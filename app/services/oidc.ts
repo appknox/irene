@@ -44,19 +44,20 @@ export default class OidcService extends Service {
   oidcAuthorizeEndpoint = '/api/v2/oidc/authorization/authorize';
 
   checkForOidcTokenAndRedirect() {
-    if (this.session.isAuthenticated) {
-      const oidc_token = this.window.sessionStorage.getItem('oidc_token');
+    const oidc_token = this.window.sessionStorage.getItem('oidc_token');
 
-      if (oidc_token) {
-        this.router.transitionTo('oidc.redirect', {
-          queryParams: {
-            oidc_token,
-          },
-        });
+    if (oidc_token) {
+      const url = this.router.urlFor('oidc.redirect', {
+        queryParams: { oidc_token },
+      });
 
-        this.window.sessionStorage.removeItem('oidc_token');
-      }
+      this.window.location.href = url;
+      this.window.sessionStorage.removeItem('oidc_token');
+
+      return true;
     }
+
+    return false;
   }
 
   authorizeOidcAppPermissions = task(async (token: string, allow?: boolean) => {

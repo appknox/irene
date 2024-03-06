@@ -3,17 +3,16 @@ import { isEmpty } from '@ember/utils';
 import Route from '@ember/routing/route';
 import { action } from '@ember/object';
 import Transition from '@ember/routing/transition';
-import { tracked } from '@glimmer/tracking';
 import Store from '@ember-data/store';
 import { all } from 'rsvp';
-
 import IntlService from 'ember-intl/services/intl';
+import RouterService from '@ember/routing/router-service';
+
 import MeService from 'irene/services/me';
 import DatetimeService from 'irene/services/datetime';
 import TrialService from 'irene/services/trial';
 import IntegrationService from 'irene/services/integration';
 import OrganizationService from 'irene/services/organization';
-import OidcService from 'irene/services/oidc';
 import UserModel from 'irene/models/user';
 import { CSBMap } from 'irene/router';
 import ENV from 'irene/config/environment';
@@ -30,18 +29,27 @@ export default class AuthenticatedRoute extends Route {
   @service declare websocket: any;
   @service declare integration: IntegrationService;
   @service declare store: Store;
-  @service declare oidc: OidcService;
   @service('notifications') declare notify: NotificationService;
   @service('organization') declare org: OrganizationService;
+
+  @service declare router: RouterService;
   @service('browser/window') declare window: Window;
 
-  @tracked lastTransition?: Transition;
+  constructor(properties?: object) {
+    super(properties);
+
+    this.monitorLastTransition();
+  }
 
   beforeModel(transition: Transition) {
-    this.session.requireAuthentication(transition, 'login');
-    this.oidc.checkForOidcTokenAndRedirect();
+    this.session.requireAuthentication(transition, () => {
+      // Don't save authenticated index route if user is not authenticated
+      if (transition.targetName !== 'authenticated.index') {
+        this.saveTransitionedURL();
+      }
 
-    this.lastTransition = transition;
+      this.router.transitionTo('login');
+    });
   }
 
   async model() {
@@ -140,5 +148,47 @@ export default class AuthenticatedRoute extends Route {
     triggerAnalytics('logout', {} as CsbAnalyticsData);
 
     this.session.invalidate();
+  }
+
+  @action saveTransitionedURL() {
+    const { pathname, search } = this.window.location;
+
+    let transitionData = {
+      url: pathname + search,
+    } as { url: string; sessionKey?: number };
+
+    /* Save session key if user is logged in.
+     * Necessary to take a decision whether to resume transition or not
+     * in the event that the logged in account is switched.
+     */
+    if (this.session.isAuthenticated) {
+      const sessionKey = this.session.data.authenticated.user_id as number;
+      transitionData = { ...transitionData, sessionKey };
+    }
+
+    this.window.sessionStorage.setItem(
+      `_lastTransitionInfo`,
+      JSON.stringify(transitionData)
+    );
+  }
+
+  // Save last transitioned route
+  @action
+  saveLastTransition(transition: Transition) {
+    if (transition.targetName?.includes('authenticated')) {
+      this.saveTransitionedURL();
+    }
+  }
+
+  @action
+  monitorLastTransition() {
+    this.router.on('routeDidChange', this.saveLastTransition);
+  }
+
+  @action
+  willDestroy() {
+    super.willDestroy();
+
+    this.router.off('routeDidChange', this.saveLastTransition);
   }
 }
