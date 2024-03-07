@@ -1,4 +1,8 @@
-<div ...attributes local-class='progress-card'>
+<div
+  ...attributes
+  local-class='progress-card'
+  data-test-cy='upload-app-status-details-{{@submission.id}}'
+>
   <AkStack @width='full' @justifyContent='space-between' class='px-2 py-1'>
     <AkStack @alignItems='center' @spacing='0.5'>
       <AkIcon

@@ -49,22 +49,33 @@ type IncludeBaseFactoryProps<T> = FlattenFactoryMethods<T> &
 
 export interface MirageFactoryDefProps {
   user: FlattenFactoryMethods<typeof USER_FACTORY_DEF>;
-  submission: FlattenFactoryMethods<typeof SUBMISSION_FACTORY_DEF>;
   'upload-app': FlattenFactoryMethods<typeof UPLOAD_APP_FACTORY_DEF>;
   'sbom-file': FlattenFactoryMethods<typeof SBOM_FILE_FACTORY_DEF>;
   'sbom-project': FlattenFactoryMethods<typeof SBOM_PROJECT_FACTORY_DEF>;
+
+  submission: FlattenFactoryMethods<
+    typeof SUBMISSION_FACTORY_DEF & {
+      file: number;
+    }
+  >;
 
   'organization-member': FlattenFactoryMethods<
     typeof ORGANIZATION_MEMBER_FACTORY_DEF
   >;
 
   // Contains base factory props
-  file: IncludeBaseFactoryProps<typeof FILE_FACTORY_DEF>;
   project: IncludeBaseFactoryProps<typeof PROJECT_FACTORY_DEF>;
   vulnerability: IncludeBaseFactoryProps<typeof VULNERABLITY_FACTORY_DEF>;
 
   'unknown-analysis-status': IncludeBaseFactoryProps<
     typeof UNKNOWN_ANALYSIS_STATUS_FACTORY_DEF
+  >;
+
+  file: IncludeBaseFactoryProps<
+    typeof FILE_FACTORY_DEF & {
+      project: number;
+      executable_name: string;
+    }
   >;
 }
 

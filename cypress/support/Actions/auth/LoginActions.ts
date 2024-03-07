@@ -33,12 +33,12 @@ export default class LoginActions {
     cy.findByPlaceholderText('Username / Email').type(username); // Username/Email field
     cy.findByLabelText('login-user-check-icon').click();
 
-    cy.wait('@checkUserRoute');
+    cy.wait('@checkUserRoute', { timeout: 30000 });
 
     cy.findByPlaceholderText('Password').type(password); // Password field
     cy.findByLabelText('login-submit-button').click();
 
-    cy.wait('@loginAPIReq');
+    cy.wait('@loginAPIReq', { timeout: 30000 });
   }
 
   /**
@@ -94,7 +94,13 @@ export default class LoginActions {
           cy.window()
             .its('localStorage')
             .invoke('getItem', 'ember_simple_auth-session')
-            .should('exist');
+            .then((authInfo) => {
+              const authDetails = authInfo ? JSON.parse(authInfo) : {};
+
+              expect(authDetails)
+                .and.to.have.property('authenticated')
+                .to.have.any.keys('authenticator', 'b64token', 'token');
+            });
         },
       }
     );
