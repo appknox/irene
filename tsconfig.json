@@ -6,6 +6,7 @@
     // work with TypeScript.
     "resolveJsonModule": true,
     "baseUrl": ".",
+    "verbatimModuleSyntax": false, // TODO: remove this later
     "paths": {
       "irene/tests/*": ["tests/*"],
       "irene/mirage/*": ["mirage/*"],

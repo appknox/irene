@@ -12,10 +12,10 @@ export default Factory.extend({
   },
 
   version() {
-    return `${faker.number.float({ min: 0, max: 10, precision: 0.01 })}`;
+    return `${faker.number.float({ min: 0, max: 10, multipleOf: 0.01 })}`;
   },
 
-  versionCode: faker.number.int({ min: 0, max: 10 }),
+  versionCode: `${faker.number.int({ min: 0, max: 10 })}`,
 
   backgroundIconStyle() {
     const url = this.iconUrl as string;

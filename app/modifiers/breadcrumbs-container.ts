@@ -1,5 +1,6 @@
 import { inject as service } from '@ember/service';
 import { registerDestructor } from '@ember/destroyable';
+import Owner from '@ember/owner';
 import Modifier from 'ember-modifier';
 import BreadcrumbsService from 'irene/services/breadcrumbs';
 import type { BreadCrumbsContainer } from 'irene/services/breadcrumbs';
@@ -22,7 +23,7 @@ export default class BreadcrumbsContainerModifier extends Modifier<BreadcrumbsCo
   container: BreadCrumbsContainer | null = null;
 
   constructor(
-    owner: unknown,
+    owner: Owner,
     args: {
       named: BreadcrumbsContainerModifierSignature['Args']['Named'];
       positional: BreadcrumbsContainerModifierSignature['Args']['Positional'];

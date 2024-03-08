@@ -169,11 +169,11 @@ module('Acceptance | DRF: CRUD Failure', function (hooks) {
 
       assert.strictEqual(nonFieldErrors1.detail, 'error 2');
       assert.strictEqual(nonFieldErrors1.source.pointer, '/data');
-      assert.strictEqual(nonFieldErrors1.title, 'Validation Error');
+      assert.strictEqual(nonFieldErrors1.title, 'Invalid Document');
 
       assert.strictEqual(nonFieldErrors2.detail, 'error 3');
       assert.strictEqual(nonFieldErrors2.source.pointer, '/data');
-      assert.strictEqual(nonFieldErrors2.title, 'Validation Error');
+      assert.strictEqual(nonFieldErrors2.title, 'Invalid Document');
     }
   });
 

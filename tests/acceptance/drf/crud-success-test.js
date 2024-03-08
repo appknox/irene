@@ -1,4 +1,3 @@
-import { merge } from '@ember/polyfills';
 import { module, test } from 'qunit';
 import { setupApplicationTest } from 'ember-qunit';
 import { setupMirage } from 'ember-cli-mirage/test-support';
@@ -74,7 +73,7 @@ module('Acceptance | DRF: CRUD Success', function (hooks) {
 
     // Update record
     this.server.put('/test-api/posts/1/', function (_, request) {
-      const data = merge(posts[0], JSON.parse(request.requestBody));
+      const data = Object.assign(posts[0], JSON.parse(request.requestBody));
 
       return new Response(
         200,
