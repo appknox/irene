@@ -4,6 +4,7 @@
 
     <AkLoader
       data-test-uploadAppStatus-loader
+      data-test-cy='uploadAppStatus-loader'
       @size={{30}}
       @thickness={{5}}
       local-class='{{this.loaderColorClass}} cursor-pointer'
@@ -39,6 +40,7 @@
       @width='full'
       @direction='column'
       local-class='submission-status-dropdown-container'
+      data-test-cy='submission-status-dropdown-container'
       data-test-uploadAppStatusPopover-container
     >
       <AkStack @width='full' @justifyContent='space-between' class='p-2'>

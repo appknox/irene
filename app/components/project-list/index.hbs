@@ -35,7 +35,7 @@
           <div local-class='project-grid'>
             {{#each pgc.currentPageResults as |project|}}
               <ProjectOverview
-                data-test-cy='project-overview-{{project.id}}'
+                data-test-cy='project-overview-{{project.lastFile.id}}'
                 @project={{project}}
               />
             {{/each}}

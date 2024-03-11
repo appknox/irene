@@ -138,7 +138,7 @@ export default class NetworkActions {
    * const aliases = loadAppConfigWithFixtureData();
    * // Now you can use aliases.frontendConfigAlias and aliases.serverConfigAlias in your tests
    */
-  loadAppConfigWithFixtureData(): object {
+  loadAppConfigWithFixtureData() {
     const frontendConfigAlias = API_ROUTES.frontendConfig.alias;
     const serverConfigAlias = API_ROUTES.serverConfig.alias;
 

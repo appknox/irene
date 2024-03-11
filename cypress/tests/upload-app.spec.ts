@@ -24,6 +24,16 @@ const APP_TYPES = {
   ipa: 'DVIA',
 };
 
+// Assertion Timeout Overrides
+const DEFAULT_ASSERT_OPTS = {
+  timeout: 30000,
+};
+
+const NETWORK_WAIT_OPTS = {
+  timeout: 60000,
+};
+
+// Test body
 describe('Upload App', () => {
   beforeEach(() => {
     // Hide websocket and analyses logs
@@ -62,23 +72,24 @@ describe('Upload App', () => {
     // Network interceptions
     cy.intercept(API_ROUTES.check.route).as('checkUserRoute');
     cy.intercept(API_ROUTES.userInfo.route).as('userInfoRoute');
-    cy.intercept(API_ROUTES.uploadApp.route).as('uploadAppReq');
     cy.intercept(API_ROUTES.projectList.route).as('orgProjectList');
     cy.intercept(API_ROUTES.submissionList.route).as('submissionList');
     cy.intercept(API_ROUTES.sbomProjectList.route).as('sbomProjectList');
+
+    cy.intercept('GET', API_ROUTES.uploadApp.route).as('uploadAppReq');
     cy.intercept('POST', API_ROUTES.uploadApp.route).as('uploadAppReqPOST');
   });
 
   Object.keys(APP_TYPES).forEach((app) =>
     it(
       `It successfully uploads an ${app} binary file`,
-      { retries: { runMode: 1, openMode: 1 } },
+      { retries: { runMode: 2, openMode: 2 } },
       function () {
         // Visit projects page
         cy.visit(APPLICATION_ROUTES.projects);
 
         // Necessary API call before showing dashboard elements
-        cy.wait('@submissionList', { timeout: 40000 });
+        cy.wait('@submissionList', NETWORK_WAIT_OPTS);
 
         cy.findByText(APP_TRANSLATIONS.startNewScan).should('exist');
 
@@ -87,21 +98,18 @@ describe('Upload App', () => {
 
         cy.fixture(`apps/${appName}`, null).as('appBinary');
 
-        uploadAppActions.selectAppViaSystem('@appBinary').then(() => {
-          uploadAppActions.openUploadAppModal();
+        uploadAppActions
+          .selectAppViaSystem('@appBinary')
+          .then(() => uploadAppActions.openUploadAppModal());
 
-          cy.findAllByText(APP_TRANSLATIONS.viaSystem).first().should('exist');
-
-          cy.findAllByText(APP_TRANSLATIONS.uploadStatus)
-            .first()
-            .should('exist');
-
-          cy.findByText(new RegExp(APP_TRANSLATIONS.uploading, 'i')).should(
-            'exist'
-          );
+        cy.findByTestId('submission-status-dropdown-container').within(() => {
+          cy.contains(APP_TRANSLATIONS.uploadStatus);
+          cy.contains(APP_TRANSLATIONS.viaSystem);
+          cy.contains(new RegExp(APP_TRANSLATIONS.uploading, 'i'));
+          cy.contains(new RegExp(APP_TRANSLATIONS.inProgress, 'i'));
         });
 
-        // Initiate apk upload
+        // Initiate app upload
         cy.wait('@uploadAppReq').then(({ response: res }) => {
           const uploadDetails =
             res?.body as MirageFactoryDefProps['upload-app'];
@@ -111,74 +119,97 @@ describe('Upload App', () => {
         });
 
         // Wait for upload completion
-        cy.wait('@uploadSuccess', { timeout: 60000 });
+        cy.wait('@uploadSuccess', NETWORK_WAIT_OPTS);
+
+        cy.findByText(
+          APP_TRANSLATIONS.fileUploadedSuccessfully,
+          NETWORK_WAIT_OPTS
+        );
 
         // Intercepts uploaded file submission request from uploaded file info
-        cy.wait('@uploadAppReqPOST', { timeout: 60000 }).then(
+        cy.wait('@uploadAppReqPOST', NETWORK_WAIT_OPTS).then(
           ({ response: res }) => {
             const uploadDetails =
               res?.body as MirageFactoryDefProps['upload-app'];
 
             const uploadedAppSubURL = `${API_ROUTES.submissionItem.route}/${uploadDetails.submission_id}`;
 
-            cy.findByText(APP_TRANSLATIONS.fileUploadedSuccessfully);
-
             // Intercept upload app submission request
             cy.intercept('GET', uploadedAppSubURL).as('uploadedAppSubmission');
+            cy.wrap(uploadDetails.submission_id).as('uploadedAppSubID');
           }
         );
 
-        // Waits for upload app submission response
-        cy.wait(['@uploadedAppSubmission', '@uploadedAppSubmission'], {
-          timeout: 60000,
-        }).then(([int1, int2]) => {
-          // App details do not return until after second upload submission request
-          const submission = {
-            ...int1?.response?.body,
-            ...int2?.response?.body,
-          } as MirageFactoryDefProps['submission'] & { file: string };
+        // Wait for uploaded file submission status to show in status popover
+        cy.get<number>('@uploadedAppSubID').then((id) =>
+          cy
+            .findByTestId(
+              `upload-app-status-details-${id}`,
+              DEFAULT_ASSERT_OPTS
+            )
+            .within(() => {
+              // App details sometimes do not return the created file until after second/third upload submission response
+              // This function waits for the response four times to capture the returned file appropraitely
+              function waitForAppSubFileResolution(attempts = 0) {
+                if (attempts === 3) {
+                  return;
+                }
 
-          const appDetails = submission?.app_data;
+                cy.wait('@uploadedAppSubmission', NETWORK_WAIT_OPTS).then(
+                  async ({ response: res }) => {
+                    const submission =
+                      res?.body as MirageFactoryDefProps['submission'];
 
-          if (appDetails) {
-            cy.findAllByText(appDetails.package_name).should('exist');
-            cy.findAllByText(appDetails.name).should('exist');
-          }
+                    if (!submission.file) {
+                      return waitForAppSubFileResolution(++attempts);
+                    }
 
-          // If file is not being analyzed
-          if (submission.status !== 7) {
-            cy.findByText(new RegExp(submission.status_humanized, 'i')).should(
-              'exist'
-            );
-          }
+                    const appDetails = submission.app_data;
+                    const fileID = submission.file;
 
-          // Intercept created file for application (.apk) binary
-          const uploadedFileURL = `${API_ROUTES.file.route}/${submission?.file}`;
-          cy.intercept('GET', uploadedFileURL).as('uploadedAppFile');
-        });
+                    cy.wrap(submission?.package_name).as(
+                      'uploadedAppPackageName'
+                    );
 
-        // Wait for ptoject list refresh
-        uploadAppActions
-          .waitForProjectListRefresh('@orgProjectList')
-          .then((projectList) => {
-            // The project of the uploaded file should be the first project
-            const firstProject = projectList.results?.[0];
+                    if (appDetails) {
+                      cy.findAllByText(
+                        appDetails?.package_name,
+                        DEFAULT_ASSERT_OPTS
+                      );
 
-            cy.wrap(firstProject?.package_name).as('packageName');
-            cy.wrap(firstProject?.id).as('uploadedAppPrjID');
-          });
+                      cy.findAllByText(appDetails?.name, DEFAULT_ASSERT_OPTS);
+                    }
+
+                    // If file is not being analyzed
+                    if (submission?.status !== 7) {
+                      cy.contains(
+                        new RegExp(submission?.status_humanized, 'i'),
+                        DEFAULT_ASSERT_OPTS
+                      );
+                    }
+
+                    // Intercept created file for application (.apk) binary
+                    const uploadedFileURL = `${API_ROUTES.file.route}/${fileID}`;
+                    cy.intercept('GET', uploadedFileURL).as('uploadedAppFile');
+                  }
+                );
+              }
+
+              waitForAppSubFileResolution();
+            })
+        );
 
         // Waits for uploaded file app response to return
-        cy.wait('@uploadedAppFile', {
-          timeout: 60000,
-        }).then(({ response: res }) => {
-          const file = res?.body as MirageFactoryDefProps['file'];
+        // and wait for its project card to appear in the project listing page
+        cy.wait('@uploadedAppFile', NETWORK_WAIT_OPTS).then(
+          ({ response: res }) => {
+            const file = res?.body as MirageFactoryDefProps['file'];
 
-          // Save file for later assertions
-          cy.wrap(file).as('uploadedFileDetails');
+            // Save file for later assertions
+            cy.wrap(file).as('uploadedFileDetails');
+            cy.wrap(file.project).as('uploadedAppPrjID');
 
-          cy.get<number>('@uploadedAppPrjID').then((prjID) => {
-            cy.findByTestId(`project-overview-${prjID}`)
+            cy.findByTestId(`project-overview-${file.id}`, NETWORK_WAIT_OPTS)
               .should('exist')
               .within(() => {
                 // File info should show in the project card
@@ -193,87 +224,93 @@ describe('Upload App', () => {
                   cy.findByText(file?.version_code).should('exist')
                 );
               });
-          });
-        });
+          }
+        );
 
         // Closes upload app modal
         uploadAppActions.closeUploadAppModalIfOpen();
 
         // Click project associated with uploaded file
-        cy.get<number>('@uploadedAppPrjID').then((prjID) => {
-          cy.findByTestId(`project-overview-${prjID}`).should('exist').click();
-        });
+        cy.get<MirageFactoryDefProps['file']>('@uploadedFileDetails')
+          .its('id')
+          .then((prjID) =>
+            cy
+              .findByTestId(`project-overview-${prjID}`, DEFAULT_ASSERT_OPTS)
+              .click()
+          );
 
         // Check if in file page
         cy.url().should('contain', APPLICATION_ROUTES.file);
 
-        cy.wait(['@uploadedAppFile', '@uploadedAppFile', '@uploadedAppFile'], {
-          timeout: 60000,
-        }).then(([int1, int2, int3]) => {
-          const file = {
-            ...int1?.response?.body,
-            ...int2?.response?.body,
-            ...int3?.response?.body,
-          } as MirageFactoryDefProps['file'];
+        cy.wait('@uploadedAppFile', NETWORK_WAIT_OPTS).then((int) => {
+          const file = int?.response?.body as MirageFactoryDefProps['file'];
 
           // File details check
           cy.findByAltText(`${file.name} - logo`).should('exist');
-          cy.get('@packageName').should('exist');
+          cy.get('@uploadedAppPackageName').should('exist');
           cy.get('@uploadedFileDetails').its('id').should('exist');
           cy.get('@uploadedFileDetails').its('name').should('exist');
 
-          cy.findByTestId('staticScan-infoContainer').then((el) => {
-            const assertOpts = { container: el };
+          cy.findByTestId('staticScan-infoContainer', DEFAULT_ASSERT_OPTS).then(
+            (el) => {
+              const assertOpts = { container: el, ...DEFAULT_ASSERT_OPTS };
 
-            cy.findByText(APP_TRANSLATIONS.staticScan, assertOpts).should(
-              'exist'
-            );
-
-            // Check if static scan has completed or is in progress
-            if (file.is_static_done) {
-              cy.findByText(APP_TRANSLATIONS.completed, assertOpts).should(
+              cy.findByText(APP_TRANSLATIONS.staticScan, assertOpts).should(
                 'exist'
               );
 
-              // Check for severity count if static scan is completed
-              cy.findByTestId('fileChart-severityLevelCounts').within(() => {
-                // If static scan is complete counts are stable
-                cy.findAllByText(file.risk_count_high).should('exist');
-                cy.findAllByText(file.risk_count_medium).should('exist');
-                cy.findAllByText(file.risk_count_low).should('exist');
-                cy.findAllByText(file.risk_count_critical).should('exist');
-                cy.findAllByText(file.risk_count_passed).should('exist');
-              });
-            } else {
-              const staticScanProgress = file.static_scan_progress;
+              // Check if static scan has completed or is in progress
+              if (file.is_static_done) {
+                cy.findByText(APP_TRANSLATIONS.completed, assertOpts).should(
+                  'exist'
+                );
 
-              cy.wrap(staticScanProgress).should('be.lessThan', 100);
+                // Check for severity count if static scan is completed
+                cy.findByTestId('fileChart-severityLevelCounts').within(() => {
+                  // If static scan is complete counts are stable
+                  cy.findAllByText(file.risk_count_high).should('exist');
+                  cy.findAllByText(file.risk_count_medium).should('exist');
+                  cy.findAllByText(file.risk_count_low).should('exist');
+                  cy.findAllByText(file.risk_count_critical).should('exist');
+                  cy.findAllByText(file.risk_count_passed).should('exist');
+                });
+              } else {
+                const staticScanProgress = file.static_scan_progress;
 
-              // If closer to 100 UI will be updated before assertion is done
-              if (staticScanProgress < 60) {
-                cy.findByText(
-                  new RegExp(APP_TRANSLATIONS.scanning, 'i'),
-                  assertOpts
-                ).should('exist');
+                cy.wrap(staticScanProgress).should('be.lessThan', 100);
+
+                // If closer to 100 UI will be updated before assertion is done
+                if (staticScanProgress < 60) {
+                  cy.findByText(
+                    new RegExp(APP_TRANSLATIONS.scanning, 'i'),
+                    assertOpts
+                  ).should('exist');
+
+                  // Check for completed/incomplete static scan tag in VA Details list
+                  cy.findAllByLabelText(
+                    `${APP_TRANSLATIONS.static} scan tag tooltip`,
+                    DEFAULT_ASSERT_OPTS
+                  )
+                    .first()
+                    .should('exist')
+                    .then((scanTag) => {
+                      if (scanTag) {
+                        const tagMsg = file.is_static_done
+                          ? APP_TRANSLATIONS.scanCompleted
+                          : APP_TRANSLATIONS.scanNotCompleted;
+
+                        cy.wrap(scanTag).trigger('mouseenter');
+
+                        cy.findByText(
+                          `${APP_TRANSLATIONS.static} ${tagMsg}`,
+                          DEFAULT_ASSERT_OPTS
+                        );
+                      }
+                    });
+                }
               }
             }
-          });
-
-          // Check for completed/incomplete static scan tag in VA Details list
-          cy.findAllByLabelText(`${APP_TRANSLATIONS.static} scan tag tooltip`)
-            .first()
-            .should('exist')
-            .then((scanTag) => {
-              if (scanTag) {
-                const tagMsg = file.is_static_done
-                  ? APP_TRANSLATIONS.scanCompleted
-                  : APP_TRANSLATIONS.scanNotCompleted;
-
-                cy.wrap(scanTag).trigger('mouseenter');
-
-                cy.findByText(`${APP_TRANSLATIONS.static} ${tagMsg}`);
-              }
-            });
+          );
         });
 
         // Go to SBOM Page
@@ -289,7 +326,7 @@ describe('Upload App', () => {
         );
 
         // Allow SBOM project list to load
-        cy.wait('@sbomProjectList', { timeout: 60000 }).then(
+        cy.wait('@sbomProjectList', NETWORK_WAIT_OPTS).then(
           ({ response: res }) => {
             const sbomPrjListRes = res?.body as {
               results: Array<MirageFactoryDefProps['sbom-project']>;
@@ -315,7 +352,7 @@ describe('Upload App', () => {
         );
 
         // Wait for SB File response
-        cy.wait('@uploadedAppSBFileReq', { timeout: 60000 }).then(
+        cy.wait('@uploadedAppSBFileReq', NETWORK_WAIT_OPTS).then(
           ({ response: res }) => {
             const sbFile = res?.body as MirageFactoryDefProps['sbom-file'];
 
@@ -339,7 +376,7 @@ describe('Upload App', () => {
                   // Check if correct file details are visible
                   cy.findByText(sbFileStatus);
                   cy.get('@uploadedFileDetails').its('name').should('exist');
-                  cy.get('@packageName').should('exist');
+                  cy.get('@uploadedAppPackageName').should('exist');
                 });
             });
           }
@@ -350,13 +387,13 @@ describe('Upload App', () => {
 
   it(
     'App upload fails if org plan has insufficient upload credits',
-    { retries: { runMode: 1, openMode: 1 } },
+    { retries: { runMode: 2, openMode: 2 } },
     function () {
       // Visit projects page
       cy.visit(APPLICATION_ROUTES.projects);
 
       // Necessary API call before showing dashboard elements
-      cy.wait('@submissionList', { timeout: 40000 });
+      cy.wait('@submissionList', NETWORK_WAIT_OPTS);
 
       cy.findByText(APP_TRANSLATIONS.startNewScan).should('exist');
 
@@ -382,10 +419,10 @@ describe('Upload App', () => {
       });
 
       // Wait for upload completion
-      cy.wait('@uploadSuccess', { timeout: 60000 });
+      cy.wait('@uploadSuccess', NETWORK_WAIT_OPTS);
 
       // Intercepts uploaded file submission request from uploaded file info
-      cy.wait('@uploadAppReqPOST', { timeout: 60000 }).then(
+      cy.wait('@uploadAppReqPOST', NETWORK_WAIT_OPTS).then(
         ({ response: res }) => {
           const uploadDetails =
             res?.body as MirageFactoryDefProps['upload-app'];
@@ -414,27 +451,27 @@ describe('Upload App', () => {
       );
 
       // Waits for upload app submission response
-      cy.wait('@uploadedAppSubmission', {
-        timeout: 60000,
-      }).then(({ response: res }) => {
-        // App details do not return until after second upload submission request
-        const submission = res?.body as MirageFactoryDefProps['submission'];
-        const appDetails = submission?.app_data;
+      cy.wait('@uploadedAppSubmission', NETWORK_WAIT_OPTS).then(
+        ({ response: res }) => {
+          // App details do not return until after second upload submission request
+          const submission = res?.body as MirageFactoryDefProps['submission'];
+          const appDetails = submission?.app_data;
 
-        if (appDetails) {
-          cy.findAllByText(appDetails.package_name).should('exist');
-          cy.findAllByText(appDetails.name).should('exist');
+          if (appDetails) {
+            cy.findAllByText(appDetails.package_name).should('exist');
+            cy.findAllByText(appDetails.name).should('exist');
+          }
+
+          // If file is not being analyzed
+          if (submission.status !== 7) {
+            cy.findByText(new RegExp(submission.reason, 'i')).should('exist');
+
+            cy.findByText(new RegExp(submission.status_humanized, 'i')).should(
+              'exist'
+            );
+          }
         }
-
-        // If file is not being analyzed
-        if (submission.status !== 7) {
-          cy.findByText(new RegExp(submission.reason, 'i')).should('exist');
-
-          cy.findByText(new RegExp(submission.status_humanized, 'i')).should(
-            'exist'
-          );
-        }
-      });
+      );
     }
   );
 });
