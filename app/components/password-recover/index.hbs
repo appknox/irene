@@ -1,8 +1,8 @@
 <AuthAssets />
 
 <div local-class='container flex-center'>
-  <form local-class='form'>
-    <h4 local-class='text-center'>
+  <form local-class='form' {{on 'submit' (perform this.recover)}}>
+    <h4 local-class='text-center' data-test-reset-password-header-text>
       {{t 'resetPassword'}}
     </h4>
 
@@ -42,8 +42,8 @@
 
       <div local-class='flex-center'>
         <AkButton
-          {{on 'click' (perform this.recover)}}
           @loading={{this.recover.isRunning}}
+          @type='submit'
           local-class='send-reset-mail-btn'
           data-test-send-reset-mail-btn
         >
@@ -52,9 +52,12 @@
       </div>
 
       <div local-class='flex-center'>
-        <LinkTo @route='login' local-class='login-link'>
-          {{t 'login'}}
-          ?
+        <LinkTo
+          @route='login'
+          local-class='login-link'
+          data-test-reset-password-login-link
+        >
+          {{t 'login'}}?
         </LinkTo>
       </div>
     {{/if}}
