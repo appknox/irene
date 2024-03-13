@@ -5,6 +5,12 @@ export default class SessionActions {
     return `${username}-${password}`;
   }
 
+  createSessionIdWithSSO({
+    username,
+  }: Omit<UserLoginCredentialProps, 'password'>) {
+    return `SSO-${username}`;
+  }
+
   resetCurrentSession() {
     return Cypress.session.clearCurrentSessionData();
   }
