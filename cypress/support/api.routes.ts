@@ -23,6 +23,10 @@ export const API_ROUTES = {
 
   // Auth
   login: { route: '/api/login' },
+  saml2Login: {
+    route: '/api/sso/saml2/login',
+    alias: 'saml2LoginReq',
+  },
 
   // Listing Routes
   sbomProjectList: {
