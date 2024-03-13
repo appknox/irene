@@ -126,8 +126,8 @@ module('Integration | Component | ak-date-picker', function (hooks) {
 
       const assertEqual = (actual, expected, message) =>
         assert.strictEqual(
-          dayjs(actual).format('DD/MM/YYY'),
-          dayjs(expected).format('DD/MM/YYY'),
+          dayjs(actual).format('DD/MM/YYYY'),
+          dayjs(expected).format('DD/MM/YYYY'),
           message
         );
 
