@@ -1,49 +1,14 @@
-<AkStack @direction='column' @spacing='0.5'>
-  {{#if (has-block 'title')}}
-    {{yield to='title'}}
-  {{else}}
-    <AkTypography data-test-projectPreference-title @variant='h6'>
-      {{t 'devicePreferences'}}
-    </AkTypography>
-  {{/if}}
-
-  <AkTypography
-    data-test-projectPreference-description
-    @variant='body2'
-    @color='textSecondary'
-  >
-    {{t 'otherTemplates.selectPreferredDevice'}}
-  </AkTypography>
-</AkStack>
-
-<AkStack class='mt-2' @spacing='2'>
-  <div {{style width='150px'}}>
-    <AkSelect
-      data-test-projectPreference-deviceTypeSelect
-      @label={{t 'deviceType'}}
-      @options={{this.filteredDeviceTypes}}
-      @selected={{this.selectedDeviceType}}
-      @onChange={{this.handleSelectDeviceType}}
-      as |aks|
-    >
-      {{t (device-type aks.value)}}
-    </AkSelect>
-  </div>
-
-  <div {{style width='150px'}}>
-    <AkSelect
-      data-test-projectPreference-osVersionSelect
-      @label={{t 'osVersion'}}
-      @selected={{this.selectedVersion}}
-      @options={{this.devicePlatformVersionOptions}}
-      @onChange={{this.handleSelectVersion}}
-      as |version|
-    >
-      {{#if (eq version '0')}}
-        {{t 'anyVersion'}}
-      {{else}}
-        {{version}}
-      {{/if}}
-    </AkSelect>
-  </div>
-</AkStack>
+<ProjectPreferences::Provider
+  @project={{@project}}
+  @profileId={{@profileId}}
+  @platform={{@platform}}
+  as |dpContext|
+>
+  {{yield
+    (hash
+      DevicePreferenceComponent=(component
+        'project-preferences/device-preference' dpContext=dpContext
+      )
+    )
+  }}
+</ProjectPreferences::Provider>

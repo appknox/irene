@@ -10,12 +10,15 @@
       @profileId={{@project.activeProfileId}}
       @platform={{@project.platform}}
       @project={{@project}}
+      as |pp|
     >
-      <:title>
-        <AkTypography @variant='h5'>
-          {{t 'devicePreferences'}}
-        </AkTypography>
-      </:title>
+      <pp.DevicePreferenceComponent>
+        <:title>
+          <AkTypography @variant='h5'>
+            {{t 'devicePreferences'}}
+          </AkTypography>
+        </:title>
+      </pp.DevicePreferenceComponent>
     </ProjectPreferences>
   </AkStack>
 
