@@ -28,3 +28,16 @@
 //
 
 import '@testing-library/cypress/add-commands';
+
+Cypress.Commands.add(
+  'getAliases',
+  <T>(names: string[]): Cypress.Chainable<T[]> => {
+    const values: T[] = [];
+
+    for (const arg of names) {
+      cy.get<T>(arg).then((value) => values.push(value));
+    }
+
+    return cy.wrap(values);
+  }
+);

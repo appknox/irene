@@ -42,3 +42,9 @@
 #storybook
 /.storybook/preview-head.html
 /storybook-static/
+
+# cypress
+cypress.env.json
+/cypress/downloads/
+/cypress/snapshots/actual
+/cypress/snapshots/diff
