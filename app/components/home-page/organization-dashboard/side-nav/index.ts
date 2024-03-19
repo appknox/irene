@@ -111,9 +111,9 @@ export default class HomePageOrganizationDashboardSideNavComponent extends Compo
       {
         label: this.intl.t('organization'),
         icon: 'people',
-        route: 'authenticated.organization.namespaces',
+        route: 'authenticated.dashboard.organization.namespaces',
         currentWhen:
-          'authenticated.organization.namespaces authenticated.organization.users authenticated.organization.teams authenticated.organization-settings',
+          'authenticated.dashboard.organization.namespaces authenticated.dashboard.organization.users authenticated.dashboard.organization.teams authenticated.dashboard.organization-settings',
       },
       {
         label: this.intl.t('accountSettings'),

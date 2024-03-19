@@ -8,7 +8,7 @@ import { setupIntl } from 'ember-intl/test-support';
 import Service from '@ember/service';
 
 class RouterStub extends Service {
-  currentRouteName = 'authenticated.organization.namespaces';
+  currentRouteName = 'authenticated.dashboard.organization.namespaces';
 
   transitionTo(routeName) {
     this.currentRouteName = routeName;
@@ -64,7 +64,7 @@ module('Integration | Component | organization-details', function (hooks) {
 
     assert.strictEqual(
       router.currentRouteName,
-      'authenticated.organization-settings'
+      'authenticated.dashboard.organization-settings'
     );
   });
 

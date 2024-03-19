@@ -20,12 +20,6 @@ export default class MarketplaceIntegrationListComponent extends Component {
         link: 'authenticated.organization-settings',
       },
       {
-        title: this.intl.t('slack'),
-        description: this.intl.t('comingSoon'),
-        logo: '../images/slack-icon.png',
-        link: '',
-      },
-      {
         title: this.intl.t('gitlab'),
         description: this.intl.t('comingSoon'),
         logo: '../images/gitlab-icon.png',
