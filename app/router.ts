@@ -43,14 +43,6 @@ Router.map(function () {
         path: '/',
       });
 
-      this.route('organization', function () {
-        this.route('namespaces');
-        this.route('users');
-        this.route('teams');
-      });
-
-      this.route('organization-settings', { path: '/organization/settings' });
-
       this.route('settings', function () {
         this.route('general');
         this.route('security');
@@ -180,6 +172,20 @@ Router.map(function () {
         this.route('file-vul-compare', {
           path: '/file-vul-compare/:files/:vulnerability_id',
         });
+
+        this.route('organization', function () {
+          this.route('namespaces');
+          this.route('users');
+          this.route('teams');
+        });
+
+        this.route('organization-settings', { path: '/organization/settings' });
+      });
+
+      this.route('organization', function () {
+        this.route('namespaces');
+        this.route('users');
+        this.route('teams');
       });
     }
   );
@@ -207,8 +213,10 @@ export const CSBMap = {
   'authenticated.settings': ENV.csb['navigateToSettings'],
   'authenticated.project.files': ENV.csb['navigateToAllScans'],
   'authenticated.choose': ENV.csb['naigateToCompareScans'],
-  'authenticated.organization.namespaces': ENV.csb['navigateToOrganization'],
-  'authenticated.organization-settings': ENV.csb['navigateToOrgSettings'],
+  'authenticated.dashboard.organization.namespaces':
+    ENV.csb['navigateToOrganization'],
+  'authenticated.dashboard.organization-settings':
+    ENV.csb['navigateToOrgSettings'],
   'authenticated.settings.index': ENV.csb['navigateToAccountSettings'],
   'authenticated.marketplace': ENV.csb['navigateToMarketPlace'],
   'authenticated.billing': ENV.csb['navigateToBilling'],

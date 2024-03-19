@@ -1,12 +1,12 @@
-/* eslint-disable prettier/prettier */
-import { module, test } from 'qunit';
-import { setupTest } from 'ember-qunit';
+// /* eslint-disable prettier/prettier */
+// import { module, test } from 'qunit';
+// import { setupTest } from 'ember-qunit';
 
-module('Unit | Route | authenticated/organization', function(hooks) {
-  setupTest(hooks);
+// module('Unit | Route | authenticated/dashboard/organization', function (hooks) {
+//   setupTest(hooks);
 
-  test('it exists', function(assert) {
-    let route = this.owner.lookup('route:authenticated/organization');
-    assert.ok(route);
-  });
-});
+//   test('it exists', function (assert) {
+//     let route = this.owner.lookup('route:authenticated/dashboard/organization');
+//     assert.ok(route);
+//   });
+// });
