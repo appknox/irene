@@ -8,7 +8,7 @@ export default Base.extend({
   },
 
   platform_version() {
-    return faker.number.int();
+    return `${faker.number.float({ min: 1, max: 50, fractionDigits: 2 })}`;
   },
 
   is_tablet() {
