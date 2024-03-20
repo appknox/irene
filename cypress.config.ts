@@ -1,4 +1,5 @@
 import { defineConfig } from 'cypress';
+import { configureVisualRegression } from 'cypress-visual-regression/dist/plugin';
 
 export default defineConfig({
   e2e: {
@@ -11,7 +12,11 @@ export default defineConfig({
       hideCredentials: true,
       TEST_USERNAME: '***',
       TEST_PASSWORD: '***',
+      visualRegressionType: 'regression',
     },
-    // setupNodeEvents(on, config) {},
+    screenshotsFolder: './cypress/snapshots/actual',
+    setupNodeEvents(on) {
+      configureVisualRegression(on);
+    },
   },
 });

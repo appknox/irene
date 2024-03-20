@@ -21,9 +21,13 @@ import './commands';
 // @ts-ignore
 import registerCypressGrep from '@cypress/grep/src/support';
 import { configure } from '@testing-library/cypress';
+import { addCompareSnapshotCommand } from 'cypress-visual-regression/dist/command';
 import { mirageServer } from './Mirage';
 
 configure({ testIdAttribute: 'data-test-cy' });
+
+// For snapshot testing
+addCompareSnapshotCommand();
 
 // Important for filtering tests to run
 // READ MORE: https://github.com/cypress-io/cypress/tree/develop/npm/grep
