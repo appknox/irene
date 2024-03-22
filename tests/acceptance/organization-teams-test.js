@@ -62,7 +62,7 @@ module('Acceptance | organization teams', function (hooks) {
       return { count: results.length, next: null, previous: null, results };
     });
 
-    await visit('/organization/teams');
+    await visit('/dashboard/organization/teams');
 
     assert.dom('[data-test-orgTeamSearch-input]').isNotDisabled().hasNoValue();
     assert.notOk(this.query);
@@ -109,7 +109,7 @@ module('Acceptance | organization teams', function (hooks) {
         schema.organizations.find(`${req.params.id}`)?.toJSON()
       );
 
-      await visit('/organization/teams');
+      await visit('/dashboard/organization/teams');
 
       assert
         .dom('[data-test-orgCreateTeam-btn]')

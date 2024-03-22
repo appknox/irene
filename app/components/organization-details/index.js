@@ -17,7 +17,7 @@ class OrganizationDetails extends Component {
     return [
       {
         id: 'namespaces',
-        route: 'authenticated.organization.namespaces',
+        route: 'authenticated.dashboard.organization.namespaces',
         badgeCount: this.organization.selected.namespacesCount,
         hasBadge: this.isAdmin,
         label: this.intl.t('namespaces'),
@@ -25,7 +25,7 @@ class OrganizationDetails extends Component {
       },
       {
         id: 'users',
-        route: 'authenticated.organization.users',
+        route: 'authenticated.dashboard.organization.users',
         hidden: !this.isAdmin,
         badgeCount: this.organization.selected.membersCount,
         hasBadge: true,
@@ -34,7 +34,7 @@ class OrganizationDetails extends Component {
       },
       {
         id: 'teams',
-        route: 'authenticated.organization.teams',
+        route: 'authenticated.dashboard.organization.teams',
         badgeCount: this.organization.selected.teamsCount,
         hasBadge: this.isAdmin,
         label: this.intl.t('teams'),
@@ -44,7 +44,7 @@ class OrganizationDetails extends Component {
   }
 
   @action routeToOrgSettings() {
-    this.router.transitionTo('authenticated.organization-settings');
+    this.router.transitionTo('authenticated.dashboard.organization-settings');
   }
 }
 

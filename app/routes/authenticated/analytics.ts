@@ -11,7 +11,7 @@ export default class AuthenticatedAnalyticsRoute extends ScrollToTop(Route) {
 
   beforeModel() {
     if (this.me.org?.get('is_member')) {
-      this.router.transitionTo('authenticated.projects');
+      this.router.transitionTo('authenticated.dashboard.projects');
     }
   }
 }

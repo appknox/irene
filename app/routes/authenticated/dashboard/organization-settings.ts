@@ -19,7 +19,9 @@ export default class AuthenticatedOrganizationSettingsRoute extends Route {
 
   beforeModel(): void {
     if (!this.me.org?.get('is_admin')) {
-      this.router.transitionTo('authenticated.organization.namespaces');
+      this.router.transitionTo(
+        'authenticated.dashboard.organization.namespaces'
+      );
     }
   }
 

@@ -27,7 +27,7 @@ class NotificationsStub extends Service {
 }
 
 class RouterStub extends Service {
-  currentRouteName = 'authenticated.organization.namespaces';
+  currentRouteName = 'authenticated.dashboard.organization.namespaces';
 }
 
 module('Integration | Component | organization-settings', function (hooks) {

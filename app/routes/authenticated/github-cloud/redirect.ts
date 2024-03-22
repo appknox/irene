@@ -30,6 +30,8 @@ export default class AuthenticatedGithubRedirectRoute extends Route {
   }
 
   async afterModel() {
-    return this.router.transitionTo('authenticated.organization-settings');
+    return this.router.transitionTo(
+      'authenticated.dashboard.organization-settings'
+    );
   }
 }

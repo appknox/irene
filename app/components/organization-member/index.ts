@@ -4,7 +4,7 @@ import MeService from 'irene/services/me';
 import OrganizationService from 'irene/services/organization';
 import OrganizationModel from 'irene/models/organization';
 import OrganizationMemberModel from 'irene/models/organization-member';
-import { OrganizationMembersRouteQueryParams } from 'irene/routes/authenticated/organization/users';
+import { OrganizationMembersRouteQueryParams } from 'irene/routes/authenticated/dashboard/organization/users';
 
 interface OrganizationMemberSignature {
   Args: {
