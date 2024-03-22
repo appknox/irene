@@ -67,7 +67,7 @@ export default class HomePageComponent extends Component {
       } else {
         this.getOwner(this)
           .lookup('route:authenticated')
-          .transitionTo('authenticated.projects');
+          .transitionTo('authenticated.dashboard.projects');
       }
       this.isLoaded = true;
     } else {

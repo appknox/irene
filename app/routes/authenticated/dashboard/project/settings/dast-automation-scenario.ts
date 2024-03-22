@@ -20,7 +20,7 @@ export default class AuthenticatedProjectSettingsDastAutomationRoute extends Scr
     );
 
     return {
-      project: this.modelFor('authenticated.project') as ProjectModel,
+      project: this.modelFor('authenticated.dashboard.project') as ProjectModel,
       scenario,
     };
   }

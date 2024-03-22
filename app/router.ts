@@ -53,23 +53,9 @@ Router.map(function () {
       this.route('marketplace');
       this.route('projects');
 
-      this.route(
-        'project',
-        {
-          path: '/project/:projectid',
-        },
-        function () {
-          this.route('settings', function () {
-            this.route('analysis');
-
-            this.route('dast-automation-scenario', {
-              path: '/dast-automation-scenario/:scenario_id',
-            });
-          });
-
-          this.route('files');
-        }
-      );
+      this.route('project', {
+        path: '/project/:projectid',
+      });
 
       this.route('file', { path: '/file/:fileid' });
 
@@ -123,6 +109,26 @@ Router.map(function () {
       });
 
       this.route('dashboard', function () {
+        this.route('projects');
+
+        this.route(
+          'project',
+          {
+            path: '/project/:projectid',
+          },
+          function () {
+            this.route('settings', function () {
+              this.route('analysis');
+
+              this.route('dast-automation-scenario', {
+                path: '/dast-automation-scenario/:scenario_id',
+              });
+            });
+
+            this.route('files');
+          }
+        );
+
         this.route('file', { path: '/file/:fileid' }, function () {
           this.route('analysis', { path: '/analysis/:analysis_id' });
         });
@@ -207,11 +213,11 @@ Router.map(function () {
 });
 
 export const CSBMap = {
-  'authenticated.projects': ENV.csb['navigateToProjects'],
+  'authenticated.dashboard.projects': ENV.csb['navigateToProjects'],
   'authenticated.analytics': ENV.csb['navigateToAnalytics'],
   'authenticated.dashboard.file': ENV.csb['clickProjectCard'],
   'authenticated.settings': ENV.csb['navigateToSettings'],
-  'authenticated.project.files': ENV.csb['navigateToAllScans'],
+  'authenticated.dashboard.project.files': ENV.csb['navigateToAllScans'],
   'authenticated.choose': ENV.csb['naigateToCompareScans'],
   'authenticated.dashboard.organization.namespaces':
     ENV.csb['navigateToOrganization'],

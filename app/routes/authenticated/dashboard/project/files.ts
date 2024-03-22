@@ -20,7 +20,9 @@ export default class AuthenticatedProjectFilesRoute extends ScrollToTop(Route) {
   model(params: Partial<ProjectFilesQueryParams>) {
     const { files_limit = '10', files_offset = '0' } = params;
 
-    const project = this.modelFor('authenticated.project') as ProjectModel;
+    const project = this.modelFor(
+      'authenticated.dashboard.project'
+    ) as ProjectModel;
 
     return { project, queryParams: { files_limit, files_offset } };
   }

@@ -1,15 +1,19 @@
 import Route from '@ember/routing/route';
+import RouterService from '@ember/routing/router-service';
+import Transition from '@ember/routing/transition';
 import { inject as service } from '@ember/service';
-import Store from '@ember-data/store';
-
-export interface ProjectRouteQueryParams {
-  projectid: string;
-}
 
 export default class AuthenticatedProjectRoute extends Route {
-  @service declare store: Store;
+  @service declare router: RouterService;
 
-  model(params: ProjectRouteQueryParams) {
-    return this.store.findRecord('project', params.projectid);
+  beforeModel(transition: Transition) {
+    const { params } = transition.to || {};
+
+    if (params) {
+      this.router.transitionTo(
+        'authenticated.dashboard.project',
+        params['projectid'] as string
+      );
+    }
   }
 }

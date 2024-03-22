@@ -21,7 +21,7 @@ export default class AuthenticatedPartnerProjectRoute extends Route {
 
   async beforeModel() {
     if (!this.organization.selected?.features?.partner_dashboard) {
-      this.router.transitionTo('authenticated.projects');
+      this.router.transitionTo('authenticated.dashboard.projects');
     }
 
     if (!this.partner.access?.list_files) {

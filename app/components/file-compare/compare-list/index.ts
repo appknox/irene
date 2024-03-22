@@ -76,7 +76,7 @@ export default class FileCompareCompareListComponent extends Component<FileCompa
   get breadcrumbItems(): AkBreadcrumbsItemSignature['Args'][] {
     return [
       {
-        route: 'authenticated.projects',
+        route: 'authenticated.dashboard.projects',
         linkTitle: this.intl.t('allProjects'),
       },
       {

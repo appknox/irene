@@ -12,7 +12,7 @@ export default class AuthenticatedPartnerAnalyticsRoute extends Route {
 
   beforeModel(): void {
     if (!this.organization.selected?.features.partner_dashboard) {
-      this.router.transitionTo('authenticated.projects');
+      this.router.transitionTo('authenticated.dashboard.projects');
     }
 
     if (!this.partner.access?.view_analytics) {

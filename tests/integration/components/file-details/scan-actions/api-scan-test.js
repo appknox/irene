@@ -294,7 +294,7 @@ module(
           assert
             .dom('[data-test-proxySettingsView-editSettings]')
             .hasTagName('a')
-            .hasAttribute('href', '/project/1/settings')
+            .hasAttribute('href', '/dashboard/project/1/settings')
             .hasText('t:edit:()');
 
           assert
