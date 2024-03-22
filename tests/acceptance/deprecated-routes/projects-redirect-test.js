@@ -1,0 +1,234 @@
+import { module, test } from 'qunit';
+import { visit, currentURL } from '@ember/test-helpers';
+import { setupApplicationTest } from 'ember-qunit';
+import { setupMirage } from 'ember-cli-mirage/test-support';
+import Service from '@ember/service';
+import { setupRequiredEndpoints } from '../../helpers/acceptance-utils';
+
+class IntegrationStub extends Service {
+  async configure(user) {
+    this.currentUser = user;
+  }
+
+  isPendoEnabled() {
+    return false;
+  }
+
+  isCrispEnabled() {
+    return false;
+  }
+}
+
+class WebsocketStub extends Service {
+  async connect() {}
+
+  async configure() {}
+}
+
+module('Acceptance | projects redirect', function (hooks) {
+  setupApplicationTest(hooks);
+  setupMirage(hooks);
+
+  hooks.beforeEach(async function () {
+    const { vulnerabilities, organization } = await setupRequiredEndpoints(
+      this.server
+    );
+
+    organization.update({
+      features: {
+        dynamicscan_automation: true,
+      },
+    });
+
+    const profile = this.server.create('profile');
+    const project = this.server.create('project');
+
+    const analyses = vulnerabilities.map((v, id) =>
+      this.server.create('analysis', { id, vulnerability: v.id }).toJSON()
+    );
+
+    this.server.get('/profiles/:id/vulnerability_preferences', (schema) => {
+      return schema['vulnerabilityPreferences'].all().models;
+    });
+
+    this.server.createList('file', 3, {
+      project: project.id,
+      profile: profile.id,
+      analyses,
+    });
+
+    this.server.get('/profiles/:id/unknown_analysis_status', (_, req) => {
+      return {
+        id: req.params.id,
+        status: true,
+      };
+    });
+
+    this.server.get('/projects/:id/files', (schema) => {
+      const files = schema.files.all().models;
+
+      return {
+        count: files.length,
+        next: null,
+        previous: null,
+        results: files,
+      };
+    });
+
+    this.server.create('device-preference', {
+      id: profile.id,
+    });
+
+    this.server.create('proxy-setting', { id: profile.id });
+    this.server.create('dynamicscan-mode', { id: profile.id });
+
+    this.owner.register('service:integration', IntegrationStub);
+    this.owner.register('service:websocket', WebsocketStub);
+
+    this.server.get('/v2/projects/:id', (schema, req) => {
+      return schema.projects.find(req.params.id).toJSON();
+    });
+
+    this.server.get('/profiles/:id', (schema, req) =>
+      schema.profiles.find(`${req.params.id}`)?.toJSON()
+    );
+
+    this.server.get('/dynamicscan/:id', (schema, req) => {
+      return schema.dynamicscans.find(`${req.params.id}`)?.toJSON();
+    });
+
+    this.server.get('/profiles/:id/device_preference', (schema, req) => {
+      return schema.devicePreferences.find(`${req.params.id}`)?.toJSON();
+    });
+
+    this.server.get('/projects/:id/available-devices', (schema) => {
+      const results = schema.projectAvailableDevices.all().models;
+
+      return { count: results.length, next: null, previous: null, results };
+    });
+
+    this.server.get('/profiles/:id/proxy_settings', (schema, req) => {
+      return schema.proxySettings.find(`${req.params.id}`)?.toJSON();
+    });
+
+    this.server.get('/profiles/:id/api_scan_options', (_, req) => ({
+      id: req.params.id,
+      api_url_filters: '',
+    }));
+
+    this.server.get(
+      '/organizations/:id/projects/:projectId/collaborators',
+      (schema) => {
+        const results = schema.projectCollaborators.all().models;
+
+        return { count: results.length, next: null, previous: null, results };
+      }
+    );
+
+    this.server.get(
+      '/organizations/:orgId/projects/:projectId/teams',
+      (schema) => {
+        const results = schema.projectTeams.all().models;
+
+        return { count: results.length, next: null, previous: null, results };
+      }
+    );
+
+    this.server.get('/profiles/:id/dynamicscan_mode', (schema, req) => {
+      return schema.dynamicscanModes.find(req.params.id).toJSON();
+    });
+
+    this.server.get('/v2/scan_parameter_groups/:id', (schema, req) =>
+      schema.scanParameterGroups.find(req.params.id).toJSON()
+    );
+
+    this.server.get(
+      '/v2/projects/:projectId/scan_parameter_groups/:id',
+      (schema, req) => schema.scanParameterGroups.find(req.params.id).toJSON()
+    );
+
+    this.server.get(
+      '/v2/projects/:projectId/scan_parameter_groups',
+      function (schema) {
+        const data = schema.scanParameterGroups.all().models;
+
+        return {
+          count: data.length,
+          next: null,
+          previous: null,
+          results: data,
+        };
+      }
+    );
+
+    this.server.get(
+      '/v2/scan_parameter_groups/:id/scan_parameters',
+      (schema) => {
+        const data = schema.scanParameters.all().models;
+
+        return {
+          count: data.length,
+          next: null,
+          previous: null,
+          results: data,
+        };
+      }
+    );
+
+    this.server.get(
+      '/organizations/:id/github_repos',
+      () => new Response(404, {}, { detail: 'Github not integrated' })
+    );
+
+    this.server.get(
+      '/projects/:id/github',
+      () => new Response(400, {}, { detail: 'Github not integrated' })
+    );
+
+    this.server.get(
+      '/organizations/:id/jira_projects',
+      () => new Response(404, {}, { detail: 'JIRA not integrated' })
+    );
+
+    this.server.get(
+      '/projects/:id/jira',
+      () => new Response(404, {}, { detail: 'JIRA not integrated' })
+    );
+
+    this.owner.register('service:integration', IntegrationStub);
+    this.owner.register('service:websocket', WebsocketStub);
+  });
+
+  test('It redirects to authenticated.dashboard.projects route', async function (assert) {
+    const scenario = this.server.create('scan-parameter-group', {
+      id: '1',
+      project: 1,
+      name: 'Default',
+      is_active: false,
+      is_default: true,
+    });
+
+    await visit('/projects');
+
+    assert.strictEqual(currentURL(), '/dashboard/projects');
+
+    await visit('/project/1/files');
+
+    assert.strictEqual(currentURL(), '/dashboard/project/1/files');
+
+    await visit('/project/1/settings');
+
+    assert.strictEqual(currentURL(), '/dashboard/project/1/settings');
+
+    await visit('/project/1/settings/analysis');
+
+    assert.strictEqual(currentURL(), '/dashboard/project/1/settings/analysis');
+
+    await visit(`/project/1/settings/dast-automation-scenario/${scenario.id}`);
+
+    assert.strictEqual(
+      currentURL(),
+      `/dashboard/project/1/settings/dast-automation-scenario/${scenario.id}`
+    );
+  });
+});

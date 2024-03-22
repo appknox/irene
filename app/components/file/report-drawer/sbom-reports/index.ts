@@ -75,7 +75,11 @@ export default class FileReportDrawerSbomReportsComponent extends Component<File
 
   @action async goToLatestFile() {
     this.args.closeDrawer();
-    this.router.transitionTo('authenticated.file', String(this.latestFileId));
+
+    this.router.transitionTo(
+      'authenticated.dashboard.file',
+      String(this.latestFileId)
+    );
   }
 
   getSbomFile = task(async () => {

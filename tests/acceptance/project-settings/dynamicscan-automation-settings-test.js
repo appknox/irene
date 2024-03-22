@@ -239,7 +239,7 @@ module(
 
       const scenario1Name = 'New Scenario Name 1';
 
-      await visit(`/project/${this.project.id}/settings`);
+      await visit(`/dashboard/project/${this.project.id}/settings`);
 
       await click(selectors.addScenarioBtn);
 
@@ -262,7 +262,7 @@ module(
       // In DAST Automation route
       assert.strictEqual(
         currentURL(),
-        `/project/${this.project.id}/settings/dast-automation-scenario/1`
+        `/dashboard/project/${this.project.id}/settings/dast-automation-scenario/1`
       );
     });
 
@@ -288,7 +288,7 @@ module(
         );
 
         await visit(
-          `/project/${this.project.id}/settings/dast-automation-scenario/${scenario.id}`
+          `/dashboard/project/${this.project.id}/settings/dast-automation-scenario/${scenario.id}`
         );
 
         if (is_default) {
@@ -336,7 +336,7 @@ module(
           // Navigates to project settings after delete
           assert.strictEqual(
             currentURL(),
-            `/project/${this.project.id}/settings`
+            `/dashboard/project/${this.project.id}/settings`
           );
         }
       }

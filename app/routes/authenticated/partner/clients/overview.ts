@@ -10,7 +10,7 @@ export default class AuthenticatedPartnerClientsOverviewRoute extends Route {
 
   beforeModel(): void {
     if (!this.me.org?.can_access_partner_dashboard) {
-      this.router.transitionTo('authenticated.projects');
+      this.router.transitionTo('authenticated.dashboard.projects');
     }
   }
 }

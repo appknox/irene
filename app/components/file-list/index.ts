@@ -18,7 +18,7 @@ import { PaginationProviderActionsArgs } from 'irene/components/ak-pagination-pr
 import RealtimeService from 'irene/services/realtime';
 import { AkBreadcrumbsItemSignature } from 'irene/components/ak-breadcrumbs/item';
 import parseError from 'irene/utils/parse-error';
-import { ProjectFilesQueryParams } from 'irene/routes/authenticated/project/files';
+import { ProjectFilesQueryParams } from 'irene/routes/authenticated/dashboard/project/files';
 
 type FilesQueryResponse = DS.AdapterPopulatedRecordArray<FileModel> & {
   meta: { count: number };
@@ -55,16 +55,16 @@ export default class FileListComponent extends Component<FileListSignature> {
   get breadcrumbItems(): AkBreadcrumbsItemSignature['Args'][] {
     return [
       {
-        route: 'authenticated.projects',
+        route: 'authenticated.dashboard.projects',
         linkTitle: this.intl.t('allProjects'),
       },
       {
-        route: 'authenticated.project.files',
+        route: 'authenticated.dashboard.project.files',
         linkTitle: this.project?.get('packageName'),
         model: this.project?.get('id'),
       },
       {
-        route: 'authenticated.project.files',
+        route: 'authenticated.dashboard.project.files',
         linkTitle: this.intl.t('allUploads'),
         model: this.project?.get('id'),
       },

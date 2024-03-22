@@ -52,26 +52,26 @@ export default class FileCompareComponent extends Component<FileCompareSignature
   get breadcrumbItems() {
     return [
       {
-        route: 'authenticated.projects',
+        route: 'authenticated.dashboard.projects',
         linkTitle: this.intl.t('allProjects'),
       },
       this.isAllUploadsBreadcrumb
         ? {
-            route: 'authenticated.project.files',
+            route: 'authenticated.dashboard.project.files',
             linkTitle: this.file1?.project?.get('packageName'),
             model: this.file1?.project?.get('id'),
           }
         : null,
       !this.isAllUploadsBreadcrumb
         ? {
-            route: 'authenticated.file',
+            route: 'authenticated.dashboard.file',
             linkTitle: `${this.intl.t('scanDetails')}`,
             model: this.file1?.id,
           }
         : null,
       !this.isAllUploadsBreadcrumb
         ? {
-            route: 'authenticated.choose',
+            route: 'authenticated.dashboard.choose',
             linkTitle: this.intl.t('fileCompare.fileSelection'),
             model: this.file1?.id,
           }
@@ -125,14 +125,17 @@ export default class FileCompareComponent extends Component<FileCompareSignature
   goToCompareSelect() {
     if (this.isAllUploadsBreadcrumb) {
       this.router.transitionTo(
-        'authenticated.project.files',
+        'authenticated.dashboard.project.files',
         String(this.file1?.project?.get('id'))
       );
 
       return;
     }
 
-    this.router.transitionTo('authenticated.choose', String(this.file1?.id));
+    this.router.transitionTo(
+      'authenticated.dashboard.choose',
+      String(this.file1?.id)
+    );
   }
 
   @action

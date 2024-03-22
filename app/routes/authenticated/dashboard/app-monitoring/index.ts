@@ -38,7 +38,7 @@ export default class AuthenticatedDashboardAppMonitoringIndexRoute extends Route
 
   beforeModel() {
     if (!this.organization.selected?.features.app_monitoring) {
-      this.router.transitionTo('authenticated.projects');
+      this.router.transitionTo('authenticated.dashboard.projects');
     }
   }
 

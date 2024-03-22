@@ -48,11 +48,11 @@ export default class FileCompareHeaderComponent extends Component<FileCompareHea
   get breadcrumbItems(): AkBreadcrumbsItemSignature['Args'][] {
     return [
       {
-        route: 'authenticated.projects',
+        route: 'authenticated.dashboard.projects',
         linkTitle: this.intl.t('allProjects'),
       },
       {
-        route: 'authenticated.file',
+        route: 'authenticated.dashboard.file',
         linkTitle: this.intl.t('scanDetails'),
         model: this.file1?.id,
       },
@@ -66,7 +66,7 @@ export default class FileCompareHeaderComponent extends Component<FileCompareHea
 
   @action goToSettings() {
     this.router.transitionTo(
-      'authenticated.project.settings',
+      'authenticated.dashboard.project.settings',
       String(this.args.project?.get('id'))
     );
   }

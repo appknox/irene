@@ -1,27 +1,30 @@
 import Route from '@ember/routing/route';
 import { inject as service } from '@ember/service';
-import ProjectModel from 'irene/models/project';
 import { ScrollToTop } from 'irene/utils/scroll-to-top';
 import Store from '@ember-data/store';
+import RouterService from '@ember/routing/router-service';
+import Transition from '@ember/routing/transition';
 
-export interface ProjectSettingsDastAutomationQueryParams {
-  scenario_id: string;
-}
-
-export default class AuthenticatedProjectSettingsDastAutomationRoute extends ScrollToTop(
+export default class AuthenticatedDashboardProjectSettingsDastAutomationRoute extends ScrollToTop(
   Route
 ) {
   @service declare store: Store;
+  @service declare router: RouterService;
 
-  async model(params: ProjectSettingsDastAutomationQueryParams) {
-    const scenario = await this.store.findRecord(
-      'scan-parameter-group',
-      params?.scenario_id
-    );
+  async beforeModel(transition: Transition) {
+    const params = this.paramsFor('authenticated.project') as Record<
+      string,
+      string
+    >;
 
-    return {
-      project: this.modelFor('authenticated.project') as ProjectModel,
-      scenario,
-    };
+    const dastParams = transition.to?.params || {};
+
+    if (params && dastParams) {
+      this.router.transitionTo(
+        'authenticated.dashboard.project.settings.dast-automation-scenario',
+        params['projectid'] as string,
+        dastParams['scenario_id'] as string
+      );
+    }
   }
 }

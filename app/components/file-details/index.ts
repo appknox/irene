@@ -15,7 +15,7 @@ export default class FileDetailsComponent extends Component<FileDetailsSignature
   get breadcrumbItems() {
     return [
       {
-        route: 'authenticated.projects',
+        route: 'authenticated.dashboard.projects',
         linkTitle: this.intl.t('allProjects'),
       },
       {

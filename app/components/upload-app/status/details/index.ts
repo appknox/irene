@@ -61,7 +61,7 @@ export default class UploadAppStatusDetailsComponent extends Component<UploadApp
       this.args.submission.status === ENUMS.SUBMISSION_STATUS.ANALYZING;
 
     const isProjectsRoute =
-      this.router.currentRouteName === 'authenticated.projects';
+      this.router.currentRouteName === 'authenticated.dashboard.projects';
 
     const hasDefaultFilters = this.projectService.isProjectReponseFiltered;
 

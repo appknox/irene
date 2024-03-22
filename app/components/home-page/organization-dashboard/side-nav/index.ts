@@ -82,11 +82,11 @@ export default class HomePageOrganizationDashboardSideNavComponent extends Compo
       {
         label: this.intl.t('allProjects'),
         icon: 'folder',
-        route: 'authenticated.projects',
+        route: 'authenticated.dashboard.projects',
         hasBadge: true,
         badgeLabel: this.organization.selected?.projectsCount,
         currentWhen:
-          'authenticated.projects authenticated.project.files authenticated.project.settings authenticated.dashboard.compare authenticated.file authenticated.dashboard.file-vul-compare authenticated.choose authenticated.dashboard.file',
+          'authenticated.dashboard.projects authenticated.dashboard.project.files authenticated.dashboard.project.settings authenticated.dashboard.compare authenticated.dashboard.file authenticated.dashboard.file-vul-compare authenticated.dashboard.choose authenticated.dashboard.file',
       },
       this.showAppMonitoringDashboard && {
         label: this.intl.t('appMonitoring'),

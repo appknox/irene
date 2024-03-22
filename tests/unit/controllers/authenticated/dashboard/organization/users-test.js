@@ -11,6 +11,7 @@ module(
       let controller = this.owner.lookup(
         'controller:authenticated/dashboard/organization/users'
       );
+
       assert.ok(controller);
     });
   }
