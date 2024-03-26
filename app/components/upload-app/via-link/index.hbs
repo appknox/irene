@@ -2,6 +2,7 @@
 <div>
   <AkIconButton
     data-test-uploadAppViaLink-btn
+    aria-label='upload app via link button'
     @variant='outlined'
     {{on 'click' this.openLinkUploadModal}}
   >
@@ -60,14 +61,14 @@
                 </AkTypography>
               </li>
 
-              <li>
+              {{! <li>
                 <AkTypography
                   @variant='body2'
                   data-test-uploadAppViaLinkModal-appstoreValidUrl
                 >
                   https://apps.apple.com/{country_code}/app/{app_slug}/id{app_id}
                 </AkTypography>
-              </li>
+              </li> }}
             </ul>
           </AkStack>
 
@@ -86,6 +87,7 @@
         >
           <AkButton
             data-test-uploadAppViaLinkModal-confirmBtn
+            aria-label='upload app via link modal confirm button'
             @disabled={{or
               this.changeset.isInvalid
               (not this.changeset.isDirty)

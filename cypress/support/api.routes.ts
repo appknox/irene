@@ -20,6 +20,10 @@ export const API_ROUTES = {
     route: '/api/organizations/*/upload_app',
     alias: 'uploadAppReq',
   },
+  uploadAppViaLink: {
+    route: '/api/organizations/*/upload_app_url',
+    alias: 'uploadAppLinkReq',
+  },
 
   // Auth
   login: { route: '/api/login' },
