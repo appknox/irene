@@ -7,6 +7,6 @@ export default class AuthenticatedSettingsSecurityRoute extends ScrollToTop(
   Route
 ) {
   model() {
-    return this.modelFor('authenticated.settings') as UserModel;
+    return this.modelFor('authenticated.dashboard.settings') as UserModel;
   }
 }

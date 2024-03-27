@@ -11,22 +11,24 @@ export default class AccountSettingsComponent extends Component {
     return [
       {
         label: this.intl.t('general'),
-        route: 'authenticated.settings.general',
+        route: 'authenticated.dashboard.settings.general',
         isActive:
-          this.router.currentRouteName === 'authenticated.settings.general',
+          this.router.currentRouteName ===
+          'authenticated.dashboard.settings.general',
       },
       {
         label: this.intl.t('security'),
-        route: 'authenticated.settings.security',
+        route: 'authenticated.dashboard.settings.security',
         isActive:
-          this.router.currentRouteName === 'authenticated.settings.security',
+          this.router.currentRouteName ===
+          'authenticated.dashboard.settings.security',
       },
       {
         label: this.intl.t('developerSettings'),
-        route: 'authenticated.settings.developersettings',
+        route: 'authenticated.dashboard.settings.developersettings',
         isActive:
           this.router.currentRouteName ===
-          'authenticated.settings.developersettings',
+          'authenticated.dashboard.settings.developersettings',
       },
     ];
   }

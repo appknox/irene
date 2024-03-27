@@ -1,0 +1,17 @@
+/* eslint-disable prettier/prettier */
+import { module, test } from 'qunit';
+import { setupTest } from 'ember-qunit';
+
+module(
+  'Unit | Route | authenticated/dashboard/settings/general',
+  function (hooks) {
+    setupTest(hooks);
+
+    test('it exists', function (assert) {
+      let route = this.owner.lookup(
+        'route:authenticated/dashboard/settings/general'
+      );
+      assert.ok(route);
+    });
+  }
+);
