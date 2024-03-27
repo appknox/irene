@@ -15,7 +15,7 @@ export default class MarketplacePluginListComponent extends Component {
         title: this.intl.t('azurePipeline'),
         description:
           this.intl.t('installAppknoxPluginTo') + this.intl.t('azurePipeline'),
-        logo: 'images/azure-icon.png',
+        logo: '../images/azure-icon.png',
         link: 'https://marketplace.visualstudio.com/items?itemName=appknox.appknox',
         published: true,
         instructions: '',
@@ -23,7 +23,7 @@ export default class MarketplacePluginListComponent extends Component {
       {
         title: this.intl.t('jenkinsPipeline'),
         description: this.intl.t('viewIntegrationInstructions'),
-        logo: 'images/jenkins-icon.png',
+        logo: '../images/jenkins-icon.png',
         link: '',
         published: false,
         instructions: htmlSafe(constants.instructions),
@@ -31,7 +31,7 @@ export default class MarketplacePluginListComponent extends Component {
       {
         title: this.intl.t('circleCIPipeline'),
         description: this.intl.t('viewIntegrationInstructions'),
-        logo: 'images/circleci-icon.png',
+        logo: '../images/circleci-icon.png',
         link: '',
         published: false,
         instructions: htmlSafe(constants.instructions),
@@ -39,7 +39,7 @@ export default class MarketplacePluginListComponent extends Component {
       {
         title: this.intl.t('bitbucketPipeline'),
         description: this.intl.t('viewIntegrationInstructions'),
-        logo: 'images/bitbucket-icon.png',
+        logo: '../images/bitbucket-icon.png',
         link: '',
         published: false,
         instructions: htmlSafe(constants.instructions),
@@ -47,7 +47,7 @@ export default class MarketplacePluginListComponent extends Component {
       {
         title: this.intl.t('appCenterPipeline'),
         description: this.intl.t('viewIntegrationInstructions'),
-        logo: 'images/app-center-icon.png',
+        logo: '../images/app-center-icon.png',
         link: '',
         published: false,
         instructions: htmlSafe(constants.appCenterInstructions),
@@ -55,7 +55,7 @@ export default class MarketplacePluginListComponent extends Component {
       {
         title: this.intl.t('bitriseWorkflow'),
         description: this.intl.t('viewIntegrationInstructions'),
-        logo: 'images/bitrise-icon.png',
+        logo: '../images/bitrise-icon.png',
         link: '',
         published: false,
         instructions: htmlSafe(constants.bitriseInstructions),
@@ -63,7 +63,7 @@ export default class MarketplacePluginListComponent extends Component {
       {
         title: this.intl.t('githubAction'),
         description: this.intl.t('viewIntegrationInstructions'),
-        logo: 'images/octocat.png',
+        logo: '../images/octocat.png',
         link: 'https://github.com/marketplace/actions/appknox-github-action',
         published: true,
         instructions: '',

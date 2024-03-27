@@ -1,16 +1,16 @@
 import Route from '@ember/routing/route';
 import RouterService from '@ember/routing/router-service';
 import { inject as service } from '@ember/service';
+import Transition from '@ember/routing/transition';
 
-import ENV from 'irene/config/environment';
-import { ScrollToTop } from 'irene/utils/scroll-to-top';
-
-export default class AuthenticatedMarketPlaceRoute extends ScrollToTop(Route) {
+export default class AuthenticatedMarketPlaceRoute extends Route {
   @service declare router: RouterService;
 
-  beforeModel() {
-    if (!ENV.enableMarketplace) {
-      this.router.transitionTo('/');
+  beforeModel(transition: Transition) {
+    const { params } = transition.to || {};
+
+    if (params) {
+      this.router.transitionTo('authenticated.dashboard.marketplace');
     }
   }
 }
