@@ -178,6 +178,7 @@
     "webpack": "^5.89.0"
   },
   "dependencies": {
+    "@formatjs/intl": "^2.10.1",
     "@novnc/novnc": "^1.4.0",
     "@popperjs/core": "^2.11.6",
     "billboard.js": "^1.12.7",

@@ -1,4 +1,5 @@
 import Ember from 'ember';
+import IntlService from 'ember-intl/services/intl';
 import { Csb, Module, Product } from 'irene/config/environment';
 
 declare global {
@@ -80,6 +81,7 @@ declare global {
     CRISP_WEBSITE_ID: string;
     fwSettings: { widget_id: string };
     analytics?: CsbAnalytics;
+    intl: IntlService;
   }
 
   // Notification Types
