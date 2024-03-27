@@ -10,8 +10,13 @@ export default class ApplicationRoute extends Route {
   @service declare headData: any;
   @service declare intl: IntlService;
   @service declare whitelabel: WhitelabelService;
+  @service('browser/window') declare window: Window;
   @service declare configuration: ConfigurationService;
   @service declare session: any;
+
+  activate() {
+    this.window.intl = this.intl;
+  }
 
   async beforeModel(): Promise<void> {
     await this.session.setup();

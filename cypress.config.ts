@@ -11,6 +11,7 @@ export default defineConfig({
       hideCredentials: true,
       TEST_USERNAME: '***',
       TEST_PASSWORD: '***',
+      TEST_GOOGLE_PASSWORD: '***',
     },
     // setupNodeEvents(on, config) {},
   },
