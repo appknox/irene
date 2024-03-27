@@ -2,7 +2,7 @@ export default {
   instructions: `
     <ul class="bullet-list margin-r-1 margin-l-1h">
       <li class="margin-b-1">
-        Generate a personal access token from <a href="/settings/developersettings" target="_blank">Developer Settings</a>
+        Generate a personal access token from <a href="/dashboard/settings/developersettings" target="_blank">Developer Settings</a>
       </li>
       <li class="margin-b-1">
         Set environment variable <code class="black-text">APPKNOX_ACCESS_TOKEN</code> with the personal token:<br>
@@ -40,7 +40,7 @@ $ appknox upload &lt;path to apk/ipa file&gt; | xargs appknox cicheck --risk-thr
   appCenterInstructions: `
     <ol class="margin-r-1 margin-l-1h">
       <li class="margin-b-1">
-        Generate a personal access token from <a href="/settings/developersettings" target="_blank">Developer Settings</a>
+        Generate a personal access token from <a href="/dashboard/settings/developersettings" target="_blank">Developer Settings</a>
       </li>
       <li class="margin-b-1">
         Create a file <code class="black-text"><strong>appcenter-post-build.sh</strong></code> in your source code repository as per the <a href="https://docs.microsoft.com/en-us/appcenter/build/custom/scripts/#post-build" target="_blank">build docs</a> and add the content given below:
@@ -71,7 +71,7 @@ $ appknox upload &lt;path to apk/ipa file&gt; | xargs appknox cicheck --risk-thr
   bitriseInstructions: `
     <ol class="margin-r-1 margin-l-1h">
       <li class="margin-b-1">
-        Generate a personal access token from <a href="/settings/developersettings" target="_blank">Developer Settings</a>
+        Generate a personal access token from <a href="/dashboard/settings/developersettings" target="_blank">Developer Settings</a>
       </li>
       <li class="margin-b-1">
         In your project's Bitrise Workflow Editor, add secret environment variable <code class="black-text"><strong>APPKNOX_ACCESS_TOKEN</strong></code> with the value generated in step 1.

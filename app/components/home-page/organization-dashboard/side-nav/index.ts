@@ -118,7 +118,7 @@ export default class HomePageOrganizationDashboardSideNavComponent extends Compo
       {
         label: this.intl.t('accountSettings'),
         icon: 'account-box',
-        route: 'authenticated.settings',
+        route: 'authenticated.dashboard.settings',
       },
       this.showMarketplace && {
         label: this.intl.t('marketplace'),
@@ -128,7 +128,7 @@ export default class HomePageOrganizationDashboardSideNavComponent extends Compo
       this.showBilling && {
         label: this.intl.t('billing'),
         icon: 'credit-card',
-        route: 'authenticated.billing',
+        route: 'authenticated.dashboard.billing',
       },
       this.showPartnerDashboard && {
         label: this.intl.t('clients'),

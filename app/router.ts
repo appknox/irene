@@ -51,11 +51,7 @@ Router.map(function () {
 
       this.route('organization-settings', { path: '/organization/settings' });
 
-      this.route('settings', function () {
-        this.route('general');
-        this.route('security');
-        this.route('developersettings');
-      });
+      this.route('settings');
 
       this.route('billing');
       this.route('marketplace');
@@ -137,6 +133,14 @@ Router.map(function () {
 
         this.route('notifications');
 
+        this.route('billing');
+
+        this.route('settings', function () {
+          this.route('general');
+          this.route('security');
+          this.route('developersettings');
+        });
+
         this.route(
           'app-monitoring',
           { path: '/store-monitoring' },
@@ -204,12 +208,13 @@ export const CSBMap = {
   'authenticated.projects': ENV.csb['navigateToProjects'],
   'authenticated.analytics': ENV.csb['navigateToAnalytics'],
   'authenticated.dashboard.file': ENV.csb['clickProjectCard'],
-  'authenticated.settings': ENV.csb['navigateToSettings'],
+  'authenticated.dashboard.settings': ENV.csb['navigateToSettings'],
   'authenticated.project.files': ENV.csb['navigateToAllScans'],
   'authenticated.choose': ENV.csb['naigateToCompareScans'],
   'authenticated.organization.namespaces': ENV.csb['navigateToOrganization'],
   'authenticated.organization-settings': ENV.csb['navigateToOrgSettings'],
-  'authenticated.settings.index': ENV.csb['navigateToAccountSettings'],
+  'authenticated.dashboard.settings.index':
+    ENV.csb['navigateToAccountSettings'],
   'authenticated.marketplace': ENV.csb['navigateToMarketPlace'],
-  'authenticated.billing': ENV.csb['navigateToBilling'],
+  'authenticated.dashboard.billing': ENV.csb['navigateToBilling'],
 };
