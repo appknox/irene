@@ -10,7 +10,7 @@ import IntlService from 'ember-intl/services/intl';
 import ConfigurationService from 'irene/services/configuration';
 import WhitelabelService from 'irene/services/whitelabel';
 import { action } from '@ember/object';
-import * as chat from 'irene/utils/chat';
+import FreshdeskService from 'irene/services/freshdesk';
 
 export interface HomePageOrganizationDashboardSideNavSignature {
   Args: {
@@ -51,6 +51,7 @@ export default class HomePageOrganizationDashboardSideNavComponent extends Compo
   @service declare configuration: ConfigurationService;
   @service declare whitelabel: WhitelabelService;
   @service('browser/window') declare window: Window;
+  @service declare freshdesk: FreshdeskService;
 
   showMarketplace = ENV.enableMarketplace;
   productVersion = ENV.productVersion;
@@ -149,7 +150,7 @@ export default class HomePageOrganizationDashboardSideNavComponent extends Compo
 
   get lowerMenuItems() {
     return [
-      this.enableCrisp && {
+      this.enableChatSupport && {
         title: this.intl.t('chatSupport'),
         icon: 'chat-bubble',
         onClick: this.openChatBox,
@@ -212,8 +213,8 @@ export default class HomePageOrganizationDashboardSideNavComponent extends Compo
     return this.integration.isPendoEnabled();
   }
 
-  get enableCrisp() {
-    return this.integration.isCrispEnabled();
+  get enableChatSupport() {
+    return this.freshdesk.freshchatEnabled;
   }
 
   get isSidebarExpanded() {
@@ -243,7 +244,7 @@ export default class HomePageOrganizationDashboardSideNavComponent extends Compo
   }
 
   @action openChatBox() {
-    chat.openChatBox();
+    this.freshdesk.openFreshchatWidget();
   }
 }
 

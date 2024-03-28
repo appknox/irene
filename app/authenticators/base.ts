@@ -6,6 +6,7 @@ import RouterService from '@ember/routing/router-service';
 
 import ENV from 'irene/config/environment';
 import OidcService from 'irene/services/oidc';
+import FreshdeskService from 'irene/services/freshdesk';
 
 export interface LoginSuccessDataProps {
   token: string;
@@ -40,6 +41,7 @@ export default class BaseAuthenticator extends Base {
   @service('notifications') declare notify: NotificationService;
   @service('browser/window') declare window: Window;
   @service declare oidc: OidcService;
+  @service declare freshdesk: FreshdeskService;
 
   restoreLastTransition(userId: number) {
     const redirected = this.oidc.checkForOidcTokenAndRedirect();
@@ -82,6 +84,8 @@ export default class BaseAuthenticator extends Base {
     const url = ENV['ember-simple-auth']['logoutEndPoint'];
 
     await this.ajax.post(url);
+
+    this.freshdesk.destroyFreshchatWidget();
 
     location.reload();
   }

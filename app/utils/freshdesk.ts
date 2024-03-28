@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
 // @ts-nocheck
+import UserModel from 'irene/models/user';
 
 // Inject freshdesk support script that enables widget in the application
 const injectSupportWidget = (widgetId: string) => {
@@ -23,4 +24,61 @@ const injectSupportWidget = (widgetId: string) => {
   document.getElementsByTagName('head')[0].appendChild(s);
 };
 
-export { injectSupportWidget };
+// Install freshchat
+const installFreshChat = (user: UserModel, freshchatKey: string) => {
+  const host = 'https://appknox-support.freshchat.com';
+
+  window.fcSettings = {
+    host,
+    token: freshchatKey,
+    onInit: function () {
+      window.fcWidget.user.get(function (resp) {
+        const status = resp && resp.status;
+        const data = resp && resp.data;
+
+        if (status !== 200) {
+          window.fcWidget.user.create({
+            firstName: user?.firstName, // user's first name
+            lastName: user?.lastName, // user's last name
+            email: user.email, // user's email address
+          });
+        }
+
+        if (status === 200 && data?.restoreId) {
+          window.localStorage.setItem(user.freshchatHash, data?.restoreId);
+        }
+      });
+
+      window.fcWidget.on('user:created', function (resp) {
+        const status = resp && resp.status;
+        const data = resp && resp.data;
+
+        if (status === 200) {
+          if (data?.restoreId) {
+            // Save Restore ID to DB
+            window.localStorage.setItem(user.freshchatHash, data.restoreId);
+          }
+        }
+      });
+    },
+  };
+
+  const restoreId = window.localStorage.getItem(user.freshchatHash); // GET Restore ID from DB
+
+  window.fcWidgetMessengerConfig = {
+    config: {
+      headerProperty: {
+        hideChatButton: true,
+      },
+    },
+    externalId: user.freshchatHash,
+    restoreId,
+  };
+
+  const s = document.createElement('script');
+  s.src = `${host}/js/widget.js`;
+  s.async = 1;
+  document.getElementsByTagName('head')[0].appendChild(s);
+};
+
+export { injectSupportWidget, installFreshChat };

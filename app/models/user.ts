@@ -87,7 +87,7 @@ export default class UserModel extends Model {
   declare isTrial: boolean;
 
   @attr('string')
-  declare crispHash: string;
+  declare freshchatHash: string;
 
   @attr('boolean')
   declare canDisableMfa: boolean;
