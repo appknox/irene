@@ -21,7 +21,8 @@ class NotificationsStub extends Service {
 }
 
 class FreshdeskStub extends Service {
-  isSupportWidgetEnabled = false;
+  supportWidgetIsEnabled = false;
+  freshchatEnabled = false;
 }
 
 class ConfigurationStub extends Service {
@@ -79,8 +80,14 @@ module(
 
     test.each(
       'it renders organization-dashboard header',
-      [{ knowledgeBase: true, hasUploadAppStatus: true }, {}],
-      async function (assert, { knowledgeBase, hasUploadAppStatus }) {
+      [
+        { knowledgeBase: true, hasUploadAppStatus: true, chatSupport: true },
+        {},
+      ],
+      async function (
+        assert,
+        { knowledgeBase, hasUploadAppStatus, chatSupport }
+      ) {
         this.owner.register('service:configuration', ConfigurationStub);
         if (hasUploadAppStatus) {
           this.server.createList('submission', 2, {
@@ -93,7 +100,8 @@ module(
         }
 
         const freshdesk = this.owner.lookup('service:freshdesk');
-        freshdesk.isSupportWidgetEnabled = knowledgeBase;
+        freshdesk.supportWidgetIsEnabled = knowledgeBase;
+        freshdesk.freshchatEnabled = chatSupport;
 
         await render(hbs`
         <HomePage::OrganizationDashboard::Header @user={{this.user}} />
@@ -129,10 +137,12 @@ module(
             .doesNotExist();
         }
 
-        assert
-          .dom('[data-test-organizationDashboardHeader-supportBtn]')
-          .isNotDisabled()
-          .hasText('t:support:()');
+        if (chatSupport) {
+          assert
+            .dom('[data-test-organizationDashboardHeader-supportBtn]')
+            .isNotDisabled()
+            .hasText('t:support:()');
+        }
 
         assert.dom('[data-test-bell-icon]').isNotDisabled();
 
@@ -148,7 +158,7 @@ module(
 
       const freshdesk = this.owner.lookup('service:freshdesk');
 
-      freshdesk.isSupportWidgetEnabled = true;
+      freshdesk.supportWidgetIsEnabled = true;
 
       freshdesk.openSupportWidget = function () {
         assert.ok('Knowledge base clicked');

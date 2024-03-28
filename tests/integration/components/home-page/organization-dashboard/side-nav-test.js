@@ -43,6 +43,10 @@ class IntegrationStub extends Service {
   }
 }
 
+class FreshdeskStub extends Service {
+  freshchatEnabled = true;
+}
+
 const menuItems = ({
   analytics,
   appMonitoring,
@@ -300,6 +304,8 @@ module(
     });
 
     test('it should show lower menu items', async function (assert) {
+      this.owner.register('service:freshdesk', FreshdeskStub);
+
       this.setProperties({
         isCollapsed: false,
         toggleSidebar: () => {

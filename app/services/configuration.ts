@@ -44,7 +44,7 @@ export default class ConfigurationService extends Service {
   };
 
   integrationData = {
-    crisp_key: '',
+    freshchat_key: '',
     freshdesk_configuration: {
       widget_id: '',
     },
@@ -84,11 +84,12 @@ export default class ConfigurationService extends Service {
       this.imageData.logo_on_darkbg ||= data.images.logo_on_darkbg;
       this.imageData.logo_on_lightbg ||= data.images.logo_on_lightbg;
 
-      this.integrationData.crisp_key ||= data.integrations.crisp_key;
       this.integrationData.csb_key ||= data.integrations.csb_key;
       this.integrationData.hotjar_key ||= data.integrations.hotjar_key;
       this.integrationData.pendo_key ||= data.integrations.pendo_key;
       this.integrationData.rollbar_key ||= data.integrations.rollbar_key;
+      this.integrationData.freshchat_key ||= data.integrations.freshchat_key;
+
       this.integrationData.freshdesk_configuration.widget_id ||=
         data.integrations.freshdesk_configuration.widget_id;
 
