@@ -244,6 +244,32 @@
           </div>
         </div>
       </div>
+      {{#unless this.isOwasp2024}}
+        <div class='columns'>
+          <div class='column is-one-third'>
+            <h5 class='bold-font'>
+              OWASP Category
+            </h5>
+          </div>
+        </div>
+        <div class='columns border-bottom-container'>
+          <div class='column margin-bottom20'>
+            <PowerSelectMultiple
+              @placeholder='Select OWASP Categories'
+              @selected={{this.analysisDetails.owasp}}
+              @options={{this.owasps}}
+              @onChange={{this.selectOwaspCategory}}
+              as |key|
+            >
+              {{key.code}}
+              -
+              {{key.year}}
+              -
+              {{key.title}}
+            </PowerSelectMultiple>
+          </div>
+        </div>
+      {{/unless}}
       <div class='columns'>
         <div class='column is-one-third'>
           <h5 class='bold-font'>

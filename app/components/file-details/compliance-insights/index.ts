@@ -2,6 +2,10 @@ import Component from '@glimmer/component';
 import FileModel from 'irene/models/file';
 import ENUMS from 'irene/enums';
 import { ECOption } from 'irene/components/ak-chart';
+import { inject as service } from '@ember/service';
+import Store from '@ember-data/store';
+import { tracked } from '@glimmer/tracking';
+import { task } from 'ember-concurrency';
 
 export interface FileDetailsComplianceInsightsSignature {
   Args: {
@@ -12,8 +16,32 @@ export interface FileDetailsComplianceInsightsSignature {
 type OwaspChartDataOptions = { mobileOptions: ECOption; webOptions: ECOption };
 
 export default class FileDetailsComplianceInsightsComponent extends Component<FileDetailsComplianceInsightsSignature> {
+  @service declare store: Store;
+  @tracked owaspTitles: { [key: string]: string } = {};
+
   get analyses() {
     return this.args.file.analyses;
+  }
+
+  get owasps() {
+    const owasps: string[] = [];
+
+    const risks = [
+      ENUMS.RISK.CRITICAL,
+      ENUMS.RISK.HIGH,
+      ENUMS.RISK.MEDIUM,
+      ENUMS.RISK.LOW,
+    ];
+
+    this.analyses.forEach((analysis) => {
+      analysis.owasp.forEach((owasp) => {
+        if (risks.includes(analysis.get('risk'))) {
+          owasps.push(owasp.id);
+        }
+      });
+    });
+
+    return owasps;
   }
 
   get owaspmobile2024s() {
@@ -50,17 +78,35 @@ export default class FileDetailsComplianceInsightsComponent extends Component<Fi
       {}
     ) as Record<string, number>;
 
-    this.owaspmobile2024s.forEach((owaspmobile2024) => {
-      const [key] = owaspmobile2024.split('_');
+    // Iterate through owaspmobile2024s if available
+    if (this.owaspmobile2024s.length > 0) {
+      this.owaspmobile2024s.forEach((owaspmobile2024) => {
+        const [key] = owaspmobile2024.split('_');
 
-      if (key && typeof owaspACounts[key] !== 'undefined') {
-        owaspACounts[key]++;
-      }
+        if (key && typeof owaspACounts[key] !== 'undefined') {
+          owaspACounts[key]++;
+        }
 
-      if (key && typeof owaspMCounts[key] !== 'undefined') {
-        owaspMCounts[key]++;
-      }
-    });
+        if (key && typeof owaspMCounts[key] !== 'undefined') {
+          owaspMCounts[key]++;
+        }
+      });
+    } else {
+      // Iterate through owasps if owaspmobile2024s is empty
+      this.owasps.forEach((owasp) => {
+        const [key] = owasp.split('_');
+
+        if (key && typeof owaspACounts[key] !== 'undefined') {
+          owaspACounts[key]++;
+        }
+
+        if (key && typeof owaspMCounts[key] !== 'undefined') {
+          owaspMCounts[key]++;
+        }
+      });
+    }
+
+    this.loadData.perform();
 
     return {
       mobileOptions: this.createChartOptions(owaspMCounts),
@@ -68,29 +114,27 @@ export default class FileDetailsComplianceInsightsComponent extends Component<Fi
     };
   }
 
-  get tooltipLabels() {
-    return {
-      A1: 'Injection',
-      A2: 'Broken Authentication and Session Management',
-      A3: 'Cross Site Scripting',
-      A4: 'IDOR',
-      A5: 'Security Misconfiguration',
-      A6: 'Sensitive Data Exposure',
-      A7: 'Missing function ACL',
-      A8: 'CSRF',
-      A9: 'Using components with known vulnerabilities',
-      A10: 'Unvalidated Redirects and Forwards',
-      M1: 'Improper Platform Usage',
-      M2: 'Insecure Data Storage',
-      M3: 'Insecure Communication',
-      M4: 'Insecure Authentication',
-      M5: 'Insufficient Cryptography',
-      M6: 'Insecure Authorization',
-      M7: 'Client Code Quality',
-      M8: 'Code Tampering',
-      M9: 'Reverse Engineering',
-      M10: 'Extraneous Functionality',
-    };
+  loadData = task(async () => {
+    let data;
+
+    if (this.owaspmobile2024s.length > 0) {
+      data = await this.store.findAll('owaspmobile2024');
+    } else if (this.owaspmobile2024s.length === 0 && this.owasps.length > 0) {
+      data = await this.store.findAll('owasp');
+    }
+
+    const tooltipLabels: { [key: string]: string } = {};
+    if (data) {
+      data.forEach((item: any) => {
+        tooltipLabels[item.code.split(':')[0]] = item.title;
+      });
+    }
+
+    this.owaspTitles = tooltipLabels;
+  });
+
+  get tooltipLabels(): { [key: string]: string } {
+    return this.owaspTitles;
   }
 
   createChartOptions(dataset: Record<string, number>): ECOption {
@@ -103,7 +147,9 @@ export default class FileDetailsComplianceInsightsComponent extends Component<Fi
         show: true,
         formatter: (params: any) => {
           const label: string =
-            this.tooltipLabels[params.name as keyof typeof this.tooltipLabels];
+            this.tooltipLabels[
+              params.name as keyof typeof this.tooltipLabels
+            ] || 'unknown';
 
           return `${label} <br/> ${params.name}: ${params.value}`;
         },

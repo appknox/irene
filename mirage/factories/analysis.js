@@ -47,6 +47,14 @@ export default Factory.extend({
     return desc;
   },
 
+  withOwasp: trait({
+    afterCreate(model, server) {
+      model.update({
+        owasp: server.createList('owasp', 2).map((it) => it.id),
+      });
+    },
+  }),
+
   withOwaspMobile2024: trait({
     afterCreate(model, server) {
       model.update({
@@ -140,6 +148,7 @@ export default Factory.extend({
   withAllRegulatory: trait({
     afterCreate(model, server) {
       model.update({
+        owasp: server.createList('owasp', 2).map((it) => it.id),
         owaspmobile2024: server
           .createList('owaspmobile2024', 2)
           .map((it) => it.id),

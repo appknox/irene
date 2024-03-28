@@ -86,6 +86,7 @@ export default class AnalysisOverviewComponent extends Component {
         contentType: 'application/json',
         data: JSON.stringify({
           ...this.PASSED_STATE,
+          owasp: this.analysis.owasp.map((a) => a.get('id')),
           owaspmobile2024: this.analysis.owaspmobile2024.map((a) =>
             a.get('id')
           ),
