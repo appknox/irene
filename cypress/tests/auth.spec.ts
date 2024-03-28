@@ -163,7 +163,6 @@ describe('User Login', () => {
     cy.findByText(APP_TRANSLATIONS.uploadApp).should('exist');
     cy.findByText(APP_TRANSLATIONS.allProjects).should('exist');
     cy.findByText(APP_TRANSLATIONS.allProjectsDescription).should('exist');
-    cy.findByText(APP_TRANSLATIONS.support).should('exist');
     cy.findByText(APP_TRANSLATIONS.knowledgeBase).should('exist');
   });
 });

@@ -17,7 +17,6 @@ import UserModel from 'irene/models/user';
 import { CSBMap } from 'irene/router';
 import ENV from 'irene/config/environment';
 import triggerAnalytics from 'irene/utils/trigger-analytics';
-import * as chat from 'irene/utils/chat';
 
 export default class AuthenticatedRoute extends Route {
   @service declare session: any;
@@ -80,9 +79,6 @@ export default class AuthenticatedRoute extends Route {
     triggerAnalytics('login', data as CsbAnalyticsLoginData);
 
     await this.integration.configure(user);
-
-    chat.setUserEmail(user.email, user.crispHash);
-    chat.setUserCompany(company || '');
 
     await this.configureRollBar(user);
     await this.configurePendo(user);

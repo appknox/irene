@@ -7,7 +7,6 @@ import IntlService from 'ember-intl/services/intl';
 import UserModel from 'irene/models/user';
 import FreshdeskService from 'irene/services/freshdesk';
 import IntegrationService from 'irene/services/integration';
-import * as chat from 'irene/utils/chat';
 
 export interface HomePageOrganizationDashboardHeaderSignature {
   Args: {
@@ -25,11 +24,11 @@ export default class HomePageOrganizationDashboardHeaderComponent extends Compon
   @tracked profileAnchorRef: HTMLElement | null = null;
 
   get showKnowledgeBase() {
-    return this.freshdesk.isSupportWidgetEnabled;
+    return this.freshdesk.supportWidgetIsEnabled;
   }
 
-  get enableCrisp() {
-    return this.integration.isCrispEnabled();
+  get showChatSupport() {
+    return this.freshdesk.freshchatEnabled;
   }
 
   get profileMenuItems() {
@@ -59,7 +58,7 @@ export default class HomePageOrganizationDashboardHeaderComponent extends Compon
   }
 
   @action openChatBox() {
-    chat.openChatBox();
+    this.freshdesk.openFreshchatWidget();
   }
 
   @action onOpenKnowledgeBase() {

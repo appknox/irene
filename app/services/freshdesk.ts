@@ -1,12 +1,13 @@
 import Service, { inject as service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
 import { task } from 'ember-concurrency';
-import { injectSupportWidget } from 'irene/utils/freshdesk';
+import { injectSupportWidget, installFreshChat } from 'irene/utils/freshdesk';
 import { action } from '@ember/object';
 
 import ConfigurationService from './configuration';
 import LoggerService from './logger';
 import NetworkService from './network';
+import UserModel from 'irene/models/user';
 
 export default class FreshdeskService extends Service {
   @service('browser/window') declare window: Window;
@@ -15,6 +16,7 @@ export default class FreshdeskService extends Service {
   @service declare network: NetworkService;
 
   @tracked widgetAuthToken = '';
+
   WIDGET_AUTH_ENDPOINT = '/api/v2/freshdesk/authenticate/';
 
   get freshdeskConfiguration() {
@@ -25,9 +27,40 @@ export default class FreshdeskService extends Service {
     return this.freshdeskConfiguration?.widget_id || '';
   }
 
-  get isSupportWidgetEnabled() {
+  get freshchatKey() {
+    return this.configuration.integrationData?.freshchat_key || '';
+  }
+
+  get supportWidgetIsEnabled() {
     const key = this.supportWidgetKey;
     return !!key;
+  }
+
+  get freshchatEnabled() {
+    const key = this.freshchatKey;
+    return !!key;
+  }
+
+  // Check if fresh chat widget is injected
+  get freshChatIsIntegrated() {
+    return this.window?.fcWidget && 'object' === typeof this.window.fcWidget;
+  }
+
+  openFreshchatWidget() {
+    if (!this.freshChatIsIntegrated || this.window.fcWidget.isOpen()) {
+      return;
+    }
+
+    this.window.fcWidget.open();
+  }
+
+  // Destroy widget when user logs out
+  destroyFreshchatWidget() {
+    if (!this.freshChatIsIntegrated) {
+      return;
+    }
+
+    this.window.fcWidget.destroy();
   }
 
   // Check if support widget is injected
@@ -67,6 +100,7 @@ export default class FreshdeskService extends Service {
     try {
       const authRes = await this.network.post(this.WIDGET_AUTH_ENDPOINT);
       const widgetAuthData = await authRes.json();
+
       this.window.FreshworksWidget('authenticate', {
         token: widgetAuthData.token,
       });
@@ -89,13 +123,14 @@ export default class FreshdeskService extends Service {
 
   @action
   async configureSupportWidget() {
-    if (!this.isSupportWidgetEnabled) {
-      this.logger.debug('Support widget is Disabled');
+    if (!this.supportWidgetIsEnabled) {
+      this.logger.debug('Support widget is disabled');
+
       return;
     }
 
     await this.getFreshWidgetToken.perform();
-    await injectSupportWidget(this.supportWidgetKey);
+    injectSupportWidget(this.supportWidgetKey);
     await this.authenticateSupportWidget(this.widgetAuthToken);
 
     this.hideSupportWidget();
@@ -110,4 +145,15 @@ export default class FreshdeskService extends Service {
       this.logger.error(error);
     }
   });
+
+  @action
+  configureFreshchat(user: UserModel) {
+    if (!this.freshchatEnabled) {
+      this.logger.debug('Freshchat is disabled');
+
+      return;
+    }
+
+    installFreshChat(user, this.freshchatKey);
+  }
 }
