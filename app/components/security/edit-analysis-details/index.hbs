@@ -244,20 +244,46 @@
           </div>
         </div>
       </div>
+      {{#unless this.owasp2024Exists}}
+        <div class='columns'>
+          <div class='column is-one-third'>
+            <h5 class='bold-font'>
+              OWASP Category
+            </h5>
+          </div>
+        </div>
+        <div class='columns border-bottom-container'>
+          <div class='column margin-bottom20'>
+            <PowerSelectMultiple
+              @placeholder='Select OWASP Categories'
+              @selected={{this.analysisDetails.owasp}}
+              @options={{this.owasps}}
+              @onChange={{this.selectOwaspCategory}}
+              as |key|
+            >
+              {{key.code}}
+              -
+              {{key.year}}
+              -
+              {{key.title}}
+            </PowerSelectMultiple>
+          </div>
+        </div>
+      {{/unless}}
       <div class='columns'>
         <div class='column is-one-third'>
           <h5 class='bold-font'>
-            OWASP Category
+            OWASP Mobile Top 10 (2024)
           </h5>
         </div>
       </div>
       <div class='columns border-bottom-container'>
         <div class='column margin-bottom20'>
           <PowerSelectMultiple
-            @placeholder='Select OWASP Categories'
-            @selected={{this.analysisDetails.owasp}}
-            @options={{this.owasps}}
-            @onChange={{this.selectOwaspCategory}}
+            @placeholder='Select OWASP Mobile Top 10 Categories'
+            @selected={{this.analysisDetails.owaspmobile2024}}
+            @options={{this.owaspmobile2024s}}
+            @onChange={{this.selectOwaspMobile2024Category}}
             as |key|
           >
             {{key.code}}

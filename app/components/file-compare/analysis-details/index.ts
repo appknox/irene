@@ -22,6 +22,7 @@ export default class FileCompareAnalysisDetailsComponent extends Component<FileC
   get regulatoryContent() {
     return {
       owasp: this.analysis?.owasp.toArray(),
+      owaspmobile2024: this.analysis?.owaspmobile2024.toArray(),
       cwe: this.analysis?.cwe.toArray(),
       asvs: this.analysis?.asvs.toArray(),
       mstg: this.analysis?.mstg.toArray(),

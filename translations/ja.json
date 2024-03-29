@@ -860,6 +860,8 @@
   "overrideRisk": "Override Risk",
   "overview": "Overview",
   "owasp": "OWASP",
+  "owaspmobile2024": "OWASP Mobile Top 10 (2024)",
+  "owaspMobile2024Expansion": "OWASP Mobile Top 10",
   "owaspapi2023": "OWASP API Top 10 (2023)",
   "owaspApiTop10Expansion": "OWASP API Top 10",
   "owaspDetails": "OWASP Details",

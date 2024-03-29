@@ -10,6 +10,7 @@ import Inflector from 'ember-inflector';
 import ENUMS from 'irene/enums';
 import SecurityFileModel from './file';
 import OwaspModel from '../owasp';
+import OwaspMobile2024Model from '../owaspmobile2024';
 import OwaspApi2023Model from '../owaspapi2023';
 import PcidssModel from '../pcidss';
 import MstgModel from '../mstg';
@@ -83,6 +84,9 @@ export default class SecurityAnalysisModel extends Model {
 
   @hasMany('owasp')
   declare owasp: AsyncHasMany<OwaspModel>;
+
+  @hasMany('owaspmobile2024')
+  declare owaspmobile2024: AsyncHasMany<OwaspMobile2024Model>;
 
   @hasMany('owaspapi2023')
   declare owaspapi2023: AsyncHasMany<OwaspApi2023Model>;
