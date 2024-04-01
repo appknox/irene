@@ -133,7 +133,7 @@ module('Integration | Component | sbom/app-scan', function (hooks) {
       assert.dom('[data-test-appPlatform-icon]').exists();
       // .hasClass(this.projects[0].platform_icon);
 
-      assert.dom('[data-test-sbomApp-logo]').exists();
+      assert.dom('[data-test-appLogo-img]').exists();
 
       // latest project
       assert
@@ -265,7 +265,7 @@ module('Integration | Component | sbom/app-scan', function (hooks) {
 
     assert
       .dom(
-        '[data-test-sbomApp-logo]',
+        '[data-test-appLogo-img]',
         find('[data-test-sbomReportDrawer-drawer]')
       )
       .doesNotExist();
@@ -316,7 +316,7 @@ module('Integration | Component | sbom/app-scan', function (hooks) {
     assert.dom('[data-test-appPlatform-icon]').exists();
     // .hasClass(this.projects[0].platform_icon);
 
-    assert.dom('[data-test-sbomApp-logo]').exists();
+    assert.dom('[data-test-appLogo-img]').exists();
 
     // latest project
     assert

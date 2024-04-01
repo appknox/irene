@@ -1,0 +1,40 @@
+.app-logo-image {
+  object-fit: contain;
+  background-image: none;
+  overflow: hidden;
+}
+
+.app-logo-container-border {
+  border-radius: var(--app-logo-border-radius);
+  border: 1px solid var(--app-logo-border-color);
+  box-sizing: border-box;
+}
+
+.app-logo-container-padding {
+  padding: 0.5em;
+}
+
+.app-logo-image-rounded {
+  border-radius: 4px;
+}
+
+.app-logo-container-size-small {
+  width: 40px;
+  height: 40px;
+  min-width: 40px;
+  min-height: 40px;
+}
+
+.app-logo-container-size-medium {
+  width: 44px;
+  height: 44px;
+  min-width: 44px;
+  min-height: 44px;
+}
+
+.app-logo-container-size-large {
+  width: 53px;
+  height: 53px;
+  min-width: 53px;
+  min-height: 53px;
+}

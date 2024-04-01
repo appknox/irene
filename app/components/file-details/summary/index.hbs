@@ -1,17 +1,11 @@
 <div local-class='file-summary-root'>
   <AkStack class='p-2' @alignItems='center' @justifyContent='space-between'>
     <AkStack @alignItems='center' @spacing='1.5'>
-      <AkStack
-        local-class='app-logo-container'
-        @alignItems='center'
-        @justifyContent='center'
-      >
-        <img
-          data-test-fileDetailsSummary-appLogo
-          src={{@file.iconUrl}}
-          alt={{concat @file.name ' - logo'}}
-        />
-      </AkStack>
+      <AppLogo
+        @src={{@file.iconUrl}}
+        @size='large'
+        @alt={{concat @file.name ' - logo'}}
+      />
 
       <AkStack @direction='column' @spacing='0.5'>
         <AkTypography data-test-fileDetailsSummary-appName @variant='subtitle1'>

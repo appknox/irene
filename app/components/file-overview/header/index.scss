@@ -3,20 +3,6 @@
   border-bottom: 1px solid var(--file-overview-border-color-dark);
   padding: 1em 1.285em;
 
-  .file-icon {
-    min-width: 44px;
-    max-width: 44px;
-    height: 44px;
-    box-sizing: border-box;
-
-    img {
-      object-fit: contain;
-      background-image: none;
-      overflow: hidden;
-      border-radius: 4px;
-    }
-  }
-
   .open-in-new-tab-link-class {
     display: inline-flex;
   }
