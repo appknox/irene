@@ -1,13 +1,16 @@
 import Component from '@glimmer/component';
-import FileModel from 'irene/models/file';
-import ENUMS from 'irene/enums';
-import { ECOption } from 'irene/components/ak-chart';
 import { inject as service } from '@ember/service';
 import Store from '@ember-data/store';
 import { tracked } from '@glimmer/tracking';
 import { task } from 'ember-concurrency';
-import OwaspMobile2024Model from 'irene/models/owaspmobile2024';
+import Owner from '@ember/owner';
+import ArrayProxy from '@ember/array/proxy';
+
+import FileModel from 'irene/models/file';
+import ENUMS from 'irene/enums';
+import { ECOption } from 'irene/components/ak-chart';
 import OwaspModel from 'irene/models/owasp';
+import OwaspMobile2024Model from 'irene/models/owaspmobile2024';
 
 export interface FileDetailsComplianceInsightsSignature {
   Args: {
@@ -19,52 +22,32 @@ type OwaspChartDataOptions = { mobileOptions: ECOption; webOptions: ECOption };
 
 export default class FileDetailsComplianceInsightsComponent extends Component<FileDetailsComplianceInsightsSignature> {
   @service declare store: Store;
-  @tracked owaspTitles: { [key: string]: string } = {};
+  @tracked owaspTitles: Record<string, string> = {};
+  @tracked owaspmobile2024s: Array<string> = [];
+  @tracked owasps: Array<string> = [];
+
+  analysisRisks = [
+    ENUMS.RISK.CRITICAL,
+    ENUMS.RISK.HIGH,
+    ENUMS.RISK.MEDIUM,
+    ENUMS.RISK.LOW,
+  ];
+
+  constructor(
+    owner: Owner,
+    args: FileDetailsComplianceInsightsSignature['Args']
+  ) {
+    super(owner, args);
+
+    this.loadOwaspData.perform();
+  }
 
   get analyses() {
     return this.args.file.analyses;
   }
 
-  get owasps() {
-    const owasps: string[] = [];
-
-    const risks = [
-      ENUMS.RISK.CRITICAL,
-      ENUMS.RISK.HIGH,
-      ENUMS.RISK.MEDIUM,
-      ENUMS.RISK.LOW,
-    ];
-
-    this.analyses.forEach((analysis) => {
-      analysis.owasp.forEach((owasp) => {
-        if (risks.includes(analysis.get('risk'))) {
-          owasps.push(owasp.id);
-        }
-      });
-    });
-
-    return owasps;
-  }
-
-  get owaspmobile2024s() {
-    const owaspmobile2024s: string[] = [];
-
-    const risks = [
-      ENUMS.RISK.CRITICAL,
-      ENUMS.RISK.HIGH,
-      ENUMS.RISK.MEDIUM,
-      ENUMS.RISK.LOW,
-    ];
-
-    this.analyses.forEach((analysis) => {
-      analysis.owaspmobile2024.forEach((owaspmobile2024) => {
-        if (risks.includes(analysis.get('risk'))) {
-          owaspmobile2024s.push(owaspmobile2024.id);
-        }
-      });
-    });
-
-    return owaspmobile2024s;
+  get tooltipLabels(): Record<string, string> {
+    return this.owaspTitles;
   }
 
   get owaspData(): OwaspChartDataOptions {
@@ -108,40 +91,61 @@ export default class FileDetailsComplianceInsightsComponent extends Component<Fi
       });
     }
 
-    this.loadData.perform();
-
     return {
       mobileOptions: this.createChartOptions(owaspMCounts),
       webOptions: this.createChartOptions(owaspACounts),
     };
   }
 
-  loadData = task(async () => {
-    let data: (OwaspMobile2024Model | OwaspModel)[] | undefined = undefined;
+  loadAllOwaspData = task(async () => {
+    const owaspsIds: string[] = [];
+    const owaspmobile2024s: string[] = [];
 
-    if (this.owaspmobile2024s.length > 0) {
-      const owaspmobile2024Data = await this.store.findAll('owaspmobile2024');
-      data = owaspmobile2024Data.toArray();
-    } else if (this.owaspmobile2024s.length === 0 && this.owasps.length > 0) {
-      const owaspData = await this.store.findAll('owasp');
-      data = owaspData.toArray();
+    for (let item = 0; item < (this.analyses.length as number); item++) {
+      const analysis = this.analyses.objectAt(item);
+      const analysisRisk = analysis?.get('risk');
+
+      const owasp2024 = await analysis?.get('owaspmobile2024');
+      const owasps = await analysis?.get('owasp');
+
+      if (this.analysisRisks.includes(analysisRisk as number)) {
+        owasp2024?.map((it) => owaspmobile2024s.push(it.id));
+        owasps?.map((it) => owaspsIds.push(it.id));
+      }
+    }
+
+    this.owaspmobile2024s = owaspmobile2024s;
+    this.owasps = owaspsIds;
+  });
+
+  loadOwaspData = task(async () => {
+    await this.loadAllOwaspData.perform();
+
+    let data: ArrayProxy<OwaspMobile2024Model | OwaspModel> | undefined;
+
+    const hasOwaspMobile2024s = this.owaspmobile2024s.length > 0;
+    const hasOwasps = this.owasps.length > 0;
+
+    if (hasOwaspMobile2024s) {
+      data = await this.store.findAll('owaspmobile2024');
+    } else if (!hasOwaspMobile2024s && hasOwasps) {
+      data = await this.store.findAll('owasp');
     }
 
     const tooltipLabels: { [key: string]: string } = {};
 
     if (data) {
-      data.forEach((item: { code: string; title: string }) => {
-        const key = item.code.split(':')[0] as keyof typeof tooltipLabels;
-        tooltipLabels[key] = item.title;
+      data.forEach((item) => {
+        const label = item.code.split(':')[0];
+
+        if (label) {
+          tooltipLabels[label] = item.title;
+        }
       });
     }
 
     this.owaspTitles = tooltipLabels;
   });
-
-  get tooltipLabels(): { [key: string]: string } {
-    return this.owaspTitles;
-  }
 
   createChartOptions(dataset: Record<string, number>): ECOption {
     return {

@@ -1,17 +1,34 @@
 <AkStack class='p-3' @spacing='1'>
-  <AkChart
-    {{style maxWidth='350px'}}
-    @width='100%'
-    @height='200px'
-    @option={{this.owaspData.mobileOptions}}
-    data-test-complianceInsights-mobileChart
-  />
+  {{#if this.loadOwaspData.isRunning}}
+    <AkStack
+      {{style height='200px'}}
+      @alignItems='center'
+      @justifyContent='center'
+      @spacing='1.5'
+      @width='full'
+    >
+      <AkLoader @size={{16}} />
 
-  <AkChart
-    {{style maxWidth='350px'}}
-    @width='100%'
-    @height='200px'
-    @option={{this.owaspData.webOptions}}
-    data-test-complianceInsights-webChart
-  />
+      <AkTypography>
+        {{t 'loading'}}...
+      </AkTypography>
+    </AkStack>
+
+  {{else}}
+    <AkChart
+      {{style maxWidth='350px'}}
+      @width='100%'
+      @height='200px'
+      @option={{this.owaspData.mobileOptions}}
+      data-test-complianceInsights-mobileChart
+    />
+
+    <AkChart
+      {{style maxWidth='350px'}}
+      @width='100%'
+      @height='200px'
+      @option={{this.owaspData.webOptions}}
+      data-test-complianceInsights-webChart
+    />
+  {{/if}}
 </AkStack>

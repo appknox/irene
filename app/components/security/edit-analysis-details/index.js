@@ -59,7 +59,7 @@ export default class EditAnalysisDetailsComponent extends Component {
     return '';
   }
 
-  get owasp2024Exists() {
+  get owaspMobile2024Exists() {
     return this.analysisDetails.owaspmobile2024;
   }
 
