@@ -59,8 +59,16 @@ export default class EditAnalysisDetailsComponent extends Component {
     return '';
   }
 
+  get owaspMobile2024Exists() {
+    return this.analysisDetails.owaspmobile2024;
+  }
+
   get owasps() {
     return this.store.findAll('owasp');
+  }
+
+  get owaspmobile2024s() {
+    return this.store.findAll('owaspmobile2024');
   }
 
   get owaspapi2023s() {
@@ -309,6 +317,10 @@ export default class EditAnalysisDetailsComponent extends Component {
     this.analysisDetails.owasp = param;
   }
 
+  @action selectOwaspMobile2024Category(param) {
+    this.analysisDetails.owaspmobile2024 = param;
+  }
+
   @action selectOwaspApi2023Category(param) {
     this.analysisDetails.owaspapi2023 = param;
   }
@@ -471,6 +483,7 @@ export default class EditAnalysisDetailsComponent extends Component {
 
     const risk = this.analysisDetails.risk;
     const owasp = this.analysisDetails.owasp;
+    const owaspmobile2024 = this.analysisDetails.owaspmobile2024;
     const owaspapi2023 = this.analysisDetails.owaspapi2023;
     const pcidss = this.analysisDetails.pcidss;
     const hipaa = this.analysisDetails.hipaa;
@@ -509,6 +522,7 @@ export default class EditAnalysisDetailsComponent extends Component {
       risk,
       status,
       owasp: owasp.map((a) => a.id),
+      owaspmobile2024: owaspmobile2024.map((a) => a.id),
       owaspapi2023: owaspapi2023.map((a) => a.id),
       pcidss: pcidss.map((a) => a.id),
       hipaa: hipaa.map((a) => a.id),

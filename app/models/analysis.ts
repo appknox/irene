@@ -19,6 +19,7 @@ import GdprModel from './gdpr';
 import HipaaModel from './hipaa';
 import MstgModel from './mstg';
 import OwaspModel from './owasp';
+import OwaspMobile2024Model from './owaspmobile2024';
 import PcidssModel from './pcidss';
 import MasvsModel from './masvs';
 import VulnerabilityModel from './vulnerability';
@@ -80,6 +81,9 @@ export default class AnalysisModel extends Model {
 
   @hasMany('owasp')
   declare owasp: AsyncHasMany<OwaspModel>;
+
+  @hasMany('owaspmobile2024')
+  declare owaspmobile2024: AsyncHasMany<OwaspMobile2024Model>;
 
   @hasMany('owaspapi2023')
   declare owaspapi2023: AsyncHasMany<OwaspApi2023Model>;
