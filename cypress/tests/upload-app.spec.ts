@@ -1,4 +1,4 @@
-import APP_TRANSLATIONS from '../support/translations';
+import cyTranslate from '../support/translations';
 import { MirageFactoryDefProps } from '../support/Mirage';
 
 import LoginActions from '../support/Actions/auth/LoginActions';
@@ -91,7 +91,7 @@ describe('Upload App', () => {
         // Necessary API call before showing dashboard elements
         cy.wait('@submissionList', NETWORK_WAIT_OPTS);
 
-        cy.findByText(APP_TRANSLATIONS.startNewScan).should('exist');
+        cy.findByText(cyTranslate('startNewScan')).should('exist');
 
         // Initiate apk upload from fixture
         const appName = APP_TYPES[app as keyof typeof APP_TYPES];
@@ -103,10 +103,11 @@ describe('Upload App', () => {
           .then(() => uploadAppActions.openUploadAppModal());
 
         cy.findByTestId('submission-status-dropdown-container').within(() => {
-          cy.contains(APP_TRANSLATIONS.uploadStatus);
-          cy.contains(APP_TRANSLATIONS.viaSystem);
-          cy.contains(new RegExp(APP_TRANSLATIONS.uploading, 'i'));
-          cy.contains(new RegExp(APP_TRANSLATIONS.inProgress, 'i'));
+          cy.contains(cyTranslate('uploadStatus'));
+          cy.contains(cyTranslate('viaSystem'));
+
+          cy.contains(new RegExp(cyTranslate('uploading'), 'i'));
+          cy.contains(new RegExp(cyTranslate('inProgress'), 'i'));
         });
 
         // Initiate app upload
@@ -122,7 +123,7 @@ describe('Upload App', () => {
         cy.wait('@uploadSuccess', NETWORK_WAIT_OPTS);
 
         cy.findByText(
-          APP_TRANSLATIONS.fileUploadedSuccessfully,
+          cyTranslate('fileUploadedSuccessfully'),
           NETWORK_WAIT_OPTS
         );
 
@@ -255,13 +256,13 @@ describe('Upload App', () => {
             (el) => {
               const assertOpts = { container: el, ...DEFAULT_ASSERT_OPTS };
 
-              cy.findByText(APP_TRANSLATIONS.staticScan, assertOpts).should(
+              cy.findByText(cyTranslate('staticScan'), assertOpts).should(
                 'exist'
               );
 
               // Check if static scan has completed or is in progress
               if (file.is_static_done) {
-                cy.findByText(APP_TRANSLATIONS.completed, assertOpts).should(
+                cy.findByText(cyTranslate('completed'), assertOpts).should(
                   'exist'
                 );
 
@@ -282,13 +283,13 @@ describe('Upload App', () => {
                 // If closer to 100 UI will be updated before assertion is done
                 if (staticScanProgress < 60) {
                   cy.findByText(
-                    new RegExp(APP_TRANSLATIONS.scanning, 'i'),
+                    new RegExp(cyTranslate('scanning'), 'i'),
                     assertOpts
                   ).should('exist');
 
                   // Check for completed/incomplete static scan tag in VA Details list
                   cy.findAllByLabelText(
-                    `${APP_TRANSLATIONS.static} scan tag tooltip`,
+                    `${cyTranslate('static')} scan tag tooltip`,
                     DEFAULT_ASSERT_OPTS
                   )
                     .first()
@@ -296,13 +297,13 @@ describe('Upload App', () => {
                     .then((scanTag) => {
                       if (scanTag) {
                         const tagMsg = file.is_static_done
-                          ? APP_TRANSLATIONS.scanCompleted
-                          : APP_TRANSLATIONS.scanNotCompleted;
+                          ? cyTranslate('scanCompleted')
+                          : cyTranslate('scanNotCompleted');
 
                         cy.wrap(scanTag).trigger('mouseenter');
 
                         cy.findByText(
-                          `${APP_TRANSLATIONS.static} ${tagMsg}`,
+                          `${cyTranslate('static')} ${tagMsg}`,
                           DEFAULT_ASSERT_OPTS
                         );
                       }
@@ -314,14 +315,14 @@ describe('Upload App', () => {
         });
 
         // Go to SBOM Page
-        cy.findByLabelText(`${APP_TRANSLATIONS.SBOM} side menu item`).click();
+        cy.findByLabelText(`${cyTranslate('SBOM')} side menu item`).click();
 
         // Check if route is SBOM Page
         cy.url().should('contain', APPLICATION_ROUTES.sbom);
 
-        cy.findByText(APP_TRANSLATIONS.sbomModule.sbomAppTitle).should('exist');
+        cy.findByText(cyTranslate('sbomModule.sbomAppTitle')).should('exist');
 
-        cy.findByText(APP_TRANSLATIONS.sbomModule.sbomAppDescription).should(
+        cy.findByText(cyTranslate('sbomModule.sbomAppDescription')).should(
           'exist'
         );
 
@@ -395,7 +396,7 @@ describe('Upload App', () => {
       // Necessary API call before showing dashboard elements
       cy.wait('@submissionList', NETWORK_WAIT_OPTS);
 
-      cy.findByText(APP_TRANSLATIONS.startNewScan).should('exist');
+      cy.findByText(cyTranslate('startNewScan')).should('exist');
 
       // Initiate apk upload from fixture
       cy.fixture('apps/MFVA.apk', null).as('apkApplication');
@@ -410,10 +411,10 @@ describe('Upload App', () => {
 
         uploadAppActions.openUploadAppModal();
 
-        cy.findByText(APP_TRANSLATIONS.viaSystem).should('exist');
-        cy.findByText(APP_TRANSLATIONS.uploadStatus).should('exist');
+        cy.findByText(cyTranslate('viaSystem')).should('exist');
+        cy.findByText(cyTranslate('uploadStatus')).should('exist');
 
-        cy.findByText(new RegExp(APP_TRANSLATIONS.uploading, 'i')).should(
+        cy.findByText(new RegExp(cyTranslate('uploading'), 'i')).should(
           'exist'
         );
       });
@@ -429,7 +430,7 @@ describe('Upload App', () => {
 
           const uploadedAppSubURL = `${API_ROUTES.submissionItem.route}/${uploadDetails.submission_id}`;
 
-          cy.findByText(APP_TRANSLATIONS.fileUploadedSuccessfully);
+          cy.findByText(cyTranslate('fileUploadedSuccessfully'));
 
           // Intercept upload app submission request and return a failed scenario
           networkActions.mockNetworkReq({

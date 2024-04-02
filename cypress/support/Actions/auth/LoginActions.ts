@@ -1,6 +1,8 @@
+import cyTranslate from '../../translations';
 import { getAliasName } from '../../utils';
+
 import SessionActions from '../common/SessionActions';
-import APP_TRANSLATIONS from '../../translations';
+
 import { APPLICATION_ROUTES } from '../../application.routes';
 import { API_ROUTES } from '../../api.routes';
 
@@ -61,9 +63,9 @@ export default class LoginActions {
 
       // Programmatically checks for reg link if available
       if (res.registration_link) {
-        cy.findByText(APP_TRANSLATIONS.dontHaveAccount).should('exist');
+        cy.findByText(cyTranslate('dontHaveAccount')).should('exist');
 
-        cy.findByText(APP_TRANSLATIONS.register)
+        cy.findByText(cyTranslate('register'))
           .should('exist')
           .should('have.attr', 'href', res.registration_link);
       }
