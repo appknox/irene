@@ -1,24 +1,24 @@
 /* eslint-disable ember/no-observers */
+/* eslint-disable ember/use-ember-data-rfc-395-imports */
+import DS from 'ember-data';
+import { tracked } from 'tracked-built-ins';
+import dayjs from 'dayjs';
+import relativeTime from 'dayjs/plugin/relativeTime';
+
 import Component from '@glimmer/component';
-import { tracked } from '@glimmer/tracking';
 import { action } from '@ember/object';
 import Store from '@ember-data/store';
 import { inject as service } from '@ember/service';
 import { addObserver, removeObserver } from '@ember/object/observers';
 import { task } from 'ember-concurrency';
-import IntlService from 'ember-intl/services/intl';
-import dayjs from 'dayjs';
-import relativeTime from 'dayjs/plugin/relativeTime';
 import { waitForPromise } from '@ember/test-waiters';
-
-// eslint-disable-next-line ember/use-ember-data-rfc-395-imports
-import DS from 'ember-data';
+import IntlService from 'ember-intl/services/intl';
 
 import ENUMS from 'irene/enums';
 import parseError from 'irene/utils/parse-error';
 import RealtimeService from 'irene/services/realtime';
-import SubmissionModel from 'irene/models/submission';
 import UploadAppService from 'irene/services/upload-app';
+import SubmissionModel from 'irene/models/submission';
 
 dayjs.extend(relativeTime);
 
@@ -29,6 +29,9 @@ type SystemFileMetaData = {
   statusHumanized: string;
 };
 
+export type SubmissionModelWithSystemFileData = SubmissionModel &
+  SystemFileMetaData['file'];
+
 const failedSubmissionStatus = [
   ENUMS.SUBMISSION_STATUS.DOWNLOAD_FAILED,
   ENUMS.SUBMISSION_STATUS.VALIDATE_FAILED,
@@ -38,17 +41,14 @@ const failedSubmissionStatus = [
 ];
 
 export default class UploadAppStatusComponent extends Component {
-  @tracked showDropdown = false;
-  @tracked anchorRef?: HTMLElement | null;
-  @tracked submissions: DS.AdapterPopulatedRecordArray<SubmissionModel> | null =
-    null;
-  @tracked submissionSet = new Set<string>();
-
   @service declare store: Store;
   @service declare realtime: RealtimeService;
   @service declare uploadApp: UploadAppService;
   @service declare intl: IntlService;
   @service('notifications') declare notify: NotificationService;
+
+  @tracked submissions: DS.AdapterPopulatedRecordArray<SubmissionModel> | null =
+    null;
 
   constructor(owner: unknown, args: object) {
     super(owner, args);
@@ -63,7 +63,7 @@ export default class UploadAppStatusComponent extends Component {
   }
 
   get submissionList() {
-    return this.submissions?.toArray() || [];
+    return this.submissions?.slice() || [];
   }
 
   get submissionNumbers() {
@@ -76,7 +76,7 @@ export default class UploadAppStatusComponent extends Component {
     this.submissions?.forEach((submission) => {
       if (
         submission.status === ENUMS.SUBMISSION_STATUS.ANALYZING &&
-        this.submissionSet.has(submission.id)
+        this.uploadApp.submissionSet.has(submission.id)
       ) {
         obj.completed = obj.completed + 1;
       } else if (failedSubmissionStatus.includes(submission.status)) {
@@ -88,23 +88,12 @@ export default class UploadAppStatusComponent extends Component {
       }
     });
 
-    if ((this.systemFileQueue?.files?.length || 0) > 0) {
-      obj.running = obj.running + (this.systemFileQueue?.files?.length || 0);
+    if ((this.uploadApp.systemFileQueue?.files?.length || 0) > 0) {
+      obj.running =
+        obj.running + (this.uploadApp.systemFileQueue?.files?.length || 0);
     }
 
     return obj;
-  }
-
-  get loaderVariant() {
-    return this.submissionNumbers.running > 0 ? 'indeterminate' : 'determinate';
-  }
-
-  get loaderColorClass() {
-    return this.submissionNumbers.failed > 0 ? '' : 'green-loader';
-  }
-
-  get systemFileQueue() {
-    return this.uploadApp.systemFileQueue;
   }
 
   get statusNumbers() {
@@ -130,21 +119,6 @@ export default class UploadAppStatusComponent extends Component {
     ];
   }
 
-  @action
-  registerAnchorRef(event: Event) {
-    this.anchorRef = event.currentTarget as HTMLElement;
-  }
-
-  @action
-  registerAnchorRefOnInsert(element: HTMLElement) {
-    this.anchorRef = element;
-  }
-
-  @action
-  closeSubmissionStatus() {
-    this.anchorRef = null;
-  }
-
   get sortedSubmissions() {
     const sortedSubmissions = [...this.submissionList];
 
@@ -161,7 +135,7 @@ export default class UploadAppStatusComponent extends Component {
     const completed: SubmissionModel[] = [];
     const running: SubmissionModel[] = [];
 
-    (this.systemFileQueue?.files || []).forEach((file) => {
+    (this.uploadApp.systemFileQueue?.files || []).forEach((file) => {
       uploading.push({
         file,
         statusHumanized: this.intl.t('uploading'),
@@ -171,7 +145,7 @@ export default class UploadAppStatusComponent extends Component {
     this.sortedSubmissions.forEach((submission) => {
       if (
         submission.status === ENUMS.SUBMISSION_STATUS.ANALYZING &&
-        this.submissionSet.has(submission.id)
+        this.uploadApp.submissionSet.has(submission.id)
       ) {
         completed.push(submission);
       } else if (failedSubmissionStatus.includes(submission.status)) {
@@ -183,11 +157,39 @@ export default class UploadAppStatusComponent extends Component {
       }
     });
 
-    return [...failed, ...uploading, ...running, ...completed];
+    return [
+      ...failed,
+      ...uploading,
+      ...running,
+      ...completed,
+    ] as SubmissionModelWithSystemFileData[];
   }
 
   get hasSubmissions() {
     return this.computedSubmissionList.length > 0;
+  }
+
+  get loaderVariant() {
+    return this.submissionNumbers.running > 0 ? 'indeterminate' : 'determinate';
+  }
+
+  get loaderColorClass() {
+    return this.submissionNumbers.failed > 0 ? '' : 'green-loader';
+  }
+
+  @action
+  registerAnchorRefOnInsert(element: HTMLElement) {
+    this.uploadApp.updateSubsPopoverAnchorRef(element);
+  }
+
+  @action
+  openSubmissionsPopover(event: Event) {
+    this.uploadApp.openSubsPopover(event.currentTarget as HTMLElement);
+  }
+
+  @action
+  closeSubmissionsPopover() {
+    this.uploadApp.closeSubsPopover();
   }
 
   @action initialize() {
@@ -217,11 +219,15 @@ export default class UploadAppStatusComponent extends Component {
 
   getSubmissions = task(async () => {
     try {
-      await waitForPromise(
+      const validatingSubs = await waitForPromise(
         this.store.query('submission', {
           status: ENUMS.SUBMISSION_STATUS.VALIDATING,
         })
       );
+
+      // Add new submissions to submission set once the client receives them
+      // To persist submissions in the popover even if the popover is not opened
+      validatingSubs.forEach((sub) => this.uploadApp.submissionSet.add(sub.id));
 
       this.submissions = this.store.peekAll('submission');
     } catch (err) {

@@ -35,6 +35,8 @@ export default class UploadAppViaSystemComponent extends Component {
   handleUploadApp = task(async (file) => {
     const queue = this.fileQueue.find(this.fileQueueName) || null;
 
+    this.uploadApp.openSubsPopover();
+
     try {
       this.uploadApp.updateSystemFileQueue(queue);
 
