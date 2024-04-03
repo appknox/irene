@@ -20,7 +20,7 @@ interface AkSelectNamedArgs<O> extends PowerSelectArgs {
   dropdownClass?: string;
   placeholder?: string;
   renderInPlace?: boolean;
-  error?: string;
+  error?: boolean;
   loadingMessage?: string;
   selectedItemComponent?: string;
   labelTypographyVariant?: AkSelectLabelTypographyVariant;

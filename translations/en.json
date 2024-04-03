@@ -319,6 +319,8 @@
   "enterValidPassword": "Please enter valid passwords!",
   "enterValidURL": "Please enter a valid URL",
   "entityID": "Entity ID",
+  "errorFetchingDevicePreferences": "Error while fetching device preferences.",
+  "errorFetchingDevices": "Error while fetching available devices.",
   "errorCouldNotLoadData": "Error: Could not load data",
   "errorWhileFetching": "Error while fetching signed url",
   "errorWhileUploading": "Error while uploading file to presigned URL",
@@ -608,6 +610,7 @@
       "processorArchitecture": "Processor architecture",
       "deviceTypes": "Device types",
       "deviceSettingsWarning": "Please ensure the mobile device settings remain unchanged during the dynamic scan. Altering device settings outside your application can cause the scanner to malfunction. Kindly refrain from actions such as updating the OS, disconnecting from WiFi, performing factory resets, uninstalling apps or changing system settings.",
+      "preferredDeviceNotAvailable": "Preferred device type and OS is not available.",
       "runApiScan": "Enable API Capture",
       "apiScanDescription": "During dynamic scan <strong>network traffic made by the app, filtered by the below provided API endpoints</strong> will be recorded. Currently traffic capturing is <strong>not supported for the apps that employ SSL pinning.</strong>",
       "start": "Start Dynamic Scan"
