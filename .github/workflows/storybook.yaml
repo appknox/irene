@@ -12,13 +12,14 @@ jobs:
       deployments: write
     name: Publish to Cloudflare Pages
     steps:
-      - uses: actions/checkout@v3
-      - uses: actions/setup-node@v3
-        with:
-          node-version: '18'
-          cache: 'npm'
-      - run: npm ci
-      - run: npm run build-storybook
+      - uses: actions/checkout@v4
+
+      - name: Setup Application
+        uses: ./.github/actions/setup-app
+
+      - name: Build App
+        run: npm run build-storybook
+
       - name: Publish to Cloudflare Pages
         uses: cloudflare/pages-action@1
         with:

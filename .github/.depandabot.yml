@@ -1,0 +1,7 @@
+# Checks for the latest actions versions and creates a PR if current versions are not latest
+version: 2
+updates:
+  - package-ecosystem: 'github-actions'
+    directory: '/'
+    schedule:
+      interval: 'weekly'

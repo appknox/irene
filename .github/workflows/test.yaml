@@ -11,10 +11,10 @@ jobs:
       group: ${{ github.workflow }}-ci-${{ github.ref }}
       cancel-in-progress: true
     steps:
-      - uses: actions/checkout@v3
-      - uses: actions/setup-node@v3
-        with:
-          node-version: '18'
-          cache: 'npm'
-      - run: npm ci
-      - run: npm test
+      - uses: actions/checkout@v4
+
+      - name: Setup Application
+        uses: ./.github/actions/setup-app
+
+      - name: Run tests
+        run: npm test
