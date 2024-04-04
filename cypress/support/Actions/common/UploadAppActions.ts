@@ -46,7 +46,9 @@ export default class UploadAppActions {
         name: new RegExp(APP_TRANSLATIONS.uploadApp, 'i'),
       })
       .then((el) => {
-        cy.wrap(el.find('input')).should('exist').selectFile(fileFixtureAlias);
+        cy.wrap(el.find('input'))
+          .should('exist')
+          .selectFile(fileFixtureAlias, { force: true });
       });
   }
 }
