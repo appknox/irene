@@ -6,14 +6,16 @@ import IntlService from 'ember-intl/services/intl';
 import { task } from 'ember-concurrency';
 import Store from '@ember-data/store';
 
-import parseError from 'irene/utils/parse-error';
-
 import lookupValidator from 'ember-changeset-validations';
 import { Changeset } from 'ember-changeset';
 import { BufferedChangeset } from 'ember-changeset/types';
-import { validateStoreDomain, validateStorePathname } from './validator';
 import { validatePresence } from 'ember-changeset-validations/validators';
 import { waitForPromise } from '@ember/test-waiters';
+
+import { validateStoreDomain, validateStorePathname } from './validator';
+import parseError from 'irene/utils/parse-error';
+import UploadAppService from 'irene/services/upload-app';
+import UploadAppUrlModel from 'irene/models/upload-app-url';
 
 type ChangesetBufferProps = BufferedChangeset & {
   url: string;
@@ -26,6 +28,7 @@ const StoreUrlValidator = {
 export default class UploadAppViaLinkComponent extends Component {
   @service declare store: Store;
   @service declare intl: IntlService;
+  @service declare uploadApp: UploadAppService;
   @service('notifications') declare notify: NotificationService;
 
   @tracked showLinkUploadModal = false;
@@ -66,9 +69,14 @@ export default class UploadAppViaLinkComponent extends Component {
         url: this.changeset.url,
       });
 
-      await waitForPromise(uploadAppUrl.save());
+      const uploadedApp = (await waitForPromise(
+        uploadAppUrl.save()
+      )) as UploadAppUrlModel;
+
+      this.uploadApp.submissionSet.add(uploadedApp.id);
 
       this.closeLinkUploadModal();
+      this.uploadApp.openSubsPopover();
     } catch (error) {
       this.notify.error(parseError(error, this.intl.t('pleaseTryAgain')));
     }

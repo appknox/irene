@@ -1,8 +1,6 @@
 /* eslint-disable ember/no-observers */
 import Component from '@glimmer/component';
-import ENUMS from 'irene/enums';
 import dayjs from 'dayjs';
-import SubmissionModel from 'irene/models/submission';
 import { inject as service } from '@ember/service';
 import IntlService from 'ember-intl/services/intl';
 import { addObserver, removeObserver } from '@ember/object/observers';
@@ -10,25 +8,22 @@ import { action } from '@ember/object';
 import RouterService from '@ember/routing/router-service';
 import { helper } from '@ember/component/helper';
 
+import { SubmissionModelWithSystemFileData } from '../index';
+import ENUMS from 'irene/enums';
 import ProjectService from 'irene/services/project';
-
-type SubmissionModelWithSystemFileData = SubmissionModel & {
-  file: {
-    progress: number;
-  };
-};
+import UploadAppService from 'irene/services/upload-app';
 
 interface UploadAppStatusDetailsSignature {
   Element: HTMLDivElement;
   Args: {
     submission: SubmissionModelWithSystemFileData;
-    submissionSet: Set<string>;
   };
 }
 
 export default class UploadAppStatusDetailsComponent extends Component<UploadAppStatusDetailsSignature> {
   @service declare intl: IntlService;
   @service declare router: RouterService;
+  @service declare uploadApp: UploadAppService;
   @service('project') declare projectService: ProjectService;
 
   normalizeFileProgress = helper(([value]: [number]) => {
@@ -39,7 +34,7 @@ export default class UploadAppStatusDetailsComponent extends Component<UploadApp
     super(owner, args);
 
     if (this.args.submission.id) {
-      this.args.submissionSet.add(this.args.submission.id);
+      this.uploadApp.submissionSet.add(this.args.submission.id);
     }
 
     addObserver(this.args.submission, 'status', this, this.refreshProjectList);

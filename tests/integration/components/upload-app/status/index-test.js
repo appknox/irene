@@ -16,6 +16,7 @@ class NotificationsStub extends Service {
   error(msg) {
     this.errorMsg = msg;
   }
+
   success(msg) {
     this.successMsg = msg;
   }
@@ -115,6 +116,9 @@ module('Integration | Component | upload-app/status', function (hooks) {
 
     assert.dom('[data-test-uploadAppStatus-loader]').exists();
     assert.dom('[data-test-uploadAppStatus-icon]').exists();
+
+    await click('[data-test-uploadAppStatus-icon]');
+
     assert.dom('[data-test-uploadAppStatusPopover-container]').exists();
 
     await click('[data-test-uploadAppStatus-loader]');
@@ -311,6 +315,9 @@ module('Integration | Component | upload-app/status', function (hooks) {
 
     assert.dom('[data-test-uploadAppStatus-loader]').exists();
     assert.dom('[data-test-uploadAppStatus-icon]').exists();
+
+    await click('[data-test-uploadAppStatus-icon]');
+
     assert.dom('[data-test-uploadAppStatusPopover-container]').exists();
 
     await click('[data-test-uploadAppStatus-loader]');

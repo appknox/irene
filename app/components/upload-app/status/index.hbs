@@ -10,7 +10,7 @@
       local-class='{{this.loaderColorClass}} cursor-pointer'
       @progress={{100}}
       @variant={{this.loaderVariant}}
-      {{on 'click' this.registerAnchorRef}}
+      {{on 'click' this.openSubmissionsPopover}}
       {{did-insert this.registerAnchorRefOnInsert}}
     >
       <:label>
@@ -29,10 +29,10 @@
   <AkPopover
     data-test-cy='upload-app-submissions-popover'
     @arrow={{true}}
-    @anchorRef={{this.anchorRef}}
+    @anchorRef={{this.uploadApp.anchorRef}}
     @placement='bottom'
     @clickOutsideToClose={{true}}
-    @closeHandler={{this.closeSubmissionStatus}}
+    @closeHandler={{this.closeSubmissionsPopover}}
     @hasBackdrop={{true}}
     local-class='submission-status-popover-container'
   >
@@ -88,7 +88,6 @@
           <UploadApp::Status::Details
             data-test-uploadAppStatus-submission='{{submission.id}}'
             @submission={{submission}}
-            @submissionSet={{this.submissionSet}}
           />
         {{/each}}
       </AkStack>
