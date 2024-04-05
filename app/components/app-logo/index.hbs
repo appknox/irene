@@ -1,0 +1,24 @@
+<AkStack
+  data-test-app-logo-container
+  ...attributes
+  local-class='app-logo-container-size-{{this.size}} {{this.paddingClass}} {{this.borderClass}}'
+  @alignItems='center'
+  @justifyContent='center'
+>
+  {{#if @loading}}
+    <AkSkeleton
+      data-test-app-logo-skeleton
+      @width='100px'
+      @height='100%'
+      @variant='rectangular'
+    />
+  {{else}}
+    <img
+      data-test-appLogo-img
+      local-class='app-logo-image {{if @rounded "app-logo-image-rounded"}}'
+      src={{this.src}}
+      alt={{this.alt}}
+      role={{this.role}}
+    />
+  {{/if}}
+</AkStack>

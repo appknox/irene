@@ -145,7 +145,7 @@ module('Integration | Component | sbom/app-list', function (hooks) {
       assert.dom('[data-test-appPlatform-icon]', firstRow[0]).exists();
       // .hasClass(this.projects[0].platform_icon);
 
-      assert.dom('[data-test-sbomApp-logo]', firstRow[1]).exists();
+      assert.dom('[data-test-appLogo-img]', firstRow[1]).exists();
 
       assert
         .dom('[data-test-sbomApp-packageName]', firstRow[1])
@@ -226,7 +226,7 @@ module('Integration | Component | sbom/app-list', function (hooks) {
     assert.dom('[data-test-appPlatform-icon]', secondRow[0]).exists();
     // .hasClass(this.projects[0].platform_icon);
 
-    assert.dom('[data-test-sbomApp-logo]', secondRow[1]).exists();
+    assert.dom('[data-test-appLogo-img]', secondRow[1]).exists();
 
     assert
       .dom('[data-test-sbomApp-packageName]', secondRow[1])
@@ -349,7 +349,7 @@ module('Integration | Component | sbom/app-list', function (hooks) {
 
     assert
       .dom(
-        '[data-test-sbomApp-logo]',
+        '[data-test-appLogo-img]',
         find('[data-test-sbomReportDrawer-drawer]')
       )
       .exists();
