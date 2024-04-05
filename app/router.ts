@@ -149,6 +149,10 @@ Router.map(function () {
           }
         );
 
+        this.route('marketplace');
+
+        this.route('analytics');
+
         this.route('sbom', function () {
           this.route('apps');
 
@@ -202,7 +206,7 @@ Router.map(function () {
 
 export const CSBMap = {
   'authenticated.projects': ENV.csb['navigateToProjects'],
-  'authenticated.analytics': ENV.csb['navigateToAnalytics'],
+  'authenticated.dashboard.analytics': ENV.csb['navigateToAnalytics'],
   'authenticated.dashboard.file': ENV.csb['clickProjectCard'],
   'authenticated.settings': ENV.csb['navigateToSettings'],
   'authenticated.project.files': ENV.csb['navigateToAllScans'],
@@ -210,6 +214,6 @@ export const CSBMap = {
   'authenticated.organization.namespaces': ENV.csb['navigateToOrganization'],
   'authenticated.organization-settings': ENV.csb['navigateToOrgSettings'],
   'authenticated.settings.index': ENV.csb['navigateToAccountSettings'],
-  'authenticated.marketplace': ENV.csb['navigateToMarketPlace'],
+  'authenticated.dashboard.marketplace': ENV.csb['navigateToMarketPlace'],
   'authenticated.billing': ENV.csb['navigateToBilling'],
 };

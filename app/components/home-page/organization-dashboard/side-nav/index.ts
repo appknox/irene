@@ -106,7 +106,7 @@ export default class HomePageOrganizationDashboardSideNavComponent extends Compo
       this.isShowAnalytics && {
         label: this.intl.t('analytics'),
         icon: 'graphic-eq',
-        route: 'authenticated.analytics',
+        route: 'authenticated.dashboard.analytics',
       },
       {
         label: this.intl.t('organization'),
@@ -123,7 +123,7 @@ export default class HomePageOrganizationDashboardSideNavComponent extends Compo
       this.showMarketplace && {
         label: this.intl.t('marketplace'),
         icon: 'account-balance',
-        route: 'authenticated.marketplace',
+        route: 'authenticated.dashboard.marketplace',
       },
       this.showBilling && {
         label: this.intl.t('billing'),
