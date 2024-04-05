@@ -51,7 +51,7 @@ Router.map(function () {
 
       this.route('organization-settings', { path: '/organization/settings' });
 
-      this.route('settings', function () {
+      this.route('account-settings', { path: '/settings' }, function () {
         this.route('general');
         this.route('security');
         this.route('developersettings');
@@ -137,6 +137,14 @@ Router.map(function () {
 
         this.route('notifications');
 
+        this.route('billing');
+
+        this.route('account-settings', { path: '/settings' }, function () {
+          this.route('general');
+          this.route('security');
+          this.route('developersettings');
+        });
+
         this.route(
           'app-monitoring',
           { path: '/store-monitoring' },
@@ -213,7 +221,8 @@ export const CSBMap = {
   'authenticated.choose': ENV.csb['naigateToCompareScans'],
   'authenticated.organization.namespaces': ENV.csb['navigateToOrganization'],
   'authenticated.organization-settings': ENV.csb['navigateToOrgSettings'],
-  'authenticated.settings.index': ENV.csb['navigateToAccountSettings'],
   'authenticated.dashboard.marketplace': ENV.csb['navigateToMarketPlace'],
-  'authenticated.billing': ENV.csb['navigateToBilling'],
+  'authenticated.dashboard.account-settings.index':
+    ENV.csb['navigateToAccountSettings'],
+  'authenticated.dashboard.billing': ENV.csb['navigateToBilling'],
 };
