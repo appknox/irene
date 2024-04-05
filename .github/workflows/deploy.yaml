@@ -14,12 +14,11 @@ jobs:
       group: ${{ github.workflow }}-ci-${{ github.ref }}
       cancel-in-progress: true
     steps:
-      - uses: actions/checkout@v3
-      - uses: actions/setup-node@v3
-        with:
-          node-version: '18'
-          cache: 'npm'
-      - run: npm ci
+      - uses: actions/checkout@v4
+
+      - name: Setup Application
+        uses: ./.github/actions/setup-app
+
       - run: npm run deploy
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
