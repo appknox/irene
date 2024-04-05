@@ -62,7 +62,7 @@ module('Integration | Component | file-details/summary', function (hooks) {
         <FileDetails::Summary @file={{this.file}} />
     `);
 
-    assert.dom('[data-test-fileDetailsSummary-appLogo]').exists();
+    assert.dom('[data-test-appLogo-img]').exists();
 
     assert
       .dom('[data-test-fileDetailsSummary-appName]')

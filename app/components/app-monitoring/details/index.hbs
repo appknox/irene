@@ -20,19 +20,7 @@
     >
       <AkStack @direction='column' @tag='article'>
         <AkStack @direction='row' @spacing='1.5' local-class='overview-icons'>
-          <AkStack
-            @tag='span'
-            @direction='row'
-            @justifyContent='center'
-            @alignItems='center'
-            local-class='project-icon'
-          >
-            <img
-              src={{this.lastFile.iconUrl}}
-              alt='app icon'
-              data-test-app-icon-url
-            />
-          </AkStack>
+          <AppLogo @src={{this.lastFile.iconUrl}} @alt='app icon' />
 
           <AkStack
             @tag='span'

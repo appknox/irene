@@ -49,7 +49,7 @@ module(
       );
 
       assert
-        .dom('[data-test-amTableRow-app-logo]')
+        .dom('[data-test-appLogo-img]')
         .hasAttribute(
           'src',
           this.amApp.get('project').get('lastFile').get('iconUrl')

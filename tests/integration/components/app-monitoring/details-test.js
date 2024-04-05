@@ -54,10 +54,10 @@ module('Integration | Component | app-monitoring/details', function (hooks) {
     `);
 
     assert.dom('[data-test-app-details-container]').exists();
-    assert.dom('[data-test-app-icon-url]').exists();
+    assert.dom('[data-test-appLogo-img]').exists();
 
     const lastFile = this.amApp.project.get('lastFile');
-    const iconElement = document.querySelector('[data-test-app-icon-url]');
+    const iconElement = document.querySelector('[data-test-appLogo-img]');
 
     assert.strictEqual(
       iconElement.src,

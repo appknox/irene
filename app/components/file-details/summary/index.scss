@@ -4,21 +4,6 @@
   background-color: var(--file-details-summary-background-color);
   box-sizing: border-box;
 
-  .app-logo-container {
-    width: 53px;
-    height: 53px;
-    padding: 0.5em;
-    border-radius: var(--file-details-summary-border-radius);
-    border: 1px solid var(--file-details-summary-border-color);
-    box-sizing: border-box;
-
-    img {
-      object-fit: contain;
-      background-image: none;
-      overflow: hidden;
-    }
-  }
-
   .file-summary-padding {
     padding: 0.75em 0;
   }

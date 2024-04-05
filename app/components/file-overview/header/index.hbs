@@ -9,18 +9,15 @@
   data-test-fileOverview-header
 >
   <AkStack @spacing='1' @alignItems='center'>
-    <div local-class='file-icon'>
-      {{#if @file.iconUrl}}
-        <img
-          src={{@file.iconUrl}}
-          aria-hidden='true'
-          role='none'
-          data-test-fileOverview-iconUrl
-        />
-      {{else}}
-        <AkSkeleton @width='100px' @height='100%' @variant='rectangular' />
-      {{/if}}
-    </div>
+    <AppLogo
+      @src={{@file.iconUrl}}
+      @loading={{if @file.iconUrl false true}}
+      @size='medium'
+      @rounded={{true}}
+      @role='none'
+      @padding={{false}}
+      @border={{false}}
+    />
 
     <AkStack @direction='column'>
       <AkTypography @variant='h5' data-test-fileOverview-fileName>

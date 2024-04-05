@@ -105,7 +105,7 @@ module('Integration | Component | sbom/scan-report-drawer', function (hooks) {
 
     assert
       .dom(
-        '[data-test-sbomApp-logo]',
+        '[data-test-appLogo-img]',
         find('[data-test-sbomReportDrawer-drawer]')
       )
       .doesNotExist();
