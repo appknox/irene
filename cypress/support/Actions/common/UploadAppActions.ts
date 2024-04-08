@@ -1,4 +1,4 @@
-import APP_TRANSLATIONS from '../../translations';
+import cyTranslate from '../../translations';
 
 export default class UploadAppActions {
   uploadAppStatusLoader = 'uploadAppStatus-loader' as const;
@@ -43,7 +43,7 @@ export default class UploadAppActions {
 
     return cy
       .findByRole('button', {
-        name: new RegExp(APP_TRANSLATIONS.uploadApp, 'i'),
+        name: new RegExp(cyTranslate('uploadApp'), 'i'),
       })
       .then((el) => {
         cy.wrap(el.find('input'))

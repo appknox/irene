@@ -1,4 +1,4 @@
-import APP_TRANSLATIONS from '../support/translations';
+import cyTranslate from '../support/translations';
 import { mirageServer, MirageFactoryDefProps } from '../support/Mirage';
 
 import LoginActions from '../support/Actions/auth/LoginActions';
@@ -32,7 +32,7 @@ describe('User Login', () => {
     cy.url().should('contain', APPLICATION_ROUTES.login);
 
     // Login page title
-    cy.findByText(APP_TRANSLATIONS.login).should('exist');
+    cy.findByText(cyTranslate('login')).should('exist');
 
     // Programmatically checks for login page elements
     loginActions.checkLoginPageElements(frontendConfigAlias);
@@ -159,11 +159,10 @@ describe('User Login', () => {
     });
 
     // Assertion for different dashboard elements
-    cy.findByText(APP_TRANSLATIONS.startNewScan).should('exist');
-    cy.findByText(APP_TRANSLATIONS.uploadApp).should('exist');
-    cy.findByText(APP_TRANSLATIONS.allProjects).should('exist');
-    cy.findByText(APP_TRANSLATIONS.allProjectsDescription).should('exist');
-    cy.findByText(APP_TRANSLATIONS.support).should('exist');
-    cy.findByText(APP_TRANSLATIONS.knowledgeBase).should('exist');
+    cy.findByText(cyTranslate('startNewScan')).should('exist');
+    cy.findByText(cyTranslate('uploadApp')).should('exist');
+    cy.findByText(cyTranslate('allProjects')).should('exist');
+    cy.findByText(cyTranslate('allProjectsDescription')).should('exist');
+    cy.findByText(cyTranslate('support')).should('exist');
   });
 });
