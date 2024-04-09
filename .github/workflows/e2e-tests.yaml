@@ -1,18 +1,32 @@
 name: E2E Test
 on:
-  pull_request:
-    types: [opened, reopened, synchronize, edited, ready_for_review]
   push:
     branches:
-      - develop
       - main
       - master
+      - e2e-test-actions-update
+
+  pull_request:
+    types: [opened, reopened, ready_for_review]
+  pull_request_review:
+    types: [submitted]
+
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.repository }}-concurrency-for-e2e
+  cancel-in-progress: false
+
+env:
+  IS_PR: ${{ github.event_name == 'pull_request' }}
 
 jobs:
   e2e-tests:
     name: Run E2E Tests
+    if: |
+      (env.IS_PR && (github.event.review.state == 'APPROVED' || !github.event.pull_request.draft)) || 
+      !env.IS_PR
     runs-on: [ubuntu-latest]
-
     permissions:
       contents: read
       deployments: write
