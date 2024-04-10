@@ -10,7 +10,7 @@ export default class AuthenticatedDashboardSbomRoute extends Route {
 
   beforeModel() {
     if (!this.organization.selected?.features?.sbom) {
-      this.router.transitionTo('authenticated.projects');
+      this.router.transitionTo('authenticated.dashboard.projects');
     }
   }
 }

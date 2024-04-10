@@ -1,11 +1,21 @@
 import Route from '@ember/routing/route';
-import ProjectModel from 'irene/models/project';
-import { ScrollToTop } from 'irene/utils/scroll-to-top';
+import RouterService from '@ember/routing/router-service';
+import { inject as service } from '@ember/service';
 
-export default class AuthenticatedProjectSettingsIndexRoute extends ScrollToTop<ProjectModel>(
-  Route
-) {
-  model() {
-    return this.modelFor('authenticated.project') as ProjectModel;
+export default class AuthenticatedProjectSettingsIndexRoute extends Route {
+  @service declare router: RouterService;
+
+  beforeModel() {
+    const params = this.paramsFor('authenticated.project') as Record<
+      string,
+      string
+    >;
+
+    if (params) {
+      this.router.transitionTo(
+        'authenticated.dashboard.project.settings.index',
+        params['projectid'] as string
+      );
+    }
   }
 }

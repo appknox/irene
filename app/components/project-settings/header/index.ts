@@ -20,22 +20,22 @@ export default class ProjectSettingsHeaderComponent extends Component<ProjectSet
   get breadcrumbItems() {
     return [
       {
-        route: 'authenticated.projects',
+        route: 'authenticated.dashboard.projects',
         linkTitle: this.intl.t('allProjects'),
       },
       {
-        route: 'authenticated.project.settings',
+        route: 'authenticated.dashboard.project.settings',
         linkTitle: this.project?.get('packageName'),
         model: this.project?.get('id'),
       },
       this.args.isDASTScenarioPage
         ? {
-            route: 'authenticated.project.settings',
+            route: 'authenticated.dashboard.project.settings',
             linkTitle: this.intl.t('dastAutomation.dastAutomationScenario'),
             model: this.project?.get('id'),
           }
         : {
-            route: 'authenticated.project.settings',
+            route: 'authenticated.dashboard.project.settings',
             linkTitle: this.intl.t('settings'),
             model: this.project?.get('id'),
           },
@@ -46,12 +46,12 @@ export default class ProjectSettingsHeaderComponent extends Component<ProjectSet
     return [
       {
         id: this.intl.t('generalSettings'),
-        route: 'authenticated.project.settings.index',
+        route: 'authenticated.dashboard.project.settings.index',
         label: this.intl.t('generalSettings'),
       },
       {
         id: this.intl.t('analysisSettings'),
-        route: 'authenticated.project.settings.analysis',
+        route: 'authenticated.dashboard.project.settings.analysis',
         label: this.intl.t('analysisSettings'),
       },
     ];

@@ -57,7 +57,7 @@ export default class ProjectSettingsViewScenarioHeaderComponent extends Componen
       );
 
       this.router.transitionTo(
-        'authenticated.project.settings',
+        'authenticated.dashboard.project.settings',
         String(this.args.project?.id)
       );
     } catch (err) {

@@ -131,8 +131,32 @@ Router.map(function () {
       });
 
       this.route('dashboard', function () {
+        this.route('projects');
+
+        this.route(
+          'project',
+          {
+            path: '/project/:projectid',
+          },
+          function () {
+            this.route('settings', function () {
+              this.route('analysis');
+
+              this.route('dast-automation-scenario', {
+                path: '/dast-automation-scenario/:scenario_id',
+              });
+            });
+
+            this.route('files');
+          }
+        );
+
         this.route('file', { path: '/file/:fileid' }, function () {
           this.route('analysis', { path: '/analysis/:analysis_id' });
+        });
+
+        this.route('choose', {
+          path: '/choose/:fileid',
         });
 
         this.route('notifications');
@@ -192,6 +216,14 @@ Router.map(function () {
         this.route('file-vul-compare', {
           path: '/file-vul-compare/:files/:vulnerability_id',
         });
+
+        this.route('organization', function () {
+          this.route('namespaces');
+          this.route('users');
+          this.route('teams');
+        });
+
+        this.route('organization-settings', { path: '/organization/settings' });
       });
     }
   );
@@ -213,14 +245,16 @@ Router.map(function () {
 });
 
 export const CSBMap = {
-  'authenticated.projects': ENV.csb['navigateToProjects'],
   'authenticated.dashboard.analytics': ENV.csb['navigateToAnalytics'],
+  'authenticated.dashboard.projects': ENV.csb['navigateToProjects'],
   'authenticated.dashboard.file': ENV.csb['clickProjectCard'],
-  'authenticated.settings': ENV.csb['navigateToSettings'],
-  'authenticated.project.files': ENV.csb['navigateToAllScans'],
-  'authenticated.choose': ENV.csb['naigateToCompareScans'],
-  'authenticated.organization.namespaces': ENV.csb['navigateToOrganization'],
-  'authenticated.organization-settings': ENV.csb['navigateToOrgSettings'],
+  'authenticated.dashboard.settings': ENV.csb['navigateToSettings'],
+  'authenticated.dashboard.project.files': ENV.csb['navigateToAllScans'],
+  'authenticated.dashboard.choose': ENV.csb['naigateToCompareScans'],
+  'authenticated.dashboard.organization.namespaces':
+    ENV.csb['navigateToOrganization'],
+  'authenticated.dashboard.organization-settings':
+    ENV.csb['navigateToOrgSettings'],
   'authenticated.dashboard.marketplace': ENV.csb['navigateToMarketPlace'],
   'authenticated.dashboard.account-settings.index':
     ENV.csb['navigateToAccountSettings'],

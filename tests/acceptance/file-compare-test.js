@@ -96,9 +96,9 @@ module('Acceptance | file compare', function (hooks) {
   });
 
   test('It compares selected files', async function (assert) {
-    await visit(`/choose/${this.fileOld?.id}`);
+    await visit(`/dashboard/choose/${this.fileOld?.id}`);
 
-    assert.strictEqual(currentURL(), `/choose/${this.fileOld?.id}`);
+    assert.strictEqual(currentURL(), `/dashboard/choose/${this.fileOld?.id}`);
 
     const compareFile = this.fileRecords[1];
     const compareFileSelector = `[data-test-fileCompare-compareList-fileOverview='${compareFile.id}']`;
@@ -121,7 +121,7 @@ module('Acceptance | file compare', function (hooks) {
   });
 
   test('it compares two selected files', async function (assert) {
-    await visit(`/project/${this.fileOld?.id}/files`);
+    await visit(`/dashboard/project/${this.fileOld?.id}/files`);
 
     const [baseFile, compareFile] = this.fileRecords;
 
@@ -148,7 +148,7 @@ module('Acceptance | file compare', function (hooks) {
 
     notify.setDefaultClearDuration(0);
 
-    await visit(`/project/${this.fileOld?.id}/files`);
+    await visit(`/dashboard/project/${this.fileOld?.id}/files`);
 
     const profile = this.server.create('profile', { id: '1' });
 
@@ -213,7 +213,10 @@ module('Acceptance | file compare', function (hooks) {
 
     await click('[data-test-fileCompareHeader-projectOverview-settingsBtn]');
 
-    assert.strictEqual(currentURL(), `/project/${this.fileOld?.id}/settings`);
+    assert.strictEqual(
+      currentURL(),
+      `/dashboard/project/${this.fileOld?.id}/settings`
+    );
   });
 
   test('it renders all upload page breadcrumbs if page referrer is "all_uploads"', async function (assert) {
@@ -246,7 +249,10 @@ module('Acceptance | file compare', function (hooks) {
 
     await click('[data-test-fileCompare-header-compareFileEditIcon]');
 
-    assert.strictEqual(currentURL(), `/project/${baseFile?.id}/files`);
+    assert.strictEqual(
+      currentURL(),
+      `/dashboard/project/${baseFile?.id}/files`
+    );
   });
 
   test('it redirects to compare list page if compare file edit icon is clicked and page referrer is empty', async function (assert) {
@@ -258,6 +264,6 @@ module('Acceptance | file compare', function (hooks) {
 
     await click('[data-test-fileCompare-header-compareFileEditIcon]');
 
-    assert.strictEqual(currentURL(), `/choose/${baseFile?.id}`);
+    assert.strictEqual(currentURL(), `/dashboard/choose/${baseFile?.id}`);
   });
 });

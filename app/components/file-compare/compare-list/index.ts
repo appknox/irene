@@ -14,7 +14,7 @@ import { PaginationProviderActionsArgs } from 'irene/components/ak-pagination-pr
 import ProjectModel from 'irene/models/project';
 import { AkBreadcrumbsItemSignature } from 'irene/components/ak-breadcrumbs/item';
 import parseError from 'irene/utils/parse-error';
-import { ChooseFilesQueryParams } from 'irene/routes/authenticated/choose';
+import { ChooseFilesQueryParams } from 'irene/routes/authenticated/dashboard/choose';
 
 type FilesQueryResponse = DS.AdapterPopulatedRecordArray<FileModel> & {
   meta: { count: number };
@@ -76,7 +76,7 @@ export default class FileCompareCompareListComponent extends Component<FileCompa
   get breadcrumbItems(): AkBreadcrumbsItemSignature['Args'][] {
     return [
       {
-        route: 'authenticated.projects',
+        route: 'authenticated.dashboard.projects',
         linkTitle: this.intl.t('allProjects'),
       },
       {

@@ -1,27 +1,21 @@
 import Route from '@ember/routing/route';
-import ProjectModel from 'irene/models/project';
-import { ScrollToTop } from 'irene/utils/scroll-to-top';
+import RouterService from '@ember/routing/router-service';
+import { inject as service } from '@ember/service';
 
-export interface ProjectFilesQueryParams {
-  files_limit: string;
-  files_offset: string;
-}
+export default class AuthenticatedProjectFilesRoute extends Route {
+  @service declare router: RouterService;
 
-export default class AuthenticatedProjectFilesRoute extends ScrollToTop(Route) {
-  queryParams = {
-    files_limit: {
-      refreshModel: true,
-    },
-    files_offset: {
-      refreshModel: true,
-    },
-  };
+  beforeModel() {
+    const params = this.paramsFor('authenticated.project') as Record<
+      string,
+      string
+    >;
 
-  model(params: Partial<ProjectFilesQueryParams>) {
-    const { files_limit = '10', files_offset = '0' } = params;
-
-    const project = this.modelFor('authenticated.project') as ProjectModel;
-
-    return { project, queryParams: { files_limit, files_offset } };
+    if (params) {
+      this.router.transitionTo(
+        'authenticated.dashboard.project.files',
+        params['projectid'] as string
+      );
+    }
   }
 }

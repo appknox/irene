@@ -10,7 +10,7 @@ import RouterService from '@ember/routing/router-service';
 import MeService from 'irene/services/me';
 import OrganizationModel from 'irene/models/organization';
 import OrganizationMemberModel from 'irene/models/organization-member';
-import { OrganizationMembersRouteQueryParams } from 'irene/routes/authenticated/organization/users';
+import { OrganizationMembersRouteQueryParams } from 'irene/routes/authenticated/dashboard/organization/users';
 // eslint-disable-next-line ember/use-ember-data-rfc-395-imports
 import DS from 'ember-data';
 

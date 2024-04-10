@@ -11,13 +11,13 @@ export default class MarketplaceIntegrationListComponent extends Component {
         title: this.intl.t('github'),
         description: this.intl.t('integrateAppknoxTo') + this.intl.t('github'),
         logo: '../images/github-icon.png',
-        link: 'authenticated.organization-settings',
+        link: 'authenticated.dashboard.organization-settings',
       },
       {
         title: this.intl.t('jira'),
         description: this.intl.t('integrateAppknoxTo') + this.intl.t('jira'),
         logo: '../images/jira-icon.png',
-        link: 'authenticated.organization-settings',
+        link: 'authenticated.dashboard.organization-settings',
       },
       {
         title: this.intl.t('slack'),

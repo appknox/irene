@@ -15,7 +15,7 @@ export default class AuthenticatedClientRoute extends Route {
 
   beforeModel() {
     if (!this.organization.selected?.features?.partner_dashboard) {
-      this.router.transitionTo('authenticated.projects');
+      this.router.transitionTo('authenticated.dashboard.projects');
     }
   }
 

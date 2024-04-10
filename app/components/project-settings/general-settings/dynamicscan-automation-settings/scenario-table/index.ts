@@ -44,7 +44,7 @@ export default class ProjectSettingsGeneralSettingsDynamicscanAutomationScenario
     rowValue: ScanParameterGroupModel;
   }) {
     this.router.transitionTo(
-      'authenticated.project.settings.dast-automation-scenario',
+      'authenticated.dashboard.project.settings.dast-automation-scenario',
       scenario.id
     );
   }

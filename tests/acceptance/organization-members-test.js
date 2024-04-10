@@ -118,7 +118,7 @@ module('Acceptance | organization members', function (hooks) {
         return schema.organizationTeams.find(req.params.teamId)?.toJSON();
       });
 
-      await visit('/organization/users');
+      await visit('/dashboard/organization/users');
 
       assert.dom('[data-test-invitation-list]').exists();
 
@@ -211,7 +211,7 @@ module('Acceptance | organization members', function (hooks) {
       return user?.toJSON();
     });
 
-    await visit('/organization/users');
+    await visit('/dashboard/organization/users');
 
     assert
       .dom('[data-test-invite-member-btn]')
@@ -290,7 +290,7 @@ module('Acceptance | organization members', function (hooks) {
       return user?.toJSON();
     });
 
-    await visit('/organization/users');
+    await visit('/dashboard/organization/users');
 
     let contentRows = findAll('[data-test-org-user-row]');
 
@@ -343,7 +343,7 @@ module('Acceptance | organization members', function (hooks) {
       return user?.toJSON();
     });
 
-    await visit('/organization/users');
+    await visit('/dashboard/organization/users');
 
     const contentRows = findAll('[data-test-org-user-row]');
 
