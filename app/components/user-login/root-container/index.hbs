@@ -1,0 +1,16 @@
+<AkStack @alignItems='center' @justifyContent='center' local-class='login-root'>
+  <AkStack @direction='column' local-class='root-container'>
+    <AkStack
+      @width='full'
+      @justifyContent='center'
+      class='pt-3 pb-2'
+      local-class='logo-container'
+    >
+      <AuthAssets />
+    </AkStack>
+
+    <AkDivider @color='dark' />
+
+    {{yield}}
+  </AkStack>
+</AkStack>

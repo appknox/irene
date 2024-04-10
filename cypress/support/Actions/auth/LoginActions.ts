@@ -32,12 +32,15 @@ export default class LoginActions {
     // Wait for frontend config request to resolve
     cy.wait('@frontendConfig');
 
-    cy.findByPlaceholderText('Username / Email').type(username); // Username/Email field
-    cy.findByLabelText('login-user-check-icon').click();
+    cy.findByPlaceholderText(
+      cyTranslate('usernameEmailIdTextPlaceholder')
+    ).type(username); // Username/Email field
+
+    cy.findByLabelText('login-next-button').click();
 
     cy.wait('@checkUserRoute', { timeout: 30000 });
 
-    cy.findByPlaceholderText('Password').type(password); // Password field
+    cy.findByPlaceholderText(cyTranslate('passwordPlaceholder')).type(password); // Password field
     cy.findByLabelText('login-submit-button').click();
 
     cy.wait('@loginAPIReq', { timeout: 30000 });
@@ -65,14 +68,15 @@ export default class LoginActions {
       if (res.registration_link) {
         cy.findByText(cyTranslate('dontHaveAccount')).should('exist');
 
-        cy.findByText(cyTranslate('register'))
-          .should('exist')
-          .should('have.attr', 'href', res.registration_link);
+        cy.findByText(cyTranslate('registerToday')).should('exist');
       }
     });
 
-    cy.findByPlaceholderText('Username / Email').should('be.visible'); // Username/Email field
-    cy.findAllByLabelText('login-user-check-icon').should('exist'); // User check button;
+    cy.findByPlaceholderText(
+      cyTranslate('usernameEmailIdTextPlaceholder')
+    ).should('be.visible'); // Username/Email field
+
+    cy.findByLabelText('login-next-button'); // User check button;
   }
 
   /**
@@ -89,8 +93,11 @@ export default class LoginActions {
         cacheAcrossSpecs,
         validate: () => {
           // If these elements are displayed, token is expired
-          cy.findByPlaceholderText('Username / Email').should('not.exist'); // Username/Email field
-          cy.findByLabelText('login-user-check-icon').should('not.exist'); // User check button;s
+          cy.findByPlaceholderText(
+            cyTranslate('usernameEmailIdTextPlaceholder')
+          ).should('not.exist'); // Username/Email field
+
+          cy.findByLabelText('login-next-button').should('not.exist'); // User check buttons
 
           // Validate presence of access token in localStorage.
           cy.window()

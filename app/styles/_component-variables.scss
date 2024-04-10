@@ -824,8 +824,37 @@ body {
     --border-color-2
   );
 
-  // variables for login-component
-  --login-component-button-loader-color: var(--primary-contrast-text);
+  // variables for user-login
+  --user-login-footer-background-color: var(--neutral-grey-100);
+
+  // variables for user-login/via-username-password
+  --user-login-via-username-password-link-color: var(--neutral-grey-700);
+  --user-login-via-username-password-contact-support-color: var(
+    --secondary-main
+  );
+
+  // variables for user-login/perform-mfa
+  --user-login-via-username-password-link-color: var(--neutral-grey-700);
+  --user-login-perform-mfa-contact-support-color: var(--secondary-main);
+
+  // variables for user-login/via-sso
+  --user-login-via-sso-separator-color: var(--neutral-grey-300);
+  --user-login-via-sso-separator-or-bg-color: var(--white);
+  --user-login-via-sso-separator-or-color: var(--background-dark);
+
+  // variables for user-login/recover-password
+  --user-login-recover-password-footer-background-color: var(
+    --neutral-grey-100
+  );
+  --user-login-recover-password-retry-text-color: var(--neutral-grey-700);
+
+  // variables for user-login/reset-password
+  --user-login-reset-password-footer-background-color: var(--neutral-grey-100);
+
+  // variables for user-login/root-container
+  --user-login-root-container-border-color: var(--neutral-grey-200);
+  --user-login-root-container-box-shadow: var(--box-shadow-3);
+  --user-login-root-container-border-radius: var(--border-radius);
 
   // variables for file-chart
   --file-chart-severity-level-color-critical: var(--severity-critical);

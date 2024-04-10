@@ -1,0 +1,29 @@
+<form
+  {{on 'submit' (perform this.handleVerification)}}
+  class='w-full'
+  data-test-user-login-check-type
+>
+  <AkStack @width='full' @direction='column' @alignItems='stretch' @spacing='3'>
+    <AkTextField
+      @label={{t 'usernameEmailIdTextLabel'}}
+      @placeholder={{t 'usernameEmailIdTextPlaceholder'}}
+      @labelTypographyColor='secondary'
+      @labelTypographyVariant='subtitle2'
+      @value={{@username}}
+      autocomplete='username'
+      @autofocus={{true}}
+      {{autofocus}}
+      data-test-user-login-check-type-username-input
+    />
+
+    <AkButton
+      aria-label='login-next-button'
+      @type='submit'
+      @loading={{@showSpinner}}
+      @disabled={{if @username false true}}
+      data-test-user-login-check-type-button
+    >
+      {{t 'next'}}
+    </AkButton>
+  </AkStack>
+</form>

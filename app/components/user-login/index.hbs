@@ -1,0 +1,82 @@
+<UserLogin::RootContainer>
+  <AkStack
+    @width='full'
+    @direction='column'
+    local-class='login-input-container'
+  >
+    <AkTypography @variant='h4' @fontWeight='bold' local-class='login-title'>
+      {{t 'loginTitle'}}
+    </AkTypography>
+
+    <AkStack @width='full' @direction='column'>
+      {{#if this.isCheckDone}}
+        {{#if this.MFAEnabled}}
+          <UserLogin::PerformMfa
+            @forced={{this.MFAForced}}
+            @isEmail={{this.MFAIsEmail}}
+            @isAuthApp={{this.MFAIsAuthApp}}
+            @showSpinner={{this.loginTask.isRunning}}
+            @login={{this.login}}
+            @showCredError={{this.showCredError}}
+            @showAccountLockError={{this.showAccountLockError}}
+          />
+        {{else}}
+          {{#if this.isSSOEnabled}}
+            <UserLogin::ViaSso
+              @username={{this.username}}
+              @password={{this.password}}
+              @usernameChanged={{this.usernameChanged}}
+              @showLoginSpinner={{this.loginTask.isRunning}}
+              @login={{this.login}}
+              @showSSOSpinner={{this.ssologinTask.isRunning}}
+              @ssologin={{this.ssologin}}
+              @isEnforced={{this.isSSOEnforced}}
+              @showCredError={{this.showCredError}}
+              @showAccountLockError={{this.showAccountLockError}}
+            />
+          {{else}}
+            <UserLogin::ViaUsernamePassword
+              @username={{this.username}}
+              @password={{this.password}}
+              @usernameChanged={{this.usernameChanged}}
+              @showSpinner={{this.loginTask.isRunning}}
+              @login={{this.login}}
+              @showCredError={{this.showCredError}}
+              @showAccountLockError={{this.showAccountLockError}}
+            />
+          {{/if}}
+        {{/if}}
+      {{else}}
+        <UserLogin::CheckType
+          @showSpinner={{this.verifySSOTask.isRunning}}
+          @verifySSO={{this.verifySSO}}
+          @username={{this.username}}
+        />
+      {{/if}}
+    </AkStack>
+  </AkStack>
+
+  {{#if this.showRegistrationLink}}
+    <AkStack
+      @alignItems='center'
+      @justifyContent='center'
+      @width='full'
+      @spacing='1'
+      local-class='login-footer'
+      class='py-2'
+    >
+      <AkTypography>{{t 'dontHaveAccount'}}</AkTypography>
+
+      <AkButton
+        @tag='a'
+        @underline='always'
+        @color='primary'
+        @variant='text'
+        href={{this.registrationLink}}
+        data-test-user-login-registration-link
+      >
+        {{t 'registerToday'}}
+      </AkButton>
+    </AkStack>
+  {{/if}}
+</UserLogin::RootContainer>

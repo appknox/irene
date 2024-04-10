@@ -1,0 +1,23 @@
+.forgot-password-link {
+  color: var(--user-login-via-username-password-link-color);
+  margin-bottom: 0.35em;
+}
+
+.error-stack {
+  margin-top: 0.285em;
+
+  .error-icon {
+    padding-top: 0.142em;
+    font-size: 1rem !important;
+  }
+
+  .error-message {
+    padding-left: 0.714em;
+    font-size: 0.857rem;
+  }
+}
+
+.contact-support-link {
+  color: var(--user-login-via-username-password-contact-support-color);
+  text-decoration: underline;
+}

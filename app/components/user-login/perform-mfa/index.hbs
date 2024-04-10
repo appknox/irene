@@ -1,0 +1,97 @@
+<form
+  {{on 'submit' (perform this.handleLogin)}}
+  class='w-full'
+  data-test-user-login-perform-mfa
+>
+  <AkStack @width='full' @direction='column' @alignItems='stretch' @spacing='3'>
+    <AkTypography>
+      {{#if @forced}}
+        <span data-test-user-login-perform-mfa-org-2fa>
+          {{t 'organizationMandatory2FA'}}
+        </span>
+
+        <br />
+
+        {{t 'emailOTP'}}
+      {{/if}}
+
+      {{#if @isEmail}}
+        <span data-test-user-login-perform-mfa-email-otp>
+          {{t 'emailOTP'}}
+        </span>
+
+        <br />
+
+        {{t 'emailCode'}}
+      {{/if}}
+
+      {{#if @isAuthApp}}
+        <span data-test-user-login-perform-mfa-authenticator-code>
+          {{t 'authenticatorCode'}}
+        </span>
+      {{/if}}
+    </AkTypography>
+
+    <AkStack @direction='column'>
+      <AkTextField
+        @label={{this.mfaInputLabel}}
+        @placeholder={{t 'enterCode'}}
+        @labelTypographyColor='secondary'
+        @labelTypographyVariant='subtitle2'
+        @value={{this.otp}}
+        @autofocus={{true}}
+        autocomplete='one-time-code'
+        @error={{or @showCredError @showAccountLockError}}
+        data-test-user-login-perform-mfa-otp-input
+      />
+
+      {{#if @showAccountLockError}}
+        <AkStack local-class='error-stack'>
+          <AkIcon @iconName='cancel' @color='error' local-class='error-icon' />
+
+          <AkTypography @color='error' local-class='error-message'>
+            {{t 'lockedAccount'}}
+
+            {{#if this.showLinkContactSupport}}
+              <a
+                href='mailto:support@appknox.com'
+                target='_blank'
+                rel='noopener noreferrer'
+                local-class='contact-support-link'
+              >
+                {{t 'contactSupport'}}
+              </a>
+            {{else}}
+              {{t 'contactSupport'}}
+            {{/if}}
+          </AkTypography>
+        </AkStack>
+      {{/if}}
+
+      {{#if @showCredError}}
+        <AkStack local-class='error-stack'>
+          <AkIcon @iconName='cancel' @color='error' local-class='error-icon' />
+
+          <AkTypography @color='error' local-class='error-message'>
+            {{t 'credentialsIncorrect'}}
+          </AkTypography>
+        </AkStack>
+      {{/if}}
+    </AkStack>
+
+    {{#if @showAccountLockError}}
+      <AkButton @tag='a' href='/recover'>
+        {{t 'resetPassword'}}
+      </AkButton>
+    {{else}}
+      <AkButton
+        @type='submit'
+        @disabled={{if this.otp false true}}
+        @loading={{@showSpinner}}
+        data-test-user-login-perform-mfa-button
+      >
+        {{t 'verify'}}
+      </AkButton>
+    {{/if}}
+  </AkStack>
+</form>

@@ -1,0 +1,100 @@
+<form
+  {{on 'submit' (perform this.handleLogin)}}
+  class='w-full'
+  data-test-user-login-via-username-password
+>
+  <AkStack @width='full' @direction='column' @alignItems='stretch' @spacing='3'>
+    <AkTextField
+      @label={{t 'usernameEmailIdTextLabel'}}
+      @placeholder={{t 'usernameEmailIdTextPlaceholder'}}
+      @labelTypographyColor='secondary'
+      @labelTypographyVariant='subtitle2'
+      @value={{@username}}
+      @error={{or @showCredError @showAccountLockError}}
+      {{on 'input' @usernameChanged}}
+      autocomplete='username'
+      data-test-user-login-via-username-password-username-input
+    />
+
+    <AkStack @direction='column'>
+      <AkStack @justifyContent='space-between' @width='full'>
+        <AkTypography @color='secondary' @variant='subtitle2'>
+          {{t 'password'}}
+        </AkTypography>
+
+        {{#unless @showAccountLockError}}
+          <AkLink
+            @underline='always'
+            @color='textSecondary'
+            @typographyVariant='body2'
+            @route='recover'
+            local-class='forgot-password-link'
+          >
+            {{t 'forgotPassword'}}
+          </AkLink>
+        {{/unless}}
+      </AkStack>
+
+      <AkTextField
+        @placeholder={{t 'passwordPlaceholder'}}
+        @labelTypographyColor='secondary'
+        @labelTypographyVariant='subtitle2'
+        @value={{@password}}
+        @type='password'
+        @error={{or @showCredError @showAccountLockError}}
+        autocomplete='current-password'
+        {{autofocus}}
+        data-test-user-login-via-username-password-password-input
+      />
+
+      {{#if @showAccountLockError}}
+        <AkStack local-class='error-stack'>
+          <AkIcon @iconName='cancel' @color='error' local-class='error-icon' />
+
+          <AkTypography @color='error' local-class='error-message'>
+            {{t 'lockedAccount'}}
+
+            {{#if this.showLinkContactSupport}}
+              <a
+                href='mailto:support@appknox.com'
+                target='_blank'
+                rel='noopener noreferrer'
+                local-class='contact-support-link'
+              >
+                {{t 'contactSupport'}}
+              </a>
+            {{else}}
+              {{t 'contactSupport'}}
+            {{/if}}
+          </AkTypography>
+        </AkStack>
+      {{/if}}
+
+      {{#if @showCredError}}
+        <AkStack local-class='error-stack'>
+          <AkIcon @iconName='cancel' @color='error' local-class='error-icon' />
+
+          <AkTypography @color='error' local-class='error-message'>
+            {{t 'credentialsIncorrect'}}
+          </AkTypography>
+        </AkStack>
+      {{/if}}
+    </AkStack>
+
+    {{#if @showAccountLockError}}
+      <AkButton @tag='a' href='/recover'>
+        {{t 'resetPassword'}}
+      </AkButton>
+    {{else}}
+      <AkButton
+        aria-label='login-submit-button'
+        @loading={{@showSpinner}}
+        @type='submit'
+        @disabled={{if @password false true}}
+        data-test-user-login-via-username-password-login-button
+      >
+        {{t 'login'}}
+      </AkButton>
+    {{/if}}
+  </AkStack>
+</form>
