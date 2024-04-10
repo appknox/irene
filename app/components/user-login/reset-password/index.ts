@@ -16,7 +16,7 @@ import {
 import IntlService from 'ember-intl/services/intl';
 import RouterService from '@ember/routing/router-service';
 
-interface PasswordResetSignature {
+interface UserLoginResetPasswordComponentSignature {
   Args: {
     token?: string;
   };
@@ -32,7 +32,7 @@ const ResetValidator = {
   confirm_password: validateConfirmation({ on: 'password' }),
 };
 
-export default class PasswordResetComponent extends Component<PasswordResetSignature> {
+export default class UserLoginResetPasswordComponent extends Component<UserLoginResetPasswordComponentSignature> {
   @service declare intl: IntlService;
   @service declare ajax: any;
   @service declare router: RouterService;
@@ -47,7 +47,10 @@ export default class PasswordResetComponent extends Component<PasswordResetSigna
   validation_errors = [];
   model = {};
 
-  constructor(owner: unknown, args: PasswordResetSignature['Args']) {
+  constructor(
+    owner: unknown,
+    args: UserLoginResetPasswordComponentSignature['Args']
+  ) {
     super(owner, args);
 
     this.changeset = Changeset(
@@ -61,6 +64,18 @@ export default class PasswordResetComponent extends Component<PasswordResetSigna
 
   get token() {
     return this.args.token || '';
+  }
+
+  get disableResetButton() {
+    if (
+      !this.changeset?.password ||
+      !this.changeset.confirm_password ||
+      this.changeset.error['confirm_password']
+    ) {
+      return true;
+    }
+
+    return false;
   }
 
   get url() {
@@ -123,6 +138,6 @@ export default class PasswordResetComponent extends Component<PasswordResetSigna
 
 declare module '@glint/environment-ember-loose/registry' {
   export default interface Registry {
-    PasswordReset: typeof PasswordResetComponent;
+    'UserLogin::ResetPassword': typeof UserLoginResetPasswordComponent;
   }
 }

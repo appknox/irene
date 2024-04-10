@@ -1,0 +1,26 @@
+.reset-password-input-container {
+  padding: 1.714em 2.857em 2.714em;
+
+  .reset-password-title {
+    padding-bottom: 1.142em;
+    font-size: 1.285rem;
+  }
+}
+
+.reset-password-footer {
+  background: var(--user-login-reset-password-footer-background-color);
+}
+
+.error-stack {
+  margin-top: 0.285em;
+
+  .error-icon {
+    padding-top: 0.142em;
+    font-size: 1rem !important;
+  }
+
+  .error-message {
+    padding-left: 0.714em;
+    font-size: 0.857rem;
+  }
+}

@@ -32,14 +32,14 @@ describe('User Login', () => {
     cy.url().should('contain', APPLICATION_ROUTES.login);
 
     // Login page title
-    cy.findByText(cyTranslate('login')).should('exist');
+    cy.findByText(cyTranslate('loginTitle')).should('exist');
 
     // Programmatically checks for login page elements
     loginActions.checkLoginPageElements(frontendConfigAlias);
   });
 
   it('should throw an error if user credentials are invalid', () => {
-    const errorMessage = 'Unable to log in with provided credentials.';
+    const errorMessage = 'The credentials you entered is incorrect';
 
     // Mocks Frontend and Server configs
     const { frontendConfigAlias } =

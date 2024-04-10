@@ -172,32 +172,45 @@ module('Acceptance | oidc login', function (hooks) {
         )
     );
 
-    await fillIn('[data-test-login-check-username-input]', 'appknoxusername');
+    await fillIn(
+      '[data-test-user-login-check-type-username-input]',
+      'appknoxusername'
+    );
 
-    await click('[data-test-login-check-button]');
+    await click('[data-test-user-login-check-type-button]');
 
     if (sso) {
       assert
-        .dom('[data-test-login-sso-forced-username-input]')
+        .dom('[data-test-user-login-via-sso-forced-username-input]')
         .hasValue('appknoxusername');
 
-      assert.dom('[data-test-login-sso-forced-button]').isNotDisabled();
+      assert
+        .dom('[data-test-user-login-via-sso-forced-button]')
+        .isNotDisabled();
 
-      await click('[data-test-login-sso-forced-button]');
+      await click('[data-test-user-login-via-sso-forced-button]');
 
       // simulate server redirect
       await visit(`/saml2/redirect?sso_token=${SSO_TOKEN}`);
     } else {
       assert
-        .dom('[data-test-login-login-username-input]')
+        .dom('[data-test-user-login-via-username-password-username-input]')
         .hasValue('appknoxusername');
 
-      assert.dom('[data-test-login-login-password-input]').exists();
-      assert.dom('[data-test-login-login-button]').isNotDisabled();
+      assert
+        .dom('[data-test-user-login-via-username-password-password-input]')
+        .exists();
 
-      await fillIn('[data-test-login-login-password-input]', 'appknoxpassword');
+      await fillIn(
+        '[data-test-user-login-via-username-password-password-input]',
+        'appknoxpassword'
+      );
 
-      await click('[data-test-login-login-button]');
+      assert
+        .dom('[data-test-user-login-via-username-password-login-button]')
+        .isNotDisabled();
+
+      await click('[data-test-user-login-via-username-password-login-button]');
     }
   };
 
