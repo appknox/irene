@@ -30,7 +30,7 @@ export default class HomePageComponent extends Component {
 
   get checkIfOrgNameIsEmpty() {
     const organization = this.organization;
-    const isOwner = this.me.org.get('is_owner');
+    const isOwner = this.me?.org?.get('is_owner');
 
     if (isOwner) {
       const orgName = organization.selected.name;
