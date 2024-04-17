@@ -68,6 +68,14 @@ export default class MarketplacePluginListComponent extends Component {
         published: true,
         instructions: '',
       },
+      {
+        title: this.intl.t('gitlab'),
+        description: this.intl.t('viewIntegrationInstructions'),
+        logo: '../images/gitlab-icon.png',
+        link: '',
+        published: false,
+        instructions: htmlSafe(constants.instructions),
+      },
     ];
   }
 }
