@@ -43,7 +43,12 @@
       <FileDetails::ScanActions::StaticScan @file={{@file}} />
     </AkStack>
 
-    <AkStack @direction='column' @alignItems='center' @spacing='1.5'>
+    <AkStack
+      @direction='column'
+      @alignItems='center'
+      @spacing='1.5'
+      data-test-cy='dynamicScan-infoContainer'
+    >
       <AkTypography
         data-test-fileDetailScanActions-dynamicScanTitle
         @variant='h6'

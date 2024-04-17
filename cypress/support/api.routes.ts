@@ -69,4 +69,8 @@ export const API_ROUTES = {
     route: '/api/submissions',
     alias: 'submission',
   },
+  devicePreference: {
+    route: '/api/profiles/*/device_preference?*',
+    alias: 'devicePreference',
+  },
 } as const;

@@ -64,7 +64,9 @@ export interface MirageFactoryDefProps {
   >;
 
   // Contains base factory props
-  project: IncludeBaseFactoryProps<typeof PROJECT_FACTORY_DEF>;
+  project: IncludeBaseFactoryProps<typeof PROJECT_FACTORY_DEF> & {
+    last_file_id: number;
+  };
   vulnerability: IncludeBaseFactoryProps<typeof VULNERABLITY_FACTORY_DEF>;
 
   'unknown-analysis-status': IncludeBaseFactoryProps<
