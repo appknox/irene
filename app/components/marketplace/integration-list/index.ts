@@ -25,12 +25,6 @@ export default class MarketplaceIntegrationListComponent extends Component {
         logo: '../images/slack-icon.png',
         link: '',
       },
-      {
-        title: this.intl.t('gitlab'),
-        description: this.intl.t('comingSoon'),
-        logo: '../images/gitlab-icon.png',
-        link: '',
-      },
     ];
   }
 }
