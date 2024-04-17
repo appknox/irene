@@ -69,8 +69,7 @@ export default class SecurityAnalysisModel extends Model {
   @attr('string') declare cvssVersion: string;
   @attr('number') declare analiserVersion: number;
 
-  // this is made as string because ember power select considers 0 as null value. ref: https://github.com/cibernox/ember-power-select/issues/962
-  @attr('string') declare overriddenRisk: string;
+  @attr('number', { defaultValue: null }) declare overriddenRisk: number;
 
   @attr('string') declare overriddenRiskComment: string;
   @attr('boolean') declare overriddenRiskToProfile: boolean;

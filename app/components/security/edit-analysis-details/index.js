@@ -5,6 +5,7 @@ import { isEmpty } from '@ember/utils';
 import Component from '@glimmer/component';
 import { tracked } from '@glimmer/tracking';
 import { task } from 'ember-concurrency';
+
 import ENV from 'irene/config/environment';
 import ENUMS from 'irene/enums';
 
@@ -47,6 +48,20 @@ export default class EditAnalysisDetailsComponent extends Component {
 
   get analysis() {
     return this.args.analysis;
+  }
+
+  get overridenRisk() {
+    // KNOWN BUG: If the value of 0 happens to be selected then nothing is shown in the selected field
+    // even if the option is visible in the dropdown
+    // ref: https://github.com/cibernox/ember-power-select/issues/962
+    // work around: https://github.com/cibernox/ember-power-select/issues/962#issuecomment-321563158
+    const risk = this.analysisDetails.overriddenRisk;
+
+    return isEmpty(risk) ? null : { value: risk };
+  }
+
+  get riskIsOverriden() {
+    return this.analysisDetails.overriddenRisk !== null;
   }
 
   get ireneFilePath() {
@@ -362,7 +377,7 @@ export default class EditAnalysisDetailsComponent extends Component {
   }
 
   @action selectOverriddenRisk(param) {
-    this.analysisDetails.overriddenRisk = param;
+    this.analysisDetails.overriddenRisk = param.value;
   }
 
   @action addFinding() {

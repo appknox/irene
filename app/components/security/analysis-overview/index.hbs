@@ -20,10 +20,10 @@
         >
           {{risk-text this.analysis.risk}}
         </div>
-        {{#if this.analysis.overriddenRisk}}
+        {{#if this.riskIsOverriden}}
           <AkIcon @iconName='east' />
-          <div class='tag {{risk-label-class this.analysis.overriddenRisk}}'>
-            {{risk-text this.analysis.overriddenRisk}}
+          <div class='tag {{risk-label-class this.overridenRisk}}'>
+            {{risk-text this.overridenRisk}}
           </div>
         {{/if}}
       </div>
