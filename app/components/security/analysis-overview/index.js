@@ -11,7 +11,7 @@ export default class AnalysisOverviewComponent extends Component {
   @service intl;
   @service('notifications') notify;
 
-  tPleaseTryAgain = this.intl.t('tPleaseTryAgain');
+  tPleaseTryAgain = this.intl.t('pleaseTryAgain');
 
   @tracked showMarkPassedConfirmBox = false;
 
@@ -67,6 +67,14 @@ export default class AnalysisOverviewComponent extends Component {
       }
     }
     return tags;
+  }
+
+  get overridenRisk() {
+    return this.analysis.overriddenRisk;
+  }
+
+  get riskIsOverriden() {
+    return this.overridenRisk !== null;
   }
 
   @action confirmCallback() {

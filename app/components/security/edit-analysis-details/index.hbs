@@ -534,7 +534,7 @@
               <div class='column is-one-third'>
                 <PowerSelect
                   @placeholder='Select Risk'
-                  @selected={{this.analysisDetails.overriddenRisk}}
+                  @selected={{this.overridenRisk}}
                   @options={{this.risks}}
                   @onChange={{this.selectOverriddenRisk}}
                   as |key|
@@ -556,7 +556,7 @@
                 </span>
               </label>
               <div class='column contain-width text-right'>
-                {{#if this.analysisDetails.overriddenRisk}}
+                {{#if this.riskIsOverriden}}
                   <button
                     type='button'
                     class='is-primary button highlighted-button edit-marked-analysis'
@@ -567,7 +567,7 @@
                 {{/if}}
               </div>
             {{/if}}
-          </div>{{#if this.analysisDetails.overriddenRisk}}
+          </div>{{#if this.riskIsOverriden}}
             <div class='columns'>
               <div class='column'>
                 <div class='vertical-align-top'>
