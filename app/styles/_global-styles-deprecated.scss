@@ -4330,11 +4330,6 @@ $login-button-width: 100%;
   height: 100vh;
   background-color: #424651;
 
-  a img {
-    margin-top: 50px;
-    width: 250px;
-  }
-
   .has-text-centered {
     h6 {
       color: #fff;
@@ -4645,32 +4640,6 @@ $attachment-icon-width: 4em;
 
     .register-confirm {
       display: flex;
-    }
-  }
-
-  .register-form {
-    padding-top: 0.6em;
-
-    &-container {
-      padding: 2em 1.6em;
-    }
-
-    &-footer {
-      display: flex;
-      justify-content: center;
-      padding: 1.5em 1em 1.6em;
-      border-top: 1px solid #efefef;
-      background: lighten(#424651, 68%);
-
-      &-link {
-        margin-left: 0.5em;
-      }
-    }
-
-    &-accept {
-      span {
-        margin-left: 0.7em;
-      }
     }
   }
 

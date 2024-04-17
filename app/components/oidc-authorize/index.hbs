@@ -1,15 +1,15 @@
 {{#if @data.form_data.authorization_needed}}
   <div local-class='oidc-authorize-root'>
     <div local-class='oidc-authorize-container'>
-      <div class='mb-6'>
-        <AuthAssets />
-      </div>
-
       <div class='py-3' local-class='oidc-authorize-card'>
+        <div local-class='oidc-authorize-logo-container'>
+          <AuthAssets />
+        </div>
+
         <AkTypography
           data-test-oidcAuthorize-heading
           class='px-3'
-          @variant='h6'
+          @variant='h5'
         >
           {{t
             'oidcModule.permissionHeading'
@@ -24,8 +24,11 @@
                 data-test-oidcAuthorize-scopeDescription='{{sd}}'
                 as |li|
               >
-                <li.leftIcon @disabled={{true}}>
-                  <AkIcon @iconName='chevron-right' />
+                <li.leftIcon>
+                  <AkIcon
+                    local-class='oidc-authorize-card-icon'
+                    @iconName='done'
+                  />
                 </li.leftIcon>
 
                 <li.text @primaryText={{sd}} />

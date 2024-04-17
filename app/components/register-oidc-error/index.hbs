@@ -1,0 +1,52 @@
+<AkStack
+  ...attributes
+  data-test-token-error
+  local-class='register-error-container'
+  @width='full'
+  @alignItems='center'
+  @justifyContent='center'
+>
+  <AkStack
+    local-class='register-error-card'
+    @direction='column'
+    @alignItems='center'
+    @justifyContent='center'
+    @spacing='6'
+  >
+    <AkStack
+      @alignItems='center'
+      @justifyContent='center'
+      @width='full'
+      local-class='logo-container'
+    >
+      <AuthAssets />
+    </AkStack>
+
+    <AkSvg::NoResult data-test-error-SvgIcon />
+
+    <AkStack
+      @direction='column'
+      @alignItems='center'
+      @justifyContent='center'
+      @spacing='2'
+    >
+      <AkTypography data-test-error-text @variant='h5'>
+        {{@title}}
+      </AkTypography>
+
+      <AkTypography @color='textSecondary' @align='center'>
+        <span data-test-error-helperText>{{@message}}</span>
+
+        {{#if @contactSupportLink}}
+          {{#if this.isWhitelabled}}
+            support.
+          {{else}}
+            <a href={{@contactSupportLink}}>
+              support.
+            </a>
+          {{/if}}
+        {{/if}}
+      </AkTypography>
+    </AkStack>
+  </AkStack>
+</AkStack>
