@@ -60,7 +60,9 @@
     ></fieldset>
   </div>
 
-  {{#if @helperText}}
+  {{#if (has-block 'helperText')}}
+    {{yield to='helperText'}}
+  {{else if @helperText}}
     <p
       data-test-helper-text
       local-class='ak-form-helper-text {{if

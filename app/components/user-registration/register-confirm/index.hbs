@@ -1,0 +1,64 @@
+<AkStack
+  data-test-registration-confirm
+  local-class='register-confirm-root'
+  @alignItems='center'
+  @justifyContent='center'
+>
+  <AkStack
+    @direction='column'
+    @alignItems='center'
+    @justifyContent='center'
+    local-class='register-confirm-container'
+  >
+    <AkStack
+      @alignItems='center'
+      @justifyContent='center'
+      @width='full'
+      local-class='logo-container'
+    >
+      <AuthAssets />
+    </AkStack>
+
+    <AkStack
+      @alignItems='center'
+      @justifyContent='center'
+      @direction='column'
+      @spacing='0.5'
+      local-class='register-confirm'
+    >
+      <AkIcon
+        @iconName='check-circle'
+        @color='success'
+        local-class='register-confirm-icon'
+      />
+
+      <AkTypography
+        data-test-register-confirm-title
+        @align='center'
+        @variant='h5'
+      >
+        {{@title}}
+      </AkTypography>
+
+      <AkTypography data-test-register-confirm-message @align='center'>
+        {{@message}}
+      </AkTypography>
+    </AkStack>
+
+    {{#if @showLoginLink}}
+      <AkStack
+        local-class='login-link-container'
+        @width='full'
+        @alignItems='center'
+        @justifyContent='center'
+        @spacing='0.5'
+      >
+        <AkTypography>
+          {{t 'takeMeTo'}}
+        </AkTypography>
+
+        <AkLink @route='login' @color='primary'>{{t 'login'}}</AkLink>
+      </AkStack>
+    {{/if}}
+  </AkStack>
+</AkStack>

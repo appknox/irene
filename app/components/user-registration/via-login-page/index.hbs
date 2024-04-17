@@ -1,0 +1,16 @@
+{{#if this.showSuccess}}
+  <UserRegistration::RegisterConfirm
+    @title={{t 'registerConfirmation'}}
+    @message={{t 'checkEmail'}}
+  />
+
+{{else}}
+  <UserRegistration::Form
+    @changeset={{this.changeset}}
+    @onRegister={{this.register}}
+    @enabledName={{this.enabledName}}
+    @enabledRecaptcha={{this.enableReCaptcha}}
+    @registerTaskRunning={{this.registerTask.isRunning}}
+    @showLoginLink={{@showLoginLink}}
+  />
+{{/if}}

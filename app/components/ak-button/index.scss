@@ -16,6 +16,7 @@
   color: inherit;
   font-weight: 400;
   font-size: 1rem;
+  font-family: var(--ak-button-font-family);
   line-height: 24px; // This was global value for button setting it here for uniformity across elements
   min-width: 80px;
   height: auto;

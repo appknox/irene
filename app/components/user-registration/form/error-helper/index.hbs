@@ -1,0 +1,17 @@
+{{#if @visible}}
+  <AkStack @alignItems='center' @spacing='0.5' {{style marginTop='0.2em'}}>
+    <AkIcon
+      {{style fontSize='1em !important'}}
+      @iconName='cancel'
+      @color='error'
+    />
+
+    <AkTypography
+      data-test-helper-text='{{@dataTestHelperText}}'
+      @color='error'
+      {{style fontSize='0.857rem'}}
+    >
+      {{@message}}
+    </AkTypography>
+  </AkStack>
+{{/if}}

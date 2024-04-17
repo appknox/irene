@@ -1,2 +1,7 @@
-{{page-title "Registration"}}
-<Registration @enable_recaptcha={{true}}></Registration>
+{{page-title 'Registration'}}
+
+<UserRegistration::ViaLoginPage
+  @enable_name={{false}}
+  @enable_recaptcha={{true}}
+  @showLoginLink={{true}}
+/>

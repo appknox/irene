@@ -80,6 +80,7 @@ declare global {
     CRISP_WEBSITE_ID: string;
     fwSettings: { widget_id: string };
     analytics?: CsbAnalytics;
+    grecaptcha?: { execute: (options: { action: string }) => Promise<string> };
   }
 
   // Notification Types
