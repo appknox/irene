@@ -81,6 +81,8 @@ module(
         profile: profile.id,
       });
 
+      const project = this.server.create('project', { file: file.id, id: '1' });
+
       const availableDevices = [
         ...this.server.createList('project-available-device', 5, {
           is_tablet: true,
@@ -100,11 +102,18 @@ module(
         }),
       ];
 
+      // choose a random device for preference
+      const randomDevice = faker.helpers.arrayElement(
+        availableDevices.filter((it) => it.platform === project.platform)
+      );
+
       const devicePreference = this.server.create('device-preference', {
         id: profile.id,
+        device_type: randomDevice.is_tablet
+          ? ENUMS.DEVICE_TYPE.TABLET_REQUIRED
+          : ENUMS.DEVICE_TYPE.PHONE_REQUIRED,
+        platform_version: randomDevice.platform_version,
       });
-
-      this.server.create('project', { file: file.id, id: '1' });
 
       this.setProperties({
         file: store.push(store.normalize('file', file.toJSON())),
@@ -1029,6 +1038,96 @@ module(
 
       assert.dom('[data-test-dynamicScan-startBtn]').hasText('t:completed:()');
       assert.dom('[data-test-dynamicScan-restartBtn]').exists();
+    });
+
+    test('test when preferred device is not available', async function (assert) {
+      const preferredDeviceType = this.devicePreference.device_type;
+      const preferredPlatformVersion = this.devicePreference.platform_version;
+
+      // there can be duplicates
+      const preferredDeviceList = this.server.db.projectAvailableDevices.where(
+        (ad) =>
+          ad.platform_version === preferredPlatformVersion &&
+          (ad.is_tablet
+            ? preferredDeviceType === ENUMS.DEVICE_TYPE.TABLET_REQUIRED
+            : preferredDeviceType === ENUMS.DEVICE_TYPE.PHONE_REQUIRED)
+      );
+
+      // simulate preferred device not available
+      preferredDeviceList.forEach(({ id }) => {
+        this.server.db.projectAvailableDevices.remove(id);
+      });
+
+      const file = this.server.create('file', {
+        project: '1',
+        profile: '100',
+        dynamic_status: ENUMS.DYNAMIC_STATUS.NONE,
+        is_dynamic_done: false,
+        can_run_automated_dynamicscan: false,
+        is_active: true,
+      });
+
+      this.set(
+        'file',
+        this.store.push(this.store.normalize('file', file.toJSON()))
+      );
+
+      this.server.get('/v2/projects/:id', (schema, req) => {
+        return schema.projects.find(`${req.params.id}`)?.toJSON();
+      });
+
+      this.server.get('/profiles/:id', (schema, req) =>
+        schema.profiles.find(`${req.params.id}`)?.toJSON()
+      );
+
+      this.server.get('/profiles/:id/device_preference', (schema, req) => {
+        return schema.devicePreferences.find(`${req.params.id}`)?.toJSON();
+      });
+
+      this.server.get('/projects/:id/available-devices', (schema) => {
+        const results = schema.projectAvailableDevices.all().models;
+
+        return { count: results.length, next: null, previous: null, results };
+      });
+
+      this.server.get('/profiles/:id/proxy_settings', (_, req) => {
+        return {
+          id: req.params.id,
+          host: '',
+          port: '',
+          enabled: false,
+        };
+      });
+
+      await render(hbs`
+        <DynamicScan @file={{this.file}} @dynamicScanText={{this.dynamicScanText}} />
+      `);
+
+      assert
+        .dom('[data-test-dynamicScan-startBtn]')
+        .hasText(this.dynamicScanText);
+
+      assert.dom('[data-test-dynamicScanModal-startBtn]').doesNotExist();
+
+      await click('[data-test-dynamicScan-startBtn]');
+
+      assert
+        .dom(
+          `[data-test-projectPreference-deviceTypeSelect] .${classes.trigger}`
+        )
+        .hasClass(classes.triggerError);
+
+      assert
+        .dom(
+          `[data-test-projectPreference-osVersionSelect] .${classes.trigger}`
+        )
+        .hasClass(classes.triggerError);
+
+      assert
+        .dom('[data-test-projectPreference-deviceUnavailableError]')
+        .hasText('t:modalCard.dynamicScan.preferredDeviceNotAvailable:()');
+
+      assert.dom('[data-test-dynamicScanModal-startBtn]').isDisabled();
     });
   }
 );
