@@ -1,17 +1,3 @@
-// Add Cypress types
-declare namespace Cypress {
-  /**
-   * ==================================
-   * CUSTOM CYPRESS COMMANDS
-   * ==================================
-   */
-  type modelFactoriesName = 'vulnerabilities';
-
-  interface Chainable {
-    exampleCommand(): Chainable;
-  }
-}
-
 declare namespace IreneAPIResponses {
   // Frontend Configuration Response
   export interface FrontendConfig {

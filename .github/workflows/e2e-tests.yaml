@@ -26,6 +26,9 @@ jobs:
     name: Run E2E Tests
     if: ('$IS_PR' && ( '$PR_IS_APPROVED' || '$PR_IS_NOT_IN_DRAFT' )) || '$IS_PR' == 'false'
     runs-on: [ubuntu-latest]
+    container:
+      image: cypress/browsers:node-20.12.0-chrome-123.0.6312.86-1-ff-124.0.2-edge-123.0.2420.65-1
+      options: --user 1001
 
     permissions:
       contents: read
@@ -46,10 +49,10 @@ jobs:
         id: cacheCypressBinary
         uses: actions/cache@v4
         with:
-          path: ~/.cache/Cypress
-          key: ${{ runner.os }}-npm-${{ hashFiles('**/package-lock.json') }}
+          path: /root/.cache/Cypress
+          key: ${{ runner.os }}-cypressBinary-${{ hashFiles('**/package-lock.json') }}
           restore-keys: |
-            ${{ runner.os }}-npm-
+            ${{ runner.os }}-cypressBinary-
 
       - name: Install cypress binary
         if: steps.cacheCypressBinary.outputs.cache-hit != 'true'
@@ -62,9 +65,12 @@ jobs:
           CYPRESS_TEST_PASSWORD: ${{ secrets.CYPRESS_TEST_PASSWORD }}
           CYPRESS_RECORD_KEY: ${{ secrets.CYPRESS_TEST_RECORD_ID}}
           CYPRESS_PROJECT_ID: ${{ secrets.CYPRESS_TEST_PROJECT_ID }}
+          CYPRESS_DYNAMIC_SCAN_SYSTEM_APK_FILE_ID: ${{ vars.CYPRESS_DYNAMIC_SCAN_SYSTEM_APK_FILE_ID }}
+          CYPRESS_DYNAMIC_SCAN_SYSTEM_IPA_FILE_ID: ${{ vars.CYPRESS_DYNAMIC_SCAN_SYSTEM_IPA_FILE_ID }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           start: npm run startprod
+          browser: chrome
           install: false
           config: pageLoadTimeout=100000
           wait-on: 'http://localhost:4200'

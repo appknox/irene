@@ -3,7 +3,12 @@
   "include": ["./**/*.ts", "../cypress.d.ts"],
   "exclude": [],
   "compilerOptions": {
-    "types": ["cypress", "@testing-library/cypress", "@cypress/grep"],
+    "types": [
+      "cypress",
+      "@testing-library/cypress",
+      "@cypress/grep",
+      "cypress-visual-regression"
+    ],
     "lib": ["es2015", "dom", "es2018.regexp"],
     "isolatedModules": false,
     "allowJs": true,
