@@ -1,0 +1,96 @@
+name: E2E Test
+on:
+  push:
+    branches:
+      - main
+      - master
+      - e2e-test-run-debug
+
+  pull_request:
+    types: [opened, reopened, ready_for_review]
+  pull_request_review:
+    types: [submitted]
+
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.repository }}-concurrency-for-e2e
+  cancel-in-progress: false
+
+env:
+  # Used for other trigger checks
+  IS_NOT_PR_EVENT: ${{ contains(github.event_name, 'pull_request') == 'false' }}
+
+  # PR Event Distinction
+  IS_PR_EVENT: ${{ github.event_name == 'pull_request' }}
+  IS_PR_REVIEW_EVENT: ${{ github.event_name == 'pull_request_review' }}
+
+  # PR Event States
+  PR_IS_APPROVED: ${{ github.event.review.state == 'approved' }}
+  PR_IS_OPENED: ${{ contains(fromJSON('["opened", "reopened", "ready_for_review"]'), github.event.action) }}
+
+jobs:
+  e2e-tests:
+    name: Run E2E Tests
+    if: github.event_name == 'pull_request_review' && github.event.review.state == 'approved' || github.event_name == 'pull_request' && contains(fromJSON('["opened", "reopened", "ready_for_review"]'), github.event.action) || contains(github.event_name, 'pull_request') == 'false'
+    runs-on: [ubuntu-latest]
+    container:
+      image: cypress/browsers:node-20.12.0-chrome-123.0.6312.86-1-ff-124.0.2-edge-123.0.2420.65-1
+      options: --user 1001
+
+    permissions:
+      contents: read
+      deployments: write
+
+    strategy:
+      fail-fast: false
+      matrix:
+        containers: [1, 2]
+
+    env:
+      EXPRESSION_ONE: ${{ '$IS_PR_REVIEW_EVENT' && '$PR_IS_APPROVED' }}
+      EXPRESSION_TWO: ${{ '$IS_PR_EVENT' && '$PR_IS_OPENED' }}
+      EXPRESSION_THREE: ${{ '$IS_NOT_PR_EVENT' }}
+      EXPRESSION_RESULT: ${{ ('$IS_PR_REVIEW_EVENT' && '$PR_IS_APPROVED') || ('$IS_PR_EVENT' && '$PR_IS_OPENED') || '$IS_NOT_PR_EVENT' }}
+
+    steps:
+      - name: Dump if expression
+        run: echo '$EXPRESSION_ONE'
+
+      - name: Dump if expression
+        run: echo '$EXPRESSION_TWO'
+
+      - name: Dump if expression
+        run: echo '$EXPRESSION_THREE'
+
+      - name: Dump if expression result
+        run: echo '$EXPRESSION_RESULT'
+
+      - name: Dump GitHub context
+        env:
+          GITHUB_CONTEXT: ${{ toJson(github) }}
+        run: echo "$GITHUB_CONTEXT"
+      - name: Dump job context
+        env:
+          JOB_CONTEXT: ${{ toJson(job) }}
+        run: echo "$JOB_CONTEXT"
+      - name: Dump steps context
+        env:
+          STEPS_CONTEXT: ${{ toJson(steps) }}
+        run: echo "$STEPS_CONTEXT"
+      - name: Dump runner context
+        env:
+          RUNNER_CONTEXT: ${{ toJson(runner) }}
+        run: echo "$RUNNER_CONTEXT"
+      - name: Dump strategy context
+        env:
+          STRATEGY_CONTEXT: ${{ toJson(strategy) }}
+        run: echo "$STRATEGY_CONTEXT"
+
+      - name: Show default environment variables
+        run: |
+          echo "The job_id is: $GITHUB_JOB"   # reference the default environment variables
+          echo "The id of this action is: $GITHUB_ACTION"   # reference the default environment variables
+          echo "The run id is: $GITHUB_RUN_ID"
+          echo "The GitHub Actor's username is: $GITHUB_ACTOR"
+          echo "GitHub SHA: $GITHUB_SHA"
