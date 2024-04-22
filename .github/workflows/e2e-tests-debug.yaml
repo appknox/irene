@@ -1,0 +1,33 @@
+name: E2E Test
+on:
+  push:
+    branches:
+      - main
+      - master
+      - e2e-test-run-debug
+
+  pull_request:
+    types: [opened, reopened, ready_for_review]
+  pull_request_review:
+    types: [submitted]
+
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.repository }}-concurrency-for-e2e
+  cancel-in-progress: false
+
+jobs:
+  e2e-tests:
+    name: Run E2E Tests
+    if: |
+      ${{ github.event_name == 'pull_request_review' && github.event.review.state == 'approved' }} || 
+        ${{ github.event_name == 'pull_request' && github.event.pull_request.draft == 'false' && contains(fromJSON('["opened", "reopened", "ready_for_review"]'), github.event.action) }} || 
+          ${{ contains(github.event_name, 'pull_request') == 'false' }}
+
+    runs-on: [ubuntu-latest]
+    steps:
+      - name: Dump GitHub context
+        env:
+          GITHUB_CONTEXT: ${{ toJson(github) }}
+        run: echo "$GITHUB_CONTEXT"
