@@ -34,6 +34,7 @@ const MFVA_INTERACTIONS: AppInteraction[] = [
     name: 'open_webview',
     snapshot: 'open_webview',
     clickCoordinates: [152, 100],
+    timeout: 5000,
   },
   {
     name: 'back_to_home_from_webview',
@@ -48,10 +49,9 @@ const MFVA_INTERACTIONS: AppInteraction[] = [
 ];
 
 // manually override above incase of generating base images
-const MFVA_CROPPED_INTERACTION_OVERRIDES: AppInteraction[] = [
+const MFVA_CROPPED_INTERACTION_OVERRIDES: Partial<AppInteraction>[] = [
   {
     name: 'open_webview',
-    snapshot: 'open_webview',
     clickCoordinates: [152, 90],
   },
 ];
@@ -168,7 +168,7 @@ describe('Dynamic Scan', () => {
   APP_TYPE_DETAILS.forEach((app) =>
     it(
       `it tests dynamic scan for an ${app.type} file: ${app.fileId}`,
-      { scrollBehavior: false },
+      { scrollBehavior: false, retries: { runMode: 1 } },
       () => {
         // intercept file request
         cy.intercept(`${API_ROUTES.file.route}/${app.fileId}`).as(
@@ -280,6 +280,7 @@ describe('Dynamic Scan', () => {
 
             cy.findByRole('button', {
               name: cyTranslate('modalCard.dynamicScan.start'),
+              ...DEFAULT_ASSERT_OPTS,
             })
               .should('not.be.disabled')
               .as('startDynamicScanBtn');

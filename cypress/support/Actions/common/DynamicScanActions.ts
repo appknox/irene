@@ -5,6 +5,7 @@ export interface AppInteraction {
   name: string;
   snapshot: string;
   clickCoordinates: [number, number] | null;
+  timeout?: number;
 }
 
 export interface AppInformation {
@@ -162,7 +163,7 @@ export default class DynamicScanActions {
    */
   checkForCroppedScreenAndInteract(
     interactions: AppInteraction[],
-    interactionOverrides: AppInteraction[],
+    interactionOverrides: Partial<AppInteraction>[],
     appInfo: AppInformation,
     snapshotName: string,
     errorThresholdRange: [number, number],
@@ -211,8 +212,9 @@ export default class DynamicScanActions {
                 );
 
                 return {
-                  ...(overriddenInteraction || it),
-                  snapshot: `${it.snapshot}_cropped`,
+                  ...it, // copy all fields
+                  ...(overriddenInteraction || {}), // add overrides if present
+                  snapshot: `${it.snapshot}_cropped`, // suffix with cropped
                 };
               }),
               appInfo
@@ -254,7 +256,9 @@ export default class DynamicScanActions {
 
     this.novncRfbCanvasContainer.within(() => {
       if (x && y) {
-        cy.get('canvas').click(x, y, { force: true }).wait(2500);
+        cy.get('canvas')
+          .click(x, y, { force: true })
+          .wait(act?.timeout || 2500);
       }
 
       cy.compareSnapshot(`${appInfo.snapshotPrefix}_${act.snapshot}`, {

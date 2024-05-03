@@ -32,6 +32,10 @@ import UploadApp, {
   UPLOAD_APP_FACTORY_DEF,
 } from 'irene/mirage/factories/upload-app';
 
+import UploadAppLink, {
+  UPLOAD_APP_LINK_FACTORY_DEF,
+} from 'irene/mirage/factories/upload-app-link';
+
 import Submission, {
   SUBMISSION_FACTORY_DEF,
 } from 'irene/mirage/factories/submission';
@@ -50,6 +54,7 @@ type IncludeBaseFactoryProps<T> = FlattenFactoryMethods<T> &
 export interface MirageFactoryDefProps {
   user: FlattenFactoryMethods<typeof USER_FACTORY_DEF>;
   'upload-app': FlattenFactoryMethods<typeof UPLOAD_APP_FACTORY_DEF>;
+  'upload-app-link': FlattenFactoryMethods<typeof UPLOAD_APP_LINK_FACTORY_DEF>;
   'sbom-file': FlattenFactoryMethods<typeof SBOM_FILE_FACTORY_DEF>;
   'sbom-project': FlattenFactoryMethods<typeof SBOM_PROJECT_FACTORY_DEF>;
 
@@ -95,6 +100,7 @@ const MIRAGE_FACTORIES: Record<
   'organization-member': OrganizationMember,
   user: User,
   'upload-app': UploadApp,
+  'upload-app-link': UploadAppLink,
   submission: Submission,
   'sbom-file': SbomFileFactory,
   'sbom-project': SbomProjectFactory,
