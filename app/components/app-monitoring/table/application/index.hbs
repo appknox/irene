@@ -1,13 +1,19 @@
 <AkStack @alignItems='center' @spacing='1.5' data-test-amTable-rowItem>
   <AppLogo @src={{@amApp.project.lastFile.iconUrl}} @role='none' />
 
-  <AkStack @direction='column' @spacing='0.5'>
+  <AkStack
+    @direction='column'
+    @spacing='0.5'
+    {{style maxWidth='calc(100% - 40px)'}}
+  >
+
     <AkTypography
       @color='secondary'
       @noWrap={{true}}
       title={{@amApp.project.packageName}}
       local-class='app-namespace'
       class='pr-4'
+      {{style width='100%'}}
       data-test-amTableRow-app-namespace
     >
       {{@amApp.project.packageName}}
