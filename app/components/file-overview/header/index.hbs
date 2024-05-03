@@ -8,7 +8,7 @@
   local-class='file-overview-header'
   data-test-fileOverview-header
 >
-  <AkStack @spacing='1' @alignItems='center'>
+  <AkStack @spacing='1' @alignItems='center' {{style width='85%'}}>
     <AppLogo
       @src={{@file.iconUrl}}
       @loading={{if @file.iconUrl false true}}
@@ -19,12 +19,18 @@
       @border={{false}}
     />
 
-    <AkStack @direction='column'>
+    <AkStack @direction='column' {{style width='inherit'}}>
       <AkTypography @variant='h5' data-test-fileOverview-fileName>
         {{@file.name}}
       </AkTypography>
 
-      <AkTypography @variant='body1' data-test-fileOverview-packageName>
+      <AkTypography
+        @variant='body1'
+        @noWrap={{true}}
+        title={{this.packageName}}
+        {{style maxWidth='100%'}}
+        data-test-fileOverview-packageName
+      >
         {{this.packageName}}
       </AkTypography>
     </AkStack>
@@ -37,7 +43,11 @@
   {{/if}}
 
   {{#unless @hideCTAs}}
-    <AkStack @alignItems='center'>
+    <AkStack
+      @alignItems='center'
+      @justifyContent='flex-end'
+      {{style width='15%'}}
+    >
       <AkTooltip
         @title={{t 'fileCompare.deselectFile'}}
         @disabled={{not @disableSelection}}
