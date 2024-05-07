@@ -12,6 +12,7 @@ import ENV from 'irene/config/environment';
 import FileModel from 'irene/models/file';
 import OrganizationService from 'irene/services/organization';
 import ManualscanModel from 'irene/models/manualscan';
+import ENUMS from 'irene/enums';
 
 export interface FileDetailsScanActionsManualScanSignature {
   Args: {
@@ -60,6 +61,25 @@ export default class FileDetailsScanActionsManualScanComponent extends Component
           'file-details/scan-actions/manual-scan/vpn-details' as const,
       },
     ];
+  }
+
+  get manualScanStatusLabels() {
+    return {
+      [ENUMS.MANUAL.NONE]: this.intl.t('notStarted'),
+      [ENUMS.MANUAL.REQUESTED]: this.intl.t('requested'),
+      [ENUMS.MANUAL.ASSESSING]: this.intl.t('inProgress'),
+      [ENUMS.MANUAL.DONE]: this.intl.t('completed'),
+    };
+  }
+
+  get manualScanStatusText() {
+    if (this.args.file.isManualDone) {
+      return this.manualScanStatusLabels[ENUMS.MANUAL.DONE];
+    } else if (this.args.file.manual == 3 && !this.args.file.isManualDone) {
+      return this.manualScanStatusLabels[ENUMS.MANUAL.ASSESSING];
+    } else {
+      return this.manualScanStatusLabels[this.args.file.manual];
+    }
   }
 
   @action

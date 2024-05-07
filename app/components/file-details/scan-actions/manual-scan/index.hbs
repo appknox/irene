@@ -6,7 +6,7 @@
       </:leftIcon>
 
       <:default>
-        {{if @file.isManualDone (t 'completed') (t 'requested')}}
+        {{this.manualScanStatusText}}
       </:default>
     </AkButton>
   {{else}}

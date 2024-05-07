@@ -53,6 +53,17 @@ export default class FileActionsNewComponent extends Component {
     return [ireneHost, 'file', fileId].join('/');
   }
 
+  manualScanStatusText([status]) {
+    const statusLabels = {
+      [ENUMS.MANUAL.NONE]: 'Not Started',
+      [ENUMS.MANUAL.REQUESTED]: 'Requested',
+      [ENUMS.MANUAL.ASSESSING]: 'In Progress',
+      [ENUMS.MANUAL.DONE]: 'Completed',
+    };
+
+    return statusLabels[status] || '';
+  }
+
   @action openAddAnalysisModal() {
     this.showAddAnalysisModal = true;
   }
