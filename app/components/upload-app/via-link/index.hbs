@@ -2,6 +2,7 @@
 <div>
   <AkIconButton
     data-test-uploadAppViaLink-btn
+    aria-label='upload app via link button'
     @variant='outlined'
     {{on 'click' this.openLinkUploadModal}}
   >
@@ -86,6 +87,7 @@
         >
           <AkButton
             data-test-uploadAppViaLinkModal-confirmBtn
+            aria-label='upload app via link modal confirm button'
             @disabled={{or
               this.changeset.isInvalid
               (not this.changeset.isDirty)
