@@ -1,34 +1,48 @@
-<div class='columns'>
-  <div class='column is-one-third margin-auto'>
-    <div class='box margin-top10'>
-      <div class='margin-auto'>
-        <AkTypography @color='neutral' @variant='h4' @fontWeight='regular'>
-          Download App
-        </AkTypography>
+<AkStack
+  @width='full'
+  @alignItems='center'
+  @direction='column'
+  data-test-download-app-container
+>
+  <AkStack @direction='column' local-class='root-container'>
+    <AkTypography
+      @variant='h4'
+      @fontWeight='bold'
+      local-class='title'
+      data-test-download-app-title
+    >
+      Download App
+    </AkTypography>
 
-        <AkStack @direction='column' @width='full' @spacing='1.5' class='mt-3'>
-          <Input
-            @value={{this.fileNumber}}
-            id='file-number'
-            placeholder={{'Enter the file number'}}
-            autofocus={{true}}
-            class='form-control input'
-          />
+    <AkTypography data-test-download-app-summary>
+      Please enter the id of the file you want to download
+    </AkTypography>
 
-          <AkButton
-            type='button'
-            @variant='outlined'
-            @disabled={{this.isDownloadingApp}}
-            {{on 'click' this.downloadApp}}
-          >
-            {{#if this.isDownloadingApp}}
-              <AkLoader @size={{13}} class='mr-1' />
-            {{/if}}
+    <AkStack
+      @width='full'
+      @direction='column'
+      @alignItems='stretch'
+      @spacing='3'
+      class='pt-3'
+    >
+      <AkTextField
+        @label='File ID'
+        @placeholder='Enter the File ID'
+        @labelTypographyColor='secondary'
+        @labelTypographyVariant='subtitle2'
+        @value={{this.fileNumber}}
+        @autofocus={{true}}
+        data-test-download-app-input
+      />
 
-            Download App
-          </AkButton>
-        </AkStack>
-      </div>
-    </div>
-  </div>
-</div>
+      <AkButton
+        @loading={{this.isDownloadingApp}}
+        @disabled={{if this.fileNumber false true}}
+        {{on 'click' this.downloadApp}}
+        data-test-download-app-download-button
+      >
+        Download
+      </AkButton>
+    </AkStack>
+  </AkStack>
+</AkStack>
