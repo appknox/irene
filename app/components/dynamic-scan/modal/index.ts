@@ -98,6 +98,8 @@ export default class DynamicScanModalComponent extends Component<DynamicScanModa
 
       if (err.errors && err.errors.length) {
         errMsg = err.errors[0]?.detail || errMsg;
+      } else if (err.payload.message) {
+        errMsg = err.payload.message;
       } else if (err.message) {
         errMsg = err.message;
       }
