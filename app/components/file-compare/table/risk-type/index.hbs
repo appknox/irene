@@ -73,7 +73,13 @@
     >
       {{#each this.fileAnalyses as |analysis|}}
         {{#if analysis}}
-          <RiskTag @analysis={{analysis}} />
+          <AnalysisRisk::Tag
+            @computedRisk={{analysis.computedRisk}}
+            @status={{analysis.status}}
+            @isOverridden={{analysis.isNonPassedRiskOverridden}}
+            @overriddenRisk={{analysis.overriddenRisk}}
+            @originalRisk={{analysis.risk}}
+          />
         {{else}}
           <AkTooltip
             @title={{t 'fileCompare.nonExistentTestCase'}}

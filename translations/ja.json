@@ -874,6 +874,7 @@
     "selectJIRAAccount": "プロジェクトで見つかったリスクに関するIssueを作成するJIRAアカウントを選択してください",
     "selectPreferredDevice": "動的診断のデバイスタイプとOSバージョンを選択してください"
   },
+  "overridden": "Overridden",
   "overriddenRisk": "Overridden Risk",
   "overrideRisk": "Override Risk",
   "overview": "Overview",

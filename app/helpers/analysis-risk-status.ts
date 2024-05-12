@@ -53,7 +53,7 @@ export interface AnalysisRiskStatus {
 }
 
 export function analysisRiskStatus(
-  params: (number | boolean | undefined)[]
+  params: [number, number, boolean]
 ): AnalysisRiskStatus {
   let risk: number | null = null;
   let status: number | null = null;

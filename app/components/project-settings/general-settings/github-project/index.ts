@@ -12,7 +12,6 @@ import OrganizationService from 'irene/services/organization';
 import ProjectModel from 'irene/models/project';
 import GithubRepoModel, { GithubRepoDetails } from 'irene/models/github-repo';
 import parseError from 'irene/utils/parse-error';
-import { analysisRiskStatus } from 'irene/helpers/analysis-risk-status';
 
 export interface ProjectSettingsGeneralSettingsGithubProjectSignature {
   Args: {
@@ -89,14 +88,6 @@ export default class ProjectSettingsGeneralSettingsGithubProjectComponent extend
     return ENUMS.THRESHOLD.CHOICES.filter((c) => c.key !== 'UNKNOWN').map(
       (c) => c.value
     );
-  }
-
-  get thresholdLabelClass() {
-    return analysisRiskStatus([
-      this.currentGithubRepo?.riskThreshold,
-      ENUMS.ANALYSIS.COMPLETED,
-      false,
-    ]).cssclass;
   }
 
   get isLoadingRepos() {

@@ -874,6 +874,7 @@
     "selectJIRAAccount": "Select the JIRA account where you want us to create issues for the risks we find in your project",
     "selectPreferredDevice": "Select the Preferred Device Type and OS Version for Dynamic Scan"
   },
+  "overridden": "Overridden",
   "overriddenRisk": "Overridden Risk",
   "overrideRisk": "Override Risk",
   "overview": "Overview",

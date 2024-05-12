@@ -193,6 +193,10 @@ export default class AnalysisModel extends Model {
     return !isEmpty(this.overriddenRisk);
   }
 
+  get isNonPassedRiskOverridden() {
+    return this.overriddenRisk !== null && this.risk !== ENUMS.RISK.NONE;
+  }
+
   get isScanning() {
     const risk = this.computedRisk;
     return risk === ENUMS.RISK.UNKNOWN;
