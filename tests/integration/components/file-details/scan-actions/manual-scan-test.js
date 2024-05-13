@@ -78,6 +78,8 @@ module(
         { manual: ENUMS.MANUAL.NONE, done: false, disabled: true },
         { manual: ENUMS.MANUAL.REQUESTED, done: false },
         { manual: ENUMS.MANUAL.REQUESTED, done: true },
+        { manual: ENUMS.MANUAL.ASSESSING, done: false },
+        { manual: ENUMS.MANUAL.ASSESSING, done: true },
       ],
       async function (assert, scan) {
         this.file.manual = scan.manual;
@@ -93,7 +95,13 @@ module(
             <FileDetails::ScanActions::ManualScan @file={{this.file}} />
         `);
 
-        if (this.file.isManualRequested) {
+        if (this.file.manual === ENUMS.MANUAL.ASSESSING) {
+          assert
+            .dom('[data-test-manualScan-statusBtn]')
+            .hasText(
+              this.file.isManualDone ? 't:completed:()' : 't:inProgress:()'
+            );
+        } else if (this.file.isManualRequested) {
           assert
             .dom('[data-test-manualScan-statusBtn]')
             .hasText(

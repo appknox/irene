@@ -745,6 +745,7 @@
   "notAvailable": "Not Available",
   "notFound": "Not Found",
   "notScanned": "Not Scanned",
+  "notStarted": "Not Started",
   "note": "Note",
   "notifications": "Notifications",
   "notificationModule": {
