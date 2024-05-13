@@ -12,11 +12,29 @@
     margin: auto;
   }
 
+  .oidc-authorize-logo-container {
+    padding: 1em 0em;
+    align-items: center;
+    border-bottom: 1px solid var(--oidc-authorize-border-color);
+    margin-bottom: 1em;
+    display: flex;
+    justify-content: center;
+    width: 100%;
+
+    img {
+      max-width: 60%;
+    }
+  }
+
   .oidc-authorize-card {
-    width: 360px;
+    width: 30em;
     border-radius: 4px;
     background-color: var(--oidc-authorize-card-background-color);
     box-shadow: var(--oidc-authorize-card-box-shadow);
     border: 1px solid var(--oidc-authorize-card-border-color);
+  }
+
+  .oidc-authorize-card-icon {
+    color: var(--oidc-authorize-icon-color-success) !important;
   }
 }

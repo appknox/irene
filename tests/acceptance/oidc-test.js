@@ -423,14 +423,14 @@ module('Acceptance | oidc login', function (hooks) {
       );
 
       const assertErrorPage = async (error) => {
-        await waitFor('[data-test-oidcError-SvgIcon]');
+        await waitFor('[data-test-oidc-error]');
 
-        assert.dom('[data-test-oidcError-SvgIcon]').exists();
+        assert.dom('[data-test-error-SvgIcon]').exists();
 
-        assert.dom('[data-test-oidcError-text]').hasText(error.description);
+        assert.dom('[data-test-error-text]').hasText(error.description);
 
         assert
-          .dom('[data-test-oidcError-helperText]')
+          .dom('[data-test-error-helperText]')
           .hasText(t('oidcModule.errorHelperText'));
       };
 

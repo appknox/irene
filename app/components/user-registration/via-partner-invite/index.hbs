@@ -1,0 +1,20 @@
+{{#if this.invalid}}
+  <RegisterOidcError
+    @title={{t 'somethingWentWrong'}}
+    @message={{t 'invalidTokenError' htmlSafe=true}}
+    @contactSupportLink="mailto:support@appknox.com?subject='Invalid%20Invitation'"
+  />
+
+{{else}}
+  <UserRegistration::Form
+    @changeset={{this.changeset}}
+    @onRegister={{this.register}}
+    @registerTaskRunning={{this.registerTask.isRunning}}
+    @emailValue={{this.initialData.email}}
+    @companyValue={{this.initialData.company}}
+    @enabledName={{true}}
+    @enabledUsername={{true}}
+    @enabledPassword={{true}}
+    @enabledTerms={{true}}
+  />
+{{/if}}

@@ -1,0 +1,41 @@
+.register-confirm-root {
+    height: 100vh;
+    background-color: var(--user-registration-register-confirm-background-color);
+}
+
+.register-confirm-icon {
+    font-size: 50px !important;
+    margin-bottom: 0.2em;
+  }
+  
+.register-confirm-button {
+    width: 8em;
+}
+  
+.register-confirm-container {
+    background-color: var(--user-registration-register-confirm-container-background-color);
+    border-radius: var(--user-registration-register-confirm-container-border-radius);
+    box-shadow: var(--user-registration-register-confirm-container-box-shadow);
+    min-width: 32em;
+}
+  
+.register-confirm {
+    padding: 2em 1em;
+}
+  
+.logo-container {
+    padding: 1.5em 0em 1em 0em;
+    border-bottom: 1px solid var(--user-registration-register-confirm-logo-container-border-color);
+  
+    img {
+      max-width: 12em;
+      max-height: 7em;
+    }
+}
+  
+.login-link-container {
+    background-color: var(--user-registration-register-confirm-login-link-background-color);
+    padding: 1em;
+    box-shadow: var(--user-registration-register-confirm-login-link-box-shadow);
+    border-radius: 0px 2px;
+}

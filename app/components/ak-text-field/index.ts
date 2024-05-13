@@ -26,6 +26,7 @@ export interface AkTextFieldSignature {
     error?: boolean;
   };
   Blocks: {
+    helperText: [];
     leftAdornment: [];
     rightAdornment: [];
   };

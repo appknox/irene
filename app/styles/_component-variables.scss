@@ -119,6 +119,7 @@ body {
   --ak-checkbox-hover-background: var(--hover-light-background);
 
   // variables for ak-button
+  --ak-button-font-family: var(--font-family);
   --ak-button-border-radius: var(--border-radius);
   --ak-button-color-primary: var(--primary-main);
   --ak-button-filled-primary-hover-background: var(--primary-dark);
@@ -1059,21 +1060,39 @@ body {
   --project-overview-card-hover-shadow: var(--box-shadow-7);
 
   // variables for oidc-authorize
-  &.theme-light {
-    --oidc-authorize-container-background-color: var(--background-main);
-    --oidc-authorize-card-border-color: var(--border-color-1);
-  }
-
-  &.theme-dark {
-    --oidc-authorize-container-background-color: var(--background-dark);
-    --oidc-authorize-card-border-color: transparent;
-  }
-
+  --oidc-authorize-card-border-color: var(--border-color-1);
+  --oidc-authorize-container-background-color: var(--background-light);
+  --oidc-authorize-border-color: var(--border-color-1);
   --oidc-authorize-card-background-color: var(--background-main);
   --oidc-authorize-card-box-shadow: var(--box-shadow-7);
+  --oidc-authorize-icon-color-success: var(--success-main);
 
-  // variables for oidc/error
-  --oidc-error-container-background-color: var(--background-light);
-  --oidc-error-card-background-color: var(--background-main);
-  --oidc-error-card-border-radius: var(--border-radius);
+  // variables for user-registration/form
+  --user-registration-form-background-color: var(--background-light);
+  --user-registration-form-container-background-color: var(--background-main);
+  --user-registration-form-container-border-color: var(--border-color-1);
+  --user-registration-form-container-border-radius: var(--border-radius);
+  --user-registration-form-disabled-background-color: var(--neutral-grey-100);
+  --user-registration-form-border-color: var(--border-color-1);
+  --user-registration-form-text-primary: var(--text-primary);
+  --user-registration-form-primary-color: var(--primary-main);
+  --user-registration-form-container-box-shadow: var(--box-shadow-2);
+  --user-registration-form-login-link-background-color: var(--neutral-grey-100);
+  --user-registration-form-login-link-box-shadow: var(--box-shadow-10);
+
+  // variables for user-registration/register-confirm
+  --user-registration-register-confirm-background-color: var(--background-light);
+  --user-registration-register-confirm-logo-container-border-color: var(--border-color-1);
+  --user-registration-register-confirm-container-box-shadow: var(--box-shadow-2);
+  --user-registration-register-confirm-container-background-color: var(--background-main);
+  --user-registration-register-confirm-container-border-radius: var(--border-radius);
+  --user-registration-register-confirm-login-link-background-color: var(--neutral-grey-100);
+  --user-registration-register-confirm-login-link-box-shadow: var(--box-shadow-10);
+
+  // variables for register-oidc-error
+  --register-oidc-error-container-background-color: var(--background-light);
+  --register-oidc-error-card-background-color: var(--background-main);
+  --register-oidc-error-card-border-radius: var(--border-radius);
+  --register-oidc-error-border-color: var(--border-color-1);
+  --register-oidc-error-error-card-box-shadow: var(--box-shadow-2);
 }

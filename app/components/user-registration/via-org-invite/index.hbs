@@ -1,0 +1,20 @@
+{{#if this.success}}
+  <UserRegistration::RegisterConfirm
+    @title={{t 'invitationRegisterConfirmation'}}
+    @message={{t 'pleaseLogin'}}
+    @showLoginLink={{true}}
+  />
+
+{{else}}
+  <UserRegistration::Form
+    @onRegister={{this.register}}
+    @changeset={{this.changeset}}
+    @emailValue={{@email}}
+    @companyValue={{@company}}
+    @enabledName={{not @isSSOEnforced}}
+    @enabledUsername={{true}}
+    @enabledPassword={{not @isSSOEnforced}}
+    @enabledTerms={{true}}
+    @registerTaskRunning={{this.registerTask.isRunning}}
+  />
+{{/if}}

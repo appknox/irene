@@ -1,0 +1,269 @@
+<AkStack
+  data-test-registration-form
+  local-class='register-form-root'
+  @alignItems='center'
+  @justifyContent='center'
+>
+  <AkStack @direction='column' local-class='register-form-container'>
+    <AkStack
+      @alignItems='center'
+      @justifyContent='center'
+      local-class='logo-container'
+    >
+      <AuthAssets />
+    </AkStack>
+
+    <AkStack
+      @spacing='2'
+      @direction='column'
+      @width='full'
+      local-class='register-form-main'
+    >
+      <AkTypography
+        data-test-registration-form-title
+        @variant='h5'
+        {{style fontSize='1.3rem'}}
+      >
+        {{t 'completeRegistration'}}
+      </AkTypography>
+
+      {{#if this.isEmailDisabled}}
+        <AkTextField
+          data-test-registration-input-email
+          local-class='input-field-disabled'
+          @label={{t 'emailId'}}
+          @placeholder={{t 'emailId'}}
+          @readonly={{true}}
+          @disabled={{true}}
+          @labelTypographyColor='secondary'
+          @labelTypographyVariant='subtitle2'
+          @value={{@emailValue}}
+        />
+
+      {{else}}
+        <AkTextField
+          data-test-registration-input-email
+          @label={{t 'emailId'}}
+          @placeholder={{t 'emailId'}}
+          @labelTypographyColor='secondary'
+          @labelTypographyVariant='subtitle2'
+          @value={{@changeset.email}}
+          @error={{this.showError 'email'}}
+        >
+          <:helperText>
+            <UserRegistration::Form::ErrorHelper
+              @visible={{this.showError 'email'}}
+              @message={{@changeset.error.email.validation}}
+              @dataTestHelperText='email'
+            />
+          </:helperText>
+        </AkTextField>
+      {{/if}}
+
+      {{#if this.isCompanyDisabled}}
+        <AkTextField
+          data-test-registration-input-company
+          local-class='input-field-disabled'
+          @label={{t 'companyName'}}
+          @placeholder={{t 'companyName'}}
+          @disabled={{true}}
+          @readonly={{true}}
+          @value={{@companyValue}}
+          @labelTypographyColor='secondary'
+          @labelTypographyVariant='subtitle2'
+        />
+
+      {{else}}
+        <AkTextField
+          data-test-registration-input-company
+          @label={{t 'companyName'}}
+          @placeholder={{t 'companyName'}}
+          @value={{@changeset.company}}
+          @error={{this.showError 'company'}}
+          @labelTypographyColor='secondary'
+          @labelTypographyVariant='subtitle2'
+        >
+          <:helperText>
+            <UserRegistration::Form::ErrorHelper
+              @message={{@changeset.error.company.validation}}
+              @visible={{this.showError 'company'}}
+              @dataTestHelperText='company'
+            />
+          </:helperText>
+        </AkTextField>
+      {{/if}}
+
+      {{#if @enabledName}}
+        <AkStack @spacing='2' class='w-full'>
+          <AkTextField
+            data-test-registration-input-fname
+            @label={{t 'firstName'}}
+            @placeholder={{t 'firstName'}}
+            @autofocus={{true}}
+            @value={{@changeset.firstname}}
+            @error={{this.showError 'firstname'}}
+            @labelTypographyColor='secondary'
+            @labelTypographyVariant='subtitle2'
+            autocomplete='fname'
+          >
+            <:helperText>
+              <UserRegistration::Form::ErrorHelper
+                @visible={{this.showError 'firstname'}}
+                @message={{@changeset.error.firstname.validation}}
+                @dataTestHelperText='firstname'
+              />
+            </:helperText>
+          </AkTextField>
+
+          <AkTextField
+            data-test-registration-input-lname
+            @label={{t 'lastName'}}
+            @placeholder={{t 'lastName'}}
+            @value={{@changeset.lastname}}
+            @error={{this.showError 'lastname'}}
+            @labelTypographyColor='secondary'
+            @labelTypographyVariant='subtitle2'
+            autocomplete='lname'
+          >
+            <:helperText>
+              <UserRegistration::Form::ErrorHelper
+                @visible={{this.showError 'lastname'}}
+                @message={{@changeset.error.lastname.validation}}
+                @dataTestHelperText='lastname'
+              />
+            </:helperText>
+          </AkTextField>
+        </AkStack>
+      {{/if}}
+
+      {{#if @enabledUsername}}
+        <AkTextField
+          data-test-registration-input-username
+          id='invite-register-username'
+          @label={{t 'username'}}
+          @placeholder={{t 'username'}}
+          @value={{@changeset.username}}
+          @error={{this.showError 'username'}}
+          autocomplete='username'
+          @labelTypographyColor='secondary'
+          @labelTypographyVariant='subtitle2'
+        >
+          <:helperText>
+            <UserRegistration::Form::ErrorHelper
+              @visible={{this.showError 'username'}}
+              @message={{@changeset.error.username.validation}}
+              @dataTestHelperText='username'
+            />
+          </:helperText>
+        </AkTextField>
+      {{/if}}
+
+      {{#if @enabledPassword}}
+        <AkStack @direction='column' @spacing='1' class='w-full'>
+          <AkTextField
+            data-test-registration-input-password
+            @label={{t 'password'}}
+            @placeholder='Minimum 10 characters'
+            @labelTypographyColor='secondary'
+            @labelTypographyVariant='subtitle2'
+            @value={{@changeset.password}}
+            @error={{this.showError 'password'}}
+            @type='password'
+          >
+            <:helperText>
+              <UserRegistration::Form::ErrorHelper
+                @visible={{this.showError 'password'}}
+                @message={{get @changeset.error.password.validation 0}}
+                @dataTestHelperText='password'
+              />
+            </:helperText>
+          </AkTextField>
+
+          <AkTextField
+            data-test-registration-input-confirm-password
+            @placeholder='Re-enter the password'
+            @labelTypographyColor='secondary'
+            @labelTypographyVariant='subtitle2'
+            @value={{@changeset.passwordConfirmation}}
+            @error={{this.showError 'passwordConfirmation'}}
+            @type='password'
+          >
+            <:helperText>
+              <UserRegistration::Form::ErrorHelper
+                @visible={{this.showError 'passwordConfirmation'}}
+                @message={{@changeset.error.passwordConfirmation.validation}}
+                @dataTestHelperText='confirm-password'
+              />
+            </:helperText>
+          </AkTextField>
+        </AkStack>
+      {{/if}}
+
+      {{#if @enabledTerms}}
+        <AkStack @direction='column'>
+          <AkStack @alignItems='center'>
+            <AkCheckbox
+              data-test-registration-terms-accept
+              @checked={{@changeset.termsAccepted}}
+            />
+
+            {{! <a
+              href='https://www.appknox.com/privacy-policy'
+              target='_blank'
+              rel='noopener noreferrer'
+            > }}
+            <AkTypography>{{t 'acceptTerms'}}
+              <sup local-class='asterisk'>*</sup>
+            </AkTypography>
+            {{! </a> }}
+          </AkStack>
+
+          {{#if (this.showError 'termsAccepted')}}
+            {{! <a
+              href='https://www.appknox.com/privacy-policy'
+              target='_blank'
+              rel='noopener noreferrer'
+            > }}
+            <UserRegistration::Form::ErrorHelper
+              @visible={{this.showError 'termsAccepted'}}
+              @message={{@changeset.error.termsAccepted.validation}}
+              @dataTestHelperText='terms-accepted'
+            />
+            {{! </a> }}
+          {{/if}}
+        </AkStack>
+      {{/if}}
+
+      <AkButton
+        data-test-register-btn
+        @loading={{@registerTaskRunning}}
+        class='w-full'
+        @disabled={{this.isRegisterButtonDisabled}}
+        {{on 'click' (fn @onRegister @changeset)}}
+      >
+        {{t 'register'}}
+      </AkButton>
+    </AkStack>
+
+    {{#if @showLoginLink}}
+      <AkStack
+        data-test-login-link
+        local-class='login-link-container'
+        @width='full'
+        @alignItems='center'
+        @justifyContent='center'
+        @spacing='0.5'
+      >
+        <AkTypography>
+          {{t 'alreadyHaveAccount'}}
+        </AkTypography>
+
+        <AkLink @route='login' @color='primary'>{{t 'login'}}</AkLink>
+      </AkStack>
+    {{/if}}
+
+    {{#if @enabledRecaptcha}}
+      <GRecaptcha @size='invisible' />
+    {{/if}}
+  </AkStack>
+</AkStack>

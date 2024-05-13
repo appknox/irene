@@ -1,0 +1,23 @@
+.register-error-card {
+    background-color: var(--register-oidc-error-card-background-color);
+    border-radius: var(--register-oidc-error-error-card-border-radius);
+    border: 1px solid var(--register-oidc-error-error-card-border-color);
+    box-shadow: var(--register-oidc-error-error-card-box-shadow);
+    min-width: 32em;
+    padding-bottom: 2em;
+}
+
+.register-error-container {
+    height: 100vh;
+    background-color: var(--register-oidc-error-container-background-color);
+}
+
+.logo-container {
+    padding: 1.5em 0em 1em 0em;
+    border-bottom: 1px solid var(--register-oidc-error-border-color);
+  
+    img {
+      max-width: 12em;
+      max-height: 7em;
+    }
+}
