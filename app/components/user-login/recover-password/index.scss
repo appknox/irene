@@ -1,0 +1,16 @@
+.recover-password-input-container {
+  padding: 1.714em 2.857em 2.714em;
+
+  .recover-password-title {
+    padding-bottom: 1.142em;
+    font-size: 1.285rem;
+
+    .retry-text {
+      color: var(--user-login-recover-password-retry-text-color);
+    }
+  }
+}
+
+.recover-password-footer {
+  background: var(--user-login-recover-password-footer-background-color);
+}

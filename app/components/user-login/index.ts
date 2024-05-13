@@ -13,7 +13,7 @@ import RegistrationService from 'irene/services/registration';
 
 type OtpError = { payload: { type: string; forced: string } };
 
-export default class LoginComponent extends Component {
+export default class UserLoginComponent extends Component {
   @service declare router: RouterService;
   @service declare intl: IntlService;
   @service declare session: any;
@@ -28,15 +28,18 @@ export default class LoginComponent extends Component {
   checkToken = '';
 
   @tracked username = '';
-  password = '';
-  otp = '';
+  @tracked password = '';
 
   @tracked isSSOEnabled = false;
   @tracked isSSOEnforced = false;
 
   @tracked MFAEnabled = false;
   @tracked MFAIsEmail = false;
+  @tracked MFAIsAuthApp = false;
   @tracked MFAForced = false;
+
+  @tracked showCredError = false;
+  @tracked showAccountLockError = false;
 
   SSOCheckEndpoint = 'v2/sso/check';
   SSOAuthenticateEndpoint = 'sso/saml2';
@@ -61,13 +64,6 @@ export default class LoginComponent extends Component {
   }
 
   verifySSOTask = task(async () => {
-    if (!this.username) {
-      return this.notifications.error(
-        this.intl.t('pleaseEnterValidEmail'),
-        ENV.notifications
-      );
-    }
-
     try {
       const res = await this.network.post(this.SSOCheckEndpoint, {
         username: this.username,
@@ -109,17 +105,9 @@ export default class LoginComponent extends Component {
     }
   });
 
-  loginTask = task(async () => {
+  loginTask = task(async (otp?: string) => {
     const username = this.username.trim();
     const password = this.password.trim();
-    const otp = this.otp.trim();
-
-    if (!username || !password) {
-      return this.notifications.error(
-        this.intl.t('pleaseEnterValidEmail'),
-        ENV.notifications
-      );
-    }
 
     try {
       await this.session.authenticate(
@@ -136,6 +124,21 @@ export default class LoginComponent extends Component {
       const err = error as AdapterError;
 
       if (err.payload && err.payload.message) {
+        if (
+          err.payload.message == 'Unable to log in with provided credentials.'
+        ) {
+          this.showCredError = true;
+
+          return;
+        }
+
+        if (err.payload.message == 'Account Locked Out') {
+          this.showCredError = false;
+          this.showAccountLockError = true;
+
+          return;
+        }
+
         this.notifications.error(err.payload.message, ENV.notifications);
 
         return;
@@ -155,7 +158,7 @@ export default class LoginComponent extends Component {
       this.logger.error(err);
 
       this.notifications.error(
-        this.intl.t('tPleaseEnterValidAccountDetail'),
+        this.intl.t('pleaseEnterValidAccountDetail'),
         ENV.notifications
       );
     }
@@ -191,7 +194,9 @@ export default class LoginComponent extends Component {
     }
 
     this.MFAEnabled = true;
-    this.MFAIsEmail = otpinfo.type == 'HOTP';
+    this.showCredError = false;
+    this.MFAIsEmail = otpinfo.type === 'HOTP';
+    this.MFAIsAuthApp = otpinfo.type === 'TOTP';
     this.MFAForced = this.isTrue(otpinfo.forced);
 
     return true;
@@ -207,7 +212,6 @@ export default class LoginComponent extends Component {
 
   reset() {
     this.username = '';
-    this.otp = '';
     this.password = '';
     this.isCheckDone = false;
     this.checkToken = '';
@@ -216,6 +220,9 @@ export default class LoginComponent extends Component {
     this.MFAEnabled = false;
     this.MFAIsEmail = false;
     this.MFAForced = false;
+    this.MFAIsAuthApp = false;
+    this.showCredError = false;
+    this.showAccountLockError = false;
   }
 
   @action
@@ -224,8 +231,8 @@ export default class LoginComponent extends Component {
   }
 
   @action
-  login() {
-    this.loginTask.perform();
+  login(otp?: string) {
+    this.loginTask.perform(otp);
   }
 
   @action
@@ -245,6 +252,6 @@ export default class LoginComponent extends Component {
 
 declare module '@glint/environment-ember-loose/registry' {
   export default interface Registry {
-    LoginComponent: typeof LoginComponent;
+    UserLogin: typeof UserLoginComponent;
   }
 }

@@ -6,6 +6,7 @@ import ConfigurationService from './configuration';
 
 export default class WhitelabelService extends Service {
   @service declare configuration: ConfigurationService;
+  @service('browser/window') declare window: Window;
 
   default_name = 'Appknox';
   default_theme = 'dark';
@@ -67,5 +68,9 @@ export default class WhitelabelService extends Service {
     }
 
     return this.configuration.imageData.logo_on_darkbg;
+  }
+
+  get show_contact_support() {
+    return this.window.location.href.includes('secure.appknox.com');
   }
 }

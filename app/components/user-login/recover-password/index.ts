@@ -20,7 +20,7 @@ type ChangesetBufferProps = BufferedChangeset & {
   username: string;
 };
 
-export default class PasswordRecoverComponent extends Component {
+export default class UserLoginRecoverPasswordComponent extends Component {
   @service declare ajax: any;
   @service('notifications') declare notify: NotificationService;
   @service('rollbar') declare logger: LoggerService;
@@ -83,4 +83,10 @@ export default class PasswordRecoverComponent extends Component {
       this.logger.error('Reset password error', errors);
     }
   });
+}
+
+declare module '@glint/environment-ember-loose/registry' {
+  export default interface Registry {
+    'UserLogin::RecoverPassword': typeof UserLoginRecoverPasswordComponent;
+  }
 }

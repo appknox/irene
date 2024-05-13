@@ -1,0 +1,112 @@
+<UserLogin::RootContainer>
+  <AkStack
+    @width='full'
+    @direction='column'
+    local-class='reset-password-input-container'
+  >
+    <AkTypography
+      @variant='h4'
+      @fontWeight='bold'
+      local-class='reset-password-title'
+    >
+      {{t 'resetPasswordLabel'}}
+    </AkTypography>
+
+    {{#if this.isVerified}}
+      <form {{on 'submit' (perform this.reset)}} class='w-full'>
+        <AkStack
+          @width='full'
+          @direction='column'
+          @alignItems='stretch'
+          @spacing='3'
+        >
+          <AkStack @direction='column'>
+            <AkTextField
+              @label={{t 'newPassword'}}
+              @placeholder={{t 'enterNewPassword'}}
+              @labelTypographyColor='secondary'
+              @labelTypographyVariant='subtitle2'
+              @type='password'
+              @value={{this.changeset.password}}
+              @error={{if this.changeset.error.password true false}}
+              autocomplete='new-password'
+              {{autofocus}}
+            />
+
+            {{#if this.changeset.error.password}}
+              <AkStack local-class='error-stack'>
+                <AkIcon
+                  @iconName='cancel'
+                  @color='error'
+                  local-class='error-icon'
+                />
+
+                <AkTypography @color='error' local-class='error-message'>
+                  {{this.changeset.error.password.validation}}
+                </AkTypography>
+              </AkStack>
+            {{/if}}
+          </AkStack>
+
+          <AkStack @direction='column'>
+            <AkTextField
+              @label={{t 'confirmPassword'}}
+              @placeholder={{t 'enterConfirmPassword'}}
+              @labelTypographyColor='secondary'
+              @labelTypographyVariant='subtitle2'
+              @type='password'
+              @value={{this.changeset.confirm_password}}
+              @error={{if this.changeset.error.confirm_password true false}}
+              autocomplete='new-password'
+            />
+
+            {{#if this.changeset.error.confirm_password}}
+              <AkStack local-class='error-stack'>
+                <AkIcon
+                  @iconName='cancel'
+                  @color='error'
+                  local-class='error-icon'
+                />
+
+                <AkTypography @color='error' local-class='error-message'>
+                  {{this.changeset.error.confirm_password.validation}}
+                </AkTypography>
+              </AkStack>
+            {{/if}}
+          </AkStack>
+
+          <AkButton
+            @type='submit'
+            @loading={{this.reset.isRunning}}
+            @disabled={{this.disableResetButton}}
+          >
+            {{t 'reset'}}
+          </AkButton>
+        </AkStack>
+      </form>
+    {{/if}}
+
+    {{#if this.isNotVerified}}
+      <AkTypography @fontWeight='medium'>
+        {{t 'invalidPasswordResetLink'}}
+      </AkTypography>
+    {{/if}}
+  </AkStack>
+
+  <AkStack
+    @alignItems='center'
+    @justifyContent='center'
+    @width='full'
+    @spacing='1'
+    local-class='reset-password-footer'
+    class='py-2'
+  >
+    <AkTypography>{{t 'takeMeTo'}}</AkTypography>
+
+    <AkLink @underline='always' @color='primary' @route='login'>
+      {{t 'login'}}
+    </AkLink>
+
+    <AkTypography>{{t 'page'}}</AkTypography>
+  </AkStack>
+</UserLogin::RootContainer>

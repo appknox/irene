@@ -1,0 +1,66 @@
+{{#if @isEnforced}}
+  <form
+    {{on 'submit' (perform this.handleSsoLogin)}}
+    class='w-full'
+    data-test-user-login-via-sso
+  >
+    <AkStack
+      @width='full'
+      @direction='column'
+      @alignItems='stretch'
+      @spacing='3'
+    >
+      <AkTextField
+        @label={{t 'usernameEmailIdTextLabel'}}
+        @placeholder={{t 'usernameEmailIdTextPlaceholder'}}
+        @labelTypographyColor='secondary'
+        @labelTypographyVariant='subtitle2'
+        @value={{@username}}
+        {{on 'input' @usernameChanged}}
+        autocomplete='username'
+        data-test-user-login-via-sso-forced-username-input
+      />
+
+      <AkButton
+        @type='submit'
+        @loading={{@showSSOSpinner}}
+        {{autofocus}}
+        data-test-user-login-via-sso-forced-button
+      >
+        {{t 'ssoLogin'}}
+      </AkButton>
+    </AkStack>
+  </form>
+{{else}}
+  <UserLogin::ViaUsernamePassword
+    @username={{@username}}
+    @password={{@password}}
+    @usernameChanged={{@usernameChanged}}
+    @showSpinner={{@showLoginSpinner}}
+    @login={{@login}}
+    @textFieldClass={{@textFieldClass}}
+    @showCredError={{@showCredError}}
+    @showAccountLockError={{@showAccountLockError}}
+  />
+
+  <AkStack
+    @alignItems='center'
+    local-class='login-form-sso-separator'
+    data-test-user-login-via-sso-or
+  >
+    <AkDivider @color='dark' />
+
+    <AkTypography class='px-1'>{{t 'or'}}</AkTypography>
+
+    <AkDivider @color='dark' />
+  </AkStack>
+
+  <AkButton
+    {{on 'click' @ssologin}}
+    @loading={{@showSSOSpinner}}
+    class='w-full'
+    data-test-user-login-via-sso-not-forced-button
+  >
+    {{t 'ssoLogin'}}
+  </AkButton>
+{{/if}}

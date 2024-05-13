@@ -1,0 +1,84 @@
+<UserLogin::RootContainer>
+  <AkStack
+    @width='full'
+    @direction='column'
+    local-class='recover-password-input-container'
+  >
+    <AkTypography
+      @variant='h4'
+      @fontWeight='bold'
+      local-class='recover-password-title'
+      data-test-user-login-recover-password-header-text
+    >
+      {{t 'resetPasswordLabel'}}
+    </AkTypography>
+
+    {{#if this.mailSent}}
+      <AkStack @direction='column' @spacing='3'>
+        <AkTypography
+          @fontWeight='medium'
+          data-test-user-login-recover-password-text-to-check
+        >
+          {{t 'resetPasswordMessageToCheck'}}
+        </AkTypography>
+
+        <AkTypography
+          local-class='retry-text'
+          data-test-user-login-recover-password-text-to-retry
+        >
+          {{t 'resetPasswordMessageToRetry'}}
+        </AkTypography>
+
+      </AkStack>
+    {{else}}
+      <form {{on 'submit' (perform this.recover)}} class='w-full'>
+        <AkStack
+          @width='full'
+          @direction='column'
+          @alignItems='stretch'
+          @spacing='3'
+        >
+          <AkTextField
+            @label={{t 'usernameEmailIdTextLabel'}}
+            @placeholder={{t 'usernameEmailIdTextPlaceholder'}}
+            @labelTypographyColor='secondary'
+            @labelTypographyVariant='subtitle2'
+            @value={{this.changeset.username}}
+            @autofocus={{true}}
+            autocomplete='username'
+            data-test-user-login-recover-password-username-email-input
+          />
+
+          <AkButton
+            @type='submit'
+            @loading={{this.recover.isRunning}}
+            @disabled={{if this.changeset.username false true}}
+            data-test-user-login-recover-password-reset-btn
+          >
+            {{t 'resetPassword'}}
+          </AkButton>
+        </AkStack>
+      </form>
+    {{/if}}
+  </AkStack>
+
+  {{#unless this.mailSent}}
+    <AkStack
+      @alignItems='center'
+      @justifyContent='center'
+      @width='full'
+      @spacing='1'
+      local-class='recover-password-footer'
+      class='py-2'
+      data-test-user-login-recover-password-footer
+    >
+      <AkTypography>{{t 'takeMeTo'}}</AkTypography>
+
+      <AkLink @underline='always' @color='primary' @route='login'>
+        {{t 'login'}}
+      </AkLink>
+
+      <AkTypography>{{t 'page'}}</AkTypography>
+    </AkStack>
+  {{/unless}}
+</UserLogin::RootContainer>
