@@ -3,7 +3,6 @@ import Component from '@glimmer/component';
 import { tracked } from '@glimmer/tracking';
 
 import UserModel from 'irene/models/user';
-import styles from './index.scss';
 
 export interface HomePageSecurityDashboardNavSignature {
   Args: {
@@ -15,10 +14,24 @@ export interface HomePageSecurityDashboardNavSignature {
 export default class HomePageSecurityDashboardNavComponent extends Component<HomePageSecurityDashboardNavSignature> {
   @tracked profileAnchorRef: HTMLElement | null = null;
 
-  get classes() {
-    return {
-      profileMenuPopoverContainerClass: styles['profile-menu-popover'],
-    };
+  get profileMenuItems() {
+    return [
+      {
+        label: this.args.user.username,
+        iconName: 'account-circle',
+      },
+      {
+        label: this.args.user.email,
+        iconName: 'mail',
+      },
+      {
+        label: 'Logout',
+        iconName: 'logout',
+        color: 'primary',
+        onClick: this.args.logoutAction,
+        isLast: true,
+      },
+    ];
   }
 
   @action
