@@ -163,6 +163,5 @@ describe('User Login', () => {
     cy.findByText(cyTranslate('uploadApp')).should('exist');
     cy.findByText(cyTranslate('allProjects')).should('exist');
     cy.findByText(cyTranslate('allProjectsDescription')).should('exist');
-    cy.findByText(cyTranslate('support')).should('exist');
   });
 });

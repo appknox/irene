@@ -22,6 +22,8 @@ declare global {
     Enumerate<F>
   >;
 
+  type UnknownFnType = (...args: unknown[]) => void;
+
   // Types for the CSB Analytics
   interface CsbAnalytics {
     logout: () => void;
@@ -57,13 +59,6 @@ declare global {
 
   type CsbAnalyticsData = CsbAnalyticsFeatureData | CsbAnalyticsLoginData;
 
-  interface CrispInstance {
-    push: (...args: unknown[]) => void;
-    show: (...args: unknown[]) => void;
-    on: (...args: unknown[]) => void;
-    off: (...args: unknown[]) => void;
-  }
-
   interface PendoInstance {
     getActiveGuides: () => PendoGuide[];
   }
@@ -74,8 +69,12 @@ declare global {
   }
 
   interface Window {
-    FreshworksWidget: (...args: unknown[]) => void;
-    $crisp: CrispInstance;
+    FreshworksWidget: UnknownFnType;
+    fcWidget: {
+      open: UnknownFnType;
+      isOpen(): boolean;
+      destroy(): void;
+    };
     pendo: PendoInstance;
     CRISP_WEBSITE_ID: string;
     fwSettings: { widget_id: string };
