@@ -4,7 +4,12 @@
     @direction='column'
     local-class='login-input-container'
   >
-    <AkTypography @variant='h4' @fontWeight='bold' local-class='login-title'>
+    <AkTypography
+      @variant='h4'
+      @fontWeight='bold'
+      local-class='login-title'
+      data-test-user-login-header-text
+    >
       {{t 'loginTitle'}}
     </AkTypography>
 
