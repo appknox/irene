@@ -1,4 +1,3 @@
-{{! @glint-nocheck }}
 <AkAppbar
   local-class='navbar-root'
   @justifyContent='space-between'
@@ -18,6 +17,22 @@
   </AkStack>
 
   <AkStack @alignItems='center' @spacing='0.5'>
+    {{#unless this.orgIsAnEnterprise}}
+      <AkButton
+        local-class='navbar-btn'
+        {{on 'click' @onToggleOnboardingGuide}}
+        data-test-organizationDashboardHeader-OnboardingGuideBtn
+      >
+        <:leftIcon>
+          <AkIcon @iconName='tungsten' />
+        </:leftIcon>
+
+        <:default>
+          {{t 'onboardingGuides'}}
+        </:default>
+      </AkButton>
+    {{/unless}}
+
     {{#if this.showKnowledgeBase}}
       <AkButton
         local-class='navbar-btn'
@@ -29,20 +44,6 @@
         </:leftIcon>
 
         <:default>{{t 'knowledgeBase'}}</:default>
-      </AkButton>
-    {{/if}}
-
-    {{#if this.showChatSupport}}
-      <AkButton
-        local-class='navbar-btn'
-        {{on 'click' this.openChatBox}}
-        data-test-organizationDashboardHeader-supportBtn
-      >
-        <:leftIcon>
-          <AkIcon @iconName='support' />
-        </:leftIcon>
-
-        <:default>{{t 'support'}}</:default>
       </AkButton>
     {{/if}}
 

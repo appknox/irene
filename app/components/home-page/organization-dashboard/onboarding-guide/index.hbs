@@ -1,0 +1,62 @@
+<AkModal
+  data-test-onboarding-guide-modal
+  @onClose={{@onClose}}
+  @noGutter={{true}}
+  @showHeader={{true}}
+  @headerTitle={{t 'onboardingGuides'}}
+>
+  <AkStack>
+    <AkStack local-class='onboarding-guide-list-container'><AkList
+        local-class='onboarding-guide-list'
+        as |akl|
+      >
+        {{#each this.guidesList as |it|}}
+          <AkTypography
+            data-test-onboarding-guide-category
+            @variant='h6'
+            class='ml-1 mt-1'
+          >
+            {{it.category}}
+          </AkTypography>
+
+          {{#each it.guides as |guide|}}
+            <akl.listItem
+              data-test-onboarding-guide-list-item
+              @button={{true}}
+              @selected={{eq this.activeGuide.id guide.id}}
+              @onClick={{fn this.setActiveGuide guide}}
+              @divider={{true}}
+              as |li|
+            >
+              <li.text @primaryText={{guide.title}} />
+            </akl.listItem>
+          {{/each}}
+        {{/each}}
+      </AkList>
+    </AkStack>
+
+    <AkStack
+      @alignItems='center'
+      @justifyContent='center'
+      local-class='onboarding-guide-iframe-container'
+      data-test-onboarding-guide-iframe
+    >
+      <AkSkeleton @width='700px' @height='393px' />
+
+      {{#if this.mountIFrame}}
+        <iframe
+          data-test-onboarding-guide-iframe='{{this.selectedGuideId}}'
+          id='{{this.selectedGuideId}}'
+          title='{{this.selectedGuideId}}'
+          src={{this.selectedGuideUrl}}
+          frameborder='0'
+          webkitallowfullscreen
+          mozallowfullscreen
+          allowfullscreen
+          allow='autoplay; fullscreen'
+          local-class='onboarding-guide-iframe'
+        ></iframe>
+      {{/if}}
+    </AkStack>
+  </AkStack>
+</AkModal>
