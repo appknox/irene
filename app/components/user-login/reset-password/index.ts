@@ -97,7 +97,9 @@ export default class UserLoginResetPasswordComponent extends Component<UserLogin
     return !this.verifyToken.isRunning && !this.isVerified;
   }
 
-  reset = task(async () => {
+  reset = task(async (event: SubmitEvent) => {
+    event.preventDefault();
+
     await this.changeset?.validate?.();
 
     if (!this.changeset?.isValid) {

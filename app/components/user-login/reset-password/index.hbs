@@ -8,6 +8,7 @@
       @variant='h4'
       @fontWeight='bold'
       local-class='reset-password-title'
+      data-test-user-login-reset-password-header-text
     >
       {{t 'resetPasswordLabel'}}
     </AkTypography>
@@ -31,6 +32,7 @@
               @error={{if this.changeset.error.password true false}}
               autocomplete='new-password'
               {{autofocus}}
+              data-test-user-login-reset-password-new-password-input
             />
 
             {{#if this.changeset.error.password}}
@@ -41,7 +43,11 @@
                   local-class='error-icon'
                 />
 
-                <AkTypography @color='error' local-class='error-message'>
+                <AkTypography
+                  @color='error'
+                  local-class='error-message'
+                  data-test-user-login-reset-password-new-password-input-error
+                >
                   {{this.changeset.error.password.validation}}
                 </AkTypography>
               </AkStack>
@@ -58,6 +64,7 @@
               @value={{this.changeset.confirm_password}}
               @error={{if this.changeset.error.confirm_password true false}}
               autocomplete='new-password'
+              data-test-user-login-reset-password-confirm-password-input
             />
 
             {{#if this.changeset.error.confirm_password}}
@@ -68,7 +75,11 @@
                   local-class='error-icon'
                 />
 
-                <AkTypography @color='error' local-class='error-message'>
+                <AkTypography
+                  @color='error'
+                  local-class='error-message'
+                  data-test-user-login-reset-password-confirm-password-input-error
+                >
                   {{this.changeset.error.confirm_password.validation}}
                 </AkTypography>
               </AkStack>
@@ -79,6 +90,7 @@
             @type='submit'
             @loading={{this.reset.isRunning}}
             @disabled={{this.disableResetButton}}
+            data-test-user-login-reset-password-reset-btn
           >
             {{t 'reset'}}
           </AkButton>
@@ -87,7 +99,10 @@
     {{/if}}
 
     {{#if this.isNotVerified}}
-      <AkTypography @fontWeight='medium'>
+      <AkTypography
+        @fontWeight='medium'
+        data-test-user-login-reset-password-invalid-link-text
+      >
         {{t 'invalidPasswordResetLink'}}
       </AkTypography>
     {{/if}}
