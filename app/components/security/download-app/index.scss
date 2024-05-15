@@ -1,0 +1,13 @@
+.root-container {
+  border: 1px solid var(--security-download-app-container-border-color);
+  border-radius: var(--security-download-app-container-border-radius);
+  min-width: 29.5em;
+  max-width: 29.5em;
+  box-shadow: var(--security-download-app-container-box-shadow);
+  padding: 1.714em 2.857em 2.714em;
+
+  .title {
+    font-size: 1.285rem;
+    padding-bottom: 0.5em;
+  }
+}

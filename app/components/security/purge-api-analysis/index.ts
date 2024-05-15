@@ -1,5 +1,4 @@
 import { inject as service } from '@ember/service';
-import { isEmpty } from '@ember/utils';
 import Component from '@glimmer/component';
 import { tracked } from '@glimmer/tracking';
 import { task } from 'ember-concurrency';
@@ -19,10 +18,6 @@ export default class SecurityPurgeApiAnalysisComponent extends Component {
 
   purgeAPIAnalyses = task(async () => {
     const fileId = this.fileNumber;
-
-    if (isEmpty(fileId)) {
-      return this.notify.error('Please enter any File ID');
-    }
 
     const url = [
       ENV.endpoints['files'],

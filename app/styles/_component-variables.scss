@@ -1081,13 +1081,27 @@ body {
   --user-registration-form-login-link-box-shadow: var(--box-shadow-10);
 
   // variables for user-registration/register-confirm
-  --user-registration-register-confirm-background-color: var(--background-light);
-  --user-registration-register-confirm-logo-container-border-color: var(--border-color-1);
-  --user-registration-register-confirm-container-box-shadow: var(--box-shadow-2);
-  --user-registration-register-confirm-container-background-color: var(--background-main);
-  --user-registration-register-confirm-container-border-radius: var(--border-radius);
-  --user-registration-register-confirm-login-link-background-color: var(--neutral-grey-100);
-  --user-registration-register-confirm-login-link-box-shadow: var(--box-shadow-10);
+  --user-registration-register-confirm-background-color: var(
+    --background-light
+  );
+  --user-registration-register-confirm-logo-container-border-color: var(
+    --border-color-1
+  );
+  --user-registration-register-confirm-container-box-shadow: var(
+    --box-shadow-2
+  );
+  --user-registration-register-confirm-container-background-color: var(
+    --background-main
+  );
+  --user-registration-register-confirm-container-border-radius: var(
+    --border-radius
+  );
+  --user-registration-register-confirm-login-link-background-color: var(
+    --neutral-grey-100
+  );
+  --user-registration-register-confirm-login-link-box-shadow: var(
+    --box-shadow-10
+  );
 
   // variables for register-oidc-error
   --register-oidc-error-container-background-color: var(--background-light);
@@ -1095,4 +1109,16 @@ body {
   --register-oidc-error-card-border-radius: var(--border-radius);
   --register-oidc-error-border-color: var(--border-color-1);
   --register-oidc-error-error-card-box-shadow: var(--box-shadow-2);
+}
+
+body {
+  // variables for security/download-app
+  --security-download-app-container-border-color: var(--neutral-grey-200);
+  --security-download-app-container-box-shadow: var(--box-shadow-3);
+  --security-download-app-container-border-radius: var(--border-radius);
+
+  // variables for security/purge-api-analysis
+  --security-purge-api-analysis-container-border-color: var(--neutral-grey-200);
+  --security-purge-api-analysis-container-box-shadow: var(--box-shadow-3);
+  --security-purge-api-analysis-container-border-radius: var(--border-radius);
 }
