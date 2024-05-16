@@ -1133,4 +1133,20 @@ body {
   --system-status-root-container-border-color: var(--neutral-grey-200);
   --system-status-root-container-box-shadow: var(--box-shadow-3);
   --system-status-root-container-border-radius: var(--border-radius);
+
+  // variables for security/project-search-list/header
+  --security-project-search-list-header-border-color: var(--neutral-white-100);
+  --security-project-search-list-header-border-radius: var(--border-radius);
+
+  // variables for security/project-search-list/empty-loading-view
+  --security-project-empty-loading-view-border-radius: var(--border-radius);
+  --security-project-empty-loading-view-border-color: var(--border-color-1);
+
+  // variables for security/file-search-list/header
+  --security-file-search-list-header-border-color: var(--neutral-white-100);
+  --security-file-search-list-header-border-radius: var(--border-radius);
+
+  // variables for security/file-search-list/empty-loading-view
+  --security-file-empty-loading-view-border-radius: var(--border-radius);
+  --security-file-empty-loading-view-border-color: var(--border-color-1);
 }

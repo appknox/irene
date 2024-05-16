@@ -34,6 +34,30 @@ export default class HomePageSecurityDashboardNavComponent extends Component<Hom
     ];
   }
 
+  get menuItems() {
+    return [
+      {
+        id: 'projects',
+        route: 'authenticated.security.projects',
+        label: 'Projects',
+        currentWhen:
+          'authenticated.security.projects authenticated.security.files authenticated.security.file',
+      },
+      {
+        id: 'downloadapp',
+        route: 'authenticated.security.downloadapp',
+        label: 'Download App',
+        currentWhen: 'authenticated.security.downloadapp',
+      },
+      {
+        id: 'purgeanalysis',
+        route: 'authenticated.security.purgeanalysis',
+        label: 'Purge API Analyses',
+        currentWhen: 'authenticated.security.purgeanalysis',
+      },
+    ];
+  }
+
   @action
   toggleProfileMenuView(event: MouseEvent) {
     if (this.profileAnchorRef) {

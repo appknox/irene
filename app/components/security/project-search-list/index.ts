@@ -5,19 +5,23 @@ import IntlService from 'ember-intl/services/intl';
 import { inject as service } from '@ember/service';
 import Component from '@glimmer/component';
 import { tracked } from '@glimmer/tracking';
-import { addObserver, removeObserver } from '@ember/object/observers';
 import { task } from 'ember-concurrency';
 import Store from '@ember-data/store';
 import { action } from '@ember/object';
+import RouterService from '@ember/routing/router-service';
+import { debounce } from '@ember/runloop';
 
 import parseError from 'irene/utils/parse-error';
 import { PaginationProviderActionsArgs } from 'irene/components/ak-pagination-provider';
 import RealtimeService from 'irene/services/realtime';
 import SecurityProjectModel from 'irene/models/security/project';
-import { debounce } from '@ember/runloop';
+import { SecurityProjectsQueryParam } from 'irene/routes/authenticated/security/projects';
 
 export interface SecurityProjectSearchListSignature {
   Element: HTMLElement;
+  Args: {
+    queryParams: SecurityProjectsQueryParam;
+  };
 }
 
 type SecurityProjectQueryResponse =
@@ -30,25 +34,29 @@ export default class SecurityProjectSearchListComponent extends Component<Securi
   @service('notifications') declare notify: NotificationService;
   @service('intl') declare intl: IntlService;
   @service('realtime') declare realtime: RealtimeService;
+  @service declare router: RouterService;
 
   @tracked securityProjectsQuery: SecurityProjectQueryResponse | null = null;
-  @tracked limit = 10;
-  @tracked offset = 0;
-  @tracked query = '';
 
   sortProperties = ['-id'];
 
-  constructor(owner: unknown, args: object) {
+  constructor(
+    owner: unknown,
+    args: SecurityProjectSearchListSignature['Args']
+  ) {
     super(owner, args);
 
-    this.fetchSecurityProjects.perform(this.limit, this.offset);
+    const { app_limit, app_offset, app_query } = args.queryParams;
 
-    addObserver(
-      this.realtime,
-      'ProjectCounter',
-      this,
-      this.observeProjectCounter
-    );
+    this.fetchSecurityProjects.perform(app_limit, app_offset, app_query, false);
+  }
+
+  get limit() {
+    return Number(this.args.queryParams.app_limit);
+  }
+
+  get offset() {
+    return Number(this.args.queryParams.app_offset);
   }
 
   get sortedSecurityProjects() {
@@ -63,60 +71,95 @@ export default class SecurityProjectSearchListComponent extends Component<Securi
     return this.totalProjects < 1;
   }
 
-  @action
-  searchProjectsQuery(event: Event): void {
-    this.query = (event.target as HTMLInputElement).value;
-    debounce(this, this.searchProjects, 500);
+  get columns() {
+    return [
+      {
+        name: 'Project ID',
+        valuePath: 'id',
+      },
+      {
+        name: 'Project Name',
+        valuePath: 'packageName',
+      },
+      {
+        name: 'View All Files',
+        component: 'security/project-search-list/view-all-files',
+        textAlign: 'center',
+      },
+    ];
   }
 
-  @action searchProjects() {
-    this.fetchSecurityProjects.perform(this.limit, 0);
+  @action
+  searchProjectsQuery(event: Event): void {
+    const query = (event.target as HTMLInputElement).value;
+
+    debounce(this, this.searchProjects, query, 500);
+  }
+
+  @action
+  clearSearchInput() {
+    this.fetchSecurityProjects.perform(this.limit, 0, '');
+  }
+
+  @action searchProjects(query: string) {
+    this.fetchSecurityProjects.perform(this.limit, 0, query);
   }
 
   @action
   handlePrevNextAction({ limit, offset }: PaginationProviderActionsArgs) {
-    this.limit = limit;
-    this.offset = offset;
+    const { app_query } = this.args.queryParams;
 
-    this.fetchSecurityProjects.perform(limit, offset);
+    this.fetchSecurityProjects.perform(limit, offset, app_query);
   }
 
   @action
   handleItemPerPageChange({ limit }: PaginationProviderActionsArgs) {
-    this.limit = limit;
-    this.offset = 0;
+    const { app_query } = this.args.queryParams;
 
-    this.fetchSecurityProjects.perform(limit, 0);
+    this.fetchSecurityProjects.perform(limit, 0, app_query);
   }
 
-  fetchSecurityProjects = task(async (limit: number, offset: number) => {
-    try {
-      this.securityProjectsQuery = (await this.store.query('security/project', {
-        limit,
-        offset,
-        q: this.query,
-      })) as SecurityProjectQueryResponse;
-    } catch (e) {
-      this.notify.error(parseError(e, this.intl.t('pleaseTryAgain')));
+  fetchSecurityProjects = task(
+    { drop: true },
+    async (
+      limit: string | number,
+      offset: string | number,
+      query: string,
+      setQueryParams = true
+    ) => {
+      if (setQueryParams) {
+        this.setRouteQueryParams(limit, offset, query);
+      }
+
+      try {
+        this.securityProjectsQuery = (await this.store.query(
+          'security/project',
+          {
+            limit,
+            offset,
+            q: query,
+          }
+        )) as SecurityProjectQueryResponse;
+      } catch (e) {
+        this.notify.error(parseError(e, this.intl.t('pleaseTryAgain')));
+      }
     }
-  });
+  );
 
-  observeProjectCounter() {
-    this.fetchSecurityProjects.perform(this.limit, 0);
-  }
+  setRouteQueryParams(
+    limit: string | number,
+    offset: string | number,
+    query: string
+  ) {
+    const searchQueryParam = query || null;
 
-  removeProjectCounterObserver() {
-    removeObserver(
-      this.realtime,
-      'ProjectCounter',
-      this,
-      this.observeProjectCounter
-    );
-  }
-
-  willDestroy() {
-    super.willDestroy();
-    this.removeProjectCounterObserver();
+    this.router.transitionTo({
+      queryParams: {
+        app_limit: limit,
+        app_offset: offset,
+        app_query: searchQueryParam,
+      },
+    });
   }
 }
 

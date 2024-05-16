@@ -1,76 +1,70 @@
-<div class='columns margin-top'>
-  <div class='column is-one-sixth margin-auto'>
-    <Input
-      id='project-search-input'
-      class='input search-input'
-      placeholder={{'Search for project'}}
-      @value={{this.query}}
-      {{on 'keyup' this.searchProjectsQuery}}
-    />
-  </div>
-</div>
+<AkStack @width='full' @direction='column' @alignItems='center'>
+  <Security::ProjectSearchList::Header
+    @packageNameSearchQuery={{@queryParams.app_query}}
+    @onQueryChange={{this.searchProjectsQuery}}
+    @handleClear={{this.clearSearchInput}}
+  />
 
-<AkStack @direction='column' @width='full' @alignItems='center'>
-  <AkPaginationProvider
-    @results={{this.sortedSecurityProjects}}
-    @onItemPerPageChange={{this.handleItemPerPageChange}}
-    @totalItems={{this.totalProjects}}
-    @nextAction={{this.handlePrevNextAction}}
-    @prevAction={{this.handlePrevNextAction}}
-    @itemPerPageOptions={{array 10 25 50}}
-    @defaultLimit={{this.limit}}
-    @offset={{this.offset}}
-    as |pgc|
+  <AkStack
+    @direction='column'
+    @alignItems='center'
+    @width='8/12'
+    local-class='min-width-content'
   >
-    {{#if this.fetchSecurityProjects.isRunning}}
-      <AkStack
-        @width='6/12'
-        @justifyContent='center'
-        @alignItems='center'
-        @spacing='1'
-        class='my-6 empty-state'
-      >
-        <AkLoader @size={{16}} />
+    <AkPaginationProvider
+      @results={{this.sortedSecurityProjects}}
+      @onItemPerPageChange={{this.handleItemPerPageChange}}
+      @totalItems={{this.totalProjects}}
+      @nextAction={{this.handlePrevNextAction}}
+      @prevAction={{this.handlePrevNextAction}}
+      @itemPerPageOptions={{array 10 25 50}}
+      @defaultLimit={{this.limit}}
+      @offset={{this.offset}}
+      as |pgc|
+    >
+      {{#if this.fetchSecurityProjects.isRunning}}
+        <AkStack
+          {{style height='500px'}}
+          @alignItems='center'
+          @justifyContent='center'
+          @direction='column'
+          @spacing='2.5'
+        >
+          <AkSvg::EmptyLoadingList
+            height={{'50%'}}
+            data-test-security-project-list-loadingSvg
+          />
+          <AkStack @alignItems='center' @justifyContent='center' @spacing='1.5'>
+            <AkLoader data-test-security-project-list-loader @size={{16}} />
 
-        <AkTypography @variant='h6' @fontWeight='light'>
-          Loading...
-        </AkTypography>
-      </AkStack>
+            <AkTypography data-test-security-project-list-loadingText>
+              Loading...
+            </AkTypography>
+          </AkStack>
+        </AkStack>
+      {{else}}
+        <AkTable data-test-security-project-list-table as |t|>
+          <t.head
+            data-test-security-project-list-thead
+            @columns={{this.columns}}
+          />
+          <t.body @rows={{pgc.currentPageResults}} as |b|>
+            <b.row data-test-security-project-list-row as |r|>
+              <r.cell as |value|>
+                {{#if r.columnValue.component}}
+                  {{#let (component r.columnValue.component) as |Component|}}
+                    <Component @project={{r.rowValue}} />
+                  {{/let}}
+                {{else}}
+                  <AkTypography title={{value}} @noWrap={{true}}>
+                    {{value}}
+                  </AkTypography>
+                {{/if}}
+              </r.cell>
+            </b.row>
+          </t.body>
+        </AkTable>
 
-    {{else if this.hasNoSecurityProjects}}
-      <div class='column is-fullwidth no-project-container'>
-        <h4 class='capitalize-text text-centre'>
-          {{t 'noProject'}}
-        </h4>
-      </div>
-
-    {{else}}
-      <AkStack @width='6/12' @justifyContent='center'>
-        <table class='security-list-table'>
-          <thead>
-            <tr>
-              <th>
-                Project ID
-              </th>
-              <th>
-                Project Name
-              </th>
-              <th>
-                View All Files
-              </th>
-            </tr>
-
-          </thead>
-
-          <tbody>
-            {{#each this.sortedSecurityProjects as |project|}}
-              <Security::ProjectSearchOverview @project={{project}} />
-            {{/each}}
-          </tbody>
-        </table>
-      </AkStack>
-
-      <AkStack @width='6/12' class='pb-6'>
         <AkPagination
           @disableNext={{pgc.disableNext}}
           @nextAction={{pgc.nextAction}}
@@ -81,11 +75,11 @@
           @itemPerPageOptions={{pgc.itemPerPageOptions}}
           @onItemPerPageChange={{pgc.onItemPerPageChange}}
           @selectedOption={{pgc.selectedOption}}
-          @tableItemLabel={{t 'projects'}}
+          @tableItemLabel='Projects'
           @perPageTranslation={{t 'recordPerPage'}}
           @totalItems={{pgc.totalItems}}
         />
-      </AkStack>
-    {{/if}}
-  </AkPaginationProvider>
+      {{/if}}
+    </AkPaginationProvider>
+  </AkStack>
 </AkStack>

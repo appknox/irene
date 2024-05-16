@@ -1,3 +1,6 @@
 {{page-title 'All Files'}}
 
-<Security::FileSearchList @projectId={{@model.projectid}} />
+<Security::FileSearchList
+  @projectId={{@model.projectid}}
+  @queryParams={{@model.queryParams}}
+/>

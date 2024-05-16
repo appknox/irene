@@ -1,0 +1,43 @@
+<AkStack
+  @width='8/12'
+  @justifyContent='space-between'
+  local-class='header-security-project-page-title'
+  @alignItems='center'
+  class='mb-4'
+>
+  <AkStack @direction='column' @spacing='0.5'>
+    <AkTypography @variant='h5' data-test-security-project-search-list-heading>
+      Projects
+    </AkTypography>
+
+    <AkTypography
+      @variant='body2'
+      data-test-security-project-search-list-description
+    >
+      Here you can view all the projects that have been uploaded to the
+      dashboard.
+    </AkTypography>
+  </AkStack>
+
+  <div local-class='search-input-container-width'>
+    <AkTextField
+      @placeholder='Search for project'
+      @value={{@packageNameSearchQuery}}
+      {{on 'input' this.onSearchQueryChange}}
+      local-class='search-package-name-input'
+      data-test-security-project-search-list-input
+    >
+      <:leftAdornment>
+        <AkIcon @iconName='search' @color='textSecondary' />
+      </:leftAdornment>
+
+      <:rightAdornment>
+        {{#if @packageNameSearchQuery}}
+          <AkIconButton @size='small' {{on 'click' this.clearSearchInput}}>
+            <AkIcon @iconName='close' @color='textSecondary' />
+          </AkIconButton>
+        {{/if}}
+      </:rightAdornment>
+    </AkTextField>
+  </div>
+</AkStack>

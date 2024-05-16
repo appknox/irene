@@ -5,9 +5,7 @@
       @logoutAction={{this.invalidateSession}}
     />
 
-    <Security::NavMenu>
-      {{yield}}
-    </Security::NavMenu>
+    {{yield}}
   {{else}}
     <HomePage::OrganizationDashboard
       @isSecurityEnabled={{this.isSecurityEnabled}}
