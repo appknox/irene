@@ -1,0 +1,72 @@
+.analysis-risk-tag {
+  width: 115px;
+  padding: 0.35em 0;
+  font-family: var(--analysis-risk-font-family);
+  font-size: 1rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background-color: transparent;
+  border-radius: var(--analysis-risk-border-radius);
+  white-space: nowrap;
+  cursor: default;
+  outline: 0px;
+  text-decoration: none;
+  vertical-align: middle;
+  box-sizing: border-box;
+  color: inherit;
+
+  .analysis-risk-tag-label {
+    color: var(--analysis-risk-text-color);
+  }
+
+  .analysis-risk-overridden-icon {
+    fill: var(--analysis-risk-text-color);
+  }
+}
+
+.tooltip-content-text,
+.tooltip-content-icon {
+  color: var(--analysis-risk-text-color);
+}
+
+.is-critical {
+  background-color: var(--analysis-risk-color-critical);
+}
+
+.is-danger {
+  background-color: var(--analysis-risk-color-high);
+}
+
+.is-warning {
+  background-color: var(--analysis-risk-color-medium);
+}
+
+.is-info {
+  background-color: var(--analysis-risk-color-low);
+}
+
+.is-success {
+  background-color: var(--analysis-risk-color-passed);
+}
+
+.is-default {
+  background-color: var(--analysis-risk-color-none);
+}
+
+.is-waiting,
+.is-progress {
+  border: 1px solid var(--analysis-risk-color-waiting);
+
+  .analysis-risk-tag-label {
+    color: var(--analysis-risk-color-waiting);
+  }
+}
+
+.is-errored {
+  border: 1px solid var(--analysis-risk-color-critical);
+
+  .analysis-risk-tag-label {
+    color: var(--analysis-risk-color-critical);
+  }
+}

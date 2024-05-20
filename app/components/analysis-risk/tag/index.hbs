@@ -1,0 +1,59 @@
+<AkStack
+  ...attributes
+  local-class='analysis-risk-tag {{this.analysisRiskStatus.cssclass}}'
+  @spacing='1'
+  data-test-analysisRiskTag-root='{{this.analysisRiskStatus.label}}'
+>
+  {{#if @isOverridden}}
+    <AkTooltip
+      @arrow={{true}}
+      @placement='bottom'
+      @disabled={{@disableOverriddenTooltip}}
+    >
+      <:tooltipContent>
+        <AkStack
+          data-test-analysisRiskTag-tooltipContent
+          @alignItems='center'
+          @justifyContent='center'
+          @spacing='1'
+        >
+          <AkTypography local-class='tooltip-content-text' @tag='span'>
+            {{t 'overridden'}}:
+          </AkTypography>
+
+          <AnalysisRisk::Text
+            data-test-analysisRiskTag-tooltipOriginalRiskText
+            @risk={{@originalRisk}}
+          />
+
+          <AkIcon
+            local-class='tooltip-content-icon'
+            @size='small'
+            @color='textSecondary'
+            @iconName='east'
+          />
+
+          <AnalysisRisk::Text
+            data-test-analysisRiskTag-tooltipOverriddenRiskText
+            @risk={{@overriddenRisk}}
+          />
+        </AkStack>
+      </:tooltipContent>
+
+      <:default>
+        <AnalysisRisk::OverriddenIcon
+          data-test-analysisRiskTag-editIcon
+          local-class='analysis-risk-overridden-icon'
+        />
+      </:default>
+    </AkTooltip>
+  {{/if}}
+
+  <AkTypography
+    local-class='analysis-risk-tag-label'
+    @tag='span'
+    data-test-analysisRiskTag-label
+  >
+    {{this.analysisRiskStatus.label}}
+  </AkTypography>
+</AkStack>

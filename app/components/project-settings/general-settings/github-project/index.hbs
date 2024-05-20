@@ -29,9 +29,8 @@
       </AkTypography>
 
       <AkStack @alignItems='center'>
-        <RiskTag
-          @label='{{threshold-status this.currentGithubRepo.riskThreshold}}'
-          @labelClass={{this.thresholdLabelClass}}
+        <AnalysisRisk::Tag
+          @computedRisk={{this.currentGithubRepo.riskThreshold}}
           local-class='threshold-risk-label'
           {{style width='fit-content'}}
           data-test-projectSettings-genSettings-githubProject-risk

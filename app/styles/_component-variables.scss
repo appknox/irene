@@ -654,17 +654,18 @@ body {
   --sbom-summary-header-border-radius: var(--border-radius);
   --sbom-summary-header-border-color: var(--border-color-1);
 
-  // variables for risk-tag
-  --risk-tag-font-family: var(--font-family);
-  --risk-tag-border-radius: var(--border-radius);
-  --risk-tag-text-color: var(--common-white);
-  --risk-tag-color-critical: var(--severity-critical);
-  --risk-tag-color-high: var(--severity-high);
-  --risk-tag-color-medium: var(--severity-medium);
-  --risk-tag-color-low: var(--severity-low);
-  --risk-tag-color-passed: var(--severity-passed);
-  --risk-tag-color-none: var(--severity-none);
-  --risk-tag-color-waiting: var(--neutral-grey-500);
+  // variables for analysis-risk/tag
+  // variables for analysis-risk/text
+  --analysis-risk-font-family: var(--font-family);
+  --analysis-risk-border-radius: var(--border-radius);
+  --analysis-risk-text-color: var(--common-white);
+  --analysis-risk-color-critical: var(--severity-critical);
+  --analysis-risk-color-high: var(--severity-high);
+  --analysis-risk-color-medium: var(--severity-medium);
+  --analysis-risk-color-low: var(--severity-low);
+  --analysis-risk-color-passed: var(--severity-passed);
+  --analysis-risk-color-none: var(--severity-none);
+  --analysis-risk-color-waiting: var(--neutral-grey-500);
 
   // variables for file-details/severity-level
   --file-details-severity-level-border-color: var(--border-color-1);

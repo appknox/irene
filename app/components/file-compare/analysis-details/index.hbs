@@ -8,7 +8,13 @@
       {{t 'severity'}}
     </AkTypography>
 
-    <RiskTag @analysis={{@analysis}} />
+    <AnalysisRisk::Tag
+      @computedRisk={{@analysis.computedRisk}}
+      @status={{@analysis.status}}
+      @isOverridden={{@analysis.isNonPassedRiskOverridden}}
+      @overriddenRisk={{@analysis.overriddenRisk}}
+      @originalRisk={{@analysis.risk}}
+    />
   </AkStack>
 
   <AkDivider @color='dark' />

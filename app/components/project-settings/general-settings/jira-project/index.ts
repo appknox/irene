@@ -14,7 +14,6 @@ import ProjectModel from 'irene/models/project';
 import JiraRepoModel from 'irene/models/jira-repo';
 import OrganizationJiraProjectModel from 'irene/models/organization-jiraproject';
 import parseError from 'irene/utils/parse-error';
-import { analysisRiskStatus } from 'irene/helpers/analysis-risk-status';
 
 type JiraProjectsQueryResponse =
   DS.AdapterPopulatedRecordArray<OrganizationJiraProjectModel> & {
@@ -99,14 +98,6 @@ export default class ProjectSettingsGeneralSettingsJiraProjectComponent extends 
 
   get project() {
     return this.args.project;
-  }
-
-  get thresholdLabelClass() {
-    return analysisRiskStatus([
-      this.currentJiraProject?.risk_threshold,
-      ENUMS.ANALYSIS.COMPLETED,
-      false,
-    ]).cssclass;
   }
 
   @action initializeJIRARepo() {

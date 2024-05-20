@@ -27,12 +27,11 @@
       </AkTypography>
 
       <AkStack @alignItems='center'>
-        <RiskTag
-          @label='{{threshold-status this.currentJiraProject.risk_threshold}}'
-          @labelClass={{this.thresholdLabelClass}}
+        <AnalysisRisk::Tag
+          @computedRisk={{this.currentJiraProject.risk_threshold}}
           local-class='threshold-risk-label'
-          data-test-projectSettings-genSettings-jiraProject-risk
           {{style width='fit-content'}}
+          data-test-projectSettings-genSettings-jiraProject-risk
         />
 
         <span local-class='threshold-risk-divider' />
