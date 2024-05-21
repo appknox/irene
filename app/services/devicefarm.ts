@@ -1,12 +1,17 @@
 import Service from '@ember/service';
 import { inject as service } from '@ember/service';
-import ENV from 'irene/config/environment';
+import ConfigurationService from './configuration';
 
 export default class DevicefarmService extends Service {
   @service declare ajax: any;
+  @service declare configuration: ConfigurationService;
 
   pingEndpoint = '/devicefarm/ping';
   websockifyEndpoint = '/websockify';
+
+  get devicefarmURL(): string {
+    return this.configuration.serverData.devicefarmURL;
+  }
 
   async testPing() {
     const pingUrl = new URL(this.pingEndpoint, this.urlbase).href;
@@ -19,7 +24,7 @@ export default class DevicefarmService extends Service {
     let base = new URL('/', window.location.href).href;
 
     try {
-      base = new URL('/', ENV.devicefarmHost).href;
+      base = new URL('/', this.devicefarmURL).href;
     } catch {
       // empty catch;
     }
