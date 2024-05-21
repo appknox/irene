@@ -16,23 +16,23 @@ export default class SecurityNavMenuComponent extends Component<SecurityNavMenuS
   get menuItems() {
     return [
       {
+        id: 'projects',
         route: 'authenticated.security.projects',
         label: 'Projects',
-        isActive: [
-          'authenticated.security.projects',
-          'authenticated.security.files',
-          'authenticated.security.file',
-        ].includes(this.currentRoute),
+        currentWhen:
+          'authenticated.security.projects authenticated.security.files authenticated.security.file',
       },
       {
+        id: 'downloadapp',
         route: 'authenticated.security.downloadapp',
         label: 'Download App',
-        isActive: this.currentRoute === 'authenticated.security.downloadapp',
+        currentWhen: 'authenticated.security.downloadapp',
       },
       {
+        id: 'purgeanalysis',
         route: 'authenticated.security.purgeanalysis',
         label: 'Purge API Analyses',
-        isActive: this.currentRoute === 'authenticated.security.purgeanalysis',
+        currentWhen: 'authenticated.security.purgeanalysis',
       },
     ];
   }

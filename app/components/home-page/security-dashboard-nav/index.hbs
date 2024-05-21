@@ -1,59 +1,50 @@
-<div class='columns security-dashboard'>
-  <div class='column top-nav'>
-    <div class='columns top-columns'>
-      <div class='column'>
-        <div class='appknox-logo'>
-          <ImgLogo />
-        </div>
-      </div>
-      <div class='column content-right top-icons'>
-        <a href='#'>
-          <AkStack
-            @direction='row'
-            @justifyContent='center'
-            @alignItems='center'
-            {{on 'click' this.toggleProfileMenuView}}
-          >
-            <AkIcon @iconName='account-circle' />
-            &nbsp;
-            {{@user.username}}
-            &nbsp;
-            <AkIcon @iconName='arrow-down' />
-          </AkStack>
+<AkAppbar
+  data-test-security-appbar
+  @elevation={{true}}
+  @justifyContent='space-between'
+  @alignItems='center'
+  @position='sticky'
+  local-class='security-top-nav'
+>
+  <AkStack data-test-security-appknox-logo local-class='appknox-logo'>
+    <ImgLogo />
+  </AkStack>
 
-        </a>
-      </div>
+  <AkButton
+    data-test-security-profile-btn
+    @variant='text'
+    @underline='none'
+    {{on 'click' this.toggleProfileMenuView}}
+  >
+    <:leftIcon>
+      <AkIcon
+        {{style fontSize='1.5rem !important'}}
+        @iconName='account-circle'
+      />
+    </:leftIcon>
 
-      <AkPopover
-        @anchorRef={{this.profileAnchorRef}}
-        @placement='bottom'
-        @renderInPlace={{true}}
-        @closeHandler={{this.handleProfileMenuClose}}
-        @clickOutsideToClose={{true}}
-        @containerClass={{this.classes.profileMenuPopoverContainerClass}}
-      >
-        <div class='user-info-popover'>
-          <div class='user-name'>
-            {{@user.username}}
-          </div>
-          <div class='user-email'>
-            {{@user.email}}
-          </div>
-          <div class='content-right'>
-            <a
-              href='#'
-              class='mp-auth-logout highlighted-button'
-              {{on 'click' @logoutAction}}
-            >
-              <AkStack @alignItems='center'>
-                <AkIcon @iconName='logout' @size='small' />
-                &nbsp;
-                {{t 'logout'}}
-              </AkStack>
-            </a>
-          </div>
-        </div>
-      </AkPopover>
-    </div>
-  </div>
-</div>
+    <:default>{{@user.username}}</:default>
+
+    <:rightIcon>
+      <AkIcon @iconName='arrow-drop-down' />
+    </:rightIcon>
+  </AkButton>
+</AkAppbar>
+
+<AkMenu
+  @anchorRef={{this.profileAnchorRef}}
+  @arrow={{true}}
+  @onClose={{this.handleProfileMenuClose}}
+>
+  {{#each this.profileMenuItems as |pmi|}}
+    <AkList::Item
+      data-test-security-profile-menu-item
+      @divider={{not pmi.isLast}}
+      @button={{if pmi.onClick true}}
+      @onClick={{pmi.onClick}}
+    >
+      <AkIcon class='mr-1' @color='textPrimary' @iconName={{pmi.iconName}} />
+      <AkTypography>{{pmi.label}}</AkTypography>
+    </AkList::Item>
+  {{/each}}
+</AkMenu>

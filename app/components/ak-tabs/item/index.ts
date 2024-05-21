@@ -16,6 +16,7 @@ export interface AkTabsItemSignature {
     model?: string;
     models?: string[];
     query?: Record<string, unknown>;
+    currentWhen?: string;
   };
 
   Blocks: {

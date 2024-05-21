@@ -13,6 +13,7 @@ export default class HomePageComponent extends Component {
   @service integration;
   @service notifications;
   @service freshdesk;
+  @service('browser/window') window;
 
   @tracked isLoaded = false;
   @tracked isSecurityEnabled = false;
@@ -60,7 +61,7 @@ export default class HomePageComponent extends Component {
   }
 
   @action securityDashboard() {
-    if (window.location.pathname.startsWith('/security')) {
+    if (this.window.location.pathname.startsWith('/security')) {
       const isSecurityEnabled = this.isSecurityEnabled;
       if (isSecurityEnabled) {
         this.isSecurityDashboard = true;
