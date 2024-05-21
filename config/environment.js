@@ -1,6 +1,5 @@
 const possibleENVS = [
   'IRENE_API_HOST',
-  'IRENE_DEVICEFARM_HOST',
   'IRENE_SHOW_LICENSE',
   'IRENE_ENABLE_HOTJAR',
   'IRENE_ENABLE_PENDO',
@@ -19,7 +18,6 @@ const ENVHandlerCONST = {
   possibleENVS: possibleENVS,
   defaults: {
     IRENE_API_HOST: 'https://api.appknox.com',
-    IRENE_DEVICEFARM_HOST: 'https://devicefarm.appknox.com',
     IRENE_SHOW_LICENSE: false,
     IRENE_ENABLE_HOTJAR: false,
     IRENE_ENABLE_PENDO: false,
@@ -141,7 +139,6 @@ class ENVHandler {
 module.exports = function (environment) {
   const handler = new ENVHandler(ENVHandlerCONST);
   var host = handler.getEnv('IRENE_API_HOST');
-  var devicefarmHost = handler.getEnv('IRENE_DEVICEFARM_HOST');
   var isEnterprise = handler.getBoolean('ENTERPRISE');
   var showLicense = handler.getBoolean('IRENE_SHOW_LICENSE');
   var ENV = {
@@ -220,7 +217,6 @@ module.exports = function (environment) {
     namespace: 'api',
     namespace_v2: 'api/v2',
     host: host,
-    devicefarmHost: devicefarmHost,
     'ember-cli-mirage': {
       enabled: false,
     },

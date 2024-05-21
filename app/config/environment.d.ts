@@ -31,7 +31,6 @@ declare const config: {
   namespace: string;
   namespace_v2: string;
   host: string;
-  devicefarmHost: string;
   'ember-cli-mirage': EmberCLIMirage;
   emblemOptions: EmblemOptions;
   EmberENV: EmberENV;
@@ -61,7 +60,6 @@ export interface ENVHandlerCONST {
 
 export interface Defaults {
   IRENE_API_HOST: string;
-  IRENE_DEVICEFARM_HOST: string;
   IRENE_SHOW_LICENSE: boolean;
   IRENE_ENABLE_HOTJAR: boolean;
   IRENE_ENABLE_PENDO: boolean;
