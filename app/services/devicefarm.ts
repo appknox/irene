@@ -1,5 +1,6 @@
 import Service from '@ember/service';
 import { inject as service } from '@ember/service';
+import ENV from 'irene/config/environment';
 import ConfigurationService from './configuration';
 
 export default class DevicefarmService extends Service {
@@ -21,14 +22,22 @@ export default class DevicefarmService extends Service {
   }
 
   get urlbase() {
-    let base = new URL('/', window.location.href).href;
-
     try {
-      base = new URL('/', this.devicefarmURL).href;
+      const base = new URL('/', this.devicefarmURL).href;
+      return base;
     } catch {
       // empty catch;
     }
 
+    try {
+      const API_HOST = ENV.host;
+      const base = new URL('/', API_HOST).href;
+      return base;
+    } catch {
+      // empty catch;
+    }
+
+    const base = new URL('/', window.location.href).href;
     return base;
   }
 
