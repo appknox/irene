@@ -116,7 +116,6 @@ const initialize = function (application) {
   application.inject('component', 'store', 'service:store');
 
   ENV.host = handler.getEnv('IRENE_API_HOST');
-  ENV.devicefarmHost = handler.getEnv('IRENE_DEVICEFARM_HOST');
   ENV.isEnterprise = handler.getBoolean('ENTERPRISE');
   ENV.showLicense = handler.getBoolean('IRENE_SHOW_LICENSE');
 

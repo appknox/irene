@@ -8,7 +8,6 @@ const staticDir = path.join(__dirname, 'dist');
 
 const ENVs = [
   'IRENE_API_HOST',
-  'IRENE_DEVICEFARM_HOST',
   'IRENE_SHOW_LICENSE',
   'IRENE_ENABLE_HOTJAR',
   'IRENE_ENABLE_PENDO',
