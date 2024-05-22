@@ -1,0 +1,45 @@
+{{#if @isRunning}}
+  <AkStack data-test-system-status-loading @alignItems='center' @spacing='0.5'>
+    <AkLoader @size={{14}} />
+
+    <AkTypography>
+      {{t 'checking'}}
+    </AkTypography>
+  </AkStack>
+
+{{else}}
+  {{#if @isWorking}}
+    <AkStack
+      data-test-system-status-operational
+      @alignItems='center'
+      @spacing='0.5'
+    >
+      <AkIcon @size='small' @iconName='check-circle' @color='success' />
+
+      <AkTypography @color='success'>
+        {{t 'operational'}}
+      </AkTypography>
+    </AkStack>
+
+  {{else}}
+    <AkStack
+      data-test-system-status-unreachable
+      @direction='column'
+      @spacing='0.5'
+    >
+      <AkStack @alignItems='center' @spacing='0.5'>
+        <AkIcon @size='small' @iconName='warning' @color='error' />
+
+        <AkTypography @color='error'>
+          {{t 'unreachable'}}
+        </AkTypography>
+      </AkStack>
+
+      {{#if @message}}
+        <AkTypography @color='textSecondary' @variant='body3'>
+          {{@message}}
+        </AkTypography>
+      {{/if}}
+    </AkStack>
+  {{/if}}
+{{/if}}

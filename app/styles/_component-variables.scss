@@ -1125,4 +1125,9 @@ body {
 
   // variables for home-page/security-dashboard-nav
   --security-dashboard-nav-bg-color: var(--background-main);
+
+  // variables for system-status
+  --system-status-root-container-border-color: var(--neutral-grey-200);
+  --system-status-root-container-box-shadow: var(--box-shadow-3);
+  --system-status-root-container-border-radius: var(--border-radius);
 }
