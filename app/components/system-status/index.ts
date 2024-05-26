@@ -1,5 +1,6 @@
 import Component from '@glimmer/component';
 import { task } from 'ember-concurrency';
+import { isNotFoundError, AjaxError } from 'ember-ajax/errors';
 import ENV from 'irene/config/environment';
 import { inject as service } from '@ember/service';
 import DevicefarmService from 'irene/services/devicefarm';
@@ -27,7 +28,7 @@ export default class SystemStatusComponent extends Component {
 
       await this.ajax.request(status.data.storage, { headers: {} });
     } catch (error) {
-      this.isStorageWorking = false;
+      this.isStorageWorking = !!isNotFoundError(error as AjaxError);
     }
   });
 
