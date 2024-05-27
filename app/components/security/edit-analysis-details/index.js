@@ -285,7 +285,7 @@ export default class EditAnalysisDetailsComponent extends Component {
   }
 
   @action selectStatus(param) {
-    this.analysisDetails.status = param;
+    this.analysisDetails.status = param.value;
   }
 
   @action selectAttackVector(param) {
@@ -513,6 +513,7 @@ export default class EditAnalysisDetailsComponent extends Component {
     let status = this.analysisDetails.status;
     if (typeof status === 'object') {
       status = status.value;
+      this.analysisDetails.status = status.value;
     }
     const analysisid = this.analysis.analysisid;
     const findings = this.analysisDetails.findings;

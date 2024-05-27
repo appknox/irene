@@ -1,0 +1,20 @@
+<AkStack
+  @direction='column'
+  @width='full'
+  local-class='file-details-root'
+  class='px-3'
+>
+  <AkBreadcrumbs::Container>
+    {{#each this.breadcrumbItems as |item|}}
+      <AkBreadcrumbs::Item
+        @route={{item.route}}
+        @model={{item.model}}
+        @linkTitle={{item.linkTitle}}
+      />
+    {{/each}}
+  </AkBreadcrumbs::Container>
+
+  <Security::FileDetailsActions @file={{@file}} />
+
+  <Security::AnalysisList @file={{@file}} />
+</AkStack>

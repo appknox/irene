@@ -1,0 +1,101 @@
+<AkStack
+  @width='full'
+  @direction='column'
+  data-test-securityAnalysisList-table-container
+>
+  {{#if @isFetchingAnalyses}}
+    <AkStack
+      @direction='column'
+      @alignItems='center'
+      local-class='loading'
+      class='pt-7'
+    >
+      <AkSvg::EmptyLoadingList local-class='loading-state-vector' />
+
+      <AkStack
+        @alignItems='center'
+        @justifyContent='center'
+        @spacing='1.5'
+        class='mt-2'
+      >
+        <AkLoader @size={{19}} />
+
+        <AkTypography local-class='loading-text'>
+          Loading analyses list...
+        </AkTypography>
+      </AkStack>
+    </AkStack>
+
+  {{else if this.showEmptyStateUI}}
+    <AkTable as |tb|>
+      <tb.head @columns={{this.columns}} />
+    </AkTable>
+
+    <AkStack
+      @width='full'
+      @direction='column'
+      @alignItems='center'
+      @spacing='2'
+      class='my-4'
+      data-test-securityAnalysisList-table-emptySearchList
+    >
+      <AkSvg::NoResult
+        data-test-securityAnalysisList-table-emptySearchListSvg
+      />
+
+      <AkTypography data-test-securityAnalysisList-table-emptySearchListText>
+        {{#if this.analysisListIsEmpty}}
+          No analysis found.
+        {{else}}
+          No analysis matched your query.
+        {{/if}}
+      </AkTypography>
+    </AkStack>
+
+  {{else}}
+    <AkTable @dense={{true}} as |t|>
+      <t.head
+        @columns={{this.columns}}
+        data-test-vulnerability-analysis-thead
+        as |h|
+      >
+        <h.row as |r|>
+          <r.cell as |columnValue columnMeta|>
+            {{columnValue.name}}
+
+            {{#if columnMeta.isSorted}}
+              <AkIcon
+                {{style verticalAlign='middle'}}
+                @iconName={{if
+                  columnMeta.isSortedAsc
+                  'arrow-drop-up'
+                  'arrow-drop-down'
+                }}
+              />
+            {{/if}}
+          </r.cell>
+        </h.row>
+      </t.head>
+
+      <t.body @rows={{@analyses}} as |b|>
+        <b.row
+          data-test-securityAnalysisListTable-row
+          data-test-securityAnalysisListTable-rowId='{{b.rowValue.id}}'
+          as |r|
+        >
+          <r.cell as |value|>
+            {{#if r.columnValue.component}}
+              {{#let (component r.columnValue.component) as |Component|}}
+                <Component @analysis={{r.rowValue}} />
+              {{/let}}
+            {{else}}
+              <AkTypography>
+                {{value}}
+              </AkTypography>
+            {{/if}}
+          </r.cell>
+        </b.row>
+      </t.body>
+    </AkTable>
+  {{/if}}
+</AkStack>

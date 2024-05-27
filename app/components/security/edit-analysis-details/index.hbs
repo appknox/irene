@@ -57,7 +57,7 @@
         <div class='column is-one-third margin-bottom20'>
           <PowerSelect
             @placeholder='Select Status'
-            @selected={{this.analysisDetails.status}}
+            @selected={{hash value=this.analysisDetails.status}}
             @options={{this.statuses}}
             @onChange={{this.selectStatus}}
             as |status|

@@ -1,22 +1,34 @@
 import { action } from '@ember/object';
 import Component from '@glimmer/component';
 import { tracked } from '@glimmer/tracking';
-import parseError from 'irene/utils/parse-error';
 import { isEmpty } from '@ember/utils';
 import { task } from 'ember-concurrency';
 import { inject as service } from '@ember/service';
+
+import parseError from 'irene/utils/parse-error';
 import ENV from 'irene/config/environment';
 
-export default class SecurityFileAnalysisReportBtnComponent extends Component {
-  @service intl;
-  @service('notifications') notify;
-  @service ajax;
+import type IntlService from 'ember-intl/services/intl';
+import type SecurityFileModel from 'irene/models/security/file';
+
+export interface SecurityFileAnalysisReportBtnSignature {
+  Element: HTMLElement;
+  Args: {
+    file: SecurityFileModel;
+  };
+}
+
+export default class SecurityFileAnalysisReportBtnComponent extends Component<SecurityFileAnalysisReportBtnSignature> {
+  @service declare intl: IntlService;
+  @service('notifications') declare notify: NotificationService;
+  @service('browser/window') declare window: Window;
+  @service declare ajax: any;
 
   @tracked isShowGenerateReportModal = false;
   @tracked emailsToSend = '';
-  @tracked sentEmailIds = [];
+  @tracked sentEmailIds: string[] = [];
   @tracked isReportGenerated = false;
-  modelName = 'security/file-report';
+  @tracked reportMoreMenuRef: HTMLElement | null = null;
 
   get externalReportTypes() {
     return [
@@ -42,6 +54,22 @@ export default class SecurityFileAnalysisReportBtnComponent extends Component {
     return this.args.file.id;
   }
 
+  get emailList() {
+    return this.emailsToSend
+      .split(',')
+      .filter((e) => Boolean(e.trim()))
+      .map((e) => e.trim());
+  }
+
+  @action
+  handleEmailDelete(index: number) {
+    const el = this.emailList;
+
+    el.splice(index, 1);
+
+    this.emailsToSend = el.join(', ');
+  }
+
   @action
   onGenerateReport() {
     this.isShowGenerateReportModal = true;
@@ -55,16 +83,26 @@ export default class SecurityFileAnalysisReportBtnComponent extends Component {
 
   @action
   onCloseModal() {
-    this.isShowCopyPasswordModal = false;
     this.isShowGenerateReportModal = false;
+  }
+
+  @action
+  handleReportMoreMenuOpen(event: MouseEvent) {
+    this.reportMoreMenuRef = event.currentTarget as HTMLElement;
+  }
+
+  @action
+  handleReportMoreMenuClose() {
+    this.reportMoreMenuRef = null;
   }
 
   /**
    * Method to re-generate a new report from security dashboard
    */
-  @task(function* () {
+  generateReport = task(async () => {
     const emails = this.emailsToSend;
-    let data = {};
+    let data: { emails?: string[] } = {};
+
     if (!isEmpty(emails)) {
       data = {
         emails: emails.split(',').map((item) => item.trim()),
@@ -72,8 +110,9 @@ export default class SecurityFileAnalysisReportBtnComponent extends Component {
     }
 
     try {
-      const url = [ENV.endpoints.reports, this.fileId].join('/');
-      yield this.ajax.put(url, {
+      const url = [ENV.endpoints['reports'], this.fileId].join('/');
+
+      await this.ajax.put(url, {
         namespace: 'api/hudson-api',
         data,
         contentType: 'application/json',
@@ -81,26 +120,27 @@ export default class SecurityFileAnalysisReportBtnComponent extends Component {
 
       this.isReportGenerated = true;
       this.emailsToSend = '';
-      this.sentEmailIds = data.emails;
+      this.sentEmailIds = data.emails as string[];
     } catch (error) {
-      this.notify.error(parseError(error), this.intl.t('pleaseTryAgain'));
+      this.notify.error(parseError(error, this.intl.t('pleaseTryAgain')));
     }
-  })
-  generateReport;
+  });
 
   /**
    * Method to download excel report
    */
-  @task(function* (type) {
+  downloadReport = task(async (type) => {
     try {
-      const url = [ENV.endpoints.reports, this.fileId, 'download_url'].join(
+      const url = [ENV.endpoints['reports'], this.fileId, 'download_url'].join(
         '/'
       );
-      const data = yield this.ajax.request(url, {
+
+      const data = await this.ajax.request(url, {
         namespace: 'api/hudson-api',
       });
+
       if (data && data[type.format]) {
-        window.location = data[type.format];
+        this.window.open(data[type.format], '_blank');
       } else {
         this.notify.error(
           this.intl.t('noReportExists', { format: type.label })
@@ -109,6 +149,11 @@ export default class SecurityFileAnalysisReportBtnComponent extends Component {
     } catch (error) {
       this.notify.error(parseError(error, this.intl.t('pleaseTryAgain')));
     }
-  })
-  downloadReport;
+  });
+}
+
+declare module '@glint/environment-ember-loose/registry' {
+  export default interface Registry {
+    'Security::AnalysisReportBtn': typeof SecurityFileAnalysisReportBtnComponent;
+  }
 }

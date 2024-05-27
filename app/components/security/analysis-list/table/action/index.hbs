@@ -1,0 +1,34 @@
+<AkTooltip @title='Mark as Passed' @arrow={{true}}>
+  <AkIconButton
+    @size='small'
+    @variant='outlined'
+    disabled={{this.markAsPassed.isRunning}}
+    {{on 'click' this.openMarkPassedConfirmBox}}
+    data-test-securityAnalysisListTable-markAsPassedIconBtn
+  >
+    {{#if this.markAsPassed.isRunning}}
+      <AkLoader @size={{13}} />
+    {{else}}
+      <AkIcon
+        @iconName='done'
+        @color='success'
+        data-test-securityAnalysisListTable-markAsPassedIcon
+      />
+    {{/if}}
+  </AkIconButton>
+</AkTooltip>
+
+<ConfirmBox
+  @isActive={{this.showMarkPassedConfirmBox}}
+  @title='Are you sure you want to mark this analysis as passed?'
+  @description={{concat
+    'ID '
+    this.analysis.id
+    ' - '
+    this.analysis.vulnerability.name
+    ' (current risk: '
+    (risk-text this.analysis.risk)
+    ')'
+  }}
+  @delegate={{this}}
+/>

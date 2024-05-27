@@ -1,0 +1,68 @@
+.filter-input {
+  border-color: var(--security-analysis-list-filter-border-color) !important;
+  padding: 0px 8px !important;
+
+  :global(.ember-power-select-status-icon) {
+    display: none;
+  }
+
+  &:hover {
+    border-color: var(
+      --security-analysis-list-filter-hover-border-color
+    ) !important;
+  }
+}
+
+.filter-input-dropdown {
+  min-width: max-content !important;
+
+  :global(.ember-power-select-option) {
+    background-color: var(
+      --security-analysis-list-filter-option-background-color
+    ) !important;
+    padding: 0.5em 0.75em !important;
+
+    &[aria-current='true'] {
+      background-color: var(
+        --security-analysis-list-filter-option-hover-background
+      ) !important;
+    }
+  }
+
+  :global(.ember-power-select-options) {
+    padding: 0 !important;
+  }
+}
+
+.search-vulnerability-name-input {
+  font-size: 0.857rem !important;
+}
+
+.divider {
+  width: 1px;
+  height: 32px;
+  background-color: var(--security-analysis-list-divider-background-color);
+  margin-left: 0.714em;
+}
+
+.clear-filter-label {
+  font-size: 0.857rem !important;
+  text-decoration: underline;
+  color: var(--security-analysis-list-clear-filter-color) !important;
+}
+
+.clear-filter-icon {
+  margin-right: 0.2em;
+  color: var(--security-analysis-list-clear-filter-color) !important;
+}
+
+.clear-filter:hover {
+  box-shadow: none;
+
+  &:hover {
+    .clear-filter-icon,
+    .clear-filter-label {
+      color: var(--security-analysis-list-clear-filter-hover-color) !important;
+    }
+  }
+}

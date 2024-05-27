@@ -1,111 +1,133 @@
-<div local-class='report-btn' data-test-report-analysis>
-  <button
-    type='button'
-    class='button is-primary'
-    local-class='btn-container'
-    data-test-report-security-generate-report
+<AkStack @alignItems='center' data-test-securityAnalysisReportBtn-container>
+  <AkButton
+    {{style marginRight='0.75em'}}
     {{on 'click' this.onGenerateReport}}
+    data-test-securityAnalysisReportBtn
   >
     {{t 'generateReport'}}
-  </button>
+  </AkButton>
+
+  <AkIconButton
+    @variant='outlined'
+    {{style padding='0.5em'}}
+    {{on 'click' this.handleReportMoreMenuOpen}}
+    data-test-securityAnalysisReportBtn-moreOptionsBtn
+  >
+    <AkIcon
+      @iconName='more-vert'
+      data-test-securityAnalysisReportBtn-moreOptionsBtn-icon
+    />
+  </AkIconButton>
+
   {{! Download specific reports like excel, HTML etc,. }}
-  <div
-    class='dropdown dropdown--default'
-    local-class='report-download'
-    data-test-report-report-download-dropdown
+  <AkMenu
+    @anchorRef={{this.reportMoreMenuRef}}
+    @onClose={{this.handleReportMoreMenuClose}}
+    @arrow={{true}}
+    as |akm|
   >
-    <BasicDropdown
-      @renderInPlace={{true}}
-      @horizontalPosition='auto-right'
-      as |dd|
-    >
-      <dd.Trigger
-        class='trigger-bootstrap-feel button is-primary'
-        local-class='dd-trigger'
+    {{#each this.externalReportTypes as |it|}}
+      <akm.listItem
+        @button={{true}}
+        @onClick={{perform this.downloadReport it}}
+        @divider={{true}}
+        data-test-securityAnalysisReportBtn-moreOptionsItem='{{it.label}}'
+        as |li|
       >
-        <AkIcon
-          data-test-report-download-trigger
-          local-class='trigger-item'
-          @iconName='more-vert'
-        />
-      </dd.Trigger>
-      <dd.Content @class='dropdown-content dropdown--default-content'>
-        <div class='dropdown-pointer'></div>
-        <div
-          class='dropdown-container'
-          local-class='dd-content'
-          data-test-report-download-content
-        >
-          {{#each this.externalReportTypes as |type seq|}}
-            <a
-              href='#'
-              class='dropdown-item'
-              local-class='report-item'
-              data-test-report-type='{{seq}}'
-              {{on 'click' (perform this.downloadReport type)}}
-            >
-              <AkIcon @iconName={{type.icon}} @size='small' @variant='outlined' />
-              {{t 'download'}}
-              {{type.label}}
-            </a>
-          {{/each}}
-        </div>
-      </dd.Content>
-    </BasicDropdown>
-  </div>
-</div>
-{{#if this.isShowGenerateReportModal}}
-  <AkModal
-    @showHeader={{true}}
-    @headerTitle={{t 'generateReport'}}
-    class='input-modal'
-    @onClose={{this.onCloseModal}}
-  >
-    <div class='card-body'>
-      <div class='card-wrapper'>
+        <li.leftIcon>
+          <AkIcon @size='small' @variant='outlined' @iconName={{it.icon}} />
+        </li.leftIcon>
+
+        <li.text @primaryText='{{t "download"}} {{it.label}}' />
+      </akm.listItem>
+    {{/each}}
+  </AkMenu>
+
+  {{#if this.isShowGenerateReportModal}}
+    <AkModal
+      @showHeader={{true}}
+      @headerTitle={{t 'generateReport'}}
+      @onClose={{this.onCloseModal}}
+      class='input-modal'
+      {{style width='450px'}}
+    >
+      <AkStack
+        @direction='column'
+        @width='full'
+        data-test-securityAnalysisReportBtn-genReportModal
+      >
         {{#if this.isReportGenerated}}
           {{t 'reportGeneratedSuccessfully'}}
+
           {{#if this.sentEmailIds}}
             {{t 'reportSendTo'}}
-            <ul class='email-list'>
+
+            <ul class='my-2 mb-1'>
               {{#each this.sentEmailIds as |email|}}
-                <li>
-                  {{email}}
+                <li class='mb-1'>
+                  <AkChip
+                    @variant='outlined'
+                    @label={{email}}
+                    data-test-securityAnalysisReportBtn-genReportModal-succesEmail='{{email}}'
+                  />
                 </li>
               {{/each}}
             </ul>
           {{/if}}
+
         {{else}}
-          <form class='input-form'>
-            <p class='control'>
-              <Input
-                placeholder='Enter the file number'
-                @type='text'
-                @value={{this.fileId}}
-                disabled={{true}}
-                class='form-control input'
-                aria-label='Enter the file number'
-              />
-            </p>
-            <p class='control'>
-              <Input
-                placeholder='Enter the Email IDs(comma separated)'
-                @type='email'
-                @value={{this.emailsToSend}}
-                class='form-control input'
-                aria-label='Enter the email IDs(comma separated)'
-              />
-            </p>
-            <button
-              type='button'
-              class='is-primary'
+          <AkStack @direction='column' @width='full'>
+            <AkStack
+              @tag='label'
+              @direction='column'
+              @spacing='0.5'
+              for='invite-user-email-input'
+              data-test-securityAnalysisReportBtn-genReportModal-formHeader
+            >
+              <AkTypography @variant='subtitle1'>
+                Emails
+              </AkTypography>
+
+              <AkTypography @variant='body2' @color='textSecondary'>
+                Please enter emails to send report to
+              </AkTypography>
+            </AkStack>
+
+            <AkTextField
+              @formControlClass='my-2 mb-1'
+              @id='invite-user-email-input'
+              @value={{this.emailsToSend}}
+              @autofocus={{true}}
+              @placeholder='Enter the Email IDs (comma separated)'
+              @type='email'
+              class='form-control input'
+              aria-label='Enter the email IDs (comma separated)'
+              data-test-securityAnalysisReportBtn-genReportModal-emailsToSendTextfield
+            />
+
+            <AkStack @spacing='2' {{style flexWrap='wrap'}}>
+              {{#each this.emailList as |email idx|}}
+                <AkChip
+                  @variant='outlined'
+                  @label={{email}}
+                  @onDelete={{fn this.handleEmailDelete idx}}
+                  data-test-securityAnalysisReportBtn-genReportModal-email='{{email}}'
+                />
+              {{/each}}
+            </AkStack>
+
+            <AkButton
+              @disabled={{not this.emailsToSend}}
+              @loading={{this.generateReport.isRunning}}
+              class='mt-3'
               {{on 'click' (perform this.generateReport)}}
+              data-test-securityAnalysisReportBtn-genReportModal-submitBtn
             >
               {{t 'generateReport'}}
-            </button>
-          </form>
+            </AkButton>
+          </AkStack>
         {{/if}}
-      </div>
-    </div>
-  </AkModal>
-{{/if}}
+      </AkStack>
+    </AkModal>
+  {{/if}}
+</AkStack>

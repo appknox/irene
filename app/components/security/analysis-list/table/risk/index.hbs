@@ -1,0 +1,21 @@
+<AkStack @alignItems='center' @spacing='1'>
+  <AnalysisRisk::Tag
+    @computedRisk={{@analysis.risk}}
+    {{style maxWidth='85px'}}
+    data-test-securityAnalysisListTable-analysisRisk
+  />
+
+  {{#if this.riskIsOverriden}}
+    <AkIcon
+      @iconName='east'
+      @size='small'
+      data-test-securityAnalysisListTable-analysisOverriddenIcon
+    />
+
+    <AnalysisRisk::Tag
+      @computedRisk={{this.overridenRisk}}
+      {{style maxWidth='85px'}}
+      data-test-securityAnalysisListTable-analysisOverriddenRisk
+    />
+  {{/if}}
+</AkStack>

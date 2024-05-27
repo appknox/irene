@@ -6,6 +6,7 @@ import Model, {
   AsyncHasMany,
 } from '@ember-data/model';
 import Inflector from 'ember-inflector';
+import { isEmpty } from '@ember/utils';
 
 import ENUMS from 'irene/enums';
 import SecurityFileModel from './file';
@@ -34,9 +35,8 @@ export default class SecurityAnalysisModel extends Model {
   @attr('number')
   declare risk: number;
 
-  // this is made as string because ember power select considers 0 as null value. ref:https://github.com/cibernox/ember-power-select/issues/962
-  @attr('string')
-  declare status: string;
+  @attr('number')
+  declare status: number;
 
   @attr()
   declare attackVector: unknown;
@@ -144,6 +144,16 @@ export default class SecurityAnalysisModel extends Model {
       case ENUMS.RISK.CRITICAL:
         return `is-critical`;
     }
+  }
+
+  hasType(type: number) {
+    const types = this.vulnerability.get('types');
+
+    if (isEmpty(types)) {
+      return false;
+    }
+
+    return types?.includes(type);
   }
 }
 
