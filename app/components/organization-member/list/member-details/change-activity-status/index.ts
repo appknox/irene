@@ -30,22 +30,27 @@ export default class OrganizationMemberChangeActivityComponent extends Component
   }
 
   changeSetting = task(async () => {
-    try {
-      const member = await this.args.member?.member;
+    const member = await this.args.member?.member;
 
-      member?.set('isActive', !member?.get('isActive'));
+    try {
+      const isMemberActive = member?.get('isActive');
+
+      member?.set('isActive', !isMemberActive);
+
       await member?.save();
 
       this.showEditModal = false;
 
-      const message = member?.get('isActive')
-        ? this.intl.t('activated')
-        : this.intl.t('deactivated');
+      const message = isMemberActive
+        ? this.intl.t('deactivated')
+        : this.intl.t('activated');
 
       this.notify.success(`${message} ${member?.username}`);
     } catch (e) {
       const err = e as AdapterError;
       let errMsg = this.intl.t('pleaseTryAgain');
+
+      member?.rollbackAttributes();
 
       if (err.errors && err.errors.length) {
         errMsg = err.errors[0]?.detail || errMsg;

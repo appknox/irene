@@ -161,8 +161,10 @@
   {{/if}}
 </AkPaginationProvider>
 
-<AkDivider class='my-2' @color='dark' />
+{{#if this.me.org.is_owner}}
+  <AkDivider class='my-2' @color='dark' />
 
-<OrganizationMember::List::MemberDetails::ChangeActivityStatus
-  @member={{@member}}
-/>
+  <OrganizationMember::List::MemberDetails::ChangeActivityStatus
+    @member={{@member}}
+  />
+{{/if}}
