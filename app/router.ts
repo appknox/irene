@@ -241,7 +241,9 @@ Router.map(function () {
     path: '/*path',
   });
 
-  this.route('status');
+  this.route('status', { path: 'dashboard/status' });
+
+  this.route('old-status', { path: 'status' });
 });
 
 export const CSBMap = {
