@@ -26,7 +26,7 @@ class FreshdeskStub extends Service {
 }
 
 class ConfigurationStub extends Service {
-  serverData = { urlUploadAllowed: true };
+  serverData = { urlUploadAllowed: true, enterprise: false };
 }
 
 class IntegrationStub extends Service {
@@ -66,12 +66,14 @@ module(
       this.owner.register('service:notifications', NotificationsStub);
       this.owner.register('service:freshdesk', FreshdeskStub);
       this.owner.register('service:integration', IntegrationStub);
+      this.owner.register('service:configuration', ConfigurationStub);
 
       const organization = this.owner.lookup('service:organization');
 
       this.setProperties({
         organization: organization,
         user: store.createRecord('user', this.server.create('user').toJSON()),
+        onToggleOnboardingGuide: () => {},
       });
 
       // handle submissions api for each test
@@ -80,15 +82,8 @@ module(
 
     test.each(
       'it renders organization-dashboard header',
-      [
-        { knowledgeBase: true, hasUploadAppStatus: true, chatSupport: true },
-        {},
-      ],
-      async function (
-        assert,
-        { knowledgeBase, hasUploadAppStatus, chatSupport }
-      ) {
-        this.owner.register('service:configuration', ConfigurationStub);
+      [{ knowledgeBase: true, hasUploadAppStatus: true }, {}],
+      async function (assert, { knowledgeBase, hasUploadAppStatus }) {
         if (hasUploadAppStatus) {
           this.server.createList('submission', 2, {
             status: ENUMS.SUBMISSION_STATUS.VALIDATING,
@@ -101,11 +96,13 @@ module(
 
         const freshdesk = this.owner.lookup('service:freshdesk');
         freshdesk.supportWidgetIsEnabled = knowledgeBase;
-        freshdesk.freshchatEnabled = chatSupport;
 
         await render(hbs`
-        <HomePage::OrganizationDashboard::Header @user={{this.user}} />
-      `);
+          <HomePage::OrganizationDashboard::Header 
+            @user={{this.user}} 
+            @onToggleOnboardingGuide={{this.onToggleOnboardingGuide}} 
+          />
+        `);
 
         assert.dom('[data-test-organizationDashboardHeader]').exists();
 
@@ -126,6 +123,10 @@ module(
           assert.dom('[data-test-uploadAppStatus-icon]').doesNotExist();
         }
 
+        assert
+          .dom('[data-test-organizationDashboardHeader-OnboardingGuideBtn]')
+          .exists();
+
         if (knowledgeBase) {
           assert
             .dom('[data-test-organizationDashboardHeader-KnowledgeBaseBtn]')
@@ -137,13 +138,6 @@ module(
             .doesNotExist();
         }
 
-        if (chatSupport) {
-          assert
-            .dom('[data-test-organizationDashboardHeader-supportBtn]')
-            .isNotDisabled()
-            .hasText('t:support:()');
-        }
-
         assert.dom('[data-test-bell-icon]').isNotDisabled();
 
         assert
@@ -152,6 +146,22 @@ module(
           .hasText(this.user.username);
       }
     );
+
+    test('It should not show onboarding guide for enterprise', async function (assert) {
+      const configuration = this.owner.lookup('service:configuration');
+      configuration.serverData.enterprise = true;
+
+      await render(hbs`
+        <HomePage::OrganizationDashboard::Header 
+          @user={{this.user}} 
+          @onToggleOnboardingGuide={{this.onToggleOnboardingGuide}} 
+        />
+      `);
+
+      assert
+        .dom('[data-test-organizationDashboardHeader-OnboardingGuideBtn]')
+        .doesNotExist();
+    });
 
     test('test Knowledge Base click', async function (assert) {
       assert.expect(5);
@@ -166,7 +176,10 @@ module(
       };
 
       await render(hbs`
-        <HomePage::OrganizationDashboard::Header @user={{this.user}} />
+        <HomePage::OrganizationDashboard::Header 
+          @user={{this.user}} 
+          @onToggleOnboardingGuide={{this.onToggleOnboardingGuide}} 
+        />
       `);
 
       assert.dom('[data-test-organizationDashboardHeader]').exists();
@@ -179,43 +192,64 @@ module(
       await click('[data-test-organizationDashboardHeader-KnowledgeBaseBtn]');
     });
 
-    test('test profile btn and logout', async function (assert) {
-      assert.expect(9);
+    test.each(
+      'test profile btn and logout',
+      [{ chatSupport: true }, { chatSupport: false }],
+      async function (assert, { chatSupport }) {
+        this.set('logoutAction', () => {
+          assert.ok('Logout action called');
+        });
 
-      this.set('logoutAction', () => {
-        assert.ok('Logout action called');
-      });
+        await render(hbs`
+          <HomePage::OrganizationDashboard::Header 
+            @user={{this.user}} 
+            @logoutAction={{this.logoutAction}}
+            @onToggleOnboardingGuide={{this.onToggleOnboardingGuide}}  
+          />
+        `);
 
-      await render(hbs`
-        <HomePage::OrganizationDashboard::Header @user={{this.user}} @logoutAction={{this.logoutAction}} />
-      `);
+        const freshdesk = this.owner.lookup('service:freshdesk');
+        freshdesk.freshchatEnabled = chatSupport;
 
-      assert.dom('[data-test-organizationDashboardHeader]').exists();
+        assert.dom('[data-test-organizationDashboardHeader]').exists();
 
-      assert
-        .dom('[data-test-organizationDashboardHeader-profileBtn]')
-        .isNotDisabled()
-        .hasText(this.user.username);
+        assert
+          .dom('[data-test-organizationDashboardHeader-profileBtn]')
+          .isNotDisabled()
+          .hasText(this.user.username);
 
-      await click('[data-test-organizationDashboardHeader-profileBtn]');
+        await click('[data-test-organizationDashboardHeader-profileBtn]');
 
-      assert
-        .dom('[data-test-organizationDashboardHeader-profileMenuItem]')
-        .exists();
+        assert
+          .dom('[data-test-organizationDashboardHeader-profileMenuItem]')
+          .exists();
 
-      const menuItems = findAll(
-        '[data-test-organizationDashboardHeader-profileMenuItem]'
-      );
+        const menuItems = findAll(
+          '[data-test-organizationDashboardHeader-profileMenuItem]'
+        );
 
-      assert.dom(menuItems[0]).hasText(this.user.username);
-      assert.dom(menuItems[1]).hasText(this.user.email);
-      assert.dom(menuItems[2]).hasText('t:logout:()');
+        assert.dom(menuItems[0]).hasText(this.user.username);
+        assert.dom(menuItems[1]).hasText(this.user.email);
 
-      await click(menuItems[2].querySelector('button'));
+        if (chatSupport) {
+          assert.dom(menuItems[2]).hasText('t:support:()');
+          assert.dom(menuItems[3]).hasText('t:logout:()');
 
-      assert
-        .dom('[data-test-organizationDashboardHeader-profileMenuItem]')
-        .doesNotExist();
-    });
+          await click(menuItems[3].querySelector('button'));
+
+          assert
+            .dom('[data-test-organizationDashboardHeader-profileMenuItem]')
+            .doesNotExist();
+        } else {
+          assert.dom(menuItems[2]).hasText('t:logout:()');
+
+          await click(menuItems[2].querySelector('button'));
+
+          assert
+            .dom('[data-test-organizationDashboardHeader-profileMenuItem]')
+            .doesNotExist();
+        }
+      }
+    );
   }
 );

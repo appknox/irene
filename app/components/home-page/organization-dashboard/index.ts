@@ -21,6 +21,7 @@ export default class HomePageOrganizationDashboardComponent extends Component<Ho
   @service('browser/window') declare window: Window;
 
   @tracked isSidebarCollapsed: boolean;
+  @tracked showOnboardingGuide = false;
 
   constructor(
     owner: unknown,
@@ -42,6 +43,11 @@ export default class HomePageOrganizationDashboardComponent extends Component<Ho
       'sidebarState',
       this.isSidebarCollapsed ? 'collapsed' : 'expanded'
     );
+  }
+
+  @action
+  onToggleOnboardingGuide() {
+    this.showOnboardingGuide = !this.showOnboardingGuide;
   }
 }
 

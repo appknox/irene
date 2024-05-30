@@ -9,6 +9,7 @@
     local-class='dashboard-header'
     @user={{@user}}
     @logoutAction={{@logoutAction}}
+    @onToggleOnboardingGuide={{this.onToggleOnboardingGuide}}
   />
 
   <HomePage::OrganizationDashboard::SideNav
@@ -22,4 +23,10 @@
   <main id='ak-organization-dashboard-main' local-class='dashboard-main'>
     {{yield}}
   </main>
+
+  {{#if this.showOnboardingGuide}}
+    <HomePage::OrganizationDashboard::OnboardingGuide
+      @onClose={{this.onToggleOnboardingGuide}}
+    />
+  {{/if}}
 </div>
