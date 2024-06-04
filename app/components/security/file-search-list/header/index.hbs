@@ -1,0 +1,31 @@
+<AkStack @width='8/12' @alignItems='center' class='mb-3'>
+  <AkBreadcrumbs::Container>
+    {{#each this.breadcrumbItems as |item|}}
+      <AkBreadcrumbs::Item
+        @route={{item.route}}
+        @model={{item.model}}
+        @linkTitle={{item.linkTitle}}
+      />
+    {{/each}}
+  </AkBreadcrumbs::Container>
+</AkStack>
+
+<AkStack
+  @width='8/12'
+  local-class='header-security-file-search-page-title'
+  @alignItems='center'
+  class='mb-4'
+>
+  <AkStack @direction='column' @spacing='0.5'>
+    <AkTypography @variant='h5' data-test-security-file-search-list-heading>
+      List of Files
+    </AkTypography>
+
+    <AkTypography
+      @variant='body2'
+      data-test-security-file-search-list-description
+    >
+      Here you can view all the files of a selected project.
+    </AkTypography>
+  </AkStack>
+</AkStack>

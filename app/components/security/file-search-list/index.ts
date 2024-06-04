@@ -5,20 +5,22 @@ import IntlService from 'ember-intl/services/intl';
 import { inject as service } from '@ember/service';
 import Component from '@glimmer/component';
 import { tracked } from '@glimmer/tracking';
-import { addObserver, removeObserver } from '@ember/object/observers';
 import { task } from 'ember-concurrency';
 import Store from '@ember-data/store';
 import { action } from '@ember/object';
+import RouterService from '@ember/routing/router-service';
 
 import SecurityFileModel from 'irene/models/security/file';
 import parseError from 'irene/utils/parse-error';
 import { PaginationProviderActionsArgs } from 'irene/components/ak-pagination-provider';
 import RealtimeService from 'irene/services/realtime';
+import { SecurityFilesQueryParam } from 'irene/routes/authenticated/security/files';
 
 export interface SecurityFileSearchListSignature {
   Element: HTMLElement;
   Args: {
     projectId: string;
+    queryParams: SecurityFilesQueryParam;
   };
 }
 
@@ -32,17 +34,25 @@ export default class SecurityFileSearchListComponent extends Component<SecurityF
   @service('notifications') declare notify: NotificationService;
   @service('intl') declare intl: IntlService;
   @service('realtime') declare realtime: RealtimeService;
+  @service declare router: RouterService;
 
   @tracked securityFilesQuery: SecurityFilesQueryResponse | null = null;
-  @tracked limit = 10;
-  @tracked offset = 0;
   sortProperties = ['-id'];
 
   constructor(owner: unknown, args: SecurityFileSearchListSignature['Args']) {
     super(owner, args);
 
-    this.fetchSecurityFiles.perform(this.limit, this.offset);
-    addObserver(this.realtime, 'FileCounter', this, this.observeFileCounter);
+    const { app_limit, app_offset } = args.queryParams;
+
+    this.fetchSecurityFiles.perform(app_limit, app_offset, false);
+  }
+
+  get limit() {
+    return Number(this.args.queryParams.app_limit);
+  }
+
+  get offset() {
+    return Number(this.args.queryParams.app_offset);
   }
 
   get sortedSecurityFiles() {
@@ -61,45 +71,69 @@ export default class SecurityFileSearchListComponent extends Component<SecurityF
     return this.totalFiles <= this.limit;
   }
 
+  get columns() {
+    return [
+      {
+        name: 'File ID',
+        valuePath: 'id',
+      },
+      {
+        name: 'File Name',
+        valuePath: 'name',
+      },
+      {
+        name: 'View',
+        component: 'security/file-search-list/view',
+        textAlign: 'center',
+      },
+      {
+        name: 'Download',
+        component: 'security/file-search-list/download',
+        textAlign: 'center',
+      },
+    ];
+  }
+
   @action
   handlePrevNextAction({ limit, offset }: PaginationProviderActionsArgs) {
-    this.limit = limit;
-    this.offset = offset;
-
     this.fetchSecurityFiles.perform(limit, offset);
   }
 
   @action
   handleItemPerPageChange({ limit }: PaginationProviderActionsArgs) {
-    this.limit = limit;
-    this.offset = 0;
-
     this.fetchSecurityFiles.perform(limit, 0);
   }
 
-  fetchSecurityFiles = task(async (limit: number, offset: number) => {
-    try {
-      this.securityFilesQuery = (await this.store.query('security/file', {
-        projectId: this.args.projectId,
-        limit,
-        offset,
-      })) as SecurityFilesQueryResponse;
-    } catch (e) {
-      this.notify.error(parseError(e, this.intl.t('pleaseTryAgain')));
+  fetchSecurityFiles = task(
+    { drop: true },
+    async (
+      limit: string | number,
+      offset: string | number,
+      setQueryParams = true
+    ) => {
+      if (setQueryParams) {
+        this.setRouteQueryParams(limit, offset);
+      }
+
+      try {
+        this.securityFilesQuery = (await this.store.query('security/file', {
+          projectId: this.args.projectId,
+          limit,
+          offset,
+        })) as SecurityFilesQueryResponse;
+      } catch (e) {
+        this.notify.error(parseError(e, this.intl.t('pleaseTryAgain')));
+      }
     }
-  });
+  );
 
-  observeFileCounter() {
-    this.fetchSecurityFiles.perform(this.limit, 0);
-  }
-
-  removeFileCounterObserver() {
-    removeObserver(this.realtime, 'FileCounter', this, this.observeFileCounter);
-  }
-
-  willDestroy() {
-    super.willDestroy();
-    this.removeFileCounterObserver();
+  setRouteQueryParams(limit: string | number, offset: string | number) {
+    this.router.transitionTo({
+      queryParams: {
+        app_limit: limit,
+        app_offset: offset,
+      },
+    });
   }
 }
 

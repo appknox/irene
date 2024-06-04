@@ -1,20 +1,20 @@
-import { action } from '@ember/object';
 import { inject as service } from '@ember/service';
 import Component from '@glimmer/component';
+import { action } from '@ember/object';
 import { task } from 'ember-concurrency';
 import IntlService from 'ember-intl/services/intl';
-import SecurityFileModel from 'irene/models/security/file';
-import parseError from 'irene/utils/parse-error';
-import ENV from 'irene/config/environment';
 
-export interface SecurityFileSearchOverviewSignature {
-  Element: HTMLElement;
+import SecurityFileModel from 'irene/models/security/file';
+import ENV from 'irene/config/environment';
+import parseError from 'irene/utils/parse-error';
+
+export interface SecurityFileSearchListDownloadComponentSignature {
   Args: {
     file: SecurityFileModel;
   };
 }
 
-export default class SecurityFileSearchOverviewComponent extends Component<SecurityFileSearchOverviewSignature> {
+export default class SecurityFileSearchListDownloadComponent extends Component<SecurityFileSearchListDownloadComponentSignature> {
   @service('notifications') declare notify: NotificationService;
   @service('browser/window') declare window: Window;
   @service('intl') declare intl: IntlService;
@@ -46,6 +46,7 @@ export default class SecurityFileSearchOverviewComponent extends Component<Secur
 
 declare module '@glint/environment-ember-loose/registry' {
   export default interface Registry {
-    'Security::FileSearchOverview': typeof SecurityFileSearchOverviewComponent;
+    'Security::FileSearchList::Download': typeof SecurityFileSearchListDownloadComponent;
+    'security/file-search-list/download': typeof SecurityFileSearchListDownloadComponent;
   }
 }

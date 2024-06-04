@@ -2,13 +2,14 @@
   data-test-security-appbar
   @elevation={{true}}
   @justifyContent='space-between'
-  @alignItems='center'
   @position='sticky'
   local-class='security-top-nav'
 >
   <AkStack data-test-security-appknox-logo local-class='appknox-logo'>
     <ImgLogo />
   </AkStack>
+
+  <Security::NavMenu />
 
   <AkButton
     data-test-security-profile-btn
