@@ -30,7 +30,6 @@ export default class EditAnalysisDetailsComponent extends Component {
   @tracked showMarkPassedConfirmBox = false;
   @tracked showRemoveFileConfirmBox = false;
 
-  risks = ENUMS.RISK.CHOICES;
   scopes = ENUMS.SCOPE.CHOICES;
   statuses = ENUMS.ANALYSIS_STATUS.CHOICES;
   attackVectors = ENUMS.ATTACK_VECTOR.CHOICES;
@@ -48,20 +47,6 @@ export default class EditAnalysisDetailsComponent extends Component {
 
   get analysis() {
     return this.args.analysis;
-  }
-
-  get overridenRisk() {
-    // KNOWN BUG: If the value of 0 happens to be selected then nothing is shown in the selected field
-    // even if the option is visible in the dropdown
-    // ref: https://github.com/cibernox/ember-power-select/issues/962
-    // work around: https://github.com/cibernox/ember-power-select/issues/962#issuecomment-321563158
-    const risk = this.analysisDetails.overriddenRisk;
-
-    return isEmpty(risk) ? null : { value: risk };
-  }
-
-  get riskIsOverriden() {
-    return this.analysisDetails.overriddenRisk !== null;
   }
 
   get ireneFilePath() {
@@ -138,10 +123,6 @@ export default class EditAnalysisDetailsComponent extends Component {
     }
 
     return null;
-  }
-
-  get isPassedRisk() {
-    return this.analysisDetails?.risk == ENUMS.RISK.NONE;
   }
 
   get availableFindings() {
@@ -376,10 +357,6 @@ export default class EditAnalysisDetailsComponent extends Component {
     this.analysisDetails.nistsp80053 = param;
   }
 
-  @action selectOverriddenRisk(param) {
-    this.analysisDetails.overriddenRisk = param.value;
-  }
-
   @action addFinding() {
     const findingTitle = this.findingTitle;
     const findingDescription = this.findingDescription;
@@ -436,11 +413,6 @@ export default class EditAnalysisDetailsComponent extends Component {
         }
       }
     );
-  }
-
-  @action resetOverriddenAnalysis() {
-    this.analysisDetails.overriddenRisk = null;
-    this.analysisDetails.overriddenRiskComment = null;
   }
 
   @task(function* () {

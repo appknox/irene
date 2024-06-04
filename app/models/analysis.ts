@@ -67,11 +67,20 @@ export default class AnalysisModel extends Model {
   @attr('number')
   declare computedRisk: number;
 
-  @attr('number')
+  @attr('number', { defaultValue: null })
   declare overriddenRisk: number | null;
 
-  @attr('string')
+  @attr('string', { defaultValue: null })
   declare overriddenRiskComment: string | null;
+
+  @attr('string', { defaultValue: null })
+  declare overrideCriteria: string | null;
+
+  @attr('string', { defaultValue: null })
+  declare overriddenBy: string | null;
+
+  @attr('date')
+  declare overriddenDate: Date | null;
 
   @attr('number')
   declare analiserVersion: string;
@@ -120,6 +129,9 @@ export default class AnalysisModel extends Model {
 
   @belongsTo('file', { inverse: 'analyses' })
   declare file: AsyncBelongsTo<FileModel>;
+
+  @attr('date')
+  declare updatedOn: Date;
 
   get tLow() {
     return this.intl.t('low');
@@ -193,8 +205,16 @@ export default class AnalysisModel extends Model {
     return !isEmpty(this.overriddenRisk);
   }
 
+  /**
+   * Risk was overridden and not passed by system
+   * This is used to show overridden icon
+   */
   get isNonPassedRiskOverridden() {
-    return this.overriddenRisk !== null && this.risk !== ENUMS.RISK.NONE;
+    return this.isOverriddenRisk && !this.isRiskPassedBySystem;
+  }
+
+  get isRiskPassedBySystem() {
+    return this.risk === ENUMS.RISK.NONE;
   }
 
   get isScanning() {
@@ -205,6 +225,15 @@ export default class AnalysisModel extends Model {
   get isRisky() {
     const risk = this.computedRisk;
     return ![ENUMS.RISK.NONE, ENUMS.RISK.UNKNOWN].includes(risk);
+  }
+
+  /**
+   * Risk was overridden as Passed and not passed by system
+   */
+  get isOverriddenAsPassed() {
+    return (
+      this.overriddenRisk === ENUMS.RISK.NONE && !this.isRiskPassedBySystem
+    );
   }
 
   get riskIconClass() {

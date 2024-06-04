@@ -1,7 +1,7 @@
 import Component from '@glimmer/component';
 
 export interface AnalysisRiskOverriddenIconSignature {
-  Element: Element;
+  Element: SVGElement;
 }
 
 export default class AnalysisRiskOverriddenIconComponent extends Component<AnalysisRiskOverriddenIconSignature> {}

@@ -22,6 +22,11 @@ const ENUMS = {
     COMPLETED: 3,
   },
 
+  ANALYSIS_OVERRIDE_CRITERIA: {
+    CURRENT_FILE: 'current_file' as const,
+    ALL_FUTURE_UPLOAD: 'all_future_upload' as const,
+  },
+
   OFFER: {
     NONE: 0,
     CUSTOM: 2,

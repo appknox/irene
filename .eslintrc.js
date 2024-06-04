@@ -26,6 +26,7 @@ module.exports = {
     '@typescript-eslint/no-explicit-any': 'warn',
     'no-debugger': 'error',
     'ember/no-empty-glimmer-component-classes': 'off',
+    'ember/no-pause-test': 'error',
   },
   overrides: [
     // node files

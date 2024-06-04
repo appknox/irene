@@ -353,6 +353,18 @@
   "fetchGitHubRepoFailed": "リポジトリリストの取得時に問題が発生しました",
   "fetchProjectFailed": "プロジェクトリストの取得時に問題が発生しました",
   "file": "File",
+  "fileAnalysisDetails": {
+    "currentFileResetOrRemoveOverrideConfirmTitle": "Do you want to reset the override for the current file alone or remove it completely ?",
+    "currentFileResetConfirmTitle": "Are you sure you want to reset the severity of this vulnerability to its original severity ?",
+    "resetForTheCurrentFile": "Reset for the Current File",
+    "removeOverride": "Remove Override",
+    "currentFileResetSuccessMessage": "The severity of this vulnerability has been reset to its original severity for the current file.",
+    "removeOverrideSuccessMessage": "You have successfully removed the override that was set for this vulnerability.",
+    "editAnalysisResetConfirmNoteTitle": "Note - Remove Override",
+    "editAnalysisResetConfirmNoteText": "If you select this option, our system will flag this vulnerability with its original severity for all the subsequent uploads of this application.",
+    "overrideSuccessMessage": "The severity of this vulnerability has been successfully changed from",
+    "ignoreVulnerabilityHelperText": "Ignoring this vulnerability would set the status to 'Passed'. Findings and other details associated with it will continue to be available on this page and in the Summary reports."
+  },
   "fileCleanup": {
     "title": "Automated file cleanup",
     "autoCleanup": "Auto cleanup",
@@ -479,6 +491,23 @@
   "idpMetadataDelete": "Delete IdP Metadata Config",
   "idpMetadataEdit": "Edit IdP Metadata XML if any change is required before uploading:",
   "idpMetadataUpload": "Upload your IdP Metadata XML file",
+  "editOverrideVulnerability": {
+    "nameOfTheVulnerability": "Name of the Vulnerability",
+    "overriddenAs": "Overridden as",
+    "overriddenOn": "Overridden on",
+    "overriddenBy": "Overridden by",
+    "overriddenSeverity": "Overridden Severity",
+    "overrideTo": "Override to",
+    "selectTheSeverity": "Select the Severity",
+    "selectACriteria": "Select a Criteria",
+    "reasonForOverridePlaceholder": "Enter the reason for override...",
+    "emptyReasonErrorText": "Please add a reason it cannot be blank.",
+    "emptySeverityErrorText": "Please select a severity.",
+    "emptyCriteriaErrorText": "Please select a criteria.",
+    "emptySeverityCriteriaErrorText": "Please select a severity and criteria."
+  },
+  "ignoreVulnerability": "Ignore Vulnerability",
+  "ignoreVulnerabilityFileChartMessage": "Out of this, {overridenPassedRiskCount, plural, =1 {# vulnerability was} other {# vulnerabilities were}} manually overridden to ‘Passed’.",
   "impact": "Impact",
   "improved": "改善",
   "inactive": "inactive",
@@ -887,6 +916,7 @@
   "overridden": "Overridden",
   "overriddenRisk": "Overridden Risk",
   "overrideRisk": "Override Risk",
+  "overrideDetails": "Override Details",
   "overview": "Overview",
   "owasp": "OWASP",
   "owaspmobile2024": "OWASP Mobile Top 10 (2024)",
@@ -1018,6 +1048,12 @@
     "drawerTitles": {
       "addCollaborator": "Add collaborator to project",
       "addTeam": "Allow teams to access this project"
+    },
+    "vulnerabilityPreference": {
+      "ignoreVulnerabilityHelperText": "Ignoring a Vulnerability would set the severity of this issue to 'Passed'.",
+      "overrideSuccessMessage": "The severity of this vulnerability has been successfully changed",
+      "resetSuccessMessage": "The severity of this vulnerability has been reset.",
+      "resetConfirmTitle": "Are you sure you want to reset the severity of this vulnerability ?"
     }
   },
   "projectUpdated": "Project updated successfully.",
@@ -1040,6 +1076,7 @@
   "proxyTurned": "Proxy turned ",
   "proxyWarning": "Please check if you have enabled proxy",
   "quarterly": "３か月",
+  "reason": "Reason",
   "reasonForOverride": "Reason for override",
   "reconnect": "Reconnet",
   "reconnectGotoSettings": "is not integrated, something went wrong you can go to settings &amp; reconnect by",
@@ -1093,6 +1130,7 @@
   "resetPasswordMessageToCheck": "Check your email for a link to reset your password. If it doesn't appear within a few minutes, check your spam folder.",
   "resetPasswordMessageToRetry": "If you are not receiving new emails after a few attempts, please retry after 24 hours or contact support.",
   "resetToDefault": "Reset to default",
+  "resetOverride": "Reset Override",
   "resetOverriddenAnalysis": "Reset Overridden Analysis",
   "resolved": "resolved",
   "revokeGithub": "Githubを取り消す",
@@ -1269,6 +1307,7 @@
   "subscriptionExpired": "サブスクリプションの期限切れ ",
   "subscriptionWillExpire": "サブスクリプションは失効します",
   "subscriptionWillExpireOn": "サブスクリプションの有効期限：",
+  "successMessage": "Success Message",
   "successfullyOverridden": "You have successfully overridden this analysis",
   "successfullyReset": "You have successfully reverted back to orginal risk of this analysis",
   "summary": "サマリー",

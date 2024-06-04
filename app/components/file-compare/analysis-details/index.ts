@@ -2,6 +2,8 @@ import Component from '@glimmer/component';
 import { inject as service } from '@ember/service';
 import { htmlSafe } from '@ember/template';
 import IntlService from 'ember-intl/services/intl';
+
+import ENUMS from 'irene/enums';
 import AnalysisModel from 'irene/models/analysis';
 
 export interface FileCompareAnalysisDetailsSignature {
@@ -17,6 +19,14 @@ export default class FileCompareAnalysisDetailsComponent extends Component<FileC
 
   get analysis() {
     return this.args.analysis || null;
+  }
+
+  get isMarkedAsPassed() {
+    return this.analysis?.overriddenRisk === ENUMS.RISK.NONE;
+  }
+
+  get isMarkedAsPassedOrRisky() {
+    return this.isMarkedAsPassed || this.analysis?.isRisky;
   }
 
   get regulatoryContent() {
@@ -41,7 +51,7 @@ export default class FileCompareAnalysisDetailsComponent extends Component<FileC
       return htmlSafe(this.vulnerability?.get?.('question') || '');
     }
 
-    if (this.analysis?.isRisky) {
+    if (this.isMarkedAsPassedOrRisky) {
       return this.vulnerability?.get?.('descriptionUnescapedd');
     }
 

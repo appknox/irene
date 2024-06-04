@@ -1,0 +1,194 @@
+{{#if this.showOverrideSuccess}}
+  <AkStack
+    @direction='column'
+    @spacing='2'
+    @alignItems='center'
+    @justifyContent='center'
+    class='py-6 px-3'
+  >
+    <AkSvg::SeverityOverrideSuccess
+      data-test-analysisRisk-overrideEditDrawer-overrideForm-successSvg
+    />
+
+    <AkTypography
+      {{style width='300px'}}
+      class='mt-3'
+      @variant='h6'
+      @align='center'
+      data-test-analysisRisk-overrideEditDrawer-overrideForm-successMsg
+    >
+      {{@dataModel.overrideSuccessMessage}}
+    </AkTypography>
+
+    {{#if @dataModel.showOverrideSuccessOriginalToOverriddenRisk}}
+      <AkStack
+        local-class='override-success-severity-container'
+        @alignItems='center'
+        @justifyContent='center'
+        data-test-analysisRisk-overrideEditDrawer-overrideForm-successFromToRisk
+      >
+        <AnalysisRisk::Text
+          data-test-analysisRisk-overrideEditDrawer-overrideForm-successOriginalRisk
+          @risk={{@dataModel.risk}}
+          @fontWeight='medium'
+        />
+
+        <AkIcon
+          @size='small'
+          @color='textSecondary'
+          @iconName='east'
+          data-test-analysisRisk-overrideEditDrawer-overrideForm-successFromToRiskIcon
+        />
+
+        <AnalysisRisk::Text
+          data-test-analysisRisk-overrideEditDrawer-overrideForm-successOverriddenRisk
+          @risk={{@dataModel.overriddenRisk}}
+          @fontWeight='medium'
+        />
+      </AkStack>
+    {{/if}}
+  </AkStack>
+{{else}}
+  <AnalysisRisk::OverrideEditDrawer::VulnerabilityName
+    @dataModel={{@dataModel}}
+  />
+
+  <AkDivider @color='dark' />
+
+  <div class='p-3'>
+    <AkStack @direction='column' @spacing='1'>
+      <AkTypography
+        data-test-analysisRisk-overrideEditDrawer-overrideForm-overrideToLabel
+        @variant='h6'
+        @color='textSecondary'
+        {{style fontSize='0.857rem'}}
+      >
+        {{t 'editOverrideVulnerability.overrideTo'}}
+      </AkTypography>
+
+      <AkStack @alignItems='center'>
+        <AkSelect
+          {{style width='180px'}}
+          data-test-analysisRisk-overrideEditDrawer-overrideForm-overrideToSelect
+          @options={{this.filteredRisks}}
+          @selected={{this.selectedRiskToOverride}}
+          @onChange={{this.handleOverrideRiskChange}}
+          @placeholder='{{t "editOverrideVulnerability.selectTheSeverity"}}'
+          @error={{this.isObjectTruthy (get this.changeset.error 'risk')}}
+          as |aks|
+        >
+          {{this.riskSelectOptionLabel aks.value}}
+        </AkSelect>
+
+        <AnalysisRisk::OverrideEditDrawer::Divider @label='{{t "for"}}' />
+
+        {{#if this.criteriaTextIfSingleOption}}
+          <AkTypography
+            data-test-analysisRisk-overrideEditDrawer-overrideForm-overrideCriteriaText
+            class='px-1'
+          >
+            {{this.criteriaTextIfSingleOption}}
+          </AkTypography>
+        {{else}}
+          <AkSelect
+            {{style width='160px'}}
+            data-test-analysisRisk-overrideEditDrawer-overrideForm-criteriaSelect
+            @options={{this.overrideRiskForOptions}}
+            @selected={{this.selectedOverrideCriteria}}
+            @onChange={{this.handleOverrideCriteriaChange}}
+            @placeholder='{{t "editOverrideVulnerability.selectACriteria"}}'
+            @error={{this.isObjectTruthy (get this.changeset.error 'criteria')}}
+            as |aks|
+          >
+            {{aks.label}}
+          </AkSelect>
+        {{/if}}
+      </AkStack>
+
+      {{#if this.riskOrCriteriaSelectValidationMessage}}
+        <AkTypography
+          data-test-analysisRisk-overrideEditDrawer-overrideForm-riskCriteriaSelectError
+          @color='error'
+          {{style fontSize='0.857rem'}}
+        >
+          {{this.riskOrCriteriaSelectValidationMessage}}
+        </AkTypography>
+      {{else}}
+        {{#if this.isIgnoreVulnerabilitySelected}}
+          <AkStack
+            data-test-analysisRisk-overrideEditDrawer-overrideForm-overrideSelectHelperText
+            class='mt-1'
+            @spacing='1'
+          >
+            <AkIcon
+              {{style marginTop='0.15em'}}
+              @iconName='info'
+              @size='small'
+            />
+
+            <AkTypography @color='textSecondary' {{style fontSize='0.857rem'}}>
+              {{@dataModel.ignoreVulnerabilityHelperText}}
+            </AkTypography>
+          </AkStack>
+        {{/if}}
+      {{/if}}
+    </AkStack>
+
+    <AkStack @direction='column' @spacing='1' class='mt-3'>
+      <AkTypography
+        @variant='h6'
+        @color='textSecondary'
+        @tag='label'
+        {{style fontSize='0.857rem'}}
+        data-test-analysisRisk-overrideEditDrawer-overrideForm-commentLabel
+      >
+        {{t 'reason'}}
+      </AkTypography>
+
+      <Textarea
+        data-test-analysisRisk-overrideEditDrawer-overrideForm-commentInput
+        rows='6'
+        aria-label='Overridden Risk Comment'
+        placeholder='{{t
+          "editOverrideVulnerability.reasonForOverridePlaceholder"
+        }}'
+        @value={{this.changeset.comment}}
+        local-class='
+          textarea-input
+          {{if (get this.changeset.error "comment") "textarea-error"}}'
+      />
+
+      {{#if (get this.changeset.error 'comment')}}
+        <AkTypography
+          data-test-analysisRisk-overrideEditDrawer-overrideForm-commentInputError
+          @color='error'
+          {{style fontSize='0.857rem'}}
+        >
+          {{t 'editOverrideVulnerability.emptyReasonErrorText'}}
+        </AkTypography>
+      {{/if}}
+    </AkStack>
+  </div>
+
+  <AkDivider @color='dark' />
+
+  <AkStack class='px-3 py-2' @alignItems='center' @spacing='2'>
+    <AkButton
+      data-test-analysisRisk-overrideEditDrawer-overrideForm-saveBtn
+      @loading={{this.editSaveOverrideHandlerTask.isRunning}}
+      {{on 'click' this.markAnalysis}}
+    >
+      {{t 'save'}}
+    </AkButton>
+
+    <AkButton
+      data-test-analysisRisk-overrideEditDrawer-overrideForm-cancelBtn
+      @variant='outlined'
+      @color='neutral'
+      @disabled={{this.editSaveOverrideHandlerTask.isRunning}}
+      {{on 'click' this.handleEditOverriddenRiskCancel}}
+    >
+      {{t 'cancel'}}
+    </AkButton>
+  </AkStack>
+{{/if}}

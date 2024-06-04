@@ -20,7 +20,7 @@ export default Factory.extend({
   ],
 
   isIgnored: faker.datatype.boolean(),
-  overridenRisk: faker.helpers.arrayElement([null, 1, 2, 3, 4]),
+  overriden_risk: faker.helpers.arrayElement([null, 1, 2, 3, 4]),
   status: faker.helpers.arrayElement(ENUMS.ANALYSIS.VALUES),
   created_on: faker.date.past(),
   updated_on: faker.date.past(),

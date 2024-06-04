@@ -1,0 +1,34 @@
+.textarea-input {
+  border: 1px solid
+    var(
+      --analysis-risk-override-edit-drawer-override-form-textarea-border-color
+    );
+  border-radius: var(
+    --analysis-risk-override-edit-drawer-override-form-border-radius
+  );
+  color: var(--analysis-risk-override-edit-drawer-override-form-textarea-color);
+  display: inline-flex;
+  justify-content: flex-start;
+  align-items: center;
+  padding: 0.75em;
+  max-width: 100%;
+  width: 100%;
+
+  &.textarea-error {
+    border-color: var(
+      --analysis-risk-override-edit-drawer-override-form-error-color
+    );
+  }
+}
+
+.override-success-severity-container {
+  border: 1px solid
+    var(
+      --analysis-risk-override-edit-drawer-override-form-severity-container-border-color
+    );
+  border-radius: var(
+    --analysis-risk-override-edit-drawer-override-form-border-radius
+  );
+  padding: 0.5em 0.75em;
+  gap: 0.75em;
+}

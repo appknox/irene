@@ -1,13 +1,14 @@
 import { inject as service } from '@ember/service';
 import Component from '@glimmer/component';
-import { task } from 'ember-concurrency';
-import IntlService from 'ember-intl/services/intl';
-import Store from '@ember-data/store';
-
-import { ECOption } from 'irene/components/ak-chart';
-import FileModel from 'irene/models/file';
 import { tracked } from '@glimmer/tracking';
-import UnknownAnalysisStatusModel from 'irene/models/unknown-analysis-status';
+import { task } from 'ember-concurrency';
+import type IntlService from 'ember-intl/services/intl';
+import type Store from '@ember-data/store';
+
+import ENUMS from 'irene/enums';
+import { type ECOption } from 'irene/components/ak-chart';
+import type UnknownAnalysisStatusModel from 'irene/models/unknown-analysis-status';
+import type FileModel from 'irene/models/file';
 
 export interface FileChartSignature {
   Element: HTMLElement;
@@ -57,6 +58,7 @@ export default class FileChartComponent extends Component<FileChartSignature> {
         value: file?.get('countRiskNone'),
         name: this.intl.t('passed'),
         severityType: 'passed',
+        hasOverridenPassedRisks: this.hasOverridenPassedRisks,
       },
     ];
 
@@ -69,6 +71,24 @@ export default class FileChartComponent extends Component<FileChartSignature> {
     }
 
     return severityCountObjects;
+  }
+
+  get overridenPassedRiskCount() {
+    return (
+      this.args.file
+        ?.get('analyses')
+        .reduce(
+          (count, a) =>
+            a.isOverriddenAsPassed && a.status === ENUMS.ANALYSIS.COMPLETED
+              ? count + 1
+              : count,
+          0
+        ) || 0
+    );
+  }
+
+  get hasOverridenPassedRisks() {
+    return this.overridenPassedRiskCount > 0;
   }
 
   get totalRiskCount() {
