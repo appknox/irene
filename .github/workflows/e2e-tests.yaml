@@ -9,6 +9,9 @@ on:
     types: [opened, reopened, ready_for_review]
 
   workflow_dispatch:
+    inputs:
+      setupJSON:
+        description: 'Setup JSON'
 
 concurrency:
   group: ${{ github.repository }}-concurrency-for-e2e
@@ -53,15 +56,16 @@ jobs:
       - name: Cypress run
         uses: cypress-io/github-action@v6
         env:
-          CYPRESS_TEST_USERNAME: ${{ secrets.CYPRESS_TEST_USERNAME}}
-          CYPRESS_TEST_PASSWORD: ${{ secrets.CYPRESS_TEST_PASSWORD }}
+          CYPRESS_TEST_USERNAME: ${{ fromJSON(github.event.inputs.setupJSON).username || secrets.CYPRESS_TEST_USERNAME }}
+          CYPRESS_TEST_PASSWORD: ${{ fromJSON(github.event.inputs.setupJSON).password || secrets.CYPRESS_TEST_PASSWORD }}
           CYPRESS_RECORD_KEY: ${{ secrets.CYPRESS_TEST_RECORD_ID}}
           CYPRESS_PROJECT_ID: ${{ secrets.CYPRESS_TEST_PROJECT_ID }}
-          CYPRESS_DYNAMIC_SCAN_SYSTEM_APK_FILE_ID: ${{ vars.CYPRESS_DYNAMIC_SCAN_SYSTEM_APK_FILE_ID }}
-          CYPRESS_DYNAMIC_SCAN_SYSTEM_IPA_FILE_ID: ${{ vars.CYPRESS_DYNAMIC_SCAN_SYSTEM_IPA_FILE_ID }}
+          CYPRESS_DYNAMIC_SCAN_SYSTEM_APK_FILE_ID: ${{ fromJSON(github.event.inputs.setupJSON).dynamicScanSystemApkFileId || vars.CYPRESS_DYNAMIC_SCAN_SYSTEM_APK_FILE_ID }}
+          CYPRESS_DYNAMIC_SCAN_SYSTEM_IPA_FILE_ID: ${{ fromJSON(github.event.inputs.setupJSON).dynamicScanSystemIpaFileId || vars.CYPRESS_DYNAMIC_SCAN_SYSTEM_IPA_FILE_ID }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          IRENE_API_HOST: ${{ fromJSON(github.event.inputs.setupJSON).apiHost || 'https://api.appknox.com' }}
         with:
-          start: npm run startprod
+          start: npx ember serve
           browser: chrome
           install: false
           config: pageLoadTimeout=100000
