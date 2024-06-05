@@ -1342,11 +1342,11 @@
   "uploadAppModule": {
     "linkPastePlaceholder": "Paste the link here...",
     "viaLink": "Via Link",
-    "supportedStores": "Supported Stores",
-    "stores": "Google Play Store and Apple App Store",
+    "supportedStores": "Supported Store",
+    "stores": "Google Play Store",
     "linkUploadPopupHeader": "Upload using a link",
     "linkInputLabel": "Add a link",
-    "validURLFormatTitle": "Valid URL Formats :"
+    "validURLFormatTitle": "Valid URL Format :"
   },
   "uploadCount": "Upload Count",
   "uploadStatus": "Upload Status",
