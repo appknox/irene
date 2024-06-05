@@ -1,11 +1,8 @@
-// eslint-disable-next-line ember/use-ember-data-rfc-395-imports
-import { DS } from 'ember-data';
 import Route from '@ember/routing/route';
 import OrganizationService from 'irene/services/organization';
 import Store from '@ember-data/store';
 import { inject as service } from '@ember/service';
-import { AppMonitoringDetailsQueryParams } from '../monitoring-details';
-import AmAppSyncModel from 'irene/models/am-app-sync';
+import { AppMonitoringDetailsQueryParams } from 'irene/routes/authenticated/dashboard/app-monitoring/monitoring-details';
 
 export default class AuthenticatedDashboardAppMonitoringMonitoringDetailsHistoryRoute extends Route {
   @service declare organization: OrganizationService;
@@ -19,17 +16,13 @@ export default class AuthenticatedDashboardAppMonitoringMonitoringDetailsHistory
     }
   }
 
-  async model(): Promise<DS.AdapterPopulatedRecordArray<AmAppSyncModel>> {
+  async model() {
     const { am_app_id } = this.paramsFor(
       this.parentRoute
     ) as AppMonitoringDetailsQueryParams;
 
-    const amAppSyncs = await this.store.query('am-app-sync', {
-      amAppId: am_app_id,
-      limit: 4,
-      offset: 0,
-    });
+    const amApp = this.store.peekRecord('am-app', am_app_id);
 
-    return amAppSyncs;
+    return amApp;
   }
 }

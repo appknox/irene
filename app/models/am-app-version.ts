@@ -1,6 +1,7 @@
 import Model, { attr, belongsTo, AsyncBelongsTo } from '@ember-data/model';
 import AmAppModel from './am-app';
 import FileModel from './file';
+import SubmissionModel from './submission';
 
 export default class AmAppVersionModel extends Model {
   @attr('string')
@@ -23,6 +24,9 @@ export default class AmAppVersionModel extends Model {
 
   @belongsTo('am-app')
   declare amApp: AsyncBelongsTo<AmAppModel>;
+
+  @belongsTo('submission')
+  declare uploadSubmission: AsyncBelongsTo<SubmissionModel>;
 
   @belongsTo('file', { inverse: null })
   declare latestFile: AsyncBelongsTo<FileModel>;

@@ -2,6 +2,8 @@
 import { AsyncBelongsTo, attr, belongsTo } from '@ember-data/model';
 import { ModelBaseMixin } from 'irene/mixins/base-model';
 import { isEmpty } from '@ember/utils';
+import { inject as service } from '@ember/service';
+import IntlService from 'ember-intl/services/intl';
 
 import ENUMS from 'irene/enums';
 import UserModel from './user';
@@ -24,6 +26,8 @@ export const submissionStatusProgressPercentage = {
 };
 
 export default class SubmissionModel extends ModelBaseMixin {
+  @service declare intl: IntlService;
+
   @belongsTo('user', { inverse: 'submissions' })
   declare user: AsyncBelongsTo<UserModel>;
 

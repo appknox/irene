@@ -176,7 +176,9 @@ Router.map(function () {
             this.route(
               'monitoring-details',
               { path: '/monitoring-details/:am_app_id' },
-              function () {}
+              function () {
+                this.route('history');
+              }
             );
           }
         );

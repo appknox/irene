@@ -53,30 +53,37 @@
         </AkTypography>
       </AkStack>
 
-      {{! This is to hide the monitoring action button until it's ready for release }}
-      {{!-- <AkStack
-          @direction='column'
-          @alignItems='flex-start'
-          @justifyContent='center'
-          local-class='monitoring-toggle-container'
+      <AkStack
+        @direction='column'
+        @alignItems='flex-start'
+        @justifyContent='center'
+        local-class='monitoring-toggle-container'
+      >
+        <AkTypography
+          @tag='p'
+          @variant='h6'
+          @color='secondary'
+          @gutterBottom={{true}}
+          data-test-app-monitoring-status-toggle-text
         >
-          <AkTypography
-            @tag='p'
-            @variant='h6'
-            @color='secondary'
-            @gutterBottom={{true}}
-          >
-            {{t 'appMonitoringModule.monitoringAction'}}
-          </AkTypography>
+          {{t 'appMonitoringModule.monitoringStatus'}}
+        </AkTypography>
 
+        <AkStack @alignItems='center' @spacing='1'>
           <AkToggle
             @size='small'
-            @checked={{@amApp.monitoringEnabled}}
+            @onChange={{this.onMonitoringActionToggle}}
+            @checked={{@amApp.isActive}}
+            @disabled={{this.disableAppMonitoringToggle}}
             local-class='monitoring-toggle'
             data-test-app-monitoring-toggle
           />
-        </AkStack> --}}
 
+          {{#if this.toggleAmAppMonitoring.isRunning}}
+            <AkLoader @size={{14}} />
+          {{/if}}
+        </AkStack>
+      </AkStack>
     </AkStack>
 
     <AkStack @direction='column' local-class='monitoring-details-container'>
@@ -87,6 +94,7 @@
             @variant='body1'
             @color='textSecondary'
             local-class='details-header'
+            data-test-app-latest-scanned-version-desc
           >
             {{t 'appMonitoringModule.latestScannedVersion'}}
           </AkTypography>
@@ -112,6 +120,7 @@
             @variant='body1'
             @color='textSecondary'
             local-class='details-header'
+            data-test-app-last-monitored-date-desc
           >
             {{t 'appMonitoringModule.lastMonitoredOn'}}
           </AkTypography>
@@ -124,7 +133,6 @@
             data-test-app-last-monitored-date
           >
             {{#if this.lastSyncedDate}}
-
               {{this.lastSyncedDate}}
 
             {{else if @amApp.isActive}}

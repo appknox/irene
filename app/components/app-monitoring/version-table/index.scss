@@ -1,0 +1,21 @@
+.app-details-table-wrapper {
+  overflow-x: auto;
+
+  .app-details-table-container {
+    min-width: 1150px;
+
+    .app-details-table {
+      td:first-child {
+        border-left: none !important;
+      }
+
+      td:last-child {
+        border-right: none !important;
+      }
+
+      .table-row {
+        height: 5.5714em !important;
+      }
+    }
+  }
+}

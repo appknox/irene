@@ -329,6 +329,7 @@ module.exports = function (environment) {
       recentIssues: 'recent_issues',
       tags: 'tags',
       capturedApiScanStart: 'start_apiscan',
+      amAppVersions: 'v2/am_app_versions',
     },
     csb: {
       userLoggedIn: {

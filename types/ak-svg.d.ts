@@ -33,6 +33,7 @@ export enum AkSvgComponentInvocationByNames {
   PlaystoreLogo,
   NoParameterData,
   ProjectListEmpty,
+  AmVersionUploadError,
 }
 
 export enum AkSvgComponentInvocationByPaths {
