@@ -283,4 +283,44 @@ module('Integration | Component | ak-select', function (hooks) {
 
     assert.true(onCloseCalled);
   });
+
+  test('test ak-select multiple selection', async function (assert) {
+    this.setProperties({
+      selectItems,
+      value: [selectItems[0], selectItems[1]],
+      handleSelectChange: (value) => {
+        this.set('value', value);
+      },
+    });
+
+    await render(hbs`
+        <AkSelect
+          @onChange={{this.handleSelectChange}} 
+          @options={{this.selectItems}} 
+          @multiple={{true}}
+          @selected={{this.value}} as |aks|>
+          {{aks.label}}
+        </AkSelect>
+    `);
+
+    assert.dom(`.${classes.trigger}`).exists();
+
+    await click(`.${classes.trigger}`);
+
+    assert.dom(`.${classes.dropdown}`).exists();
+
+    const selectListItems = findAll('.ember-power-select-option');
+
+    assert.dom(selectListItems[0]).hasAria('selected', 'true');
+
+    assert.dom(selectListItems[1]).hasAria('selected', 'true');
+
+    assert.dom(selectListItems[2]).hasAria('selected', 'false');
+
+    const removeButton = findAll('.ember-power-select-multiple-remove-btn');
+
+    await click(removeButton[0]);
+
+    assert.dom(selectListItems[0]).hasAria('selected', 'false');
+  });
 });

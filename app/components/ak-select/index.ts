@@ -31,6 +31,7 @@ interface AkSelectNamedArgs<O> extends PowerSelectArgs {
   searchEnabled?: boolean;
   extra?: Record<string, unknown>;
   optionTitle?: string;
+  multiple?: boolean;
   onInput?: (term: string, select: Select, e: Event) => string | false | void;
   onFocus?: (select: Select, event: FocusEvent) => void;
   onBlur?: (select: Select, event: FocusEvent) => void;
