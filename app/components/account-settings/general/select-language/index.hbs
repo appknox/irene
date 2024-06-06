@@ -1,14 +1,21 @@
-<div class='control'>
-  <select
+<AkStack @direction='column' @spacing='2' class='p-2'>
+  <AkTypography @variant='h5'>
+    {{t 'language'}}
+  </AkTypography>
+
+  <AkTypography @color='textSecondary'>
+    {{t 'selectLanguage'}}
+  </AkTypography>
+
+  <AkSelect
+    {{style width='250px'}}
     id='settings-select-language'
-    class='mp-select-language'
-    {{on 'change' (perform this.setLocale)}}
-    disabled={{this.setLocale.isRunning}}
+    @options={{this.allLocales}}
+    @selected={{this.currentLocale}}
+    @onChange={{this.handleLocaleChange}}
+    @disabled={{this.setLocale.isRunning}}
+    as |locale|
   >
-    {{#each this.allLocales as |al|}}
-      <option selected={{eq this.currentLocale al.locale}} value={{al.locale}}>
-        {{al.localeString}}
-      </option>
-    {{/each}}
-  </select>
-</div>
+    {{locale.localeString}}
+  </AkSelect>
+</AkStack>

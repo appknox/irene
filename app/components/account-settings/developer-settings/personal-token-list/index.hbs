@@ -1,5 +1,5 @@
 <div class='m-2 w-full'>
-  <AkStack @direction='column' @spacing='0.5'>
+  <AkStack @direction='column' @spacing='1'>
     <AkTypography @variant='h5'>
       {{t 'personalAccessTokens'}}
     </AkTypography>
@@ -9,7 +9,7 @@
     </AkTypography>
   </AkStack>
 
-  <form {{style width='100%' maxWidth='650px'}} class='my-5'>
+  <form {{style width='100%' maxWidth='650px'}} class='my-3'>
     <AkStack @width='full' @alignItems='center' @spacing='1.5'>
       <AkTextField
         id='personal-token-input'

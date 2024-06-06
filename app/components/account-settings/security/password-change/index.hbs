@@ -1,96 +1,49 @@
-<form>
-  <div class='control'>
-    <div class='columns'>
-      <div class='column is-half'>
-        <div
-          class='input-wrap
-            {{if this.changeset.error.old_password "has-error"}}'
-        >
-          <div class='label-error'>
-            <label>
-              {{t 'currentPassword'}}
-            </label>
+<AkStack @direction='column' @spacing='2' {{style width='350px'}}>
+  <AkTypography @variant='h5'>
+    {{t 'changePassword'}}
+  </AkTypography>
 
-            {{#if this.changeset.error.old_password}}
-              <span class='error-msg'>
-                {{this.changeset.error.old_password.validation}}
-              </span>
-            {{/if}}
-          </div>
+  <AkTextField
+    id='security-pc-old-password'
+    @label={{t 'currentPassword'}}
+    @labelTypographyColor='secondary'
+    @labelTypographyVariant='subtitle2'
+    @type='password'
+    @value={{this.changeset.old_password}}
+    @error={{if this.changeset.error.old_password true false}}
+    @helperText={{this.changeset.error.old_password.validation}}
+    autocomplete='password'
+  />
 
-          <Input
-            id='security-pc-old-password'
-            class='input-field'
-            @type='password'
-            @value={{this.changeset.old_password}}
-            autocomplete='password'
-          />
-        </div>
+  <AkTextField
+    id='security-pc-new-password'
+    @label={{t 'newPassword'}}
+    @labelTypographyColor='secondary'
+    @labelTypographyVariant='subtitle2'
+    @type='password'
+    @value={{this.changeset.password}}
+    @error={{if this.changeset.error.password true false}}
+    @helperText={{this.changeset.error.password.validation}}
+    autocomplete='new-password'
+  />
 
-        <div
-          class='input-wrap {{if this.changeset.error.password "has-error"}}'
-        >
-          <div class='label-error'>
-            <label>
-              {{t 'newPassword'}}
-            </label>
+  <AkTextField
+    id='security-pc-confirm-password'
+    @label={{t 'confirmPassword'}}
+    @labelTypographyColor='secondary'
+    @labelTypographyVariant='subtitle2'
+    @type='password'
+    @value={{this.changeset.confirm_password}}
+    @error={{if this.changeset.error.confirm_password true false}}
+    @helperText={{this.changeset.error.confirm_password.validation}}
+    autocomplete='new-password'
+  />
 
-            {{#if this.changeset.error.password}}
-              <span class='error-msg'>
-                {{this.changeset.error.password.validation}}
-              </span>
-            {{/if}}
-          </div>
+  <AkButton @variant='outlined' {{on 'click' (perform this.changePassword)}}>
+    {{#if this.changePassword.isRunning}}
+      <AkLoader @size={{14}} class='mr-1' />
+    {{/if}}
 
-          <Input
-            id='security-pc-new-password'
-            class='input-field'
-            @type='password'
-            @value={{this.changeset.password}}
-            autocomplete='new-password'
-          />
-        </div>
-
-        <div
-          class='input-wrap
-            {{if this.changeset.error.confirm_password "has-error"}}'
-        >
-          <div class='label-error'>
-            <label>
-              {{t 'confirmPassword'}}
-            </label>
-
-            {{#if this.changeset.error.confirm_password}}
-              <span class='error-msg'>
-                {{this.changeset.error.confirm_password.validation}}
-              </span>
-            {{/if}}
-          </div>
-
-          <Input
-            id='security-pc-confirm-password'
-            class='input-field'
-            @type='password'
-            @value={{this.changeset.confirm_password}}
-            autocomplete='new-password'
-          />
-        </div>
-      </div>
-    </div>
-
-    <div class='columns'>
-      <div class='column is-one-third'>
-        <AkButton
-          @variant='outlined'
-          {{on 'click' (perform this.changePassword)}}
-        >
-          {{#if this.changePassword.isRunning}}
-            <AkLoader @size={{14}} class='mr-1' />
-          {{/if}}
-
-          {{t 'changePassword'}}
-        </AkButton>
-      </div>
-    </div>
-  </div>
-</form>
+    {{t 'changePassword'}}
+  </AkButton>
+</AkStack>
