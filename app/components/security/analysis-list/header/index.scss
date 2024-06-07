@@ -1,0 +1,13 @@
+.security-analysis-list-header-root {
+  background-color: var(--security-analysis-list-header-background-color);
+  border: 1px solid var(--security-analysis-list-header-border-color);
+  border-radius: var(--security-analysis-list-header-border-radius);
+
+  .security-analysis-list-header-title {
+    padding: 1em 1.285em;
+  }
+}
+
+.security-analysis-list-header-sorting-filter {
+  padding: 0.785em 1.285em;
+}

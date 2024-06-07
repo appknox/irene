@@ -1,32 +1,100 @@
-<div class='table-container'>
-  <table class='security-list-table'>
-    <thead class='w-full'>
-      <tr>
-        <th>
-          Analysis ID
-        </th>
-        <th>
-          Vulnerability
-        </th>
-        <th>
-          Risk
-        </th>
-        <th>
-          Scan Type
-        </th>
-        <th>
-          Status
-        </th>
-      </tr>
-    </thead>
+<AkStack @width='full' @direction='column' @spacing='2' class='mt-5 mb-4'>
+  <Security::AnalysisList::Header
+    @file={{@file}}
+    @reloadAnalysesList={{this.reloadAnalysisList}}
+  >
+    <:analysesFilter>
+      <AkStack>
+        <AkSelect
+          @onChange={{this.filterVulnerabilityType}}
+          @options={{this.vulnerabilityTypes}}
+          @selected={{this.vulnerabilityType}}
+          @verticalPosition='auto'
+          @triggerClass={{this.triggerClass}}
+          @dropdownClass={{this.dropDownClass}}
+          @optionTitle={{'Scan type'}}
+          @selectedItemComponent='security/analysis-list/filter-selected-item'
+          @extra={{hash
+            selectedItem=this.vulnerabilityType
+            showLabel=true
+            iconName='filter-list'
+          }}
+          {{style width='auto'}}
+          class='vulnerability-type-select-class'
+          data-test-securityAnalysisListTable-scanTypeSelect
+          as |vulnTypeObj|
+        >
+          <AkStack @spacing='1'>
+            <AkStack @alignItems='center'>
+              {{#if (eq this.vulnerabilityType vulnTypeObj)}}
+                <AkIcon @iconName='radio-button-checked' @color='success' />
+              {{else}}
+                <AkIcon @iconName='radio-button-unchecked' />
+              {{/if}}
+            </AkStack>
 
-    <tbody class='w-full'>
-      {{#each this.sortedAnalyses as |analysis|}}
-        <Security::AnalysisOverview
-          @analysis={{analysis}}
-          @fileDetails={{@fileDetails}}
-        />
-      {{/each}}
-    </tbody>
-  </table>
-</div>
+            {{#if (eq vulnTypeObj -1)}}
+              {{t 'allScans'}}
+            {{else}}
+              {{t (vulnerability-type vulnTypeObj)}}
+            {{/if}}
+          </AkStack>
+        </AkSelect>
+
+        {{#if this.showClearFilter}}
+          <AkDivider local-class='divider' />
+
+          <AkButton
+            @color='textSecondary'
+            @underline='none'
+            @leftIconClass={{this.clearFilterIconClass}}
+            {{on 'click' this.clearFilters}}
+            local-class='clear-filter'
+            data-test-securityAnalysisListTable-selectScanTypeFilterIndicator
+          >
+            <:leftIcon>
+              <AkIcon @iconName='close' @size='small' />
+            </:leftIcon>
+
+            <:default>
+              <AkTypography local-class='clear-filter-label'>
+                {{t 'clearFilter'}}
+              </AkTypography>
+            </:default>
+          </AkButton>
+        {{/if}}
+      </AkStack>
+
+      <div {{style width='220px'}}>
+        <AkTextField
+          @placeholder='Search By Vulnerability Name'
+          @value={{this.vulnSearchTerm}}
+          local-class='search-vulnerability-name-input'
+          data-test-securityAnalysisListTable-vulnNameSearchTextField
+        >
+          <:leftAdornment>
+            <AkIcon @iconName='search' @color='textSecondary' />
+          </:leftAdornment>
+
+          <:rightAdornment>
+            {{#if this.vulnSearchTerm}}
+              <AkIconButton
+                @size='small'
+                {{on 'click' this.clearVulnSearchTerm}}
+              >
+                <AkIcon @iconName='close' @color='textSecondary' />
+              </AkIconButton>
+            {{/if}}
+          </:rightAdornment>
+        </AkTextField>
+      </div>
+    </:analysesFilter>
+  </Security::AnalysisList::Header>
+
+  <Security::AnalysisList::Table
+    @analyses={{this.finalSortedAnalyses}}
+    @file={{@file}}
+    @vulnSearchResultIsEmpty={{this.vulnSearchResultIsEmpty}}
+    @isFetchingAnalyses={{this.isFetchingAnalyses}}
+  />
+</AkStack>

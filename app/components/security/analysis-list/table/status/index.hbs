@@ -1,0 +1,12 @@
+<AkChip
+  @variant={{this.statusVariant}}
+  @color={{this.analysisStatusDetails.color}}
+  @label={{this.analysisStatusDetails.label}}
+  @size='small'
+  local-class='{{if
+    (eq this.analysis.status this.analysisIsRunning)
+    "scanning-animation"
+  }}'
+  {{style width='80px'}}
+  data-test-securityAnalysisListTable-analysisStatus
+/>

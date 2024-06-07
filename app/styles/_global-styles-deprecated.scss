@@ -466,7 +466,10 @@ $badge-small-size: 1.5em;
 }
 
 $spacers: margin padding;
-$fractional-pts: q 0.25, h 0.5, 3Q 0.75;
+$fractional-pts:
+  q 0.25,
+  h 0.5,
+  3Q 0.75;
 
 @each $spacer in $spacers {
   @each $fp in $fractional-pts {
@@ -985,7 +988,9 @@ canvas.other-devices {
 .status-box {
   color: #31708f;
   margin-top: 10px;
-  box-shadow: 0px 2px 2px #888, 0px -2px 2px #888;
+  box-shadow:
+    0px 2px 2px #888,
+    0px -2px 2px #888;
   padding: 5px 5px;
 }
 
@@ -995,7 +1000,8 @@ select {
   border-radius: 2px;
   box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.1);
   user-select: none;
-  background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABYAAAAeCAYAAAAo5+5WAAAAdUlEQVRIx2MQllCs+P//vwcQM1ATM4waPGrwqMEjzmBSweAxGMgu+k8YFJHjYsvFixfvwWUiSA6khtygsFmxYsV+dENBYiA5SsPYfvXq1QdghoLYIDFqRZ7jxo0bD4MwiE3tVOECxYM0uVHd4NFCaNTgQW4wAKpugq+9Zk7QAAAAAElFTkSuQmCC),
+  background-image:
+    url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABYAAAAeCAYAAAAo5+5WAAAAdUlEQVRIx2MQllCs+P//vwcQM1ATM4waPGrwqMEjzmBSweAxGMgu+k8YFJHjYsvFixfvwWUiSA6khtygsFmxYsV+dENBYiA5SsPYfvXq1QdghoLYIDFqRZ7jxo0bD4MwiE3tVOECxYM0uVHd4NFCaNTgQW4wAKpugq+9Zk7QAAAAAElFTkSuQmCC),
     -webkit-linear-gradient(#fafafa, #f4f4f4 40%, #e5e5e5);
   background-position: 97% center;
   background-repeat: no-repeat;
@@ -1476,7 +1482,9 @@ div[class^='_c-notification__container'] {
     --top-nav-icon-color-hover: #28282b;
 
     background: #f3f3f3;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
+    box-shadow:
+      0 1px 3px rgba(0, 0, 0, 0.12),
+      0 1px 2px rgba(0, 0, 0, 0.24);
 
     .scan-text {
       color: #7c7f88;
@@ -1978,41 +1986,6 @@ div[class^='_c-notification__container'] {
   padding: 0.2em 0.2em 0.15em 0.8em;
 }
 
-.file-overview-scan-status {
-  display: flex;
-  justify-content: space-evenly;
-  align-items: center;
-
-  .scan-status-tag {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin-left: 1em;
-
-    &-label {
-      padding-left: 0.3em;
-      font-size: 0.83em;
-      line-height: 1.6;
-      display: flex;
-      align-items: center;
-    }
-
-    &-icon {
-      display: flex;
-      align-items: center;
-
-      &-done {
-        color: $success;
-      }
-
-      .fa {
-        font-size: 0.83em;
-        line-height: 1.4;
-      }
-    }
-  }
-}
-
 .compare-container {
   padding: 0px 5px;
 }
@@ -2471,10 +2444,6 @@ b.bold {
     margin-left: 4px;
     margin-right: -4px;
   }
-}
-
-.status-tag {
-  color: $default;
 }
 
 table.vuln-table {
@@ -3124,24 +3093,6 @@ button.delete-button {
     border-color: rgba($color-table, 0.2);
   }
 
-  &.status-tag-0 {
-    background-color: $red;
-    color: #fff;
-  }
-
-  &.status-tag-1 {
-    background-color: $default;
-    color: #fff;
-  }
-
-  &.status-tag-2 {
-    @extend .is-progress;
-  }
-
-  &.status-tag-3 {
-    color: $success;
-  }
-
   &.edit-tag {
     background-color: grey;
     color: #fff;
@@ -3618,7 +3569,8 @@ select {
   cursor: pointer;
   border-radius: 5px !important;
   color: $default !important;
-  background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABYAAAAeCAYAAAAo5+5WAAAAdUlEQVRIx2MQllCs+P//vwcQM1ATM4waPGrwqMEjzmBSweAxGMgu+k8YFJHjYsvFixfvwWUiSA6khtygsFmxYsV+dENBYiA5SsPYfvXq1QdghoLYIDFqRZ7jxo0bD4MwiE3tVOECxYM0uVHd4NFCaNTgQW4wAKpugq+9Zk7QAAAAAElFTkSuQmCC),
+  background-image:
+    url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABYAAAAeCAYAAAAo5+5WAAAAdUlEQVRIx2MQllCs+P//vwcQM1ATM4waPGrwqMEjzmBSweAxGMgu+k8YFJHjYsvFixfvwWUiSA6khtygsFmxYsV+dENBYiA5SsPYfvXq1QdghoLYIDFqRZ7jxo0bD4MwiE3tVOECxYM0uVHd4NFCaNTgQW4wAKpugq+9Zk7QAAAAAElFTkSuQmCC),
     -webkit-linear-gradient(lighten($default, 55%), lighten($default, 55%) 40%, lighten($default, 55%)) !important;
   border: 1px solid lighten($default, 40%) !important;
 }
@@ -5008,23 +4960,6 @@ $attachment-icon-width: 4em;
 
     .paginate {
       padding: 10px 200px;
-    }
-  }
-}
-
-ul.email-list {
-  margin-top: 10px;
-
-  li {
-    color: #000;
-
-    &:before {
-      content: '• ';
-      font-size: 30px;
-      color: $green;
-      position: relative;
-      left: 2px;
-      top: 7px;
     }
   }
 }

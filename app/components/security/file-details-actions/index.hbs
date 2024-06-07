@@ -1,0 +1,160 @@
+<AkStack
+  @alignItems='center'
+  @justifyContent='space-between'
+  @width='full'
+  local-class='file-actions-section-wrapper'
+  class='p-2 my-2'
+  data-test-securityFileDetailsActions-container
+>
+  <AkStack @alignItems='center' @spacing='1.5'>
+    <AkStack
+      @direction='column'
+      @spacing='0.5'
+      data-test-securityFileDetailsActions-fileInfo
+    >
+      <AkTypography @variant='h4'>
+        {{@file.name}}
+        |
+        {{@file.id}}
+      </AkTypography>
+
+      <AkTypography @color='textSecondary'>
+        {{this.packageName}}
+      </AkTypography>
+    </AkStack>
+  </AkStack>
+
+  <AkStack @alignItems='stretch' @spacing='1.5'>
+    <AkButton
+      {{on 'click' this.downloadApp}}
+      data-test-securityFileDetailsActions-originalAppFormatDownloadBtn
+    >
+      <:leftIcon>
+        <AkIcon @iconName='download' />
+      </:leftIcon>
+
+      <:default>
+        Original
+        {{@file.fileFormatDisplay}}
+      </:default>
+    </AkButton>
+
+    <AkButton
+      @variant='outlined'
+      {{on 'click' this.downloadModifiedAppVersion}}
+      data-test-securityFileDetailsActions-modAppFormatDownloadBtn
+    >
+      <:leftIcon>
+        <AkIcon @iconName='download' />
+      </:leftIcon>
+
+      <:default>
+        Resigned
+      </:default>
+    </AkButton>
+
+    <AkButton
+      @variant='outlined'
+      {{on 'click' this.goToDashboard}}
+      data-test-securityFileDetailsActions-dashboardFilePageRedirectBtn
+    >
+      Visit Dashboard
+    </AkButton>
+
+    <Security::AnalysisReportBtn @file={{this.file}} />
+  </AkStack>
+</AkStack>
+
+<AkStack
+  @direction='column'
+  @justifyContent='space-between'
+  @width='full'
+  local-class='file-actions-section-wrapper'
+  class='p-2'
+  data-test-securityFileDetailsActions-scanStatuses-container
+>
+  <AkTypography @variant='h5' @color='textPrimary'>
+    Scan Statuses
+  </AkTypography>
+
+  <AkTypography class='mt-1' @variant='body2' @color='textSecondary'>
+    Update the statuses of different scan types for this file
+  </AkTypography>
+
+  <AkStack
+    @direction='column'
+    class='mt-2'
+    data-test-securityFileDetailsActions-scanStatusesList-container
+  >
+    {{#each this.scanStatusesList as |status|}}
+      <AkStack @alignItems='center'>
+        <AkFormControlLabel
+          @label={{status.label}}
+          data-test-securityFileDetailsActions-scanStatus-label='{{status.label}}'
+        >
+          <AkCheckbox
+            @checked={{status.checked}}
+            @onClick={{status.onChecboxClick}}
+            data-test-securityFileDetailsActions-scanStatusCheckbox='{{status.label}}'
+          />
+        </AkFormControlLabel>
+
+        {{#if status.isSaving}}
+          <AkLoader class='ml-1' @size={{13}} />
+        {{/if}}
+      </AkStack>
+    {{/each}}
+  </AkStack>
+
+  {{#if this.isManualScanAvailable}}
+    <AkDivider @color='dark' class='my-2' />
+
+    <AkStack
+      @direction='column'
+      @spacing='1.5'
+      data-test-securityFileDetailsActions-manualScan-container
+    >
+      <AkStack
+        @direction='column'
+        data-test-securityFileDetailsActions-manualScan-info
+      >
+        <AkTypography @variant='body1' @fontWeight='medium'>
+          Manual Scan Status
+        </AkTypography>
+
+        <AkStack
+          @direction='row'
+          @alignItems='center'
+          @spacing='1'
+          class='mt-1'
+        >
+          <AkIcon @iconName='info' @size='small' />
+
+          <AkTypography @variant='body2' @color='textSecondary'>
+            All manual scan vulnerabilities need to be resolved before it is
+            marked as
+            <strong>"completed"</strong>
+            at the file level.
+          </AkTypography>
+        </AkStack>
+      </AkStack>
+
+      <AkStack @spacing='1.5' @alignItems='center'>
+        <AkSelect
+          @options={{this.manualStatuses}}
+          @selected={{this.manualToString}}
+          @onChange={{this.selectManualScan}}
+          {{style width='160px'}}
+          data-test-securityFileDetailsActions-manualScan-select
+          as |op|
+        >
+          {{this.manualScanStatusText op}}
+        </AkSelect>
+
+        {{#if this.updateManualScan.isRunning}}
+          <AkLoader @size={{16}} />
+        {{/if}}
+      </AkStack>
+    </AkStack>
+  {{/if}}
+</AkStack>

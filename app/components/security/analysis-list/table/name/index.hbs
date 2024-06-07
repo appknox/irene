@@ -1,0 +1,10 @@
+{{#if @analysis.id}}
+  <AkLink
+    @route='authenticated.security.analysis'
+    @color='primary'
+    @model={{@analysis.id}}
+    data-test-securityAnalysisListTable-analysisName
+  >
+    {{this.vulnerabilityName}}
+  </AkLink>
+{{/if}}

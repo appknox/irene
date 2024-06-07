@@ -1,20 +1,32 @@
-/* eslint-disable qunit/no-assert-equal */
 import { module, test } from 'qunit';
 import { setupRenderingTest } from 'ember-qunit';
 import { setupIntl } from 'ember-intl/test-support';
 import { setupMirage } from 'ember-cli-mirage/test-support';
-import { render, click } from '@ember/test-helpers';
+import { render, click, fillIn } from '@ember/test-helpers';
 import { hbs } from 'ember-cli-htmlbars';
 import Service from '@ember/service';
+import { Response } from 'miragejs';
 
 class NotificationsStub extends Service {
   errorMsg = null;
   successMsg = null;
+
   error(msg) {
-    return (this.errorMsg = msg);
+    this.errorMsg = msg;
   }
+
   success(msg) {
-    return (this.successMsg = msg);
+    this.successMsg = msg;
+  }
+}
+
+class WindowStub extends Service {
+  url = null;
+  target = null;
+
+  open(url, target) {
+    this.url = url;
+    this.target = target;
   }
 }
 
@@ -26,72 +38,201 @@ module(
     setupIntl(hooks);
 
     hooks.beforeEach(async function () {
+      // Services
+      this.owner.register('service:browser/window', WindowStub);
       this.owner.register('service:notifications', NotificationsStub);
-    });
 
-    test('it should render generate report btn', async function (assert) {
-      this.server.get('v2/files/:id/reports', () => {
-        return [];
+      const window = this.owner.lookup('service:browser/window');
+      const store = this.owner.lookup('service:store');
+
+      // Server Mocks
+      this.server.get('/hudson-api/projects/:id', (schema, req) => {
+        return schema['security/projects'].find(`${req.params.id}`)?.toJSON();
       });
-      this.set('file', {});
-      await render(hbs`<Security::AnalysisReportBtn @file={{this.file}}/>`);
-      assert.dom(`[data-test-report-analysis]`).hasText(`t:generateReport:()`);
+
+      this.server.get('/hudson-api/projects', () => {
+        return new Response(200);
+      });
+
+      const secProj = this.server.create('security/project');
+
+      const secFile = this.server.create('security/file', {
+        id: 1,
+        project: secProj.id,
+      });
+
+      const secFileModel = store.push(
+        store.normalize('security/file', secFile.toJSON())
+      );
+
+      this.setProperties({ secFileModel, secProj, window });
     });
 
-    test('it should show all other types download report btns', async function (assert) {
-      this.set('file', { id: 1 });
-      await render(hbs`<Security::AnalysisReportBtn @file={{this.file}}/>`);
+    test('it should render generate report and available reports buttons', async function (assert) {
+      await render(
+        hbs`<Security::AnalysisReportBtn @file={{this.secFileModel}} />`
+      );
 
-      assert.dom(`[data-test-report-report-download-dropdown]`).exists();
+      assert
+        .dom('[data-test-securityAnalysisReportBtn]')
+        .exists()
+        .hasText('t:generateReport:()');
 
-      await click(`[data-test-report-download-trigger]`);
+      assert
+        .dom('[data-test-securityAnalysisReportBtn-moreOptionsBtn]')
+        .exists();
 
-      const reportTypes = [
-        `t:excelReport:()`,
-        `t:jaHTMLReport:()`,
-        `t:enHTMLReport:()`,
-      ];
+      assert
+        .dom('[data-test-securityAnalysisReportBtn-moreOptionsBtn-icon]')
+        .exists();
+    });
 
-      assert.dom(`[data-test-report-download-content]`).exists();
+    test('it generates a report', async function (assert) {
+      assert.expect();
 
-      reportTypes.forEach((reportType, seq) =>
+      const emailsToSendTo = ['user1@email.com', 'user2@email.com'];
+      const emailsToSendToStr = emailsToSendTo.join(', ');
+
+      this.server.put('/hudson-api/reports/:id', (_, req) => {
+        const { emails } = JSON.parse(req.requestBody);
+
+        assert.strictEqual(
+          emailsToSendToStr,
+          emails.join(', '),
+          'Sends correct email addresses over the network'
+        );
+
+        return new Response(200);
+      });
+
+      await render(
+        hbs`<Security::AnalysisReportBtn @file={{this.secFileModel}} />`
+      );
+
+      assert.dom('[data-test-securityAnalysisReportBtn]').exists();
+
+      await click('[data-test-securityAnalysisReportBtn]');
+
+      assert
+        .dom('[data-test-securityAnalysisReportBtn-genReportModal]')
+        .exists();
+
+      assert
+        .dom('[data-test-securityAnalysisReportBtn-genReportModal-formHeader]')
+        .exists()
+        .containsText('Emails')
+        .containsText('Please enter emails to send report to');
+
+      const emailsTextfieldSelector =
+        '[data-test-securityAnalysisReportBtn-genReportModal-emailsToSendTextfield]';
+
+      assert.dom(emailsTextfieldSelector).exists();
+
+      await fillIn(emailsTextfieldSelector, emailsToSendToStr);
+
+      assert.dom(emailsTextfieldSelector).hasValue(emailsToSendToStr);
+
+      for (const email of emailsToSendTo) {
         assert
-          .dom(`[data-test-report-type='${seq}']`)
-          .hasText(`t:download:() ${reportType}`)
+          .dom(
+            `[data-test-securityAnalysisReportBtn-genReportModal-email="${email}"]`
+          )
+          .exists()
+          .hasText(email);
+      }
+
+      assert
+        .dom('[data-test-securityAnalysisReportBtn-genReportModal-submitBtn]')
+        .exists()
+        .hasText('t:generateReport:()');
+
+      await click(
+        '[data-test-securityAnalysisReportBtn-genReportModal-submitBtn]'
       );
+
+      assert
+        .dom('[data-test-securityAnalysisReportBtn-genReportModal]')
+        .containsText('t:reportGeneratedSuccessfully:()')
+        .containsText('t:reportSendTo:()');
+
+      for (const email of emailsToSendTo) {
+        assert
+          .dom(
+            `[data-test-securityAnalysisReportBtn-genReportModal-succesEmail='${email}']`
+          )
+          .exists()
+          .containsText(email);
+      }
     });
 
-    test('it should show error when download report which is not exist', async function (assert) {
-      this.set('file', { id: 1 });
-      await render(hbs`<Security::AnalysisReportBtn @file={{this.file}}/>`);
+    test.each(
+      'it should download all other report types',
+      [
+        {
+          label: 't:excelReport:()',
+          format: 'xlsx',
+        },
+        {
+          label: 't:jaHTMLReport:()',
+          format: 'html_ja',
+        },
+        {
+          label: 't:enHTMLReport:()',
+          format: 'html_en',
+        },
+        {
+          label: 't:excelReport:()',
+          format: 'xlsx',
+          error: true,
+        },
+        {
+          label: 't:jaHTMLReport:()',
+          format: 'html_ja',
+          error: true,
+        },
+        {
+          label: 't:enHTMLReport:()',
+          format: 'html_en',
+          error: true,
+        },
+      ],
+      async function (assert, { label, format, error }) {
+        const downloadURL = `www.download-${format}-report.com`;
 
-      await click(`[data-test-report-download-trigger]`);
+        this.server.get('/hudson-api/reports/:id/download_url', () => {
+          const FORMAT = error ? 'CSV' : format;
 
-      const reportTypes = [
-        `t:excelReport:()`,
-        `t:jaHTMLReport:()`,
-        `t:enHTMLReport:()`,
-      ];
+          return { [FORMAT]: downloadURL };
+        });
 
-      assert.dom(`[data-test-report-download-content]`).exists();
-      const notifyService = this.owner.lookup('service:notifications');
-      await click(`[data-test-report-type='0']`);
-      assert.equal(
-        notifyService.get('errorMsg'),
-        `t:noReportExists:("format":"${reportTypes[0]}")`
-      );
+        await render(
+          hbs`<Security::AnalysisReportBtn @file={{this.secFileModel}} />`
+        );
 
-      await click(`[data-test-report-type='1']`);
-      assert.equal(
-        notifyService.get('errorMsg'),
-        `t:noReportExists:("format":"${reportTypes[1]}")`
-      );
+        const availableReportsBtn =
+          '[data-test-securityAnalysisReportBtn-moreOptionsBtn]';
 
-      await click(`[data-test-report-type='2']`);
-      assert.equal(
-        notifyService.get('errorMsg'),
-        `t:noReportExists:("format":"${reportTypes[2]}")`
-      );
-    });
+        assert.dom(availableReportsBtn).exists();
+
+        await click(availableReportsBtn);
+
+        const reportTypeDownloadTrigger = `[data-test-securityAnalysisReportBtn-moreOptionsItem='${label}'] button`;
+
+        assert.dom(reportTypeDownloadTrigger).hasText(`t:download:() ${label}`);
+
+        await click(reportTypeDownloadTrigger);
+
+        const notifyService = this.owner.lookup('service:notifications');
+
+        if (error) {
+          assert.strictEqual(
+            notifyService.get('errorMsg'),
+            `t:noReportExists:("format":"${label}")`
+          );
+        } else {
+          assert.strictEqual(this.window.url, downloadURL);
+        }
+      }
+    );
   }
 );

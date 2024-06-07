@@ -1,17 +1,25 @@
 import { action } from '@ember/object';
-import { inject as service } from '@ember/service';
 import Component from '@glimmer/component';
-import { tracked } from '@glimmer/tracking';
 import { task } from 'ember-concurrency';
+import { service } from '@ember/service';
+import { tracked } from 'tracked-built-ins';
+
 import ENV from 'irene/config/environment';
 import ENUMS from 'irene/enums';
 
-export default class AnalysisOverviewComponent extends Component {
-  @service ajax;
-  @service intl;
-  @service('notifications') notify;
+import type IntlService from 'ember-intl/services/intl';
+import type SecurityAnalysisModel from 'irene/models/security/analysis';
 
-  tPleaseTryAgain = this.intl.t('pleaseTryAgain');
+export interface SecurityAnalysisListTableActionComponentSignature {
+  Args: {
+    analysis: SecurityAnalysisModel;
+  };
+}
+
+export default class SecurityAnalysisListTableActionComponent extends Component<SecurityAnalysisListTableActionComponentSignature> {
+  @service('notifications') declare notify: NotificationService;
+  @service declare intl: IntlService;
+  @service declare ajax: any;
 
   @tracked showMarkPassedConfirmBox = false;
 
@@ -29,56 +37,17 @@ export default class AnalysisOverviewComponent extends Component {
     availability_impact: ENUMS.AVAILABILITY_IMPACT.NONE,
   };
 
+  get tPleaseTryAgain() {
+    return this.intl.t('pleaseTryAgain');
+  }
+
   get analysis() {
-    return this.args.analysis || null;
-  }
-
-  get tags() {
-    const types = this.analysis.vulnerability.get('types');
-    if (types === undefined) {
-      return [];
-    }
-
-    const tags = [];
-    for (let type of Array.from(types)) {
-      if (type === ENUMS.VULNERABILITY_TYPE.STATIC) {
-        tags.push({
-          status: this.analysis.file.get('isStaticDone'),
-          text: 'static',
-        });
-      }
-      if (type === ENUMS.VULNERABILITY_TYPE.DYNAMIC) {
-        tags.push({
-          status: this.analysis.file.get('isDynamicDone'),
-          text: 'dynamic',
-        });
-      }
-      if (type === ENUMS.VULNERABILITY_TYPE.MANUAL) {
-        tags.push({
-          status: this.analysis.file.get('manual') == ENUMS.MANUAL.DONE,
-          text: 'manual',
-        });
-      }
-      if (type === ENUMS.VULNERABILITY_TYPE.API) {
-        tags.push({
-          status: this.analysis.file.get('isApiDone'),
-          text: 'api',
-        });
-      }
-    }
-    return tags;
-  }
-
-  get overridenRisk() {
-    return this.analysis.overriddenRisk;
-  }
-
-  get riskIsOverriden() {
-    return this.overridenRisk !== null;
+    return this.args.analysis;
   }
 
   @action confirmCallback() {
     this.markAsPassed.perform();
+
     this.showMarkPassedConfirmBox = false;
   }
 
@@ -86,10 +55,11 @@ export default class AnalysisOverviewComponent extends Component {
     this.showMarkPassedConfirmBox = true;
   }
 
-  @task(function* () {
+  markAsPassed = task(async () => {
     try {
-      const url = [ENV.endpoints.analyses, this.analysis.id].join('/');
-      yield this.ajax.put(url, {
+      const url = [ENV.endpoints['analyses'], this.analysis.id].join('/');
+
+      await this.ajax.put(url, {
         namespace: 'api/hudson-api',
         contentType: 'application/json',
         data: JSON.stringify({
@@ -109,10 +79,10 @@ export default class AnalysisOverviewComponent extends Component {
           nistsp80053: this.analysis.nistsp80053.map((a) => a.get('id')),
           nistsp800171: this.analysis.nistsp800171.map((a) => a.get('id')),
           findings: this.analysis.findings,
-          overridden_risk: this.analysis.overridden_risk || 'None',
-          overridden_risk_comment: this.analysis.overridden_risk_comment || '',
+          overridden_risk: this.analysis.overriddenRisk || 'None',
+          overridden_risk_comment: this.analysis.overriddenRiskComment || '',
           overridden_risk_to_profile:
-            this.analysis.overridden_risk_to_profile || false,
+            this.analysis.overriddenRiskToProfile || false,
         }),
       });
 
@@ -130,15 +100,23 @@ export default class AnalysisOverviewComponent extends Component {
       this.analysis.availabilityImpact = this.PASSED_STATE.availability_impact;
 
       this.notify.success(`Analysis ${this.analysis.id} marked as passed`);
-    } catch (error) {
+    } catch (err) {
+      const error = err as AdapterError;
       let errMsg = this.tPleaseTryAgain;
+
       if (error.errors && error.errors.length) {
-        errMsg = error.errors[0].detail || errMsg;
+        errMsg = error.errors[0]?.detail || errMsg;
       } else if (error.message) {
         errMsg = error.message;
       }
+
       this.notify.error(errMsg);
     }
-  })
-  markAsPassed;
+  });
+}
+
+declare module '@glint/environment-ember-loose/registry' {
+  export default interface Registry {
+    'security/analysis-list/table/action': typeof SecurityAnalysisListTableActionComponent;
+  }
 }

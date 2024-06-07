@@ -1,0 +1,114 @@
+<AkStack @width='full' data-test-securityAnalysisList-header-container>
+  <AkStack
+    @width='full'
+    @direction='column'
+    local-class='security-analysis-list-header-root'
+  >
+    <AkStack
+      @width='full'
+      @justifyContent='space-between'
+      @alignItems='center'
+      local-class='security-analysis-list-header-title'
+    >
+      <AkStack
+        @direction='column'
+        @spacing='0.5'
+        data-test-securityAnalysisList-header-description
+      >
+        <AkTypography @variant='h5'>
+          List of Analyses
+        </AkTypography>
+
+        <AkTypography @variant='body2'>
+          Here you can view the list of all vulnerabilities associated with this
+          file
+        </AkTypography>
+      </AkStack>
+
+      <AkStack @alignItems='center' @spacing='1.5'>
+        <AkButton
+          {{on 'click' this.openPurgeAPIAnalysisConfirmBox}}
+          data-test-securityAnalysisList-header-purgeAPIModalTriggerBtn
+        >
+          Purge API Analyses
+        </AkButton>
+
+        <AkButton
+          @variant='outlined'
+          {{on 'click' this.openAddAnalysisModal}}
+          data-test-securityAnalysisList-header-addAnalysisModalTriggerBtn
+        >
+          Add Analysis
+        </AkButton>
+      </AkStack>
+    </AkStack>
+
+    <AkDivider @color='dark' />
+
+    <AkStack
+      @alignItems='center'
+      @justifyContent='space-between'
+      @width='full'
+      local-class='security-analysis-list-header-sorting-filter'
+    >
+      {{yield to='analysesFilter'}}
+    </AkStack>
+  </AkStack>
+
+  {{#if this.showAddAnalysisModal}}
+    <AkModal
+      @headerTitle='Add Analysis'
+      @showHeader={{true}}
+      @onClose={{this.closeAddAnalysisModal}}
+    >
+      <AkStack @direction='column' @spacing='3'>
+        <AkStack @direction='column' @spacing='1.5'>
+          <AkStack
+            @direction='column'
+            @spacing='0.5'
+            data-test-securityAnalysisList-addAnalysisModal-header
+          >
+            <AkTypography @variant='h5'>
+              Vulnerability
+            </AkTypography>
+
+            <AkTypography @variant='body2' @color='textSecondary'>
+              Selected vulnerability will be added to list
+            </AkTypography>
+          </AkStack>
+
+          <AkSelect
+            {{style minWidth='400px'}}
+            @searchField='name'
+            @placeholder='Select the Vulnerability'
+            @selected={{this.selectedVulnerability}}
+            @options={{this.vulnerabilities}}
+            @onChange={{this.selectVulnerabilty}}
+            class='add-analysis-vulnerability-class'
+            data-test-securityAnalysisList-addAnalysisModal-vulnerabilitySelect
+            as |key|
+          >
+            {{concat key.id ' - ' key.name}}
+          </AkSelect>
+        </AkStack>
+
+        <AkButton
+          @disabled={{not this.selectedVulnerability}}
+          @loading={{this.doAddAnalysis.isRunning}}
+          {{on 'click' this.addAnalysis}}
+          data-test-securityAnalysisList-addAnalysisModal-saveBtn
+        >
+          Add Analysis
+        </AkButton>
+      </AkStack>
+    </AkModal>
+  {{/if}}
+</AkStack>
+
+<ConfirmBox
+  @isActive={{this.showPurgeAPIAnalysisConfirmBox}}
+  @title='Are you sure of Purging API Analyses'
+  @confirmAction={{this.confirmPurgeAPIAnalysisConfirmBox}}
+  @disabled={{this.confirmPurge.isRunning}}
+  @key='purge'
+/>

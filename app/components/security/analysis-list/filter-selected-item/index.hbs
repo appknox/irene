@@ -1,0 +1,24 @@
+<AkStack
+  @spacing='0.5'
+  @alignItems='center'
+  data-test-securityAnalysisListTable-selectedScanType
+>
+  <AkStack @spacing='1' @alignItems='center'>
+    <AkIcon @iconName={{this.iconName}} @size='small' @color='primary' />
+
+    {{#if this.showLabel}}
+      <AkTypography local-class='trigger-label'>
+        {{this.optionTitle}}
+        -
+      </AkTypography>
+    {{/if}}
+  </AkStack>
+
+  <AkTypography @fontWeight='medium' local-class='trigger-label'>
+    {{#if (eq this.selectedItem -1)}}
+      {{t 'allScans'}}
+    {{else}}
+      {{t (vulnerability-type this.selectedItem)}}
+    {{/if}}
+  </AkTypography>
+</AkStack>

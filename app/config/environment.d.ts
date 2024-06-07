@@ -9,6 +9,7 @@ declare const config: {
   isDevknox: boolean;
   isAppknox: boolean;
   isEnterprise: boolean;
+  ireneHost: string;
   showLicense: boolean;
   exportApplicationGlobal: boolean;
   devknoxPrice: number;
