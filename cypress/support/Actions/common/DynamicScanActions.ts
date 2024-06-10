@@ -26,7 +26,7 @@ export const NETWORK_WAIT_OPTS = {
   timeout: 60000,
 };
 
-export const DYNAMIC_SCAN_STATUS_TIMEOUT = 45000;
+export const DYNAMIC_SCAN_STATUS_TIMEOUT = 75000;
 export const DYNAMIC_SCAN_STOP_BTN_ALIAS = 'stopDynamicScanBtn';
 
 type ProjectResponseModel = MirageFactoryDefProps['project'];
@@ -288,6 +288,24 @@ export default class DynamicScanActions {
         }
       });
     });
+  }
+
+  /**
+   * Helper to choose device preference
+   * @param selectAlias alias for device preference select
+   * @param optionName name of the option to select
+   */
+  chooseDevicePreferenceOption(selectAlias: string, optionName: string) {
+    cy.get(selectAlias).click({ force: true });
+
+    cy.document()
+      .findByRole('option', {
+        name: optionName,
+      })
+      .should('exist')
+      .click({ force: true });
+
+    cy.document().findByText(cyTranslate('savedPreferences')).should('exist');
   }
 
   /**

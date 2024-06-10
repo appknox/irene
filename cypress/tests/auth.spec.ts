@@ -21,6 +21,11 @@ describe('User Login', () => {
   });
 
   it('should redirect unauthenticated user to login page', function () {
+    // Clear all cookies, local storage, and session storage to force the user to be unauthenticated
+    cy.clearAllLocalStorage();
+    cy.clearAllSessionStorage();
+    cy.clearAllCookies();
+
     // Intercepts frontend config route
     const frontendConfigAlias = API_ROUTES.frontendConfig.alias;
     cy.intercept(API_ROUTES.frontendConfig.route).as(frontendConfigAlias);
