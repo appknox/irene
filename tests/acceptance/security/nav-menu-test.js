@@ -34,23 +34,12 @@ module('Acceptance | security/nav menu', function (hooks) {
   hooks.beforeEach(async function () {
     await setupRequiredEndpoints(this.server);
 
-    this.server.get('/organizations/:id', (schema, req) =>
-      schema.organizationMes.find(`${req.params.id}`)?.toJSON()
-    );
-
-    this.server.get('organizations/:id/projects', (schema) => {
-      const results = schema.projects.all().models;
-
-      return { count: results.length, next: null, previous: null, results };
-    });
-
-    this.server.get('/v2/files/:id', (schema, req) => {
-      return schema.files.find(`${req.params.id}`)?.toJSON();
-    });
-
-    this.server.get('/v2/projects/:id', (schema, req) => {
-      return schema.projects.find(req.params.id).toJSON();
-    });
+    this.server.get('/hudson-api/projects', () => ({
+      previous: null,
+      next: null,
+      count: 0,
+      results: [],
+    }));
 
     this.owner.register('service:integration', IntegrationStub);
     this.owner.register('service:websocket', WebsocketStub);

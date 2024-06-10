@@ -1,6 +1,6 @@
 import Service from '@ember/service';
 import { isEmpty } from '@ember/utils';
-import { fillIn, findAll, render, click } from '@ember/test-helpers';
+import { fillIn, findAll, render, click, waitFor } from '@ember/test-helpers';
 import { hbs } from 'ember-cli-htmlbars';
 import { setupMirage } from 'ember-cli-mirage/test-support';
 import { setupIntl } from 'ember-intl/test-support';
@@ -356,7 +356,11 @@ module('Integration | Component | project list', function (hooks) {
       'Contains correct number of project overview cards.'
     );
 
+    await waitFor('[data-test-select-platform-container]', { timeout: 1000 });
+
     await clickTrigger('[data-test-select-platform-container]');
+
+    await waitFor('.ember-power-select-option', { timeout: 1000 });
 
     await selectChoose(
       '.select-platform-class',

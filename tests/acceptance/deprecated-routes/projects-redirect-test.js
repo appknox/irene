@@ -30,15 +30,7 @@ module('Acceptance | projects redirect', function (hooks) {
   setupMirage(hooks);
 
   hooks.beforeEach(async function () {
-    const { vulnerabilities, organization } = await setupRequiredEndpoints(
-      this.server
-    );
-
-    organization.update({
-      features: {
-        dynamicscan_automation: true,
-      },
-    });
+    const { vulnerabilities } = await setupRequiredEndpoints(this.server);
 
     const profile = this.server.create('profile');
     const project = this.server.create('project');
@@ -80,7 +72,6 @@ module('Acceptance | projects redirect', function (hooks) {
     });
 
     this.server.create('proxy-setting', { id: profile.id });
-    this.server.create('dynamicscan-mode', { id: profile.id });
 
     this.owner.register('service:integration', IntegrationStub);
     this.owner.register('service:websocket', WebsocketStub);
@@ -92,10 +83,6 @@ module('Acceptance | projects redirect', function (hooks) {
     this.server.get('/profiles/:id', (schema, req) =>
       schema.profiles.find(`${req.params.id}`)?.toJSON()
     );
-
-    this.server.get('/dynamicscan/:id', (schema, req) => {
-      return schema.dynamicscans.find(`${req.params.id}`)?.toJSON();
-    });
 
     this.server.get('/profiles/:id/device_preference', (schema, req) => {
       return schema.devicePreferences.find(`${req.params.id}`)?.toJSON();
@@ -133,10 +120,6 @@ module('Acceptance | projects redirect', function (hooks) {
         return { count: results.length, next: null, previous: null, results };
       }
     );
-
-    this.server.get('/profiles/:id/dynamicscan_mode', (schema, req) => {
-      return schema.dynamicscanModes.find(req.params.id).toJSON();
-    });
 
     this.server.get('/v2/scan_parameter_groups/:id', (schema, req) =>
       schema.scanParameterGroups.find(req.params.id).toJSON()
@@ -194,6 +177,11 @@ module('Acceptance | projects redirect', function (hooks) {
       '/projects/:id/jira',
       () => new Response(404, {}, { detail: 'JIRA not integrated' })
     );
+
+    // to dismiss notification quickly
+    const notify = this.owner.lookup('service:notifications');
+
+    notify.setDefaultClearDuration(0);
 
     this.owner.register('service:integration', IntegrationStub);
     this.owner.register('service:websocket', WebsocketStub);

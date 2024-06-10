@@ -405,7 +405,7 @@ module('Integration | Component | security/analysis-list', function (hooks) {
       'Renders the correct number of analysis items'
     );
 
-    const selectedAnalysisElement = find(
+    let selectedAnalysisElement = find(
       `[data-test-securityAnalysisListTable-rowId='${selectedAnalysis.id}']`
     );
 
@@ -435,6 +435,11 @@ module('Integration | Component | security/analysis-list', function (hooks) {
       .containsText(modalDescriptionText);
 
     await click('[data-test-confirmbox-confirmbtn]');
+
+    // query again in case of reorder of rows
+    selectedAnalysisElement = find(
+      `[data-test-securityAnalysisListTable-rowId='${selectedAnalysis.id}']`
+    );
 
     assert
       .dom(

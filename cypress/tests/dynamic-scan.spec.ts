@@ -54,6 +54,10 @@ const MFVA_CROPPED_INTERACTION_OVERRIDES: Partial<AppInteraction>[] = [
     name: 'open_webview',
     clickCoordinates: [152, 90],
   },
+  {
+    name: 'app_info',
+    clickCoordinates: [235, 32],
+  },
 ];
 
 const DVIA_INTERACTIONS: AppInteraction[] = [
@@ -118,10 +122,10 @@ const APP_TYPE_DETAILS = [
   },
 ];
 
-const DynamicStatusTexts = [
-  cyTranslate('deviceBooting'),
-  cyTranslate('deviceInstalling'),
-];
+const DynamicStatusTexts = [cyTranslate('deviceBooting')];
+
+const ANY_DEVICE = 0;
+const ANY_VERSION = '0';
 
 describe('Dynamic Scan', () => {
   beforeEach(() => {
@@ -249,7 +253,9 @@ describe('Dynamic Scan', () => {
 
                 cy.findByRole('button', {
                   name: platformVersion,
-                }).should('exist');
+                })
+                  .should('exist')
+                  .as('deviceVersionSelect');
 
                 cy.findByRole('button', {
                   name: deviceType,
@@ -257,25 +263,29 @@ describe('Dynamic Scan', () => {
                   .should('exist')
                   .as('deviceTypeSelect');
 
-                if (type !== 0) {
+                if (type !== ANY_DEVICE) {
                   // change to any device
-                  cy.get('@deviceTypeSelect').click({ force: true });
-
-                  cy.document()
-                    .findByRole('option', {
-                      name: cyTranslate('anyDevice'),
-                    })
-                    .should('exist')
-                    .click({ force: true });
-
-                  cy.findByRole('button', {
-                    name: cyTranslate('anyDevice'),
-                  }).should('exist');
-
-                  cy.document()
-                    .findByText(cyTranslate('savedPreferences'))
-                    .should('exist');
+                  dynamicScanActions.chooseDevicePreferenceOption(
+                    '@deviceTypeSelect',
+                    cyTranslate('anyDevice')
+                  );
                 }
+
+                if (version !== ANY_VERSION) {
+                  // change to any version
+                  dynamicScanActions.chooseDevicePreferenceOption(
+                    '@deviceVersionSelect',
+                    cyTranslate('anyVersion')
+                  );
+                }
+
+                cy.findByRole('button', {
+                  name: cyTranslate('anyDevice'),
+                }).should('exist');
+
+                cy.findByRole('button', {
+                  name: cyTranslate('anyVersion'),
+                }).should('exist');
               });
 
             cy.findByRole('button', {

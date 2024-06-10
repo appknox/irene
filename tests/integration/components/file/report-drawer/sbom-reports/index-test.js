@@ -129,7 +129,7 @@ module(
         (schema, req) => {
           return schema.sbomFiles.find(`${req.params.id}`)?.toJSON();
         },
-        { timing: 100 }
+        { timing: 500 }
       );
 
       this.server.get(
@@ -137,7 +137,7 @@ module(
         (schema, req) => {
           return schema.sbomProjects.find(req.params.id)?.toJSON();
         },
-        { timing: 100 }
+        { timing: 500 }
       );
 
       render(
@@ -145,7 +145,7 @@ module(
       );
 
       await waitFor('[data-test-fileReportDrawer-sbomReports-root]', {
-        timeout: 100,
+        timeout: 500,
       });
 
       assert
@@ -153,7 +153,7 @@ module(
         .exists();
 
       await waitFor('[data-test-fileReportDrawer-sbomReports-reportsList]', {
-        timeout: 100,
+        timeout: 500,
       });
 
       assert
@@ -165,7 +165,7 @@ module(
         .doesNotExist();
 
       await waitFor('[data-test-sbomReportList-reportlistItem]', {
-        timeout: 100,
+        timeout: 500,
       });
 
       const reportList = findAll('[data-test-sbomReportList-reportlistItem]');
