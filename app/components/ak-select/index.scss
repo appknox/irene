@@ -74,6 +74,12 @@
   }
 }
 
+.ak-select-trigger-root-multiple {
+  .ak-select-trigger {
+    height: auto !important;
+  }
+}
+
 .ak-select-trigger-root {
   font-weight: 400;
   font-size: 1rem;
@@ -130,6 +136,27 @@
 
     &:focus {
       border-color: var(--ak-select-error-color);
+    }
+  }
+
+  :global(.ember-power-select-multiple-options) {
+    padding: 0.285em;
+    column-gap: 0.25em;
+
+    :global(.ember-power-select-multiple-option) {
+      display: flex;
+      flex-direction: row-reverse;
+      background-color: var(--ak-select-multiple-chip-background-color);
+      border: 0;
+      font-size: 0.857rem;
+      height: 1.85em;
+      align-items: center;
+      border-radius: var(--ak-select-multiple-chip-border-radius);
+
+      :global(.ember-power-select-multiple-remove-btn) {
+        font-size: 1.2rem !important;
+        margin-left: 0.57em;
+      }
     }
   }
 }

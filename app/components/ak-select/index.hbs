@@ -16,40 +16,47 @@
     {{/if}}
 
     <div
-      local-class='ak-select-trigger-root {{if @label "ak-form-label-spacing"}}'
+      local-class='ak-select-trigger-root 
+      {{if @label "ak-form-label-spacing"}} 
+      {{if @multiple "ak-select-trigger-root-multiple"}}'
     >
-      <PowerSelect
-        @triggerId={{this.labelId}}
-        @dropdownClass='{{@dropdownClass}} {{this.classes.dropdown}}'
-        @triggerClass='
+      {{#let
+        (component (if @multiple 'power-select-multiple' 'power-select'))
+        as |SelectComponent|
+      }}
+        <SelectComponent
+          @triggerId={{this.labelId}}
+          @dropdownClass='{{@dropdownClass}} {{this.classes.dropdown}}'
+          @triggerClass='
           {{@triggerClass}}
           {{this.classes.trigger}} 
           {{if @error this.classes.triggerError}}'
-        @options={{@options}}
-        @onChange={{@onChange}}
-        @selected={{@selected}}
-        @placeholder={{@placeholder}}
-        @disabled={{@disabled}}
-        @renderInPlace={{@renderInPlace}}
-        @ariaInvalid='{{if @error true false}}'
-        @onOpen={{@onOpen}}
-        @onClose={{@onClose}}
-        @loadingMessage={{@loadingMessage}}
-        @selectedItemComponent={{@selectedItemComponent}}
-        @verticalPosition={{or @verticalPosition 'below'}}
-        @searchEnabled={{@searchEnabled}}
-        @searchPlaceholder={{@searchPlaceholder}}
-        @extra={{this.extra}}
-        @search={{@search}}
-        @beforeOptionsComponent={{or
-          @beforeOptionsComponent
-          'ak-select/before-option'
-        }}
-        data-test-power-select
-        as |option|
-      >
-        {{yield option}}
-      </PowerSelect>
+          @options={{@options}}
+          @onChange={{@onChange}}
+          @selected={{@selected}}
+          @placeholder={{@placeholder}}
+          @disabled={{@disabled}}
+          @renderInPlace={{@renderInPlace}}
+          @ariaInvalid='{{if @error true false}}'
+          @onOpen={{@onOpen}}
+          @onClose={{@onClose}}
+          @loadingMessage={{@loadingMessage}}
+          @selectedItemComponent={{@selectedItemComponent}}
+          @verticalPosition={{or @verticalPosition 'below'}}
+          @searchEnabled={{@searchEnabled}}
+          @searchPlaceholder={{@searchPlaceholder}}
+          @extra={{this.extra}}
+          @search={{@search}}
+          @beforeOptionsComponent={{or
+            @beforeOptionsComponent
+            'ak-select/before-option'
+          }}
+          data-test-power-select
+          as |option|
+        >
+          {{yield option}}
+        </SelectComponent>
+      {{/let}}
     </div>
 
     {{#if @helperText}}
