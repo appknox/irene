@@ -10,12 +10,31 @@
   </AkIconButton>
 
   {{#if this.showLinkUploadModal}}
-    <AkModal
-      @showHeader={{true}}
-      @headerTitle={{t 'uploadAppModule.linkUploadPopupHeader'}}
-      @onClose={{this.closeLinkUploadModal}}
-    >
+    <AkModal @noGutter={{true}} @onClose={{this.closeLinkUploadModal}}>
       <:default>
+        <AkAppbar
+          data-test-ak-modal-header
+          @justifyContent='space-between'
+          as |ab|
+        >
+          <AkStack @alignItems='center' @spacing='1.5'>
+            <AkTypography @variant='h5' @fontWeight='medium' @color='inherit'>
+              {{t 'uploadAppModule.linkUploadPopupHeader'}}
+            </AkTypography>
+
+            <AkChip @color='primary' @size='small' @label={{t 'beta'}} />
+          </AkStack>
+
+          <AkIconButton
+            data-test-modal-close-btn
+            class={{ab.classes.defaultIconBtn}}
+            {{on 'click' this.closeLinkUploadModal}}
+            @size='small'
+          >
+            <AkIcon @iconName='close' />
+          </AkIconButton>
+        </AkAppbar>
+
         <AkStack
           @direction='column'
           @spacing='2'
@@ -61,14 +80,14 @@
                 </AkTypography>
               </li>
 
-              <li>
+              {{! <li>
                 <AkTypography
                   @variant='body2'
                   data-test-uploadAppViaLinkModal-appstoreValidUrl
                 >
                   https://apps.apple.com/{country_code}/app/{app_slug}/id{app_id}
                 </AkTypography>
-              </li>
+              </li> }}
             </ul>
           </AkStack>
 
