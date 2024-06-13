@@ -1,0 +1,40 @@
+<AkStack
+  @width='full'
+  @justifyContent='flex-end'
+  @alignItems='center'
+  local-class='footer-root'
+>
+  <AkStack
+    @width='full'
+    @justifyContent='flex-end'
+    @alignItems='center'
+    @spacing='2'
+    local-class='footer-cta-btns-container'
+  >
+    <AkButton
+      @variant='outlined'
+      @color='primary'
+      disabled={{@isSavingAnalysis}}
+      {{on 'click' (fn @saveAnalysis false)}}
+      data-test-securityAnalysisDetails-footer-saveAndContinueBtn
+    >
+      {{if
+        (and @isSavingAnalysis @isSaveActionOnly)
+        'Updating Analysis...'
+        'Save & Continue Editing'
+      }}
+    </AkButton>
+
+    <AkButton
+      disabled={{@isSavingAnalysis}}
+      {{on 'click' (fn @saveAnalysis true)}}
+      data-test-securityAnalysisDetails-footer-saveAndGoBackBtn
+    >
+      {{if
+        (and @isSavingAnalysis (not @isSaveActionOnly))
+        'Updating Analysis...'
+        'Save & Go Back'
+      }}
+    </AkButton>
+  </AkStack>
+</AkStack>

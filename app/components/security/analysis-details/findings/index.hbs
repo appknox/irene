@@ -1,0 +1,81 @@
+<AkStack
+  @direction='column'
+  @width='full'
+  data-test-securityAnalysisDetails-findings-root
+>
+  <AkStack @width='full' @alignItems='center' @justifyContent='space-between'>
+    <AkStack
+      @direction='column'
+      data-test-securityAnalysisDetails-findings-infoTexts
+    >
+      <AkTypography @variant='h5'>
+        Findings
+      </AkTypography>
+
+      <AkTypography @variant='body2' @color='textSecondary'>
+        All discoveries associated with this vulnerability analysis
+      </AkTypography>
+    </AkStack>
+
+    {{#if this.allFindings.length}}
+      <AkButton
+        @variant='outlined'
+        {{on 'click' this.openClearAllFindingConfirmBox}}
+        data-test-securityAnalysisDetails-findings-clearAllFindingsBtn
+      >
+        <:leftIcon>
+          <AkIcon @iconName='close' />
+        </:leftIcon>
+
+        <:default>
+          Clear All Findings
+        </:default>
+      </AkButton>
+    {{/if}}
+  </AkStack>
+
+  <AkDivider @color='dark' class='my-2' />
+
+  {{#if this.allFindings.length}}
+    <Security::AnalysisDetails::Findings::Table
+      @analysis={{this.analysis}}
+      @allFindings={{this.allFindings}}
+      @openRemoveFindingConfirmBox={{this.openRemoveFindingConfirmBox}}
+    />
+
+  {{else}}
+    <AkStack
+      @direction='row'
+      @alignItems='center'
+      @spacing='1'
+      data-test-securityAnalysisDetails-findings-noFindingsInfoText
+    >
+      <AkIcon @iconName='info' @size='small' />
+
+      <AkTypography @color='textSecondary' @variant='body2' @fontWeight='light'>
+        No findings added for this vulnerability.
+      </AkTypography>
+    </AkStack>
+  {{/if}}
+
+  <AkDivider @color='dark' class='my-2' />
+
+  <Security::AnalysisDetails::Findings::AddForm
+    @analysis={{this.analysis}}
+    @addNewFinding={{this.addNewFinding}}
+  />
+</AkStack>
+
+<ConfirmBox
+  @isActive={{this.showClearAllFindingsConfirmBox}}
+  @title='Are you sure you want to clear all findings?'
+  @confirmAction={{this.clearAllFindings}}
+  @cancelAction={{this.closeClearAllFindingConfirmBox}}
+/>
+
+<ConfirmBox
+  @isActive={{this.showRemoveFindingConfirmBox}}
+  @title='Are you sure you want to remove this finding?'
+  @confirmAction={{this.deleteFinding}}
+  @cancelAction={{this.closeRemoveFindingConfirmBox}}
+/>

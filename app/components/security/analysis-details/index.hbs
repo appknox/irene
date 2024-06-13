@@ -1,0 +1,74 @@
+<AkStack
+  @direction='column'
+  @width='full'
+  local-class='analysis-details-root'
+  class='px-3'
+>
+  <AkBreadcrumbs::Container>
+    {{#each this.breadcrumbItems as |item|}}
+      <AkBreadcrumbs::Item
+        @route={{item.route}}
+        @model={{item.model}}
+        @linkTitle={{item.linkTitle}}
+      />
+    {{/each}}
+  </AkBreadcrumbs::Container>
+
+  <Security::AnalysisDetails::Header
+    @analysis={{this.analysisDetails}}
+    @updateAnalysis={{this.triggerUpdateAnalysis}}
+    @updateCVSSScore={{this.triggerUpdateCVSSScore}}
+  />
+
+  <AkStack
+    @direction='column'
+    @width='full'
+    local-class='analysis-details-section-wrapper'
+    class='p-2 my-2'
+  >
+    <Security::AnalysisDetails::CvssMetrics
+      @analysis={{this.analysisDetails}}
+      @updateCVSSScore={{this.triggerUpdateCVSSScore}}
+      @isInValidCvssBase={{this.isInValidCvssBase}}
+    />
+  </AkStack>
+
+  <AkStack
+    @direction='column'
+    @width='full'
+    local-class='analysis-details-section-wrapper'
+    class='p-2 my-2'
+  >
+    <Security::AnalysisDetails::RegulatoryCategories
+      @analysis={{this.analysisDetails}}
+    />
+  </AkStack>
+
+  <AkStack
+    @direction='column'
+    @width='full'
+    local-class='analysis-details-section-wrapper'
+    class='p-2 my-2'
+  >
+    <Security::AnalysisDetails::Findings @analysis={{this.analysisDetails}} />
+  </AkStack>
+
+  <AkStack
+    @direction='column'
+    @width='full'
+    local-class='analysis-details-section-wrapper'
+    class='p-2 my-2'
+  >
+    <Security::AnalysisDetails::Attachments
+      @analysis={{this.analysisDetails}}
+      @updateAnalysis={{this.triggerUpdateAnalysis}}
+    />
+  </AkStack>
+
+  <Security::AnalysisDetails::Footer
+    @analysis={{this.analysisDetails}}
+    @saveAnalysis={{this.triggerSaveAnalysis}}
+    @isSavingAnalysis={{this.saveAnalysis.isRunning}}
+    @isSaveActionOnly={{this.isSaveActionOnly}}
+  />
+</AkStack>

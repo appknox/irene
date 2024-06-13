@@ -6,5 +6,7 @@ export default Factory.extend({
     return `cwe${i}`;
   },
 
-  url: faker.internet.url(),
+  url() {
+    return faker.internet.url();
+  },
 });
