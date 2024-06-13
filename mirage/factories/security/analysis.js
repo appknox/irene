@@ -5,43 +5,45 @@ import ENUMS from 'irene/enums';
 export default Factory.extend({
   analiser_version: 1,
   cvss_version: 3,
-  cvss_base: 10.0,
+  cvss_base() {
+    return faker.number.float({ min: 1.0, max: 9.9, fractionDigits: 1 });
+  },
   cvss_vector: 'CVSS:3.0/AV:N/AC:L/PR:N/UI:N/S:C/C:H/I:H/A:H',
 
   attack_vector() {
-    return faker.string.alpha({ length: 1, casing: 'upper' });
+    return faker.helpers.arrayElement(ENUMS.ATTACK_VECTOR.BASE_VALUES);
   },
 
   attack_complexity() {
-    return faker.string.alpha({ length: 1, casing: 'upper' });
+    return faker.helpers.arrayElement(ENUMS.ATTACK_COMPLEXITY.BASE_VALUES);
   },
 
   privileges_required() {
-    return faker.string.alpha({ length: 1, casing: 'upper' });
+    return faker.helpers.arrayElement(ENUMS.PRIVILEGES_REQUIRED.BASE_VALUES);
   },
 
   user_interaction() {
-    return faker.string.alpha({ length: 1, casing: 'upper' });
+    return faker.helpers.arrayElement(ENUMS.USER_INTERACTION.BASE_VALUES);
   },
 
   scope() {
-    return faker.string.alpha({ length: 1, casing: 'upper' });
+    return faker.helpers.arrayElement(ENUMS.SCOPE.BASE_VALUES);
   },
 
   confidentiality_impact() {
-    return faker.string.alpha({ length: 1, casing: 'upper' });
+    return faker.helpers.arrayElement(ENUMS.CONFIDENTIALITY_IMPACT.BASE_VALUES);
   },
 
   integrity_impact() {
-    return faker.string.alpha({ length: 1, casing: 'upper' });
+    return faker.helpers.arrayElement(ENUMS.INTEGRITY_IMPACT.BASE_VALUES);
   },
 
   availability_impact() {
-    return faker.string.alpha({ length: 1, casing: 'upper' });
+    return faker.helpers.arrayElement(ENUMS.AVAILABILITY_IMPACT.BASE_VALUES);
   },
 
   risk() {
-    return faker.helpers.arrayElement(ENUMS.RISK.VALUES);
+    return faker.helpers.arrayElement(ENUMS.RISK.BASE_VALUES);
   },
 
   overridden_risk() {
@@ -49,7 +51,7 @@ export default Factory.extend({
   },
 
   status() {
-    return faker.helpers.arrayElement(ENUMS.ANALYSIS_STATUS.VALUES);
+    return faker.helpers.arrayElement(ENUMS.ANALYSIS_STATUS.BASE_VALUES);
   },
 
   overridden_risk_comment() {

@@ -1,0 +1,21 @@
+.analysis-details-header-section {
+  border: 1px solid var(--security-analysis-details-header-border-color);
+  background-color: var(--security-analysis-details-header-background-color);
+}
+
+.mark-as-passed-button,
+.mark-as-passed-button:hover,
+.mark-as-passed-button:focus {
+  background-color: var(
+    --security-analysis-details-header-marked-as-passed-background-color
+  );
+  border-color: var(
+    --security-analysis-details-header-marked-as-passed-border-color
+  );
+  color: var(--security-analysis-details-header-marked-as-passed-color);
+  box-shadow: unset;
+
+  :global(.ak-icon) {
+    color: var(--security-analysis-details-header-marked-as-passed-color);
+  }
+}

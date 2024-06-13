@@ -1,0 +1,19 @@
+.footer-root {
+  background-color: var(
+    --security-analysis-details-footer-white-background-color
+  );
+  padding-bottom: 1.5em;
+  position: sticky;
+  bottom: 0em;
+  z-index: 10;
+
+  .footer-cta-btns-container {
+    padding: 1.4286em;
+    padding-bottom: 1em;
+    border: 1px solid var(--security-analysis-details-footer-cta-border-color);
+    box-shadow: var(--security-analysis-details-footer-cta-box-shadow);
+    background-color: var(
+      --security-analysis-details-footer-white-background-color
+    );
+  }
+}

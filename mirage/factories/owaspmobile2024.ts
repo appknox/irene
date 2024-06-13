@@ -2,7 +2,10 @@ import base from './base';
 import { faker } from '@faker-js/faker';
 
 export const OWASPMOBILE2024_FACTORY_DEF = {
-  title: faker.lorem.sentence(),
+  title() {
+    return faker.lorem.sentence();
+  },
+
   year: faker.date.past().getFullYear(),
 
   code(i: number) {

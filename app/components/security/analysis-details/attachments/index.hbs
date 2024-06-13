@@ -1,0 +1,132 @@
+<AkStack
+  @width='full'
+  @alignItems='center'
+  @justifyContent='space-between'
+  data-test-securityAnalysisDetails-attachments-root
+>
+  <AkStack
+    @direction='column'
+    data-test-securityAnalysisDetails-attachments-header
+  >
+    <AkTypography @variant='h5'>
+      Attachments
+    </AkTypography>
+
+    <AkTypography @variant='body2' @color='textSecondary'>
+      Files relevant to this analysis
+    </AkTypography>
+  </AkStack>
+
+  {{#let
+    (file-queue
+      name='analysisAttachmentFileUpload' onFileAdded=this.triggerFileUpload
+    )
+    as |queue|
+  }}
+    <AkButton
+      @tag='label'
+      @variant='outlined'
+      @typographyFontWeight='medium'
+      @disabled={{this.uploadFile.isRunning}}
+      data-test-securityAnalysisDetails-attachments-uploadFileTrigger
+    >
+      <:leftIcon>
+        <AkIcon @iconName='file-upload' />
+      </:leftIcon>
+
+      <:default>
+        {{#if this.uploadFile.isRunning}}
+          {{t 'uploading'}}...
+        {{else}}
+          Upload File
+        {{/if}}
+
+        <input
+          type='file'
+          disabled={{this.uploadFile.isRunning}}
+          id='upload-analysis-details-file-input'
+          {{style display='none'}}
+          {{queue.selectFile}}
+          data-test-securityAnalysisDetails-attachments-uploadFileInput
+        />
+      </:default>
+    </AkButton>
+  {{/let}}
+</AkStack>
+
+<AkDivider @color='dark' class='my-2' />
+
+<AkStack @width='full' @direction='column' @spacing='2'>
+  {{#if this.analysis.attachments}}
+    <AkStack
+      @width='full'
+      @direction='column'
+      local-class='attachment-list-container'
+    >
+      {{#each this.analysis.attachments as |attachment|}}
+        <AkStack
+          @justifyContent='space-between'
+          @alignItems='center'
+          @width='full'
+          @spacing='0.5'
+          local-class='attachment-details'
+          class='p-1'
+          data-test-securityAnalysisDetails-attachments-uploadedFile='{{attachment.id}}'
+        >
+          <AkStack @alignItems='center' @spacing='1'>
+            <div
+              data-type='{{file-extension attachment.name}}'
+              title='{{attachment.name}}'
+              local-class='attachment'
+              data-test-securityAnalysisDetails-attachments-uploadedFile-extension
+            />
+
+            <AkTypography
+              @fontWeight='light'
+              data-test-securityAnalysisDetails-attachments-uploadedFile-name
+            >
+              {{attachment.name}}
+            </AkTypography>
+          </AkStack>
+
+          <AkStack @alignItems='center' @spacing='1'>
+            <AkIconButton
+              {{on 'click' (fn this.triggerDownloadAttachment attachment.id)}}
+              data-test-securityAnalysisDetails-attachments-uploadedFile-downloadBtn
+            >
+              <AkIcon @iconName='download' />
+            </AkIconButton>
+
+            <AkIconButton
+              disabled={{and
+                this.deleteFile.isRunning
+                (eq this.fileIDToDelete attachment.id)
+              }}
+              {{on 'click' (fn this.openRemoveFileConfirmBox attachment.id)}}
+              data-test-securityAnalysisDetails-attachments-uploadedFile-deleteBtn
+            >
+              <AkIcon @iconName='delete' @variant='outlined' @color='error' />
+            </AkIconButton>
+          </AkStack>
+        </AkStack>
+      {{/each}}
+    </AkStack>
+
+  {{else}}
+    <AkTypography
+      @color='neutral'
+      @variant='h6'
+      @fontWeight='light'
+      data-test-securityAnalysisDetails-attachments-emptyUploadMessage
+    >
+      No Files Uploaded
+    </AkTypography>
+  {{/if}}
+</AkStack>
+
+<ConfirmBox
+  @isActive={{this.showRemoveFileConfirmBox}}
+  @title='Are you sure you want to remove this file?'
+  @confirmAction={{this.confirmFileDeleteAction}}
+  @cancelAction={{this.closeRemoveFileConfirmBox}}
+/>

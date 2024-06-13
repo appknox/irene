@@ -20,7 +20,7 @@ export default class SecurityNavMenuComponent extends Component<SecurityNavMenuS
         route: 'authenticated.security.projects',
         label: 'Projects',
         currentWhen:
-          'authenticated.security.projects authenticated.security.files authenticated.security.file',
+          'authenticated.security.projects authenticated.security.files authenticated.security.file authenticated.security.analysis',
       },
       {
         id: 'downloadapp',

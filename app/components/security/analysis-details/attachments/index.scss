@@ -1,0 +1,63 @@
+$extensions-list: (
+  apk: #5eb533,
+  ipa: #8e44ad,
+  txt: #a6b1b5,
+  log: #373a43,
+  pdf: #db3e3d,
+  doc: #307cf1,
+  docx: #307cf1,
+  xls: #0f9d58,
+  xlsx: #0f9d58,
+  xlsm: #0f9d58,
+  zip: #855d40,
+  jpg: #80c081,
+  jpeg: #80c081,
+  png: #80c081,
+  bmp: #80c081,
+);
+
+.attachment-list-container {
+  box-shadow: var(--security-analysis-details-attachments-list-box-shadow);
+  border-radius: var(
+    --security-analysis-details-attachments-list-border-radius
+  );
+  border: 1px solid
+    var(--security-analysis-details-attachments-list-border-color);
+
+  .attachment-details {
+    border-top: 1px solid
+      var(--security-analysis-details-attachments-list-border-color);
+
+    .text-with-icon {
+      gap: 0.2587em;
+    }
+
+    .attachment {
+      &::before {
+        content: attr(data-type);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        font-size: 0.7em;
+        font-weight: bold;
+        width: 4em;
+        height: 2.3em;
+        text-align: center;
+        color: var(--security-analysis-details-attachments-type-text-color);
+        background: var(
+          --security-analysis-details-attachments-type-background-color
+        );
+      }
+
+      @each $extn, $color in $extensions-list {
+        &[data-type='#{$extn}'] {
+          &::before {
+            background: $color;
+          }
+        }
+      }
+    }
+  }
+}
