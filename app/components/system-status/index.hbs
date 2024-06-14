@@ -31,7 +31,7 @@
         <t.head @columns={{this.columns}} />
 
         <t.body @rows={{this.rows}} as |b|>
-          <b.row as |r|>
+          <b.row data-test-system-status-rows='{{b.rowValue.id}}' as |r|>
             <r.cell>
               {{#if r.columnValue.component}}
                 {{#let (component r.columnValue.component) as |Component|}}
