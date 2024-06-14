@@ -1,0 +1,55 @@
+<AkStack @spacing='1' @flexWrap='wrap'>
+  {{#each @file.tags as |tag|}}
+    <AkChip
+      data-test-fileDetailsSummary-fileTag='{{tag.name}}'
+      @label={{tag.name}}
+      @variant='outlined'
+      @onDelete={{perform this.handleDeleteTag tag}}
+    />
+  {{/each}}
+
+  {{#if this.showAddTagForm}}
+    <AkStack @spacing='1'>
+      <div {{style width='135px'}}>
+        <AkTextField
+          data-test-fileDetailsSummary-addTagInput
+          @value={{this.tagName}}
+          @placeholder={{t 'enterTagName'}}
+          @textFieldRootClass={{this.classes.addTagTextFieldRoot}}
+          @autofocus={{true}}
+        />
+      </div>
+
+      <AkIconButton
+        @variant='outlined'
+        {{on 'click' (perform this.handleAddTag)}}
+        disabled={{this.handleAddTag.isRunning}}
+        data-test-fileDetailsSummary-addTagConfirmBtn
+      >
+        <AkIcon @iconName='done' @color='success' />
+      </AkIconButton>
+
+      <AkIconButton
+        @variant='outlined'
+        {{on 'click' this.handleHideAddTagForm}}
+        disabled={{this.handleAddTag.isRunning}}
+        data-test-fileDetailsSummary-addTagCancelBtn
+      >
+        <AkIcon @iconName='close' @color='error' />
+      </AkIconButton>
+    </AkStack>
+  {{else}}
+    <AkButton
+      data-test-fileDetailsSummary-addTagBtn
+      local-class='add-tag-btn'
+      @variant='outlined'
+      {{on 'click' this.handleShowAddTagForm}}
+    >
+      <:default>{{t 'addTags'}}</:default>
+
+      <:rightIcon>
+        <AkIcon @iconName='add' />
+      </:rightIcon>
+    </AkButton>
+  {{/if}}
+</AkStack>

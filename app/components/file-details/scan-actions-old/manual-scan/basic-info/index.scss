@@ -1,0 +1,17 @@
+.basic-info-group {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.5em;
+  box-sizing: border-box;
+
+  .basic-info-label {
+    flex: 1;
+  }
+
+  .basic-info-input-container {
+    flex: 1;
+    max-width: 200px;
+  }
+}

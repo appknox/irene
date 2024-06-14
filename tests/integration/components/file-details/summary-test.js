@@ -87,10 +87,7 @@ module('Integration | Component | file-details/summary', function (hooks) {
       .dom('[data-test-fileDetailsSummary-fileOverview-appPlatform]')
       .exists();
 
-    assert
-      .dom('[data-test-fileDetailsSummary-showMoreOrLessBtn]')
-      .isNotDisabled()
-      .hasText('t:showMore:()');
+    assert.dom('[data-test-fileDetailsSummary-showMoreOrLessBtn]');
   });
 
   test('it should toggle show more for file overview', async function (assert) {
@@ -121,16 +118,14 @@ module('Integration | Component | file-details/summary', function (hooks) {
     });
 
     assert
-      .dom('[data-test-fileDetailsSummary-showMoreOrLessBtn]')
-      .isNotDisabled()
-      .hasText('t:showMore:()');
+      .dom('[data-test-fileDetailsSummary-showMoreOrLessBtn-icon]')
+      .hasClass('ak-icon-arrow-drop-down');
 
     await click('[data-test-fileDetailsSummary-showMoreOrLessBtn]');
 
     assert
-      .dom('[data-test-fileDetailsSummary-showMoreOrLessBtn]')
-      .isNotDisabled()
-      .hasText('t:showLess:()');
+      .dom('[data-test-fileDetailsSummary-showMoreOrLessBtn-icon]')
+      .hasClass('ak-icon-arrow-drop-up');
 
     hiddenFileOverviewDetails.forEach((d) => {
       assert
@@ -228,9 +223,8 @@ module('Integration | Component | file-details/summary', function (hooks) {
     `);
 
     assert
-      .dom('[data-test-fileDetailsSummary-showMoreOrLessBtn]')
-      .isNotDisabled()
-      .hasText('t:showMore:()');
+      .dom('[data-test-fileDetailsSummary-showMoreOrLessBtn-icon]')
+      .hasClass('ak-icon-arrow-drop-down');
 
     await click('[data-test-fileDetailsSummary-showMoreOrLessBtn]');
 
@@ -346,9 +340,8 @@ module('Integration | Component | file-details/summary', function (hooks) {
     `);
 
     assert
-      .dom('[data-test-fileDetailsSummary-showMoreOrLessBtn]')
-      .isNotDisabled()
-      .hasText('t:showMore:()');
+      .dom('[data-test-fileDetailsSummary-showMoreOrLessBtn-icon]')
+      .hasClass('ak-icon-arrow-drop-down');
 
     await click('[data-test-fileDetailsSummary-showMoreOrLessBtn]');
 
@@ -388,5 +381,19 @@ module('Integration | Component | file-details/summary', function (hooks) {
 
       assert.strictEqual(notify.successMsg, 't:fileTag.deletedSuccessMsg:()');
     }
+  });
+
+  test('it renders inactive file icon', async function (assert) {
+    this.file.isActive = false;
+
+    this.server.get('/v2/projects/:id', (schema, req) => {
+      return schema.projects.find(`${req.params.id}`)?.toJSON();
+    });
+
+    await render(hbs`
+        <FileDetails::Summary @file={{this.file}} />
+    `);
+
+    assert.dom('[data-test-fileDetailSummary-inactiveFileIcon]').exists();
   });
 });

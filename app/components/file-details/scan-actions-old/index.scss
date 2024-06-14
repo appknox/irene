@@ -1,0 +1,10 @@
+.scan-actions-root {
+  width: 100%;
+  border: 1px solid var(--file-details-scan-actions-old-border-color);
+  background-color: var(--file-details-scan-actions-old-background-color);
+  box-sizing: border-box;
+
+  .scan-actions-header {
+    padding: 0.75em 1.5em;
+  }
+}

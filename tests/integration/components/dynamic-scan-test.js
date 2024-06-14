@@ -63,7 +63,7 @@ class PollServiceStub extends Service {
 }
 
 module(
-  'Integration | Component | file-details/scan-actions/dynamic-scan',
+  'Integration | Component | file-details/scan-actions-old/dynamic-scan',
   function (hooks) {
     setupRenderingTest(hooks);
     setupMirage(hooks);

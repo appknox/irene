@@ -1,0 +1,92 @@
+<div local-class='scan-actions-root'>
+  <AkStack
+    @alignItems='center'
+    @justifyContent='space-between'
+    local-class='scan-actions-header'
+  >
+    <AkTypography data-test-fileDetailScanActions-title @variant='subtitle1'>
+      {{t 'scanTypes'}}
+    </AkTypography>
+
+    {{#unless @file.isActive}}
+      <AkTooltip
+        @placement='top'
+        @arrow={{true}}
+        @title={{t 'fileInactive'}}
+        @color='dark'
+      >
+        <AkIcon
+          data-test-fileDetailScanActions-inactiveFileIcon
+          @color='warn'
+          @iconName='warning'
+        />
+      </AkTooltip>
+    {{/unless}}
+  </AkStack>
+
+  <AkDivider @color='dark' />
+
+  <AkStack class='p-3' @spacing='6' @alignItems='center'>
+    <AkStack
+      @direction='column'
+      @alignItems='center'
+      @spacing='1.5'
+      data-test-cy='staticScan-infoContainer'
+    >
+      <AkTypography
+        data-test-fileDetailScanActions-staticScanTitle
+        @variant='h6'
+      >
+        {{t 'staticScan'}}
+      </AkTypography>
+
+      <FileDetails::ScanActionsOld::StaticScan @file={{@file}} />
+    </AkStack>
+
+    <AkStack
+      @direction='column'
+      @alignItems='center'
+      @spacing='1.5'
+      data-test-cy='dynamicScan-infoContainer'
+    >
+      <AkTypography
+        data-test-fileDetailScanActions-dynamicScanTitle
+        @variant='h6'
+      >
+        {{t 'dynamicScan'}}
+      </AkTypography>
+
+      <DynamicScan
+        @file={{@file}}
+        @vncViewer={{false}}
+        @dynamicScanText={{t 'start'}}
+      />
+    </AkStack>
+
+    {{#if this.isAPIScanEnabled}}
+      <AkStack @direction='column' @alignItems='center' @spacing='1.5'>
+        <AkTypography
+          data-test-fileDetailScanActions-apiScanTitle
+          @variant='h6'
+        >
+          {{t 'apiScan'}}
+        </AkTypography>
+
+        <FileDetails::ScanActionsOld::ApiScan @file={{@file}} />
+      </AkStack>
+    {{/if}}
+
+    {{#unless this.isManualScanDisabled}}
+      <AkStack @direction='column' @alignItems='center' @spacing='1.5'>
+        <AkTypography
+          data-test-fileDetailScanActions-manualScanTitle
+          @variant='h6'
+        >
+          {{t 'manualScan'}}
+        </AkTypography>
+
+        <FileDetails::ScanActionsOld::ManualScan @file={{@file}} />
+      </AkStack>
+    {{/unless}}
+  </AkStack>
+</div>
