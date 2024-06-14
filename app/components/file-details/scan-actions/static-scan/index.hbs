@@ -1,48 +1,53 @@
-<div>
-  {{#if @file.isStaticCompleted}}
-    <AkStack @alignItems='stretch' @spacing='1.5'>
-      <AkButton
-        data-test-fileDetailScanActions-staticScanCompletedStatus
-        {{style pointerEvents='none'}}
-      >
-        <:leftIcon>
-          <AkIcon @iconName='done' />
-        </:leftIcon>
-
-        <:default>{{t 'completed'}}</:default>
-      </AkButton>
-
-      <AkIconButton
-        {{style padding='0.5em'}}
-        {{on 'click' this.handleRescanModalOpen}}
-        @variant='outlined'
-        @borderColor='primary'
-        data-test-fileDetailScanActions-staticScanRestartBtn
-      >
-        <AkIcon @iconName='refresh' @color='primary' />
-      </AkIconButton>
-    </AkStack>
-  {{else}}
-    <AkButton
-      data-test-fileDetailScanActions-staticScanInProgressStatus
-      @variant='outlined'
-      @disabled={{true}}
-    >
-      {{t 'scanning'}}
-      :
-      {{@file.staticScanProgress}}%
-    </AkButton>
-  {{/if}}
+<AkStack
+  @justifyContent='space-between'
+  @alignItems='center'
+  @flexWrap='wrap'
+  class='p-2'
+>
+  <AkTypography @variant='h5' data-test-fileDetailScanActions-staticScanTitle>
+    {{t 'sast'}}
+  </AkTypography>
 
   {{#if @file.isStaticCompleted}}
-    <ConfirmBox
-      @isActive={{this.showRescanModal}}
-      @title={{t 'modalCard.rescan.title'}}
-      @description={{t 'modalCard.rescan.description'}}
-      @confirmText={{t 'yes'}}
-      @cancelText={{t 'no'}}
-      @confirmAction={{perform this.handleRescanApp}}
-      @disabled={{this.handleRescanApp.isRunning}}
+    <AkChip
+      @label={{t 'completed'}}
+      @color='success'
+      @variant='semi-filled'
+      @size='small'
+      local-class='chips-uppercase'
+      data-test-fileDetailScanActions-staticScanCompletedStatus
     />
+  {{else}}
+    <AkStack @alignItems='center' local-class='scanning-chip chips-uppercase'>
+      <AkLoader @size={{12}} />
+
+      <AkTypography
+        @color='textSecondary'
+        @fontWeight='bold'
+        local-class='scanning-text'
+        data-test-fileDetailScanActions-staticScanInProgressStatus
+      >
+        {{t 'scanning'}}...
+        {{@file.staticScanProgress}}%
+      </AkTypography>
+    </AkStack>
   {{/if}}
-</div>
+</AkStack>
+
+<AkDivider @color='dark' />
+
+<AkLink
+  @color='primary'
+  @underline='always'
+  @fontWeight='bold'
+  class='px-2 py-1'
+  local-class='view-details-icon'
+>
+  <:default>
+    {{t 'viewDetails'}}
+  </:default>
+
+  <:rightIcon>
+    <AkIcon @iconName='arrow-right' />
+  </:rightIcon>
+</AkLink>

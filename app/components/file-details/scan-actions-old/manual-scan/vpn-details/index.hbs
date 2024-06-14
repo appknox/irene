@@ -1,0 +1,65 @@
+<AkStack @direction='column' @spacing='1.5' class='px-3 py-2'>
+  <div local-class='vpn-details-group'>
+    <AkTypography
+      data-test-manualScanVpnDetails-vpnRequiredLabel
+      local-class='vpn-details-label'
+    >
+      {{t 'modalCard.manual.vpnRequired'}}
+    </AkTypography>
+
+    <div local-class='vpn-details-input-container'>
+      <AkSelect
+        data-test-manualScanVpnDetails-vpnRequiredSelect
+        @options={{this.vpnStatuses}}
+        @selected={{@manualscan.vpnStatus}}
+        @onChange={{this.handleVpnStatusChange}}
+        as |status|
+      >
+        {{t status}}
+      </AkSelect>
+    </div>
+  </div>
+
+  {{#if @manualscan.vpnRequired}}
+    <div data-test-manualScanVpnDetails-detailsContainer class='mt-2'>
+      <AkTypography data-test-manualScanVpnDetails-detailsLabel>
+        {{t 'modalCard.manual.enterVPNDetails'}}
+      </AkTypography>
+
+      <AkStack class='my-2' @spacing='1.5'>
+        <AkTextField
+          data-test-manualScanVpnDetails-vpnAddressInput
+          @placeholder={{t 'modalCard.manual.vpnAddress'}}
+          @value={{@manualscan.vpnDetails.address}}
+        />
+
+        <AkTextField
+          data-test-manualScanVpnDetails-vpnPortInput
+          @placeholder={{t 'modalCard.manual.vpnPort'}}
+          @value={{@manualscan.vpnDetails.port}}
+        />
+      </AkStack>
+    </div>
+
+    <div>
+      <AkTypography data-test-manualScanVpnDetails-credentialsLabel>
+        {{t 'modalCard.manual.enterCredentails'}}
+      </AkTypography>
+
+      <AkStack class='my-2' @spacing='1.5'>
+        <AkTextField
+          data-test-manualScanVpnDetails-usernameInput
+          @placeholder={{t 'username'}}
+          @value={{@manualscan.vpnDetails.username}}
+        />
+
+        <AkTextField
+          data-test-manualScanVpnDetails-passwordInput
+          @type='password'
+          @placeholder={{t 'password'}}
+          @value={{@manualscan.vpnDetails.password}}
+        />
+      </AkStack>
+    </div>
+  {{/if}}
+</AkStack>
