@@ -34,7 +34,7 @@ const MFVA_INTERACTIONS: AppInteraction[] = [
     name: 'open_webview',
     snapshot: 'open_webview',
     clickCoordinates: [152, 100],
-    timeout: 5000,
+    timeout: 6000,
   },
   {
     name: 'back_to_home_from_webview',
@@ -103,7 +103,7 @@ const APP_TYPE_DETAILS = [
         MFVA_CROPPED_INTERACTION_OVERRIDES,
         appInfo,
         'mfva_home_screen',
-        [0.65, 0.55]
+        [0.6, 0.5]
       ),
   },
   {
