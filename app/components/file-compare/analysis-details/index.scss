@@ -4,6 +4,19 @@
   border-top: none;
   border-bottom-width: 1px;
 
+  &.marked-passed {
+    background-color: var(
+      --file-compare-analysis-details-marked-passed-bg-color
+    );
+
+    :global(.scrollable-box),
+    :global(.scrollable-box) pre {
+      background-color: var(
+        --file-compare-analysis-details-marked-passed-vuln-finding-bg-color
+      );
+    }
+  }
+
   .analysis-static-content {
     display: flex;
     flex-direction: column;

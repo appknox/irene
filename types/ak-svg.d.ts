@@ -33,6 +33,8 @@ export enum AkSvgComponentInvocationByNames {
   PlaystoreLogo,
   NoParameterData,
   ProjectListEmpty,
+  SeverityOverrideSuccess,
+  SeverityResetSuccess,
 }
 
 export enum AkSvgComponentInvocationByPaths {

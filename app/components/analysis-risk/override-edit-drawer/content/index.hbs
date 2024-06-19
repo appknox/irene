@@ -1,0 +1,10 @@
+<div local-class='edit-analysis-content'>
+  {{#let (component this.activeComponent) as |ActiveComponent|}}
+    <ActiveComponent
+      @dataModel={{@dataModel}}
+      @setAppBarData={{@setAppBarData}}
+      @setActiveComponent={{this.setActiveComponent}}
+      @drawerCloseHandler={{@drawerCloseHandler}}
+    />
+  {{/let}}
+</div>

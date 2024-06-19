@@ -1,0 +1,37 @@
+<AkDrawer @open={{@open}} @onClose={{@onClose}} @anchor='right' as |dr|>
+  <AkAppbar @justifyContent='space-between' class='px-3' as |ab|>
+    <AkStack @alignItems='center' @spacing='1'>
+      {{#if this.appBarData.onBackClick}}
+        <AkIconButton
+          data-test-analysisRisk-overrideEditDrawer-backBtn
+          {{on 'click' this.appBarData.onBackClick}}
+          class={{ab.classes.defaultIconBtn}}
+        >
+          <AkIcon @iconName='arrow-back' />
+        </AkIconButton>
+      {{/if}}
+
+      <AkTypography
+        data-test-analysisRisk-overrideEditDrawer-title
+        @color='inherit'
+        @variant='h5'
+      >
+        {{this.appBarData.title}}
+      </AkTypography>
+    </AkStack>
+
+    <AkIconButton
+      data-test-analysisRisk-overrideEditDrawer-closeBtn
+      {{on 'click' dr.closeHandler}}
+      class={{ab.classes.defaultIconBtn}}
+    >
+      <AkIcon @iconName='close' />
+    </AkIconButton>
+  </AkAppbar>
+
+  <AnalysisRisk::OverrideEditDrawer::Content
+    @dataModel={{@dataModel}}
+    @setAppBarData={{this.setAppBarData}}
+    @drawerCloseHandler={{dr.closeHandler}}
+  />
+</AkDrawer>

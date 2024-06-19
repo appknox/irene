@@ -1,0 +1,9 @@
+.edit-analysis-content {
+  width: 650px;
+  border: 1px solid
+    var(--analysis-risk-override-edit-drawer-content-border-color);
+  border-radius: var(
+    --analysis-risk-override-edit-drawer-content-border-radius
+  );
+  margin: 1.5em;
+}

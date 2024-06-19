@@ -1,0 +1,9 @@
+{{#let (component @dataModel.resetConfirmComponent) as |ResetConfirm|}}
+  <ResetConfirm
+    @dataModel={{@dataModel}}
+    @resetHandler={{this.handleReset}}
+    @resetCancelHandler={{this.handleResetCancel}}
+    @isResetRunning={{this.resetHandlerTask.isRunning}}
+    @isResetSuccess={{this.showResetSuccess}}
+  />
+{{/let}}

@@ -10,6 +10,8 @@ import Service from '@ember/service';
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
 
+import { getReqBodyObjFromReqBodyStr } from 'irene/tests/helpers/mirage-utils';
+
 dayjs.extend(relativeTime);
 
 class NotificationsStub extends Service {
@@ -24,14 +26,6 @@ class NotificationsStub extends Service {
     this.successMsg = msg;
   }
 }
-
-const getRequestObj = (body) =>
-  JSON.parse(
-    '{"' + body.replace(/&/g, '","').replace(/=/g, '":"') + '"}',
-    function (key, value) {
-      return key === '' ? value : decodeURIComponent(value);
-    }
-  );
 
 module(
   'Integration | Component | project-settings/general-settings/dynamicscan-automation-settings/scripts-archived',
@@ -152,14 +146,7 @@ module(
         this.server.post(
           '/profiles/:id/upload_automation_script',
           (schema, req) => {
-            const reqBody = req.requestBody;
-
-            const scriptKeys = JSON.parse(
-              '{"' + reqBody.replace(/&/g, '","').replace(/=/g, '":"') + '"}',
-              function (key, value) {
-                return key === '' ? value : decodeURIComponent(value);
-              }
-            );
+            const scriptKeys = getReqBodyObjFromReqBodyStr(req);
 
             const automationScript = this.server.create('automation-script', {
               id: 1,
@@ -289,9 +276,7 @@ module(
       this.server.post(
         '/profiles/:id/upload_automation_script',
         (schema, req) => {
-          const reqBody = req.requestBody;
-
-          const scriptKeys = getRequestObj(reqBody);
+          const scriptKeys = getReqBodyObjFromReqBodyStr(req);
 
           const automationScript = this.server.create('automation-script', {
             id: 1,
@@ -307,7 +292,8 @@ module(
       );
 
       this.server.put('/profiles/:id/dynamicscan_mode', (schema, req) => {
-        const reqBody = getRequestObj(req.requestBody);
+        const reqBody = getReqBodyObjFromReqBodyStr(req);
+
         this.set('dynamicscan_mode', reqBody.dynamicscan_mode);
 
         return {

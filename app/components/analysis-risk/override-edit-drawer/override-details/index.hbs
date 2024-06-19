@@ -1,0 +1,110 @@
+<AnalysisRisk::OverrideEditDrawer::VulnerabilityName
+  @dataModel={{@dataModel}}
+/>
+
+<AkDivider @color='dark' class='my-2' />
+
+<div class='p-3'>
+  <AkStack @direction='column' @spacing='1'>
+    <AkTypography
+      data-test-analysisRisk-overrideEditDrawer-overrideDetails-overriddenAsTitle
+      @variant='subtitle1'
+      {{style fontSize='0.857rem'}}
+    >
+      {{t 'editOverrideVulnerability.overriddenAs'}}
+    </AkTypography>
+
+    <AkStack local-class='overridden-as-value-container' @alignItems='center'>
+      <AkTypography
+        data-test-analysisRisk-overrideEditDrawer-overrideDetails-overriddenRiskText
+      >
+        {{t (risk-text @dataModel.overriddenRisk)}}
+      </AkTypography>
+
+      <AnalysisRisk::OverrideEditDrawer::Divider @label='{{t "for"}}' />
+
+      <AkTypography
+        data-test-analysisRisk-overrideEditDrawer-overrideDetails-overriddenRiskCriteriaText
+      >
+        {{this.overrideCriteriaText @dataModel.overrideCriteria}}
+      </AkTypography>
+      <AkStack />
+    </AkStack>
+
+    <AkDivider local-class='details-divider' />
+
+    <AkStack @direction='column' @spacing='1'>
+      <AkTypography
+        @variant='subtitle1'
+        {{style fontSize='0.857rem'}}
+        data-test-analysisRisk-overrideEditDrawer-overrideDetails-reasonTitle
+      >
+        {{t 'reason'}}
+      </AkTypography>
+
+      <AkTypography
+        data-test-analysisRisk-overrideEditDrawer-overrideDetails-reasonValue
+      >
+        {{@dataModel.overriddenRiskComment}}
+      </AkTypography>
+    </AkStack>
+  </AkStack>
+
+  <AkDivider @color='dark' class='my-2' />
+
+  <AkStack @direction='column' @spacing='1'>
+    {{#each this.overrideAuditDetails as |oad|}}
+      <AkStack
+        data-test-analysisRisk-overrideEditDrawer-overrideDetails-auditDetails='{{oad.label}}'
+        local-class='overridden-details-chip'
+        @alignItems='center'
+        @spacing='1'
+      >
+        {{#if oad.icon}}
+          <AkIcon @size='small' @iconName={{oad.icon}} />
+        {{else}}
+          <AnalysisRisk::OverriddenIcon />
+        {{/if}}
+
+        <AkTypography @variant='subtitle1' {{style fontSize='0.857rem'}}>
+          {{oad.label}}
+          -
+        </AkTypography>
+
+        {{#if oad.renderValue}}
+          <AkStack @alignItems='center' @justifyContent='center' @spacing='1'>
+            <AnalysisRisk::Text @risk={{@dataModel.risk}} />
+
+            <AkIcon @size='small' @color='textSecondary' @iconName='east' />
+
+            <AnalysisRisk::Text @risk={{@dataModel.overriddenRisk}} />
+          </AkStack>
+        {{else}}
+          <AkTypography @color='secondary'>
+            {{oad.value}}
+          </AkTypography>
+        {{/if}}
+      </AkStack>
+    {{/each}}
+  </AkStack>
+</div>
+
+<AkDivider @color='dark' />
+
+<AkStack class='px-3 py-2' @alignItems='center' @spacing='2'>
+  <AkButton
+    data-test-analysisRisk-overrideEditDrawer-overrideDetails-editBtn
+    {{on 'click' this.handleEditOverrideClick}}
+  >
+    {{t 'edit'}}
+  </AkButton>
+
+  <AkButton
+    data-test-analysisRisk-overrideEditDrawer-overrideDetails-resetBtn
+    @variant='outlined'
+    @color='neutral'
+    {{on 'click' this.handleResetOverrideClick}}
+  >
+    {{t 'resetOverride'}}
+  </AkButton>
+</AkStack>

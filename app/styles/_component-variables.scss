@@ -669,6 +669,45 @@ body {
   --analysis-risk-color-none: var(--severity-none);
   --analysis-risk-color-waiting: var(--neutral-grey-500);
 
+  // analysis-risk/override-edit-drawer/content
+  --analysis-risk-override-edit-drawer-content-border-color: var(
+    --border-color-1
+  );
+  --analysis-risk-override-edit-drawer-content-border-radius: var(
+    --border-radius
+  );
+
+  // analysis-risk/override-edit-drawer/divider
+  --analysis-risk-override-edit-drawer-divider-color: var(--border-color-1);
+  --analysis-risk-override-edit-drawer-divider-label-background-color: var(
+    --neutral-grey-100
+  );
+
+  // analysis-risk/override-edit-drawer/override-details
+  --analysis-risk-override-edit-drawer-override-details-border-color: var(
+    --border-color-1
+  );
+  --analysis-risk-override-edit-drawer-override-details-border-radius: var(
+    --border-radius
+  );
+
+  // analysis-risk/override-edit-drawer/override-form
+  --analysis-risk-override-edit-drawer-override-form-textarea-border-color: var(
+    --border-color-1
+  );
+  --analysis-risk-override-edit-drawer-override-form-textarea-color: var(
+    --text-primary
+  );
+  --analysis-risk-override-edit-drawer-override-form-error-color: var(
+    --error-main
+  );
+  --analysis-risk-override-edit-drawer-override-form-border-radius: var(
+    --border-radius
+  );
+  --analysis-risk-override-edit-drawer-override-form-severity-container-border-color: var(
+    --border-color-2
+  );
+
   // variables for file-details/severity-level
   --file-details-severity-level-border-color: var(--border-color-1);
 
@@ -733,18 +772,24 @@ body {
   --file-details-vulnerability-analysis-details-background-main: var(
     --background-main
   );
+  --file-details-vulnerability-analysis-details-marked-passed-background-color: var(
+    --neutral-grey-100
+  );
+  --file-details-vulnerability-analysis-details-background-light: var(
+    --background-light
+  );
   --file-details-vulnerability-analysis-details-header-box-shadow: var(
     --box-shadow-5
   );
   --file-details-vulnerability-analysis-details-zIndex: var(--zIndex-appbar);
-  --file-details-vulnerability-analysis-details-vul-finding-border-color: var(
-    --border-color-1
-  );
-  --file-details-vulnerability-analysis-details-vul-finding-background-color: var(
+  --file-details-vulnerability-analysis-details-code-background-color: var(
     --neutral-grey-100
   );
-  --file-details-vulnerability-analysis-details-vul-finding-font-family: var(
-    --font-family
+  --file-details-vulnerability-analysis-details-code-text-color: var(
+    --text-primary
+  );
+  --file-details-vulnerability-analysis-details-marked-passed-code-background-color: var(
+    --neutral-grey-50
   );
   --file-details-vulnerability-analysis-details-color-primary: var(
     --primary-main
@@ -755,13 +800,27 @@ body {
   --file-details-vulnerability-analysis-details-divider-color: var(
     --divider-dark
   );
+  --file-details-vulnerability-analysis-details-border-color: var(
+    --border-color-1
+  );
 
   // variables for file-details/vulnerability-analysis-details/edit-analysis-button
-  --file-details-vulnerability-analysis-details-edit-analysis-button-background-main: var(
+  --file-details-vulnerability-analysis-details-edit-analysis-button-divider-color: var(
+    --neutral-grey-300
+  );
+
+  // variables for file-details/vulnerability-analysis-details/edit-analysis-button/reset-confirm
+  --file-details-vulnerability-analysis-details-edit-analysis-reset-confirm-background-main: var(
     --background-main
   );
-  --file-details-vulnerability-analysis-details-edit-analysis-button-box-shadow: var(
-    --box-shadow-5
+  --file-details-vulnerability-analysis-details-edit-analysis-reset-confirm-border-radius: var(
+    --border-radius
+  );
+  --file-details-vulnerability-analysis-details-edit-analysis-reset-confirm-action-box-shadow: var(
+    --box-shadow-4
+  );
+  --file-details-vulnerability-analysis-details-edit-analysis-reset-confirm-note-background-color: var(
+    --neutral-grey-100
   );
 
   // variables for vnc-viewer
@@ -795,6 +854,12 @@ body {
 
   // variables for file-compare/analysis-details
   --file-compare-analysis-details-border-color: var(--border-color-1);
+  --file-compare-analysis-details-marked-passed-bg-color: var(
+    --neutral-grey-100
+  );
+  --file-compare-analysis-details-marked-passed-vuln-finding-bg-color: var(
+    --neutral-grey-50
+  );
 
   // variables for file-compare/compare-list
   --file-compare-compare-list-wrapper-background-color: var(--background-main);
@@ -947,14 +1012,6 @@ body {
   --project-settings-analysis-settings-border-color: var(--neutral-grey-200);
   --project-settings-analysis-settings-border-radius: var(--border-radius);
 
-  // variables for project-settings/analysis-settings/vulnerability-details
-  --project-settings-analysis-settings-vulnerability-details-border-color: var(
-    --neutral-grey-200
-  );
-  --project-settings-analysis-settings-vulnerability-details-border-radius: var(
-    --border-radius
-  );
-
   // variables for project-settings/analysis-settings/vulnerability-list
   --project-settings-analysis-settings-vulnerability-list-border-color: var(
     --neutral-grey-200
@@ -970,6 +1027,14 @@ body {
   );
   --project-settings-analysis-settings-vulnerability-list-border-radius: var(
     --border-radius
+  );
+
+  // variables for project-settings/analysis-settings/vulnerability-list/reset-confirm
+  --project-settings-analysis-settings-vulnerability-list-reset-confirm-background-main: var(
+    --background-main
+  );
+  --project-settings-analysis-settings-vulnerability-list-reset-confirm-action-box-shadow: var(
+    --box-shadow-4
   );
 
   // variables for project-settings/view-scenario

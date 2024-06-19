@@ -188,6 +188,10 @@ module('Acceptance | projects redirect', function (hooks) {
   });
 
   test('It redirects to authenticated.dashboard.projects route', async function (assert) {
+    const notify = this.owner.lookup('service:notifications');
+
+    notify.setDefaultClearDuration(0);
+
     const scenario = this.server.create('scan-parameter-group', {
       id: '1',
       project: 1,

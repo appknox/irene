@@ -27,3 +27,10 @@
 .severity-none {
   background-color: var(--file-chart-severity-level-color-none);
 }
+
+.tooltip-content-container {
+  width: 320px;
+  padding: 0.5em;
+  box-sizing: border-box;
+  white-space: normal;
+}

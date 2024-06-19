@@ -1,4 +1,10 @@
-<AkStack ...attributes @direction='column' local-class='analysis-details-root'>
+<AkStack
+  ...attributes
+  @direction='column'
+  local-class='
+    analysis-details-root
+    {{if this.isMarkedAsPassed "marked-passed"}}'
+>
   <AkStack
     @width='full'
     class='p-3'
@@ -70,11 +76,11 @@
     </AkTypography>
   </AkStack>
 
-  {{#if (or @analysis.isRisky @analysis.attachments)}}
+  {{#if (or this.isMarkedAsPassedOrRisky @analysis.attachments)}}
     <AkDivider @color='dark' />
 
     <AkStack @width='full' @direction='column' class='p-3'>
-      {{#if @analysis.isRisky}}
+      {{#if this.isMarkedAsPassedOrRisky}}
         <AkTypography @variant='h6' @gutterBottom={{true}}>
           {{t 'vulnerability'}}
         </AkTypography>

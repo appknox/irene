@@ -1,0 +1,35 @@
+.divider-container {
+  width: 100px;
+  height: 24px;
+  position: relative;
+
+  .divider {
+    width: 100%;
+    border-bottom: 1px dashed
+      var(--analysis-risk-override-edit-drawer-divider-color);
+    z-index: -1;
+  }
+
+  .divider,
+  .divider-label {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+  }
+
+  .divider-label {
+    z-index: 1;
+    min-width: 32px;
+    height: 24px;
+    border-radius: 6px;
+    box-sizing: border-box;
+    padding: 0 0.75em;
+    background-color: var(
+      --analysis-risk-override-edit-drawer-divider-label-background-color
+    );
+    font-size: 0.857rem !important;
+    display: inline-flex;
+    align-items: center;
+  }
+}
