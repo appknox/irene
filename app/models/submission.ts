@@ -1,10 +1,10 @@
 /* eslint-disable ember/no-computed-properties-in-native-classes, ember/no-mixins */
 import { AsyncBelongsTo, attr, belongsTo } from '@ember-data/model';
-import { ModelBaseMixin } from 'irene/mixins/base-model';
 import { isEmpty } from '@ember/utils';
+import { ModelBaseMixin } from 'irene/mixins/base-model';
 
 import ENUMS from 'irene/enums';
-import UserModel from './user';
+import type UserModel from 'irene/models/user';
 
 export interface SubmissionAppData {
   name: string;

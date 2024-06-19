@@ -1,7 +1,7 @@
 import commondrf from './commondrf';
 
 type AmAppRecordQuery = {
-  amAppId?: string | number;
+  amAppVersionId?: string | number;
 };
 
 export default class AmAppRecordAdapter extends commondrf {
@@ -15,8 +15,8 @@ export default class AmAppRecordAdapter extends commondrf {
     return this.buildURLFromBase(baseurl);
   }
 
-  _buildNestedURL(_: string | number, amAppId: string | number) {
-    const baseURL = `${this.namespace_v2}/am_apps/${amAppId}/am_app_records`;
+  _buildNestedURL(_: string | number, amAppVersionId: string | number) {
+    const baseURL = `${this.namespace_v2}/am_app_versions/${amAppVersionId}/am_app_records`;
 
     return this.buildURLFromBase(baseURL);
   }
@@ -25,11 +25,11 @@ export default class AmAppRecordAdapter extends commondrf {
     query: AmAppRecordQuery,
     modelName: K
   ) {
-    if (query.amAppId) {
-      const amAppId = query.amAppId;
-      delete query.amAppId;
+    if (query.amAppVersionId) {
+      const amAppVersionId = query.amAppVersionId;
+      delete query.amAppVersionId;
 
-      return this._buildNestedURL(modelName, amAppId);
+      return this._buildNestedURL(modelName, amAppVersionId);
     }
 
     return super.urlForQuery(query, modelName);

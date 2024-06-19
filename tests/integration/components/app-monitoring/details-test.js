@@ -1,57 +1,71 @@
-import { render } from '@ember/test-helpers';
+import { click, render } from '@ember/test-helpers';
 import dayjs from 'dayjs';
 import { hbs } from 'ember-cli-htmlbars';
 import { setupIntl } from 'ember-intl/test-support';
 import { setupRenderingTest } from 'ember-qunit';
 import { module, test } from 'qunit';
-import { faker } from '@faker-js/faker';
+import { setupMirage } from 'ember-cli-mirage/test-support';
 import styles from 'irene/components/app-monitoring/details/index.scss';
 
 module('Integration | Component | app-monitoring/details', function (hooks) {
   setupRenderingTest(hooks);
-
+  setupMirage(hooks);
   setupIntl(hooks);
 
   hooks.beforeEach(async function () {
     this.store = this.owner.lookup('service:store');
 
-    this.file = this.store.createRecord('file', {
-      id: 1,
-      iconUrl: faker.image.avatar(),
-      name: faker.company.name(),
-      version: '23.2.75',
-      versionCode: '23.2.75',
+    const file = this.server.create('file');
+
+    const project = this.server.create('project', {
+      last_file_id: file.id,
     });
 
-    this.latestAmAppVersion = this.store.createRecord('am-app-version', {
+    // Am App version
+    const amAppVersion = this.server.create('am-app-version', {
       id: 1,
+      latest_file: file.id,
     });
 
-    this.project = this.store.createRecord('project', {
-      id: 1,
-      lastFile: this.file,
-      platform: faker.helpers.arrayElement([0, 1]),
-      packageName: 'package_name.com',
+    this.setProperties({
+      file,
+      project,
+      latestAmAppVersion: amAppVersion,
+    });
+
+    this.server.get('/v2/files/:id', (schema, req) => {
+      return schema.files.find(`${req.params.id}`)?.toJSON();
+    });
+
+    this.server.get('/v2/projects/:id', (schema, req) => {
+      return schema.projects.find(req.params.id).toJSON();
+    });
+
+    this.server.get('/v2/am_app_syncs/:id', (schema, req) => {
+      return schema.amAppSyncs.find(req.params.id).toJSON();
     });
   });
 
   test('it renders with the right app data', async function (assert) {
-    this.latestAmAppVersion = this.store.createRecord('am-app-version', {
-      id: 2,
-      latestFile: this.file,
-    });
-
-    this.amApp = this.store.createRecord('am-app', {
+    // Am app version
+    const amAppVersion = this.server.create('am-app-version', {
       id: 1,
-      project: this.project,
-      latestAmAppVersion: this.latestAmAppVersion,
-      isActive: true,
-      monitoringEnabled: true,
+      latest_file: this.file.id,
     });
 
-    await render(hbs`
-      <AppMonitoring::Details @amApp={{this.amApp}} />
-    `);
+    // Am App record
+    const amApp = this.server.create('am-app', {
+      id: 1,
+      project: this.project.id,
+      latest_am_app_version: amAppVersion.id,
+      is_active: true,
+      monitoring_enabled: true,
+    });
+
+    const normalizedAmApp = this.store.normalize('am-app', amApp.toJSON());
+    this.amApp = this.store.push(normalizedAmApp);
+
+    await render(hbs`<AppMonitoring::Details @amApp={{this.amApp}} />`);
 
     assert.dom('[data-test-app-details-container]').exists();
     assert.dom('[data-test-appLogo-img]').exists();
@@ -66,6 +80,7 @@ module('Integration | Component | app-monitoring/details', function (hooks) {
     );
 
     assert.dom('[data-test-app-name]').hasText(`${lastFile.get('name')}`);
+
     assert
       .dom('[data-test-app-namespace]')
       .hasText(`${this.amApp.project.get('packageName')}`);
@@ -78,6 +93,11 @@ module('Integration | Component | app-monitoring/details', function (hooks) {
       );
 
     assert.dom('[data-test-app-file-id]').containsText(`${lastFile.get('id')}`);
+
+    assert
+      .dom('[data-test-app-latest-scanned-version-desc]')
+      .exists()
+      .hasText('t:appMonitoringModule.latestScannedVersion:()');
 
     assert
       .dom('[data-test-app-latest-scanned-version]')
@@ -93,22 +113,30 @@ module('Integration | Component | app-monitoring/details', function (hooks) {
 
   test('it renders monitored date if amApp has a lastSynced date', async function (assert) {
     // Last sync is available for "NOT FOUND", "SCANNED", and "NOT SCANNED" Statuses
-    this.lastSync = this.store.createRecord('am-app-sync', {
+    const amAppSync = this.server.create('am-app-sync', {
       id: 1,
-      syncedOn: '2023-02-23T12:30:30.126797Z',
+      synced_on: '2023-02-23T12:30:30.126797Z',
     });
 
-    this.amApp = this.store.createRecord('am-app', {
+    // Am App record
+    const amApp = this.server.create('am-app', {
       id: 1,
-      project: this.project,
-      latestAmAppVersion: this.latestAmAppVersion,
-      lastSync: this.lastSync,
-      isActive: true,
+      project: this.project.id,
+      latest_am_app_version: this.latestAmAppVersion.id,
+      is_active: true,
+      monitoring_enabled: true,
+      last_sync: amAppSync.id,
     });
 
-    await render(hbs`
-    <AppMonitoring::Details @amApp={{this.amApp}} />
-  `);
+    const normalizedAmApp = this.store.normalize('am-app', amApp.toJSON());
+    this.amApp = this.store.push(normalizedAmApp);
+
+    await render(hbs`<AppMonitoring::Details @amApp={{this.amApp}} />`);
+
+    assert
+      .dom('[data-test-app-last-monitored-date-desc]')
+      .exists()
+      .containsText('t:appMonitoringModule.lastMonitoredOn:()');
 
     assert
       .dom('[data-test-app-last-monitored-date]')
@@ -121,18 +149,18 @@ module('Integration | Component | app-monitoring/details', function (hooks) {
   });
 
   test('it renders loading state as monitored date if amApp has no last synced date and monitoring status is "ACTIVE"', async function (assert) {
-    // Monitoring results are pending
-    this.amApp = this.store.createRecord('am-app', {
+    const amApp = this.server.create('am-app', {
       id: 1,
-      project: this.project,
-      latestAmAppVersion: this.latestAmAppVersion,
-      lastSync: null,
-      isActive: true,
+      project: this.project.id,
+      latest_am_app_version: this.latestAmAppVersion.id,
+      last_sync: null,
+      is_active: true,
     });
 
-    await render(hbs`
-    <AppMonitoring::Details @amApp={{this.amApp}} />
-  `);
+    const normalizedAmApp = this.store.normalize('am-app', amApp.toJSON());
+    this.amApp = this.store.push(normalizedAmApp);
+
+    await render(hbs`<AppMonitoring::Details @amApp={{this.amApp}} />`);
 
     assert
       .dom('[data-test-app-last-monitored-date] [data-test-ak-loader]')
@@ -145,18 +173,18 @@ module('Integration | Component | app-monitoring/details', function (hooks) {
   });
 
   test('it renders empty monitoring date if amApp has no last synced date and monitoring status is "INACTIVE"', async function (assert) {
-    // Monitoring results are pending
-    this.amApp = this.store.createRecord('am-app', {
+    const amApp = this.server.create('am-app', {
       id: 1,
-      project: this.project,
-      latestAmAppVersion: this.latestAmAppVersion,
-      lastSync: null,
-      isActive: false,
+      project: this.project.id,
+      latest_am_app_version: this.latestAmAppVersion.id,
+      last_sync: null,
+      is_active: false,
     });
 
-    await render(hbs`
-    <AppMonitoring::Details @amApp={{this.amApp}} />
-  `);
+    const normalizedAmApp = this.store.normalize('am-app', amApp.toJSON());
+    this.amApp = this.store.push(normalizedAmApp);
+
+    await render(hbs`<AppMonitoring::Details @amApp={{this.amApp}} />`);
 
     assert
       .dom('[data-test-app-last-monitored-date]')
@@ -171,17 +199,18 @@ module('Integration | Component | app-monitoring/details', function (hooks) {
       [false, 't:inactiveCapital:()'],
     ],
     async function (assert, [status, statusText]) {
-      this.amApp = this.store.createRecord('am-app', {
+      const amApp = this.server.create('am-app', {
         id: 1,
-        project: this.project,
-        latestAmAppVersion: this.latestAmAppVersion,
-        lastSync: null,
-        isActive: status,
+        project: this.project.id,
+        latest_am_app_version: this.latestAmAppVersion.id,
+        last_sync: null,
+        is_active: status,
       });
 
-      await render(hbs`
-        <AppMonitoring::Details @amApp={{this.amApp}} />
-      `);
+      const normalizedAmApp = this.store.normalize('am-app', amApp.toJSON());
+      this.amApp = this.store.push(normalizedAmApp);
+
+      await render(hbs`<AppMonitoring::Details @amApp={{this.amApp}} />`);
 
       assert
         .dom('[data-test-app-monitoring-status]')
@@ -194,24 +223,87 @@ module('Integration | Component | app-monitoring/details', function (hooks) {
     'it renders the history and details tabs',
     [
       ['monitoring-details', 't:appMonitoringModule.monitoringDetails:()'],
-      // ['monitoring-history', 't:appMonitoringModule.monitoringHistory:()'],
+      ['monitoring-history', 't:appMonitoringModule.monitoringHistory:()'],
     ],
     async function (assert, [tabId, tabLabel]) {
-      this.amApp = this.store.createRecord('am-app', {
+      const amApp = this.server.create('am-app', {
         id: 1,
-        project: this.project,
-        latestAmAppVersion: this.latestAmAppVersion,
-        lastSync: null,
+        project: this.project.id,
+        latest_am_app_version: this.latestAmAppVersion.id,
+        last_sync: null,
       });
 
-      await render(hbs`
-        <AppMonitoring::Details @amApp={{this.amApp}} />
-      `);
+      const normalizedAmApp = this.store.normalize('am-app', amApp.toJSON());
+      this.amApp = this.store.push(normalizedAmApp);
+
+      await render(hbs`<AppMonitoring::Details @amApp={{this.amApp}} />`);
 
       assert
         .dom(`[data-test-app-details-tabs='${tabId}-tab']`)
         .exists()
         .hasText(tabLabel);
+    }
+  );
+
+  test.each(
+    'monitoring status toggle',
+    [true, false],
+    async function (assert, orgMonitoringEnabled) {
+      assert.expect(orgMonitoringEnabled ? 7 : 5);
+
+      this.set('settings', {
+        id: 1,
+        enabled: orgMonitoringEnabled,
+      });
+
+      this.server.patch('/v2/am_apps/:id', (schema, req) => {
+        const { monitoring_enabled } = JSON.parse(req.requestBody);
+
+        if (orgMonitoringEnabled) {
+          assert.notOk(monitoring_enabled);
+        }
+
+        return {
+          ...schema.amApps.find(`${req.params.id}`)?.toJSON(),
+          monitoring_enabled,
+        };
+      });
+
+      // AmApp Record
+      const amApp = this.server.create('am-app', {
+        id: 1,
+        project: this.project.id,
+        latest_am_app_version: this.latestAmAppVersion.id,
+        is_active: true,
+        monitoring_enabled: true,
+      });
+
+      const normalizedAmApp = this.store.normalize('am-app', amApp.toJSON());
+      this.amApp = this.store.push(normalizedAmApp);
+
+      await render(
+        hbs`<AppMonitoring::Details @amApp={{this.amApp}} @amOrgSettings={{this.settings}} />`
+      );
+
+      assert
+        .dom('[data-test-app-monitoring-status-toggle-text]')
+        .exists()
+        .containsText('t:appMonitoringModule.monitoringStatus:()');
+
+      const monitoringStatusToggle =
+        '[data-test-app-monitoring-toggle] [data-test-toggle-input]';
+
+      if (orgMonitoringEnabled) {
+        // App is checked by default
+        assert.dom(monitoringStatusToggle).exists().isChecked();
+
+        await click(monitoringStatusToggle);
+
+        assert.dom(monitoringStatusToggle).exists().isNotChecked();
+      } else {
+        // Toggling is disabled at app level when org level monitoring is disabled
+        assert.dom(monitoringStatusToggle).exists().isChecked().isDisabled();
+      }
     }
   );
 });

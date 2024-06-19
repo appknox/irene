@@ -35,6 +35,7 @@ export enum AkSvgComponentInvocationByNames {
   ProjectListEmpty,
   SeverityOverrideSuccess,
   SeverityResetSuccess,
+  AmVersionUploadError,
 }
 
 export enum AkSvgComponentInvocationByPaths {
