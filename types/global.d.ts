@@ -61,6 +61,16 @@ declare module '@glint/environment-ember-loose/registry' {
       };
     }>;
 
+    'day-js': HelperLike<{
+      Args: {
+        Named: {
+          date?: Date;
+          format?: string;
+        };
+      };
+      Return: string;
+    }>;
+
     t: HelperLike<{
       Args: {
         Positional: [string];
