@@ -7,6 +7,7 @@ import type { EmberTableSort } from 'ember-table';
 
 import type FileModel from 'irene/models/file';
 import ENUMS from 'irene/enums';
+
 export interface FileDetailsDastResultsSignature {
   Args: {
     file: FileModel;
