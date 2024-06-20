@@ -1,0 +1,15 @@
+.badge-container {
+    padding: 0.3em;
+
+    .badge-count {
+        &.active {
+            color: var(--file-details-dynamic-scan-header-badge-text-primary);
+            font-weight: var(--file-details-dynamic-scan-header-badge-font-weight-bold);
+        }
+
+        &.inactive {
+            color: var(--file-details-dynamic-scan-header-badge-text-secondary);
+            font-weight: var(--file-details-dynamic-scan-header-badge-font-weight-regular);
+        }
+    }
+}

@@ -153,6 +153,11 @@ Router.map(function () {
 
         this.route('file', { path: '/file/:fileid' }, function () {
           this.route('analysis', { path: '/analysis/:analysis_id' });
+          this.route('dynamic-scan', function () {
+            this.route('manual');
+            this.route('automated');
+            this.route('results');
+          });
         });
 
         this.route('choose', {

@@ -1,0 +1,48 @@
+<AkStack @direction='column' @spacing='2' @width='full'>
+  <AkBreadcrumbs::Container class='mt-1'>
+    {{#each this.breadcrumbItems as |item|}}
+      <AkBreadcrumbs::Item
+        @route={{item.route}}
+        @model={{item.model}}
+        @linkTitle={{item.linkTitle}}
+        data-test-fileDetails-breadcrumbItem='{{item.linkTitle}}'
+      />
+    {{/each}}
+  </AkBreadcrumbs::Container>
+
+  <FileDetails::Summary @file={{@file}} />
+
+  <AkTabs {{style width='100%'}} as |Akt|>
+    {{#each this.tabs as |item|}}
+      <Akt.tabItem
+        @id={{item.id}}
+        @route={{item.route}}
+        @currentWhen={{item.activeRoutes}}
+        @indicatorVariant='shadow'
+        @hasBadge={{item.count}}
+      >
+        <:badge>
+          {{#if item.count}}
+            <AkStack local-class='badge-container' @alignItems='center'>
+              <AkIcon @iconName='bug-report' />
+
+              <AkTypography
+                local-class='badge-count {{if
+                  (eq item.route this.currentRoute)
+                  "active"
+                  "inactive"
+                }}'
+              >
+                {{item.count}}
+              </AkTypography>
+            </AkStack>
+          {{/if}}
+        </:badge>
+
+        <:default>
+          {{item.label}}
+        </:default>
+      </Akt.tabItem>
+    {{/each}}
+  </AkTabs>
+</AkStack>

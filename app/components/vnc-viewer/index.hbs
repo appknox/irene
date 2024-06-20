@@ -1,83 +1,55 @@
-<div
-  data-test-vncViewer-root
-  local-class='
-    vnc-viewer-root
-    {{if this.isFullscreenView "vnc-viewer-fullscreen"}}'
+<AkStack
+  @justifyContent='center'
+  @alignItems='center'
+  @direction='column'
+  @spacing='3'
 >
-  {{#if this.isFullscreenView}}
-    <div
-      data-test-vncViewer-backdrop
-      aria-hidden='true'
-      local-class='vnc-viewer-backdrop'
-    />
+  {{#if @file.isReady}}
+    <AkStack @justifyContent='center'>
+      <DynamicScan::Expiry @file={{@file}} @vncViewer={{true}} />
+    </AkStack>
   {{/if}}
 
-  <div
-    data-test-vncViewer-fullscreenContainer
-    local-class='{{if this.isFullscreenView "vnc-viewer-fullscreen-container"}}'
-  >
-    <AkStack @justifyContent='center'>
-      <div data-test-vncViewer-device class='marvel-device {{this.deviceType}}'>
-        {{#if this.isTablet}}
-          <div data-test-vncViewer-deviceTopBar class='top-bar' />
-          <div data-test-vncViewer-deviceSleep class='sleep' />
-          <div data-test-vncViewer-deviceVolume class='volume' />
-        {{/if}}
-
-        <div data-test-vncViewer-deviceCamera class='camera' />
-
-        {{#if this.isIOSDevice}}
-          {{#if this.isTablet}}
-            <div data-test-vncViewer-deviceSpeaker class='speaker' />
-          {{/if}}
-        {{/if}}
-
-        <div
-          data-test-vncViewer-deviceScreen
-          class={{if this.screenRequired 'noscreen' 'screen'}}
-        >
-          {{#if (and @file.isReady this.deviceType)}}
-            <NovncRfb
-              @deviceFarmURL={{this.deviceFarmURL}}
-              @deviceFarmPassword={{this.deviceFarmPassword}}
-            />
-          {{/if}}
-        </div>
-
-        {{#if this.isIOSDevice}}
-          <div data-test-vncViewer-deviceHome class='home' />
-
-          {{#if this.isTablet}}
-            <div data-test-vncViewer-deviceBottomBar class='bottom-bar' />
-          {{/if}}
-        {{/if}}
-      </div>
+  {{#if @file.isDynamicStatusStarting}}
+    <AkStack @spacing='0.5'>
+      <AkTypography @fontWeight='bold'>Note - </AkTypography>
+      {{t 'dynamicScanText'}}
     </AkStack>
+  {{/if}}
 
-    <AkStack class='mt-4' @justifyContent='center' @spacing='1.5'>
-      <DynamicScan
-        @file={{@file}}
-        @vncViewer={{true}}
-        @onScanShutdown={{this.handleFullscreenClose}}
-        @dynamicScanText={{t 'startDynamicScan'}}
-      />
+  <div data-test-vncViewer-device class='marvel-device {{this.deviceType}}'>
+    {{#if this.isTablet}}
+      <div data-test-vncViewer-deviceTopBar class='top-bar' />
+      <div data-test-vncViewer-deviceSleep class='sleep' />
+      <div data-test-vncViewer-deviceVolume class='volume' />
+    {{/if}}
 
-      {{#if this.showVNCControls}}
-        <AkButton
-          data-test-vncViewer-fullscreenToggleBtn
-          @variant='outlined'
-          @color='neutral'
-          {{on 'click' this.toggleFullscreenView}}
-        >
-          {{this.vncFullscreenText}}
-        </AkButton>
+    <div data-test-vncViewer-deviceCamera class='camera' />
+
+    {{#if this.isIOSDevice}}
+      {{#if this.isTablet}}
+        <div data-test-vncViewer-deviceSpeaker class='speaker' />
       {{/if}}
-    </AkStack>
+    {{/if}}
 
-    {{#if @file.isReady}}
-      <AkStack class='mt-2' @justifyContent='center'>
-        <DynamicScan::Expiry @file={{@file}} />
-      </AkStack>
+    <div
+      data-test-vncViewer-deviceScreen
+      class={{if this.screenRequired 'noscreen' 'screen'}}
+    >
+      {{#if (and @file.isReady this.deviceType)}}
+        <NovncRfb
+          @deviceFarmURL={{this.deviceFarmURL}}
+          @deviceFarmPassword={{this.deviceFarmPassword}}
+        />
+      {{/if}}
+    </div>
+
+    {{#if this.isIOSDevice}}
+      <div data-test-vncViewer-deviceHome class='home' />
+
+      {{#if this.isTablet}}
+        <div data-test-vncViewer-deviceBottomBar class='bottom-bar' />
+      {{/if}}
     {{/if}}
   </div>
-</div>
+</AkStack>

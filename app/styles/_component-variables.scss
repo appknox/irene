@@ -11,7 +11,17 @@ body {
 
   // variables for ak-loader
   --ak-loader-stroke-primary-main: var(--primary-main);
-  --ak-loader-stroke-primary-light: var(--primary-light);
+  --ak-loader-stroke-secondary: var(--secondary-main);
+  --ak-loader-stroke-info: var(--info-dark);
+  --ak-loader-stroke-success: var(--success-main);
+  --ak-loader-stroke-warn: var(--warn-dark);
+  --ak-loader-stroke-error: var(--error-main);
+  --ak-loader-track-color-primary-light: var(--primary-light);
+  --ak-loader-track-color-secondary-light: var(--secondary-light);
+  --ak-loader-track-color-info-light: var(--info-light);
+  --ak-loader-track-color-success-light: var(--success-light);
+  --ak-loader-track-color-warn-light: var(--warn-light);
+  --ak-loader-track-color-error-light: var(--error-light);
   --ak-loader-linear-root-bg-color: var(--neutral-grey-200);
 
   // variables for ak-popover
@@ -1279,4 +1289,26 @@ body {
   // variables for security/file-detail-actions
   --security-file-details-actions-background-color: var(--background-main);
   --security-file-details-actions-border-color: var(--border-color-1);
+
+  // variables for file-details/dynamic-scan/page-wrapper
+  --file-details-dast-background-color: var(--background-light);
+
+  // variables for file-details/dynamic-scan/header
+  --file-details-dynamic-scan-header-badge-text-primary: var(--text-primary);
+  --file-details-dynamic-scan-header-badge-text-secondary: var(--text-secondary);
+  --file-details-dynamic-scan-header-badge-font-weight-regular: var(--font-weight-regular);
+  --file-details-dynamic-scan-header-badge-font-weight-bold: var(--font-weight-bold);
+
+  // variables for file-details/dynamic-scan/manual
+  --file-details-dast-manual-dast-header-border-color: var(--border-color-1);
+  --file-details-dast-manual-dast-background-color-white: var(--common-white);
+
+  // variables for file-details/dynamic-scan/automated
+  --file-details-dast-automated-dast-header-border-color: var(--border-color-1);
+  --file-details-dast-automated-dast-background-color-white: var(--common-white);
+
+  // variables for file-details/dynamic-scan/results
+  --file-details-dynamic-scan-border-color: var(--neutral-grey-300);
+  --file-details-dynamic-scan-background-color: var(--background-light);
+  --file-details-dynamic-scan-background-white: var(--common-white);
 }

@@ -1,0 +1,9 @@
+.manual-dast-container {
+    background-color: var(--file-details-dast-manual-dast-background-color-white);
+    border: 1px solid var(--file-details-dast-manual-dast-header-border-color);
+}
+
+.manual-dast-header {
+    border-bottom: 1px solid var(--file-details-dast-manual-dast-header-border-color);
+    padding: 0.5em 1.5em;
+}

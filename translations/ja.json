@@ -282,6 +282,12 @@
     "parameterDeleteConfirm": "Would you like to delete this config under <strong>Scenario - {scenarioName}?</strong>",
     "noParamaterAvailable": "No input parameters exist for this scenario. Use the Input Type and Input Value fields above to create the parameters for this scenario."
   },
+  "dastTabs": {
+    "manualDAST": "Manual DAST",
+    "automatedDAST": "Automated DAST",
+    "dastResults": "DAST Results"
+  },
+  "dastResultsInfo": "The issues detected for each test cases is cumulative data of all the DAST scan done so far.",
   "date": "日付",
   "dateCreated": "作成日",
   "dateUpdated": "更新日",
@@ -1087,6 +1093,7 @@
   "proxyTurned": "Proxy turned ",
   "proxyWarning": "Please check if you have enabled proxy",
   "quarterly": "３か月",
+  "realDevice": "Real Device",
   "reason": "Reason",
   "reasonForOverride": "Reason for override",
   "reconnect": "Reconnet",

@@ -16,11 +16,56 @@
     }
 
     .ak-loader-svg-track {
-      stroke: var(--ak-loader-stroke-primary-light);
+      &.ak-loader-track-color-primary {
+        stroke: var(--ak-loader-track-color-primary-light);
+      }
+  
+      &.ak-loader-track-color-secondary {
+        stroke: var(--ak-loader-track-color-secondary-light);
+      }
+  
+      &.ak-loader-track-color-info {
+        stroke: var(--ak-loader-track-color-info-light);
+      }
+  
+      &.ak-loader-track-color-success {
+        stroke: var(--ak-loader-track-color-success-light);
+      }
+  
+      &.ak-loader-track-color-warn {
+        stroke: var(--ak-loader-track-color-warn-light);
+      }
+  
+      &.ak-loader-track-color-error {
+        stroke: var(--ak-loader-track-color-error-light);
+      }
     }
 
     .ak-loader-svg-indicator {
-      stroke: var(--ak-loader-stroke-primary-main);
+      &.ak-loader-color-primary {
+        stroke: var(--ak-loader-stroke-primary-main);
+      }
+  
+      &.ak-loader-color-secondary {
+        stroke: var(--ak-loader-stroke-secondary);
+      }
+  
+      &.ak-loader-color-info {
+        stroke: var(--ak-loader-stroke-info);
+      }
+  
+      &.ak-loader-color-success {
+        stroke: var(--ak-loader-stroke-success);
+      }
+  
+      &.ak-loader-color-warn {
+        stroke: var(--ak-loader-stroke-warn);
+      }
+  
+      &.ak-loader-color-error {
+        stroke: var(--ak-loader-stroke-error);
+      }
+
       stroke-linecap: round;
 
       &.indeterminate {

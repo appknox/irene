@@ -2,13 +2,16 @@
   {{#if @file.isDynamicStatusNotReady}}
     <AkStack @alignItems='stretch' @spacing='1.5'>
       {{#if @file.isDynamicStatusNeitherNoneNorReadyNorError}}
-        <AkButton data-test-dynamicScan-startBtn @variant='outlined'>
-          <:leftIcon>
-            <AkLoader @size={{13}} />
-          </:leftIcon>
-
-          <:default>{{@file.statusText}}</:default>
-        </AkButton>
+        <AkChip
+          data-test-dynamicScan-startBtn
+          @label={{@file.statusText}}
+          @variant='semi-filled'
+          @color={{this.color}}
+        >
+          <:icon>
+            <AkLoader @color={{this.color}} @size={{13}} />
+          </:icon>
+        </AkChip>
 
         {{#if @file.isDynamicStatusQueueAndHasAutomation}}
           <AkIconButton
@@ -26,17 +29,16 @@
 
       {{#if @file.isDynamicStatusNoneOrError}}
         {{#if @file.isDynamicStatusError}}
-          <AkButton
+          <AkChip
             data-test-dynamicScan-startBtn
-            @variant='outlined'
-            @disabled={{true}}
+            @variant='semi-filled'
+            @label={{t 'errored'}}
+            @color='warn'
           >
-            <:leftIcon>
+            <:icon>
               <AkIcon @iconName='warning' />
-            </:leftIcon>
-
-            <:default>{{t 'errored'}}</:default>
-          </AkButton>
+            </:icon>
+          </AkChip>
 
           <AkIconButton
             data-test-dynamicScan-restartBtn
@@ -49,33 +51,24 @@
           >
             <AkIcon @iconName='refresh' @color='primary' />
           </AkIconButton>
+
         {{else if @file.isDynamicDone}}
           <AkButton
-            data-test-dynamicScan-startBtn
-            {{style pointerEvents='none'}}
-          >
-            <:leftIcon>
-              <AkIcon @iconName='done' />
-            </:leftIcon>
-
-            <:default>{{t 'completed'}}</:default>
-          </AkButton>
-
-          <AkIconButton
             data-test-dynamicScan-restartBtn
             data-test-cy='dynamicScan-restartBtn'
             {{style padding='0.5em'}}
             {{on 'click' this.openDynamicScanModal}}
-            @variant='outlined'
-            @borderColor='primary'
             disabled={{not @file.isActive}}
           >
-            <AkIcon @iconName='refresh' @color='primary' />
-          </AkIconButton>
+            <:leftIcon>
+              <AkIcon @iconName='refresh' />
+            </:leftIcon>
+
+            <:default>{{@dynamicScanText}}</:default>
+          </AkButton>
         {{else}}
           <AkButton
             data-test-dynamicScan-startBtn
-            @variant='outlined'
             {{on 'click' this.openDynamicScanModal}}
           >
             <:leftIcon>
@@ -92,7 +85,6 @@
   {{#if @file.isDynamicStatusReady}}
     <AkButton
       data-test-dynamicScan-stopBtn
-      @variant='outlined'
       {{on 'click' (perform this.dynamicShutdown)}}
       @disabled={{not @file.isActive}}
     >
@@ -106,12 +98,6 @@
 
       <:default>{{t 'stop'}}</:default>
     </AkButton>
-  {{/if}}
-
-  {{#if (and @vncViewer @file.isDynamicStatusStarting)}}
-    <div>
-      {{t 'dynamicScanText'}}
-    </div>
   {{/if}}
 </AkStack>
 

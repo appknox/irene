@@ -25,7 +25,6 @@ export default class VncViewerComponent extends Component<VncViewerSignature> {
 
   @tracked rfb: any = null;
   @tracked devicePreference?: DevicePreferenceModel;
-  @tracked isFullscreenView = false;
 
   deviceFarmPassword = ENV.deviceFarmPassword;
 
@@ -39,18 +38,6 @@ export default class VncViewerComponent extends Component<VncViewerSignature> {
     const token = this.args.file.deviceToken;
 
     return this.devicefarm.getTokenizedWSURL(token);
-  }
-
-  get vncFullscreenText() {
-    if (this.isFullscreenView) {
-      return this.intl.t('closeModal');
-    } else {
-      return this.intl.t('popOutModal');
-    }
-  }
-
-  get showVNCControls() {
-    return this.isFullscreenView || this.args.file.isReady;
   }
 
   fetchDevicePreference = task(async () => {
@@ -108,16 +95,6 @@ export default class VncViewerComponent extends Component<VncViewerSignature> {
     const platform = this.args.file.project.get('platform');
 
     return platform === ENUMS.PLATFORM.IOS;
-  }
-
-  @action
-  handleFullscreenClose() {
-    this.isFullscreenView = false;
-  }
-
-  @action
-  toggleFullscreenView() {
-    this.isFullscreenView = !this.isFullscreenView;
   }
 
   @action
