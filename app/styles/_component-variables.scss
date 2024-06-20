@@ -1322,28 +1322,20 @@ body {
   --file-details-static-scan-border-color: var(--border-color-1);
   --file-details-static-scan-background-color: var(--background-light);
   --file-details-static-scan-background-main: var(--background-main);
-  --file-details-static-scan-primary-light: var(--primary-light);
-  --file-details-static-scan-text-primary: var(--text-primary);
-  
+
   // variables for file-details/dynamic-scan/page-wrapper
   --file-details-dast-background-color: var(--background-light);
 
-  // variables for file-details/dynamic-scan/header
-  --file-details-dynamic-scan-header-badge-text-primary: var(--text-primary);
-  --file-details-dynamic-scan-header-badge-text-secondary: var(--text-secondary);
-  --file-details-dynamic-scan-header-badge-font-weight-regular: var(--font-weight-regular);
-  --file-details-dynamic-scan-header-badge-font-weight-bold: var(--font-weight-bold);
-
   // variables for file-details/dynamic-scan/manual
   --file-details-dast-manual-dast-header-border-color: var(--border-color-1);
-  --file-details-dast-manual-dast-background-color-white: var(--common-white);
+  --file-details-dast-manual-dast-background-main: var(--background-main);
 
   // variables for file-details/dynamic-scan/automated
   --file-details-dast-automated-dast-header-border-color: var(--border-color-1);
-  --file-details-dast-automated-dast-background-color-white: var(--common-white);
+  --file-details-dast-automated-dast-background-main: var(--background-main);
 
   // variables for file-details/dynamic-scan/results
-  --file-details-dynamic-scan-border-color: var(--neutral-grey-300);
+  --file-details-dynamic-scan-border-color: var(--border-color-1);
   --file-details-dynamic-scan-background-color: var(--background-light);
-  --file-details-dynamic-scan-background-white: var(--common-white);
+  --file-details-dynamic-scan-background-main: var(--background-main);
 }
