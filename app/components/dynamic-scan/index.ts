@@ -31,6 +31,22 @@ export default class DynamicScanComponent extends Component<DynamicScanSignature
     this.pollDynamicStatus();
   }
 
+  get color() {
+    const file = this.args.file;
+
+    if (file.isDynamicStatusInProgress) {
+      return 'warn';
+    } else if (file.dynamicStatus === ENUMS.DYNAMIC_STATUS.COMPLETED) {
+      return 'success';
+    } else if (file.dynamicStatus === ENUMS.DYNAMIC_STATUS.ERROR) {
+      return 'error';
+    } else if (file.dynamicStatus === ENUMS.DYNAMIC_STATUS.NONE) {
+      return 'secondary';
+    } else if (file.isDynamicStatusReady) {
+      return 'info';
+    }
+  }
+
   @action
   openDynamicScanModal() {
     triggerAnalytics(
@@ -97,4 +113,10 @@ export default class DynamicScanComponent extends Component<DynamicScanSignature
       this.notify.error((error as AdapterError).payload.error);
     }
   });
+}
+
+declare module '@glint/environment-ember-loose/registry' {
+  export default interface Registry {
+    DynamicScan: typeof DynamicScanComponent;
+  }
 }

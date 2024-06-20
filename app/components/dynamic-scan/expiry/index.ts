@@ -18,6 +18,7 @@ import ENV from 'irene/config/environment';
 export interface DyanmicScanExpirySignature {
   Args: {
     file: FileModel;
+    vncViewer?: boolean;
   };
 }
 
@@ -140,5 +141,11 @@ export default class DyanmicScanExpiryComponent extends Component<DyanmicScanExp
   @action
   handleExtendTimeMenuClose() {
     this.extendBtnAnchorRef = null;
+  }
+}
+
+declare module '@glint/environment-ember-loose/registry' {
+  export default interface Registry {
+    'DynamicScan::Expiry': typeof DyanmicScanExpiryComponent;
   }
 }

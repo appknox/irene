@@ -1,0 +1,46 @@
+<AkStack
+  local-class='manual-dast-container'
+  @width='full'
+  @alignItems='center'
+  @direction='column'
+  @justifyContent='center'
+  class='my-2'
+>
+  <AkStack
+    local-class='manual-dast-header'
+    @width='full'
+    @alignItems='center'
+    @justifyContent='space-between'
+  >
+    <AkTypography @variant='h6' @fontWeight='bold'>
+      {{t 'realDevice'}}
+    </AkTypography>
+
+    <AkStack @spacing='1' @alignItems='center'>
+      <DynamicScan
+        @file={{@file}}
+        @vncViewer={{true}}
+        @dynamicScanText={{t 'dastTabs.manualDAST'}}
+        @onScanShutdown={{this.handleFullscreenClose}}
+      />
+
+      <AkIconButton {{on 'click' this.toggleFullscreenView}}>
+        <AkIcon @iconName='open-in-full' />
+      </AkIconButton>
+    </AkStack>
+  </AkStack>
+
+  {{#if this.isFullscreenView}}
+    <AkModal
+      @headerTitle='{{t "realDevice"}}'
+      @showHeader={{true}}
+      @onClose={{this.toggleFullscreenView}}
+    >
+      <VncViewer @file={{@file}} @profileId={{@profileId}} />
+    </AkModal>
+  {{else}}
+    <AkStack class='p-3'>
+      <VncViewer @file={{@file}} @profileId={{@profileId}} />
+    </AkStack>
+  {{/if}}
+</AkStack>

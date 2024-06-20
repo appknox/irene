@@ -1,5 +1,21 @@
 <div>
-  <AkStack @justifyContent='center' @alignItems='center' @spacing='1'>
+  <AkStack
+    local-class='dynamic-scan-expiry-container'
+    @justifyContent='center'
+    @alignItems='center'
+    @spacing='1'
+  >
+    <AkTooltip
+      @color='dark'
+      @placement='top'
+      @arrow={{true}}
+      @title='Kindly interact with the device to get the potential results'
+    >
+      <AkIconButton @size='small' local-class='info-btn'>
+        <AkIcon @iconName='info' @color='primary' />
+      </AkIconButton>
+    </AkTooltip>
+
     <AkTypography @tag='span' @variant='h5' @fontWeight='regular'>
       {{this.timeRemaining.minutes}}:{{this.timeRemaining.seconds}}
     </AkTypography>
@@ -17,10 +33,10 @@
         <AkIconButton
           @size='small'
           disabled={{not this.canExtend}}
-          @variant='outlined'
           {{on 'click' this.handleExtendTimeClick}}
+          local-class='extend-time-btn'
         >
-          <AkIcon @iconName='add' />
+          <AkIcon @size='small' @iconName='add' />
         </AkIconButton>
       </AkTooltip>
     {{/if}}

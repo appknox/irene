@@ -1,0 +1,30 @@
+.dast-results-info {
+    border: 1px solid var(--file-details-dynamic-scan-border-color);
+    background-color: var(--file-details-dynamic-scan-background-white);
+    padding: 1em;
+}
+
+.tabs-container {
+    border-bottom: 0 !important;
+}
+
+.dast-results-header {
+    position: sticky;
+    background-color: var(--file-details-dynamic-scan-background-color);
+    top: 1.7em;
+    border-bottom: 1px solid var(--file-details-dynamic-scan-border-color);
+    padding-top: 1em;
+    z-index: 100;
+    margin-bottom: 1em;
+    width: 100%;
+}
+
+.breadcrumb-container {
+    position: sticky;
+    top: -0.5em;
+    background-color: var(--file-details-dynamic-scan-background-color);
+    z-index: 100;
+    margin: 0;
+    padding: 1em 0em;
+    width: 100%;
+}
