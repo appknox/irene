@@ -13,6 +13,7 @@ const commonArgs = {
   currentTabDetails: computed('activeTab', 'tabItems', function () {
     return this.tabItems.find((tab) => tab.id === this.activeTab);
   }),
+  indicatorVariant: 'line',
   tabItems: [
     {
       id: 1,
@@ -52,6 +53,7 @@ const Template = (args) => ({
                 @isActive={{eq this.activeTab item.id}}
                 @buttonVariant={{this.buttonVariant}}
                 @onTabClick={{action this.onTabClick}}
+                @indicatorVariant={{this.indicatorVariant}}
               >
                 <:tabIcon>
                   <AkIcon

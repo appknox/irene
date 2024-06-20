@@ -17,6 +17,7 @@ export interface AkTabsItemSignature {
     models?: string[];
     query?: Record<string, unknown>;
     currentWhen?: string;
+    indicatorVariant?: 'shadow' | 'line';
   };
 
   Blocks: {
@@ -26,9 +27,13 @@ export interface AkTabsItemSignature {
 }
 
 export default class AkTabsItemComponent extends Component<AkTabsItemSignature> {
+  get variant() {
+    return this.args.indicatorVariant || 'line';
+  }
+
   get classes() {
     return {
-      activeClass: styles['active'],
+      activeClass: styles[`active-${this.variant}`],
     };
   }
 
