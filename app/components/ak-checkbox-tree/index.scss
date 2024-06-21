@@ -1,0 +1,66 @@
+.expanded-icon {
+  cursor: pointer;
+  transition: transform 0.2s ease-in-out;
+  transform: rotate(-90deg);
+
+  &.down {
+    transform: rotate(0deg);
+  }
+}
+
+.summary {
+  cursor: pointer;
+  background-color: var(--common-white);
+  border: 1px solid var(--ak-accordion-summary-secondary-border-color);
+
+  &.tree-depth-0 {
+    padding: 0.9286em;
+  }
+
+  &.tree-depth-1 {
+    padding: 0.7857em;
+    padding-left: 2.5714em;
+  }
+
+  &.tree-depth-2 {
+    padding: 0.7857em;
+    padding-left: 4.2857em;
+  }
+
+  &.tree-depth-3 {
+    padding: 0.7857em;
+    padding-left: 6.2857em;
+  }
+
+  &.root:not(:first-of-type) {
+    border-top: 0px;
+  }
+
+  &.child {
+    border-top: 0px;
+  }
+
+  &.leaf:not(.has-parent-sibling) {
+    padding-top: 0px;
+    padding-bottom: 1em;
+  }
+
+  &.leaf:not(.has-parent-sibling):first-of-type {
+    padding-top: 1em;
+  }
+
+  &.leaf:not(.has-parent-sibling):first-of-type,
+  &.leaf:not(.has-parent-sibling):not(:last-child) {
+    border-bottom: 0px;
+  }
+
+  &.primary {
+    background-color: var(--ak-accordion-summary-primary-background);
+    border-color: var(--ak-accordion-summary-primary-border-color);
+  }
+
+  &.secondary,
+  &.disabled {
+    background-color: var(--ak-accordion-summary-secondary-background);
+  }
+}

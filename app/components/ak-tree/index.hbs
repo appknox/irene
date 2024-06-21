@@ -1,0 +1,19 @@
+<AkStack @direction='column' @width='full'>
+  {{#each @treeData as |node|}}
+    {{#let (this.getFlatNode node.key) as |flatNode|}}
+      {{yield flatNode}}
+
+      {{#if (this.getShowChildrenNodes node flatNode)}}
+        <AkStack @direction='row' @alignItems='center' @width='full'>
+          <AkTree
+            @tree={{this.tree}}
+            @treeData={{this.getNodeChildren node}}
+            as |childN|
+          >
+            {{yield (this.getFlatNode childN.key)}}
+          </AkTree>
+        </AkStack>
+      {{/if}}
+    {{/let}}
+  {{/each}}
+</AkStack>

@@ -1,0 +1,52 @@
+<AkTreeProvider
+  @treeData={{this.treeData}}
+  @expanded={{this.expanded}}
+  @checked={{this.checked}}
+  @onCheck={{this.onCheck}}
+  @onExpand={{this.onExpand}}
+  as |tree|
+>
+  <AkTree @tree={{tree}} @treeData={{tree.nodes}} as |node|>
+    <AkStack
+      @alignItems='center'
+      @justifyContent='space-between'
+      @width='full'
+      local-class='summary 
+        tree-depth-{{node.treeDepth}}
+        {{if (and (gt node.treeDepth 0) node.isParent) "secondary"}} 
+        {{if node.disabled "disabled"}}
+        {{if node.isRoot "root"}}
+        {{if node.isParent "parent"}}
+        {{if node.isChild "child"}}
+        {{if node.isLeaf "leaf"}}
+        {{if node.hasParentSibling "has-parent-sibling"}}
+        '
+      {{on 'click' (fn tree.onExpand node)}}
+    >
+      <AkStack @alignItems='center'>
+        <AkCheckbox
+          @checked={{node.checked}}
+          @onClick={{fn tree.onCheck node}}
+          @disabled={{node.disabled}}
+          @indeterminate={{node.indeterminate}}
+        />
+
+        <AkTypography
+          @fontWeight={{if node.isRoot 'bold' 'medium'}}
+          @variant='subtitle1'
+          @color={{if node.disabled 'textSecondary' 'secondary'}}
+        >
+          {{node.label}}
+        </AkTypography>
+      </AkStack>
+
+      {{#if node.isParent}}
+        <AkIcon
+          @iconName='arrow-drop-down'
+          local-class='expanded-icon {{if node.expanded "down"}}'
+          @color='secondary'
+        />
+      {{/if}}
+    </AkStack>
+  </AkTree>
+</AkTreeProvider>
