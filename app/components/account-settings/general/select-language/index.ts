@@ -2,6 +2,7 @@ import Component from '@glimmer/component';
 import { inject as service } from '@ember/service';
 import { task } from 'ember-concurrency';
 import IntlService from 'ember-intl/services/intl';
+import { action } from '@ember/object';
 
 import ENV from 'irene/config/environment';
 import DatetimeService from 'irene/services/datetime';
@@ -20,7 +21,9 @@ export default class AccountSettingsGeneralSelectLanguageComponent extends Compo
   @service('notifications') declare notify: NotificationService;
 
   get currentLocale() {
-    return this.intl.locale.toString();
+    return this.allLocales.find(
+      ({ locale }) => locale === this.intl.locale.toString()
+    );
   }
 
   get allLocales() {
@@ -32,8 +35,8 @@ export default class AccountSettingsGeneralSelectLanguageComponent extends Compo
       .filter((f) => Boolean(f.localeString));
   }
 
-  setLocale = task(async (event: Event) => {
-    const lang = (event.target as HTMLSelectElement).value;
+  setLocale = task(async (selection) => {
+    const lang = selection.locale;
 
     this.intl.locale = lang;
 
@@ -54,6 +57,11 @@ export default class AccountSettingsGeneralSelectLanguageComponent extends Compo
       this.notify.error(error.payload.message);
     }
   });
+
+  @action
+  handleLocaleChange(selection: { locale: string; localeString: string }) {
+    this.setLocale.perform(selection);
+  }
 }
 
 declare module '@glint/environment-ember-loose/registry' {
