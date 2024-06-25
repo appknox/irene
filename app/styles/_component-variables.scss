@@ -279,6 +279,11 @@ body {
   // variables for ak-skeleton
   --ak-skeleton-linear-gradient-color-1: var(--neutral-grey-100);
   --ak-skeleton-linear-gradient-color-2: var(--neutral-grey-200);
+
+  // variables for ak-checkbox-tree
+  --ak-checkbox-tree-secondary-background-white: var(--background-main);
+  --ak-checkbox-tree-secondary-background: var(--background-light);
+  --ak-checkbox-tree-secondary-border-color: var(--border-color-1);
 }
 
 body {

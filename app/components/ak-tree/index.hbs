@@ -1,0 +1,14 @@
+<AkTree::Provider
+  @treeData={{@treeData}}
+  @expanded={{@expanded}}
+  @checked={{@checked}}
+  @onCheck={{@onCheck}}
+  @onExpand={{@onExpand}}
+  @cascade={{@cascade}}
+  @disabled={{@disabled}}
+  as |tree|
+>
+  <AkTree::Node @tree={{tree}} @treeData={{tree.nodes}} as |node|>
+    {{yield node tree}}
+  </AkTree::Node>
+</AkTree::Provider>
