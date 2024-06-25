@@ -152,7 +152,31 @@ module('Integration | Component | ak-tabs/item', function (hooks) {
     assert
       .dom('[data-test-ak-tab-item] button')
       .exists()
-      .hasClass(`${styles['active']}`);
+      .hasClass(`${styles['active-line']}`);
+  });
+
+  test('it applies active shadow class to ak-tabs/item button tab if active', async function (assert) {
+    this.setProperties({
+      buttonVariant: true,
+      isActive: true,
+      indicatorVariant: 'shadow',
+    });
+
+    await render(hbs`
+      <AkTabs::Item
+        @buttonVariant={{this.buttonVariant}}  
+        @id={{this.id}}
+        @hasBadge={{this.hasBadge}}
+        @badgeCount={{this.badgeCount}}
+        @isActive={{this.isActive}}
+        @indicatorVariant={{this.indicatorVariant}}
+      />
+    `);
+
+    assert
+      .dom('[data-test-ak-tab-item] button')
+      .exists()
+      .hasClass(`${styles['active-shadow']}`);
   });
 
   test('it triggers click callback passed to ak-tabs/item button with the right arguments', async function (assert) {

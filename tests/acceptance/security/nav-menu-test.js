@@ -57,7 +57,7 @@ module('Acceptance | security/nav menu', function (hooks) {
     assert
       .dom('[data-test-security-nav-menu-item="projects"] a')
       .exists()
-      .hasClass(/_active_/i);
+      .hasClass(/_active-line_/i);
 
     window.location.href = '/security/downloadapp';
 
@@ -66,7 +66,7 @@ module('Acceptance | security/nav menu', function (hooks) {
     assert
       .dom('[data-test-security-nav-menu-item="downloadapp"] a')
       .exists()
-      .hasClass(/_active_/i);
+      .hasClass(/_active-line_/i);
 
     window.location.href = '/security/purgeanalysis';
 
@@ -75,6 +75,6 @@ module('Acceptance | security/nav menu', function (hooks) {
     assert
       .dom('[data-test-security-nav-menu-item="purgeanalysis"] a')
       .exists()
-      .hasClass(/_active_/i);
+      .hasClass(/_active-line_/i);
   });
 });

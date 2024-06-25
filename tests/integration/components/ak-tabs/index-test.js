@@ -156,7 +156,7 @@ module('Integration | Component | ak-tabs', function (hooks) {
 
     assert
       .dom(`[data-test-tab-item="tab-${this.currentTabDetails.id}"] button`)
-      .hasClass(/_active_/i);
+      .hasClass(/_active-line_/i);
 
     const tabIdToBeClicked = 2;
     await click(`[data-test-tab-item="tab-${tabIdToBeClicked}"] button`);
@@ -169,6 +169,6 @@ module('Integration | Component | ak-tabs', function (hooks) {
 
     assert
       .dom(`[data-test-tab-item="tab-${this.currentTabDetails.id}"] button`)
-      .hasClass(/_active_/i);
+      .hasClass(/_active-line_/i);
   });
 });
