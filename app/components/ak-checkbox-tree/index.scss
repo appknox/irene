@@ -1,0 +1,58 @@
+.expanded-icon {
+  cursor: pointer;
+  transition: transform 0.2s ease-in-out;
+  transform: rotate(-90deg);
+
+  &.down {
+    transform: rotate(0deg);
+  }
+}
+
+.checkbox-tree-node {
+  background-color: var(--ak-checkbox-tree-secondary-background-white);
+  border: 1px solid var(--ak-checkbox-tree-secondary-border-color);
+
+  &.root {
+    height: 48px;
+    padding: 0.9286em;
+  }
+
+  &.root:not(:first-of-type) {
+    border-top: 0px;
+  }
+
+  &:not(.root) {
+    padding: 0.7857em;
+  }
+
+  &.parent {
+    cursor: pointer;
+  }
+
+  &.child {
+    border-top: 0px;
+  }
+
+  &.leaf:not(.has-parent-sibling) {
+    padding-top: 0.5em;
+    padding-bottom: 0.5em;
+  }
+
+  &.leaf:not(.has-parent-sibling):first-of-type {
+    padding-top: 1em;
+  }
+
+  &.leaf:not(.has-parent-sibling):last-of-type {
+    padding-bottom: 1em;
+  }
+
+  &.leaf:not(.has-parent-sibling):first-of-type,
+  &.leaf:not(.has-parent-sibling):not(:last-child) {
+    border-bottom: 0px;
+  }
+
+  &.secondary,
+  &.disabled {
+    background-color: var(--ak-checkbox-tree-secondary-background);
+  }
+}
