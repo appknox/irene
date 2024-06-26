@@ -6,5 +6,7 @@ export default Factory.extend({
     return `masvs-${i}`;
   },
 
-  title: faker.lorem.sentence(),
+  title() {
+    return faker.lorem.sentence();
+  },
 });

@@ -6,6 +6,9 @@ export default Factory.extend({
     return `owaspapi2023-${i}`;
   },
 
-  title: faker.lorem.sentence(),
+  title() {
+    return faker.lorem.sentence();
+  },
+
   year: faker.date.past().getFullYear(),
 });

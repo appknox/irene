@@ -6,6 +6,9 @@ export default Factory.extend({
     return `pcidss${i}`;
   },
 
-  title: faker.lorem.sentence(),
+  title() {
+    return faker.lorem.sentence();
+  },
+
   description: faker.lorem.paragraph(),
 });

@@ -28,9 +28,39 @@ import Nistsp800171Model from '../nistsp800171';
 const inflector = Inflector.inflector;
 inflector.irregular('asvs', 'asvses');
 
+export interface SecurityAnalysisFinding {
+  id?: number;
+  title: string | null;
+  description: string;
+}
+
 export default class SecurityAnalysisModel extends Model {
-  @attr()
-  declare findings: unknown;
+  @attr
+  declare findings: SecurityAnalysisFinding[];
+
+  @attr
+  declare attackVector: 'N' | 'A' | 'L' | 'P' | number;
+
+  @attr
+  declare attackComplexity: 'L' | 'H' | number;
+
+  @attr
+  declare privilegesRequired: 'N' | 'L' | 'H' | number;
+
+  @attr
+  declare userInteraction: 'R' | 'N' | number;
+
+  @attr
+  declare scope: 'C' | 'U' | number;
+
+  @attr
+  declare confidentialityImpact: 'N' | 'L' | 'H' | number;
+
+  @attr
+  declare integrityImpact: 'N' | 'L' | 'H' | number;
+
+  @attr
+  declare availabilityImpact: 'N' | 'L' | 'H' | number;
 
   @attr('number')
   declare risk: number;
@@ -38,32 +68,8 @@ export default class SecurityAnalysisModel extends Model {
   @attr('number')
   declare status: number;
 
-  @attr()
-  declare attackVector: unknown;
-
-  @attr()
-  declare attackComplexity: unknown;
-
-  @attr()
-  declare privilegesRequired: unknown;
-
-  @attr()
-  declare userInteraction: unknown;
-
-  @attr()
-  declare scope: unknown;
-
-  @attr()
-  declare confidentialityImpact: unknown;
-
-  @attr()
-  declare integrityImpact: unknown;
-
-  @attr()
-  declare availabilityImpact: unknown;
-
   @attr('string')
-  declare cvssBase: string;
+  declare cvssBase: string | number;
 
   @attr('string') declare cvssVector: string;
   @attr('string') declare cvssVersion: string;
@@ -121,8 +127,7 @@ export default class SecurityAnalysisModel extends Model {
   declare attachments: AsyncHasMany<SecurityAttachmentModel>;
 
   get isPassed() {
-    const risk = this.risk;
-    return risk !== ENUMS.RISK.NONE;
+    return this.risk === ENUMS.RISK.NONE;
   }
 
   get riskLabelClass() {
@@ -132,17 +137,22 @@ export default class SecurityAnalysisModel extends Model {
   labelClass(risk: number) {
     switch (risk) {
       case ENUMS.RISK.UNKNOWN:
-        return `is-progress`;
+        return 'is-progress';
+
       case ENUMS.RISK.NONE:
-        return `is-success`;
+        return 'is-success';
+
       case ENUMS.RISK.LOW:
-        return `is-info`;
+        return 'is-info';
+
       case ENUMS.RISK.MEDIUM:
-        return `is-warning`;
+        return 'is-warning';
+
       case ENUMS.RISK.HIGH:
-        return `is-danger`;
+        return 'is-danger';
+
       case ENUMS.RISK.CRITICAL:
-        return `is-critical`;
+        return 'is-critical';
     }
   }
 

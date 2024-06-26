@@ -1,0 +1,47 @@
+<AkStack @direction='column' @spacing='2.5' @width='full'>
+  <AkTypography
+    @variant='h6'
+    @fontWeight='medium'
+    data-test-securityAnalysisDetails-newHeaderText
+  >
+    New Finding?
+  </AkTypography>
+
+  <AkStack @spacing='2.5' @width='7/12'>
+    <Textarea
+      @value={{this.findingTitle}}
+      autocomplete='off'
+      autocorrect='off'
+      autocapitalize='off'
+      spellcheck='false'
+      rows='3'
+      cols='10'
+      placeholder='Title'
+      class='textarea-input'
+      id='add-finding-form-title'
+      data-test-securityAnalysisDetails-newFindingTitleInput
+    />
+
+    <Textarea
+      @value={{this.findingDescription}}
+      autocomplete='off'
+      autocorrect='off'
+      autocapitalize='off'
+      spellcheck='false'
+      rows='3'
+      cols='30'
+      placeholder='Description'
+      class='textarea-input'
+      id='add-finding-form-description'
+      data-test-securityAnalysisDetails-newFindingDescriptionInput
+    />
+  </AkStack>
+
+  <AkButton
+    @variant='filled'
+    {{on 'click' this.addFinding}}
+    data-test-securityAnalysisDetails-newFindingAddBtn
+  >
+    Add Finding
+  </AkButton>
+</AkStack>

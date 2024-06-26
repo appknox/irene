@@ -86,18 +86,19 @@ export default class SecurityAnalysisListTableActionComponent extends Component<
         }),
       });
 
-      this.analysis.risk = this.PASSED_STATE.risk;
-      this.analysis.status = this.PASSED_STATE.status;
-      this.analysis.cvssVector = this.PASSED_STATE.cvss_vector;
-      this.analysis.attackVector = this.PASSED_STATE.attack_vector;
-      this.analysis.attackComplexity = this.PASSED_STATE.attack_complexity;
-      this.analysis.privilegesRequired = this.PASSED_STATE.privileges_required;
-      this.analysis.userInteraction = this.PASSED_STATE.user_interaction;
-      this.analysis.scope = this.PASSED_STATE.scope;
-      this.analysis.confidentialityImpact =
-        this.PASSED_STATE.confidentiality_impact;
-      this.analysis.integrityImpact = this.PASSED_STATE.integrity_impact;
-      this.analysis.availabilityImpact = this.PASSED_STATE.availability_impact;
+      this.analysis.setProperties({
+        risk: this.PASSED_STATE.risk,
+        status: this.PASSED_STATE.status,
+        cvssVector: this.PASSED_STATE.cvss_vector,
+        attackVector: this.PASSED_STATE.attack_vector,
+        attackComplexity: this.PASSED_STATE.attack_complexity,
+        privilegesRequired: this.PASSED_STATE.privileges_required,
+        userInteraction: this.PASSED_STATE.user_interaction,
+        scope: this.PASSED_STATE.scope,
+        confidentialityImpact: this.PASSED_STATE.confidentiality_impact,
+        integrityImpact: this.PASSED_STATE.integrity_impact,
+        availabilityImpact: this.PASSED_STATE.availability_impact,
+      });
 
       this.notify.success(`Analysis ${this.analysis.id} marked as passed`);
     } catch (err) {
