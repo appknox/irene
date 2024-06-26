@@ -1,0 +1,64 @@
+{{#if this.proxy.hasProxyUrl}}
+  <AkStack
+    data-test-fileDetails-proxySettings-container
+    class='p-3'
+    @width='full'
+    @justifyContent='space-between'
+    @alignItems='center'
+  >
+    <AkStack @alignItems='center' @spacing='1.5'>
+      <AkTypography
+        data-test-fileDetails-proxySettings-enableApiProxyLabel
+        @variant='subtitle1'
+      >
+        {{t 'enable'}}
+        {{t 'proxySettingsTitle'}}
+      </AkTypography>
+
+      <AkTooltip @arrow={{true}} @placement='right'>
+        <:tooltipContent>
+          <div
+            data-test-fileDetails-proxySettings-helpTooltipContent
+            local-class='tooltip-content-container'
+          >
+            {{t 'proxySettingsRouteVia'}}
+            {{this.proxy.host}}:{{this.proxy.port}}
+          </div>
+        </:tooltipContent>
+
+        <:default>
+          <AkIcon
+            data-test-fileDetails-proxySettings-helpIcon
+            local-class='proxy-settings-help-icon'
+            @iconName='help'
+            @size='small'
+          />
+        </:default>
+      </AkTooltip>
+
+      <div local-class='proxy-settings-divider' />
+
+      <AkLink
+        @route='authenticated.dashboard.project.settings'
+        @model={{this.projectId}}
+        @color='primary'
+        target='_blank'
+        rel='noopener noreferrer'
+        title={{t 'proxyEdit'}}
+        data-test-fileDetails-proxySettings-editSettings
+      >
+        {{t 'edit'}}
+      </AkLink>
+    </AkStack>
+
+    <AkToggle
+      @checked={{this.proxy.enabled}}
+      @onChange={{perform this.toggleProxy}}
+      @disabled={{this.toggleProxy.isRunning}}
+      @size='small'
+      data-test-fileDetails-proxySettings-enableApiProxyToggle
+    />
+  </AkStack>
+
+  <AkDivider @color='dark' />
+{{/if}}
