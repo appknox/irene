@@ -824,6 +824,9 @@ body {
     --neutral-grey-100
   );
 
+  // variables for file-details/proxy-settings
+  --file-details-proxy-settings-neutral-color: var(--neutral-grey-300);
+
   // variables for vnc-viewer
   --vnc-viewer-modal-zIndex: var(--zIndex-drawer);
   --vnc-viewer-modal-backdrop-overlay-background: var(
