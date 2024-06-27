@@ -217,6 +217,7 @@ module('Integration | Component | ak-tabs/item', function (hooks) {
         <:badge>
           Custom Badge
         </:badge>
+        
         <:default>{{this.label}}</:default>
       </AkTabs::Item>
     `);

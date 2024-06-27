@@ -28,16 +28,6 @@ export default class FileDetailsDastHeader extends Component<FileDetailsDastHead
     return this.router.currentRouteName;
   }
 
-  get filteredVulnerabilityCount() {
-    const vulnerabilityType = ENUMS.VULNERABILITY_TYPE.DYNAMIC;
-
-    const filteredAnalysis = this.analyses?.filter((a) =>
-      a.hasType(vulnerabilityType)
-    );
-
-    return filteredAnalysis.length;
-  }
-
   get breadcrumbItems() {
     return [
       {
@@ -73,7 +63,7 @@ export default class FileDetailsDastHeader extends Component<FileDetailsDastHead
         label: this.intl.t('dastTabs.dastResults'),
         route: 'authenticated.dashboard.file.dynamic-scan.results',
         activeRoutes: 'authenticated.dashboard.file.dynamic-scan.results',
-        count: this.filteredVulnerabilityCount,
+        count: this.args.file.dynamicVulnerabilityCount,
       },
     ];
   }

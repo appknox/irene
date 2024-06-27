@@ -394,6 +394,13 @@ export default class FileModel extends ModelBaseMixin {
     ).length;
   }
 
+  @computed('analyses.@each.computedRisk')
+  get dynamicVulnerabilityCount() {
+    return this.analyses.filter(
+      (it) => it.hasType(ENUMS.VULNERABILITY_TYPE.DYNAMIC) && it.isRisky
+    ).length;
+  }
+
   get doughnutData() {
     return {
       labels: ['CRITICAL', 'HIGH', 'MEDIUM', 'LOW', 'PASSED', 'UNKNOWN'],

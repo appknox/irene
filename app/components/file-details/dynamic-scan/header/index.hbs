@@ -19,19 +19,18 @@
         @route={{item.route}}
         @currentWhen={{item.activeRoutes}}
         @indicatorVariant='shadow'
-        @hasBadge={{item.count}}
+        @hasBadge={{if item.count true false}}
       >
         <:badge>
           {{#if item.count}}
-            <AkStack local-class='badge-container' @alignItems='center'>
-              <AkIcon @iconName='bug-report' />
+            <AkStack @alignItems='center'>
+              <AkIcon @iconName='bug-report' @size='small' />
 
               <AkTypography
-                local-class='badge-count {{if
-                  (eq item.route this.currentRoute)
-                  "active"
-                  "inactive"
-                }}'
+                local-class='badge-count-text'
+                @color='inherit'
+                @tag='span'
+                @fontWeight='bold'
               >
                 {{item.count}}
               </AkTypography>
