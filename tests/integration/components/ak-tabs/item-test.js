@@ -206,4 +206,24 @@ module('Integration | Component | ak-tabs/item', function (hooks) {
 
     await click('[data-test-ak-tab-item] button');
   });
+
+  test('it renders custom badge content when using named block', async function (assert) {
+    await render(hbs`
+      <AkTabs::Item
+        @id={{this.id}}
+        @route={{this.route}}
+        @hasBadge={{this.hasBadge}}
+      >
+        <:badge>
+          Custom Badge
+        </:badge>
+        <:default>{{this.label}}</:default>
+      </AkTabs::Item>
+    `);
+
+    assert
+      .dom('[data-test-ak-tab-badge]')
+      .exists()
+      .containsText('Custom Badge');
+  });
 });
