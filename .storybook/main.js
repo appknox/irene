@@ -1,5 +1,4 @@
-/* eslint-disable @typescript-eslint/no-var-requires, no-undef */
-const namedBlockPolyfill = require('ember-named-blocks-polyfill/lib/named-blocks-polyfill-plugin');
+/* eslint-disable no-undef */
 
 module.exports = {
   stories: ['../app/components/**/*.stories.js'],
@@ -12,7 +11,7 @@ module.exports = {
     builder: '@storybook/builder-webpack5',
   },
   emberOptions: {
-    polyfills: [namedBlockPolyfill],
+    polyfills: [],
   },
   previewBody: (body) => `
     ${body}

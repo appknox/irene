@@ -10,6 +10,7 @@ export interface AkTabsItemSignature {
     hasBadge?: boolean;
     buttonVariant?: boolean;
     badgeCount?: string | number;
+    badgeBackground?: boolean;
     onTabClick?: (id: number | string, event: MouseEvent) => void;
     disabled?: boolean;
     route?: string;
@@ -23,12 +24,17 @@ export interface AkTabsItemSignature {
   Blocks: {
     default: [];
     tabIcon: [];
+    badge: [];
   };
 }
 
 export default class AkTabsItemComponent extends Component<AkTabsItemSignature> {
   get variant() {
     return this.args.indicatorVariant || 'line';
+  }
+
+  get badgeBackground() {
+    return this.args.badgeBackground ?? true;
   }
 
   get classes() {

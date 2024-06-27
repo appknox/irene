@@ -18,12 +18,17 @@
   .ak-tab-badge {
     font-size: 0.857em;
     min-width: 24px;
-    height: 20px;
+    min-height: 20px;
     padding: 0em 0.357em;
     margin-left: 0.7em;
-    font-weight: var(--ak-tabs-font-weight-regular);
     border-radius: var(--ak-tabs-border-radius);
-    background-color: var(--ak-tabs-neutral-background);
+    font-weight: var(--ak-tabs-font-weight-regular);
+    background-color: transparent;
+
+    &.ak-tab-badge-background {
+      background-color: var(--ak-tabs-neutral-background);
+      color: var(--ak-tabs-text-color-secondary);
+    }
   }
 
   .ak-tab-icon {
@@ -44,7 +49,12 @@
     }
 
     .ak-tab-badge {
-      background: var(--ak-tabs-color-primary-light);
+      background-color: transparent;
+
+      &.ak-tab-badge-background {
+        background-color: var(--ak-tabs-color-primary-light);
+        color: var(--ak-tabs-text-color-primary);
+      }
     }
 
     .ak-tab-icon {
@@ -75,6 +85,7 @@
     border-top-right-radius: 0.357em;
     border-top-left-radius: 0.357em;
     font-weight: var(--ak-tabs-font-weight-bold);
+    background-color: var(--ak-tabs-background-main);
 
     &:hover,
     &:focus {
@@ -83,7 +94,12 @@
     }
 
     .ak-tab-badge {
-      background: var(--ak-tabs-color-primary-light);
+      background-color: transparent;
+
+      &.ak-tab-badge-background {
+        background-color: var(--ak-tabs-color-primary-light);
+        color: var(--ak-tabs-text-color-primary);
+      }
     }
 
     .ak-tab-icon {

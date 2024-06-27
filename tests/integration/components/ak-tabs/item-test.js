@@ -206,4 +206,53 @@ module('Integration | Component | ak-tabs/item', function (hooks) {
 
     await click('[data-test-ak-tab-item] button');
   });
+
+  test('it renders custom badge content when using named block', async function (assert) {
+    await render(hbs`
+      <AkTabs::Item
+        @id={{this.id}}
+        @route={{this.route}}
+        @hasBadge={{this.hasBadge}}
+      >
+        <:badge>
+          Custom Badge
+        </:badge>
+
+        <:default>{{this.label}}</:default>
+      </AkTabs::Item>
+    `);
+
+    assert
+      .dom('[data-test-ak-tab-badge]')
+      .exists()
+      .containsText('Custom Badge');
+  });
+
+  test.each(
+    'it renders badge content with/without background',
+    ['', false, true],
+    async function (assert, badgeBackground) {
+      this.set('badgeBackground', badgeBackground);
+
+      const hasBadgeBackground = badgeBackground ?? true;
+
+      await render(hbs`
+      <AkTabs::Item
+        @id={{this.id}}
+        @route={{this.route}}
+        @hasBadge={{this.hasBadge}}
+        @badgeBackground={{this.badgeBackground}}
+      >
+        {{this.label}}
+      </AkTabs::Item>
+    `);
+
+      assert
+        .dom('[data-test-ak-tab-badge]')
+        .exists()
+        [hasBadgeBackground ? 'hasClass' : 'doesNotHaveClass'](
+          /ak-tab-badge-background/
+        );
+    }
+  );
 });

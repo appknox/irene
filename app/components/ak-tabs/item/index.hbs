@@ -29,10 +29,16 @@
       @direction='row'
       @alignItems='center'
       @justifyContent='center'
-      local-class='ak-tab-badge'
+      local-class='
+        ak-tab-badge
+        {{if this.badgeBackground "ak-tab-badge-background"}}'
       data-test-ak-tab-badge
     >
-      {{@badgeCount}}
+      {{#if (has-block 'badge')}}
+        {{yield to='badge'}}
+      {{else}}
+        {{@badgeCount}}
+      {{/if}}
     </AkStack>
   {{/if}}
 </AkList::Item>
