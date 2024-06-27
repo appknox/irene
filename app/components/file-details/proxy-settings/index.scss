@@ -1,0 +1,16 @@
+.tooltip-content-container {
+  width: 280px;
+  padding: 0.5em;
+  box-sizing: border-box;
+  white-space: normal;
+}
+
+.proxy-settings-help-icon {
+  color: var(--file-details-proxy-settings-neutral-color);
+}
+
+.proxy-settings-divider {
+  width: 1px;
+  height: 18px;
+  background-color: var(--file-details-proxy-settings-neutral-color);
+}
