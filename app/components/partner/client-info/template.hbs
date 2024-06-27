@@ -1,11 +1,10 @@
-{{! template-lint-disable no-curly-component-invocation }}
 <div local-class='client-info-card {{@client.type}}'>
   <div local-class='client-info-header'>
     <span local-class='thumbnail' data-test-thumbnail>
       <AkIcon @iconName='groups' local-class='thumbnail-icon' />
     </span>
     <div
-      local-class='title {{if this.isEmptyTitle 'empty-title'}}'
+      local-class='title {{if this.isEmptyTitle "empty-title"}}'
       data-test-title
     >
       {{#if this.isEmptyTitle}}

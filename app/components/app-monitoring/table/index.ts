@@ -50,7 +50,7 @@ export default class AppMonitoringTableComponent extends Component<AppMonitoring
         width: 150,
       },
       {
-        name: this.intl.t('status'),
+        name: this.intl.t('appMonitoringModule.monitoringStatus'),
         component: 'app-monitoring/table/status',
         width: 180,
       },
