@@ -1,8 +1,10 @@
 import { inject as service } from '@ember/service';
 import Service from '@ember/service';
+import Store from '@ember-data/store';
 
-import NetworkService from './network';
+import NetworkService, { Header, RequestOptions } from './network';
 import LoggerService from './logger';
+import ENV from 'irene/config/environment';
 
 type ServerData = {
   websocket: string;
@@ -11,12 +13,20 @@ type ServerData = {
   urlUploadAllowed: boolean;
 };
 
+type DashboardData = {
+  dashboardURL: string;
+  orgDevicefarmURL: string;
+};
+
 export default class ConfigurationService extends Service {
   @service declare network: NetworkService;
   @service declare logger: LoggerService;
+  @service declare store: Store;
+  @service declare session: any;
 
   frontendPromise?: Promise<void>;
   serverPromise?: Promise<void>;
+  dashboardPromise?: Promise<void>;
 
   serverConfigEndpoint = '/v2/server_configuration';
   frontendConfigEndpoint = '/v2/frontend_configuration';
@@ -62,8 +72,34 @@ export default class ConfigurationService extends Service {
     urlUploadAllowed: false,
   };
 
-  async fetchConfig(url: string) {
-    const res = await this.network.request(url);
+  dashboardData: DashboardData = {
+    dashboardURL: '',
+    orgDevicefarmURL: '',
+  };
+
+  async getAuthHeaders(): Promise<Header> {
+    const data = this.session.data.authenticated;
+
+    if (data?.b64token) {
+      return {
+        Authorization: `Basic ${data.b64token}`,
+        'X-Product': `${ENV.product}`,
+      };
+    }
+
+    return {
+      'X-Product': `${ENV.product}`,
+    };
+  }
+
+  async fetchConfig(url: string, headers?: Header) {
+    const reqOptions: RequestOptions = {};
+
+    if (headers) {
+      reqOptions.headers = headers;
+    }
+
+    const res = await this.network.request(url, reqOptions);
 
     if (res.ok) {
       return await res.json();
@@ -161,5 +197,29 @@ export default class ConfigurationService extends Service {
     }
 
     return this.serverData;
+  }
+
+  async dashboardConfigFetch() {
+    try {
+      const headers: Header = await this.getAuthHeaders();
+      const data = await this.fetchConfig(
+        this.dashboardConfigEndpoint,
+        headers
+      );
+
+      this.dashboardData.dashboardURL ||= data.dashboard_url;
+      this.dashboardData.orgDevicefarmURL ||= data.devicefarm_url;
+    } catch (error) {
+      this.logger.error('Error getting dashboard configuration', error);
+    }
+  }
+
+  async getDashboardConfig() {
+    if (!this.dashboardPromise && this.session.isAuthenticated) {
+      this.dashboardPromise = this.dashboardConfigFetch();
+      await this.dashboardPromise;
+    }
+
+    return this.dashboardData;
   }
 }

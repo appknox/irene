@@ -7,9 +7,9 @@ import ENV from 'irene/config/environment';
 import fetch from 'fetch';
 import BuildURL from './buildurl';
 
-type Header = { [x: string]: string };
+export type Header = { [x: string]: string };
 
-type RequestOptions = {
+export type RequestOptions = {
   method?: string;
   body?: string;
   headers?: Header;

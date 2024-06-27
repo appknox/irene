@@ -19,6 +19,7 @@ export default class ApplicationRoute extends Route {
     await all([
       this.configuration.serverConfigFetch(),
       this.configuration.getFrontendConfig(),
+      this.configuration.getDashboardConfig(),
     ]);
 
     return this.intl.setLocale(['en']);
