@@ -273,7 +273,7 @@ body {
   --ak-tabs-border-radius: var(--border-radius);
   --ak-tabs-neutral-background: var(--neutral-grey-200);
   --ak-tabs-active-box-shadow: var(--box-shadow-4);
-  --ak-tabs-background-main: var(--background-main);
+  --ak-tabs-background-white: var(--common-white);
 
   // variables for ak-breadcrumbs
   --ak-breadcrumbs-color-text-primary: var(--text-primary);
@@ -808,13 +808,17 @@ body {
   );
 
   // variables for file-details/vulnerability-analysis/header
-  --file-details-vulnerability-analysis-header-border-color: var(--border-color-1);
+  --file-details-vulnerability-analysis-header-border-color: var(
+    --border-color-1
+  );
   --file-details-vulnerability-analysis-header-background-color: var(
     --background-main
   );
 
   // variables for file-details/vulnerability-analysis/table
-  --file-details-vulnerability-analysis-table-border-color: var(--border-color-1);
+  --file-details-vulnerability-analysis-table-border-color: var(
+    --border-color-1
+  );
   --file-details-vulnerability-analysis-table-background-color: var(
     --background-main
   );
