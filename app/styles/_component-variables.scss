@@ -772,9 +772,15 @@ body {
     --border-color-1
   );
 
-  // variables for file-details/vulnerability-analysis
-  --file-details-vulnerability-analysis-border-color: var(--border-color-1);
-  --file-details-vulnerability-analysis-background-color: var(
+  // variables for file-details/vulnerability-analysis/header
+  --file-details-vulnerability-analysis-header-border-color: var(--border-color-1);
+  --file-details-vulnerability-analysis-header-background-color: var(
+    --background-main
+  );
+
+  // variables for file-details/vulnerability-analysis/table
+  --file-details-vulnerability-analysis-table-border-color: var(--border-color-1);
+  --file-details-vulnerability-analysis-table-background-color: var(
     --background-main
   );
 
