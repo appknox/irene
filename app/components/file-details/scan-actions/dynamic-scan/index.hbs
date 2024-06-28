@@ -1,0 +1,37 @@
+<AkStack
+  @justifyContent='space-between'
+  @alignItems='center'
+  @flexWrap='wrap'
+  class='p-2'
+>
+  <AkTypography @variant='h5' data-test-fileDetailScanActions-dynamicScanTitle>
+    {{t 'dast'}}
+  </AkTypography>
+
+  <AkChip
+    @label={{this.chipStatusText}}
+    @color={{if @file.isDynamicDone 'success' 'default'}}
+    @variant='semi-filled'
+    @size='small'
+    local-class='chips-uppercase'
+    data-test-fileDetailScanActions-dynamicScanStatus
+  />
+</AkStack>
+
+<AkDivider @color='dark' />
+
+<AkLink
+  @color='primary'
+  @underline='always'
+  @fontWeight='bold'
+  class='px-2 py-1'
+  local-class='view-details-icon'
+>
+  <:default>
+    {{t 'viewDetails'}}
+  </:default>
+
+  <:rightIcon>
+    <AkIcon @iconName='arrow-right' />
+  </:rightIcon>
+</AkLink>

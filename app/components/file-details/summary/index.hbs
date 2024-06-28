@@ -1,5 +1,10 @@
 <div local-class='file-summary-root'>
-  <AkStack class='p-2' @alignItems='center' @justifyContent='space-between'>
+  <AkStack
+    class='p-2'
+    local-class='file-summary-header'
+    @alignItems='center'
+    @justifyContent='space-between'
+  >
     <AkStack @alignItems='center' @spacing='1.5'>
       <AppLogo
         @src={{@file.iconUrl}}
@@ -45,11 +50,28 @@
       @alignItems='center'
       @justifyContent='space-between'
     >
-      <AkTypography data-test-fileDetailsSummary-fileId @variant='subtitle1'>
-        {{t 'fileID'}}
-        -
-        {{@file.id}}
-      </AkTypography>
+      <AkStack @alignItems='center'>
+        <AkIconButton
+          @size='small'
+          {{on 'click' this.handleFileSummaryToggle}}
+          data-test-fileDetailsSummary-showMoreOrLessBtn
+        >
+          <AkIcon
+            @iconName={{if
+              this.showMoreFileSummary
+              'arrow-drop-up'
+              'arrow-drop-down'
+            }}
+            local-class='show-more-icon'
+            data-test-fileDetailsSummary-showMoreOrLessBtn-icon
+          />
+        </AkIconButton>
+        <AkTypography data-test-fileDetailsSummary-fileId @variant='subtitle1'>
+          {{t 'fileID'}}
+          -
+          {{@file.id}}
+        </AkTypography>
+      </AkStack>
 
       <AkStack @alignItems='center' @spacing='1'>
         <FileDetails::Summary::AppPlatform @file={{@file}} />
@@ -80,12 +102,27 @@
             </a>
           </AkTooltip>
         {{/if}}
+
+        {{#unless @file.isActive}}
+          <AkTooltip
+            @placement='bottom'
+            @arrow={{true}}
+            @title={{t 'fileInactive'}}
+            @color='dark'
+          >
+            <AkIcon
+              data-test-fileDetailSummary-inactiveFileIcon
+              @color='warn'
+              @iconName='warning'
+            />
+          </AkTooltip>
+        {{/unless}}
       </AkStack>
     </AkStack>
 
-    <AkDivider />
-
     {{#if this.showMoreFileSummary}}
+      <AkDivider />
+
       {{#each this.fileSummary as |fs|}}
         <AkStack
           local-class='file-summary-padding'
@@ -124,32 +161,6 @@
 
       <AkDivider />
     {{/if}}
-
-    <div local-class='file-summary-padding'>
-      <AkButton
-        @variant='text'
-        @underline='always'
-        @color='primary'
-        @typographyVariant='subtitle1'
-        {{on 'click' this.handleFileSummaryToggle}}
-        data-test-fileDetailsSummary-showMoreOrLessBtn
-      >
-        <:default>
-          {{if this.showMoreFileSummary (t 'showLess') (t 'showMore')}}
-        </:default>
-
-        <:rightIcon>
-          <AkIcon
-            @iconName={{if
-              this.showMoreFileSummary
-              'arrow-drop-up'
-              'arrow-drop-down'
-            }}
-            @color='primary'
-          />
-        </:rightIcon>
-      </AkButton>
-    </div>
   </div>
 
   <AkMenu

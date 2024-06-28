@@ -1,0 +1,33 @@
+.scanning-chip {
+  gap: 0.285em;
+  border: 1px solid var(--file-details-scan-actions-static-scan-border-color);
+  border-radius: var(--file-details-scan-actions-static-scan-border-radius);
+  padding: 0 0.428em;
+  height: 1.714em;
+
+  .scanning-text {
+    font-size: 0.857rem;
+  }
+
+  :global(.ak-loader-circle-indicator) {
+    stroke: var(
+      --file-details-scan-actions-static-scan-loader-color
+    ) !important;
+  }
+
+  :global(.ak-loader-svg-track) {
+    stroke: var(
+      --file-details-scan-actions-static-scan-loader-track-color
+    ) !important;
+  }
+}
+
+.view-details-icon {
+  :global(.ak-icon) {
+    font-size: 1.5rem !important;
+  }
+}
+
+.chips-uppercase {
+  text-transform: uppercase;
+}

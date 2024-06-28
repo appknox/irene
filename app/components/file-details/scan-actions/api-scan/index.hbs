@@ -1,112 +1,61 @@
-{{#if @file.isRunningApiScan}}
-  <AkButton data-test-apiScan-btn @variant='outlined' @disabled={{true}}>
-    {{t 'scanning'}}
-    :
-    {{@file.apiScanProgress}}%
-  </AkButton>
-{{else if @file.isApiDone}}
-  <AkButton data-test-apiScan-btn {{style pointerEvents='none'}}>
-    <:leftIcon>
-      <AkIcon @iconName='done' />
-    </:leftIcon>
+<AkStack
+  @justifyContent='space-between'
+  @alignItems='center'
+  @flexWrap='wrap'
+  class='p-2'
+>
+  <AkTypography @variant='h5' data-test-fileDetailScanActions-apiScanTitle>
+    {{t 'apiScan'}}
+  </AkTypography>
 
-    <:default>{{t 'completed'}}</:default>
-  </AkButton>
-{{else if @file.isApiNotDone}}
-  <AkButton
-    data-test-apiScan-btn
-    @variant='outlined'
-    {{on 'click' (perform this.openApiScanModal)}}
-    @disabled={{if (and @file.isActive @file.isDynamicDone) false true}}
-  >
-    <:leftIcon>
-      {{#if this.openApiScanModal.isRunning}}
-        <AkLoader @size={{13}} />
-      {{else}}
-        <AkIcon @iconName='play-arrow' />
-      {{/if}}
-    </:leftIcon>
+  {{#if @file.isRunningApiScan}}
+    <AkStack @alignItems='center' local-class='scanning-chip chips-uppercase'>
+      <AkLoader @size={{12}} />
 
-    <:default>{{t 'start'}}</:default>
-  </AkButton>
-{{/if}}
+      <AkTypography
+        @color='textSecondary'
+        @fontWeight='bold'
+        local-class='scanning-text'
+        data-test-fileDetailScanActions-apiScanInProgressStatus
+      >
+        {{t 'scanning'}}...
+        {{@file.apiScanProgress}}%
+      </AkTypography>
+    </AkStack>
+  {{else if @file.isApiDone}}
+    <AkChip
+      @label={{t 'completed'}}
+      @color='success'
+      @variant='semi-filled'
+      @size='small'
+      local-class='chips-uppercase'
+      data-test-fileDetailScanActions-apiScanCompletedStatus
+    />
+  {{else if @file.isApiNotDone}}
+    <AkChip
+      @label={{t 'notStarted'}}
+      @variant='semi-filled'
+      @size='small'
+      local-class='chips-uppercase'
+      data-test-fileDetailScanActions-apiScanNotStartedStatus
+    />
+  {{/if}}
+</AkStack>
 
-{{#if this.showApiScanModal}}
-  <AkModal
-    @showHeader={{true}}
-    @headerTitle={{t 'modalCard.apiScan.title'}}
-    @onClose={{this.closeApiScanModal}}
-    @disableClose={{this.runApiScan.isRunning}}
-  >
-    <:default>
-      <div {{style maxWidth='650px'}}>
-        {{#if this.hasDynamicScanDone}}
-          {{#if this.capturedApisCount}}
-            <AkStack
-              @alignItems='center'
-              @spacing='2'
-              local-class='api-scan-modal-alert'
-              data-test-apiScanModal-warnAlert
-            >
-              <AkIcon @iconName='warning' />
+<AkDivider @color='dark' />
 
-              <AkTypography>
-                {{t 'modalCard.apiScan.warning' htmlSafe=true}}
-              </AkTypography>
-            </AkStack>
+<AkLink
+  @color='primary'
+  @underline='always'
+  @fontWeight='bold'
+  class='px-2 py-1'
+  local-class='view-details-icon'
+>
+  <:default>
+    {{t 'viewDetails'}}
+  </:default>
 
-            <div class='my-3'>
-              <AkTypography data-test-apiScanModal-description>
-                {{t 'modalCard.apiScan.description'}}
-              </AkTypography>
-            </div>
-          {{/if}}
-
-          <div class='mt-2'>
-            <FileDetails::ScanActions::ApiScan::CapturedApis @file={{@file}} />
-          </div>
-
-          <div class='mt-3'>
-            <ProxySettingsView
-              @profile={{@file.profile}}
-              @project={{@file.project}}
-            />
-          </div>
-        {{else}}
-          <AkStack @alignItems='center' @spacing='1.5' class='alert alert-info'>
-            <AkIcon @iconName='info' />
-
-            <AkTypography @color='inherit'>
-              {{t 'modalCard.apiScan.noDynamicScan'}}
-            </AkTypography>
-          </AkStack>
-        {{/if}}
-      </div>
-    </:default>
-
-    <:footer>
-      <AkDivider />
-
-      <AkStack @justifyContent='flex-end' class='p-2'>
-        {{#if this.capturedApisCount}}
-          <AkButton
-            data-test-apiScanModal-startBtn
-            {{on 'click' (perform this.runApiScan)}}
-            @loading={{this.runApiScan.isRunning}}
-          >
-            {{t 'modalCard.apiScan.start'}}
-          </AkButton>
-        {{else}}
-          <AkButton
-            data-test-apiScanModal-closeBtn
-            @variant='outlined'
-            @color='neutral'
-            {{on 'click' this.closeApiScanModal}}
-          >
-            {{t 'close'}}
-          </AkButton>
-        {{/if}}
-      </AkStack>
-    </:footer>
-  </AkModal>
-{{/if}}
+  <:rightIcon>
+    <AkIcon @iconName='arrow-right' />
+  </:rightIcon>
+</AkLink>

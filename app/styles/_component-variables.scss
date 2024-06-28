@@ -718,6 +718,9 @@ body {
     --border-color-2
   );
 
+  // variables for file-details
+  --file-details-background-color: var(--background-light);
+
   // variables for file-details/severity-level
   --file-details-severity-level-border-color: var(--border-color-1);
 
@@ -747,14 +750,19 @@ body {
   --file-details-summary-store-logo-container-border-color: var(
     --neutral-grey-200
   );
+  --file-details-summary-header-box-shadow: var(--box-shadow-3);
 
   // variables for file-details/summary/app-platform
   --file-details-summary-app-platform-color-ios: var(--ios);
   --file-details-summary-app-platform-color-android: var(--android);
 
   // variables for file-details/scan-actions
-  --file-details-scan-actions-border-color: var(--border-color-1);
-  --file-details-scan-actions-background-color: var(--background-main);
+  --file-details-scan-actions-border-color: var(--neutral-grey-200);
+  --file-details-scan-actions-background-color: var(--common-white);
+
+  // variables for file-details/scan-actions-old
+  --file-details-scan-actions-old-border-color: var(--border-color-1);
+  --file-details-scan-actions-old-background-color: var(--background-main);
 
   // variables for file-details/scan-actions/api-scan
   --file-details-scan-actions-api-scan-border-radius: var(--border-radius);
@@ -763,6 +771,17 @@ body {
   );
   --file-details-scan-actions-api-scan-alert-text-color: var(--error-main);
   --file-details-scan-actions-api-scan-alert-border-color: var(--error-main);
+  --file-details-scan-actions-api-scan-border-color: var(--neutral-grey-200);
+  --file-details-scan-actions-api-scan-loader-color: var(--success-main);
+  --file-details-scan-actions-api-scan-loader-track-color: var(--success-light);
+
+  // variables for file-details/scan-actions/static-scan
+  --file-details-scan-actions-static-scan-border-radius: var(--border-radius);
+  --file-details-scan-actions-static-scan-border-color: var(--neutral-grey-200);
+  --file-details-scan-actions-static-scan-loader-color: var(--success-main);
+  --file-details-scan-actions-static-scan-loader-track-color: var(
+    --success-light
+  );
 
   // variables for file-details/scan-actions/api-scan/captured-apis
   --file-details-scan-actions-api-scan-captured-apis-border-radius: var(

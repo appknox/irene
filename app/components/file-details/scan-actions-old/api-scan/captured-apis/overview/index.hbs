@@ -1,0 +1,24 @@
+<AkStack data-test-capturedApi-endpointContainer @spacing='1' @tag='label'>
+  <AkCheckbox
+    @checked={{@capturedApi.isActive}}
+    @onChange={{perform this.handleToggleApi}}
+    @disabled={{this.handleToggleApi.isRunning}}
+    data-test-capturedApi-endpointSelectCheckbox
+  />
+
+  <AkStack local-class='api-endpoint-container' @spacing='1.5'>
+    <AkChip
+      data-test-capturedApi-endpointMethodChip
+      @label={{@capturedApi.request.method}}
+      @size='small'
+    />
+
+    <AkTypography local-class='api-endpoint' data-test-capturedApi-endpointUrl>
+      {{request-to-url @capturedApi.request}}
+
+      {{#if this.handleToggleApi.isRunning}}
+        <AkLoader class='mx-1' @size={{13}} />
+      {{/if}}
+    </AkTypography>
+  </AkStack>
+</AkStack>

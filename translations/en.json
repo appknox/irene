@@ -254,6 +254,7 @@
   "cvssMetrics": "CVSS Metrics",
   "cwe": "CWE",
   "cweExpansion": "Common Weakness Enumeration",
+  "dast": "DAST",
   "dastAutomation": {
     "dastAutomationScenario": "DAST Automation Scenario",
     "addScenario": "Add Scenario",
@@ -1152,6 +1153,7 @@
   "role": "Role",
   "samlAuth": "SAML Authentication",
   "samlDesc": "SAML-based single sign-on (SSO) gives users access to app through an identity provider (IdP) of your choice. Get set up with ADFS, G Suite, Auth0, OneLogin, or your custom SAML 2.0 solution.",
+  "sast": "SAST",
   "save": "Save",
   "saveCredentials": "Save Credentials",
   "savedPreferences": "Successfully saved the preferences",
