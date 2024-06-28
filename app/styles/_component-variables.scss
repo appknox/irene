@@ -1033,6 +1033,11 @@ body {
     --background-main
   );
 
+  // variables for project-settings/general-settings/device-preferences-automated-dast
+  --project-settings-general-settings-device-preferences-automated-dast-border-color: var(
+    --border-color-1
+  );
+
   // variables for project-settings/general-settings/dynamicscan-automation-settings
   --project-settings-general-settings-dynamicscan-automation-settings-box-shadow: var(
     --box-shadow-7
@@ -1050,6 +1055,20 @@ body {
   );
   --project-settings-general-settings-dynamicscan-automation-scenario-form-footer-box-shadow: var(
     --box-shadow-4
+  );
+
+  // variables for project-settings/general-settings/dynamicscan-automation-settings/upselling-feature
+  --project-settings-general-settings-dynamicscan-automation-upselling-feature-box-shadow: var(
+    --box-shadow-7
+  );
+  --project-settings-general-settings-dynamicscan-automation-upselling-feature-upgrade-note-color: var(
+    --neutral-grey-800
+  );
+  --project-settings-general-settings-dynamicscan-automation-upselling-feature-footer-color: var(
+    --upselling-feature-footer-color
+  );
+  --project-settings-general-settings-dynamicscan-automation-upselling-feature-footer-bg-color: var(
+    --upselling-feature-footer-bg-color
   );
 
   // variables for project-settings/general-settings/github-project

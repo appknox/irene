@@ -1,0 +1,60 @@
+<AkStack @direction='column' @width='full' local-class='upselling-feature-root'>
+  <AkStack @direction='column' @width='full' class='p-2'>
+    <AkChip
+      @label='New'
+      @variant='semi-filled'
+      @size='small'
+      local-class='new-chip'
+    >
+      <:icon>
+        <AkIcon @iconName='auto-fix-high' />
+      </:icon>
+    </AkChip>
+
+    <AkTypography @variant='h6'>Automated DAST</AkTypography>
+
+    <AkTypography @variant='body2' local-class='upgrade-note'>Upgrade your
+      subscription to perform Automated DAST</AkTypography>
+
+    <AkDivider class='my-2' @color='dark' />
+
+    <AkStack @direction='column' @spacing='1.5'>
+      <AkTypography @variant='subtitle2'>Advantages of Automated DAST</AkTypography>
+
+      <AkStack @alignItems='center' @spacing='0.5'>
+        <AkIcon @iconName='verified-user' @color='success' @size='small' />
+
+        <AkTypography @variant='body2'>Lorem ipsum dolor sit amet consectetur.</AkTypography>
+      </AkStack>
+
+      <AkStack @alignItems='center' @spacing='0.5'>
+        <AkIcon @iconName='verified-user' @color='success' @size='small' />
+
+        <AkTypography @variant='body2'>Lorem ipsum dolor sit amet consectetur.</AkTypography>
+      </AkStack>
+
+      <AkStack @alignItems='center' @spacing='0.5'>
+        <AkIcon @iconName='verified-user' @color='success' @size='small' />
+
+        <AkTypography @variant='body2'>Lorem ipsum dolor sit amet consectetur.</AkTypography>
+      </AkStack>
+
+      <AkStack @alignItems='center' @spacing='0.5'>
+        <AkIcon @iconName='verified-user' @color='success' @size='small' />
+
+        <AkTypography @variant='body2'>Lorem ipsum dolor sit amet consectetur.</AkTypography>
+      </AkStack>
+    </AkStack>
+  </AkStack>
+
+  <AkStack @width='full' local-class='footer'>
+    <AkLink
+      @underline='always'
+      @typographyVariant='body2'
+      @fontWeight='bold'
+      @linkTextClass={{this.classes.linkTextClass}}
+    >
+      Upgrade Now
+    </AkLink>
+  </AkStack>
+</AkStack>

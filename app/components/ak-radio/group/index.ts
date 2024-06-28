@@ -54,6 +54,6 @@ export default class AkRadioGroupComponent extends Component<AkRadioGroupSignatu
 }
 declare module '@glint/environment-ember-loose/registry' {
   export default interface Registry {
-    AkRadioGroup: typeof AkRadioGroupComponent;
+    'AkRadio::Group': typeof AkRadioGroupComponent;
   }
 }

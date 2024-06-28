@@ -1,0 +1,122 @@
+<AkStack @width='full' @direction='column'>
+  <AkTypography @variant='h5'>
+    Device Preferences (Automated DAST)
+  </AkTypography>
+
+  <AkSelect
+    @options={{this.preferenceType}}
+    @selected={{this.selectedType}}
+    @placeholder='Select the device preference'
+    @onChange={{this.changed}}
+    local-class='device-preference-select'
+    as |aks|
+  >
+    {{aks.label}}
+  </AkSelect>
+
+  {{#if this.showTable}}
+    <AkStack @direction='column' local-class='device-preference-table'>
+      <AkStack @width='full' @alignItems='center'>
+        <AkStack @width='4/12' class='ml-2'>
+          <AkTypography>Device Type</AkTypography>
+        </AkStack>
+
+        {{#if this.loaded}}
+          <AkRadio::Group @groupDirection='row' as |ctx|>
+            <AkFormControlLabel @label='Phone'>
+              <AkRadio @radioCtx={{ctx}} @value='Phone' />
+            </AkFormControlLabel>
+
+            <AkFormControlLabel @label='Tab'>
+              <AkRadio @radioCtx={{ctx}} @value='Tab' />
+            </AkFormControlLabel>
+          </AkRadio::Group>
+        {{else}}
+          <AkSkeleton @width='80px' @height='18px' @variant='rectangular' />
+
+          <AkSkeleton
+            @width='80px'
+            @height='18px'
+            @variant='rectangular'
+            class='ml-2 my-1'
+          />
+        {{/if}}
+      </AkStack>
+
+      <AkDivider @color='dark' />
+
+      <AkStack @width='full' @alignItems='center'>
+        <AkStack @width='4/12' class='ml-2'>
+          <AkTypography>Min OS Version</AkTypography>
+        </AkStack>
+
+        <ProjectPreferences::Provider
+          @profileId={{@project.activeProfileId}}
+          @platform={{@project.platform}}
+          @project={{@project}}
+          as |dpContext|
+        >
+          {{#if this.loaded}}
+            <AkSelect
+              @selected={{dpContext.selectedVersion}}
+              @options={{dpContext.devicePlatformVersions}}
+              @onChange={{dpContext.handleSelectVersion}}
+              local-class='version-select'
+              as |version|
+            >
+              {{#if (eq version '0')}}
+                {{t 'anyVersion'}}
+              {{else}}
+                {{version}}
+              {{/if}}
+            </AkSelect>
+          {{else}}
+            <AkSkeleton @width='96px' @height='32px' @variant='rectangular' />
+          {{/if}}
+        </ProjectPreferences::Provider>
+      </AkStack>
+
+      <AkDivider @color='dark' />
+
+      <AkStack @width='full' @alignItems='center'>
+        <AkStack @width='4/12' class='ml-2'>
+          <AkTypography>Additional capabilities</AkTypography>
+        </AkStack>
+
+        {{#if this.loaded}}
+          <AkStack @spacing='3'>
+            <AkFormControlLabel @label='SIM'>
+              <AkCheckbox @checked={{true}} />
+            </AkFormControlLabel>
+
+            <AkFormControlLabel @label='VPN'>
+              <AkCheckbox @checked={{false}} />
+            </AkFormControlLabel>
+
+            <AkFormControlLabel @label='Pin Lock'>
+              <AkCheckbox @checked={{false}} />
+            </AkFormControlLabel>
+          </AkStack>
+        {{else}}
+          <AkSkeleton @width='60px' @height='18px' @variant='rectangular' />
+
+          <AkSkeleton
+            @width='60px'
+            @height='18px'
+            @variant='rectangular'
+            class='ml-2 my-1'
+          />
+
+          <AkSkeleton
+            @width='60px'
+            @height='18px'
+            @variant='rectangular'
+            class='ml-2 my-1'
+          />
+        {{/if}}
+
+      </AkStack>
+    </AkStack>
+  {{/if}}
+
+</AkStack>
