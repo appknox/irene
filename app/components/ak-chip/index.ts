@@ -19,6 +19,7 @@ interface AkChipSignature {
     variant?: 'filled' | 'semi-filled' | 'outlined';
     color?: AkChipColor;
     size?: 'medium' | 'small';
+    border?: boolean;
   };
 
   Blocks: {

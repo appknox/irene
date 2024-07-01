@@ -61,41 +61,51 @@
 }
 
 .ak-chip-variant-semi-filled {
-  border: 0px;
+  &.ak-chip-border {
+    border-width: 1px;
+    border-style: solid;
+  }
 
   &.ak-chip-color-default {
     background-color: var(--ak-chip-color-semi-filled-default-background);
     color: var(--ak-chip-color-semi-filled-default-contrast-text);
+    border-color: var(--ak-chip-color-semi-filled-default-contrast-text);
   }
 
   &.ak-chip-color-primary {
     background-color: var(--ak-chip-color-semi-filled-primary-background);
     color: var(--ak-chip-color-semi-filled-primary-contrast-text);
+    border-color: var(--ak-chip-color-semi-filled-primary-contrast-text);
   }
 
   &.ak-chip-color-secondary {
     background-color: var(--ak-chip-color-semi-filled-secondary-background);
     color: var(--ak-chip-color-semi-filled-secondary-contrast-text);
+    border-color: var(--ak-chip-color-semi-filled-secondary-contrast-text);
   }
 
   &.ak-chip-color-success {
     background-color: var(--ak-chip-color-semi-filled-success-background);
     color: var(--ak-chip-color-semi-filled-success-contrast-text);
+    border-color: var(--ak-chip-color-semi-filled-success-contrast-text);
   }
 
   &.ak-chip-color-error {
     background-color: var(--ak-chip-color-semi-filled-error-background);
     color: var(--ak-chip-color-semi-filled-error-contrast-text);
+    border-color: var(--ak-chip-color-semi-filled-error-contrast-text);
   }
 
   &.ak-chip-color-warn {
     background-color: var(--ak-chip-color-semi-filled-warn-background);
     color: var(--ak-chip-color-semi-filled-warn-contrast-text);
+    border-color: var(--ak-chip-color-semi-filled-warn-contrast-text);
   }
 
   &.ak-chip-color-info {
     background-color: var(--ak-chip-color-semi-filled-info-background);
     color: var(--ak-chip-color-semi-filled-info-contrast-text);
+    border-color: var(--ak-chip-color-semi-filled-info-contrast-text);
   }
 }
 

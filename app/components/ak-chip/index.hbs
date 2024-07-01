@@ -7,7 +7,8 @@
     ak-chip-variant-{{this.variant}} 
     ak-chip-size-{{this.size}}
     ak-chip-color-{{this.color}}
-    {{if @button "ak-chip-button"}}'
+    {{if @button "ak-chip-button"}}
+    {{if @border "ak-chip-border"}}'
 >
   {{#if (has-block 'icon')}}
     <div local-class='ak-chip-icon'>

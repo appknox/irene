@@ -12,7 +12,7 @@ const Template = (args) => ({
         Experiment with me
     </AkTypography>
 
-    <AkChip @label={{this.label}} @variant={{this.variant}} @size={{this.size}} @color={{this.color}} />
+    <AkChip @label={{this.label}} @variant={{this.variant}} @size={{this.size}} @color={{this.color}} @border={{this.border}} />
   `,
   context: args,
 });
@@ -24,6 +24,7 @@ Default.args = {
   color: 'default',
   variant: 'filled',
   size: 'medium',
+  border: false,
 };
 
 const WithIconTemplate = (args) => ({
