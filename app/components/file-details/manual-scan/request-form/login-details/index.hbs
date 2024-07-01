@@ -1,0 +1,118 @@
+<AkStack @direction='column' @spacing='3' class='px-3 py-2'>
+  <div local-class='login-details-group'>
+    <AkTypography
+      data-test-manualScanLoginDetails-loginRequiredLabel
+      local-class='login-details-label'
+    >
+      {{t 'modalCard.manual.loginRequired'}}
+    </AkTypography>
+
+    <div local-class='login-details-input-container'>
+      <AkSelect
+        data-test-manualScanLoginDetails-loginRequiredSelect
+        @options={{this.loginStatuses}}
+        @selected={{@manualscan.loginStatus}}
+        @onChange={{this.handleLoginStatusChange}}
+        as |status|
+      >
+        {{t status}}
+      </AkSelect>
+    </div>
+  </div>
+
+  {{#if @manualscan.loginRequired}}
+    <div data-test-manualScanLoginDetails-userRoleDetailsContainer>
+      <AkTypography
+        local-class='login-details-label'
+        data-test-manualScanLoginDetails-detailsLabel
+      >
+        {{t 'modalCard.manual.enterLoginDetails' htmlSafe=true}}
+      </AkTypography>
+
+      <AkStack
+        class='my-2'
+        local-class='login-details-input-container'
+        @direction='column'
+        @spacing='1.5'
+      >
+        <AkTextField
+          data-test-manualScanLoginDetails-roleInput
+          @placeholder={{t 'role'}}
+          @value={{this.role}}
+        />
+
+        <AkTextField
+          data-test-manualScanLoginDetails-usernameInput
+          @placeholder={{t 'username'}}
+          @value={{this.username}}
+        />
+
+        <AkTextField
+          data-test-manualScanLoginDetails-passwordInput
+          @type='password'
+          @placeholder={{t 'password'}}
+          @value={{this.password}}
+        />
+      </AkStack>
+
+      <AkButton
+        data-test-manualScanLoginDetails-addRoleBtn
+        @variant='outlined'
+        {{on 'click' this.addUserRole}}
+      >
+        <:leftIcon>
+          <AkIcon @iconName='add' />
+        </:leftIcon>
+
+        <:default>{{t 'modalCard.manual.addUserRole'}}</:default>
+      </AkButton>
+
+      {{#if this.hasUserRole}}
+        <div class='mt-2'>
+          <AkTable
+            data-test-manualScanLoginDetails-userRole-table
+            @dense={{true}}
+            as |t|
+          >
+            <t.head
+              data-test-manualScanLoginDetails-userRole-thead
+              @columns={{this.columns}}
+            />
+            <t.body @rows={{this.allUserRoles}} as |b|>
+              <b.row data-test-manualScanLoginDetails-userRole-row as |r|>
+                <r.cell
+                  data-test-manualScanLoginDetails-userRole-cell
+                  as |value|
+                >
+                  {{#if r.columnValue.component}}
+                    {{#let (component r.columnValue.component) as |Component|}}
+                      <Component
+                        @onDeleteClick={{fn
+                          this.handleDeleteUserRoleConfirmBoxOpen
+                          r.rowValue
+                        }}
+                      />
+                    {{/let}}
+                  {{else}}
+                    <AkTypography title={{value}} @noWrap={{true}}>
+                      {{value}}
+                    </AkTypography>
+                  {{/if}}
+                </r.cell>
+              </b.row>
+            </t.body>
+          </AkTable>
+        </div>
+      {{/if}}
+    </div>
+  {{/if}}
+
+  <ConfirmBox
+    @isActive={{this.showRemoveRoleConfirmBox}}
+    @description={{t 'confirmBox.removeUserRole'}}
+    @confirmText={{t 'delete'}}
+    @confirmAction={{this.handleDeleteUserRole}}
+    @cancelAction={{this.handleDeleteUserRoleConfirmBoxClose}}
+    @blurOverlay={{true}}
+  />
+</AkStack>

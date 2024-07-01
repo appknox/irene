@@ -152,6 +152,7 @@ Router.map(function () {
         );
 
         this.route('file', { path: '/file/:fileid' }, function () {
+          this.route('manual-scan');
           this.route('analysis', { path: '/analysis/:analysis_id' });
         });
 
