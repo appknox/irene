@@ -11,7 +11,7 @@ type DefaultBlock = {
 
 type AkAppbarDirection = AkStackSignature['Args']['direction'];
 type AkAppbarAlignItems = AkStackSignature['Args']['alignItems'];
-type AkAppbarSpacing = AkStackSignature['Args']['alignItems'];
+type AkAppbarSpacing = AkStackSignature['Args']['spacing'];
 type AkAppbarJustifyContent = AkStackSignature['Args']['justifyContent'];
 
 export interface AkAppbarSignature {

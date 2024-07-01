@@ -1,0 +1,17 @@
+<AkStack
+  @direction='column'
+  @alignItems='center'
+  @justifyContent='center'
+  @spacing='1.5'
+  class='px-3 py-5'
+>
+  <AkSvg::EmptyLoadingList />
+
+  <AkStack @alignItems='center' @spacing='1.5' class='mt-1'>
+    <AkLoader @size={{16}} />
+
+    <AkTypography>
+      {{t 'loading'}}...
+    </AkTypography>
+  </AkStack>
+</AkStack>

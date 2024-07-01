@@ -36,6 +36,8 @@ export enum AkSvgComponentInvocationByNames {
   SeverityOverrideSuccess,
   SeverityResetSuccess,
   AmVersionUploadError,
+  ApiScanProgress,
+  NoApisCaptured,
 }
 
 export enum AkSvgComponentInvocationByPaths {

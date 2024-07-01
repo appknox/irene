@@ -1,0 +1,65 @@
+<div local-class='api-scan-root'>
+  <div local-class='api-scan-container'>
+    <div local-class='api-scan-breadcrumbs-container'>
+      <AkBreadcrumbs::Container
+        data-test-fileDetails-apiScan-breadcrumbContainer
+      >
+        {{#each this.breadcrumbItems as |item|}}
+          <AkBreadcrumbs::Item
+            @route={{item.route}}
+            @model={{item.model}}
+            @linkTitle={{item.linkTitle}}
+            data-test-fileDetails-apiScan-breadcrumbItem='{{item.linkTitle}}'
+          />
+        {{/each}}
+      </AkBreadcrumbs::Container>
+    </div>
+
+    <FileDetails::Summary @file={{@file}} />
+
+    <div class='my-3'>
+      <AkTabs local-class='api-scan-tabs-container' as |Akt|>
+        {{#each this.tabItems as |item|}}
+          <Akt.tabItem
+            @id={{item.id}}
+            @hasBadge={{item.hasBadge}}
+            @route={{item.route}}
+            @currentWhen={{item.currentWhen}}
+            @indicatorVariant='shadow'
+            data-test-fileDetails-apiScan-tabs='{{item.id}}-tab'
+          >
+            <:badge>
+              <AkStack @alignItems='center'>
+                <AkIcon @iconName='bug-report' @size='small' />
+
+                <AkTypography
+                  local-class='bagde-count-text'
+                  @color='inherit'
+                  @tag='span'
+                  @fontWeight='bold'
+                >
+                  {{item.badgeCount}}
+                </AkTypography>
+              </AkStack>
+            </:badge>
+
+            <:default>{{item.label}}</:default>
+          </Akt.tabItem>
+        {{/each}}
+      </AkTabs>
+
+      {{yield}}
+    </div>
+  </div>
+
+  {{#if this.apiScan.footerComponent}}
+    <div
+      data-test-fileDetails-apiScan-footerContainer
+      local-class='api-scan-footer'
+    >
+      {{#let (component this.apiScan.footerComponent) as |Component|}}
+        <Component @file={{@file}} @data={{this.apiScan.footerComponentData}} />
+      {{/let}}
+    </div>
+  {{/if}}
+</div>

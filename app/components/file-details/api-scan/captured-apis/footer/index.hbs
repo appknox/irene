@@ -1,0 +1,140 @@
+<AkStack @alignItems='center' @justifyContent='space-between'>
+  <AkStack @direction='column' @spacing='0.5'>
+    <AkTypography data-test-fileDetails-apiScan-footerTitle @variant='h6'>
+      {{t 'startScan'}}
+    </AkTypography>
+
+    <AkTypography
+      data-test-fileDetails-apiScan-footerDesc
+      @variant='body2'
+      @color='textSecondary'
+    >
+      {{t
+        'capturedApiSelectedTotalCount'
+        selectedCount=this.data.selectedCount
+        totalCount=this.data.totalCount
+      }}
+    </AkTypography>
+  </AkStack>
+
+  <AkButton
+    data-test-fileDetails-apiScan-actionBtn
+    {{on 'click' this.handleStartApiScanDrawerOpen}}
+  >
+    <:leftIcon>
+      <AkIcon @iconName='play-arrow' />
+    </:leftIcon>
+
+    <:default>{{t 'apiScan'}}</:default>
+  </AkButton>
+</AkStack>
+
+<AkDrawer
+  @open={{this.openStartApiScanDrawer}}
+  @onClose={{this.handleStartApiScanDrawerClose}}
+  @anchor='right'
+  data-test-fileDetails-apiScanDrawer
+  as |dr|
+>
+  <div local-class='api-scan-drawer-container'>
+    <AkAppbar
+      @justifyContent='space-between'
+      @position='sticky'
+      class='px-3'
+      as |ab|
+    >
+      <AkTypography
+        data-test-fileDetails-apiScanDrawer-title
+        @color='inherit'
+        @variant='h5'
+      >
+        {{t 'apiScan'}}
+      </AkTypography>
+
+      <AkIconButton
+        data-test-fileDetails-apiScanDrawer-closeBtn
+        {{on 'click' dr.closeHandler}}
+        class={{ab.classes.defaultIconBtn}}
+      >
+        <AkIcon @iconName='close' />
+      </AkIconButton>
+    </AkAppbar>
+
+    <div class='m-3' local-class='bordered-box height-full'>
+      <AkStack
+        @alignItems='center'
+        @spacing='2'
+        local-class='api-scan-drawer-alert'
+      >
+        <AkIcon @iconName='warning' @color='error' />
+
+        <AkTypography data-test-fileDetails-apiScanDrawer-warnAlert>
+          {{t 'modalCard.apiScan.warning' htmlSafe=true}}
+        </AkTypography>
+      </AkStack>
+
+      <AkDivider @color='dark' />
+
+      <AkStack @direction='column' @spacing='1.5' class='p-3'>
+        <AkTypography
+          data-test-fileDetails-apiScanDrawer-apiSelectedTitle
+          @variant='subtitle1'
+        >
+          {{t 'capturedApiSelectedTitle'}}
+        </AkTypography>
+
+        <AkTypography
+          data-test-fileDetails-apiScanDrawer-apiSelectedDesc
+          @color='textSecondary'
+        >
+          {{t 'capturedApiSelectedDesc'}}
+        </AkTypography>
+
+        <AkTypography
+          @variant='subtitle2'
+          class='p-1 mt-1'
+          local-class='bordered-box'
+          data-test-fileDetails-apiScanDrawer-apiSelectedCount
+        >
+          {{t
+            'capturedApiSelectedTotalCountToPerfApiScan'
+            selectedCount=this.data.selectedCount
+            totalCount=this.data.totalCount
+          }}
+        </AkTypography>
+      </AkStack>
+
+      <AkDivider @color='dark' />
+
+      <FileDetails::ProxySettings
+        @project={{@file.project}}
+        @profile={{@file.profile}}
+      />
+    </div>
+
+    <AkStack
+      @spacing='1.5'
+      @alignItems='center'
+      class='px-3 py-2'
+      local-class='api-scan-drawer-footer'
+    >
+      <AkButton
+        data-test-fileDetails-apiScanDrawer-startBtn
+        {{on 'click' (perform this.startApiScan dr.closeHandler)}}
+        @loading={{this.startApiScan.isRunning}}
+      >
+        {{t 'start'}}
+      </AkButton>
+
+      <AkButton
+        data-test-fileDetails-apiScanDrawer-cancelBtn
+        {{on 'click' dr.closeHandler}}
+        @variant='outlined'
+        @color='neutral'
+        @disabled={{this.startApiScan.isRunning}}
+      >
+        {{t 'cancel'}}
+      </AkButton>
+    </AkStack>
+  </div>
+</AkDrawer>
