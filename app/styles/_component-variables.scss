@@ -11,7 +11,19 @@ body {
 
   // variables for ak-loader
   --ak-loader-stroke-primary-main: var(--primary-main);
-  --ak-loader-stroke-primary-light: var(--primary-light);
+  --ak-loader-stroke-secondary: var(--secondary-main);
+  --ak-loader-stroke-info-main: var(--info-main);
+  --ak-loader-stroke-info-dark: var(--info-dark);
+  --ak-loader-stroke-success-main: var(--success-main);
+  --ak-loader-stroke-warn-main: var(--warn-main);
+  --ak-loader-stroke-warn-dark: var(--warn-dark);
+  --ak-loader-stroke-error-main: var(--error-main);
+  --ak-loader-track-color-primary-light: var(--primary-light);
+  --ak-loader-track-color-secondary-light: var(--neutral-grey-200);
+  --ak-loader-track-color-info-light: var(--info-light);
+  --ak-loader-track-color-success-light: var(--success-light);
+  --ak-loader-track-color-warn-light: var(--warn-light);
+  --ak-loader-track-color-error-light: var(--error-light);
   --ak-loader-linear-root-bg-color: var(--neutral-grey-200);
 
   // variables for ak-popover
@@ -162,7 +174,7 @@ body {
   --ak-chip-color-semi-filled-default-contrast-text: var(--neutral-grey-700);
   --ak-chip-color-semi-filled-primary-background: var(--primary-light);
   --ak-chip-color-semi-filled-primary-contrast-text: var(--primary-dark);
-  --ak-chip-color-semi-filled-secondary-background: var(--secondary-light);
+  --ak-chip-color-semi-filled-secondary-background: var(--neutral-grey-200);
   --ak-chip-color-semi-filled-secondary-contrast-text: var(--secondary-main);
   --ak-chip-color-semi-filled-success-background: var(--success-light);
   --ak-chip-color-semi-filled-success-contrast-text: var(--success-main);
@@ -180,6 +192,21 @@ body {
   --ak-chip-color-outlined-error: var(--error-main);
   --ak-chip-color-outlined-warn: var(--warn-main);
   --ak-chip-color-outlined-info: var(--info-main);
+
+  --ak-chip-color-semi-filled-outlined-default-background: var(--neutral-grey-200);
+  --ak-chip-color-semi-filled-outlined-default-contrast-text: var(--neutral-grey-700);
+  --ak-chip-color-semi-filled-outlined-primary-background: var(--primary-light);
+  --ak-chip-color-semi-filled-outlined-primary-contrast-text: var(--primary-dark);
+  --ak-chip-color-semi-filled-outlined-secondary-background: var(--neutral-grey-200);
+  --ak-chip-color-semi-filled-outlined-secondary-contrast-text: var(--secondary-main);
+  --ak-chip-color-semi-filled-outlined-success-background: var(--success-light);
+  --ak-chip-color-semi-filled-outlined-success-contrast-text: var(--success-main);
+  --ak-chip-color-semi-filled-outlined-error-background: var(--error-light);
+  --ak-chip-color-semi-filled-outlined-error-contrast-text: var(--error-main);
+  --ak-chip-color-semi-filled-outlined-warn-background: var(--warn-light);
+  --ak-chip-color-semi-filled-outlined-warn-contrast-text: var(--warn-dark);
+  --ak-chip-color-semi-filled-outlined-info-background: var(--info-light);
+  --ak-chip-color-semi-filled-outlined-info-contrast-text: var(--info-dark);
 
   // variables for ak-app-bar
   --ak-appbar-default-background: var(--background-main);

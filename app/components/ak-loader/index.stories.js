@@ -17,7 +17,7 @@ const Template = (args) => ({
           Default Loader
         </AkTypography>
 
-        <AkLoader @size={{this.size}} @thickness={{this.thickness}}  />
+        <AkLoader @size={{this.size}} @thickness={{this.thickness}} @color={{this.color}}  />
       </div>
 
       <AkDivider />
@@ -33,6 +33,7 @@ const Template = (args) => ({
         <AkLoader 
           @size={{this.size}} 
           @thickness={{this.thickness}}
+          @color={{this.color}}
         > 
           <:label>
             <AkTypography @variant="h6">
@@ -57,6 +58,7 @@ const Template = (args) => ({
           @size={{this.size}} 
           @thickness={{this.thickness}}
           @progress={{this.progress}}
+          @color={{this.color}}
         />
       </div>
 
@@ -75,6 +77,7 @@ const Template = (args) => ({
           @size={{this.size}} 
           @thickness={{this.thickness}} 
           @progress={{this.progress}}
+          @color={{this.color}}
         >
           <:label>
             <AkTypography @variant="h6">
@@ -95,6 +98,7 @@ Circular.args = {
   thickness: 3,
   label: 'Label',
   progress: 22.5,
+  color: 'primary',
 };
 
 const LinearTemplate = (args) => {
@@ -114,6 +118,7 @@ const LinearTemplate = (args) => {
           @variant='determinate'
           @height={{this.height}}
           @progress={{this.progress}}
+          @color={{this.color}}
         >
           <:label>
             <AkTypography @variant="h6">
@@ -133,7 +138,7 @@ const LinearTemplate = (args) => {
           Indeterminate Loader
         </AkTypography>
 
-        <AkLoader::Linear @height={{this.height}} />
+        <AkLoader::Linear @height={{this.height}} @color={{this.color}} />
       </div>
     </AkStack>
   `,
@@ -146,4 +151,5 @@ export const Linear = LinearTemplate.bind({});
 Linear.args = {
   height: 4,
   progress: 22.5,
+  color: 'primary',
 };

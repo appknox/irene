@@ -57,6 +57,16 @@ const WithIconTemplate = (args) => ({
             <AkIcon @iconName="security" />
         </:icon> 
     </AkChip>
+
+    <AkChip 
+        @label="Security" 
+        @variant="semi-filled-outlined" 
+        @size={{this.size}} 
+        @color={{this.color}}>
+        <:icon>
+            <AkIcon @iconName="security" />
+        </:icon> 
+    </AkChip>
   `,
   context: args,
 });
@@ -92,6 +102,15 @@ const DeletableTemplate = (args) => ({
         @label="Deletable semi-filled" 
         @onDelete={{this.handleDelete}} 
         @variant="semi-filled" 
+        @size={{this.size}} 
+        @color={{this.color}} 
+        @button={{this.button}}
+        {{on 'click' this.handleClick}} />
+    
+    <AkChip 
+        @label="Deletable semi-filled-outlined" 
+        @onDelete={{this.handleDelete}} 
+        @variant="semi-filled-outlined" 
         @size={{this.size}} 
         @color={{this.color}} 
         @button={{this.button}}
