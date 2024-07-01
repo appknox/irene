@@ -1,0 +1,76 @@
+{{#if this.fetchCapturedApis.isRunning}}
+  <AkStack @justifyContent='center' class='mt-7'>
+    <div local-class='captured-api-status-card'>
+      <FileDetails::ApiScan::CapturedApis::Loading />
+    </div>
+  </AkStack>
+{{else if this.hasNoCapturedApi}}
+  <AkStack @justifyContent='center' class='mt-7'>
+    <div local-class='captured-api-status-card'>
+      <FileDetails::ApiScan::CapturedApis::Empty />
+    </div>
+  </AkStack>
+{{else}}
+  <div local-class='captured-api-list-container'>
+    <AkTypography
+      data-test-fileDetails-apiScan-capturedApi-desc
+      @color='textSecondary'
+      class='p-2'
+    >
+      {{t 'capturedApiListDesc'}}
+    </AkTypography>
+
+    <AkDivider @color='dark' />
+
+    <AkPaginationProvider
+      @results={{this.capturedApiList}}
+      @onItemPerPageChange={{this.handleItemPerPageChange}}
+      @totalItems={{this.totalCapturedApiCount}}
+      @nextAction={{this.handlePrevNextAction}}
+      @prevAction={{this.handlePrevNextAction}}
+      @itemPerPageOptions={{array 10 25 50}}
+      @defaultLimit={{this.limit}}
+      @offset={{this.offset}}
+      as |pgc|
+    >
+      <div class='mb-1'>
+        <AkTypography
+          data-test-fileDetails-apiScan-capturedApi-title
+          local-class='captured-api-title'
+          @variant='h6'
+        >
+          {{t 'capturedApiListTitle'}}
+        </AkTypography>
+
+        <AkStack @direction='column' @spacing='1.5'>
+          {{#each pgc.currentPageResults as |ca|}}
+            <AkDivider />
+
+            <div class='px-2'>
+              <FileDetails::ApiScan::CapturedApis::Overview
+                @capturedApi={{ca}}
+                @toggleApi={{perform this.toggleApi ca}}
+              />
+            </div>
+          {{/each}}
+        </AkStack>
+      </div>
+
+      <AkPagination
+        @variant='compact'
+        @disableNext={{pgc.disableNext}}
+        @nextAction={{pgc.nextAction}}
+        @disablePrev={{pgc.disablePrev}}
+        @prevAction={{pgc.prevAction}}
+        @endItemIdx={{pgc.endItemIdx}}
+        @startItemIdx={{pgc.startItemIdx}}
+        @itemPerPageOptions={{pgc.itemPerPageOptions}}
+        @onItemPerPageChange={{pgc.onItemPerPageChange}}
+        @selectedOption={{pgc.selectedOption}}
+        @tableItemLabel={{t 'apis'}}
+        @perPageTranslation={{t 'recordPerPage'}}
+        @totalItems={{pgc.totalItems}}
+      />
+    </AkPaginationProvider>
+  </div>
+{{/if}}

@@ -1,0 +1,37 @@
+.api-scan-drawer-container {
+  width: 640px;
+  height: 100%;
+  overflow-y: auto;
+}
+
+.api-scan-drawer-footer {
+  position: sticky;
+  bottom: 0;
+  background-color: var(
+    --file-details-api-scan-captured-apis-footer-background-main
+  );
+  box-shadow: var(--file-details-api-scan-captured-apis-footer-box-shadow);
+}
+
+.height-full {
+  height: 100%;
+}
+
+.api-scan-drawer-alert {
+  margin: 1.5em;
+  padding: 1em;
+  background-color: var(
+    --file-details-api-scan-captured-apis-footer-alert-background-color
+  );
+  color: var(--file-details-api-scan-captured-apis-footer-alert-text-color);
+  border: 1px solid
+    var(--file-details-api-scan-captured-apis-footer-alert-border-color);
+  border-radius: var(--file-details-api-scan-footer-border-radius);
+}
+
+.bordered-box {
+  border: 1px solid
+    var(--file-details-api-scan-captured-apis-footer-border-color);
+  border-radius: var(--file-details-api-scan-footer-border-radius);
+  box-sizing: border-box;
+}

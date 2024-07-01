@@ -1,0 +1,14 @@
+{{#let
+  (or @model.file.isRunningApiScan @model.file.isApiDone)
+  as |isRunningOrDone|
+}}
+  {{page-title
+    (if isRunningOrDone (t 'scanStatus') (t 'capturedApiListTitle'))
+  }}
+
+  {{#if isRunningOrDone}}
+    <FileDetails::ApiScan::ProgressStatus @file={{@model.file}} />
+  {{else}}
+    <FileDetails::ApiScan::CapturedApis @file={{@model.file}} />
+  {{/if}}
+{{/let}}
