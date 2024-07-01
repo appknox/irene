@@ -11,7 +11,17 @@ body {
 
   // variables for ak-loader
   --ak-loader-stroke-primary-main: var(--primary-main);
-  --ak-loader-stroke-primary-light: var(--primary-light);
+  --ak-loader-stroke-secondary: var(--secondary-main);
+  --ak-loader-stroke-info: var(--info-dark);
+  --ak-loader-stroke-success: var(--success-main);
+  --ak-loader-stroke-warn: var(--warn-dark);
+  --ak-loader-stroke-error: var(--error-main);
+  --ak-loader-track-color-primary-light: var(--primary-light);
+  --ak-loader-track-color-secondary-light: var(--secondary-light);
+  --ak-loader-track-color-info-light: var(--info-light);
+  --ak-loader-track-color-success-light: var(--success-light);
+  --ak-loader-track-color-warn-light: var(--warn-light);
+  --ak-loader-track-color-error-light: var(--error-light);
   --ak-loader-linear-root-bg-color: var(--neutral-grey-200);
 
   // variables for ak-popover

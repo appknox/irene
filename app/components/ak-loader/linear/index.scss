@@ -10,9 +10,32 @@
   .ak-loader-linear-indicator,
   .indeterminate-indicator-bar--1,
   .indeterminate-indicator-bar--2 {
-    background-color: var(--ak-loader-stroke-primary-main);
     bottom: 0px;
     top: 0px;
+
+    &.ak-loader-linear-color-primary {
+      background-color: var(--ak-loader-stroke-primary-main);
+    }
+
+    &.ak-loader-linear-color-secondary {
+      background-color: var(--ak-loader-stroke-secondary);
+    }
+
+    &.ak-loader-linear-color-info {
+      background-color: var(--ak-loader-stroke-info);
+    }
+
+    &.ak-loader-linear-color-success {
+      background-color: var(--ak-loader-stroke-success);
+    }
+
+    &.ak-loader-linear-color-warn {
+      background-color: var(--ak-loader-stroke-warn);
+    }
+
+    &.ak-loader-linear-color-error {
+      background-color: var(--ak-loader-stroke-error);
+    }
   }
 
   .ak-loader-linear-indicator {
