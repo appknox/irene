@@ -1,0 +1,15 @@
+.basic-info-group {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75em;
+  box-sizing: border-box;
+
+  .basic-info-label {
+    max-width: 420px;
+  }
+
+  .basic-info-input-container {
+    max-width: 300px;
+  }
+}

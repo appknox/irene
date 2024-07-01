@@ -1,0 +1,37 @@
+$container-width: 1200px;
+
+.manual-scan-root {
+  padding: 1.5em;
+  margin: -0.5em;
+  background-color: var(--background-light);
+  min-height: calc(100vh - 56px);
+
+  .manual-scan-container {
+    max-width: $container-width;
+    margin: 0 auto;
+  }
+
+  .manual-scan-form-container {
+    background-color: var(--background-main);
+    margin: 1.5em 0;
+    border-radius: var(--border-radius);
+    border: 1px solid var(--border-color-1);
+  }
+
+  .manual-scan-footer {
+    width: 100%;
+    max-width: $container-width + 50px;
+    margin: 0 auto;
+    padding: 1em;
+    position: sticky;
+    z-index: 10;
+    bottom: 1.5em;
+    background-color: var(--background-main);
+    border-radius: var(
+      --file-details-scan-actions-api-scan-captured-apis-border-radius
+    );
+    border: 1px solid
+      var(--file-details-scan-actions-api-scan-captured-apis-border-color);
+    box-shadow: var(--box-shadow-3);
+  }
+}

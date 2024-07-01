@@ -1,0 +1,91 @@
+<AkStack @direction='column' @spacing='3' class='px-3 py-2'>
+  <div local-class='basic-info-group'>
+    <AkTypography
+      data-test-manualScanBasicInfo-appEnvLabel
+      local-class='basic-info-label'
+    >
+      {{t 'modalCard.manual.appEnv'}}
+    </AkTypography>
+
+    <div local-class='basic-info-input-container'>
+      <AkSelect
+        data-test-manualScanBasicInfo-appEnvSelect
+        @options={{this.environments}}
+        @selected={{this.selectedAppEnvironment}}
+        @onChange={{this.selectAppEnvironment}}
+        as |aks|
+      >
+        {{t (app-environment aks.value)}}
+      </AkSelect>
+    </div>
+  </div>
+
+  <div local-class='basic-info-group'>
+    <AkTypography
+      data-test-manualScanBasicInfo-minOSVersionLabel
+      local-class='basic-info-label'
+    >
+      {{t 'modalCard.manual.minOSVersion'}}
+    </AkTypography>
+
+    <div local-class='basic-info-input-container'>
+      <AkTextField
+        data-test-manualScanBasicInfo-minOSVersionInput
+        @placeholder={{t 'modalCard.manual.minOSVersion'}}
+        @value={{@manualscan.minOsVersion}}
+      />
+    </div>
+  </div>
+
+  <div local-class='basic-info-group'>
+    <AkTypography
+      data-test-manualScanBasicInfo-appQuestion1Label
+      local-class='basic-info-label'
+    >
+      {{t 'modalCard.manual.appQuestion1'}}
+    </AkTypography>
+
+    <div local-class='basic-info-input-container'>
+      <AkSelect
+        data-test-manualScanBasicInfo-appQuestion1Select
+        @options={{this.appActions}}
+        @selected={{this.selectedAppAction}}
+        @onChange={{this.handleAppActionChange}}
+        @helperText={{if
+          @manualscan.showProceedText
+          (t 'modalCard.manual.appQuestion1Answer1')
+          (if
+            @manualscan.showHaltText (t 'modalCard.manual.appQuestion1Answer2')
+          )
+        }}
+        as |aks|
+      >
+        {{t (app-action aks.value)}}
+      </AkSelect>
+    </div>
+  </div>
+
+  <div local-class='basic-info-group'>
+    <AkTypography
+      data-test-manualScanBasicInfo-pocLabel
+      local-class='basic-info-label'
+    >
+      {{t 'modalCard.manual.poc'}}
+    </AkTypography>
+
+    <div local-class='basic-info-input-container'>
+      <AkTextField
+        data-test-manualScanBasicInfo-pocNameInput
+        @placeholder={{t 'name'}}
+        @value={{@manualscan.contact.name}}
+      />
+
+      <AkTextField
+        data-test-manualScanBasicInfo-pocEmailInput
+        @formControlClass='mt-2'
+        @placeholder={{t 'email'}}
+        @value={{@manualscan.contact.email}}
+      />
+    </div>
+  </div>
+</AkStack>

@@ -1,0 +1,15 @@
+<AkAccordion::Group @defaultOpen={{array 'basic-info'}} as |actx|>
+  {{#each this.manualScanFormSections as |msf|}}
+    <AkAccordion
+      @id={{msf.id}}
+      @accordionCtx={{actx}}
+      @summaryText={{msf.summaryText}}
+    >
+      <:content>
+        {{#let (component msf.contentComponent) as |Component|}}
+          <Component @file={{@file}} @manualscan={{@manualscan}} />
+        {{/let}}
+      </:content>
+    </AkAccordion>
+  {{/each}}
+</AkAccordion::Group>

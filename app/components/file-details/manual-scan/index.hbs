@@ -1,0 +1,51 @@
+<div local-class='manual-scan-root'>
+  <div local-class='manual-scan-container'>
+    <AkBreadcrumbs::Container
+      class='mb-3'
+      data-test-fileDetails-manualScan-breadcrumbContainer
+    >
+      {{#each this.breadcrumbItems as |item|}}
+        <AkBreadcrumbs::Item
+          @route={{item.route}}
+          @model={{item.model}}
+          @linkTitle={{item.linkTitle}}
+          data-test-fileDetails-manualScan-breadcrumbItem='{{item.linkTitle}}'
+        />
+      {{/each}}
+    </AkBreadcrumbs::Container>
+
+    <FileDetails::Summary @file={{@file}} />
+
+    <div local-class='manual-scan-form-container'>
+      <AkStack class='p-3' @direction='column' @spacing='0.5'>
+        <AkTypography @variant='subtitle1'>
+          Request Manual Scan
+        </AkTypography>
+
+        <AkTypography>
+          {{t 'modalCard.manual.description'}}
+        </AkTypography>
+      </AkStack>
+
+      <FileDetails::ManualScan::RequestForm
+        @file={{@file}}
+        @manualscan={{this.manualscan}}
+      />
+    </div>
+  </div>
+
+  <AkStack
+    class='px-3 py-2'
+    @alignItems='center'
+    @justifyContent='space-between'
+    local-class='manual-scan-footer'
+  >
+    <AkTypography @variant='h6'>
+      Request Manual Scan
+    </AkTypography>
+
+    <AkButton>
+      Submit
+    </AkButton>
+  </AkStack>
+</div>
