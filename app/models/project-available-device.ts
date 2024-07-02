@@ -1,12 +1,5 @@
 import Model, { attr } from '@ember-data/model';
 
-export enum ProjectAvailableDeviceCapabilitiesTranslationsMap {
-  hasSim = 'sim',
-  hasVpn = 'vpn',
-  hasPinLock = 'pinLock',
-  hasVnc = 'vnc',
-}
-
 export default class ProjectAvailableDeviceModel extends Model {
   @attr('string')
   declare address: string;
