@@ -153,6 +153,7 @@ Router.map(function () {
 
         this.route('file', { path: '/file/:fileid' }, function () {
           this.route('analysis', { path: '/analysis/:analysis_id' });
+          this.route('static-scan');
         });
 
         this.route('choose', {

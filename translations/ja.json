@@ -764,7 +764,7 @@
       "vpnDetails": "VPNの詳細"
     },
     "rescan": {
-      "title": "Re-scan Static Scan",
+      "title": "Restart Static Scan",
       "description": "Do you want to do the static scan again?"
     },
     "copyPassword": {
@@ -1144,6 +1144,7 @@
   "resetOverride": "Reset Override",
   "resetOverriddenAnalysis": "Reset Overridden Analysis",
   "resolved": "resolved",
+  "restartSAST": "Restart SAST",
   "revokeGithub": "Githubを取り消す",
   "revokeJira": "JIRAを取り消す",
   "risk": "リスク",
@@ -1154,6 +1155,8 @@
   "samlAuth": "SAML Authentication",
   "samlDesc": "SAML-based single sign-on (SSO) gives users access to app through an identity provider (IdP) of your choice. Get set up with ADFS, G Suite, Auth0, OneLogin, or your custom SAML 2.0 solution.",
   "sast": "SAST",
+  "sastResults": "SAST Results",
+  "sastResultsInfo": "Here is the data from this particular SAST scan.",
   "save": "Save",
   "saveCredentials": "資格情報の保存",
   "savedPreferences": "設定を保存しました",

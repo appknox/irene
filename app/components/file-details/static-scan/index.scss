@@ -1,0 +1,53 @@
+.sast-page-root {
+  padding: 0 1.5em 1.5em 1.5em;
+  margin: -0.5em;
+  background-color: var(--file-details-static-scan-background-color);
+  min-height: calc(100vh - 56px);
+
+  .sast-page-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    width: 100%;
+  }
+
+  .sast-results-info {
+    border-width: 0px 1px;
+    border-style: solid;
+    border-color: var(--file-details-static-scan-border-color);
+    background-color: var(--file-details-static-scan-background-main);
+    padding: 1em;
+  }
+
+  .sast-results-sticky-header,
+  .breadcrumb-container {
+    position: sticky;
+    background-color: var(--file-details-static-scan-background-color);
+    width: 100%;
+    z-index: 100;
+  }
+
+  .breadcrumb-container {
+    top: -0.5em;
+    margin: 0;
+    padding: 1.5em 0em;
+  }
+
+  .sast-results-sticky-header {
+    margin-top: 1.5em;
+    top: 3.5em;
+
+    .sast-results-header {
+      border-bottom: 1px solid var(--file-details-static-scan-border-color);
+
+      .badge-count-text {
+        font-size: 0.857rem;
+        margin: 0 0.25em;
+      }
+    }
+
+    .sast-results-tabs {
+      width: 100%;
+      margin-top: 0.5em;
+    }
+  }
+}
