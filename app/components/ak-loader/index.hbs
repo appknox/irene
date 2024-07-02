@@ -22,7 +22,7 @@
   >
     <g>
       <circle
-        local-class='ak-loader-svg-track'
+        local-class='ak-loader-svg-track ak-loader-track-color-{{this.color}}'
         class='ak-loader-svg-track'
         cx='{{this.viewPortSize}}'
         cy='{{this.viewPortSize}}'
@@ -34,6 +34,7 @@
       <circle
         local-class='
           ak-loader-svg-indicator 
+          ak-loader-color-{{this.color}}
           {{if this.isIndeterminateLoader "indeterminate"}}
         '
         class='ak-loader-circle-indicator'
