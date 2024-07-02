@@ -18,7 +18,6 @@ export interface AkButtonSignature<T extends ButtonTags> {
     variant?: 'filled' | 'text' | 'outlined';
     loading?: boolean;
     underline?: 'none' | 'always' | 'hover';
-    iconSize?: 'small' | 'medium';
     type?: 'button' | 'reset' | 'submit';
     color?: ButtonColors;
     typographyVariant?: ButtonVariants;

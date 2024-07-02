@@ -1,0 +1,115 @@
+<div local-class='sast-page-root'>
+  <div local-class='sast-page-container'>
+    <AkStack @direction='column' @width='full' class='mb-3'>
+      <AkBreadcrumbs::Container
+        local-class='breadcrumb-container'
+        data-test-fileDetails-staticscan-breadcrumbContainer
+      >
+        {{#each this.breadcrumbItems as |item|}}
+          <AkBreadcrumbs::Item
+            @route={{item.route}}
+            @model={{item.model}}
+            @linkTitle={{item.linkTitle}}
+            data-test-fileDetails-staticscan-breadcrumbItem='{{item.linkTitle}}'
+          />
+        {{/each}}
+      </AkBreadcrumbs::Container>
+
+      <FileDetails::Summary @file={{@file}} />
+
+      <AkStack @direction='column' local-class='sast-results-sticky-header'>
+        <AkStack
+          local-class='sast-results-header'
+          @width='full'
+          @justifyContent='space-between'
+        >
+          <AkTabs as |akt|>
+            <akt.tabItem
+              @id='sast-results'
+              @indicatorVariant='shadow'
+              @buttonVariant={{true}}
+              @isActive={{true}}
+              @hasBadge={{true}}
+            >
+              <:badge>
+                <AkStack @alignItems='center'>
+                  <AkIcon @iconName='bug-report' @size='small' />
+
+                  <AkTypography
+                    local-class='badge-count-text'
+                    @color='inherit'
+                    @tag='span'
+                    @fontWeight='bold'
+                  >
+                    {{this.filteredVulnerabilityCount}}
+                  </AkTypography>
+                </AkStack>
+              </:badge>
+
+              <:default>
+                {{t 'sastResults'}}
+              </:default>
+            </akt.tabItem>
+          </AkTabs>
+
+          <AkButton
+            data-test-fileDetails-staticscan-restartBtn
+            {{on 'click' this.handleRescanModalOpen}}
+            class='px-1'
+            @disabled={{not @file.isStaticCompleted}}
+          >
+            <:leftIcon>
+              <AkIcon @iconName='refresh' />
+            </:leftIcon>
+
+            <:default>
+              {{t 'restartSAST'}}
+            </:default>
+          </AkButton>
+        </AkStack>
+
+        <AkTabs local-class='sast-results-tabs' as |Akt|>
+          {{#each this.tabItems as |item|}}
+            <Akt.tabItem
+              @id={{item.id}}
+              @route={{item.route}}
+              @currentWhen={{item.currentWhen}}
+            >
+              {{item.label}}
+            </Akt.tabItem>
+          {{/each}}
+        </AkTabs>
+      </AkStack>
+
+      <AkStack
+        data-test-fileDetails-staticscan-info
+        local-class='sast-results-info'
+        @width='full'
+      >
+        <AkTypography @color='textSecondary'>
+          {{t 'sastResultsInfo'}}
+        </AkTypography>
+      </AkStack>
+
+      <FileDetails::VulnerabilityAnalysis::Table
+        @file={{@file}}
+        @filterVulnerabilityType={{this.filterBy}}
+        @columns={{this.columns}}
+        @sorts={{this.sorts}}
+        @updateAnalysesSorts={{this.updateSorts}}
+      />
+    </AkStack>
+  </div>
+
+  {{#if @file.isStaticCompleted}}
+    <ConfirmBox
+      @isActive={{this.showRescanModal}}
+      @title={{t 'modalCard.rescan.title'}}
+      @description={{t 'modalCard.rescan.description'}}
+      @confirmText={{t 'yes'}}
+      @cancelText={{t 'no'}}
+      @confirmAction={{perform this.handleRescanApp}}
+      @disabled={{this.handleRescanApp.isRunning}}
+    />
+  {{/if}}
+</div>
