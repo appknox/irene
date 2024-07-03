@@ -80,16 +80,6 @@ export default class FileDetailsStaticScan extends Component<FileDetailsStaticSc
     return this.file.analyses;
   }
 
-  get filteredVulnerabilityCount() {
-    const vulnerabilityType = this.filterBy;
-
-    const filteredAnalysis = this.analyses?.filter((a) =>
-      a.hasType(vulnerabilityType)
-    );
-
-    return filteredAnalysis.length;
-  }
-
   get tabItems() {
     return [
       {

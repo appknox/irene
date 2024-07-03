@@ -25,6 +25,7 @@
         >
           <AkTabs as |akt|>
             <akt.tabItem
+              data-test-fileDetails-staticscan-sast-results-tab
               @id='sast-results'
               @indicatorVariant='shadow'
               @buttonVariant={{true}}
@@ -36,12 +37,13 @@
                   <AkIcon @iconName='bug-report' @size='small' />
 
                   <AkTypography
+                    data-test-fileDetails-staticscan-badge-count
                     local-class='badge-count-text'
                     @color='inherit'
                     @tag='span'
                     @fontWeight='bold'
                   >
-                    {{this.filteredVulnerabilityCount}}
+                    {{@file.staticVulnerabilityCount}}
                   </AkTypography>
                 </AkStack>
               </:badge>
@@ -74,6 +76,7 @@
               @id={{item.id}}
               @route={{item.route}}
               @currentWhen={{item.currentWhen}}
+              data-test-fileDetails-staticscan-tabs='{{item.id}}-tab'
             >
               {{item.label}}
             </Akt.tabItem>
