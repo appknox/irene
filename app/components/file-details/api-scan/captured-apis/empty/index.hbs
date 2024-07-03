@@ -1,0 +1,44 @@
+<AkStack @direction='column' @alignItems='center' @justifyContent='center'>
+  <AkStack @direction='column' @alignItems='center' class='p-3'>
+    <AkSvg::NoApisCaptured
+      data-test-fileDetails-apiScan-capturedApis-emptySvg
+      class='mt-3'
+    />
+
+    <AkTypography
+      data-test-fileDetails-apiScan-capturedApis-emptyTitle
+      @align='center'
+      @variant='h5'
+      class='mt-3'
+    >
+      {{t 'capturedApiEmptyTitle'}}
+    </AkTypography>
+  </AkStack>
+
+  <AkDivider />
+
+  <AkStack @direction='column' @spacing='2.5' class='py-3 px-5'>
+    <AkChip
+      data-test-fileDetails-apiScan-capturedApis-stepsToCaptureChip
+      @variant='semi-filled'
+      @label={{t 'capturedApiEmptyStepsLabel'}}
+      @color='primary'
+    />
+
+    {{#each this.apiCaptureSteps as |step|}}
+      <AkStack @spacing='1'>
+        <AkIcon
+          data-test-fileDetails-apiScan-capturedApis-stepsToCaptureBullet='{{step}}'
+          @iconName='arrow-forward'
+          @color='textPrimary'
+        />
+
+        <AkTypography
+          data-test-fileDetails-apiScan-capturedApis-stepsToCaptureValue='{{step}}'
+        >
+          {{step}}
+        </AkTypography>
+      </AkStack>
+    {{/each}}
+  </AkStack>
+</AkStack>
