@@ -88,21 +88,23 @@
 
   <AkDivider @color='dark' />
 
-  {{#if this.organization.selected.features.dynamicscan_automation}}
-    <AkStack @width='9/12' class='px-3'>
-      {{!-- <ProjectSettings::GeneralSettings::DynamicscanAutomationSettings::ScriptsArchived
-        @project={{@project}}
-        @profileId={{@profileId}}
-      /> --}}
+  <AkStack @width='9/12' class='px-3'>
+    <ProjectSettings::GeneralSettings::DynamicscanAutomationSettings
+      @profileId={{this.project.activeProfileId}}
+      @project={{this.project}}
+      @featureAvailable={{this.dynamicscanAutomationAvailable}}
+    />
+  </AkStack>
 
-      <ProjectSettings::GeneralSettings::DynamicscanAutomationSettings
-        @profileId={{this.project.activeProfileId}}
-        @project={{this.project}}
-      />
-    </AkStack>
+  <AkDivider @color='dark' />
 
-    <AkDivider @color='dark' />
-  {{/if}}
+  <AkStack @width='9/12' class='px-3'>
+    <ProjectSettings::GeneralSettings::DevicePreferencesAutomatedDast
+      @project={{@project}}
+    />
+  </AkStack>
+
+  <AkDivider @color='dark' />
 
   <AkStack @width='9/12' class='px-3'>
     <ProjectSettings::GeneralSettings::GithubProject
