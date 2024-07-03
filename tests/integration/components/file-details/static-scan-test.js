@@ -73,42 +73,73 @@ module('Integration | Component | file-details/static-scan', function (hooks) {
     });
 
     assert
+      .dom('[data-test-fileDetails-staticscan-sast-results-tab]')
+      .exists()
+      .containsText('t:sastResults:()');
+
+    assert
+      .dom('[data-test-fileDetails-staticscan-badge-count]')
+      .exists()
+      .containsText(this.file.staticVulnerabilityCount);
+
+    assert
       .dom('[data-test-fileDetails-staticscan-info]')
       .exists()
       .containsText('t:sastResultsInfo:()');
-  });
-
-  test('test restart static scan', async function (assert) {
-    this.file.isStaticDone = true;
-
-    this.server.get('/v2/projects/:id', (schema, req) => {
-      return schema.projects.find(`${req.params.id}`)?.toJSON();
-    });
-
-    this.server.post('/rescan', () => {});
-
-    await render(hbs`<FileDetails::StaticScan @file={{this.file}} />`);
-
-    assert.dom('[data-test-fileDetails-staticscan-restartBtn]').isNotDisabled();
-
-    await click('[data-test-fileDetails-staticscan-restartBtn]');
 
     assert
-      .dom('[data-test-ak-modal-header]')
-      .hasText('t:modalCard.rescan.title:()');
-
-    assert
-      .dom('[data-test-confirmbox-description]')
-      .hasText('t:modalCard.rescan.description:()');
-
-    assert.dom('[data-test-confirmbox-confirmBtn]').hasText('t:yes:()');
-
-    assert.dom('[data-test-confirmbox-cancelBtn]').hasText('t:no:()');
-
-    await click('[data-test-confirmbox-confirmBtn]');
-
-    const notify = this.owner.lookup('service:notifications');
-
-    assert.strictEqual(notify.infoMsg, 't:rescanInitiated:()');
+      .dom(
+        '[data-test-fileDetails-staticscan-tabs="vulnerability-details-tab"]'
+      )
+      .exists()
+      .containsText('t:vulnerabilityDetails:()');
   });
+
+  test.each(
+    'test restart static scan',
+    [true, false],
+    async function (assert, isStaticDone) {
+      this.file.isStaticDone = isStaticDone;
+
+      this.server.get('/v2/projects/:id', (schema, req) => {
+        return schema.projects.find(`${req.params.id}`)?.toJSON();
+      });
+
+      if (isStaticDone) {
+        this.server.post('/rescan', () => {});
+      }
+
+      await render(hbs`<FileDetails::StaticScan @file={{this.file}} />`);
+
+      if (isStaticDone) {
+        assert
+          .dom('[data-test-fileDetails-staticscan-restartBtn]')
+          .isNotDisabled();
+
+        await click('[data-test-fileDetails-staticscan-restartBtn]');
+
+        assert
+          .dom('[data-test-ak-modal-header]')
+          .hasText('t:modalCard.rescan.title:()');
+
+        assert
+          .dom('[data-test-confirmbox-description]')
+          .hasText('t:modalCard.rescan.description:()');
+
+        assert.dom('[data-test-confirmbox-confirmBtn]').hasText('t:yes:()');
+
+        assert.dom('[data-test-confirmbox-cancelBtn]').hasText('t:no:()');
+
+        await click('[data-test-confirmbox-confirmBtn]');
+
+        const notify = this.owner.lookup('service:notifications');
+
+        assert.strictEqual(notify.infoMsg, 't:rescanInitiated:()');
+      } else {
+        assert
+          .dom('[data-test-fileDetails-staticscan-restartBtn]')
+          .isDisabled();
+      }
+    }
+  );
 });
