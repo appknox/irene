@@ -1,5 +1,7 @@
 .scan-status-card {
   border: 1px solid var(--file-details-scan-actions-border-color);
   background-color: var(--file-details-scan-actions-background-color);
-  width: 240px;
+  min-width: 240px;
+  max-width: 360px;
+  flex: 1;
 }

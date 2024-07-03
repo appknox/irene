@@ -243,4 +243,48 @@ module('Acceptance | file details', function (hooks) {
       `/dashboard/file/${this.file.id}/analysis/${analyses[1].id}`
     );
   });
+
+  test('test sast view details click to navigate to static scan page', async function (assert) {
+    await visit('/dashboard/file/1');
+
+    await click('[data-test-fileDetailScanActions-staticScanViewDetails]');
+
+    assert.strictEqual(
+      currentURL(),
+      `/dashboard/file/${this.file.id}/static-scan`
+    );
+  });
+
+  test('test dast view details click to navigate to dynamic scan page', async function (assert) {
+    await visit('/dashboard/file/1');
+
+    await click('[data-test-fileDetailScanActions-dynamicScanViewDetails]');
+
+    assert.strictEqual(
+      currentURL(),
+      `/dashboard/file/${this.file.id}/dynamic-scan/manual`
+    );
+  });
+
+  test('test api view details click to navigate to api scan page', async function (assert) {
+    await visit('/dashboard/file/1');
+
+    await click('[data-test-fileDetailScanActions-apiScanViewDetails]');
+
+    assert.strictEqual(
+      currentURL(),
+      `/dashboard/file/${this.file.id}/api-scan`
+    );
+  });
+
+  test('test manual view details click to navigate to manual scan page', async function (assert) {
+    await visit('/dashboard/file/1');
+
+    await click('[data-test-fileDetailScanActions-manualScanViewDetails]');
+
+    assert.strictEqual(
+      currentURL(),
+      `/dashboard/file/${this.file.id}/manual-scan`
+    );
+  });
 });

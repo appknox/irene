@@ -36,6 +36,13 @@ export default class ProjectSettingsGeneralSettingsComponent extends Component<P
     return this.args.project;
   }
 
+  get dynamicscanAutomationAvailable() {
+    if (this.organization.selected?.features.dynamicscan_automation) {
+      return true;
+    }
+    return false;
+  }
+
   fetchProfile = task(async () => {
     try {
       const profileId = this.args.project?.activeProfileId;

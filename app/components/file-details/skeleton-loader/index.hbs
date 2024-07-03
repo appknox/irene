@@ -1,4 +1,8 @@
-<div class='px-2 py-3'>
+<div local-class='file-details-skeleton-container'>
+  <AkStack class='mt-2 mb-3'>
+    <AkSkeleton @width='275px' />
+  </AkStack>
+
   <AkStack @direction='column' @spacing='2.5'>
     {{! summary }}
     <div local-class='box-section-root'>
@@ -27,43 +31,67 @@
           <AkSkeleton @width='100px' />
           <AkSkeleton @width='50px' />
         </AkStack>
-
-        <AkDivider />
-
-        <AkSkeleton @width='100px' />
       </AkStack>
     </div>
 
     {{! scan actions }}
-    <div local-class='box-section-root'>
-      <div local-class='box-section-header'>
-        <AkSkeleton @width='100px' />
+    <AkStack @flexWrap='wrap' @spacing='2' @width='full'>
+      <div local-class='box-section-root scan-actions-status-card'>
+        <AkStack @justifyContent='space-between' class='p-2'>
+          <AkSkeleton @width='100px' />
+
+          <AkSkeleton @width='70px' />
+        </AkStack>
+
+        <AkDivider @color='dark' />
+
+        <AkStack class='px-2 py-1'>
+          <AkSkeleton @width='100px' />
+        </AkStack>
       </div>
 
-      <AkDivider @color='dark' />
-
-      <AkStack @spacing='6' class='p-3'>
-        <AkStack @direction='column' @spacing='1' @alignItems='center'>
+      <div local-class='box-section-root scan-actions-status-card'>
+        <AkStack @justifyContent='space-between' class='p-2'>
           <AkSkeleton @width='100px' />
-          <AkSkeleton @width='70px' @height='32px' />
+
+          <AkSkeleton @width='70px' />
         </AkStack>
 
-        <AkStack @direction='column' @spacing='1' @alignItems='center'>
+        <AkDivider @color='dark' />
+
+        <AkStack class='px-2 py-1'>
           <AkSkeleton @width='100px' />
-          <AkSkeleton @width='70px' @height='32px' />
+        </AkStack>
+      </div>
+
+      <div local-class='box-section-root scan-actions-status-card'>
+        <AkStack @justifyContent='space-between' class='p-2'>
+          <AkSkeleton @width='100px' />
+
+          <AkSkeleton @width='70px' />
         </AkStack>
 
-        <AkStack @direction='column' @spacing='1' @alignItems='center'>
+        <AkDivider @color='dark' />
+
+        <AkStack class='px-2 py-1'>
           <AkSkeleton @width='100px' />
-          <AkSkeleton @width='70px' @height='32px' />
+        </AkStack>
+      </div>
+
+      <div local-class='box-section-root scan-actions-status-card'>
+        <AkStack @justifyContent='space-between' class='p-2'>
+          <AkSkeleton @width='100px' />
+
+          <AkSkeleton @width='70px' />
         </AkStack>
 
-        <AkStack @direction='column' @spacing='1' @alignItems='center'>
+        <AkDivider @color='dark' />
+
+        <AkStack class='px-2 py-1'>
           <AkSkeleton @width='100px' />
-          <AkSkeleton @width='70px' @height='32px' />
         </AkStack>
-      </AkStack>
-    </div>
+      </div>
+    </AkStack>
 
     {{! insights wrapper }}
     <div local-class='box-section-root'>
@@ -87,7 +115,7 @@
 
           <AkDivider @color='dark' />
 
-          <AkStack class='p-3' @spacing='5' @justifyContent='center'>
+          <AkStack class='p-3' @spacing='5'>
             <AkSkeleton @width='210px' @height='180px' />
 
             <AkStack @direction='column' @spacing='1.5'>

@@ -25,44 +25,50 @@
     </AkChip>
   </AkStack>
 
-  <ProjectSettings::GeneralSettings::DynamicscanAutomationSettings::Scenario
-    @project={{@project}}
-    @profileId={{@profileId}}
-  />
+  {{#if @featureAvailable}}
+    <ProjectSettings::GeneralSettings::DynamicscanAutomationSettings::Scenario
+      @project={{@project}}
+      @profileId={{@profileId}}
+    />
 
-  <AkStack @width='full' @direction='column'>
     <AkStack @width='full' @direction='column'>
-      <AkStack
-        @width='full'
-        class='p-1 my-1 mb-2'
-        local-class='schedule-automation-toggle'
-      >
-        <AkFormControlLabel
-          @label='{{t "appiumScheduledAutomation"}}'
-          @labelTypographyFontWeight='medium'
-          @disabled={{this.toggleDynamicscanMode.isRunning}}
-          data-test-genSettings-dynScanAutoSettings-dynamicscanModeToggleLabel
-          as |fcl|
+      <AkStack @width='full' @direction='column'>
+        <AkStack
+          @width='full'
+          class='p-1 my-1 mb-2'
+          local-class='schedule-automation-toggle'
         >
-          <AkToggle
-            @size='small'
-            @disabled={{fcl.disabled}}
-            @checked={{this.automationEnabled}}
-            @onClick={{perform this.toggleDynamicscanMode}}
-            data-test-genSettings-dynScanAutoSettings-dynamicscanModeToggle
-          />
-        </AkFormControlLabel>
-      </AkStack>
+          <AkFormControlLabel
+            @label='{{t "appiumScheduledAutomation"}}'
+            @labelTypographyFontWeight='medium'
+            @disabled={{this.toggleDynamicscanMode.isRunning}}
+            data-test-genSettings-dynScanAutoSettings-dynamicscanModeToggleLabel
+            as |fcl|
+          >
+            <AkToggle
+              @size='small'
+              @disabled={{fcl.disabled}}
+              @checked={{this.automationEnabled}}
+              @onClick={{perform this.toggleDynamicscanMode}}
+              data-test-genSettings-dynScanAutoSettings-dynamicscanModeToggle
+            />
+          </AkFormControlLabel>
+        </AkStack>
 
-      <AkStack
-        @direction='column'
-        {{style maxWidth='700px'}}
-        data-test-genSettings-dynScanAutoSettings-headerInfoDescNote
-      >
-        <AkTypography @variant='body3' {{style lineHeight='1.5'}}>
-          {{t 'dynScanAutoSchedNote'}}
-        </AkTypography>
+        <AkStack
+          @direction='column'
+          {{style maxWidth='700px'}}
+          data-test-genSettings-dynScanAutoSettings-headerInfoDescNote
+        >
+          <AkTypography @variant='body3' {{style lineHeight='1.5'}}>
+            {{t 'dynScanAutoSchedNote'}}
+          </AkTypography>
+        </AkStack>
       </AkStack>
     </AkStack>
-  </AkStack>
+  {{else}}
+    <ProjectSettings::GeneralSettings::DynamicscanAutomationSettings::UpsellingFeature
+    />
+  {{/if}}
+
 </AkStack>

@@ -193,14 +193,26 @@ body {
   --ak-chip-color-outlined-warn: var(--warn-main);
   --ak-chip-color-outlined-info: var(--info-main);
 
-  --ak-chip-color-semi-filled-outlined-default-background: var(--neutral-grey-200);
-  --ak-chip-color-semi-filled-outlined-default-contrast-text: var(--neutral-grey-700);
+  --ak-chip-color-semi-filled-outlined-default-background: var(
+    --neutral-grey-200
+  );
+  --ak-chip-color-semi-filled-outlined-default-contrast-text: var(
+    --neutral-grey-700
+  );
   --ak-chip-color-semi-filled-outlined-primary-background: var(--primary-light);
-  --ak-chip-color-semi-filled-outlined-primary-contrast-text: var(--primary-dark);
-  --ak-chip-color-semi-filled-outlined-secondary-background: var(--neutral-grey-200);
-  --ak-chip-color-semi-filled-outlined-secondary-contrast-text: var(--secondary-main);
+  --ak-chip-color-semi-filled-outlined-primary-contrast-text: var(
+    --primary-dark
+  );
+  --ak-chip-color-semi-filled-outlined-secondary-background: var(
+    --neutral-grey-200
+  );
+  --ak-chip-color-semi-filled-outlined-secondary-contrast-text: var(
+    --secondary-main
+  );
   --ak-chip-color-semi-filled-outlined-success-background: var(--success-light);
-  --ak-chip-color-semi-filled-outlined-success-contrast-text: var(--success-main);
+  --ak-chip-color-semi-filled-outlined-success-contrast-text: var(
+    --success-main
+  );
   --ak-chip-color-semi-filled-outlined-error-background: var(--error-light);
   --ak-chip-color-semi-filled-outlined-error-contrast-text: var(--error-main);
   --ak-chip-color-semi-filled-outlined-warn-background: var(--warn-light);
@@ -852,10 +864,6 @@ body {
   --file-details-scan-actions-border-color: var(--neutral-grey-200);
   --file-details-scan-actions-background-color: var(--common-white);
 
-  // variables for file-details/scan-actions-old
-  --file-details-scan-actions-old-border-color: var(--border-color-1);
-  --file-details-scan-actions-old-background-color: var(--background-main);
-
   // variables for file-details/scan-actions/api-scan
   --file-details-scan-actions-api-scan-border-radius: var(--border-radius);
   --file-details-scan-actions-api-scan-alert-background-color: var(
@@ -875,11 +883,8 @@ body {
     --success-light
   );
 
-  // variables for file-details/scan-actions/api-scan/captured-apis
-  --file-details-scan-actions-api-scan-captured-apis-border-radius: var(
-    --border-radius
-  );
-  --file-details-scan-actions-api-scan-captured-apis-border-color: var(
+  // variables for file-details/vulnerability-analysis/header
+  --file-details-vulnerability-analysis-header-border-color: var(
     --border-color-1
   );
 
@@ -964,9 +969,6 @@ body {
   );
   --vnc-viewer-modal-background: var(--background-main);
   --vnc-viewer-modal-text-color: var(--text-primary);
-
-  // variables for proxy-settings-view
-  --proxy-settings-view-border-color: var(--border-color-1);
 
   // variables for dynamic-scan/modal
   --dynamic-scan-modal-border-color: var(--border-color-1);
