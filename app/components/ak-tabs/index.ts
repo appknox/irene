@@ -3,7 +3,6 @@ import AkTabsItemComponent from './item';
 
 export interface AkTabsSignature {
   Element: HTMLElement;
-  Args: null;
   Blocks: { default: [{ tabItem: typeof AkTabsItemComponent }] };
 }
 

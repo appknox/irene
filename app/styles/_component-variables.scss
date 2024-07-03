@@ -1279,4 +1279,11 @@ body {
   // variables for security/file-detail-actions
   --security-file-details-actions-background-color: var(--background-main);
   --security-file-details-actions-border-color: var(--border-color-1);
+
+  // variables for file-details/static-scan
+  --file-details-static-scan-border-color: var(--border-color-1);
+  --file-details-static-scan-background-color: var(--background-light);
+  --file-details-static-scan-background-main: var(--background-main);
+  --file-details-static-scan-primary-light: var(--primary-light);
+  --file-details-static-scan-text-primary: var(--text-primary);
 }

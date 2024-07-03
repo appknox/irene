@@ -1,0 +1,114 @@
+import { click, render } from '@ember/test-helpers';
+import { hbs } from 'ember-cli-htmlbars';
+import { setupMirage } from 'ember-cli-mirage/test-support';
+import { setupIntl } from 'ember-intl/test-support';
+import { setupRenderingTest } from 'ember-qunit';
+import { module, test } from 'qunit';
+import Service from '@ember/service';
+
+class NotificationsStub extends Service {
+  errorMsg = null;
+  successMsg = null;
+  infoMsg = null;
+
+  error(msg) {
+    this.errorMsg = msg;
+  }
+
+  success(msg) {
+    this.successMsg = msg;
+  }
+
+  info(msg) {
+    this.infoMsg = msg;
+  }
+}
+
+module('Integration | Component | file-details/static-scan', function (hooks) {
+  setupRenderingTest(hooks);
+  setupMirage(hooks);
+  setupIntl(hooks);
+
+  hooks.beforeEach(async function () {
+    this.server.createList('organization', 1);
+
+    const store = this.owner.lookup('service:store');
+
+    const file = this.server.create('file', {
+      project: '1',
+    });
+
+    this.server.create('project', { file: file.id, id: '1' });
+
+    this.setProperties({
+      file: store.push(store.normalize('file', file.toJSON())),
+    });
+
+    await this.owner.lookup('service:organization').load();
+
+    this.owner.register('service:notifications', NotificationsStub);
+  });
+
+  test('it renders', async function (assert) {
+    const breadcrumbItems = [
+      't:allProjects:()',
+      't:scanDetails:()',
+      't:sastResults:()',
+    ];
+
+    this.server.get('/v2/projects/:id', (schema, req) => {
+      return schema.projects.find(`${req.params.id}`)?.toJSON();
+    });
+
+    await render(hbs`<FileDetails::StaticScan @file={{this.file}} />`);
+
+    assert
+      .dom('[data-test-fileDetails-staticscan-breadcrumbContainer]')
+      .exists();
+
+    breadcrumbItems.map((item) => {
+      assert
+        .dom(`[data-test-fileDetails-staticscan-breadcrumbItem="${item}"]`)
+        .exists();
+    });
+
+    assert
+      .dom('[data-test-fileDetails-staticscan-info]')
+      .exists()
+      .containsText('t:sastResultsInfo:()');
+  });
+
+  test('test restart static scan', async function (assert) {
+    this.file.isStaticDone = true;
+
+    this.server.get('/v2/projects/:id', (schema, req) => {
+      return schema.projects.find(`${req.params.id}`)?.toJSON();
+    });
+
+    this.server.post('/rescan', () => {});
+
+    await render(hbs`<FileDetails::StaticScan @file={{this.file}} />`);
+
+    assert.dom('[data-test-fileDetails-staticscan-restartBtn]').isNotDisabled();
+
+    await click('[data-test-fileDetails-staticscan-restartBtn]');
+
+    assert
+      .dom('[data-test-ak-modal-header]')
+      .hasText('t:modalCard.rescan.title:()');
+
+    assert
+      .dom('[data-test-confirmbox-description]')
+      .hasText('t:modalCard.rescan.description:()');
+
+    assert.dom('[data-test-confirmbox-confirmBtn]').hasText('t:yes:()');
+
+    assert.dom('[data-test-confirmbox-cancelBtn]').hasText('t:no:()');
+
+    await click('[data-test-confirmbox-confirmBtn]');
+
+    const notify = this.owner.lookup('service:notifications');
+
+    assert.strictEqual(notify.infoMsg, 't:rescanInitiated:()');
+  });
+});
