@@ -730,6 +730,65 @@ body {
   // variables for file-details/severity-level
   --file-details-severity-level-border-color: var(--border-color-1);
 
+  // variables for file-details/api-scan
+  --file-details-api-scan-background-color: var(--background-light);
+  --file-details-api-scan-footer-background-color: var(--background-main);
+  --file-details-api-scan-footer-border-color: var(--border-color-1);
+  --file-details-api-scan-footer-border-radius: var(--border-radius);
+  --file-details-api-scan-footer-box-shadow: var(--box-shadow-3);
+
+  // variables for file-details/api-scan/captured-apis
+  --file-details-api-scan-captured-apis-border-radius: var(--border-radius);
+  --file-details-api-scan-captured-apis-card-box-shadow: var(--box-shadow-3);
+  --file-details-api-scan-captured-apis-card-background: var(--background-main);
+  --file-details-api-scan-captured-apis-title-background: var(
+    --neutral-grey-100
+  );
+  --file-details-api-scan-captured-apis-container-background: var(
+    --background-main
+  );
+
+  // variables for file-details/api-scan/progress-status
+  --file-details-api-scan-progress-status-border-radius: var(--border-radius);
+  --file-details-api-scan-progress-status-card-box-shadow: var(--box-shadow-3);
+  --file-details-api-scan-progress-status-card-background: var(
+    --background-main
+  );
+  --file-details-api-scan-progress-status-indicator-background: var(
+    --success-main
+  );
+  --file-details-api-scan-progress-status-text-primary: var(--text-primary);
+  --file-details-api-scan-progress-status-font-weight-medium: var(
+    --font-weight-medium
+  );
+
+  // variables for file-details/api-scan/results
+  --file-details-api-scan-results-tabs-container-background: var(
+    --background-light
+  );
+  --file-details-api-scan-results-container-background: var(--background-main);
+
+  // variables for file-details/api-scan/captured-apis/footer
+  --file-details-api-scan-captured-apis-footer-background-main: var(
+    --background-main
+  );
+  --file-details-api-scan-captured-apis-footer-box-shadow: var(--box-shadow-4);
+  --file-details-api-scan-captured-apis-footer-border-radius: var(
+    --border-radius
+  );
+  --file-details-api-scan-captured-apis-footer-border-color: var(
+    --border-color-1
+  );
+  --file-details-api-scan-captured-apis-footer-alert-background-color: var(
+    --error-light
+  );
+  --file-details-api-scan-captured-apis-footer-alert-text-color: var(
+    --error-main
+  );
+  --file-details-api-scan-captured-apis-footer-alert-border-color: var(
+    --error-main
+  );
+
   // variables for file-details/insights-wrapper
   --file-details-insights-wrapper-border-color: var(--border-color-1);
   --file-details-insights-wrapper-background-color: var(--background-main);
@@ -798,13 +857,17 @@ body {
   );
 
   // variables for file-details/vulnerability-analysis/header
-  --file-details-vulnerability-analysis-header-border-color: var(--border-color-1);
+  --file-details-vulnerability-analysis-header-border-color: var(
+    --border-color-1
+  );
   --file-details-vulnerability-analysis-header-background-color: var(
     --background-main
   );
 
   // variables for file-details/vulnerability-analysis/table
-  --file-details-vulnerability-analysis-table-border-color: var(--border-color-1);
+  --file-details-vulnerability-analysis-table-border-color: var(
+    --border-color-1
+  );
   --file-details-vulnerability-analysis-table-background-color: var(
     --background-main
   );

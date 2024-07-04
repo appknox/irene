@@ -152,6 +152,11 @@ Router.map(function () {
         );
 
         this.route('file', { path: '/file/:fileid' }, function () {
+          this.route('api-scan', function () {
+            this.route('index', { path: '/' });
+            this.route('results');
+          });
+
           this.route('analysis', { path: '/analysis/:analysis_id' });
           this.route('static-scan');
         });

@@ -1,0 +1,88 @@
+<AkStack
+  data-test-fileDetails-apiScan-progressStatus-container
+  @justifyContent='center'
+  class='mt-7'
+>
+  <div local-class='api-scan-status-card'>
+    <AkStack @direction='column' @alignItems='center' @justifyContent='center'>
+      <AkStack
+        @direction='column'
+        @alignItems='center'
+        @width='full'
+        class='p-3'
+      >
+        {{#if @file.isApiDone}}
+          <AkSvg::ScanCompleted
+            data-test-fileDetails-apiScan-progressStatus-svg='completed'
+            class='mt-3'
+          />
+        {{else}}
+          <AkSvg::ScanProgress
+            data-test-fileDetails-apiScan-progressStatus-svg='in-progress'
+            class='mt-3'
+          />
+        {{/if}}
+
+        <AkTypography
+          data-test-fileDetails-apiScan-progressStatus-title
+          @align='center'
+          @variant='h5'
+          class='mt-3'
+        >
+          {{if @file.isApiDone (t 'apiScan') (t 'apiScanInProgress')}}
+        </AkTypography>
+
+        <AkStack
+          @direction='column'
+          @alignItems='center'
+          @spacing='1'
+          @width='full'
+          class='mt-3'
+        >
+          {{#if @file.isRunningApiScan}}
+            <AkStack
+              @width='full'
+              @alignItems='center'
+              @justifyContent='space-between'
+              data-test-fileDetails-apiScan-progressStatus-progressText
+            >
+              <AkTypography>{{t 'scanning'}}...</AkTypography>
+
+              <AkTypography @variant='h6'>
+                {{@file.apiScanProgress}}%
+              </AkTypography>
+            </AkStack>
+
+            <AkLoader::Linear
+              @progress={{@file.apiScanProgress}}
+              @variant='determinate'
+            />
+          {{else if @file.isApiDone}}
+            <AkChip
+              data-test-fileDetails-apiScan-progressStatus-completedChip
+              @variant='semi-filled'
+              @label={{t 'chipStatus.completed'}}
+              @color='success'
+            />
+          {{/if}}
+        </AkStack>
+      </AkStack>
+
+      <AkDivider />
+
+      <AkTypography
+        data-test-fileDetails-apiScan-progressStatus-helperText
+        @align='center'
+        @color='textSecondary'
+        local-class='status-helper-text'
+        class='py-2 px-3'
+      >
+        {{t
+          'apiScanProgressStatusHelper'
+          status=(if @file.isApiDone 'completed')
+          htmlSafe=true
+        }}
+      </AkTypography>
+    </AkStack>
+  </div>
+</AkStack>
