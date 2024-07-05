@@ -112,4 +112,35 @@ module('Integration | Component | ak-loader/linear', function (hooks) {
 
     assert.dom("[data-test-ak-loader-linear-progress='100']").exists();
   });
+
+  test.each(
+    'it renders ak-loader linear in different colors',
+    [
+      '',
+      'primary',
+      'secondary',
+      'success',
+      'error',
+      'warn',
+      'warn-dark',
+      'info',
+      'info-dark',
+    ],
+    async function (assert, color) {
+      this.setProperties({
+        color,
+      });
+
+      this.set('height', 10);
+
+      await render(
+        hbs`<AkLoader::Linear @color={{this.color}} @height={{this.height}} />`
+      );
+
+      assert
+        .dom('[data-test-ak-loader-linear-indicator]')
+        .exists()
+        .hasClass(RegExp(`ak-loader-linear-color-${color || 'primary'}`));
+    }
+  );
 });

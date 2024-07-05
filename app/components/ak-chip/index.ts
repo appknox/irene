@@ -16,7 +16,7 @@ interface AkChipSignature {
     button?: boolean;
     onDelete?: (event: MouseEvent) => void;
     label?: string;
-    variant?: 'filled' | 'semi-filled' | 'outlined';
+    variant?: 'filled' | 'semi-filled' | 'outlined' | 'semi-filled-outlined';
     color?: AkChipColor;
     size?: 'medium' | 'small';
   };

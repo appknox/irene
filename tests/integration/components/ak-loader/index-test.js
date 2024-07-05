@@ -170,4 +170,36 @@ module('Integration | Component | ak-loader', function (hooks) {
 
     assert.dom(`[data-test-ak-loader-progress='100']`).exists();
   });
+
+  test.each(
+    'it renders ak-loader in different colors',
+    [
+      '',
+      'primary',
+      'secondary',
+      'success',
+      'error',
+      'warn',
+      'warn-dark',
+      'info',
+      'info-dark',
+    ],
+    async function (assert, color) {
+      this.setProperties({
+        color,
+      });
+
+      await render(hbs`<AkLoader @color={{this.color}} />`);
+
+      assert
+        .dom('[data-test-ak-loader-svg-track]')
+        .exists()
+        .hasClass(RegExp(`ak-loader-track-color-${color || 'primary'}`));
+
+      assert
+        .dom('[data-test-ak-loader-svg-indicator]')
+        .exists()
+        .hasClass(RegExp(`ak-loader-indicator-color-${color || 'primary'}`));
+    }
+  );
 });

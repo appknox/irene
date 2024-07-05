@@ -18,7 +18,7 @@ module('Integration | Component | ak-chip', function (hooks) {
 
   test.each(
     'it renders ak-chip in different variants',
-    ['', 'filled', 'semi-filled', 'outlined'],
+    ['', 'filled', 'semi-filled', 'outlined', 'semi-filled-outlined'],
     async function (assert, variant) {
       this.setProperties({
         label: 'Chip',

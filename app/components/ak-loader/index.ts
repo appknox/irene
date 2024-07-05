@@ -1,8 +1,19 @@
 import Component from '@glimmer/component';
 
+export type AkLoaderColor =
+  | 'primary'
+  | 'secondary'
+  | 'success'
+  | 'error'
+  | 'warn'
+  | 'warn-dark'
+  | 'info'
+  | 'info-dark';
+
 export interface AkLoaderCommonArgs {
   progress?: number;
   variant?: 'determinate' | 'indeterminate';
+  color?: AkLoaderColor;
 }
 
 export interface AkLoaderArgs extends AkLoaderCommonArgs {
@@ -70,6 +81,10 @@ export default class AkLoader extends Component<AkLoaderSignature> {
     return `${this.viewPortSize / 2} ${this.viewPortSize / 2} ${
       this.viewPortSize
     } ${this.viewPortSize}`;
+  }
+
+  get color() {
+    return this.args.color || 'primary';
   }
 }
 

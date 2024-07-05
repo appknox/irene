@@ -139,6 +139,53 @@
   }
 }
 
+.ak-chip-variant-semi-filled-outlined {
+  border-width: 1px;
+  border-style: solid;
+
+  &.ak-chip-color-default {
+    background-color: var(--ak-chip-color-semi-filled-outlined-default-background);
+    color: var(--ak-chip-color-semi-filled-outlined-default-contrast-text);
+    border-color: var(--ak-chip-color-semi-filled-outlined-default-contrast-text);
+  }
+
+  &.ak-chip-color-primary {
+    background-color: var(--ak-chip-color-semi-filled-outlined-primary-background);
+    color: var(--ak-chip-color-semi-filled-outlined-primary-contrast-text);
+    border-color: var(--ak-chip-color-semi-filled-outlined-primary-contrast-text);
+  }
+
+  &.ak-chip-color-secondary {
+    background-color: var(--ak-chip-color-semi-filled-outlined-secondary-background);
+    color: var(--ak-chip-color-semi-filled-outlined-secondary-contrast-text);
+    border-color: var(--ak-chip-color-semi-filled-outlined-secondary-contrast-text);
+  }
+
+  &.ak-chip-color-success {
+    background-color: var(--ak-chip-color-semi-filled-outlined-success-background);
+    color: var(--ak-chip-color-semi-filled-outlined-success-contrast-text);
+    border-color: var(--ak-chip-color-semi-filled-outlined-success-contrast-text);
+  }
+
+  &.ak-chip-color-error {
+    background-color: var(--ak-chip-color-semi-filled-outlined-error-background);
+    color: var(--ak-chip-color-semi-filled-outlined-error-contrast-text);
+    border-color: var(--ak-chip-color-semi-filled-outlined-error-contrast-text);
+  }
+
+  &.ak-chip-color-warn {
+    background-color: var(--ak-chip-color-semi-filled-outlined-warn-background);
+    color: var(--ak-chip-color-semi-filled-outlined-warn-contrast-text);
+    border-color: var(--ak-chip-color-semi-filled-outlined-warn-contrast-text);
+  }
+
+  &.ak-chip-color-info {
+    background-color: var(--ak-chip-color-semi-filled-outlined-info-background);
+    color: var(--ak-chip-color-semi-filled-outlined-info-contrast-text);
+    border-color: var(--ak-chip-color-semi-filled-outlined-info-contrast-text);
+  }
+}
+
 .ak-chip-label {
   margin: 0 0.5em !important;
 }

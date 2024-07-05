@@ -45,6 +45,10 @@ export default class AkLoaderLinearComponent extends Component<AkLoaderLinearSig
 
     return this.progress - 100;
   }
+
+  get color() {
+    return this.args.color || 'primary';
+  }
 }
 
 declare module '@glint/environment-ember-loose/registry' {
