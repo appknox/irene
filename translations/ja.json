@@ -659,6 +659,7 @@
   "manager": "マネージャー",
   "manual": "手動",
   "manualRequested": "手動診断がリクエストされました",
+  "manualResults": "Manual Results",
   "manualScan": "手動診断",
   "manualSettings": "Manual Settings",
   "markAnalysis": "Mark Analysis",
@@ -747,6 +748,7 @@
     "requestAccess": {
       "title": "Request Access",
       "description": "Trial account does not have access to this feature",
+      "helperText": "Click below to request access",
       "button": "Request Access"
     },
     "manual": {
@@ -761,7 +763,7 @@
       "appQuestion1Answer1": "再診断を実施しますので、診断を続行し、診断されなかった機能についてレポートで報告してください。",
       "appQuestion1Answer2": "診断を停止して、サポートに連絡してください。",
       "loginRequired": "あなたのアプリケーションは、ログインするためのアカウントが必要ですか？",
-      "enterLoginDetails": "アプリにログインするために必要な資格情報を入力してください<b class = 'bold'>（各役割に4つの資格情報が設定されています）</ b>",
+      "enterLoginDetails": "アプリにログインするために必要な資格情報を入力してください<strong>（各役割に4つの資格情報が設定されています）</strong>",
       "addUserRole": "ユーザの役割を追加する",
       "userRoles": "ユーザの役割を追加する",
       "actions": "アクション",
@@ -778,7 +780,11 @@
       "pleaseEnterVPNDetails": "VPNの詳細を入力してください",
       "basicAppInfo": "アプリの基本情報",
       "loginDetails": "ログインの詳細",
-      "vpnDetails": "VPNの詳細"
+      "vpnDetails": "VPNの詳細",
+      "scanInProgressDescription": "The file is currently being assessed by our security researchers.",
+      "requestSubmittedDescription": "Manual Scan for this file has been requested.",
+      "resultsDescription": "Here are the data from this particular Manual Scan.",
+      "viewResultsInTab": "View the results in <strong>\"Manual Results Tab\"</strong>"
     },
     "rescan": {
       "title": "Restart Static Scan",
@@ -1254,6 +1260,7 @@
   "scanned": "scanned",
   "scans": "Scans",
   "scanCompleted": "scan completed",
+  "scanInProgress": "Scan in Progress",
   "scanDetails": "診断の詳細",
   "scanNotCompleted": "scan not completed",
   "scanResults": "Scan Results",
@@ -1333,6 +1340,7 @@
   "storage": "Storage",
   "storageManagement": "Storage Management",
   "storeLowercase": "store",
+  "submit": "Submit",
   "submitUrl": "URLを送信",
   "subscription": "サブスクリプション",
   "subscriptionCancelled": "サブスクリプションが正常にキャンセルされました",

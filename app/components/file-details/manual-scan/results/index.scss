@@ -1,0 +1,13 @@
+.manual-results-tabs-container {
+  padding-top: 0.5em;
+  background-color: var(
+    --file-details-manual-scan-results-tab-container-background
+  );
+  position: sticky;
+  top: 6.42em;
+  z-index: 100;
+}
+
+.vulnerability-details-container {
+  background-color: var(--file-details-manual-scan-results-background-main);
+}

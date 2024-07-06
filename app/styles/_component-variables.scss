@@ -193,14 +193,26 @@ body {
   --ak-chip-color-outlined-warn: var(--warn-main);
   --ak-chip-color-outlined-info: var(--info-main);
 
-  --ak-chip-color-semi-filled-outlined-default-background: var(--neutral-grey-200);
-  --ak-chip-color-semi-filled-outlined-default-contrast-text: var(--neutral-grey-700);
+  --ak-chip-color-semi-filled-outlined-default-background: var(
+    --neutral-grey-200
+  );
+  --ak-chip-color-semi-filled-outlined-default-contrast-text: var(
+    --neutral-grey-700
+  );
   --ak-chip-color-semi-filled-outlined-primary-background: var(--primary-light);
-  --ak-chip-color-semi-filled-outlined-primary-contrast-text: var(--primary-dark);
-  --ak-chip-color-semi-filled-outlined-secondary-background: var(--neutral-grey-200);
-  --ak-chip-color-semi-filled-outlined-secondary-contrast-text: var(--secondary-main);
+  --ak-chip-color-semi-filled-outlined-primary-contrast-text: var(
+    --primary-dark
+  );
+  --ak-chip-color-semi-filled-outlined-secondary-background: var(
+    --neutral-grey-200
+  );
+  --ak-chip-color-semi-filled-outlined-secondary-contrast-text: var(
+    --secondary-main
+  );
   --ak-chip-color-semi-filled-outlined-success-background: var(--success-light);
-  --ak-chip-color-semi-filled-outlined-success-contrast-text: var(--success-main);
+  --ak-chip-color-semi-filled-outlined-success-contrast-text: var(
+    --success-main
+  );
   --ak-chip-color-semi-filled-outlined-error-background: var(--error-light);
   --ak-chip-color-semi-filled-outlined-error-contrast-text: var(--error-main);
   --ak-chip-color-semi-filled-outlined-warn-background: var(--warn-light);
@@ -882,6 +894,50 @@ body {
   --file-details-scan-actions-api-scan-captured-apis-border-color: var(
     --border-color-1
   );
+
+  // variables for file-details/manual-scan
+  --file-details-manual-scan-background-color: var(--background-light);
+  --file-details-manual-scan-footer-background-color: var(--background-main);
+  --file-details-manual-scan-footer-border-color: var(--border-color-1);
+  --file-details-manual-scan-footer-border-radius: var(--border-radius);
+  --file-details-manual-scan-footer-box-shadow: var(--box-shadow-3);
+
+  // variables for file-details/manual-scan/progress-status
+  --file-details-manual-scan-progress-status-border-radius: var(
+    --border-radius
+  );
+  --file-details-manual-scan-progress-status-card-box-shadow: var(
+    --box-shadow-3
+  );
+  --file-details-manual-scan-progress-status-card-background: var(
+    --background-main
+  );
+  --file-details-manual-scan-progress-status-text-primary: var(--text-primary);
+  --file-details-manual-scan-progress-status-font-weight-medium: var(
+    --font-weight-medium
+  );
+
+  // variables for file-details/manual-scan/request-access
+  --file-details-manual-scan-request-access-border-radius: var(--border-radius);
+  --file-details-manual-scan-request-access-card-box-shadow: var(
+    --box-shadow-3
+  );
+  --file-details-manual-scan-request-access-card-background: var(
+    --background-main
+  );
+
+  // variables for file-details/manual-scan/request-form
+  --file-details-manual-scan-request-form-border-radius: var(--border-radius);
+  --file-details-manual-scan-request-form-border-color: var(--border-color-1);
+  --file-details-manual-scan-request-form-background-color: var(
+    --background-main
+  );
+
+  // variables for file-details/manual-scan/results
+  --file-details-manual-scan-results-tab-container-background: var(
+    --background-light
+  );
+  --file-details-manual-scan-results-background-main: var(--background-main);
 
   // variables for file-details/vulnerability-analysis/header
   --file-details-vulnerability-analysis-header-border-color: var(

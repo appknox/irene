@@ -157,6 +157,11 @@ Router.map(function () {
             this.route('results');
           });
 
+          this.route('manual-scan', function () {
+            this.route('index', { path: '/' });
+            this.route('results');
+          });
+
           this.route('analysis', { path: '/analysis/:analysis_id' });
           this.route('static-scan');
         });

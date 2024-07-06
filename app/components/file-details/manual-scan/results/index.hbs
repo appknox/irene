@@ -1,0 +1,32 @@
+<div class='mb-2'>
+  <AkTabs local-class='manual-results-tabs-container' as |Akt|>
+    {{#each this.tabItems as |item|}}
+      <Akt.tabItem
+        @id={{item.id}}
+        @route={{item.route}}
+        @currentWhen={{item.currentWhen}}
+        data-test-fileDetails-manualScanResults-tabs='{{item.id}}-tab'
+      >
+        {{item.label}}
+      </Akt.tabItem>
+    {{/each}}
+  </AkTabs>
+
+  <div local-class='vulnerability-details-container'>
+    <AkTypography
+      data-test-fileDetails-manualScanResults-desc
+      @color='textSecondary'
+      class='p-2'
+    >
+      {{t 'modalCard.manual.resultsDescription'}}
+    </AkTypography>
+
+    <FileDetails::VulnerabilityAnalysis::Table
+      @file={{@file}}
+      @columns={{this.columns}}
+      @filterVulnerabilityType={{this.filterVulnerabilityType}}
+      @sorts={{this.sorts}}
+      @updateAnalysesSorts={{this.updateAnalysesSorts}}
+    />
+  </div>
+</div>

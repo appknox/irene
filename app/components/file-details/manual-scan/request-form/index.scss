@@ -1,0 +1,8 @@
+.manual-scan-form-container {
+  background-color: var(
+    --file-details-manual-scan-request-form-background-color
+  );
+  margin: 1.5em 0;
+  border-radius: var(--file-details-manual-scan-request-form-border-radius);
+  border: 1px solid var(--file-details-manual-scan-request-form-border-color);
+}
