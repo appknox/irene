@@ -101,10 +101,19 @@
   {{/if}}
 </AkStack>
 
-{{#if this.showDynamicScanModal}}
+{{!-- {{#if this.showDynamicScanModal}} --}}
+<ProjectPreferences::Provider
+  @profileId={{this.profileId}}
+  @platform={{this.projectPlatform}}
+  @project={{@file.project.content}}
+  as |dpContext|
+>
   <DynamicScan::Modal
     @onClose={{this.closeDynamicScanModal}}
     @pollDynamicStatus={{this.pollDynamicStatus}}
     @file={{@file}}
+    @dpContext={{dpContext}}
+    @isAutomatedScan={{@isAutomatedScan}}
   />
-{{/if}}
+</ProjectPreferences::Provider>
+{{!-- {{/if}} --}}

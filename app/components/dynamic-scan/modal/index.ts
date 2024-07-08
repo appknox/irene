@@ -2,18 +2,28 @@ import Component from '@glimmer/component';
 import { inject as service } from '@ember/service';
 import { task } from 'ember-concurrency';
 import { action } from '@ember/object';
+import { tracked } from '@glimmer/tracking';
+import { isEmpty } from '@ember/utils';
+
 import ENV from 'irene/config/environment';
 import triggerAnalytics from 'irene/utils/trigger-analytics';
-import IntlService from 'ember-intl/services/intl';
-import Store from '@ember-data/store';
-import { tracked } from '@glimmer/tracking';
-import FileModel from 'irene/models/file';
+import ENUMS from 'irene/enums';
+import parseError from 'irene/utils/parse-error';
+
+import type IntlService from 'ember-intl/services/intl';
+import type Store from '@ember-data/store';
+
+import type FileModel from 'irene/models/file';
+import { type DevicePreferenceContext } from 'irene/components/project-preferences/provider';
+import { ProfileDynamicScanMode } from 'irene/models/profile';
 
 export interface DynamicScanModalSignature {
   Args: {
     onClose: () => void;
     pollDynamicStatus: () => void;
     file: FileModel;
+    isAutomatedScan?: boolean;
+    dpContext: DevicePreferenceContext;
   };
 }
 
@@ -23,138 +33,50 @@ export default class DynamicScanModalComponent extends Component<DynamicScanModa
   @service declare store: Store;
   @service('notifications') declare notify: NotificationService;
 
-  @tracked showApiScanSettings = false;
   @tracked isApiScanEnabled = false;
+
+  get file() {
+    return this.args.file;
+  }
 
   get tStartingScan() {
     return this.intl.t('startingScan');
-  }
-
-  get tScheduleDynamicscanSuccess() {
-    return this.intl.t('scheduleDynamicscanSuccess');
   }
 
   get tPleaseTryAgain() {
     return this.intl.t('pleaseTryAgain');
   }
 
-  get projectPlatform() {
-    return this.args.file.project.get('platform');
+  get disableCloseDastModal() {
+    return this.startDynamicScan.isRunning;
   }
 
-  get profileId() {
-    return this.args.file.profile.get('id');
-  }
+  get enableStartDynamicScanBtn() {
+    const { isAutomatedScan, dpContext } = this.args;
 
-  get deviceRequirements() {
-    const file = this.args.file;
+    if (!isAutomatedScan) {
+      const anyDeviceSelection = ENUMS.DS_MANUAL_DEVICE_SELECTION.ANY_DEVICE;
 
-    return [
-      {
-        type: this.intl.t('modalCard.dynamicScan.osVersion'),
-        boldValue: `${file.project.get('platformDisplay')} ${
-          file.minOsVersion
-        } `,
-        value: this.intl.t('modalCard.dynamicScan.orAbove'),
-      },
-      file.supportedCpuArchitectures && {
-        type: this.intl.t('modalCard.dynamicScan.processorArchitecture'),
-        boldValue: file.supportedCpuArchitectures,
-      },
-      file.supportedDeviceTypes && {
-        type: this.intl.t('modalCard.dynamicScan.deviceTypes'),
-        boldValue: file.supportedDeviceTypes,
-      },
-    ].filter(Boolean) as { type: string; boldValue: string; value?: string }[];
+      const specificDeviceSelection =
+        ENUMS.DS_MANUAL_DEVICE_SELECTION.SPECIFIC_DEVICE;
+
+      const dsManualDeviceSelection =
+        dpContext.projectProfile?.dsManualDeviceSelection;
+
+      return (
+        dsManualDeviceSelection === anyDeviceSelection ||
+        (specificDeviceSelection === dsManualDeviceSelection &&
+          !isEmpty(dpContext.dsManualDeviceId))
+      );
+    }
+
+    return true;
   }
 
   @action
-  enableApiScan(event: Event, checked: boolean) {
-    this.showApiScanSettings = checked;
+  enableApiScan(_: Event, checked: boolean) {
     this.isApiScanEnabled = !!checked;
   }
-
-  startDynamicScan = task(async () => {
-    try {
-      const data = {
-        isApiScanEnabled: this.isApiScanEnabled === true,
-      };
-
-      const file = this.args.file;
-      const dynamicUrl = [ENV.endpoints['dynamic'], file.id].join('/');
-
-      await this.ajax.put(dynamicUrl, { data });
-
-      this.args.onClose();
-
-      file.setBootingStatus();
-
-      this.args.pollDynamicStatus();
-
-      this.notify.success(this.tStartingScan);
-    } catch (error) {
-      const err = error as AdapterError;
-      let errMsg = this.tPleaseTryAgain;
-
-      if (err.errors && err.errors.length) {
-        errMsg = err.errors[0]?.detail || errMsg;
-      } else if (err.payload.message) {
-        errMsg = err.payload.message;
-      } else if (err.message) {
-        errMsg = err.message;
-      }
-
-      this.notify.error(errMsg);
-
-      this.args.file.setDynamicStatusNone();
-    }
-  });
-
-  scheduleDynamicScan = task({ drop: true }, async () => {
-    try {
-      const file = this.args.file;
-
-      const scheduleAutomationUrl = [
-        ENV.endpoints['dynamic'],
-        file.id,
-        ENV.endpoints['scheduleDynamicscanAutomation'],
-      ].join('/');
-
-      await this.ajax.post(scheduleAutomationUrl, {
-        data: { id: file.id },
-      });
-
-      file.setInQueueStatus();
-
-      this.args.onClose();
-
-      this.notify.success(this.tScheduleDynamicscanSuccess, {
-        clearDuration: 5000,
-      });
-    } catch (e) {
-      const err = e as AdapterError;
-      let errMsg = this.tPleaseTryAgain;
-
-      if (err.payload) {
-        Object.keys(err.payload).forEach((p) => {
-          errMsg = err.payload[p];
-          if (typeof errMsg !== 'string') {
-            errMsg = err.payload[p][0];
-          }
-
-          this.notify.error(errMsg);
-        });
-
-        return;
-      } else if (err.errors && err.errors.length) {
-        errMsg = err.errors[0]?.detail || errMsg;
-      } else if (err.message) {
-        errMsg = err.message;
-      }
-
-      this.notify.error(errMsg);
-    }
-  });
 
   @action
   runDynamicScan() {
@@ -165,6 +87,39 @@ export default class DynamicScanModalComponent extends Component<DynamicScanModa
 
     this.startDynamicScan.perform();
   }
+
+  startDynamicScan = task(async () => {
+    try {
+      const mode = this.args.isAutomatedScan
+        ? ProfileDynamicScanMode.AUTOMATED
+        : ProfileDynamicScanMode.MANUAL;
+
+      const data = {
+        mode,
+        enable_api_capture: this.isApiScanEnabled,
+      };
+
+      const dynamicUrl = [
+        ENV.endpoints['files'],
+        this.file.id,
+        ENV.endpoints['dynamicscans'],
+      ].join('/');
+
+      await this.ajax.post(dynamicUrl, { namespace: ENV.namespace_v2, data });
+
+      this.args.onClose();
+
+      this.file.setBootingStatus();
+
+      this.args.pollDynamicStatus();
+
+      this.notify.success(this.tStartingScan);
+    } catch (error) {
+      this.notify.error(parseError(error, this.tPleaseTryAgain));
+
+      this.args.file.setDynamicStatusNone();
+    }
+  });
 }
 
 declare module '@glint/environment-ember-loose/registry' {

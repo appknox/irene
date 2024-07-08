@@ -1,30 +1,31 @@
-import Component from '@glimmer/component';
-import { tracked } from 'tracked-built-ins';
 import { action } from '@ember/object';
-import ProjectModel from 'irene/models/project';
+import Component from '@glimmer/component';
+import ENUMS from 'irene/enums';
+import { ProfileDsAutomatedDeviceSelection } from 'irene/models/profile';
+
+import type ProjectModel from 'irene/models/project';
 
 export interface ProjectSettingsGeneralSettingsDevicePreferencesAutomatedDastSignature {
   Args: {
-    project: ProjectModel | null;
+    project?: ProjectModel;
+  };
+  Blocks: {
+    title: [];
   };
 }
 
 export default class ProjectSettingsGeneralSettingsDevicePreferencesAutomatedDastComponent extends Component<ProjectSettingsGeneralSettingsDevicePreferencesAutomatedDastSignature> {
-  @tracked selectedType: { label: string; value: boolean } | null = null;
-  @tracked showTable = false;
-  @tracked loaded = true;
+  filterDsAutomatedDeviceCriteria =
+    ENUMS.DS_AUTOMATED_DEVICE_SELECTION.FILTER_CRITERIA;
 
-  get preferenceType() {
-    return [
-      { label: 'Use any available device with criteria', value: false },
-      { label: 'Use Specific device', value: true },
-    ];
-  }
+  deviceSelectionTypes = ENUMS.DS_AUTOMATED_DEVICE_SELECTION.BASE_CHOICES;
 
-  @action
-  changed(selected: { label: string; value: boolean }) {
-    this.selectedType = selected;
-    this.showTable = selected.value;
+  loaded = true;
+
+  @action getChosenDeviceSelection(
+    selectedDevice?: ProfileDsAutomatedDeviceSelection
+  ) {
+    return this.deviceSelectionTypes.find((st) => st.value === selectedDevice);
   }
 }
 

@@ -18,4 +18,6 @@ export default Factory.extend({
       is_inherited: faker.datatype.boolean(),
     },
   }),
+
+  ds_automated_platform_version_min: () => faker.string.numeric(1),
 });

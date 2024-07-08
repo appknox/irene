@@ -1,12 +1,56 @@
 import commondrf from './commondrf';
 
 import ProfileModel, {
-  ProfileRegulatoryReportPreference,
-  SaveReportPreferenceData,
-  SetProfileRegulatorPrefData,
+  type ProfileRegulatoryReportPreference,
+  type SaveReportPreferenceData,
+  type SetProfileRegulatorPrefData,
+  type SetProfileDSAutomatedDevicePrefData,
+  SetProfileDSManualDevicePrefData,
 } from 'irene/models/profile';
 
 export default class ProfileAdapter extends commondrf {
+  async setDSManualDevicePrefData(
+    modelInstance: ProfileModel,
+    data: SetProfileDSManualDevicePrefData
+  ) {
+    const modelId = modelInstance.get('id');
+
+    const url =
+      this.buildURL('profile', modelId) + '/ds_manual_device_preference';
+
+    return this.ajax(url, 'PUT', { data });
+  }
+
+  async setDSAutomatedPrefData(
+    modelInstance: ProfileModel,
+    data: SetProfileDSAutomatedDevicePrefData
+  ) {
+    const modelId = modelInstance.get('id');
+
+    const url =
+      this.buildURL('profile', modelId) + '/ds_automated_device_preference';
+
+    return this.ajax(url, 'PUT', { data });
+  }
+
+  async getDsManualDevicePreference(modelInstance: ProfileModel) {
+    const modelId = modelInstance.get('id');
+
+    const url =
+      this.buildURL('profile', modelId) + '/ds_manual_device_preference';
+
+    return this.ajax(url, 'GET');
+  }
+
+  async getDsAutomatedDevicePreference(modelInstance: ProfileModel) {
+    const modelId = modelInstance.get('id');
+
+    const url =
+      this.buildURL('profile', modelId) + '/ds_automated_device_preference';
+
+    return this.ajax(url, 'GET');
+  }
+
   async saveReportPreference(
     modelInstance: ProfileModel,
     data: SaveReportPreferenceData

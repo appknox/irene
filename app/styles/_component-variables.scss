@@ -893,7 +893,7 @@ body {
   --proxy-settings-view-border-color: var(--border-color-1);
 
   // variables for dynamic-scan/modal
-  --dynamic-scan-modal-border-color: var(--border-color-1);
+  --file-details-dynamic-scan-modal-border-color: var(--border-color-1);
   --dynamic-scan-modal-border-radius: var(--border-radius);
   --dynamic-scan-modal-alert-background-color: var(--warn-light);
   --dynamic-scan-modal-alert-text-color: var(--warn-dark);
@@ -1338,4 +1338,18 @@ body {
   --file-details-dynamic-scan-border-color: var(--border-color-1);
   --file-details-dynamic-scan-background-color: var(--background-light);
   --file-details-dynamic-scan-background-main: var(--background-main);
+
+  // variables for file-details/dynamic-scan/modal
+  --file-details-dynamic-scan-modal-capability-chip-border-color: var(
+    --neutral-grey-200
+  );
+  --file-details-dynamic-scan-modal-device-list-filter-border-color: var(
+    --neutral-grey-200
+  );
+  --file-details-dynamic-scan-modal-device-list-filter-hover-border-color: var(
+    --neutral-grey-400
+  );
+  --file-details-dynamic-scan-modal-proxy-settings-neutral-color: var(
+    --neutral-grey-300
+  );
 }

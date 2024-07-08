@@ -1,6 +1,7 @@
 .device-preference-select {
   margin-top: 0.57em;
-  width: 400px;
+  max-width: 400px;
+  min-width: 330px;
 }
 
 .device-preference-table {
@@ -8,7 +9,8 @@
     var(
       --project-settings-general-settings-device-preferences-automated-dast-border-color
     );
-  width: 600px;
+  width: 100%;
+  max-width: 600px;
   gap: 0.57em;
   padding: 0.57em 0;
   margin-top: 1.285em;

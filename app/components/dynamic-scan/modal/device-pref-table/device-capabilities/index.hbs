@@ -1,0 +1,24 @@
+{{#if this.deviceCapabilities.length}}
+  <AkStack @spacing='0.5' @flexWrap='wrap'>
+    {{#each this.deviceCapabilities as |capability|}}
+      <AkChip
+        @size='small'
+        @variant='outlined'
+        @label={{t capability}}
+        @color='error'
+        local-class='capability-chip'
+        data-test-dynnamicScanModal-devicePrefTable-capability
+        data-test-dynnamicScanModal-devicePrefTable-capabilityId='{{capability}}'
+      />
+    {{/each}}
+  </AkStack>
+
+{{else}}
+  <AkTypography
+    @variant='body1'
+    @color='textSecondary'
+    data-test-dynnamicScanModal-devicePrefTable-noCapabilityText
+  >
+    <em>{{t 'modalCard.dynamicScan.noDeviceCapability'}}</em>
+  </AkTypography>
+{{/if}}

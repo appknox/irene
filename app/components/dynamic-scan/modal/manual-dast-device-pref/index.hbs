@@ -1,0 +1,151 @@
+<AkStack
+  @direction='column'
+  @width='full'
+  local-class='scan-modal-body-wrapper'
+  data-test-dynamicScanModal-manualDast-modalBodyWrapper
+>
+  <AkStack
+    @direction='column'
+    @spacing='2'
+    @width='full'
+    local-class='scan-modal-section'
+    data-test-dynamicScanModal-manualDast-header
+  >
+    <AkTypography
+      @fontWeight='bold'
+      data-test-dynamicScanModal-manualDast-headerDeviceRequirements
+    >
+      {{t 'modalCard.dynamicScan.deviceRequirements'}}
+    </AkTypography>
+
+    <AkStack @alignItems='center' @spacing='2.5'>
+      <AkTypography
+        @color='textSecondary'
+        {{style minWidth='140px'}}
+        data-test-dynamicScanModal-manualDast-headerOSInfoDesc
+      >
+        {{t 'modalCard.dynamicScan.osVersion'}}
+      </AkTypography>
+
+      <AkTypography
+        @fontWeight='medium'
+        data-test-dynamicScanModal-manualDast-headerOSInfoValue
+      >
+        {{t 'android'}}
+        {{this.minOsVersion}}
+        {{t 'modalCard.dynamicScan.orAbove'}}
+      </AkTypography>
+    </AkStack>
+  </AkStack>
+
+  <AkDivider @color='dark' />
+
+  <AkStack
+    @direction='column'
+    @spacing='3'
+    @width='full'
+    local-class='scan-modal-section'
+  >
+    <AkStack
+      @direction='column'
+      @spacing='1'
+      data-test-dynamicScanModal-manualDast-devicePrefHeader
+    >
+      <AkTypography
+        @fontWeight='bold'
+        data-test-dynamicScanModal-manualDast-devicePrefHeaderDesc
+      >
+        {{t 'devicePreferences'}}
+      </AkTypography>
+
+      <AkSelect
+        @placeholder={{'Select the device preference'}}
+        @options={{this.deviceSelectionTypes}}
+        @selected={{this.selectedDeviceSelection}}
+        @onChange={{@dpContext.handleDsManualDeviceSelection}}
+        {{style minWidth='330px'}}
+        data-test-dynamicScanModal-manualDast-devicePrefSelect
+        as |dst|
+      >
+        {{t (ds-manual-device-pref dst.value)}}
+      </AkSelect>
+    </AkStack>
+
+    {{#if this.isSpecificDeviceSelection}}
+      <DynamicScan::Modal::DevicePrefTable
+        @file={{@file}}
+        @dpContext={{@dpContext}}
+      />
+    {{/if}}
+  </AkStack>
+
+  <AkDivider @color='dark' />
+
+  <FileDetails::ProxySettings
+    @profile={{@file.profile}}
+    @project={{@file.project}}
+  />
+
+  <AkStack
+    @alignItems='center'
+    @justifyContent='space-between'
+    @width='full'
+    local-class='scan-modal-section'
+    data-test-dynamicScanModal-manualDast-enableAPICapture
+  >
+    <AkTypography @fontWeight='bold'>
+      {{t 'modalCard.dynamicScan.runApiScan'}}
+    </AkTypography>
+
+    <AkToggle
+      @size='small'
+      @checked={{@isApiScanEnabled}}
+      @onClick={{@enableApiScan}}
+      data-test-dynamicScanModal-manualDast-enableAPICaptureCheckbox
+    />
+  </AkStack>
+
+  <AkDivider @color='dark' />
+
+  <AkStack @width='full' local-class='scan-modal-section'>
+    <ApiFilter
+      @profileId={{@file.project.activeProfileId}}
+      @hideDescriptionText={{true}}
+    >
+      <:title>
+        <AkStack
+          @alignItems='center'
+          @spacing='1'
+          data-test-dynamicScanModal-manualDast-apiFilter-title
+        >
+          <AkTypography @fontWeight='bold'>
+            {{t 'templates.apiScanURLFilter'}}
+          </AkTypography>
+
+          <AkTooltip
+            @arrow={{true}}
+            @placement='right'
+            data-test-dynamicScanModal-manualDast-apiURLFilter-iconTooltip
+          >
+            <:tooltipContent>
+              <div local-class='tooltip-content-container'>
+                {{t 'modalCard.dynamicScan.apiScanUrlFilterTooltipText'}}
+              </div>
+            </:tooltipContent>
+
+            <:default>
+              <AkIcon
+                local-class='api-url-filter-help-icon'
+                @iconName='help'
+                @size='small'
+                data-test-dynamicScanModal-manualDast-apiURLFilter-helpIcon
+              />
+            </:default>
+          </AkTooltip>
+        </AkStack>
+      </:title>
+    </ApiFilter>
+  </AkStack>
+
+  <AkDivider @color='dark' />
+</AkStack>

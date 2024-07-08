@@ -252,6 +252,7 @@ module.exports = function (environment) {
       devices: 'devices',
       devicePreferences: 'device_preference',
       dynamic: 'dynamicscan',
+      dynamicscans: 'dynamicscans',
       dynamicShutdown: 'dynamic_shutdown',
       storeUrl: 'store_url',
       deleteProject: 'projects/delete',

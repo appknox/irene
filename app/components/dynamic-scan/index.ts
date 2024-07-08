@@ -15,6 +15,7 @@ export interface DynamicScanSignature {
     onScanShutdown?: () => void;
     file: FileModel;
     dynamicScanText: string;
+    isAutomatedScan?: boolean;
   };
 }
 
@@ -31,20 +32,30 @@ export default class DynamicScanComponent extends Component<DynamicScanSignature
     this.pollDynamicStatus();
   }
 
-  get color() {
-    const file = this.args.file;
+  get file() {
+    return this.args.file;
+  }
 
-    if (file.isDynamicStatusInProgress) {
+  get color() {
+    if (this.file.isDynamicStatusInProgress) {
       return 'warn';
-    } else if (file.dynamicStatus === ENUMS.DYNAMIC_STATUS.COMPLETED) {
+    } else if (this.file.dynamicStatus === ENUMS.DYNAMIC_STATUS.COMPLETED) {
       return 'success';
-    } else if (file.dynamicStatus === ENUMS.DYNAMIC_STATUS.ERROR) {
+    } else if (this.file.dynamicStatus === ENUMS.DYNAMIC_STATUS.ERROR) {
       return 'error';
-    } else if (file.dynamicStatus === ENUMS.DYNAMIC_STATUS.NONE) {
+    } else if (this.file.dynamicStatus === ENUMS.DYNAMIC_STATUS.NONE) {
       return 'secondary';
-    } else if (file.isDynamicStatusReady) {
+    } else if (this.file.isDynamicStatusReady) {
       return 'info';
     }
+  }
+
+  get projectPlatform() {
+    return this.file.project.get('platform');
+  }
+
+  get profileId() {
+    return this.file.profile.get('id');
   }
 
   @action
@@ -64,20 +75,19 @@ export default class DynamicScanComponent extends Component<DynamicScanSignature
 
   @action
   pollDynamicStatus() {
-    const file = this.args.file;
-    const isDynamicReady = file.isDynamicStatusReady;
+    const isDynamicReady = this.file.isDynamicStatusReady;
 
     if (isDynamicReady) {
       return;
     }
 
-    if (!file.id) {
+    if (!this.file.id) {
       return;
     }
 
     const stopPoll = this.poll.startPolling(
       () =>
-        file
+        this.file
           .reload()
           .then((f) => {
             if (
@@ -93,11 +103,9 @@ export default class DynamicScanComponent extends Component<DynamicScanSignature
   }
 
   dynamicShutdown = task({ drop: true }, async () => {
-    const file = this.args.file;
+    this.file.setShuttingDown();
 
-    file.setShuttingDown();
-
-    const dynamicUrl = [ENV.endpoints['dynamic'], file.id].join('/');
+    const dynamicUrl = [ENV.endpoints['dynamic'], this.file.id].join('/');
 
     try {
       await this.ajax.delete(dynamicUrl);
@@ -108,7 +116,7 @@ export default class DynamicScanComponent extends Component<DynamicScanSignature
         this.pollDynamicStatus();
       }
     } catch (error) {
-      file.setNone();
+      this.file.setNone();
 
       this.notify.error((error as AdapterError).payload.error);
     }

@@ -8,19 +8,21 @@
       </AkTypography>
     {{/if}}
 
-    <AkTypography
-      data-test-apiFilter-description
-      @variant='body2'
-      @color='textSecondary'
-    >
-      {{t 'otherTemplates.specifyTheURL'}}
-    </AkTypography>
+    {{#unless @hideDescriptionText}}
+      <AkTypography
+        data-test-apiFilter-description
+        @variant='body2'
+        @color='textSecondary'
+      >
+        {{t 'otherTemplates.specifyTheURL'}}
+      </AkTypography>
+    {{/unless}}
   </AkStack>
 
-  <AkStack class='mt-2' @spacing='1.5'>
+  <AkStack class='mt-2' @spacing='1.5' @width='full' {{style maxWidth='750px'}}>
     <AkTextField
       data-test-apiFilter-apiEndpointInput
-      @formControlClass='w-8/12'
+      @formControlClass='w-10/12'
       @placeholder={{t 'templates.enterAPIEndpoint'}}
       @value={{this.newUrlFilter}}
       @helperText={{t 'templates.enterEndpoint'}}
@@ -30,6 +32,7 @@
     <AkButton
       data-test-apiFilter-addApiEndpointBtn
       @variant='outlined'
+      @disabled={{this.saveApiUrlFilter.isRunning}}
       {{on 'click' this.addApiUrlFilter}}
     >
       <:leftIcon>

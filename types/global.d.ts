@@ -82,20 +82,6 @@ declare module '@glint/environment-ember-loose/registry' {
       Return: string;
     }>;
 
-    'file-extension': HelperLike<{
-      Args: {
-        Positional: [string | undefined];
-      };
-      Return: string | null;
-    }>;
-
-    'threshold-status': HelperLike<{
-      Args: {
-        Positional: [number | string];
-      };
-      Return: string;
-    }>;
-
     'page-title': HelperLike<{
       Args: {
         Positional: string[];

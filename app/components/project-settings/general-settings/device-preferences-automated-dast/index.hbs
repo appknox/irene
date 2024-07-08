@@ -1,61 +1,77 @@
-<AkStack @width='full' @direction='column'>
-  <AkTypography @variant='h5'>
-    Device Preferences (Automated DAST)
-  </AkTypography>
+<ProjectPreferences::Provider
+  @profileId={{@project.activeProfileId}}
+  @platform={{@project.platform}}
+  @project={{@project}}
+  as |dpContext|
+>
+  <AkStack @width='full' @direction='column'>
+    {{#if (has-block 'title')}}
+      {{yield to='title'}}
+    {{else}}
+      <AkTypography @variant='h5'>
+        Device Preferences (Automated DAST)
+      </AkTypography>
+    {{/if}}
 
-  <AkSelect
-    @options={{this.preferenceType}}
-    @selected={{this.selectedType}}
-    @placeholder='Select the device preference'
-    @onChange={{this.changed}}
-    local-class='device-preference-select'
-    as |aks|
-  >
-    {{aks.label}}
-  </AkSelect>
+    <AkSelect
+      @placeholder={{'Select the device preference'}}
+      @options={{this.deviceSelectionTypes}}
+      @onChange={{dpContext.handleDsAutomatedDeviceSelection}}
+      @selected={{this.getChosenDeviceSelection
+        dpContext.projectProfile.dsAutomatedDeviceSelection
+      }}
+      local-class='device-preference-select'
+      as |dst|
+    >
+      {{t (ds-automated-device-pref dst.value)}}
+    </AkSelect>
 
-  {{#if this.showTable}}
-    <AkStack @direction='column' local-class='device-preference-table'>
-      <AkStack @width='full' @alignItems='center'>
-        <AkStack @width='4/12' class='ml-2'>
-          <AkTypography>Device Type</AkTypography>
+    {{#if
+      (eq
+        dpContext.projectProfile.dsAutomatedDeviceSelection
+        this.filterDsAutomatedDeviceCriteria
+      )
+    }}
+      <AkStack
+        @width='full'
+        @direction='column'
+        local-class='device-preference-table'
+      >
+        <AkStack @width='full' @alignItems='center'>
+          <AkStack @width='4/12' class='ml-2'>
+            <AkTypography>Device Type</AkTypography>
+          </AkStack>
+
+          {{#if dpContext}}
+            <AkRadio::Group @groupDirection='row' as |ctx|>
+              <AkFormControlLabel @label='Phone'>
+                <AkRadio @radioCtx={{ctx}} @value='Phone' />
+              </AkFormControlLabel>
+
+              <AkFormControlLabel @label='Tab'>
+                <AkRadio @radioCtx={{ctx}} @value='Tab' />
+              </AkFormControlLabel>
+            </AkRadio::Group>
+          {{else}}
+
+            <AkSkeleton @width='80px' @height='18px' @variant='rectangular' />
+
+            <AkSkeleton
+              @width='80px'
+              @height='18px'
+              @variant='rectangular'
+              class='ml-2 my-1'
+            />
+          {{/if}}
         </AkStack>
 
-        {{#if this.loaded}}
-          <AkRadio::Group @groupDirection='row' as |ctx|>
-            <AkFormControlLabel @label='Phone'>
-              <AkRadio @radioCtx={{ctx}} @value='Phone' />
-            </AkFormControlLabel>
+        <AkDivider @color='dark' />
 
-            <AkFormControlLabel @label='Tab'>
-              <AkRadio @radioCtx={{ctx}} @value='Tab' />
-            </AkFormControlLabel>
-          </AkRadio::Group>
-        {{else}}
-          <AkSkeleton @width='80px' @height='18px' @variant='rectangular' />
+        <AkStack @width='full' @alignItems='center'>
+          <AkStack @width='4/12' class='ml-2'>
+            <AkTypography>Min OS Version</AkTypography>
+          </AkStack>
 
-          <AkSkeleton
-            @width='80px'
-            @height='18px'
-            @variant='rectangular'
-            class='ml-2 my-1'
-          />
-        {{/if}}
-      </AkStack>
-
-      <AkDivider @color='dark' />
-
-      <AkStack @width='full' @alignItems='center'>
-        <AkStack @width='4/12' class='ml-2'>
-          <AkTypography>Min OS Version</AkTypography>
-        </AkStack>
-
-        <ProjectPreferences::Provider
-          @profileId={{@project.activeProfileId}}
-          @platform={{@project.platform}}
-          @project={{@project}}
-          as |dpContext|
-        >
           {{#if this.loaded}}
             <AkSelect
               @selected={{dpContext.selectedVersion}}
@@ -73,50 +89,60 @@
           {{else}}
             <AkSkeleton @width='96px' @height='32px' @variant='rectangular' />
           {{/if}}
-        </ProjectPreferences::Provider>
-      </AkStack>
-
-      <AkDivider @color='dark' />
-
-      <AkStack @width='full' @alignItems='center'>
-        <AkStack @width='4/12' class='ml-2'>
-          <AkTypography>Additional capabilities</AkTypography>
         </AkStack>
 
-        {{#if this.loaded}}
-          <AkStack @spacing='3'>
-            <AkFormControlLabel @label='SIM'>
-              <AkCheckbox @checked={{true}} />
-            </AkFormControlLabel>
+        <AkDivider @color='dark' />
 
-            <AkFormControlLabel @label='VPN'>
-              <AkCheckbox @checked={{false}} />
-            </AkFormControlLabel>
-
-            <AkFormControlLabel @label='Pin Lock'>
-              <AkCheckbox @checked={{false}} />
-            </AkFormControlLabel>
+        <AkStack @width='full' @alignItems='center'>
+          <AkStack @width='4/12' class='ml-2'>
+            <AkTypography>Additional capabilities</AkTypography>
           </AkStack>
-        {{else}}
-          <AkSkeleton @width='60px' @height='18px' @variant='rectangular' />
 
-          <AkSkeleton
-            @width='60px'
-            @height='18px'
-            @variant='rectangular'
-            class='ml-2 my-1'
-          />
+          {{#if this.loaded}}
+            <AkStack @spacing='3'>
+              <AkFormControlLabel @label='SIM'>
+                <AkCheckbox
+                  @id='dsAutomatedSimRequired'
+                  @checked={{dpContext.projectProfile.dsAutomatedSimRequired}}
+                  @onChange={{dpContext.handleSelectDsAutomatedDeviceCapability}}
+                />
+              </AkFormControlLabel>
 
-          <AkSkeleton
-            @width='60px'
-            @height='18px'
-            @variant='rectangular'
-            class='ml-2 my-1'
-          />
-        {{/if}}
+              <AkFormControlLabel @label='VPN'>
+                <AkCheckbox
+                  @id='dsAutomatedVpnRequired'
+                  @checked={{dpContext.projectProfile.dsAutomatedVpnRequired}}
+                  @onChange={{dpContext.handleSelectDsAutomatedDeviceCapability}}
+                />
+              </AkFormControlLabel>
 
+              <AkFormControlLabel @label='Pin Lock'>
+                <AkCheckbox
+                  @id='dsAutomatedPinLockRequired'
+                  @checked={{dpContext.projectProfile.dsAutomatedPinLockRequired}}
+                  @onChange={{dpContext.handleSelectDsAutomatedDeviceCapability}}
+                />
+              </AkFormControlLabel>
+            </AkStack>
+          {{else}}
+            <AkSkeleton @width='60px' @height='18px' @variant='rectangular' />
+
+            <AkSkeleton
+              @width='60px'
+              @height='18px'
+              @variant='rectangular'
+              class='ml-2 my-1'
+            />
+
+            <AkSkeleton
+              @width='60px'
+              @height='18px'
+              @variant='rectangular'
+              class='ml-2 my-1'
+            />
+          {{/if}}
+        </AkStack>
       </AkStack>
-    </AkStack>
-  {{/if}}
-
-</AkStack>
+    {{/if}}
+  </AkStack>
+</ProjectPreferences::Provider>
