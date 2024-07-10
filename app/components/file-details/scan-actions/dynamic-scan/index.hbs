@@ -24,8 +24,11 @@
   @color='primary'
   @underline='always'
   @fontWeight='bold'
+  @route='authenticated.dashboard.file.dynamic-scan.manual'
+  @model={{@file.id}}
   class='px-2 py-1'
   local-class='view-details-icon'
+  data-test-fileDetailScanActions-dynamicScanViewDetails
 >
   <:default>
     {{t 'viewDetails'}}

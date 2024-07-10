@@ -48,8 +48,11 @@
   @color='primary'
   @underline='always'
   @fontWeight='bold'
+  @route='authenticated.dashboard.file.api-scan'
+  @model={{@file.id}}
   class='px-2 py-1'
   local-class='view-details-icon'
+  data-test-fileDetailScanActions-apiScanViewDetails
 >
   <:default>
     {{t 'viewDetails'}}
