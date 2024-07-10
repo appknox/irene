@@ -1,5 +1,7 @@
 <AkStack @direction='column' @alignItems='center' @spacing='1'>
-  {{#if @dynamicScan.isReadyOrRunning}}
+  {{! TODO: Logic should be replaced by comments when full DAST feature is ready }}
+  {{!-- {{#if @dynamicScan.isReadyOrRunning}} --}}
+  {{#if (or @file.isDynamicStatusReady @file.isDynamicStatusInProgress)}}
     {{#if @isAutomatedScan}}
       <AkButton
         local-class='dynamic-scan-btn'
@@ -7,7 +9,7 @@
         @color='neutral'
         @disabled={{not @file.isActive}}
         {{on 'click' (perform this.dynamicShutdown)}}
-        data-test-dynamicScan-cancelBtn
+        data-test-fileDetails-dynamicScanAction-cancelBtn
       >
         <:leftIcon>
           {{#if this.dynamicShutdown.isRunning}}
@@ -21,16 +23,16 @@
       </AkButton>
     {{else}}
       <AkButton
-        data-test-dynamicScan-stopBtn
+        data-test-fileDetails-dynamicScanAction-stopBtn
         local-class='dynamic-scan-btn'
-        {{on 'click' (perform this.dynamicShutdown)}}
+        {{on 'click' this.shutdownDynamicScan}}
         @disabled={{not @file.isActive}}
       >
         <:leftIcon>
           {{#if this.dynamicShutdown.isRunning}}
             <AkLoader @size={{13}} />
           {{else}}
-            <AkIcon @iconName='stop' />
+            <AkIcon @iconName='stop-circle' />
           {{/if}}
         </:leftIcon>
 
@@ -38,10 +40,11 @@
       </AkButton>
     {{/if}}
 
-  {{else if (or @file.isDynamicDone @dynamicScan.isDynamicStatusError)}}
+    {{!-- {{else if (or @file.isDynamicDone @dynamicScan.isDynamicStatusError)}} --}}
+  {{else if (or @file.isDynamicDone @file.isDynamicStatusError)}}
     <AkButton
       local-class='dynamic-scan-btn'
-      data-test-dynamicScan-restartBtn
+      data-test-fileDetails-dynamicScanAction-restartBtn
       data-test-cy='dynamicScan-restartBtn'
       {{on 'click' this.openDynamicScanDrawer}}
       @disabled={{not @file.isActive}}
@@ -55,7 +58,7 @@
   {{else}}
     <AkButton
       local-class='dynamic-scan-btn'
-      data-test-dynamicScan-startBtn
+      data-test-fileDetails-dynamicScanAction-startBtn
       {{on 'click' this.openDynamicScanDrawer}}
       @disabled={{not @file.isActive}}
     >
@@ -69,6 +72,14 @@
 </AkStack>
 
 {{#if this.showDynamicScanDrawer}}
+  <FileDetails::DynamicScan::DrawerOld
+    @onClose={{this.closeDynamicScanDrawer}}
+    @pollDynamicStatus={{this.pollDynamicStatus}}
+    @file={{@file}}
+  />
+{{/if}}
+
+{{!-- {{#if this.showDynamicScanDrawer}}
   <ProjectPreferences::Provider
     @profileId={{this.profileId}}
     @platform={{this.projectPlatform}}
@@ -83,4 +94,4 @@
       @isAutomatedScan={{@isAutomatedScan}}
     />
   </ProjectPreferences::Provider>
-{{/if}}
+{{/if}} --}}

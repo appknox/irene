@@ -1,5 +1,11 @@
 {{#if this.fetchUnknownAnalysisStatus.isRunning}}
-  <AkStack {{style height='200px'}} @alignItems='center' @spacing='1.5'>
+  <AkStack
+    {{style height='200px'}}
+    @alignItems='center'
+    @justifyContent='center'
+    @spacing='1.5'
+    @width='full'
+  >
     <AkLoader @size={{16}} />
 
     <AkTypography>

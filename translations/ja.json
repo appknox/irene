@@ -69,12 +69,11 @@
   "apiDocumentation": "API Documentation",
   "apis": "APIs",
   "apiKey": "API Key",
-  "apiResults": "API Results",
   "apiScan": "API診断",
-  "apiScanResult": "API Scan Result",
+  "apiScanResults": "API Scan Results",
   "apiScanResultsDesc": "Here are the data from this particular API scan.",
   "apiScanInProgress": "API Scan in progress",
-  "apiScanProgressStatusHelper": "{status, select, completed {} other {Once the scan is completed.}} View the results in <strong>\"API Results Tab\"</strong>",
+  "apiScanProgressStatusHelper": "{status, select, completed {} other {Once the scan is completed.}} View the results in <strong>API Results Tab</strong>",
   "apiURLFilter": "API URLフィルタ",
   "app": "アプリ",
   "appCenterPipeline": "App Center Build",
@@ -704,7 +703,7 @@
   "manager": "マネージャー",
   "manual": "手動",
   "manualRequested": "手動診断がリクエストされました",
-  "manualResults": "Manual Results",
+  "manualScanResults": "Manual Scan Results",
   "manualScan": "手動診断",
   "manualSettings": "Manual Settings",
   "markAnalysis": "Mark Analysis",
@@ -851,7 +850,7 @@
       "scanInProgressDescription": "The file is currently being assessed by our security researchers.",
       "requestSubmittedDescription": "Manual Scan for this file has been requested.",
       "resultsDescription": "Here are the data from this particular Manual Scan.",
-      "viewResultsInTab": "View the results in <strong>\"Manual Results Tab\"</strong>"
+      "viewResultsInTab": "View the results in <strong>Manual Results Tab</strong>"
     },
     "rescan": {
       "title": "Restart Static Scan",

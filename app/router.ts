@@ -168,7 +168,7 @@ Router.map(function () {
 
           this.route('dynamic-scan', function () {
             this.route('manual');
-            this.route('automated');
+            // this.route('automated');
             this.route('results');
           });
         });

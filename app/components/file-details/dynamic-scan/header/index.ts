@@ -64,13 +64,13 @@ export default class FileDetailsDastHeader extends Component<FileDetailsDastHead
         route: 'authenticated.dashboard.file.dynamic-scan.manual',
         activeRoutes: 'authenticated.dashboard.file.dynamic-scan.manual',
       },
-      {
-        id: 'automated-dast',
-        label: this.intl.t('dastTabs.automatedDAST'),
-        route: 'authenticated.dashboard.file.dynamic-scan.automated',
-        activeRoutes: 'authenticated.dashboard.file.dynamic-scan.automated',
-        inProgress: this.isAutomatedScanRunning,
-      },
+      // {
+      //   id: 'automated-dast',
+      //   label: this.intl.t('dastTabs.automatedDAST'),
+      //   route: 'authenticated.dashboard.file.dynamic-scan.automated',
+      //   activeRoutes: 'authenticated.dashboard.file.dynamic-scan.automated',
+      //   inProgress: this.isAutomatedScanRunning,
+      // },
       {
         id: 'dast-results',
         label: this.intl.t('dastTabs.dastResults'),

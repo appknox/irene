@@ -14,6 +14,7 @@ export interface ProjectSettingsGeneralSettingsDyanmicscanAutomationSettingsSign
   Args: {
     project?: ProjectModel | null;
     profileId?: string | number;
+    featureAvailable: boolean;
   };
 }
 
