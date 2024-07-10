@@ -52,6 +52,12 @@ const ENUMS = {
     READY: 7,
     SHUTTING_DOWN: 8,
     COMPLETED: 9,
+    RUNNING: 10, // TODO: check with backend after api is ready
+  },
+
+  DYNAMIC_MODE: {
+    MANUAL: 0,
+    AUTOMATED: 1,
   },
 
   MANUAL: {

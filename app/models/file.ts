@@ -235,6 +235,7 @@ export default class FileModel extends ModelBaseMixin {
     const status = this.dynamicStatus;
     return ![
       ENUMS.DYNAMIC_STATUS.READY,
+      ENUMS.DYNAMIC_STATUS.RUNNING,
       ENUMS.DYNAMIC_STATUS.NONE,
       ENUMS.DYNAMIC_STATUS.SHUTTING_DOWN,
     ].includes(status);
@@ -250,6 +251,7 @@ export default class FileModel extends ModelBaseMixin {
       ENUMS.DYNAMIC_STATUS.LAUNCHING,
       ENUMS.DYNAMIC_STATUS.HOOKING,
       ENUMS.DYNAMIC_STATUS.READY,
+      ENUMS.DYNAMIC_STATUS.RUNNING,
       ENUMS.DYNAMIC_STATUS.SHUTTING_DOWN,
     ].includes(status);
   }
@@ -391,6 +393,13 @@ export default class FileModel extends ModelBaseMixin {
   get staticVulnerabilityCount() {
     return this.analyses.filter(
       (it) => it.hasType(ENUMS.VULNERABILITY_TYPE.STATIC) && it.isRisky
+    ).length;
+  }
+
+  @computed('analyses.@each.computedRisk')
+  get dynamicVulnerabilityCount() {
+    return this.analyses.filter(
+      (it) => it.hasType(ENUMS.VULNERABILITY_TYPE.DYNAMIC) && it.isRisky
     ).length;
   }
 

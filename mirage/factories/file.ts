@@ -6,6 +6,7 @@ import Base from './base';
 export const FILE_FACTORY_DEF = {
   uuid: faker.number.int(),
   device_token: faker.number.int(),
+  min_os_version: faker.number.int({ min: 16, max: 20 }),
   md5hash: faker.number.int(),
   sha1hash: faker.number.int(),
   report: faker.image.avatar(),

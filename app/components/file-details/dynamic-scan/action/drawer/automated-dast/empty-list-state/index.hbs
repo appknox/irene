@@ -1,0 +1,20 @@
+<AkStack
+  @direction='column'
+  @width='full'
+  @justifyContent='center'
+  @alignItems='center'
+  class='pt-3 pb-4'
+  ...attributes
+>
+  {{#let (component 'ak-svg/no-api-url-filter') as |EmptyListStateSVG|}}
+    <EmptyListStateSVG />
+  {{/let}}
+
+  <AkTypography @fontWeight='bold' class='mb-1 mt-3'>
+    {{@headerText}}
+  </AkTypography>
+
+  <AkTypography>
+    {{@subText}}
+  </AkTypography>
+</AkStack>

@@ -6,15 +6,9 @@ export default Factory.extend({
   api_scan: faker.datatype.boolean(),
   created_on: faker.date.recent().toString(),
   updated_on: faker.date.recent().toString(),
-  expires_on: faker.date.recent().toString(),
+  ended_on: faker.date.recent().toString(),
   device_type: faker.helpers.arrayElement(ENUMS.DEVICE_TYPE.BASE_VALUES),
-  dynamic_status: faker.helpers.arrayElement(ENUMS.DYNAMIC_STATUS.VALUES),
-
-  platform: faker.helpers.arrayElement([
-    ENUMS.PLATFORM.ANDROID,
-    ENUMS.PLATFORM.IOS,
-  ]),
-
+  status: faker.helpers.arrayElement(ENUMS.DYNAMIC_STATUS.VALUES),
   platform_version: faker.system.semver(),
   proxy_host: faker.internet.ip(),
   proxy_port: faker.internet.port(),

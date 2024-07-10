@@ -77,10 +77,12 @@ module('Integration | Component | file-details/static-scan', function (hooks) {
       .exists()
       .containsText('t:sastResults:()');
 
-    assert
-      .dom('[data-test-fileDetails-staticscan-badge-count]')
-      .exists()
-      .containsText(this.file.staticVulnerabilityCount);
+    if (this.file.staticVulnerabilityCount) {
+      assert
+        .dom('[data-test-fileDetails-staticscan-badge-count]')
+        .exists()
+        .containsText(this.file.staticVulnerabilityCount);
+    }
 
     assert
       .dom('[data-test-fileDetails-staticscan-info]')

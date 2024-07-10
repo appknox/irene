@@ -1,0 +1,39 @@
+.upselling-feature-root {
+  box-shadow: var(
+    --project-settings-general-settings-dynamicscan-automation-upselling-feature-box-shadow
+  );
+}
+
+.new-chip {
+  background-color: var(
+    --project-settings-general-settings-dynamicscan-automation-upselling-feature-footer-bg-color
+  ) !important;
+
+  color: var(
+    --project-settings-general-settings-dynamicscan-automation-upselling-feature-footer-color
+  ) !important;
+
+  margin-bottom: 0.57em;
+}
+
+.upgrade-note {
+  margin-top: 0.285em;
+  color: var(
+    --project-settings-general-settings-dynamicscan-automation-upselling-feature-upgrade-note-color
+  );
+}
+
+.footer {
+  background-color: var(
+    --project-settings-general-settings-dynamicscan-automation-upselling-feature-footer-bg-color
+  ) !important;
+
+  padding: 0.714em 1em;
+  margin-top: 0.714em;
+
+  .link-text {
+    color: var(
+      --project-settings-general-settings-dynamicscan-automation-upselling-feature-footer-color
+    ) !important;
+  }
+}

@@ -15,13 +15,13 @@ import { EmberRunTimer } from '@ember/runloop/types';
 import DynamicscanModal from 'irene/models/dynamicscan-old';
 import ENV from 'irene/config/environment';
 
-export interface DyanmicScanExpirySignature {
+export interface DynamicScanExpirySignature {
   Args: {
     file: FileModel;
   };
 }
 
-export default class DyanmicScanExpiryComponent extends Component<DyanmicScanExpirySignature> {
+export default class DynamicScanExpiryComponent extends Component<DynamicScanExpirySignature> {
   @service('notifications') declare notify: NotificationService;
   @service declare store: Store;
   @service declare datetime: DatetimeService;
@@ -31,7 +31,7 @@ export default class DyanmicScanExpiryComponent extends Component<DyanmicScanExp
   @tracked clockStop = false;
   @tracked extendBtnAnchorRef: HTMLElement | null = null;
 
-  constructor(owner: unknown, args: DyanmicScanExpirySignature['Args']) {
+  constructor(owner: unknown, args: DynamicScanExpirySignature['Args']) {
     super(owner, args);
 
     this.fetchDynaminscan.perform();
@@ -140,5 +140,11 @@ export default class DyanmicScanExpiryComponent extends Component<DyanmicScanExp
   @action
   handleExtendTimeMenuClose() {
     this.extendBtnAnchorRef = null;
+  }
+}
+
+declare module '@glint/environment-ember-loose/registry' {
+  export default interface Registry {
+    'DynamicScan::Expiry': typeof DynamicScanExpiryComponent;
   }
 }

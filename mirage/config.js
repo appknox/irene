@@ -437,6 +437,10 @@ function routes() {
     return {};
   });
 
+  this.get('/v2/dynamicscans/:id', () => {
+    return {};
+  });
+
   this.put('/dynamicscan/:id', () => {
     return {};
   });

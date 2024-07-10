@@ -1,0 +1,54 @@
+<AkBreadcrumbs::Container
+  data-test-fileDetails-dynamicScan-header-breadcrumbContainer
+  local-class='breadcrumb-container'
+>
+  {{#each this.breadcrumbItems as |item|}}
+    <AkBreadcrumbs::Item
+      @route={{item.route}}
+      @model={{item.model}}
+      @linkTitle={{item.linkTitle}}
+      data-test-fileDetails-dynamicScan-header-breadcrumbItem='{{item.linkTitle}}'
+    />
+  {{/each}}
+</AkBreadcrumbs::Container>
+
+<FileDetails::Summary @file={{@file}} />
+
+<AkTabs local-class='dast-results-sticky-tabs' as |Akt|>
+  {{#each this.tabs as |item|}}
+    <Akt.tabItem
+      data-test-fileDetails-dynamicScan-header='{{item.id}}-tab'
+      @id={{item.id}}
+      @route={{item.route}}
+      @currentWhen={{item.activeRoutes}}
+      @indicatorVariant='shadow'
+      @hasBadge={{if (or item.inProgress item.count) true false}}
+      @badgeBackground={{if item.count true false}}
+    >
+      <:badge>
+        {{#if item.count}}
+          <AkStack @alignItems='center'>
+            <AkIcon @iconName='bug-report' @size='small' />
+
+            <AkTypography
+              data-test-fileDetails-dynamicScan-header-badge-count
+              local-class='badge-count-text'
+              @color='inherit'
+              @tag='span'
+              @fontWeight='bold'
+            >
+              {{item.count}}
+            </AkTypography>
+          </AkStack>
+        {{/if}}
+        {{#if item.inProgress}}
+          <AkLoader @size={{15}} @thickness={{6}} />
+        {{/if}}
+      </:badge>
+
+      <:default>
+        {{item.label}}
+      </:default>
+    </Akt.tabItem>
+  {{/each}}
+</AkTabs>

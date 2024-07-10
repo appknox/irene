@@ -108,6 +108,10 @@ body {
   --box-shadow-dark: 1px 0px 8px -1px rgba(0, 0, 0, 0.3);
   --box-shadow-light: 4px 4px 20px rgba(222, 222, 222, 0.25);
 
+  // special case variable for project-settings/general-settings/dynamicscan-automation-settings/upselling-feature
+  --upselling-feature-footer-bg-color: #f7f3ff;
+  --upselling-feature-footer-color: #3e0e8c;
+
   // special case variable for severity
   --severity-critical: #d72f2f;
   --severity-high: #f98746;

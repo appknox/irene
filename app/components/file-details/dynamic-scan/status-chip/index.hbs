@@ -1,0 +1,44 @@
+{{#if @dynamicScan.isDynamicStatusError}}
+  <AkChip
+    data-test-dynamicScan-statusChip
+    @variant='semi-filled-outlined'
+    @label={{t 'errored'}}
+    @color='warn'
+  >
+    <:icon>
+      <AkIcon @iconName='warning' />
+    </:icon>
+  </AkChip>
+
+{{else if @file.isDynamicDone}}
+  <AkChip
+    data-test-dynamicScan-statusChip
+    @variant='semi-filled-outlined'
+    @label={{t 'completed'}}
+    @color='success'
+  />
+
+{{else if @dynamicScan.isDynamicStatusInProgress}}
+  <AkChip
+    data-test-dynamicScan-statusChip
+    @label={{@dynamicScan.statusText}}
+    @variant='semi-filled-outlined'
+    @color={{this.chipColor}}
+  >
+    <:icon>
+      <AkLoader
+        data-test-dynamicScan-statusChip-loader
+        @color={{this.loaderColor}}
+        @size={{13}}
+      />
+    </:icon>
+  </AkChip>
+
+{{else}}
+  <AkChip
+    data-test-dynamicScan-statusChip
+    @label={{t 'notStarted'}}
+    @variant='semi-filled-outlined'
+    @color='secondary'
+  />
+{{/if}}

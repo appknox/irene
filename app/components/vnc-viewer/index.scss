@@ -1,0 +1,14 @@
+.automated-scan-vnc-note {
+    background-color: var(--vnc-viewer-note-background);
+    color: var(--vnc-viewer-note-text-color);
+    padding: 1em;
+    margin: 6em 1em;
+    border-radius: var(--vnc-viewer-note-border-radius);
+}
+
+.automated-scan-trigger-info {
+    padding: 1em;
+    background-color: var(--vnc-viewer-info-background);
+    border-radius: var(--vnc-viewer-note-border-radius);
+    border: 1px solid var(--vnc-viewer-info-border-color);
+}
