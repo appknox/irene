@@ -13,21 +13,23 @@
     </AkTypography>
 
     <AkSelect
-      @selected={{this.selectedDevicePrefFilter}}
+      @selected={{this.selectedDevicePrefFilterKey}}
       @options={{this.devicePreferenceTypes}}
       @onChange={{this.setDevicePrefFilter}}
       @verticalPosition='auto'
       @triggerClass={{this.triggerClass}}
       @selectedItemComponent='file-details/dynamic-scan/action/drawer/device-pref-table/filter-selected-item'
       @extra={{hash
-        selectedItem=this.selectedDevicePrefFilter
+        selectedOptionLabel=(this.getSelectedFilterOptionLabel
+          this.selectedDevicePrefFilterKey
+        )
         iconName='filter-list'
       }}
       {{style width='200px'}}
       data-test-fileDetails-dynamicScanDrawer-manualDast-devicePrefTable-filterSelect
       as |dPrefFilter|
     >
-      {{dPrefFilter}}
+      {{this.getSelectedFilterOptionLabel dPrefFilter}}
     </AkSelect>
   </AkStack>
 

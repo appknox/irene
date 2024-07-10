@@ -1873,7 +1873,9 @@ body {
   --license-detail-primary-light: var(--primary-main-10);
 
   // variables for file-details/dynamic-scan/page-wrapper
-  --file-details-dynamic-scan-page-wrapper-background-color: var(--background-light);
+  --file-details-dynamic-scan-page-wrapper-background-color: var(
+    --background-light
+  );
 
   // variables for file-details/dynamic-scan/header
   --file-details-dynamic-scan-header-background-color: var(--background-light);

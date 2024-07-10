@@ -1,12 +1,12 @@
 import Component from '@glimmer/component';
 
 interface SecurityAnalysisListFilterSelectedItemArgs {
-  extra: Record<'selectedItem' | 'iconName', string>;
+  extra: Record<'selectedOptionLabel' | 'iconName', string>;
 }
 
 export default class SecurityAnalysisListFilterSelectedItemComponent extends Component<SecurityAnalysisListFilterSelectedItemArgs> {
   get selectedItem() {
-    return this.args.extra?.selectedItem;
+    return this.args.extra?.selectedOptionLabel;
   }
 
   get iconName() {

@@ -14,6 +14,15 @@ import type Store from '@ember-data/store';
 
 import styles from './index.scss';
 
+enum AvailableManualDeviceModelKeyMap {
+  ALL_AVAILABLE_DEVICES = 'all',
+  DEVICES_WITH_SIM = 'hasSim',
+  DEVICES_WITH_VPN = 'hasVpn',
+  DEVICES_WITH_LOCK = 'hasPinLock',
+}
+
+type DevicePrefFilterKey = keyof typeof AvailableManualDeviceModelKeyMap;
+
 export interface FileDetailsDynamicScanDrawerDevicePrefTableSignature {
   Args: {
     dpContext: DevicePreferenceContext;
@@ -33,15 +42,8 @@ export default class FileDetailsDynamicScanDrawerDevicePrefTableComponent extend
   @tracked offset = 0;
 
   @tracked filteredManualDevices: ProjectAvailableDeviceModel[] = [];
-  @tracked selectedDevicePrefFilter = 'All Available Device';
-
-  availableManualDeviceModelKeyMap = {
-    'All Available Device': 'all',
-    'Devices with Sim': 'hasSim',
-    'Devices with VPN': 'hasVpn',
-    'Devices with Pin Lock': 'hasPinLock',
-    'Reserved Devices': 'isReserved',
-  };
+  @tracked selectedDevicePrefFilterKey: DevicePrefFilterKey =
+    'ALL_AVAILABLE_DEVICES';
 
   get allAvailableManualDevices() {
     return this.args.allAvailableManualDevices;
@@ -86,7 +88,7 @@ export default class FileDetailsDynamicScanDrawerDevicePrefTableComponent extend
   }
 
   get showAllManualDevices() {
-    return this.selectedDevicePrefFilter === 'All Available Device';
+    return this.selectedDevicePrefFilterKey === 'ALL_AVAILABLE_DEVICES';
   }
 
   get currentDevicesInView() {
@@ -101,12 +103,23 @@ export default class FileDetailsDynamicScanDrawerDevicePrefTableComponent extend
     return data;
   }
 
+  get selectedFilterKeyLabelMap() {
+    return {
+      ALL_AVAILABLE_DEVICES: this.intl.t(
+        'modalCard.dynamicScan.allAvailableDevices'
+      ),
+      DEVICES_WITH_SIM: this.intl.t('modalCard.dynamicScan.devicesWithSim'),
+      DEVICES_WITH_VPN: this.intl.t('modalCard.dynamicScan.devicesWithVPN'),
+      DEVICES_WITH_LOCK: this.intl.t('modalCard.dynamicScan.devicesWithLock'),
+    };
+  }
+
   get devicePreferenceTypes() {
     return [
-      this.intl.t('modalCard.dynamicScan.allAvailableDevices'),
-      this.intl.t('modalCard.dynamicScan.devicesWithSim'),
-      this.intl.t('modalCard.dynamicScan.devicesWithVPN'),
-      this.intl.t('modalCard.dynamicScan.devicesWithLock'),
+      'ALL_AVAILABLE_DEVICES' as const,
+      'DEVICES_WITH_SIM' as const,
+      'DEVICES_WITH_VPN' as const,
+      'DEVICES_WITH_LOCK' as const,
     ];
   }
 
@@ -124,10 +137,12 @@ export default class FileDetailsDynamicScanDrawerDevicePrefTableComponent extend
       : this.filteredManualDevices.length;
   }
 
-  @action setDevicePrefFilter(
-    opt: keyof typeof this.availableManualDeviceModelKeyMap
-  ) {
-    this.selectedDevicePrefFilter = opt;
+  @action getSelectedFilterOptionLabel(opt: DevicePrefFilterKey) {
+    return this.selectedFilterKeyLabelMap[opt];
+  }
+
+  @action setDevicePrefFilter(opt: DevicePrefFilterKey) {
+    this.selectedDevicePrefFilterKey = opt;
 
     this.goToPage({ limit: this.limit, offset: 0 });
 
@@ -154,17 +169,15 @@ export default class FileDetailsDynamicScanDrawerDevicePrefTableComponent extend
     this.offset = offset;
   }
 
-  filterAvailableDevices = task(
-    async (filter: keyof typeof this.availableManualDeviceModelKeyMap) => {
-      const modelFilterKey = this.availableManualDeviceModelKeyMap[
-        filter
-      ] as keyof ProjectAvailableDeviceModel;
+  filterAvailableDevices = task(async (filterkey: DevicePrefFilterKey) => {
+    const modelFilterKey = AvailableManualDeviceModelKeyMap[
+      filterkey
+    ] as keyof ProjectAvailableDeviceModel;
 
-      this.filteredManualDevices = this.allAvailableManualDevices.filter(
-        (dev) => filter === 'All Available Device' || dev[modelFilterKey]
-      );
-    }
-  );
+    this.filteredManualDevices = this.allAvailableManualDevices.filter(
+      (dev) => filterkey === 'ALL_AVAILABLE_DEVICES' || dev[modelFilterKey]
+    );
+  });
 }
 
 declare module '@glint/environment-ember-loose/registry' {
