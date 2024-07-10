@@ -1,4 +1,4 @@
-<ProjectPreferences::Provider
+<ProjectPreferencesOld::Provider
   @profileId={{this.profileId}}
   @platform={{this.projectPlatform}}
   @project={{@file.project}}
@@ -75,7 +75,7 @@
         {{/if}}
 
         <div class='mt-3'>
-          <ProjectPreferences::DevicePreference @dpContext={{dpContext}} />
+          <ProjectPreferencesOld::DevicePreference @dpContext={{dpContext}} />
         </div>
 
         {{#unless @file.showScheduleAutomatedDynamicScan}}
@@ -214,4 +214,4 @@
       </AkStack>
     </:footer>
   </AkModal>
-</ProjectPreferences::Provider>
+</ProjectPreferencesOld::Provider>

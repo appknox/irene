@@ -30,7 +30,7 @@
               @indicatorVariant='shadow'
               @buttonVariant={{true}}
               @isActive={{true}}
-              @hasBadge={{true}}
+              @hasBadge={{if @file.staticVulnerabilityCount true false}}
             >
               <:badge>
                 <AkStack @alignItems='center'>

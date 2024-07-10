@@ -1,0 +1,11 @@
+{{#each (array 0 1) as |loader|}}
+  <AkStack
+    class='px-3 {{if (eq loader 0) "py-2" "pb-2"}}'
+    @spacing='1'
+    @alignItems='center'
+  >
+    <AkSkeleton @width='16px' @height='16px' />
+
+    <AkSkeleton @width='100px' @height='16px' />
+  </AkStack>
+{{/each}}

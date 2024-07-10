@@ -1,0 +1,18 @@
+.dynamic-scan-modal {
+  height: fit-content;
+
+  .dynamic-scan-modal-body {
+    width: 650px;
+    min-height: calc(100vh - 120px);
+    height: fit-content;
+  }
+
+  .dynamic-scan-modal-cta {
+    z-index: 10;
+    position: sticky;
+    bottom: 0;
+    border-top: 1px solid var(--file-details-dynamic-scan-drawer-border-color);
+    background-color: var(--file-details-dynamic-scan-drawer-background-main);
+    box-shadow: var(--file-details-dynamic-scan-drawer-cta-box-shadow);
+  }
+}

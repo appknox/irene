@@ -1,0 +1,30 @@
+.scan-modal-body-wrapper {
+  height: 100%;
+  border: 1px solid var(--file-details-dynamic-scan-drawer-border-color);
+  border-top: 0px;
+
+  .scan-modal-section {
+    header {
+      width: 100%;
+      padding-top: 0.7857em;
+      padding-bottom: 0.7857em;
+      border: 1px solid var(--file-details-dynamic-scan-drawer-border-color);
+      border-left: 0px;
+      border-right: 0px;
+      background-color: var(
+        --file-details-dynamic-scan-drawer-background-light
+      );
+    }
+  }
+}
+
+.api-url-filter-help-icon {
+  color: var(--file-details-dynamic-scan-drawer-proxy-settings-neutral-color);
+}
+
+.tooltip-content-container {
+  width: 280px;
+  padding: 0.5em;
+  box-sizing: border-box;
+  white-space: normal;
+}

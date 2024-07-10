@@ -15,7 +15,11 @@
         {{t 'proxySettingsTitle'}}
       </AkTypography>
 
-      <AkTooltip @arrow={{true}} @placement='right'>
+      <AkTooltip
+        @arrow={{true}}
+        @placement='right'
+        data-test-fileDetails-proxySettings-helpTooltip
+      >
         <:tooltipContent>
           <div
             data-test-fileDetails-proxySettings-helpTooltipContent

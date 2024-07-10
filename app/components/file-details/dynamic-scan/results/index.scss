@@ -1,0 +1,15 @@
+.dast-results-info {
+  border-width: 0px 1px;
+  border-style: solid;
+  border-color: var(--file-details-dynamic-scan-results-border-color);
+  background-color: var(--file-details-dynamic-scan-results-background-main);
+  padding: 1em;
+}
+
+.dast-results-tabs {
+  position: sticky;
+  background-color: var(--file-details-dynamic-scan-results-background-color);
+  top: 6.4em;
+  z-index: 100;
+  width: 100%;
+}

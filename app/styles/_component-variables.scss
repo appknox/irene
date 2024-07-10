@@ -1128,6 +1128,11 @@ body {
   );
   --vnc-viewer-modal-background: var(--background-main);
   --vnc-viewer-modal-text-color: var(--text-primary);
+  --vnc-viewer-note-border-radius: var(--border-radius);
+  --vnc-viewer-note-background: var(--secondary-main);
+  --vnc-viewer-note-text-color: var(--common-white);
+  --vnc-viewer-info-border-color: var(--neutral-grey-300);
+  --vnc-viewer-info-background: var(--neutral-grey-100);
 
   // variables for proxy-settings-view
   --proxy-settings-view-border-color: var(--border-color-1);
@@ -1306,6 +1311,20 @@ body {
   );
   --project-settings-general-settings-dynamicscan-automation-scenario-form-footer-box-shadow: var(
     --box-shadow-4
+  );
+
+  // variables for project-settings/general-settings/dynamicscan-automation-settings/upselling-feature
+  --project-settings-general-settings-dynamicscan-automation-upselling-feature-box-shadow: var(
+    --box-shadow-7
+  );
+  --project-settings-general-settings-dynamicscan-automation-upselling-feature-upgrade-note-color: var(
+    --neutral-grey-800
+  );
+  --project-settings-general-settings-dynamicscan-automation-upselling-feature-footer-color: var(
+    --upselling-feature-footer-color
+  );
+  --project-settings-general-settings-dynamicscan-automation-upselling-feature-footer-bg-color: var(
+    --upselling-feature-footer-bg-color
   );
 
   // variables for project-settings/general-settings/github-project
@@ -1852,4 +1871,50 @@ body {
   --license-detail-border-color: var(--border-color-1);
   --license-detail-success-light: var(--success-light);
   --license-detail-primary-light: var(--primary-main-10);
+
+  // variables for file-details/dynamic-scan/page-wrapper
+  --file-details-dynamic-scan-page-wrapper-background-color: var(--background-light);
+
+  // variables for file-details/dynamic-scan/header
+  --file-details-dynamic-scan-header-background-color: var(--background-light);
+
+  // variables for file-details/dynamic-scan/manual
+  --file-details-dynamic-scan-manual-border-color: var(--border-color-1);
+  --file-details-dynamic-scan-manual-background-main: var(--background-main);
+
+  // variables for file-details/dynamic-scan/automated
+  --file-details-dynamic-scan-automated-border-color: var(--border-color-1);
+  --file-details-dynamic-scan-automated-background-main: var(--background-main);
+  --file-details-dynamic-scan-automated-border-radius: var(--border-radius);
+  --file-details-dynamic-scan-automated-card-box-shadow: var(--box-shadow-3);
+
+  // variables for file-details/dynamic-scan/results
+  --file-details-dynamic-scan-results-border-color: var(--border-color-1);
+  --file-details-dynamic-scan-results-background-color: var(--background-light);
+  --file-details-dynamic-scan-results-background-main: var(--background-main);
+
+  // variables for file-details/dynamic-scan/drawer
+  --file-details-dynamic-scan-drawer-capability-chip-border-color: var(
+    --neutral-grey-200
+  );
+  --file-details-dynamic-scan-drawer-device-list-filter-border-color: var(
+    --neutral-grey-200
+  );
+  --file-details-dynamic-scan-drawer-device-list-filter-hover-border-color: var(
+    --neutral-grey-400
+  );
+  --file-details-dynamic-scan-drawer-proxy-settings-neutral-color: var(
+    --neutral-grey-300
+  );
+  --file-details-dynamic-scan-drawer-border-color: var(--border-color-1);
+  --file-details-dynamic-scan-drawer-background-light: var(--background-light);
+  --file-details-dynamic-scan-drawer-background-main: var(--background-main);
+  --file-details-dynamic-scan-drawer-cta-box-shadow: var(--box-shadow-4);
+
+  // variables for file-details/dynamic-scan/action/expiry
+  --dynamic-scan-action-expiry-extend-btn-background: var(--neutral-grey-500);
+  --dynamic-scan-action-expiry-extend-btn-icon-color: var(--common-white);
+  --dynamic-scan-action-expiry-container-background-color: var(
+    --neutral-grey-100
+  );
 }

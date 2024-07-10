@@ -18,4 +18,9 @@ export default Factory.extend({
       is_inherited: faker.datatype.boolean(),
     },
   }),
+
+  ds_automated_platform_version_min: () => faker.string.numeric(1),
+  ds_automated_sim_required: faker.datatype.boolean(),
+  ds_automated_vpn_required: faker.datatype.boolean(),
+  ds_automated_pin_lock_required: faker.datatype.boolean(),
 });
