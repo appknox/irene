@@ -2,9 +2,8 @@ import { inject as service } from '@ember/service';
 import Service from '@ember/service';
 import Store from '@ember-data/store';
 
-import NetworkService, { Header, RequestOptions } from './network';
+import NetworkService from './network';
 import LoggerService from './logger';
-import ENV from 'irene/config/environment';
 
 type ServerData = {
   websocket: string;
@@ -15,7 +14,7 @@ type ServerData = {
 
 type DashboardData = {
   dashboardURL: string;
-  orgDevicefarmURL: string;
+  devicefarmURL: string;
 };
 
 export default class ConfigurationService extends Service {
@@ -74,32 +73,11 @@ export default class ConfigurationService extends Service {
 
   dashboardData: DashboardData = {
     dashboardURL: '',
-    orgDevicefarmURL: '',
+    devicefarmURL: '',
   };
 
-  async getAuthHeaders(): Promise<Header> {
-    const data = this.session.data.authenticated;
-
-    if (data?.b64token) {
-      return {
-        Authorization: `Basic ${data.b64token}`,
-        'X-Product': `${ENV.product}`,
-      };
-    }
-
-    return {
-      'X-Product': `${ENV.product}`,
-    };
-  }
-
-  async fetchConfig(url: string, headers?: Header) {
-    const reqOptions: RequestOptions = {};
-
-    if (headers) {
-      reqOptions.headers = headers;
-    }
-
-    const res = await this.network.request(url, reqOptions);
+  async fetchConfig(url: string) {
+    const res = await this.network.request(url);
 
     if (res.ok) {
       return await res.json();
@@ -201,14 +179,10 @@ export default class ConfigurationService extends Service {
 
   async dashboardConfigFetch() {
     try {
-      const headers: Header = await this.getAuthHeaders();
-      const data = await this.fetchConfig(
-        this.dashboardConfigEndpoint,
-        headers
-      );
+      const data = await this.fetchConfig(this.dashboardConfigEndpoint);
 
       this.dashboardData.dashboardURL ||= data.dashboard_url;
-      this.dashboardData.orgDevicefarmURL ||= data.devicefarm_url;
+      this.dashboardData.devicefarmURL ||= data.devicefarm_url;
     } catch (error) {
       this.logger.error('Error getting dashboard configuration', error);
     }

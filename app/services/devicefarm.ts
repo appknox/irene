@@ -14,9 +14,9 @@ export default class DevicefarmService extends Service {
   get devicefarmURL(): string {
     if (
       this.session.isAuthenticated &&
-      this.configuration.dashboardData.orgDevicefarmURL
+      this.configuration.dashboardData.devicefarmURL
     ) {
-      return this.configuration.dashboardData.orgDevicefarmURL;
+      return this.configuration.dashboardData.devicefarmURL;
     }
 
     return this.configuration.serverData.devicefarmURL;
