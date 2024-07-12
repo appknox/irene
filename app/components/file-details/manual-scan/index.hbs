@@ -1,0 +1,87 @@
+<div local-class='manual-scan-root'>
+  <div local-class='manual-scan-container'>
+    <AkBreadcrumbs::Container
+      local-class='manual-scan-breadcrumbs-container'
+      data-test-fileDetails-manualScan-breadcrumbContainer
+    >
+      {{#each this.breadcrumbItems as |item|}}
+        <AkBreadcrumbs::Item
+          @route={{item.route}}
+          @model={{item.model}}
+          @linkTitle={{item.linkTitle}}
+          data-test-fileDetails-manualScan-breadcrumbItem='{{item.linkTitle}}'
+        />
+      {{/each}}
+    </AkBreadcrumbs::Container>
+
+    <FileDetails::Summary @file={{@file}} />
+
+    {{#if this.showManualScanRequestForm}}
+      <FileDetails::ManualScan::RequestForm
+        @file={{@file}}
+        @manualscan={{this.manualscan}}
+      />
+    {{else}}
+      <div class='my-3'>
+        <AkTabs local-class='manual-scan-tabs-container' as |Akt|>
+          {{#each this.tabItems as |item|}}
+            {{#unless item.hidden}}
+              <Akt.tabItem
+                @id={{item.id}}
+                @hasBadge={{item.hasBadge}}
+                @route={{item.route}}
+                @currentWhen={{item.currentWhen}}
+                @indicatorVariant='shadow'
+                data-test-fileDetails-manualScan-tabs='{{item.id}}-tab'
+              >
+                <:badge>
+                  <AkStack @alignItems='center'>
+                    <AkIcon @iconName='bug-report' @size='small' />
+
+                    <AkTypography
+                      local-class='bagde-count-text'
+                      @color='inherit'
+                      @tag='span'
+                      @fontWeight='bold'
+                    >
+                      {{item.badgeCount}}
+                    </AkTypography>
+                  </AkStack>
+                </:badge>
+
+                <:default>{{item.label}}</:default>
+              </Akt.tabItem>
+            {{/unless}}
+          {{/each}}
+        </AkTabs>
+
+        {{yield}}
+      </div>
+    {{/if}}
+  </div>
+
+  {{#if this.showManualScanRequestForm}}
+    <AkStack
+      class='px-3 py-2'
+      @alignItems='center'
+      @justifyContent='space-between'
+      local-class='manual-scan-footer'
+      data-test-fileDetails-manualScanFooter
+    >
+      <AkTypography
+        @variant='h6'
+        data-test-fileDetails-manualScanFooter-requestTitle
+      >
+        {{t 'modalCard.manual.title'}}
+      </AkTypography>
+
+      <AkButton
+        {{on 'click' (perform this.saveManualScanForm)}}
+        @loading={{this.saveManualScanForm.isRunning}}
+        data-test-fileDetails-manualScanFooter-requestSubmitBtn
+      >
+        {{t 'submit'}}
+      </AkButton>
+    </AkStack>
+  {{/if}}
+</div>

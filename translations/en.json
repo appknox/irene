@@ -659,6 +659,7 @@
   "manager": "Manager",
   "manual": "Manual",
   "manualRequested": "Manual assessment requested",
+  "manualResults": "Manual Results",
   "manualScan": "Manual Scan",
   "manualSettings": "Manual Settings",
   "markAnalysis": "Mark Analysis",
@@ -747,6 +748,7 @@
     "requestAccess": {
       "title": "Request Access",
       "description": "Trial account does not have access to this feature",
+      "helperText": "Click below to request access",
       "button": "Request Access"
     },
     "manual": {
@@ -761,7 +763,7 @@
       "appQuestion1Answer1": "Proceed with the scan & mention the features that were not scanned in the report. We will rescan it later.",
       "appQuestion1Answer2": "Halt the scan, contact us & then proceed with the complete application scan.",
       "loginRequired": "Does your application require an account to login?",
-      "enterLoginDetails": "Please enter the credentials required to login into the app <b class='bold'>(4 sets of credentials for each role)</b>",
+      "enterLoginDetails": "Please enter the credentials required to login into the app <strong>(4 sets of credentials for each role)</strong>",
       "addUserRole": "Add user role",
       "userRoles": "User roles",
       "actions": "Actions",
@@ -778,7 +780,11 @@
       "pleaseEnterVPNDetails": "Please enter VPN details",
       "basicAppInfo": "Basic App Info",
       "loginDetails": "Login Details",
-      "vpnDetails": "VPN Details"
+      "vpnDetails": "VPN Details",
+      "scanInProgressDescription": "The file is currently being assessed by our security researchers.",
+      "requestSubmittedDescription": "Manual Scan for this file has been requested.",
+      "resultsDescription": "Here are the data from this particular Manual Scan.",
+      "viewResultsInTab": "View the results in <strong>\"Manual Results Tab\"</strong>"
     },
     "rescan": {
       "title": "Restart Static Scan",
@@ -1254,6 +1260,7 @@
   "scanned": "scanned",
   "scans": "Scans",
   "scanCompleted": "scan completed",
+  "scanInProgress": "Scan in Progress",
   "scanDetails": "Scan Details",
   "scanNotCompleted": "scan not completed",
   "scanResults": "Scan Results",
@@ -1333,6 +1340,7 @@
   "storage": "Storage",
   "storageManagement": "Storage Management",
   "storeLowercase": "store",
+  "submit": "Submit",
   "submitUrl": "Submit URL",
   "subscription": "Subscription",
   "subscriptionCancelled": "Subscription Cancelled Successfully",

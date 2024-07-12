@@ -1,0 +1,14 @@
+{{#let
+  (and @model.organization.isTrial (not @model.file.isManualRequested))
+  as |isTrialAndNotRequested|
+}}
+  {{page-title
+    (if isTrialAndNotRequested (t 'modalCard.requestAccess.title') (t 'status'))
+  }}
+
+  {{#if isTrialAndNotRequested}}
+    <FileDetails::ManualScan::RequestAccess @file={{@model.file}} />
+  {{else}}
+    <FileDetails::ManualScan::ProgressStatus @file={{@model.file}} />
+  {{/if}}
+{{/let}}

@@ -1,0 +1,52 @@
+<AkStack
+  data-test-fileDetails-manualScan-requestAccess-container
+  @justifyContent='center'
+  class='mt-7'
+>
+  <div local-class='manual-scan-status-card'>
+    <AkStack @direction='column' @alignItems='center' @justifyContent='center'>
+      <AkStack
+        @direction='column'
+        @alignItems='center'
+        @width='full'
+        class='p-3'
+      >
+        <AkSvg::NoApisCaptured
+          data-test-fileDetails-manualScan-requestAccess-svg
+          class='mt-3'
+        />
+
+        <AkStack
+          class='mt-3'
+          @direction='column'
+          @alignItems='center'
+          @spacing='1.5'
+        >
+          <AkTypography
+            data-test-fileDetails-manualScan-requestAccess-title
+            @align='center'
+            @variant='h5'
+          >
+            {{t 'modalCard.requestAccess.description'}}
+          </AkTypography>
+
+          <AkTypography
+            data-test-fileDetails-manualScan-requestAccess-description
+            @align='center'
+          >
+            {{t 'modalCard.requestAccess.helperText'}}
+          </AkTypography>
+        </AkStack>
+      </AkStack>
+
+      <AkButton
+        data-test-fileDetails-manualScan-requestAccess-requestBtn
+        {{on 'click' (perform this.requestManualScanAccess)}}
+        class='mt-1 mb-3'
+        @loading={{this.requestManualScanAccess.isRunning}}
+      >
+        {{t 'modalCard.requestAccess.title'}}
+      </AkButton>
+    </AkStack>
+  </div>
+</AkStack>

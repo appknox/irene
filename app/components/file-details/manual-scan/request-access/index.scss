@@ -1,0 +1,9 @@
+.manual-scan-status-card {
+  width: 500px;
+  background-color: var(
+    --file-details-manual-scan-request-access-card-background
+  );
+  box-shadow: var(--file-details-manual-scan-request-access-card-box-shadow);
+  border-radius: var(--file-details-manual-scan-request-access-border-radius);
+  box-sizing: border-box;
+}
