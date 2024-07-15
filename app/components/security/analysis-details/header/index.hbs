@@ -1,0 +1,98 @@
+<AkStack
+  @alignItems='center'
+  @justifyContent='space-between'
+  @width='full'
+  local-class='analysis-details-header-section'
+  class='p-2 my-2'
+  data-test-securityAnalysisDetails-header-container
+>
+  <AkStack @alignItems='center' @spacing='1.5'>
+    <AkStack
+      @direction='column'
+      @spacing='0.5'
+      data-test-securityAnalysisDetailsHeader-analysisInfoAndHeaderActions
+    >
+      <AkTypography @variant='h4'>
+        {{this.analysis.id}}
+        |
+        {{this.analysis.vulnerability.name}}
+      </AkTypography>
+
+      <AkTypography @color='textSecondary'>
+        {{this.analysis.file.name}}
+      </AkTypography>
+    </AkStack>
+  </AkStack>
+
+  <AkStack @alignItems='stretch' @spacing='1.5'>
+    {{#unless this.analysis.isPassed}}
+      <AkButton
+        @variant='outlined'
+        @color='neutral'
+        local-class='mark-as-passed-button'
+        {{on 'click' this.openMarkPassedConfirmBox}}
+        data-test-securityAnalysisDetailsHeader-markAsPassedBtn
+      >
+        <:leftIcon>
+          <AkIcon @color='success' @iconName='check' />
+        </:leftIcon>
+
+        <:default>
+          Mark as Passed
+        </:default>
+      </AkButton>
+    {{/unless}}
+
+    <AkButton
+      @tag='a'
+      href={{this.ireneFilePath}}
+      target='_blank'
+      rel='noopener noreferrer'
+      data-test-securityAnalysisDetailsHeader-visitDashboardButton
+    >
+      Visit Dashboard
+    </AkButton>
+  </AkStack>
+</AkStack>
+
+<AkStack
+  @width='full'
+  @direction='column'
+  local-class='analysis-details-header-section'
+  class='p-2'
+>
+  <AkStack
+    @direction='column'
+    class='mb-2'
+    data-test-securityAnalysisDetailsHeader-analysisStatusInfoText
+  >
+    <AkTypography @variant='h5'>
+      Analysis Status
+    </AkTypography>
+
+    <AkTypography @variant='body2' @color='textSecondary'>
+      Changing the status here will change the current status for this analysis
+      in the file page.
+    </AkTypography>
+  </AkStack>
+
+  <AkSelect
+    @placeholder='Select Status'
+    @selected={{this.analysisStatus}}
+    @options={{this.statuses}}
+    @onChange={{this.selectStatus}}
+    {{style width='160px'}}
+    data-test-securityAnalysisDetailsHeader-analysisStatusSelector
+    as |status|
+  >
+    {{analysis-status status}}
+  </AkSelect>
+</AkStack>
+
+<ConfirmBox
+  @isActive={{this.showMarkPassedConfirmBox}}
+  @title='Are you sure you want to mark this analysis as passed?'
+  @disabled={{this.markAsPassed.isRunning}}
+  @confirmAction={{this.triggerMarkAsPassed}}
+  @cancelAction={{this.closeMarkPassedConfirmBox}}
+/>

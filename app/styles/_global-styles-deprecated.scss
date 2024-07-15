@@ -3,29 +3,6 @@ $color-table: #565d66;
 $sidebar-bg: #424651;
 $color-lightgray: #f7f7f7;
 
-$risk-names: (
-  warning: (
-    $warning,
-    $warning-invert,
-  ),
-  info: (
-    $info,
-    $info-invert,
-  ),
-  danger: (
-    $danger,
-    $danger-invert,
-  ),
-  critical: (
-    $critical,
-    $critical-invert,
-  ),
-  success: (
-    $success,
-    $success-invert,
-  ),
-) !default;
-
 .bold,
 strong {
   font-weight: bold;
@@ -3104,30 +3081,6 @@ button.delete-button {
   }
 }
 
-.colored-box {
-  margin: auto;
-  cursor: pointer;
-  width: 90px;
-  border-radius: 5px;
-
-  @each $name, $pair in $risk-names {
-    &.is-#{$name} {
-      background-color: nth($pair, 1);
-      border: 4px solid nth($pair, 1);
-      color: $white;
-    }
-  }
-
-  &.is-progress {
-    color: $default;
-  }
-
-  &.is-error {
-    background: $primary;
-    color: $white;
-  }
-}
-
 .vuln-header {
   .scan-tag,
   .owasp-tag {
@@ -4433,61 +4386,6 @@ $login-button-width: 100%;
     color: darken($red, 20%);
   }
   // attachments
-}
-
-$attachment-icon-width: 4em;
-
-.attachment {
-  position: relative;
-  display: flex;
-  align-items: center;
-  background: #f5f5f5;
-  color: $text;
-  margin-bottom: 1em;
-
-  &:hover,
-  &:focus,
-  &:active {
-    color: $primary;
-  }
-
-  &::before {
-    content: attr(data-type);
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-    font-size: 0.8em;
-    font-weight: bold;
-    width: $attachment-icon-width;
-    height: $attachment-icon-width / 1.4;
-    text-align: center;
-    background: $grey;
-    color: white;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-
-  @each $extn, $color in $extensions-list {
-    &[data-type='#{$extn}'] {
-      &::before {
-        background: $color;
-      }
-    }
-  }
-
-  &-label {
-    max-width: 35em;
-    display: inline-block;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-    margin-left: 0.5em;
-  }
-
-  &-icon {
-    position: absolute;
-    right: 1em;
-  }
 }
 
 .signup-container {

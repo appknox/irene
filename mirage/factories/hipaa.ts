@@ -5,7 +5,11 @@ export default Factory.extend({
   code(i) {
     return `hipaa${i}`;
   },
-  title: faker.lorem.sentence(),
+
+  title() {
+    return faker.lorem.sentence();
+  },
+
   safeguard: faker.lorem.word(),
 
   standards() {

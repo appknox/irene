@@ -6,5 +6,7 @@ export default Factory.extend({
     return `mstg${i}`;
   },
 
-  title: faker.lorem.sentence(),
+  title() {
+    return faker.lorem.sentence();
+  },
 });

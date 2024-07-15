@@ -1,0 +1,42 @@
+<AkTypography
+  @variant='h5'
+  data-test-securityAnalysisDetails-regulatoryCategories-header
+>
+  Regulatory Categories
+</AkTypography>
+
+<AkDivider @color='dark' class='my-2' />
+
+{{#each this.regulatoryCategories as |cat|}}
+  {{#unless cat.hidden}}
+    <AkStack
+      @direction='column'
+      @spacing='1'
+      @width='full'
+      data-test-securityAnalysisDetails-regulatoryCategories='{{cat.key}}'
+    >
+      <AkTypography
+        @variant='h6'
+        @fontWeight='regular'
+        data-test-securityAnalysisDetails-regulatorySection-title
+      >
+        {{cat.title}}
+      </AkTypography>
+
+      <AkSelect
+        @placeholder='Select OWASP Categories'
+        @selected={{cat.selected}}
+        @options={{cat.options}}
+        @onChange={{cat.onChange}}
+        @multiple={{true}}
+        class='w-full'
+        data-test-securityAnalysisDetails-regulatoryCategories-select
+        as |key|
+      >
+        {{this.getCategoryOptionLabel key cat.labelKeys}}
+      </AkSelect>
+    </AkStack>
+
+    <AkDivider @color='dark' class='my-2' />
+  {{/unless}}
+{{/each}}

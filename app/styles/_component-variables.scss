@@ -1437,4 +1437,62 @@ body {
   --file-details-static-scan-background-main: var(--background-main);
   --file-details-static-scan-primary-light: var(--primary-light);
   --file-details-static-scan-text-primary: var(--text-primary);
+
+  // variables for security/analysis-details/index
+  --security-analysis-details-background-color: var(--background-main);
+  --security-analysis-details-border-color: var(--border-color-1);
+
+  // variables for security/analysis-details/header
+  --security-analysis-details-header-background-color: var(--background-main);
+  --security-analysis-details-header-border-color: var(--border-color-1);
+  --security-analysis-details-header-marked-as-passed-background-color: var(
+    --success-main
+  );
+  --security-analysis-details-header-marked-as-passed-border-color: var(
+    --success-main
+  );
+  --security-analysis-details-header-marked-as-passed-color: var(
+    --common-white
+  );
+
+  // variables for security/analysis-details/cvss-metrics
+  --security-analysis-details-cvss-metrics-white-color: var(--common-white);
+  --security-analysis-details-cvss-metrics-risk-medium-color: var(
+    --risk-medium
+  );
+  --security-analysis-details-cvss-metrics-risk-low-color: var(--risk-low);
+  --security-analysis-details-cvss-metrics-risk-high-color: var(--risk-high);
+  --security-analysis-details-cvss-metrics-risk-critical-color: var(
+    --risk-critical
+  );
+  --security-analysis-details-cvss-metrics-risk-passed-color: var(
+    --risk-passed
+  );
+  --security-analysis-details-cvss-metrics-risk-error-color: var(
+    --primary-main
+  );
+  --security-analysis-details-cvss-metrics-progress-color: var(--risk-untested);
+  --security-analysis-details-cvss-metrics-progress-border-color: var(
+    --input-border-color
+  );
+
+  // variables for security/analysis-details/footer
+  --security-analysis-details-footer-white-background-color: var(
+    --common-white
+  );
+  --security-analysis-details-footer-cta-border-color: var(--neutral-grey-300);
+  --security-analysis-details-footer-cta-box-shadow: var(--box-shadow-6);
+
+  // variables for security/analysis-details/attachments
+  --security-analysis-details-attachments-list-box-shadow: var(--box-shadow-7);
+  --security-analysis-details-attachments-list-border-radius: var(
+    --border-radius
+  );
+  --security-analysis-details-attachments-list-border-color: var(
+    --border-color-1
+  );
+  --security-analysis-details-attachments-type-background-color: var(
+    --text-default
+  );
+  --security-analysis-details-attachments-type-text-color: var(--common-white);
 }

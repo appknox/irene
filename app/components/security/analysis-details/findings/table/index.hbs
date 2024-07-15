@@ -1,0 +1,20 @@
+<AkTable @dense={{true}} as |t|>
+  <t.head @columns={{this.columns}} />
+
+  <t.body @rows={{this.allFindings}} as |b|>
+    <b.row
+      data-test-securityAnalysisDetailsTable-row
+      data-test-securityAnalysisDetailsTable-rowId='{{b.rowValue.id}}'
+      as |r|
+    >
+      <r.cell>
+        {{#let (component r.columnValue.component) as |Component|}}
+          <Component
+            @finding={{r.rowValue}}
+            @openRemoveFindingConfirmBox={{@openRemoveFindingConfirmBox}}
+          />
+        {{/let}}
+      </r.cell>
+    </b.row>
+  </t.body>
+</AkTable>
