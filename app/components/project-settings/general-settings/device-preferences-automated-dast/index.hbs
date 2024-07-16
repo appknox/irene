@@ -1,0 +1,152 @@
+<ProjectPreferences::Provider
+  @profileId={{@project.activeProfileId}}
+  @platform={{@project.platform}}
+  @project={{@project}}
+  as |dpContext|
+>
+  {{#let dpContext.dsAutomatedDevicePreference as |dsAutoDevicePref|}}
+    <AkStack @width='full' @direction='column'>
+      {{#if (has-block 'title')}}
+        {{yield to='title'}}
+      {{else}}
+        <AkTypography
+          @variant='h5'
+          data-test-projectSettings-generalSettings-devicePreferenceAutomatedDast-title
+        >
+          {{t 'devicePreferencesAutomatedDast'}}
+        </AkTypography>
+      {{/if}}
+
+      <AkSelect
+        @placeholder='{{t "selectDevicePref"}}'
+        @options={{this.deviceSelectionTypes}}
+        @onChange={{dpContext.handleDsAutomatedDeviceSelection}}
+        @selected={{this.getChosenDeviceSelection
+          dsAutoDevicePref.ds_automated_device_selection
+        }}
+        local-class='device-preference-select'
+        {{style minWidth='345px'}}
+        data-test-projectSettings-generalSettings-devicePreferenceAutomatedDast-preference-select
+        as |dst|
+      >
+        {{t (ds-automated-device-pref dst.value)}}
+      </AkSelect>
+
+      {{#if
+        (eq
+          dsAutoDevicePref.ds_automated_device_selection
+          this.filterDsAutomatedDeviceCriteria
+        )
+      }}
+        <AkStack
+          @width='full'
+          @direction='column'
+          local-class='device-preference-table'
+        >
+          {{!-- <AkStack @width='full' @alignItems='center'>
+            <AkStack @width='4/12' class='ml-2'>
+              <AkTypography>{{t 'deviceType'}}</AkTypography>
+            </AkStack>
+
+            {{#if dpContext}}
+              <AkRadio::Group @groupDirection='row' as |ctx|>
+                <AkFormControlLabel @label='Phone'>
+                  <AkRadio @radioCtx={{ctx}} @value='Phone' />
+                </AkFormControlLabel>
+
+                <AkFormControlLabel @label='Tab'>
+                  <AkRadio @radioCtx={{ctx}} @value='Tab' />
+                </AkFormControlLabel>
+              </AkRadio::Group>
+            {{else}}
+
+              <AkSkeleton @width='80px' @height='18px' @variant='rectangular' />
+
+              <AkSkeleton
+                @width='80px'
+                @height='18px'
+                @variant='rectangular'
+                class='ml-2 my-1'
+              />
+            {{/if}}
+          </AkStack>
+
+          <AkDivider @color='dark' /> --}}
+
+          <AkStack
+            @width='full'
+            @alignItems='center'
+            data-test-dast-preference-criteria-table
+          >
+            <AkStack @width='4/12' class='ml-2'>
+              <AkTypography>{{t 'minOSVersion'}}</AkTypography>
+            </AkStack>
+
+            {{#if dpContext.loadingDsAutoDevicePref}}
+              <AkSkeleton @width='96px' @height='32px' @variant='rectangular' />
+            {{else}}
+              <AkSelect
+                @placeholder='{{t "selectMinOsVersion"}}'
+                @selected={{dpContext.dsAutomatedDevicePreference.ds_automated_platform_version_min}}
+                @options={{this.minOSVersionOptions}}
+                @onChange={{dpContext.handleDsAutomatedMinOSVersionSelect}}
+                local-class='version-select'
+                data-test-projectSettings-generalSettings-devicePreferenceAutomatedDast-version-select
+                as |version|
+              >
+                {{version}}
+              </AkSelect>
+            {{/if}}
+          </AkStack>
+
+          {{!-- <AkDivider @color='dark' />
+
+          <AkStack @width='full' @alignItems='center'>
+            <AkStack @width='4/12' class='ml-2'>
+              <AkTypography>{{t 'additionalCapabilities'}}</AkTypography>
+            </AkStack>
+
+            {{#if dpContext.loadingDsAutoDevicePref}}
+              <AkStack
+                @spacing='3'
+                data-test-projectSettings-generalSettings-devicePreferenceAutomatedDast-capabilities-checkbox
+              >
+                {{#let
+                  (this.getDeviceCapabilitiesOptionsData dsAutoDevicePref)
+                  as |capabilities|
+                }}
+                  {{#each capabilities as |capability|}}
+                    <AkFormControlLabel @label={{capability.label}}>
+                      <AkCheckbox
+                        @id={{capability.id}}
+                        @checked={{capability.checked}}
+                        @onChange={{dpContext.handleSelectDsAutomatedDeviceCapability}}
+                      />
+
+                    </AkFormControlLabel>
+                  {{/each}}
+                {{/let}}
+              </AkStack>
+            {{else}}
+              <AkSkeleton @width='60px' @height='18px' @variant='rectangular' />
+
+              <AkSkeleton
+                @width='60px'
+                @height='18px'
+                @variant='rectangular'
+                class='ml-2 my-1'
+              />
+
+              <AkSkeleton
+                @width='60px'
+                @height='18px'
+                @variant='rectangular'
+                class='ml-2 my-1'
+              />
+            {{/if}}
+          </AkStack> --}}
+        </AkStack>
+      {{/if}}
+    </AkStack>
+  {{/let}}
+</ProjectPreferences::Provider>

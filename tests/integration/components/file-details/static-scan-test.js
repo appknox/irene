@@ -99,6 +99,7 @@ module('Integration | Component | file-details/static-scan', function (hooks) {
     'test restart static scan',
     [true, false],
     async function (assert, isStaticDone) {
+      this.file.isActive = true;
       this.file.isStaticDone = isStaticDone;
 
       this.server.get('/v2/projects/:id', (schema, req) => {

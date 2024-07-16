@@ -7,22 +7,6 @@ export enum ProfileDynamicScanMode {
   AUTOMATED = 'Automated',
 }
 
-export enum ProfileDsManualDeviceSelection {
-  ANY_DEVICE = 0,
-  SPECIFIC_DEVICE = 1,
-}
-
-export enum ProfileDsAutomatedDeviceSelection {
-  ANY_DEVICE = 0,
-  FILTER_CRITERIA = 1,
-}
-
-export enum ProfileDsAutomatedDeviceType {
-  NO_PREFERENCE = 0,
-  PHONE_REQUIRED = 1,
-  TABLET_REQUIRED = 2,
-}
-
 export enum ProfilleCapabilitiesTranslationsMap {
   dsAutomatedSimRequired = 'sim',
   dsAutomatedVpnRequired = 'vpn',
@@ -54,7 +38,7 @@ export type SetProfileRegulatorPrefData = { value: boolean };
 
 export type ProfileDSManualDevicePrefData = {
   id: string;
-  ds_manual_device_selection: ProfileDsManualDeviceSelection;
+  ds_manual_device_selection: number;
   ds_manual_device_identifier: string;
 };
 
@@ -64,8 +48,8 @@ export type SetProfileDSManualDevicePrefData = Partial<
 
 export type ProfileDSAutomatedDevicePrefData = {
   id: string;
-  ds_automated_device_selection: ProfileDsAutomatedDeviceSelection;
-  ds_automated_device_type: ProfileDsAutomatedDeviceType;
+  ds_automated_device_selection: number;
+  ds_automated_device_type: number;
   ds_automated_device_identifier: string;
   ds_automated_platform_version_min: string;
   ds_automated_platform_version_max: string;
@@ -101,7 +85,7 @@ export default class ProfileModel extends Model {
   declare dsManualDeviceIdentifier: string;
 
   @attr
-  declare dsManualDeviceSelection: ProfileDsManualDeviceSelection;
+  declare dsManualDeviceSelection: number;
 
   // Automated Scan
   @attr('string')
@@ -126,10 +110,10 @@ export default class ProfileModel extends Model {
   declare dsAutomatedUseReservedDevice: boolean;
 
   @attr
-  declare dsAutomatedDeviceSelection: ProfileDsAutomatedDeviceSelection;
+  declare dsAutomatedDeviceSelection: number;
 
   @attr
-  declare dsAutomatedDeviceType: ProfileDsAutomatedDeviceType;
+  declare dsAutomatedDeviceType: number;
 
   @hasMany('file', { inverse: 'profile' })
   declare files: AsyncHasMany<FileModel>;

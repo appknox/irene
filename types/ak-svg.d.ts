@@ -39,6 +39,7 @@ export enum AkSvgComponentInvocationByNames {
   ScanProgress,
   ScanCompleted,
   NoApisCaptured,
+  DastAutomationUpselling,
 }
 
 export enum AkSvgComponentInvocationByPaths {

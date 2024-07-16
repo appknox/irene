@@ -1169,6 +1169,11 @@ body {
     --background-main
   );
 
+  // variables for project-settings/general-settings/device-preferences-automated-dast
+  --project-settings-general-settings-device-preferences-automated-dast-border-color: var(
+    --border-color-1
+  );
+
   // variables for project-settings/general-settings/dynamicscan-automation-settings
   --project-settings-general-settings-dynamicscan-automation-settings-box-shadow: var(
     --box-shadow-7
@@ -1495,4 +1500,10 @@ body {
     --text-default
   );
   --security-analysis-details-attachments-type-text-color: var(--common-white);
+
+  // variables for dynamicscan-automation-upselling-feature
+  --dynamicscan-automation-upselling-feature-box-shadow: var(--box-shadow-7);
+  --dynamicscan-automation-upselling-feature-text-color: var(
+    --neutral-grey-800
+  );
 }

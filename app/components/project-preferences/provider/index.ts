@@ -1,5 +1,5 @@
 // eslint-disable-next-line ember/use-ember-data-rfc-395-imports
-import DS from 'ember-data';
+import type DS from 'ember-data';
 
 import Component from '@glimmer/component';
 import { inject as service } from '@ember/service';
@@ -18,16 +18,13 @@ import type DevicePreferenceModel from 'irene/models/device-preference';
 import type ProjectAvailableDeviceModel from 'irene/models/project-available-device';
 
 import ProfileModel, {
-  type ProfileDsAutomatedDeviceSelection,
-  type ProfileDsAutomatedDeviceType,
-  type ProfileDsManualDeviceSelection,
   type SetProfileDSAutomatedDevicePrefData,
   type SetProfileDSManualDevicePrefData,
   type ProfileDSAutomatedDevicePrefData,
   type ProfileDSManualDevicePrefData,
 } from 'irene/models/profile';
 
-type ProfileDsSelectFuncHandler<T> = (option: { value: T }) => void;
+type ProfileDsSelectFuncHandler = (option: { value: number }) => void;
 
 export interface DevicePreferenceContext {
   deviceTypes: DeviceType[];
@@ -46,9 +43,12 @@ export interface DevicePreferenceContext {
   handleSelectDsManualIdentifier(id: string): void;
   handleSelectDsAutomatedDeviceCapability(event: Event, checked: boolean): void;
 
-  handleDsManualDeviceSelection: ProfileDsSelectFuncHandler<ProfileDsManualDeviceSelection>;
-  handleDsAutomatedDeviceSelection: ProfileDsSelectFuncHandler<ProfileDsAutomatedDeviceSelection>;
-  handleSelectDsAutomatedDeviceType: ProfileDsSelectFuncHandler<ProfileDsAutomatedDeviceType>;
+  handleDsManualDeviceSelection: ProfileDsSelectFuncHandler;
+  handleDsAutomatedDeviceSelection: ProfileDsSelectFuncHandler;
+  handleSelectDsAutomatedDeviceType: ProfileDsSelectFuncHandler;
+
+  loadingDsAutoDevicePref: boolean;
+  loadingDsManualDevicePref: boolean;
 }
 
 export interface ProjectPreferencesProviderSignature {
@@ -81,7 +81,13 @@ export default class ProjectPreferencesProviderComponent extends Component<Proje
   @tracked dsManualDevicePreference?: Partial<ProfileDSManualDevicePrefData>;
 
   @tracked
+  dsManualDevicePreferenceCopy?: Partial<ProfileDSManualDevicePrefData>;
+
+  @tracked
   dsAutomatedDevicePreference?: Partial<ProfileDSAutomatedDevicePrefData>;
+
+  @tracked
+  dsAutomatedDevicePreferenceCopy?: Partial<ProfileDSAutomatedDevicePrefData>;
 
   @tracked
   devices: DS.AdapterPopulatedRecordArray<ProjectAvailableDeviceModel> | null =
@@ -194,21 +200,18 @@ export default class ProjectPreferencesProviderComponent extends Component<Proje
 
   @action
   handleSelectDsManualIdentifier(id: string) {
-    this.dsManualDevicePreference = {
+    const updatedPref = {
       ...this.dsManualDevicePreference,
       ds_manual_device_identifier: id,
     };
 
-    this.updateDsManualDevicePreference.perform({
-      ...this.dsManualDevicePreference,
-      ds_manual_device_identifier: id,
-    });
+    this.dsManualDevicePreference = updatedPref;
+
+    this.updateDsManualDevicePreference.perform(updatedPref);
   }
 
   @action
-  handleDsManualDeviceSelection(opt: {
-    value: ProfileDsManualDeviceSelection;
-  }) {
+  handleDsManualDeviceSelection(opt: { value: number }) {
     const updatedDsManualDevicePreference = {
       ...this.dsManualDevicePreference,
       ds_manual_device_selection: opt.value,
@@ -226,10 +229,14 @@ export default class ProjectPreferencesProviderComponent extends Component<Proje
 
   @action
   handleDsAutomatedMinOSVersionSelect(opt: string) {
-    this.updateDsAutomatedDevicePreference.perform({
+    const updatedPref = {
       ...this.dsAutomatedDevicePreference,
       ds_automated_platform_version_min: opt,
-    });
+    };
+
+    this.dsAutomatedDevicePreference = updatedPref;
+
+    this.updateDsAutomatedDevicePreference.perform(updatedPref);
   }
 
   @action
@@ -252,19 +259,19 @@ export default class ProjectPreferencesProviderComponent extends Component<Proje
   }
 
   @action
-  handleDsAutomatedDeviceSelection(option: {
-    value: ProfileDsAutomatedDeviceSelection;
-  }) {
-    this.updateDsAutomatedDevicePreference.perform({
+  handleDsAutomatedDeviceSelection(option: { value: number }) {
+    const updatedPref = {
       ...this.dsAutomatedDevicePreference,
       ds_automated_device_selection: option.value,
-    });
+    };
+
+    this.dsAutomatedDevicePreference = updatedPref;
+
+    this.updateDsAutomatedDevicePreference.perform(updatedPref);
   }
 
   @action
-  handleSelectDsAutomatedDeviceType(option: {
-    value: ProfileDsAutomatedDeviceType;
-  }) {
+  handleSelectDsAutomatedDeviceType(option: { value: number }) {
     const isAnyDeviceSelection =
       option.value === ENUMS.DS_AUTOMATED_DEVICE_SELECTION.ANY_DEVICE;
 
@@ -304,12 +311,8 @@ export default class ProjectPreferencesProviderComponent extends Component<Proje
         await this.projectProfile?.getDsManualDevicePreference();
 
       this.dsManualDevicePreference = dsManualDevicePreference;
+      this.dsManualDevicePreferenceCopy = dsManualDevicePreference;
     } catch (error) {
-      this.dsManualDevicePreference = {
-        ...this.dsManualDevicePreference,
-        ds_manual_device_identifier: '',
-      };
-
       this.notify.error(this.intl.t('failedToUpdateDsManualDevicePref'));
     }
   });
@@ -321,7 +324,12 @@ export default class ProjectPreferencesProviderComponent extends Component<Proje
           await this.projectProfile?.setDSManualDevicePrefData(data);
 
         this.dsManualDevicePreference = dsManualDevicePreference;
+        this.dsManualDevicePreferenceCopy = dsManualDevicePreference;
+
+        this.notify.success(this.intl.t('savedPreferences'));
       } catch (error) {
+        this.dsManualDevicePreference = this.dsManualDevicePreferenceCopy;
+
         this.notify.error(this.intl.t('errorFetchingDsManualDevicePref'));
       }
     }
@@ -334,7 +342,12 @@ export default class ProjectPreferencesProviderComponent extends Component<Proje
           await this.projectProfile?.setDSAutomatedDevicePrefData(data);
 
         this.dsAutomatedDevicePreference = dsAutomatedDevicePreference;
+        this.dsAutomatedDevicePreferenceCopy = dsAutomatedDevicePreference;
+
+        this.notify.success(this.intl.t('savedPreferences'));
       } catch (error) {
+        this.dsAutomatedDevicePreference = this.dsAutomatedDevicePreferenceCopy;
+
         this.notify.error(this.intl.t('failedToUpdateDsAutomatedDevicePref'));
       }
     }
@@ -346,6 +359,7 @@ export default class ProjectPreferencesProviderComponent extends Component<Proje
         await this.projectProfile?.getDsAutomatedDevicePreference();
 
       this.dsAutomatedDevicePreference = dsAutomatedDevicePref;
+      this.dsManualDevicePreferenceCopy = dsAutomatedDevicePref;
     } catch (error) {
       this.notify.error(this.intl.t('errorFetchingDsAutomatedDevicePref'));
     }
