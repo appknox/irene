@@ -34,6 +34,19 @@ module('Acceptance | Status Route Redirect', function (hooks) {
 
     this.owner.register('service:integration', IntegrationStub);
     this.owner.register('service:websocket', WebsocketStub);
+
+    // Network stub
+    const DEVICE_FARM_URL = 'https://example-device-farm-url.appknox.com';
+
+    this.server.get('/v2/dashboard_configuration', () => {
+      return {
+        devicefarm_url: DEVICE_FARM_URL,
+      };
+    });
+
+    this.server.get(`${DEVICE_FARM_URL}/devicefarm/ping`, () => {
+      return new Response(200, {}, { ping: 'pong' });
+    });
   });
 
   test('redirects to dashboard/status route', async function (assert) {

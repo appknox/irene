@@ -13,6 +13,7 @@ import DatetimeService from 'irene/services/datetime';
 import TrialService from 'irene/services/trial';
 import IntegrationService from 'irene/services/integration';
 import OrganizationService from 'irene/services/organization';
+import ConfigurationService from 'irene/services/configuration';
 import UserModel from 'irene/models/user';
 import { CSBMap } from 'irene/router';
 import ENV from 'irene/config/environment';
@@ -30,6 +31,7 @@ export default class AuthenticatedRoute extends Route {
   @service declare store: Store;
   @service('notifications') declare notify: NotificationService;
   @service('organization') declare org: OrganizationService;
+  @service declare configuration: ConfigurationService;
 
   @service declare router: RouterService;
   @service('browser/window') declare window: Window;
@@ -54,7 +56,11 @@ export default class AuthenticatedRoute extends Route {
   async model() {
     const userId = this.session.data.authenticated.user_id;
 
-    await all([this.store.findAll('Vulnerability'), this.org.load()]);
+    await all([
+      this.store.findAll('Vulnerability'),
+      this.org.load(),
+      this.configuration.getDashboardConfig(),
+    ]);
 
     return await this.store.findRecord('user', userId);
   }

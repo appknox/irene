@@ -1,5 +1,6 @@
 import { inject as service } from '@ember/service';
 import Service from '@ember/service';
+import Store from '@ember-data/store';
 
 import NetworkService from './network';
 import LoggerService from './logger';
@@ -11,12 +12,20 @@ type ServerData = {
   urlUploadAllowed: boolean;
 };
 
+type DashboardData = {
+  dashboardURL: string;
+  devicefarmURL: string;
+};
+
 export default class ConfigurationService extends Service {
   @service declare network: NetworkService;
   @service declare logger: LoggerService;
+  @service declare store: Store;
+  @service declare session: any;
 
   frontendPromise?: Promise<void>;
   serverPromise?: Promise<void>;
+  dashboardPromise?: Promise<void>;
 
   serverConfigEndpoint = '/v2/server_configuration';
   frontendConfigEndpoint = '/v2/frontend_configuration';
@@ -60,6 +69,11 @@ export default class ConfigurationService extends Service {
     devicefarmURL: '',
     enterprise: '',
     urlUploadAllowed: false,
+  };
+
+  dashboardData: DashboardData = {
+    dashboardURL: '',
+    devicefarmURL: '',
   };
 
   async fetchConfig(url: string) {
@@ -161,5 +175,25 @@ export default class ConfigurationService extends Service {
     }
 
     return this.serverData;
+  }
+
+  async dashboardConfigFetch() {
+    try {
+      const data = await this.fetchConfig(this.dashboardConfigEndpoint);
+
+      this.dashboardData.dashboardURL ||= data.dashboard_url;
+      this.dashboardData.devicefarmURL ||= data.devicefarm_url;
+    } catch (error) {
+      this.logger.error('Error getting dashboard configuration', error);
+    }
+  }
+
+  async getDashboardConfig() {
+    if (!this.dashboardPromise && this.session.isAuthenticated) {
+      this.dashboardPromise = this.dashboardConfigFetch();
+      await this.dashboardPromise;
+    }
+
+    return this.dashboardData;
   }
 }

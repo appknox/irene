@@ -4,6 +4,7 @@ import ENV from 'irene/config/environment';
 import ConfigurationService from './configuration';
 
 export default class DevicefarmService extends Service {
+  @service declare session: any;
   @service declare ajax: any;
   @service declare configuration: ConfigurationService;
 
@@ -11,6 +12,13 @@ export default class DevicefarmService extends Service {
   websockifyEndpoint = '/websockify';
 
   get devicefarmURL(): string {
+    if (
+      this.session.isAuthenticated &&
+      this.configuration.dashboardData.devicefarmURL
+    ) {
+      return this.configuration.dashboardData.devicefarmURL;
+    }
+
     return this.configuration.serverData.devicefarmURL;
   }
 
