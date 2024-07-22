@@ -12,7 +12,7 @@ import FileModel from 'irene/models/file';
 import DatetimeService from 'irene/services/datetime';
 import { Duration } from 'dayjs/plugin/duration';
 import { EmberRunTimer } from '@ember/runloop/types';
-import DynamicscanModal from 'irene/models/dynamicscan';
+import DynamicscanModal from 'irene/models/dynamicscan-old';
 import ENV from 'irene/config/environment';
 
 export interface DyanmicScanExpirySignature {
@@ -55,7 +55,7 @@ export default class DyanmicScanExpiryComponent extends Component<DyanmicScanExp
 
   fetchDynaminscan = task(async () => {
     const id = this.args.file.id;
-    this.dynamicscan = await this.store.findRecord('dynamicscan', id);
+    this.dynamicscan = await this.store.findRecord('dynamicscan-old', id);
   });
 
   observeDeviceState() {

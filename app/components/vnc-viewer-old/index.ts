@@ -11,14 +11,14 @@ import { task } from 'ember-concurrency';
 import DevicePreferenceModel from 'irene/models/device-preference';
 import DevicefarmService from 'irene/services/devicefarm';
 
-export interface VncViewerSignature {
+export interface VncViewerOldSignature {
   Args: {
     file: FileModel;
     profileId?: number;
   };
 }
 
-export default class VncViewerComponent extends Component<VncViewerSignature> {
+export default class VncViewerOldComponent extends Component<VncViewerOldSignature> {
   @service declare intl: IntlService;
   @service declare store: Store;
   @service declare devicefarm: DevicefarmService;
@@ -29,7 +29,7 @@ export default class VncViewerComponent extends Component<VncViewerSignature> {
 
   deviceFarmPassword = ENV.deviceFarmPassword;
 
-  constructor(owner: unknown, args: VncViewerSignature['Args']) {
+  constructor(owner: unknown, args: VncViewerOldSignature['Args']) {
     super(owner, args);
 
     this.fetchDevicePreference.perform();
@@ -140,6 +140,6 @@ export default class VncViewerComponent extends Component<VncViewerSignature> {
 
 declare module '@glint/environment-ember-loose/registry' {
   export default interface Registry {
-    VncViewer: typeof VncViewerComponent;
+    VncViewerOld: typeof VncViewerOldComponent;
   }
 }

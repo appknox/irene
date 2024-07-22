@@ -113,7 +113,7 @@ module('Integration | Component | vnc-viewer', function (hooks) {
       });
 
       await render(hbs`
-        <VncViewer @file={{this.file}} @profileId={{this.activeProfileId}} />
+        <VncViewerOld @file={{this.file}} @profileId={{this.activeProfileId}} />
       `);
 
       assert
@@ -170,7 +170,7 @@ module('Integration | Component | vnc-viewer', function (hooks) {
   );
 
   test('test vnc viewer with status ready', async function (assert) {
-    this.server.create('dynamicscan', { expires_on: null });
+    this.server.create('dynamicscan-old', { expires_on: null });
 
     this.file.dynamicStatus = ENUMS.DYNAMIC_STATUS.READY;
 
@@ -189,11 +189,11 @@ module('Integration | Component | vnc-viewer', function (hooks) {
     });
 
     this.server.get('/dynamicscan/:id', (schema, req) => {
-      return schema.dynamicscans.find(`${req.params.id}`)?.toJSON();
+      return schema.dynamicscanOlds.find(`${req.params.id}`)?.toJSON();
     });
 
     await render(hbs`
-      <VncViewer @file={{this.file}} @profileId={{this.activeProfileId}} />
+      <VncViewerOld @file={{this.file}} @profileId={{this.activeProfileId}} />
     `);
 
     assert

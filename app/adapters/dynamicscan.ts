@@ -1,20 +1,14 @@
-import DynamicscanModal from 'irene/models/dynamicscan';
 import commondrf from './commondrf';
-// eslint-disable-next-line ember/use-ember-data-rfc-395-imports
-import ModelRegistry from 'ember-data/types/registries/model';
+import DynamicscanModel from '../models/dynamicscan';
 
 export default class DynamicscanAdapter extends commondrf {
-  pathForType(type: keyof ModelRegistry) {
-    return type.toString();
-  }
+  namespace = this.namespace_v2;
 
-  extendTime(snapshot: DynamicscanModal, time: number) {
+  extendTime(modelName: string, snapshot: DynamicscanModel, time: number) {
     const id = snapshot.id;
-    const modelName = DynamicscanModal.modelName;
+    const url = this.buildURL(modelName, id);
 
-    const url = this.buildURL(modelName, id) + '/extend';
-
-    return this.ajax(url, 'POST', {
+    return this.ajax(url, 'PUT', {
       data: { time },
     });
   }
