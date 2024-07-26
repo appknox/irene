@@ -109,7 +109,7 @@ module(
       );
 
       this.server.get('/dynamicscan/:id', (schema, req) => {
-        return schema.dynamicscans.find(`${req.params.id}`)?.toJSON();
+        return schema.dynamicscanOlds.find(`${req.params.id}`)?.toJSON();
       });
 
       this.server.get('/profiles/:id/device_preference', (schema, req) => {

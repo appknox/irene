@@ -77,7 +77,7 @@ module('Acceptance | file details', function (hooks) {
       status: true,
     });
 
-    this.server.create('dynamicscan', { expires_on: null });
+    this.server.create('dynamicscan-old', { expires_on: null });
 
     this.server.create('device-preference', {
       id: profile.id,
@@ -114,7 +114,7 @@ module('Acceptance | file details', function (hooks) {
     });
 
     this.server.get('/dynamicscan/:id', (schema, req) => {
-      return schema.dynamicscans.find(`${req.params.id}`)?.toJSON();
+      return schema.dynamicscanOlds.find(`${req.params.id}`)?.toJSON();
     });
 
     this.server.get('/profiles/:id/device_preference', (schema, req) => {
