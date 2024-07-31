@@ -143,6 +143,7 @@ module(
         't:hipaa:()',
         't:gdpr:()',
         't:nist:()',
+        't:sama:()',
       ];
 
       optionalRegulatoriesLabels.map((regLabel) =>
@@ -170,6 +171,10 @@ module(
             is_inherited: false,
           },
           show_nist: {
+            value: false,
+            is_inherited: false,
+          },
+          show_sama: {
             value: false,
             is_inherited: false,
           },
@@ -241,6 +246,19 @@ module(
         return profile.report_preference.show_nist;
       });
 
+      this.server.put('profiles/:id/show_sama', (schema, request) => {
+        const body = JSON.parse(request.requestBody);
+
+        const profile = schema['profiles'].find(request.params.id);
+        profile.report_preference.show_sama = {
+          value: body.value,
+          is_inherited: false,
+        };
+        profile.save();
+
+        return profile.report_preference.show_sama;
+      });
+
       await render(
         hbs`<ProjectSettings::AnalysisSettings::RegulatoryPreference @project={{this.project}}/>`
       );
@@ -275,7 +293,9 @@ module(
       const gdprInitialValue = profile.report_preference.show_gdpr.value;
       const gdprInput = gdpr.querySelector('[data-test-input]');
       assert.strictEqual(gdprInput.checked, gdprInitialValue);
+
       await click(gdprInput);
+
       assert.strictEqual(gdprInput.checked, !gdprInitialValue);
 
       const nist = this.element.querySelector(
@@ -288,7 +308,20 @@ module(
 
       await click(nistInput);
 
-      assert.strictEqual(gdprInput.checked, !nistInitialValue);
+      assert.strictEqual(nistInput.checked, !nistInitialValue);
+
+      const sama = this.element.querySelector(
+        '[data-test-projectSetting-analysisSettings-regulatoryPreferences="t:sama:()"]'
+      );
+
+      const samaInitialValue = profile.report_preference.show_sama.value;
+      const samaInput = sama.querySelector('[data-test-input]');
+
+      assert.strictEqual(samaInput.checked, samaInitialValue);
+
+      await click(samaInput);
+
+      assert.strictEqual(samaInput.checked, !samaInitialValue);
     });
 
     test('it does not toggle preference value on error', async function (assert) {
@@ -307,6 +340,10 @@ module(
             is_inherited: false,
           },
           show_nist: {
+            value: false,
+            is_inherited: false,
+          },
+          show_sama: {
             value: false,
             is_inherited: false,
           },
@@ -342,6 +379,10 @@ module(
         return new Response(400, {}, { value: ['Must be a valid boolean.'] });
       });
 
+      this.server.put('profiles/:id/show_sama', () => {
+        return new Response(400, {}, { value: ['Must be a valid boolean.'] });
+      });
+
       await render(
         hbs`<ProjectSettings::AnalysisSettings::RegulatoryPreference @project={{this.project}}/>`
       );
@@ -392,6 +433,18 @@ module(
       await click(nistInput);
 
       assert.strictEqual(nistInput.checked, nistInitialValue);
+
+      const sama = this.element.querySelector(
+        '[data-test-projectSetting-analysisSettings-regulatoryPreferences="t:sama:()"]'
+      );
+      const samaInitialValue = profile.report_preference.show_sama.value;
+      const samaInput = sama.querySelector('[data-test-input]');
+
+      assert.strictEqual(samaInput.checked, samaInitialValue);
+
+      await click(samaInput);
+
+      assert.strictEqual(samaInput.checked, samaInitialValue);
     });
 
     test('it displays overridden state with reset button if a preference is updated', async function (assert) {

@@ -24,6 +24,7 @@ import SecurityAttachmentModel from './attachment';
 import VulnerabilityModel from '../vulnerability';
 import Nistsp80053Model from '../nistsp80053';
 import Nistsp800171Model from '../nistsp800171';
+import SamaModel from '../sama';
 
 const inflector = Inflector.inflector;
 inflector.irregular('asvs', 'asvses');
@@ -122,6 +123,9 @@ export default class SecurityAnalysisModel extends Model {
 
   @hasMany('nistsp800171')
   declare nistsp800171: AsyncHasMany<Nistsp800171Model>;
+
+  @hasMany('sama')
+  declare sama: AsyncHasMany<SamaModel>;
 
   @hasMany('security/attachment')
   declare attachments: AsyncHasMany<SecurityAttachmentModel>;

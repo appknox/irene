@@ -1182,6 +1182,8 @@
   "riskOf": "Risk Of",
   "riskType": "Risk Type",
   "role": "Role",
+  "sama": "SAMA",
+  "samaExpansion": "Saudi Arabian Monetary Authority",
   "samlAuth": "SAML Authentication",
   "samlDesc": "SAML-based single sign-on (SSO) gives users access to app through an identity provider (IdP) of your choice. Get set up with ADFS, G Suite, Auth0, OneLogin, or your custom SAML 2.0 solution.",
   "sast": "SAST",

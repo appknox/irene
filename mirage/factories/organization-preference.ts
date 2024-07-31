@@ -7,5 +7,6 @@ export default Factory.extend({
     show_hipaa: faker.datatype.boolean(),
     show_gdpr: faker.datatype.boolean(),
     show_nist: faker.datatype.boolean(),
+    show_sama: faker.datatype.boolean(),
   }),
 });
