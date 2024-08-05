@@ -19,6 +19,7 @@
 
   <AkButton
     data-test-fileDetails-apiScan-actionBtn
+    @disabled={{not @file.isActive}}
     {{on 'click' this.handleStartApiScanDrawerOpen}}
   >
     <:leftIcon>

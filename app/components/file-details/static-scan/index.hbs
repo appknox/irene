@@ -58,7 +58,7 @@
             data-test-fileDetails-staticscan-restartBtn
             {{on 'click' this.handleRescanModalOpen}}
             class='px-1'
-            @disabled={{not @file.isStaticCompleted}}
+            @disabled={{this.isRescanDisabled}}
           >
             <:leftIcon>
               <AkIcon @iconName='refresh' />

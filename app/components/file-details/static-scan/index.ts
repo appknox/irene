@@ -91,6 +91,10 @@ export default class FileDetailsStaticScan extends Component<FileDetailsStaticSc
     ];
   }
 
+  get isRescanDisabled() {
+    return !this.file.isStaticCompleted || !this.file.isActive;
+  }
+
   @action
   handleRescanModalOpen() {
     this.showRescanModal = true;

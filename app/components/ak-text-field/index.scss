@@ -44,6 +44,7 @@
   display: inline-flex;
   align-items: center;
   border-radius: var(--border-radius);
+  z-index: 0;
 }
 
 .ak-text-input {

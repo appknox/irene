@@ -13,6 +13,7 @@
         @options={{this.environments}}
         @selected={{this.selectedAppEnvironment}}
         @onChange={{this.selectAppEnvironment}}
+        @disabled={{not @file.isActive}}
         as |aks|
       >
         {{t (app-environment aks.value)}}
@@ -33,6 +34,7 @@
         data-test-manualScanBasicInfo-minOSVersionInput
         @placeholder={{t 'modalCard.manual.minOSVersion'}}
         @value={{@manualscan.minOsVersion}}
+        @disabled={{not @file.isActive}}
       />
     </div>
   </div>
@@ -58,6 +60,7 @@
             @manualscan.showHaltText (t 'modalCard.manual.appQuestion1Answer2')
           )
         }}
+        @disabled={{not @file.isActive}}
         as |aks|
       >
         {{t (app-action aks.value)}}
@@ -78,6 +81,7 @@
         data-test-manualScanBasicInfo-pocNameInput
         @placeholder={{t 'name'}}
         @value={{@manualscan.contact.name}}
+        @disabled={{not @file.isActive}}
       />
 
       <AkTextField
@@ -85,6 +89,7 @@
         @formControlClass='mt-2'
         @placeholder={{t 'email'}}
         @value={{@manualscan.contact.email}}
+        @disabled={{not @file.isActive}}
       />
     </div>
   </div>
