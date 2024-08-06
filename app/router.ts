@@ -237,6 +237,10 @@ Router.map(function () {
         });
 
         this.route('organization-settings', { path: '/organization/settings' });
+
+        this.route('public-api', function () {
+          this.route('docs');
+        });
       });
     }
   );

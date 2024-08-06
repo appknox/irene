@@ -91,6 +91,7 @@
     "@typescript-eslint/parser": "^7.0.2",
     "bohemia": "^0.9.2",
     "broccoli-asset-rev": "^3.0.0",
+    "buffer": "^6.0.3",
     "concurrently": "^8.2.2",
     "cross-env": "^7.0.3",
     "cypress-visual-regression": "^5.0.0",
@@ -172,6 +173,7 @@
     "prettier": "^3.2.5",
     "qunit": "^2.20.1",
     "qunit-dom": "^3.0.0",
+    "stream-browserify": "^3.0.0",
     "stylelint": "^16.2.1",
     "stylelint-config-standard": "^36.0.0",
     "stylelint-config-standard-scss": "^13.0.0",
@@ -190,7 +192,8 @@
     "echarts": "^5.4.2",
     "ember-websockets": "^10.2.1",
     "material-icons": "^1.11.6",
-    "qrious": "^4.0.2"
+    "qrious": "^4.0.2",
+    "swagger-ui": "^5.17.14"
   },
   "overrides": {
     "ember-data-resources": {

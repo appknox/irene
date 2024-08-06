@@ -57,6 +57,10 @@
                     data-test-side-menu-item-icon
                     @iconName={{it.icon}}
                   />
+                {{else if it.customIconComponent}}
+                  {{#let (component it.customIconComponent) as |CustomIcon|}}
+                    <CustomIcon local-class='menu-item-icon' />
+                  {{/let}}
                 {{/if}}
               </li.leftIcon>
 
