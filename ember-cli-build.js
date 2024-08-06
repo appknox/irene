@@ -1,6 +1,8 @@
 'use strict';
 
 const EmberApp = require('ember-cli/lib/broccoli/ember-app');
+const webpack = require('webpack');
+
 const defaultFingerprintExtensions =
   require('broccoli-asset-rev/lib/default-options').extensions;
 
@@ -30,6 +32,7 @@ module.exports = function (defaults) {
         'node_modules/bohemia',
         'node_modules/billboard.js/dist/',
         'node_modules/material-icons/css/',
+        'node_modules/swagger-ui/dist/',
       ],
       // onlyIncluded: true,
       implementation: require('node-sass'),
@@ -60,6 +63,26 @@ module.exports = function (defaults) {
     },
     'ember-date-components': {
       includeCSS: false,
+    },
+    autoImport: {
+      webpack: {
+        // extra webpack configuration goes here
+        node: {
+          global: true,
+        },
+        plugins: [
+          new webpack.ProvidePlugin({
+            Buffer: ['buffer', 'Buffer'],
+          }),
+        ],
+        resolve: {
+          fallback: {
+            fs: false,
+            stream: require.resolve('stream-browserify'),
+            buffer: require.resolve('buffer/'),
+          },
+        },
+      },
     },
   });
 

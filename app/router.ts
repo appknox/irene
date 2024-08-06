@@ -252,6 +252,10 @@ Router.map(function () {
         this.route('service-account-create', {
           path: '/organization/settings/service-account/create',
         });
+
+        this.route('public-api', function () {
+          this.route('docs');
+        });
       });
     }
   );
