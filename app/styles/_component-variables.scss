@@ -1257,9 +1257,22 @@ body {
   --tri-state-checkbox-border-color: var(--success-main);
   --tri-state-reset-icon-bg: var(--common-white);
 
+  // variables for organization-analytics
+  --organization-analytics-background-color: var(--background-main);
+  --organization-analytics-border-radius: var(--border-radius);
+  --organization-analytics-box-shadow: var(--box-shadow-2);
+  --organization-analytics-border-color: var(--border-color-1);
+  --organization-analytics-background-color-grey: var(--neutral-grey-200);
+
   // variables for organization-analytics/app-scan-chart
   --organization-analytics-app-scan-chart-border-color: var(--border-color-1);
   --organization-analytics-app-scan-chart-border-radius: var(--border-radius);
+
+  // variables for organization-analytics/recent-issues
+  --organization-analytics-recent-issues-background-color: var(--neutral-grey-200);
+  --organization-analytics-recent-issues-box-shadow: var(--box-shadow-2);
+  --organization-analytics-recent-issues-border-radius: var(--border-radius);
+  --organization-analytics-recent-issues-border-color: var(--border-color-1);
 
   // variables for app-upload/status/details
   --app-upload-status-details-footer-background-color: var(--background-light);

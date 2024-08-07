@@ -1,67 +1,55 @@
-<div class='columns home-page box-container'>
-  <div class='column'>
-    <div class='columns'>
-      <div class='column'>
-        <OrganizationAnalytics::ScanCountChart @scanCount={{this.scanCount}} />
-      </div>
-    </div>
-  </div>
+<div local-class='analytics-root'>
+  <AkStack @width='full' class='p-2'>
+    <AkStack @width='6/12'>
+      <OrganizationAnalytics::ScanCountChart @scanCount={{this.scanCount}} />
+    </AkStack>
 
-  <div class='column'>
-    <OrganizationAnalytics::AppScanChart />
-  </div>
-</div>
+    <AkStack @width='6/12'>
+      <OrganizationAnalytics::AppScanChart />
+    </AkStack>
+  </AkStack>
 
-<div class='columns'>
-  <div class='column'>
-    <div class='main-box-container'>
-      <h5 class='box-main-heading'>
-        Overall Scan Count
-      </h5>
+  <AkDivider @color='dark' />
 
-      <div class='columns scan-list'>
-        <div class='column'>
-          <h5>Total Static Scans</h5>
-        </div>
+  <AkStack @spacing='5' @width='full' class='mt-3'>
+    <AkStack @direction='column' @width='6/12'>
+      <AkStack
+        @width='full'
+        @direction='column'
+        local-class='main-box-container'
+      >
+        <AkStack @width='full' local-class='box-main-heading'>
+          <AkTypography @variant='h5' @fontWeight='medium'>Overall Scan Count</AkTypography>
+        </AkStack>
 
-        <div class='column'>
-          <h5>{{this.scanCount.static_scan_count}}</h5>
-        </div>
-      </div>
+        <AkStack @width='full' @direction='column' class='py-1'>
+          {{#each this.scanTypes as |scanType|}}
+            <AkStack @width='full' class='p-2'>
+              <AkStack @justifyContent='center' @width='9/12'>
+                <AkTypography @variant='h5' @fontWeight='regular'>
+                  Total
+                  {{scanType.name}}
+                  Scans
+                </AkTypography>
+              </AkStack>
 
-      <div class='columns scan-list'>
-        <div class='column'>
-          <h5>Total Dynamic Scans</h5>
-        </div>
+              <AkStack @width='3/12'>
+                <AkTypography @variant='h5' @fontWeight='regular'>
+                  {{scanType.count}}
+                </AkTypography>
+              </AkStack>
+            </AkStack>
 
-        <div class='column'>
-          <h5>{{this.scanCount.dynamic_scan_count}}</h5>
-        </div>
-      </div>
+            {{#unless scanType.last}}
+              <AkDivider @color='dark' />
+            {{/unless}}
+          {{/each}}
+        </AkStack>
+      </AkStack>
+    </AkStack>
 
-      <div class='columns scan-list'>
-        <div class='column'>
-          <h5>Total API Scans</h5>
-        </div>
-
-        <div class='column'>
-          <h5>{{this.scanCount.api_scan_count}}</h5>
-        </div>
-      </div>
-
-      <div class='columns scan-list'>
-        <div class='column'>
-          <h5>Total Manual Scans</h5>
-        </div>
-
-        <div class='column'>
-          <h5>{{this.scanCount.manual_scan_count}}</h5>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <div class='column'>
-    <OrganizationAnalytics::RecentIssues />
-  </div>
+    <AkStack @width='6/12'>
+      <OrganizationAnalytics::RecentIssues />
+    </AkStack>
+  </AkStack>
 </div>
