@@ -1,0 +1,26 @@
+.main-box-container {
+    border-radius: var(--organization-analytics-recent-issues-border-radius);
+    box-shadow: var(--organization-analytics-recent-issues-box-shadow);
+    border: 1px solid var(--organization-analytics-recent-issues-border-color);
+    width: 100%;
+  
+    .box-main-heading {
+      background-color: var(--organization-analytics-recent-issues-background-color);
+      padding: 0.5em;
+      justify-content: center;
+    }
+}
+
+.box-list-container {
+    max-height: 220px;
+    overflow: scroll;
+
+    .issue-name {
+        margin: 0 !important;
+    }
+}
+
+.empty-container {
+    height: 220px;
+    width: 100%;
+}
