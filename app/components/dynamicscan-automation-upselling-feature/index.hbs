@@ -1,0 +1,44 @@
+<AkStack
+  @direction='column'
+  @width='full'
+  @alignItems='center'
+  local-class='upselling-feature-root'
+>
+  {{#if this.requestedForUpgrade}}
+    <AkSvg::ThumbsUpIcon local-class='thumbsup-icon' />
+
+    <AkTypography
+      @variant='body1'
+      @align='center'
+      class='pt-3 pb-1'
+      local-class='upselling-text-width'
+      data-test-upselling-upgrade-clicked-text
+    >
+
+      {{t 'upsellingDastAutomationWhenClicked'}}
+    </AkTypography>
+
+    <AkTypography @variant='subtitle1' @align='center' class='pt-1 pb-2'>
+      {{t 'upsellingDastAutomationWillBeContacted'}}
+    </AkTypography>
+  {{else}}
+    <AkSvg::DastAutomationUpselling />
+
+    <AkTypography
+      @variant='body2'
+      @align='center'
+      class='pt-3 pb-2'
+      local-class='upselling-text upselling-text-width'
+      data-test-upselling-text
+    >
+      {{t 'upsellingDastAutomation'}}
+    </AkTypography>
+
+    <AkButton
+      {{on 'click' (perform this.contactSupport)}}
+      data-test-upselling-upgrade-now-button
+    >
+      {{t 'upgradeNow'}}
+    </AkButton>
+  {{/if}}
+</AkStack>
