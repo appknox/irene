@@ -1,0 +1,125 @@
+<Organization::ServiceAccount::Section::Card
+  @title={{if this.isEditOrCreateView (t 'selectScope') (t 'selectedScope')}}
+  @headerColor={{if this.isEditView 'primary'}}
+  @showHeaderAction={{this.showHeaderAction}}
+  @showFooterAction={{this.isEditView}}
+>
+  <:headerAction as |ha|>
+    <AkTooltip
+      @placement='top'
+      @arrow={{true}}
+      @title='{{t "edit"}} {{t "selectedScope"}}'
+    >
+      <AkIconButton
+        data-test-serviceAccountSection-selectScope-actionBtn
+        @variant='outlined'
+        class={{ha.classes.headerActionBtn}}
+        {{on 'click' this.handleShowEditView}}
+      >
+        <AkIcon @iconName='edit' />
+      </AkIconButton>
+    </AkTooltip>
+  </:headerAction>
+
+  <:default>
+    <AkCheckboxTree
+      @treeData={{this.treeData}}
+      @expanded={{this.expanded}}
+      @checked={{this.checked}}
+      @onCheck={{this.onCheck}}
+      @onExpand={{this.onExpand}}
+    >
+      <:label as |node|>
+        <AkStack @alignItems='center' @spacing='1'>
+          {{#unless node.showCheckbox}}
+            {{#if node.checked}}
+              <AkIcon
+                data-test-serviceAccountSection-selectScope-nodeLabelIcon='checked'
+                @iconName='done'
+                @color='success'
+              />
+            {{else}}
+              <AkIcon
+                data-test-serviceAccountSection-selectScope-nodeLabelIcon='unchecked'
+                @variant='outlined'
+                @iconName='do-not-disturb-on'
+                local-class='scope-unchecked-icon'
+              />
+            {{/if}}
+          {{/unless}}
+
+          {{#if node.label}}
+            <AkTypography
+              data-test-serviceAccountSection-selectScope-nodeLabel
+              @tag='span'
+              @variant='h6'
+            >
+              {{node.label}}
+            </AkTypography>
+          {{else}}
+            {{#let (get this.dataObjectForNode node.key) as |dataObj|}}
+              <AkStack @alignItems='center' @spacing='0.5'>
+                <AkTypography
+                  data-test-serviceAccountSection-selectScope-nodeLabel
+                  @tag='span'
+                  @variant='h6'
+                >
+                  {{dataObj.scopeLabel}}:
+                </AkTypography>
+
+                <AkTypography
+                  data-test-serviceAccountSection-selectScope-nodeLabelAccessType
+                  @tag='span'
+                  @color='textSecondary'
+                >
+                  {{dataObj.accessType}}
+                </AkTypography>
+              </AkStack>
+
+              <AkTooltip @placement='right' @arrow={{true}}>
+                <:tooltipContent>
+                  <div
+                    data-test-serviceAccountSection-selectScope-nodeLabelInfoText
+                    local-class='scope-info-tooltip-content'
+                  >
+                    {{dataObj.scopeDescription}}
+                  </div>
+                </:tooltipContent>
+
+                <:default>
+                  <AkIcon
+                    data-test-serviceAccountSection-selectScope-nodeLabelInfoIcon
+                    local-class='scope-info-icon'
+                    @color='textSecondary'
+                    @iconName='info'
+                    @size='small'
+                  />
+                </:default>
+              </AkTooltip>
+            {{/let}}
+          {{/if}}
+        </AkStack>
+      </:label>
+    </AkCheckboxTree>
+  </:default>
+
+  <:footerAction>
+    <AkButton
+      data-test-serviceAccountSection-selectScope-updateBtn
+      @loading={{this.updateServiceAccount.isRunning}}
+      {{on 'click' this.handleUpdateServiceAccount}}
+    >
+      {{t 'update'}}
+    </AkButton>
+
+    <AkButton
+      data-test-serviceAccountSection-selectScope-cancelBtn
+      @variant='outlined'
+      @color='neutral'
+      @disabled={{this.updateServiceAccount.isRunning}}
+      {{on 'click' this.handleCancelEditView}}
+    >
+      {{t 'cancel'}}
+    </AkButton>
+  </:footerAction>
+</Organization::ServiceAccount::Section::Card>

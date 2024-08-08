@@ -14,6 +14,7 @@ export interface AkCheckboxTreeSignature<N extends AkTreeNodeProps> {
       node: MergeObjects<N, AkTreeNodeFlattenedProps> | undefined,
       tree: AkTreeProviderDefaultBlockProps<N>,
     ];
+    label: [node: MergeObjects<N, AkTreeNodeFlattenedProps> | undefined];
   };
 }
 
@@ -21,7 +22,9 @@ export default class AkCheckboxTreeComponent<
   N extends AkTreeNodeProps,
 > extends Component<AkCheckboxTreeSignature<N>> {
   calculatePadding(treeDepth?: number) {
-    return `${Number(treeDepth) * 1}em`;
+    const spacingFactor = treeDepth === 0 ? 1 : 1.25;
+
+    return `${(Number(treeDepth) + 1) * spacingFactor}em`;
   }
 }
 

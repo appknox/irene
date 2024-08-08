@@ -1,0 +1,17 @@
+<AkStack
+  @alignItems='center'
+  @justifyContent='center'
+  @direction='column'
+  @spacing='1'
+  class='py-7 px-4'
+>
+  <AkSvg::ProjectListEmpty data-test-serviceAccount-emptySvg />
+
+  <AkTypography @variant='h5' class='mt-4' data-test-serviceAccount-emptyTitle>
+    {{t 'serviceAccountModule.emptyTitle'}}
+  </AkTypography>
+
+  <AkTypography @align='center' data-test-serviceAccount-emptyDescription>
+    {{t 'serviceAccountModule.emptyDescription' htmlSafe=true}}
+  </AkTypography>
+</AkStack>

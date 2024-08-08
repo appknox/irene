@@ -1,0 +1,11 @@
+.app-platform-icon {
+  vertical-align: unset;
+
+  &.app-platform-icon-apple {
+    color: var(--app-platform-icon-color-ios) !important;
+  }
+
+  &.app-platform-icon-android {
+    color: var(--app-platform-icon-color-android) !important;
+  }
+}

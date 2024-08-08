@@ -1,0 +1,241 @@
+<Organization::ServiceAccount::Section::Card
+  @title='{{t "accessToken"}}'
+  @headerColor={{if this.isEditView 'primary'}}
+  @showHeaderAction={{this.showHeaderAction}}
+  @showFooterAction={{this.isEditView}}
+>
+  <:headerAction as |ha|>
+    <AkTooltip
+      @title='{{t "serviceAccountModule.refreshAccessToken"}}'
+      @arrow={{true}}
+      @placement='top'
+    >
+      <AkIconButton
+        data-test-serviceAccountSection-accessToken-actionBtn
+        @variant='outlined'
+        class={{ha.classes.headerActionBtn}}
+        {{on 'click' this.handleShowEditView}}
+      >
+        <AkIcon @iconName='refresh' />
+      </AkIconButton>
+    </AkTooltip>
+  </:headerAction>
+
+  <:default>
+    {{#if this.isEditOrCreateView}}
+      <AkTypography
+        data-test-serviceAccountSection-accessToken-createOrEditDescription
+      >
+        {{if
+          this.isEditView
+          (t 'serviceAccountModule.accessTokenEditDescription')
+          (t 'serviceAccountModule.accessTokenCreateDescription')
+        }}
+      </AkTypography>
+
+      <AkStack class='mt-3' @alignItems='center' @spacing='1.5'>
+        <AkStack @alignItems='center'>
+          <div local-class='expiry-text-input-container'>
+            <AkTextField
+              data-test-serviceAccountSection-accessToken-expiryInDaysInput
+              @disabled={{this.doesNotExpire}}
+              @value='{{this.expiryInDays}}'
+              {{on 'keyup' this.handleExpireInDaysChange}}
+            >
+              <:rightAdornment>
+                <AkStack @alignItems='center' @spacing='1'>
+                  <AkIconButton
+                    data-test-serviceAccountSection-accessToken-expiryInDaysDecrementBtn
+                    @size='small'
+                    disabled={{this.doesNotExpire}}
+                    {{on 'click' this.handleExpireInDaysDecrement}}
+                  >
+                    <AkIcon @iconName='remove' />
+                  </AkIconButton>
+
+                  <div local-class='divider' />
+
+                  <AkIconButton
+                    data-test-serviceAccountSection-accessToken-expiryInDaysIncrementBtn
+                    @size='small'
+                    disabled={{this.doesNotExpire}}
+                    {{on 'click' this.handleExpireInDaysIncrement}}
+                  >
+                    <AkIcon @iconName='add' />
+                  </AkIconButton>
+                </AkStack>
+              </:rightAdornment>
+            </AkTextField>
+          </div>
+
+          <div local-class='dashed-divider' />
+
+          <AkTypography
+            data-test-serviceAccountSection-accessToken-expiryUnitLabel
+            @tag='span'
+            @fontWeight='medium'
+            @color='secondary'
+            local-class='expiry-unit-label'
+          >
+            {{t 'days'}}
+          </AkTypography>
+        </AkStack>
+
+        <div class='ml-1' local-class='divider' />
+
+        <AkFormControlLabel
+          data-test-serviceAccountSection-accessToken-doesNotExpire
+          @label='{{t "serviceAccountModule.doesNotExpire"}}'
+        >
+          <AkCheckbox
+            data-test-serviceAccountSection-accessToken-doesNotExpireCheckbox
+            @checked={{this.doesNotExpire}}
+            @onChange={{this.handleNoExpiryChange}}
+          />
+        </AkFormControlLabel>
+      </AkStack>
+
+      <AkTypography
+        data-test-serviceAccountSection-accessToken-expiryHelperText
+        class='mt-2'
+        @color='secondary'
+        @fontWeight='medium'
+      >
+        {{if
+          this.doesNotExpire
+          (t 'serviceAccountModule.doesNotExpireHelperText')
+          (t
+            'serviceAccountModule.expiryHelperText'
+            date=this.expiryInDate
+            htmlSafe=true
+          )
+        }}
+      </AkTypography>
+    {{else}}
+      <AkStack @direction='column' @spacing='0.5'>
+        <AkTypography
+          data-test-serviceAccountSection-accessToken-accountIdLabel
+          @variant='subtitle1'
+        >
+          {{t 'accountID'}}
+        </AkTypography>
+
+        {{#if this.regenerateKey.isRunning}}
+          <AkSkeleton @width='160px' />
+        {{else}}
+          <AkTypography
+            data-test-serviceAccountSection-accessToken-accountIdValue
+          >
+            {{@serviceAccount.accessKeyId}}
+          </AkTypography>
+        {{/if}}
+      </AkStack>
+
+      <AkStack class='mt-3' @direction='column' @spacing='0.5'>
+        <AkTypography
+          @variant='subtitle1'
+          data-test-serviceAccountSection-accessToken-secretKeyLabel
+        >
+          {{t 'serviceAccountModule.secretAccountKey'}}
+        </AkTypography>
+
+        {{#if this.regenerateKey.isRunning}}
+          <AkSkeleton @width='210px' />
+        {{else}}
+          {{#if this.secretAccessKeyVisible}}
+            <AkStack @width='full' @alignItems='center' @spacing='1'>
+              <AkTypography
+                data-test-serviceAccountSection-accessToken-secretKeyValue
+                @noWrap={{true}}
+              >
+                {{this.secretAccessKey}}
+              </AkTypography>
+
+              <AkClipboard
+                @onSuccess={{this.handleCopySuccess}}
+                @onError={{this.handleCopyError}}
+                as |ac|
+              >
+                <AkIconButton
+                  data-test-serviceAccountSection-accessToken-secretKeyCopyBtn
+                  data-clipboard-text={{this.secretAccessKey}}
+                  id={{ac.triggerId}}
+                  @size='small'
+                >
+                  <AkIcon @iconName='content-copy' @color='primary' />
+                </AkIconButton>
+              </AkClipboard>
+            </AkStack>
+          {{else}}
+            <AkTypography
+              data-test-serviceAccountSection-accessToken-secretKeyMasked
+              @variant='h1'
+              {{style lineHeight='0'}}
+            >
+              ..............
+            </AkTypography>
+          {{/if}}
+
+          <AkStack
+            class={{unless this.secretAccessKeyVisible 'mt-3'}}
+            @alignItems='center'
+            @spacing='0.5'
+          >
+            <AkIcon
+              @iconName='insert-drive-file'
+              @color='primary'
+              @size='small'
+            />
+
+            <AkTypography
+              data-test-serviceAccountSection-accessToken-secretKeyHelperText
+              @variant='body2'
+              @color={{if
+                this.secretAccessKeyVisible
+                'primary'
+                'textSecondary'
+              }}
+            >
+              {{this.secretAccessKeyHelperText}}
+            </AkTypography>
+          </AkStack>
+        {{/if}}
+      </AkStack>
+
+      <AkStack class='mt-3' @direction='column' @spacing='0.5'>
+        <AkTypography
+          data-test-serviceAccountSection-accessToken-expiryLabel
+          @variant='subtitle1'
+        >
+          {{t 'expiresOn'}}
+        </AkTypography>
+
+        {{#if this.regenerateKey.isRunning}}
+          <AkSkeleton @width='225px' />
+        {{else}}
+          <AkTypography data-test-serviceAccountSection-accessToken-expiryValue>
+            {{if this.doesNotExpire (t 'noExpiry') this.expiresOn}}
+          </AkTypography>
+        {{/if}}
+      </AkStack>
+    {{/if}}
+  </:default>
+
+  <:footerAction>
+    <AkButton
+      data-test-serviceAccountSection-accessToken-regenerateBtn
+      {{on 'click' this.handleRegenerateKey}}
+    >
+      {{t 'serviceAccountModule.regenerateKey'}}
+    </AkButton>
+
+    <AkButton
+      data-test-serviceAccountSection-accessToken-cancelBtn
+      @variant='outlined'
+      @color='neutral'
+      {{on 'click' this.handleCancelEditView}}
+    >
+      {{t 'cancel'}}
+    </AkButton>
+  </:footerAction>
+</Organization::ServiceAccount::Section::Card>

@@ -1,0 +1,29 @@
+.expiry-text-input-container {
+  width: 125px;
+
+  .divider {
+    height: 16px;
+  }
+}
+
+.expiry-unit-label {
+  background-color: var(
+    --organization-service-account-section-access-token-background-color
+  );
+  padding: 0.25em 0.75em;
+  border-radius: 5px;
+}
+
+.dashed-divider {
+  width: 28px;
+  border-bottom: 1px dashed
+    var(--organization-service-account-section-access-token-border-color);
+}
+
+.divider {
+  width: 1px;
+  height: 30px;
+  background-color: var(
+    --organization-service-account-section-access-token-border-color
+  );
+}

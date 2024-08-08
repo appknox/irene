@@ -1,0 +1,19 @@
+.confirm-drawer-container {
+  width: 640px;
+  margin: 1.5em;
+  border: 1px solid
+    var(--organization-service-account-confirm-drawer-border-color);
+  border-radius: var(
+    --organization-service-account-confirm-drawer-border-radius
+  );
+  box-sizing: border-box;
+}
+
+.confirm-action-container {
+  background-color: var(
+    --organization-service-account-confirm-drawer-background-main
+  );
+  box-shadow: var(
+    --organization-service-account-confirm-drawer-action-box-shadow
+  );
+}

@@ -1,0 +1,51 @@
+.section-card-container {
+  width: 100%;
+  border: 1px solid
+    var(--organization-service-account-section-card-border-color);
+  border-radius: var(--organization-service-account-section-card-border-radius);
+  box-sizing: border-box;
+
+  .section-card-header {
+    padding: 1em 1.5em;
+
+    &.section-card-header-color-default {
+      background-color: var(
+        --organization-service-account-section-card-header-background-color
+      );
+      color: var(--organization-service-account-section-card-header-text-color);
+    }
+
+    &.section-card-header-color-primary {
+      color: var(
+        --organization-service-account-section-card-header-color-primary
+      );
+      background-color: var(
+        --organization-service-account-section-card-header-background-color-light
+      );
+    }
+
+    .header-action-btn {
+      background-color: var(
+        --organization-service-account-section-card-header-background-main
+      );
+      border: unset;
+    }
+  }
+
+  .section-card-body {
+    background-color: var(
+      --organization-service-account-section-card-header-background-main
+    );
+  }
+
+  .section-card-footer {
+    padding: 1em 1.5em;
+    background-color: var(
+      --organization-service-account-section-card-header-background-main
+    );
+    box-shadow: var(
+      --organization-service-account-section-card-header-box-shadow
+    );
+    box-sizing: border-box;
+  }
+}
