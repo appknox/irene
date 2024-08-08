@@ -717,4 +717,45 @@ module('Acceptance | file-details/api-scan', function (hooks) {
 
     assert.dom(firstRowCells[1]).hasText(analyses[0].vulnerability.get('name'));
   });
+
+  test('it disables start button for inactive files', async function (assert) {
+    this.file.update({
+      is_active: false,
+    });
+
+    this.server.get('/v2/files/:id/capturedapis', (schema, req) => {
+      const results = req.queryParams.is_active
+        ? schema.db.capturedapis.where({ is_active: true })
+        : schema.capturedapis.all().models;
+
+      return { count: results.length, previous: null, next: null, results };
+    });
+
+    this.server.put('/capturedapis/:id', (schema, req) => {
+      const data = JSON.parse(req.requestBody);
+
+      schema.db.capturedapis.update(`${req.params.id}`, {
+        is_active: data.is_active,
+      });
+
+      return schema.capturedapis.find(`${req.params.id}`)?.toJSON();
+    });
+
+    await visit(`/dashboard/file/${this.file.id}/api-scan`);
+
+    const apiEndpoints = findAll(
+      '[data-test-fileDetails-apiScan-capturedApi-endpointContainer]'
+    );
+
+    assert.strictEqual(apiEndpoints.length, 10);
+
+    assert
+      .dom(
+        '[data-test-fileDetails-apiScan-capturedApi-endpointSelectCheckbox]',
+        apiEndpoints[0]
+      )
+      .isDisabled();
+
+    assert.dom('[data-test-fileDetails-apiScan-actionBtn]').isDisabled();
+  });
 });

@@ -7,6 +7,7 @@ import type { EmberTableSort } from 'ember-table';
 
 import ENUMS from 'irene/enums';
 import type FileModel from 'irene/models/file';
+import ApiScanService from 'irene/services/api-scan';
 
 export interface FileDetailsApiScanResultsSignature {
   Args: {
@@ -16,11 +17,21 @@ export interface FileDetailsApiScanResultsSignature {
 
 export default class FileDetailsApiScanResultsComponent extends Component<FileDetailsApiScanResultsSignature> {
   @service declare intl: IntlService;
+  @service declare apiScan: ApiScanService;
 
   @tracked filterVulnerabilityType: string | number =
     ENUMS.VULNERABILITY_TYPE.API;
 
   @tracked sorts = [{ isAscending: false, valuePath: 'computedRisk' }];
+
+  constructor(
+    owner: unknown,
+    args: FileDetailsApiScanResultsSignature['Args']
+  ) {
+    super(owner, args);
+
+    this.apiScan.setFooterComponent(null, {});
+  }
 
   get tabItems() {
     return [

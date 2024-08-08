@@ -6,7 +6,7 @@
   <AkCheckbox
     @checked={{@capturedApi.isActive}}
     @onChange={{perform this.handleToggleApi}}
-    @disabled={{this.handleToggleApi.isRunning}}
+    @disabled={{or @disableToggleApi this.handleToggleApi.isRunning}}
     data-test-fileDetails-apiScan-capturedApi-endpointSelectCheckbox
   />
 

@@ -873,4 +873,72 @@ module('Acceptance | file-details/manual-scan', function (hooks) {
 
     assert.dom(firstRowCells[1]).hasText(analyses[0].vulnerability.get('name'));
   });
+
+  test('it disables manual scan submit button for inactive file', async function (assert) {
+    this.file.update({
+      is_active: false,
+    });
+
+    this.server.get('/manualscans/:id', (schema, req) => {
+      return schema.manualscans.find(`${req.params.id}`)?.toJSON();
+    });
+
+    this.server.post(
+      '/organizations/:id/request_access',
+      () => new Response(201)
+    );
+
+    await visit(`/dashboard/file/${this.file.id}/manual-scan`);
+
+    const accordions = findAll('[data-test-ak-accordion]');
+
+    assert.strictEqual(accordions.length, 4);
+
+    assert
+      .dom('[data-test-manualScanBasicInfo-minOSVersionInput]', accordions[0])
+      .isDisabled();
+
+    assert
+      .dom('[data-test-manualScanBasicInfo-pocNameInput]', accordions[0])
+      .isDisabled();
+
+    assert
+      .dom('[data-test-manualScanBasicInfo-pocEmailInput]', accordions[0])
+      .isDisabled();
+
+    await click(
+      accordions[1].querySelector('[data-test-ak-accordion-summary]')
+    );
+
+    assert
+      .dom(
+        `[data-test-manualScanLoginDetails-loginRequiredSelect] .${classes.trigger}`
+      )
+      .hasAria('disabled', 'true');
+
+    // vpn details
+    await click(
+      accordions[2].querySelector('[data-test-ak-accordion-summary]')
+    );
+
+    assert
+      .dom(
+        accordions[2].querySelector(
+          `[data-test-manualScanVpnDetails-vpnRequiredSelect]
+          .${classes.trigger}`
+        )
+      )
+      .hasAria('disabled', 'true');
+
+    // additional comments
+    await click(
+      accordions[3].querySelector('[data-test-ak-accordion-summary]')
+    );
+
+    assert.dom('[data-test-manualScan-additionalCommentInput]').isDisabled();
+
+    assert
+      .dom('[data-test-fileDetails-manualScanFooter-requestSubmitBtn]')
+      .hasAttribute('disabled');
+  });
 });

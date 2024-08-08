@@ -78,6 +78,7 @@
       <AkButton
         {{on 'click' (perform this.saveManualScanForm)}}
         @loading={{this.saveManualScanForm.isRunning}}
+        @disabled={{not @file.isActive}}
         data-test-fileDetails-manualScanFooter-requestSubmitBtn
       >
         {{t 'submit'}}

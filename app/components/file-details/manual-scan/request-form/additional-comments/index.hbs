@@ -5,5 +5,6 @@
     class='textarea-input mt-1'
     rows='5'
     @value={{@manualscan.additionalComments}}
+    disabled={{not @file.isActive}}
   />
 </div>

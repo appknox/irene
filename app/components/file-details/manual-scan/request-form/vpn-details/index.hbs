@@ -13,6 +13,7 @@
         @options={{this.vpnStatuses}}
         @selected={{@manualscan.vpnStatus}}
         @onChange={{this.handleVpnStatusChange}}
+        @disabled={{not @file.isActive}}
         as |status|
       >
         {{t status}}
@@ -31,12 +32,14 @@
           data-test-manualScanVpnDetails-vpnAddressInput
           @placeholder={{t 'modalCard.manual.vpnAddress'}}
           @value={{@manualscan.vpnDetails.address}}
+          @disabled={{not @file.isActive}}
         />
 
         <AkTextField
           data-test-manualScanVpnDetails-vpnPortInput
           @placeholder={{t 'modalCard.manual.vpnPort'}}
           @value={{@manualscan.vpnDetails.port}}
+          @disabled={{not @file.isActive}}
         />
       </AkStack>
     </div>
@@ -51,6 +54,7 @@
           data-test-manualScanVpnDetails-usernameInput
           @placeholder={{t 'username'}}
           @value={{@manualscan.vpnDetails.username}}
+          @disabled={{not @file.isActive}}
         />
 
         <AkTextField
@@ -58,6 +62,7 @@
           @type='password'
           @placeholder={{t 'password'}}
           @value={{@manualscan.vpnDetails.password}}
+          @disabled={{not @file.isActive}}
         />
       </AkStack>
     </div>

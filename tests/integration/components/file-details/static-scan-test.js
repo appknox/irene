@@ -142,4 +142,17 @@ module('Integration | Component | file-details/static-scan', function (hooks) {
       }
     }
   );
+
+  test('static scan restart button should be disabled for inactive file', async function (assert) {
+    this.file.isActive = false;
+    this.file.isStaticDone = true;
+
+    this.server.get('/v2/projects/:id', (schema, req) => {
+      return schema.projects.find(`${req.params.id}`)?.toJSON();
+    });
+
+    await render(hbs`<FileDetails::StaticScan @file={{this.file}} />`);
+
+    assert.dom('[data-test-fileDetails-staticscan-restartBtn]').isDisabled();
+  });
 });

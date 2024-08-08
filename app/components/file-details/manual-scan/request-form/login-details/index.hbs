@@ -13,6 +13,7 @@
         @options={{this.loginStatuses}}
         @selected={{@manualscan.loginStatus}}
         @onChange={{this.handleLoginStatusChange}}
+        @disabled={{not @file.isActive}}
         as |status|
       >
         {{t status}}
@@ -39,12 +40,14 @@
           data-test-manualScanLoginDetails-roleInput
           @placeholder={{t 'role'}}
           @value={{this.role}}
+          @disabled={{not @file.isActive}}
         />
 
         <AkTextField
           data-test-manualScanLoginDetails-usernameInput
           @placeholder={{t 'username'}}
           @value={{this.username}}
+          @disabled={{not @file.isActive}}
         />
 
         <AkTextField
@@ -52,6 +55,7 @@
           @type='password'
           @placeholder={{t 'password'}}
           @value={{this.password}}
+          @disabled={{not @file.isActive}}
         />
       </AkStack>
 
@@ -59,6 +63,7 @@
         data-test-manualScanLoginDetails-addRoleBtn
         @variant='outlined'
         {{on 'click' this.addUserRole}}
+        @disabled={{not @file.isActive}}
       >
         <:leftIcon>
           <AkIcon @iconName='add' />

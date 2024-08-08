@@ -7,6 +7,7 @@ export interface FileDetailsApiScanCapturedApiOverviewSignature {
   Args: {
     capturedApi: CapturedApiModel;
     toggleApi: () => Promise<void>;
+    disableToggleApi: boolean;
   };
 }
 

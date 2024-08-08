@@ -50,6 +50,7 @@
               <FileDetails::ApiScan::CapturedApis::Overview
                 @capturedApi={{ca}}
                 @toggleApi={{perform this.toggleApi ca}}
+                @disableToggleApi={{not @file.isActive}}
               />
             </div>
           {{/each}}
