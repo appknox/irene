@@ -26,6 +26,7 @@ import VulnerabilityModel from './vulnerability';
 import OwaspApi2023Model from './owaspapi2023';
 import Nistsp800171Model from './nistsp800171';
 import Nistsp80053Model from './nistsp80053';
+import SamaModel from './sama';
 
 const inflector = Inflector.inflector;
 inflector.irregular('asvs', 'asvses');
@@ -123,6 +124,9 @@ export default class AnalysisModel extends Model {
 
   @hasMany('nistsp80053')
   declare nistsp80053: AsyncHasMany<Nistsp80053Model>;
+
+  @hasMany('sama')
+  declare sama: AsyncHasMany<SamaModel>;
 
   @belongsTo('vulnerability')
   declare vulnerability: AsyncBelongsTo<VulnerabilityModel>;
@@ -271,6 +275,10 @@ export default class AnalysisModel extends Model {
 
   get showNist() {
     return this.file.get('profile')?.get('reportPreference')?.show_nist?.value;
+  }
+
+  get showSama() {
+    return this.file.get('profile')?.get('reportPreference')?.show_sama?.value;
   }
 
   get vulnerabilityTypes() {

@@ -214,6 +214,7 @@ export default class SecurityAnalysisDetailsComponent extends Component<Security
     const gdpr = this.analysisDetails?.gdpr;
     const nistsp800171 = this.analysisDetails?.nistsp800171;
     const nistsp80053 = this.analysisDetails?.nistsp80053;
+    const sama = this.analysisDetails?.sama;
 
     const status = this.analysisDetails?.status as number | { value: number };
 
@@ -248,6 +249,7 @@ export default class SecurityAnalysisDetailsComponent extends Component<Security
       findings,
       nistsp80053: nistsp80053?.map((a) => a.id),
       nistsp800171: nistsp800171?.map((a) => a.id),
+      sama: sama?.map((a) => a.id),
       overridden_risk: overriddenRisk,
       overridden_risk_comment: this.analysisDetails?.overriddenRiskComment,
       overridden_risk_to_profile: this.analysisDetails?.overriddenRiskToProfile,

@@ -23,6 +23,7 @@ import type GdprModel from 'irene/models/gdpr';
 import type Nistsp80053Model from 'irene/models/nistsp80053';
 import type Nistsp800171Model from 'irene/models/nistsp800171';
 import type IntlService from 'ember-intl/services/intl';
+import SamaModel from 'irene/models/sama';
 
 type RegulatoryCategoryOptionKeys =
   | 'owasp'
@@ -36,7 +37,8 @@ type RegulatoryCategoryOptionKeys =
   | 'cwe'
   | 'gdpr'
   | 'nistsp800171'
-  | 'nistsp80053';
+  | 'nistsp80053'
+  | 'sama';
 
 type RegulatoryCategoryModels =
   | OwaspModel
@@ -50,7 +52,8 @@ type RegulatoryCategoryModels =
   | CweModel
   | GdprModel
   | Nistsp80053Model
-  | Nistsp800171Model;
+  | Nistsp800171Model
+  | SamaModel;
 
 type RegulatoryDataModel<T> = ArrayProxy<T> | null;
 
@@ -78,6 +81,7 @@ export default class SecurityAnalysisDetailsRegulatoryCategoriesComponent extend
   @tracked gdprsData: RegulatoryDataModel<GdprModel> = null;
   @tracked nistsp80053sData: RegulatoryDataModel<Nistsp80053Model> = null;
   @tracked nistsp800171sData: RegulatoryDataModel<Nistsp800171Model> = null;
+  @tracked samaData: RegulatoryDataModel<SamaModel> = null;
 
   risks = ENUMS.RISK.CHOICES;
 
@@ -148,6 +152,10 @@ export default class SecurityAnalysisDetailsRegulatoryCategoriesComponent extend
 
   get nistsp800171s() {
     return this.nistsp800171sData?.slice() || [];
+  }
+
+  get sama() {
+    return this.samaData?.slice() || [];
   }
 
   get regulatoryCategories() {
@@ -249,6 +257,14 @@ export default class SecurityAnalysisDetailsRegulatoryCategoriesComponent extend
         options: this.nistsp80053s,
         onChange: this.onCategorySelect('nistsp80053'),
       },
+      {
+        key: 'sama',
+        title: 'Saudi Arabian Monetary Authority',
+        labelKeys: ['code', 'title'],
+        selected: this.analysis?.sama.slice(),
+        options: this.sama,
+        onChange: this.onCategorySelect('sama'),
+      },
     ] as Array<{
       key: string;
       title: string;
@@ -310,6 +326,8 @@ export default class SecurityAnalysisDetailsRegulatoryCategoriesComponent extend
       this.nistsp80053sData = await this.store.findAll('nistsp80053');
 
       this.nistsp800171sData = await this.store.findAll('nistsp800171');
+
+      this.samaData = await this.store.findAll('sama');
     } catch (error) {
       this.notifications.error(parseError(error, this.tPleaseTryAgain));
     }

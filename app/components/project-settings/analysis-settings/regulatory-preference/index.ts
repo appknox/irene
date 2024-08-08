@@ -72,6 +72,15 @@ export default class ProjectSettingsAnalysisSettingsRegulatoryPreferenceComponen
         isSaving: this.onSaveNist.isRunning,
         isOverriden: !this.profile?.reportPreference.show_nist?.is_inherited,
       },
+      {
+        label: this.intl.t('sama'),
+        title: this.intl.t('samaExpansion'),
+        value: this.profile?.reportPreference.show_sama?.value,
+        toggleHandler: this.onSaveSama,
+        resetHandler: this.onResetSama,
+        isSaving: this.onSaveSama.isRunning,
+        isOverriden: !this.profile?.reportPreference.show_sama?.is_inherited,
+      },
     ];
   }
 
@@ -140,6 +149,10 @@ export default class ProjectSettingsAnalysisSettingsRegulatoryPreferenceComponen
     await this.savePreference.perform(event, 'nist');
   });
 
+  onSaveSama = task(async (event: Event) => {
+    await this.savePreference.perform(event, 'sama');
+  });
+
   onResetPcidss = task(async () => {
     await this.resetPreference.perform('pcidss');
   });
@@ -154,6 +167,10 @@ export default class ProjectSettingsAnalysisSettingsRegulatoryPreferenceComponen
 
   onResetNist = task(async () => {
     await this.resetPreference.perform('nist');
+  });
+
+  onResetSama = task(async () => {
+    await this.resetPreference.perform('sama');
   });
 }
 

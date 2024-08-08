@@ -48,6 +48,12 @@ export default class RegulatoryPreferenceOrganizationComponent extends Component
         task: this.saveNist,
         title: this.intl.t('nistExpansion'),
       },
+      {
+        label: 'SAMA',
+        checked: Boolean(this.orgPreference?.reportPreference?.show_sama),
+        task: this.saveSama,
+        title: this.intl.t('samaExpansion'),
+      },
     ];
   }
 
@@ -80,9 +86,18 @@ export default class RegulatoryPreferenceOrganizationComponent extends Component
     await this.saveReportPreference.perform('show_nist', event);
   });
 
+  saveSama = task(async (event) => {
+    await this.saveReportPreference.perform('show_sama', event);
+  });
+
   saveReportPreference = task(
     async (
-      regulator: 'show_pcidss' | 'show_hipaa' | 'show_gdpr' | 'show_nist',
+      regulator:
+        | 'show_pcidss'
+        | 'show_hipaa'
+        | 'show_gdpr'
+        | 'show_nist'
+        | 'show_sama',
       event
     ) => {
       const preference = this.orgPreference as OrganizationPreferenceModel;

@@ -145,6 +145,14 @@ export default Factory.extend({
     },
   }),
 
+  withSama: trait({
+    afterCreate(model, server) {
+      model.update({
+        sama: server.createList('sama', 2).map((it) => it.id),
+      });
+    },
+  }),
+
   withAllRegulatory: trait({
     afterCreate(model, server) {
       model.update({
@@ -162,6 +170,7 @@ export default Factory.extend({
         gdpr: server.createList('gdpr', 2).map((it) => it.id),
         nistsp80053: server.createList('nistsp80053', 2).map((it) => it.id),
         nistsp800171: server.createList('nistsp800171', 2).map((it) => it.id),
+        sama: server.createList('sama', 2).map((it) => it.id),
       });
     },
   }),
