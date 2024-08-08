@@ -47,6 +47,7 @@ export enum AkSvgComponentInvocationByPaths {
   'pdf-report',
   'xlsx-icon',
   'csv-icon',
+  'public-api-icon',
 }
 
 type AkSvgComponent = ComponentLike<{

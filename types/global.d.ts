@@ -30,6 +30,8 @@ declare module '@glint/environment-ember-loose/registry' {
     verticalPosition?: 'above' | 'below' | 'auto';
   }
 
+  type UnknownFnWithAnyArgType = (...args: any[]) => void;
+
   export default interface Registry extends EmberTableRegistry, AkSvgRegistry {
     element: HelperLike<{
       Args: { Positional: [tagName: string] };
@@ -117,6 +119,20 @@ declare module '@glint/environment-ember-loose/registry' {
         };
       };
       Return: Array<string[]>;
+    }>;
+
+    'did-insert': ModifierLike<{
+      Args: {
+        Positional: [UnknownFnWithAnyArgType];
+      };
+      Return: void;
+    }>;
+
+    'will-destroy': ModifierLike<{
+      Args: {
+        Positional: [UnknownFnWithAnyArgType];
+      };
+      Return: void;
     }>;
 
     'breadcrumbs-container': ModifierLike<{
