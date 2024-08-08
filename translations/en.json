@@ -1038,6 +1038,7 @@
   "pay": "Pay",
   "paymentPlan": "Payment plan",
   "pcidss": "PCI-DSS",
+  "pcidss4": "PCI-DSS (v 4.0)",
   "pcidssExpansion": "Payment Card Industry Data Security Standard",
   "pdfReport": "Download Report",
   "pending": "Pending",

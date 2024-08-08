@@ -146,6 +146,14 @@ export default Factory.extend({
     },
   }),
 
+  withPcidss4: trait({
+    afterCreate(model, server) {
+      model.update({
+        pcidss4: server.createList('pcidss4', 2).map((it) => it.id),
+      });
+    },
+  }),
+
   withHipaa: trait({
     afterCreate(model, server) {
       model.update({

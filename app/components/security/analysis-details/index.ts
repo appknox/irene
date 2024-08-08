@@ -206,6 +206,7 @@ export default class SecurityAnalysisDetailsComponent extends Component<Security
     const owaspmobile2024 = this.analysisDetails?.owaspmobile2024;
     const owaspapi2023 = this.analysisDetails?.owaspapi2023;
     const pcidss = this.analysisDetails?.pcidss;
+    const pcidss4 = this.analysisDetails?.pcidss4;
     const hipaa = this.analysisDetails?.hipaa;
     const masvs = this.analysisDetails?.masvs;
     const mstg = this.analysisDetails?.mstg;
@@ -240,6 +241,7 @@ export default class SecurityAnalysisDetailsComponent extends Component<Security
       owaspmobile2024: owaspmobile2024?.map((a) => a.id),
       owaspapi2023: owaspapi2023?.map((a) => a.id),
       pcidss: pcidss?.map((a) => a.id),
+      pcidss4: pcidss4?.map((a) => a.id),
       hipaa: hipaa?.map((a) => a.id),
       mstg: mstg?.map((a) => a.id),
       masvs: masvs?.map((a) => a.id),

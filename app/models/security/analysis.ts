@@ -25,6 +25,7 @@ import VulnerabilityModel from '../vulnerability';
 import Nistsp80053Model from '../nistsp80053';
 import Nistsp800171Model from '../nistsp800171';
 import SamaModel from '../sama';
+import Pcidss4Model from '../pcidss4';
 
 const inflector = Inflector.inflector;
 inflector.irregular('asvs', 'asvses');
@@ -99,6 +100,9 @@ export default class SecurityAnalysisModel extends Model {
 
   @hasMany('pcidss')
   declare pcidss: AsyncHasMany<PcidssModel>;
+
+  @hasMany('pcidss4')
+  declare pcidss4: AsyncHasMany<Pcidss4Model>;
 
   @hasMany('mstg')
   declare mstg: AsyncHasMany<MstgModel>;
