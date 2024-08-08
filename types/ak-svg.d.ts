@@ -40,6 +40,8 @@ export enum AkSvgComponentInvocationByNames {
   ScanCompleted,
   NoApisCaptured,
   DastAutomationUpselling,
+  NoApiUrlFilter,
+  ToggleAutomatedDast,
 }
 
 export enum AkSvgComponentInvocationByPaths {
@@ -47,6 +49,7 @@ export enum AkSvgComponentInvocationByPaths {
   'pdf-report',
   'xlsx-icon',
   'csv-icon',
+  'no-api-url-filter',
 }
 
 type AkSvgComponent = ComponentLike<{

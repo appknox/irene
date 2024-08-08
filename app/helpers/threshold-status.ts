@@ -3,7 +3,7 @@ import ENUMS from 'irene/enums';
 
 type ThresholdStatusLabels = 'Low' | 'Medium' | 'High' | 'Critical';
 
-export function thresholdStatus(params: (number | string)[]) {
+function thresholdStatus(params: (number | string)[]) {
   let status: number | null = null;
 
   try {
@@ -22,4 +22,14 @@ export function thresholdStatus(params: (number | string)[]) {
   return statusLabels[status] || '';
 }
 
-export default helper(thresholdStatus);
+const ThresholdStatusHelper = helper(thresholdStatus);
+
+export { thresholdStatus };
+
+export default ThresholdStatusHelper;
+
+declare module '@glint/environment-ember-loose/registry' {
+  export default interface Registry {
+    'threshold-status': typeof ThresholdStatusHelper;
+  }
+}

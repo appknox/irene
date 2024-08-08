@@ -2,7 +2,7 @@ import { helper } from '@ember/component/helper';
 
 type Positional = [string | undefined];
 
-const fileExtension = (params: Positional) => {
+export function fileExtension(params: Positional) {
   const filename = params[0];
 
   if (!filename) {
@@ -16,7 +16,14 @@ const fileExtension = (params: Positional) => {
   }
 
   return file_parts.pop();
-};
+}
 
-export { fileExtension };
-export default helper(fileExtension);
+const FileExtensionHelper = helper(fileExtension);
+
+export default FileExtensionHelper;
+
+declare module '@glint/environment-ember-loose/registry' {
+  export default interface Registry {
+    'file-extension': typeof FileExtensionHelper;
+  }
+}

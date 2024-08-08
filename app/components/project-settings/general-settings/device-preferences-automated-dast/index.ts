@@ -33,7 +33,7 @@ export default class ProjectSettingsGeneralSettingsDevicePreferencesAutomatedDas
     return this.isIOSApp ? ['13', '14', '15', '16'] : ['9', '10', '12', '13'];
   }
 
-  @action getChosenDeviceSelection(selectedDevice?: number) {
+  @action getChosenDeviceSelection(selectedDevice?: string | number) {
     return this.deviceSelectionTypes.find(
       (st) => String(st.value) === String(selectedDevice)
     );

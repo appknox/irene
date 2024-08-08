@@ -28,10 +28,12 @@ export function riskText(params: [Risk | string | number]) {
   }
 }
 
-export default helper(riskText);
+const RiskTextHelper = helper(riskText);
+
+export default RiskTextHelper;
 
 declare module '@glint/environment-ember-loose/registry' {
   export default interface Registry {
-    'risk-text': typeof riskText;
+    'risk-text': typeof RiskTextHelper;
   }
 }

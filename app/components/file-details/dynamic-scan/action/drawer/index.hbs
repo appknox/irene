@@ -1,0 +1,118 @@
+<AkDrawer
+  @anchor='right'
+  @open={{true}}
+  @disableBackdropClick={{true}}
+  data-test-cy='dynamicScanModal'
+  @onClose={{@onClose}}
+  as |dr|
+>
+  <AkStack
+    @direction='column'
+    @width='full'
+    local-class='dynamic-scan-modal'
+    data-test-fileDetails-dynamicScanDrawer-drawerContainer
+  >
+    <AkAppbar
+      @position='sticky'
+      @justifyContent='space-between'
+      class='px-3'
+      as |ab|
+    >
+      <AkTypography
+        @color='inherit'
+        @variant='h5'
+        @fontWeight='medium'
+        data-test-fileDetails-dynamicScanDrawer-drawerContainer-title
+      >
+        {{t
+          (if @isAutomatedScan 'dastTabs.automatedDAST' 'dastTabs.manualDAST')
+        }}
+      </AkTypography>
+
+      <AkIconButton
+        disabled={{this.disableCloseDastModal}}
+        {{on 'click' dr.closeHandler}}
+        class={{ab.classes.defaultIconBtn}}
+        data-test-fileDetails-dynamicScanDrawer-drawerContainer-closeBtn
+      >
+        <AkIcon @iconName='close' />
+      </AkIconButton>
+    </AkAppbar>
+
+    <AkStack
+      @direction='column'
+      @width='full'
+      local-class='dynamic-scan-modal-body'
+      class='p-3'
+    >
+      {{#if @isAutomatedScan}}
+        <FileDetails::DynamicScan::Action::Drawer::AutomatedDast
+          @dpContext={{@dpContext}}
+          @file={{@file}}
+          @enableApiScan={{this.enableApiScan}}
+        />
+      {{else}}
+        <FileDetails::DynamicScan::Action::Drawer::ManualDast
+          @dpContext={{@dpContext}}
+          @file={{@file}}
+          @isApiScanEnabled={{this.isApiScanEnabled}}
+          @enableApiScan={{this.enableApiScan}}
+          @allAvailableManualDevices={{this.allAvailableManualDevices}}
+          @isFetchingManualDevices={{this.fetchAllAvailableManualDevices.isRunning}}
+        />
+      {{/if}}
+    </AkStack>
+
+    <AkStack
+      @width='full'
+      @justifyContent={{if @isAutomatedScan 'space-between' 'flex-start'}}
+      @spacing='1.5'
+      class='px-3 py-2'
+      local-class='dynamic-scan-modal-cta'
+    >
+      <AkButton
+        {{on 'click' this.runDynamicScan}}
+        @loading={{this.startDynamicScan.isRunning}}
+        @disabled={{not this.enableStartDynamicScanBtn}}
+        data-test-fileDetails-dynamicScanDrawer-startBtn
+      >
+        <:leftIcon>
+          {{#if @isAutomatedScan}}
+            <AkIcon @iconName='refresh' />
+          {{/if}}
+        </:leftIcon>
+
+        <:default>
+          {{t
+            (if @isAutomatedScan 'modalCard.dynamicScan.restartScan' 'start')
+          }}
+        </:default>
+      </AkButton>
+
+      {{#if @isAutomatedScan}}
+        <AkButton
+          @variant='outlined'
+          @color='neutral'
+          @tag='a'
+          href='/dashboard/project/{{this.projectId}}/settings'
+          target='_blank'
+          rel='noopener noreferrer'
+          data-test-fileDetails-dynamicScanDrawer-settingsPageRedirectBtn
+        >
+          {{t 'modalCard.dynamicScan.goToGeneralSettings'}}
+        </AkButton>
+
+      {{else}}
+        <AkButton
+          @variant='outlined'
+          @color='neutral'
+          {{on 'click' @onClose}}
+          @disabled={{this.startDynamicScan.isRunning}}
+          data-test-fileDetails-dynamicScanDrawer-cancelBtn
+        >
+          {{t 'cancel'}}
+        </AkButton>
+      {{/if}}
+    </AkStack>
+  </AkStack>
+</AkDrawer>

@@ -6,7 +6,7 @@
   data-test-projectSettings-generalSettings-root
 >
   <AkStack @direction='column' class='px-3'>
-    <ProjectPreferences
+    <ProjectPreferencesOld
       @profileId={{@project.activeProfileId}}
       @platform={{@project.platform}}
       @project={{@project}}
@@ -19,7 +19,7 @@
           </AkTypography>
         </:title>
       </pp.DevicePreferenceComponent>
-    </ProjectPreferences>
+    </ProjectPreferencesOld>
   </AkStack>
 
   <AkDivider @color='dark' />

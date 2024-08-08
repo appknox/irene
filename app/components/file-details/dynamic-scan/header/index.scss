@@ -1,0 +1,23 @@
+.dast-results-sticky-tabs,
+.breadcrumb-container {
+  position: sticky;
+  background-color: var(--file-details-dynamic-scan-header-background-color);
+  width: 100%;
+  z-index: 100;
+}
+
+.breadcrumb-container {
+  top: -0.5em;
+  margin: 0;
+  padding: 1.5em 0em;
+}
+
+.dast-results-sticky-tabs {
+  margin-top: 1.5em;
+  top: 3.5em;
+
+  .badge-count-text {
+    font-size: 0.857rem;
+    margin: 0 0.25em;
+  }
+}
