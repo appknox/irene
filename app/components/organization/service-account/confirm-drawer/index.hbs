@@ -1,0 +1,51 @@
+<AkDrawer @open={{@open}} @onClose={{@onClose}} @anchor='right' as |dr|>
+  <AkAppbar @justifyContent='space-between' as |ab|>
+    <AkTypography
+      data-test-serviceAccount-confirmDrawer-heading
+      @variant='h5'
+      @color='inherit'
+    >
+      {{t 'confirmation'}}
+    </AkTypography>
+
+    <AkIconButton
+      class={{ab.classes.defaultIconBtn}}
+      {{on 'click' dr.closeHandler}}
+    >
+      <AkIcon @iconName='close' />
+    </AkIconButton>
+  </AkAppbar>
+
+  <div local-class='confirm-drawer-container'>
+    <div class='p-2'>
+      {{yield to='confirmTitle'}}
+    </div>
+
+    <AkDivider @color='dark' />
+
+    <AkStack
+      @alignItems='center'
+      @spacing='1.5'
+      local-class='confirm-action-container'
+      class='p-2'
+    >
+      <AkButton
+        data-test-serviceAccount-confirmDrawer-confirmBtn
+        @loading={{@disabled}}
+        {{on 'click' (fn @confirmAction dr.closeHandler)}}
+      >
+        {{or @confirmText (t 'ok')}}
+      </AkButton>
+
+      <AkButton
+        data-test-serviceAccount-confirmDrawer-cancelBtn
+        @variant='outlined'
+        @color='neutral'
+        @disabled={{@disabled}}
+        {{on 'click' dr.closeHandler}}
+      >
+        {{or @cancelText (t 'cancel')}}
+      </AkButton>
+    </AkStack>
+  </div>
+</AkDrawer>

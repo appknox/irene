@@ -1,0 +1,52 @@
+<AkTooltip @arrow={{true}} @placement='right-start' @color='light'>
+  <:tooltipContent>
+    {{#each this.moreInfoTooltipContent as |cnt|}}
+      <AkStack class='p-2' @direction='column' @spacing='1'>
+        <AkTypography
+          @variant='body3'
+          @fontWeight='medium'
+          @tag='h6'
+          @color='textSecondary'
+          data-test-serviceAccountSection-accountOverview-auditInfoTitle='{{cnt.title}}'
+        >
+          {{cnt.title}}
+        </AkTypography>
+
+        {{#if cnt.loading}}
+          <AkSkeleton @width='150px' />
+        {{else}}
+          <AkStack @alignItems='center' @spacing='1'>
+            <AkIcon
+              @iconName={{cnt.iconName}}
+              @color={{cnt.iconColor}}
+              @size='small'
+              local-class='{{cnt.iconClass}}'
+            />
+
+            <AkTypography
+              @fontWeight='medium'
+              @tag='span'
+              @color={{cnt.valueColor}}
+              data-test-serviceAccountSection-accountOverview-auditInfoValue='{{cnt.title}}'
+            >
+              {{cnt.value}}
+            </AkTypography>
+          </AkStack>
+        {{/if}}
+      </AkStack>
+
+      {{#if cnt.divider}}
+        <AkDivider @color='dark' />
+      {{/if}}
+    {{/each}}
+  </:tooltipContent>
+
+  <:default>
+    <AkIcon
+      data-test-serviceAccountSection-accountOverview-auditInfoIcon
+      @iconName='info'
+      @size='small'
+      local-class='audit-info-icon'
+    />
+  </:default>
+</AkTooltip>

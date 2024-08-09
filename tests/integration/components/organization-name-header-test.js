@@ -8,13 +8,6 @@ import { Response } from 'miragejs';
 
 import Service from '@ember/service';
 
-class OrganizationMeStub extends Service {
-  org = {
-    is_owner: true,
-    is_admin: true,
-  };
-}
-
 class NotificationsStub extends Service {
   errorMsg = null;
   successMsg = null;
@@ -34,10 +27,26 @@ module('Integration | Component | organization-name-header', function (hooks) {
 
   hooks.beforeEach(async function () {
     this.server.createList('organization', 1);
+
+    const organizationMe = this.server.create('organization-me', {
+      is_admin: true,
+      is_owner: true,
+      is_member: false,
+    });
+
     await this.owner.lookup('service:organization').load();
 
-    this.owner.register('service:me', OrganizationMeStub);
+    // stub
     this.owner.register('service:notifications', NotificationsStub);
+
+    // intercept
+    this.server.get('organizations/:id/me', (schema) => {
+      return schema.organizationMes.find(organizationMe.id).toJSON();
+    });
+
+    this.setProperties({
+      organizationMe,
+    });
   });
 
   test('it renders organization name header', async function (assert) {
@@ -88,6 +97,12 @@ module('Integration | Component | organization-name-header', function (hooks) {
   });
 
   test('it renders organization name header with add button disabled', async function (assert) {
+    // set user role as admin
+    this.organizationMe.update({
+      is_owner: false,
+      is_admin: true,
+    });
+
     const organization = this.owner.lookup('service:organization');
 
     organization.selected.set('name', '');
@@ -95,10 +110,6 @@ module('Integration | Component | organization-name-header', function (hooks) {
     this.setProperties({
       organization,
     });
-
-    const me = this.owner.lookup('service:me');
-
-    me.org.is_owner = false;
 
     await render(
       hbs`

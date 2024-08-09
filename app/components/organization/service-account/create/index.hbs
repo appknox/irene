@@ -1,0 +1,84 @@
+<div local-class='service-account-details-root'>
+  <div local-class='service-account-details-container'>
+    <div local-class='service-account-details-breadcrumbs-container'>
+      <AkBreadcrumbs::Container
+        data-test-serviceAccountCreate-breadcrumbContainer
+      >
+        {{#each this.breadcrumbItems as |item|}}
+          <AkBreadcrumbs::Item
+            @route={{item.route}}
+            @linkTitle={{item.linkTitle}}
+            data-test-serviceAccountCreate-breadcrumbItem='{{item.linkTitle}}'
+          />
+        {{/each}}
+      </AkBreadcrumbs::Container>
+    </div>
+
+    <AkStack
+      @alignItems='center'
+      @justifyContent='space-between'
+      class='p-3'
+      local-class='service-account-details-header'
+    >
+      <AkStack @direction='column' @spacing='0.5'>
+        <AkTypography data-test-serviceAccountCreate-title @variant='subtitle1'>
+          {{t 'serviceAccountModule.createTitle'}}
+        </AkTypography>
+
+        <AkTypography
+          data-test-serviceAccountCreate-description
+          @variant='body2'
+          @color='textSecondary'
+        >
+          {{t 'serviceAccountModule.createDescription'}}
+        </AkTypography>
+      </AkStack>
+
+      <AkStack @alignItems='center' @spacing='1.5'>
+        <AkLink
+          data-test-serviceAccountCreate-cancelLink
+          @route='authenticated.dashboard.organization-settings.service-account'
+        >
+          <AkButton
+            @variant='outlined'
+            @color='neutral'
+            @disabled={{this.createServiceAccount.isRunning}}
+          >
+            {{t 'cancel'}}
+          </AkButton>
+        </AkLink>
+
+        <AkButton
+          data-test-serviceAccountCreate-saveButton
+          @loading={{this.createServiceAccount.isRunning}}
+          {{on 'click' (perform this.createServiceAccount)}}
+        >
+          {{t 'save'}}
+        </AkButton>
+      </AkStack>
+    </AkStack>
+
+    <AkStack class='my-3' @width='full' @direction='column' @spacing='3'>
+      <Organization::ServiceAccount::Section::AccountOverview
+        @serviceAccount={{this.serviceAccount}}
+        @setChangeset={{this.setChangeset}}
+        @renderType='create'
+      />
+
+      <Organization::ServiceAccount::Section::AccessToken
+        @serviceAccount={{this.serviceAccount}}
+        @renderType='create'
+      />
+
+      <Organization::ServiceAccount::Section::SelectScope
+        @serviceAccount={{this.serviceAccount}}
+        @renderType='create'
+      />
+
+      <Organization::ServiceAccount::Section::SelectProject
+        @serviceAccount={{this.serviceAccount}}
+        @renderType='create'
+      />
+    </AkStack>
+  </div>
+</div>

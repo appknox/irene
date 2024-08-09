@@ -1,0 +1,29 @@
+$container-width: 1200px;
+
+.organization-settings-root {
+  padding: 0 1.5em 1.5em;
+  margin: -0.5em;
+  background-color: var(--organization-settings-wrapper-background-color);
+  min-height: calc(100vh - 56px);
+
+  .organization-settings-container {
+    max-width: $container-width;
+    margin: 0 auto;
+
+    .organization-settings-breadcrumbs-container,
+    .organization-settings-tabs-container {
+      position: sticky;
+      z-index: 100;
+      background-color: var(--organization-settings-wrapper-background-color);
+    }
+
+    .organization-settings-breadcrumbs-container {
+      padding: 1.5em 0;
+      top: -0.5em;
+    }
+
+    .organization-settings-tabs-container {
+      top: 3.5em;
+    }
+  }
+}

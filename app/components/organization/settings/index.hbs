@@ -1,34 +1,4 @@
 <div local-class='org-settings-container'>
-  <AkLink @route='authenticated.dashboard.organization.namespaces'>
-    <:leftIcon>
-      <AkIcon @iconName='arrow-back' />
-    </:leftIcon>
-
-    <:default>{{t 'back'}}</:default>
-  </AkLink>
-
-  <div class='mt-3 mb-4'>
-    <OrganizationNameHeader @organization={{@model.organization}}>
-      <:actionBtn as |ab|>
-        {{#if this.showOrgNameActionBtn}}
-          <AkButton
-            @variant='outlined'
-            data-test-org-name-action-btn
-            {{on 'click' ab.openEditOrgNameModal}}
-          >
-            <:leftIcon>
-              <AkIcon @iconName='edit' />
-            </:leftIcon>
-
-            <:default>
-              {{t 'editName'}}
-            </:default>
-          </AkButton>
-        {{/if}}
-      </:actionBtn>
-    </OrganizationNameHeader>
-  </div>
-
   {{#if this.me.org.is_owner}}
     <RegulatoryPreferenceOrganization />
 

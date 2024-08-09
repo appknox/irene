@@ -1,0 +1,12 @@
+.selected-project-access-value {
+  strong {
+    font-weight: var(
+      --organization-service-account-section-select-project-font-weight
+    );
+  }
+}
+
+.tooltip-content-container {
+  width: 350px;
+  white-space: normal;
+}

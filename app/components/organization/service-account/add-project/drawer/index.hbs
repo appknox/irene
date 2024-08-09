@@ -1,0 +1,31 @@
+<AkDrawer @open={{@open}} @onClose={{@onClose}} @anchor='right' as |dr|>
+  <div
+    data-test-serviceAccountAddProject-drawerContainer
+    {{style width='640px' height='100%'}}
+  >
+    <AkAppbar @justifyContent='space-between' as |ab|>
+      <AkTypography
+        data-test-serviceAccountAddProject-drawerTitle
+        @variant='h5'
+        @color='inherit'
+      >
+        {{t 'addProject'}}
+      </AkTypography>
+
+      <AkIconButton
+        data-test-serviceAccountAddProject-drawerCloseBtn
+        class={{ab.classes.defaultIconBtn}}
+        {{on 'click' dr.closeHandler}}
+      >
+        <AkIcon @iconName='close' />
+      </AkIconButton>
+    </AkAppbar>
+
+    <Organization::ServiceAccount::AddProject::List
+      @isCreateView={{@isCreateView}}
+      @serviceAccount={{@serviceAccount}}
+      @refreshSelectedProjects={{@refreshSelectedProjects}}
+      @drawerCloseHandler={{dr.closeHandler}}
+    />
+  </div>
+</AkDrawer>

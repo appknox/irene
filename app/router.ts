@@ -236,7 +236,22 @@ Router.map(function () {
           this.route('teams');
         });
 
-        this.route('organization-settings', { path: '/organization/settings' });
+        this.route(
+          'organization-settings',
+          { path: '/organization/settings' },
+          function () {
+            this.route('index', { path: '/' });
+            this.route('service-account');
+          }
+        );
+
+        this.route('service-account-details', {
+          path: '/organization/settings/service-account/:id',
+        });
+
+        this.route('service-account-create', {
+          path: '/organization/settings/service-account/create',
+        });
       });
     }
   );
