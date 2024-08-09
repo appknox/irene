@@ -78,6 +78,7 @@ export default class SecurityAnalysisListTableActionComponent extends Component<
           gdpr: this.analysis.gdpr.map((a) => a.get('id')),
           nistsp80053: this.analysis.nistsp80053.map((a) => a.get('id')),
           nistsp800171: this.analysis.nistsp800171.map((a) => a.get('id')),
+          sama: this.analysis.sama.map((a) => a.get('id')),
           findings: this.analysis.findings,
           overridden_risk: this.analysis.overriddenRisk || 'None',
           overridden_risk_comment: this.analysis.overriddenRiskComment || '',
