@@ -1,0 +1,36 @@
+<div local-class='section-card-container'>
+  <AkStack
+    @alignItems='center'
+    @justifyContent='space-between'
+    local-class='section-card-header section-card-header-color-{{this.headerColor}}'
+  >
+    <AkTypography
+      data-test-serviceAccountSection-title
+      @color='inherit'
+      @variant='subtitle1'
+    >
+      {{@title}}
+    </AkTypography>
+
+    {{#if @showHeaderAction}}
+      {{yield (hash classes=this.classes) to='headerAction'}}
+    {{/if}}
+  </AkStack>
+
+  <AkDivider @color='dark' />
+
+  <div class='p-3' local-class='section-card-body'>
+    {{yield}}
+  </div>
+
+  {{#if @showFooterAction}}
+    <AkStack
+      @alignItems='center'
+      @spacing='1.5'
+      local-class='section-card-footer'
+      data-test-serviceAccountSection-footer
+    >
+      {{yield to='footerAction'}}
+    </AkStack>
+  {{/if}}
+</div>

@@ -12,6 +12,7 @@ interface Features {
   partner_dashboard: boolean;
   sso: boolean;
   sbom: boolean;
+  public_apis: boolean;
 }
 
 export default class OrganizationModel extends Model {

@@ -413,6 +413,25 @@ module('Integration | Component | ak-checkbox-tree', function (hooks) {
   });
 
   test.each('test: cascading', [true, false], async function (assert, cascade) {
+    // Assumption: All nodes are unchecked by default
+    this.onCheck = (checkedItems, fNode, flatNodes) => {
+      this.set('checked', checkedItems);
+
+      // test: Parent is checked and all children should be checked
+      if (cascade && fNode.isParent) {
+        fNode.children.forEach((c) =>
+          assert.strictEqual(flatNodes[c.key].checked, fNode.checked)
+        );
+      }
+
+      // test: Parent is checked and all children should not be checked and vice versa
+      if (!cascade && fNode.isParent) {
+        fNode.children.forEach((c) =>
+          assert.notStrictEqual(flatNodes[c.key].checked, fNode.checked)
+        );
+      }
+    };
+
     this.setProperties({
       cascade,
       treeData: [
@@ -503,6 +522,27 @@ module('Integration | Component | ak-checkbox-tree', function (hooks) {
 
       // All child nodes are checked but the parent node should remain unchecked
       assert.dom(parentNodeCheckbox).isNotChecked();
+
+      // Uncheck all children
+      for (const id of this.childrenIds) {
+        const childElemSelector = `[data-test-ak-checkbox-tree-nodeKey='${id}']`;
+        const nodeCheckbox = find(`${childElemSelector} [data-test-checkbox]`);
+
+        await click(nodeCheckbox);
+
+        assert.dom(nodeCheckbox).isNotChecked();
+      }
+
+      // Check parent
+      await click(parentNodeCheckbox);
+
+      // All children should remain unchecked
+      for (const id of this.childrenIds) {
+        const childElemSelector = `[data-test-ak-checkbox-tree-nodeKey='${id}']`;
+        const nodeCheckbox = find(`${childElemSelector} [data-test-checkbox]`);
+
+        assert.dom(nodeCheckbox).isNotChecked();
+      }
     }
   });
 });

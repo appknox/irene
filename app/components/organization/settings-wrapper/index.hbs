@@ -1,0 +1,54 @@
+<div local-class='organization-settings-root'>
+  <div local-class='organization-settings-container'>
+    <div local-class='organization-settings-breadcrumbs-container'>
+      <AkBreadcrumbs::Container
+        data-test-fileDetails-apiScan-breadcrumbContainer
+      >
+        {{#each this.breadcrumbItems as |item|}}
+          <AkBreadcrumbs::Item
+            @route={{item.route}}
+            @linkTitle={{item.linkTitle}}
+            data-test-fileDetails-apiScan-breadcrumbItem='{{item.linkTitle}}'
+          />
+        {{/each}}
+      </AkBreadcrumbs::Container>
+    </div>
+
+    <OrganizationNameHeader @organization={{@organization}}>
+      <:actionBtn as |ab|>
+        {{#if this.showOrgNameActionBtn}}
+          <AkButton
+            @variant='outlined'
+            data-test-org-name-action-btn
+            {{on 'click' ab.openEditOrgNameModal}}
+          >
+            <:leftIcon>
+              <AkIcon @iconName='edit' />
+            </:leftIcon>
+
+            <:default>
+              {{t 'editName'}}
+            </:default>
+          </AkButton>
+        {{/if}}
+      </:actionBtn>
+    </OrganizationNameHeader>
+
+    <div class='my-3'>
+      <AkTabs local-class='organization-settings-tabs-container' as |Akt|>
+        {{#each this.tabItems as |item|}}
+          <Akt.tabItem
+            @id={{item.id}}
+            @route={{item.route}}
+            @currentWhen={{item.currentWhen}}
+            data-test-fileDetails-apiScan-tabs='{{item.id}}-tab'
+          >
+            {{item.label}}
+          </Akt.tabItem>
+        {{/each}}
+      </AkTabs>
+
+      {{yield}}
+    </div>
+  </div>
+</div>

@@ -1,3 +1,5 @@
-{{page-title 'Organization Settings'}}
+{{page-title (t 'organizationSettings')}}
 
-<OrganizationSettings @model={{@model}} />
+<Organization::SettingsWrapper @organization={{@model.organization}}>
+  {{outlet}}
+</Organization::SettingsWrapper>

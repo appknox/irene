@@ -14,12 +14,11 @@
   data-test-ak-tab-item
   as |It|
 >
-
-  <It.leftIcon local-class='ak-tab-icon'>
-    {{#if (has-block 'tabIcon')}}
+  {{#if (has-block 'tabIcon')}}
+    <It.leftIcon local-class='ak-tab-icon'>
       {{yield to='tabIcon'}}
-    {{/if}}
-  </It.leftIcon>
+    </It.leftIcon>
+  {{/if}}
 
   {{yield}}
 
