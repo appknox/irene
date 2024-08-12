@@ -1,15 +1,18 @@
+/* eslint-disable ember/no-observers */
 import Component from '@glimmer/component';
 import { tracked } from 'tracked-built-ins';
 import { action } from '@ember/object';
+import { addObserver, removeObserver } from '@ember/object/observers';
 
 // Base Tree Node Shape
 export interface AkTreeNodeProps {
   key: string;
-  label: string;
+  label?: string;
   checked?: boolean;
   expanded?: boolean;
   showCheckbox?: boolean;
   disabled?: boolean;
+  dataObject?: unknown;
   children?: Array<AkTreeNodeProps>;
 }
 
@@ -29,9 +32,10 @@ export interface AkTreeNodeFlattenedProps extends AkTreeNodeProps {
 export type AkTreeProviderFlatNodes = Record<string, AkTreeNodeFlattenedProps>;
 
 // Component Signature
-type AkTreeProviderCheckExpandFuncType = (
+export type AkTreeProviderCheckExpandFuncType = (
   keys: Array<string>,
-  node: AkTreeNodeFlattenedProps
+  node: AkTreeNodeFlattenedProps,
+  flatNodes: AkTreeProviderFlatNodes
 ) => void;
 
 export interface AkTreeProviderSignatureArgs<N extends AkTreeNodeProps> {
@@ -81,8 +85,15 @@ export default class AkTreeProviderComponent<
   constructor(owner: unknown, args: AkTreeProviderSignature<N>['Args']) {
     super(owner, args);
 
-    this.flattenNodes(this.args.treeData);
-    this.deserializeLists();
+    this.initialize();
+
+    addObserver(this.args, 'treeData', this.initialize);
+  }
+
+  willDestroy(): void {
+    super.willDestroy();
+
+    removeObserver(this.args, 'treeData', this.initialize);
   }
 
   get expanded() {
@@ -99,6 +110,14 @@ export default class AkTreeProviderComponent<
 
   get cascade() {
     return this.args.cascade ?? true;
+  }
+
+  @action
+  initialize() {
+    this.flatNodes = {};
+
+    this.flattenNodes(this.args.treeData);
+    this.deserializeLists();
   }
 
   /**
@@ -129,12 +148,16 @@ export default class AkTreeProviderComponent<
       return;
     }
 
+    this.toggleNode(node.key, 'checked', checked);
+
+    // Necessary to toggle children/parent if cascade is enabled
     this.toggleChecked(node, checked);
 
-    this.args.onCheck?.(this.serializeList('checked'), {
-      ...flatNode,
-      ...node,
-    });
+    this.args.onCheck?.(
+      this.serializeList('checked'),
+      flatNode,
+      this.flatNodes
+    );
   }
 
   /**
@@ -151,10 +174,11 @@ export default class AkTreeProviderComponent<
 
     this.toggleNode(node.key, 'expanded', !node.expanded);
 
-    this.args.onExpand?.(this.serializeList('expanded'), {
-      ...flatNode,
-      ...node,
-    });
+    this.args.onExpand?.(
+      this.serializeList('expanded'),
+      flatNode,
+      this.flatNodes
+    );
   }
 
   /**
@@ -185,6 +209,7 @@ export default class AkTreeProviderComponent<
 
       this.flatNodes[node.key] = {
         ...node,
+        checked: !!node.checked,
         parent,
         isParent,
         isLeaf: !isParent,
@@ -231,6 +256,18 @@ export default class AkTreeProviderComponent<
           this.toggleChecked(nodeValue, true);
         }
       });
+    });
+
+    // Resolve checked state in scenarios where checked array is empty by default but nodes have checked prop
+    Object.keys(this.flatNodes).forEach((fNode) => {
+      const nodeValue = this.flatNodes[fNode];
+      const nodeIsChecked = nodeValue?.checked;
+
+      if (!nodeIsChecked && nodeValue?.isParent) {
+        nodeValue['checked'] = nodeValue.children?.every(
+          (cFNode) => cFNode.checked
+        );
+      }
     });
   }
 

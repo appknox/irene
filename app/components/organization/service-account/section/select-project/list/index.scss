@@ -1,0 +1,22 @@
+.projects-list-container {
+  border: 1px solid
+    var(--organization-service-account-section-select-project-list-border-color);
+  border-radius: var(
+    --organization-service-account-section-select-project-list-border-radius
+  );
+  box-sizing: border-box;
+
+  .projects-list-header {
+    padding: 1.5em;
+    background-color: var(
+      --organization-service-account-section-select-project-list-header-background-color
+    );
+
+    .search-input-container {
+      width: 180px;
+      background-color: var(
+        --organization-service-account-section-select-project-list-background-color
+      );
+    }
+  }
+}

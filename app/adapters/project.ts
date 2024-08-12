@@ -1,7 +1,15 @@
-import commondrf from './commondrf';
+import CommonDRFAdapter from './commondrf';
 
-export default class ProjectAdapter extends commondrf {
-  _buildURL(modelName: string | number, id: string | number) {
+type ProjectQueryParamOption = Record<string, string | number> & {
+  adapterOptions?: {
+    baseUrlModel: 'service-account';
+    id?: string | number;
+    path: string;
+  };
+};
+
+export default class ProjectAdapter extends CommonDRFAdapter {
+  _buildURL(modelName: string | number, id?: string | number) {
     const baseurl = `${this.namespace_v2}/projects`;
 
     if (id) {
@@ -11,6 +19,23 @@ export default class ProjectAdapter extends commondrf {
     return this.buildURLFromBase(
       `${this.namespace}/organizations/${this.organization?.selected?.id}/projects`
     );
+  }
+
+  urlForQuery<k extends string | number>(
+    query: ProjectQueryParamOption,
+    modelName: k
+  ): string {
+    if (query.adapterOptions?.baseUrlModel) {
+      const { baseUrlModel, id, path } = query.adapterOptions;
+      const adapter = this.store.adapterFor(baseUrlModel);
+
+      // not required to be part of url endpoint
+      delete query.adapterOptions;
+
+      return adapter.buildURL(baseUrlModel, id).concat(`/${path}`);
+    }
+
+    return this._buildURL(modelName, query['id']);
   }
 }
 

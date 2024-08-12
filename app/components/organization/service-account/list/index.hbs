@@ -1,0 +1,117 @@
+<div local-class='service-account-container'>
+  <AkStack
+    class='p-2'
+    @alignItems='center'
+    @justifyContent='space-between'
+    @spacing='1.5'
+  >
+    <AkStack @direction='column' @spacing='0.5'>
+      <AkTypography @variant='subtitle1' data-test-serviceAccountList-title>
+        {{t 'serviceAccountModule.listTitle'}}
+      </AkTypography>
+
+      <AkTypography
+        @variant='body2'
+        @color='textSecondary'
+        data-test-serviceAccountList-description
+      >
+        {{t 'serviceAccountModule.listDescription'}}
+      </AkTypography>
+    </AkStack>
+
+    <AkStack @alignItems='center' @spacing='2.5'>
+      <AkFormControlLabel
+        @label='{{t "serviceAccountModule.showSystemCreated"}}'
+      >
+        <AkCheckbox
+          data-test-serviceAccountList-showSystemCreatedCheckbox
+          @checked={{@queryParams.show_system_created}}
+          @onChange={{this.handleShowSystemCreated}}
+        />
+      </AkFormControlLabel>
+
+      <div local-class='divider' />
+
+      <AkLink
+        @route='authenticated.dashboard.service-account-create'
+        @query={{hash duplicate=null}}
+      >
+        <AkButton data-test-serviceAccountList-createBtn>
+          {{t 'create'}}
+        </AkButton>
+      </AkLink>
+    </AkStack>
+  </AkStack>
+
+  <AkPaginationProvider
+    @results={{this.serviceAccountList}}
+    @onItemPerPageChange={{this.handleItemPerPageChange}}
+    @totalItems={{this.totalServiceAccountCount}}
+    @nextAction={{this.handleNextPrevAction}}
+    @prevAction={{this.handleNextPrevAction}}
+    @itemPerPageOptions={{array 10 25 50}}
+    @defaultLimit={{this.limit}}
+    @offset={{this.offset}}
+    as |pgc|
+  >
+    {{#if this.fetchServiceAccounts.isRunning}}
+      <AkDivider @color='dark' />
+
+      <Organization::ServiceAccount::Loading />
+    {{else if this.hasNoServiceAccount}}
+      <AkDivider @color='dark' />
+
+      <Organization::ServiceAccount::Empty />
+    {{else}}
+      <div class='mb-2'>
+        <AkTable as |t|>
+          <t.head
+            data-test-serviceAccountList-thead
+            @columns={{this.columns}}
+          />
+
+          <t.body @rows={{this.serviceAccountList}} as |b|>
+            <b.row data-test-serviceAccountList-row as |r|>
+              <r.cell data-test-serviceAccountList-cell as |value|>
+                {{#if r.columnValue.component}}
+                  {{#let (component r.columnValue.component) as |Component|}}
+                    <Component
+                      @serviceAccount={{r.rowValue}}
+                      @onMoreMenuClick={{this.handleMoreOptionsClick}}
+                    />
+                  {{/let}}
+                {{else}}
+                  <AkTypography @noWrap={{true}} title={{value}}>
+                    {{value}}
+                  </AkTypography>
+                {{/if}}
+              </r.cell>
+            </b.row>
+          </t.body>
+        </AkTable>
+      </div>
+
+      <AkPagination
+        @disableNext={{pgc.disableNext}}
+        @nextAction={{pgc.nextAction}}
+        @disablePrev={{pgc.disablePrev}}
+        @prevAction={{pgc.prevAction}}
+        @endItemIdx={{pgc.endItemIdx}}
+        @startItemIdx={{pgc.startItemIdx}}
+        @itemPerPageOptions={{pgc.itemPerPageOptions}}
+        @onItemPerPageChange={{pgc.onItemPerPageChange}}
+        @selectedOption={{pgc.selectedOption}}
+        @tableItemLabel={{t 'serviceAccount'}}
+        @perPageTranslation={{t 'recordPerPage'}}
+        @totalItems={{pgc.totalItems}}
+      />
+    {{/if}}
+  </AkPaginationProvider>
+</div>
+
+<Organization::ServiceAccount::MoreMenu
+  @anchorRef={{this.moreMenuAnchorRef}}
+  @onClose={{this.handleMoreOptionsClose}}
+  @serviceAccount={{this.serviceAccountToDelete}}
+  @onDeleteSuccess={{this.handleRefreshServiceAccounts}}
+/>

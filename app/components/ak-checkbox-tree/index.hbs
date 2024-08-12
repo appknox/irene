@@ -41,14 +41,18 @@
           />
         {{/if}}
 
-        <AkTypography
-          @fontWeight={{if node.isRoot 'bold' 'medium'}}
-          @variant='subtitle1'
-          @color={{if node.disabled 'textSecondary' 'secondary'}}
-          data-test-ak-checkbox-tree-nodeLabel
-        >
-          {{node.label}}
-        </AkTypography>
+        {{#if (has-block 'label')}}
+          {{yield node to='label'}}
+        {{else}}
+          <AkTypography
+            @fontWeight={{if node.isRoot 'bold' 'medium'}}
+            @variant='subtitle1'
+            @color={{if node.disabled 'textSecondary' 'secondary'}}
+            data-test-ak-checkbox-tree-nodeLabel
+          >
+            {{node.label}}
+          </AkTypography>
+        {{/if}}
       </AkStack>
 
       {{#if node.isParent}}

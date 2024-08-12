@@ -35,21 +35,22 @@ export default class AkTreeNodesComponent<
     const flatNode = this.tree.getFlatNode(key);
 
     if (this.tree.cascade) {
-      this.setIndeterminateState(flatNode);
+      this.setCheckedState(flatNode);
     }
 
     return flatNode;
   }
 
   /**
-   * Sets the indeterminate state of a node based on the checked status of its children.
+   * Sets the checked state of a node based on the checked status of its children.
    * A node is considered indeterminate if it has at least one checked child but not all children are checked.
    *
    * @param {AkTreeNodeFlattenedProps} [flatNode] - The node whose indeterminate state needs to be set.
    * @memberof AkTreeNodesComponent
    */
-  @action setIndeterminateState(flatNode?: AkTreeNodeFlattenedProps) {
+  @action setCheckedState(flatNode?: AkTreeNodeFlattenedProps) {
     if (flatNode?.children?.length) {
+      const childrenLength = flatNode.children.length;
       let checkedNodes = 0;
       let disabledNodes = 0;
 
@@ -66,8 +67,9 @@ export default class AkTreeNodesComponent<
       });
 
       flatNode.indeterminate =
-        checkedNodes > 0 &&
-        checkedNodes < flatNode.children.length - disabledNodes;
+        checkedNodes > 0 && checkedNodes < childrenLength - disabledNodes;
+
+      flatNode.checked = flatNode.checked || checkedNodes === childrenLength;
     }
   }
 }

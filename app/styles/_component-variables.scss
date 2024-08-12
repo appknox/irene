@@ -524,7 +524,8 @@ body {
   --github-account-border-color: var(--border-color-1);
 
   // variables for organization-name-header
-  --organization-name-header-border-color: var(--neutral-grey-100);
+  --organization-name-header-background-color: var(--background-main);
+  --organization-name-header-border-color: var(--border-color-1);
   --organization-name-header-border-radius: var(--border-radius);
   --organization-name-color-primary-light: var(--primary-light);
   --organization-name-color-text-disabled: var(--text-disabled);
@@ -1506,4 +1507,149 @@ body {
   --dynamicscan-automation-upselling-feature-text-color: var(
     --neutral-grey-800
   );
+
+  // variables for app-platform-icon
+  --app-platform-icon-color-ios: var(--ios);
+  --app-platform-icon-color-android: var(--android);
+
+  // variables for organization/service-account/add-project/list
+  --organization-service-account-add-project-list-border-radius: var(
+    --border-radius
+  );
+  --organization-service-account-add-project-list-border-color: var(
+    --border-color-1
+  );
+  --organization-service-account-add-project-list-footer-background-main: var(
+    --background-main
+  );
+  --organization-service-account-add-project-list-footer-box-shadow: var(
+    --box-shadow-4
+  );
+
+  // variables for organization/service-account/confirm-drawer
+  --organization-service-account-confirm-drawer-action-box-shadow: var(
+    --box-shadow-4
+  );
+  --organization-service-account-confirm-drawer-background-main: var(
+    --background-main
+  );
+  --organization-service-account-confirm-drawer-border-color: var(
+    --border-color-1
+  );
+  --organization-service-account-confirm-drawer-border-radius: var(
+    --border-radius
+  );
+
+  // variables for organization/service-account/create
+  --organization-service-account-create-background-color: var(
+    --background-light
+  );
+  --organization-service-account-create-header-background-main: var(
+    --background-main
+  );
+  --organization-service-account-create-border-color: var(--border-color-1);
+  --organization-service-account-create-border-radius: var(--border-radius);
+
+  // variables for organization/service-account/details
+  --organization-service-account-details-background-color: var(
+    --background-light
+  );
+  --organization-service-account-details-header-background-main: var(
+    --background-main
+  );
+  --organization-service-account-details-border-color: var(--border-color-1);
+  --organization-service-account-details-border-radius: var(--border-radius);
+
+  // variables for organization/service-account/list
+  --organization-service-account-list-background-main: var(--background-main);
+  --organization-service-account-list-border-color: var(--border-color-1);
+  --organization-service-account-list-divider-color: var(--neutral-grey-300);
+
+  // variables for organization/service-account/list/action
+  --organization-service-account-list-action-divider-color: var(
+    --neutral-grey-300
+  );
+
+  // variables for organization/service-account/section/access-token
+  --organization-service-account-section-access-token-background-color: var(
+    --neutral-grey-100
+  );
+  --organization-service-account-section-access-token-border-color: var(
+    --border-color-1
+  );
+
+  // variables for organization/service-account/section/account-overview
+  --organization-service-account-section-account-overview-border-color: var(
+    --border-color-2
+  );
+  --organization-service-account-section-account-overview-textarea-color: var(
+    --text-primary
+  );
+  --organization-service-account-section-account-overview-border-radius: var(
+    --border-radius
+  );
+  --organization-service-account-section-account-overview-error-main: var(
+    --error-main
+  );
+
+  // variables for organization/service-account/section/account-overview/audit-info
+  --organization-service-account-section-account-overview-audit-info-icon-color: var(
+    --neutral-grey-300
+  );
+
+  // variables for organization/service-account/section/card
+  --organization-service-account-section-card-border-color: var(
+    --border-color-1
+  );
+  --organization-service-account-section-card-border-radius: var(
+    --border-radius
+  );
+  --organization-service-account-section-card-header-background-color: var(
+    --neutral-grey-100
+  );
+  --organization-service-account-section-card-header-text-color: var(
+    --text-primary
+  );
+  --organization-service-account-section-card-header-color-primary: var(
+    --primary-main
+  );
+  --organization-service-account-section-card-header-background-color-light: var(
+    --primary-light
+  );
+  --organization-service-account-section-card-header-background-main: var(
+    --background-main
+  );
+  --organization-service-account-section-card-header-box-shadow: var(
+    --box-shadow-4
+  );
+
+  // variables for organization/service-account/section/select-project
+  --organization-service-account-section-select-project-font-weight: var(
+    --font-weight-medium
+  );
+
+  // variables for organization/service-account/section/select-project/list
+  --organization-service-account-section-select-project-list-background-color: var(
+    --background-main
+  );
+  --organization-service-account-section-select-project-list-header-background-color: var(
+    --neutral-grey-100
+  );
+  --organization-service-account-section-select-project-list-border-radius: var(
+    --border-radius
+  );
+  --organization-service-account-section-select-project-list-border-color: var(
+    --border-color-1
+  );
+
+  // variables for organization/service-account/section/select-scope
+  --organization-service-account-section-select-scope-icon-color: var(
+    --neutral-grey-300
+  );
+
+  // variables for organization/settings
+  --organization-settings-container-background-color: var(--background-main);
+
+  // variables for organization/settings-wrapper
+  --organization-settings-wrapper-background-color: var(--background-light);
 }

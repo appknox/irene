@@ -4,4 +4,5 @@ export default Factory.extend({
   is_admin: true,
   is_owner: true,
   is_member: false,
+  can_access_partner_dashboard: false,
 });
