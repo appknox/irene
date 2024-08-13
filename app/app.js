@@ -1,11 +1,8 @@
 import ENUMS from 'irene/enums';
 import config from 'irene/config/environment';
-import installPendo from 'irene/utils/install-pendo';
 import Application from '@ember/application';
 import Resolver from 'ember-resolver';
 import loadInitializers from 'ember-load-initializers';
-import installHotjar from 'irene/utils/install-hotjar';
-import customerSuccessBox from 'irene/utils/customer-success-box';
 import { registerDateLibrary } from 'ember-power-calendar';
 import DateUtils from 'irene/utils/power-calendar-dayjs';
 
@@ -20,9 +17,6 @@ if (config.isAppknox) {
   config.product = ENUMS.PRODUCT.DEVKNOX;
 }
 
-installPendo();
-installHotjar();
-customerSuccessBox();
 registerDateLibrary(DateUtils);
 
 export default class App extends Application {

@@ -1,4 +1,7 @@
 import ENV from 'irene/config/environment';
+import installPendo from 'irene/utils/install-pendo';
+import installHotjar from 'irene/utils/install-hotjar';
+import customerSuccessBox from 'irene/utils/customer-success-box';
 
 class ENVHandler {
   constructor(envHandlerConst) {
@@ -138,6 +141,10 @@ const initialize = function (application) {
   ENV.emberRollbarClient = {
     enabled: handler.getValueForPlugin('IRENE_ENABLE_ROLLBAR'),
   };
+
+  installPendo();
+  installHotjar();
+  customerSuccessBox();
 
   // Inject ENV
   if (ENV.environment !== 'test') {
