@@ -1,0 +1,18 @@
+.analytics-root {
+  padding: 2em;
+  margin: -0.5em;
+  background-color: var(--organization-analytics-background-color);
+  min-height: calc(100vh - 56px);
+}
+
+.main-box-container {
+  border-radius: var(--organization-analytics-border-radius);
+  box-shadow: var(--organization-analytics-box-shadow);
+  border: 1px solid var(--organization-analytics-border-color);
+
+  .box-main-heading {
+    background-color: var(--organization-analytics-background-color-grey);
+    padding: 0.5em;
+    justify-content: center;
+  }
+}

@@ -29,6 +29,15 @@ export default class OrganizationAnalyticsComponent extends Component {
     this.fetchScanCount.perform();
   }
 
+  get scanTypes() {
+    return [
+      { name: 'Static', count: this.scanCount?.static_scan_count },
+      { name: 'Dynamic', count: this.scanCount?.dynamic_scan_count },
+      { name: 'API', count: this.scanCount?.api_scan_count },
+      { name: 'Manual', count: this.scanCount?.manual_scan_count, last: true },
+    ];
+  }
+
   fetchScanCount = task(async () => {
     const orgId = this.organization?.selected?.id;
 
