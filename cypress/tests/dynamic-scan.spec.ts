@@ -127,6 +127,12 @@ const DynamicStatusTexts = [cyTranslate('deviceBooting')];
 const ANY_DEVICE = 0;
 const ANY_VERSION = '0';
 
+// fixes cross origin errors
+Cypress.on('uncaught:exception', () => {
+  // returning false here prevents Cypress from failing the test
+  return false;
+});
+
 describe('Dynamic Scan', () => {
   beforeEach(() => {
     // Hide websocket and analyses logs

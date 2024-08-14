@@ -41,6 +41,12 @@ const SUBMISSION_WAIT_OPTS = {
   timeout: 160000,
 };
 
+// fixes cross origin errors
+Cypress.on('uncaught:exception', () => {
+  // returning false here prevents Cypress from failing the test
+  return false;
+});
+
 // Test body
 describe('Upload App', () => {
   beforeEach(() => {

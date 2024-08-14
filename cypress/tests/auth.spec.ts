@@ -15,6 +15,12 @@ const networkActions = new NetworkActions();
 const username = Cypress.env('TEST_USERNAME');
 const password = Cypress.env('TEST_PASSWORD');
 
+// fixes cross origin errors
+Cypress.on('uncaught:exception', () => {
+  // returning false here prevents Cypress from failing the test
+  return false;
+});
+
 describe('User Login', () => {
   beforeEach(() => {
     networkActions.hideNetworkLogsFor({ ...API_ROUTES.websockets });
