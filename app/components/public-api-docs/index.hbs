@@ -1,0 +1,52 @@
+<AkStack
+  @direction='column'
+  @width='full'
+  local-class='swagger-ui-wrapper'
+  class='py-3'
+>
+  {{#if this.fetchSchemaData.isRunning}}
+    <PublicApiDocs::LoadingUi />
+
+  {{else}}
+    {{#if this.showServiceAccountBtn}}
+      <AkButton
+        @tag='a'
+        @variant='filled'
+        @color='primary'
+        @underline='always'
+        href='/dashboard/organization/settings/service-account'
+        target='_blank'
+        rel='noopener noreferrer'
+        local-class='service-account-link'
+        data-test-publicApiDocs-serviceAccountLink
+      >
+        {{t 'goToServiceAccounts'}}
+      </AkButton>
+    {{/if}}
+
+    <div
+      class='swagger-ui-description'
+      data-test-publicApiDocs-description-container
+      {{did-insert this.intializeSwaggerUI}}
+    />
+
+    {{#if this.data}}
+      <AkTabs local-class='tabs-container' as |akt|>
+        {{#each this.tabItems as |item|}}
+          <akt.tabItem
+            @id={{item.id}}
+            @buttonVariant={{true}}
+            @onTabClick={{this.handleTabClick}}
+            @isActive={{eq item.id this.selectedTab}}
+          >
+            {{item.label}}
+          </akt.tabItem>
+        {{/each}}
+      </AkTabs>
+
+      {{#let (component this.activeTabComponent) as |Component|}}
+        <Component @data={{this.data}} />
+      {{/let}}
+    {{/if}}
+  {{/if}}
+</AkStack>

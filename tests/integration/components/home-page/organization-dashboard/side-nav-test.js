@@ -50,6 +50,7 @@ class FreshdeskStub extends Service {
 const menuItems = ({
   analytics,
   appMonitoring,
+  publicApis,
   market,
   billing,
   partner,
@@ -62,6 +63,7 @@ const menuItems = ({
     sbom && { label: 't:SBOM:()', icon: 'receipt-long' },
     analytics && { label: 't:analytics:()', icon: 'graphic-eq' },
     { label: 't:organization:()', icon: 'people' },
+    publicApis && { label: 't:apiDocument:()' },
     { label: 't:accountSettings:()', icon: 'account-box' },
     market && { label: 't:marketplace:()', icon: 'account-balance' },
     billing && { label: 't:billing:()', icon: 'credit-card' },
@@ -81,6 +83,7 @@ const sections = (enabled) => ({
   partner: enabled,
   security: enabled,
   sbom: enabled,
+  publicApis: enabled,
 });
 
 const lowerMenuItems = [
@@ -155,6 +158,7 @@ module(
           appMonitoring,
           security,
           sbom,
+          publicApis,
         }
       ) {
         this.setProperties({
@@ -177,6 +181,7 @@ module(
 
         this.organization.selected.features = {
           app_monitoring: appMonitoring,
+          public_apis: publicApis,
           sbom,
         };
 
@@ -196,10 +201,13 @@ module(
           partner,
           security,
           sbom,
+          publicApis,
         }).forEach((it, index) => {
-          assert
-            .dom('[data-test-side-menu-item-icon]', menuItemEle[index])
-            .hasClass(`ak-icon-${it.icon}`);
+          if (it.icon) {
+            assert
+              .dom('[data-test-side-menu-item-icon]', menuItemEle[index])
+              .hasClass(`ak-icon-${it.icon}`);
+          }
 
           assert
             .dom('[data-test-side-menu-item-text]', menuItemEle[index])

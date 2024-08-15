@@ -1269,7 +1269,9 @@ body {
   --organization-analytics-app-scan-chart-border-radius: var(--border-radius);
 
   // variables for organization-analytics/recent-issues
-  --organization-analytics-recent-issues-background-color: var(--neutral-grey-200);
+  --organization-analytics-recent-issues-background-color: var(
+    --neutral-grey-200
+  );
   --organization-analytics-recent-issues-box-shadow: var(--box-shadow-2);
   --organization-analytics-recent-issues-border-radius: var(--border-radius);
   --organization-analytics-recent-issues-border-color: var(--border-color-1);
@@ -1665,4 +1667,7 @@ body {
 
   // variables for organization/settings-wrapper
   --organization-settings-wrapper-background-color: var(--background-light);
+
+  // variables for public-api-docs/index
+  --public-api-docs-tabs-background-color: var(--common-white);
 }

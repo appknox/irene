@@ -30,6 +30,7 @@ interface MenuItem {
   hasBadge?: boolean;
   badgeLabel?: string;
   component?: 'home-page/organization-dashboard/side-nav/security-menu-item';
+  customIconComponent?: 'ak-svg/public-api-icon';
 }
 
 interface LowerMenuItem {
@@ -116,6 +117,12 @@ export default class HomePageOrganizationDashboardSideNavComponent extends Compo
         currentWhen:
           'authenticated.dashboard.organization.namespaces authenticated.dashboard.organization.users authenticated.dashboard.organization.teams authenticated.dashboard.organization-settings',
       },
+      this.showPublicApiDocs && {
+        label: this.intl.t('apiDocument'),
+        route: 'authenticated.dashboard.public-api.docs',
+        currentWhen: 'authenticated.dashboard.public-api.docs',
+        customIconComponent: 'ak-svg/public-api-icon' as const,
+      },
       {
         label: this.intl.t('accountSettings'),
         icon: 'account-box',
@@ -200,6 +207,10 @@ export default class HomePageOrganizationDashboardSideNavComponent extends Compo
 
   get showAppMonitoringDashboard() {
     return this.organization?.selected?.features?.app_monitoring;
+  }
+
+  get showPublicApiDocs() {
+    return this.organization?.selected?.features?.public_apis;
   }
 
   get showSbomDashboard() {
