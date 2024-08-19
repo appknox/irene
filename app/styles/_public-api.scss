@@ -246,6 +246,18 @@
         padding-top: 1.5em !important;
         padding-bottom: 1em;
       }
+
+      .schemes-server-container {
+        .servers-title {
+          font-size: 1rem;
+          font-weight: var(--font-weight-medium);
+          padding: 0 0.5em;
+        }
+
+        .servers {
+          padding: 0.5em;
+        }
+      }
     }
 
     .auth-container div h6,

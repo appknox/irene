@@ -3,6 +3,7 @@ import SwaggerUI from 'swagger-ui';
 import Component from '@glimmer/component';
 import { action } from '@ember/object';
 
+import ENV from 'irene/config/environment';
 import { type SwaggerUIDataProps } from '..';
 
 interface PublicApiDocsApiEndpointsSignature {
@@ -14,8 +15,10 @@ interface PublicApiDocsApiEndpointsSignature {
 export default class PublicApiDocsApiEndpointsComponent extends Component<PublicApiDocsApiEndpointsSignature> {
   @action
   initializeAPIEndpoints(element: HTMLDivElement) {
+    const servers = [{ url: ENV.host }];
+
     SwaggerUI({
-      spec: { ...this.args.data, info: {} },
+      spec: { ...this.args.data, info: {}, servers },
       domNode: element,
       presets: [SwaggerUI.presets.apis, SwaggerUI.SwaggerUIStandalonePreset],
     });
