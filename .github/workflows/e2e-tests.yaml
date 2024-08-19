@@ -17,7 +17,8 @@ concurrency:
 jobs:
   e2e-tests:
     name: Run E2E Tests
-    runs-on: [ubuntu-latest]
+    # runs-on: [ubuntu-latest]
+    runs-on: [ubuntu-22.04]
     container:
       image: cypress/browsers:node-20.12.0-chrome-123.0.6312.86-1-ff-124.0.2-edge-123.0.2420.65-1
       options: --user 1001
@@ -65,6 +66,6 @@ jobs:
           browser: chrome
           install: false
           config: pageLoadTimeout=100000
-          wait-on: 'http://localhost:4200'
+          wait-on: 'npx wait-on --timeout 90000 http://localhost:4200'
           record: true
           parallel: true
