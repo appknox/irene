@@ -5,9 +5,10 @@ import { setupMirage } from 'ember-cli-mirage/test-support';
 import { t } from 'ember-intl/test-support';
 import { Response } from 'miragejs';
 import Service from '@ember/service';
+import dayjs from 'dayjs';
 
 import { setupRequiredEndpoints } from '../../helpers/acceptance-utils';
-import dayjs from 'dayjs';
+import { ServiceAccountType } from 'irene/models/service-account';
 
 class IntegrationStub extends Service {
   async configure(user) {
@@ -52,7 +53,16 @@ module('Acceptance | Organization Service Account List', function (hooks) {
     const { organization, currentOrganizationMe } =
       await setupRequiredEndpoints(this.server);
 
-    this.server.createList('service-account', 8);
+    // user created service accounts
+    this.server.createList('service-account', 5, {
+      service_account_type: ServiceAccountType.USER,
+    });
+
+    // system created service accounts
+    this.server.createList('service-account', 3, {
+      service_account_type: ServiceAccountType.SYSTEM,
+    });
+
     this.server.createList('organization-user', 8);
 
     this.owner.register('service:notifications', NotificationsStub);
@@ -146,6 +156,7 @@ module('Acceptance | Organization Service Account List', function (hooks) {
       assert.dom(headerCells[4]).hasText(t('action'));
 
       const rows = findAll('[data-test-serviceAccountList-row]');
+
       const serviceAccounts = showSystemCreated
         ? this.server.db.serviceAccounts
         : this.getServiceAccounts();
