@@ -29,13 +29,14 @@
     "cypress:run": "cypress run --browser chrome",
     "deploy": "ember deploy production --verbose=true --activate=true --show-progress=true",
     "deploy:server": "ember deploy server",
-    "storybook": "start-storybook -p 6006 -s dist --ci",
+    "storybook": "storybook dev -p 6006",
     "storybook-dev": "concurrently \"npm:start\" \"npm:storybook\" --names \"dev-server,storybook\"",
     "prebuild-storybook": "ember build",
-    "build-storybook": "build-storybook -s dist"
+    "build-storybook": "storybook build"
   },
   "devDependencies": {
     "@appknox/ember-pace": "^1.0.1",
+    "@chromatic-com/storybook": "^1.6.1",
     "@cypress/grep": "^4.0.1",
     "@ember/jquery": "^1.1.0",
     "@ember/optional-features": "^2.1.0",
@@ -48,11 +49,13 @@
     "@glint/core": "^1.3.0",
     "@glint/environment-ember-loose": "^1.3.0",
     "@glint/template": "^1.3.0",
-    "@storybook/addon-actions": "6.5.13",
-    "@storybook/addon-essentials": "6.5.13",
-    "@storybook/addon-links": "6.5.13",
-    "@storybook/builder-webpack5": "6.5.13",
-    "@storybook/ember": "6.5.13",
+    "@storybook/addon-actions": "8.2.8",
+    "@storybook/addon-docs": "^8.2.9",
+    "@storybook/addon-essentials": "8.2.8",
+    "@storybook/addon-links": "8.2.8",
+    "@storybook/blocks": "^8.2.8",
+    "@storybook/builder-webpack5": "8.2.8",
+    "@storybook/ember": "8.2.8",
     "@storybook/ember-cli-storybook": "^0.6.0",
     "@storybook/manager-webpack5": "6.5.13",
     "@testing-library/cypress": "^10.0.1",
@@ -173,6 +176,7 @@
     "prettier": "^3.2.5",
     "qunit": "^2.20.1",
     "qunit-dom": "^3.0.0",
+    "storybook": "^8.2.8",
     "stream-browserify": "^3.0.0",
     "stylelint": "^16.2.1",
     "stylelint-config-standard": "^36.0.0",
@@ -186,6 +190,7 @@
     "@formatjs/intl": "^2.10.1",
     "@novnc/novnc": "^1.4.0",
     "@popperjs/core": "^2.11.6",
+    "@storybook/types": "^8.2.9",
     "billboard.js": "^1.12.7",
     "clipboard": "^2.0.6",
     "cypress": "^13.6.3",
@@ -198,10 +203,6 @@
   "overrides": {
     "ember-data-resources": {
       "ember-resources": "6.4.2"
-    },
-    "@storybook/ember": {
-      "ember-source": "~4.12.1",
-      "@types/ember__component": "^4.0.21"
     }
   },
   "engines": {
