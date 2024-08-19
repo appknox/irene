@@ -38,11 +38,11 @@ export default class PublicApiDocsComponent extends Component {
         label: 'API Endpoints',
         component: 'public-api-docs/api-endpoints' as const,
       },
-      {
-        id: 'schemas',
-        label: 'Schemas',
-        component: 'public-api-docs/schemas' as const,
-      },
+      // {
+      //   id: 'schemas',
+      //   label: 'Schemas',
+      //   component: 'public-api-docs/schemas' as const,
+      // },
     ];
   }
 

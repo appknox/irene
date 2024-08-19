@@ -66,5 +66,6 @@ jobs:
           install: false
           config: pageLoadTimeout=100000
           wait-on: 'http://localhost:4200'
+          wait-on-timeout: 200
           record: true
           parallel: true

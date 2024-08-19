@@ -64,7 +64,7 @@
   "anyDevice": "Any Device",
   "anyVersion": "Any Version",
   "api": "API",
-  "apiDocument": "API Document",
+  "apiDocumentation": "API Documentation",
   "apis": "APIs",
   "apiKey": "API Key",
   "apiResults": "API Results",
@@ -1380,7 +1380,7 @@
         "readDescription": "Read access for scan results of vulnerability assessment (access scoped only to projects selected below)"
       },
       "user": {
-        "label": "User",
+        "label": "Users",
         "readDescription": "Read access for listing members of this organization"
       }
     }

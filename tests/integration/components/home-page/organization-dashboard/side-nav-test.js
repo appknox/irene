@@ -63,7 +63,7 @@ const menuItems = ({
     sbom && { label: 't:SBOM:()', icon: 'receipt-long' },
     analytics && { label: 't:analytics:()', icon: 'graphic-eq' },
     { label: 't:organization:()', icon: 'people' },
-    publicApis && { label: 't:apiDocument:()' },
+    publicApis && { label: 't:apiDocumentation:()' },
     { label: 't:accountSettings:()', icon: 'account-box' },
     market && { label: 't:marketplace:()', icon: 'account-balance' },
     billing && { label: 't:billing:()', icon: 'credit-card' },

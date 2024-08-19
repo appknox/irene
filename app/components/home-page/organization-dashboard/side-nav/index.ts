@@ -118,7 +118,7 @@ export default class HomePageOrganizationDashboardSideNavComponent extends Compo
           'authenticated.dashboard.organization.namespaces authenticated.dashboard.organization.users authenticated.dashboard.organization.teams authenticated.dashboard.organization-settings',
       },
       this.showPublicApiDocs && {
-        label: this.intl.t('apiDocument'),
+        label: this.intl.t('apiDocumentation'),
         route: 'authenticated.dashboard.public-api.docs',
         currentWhen: 'authenticated.dashboard.public-api.docs',
         customIconComponent: 'ak-svg/public-api-icon' as const,
