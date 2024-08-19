@@ -88,6 +88,10 @@ module('Acceptance | security/project-search-list', function (hooks) {
       return { count: results.length, next: null, previous: null, results };
     });
 
+    this.server.get('hudson-api/projects/:id/files', () => {
+      return { count: 0, next: null, previous: null, results: [] };
+    });
+
     await visit('/security/projects');
 
     assert.dom('[data-test-project-search-list-view-file-btn]').exists();
