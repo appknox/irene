@@ -69,3 +69,5 @@ jobs:
           wait-on-timeout: 200
           record: true
           parallel: true
+          group: merge
+          tag: ${{ github.event_name }}
