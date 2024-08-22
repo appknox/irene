@@ -10,7 +10,7 @@ const AuthenticationBase = (
 ) =>
   class extends Superclass {
     get headers() {
-      const data = this['session'].data.authenticated;
+      const data = (this as any)['session'].data.authenticated;
 
       if (data?.b64token) {
         return {
