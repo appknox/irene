@@ -75,10 +75,26 @@ declare global {
       open: UnknownFnType;
       isOpen(): boolean;
       destroy(): void;
+
+      on(
+        event: string,
+        cb: (val: { status: number; data: { restoreId: string } }) => void
+      ): void;
+
+      user: {
+        get(
+          cb: (val: { status: number; data: { restoreId: string } }) => void
+        ): void;
+
+        create(val: Record<string, string | undefined>): void;
+        setProperties(val: Record<string, string | undefined>): void;
+      };
     };
     pendo: PendoInstance;
     CRISP_WEBSITE_ID: string;
     fwSettings: { widget_id: string };
+    fcSettings: object;
+    fcWidgetMessengerConfig: object;
     analytics?: CsbAnalytics;
     grecaptcha?: { execute: (options: { action: string }) => Promise<string> };
   }

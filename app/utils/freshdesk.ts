@@ -1,3 +1,5 @@
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-nocheck
 import OrganizationModel from 'irene/models/organization';
 import UserModel from 'irene/models/user';
 

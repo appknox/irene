@@ -35,7 +35,6 @@ module.exports = function (defaults) {
         'node_modules/swagger-ui/dist/',
       ],
       // onlyIncluded: true,
-      implementation: require('node-sass'),
       extension: 'sass',
       sourceMap: !isProduction,
       sourceMapEmbed: !isProduction,
