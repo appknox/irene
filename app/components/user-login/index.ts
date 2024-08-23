@@ -239,9 +239,11 @@ export default class UserLoginComponent extends Component {
   usernameChanged(event: Event) {
     const username = (event.target as HTMLInputElement).value;
 
-    this.reset();
+    if (username !== this.username) {
+      this.reset();
 
-    this.username = username;
+      this.username = username;
+    }
   }
 
   @action
