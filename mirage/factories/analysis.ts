@@ -1,8 +1,9 @@
-import { Factory, trait } from 'miragejs';
+// @ts-expect-error "trait" prop missing from miragejs
+import { Factory, ModelInstance, Server, trait } from 'miragejs';
 import { faker } from '@faker-js/faker';
 import ENUMS from 'irene/enums';
 
-export default Factory.extend({
+export const ANALYSIS_FACTORY_DEF = {
   analiser_version: 1,
   cvss_version: 3,
   cvss_base: 10.0,
@@ -20,7 +21,7 @@ export default Factory.extend({
   ],
 
   isIgnored: faker.datatype.boolean(),
-  overriden_risk: faker.helpers.arrayElement([null, 1, 2, 3, 4]),
+  overridden_risk: faker.helpers.arrayElement([null, 1, 2, 3, 4]),
   status: faker.helpers.arrayElement(ENUMS.ANALYSIS.VALUES),
   created_on: faker.date.past(),
   updated_on: faker.date.past(),
@@ -34,7 +35,7 @@ export default Factory.extend({
   },
 
   findings() {
-    let desc = [];
+    const desc = [];
     const uuid = faker.string.uuid();
 
     for (let i = 0; i < 3; i++) {
@@ -46,9 +47,12 @@ export default Factory.extend({
 
     return desc;
   },
+};
 
+export default Factory.extend({
+  ...ANALYSIS_FACTORY_DEF,
   withOwasp: trait({
-    afterCreate(model, server) {
+    afterCreate(model: ModelInstance, server: Server) {
       model.update({
         owasp: server.createList('owasp', 2).map((it) => it.id),
       });
@@ -56,7 +60,7 @@ export default Factory.extend({
   }),
 
   withOwaspMobile2024: trait({
-    afterCreate(model, server) {
+    afterCreate(model: ModelInstance, server: Server) {
       model.update({
         owaspmobile2024: server
           .createList('owaspmobile2024', 2)
@@ -66,7 +70,7 @@ export default Factory.extend({
   }),
 
   withOwaspApi2023: trait({
-    afterCreate(model, server) {
+    afterCreate(model: ModelInstance, server: Server) {
       model.update({
         owaspapi2023: server.createList('owaspapi2023', 2).map((it) => it.id),
       });
@@ -74,7 +78,7 @@ export default Factory.extend({
   }),
 
   withCwe: trait({
-    afterCreate(model, server) {
+    afterCreate(model: ModelInstance, server: Server) {
       model.update({
         cwe: server.createList('cwe', 2).map((it) => it.id),
       });
@@ -82,7 +86,7 @@ export default Factory.extend({
   }),
 
   withAsvs: trait({
-    afterCreate(model, server) {
+    afterCreate(model: ModelInstance, server: Server) {
       model.update({
         asvs: server.createList('asvs', 2).map((it) => it.id),
       });
@@ -90,7 +94,7 @@ export default Factory.extend({
   }),
 
   withMasvs: trait({
-    afterCreate(model, server) {
+    afterCreate(model: ModelInstance, server: Server) {
       model.update({
         masvs: server.createList('masvs', 2).map((it) => it.id),
       });
@@ -98,7 +102,7 @@ export default Factory.extend({
   }),
 
   withMstg: trait({
-    afterCreate(model, server) {
+    afterCreate(model: ModelInstance, server: Server) {
       model.update({
         mstg: server.createList('mstg', 2).map((it) => it.id),
       });
@@ -106,7 +110,7 @@ export default Factory.extend({
   }),
 
   withPcidss: trait({
-    afterCreate(model, server) {
+    afterCreate(model: ModelInstance, server: Server) {
       model.update({
         pcidss: server.createList('pcidss', 2).map((it) => it.id),
       });
@@ -122,7 +126,7 @@ export default Factory.extend({
   }),
 
   withHipaa: trait({
-    afterCreate(model, server) {
+    afterCreate(model: ModelInstance, server: Server) {
       model.update({
         hipaa: server.createList('hipaa', 2).map((it) => it.id),
       });
@@ -130,7 +134,7 @@ export default Factory.extend({
   }),
 
   withGdpr: trait({
-    afterCreate(model, server) {
+    afterCreate(model: ModelInstance, server: Server) {
       model.update({
         gdpr: server.createList('gdpr', 2).map((it) => it.id),
       });
@@ -138,7 +142,7 @@ export default Factory.extend({
   }),
 
   withNistsp80053: trait({
-    afterCreate(model, server) {
+    afterCreate(model: ModelInstance, server: Server) {
       model.update({
         nistsp80053: server.createList('nistsp80053', 2).map((it) => it.id),
       });
@@ -146,7 +150,7 @@ export default Factory.extend({
   }),
 
   withNistsp800171: trait({
-    afterCreate(model, server) {
+    afterCreate(model: ModelInstance, server: Server) {
       model.update({
         nistsp800171: server.createList('nistsp800171', 2).map((it) => it.id),
       });
@@ -154,7 +158,7 @@ export default Factory.extend({
   }),
 
   withSama: trait({
-    afterCreate(model, server) {
+    afterCreate(model: ModelInstance, server: Server) {
       model.update({
         sama: server.createList('sama', 2).map((it) => it.id),
       });
@@ -162,7 +166,7 @@ export default Factory.extend({
   }),
 
   withAllRegulatory: trait({
-    afterCreate(model, server) {
+    afterCreate(model: ModelInstance, server: Server) {
       model.update({
         owasp: server.createList('owasp', 2).map((it) => it.id),
         owaspmobile2024: server

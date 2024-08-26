@@ -29,6 +29,7 @@
       >
         <AnalysisRisk::Text
           data-test-analysisRisk-overrideEditDrawer-overrideForm-successOriginalRisk
+          data-test-cy='overrideEditDrawer-overrideForm-successOriginalRisk'
           @risk={{@dataModel.risk}}
           @fontWeight='medium'
         />
@@ -38,10 +39,12 @@
           @color='textSecondary'
           @iconName='east'
           data-test-analysisRisk-overrideEditDrawer-overrideForm-successFromToRiskIcon
+          data-test-cy='overrideEditDrawer-overrideForm-successFromToRiskIcon'
         />
 
         <AnalysisRisk::Text
           data-test-analysisRisk-overrideEditDrawer-overrideForm-successOverriddenRisk
+          data-test-cy='overrideEditDrawer-overrideForm-successOverriddenRisk'
           @risk={{@dataModel.overriddenRisk}}
           @fontWeight='medium'
         />
@@ -70,6 +73,7 @@
         <AkSelect
           {{style width='180px'}}
           data-test-analysisRisk-overrideEditDrawer-overrideForm-overrideToSelect
+          data-test-cy='overrideEditDrawer-overrideForm-overrideToSelect'
           @options={{this.filteredRisks}}
           @selected={{this.selectedRiskToOverride}}
           @onChange={{this.handleOverrideRiskChange}}
@@ -93,6 +97,7 @@
           <AkSelect
             {{style width='160px'}}
             data-test-analysisRisk-overrideEditDrawer-overrideForm-criteriaSelect
+            data-test-cy='overrideEditDrawer-overrideForm-criteriaSelect'
             @options={{this.overrideRiskForOptions}}
             @selected={{this.selectedOverrideCriteria}}
             @onChange={{this.handleOverrideCriteriaChange}}

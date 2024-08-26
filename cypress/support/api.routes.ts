@@ -53,6 +53,10 @@ export const API_ROUTES = {
     route: '/api/hudson-api/projects',
     alias: 'hudsonProjectList',
   },
+  vulnerabilityPreferenceList: {
+    route: '/api/profiles/*/vulnerability_preferences',
+    alias: 'vulnerabilityPreferenceList',
+  },
 
   // Single Record routes
   file: { route: '/api/v2/files', alias: 'file' },
@@ -76,5 +80,9 @@ export const API_ROUTES = {
   devicePreference: {
     route: '/api/profiles/*/device_preference?*',
     alias: 'devicePreference',
+  },
+  editAnalysisRisk: {
+    route: '/api/files/*/vulnerability_preferences/*/risk',
+    alias: 'editAnalysisRisk',
   },
 } as const;

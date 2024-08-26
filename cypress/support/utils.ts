@@ -75,3 +75,16 @@ export function removeHostFromUrl(urlString: string): string {
 
   return urlWithoutHost;
 }
+
+/**
+ * Returns the corresponding text description for a given vulnerability type.
+ *
+ * @param {number} vulnType - The numeric code representing the type of vulnerability.
+ * @returns {string | undefined} The text description of the vulnerability type
+ * (e.g., 'static', 'dynamic', 'manual', 'api'), or `undefined` if the code is not recognized.
+ */
+export function getVulnerabilityTypeText(vulnType: number): string {
+  const typeTextMap = { 1: 'static', 2: 'dynamic', 3: 'manual', 4: 'api' };
+
+  return typeTextMap[vulnType as keyof typeof typeTextMap];
+}

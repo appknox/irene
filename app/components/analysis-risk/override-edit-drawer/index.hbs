@@ -1,4 +1,10 @@
-<AkDrawer @open={{@open}} @onClose={{@onClose}} @anchor='right' as |dr|>
+<AkDrawer
+  @open={{@open}}
+  @onClose={{@onClose}}
+  @anchor='right'
+  data-test-cy='editAnaysis-drawer'
+  as |dr|
+>
   <AkAppbar @justifyContent='space-between' class='px-3' as |ab|>
     <AkStack @alignItems='center' @spacing='1'>
       {{#if this.appBarData.onBackClick}}
@@ -22,6 +28,7 @@
 
     <AkIconButton
       data-test-analysisRisk-overrideEditDrawer-closeBtn
+      data-test-cy='overrideEditDrawer-closeBtn'
       {{on 'click' dr.closeHandler}}
       class={{ab.classes.defaultIconBtn}}
     >
