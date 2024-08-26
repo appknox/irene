@@ -4,16 +4,18 @@ import { task } from 'ember-concurrency';
 import { injectSupportWidget, installFreshChat } from 'irene/utils/freshdesk';
 import { action } from '@ember/object';
 
-import ConfigurationService from './configuration';
-import LoggerService from './logger';
-import NetworkService from './network';
-import UserModel from 'irene/models/user';
+import type ConfigurationService from './configuration';
+import type LoggerService from './logger';
+import type NetworkService from './network';
+import type OrganizationService from './organization';
+import type UserModel from 'irene/models/user';
 
 export default class FreshdeskService extends Service {
   @service('browser/window') declare window: Window;
   @service declare configuration: ConfigurationService;
   @service declare logger: LoggerService;
   @service declare network: NetworkService;
+  @service declare organization: OrganizationService;
 
   @tracked widgetAuthToken = '';
 
@@ -154,6 +156,6 @@ export default class FreshdeskService extends Service {
       return;
     }
 
-    installFreshChat(user, this.freshchatKey);
+    installFreshChat(user, this.organization.selected, this.freshchatKey);
   }
 }
