@@ -1,5 +1,4 @@
-/* eslint-disable @typescript-eslint/ban-ts-comment */
-// @ts-nocheck
+import OrganizationModel from 'irene/models/organization';
 import UserModel from 'irene/models/user';
 
 // Inject freshdesk support script that enables widget in the application
@@ -25,7 +24,11 @@ const injectSupportWidget = (widgetId: string) => {
 };
 
 // Install freshchat
-const installFreshChat = (user: UserModel, freshchatKey: string) => {
+const installFreshChat = (
+  user: UserModel,
+  org: OrganizationModel | null,
+  freshchatKey: string
+) => {
   const host = 'https://appknox-support.freshchat.com';
 
   window.fcSettings = {
@@ -41,11 +44,16 @@ const installFreshChat = (user: UserModel, freshchatKey: string) => {
             firstName: user?.firstName, // user's first name
             lastName: user?.lastName, // user's last name
             email: user.email, // user's email address
+            cf_custom_company_name: org?.name,
           });
         }
 
         if (status === 200 && data?.restoreId) {
           window.localStorage.setItem(user.freshchatHash, data?.restoreId);
+
+          window.fcWidget?.user?.setProperties({
+            cf_custom_company_name: org?.name,
+          });
         }
       });
 
@@ -54,6 +62,10 @@ const installFreshChat = (user: UserModel, freshchatKey: string) => {
         const data = resp && resp.data;
 
         if (status === 200) {
+          window.fcWidget?.user?.setProperties({
+            cf_custom_company_name: org?.name,
+          });
+
           if (data?.restoreId) {
             // Save Restore ID to DB
             window.localStorage.setItem(user.freshchatHash, data.restoreId);
