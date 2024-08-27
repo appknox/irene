@@ -5,12 +5,22 @@ import ENV from 'irene/config/environment';
 // @ts-expect-error no types
 import DRFAdapter from 'ember-django-adapter/adapters/drf';
 
+interface SessionService {
+  data: {
+    authenticated: {
+      b64token: string;
+    };
+  };
+}
+
 const AuthenticationBase = (
   Superclass: typeof JSONAPIAdapter | typeof DRFAdapter
 ) =>
   class extends Superclass {
+    declare session: SessionService;
+
     get headers() {
-      const data = this['session'].data.authenticated;
+      const data = this.session.data.authenticated;
 
       if (data?.b64token) {
         return {
@@ -28,9 +38,9 @@ const AuthenticationBase = (
 export class JSONAPIAuthenticationBase extends AuthenticationBase(
   JSONAPIAdapter
 ) {
-  @service session: any;
+  @service declare session: SessionService;
 }
 
 export class DRFAuthenticationBase extends AuthenticationBase(DRFAdapter) {
-  @service session: any;
+  @service declare session: SessionService;
 }

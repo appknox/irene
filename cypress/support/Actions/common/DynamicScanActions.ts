@@ -118,7 +118,9 @@ export default class DynamicScanActions {
 
       this.novncRfbCanvasContainer.within(() => {
         if (x && y) {
-          cy.get('canvas').click(x, y, { force: true }).wait(2500);
+          cy.get('canvas')
+            .click(x, y, { force: true })
+            .wait(act.timeout ?? 2500);
         }
 
         cy.compareSnapshot(`${appInfo.snapshotPrefix}_${act.snapshot}`).should(

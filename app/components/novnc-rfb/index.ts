@@ -2,7 +2,7 @@ import { action } from '@ember/object';
 import Component from '@glimmer/component';
 import { tracked } from '@glimmer/tracking';
 // @ts-expect-error no types
-import RFB from '@novnc/novnc/core/rfb';
+import RFB from '@novnc/novnc/lib/rfb';
 
 export interface NovncRfbSignature {
   Args: {
