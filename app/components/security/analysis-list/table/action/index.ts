@@ -70,6 +70,7 @@ export default class SecurityAnalysisListTableActionComponent extends Component<
           ),
           owaspapi2023: this.analysis.owaspapi2023.map((a) => a.get('id')),
           pcidss: this.analysis.pcidss.map((a) => a.get('id')),
+          pcidss4: this.analysis.pcidss4.map((a) => a.get('id')),
           hipaa: this.analysis.hipaa.map((a) => a.get('id')),
           masvs: this.analysis.masvs.map((a) => a.get('id')),
           mstg: this.analysis.mstg.map((a) => a.get('id')),

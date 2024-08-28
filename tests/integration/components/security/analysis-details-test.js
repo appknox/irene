@@ -94,6 +94,7 @@ module('Integration | Component | security/analysis-details', function (hooks) {
       ['v2/mstgs', 'mstgs', 'mstg'],
       ['v2/gdprs', 'gdprs', 'gdpr'],
       ['pcidsses', 'pcidsses', 'pcidss', true],
+      ['v2/pcidss4s', 'pcidss4s', 'pcidss4'],
       ['v2/hipaas', 'hipaas', 'hipaa'],
       ['v2/nistsp80053s', 'nistsp80053s', 'nistsp80053'],
       ['v2/nistsp800171s', 'nistsp800171s', 'nistsp800171'],
@@ -667,6 +668,12 @@ module('Integration | Component | security/analysis-details', function (hooks) {
         ['code', 'title'],
       ],
       ['withPcidss', 'pcidss', 'PCI-DSS Risk Category', ['code', 'title']],
+      [
+        'withPcidss4',
+        'pcidss4',
+        'PCI-DSS Risk Category (v 4.0)',
+        ['code', 'title'],
+      ],
       ['withHipaa', 'hipaa', 'HIPAA Sections', ['code', 'safeguard', 'title']],
       [
         'withMasvs',

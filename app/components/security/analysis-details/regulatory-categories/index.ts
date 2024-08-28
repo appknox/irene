@@ -24,12 +24,14 @@ import type Nistsp80053Model from 'irene/models/nistsp80053';
 import type Nistsp800171Model from 'irene/models/nistsp800171';
 import type IntlService from 'ember-intl/services/intl';
 import SamaModel from 'irene/models/sama';
+import Pcidss4Model from 'irene/models/pcidss4';
 
 type RegulatoryCategoryOptionKeys =
   | 'owasp'
   | 'owaspmobile2024'
   | 'owaspapi2023'
   | 'pcidss'
+  | 'pcidss4'
   | 'hipaa'
   | 'masvs'
   | 'mstg'
@@ -45,6 +47,7 @@ type RegulatoryCategoryModels =
   | OwaspMobile2024Model
   | OwaspApi2023Model
   | PcidssModel
+  | Pcidss4Model
   | HipaaModel
   | MstgModel
   | MasvsModel
@@ -73,6 +76,7 @@ export default class SecurityAnalysisDetailsRegulatoryCategoriesComponent extend
     null;
   @tracked owaspapi2023sData: RegulatoryDataModel<OwaspApi2023Model> = null;
   @tracked pcidssesData: RegulatoryDataModel<PcidssModel> = null;
+  @tracked pcidss4sData: RegulatoryDataModel<Pcidss4Model> = null;
   @tracked hipaasData: RegulatoryDataModel<HipaaModel> = null;
   @tracked mstgsData: RegulatoryDataModel<MstgModel> = null;
   @tracked masvsesData: RegulatoryDataModel<MasvsModel> = null;
@@ -106,6 +110,10 @@ export default class SecurityAnalysisDetailsRegulatoryCategoriesComponent extend
     return !!this.analysis?.owaspmobile2024?.length;
   }
 
+  get pcidssExists() {
+    return !!this.analysis?.pcidss?.length;
+  }
+
   get owasps() {
     return this.owaspsData?.slice() || [];
   }
@@ -120,6 +128,10 @@ export default class SecurityAnalysisDetailsRegulatoryCategoriesComponent extend
 
   get pcidsses() {
     return this.pcidssesData?.slice() || [];
+  }
+
+  get pcidss4s() {
+    return this.pcidss4sData?.slice() || [];
   }
 
   get hipaas() {
@@ -192,6 +204,15 @@ export default class SecurityAnalysisDetailsRegulatoryCategoriesComponent extend
         selected: this.analysis?.pcidss.slice(),
         options: this.pcidsses,
         onChange: this.onCategorySelect('pcidss'),
+      },
+      {
+        key: 'pcidss4',
+        title: 'PCI-DSS Risk Category (v 4.0)',
+        labelKeys: ['code', 'title'],
+        selected: this.analysis?.pcidss4.slice(),
+        options: this.pcidss4s,
+        onChange: this.onCategorySelect('pcidss4'),
+        hidden: this.pcidssExists,
       },
       {
         key: 'hipaa',
@@ -328,6 +349,8 @@ export default class SecurityAnalysisDetailsRegulatoryCategoriesComponent extend
       this.nistsp800171sData = await this.store.findAll('nistsp800171');
 
       this.samaData = await this.store.findAll('sama');
+
+      this.pcidss4sData = await this.store.findAll('pcidss4');
     } catch (error) {
       this.notifications.error(parseError(error, this.tPleaseTryAgain));
     }
