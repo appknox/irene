@@ -2,6 +2,9 @@
   margin: 1em;
   width: 15em;
 }
+
 .marketplace-list {
   flex-wrap: wrap;
+  display: flex;
+  align-items: center;
 }

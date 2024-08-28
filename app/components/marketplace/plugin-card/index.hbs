@@ -37,9 +37,13 @@
       <img src={{@data.logo}} alt='ci-logo' />
     </div>
 
-    <div class='black-text bold font-medium text-centre padding-b-1h'>
+    <AkTypography
+      @align='center'
+      @fontWeight='bold'
+      local-class='marketplace-modal-title'
+    >
       {{@data.title}}
-    </div>
+    </AkTypography>
 
     <div>
       {{@data.instructions}}

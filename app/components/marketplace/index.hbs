@@ -1,31 +1,31 @@
-<h2 class='black-text bold padding-t-3q padding-l-h'>
+<AkTypography @fontWeight='bold' local-class='marketplace-header'>
   {{t 'marketplace'}}
-</h2>
+</AkTypography>
 
-<div class='padding-t-2 padding-l-1'>
-  <h3 class='black-text bold'>
+<AkStack @direction='column' class='pt-4 pl-2 pb-1'>
+  <AkTypography @fontWeight='bold' local-class='sub-header'>
     {{t 'plugins'}}
-  </h3>
+  </AkTypography>
 
-  <div class='padding-b-h'>
+  <AkTypography local-class='sub-header-description'>
     {{t 'marketplacePluginDesc'}}
-  </div>
-</div>
+  </AkTypography>
+</AkStack>
 
-<div class='padding-b-2'>
+<AkStack class='pb-4'>
   <Marketplace::PluginList />
-</div>
+</AkStack>
 
-<div class='padding-l-1'>
-  <h3 class='black-text bold'>
+<AkStack @direction='column' class='pl-2 pb-1'>
+  <AkTypography @fontWeight='bold' local-class='sub-header'>
     {{t 'integration'}}
-  </h3>
+  </AkTypography>
 
-  <div class='padding-b-h'>
+  <AkTypography local-class='sub-header-description'>
     {{t 'marketplaceIntegrationDesc'}}
-  </div>
-</div>
+  </AkTypography>
+</AkStack>
 
-<div class='padding-b-2'>
+<AkStack class='pb-4'>
   <Marketplace::IntegrationList />
-</div>
+</AkStack>

@@ -1391,6 +1391,17 @@ body {
 
   // variables for home-page/organization-dashboard/onboarding-guide
   --onboarding-guide-list-border-color: var(--border-color-1);
+
+  // variables for marketplace
+  --marketplace-sub-header-description-text-color: var(--text-secondary);
+
+  // variables for marketplace/plugin-card
+  --marketplace-plugin-card-text-color: var(--text-secondary);
+  --marketplace-plugin-card-border-color: var(--border-color-1);
+
+  // variables for marketplace/integration-card
+  --marketplace-integration-card-text-color: var(--text-secondary);
+  --marketplace-integration-card-border-color: var(--border-color-1);
 }
 
 body {
