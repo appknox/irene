@@ -119,17 +119,36 @@
           data-test-serviceAccountSection-accessToken-accountIdLabel
           @variant='subtitle1'
         >
-          {{t 'accountID'}}
+          {{t 'accessKeyID'}}
         </AkTypography>
 
         {{#if this.regenerateKey.isRunning}}
           <AkSkeleton @width='160px' />
         {{else}}
-          <AkTypography
-            data-test-serviceAccountSection-accessToken-accountIdValue
-          >
-            {{@serviceAccount.accessKeyId}}
-          </AkTypography>
+          <AkStack @width='full' @alignItems='center' @spacing='1'>
+            <AkTypography
+              data-test-serviceAccountSection-accessToken-accountIdValue
+            >
+              {{@serviceAccount.accessKeyId}}
+            </AkTypography>
+
+            {{#if this.secretAccessKeyVisible}}
+              <AkClipboard
+                @onSuccess={{this.handleCopySuccess}}
+                @onError={{this.handleCopyError}}
+                as |ac|
+              >
+                <AkIconButton
+                  data-test-serviceAccountSection-accessToken-accountIdCopyBtn
+                  data-clipboard-text={{@serviceAccount.accessKeyId}}
+                  id={{ac.triggerId}}
+                  @size='small'
+                >
+                  <AkIcon @iconName='content-copy' @color='primary' />
+                </AkIconButton>
+              </AkClipboard>
+            {{/if}}
+          </AkStack>
         {{/if}}
       </AkStack>
 
@@ -138,7 +157,7 @@
           @variant='subtitle1'
           data-test-serviceAccountSection-accessToken-secretKeyLabel
         >
-          {{t 'serviceAccountModule.secretAccountKey'}}
+          {{t 'serviceAccountModule.secretAccessKey'}}
         </AkTypography>
 
         {{#if this.regenerateKey.isRunning}}

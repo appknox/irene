@@ -717,7 +717,7 @@ module('Acceptance | Create service account', function (hooks) {
         .dom(
           '[data-test-serviceAccountSection-accessToken-secretKeyHelperText]'
         )
-        .hasText(t('serviceAccountModule.unmaskedSecretAccountKeyHelperText'));
+        .hasText(t('serviceAccountModule.unmaskedSecretAccessKeyHelperText'));
 
       assert
         .dom('[data-test-serviceAccountSection-accessToken-secretKeyCopyBtn]')

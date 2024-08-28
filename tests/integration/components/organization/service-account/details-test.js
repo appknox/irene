@@ -147,7 +147,7 @@ module(
 
       assert
         .dom('[data-test-serviceAccountSection-accessToken-accountIdLabel]')
-        .hasText('t:accountID:()');
+        .hasText('t:accessKeyID:()');
 
       assert
         .dom('[data-test-serviceAccountSection-accessToken-accountIdValue]')
@@ -155,7 +155,7 @@ module(
 
       assert
         .dom('[data-test-serviceAccountSection-accessToken-secretKeyLabel]')
-        .hasText('t:serviceAccountModule.secretAccountKey:()');
+        .hasText('t:serviceAccountModule.secretAccessKey:()');
 
       assert
         .dom('[data-test-serviceAccountSection-accessToken-secretKeyMasked]')
@@ -165,7 +165,7 @@ module(
         .dom(
           '[data-test-serviceAccountSection-accessToken-secretKeyHelperText]'
         )
-        .hasText('t:serviceAccountModule.maskedSecretAccountKeyHelperText:()');
+        .hasText('t:serviceAccountModule.maskedSecretAccessKeyHelperText:()');
 
       assert
         .dom('[data-test-serviceAccountSection-accessToken-expiryLabel]')

@@ -57,7 +57,7 @@ export default class OrganizationServiceAccountListComponent extends Component<O
         valuePath: 'name',
       },
       {
-        name: this.intl.t('accountID'),
+        name: this.intl.t('accessKeyID'),
         valuePath: 'accessKeyId',
         width: 150,
       },
