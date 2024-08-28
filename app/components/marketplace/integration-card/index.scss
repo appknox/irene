@@ -1,10 +1,10 @@
 .marketplace-card {
-  border: 1px solid #efefef;
+  border: 1px solid var(--marketplace-integration-card-border-color);
   text-align: center;
   display: block;
   box-shadow: 0px 0px 6px #ccc;
   padding: 1em;
-  color: #6b6b6b;
+  color: var(--marketplace-integration-card-text-color);
 
   &:hover {
     box-shadow: 1px 1px 20px #999;
