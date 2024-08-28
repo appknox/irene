@@ -1,0 +1,9 @@
+.note {
+  padding: 0.75em;
+  background-color: var(
+    --security-analysis-details-finding-add-form-note-background-color
+  );
+  border-radius: var(
+    --security-analysis-details-finding-add-form-note-border-radius
+  );
+}
