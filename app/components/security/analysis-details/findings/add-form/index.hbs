@@ -37,6 +37,24 @@
     />
   </AkStack>
 
+  <div local-class='note'>
+    <AkTypography @variant='subtitle2'>
+      API request/response -
+    </AkTypography>
+
+    <AkTypography @variant='body2' class='mt-1'>
+      When documenting API request/response details in your vulnerability
+      findings, please ensure the following formatting rules are applied:
+      <br />
+      New Lines: Use \n to indicate a new line within the same block of
+      information.
+      <br />
+      New Blocks: Use \n\n or \n\n\n to separate different blocks of
+      information, such as separating the request section from the response
+      section.
+    </AkTypography>
+  </div>
+
   <AkButton
     @variant='filled'
     {{on 'click' this.addFinding}}
