@@ -11,6 +11,11 @@ export enum OrganizationArchiveModelGeneratedVia {
   PARTNER = 1,
 }
 
+export enum OrganizationArchiveType {
+  COMPREHENSIVE = 0,
+  LATEST_SCAN = 1,
+}
+
 export default class OrganizationArchiveModel extends Model {
   @service declare logger: LoggerService;
   @service declare intl: IntlService;
@@ -58,6 +63,9 @@ export default class OrganizationArchiveModel extends Model {
   @attr('number')
   declare generatedVia: OrganizationArchiveModelGeneratedVia;
 
+  @attr('number')
+  declare archiveType: OrganizationArchiveType;
+
   async downloadURL() {
     const adapter = this.store.adapterFor('organization-archive');
 
@@ -78,13 +86,14 @@ export default class OrganizationArchiveModel extends Model {
   }
 
   get isCRM() {
-    return this.generatedVia == this.GeneratedViaEnum.CRM;
+    return this.generatedVia === this.GeneratedViaEnum.CRM;
   }
 
   get generatedByDisplay() {
     if (this.isCRM) {
       return this.SYSTEM;
     }
+
     return this.generatedBy.get('username');
   }
 

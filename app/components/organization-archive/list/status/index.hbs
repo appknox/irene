@@ -1,7 +1,7 @@
 {{#if @archive.isAvailable}}
   <AkTypography @align='center'>
     {{t 'expires'}}
-    {{dayjs-from-now @archive.availableUntil}}
+    {{this.availableUntil}}
   </AkTypography>
 {{/if}}
 

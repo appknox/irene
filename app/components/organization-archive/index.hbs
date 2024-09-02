@@ -1,104 +1,119 @@
-<div local-class='organization-archive-header-container'>
+<div>
   <AkTypography data-test-orgArchive-title @variant='h5' @gutterBottom={{true}}>
     {{t 'organizationArchive'}}
   </AkTypography>
 
-  <AkTypography
-    data-test-orgArchive-subtitle
-    @variant='body2'
-    @color='textSecondary'
-  >
-    {{t 'organizationArchiveDescription'}}
-  </AkTypography>
-
   <div class='my-3'>
-    <AkTypography data-test-orgArchive-dateTitle @variant='subtitle1'>
-      {{t 'organizationArchiveSelectDateTitle'}}
-    </AkTypography>
-
     <AkTypography
-      data-test-orgArchive-dateSubtitle
-      @variant='body2'
-      @color='textSecondary'
+      data-test-orgArchive-selectArchiveTypeTitle
+      @variant='subtitle1'
     >
-      {{t 'organizationArchiveSelectDateDesc'}}
+      {{t 'organizationArchiveTypeSelectTitle'}}
     </AkTypography>
 
-    <AkStack class='mt-2' @alignItems='center' @spacing='1.5'>
-      <AkDatePicker
-        @maxDate={{this.maxDate}}
-        @range={{true}}
-        @selected={{hash start=this.startDate end=this.endDate}}
-        @quickSelectOptions={{this.datepickerOptions}}
-        @onSelect={{this.setDuration}}
-      >
-        <AkStack
-          data-test-date-picker-toggle-button
-          local-class='date-picker-btn'
-          @alignItems='center'
+    <AkStack class='my-1' @alignItems='center' @spacing='1.5'>
+      <div {{style width='400px'}}>
+        <AkSelect
+          data-test-orgArchive-archiveTypeSelect
+          @options={{this.archiveTypeOptions}}
+          @onChange={{this.setArchiveType}}
+          @selected={{this.selectedArchiveType}}
+          @placeholder='{{t "organizationArchiveTypeSelectPlaceholder"}}'
+          as |aks|
         >
-          <AkIcon
-            @iconName='event'
-            @size='small'
-            @color='textPrimary'
-            title='Select date range'
-            local-class='date-picker-icon'
-          />
+          {{aks.label}}
+        </AkSelect>
+      </div>
 
-          <div
-            data-test-orgArchive-dateRangeLabel
-            local-class='date-picker-dateText'
+      {{#if this.isComprehensiveArchiveSelected}}
+        <AkDatePicker
+          @maxDate={{this.maxDate}}
+          @range={{true}}
+          @selected={{hash start=this.startDate end=this.endDate}}
+          @quickSelectOptions={{this.datepickerOptions}}
+          @onSelect={{this.setDuration}}
+        >
+          <AkStack
+            data-test-date-picker-toggle-button
+            local-class='date-picker-btn'
+            @alignItems='center'
           >
-            {{#if this.startDate}}
-              <AkTypography @tag='span' @color='textPrimary'>
-                {{day-js date=this.startDate format='DD MMM YYYY'}}
-              </AkTypography>
-            {{else}}
+            <AkIcon
+              @iconName='event'
+              @size='small'
+              @color='textPrimary'
+              title='Select date range'
+              local-class='date-picker-icon'
+            />
+
+            <div
+              data-test-orgArchive-dateRangeLabel
+              local-class='date-picker-dateText'
+            >
+              {{#if this.startDate}}
+                <AkTypography @tag='span' @color='textPrimary'>
+                  {{day-js date=this.startDate format='DD MMM YYYY'}}
+                </AkTypography>
+              {{else}}
+                <AkTypography @tag='span' @color='textSecondary'>
+                  {{t 'fromDate'}}
+                </AkTypography>
+              {{/if}}
+
               <AkTypography @tag='span' @color='textSecondary'>
-                {{t 'fromDate'}}
+                -
               </AkTypography>
-            {{/if}}
 
-            <AkTypography @tag='span' @color='textSecondary'>
-              -
-            </AkTypography>
+              {{#if this.endDate}}
+                <AkTypography @tag='span' @color='textPrimary'>
+                  {{day-js date=this.endDate format='DD MMM YYYY'}}
+                </AkTypography>
+              {{else}}
+                <AkTypography @tag='span' @color='textSecondary'>
+                  {{t 'toDate'}}
+                </AkTypography>
+              {{/if}}
+            </div>
 
-            {{#if this.endDate}}
-              <AkTypography @tag='span' @color='textPrimary'>
-                {{day-js date=this.endDate format='DD MMM YYYY'}}
-              </AkTypography>
-            {{else}}
-              <AkTypography @tag='span' @color='textSecondary'>
-                {{t 'toDate'}}
-              </AkTypography>
-            {{/if}}
-          </div>
+            <AkButton
+              data-test-orgArchive-dateClearBtn
+              local-class='date-picker-clearBtn'
+              @variant='text'
+              @color='primary'
+              @underline='always'
+              {{on 'click' this.clearSelectedDatePickerDates}}
+            >
+              {{t 'clear'}}
+            </AkButton>
+          </AkStack>
+        </AkDatePicker>
+      {{/if}}
 
-          <AkButton
-            data-test-orgArchive-dateClearBtn
-            local-class='date-picker-clearBtn'
-            @variant='text'
-            @color='primary'
-            @underline='always'
-            {{on 'click' this.clearSelectedDatePickerDates}}
-          >
-            Clear
-          </AkButton>
-        </AkStack>
-      </AkDatePicker>
-
-      <AkButton
-        data-test-orgArchive-exportBtn
-        {{on 'click' (perform this.tiggerGenerateArchive)}}
-        @loading={{this.tiggerGenerateArchive.isRunning}}
-      >
-        {{#if this.tiggerGenerateArchive.isRunning}}
-          {{t 'processing'}}
-        {{else}}
-          {{t 'organizationArchiveExport'}}
-        {{/if}}
-      </AkButton>
+      {{#if this.showExportButton}}
+        <AkButton
+          data-test-orgArchive-exportBtn
+          {{on 'click' (perform this.triggerGenerateArchive)}}
+          @loading={{this.triggerGenerateArchive.isRunning}}
+        >
+          {{#if this.triggerGenerateArchive.isRunning}}
+            {{t 'processing'}}
+          {{else}}
+            {{t 'organizationArchiveExport'}}
+          {{/if}}
+        </AkButton>
+      {{/if}}
     </AkStack>
+
+    {{#if this.selectedArchiveType}}
+      <AkTypography
+        data-test-orgArchive-archiveTypeDescription
+        local-class='archive-type-description'
+        @variant='body2'
+        @color='textSecondary'
+      >
+        {{this.selectedArchiveType.description}}
+      </AkTypography>
+    {{/if}}
   </div>
 </div>
 

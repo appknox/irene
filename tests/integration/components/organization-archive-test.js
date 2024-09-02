@@ -1,10 +1,12 @@
 import { module, test } from 'qunit';
 import { setupRenderingTest } from 'ember-qunit';
-import { render, findAll, click } from '@ember/test-helpers';
+import { render, findAll, click, triggerEvent } from '@ember/test-helpers';
 import { hbs } from 'ember-cli-htmlbars';
 import { setupMirage } from 'ember-cli-mirage/test-support';
 import { setupIntl } from 'ember-intl/test-support';
 import { Response } from 'miragejs';
+import { selectChoose } from 'ember-power-select/test-support';
+
 import {
   calendarCenter,
   calendarSelect,
@@ -13,6 +15,15 @@ import {
 import Service from '@ember/service';
 import dayjs from 'dayjs';
 import { faker } from '@faker-js/faker';
+
+import { OrganizationArchiveType } from 'irene/models/organization-archive';
+import styles from 'irene/components/ak-select/index.scss';
+
+const classes = {
+  dropdown: styles['ak-select-dropdown'],
+  trigger: styles['ak-select-trigger'],
+  triggerError: styles['ak-select-trigger-error'],
+};
 
 class OrganizationMeStub extends Service {
   org = {
@@ -33,6 +44,14 @@ class NotificationsStub extends Service {
   }
 }
 
+class WindowStub extends Service {
+  url = null;
+
+  open(url) {
+    this.url = url;
+  }
+}
+
 module('Integration | Component | organization-archive', function (hooks) {
   setupRenderingTest(hooks);
   setupMirage(hooks);
@@ -46,7 +65,8 @@ module('Integration | Component | organization-archive', function (hooks) {
       'organization-archive',
       5
     );
-    const organizationUsers = this.server.createList('organization-user', 5);
+
+    const organizationUsers = this.server.createList('organization-user', 6);
 
     this.setProperties({
       organizationArchives,
@@ -55,6 +75,7 @@ module('Integration | Component | organization-archive', function (hooks) {
 
     this.owner.register('service:me', OrganizationMeStub);
     this.owner.register('service:notifications', NotificationsStub);
+    this.owner.register('service:browser/window', WindowStub);
   });
 
   test('it renders organization-archive', async function (assert) {
@@ -77,21 +98,13 @@ module('Integration | Component | organization-archive', function (hooks) {
       .hasText('t:organizationArchive:()');
 
     assert
-      .dom('[data-test-orgArchive-subtitle]')
-      .hasText('t:organizationArchiveDescription:()');
+      .dom('[data-test-orgArchive-selectArchiveTypeTitle]')
+      .hasText('t:organizationArchiveTypeSelectTitle:()');
 
-    assert
-      .dom('[data-test-orgArchive-dateTitle]')
-      .hasText('t:organizationArchiveSelectDateTitle:()');
-
-    assert
-      .dom('[data-test-orgArchive-dateSubtitle]')
-      .hasText('t:organizationArchiveSelectDateDesc:()');
-
-    assert
-      .dom('[data-test-orgArchive-exportBtn]')
-      .isNotDisabled()
-      .hasText('t:organizationArchiveExport:()');
+    assert.dom('[data-test-orgArchive-exportBtn]').doesNotExist();
+    assert.dom('[data-test-orgArchive-dateRangeLabel]').doesNotExist();
+    assert.dom('[data-test-orgArchive-dateClearBtn]').doesNotExist();
+    assert.dom('[data-test-orgArchive-archiveTypeDescription]').doesNotExist();
 
     // archive table
     assert
@@ -106,7 +119,7 @@ module('Integration | Component | organization-archive', function (hooks) {
 
     assert.dom(headerContent[0]).hasText('t:organizationTableCreatedOn:()');
     assert.dom(headerContent[1]).hasText('t:organizationTableGeneratedBy:()');
-    assert.dom(headerContent[2]).hasText('t:organizationTableDuration:()');
+    assert.dom(headerContent[2]).hasText('t:reportType:()');
     assert.dom(headerContent[3]).hasText('t:status:()');
     assert.dom(headerContent[4]).hasText('t:action:()');
 
@@ -124,15 +137,40 @@ module('Integration | Component | organization-archive', function (hooks) {
 
     assert.dom(contentRow[1]).hasText(this.organizationUsers[0].username);
 
-    const fromDate = dayjs(this.organizationArchives[0].from_date).format(
-      'DD MMM YYYY'
-    );
+    if (
+      this.organizationArchives[0].archive_type ===
+      OrganizationArchiveType.COMPREHENSIVE
+    ) {
+      const fromDate = dayjs(this.organizationArchives[0].from_date).format(
+        'DD MMM YYYY'
+      );
 
-    const toDate = dayjs(this.organizationArchives[0].to_date).format(
-      'DD MMM YYYY'
-    );
+      const toDate = dayjs(this.organizationArchives[0].to_date).format(
+        'DD MMM YYYY'
+      );
 
-    assert.dom(contentRow[2]).hasText(`${fromDate} - ${toDate}`);
+      assert.dom(contentRow[2]).hasText('t:comprehensive:()');
+
+      const durationIcon = contentRow[2].querySelector(
+        '[data-test-orgArchive-durationIcon]'
+      );
+
+      assert.dom(durationIcon).exists();
+
+      assert.dom('[data-test-orgArchive-durationDateRange]').doesNotExist();
+
+      await triggerEvent(durationIcon, 'mouseenter');
+
+      assert
+        .dom('[data-test-orgArchive-durationDateRange]')
+        .hasText(`${fromDate} - ${toDate}`);
+
+      await triggerEvent(durationIcon, 'mouseleave');
+
+      assert.dom('[data-test-orgArchive-durationDateRange]').doesNotExist();
+    } else {
+      assert.dom(contentRow[2]).hasText('t:latestScan:()');
+    }
 
     const availableUntil = dayjs(
       this.organizationArchives[0].available_until
@@ -181,15 +219,40 @@ module('Integration | Component | organization-archive', function (hooks) {
 
     assert.dom(contentRow[1]).hasText(this.organizationUsers[3].username);
 
-    const fromDate = dayjs(this.organizationArchives[3].from_date).format(
-      'DD MMM YYYY'
-    );
+    if (
+      this.organizationArchives[3].archive_type ===
+      OrganizationArchiveType.COMPREHENSIVE
+    ) {
+      const fromDate = dayjs(this.organizationArchives[3].from_date).format(
+        'DD MMM YYYY'
+      );
 
-    const toDate = dayjs(this.organizationArchives[3].to_date).format(
-      'DD MMM YYYY'
-    );
+      const toDate = dayjs(this.organizationArchives[3].to_date).format(
+        'DD MMM YYYY'
+      );
 
-    assert.dom(contentRow[2]).hasText(`${fromDate} - ${toDate}`);
+      assert.dom(contentRow[2]).hasText('t:comprehensive:()');
+
+      const durationIcon = contentRow[2].querySelector(
+        '[data-test-orgArchive-durationIcon]'
+      );
+
+      assert.dom(durationIcon).exists();
+
+      assert.dom('[data-test-orgArchive-durationDateRange]').doesNotExist();
+
+      await triggerEvent(durationIcon, 'mouseenter');
+
+      assert
+        .dom('[data-test-orgArchive-durationDateRange]')
+        .hasText(`${fromDate} - ${toDate}`);
+
+      await triggerEvent(durationIcon, 'mouseleave');
+
+      assert.dom('[data-test-orgArchive-durationDateRange]').doesNotExist();
+    } else {
+      assert.dom(contentRow[2]).hasText('t:latestScan:()');
+    }
 
     assert.dom(contentRow[3]).hasText('t:expired:()');
 
@@ -202,12 +265,7 @@ module('Integration | Component | organization-archive', function (hooks) {
     async function (assert, { fail }) {
       assert.expect(fail ? 3 : 4);
 
-      window.open = (url) => {
-        assert.strictEqual(
-          url,
-          'https://appknox.archive_download_url.amazonaws.com/'
-        );
-      };
+      const downloadURL = 'https://appknox.archive_download_url.amazonaws.com/';
 
       this.server.get('/organizations/:id/archives', (schema) => {
         const results = schema.organizationArchives.all().models;
@@ -221,7 +279,7 @@ module('Integration | Component | organization-archive', function (hooks) {
           return fail
             ? new Response(500)
             : {
-                url: 'https://appknox.archive_download_url.amazonaws.com/',
+                url: downloadURL,
               };
         }
       );
@@ -259,15 +317,28 @@ module('Integration | Component | organization-archive', function (hooks) {
         );
       } else {
         assert.notOk(notify.errorMsg);
+
+        const window = this.owner.lookup('service:browser/window');
+
+        assert.strictEqual(window.url, downloadURL);
       }
     }
   );
 
   test.each(
-    'it should export excel archive for selected dates',
-    [{ fail: false }, { fail: true }],
-    async function (assert, { fail }) {
-      const createOrgArchive = () => this.server.create('organization-archive');
+    'it should export excel archive for selected dates/latest scan',
+    [
+      { fail: false, archiveType: OrganizationArchiveType.COMPREHENSIVE },
+      { fail: false, archiveType: OrganizationArchiveType.LATEST_SCAN },
+      { fail: true, archiveType: OrganizationArchiveType.COMPREHENSIVE },
+      { fail: true, archiveType: OrganizationArchiveType.LATEST_SCAN },
+    ],
+    async function (assert, { fail, archiveType }) {
+      const isComprehensive =
+        archiveType === OrganizationArchiveType.COMPREHENSIVE;
+
+      const createOrgArchive = (archive_type) =>
+        this.server.create('organization-archive', { archive_type });
 
       this.server.get('/organizations/:id/archives', (schema) => {
         const results = schema.organizationArchives.all().models;
@@ -276,8 +347,19 @@ module('Integration | Component | organization-archive', function (hooks) {
       });
 
       this.server.post('/organizations/:id/archives', () => {
-        return fail ? new Response(500) : createOrgArchive()?.toJSON();
+        return fail
+          ? new Response(500)
+          : createOrgArchive(archiveType)?.toJSON();
       });
+
+      this.server.post(
+        '/organizations/:id/archives/generate_excel_project_latest_scans',
+        () => {
+          return fail
+            ? new Response(500)
+            : createOrgArchive(archiveType)?.toJSON();
+        }
+      );
 
       this.server.get('/organizations/:id/users/:userId', (schema, req) => {
         const user = schema.organizationUsers.find(req.params.userId);
@@ -292,40 +374,78 @@ module('Integration | Component | organization-archive', function (hooks) {
         .hasText('t:organizationArchive:()');
 
       assert
-        .dom('[data-test-orgArchive-dateRangeLabel]')
-        .hasText('t:fromDate:() - t:toDate:()');
+        .dom('[data-test-orgArchive-selectArchiveTypeTitle]')
+        .hasText('t:organizationArchiveTypeSelectTitle:()');
+
+      assert.dom('[data-test-orgArchive-archiveTypeSelect]').exists();
+
+      assert.dom('[data-test-orgArchive-exportBtn]').doesNotExist();
+      assert.dom('[data-test-orgArchive-dateRangeLabel]').doesNotExist();
+      assert.dom('[data-test-orgArchive-dateClearBtn]').doesNotExist();
 
       assert
-        .dom('[data-test-orgArchive-dateClearBtn]')
-        .isNotDisabled()
-        .hasText('Clear');
+        .dom('[data-test-orgArchive-archiveTypeDescription]')
+        .doesNotExist();
 
-      assert.dom('[data-test-akDatePicker-calendar]').doesNotExist();
-
-      // open date picker
-      await click('[data-test-date-picker-toggle-button]');
-
-      assert.dom('[data-test-akDatePicker-calendar]').exists();
-
-      const prevMonth = dayjs().subtract(1, 'month');
-
-      await calendarCenter(
-        '[data-test-akDatePicker-calendar]',
-        prevMonth.toDate()
+      await selectChoose(
+        `[data-test-orgArchive-archiveTypeSelect] .${classes.trigger}`,
+        isComprehensive ? 't:comprehensive:()' : 't:latestScan:()'
       );
 
-      const dateFrom = new Date(prevMonth.year(), prevMonth.month(), 1);
-      const dateTo = new Date(prevMonth.year(), prevMonth.month(), 24);
-
-      await calendarSelect('[data-test-akDatePicker-calendar]', dateFrom);
-      await calendarSelect('[data-test-akDatePicker-calendar]', dateTo);
-
-      const fomatedFrom = dayjs(dateFrom).format('DD MMM YYYY');
-      const fomatedTo = dayjs(dateTo).format('DD MMM YYYY');
+      assert
+        .dom(`[data-test-orgArchive-archiveTypeSelect] .${classes.trigger}`)
+        .hasText(isComprehensive ? 't:comprehensive:()' : 't:latestScan:()');
 
       assert
-        .dom('[data-test-orgArchive-dateRangeLabel]')
-        .hasText(`${fomatedFrom} - ${fomatedTo}`);
+        .dom('[data-test-orgArchive-exportBtn]')
+        .isNotDisabled()
+        .hasText('t:organizationArchiveExport:()');
+
+      assert
+        .dom('[data-test-orgArchive-archiveTypeDescription]')
+        .hasText(
+          isComprehensive
+            ? 't:organizationArchiveComprehensiveDescription:()'
+            : 't:organizationArchiveLatestScanDescription:()'
+        );
+
+      if (isComprehensive) {
+        assert
+          .dom('[data-test-orgArchive-dateRangeLabel]')
+          .hasText('t:fromDate:() - t:toDate:()');
+
+        assert
+          .dom('[data-test-orgArchive-dateClearBtn]')
+          .isNotDisabled()
+          .hasText('t:clear:()');
+
+        assert.dom('[data-test-akDatePicker-calendar]').doesNotExist();
+
+        // open date picker
+        await click('[data-test-date-picker-toggle-button]');
+
+        assert.dom('[data-test-akDatePicker-calendar]').exists();
+
+        const prevMonth = dayjs().subtract(1, 'month');
+
+        await calendarCenter(
+          '[data-test-akDatePicker-calendar]',
+          prevMonth.toDate()
+        );
+
+        const dateFrom = new Date(prevMonth.year(), prevMonth.month(), 1);
+        const dateTo = new Date(prevMonth.year(), prevMonth.month(), 24);
+
+        await calendarSelect('[data-test-akDatePicker-calendar]', dateFrom);
+        await calendarSelect('[data-test-akDatePicker-calendar]', dateTo);
+
+        const fomatedFrom = dayjs(dateFrom).format('DD MMM YYYY');
+        const fomatedTo = dayjs(dateTo).format('DD MMM YYYY');
+
+        assert
+          .dom('[data-test-orgArchive-dateRangeLabel]')
+          .hasText(`${fomatedFrom} - ${fomatedTo}`);
+      }
 
       await click('[data-test-orgArchive-exportBtn]');
 
