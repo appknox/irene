@@ -1,0 +1,28 @@
+<AkStack @alignItems='center' @spacing='0.5'>
+  {{#if this.isLatestScanReport}}
+    <AkTypography>
+      {{t 'latestScan'}}
+    </AkTypography>
+  {{else}}
+    <AkTypography>
+      {{t 'comprehensive'}}
+    </AkTypography>
+
+    <AkTooltip @arrow={{true}} @color='light' @placement='bottom'>
+      <:tooltipContent>
+        <AkTypography data-test-orgArchive-durationDateRange class='p-1'>
+          {{this.duration}}
+        </AkTypography>
+      </:tooltipContent>
+
+      <:default>
+        <AkIcon
+          data-test-orgArchive-durationIcon
+          @iconName='event'
+          @size='small'
+          @color='textPrimary'
+        />
+      </:default>
+    </AkTooltip>
+  {{/if}}
+</AkStack>
