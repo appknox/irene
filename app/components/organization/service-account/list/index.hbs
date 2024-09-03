@@ -36,7 +36,10 @@
         @route='authenticated.dashboard.service-account-create'
         @query={{hash duplicate=null}}
       >
-        <AkButton data-test-serviceAccountList-createBtn>
+        <AkButton
+          data-test-cy='serviceAccountList-createBtn'
+          data-test-serviceAccountList-createBtn
+        >
           {{t 'create'}}
         </AkButton>
       </AkLink>
@@ -64,14 +67,18 @@
       <Organization::ServiceAccount::Empty />
     {{else}}
       <div class='mb-2'>
-        <AkTable as |t|>
+        <AkTable data-test-cy='serviceAccountList-table' as |t|>
           <t.head
             data-test-serviceAccountList-thead
             @columns={{this.columns}}
           />
 
           <t.body @rows={{this.serviceAccountList}} as |b|>
-            <b.row data-test-serviceAccountList-row as |r|>
+            <b.row
+              data-test-serviceAccountList-row
+              data-test-cy='serviceAccountList-row-{{b.rowValue.id}}'
+              as |r|
+            >
               <r.cell data-test-serviceAccountList-cell as |value|>
                 {{#if r.columnValue.component}}
                   {{#let (component r.columnValue.component) as |Component|}}

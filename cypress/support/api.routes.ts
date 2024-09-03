@@ -57,6 +57,10 @@ export const API_ROUTES = {
     route: '/api/profiles/*/vulnerability_preferences',
     alias: 'vulnerabilityPreferenceList',
   },
+  serviceAccountList: {
+    route: '/api/service_accounts*',
+    alias: 'serviceAccountList',
+  },
 
   // Single Record routes
   file: { route: '/api/v2/files', alias: 'file' },
@@ -84,5 +88,9 @@ export const API_ROUTES = {
   editAnalysisRisk: {
     route: '/api/files/*/vulnerability_preferences/*/risk',
     alias: 'editAnalysisRisk',
+  },
+  serviceAccount: {
+    route: '/api/service_accounts/*',
+    alias: 'serviceAccount',
   },
 } as const;

@@ -57,6 +57,7 @@
       <AkTable @dense={{true}} as |t|>
         <t.head
           data-test-serviceAccountAddProjectList-thead
+          data-test-cy='serviceAccountAddProjectList-thead'
           @columns={{this.columns}}
         />
         <t.body
@@ -65,7 +66,11 @@
           as |b|
         >
 
-          <b.row data-test-serviceAccountAddProjectList-row as |r|>
+          <b.row
+            data-test-serviceAccountAddProjectList-row
+            data-test-cy='serviceAccountAddProjectList-row'
+            as |r|
+          >
             <r.cell data-test-serviceAccountAddProjectList-cell>
               {{#if r.columnValue.component}}
                 {{#let (component r.columnValue.component) as |Component|}}
@@ -120,6 +125,7 @@
 
   <AkButton
     data-test-serviceAccountAddProjectList-addBtn
+    data-test-cy='serviceAccountAddProjectList-addBtn'
     {{on 'click' this.handleAddSelectedProjects}}
     @disabled={{this.hasNoSelection}}
     @loading={{this.addSelectedProjects.isRunning}}

@@ -15,6 +15,7 @@
         class={{ha.classes.headerActionBtn}}
         {{on 'click' this.handleShowEditView}}
         data-test-serviceAccountSection-accountOverview-actionBtn
+        data-test-cy='serviceAccountSection-accountOverview-actionBtn'
       >
         <AkIcon @iconName='edit' />
       </AkIconButton>
@@ -25,6 +26,7 @@
     {{#if this.isEditOrCreateView}}
       <AkTextField
         data-test-serviceAccountSection-accountOverview-nameInput
+        data-test-cy='serviceAccountSection-accountOverview-nameInput'
         @label='{{t "serviceAccountModule.nameOfTheServiceAccount"}}'
         @labelTypographyColor='textPrimary'
         @labelTypographyVariant='subtitle1'
@@ -46,6 +48,7 @@
 
         <Textarea
           data-test-serviceAccountSection-accountOverview-descriptionInput
+          data-test-cy='serviceAccountSection-accountOverview-descriptionInput'
           id='service-account-description'
           rows='6'
           local-class='
@@ -80,7 +83,10 @@
           />
         </AkStack>
 
-        <AkTypography data-test-serviceAccountSection-accountOverview-nameValue>
+        <AkTypography
+          data-test-serviceAccountSection-accountOverview-nameValue
+          data-test-cy='serviceAccountSection-accountOverview-nameValue'
+        >
           {{@serviceAccount.name}}
         </AkTypography>
       </AkStack>
@@ -95,6 +101,7 @@
 
         <AkTypography
           data-test-serviceAccountSection-accountOverview-descriptionValue
+          data-test-cy='serviceAccountSection-accountOverview-descriptionValue'
         >
           {{@serviceAccount.description}}
         </AkTypography>
@@ -105,6 +112,7 @@
   <:footerAction>
     <AkButton
       data-test-serviceAccountSection-accountOverview-updateBtn
+      data-test-cy='serviceAccountSection-accountOverview-updateBtn'
       @loading={{this.updateServiceAccount.isRunning}}
       {{on 'click' this.handleUpdateServiceAccount}}
     >

@@ -38,6 +38,7 @@
           <div local-class='expiry-text-input-container'>
             <AkTextField
               data-test-serviceAccountSection-accessToken-expiryInDaysInput
+              data-test-cy='serviceAccountSection-accessToken-expiryInDaysInput'
               @disabled={{this.doesNotExpire}}
               @value='{{this.expiryInDays}}'
               {{on 'keyup' this.handleExpireInDaysChange}}
@@ -89,6 +90,7 @@
         >
           <AkCheckbox
             data-test-serviceAccountSection-accessToken-doesNotExpireCheckbox
+            data-test-cy='serviceAccountSection-accessToken-doesNotExpireCheckbox'
             @checked={{this.doesNotExpire}}
             @onChange={{this.handleNoExpiryChange}}
           />
@@ -158,6 +160,7 @@
               >
                 <AkIconButton
                   data-test-serviceAccountSection-accessToken-secretKeyCopyBtn
+                  data-test-cy='serviceAccountSection-accessToken-secretKeyCopyBtn'
                   data-clipboard-text={{this.secretAccessKey}}
                   id={{ac.triggerId}}
                   @size='small'
@@ -213,7 +216,10 @@
         {{#if this.regenerateKey.isRunning}}
           <AkSkeleton @width='225px' />
         {{else}}
-          <AkTypography data-test-serviceAccountSection-accessToken-expiryValue>
+          <AkTypography
+            data-test-serviceAccountSection-accessToken-expiryValue
+            data-test-cy='serviceaccountsection-accesstoken-expiryvalue'
+          >
             {{if this.doesNotExpire (t 'noExpiry') this.expiresOn}}
           </AkTypography>
         {{/if}}
