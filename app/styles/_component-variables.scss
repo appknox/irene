@@ -1076,8 +1076,12 @@ body {
   --file-details-vulnerability-analysis-details-edit-analysis-reset-confirm-note-background-color: var(
     --neutral-grey-100
   );
-  --file-details-vulnerability-analysis-details-header-background-color: var(--neutral-grey-200);
-  --file-details-vulnerability-analysis-details-pagination-button-background-color: var(--common-white);
+  --file-details-vulnerability-analysis-details-header-background-color: var(
+    --neutral-grey-200
+  );
+  --file-details-vulnerability-analysis-details-pagination-button-background-color: var(
+    --common-white
+  );
 
   // variables for file-details/proxy-settings
   --file-details-proxy-settings-neutral-color: var(--neutral-grey-300);
@@ -1597,8 +1601,12 @@ body {
   --security-analysis-details-attachments-type-text-color: var(--common-white);
 
   // variables for security/analysis-details/finding/add-form
-  --security-analysis-details-finding-add-form-note-background-color: var(--neutral-grey-200);
-  --security-analysis-details-finding-add-form-note-border-radius: var(--border-radius);
+  --security-analysis-details-finding-add-form-note-background-color: var(
+    --neutral-grey-200
+  );
+  --security-analysis-details-finding-add-form-note-border-radius: var(
+    --border-radius
+  );
 
   // variables for dynamicscan-automation-upselling-feature
   --dynamicscan-automation-upselling-feature-box-shadow: var(--box-shadow-7);
@@ -1753,4 +1761,16 @@ body {
 
   // variables for public-api-docs/index
   --public-api-docs-tabs-background-color: var(--common-white);
+
+  // variables for organization-billing/plan
+  --organization-billing-plan-primary-main: var(--primary-main);
+  --organization-billing-plan-common-white: var(--common-white);
+  --organization-billing-plan-success-main: var(--success-main);
+  --organization-billing-plan-card-border-color: var(--border-color-1);
+  --organization-billing-plan-card-border-radius: var(--border-radius);
+  --organization-billing-plan-card-box-shadow: var(--box-shadow-7);
+  --organization-billing-plan-card-text-secondary-color: var(--text-secondary);
+  --organization-billing-plan-plan-quantity-container-border-color: var(
+    --border-color-2
+  );
 }

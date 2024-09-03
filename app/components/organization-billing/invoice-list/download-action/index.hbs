@@ -1,0 +1,11 @@
+<AkButton {{on 'click' (perform this.getInvoiceLink)}} @variant='outlined'>
+  <:leftIcon>
+    {{#if this.getInvoiceLink.isRunning}}
+      <AkLoader @size={{13}} />
+    {{else}}
+      <AkIcon @iconName='download' />
+    {{/if}}
+  </:leftIcon>
+
+  <:default>{{t 'download'}}</:default>
+</AkButton>

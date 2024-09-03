@@ -1,0 +1,57 @@
+.box-section {
+  max-width: 400px;
+  margin: 0.75em;
+  padding: 1em;
+  border: 1px solid var(--organization-billing-plan-card-border-color);
+  border-radius: var(--organization-billing-plan-card-border-radius);
+  box-shadow: var(--organization-billing-plan-card-box-shadow);
+
+  .box-section-content {
+    margin: 0.75em;
+    padding: 0.75em;
+    font-size: 1.142rem;
+    height: 60px;
+    text-align: center;
+    color: var(--organization-billing-plan-card-text-secondary-color);
+  }
+
+  .plan-quantity-container {
+    padding: 0 2em;
+    border: 2px solid
+      var(--organization-billing-plan-plan-quantity-container-border-color);
+  }
+
+  .plan-text {
+    text-transform: uppercase;
+  }
+
+  .minus-icon,
+  .plus-icon {
+    color: var(--organization-billing-plan-common-white) !important;
+    border-radius: 50%;
+    font-size: 20px;
+    width: 35px;
+    height: 35px;
+  }
+
+  .minus-icon {
+    background-color: var(--organization-billing-plan-primary-main);
+
+    &:hover {
+      background-color: var(
+        --organization-billing-plan-primary-main
+      ) !important;
+    }
+  }
+
+  .plus-icon,
+  .payment-button {
+    background-color: var(--organization-billing-plan-success-main);
+
+    &:hover {
+      background-color: var(
+        --organization-billing-plan-success-main
+      ) !important;
+    }
+  }
+}

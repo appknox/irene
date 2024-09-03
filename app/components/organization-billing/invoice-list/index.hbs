@@ -1,28 +1,33 @@
-<div class='invoice-table'>
+<div class='px-3'>
   {{#if this.hasInvoices}}
-    <h4 class='margin-left20 bold black-text'>
+    <AkTypography @variant='h2'>
       {{t 'invoices'}}
-    </h4>
+    </AkTypography>
 
-    <div class='invoice-list-container'>
-      <table>
-        <thead>
-          <tr>
-            <th>{{t 'invoiceId'}}</th>
-            <th>{{t 'planName'}}</th>
-            <th>{{t 'amountPaid'}}</th>
-            <th>{{t 'date'}}</th>
-            <th class='uppercase-text'>{{t 'status'}}</th>
-            <th>{{t 'invoice'}}</th>
-          </tr>
-        </thead>
+    <AkTable
+      class='my-2'
+      @variant='bordered'
+      @borderColor='dark'
+      data-test-billingInvoice-list
+      as |t|
+    >
+      <t.head data-test-billingInvoice-list-thead @columns={{this.columns}} />
 
-        <tbody local-class='invoice-tbody'>
-          {{#each this.invoices as |invoice|}}
-            <OrganizationBilling::InvoiceList::Overview @invoice={{invoice}} />
-          {{/each}}
-        </tbody>
-      </table>
-    </div>
+      <t.body @rows={{this.invoiceList}} as |b|>
+        <b.row data-test-billingInvoice-list-row as |r|>
+          <r.cell data-test-billingInvoice-list-cell as |value|>
+            {{#if r.columnValue.component}}
+              {{#let (component r.columnValue.component) as |Component|}}
+                <Component @invoice={{r.rowValue}} />
+              {{/let}}
+            {{else}}
+              <AkTypography title={{value}} @noWrap={{true}}>
+                {{value}}
+              </AkTypography>
+            {{/if}}
+          </r.cell>
+        </b.row>
+      </t.body>
+    </AkTable>
   {{/if}}
 </div>
