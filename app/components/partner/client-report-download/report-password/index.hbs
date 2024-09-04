@@ -6,16 +6,14 @@
       </:tooltipContent>
 
       <:default>
-        <button
-          type='button'
-          class='button is-default no-border no-hover-button'
+        <AkIconButton
           local-class='dropdown-toggle'
           id='password-toggle-{{@reportId}}'
           {{on 'click' this.togglePassTrayVisibility}}
           data-test-dropdown-toggle
         >
           <AkIcon @iconName='key' />
-        </button>
+        </AkIconButton>
       </:default>
     </AkTooltip>
 
@@ -47,18 +45,22 @@
                 data-test-report-password-value
               />
 
-              <button
-                type='button'
-                class='button is-primary highlighted-button copy-unlock-key-button-{{@reportId}}'
+              <AkButton
+                {{on 'click' this.onCopyPassword}}
+                class='copy-unlock-key-button-{{@reportId}}'
                 local-class='copy-button button-small'
                 data-clipboard-target='#unlock-key-{{@reportId}}'
                 data-clipboard-action='copy'
-                {{on 'click' this.onCopyPassword}}
                 data-test-report-password-copy-button
               >
-                <AkIcon @iconName='content-copy' />
-                {{t 'copy'}}
-              </button>
+                <:leftIcon>
+                  <AkIcon @iconName='content-copy' />
+                </:leftIcon>
+
+                <:default>
+                  {{t 'copy'}}
+                </:default>
+              </AkButton>
             </div>
           {{else if this.apiError}}
             <div local-class='password-loading-error' data-test-api-error>

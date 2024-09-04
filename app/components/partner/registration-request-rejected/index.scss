@@ -9,39 +9,7 @@
     grid-template-columns: 1fr 30% 10rem 10rem 3.6rem;
   }
 }
-.user {
-  padding-right: 1rem;
-}
-.email {
-  color: var(--black-700);
-  font-size: 0.95rem;
-  font-weight: 600;
-  line-height: 1.2;
-  word-break: break-word;
-  overflow-wrap: break-word;
-  text-overflow: ellipsis;
-}
-.name {
-  word-break: break-word;
-  overflow-wrap: break-word;
-  text-overflow: ellipsis;
-  padding-top: 0.3rem;
-  font-size: 0.9rem;
-}
-.company {
-  word-break: break-word;
-  overflow-wrap: break-word;
-  text-overflow: ellipsis;
-  padding-right: 1rem;
-  font-size: 0.92rem;
-}
-.date {
-  font-style: italic;
-  font-size: 0.9rem;
-  padding-right: 0.5rem;
-}
-.actions {
-  display: flex;
-  justify-content: flex-end;
-  align-items: center;
+
+.undo-icon {
+  color: var(--risk-high) !important;
 }

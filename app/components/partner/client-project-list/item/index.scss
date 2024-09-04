@@ -3,15 +3,15 @@
   color: var(--black-500);
 }
 
-.platform-android {
-  color: var(--android);
-}
-.platform-apple {
-  color: var(--ios);
-}
-
 .version {
   display: grid;
   align-items: center;
   font-size: 0.95em;
+}
+
+.view-files-button {
+  height: 32px;
+  padding-left: 0.7143em;
+  padding-right: 0.7143em;
+  border: 1px solid var(--primary);
 }

@@ -48,9 +48,7 @@
         </div>
         <div local-class='duration-options' data-test-chart='filter-options'>
           {{#each this.timelinePlaceholders as |option seq|}}
-            <button
-              class='button'
-              type='button'
+            <AkButton
               local-class='option {{if
                 (eq this.currentTimeline.key option.key)
                 "active"
@@ -59,8 +57,7 @@
               data-test-chart='filter-btns-{{seq}}'
             >
               {{option.buttonSelectorText}}
-            </button>
-
+            </AkButton>
           {{/each}}
         </div>
       </div>

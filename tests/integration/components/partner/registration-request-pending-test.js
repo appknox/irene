@@ -252,18 +252,11 @@ module(
       await render(
         hbs`<Partner::RegistrationRequestPending @request={{this.request}} @onApprove={{this.onApprove}} @onReject={{this.onReject}} />`
       );
-      assert.dom('[data-test-pending-request-approve-button]').exists();
 
-      const btn = this.element.querySelector(
-        '[data-test-pending-request-approve-button]'
-      );
       assert
         .dom('[data-test-pending-request-approve-button]')
-        .hasClass('is-success');
-      assert
-        .dom('[data-test-pending-request-approve-button]')
-        .hasAttribute('title');
-      assert.equal(btn.title, 'Send invitation');
+        .exists()
+        .hasAttribute('title', 'Send invitation');
     });
 
     test('it renders reject button as primary btn with title reject request', async function (assert) {
@@ -284,18 +277,11 @@ module(
       await render(
         hbs`<Partner::RegistrationRequestPending @request={{this.request}} @onApprove={{this.onApprove}} @onReject={{this.onReject}} />`
       );
-      assert.dom('[data-test-pending-request-reject-button]').exists();
 
-      const btn = this.element.querySelector(
-        '[data-test-pending-request-reject-button]'
-      );
       assert
         .dom('[data-test-pending-request-reject-button]')
-        .hasClass('is-primary');
-      assert
-        .dom('[data-test-pending-request-reject-button]')
-        .hasAttribute('title');
-      assert.equal(btn.title, 'Reject request');
+        .exists()
+        .hasAttribute('title', 'Reject request');
     });
   }
 );

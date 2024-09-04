@@ -2,6 +2,7 @@
   <div local-class='header' data-test-header>
     {{t 'downloadClientsStatData'}}
   </div>
+
   <div local-class='body'>
     <div local-class='date-range-picker' data-test-date-range-picker-container>
       <AkDatePicker
@@ -17,9 +18,9 @@
             data-test-date-range-icon
             @iconName='calendar-month'
             @size='small'
-            class='font-small'
             title='Select date range'
           />
+
           <span data-test-date-range-selected>
             <span local-class='date' data-test-from-date>
               {{#if this.selectedDateRange.start}}
@@ -27,8 +28,8 @@
               {{else}}
                 {{t 'fromDate'}}
               {{/if}}
-
             </span>
+
             <span>
               -
             </span>
@@ -43,8 +44,9 @@
         </div>
       </AkDatePicker>
     </div>
+
     <AkButton
-      class='is-primary button margin-left highlighted-button'
+      class='ml-2'
       {{on 'click' this.downloadCSV}}
       @loading={{this.fetchDownloadUrl.isRunning}}
       @disabled={{this.fetchDownloadUrl.isRunning}}

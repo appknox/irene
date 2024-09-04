@@ -110,7 +110,9 @@ module(
         hbs`<Partner::ClientProjectList @clientId={{this.clientId}}/>`
       );
       assert.equal(
-        this.element.querySelectorAll(`[data-test-table-header] > div`).length,
+        this.element.querySelectorAll(
+          `[data-test-table-header] > [data-test-table-header-item]`
+        ).length,
         3,
         '3 table header exist'
       );

@@ -30,35 +30,47 @@
             </:tooltipContent>
 
             <:default>
-              <button
-                type='button'
-                class='button is-primary is-small'
+              <AkButton
+                @variant='outlined'
+                @disabled={{this.isDownloadButtonDisabled}}
                 local-class='{{if
                   this.isGenerating
                   "button-progress"
                 }} download-button button-small'
-                disabled={{this.isDownloadButtonDisabled}}
                 {{on 'click' (fn this.onDownload this.latestReport.id)}}
                 data-test-download-report-button
               >
-                {{#if this.isGenerating}}
-                  <span
-                    class='is-progress'
-                    local-class='progress-loader'
-                    style={{this.generationProgressStyle}}
-                    data-test-download-button-generating-progress
-                  ></span>
-                  <span
-                    class='vertical-align-center'
-                    data-test-download-button-generating-label
-                  >{{t 'generating'}}</span>
-                {{else}}
-                  <span
-                    class='vertical-align-center'
-                    data-test-download-button-download-label
-                  ><AkIcon @iconName='download' />&nbsp; {{t 'download'}}</span>
-                {{/if}}
-              </button>
+
+                <:leftIcon>
+                  {{#unless this.isGenerating}}
+                    <AkIcon @iconName='download' />
+                  {{/unless}}
+                </:leftIcon>
+
+                <:default>
+                  {{#if this.isGenerating}}
+                    <span
+                      local-class='progress-loader is-progress'
+                      style={{this.generationProgressStyle}}
+                      data-test-download-button-generating-progress
+                    ></span>
+
+                    <AkTypography
+                      @color='inherit'
+                      data-test-download-button-generating-label
+                    >
+                      {{t 'generating'}}
+                    </AkTypography>
+                  {{else}}
+                    <AkTypography
+                      @color='inherit'
+                      data-test-download-button-download-label
+                    >
+                      {{t 'download'}}
+                    </AkTypography>
+                  {{/if}}
+                </:default>
+              </AkButton>
             </:default>
           </AkTooltip>
         </div>
@@ -78,16 +90,15 @@
             </:tooltipContent>
 
             <:default>
-              <button
-                type='button'
-                class='button is-default'
-                local-class='button-small'
+              <AkIconButton
+                @variant='outlined'
                 disabled={{this.isGenerateButtonDisabled}}
+                local-class='button-small'
                 {{on 'click' this.onGenerate}}
                 data-test-generate-report-button
               >
                 <AkIcon @iconName='refresh' />
-              </button>
+              </AkIconButton>
             </:default>
           </AkTooltip>
         </div>

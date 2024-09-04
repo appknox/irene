@@ -17,7 +17,8 @@
       </strong>
     </div>
   </div>
-  <div class='divider margin-t-1 margin-b-1'></div>
+
+  <AkDivider class='my-2' @color='dark' />
 
   <div local-class='client-crdits' data-test-client-credits>
     <div local-class='row' data-test-row>
@@ -25,7 +26,7 @@
         {{t 'client'}}:
       </div>
       <strong
-        local-class='value {{unless @clientName 'empty-title'}}'
+        local-class='value {{unless @clientName "empty-title"}}'
         data-test-client-value
       >
         {{#if @clientName}}
@@ -53,28 +54,33 @@
     </div>
   </div>
 
-  <div local-class='action-btns' data-test-action-btns>
+  <AkStack
+    @justifyContent='center'
+    @alignItems='center'
+    @spacing='2'
+    @width='full'
+    class='mt-2'
+    data-test-action-btns
+  >
     {{#if @transferCredits}}
-      <button
-        type='button'
-        local-class='transfer-btn'
-        class='is-primary button margin-top margin-right'
+      <AkButton
+        @variant='outlined'
         data-test-confirm-btn
         {{on 'click' @transferCredits}}
       >
         {{t 'confirmTransfer'}}
-      </button>
+      </AkButton>
     {{/if}}
+
     {{#if @toggleMode}}
-      <button
-        type='button'
-        local-class='back-btn'
-        class='button margin-top is-default'
+      <AkButton
+        @variant='outlined'
+        @color='neutral'
         data-test-back-btn
         {{on 'click' @toggleMode}}
       >
         {{t 'back'}}
-      </button>
+      </AkButton>
     {{/if}}
-  </div>
+  </AkStack>
 </div>

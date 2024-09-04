@@ -235,7 +235,7 @@ module(
         .hasClass(styles['button-progress']);
       assert
         .dom('[data-test-download-button-generating-progress]')
-        .hasClass('is-progress')
+        .hasClass(styles['is-progress'])
         .hasClass(styles['progress-loader'])
         .hasAttribute('style', `width: ${report.progress}%`);
       assert

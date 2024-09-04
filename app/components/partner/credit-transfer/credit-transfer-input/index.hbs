@@ -32,15 +32,14 @@
     </div>
   </div>
   {{#if @toggleMode}}
-    <button
-      type='button'
+    <AkButton
+      @variant='outlined'
+      @disabled={{not this.isValidInput}}
       local-class='tranfer-btn'
-      class='is-primary button'
-      disabled={{not this.isValidInput}}
-      data-test-transfer-btn
       {{on 'click' @toggleMode}}
+      data-test-transfer-btn
     >
       {{t 'transferCredits'}}
-    </button>
+    </AkButton>
   {{/if}}
 </div>

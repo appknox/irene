@@ -15,13 +15,13 @@
         </div>
         <div local-class='plan-status' data-test-plan-status>
           {{#if this.clientPlan.limitedScans}}
-            <strong class='margin-r-h' data-test-scans-left>
+            <strong class='mr-1' data-test-scans-left>
               {{this.clientPlan.scansLeft}}
               {{t 'pluralScans' itemCount=this.clientPlan.scansLeft}}
             </strong>
             {{t 'remaining'}}
           {{else}}
-            <strong class='margin-r-h' data-test-projects-left>
+            <strong class='mr-1' data-test-projects-left>
               {{this.clientPlan.projectsLimit}}
               {{t 'pluralApps' itemCount=this.clientPlan.projectsLimit}}
             </strong>

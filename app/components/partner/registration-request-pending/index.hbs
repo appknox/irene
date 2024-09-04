@@ -1,41 +1,59 @@
 <div local-class='request' data-test-pending-request ...attributes>
-  <div local-class='user'>
-    <div
-      local-class='email'
-      data-test-pending-request-email
-    >{{@request.email}}</div>
-    <div
-      local-class='name'
-      class='text-lightgray'
+  <AkStack @direction='column' @spacing='0.5' class='pr-2'>
+    <AkTypography @noWrap={{true}} data-test-pending-request-email>
+      {{@request.email}}
+    </AkTypography>
+
+    <AkTypography
+      @color='neutral'
+      @variant='body2'
+      @noWrap={{true}}
       data-test-pending-request-name
-    >{{@request.fullName}}</div>
-  </div>
-  <div
-    local-class='company'
+    >
+      {{@request.fullName}}
+    </AkTypography>
+  </AkStack>
+
+  <AkTypography
+    @color='neutral'
+    @variant='body2'
+    @noWrap={{true}}
     data-test-pending-request-company
-  >{{@request.data.company}}</div>
-  <div
-    local-class='date'
-    class='text-lightgray'
+  >
+    {{@request.data.company}}
+  </AkTypography>
+
+  <AkTypography
+    @color='neutral'
+    @variant='body2'
     title='{{day-js date=@request.createdOn format='DD MMM YYYY HH:mm A'}}'
     data-test-pending-request-createdon
-  >{{dayjs-from-now @request.createdOn}}</div>
-  <div local-class='actions'>
-    <button
-      type='button'
-      class='button is-success'
-      local-class='approveRequest'
+  >
+    <em>{{dayjs-from-now @request.createdOn}}</em>
+  </AkTypography>
+
+  <AkStack @justifyContent='flex-end' @alignItems='center' @spacing='1'>
+    <AkButton
+      @variant='outlined'
       title='Send invitation'
-      data-test-pending-request-approve-button
       {{on 'click' (fn @onApprove @request)}}
-    ><AkIcon @iconName='done'/>&nbsp; Invite</button>
-    <button
-      type='button'
-      class='button is-primary margin-l-h'
-      local-class='rejectRequest'
+      local-class='invite-btn'
+      data-test-pending-request-approve-button
+    >
+      <:leftIcon><AkIcon @iconName='done' @color='success' /></:leftIcon>
+
+      <:default>Invite</:default>
+    </AkButton>
+
+    <AkButton
+      @variant='outlined'
       title='Reject request'
       data-test-pending-request-reject-button
       {{on 'click' (fn @onReject @request)}}
-    ><AkIcon @iconName='close'/>&nbsp; Reject</button>
-  </div>
+    >
+      <:leftIcon><AkIcon @iconName='close' /></:leftIcon>
+
+      <:default>Reject</:default>
+    </AkButton>
+  </AkStack>
 </div>

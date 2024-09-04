@@ -2,8 +2,8 @@
 
 <Partner::ClientsNav />
 
-<div class='padding-h-1 padding-b-2'>
-  <div class='padding-t-1h padding-b-3'>
+<div class='px-2 pb-4'>
+  <div class='pt-3 pb-6'>
     <LinkTo @route='authenticated.partner.clients'>{{t 'clients'}}</LinkTo>
     /
     {{#if this.model.client.isEmptyTitle}}
@@ -15,12 +15,12 @@
     <Partner::ClientDetail @client={{this.model.client}} />
   </div>
 
-  <div class='padding-h-1 padding-b-3'>
+  <div class='px-2 pb-6'>
     <Partner::ClientProjectList @clientId={{this.model.client.id}} />
   </div>
 
   {{#if this.model.partner.access.view_analytics}}
-    <div class='padding-h-1 padding-b-3'>
+    <div class='px-2 pb-6'>
       <Partner::ClientUploadsStatChart
         @title={{this.model.client.name}}
         @targetModel='partner/partnerclient-analytic'
