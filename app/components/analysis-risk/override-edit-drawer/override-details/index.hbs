@@ -5,7 +5,11 @@
 <AkDivider @color='dark' class='my-2' />
 
 <div class='p-3'>
-  <AkStack @direction='column' @spacing='1'>
+  <AkStack
+    @direction='column'
+    @spacing='1'
+    data-test-cy='overrideEditDrawer-overrideDetails-overriddenRiskInfo'
+  >
     <AkTypography
       data-test-analysisRisk-overrideEditDrawer-overrideDetails-overriddenAsTitle
       @variant='subtitle1'
@@ -52,7 +56,11 @@
 
   <AkDivider @color='dark' class='my-2' />
 
-  <AkStack @direction='column' @spacing='1'>
+  <AkStack
+    @direction='column'
+    @spacing='1'
+    data-test-cy='overrideEditDrawer-overrideDetails-auditDetails'
+  >
     {{#each this.overrideAuditDetails as |oad|}}
       <AkStack
         data-test-analysisRisk-overrideEditDrawer-overrideDetails-auditDetails='{{oad.label}}'

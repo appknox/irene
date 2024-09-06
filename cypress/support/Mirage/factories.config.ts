@@ -4,6 +4,10 @@ import { BASE_FACTORY_DEF } from 'irene/mirage/factories/base';
 import FileFactory, { FILE_FACTORY_DEF } from 'irene/mirage/factories/file';
 import User, { USER_FACTORY_DEF } from 'irene/mirage/factories/user';
 
+import AnalysisFactory, {
+  ANALYSIS_FACTORY_DEF,
+} from 'irene/mirage/factories/analysis';
+
 import SbomProjectFactory, {
   SBOM_PROJECT_FACTORY_DEF,
 } from 'irene/mirage/factories/sbom-project';
@@ -51,6 +55,18 @@ type FlattenFactoryMethods<T> = {
 type IncludeBaseFactoryProps<T> = FlattenFactoryMethods<T> &
   FlattenFactoryMethods<typeof BASE_FACTORY_DEF>;
 
+type AnalysisModelFactoryDef = FlattenFactoryMethods<
+  typeof ANALYSIS_FACTORY_DEF & {
+    id: number;
+    vulnerability: number;
+    overridden_by: string;
+    overridden_date: Date;
+    overridden_risk: number;
+    overridden_risk_comment: string;
+    override_criteria: string;
+  }
+>;
+
 export interface MirageFactoryDefProps {
   user: FlattenFactoryMethods<typeof USER_FACTORY_DEF>;
   'upload-app': FlattenFactoryMethods<typeof UPLOAD_APP_FACTORY_DEF>;
@@ -72,7 +88,10 @@ export interface MirageFactoryDefProps {
   project: IncludeBaseFactoryProps<typeof PROJECT_FACTORY_DEF> & {
     last_file_id: number;
   };
+
   vulnerability: IncludeBaseFactoryProps<typeof VULNERABLITY_FACTORY_DEF>;
+
+  analysis: AnalysisModelFactoryDef;
 
   'unknown-analysis-status': IncludeBaseFactoryProps<
     typeof UNKNOWN_ANALYSIS_STATUS_FACTORY_DEF
@@ -82,6 +101,7 @@ export interface MirageFactoryDefProps {
     typeof FILE_FACTORY_DEF & {
       project: number;
       executable_name: string;
+      analyses: Array<AnalysisModelFactoryDef>;
     }
   >;
 }
@@ -96,6 +116,7 @@ const MIRAGE_FACTORIES: Record<
   file: FileFactory,
   project: ProjectFactory,
   vulnerability: VulnerabilityFactory,
+  analysis: AnalysisFactory,
   'unknown-analysis-status': UnknownAnalysisStatus,
   'organization-member': OrganizationMember,
   user: User,

@@ -41,3 +41,34 @@ Cypress.Commands.add(
     return cy.wrap(values);
   }
 );
+
+Cypress.Commands.add('getBySel', (selector, ...args) => {
+  return cy.get(`[data-test=${selector}]`, ...args);
+});
+
+Cypress.Commands.add('getBySelLike', (selector, ...args) => {
+  return cy.get(`[data-test*=${selector}]`, ...args);
+});
+
+Cypress.Commands.add(
+  'makeAuthenticatedAPIRequest',
+  <ResObj>(
+    options: Partial<Cypress.RequestOptions>
+  ): Cypress.Chainable<Cypress.Response<ResObj>> => {
+    return cy
+      .window()
+      .its('localStorage')
+      .invoke('getItem', 'ember_simple_auth-session')
+      .then((authInfo) => {
+        const authDetails = authInfo ? JSON.parse(authInfo) : {};
+
+        return cy.request<ResObj>({
+          ...options,
+          headers: {
+            ...options.headers,
+            Authorization: `Basic ${authDetails['authenticated']['b64token']}`,
+          },
+        });
+      });
+  }
+);
