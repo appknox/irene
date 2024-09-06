@@ -1,17 +1,17 @@
 import Component from '@glimmer/component';
 import { inject as service } from '@ember/service';
-
-import ENV from 'irene/config/environment';
-import InvoiceModel from 'irene/models/invoice';
 import { task } from 'ember-concurrency';
 
-interface OrganizationBillingInvoiceListOverviewSignature {
+import ENV from 'irene/config/environment';
+import type InvoiceModel from 'irene/models/invoice';
+
+interface OrganizationBillingInvoiceListDownloadActionSignature {
   Args: {
     invoice: InvoiceModel;
   };
 }
 
-export default class OrganizationBillingInvoiceListOverviewComponent extends Component<OrganizationBillingInvoiceListOverviewSignature> {
+export default class OrganizationBillingInvoiceListDownloadActionComponent extends Component<OrganizationBillingInvoiceListDownloadActionSignature> {
   @service declare ajax: any;
   @service('browser/window') declare window: Window;
   @service('notifications') declare notify: NotificationService;
@@ -34,6 +34,7 @@ export default class OrganizationBillingInvoiceListOverviewComponent extends Com
 
 declare module '@glint/environment-ember-loose/registry' {
   export default interface Registry {
-    'OrganizationBilling::InvoiceList::Overview': typeof OrganizationBillingInvoiceListOverviewComponent;
+    'OrganizationBilling::InvoiceList::DownloadAction': typeof OrganizationBillingInvoiceListDownloadActionComponent;
+    'organization-billing/invoice-list/download-action': typeof OrganizationBillingInvoiceListDownloadActionComponent;
   }
 }

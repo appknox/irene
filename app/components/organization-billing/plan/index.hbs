@@ -1,55 +1,60 @@
-<div class='column is-one-third'>
-  <div class='box-section'>
-    <h2>
-      {{@plan.name}}
-    </h2>
+<div class='w-4/12' local-class='box-section'>
+  <AkTypography
+    @variant='h3'
+    @fontWeight='regular'
+    @color='textSecondary'
+    @align='center'
+  >
+    {{@plan.name}}
+  </AkTypography>
 
-    {{#each @plan.descriptionItems as |item|}}
-      <div class='box-section-content'>
-        {{item}}
-      </div>
-    {{/each}}
-
-    <div class='columns choose-units'>
-      <div class='column'>
-        <button
-          type='button'
-          class='minus-icon'
-          {{on 'click' this.decrementPlanQuantity}}
-        >
-          <AkIcon @iconName='remove' />
-        </button>
-      </div>
-
-      <div class='column'>
-        <div class='columns'>
-          <div class='column'>
-            <h3>{{this.planQuantity}}</h3>
-          </div>
-        </div>
-
-        <div class='columns'>
-          <div class='column plan-text uppercase-text'>
-            {{this.planText}}
-          </div>
-        </div>
-      </div>
-
-      <div class='column'>
-        <button
-          type='button'
-          class='plus-icon'
-          {{on 'click' this.incrementPlanQuantity}}
-        >
-          <AkIcon @iconName='add' />
-        </button>
-      </div>
+  {{#each @plan.descriptionItems as |item|}}
+    <div local-class='box-section-content'>
+      {{item}}
     </div>
+  {{/each}}
 
-    <div class='flex-center'>
-      <button type='button' class='pay' {{on 'click' this.initiatePayment}}>
-        {{this.updatedPrice}}
-      </button>
-    </div>
-  </div>
+  <AkStack
+    class='mt-7 mb-3'
+    @alignItems='flex-start'
+    @justifyContent='center'
+    @spacing='3'
+  >
+    <AkIconButton
+      local-class='minus-icon'
+      {{on 'click' this.decrementPlanQuantity}}
+    >
+      <AkIcon @iconName='remove' />
+    </AkIconButton>
+
+    <AkStack
+      @direction='column'
+      @spacing='1'
+      @alignItems='center'
+      @justifyContent='center'
+    >
+      <div local-class='plan-quantity-container'>
+        <AkTypography @variant='h3' @fontWeight='regular'>
+          {{this.planQuantity}}
+        </AkTypography>
+      </div>
+
+      <AkTypography local-class='plan-text' @tag='span' @color='textSecondary'>
+        {{this.planText}}
+      </AkTypography>
+    </AkStack>
+
+    <AkIconButton
+      local-class='plus-icon'
+      {{on 'click' this.incrementPlanQuantity}}
+    >
+      <AkIcon @iconName='add' />
+    </AkIconButton>
+  </AkStack>
+
+  <AkStack @alignItems='center' @justifyContent='center'>
+    <AkButton local-class='payment-button' {{on 'click' this.initiatePayment}}>
+      {{this.updatedPrice}}
+    </AkButton>
+  </AkStack>
 </div>

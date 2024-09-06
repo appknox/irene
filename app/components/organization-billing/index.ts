@@ -1,16 +1,17 @@
 import Component from '@glimmer/component';
 import { inject as service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
-import Store from '@ember-data/store';
 import { task } from 'ember-concurrency';
 import { action } from '@ember/object';
+import type IntlService from 'ember-intl/services/intl';
 
 // eslint-disable-next-line ember/use-ember-data-rfc-395-imports
-import DS from 'ember-data';
-import SubscriptionModel from 'irene/models/subscription';
-import PlanModel from 'irene/models/plan';
+import type DS from 'ember-data';
+import type Store from '@ember-data/store';
+
+import type SubscriptionModel from 'irene/models/subscription';
+import type PlanModel from 'irene/models/plan';
 import ENUMS from 'irene/enums';
-import IntlService from 'ember-intl/services/intl';
 
 type SubscriptionsResponse = DS.AdapterPopulatedRecordArray<SubscriptionModel>;
 type PlansResponse = DS.AdapterPopulatedRecordArray<PlanModel>;
@@ -47,7 +48,7 @@ export default class OrganizationBillingComponent extends Component {
   }
 
   get subscriptionCount() {
-    return (this.subscriptions?.toArray() || []).length;
+    return (this.subscriptions?.slice() || []).length;
   }
 
   get hasSubscription() {

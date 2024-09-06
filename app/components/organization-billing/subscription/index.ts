@@ -1,12 +1,12 @@
 import Component from '@glimmer/component';
 import { inject as service } from '@ember/service';
-import IntlService from 'ember-intl/services/intl';
 import { task } from 'ember-concurrency';
 import { tracked } from '@glimmer/tracking';
 import { action } from '@ember/object';
+import type IntlService from 'ember-intl/services/intl';
 
 import ENV from 'irene/config/environment';
-import SubscriptionModel from 'irene/models/subscription';
+import type SubscriptionModel from 'irene/models/subscription';
 
 interface OrganizationBillingSubscriptionSignature {
   Args: {
@@ -23,6 +23,38 @@ export default class OrganizationBillingSubscriptionComponent extends Component<
 
   get isNotPerScan() {
     return !this.args.subscription?.isPerScan;
+  }
+
+  get columns() {
+    return [
+      {
+        name: this.intl.t('subscriptionDetails'),
+        textAlign: 'center',
+      },
+    ];
+  }
+
+  get rows() {
+    return [
+      {
+        label: this.intl.t('currentPlan'),
+        value: this.args.subscription?.planName,
+      },
+      {
+        label: this.intl.t('billingPeriod'),
+        value: this.args.subscription?.billingPeriodText,
+      },
+    ];
+  }
+
+  @action
+  openCancelSubscriptionConfirmBox() {
+    this.showCancelSubscriptionConfirmBox = true;
+  }
+
+  @action
+  closeCancelSubscriptionConfirmBox() {
+    this.showCancelSubscriptionConfirmBox = false;
   }
 
   confirmCancelSubscription = task(async () => {
@@ -49,16 +81,6 @@ export default class OrganizationBillingSubscriptionComponent extends Component<
       }
     }
   });
-
-  @action
-  openCancelSubscriptionConfirmBox() {
-    this.showCancelSubscriptionConfirmBox = true;
-  }
-
-  @action
-  closeCancelSubscriptionConfirmBox() {
-    this.showCancelSubscriptionConfirmBox = false;
-  }
 }
 
 declare module '@glint/environment-ember-loose/registry' {

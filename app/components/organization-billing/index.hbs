@@ -1,55 +1,58 @@
 <div>
   {{#if this.hasSubscription}}
-    <div class='box-container'>
-      <div class='columns plan-durations'>
-        <h4 class='bold black-text'>
-          {{t 'activeSubscription'}}
-        </h4>
-      </div>
+    <div class='px-3 py-2'>
+      <AkTypography @variant='h2'>
+        {{t 'activeSubscription'}}
+      </AkTypography>
 
-      <div class='columns plan-list flex-center'>
+      <AkStack @alignItems='center' @justifyContent='center'>
         <OrganizationBilling::Subscription
           @subscription={{this.subscription}}
         />
-      </div>
+      </AkStack>
     </div>
+
+    <AkDivider class='my-2' @color='dark' />
   {{/if}}
 
   {{#if this.hasNoSubscription}}
-    <div class='box-container'>
-      <div class='columns plan-durations'>
-        <h4 class='bold black-text'>
+    <div class='px-3 py-2'>
+      <AkStack @alignItems='center' @flexWrap='wrap'>
+        <AkTypography @variant='h2'>
           {{t 'plans'}}
-        </h4>
+        </AkTypography>
 
-        <div class='column flex-center margin-left-80'>
+        <AkStack
+          {{style flex='1'}}
+          @alignItems='center'
+          @justifyContent='center'
+          @spacing='1.5'
+        >
           {{#each this.durations as |duration|}}
-            <button
-              {{style borderRadius='5px'}}
-              type='button'
-              class='margin-left mp-pricing-duration
-                {{if
-                  (eq this.paymentDuration duration.value)
-                  "is-primary is-active"
-                  "is-default"
-                }}'
-              {{on 'click' (fn this.selectDuration duration.value)}}
-            >
-              {{duration.label}}
-            </button>
+            {{#let (eq this.paymentDuration duration.value) as |isActive|}}
+              <AkButton
+                @variant='outlined'
+                @color={{if isActive 'primary' 'neutral'}}
+                {{on 'click' (fn this.selectDuration duration.value)}}
+              >
+                {{duration.label}}
+              </AkButton>
+            {{/let}}
           {{/each}}
-        </div>
-      </div>
+        </AkStack>
+      </AkStack>
 
-      <div class='columns plan-list flex-center'>
+      <AkStack class='pt-3' @alignItems='center' @justifyContent='center'>
         {{#each this.sortedPlans as |plan|}}
           <OrganizationBilling::Plan
             @plan={{plan}}
             @paymentDuration={{this.paymentDuration}}
           />
         {{/each}}
-      </div>
+      </AkStack>
     </div>
+
+    <AkDivider class='my-2' @color='dark' />
   {{/if}}
 
   <OrganizationBilling::InvoiceList />

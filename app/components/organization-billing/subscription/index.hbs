@@ -1,56 +1,48 @@
-<div>
-  <div class='subscription-container'>
-    {{#if this.isNotPerScan}}
-      <table>
-        <thead>
-          <tr>
-            <th colspan='2'>{{t 'subscriptionDetails'}}</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td class='td-heading'>
-              {{t 'currentPlan'}}
-            </td>
+<div {{style width='400px'}}>
+  {{#if this.isNotPerScan}}
+    <AkTable class='my-2' @variant='bordered' @borderColor='dark' as |t|>
+      <t.head @columns={{this.columns}} as |h|>
+        <h.row as |r|>
+          <r.cell colspan='2' as |columnValue|>
+            {{columnValue.name}}
+          </r.cell>
+        </h.row>
+      </t.head>
 
-            <td>{{@subscription.planName}}</td>
-          </tr>
+      <t.body @rows={{this.rows}} as |b|>
+        <b.row as |r|>
+          <r.cell>{{r.rowValue.label}}</r.cell>
+          <r.cell>{{r.rowValue.value}}</r.cell>
+        </b.row>
+      </t.body>
+    </AkTable>
 
-          <tr>
-            <td class='td-heading'>
-              {{t 'billingPeriod'}}
-            </td>
+    <AkStack
+      @width='full'
+      @direction='column'
+      @alignItems='center'
+      @justifyContent='center'
+      @spacing='1.5'
+    >
+      <AkTypography @tag='span' @color='textSecondary'>
+        {{@subscription.subscriptionText}}
+        {{@subscription.expiryDateOnHumanized}}
+      </AkTypography>
 
-            <td>{{@subscription.billingPeriodText}}</td>
-          </tr>
+      {{#if @subscription.isNotCancelled}}
+        <AkButton
+          @variant='outlined'
+          {{on 'click' this.openCancelSubscriptionConfirmBox}}
+        >
+          <:leftIcon>
+            <AkIcon @iconName='close' />
+          </:leftIcon>
 
-          <tr>
-            <td colspan='2'>
-              <AkStack @direction='column' @alignItems='center'>
-                <span>
-                  {{@subscription.subscriptionText}}
-                  {{@subscription.expiryDateOnHumanized}}
-                </span>
-
-                {{#if @subscription.isNotCancelled}}
-                  <AkButton
-                    @variant='outlined'
-                    {{on 'click' this.openCancelSubscriptionConfirmBox}}
-                  >
-                    <:leftIcon>
-                      <AkIcon @iconName='close' />
-                    </:leftIcon>
-
-                    <:default>{{t 'cancelSubsciption'}}</:default>
-                  </AkButton>
-                {{/if}}
-              </AkStack>
-            </td>
-          </tr>
-        </tbody>
-      </table>
-    {{/if}}
-  </div>
+          <:default>{{t 'cancelSubsciption'}}</:default>
+        </AkButton>
+      {{/if}}
+    </AkStack>
+  {{/if}}
 
   <ConfirmBox
     @isActive={{this.showCancelSubscriptionConfirmBox}}
