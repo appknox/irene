@@ -1,26 +1,34 @@
-.mfa__method {
-  border: 1px solid darken(#f3f5f8, 5%);
-  background: #f3f5f8;
-  padding: 0.7em 1em 1em;
+.mfa-records-container {
+  border: 1px solid var(--account-settings-security-mfa-border-color);
 
-  h3 {
-    margin-bottom: 0;
-  }
-
-  label {
-    cursor: default;
+  .mfa-enabled {
+    background-color: var(
+      --account-settings-security-mfa-alert-success-background
+    );
   }
 }
 
-.mfa__method__enabled {
-  background: #80c081;
-  color: white;
-  border-radius: 0.2em;
-  padding: 0.3em 0.8em;
+.alert-warn {
+  border: 1px solid var(--account-settings-security-mfa-alert-warn-border-color);
+  background-color: var(--account-settings-security-mfa-alert-warn-background);
+  color: var(--account-settings-security-mfa-alert-warn-text-color);
+
+  .alert-warn-link {
+    color: var(
+      --account-settings-security-mfa-alert-warn-text-color
+    ) !important;
+  }
 }
 
-.ak-btn-loader {
-  :global(.ak-loader-circle-indicator) {
-    stroke: var(--mfa-loader-primary-contrast-text) !important;
-  }
+.alert-success {
+  border: 1px solid
+    var(--account-settings-security-mfa-alert-success-border-color);
+  background-color: var(
+    --account-settings-security-mfa-alert-success-background
+  );
+  color: var(--account-settings-security-mfa-alert-success-text-color);
+}
+
+.info-box {
+  background-color: var(--account-settings-security-mfa-info-box-bg);
 }

@@ -89,6 +89,27 @@ export default class AccountSettingsSecurityMultiFactorAuthComponent extends Com
     return appMFA?.enabled ?? false;
   }
 
+  get mfaAppRecords() {
+    return [
+      {
+        osTypes: 'For Android, iOS, and Blackberry:',
+        app: 'Google Authenticator',
+        infoURL: 'https://support.google.com/accounts/answer/1066447?hl=en',
+      },
+      {
+        osTypes: 'For Android & iOS:',
+        app: 'Duo Mobile',
+        infoURL: 'https://guide.duo.com/third-party-accounts',
+      },
+      {
+        osTypes: 'For Windows Phone:',
+        app: 'Authenticator',
+        infoURL:
+          'https://www.microsoft.com/en-us/store/p/authenticator/9wzdncrfj3rj',
+      },
+    ];
+  }
+
   //------No MFA Enable Email start------
 
   @action
