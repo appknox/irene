@@ -16,6 +16,7 @@
     >
       <AkIconButton
         data-test-serviceAccountSection-selectProject-actionBtn
+        data-test-cy='serviceAccountSection-selectProject-actionBtn'
         @variant='outlined'
         class={{ha.classes.headerActionBtn}}
         {{on 'click' this.handleShowEditView}}
@@ -30,6 +31,7 @@
       {{#if this.isEditOrCreateView}}
         <AkSelect
           data-test-serviceAccountSection-selectProject-projectAccessSelect
+          data-test-cy='serviceAccountSection-selectProject-projectAccessSelect'
           class='w-6/12'
           @label='Project Access'
           @labelTypographyVariant='h6'
@@ -106,6 +108,7 @@
   <:footerAction>
     <AkButton
       data-test-serviceAccountSection-selectProject-updateBtn
+      data-test-cy='serviceAccountSection-selectProject-updateBtn'
       @loading={{this.updateServiceAccount.isRunning}}
       {{on 'click' this.handleUpdateServiceAccount}}
     >

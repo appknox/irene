@@ -9,6 +9,7 @@
             @route={{item.route}}
             @linkTitle={{item.linkTitle}}
             data-test-serviceAccountDetails-breadcrumbItem='{{item.linkTitle}}'
+            data-test-cy='serviceAccountDetails-breadcrumbItem-{{item.linkTitle}}'
           />
         {{/each}}
       </AkBreadcrumbs::Container>
@@ -39,6 +40,7 @@
 
       <AkIconButton
         data-test-serviceAccountDetails-moreOptionsBtn
+        data-test-cy='serviceAccountDetails-moreOptionsBtn'
         @variant='outlined'
         {{on 'click' this.handleMoreOptionsClick}}
       >

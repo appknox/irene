@@ -29,7 +29,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        containers: [1, 2, 3]
+        containers: [1, 2, 3, 4]
 
     steps:
       - uses: actions/checkout@v4
@@ -61,6 +61,8 @@ jobs:
           CYPRESS_DYNAMIC_SCAN_SYSTEM_IPA_FILE_ID: ${{ vars.CYPRESS_DYNAMIC_SCAN_SYSTEM_IPA_FILE_ID }}
           CYPRESS_IGNORE_VULNERABILITY_TEST_PACKAGE_NAME: ${{ vars.CYPRESS_IGNORE_VULNERABILITY_TEST_PACKAGE_NAME }}
           CYPRESS_API_HOST: ${{ vars.CYPRESS_API_HOST }}
+          SERVICE_ACCOUNT_DUPLICATE_ACCOUNT_ID: ${{ vars.SERVICE_ACCOUNT_DUPLICATE_ACCOUNT_ID }}
+          SERVICE_ACCOUNT_VIEW_ACCOUNT_ID: ${{ vars.SERVICE_ACCOUNT_VIEW_ACCOUNT_ID }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           start: npm run startprod

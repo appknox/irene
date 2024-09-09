@@ -12,6 +12,7 @@
     >
       <AkIconButton
         data-test-serviceAccountSection-selectScope-actionBtn
+        data-test-cy='serviceAccountSection-selectScope-actionBtn'
         @variant='outlined'
         class={{ha.classes.headerActionBtn}}
         {{on 'click' this.handleShowEditView}}
@@ -35,12 +36,14 @@
             {{#if node.checked}}
               <AkIcon
                 data-test-serviceAccountSection-selectScope-nodeLabelIcon='checked'
+                data-test-cy='serviceAccountSection-selectScope-nodeLabelIcon-checked'
                 @iconName='done'
                 @color='success'
               />
             {{else}}
               <AkIcon
                 data-test-serviceAccountSection-selectScope-nodeLabelIcon='unchecked'
+                data-test-cy='serviceAccountSection-selectScope-nodeLabelIcon-unchecked'
                 @variant='outlined'
                 @iconName='do-not-disturb-on'
                 local-class='scope-unchecked-icon'
@@ -106,6 +109,7 @@
   <:footerAction>
     <AkButton
       data-test-serviceAccountSection-selectScope-updateBtn
+      data-test-cy='serviceAccountSection-selectScope-updateBtn'
       @loading={{this.updateServiceAccount.isRunning}}
       {{on 'click' this.handleUpdateServiceAccount}}
     >

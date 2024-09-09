@@ -50,6 +50,7 @@
 
         <AkButton
           data-test-serviceAccountCreate-saveButton
+          data-test-cy='serviceAccountCreate-saveButton'
           @loading={{this.createServiceAccount.isRunning}}
           {{on 'click' (perform this.createServiceAccount)}}
         >

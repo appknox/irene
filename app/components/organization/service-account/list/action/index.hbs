@@ -1,6 +1,7 @@
 <AkStack @justifyContent='center' @alignItems='center' @spacing='1'>
   <AkLink
     data-test-serviceAccountList-viewDetailsLink
+    data-test-cy='serviceAccountList-viewDetailsLink'
     @route='authenticated.dashboard.service-account-details'
     @model={{@serviceAccount.id}}
   >
@@ -13,6 +14,7 @@
 
   <AkIconButton
     data-test-serviceAccountList-moreOptionBtn
+    data-test-cy='serviceAccountList-moreOptionBtn'
     {{on 'click' (fn @onMoreMenuClick @serviceAccount)}}
   >
     <AkIcon @iconName='more-vert' />

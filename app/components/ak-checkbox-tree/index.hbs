@@ -29,6 +29,7 @@
       {{style paddingLeft=(this.calculatePadding node.treeDepth)}}
       data-test-ak-checkbox-tree-node
       data-test-ak-checkbox-tree-nodeKey='{{node.key}}'
+      data-test-cy='checkbox-tree-nodeKey-{{node.key}}'
     >
       <AkStack @alignItems='center'>
         {{#if node.showCheckbox}}
