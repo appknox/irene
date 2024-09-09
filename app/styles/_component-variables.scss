@@ -1211,8 +1211,19 @@ body {
     --neutral-grey-200
   );
 
-  // variables for account-settings/mfa
-  --mfa-loader-primary-contrast-text: var(--primary-contrast-text);
+  // variables for account-settings/security
+  --account-settings-security-mfa-border-color: var(--border-color-1);
+  --account-settings-security-mfa-info-box-bg: var(--neutral-grey-100);
+  --account-settings-security-mfa-alert-warn-border-color: var(--warn-dark);
+  --account-settings-security-mfa-alert-warn-text-color: var(--warn-dark);
+  --account-settings-security-mfa-alert-warn-background: var(--warn-light);
+  --account-settings-security-mfa-alert-success-border-color: var(
+    --success-main
+  );
+  --account-settings-security-mfa-alert-success-text-color: var(--success-main);
+  --account-settings-security-mfa-alert-success-background: var(
+    --success-light
+  );
 
   // variables for project-settings/empty-list
   --project-settings-empty-list-border-radius: var(--border-radius);

@@ -1,143 +1,128 @@
-<div class='mfa is-two-third'>
-  <h5 class='bold black-text is-fullwidth'>
+<AkStack @direction='column' @width='8/12'>
+  <AkTypography @variant='h5' @gutterBottom={{true}} class='mb-4'>
     {{t 'multiFactorAuth'}}
-  </h5>
+  </AkTypography>
 
-  {{t 'mfaDescription'}}
+  <AkTypography @color='neutral'>{{t 'mfaDescription'}}</AkTypography>
 
-  <div class='margin-t-1'>
-    {{t 'mfaSelect'}}
-  </div>
+  <AkTypography @color='neutral' class='mt-2'>{{t 'mfaSelect'}}</AkTypography>
 
-  <div class='margin-t-1'>
-    <div class='columns'>
-      <div class='column'>
-        <table class='org-table'>
-          <tbody>
-            {{#each this.mfas.records as |mfa|}}
-              <tr class={{if mfa.enabled 'fill-success-box'}}>
-                <td>
-                  <div class='vertical-align-top padding-v-h padding-h-h'>
-                    <div class='div'>
-                      <div class='bold black-text font-medium'>
-                        <AkStack @alignItems='center' @spacing='1'>
-                          {{mfa.display}}
+  {{#if this.mfas.records.length}}
+    <AkStack
+      @width='full'
+      @direction='column'
+      local-class='mfa-records-container'
+      class='mt-2'
+    >
+      {{#each this.mfas.records as |mfa idx|}}
+        {{#if (gt idx 0)}}
+          <AkDivider @color='dark' />
+        {{/if}}
 
-                          {{#if mfa.enabled}}
-                            <AkIcon @iconName='done' @color='success' />
-                          {{/if}}
-                        </AkStack>
-                      </div>
+        <AkStack
+          local-class='{{if mfa.enabled "mfa-enabled"}}'
+          @width='full'
+          class='p-2'
+        >
+          <AkStack @width='full' @alignItems='center' @spacing='2.5'>
+            <AkStack @direction='column' @width='full'>
+              <AkStack @alignItems='center' @spacing='1'>
+                <AkTypography>{{mfa.display}}</AkTypography>
 
-                      {{#if mfa.isApp}}
-                        <div class='text-lightgray margin-t-h'>
-                          {{t 'mfaAppDesc'}}
-                        </div>
-
-                        <ul class='margin-t-1'>
-                          <li>
-                            For Android, iOS, and Blackberry:
-                            <a
-                              href='https://support.google.com/accounts/answer/1066447?hl=en'
-                              target='_blank'
-                              rel='noopener noreferrer'
-                            >
-                              Google Authenticator
-                            </a>
-                          </li>
-
-                          <li>
-                            For Android & iOS:
-                            <a
-                              href='https://guide.duo.com/third-party-accounts'
-                              target='_blank'
-                              rel='noopener noreferrer'
-                            >
-                              Duo Mobile
-                            </a>
-                          </li>
-
-                          <li>
-                            For Windows Phone:
-                            <a
-                              href='https://www.microsoft.com/en-us/store/p/authenticator/9wzdncrfj3rj'
-                              target='_blank'
-                              rel='noopener noreferrer'
-                            >
-                              Authenticator
-                            </a>
-                          </li>
-                        </ul>
-                      {{/if}}
-
-                      {{#if mfa.isEmail}}
-                        <div class='text-lightgray margin-t-h'>
-                          {{t 'mfaEmailDesc'}}
-                        </div>
-                      {{/if}}
-                    </div>
-                  </div>
-                </td>
-
-                <td>
-                  <div class='div'>
-                    {{#if mfa.enabled}}
-                      {{#if this.user.canDisableMfa}}
-                        <button
-                          {{style borderRadius='5px'}}
-                          class='is-primary'
-                          type='button'
-                          {{on 'click' (perform this.disableMFA mfa.method)}}
-                          disabled={{not this.user.canDisableMfa}}
-                        >
-                          {{t 'disable'}}
-                        </button>
-                      {{/if}}
-                    {{else}}
-                      <button
-                        {{style borderRadius='5px'}}
-                        class='is-default is-small'
-                        type='button'
-                        {{on 'click' (perform this.enableMFA mfa.method)}}
-                      >
-                        {{t 'enable'}}
-                      </button>
-                    {{/if}}
-                  </div>
-                </td>
-              </tr>
-            {{/each}}
-          </tbody>
-        </table>
-
-        {{#unless this.user.canDisableMfa}}
-          <div class='alert alert-danger alert-small margin-t-2'>
-            <div class='vertical-align-center'>
-              <AkIcon @iconName='security' />
-
-              <div class='margin-l-1'>
-                {{t 'disableMFADenied'}}
-
-                {{#if this.me.org.is_owner}}
-                  <div>
-                    {{t 'disableThisIn'}}
-
-                    <LinkTo
-                      @route='authenticated.dashboard.organization-settings'
-                      class='alert-link'
-                    >
-                      {{t 'organizationSettings'}}
-                    </LinkTo>
-                  </div>
+                {{#if mfa.enabled}}
+                  <AkIcon @iconName='done' @color='success' />
                 {{/if}}
-              </div>
-            </div>
-          </div>
-        {{/unless}}
-      </div>
-    </div>
-  </div>
-</div>
+              </AkStack>
+
+              {{#if mfa.isApp}}
+                <AkTypography @variant='body2' @color='neutral' class='mt-1'>
+                  {{t 'mfaAppDesc'}}
+                </AkTypography>
+
+                <AkStack @direction='column' class='mt-2'>
+                  {{#each this.mfaAppRecords as |record|}}
+                    <AkStack @spacing='0.5'>
+                      <AkTypography
+                        @variant='body2'
+                        @color='neutral'
+                        {{style fontSize='0.85714em'}}
+                      >
+                        {{record.osTypes}}
+                      </AkTypography>
+
+                      <a
+                        href={{record.infoURL}}
+                        target='_blank'
+                        rel='noopener noreferrer'
+                        {{style fontSize='0.85714em'}}
+                      >
+                        {{record.app}}
+                      </a>
+                    </AkStack>
+                  {{/each}}
+                </AkStack>
+              {{/if}}
+
+              {{#if mfa.isEmail}}
+                <AkTypography @variant='body2' @color='neutral' class='mt-1'>
+                  {{t 'mfaEmailDesc'}}
+                </AkTypography>
+              {{/if}}
+            </AkStack>
+
+            {{#if mfa.enabled}}
+              {{#if this.user.canDisableMfa}}
+                <AkButton
+                  @variant='outlined'
+                  @disabled={{not this.user.canDisableMfa}}
+                  {{on 'click' (perform this.disableMFA mfa.method)}}
+                >
+                  {{t 'disable'}}
+                </AkButton>
+              {{/if}}
+            {{else}}
+              <AkButton
+                @variant='outlined'
+                @color='neutral'
+                {{on 'click' (perform this.enableMFA mfa.method)}}
+              >
+                {{t 'enable'}}
+              </AkButton>
+            {{/if}}
+          </AkStack>
+        </AkStack>
+      {{/each}}
+    </AkStack>
+  {{/if}}
+
+  {{#unless this.user.canDisableMfa}}
+    <AkStack @alignItems='center' class='my-4 p-2' local-class='alert-warn'>
+      <AkIcon @iconName='security' @color='inherit' />
+
+      <AkStack @direction='column' class='ml-2'>
+        <AkTypography @variant='body2'>{{t 'disableMFADenied'}}</AkTypography>
+
+        {{#if this.me.org.is_owner}}
+          <AkStack @spacing='0.5'>
+            <AkTypography @variant='body2'>
+              {{t 'disableThisIn'}}
+            </AkTypography>
+
+            <AkLink
+              @fontWeight='medium'
+              @typographyVariant='body2'
+              @route='authenticated.dashboard.organization-settings'
+              @underline='always'
+              local-class='alert-warn-link'
+            >
+              {{t 'organizationSettings'}}
+            </AkLink>
+          </AkStack>
+        {{/if}}
+      </AkStack>
+    </AkStack>
+  {{/unless}}
+</AkStack>
 
 {{#if this.showMFADisableModal}}
   <AkModal
@@ -151,16 +136,18 @@
           {{t 'modalCard.enableMFAEmail.sendMailMsg'}}
         </AkTypography>
       {{else}}
-        <div
+        <AkStack
+          @alignItems='center'
+          class='mb-2 p-2'
+          local-class='alert-success'
           {{style width='450px'}}
-          class='alert alert-success alert-small mb-2'
         >
           <AkStack @alignItems='center' @spacing='1'>
-            <AkIcon @iconName='security' />
+            <AkIcon @iconName='security' color='inherit' />
 
             <AkTypography>{{t 'disableMFADenied'}}</AkTypography>
           </AkStack>
-        </div>
+        </AkStack>
       {{/if}}
 
       {{#if this.showDisableMFA}}
@@ -242,7 +229,7 @@
       {{/if}}
 
       {{#if this.showEmailOTPEnter}}
-        <div class='fill-silver px-3 py-2'>
+        <div local-class='info-box' class='px-3 py-2'>
           <AkTypography>
             {{t 'modalCard.enableMFAEmail.description'}}
             <strong>{{this.user.email}}</strong>
@@ -326,7 +313,7 @@
       {{/if}}
 
       {{#if this.staEmailVerifyActive}}
-        <div class='fill-silver px-3 py-2'>
+        <div local-class='info-box' class='px-3 py-2'>
           <AkTypography>
             {{t 'modalCard.enableMFAEmail.description'}}
             <strong>{{this.user.email}}</strong>
@@ -415,7 +402,7 @@
       {{/if}}
 
       {{#if this.showSwitchTOEmailEmailVerify}}
-        <div class='fill-silver px-3 py-2'>
+        <div local-class='info-box' class='px-3 py-2'>
           <AkTypography>
             {{t 'modalCard.enableMFAEmail.description'}}
             <strong>{{this.user.email}}</strong>
