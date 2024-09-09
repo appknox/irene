@@ -6,10 +6,8 @@ import { setupMirage } from 'ember-cli-mirage/test-support';
 import { t } from 'ember-intl/test-support';
 import Service from '@ember/service';
 import { faker } from '@faker-js/faker';
-import {
-  clickTrigger,
-  selectChoose,
-} from 'ember-power-select/test-support/helpers';
+import { selectChoose } from 'ember-power-select/test-support';
+import { clickTrigger } from 'ember-power-select/test-support/helpers';
 
 import { SbomScanStatus } from 'irene/models/sbom-file';
 

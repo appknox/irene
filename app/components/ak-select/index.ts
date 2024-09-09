@@ -1,18 +1,22 @@
-import {
+import { guidFor } from '@ember/object/internals';
+import Component from '@glimmer/component';
+import { action } from '@ember/object';
+import { next } from '@ember/runloop';
+
+import type {
   PowerSelectArgs,
   Select,
 } from 'ember-power-select/components/power-select';
+
 import styles from './index.scss';
-import { guidFor } from '@ember/object/internals';
-import Component from '@glimmer/component';
-import { TypographyColors, TypographyVariant } from '../ak-typography';
+import type { TypographyColors, TypographyVariant } from '../ak-typography';
 
 type AkSelectLabelTypographyVariant = TypographyVariant;
 type AkSelectLabelTypographyColor = TypographyColors;
 
 interface AkSelectNamedArgs<O> extends PowerSelectArgs {
   labelId?: string;
-  required?: boolean;
+  required?: string;
   disabled?: boolean;
   label?: string;
   helperText?: string;
@@ -62,6 +66,14 @@ export default class AkSelectComponent<O> extends Component<
       trigger: styles['ak-select-trigger'],
       triggerError: styles['ak-select-trigger-error'],
     };
+  }
+
+  @action
+  onOpen(select: Select, event: Event) {
+    // Reposition the dropdown to make sure it's properly aligned
+    next(this, () => select.actions.reposition());
+
+    this.args.onOpen?.(select, event);
   }
 }
 

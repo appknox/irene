@@ -4,10 +4,8 @@ import { setupApplicationTest } from 'ember-qunit';
 import { setupRequiredEndpoints } from '../../helpers/acceptance-utils';
 import { setupMirage } from 'ember-cli-mirage/test-support';
 import { faker } from '@faker-js/faker';
-import {
-  clickTrigger,
-  selectChoose,
-} from 'ember-power-select/test-support/helpers';
+import { clickTrigger } from 'ember-power-select/test-support/helpers';
+import { selectChoose } from 'ember-power-select/test-support';
 import Service from '@ember/service';
 
 class IntegrationStub extends Service {

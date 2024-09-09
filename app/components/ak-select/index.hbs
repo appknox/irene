@@ -38,11 +38,12 @@
           @disabled={{@disabled}}
           @renderInPlace={{@renderInPlace}}
           @ariaInvalid='{{if @error true false}}'
-          @onOpen={{@onOpen}}
+          @onOpen={{this.onOpen}}
           @onClose={{@onClose}}
           @loadingMessage={{@loadingMessage}}
           @selectedItemComponent={{@selectedItemComponent}}
           @verticalPosition={{or @verticalPosition 'below'}}
+          @horizontalPosition={{or @horizontalPosition 'left'}}
           @searchEnabled={{@searchEnabled}}
           @searchPlaceholder={{@searchPlaceholder}}
           @extra={{this.extra}}
