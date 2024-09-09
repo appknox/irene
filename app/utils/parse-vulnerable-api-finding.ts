@@ -1,3 +1,5 @@
+import { NestedKeyOf } from './types';
+
 /**
  * Represents a vulnerable API request.
  */
@@ -5,11 +7,9 @@ export interface VulnerableApiRequest {
   body: string;
   headers: Record<string, string>;
   method: string;
-  params: {
-    key: string;
-    token: string;
-  };
+  params: Record<string, string>;
   url: string;
+  cookies: Record<string, string>;
 }
 
 /**
@@ -21,15 +21,8 @@ export interface VulnerableApiResponse {
   status_code: number;
   text: string;
   url: string;
+  cookies: Record<string, string>;
 }
-
-type VulnerableApiFindingSection =
-  | 'request'
-  | 'response'
-  | 'request-headers'
-  | 'response-headers'
-  | 'params'
-  | 'other';
 
 /**
  * Represents a finding of a vulnerability in an API.
@@ -38,9 +31,12 @@ export interface VulnerableApiFinding {
   severity: string;
   confidence: string;
   description: string;
+  url: string;
   request: VulnerableApiRequest;
   response: VulnerableApiResponse;
 }
+
+type VulnerabilityApiFindingSection = NestedKeyOf<VulnerableApiFinding>;
 
 /**
  * Initializes a `VulnerableApiFinding` with default values.
@@ -52,8 +48,9 @@ function initializeVulnerableApiFinding(): VulnerableApiFinding {
       body: '',
       headers: {},
       method: '',
-      params: { key: '', token: '' },
+      params: {},
       url: '',
+      cookies: {},
     },
     response: {
       headers: {},
@@ -61,9 +58,11 @@ function initializeVulnerableApiFinding(): VulnerableApiFinding {
       status_code: 0,
       text: '',
       url: '',
+      cookies: {},
     },
     severity: '',
     confidence: '',
+    url: '',
     description: '',
   };
 }
@@ -74,7 +73,18 @@ function initializeVulnerableApiFinding(): VulnerableApiFinding {
  * @returns `true` if the content contains vulnerability indicators, otherwise `false`.
  */
 export function isVulnerableApiFinding(content: string): boolean {
-  const vulnerabilityPattern = /(\bseverity\b|\bconfidence\b|\bmethod\b)/;
+  const severityPattern =
+    '\\bseverity:\\s*?(PASSED|LOW|MEDIUM|HIGH|CRITICAL|UNKNOWN)\\b';
+
+  const confidencePattern = '\\bconfidence:\\s*?(LOW|HIGH|MEDIUM)\\b';
+
+  const methodPattern =
+    '\\bmethod:\\s*?(GET|POST|PUT|DELETE|TRACE|HEAD|CONNECT|OPTIONS|PATCH)\\b';
+
+  const vulnerabilityPattern = new RegExp(
+    `(${severityPattern}|${confidencePattern}|${methodPattern})`,
+    'i'
+  );
 
   return content.length > 0 && vulnerabilityPattern.test(content);
 }
@@ -114,12 +124,12 @@ function isValidVulnerableApiFinding(finding: VulnerableApiFinding): boolean {
 }
 
 /**
- * Splits the report content into blocks based on double or triple newlines.
- * @param report - The report content to split.
- * @returns An array of strings, each representing a block of the report.
+ * Splits the content into blocks based on double or triple newlines.
+ * @param content - The content to split.
+ * @returns An array of strings, each representing a block of the content.
  */
-function splitVulnerableApiFindingIntoBlocks(report: string): string[] {
-  return report.split(/\n{2,3}/);
+function splitVulnerableApiFindingIntoBlocks(content: string): string[] {
+  return content.split(/\n{2,3}/);
 }
 
 /**
@@ -131,9 +141,11 @@ function parseVulnerableApiFindingBlock(block: string): VulnerableApiFinding {
   const lines = block.split('\n');
   const finding = initializeVulnerableApiFinding();
 
-  let currentSection: VulnerableApiFindingSection = 'other';
-  let currentHeaders: Record<string, string> | null = null;
+  let currentSection: VulnerabilityApiFindingSection = 'confidence';
+  let currentBuffer: string | null = null;
+  let currentKey: string | null = null;
 
+  // Process the first line separately to handle initial URL or description
   processFirstLine(lines, finding);
 
   lines.forEach((line) => {
@@ -142,19 +154,45 @@ function parseVulnerableApiFindingBlock(block: string): VulnerableApiFinding {
     if (parsedLine) {
       const [key, value] = parsedLine;
 
-      const { updatedSection, updatedHeaders } = updateVulnerableApiFinding(
-        finding,
-        key,
-        value,
-        currentSection,
-        currentHeaders
-      );
+      if (currentKey && currentBuffer) {
+        // If a previous key exists, update it with the accumulated buffer
+        updateFindingField(finding, currentKey, currentBuffer, currentSection);
+        currentBuffer = null; // Reset buffer after updating
+        currentKey = null; // Reset key after updating
+      }
 
-      // update the current section and headers
-      currentSection = updatedSection;
-      currentHeaders = updatedHeaders;
+      if (key) {
+        if (currentKey && currentBuffer) {
+          // Continue accumulating the value if the same key is detected
+          currentBuffer += `\n${value}`;
+        } else {
+          // If a new key is detected, update section and headers
+          const { updatedSection } = updateVulnerableApiFinding(
+            finding,
+            key,
+            value,
+            currentSection
+          );
+
+          // Update current section and headers
+          if (updatedSection !== currentSection) {
+            currentSection = updatedSection;
+          }
+
+          currentKey = key; // Track the current key
+          currentBuffer = value; // Start accumulating value
+        }
+      }
+    } else if (currentBuffer) {
+      // Continue accumulating the value if no new key is detected
+      currentBuffer += `\n${line}`;
     }
   });
+
+  // Finalize any remaining buffer
+  if (currentBuffer && currentKey) {
+    updateFindingField(finding, currentKey, currentBuffer, currentSection);
+  }
 
   return finding;
 }
@@ -168,6 +206,14 @@ function parseLine(line: string): [string, string] | null {
   const [key, ...valueParts] = line.split(':');
 
   if (!key) {
+    return null;
+  }
+
+  // Split the line into key and value parts based on the first colon
+  const colonIndex = line.indexOf(':');
+
+  // If there's no colon, return null as it's not a valid key-value pair
+  if (colonIndex === -1) {
     return null;
   }
 
@@ -188,40 +234,20 @@ function processFirstLine(
   if (lines[0]) {
     const firstLine = lines[0].trim();
     const colonIndex = firstLine.indexOf(': ');
+    const beforeColon = firstLine.substring(0, colonIndex).trim();
 
-    const genericUrlRegex = /^http[s]?:\/\/[a-zA-Z0-9.-]+(:\d+)?\/[^\s:]+/;
+    const genericUrlRegex =
+      /^(https?:\/\/)?([a-zA-Z0-9-]+\.)+[a-zA-Z0-9.-]+(:\d+)?(\/[^\s]*)?$/;
 
-    const match = firstLine.match(genericUrlRegex);
+    const match = beforeColon.match(genericUrlRegex);
 
     if (match) {
-      finding.request.url = finding.request.url = firstLine
-        .substring(0, colonIndex)
-        .trim();
+      finding.url = firstLine.substring(0, colonIndex).trim();
     }
 
-    if (!firstLine.startsWith('confidence:')) {
-      if (colonIndex !== -1) {
-        finding.description = firstLine.substring(colonIndex + 2).trim();
-      }
+    if (!firstLine.startsWith('confidence:') && colonIndex !== -1) {
+      finding.description = firstLine.substring(colonIndex + 2).trim();
     }
-  }
-}
-
-/**
- * Updates the severity and confidence fields of the finding based on the key-value pair.
- * @param finding - The `VulnerableApiFinding` object to update.
- * @param key - The key indicating the type of information (`severity` or `confidence`).
- * @param value - The value to set.
- */
-function updateFindingSeverityAndConfidence(
-  finding: VulnerableApiFinding,
-  key: string,
-  value: string
-): void {
-  if (key === 'severity') {
-    finding.severity = value;
-  } else if (key === 'confidence') {
-    finding.confidence = value;
   }
 }
 
@@ -233,34 +259,29 @@ function updateFindingSeverityAndConfidence(
  */
 function updateSection(
   key: string,
-  currentSection: VulnerableApiFindingSection
-): VulnerableApiFindingSection {
-  switch (key) {
-    case 'request':
-    case 'method':
-      return 'request';
+  currentSection: VulnerabilityApiFindingSection
+): VulnerabilityApiFindingSection {
+  const sectionMap: Record<string, VulnerabilityApiFindingSection> = {
+    request: 'request',
+    response: 'response',
+    headers: currentSection.startsWith('response')
+      ? 'response.headers'
+      : 'request.headers',
+    params: 'request.params',
+    severity: 'severity',
+    confidence: 'confidence',
+    url: currentSection.startsWith('response') ? 'response.url' : 'request.url',
+    method: 'request.method',
+    body: 'request.body',
+    text: 'response.text',
+    status_code: 'response.status_code',
+    reason: 'response.reason',
+    cookies: currentSection.startsWith('response')
+      ? 'response.cookies'
+      : 'request.cookies',
+  };
 
-    case 'response':
-    case 'reason':
-    case 'text':
-    case 'status_code':
-      return 'response';
-
-    case 'headers':
-      return currentSection === 'response'
-        ? 'response-headers'
-        : 'request-headers';
-
-    case 'params':
-      return 'params';
-
-    case 'severity':
-    case 'confidence':
-      return 'other';
-
-    default:
-      return currentSection;
-  }
+  return sectionMap[key] || currentSection;
 }
 
 /**
@@ -274,18 +295,14 @@ function updateFindingField(
   finding: VulnerableApiFinding,
   key: string,
   value: string,
-  currentSection: VulnerableApiFindingSection
+  currentSection: VulnerabilityApiFindingSection
 ): void {
-  const isRequestSection = currentSection === 'request';
-  const isResponseSection = currentSection === 'response';
-  const isParamsSection = currentSection === 'params';
+  const isRequestSection = currentSection.startsWith('request');
+  const isResponseSection = currentSection.startsWith('response');
+  const isParamsSection = currentSection.startsWith('request.params');
 
-  if (key === 'body') {
-    if (isRequestSection) {
-      finding.request.body = value;
-    } else if (isResponseSection) {
-      finding.response.text = value;
-    }
+  if (key === 'body' && isRequestSection) {
+    finding.request.body = value;
   } else if (key === 'url') {
     if (isRequestSection || isParamsSection) {
       finding.request.url = value;
@@ -298,80 +315,134 @@ function updateFindingField(
     finding.response.status_code = Number(value);
   } else if (key === 'reason' && isResponseSection) {
     finding.response.reason = value;
+  } else if (key === 'text' && isResponseSection) {
+    finding.response.text = value;
+  } else if (key === 'severity') {
+    finding.severity = value;
+  } else if (key === 'confidence') {
+    finding.confidence = value;
   }
 }
 
 /**
- * Updates the headers of the finding based on the current section.
- * @param currentHeaders - The current headers to update.
- * @param key - The key of the header.
- * @param value - The value of the header.
+ * Updates the headers in the given section of the finding object.
+ *
+ * @param currentSection - The section of the finding to update, which can be either 'request.headers' or 'response.headers'.
+ * @param finding - The vulnerable API finding object.
+ * @param key - The header key to update or add.
+ * @param value - The value to set for the specified header key.
  */
 function updateFindingHeaders(
-  currentHeaders: Record<string, string> | null,
+  currentSection: VulnerabilityApiFindingSection,
+  finding: VulnerableApiFinding,
   key: string,
   value: string
 ): void {
+  const currentHeaders =
+    currentSection === 'request.headers'
+      ? finding.request.headers
+      : currentSection === 'response.headers'
+        ? finding.response.headers
+        : null;
+
   if (currentHeaders) {
     currentHeaders[key] = value;
   }
 }
 
 /**
- * Updates the parameters of the finding.
- * @param paramKey - The key of the parameter.
- * @param paramValue - The value of the parameter.
- * @param finding - The `VulnerableApiFinding` object to update.
+ * Updates the cookies in the given section of the finding object.
+ *
+ * @param currentSection - The section of the finding to update, which can be either 'request.cookies' or 'response.cookies'.
+ * @param finding - The vulnerable API finding object.
+ * @param key - The cookie key to update or add.
+ * @param value - The value to set for the specified cookie key.
  */
-function updateFindingParams(
-  paramKey: string,
-  paramValue: string | undefined,
-  finding: VulnerableApiFinding
+function updateFindingCookies(
+  currentSection: VulnerabilityApiFindingSection,
+  finding: VulnerableApiFinding,
+  key: string,
+  value: string
 ): void {
-  if (paramKey === 'key' || paramKey === 'token') {
-    finding.request.params[paramKey] = paramValue || '';
+  const currentCookies =
+    currentSection === 'request.cookies'
+      ? finding.request.cookies
+      : currentSection === 'response.cookies'
+        ? finding.response.cookies
+        : null;
+
+  if (currentCookies) {
+    currentCookies[key] = value;
   }
 }
 
 /**
- * Updates a `VulnerableApiFinding` based on the key-value pair and current section.
- * @param finding - The `VulnerableApiFinding` object to update.
- * @param key - The key indicating what to update.
- * @param value - The value to set.
- * @param currentSection - The current section of the finding.
- * @param currentHeaders - The current headers being processed.
- * @returns The updated section and headers.
+ * Updates the parameters in the request section of the finding object.
+ *
+ * @param currentSection - The section of the finding to update, which should be 'request.params'.
+ * @param finding - The vulnerable API finding object.
+ * @param key - The parameter key to update or add.
+ * @param value - The value to set for the specified parameter key.
+ */
+function updateFindingParams(
+  currentSection: VulnerabilityApiFindingSection,
+  finding: VulnerableApiFinding,
+  key: string,
+  value: string
+): void {
+  const currentParams =
+    currentSection === 'request.params' ? finding.request.params : null;
+
+  if (currentParams) {
+    currentParams[key] = value;
+  }
+}
+
+/**
+ * Updates a field in a vulnerable API finding and returns the updated section.
+ *
+ * @param finding - The vulnerable API finding object to update.
+ * @param key - The key of the field to update.
+ * @param value - The new value for the specified field key.
+ * @param currentSection - The current section of the finding to update, which determines where the update occurs.
+ * @returns An object containing the updated section of the finding.
  */
 function updateVulnerableApiFinding(
   finding: VulnerableApiFinding,
   key: string,
   value: string,
-  currentSection: VulnerableApiFindingSection,
-  currentHeaders: Record<string, string> | null
+  currentSection: VulnerabilityApiFindingSection
 ): {
-  updatedSection: VulnerableApiFindingSection;
-  updatedHeaders: Record<string, string> | null;
+  updatedSection: VulnerabilityApiFindingSection;
 } {
-  updateFindingSeverityAndConfidence(finding, key, value);
-
   currentSection = updateSection(key, currentSection);
+
+  // Handle empty objects for headers, cookies, and params
+  if (
+    ['headers', 'cookies', 'params'].includes(key) &&
+    (value === '' || value === '{}')
+  ) {
+    return { updatedSection: currentSection };
+  }
 
   updateFindingField(finding, key, value, currentSection);
 
-  if (key === 'headers' && currentSection === 'request-headers') {
-    currentHeaders = finding.request.headers;
-  } else if (key === 'headers' && currentSection === 'response-headers') {
-    currentHeaders = finding.response.headers;
-  } else if (key === 'params') {
-    currentSection = 'params';
-  } else if (currentSection === 'params') {
-    updateFindingParams(key, value, finding);
-  } else if (
-    currentSection === 'request-headers' ||
-    currentSection === 'response-headers'
-  ) {
-    updateFindingHeaders(currentHeaders, key, value);
+  // Handle headers separately based on the current section
+  if (currentSection.endsWith('headers')) {
+    updateFindingHeaders(currentSection, finding, key, value);
   }
 
-  return { updatedSection: currentSection, updatedHeaders: currentHeaders };
+  // Handle cookies separately based on the current section
+  if (currentSection.endsWith('cookies')) {
+    updateFindingCookies(currentSection, finding, key, value);
+  }
+
+  // Handle params separately based on the current section
+  if (currentSection.endsWith('params')) {
+    updateFindingParams(currentSection, finding, key, value);
+  }
+
+  return {
+    updatedSection: currentSection,
+  };
 }

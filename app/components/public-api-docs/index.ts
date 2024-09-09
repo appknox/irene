@@ -6,11 +6,12 @@ import { service } from '@ember/service';
 import { action } from '@ember/object';
 import { task } from 'ember-concurrency';
 import { tracked } from 'tracked-built-ins';
-import parseError from 'irene/utils/parse-error';
+import type IntlService from 'ember-intl/services/intl';
+import { waitForPromise } from '@ember/test-waiters';
 
+import parseError from 'irene/utils/parse-error';
 import type NetworkService from 'irene/services/network';
 import type MeService from 'irene/services/me';
-import type IntlService from 'ember-intl/services/intl';
 
 export type SwaggerUIDataProps = Partial<
   Record<'components' | 'paths' | 'openapi' | 'info', string | object>
@@ -64,20 +65,26 @@ export default class PublicApiDocsComponent extends Component {
 
   @action
   intializeSwaggerUI(element: HTMLDivElement) {
-    SwaggerUI({
-      spec: { ...this.data, paths: {}, components: {} },
-      domNode: element,
-      presets: [SwaggerUI.presets.apis, SwaggerUI.SwaggerUIStandalonePreset],
-    });
+    try {
+      SwaggerUI({
+        spec: { ...this.data, paths: {}, components: {} },
+        domNode: element,
+        presets: [SwaggerUI.presets.apis, SwaggerUI.SwaggerUIStandalonePreset],
+      });
+    } catch (error) {
+      this.notify.error(parseError(error, this.intl.t('pleaseTryAgain')));
+    }
   }
 
   fetchSchemaData = task(async () => {
     try {
-      const res = await this.network.request('/api/public_api/schema', {
-        headers: { accept: 'application/json, */*' },
-      });
+      const res = await waitForPromise(
+        this.network.request('/api/public_api/schema', {
+          headers: { accept: 'application/json, */*' },
+        })
+      );
 
-      const data = (await res.json()) as SwaggerUIDataProps;
+      const data = (await waitForPromise(res.json())) as SwaggerUIDataProps;
 
       this.data = data;
     } catch (error) {
