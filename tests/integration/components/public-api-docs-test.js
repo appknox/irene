@@ -1,6 +1,6 @@
 import { module, test } from 'qunit';
 import { setupRenderingTest } from 'ember-qunit';
-import { render } from '@ember/test-helpers';
+import { find, render, waitUntil } from '@ember/test-helpers';
 import { hbs } from 'ember-cli-htmlbars';
 import { setupIntl } from 'ember-intl/test-support';
 import { setupMirage } from 'ember-cli-mirage/test-support';
@@ -80,6 +80,15 @@ module('Integration | Component | public-api-docs', function (hooks) {
 
   test('it renders', async function (assert) {
     await render(hbs`<PublicApiDocs />`);
+
+    await waitUntil(
+      () => {
+        return find(
+          '[data-test-publicApiDocs-description-container]'
+        ).textContent.includes(this.infoTitle);
+      },
+      { timeout: 2000 }
+    );
 
     assert
       .dom('[data-test-publicApiDocs-description-container]')

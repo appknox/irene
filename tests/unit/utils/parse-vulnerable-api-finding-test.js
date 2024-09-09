@@ -9,12 +9,13 @@ module('Unit | Utility | parse-vulnerable-api-finding', function (hooks) {
   setupTest(hooks);
 
   const content1 =
-    "p157-contacts.icloud.com:443/mm/sub: A response to one of our payload requests has taken too long compared to the baseline request. This could indicate a vulnerability to time-based Regex DoS attacks\nconfidence: LOW\nparam:\n  location: headers\n  method: POST\n  variables:\n  - X-Apple-I-Md-M\n  - Content-Length\n  - X-Apple-I-Locale\n  - Accept\n  - Accept-Language\n  - Connection\n  - X-Apple-I-Md\n  - Accept-Encoding\n  - User-Agent\n  - X-Apple-I-Timezone\n  - X-Apple-I-Md-Rinfo\n  - X-Apple-I-Client-Time\nrequest:\n  body: ''\n  headers:\n    Accept: '*/*'\n    Accept-Encoding: gzip, deflate, br\n    Accept-Language: en-US,en;q=0.9\n    Connection: keep-alive\n    Content-Length: '0'\n    Host: p157-caldav.icloud.com:443\n    User-Agent: iOS/16.7.5 (20H307) dataaccessd/1.0\n    X-Apple-I-Client-Time: '1111111111111111111111111111111112'\n    X-Apple-I-Locale: en_US\n    X-Apple-I-Md: AAAABQAAABD+t/oZrRyr0dQagkbgUyI3AAAAAw==\n    X-Apple-I-Md-M: qKirfmb8fGttUzAtNOscrjefNSH3JW09VgFOjsxKbHYZeoFsqnHcTScIa6zrbXzkCyinChfXXcQZaME0\n    X-Apple-I-Md-Rinfo: '50660608'\n    X-Apple-I-Timezone: GMT+5:30\n  method: POST\n  params:\n    key: '16304401481'\n    token: b37163f4e3f63e20192b40e3bfe0ce293ba129f9706437f0dc0dce3e2bea9268\n  url: https://p157-contacts.icloud.com:443/mm/sub\nresponse:\n  cookies: {}\n  headers:\n    Connection: keep-alive\n    Content-Length: '0'\n    Date: Mon, 15 Jul 2024 12:49:15 GMT\n    Server: AppleHttpServer/b866cf47a603\n    X-Apple-Edge-Response-Time: '0'\n    X-Apple-Filtered-At-Edge: 'true'\n    X-Apple-Request-UUID: f3dcbfe2-9417-43ff-9e2d-d09071707eb6\n    access-control-expose-headers: X-Apple-Request-UUID,Via\n    via: 631194250daa17e24277dea86cf30319:18042a2d519f8fe036a8b503c12ad658:usmes1\n    www-authenticate: X-MobileMe-AuthToken realm=\"MMCalDav\", Basic realm=\"MMCalDav\"\n    x-apple-user-partition: '157'\n  reason: Unauthorized\n  status_code: 401\n  text: ''\n  url: https://p157-contacts.icloud.com:443/mm/sub?token=b37163f4e3f63e20192b40e3bfe0ce293ba129f9706437f0dc0dce3e2bea9268&key=16304401481\n  version: 11\nseverity: MEDIUM\n\n";
+    "p157-contacts.icloud.com:443/mm/sub: A response to one of our payload requests has taken too long compared to the baseline request. This could indicate a vulnerability to time-based Regex DoS attacks\nconfidence: LOW\nparam:\n  location: headers\n  method: POST\n  variables:\n  - X-Apple-I-Md-M\n  - Content-Length\n  - X-Apple-I-Locale\n  - Accept\n  - Accept-Language\n  - Connection\n  - X-Apple-I-Md\n  - Accept-Encoding\n  - User-Agent\n  - X-Apple-I-Timezone\n  - X-Apple-I-Md-Rinfo\n  - X-Apple-I-Client-Time\nrequest:\n  body: ''\n  headers:\n    Accept: '*/*'\n    Accept-Encoding: gzip, deflate, br\n    Accept-Language: en-US,en;q=0.9\n    Connection: keep-alive\n    Content-Length: '0'\n    Host: p157-caldav.icloud.com:443\n    User-Agent: iOS/16.7.5 (20H307) dataaccessd/1.0\n    X-Apple-I-Client-Time: '1111111111111111111111111111111112'\n    X-Apple-I-Locale: en_US\n    X-Apple-I-Md: AAAABQAAABD+t/oZrRyr0dQagkbgUyI3AAAAAw==\n    X-Apple-I-Md-M: qKirfmb8fGttUzAtNOscrjefNSH3JW09VgFOjsxKbHYZeoFsqnHcTScIa6zrbXzkCyinChfXXcQZaME0\n    X-Apple-I-Md-Rinfo: '50660608'\n    X-Apple-I-Timezone: GMT+5:30\n  method: POST\n  params:\n    key: '16304401481'\n    token: b37163f4e3f63e20192b40e3bfe0ce293ba129f9706437f0dc0dce3e2bea9268\n  url: https://p157-contacts.icloud.com:443/mm/sub\nresponse:\n  cookies:\n    JSESSIONID: 0000gfnsEirGQB2UzBDCcDys4Un:1cca51vsg\n    VSLEGFIA: 022f6c2a0b-ee5b-4b5HFOjCLRz0fkRYfGDWsskj3PxhW1FT4PNCd2AqIl_uBPL0m1psk_DSBX0qcKCSGO7bY\n    WC_PERSISTENT: 6KqdTAXHThll4Ll8fMLSnpkpDZGTH2stmRKqWcNQfMk%3D%3B2024-07-31+16%3A19%3A53.785_1722457193785-8500_0\n    __cf_bm: irVbX8KLSRbQwNnUZzx8.wKUryCpolObw3OtCxlBWRA-1722457193-1.0.1.1-2fvHPIjkGdPENjQnGpZO4HVGW2RCipjQ5ogdRhtyTnw.JF8skFeoJhkWAa53BWdd.U850VGe.MACd6K9tTWf9A\n    src: app\n  \n  headers:\n    Connection: keep-alive\n    Content-Length: '0'\n    Date: Mon, 15 Jul 2024 12:49:15 GMT\n    Server: AppleHttpServer/b866cf47a603\n    X-Apple-Edge-Response-Time: '0'\n    X-Apple-Filtered-At-Edge: 'true'\n    X-Apple-Request-UUID: f3dcbfe2-9417-43ff-9e2d-d09071707eb6\n    access-control-expose-headers: X-Apple-Request-UUID,Via\n    via: 631194250daa17e24277dea86cf30319:18042a2d519f8fe036a8b503c12ad658:usmes1\n    www-authenticate: X-MobileMe-AuthToken realm=\"MMCalDav\", Basic realm=\"MMCalDav\"\n    x-apple-user-partition: '157'\n  reason: Unauthorized\n  status_code: 401\n  text: '{\"storeConf\":[{\"assortment_enable\":\"true\"}]}'\n  url: https://p157-contacts.icloud.com:443/mm/sub?token=b37163f4e3f63e20192b40e3bfe0ce293ba129f9706437f0dc0dce3e2bea9268&key=16304401481\n  version: 11\nseverity: MEDIUM\n\n";
 
   const expectedObject1 = [
     {
       request: {
         body: "''",
+        cookies: {},
         headers: {
           accept: "'*/*'",
           'accept-encoding': 'gzip, deflate, br',
@@ -40,6 +41,16 @@ module('Unit | Utility | parse-vulnerable-api-finding', function (hooks) {
         url: 'https://p157-contacts.icloud.com:443/mm/sub',
       },
       response: {
+        cookies: {
+          __cf_bm:
+            'irVbX8KLSRbQwNnUZzx8.wKUryCpolObw3OtCxlBWRA-1722457193-1.0.1.1-2fvHPIjkGdPENjQnGpZO4HVGW2RCipjQ5ogdRhtyTnw.JF8skFeoJhkWAa53BWdd.U850VGe.MACd6K9tTWf9A',
+          jsessionid: '0000gfnsEirGQB2UzBDCcDys4Un:1cca51vsg',
+          src: 'app',
+          vslegfia:
+            '022f6c2a0b-ee5b-4b5HFOjCLRz0fkRYfGDWsskj3PxhW1FT4PNCd2AqIl_uBPL0m1psk_DSBX0qcKCSGO7bY',
+          wc_persistent:
+            '6KqdTAXHThll4Ll8fMLSnpkpDZGTH2stmRKqWcNQfMk%3D%3B2024-07-31+16%3A19%3A53.785_1722457193785-8500_0',
+        },
         headers: {
           connection: 'keep-alive',
           'content-length': "'0'",
@@ -56,11 +67,12 @@ module('Unit | Utility | parse-vulnerable-api-finding', function (hooks) {
         },
         reason: 'Unauthorized',
         status_code: 401,
-        text: '',
+        text: '\'{"storeConf":[{"assortment_enable":"true"}]}\'',
         url: 'https://p157-contacts.icloud.com:443/mm/sub?token=b37163f4e3f63e20192b40e3bfe0ce293ba129f9706437f0dc0dce3e2bea9268&key=16304401481',
       },
       severity: 'MEDIUM',
       confidence: 'LOW',
+      url: 'p157-contacts.icloud.com:443/mm/sub',
       description:
         'A response to one of our payload requests has taken too long compared to the baseline request. This could indicate a vulnerability to time-based Regex DoS attacks',
     },
@@ -73,16 +85,15 @@ module('Unit | Utility | parse-vulnerable-api-finding', function (hooks) {
     {
       request: {
         body: '',
+        cookies: {},
         headers: {},
         method: '',
-        params: {
-          key: '',
-          token: '',
-        },
-        url: 'https://token.safebrowsing.apple:443/api/v1/google.json',
+        params: {},
+        url: '',
       },
       response: {
         headers: {},
+        cookies: {},
         reason: '',
         status_code: 0,
         text: '',
@@ -90,17 +101,19 @@ module('Unit | Utility | parse-vulnerable-api-finding', function (hooks) {
       },
       severity: 'LOW',
       confidence: '',
+      url: 'https://token.safebrowsing.apple:443/api/v1/google.json',
       description: 'TRACE is enabled in the webserver configuration',
     },
   ];
 
   const content3 =
-    "p157-contacts.icloud.com:443/mm/sub: A response to one of our payload requests has taken too long compared to the baseline request. This could indicate a vulnerability to time-based SQL injection attacks\nconfidence: LOW\nparam:\n  location: headers\n  method: POST\n  variables:\n  - X-Apple-I-Md-M\n  - Content-Length\n  - X-Apple-I-Locale\n  - Accept\n  - Accept-Language\n  - Connection\n  - X-Apple-I-Md\n  - Accept-Encoding\n  - User-Agent\n  - X-Apple-I-Timezone\n  - X-Apple-I-Md-Rinfo\n  - Host\n  - X-Apple-I-Client-Time\nrequest:\n  body: ''\n  headers:\n    Accept: '*/*'\n    Accept-Encoding: ; OR '1'='1'\n    Accept-Language: en-US,en;q=0.9\n    Connection: keep-alive\n    Content-Length: '0'\n    Host: p157-caldav.icloud.com:443\n    User-Agent: iOS/16.7.5 (20H307) dataaccessd/1.0\n    X-Apple-I-Client-Time: '2024-07-15T09:07:13Z'\n    X-Apple-I-Locale: en_US\n    X-Apple-I-Md: AAAABQAAABD+t/oZrRyr0dQagkbgUyI3AAAAAw==\n    X-Apple-I-Md-M: qKirfmb8fGttUzAtNOscrjefNSH3JW09VgFOjsxKbHYZeoFsqnHcTScIa6zrbXzkCyinChfXXcQZaME0\n    X-Apple-I-Md-Rinfo: '50660608'\n    X-Apple-I-Timezone: GMT+5:30\n  method: POST\n  params:\n    key: '16304401481'\n    token: b37163f4e3f63e20192b40e3bfe0ce293ba129f9706437f0dc0dce3e2bea9268\n  url: https://p157-contacts.icloud.com:443/mm/sub\nresponse:\n  cookies: {}\n  headers:\n    Connection: keep-alive\n    Content-Length: '0'\n    Date: Mon, 15 Jul 2024 12:50:17 GMT\n    Server: AppleHttpServer/b866cf47a603\n    X-Apple-Edge-Response-Time: '0'\n    X-Apple-Filtered-At-Edge: 'true'\n    X-Apple-Request-UUID: c411e3b6-c70a-4b50-acd5-b98c31521249\n    access-control-expose-headers: X-Apple-Request-UUID,Via\n    via: 631194250daa17e24277dea86cf30319:02caeb0e04ee373e250b945a1f576f08:usdal2\n    www-authenticate: X-MobileMe-AuthToken realm=\"MMCalDav\", Basic realm=\"MMCalDav\"\n    x-apple-user-partition: '157'\n  reason: Unauthorized\n  status_code: 401\n  text: ''\n  url: https://p157-contacts.icloud.com:443/mm/sub?token=b37163f4e3f63e20192b40e3bfe0ce293ba129f9706437f0dc0dce3e2bea9268&key=16304401481\n  version: 11\nseverity: MEDIUM\n\nconfidence: LOW\nparam:\n  location: params\n  method: POST\n  variables:\n  - token\n  - key\nrequest:\n  body: ''\n  headers:\n    Accept: '*/*'\n    Accept-Encoding: gzip, deflate, br\n    Accept-Language: en-US,en;q=0.9\n    Connection: keep-alive\n    Content-Length: '0'\n    Host: p157-caldav.icloud.com:443\n    User-Agent: iOS/16.7.5 (20H307) dataaccessd/1.0\n    X-Apple-I-Client-Time: '2024-07-15T09:07:13Z'\n    X-Apple-I-Locale: en_US\n    X-Apple-I-Md: AAAABQAAABD+t/oZrRyr0dQagkbgUyI3AAAAAw==\n    X-Apple-I-Md-M: qKirfmb8fGttUzAtNOscrjefNSH3JW09VgFOjsxKbHYZeoFsqnHcTScIa6zrbXzkCyinChfXXcQZaME0\n    X-Apple-I-Md-Rinfo: '50660608'\n    X-Apple-I-Timezone: GMT+5:30\n  method: POST\n  params:\n    key: '16304401481'\n    token: ; OR '1'='1'\n  url: https://p157-contacts.icloud.com:443/mm/sub\nresponse:\n  cookies: {}\n  headers:\n    Connection: keep-alive\n    Content-Length: '0'\n    Date: Mon, 15 Jul 2024 12:50:18 GMT\n    Server: AppleHttpServer/b866cf47a603\n    X-Apple-Edge-Response-Time: '0'\n    X-Apple-Filtered-At-Edge: 'true'\n    X-Apple-Request-UUID: 05b1ac99-ee33-44ba-aa1d-f52499fdcd88\n    access-control-expose-headers: X-Apple-Request-UUID,Via\n    via: 631194250daa17e24277dea86cf30319:4253a6fbce6fc9cade45c5ab633577a5:usmes1\n    www-authenticate: X-MobileMe-AuthToken realm=\"MMCalDav\", Basic realm=\"MMCalDav\"\n    x-apple-user-partition: '157'\n  reason: Unauthorized\n  status_code: 401\n  text: ''\n  url: https://p157-contacts.icloud.com:443/mm/sub?token=%3B+OR+%271%27%3D%271%27&key=16304401481\n  version: 11\nseverity: MEDIUM\n\n\n";
+    "p157-contacts.icloud.com:443/mm/sub: A response to one of our payload requests has taken too long compared to the baseline request. This could indicate a vulnerability to time-based SQL injection attacks\nconfidence: LOW\nparam:\n  location: headers\n  method: POST\n  variables:\n  - X-Apple-I-Md-M\n  - Content-Length\n  - X-Apple-I-Locale\n  - Accept\n  - Accept-Language\n  - Connection\n  - X-Apple-I-Md\n  - Accept-Encoding\n  - User-Agent\n  - X-Apple-I-Timezone\n  - X-Apple-I-Md-Rinfo\n  - Host\n  - X-Apple-I-Client-Time\nrequest:\n  body: '{\"operationName\": \"GetAdhocTasks\", \"variables\": {\"driverId\": 3, \"startTime\": \"2024-09-02 14:00:00\", \"endTime\": \"2024-09-03 00:00:00\"}, \"query\": \"query GetAdhocTasks($driverId: Int, $endTime: String, $startTime: String) {\\n  adhocTasks(driverId: $driverId, endTime: $endTime, startTime: $startTime) {\\n    adhoctaskId\\n    driverId\\n    note\\n    startTime\\n    endDeadline\\n    issueType\\n    delayedTask\\n    __typename\\n  }\\n}\"}'\n  headers:\n    Accept: '*/*'\n    Accept-Encoding: ; OR '1'='1'\n    Accept-Language: en-US,en;q=0.9\n    Connection: keep-alive\n    Content-Length: '0'\n    Host: p157-caldav.icloud.com:443\n    User-Agent: iOS/16.7.5 (20H307) dataaccessd/1.0\n    X-Apple-I-Client-Time: '2024-07-15T09:07:13Z'\n    X-Apple-I-Locale: en_US\n    X-Apple-I-Md: AAAABQAAABD+t/oZrRyr0dQagkbgUyI3AAAAAw==\n    X-Apple-I-Md-M: qKirfmb8fGttUzAtNOscrjefNSH3JW09VgFOjsxKbHYZeoFsqnHcTScIa6zrbXzkCyinChfXXcQZaME0\n    X-Apple-I-Md-Rinfo: '50660608'\n    X-Apple-I-Timezone: GMT+5:30\n  method: POST\n  params:\n    catalogId: '10054'\n    langId: '-1'\n    name: assortment_enable\n    responseFormat: json\n    src: app\n  url: https://qa2.hdsupplysolutions.com:443/wcs/resources/store/10051/hdsstore/storeconf\n  url: https://p157-contacts.icloud.com:443/mm/sub\nresponse:\n  cookies: {}\n  headers:\n    Connection: keep-alive\n    Content-Length: '0'\n    Date: Mon, 15 Jul 2024 12:50:17 GMT\n    Server: AppleHttpServer/b866cf47a603\n    X-Apple-Edge-Response-Time: '0'\n    X-Apple-Filtered-At-Edge: 'true'\n    X-Apple-Request-UUID: c411e3b6-c70a-4b50-acd5-b98c31521249\n    access-control-expose-headers: X-Apple-Request-UUID,Via\n    via: 631194250daa17e24277dea86cf30319:02caeb0e04ee373e250b945a1f576f08:usdal2\n    www-authenticate: X-MobileMe-AuthToken realm=\"MMCalDav\", Basic realm=\"MMCalDav\"\n    x-apple-user-partition: '157'\n  reason: Unauthorized\n  status_code: 401\n  text: ''\n  url: https://p157-contacts.icloud.com:443/mm/sub?token=b37163f4e3f63e20192b40e3bfe0ce293ba129f9706437f0dc0dce3e2bea9268&key=16304401481\n  version: 11\nseverity: MEDIUM\n\nconfidence: LOW\nparam:\n  location: params\n  method: POST\n  variables:\n  - token\n  - key\nrequest:\n  body: ''\n  headers:\n    Accept: '*/*'\n    Accept-Encoding: gzip, deflate, br\n    Accept-Language: en-US,en;q=0.9\n    Connection: keep-alive\n    Content-Length: '0'\n    Host: p157-caldav.icloud.com:443\n    User-Agent: iOS/16.7.5 (20H307) dataaccessd/1.0\n    X-Apple-I-Client-Time: '2024-07-15T09:07:13Z'\n    X-Apple-I-Locale: en_US\n    X-Apple-I-Md: AAAABQAAABD+t/oZrRyr0dQagkbgUyI3AAAAAw==\n    X-Apple-I-Md-M: qKirfmb8fGttUzAtNOscrjefNSH3JW09VgFOjsxKbHYZeoFsqnHcTScIa6zrbXzkCyinChfXXcQZaME0\n    X-Apple-I-Md-Rinfo: '50660608'\n    X-Apple-I-Timezone: GMT+5:30\n  method: POST\n  params:\n    key: '16304401481'\n    token: ; OR '1'='1'\n  url: https://p157-contacts.icloud.com:443/mm/sub\nresponse:\n  cookies: {}\n  headers:\n    Connection: keep-alive\n    Content-Length: '0'\n    Date: Mon, 15 Jul 2024 12:50:18 GMT\n    Server: AppleHttpServer/b866cf47a603\n    X-Apple-Edge-Response-Time: '0'\n    X-Apple-Filtered-At-Edge: 'true'\n    X-Apple-Request-UUID: 05b1ac99-ee33-44ba-aa1d-f52499fdcd88\n    access-control-expose-headers: X-Apple-Request-UUID,Via\n    via: 631194250daa17e24277dea86cf30319:4253a6fbce6fc9cade45c5ab633577a5:usmes1\n    www-authenticate: X-MobileMe-AuthToken realm=\"MMCalDav\", Basic realm=\"MMCalDav\"\n    x-apple-user-partition: '157'\n  reason: Unauthorized\n  status_code: 401\n  text: ''\n  url: https://p157-contacts.icloud.com:443/mm/sub?token=%3B+OR+%271%27%3D%271%27&key=16304401481\n  version: 11\nseverity: MEDIUM\n\n\n";
 
   const expectedObject3 = [
     {
       request: {
-        body: "''",
+        body: '\'{"operationName": "GetAdhocTasks", "variables": {"driverId": 3, "startTime": "2024-09-02 14:00:00", "endTime": "2024-09-03 00:00:00"}, "query": "query GetAdhocTasks($driverId: Int, $endTime: String, $startTime: String) {\\n  adhocTasks(driverId: $driverId, endTime: $endTime, startTime: $startTime) {\\n    adhoctaskId\\n    driverId\\n    note\\n    startTime\\n    endDeadline\\n    issueType\\n    delayedTask\\n    __typename\\n  }\\n}"}\'',
+        cookies: {},
         headers: {
           accept: "'*/*'",
           'accept-encoding': "; OR '1'='1'",
@@ -119,9 +132,11 @@ module('Unit | Utility | parse-vulnerable-api-finding', function (hooks) {
         },
         method: 'POST',
         params: {
-          key: "'16304401481'",
-          token:
-            'b37163f4e3f63e20192b40e3bfe0ce293ba129f9706437f0dc0dce3e2bea9268',
+          catalogid: "'10054'",
+          langid: "'-1'",
+          name: 'assortment_enable',
+          responseformat: 'json',
+          src: 'app',
         },
         url: 'https://p157-contacts.icloud.com:443/mm/sub',
       },
@@ -140,13 +155,15 @@ module('Unit | Utility | parse-vulnerable-api-finding', function (hooks) {
             'X-MobileMe-AuthToken realm="MMCalDav", Basic realm="MMCalDav"',
           'x-apple-user-partition': "'157'",
         },
+        cookies: {},
         reason: 'Unauthorized',
         status_code: 401,
-        text: '',
+        text: "''",
         url: 'https://p157-contacts.icloud.com:443/mm/sub?token=b37163f4e3f63e20192b40e3bfe0ce293ba129f9706437f0dc0dce3e2bea9268&key=16304401481',
       },
       severity: 'MEDIUM',
       confidence: 'LOW',
+      url: 'p157-contacts.icloud.com:443/mm/sub',
       description:
         'A response to one of our payload requests has taken too long compared to the baseline request. This could indicate a vulnerability to time-based SQL injection attacks',
     },
@@ -169,6 +186,7 @@ module('Unit | Utility | parse-vulnerable-api-finding', function (hooks) {
           'x-apple-i-md-rinfo': "'50660608'",
           'x-apple-i-timezone': 'GMT+5:30',
         },
+        cookies: {},
         method: 'POST',
         params: {
           key: "'16304401481'",
@@ -191,13 +209,15 @@ module('Unit | Utility | parse-vulnerable-api-finding', function (hooks) {
             'X-MobileMe-AuthToken realm="MMCalDav", Basic realm="MMCalDav"',
           'x-apple-user-partition': "'157'",
         },
+        cookies: {},
         reason: 'Unauthorized',
         status_code: 401,
-        text: '',
+        text: "''",
         url: 'https://p157-contacts.icloud.com:443/mm/sub?token=%3B+OR+%271%27%3D%271%27&key=16304401481',
       },
       severity: 'MEDIUM',
       confidence: 'LOW',
+      url: '',
       description: '',
     },
   ];
@@ -237,12 +257,16 @@ module('Unit | Utility | parse-vulnerable-api-finding', function (hooks) {
     assert.true(result);
   });
 
-  test('should return false if content contains vulnerability indicators', (assert) => {
-    const contentWithVulnerability =
-      'description: This is just a regular log entry.';
+  test.each(
+    'should return false if content does not contains vulnerability indicators',
+    [
+      'description: This is just a regular log entry.',
+      'An activity was found using an insecure randomization function via the Math.random method in Lcom/talview/recruit/utils/SntpClient;->writeTimeStamp(. As a result, the generated random data will be predictable and an attacker can guess or infer sensitive information',
+    ],
+    (assert, contentWithoutVulnerability) => {
+      const result = isVulnerableApiFinding(contentWithoutVulnerability);
 
-    const result = isVulnerableApiFinding(contentWithVulnerability);
-
-    assert.false(result);
-  });
+      assert.false(result);
+    }
+  );
 });

@@ -39,7 +39,12 @@ export default class SecurityAnalysisDetailsFindingsAddFormComponent extends Com
 
     const newFinding = {
       title: findingTitle,
-      description: findingDescription,
+
+      description: findingDescription
+        .replace(/\\\\n/g, '\n')
+        .replace(/\\n/g, '\n')
+        .replace(/\\\\/g, '\\')
+        .replace(/\\"/g, '"'),
     };
 
     this.args.addNewFinding(newFinding);

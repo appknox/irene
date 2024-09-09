@@ -9,3 +9,9 @@ export type Resolved<P> = P extends Promise<infer T> ? T : P;
 
 /** Get the resolved model value from a route. */
 export type ModelFrom<R extends Route> = Resolved<ReturnType<R['model']>>;
+
+export type NestedKeyOf<ObjectType extends object> = {
+  [Key in keyof ObjectType & (string | number)]: ObjectType[Key] extends object
+    ? `${Key}` | `${Key}.${NestedKeyOf<ObjectType[Key]>}`
+    : Key;
+}[keyof ObjectType & (string | number)];

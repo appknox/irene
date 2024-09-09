@@ -1002,6 +1002,12 @@ body {
   --file-details-vulnerability-analysis-details-findings-vulnerable-api-code-background-color: var(
     --neutral-grey-100
   );
+  --file-details-vulnerability-analysis-details-findings-vulnerable-api-marked-passed-code-background-color: var(
+    --neutral-grey-50
+  );
+  --file-details-vulnerability-analysis-details-findings-vulnerable-api-border-color: var(
+    --border-color-1
+  );
 
   // variables for file-details/vulnerability-analysis-details/findings/custom-vulnerabilities
   --file-details-vulnerability-analysis-details-findings-custom-vulnerabilities-background-main: var(
