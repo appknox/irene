@@ -150,7 +150,7 @@ module('Acceptance | Organization Service Account List', function (hooks) {
       assert.strictEqual(headerCells.length, 5);
 
       assert.dom(headerCells[0]).hasText(t('accountName'));
-      assert.dom(headerCells[1]).hasText(t('accountID'));
+      assert.dom(headerCells[1]).hasText(t('accessKeyID'));
       assert.dom(headerCells[2]).hasText(t('expiryOn'));
       assert.dom(headerCells[3]).hasText(t('createdBy'));
       assert.dom(headerCells[4]).hasText(t('action'));

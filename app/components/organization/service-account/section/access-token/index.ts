@@ -78,8 +78,8 @@ export default class OrganizationServiceAccountSectionAccessTokenComponent exten
 
   get secretAccessKeyHelperText() {
     return this.secretAccessKeyVisible
-      ? this.intl.t('serviceAccountModule.unmaskedSecretAccountKeyHelperText')
-      : this.intl.t('serviceAccountModule.maskedSecretAccountKeyHelperText');
+      ? this.intl.t('serviceAccountModule.unmaskedSecretAccessKeyHelperText')
+      : this.intl.t('serviceAccountModule.maskedSecretAccessKeyHelperText');
   }
 
   setCreateServiceAccountExpiry() {
