@@ -16,6 +16,9 @@ module.exports = function (defaults) {
     storeConfigInMeta: false,
     babel: {
       sourceMaps: 'inline',
+      plugins: [
+        require.resolve('ember-concurrency/async-arrow-task-transform'),
+      ],
     },
     minifyJS: {
       options: {

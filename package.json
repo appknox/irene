@@ -101,6 +101,7 @@
     "dayjs": "^1.11.9",
     "ember-ajax": "^5.1.2",
     "ember-auto-import": "^2.7.2",
+    "ember-basic-dropdown": "^8.3.0",
     "ember-browser-services": "^4.0.4",
     "ember-changeset": "^4.1.2",
     "ember-changeset-validations": "^4.1.1",
@@ -131,11 +132,10 @@
     "ember-cli-terser": "^4.0.2",
     "ember-cli-test-loader": "^3.1.0",
     "ember-cli-typescript": "^5.2.1",
-    "ember-concurrency": "^2.3.7",
+    "ember-concurrency": "^4.0.2",
     "ember-css-modules": "^2.0.1",
     "ember-css-modules-sass": "^1.1.0",
     "ember-data": "~4.12.1",
-    "ember-data-resources": "^5.0.0",
     "ember-dayjs-helpers": "^0.5.15",
     "ember-exam": "^9.0.0",
     "ember-export-application-global": "^2.0.1",
@@ -150,8 +150,8 @@
     "ember-modifier": "^4.1.0",
     "ember-named-blocks-polyfill": "^0.2.5",
     "ember-page-title": "^8.2.2",
-    "ember-power-calendar": "^0.21.0",
-    "ember-power-select": "^7.2.0",
+    "ember-power-calendar": "^1.2.0",
+    "ember-power-select": "^8.3.1",
     "ember-qunit": "^8.0.2",
     "ember-resolver": "^11.0.1",
     "ember-rollbar-client": "^0.10.0",
@@ -196,15 +196,11 @@
     "clipboard": "^2.0.6",
     "cypress": "^13.6.3",
     "echarts": "^5.4.2",
+    "ember-data-resources": "^5.2.1",
     "ember-websockets": "^10.2.1",
     "material-icons": "^1.11.6",
     "qrious": "^4.0.2",
     "swagger-ui": "^5.17.14"
-  },
-  "overrides": {
-    "ember-data-resources": {
-      "ember-resources": "6.4.2"
-    }
   },
   "engines": {
     "node": ">=18"

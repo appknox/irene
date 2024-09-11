@@ -1,14 +1,13 @@
 import '@glint/environment-ember-loose';
-import { TemplateFactory } from 'ember-cli-htmlbars';
-import { HelperLike, ComponentLike, ModifierLike } from '@glint/template';
-import { BreadcrumbsContainerModifierArgs } from 'irene/modifiers/breadcrumbs-container';
-import { BreadcrumbsItemModifierArgs } from 'irene/modifiers/breadcrumbs-item';
-import {
-  PowerSelectArgs,
-  Select,
-} from 'ember-power-select/components/power-select';
-import EmberTableRegistry from 'ember-table/template-registry';
-import AkSvgRegistry from 'ak-svg';
+import type { TemplateFactory } from 'ember-cli-htmlbars';
+import type { HelperLike, ComponentLike, ModifierLike } from '@glint/template';
+import type { BreadcrumbsContainerModifierArgs } from 'irene/modifiers/breadcrumbs-container';
+import type { BreadcrumbsItemModifierArgs } from 'irene/modifiers/breadcrumbs-item';
+import type EmberConcurrencyRegistry from 'ember-concurrency/template-registry';
+import type EmberPowerSelectRegistry from 'ember-power-select/template-registry';
+import type EmberBasicDropdownRegistry from 'ember-basic-dropdown/template-registry';
+import type EmberTableRegistry from 'ember-table/template-registry';
+import type AkSvgRegistry from 'ak-svg';
 
 // Types for compiled templates
 declare module 'irene/templates/*' {
@@ -17,22 +16,14 @@ declare module 'irene/templates/*' {
 }
 
 declare module '@glint/environment-ember-loose/registry' {
-  interface PowerSelectExtendedArgs extends PowerSelectArgs {
-    triggerId?: string;
-    dropdownClass?: string;
-    triggerClass?: string;
-    placeholder?: string;
-    disabled?: boolean;
-    renderInPlace?: boolean;
-    ariaInvalid: string;
-    loadingMessage?: string;
-    selectedItemComponent?: string;
-    verticalPosition?: 'above' | 'below' | 'auto';
-  }
-
   type UnknownFnWithAnyArgType = (...args: any[]) => void;
 
-  export default interface Registry extends EmberTableRegistry, AkSvgRegistry {
+  export default interface Registry
+    extends AkSvgRegistry,
+      EmberTableRegistry,
+      EmberConcurrencyRegistry,
+      EmberPowerSelectRegistry,
+      EmberBasicDropdownRegistry {
     element: HelperLike<{
       Args: { Positional: [tagName: string] };
       Return: ComponentLike<{
@@ -47,14 +38,6 @@ declare module '@glint/environment-ember-loose/registry' {
         renderInPlace?: boolean;
       };
       Blocks: { default: [] };
-    }>;
-
-    PowerSelect: ComponentLike<{
-      Element: HTMLElement;
-      Args: PowerSelectExtendedArgs;
-      Blocks: {
-        default: [option: unknown, select?: Select];
-      };
     }>;
 
     'blank-template': ComponentLike<{

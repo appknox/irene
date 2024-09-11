@@ -10,7 +10,7 @@ import { selectChoose } from 'ember-power-select/test-support';
 import {
   calendarCenter,
   calendarSelect,
-} from 'ember-power-calendar/test-support';
+} from 'ember-power-calendar/test-support/helpers';
 
 import Service from '@ember/service';
 import dayjs from 'dayjs';

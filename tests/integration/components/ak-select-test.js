@@ -169,7 +169,8 @@ module('Integration | Component | ak-select', function (hooks) {
     'test ak-select for placeholder & value',
     [
       ['', '', ''],
-      ['', 'test placeholder', 'test placeholder'],
+      [null, 'test placeholder', 'test placeholder'],
+      [undefined, 'test placeholder', 'test placeholder'],
       [selectItems[0], 'test placeholder', selectItems[0].label],
     ],
     async function (assert, [value, placeholder, expectedText]) {

@@ -175,6 +175,7 @@ export default class SecurityAnalysisDetailsRegulatoryCategoriesComponent extend
       {
         key: 'owasp',
         title: 'OWASP Category',
+        placeholder: 'Select OWASP Categories',
         labelKeys: ['code', 'year', 'title'],
         selected: this.analysis?.owasp.slice(),
         options: this.owasps,
@@ -184,6 +185,7 @@ export default class SecurityAnalysisDetailsRegulatoryCategoriesComponent extend
       {
         key: 'owaspmobile2024',
         title: 'OWASP Mobile Top 10 (2024)',
+        placeholder: 'Select OWASP Mobile Top 10 (2024)',
         labelKeys: ['code', 'year', 'title'],
         selected: this.analysis?.owaspmobile2024.slice(),
         options: this.owaspmobile2024s,
@@ -192,6 +194,7 @@ export default class SecurityAnalysisDetailsRegulatoryCategoriesComponent extend
       {
         key: 'owaspapi2023',
         title: 'OWASP API TOP 10 (2023)',
+        placeholder: 'Select OWASP API TOP 10 (2023)',
         labelKeys: ['code', 'title'],
         selected: this.analysis?.owaspapi2023.slice(),
         options: this.owaspapi2023s,
@@ -200,6 +203,7 @@ export default class SecurityAnalysisDetailsRegulatoryCategoriesComponent extend
       {
         key: 'pcidss',
         title: 'PCI-DSS Risk Category',
+        placeholder: 'Select PCI-DSS Risk Category',
         labelKeys: ['code', 'title'],
         selected: this.analysis?.pcidss.slice(),
         options: this.pcidsses,
@@ -208,6 +212,7 @@ export default class SecurityAnalysisDetailsRegulatoryCategoriesComponent extend
       {
         key: 'pcidss4',
         title: 'PCI-DSS Risk Category (v 4.0)',
+        placeholder: 'Select PCI-DSS Risk Category (v 4.0)',
         labelKeys: ['code', 'title'],
         selected: this.analysis?.pcidss4.slice(),
         options: this.pcidss4s,
@@ -217,6 +222,7 @@ export default class SecurityAnalysisDetailsRegulatoryCategoriesComponent extend
       {
         key: 'hipaa',
         title: 'HIPAA Sections',
+        placeholder: 'Select HIPAA Sections',
         labelKeys: ['code', 'safeguard', 'title'],
         selected: this.analysis?.hipaa.slice(),
         options: this.hipaas,
@@ -225,6 +231,7 @@ export default class SecurityAnalysisDetailsRegulatoryCategoriesComponent extend
       {
         key: 'masvs',
         title: 'OWASP MASVS (v2) Requirements',
+        placeholder: 'Select OWASP MASVS (v2) Requirements',
         labelKeys: ['code', 'title'],
         selected: this.analysis?.masvs.slice(),
         options: this.masvses,
@@ -233,6 +240,7 @@ export default class SecurityAnalysisDetailsRegulatoryCategoriesComponent extend
       {
         key: 'mstg',
         title: 'MSTG Requirements',
+        placeholder: 'Select MSTG Requirements',
         labelKeys: ['code', 'title'],
         selected: this.analysis?.mstg.slice(),
         options: this.mstgs,
@@ -241,6 +249,7 @@ export default class SecurityAnalysisDetailsRegulatoryCategoriesComponent extend
       {
         key: 'asvs',
         title: 'ASVS Requirements',
+        placeholder: 'Select ASVS Requirements',
         labelKeys: ['code', 'title'],
         selected: this.analysis?.asvs.slice(),
         options: this.asvses,
@@ -249,6 +258,7 @@ export default class SecurityAnalysisDetailsRegulatoryCategoriesComponent extend
       {
         key: 'cwe',
         title: 'CWE Weaknesses',
+        placeholder: 'Select CWE Weaknesses',
         labelKeys: ['code', 'url'],
         selected: this.analysis?.cwe.slice(),
         options: this.cwes,
@@ -257,6 +267,7 @@ export default class SecurityAnalysisDetailsRegulatoryCategoriesComponent extend
       {
         key: 'gdpr',
         title: 'GDPR Articles',
+        placeholder: 'Select GDPR Articles',
         labelKeys: ['code', 'title'],
         selected: this.analysis?.gdpr.slice(),
         options: this.gdprs,
@@ -265,6 +276,7 @@ export default class SecurityAnalysisDetailsRegulatoryCategoriesComponent extend
       {
         key: 'nistsp800171',
         title: 'NIST SP 800-171',
+        placeholder: 'Select NIST SP 800-171',
         labelKeys: ['code', 'title'],
         selected: this.analysis?.nistsp800171.slice(),
         options: this.nistsp800171s,
@@ -273,6 +285,7 @@ export default class SecurityAnalysisDetailsRegulatoryCategoriesComponent extend
       {
         key: 'nistsp80053',
         title: 'NIST SP 800-53',
+        placeholder: 'Select NIST SP 800-53',
         labelKeys: ['code', 'title'],
         selected: this.analysis?.nistsp80053.slice(),
         options: this.nistsp80053s,
@@ -281,6 +294,7 @@ export default class SecurityAnalysisDetailsRegulatoryCategoriesComponent extend
       {
         key: 'sama',
         title: 'Saudi Arabian Monetary Authority',
+        placeholder: 'Select Saudi Arabian Monetary Authority',
         labelKeys: ['code', 'title'],
         selected: this.analysis?.sama.slice(),
         options: this.sama,
@@ -289,6 +303,7 @@ export default class SecurityAnalysisDetailsRegulatoryCategoriesComponent extend
     ] as Array<{
       key: string;
       title: string;
+      placeholder: string;
       labelKeys: string[];
       selected: Array<RegulatoryCategoryModels>;
       options: Array<RegulatoryCategoryModels>;
