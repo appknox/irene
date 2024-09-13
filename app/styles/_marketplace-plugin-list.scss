@@ -1,0 +1,15 @@
+.marketplace-bullet-list {
+  list-style-type: square;
+}
+
+.marketplace-code-block {
+  background: var(--neutral-grey-100);
+  color: var(--text-primary);
+  white-space: pre-wrap;
+  padding: 1em;
+  margin: 0.5em 0;
+}
+
+.marketplace-black-text {
+  color: var(--text-primary);
+}

@@ -16,7 +16,7 @@ module('Integration | Component | plus-n-list', function (hooks) {
     // Handle any actions with this.set('myAction', function(val) { ... });
 
     await render(hbs`<PlusNList />`);
-    assert.dom('div[data-test-initial-container]').exists();
+    assert.dom('[data-test-initial-container]').exists();
   });
 
   test('it renders 1 default items', async function (assert) {
@@ -26,20 +26,20 @@ module('Integration | Component | plus-n-list', function (hooks) {
     }
     this.set('emails', emails);
     await render(hbs`<PlusNList @list={{this.emails}}/>`);
-    assert.dom('div[data-test-default-items]').hasText(this.emails.firstObject);
+    assert.dom('[data-test-default-items]').hasText(this.emails.firstObject);
   });
 
   test('it renders 3 default items', async function (assert) {
     this.set('emails', emails);
     await render(hbs`<PlusNList @list={{this.emails}} @defaultCount=3/>`);
     const defaultEmails = this.emails.slice(0, 3).join(', ');
-    assert.dom('div[data-test-default-items]').hasText(defaultEmails);
+    assert.dom('[data-test-default-items]').hasText(defaultEmails);
   });
 
   test('it renders button with remaining count as +5', async function (assert) {
     this.set('emails', emails);
     await render(hbs`<PlusNList @list={{this.emails}}/>`);
-    assert.dom('button[data-test-more-btn]').hasText('+ 5');
+    assert.dom('[data-test-more-btn]').hasText('+ 5');
   });
 
   test('it renders button with remaining count and suffix', async function (assert) {
@@ -48,30 +48,30 @@ module('Integration | Component | plus-n-list', function (hooks) {
     await render(
       hbs`<PlusNList @list={{this.emails}} @suffix={{this.suffix}}/>`
     );
-    assert.dom('button[data-test-more-btn]').hasText('+ 5 items');
+    assert.dom('[data-test-more-btn]').hasText('+ 5 items');
   });
 
   test('it should not render remaining count button', async function (assert) {
     let emails = ['test+0@test.app'];
     this.set('emails', emails);
     await render(hbs`<PlusNList @list={{this.emails}}/>`);
-    assert.dom('button[data-test-more-btn]').doesNotExist();
+    assert.dom('[data-test-more-btn]').doesNotExist();
   });
 
   test('it should open list with modal when clicking on remaining count btn', async function (assert) {
     this.set('emails', emails);
     await render(hbs`<PlusNList @list={{this.emails}}/>`);
-    await click(this.element.querySelector('button[data-test-more-btn]'));
-    assert.dom('div[data-test-list-modal]').exists();
+    await click(this.element.querySelector('[data-test-more-btn]'));
+    assert.dom('[data-test-list-modal]').exists();
   });
 
   test('it should show 6 items in the modal with seq', async function (assert) {
     this.set('emails', emails);
     await render(hbs`<PlusNList @list={{this.emails}} @isShowSeq={{true}}/>`);
-    await click(this.element.querySelector('button[data-test-more-btn]'));
+    await click(this.element.querySelector('[data-test-more-btn]'));
     for (let i = 0; i <= 5; i++) {
       assert
-        .dom(`div[data-test-list-item="${i}"]`)
+        .dom(`[data-test-list-item="${i}"]`)
         .hasText(`${i + 1}. test+${i}@test.app`);
     }
   });
@@ -79,11 +79,9 @@ module('Integration | Component | plus-n-list', function (hooks) {
   test('it should show 6 items in the modal without seq', async function (assert) {
     this.set('emails', emails);
     await render(hbs`<PlusNList @list={{this.emails}}/>`);
-    await click(this.element.querySelector('button[data-test-more-btn]'));
+    await click(this.element.querySelector('[data-test-more-btn]'));
     for (let i = 0; i <= 5; i++) {
-      assert
-        .dom(`div[data-test-list-item='${i}']`)
-        .hasText(`test+${i}@test.app`);
+      assert.dom(`[data-test-list-item='${i}']`).hasText(`test+${i}@test.app`);
     }
   });
 
@@ -92,6 +90,6 @@ module('Integration | Component | plus-n-list', function (hooks) {
     this.set('emails', emails);
     await render(hbs`<PlusNList @list={{this.emails}}/>`);
 
-    assert.dom('div[data-test-default-items]').hasText('');
+    assert.dom('[data-test-default-items]').hasText('');
   });
 });

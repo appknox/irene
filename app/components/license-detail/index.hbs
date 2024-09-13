@@ -1,38 +1,38 @@
-<div class='license-detail margin-h-1h padding-t-1'>
-  <h4 class='bold black-text'>
-    License
-  </h4>
+<div class='my-1 p-1'>
+  <AkTypography @variant='h4'>
+    {{t 'license'}}
+  </AkTypography>
 
-  <table class='org-table'>
+  <table class='my-2' local-class='license-detail-table'>
     <thead>
       <tr>
         <th
           colspan='3'
-          class='{{if @license.isActive "success" "critical"}} p-2'
+          local-class='{{if @license.isActive "success" "critical"}}'
         >
-          <div class='align-both-centered'>
-            <div class='font-legible bold'>
-              {{#if @license.isLimitedScans}}
-                {{@license.perScanName}}
-              {{else}}
-                {{@license.perAppName}}
-              {{/if}}
-            </div>
-
-            <div class='text-right'>
-              <AkStack @alignItems='center'>
-                {{#if @license.isActive}}
-                  <AkIcon @iconName='done' @color='success' @size='small' />
+          <AkStack @justifyContent='space-between'>
+            <AkStack @alignItems='center'>
+              <AkTypography @fontWeight='bold'>
+                {{#if @license.isLimitedScans}}
+                  {{@license.perScanName}}
                 {{else}}
-                  <AkIcon @iconName='close' @color='error' @size='small' />
+                  {{@license.perAppName}}
                 {{/if}}
+              </AkTypography>
+            </AkStack>
 
-                <span class='padding-l-q'>
-                  {{@license.status}}
-                </span>
-              </AkStack>
-            </div>
-          </div>
+            <AkStack @alignItems='center' @spacing='2'>
+              {{#if @license.isActive}}
+                <AkIcon @iconName='done' @color='success' @size='small' />
+              {{else}}
+                <AkIcon @iconName='close' @color='error' @size='small' />
+              {{/if}}
+
+              <span>
+                {{@license.status}}
+              </span>
+            </AkStack>
+          </AkStack>
         </th>
       </tr>
     </thead>
@@ -40,41 +40,35 @@
     <tbody>
       <tr>
         <td>
-          <div class='font-legible black-text'>
-            <AkStack @alignItems='center' @spacing='0.5'>
-              <AkIcon
-                @iconName='shape-line'
-                class='padding-r-h'
-                @size='small'
-              />
+          <AkStack @alignItems='center' @spacing='2'>
+            <AkIcon @iconName='shape-line' @size='small' />
 
-              <span>Features</span>
-            </AkStack>
-          </div>
+            <AkTypography>{{t 'features'}}</AkTypography>
+          </AkStack>
         </td>
 
         <td>
           {{#if @license.isLimitedScans}}
-            <div class='uppercase-text margin-b-h font-small'>
+            <AkTypography @color='textSecondary' local-class='uppercase-text'>
               No. of Scans
-            </div>
+            </AkTypography>
 
-            <div class='semi-bold font-legible black-text'>
+            <AkTypography @fontWeight='medium'>
               {{@license.perScanQuantity}}
-            </div>
+            </AkTypography>
           {{else}}
-            <div class='uppercase-text margin-b-h font-small'>
-              No. of Apps
-            </div>
+            <AkTypography @color='textSecondary' local-class='uppercase-text'>
+              {{t 'noOfApps'}}
+            </AkTypography>
 
-            <div class='semi-bold font-legible black-text'>
+            <AkTypography @fontWeight='medium'>
               {{@license.perAppQuantity}}
-            </div>
+            </AkTypography>
           {{/if}}
         </td>
 
         <td>
-          <em class='font-legible text-lightgray'>
+          <em>
             {{#if @license.isLimitedScans}}
               {{@license.perScanDescription}}
             {{else}}
@@ -86,73 +80,62 @@
 
       <tr>
         <td>
-          <div class='font-legible black-text'>
-            <AkStack @alignItems='center' @spacing='0.5'>
-              <AkIcon
-                @iconName='calendar-month'
-                class='padding-r-h'
-                @size='small'
-              />
+          <AkStack @alignItems='center' @spacing='2'>
+            <AkIcon @iconName='calendar-month' @size='small' />
 
-              <span>Validity</span>
-            </AkStack>
-          </div>
+            <AkTypography>{{t 'validity'}}</AkTypography>
+          </AkStack>
         </td>
 
         <td>
-          <div class='uppercase-text margin-b-h font-small'>
-            Start Date
-          </div>
+          <AkTypography @color='textSecondary' local-class='uppercase-text'>
+            {{t 'startDate'}}
+          </AkTypography>
 
-          <div class='semi-bold font-legible black-text'>
+          <AkTypography @fontWeight='medium'>
             {{this.startDate}}
-          </div>
+          </AkTypography>
         </td>
 
         <td>
-          <div class='uppercase-text margin-b-h font-small'>
-            Expiry Date
-          </div>
+          <AkTypography @color='textSecondary' local-class='uppercase-text'>
+            {{t 'expiryDate'}}
+          </AkTypography>
 
-          <div class='semi-bold font-legible black-text'>
+          <AkTypography @fontWeight='medium'>
             {{this.expiryDate}}
-          </div>
+          </AkTypography>
         </td>
       </tr>
 
       <tr>
         <td>
-          <div class='font-legible black-text'>
-            <AkStack @alignItems='center' @spacing='0.5'>
-              <AkIcon @iconName='person' class='padding-r-h' @size='small' />
+          <AkStack @alignItems='center' @spacing='2'>
+            <AkIcon @iconName='person' @size='small' />
 
-              <span>Registration</span>
-            </AkStack>
-          </div>
+            <AkTypography>{{t 'registration'}}</AkTypography>
+          </AkStack>
         </td>
 
         <td>
-          <div class='uppercase-text margin-b-h font-small'>
-            License Key
-          </div>
+          <AkTypography @color='textSecondary' local-class='uppercase-text'>
+            {{t 'licenseKey'}}
+          </AkTypography>
 
-          <div class='semi-bold font-legible black-text'>
+          <AkTypography @fontWeight='medium'>
             {{@license.key}}
-          </div>
+          </AkTypography>
         </td>
 
         <td>
-          <div class='uppercase-text margin-b-h font-small'>
-            Licensed to
-          </div>
+          <AkTypography @color='textSecondary' local-class='uppercase-text'>
+            {{t 'licensedTo'}}
+          </AkTypography>
 
-          <div class='vertical-align-center semi-bold font-legible black-text'>
+          <AkTypography @fontWeight='medium'>
             {{@license.name}}
-
-            <div class='margin-l-h semi-bold black-text'>
-              &lt;{{@license.email}}&gt;
-            </div>
-          </div>
+            &lt;{{@license.email}}&gt;
+          </AkTypography>
         </td>
       </tr>
     </tbody>
