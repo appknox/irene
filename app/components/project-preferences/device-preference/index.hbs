@@ -19,6 +19,7 @@
 <AkStack class='mt-2' @spacing='2'>
   <div {{style width='150px'}}>
     <AkSelect
+      data-test-cy='device-preference-device-type-select'
       data-test-projectPreference-deviceTypeSelect
       @label={{t 'deviceType'}}
       @options={{@dpContext.deviceTypes}}
@@ -33,6 +34,7 @@
 
   <div {{style width='150px'}}>
     <AkSelect
+      data-test-cy='device-preference-os-version-select'
       data-test-projectPreference-osVersionSelect
       @label={{t 'osVersion'}}
       @selected={{@dpContext.selectedVersion}}
