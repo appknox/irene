@@ -1,0 +1,40 @@
+.license-detail-table {
+    tr {
+      border: 1px solid var(--license-detail-border-color);
+    }
+
+    td {
+      font-size: 12px;
+    }
+
+    th {
+      padding: 1em;
+      margin-top: 1em;
+
+      &.success {
+        border-color: var(--license-detail-success-light);
+        background: var(--license-detail-success-light);
+      }
+
+      &.critical {
+        border-color: var(--license-detail-primary-light);
+        background: var(--license-detail-primary-light);
+      } 
+    }
+
+    th,
+    td {
+      border-width: 0px;
+      vertical-align: middle;
+
+      &:first-child {
+        text-align: left;
+        padding-left: 1em;
+      } 
+    }
+}
+
+.uppercase-text {
+    text-transform: uppercase;
+    font-size: 0.83rem;
+}

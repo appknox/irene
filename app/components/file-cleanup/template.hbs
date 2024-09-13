@@ -1,106 +1,82 @@
 {{#unless this.isHideSettings}}
-  <div
-    class='org-settings-subtitle black-text is-fullwidth'
+  <AkTypography
+    @variant='h5'
+    class='pb-2'
     {{did-insert (perform this.loadCleanupPref)}}
   >
     {{t 'storageManagement'}}
-  </div>
-  <div>
-    <div class='vertical-align-top'>
-      <div local-class='toggle-check' class='div'>
-        <label class='switch margin-right'>
-          <Input
-            {{! template-lint-disable require-input-label  }}
-            class='switch-input'
-            @type='checkbox'
-            id='auto-cleanup'
-            {{on 'change' (fn this.onChangePref this.changeset 'checkbox')}}
-            @checked={{get this.changeset 'isEnabled'}}
-          />
-          <span class='slider slider-nolabel round'></span>
-        </label>
-      </div>
-      <div class='padding-l-1h'>
-        <label
-          class='black-text'
-          local-class='cleanup-title'
-          for='auto-cleanup'
-        >
-          {{t 'fileCleanup.autoCleanup'}}
-        </label>
-        <p local-class='cleanup-descripton'>{{t 'fileCleanup.description'}}</p>
-        {{#if this.changeset.isEnabled}}
-          <div
-            class='input-wrap margin-right20'
-            local-class='files-count-input'
+  </AkTypography>
+
+  <AkStack @direction='row' @spacing='2'>
+    <AkToggle
+      @id='auto-cleanup'
+      @onChange={{fn this.onChangePref this.changeset 'checkbox'}}
+      @checked={{get this.changeset 'isEnabled'}}
+    />
+
+    <AkStack @direction='column'>
+      <AkTypography @variant='h5'>
+        {{t 'fileCleanup.autoCleanup'}}
+      </AkTypography>
+
+      <AkTypography @variant='body2'>
+        {{t 'fileCleanup.description'}}
+      </AkTypography>
+
+      {{#if this.changeset.isEnabled}}
+        <AkStack @spacing='2' @width='8/12' class='my-2'>
+          <AkTextField
+            @label={{t 'fileCleanup.activeCount'}}
+            @value={{mut (get this.changeset 'filesToKeep')}}
+            @type='number'
+            @min={{2}}
+            @max={{50}}
+            @id='active-file-limit'
+            @disabled={{unless this.changeset.isEnabled 'disabled'}}
+            @error={{this.changeset.error.filesToKeep}}
           >
-            <label for='active-file-limit'>
-              {{t 'fileCleanup.activeCount'}}
-            </label>
-            <Input
-              class='input-field'
-              local-class='{{if
-                this.changeset.error.filesToKeep
-                "error-input"
-              }}'
-              @type='number'
-              @value={{mut (get this.changeset 'filesToKeep')}}
-              min={{2}}
-              max={{50}}
-              id='active-file-limit'
-              disabled={{unless this.changeset.isEnabled 'disabled'}}
-            />
-            <button
-              type='button'
-              local-class='save-input {{unless
-                this.changeset.error.filesToKeep
-                "correct-input"
-              }}'
-              disabled={{if this.changeset.error.filesToKeep 'disabled'}}
-              {{on 'click' (fn this.onChangePref this.changeset)}}
-            >
-              <AkIcon @iconName='done' />
-            </button>
-            {{#if this.changeset.error.filesToKeep}}
-              <span
-                local-class='file-count-err'
-              >{{this.changeset.error.filesToKeep.validation}}</span>
-            {{/if}}
-          </div>
+            <:helperText>
+              <AkTypography @variant='body2' @color='error'>
+                {{this.changeset.error.filesToKeep.validation}}
+              </AkTypography>
+            </:helperText>
+          </AkTextField>
 
-          <div class='last-cleanup vertical-align-center'>
-            <label local-class='last-activity' class='margin-right black-text'>
-              {{t 'fileCleanup.lastActivity'}}
-            </label>
-            <span class='margin-right'>{{day-js
-                date=this.changeset.lastCleanedAt
-                format='DD MMM YYYY'
-              }}</span>
-            <button
-              class='view-all-cleanup button is-primary'
-              {{on 'click' this.onViewAllCleanup}}
-              type='button'
-            >
-              {{t 'fileCleanup.viewList'}}
-            </button>
-            <div class='trigger-cleanup-btn align-end'>
-              <button
-                type='button'
-                class='is-primary highlighted-button margin-l-1'
-                {{on 'click' this.onTriggerCleanup}}
-                disabled={{unless this.changeset.isEnabled 'disabled'}}
-              >{{t 'fileCleanup.run'}}</button>
-            </div>
-          </div>
-        {{/if}}
+          <AkIconButton
+            local-class='save-input'
+            @variant='outlined'
+            @disabled={{if this.changeset.error.filesToKeep 'disabled'}}
+            {{on 'click' (fn this.onChangePref this.changeset)}}
+          >
+            <AkIcon @iconName='done' />
+          </AkIconButton>
+        </AkStack>
 
-      </div>
-    </div>
+        <AkStack @direction='row' @alignItems='center' @spacing='2'>
+          <AkTypography @variant='body2'>
+            {{t 'fileCleanup.lastActivity'}}:
+          </AkTypography>
 
-  </div>
+          <AkTypography @variant='body2'>
+            {{day-js date=this.changeset.lastCleanedAt format='DD MMM YYYY'}}
+          </AkTypography>
 
+          <AkButton @variant='outlined' {{on 'click' this.onViewAllCleanup}}>
+            {{t 'fileCleanup.viewList'}}
+          </AkButton>
+
+          <AkButton
+            @disabled={{unless this.changeset.isEnabled 'disabled'}}
+            {{on 'click' this.onTriggerCleanup}}
+          >
+            {{t 'fileCleanup.run'}}
+          </AkButton>
+        </AkStack>
+      {{/if}}
+    </AkStack>
+  </AkStack>
   {{! Added divider since it's render by self context check }}
-  <div class='divider margin-t-1 margin-b-1'></div>
+  <AkDivider class='my-2' />
 {{/unless}}
 
 {{#if this.isShowAllCleanup}}

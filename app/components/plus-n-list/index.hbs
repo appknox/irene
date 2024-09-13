@@ -1,11 +1,12 @@
 <div local-class='initial-container' data-test-initial-container ...attributes>
-  <div class='black-text' data-test-default-items>
+  <AkTypography local-class='first-item' data-test-default-items>
     {{this.defaultItems}}
-  </div>
+  </AkTypography>
+
   {{#if (gt this.remainingCount 0)}}
     <button
       type='button'
-      class='margin-l-h'
+      class='ml-2'
       local-class='show-more-count-badge'
       title='View {{this.remainingCount}} more'
       data-test-more-btn
@@ -19,6 +20,7 @@
     </button>
   {{/if}}
 </div>
+
 {{#if this.showMoreModal}}
   <AkModal
     @onClose={{this.toggleShowMoreModal}}

@@ -1,10 +1,8 @@
 {{page-title 'Invitation'}}
 
-<div class='auth-main-container'>
-  <UserRegistration::ViaOrgInvite
-    @email={{@model.email}}
-    @company={{@model.company}}
-    @token={{@model.token}}
-    @isSSOEnforced={{@model.is_sso_enforced}}
-  />
-</div>
+<UserRegistration::ViaOrgInvite
+  @email={{@model.email}}
+  @company={{@model.company}}
+  @token={{@model.token}}
+  @isSSOEnforced={{@model.is_sso_enforced}}
+/>
