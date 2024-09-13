@@ -1,7 +1,7 @@
 <AkStack local-class='project-card' @alignItems='center'>
-  <AkIcon
-    @iconName='{{@project.platformIcon}}'
-    class='platform-icon--{{@project.platformIcon}}'
-  />
-  <span class='black-text'>{{@project.packageName}}</span>
+  <AppPlatformIcon @platform='{{@project.platformIcon}}' />
+
+  <AkTypography>
+    {{@project.packageName}}
+  </AkTypography>
 </AkStack>

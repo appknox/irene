@@ -70,10 +70,11 @@ module(
         @clientId={{this.clientId}}
         @project={{this.project}}/>`
       );
-      assert.dom(`[data-test-view-files]`).exists();
-      assert.dom(`[data-test-view-files]`).hasClass('button');
-      assert.dom(`[data-test-view-files]`).hasText(`t:viewUploads:()`);
-      assert.dom(`[data-test-view-files]`).hasTagName('a');
+      assert
+        .dom(`[data-test-view-files]`)
+        .exists()
+        .hasText(`t:viewUploads:()`)
+        .hasTagName('a');
     });
 
     test('it should not show view files btn', async function (assert) {

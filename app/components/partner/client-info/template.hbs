@@ -25,9 +25,9 @@
             {{#if @client.lastUploadedOn}}
               {{dayjs-from-now @client.lastUploadedOn}}
             {{else}}
-              <em class='text-lightgray'>
+              <AkTypography @color='neutral' {{style fontStyle='italic'}}>
                 {{t 'noUploads'}}
-              </em>
+              </AkTypography>
             {{/if}}
           </div>
         </div>
@@ -79,11 +79,15 @@
       {{/if}}
       {{#if (and @showDetailLink this.partner.access.list_projects)}}
         <div local-class='action' data-test-detail-page-link>
-          <LinkTo
-            @route='authenticated.partner.client'
-            @model={{@client.id}}
-            class='button is-primary'
-          ><AkIcon @iconName='arrow-forward' /></LinkTo>
+          <AkLink @route='authenticated.partner.client' @model={{@client.id}}>
+            <AkButton
+              @variant='outlined'
+              @color='primary'
+              {{style minWidth='50px'}}
+            >
+              <AkIcon @iconName='arrow-forward' @color='primary' />
+            </AkButton>
+          </AkLink>
         </div>
       {{/if}}
     </div>

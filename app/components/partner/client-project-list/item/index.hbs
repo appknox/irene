@@ -1,10 +1,7 @@
-<AkStack
-  @alignItems='center'
-  local-class='platform platform-{{@project.platformIcon}}'
-  data-test-platform='{{@project.platformIcon}}'
->
-  <AkIcon @iconName='{{@project.platformIcon}}' />
+<AkStack @alignItems='center' data-test-platform='{{@project.platformIcon}}'>
+  <AppPlatformIcon @platform='{{@project.platformIcon}}' />
 </AkStack>
+
 <div
   local-class='package-name'
   title='Project ID: {{@project.id}}'
@@ -12,16 +9,20 @@
 >
   {{@project.packageName}}
 </div>
-<div local-class='created-on' class='text-lightgray' data-test-created_on>
+
+<AkTypography @color='textSecondary' @fontWeight='light' data-test-created_on>
   {{day-js date=@project.createdOn format='DD MMM YYYY'}}
-</div>
+</AkTypography>
+
 {{#if (and @enableViewFiles @clientId @project.id)}}
-  <LinkTo
+  <AkLink
     @route='authenticated.partner.project'
     @models={{array @clientId @project.id}}
-    class='button is-primary margin-l-3q'
+    @underline='none'
+    @color='primary'
+    local-class='view-files-button'
     data-test-view-files
   >
     {{t 'viewUploads'}}
-  </LinkTo>
+  </AkLink>
 {{/if}}

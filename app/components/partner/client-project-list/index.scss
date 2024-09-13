@@ -76,3 +76,15 @@
   align-items: center;
   justify-content: center;
 }
+
+.badge {
+  font-size: 0.857em;
+  min-width: 24px;
+  min-height: 20px;
+  padding: 0em 0.357em;
+  margin-left: 0.7em;
+  border-radius: var(--border-radius);
+  font-weight: var(--font-weight-regular);
+  background-color: var(--neutral-grey-200);
+  color: var(--text-secondary);
+}

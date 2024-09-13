@@ -5,7 +5,6 @@ import { setupIntl } from 'ember-intl/test-support';
 import { click, find, render, triggerEvent } from '@ember/test-helpers';
 import { hbs } from 'ember-cli-htmlbars';
 import { underscore } from '@ember/string';
-import styles from 'irene/components/partner/credit-transfer/index.scss';
 
 function serializer(payload) {
   const serializedPayload = {};
@@ -174,8 +173,7 @@ module('Integration | Component | partner/credit-transfer', function (hooks) {
 
     await render(hbs`<Partner::CreditTransfer @client={{this.client}}/>`);
 
-    assert.dom('[data-test-plus-btn]').exists();
-    assert.dom('[data-test-plus-btn]').hasClass(styles['disabled-btn']);
+    assert.dom('[data-test-plus-btn]').exists().isDisabled();
 
     const creditTransferTooltip = find(
       '[data-test-credit-transfer] [data-test-ak-tooltip-root]'
@@ -218,8 +216,7 @@ module('Integration | Component | partner/credit-transfer', function (hooks) {
     this.set('client', this.server.create('partner/partnerclient'));
 
     await render(hbs`<Partner::CreditTransfer @client={{this.client}}/>`);
-    assert.dom('[data-test-plus-btn]').exists();
-    assert.dom('[data-test-plus-btn]').hasClass(styles['disabled-btn']);
+    assert.dom('[data-test-plus-btn]').exists().isDisabled();
 
     const creditTransferTooltip = find(
       '[data-test-credit-transfer] [data-test-ak-tooltip-root]'
@@ -262,8 +259,8 @@ module('Integration | Component | partner/credit-transfer', function (hooks) {
     this.set('client', this.server.create('partner/partnerclient'));
 
     await render(hbs`<Partner::CreditTransfer @client={{this.client}}/>`);
-    assert.dom('[data-test-plus-btn]').exists();
-    assert.dom('[data-test-plus-btn]').doesNotHaveClass(styles['disabled-btn']);
+    assert.dom('[data-test-plus-btn]').exists().isNotDisabled();
+
     assert
       .dom(`#client-${this.client.id}-tooltip`)
       .doesNotExist('Tooltip not required for clickable state');

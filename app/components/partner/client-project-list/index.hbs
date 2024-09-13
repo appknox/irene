@@ -3,12 +3,15 @@
     <div local-class='header'>
       <h3 local-class='title' data-test-title>{{t 'projects'}}</h3>
 
-      <div
-        class='badge-square is-default margin-l-1'
+      <AkStack
+        @justifyContent='center'
+        @alignItems='center'
+        local-class='badge'
+        class='ml-1'
         data-test-total-projects-count
       >
         {{this.totalParnterClientProjectsCount}}
-      </div>
+      </AkStack>
     </div>
 
     <AkPaginationProvider
@@ -44,17 +47,29 @@
               }}'
               data-test-table-header
             >
-              <div class='bold' data-test-table-header-platform>
+              <AkTypography
+                @fontWeight='bold'
+                data-test-table-header-item
+                data-test-table-header-platform
+              >
                 {{t 'platform'}}
-              </div>
+              </AkTypography>
 
-              <div class='bold' data-test-table-header-package_name>
+              <AkTypography
+                @fontWeight='bold'
+                data-test-table-header-item
+                data-test-table-header-package_name
+              >
                 {{t 'packageName'}}
-              </div>
+              </AkTypography>
 
-              <div class='bold' data-test-table-header-created_on>
+              <AkTypography
+                @fontWeight='bold'
+                data-test-table-header-item
+                data-test-table-header-created_on
+              >
                 {{t 'createdOn'}}
-              </div>
+              </AkTypography>
             </div>
 
             <div local-class='table-body' data-test-table-body>

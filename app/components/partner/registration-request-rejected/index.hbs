@@ -1,35 +1,53 @@
 <div local-class='request'>
-  <div local-class='user'>
-    <div local-class='email'>{{@request.email}}</div>
-    <div local-class='name' class='text-lightgray'>{{@request.fullName}}</div>
-  </div>
-  <div local-class='company'>{{@request.data.company}}</div>
-  <div
-    local-class='date'
-    class='text-lightgray'
-    title='{{day-js date=@request.createdOn format='DD MMM YYYY HH:mm A'}}'
-  >{{dayjs-from-now @request.createdOn}}</div>
-  <div
-    local-class='date'
-    class='text-lightgray'
-    title='{{day-js date=@request.updatedOn format='DD MMM YYYY HH:mm A'}}'
-  >{{dayjs-from-now @request.updatedOn}}</div>
-  <div local-class='action'>
+  <AkStack @direction='column' @spacing='0.5' class='pr-2' local-class='user'>
+    <AkTypography @noWrap={{true}}>
+      {{@request.email}}
+    </AkTypography>
 
+    <AkTypography @color='neutral' @variant='body2' @noWrap={{true}}>
+      {{@request.fullName}}
+    </AkTypography>
+  </AkStack>
+
+  <AkTypography
+    @color='neutral'
+    @variant='body2'
+    @noWrap={{true}}
+    data-test-pending-request-company
+  >
+    {{@request.data.company}}
+  </AkTypography>
+
+  <AkTypography
+    @color='neutral'
+    @variant='body2'
+    title='{{day-js date=@request.createdOn format='DD MMM YYYY HH:mm A'}}'
+    data-test-pending-request-createdon
+  >
+    <em>{{dayjs-from-now @request.createdOn}}</em>
+  </AkTypography>
+
+  <AkTypography
+    @color='neutral'
+    @variant='body2'
+    title='{{day-js date=@request.updatedOn format='DD MMM YYYY HH:mm A'}}'
+    data-test-pending-request-createdon
+  >
+    <em>{{dayjs-from-now @request.updatedOn}}</em>
+  </AkTypography>
+
+  <AkStack @justifyContent='flex-end' @alignItems='center' @spacing='1'>
     <AkTooltip
       @placement='top'
       @arrow={{true}}
       @title=' {{t "undo"}} {{t "reject"}}'
     >
-      <button
-        type='button'
-        class='is-danger is-icon no-border no-hover-button'
-        local-class='reject'
+      <AkIconButton
         title='Move back to pending'
         {{on 'click' (fn @onUndoReject @request)}}
       >
-        <AkIcon @iconName='undo' />
-      </button>
+        <AkIcon @iconName='undo' local-class='undo-icon' />
+      </AkIconButton>
     </AkTooltip>
-  </div>
+  </AkStack>
 </div>

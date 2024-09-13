@@ -9,64 +9,30 @@
     grid-template-columns: 1fr 25% 9rem 7rem 6.5rem 6rem;
   }
 }
+
 .invitation-expired {
   background-color: var(--bg-gray-lighten-015);
   opacity: 0.6;
 }
-.user {
-  padding-right: 1rem;
-}
-.email {
-  color: var(--black-700);
-  font-size: 0.95rem;
-  font-weight: 600;
-  line-height: 1.2;
-  word-break: break-word;
-  overflow-wrap: break-word;
-  text-overflow: ellipsis;
-}
-.name {
-  word-break: break-word;
-  overflow-wrap: break-word;
-  text-overflow: ellipsis;
-  padding-top: 0.3rem;
-  font-size: 0.9rem;
-}
-.company {
-  word-break: break-word;
-  overflow-wrap: break-word;
-  text-overflow: ellipsis;
-  padding-right: 1rem;
-  font-size: 0.92rem;
-}
-.date {
-  font-style: italic;
-  font-size: 0.9rem;
-  padding-right: 0.5rem;
-}
-.expired {
-  color: var(--text-error);
-  text-transform: lowercase;
-}
+
 .source {
   font-size: 0.85rem;
   padding: 0.1rem 0.6rem 0.2rem;
   display: inline-block;
   border-radius: 0.3rem;
 }
+
 .source-backoffice {
   color: var(--label-orange-color);
   background-color: var(--label-orange-bg);
 }
+
 .source-invitation {
   color: var(--label-green-color);
   background-color: var(--label-green-bg);
 }
+
 .source-registration {
   color: var(--label-blue-color);
   background-color: var(--label-blue-bg);
-}
-.actions {
-  display: flex;
-  justify-content: flex-end;
 }

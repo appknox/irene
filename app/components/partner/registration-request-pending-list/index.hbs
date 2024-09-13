@@ -1,4 +1,4 @@
-<div class='pending-registration-requests'>
+<div>
   <h3 local-class='title' data-test-pending-requests-title>
     {{t 'pendingRequests'}}
   </h3>
@@ -33,10 +33,20 @@
             local-class='table-header'
             data-test-pending-requests-table-header
           >
-            <div class='bold'>{{t 'requested'}} {{t 'by'}}</div>
-            <div class='bold'>{{t 'company'}}</div>
-            <div class='bold'>{{t 'requested'}}</div>
-            <div class='bold'></div>
+            <AkTypography @fontWeight='bold' @color='neutral'>
+              {{t 'requested'}}
+              {{t 'by'}}
+            </AkTypography>
+
+            <AkTypography @fontWeight='bold' @color='neutral'>
+              {{t 'company'}}
+            </AkTypography>
+
+            <AkTypography @fontWeight='bold' @color='neutral'>
+              {{t 'requested'}}
+            </AkTypography>
+
+            <div></div>
           </div>
 
           <div local-class='table-body'>

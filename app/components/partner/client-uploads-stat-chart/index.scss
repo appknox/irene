@@ -56,12 +56,15 @@
     .option {
       border: 1px solid var(--primary);
       border-radius: 12px;
-      padding: 0.5rem 1rem;
+      padding: 0.5rem 1rem !important;
+      max-height: 32px;
+      background-color: transparent;
       text-transform: uppercase;
       font-size: 0.8rem;
       cursor: pointer;
       color: var(--primary);
       border-radius: 0;
+
       &:hover,
       &:active,
       &:focus {

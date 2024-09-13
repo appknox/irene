@@ -2,7 +2,6 @@
   (and this.partner.access.view_plans this.partner.access.transfer_credits)
 }}
   <div
-    local-class='credit-transfer'
     ...attributes
     data-test-credit-transfer
     {{did-insert this.initializeComp}}
@@ -15,20 +14,21 @@
         @disabled={{not this.buttonTooltip}}
         data-test-tooltip
       >
-        <button
-          class='button is-default'
-          local-class='credit-transfer-btn {{if
-            this.disableTransfer
-            "disabled-btn"
-          }}'
-          data-test-plus-btn
-          type='button'
+        <AkButton
+          @variant='outlined'
+          @color='neutral'
+          @disabled={{this.disableTransfer}}
           {{on 'click' this.toggleModal}}
+          data-test-plus-btn
         >
-          <AkIcon @iconName='add' />
-          &nbsp;
-          {{t 'transferCredits'}}
-        </button>
+          <:leftIcon>
+            <AkIcon @iconName='add' />
+          </:leftIcon>
+
+          <:default>
+            {{t 'transferCredits'}}
+          </:default>
+        </AkButton>
       </AkTooltip>
     {{/if}}
   </div>
@@ -40,11 +40,7 @@
     @showHeader={{true}}
     @headerTitle={{t 'creditTransfer'}}
   >
-    <div
-      local-class='credit-transfer-container'
-      data-test-credit-transfer-modal
-    >
-
+    <div data-test-credit-transfer-modal>
       {{#if this.isEditMode}}
         <Partner::CreditTransfer::CreditTransferInput
           @partnerPlan={{this.partnerPlan}}

@@ -18,13 +18,13 @@
               @arrow={{true}}
               @title='No credits left to transfer to the clients. Please upgrade your plan'
             >
-              <div class='margin-r-1'><AkIcon @iconName='error' /></div>
+              <div class='mr-2'><AkIcon @iconName='error' /></div>
             </AkTooltip>
           </div>
         {{else if (not this.partnerPlan.limitedScans)}}
           {{! NOTE credit transfer unavailable warning }}
           <div data-test-warning-credit-transfer-unavailable>
-            <div class='margin-r-1'>
+            <div class='mr-2'>
               <AkTooltip @placement='left' @arrow={{true}}>
                 <:tooltipContent>
                   <AkStack

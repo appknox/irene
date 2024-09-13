@@ -131,10 +131,11 @@ module(
         '[data-test-pending-requests-table-header]'
       );
 
-      assert.equal(header.children[0].textContent, 'Requested by');
-      assert.equal(header.children[1].textContent, 'Company');
-      assert.equal(header.children[2].textContent, 'Requested');
-      assert.equal(header.children[3].textContent, '');
+      assert.true(header.children[0].textContent.trim().includes('Requested'));
+      assert.true(header.children[0].textContent.trim().includes('by'));
+      assert.strictEqual(header.children[1].textContent.trim(), 'Company');
+      assert.strictEqual(header.children[2].textContent.trim(), 'Requested');
+      assert.strictEqual(header.children[3].textContent.trim(), '');
     });
 
     test('it does not render table header for empty state', async function (assert) {
@@ -181,7 +182,7 @@ module(
         '[data-test-pending-request-row]'
       );
 
-      assert.equal(rows.length, 5);
+      assert.strictEqual(rows.length, 5);
       assert.dom('[data-test-pending-requests-empty]').doesNotExist();
       assert.dom('[data-test-pending-requests-list]').exists();
     });

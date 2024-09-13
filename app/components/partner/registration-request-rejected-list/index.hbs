@@ -1,4 +1,4 @@
-<div class='pending-registration-requests'>
+<div>
   <AkPaginationProvider
     @results={{this.partnerRegistrationRequestList}}
     @onItemPerPageChange={{this.handleItemPerPageChange}}
@@ -11,16 +11,29 @@
     as |pgc|
   >
     {{#if this.partnerRegistrationRequestReponse}}
-      <h3 local-class='title' class='margin-t-3'>{{t 'rejectedRequests'}}</h3>
+      <h3 local-class='title' class='mt-6'>{{t 'rejectedRequests'}}</h3>
 
       <div>
         <div local-class='table'>
           <div local-class='table-header'>
-            <div class='bold'>{{t 'requested'}} {{t 'by'}}</div>
-            <div class='bold'>{{t 'company'}}</div>
-            <div class='bold'>{{t 'requested'}}</div>
-            <div class='bold'>{{t 'rejected'}}</div>
-            <div class='bold'></div>
+            <AkTypography @fontWeight='bold' @color='neutral'>
+              {{t 'requested'}}
+              {{t 'by'}}
+            </AkTypography>
+
+            <AkTypography @fontWeight='bold' @color='neutral'>
+              {{t 'company'}}
+            </AkTypography>
+
+            <AkTypography @fontWeight='bold' @color='neutral'>
+              {{t 'requested'}}
+            </AkTypography>
+
+            <AkTypography @fontWeight='bold' @color='neutral'>
+              {{t 'rejected'}}
+            </AkTypography>
+
+            <div></div>
           </div>
 
           <div local-class='table-body'>

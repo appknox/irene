@@ -1,14 +1,25 @@
 {{#if this.partner.access.list_files}}
   <div data-test-upload-list>
     <div local-class='header'>
-      <h3 local-class='title' data-test-title>{{t 'uploads'}}</h3>
+      <AkTypography
+        @tag='h3'
+        @fontWeight='bold'
+        @color='neutral'
+        {{style fontSize='1.1rem'}}
+        data-test-title
+      >
+        {{t 'uploads'}}
+      </AkTypography>
 
-      <div
-        class='badge-square is-default margin-l-1'
+      <AkStack
+        @alignItems='center'
+        @justifyContent='center'
+        local-class='badge'
+        class='ml-1'
         data-test-total-projects-count
       >
         {{this.totalParnterClientUploadsCount}}
-      </div>
+      </AkStack>
     </div>
 
     <AkPaginationProvider
@@ -44,24 +55,51 @@
               }}'
               data-test-table-header
             >
-              <div class='bold' data-test-table-header-app>{{t 'app'}}</div>
+              <AkTypography
+                @fontWeight='bold'
+                @color='neutral'
+                data-test-table-header-item
+                data-test-table-header-app
+              >
+                {{t 'app'}}
+              </AkTypography>
 
-              <div class='bold' data-test-table-header-version>
+              <AkTypography
+                @fontWeight='bold'
+                @color='neutral'
+                data-test-table-header-item
+                data-test-table-header-version
+              >
                 {{t 'version'}}
-              </div>
+              </AkTypography>
 
-              <div class='bold' data-test-table-header-uploaded>
+              <AkTypography
+                @fontWeight='bold'
+                @color='neutral'
+                data-test-table-header-item
+                data-test-table-header-uploaded
+              >
                 {{t 'uploaded'}}
-              </div>
+              </AkTypography>
 
               {{#if this.partner.access.view_reports}}
-                <div class='bold' data-test-table-header-summary>
+                <AkTypography
+                  @fontWeight='bold'
+                  @color='neutral'
+                  data-test-table-header-item
+                  data-test-table-header-summary
+                >
                   {{t 'scanResults'}}
-                </div>
+                </AkTypography>
 
-                <div class='bold' data-test-table-header-report>
+                <AkTypography
+                  @fontWeight='bold'
+                  @color='neutral'
+                  data-test-table-header-item
+                  data-test-table-header-report
+                >
                   {{t 'report'}}
-                </div>
+                </AkTypography>
               {{/if}}
             </div>
 
@@ -82,14 +120,14 @@
                     ></div>
 
                     <div>
-                      <div
-                        local-class='app-name'
-                        class='bold'
+                      <AkTypography
+                        @fontWeight='bold'
+                        @color='neutral'
                         title='File ID: {{upload.id}}'
                         data-test-app-info
                       >
                         {{upload.name}}
-                      </div>
+                      </AkTypography>
 
                       <div data-test-app-fileid>
                         <span local-class='fileid-key'>{{t 'fileID'}}:</span>
