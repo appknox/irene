@@ -70,7 +70,10 @@ export default class DynamicScanActions {
    */
   doFilePageSanityCheck(file: FileResponseModel, appInfo: AppInformation) {
     // check file and app info
-    cy.findByAltText(`${file.name} - logo`).should('exist');
+    cy.findByAltText(`${file.name} - logo`, DEFAULT_ASSERT_OPTS).should(
+      'exist'
+    );
+
     cy.findByText(file.name).should('exist');
 
     cy.findByText(`${cyTranslate('fileID')} - ${file.id}`).should('exist');
@@ -91,7 +94,10 @@ export default class DynamicScanActions {
     );
 
     // Check for severity count for static scan
-    cy.findByTestId('fileChart-severityLevelCounts').within(() => {
+    cy.findByTestId(
+      'fileChart-severityLevelCounts',
+      DEFAULT_ASSERT_OPTS
+    ).within(() => {
       // assert risk counts
       cy.findAllByText(file.risk_count_high).should('exist');
       cy.findAllByText(file.risk_count_medium).should('exist');

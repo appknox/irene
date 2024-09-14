@@ -257,15 +257,19 @@ describe('Dynamic Scan', () => {
                 const platformVersion =
                   dynamicScanActions.getPlatformVersionText(version);
 
-                cy.findByRole('button', {
-                  name: platformVersion,
-                })
+                // check device type and platform version texts
+                cy.findByText(deviceType).should('exist');
+                cy.findByText(platformVersion).should('exist');
+
+                // ref for device os version select
+                cy.findByTestId('device-preference-os-version-select')
+                  .findByRole('combobox')
                   .should('exist')
                   .as('deviceVersionSelect');
 
-                cy.findByRole('button', {
-                  name: deviceType,
-                })
+                // ref for device type select
+                cy.findByTestId('device-preference-device-type-select')
+                  .findByRole('combobox')
                   .should('exist')
                   .as('deviceTypeSelect');
 
@@ -285,13 +289,14 @@ describe('Dynamic Scan', () => {
                   );
                 }
 
-                cy.findByRole('button', {
-                  name: cyTranslate('anyDevice'),
-                }).should('exist');
+                // assert preference is any device & version
+                cy.get('@deviceTypeSelect').within(() => {
+                  cy.findByText(cyTranslate('anyDevice')).should('exist');
+                });
 
-                cy.findByRole('button', {
-                  name: cyTranslate('anyVersion'),
-                }).should('exist');
+                cy.get('@deviceVersionSelect').within(() => {
+                  cy.findByText(cyTranslate('anyVersion')).should('exist');
+                });
               });
 
             cy.findByRole('button', {
