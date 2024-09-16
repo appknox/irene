@@ -1,0 +1,26 @@
+.found-by-filter {
+  width: 12.5em;
+  background-color: var(
+    --storeknox-discover-pending-review-table-found-by-filter-background-color
+  );
+  box-shadow: var(
+    --storeknox-discover-pending-review-table-found-by-filter-box-shadow
+  );
+  border-radius: 3px;
+
+  .filter-option:hover {
+    background-color: var(
+      --storeknox-discover-pending-review-table-found-by-filter-option-hover-background-color
+    );
+  }
+
+  .clear-filter-section {
+    background-color: var(
+      --storeknox-discover-pending-review-table-found-by-filter-option-clear-filter-background-color
+    );
+  }
+}
+
+.cursor-pointer {
+  cursor: pointer;
+}

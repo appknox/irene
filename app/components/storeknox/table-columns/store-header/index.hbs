@@ -1,0 +1,59 @@
+<AkStack @alignItems='center' @justifyContent='center' @spacing='0.5'>
+  <AkTypography @fontWeight='medium'>{{t 'storeknox.store'}}</AkTypography>
+
+  {{!-- <AkIcon
+    @iconName='filter-list'
+    @color={{if this.filterApplied 'primary' 'inherit'}}
+    local-class='cursor-pointer'
+    {{on 'click' this.handleClick}}
+  /> --}}
+</AkStack>
+
+<AkPopover
+  @anchorRef={{this.anchorRef}}
+  @placement='bottom'
+  @arrow={{false}}
+  @closeHandler={{this.handleOptionsClose}}
+  @clickOutsideToClose={{true}}
+>
+  <AkStack @direction='column' local-class='store-filter'>
+    <AkTypography class='pb-1 pt-2 pl-2'>{{t 'filterBy'}}</AkTypography>
+
+    {{#each this.platformObject as |platform|}}
+      <AkStack
+        @spacing='1'
+        @width='full'
+        local-class='filter-option cursor-pointer'
+        class='py-1 pl-2'
+        {{on 'click' (fn this.selectPlatform platform.value)}}
+      >
+        <AkStack @alignItems='center'>
+          {{#if (eq this.selectedPlatform platform.value)}}
+            <AkIcon @iconName='radio-button-checked' @color='success' />
+          {{else}}
+            <AkIcon @iconName='radio-button-unchecked' />
+          {{/if}}
+        </AkStack>
+
+        <AkTypography>{{platform.key}}</AkTypography>
+      </AkStack>
+    {{/each}}
+
+    {{#if this.filterApplied}}
+      <AkStack
+        class='py-1 pl-2'
+        local-class='clear-filter-section'
+        @width='full'
+      >
+        <AkTypography
+          @underline='always'
+          @color='primary'
+          local-class='cursor-pointer'
+          {{on 'click' this.clearFilter}}
+        >
+          {{t 'clearFilter'}}
+        </AkTypography>
+      </AkStack>
+    {{/if}}
+  </AkStack>
+</AkPopover>

@@ -1,0 +1,28 @@
+.review-header {
+  border: 1px solid var(--storeknox-discover-pending-review-header-border-color);
+  background-color: var(--storeknox-discover-pending-review-header-bg-color);
+  padding: 1em;
+}
+
+.approve-button {
+  width: 7.714em;
+  background-color: var(
+    --storeknox-discover-pending-review-approve-button-color
+  ) !important;
+}
+
+.reject-button {
+  width: 7.714em;
+  background-color: var(
+    --storeknox-discover-pending-review-reject-button-color
+  ) !important;
+}
+
+.divider {
+  width: 1px;
+  height: 40px;
+  background-color: var(
+    --storeknox-discover-pending-review-header-divider-background-color
+  );
+  margin: 0 0.35em;
+}

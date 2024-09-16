@@ -1,0 +1,24 @@
+.store-filter {
+  width: 175px;
+  background-color: var(
+    --storeknox-table-columns-store-header-filter-background-color
+  );
+  box-shadow: var(--storeknox-table-columns-store-header-filter-box-shadow);
+  border-radius: 3px;
+
+  .filter-option:hover {
+    background-color: var(
+      --storeknox-table-columns-store-header-filter-option-hover-bgcolor
+    );
+  }
+
+  .clear-filter-section {
+    background-color: var(
+      --storeknox-table-columns-store-header-filter-option-clear-filter-bgcolor
+    );
+  }
+}
+
+.cursor-pointer {
+  cursor: pointer;
+}

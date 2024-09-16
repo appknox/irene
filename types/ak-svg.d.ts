@@ -48,6 +48,12 @@ export enum AkSvgComponentInvocationByNames {
   VaptIndicator,
   SmIndicator,
   SecurityIndicator,
+  ConfigurationBgImg,
+  StoreknoxSearchApps,
+  StoreknoxPlaystoreLogo,
+  InfoIndicator,
+  NoPendingItems,
+  WelcomeToStoreknox,
 }
 
 export enum AkSvgComponentInvocationByPaths {

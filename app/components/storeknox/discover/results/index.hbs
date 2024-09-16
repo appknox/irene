@@ -1,0 +1,104 @@
+<form {{on 'submit' this.discoverApp}}>
+  <AkStack>
+    <div local-class='search-input-container-width'>
+      <AkTextField
+        @placeholder={{t 'storeknox.searchQuery'}}
+        @value={{this.searchQuery}}
+      >
+        <:rightAdornment>
+          {{#if this.searchQuery}}
+            <AkStack
+              @alignItems='center'
+              local-class='close-search-text'
+              {{on 'click' this.clearSearch}}
+            >
+              <AkIcon @iconName='close' />
+            </AkStack>
+          {{else}}
+            <AkIcon @iconName='search' @color='textSecondary' />
+          {{/if}}
+        </:rightAdornment>
+      </AkTextField>
+    </div>
+
+    <AkButton @type='submit' @disabled={{not this.searchQuery}}>
+      {{t 'storeknox.discoverHeader'}}
+    </AkButton>
+  </AkStack>
+</form>
+
+<AkStack @alignItems='center' local-class='disclaimer-section'>
+  <AkStack local-class='warning-icon' class='p-1'>
+    <AkIcon @iconName='warning' />
+  </AkStack>
+
+  <AkTypography @fontWeight='medium' class='ml-2'>
+    {{t 'storeknox.disclaimer'}}:
+  </AkTypography>
+
+  <AkTypography class='ml-1'>
+    {{t 'storeknox.disclaimerHeader'}}
+  </AkTypography>
+
+  <AkButton
+    @variant='text'
+    @underline='always'
+    @typographyFontWeight='bold'
+    class='ml-1'
+    {{on 'click' this.viewMore}}
+  >
+    {{t 'viewMore'}}
+  </AkButton>
+</AkStack>
+
+{{#if this.discoverClicked}}
+  <Storeknox::Discover::Results::Table @queryParams={{@queryParams}} />
+{{else}}
+  <Storeknox::Discover::Results::Empty />
+{{/if}}
+
+{{#if this.showDisclaimerModal}}
+  <AkModal @onClose={{this.closeDisclaimerModal}} @noGutter={{true}}>
+    <AkAppbar
+      @gutter={{false}}
+      @justifyContent='space-between'
+      class='pr-1'
+      as |ab|
+    >
+      <AkStack @alignItems='center'>
+        <AkStack local-class='warning-icon' class='p-1'>
+          <AkIcon @iconName='warning' />
+        </AkStack>
+
+        <AkTypography
+          @variant='h5'
+          @fontWeight='medium'
+          @color='inherit'
+          class='ml-1'
+        >
+          {{t 'storeknox.disclaimer'}}
+        </AkTypography>
+      </AkStack>
+
+      <AkIconButton
+        class={{ab.classes.defaultIconBtn}}
+        {{on 'click' this.closeDisclaimerModal}}
+        @size='small'
+      >
+        <AkIcon @iconName='close' />
+      </AkIconButton>
+    </AkAppbar>
+
+    <AkStack @direction='column' @alignItems='center' class='p-3'>
+      <AkTypography @variant='h5'>
+        {{t 'storeknox.disclaimerHeader'}}
+      </AkTypography>
+
+      <AkDivider @color='dark' class='my-2' />
+
+      <AkTypography>
+        {{t 'storeknox.disclaimerBody' htmlSafe=true}}
+      </AkTypography>
+    </AkStack>
+  </AkModal>
+{{/if}}

@@ -1,0 +1,66 @@
+{{!-- <AkStack
+  @justifyContent='space-between'
+  @alignItems='center'
+  local-class='review-header'
+>
+  <div local-class='search-input-container-width'>
+    <AkTextField @placeholder={{t 'search'}}>
+      <:rightAdornment>
+        <AkIcon @iconName='search' @color='textSecondary' />
+      </:rightAdornment>
+    </AkTextField>
+  </div>
+
+  <AkStack @spacing='1' @alignItems='center'>
+    {{#if this.showButtons}}
+      <AkButton
+        local-class='approve-button'
+        {{on 'click' this.approveMultipleApp}}
+      >
+        <:leftIcon>
+          <AkIcon @iconName='check' />
+        </:leftIcon>
+
+        <:default>
+          {{t 'approve'}}
+        </:default>
+      </AkButton>
+
+      <AkButton
+        local-class='reject-button'
+        {{on 'click' this.rejectMultipleApp}}
+      >
+        <:leftIcon>
+          <AkIcon @iconName='close' />
+        </:leftIcon>
+
+        <:default>
+          {{t 'reject'}}
+        </:default>
+      </AkButton>
+
+      <AkDivider local-class='divider' />
+    {{/if}}
+
+    <AkLink @route='authenticated.storeknox.review-logs'>
+      <AkButton @color='neutral' @variant='outlined'>
+        {{t 'storeknox.logs'}}
+      </AkButton>
+    </AkLink>
+  </AkStack>
+</AkStack> --}}
+
+{{#if this.showTable}}
+  <Storeknox::Discover::PendingReview::Table
+    @columns={{this.columns}}
+    @data={{this.reviewAppsData}}
+    @limit={{this.limit}}
+    @offset={{this.offset}}
+    @loadingData={{this.loadingData}}
+    @totalCount={{this.totalCount}}
+    @goToPage={{this.goToPage}}
+    @onItemPerPageChange={{this.changePerPageItem}}
+  />
+{{else}}
+  <Storeknox::Discover::PendingReview::Empty />
+{{/if}}

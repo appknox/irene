@@ -1,0 +1,69 @@
+{{#if (eq @data.status 'pending')}}
+  <AkChip
+    @label={{t 'storeknox.waitingForApproval'}}
+    @variant='semi-filled'
+    @color='success'
+  >
+    <:icon>
+      <AkIcon @iconName='schedule-send' />
+    </:icon>
+  </AkChip>
+{{else if (eq @data.status 'approved')}}
+  <AkStack @justifyContent='center' @direction='column'>
+    <AkTypography @color='success'>
+      {{t 'storeknox.approved'}}
+    </AkTypography>
+
+    <AkStack @alignItems='center' @spacing='0.5'>
+      <AkTypography>
+        {{t 'by'}}
+        {{@data.approvedBy}}
+      </AkTypography>
+
+      <AkTooltip @placement='bottom' @arrow={{true}} @color='light'>
+        <:tooltipContent>
+          <AkStack @spacing='0.5' @alignItems='center'>
+            <AkIcon @iconName='check-circle' @size='small' />
+
+            <AkTypography @color='inherit'>
+              {{day-js date=@data.approvedOn format='MMMM D, YYYY, HH:mm'}}
+            </AkTypography>
+          </AkStack>
+        </:tooltipContent>
+
+        <:default>
+          <AkIcon @iconName='info' local-class='info-icon' />
+        </:default>
+      </AkTooltip>
+    </AkStack>
+  </AkStack>
+{{else if (eq @data.status 'rejected')}}
+  <AkStack @justifyContent='center' @direction='column'>
+    <AkTypography @color='error'>
+      {{t 'rejected'}}
+    </AkTypography>
+
+    <AkStack @alignItems='center' @spacing='0.5'>
+      <AkTypography>
+        {{t 'by'}}
+        {{@data.rejectedBy}}
+      </AkTypography>
+
+      <AkTooltip @placement='bottom' @arrow={{true}} @color='light'>
+        <:tooltipContent>
+          <AkStack @spacing='0.5' @alignItems='center'>
+            <AkIcon @iconName='check-circle' @size='small' />
+
+            <AkTypography @color='inherit'>
+              {{day-js date=@data.rejectedOn format='MMMM D, YYYY, HH:mm'}}
+            </AkTypography>
+          </AkStack>
+        </:tooltipContent>
+
+        <:default>
+          <AkIcon @iconName='info' local-class='info-icon' />
+        </:default>
+      </AkTooltip>
+    </AkStack>
+  </AkStack>
+{{/if}}
