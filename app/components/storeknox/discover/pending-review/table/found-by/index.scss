@@ -1,0 +1,15 @@
+.info-icon {
+  font-size: 1em !important;
+  height: 12px;
+  color: var(
+    --storeknox-discover-pending-review-table-found-by-info-icon-color
+  );
+}
+
+.section-header {
+  text-transform: uppercase;
+  font-size: 0.785rem;
+  color: var(
+    --storeknox-discover-pending-review-table-found-by-header-text-color
+  );
+}

@@ -130,6 +130,7 @@ Router.map(function () {
         this.route('analytics');
       });
 
+      // Appknox routes
       this.route('dashboard', function () {
         this.route('projects');
 
@@ -263,6 +264,19 @@ Router.map(function () {
         this.route('public-api', function () {
           this.route('docs');
         });
+      });
+
+      // Storeknox routes
+      this.route('storeknox', { path: '/dashboard/storeknox' }, function () {
+        this.route('index', { path: '/' });
+
+        this.route('discover', function () {
+          this.route('result');
+          this.route('requested');
+          this.route('review');
+        });
+
+        this.route('inventory');
       });
     }
   );
