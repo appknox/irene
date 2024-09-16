@@ -45,7 +45,6 @@ export enum AkSvgComponentInvocationByNames {
   AppknoxBgImg,
   StoreknoxBgImg,
   ConfigurationBgImg,
-<<<<<<< HEAD
   StoreknoxSearchApps,
   StoreknoxPlaystoreLogo,
   SmIndicator,
@@ -59,10 +58,15 @@ export enum AkSvgComponentInvocationByNames {
   SoxUploadProcessing,
   SoxUploadCompleted,
   SoxInsufficientCredits,
-=======
   VpIndicator,
   SmIndicator,
->>>>>>> 6de9b12ec (new main product landing page and navs)
+  StoreknoxSearchApps,
+  StoreknoxPlaystoreLogo,
+  SmIndicator,
+  VaptIndicator,
+  InfoIndicator,
+  NoPendingItems,
+  WelcomeToStoreknox,
 }
 
 export enum AkSvgComponentInvocationByPaths {
