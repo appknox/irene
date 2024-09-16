@@ -1,0 +1,8 @@
+.requested-table {
+  tr {
+    background-color: var(--storeknox-discover-requested-apps-table-row-color);
+    border: 1px solid
+      var(--storeknox-discover-requested-apps-table-row-border-color);
+    border-top: 0;
+  }
+}
