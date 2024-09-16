@@ -4,7 +4,12 @@
 
 <div class='px-2 pb-4'>
   <div class='pt-3 pb-6'>
-    <LinkTo @route='authenticated.partner.clients'>{{t 'clients'}}</LinkTo>
+    <LinkTo
+      {{style color='var(--primary-main)'}}
+      @route='authenticated.partner.clients'
+    >
+      {{t 'clients'}}
+    </LinkTo>
     /
     {{#if this.model.client.isEmptyTitle}}
       <em>{{t 'noName'}}</em>

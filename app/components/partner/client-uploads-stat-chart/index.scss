@@ -36,7 +36,7 @@
       justify-content: left;
       align-items: center;
       border: 1px solid var(--bg-gray-darken-050);
-      background: var(--white);
+      background: var(--background-main);
       border-radius: 0.3rem;
       padding: 0.4rem 1rem;
 
@@ -54,7 +54,7 @@
     justify-content: right;
 
     .option {
-      border: 1px solid var(--primary);
+      border: 1px solid var(--primary-main);
       border-radius: 12px;
       padding: 0.5rem 1rem !important;
       max-height: 32px;
@@ -62,7 +62,7 @@
       text-transform: uppercase;
       font-size: 0.8rem;
       cursor: pointer;
-      color: var(--primary);
+      color: var(--primary-main);
       border-radius: 0;
 
       &:hover,
@@ -89,8 +89,8 @@
         &:hover,
         &:active,
         &:focus {
-          background-color: var(--primary);
-          color: var(--white);
+          background-color: var(--primary-main);
+          color: var(--primary-contrast-text);
         }
       }
     }
@@ -103,7 +103,7 @@
   padding: 0.5rem;
   border-radius: 5px;
   font-size: 0.9rem;
-  background-color: $white;
+  background-color: #ffffff;
 }
 
 .tt-val-label {

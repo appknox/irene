@@ -70,18 +70,18 @@
   }
 
   &.ak-icon-button-size-small {
+    padding: 0.35em;
+
     :global(.ak-icon) {
       font-size: 1.125rem !important;
     }
-
-    padding: 0.35em;
   }
 
   &.ak-icon-button-size-medium {
+    padding: 0.4em;
+
     :global(.ak-icon) {
       font-size: 1.35rem !important;
     }
-
-    padding: 0.4em;
   }
 }

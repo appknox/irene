@@ -38,9 +38,10 @@ img._pendo-image._pendo-badge-image {
 
 // text styling and utils
 body {
-  font-family: 'Open Sans', sans-serif;
+  font-family: var(--font-family);
 }
 
 html {
   overflow-y: auto;
+  font-size: var(--html-font-size);
 }

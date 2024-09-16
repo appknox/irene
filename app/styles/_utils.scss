@@ -178,7 +178,7 @@ Examples:
 
 @for $i from 1 to 12 {
   .w-#{$i}\/12 {
-    width: ($i / 12) * 100%;
+    width: calc($i / 12) * 100%;
   }
 }
 

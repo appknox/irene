@@ -32,18 +32,16 @@ module.exports = function (defaults) {
     },
     sassOptions: {
       includePaths: [
-        'node_modules/bohemia',
         'node_modules/billboard.js/dist/',
         'node_modules/material-icons/css/',
         'node_modules/swagger-ui/dist/',
       ],
-      // onlyIncluded: true,
-      extension: 'sass',
       sourceMap: !isProduction,
       sourceMapEmbed: !isProduction,
     },
     cssModules: {
-      intermediateOutputPath: 'app/styles/_modules.scss',
+      intermediateOutputPath: 'app/styles/app.scss',
+      extension: 'scss',
     },
     autoprefixer: {
       enabled: true,
