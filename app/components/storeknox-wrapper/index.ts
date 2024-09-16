@@ -7,6 +7,7 @@ import type IntlService from 'ember-intl/services/intl';
 import type UserModel from 'irene/models/user';
 import type { MenuItem } from '../side-nav';
 import type ConfigurationService from 'irene/services/configuration';
+import type WhitelabelService from 'irene/services/whitelabel';
 
 export interface StoreknoxWrapperComponentSignature {
   Args: {
@@ -21,6 +22,7 @@ export default class StoreknoxWrapperComponent extends Component<StoreknoxWrappe
   @service('browser/window') declare window: Window;
   @service declare intl: IntlService;
   @service declare configuration: ConfigurationService;
+  @service declare whitelabel: WhitelabelService;
 
   @tracked isSidebarCollapsed: boolean;
 
@@ -55,8 +57,8 @@ export default class StoreknoxWrapperComponent extends Component<StoreknoxWrappe
     ] as MenuItem[];
   }
 
-  get orgIsAnEnterprise() {
-    return this.configuration.serverData.enterprise;
+  get isWhitelabel() {
+    return !this.whitelabel.is_appknox_url;
   }
 
   @action

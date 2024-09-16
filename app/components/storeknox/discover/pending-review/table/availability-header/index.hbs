@@ -1,0 +1,83 @@
+<AkStack @spacing='0.5' @alignItems='center' @justifyContent='center'>
+  <AkTypography>{{t 'storeknox.availability'}}</AkTypography>
+
+  <AkTooltip @placement='bottom' @arrow={{true}} @color='light'>
+    <:tooltipContent>
+      <div local-class='tooltip-content'>
+        <AkStack @spacing='0.5' @alignItems='center'>
+          <AkIcon @iconName='info' @color='textSecondary' @size='small' />
+
+          <AkTypography @color='textSecondary'>
+            {{t 'storeknox.info'}}
+          </AkTypography>
+        </AkStack>
+
+        <AkTypography class='mt-1'>
+          {{t 'storeknox.availableColumnInfo' htmlSafe=true}}
+        </AkTypography>
+      </div>
+    </:tooltipContent>
+
+    <:default>
+      <AkIcon @iconName='info' local-class='info-icon' />
+    </:default>
+  </AkTooltip>
+
+  <AkIcon
+    @iconName='filter-list'
+    @color={{if this.filterApplied 'primary' 'inherit'}}
+    local-class='cursor-pointer'
+    {{on 'click' this.handleClick}}
+  />
+</AkStack>
+
+<AkPopover
+  @anchorRef={{this.anchorRef}}
+  @placement='bottom'
+  @arrow={{false}}
+  @closeHandler={{this.handleOptionsClose}}
+  @clickOutsideToClose={{true}}
+>
+  <AkStack @direction='column' local-class='availability-filter'>
+    <AkTypography class='pb-1 pt-2 pl-2'>
+      {{t 'filterBy'}}
+    </AkTypography>
+
+    {{#each this.availabilityObject as |availability|}}
+      <AkStack
+        @spacing='1'
+        @width='full'
+        local-class='filter-option cursor-pointer'
+        class='py-1 pl-2'
+        {{on 'click' (fn this.selectAvailability availability.value)}}
+      >
+        <AkStack @alignItems='center'>
+          {{#if (eq this.selectedAvailability availability.value)}}
+            <AkIcon @iconName='radio-button-checked' @color='success' />
+          {{else}}
+            <AkIcon @iconName='radio-button-unchecked' />
+          {{/if}}
+        </AkStack>
+
+        <AkTypography>{{availability.key}}</AkTypography>
+      </AkStack>
+    {{/each}}
+
+    {{#if this.filterApplied}}
+      <AkStack
+        class='py-1 pl-2'
+        local-class='clear-filter-section'
+        @width='full'
+      >
+        <AkTypography
+          @underline='always'
+          @color='primary'
+          local-class='cursor-pointer'
+          {{on 'click' this.clearFilter}}
+        >
+          {{t 'clearFilter'}}
+        </AkTypography>
+      </AkStack>
+    {{/if}}
+  </AkStack>
+</AkPopover>
