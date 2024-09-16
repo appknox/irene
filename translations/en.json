@@ -1506,7 +1506,6 @@
   "stop": "Stop",
   "storage": "Storage",
   "storageManagement": "Storage Management",
-<<<<<<< HEAD
   "storeknox": {
     "actionHeaderInfo": "Your request to add an app will be sent to all Owners in your Organization. If approved, you will be able to view the app in your Organizations Inventory.",
     "actionHeaderInfoOwner": "Cick on the ‘+’ icon to add the app to your Organization’s Inventolry.",
@@ -1570,13 +1569,9 @@
     "appIsPartOf": "This App is part of",
     "checkOn": "Check on",
     "actionsNeededMsg": "Unscanned versions, brand abuse and duplications",
-    "noActionsNeededMsg": "No unscanned versions, brand abuse and duplications"
+    "noActionsNeededMsg": "No unscanned versions, brand abuse and duplications",
+    "storeknoxTitle": "Storeknox"
   },
-  "storeknoxTitle": "Storeknox",
-=======
-  "storeknox": "Storeknox",
->>>>>>> 6de9b12ec (new main product landing page and navs)
-  "storeknoxDesc": "Monitor your mobile apps on Play Store and App Store",
   "storeLowercase": "store",
   "submit": "Submit",
   "submitUrl": "Submit URL",
