@@ -1,0 +1,90 @@
+<AkStack
+  @justifyContent='space-between'
+  @alignItems='center'
+  local-class='result-header'
+>
+  <AkStack @alignItems='center' local-class='close-search-text'>
+    <AkTypography @variant='h5' @fontWeight='regular'>
+      {{t 'storeknox.showingResults'}}
+    </AkTypography>
+
+    <AkTypography @variant='h5'>
+      &nbsp;"Shell Test"
+    </AkTypography>
+  </AkStack>
+
+  {{#if this.isAdmin}}
+    <AkButton>
+      <:leftIcon>
+        <AkIcon @iconName='add-box' />
+      </:leftIcon>
+
+      <:default>
+        {{t 'storeknox.addToInventory'}}
+      </:default>
+    </AkButton>
+  {{else}}
+    <AkButton>
+      <:leftIcon>
+        <AkIcon @iconName='send' />
+      </:leftIcon>
+
+      <:default>
+        {{t 'storeknox.sendRequest'}}
+      </:default>
+    </AkButton>
+  {{/if}}
+
+</AkStack>
+
+<AkPaginationProvider
+  @results={{this.tableData}}
+  @onItemPerPageChange={{this.onItemPerPageChange}}
+  @totalItems={{this.totalCount}}
+  @nextAction={{this.goToPage}}
+  @prevAction={{this.goToPage}}
+  @itemPerPageOptions={{this.itemPerPageOptions}}
+  @defaultLimit={{this.limit}}
+  @offset={{this.offset}}
+  as |pgc|
+>
+  <AkTable as |tb|>
+    <tb.head @columns={{this.columns}} as |h|>
+      <h.row as |r|>
+        <r.cell as |column|>
+          {{#if column.headerComponent}}
+            {{#let (component column.headerComponent) as |Component|}}
+              <Component />
+            {{/let}}
+          {{else}}
+            {{column.name}}
+          {{/if}}
+        </r.cell>
+      </h.row>
+    </tb.head>
+    <tb.body @rows={{pgc.currentPageResults}} as |b|>
+      <b.row as |r|>
+        <r.cell>
+          {{#let (component r.columnValue.cellComponent) as |Component|}}
+            <Component @data={{r.rowValue}} />
+          {{/let}}
+        </r.cell>
+      </b.row>
+    </tb.body>
+  </AkTable>
+
+  <AkPagination
+    @disableNext={{pgc.disableNext}}
+    @nextAction={{pgc.nextAction}}
+    @disablePrev={{pgc.disablePrev}}
+    @prevAction={{pgc.prevAction}}
+    @endItemIdx={{pgc.endItemIdx}}
+    @startItemIdx={{pgc.startItemIdx}}
+    @itemPerPageOptions={{pgc.itemPerPageOptions}}
+    @onItemPerPageChange={{pgc.onItemPerPageChange}}
+    @selectedOption={{pgc.selectedOption}}
+    @tableItemLabel={{t 'projects'}}
+    @perPageTranslation={{t 'recordPerPage'}}
+    @totalItems={{pgc.totalItems}}
+  />
+</AkPaginationProvider>

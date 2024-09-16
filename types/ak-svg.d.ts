@@ -40,6 +40,13 @@ export enum AkSvgComponentInvocationByNames {
   ScanCompleted,
   NoApisCaptured,
   DastAutomationUpselling,
+  StoreknoxSearchApps,
+  StoreknoxPlaystoreLogo,
+  SmIndicator,
+  VaptIndicator,
+  InfoIndicator,
+  NoPendingItems,
+  WelcomeToStoreknox,
 }
 
 export enum AkSvgComponentInvocationByPaths {

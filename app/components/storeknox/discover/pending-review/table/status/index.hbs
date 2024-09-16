@@ -1,0 +1,43 @@
+{{#if @data.status}}
+  {{#if (eq @data.status 'approved')}}
+    <AkTypography @color='success' @variant='subtitle1'>
+      {{t 'storeknox.approved'}}
+    </AkTypography>
+  {{else}}
+    <AkTypography @color='error' @variant='subtitle1'>
+      {{t 'rejected'}}
+    </AkTypography>
+  {{/if}}
+  <AkStack @alignItems='center' @spacing='0.5'>
+    <AkTypography>
+      {{t 'by'}}
+      {{@data.actionTakenBy}}
+    </AkTypography>
+
+    <AkTooltip @placement='bottom' @arrow={{true}} @color='light'>
+      <:tooltipContent>
+        <AkStack @spacing='0.5'>
+          <AkIcon @iconName='check-circle' @size='small' />
+
+          <AkTypography @color='inherit'>
+            June 17, 2024, 12:51
+          </AkTypography>
+        </AkStack>
+      </:tooltipContent>
+
+      <:default>
+        <AkIcon @iconName='info' local-class='info-icon' />
+      </:default>
+    </AkTooltip>
+  </AkStack>
+{{else}}
+  <AkStack @spacing='1' @justifyContent='center'>
+    <AkIconButton @variant='outlined'>
+      <AkIcon @color='success' @iconName='done' />
+    </AkIconButton>
+
+    <AkIconButton @variant='outlined'>
+      <AkIcon @color='error' @iconName='close' />
+    </AkIconButton>
+  </AkStack>
+{{/if}}

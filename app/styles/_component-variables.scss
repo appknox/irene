@@ -876,7 +876,9 @@ body {
   --file-details-scan-actions-old-manual-scan-textarea-border-color: var(
     --border-color-1
   );
-  --file-details-scan-actions-old-manual-scan-textarea-color: var(--text-primary);
+  --file-details-scan-actions-old-manual-scan-textarea-color: var(
+    --text-primary
+  );
   --file-details-scan-actions-old-manual-scan-textarea-border-radius: var(
     --border-radius
   );
@@ -950,7 +952,9 @@ body {
   --file-details-manual-scan-request-form-additional-comments-textarea-border-color: var(
     --border-color-1
   );
-  --file-details-manual-scan-request-form-additional-comments-textarea-color: var(--text-primary);
+  --file-details-manual-scan-request-form-additional-comments-textarea-color: var(
+    --text-primary
+  );
   --file-details-manual-scan-request-form-additional-comments-textarea-border-radius: var(
     --border-radius
   );
@@ -1512,6 +1516,101 @@ body {
   // variables for marketplace/integration-card
   --marketplace-integration-card-text-color: var(--text-secondary);
   --marketplace-integration-card-border-color: var(--border-color-1);
+
+  // variables for storeknox/discover/pending-review/table/availability-header
+  --storeknox-discover-pending-review-table-availability-header-info-icon-color: var(
+    --neutral-grey-400
+  );
+  --storeknox-discover-pending-review-table-availability-filter-background-color: var(
+    --background-main
+  );
+  --storeknox-discover-pending-review-table-availability-filter-box-shadow: var(
+    --box-shadow-7
+  );
+  --storeknox-discover-pending-review-table-availability-filter-option-hover-background-color: var(
+    --neutral-grey-200
+  );
+  --storeknox-discover-pending-review-table-availability-filter-option-clear-filter-background-color: var(
+    --neutral-grey-200
+  );
+
+  // variables for storeknox/discover/pending-review/table/found-by
+  --storeknox-discover-pending-review-table-found-by-info-icon-color: var(
+    --neutral-grey-300
+  );
+
+  // variables for storeknox/discover/pending-review/table/found-by-header
+  --storeknox-discover-pending-review-table-found-by-filter-background-color: var(
+    --background-main
+  );
+  --storeknox-discover-pending-review-table-found-by-filter-box-shadow: var(
+    --box-shadow-7
+  );
+  --storeknox-discover-pending-review-table-found-by-filter-option-hover-background-color: var(
+    --neutral-grey-200
+  );
+  --storeknox-discover-pending-review-table-found-by-filter-option-clear-filter-background-color: var(
+    --neutral-grey-200
+  );
+
+  // variables for storeknox/discover/pending-review/table/status
+  --storeknox-discover-pending-review-table-status-info-icon-color: var(
+    --neutral-grey-300
+  );
+
+  // variables for storeknox/discover/pending-review
+  --storeknox-discover-pending-review-header-border-color: var(
+    --neutral-grey-200
+  );
+  --storeknox-discover-pending-review-approve-button-color: var(--success-main);
+  --storeknox-discover-pending-review-reject-button-color: var(--error-main);
+  --storeknox-discover-pending-review-header-divider-background-color: var(
+    --neutral-grey-200
+  );
+
+  // variables for storeknox/discover/requested-apps/table/status
+  --storeknox-discover-requested-apps-table-status-info-icon-color: var(
+    --neutral-grey-300
+  );
+
+  // variables for storeknox/discover/results/table/action
+  --storeknox-discover-results-table-action-requested-icon-color: var(
+    --warn-dark
+  );
+  --storeknox-discover-results-table-action-requested-icon-bgcolor: var(
+    --warn-light
+  );
+  --storeknox-discover-results-table-action-already-exist-icon-color: var(
+    --success-main
+  );
+  --storeknox-discover-results-table-action-already-exist-icon-bgcolor: var(
+    --success-light
+  );
+
+  // variables for storeknox/discover/results/table
+  --storeknox-discover-results-table-header-border-color: var(
+    --neutral-grey-200
+  );
+
+  // variables for storeknox/discover
+  --storeknox-discover-header-border-color: var(--neutral-grey-200);
+  --storeknox-discover-header-description-color: var(--neutral-grey-500);
+
+  // variables for storeknox/review-logs
+  --storeknox-review-logs-header-border-color: var(--neutral-grey-200);
+  --storeknox-review-logs-header-description-color: var(--neutral-grey-500);
+
+  // variables for storeknox/table-columns/store-header
+  --storeknox-table-columns-store-header-filter-background-color: var(
+    --background-main
+  );
+  --storeknox-table-columns-store-header-filter-box-shadow: var(--box-shadow-7);
+  --storeknox-table-columns-store-header-filter-option-hover-bgcolor: var(
+    --neutral-grey-200
+  );
+  --storeknox-table-columns-store-header-filter-option-clear-filter-bgcolor: var(
+    --neutral-grey-200
+  );
 }
 
 body {
@@ -1645,19 +1744,37 @@ body {
   --security-analysis-details-finding-add-form-note-border-radius: var(
     --border-radius
   );
-  --security-analysis-details-finding-add-form-textarea-border-color: var(--border-color-1);
-  --security-analysis-details-finding-add-form-textarea-border-radius: var(--border-radius);
-  --security-analysis-details-finding-add-form-textarea-color: var(--text-primary);
+  --security-analysis-details-finding-add-form-textarea-border-color: var(
+    --border-color-1
+  );
+  --security-analysis-details-finding-add-form-textarea-border-radius: var(
+    --border-radius
+  );
+  --security-analysis-details-finding-add-form-textarea-color: var(
+    --text-primary
+  );
 
   // variables for security/analysis-details/findings/table/title
-  --security-analysis-details-findings-table-title-textarea-border-color: var(--border-color-1);
-  --security-analysis-details-findings-table-title-textarea-border-radius: var(--border-radius);
-  --security-analysis-details-findings-table-title-textarea-color: var(--text-primary);
+  --security-analysis-details-findings-table-title-textarea-border-color: var(
+    --border-color-1
+  );
+  --security-analysis-details-findings-table-title-textarea-border-radius: var(
+    --border-radius
+  );
+  --security-analysis-details-findings-table-title-textarea-color: var(
+    --text-primary
+  );
 
   // variables for security/analysis-details/findings/table/description
-  --security-analysis-details-findings-table-description-textarea-border-color: var(--border-color-1);
-  --security-analysis-details-findings-table-description-textarea-border-radius: var(--border-radius);
-  --security-analysis-details-findings-table-description-textarea-color: var(--text-primary);
+  --security-analysis-details-findings-table-description-textarea-border-color: var(
+    --border-color-1
+  );
+  --security-analysis-details-findings-table-description-textarea-border-radius: var(
+    --border-radius
+  );
+  --security-analysis-details-findings-table-description-textarea-color: var(
+    --text-primary
+  );
 
   // variables for dynamicscan-automation-upselling-feature
   --dynamicscan-automation-upselling-feature-box-shadow: var(--box-shadow-7);

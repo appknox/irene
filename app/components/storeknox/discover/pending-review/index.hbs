@@ -1,0 +1,53 @@
+<AkStack
+  @justifyContent='space-between'
+  @alignItems='center'
+  local-class='review-header'
+>
+  <div local-class='search-input-container-width'>
+    <AkTextField @placeholder={{t 'search'}}>
+      <:rightAdornment>
+        <AkIcon @iconName='search' @color='textSecondary' />
+      </:rightAdornment>
+    </AkTextField>
+  </div>
+
+  <AkStack @spacing='1' @alignItems='center'>
+    <AkButton local-class='approve-button'>
+      <:leftIcon>
+        <AkIcon @iconName='check' />
+      </:leftIcon>
+
+      <:default>
+        {{t 'approve'}}
+      </:default>
+    </AkButton>
+
+    <AkButton local-class='reject-button'>
+      <:leftIcon>
+        <AkIcon @iconName='close' />
+      </:leftIcon>
+
+      <:default>
+        {{t 'reject'}}
+      </:default>
+    </AkButton>
+
+    <AkDivider local-class='divider' />
+
+    <AkLink @route='authenticated.storeknox.review-logs'>
+      <AkButton @color='neutral' @variant='outlined'>
+        {{t 'storeknox.logs'}}
+      </AkButton>
+    </AkLink>
+  </AkStack>
+</AkStack>
+
+{{#if this.pendingItems}}
+  <Storeknox::Discover::PendingReview::Table
+    @columns={{this.columns}}
+    @data={{this.reviewApps}}
+    @router='authenticated.storeknox.discover.review'
+  />
+{{else}}
+  <Storeknox::Discover::PendingReview::Empty />
+{{/if}}

@@ -130,6 +130,16 @@ Router.map(function () {
         this.route('analytics');
       });
 
+      this.route('storeknox', { path: '/dashboard/storeknox' }, function () {
+        this.route('discover', function () {
+          this.route('result');
+          this.route('requested');
+          this.route('review');
+        });
+
+        this.route('review-logs');
+      });
+
       this.route('dashboard', function () {
         this.route('projects');
 

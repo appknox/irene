@@ -1,0 +1,49 @@
+<AkStack @direction='column' @alignItems='center' local-class='modal-body'>
+  <AkSvg::WelcomeToStoreknox />
+
+  <AkDivider @color='dark' class='mt-2' />
+
+  <AkStack @direction='column' @spacing='1.5' local-class='modal-body-list'>
+
+    <AkStack @alignItems='center'>
+      <AkIcon @iconName='verified' @color='success' />
+
+      <AkTypography class='ml-2'>
+        We have detected
+        <strong>15 apps</strong>
+        that may belong to your organization which exists on Google Play Store
+        and Apple App Store.
+      </AkTypography>
+    </AkStack>
+
+    <AkStack @alignItems='center'>
+      <AkIcon @iconName='verified' @color='success' />
+
+      <AkTypography class='ml-2'>
+        In addition, there are
+        <strong>30 apps</strong>
+        that are present in your Organizations Appknox account which should also
+        be added to Storeknox.
+      </AkTypography>
+    </AkStack>
+
+    <AkStack @alignItems='center'>
+      <AkIcon @iconName='verified' @color='success' />
+
+      <AkTypography class='ml-2'>
+        You can use the button below to review them and take necessary action.
+      </AkTypography>
+    </AkStack>
+
+  </AkStack>
+</AkStack>
+
+<AkStack @justifyContent='center' local-class='modal-footer'>
+  <div {{on 'click' @takeAction}}>
+    <AkLink @route='authenticated.storeknox.discover.review'>
+      <AkButton>
+        Take Action
+      </AkButton>
+    </AkLink>
+  </div>
+</AkStack>
