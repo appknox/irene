@@ -1,0 +1,57 @@
+{{#if @data.requested}}
+  {{#if @data.approved}}
+    <AkTooltip @placement='bottom' @arrow={{true}} @color='light'>
+      <:tooltipContent>
+        <div local-class='tooltip-content'>
+          <AkTypography @color='inherit'>
+            {{t 'storeknox.appAlreadyExists'}}
+          </AkTypography>
+        </div>
+      </:tooltipContent>
+
+      <:default>
+        <AkIcon
+          @iconName='inventory-2'
+          @size='small'
+          local-class='already-exist-icon'
+        />
+      </:default>
+    </AkTooltip>
+  {{else}}
+    <AkTooltip @placement='bottom' @arrow={{true}} @color='light'>
+      <:tooltipContent>
+        <div local-class='tooltip-content'>
+          <AkTypography @color='inherit'>
+            {{t 'storeknox.appAlreadyRequested'}}
+          </AkTypography>
+        </div>
+      </:tooltipContent>
+
+      <:default>
+        <AkIcon
+          @iconName='schedule-send'
+          @size='small'
+          local-class='requested-icon'
+        />
+      </:default>
+    </AkTooltip>
+  {{/if}}
+{{else}}
+  {{#if @loading}}
+    <AkStack @justifyContent='center'>
+      <AkSkeleton @width='30px' @height='30px' />
+    </AkStack>
+  {{else}}
+    {{#if @data.add_button_loading}}
+      <AkLoader @size={{16}} />
+    {{else}}
+      <AkIconButton {{on 'click' (fn this.addToInventory @data.docUlid)}}>
+        {{#if this.isAdmin}}
+          <AkIcon @iconName='add-box' />
+        {{else}}
+          <AkIcon @iconName='send' />
+        {{/if}}
+      </AkIconButton>
+    {{/if}}
+  {{/if}}
+{{/if}}

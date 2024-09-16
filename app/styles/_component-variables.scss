@@ -1522,6 +1522,126 @@ body {
   // variables for marketplace/integration-card
   --marketplace-integration-card-text-color: var(--text-secondary);
   --marketplace-integration-card-border-color: var(--border-color-1);
+
+  // variables for storeknox/discover/pending-review/table/availability-header
+  --storeknox-discover-pending-review-table-availability-header-info-icon-color: var(
+    --neutral-grey-400
+  );
+  --storeknox-discover-pending-review-table-availability-filter-background-color: var(
+    --background-main
+  );
+  --storeknox-discover-pending-review-table-availability-filter-box-shadow: var(
+    --box-shadow-7
+  );
+  --storeknox-discover-pending-review-table-availability-filter-option-hover-background-color: var(
+    --neutral-grey-200
+  );
+  --storeknox-discover-pending-review-table-availability-filter-option-clear-filter-background-color: var(
+    --neutral-grey-200
+  );
+
+  // variables for storeknox/discover/pending-review/table/found-by
+  --storeknox-discover-pending-review-table-found-by-info-icon-color: var(
+    --neutral-grey-300
+  );
+
+  // variables for storeknox/discover/pending-review/table/found-by-header
+  --storeknox-discover-pending-review-table-found-by-filter-background-color: var(
+    --background-main
+  );
+  --storeknox-discover-pending-review-table-found-by-filter-box-shadow: var(
+    --box-shadow-7
+  );
+  --storeknox-discover-pending-review-table-found-by-filter-option-hover-background-color: var(
+    --neutral-grey-200
+  );
+  --storeknox-discover-pending-review-table-found-by-filter-option-clear-filter-background-color: var(
+    --neutral-grey-200
+  );
+
+  // variables for storeknox/discover/pending-review/table/status
+  --storeknox-discover-pending-review-table-status-info-icon-color: var(
+    --neutral-grey-300
+  );
+
+  // variables for storeknox/discover/pending-review
+  --storeknox-discover-pending-review-header-border-color: var(
+    --neutral-grey-200
+  );
+  --storeknox-discover-pending-review-approve-button-color: var(--success-main);
+  --storeknox-discover-pending-review-reject-button-color: var(--error-main);
+  --storeknox-discover-pending-review-header-divider-background-color: var(
+    --neutral-grey-200
+  );
+
+  // variables for storeknox/discover/requested-apps/table
+  --storeknox-discover-requested-apps-table-row-color: var(--common-white);
+  --storeknox-discover-requested-apps-table-row-border-color: var(
+    --neutral-grey-100
+  );
+
+  // variables for storeknox/discover/requested-apps/table/status
+  --storeknox-discover-requested-apps-table-status-info-icon-color: var(
+    --neutral-grey-300
+  );
+
+  // variables for storeknox/discover/results/table
+  --storeknox-discover-results-table-row-color: var(--common-white);
+  --storeknox-discover-results-table-row-border-color: var(--neutral-grey-100);
+
+  // variables for storeknox/discover/results/table/action
+  --storeknox-discover-results-table-action-requested-icon-color: var(
+    --warn-dark
+  );
+  --storeknox-discover-results-table-action-requested-icon-bgcolor: var(
+    --warn-light
+  );
+  --storeknox-discover-results-table-action-already-exist-icon-color: var(
+    --success-main
+  );
+  --storeknox-discover-results-table-action-already-exist-icon-bgcolor: var(
+    --success-light
+  );
+
+  // variables for storeknox/discover/results
+  --storeknox-discover-results-input-bg-color: var(--common-white);
+
+  // variables for storeknox/discover/results/table
+  --storeknox-discover-results-table-header-border-color: var(
+    --neutral-grey-200
+  );
+  --storeknox-discover-results-table-header-bg-color: var(--common-white);
+
+  // variables for storeknox/discover
+  --storeknox-discover-header-border-color: var(--neutral-grey-200);
+  --storeknox-discover-header-background-color: var(--common-white);
+  --storeknox-discover-header-description-color: var(--neutral-grey-500);
+
+  // variables for storeknox/discover/pending-review/table
+  --storeknox-discover-pending-review-table-row-color: var(--common-white);
+  --storeknox-discover-pending-review-table-row-border-color: var(
+    --neutral-grey-100
+  );
+
+  // variables for storeknox/review-logs
+  --storeknox-review-logs-header-background-color: var(--common-white);
+  --storeknox-review-logs-header-border-color: var(--neutral-grey-200);
+  --storeknox-review-logs-header-description-color: var(--neutral-grey-500);
+
+  // variables for storeknox/table-columns/store-header
+  --storeknox-table-columns-store-header-filter-background-color: var(
+    --background-main
+  );
+  --storeknox-table-columns-store-header-filter-box-shadow: var(--box-shadow-7);
+  --storeknox-table-columns-store-header-filter-option-hover-bgcolor: var(
+    --neutral-grey-200
+  );
+  --storeknox-table-columns-store-header-filter-option-clear-filter-bgcolor: var(
+    --neutral-grey-200
+  );
+
+  // variables for page-wrapper
+  --page-wrapper-background-color: var(--background-light);
 }
 
 body {

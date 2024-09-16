@@ -1,0 +1,26 @@
+.requested-icon {
+  padding: 0.4em;
+  color: var(--storeknox-discover-results-table-action-requested-icon-color);
+  background-color: var(
+    --storeknox-discover-results-table-action-requested-icon-bgcolor
+  );
+  border-radius: 2px;
+}
+
+.already-exist-icon {
+  padding: 0.4em;
+  color: var(
+    --storeknox-discover-results-table-action-already-exist-icon-color
+  );
+  background-color: var(
+    --storeknox-discover-results-table-action-already-exist-icon-bgcolor
+  );
+  border-radius: 2px;
+}
+
+.tooltip-content {
+  width: 12.85em;
+  padding: 0.5em;
+  box-sizing: border-box;
+  white-space: normal;
+}
