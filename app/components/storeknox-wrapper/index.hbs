@@ -8,7 +8,7 @@
   <TopNav
     local-class='storeknox-header'
     @user={{@user}}
-    @title={{if this.orgIsAnEnterprise (t 'appMonitoring') (t 'storeknox')}}
+    @title={{if this.isWhitelabel (t 'appMonitoring') (t 'storeknox.title')}}
   />
 
   <SideNav

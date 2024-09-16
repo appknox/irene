@@ -1,0 +1,33 @@
+<AkBreadcrumbs::Container class='pt-2'>
+  {{#each this.breadcrumbItems as |item|}}
+    <AkBreadcrumbs::Item
+      @route={{item.route}}
+      @model={{item.model}}
+      @linkTitle={{item.linkTitle}}
+    />
+  {{/each}}
+</AkBreadcrumbs::Container>
+
+<AkStack
+  @direction='column'
+  @spacing='0.5'
+  local-class='header-storeknox-review-logs-page'
+>
+  <AkTypography @variant='subtitle1'>
+    {{t 'storeknox.reviewLogs'}}
+  </AkTypography>
+
+  <AkTypography
+    @variant='body2'
+    local-class='description-storeknox-review-logs-page'
+  >
+    Lorem ipsum dolor sit amet consectetur. At suspendisse et orci risus non
+    sed. Mauris dui tincidunt
+  </AkTypography>
+</AkStack>
+
+<Storeknox::Inventory::PendingReview::Table
+  @columns={{this.columns}}
+  @data={{this.reviewLogApps}}
+  @router='authenticated.storeknox.discover.review-logs'
+/>

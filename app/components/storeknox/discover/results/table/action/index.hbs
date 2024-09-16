@@ -1,0 +1,45 @@
+{{#if @loading}}
+  <AkStack @justifyContent='center'>
+    <AkSkeleton @width='30px' @height='30px' />
+  </AkStack>
+{{else if @data.docUlid}}
+  <div {{did-insert this.handleCheckStatus}}>
+    {{#if this.checkStatus.isRunning}}
+      <AkStack @justifyContent='center'>
+        <AkSkeleton @width='30px' @height='30px' />
+      </AkStack>
+    {{else}}
+      {{#if this.requested}}
+        <AkTooltip @placement='bottom' @arrow={{true}} @color='light'>
+          <:tooltipContent>
+            <div local-class='tooltip-content'>
+              <AkTypography @color='inherit'>
+                {{this.iconValue.tooltipText}}
+              </AkTypography>
+            </div>
+          </:tooltipContent>
+
+          <:default>
+            <AkIcon
+              @iconName={{this.iconValue.iconName}}
+              @size='small'
+              local-class='{{this.iconValue.className}}'
+            />
+          </:default>
+        </AkTooltip>
+      {{else}}
+        {{#if this.buttonLoading}}
+          <AkLoader @size={{16}} />
+        {{else}}
+          <AkIconButton {{on 'click' this.handleAddToInventory}}>
+            {{#if this.isAdmin}}
+              <AkIcon @iconName='add-box' />
+            {{else}}
+              <AkIcon @iconName='send' />
+            {{/if}}
+          </AkIconButton>
+        {{/if}}
+      {{/if}}
+    {{/if}}
+  </div>
+{{/if}}
