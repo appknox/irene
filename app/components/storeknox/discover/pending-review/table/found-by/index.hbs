@@ -1,0 +1,54 @@
+{{#if @loading}}
+  <AkSkeleton @width='120px' @height='16px' />
+{{else}}
+  <AkStack @alignItems='center' @spacing='0.5'>
+    {{#if @data.isAutoDiscovery}}
+      <AkTypography @noWrap={{true}}>
+        {{t 'system'}}
+      </AkTypography>
+    {{else}}
+      <AkTypography @noWrap={{true}}>
+        {{@data.addedBy.email}}
+      </AkTypography>
+    {{/if}}
+
+    <AkTooltip @placement='bottom' @arrow={{true}} @color='light'>
+      <:tooltipContent>
+        <AkStack @direction='column' @spacing='0.5' class='mb-1'>
+          <AkTypography
+            @color='inherit'
+            @fontWeight='medium'
+            local-class='section-header'
+          >
+            {{t 'requestedOn'}}
+          </AkTypography>
+
+          <AkTypography @color='inherit'>
+            {{day-js date=@data.addedOn format='MMMM D, YYYY, HH:mm'}}
+          </AkTypography>
+        </AkStack>
+
+        <AkDivider @color='dark' class='my-2' />
+
+        <AkStack @direction='column' @spacing='0.5' class='mt-1'>
+          <AkTypography
+            @color='inherit'
+            @fontWeight='medium'
+            local-class='section-header'
+          >
+            {{t 'type'}}
+          </AkTypography>
+
+          <AkTypography @color='inherit'>
+            {{@data.foundBy}}
+          </AkTypography>
+        </AkStack>
+
+      </:tooltipContent>
+
+      <:default>
+        <AkIcon @iconName='info' local-class='info-icon' />
+      </:default>
+    </AkTooltip>
+  </AkStack>
+{{/if}}

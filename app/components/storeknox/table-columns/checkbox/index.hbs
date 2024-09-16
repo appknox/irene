@@ -1,0 +1,11 @@
+{{#if @loading}}
+  <AkStack @justifyContent='center'>
+    <AkSkeleton @width='30px' @height='30px' @variant='circular' />
+  </AkStack>
+{{else}}
+  <AkCheckbox
+    @disabled={{@data.requested}}
+    @checked={{@data.selected}}
+    @onChange={{this.handleChange}}
+  />
+{{/if}}
