@@ -1,0 +1,101 @@
+<div local-class='app-inventory-header-root' class='w-full mb-3 pt-2'>
+  <AkBreadcrumbs::Container
+    class='mb-3'
+    data-test-storeknoxAppDetails-breadcrumbContainer
+  >
+    {{#each this.breadcrumbItems as |item|}}
+      <AkBreadcrumbs::Item
+        @route={{item.route}}
+        @models={{item.model}}
+        @linkTitle={{item.linkTitle}}
+        data-test-fileDetails-breadcrumbItem='{{item.linkTitle}}'
+      />
+    {{/each}}
+  </AkBreadcrumbs::Container>
+
+  <AkStack @direction='column' @spacing='2' @width='full'>
+    <AkStack @direction='column' @width='full'>
+      <Storeknox::InventoryDetails::SectionHeader {{style height='44px'}}>
+        <:icon>
+          <AkSvg::InfoIndicator />
+        </:icon>
+
+        <:default>
+          <AkTypography @fontWeight='medium'>
+            This app is not a part of Appknox, upload to Appknox Dashboard for
+            better results. Check the latest VA Results Section.
+          </AkTypography>
+        </:default>
+      </Storeknox::InventoryDetails::SectionHeader>
+
+      <Storeknox::InventoryDetails::SectionInfo
+        @width='full'
+        @alignItems='flex-end'
+      >
+        <AkStack @width='full' @direction='column'>
+          <img
+            local-class='app-info-logo'
+            src={{this.whitelabel.favicon}}
+            alt={{this.whitelabel.name}}
+            {{style width='50px' height='50px'}}
+          />
+
+          <AkTypography
+            @variant='h5'
+            @fontWeight='bold'
+            @gutterBottom={{true}}
+            class='mt-1'
+          >
+            Test App
+          </AkTypography>
+
+          <AkTypography @color='neutral' @gutterBottom={{true}}>
+            com.test.android
+          </AkTypography>
+
+          <AkStack @spacing='1'>
+            <Storeknox::ProductIcon>
+              <AppPlatformIcon @platform='android' />
+            </Storeknox::ProductIcon>
+
+            <Storeknox::ProductIcon @product='android'>
+              <AkSvg::PlaystoreLogo
+                data-test-uploadAppStatusDetails-playStoreLogo
+              />
+            </Storeknox::ProductIcon>
+
+            <Storeknox::ProductIcon @product='vapt'>
+              <AkSvg::AoxIcon />
+            </Storeknox::ProductIcon>
+
+            <Storeknox::ProductIcon @product='sm'>
+              <AkSvg::SoxIcon />
+            </Storeknox::ProductIcon>
+          </AkStack>
+        </AkStack>
+
+        <AkStack @alignItems='center' @spacing='1'>
+          {{#if this.activeRouteTag}}
+            <Storeknox::InventoryDetails::AppDetails::ActionsList::Button
+              @disabled={{true}}
+              @needsAction={{false}}
+              @label={{this.activeRouteTag}}
+              @hideRightIcon={{true}}
+              {{style height='32px'}}
+            />
+
+            <AkDivider
+              @variant='vertical'
+              @color='dark'
+              {{style height='32px'}}
+            />
+          {{/if}}
+
+          <AkIconButton @variant='outlined'>
+            <AkIcon @iconName='archive' @color='textPrimary' />
+          </AkIconButton>
+        </AkStack>
+      </Storeknox::InventoryDetails::SectionInfo>
+    </AkStack>
+  </AkStack>
+</div>

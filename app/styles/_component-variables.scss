@@ -876,7 +876,9 @@ body {
   --file-details-scan-actions-old-manual-scan-textarea-border-color: var(
     --border-color-1
   );
-  --file-details-scan-actions-old-manual-scan-textarea-color: var(--text-primary);
+  --file-details-scan-actions-old-manual-scan-textarea-color: var(
+    --text-primary
+  );
   --file-details-scan-actions-old-manual-scan-textarea-border-radius: var(
     --border-radius
   );
@@ -950,7 +952,9 @@ body {
   --file-details-manual-scan-request-form-additional-comments-textarea-border-color: var(
     --border-color-1
   );
-  --file-details-manual-scan-request-form-additional-comments-textarea-color: var(--text-primary);
+  --file-details-manual-scan-request-form-additional-comments-textarea-color: var(
+    --text-primary
+  );
   --file-details-manual-scan-request-form-additional-comments-textarea-border-radius: var(
     --border-radius
   );
@@ -1645,19 +1649,37 @@ body {
   --security-analysis-details-finding-add-form-note-border-radius: var(
     --border-radius
   );
-  --security-analysis-details-finding-add-form-textarea-border-color: var(--border-color-1);
-  --security-analysis-details-finding-add-form-textarea-border-radius: var(--border-radius);
-  --security-analysis-details-finding-add-form-textarea-color: var(--text-primary);
+  --security-analysis-details-finding-add-form-textarea-border-color: var(
+    --border-color-1
+  );
+  --security-analysis-details-finding-add-form-textarea-border-radius: var(
+    --border-radius
+  );
+  --security-analysis-details-finding-add-form-textarea-color: var(
+    --text-primary
+  );
 
   // variables for security/analysis-details/findings/table/title
-  --security-analysis-details-findings-table-title-textarea-border-color: var(--border-color-1);
-  --security-analysis-details-findings-table-title-textarea-border-radius: var(--border-radius);
-  --security-analysis-details-findings-table-title-textarea-color: var(--text-primary);
+  --security-analysis-details-findings-table-title-textarea-border-color: var(
+    --border-color-1
+  );
+  --security-analysis-details-findings-table-title-textarea-border-radius: var(
+    --border-radius
+  );
+  --security-analysis-details-findings-table-title-textarea-color: var(
+    --text-primary
+  );
 
   // variables for security/analysis-details/findings/table/description
-  --security-analysis-details-findings-table-description-textarea-border-color: var(--border-color-1);
-  --security-analysis-details-findings-table-description-textarea-border-radius: var(--border-radius);
-  --security-analysis-details-findings-table-description-textarea-color: var(--text-primary);
+  --security-analysis-details-findings-table-description-textarea-border-color: var(
+    --border-color-1
+  );
+  --security-analysis-details-findings-table-description-textarea-border-radius: var(
+    --border-radius
+  );
+  --security-analysis-details-findings-table-description-textarea-color: var(
+    --text-primary
+  );
 
   // variables for dynamicscan-automation-upselling-feature
   --dynamicscan-automation-upselling-feature-box-shadow: var(--box-shadow-7);
@@ -1829,4 +1851,7 @@ body {
   --license-detail-border-color: var(--border-color-1);
   --license-detail-success-light: var(--success-light);
   --license-detail-primary-light: var(--primary-main-10);
+
+  // variables for page-wrapper
+  --page-wrapper-background-color: var(--background-light);
 }

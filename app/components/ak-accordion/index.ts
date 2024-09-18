@@ -11,7 +11,7 @@ import {
 } from '../ak-typography';
 import { AccordionCtxProps } from './group';
 
-export type AkAccordionVariant = 'primary' | 'secondary';
+export type AkAccordionVariant = 'primary' | 'secondary' | 'light';
 export type AkAccordionTypographyVariant = TypographyVariant;
 export type AkAccordionFontWeightVariant = TypographyFontWeight;
 
@@ -54,6 +54,7 @@ export default class AkAccordionComponent extends Component<AkAccordionSignature
   summaryColorVariantMap = {
     primary: 'primary',
     secondary: 'textPrimary',
+    light: 'textPrimary',
   };
 
   constructor(owner: unknown, args: AkAccordionSignature['Args']) {

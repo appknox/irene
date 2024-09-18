@@ -40,6 +40,13 @@ export enum AkSvgComponentInvocationByNames {
   ScanCompleted,
   NoApisCaptured,
   DastAutomationUpselling,
+  InfoIndicator,
+  AoxIcon,
+  SoxIcon,
+  SoxInitiateUpload,
+  SoxUploadProcessing,
+  SoxUploadCompleted,
+  SoxInsufficientCredits,
 }
 
 export enum AkSvgComponentInvocationByPaths {

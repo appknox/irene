@@ -1,0 +1,12 @@
+.app-header-info-banner {
+  border: 1px solid var(--border-color-1);
+  border-bottom: 0px;
+
+  &.default {
+    background: var(--neutral-grey-100);
+  }
+
+  &.white {
+    background-color: var(--common-white);
+  }
+}
