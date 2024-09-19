@@ -1,52 +1,54 @@
 .register-form-root {
+  width: 100%;
+  height: 100vh;
+  display: flex;
+  background-color: var(--user-registration-form-background-color);
+  overflow: auto;
+  padding: 3em;
+  box-sizing: border-box;
+
+  .logo-container {
+    padding: 1.5em 0em 1em 0em;
+    border-bottom: 1px solid var(--user-registration-form-border-color);
     width: 100%;
-    height: 100vh;
+
+    img {
+      max-width: 12em;
+      max-height: 7em;
+    }
+  }
+
+  .register-form-container {
+    background-color: var(--user-registration-form-container-background-color);
+    border-radius: var(--user-registration-form-container-border-radius);
+    border: 1px solid var(--user-registration-form-container-border-color);
+    box-shadow: var(--user-registration-form-container-box-shadow);
+    margin: 1em 1em 3em 1em;
+    width: 32em;
+    height: min-content;
+  }
+
+  .register-form-main {
     display: flex;
-    background-color: var(--user-registration-form-background-color);
-    overflow: auto;
-    padding: 3em;
-    box-sizing: border-box;
+    flex-direction: column;
+    padding: 2em;
+  }
 
-    .logo-container {
-        padding: 1.5em 0em 1em 0em;
-        border-bottom: 1px solid var(--user-registration-form-border-color);
-        width: 100%;
+  .input-field-disabled {
+    background-color: var(
+      --user-registration-form-disabled-background-color
+    ) !important;
+    color: var(--user-registration-form-text-primary) !important;
+  }
 
-        img {
-            max-width: 12em;
-            max-height: 7em;
-        }
-    }
+  .asterisk {
+    color: var(--user-registration-form-primary-color);
+  }
 
-    .register-form-container {
-        background-color: var(--user-registration-form-container-background-color);
-        border-radius: var(--user-registration-form-container-border-radius);
-        border: 1px solid var(--user-registration-form-container-border-color);
-        box-shadow: var(--user-registration-form-container-box-shadow);
-        margin: 1em 1em 3em 1em;
-        min-width: 32em;
-        height: min-content;
-    }
-
-    .register-form-main {
-        display: flex;
-        flex-direction: column;
-        padding: 2em;  
-    }
-
-    .input-field-disabled {
-        background-color: var(--user-registration-form-disabled-background-color) !important;
-        color: var(--user-registration-form-text-primary) !important;
-    }
-
-    .asterisk {
-        color: var(--user-registration-form-primary-color);
-    }
-
-    .login-link-container {
-        background-color: var(--user-registration-form-login-link-background-color);
-        padding: 1em;
-        box-shadow: var(--user-registration-form-login-link-box-shadow);
-        border-radius: 0px 2px;
-    }
+  .login-link-container {
+    background-color: var(--user-registration-form-login-link-background-color);
+    padding: 1em;
+    box-shadow: var(--user-registration-form-login-link-box-shadow);
+    border-radius: 0px 2px;
+  }
 }
