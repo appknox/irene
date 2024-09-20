@@ -7,8 +7,14 @@ import {
 import validateEquality from 'irene/validations/common/value-equality';
 
 export default {
-  username: validatePresence(true),
-  password: [validatePresence(true), validateLength({ min: 10 })],
+  username: [
+    validatePresence({ presence: true, ignoreBlank: true }),
+    validateLength({ min: 3 }),
+  ],
+  password: [
+    validatePresence({ presence: true, ignoreBlank: true }),
+    validateLength({ min: 10 }),
+  ],
   passwordConfirmation: validateConfirmation({ on: 'password' }),
   termsAccepted: validateEquality({
     expected: true,

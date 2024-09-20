@@ -69,7 +69,9 @@ module(
 
       assert
         .dom('[data-test-helper-text="username"]')
-        .hasText("Username can't be blank");
+        .hasText(
+          "Username can't be blank,Username is too short (minimum is 3 characters)"
+        );
 
       assert
         .dom('[data-test-helper-text="password"]')
