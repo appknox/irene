@@ -4,9 +4,15 @@
 
 <div class='px-2 pt-3 pb-6'>
   <div class='pb-3'>
-    <LinkTo @route='authenticated.partner.clients'>{{t 'clients'}}</LinkTo>
+    <LinkTo
+      {{style color='var(--primary-main)'}}
+      @route='authenticated.partner.clients'
+    >
+      {{t 'clients'}}
+    </LinkTo>
     /
     <LinkTo
+      {{style color='var(--primary-main)'}}
       @route='authenticated.partner.client'
       @model={{this.model.client.id}}
     >

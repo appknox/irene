@@ -1,0 +1,26 @@
+// Variables
+$ember-basic-dropdown-content-z-index: 10;
+
+// Reset and base styles
+@import 'reset';
+@import 'theme-deprecated';
+@import 'theme';
+@import 'component-variables';
+@import 'icons';
+
+// Third-party libraries
+@import 'billboard';
+@import 'ember-modal-dialog/ember-modal-structure';
+@import 'ember-modal-dialog/ember-modal-appearance';
+@import 'ember-power-calendar';
+@import 'ember-power-select';
+@import 'ember-basic-dropdown';
+@import 'swagger-ui';
+
+// global styles
+@import 'utils';
+@import 'devices';
+@import 'freshdesk';
+@import 'public-api';
+@import 'marketplace-plugin-list';
+@import 'global-styles';

@@ -19,11 +19,11 @@
       &.ak-loader-track-color-primary {
         stroke: var(--ak-loader-track-color-primary-light);
       }
-  
+
       &.ak-loader-track-color-secondary {
         stroke: var(--ak-loader-track-color-secondary-light);
       }
-  
+
       &.ak-loader-track-color-info-dark {
         stroke: var(--ak-loader-track-color-info-light);
       }
@@ -35,7 +35,7 @@
       &.ak-loader-track-color-success {
         stroke: var(--ak-loader-track-color-success-light);
       }
-  
+
       &.ak-loader-track-color-warn-dark {
         stroke: var(--ak-loader-track-color-warn-light);
       }
@@ -50,14 +50,16 @@
     }
 
     .ak-loader-svg-indicator {
+      stroke-linecap: round;
+
       &.ak-loader-indicator-color-primary {
         stroke: var(--ak-loader-stroke-primary-main);
       }
-  
+
       &.ak-loader-indicator-color-secondary {
         stroke: var(--ak-loader-stroke-secondary);
       }
-  
+
       &.ak-loader-indicator-color-info {
         stroke: var(--ak-loader-stroke-info-main);
       }
@@ -65,11 +67,11 @@
       &.ak-loader-indicator-color-info-dark {
         stroke: var(--ak-loader-stroke-info-dark);
       }
-  
+
       &.ak-loader-indicator-color-success {
         stroke: var(--ak-loader-stroke-success-main);
       }
-  
+
       &.ak-loader-indicator-color-warn {
         stroke: var(--ak-loader-stroke-warn-main);
       }
@@ -77,12 +79,10 @@
       &.ak-loader-indicator-color-warn-dark {
         stroke: var(--ak-loader-stroke-warn-dark);
       }
-  
+
       &.ak-loader-indicator-color-error {
         stroke: var(--ak-loader-stroke-error-main);
       }
-
-      stroke-linecap: round;
 
       &.indeterminate {
         stroke-dasharray: 90, 200;

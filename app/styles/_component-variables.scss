@@ -306,7 +306,7 @@ body {
 
   // variables for ak-breadcrumbs
   --ak-breadcrumbs-color-text-primary: var(--text-primary);
-  --ak-breadcrumbs-color-text-secondary: var(--text-secondary-color);
+  --ak-breadcrumbs-color-text-secondary: var(--neutral-grey-500);
   --ak-breadcrumbs-font-weight-medium: var(--font-weight-medium);
 
   // variables for ak-accordion
@@ -546,7 +546,7 @@ body {
   --organization-details-font-weight-bold: var(--font-weight-bold);
 
   //variables for notifications
-  --notification-bell-icon-dot-background-color: var(--primary);
+  --notification-bell-icon-dot-background-color: var(--primary-main);
   --notification-bell-icon-dot-border-color: var(--black-700);
   --notification-bell-icon-color: var(--background-main);
 
@@ -557,6 +557,7 @@ body {
 
   --notification-unread-count-color-primary: var(--primary-main);
   --notification-unread-count-background-color: var(--primary-main-10);
+  --notification-unread-text-primary-color: var(--text-primary);
   --notification-divider-border-color: var(--common-black);
   --notification-message-hover-background-color: var(--neutral-grey-50);
   --notification-message-read-unread-dot-background-color: var(
@@ -589,7 +590,7 @@ body {
 
   //variables for appmonitoring/settings
   --appmonitoring-settings-block-description-text-color: var(
-    --text-secondary-color
+    --neutral-grey-500
   );
   --appmonitoring-settings-header-background-color: var(--common-white);
   --appmonitoring-settings-header-border-color: var(--neutral-white-100);
@@ -876,7 +877,9 @@ body {
   --file-details-scan-actions-old-manual-scan-textarea-border-color: var(
     --border-color-1
   );
-  --file-details-scan-actions-old-manual-scan-textarea-color: var(--text-primary);
+  --file-details-scan-actions-old-manual-scan-textarea-color: var(
+    --text-primary
+  );
   --file-details-scan-actions-old-manual-scan-textarea-border-radius: var(
     --border-radius
   );
@@ -950,7 +953,9 @@ body {
   --file-details-manual-scan-request-form-additional-comments-textarea-border-color: var(
     --border-color-1
   );
-  --file-details-manual-scan-request-form-additional-comments-textarea-color: var(--text-primary);
+  --file-details-manual-scan-request-form-additional-comments-textarea-color: var(
+    --text-primary
+  );
   --file-details-manual-scan-request-form-additional-comments-textarea-border-radius: var(
     --border-radius
   );
@@ -1054,6 +1059,9 @@ body {
   );
   --file-details-vulnerability-analysis-details-findings-custom-vulnerabilities-marked-passed-code-background-color: var(
     --neutral-grey-50
+  );
+  --file-details-vulnerability-analysis-details-findings-custom-vulnerabilities-marked-passed-background-color: var(
+    --neutral-grey-100
   );
   --file-details-vulnerability-analysis-details-findings-custom-vulnerabilities-border-color: var(
     --border-color-1
@@ -1195,11 +1203,6 @@ body {
   --user-login-via-username-password-link-color: var(--neutral-grey-700);
   --user-login-perform-mfa-contact-support-color: var(--secondary-main);
 
-  // variables for user-login/via-sso
-  --user-login-via-sso-separator-color: var(--neutral-grey-300);
-  --user-login-via-sso-separator-or-bg-color: var(--white);
-  --user-login-via-sso-separator-or-color: var(--background-dark);
-
   // variables for user-login/recover-password
   --user-login-recover-password-footer-background-color: var(
     --neutral-grey-100
@@ -1251,6 +1254,7 @@ body {
   --account-settings-security-mfa-alert-success-background: var(
     --success-light
   );
+  --account-settings-security-mfa-primary-color: var(--primary-main);
 
   // variables for project-settings/empty-list
   --project-settings-empty-list-border-radius: var(--border-radius);
@@ -1268,7 +1272,7 @@ body {
   --project-settings-header-background-color: var(--background-light);
   --project-settings-header-border-color: var(--border-color-1);
   --project-settings-header-border-radius: var(--border-radius);
-  --project-settings-header-info-text-color: var(--text-secondary-color);
+  --project-settings-header-info-text-color: var(--neutral-grey-500);
   --project-settings-header-tabs-box-shadow: var(--box-shadow-6);
   --project-settings-header-project-details-box-shadow: var(--box-shadow-8);
   --project-settings-header-color-android: var(--android);
@@ -1508,6 +1512,7 @@ body {
   // variables for marketplace/plugin-card
   --marketplace-plugin-card-text-color: var(--text-secondary);
   --marketplace-plugin-card-border-color: var(--border-color-1);
+  --marketplace-plugin-card-primary-color: var(--primary-main);
 
   // variables for marketplace/integration-card
   --marketplace-integration-card-text-color: var(--text-secondary);
@@ -1615,7 +1620,7 @@ body {
   );
   --security-analysis-details-cvss-metrics-progress-color: var(--risk-untested);
   --security-analysis-details-cvss-metrics-progress-border-color: var(
-    --input-border-color
+    --primary-main-10
   );
 
   // variables for security/analysis-details/footer
@@ -1645,19 +1650,37 @@ body {
   --security-analysis-details-finding-add-form-note-border-radius: var(
     --border-radius
   );
-  --security-analysis-details-finding-add-form-textarea-border-color: var(--border-color-1);
-  --security-analysis-details-finding-add-form-textarea-border-radius: var(--border-radius);
-  --security-analysis-details-finding-add-form-textarea-color: var(--text-primary);
+  --security-analysis-details-finding-add-form-textarea-border-color: var(
+    --border-color-1
+  );
+  --security-analysis-details-finding-add-form-textarea-border-radius: var(
+    --border-radius
+  );
+  --security-analysis-details-finding-add-form-textarea-color: var(
+    --text-primary
+  );
 
   // variables for security/analysis-details/findings/table/title
-  --security-analysis-details-findings-table-title-textarea-border-color: var(--border-color-1);
-  --security-analysis-details-findings-table-title-textarea-border-radius: var(--border-radius);
-  --security-analysis-details-findings-table-title-textarea-color: var(--text-primary);
+  --security-analysis-details-findings-table-title-textarea-border-color: var(
+    --border-color-1
+  );
+  --security-analysis-details-findings-table-title-textarea-border-radius: var(
+    --border-radius
+  );
+  --security-analysis-details-findings-table-title-textarea-color: var(
+    --text-primary
+  );
 
   // variables for security/analysis-details/findings/table/description
-  --security-analysis-details-findings-table-description-textarea-border-color: var(--border-color-1);
-  --security-analysis-details-findings-table-description-textarea-border-radius: var(--border-radius);
-  --security-analysis-details-findings-table-description-textarea-color: var(--text-primary);
+  --security-analysis-details-findings-table-description-textarea-border-color: var(
+    --border-color-1
+  );
+  --security-analysis-details-findings-table-description-textarea-border-radius: var(
+    --border-radius
+  );
+  --security-analysis-details-findings-table-description-textarea-color: var(
+    --text-primary
+  );
 
   // variables for dynamicscan-automation-upselling-feature
   --dynamicscan-automation-upselling-feature-box-shadow: var(--box-shadow-7);

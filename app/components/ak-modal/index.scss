@@ -1,31 +1,33 @@
-.ak-modal-overlay {
-  z-index: var(--ak-modal-zIndex);
+:global(.ember-modal-wrapper) {
+  .ak-modal-overlay {
+    z-index: var(--ak-modal-zIndex);
 
-  &:global(.translucent) {
-    background-color: var(--ak-modal-backdrop-overlay-background);
+    &:global(.translucent) {
+      background-color: var(--ak-modal-backdrop-overlay-background);
+    }
+
+    .ak-modal-dialog-container {
+      display: flex;
+      flex-direction: column;
+      overflow-y: auto;
+      max-height: calc(100% - 64px);
+      padding: 0;
+      border-radius: var(--ak-modal-border-radius);
+      box-shadow: none;
+    }
+
+    &.ak-modal-overlay-blur {
+      backdrop-filter: blur(5px);
+    }
   }
 
-  .ak-modal-dialog-container {
-    display: flex;
-    flex-direction: column;
+  .ak-modal-body {
+    min-width: 400px;
+    flex: 1 1 auto;
     overflow-y: auto;
-    max-height: calc(100% - 64px);
-    padding: 0;
-    border-radius: var(--ak-modal-border-radius);
-    box-shadow: none;
-  }
 
-  &.ak-modal-overlay-blur {
-    backdrop-filter: blur(5px);
-  }
-}
-
-.ak-modal-body {
-  min-width: 400px;
-  flex: 1 1 auto;
-  overflow-y: auto;
-
-  &.ak-modal-body-gutter {
-    padding: 1.2em;
+    &.ak-modal-body-gutter {
+      padding: 1.2em;
+    }
   }
 }

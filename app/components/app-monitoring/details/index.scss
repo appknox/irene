@@ -45,11 +45,11 @@
         padding-left: 1.214em;
 
         .monitoring-toggle {
+          margin: 0em;
+
           & > input:disabled {
             cursor: not-allowed;
           }
-
-          margin: 0em;
         }
       }
     }

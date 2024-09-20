@@ -32,12 +32,12 @@
   border-bottom: 3px solid transparent;
   color: inherit;
   &.active {
-    border-bottom-color: var(--primary);
-    color: var(--black);
+    border-bottom-color: var(--primary-main);
+    color: var(--text-primary);
   }
   &:hover,
   &:focus,
   &:active {
-    color: var(--black);
+    color: var(--text-primary);
   }
 }

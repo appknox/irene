@@ -8,7 +8,7 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  background-color: var(--white);
+  background-color: var(--background-main);
   width: auto;
   padding: 0.5rem;
   border-radius: 6px;
@@ -59,7 +59,7 @@
 }
 
 .credits-left {
-  color: $primary-color;
+  color: var(--primary-main);
   font-size: 1.2rem;
   line-height: 1;
   font-weight: bold;
