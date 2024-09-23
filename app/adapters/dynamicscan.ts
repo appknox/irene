@@ -1,5 +1,5 @@
 import commondrf from './commondrf';
-import DynamicscanModel from '../models/dynamicscan';
+import type DynamicscanModel from 'irene/models/dynamicscan';
 
 export default class DynamicscanAdapter extends commondrf {
   namespace = this.namespace_v2;

@@ -1,0 +1,14 @@
+<ProjectPreferencesOld::Provider
+  @project={{@project}}
+  @profileId={{@profileId}}
+  @platform={{@platform}}
+  as |dpContext|
+>
+  {{yield
+    (hash
+      DevicePreferenceComponent=(component
+        'project-preferences-old/device-preference' dpContext=dpContext
+      )
+    )
+  }}
+</ProjectPreferencesOld::Provider>
