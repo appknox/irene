@@ -1,0 +1,23 @@
+.page-not-found-card {
+  background-color: var(--page-not-found-card-background-color);
+  border-radius: var(--page-not-found-card-border-radius);
+  border: 1px solid var(--page-not-found-card-border-color);
+  box-shadow: var(--page-not-found-card-box-shadow);
+  min-width: 32em;
+  padding-bottom: 2em;
+}
+
+.page-not-found-container {
+  height: 100vh;
+  background-color: var(--page-not-found-container-background-color);
+}
+
+.logo-container {
+  padding: 1.5em 0em 1em 0em;
+  border-bottom: 1px solid var(--page-not-found-border-color);
+
+  img {
+    max-width: 12em;
+    max-height: 7em;
+  }
+}
