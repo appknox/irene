@@ -68,7 +68,10 @@
       >
         <AkStack @direction='row' @alignItems='center' @spacing='1'>
           {{#let (component switcherItem.svg) as |SvgIcon|}}
-            <SvgIcon data-test-side-menu-switcher-modal='{{switcherItem.id}}' />
+            <SvgIcon
+              local-class='switcher-menu-item-icon'
+              data-test-side-menu-switcher-modal='{{switcherItem.id}}'
+            />
           {{/let}}
 
           <AkTypography data-test-side-menu-switcher-modal-switch-to>

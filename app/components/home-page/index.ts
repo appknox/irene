@@ -11,7 +11,7 @@ interface productCardDetails {
   title: string;
   desc: string;
   link: string;
-  indicator: 'ak-svg/sm-indicator' | 'ak-svg/vp-indicator';
+  indicator: 'ak-svg/sm-indicator' | 'ak-svg/vapt-indicator';
   coverImage: 'ak-svg/storeknox-bg-img' | 'ak-svg/appknox-bg-img';
 }
 
@@ -39,15 +39,15 @@ export default class HomePageComponent extends Component {
           : this.intl.t('appknox'),
         desc: this.intl.t('appknoxDesc'),
         link: 'authenticated.dashboard.projects',
-        indicator: 'ak-svg/vp-indicator',
+        indicator: 'ak-svg/vapt-indicator',
         coverImage: 'ak-svg/appknox-bg-img',
       },
       this.isStoreknoxEnabled && {
         title: this.orgIsAnEnterprise
           ? this.intl.t('appMonitoring')
-          : this.intl.t('storeknox'),
+          : this.intl.t('storeknoxTitle'),
         desc: this.intl.t('storeknoxDesc'),
-        link: 'authenticated.storeknox.discover',
+        link: 'authenticated.storeknox.discover.result',
         indicator: 'ak-svg/sm-indicator',
         coverImage: 'ak-svg/storeknox-bg-img',
       },

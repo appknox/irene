@@ -58,7 +58,7 @@ export interface LowerMenuItem {
 
 export interface SwitcherMenuItem {
   id: string;
-  svg: 'ak-svg/sm-indicator' | 'ak-svg/vp-indicator';
+  svg: 'ak-svg/sm-indicator' | 'ak-svg/vapt-indicator';
   label: string;
   route: string;
   key: string;

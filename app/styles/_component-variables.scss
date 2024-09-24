@@ -330,17 +330,13 @@ body {
   &.theme-light {
     --top-nav-background-color: var(--background-main);
     --top-nav-text-color: var(--text-primary);
-    --top-nav-security-dashboard-btn-color: var(
-      --secondary-main
-    );
+    --top-nav-security-dashboard-btn-color: var(--secondary-main);
   }
 
   &.theme-dark {
     --top-nav-background-color: var(--secondary-main);
     --top-nav-text-color: var(--secondary-contrast-text);
-    --top-nav-security-dashboard-btn-color: var(
-      --secondary-contrast-text
-    );
+    --top-nav-security-dashboard-btn-color: var(--secondary-contrast-text);
   }
 
   //variables for side-nav
@@ -361,7 +357,7 @@ body {
     --side-nav-box-shadow: var(--box-shadow-light);
     --side-nav-border: 1px solid var(--border-color-1);
   }
- 
+
   &.theme-dark {
     --side-nav-inherit-background: var(--background-dark);
     --side-nav-inherit-background-text-color: var(--common-white);
@@ -374,12 +370,16 @@ body {
   }
 
   //variables for side-nav/product-switcher
-  --side-nav-product-switcher-modal-item-hover-background: var(--neutral-grey-100);
+  --side-nav-product-switcher-modal-item-hover-background: var(
+    --neutral-grey-100
+  );
   --side-nav-product-switcher-modal-title-background: var(--neutral-grey-100);
   --side-nav-product-switcher-border: 1px solid var(--border-color-1);
   --side-nav-product-switcher-bg-main: var(--background-main);
   --side-nav-product-switcher-box-shadow: var(--box-shadow-light);
-  --side-nav-product-switcher-item-hover-background: var(--hover-light-background);
+  --side-nav-product-switcher-item-hover-background: var(
+    --hover-light-background
+  );
 
   // variables for organization-namespace/namespace-value
   --organization-namespace-value-color-ios: var(--ios);
@@ -849,6 +849,17 @@ body {
   // variables for file-details/scan-actions
   --file-details-scan-actions-border-color: var(--neutral-grey-200);
   --file-details-scan-actions-background-color: var(--common-white);
+
+  // variables for file-details/scan-actions/old/manual-scan
+  --file-details-scan-actions-old-manual-scan-textarea-border-color: var(
+    --border-color-1
+  );
+  --file-details-scan-actions-old-manual-scan-textarea-color: var(
+    --text-primary
+  );
+  --file-details-scan-actions-old-manual-scan-textarea-border-radius: var(
+    --border-radius
+  );
 
   // variables for file-details/scan-actions/api-scan
   --file-details-scan-actions-api-scan-border-radius: var(--border-radius);
@@ -2051,4 +2062,7 @@ body {
   --home-page-product-card-border-radius: var(--border-radius);
   --home-page-product-card-border-color: var(--border-color-1);
   --home-page-product-card-background-color: var(--background-main);
+
+  // variables for page-wrapper
+  --page-wrapper-background-color: var(--background-light);
 }

@@ -82,7 +82,7 @@ module('Integration | Component | storeknox-wrapper', function (hooks) {
     const organization = this.owner.lookup('service:organization');
 
     this.setProperties({
-      title: t('storeknox'),
+      title: t('storeknox.storeknox'),
       organization: organization,
       user: store.createRecord('user', this.server.create('user').toJSON()),
     });

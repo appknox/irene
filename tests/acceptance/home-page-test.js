@@ -85,7 +85,7 @@ module('Acceptance | home page', function (hooks) {
     );
 
     assert.strictEqual(titles[0].textContent.trim(), t('appknox'));
-    assert.strictEqual(titles[1].textContent.trim(), t('storeknox'));
+    assert.strictEqual(titles[1].textContent.trim(), t('storeknox.storeknox'));
 
     const links = this.element.querySelectorAll(
       '[data-test-home-page-product-card-link]'
@@ -123,7 +123,7 @@ module('Acceptance | home page', function (hooks) {
 
     assert.strictEqual(
       currentURL(),
-      '/dashboard/storeknox/discover',
+      '/dashboard/storeknox/discover/result',
       'Redirected to storeknox'
     );
   });
