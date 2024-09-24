@@ -10,11 +10,7 @@ export interface ProductCardComponentSignature {
     linkText: string;
     route: string;
     coverBackgroundImage: 'ak-svg/storeknox-bg-img' | 'ak-svg/appknox-bg-img';
-<<<<<<< HEAD
     indicatorSvg: 'ak-svg/sm-indicator' | 'ak-svg/vapt-indicator';
-=======
-    indicatorSvg: 'ak-svg/sm-indicator' | 'ak-svg/vp-indicator';
->>>>>>> 6de9b12ec (new main product landing page and navs)
   };
   Blocks: {
     default: [];

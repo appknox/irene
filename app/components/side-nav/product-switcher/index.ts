@@ -43,13 +43,8 @@ export default class SideNavProductSwitcherComponent extends Component<SideNavPr
   get switcherMenuItems() {
     const allMenuItems: SwitcherMenuItem[] = [
       {
-<<<<<<< HEAD
         id: 'vapt-svg',
         svg: 'ak-svg/vapt-indicator',
-=======
-        id: 'vp-svg',
-        svg: 'ak-svg/vp-indicator',
->>>>>>> 6de9b12ec (new main product landing page and navs)
         label: this.orgIsAnEnterprise
           ? this.intl.t('vapt')
           : this.intl.t('appknox'),
@@ -61,13 +56,8 @@ export default class SideNavProductSwitcherComponent extends Component<SideNavPr
         svg: 'ak-svg/sm-indicator',
         label: this.orgIsAnEnterprise
           ? this.intl.t('appMonitoring')
-<<<<<<< HEAD
           : this.intl.t('storeknox.storeknox'),
         route: 'authenticated.storeknox.discover.result',
-=======
-          : this.intl.t('storeknox'),
-        route: 'authenticated.storeknox.discover',
->>>>>>> 6de9b12ec (new main product landing page and navs)
         key: 'storeknox',
       },
     ];

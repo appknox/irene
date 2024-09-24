@@ -85,11 +85,7 @@ module('Acceptance | home page', function (hooks) {
     );
 
     assert.strictEqual(titles[0].textContent.trim(), t('appknox'));
-<<<<<<< HEAD
     assert.strictEqual(titles[1].textContent.trim(), t('storeknox.storeknox'));
-=======
-    assert.strictEqual(titles[1].textContent.trim(), t('storeknox'));
->>>>>>> 6de9b12ec (new main product landing page and navs)
 
     const links = this.element.querySelectorAll(
       '[data-test-home-page-product-card-link]'
@@ -127,11 +123,7 @@ module('Acceptance | home page', function (hooks) {
 
     assert.strictEqual(
       currentURL(),
-<<<<<<< HEAD
       '/dashboard/storeknox/discover/result',
-=======
-      '/dashboard/storeknox/discover',
->>>>>>> 6de9b12ec (new main product landing page and navs)
       'Redirected to storeknox'
     );
   });
