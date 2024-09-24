@@ -4,14 +4,12 @@ import Transition from '@ember/routing/transition';
 // Route constructor
 type Constructor<T = object> = new (...args: (object | undefined)[]) => T;
 
-export const scrollOrganizationDashboardMainContainerTo = (
-  options?: ScrollToOptions
-) => {
-  const organizationDashboardMainContainer = document.querySelector(
-    '#ak-organization-dashboard-main'
+export const scrollDashboardMainContainerTo = (options?: ScrollToOptions) => {
+  const akDashboardMainContainer = document.querySelector(
+    '#ak-dashboard-main-scroll-container'
   );
 
-  organizationDashboardMainContainer?.scrollTo(options);
+  akDashboardMainContainer?.scrollTo(options);
 };
 
 /**
@@ -29,7 +27,7 @@ export const ScrollToTop = <Model = unknown, Params extends object = object>(
     activate(_transition: Transition) {
       super.activate(_transition);
 
-      scrollOrganizationDashboardMainContainerTo({ top: 0, left: 0 });
+      scrollDashboardMainContainerTo({ top: 0, left: 0 });
 
       window.scrollTo(0, 0);
     }

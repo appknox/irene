@@ -1,0 +1,43 @@
+.navbar-root {
+  padding: 0.65em 1em;
+  background-color: var(--top-nav-background-color);
+  color: var(--top-nav-text-color);
+  max-height: 4em;
+  width: 100%;
+
+  .navbar-btn {
+    color: var(--top-nav-text-color);
+    background-color: unset;
+
+    :global(.ak-icon) {
+      font-size: 1.5rem !important;
+    }
+
+    &:hover {
+      color: var(--top-nav-text-color);
+      background-color: unset;
+    }
+  }
+
+  .right-nav {
+    margin-left: auto;
+  }
+
+  .navbar-title {
+    color: var(--top-nav-text-color);
+  }
+
+  .spacer {
+    flex-grow: 1;
+  }
+
+  .appknox-logo {
+    pointer-events: none;
+    padding: 1em 0;
+  
+    img {
+      max-width: 12em;
+      max-height: 2em;
+    }
+  }
+}

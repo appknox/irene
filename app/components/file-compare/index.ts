@@ -14,7 +14,7 @@ import {
 } from 'irene/utils/compare-files';
 
 import UnknownAnalysisStatusModel from 'irene/models/unknown-analysis-status';
-import { scrollOrganizationDashboardMainContainerTo } from 'irene/utils/scroll-to-top';
+import { scrollDashboardMainContainerTo } from 'irene/utils/scroll-to-top';
 
 interface FileCompareSignature {
   Args: {
@@ -142,7 +142,7 @@ export default class FileCompareComponent extends Component<FileCompareSignature
   handleExpandFilesOverview() {
     this.expandFilesOverview = !this.expandFilesOverview;
 
-    scrollOrganizationDashboardMainContainerTo({ top: 0, behavior: 'smooth' });
+    scrollDashboardMainContainerTo({ top: 0, behavior: 'smooth' });
   }
 }
 

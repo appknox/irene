@@ -1,4 +1,10 @@
 .security-menu {
-  margin-left: -3.15em;
-  margin-bottom: -1px;
+  margin-bottom: -1em;
+  flex-grow: 1;
+}
+
+.security-menu-item {
+  a {
+    color: inherit !important;
+  }
 }

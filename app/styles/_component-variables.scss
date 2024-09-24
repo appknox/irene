@@ -326,79 +326,60 @@ body {
 }
 
 body {
-  //variables for home-page/organization-dashboard/header
+  //variables for top-nav
   &.theme-light {
-    --organization-dashboard-header-background-color: var(--background-main);
-    --organization-dashboard-header-text-color: var(--text-primary);
-    --organization-dashboard-header-security-dashboard-btn-color: var(
+    --top-nav-background-color: var(--background-main);
+    --top-nav-text-color: var(--text-primary);
+    --top-nav-security-dashboard-btn-color: var(
       --secondary-main
     );
   }
 
   &.theme-dark {
-    --organization-dashboard-header-background-color: var(--secondary-main);
-    --organization-dashboard-header-text-color: var(--secondary-contrast-text);
-    --organization-dashboard-header-security-dashboard-btn-color: var(
+    --top-nav-background-color: var(--secondary-main);
+    --top-nav-text-color: var(--secondary-contrast-text);
+    --top-nav-security-dashboard-btn-color: var(
       --secondary-contrast-text
     );
   }
 
-  //variables for home-page/organization-dashboard/side-nav
-  --organization-dashboard-side-nav-font-weight-medium: var(
-    --font-weight-medium
-  );
-  --organization-dashboard-side-nav-text-primary: var(--primary-main);
-  --organization-dashboard-side-nav-text-secondary: var(--text-secondary);
-  --organization-dashboard-side-nav-item-active-badge-background: var(
-    --primary-main
-  );
-  --organization-dashboard-side-nav-item-active-badge-text-color: var(
-    --primary-contrast-text
-  );
-  --organization-dashboard-side-nav-item-active-border-color: var(
-    --primary-main
-  );
-  --organization-dashboard-side-nav-zIndex: calc(var(--zIndex-appbar) + 1);
-
+  //variables for side-nav
+  --side-nav-font-weight-medium: var(--font-weight-medium);
+  --side-nav-text-primary: var(--primary-main);
+  --side-nav-item-active-badge-background: var(--primary-main);
+  --side-nav-item-active-badge-text-color: var(--primary-contrast-text);
+  --side-nav-item-active-border-color: var(--primary-main);
+  --side-nav-zIndex: calc(var(--zIndex-appbar) + 1);
+ 
   &.theme-light {
-    --organization-dashboard-side-nav-bg-color: var(--background-main);
-    --organization-dashboard-side-nav-text-color: var(--text-primary);
-    --organization-dashboard-side-nav-box-shadow: var(--box-shadow-light);
-    --organization-dashboard-side-nav-item-badge-background: var(
-      --neutral-grey-200
-    );
-    --organization-dashboard-side-nav-item-badge-text-color: var(
-      --text-primary
-    );
-    --organization-dashboard-side-nav-item-hover-background: var(
-      --hover-light-background
-    );
-    --organization-dashboard-side-nav-item-active-background: var(
-      --side-menu-active-background-light
-    );
-    --organization-dashboard-side-nav-border: 1px solid var(--border-color-1);
+    --side-nav-inherit-background: var(--background-main);
+    --side-nav-inherit-background-text-color: var(--text-primary);
+    --side-nav-inherit-hover-background: var(--hover-light-background);
+    --side-nav-item-badge-background: var(--neutral-grey-200);
+    --side-nav-item-badge-text-color: var(--text-primary);
+    --side-nav-item-active-background: var(--side-menu-active-background-light);
+    --side-nav-box-shadow: var(--box-shadow-light);
+    --side-nav-border: 1px solid var(--border-color-1);
+  }
+ 
+  &.theme-dark {
+    --side-nav-inherit-background: var(--background-dark);
+    --side-nav-inherit-background-text-color: var(--common-white);
+    --side-nav-inherit-hover-background: var(--hover-dark-background);
+    --side-nav-item-badge-background: var(--neutral-grey-900);
+    --side-nav-item-badge-text-color: var(--secondary-contrast-text);
+    --side-nav-item-active-background: var(--side-menu-active-background-dark);
+    --side-nav-box-shadow: var(--box-shadow-dark);
+    --side-nav-border: none;
   }
 
-  &.theme-dark {
-    --organization-dashboard-side-nav-bg-color: var(--background-dark);
-    --organization-dashboard-side-nav-text-color: var(
-      --secondary-contrast-text
-    );
-    --organization-dashboard-side-nav-box-shadow: var(--box-shadow-dark);
-    --organization-dashboard-side-nav-item-badge-background: var(
-      --neutral-grey-900
-    );
-    --organization-dashboard-side-nav-item-badge-text-color: var(
-      --secondary-contrast-text
-    );
-    --organization-dashboard-side-nav-item-hover-background: var(
-      --hover-dark-background
-    );
-    --organization-dashboard-side-nav-item-active-background: var(
-      --side-menu-active-background-dark
-    );
-    --organization-dashboard-side-nav-border: none;
-  }
+  //variables for side-nav/product-switcher
+  --side-nav-product-switcher-modal-item-hover-background: var(--neutral-grey-100);
+  --side-nav-product-switcher-modal-title-background: var(--neutral-grey-100);
+  --side-nav-product-switcher-border: 1px solid var(--border-color-1);
+  --side-nav-product-switcher-bg-main: var(--background-main);
+  --side-nav-product-switcher-box-shadow: var(--box-shadow-light);
+  --side-nav-product-switcher-item-hover-background: var(--hover-light-background);
 
   // variables for organization-namespace/namespace-value
   --organization-namespace-value-color-ios: var(--ios);
@@ -1508,8 +1489,20 @@ body {
   --register-oidc-error-border-color: var(--border-color-1);
   --register-oidc-error-error-card-box-shadow: var(--box-shadow-2);
 
-  // variables for home-page/organization-dashboard/onboarding-guide
-  --onboarding-guide-list-border-color: var(--border-color-1);
+  // variables for appknox-wrapper
+  --appknox-wrapper-text-primary: var(--primary-main);
+  --appknox-wrapper-border-color: var(--border-color-1);
+
+  &.theme-light {
+    --appknox-wrapper-text-color: var(--text-primary);
+  }
+
+  &.theme-dark {
+    --appknox-wrapper-text-color: var(--secondary-contrast-text);
+  }
+
+  // variables for appknox-wrapper/onboarding-guide
+  --appknox-wrapper-onboarding-guide-list-border-color: var(--border-color-1);
 
   // variables for marketplace
   --marketplace-sub-header-description-text-color: var(--text-secondary);
@@ -1534,9 +1527,6 @@ body {
   --security-purge-api-analysis-container-border-color: var(--neutral-grey-200);
   --security-purge-api-analysis-container-box-shadow: var(--box-shadow-3);
   --security-purge-api-analysis-container-border-radius: var(--border-radius);
-
-  // variables for home-page/security-dashboard-nav
-  --security-dashboard-nav-bg-color: var(--background-main);
 
   // variables for system-status
   --system-status-root-container-border-color: var(--neutral-grey-200);
@@ -1922,4 +1912,13 @@ body {
   --file-details-dynamic-scan-drawer-old-proxy-settings-view-border-color: var(
     --border-color-1
   );
+  
+  // variables for home-page
+  --home-page-background-color: var(--background-light);
+  --home-page-button-background-color: var(--background-main);
+
+  // variables for home-page/product-card
+  --home-page-product-card-border-radius: var(--border-radius);
+  --home-page-product-card-border-color: var(--border-color-1);
+  --home-page-product-card-background-color: var(--background-main);
 }

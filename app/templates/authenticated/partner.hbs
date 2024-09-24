@@ -1,3 +1,5 @@
-{{page-title "Partner"}}
-<Partner></Partner>
-{{outlet}}
+{{page-title (t 'partner')}}
+
+<Partner @user={{@model.user}}>
+  {{outlet}}
+</Partner>
