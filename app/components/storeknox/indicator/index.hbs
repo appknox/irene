@@ -10,12 +10,14 @@
       </AkStack>
 
       <AkTypography class='mt-1'>
-        {{@text}}
+        {{@indicatorInfo}}
       </AkTypography>
     </div>
   </:tooltipContent>
 
   <:default>
-    {{component @svgComponent}}
+    {{#let (component @svgComponent) as |SvgComponent|}}
+      <SvgComponent />
+    {{/let}}
   </:default>
 </AkTooltip>

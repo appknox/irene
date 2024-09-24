@@ -1,9 +1,8 @@
-import Model, { attr, belongsTo, AsyncBelongsTo } from '@ember-data/model';
-
+import Model, { AsyncBelongsTo, attr, belongsTo } from '@ember-data/model';
 import ENUMS from 'irene/enums';
 import OrganizationUserModel from './organization-user';
 
-export interface AppMetadata {
+export interface SkAppMetadata {
   doc_ulid: string;
   doc_hash: string;
   app_id: string;
@@ -43,15 +42,9 @@ export interface Store {
   platform_display: string;
 }
 
-export interface AvailabilityData {
+export interface SkAppAvailabilityData {
   storeknox: boolean;
   appknox: boolean;
-}
-
-enum SkAppStatus {
-  PENDING_APPROVAL = 0,
-  APPROVED = 1,
-  REJECTED = 2,
 }
 
 export default class SkAppModel extends Model {
@@ -101,13 +94,13 @@ export default class SkAppModel extends Model {
   declare coreProject: number | null;
 
   @attr()
-  declare appMetadata: AppMetadata;
+  declare appMetadata: SkAppMetadata;
 
   @attr()
-  declare availability: AvailabilityData;
+  declare availability: SkAppAvailabilityData;
 
   @attr()
-  declare statusButtonsLoading: AvailabilityData;
+  declare statusButtonsLoading: SkAppAvailabilityData;
 
   @attr('boolean')
   declare selected: boolean;
@@ -171,13 +164,13 @@ export default class SkAppModel extends Model {
 
   get status() {
     switch (this.approvalStatus) {
-      case SkAppStatus.PENDING_APPROVAL:
+      case ENUMS.SK_APP_APPROVAL_STATUS.PENDING:
         return 'pending';
 
-      case SkAppStatus.APPROVED:
+      case ENUMS.SK_APP_APPROVAL_STATUS.APPROVED:
         return 'approved';
 
-      case SkAppStatus.REJECTED:
+      case ENUMS.SK_APP_APPROVAL_STATUS.REJECTED:
         return 'rejected';
 
       default:

@@ -1,0 +1,24 @@
+.navbar-root {
+    padding: 0.65em 1em;
+    background-color: var(--storeknox-top-nav-background-color);
+    color: var(--storeknox-top-nav-text-color);
+    max-height: 4em;
+  
+    .navbar-btn {
+      color: var(--storeknox-top-nav-text-color);
+      background-color: unset;
+  
+      :global(.ak-icon) {
+        font-size: 1.5rem !important;
+      }
+  
+      :hover {
+        color: var(--storeknox-top-nav-text-color);
+        background-color: unset;
+      }
+    }
+    
+  .navbar-title {
+    color: var(--storeknox-top-nav-text-color);
+  }
+}

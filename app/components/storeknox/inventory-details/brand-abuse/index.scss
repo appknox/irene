@@ -1,0 +1,32 @@
+.summary-bars-container {
+  width: 500px;
+  display: flex;
+  align-items: center;
+  gap: 2px;
+
+  .bar {
+    display: flex;
+    height: 15px;
+    min-width: 15px;
+  }
+
+  .critical {
+    background-color: var(--severity-critical);
+  }
+
+  .high {
+    background-color: var(--severity-high);
+  }
+
+  .medium {
+    background-color: var(--severity-medium);
+  }
+
+  .low {
+    background-color: var(--severity-low);
+  }
+
+  .passed {
+    background-color: var(--severity-passed);
+  }
+}

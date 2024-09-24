@@ -237,6 +237,17 @@ const ENUMS = {
     SHOW: 1,
     HIDE: 2,
   },
+
+  SK_APP_STATUS: {
+    INACTIVE: 0,
+    ACTIVE: 1,
+  },
+
+  SK_APP_APPROVAL_STATUS: {
+    PENDING: 0,
+    APPROVED: 1,
+    REJECTED: 2,
+  },
 };
 
 export const ENUMS_DISPLAY = {

@@ -1,0 +1,26 @@
+<AkStack @spacing='0.5' @alignItems='center' @justifyContent='center'>
+  <AkTypography>{{t 'storeknox.availability'}}</AkTypography>
+
+  <AkTooltip @placement='bottom' @arrow={{true}} @color='light'>
+    <:tooltipContent>
+      <div local-class='tooltip-content'>
+        <AkStack @spacing='0.5' @alignItems='center'>
+          <AkIcon @iconName='info' @color='textSecondary' @size='small' />
+
+          <AkTypography @color='textSecondary'>
+            {{t 'storeknox.info'}}
+          </AkTypography>
+        </AkStack>
+
+        <AkTypography class='mt-1'>
+          Lorem ipsum dolor sit amet consectetur. At suspendisse et orci risus
+          non sed. Mauris dui tincidunt
+        </AkTypography>
+      </div>
+    </:tooltipContent>
+
+    <:default>
+      <AkIcon @iconName='info' local-class='info-icon' />
+    </:default>
+  </AkTooltip>
+</AkStack>

@@ -1,0 +1,55 @@
+<AkAppbar
+  local-class='navbar-root'
+  @justifyContent='space-between'
+  @elevation={{true}}
+  ...attributes
+>
+  <AkStack @alignItems='center' @spacing='1.5'>
+    <AkTypography local-class='navbar-title' @variant='h4'>
+      {{if this.orgIsAnEnterprise (t 'appMonitoring') (t 'storeknoxTitle')}}
+    </AkTypography>
+  </AkStack>
+
+  <AkStack @alignItems='center' @spacing='0.5'>
+    <NotificationsPage::BellIcon />
+
+    <AkButton
+      local-class='navbar-btn'
+      {{on 'click' this.handleProfileBtnClick}}
+    >
+      <:leftIcon>
+        <AkIcon @iconName='account-circle' />
+      </:leftIcon>
+
+      <:default>{{@user.username}}</:default>
+
+      <:rightIcon>
+        <AkIcon @iconName='arrow-drop-down' />
+      </:rightIcon>
+    </AkButton>
+  </AkStack>
+</AkAppbar>
+
+<AkMenu
+  @anchorRef={{this.profileAnchorRef}}
+  @arrow={{true}}
+  @onClose={{this.handleProfileMenuClose}}
+>
+  {{#each this.profileMenuItems as |pmi|}}
+    <AkList::Item
+      @divider={{not pmi.isLast}}
+      @button={{if pmi.onClick true}}
+      @onClick={{pmi.onClick}}
+    >
+      <AkIcon
+        class='mr-1'
+        @color={{or pmi.color 'textPrimary'}}
+        @iconName={{pmi.iconName}}
+      />
+
+      <AkTypography @color={{or pmi.color 'textPrimary'}}>
+        {{pmi.label}}
+      </AkTypography>
+    </AkList::Item>
+  {{/each}}
+</AkMenu>

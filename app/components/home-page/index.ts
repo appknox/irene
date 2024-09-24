@@ -49,7 +49,7 @@ export default class HomePageComponent extends Component {
       this.isStoreknoxEnabled && {
         title: this.isWhitelabel
           ? this.intl.t('appMonitoring')
-          : this.intl.t('storeknox'),
+          : this.intl.t('storeknoxTitle'),
         desc: this.intl.t('storeknoxDesc'),
         link: 'authenticated.storeknox.inventory',
         indicator: 'ak-svg/sm-indicator',

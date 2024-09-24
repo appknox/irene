@@ -1,0 +1,113 @@
+<div local-class='app-inventory-header-root' class='w-full mb-3 pt-2'>
+  <AkBreadcrumbs::Container
+    class='mb-3'
+    data-test-storeknoxAppDetails-breadcrumbContainer
+  >
+    {{#each this.breadcrumbItems as |item|}}
+      <AkBreadcrumbs::Item
+        @route={{item.route}}
+        @models={{item.models}}
+        @linkTitle={{item.linkTitle}}
+        data-test-fileDetails-breadcrumbItem='{{item.linkTitle}}'
+      />
+    {{/each}}
+  </AkBreadcrumbs::Container>
+
+  <AkStack @direction='column' @spacing='2' @width='full'>
+    <AkStack @direction='column' @width='full'>
+      <Storeknox::InventoryDetails::SectionHeader {{style minHeight='44px'}}>
+        <:icon>
+          <AkSvg::InfoIndicator {{style width='16px'}} />
+        </:icon>
+
+        <:default>
+          <AkTypography @fontWeight='medium'>
+            {{t 'storeknox.appNotPartOfAppknox'}}
+          </AkTypography>
+        </:default>
+      </Storeknox::InventoryDetails::SectionHeader>
+
+      <Storeknox::InventoryDetails::SectionInfo
+        @width='full'
+        @alignItems='flex-end'
+      >
+        <AkStack @width='full' @direction='column'>
+          <img
+            local-class='app-info-logo'
+            src={{@skApp.appMetadata.icon_url}}
+            alt={{@skApp.appMetadata.title}}
+            {{style width='50px' height='50px'}}
+          />
+
+          <AkTypography
+            @variant='h5'
+            @fontWeight='bold'
+            @gutterBottom={{true}}
+            class='mt-1'
+          >
+            {{@skApp.appMetadata.title}}
+          </AkTypography>
+
+          <AkTypography @color='neutral' @gutterBottom={{true}}>
+            {{@skApp.appMetadata.package_name}}
+          </AkTypography>
+
+          <AkStack @spacing='1'>
+            <Storeknox::ProductIcon @notClickable={{true}} @product='android'>
+              <AppPlatformIcon
+                @platform={{if this.skApp.isAndroid 'android' 'apple'}}
+              />
+            </Storeknox::ProductIcon>
+
+            <Storeknox::ProductIcon
+              @product={{if this.skApp.isAndroid 'android' 'ios'}}
+              @storeLink={{@skApp.appMetadata.url}}
+            >
+              {{#if this.skApp.isAndroid}}
+                <AkSvg::PlaystoreLogo {{style width='16px'}} />
+              {{else}}
+                <AkSvg::AppstoreLogo {{style width='16px'}} />
+              {{/if}}
+            </Storeknox::ProductIcon>
+
+            <Storeknox::ProductIcon @product='vapt'>
+              <AkSvg::AoxIcon />
+            </Storeknox::ProductIcon>
+
+            {{! TODO: Uncomment when feature is fully ready }}
+            {{! <Storeknox::ProductIcon @product='sm'>
+              <AkSvg::SoxIcon />
+            </Storeknox::ProductIcon> }}
+          </AkStack>
+        </AkStack>
+
+        <AkStack
+          @alignItems='center'
+          @justifyContent='flex-end'
+          @spacing='1'
+          {{style minWidth='300px'}}
+        >
+          {{#if this.activeRouteTag}}
+            <Storeknox::InventoryDetails::AppDetails::ActionsList::Button
+              @disabled={{true}}
+              @needsAction={{false}}
+              @label={{this.activeRouteTag}}
+              @hideRightIcon={{true}}
+              {{style height='32px'}}
+            />
+
+            {{!-- <AkDivider
+              @variant='vertical'
+              @color='dark'
+              {{style height='32px'}}
+            /> --}}
+          {{/if}}
+
+          {{! <AkIconButton @variant='outlined'>
+            <AkIcon @iconName='archive' @color='textPrimary' />
+          </AkIconButton> }}
+        </AkStack>
+      </Storeknox::InventoryDetails::SectionInfo>
+    </AkStack>
+  </AkStack>
+</div>

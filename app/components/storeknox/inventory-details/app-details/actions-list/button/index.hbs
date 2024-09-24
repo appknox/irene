@@ -1,0 +1,25 @@
+<AkButton
+  @variant='outlined'
+  @disabled={{@disabled}}
+  @color={{if @needsAction 'primary'}}
+  local-class='action-button-root {{if @needsAction "needs-action"}}'
+  ...attributes
+>
+  <:leftIcon>
+    <AkIcon @iconName='report' @color='inherit' />
+  </:leftIcon>
+
+  <:default>
+    {{@label}}
+  </:default>
+
+  <:rightIcon>
+    {{#unless @hideRightIcon}}
+      <AkIcon
+        @iconName='arrow-outward'
+        @color='textPrimary'
+        {{style fontSize='18px !important'}}
+      />
+    {{/unless}}
+  </:rightIcon>
+</AkButton>

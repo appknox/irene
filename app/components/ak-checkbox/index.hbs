@@ -6,7 +6,7 @@
     data-test-checkbox
     ...attributes
     data-indeterminate='{{@indeterminate}}'
-    local-class='ak-checkbox'
+    local-class='ak-checkbox {{if @checked "checked"}}'
     @checked={{@checked}}
     disabled={{@disabled}}
     readonly={{@readonly}}

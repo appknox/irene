@@ -302,15 +302,40 @@ Router.map(function () {
 
       // Storeknox routes
       this.route('storeknox', { path: '/dashboard/storeknox' }, function () {
-        this.route('index', { path: '/' });
-
         this.route('discover', function () {
           this.route('result');
           this.route('requested');
           this.route('review');
         });
 
-        this.route('inventory');
+        this.route('inventory', function () {
+          this.route('app-list');
+          this.route('disabled-apps');
+        });
+
+        this.route('index', { path: '/' });
+
+        this.route(
+          'inventory-details',
+          { path: '/inventory-details/:id' },
+          function () {
+            this.route('brand-abuse');
+            this.route('malware-detected');
+
+            this.route(
+              'unscanned-version',
+              {
+                path: '/inventory-details/:id/unscanned-version/:am_app_id',
+              },
+              function () {
+                this.route('history');
+              }
+            );
+          }
+        );
+
+        this.route('review-logs', { path: '/discover/review-logs' });
+        this.route('archived-apps', { path: '/inventory/archived-apps' });
       });
     }
   );

@@ -4,7 +4,7 @@ export interface AkDividerSignature {
   Element: HTMLElement;
   Args: {
     tag?: string;
-    variant?: 'fullWidth' | 'middle';
+    variant?: 'fullWidth' | 'middle' | 'vertical';
     color?: 'light' | 'dark';
   };
   Blocks: { default: [] };

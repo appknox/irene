@@ -2,17 +2,17 @@
   {{#if (eq @data.available 'VAPT')}}
     <Storeknox::Indicator
       @svgComponent='ak-svg/vapt-indicator'
-      @text={{t 'storeknox.vaptIndicatorText' htmlSafe=true}}
+      @indicatorInfo={{t 'storeknox.vaptIndicatorText' htmlSafe=true}}
     />
   {{else}}
     <Storeknox::Indicator
       @svgComponent='ak-svg/sm-indicator'
-      @text={{t 'storeknox.smIndicatorText' htmlSafe=true}}
+      @indicatorInfo={{t 'storeknox.smIndicatorText' htmlSafe=true}}
     />
   {{/if}}
 {{else}}
   <Storeknox::Indicator
     @svgComponent='ak-svg/info-indicator'
-    @text={{t 'storeknox.infoIndicatorWhitelabelText' htmlSafe=true}}
+    @indicatorInfo={{t 'storeknox.infoIndicatorWhitelabelText' htmlSafe=true}}
   />
 {{/if}}

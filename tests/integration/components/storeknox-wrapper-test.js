@@ -87,7 +87,7 @@ module('Integration | Component | storeknox-wrapper', function (hooks) {
     window.localStorage.setItem('sidebarState', 'expanded');
 
     this.setProperties({
-      title: t('storeknox'),
+      title: t('storeknox.storeknox'),
       organization: organization,
       user: store.createRecord('user', this.server.create('user').toJSON()),
     });

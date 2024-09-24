@@ -41,8 +41,9 @@ export default class StoreknoxWrapperComponent extends Component<StoreknoxWrappe
       {
         label: this.intl.t('inventory'),
         icon: 'inventory-2',
-        route: 'authenticated.storeknox.inventory',
-        currentWhen: 'authenticated.storeknox.inventory',
+        route: 'authenticated.storeknox.inventory.app-list',
+        currentWhen:
+          'authenticated.storeknox.inventory authenticated.storeknox.inventory-details',
       },
       {
         label: this.intl.t('discovery'),

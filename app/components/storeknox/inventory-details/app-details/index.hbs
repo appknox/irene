@@ -1,0 +1,322 @@
+<AkStack @direction='column' @spacing='2' @width='full'>
+  <Storeknox::InventoryDetails::AppDetails::ActionsList @app={{this.skApp}} />
+
+  <AkStack @direction='column' @width='full'>
+    <Storeknox::InventoryDetails::SectionHeader {{style height='40px'}}>
+      <:default>
+        <AkTypography @fontWeight='medium'>
+          {{t 'storeknox.appDetails'}}
+        </AkTypography>
+      </:default>
+    </Storeknox::InventoryDetails::SectionHeader>
+
+    <Storeknox::InventoryDetails::SectionInfo
+      @width='full'
+      @spacing='1'
+      @alignItems='center'
+    >
+      <AkStack @direction='column' @width='full' @spacing='1.5'>
+        {{#each this.appDetailsInfo as |info idx|}}
+          {{#if (gt idx 0)}}
+            <AkDivider @color='light' />
+          {{/if}}
+
+          <AkStack @alignItems='center' @width='9/12' @spacing='2.5'>
+            <AkTypography @color='neutral' {{style width='150px'}}>
+              {{info.title}}
+            </AkTypography>
+
+            <AkTypography @fontWeight='medium'>
+              {{or info.value '-'}}
+            </AkTypography>
+          </AkStack>
+        {{/each}}
+      </AkStack>
+    </Storeknox::InventoryDetails::SectionInfo>
+  </AkStack>
+
+  <AkStack @direction='column' @width='full'>
+    <Storeknox::InventoryDetails::SectionHeader {{style height='40px'}}>
+      <:default>
+        <AkTypography @fontWeight='medium'>
+          Latest VA Results
+        </AkTypography>
+      </:default>
+    </Storeknox::InventoryDetails::SectionHeader>
+
+    <Storeknox::InventoryDetails::SectionInfo
+      @width='full'
+      @spacing='1'
+      @alignItems='center'
+    >
+      <AkStack @direction='column' @width='full' @spacing='1.5'>
+        <AkStack @alignItems='center' @width='9/12' @spacing='2.5'>
+          <AkTypography @color='neutral' {{style width='150px'}}>
+            {{t 'summary'}}
+          </AkTypography>
+
+          <Storeknox::InventoryDetails::AppDetails::VaResults />
+        </AkStack>
+
+        <AkDivider @color='light' />
+
+        <AkStack @alignItems='center' @width='9/12' @spacing='2.5'>
+          <AkTypography @color='neutral' {{style width='150px'}}>
+            {{t 'fileID'}}
+          </AkTypography>
+
+          <AkLink @color='primary' @fontWeight='medium' @underline='always'>
+            48390
+          </AkLink>
+        </AkStack>
+
+        {{#each this.vaResultsData as |info|}}
+          <AkDivider @color='light' />
+
+          <AkStack @alignItems='center' @width='9/12' @spacing='2.5'>
+            <AkTypography @color='neutral' {{style width='150px'}}>
+              {{info.title}}
+            </AkTypography>
+
+            <AkTypography @fontWeight='medium'>
+              {{info.value}}
+            </AkTypography>
+          </AkStack>
+        {{/each}}
+      </AkStack>
+    </Storeknox::InventoryDetails::SectionInfo>
+  </AkStack>
+
+  <AkStack @direction='column' @width='full'>
+    <Storeknox::InventoryDetails::SectionHeader {{style height='40px'}}>
+      <:default>
+        <AkTypography @fontWeight='medium'>
+          {{t 'storeknox.latestVAResults'}}
+        </AkTypography>
+      </:default>
+    </Storeknox::InventoryDetails::SectionHeader>
+
+    <Storeknox::InventoryDetails::SectionInfo
+      @width='full'
+      @spacing='1'
+      @alignItems='center'
+    >
+      <AkStack @direction='column' @width='full' @spacing='1.5'>
+        <AkStack @alignItems='center' @width='9/12' @spacing='2.5'>
+          <AkTypography @color='neutral' {{style width='150px'}}>
+            {{t 'summary'}}
+          </AkTypography>
+
+          <AkSkeleton @width='500px' @height='16px' />
+        </AkStack>
+
+        <AkDivider @color='light' />
+
+        <AkStack @alignItems='center' @width='9/12' @spacing='2.5'>
+          <AkTypography @color='neutral' {{style width='150px'}}>
+            {{t 'fileID'}}
+          </AkTypography>
+
+          <AkSkeleton @width='100px' @height='16px' />
+        </AkStack>
+
+        {{#each this.vaResultsData as |info|}}
+          <AkDivider @color='light' />
+
+          <AkStack @alignItems='center' @width='9/12' @spacing='2.5'>
+            <AkTypography @color='neutral' {{style width='150px'}}>
+              {{info.title}}
+            </AkTypography>
+
+            <AkSkeleton @width='100px' @height='16px' />
+          </AkStack>
+        {{/each}}
+      </AkStack>
+    </Storeknox::InventoryDetails::SectionInfo>
+  </AkStack>
+
+  <AkStack @direction='column' @width='full'>
+    <Storeknox::InventoryDetails::SectionHeader {{style height='40px'}}>
+      <:default>
+        <AkTypography @fontWeight='medium'>
+          {{t 'storeknox.appDetails'}}
+        </AkTypography>
+      </:default>
+    </Storeknox::InventoryDetails::SectionHeader>
+
+    <Storeknox::InventoryDetails::SectionInfo
+      @width='full'
+      @spacing='1'
+      @alignItems='center'
+    >
+      <AkStack @direction='column' @width='full' @spacing='1.5'>
+        {{#each this.appDetailsInfo as |info idx|}}
+          {{#if (gt idx 0)}}
+            <AkDivider @color='light' />
+          {{/if}}
+
+          <AkStack @alignItems='center' @width='9/12' @spacing='2.5'>
+            <AkTypography @color='neutral' {{style width='150px'}}>
+              {{info.title}}
+            </AkTypography>
+
+            <AkTypography @fontWeight='medium'>
+              {{or info.value '-'}}
+            </AkTypography>
+          </AkStack>
+        {{/each}}
+      </AkStack>
+    </Storeknox::InventoryDetails::SectionInfo>
+  </AkStack>
+
+  <AkStack @direction='column' @width='full'>
+    <Storeknox::InventoryDetails::SectionHeader {{style height='40px'}}>
+      <:default>
+        <AkTypography @fontWeight='medium'>
+          {{t 'storeknox.latestVAResults'}}
+        </AkTypography>
+      </:default>
+    </Storeknox::InventoryDetails::SectionHeader>
+
+    <Storeknox::InventoryDetails::SectionInfo
+      @direction='column'
+      @alignItems='center'
+      @width='full'
+      @spacing='2.5'
+      class='py-6'
+    >
+      <AkSvg::SoxUploadCompleted />
+
+      <AkTypography @align='center'>
+        Completed...
+        <strong>100%</strong>
+      </AkTypography>
+
+      <AkLoader::Linear
+        @color='success'
+        @variant='determinate'
+        @progress={{100}}
+        {{style maxWidth='270px'}}
+      />
+    </Storeknox::InventoryDetails::SectionInfo>
+  </AkStack>
+
+  <AkStack @direction='column' @width='full'>
+    <Storeknox::InventoryDetails::SectionHeader {{style height='40px'}}>
+      <:default>
+        <AkTypography @fontWeight='medium'>
+          {{t 'storeknox.latestVAResults'}}
+        </AkTypography>
+      </:default>
+    </Storeknox::InventoryDetails::SectionHeader>
+
+    <Storeknox::InventoryDetails::SectionInfo
+      @direction='column'
+      @alignItems='center'
+      @width='full'
+      @spacing='2.5'
+      class='py-6'
+    >
+      <AkSvg::SoxUploadProcessing />
+
+      <AkTypography @align='center'>
+        Processing...
+        <strong>70%</strong>
+      </AkTypography>
+
+      <AkLoader::Linear
+        @color='success'
+        @variant='determinate'
+        @progress={{70}}
+        {{style maxWidth='270px'}}
+      />
+
+    </Storeknox::InventoryDetails::SectionInfo>
+  </AkStack>
+
+  <AkStack @direction='column' @width='full'>
+    <Storeknox::InventoryDetails::SectionHeader {{style height='40px'}}>
+      <:default>
+        <AkTypography @fontWeight='medium'>
+          {{t 'storeknox.latestVAResults'}}
+        </AkTypography>
+      </:default>
+    </Storeknox::InventoryDetails::SectionHeader>
+
+    <Storeknox::InventoryDetails::SectionInfo
+      @direction='column'
+      @alignItems='center'
+      @width='full'
+      @spacing='3'
+      class='py-6'
+    >
+      <AkSvg::SoxInitiateUpload />
+
+      <AkStack
+        @width='full'
+        @direction='column'
+        @alignItems='center'
+        @spacing='1'
+      >
+        <AkTypography @fontWeight='bold' @align='center'>
+          This app has never been uploaded to Appknox
+        </AkTypography>
+
+        <AkTypography @align='center' {{style maxWidth='430px'}}>
+          It is strongly recommended to upload this to Appknox to perform the
+          Vulnerability Assessment.
+        </AkTypography>
+      </AkStack>
+
+      <AkButton @variant='outlined'>
+        <:leftIcon>
+          <AkIcon @iconName='cloud-upload' @variant='filled' />
+        </:leftIcon>
+
+        <:default>
+          {{t 'appMonitoringModule.initiateUpload'}}
+        </:default>
+      </AkButton>
+    </Storeknox::InventoryDetails::SectionInfo>
+  </AkStack>
+
+  <AkStack @direction='column' @width='full'>
+    <Storeknox::InventoryDetails::SectionHeader {{style height='40px'}}>
+      <:default>
+        <AkTypography @fontWeight='medium'>
+          {{t 'storeknox.latestVAResults'}}
+        </AkTypography>
+      </:default>
+    </Storeknox::InventoryDetails::SectionHeader>
+
+    <Storeknox::InventoryDetails::SectionInfo
+      @direction='column'
+      @alignItems='center'
+      @width='full'
+      @spacing='3'
+      class='py-6'
+    >
+      <AkSvg::SoxInsufficientCredits />
+
+      <AkStack
+        @width='full'
+        @direction='column'
+        @alignItems='center'
+        @spacing='1'
+      >
+        <AkTypography @fontWeight='bold' @align='center'>
+          Insufficient Credits
+        </AkTypography>
+
+        <AkTypography @align='center' {{style maxWidth='430px'}}>
+          We tried to upload, due to Insufficient Credits. The upload has been
+          cancelled.
+        </AkTypography>
+      </AkStack>
+
+      <AkButton>
+        Contact Support
+      </AkButton>
+    </Storeknox::InventoryDetails::SectionInfo>
+  </AkStack>
+</AkStack>

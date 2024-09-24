@@ -985,6 +985,17 @@ body {
   --file-details-scan-actions-border-color: var(--neutral-grey-200);
   --file-details-scan-actions-background-color: var(--common-white);
 
+  // variables for file-details/scan-actions/old/manual-scan
+  --file-details-scan-actions-old-manual-scan-textarea-border-color: var(
+    --border-color-1
+  );
+  --file-details-scan-actions-old-manual-scan-textarea-color: var(
+    --text-primary
+  );
+  --file-details-scan-actions-old-manual-scan-textarea-border-radius: var(
+    --border-radius
+  );
+
   // variables for file-details/scan-actions/api-scan
   --file-details-scan-actions-api-scan-border-radius: var(--border-radius);
   --file-details-scan-actions-api-scan-alert-background-color: var(

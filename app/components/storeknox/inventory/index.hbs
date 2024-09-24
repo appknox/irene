@@ -1,0 +1,36 @@
+{{!-- <AkBreadcrumbs::Container class='pt-2'>
+  {{#each this.breadcrumbItems as |item|}}
+    <AkBreadcrumbs::Item @route={{item.route}} @linkTitle={{item.linkTitle}} />
+  {{/each}}
+</AkBreadcrumbs::Container> --}}
+
+<AkStack
+  @direction='column'
+  @spacing='0.5'
+  local-class='header-storeknox-discover-page'
+>
+  <AkTypography @variant='subtitle1'>
+    {{t 'storeknox.inventoryHeader'}}
+  </AkTypography>
+
+  <AkTypography
+    @variant='body2'
+    local-class='description-storeknox-discover-page'
+  >
+    {{t 'storeknox.inventoryDescription'}}
+  </AkTypography>
+</AkStack>
+
+<AkTabs class='mb-3' as |Akt|>
+  {{#each this.tabItems as |item|}}
+    <Akt.tabItem
+      @id={{item.id}}
+      @badgeBackground={{true}}
+      @route={{item.route}}
+      @hasBadge={{item.hasBadge}}
+      @badgeCount={{item.badgeCount}}
+    >
+      {{item.label}}
+    </Akt.tabItem>
+  {{/each}}
+</AkTabs>

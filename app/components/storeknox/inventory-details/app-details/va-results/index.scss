@@ -1,0 +1,26 @@
+.indicator {
+  display: flex;
+  width: 10px;
+  height: 10px;
+  border-radius: 100%;
+
+  &.critical {
+    background-color: var(--severity-critical);
+  }
+
+  &.high {
+    background-color: var(--severity-high);
+  }
+
+  &.medium {
+    background-color: var(--severity-medium);
+  }
+
+  &.low {
+    background-color: var(--severity-low);
+  }
+
+  &.passed {
+    background-color: var(--severity-passed);
+  }
+}
