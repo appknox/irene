@@ -49,6 +49,7 @@ export enum AkSvgComponentInvocationByNames {
   SmIndicator,
   SecurityIndicator,
   ConfigurationBgImg,
+<<<<<<< HEAD
   StoreknoxSearchApps,
   StoreknoxPlaystoreLogo,
   InfoIndicator,
@@ -60,6 +61,10 @@ export enum AkSvgComponentInvocationByNames {
   SoxUploadProcessing,
   SoxUploadCompleted,
   SoxInsufficientCredits,
+=======
+  VpIndicator,
+  SmIndicator,
+>>>>>>> 6de9b12ec (new main product landing page and navs)
 }
 
 export enum AkSvgComponentInvocationByPaths {

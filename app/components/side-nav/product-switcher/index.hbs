@@ -73,7 +73,7 @@
         rel={{if item.openInNewTab 'noopener noreferrer'}}
       >
         <AkStack @direction='row' @alignItems='center' @spacing='1'>
-          {{#let (component item.svg) as |SvgIcon|}}
+          {{#let (component switcherItem.svg) as |SvgIcon|}}
             <SvgIcon
               local-class='switcher-menu-item-icon'
               data-test-side-menu-switcher-modal='{{item.id}}'
