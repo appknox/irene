@@ -1,7 +1,6 @@
 <AkStack
   @alignItems='flex-end'
   @justifyContent='center'
-  @width='full'
   local-class='security-menu'
   data-test-security-nav-menu
 >
@@ -9,6 +8,7 @@
     {{#each this.menuItems as |item|}}
       <Akt.tabItem
         data-test-security-nav-menu-item='{{item.id}}'
+        local-class='security-menu-item'
         @id={{item.id}}
         @route={{item.route}}
         @currentWhen={{item.currentWhen}}

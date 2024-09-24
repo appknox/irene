@@ -7,7 +7,7 @@ import RouterService from '@ember/routing/router-service';
 import IntlService from 'ember-intl/services/intl';
 
 import FileModel from 'irene/models/file';
-import { scrollOrganizationDashboardMainContainerTo } from 'irene/utils/scroll-to-top';
+import { scrollDashboardMainContainerTo } from 'irene/utils/scroll-to-top';
 import { PaginationProviderActionsArgs } from 'irene/components/ak-pagination-provider/index';
 
 import {
@@ -144,7 +144,7 @@ export default class FileCompareTableComponent extends Component<FileCompareTabl
     this.limit = limit;
     this.offset = offset;
 
-    scrollOrganizationDashboardMainContainerTo({ top: 0, left: 0 });
+    scrollDashboardMainContainerTo({ top: 0, left: 0 });
   }
 
   @action onItemPerPageChange(args: PaginationProviderActionsArgs) {
@@ -155,10 +155,7 @@ export default class FileCompareTableComponent extends Component<FileCompareTabl
     this.offset = offset;
 
     // Allows rendering table change before scrolling
-    later(
-      () => scrollOrganizationDashboardMainContainerTo({ top: 0, left: 0 }),
-      150
-    );
+    later(() => scrollDashboardMainContainerTo({ top: 0, left: 0 }), 150);
   }
 }
 

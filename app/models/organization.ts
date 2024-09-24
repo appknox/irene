@@ -13,6 +13,7 @@ interface Features {
   sso: boolean;
   sbom: boolean;
   public_apis: boolean;
+  storeknox: boolean;
 }
 
 export default class OrganizationModel extends Model {

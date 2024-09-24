@@ -1,0 +1,23 @@
+.home-page-container {
+  background-color: var(--home-page-background-color);
+  min-height: 100vh;
+  height: auto;
+  padding: 4em;
+
+  .home-page-content {
+    max-width: 1200px;
+  }
+}
+
+.logo-container {
+  width: 100%;
+  
+  img {
+    max-width: 225px;
+    max-height: 100px;
+  }
+}
+
+.logout-button {
+  background-color: var(--home-page-button-background-color);
+}
