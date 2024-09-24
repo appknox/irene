@@ -90,7 +90,7 @@ module('Integration | Component | top-nav', function (hooks) {
 
     assert.dom('[data-test-topNav]').exists();
 
-    // assert.dom('[data-test-topNav-title]').hasText(this.title);
+    assert.dom('[data-test-topNav-title]').hasText(this.title);
 
     assert.dom('[data-test-bell-icon]').isNotDisabled();
 

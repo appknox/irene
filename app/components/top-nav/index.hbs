@@ -6,14 +6,14 @@
 >
   <AkStack @alignItems='center' @spacing='1.5' @width='full'>
     {{#if @title}}
-      {{!-- <AkTypography
+      <AkTypography
         data-test-topNav-title
         local-class='navbar-title'
         @variant='h4'
         @noWrap={{true}}
       >
         {{@title}}
-      </AkTypography> --}}
+      </AkTypography>
     {{else}}
       <AkStack data-test-topNav-logo local-class='appknox-logo'>
         <AuthAssets />
