@@ -1,5 +1,6 @@
 import { inject as service } from '@ember/service';
 import Component from '@glimmer/component';
+import { tracked } from '@glimmer/tracking';
 import ENV from 'irene/config/environment';
 import styles from './index.scss';
 
@@ -15,6 +16,7 @@ import FreshdeskService from 'irene/services/freshdesk';
 export interface HomePageOrganizationDashboardSideNavSignature {
   Args: {
     isSecurityEnabled?: boolean;
+    isStoreknox?: boolean;
     isCollapsed: boolean;
     toggleSidebar: () => void;
   };
@@ -54,6 +56,8 @@ export default class HomePageOrganizationDashboardSideNavComponent extends Compo
   @service('browser/window') declare window: Window;
   @service declare freshdesk: FreshdeskService;
 
+  @tracked anchorRef: HTMLElement | null = null;
+
   showMarketplace = ENV.enableMarketplace;
   productVersion = ENV.productVersion;
 
@@ -76,7 +80,12 @@ export default class HomePageOrganizationDashboardSideNavComponent extends Compo
       menuItemLink: styles['menu-item-link'],
       menuItemLinkActive: styles['active'],
       menuItemTooltip: styles['menu-item-tooltip'],
+      switcherModalArrow: styles['switcher-modal-arrow'],
     };
+  }
+
+  get orgIsAnEnterprise() {
+    return this.configuration.serverData.enterprise;
   }
 
   get menuItems() {
@@ -155,7 +164,60 @@ export default class HomePageOrganizationDashboardSideNavComponent extends Compo
     ].filter(Boolean) as MenuItem[];
   }
 
-  get lowerMenuItems() {
+  get storeknoxMenuItems() {
+    return [
+      {
+        label: this.intl.t('discovery'),
+        route: 'authenticated.storeknox.discover',
+        currentWhen: 'authenticated.storeknox.discover', // TODO: add  authenticated.storeknox.discover.results authenticated.storeknox.discover.requested authenticated.storeknox.discover.review
+        icon: 'search',
+      },
+      {
+        label: this.intl.t('inventory'),
+        icon: 'inventory-2',
+        route: 'authenticated.storeknox.inventory',
+        currentWhen: 'authenticated.storeknox.inventory',
+      },
+      // {
+      //   label: '?',
+      //   icon: 'location-searching',
+      //   route: 'authenticated.storeknox',
+      //   currentWhen: 'authenticated.home',
+      // },
+      // {
+      //   label: '?',
+      //   icon: 'auto-graph',
+      //   route: 'authenticated.storeknox',
+      //   currentWhen: 'authenticated.home',
+      // },
+      // {
+      //   label: this.intl.t('organization'),
+      //   icon: 'people',
+      //   route: 'authenticated.storeknox',
+      //   currentWhen: 'authenticated.home',
+      // },
+    ].filter(Boolean) as MenuItem[];
+  }
+
+  get renderMenuItems() {
+    return this.args.isStoreknox ? this.storeknoxMenuItems : this.menuItems;
+  }
+
+  get commonLowerMenuItems() {
+    return [
+      {
+        title: this.args.isCollapsed
+          ? this.intl.t('expand')
+          : this.intl.t('collapse'),
+        icon: 'keyboard-tab',
+        onClick: this.args.toggleSidebar,
+        textClass: styles['menu-item-text'],
+        iconClass: this.isSidebarExpanded ? 'rotated-icon' : '',
+      },
+    ] as LowerMenuItem[];
+  }
+
+  get lowerMenuItemsAppknox() {
     return [
       this.enableChatSupport && {
         title: this.intl.t('chatSupport'),
@@ -174,16 +236,18 @@ export default class HomePageOrganizationDashboardSideNavComponent extends Compo
         textClass: styles['menu-item-text'],
         listItemClass: this.enablePendo ? '' : 'no-hover',
       },
-      {
-        title: this.args.isCollapsed
-          ? this.intl.t('expand')
-          : this.intl.t('collapse'),
-        icon: 'keyboard-tab',
-        onClick: this.args.toggleSidebar,
-        textClass: styles['menu-item-text'],
-        iconClass: this.isSidebarExpanded ? 'rotated-icon' : '',
-      },
+      ...this.commonLowerMenuItems,
     ].filter(Boolean) as LowerMenuItem[];
+  }
+
+  get lowerMenuItemsStoreknox() {
+    return [...this.commonLowerMenuItems].filter(Boolean) as LowerMenuItem[];
+  }
+
+  get renderLowerMenuItems() {
+    return this.args.isStoreknox
+      ? this.lowerMenuItemsStoreknox
+      : this.lowerMenuItemsAppknox;
   }
 
   /**
@@ -238,6 +302,14 @@ export default class HomePageOrganizationDashboardSideNavComponent extends Compo
     return `${translated} - ${version}`;
   }
 
+  get switchToRoute() {
+    if (this.args.isStoreknox) {
+      return 'authenticated.dashboard.projects';
+    } else {
+      return 'authenticated.storeknox';
+    }
+  }
+
   @action async showGuide() {
     if (this.enablePendo) {
       try {
@@ -252,6 +324,14 @@ export default class HomePageOrganizationDashboardSideNavComponent extends Compo
         console.error(e);
       }
     }
+  }
+
+  @action onClickSwitcher(event: MouseEvent) {
+    this.anchorRef = event.currentTarget as HTMLElement;
+  }
+
+  @action closeSwitcherModal() {
+    this.anchorRef = null;
   }
 
   @action openChatBox() {

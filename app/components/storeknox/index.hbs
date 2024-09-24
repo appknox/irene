@@ -1,0 +1,24 @@
+<div
+  local-class='storeknox-root {{if
+    this.isSidebarCollapsed
+    "collapsed"
+    "expanded"
+  }}'
+>
+  <Storeknox::TopNav
+    local-class='dashboard-header'
+    @user={{@user}}
+    @logoutAction={{this.invalidateSession}}
+  />
+
+  <HomePage::OrganizationDashboard::SideNav
+    local-class='dashboard-sidenav'
+    @isStoreknox={{true}}
+    @isCollapsed={{this.isSidebarCollapsed}}
+    @toggleSidebar={{this.toggleSidebar}}
+  />
+
+  <main local-class='dashboard-main'>
+    {{yield}}
+  </main>
+</div>

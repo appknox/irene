@@ -17,4 +17,13 @@
       background-color: unset;
     }
   }
+
+  .navbar-title {
+    color: var(--organization-dashboard-header-text-color);
+  }
+
+  .divider {
+    border-left: 1px solid var(--border-color-1);
+    height: 30px;
+  }
 }

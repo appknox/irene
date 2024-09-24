@@ -36,7 +36,7 @@ module(
 
     test('it exists', async function (assert) {
       await render(hbs`
-        <HomePage::SecurityDashboardNav @user={{this.user}} @logoutAction={{this.logoutAction}} />
+        <HomePage::SecurityDashboardNav @user={{this.user}} />
       `);
 
       assert.dom('[data-test-security-appbar]').exists();
@@ -47,14 +47,10 @@ module(
     });
 
     test('test profile btn and logout', async function (assert) {
-      assert.expect(9);
-
-      this.set('logoutAction', () => {
-        assert.ok('Logout action called');
-      });
+      assert.expect(8);
 
       await render(hbs`
-        <HomePage::SecurityDashboardNav @user={{this.user}} @logoutAction={{this.logoutAction}} />
+        <HomePage::SecurityDashboardNav @user={{this.user}} />
       `);
 
       assert.dom('[data-test-security-appbar]').exists();
