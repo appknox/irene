@@ -6,6 +6,12 @@
   data-test-organizationDashboardHeader
 >
   <AkStack @alignItems='center' @spacing='1.5'>
+    <AkTypography local-class='navbar-title' @variant='h4' @noWrap={{true}}>
+      {{t 'vapt'}}
+    </AkTypography>
+
+    <div local-class='divider' />
+
     <AkTypography
       data-test-organizationDashboardHeader-startScanLabel
       @color='inherit'

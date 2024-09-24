@@ -359,6 +359,13 @@ body {
     --primary-main
   );
   --organization-dashboard-side-nav-zIndex: calc(var(--zIndex-appbar) + 1);
+  --organization-dashboard-side-nav-modal-title-background: var(
+    --neutral-grey-100
+  );
+  --organization-dashboard-side-nav-bg-light: var(--background-main);
+  --organization-dashboard-side-nav-modal-item-hover-background: var(
+    --neutral-grey-100
+  );
 
   &.theme-light {
     --organization-dashboard-side-nav-bg-color: var(--background-main);
@@ -1922,4 +1929,11 @@ body {
   --file-details-dynamic-scan-drawer-old-proxy-settings-view-border-color: var(
     --border-color-1
   );
+  
+  // variables for landing-page
+  --landing-page-button-background-color: var(--common-white);
+
+  // variables for landing-page/product-card
+  --landing-page-product-card-border-radius: var(--border-radius);
+  --landing-page-product-card-border-color: var(--border-color-1);
 }

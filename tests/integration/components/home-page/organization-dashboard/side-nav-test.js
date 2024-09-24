@@ -86,6 +86,17 @@ const sections = (enabled) => ({
   publicApis: enabled,
 });
 
+const storeknoxMenuItems = [
+  {
+    label: () => t('discovery'),
+    icon: 'search',
+  },
+  {
+    label: () => t('inventory'),
+    icon: 'inventory-2',
+  },
+].filter(Boolean);
+
 const lowerMenuItems = [
   {
     title: () => t('chatSupport'),
@@ -97,6 +108,13 @@ const lowerMenuItems = [
     enablePendo: false,
     divider: true,
   },
+  {
+    title: () => t('collapse'),
+    icon: 'keyboard-tab',
+  },
+];
+
+const lowerMenuItemsStoreknox = [
   {
     title: () => t('collapse'),
     icon: 'keyboard-tab',
@@ -373,5 +391,134 @@ module(
           .hasClass(`ak-icon-${it.icon}`);
       });
     });
+
+    test('it should render storeknox side nav', async function (assert) {
+      this.setProperties({
+        isCollapsed: false,
+        isStoreknox: true,
+        toggleSidebar: () => {
+          this.set('isCollapsed', !this.isCollapsed);
+        },
+      });
+
+      await render(
+        hbs`<HomePage::OrganizationDashboard::SideNav @isCollapsed={{this.isCollapsed}} @toggleSidebar={{this.toggleSidebar}} @isStoreknox={{this.isStoreknox}}  />`
+      );
+
+      const menuItemEle = findAll('[data-test-side-menu-item]');
+
+      storeknoxMenuItems.forEach((it, index) => {
+        assert
+          .dom('[data-test-side-menu-item-icon]', menuItemEle[index])
+          .hasClass(`ak-icon-${it.icon}`);
+      });
+
+      assert.dom('[data-test-side-lower-menu]').exists();
+
+      assert.dom('[data-test-side-lower-menu-divider]').exists();
+
+      const lowerMenuItemEle = findAll('[data-test-side-lower-menu-item]');
+
+      const collapseButton = find(
+        `[data-test-side-lower-menu-item="${t('collapse')}"]`
+      );
+
+      assert.ok(collapseButton, 'Collapse button should exist');
+
+      await click(collapseButton);
+
+      assert.ok(
+        this.isCollapsed,
+        'Sidebar should be collapsed after clicking the expand button'
+      );
+
+      assert.dom('[data-test-side-lower-menu-item-text]').doesNotExist();
+
+      lowerMenuItemsStoreknox.forEach((it, index) => {
+        assert
+          .dom('[data-test-side-lower-menu-item-icon]', lowerMenuItemEle[index])
+          .hasClass(`ak-icon-${it.icon}`);
+      });
+
+      const expandButton = find(
+        `[data-test-side-lower-menu-item="${t('expand')}"]`
+      );
+
+      await click(expandButton);
+
+      assert.notOk(
+        this.isCollapsed,
+        'Sidebar should be expanded after clicking the expand button'
+      );
+
+      storeknoxMenuItems.forEach((it, index) => {
+        assert
+          .dom('[data-test-side-menu-item-text]', menuItemEle[index])
+          .hasText(it.label());
+      });
+
+      lowerMenuItemsStoreknox.forEach((it, index) => {
+        assert
+          .dom('[data-test-side-lower-menu-item-text]', lowerMenuItemEle[index])
+          .containsText(it.title());
+
+        assert
+          .dom('[data-test-side-lower-menu-item-icon]', lowerMenuItemEle[index])
+          .hasClass(`ak-icon-${it.icon}`);
+      });
+    });
+
+    test.each(
+      'it should render switcher modal',
+      [true, false],
+      async function (assert, storeknox) {
+        this.setProperties({
+          isCollapsed: false,
+          isStoreknox: storeknox,
+          toggleSidebar: () => {
+            this.set('isCollapsed', !this.isCollapsed);
+          },
+        });
+
+        this.organization.selected.features = {
+          app_monitoring: true,
+        };
+
+        await render(
+          hbs`<HomePage::OrganizationDashboard::SideNav @isCollapsed={{this.isCollapsed}} @toggleSidebar={{this.toggleSidebar}} @isStoreknox={{this.isStoreknox}}  />`
+        );
+
+        assert.dom('[data-test-side-menu-switcher]').exists();
+
+        assert.dom('[data-test-side-menu-switcher-modal]').doesNotExist();
+
+        assert.dom('[data-test-side-menu-switcher-icon]').exists();
+
+        assert
+          .dom('[data-test-side-menu-switcher-text]')
+          .exists()
+          .hasText(t('appSwitcher'));
+
+        await click('[data-test-side-menu-switcher]');
+
+        assert.dom('[data-test-side-menu-switcher-modal]').exists();
+
+        if (storeknox) {
+          assert
+            .dom('[data-test-side-menu-switcher-modal-switch-to]')
+            .exists()
+            .hasText(t('appknox'));
+
+          assert.dom('[data-test-side-menu-switcher-modal-vp-svg]').exists();
+        } else {
+          assert
+            .dom('[data-test-side-menu-switcher-modal-switch-to]')
+            .exists()
+            .hasText(t('storeknox'));
+
+          assert.dom('[data-test-side-menu-switcher-modal-sm-svg]').exists();
+        }
+      }
+    );
   }
 );

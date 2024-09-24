@@ -1,4 +1,5 @@
 <aside
+  data-test-side-nav
   local-class='side-menu-root {{if @isCollapsed "collapsed" "expanded"}}'
   ...attributes
 >
@@ -12,9 +13,58 @@
     </LinkTo>
   </div>
 
+  {{#if this.showAppMonitoringDashboard}}
+    <AkDivider @color='dark' class='mt-4' />
+
+    <div
+      data-test-side-menu-switcher
+      local-class='switcher {{if
+        this.isSidebarExpanded
+        "expanded"
+        "collapsed"
+      }}'
+      role='button'
+      {{on 'click' this.onClickSwitcher}}
+    >
+      <AkIcon
+        data-test-side-menu-switcher-icon
+        local-class='menu-item-icon'
+        @iconName='apps'
+      />
+
+      {{#if this.isSidebarExpanded}}
+        <AkStack
+          class='ml-2'
+          @width='full'
+          @direction='row'
+          @justifyContent='space-between'
+          @alignItems='center'
+        >
+          <AkTypography
+            local-class='menu-item-text'
+            data-test-side-menu-switcher-text
+          >
+            {{t 'appSwitcher'}}
+          </AkTypography>
+
+          <AkIcon local-class='menu-item-icon' @iconName='chevron-right' />
+        </AkStack>
+      {{/if}}
+    </div>
+
+    <AkDivider @color='dark' class='mb-4' />
+  {{/if}}
+
   <div local-class='scroll-container'>
-    <AkList local-class='side-menu-list' as |akl|>
-      {{#each this.menuItems as |it|}}
+    <AkList
+      local-class='side-menu-list {{if
+        this.showAppMonitoringDashboard
+        ""
+        "no-switcher"
+      }}'
+      as |akl|
+    >
+      {{#each this.renderMenuItems as |it|}}
         {{#if it.component}}
           <akl.listItem
             aria-label='{{it.label}} side menu item'
@@ -91,7 +141,16 @@
   </div>
 
   <AkList data-test-side-lower-menu local-class='lower-menu' as |akl|>
-    {{#each this.lowerMenuItems as |lmi|}}
+    {{#if @isStoreknox}}
+      <AkDivider
+        data-test-side-lower-menu-divider
+        local-class='divider'
+        @color='dark'
+        @tag='li'
+      />
+    {{/if}}
+
+    {{#each this.renderLowerMenuItems as |lmi|}}
       <akl.listItem
         @noGutters={{true}}
         class={{this.classes.menuItemLink}}
@@ -144,3 +203,43 @@
     {{/each}}
   </AkList>
 </aside>
+
+<AkPopover
+  data-test-side-menu-switcher-modal
+  @anchorRef={{this.anchorRef}}
+  @arrow={{true}}
+  @arrowClass={{this.classes.switcherModalArrow}}
+  @closeHandler={{this.closeSwitcherModal}}
+  @hasBackdrop={{true}}
+  @clickOutsideToClose={{true}}
+  @placement='right-start'
+>
+  <div local-class='switcher-popover-container'>
+    <AkTypography local-class='modal-title-text' @fontWeight='bold'>
+      {{t 'switchTo'}}
+    </AkTypography>
+
+    <AkLink
+      data-test-switcher-popover-item-link
+      local-class='sm-modal-item'
+      @underline='none'
+      @route={{this.switchToRoute}}
+    >
+      <AkStack @direction='row' @alignItems='center' @spacing='1' class='p-2'>
+        {{#if @isStoreknox}}
+          <AkSvg::VpIndicator data-test-side-menu-switcher-modal-vp-svg />
+
+          <AkTypography data-test-side-menu-switcher-modal-switch-to>
+            {{if this.orgIsAnEnterprise (t 'vapt') (t 'appknox')}}
+          </AkTypography>
+        {{else}}
+          <AkSvg::SmIndicator data-test-side-menu-switcher-modal-sm-svg />
+
+          <AkTypography data-test-side-menu-switcher-modal-switch-to>
+            {{if this.orgIsAnEnterprise (t 'appMonitoring') (t 'storeknox')}}
+          </AkTypography>
+        {{/if}}
+      </AkStack>
+    </AkLink>
+  </div>
+</AkPopover>

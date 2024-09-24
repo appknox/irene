@@ -6,6 +6,6 @@ export default class IndexRoute extends Route {
   @service declare router: RouterService;
 
   beforeModel() {
-    this.router.transitionTo('/projects');
+    this.router.transitionTo('authenticated.home');
   }
 }
