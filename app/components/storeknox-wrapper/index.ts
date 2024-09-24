@@ -41,15 +41,25 @@ export default class StoreknoxWrapperComponent extends Component<StoreknoxWrappe
       {
         label: this.intl.t('discovery'),
         icon: 'search',
+<<<<<<< HEAD
         route: 'authenticated.storeknox.discover.result',
         currentWhen: 'authenticated.storeknox.discover.result',
+=======
+        route: 'authenticated.storeknox.discover',
+        currentWhen: 'authenticated.storeknox.discover',
+>>>>>>> 6de9b12ec (new main product landing page and navs)
       },
       {
         label: this.intl.t('inventory'),
         icon: 'inventory-2',
+<<<<<<< HEAD
         route: 'authenticated.storeknox.inventory.app-list',
         currentWhen:
           'authenticated.storeknox.inventory authenticated.storeknox.inventory-details',
+=======
+        route: 'authenticated.storeknox.inventory',
+        currentWhen: 'authenticated.storeknox.inventory',
+>>>>>>> 6de9b12ec (new main product landing page and navs)
       },
     ] as MenuItem[];
   }

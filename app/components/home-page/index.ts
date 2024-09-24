@@ -11,7 +11,11 @@ interface productCardDetails {
   title: string;
   desc: string;
   link: string;
+<<<<<<< HEAD
   indicator: 'ak-svg/sm-indicator' | 'ak-svg/vapt-indicator';
+=======
+  indicator: 'ak-svg/sm-indicator' | 'ak-svg/vp-indicator';
+>>>>>>> 6de9b12ec (new main product landing page and navs)
   coverImage: 'ak-svg/storeknox-bg-img' | 'ak-svg/appknox-bg-img';
 }
 
@@ -39,15 +43,25 @@ export default class HomePageComponent extends Component {
           : this.intl.t('appknox'),
         desc: this.intl.t('appknoxDesc'),
         link: 'authenticated.dashboard.projects',
+<<<<<<< HEAD
         indicator: 'ak-svg/vapt-indicator',
+=======
+        indicator: 'ak-svg/vp-indicator',
+>>>>>>> 6de9b12ec (new main product landing page and navs)
         coverImage: 'ak-svg/appknox-bg-img',
       },
       this.isStoreknoxEnabled && {
         title: this.orgIsAnEnterprise
           ? this.intl.t('appMonitoring')
+<<<<<<< HEAD
           : this.intl.t('storeknoxTitle'),
         desc: this.intl.t('storeknoxDesc'),
         link: 'authenticated.storeknox.discover.result',
+=======
+          : this.intl.t('storeknox'),
+        desc: this.intl.t('storeknoxDesc'),
+        link: 'authenticated.storeknox.discover',
+>>>>>>> 6de9b12ec (new main product landing page and navs)
         indicator: 'ak-svg/sm-indicator',
         coverImage: 'ak-svg/storeknox-bg-img',
       },

@@ -122,14 +122,23 @@ module('Acceptance | side nav test', function (hooks) {
     'it should switch between VAPT and Store Monitoring',
     [
       {
+<<<<<<< HEAD
         expectedUrl: '/dashboard/storeknox/discover/result',
+=======
+        expectedUrl: '/dashboard/storeknox/discover',
+>>>>>>> 6de9b12ec (new main product landing page and navs)
         visitUrl: '/dashboard/projects',
         icon: 'sm-svg',
       },
       {
         expectedUrl: '/dashboard/projects',
+<<<<<<< HEAD
         visitUrl: '/dashboard/storeknox/discover/result',
         icon: 'vapt-svg',
+=======
+        visitUrl: '/dashboard/storeknox/discover',
+        icon: 'vp-svg',
+>>>>>>> 6de9b12ec (new main product landing page and navs)
       },
     ],
 
