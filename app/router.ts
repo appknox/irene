@@ -302,18 +302,14 @@ Router.map(function () {
 
       // Storeknox routes
       this.route('storeknox', { path: '/dashboard/storeknox' }, function () {
-<<<<<<< HEAD
-=======
         this.route('index', { path: '/' });
 
->>>>>>> 6de9b12ec (new main product landing page and navs)
         this.route('discover', function () {
           this.route('result');
           this.route('requested');
           this.route('review');
         });
 
-<<<<<<< HEAD
         this.route('inventory', function () {
           this.route('app-list');
           this.route('disabled-apps');
@@ -342,9 +338,6 @@ Router.map(function () {
 
         this.route('review-logs', { path: '/discover/review-logs' });
         this.route('archived-apps', { path: '/inventory/archived-apps' });
-=======
-        this.route('inventory');
->>>>>>> 6de9b12ec (new main product landing page and navs)
       });
     }
   );

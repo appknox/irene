@@ -2,7 +2,6 @@
   width: 100%;
   display: flex;
   align-items: center;
-  cursor: pointer;
 
   &.collapsed {
     justify-content: center;
@@ -13,6 +12,7 @@
   display: flex;
   width: 100%;
   padding: 1em;
+  cursor: pointer;
 
   &.collapsed {
     justify-content: center;
@@ -49,14 +49,11 @@
     background-color: var(--side-nav-product-switcher-modal-title-background);
     border-bottom: var(--side-nav-product-switcher-border);
   }
-<<<<<<< HEAD
 
   .switcher-menu-item-icon {
     height: 24px;
     width: 24px;
   }
-=======
->>>>>>> 6de9b12ec (new main product landing page and navs)
 }
   
 .switcher-popover-arrow {

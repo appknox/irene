@@ -1572,6 +1572,8 @@
     "noActionsNeededMsg": "No unscanned versions, brand abuse and duplications",
     "storeknoxTitle": "Storeknox"
   },
+  "storeknoxTitle": "Storeknox",
+  "storeknoxDesc": "Monitor your mobile apps on Play Store and App Store",
   "storeLowercase": "store",
   "submit": "Submit",
   "submitUrl": "Submit URL",

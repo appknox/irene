@@ -81,8 +81,8 @@ export default class SideNavProductSwitcherComponent extends Component<SideNavPr
         svg: 'ak-svg/sm-indicator',
         label: this.isWhitelabel
           ? this.intl.t('appMonitoring')
-          : this.intl.t('storeknox'),
-        route: 'authenticated.storeknox.inventory',
+          : this.intl.t('storeknoxTitle'),
+        route: 'authenticated.storeknox.inventory.app-list',
         key: 'storeknox',
       },
       this.isSecurityEnabled && {

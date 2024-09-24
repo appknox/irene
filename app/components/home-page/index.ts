@@ -51,7 +51,7 @@ export default class HomePageComponent extends Component {
           ? this.intl.t('appMonitoring')
           : this.intl.t('storeknoxTitle'),
         desc: this.intl.t('storeknoxDesc'),
-        link: 'authenticated.storeknox.inventory',
+        link: 'authenticated.storeknox.inventory.app-list',
         indicator: 'ak-svg/sm-indicator',
         coverImage: 'ak-svg/storeknox-bg-img',
       },

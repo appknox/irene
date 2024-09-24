@@ -473,12 +473,16 @@ body {
   --side-nav-zIndex: calc(var(--zIndex-appbar) + 1);
 
   //variables for side-nav/product-switcher
-  --side-nav-product-switcher-modal-item-hover-background: var(--neutral-grey-100);
+  --side-nav-product-switcher-modal-item-hover-background: var(
+    --neutral-grey-100
+  );
   --side-nav-product-switcher-modal-title-background: var(--neutral-grey-100);
   --side-nav-product-switcher-border: 1px solid var(--border-color-1);
   --side-nav-product-switcher-bg-main: var(--background-main);
   --side-nav-product-switcher-box-shadow: var(--box-shadow-light);
-  --side-nav-product-switcher-item-hover-background: var(--hover-light-background);
+  --side-nav-product-switcher-item-hover-background: var(
+    --hover-light-background
+  );
 
 
   // variables for organization-namespace/namespace-value

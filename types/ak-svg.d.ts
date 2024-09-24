@@ -60,15 +60,6 @@ export enum AkSvgComponentInvocationByNames {
   SoxUploadProcessing,
   SoxUploadCompleted,
   SoxInsufficientCredits,
-  VpIndicator,
-  SmIndicator,
-  StoreknoxSearchApps,
-  StoreknoxPlaystoreLogo,
-  SmIndicator,
-  VaptIndicator,
-  InfoIndicator,
-  NoPendingItems,
-  WelcomeToStoreknox,
 }
 
 export enum AkSvgComponentInvocationByPaths {

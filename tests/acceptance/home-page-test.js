@@ -125,7 +125,7 @@ module('Acceptance | home page', function (hooks) {
 
     assert.strictEqual(
       currentURL(),
-      '/dashboard/storeknox/inventory',
+      '/dashboard/storeknox/inventory/app-list',
       'Redirected to storeknox'
     );
   });
