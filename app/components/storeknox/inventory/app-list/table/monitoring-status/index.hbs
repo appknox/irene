@@ -1,0 +1,26 @@
+<AkTooltip @placement='bottom' @arrow={{true}} @color='light'>
+  <:tooltipContent>
+    <div local-class='tooltip-content'>
+      <AkStack @spacing='0.5' @alignItems='center'>
+        <AkTypography @color='textSecondary'>
+          REASON
+        </AkTypography>
+      </AkStack>
+
+      <AkTypography class='mt-1'>
+        <strong>{{@data.reason}}</strong>
+        has been detected.
+      </AkTypography>
+    </div>
+  </:tooltipContent>
+
+  <:default>
+    <AkStack @alignItems='center' @spacing='0.5'>
+      <AkIcon @iconName='info' @color='error' @size='small' />
+
+      <AkTypography>
+        Needs Action
+      </AkTypography>
+    </AkStack>
+  </:default>
+</AkTooltip>
