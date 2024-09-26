@@ -1,0 +1,36 @@
+<AkStack>
+  <div local-class='search-input-container-width'>
+    <AkTextField
+      @placeholder={{t 'storeknox.searchQuery'}}
+      @value={{this.searchQuery}}
+    >
+      <:rightAdornment>
+        {{#if this.discoverClicked}}
+          <AkStack
+            @alignItems='center'
+            local-class='close-search-text'
+            {{on 'click' this.clearSearch}}
+          >
+            <AkIcon @iconName='close' />
+
+            <AkTypography @underline='always'>
+              {{t 'clear'}}
+            </AkTypography>
+          </AkStack>
+        {{else}}
+          <AkIcon @iconName='search' @color='textSecondary' />
+        {{/if}}
+      </:rightAdornment>
+    </AkTextField>
+  </div>
+
+  <AkButton @disabled={{not this.searchQuery}} {{on 'click' this.discoverApp}}>
+    {{t 'storeknox.discoverHeader'}}
+  </AkButton>
+</AkStack>
+
+{{#if this.discoverClicked}}
+  <Storeknox::Discover::Results::Table />
+{{else}}
+  <Storeknox::Discover::Results::Empty />
+{{/if}}

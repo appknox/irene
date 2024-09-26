@@ -1,0 +1,24 @@
+<AkStack @alignItems='center' @spacing='0.5'>
+  <AkTypography>
+    {{@data.foundBy}}
+  </AkTypography>
+
+  {{#if @data.mailId}}
+    <AkTooltip @placement='bottom' @arrow={{true}} @color='light'>
+      <:tooltipContent>
+        <AkStack @spacing='0.5'>
+          <AkIcon @iconName='person' />
+
+          <AkTypography @color='inherit'>
+            {{@data.mailId}}
+          </AkTypography>
+        </AkStack>
+      </:tooltipContent>
+
+      <:default>
+        <AkIcon @iconName='info' local-class='info-icon' />
+      </:default>
+    </AkTooltip>
+
+  {{/if}}
+</AkStack>

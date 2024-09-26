@@ -1,0 +1,32 @@
+<AkStack @alignItems='center' @spacing='1.5'>
+  <AppLogo @src={{@data.iconUrl}} @role='none' />
+
+  <AkStack
+    @direction='column'
+    @spacing='0.5'
+    {{style maxWidth='calc(100% - 40px)'}}
+  >
+
+    <AkTypography
+      @color='secondary'
+      @noWrap={{true}}
+      @variant='h6'
+      @underline='always'
+      title={{@data.packageName}}
+      class='pr-4'
+      {{style width='100%'}}
+    >
+      {{@data.name}}
+    </AkTypography>
+
+    <AkTypography
+      @color='neutral'
+      @noWrap={{true}}
+      title={{@data.name}}
+      class='pr-4'
+      {{style width='100%'}}
+    >
+      {{@data.packageName}}
+    </AkTypography>
+  </AkStack>
+</AkStack>
