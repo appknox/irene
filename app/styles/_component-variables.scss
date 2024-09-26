@@ -1919,4 +1919,12 @@ body {
   --dynamic-scan-action-expiry-container-background-color: var(
     --neutral-grey-100
   );
+
+  // variables for page-not-found
+  --page-not-found-container-background-color: var(--background-light);
+  --page-not-found-card-background-color: var(--background-main);
+  --page-not-found-card-border-color: var(--border-color-1);
+  --page-not-found-card-border-radius: var(--border-radius);
+  --page-not-found-card-box-shadow: var(--box-shadow-2);
+  --page-not-found-border-color: var(--border-color-1);
 }

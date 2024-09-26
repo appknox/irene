@@ -1,0 +1,46 @@
+<AkStack
+  local-class='page-not-found-container'
+  @width='full'
+  @alignItems='center'
+  @justifyContent='center'
+>
+  <AkStack
+    local-class='page-not-found-card'
+    @direction='column'
+    @alignItems='center'
+    @justifyContent='center'
+    @spacing='6'
+  >
+    <AkStack
+      @alignItems='center'
+      @justifyContent='center'
+      @width='full'
+      local-class='logo-container'
+    >
+      <AuthAssets />
+    </AkStack>
+
+    <AkSvg::NoResult />
+
+    <AkStack
+      @direction='column'
+      @alignItems='center'
+      @justifyContent='center'
+      @spacing='2'
+    >
+      <AkTypography @variant='h5'>
+        {{t 'pageNotFound'}}
+      </AkTypography>
+
+      <AkLink @route='authenticated.index' @replace={{true}}>
+        <AkButton>
+          <:leftIcon>
+            <AkIcon @iconName='home' />
+          </:leftIcon>
+
+          <:default>{{t 'gotoHome'}}</:default>
+        </AkButton>
+      </AkLink>
+    </AkStack>
+  </AkStack>
+</AkStack>

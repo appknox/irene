@@ -1,13 +1,3 @@
-{{page-title "Not Found"}}
+{{page-title 'Not Found'}}
 
-<div class="error-page">
-  <h1>404</h1>
-  <h2>{{t "pageNotFound"}}</h2>
-  <div>
-    <LinkTo @route="authenticated.index" class="button is-primary">
-      <AkIcon @iconName="home" @size="small" />
-      &nbsp;
-      {{t "gotoHome"}}
-    </LinkTo>
-  </div>
-</div>
+<PageNotFound />
