@@ -191,7 +191,6 @@
   "changedMandatoryMFA": "Changed MFA setting",
   "checkEmail": "Please check your email for further instructions.",
   "checking": "Checking",
-  "complianceInsights": "Compliance Insights",
   "chatSupport": "Chat Support",
   "chooseAFile": "Choose a file to compare",
   "chipStatus": {
@@ -218,6 +217,7 @@
   "clients": "Clients",
   "close": "Close",
   "closeModal": "Exit Full Screen",
+  "codemagic": "Codemagic",
   "collaboratorRemoved": "Removed Collaborator",
   "collaborators": "Collaborators",
   "collapse": "Collapse",
@@ -225,6 +225,7 @@
   "comment": "Comment",
   "comments": "Comments",
   "company": "Company",
+  "complianceInsights": "Compliance Insights",
   "companyName": "Company Name",
   "compare": "Compare",
   "completed": "Completed",
