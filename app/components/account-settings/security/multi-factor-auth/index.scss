@@ -6,6 +6,14 @@
       --account-settings-security-mfa-alert-success-background
     );
   }
+
+  a {
+    color: var(--account-settings-security-mfa-primary-color);
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
 }
 
 .alert-warn {

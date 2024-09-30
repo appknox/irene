@@ -6,13 +6,13 @@ export function dsManualDevicePref(params: [number | string]) {
 
   switch (devicePreference) {
     case ENUMS.DS_MANUAL_DEVICE_SELECTION.ANY_DEVICE:
-      return 'anyDevice';
+      return 'anyAvailableDeviceWithAnyOS';
 
     case ENUMS.DS_MANUAL_DEVICE_SELECTION.SPECIFIC_DEVICE:
       return 'specificDevice';
 
     default:
-      return 'anyDevice';
+      return 'anyAvailableDeviceWithAnyOS';
   }
 }
 

@@ -1,7 +1,11 @@
 /* eslint-disable ember/no-computed-properties-in-native-classes */
+import Inflector from 'ember-inflector';
 import { computed } from '@ember/object';
 import { isEmpty } from '@ember/utils';
 import Model, { attr } from '@ember-data/model';
+
+const inflector = Inflector.inflector;
+inflector.irregular('api-scan-options', 'api-scan-options');
 
 export default class ApiScanOptionsModel extends Model {
   @attr('string')

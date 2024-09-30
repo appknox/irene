@@ -1,0 +1,86 @@
+<AkStack @direction='column' @alignItems='center' @spacing='1'>
+  {{#if @dynamicScan.isReadyOrRunning}}
+    {{#if @isAutomatedScan}}
+      <AkButton
+        local-class='dynamic-scan-btn'
+        @variant='outlined'
+        @color='neutral'
+        @disabled={{not @file.isActive}}
+        {{on 'click' (perform this.dynamicShutdown)}}
+        data-test-dynamicScan-cancelBtn
+      >
+        <:leftIcon>
+          {{#if this.dynamicShutdown.isRunning}}
+            <AkLoader @color='secondary' @size={{13}} />
+          {{else}}
+            <AkIcon @iconName='close' />
+          {{/if}}
+        </:leftIcon>
+
+        <:default>{{t 'cancelScan'}}</:default>
+      </AkButton>
+    {{else}}
+      <AkButton
+        data-test-dynamicScan-stopBtn
+        local-class='dynamic-scan-btn'
+        {{on 'click' (perform this.dynamicShutdown)}}
+        @disabled={{not @file.isActive}}
+      >
+        <:leftIcon>
+          {{#if this.dynamicShutdown.isRunning}}
+            <AkLoader @size={{13}} />
+          {{else}}
+            <AkIcon @iconName='stop' />
+          {{/if}}
+        </:leftIcon>
+
+        <:default>{{t 'stop'}}</:default>
+      </AkButton>
+    {{/if}}
+
+  {{else if (or @file.isDynamicDone @dynamicScan.isDynamicStatusError)}}
+    <AkButton
+      local-class='dynamic-scan-btn'
+      data-test-dynamicScan-restartBtn
+      data-test-cy='dynamicScan-restartBtn'
+      {{on 'click' this.openDynamicScanDrawer}}
+      @disabled={{not @file.isActive}}
+    >
+      <:leftIcon>
+        <AkIcon @iconName='refresh' />
+      </:leftIcon>
+
+      <:default>{{@dynamicScanText}}</:default>
+    </AkButton>
+  {{else}}
+    <AkButton
+      local-class='dynamic-scan-btn'
+      data-test-dynamicScan-startBtn
+      {{on 'click' this.openDynamicScanDrawer}}
+      @disabled={{not @file.isActive}}
+    >
+      <:leftIcon>
+        <AkIcon @iconName='play-arrow' />
+      </:leftIcon>
+
+      <:default>{{@dynamicScanText}}</:default>
+    </AkButton>
+  {{/if}}
+</AkStack>
+
+{{#if this.showDynamicScanDrawer}}
+  <ProjectPreferences::Provider
+    @profileId={{this.profileId}}
+    @platform={{this.projectPlatform}}
+    @project={{@file.project.content}}
+    as |dpContext|
+  >
+    <FileDetails::DynamicScan::Action::Drawer
+      @onClose={{this.closeDynamicScanDrawer}}
+      @pollDynamicStatus={{this.pollDynamicStatus}}
+      @file={{@file}}
+      @dpContext={{dpContext}}
+      @isAutomatedScan={{@isAutomatedScan}}
+    />
+  </ProjectPreferences::Provider>
+{{/if}}

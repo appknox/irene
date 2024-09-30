@@ -11,6 +11,16 @@
   }
 }
 
+.marketplace-modal-content-container {
+  a {
+    color: var(--marketplace-plugin-card-primary-color);
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+}
+
 .marketplace-modal-logo {
   height: auto;
   width: 6em;

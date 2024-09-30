@@ -1,0 +1,13 @@
+.filter-input {
+  border-color: var(
+    --file-details-dynamic-scan-drawer-device-list-filter-border-color
+  ) !important;
+
+  padding: 0px 0.5714em !important;
+
+  &:hover {
+    border-color: var(
+      --file-details-dynamic-scan-drawer-device-list-filter-hover-border-color
+    ) !important;
+  }
+}

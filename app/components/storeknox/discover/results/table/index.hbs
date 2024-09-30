@@ -48,7 +48,7 @@
   @offset={{this.offset}}
   as |pgc|
 >
-  <AkTable as |tb|>
+  <AkTable local-class='results-table' as |tb|>
     <tb.head @columns={{this.columns}} as |h|>
       <h.row as |r|>
         <r.cell as |column|>
@@ -86,5 +86,6 @@
     @tableItemLabel={{t 'projects'}}
     @perPageTranslation={{t 'recordPerPage'}}
     @totalItems={{pgc.totalItems}}
+    class='mt-0'
   />
 </AkPaginationProvider>

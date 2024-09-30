@@ -116,7 +116,7 @@ module(
 
       let selectListItems = findAll('.ember-power-select-option');
 
-      const anyDeviceLabel = `t:anyDevice:()`;
+      const anyDeviceLabel = `t:anyAvailableDeviceWithAnyOS:()`;
 
       // Select "Any Device"
       await selectChoose(`.${classes.trigger}`, anyDeviceLabel);

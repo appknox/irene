@@ -9,7 +9,7 @@
   @offset={{this.offset}}
   as |pgc|
 >
-  <AkTable as |tb|>
+  <AkTable local-class='review-table' as |tb|>
     <tb.head @columns={{@columns}} as |h|>
       <h.row as |r|>
         <r.cell as |column|>
@@ -47,5 +47,6 @@
     @tableItemLabel={{t 'projects'}}
     @perPageTranslation={{t 'recordPerPage'}}
     @totalItems={{pgc.totalItems}}
+    class='mt-0'
   />
 </AkPaginationProvider>

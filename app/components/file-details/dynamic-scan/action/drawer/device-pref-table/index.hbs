@@ -1,0 +1,136 @@
+<AkStack
+  @direction='column'
+  @spacing='2'
+  @width='full'
+  data-test-fileDetails-dynamicScanDrawer-manualDast-devicePrefTable-root
+>
+  <AkStack @alignItems='center' @justifyContent='space-between' @width='full'>
+    <AkTypography
+      @fontWeight='bold'
+      data-test-fileDetails-dynamicScanDrawer-manualDast-devicePrefTableHeaderTitle
+    >
+      {{t 'modalCard.dynamicScan.selectSpecificDevice'}}
+    </AkTypography>
+
+    <AkSelect
+      @selected={{this.selectedDevicePrefFilterKey}}
+      @options={{this.devicePreferenceTypes}}
+      @onChange={{this.setDevicePrefFilter}}
+      @verticalPosition='auto'
+      @triggerClass={{this.triggerClass}}
+      @selectedItemComponent='file-details/dynamic-scan/action/drawer/device-pref-table/filter-selected-item'
+      @extra={{hash
+        selectedOptionLabel=(this.getSelectedFilterOptionLabel
+          this.selectedDevicePrefFilterKey
+        )
+        iconName='filter-list'
+      }}
+      {{style width='200px'}}
+      data-test-fileDetails-dynamicScanDrawer-manualDast-devicePrefTable-filterSelect
+      as |dPrefFilter|
+    >
+      {{this.getSelectedFilterOptionLabel dPrefFilter}}
+    </AkSelect>
+  </AkStack>
+
+  <AkPaginationProvider
+    @results={{this.currentDevicesInView}}
+    @onItemPerPageChange={{this.onItemPerPageChange}}
+    @totalItems={{this.totalItemsCount}}
+    @nextAction={{this.goToPage}}
+    @prevAction={{this.goToPage}}
+    @itemPerPageOptions={{array 5 10 20}}
+    @defaultLimit={{this.limit}}
+    @offset={{this.offset}}
+    as |pgc|
+  >
+
+    <AkTable
+      data-test-fileDetails-dynamicScanDrawer-devicePrefTable
+      @dense={{true}}
+      as |t|
+    >
+      <t.head
+        data-test-fileDetails-dynamicScanDrawer-devicePrefTable-thead
+        @columns={{this.columns}}
+      />
+
+      {{#unless this.showEmptyAvailableDeviceList}}
+        {{#if @isFetchingManualDevices}}
+          <t.body @rows={{this.loadingMockData}} as |b|>
+            <b.row as |r|>
+              <r.cell>
+                <AkSkeleton
+                  @width={{r.columnValue.component.width}}
+                  @height='20px'
+                />
+              </r.cell>
+            </b.row>
+          </t.body>
+
+        {{else}}
+          <t.body @rows={{pgc.currentPageResults}} as |b|>
+            <b.row
+              data-test-fileDetails-dynamicScanDrawer-devicePrefTable-row
+              as |r|
+            >
+              <r.cell
+                data-test-fileDetails-dynamicScanDrawer-devicePrefTable-cell
+                as |value|
+              >
+                {{#if r.columnValue.component}}
+                  {{#let (component r.columnValue.component) as |Component|}}
+                    <Component
+                      @deviceProps={{r.rowValue}}
+                      @selectedDeviceId={{@dpContext.dsManualDevicePreference.ds_manual_device_identifier}}
+                      @onDeviceClick={{this.setSelectedDevice}}
+                      @dpContext={{@dpContext}}
+                    />
+                  {{/let}}
+                {{else}}
+                  <AkTypography title={{value}} @noWrap={{true}}>
+                    {{value}}
+                  </AkTypography>
+                {{/if}}
+              </r.cell>
+            </b.row>
+          </t.body>
+        {{/if}}
+      {{/unless}}
+    </AkTable>
+
+    {{#if this.showEmptyAvailableDeviceList}}
+      <AkStack
+        @width='full'
+        @direction='column'
+        @alignItems='center'
+        @spacing='2'
+        class='py-3'
+      >
+        <AkSvg::NoApiUrlFilter />
+
+        <AkTypography>
+          {{t 'modalCard.dynamicScan.emptyFilteredDeviceList'}}
+        </AkTypography>
+      </AkStack>
+    {{/if}}
+
+    {{#unless this.showEmptyAvailableDeviceList}}
+      <AkPagination
+        @disableNext={{pgc.disableNext}}
+        @nextAction={{pgc.nextAction}}
+        @disablePrev={{pgc.disablePrev}}
+        @prevAction={{pgc.prevAction}}
+        @endItemIdx={{pgc.endItemIdx}}
+        @startItemIdx={{pgc.startItemIdx}}
+        @itemPerPageOptions={{pgc.itemPerPageOptions}}
+        @onItemPerPageChange={{pgc.onItemPerPageChange}}
+        @selectedOption={{pgc.selectedOption}}
+        @tableItemLabel={{t 'modalCard.dynamicScan.devices'}}
+        @perPageTranslation={{t 'recordPerPage'}}
+        @totalItems={{pgc.totalItems}}
+        @variant='compact'
+      />
+    {{/unless}}
+  </AkPaginationProvider>
+</AkStack>

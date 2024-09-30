@@ -1,4 +1,4 @@
-<AkBreadcrumbs::Container>
+<AkBreadcrumbs::Container class='pt-2'>
   {{#each this.breadcrumbItems as |item|}}
     <AkBreadcrumbs::Item
       @route={{item.route}}
@@ -29,5 +29,5 @@
 <Storeknox::Discover::PendingReview::Table
   @columns={{this.columns}}
   @data={{this.reviewLogApps}}
-  @router='authenticated.storeknox.review-logs'
+  @router='authenticated.storeknox.discover.review-logs'
 />

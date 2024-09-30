@@ -1,0 +1,87 @@
+<AkStack
+  data-test-vncViewer-root
+  @justifyContent='center'
+  @alignItems='center'
+  @direction='column'
+  @spacing='3'
+>
+  {{#if @dynamicScan.isDynamicStatusInProgress}}
+    <AkStack @justifyContent='center'>
+      <FileDetails::DynamicScan::Action::Expiry @file={{@file}} />
+    </AkStack>
+  {{/if}}
+
+  {{#if @file.isDynamicStatusStarting}}
+    <AkTypography>
+      <strong>{{t 'note'}} -</strong>
+      {{t 'dynamicScanText'}}
+    </AkTypography>
+  {{/if}}
+
+  {{#if (and this.isAutomated @dynamicScan.isDynamicStatusInProgress)}}
+    <AkStack @spacing='0.5' local-class='automated-scan-trigger-info'>
+      <AkIcon @color='primary' @variant='outlined' @iconName='description' />
+
+      {{#if this.startedBy}}
+        <AkTypography>
+          {{t 'scanStartedBy'}}
+          <strong>{{this.startedBy}}</strong>
+        </AkTypography>
+      {{else}}
+        <AkTypography data-test-vncViewer-scanTriggeredAutomaticallyText>
+          {{t 'scanTriggeredAutomatically'}}
+        </AkTypography>
+      {{/if}}
+    </AkStack>
+  {{/if}}
+
+  <div data-test-vncViewer-device class='marvel-device {{this.deviceType}}'>
+    {{#if this.isTablet}}
+      <div data-test-vncViewer-deviceTopBar class='top-bar' />
+      <div data-test-vncViewer-deviceSleep class='sleep' />
+      <div data-test-vncViewer-deviceVolume class='volume' />
+    {{/if}}
+
+    <div data-test-vncViewer-deviceCamera class='camera' />
+
+    {{#if this.isIOSDevice}}
+      {{#if this.isTablet}}
+        <div data-test-vncViewer-deviceSpeaker class='speaker' />
+      {{/if}}
+    {{/if}}
+
+    <div
+      data-test-vncViewer-deviceScreen
+      class={{if this.screenRequired 'noscreen' 'screen'}}
+    >
+      {{#if (and @dynamicScan.isReadyOrRunning this.deviceType)}}
+        {{#if this.isAutomated}}
+          <AkStack
+            data-test-vncViewer-automatedNote
+            local-class='automated-scan-vnc-note'
+          >
+            <AkTypography @color='inherit'>
+              <strong>{{t 'note'}}</strong>
+              -
+              {{t 'automatedScanVncNote'}}
+            </AkTypography>
+          </AkStack>
+
+        {{else}}
+          <NovncRfb
+            @deviceFarmURL={{this.deviceFarmURL}}
+            @deviceFarmPassword={{this.deviceFarmPassword}}
+          />
+        {{/if}}
+      {{/if}}
+    </div>
+
+    {{#if this.isIOSDevice}}
+      <div data-test-vncViewer-deviceHome class='home' />
+
+      {{#if this.isTablet}}
+        <div data-test-vncViewer-deviceBottomBar class='bottom-bar' />
+      {{/if}}
+    {{/if}}
+  </div>
+</AkStack>

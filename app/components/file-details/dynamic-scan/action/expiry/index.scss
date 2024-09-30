@@ -1,0 +1,20 @@
+.extend-time-btn {
+    border-radius: 50%;
+    background-color: var(--dynamic-scan-action-expiry-extend-btn-background) !important;
+    padding: 0 !important;
+
+    :global(.ak-icon) {
+        color: var(--dynamic-scan-action-expiry-extend-btn-icon-color) !important;
+    }
+}
+
+.dynamic-scan-expiry-container {
+    background-color: var(--dynamic-scan-action-expiry-container-background-color);
+    padding: 0.3em 1em;
+    border-radius: 200px;
+}
+
+.info-btn {
+    border-radius: 50%;
+    margin-right: 0.5em;
+}

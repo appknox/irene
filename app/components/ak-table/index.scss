@@ -1,4 +1,6 @@
 .ak-table-root table {
+  width: 100%;
+
   th,
   td {
     font-family: var(--font-family);
@@ -131,16 +133,15 @@
 .ak-table-variant-full-bordered table {
   tbody tr td {
     border: 1px solid;
+    border-right-width: 1px;
+    border-right-style: solid;
+    border-bottom-width: 1px !important;
+    border-bottom-style: solid;
 
     &:first-child {
       border-left-width: 1px;
       border-left-style: solid;
     }
-
-    border-right-width: 1px;
-    border-right-style: solid;
-    border-bottom-width: 1px !important;
-    border-bottom-style: solid;
   }
 }
 

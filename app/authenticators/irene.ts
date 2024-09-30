@@ -4,7 +4,7 @@ import BaseAuthenticator, { LoginSuccessDataProps, processData } from './base';
 class IreneAuthenticator extends BaseAuthenticator {
   async authenticate(identification: string, password: string, otp: string) {
     const data = {
-      username: identification,
+      username: identification.toLowerCase(), // Ensure username is in lowercase since the server does case-insensitive comparison
       password,
       otp,
     };

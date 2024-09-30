@@ -33,20 +33,22 @@
     @headerTitle={{t 'integrateAppknoxToCICDPipeline'}}
     @onClose={{this.closeInstructionsModal}}
   >
-    <div local-class='marketplace-modal-logo'>
-      <img src={{@data.logo}} alt='ci-logo' />
-    </div>
+    <div local-class='marketplace-modal-content-container'>
+      <div local-class='marketplace-modal-logo'>
+        <img src={{@data.logo}} alt='ci-logo' />
+      </div>
 
-    <AkTypography
-      @align='center'
-      @fontWeight='bold'
-      local-class='marketplace-modal-title'
-    >
-      {{@data.title}}
-    </AkTypography>
+      <AkTypography
+        @align='center'
+        @fontWeight='bold'
+        local-class='marketplace-modal-title'
+      >
+        {{@data.title}}
+      </AkTypography>
 
-    <div>
-      {{@data.instructions}}
+      <div>
+        {{@data.instructions}}
+      </div>
     </div>
   </AkModal>
 {{/if}}

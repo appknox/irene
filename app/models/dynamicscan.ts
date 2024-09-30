@@ -124,13 +124,13 @@ export default class DynamicscanModel extends Model {
     });
   }
 
-  //   setDynamicScanModeManual() {
-  //     this.setDynamicScanMode(ENUMS.DYNAMIC_MODE.MANUAL);
-  //   }
+  setDynamicScanModeManual() {
+    this.setDynamicScanMode(ENUMS.DYNAMIC_MODE.MANUAL);
+  }
 
-  //   setDynamicScanModeAuto() {
-  //     this.setDynamicScanMode(ENUMS.DYNAMIC_MODE.AUTOMATED);
-  //   }
+  setDynamicScanModeAuto() {
+    this.setDynamicScanMode(ENUMS.DYNAMIC_MODE.AUTOMATED);
+  }
 
   setBootingStatus() {
     this.setDynamicStatus(ENUMS.DYNAMIC_STATUS.BOOTING);
@@ -152,9 +152,9 @@ export default class DynamicscanModel extends Model {
     this.setDynamicStatus(ENUMS.DYNAMIC_STATUS.READY);
   }
 
-  //   setRunning() {
-  //     this.setDynamicStatus(ENUMS.DYNAMIC_STATUS.RUNNING);
-  //   }
+  setRunning() {
+    this.setDynamicStatus(ENUMS.DYNAMIC_STATUS.RUNNING);
+  }
 
   get isReady() {
     const status = this.status;
@@ -207,18 +207,18 @@ export default class DynamicscanModel extends Model {
     );
   }
 
-  //   get isReadyOrRunning() {
-  //     const status = this.status;
-  //     return [ENUMS.DYNAMIC_STATUS.READY, ENUMS.DYNAMIC_STATUS.RUNNING].includes(
-  //       status
-  //     );
-  //   }
+  get isReadyOrRunning() {
+    const status = this.status;
+    return [ENUMS.DYNAMIC_STATUS.READY, ENUMS.DYNAMIC_STATUS.RUNNING].includes(
+      status
+    );
+  }
 
   get isDynamicStatusStarting() {
     const status = this.status;
     return ![
       ENUMS.DYNAMIC_STATUS.READY,
-      //   ENUMS.DYNAMIC_STATUS.RUNNING,
+      ENUMS.DYNAMIC_STATUS.RUNNING,
       ENUMS.DYNAMIC_STATUS.NONE,
       ENUMS.DYNAMIC_STATUS.SHUTTING_DOWN,
     ].includes(status);
@@ -234,7 +234,7 @@ export default class DynamicscanModel extends Model {
       ENUMS.DYNAMIC_STATUS.LAUNCHING,
       ENUMS.DYNAMIC_STATUS.HOOKING,
       ENUMS.DYNAMIC_STATUS.READY,
-      //   ENUMS.DYNAMIC_STATUS.RUNNING,
+      ENUMS.DYNAMIC_STATUS.RUNNING,
       ENUMS.DYNAMIC_STATUS.SHUTTING_DOWN,
     ].includes(status);
   }
@@ -255,10 +255,10 @@ export default class DynamicscanModel extends Model {
     return status !== ENUMS.DYNAMIC_STATUS.INQUEUE;
   }
 
-  //   get isRunning() {
-  //     const status = this.status;
-  //     return status === ENUMS.DYNAMIC_STATUS.RUNNING;
-  //   }
+  get isRunning() {
+    const status = this.status;
+    return status === ENUMS.DYNAMIC_STATUS.RUNNING;
+  }
 
   get statusText() {
     const tDeviceInQueue = this.intl.t('deviceInQueue');
@@ -269,7 +269,7 @@ export default class DynamicscanModel extends Model {
     const tDeviceHooking = this.intl.t('deviceHooking');
     const tDeviceShuttingDown = this.intl.t('deviceShuttingDown');
     const tDeviceCompleted = this.intl.t('deviceCompleted');
-    // const tDeviceRunning = this.intl.t('inProgress');
+    const tDeviceRunning = this.intl.t('inProgress');
 
     switch (this.status) {
       case ENUMS.DYNAMIC_STATUS.INQUEUE:
@@ -288,8 +288,8 @@ export default class DynamicscanModel extends Model {
         return tDeviceShuttingDown;
       case ENUMS.DYNAMIC_STATUS.COMPLETED:
         return tDeviceCompleted;
-      //   case ENUMS.DYNAMIC_STATUS.RUNNING:
-      //     return tDeviceRunning;
+      case ENUMS.DYNAMIC_STATUS.RUNNING:
+        return tDeviceRunning;
       default:
         return 'Unknown Status';
     }

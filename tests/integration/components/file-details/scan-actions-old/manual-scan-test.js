@@ -289,7 +289,7 @@ module(
 
       assert
         .dom('[data-test-manualScanBasicInfo-minOSVersionLabel]', accordions[0])
-        .hasText('t:modalCard.manual.minOSVersion:()');
+        .hasText('t:minOSVersion:()');
 
       assert
         .dom('[data-test-manualScanBasicInfo-minOSVersionInput]', accordions[0])

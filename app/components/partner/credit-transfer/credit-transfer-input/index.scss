@@ -7,7 +7,7 @@
 }
 
 .invalid-credits {
-  color: $red;
+  color: #ef4836;
   font-size: 0.8rem;
   grid-column-start: 1;
   grid-column-end: 3;
@@ -24,7 +24,7 @@
   text-overflow: ellipsis;
 
   &.empty-title {
-    color: $secondary;
+    color: #424651;
     font-style: italic;
   }
 }

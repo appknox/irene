@@ -547,6 +547,10 @@
   @extend .mi-event-note;
 }
 
+.ak-icon-open-in-full {
+  @extend .mi-open-in-full;
+}
+
 .ak-icon-bug-report {
   @extend .mi-bug-report;
 }
@@ -577,8 +581,4 @@
 
 .ak-icon-add-box {
   @extend .mi-add-box;
-}
-
-.ak-icon-do-not-disturb-on {
-  @extend .mi-do-not-disturb-on;
 }

@@ -11,24 +11,24 @@
 
   <form {{style width='100%' maxWidth='650px'}} class='my-3'>
     <AkStack @width='full' @alignItems='center' @spacing='1.5'>
-      <AkTextField
-        id='personal-token-input'
-        placeholder={{t 'name'}}
-        @value={{this.tokenName}}
-      />
-
-      <div>
-        <AkButton
-          @loading={{this.generateToken.isRunning}}
-          {{on 'click' (perform this.generateToken)}}
-        >
-          <:leftIcon>
-            <AkIcon @iconName='add' />
-          </:leftIcon>
-
-          <:default>{{t 'personalAccessTokenCreate'}}</:default>
-        </AkButton>
+      <div {{style flex='1'}}>
+        <AkTextField
+          id='personal-token-input'
+          placeholder={{t 'name'}}
+          @value={{this.tokenName}}
+        />
       </div>
+
+      <AkButton
+        @loading={{this.generateToken.isRunning}}
+        {{on 'click' (perform this.generateToken)}}
+      >
+        <:leftIcon>
+          <AkIcon @iconName='add' />
+        </:leftIcon>
+
+        <:default>{{t 'personalAccessTokenCreate'}}</:default>
+      </AkButton>
     </AkStack>
   </form>
 

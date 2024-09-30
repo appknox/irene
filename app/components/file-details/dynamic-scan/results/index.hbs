@@ -1,0 +1,32 @@
+<AkStack @direction='column' @width='full' class='my-1'>
+  <AkTabs local-class='dast-results-tabs' as |Akt|>
+    {{#each this.tabItems as |item|}}
+      <Akt.tabItem
+        @id={{item.id}}
+        @route={{item.route}}
+        @currentWhen={{item.currentWhen}}
+        data-test-fileDetails-dynamicScan-results-tabs='{{item.id}}-tab'
+      >
+        {{item.label}}
+      </Akt.tabItem>
+    {{/each}}
+  </AkTabs>
+
+  <AkStack
+    data-test-fileDetails-dynamicScan-info
+    local-class='dast-results-info'
+    @width='full'
+  >
+    <AkTypography @color='textSecondary'>
+      {{t 'dastResultsInfo'}}
+    </AkTypography>
+  </AkStack>
+
+  <FileDetails::VulnerabilityAnalysis::Table
+    @file={{@file}}
+    @filterVulnerabilityType={{this.filterBy}}
+    @columns={{this.columns}}
+    @sorts={{this.sorts}}
+    @updateAnalysesSorts={{this.updateSorts}}
+  />
+</AkStack>

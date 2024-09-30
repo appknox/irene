@@ -1,4 +1,4 @@
-import { click, render } from '@ember/test-helpers';
+import { render } from '@ember/test-helpers';
 import { hbs } from 'ember-cli-htmlbars';
 import { setupMirage } from 'ember-cli-mirage/test-support';
 import { setupIntl } from 'ember-intl/test-support';
@@ -47,8 +47,15 @@ module('Integration | Component | vnc-viewer', function (hooks) {
       id: profile.id,
     });
 
+    const dynamicscan = this.server.create('dynamicscan', {
+      id: profile.id,
+      status: ENUMS.DYNAMIC_STATUS.NONE,
+      expires_on: null,
+    });
+
     this.setProperties({
       file: store.push(store.normalize('file', file.toJSON())),
+      dynamicScan: dynamicscan,
       devicePreference,
       activeProfileId: profile.id,
       store,
@@ -113,18 +120,8 @@ module('Integration | Component | vnc-viewer', function (hooks) {
       });
 
       await render(hbs`
-        <VncViewerOld @file={{this.file}} @profileId={{this.activeProfileId}} />
+        <VncViewer @file={{this.file}} @profileId={{this.activeProfileId}} @dynamicScan={{this.dynamicScan}} />
       `);
-
-      assert
-        .dom('[data-test-vncViewer-root]')
-        .doesNotHaveClass(/vnc-viewer-fullscreen/);
-
-      assert.dom('[data-test-vncViewer-backdrop]').doesNotExist();
-
-      assert
-        .dom('[data-test-vncViewer-fullscreenContainer]')
-        .doesNotHaveClass(/vnc-viewer-fullscreen-container/);
 
       deviceClass.split(' ').forEach((val) => {
         assert.dom('[data-test-vncViewer-device]').hasClass(val);
@@ -160,94 +157,6 @@ module('Integration | Component | vnc-viewer', function (hooks) {
           }
         });
       }
-
-      assert.dom('[data-test-dynamicScan-startBtn]').hasText('t:completed:()');
-
-      assert.dom('[data-test-dynamicScan-restartBtn]').isNotDisabled();
-
-      assert.dom('[data-test-vncViewer-fullscreenToggleBtn]').doesNotExist();
     }
   );
-
-  test('test vnc viewer with status ready', async function (assert) {
-    this.server.create('dynamicscan-old', { expires_on: null });
-
-    this.file.dynamicStatus = ENUMS.DYNAMIC_STATUS.READY;
-
-    // make sure file is active
-    this.file.isActive = true;
-
-    this.server.get('/v2/projects/:id', (schema, req) => {
-      return {
-        ...schema.projects.find(`${req.params.id}`)?.toJSON(),
-        platform: ENUMS.PLATFORM.ANDROID,
-      };
-    });
-
-    this.server.get('/profiles/:id/device_preference', (schema, req) => {
-      return schema.devicePreferences.find(`${req.params.id}`)?.toJSON();
-    });
-
-    this.server.get('/dynamicscan/:id', (schema, req) => {
-      return schema.dynamicscanOlds.find(`${req.params.id}`)?.toJSON();
-    });
-
-    await render(hbs`
-      <VncViewerOld @file={{this.file}} @profileId={{this.activeProfileId}} />
-    `);
-
-    assert
-      .dom('[data-test-vncViewer-root]')
-      .doesNotHaveClass(/vnc-viewer-fullscreen/);
-
-    assert.dom('[data-test-vncViewer-backdrop]').doesNotExist();
-
-    assert
-      .dom('[data-test-vncViewer-fullscreenContainer]')
-      .doesNotHaveClass(/vnc-viewer-fullscreen-container/);
-
-    assert.dom('[data-test-NovncRfb-canvasContainer]').exists();
-
-    assert.dom('[data-test-dynamicScan-stopBtn]').hasText('t:stop:()');
-    assert.dom('[data-test-dynamicScan-restartBtn]').doesNotExist();
-
-    assert
-      .dom('[data-test-vncViewer-fullscreenToggleBtn]')
-      .isNotDisabled()
-      .hasText('t:popOutModal:()');
-
-    // go fullscreen
-    await click('[data-test-vncViewer-fullscreenToggleBtn]');
-
-    assert.dom('[data-test-vncViewer-root]').hasClass(/vnc-viewer-fullscreen/);
-
-    assert.dom('[data-test-vncViewer-backdrop]').exists();
-
-    assert
-      .dom('[data-test-vncViewer-fullscreenContainer]')
-      .hasClass(/vnc-viewer-fullscreen-container/);
-
-    assert
-      .dom('[data-test-vncViewer-fullscreenToggleBtn]')
-      .isNotDisabled()
-      .hasText('t:closeModal:()');
-
-    // exit fullscreen
-    await click('[data-test-vncViewer-fullscreenToggleBtn]');
-
-    assert
-      .dom('[data-test-vncViewer-root]')
-      .doesNotHaveClass(/vnc-viewer-fullscreen/);
-
-    assert.dom('[data-test-vncViewer-backdrop]').doesNotExist();
-
-    assert
-      .dom('[data-test-vncViewer-fullscreenContainer]')
-      .doesNotHaveClass(/vnc-viewer-fullscreen-container/);
-
-    assert
-      .dom('[data-test-vncViewer-fullscreenToggleBtn]')
-      .isNotDisabled()
-      .hasText('t:popOutModal:()');
-  });
 });

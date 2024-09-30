@@ -18,9 +18,9 @@
   border-top-right-radius: 0.3rem;
   background-color: var(--bg-gray-darken-020);
   &.active {
-    background-color: var(--white);
-    color: var(--primary);
+    background-color: var(--background-main);
+    color: var(--primary-main);
     border-color: var(--bg-gray-darken-080) var(--bg-gray-darken-080)
-      var(--white) var(--bg-gray-darken-080);
+      var(--common-white) var(--bg-gray-darken-080);
   }
 }

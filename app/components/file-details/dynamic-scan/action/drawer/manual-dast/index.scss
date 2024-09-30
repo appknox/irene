@@ -1,0 +1,19 @@
+.scan-modal-body-wrapper {
+  height: 100%;
+  border: 1px solid var(--file-details-dynamic-scan-drawer-border-color);
+}
+
+.scan-modal-section {
+  padding: 1.2857em 1.7142em 1.2857em 1.5em;
+}
+
+.api-url-filter-help-icon {
+  color: var(--file-details-dynamic-scan-drawer-proxy-settings-neutral-color);
+}
+
+.tooltip-content-container {
+  width: 280px;
+  padding: 0.5em;
+  box-sizing: border-box;
+  white-space: normal;
+}
