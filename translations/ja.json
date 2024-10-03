@@ -191,7 +191,6 @@
   "changedMandatoryMFA": "Changed MFA setting",
   "checkEmail": "Please check your email for further instructions.",
   "checking": "Checking",
-  "complianceInsights": "Compliance Insights",
   "chatSupport": "Chat Support",
   "chooseAFile": "比較するファイルを選択してください",
   "chipStatus": {
@@ -217,6 +216,7 @@
   "client": "Client",
   "clients": "Clients",
   "close": "Close",
+  "codemagic": "Codemagic",
   "closeModal": "全画面を終了",
   "collaboratorRemoved": "Removed Collaborator",
   "collaborators": "Collaborators",
@@ -225,6 +225,7 @@
   "comment": "Comment",
   "comments": "Comments",
   "company": "Company",
+  "complianceInsights": "Compliance Insights",
   "companyName": "会社名",
   "compare": "比較",
   "completed": "完了しました",
