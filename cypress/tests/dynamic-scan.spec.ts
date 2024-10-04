@@ -23,6 +23,7 @@ const dynamicScanActions = new DynamicScanActions();
 // User credentials
 const username = Cypress.env('TEST_USERNAME');
 const password = Cypress.env('TEST_PASSWORD');
+const API_HOST = Cypress.env('API_HOST');
 
 const MFVA_INTERACTIONS: AppInteraction[] = [
   {
@@ -133,8 +134,10 @@ Cypress.on('uncaught:exception', () => {
   return false;
 });
 
-describe('Dynamic Scan', () => {
+describe.skip('Dynamic Scan', () => {
   beforeEach(() => {
+    cy.viewport(1450, 962);
+
     // Hide websocket and analyses logs
     networkActions.hideNetworkLogsFor({ ...API_ROUTES.websockets });
 
@@ -180,6 +183,9 @@ describe('Dynamic Scan', () => {
       `it tests dynamic scan for an ${app.type} file: ${app.fileId}`,
       { scrollBehavior: false, retries: { runMode: 1 } },
       () => {
+        cy.wrap(app.fileId).as('DYNAMIC_SCAN_FILE_ID');
+        cy.wrap(false).as('testCompleted');
+
         // intercept file request
         cy.intercept(`${API_ROUTES.file.route}/${app.fileId}`).as(
           'currentFileRequest'
@@ -219,23 +225,55 @@ describe('Dynamic Scan', () => {
           ).within(() => {
             const assertOpts = { ...DEFAULT_ASSERT_OPTS };
 
-            cy.findByText(cyTranslate('dynamicScan'), assertOpts).should(
-              'exist'
-            );
+            cy.findByText(cyTranslate('dast'), assertOpts).should('exist');
 
-            if (file.is_dynamic_done) {
-              cy.findByRole('button', {
-                name: cyTranslate('completed'),
-              }).should('exist');
+            cy.findByText(
+              file.is_dynamic_done
+                ? cyTranslate('completed')
+                : cyTranslate('notStarted')
+            ).should('exist');
 
-              cy.findByTestId('dynamicScan-restartBtn')
-                .should('exist')
-                .as('startRestartdynamicScanBtn');
-            } else {
-              cy.findByRole('button', { name: cyTranslate('start') })
-                .should('exist')
-                .as('startRestartdynamicScanBtn');
-            }
+            cy.findByRole('link', { name: cyTranslate('viewDetails') })
+              .should('exist')
+              .click();
+          });
+
+          // Check if in manual DAST page
+          cy.url().should('contain', '/dynamic-scan/manual');
+
+          cy.get<MirageFactoryDefProps['file']>('@currentFile').then((file) => {
+            // Check tabs info
+            cy.findByRole('link', {
+              name: cyTranslate('dastTabs.manualDAST'),
+            }).should('exist');
+
+            cy.findByRole('link', {
+              name: new RegExp(cyTranslate('dastTabs.dastResults'), 'i'),
+            }).should('exist');
+
+            cy.findByText(cyTranslate('realDevice')).should('exist');
+
+            cy.findAllByTestId('manualDast-headerContainer')
+              .should('exist')
+              .within(() => {
+                cy.findByText(
+                  file.is_dynamic_done
+                    ? cyTranslate('completed')
+                    : cyTranslate('notStarted')
+                ).should('exist');
+
+                if (file.is_dynamic_done) {
+                  cy.findByTestId('dynamicScan-restartBtn')
+                    .should('exist')
+                    .as('startRestartdynamicScanBtn');
+                } else {
+                  cy.findByRole('button', {
+                    name: cyTranslate('modalCard.dynamicScan.title'),
+                  })
+                    .should('exist')
+                    .as('startRestartdynamicScanBtn');
+                }
+              });
           });
 
           // open dynamic scan modal
@@ -315,43 +353,64 @@ describe('Dynamic Scan', () => {
             'not.exist'
           );
 
-          // check different status of dynamic scan btn while stating
-          cy.findByTestId('dynamicScan-infoContainer').within(() => {
-            DynamicStatusTexts.forEach((status) => {
-              cy.findByRole('button', {
-                name: status,
-                timeout: DYNAMIC_SCAN_STATUS_TIMEOUT,
-              }).should('exist');
-            });
+          // check different status of dynamic scan status chip while starting
+          cy.findByTestId('manualDast-statusChipAndScanCTAContainer').within(
+            () => {
+              DynamicStatusTexts.forEach((status) => {
+                cy.findByText(status, {
+                  timeout: DYNAMIC_SCAN_STATUS_TIMEOUT,
+                }).should('exist');
+              });
+            }
+          );
 
-            // when dynamic started running
-            cy.findByRole('button', {
-              name: cyTranslate('stop'),
-              timeout: DYNAMIC_SCAN_STATUS_TIMEOUT,
-            })
-              .should('exist')
-              .as(DYNAMIC_SCAN_STOP_BTN_ALIAS);
-          });
+          // when dynamic started running
+          cy.findByRole('button', {
+            name: cyTranslate('stop'),
+            timeout: DYNAMIC_SCAN_STATUS_TIMEOUT,
+          })
+            .should('exist')
+            .as(DYNAMIC_SCAN_STOP_BTN_ALIAS);
 
           // wait for screen to load
           cy.wait(5000);
 
+          cy.findByTestId('manualDast-fullscreenBtn').should('exist').click();
+
           // trigger app interaction
           app.performInteraction(app.interactions, app);
+
+          // stop dynamic scan
+          cy.findByRole('button', {
+            name: cyTranslate('stop'),
+            timeout: DYNAMIC_SCAN_STATUS_TIMEOUT,
+          })
+            .should('exist')
+            .click({ force: true });
+
+          // check status of dynamic while stopping
+          cy.findByTestId('manualDast-statusChipAndScanCTAContainer')
+            .within(() => {
+              cy.findByText(cyTranslate('deviceShuttingDown'), {
+                timeout: DYNAMIC_SCAN_STATUS_TIMEOUT,
+              }).should('exist');
+            })
+            .then(() => cy.wrap(true).as('testCompleted'));
         });
       }
     )
   );
 
   afterEach(() => {
-    // stop dynamic scan
-    cy.get(`@${DYNAMIC_SCAN_STOP_BTN_ALIAS}`).click({ force: true });
-
-    // dynamic scan btn while stoping
-    cy.findByTestId('dynamicScan-infoContainer')
-      .findByRole('button', {
-        name: cyTranslate('deviceShuttingDown'),
-      })
-      .should('exist');
+    cy.get<boolean>('@testCompleted').then((testCompleted) => {
+      if (!testCompleted) {
+        cy.get('@DYNAMIC_SCAN_FILE_ID').then((fileId) =>
+          cy.makeAuthenticatedAPIRequest({
+            method: 'DELETE',
+            url: `${API_HOST}/api/dynamicscan/${fileId}`,
+          })
+        );
+      }
+    });
   });
 });

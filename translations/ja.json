@@ -73,7 +73,7 @@
   "apiScanResults": "API Scan Results",
   "apiScanResultsDesc": "Here are the data from this particular API scan.",
   "apiScanInProgress": "API Scan in progress",
-  "apiScanProgressStatusHelper": "{status, select, completed {} other {Once the scan is completed.}} View the results in <strong>API Results Tab</strong>",
+  "apiScanProgressStatusHelper": "{status, select, completed {} other {Once the scan is completed.}} View the results in <strong>API Scan Results Tab</strong>",
   "apiURLFilter": "API URLフィルタ",
   "app": "アプリ",
   "appCenterPipeline": "App Center Build",
@@ -176,8 +176,7 @@
   "capturedApiEmptyTitle": "No APIs captured during the last dynamic scan. Please try again",
   "capturedApiSaveSuccessMsg": "Successfully saved the captured api status",
   "capturedApiTitle": "Captured APIs",
-  "capturedApiListTitle": "List of API's",
-  "capturedApiListDesc": "Here are the view all the API's captured in the last dynamic scan.",
+  "capturedApiListTitle": "APIs from last Dynamic Scan",
   "capturedApiSelectedTitle": "API's Selected",
   "capturedApiSelectedDesc": "We will run API scan for web vulnerabilities on the selected list of requests captured during the dynamic scan.",
   "capturedApiSelectedTotalCount": "({selectedCount}/{totalCount} have been selected)",
@@ -850,7 +849,7 @@
       "scanInProgressDescription": "The file is currently being assessed by our security researchers.",
       "requestSubmittedDescription": "Manual Scan for this file has been requested.",
       "resultsDescription": "Here are the data from this particular Manual Scan.",
-      "viewResultsInTab": "View the results in <strong>Manual Results Tab</strong>"
+      "viewResultsInTab": "View the results in <strong>Manual Scan Results Tab</strong>"
     },
     "rescan": {
       "title": "Restart Static Scan",

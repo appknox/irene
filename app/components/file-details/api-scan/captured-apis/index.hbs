@@ -12,16 +12,6 @@
   </AkStack>
 {{else}}
   <div local-class='captured-api-list-container'>
-    <AkTypography
-      data-test-fileDetails-apiScan-capturedApi-desc
-      @color='textSecondary'
-      class='p-2'
-    >
-      {{t 'capturedApiListDesc'}}
-    </AkTypography>
-
-    <AkDivider @color='dark' />
-
     <AkPaginationProvider
       @results={{this.capturedApiList}}
       @onItemPerPageChange={{this.handleItemPerPageChange}}

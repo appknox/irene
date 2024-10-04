@@ -202,10 +202,6 @@ module('Acceptance | file-details/api-scan', function (hooks) {
       .hasText(t('apiScan'));
 
     assert
-      .dom('[data-test-fileDetails-apiScan-capturedApi-desc]')
-      .hasText(t('capturedApiListDesc'));
-
-    assert
       .dom('[data-test-fileDetails-apiScan-capturedApi-title]')
       .hasText(t('capturedApiListTitle'));
 
@@ -295,10 +291,6 @@ module('Acceptance | file-details/api-scan', function (hooks) {
     assert
       .dom('[data-test-fileDetails-apiScan-tabs="api-scan-tab"]')
       .hasText(t('apiScan'));
-
-    assert
-      .dom('[data-test-fileDetails-apiScan-capturedApi-desc]')
-      .hasText(t('capturedApiListDesc'));
 
     assert
       .dom('[data-test-fileDetails-apiScan-capturedApi-title]')
@@ -425,10 +417,6 @@ module('Acceptance | file-details/api-scan', function (hooks) {
       assert
         .dom('[data-test-fileDetails-apiScan-tabs="api-scan-tab"]')
         .hasText(t('apiScan'));
-
-      assert
-        .dom('[data-test-fileDetails-apiScan-capturedApi-desc]')
-        .hasText(t('capturedApiListDesc'));
 
       assert
         .dom('[data-test-fileDetails-apiScan-capturedApi-title]')

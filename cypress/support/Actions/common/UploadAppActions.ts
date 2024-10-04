@@ -155,7 +155,7 @@ export default class UploadAppActions {
       (el) => {
         const assertOpts = { container: el, timeout: 30000 };
 
-        cy.findByText(cyTranslate('staticScan'), assertOpts).should('exist');
+        cy.findByText(cyTranslate('sast'), assertOpts).should('exist');
 
         // Check if static scan has completed or is in progress
         if (file.is_static_done) {
