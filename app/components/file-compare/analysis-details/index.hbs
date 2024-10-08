@@ -90,15 +90,17 @@
             {{finding.title}}
           </AkTypography>
 
-          <span class='scrollable-box'>
-            <pre class='pre-code'>{{finding.description}}</pre>
-          </span>
+          <div local-class='vulnerability-finding-container'>
+            <pre local-class='vulnerability-finding-description'>
+              {{finding.description}}
+            </pre>
+          </div>
         {{/each}}
       {{/if}}
     </AkStack>
 
     {{#if @analysis.attachments}}
-      <AkStack @width='full' @direction='column' class='px-3 pb-3'>
+      <AkStack @width='full' @direction='column' @spacing='1' class='px-3 pb-3'>
         <AkTypography @variant='h6' @gutterBottom={{true}}>
           {{t 'attachments'}}
         </AkTypography>
