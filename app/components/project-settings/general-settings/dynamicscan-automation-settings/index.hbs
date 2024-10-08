@@ -25,6 +25,8 @@
     </AkChip>
   </AkStack>
 
+  {{! TODO: Uncomment when feature is available }}
+  {{!-- {{#if @featureAvailable}} --}}
   <ProjectSettings::GeneralSettings::DynamicscanAutomationSettings::Scenario
     @project={{@project}}
     @profileId={{@profileId}}
@@ -65,4 +67,7 @@
       </AkStack>
     </AkStack>
   </AkStack>
+  {{!-- {{else}}
+    <DynamicscanAutomationUpsellingFeature />
+  {{/if}} --}}
 </AkStack>

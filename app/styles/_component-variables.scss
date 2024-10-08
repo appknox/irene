@@ -869,21 +869,6 @@ body {
   --file-details-scan-actions-border-color: var(--neutral-grey-200);
   --file-details-scan-actions-background-color: var(--common-white);
 
-  // variables for file-details/scan-actions-old
-  --file-details-scan-actions-old-border-color: var(--border-color-1);
-  --file-details-scan-actions-old-background-color: var(--background-main);
-
-  // variables for file-details/scan-actions/old/manual-scan
-  --file-details-scan-actions-old-manual-scan-textarea-border-color: var(
-    --border-color-1
-  );
-  --file-details-scan-actions-old-manual-scan-textarea-color: var(
-    --text-primary
-  );
-  --file-details-scan-actions-old-manual-scan-textarea-border-radius: var(
-    --border-radius
-  );
-
   // variables for file-details/scan-actions/api-scan
   --file-details-scan-actions-api-scan-border-radius: var(--border-radius);
   --file-details-scan-actions-api-scan-alert-background-color: var(
@@ -903,11 +888,8 @@ body {
     --success-light
   );
 
-  // variables for file-details/scan-actions/api-scan/captured-apis
-  --file-details-scan-actions-api-scan-captured-apis-border-radius: var(
-    --border-radius
-  );
-  --file-details-scan-actions-api-scan-captured-apis-border-color: var(
+  // variables for file-details/vulnerability-analysis/header
+  --file-details-vulnerability-analysis-header-border-color: var(
     --border-color-1
   );
 
@@ -1134,16 +1116,15 @@ body {
   --vnc-viewer-info-border-color: var(--neutral-grey-300);
   --vnc-viewer-info-background: var(--neutral-grey-100);
 
-  // variables for proxy-settings-view
-  --proxy-settings-view-border-color: var(--border-color-1);
-
-  // variables for dynamic-scan/modal
-  --dynamic-scan-modal-border-color: var(--border-color-1);
-  --dynamic-scan-modal-border-radius: var(--border-radius);
-  --dynamic-scan-modal-alert-background-color: var(--warn-light);
-  --dynamic-scan-modal-alert-text-color: var(--warn-dark);
-  --dynamic-scan-modal-alert-border-color: var(--warn-dark);
-  --dynamic-scan-modal-device-settings-warning-text-color: var(
+  // variables for file-details/dynamic-scan/drawer-old
+  --file-details-dynamic-scan-drawer-old-border-color: var(--border-color-1);
+  --file-details-dynamic-scan-drawer-old-border-radius: var(--border-radius);
+  --file-details-dynamic-scan-drawer-old-alert-background-color: var(
+    --warn-light
+  );
+  --file-details-dynamic-scan-drawer-old-alert-text-color: var(--warn-dark);
+  --file-details-dynamic-scan-drawer-old-alert-border-color: var(--warn-dark);
+  --file-details-dynamic-scan-drawer-old-device-settings-warning-text-color: var(
     --neutral-grey-500
   );
 
@@ -1914,9 +1895,13 @@ body {
   --file-details-dynamic-scan-drawer-cta-box-shadow: var(--box-shadow-4);
 
   // variables for file-details/dynamic-scan/action/expiry
-  --dynamic-scan-action-expiry-extend-btn-background: var(--neutral-grey-500);
-  --dynamic-scan-action-expiry-extend-btn-icon-color: var(--common-white);
-  --dynamic-scan-action-expiry-container-background-color: var(
+  --file-details-dynamic-scan-action-expiry-extend-btn-background: var(
+    --neutral-grey-500
+  );
+  --file-details-dynamic-scan-action-expiry-extend-btn-icon-color: var(
+    --common-white
+  );
+  --file-details-dynamic-scan-action-expiry-container-background-color: var(
     --neutral-grey-100
   );
 
@@ -1927,4 +1912,9 @@ body {
   --page-not-found-card-border-radius: var(--border-radius);
   --page-not-found-card-box-shadow: var(--box-shadow-2);
   --page-not-found-border-color: var(--border-color-1);
+
+  // variables for file-details/dynamic-scan/drawer-old/proxy-settings-view
+  --file-details-dynamic-scan-drawer-old-proxy-settings-view-border-color: var(
+    --border-color-1
+  );
 }

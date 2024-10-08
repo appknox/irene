@@ -77,7 +77,8 @@ module(
       await render(hbs`
         <ProjectSettings::GeneralSettings::DynamicscanAutomationSettings 
           @project={{this.project}} 
-          @profileId={{this.project.activeProfileId}} 
+          @profileId={{this.project.activeProfileId}}  
+          @featureAvailable={{true}}
         />
       `);
 
@@ -115,6 +116,7 @@ module(
         <ProjectSettings::GeneralSettings::DynamicscanAutomationSettings 
           @project={{this.project}} 
           @profileId={{this.project.activeProfileId}} 
+          @featureAvailable={{true}}
         />
       `);
 

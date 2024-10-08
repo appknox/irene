@@ -1,32 +1,36 @@
 import Component from '@glimmer/component';
+import ENV from 'irene/config/environment';
+import triggerAnalytics from 'irene/utils/trigger-analytics';
 import { inject as service } from '@ember/service';
-import { tracked } from '@glimmer/tracking';
 import { task } from 'ember-concurrency';
+import { tracked } from '@glimmer/tracking';
 import type IntlService from 'ember-intl/services/intl';
 import type Store from '@ember-data/store';
 import type { AsyncBelongsTo } from '@ember-data/model';
 
-import ENV from 'irene/config/environment';
-import triggerAnalytics from 'irene/utils/trigger-analytics';
 import type ProxySettingModel from 'irene/models/proxy-setting';
 import type ProfileModel from 'irene/models/profile';
 import type ProjectModel from 'irene/models/project';
+import parseError from 'irene/utils/parse-error';
 
-export interface FileDetailsProxySettingsSignature {
+export interface FileDetailsDynamicScanDrawerOldProxySettingsViewSignature {
   Args: {
     profile: AsyncBelongsTo<ProfileModel>;
     project: AsyncBelongsTo<ProjectModel>;
   };
 }
 
-export default class FileDetailsProxySettingsComponent extends Component<FileDetailsProxySettingsSignature> {
+export default class FileDetailsDynamicScanDrawerOldProxySettingsViewComponent extends Component<FileDetailsDynamicScanDrawerOldProxySettingsViewSignature> {
   @service declare intl: IntlService;
   @service('notifications') declare notify: NotificationService;
   @service declare store: Store;
 
   @tracked proxy?: ProxySettingModel;
 
-  constructor(owner: unknown, args: FileDetailsProxySettingsSignature['Args']) {
+  constructor(
+    owner: unknown,
+    args: FileDetailsDynamicScanDrawerOldProxySettingsViewSignature['Args']
+  ) {
     super(owner, args);
 
     this.fetchProxySetting.perform();
@@ -37,10 +41,14 @@ export default class FileDetailsProxySettingsComponent extends Component<FileDet
   }
 
   fetchProxySetting = task(async () => {
-    const profileId = this.args.profile.get('id');
+    try {
+      const profileId = this.args.profile.get('id');
 
-    if (profileId) {
-      this.proxy = await this.store.findRecord('proxy-setting', profileId);
+      if (profileId) {
+        this.proxy = await this.store.findRecord('proxy-setting', profileId);
+      }
+    } catch (error) {
+      this.notify.error(parseError(error, this.intl.t('somethingWentWrong')));
     }
   });
 
@@ -59,34 +67,19 @@ export default class FileDetailsProxySettingsComponent extends Component<FileDet
         `${this.intl.t('proxyTurned')} ${statusText.toUpperCase()}`
       );
 
-      if (enabled) {
-        triggerAnalytics(
-          'feature',
-          ENV.csb['enableProxy'] as CsbAnalyticsFeatureData
-        );
-      } else {
-        triggerAnalytics(
-          'feature',
-          ENV.csb['disableProxy'] as CsbAnalyticsFeatureData
-        );
-      }
+      const analyticsData = enabled
+        ? ENV.csb['enableProxy']
+        : ENV.csb['disableProxy'];
+
+      triggerAnalytics('feature', analyticsData as CsbAnalyticsFeatureData);
     } catch (error) {
-      const err = error as AdapterError;
-      let errMsg = this.intl.t('pleaseTryAgain');
-
-      if (err.errors && err.errors.length) {
-        errMsg = err.errors[0]?.detail || errMsg;
-      } else if (err.message) {
-        errMsg = err.message;
-      }
-
-      this.notify.error(errMsg);
+      this.notify.error(parseError(error, this.intl.t('pleaseTryAgain')));
     }
   });
 }
 
 declare module '@glint/environment-ember-loose/registry' {
   export default interface Registry {
-    'FileDetails::ProxySettings': typeof FileDetailsProxySettingsComponent;
+    'FileDetails::DynamicScan::DrawerOld::ProxySettingsView': typeof FileDetailsDynamicScanDrawerOldProxySettingsViewComponent;
   }
 }

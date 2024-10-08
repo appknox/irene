@@ -31,7 +31,7 @@ export default class FileDetailsApiScanComponent extends Component<FileDetailsAp
       },
       {
         route: 'authenticated.dashboard.file.api-scan',
-        linkTitle: this.intl.t('apiScanResult'),
+        linkTitle: this.intl.t('apiScanResults'),
         model: this.args.file.id,
       },
     ];
@@ -47,7 +47,7 @@ export default class FileDetailsApiScanComponent extends Component<FileDetailsAp
       },
       {
         id: 'api-results',
-        label: this.intl.t('apiResults'),
+        label: this.intl.t('apiScanResults'),
         hasBadge: this.isApiScanRunningOrDone,
         badgeCount: this.args.file.apiVulnerabilityCount,
         route: 'authenticated.dashboard.file.api-scan.results',

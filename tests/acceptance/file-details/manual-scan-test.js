@@ -310,7 +310,7 @@ module('Acceptance | file-details/manual-scan', function (hooks) {
 
     assert
       .dom('[data-test-manualScanBasicInfo-minOSVersionLabel]', accordions[0])
-      .hasText(t('modalCard.manual.minOSVersion'));
+      .hasText(t('minOSVersion'));
 
     assert
       .dom('[data-test-manualScanBasicInfo-minOSVersionInput]', accordions[0])
@@ -784,7 +784,7 @@ module('Acceptance | file-details/manual-scan', function (hooks) {
 
     assert
       .dom(tabLink('manual-results'))
-      .hasText(`${t('manualResults')} ${file.manualVulnerabilityCount}`)
+      .hasText(`${t('manualScanResults')} ${file.manualVulnerabilityCount}`)
       .hasClass(/active-shadow/);
 
     assert.strictEqual(

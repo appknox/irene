@@ -38,7 +38,7 @@ export default class FileDetailsManualScanRequestFormLoginDetailsComponent exten
       {
         name: this.intl.t('action'),
         component:
-          'file-details/scan-actions/manual-scan/login-details/user-role-action' as const,
+          'file-details/manual-scan/request-form/login-details/user-role-action' as const,
         textAlign: 'center',
       },
     ];

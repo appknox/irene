@@ -63,7 +63,7 @@ export default class DynamicScanActionComponent extends Component<DynamicScanAct
 
   @action
   pollDynamicStatus() {
-    const isDynamicReady = this.args.dynamicScan?.isDynamicStatusReady;
+    const isDynamicReady = this.file.isDynamicStatusReady;
 
     if (isDynamicReady) {
       return;
@@ -75,12 +75,12 @@ export default class DynamicScanActionComponent extends Component<DynamicScanAct
 
     const stopPoll = this.poll.startPolling(
       () =>
-        this.args.dynamicScan
+        this.file
           ?.reload()
-          .then((ds) => {
+          .then((f) => {
             if (
-              ds.status === ENUMS.DYNAMIC_STATUS.NONE ||
-              ds.status === ENUMS.DYNAMIC_STATUS.READY
+              f.dynamicStatus === ENUMS.DYNAMIC_STATUS.NONE ||
+              f.dynamicStatus === ENUMS.DYNAMIC_STATUS.READY
             ) {
               stopPoll();
             }
@@ -90,23 +90,24 @@ export default class DynamicScanActionComponent extends Component<DynamicScanAct
     );
   }
 
-  dynamicShutdown = task({ drop: true }, async () => {
-    this.args.dynamicScan?.setShuttingDown();
+  @action shutdownDynamicScan() {
+    this.dynamicShutdown.perform();
+    this.args.onScanShutdown?.();
+  }
 
-    const dynamicUrl = [ENV.endpoints['dynamicscans'], this.profileId].join(
-      '/'
-    );
+  dynamicShutdown = task({ drop: true }, async () => {
+    this.file.setShuttingDown();
+
+    const dynamicUrl = [ENV.endpoints['dynamic'], this.file.id].join('/');
 
     try {
       await this.ajax.delete(dynamicUrl);
-
-      this.args.onScanShutdown?.();
 
       if (!this.isDestroyed) {
         this.pollDynamicStatus();
       }
     } catch (error) {
-      this.args.dynamicScan?.setNone();
+      this.file.setNone();
 
       this.notify.error((error as AdapterError).payload.error);
     }

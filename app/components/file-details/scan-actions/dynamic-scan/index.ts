@@ -1,8 +1,8 @@
 import Component from '@glimmer/component';
 import { inject as service } from '@ember/service';
-import IntlService from 'ember-intl/services/intl';
+import type IntlService from 'ember-intl/services/intl';
 
-import FileModel from 'irene/models/file';
+import type FileModel from 'irene/models/file';
 
 export interface FileDetailsScanActionsDynamicScanSignature {
   Args: {
@@ -16,6 +16,8 @@ export default class FileDetailsScanActionsDynamicScanComponent extends Componen
   get chipStatusText() {
     if (this.args.file.isDynamicStatusNeitherNoneNorReadyNorError) {
       return this.args.file.statusText;
+    } else if (this.args.file.isDynamicStatusInProgress) {
+      return this.intl.t('inProgress');
     } else if (this.args.file.isDynamicDone) {
       return this.intl.t('completed');
     } else {

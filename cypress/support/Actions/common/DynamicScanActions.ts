@@ -83,9 +83,7 @@ export default class DynamicScanActions {
     // check completed static scan info
     cy.findByTestId('staticScan-infoContainer', DEFAULT_ASSERT_OPTS).within(
       () => {
-        cy.findByText(cyTranslate('staticScan'), DEFAULT_ASSERT_OPTS).should(
-          'exist'
-        );
+        cy.findByText(cyTranslate('sast'), DEFAULT_ASSERT_OPTS).should('exist');
 
         cy.findByText(cyTranslate('completed'), DEFAULT_ASSERT_OPTS).should(
           'exist'
@@ -146,7 +144,7 @@ export default class DynamicScanActions {
 
     // wait for page to fully reload
     cy.document()
-      .findByTestId('dynamicScan-infoContainer', {
+      .findByTestId('manualDast-statusChipAndScanCTAContainer', {
         timeout: DYNAMIC_SCAN_STATUS_TIMEOUT,
       })
       .findByRole('button', {
@@ -155,6 +153,13 @@ export default class DynamicScanActions {
       })
       .should('exist')
       .as(DYNAMIC_SCAN_STOP_BTN_ALIAS);
+
+    // check different status of dynamic scan status chip while starting
+    cy.findByTestId('manualDast-statusChipAndScanCTAContainer').within(() => {
+      cy.findByTestId('manualDast-fullscreenBtn', DEFAULT_ASSERT_OPTS)
+        .should('exist')
+        .click();
+    });
 
     // wait for device screen to render
     cy.wait(3000);
@@ -287,7 +292,7 @@ export default class DynamicScanActions {
           // restart same interaction
           this.interactWithApp(interactions, appInfo, actionIndex, retries - 1);
         } else {
-          expect(result.error).to.be.undefined;
+          expect(result.error, 'Result Error').to.be.undefined;
 
           expect(result.percentage).to.be.below(appInfo.errorThreshold ?? 0.05);
 

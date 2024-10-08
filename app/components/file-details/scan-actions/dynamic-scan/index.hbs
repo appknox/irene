@@ -8,12 +8,9 @@
     {{t 'dast'}}
   </AkTypography>
 
-  <AkChip
-    @label={{this.chipStatusText}}
-    @color={{if @file.isDynamicDone 'success' 'default'}}
-    @variant='semi-filled'
-    @size='small'
-    local-class='chips-uppercase'
+  <FileDetails::DynamicScan::StatusChip
+    @file={{@file}}
+    @chipStatusText={{this.chipStatusText}}
     data-test-fileDetailScanActions-dynamicScanStatus
   />
 </AkStack>
@@ -24,8 +21,11 @@
   @color='primary'
   @underline='always'
   @fontWeight='bold'
+  @route='authenticated.dashboard.file.dynamic-scan.manual'
+  @model={{@file.id}}
   class='px-2 py-1'
   local-class='view-details-icon'
+  data-test-fileDetailScanActions-dynamicScanViewDetails
 >
   <:default>
     {{t 'viewDetails'}}

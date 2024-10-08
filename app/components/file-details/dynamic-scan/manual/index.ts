@@ -28,15 +28,20 @@ export default class FileDetailsDastManual extends Component<FileDetailsDastManu
   constructor(owner: unknown, args: FileDetailsDastManualSignature['Args']) {
     super(owner, args);
 
-    this.fetchDynamicscan.perform();
+    // TODO: Uncomment when full DAST feature is ready.
+    // this.fetchDynamicscan.perform();
+  }
+
+  get file() {
+    return this.args.file;
   }
 
   get showStatusChip() {
-    if (this.dynamicScan?.isDynamicStatusReady) {
+    if (this.file?.isDynamicStatusReady) {
       return false;
     } else if (
-      this.dynamicScan?.isDynamicStatusNoneOrError ||
-      this.dynamicScan?.isDynamicStatusInProgress
+      this.file?.isDynamicStatusNoneOrError ||
+      this.file?.isDynamicStatusInProgress
     ) {
       return true;
     }
@@ -45,14 +50,16 @@ export default class FileDetailsDastManual extends Component<FileDetailsDastManu
   }
 
   get showActionButton() {
-    if (
-      this.dynamicScan?.isDynamicStatusReady ||
-      this.dynamicScan?.isDynamicStatusError
-    ) {
-      return true;
-    } else if (this.dynamicScan?.isDynamicStatusInProgress) {
+    if (this.isFullscreenView) {
       return false;
     }
+
+    if (this.file?.isDynamicStatusReady || this.file?.isDynamicStatusError) {
+      return true;
+    } else if (this.file?.isDynamicStatusInProgress) {
+      return false;
+    }
+
     return true;
   }
 

@@ -5,6 +5,7 @@
   @alignItems='center'
   @justifyContent='center'
   class='my-2'
+  data-test-cy='manualDast-headerContainer'
 >
   <AkStack
     local-class='manual-dast-header'
@@ -20,53 +21,107 @@
       {{t 'realDevice'}}
     </AkTypography>
 
-    <AkStack @spacing='1' @alignItems='center'>
+    <AkStack
+      @spacing='1'
+      @alignItems='center'
+      data-test-cy='manualDast-statusChipAndScanCTAContainer'
+    >
       {{#if this.showStatusChip}}
         <FileDetails::DynamicScan::StatusChip
           @file={{@file}}
           @dynamicScan={{this.dynamicScan}}
         />
+
       {{/if}}
 
       {{#if this.showActionButton}}
         <FileDetails::DynamicScan::Action
           @file={{@file}}
-          @dynamicScanText={{t 'dastTabs.manualDAST'}}
+          @dynamicScanText={{t 'modalCard.dynamicScan.title'}}
           @onScanShutdown={{this.handleFullscreenClose}}
           @dynamicScan={{this.dynamicScan}}
         />
       {{/if}}
 
-      <AkIconButton
-        data-test-fileDetails-dynamicScan-manualDast-fullscreenBtn
-        {{on 'click' this.toggleFullscreenView}}
-      >
-        <AkIcon @iconName='open-in-full' />
-      </AkIconButton>
+      {{#if (and @file.isReady (not this.isFullscreenView))}}
+        <AkIconButton
+          data-test-cy='manualDast-fullscreenBtn'
+          data-test-fileDetails-dynamicScan-manualDast-fullscreenBtn
+          {{on 'click' this.toggleFullscreenView}}
+        >
+          <AkIcon @iconName='open-in-full' />
+        </AkIconButton>
+      {{/if}}
     </AkStack>
   </AkStack>
 
-  {{#if this.isFullscreenView}}
-    <AkModal
-      data-test-fileDetails-dynamicScan-manualDast-fullscreenModal
-      @headerTitle={{t 'realDevice'}}
-      @showHeader={{true}}
-      @onClose={{this.toggleFullscreenView}}
-    >
-      <VncViewer
-        @file={{@file}}
-        @profileId={{@profileId}}
-        @dynamicScan={{this.dynamicScan}}
+  <div
+    data-test-vncViewer-root
+    local-class='
+    {{if this.isFullscreenView "vnc-viewer-fullscreen"}}'
+  >
+    {{#if this.isFullscreenView}}
+      <div
+        data-test-vncViewer-backdrop
+        aria-hidden='true'
+        local-class='vnc-viewer-backdrop'
       />
-    </AkModal>
+    {{/if}}
 
-  {{else}}
-    <AkStack data-test-fileDetails-dynamicScan-manualDast-vncViewer class='p-3'>
-      <VncViewer
-        @file={{@file}}
-        @profileId={{@profileId}}
-        @dynamicScan={{this.dynamicScan}}
-      />
+    <AkStack
+      @direction='column'
+      @alignItems='center'
+      local-class='{{if
+        this.isFullscreenView
+        "vnc-viewer-fullscreen-container"
+      }}'
+    >
+      {{#if this.isFullscreenView}}
+        <AkAppbar
+          @justifyContent='space-between'
+          @position='sticky'
+          class='px-3'
+          as |ab|
+        >
+          <AkTypography
+            data-test-fileDetails-dynamicScan-manualDastFullScreen-title
+            @color='inherit'
+            @variant='h5'
+          >
+            {{t 'realDevice'}}
+          </AkTypography>
+
+          <AkIconButton
+            data-test-fileDetails-dynamicScan-manualDastFullScreen-closeBtn
+            {{on 'click' this.toggleFullscreenView}}
+            class={{ab.classes.defaultIconBtn}}
+          >
+            <AkIcon @iconName='close' />
+          </AkIconButton>
+        </AkAppbar>
+      {{/if}}
+
+      <AkStack
+        data-test-fileDetails-dynamicScan-manualDast-vncViewer
+        class='p-3 py-4'
+      >
+        <VncViewer
+          @file={{@file}}
+          @profileId={{@profileId}}
+          @dynamicScan={{this.dynamicScan}}
+        >
+          <:controls>
+            {{#if this.isFullscreenView}}
+              <FileDetails::DynamicScan::Action
+                @file={{@file}}
+                @dynamicScanText={{t 'modalCard.dynamicScan.title'}}
+                @onScanShutdown={{this.toggleFullscreenView}}
+                @dynamicScan={{this.dynamicScan}}
+              />
+            {{/if}}
+          </:controls>
+        </VncViewer>
+      </AkStack>
     </AkStack>
-  {{/if}}
+  </div>
 </AkStack>

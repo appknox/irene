@@ -9,7 +9,7 @@
   <AkStack
     @direction='column'
     @width='full'
-    local-class='dynamic-scan-modal'
+    local-class='dynamic-scan-drawer'
     data-test-fileDetails-dynamicScanDrawer-drawerContainer
   >
     <AkAppbar
@@ -42,7 +42,7 @@
     <AkStack
       @direction='column'
       @width='full'
-      local-class='dynamic-scan-modal-body'
+      local-class='dynamic-scan-drawer-body'
       class='p-3'
     >
       {{#if @isAutomatedScan}}
@@ -68,7 +68,7 @@
       @justifyContent={{if @isAutomatedScan 'space-between' 'flex-start'}}
       @spacing='1.5'
       class='px-3 py-2'
-      local-class='dynamic-scan-modal-cta'
+      local-class='dynamic-scan-drawer-cta'
     >
       <AkButton
         {{on 'click' this.runDynamicScan}}

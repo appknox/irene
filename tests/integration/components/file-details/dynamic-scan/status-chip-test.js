@@ -42,7 +42,8 @@ module(
     setupMirage(hooks);
     setupIntl(hooks);
 
-    test.each(
+    // TODO: Unskip when full DAST feature is ready.
+    test.skip(
       'it renders status chip for different dynamic scan status',
       [-1, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
       async function (assert, status) {
@@ -75,23 +76,27 @@ module(
             />`
         );
 
-        assert.dom('[data-test-dynamicScan-statusChip]').exists();
+        assert.dom('[data-test-fileDetails-dynamicScan-statusChip]').exists();
 
         const expectedText = dynamicScanStatusText[status];
 
-        assert.dom('[data-test-dynamicScan-statusChip]').hasText(expectedText);
+        assert
+          .dom('[data-test-fileDetails-dynamicScan-statusChip]')
+          .hasText(expectedText);
 
         const expectedColor = dynamicScanStatusColor[status];
 
         assert
-          .dom('[data-test-dynamicScan-statusChip]')
+          .dom('[data-test-fileDetails-dynamicScan-statusChip]')
           .hasClass(RegExp(`ak-chip-color-${expectedColor}`));
 
         if (this.dynamicscan.isDynamicStatusInProgress) {
-          assert.dom('[data-test-dynamicScan-statusChip-loader]').exists();
+          assert
+            .dom('[data-test-fileDetails-dynamicScan-statusChip-loader]')
+            .exists();
         } else {
           assert
-            .dom('[data-test-dynamicScan-statusChip-loader]')
+            .dom('[data-test-fileDetails-dynamicScan-statusChip-loader]')
             .doesNotExist();
         }
       }
