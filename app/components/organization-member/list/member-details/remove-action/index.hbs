@@ -1,7 +1,8 @@
 <AkIconButton
   data-test-remove-user
+  data-test-cy='remove-user'
   title='{{t "removeFromTeam"}}'
-  class="mr-1"
+  class='mr-1'
   {{on 'click' this.openRemoveMemberPrompt}}
 >
   <AkIcon @iconName='person-remove' />
