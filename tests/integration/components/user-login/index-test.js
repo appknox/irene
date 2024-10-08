@@ -4,7 +4,7 @@ import { setupRenderingTest } from 'ember-qunit';
 import { render, click, fillIn } from '@ember/test-helpers';
 import { hbs } from 'ember-cli-htmlbars';
 import { setupMirage } from 'ember-cli-mirage/test-support';
-import { setupIntl } from 'ember-intl/test-support';
+import { setupIntl, t } from 'ember-intl/test-support';
 import Service from '@ember/service';
 import { Response } from 'miragejs';
 
@@ -300,7 +300,7 @@ module('Integration | Component | user-login', function (hooks) {
     assert.dom('[data-test-user-login-perform-mfa-button]').exists();
     assert
       .dom('[data-test-user-login-perform-mfa-email-otp]')
-      .hasText('t:emailOTP:()');
+      .hasText(t('emailOTP'));
 
     const otpInput = this.element.querySelector(
       '[data-test-user-login-perform-mfa-otp-input]'
@@ -378,7 +378,7 @@ module('Integration | Component | user-login', function (hooks) {
     assert.dom('[data-test-user-login-perform-mfa-button]').exists();
     assert
       .dom('[data-test-user-login-perform-mfa-authenticator-code]')
-      .hasText('t:authenticatorCode:()');
+      .hasText(t('authenticatorCode'));
 
     const otpInput = this.element.querySelector(
       '[data-test-user-login-perform-mfa-otp-input]'
@@ -427,7 +427,7 @@ module('Integration | Component | user-login', function (hooks) {
     assert.dom('[data-test-user-login-via-username-password]').exists();
     assert.dom('[data-test-user-login-via-sso-or]').exists();
     assert.dom('[data-test-user-login-via-sso-not-forced-button]').exists();
-    assert.dom('[data-test-user-login-via-sso-or]').hasText('t:or:()');
+    assert.dom('[data-test-user-login-via-sso-or]').hasText(t('or'));
   });
 
   test('it should show sso button without login form for forced', async function (assert) {

@@ -2,7 +2,7 @@ import Service from '@ember/service';
 import { findAll, render } from '@ember/test-helpers';
 import { hbs } from 'ember-cli-htmlbars';
 import { setupMirage } from 'ember-cli-mirage/test-support';
-import { setupIntl } from 'ember-intl/test-support';
+import { setupIntl, t } from 'ember-intl/test-support';
 import { setupRenderingTest } from 'ember-qunit';
 import { module, test } from 'qunit';
 
@@ -114,8 +114,8 @@ module('Integration | Component | app-monitoring/table', function (hooks) {
 
     assert
       .dom('[data-test-am-errorContainer]')
-      .containsText('t:appMonitoringMessages.emptyResults.header:()')
-      .containsText('t:appMonitoringMessages.emptyResults.body:()');
+      .containsText(t('appMonitoringMessages.emptyResults.header'))
+      .containsText(t('appMonitoringMessages.emptyResults.body'));
   });
 
   test('it should show table rows if settings is enabled and atleast one amApp exists', async function (assert) {
@@ -185,11 +185,7 @@ module('Integration | Component | app-monitoring/table', function (hooks) {
     assert
       .dom(rowCells[4])
       .containsText(
-        `${
-          this.amApps[0].isActive
-            ? 't:activeCapital:()'
-            : 't:inactiveCapital:()'
-        }`
+        `${this.amApps[0].isActive ? t('activeCapital') : t('inactiveCapital')}`
       );
   });
 
@@ -217,7 +213,7 @@ module('Integration | Component | app-monitoring/table', function (hooks) {
 
     assert
       .dom('[data-test-am-errorContainer]')
-      .containsText('t:appMonitoringMessages.noOrgProjects.header:()')
-      .containsText('t:appMonitoringMessages.noOrgProjects.body:()');
+      .containsText(t('appMonitoringMessages.noOrgProjects.header'))
+      .containsText(t('appMonitoringMessages.noOrgProjects.body'));
   });
 });

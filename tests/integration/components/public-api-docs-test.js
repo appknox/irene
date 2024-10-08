@@ -2,7 +2,7 @@ import { module, test } from 'qunit';
 import { setupRenderingTest } from 'ember-qunit';
 import { find, render, waitUntil } from '@ember/test-helpers';
 import { hbs } from 'ember-cli-htmlbars';
-import { setupIntl } from 'ember-intl/test-support';
+import { setupIntl, t } from 'ember-intl/test-support';
 import { setupMirage } from 'ember-cli-mirage/test-support';
 import Service from '@ember/service';
 
@@ -119,7 +119,7 @@ module('Integration | Component | public-api-docs', function (hooks) {
         assert
           .dom('[data-test-publicApiDocs-serviceAccountLink]')
           .exists()
-          .containsText('t:goToServiceAccounts:()')
+          .containsText(t('goToServiceAccounts'))
           .hasAttribute(
             'href',
             '/dashboard/organization/settings/service-account'

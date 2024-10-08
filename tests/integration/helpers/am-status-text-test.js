@@ -2,7 +2,7 @@ import { module, test } from 'qunit';
 import { setupRenderingTest } from 'ember-qunit';
 import { render } from '@ember/test-helpers';
 import { hbs } from 'ember-cli-htmlbars';
-import { setupIntl } from 'ember-intl/test-support';
+import { setupIntl, t } from 'ember-intl/test-support';
 import { setupMirage } from 'ember-cli-mirage/test-support';
 
 module('Integration | Helper | am-status-text', function (hooks) {
@@ -76,7 +76,7 @@ module('Integration | Helper | am-status-text', function (hooks) {
 
     await render(hbs`{{am-status-text this.amApp}}`);
 
-    assert.strictEqual(this.element.textContent.trim(), 't:scanned:()');
+    assert.strictEqual(this.element.textContent.trim(), t('scanned'));
   });
 
   test('it renders the correct status text when amApp is "NOT SCANNED"', async function (assert) {
@@ -100,7 +100,7 @@ module('Integration | Helper | am-status-text', function (hooks) {
 
     await render(hbs`{{am-status-text this.amApp}}`);
 
-    assert.strictEqual(this.element.textContent.trim(), 't:notScanned:()');
+    assert.strictEqual(this.element.textContent.trim(), t('notScanned'));
   });
 
   test('it renders the correct status text when amApp is "PENDING"', async function (assert) {
@@ -120,7 +120,7 @@ module('Integration | Helper | am-status-text', function (hooks) {
 
     await render(hbs`{{am-status-text this.amApp}}`);
 
-    assert.strictEqual(this.element.textContent.trim(), 't:pending:()');
+    assert.strictEqual(this.element.textContent.trim(), t('pending'));
   });
 
   test('it renders the correct status text when amApp is "NOT FOUND"', async function (assert) {
@@ -138,6 +138,6 @@ module('Integration | Helper | am-status-text', function (hooks) {
 
     await render(hbs`{{am-status-text this.amApp}}`);
 
-    assert.strictEqual(this.element.textContent.trim(), 't:notFound:()');
+    assert.strictEqual(this.element.textContent.trim(), t('notFound'));
   });
 });

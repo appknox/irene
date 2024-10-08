@@ -2,7 +2,7 @@ import { module, test } from 'qunit';
 import { setupRenderingTest } from 'ember-qunit';
 import { click, render, waitFor, findAll } from '@ember/test-helpers';
 import { hbs } from 'ember-cli-htmlbars';
-import { setupIntl } from 'ember-intl/test-support';
+import { setupIntl, t } from 'ember-intl/test-support';
 import { setupMirage } from 'ember-cli-mirage/test-support';
 import { serializer } from 'irene/tests/test-utils';
 import { Response } from 'miragejs';
@@ -84,12 +84,12 @@ module(
       assert
         .dom('[data-test-vaReports-generateReportCTA-directiveText]')
         .exists()
-        .hasText('t:fileReport.generateReportCTAText:()');
+        .hasText(t('fileReport.generateReportCTAText'));
 
       assert
         .dom('[data-test-vaReports-generateReportCTA-btn]')
         .exists()
-        .hasText('t:generateReport:()');
+        .hasText(t('generateReport'));
 
       assert
         .dom('[data-test-vaReports-generateReportProgress-container]')
@@ -147,7 +147,7 @@ module(
       assert
         .dom('[data-test-vaReports-generateReportCTA-btn]')
         .exists()
-        .hasText('t:generatingReport:()')
+        .hasText(t('generatingReport'))
         .hasAttribute('disabled');
 
       await waitFor('[data-test-vaReports-reportList]', {
@@ -158,7 +158,7 @@ module(
 
       assert.strictEqual(
         notifyService.successMsg,
-        't:reportIsGettingGenerated:()'
+        t('reportIsGettingGenerated')
       );
 
       assert.dom('[data-test-vaReports-reportList]').exists();
@@ -169,9 +169,9 @@ module(
 
       // Reports are generated the "pdf", "xlsx", and "csv" formats.
       const reportTypes = [
-        ['pdf', 't:generating:()'],
-        ['xlsx', 't:fileReport.noPasswordRequired:()'],
-        ['csv', 't:fileReport.noPasswordRequired:()'],
+        ['pdf', t('generating')],
+        ['xlsx', t('fileReport.noPasswordRequired')],
+        ['csv', t('fileReport.noPasswordRequired')],
       ];
 
       assert.strictEqual(
@@ -245,7 +245,7 @@ module(
       assert
         .dom('[data-test-vaReports-generateReportCTA-btn]')
         .exists()
-        .hasText('t:generatingReport:()')
+        .hasText(t('generatingReport'))
         .hasAttribute('disabled');
 
       await waitFor('[data-test-vaReports-reportList]', {
@@ -256,7 +256,7 @@ module(
 
       assert.strictEqual(
         notifyService.successMsg,
-        't:reportIsGettingGenerated:()'
+        t('reportIsGettingGenerated')
       );
 
       assert.dom('[data-test-vaReports-reportList]').exists();
@@ -268,7 +268,7 @@ module(
       assert
         .dom('[data-test-vaReports-generateReportProgress-text]')
         .exists()
-        .hasText('t:fileReport.generateReportLoaderText:()...');
+        .hasText(`${t('fileReport.generateReportLoaderText')}...`);
 
       assert
         .dom('[data-test-vaReports-generateReportProgress-loader]')
@@ -323,21 +323,21 @@ module(
       assert
         .dom(currentReport)
         .exists()
-        .hasText(/t:fileReport.detailedReport:()/)
+        .hasText(new RegExp(t('fileReport.detailedReport')))
         .containsText(this.file.project.get('pdfPassword'));
 
       assert
         .dom(previousReport)
         .exists()
-        .hasText(/t:fileReport.previousReport:()/)
+        .hasText(new RegExp(t('fileReport.previousReport')))
         .containsText(this.file.project.get('pdfPassword'));
 
       summaryReports.forEach((report) => {
         assert
           .dom(report)
           .exists()
-          .hasText(/t:fileReport.summaryReport:()/)
-          .hasText(/t:fileReport.noPasswordRequired:()/);
+          .hasText(new RegExp(t('fileReport.summaryReport')))
+          .hasText(new RegExp(t('fileReport.noPasswordRequired')));
       });
     });
 
@@ -350,7 +350,7 @@ module(
         return new Response(
           400,
           { some: 'header' },
-          { errors: ['t:reportGenerateError:()'] }
+          { errors: [t('reportGenerateError')] }
         );
       });
 
@@ -363,7 +363,7 @@ module(
 
       const notifyService = this.owner.lookup('service:notifications');
 
-      assert.strictEqual(notifyService.errorMsg, 't:reportGenerateError:()');
+      assert.strictEqual(notifyService.errorMsg, t('reportGenerateError'));
     });
   }
 );

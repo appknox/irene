@@ -1,7 +1,7 @@
 import { click, render } from '@ember/test-helpers';
 import { hbs } from 'ember-cli-htmlbars';
 import { setupMirage } from 'ember-cli-mirage/test-support';
-import { setupIntl } from 'ember-intl/test-support';
+import { setupIntl, t } from 'ember-intl/test-support';
 import { setupRenderingTest } from 'ember-qunit';
 import { module, test } from 'qunit';
 import Service from '@ember/service';
@@ -51,9 +51,9 @@ module('Integration | Component | file-details/static-scan', function (hooks) {
 
   test('it renders', async function (assert) {
     const breadcrumbItems = [
-      't:allProjects:()',
-      't:scanDetails:()',
-      't:sastResults:()',
+      t('allProjects'),
+      t('scanDetails'),
+      t('sastResults'),
     ];
 
     this.server.get('/v2/projects/:id', (schema, req) => {
@@ -75,7 +75,7 @@ module('Integration | Component | file-details/static-scan', function (hooks) {
     assert
       .dom('[data-test-fileDetails-staticscan-sast-results-tab]')
       .exists()
-      .containsText('t:sastResults:()');
+      .containsText(t('sastResults'));
 
     if (this.file.staticVulnerabilityCount) {
       assert
@@ -87,14 +87,14 @@ module('Integration | Component | file-details/static-scan', function (hooks) {
     assert
       .dom('[data-test-fileDetails-staticscan-info]')
       .exists()
-      .containsText('t:sastResultsInfo:()');
+      .containsText(t('sastResultsInfo'));
 
     assert
       .dom(
         '[data-test-fileDetails-staticscan-tabs="vulnerability-details-tab"]'
       )
       .exists()
-      .containsText('t:vulnerabilityDetails:()');
+      .containsText(t('vulnerabilityDetails'));
   });
 
   test.each(
@@ -123,21 +123,21 @@ module('Integration | Component | file-details/static-scan', function (hooks) {
 
         assert
           .dom('[data-test-ak-modal-header]')
-          .hasText('t:modalCard.rescan.title:()');
+          .hasText(t('modalCard.rescan.title'));
 
         assert
           .dom('[data-test-confirmbox-description]')
-          .hasText('t:modalCard.rescan.description:()');
+          .hasText(t('modalCard.rescan.description'));
 
-        assert.dom('[data-test-confirmbox-confirmBtn]').hasText('t:yes:()');
+        assert.dom('[data-test-confirmbox-confirmBtn]').hasText(t('yes'));
 
-        assert.dom('[data-test-confirmbox-cancelBtn]').hasText('t:no:()');
+        assert.dom('[data-test-confirmbox-cancelBtn]').hasText(t('no'));
 
         await click('[data-test-confirmbox-confirmBtn]');
 
         const notify = this.owner.lookup('service:notifications');
 
-        assert.strictEqual(notify.infoMsg, 't:rescanInitiated:()');
+        assert.strictEqual(notify.infoMsg, t('rescanInitiated'));
       } else {
         assert
           .dom('[data-test-fileDetails-staticscan-restartBtn]')

@@ -10,7 +10,7 @@ import {
   triggerEvent,
 } from '@ember/test-helpers';
 
-import { setupIntl } from 'ember-intl/test-support';
+import { setupIntl, t } from 'ember-intl/test-support';
 import { hbs } from 'ember-cli-htmlbars';
 import { Response } from 'miragejs';
 
@@ -87,11 +87,11 @@ module(
         </OrganizationTeam::AddTeamMember>
     `);
 
-      assert.dom('[data-test-addUserList-title]').hasText('t:addUsers:()');
+      assert.dom('[data-test-addUserList-title]').hasText(t('addUsers'));
 
       assert
         .dom('[data-test-addUserList-description]')
-        .hasText('t:addTeamMemberDesc:()');
+        .hasText(t('addTeamMemberDesc'));
 
       assert
         .dom('[data-test-addUserList-searchInput]')
@@ -100,8 +100,8 @@ module(
 
       const headerRow = findAll('[data-test-addUserList-thead] th');
 
-      assert.dom(headerRow[0]).hasText('t:name:()');
-      assert.dom(headerRow[1]).hasText('t:action:()');
+      assert.dom(headerRow[0]).hasText(t('name'));
+      assert.dom(headerRow[1]).hasText(t('action'));
 
       const contentRows = findAll('[data-test-addUserList-row]');
 
@@ -116,10 +116,7 @@ module(
         .isNotChecked()
         .isNotDisabled();
 
-      assert
-        .dom('[data-test-action-btn]')
-        .isDisabled()
-        .hasText('t:addUsers:()');
+      assert.dom('[data-test-action-btn]').isDisabled().hasText(t('addUsers'));
     });
 
     test('test add-team-member search', async function (assert) {
@@ -186,7 +183,7 @@ module(
         assert
           .dom('[data-test-action-btn]')
           .isDisabled()
-          .hasText('t:addUsers:()');
+          .hasText(t('addUsers'));
 
         const contentRows = findAll('[data-test-addUserList-row]');
 
@@ -236,13 +233,13 @@ module(
         const latestRows = () => findAll('[data-test-addUserList-row]');
 
         if (fail) {
-          assert.strictEqual(notify.errorMsg, 't:pleaseTryAgain:()');
+          assert.strictEqual(notify.errorMsg, t('pleaseTryAgain'));
           assert.strictEqual(
             latestRows().length,
             this.organizationUsers.length
           );
         } else {
-          assert.strictEqual(notify.successMsg, 't:teamMemberAdded:()');
+          assert.strictEqual(notify.successMsg, t('teamMemberAdded'));
 
           assert.strictEqual(
             latestRows().length,

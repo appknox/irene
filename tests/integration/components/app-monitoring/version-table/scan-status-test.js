@@ -1,6 +1,6 @@
 import { hbs } from 'ember-cli-htmlbars';
 import { setupMirage } from 'ember-cli-mirage/test-support';
-import { setupIntl } from 'ember-intl/test-support';
+import { setupIntl, t } from 'ember-intl/test-support';
 import { setupRenderingTest } from 'ember-qunit';
 import { module, test } from 'qunit';
 import { render } from '@ember/test-helpers';
@@ -102,7 +102,7 @@ module(
           assert
             .dom(notScannedStatusSelector)
             .exists()
-            .containsText('t:notScanned:()');
+            .containsText(t('notScanned'));
 
           assert.dom(transitionArrowSelector).doesNotExist();
           assert.dom(scannedStatusSelector).doesNotExist();
@@ -113,14 +113,14 @@ module(
           assert
             .dom(notScannedStatusSelector)
             .exists()
-            .containsText('t:notScanned:()');
+            .containsText(t('notScanned'));
 
           assert.dom(transitionArrowSelector).exists();
 
           assert
             .dom(fileIDSelector)
             .exists()
-            .containsText('t:fileID:()')
+            .containsText(t('fileID'))
             .containsText(this.amAppVersion.get('latestFile').get('id'));
         }
 
@@ -132,13 +132,10 @@ module(
           assert
             .dom(fileIDSelector)
             .exists()
-            .containsText('t:fileID:()')
+            .containsText(t('fileID'))
             .containsText(this.amAppVersion.get('latestFile').get('id'));
 
-          assert
-            .dom(scannedStatusSelector)
-            .exists()
-            .containsText('t:scanned:()');
+          assert.dom(scannedStatusSelector).exists().containsText(t('scanned'));
         }
       }
     );

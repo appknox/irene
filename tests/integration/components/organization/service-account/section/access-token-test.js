@@ -1,7 +1,7 @@
 import { click, fillIn, render, triggerEvent } from '@ember/test-helpers';
 import { hbs } from 'ember-cli-htmlbars';
 import { setupMirage } from 'ember-cli-mirage/test-support';
-import { setupIntl } from 'ember-intl/test-support';
+import { setupIntl, t } from 'ember-intl/test-support';
 import { setupRenderingTest } from 'ember-qunit';
 import { module, test } from 'qunit';
 import { Response } from 'miragejs';
@@ -66,7 +66,7 @@ module(
 
         assert
           .dom('[data-test-serviceAccountSection-title]')
-          .hasText('t:accessToken:()');
+          .hasText(t('accessToken'));
 
         assert
           .dom('[data-test-serviceAccountSection-accessToken-actionBtn]')
@@ -74,7 +74,7 @@ module(
 
         assert
           .dom('[data-test-serviceAccountSection-accessToken-accountIdLabel]')
-          .hasText('t:accessKeyID:()');
+          .hasText(t('accessKeyID'));
 
         assert
           .dom('[data-test-serviceAccountSection-accessToken-accountIdValue]')
@@ -82,7 +82,7 @@ module(
 
         assert
           .dom('[data-test-serviceAccountSection-accessToken-secretKeyLabel]')
-          .hasText('t:serviceAccountModule.secretAccessKey:()');
+          .hasText(t('serviceAccountModule.secretAccessKey'));
 
         assert
           .dom('[data-test-serviceAccountSection-accessToken-secretKeyMasked]')
@@ -92,17 +92,17 @@ module(
           .dom(
             '[data-test-serviceAccountSection-accessToken-secretKeyHelperText]'
           )
-          .hasText('t:serviceAccountModule.maskedSecretAccessKeyHelperText:()');
+          .hasText(t('serviceAccountModule.maskedSecretAccessKeyHelperText'));
 
         assert
           .dom('[data-test-serviceAccountSection-accessToken-expiryLabel]')
-          .hasText('t:expiresOn:()');
+          .hasText(t('expiresOn'));
 
         assert
           .dom('[data-test-serviceAccountSection-accessToken-expiryValue]')
           .hasText(
             noExpiry
-              ? 't:noExpiry:()'
+              ? t('noExpiry')
               : dayjs(this.serviceAccount.expiry).format('MMM DD, YYYY')
           );
 
@@ -144,7 +144,7 @@ module(
 
         assert
           .dom('[data-test-serviceAccountSection-title]')
-          .hasText('t:accessToken:()');
+          .hasText(t('accessToken'));
 
         assert
           .dom('[data-test-serviceAccountSection-accessToken-actionBtn]')
@@ -162,7 +162,7 @@ module(
           .dom(
             '[data-test-serviceAccountSection-accessToken-createOrEditDescription]'
           )
-          .hasText('t:serviceAccountModule.accessTokenEditDescription:()');
+          .hasText(t('serviceAccountModule.accessTokenEditDescription'));
 
         assert
           .dom(
@@ -184,7 +184,7 @@ module(
 
         assert
           .dom('[data-test-serviceAccountSection-accessToken-expiryUnitLabel]')
-          .hasText('t:days:()');
+          .hasText(t('days'));
 
         assert
           .dom(
@@ -195,18 +195,20 @@ module(
         assert
           .dom('[data-test-serviceAccountSection-accessToken-expiryHelperText]')
           .hasText(
-            `t:serviceAccountModule.expiryHelperText:("date":"${expiryInDate(defaultExpiryInDays)}")`
+            t('serviceAccountModule.expiryHelperText', {
+              date: expiryInDate(defaultExpiryInDays),
+            })
           );
 
         assert
           .dom('[data-test-serviceAccountSection-accessToken-regenerateBtn]')
           .isNotDisabled()
-          .hasText('t:serviceAccountModule.regenerateKey:()');
+          .hasText(t('serviceAccountModule.regenerateKey'));
 
         assert
           .dom('[data-test-serviceAccountSection-accessToken-cancelBtn]')
           .isNotDisabled()
-          .hasText('t:cancel:()');
+          .hasText(t('cancel'));
 
         if (noExpiry) {
           await click(
@@ -246,7 +248,9 @@ module(
               '[data-test-serviceAccountSection-accessToken-expiryHelperText]'
             )
             .hasText(
-              `t:serviceAccountModule.expiryHelperText:("date":"${expiryInDate(60)}")`
+              t('serviceAccountModule.expiryHelperText', {
+                date: expiryInDate(60),
+              })
             );
         }
 
@@ -271,7 +275,7 @@ module(
         } else {
           assert.strictEqual(
             notify.successMsg,
-            't:serviceAccountModule.editSuccessMsg:()'
+            t('serviceAccountModule.editSuccessMsg')
           );
 
           assert
@@ -283,14 +287,14 @@ module(
               '[data-test-serviceAccountSection-accessToken-secretKeyHelperText]'
             )
             .hasText(
-              't:serviceAccountModule.unmaskedSecretAccessKeyHelperText:()'
+              t('serviceAccountModule.unmaskedSecretAccessKeyHelperText')
             );
 
           assert
             .dom('[data-test-serviceAccountSection-accessToken-expiryValue]')
             .hasText(
               noExpiry
-                ? 't:noExpiry:()'
+                ? t('noExpiry')
                 : dayjs(this.serviceAccount.expiry).format('MMM DD, YYYY')
             );
 
@@ -305,7 +309,7 @@ module(
             '[data-test-serviceAccountSection-accessToken-secretKeyCopyBtn]'
           );
 
-          assert.strictEqual(notify.infoMsg, 't:tokenCopied:()');
+          assert.strictEqual(notify.infoMsg, t('tokenCopied'));
         }
       }
     );

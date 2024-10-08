@@ -2,7 +2,7 @@ import { module, test } from 'qunit';
 import { setupRenderingTest } from 'ember-qunit';
 import { render } from '@ember/test-helpers';
 import { hbs } from 'ember-cli-htmlbars';
-import { setupIntl } from 'ember-intl/test-support';
+import { setupIntl, t } from 'ember-intl/test-support';
 
 module('Integration | Helper | am-monitoring-text', function (hooks) {
   setupRenderingTest(hooks);
@@ -20,7 +20,7 @@ module('Integration | Helper | am-monitoring-text', function (hooks) {
 
     await render(hbs`{{am-monitoring-text this.amApp}}`);
 
-    assert.strictEqual(this.element.textContent.trim(), 't:activeCapital:()');
+    assert.strictEqual(this.element.textContent.trim(), t('activeCapital'));
   });
 
   test('it renders the correct "error" text when monitoring is inactive ', async function (assert) {
@@ -31,6 +31,6 @@ module('Integration | Helper | am-monitoring-text', function (hooks) {
 
     await render(hbs`{{am-monitoring-text this.amApp}}`);
 
-    assert.strictEqual(this.element.textContent.trim(), 't:inactiveCapital:()');
+    assert.strictEqual(this.element.textContent.trim(), t('inactiveCapital'));
   });
 });

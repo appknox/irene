@@ -3,7 +3,7 @@ import { setupRenderingTest } from 'ember-qunit';
 import { render, click, find } from '@ember/test-helpers';
 import { hbs } from 'ember-cli-htmlbars';
 import { setupMirage } from 'ember-cli-mirage/test-support';
-import { setupIntl } from 'ember-intl/test-support';
+import { setupIntl, t } from 'ember-intl/test-support';
 import { Response } from 'miragejs';
 import checkboxStyles from 'irene/components/tri-state-checkbox/index.scss';
 
@@ -96,21 +96,21 @@ module(
         .dom(
           '[data-test-projectSetting-analysisSettings-regulatoryPreferences-title]'
         )
-        .hasText('t:regulatoryPreferences:()');
+        .hasText(t('regulatoryPreferences'));
 
       assert
         .dom(
           '[data-test-projectSetting-analysisSettings-regulatoryPreferences-desc]'
         )
         .hasText(
-          't:regulatoryPreferencesChooseForProfile:() t:regulatoryPreferencesWarning:()'
+          `${t('regulatoryPreferencesChooseForProfile')} ${t('regulatoryPreferencesWarning')}`
         );
 
       assert
         .dom(
           '[data-test-projectSetting-analysisSettings-regulatoryPreferences-note]'
         )
-        .hasText('(t:regulatoryPreferencesProfileNote:())');
+        .hasText(`(${t('regulatoryPreferencesProfileNote')})`);
 
       assert
         .dom(
@@ -139,11 +139,11 @@ module(
       );
 
       const optionalRegulatoriesLabels = [
-        't:pcidss:()',
-        't:hipaa:()',
-        't:gdpr:()',
-        't:nist:()',
-        't:sama:()',
+        t('pcidss'),
+        t('hipaa'),
+        t('gdpr'),
+        t('nist'),
+        t('sama'),
       ];
 
       optionalRegulatoriesLabels.map((regLabel) =>
@@ -264,7 +264,7 @@ module(
       );
 
       const pcidss = this.element.querySelector(
-        '[data-test-projectSetting-analysisSettings-regulatoryPreferences="t:pcidss:()"]'
+        `[data-test-projectSetting-analysisSettings-regulatoryPreferences="${t('pcidss')}"]`
       );
       const pcidssInitialValue = profile.report_preference.show_pcidss.value;
       const pcidssInput = pcidss.querySelector('[data-test-input]');
@@ -275,7 +275,7 @@ module(
       assert.strictEqual(pcidssInput.checked, !pcidssInitialValue);
 
       const hipaa = this.element.querySelector(
-        '[data-test-projectSetting-analysisSettings-regulatoryPreferences="t:hipaa:()"]'
+        `[data-test-projectSetting-analysisSettings-regulatoryPreferences="${t('hipaa')}"]`
       );
       const hipaaInitialValue = profile.report_preference.show_hipaa.value;
       const hipaaInput = hipaa.querySelector('[data-test-input]');
@@ -287,7 +287,7 @@ module(
       assert.strictEqual(hipaaInput.checked, !hipaaInitialValue);
 
       const gdpr = this.element.querySelector(
-        '[data-test-projectSetting-analysisSettings-regulatoryPreferences="t:gdpr:()"]'
+        `[data-test-projectSetting-analysisSettings-regulatoryPreferences="${t('gdpr')}"]`
       );
 
       const gdprInitialValue = profile.report_preference.show_gdpr.value;
@@ -299,7 +299,7 @@ module(
       assert.strictEqual(gdprInput.checked, !gdprInitialValue);
 
       const nist = this.element.querySelector(
-        '[data-test-projectSetting-analysisSettings-regulatoryPreferences="t:nist:()"]'
+        `[data-test-projectSetting-analysisSettings-regulatoryPreferences="${t('nist')}"]`
       );
 
       const nistInitialValue = profile.report_preference.show_nist.value;
@@ -311,7 +311,7 @@ module(
       assert.strictEqual(nistInput.checked, !nistInitialValue);
 
       const sama = this.element.querySelector(
-        '[data-test-projectSetting-analysisSettings-regulatoryPreferences="t:sama:()"]'
+        `[data-test-projectSetting-analysisSettings-regulatoryPreferences="${t('sama')}"]`
       );
 
       const samaInitialValue = profile.report_preference.show_sama.value;
@@ -388,7 +388,7 @@ module(
       );
 
       const pcidss = this.element.querySelector(
-        '[data-test-projectSetting-analysisSettings-regulatoryPreferences="t:pcidss:()"]'
+        `[data-test-projectSetting-analysisSettings-regulatoryPreferences="${t('pcidss')}"]`
       );
       const pcidssInitialValue = profile.report_preference.show_pcidss.value;
       const pcidssInput = pcidss.querySelector('[data-test-input]');
@@ -399,7 +399,7 @@ module(
       assert.strictEqual(pcidssInput.checked, pcidssInitialValue);
 
       const hipaa = this.element.querySelector(
-        '[data-test-projectSetting-analysisSettings-regulatoryPreferences="t:hipaa:()"]'
+        `[data-test-projectSetting-analysisSettings-regulatoryPreferences="${t('hipaa')}"]`
       );
       const hipaaInitialValue = profile.report_preference.show_hipaa.value;
       const hipaaInput = hipaa.querySelector('[data-test-input]');
@@ -411,7 +411,7 @@ module(
       assert.strictEqual(hipaaInput.checked, hipaaInitialValue);
 
       const gdpr = this.element.querySelector(
-        '[data-test-projectSetting-analysisSettings-regulatoryPreferences="t:gdpr:()"]'
+        `[data-test-projectSetting-analysisSettings-regulatoryPreferences="${t('gdpr')}"]`
       );
       const gdprInitialValue = profile.report_preference.show_gdpr.value;
       const gdprInput = gdpr.querySelector('[data-test-input]');
@@ -423,7 +423,7 @@ module(
       assert.strictEqual(gdprInput.checked, gdprInitialValue);
 
       const nist = this.element.querySelector(
-        '[data-test-projectSetting-analysisSettings-regulatoryPreferences="t:nist:()"]'
+        `[data-test-projectSetting-analysisSettings-regulatoryPreferences="${t('nist')}"]`
       );
       const nistInitialValue = profile.report_preference.show_nist.value;
       const nistInput = nist.querySelector('[data-test-input]');
@@ -435,7 +435,7 @@ module(
       assert.strictEqual(nistInput.checked, nistInitialValue);
 
       const sama = this.element.querySelector(
-        '[data-test-projectSetting-analysisSettings-regulatoryPreferences="t:sama:()"]'
+        `[data-test-projectSetting-analysisSettings-regulatoryPreferences="${t('sama')}"]`
       );
       const samaInitialValue = profile.report_preference.show_sama.value;
       const samaInput = sama.querySelector('[data-test-input]');
@@ -486,7 +486,7 @@ module(
       );
 
       let pcidss = find(
-        '[data-test-projectSetting-analysisSettings-regulatoryPreferences="t:pcidss:()"]'
+        `[data-test-projectSetting-analysisSettings-regulatoryPreferences="${t('pcidss')}"]`
       );
 
       let pcidssCheck = pcidss.querySelector('[data-test-check]');
@@ -499,7 +499,7 @@ module(
       await click(pcidssInput);
 
       pcidss = find(
-        '[data-test-projectSetting-analysisSettings-regulatoryPreferences="t:pcidss:()"]'
+        `[data-test-projectSetting-analysisSettings-regulatoryPreferences="${t('pcidss')}"]`
       );
       pcidssCheck = pcidss.querySelector('[data-test-check]');
       pcidssInput = pcidss.querySelector('[data-test-input]');
@@ -511,7 +511,7 @@ module(
       await click(pcidssInput);
 
       pcidss = find(
-        '[data-test-projectSetting-analysisSettings-regulatoryPreferences="t:pcidss:()"]'
+        `[data-test-projectSetting-analysisSettings-regulatoryPreferences="${t('pcidss')}"]`
       );
       pcidssCheck = pcidss.querySelector('[data-test-check]');
       pcidssInput = pcidss.querySelector('[data-test-input]');
@@ -558,7 +558,7 @@ module(
       );
 
       let pcidss = find(
-        '[data-test-projectSetting-analysisSettings-regulatoryPreferences="t:pcidss:()"]'
+        `[data-test-projectSetting-analysisSettings-regulatoryPreferences="${t('pcidss')}"]`
       );
       let pcidssCheck = pcidss.querySelector('[data-test-check]');
       let pcidssInput = pcidss.querySelector('[data-test-input]');
@@ -571,7 +571,7 @@ module(
       await click(pcidssReset);
 
       pcidss = find(
-        '[data-test-projectSetting-analysisSettings-regulatoryPreferences="t:pcidss:()"]'
+        `[data-test-projectSetting-analysisSettings-regulatoryPreferences="${t('pcidss')}"]`
       );
       pcidssCheck = pcidss.querySelector('[data-test-check]');
       pcidssInput = pcidss.querySelector('[data-test-input]');

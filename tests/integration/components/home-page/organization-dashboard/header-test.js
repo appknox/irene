@@ -1,7 +1,7 @@
 import { module, test } from 'qunit';
 import { setupRenderingTest } from 'ember-qunit';
 import { setupMirage } from 'ember-cli-mirage/test-support';
-import { setupIntl } from 'ember-intl/test-support';
+import { setupIntl, t } from 'ember-intl/test-support';
 import { click, findAll, render } from '@ember/test-helpers';
 import { hbs } from 'ember-cli-htmlbars';
 
@@ -108,11 +108,11 @@ module(
 
         assert
           .dom('[data-test-organizationDashboardHeader-startScanLabel]')
-          .hasText('t:startNewScan:()');
+          .hasText(t('startNewScan'));
 
         assert.dom('[data-test-uploadApp-input]').exists();
 
-        assert.dom('[data-test-uploadApp-uploadBtn]').hasText('t:uploadApp:()');
+        assert.dom('[data-test-uploadApp-uploadBtn]').hasText(t('uploadApp'));
         // assert.dom('[data-test-uploadAppViaLink-btn]').isNotDisabled();
 
         if (hasUploadAppStatus) {
@@ -131,7 +131,7 @@ module(
           assert
             .dom('[data-test-organizationDashboardHeader-KnowledgeBaseBtn]')
             .isNotDisabled()
-            .hasText('t:knowledgeBase:()');
+            .hasText(t('knowledgeBase'));
         } else {
           assert
             .dom('[data-test-organizationDashboardHeader-KnowledgeBaseBtn]')
@@ -187,7 +187,7 @@ module(
       assert
         .dom('[data-test-organizationDashboardHeader-KnowledgeBaseBtn]')
         .isNotDisabled()
-        .hasText('t:knowledgeBase:()');
+        .hasText(t('knowledgeBase'));
 
       await click('[data-test-organizationDashboardHeader-KnowledgeBaseBtn]');
     });
@@ -232,8 +232,8 @@ module(
         assert.dom(menuItems[1]).hasText(this.user.email);
 
         if (chatSupport) {
-          assert.dom(menuItems[2]).hasText('t:support:()');
-          assert.dom(menuItems[3]).hasText('t:logout:()');
+          assert.dom(menuItems[2]).hasText(t('support'));
+          assert.dom(menuItems[3]).hasText(t('logout'));
 
           await click(menuItems[3].querySelector('button'));
 
@@ -241,7 +241,7 @@ module(
             .dom('[data-test-organizationDashboardHeader-profileMenuItem]')
             .doesNotExist();
         } else {
-          assert.dom(menuItems[2]).hasText('t:logout:()');
+          assert.dom(menuItems[2]).hasText(t('logout'));
 
           await click(menuItems[2].querySelector('button'));
 

@@ -3,7 +3,7 @@ import { setupRenderingTest } from 'ember-qunit';
 import { render } from '@ember/test-helpers';
 import { hbs } from 'ember-cli-htmlbars';
 import { setupMirage } from 'ember-cli-mirage/test-support';
-import { setupIntl } from 'ember-intl/test-support';
+import { setupIntl, t } from 'ember-intl/test-support';
 
 module(
   'Integration | Component | app-monitoring/table/status',
@@ -69,7 +69,7 @@ module(
       assert
         .dom(`[data-test-amTableRow-status]`)
         .exists()
-        .containsText(`t:inactiveCapital:()`);
+        .containsText(t('inactiveCapital'));
     });
 
     test('It renders "ACTIVE" in status column if settings is enabled and isActive is enabled', async function (assert) {
@@ -92,7 +92,7 @@ module(
 
       assert
         .dom('[data-test-amTableRow-status]')
-        .containsText('t:activeCapital:()');
+        .containsText(t('activeCapital'));
     });
 
     test('it hides "sync in progress" status column when store monitoring is inactive and status is "PENDING"', async function (assert) {
@@ -116,7 +116,7 @@ module(
 
       assert
         .dom(`[data-test-amTableRow-status]`)
-        .containsText(`t:inactiveCapital:()`);
+        .containsText(t('inactiveCapital'));
 
       assert.dom('[data-test-amTableRow-last-sync-spinner]').doesNotExist();
     });

@@ -9,7 +9,7 @@ import {
 
 import { hbs } from 'ember-cli-htmlbars';
 import { setupMirage } from 'ember-cli-mirage/test-support';
-import { setupIntl } from 'ember-intl/test-support';
+import { setupIntl, t } from 'ember-intl/test-support';
 import { setupRenderingTest } from 'ember-qunit';
 import { module, test } from 'qunit';
 
@@ -142,13 +142,13 @@ module('Integration | Component | sbom/app-scan', function (hooks) {
 
       assert
         .dom('[data-test-sbomScan-title]')
-        .hasText('t:sbomModule.pastSbomAnalyses:()');
+        .hasText(t('sbomModule.pastSbomAnalyses'));
 
-      assert
-        .dom('[data-test-sbomScan-description]')
-        .hasText(
-          `t:sbomModule.pastSbomAnalysesDescription:("projectName":"${this.files[0].name}")`
-        );
+      assert.dom('[data-test-sbomScan-description]').hasText(
+        t('sbomModule.pastSbomAnalysesDescription', {
+          projectName: this.files[0].name,
+        })
+      );
 
       assert.dom('[data-test-sbomScan-table]').exists();
 
@@ -157,11 +157,11 @@ module('Integration | Component | sbom/app-scan', function (hooks) {
       );
 
       // assert header row
-      assert.dom(headerRow[0]).hasText('t:sbomModule.applicationVersion:()');
-      assert.dom(headerRow[1]).hasText('t:sbomModule.versionCode:()');
-      assert.dom(headerRow[2]).hasText('t:sbomModule.sbomGeneratedOn:()');
-      assert.dom(headerRow[3]).hasText('t:status:()');
-      assert.dom(headerRow[4]).hasText('t:sbomModule.viewReport:()');
+      assert.dom(headerRow[0]).hasText(t('sbomModule.applicationVersion'));
+      assert.dom(headerRow[1]).hasText(t('sbomModule.versionCode'));
+      assert.dom(headerRow[2]).hasText(t('sbomModule.sbomGeneratedOn'));
+      assert.dom(headerRow[3]).hasText(t('status'));
+      assert.dom(headerRow[4]).hasText(t('sbomModule.viewReport'));
 
       const contentRows = findAll('[data-test-sbomScan-row]');
 
@@ -252,7 +252,7 @@ module('Integration | Component | sbom/app-scan', function (hooks) {
 
     assert
       .dom('[data-test-sbomReportDrawer-title]')
-      .hasText('t:sbomModule.scanReports:()');
+      .hasText(t('sbomModule.scanReports'));
 
     assert.dom('[data-test-sbomReportDrawer-closeBtn]').isNotDisabled();
 
@@ -276,7 +276,7 @@ module('Integration | Component | sbom/app-scan', function (hooks) {
 
     assert
       .dom('[data-test-sbomReportDrawer-description]')
-      .hasText('t:sbomModule.sbomDownloadReportDescription:()');
+      .hasText(t('sbomModule.sbomDownloadReportDescription'));
   });
 
   test('test sbom app scans loading & empty state', async function (assert) {
@@ -325,30 +325,30 @@ module('Integration | Component | sbom/app-scan', function (hooks) {
 
     assert
       .dom('[data-test-sbomScan-title]')
-      .hasText('t:sbomModule.pastSbomAnalyses:()');
+      .hasText(t('sbomModule.pastSbomAnalyses'));
 
-    assert
-      .dom('[data-test-sbomScan-description]')
-      .hasText(
-        `t:sbomModule.pastSbomAnalysesDescription:("projectName":"${this.files[0].name}")`
-      );
+    assert.dom('[data-test-sbomScan-description]').hasText(
+      t('sbomModule.pastSbomAnalysesDescription', {
+        projectName: this.files[0].name,
+      })
+    );
 
     assert.dom('[data-test-sbomScan-table]').doesNotExist();
 
     assert.dom('[data-test-sbom-loadingSvg]').exists();
 
     assert.dom('[data-test-sbom-loader]').exists();
-    assert.dom('[data-test-sbom-loadingText]').hasText('t:loading:()...');
+    assert.dom('[data-test-sbom-loadingText]').hasText(`${t('loading')}...`);
 
     await waitFor('[data-test-sbomScan-emptyTextTitle]', { timeout: 500 });
 
     assert
       .dom('[data-test-sbomScan-emptyTextTitle]')
-      .hasText('t:sbomModule.appScanEmptyText.title:()');
+      .hasText(t('sbomModule.appScanEmptyText.title'));
 
     assert
       .dom('[data-test-sbomScan-emptyTextDescription]')
-      .hasText('t:sbomModule.appScanEmptyText.description:()');
+      .hasText(t('sbomModule.appScanEmptyText.description'));
 
     assert.dom('[data-test-sbomScan-emptySvg]').exists();
   });

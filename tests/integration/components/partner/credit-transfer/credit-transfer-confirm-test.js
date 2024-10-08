@@ -1,7 +1,7 @@
 /* eslint-disable qunit/no-assert-equal, qunit/require-expect */
 import { module, test } from 'qunit';
 import { setupRenderingTest } from 'ember-qunit';
-import { setupIntl } from 'ember-intl/test-support';
+import { setupIntl, t } from 'ember-intl/test-support';
 import { click, render } from '@ember/test-helpers';
 import { hbs } from 'ember-cli-htmlbars';
 import { faker } from '@faker-js/faker';
@@ -29,7 +29,7 @@ module(
 
       assert
         .dom(`[data-test-partner-current-credits-key]`)
-        .hasText(`t:currentCredits:():`);
+        .hasText(`${t('currentCredits')}:`);
       assert
         .dom(`[data-test-partner-current-credits-value]`)
         .hasText(
@@ -38,7 +38,7 @@ module(
 
       assert
         .dom(`[data-test-partner-remaining-credits-key]`)
-        .hasText(`t:remainingCredits:():`);
+        .hasText(`${t('remainingCredits')}:`);
       assert
         .dom(`[data-test-partner-remaining-credits-value]`)
         .hasText(
@@ -64,18 +64,18 @@ module(
         'Client credits has three rows'
       );
 
-      assert.dom(`[data-test-client-key]`).hasText(`t:client:():`);
+      assert.dom(`[data-test-client-key]`).hasText(`${t('client')}:`);
       assert.dom(`[data-test-client-value]`).hasText(this.clientName);
       assert
         .dom(`[data-test-client-current-credits-key]`)
-        .hasText(`t:currentCredits:():`);
+        .hasText(`${t('currentCredits')}:`);
       assert
         .dom(`[data-test-client-current-credits-value]`)
         .hasText(
           `${this.clientPlan.scansLeft} t:pluralScans:("itemCount":${this.clientPlan.scansLeft})`
         );
 
-      assert.dom(`[data-test-new-credits-key]`).hasText(`t:newCredits:():`);
+      assert.dom(`[data-test-new-credits-key]`).hasText(`${t('newCredits')}:`);
       assert
         .dom(`[data-test-new-credits-value]`)
         .hasText(
@@ -91,8 +91,8 @@ module(
       @toggleMode={{this.toggleMode}}
       />`);
 
-      assert.dom(`[data-test-confirm-btn]`).hasText(`t:confirmTransfer:()`);
-      assert.dom(`[data-test-back-btn]`).hasText(`t:back:()`);
+      assert.dom(`[data-test-confirm-btn]`).hasText(t('confirmTransfer'));
+      assert.dom(`[data-test-back-btn]`).hasText(t('back'));
     });
 
     test('it should only render confirm btn', async function (assert) {
@@ -102,7 +102,7 @@ module(
       />`);
 
       assert.dom(`[data-test-confirm-btn]`).exists();
-      assert.dom(`[data-test-confirm-btn]`).hasText(`t:confirmTransfer:()`);
+      assert.dom(`[data-test-confirm-btn]`).hasText(t('confirmTransfer'));
       assert.dom(`[data-test-back-btn]`).doesNotExist();
     });
 
@@ -113,7 +113,7 @@ module(
       />`);
 
       assert.dom(`[data-test-confirm-btn]`).doesNotExist();
-      assert.dom(`[data-test-back-btn]`).hasText(`t:back:()`);
+      assert.dom(`[data-test-back-btn]`).hasText(t('back'));
     });
 
     test('it should handle back btn action', async function (assert) {

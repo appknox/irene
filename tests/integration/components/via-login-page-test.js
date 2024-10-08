@@ -2,7 +2,7 @@ import { module, test } from 'qunit';
 import { setupRenderingTest } from 'ember-qunit';
 import { click, fillIn, render } from '@ember/test-helpers';
 import { hbs } from 'ember-cli-htmlbars';
-import { setupIntl } from 'ember-intl/test-support';
+import { setupIntl, t } from 'ember-intl/test-support';
 import { setupMirage } from 'ember-cli-mirage/test-support';
 import Service from '@ember/service';
 import { Response } from 'miragejs';
@@ -33,7 +33,7 @@ module('Integration | Component | via-login-page', function (hooks) {
 
     assert
       .dom('[data-test-registration-form-title]')
-      .hasText('t:completeRegistration:()');
+      .hasText(t('completeRegistration'));
 
     assert.dom('[data-test-register-btn]').exists();
   });
@@ -110,12 +110,12 @@ module('Integration | Component | via-login-page', function (hooks) {
     assert
       .dom('[data-test-register-confirm-title]')
       .exists()
-      .hasText('t:registerConfirmation:()');
+      .hasText(t('registerConfirmation'));
 
     assert
       .dom('[data-test-register-confirm-message]')
       .exists()
-      .hasText('t:checkEmail:()');
+      .hasText(t('checkEmail'));
   });
 
   test('it should show error message if registration fails', async function (assert) {

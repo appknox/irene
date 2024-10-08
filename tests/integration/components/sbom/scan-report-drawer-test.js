@@ -1,7 +1,7 @@
 import { find, findAll, render, click, waitFor } from '@ember/test-helpers';
 import { hbs } from 'ember-cli-htmlbars';
 import { setupMirage } from 'ember-cli-mirage/test-support';
-import { setupIntl } from 'ember-intl/test-support';
+import { setupIntl, t } from 'ember-intl/test-support';
 import { setupRenderingTest } from 'ember-qunit';
 import { module, test } from 'qunit';
 
@@ -92,7 +92,7 @@ module('Integration | Component | sbom/scan-report-drawer', function (hooks) {
 
     assert
       .dom('[data-test-sbomReportDrawer-title]')
-      .hasText('t:sbomModule.scanReports:()');
+      .hasText(t('sbomModule.scanReports'));
 
     assert.dom('[data-test-sbomReportDrawer-closeBtn]').isNotDisabled();
 
@@ -116,7 +116,7 @@ module('Integration | Component | sbom/scan-report-drawer', function (hooks) {
 
     assert
       .dom('[data-test-sbomReportDrawer-description]')
-      .hasText('t:sbomModule.sbomDownloadReportDescription:()');
+      .hasText(t('sbomModule.sbomDownloadReportDescription'));
 
     assert.dom('[data-test-sbomReportList-reportlist]').exists();
 
@@ -165,7 +165,7 @@ module('Integration | Component | sbom/scan-report-drawer', function (hooks) {
 
     assert
       .dom('[data-test-sbomReportList-reportGenerateTitle]', reportList[0])
-      .hasText('t:sbomModule.sbomDownloadPdfPrimaryText:()');
+      .hasText(t('sbomModule.sbomDownloadPdfPrimaryText'));
 
     assert
       .dom('[data-test-sbomReportList-reportGenerateSvg]', reportList[0])
@@ -176,12 +176,12 @@ module('Integration | Component | sbom/scan-report-drawer', function (hooks) {
         '[data-test-sbomReportList-reportGenerateDescription]',
         reportList[0]
       )
-      .hasText('t:sbomModule.generateReportDescription:()');
+      .hasText(t('sbomModule.generateReportDescription'));
 
     assert
       .dom('[data-test-sbomReportList-reportGenerateBtn]', reportList[0])
       .isNotDisabled()
-      .hasText('t:generateReport:()');
+      .hasText(t('generateReport'));
 
     await click(
       reportList[0].querySelector(
@@ -215,11 +215,11 @@ module('Integration | Component | sbom/scan-report-drawer', function (hooks) {
     // current state
     assert
       .dom('[data-test-sbomReportList-reportPrimaryText]', reportList[0])
-      .hasText('t:sbomModule.sbomDownloadPdfPrimaryText:()');
+      .hasText(t('sbomModule.sbomDownloadPdfPrimaryText'));
 
     assert
       .dom('[data-test-sbomReportList-reportGeneratingText]', reportList[0])
-      .hasText('t:generating:()...');
+      .hasText(`${t('generating')}...`);
 
     assert
       .dom('[data-test-sbomReportList-reportGeneratingLoader]', reportList[0])
@@ -258,12 +258,14 @@ module('Integration | Component | sbom/scan-report-drawer', function (hooks) {
     // after report generation
     assert
       .dom('[data-test-sbomReportList-reportPrimaryText]', reportList[0])
-      .hasText('t:sbomModule.sbomDownloadPdfPrimaryText:()');
+      .hasText(t('sbomModule.sbomDownloadPdfPrimaryText'));
 
     assert
       .dom('[data-test-sbomReportList-reportSecondaryText]', reportList[0])
       .hasText(
-        `t:sbomModule.sbomDownloadPdfSecondaryText:("password":"${this.sbomReport.report_password}")`
+        t('sbomModule.sbomDownloadPdfSecondaryText', {
+          password: this.sbomReport.report_password,
+        })
       );
 
     assert
@@ -324,7 +326,7 @@ module('Integration | Component | sbom/scan-report-drawer', function (hooks) {
     assert
       .dom('[data-test-sbomReportList-reportGenerateBtn]', reportList[0])
       .isNotDisabled()
-      .hasText('t:generateReport:()');
+      .hasText(t('generateReport'));
 
     this.set('status', SbomReportStatus.STARTED);
 
@@ -360,11 +362,11 @@ module('Integration | Component | sbom/scan-report-drawer', function (hooks) {
     // current state
     assert
       .dom('[data-test-sbomReportList-reportPrimaryText]', reportList[0])
-      .hasText('t:sbomModule.sbomDownloadPdfPrimaryText:()');
+      .hasText(t('sbomModule.sbomDownloadPdfPrimaryText'));
 
     assert
       .dom('[data-test-sbomReportList-reportGeneratingText]', reportList[0])
-      .hasText('t:generating:()...');
+      .hasText(`${t('generating')}...`);
 
     assert
       .dom('[data-test-sbomReportList-reportGeneratingLoader]', reportList[0])
@@ -396,12 +398,14 @@ module('Integration | Component | sbom/scan-report-drawer', function (hooks) {
     // completed state
     assert
       .dom('[data-test-sbomReportList-reportPrimaryText]', reportList[0])
-      .hasText('t:sbomModule.sbomDownloadPdfPrimaryText:()');
+      .hasText(t('sbomModule.sbomDownloadPdfPrimaryText'));
 
     assert
       .dom('[data-test-sbomReportList-reportSecondaryText]', reportList[0])
       .hasText(
-        `t:sbomModule.sbomDownloadPdfSecondaryText:("password":"${this.sbomReport.report_password}")`
+        t('sbomModule.sbomDownloadPdfSecondaryText', {
+          password: this.sbomReport.report_password,
+        })
       );
 
     assert
@@ -438,12 +442,14 @@ module('Integration | Component | sbom/scan-report-drawer', function (hooks) {
 
     assert
       .dom('[data-test-sbomReportList-reportPrimaryText]', reportList[0])
-      .hasText('t:sbomModule.sbomDownloadPdfPrimaryText:()');
+      .hasText(t('sbomModule.sbomDownloadPdfPrimaryText'));
 
     assert
       .dom('[data-test-sbomReportList-reportSecondaryText]', reportList[0])
       .hasText(
-        `t:sbomModule.sbomDownloadPdfSecondaryText:("password":"${this.sbomReport.report_password}")`
+        t('sbomModule.sbomDownloadPdfSecondaryText', {
+          password: this.sbomReport.report_password,
+        })
       );
 
     assert
@@ -488,7 +494,9 @@ module('Integration | Component | sbom/scan-report-drawer', function (hooks) {
     assert
       .dom('[data-test-sbomReportList-reportSecondaryText]', reportList[0])
       .hasText(
-        `t:sbomModule.sbomDownloadPdfSecondaryText:("password":"${this.sbomReport.report_password}")`
+        t('sbomModule.sbomDownloadPdfSecondaryText', {
+          password: this.sbomReport.report_password,
+        })
       );
 
     assert
@@ -502,7 +510,7 @@ module('Integration | Component | sbom/scan-report-drawer', function (hooks) {
 
     const notify = this.owner.lookup('service:notifications');
 
-    assert.strictEqual(notify.infoMsg, 't:passwordCopied:()');
+    assert.strictEqual(notify.infoMsg, t('passwordCopied'));
   });
 
   test('test json report download', async function (assert) {
@@ -532,11 +540,11 @@ module('Integration | Component | sbom/scan-report-drawer', function (hooks) {
 
     assert
       .dom('[data-test-sbomReportList-reportPrimaryText]', reportList[1])
-      .hasText('t:sbomModule.sbomDownloadJsonPrimaryText:()');
+      .hasText(t('sbomModule.sbomDownloadJsonPrimaryText'));
 
     assert
       .dom('[data-test-sbomReportList-reportSecondaryText]', reportList[1])
-      .hasText('t:sbomModule.sbomDownloadJsonSecondaryText:()');
+      .hasText(t('sbomModule.sbomDownloadJsonSecondaryText'));
 
     assert
       .dom('[data-test-sbomReportList-reportDownloadBtn]', reportList[1])

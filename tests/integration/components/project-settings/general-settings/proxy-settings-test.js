@@ -1,11 +1,12 @@
 import { module, test } from 'qunit';
 import { setupRenderingTest } from 'ember-qunit';
 import { setupMirage } from 'ember-cli-mirage/test-support';
-import { setupIntl } from 'ember-intl/test-support';
+import { setupIntl, t } from 'ember-intl/test-support';
 import { click, fillIn, render } from '@ember/test-helpers';
 import { hbs } from 'ember-cli-htmlbars';
 import { faker } from '@faker-js/faker';
 import Service from '@ember/service';
+import { capitalize } from '@ember/string';
 
 class NotificationsStub extends Service {
   errorMsg = null;
@@ -80,14 +81,14 @@ module(
           '[data-test-projectSettings-genSettings-proxySettings-saveProxyBtn]'
         )
         .exists()
-        .containsText('t:save:()');
+        .containsText(t('save'));
 
       assert
         .dom(
           '[data-test-projectSettings-genSettings-proxySettings-proxyToggleLabel]'
         )
         .exists()
-        .containsText('t:proxyEnable:()');
+        .containsText(t('proxyEnable'));
 
       assert
         .dom(
@@ -157,7 +158,7 @@ module(
 
         if (host && port) {
           const notify = this.owner.lookup('service:notifications');
-          assert.strictEqual(notify.successMsg, 't:proxySettingsSaved:()');
+          assert.strictEqual(notify.successMsg, t('proxySettingsSaved'));
 
           assert.strictEqual(this.host, host);
           assert.strictEqual(this.port, port);
@@ -229,12 +230,18 @@ module(
       await click(toggleSelector);
 
       const notify = this.owner.lookup('service:notifications');
-      assert.strictEqual(notify.successMsg, 't:proxyTurned:()T:ON:()');
+      assert.strictEqual(
+        notify.successMsg,
+        `${t('proxyTurned')}${capitalize(t('ON'))}`
+      );
       assert.dom(toggleSelector).exists().isChecked();
 
       await click(toggleSelector);
 
-      assert.strictEqual(notify.successMsg, 't:proxyTurned:()T:OFF:()');
+      assert.strictEqual(
+        notify.successMsg,
+        `${t('proxyTurned')}${capitalize(t('OFF'))}`
+      );
       assert.dom(toggleSelector).exists().isNotChecked();
     });
   }

@@ -2,7 +2,7 @@ import { render, click } from '@ember/test-helpers';
 import dayjs from 'dayjs';
 import { hbs } from 'ember-cli-htmlbars';
 import { setupMirage } from 'ember-cli-mirage/test-support';
-import { setupIntl } from 'ember-intl/test-support';
+import { setupIntl, t } from 'ember-intl/test-support';
 import { setupRenderingTest } from 'ember-qunit';
 import { module, test } from 'qunit';
 
@@ -85,11 +85,11 @@ module('Integration | Component | sbom/scan-details', function (hooks) {
 
       assert
         .dom('[data-test-sbomScanDetails-componentTitle]')
-        .hasText('t:sbomModule.allComponents:()');
+        .hasText(t('sbomModule.allComponents'));
 
       assert
         .dom('[data-test-sbomScanDetails-componentDescription]')
-        .hasText('t:sbomModule.componentDescription:()');
+        .hasText(t('sbomModule.componentDescription'));
 
       // assert.dom('[data-test-sbomScanDetails-componentSearchInput]').hasNoValue();
 
@@ -98,13 +98,13 @@ module('Integration | Component | sbom/scan-details', function (hooks) {
       assert
         .dom('[data-test-sbomScanDetails-pastSbomAnalyses-link]')
         .exists()
-        .hasText('t:sbomModule.pastSbomAnalyses:()');
+        .hasText(t('sbomModule.pastSbomAnalyses'));
 
       if (status === SbomScanStatus.COMPLETED) {
         assert
           .dom('[data-test-sbomScanDetails-viewReport-btn]')
           .exists()
-          .containsText('t:sbomModule.viewReport:()');
+          .containsText(t('sbomModule.viewReport'));
       } else {
         assert.dom('[data-test-sbomScanDetails-viewReport-btn]').doesNotExist();
       }
@@ -132,11 +132,11 @@ module('Integration | Component | sbom/scan-details', function (hooks) {
 
           assert
             .dom('[data-test-sbomScanDetails-scanStatusTitle]')
-            .hasText('t:sbomModule.sbomScanStatusError.title:()');
+            .hasText(t('sbomModule.sbomScanStatusError.title'));
 
           assert
             .dom('[data-test-sbomScanDetails-scanStatusDescription]')
-            .hasText('t:sbomModule.sbomScanStatusError.description:()');
+            .hasText(t('sbomModule.sbomScanStatusError.description'));
         }
 
         if (
@@ -149,11 +149,11 @@ module('Integration | Component | sbom/scan-details', function (hooks) {
 
           assert
             .dom('[data-test-sbomScanDetails-scanStatusTitle]')
-            .hasText('t:sbomModule.sbomScanStatusProgress.title:()');
+            .hasText(t('sbomModule.sbomScanStatusProgress.title'));
 
           assert
             .dom('[data-test-sbomScanDetails-scanStatusDescription]')
-            .hasText('t:sbomModule.sbomScanStatusProgress.description:()');
+            .hasText(t('sbomModule.sbomScanStatusProgress.description'));
         }
       }
 
@@ -193,15 +193,15 @@ module('Integration | Component | sbom/scan-details', function (hooks) {
     // File summary tests
     const fileSummaryDetailsList = [
       {
-        label: 't:version:()',
+        label: t('version'),
         value: this.sbomFile.get('file').get('version'),
       },
       {
-        label: 't:sbomModule.versionCode:()',
+        label: t('sbomModule.versionCode'),
         value: this.sbomFile.get('file').get('versionCode'),
       },
       {
-        label: 't:file:()',
+        label: t('file'),
         value: this.sbomFile.get('file').get('id'),
         link: true,
       },
@@ -241,30 +241,30 @@ module('Integration | Component | sbom/scan-details', function (hooks) {
     // Scan summary tests
     const scanSummaryDetailsList = [
       {
-        label: 't:sbomModule.totalComponents:()',
+        label: t('sbomModule.totalComponents'),
         value: [`${this.sbomScanSummary.componentCount}`],
       },
       {
-        label: 't:sbomModule.componentType:()',
+        label: t('sbomModule.componentType'),
         value: [
-          `t:library:() - ${this.sbomScanSummary.libraryCount}`,
-          `t:framework:() - ${this.sbomScanSummary.frameworkCount}`,
-          `t:application:() - ${this.sbomScanSummary.applicationCount}`,
-          `t:container:() - ${this.sbomScanSummary.containerCount}`,
-          `t:device:() - ${this.sbomScanSummary.deviceCount}`,
-          `t:file:() - ${this.sbomScanSummary.fileCount}`,
-          `t:firmware:() - ${this.sbomScanSummary.firmwareCount}`,
-          `t:operatingSystem:() - ${this.sbomScanSummary.operatingSystemCount}`,
+          `${t('library')} - ${this.sbomScanSummary.libraryCount}`,
+          `${t('framework')} - ${this.sbomScanSummary.frameworkCount}`,
+          `${t('application')} - ${this.sbomScanSummary.applicationCount}`,
+          `${t('container')} - ${this.sbomScanSummary.containerCount}`,
+          `${t('device')} - ${this.sbomScanSummary.deviceCount}`,
+          `${t('file')} - ${this.sbomScanSummary.fileCount}`,
+          `${t('firmware')} - ${this.sbomScanSummary.firmwareCount}`,
+          `${t('operatingSystem')} - ${this.sbomScanSummary.operatingSystemCount}`,
         ].filter((it) => !it.endsWith(' - 0')), // remove zero counts it will not be rendered
       },
       {
-        label: 't:status:()',
+        label: t('status'),
         value: [],
         assertValue: () =>
           assert.dom('[data-test-sbom-scanStatus]').hasAnyText(),
       },
       {
-        label: 't:sbomModule.generatedDate:()',
+        label: t('sbomModule.generatedDate'),
         value: [dayjs(this.sbomFile.completedAt).format('MMM DD, YYYY')],
       },
     ];

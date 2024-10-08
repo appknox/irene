@@ -1,7 +1,7 @@
 import { click, findAll, render } from '@ember/test-helpers';
 import { hbs } from 'ember-cli-htmlbars';
 import { setupMirage } from 'ember-cli-mirage/test-support';
-import { setupIntl } from 'ember-intl/test-support';
+import { setupIntl, t } from 'ember-intl/test-support';
 import { setupRenderingTest } from 'ember-qunit';
 import { module, test } from 'qunit';
 import { Response } from 'miragejs';
@@ -27,9 +27,9 @@ const classes = {
   trigger: styles['ak-select-trigger'],
 };
 
-const projectAccessOptions = [
-  { label: 't:allProjects:()', value: true },
-  { label: 't:serviceAccountModule.forSpecificProjects:()', value: false },
+const projectAccessOptions = () => [
+  { label: t('allProjects'), value: true },
+  { label: t('serviceAccountModule.forSpecificProjects'), value: false },
 ];
 
 module(
@@ -105,7 +105,7 @@ module(
 
         assert
           .dom('[data-test-serviceAccountSection-title]')
-          .hasText('t:selectedProject:()');
+          .hasText(t('selectedProject'));
 
         assert
           .dom('[data-test-serviceAccountSection-selectProject-actionBtn]')
@@ -115,7 +115,7 @@ module(
           .dom(
             '[data-test-serviceAccountSection-selectProject-projectAccessLabel]'
           )
-          .hasText('t:serviceAccountModule.projectAccess:()');
+          .hasText(t('serviceAccountModule.projectAccess'));
 
         assert
           .dom(
@@ -123,7 +123,7 @@ module(
           )
           .exists();
 
-        const selectedProjectAccess = projectAccessOptions.find(
+        const selectedProjectAccess = projectAccessOptions().find(
           (opt) => opt.value === this.serviceAccount.allProjects
         );
 
@@ -132,7 +132,9 @@ module(
             '[data-test-serviceAccountSection-selectProject-selectedProjectAccess]'
           )
           .hasText(
-            `t:serviceAccountModule.selectedProjectAccess:("projectAccess":"${selectedProjectAccess?.label}")`
+            t('serviceAccountModule.selectedProjectAccess', {
+              projectAccess: selectedProjectAccess?.label,
+            })
           );
 
         if (allProjects) {
@@ -145,14 +147,14 @@ module(
           if (hasProjects) {
             assert
               .dom('[data-test-serviceAccountSection-selectProjectList-title]')
-              .hasText('t:serviceAccountModule.selectedProjectListTitle:()');
+              .hasText(t('serviceAccountModule.selectedProjectListTitle'));
 
             assert
               .dom(
                 '[data-test-serviceAccountSection-selectProjectList-description]'
               )
               .hasText(
-                't:serviceAccountModule.selectedProjectListDescription:()'
+                t('serviceAccountModule.selectedProjectListDescription')
               );
 
             assert
@@ -212,20 +214,20 @@ module(
               .dom(
                 '[data-test-serviceAccountSection-selectProjectList-emptyTitle]'
               )
-              .hasText('t:serviceAccountModule.emptyProjectListTitle:()');
+              .hasText(t('serviceAccountModule.emptyProjectListTitle'));
 
             assert
               .dom(
                 '[data-test-serviceAccountSection-selectProjectList-emptyDescription]'
               )
-              .hasText('t:serviceAccountModule.emptyProjectListDescription:()');
+              .hasText(t('serviceAccountModule.emptyProjectListDescription'));
 
             assert
               .dom(
                 '[data-test-serviceAccountSection-selectProjectList-emptyAddProjectBtn]'
               )
               .isNotDisabled()
-              .hasText('t:addProject:()');
+              .hasText(t('addProject'));
           }
         }
 
@@ -263,7 +265,7 @@ module(
 
         assert
           .dom('[data-test-serviceAccountSection-title]')
-          .hasText('t:selectedProject:()');
+          .hasText(t('selectedProject'));
 
         assert
           .dom('[data-test-serviceAccountSection-selectProject-actionBtn]')
@@ -273,7 +275,7 @@ module(
           .dom(
             '[data-test-serviceAccountSection-selectProject-projectAccessLabel]'
           )
-          .hasText('t:serviceAccountModule.projectAccess:()');
+          .hasText(t('serviceAccountModule.projectAccess'));
 
         assert
           .dom(
@@ -281,7 +283,7 @@ module(
           )
           .exists();
 
-        const selectedProjectAccess = projectAccessOptions.find(
+        const selectedProjectAccess = projectAccessOptions().find(
           (opt) => opt.value === this.serviceAccount.allProjects
         );
 
@@ -290,7 +292,9 @@ module(
             '[data-test-serviceAccountSection-selectProject-selectedProjectAccess]'
           )
           .hasText(
-            `t:serviceAccountModule.selectedProjectAccess:("projectAccess":"${selectedProjectAccess?.label}")`
+            t('serviceAccountModule.selectedProjectAccess', {
+              projectAccess: selectedProjectAccess?.label,
+            })
           );
 
         assert.dom('[data-test-serviceAccountSection-footer]').doesNotExist();
@@ -314,14 +318,14 @@ module(
         assert
           .dom('[data-test-serviceAccountSection-selectProject-updateBtn]')
           .isNotDisabled()
-          .hasText('t:update:()');
+          .hasText(t('update'));
 
         assert
           .dom('[data-test-serviceAccountSection-selectProject-cancelBtn]')
           .isNotDisabled()
-          .hasText('t:cancel:()');
+          .hasText(t('cancel'));
 
-        const optionToSelect = projectAccessOptions.find(
+        const optionToSelect = projectAccessOptions().find(
           (opt) => opt.value !== selectedProjectAccess.value
         );
 
@@ -350,16 +354,16 @@ module(
           assert
             .dom('[data-test-serviceAccountSection-selectProject-updateBtn]')
             .isNotDisabled()
-            .hasText('t:update:()');
+            .hasText(t('update'));
 
           assert
             .dom('[data-test-serviceAccountSection-selectProject-cancelBtn]')
             .isNotDisabled()
-            .hasText('t:cancel:()');
+            .hasText(t('cancel'));
         } else {
           assert.strictEqual(
             notify.successMsg,
-            't:serviceAccountModule.editSuccessMsg:()'
+            t('serviceAccountModule.editSuccessMsg')
           );
 
           assert
@@ -367,7 +371,9 @@ module(
               '[data-test-serviceAccountSection-selectProject-selectedProjectAccess]'
             )
             .hasText(
-              `t:serviceAccountModule.selectedProjectAccess:("projectAccess":"${optionToSelect?.label}")`
+              t('serviceAccountModule.selectedProjectAccess', {
+                projectAccess: optionToSelect?.label,
+              })
             );
 
           assert
@@ -439,7 +445,7 @@ module(
 
         assert
           .dom('[data-test-serviceAccountSection-title]')
-          .hasText('t:selectedProject:()');
+          .hasText(t('selectedProject'));
 
         assert
           .dom('[data-test-serviceAccountSection-selectProject-actionBtn]')
@@ -456,14 +462,14 @@ module(
 
           assert
             .dom('[data-test-serviceAccountSection-selectProjectList-title]')
-            .hasText('t:serviceAccountModule.selectedProjectListTitle:()');
+            .hasText(t('serviceAccountModule.selectedProjectListTitle'));
 
           assert
             .dom(
               '[data-test-serviceAccountSection-selectProjectList-addProjectBtn]'
             )
             .isNotDisabled()
-            .hasText('t:addProject:()');
+            .hasText(t('addProject'));
 
           await click(
             '[data-test-serviceAccountSection-selectProjectList-addProjectBtn]'
@@ -474,7 +480,7 @@ module(
               '[data-test-serviceAccountSection-selectProjectList-emptyAddProjectBtn]'
             )
             .isNotDisabled()
-            .hasText('t:addProject:()');
+            .hasText(t('addProject'));
 
           await click(
             '[data-test-serviceAccountSection-selectProjectList-emptyAddProjectBtn]'
@@ -487,7 +493,7 @@ module(
 
         assert
           .dom('[data-test-serviceAccountAddProject-drawerTitle]')
-          .hasText('t:addProject:()');
+          .hasText(t('addProject'));
 
         assert
           .dom('[data-test-serviceAccountAddProject-drawerCloseBtn]')
@@ -495,11 +501,11 @@ module(
 
         assert
           .dom('[data-test-serviceAccountAddProjectList-title]')
-          .hasText('t:addProject:()');
+          .hasText(t('addProject'));
 
         assert
           .dom('[data-test-serviceAccountAddProjectList-description]')
-          .hasText('t:serviceAccountModule.addProjectDescription:()');
+          .hasText(t('serviceAccountModule.addProjectDescription'));
 
         assert
           .dom('[data-test-serviceAccountAddProjectList-searchInput]')
@@ -511,8 +517,8 @@ module(
 
         assert.strictEqual(headers.length, 2);
 
-        assert.dom(headers[0]).hasText('t:name:()');
-        assert.dom(headers[1]).hasText('t:action:()');
+        assert.dom(headers[0]).hasText(t('name'));
+        assert.dom(headers[1]).hasText(t('action'));
 
         const rows = findAll('[data-test-serviceAccountAddProjectList-row]');
 
@@ -541,7 +547,7 @@ module(
 
         assert.strictEqual(
           notify.successMsg,
-          't:serviceAccountModule.addProjectSuccessMsg:()'
+          t('serviceAccountModule.addProjectSuccessMsg')
         );
 
         assert
@@ -599,7 +605,7 @@ module(
 
         assert
           .dom('[data-test-serviceAccountSection-title]')
-          .hasText('t:selectedProject:()');
+          .hasText(t('selectedProject'));
 
         assert
           .dom('[data-test-serviceAccountSection-selectProject-actionBtn]')
@@ -607,13 +613,13 @@ module(
 
         assert
           .dom('[data-test-serviceAccountSection-selectProjectList-title]')
-          .hasText('t:serviceAccountModule.selectedProjectListTitle:()');
+          .hasText(t('serviceAccountModule.selectedProjectListTitle'));
 
         assert
           .dom(
             '[data-test-serviceAccountSection-selectProjectList-description]'
           )
-          .hasText('t:serviceAccountModule.selectedProjectListDescription:()');
+          .hasText(t('serviceAccountModule.selectedProjectListDescription'));
 
         const listItems = findAll(
           '[data-test-serviceAccountSection-selectProjectList-item]'
@@ -644,7 +650,7 @@ module(
 
         assert
           .dom('[data-test-serviceAccount-confirmDrawer-heading]')
-          .hasText('t:confirmation:()');
+          .hasText(t('confirmation'));
 
         const serviceAccountProject = this.store.peekRecord(
           'service-account-project',
@@ -654,18 +660,20 @@ module(
         assert
           .dom('[data-test-serviceAccount-confirmDrawer-removeConfirmText]')
           .hasText(
-            `t:serviceAccountModule.removeProjectConfirmText:("projectName":"${serviceAccountProject.project.get('packageName')}")`
+            t('serviceAccountModule.removeProjectConfirmText', {
+              projectName: serviceAccountProject.project.get('packageName'),
+            })
           );
 
         assert
           .dom('[data-test-serviceAccount-confirmDrawer-confirmBtn]')
           .isNotDisabled()
-          .hasText('t:remove:()');
+          .hasText(t('remove'));
 
         assert
           .dom('[data-test-serviceAccount-confirmDrawer-cancelBtn]')
           .isNotDisabled()
-          .hasText('t:cancel:()');
+          .hasText(t('cancel'));
 
         await click('[data-test-serviceAccount-confirmDrawer-confirmBtn]');
 
@@ -676,21 +684,21 @@ module(
 
           assert
             .dom('[data-test-serviceAccount-confirmDrawer-heading]')
-            .hasText('t:confirmation:()');
+            .hasText(t('confirmation'));
 
           assert
             .dom('[data-test-serviceAccount-confirmDrawer-confirmBtn]')
             .isNotDisabled()
-            .hasText('t:remove:()');
+            .hasText(t('remove'));
 
           assert
             .dom('[data-test-serviceAccount-confirmDrawer-cancelBtn]')
             .isNotDisabled()
-            .hasText('t:cancel:()');
+            .hasText(t('cancel'));
         } else {
           assert.strictEqual(
             notify.successMsg,
-            't:serviceAccountModule.removeProjectSuccessMsg:()'
+            t('serviceAccountModule.removeProjectSuccessMsg')
           );
 
           assert

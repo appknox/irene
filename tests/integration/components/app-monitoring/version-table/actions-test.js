@@ -1,6 +1,6 @@
 import { hbs } from 'ember-cli-htmlbars';
 import { setupMirage } from 'ember-cli-mirage/test-support';
-import { setupIntl } from 'ember-intl/test-support';
+import { setupIntl, t } from 'ember-intl/test-support';
 import { setupRenderingTest } from 'ember-qunit';
 import { module, test } from 'qunit';
 import { click, find, render, triggerEvent } from '@ember/test-helpers';
@@ -136,7 +136,7 @@ module(
           assert
             .dom('[data-test-amVersionTable-noActionRequired]')
             .exists()
-            .containsText('t:noActionRequired:()');
+            .containsText(t('noActionRequired'));
         }
 
         // Show button if unscanned
@@ -144,7 +144,7 @@ module(
           assert
             .dom('[data-test-amVersionTable-initiateUploadBtn]')
             .exists()
-            .containsText('t:appMonitoringModule.initiateUpload:()');
+            .containsText(t('appMonitoringModule.initiateUpload'));
         }
       }
     );
@@ -199,7 +199,7 @@ module(
           assert
             .dom(COMMON_SELECTORS.loadingOrCompletedTextSelector)
             .exists()
-            .containsText('t:uploading:()');
+            .containsText(t('uploading'));
         }
 
         // Completed state
@@ -212,7 +212,7 @@ module(
           assert
             .dom(COMMON_SELECTORS.loadingOrCompletedTextSelector)
             .exists()
-            .containsText('t:completed:()');
+            .containsText(t('completed'));
         }
 
         // Error state
@@ -225,14 +225,14 @@ module(
           assert
             .dom('[data-test-amVersionTable-initiateUpload-errorText]')
             .exists()
-            .containsText('t:error:()');
+            .containsText(t('error'));
 
           assert
             .dom(
               '[data-test-amVersionTable-initiateUpload-errorInfoModalTrigger]'
             )
             .exists()
-            .hasText('t:appMonitoringModule.checkDetails:()');
+            .hasText(t('appMonitoringModule.checkDetails'));
         }
 
         assert.dom(COMMON_SELECTORS.initiateUploadBtn).doesNotExist();
@@ -286,12 +286,12 @@ module(
       assert
         .dom('[data-test-amVersionTable-initiateUpload-errorText]')
         .exists()
-        .containsText('t:error:()');
+        .containsText(t('error'));
 
       assert
         .dom(errorInfoModalTrigger)
         .exists()
-        .hasText('t:appMonitoringModule.checkDetails:()');
+        .hasText(t('appMonitoringModule.checkDetails'));
 
       assert.dom(COMMON_SELECTORS.initiateUploadBtn).doesNotExist();
 
@@ -317,18 +317,18 @@ module(
       assert
         .dom('[data-test-amVersionTable-initiateUpload-lastUploadAttempt]')
         .exists()
-        .containsText('t:appMonitoringModule.lastUploadAttemptText:()')
+        .containsText(t('appMonitoringModule.lastUploadAttemptText'))
         .containsText(dayjs(submissionRecord.createdOn).format('Do MMM YYYY'));
 
       assert
         .dom('[data-test-amVersionTable-initiateUpload-retryBtn]')
         .exists()
-        .hasText('t:appMonitoringModule.retryUpload:()');
+        .hasText(t('appMonitoringModule.retryUpload'));
 
       assert
         .dom('[data-test-amVersionTable-initiateUpload-retryCancelBtn]')
         .exists()
-        .hasText('t:cancel:()');
+        .hasText(t('cancel'));
     });
 
     test('it disables initiate upload button for IOS apps', async function (assert) {
@@ -381,7 +381,7 @@ module(
       assert
         .dom('[data-test-amVersionTable-initiateUploadBtn-tooltipText]')
         .exists()
-        .containsText('t:appMonitoringModule.initiateUploadComingSoon:()');
+        .containsText(t('appMonitoringModule.initiateUploadComingSoon'));
 
       assert
         .dom(COMMON_SELECTORS.initiateUploadBtn)
@@ -451,7 +451,7 @@ module(
       assert
         .dom(errorInfoModalTrigger)
         .exists()
-        .hasText('t:appMonitoringModule.checkDetails:()');
+        .hasText(t('appMonitoringModule.checkDetails'));
 
       assert.dom(initiateUploadBtn).doesNotExist();
 
@@ -480,7 +480,7 @@ module(
       assert
         .dom(COMMON_SELECTORS.loadingOrCompletedTextSelector)
         .exists()
-        .containsText('t:completed:()');
+        .containsText(t('completed'));
     });
   }
 );

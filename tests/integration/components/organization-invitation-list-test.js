@@ -1,7 +1,7 @@
 import { render, findAll, find, click } from '@ember/test-helpers';
 import { hbs } from 'ember-cli-htmlbars';
 import { setupMirage } from 'ember-cli-mirage/test-support';
-import { setupIntl } from 'ember-intl/test-support';
+import { setupIntl, t } from 'ember-intl/test-support';
 import { setupRenderingTest } from 'ember-qunit';
 import { module, test } from 'qunit';
 import dayjs from 'dayjs';
@@ -106,7 +106,7 @@ module(
       assert
         .dom('[data-test-invitation-list-title]')
         .exists()
-        .hasText('t:pendingInvitations:()');
+        .hasText(t('pendingInvitations'));
 
       assert.dom('[data-test-invitation-list]').exists();
 
@@ -115,11 +115,11 @@ module(
       ).querySelectorAll('th');
 
       // assert header row
-      assert.dom(headerRow[0]).hasText('t:email:()');
-      assert.dom(headerRow[1]).hasText('t:inviteType:()');
-      assert.dom(headerRow[2]).hasText('t:invitedOn:()');
-      assert.dom(headerRow[3]).hasText('t:resend:()');
-      assert.dom(headerRow[4]).hasText('t:delete:()');
+      assert.dom(headerRow[0]).hasText(t('email'));
+      assert.dom(headerRow[1]).hasText(t('inviteType'));
+      assert.dom(headerRow[2]).hasText(t('invitedOn'));
+      assert.dom(headerRow[3]).hasText(t('resend'));
+      assert.dom(headerRow[4]).hasText(t('delete'));
 
       const contentRows = findAll('[data-test-invitation-list-row]');
 
@@ -134,7 +134,7 @@ module(
       );
 
       assert.dom(firstRow[0]).hasText(this.organizationInvitations[0].email);
-      assert.dom(firstRow[1]).hasText('t:organization:()');
+      assert.dom(firstRow[1]).hasText(t('organization'));
 
       assert
         .dom(firstRow[2])
@@ -160,7 +160,7 @@ module(
       assert
         .dom('[data-test-invite-type-text]', secondRow[1])
         .exists()
-        .hasText('t:team:()');
+        .hasText(t('team'));
 
       assert
         .dom('[data-test-invite-type-link]', secondRow[1])
@@ -216,35 +216,35 @@ module(
 
         await click(`#${firstRow[3].id} [data-test-invitation-resend-btn]`);
 
-        assert.dom('[data-test-ak-modal-header]').hasText('t:confirm:()');
+        assert.dom('[data-test-ak-modal-header]').hasText(t('confirm'));
 
         assert
           .dom('[data-test-confirmbox-description]')
-          .hasText('t:confirmBox.resendInvitation:()');
+          .hasText(t('confirmBox.resendInvitation'));
 
         assert
           .dom('[data-test-confirmbox-confirmBtn]')
           .exists()
           .isNotDisabled()
-          .hasText('t:resend:()');
+          .hasText(t('resend'));
 
         assert
           .dom('[data-test-confirmbox-cancelBtn]')
           .exists()
           .isNotDisabled()
-          .hasText('t:cancel:()');
+          .hasText(t('cancel'));
 
         await click('[data-test-confirmbox-confirmBtn]');
 
         const notify = this.owner.lookup('service:notifications');
 
         if (fail) {
-          assert.strictEqual(notify.errorMsg, 't:pleaseTryAgain:()');
+          assert.strictEqual(notify.errorMsg, t('pleaseTryAgain'));
 
           assert.dom('[data-test-ak-modal-header]').exists();
           assert.dom('[data-test-confirmbox-confirmBtn]').exists();
         } else {
-          assert.strictEqual(notify.successMsg, 't:invitationReSent:()');
+          assert.strictEqual(notify.successMsg, t('invitationReSent'));
 
           assert.dom('[data-test-ak-modal-header]').doesNotExist();
           assert.dom('[data-test-confirmbox-confirmBtn]').doesNotExist();

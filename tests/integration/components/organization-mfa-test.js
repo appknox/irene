@@ -3,7 +3,7 @@ import { setupRenderingTest } from 'ember-qunit';
 import { render, click, find } from '@ember/test-helpers';
 import { hbs } from 'ember-cli-htmlbars';
 import { setupMirage } from 'ember-cli-mirage/test-support';
-import { setupIntl } from 'ember-intl/test-support';
+import { setupIntl, t } from 'ember-intl/test-support';
 
 import ENUMS from 'irene/enums';
 import Service from '@ember/service';
@@ -45,7 +45,7 @@ module('Integration | Component | organization-mfa', function (hooks) {
       hbs`<OrganizationMfa @organization={{this.organization}} @user={{this.user}} />`
     );
 
-    assert.dom('[data-test-mfa-title]').hasText('t:multiFactorAuth:()');
+    assert.dom('[data-test-mfa-title]').hasText(t('multiFactorAuth'));
 
     assert.dom('[data-test-toggle-input]').exists().isDisabled().isNotChecked();
 
@@ -54,19 +54,19 @@ module('Integration | Component | organization-mfa', function (hooks) {
         '[data-test-ak-form-label]',
         find('[data-test-enable-mandatory-mfa-label]')
       )
-      .hasText('t:enableMandatoryMFATitle:()');
+      .hasText(t('enableMandatoryMFATitle'));
 
     assert
       .dom('[data-test-enable-mandatory-mfa-description]')
-      .hasText('t:enableMandatoryMFADescription:()');
+      .hasText(t('enableMandatoryMFADescription'));
 
     assert
       .dom('[data-test-enable-mandatory-mfa-warning]')
-      .hasText('t:enableMandatoryMFAWarning:()');
+      .hasText(t('enableMandatoryMFAWarning'));
 
     assert
       .dom('[data-test-enable-mandatory-mfa-requirement]')
-      .includesText('t:enableMandatoryMFARequirement:()');
+      .includesText(t('enableMandatoryMFARequirement'));
   });
 
   test('it should render with mfa enbaled', async function (assert) {
@@ -76,7 +76,7 @@ module('Integration | Component | organization-mfa', function (hooks) {
       hbs`<OrganizationMfa @organization={{this.organization}} @user={{this.user}} />`
     );
 
-    assert.dom('[data-test-mfa-title]').hasText('t:multiFactorAuth:()');
+    assert.dom('[data-test-mfa-title]').hasText(t('multiFactorAuth'));
 
     assert.dom('[data-test-toggle-input]').exists().isDisabled().isChecked();
   });
@@ -89,7 +89,7 @@ module('Integration | Component | organization-mfa', function (hooks) {
       hbs`<OrganizationMfa @organization={{this.organization}} @user={{this.user}} />`
     );
 
-    assert.dom('[data-test-mfa-title]').hasText('t:multiFactorAuth:()');
+    assert.dom('[data-test-mfa-title]').hasText(t('multiFactorAuth'));
 
     assert.dom('[data-test-toggle-input]').exists().isNotDisabled().isChecked();
   });
@@ -115,7 +115,7 @@ module('Integration | Component | organization-mfa', function (hooks) {
       hbs`<OrganizationMfa @organization={{this.organization}} @user={{this.user}} />`
     );
 
-    assert.dom('[data-test-mfa-title]').hasText('t:multiFactorAuth:()');
+    assert.dom('[data-test-mfa-title]').hasText(t('multiFactorAuth'));
 
     assert
       .dom('[data-test-toggle-input]')
@@ -133,6 +133,6 @@ module('Integration | Component | organization-mfa', function (hooks) {
     assert.dom('[data-test-toggle-input]').isNotChecked();
     assert.false(this.organization.mandatoryMfa);
 
-    assert.strictEqual(notify.successMsg, 't:changedMandatoryMFA:()');
+    assert.strictEqual(notify.successMsg, t('changedMandatoryMFA'));
   });
 });

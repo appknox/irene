@@ -3,7 +3,7 @@ import { setupRenderingTest } from 'ember-qunit';
 import { render } from '@ember/test-helpers';
 import { hbs } from 'ember-cli-htmlbars';
 import { setupMirage } from 'ember-cli-mirage/test-support';
-import { setupIntl } from 'ember-intl/test-support';
+import { setupIntl, t } from 'ember-intl/test-support';
 
 module('Integration | Component | project-settings/header', function (hooks) {
   setupRenderingTest(hooks);
@@ -43,11 +43,11 @@ module('Integration | Component | project-settings/header', function (hooks) {
       );
 
       const breadcrumbItems = [
-        't:allProjects:()',
+        t('allProjects'),
         this.project.get('packageName'),
         isDASTScenarioPage
-          ? 't:dastAutomation.dastAutomationScenario:()'
-          : 't:settings:()',
+          ? t('dastAutomation.dastAutomationScenario')
+          : t('settings'),
       ];
 
       // Checks rendering of breadcrumbs
@@ -61,8 +61,8 @@ module('Integration | Component | project-settings/header', function (hooks) {
         assert
           .dom('[data-test-projectSettingsHeader-descText]')
           .exists()
-          .containsText('t:settings:()')
-          .containsText('t:projectSettings.headerText:()');
+          .containsText(t('settings'))
+          .containsText(t('projectSettings.headerText'));
 
         assert.dom('[data-test-projectSettingsHeader-projectDetails]').exists();
 
@@ -81,7 +81,7 @@ module('Integration | Component | project-settings/header', function (hooks) {
         assert
           .dom('[data-test-projectSettingsHeader-projectDetails-projectID]')
           .exists()
-          .containsText('t:projectID:()')
+          .containsText(t('projectID'))
           .containsText(this.project.id);
 
         assert
@@ -92,7 +92,7 @@ module('Integration | Component | project-settings/header', function (hooks) {
           );
 
         // Checks rendering of tabs
-        const tabItems = ['t:generalSettings:()', 't:analysisSettings:()'];
+        const tabItems = [t('generalSettings'), t('analysisSettings')];
 
         tabItems.forEach((tab) => {
           assert

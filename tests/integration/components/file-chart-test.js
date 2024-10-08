@@ -1,6 +1,6 @@
 import { module, test } from 'qunit';
 import { setupRenderingTest } from 'ember-qunit';
-import { setupIntl } from 'ember-intl/test-support';
+import { setupIntl, t } from 'ember-intl/test-support';
 import { setupMirage } from 'ember-cli-mirage/test-support';
 import { render, triggerEvent } from '@ember/test-helpers';
 import { hbs } from 'ember-cli-htmlbars';
@@ -119,7 +119,9 @@ module('Integration | Component | file-chart', function (hooks) {
       )
       .exists()
       .containsText(
-        `t:ignoreVulnerabilityFileChartMessage:("overridenPassedRiskCount":${passedRiskCount})`
+        t('ignoreVulnerabilityFileChartMessage', {
+          overridenPassedRiskCount: passedRiskCount,
+        })
       );
   });
 });

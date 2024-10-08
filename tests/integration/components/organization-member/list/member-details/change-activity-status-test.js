@@ -3,7 +3,7 @@ import { setupRenderingTest } from 'ember-qunit';
 import { click, render } from '@ember/test-helpers';
 import { hbs } from 'ember-cli-htmlbars';
 import { setupMirage } from 'ember-cli-mirage/test-support';
-import { setupIntl } from 'ember-intl/test-support';
+import { setupIntl, t } from 'ember-intl/test-support';
 import Service from '@ember/service';
 
 class NotificationsStub extends Service {
@@ -65,20 +65,20 @@ module(
         this.set('is_active', true);
         assert
           .dom('[data-test-change-activity-status]')
-          .hasText('t:deactivateUser:()');
+          .hasText(t('deactivateUser'));
 
         assert
           .dom('[data-test-change-activity-status-description]')
-          .containsText('t:deactivateUserDesc:()');
+          .containsText(t('deactivateUserDesc'));
       } else {
         this.set('is_active', false);
         assert
           .dom('[data-test-change-activity-status]')
-          .hasText('t:activateUser:()');
+          .hasText(t('activateUser'));
 
         assert
           .dom('[data-test-change-activity-status-description]')
-          .containsText('t:activateUserDesc:()');
+          .containsText(t('activateUserDesc'));
       }
 
       assert.dom('[data-test-change-activity-status]').isNotDisabled();
@@ -114,12 +114,12 @@ module(
       assert
         .dom('[data-test-confirmbox-confirmBtn]')
         .isNotDisabled()
-        .hasText('t:confirm:()');
+        .hasText(t('confirm'));
 
       assert
         .dom('[data-test-confirmbox-cancelBtn]')
         .isNotDisabled()
-        .hasText('t:cancel:()');
+        .hasText(t('cancel'));
 
       await click('[data-test-confirmbox-confirmBtn]');
 
@@ -128,8 +128,8 @@ module(
       assert.strictEqual(
         notify.successMsg,
         this.is_active
-          ? `t:deactivated:() ${this.organizationUser.username}`
-          : `t:activated:() ${this.organizationUser.username}`
+          ? `${t('deactivated')} ${this.organizationUser.username}`
+          : `${t('activated')} ${this.organizationUser.username}`
       );
 
       await click('[data-test-change-activity-status]');

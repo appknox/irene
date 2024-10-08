@@ -3,7 +3,7 @@ import { setupRenderingTest } from 'ember-qunit';
 import { click, fillIn, render } from '@ember/test-helpers';
 import { hbs } from 'ember-cli-htmlbars';
 import { setupMirage } from 'ember-cli-mirage/test-support';
-import { setupIntl } from 'ember-intl/test-support';
+import { setupIntl, t } from 'ember-intl/test-support';
 import { Response } from 'miragejs';
 
 import Service from '@ember/service';
@@ -55,23 +55,23 @@ module('Integration | Component | upload-app/via-link', function (hooks) {
 
     assert
       .dom('[data-test-ak-modal-header]')
-      .containsText('t:uploadAppModule.linkUploadPopupHeader:()');
+      .containsText(t('uploadAppModule.linkUploadPopupHeader'));
 
     assert
       .dom('[data-test-uploadAppViaLinkModal-linkInput]')
       .isNotDisabled()
-      .hasAttribute('placeholder', 't:uploadAppModule.linkPastePlaceholder:()')
+      .hasAttribute('placeholder', t('uploadAppModule.linkPastePlaceholder'))
       .hasNoValue();
 
     assert
       .dom('[data-test-uploadAppViaLinkModal-linkInputHelperText]')
       .hasText(
-        't:uploadAppModule.supportedStores:() : t:uploadAppModule.stores:()'
+        `${t('uploadAppModule.supportedStores')} : ${t('uploadAppModule.stores')}`
       );
 
     assert
       .dom('[data-test-uploadAppViaLinkModal-validFormatText]')
-      .hasText('t:uploadAppModule.validURLFormatTitle:()');
+      .hasText(t('uploadAppModule.validURLFormatTitle'));
 
     assert
       .dom('[data-test-uploadAppViaLinkModal-playstoreValidUrl]')
@@ -80,7 +80,7 @@ module('Integration | Component | upload-app/via-link', function (hooks) {
     assert
       .dom('[data-test-uploadAppViaLinkModal-confirmBtn]')
       .isDisabled()
-      .hasText('t:upload:()');
+      .hasText(t('upload'));
   });
 
   test.each(
@@ -107,7 +107,7 @@ module('Integration | Component | upload-app/via-link', function (hooks) {
 
       assert
         .dom('[data-test-ak-modal-header]')
-        .containsText('t:uploadAppModule.linkUploadPopupHeader:()');
+        .containsText(t('uploadAppModule.linkUploadPopupHeader'));
 
       assert
         .dom('[data-test-uploadAppViaLinkModal-linkInput]')
@@ -152,7 +152,7 @@ module('Integration | Component | upload-app/via-link', function (hooks) {
 
       assert
         .dom('[data-test-ak-modal-header]')
-        .containsText('t:uploadAppModule.linkUploadPopupHeader:()');
+        .containsText(t('uploadAppModule.linkUploadPopupHeader'));
 
       assert
         .dom('[data-test-uploadAppViaLinkModal-linkInput]')
@@ -162,7 +162,7 @@ module('Integration | Component | upload-app/via-link', function (hooks) {
       assert
         .dom('[data-test-uploadAppViaLinkModal-confirmBtn]')
         .isDisabled()
-        .hasText('t:upload:()');
+        .hasText(t('upload'));
 
       await fillIn('[data-test-uploadAppViaLinkModal-linkInput]', appLink);
 

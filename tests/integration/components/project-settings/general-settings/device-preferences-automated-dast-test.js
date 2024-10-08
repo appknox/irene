@@ -1,7 +1,7 @@
 import { module, test } from 'qunit';
 import { setupRenderingTest } from 'ember-qunit';
 import { setupMirage } from 'ember-cli-mirage/test-support';
-import { setupIntl } from 'ember-intl/test-support';
+import { setupIntl, t } from 'ember-intl/test-support';
 import { render, click, findAll } from '@ember/test-helpers';
 import { hbs } from 'ember-cli-htmlbars';
 import { selectChoose } from 'ember-power-select/test-support';
@@ -85,7 +85,7 @@ module(
           '[data-test-projectSettings-generalSettings-devicePreferenceAutomatedDast-title]'
         )
         .exists()
-        .containsText('t:devicePreferencesAutomatedDast:()');
+        .containsText(t('devicePreferencesAutomatedDast'));
 
       assert
         .dom(
@@ -116,7 +116,7 @@ module(
 
       let selectListItems = findAll('.ember-power-select-option');
 
-      const anyDeviceLabel = `t:anyAvailableDeviceWithAnyOS:()`;
+      const anyDeviceLabel = t('anyAvailableDeviceWithAnyOS');
 
       // Select "Any Device"
       await selectChoose(`.${classes.trigger}`, anyDeviceLabel);
@@ -130,7 +130,7 @@ module(
       assert.dom('[data-test-dast-preference-criteria-table]').doesNotExist();
 
       //  Select 'Specific Device'
-      const specificDeviceLabel = `t:defineDeviceCriteria:()`;
+      const specificDeviceLabel = t('defineDeviceCriteria');
 
       await selectChoose(`.${classes.trigger}`, specificDeviceLabel);
 
@@ -174,7 +174,7 @@ module(
       `);
 
       //  Select 'Specific Device'
-      const specificDeviceLabel = `t:defineDeviceCriteria:()`;
+      const specificDeviceLabel = t('defineDeviceCriteria');
 
       await selectChoose(`.${classes.trigger}`, specificDeviceLabel);
 

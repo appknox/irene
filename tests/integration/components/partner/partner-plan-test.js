@@ -3,7 +3,7 @@ import { setupRenderingTest } from 'ember-qunit';
 import { render } from '@ember/test-helpers';
 import { hbs } from 'ember-cli-htmlbars';
 import { setupMirage } from 'ember-cli-mirage/test-support';
-import { setupIntl } from 'ember-intl/test-support';
+import { setupIntl, t } from 'ember-intl/test-support';
 import { underscore } from '@ember/string';
 import styles from 'irene/components/partner/partner-plan/index.scss';
 
@@ -61,13 +61,13 @@ module('Integration | Component | partner/partner-plan', function (hooks) {
     await this.owner.lookup('service:partner').load();
     await render(hbs`<Partner::PartnerPlan />`);
 
-    assert.dom(`[data-test-plan-label]`).hasText('t:yourPlan:()');
+    assert.dom(`[data-test-plan-label]`).hasText(t('yourPlan'));
     assert.dom('[data-test-plan-type]').hasClass(styles['per-scan']);
-    assert.dom(`[data-test-plan-type]`).hasText(`t:perScan:()`);
+    assert.dom(`[data-test-plan-type]`).hasText(t('perScan'));
     assert.dom(`[data-test-credits-left]`).hasText(`${partnerPlan.scansLeft}`);
     assert
       .dom(`[data-test-credits-type]`)
-      .hasText(`t:pluralScans:("itemCount":${partnerPlan.scansLeft})`);
+      .hasText(t('pluralScans', { itemCount: partnerPlan.scansLeft }));
   });
 
   test('it should render per-app details', async function (assert) {
@@ -90,15 +90,15 @@ module('Integration | Component | partner/partner-plan', function (hooks) {
     await this.owner.lookup('service:partner').load();
     await render(hbs`<Partner::PartnerPlan />`);
 
-    assert.dom(`[data-test-plan-label]`).hasText('t:yourPlan:()');
+    assert.dom(`[data-test-plan-label]`).hasText(t('yourPlan'));
     assert.dom('[data-test-plan-type]').hasClass(styles['per-app']);
-    assert.dom(`[data-test-plan-type]`).hasText(`t:perApp:()`);
+    assert.dom(`[data-test-plan-type]`).hasText(t('perApp'));
     assert
       .dom(`[data-test-credits-left]`)
       .hasText(`${partnerPlan.projectsLimit}`);
     assert
       .dom(`[data-test-credits-type]`)
-      .hasText(`t:pluralApps:("itemCount":${partnerPlan.projectsLimit})`);
+      .hasText(t('pluralApps', { itemCount: partnerPlan.projectsLimit }));
   });
 
   test('it should render credit transfer warning for per-app plan', async function (assert) {
@@ -122,7 +122,7 @@ module('Integration | Component | partner/partner-plan', function (hooks) {
     await this.owner.lookup('service:partner').load();
     await render(hbs`<Partner::PartnerPlan />`);
 
-    assert.dom('[data-test-plan-type]').hasText(`t:perApp:()`);
+    assert.dom('[data-test-plan-type]').hasText(t('perApp'));
     assert.dom('[data-test-warning-credit-transfer-unavailable]').exists();
     assert.dom('[data-test-warning-zero-scan-credits]').doesNotExist();
   });
@@ -149,7 +149,7 @@ module('Integration | Component | partner/partner-plan', function (hooks) {
     await this.owner.lookup('service:partner').load();
     await render(hbs`<Partner::PartnerPlan />`);
 
-    assert.dom('[data-test-plan-type]').hasText(`t:perScan:()`);
+    assert.dom('[data-test-plan-type]').hasText(t('perScan'));
     assert.dom('[data-test-warning-zero-scan-credits]').exists();
     assert
       .dom('[data-test-warning-credit-transfer-unavailable]')
@@ -178,7 +178,7 @@ module('Integration | Component | partner/partner-plan', function (hooks) {
     await this.owner.lookup('service:partner').load();
     await render(hbs`<Partner::PartnerPlan />`);
 
-    assert.dom('[data-test-plan-type]').hasText(`t:perScan:()`);
+    assert.dom('[data-test-plan-type]').hasText(t('perScan'));
     assert.dom('[data-test-warning-zero-scan-credits]').doesNotExist();
     assert
       .dom('[data-test-warning-credit-transfer-unavailable]')
@@ -206,7 +206,7 @@ module('Integration | Component | partner/partner-plan', function (hooks) {
     await this.owner.lookup('service:partner').load();
     await render(hbs`<Partner::PartnerPlan />`);
 
-    assert.dom('[data-test-plan-type]').hasText(`t:perScan:()`);
+    assert.dom('[data-test-plan-type]').hasText(t('perScan'));
     assert.dom('[data-test-warning-zero-scan-credits]').doesNotExist();
     assert
       .dom('[data-test-warning-credit-transfer-unavailable]')

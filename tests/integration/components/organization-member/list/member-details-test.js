@@ -1,6 +1,7 @@
 import { module, test } from 'qunit';
 import { setupRenderingTest } from 'ember-qunit';
 import { setupMirage } from 'ember-cli-mirage/test-support';
+
 import {
   click,
   fillIn,
@@ -8,9 +9,11 @@ import {
   render,
   triggerEvent,
 } from '@ember/test-helpers';
-import { setupIntl } from 'ember-intl/test-support';
+
+import { setupIntl, t } from 'ember-intl/test-support';
 import { hbs } from 'ember-cli-htmlbars';
 import Service from '@ember/service';
+import { capitalize } from '@ember/string';
 import dayjs from 'dayjs';
 
 class NotificationsStub extends Service {
@@ -92,38 +95,32 @@ module(
 
         assert.dom('[data-test-selected-user-details]').exists();
 
-        assert.dom('[data-test-selected-user-label]').hasText('t:user:()');
+        assert.dom('[data-test-selected-user-label]').hasText(t('user'));
 
         if (is_owner) {
           assert.dom('[data-test-member-role-dropdown]').exists();
 
           if (this.member.role === 'admin') {
-            assert
-              .dom('[data-test-member-role-dropdown]')
-              .hasText('t:admin:()');
+            assert.dom('[data-test-member-role-dropdown]').hasText(t('admin'));
           }
 
           if (this.member.role === 'member') {
-            assert
-              .dom('[data-test-member-role-dropdown]')
-              .hasText('t:member:()');
+            assert.dom('[data-test-member-role-dropdown]').hasText(t('member'));
           }
 
           if (this.member.role === 'owner') {
-            assert
-              .dom('[data-test-member-role-dropdown]')
-              .hasText('t:owner:()');
+            assert.dom('[data-test-member-role-dropdown]').hasText(t('owner'));
           }
         } else {
           assert.dom('[data-test-member-role-dropdown]').doesNotExist();
 
           if (this.member.role === 'admin') {
-            assert.dom('[data-test-member-role-text]').hasText('t:admin:()');
+            assert.dom('[data-test-member-role-text]').hasText(t('admin'));
           }
         }
 
         if (this.member.last_logged_in == null) {
-          assert.dom('[data-test-org-member-lastLogin]').hasText('t:never:()');
+          assert.dom('[data-test-org-member-lastLogin]').hasText(t('never'));
         } else {
           assert
             .dom('[data-test-org-member-lastLogin]')
@@ -159,8 +156,8 @@ module(
 
       const headerRow = findAll('[data-test-teamList-thead] th');
 
-      assert.dom(headerRow[0]).hasText('t:teamName:()');
-      assert.dom(headerRow[1]).hasText('t:action:()');
+      assert.dom(headerRow[0]).hasText(t('teamName'));
+      assert.dom(headerRow[1]).hasText(t('action'));
 
       const contentRows = findAll('[data-test-teamList-row]');
 
@@ -213,23 +210,23 @@ module(
 
       assert
         .dom('[data-test-confirmbox-description]')
-        .hasText('t:confirmBox.removeUser:()');
+        .hasText(t('confirmBox.removeUser'));
 
       assert
         .dom('[data-test-confirmbox-confirmBtn]')
         .isNotDisabled()
-        .hasText('T:remove:()');
+        .hasText(capitalize(t('remove')));
 
       assert
         .dom('[data-test-confirmbox-cancelBtn]')
         .isNotDisabled()
-        .hasText('t:cancel:()');
+        .hasText(t('cancel'));
 
       await click('[data-test-confirmbox-confirmBtn]');
 
       const notify = this.owner.lookup('service:notifications');
 
-      assert.strictEqual(notify.successMsg, 't:teamMemberRemoved:()');
+      assert.strictEqual(notify.successMsg, t('teamMemberRemoved'));
     });
 
     test('search action test for add user list', async function (assert) {

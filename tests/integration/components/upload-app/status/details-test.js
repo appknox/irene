@@ -3,7 +3,7 @@ import { setupRenderingTest } from 'ember-qunit';
 import { render } from '@ember/test-helpers';
 import { hbs } from 'ember-cli-htmlbars';
 import { setupMirage } from 'ember-cli-mirage/test-support';
-import { setupIntl } from 'ember-intl/test-support';
+import { setupIntl, t } from 'ember-intl/test-support';
 import { faker } from '@faker-js/faker';
 
 import ENUMS from 'irene/enums';
@@ -65,7 +65,7 @@ module('Integration | Component | upload-app/status/details', function (hooks) {
 
         assert
           .dom('[data-test-uploadAppStatusDetails-uploadSourceTitle]')
-          .hasText('t:viaLink:()');
+          .hasText(t('viaLink'));
       } else {
         assert
           .dom('[data-test-uploadAppStatusDetails-uploadSourceIcon]')
@@ -73,7 +73,7 @@ module('Integration | Component | upload-app/status/details', function (hooks) {
 
         assert
           .dom('[data-test-uploadAppStatusDetails-uploadSourceTitle]')
-          .hasText('t:viaSystem:()');
+          .hasText(t('viaSystem'));
       }
 
       // default createSubmission is in progress
@@ -81,7 +81,7 @@ module('Integration | Component | upload-app/status/details', function (hooks) {
 
       assert
         .dom('[data-test-uploadAppStatusDetails-statusLabel]')
-        .hasText('t:inProgress:()');
+        .hasText(t('inProgress'));
 
       assert
         .dom('[data-test-uploadAppStatusDetails-appIcon]')
@@ -124,7 +124,7 @@ module('Integration | Component | upload-app/status/details', function (hooks) {
         assert
           .dom('[data-test-uploadAppStatusDetails-storeLink]')
           .hasAttribute('href', this.submission.url)
-          .hasText('t:viewStoreLink:()');
+          .hasText(t('viewStoreLink'));
       } else {
         assert
           .dom('[data-test-uploadAppStatusDetails-appStoreLogo]')
@@ -165,7 +165,7 @@ module('Integration | Component | upload-app/status/details', function (hooks) {
 
         assert
           .dom('[data-test-uploadAppStatusDetails-uploadSourceTitle]')
-          .hasText('t:viaLink:()');
+          .hasText(t('viaLink'));
       } else {
         assert
           .dom('[data-test-uploadAppStatusDetails-uploadSourceIcon]')
@@ -173,7 +173,7 @@ module('Integration | Component | upload-app/status/details', function (hooks) {
 
         assert
           .dom('[data-test-uploadAppStatusDetails-uploadSourceTitle]')
-          .hasText('t:viaSystem:()');
+          .hasText(t('viaSystem'));
       }
 
       // skeleton loader
@@ -223,7 +223,7 @@ module('Integration | Component | upload-app/status/details', function (hooks) {
 
         assert
           .dom('[data-test-uploadAppStatusDetails-uploadSourceTitle]')
-          .hasText('t:viaLink:()');
+          .hasText(t('viaLink'));
       } else {
         assert
           .dom('[data-test-uploadAppStatusDetails-uploadSourceIcon]')
@@ -231,7 +231,7 @@ module('Integration | Component | upload-app/status/details', function (hooks) {
 
         assert
           .dom('[data-test-uploadAppStatusDetails-uploadSourceTitle]')
-          .hasText('t:viaSystem:()');
+          .hasText(t('viaSystem'));
       }
 
       assert.dom('[data-test-uploadAppStatusDetails-statusIcon]').exists();
@@ -239,11 +239,11 @@ module('Integration | Component | upload-app/status/details', function (hooks) {
       if (completed) {
         assert
           .dom('[data-test-uploadAppStatusDetails-statusLabel]')
-          .hasText('t:completed:()');
+          .hasText(t('completed'));
       } else {
         assert
           .dom('[data-test-uploadAppStatusDetails-statusLabel]')
-          .hasText('t:failed:()');
+          .hasText(t('failed'));
       }
 
       assert

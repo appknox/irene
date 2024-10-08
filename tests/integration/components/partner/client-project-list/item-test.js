@@ -1,7 +1,7 @@
 import { module, test } from 'qunit';
 import { setupRenderingTest } from 'ember-qunit';
 import { setupMirage } from 'ember-cli-mirage/test-support';
-import { setupIntl } from 'ember-intl/test-support';
+import { setupIntl, t } from 'ember-intl/test-support';
 import { render } from '@ember/test-helpers';
 import { hbs } from 'ember-cli-htmlbars';
 import dayjs from 'dayjs';
@@ -73,7 +73,7 @@ module(
       assert
         .dom(`[data-test-view-files]`)
         .exists()
-        .hasText(`t:viewUploads:()`)
+        .hasText(t('viewUploads'))
         .hasTagName('a');
     });
 

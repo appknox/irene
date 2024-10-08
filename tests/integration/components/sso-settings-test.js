@@ -4,7 +4,7 @@ import { render, findAll, find, click, waitUntil } from '@ember/test-helpers';
 import { dragAndDrop, selectFiles } from 'ember-file-upload/test-support';
 import { hbs } from 'ember-cli-htmlbars';
 import { setupMirage } from 'ember-cli-mirage/test-support';
-import { setupIntl } from 'ember-intl/test-support';
+import { setupIntl, t } from 'ember-intl/test-support';
 import { Response } from 'miragejs';
 import Service from '@ember/service';
 import dayjs from 'dayjs';
@@ -95,9 +95,9 @@ module('Integration | Component | sso-settings', function (hooks) {
 
     await render(hbs`<SsoSettings @organization={{this.organization}} />`);
 
-    assert.dom('[data-test-ssoSetting-title]').hasText('t:singleSignOn:()');
-    assert.dom('[data-test-ssoSetting-subtitle]').hasText('t:samlAuth:()');
-    assert.dom('[data-test-ssoSetting-desc]').hasText('t:samlDesc:()');
+    assert.dom('[data-test-ssoSetting-title]').hasText(t('singleSignOn'));
+    assert.dom('[data-test-ssoSetting-subtitle]').hasText(t('samlAuth'));
+    assert.dom('[data-test-ssoSetting-desc]').hasText(t('samlDesc'));
   });
 
   test('it renders sso-settings with SP config', async function (assert) {
@@ -122,9 +122,9 @@ module('Integration | Component | sso-settings', function (hooks) {
     // sp config
     assert
       .dom('[data-test-ssoSetting-spTitle]')
-      .hasText('t:serviceProvider:() (SP)');
+      .hasText(`${t('serviceProvider')} (SP)`);
 
-    assert.dom('[data-test-ssoSetting-spDesc]').hasText('t:spMetadataDesc:()');
+    assert.dom('[data-test-ssoSetting-spDesc]').hasText(t('spMetadataDesc'));
 
     // default is manual
     assert
@@ -140,13 +140,13 @@ module('Integration | Component | sso-settings', function (hooks) {
     const spConfigLabels = findAll('[data-test-ssoSetting-spConfigLabel]');
     const spConfigValues = findAll('[data-test-ssoSetting-spConfigValue]');
 
-    assert.dom(spConfigLabels[0]).hasText('t:entityID:()');
+    assert.dom(spConfigLabels[0]).hasText(t('entityID'));
     assert.dom(spConfigValues[0]).hasText(this.metadata.entity_id);
 
-    assert.dom(spConfigLabels[1]).hasText('t:acsURL:()');
+    assert.dom(spConfigLabels[1]).hasText(t('acsURL'));
     assert.dom(spConfigValues[1]).hasText(this.metadata.acs_url);
 
-    assert.dom(spConfigLabels[2]).hasText('t:nameIDFormat:()');
+    assert.dom(spConfigLabels[2]).hasText(t('nameIDFormat'));
     assert.dom(spConfigValues[2]).hasText(this.metadata.named_id_format);
 
     assert.dom('[data-test-ssoSetting-spConfigXmlInput]').doesNotExist();
@@ -194,15 +194,13 @@ module('Integration | Component | sso-settings', function (hooks) {
 
     assert
       .dom('[data-test-ssoSetting-idpTitle]')
-      .hasText('t:identityProvider:() (IdP)');
+      .hasText(`${t('identityProvider')} (IdP)`);
 
-    assert
-      .dom('[data-test-ssoSetting-idpSubtitle]')
-      .hasText('t:idpMetadata:()');
+    assert.dom('[data-test-ssoSetting-idpSubtitle]').hasText(t('idpMetadata'));
 
     assert
       .dom('[data-test-ssoSetting-idpEntityIdLabel]')
-      .hasText('t:entityID:()');
+      .hasText(t('entityID'));
 
     assert
       .dom('[data-test-ssoSetting-idpEntityIdValue]')
@@ -210,7 +208,7 @@ module('Integration | Component | sso-settings', function (hooks) {
 
     assert
       .dom('[data-test-ssoSetting-idpSsoUrlLabel]')
-      .hasText('t:ssoServiceURL:()');
+      .hasText(t('ssoServiceURL'));
 
     assert
       .dom('[data-test-ssoSetting-idpSsoUrlValue]')
@@ -219,11 +217,11 @@ module('Integration | Component | sso-settings', function (hooks) {
     // certificate
     assert
       .dom('[data-test-ssoSetting-idpCertSubtitle]')
-      .hasText('t:certificate:()');
+      .hasText(t('certificate'));
 
     assert
       .dom('[data-test-ssoSetting-idpCertIssuerLabel]')
-      .hasText('t:issuer:()');
+      .hasText(t('issuer'));
 
     assert
       .dom('[data-test-ssoSetting-idpCertIssuerValue]')
@@ -231,7 +229,7 @@ module('Integration | Component | sso-settings', function (hooks) {
 
     assert
       .dom('[data-test-ssoSetting-idpCertIssuedOnLabel]')
-      .hasText('t:issuedOn:()');
+      .hasText(t('issuedOn'));
 
     assert
       .dom('[data-test-ssoSetting-idpCertIssuedOnValue]')
@@ -243,7 +241,7 @@ module('Integration | Component | sso-settings', function (hooks) {
 
     assert
       .dom('[data-test-ssoSetting-idpCertExpiryLabel]')
-      .hasText('t:expiry:()');
+      .hasText(t('expiry'));
 
     assert
       .dom('[data-test-ssoSetting-idpCertExpiryValue]')
@@ -255,7 +253,7 @@ module('Integration | Component | sso-settings', function (hooks) {
 
     assert
       .dom('[data-test-ssoSetting-idpCertFPLabel]')
-      .hasText('t:fingerprints:()');
+      .hasText(t('fingerprints'));
 
     assert
       .dom('[data-test-ssoSetting-idpCertFPValue-SHA256]')
@@ -287,23 +285,23 @@ module('Integration | Component | sso-settings', function (hooks) {
 
     assert
       .dom('[data-test-ssoSetting-idpTitle]')
-      .hasText('t:identityProvider:() (IdP)');
+      .hasText(`${t('identityProvider')} (IdP)`);
 
     assert
       .dom('[data-test-ssoSetting-idpUploadText]')
-      .hasText('t:idpMetadataUpload:()');
+      .hasText(t('idpMetadataUpload'));
 
     assert.dom('[data-test-ssoSetting-idpUploadFileIcon]').exists();
 
     assert
       .dom('[data-test-ssoSetting-idpUploadFileDragDropText]')
-      .hasText('t:dragDropFile:() t:or:()');
+      .hasText(`${t('dragDropFile')} ${t('or')}`);
 
     assert.dom('[data-test-ssoSetting-idpUploadFileInput]').exists();
 
     assert
       .dom('[data-test-ssoSetting-idpUploadFileBtn]')
-      .hasText('t:browseFiles:()');
+      .hasText(t('browseFiles'));
   });
 
   test('it renders sso-settings with sso config', async function (assert) {
@@ -327,15 +325,15 @@ module('Integration | Component | sso-settings', function (hooks) {
 
     assert
       .dom('[data-test-ssoSetting-ssoTitle]')
-      .hasText('t:ssoAuthentication:()');
+      .hasText(t('ssoAuthentication'));
 
     assert
       .dom('[data-test-ssoSetting-ssoSwitchLabel] [data-test-ak-form-label]')
-      .hasText('t:enable:() t:ssoAuthentication:()');
+      .hasText(`${t('enable')} ${t('ssoAuthentication')}`);
 
     assert
       .dom('[data-test-ssoSetting-ssoEnableDesc]')
-      .hasText('(t:ssoEnableDesc:())');
+      .hasText(`(${t('ssoEnableDesc')})`);
 
     if (this.sso.enabled) {
       assert
@@ -345,7 +343,7 @@ module('Integration | Component | sso-settings', function (hooks) {
 
       assert
         .dom('[data-test-ssoSetting-ssoEnforceLabel] [data-test-ak-form-label]')
-        .hasText('t:ssoEnforce:()');
+        .hasText(t('ssoEnforce'));
 
       assert
         .dom('[data-test-ssoSetting-ssoEnforceCheckbox]')
@@ -354,7 +352,7 @@ module('Integration | Component | sso-settings', function (hooks) {
 
       assert
         .dom('[data-test-ssoSetting-ssoEnforceDesc]')
-        .hasText('(t:ssoEnforceDesc:())');
+        .hasText(`(${t('ssoEnforceDesc')})`);
     } else {
       assert
         .dom('[data-test-ssoSetting-ssoSwitch] input')
@@ -428,12 +426,12 @@ module('Integration | Component | sso-settings', function (hooks) {
       assert
         .dom('[data-test-ssoSetting-idpMetadataXmlSubmitBtn]')
         .isNotDisabled()
-        .hasText('t:upload:()');
+        .hasText(t('upload'));
 
       assert
         .dom('[data-test-ssoSetting-idpMetadataXmlCancelBtn]')
         .isNotDisabled()
-        .hasText('t:cancel:()');
+        .hasText(t('cancel'));
 
       await click('[data-test-ssoSetting-idpMetadataXmlSubmitBtn]');
 
@@ -505,7 +503,7 @@ module('Integration | Component | sso-settings', function (hooks) {
 
       await click('[data-test-ssoSetting-idpDeleteBtn]');
 
-      assert.dom('[data-test-ak-modal-header]').hasText('t:confirm:()');
+      assert.dom('[data-test-ak-modal-header]').hasText(t('confirm'));
 
       assert
         .dom('[data-test-confirmbox-description]')
@@ -514,12 +512,12 @@ module('Integration | Component | sso-settings', function (hooks) {
       assert
         .dom('[data-test-confirmbox-confirmBtn]')
         .isNotDisabled()
-        .hasText('t:delete:()');
+        .hasText(t('delete'));
 
       assert
         .dom('[data-test-confirmbox-cancelBtn]')
         .isNotDisabled()
-        .hasText('t:cancel:()');
+        .hasText(t('cancel'));
 
       await click('[data-test-confirmbox-confirmBtn]');
 
@@ -602,13 +600,13 @@ module('Integration | Component | sso-settings', function (hooks) {
           .dom(
             '[data-test-ssoSetting-ssoEnforceLabel] [data-test-ak-form-label]'
           )
-          .hasText('t:ssoEnforce:()');
+          .hasText(t('ssoEnforce'));
 
         assert.dom('[data-test-ssoSetting-ssoEnforceCheckbox]').isNotDisabled();
 
         assert
           .dom('[data-test-ssoSetting-ssoEnforceDesc]')
-          .hasText('(t:ssoEnforceDesc:())');
+          .hasText(`(${t('ssoEnforceDesc')})`);
       }
     }
   );
@@ -645,7 +643,7 @@ module('Integration | Component | sso-settings', function (hooks) {
 
       assert
         .dom('[data-test-ssoSetting-ssoEnforceLabel] [data-test-ak-form-label]')
-        .hasText('t:ssoEnforce:()');
+        .hasText(t('ssoEnforce'));
 
       assert
         .dom('[data-test-ssoSetting-ssoEnforceCheckbox]')
@@ -654,7 +652,7 @@ module('Integration | Component | sso-settings', function (hooks) {
 
       assert
         .dom('[data-test-ssoSetting-ssoEnforceDesc]')
-        .hasText('(t:ssoEnforceDesc:())');
+        .hasText(`(${t('ssoEnforceDesc')})`);
 
       await click('[data-test-ssoSetting-ssoEnforceCheckbox]');
 

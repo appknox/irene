@@ -9,7 +9,7 @@ import {
 } from '@ember/test-helpers';
 import { hbs } from 'ember-cli-htmlbars';
 import { setupMirage } from 'ember-cli-mirage/test-support';
-import { setupIntl } from 'ember-intl/test-support';
+import { setupIntl, t } from 'ember-intl/test-support';
 
 module(
   'Integration | Component | project-settings/general-settings/add-project-collaborator',
@@ -80,7 +80,7 @@ module(
       assert
         .dom('[data-test-generalSettings-addProjectCollab-button]')
         .exists()
-        .hasText('t:addCollaborator:()');
+        .hasText(t('addCollaborator'));
     });
 
     test('it renders project collaborator drawer with table', async function (assert) {
@@ -104,7 +104,7 @@ module(
       assert
         .dom('[data-test-addProjectCollab-drawerContainer-title]')
         .exists()
-        .containsText('t:projectSettings.drawerTitles.addCollaborator:()');
+        .containsText(t('projectSettings.drawerTitles.addCollaborator'));
 
       assert
         .dom('[data-test-addProjectCollab-drawerContainer-closeIconBtn]')

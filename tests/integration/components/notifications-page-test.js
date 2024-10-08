@@ -1,6 +1,6 @@
 import { module, test } from 'qunit';
 import { setupMirage } from 'ember-cli-mirage/test-support';
-import { setupIntl } from 'ember-intl/test-support';
+import { setupIntl, t } from 'ember-intl/test-support';
 import { setupRenderingTest } from 'ember-qunit';
 import { render } from '@ember/test-helpers';
 import { hbs } from 'ember-cli-htmlbars';
@@ -39,7 +39,7 @@ module('Integration | Component | notifications-page', function (hooks) {
   test('it renders', async function (assert) {
     await render(hbs`<NotificationsPage />`);
     assert.notEqual(
-      this.element.textContent.trim().indexOf('t:notifications:()'),
+      this.element.textContent.trim().indexOf(t('notifications')),
       -1
     );
   });

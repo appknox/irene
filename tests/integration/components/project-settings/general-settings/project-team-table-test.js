@@ -3,7 +3,7 @@ import { setupRenderingTest } from 'ember-qunit';
 import { click, findAll, render, waitFor } from '@ember/test-helpers';
 import { hbs } from 'ember-cli-htmlbars';
 import { setupMirage } from 'ember-cli-mirage/test-support';
-import { setupIntl } from 'ember-intl/test-support';
+import { setupIntl, t } from 'ember-intl/test-support';
 import Service from '@ember/service';
 import { Response } from 'miragejs';
 
@@ -117,7 +117,7 @@ module(
           '[data-test-projectSettings-generalSettings-projectTeamTableEmpty]'
         )
         .exists()
-        .containsText('t:noTeams:()');
+        .containsText(t('noTeams'));
     });
 
     test('it renders project teams list', async function (assert) {
@@ -155,7 +155,7 @@ module(
           .dom('[data-test-generalSettings-projectTeamTable-teamInfo]', row)
           .exists()
           .containsText(team.members_count)
-          .containsText('t:members:()');
+          .containsText(t('members'));
 
         const checkboxSelector = `[data-test-generalSettings-projectTeamTable-editAccess="${team.name}"]`;
 
@@ -233,14 +233,14 @@ module(
       assert.ok(this.accessChecked);
 
       const notify = this.owner.lookup('service:notifications');
-      assert.strictEqual(notify.successMsg, 't:permissionChanged:()');
+      assert.strictEqual(notify.successMsg, t('permissionChanged'));
 
       await click(checkboxSelector);
 
       assert.dom(checkboxSelector, teamsTable[0]).exists().isNotChecked();
       assert.notOk(this.accessChecked);
 
-      assert.strictEqual(notify.successMsg, 't:permissionChanged:()');
+      assert.strictEqual(notify.successMsg, t('permissionChanged'));
     });
 
     test.each(
@@ -313,7 +313,7 @@ module(
         if (pass) {
           const notify = this.owner.lookup('service:notifications');
 
-          assert.strictEqual(notify.successMsg, 't:teamRemoved:()');
+          assert.strictEqual(notify.successMsg, t('teamRemoved'));
 
           prjTeamRows = findAll(
             '[data-test-generalSettings-projectTeamTable-row]'
@@ -323,7 +323,7 @@ module(
         } else {
           const notify = this.owner.lookup('service:notifications');
 
-          assert.strictEqual(notify.errorMsg, 't:pleaseTryAgain:()');
+          assert.strictEqual(notify.errorMsg, t('pleaseTryAgain'));
 
           prjTeamRows = findAll(
             '[data-test-generalSettings-projectTeamTable-row]'

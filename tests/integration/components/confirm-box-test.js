@@ -1,7 +1,7 @@
 import { module, test } from 'qunit';
 import { setupRenderingTest } from 'ember-qunit';
 import { click, render } from '@ember/test-helpers';
-import { setupIntl } from 'ember-intl/test-support';
+import { setupIntl, t } from 'ember-intl/test-support';
 import { hbs } from 'ember-cli-htmlbars';
 
 module('Integration | Component | confirm-box', function (hooks) {
@@ -24,15 +24,15 @@ module('Integration | Component | confirm-box', function (hooks) {
 
     await click('[data-test-button]');
 
-    assert.dom('[data-test-ak-modal-header]').exists().hasText('t:confirm:()');
+    assert.dom('[data-test-ak-modal-header]').exists().hasText(t('confirm'));
     assert.dom('[data-test-confirmbox-description]').doesNotExist();
 
-    assert.dom('[data-test-confirmbox-confirmBtn]').exists().hasText('t:ok:()');
+    assert.dom('[data-test-confirmbox-confirmBtn]').exists().hasText(t('ok'));
 
     assert
       .dom('[data-test-confirmbox-cancelBtn]')
       .exists()
-      .hasText('t:cancel:()');
+      .hasText(t('cancel'));
   });
 
   test('it renders confirm-box disabled', async function (assert) {
@@ -45,14 +45,14 @@ module('Integration | Component | confirm-box', function (hooks) {
         <ConfirmBox @isActive={{this.open}} @disabled={{this.disabled}} />
     `);
 
-    assert.dom('[data-test-ak-modal-header]').exists().hasText('t:confirm:()');
+    assert.dom('[data-test-ak-modal-header]').exists().hasText(t('confirm'));
     assert.dom('[data-test-confirmbox-description]').doesNotExist();
 
     assert
       .dom('[data-test-confirmbox-confirmBtn]')
       .exists()
       .isDisabled()
-      .hasText('t:ok:()');
+      .hasText(t('ok'));
 
     assert.dom('[data-test-ak-button-loader]').exists();
 
@@ -60,7 +60,7 @@ module('Integration | Component | confirm-box', function (hooks) {
       .dom('[data-test-confirmbox-cancelBtn]')
       .isDisabled()
       .exists()
-      .hasText('t:cancel:()');
+      .hasText(t('cancel'));
   });
 
   test('it renders confirm-box with custom values', async function (assert) {
@@ -122,15 +122,15 @@ module('Integration | Component | confirm-box', function (hooks) {
 
     await click('[data-test-button]');
 
-    assert.dom('[data-test-ak-modal-header]').exists().hasText('t:confirm:()');
+    assert.dom('[data-test-ak-modal-header]').exists().hasText(t('confirm'));
     assert.dom('[data-test-confirmbox-description]').doesNotExist();
 
-    assert.dom('[data-test-confirmbox-confirmBtn]').exists().hasText('t:ok:()');
+    assert.dom('[data-test-confirmbox-confirmBtn]').exists().hasText(t('ok'));
 
     assert
       .dom('[data-test-confirmbox-cancelBtn]')
       .exists()
-      .hasText('t:cancel:()');
+      .hasText(t('cancel'));
 
     await click('[data-test-confirmbox-confirmBtn]');
 
@@ -165,15 +165,15 @@ module('Integration | Component | confirm-box', function (hooks) {
 
     await click('[data-test-button]');
 
-    assert.dom('[data-test-ak-modal-header]').exists().hasText('t:confirm:()');
+    assert.dom('[data-test-ak-modal-header]').exists().hasText(t('confirm'));
     assert.dom('[data-test-confirmbox-description]').doesNotExist();
 
-    assert.dom('[data-test-confirmbox-confirmBtn]').exists().hasText('t:ok:()');
+    assert.dom('[data-test-confirmbox-confirmBtn]').exists().hasText(t('ok'));
 
     assert
       .dom('[data-test-confirmbox-cancelBtn]')
       .exists()
-      .hasText('t:cancel:()');
+      .hasText(t('cancel'));
 
     await click('[data-test-confirmbox-confirmBtn]');
 
@@ -208,15 +208,15 @@ module('Integration | Component | confirm-box', function (hooks) {
 
     await click('[data-test-button]');
 
-    assert.dom('[data-test-ak-modal-header]').exists().hasText('t:confirm:()');
+    assert.dom('[data-test-ak-modal-header]').exists().hasText(t('confirm'));
     assert.dom('[data-test-description-block]').exists().hasText('description');
     assert.dom('[data-test-confirmbox-description]').doesNotExist();
 
-    assert.dom('[data-test-confirmbox-confirmBtn]').exists().hasText('t:ok:()');
+    assert.dom('[data-test-confirmbox-confirmBtn]').exists().hasText(t('ok'));
 
     assert
       .dom('[data-test-confirmbox-cancelBtn]')
       .exists()
-      .hasText('t:cancel:()');
+      .hasText(t('cancel'));
   });
 });

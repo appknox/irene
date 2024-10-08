@@ -8,7 +8,7 @@ import {
 } from '@ember/test-helpers';
 import { hbs } from 'ember-cli-htmlbars';
 import { setupMirage } from 'ember-cli-mirage/test-support';
-import { setupIntl } from 'ember-intl/test-support';
+import { setupIntl, t } from 'ember-intl/test-support';
 import { setupRenderingTest } from 'ember-qunit';
 import { module, test } from 'qunit';
 
@@ -57,7 +57,7 @@ module(
 
       assert.dom('[data-test-sbom-loadingSvg]').exists();
 
-      assert.dom('[data-test-sbom-loadingText]').hasText('t:loading:()...');
+      assert.dom('[data-test-sbom-loadingText]').hasText(`${t('loading')}...`);
 
       await waitFor('[data-test-sbomComponentVulnerabilities-emptyTextTitle]', {
         timeout: 500,
@@ -65,11 +65,11 @@ module(
 
       assert
         .dom('[data-test-sbomComponentVulnerabilities-emptyTextTitle]')
-        .hasText('t:sbomModule.knownVulnerabilitiesEmptyText.title:()');
+        .hasText(t('sbomModule.knownVulnerabilitiesEmptyText.title'));
 
       assert
         .dom('[data-test-sbomComponentVulnerabilities-emptyTextDescription]')
-        .hasText('t:sbomModule.knownVulnerabilitiesEmptyText.description:()');
+        .hasText(t('sbomModule.knownVulnerabilitiesEmptyText.description'));
 
       assert.dom('[data-test-sbomComponentVulnerabilities-emptySvg]').exists();
     });
@@ -96,15 +96,13 @@ module(
 
       assert
         .dom(vulnerabilityColHeaders[0])
-        .hasText('t:sbomModule.vulnerabilityId:()');
+        .hasText(t('sbomModule.vulnerabilityId'));
 
-      assert
-        .dom(vulnerabilityColHeaders[1])
-        .hasText('t:sbomModule.severity:()');
+      assert.dom(vulnerabilityColHeaders[1]).hasText(t('sbomModule.severity'));
 
       assert
         .dom(vulnerabilityColHeaders[2])
-        .hasText('t:sbomModule.cvssV3Score:()');
+        .hasText(t('sbomModule.cvssV3Score'));
 
       const vulnerabilityRows = findAll(
         '[data-test-sbomComponentVulnerabilities-listItem]'
@@ -221,7 +219,7 @@ module(
           '[data-test-sbomComponentVulnerabilities-detailDescTitle]',
           vulnerabilityRows[0]
         )
-        .hasText('t:description:()');
+        .hasText(t('description'));
 
       assert
         .dom(
@@ -236,7 +234,7 @@ module(
           '[data-test-sbomComponentVulnerabilities-affectedFixedVersionTitle]',
           vulnerabilityRows[0]
         )
-        .hasText('t:sbomModule.affectedAndFixedVersion.title:()');
+        .hasText(t('sbomModule.affectedAndFixedVersion.title'));
 
       assert
         .dom(
@@ -249,8 +247,8 @@ module(
       );
 
       assert.strictEqual(headers.length, 2);
-      assert.dom(headers[0]).hasText('t:sbomModule.affectedVersions:()');
-      assert.dom(headers[1]).hasText('t:sbomModule.fixedVersions:()');
+      assert.dom(headers[0]).hasText(t('sbomModule.affectedVersions'));
+      assert.dom(headers[1]).hasText(t('sbomModule.fixedVersions'));
 
       const rows = findAll(
         '[data-test-sbomComponentVulnerabilities-affectedFixedVersion-row]'
@@ -277,7 +275,7 @@ module(
           '[data-test-sbomComponentVulnerabilities-detailSourceTitle]',
           vulnerabilityRows[0]
         )
-        .hasText('t:source:()');
+        .hasText(t('source'));
 
       assert
         .dom(
@@ -384,7 +382,7 @@ module(
           .dom(
             '[data-test-sbomComponentVulnerabilities-affectedFixedVersion-emptyTitle]'
           )
-          .hasText('t:sbomModule.affectedAndFixedVersion.emptyTitle:()');
+          .hasText(t('sbomModule.affectedAndFixedVersion.emptyTitle'));
       }
     );
   }

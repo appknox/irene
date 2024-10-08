@@ -5,7 +5,7 @@ import { setupRenderingTest } from 'ember-qunit';
 import Service from '@ember/service';
 import { render, click, find, triggerEvent } from '@ember/test-helpers';
 import { hbs } from 'ember-cli-htmlbars';
-import { setupIntl } from 'ember-intl/test-support';
+import { setupIntl, t } from 'ember-intl/test-support';
 import { setupMirage } from 'ember-cli-mirage/test-support';
 import { serializer } from 'irene/tests/test-utils';
 import styles from 'irene/components/partner/client-report-download/index.scss';
@@ -135,7 +135,7 @@ module(
 
       assert
         .dom('[data-test-download-button-download-label]')
-        .includesText(`t:download:()`);
+        .includesText(t('download'));
 
       const downloadActionTooltip = find(
         '[data-test-action-download] [data-test-ak-tooltip-root]'
@@ -146,7 +146,7 @@ module(
       assert
         .dom('[data-test-download-button-no-report-tooltip]')
         .exists()
-        .hasText(`t:noReportsGenerated:()`);
+        .hasText(t('noReportsGenerated'));
     });
 
     test('it should show disabled download button if fails to fetch report for the id', async function (assert) {
@@ -182,7 +182,7 @@ module(
       assert.dom('[data-test-download-report-button]').hasAttribute('disabled');
       assert
         .dom('[data-test-download-button-download-label]')
-        .includesText(`t:download:()`);
+        .includesText(t('download'));
 
       const downloadActionTooltip = find(
         '[data-test-action-download] [data-test-ak-tooltip-root]'
@@ -192,7 +192,7 @@ module(
 
       assert
         .dom('[data-test-download-button-no-report-tooltip]')
-        .hasText(`t:noReportsGenerated:()`);
+        .hasText(t('noReportsGenerated'));
     });
 
     test('it should render download button with generating state if report generation is in progress', async function (assert) {
@@ -240,7 +240,7 @@ module(
         .hasAttribute('style', `width: ${report.progress}%`);
       assert
         .dom('[data-test-download-button-generating-label]')
-        .hasText(`t:generating:()`);
+        .hasText(t('generating'));
 
       const downloadActionTooltip = find(
         '[data-test-action-download] [data-test-ak-tooltip-root]'
@@ -293,7 +293,7 @@ module(
         .hasNoClass(styles['button-progress']);
       assert
         .dom('[data-test-download-button-download-label]')
-        .includesText(`t:download:()`);
+        .includesText(t('download'));
 
       const downloadActionTooltip = find(
         '[data-test-action-download] [data-test-ak-tooltip-root]'
@@ -304,7 +304,7 @@ module(
       assert
         .dom('[data-test-download-button-tooltip]')
         .hasText(
-          `t:generatedOn:() ${dayjs(report.generatedOn).format(
+          `${t('generatedOn')} ${dayjs(report.generatedOn).format(
             'DD MMM YYYY hh:mm a'
           )}`
         );
@@ -389,7 +389,7 @@ module(
 
       assert
         .dom('[data-test-generate-button-tooltip]')
-        .hasText(`t:generateNewReport:()`);
+        .hasText(t('generateNewReport'));
     });
 
     test('it should disable generate button even if report is in generating state', async function (assert) {
@@ -438,7 +438,7 @@ module(
 
       assert
         .dom('[data-test-generate-button-progress-tooltip]')
-        .hasText(`t:reportGenerationInProgressWait:()`);
+        .hasText(t('reportGenerationInProgressWait'));
     });
 
     test('it should hide password toggle button if no report exists', async function (assert) {
@@ -702,14 +702,14 @@ module(
       assert.dom('[data-test-report-password]').exists();
       assert
         .dom('[data-test-report-password-title]')
-        .hasText(`t:reportPassword:()`);
+        .hasText(t('reportPassword'));
       assert
         .dom('[data-test-report-password-value]')
         .hasAttribute('id', `unlock-key-${report.id}`)
         .hasValue(unlockKey.unlockKey);
       assert
         .dom('[data-test-report-password-copy-button]')
-        .containsText(`t:copy:()`);
+        .containsText(t('copy'));
     });
 
     test('it should notify on download report error', async function (assert) {
@@ -759,7 +759,7 @@ module(
 
       assert.strictEqual(
         notifyService.get('errorMsg'),
-        `t:downloadUrlNotFound:()`
+        t('downloadUrlNotFound')
       );
     });
 
@@ -819,7 +819,7 @@ module(
 
       assert.strictEqual(
         notifyService.get('successMsg'),
-        `t:reportIsGettingGenerated:()`
+        t('reportIsGettingGenerated')
       );
       assert.strictEqual(notifyService.get('errorMsg'), null);
     });

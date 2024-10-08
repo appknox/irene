@@ -1,9 +1,10 @@
 import { click, fillIn, find, findAll, render } from '@ember/test-helpers';
 import { hbs } from 'ember-cli-htmlbars';
 import { setupMirage } from 'ember-cli-mirage/test-support';
-import { setupIntl } from 'ember-intl/test-support';
+import { setupIntl, t } from 'ember-intl/test-support';
 import { setupRenderingTest } from 'ember-qunit';
 import { module, test } from 'qunit';
+import { capitalize } from '@ember/string';
 
 import { Response } from 'miragejs';
 import Service from '@ember/service';
@@ -75,13 +76,13 @@ module('Integration | Component | file-details/summary', function (hooks) {
     assert
       .dom('[data-test-fileReportBtn]')
       .isNotDisabled()
-      .hasText('t:viewReport:()');
+      .hasText(t('viewReport'));
 
     assert.dom('[data-test-fileDetailsSummary-moreMenuBtn]').isNotDisabled();
 
     assert
       .dom('[data-test-fileDetailsSummary-fileId]')
-      .hasText(`t:fileID:() - ${this.file.id}`);
+      .hasText(`${t('fileID')} - ${this.file.id}`);
 
     assert
       .dom('[data-test-fileDetailsSummary-fileOverview-appPlatform]')
@@ -100,13 +101,13 @@ module('Integration | Component | file-details/summary', function (hooks) {
     `);
 
     const hiddenFileOverviewDetails = [
-      { label: 't:version:()', value: this.file.version },
+      { label: t('version'), value: this.file.version },
       {
-        label: 'T:versionCode:()',
+        label: capitalize(t('versionCode')),
         value: this.file.versionCode,
       },
       {
-        label: 't:uploadedOn:()',
+        label: t('uploadedOn'),
         value: dayjs(this.file.createdOn).fromNow(),
       },
     ];
@@ -145,12 +146,12 @@ module('Integration | Component | file-details/summary', function (hooks) {
 
     assert
       .dom('[data-test-fileDetailsSummary-fileTagTitle]')
-      .hasText('t:tags:()');
+      .hasText(t('tags'));
 
     assert
       .dom('[data-test-fileDetailsSummary-addTagBtn]')
       .isNotDisabled()
-      .hasText('t:addTags:()');
+      .hasText(t('addTags'));
   });
 
   test('it should render file more menu', async function (assert) {
@@ -175,9 +176,9 @@ module('Integration | Component | file-details/summary', function (hooks) {
     // project file count is more than 1
     assert.strictEqual(menuItems.length, 3);
 
-    assert.dom(menuItems[0]).hasText('t:compare:()');
-    assert.dom(menuItems[1]).hasText('t:allUploads:()');
-    assert.dom(menuItems[2]).hasText('t:settings:()');
+    assert.dom(menuItems[0]).hasText(t('compare'));
+    assert.dom(menuItems[1]).hasText(t('allUploads'));
+    assert.dom(menuItems[2]).hasText(t('settings'));
 
     // close menu
     await click('[data-test-ak-popover-backdrop]');
@@ -192,7 +193,7 @@ module('Integration | Component | file-details/summary', function (hooks) {
 
     assert.strictEqual(menuItems.length, 1);
 
-    assert.dom(menuItems[0]).hasText('t:settings:()');
+    assert.dom(menuItems[0]).hasText(t('settings'));
   });
 
   test.each('test add tag', [false, true], async function (assert, fail) {
@@ -230,7 +231,7 @@ module('Integration | Component | file-details/summary', function (hooks) {
 
     assert
       .dom('[data-test-fileDetailsSummary-fileTagTitle]')
-      .hasText('t:tags:()');
+      .hasText(t('tags'));
 
     this.tags.forEach((tag) => {
       assert
@@ -241,7 +242,7 @@ module('Integration | Component | file-details/summary', function (hooks) {
     assert
       .dom('[data-test-fileDetailsSummary-addTagBtn]')
       .isNotDisabled()
-      .hasText('t:addTags:()');
+      .hasText(t('addTags'));
 
     await click('[data-test-fileDetailsSummary-addTagBtn]');
 
@@ -265,7 +266,7 @@ module('Integration | Component | file-details/summary', function (hooks) {
 
     const notify = this.owner.lookup('service:notifications');
 
-    assert.strictEqual(notify.errorMsg, 't:fileTag.blankErrorMsg:()');
+    assert.strictEqual(notify.errorMsg, t('fileTag.blankErrorMsg'));
 
     await fillIn('[data-test-fileDetailsSummary-addTagInput]', 'testTag');
 
@@ -309,7 +310,7 @@ module('Integration | Component | file-details/summary', function (hooks) {
 
       assert.dom('[data-test-fileDetailsSummary-addTagBtn]').exists();
 
-      assert.strictEqual(notify.successMsg, 't:fileTag.addedSuccessMsg:()');
+      assert.strictEqual(notify.successMsg, t('fileTag.addedSuccessMsg'));
     }
   });
 
@@ -347,7 +348,7 @@ module('Integration | Component | file-details/summary', function (hooks) {
 
     assert
       .dom('[data-test-fileDetailsSummary-fileTagTitle]')
-      .hasText('t:tags:()');
+      .hasText(t('tags'));
 
     this.tags.forEach((tag) => {
       assert
@@ -358,7 +359,7 @@ module('Integration | Component | file-details/summary', function (hooks) {
     assert
       .dom('[data-test-fileDetailsSummary-addTagBtn]')
       .isNotDisabled()
-      .hasText('t:addTags:()');
+      .hasText(t('addTags'));
 
     await click(
       find(
@@ -379,7 +380,7 @@ module('Integration | Component | file-details/summary', function (hooks) {
         .dom(`[data-test-fileDetailsSummary-fileTag='${this.tags[0].name}']`)
         .doesNotExist();
 
-      assert.strictEqual(notify.successMsg, 't:fileTag.deletedSuccessMsg:()');
+      assert.strictEqual(notify.successMsg, t('fileTag.deletedSuccessMsg'));
     }
   });
 

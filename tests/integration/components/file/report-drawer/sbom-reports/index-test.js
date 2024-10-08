@@ -1,6 +1,6 @@
 import { module, test } from 'qunit';
 import { setupRenderingTest } from 'ember-qunit';
-import { setupIntl } from 'ember-intl/test-support';
+import { setupIntl, t } from 'ember-intl/test-support';
 import { setupMirage } from 'ember-cli-mirage/test-support';
 import { find, findAll, render, waitFor, waitUntil } from '@ember/test-helpers';
 import { hbs } from 'ember-cli-htmlbars';
@@ -92,17 +92,17 @@ module(
       assert
         .dom('[data-test-sbomReports-sbomSampleReportText1]')
         .exists()
-        .hasText('t:fileReport.sbomSampleReportText1:()');
+        .hasText(t('fileReport.sbomSampleReportText1'));
 
       assert
         .dom('[data-test-sbomReports-sbomSampleReportText2]')
         .exists()
-        .hasText('t:fileReport.sbomSampleReportText2:()');
+        .hasText(t('fileReport.sbomSampleReportText2'));
 
       assert
         .dom('[data-test-sbomReports-contactUsButton]')
         .exists()
-        .hasText('t:clickHere:()');
+        .hasText(t('clickHere'));
 
       assert
         .dom('[data-test-fileReportDrawer-sbomReports-sampleReports]')
@@ -173,11 +173,11 @@ module(
       // PDF Generate Report check
       assert
         .dom('[data-test-sbomReportList-reportGenerateTitle]', reportList[0])
-        .hasText('t:sbomModule.sbomDownloadPdfPrimaryText:()');
+        .hasText(t('sbomModule.sbomDownloadPdfPrimaryText'));
 
       assert
         .dom('[data-test-sbomReportList-reportGenerateTitle]', reportList[0])
-        .hasText('t:sbomModule.sbomDownloadPdfPrimaryText:()');
+        .hasText(t('sbomModule.sbomDownloadPdfPrimaryText'));
 
       assert
         .dom('[data-test-sbomReportList-reportGenerateSvg]', reportList[0])
@@ -188,21 +188,21 @@ module(
           '[data-test-sbomReportList-reportGenerateDescription]',
           reportList[0]
         )
-        .hasText('t:sbomModule.generateReportDescription:()');
+        .hasText(t('sbomModule.generateReportDescription'));
 
       assert
         .dom('[data-test-sbomReportList-reportGenerateBtn]', reportList[0])
         .isNotDisabled()
-        .hasText('t:generateReport:()');
+        .hasText(t('generateReport'));
 
       // static JSON report check
       assert
         .dom('[data-test-sbomReportList-reportPrimaryText]', reportList[1])
-        .hasText('t:sbomModule.sbomDownloadJsonPrimaryText:()');
+        .hasText(t('sbomModule.sbomDownloadJsonPrimaryText'));
 
       assert
         .dom('[data-test-sbomReportList-reportSecondaryText]', reportList[1])
-        .hasText('t:sbomModule.sbomDownloadJsonSecondaryText:()');
+        .hasText(t('sbomModule.sbomDownloadJsonSecondaryText'));
 
       assert
         .dom('[data-test-sbomReportList-reportDownloadBtn]', reportList[1])
@@ -219,7 +219,7 @@ module(
       assert
         .dom('[data-test-fileReportDrawer-sbomReports-sbomFileLink]')
         .exists()
-        .hasText('t:fileReport.viewSbomDetails:()')
+        .hasText(t('fileReport.viewSbomDetails'))
         .hasAttribute('href', new RegExp(this.file.sbFile.get('id')));
     });
 
@@ -248,12 +248,14 @@ module(
       // Test for generated pdf report state
       assert
         .dom('[data-test-sbomReportList-reportPrimaryText]', reportList[0])
-        .hasText('t:sbomModule.sbomDownloadPdfPrimaryText:()');
+        .hasText(t('sbomModule.sbomDownloadPdfPrimaryText'));
 
       assert
         .dom('[data-test-sbomReportList-reportSecondaryText]', reportList[0])
         .hasText(
-          `t:sbomModule.sbomDownloadPdfSecondaryText:("password":"${sbomReport.report_password}")`
+          t('sbomModule.sbomDownloadPdfSecondaryText', {
+            password: sbomReport.report_password,
+          })
         );
 
       assert
@@ -269,7 +271,7 @@ module(
       assert
         .dom('[data-test-fileReportDrawer-sbomReports-sbomFileLink]')
         .exists()
-        .hasText('t:fileReport.viewSbomDetails:()')
+        .hasText(t('fileReport.viewSbomDetails'))
         .hasAttribute(
           'href',
           new RegExp(
@@ -302,12 +304,12 @@ module(
       assert
         .dom('[data-test-fileReportDrawer-sbomReports-pendingDescription]')
         .exists()
-        .hasText('t:fileReport.sbomReportInProgress:()');
+        .hasText(t('fileReport.sbomReportInProgress'));
 
       assert
         .dom('[data-test-fileReportDrawer-sbomReports-sbomFileLink]')
         .exists()
-        .hasText('t:fileReport.viewSbomDetails:()')
+        .hasText(t('fileReport.viewSbomDetails'))
         .hasAttribute('href', new RegExp(this.file.sbFile.get('id')));
     });
 
@@ -333,7 +335,7 @@ module(
           '[data-test-fileReportDrawer-sbomReports-noSbomReportsDescription]'
         )
         .exists()
-        .hasText('t:fileReport.noSbomReportAvailable:()');
+        .hasText(t('fileReport.noSbomReportAvailable'));
     });
   }
 );

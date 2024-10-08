@@ -1,7 +1,7 @@
 import { render, findAll, find, click, waitFor } from '@ember/test-helpers';
 import { hbs } from 'ember-cli-htmlbars';
 import { setupMirage } from 'ember-cli-mirage/test-support';
-import { setupIntl } from 'ember-intl/test-support';
+import { setupIntl, t } from 'ember-intl/test-support';
 import { setupRenderingTest } from 'ember-qunit';
 import { module, test } from 'qunit';
 import dayjs from 'dayjs';
@@ -114,11 +114,11 @@ module('Integration | Component | sbom/app-list', function (hooks) {
 
       assert
         .dom('[data-test-sbomApp-title]')
-        .hasText('t:sbomModule.sbomAppTitle:()');
+        .hasText(t('sbomModule.sbomAppTitle'));
 
       assert
         .dom('[data-test-sbomApp-description]')
-        .hasText('t:sbomModule.sbomAppDescription:()');
+        .hasText(t('sbomModule.sbomAppDescription'));
 
       assert.dom('[data-test-sbomApp-table]').exists();
 
@@ -127,11 +127,11 @@ module('Integration | Component | sbom/app-list', function (hooks) {
       );
 
       // assert header row
-      assert.dom(headerRow[0]).hasText('t:platform:()');
-      assert.dom(headerRow[1]).hasText('t:sbomModule.applicationName:()');
-      assert.dom(headerRow[2]).hasText('t:sbomModule.lastSbomAnalysisOn:()');
-      assert.dom(headerRow[3]).hasText('t:status:()');
-      assert.dom(headerRow[4]).hasText('t:action:()');
+      assert.dom(headerRow[0]).hasText(t('platform'));
+      assert.dom(headerRow[1]).hasText(t('sbomModule.applicationName'));
+      assert.dom(headerRow[2]).hasText(t('sbomModule.lastSbomAnalysisOn'));
+      assert.dom(headerRow[3]).hasText(t('status'));
+      assert.dom(headerRow[4]).hasText(t('action'));
 
       const contentRows = findAll('[data-test-sbomApp-row]');
 
@@ -180,12 +180,12 @@ module('Integration | Component | sbom/app-list', function (hooks) {
         assert
           .dom('button', menuItems[1])
           .isNotDisabled()
-          .hasText('t:sbomModule.viewReport:()');
+          .hasText(t('sbomModule.viewReport'));
       } else {
         assert.strictEqual(menuItems.length, 1);
       }
 
-      assert.dom('a', menuItems[0]).hasText('t:sbomModule.pastSbomAnalyses:()');
+      assert.dom('a', menuItems[0]).hasText(t('sbomModule.pastSbomAnalyses'));
     }
   );
 
@@ -240,7 +240,7 @@ module('Integration | Component | sbom/app-list', function (hooks) {
 
     assert
       .dom('[data-test-sbom-scanStatus]', secondRow[3])
-      .hasText('t:chipStatus.neverInitiated:()');
+      .hasText(t('chipStatus.neverInitiated'));
 
     assert.dom('[data-test-sbomApp-actionBtn]', secondRow[4]).isDisabled();
 
@@ -254,16 +254,16 @@ module('Integration | Component | sbom/app-list', function (hooks) {
 
     assert
       .dom('[data-test-sbomApp-noScanTitle]')
-      .hasText('t:sbomModule.neverInitiated:()');
+      .hasText(t('sbomModule.neverInitiated'));
 
     assert
       .dom('[data-test-sbomApp-noScanDescription]')
-      .hasText('t:sbomModule.noScanAlertDescription:()');
+      .hasText(t('sbomModule.noScanAlertDescription'));
 
     assert
       .dom('[data-test-sbomApp-noScanOkBtn]')
       .isNotDisabled()
-      .hasText('t:ok:()');
+      .hasText(t('ok'));
 
     await click('[data-test-sbomApp-noScanOkBtn]');
 
@@ -318,12 +318,12 @@ module('Integration | Component | sbom/app-list', function (hooks) {
 
     assert.strictEqual(menuItems.length, 2);
 
-    assert.dom('a', menuItems[0]).hasText('t:sbomModule.pastSbomAnalyses:()');
+    assert.dom('a', menuItems[0]).hasText(t('sbomModule.pastSbomAnalyses'));
 
     assert
       .dom('button', menuItems[1])
       .isNotDisabled()
-      .hasText('t:sbomModule.viewReport:()');
+      .hasText(t('sbomModule.viewReport'));
 
     const viewReportBtn = menuItems[1].querySelector('button');
 
@@ -335,7 +335,7 @@ module('Integration | Component | sbom/app-list', function (hooks) {
 
     assert
       .dom('[data-test-sbomReportDrawer-title]')
-      .hasText('t:sbomModule.scanReports:()');
+      .hasText(t('sbomModule.scanReports'));
 
     assert.dom('[data-test-sbomReportDrawer-closeBtn]').isNotDisabled();
 
@@ -364,7 +364,7 @@ module('Integration | Component | sbom/app-list', function (hooks) {
 
     assert
       .dom('[data-test-sbomReportDrawer-description]')
-      .hasText('t:sbomModule.sbomDownloadReportDescription:()');
+      .hasText(t('sbomModule.sbomDownloadReportDescription'));
   });
 
   test('it renders sbom app list loading & empty state', async function (assert) {
@@ -385,11 +385,11 @@ module('Integration | Component | sbom/app-list', function (hooks) {
 
     assert
       .dom('[data-test-sbomApp-title]')
-      .hasText('t:sbomModule.sbomAppTitle:()');
+      .hasText(t('sbomModule.sbomAppTitle'));
 
     assert
       .dom('[data-test-sbomApp-description]')
-      .hasText('t:sbomModule.sbomAppDescription:()');
+      .hasText(t('sbomModule.sbomAppDescription'));
 
     // assert
     //   .dom('[data-test-sbomApp-searchInput]')
@@ -401,17 +401,17 @@ module('Integration | Component | sbom/app-list', function (hooks) {
     assert.dom('[data-test-sbom-loadingSvg]').exists();
 
     assert.dom('[data-test-sbom-loader]').exists();
-    assert.dom('[data-test-sbom-loadingText]').hasText('t:loading:()...');
+    assert.dom('[data-test-sbom-loadingText]').hasText(`${t('loading')}...`);
 
     await waitFor('[data-test-sbomApp-emptyTextTitle]', { timeout: 500 });
 
     assert
       .dom('[data-test-sbomApp-emptyTextTitle]')
-      .hasText('t:sbomModule.sbomAppEmptyText.title:()');
+      .hasText(t('sbomModule.sbomAppEmptyText.title'));
 
     assert
       .dom('[data-test-sbomApp-emptyTextDescription]')
-      .hasText('t:sbomModule.sbomAppEmptyText.description:()');
+      .hasText(t('sbomModule.sbomAppEmptyText.description'));
 
     assert.dom('[data-test-sbomApp-emptySvg]').exists();
   });

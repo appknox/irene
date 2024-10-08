@@ -3,7 +3,7 @@ import { setupRenderingTest } from 'ember-qunit';
 import { render } from '@ember/test-helpers';
 import { hbs } from 'ember-cli-htmlbars';
 import { setupMirage } from 'ember-cli-mirage/test-support';
-import { setupIntl } from 'ember-intl/test-support';
+import { setupIntl, t } from 'ember-intl/test-support';
 
 module(
   'Integration | Component | app-monitoring/table/store-version',
@@ -80,7 +80,7 @@ module(
 
       assert
         .dom('[data-test-amTableRow-store-version]')
-        .containsText('t:notFound:()');
+        .containsText(t('notFound'));
     });
 
     test('it renders "PENDING" status in store version column if comparableVersion is empty and lastSync are null', async function (assert) {
@@ -111,7 +111,7 @@ module(
         .dom(
           '[data-test-amTableRow-store-version] [data-test-am-status-element]'
         )
-        .containsText('t:pending:()');
+        .containsText(t('pending'));
     });
 
     test('it renders "NOT SCANNED" status when relevantAmAppVersion has a comparableVersion but latestFile is null', async function (assert) {
@@ -149,14 +149,14 @@ module(
         .containsText(
           `${this.amApp.get('relevantAmAppVersion').get('comparableVersion')}`
         )
-        .containsText(`t:notScanned:()`);
+        .containsText(t('notScanned'));
 
       assert
         .dom(
           '[data-test-amTableRow-store-version] [data-test-am-status-element]'
         )
         .exists()
-        .containsText(`t:notScanned:()`);
+        .containsText(t('notScanned'));
     });
 
     test('it renders "SCANNED" status when relevantAmAppVersion has a comparableVersion and a latestFile', async function (assert) {

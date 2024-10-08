@@ -1,6 +1,7 @@
 import { module, test } from 'qunit';
 import { setupRenderingTest } from 'ember-qunit';
 import { setupMirage } from 'ember-cli-mirage/test-support';
+
 import {
   click,
   render,
@@ -8,8 +9,10 @@ import {
   fillIn,
   triggerEvent,
 } from '@ember/test-helpers';
-import { setupIntl } from 'ember-intl/test-support';
+
+import { setupIntl, t } from 'ember-intl/test-support';
 import { hbs } from 'ember-cli-htmlbars';
+import { capitalize } from '@ember/string';
 import { Response } from 'miragejs';
 
 import Service from '@ember/service';
@@ -95,22 +98,22 @@ module(
         )
       );
 
-      assert.dom('[data-test-teamProjectList-title]').hasText('t:projects:()');
+      assert.dom('[data-test-teamProjectList-title]').hasText(t('projects'));
 
       assert
         .dom('[data-test-teamProjectList-description]')
-        .hasText('t:teamProjectsDesc:()');
+        .hasText(t('teamProjectsDesc'));
 
       assert
         .dom('[data-test-teamProjectList-addProjectBtn]')
         .isNotDisabled()
-        .hasText('t:addProject:()');
+        .hasText(t('addProject'));
 
       const projectHeaderRows = findAll('[data-test-teamProjectList-thead] th');
 
-      assert.dom(projectHeaderRows[0]).hasText('T:project:()');
-      assert.dom(projectHeaderRows[1]).hasText('t:accessPermissions:()');
-      assert.dom(projectHeaderRows[2]).hasText('t:action:()');
+      assert.dom(projectHeaderRows[0]).hasText(capitalize(t('project')));
+      assert.dom(projectHeaderRows[1]).hasText(t('accessPermissions'));
+      assert.dom(projectHeaderRows[2]).hasText(t('action'));
 
       const projectContentRows = findAll('[data-test-teamProjectList-row]');
 
@@ -127,7 +130,7 @@ module(
 
       assert
         .dom('[data-test-ak-form-label]', projectContentRow[1])
-        .hasText('t:allowEdit:()');
+        .hasText(t('allowEdit'));
 
       assert
         .dom('[data-test-accessPermission-checkbox]', projectContentRow[1])
@@ -163,7 +166,7 @@ module(
         )
       );
 
-      assert.dom('[data-test-teamProjectList-title]').hasText('t:projects:()');
+      assert.dom('[data-test-teamProjectList-title]').hasText(t('projects'));
       assert.dom('[data-test-teamProjectList-searchInput]').hasNoValue();
       assert.notOk(this.query);
 
@@ -227,7 +230,7 @@ module(
 
         assert
           .dom('[data-test-ak-form-label]', contentRow[1])
-          .hasText('t:allowEdit:()');
+          .hasText(t('allowEdit'));
 
         assert
           .dom('[data-test-accessPermission-checkbox]', contentRow[1])
@@ -239,9 +242,9 @@ module(
         const notify = this.owner.lookup('service:notifications');
 
         if (fail) {
-          assert.strictEqual(notify.errorMsg, 't:pleaseTryAgain:()');
+          assert.strictEqual(notify.errorMsg, t('pleaseTryAgain'));
         } else {
-          assert.strictEqual(notify.successMsg, 't:permissionChanged:()');
+          assert.strictEqual(notify.successMsg, t('permissionChanged'));
         }
       }
     );
@@ -308,21 +311,21 @@ module(
           `#${contentRow[2].id} [data-test-teamProjectList-actionBtn]`
         );
 
-        assert.dom('[data-test-ak-modal-header]').hasText('t:confirm:()');
+        assert.dom('[data-test-ak-modal-header]').hasText(t('confirm'));
 
         assert
           .dom('[data-test-confirmBox-cancelBtn]')
           .isNotDisabled()
-          .hasText('t:cancel:()');
+          .hasText(t('cancel'));
 
         assert
           .dom('[data-test-confirmBox-confirmBtn]')
           .isNotDisabled()
-          .hasText('T:remove:()');
+          .hasText(capitalize(t('remove')));
 
         assert
           .dom('[data-test-confirmBox-description]')
-          .hasText('t:confirmBox.removeTeamProject:()');
+          .hasText(t('confirmBox.removeTeamProject'));
 
         if (!fail) {
           this.set('projectRemoved', true);
@@ -335,11 +338,11 @@ module(
         const latestRows = findAll('[data-test-teamProjectList-row]');
 
         if (fail) {
-          assert.strictEqual(notify.errorMsg, 't:pleaseTryAgain:()');
+          assert.strictEqual(notify.errorMsg, t('pleaseTryAgain'));
 
           assert.strictEqual(latestRows.length, this.projects.length);
         } else {
-          assert.strictEqual(notify.successMsg, 't:projectRemoved:()');
+          assert.strictEqual(notify.successMsg, t('projectRemoved'));
 
           assert.strictEqual(latestRows.length, this.projects.length - 1);
         }

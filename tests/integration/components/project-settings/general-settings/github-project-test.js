@@ -2,7 +2,7 @@ import Service from '@ember/service';
 import { click, render } from '@ember/test-helpers';
 import { hbs } from 'ember-cli-htmlbars';
 import { setupMirage } from 'ember-cli-mirage/test-support';
-import { setupIntl } from 'ember-intl/test-support';
+import { setupIntl, t } from 'ember-intl/test-support';
 import { clickTrigger } from 'ember-power-select/test-support/helpers';
 import { selectChoose } from 'ember-power-select/test-support';
 import { setupRenderingTest } from 'ember-qunit';
@@ -152,22 +152,22 @@ module(
       assert
         .dom('[data-test-projectSettings-genSettings-githubProject-headerText]')
         .exists()
-        .hasText('t:githubIntegration:()');
+        .hasText(t('githubIntegration'));
 
       assert
         .dom(
           '[data-test-projectSettings-genSettings-githubProject-noReposInfoText]'
         )
         .exists()
-        .containsText('t:github:()')
-        .containsText('t:gotoSettings:()');
+        .containsText(t('github'))
+        .containsText(t('gotoSettings'));
 
       assert
         .dom(
           '[data-test-projectSettings-genSettings-githubProject-orgSettingsLink]'
         )
         .exists()
-        .hasText('t:clickingHere:()');
+        .hasText(t('clickingHere'));
     });
 
     test('it renders select button with atleast one github repo and no selected project', async function (assert) {
@@ -198,9 +198,9 @@ module(
           '[data-test-projectSettings-genSettings-githubProject-selectProjectText]'
         )
         .exists()
-        .hasText('t:otherTemplates.selectGHRepo:()');
+        .hasText(t('otherTemplates.selectGHRepo'));
 
-      assert.dom(this.selectProjectBtn).exists().hasText('t:selectProject:()');
+      assert.dom(this.selectProjectBtn).exists().hasText(t('selectProject'));
     });
 
     test('it opens and closes project edit modal', async function (assert) {
@@ -221,14 +221,14 @@ module(
       assert
         .dom(`[data-test-genSettings-githubProject-editModal-title]`)
         .exists()
-        .hasText('t:otherTemplates.selectGHRepo:()');
+        .hasText(t('otherTemplates.selectGHRepo'));
 
-      assert.dom(this.editModalSaveBtn).exists().hasText('t:save:()');
+      assert.dom(this.editModalSaveBtn).exists().hasText(t('save'));
 
       const cancelBtnSelector =
         '[data-test-genSettings-githubProject-editModal-cancelSaveProjectBtn]';
 
-      assert.dom(cancelBtnSelector).exists().hasText('t:cancel:()');
+      assert.dom(cancelBtnSelector).exists().hasText(t('cancel'));
 
       await click(cancelBtnSelector);
 
@@ -243,13 +243,13 @@ module(
             account: ['This field may not be null.'],
             repo: ['This field may not be null.'],
           },
-          't:invalidProject:()',
+          () => t('invalidProject'),
         ],
         [
           {
             risk_threshold: ['This field may not be null.'],
           },
-          't:invalidRisk:()',
+          () => t('invalidRisk'),
         ],
       ],
       async function (assert, [error, message]) {
@@ -270,7 +270,7 @@ module(
         await click(this.editModalSaveBtn);
 
         if (this.hasAttemptedCreatingRepo) {
-          assert.strictEqual(this.notifyService.errorMsg, message);
+          assert.strictEqual(this.notifyService.errorMsg, message());
         }
       }
     );
@@ -346,7 +346,7 @@ module(
 
       assert.dom(this.deletePrjIconBtn).exists();
 
-      assert.strictEqual(this.notifyService.successMsg, `t:repoIntegrated:()`);
+      assert.strictEqual(this.notifyService.successMsg, t('repoIntegrated'));
     });
 
     test('it deletes selected repo when delete trigger is clicked', async function (assert) {
@@ -396,7 +396,7 @@ module(
 
       assert.strictEqual(
         this.notifyService.successMsg,
-        't:projectRemoved:()',
+        t('projectRemoved'),
         'Displays the right success message'
       );
 
@@ -409,7 +409,7 @@ module(
       assert.dom(this.deletePrjIconBtn).doesNotExist();
 
       // Check for select button
-      assert.dom(this.selectProjectBtn).exists().hasText('t:selectProject:()');
+      assert.dom(this.selectProjectBtn).exists().hasText(t('selectProject'));
     });
 
     test('it edits the project when a new repo is selected', async function (assert) {
@@ -459,7 +459,7 @@ module(
 
       assert.dom(this.deletePrjIconBtn).exists();
 
-      assert.strictEqual(this.notifyService.successMsg, 't:repoIntegrated:()');
+      assert.strictEqual(this.notifyService.successMsg, t('repoIntegrated'));
 
       // Flow for updating the existing JiraIntegration
       await click(this.editPrjIconBtn);
@@ -493,7 +493,7 @@ module(
 
       assert.dom(this.deletePrjIconBtn).exists();
 
-      assert.strictEqual(this.notifyService.successMsg, 't:projectUpdated:()');
+      assert.strictEqual(this.notifyService.successMsg, t('projectUpdated'));
     });
   }
 );

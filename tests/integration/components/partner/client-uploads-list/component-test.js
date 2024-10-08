@@ -1,7 +1,7 @@
 import { module, test } from 'qunit';
 import { setupRenderingTest } from 'ember-qunit';
 import { setupMirage } from 'ember-cli-mirage/test-support';
-import { setupIntl } from 'ember-intl/test-support';
+import { setupIntl, t } from 'ember-intl/test-support';
 import { render } from '@ember/test-helpers';
 import { hbs } from 'ember-cli-htmlbars';
 import dayjs from 'dayjs';
@@ -77,7 +77,7 @@ module(
         hbs`<Partner::ClientUploadsList @clientId={{this.clientId}} @projectId={{this.projectId}}/>`
       );
       assert.dom('[data-test-no-uploads]').exists();
-      assert.dom('[data-test-no-uploads]').hasText('t:noClientUploads:()');
+      assert.dom('[data-test-no-uploads]').hasText(t('noClientUploads'));
     });
 
     test('it should show error message on api error', async function (assert) {
@@ -103,9 +103,7 @@ module(
         hbs`<Partner::ClientUploadsList @clientId={{this.clientId}} @projectId={{this.projectId}}/>`
       );
       assert.dom('[data-test-load-error]').exists();
-      assert
-        .dom('[data-test-load-error]')
-        .hasText('t:errorCouldNotLoadData:()');
+      assert.dom('[data-test-load-error]').hasText(t('errorCouldNotLoadData'));
     });
 
     test('it should show table headers correctly', async function (assert) {
@@ -139,9 +137,9 @@ module(
         3,
         'Should have 3 headers by default'
       );
-      assert.dom(`[data-test-table-header-app]`).hasText(`t:app:()`);
-      assert.dom(`[data-test-table-header-version]`).hasText(`t:version:()`);
-      assert.dom(`[data-test-table-header-uploaded]`).hasText(`t:uploaded:()`);
+      assert.dom(`[data-test-table-header-app]`).hasText(t('app'));
+      assert.dom(`[data-test-table-header-version]`).hasText(t('version'));
+      assert.dom(`[data-test-table-header-uploaded]`).hasText(t('uploaded'));
     });
 
     test('it should render table rows for each file', async function (assert) {
@@ -221,13 +219,13 @@ module(
           .hasText(rowData.name);
         assert
           .dom(`[data-test-table-body-row="${row}"] [data-test-app-fileid]`)
-          .hasText(`t:fileID:(): ${rowData.id}`);
+          .hasText(`${t('fileID')}: ${rowData.id}`);
         assert
           .dom(`[data-test-table-body-row="${row}"] [data-test-version]`)
-          .hasText(`t:version:(): ${rowData.version}`);
+          .hasText(`${t('version')}: ${rowData.version}`);
         assert
           .dom(`[data-test-table-body-row="${row}"] [data-test-versioncode]`)
-          .hasText(`t:versionCode:(): ${rowData.versionCode}`);
+          .hasText(`${t('versionCode')}: ${rowData.versionCode}`);
         assert
           .dom(`[data-test-table-body-row="${row}"] [data-test-uploaded]`)
           .hasText(dayjs(rowData.createdOn).fromNow());
@@ -330,13 +328,11 @@ module(
         5,
         'Should have 5 headers by default'
       );
-      assert.dom(`[data-test-table-header-app]`).hasText(`t:app:()`);
-      assert.dom(`[data-test-table-header-version]`).hasText(`t:version:()`);
-      assert.dom(`[data-test-table-header-uploaded]`).hasText(`t:uploaded:()`);
-      assert
-        .dom(`[data-test-table-header-summary]`)
-        .hasText(`t:scanResults:()`);
-      assert.dom(`[data-test-table-header-report]`).hasText(`t:report:()`);
+      assert.dom(`[data-test-table-header-app]`).hasText(t('app'));
+      assert.dom(`[data-test-table-header-version]`).hasText(t('version'));
+      assert.dom(`[data-test-table-header-uploaded]`).hasText(t('uploaded'));
+      assert.dom(`[data-test-table-header-summary]`).hasText(t('scanResults'));
+      assert.dom(`[data-test-table-header-report]`).hasText(t('report'));
 
       for (let row = 0; row <= files.length - 1; row++) {
         const rowData = files[row];
@@ -350,13 +346,13 @@ module(
           .hasText(rowData.name);
         assert
           .dom(`[data-test-table-body-row="${row}"] [data-test-app-fileid]`)
-          .hasText(`t:fileID:(): ${rowData.id}`);
+          .hasText(`${t('fileID')}: ${rowData.id}`);
         assert
           .dom(`[data-test-table-body-row="${row}"] [data-test-version]`)
-          .hasText(`t:version:(): ${rowData.version}`);
+          .hasText(`${t('version')}: ${rowData.version}`);
         assert
           .dom(`[data-test-table-body-row="${row}"] [data-test-versioncode]`)
-          .hasText(`t:versionCode:(): ${rowData.versionCode}`);
+          .hasText(`${t('versionCode')}: ${rowData.versionCode}`);
         assert
           .dom(`[data-test-table-body-row="${row}"] [data-test-uploaded]`)
           .hasText(dayjs(rowData.createdOn).fromNow());

@@ -1,7 +1,7 @@
 import { click, fillIn, render, triggerEvent } from '@ember/test-helpers';
 import { hbs } from 'ember-cli-htmlbars';
 import { setupMirage } from 'ember-cli-mirage/test-support';
-import { setupIntl } from 'ember-intl/test-support';
+import { setupIntl, t } from 'ember-intl/test-support';
 import { setupRenderingTest } from 'ember-qunit';
 import { module, test } from 'qunit';
 import { Response } from 'miragejs';
@@ -58,7 +58,7 @@ module(
 
       assert
         .dom('[data-test-serviceAccountSection-title]')
-        .hasText('t:accountOverview:()');
+        .hasText(t('accountOverview'));
 
       assert
         .dom('[data-test-serviceAccountSection-accountOverview-actionBtn]')
@@ -66,7 +66,7 @@ module(
 
       assert
         .dom('[data-test-serviceAccountSection-accountOverview-nameLabel]')
-        .hasText('t:serviceAccountModule.nameOfTheServiceAccount:()');
+        .hasText(t('serviceAccountModule.nameOfTheServiceAccount'));
 
       assert
         .dom('[data-test-serviceAccountSection-accountOverview-auditInfoIcon]')
@@ -80,7 +80,7 @@ module(
         .dom(
           '[data-test-serviceAccountSection-accountOverview-descriptionLabel]'
         )
-        .hasText('t:description:()');
+        .hasText(t('description'));
 
       assert
         .dom(
@@ -102,7 +102,7 @@ module(
 
       assert
         .dom('[data-test-serviceAccountSection-title]')
-        .hasText('t:accountOverview:()');
+        .hasText(t('accountOverview'));
 
       assert
         .dom('[data-test-serviceAccountSection-accountOverview-auditInfoIcon]')
@@ -115,23 +115,23 @@ module(
 
       const auditInfo = [
         {
-          title: 't:createdOn:()',
+          title: t('createdOn'),
           value: dayjs(this.serviceAccount.createdOn).format(
             'MMMM DD, YYYY, hh:mm'
           ),
         },
         {
-          title: 't:createdBy:()',
+          title: t('createdBy'),
           value: `${this.user.username} (${this.user.email})`,
         },
         {
-          title: 't:updatedOn:()',
+          title: t('updatedOn'),
           value: dayjs(this.serviceAccount.updatedOn).format(
             'MMMM DD, YYYY, hh:mm'
           ),
         },
         {
-          title: 't:updatedBy:()',
+          title: t('updatedBy'),
           value: `${this.user.username} (${this.user.email})`,
         },
       ];
@@ -213,7 +213,7 @@ module(
 
         assert
           .dom('[data-test-serviceAccountSection-title]')
-          .hasText('t:accountOverview:()');
+          .hasText(t('accountOverview'));
 
         assert
           .dom('[data-test-serviceAccountSection-accountOverview-actionBtn]')
@@ -229,7 +229,7 @@ module(
 
         assert
           .dom('[data-test-form-label]')
-          .containsText('t:serviceAccountModule.nameOfTheServiceAccount:()');
+          .containsText(t('serviceAccountModule.nameOfTheServiceAccount'));
 
         assert
           .dom(
@@ -245,7 +245,7 @@ module(
           .dom(
             '[data-test-serviceAccountSection-accountOverview-descriptionLabel]'
           )
-          .containsText('t:description:()');
+          .containsText(t('description'));
 
         assert
           .dom(
@@ -258,12 +258,12 @@ module(
         assert
           .dom('[data-test-serviceAccountSection-accountOverview-updateBtn]')
           .isNotDisabled()
-          .hasText('t:update:()');
+          .hasText(t('update'));
 
         assert
           .dom('[data-test-serviceAccountSection-accountOverview-cancelBtn]')
           .isNotDisabled()
-          .hasText('t:cancel:()');
+          .hasText(t('cancel'));
 
         const updatedName = 'Testing name update';
         const updatedDescription = 'Testing description update';
@@ -296,7 +296,7 @@ module(
         } else {
           assert.strictEqual(
             notify.successMsg,
-            't:serviceAccountModule.editSuccessMsg:()'
+            t('serviceAccountModule.editSuccessMsg')
           );
 
           assert

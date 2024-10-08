@@ -1,7 +1,7 @@
 import { render, findAll, find, click } from '@ember/test-helpers';
 import { hbs } from 'ember-cli-htmlbars';
 import { setupMirage } from 'ember-cli-mirage/test-support';
-import { setupIntl } from 'ember-intl/test-support';
+import { setupIntl, t } from 'ember-intl/test-support';
 import { setupRenderingTest } from 'ember-qunit';
 import { module, test } from 'qunit';
 import { selectChoose } from 'ember-power-select/test-support';
@@ -109,7 +109,7 @@ module('Integration | Component | organization-member/list', function (hooks) {
     assert
       .dom('[data-test-ak-form-label]', inactiveUserFormControl)
       .exists()
-      .hasText('t:includeInactiveMembers:()');
+      .hasText(t('includeInactiveMembers'));
 
     assert
       .dom('[data-test-inactive-user-checkbox]', inactiveUserFormControl)
@@ -126,10 +126,10 @@ module('Integration | Component | organization-member/list', function (hooks) {
     );
 
     // assert header row
-    assert.dom(headerRow[0]).hasText('t:user:()');
-    assert.dom(headerRow[1]).hasText('t:email:()');
-    assert.dom(headerRow[2]).hasText('t:role:()');
-    assert.dom(headerRow[3]).hasText('t:lastLoggedIn:()');
+    assert.dom(headerRow[0]).hasText(t('user'));
+    assert.dom(headerRow[1]).hasText(t('email'));
+    assert.dom(headerRow[2]).hasText(t('role'));
+    assert.dom(headerRow[3]).hasText(t('lastLoggedIn'));
 
     const contentRows = findAll('[data-test-org-user-row]');
 
@@ -146,7 +146,7 @@ module('Integration | Component | organization-member/list', function (hooks) {
     assert
       .dom('.user-role-select-trigger', firstRow[2])
       .hasAria('disabled', 'false')
-      .hasText('t:owner:()');
+      .hasText(t('owner'));
 
     if (this.organizationMembers[0].last_logged_in) {
       assert
@@ -157,7 +157,7 @@ module('Integration | Component | organization-member/list', function (hooks) {
           )
         );
     } else {
-      assert.dom(firstRow[3]).hasText('t:never:()');
+      assert.dom(firstRow[3]).hasText(t('never'));
     }
 
     // second row sanity check
@@ -168,7 +168,7 @@ module('Integration | Component | organization-member/list', function (hooks) {
     assert
       .dom('.user-role-select-trigger', secondRow[2])
       .hasAria('disabled', 'false')
-      .hasText('t:memberRole:()');
+      .hasText(t('memberRole'));
 
     // forth row sanity check
     const forthRow = contentRows[3].querySelectorAll(
@@ -178,7 +178,7 @@ module('Integration | Component | organization-member/list', function (hooks) {
     assert
       .dom('.user-role-select-trigger', forthRow[2])
       .hasAria('disabled', 'false')
-      .hasText('t:admin:()');
+      .hasText(t('admin'));
   });
 
   test('it renders organization user list for admin', async function (assert) {
@@ -213,7 +213,7 @@ module('Integration | Component | organization-member/list', function (hooks) {
     assert
       .dom('[data-test-ak-form-label]', inactiveUserFormControl)
       .exists()
-      .hasText('t:includeInactiveMembers:()');
+      .hasText(t('includeInactiveMembers'));
 
     assert
       .dom('[data-test-inactive-user-checkbox]', inactiveUserFormControl)
@@ -230,10 +230,10 @@ module('Integration | Component | organization-member/list', function (hooks) {
     );
 
     // assert header row
-    assert.dom(headerRow[0]).hasText('t:user:()');
-    assert.dom(headerRow[1]).hasText('t:email:()');
-    assert.dom(headerRow[2]).hasText('t:role:()');
-    assert.dom(headerRow[3]).hasText('t:lastLoggedIn:()');
+    assert.dom(headerRow[0]).hasText(t('user'));
+    assert.dom(headerRow[1]).hasText(t('email'));
+    assert.dom(headerRow[2]).hasText(t('role'));
+    assert.dom(headerRow[3]).hasText(t('lastLoggedIn'));
 
     const contentRows = findAll('[data-test-org-user-row]');
 
@@ -249,7 +249,7 @@ module('Integration | Component | organization-member/list', function (hooks) {
 
     assert.dom('.user-role-select-trigger', firstRow[2]).doesNotExist();
 
-    assert.dom(firstRow[2]).hasText('t:owner:()');
+    assert.dom(firstRow[2]).hasText(t('owner'));
 
     if (this.organizationMembers[0].last_logged_in) {
       assert
@@ -260,7 +260,7 @@ module('Integration | Component | organization-member/list', function (hooks) {
           )
         );
     } else {
-      assert.dom(firstRow[3]).hasText('t:never:()');
+      assert.dom(firstRow[3]).hasText(t('never'));
     }
 
     // second row sanity check
@@ -270,7 +270,7 @@ module('Integration | Component | organization-member/list', function (hooks) {
 
     assert.dom('.user-role-select-trigger', secondRow[2]).doesNotExist();
 
-    assert.dom(secondRow[2]).hasText('t:memberRole:()');
+    assert.dom(secondRow[2]).hasText(t('memberRole'));
 
     // forth row sanity check
     const forthRow = contentRows[3].querySelectorAll(
@@ -279,7 +279,7 @@ module('Integration | Component | organization-member/list', function (hooks) {
 
     assert.dom('.user-role-select-trigger', forthRow[2]).doesNotExist();
 
-    assert.dom(forthRow[2]).hasText('t:admin:()');
+    assert.dom(forthRow[2]).hasText(t('admin'));
   });
 
   test('it opens a drawer with member details on row click', async function (assert) {
@@ -317,8 +317,8 @@ module('Integration | Component | organization-member/list', function (hooks) {
     await click(contentRow[0]);
 
     assert.dom('[data-test-member-drawer]').exists();
-    assert.dom('[data-test-member-drawer-title]').hasText('t:userDetails:()');
-    assert.dom('[data-test-add-to-team-button]').hasText('t:addToTeams:()');
+    assert.dom('[data-test-member-drawer-title]').hasText(t('userDetails'));
+    assert.dom('[data-test-add-to-team-button]').hasText(t('addToTeams'));
     assert.dom('[data-test-member-drawer-close-btn]').exists();
 
     await click('[data-test-member-drawer-close-btn]');
@@ -362,16 +362,16 @@ module('Integration | Component | organization-member/list', function (hooks) {
     assert
       .dom('.user-role-select-trigger', contentRow[2])
       .hasAria('disabled', 'false')
-      .hasText('t:owner:()');
+      .hasText(t('owner'));
 
     await selectChoose(
       `#${contentRow[2].id} .user-role-select-trigger`,
-      't:admin:()'
+      t('admin')
     );
 
     const notify = this.owner.lookup('service:notifications');
 
-    assert.strictEqual(notify.successMsg, 't:userRoleUpdated:()');
+    assert.strictEqual(notify.successMsg, t('userRoleUpdated'));
   });
 
   test('test organization user role change failure', async function (assert) {
@@ -406,15 +406,15 @@ module('Integration | Component | organization-member/list', function (hooks) {
     assert
       .dom('.user-role-select-trigger', contentRow[2])
       .hasAria('disabled', 'false')
-      .hasText('t:owner:()');
+      .hasText(t('owner'));
 
     await selectChoose(
       `#${contentRow[2].id} .user-role-select-trigger`,
-      't:admin:()'
+      t('admin')
     );
 
     const notify = this.owner.lookup('service:notifications');
 
-    assert.strictEqual(notify.errorMsg, 't:pleaseTryAgain:()');
+    assert.strictEqual(notify.errorMsg, t('pleaseTryAgain'));
   });
 });
