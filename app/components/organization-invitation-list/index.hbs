@@ -27,7 +27,11 @@
     <AkTable data-test-invitation-list as |t|>
       <t.head data-test-invitation-list-thead @columns={{this.columns}} />
       <t.body @rows={{pgc.currentPageResults}} as |b|>
-        <b.row data-test-invitation-list-row as |r|>
+        <b.row
+          data-test-cy='invite-list-row'
+          data-test-invitation-list-row
+          as |r|
+        >
           <r.cell data-test-invitation-list-cell as |value|>
             {{#if r.columnValue.component}}
               {{#let (component r.columnValue.component) as |Component|}}
