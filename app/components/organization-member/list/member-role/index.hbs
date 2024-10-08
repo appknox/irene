@@ -1,6 +1,7 @@
 {{#if this.me.org.is_owner}}
   <AkStack @justifyContent='center' data-test-member-role-dropdown>
     <AkSelect
+      data-test-cy='user-role-select'
       @triggerClass='user-role-select-trigger'
       @disabled={{this.userDisabled}}
       @selected={{this.selectedRole}}

@@ -6,6 +6,7 @@
 >
   <AkButton
     data-test-addToTeam-titleBtn
+    data-test-cy='add-to-team-back-btn'
     @variant='text'
     @typographyVariant='h5'
     @underline='none'
@@ -20,7 +21,7 @@
         <AkTypography @color='textPrimary' @fontWeight='medium'>
           {{@member.member.username}}
         </AkTypography>
-        <AkTypography @color='textPrimary' class="ml-1">
+        <AkTypography @color='textPrimary' class='ml-1'>
           ({{@member.member.email}})
         </AkTypography>
       </AkStack>
