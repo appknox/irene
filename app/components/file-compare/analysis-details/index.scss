@@ -9,11 +9,11 @@
       --file-compare-analysis-details-marked-passed-bg-color
     );
 
-    :global(.scrollable-box),
-    :global(.scrollable-box) pre {
+    .vulnerability-finding-container {
       background-color: var(
         --file-compare-analysis-details-marked-passed-vuln-finding-bg-color
       );
+      border: 1px solid var(--file-compare-analysis-details-border-color);
     }
   }
 
@@ -21,10 +21,6 @@
     display: flex;
     flex-direction: column;
     gap: 0.75em;
-
-    code {
-      @extend .scrollable-box;
-    }
 
     h1 {
       font-size: 1.75rem;
@@ -63,5 +59,27 @@
 
   .analysis-content-value {
     width: calc(100% - 185px);
+  }
+
+  .vulnerability-finding-container {
+    width: 100%;
+    max-width: 600px;
+    max-height: 300px;
+    overflow: auto;
+    text-overflow: clip;
+    margin: 1em 0;
+    background-color: var(
+      --file-compare-analysis-details-findings-code-background-color
+    );
+    border-radius: var(--file-compare-analysis-details-findings-border-radius);
+
+    .vulnerability-finding-description {
+      background-color: unset;
+      color: var(--file-compare-analysis-details-findings-color-primary);
+      white-space: pre-line;
+      width: max-content;
+      line-height: normal;
+      padding: 0.75em;
+    }
   }
 }

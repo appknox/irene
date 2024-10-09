@@ -1144,6 +1144,11 @@ body {
   --file-compare-analysis-details-marked-passed-vuln-finding-bg-color: var(
     --neutral-grey-50
   );
+  --file-compare-analysis-details-findings-code-background-color: var(
+    --neutral-grey-100
+  );
+  --file-compare-analysis-details-findings-border-radius: var(--border-radius);
+  --file-compare-analysis-details-findings-color-primary: var(--primary-main);
 
   // variables for file-compare/compare-list
   --file-compare-compare-list-wrapper-background-color: var(--background-main);
