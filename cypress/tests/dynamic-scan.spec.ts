@@ -134,9 +134,9 @@ Cypress.on('uncaught:exception', () => {
   return false;
 });
 
-describe.skip('Dynamic Scan', () => {
+describe('Dynamic Scan', () => {
   beforeEach(() => {
-    cy.viewport(1450, 962);
+    cy.viewport(1450, 1450);
 
     // Hide websocket and analyses logs
     networkActions.hideNetworkLogsFor({ ...API_ROUTES.websockets });
@@ -372,10 +372,11 @@ describe.skip('Dynamic Scan', () => {
             .should('exist')
             .as(DYNAMIC_SCAN_STOP_BTN_ALIAS);
 
+          // open device in fullscreen
+          cy.findByTestId('manualDast-fullscreenBtn').should('exist').click();
+
           // wait for screen to load
           cy.wait(5000);
-
-          cy.findByTestId('manualDast-fullscreenBtn').should('exist').click();
 
           // trigger app interaction
           app.performInteraction(app.interactions, app);
