@@ -17,7 +17,7 @@ export default defineConfig({
     setupNodeEvents(on) {
       on('before:browser:launch', (browser, launchOptions) => {
         if (browser.family === 'chromium' && browser.name !== 'electron') {
-          launchOptions.args.push('--window-size=1350,768');
+          launchOptions.args.push('--window-size=1350,1024');
           launchOptions.args.push('--force-device-scale-factor=1');
         }
 
