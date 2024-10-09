@@ -283,6 +283,16 @@
   "cvssV3": "CVSSv3",
   "cvssExpansion": "Common Vulnerability Scoring System",
   "cvssMetrics": "CVSS Metrics",
+  "cvssMetricsLabel": {
+    "attackVector": "Attack Vector",
+    "attackComplexity": "Attack Complexity",
+    "privilegesRequired": "Privileges Required",
+    "userInteraction": "User Interaction",
+    "scope": "Scope",
+    "confidentialityImpact": "Confidentiality Impact",
+    "integrityImpact": "Integrity Impact",
+    "availabilityImpact": "Availability Impact"
+  },
   "cwe": "CWE",
   "cweExpansion": "Common Weakness Enumeration",
   "dast": "DAST",
