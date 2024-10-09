@@ -93,4 +93,8 @@ export const API_ROUTES = {
     route: '/api/service_accounts/*',
     alias: 'serviceAccount',
   },
+  teamsList: {
+    route: '/api/organizations/*/teams*',
+    alias: 'teamList',
+  },
 } as const;
