@@ -83,7 +83,7 @@ module(
       assert
         .dom(selectors.addParamBtnSelector)
         .exists()
-        .containsText('t:add:()')
+        .containsText(t('add'))
         .hasAttribute('disabled');
 
       assert.dom(selectors.inputTypeTextField).exists();

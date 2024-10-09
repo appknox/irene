@@ -3,7 +3,7 @@ import { setupRenderingTest } from 'ember-qunit';
 import { render } from '@ember/test-helpers';
 import { hbs } from 'ember-cli-htmlbars';
 import { setupMirage } from 'ember-cli-mirage/test-support';
-import { setupIntl } from 'ember-intl/test-support';
+import { setupIntl, t } from 'ember-intl/test-support';
 import dayjs from 'dayjs';
 import { faker } from '@faker-js/faker';
 import { underscore } from '@ember/string';
@@ -50,7 +50,7 @@ module('Integration | Component | partner/client-plan', function (hooks) {
     this.set('clientId', 1);
     await render(hbs`<Partner::ClientPlan @clientId={{this.clientId}}/>`);
 
-    assert.dom('div[data-test-plan-type]').hasText(`t:perApp:()`);
+    assert.dom('div[data-test-plan-type]').hasText(t('perApp'));
     assert.dom('div[data-test-plan-type]').hasClass(styles['per-app']);
     assert
       .dom('strong[data-test-projects-left]')
@@ -60,7 +60,7 @@ module('Integration | Component | partner/client-plan', function (hooks) {
     assert
       .dom('span[data-test-plan-expiry]')
       .hasText(
-        `t:expiresOn:() ${dayjs(clientPlan.expiryDate).format('DD MMM YYYY')}`
+        `${t('expiresOn')} ${dayjs(clientPlan.expiryDate).format('DD MMM YYYY')}`
       );
     assert
       .dom('span[data-test-plan-expiry]')
@@ -90,7 +90,7 @@ module('Integration | Component | partner/client-plan', function (hooks) {
     this.set('clientId', 1);
     await render(hbs`<Partner::ClientPlan @clientId={{this.clientId}}/>`);
 
-    assert.dom('div[data-test-plan-type]').hasText(`t:perApp:()`);
+    assert.dom('div[data-test-plan-type]').hasText(t('perApp'));
     assert.dom('div[data-test-plan-type]').hasClass(styles['per-app']);
     assert
       .dom('strong[data-test-projects-left]')
@@ -100,7 +100,7 @@ module('Integration | Component | partner/client-plan', function (hooks) {
     assert
       .dom('span[data-test-plan-expiry]')
       .hasText(
-        `t:expiredOn:() ${dayjs(clientPlan.expiryDate).format('DD MMM YYYY')}`
+        `${t('expiredOn')} ${dayjs(clientPlan.expiryDate).format('DD MMM YYYY')}`
       );
     assert
       .dom('span[data-test-plan-expiry]')
@@ -128,18 +128,18 @@ module('Integration | Component | partner/client-plan', function (hooks) {
     this.set('clientId', 1);
     await render(hbs`<Partner::ClientPlan @clientId={{this.clientId}}/>`);
 
-    assert.dom('div[data-test-plan-type]').hasText(`t:perScan:()`);
+    assert.dom('div[data-test-plan-type]').hasText(t('perScan'));
     assert.dom('div[data-test-plan-type]').hasClass(styles['per-scan']);
     assert
       .dom('strong[data-test-scans-left]')
       .hasText(
         `${clientPlan.scansLeft} t:pluralScans:("itemCount":${clientPlan.scansLeft})`
       );
-    assert
-      .dom('div[data-test-plan-status]')
-      .hasText(
-        `${clientPlan.scansLeft} t:pluralScans:("itemCount":${clientPlan.scansLeft}) t:remaining:()`
-      );
+    assert.dom('div[data-test-plan-status]').hasText(
+      `${clientPlan.scansLeft} ${t('pluralScans', {
+        itemCount: clientPlan.scansLeft,
+      })} ${t('remaining')}`
+    );
   });
 
   test('it should not render client plan, if error occurred', async function (assert) {

@@ -3,7 +3,7 @@ import { setupRenderingTest } from 'ember-qunit';
 import { render, findAll, click, triggerEvent } from '@ember/test-helpers';
 import { hbs } from 'ember-cli-htmlbars';
 import { setupMirage } from 'ember-cli-mirage/test-support';
-import { setupIntl } from 'ember-intl/test-support';
+import { setupIntl, t } from 'ember-intl/test-support';
 import { Response } from 'miragejs';
 import { selectChoose } from 'ember-power-select/test-support';
 
@@ -95,11 +95,11 @@ module('Integration | Component | organization-archive', function (hooks) {
 
     assert
       .dom('[data-test-orgArchive-title]')
-      .hasText('t:organizationArchive:()');
+      .hasText(t('organizationArchive'));
 
     assert
       .dom('[data-test-orgArchive-selectArchiveTypeTitle]')
-      .hasText('t:organizationArchiveTypeSelectTitle:()');
+      .hasText(t('organizationArchiveTypeSelectTitle'));
 
     assert.dom('[data-test-orgArchive-exportBtn]').doesNotExist();
     assert.dom('[data-test-orgArchive-dateRangeLabel]').doesNotExist();
@@ -109,19 +109,19 @@ module('Integration | Component | organization-archive', function (hooks) {
     // archive table
     assert
       .dom('[data-test-orgArchiveList-title]')
-      .hasText('t:organizationArchiveTableHeading:()');
+      .hasText(t('organizationArchiveTableHeading'));
 
     assert
       .dom('[data-test-orgArchiveList-desc]')
-      .hasText('t:organizationArchiveTableDesc:()');
+      .hasText(t('organizationArchiveTableDesc'));
 
     const headerContent = findAll('[data-test-orgArchiveList-thead] th');
 
-    assert.dom(headerContent[0]).hasText('t:organizationTableCreatedOn:()');
-    assert.dom(headerContent[1]).hasText('t:organizationTableGeneratedBy:()');
-    assert.dom(headerContent[2]).hasText('t:reportType:()');
-    assert.dom(headerContent[3]).hasText('t:status:()');
-    assert.dom(headerContent[4]).hasText('t:action:()');
+    assert.dom(headerContent[0]).hasText(t('organizationTableCreatedOn'));
+    assert.dom(headerContent[1]).hasText(t('organizationTableGeneratedBy'));
+    assert.dom(headerContent[2]).hasText(t('reportType'));
+    assert.dom(headerContent[3]).hasText(t('status'));
+    assert.dom(headerContent[4]).hasText(t('action'));
 
     const contentRows = findAll('[data-test-orgArchiveList-row]');
 
@@ -149,7 +149,7 @@ module('Integration | Component | organization-archive', function (hooks) {
         'DD MMM YYYY'
       );
 
-      assert.dom(contentRow[2]).hasText('t:comprehensive:()');
+      assert.dom(contentRow[2]).hasText(t('comprehensive'));
 
       const durationIcon = contentRow[2].querySelector(
         '[data-test-orgArchive-durationIcon]'
@@ -169,14 +169,14 @@ module('Integration | Component | organization-archive', function (hooks) {
 
       assert.dom('[data-test-orgArchive-durationDateRange]').doesNotExist();
     } else {
-      assert.dom(contentRow[2]).hasText('t:latestScan:()');
+      assert.dom(contentRow[2]).hasText(t('latestScan'));
     }
 
     const availableUntil = dayjs(
       this.organizationArchives[0].available_until
     ).fromNow();
 
-    assert.dom(contentRow[3]).hasText(`t:expires:() ${availableUntil}`);
+    assert.dom(contentRow[3]).hasText(`${t('expires')} ${availableUntil}`);
 
     assert.dom('[data-test-archiveAction-btn]', contentRow[4]).isNotDisabled();
   });
@@ -201,7 +201,7 @@ module('Integration | Component | organization-archive', function (hooks) {
 
     assert
       .dom('[data-test-orgArchive-title]')
-      .hasText('t:organizationArchive:()');
+      .hasText(t('organizationArchive'));
 
     const contentRows = findAll('[data-test-orgArchiveList-row]');
 
@@ -231,7 +231,7 @@ module('Integration | Component | organization-archive', function (hooks) {
         'DD MMM YYYY'
       );
 
-      assert.dom(contentRow[2]).hasText('t:comprehensive:()');
+      assert.dom(contentRow[2]).hasText(t('comprehensive'));
 
       const durationIcon = contentRow[2].querySelector(
         '[data-test-orgArchive-durationIcon]'
@@ -251,10 +251,10 @@ module('Integration | Component | organization-archive', function (hooks) {
 
       assert.dom('[data-test-orgArchive-durationDateRange]').doesNotExist();
     } else {
-      assert.dom(contentRow[2]).hasText('t:latestScan:()');
+      assert.dom(contentRow[2]).hasText(t('latestScan'));
     }
 
-    assert.dom(contentRow[3]).hasText('t:expired:()');
+    assert.dom(contentRow[3]).hasText(t('expired'));
 
     assert.dom('[data-test-archiveAction-btn]', contentRow[4]).doesNotExist();
   });
@@ -294,7 +294,7 @@ module('Integration | Component | organization-archive', function (hooks) {
 
       assert
         .dom('[data-test-orgArchive-title]')
-        .hasText('t:organizationArchive:()');
+        .hasText(t('organizationArchive'));
 
       const contentRows = findAll('[data-test-orgArchiveList-row]');
 
@@ -313,7 +313,7 @@ module('Integration | Component | organization-archive', function (hooks) {
       if (fail) {
         assert.strictEqual(
           notify.errorMsg,
-          't:organizationArchiveDownloadErrored:()'
+          t('organizationArchiveDownloadErrored')
         );
       } else {
         assert.notOk(notify.errorMsg);
@@ -371,11 +371,11 @@ module('Integration | Component | organization-archive', function (hooks) {
 
       assert
         .dom('[data-test-orgArchive-title]')
-        .hasText('t:organizationArchive:()');
+        .hasText(t('organizationArchive'));
 
       assert
         .dom('[data-test-orgArchive-selectArchiveTypeTitle]')
-        .hasText('t:organizationArchiveTypeSelectTitle:()');
+        .hasText(t('organizationArchiveTypeSelectTitle'));
 
       assert.dom('[data-test-orgArchive-archiveTypeSelect]').exists();
 
@@ -389,35 +389,35 @@ module('Integration | Component | organization-archive', function (hooks) {
 
       await selectChoose(
         `[data-test-orgArchive-archiveTypeSelect] .${classes.trigger}`,
-        isComprehensive ? 't:comprehensive:()' : 't:latestScan:()'
+        isComprehensive ? t('comprehensive') : t('latestScan')
       );
 
       assert
         .dom(`[data-test-orgArchive-archiveTypeSelect] .${classes.trigger}`)
-        .hasText(isComprehensive ? 't:comprehensive:()' : 't:latestScan:()');
+        .hasText(isComprehensive ? t('comprehensive') : t('latestScan'));
 
       assert
         .dom('[data-test-orgArchive-exportBtn]')
         .isNotDisabled()
-        .hasText('t:organizationArchiveExport:()');
+        .hasText(t('organizationArchiveExport'));
 
       assert
         .dom('[data-test-orgArchive-archiveTypeDescription]')
         .hasText(
           isComprehensive
-            ? 't:organizationArchiveComprehensiveDescription:()'
-            : 't:organizationArchiveLatestScanDescription:()'
+            ? t('organizationArchiveComprehensiveDescription')
+            : t('organizationArchiveLatestScanDescription')
         );
 
       if (isComprehensive) {
         assert
           .dom('[data-test-orgArchive-dateRangeLabel]')
-          .hasText('t:fromDate:() - t:toDate:()');
+          .hasText(`${t('fromDate')} - ${t('toDate')}`);
 
         assert
           .dom('[data-test-orgArchive-dateClearBtn]')
           .isNotDisabled()
-          .hasText('t:clear:()');
+          .hasText(t('clear'));
 
         assert.dom('[data-test-akDatePicker-calendar]').doesNotExist();
 
@@ -452,12 +452,9 @@ module('Integration | Component | organization-archive', function (hooks) {
       const notify = this.owner.lookup('service:notifications');
 
       if (fail) {
-        assert.strictEqual(notify.errorMsg, 't:organizationArchiveFailed:()');
+        assert.strictEqual(notify.errorMsg, t('organizationArchiveFailed'));
       } else {
-        assert.strictEqual(
-          notify.successMsg,
-          't:organizationArchiveSuccess:()'
-        );
+        assert.strictEqual(notify.successMsg, t('organizationArchiveSuccess'));
       }
     }
   );
@@ -505,7 +502,7 @@ module('Integration | Component | organization-archive', function (hooks) {
     await render(hbs`<OrganizationArchive />`);
 
     const cells = findAll('[data-test-orgArchiveList-cell]');
-    const systemText = 't:system:()';
+    const systemText = t('system');
 
     const contentWithSystem = cells
       .map((_) => _.textContent.trim())
@@ -519,7 +516,7 @@ module('Integration | Component | organization-archive', function (hooks) {
 
     assert.strictEqual(
       contentWithSystem[0],
-      't:system:()',
+      t('system'),
       'System generatedBy exists'
     );
   });

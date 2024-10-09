@@ -2,7 +2,7 @@ import { module, test } from 'qunit';
 import { setupRenderingTest } from 'ember-qunit';
 import { render, triggerEvent } from '@ember/test-helpers';
 import { hbs } from 'ember-cli-htmlbars';
-import { setupIntl } from 'ember-intl/test-support';
+import { setupIntl, t } from 'ember-intl/test-support';
 
 const selectors = {
   inputTypeColumnHeaderTooltip:
@@ -34,7 +34,7 @@ module(
       assert
         .dom(selectors.inputTypeColumnHeader)
         .exists()
-        .containsText('t:dastAutomation.inputType:()');
+        .containsText(t('dastAutomation.inputType'));
 
       // Tootlip selector input type column
       await triggerEvent(selectors.inputTypeColumnHeaderTooltip, 'mouseenter');
@@ -42,14 +42,14 @@ module(
       assert
         .dom(selectors.inputTypeColumnHeaderTooltipContent)
         .exists()
-        .containsText('t:dastAutomation.inputTypeColumnHeaderInfo:()');
+        .containsText(t('dastAutomation.inputTypeColumnHeaderInfo'));
 
       assert.dom(selectors.inputTypeColumnHeaderTooltipIcon).exists();
 
       assert
         .dom(selectors.inputValueColumnHeader)
         .exists()
-        .containsText('t:dastAutomation.inputValue:()');
+        .containsText(t('dastAutomation.inputValue'));
     });
   }
 );

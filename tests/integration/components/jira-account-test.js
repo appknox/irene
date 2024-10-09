@@ -3,7 +3,7 @@ import { setupRenderingTest } from 'ember-qunit';
 import { render, click, fillIn } from '@ember/test-helpers';
 import { hbs } from 'ember-cli-htmlbars';
 import { setupMirage } from 'ember-cli-mirage/test-support';
-import { setupIntl } from 'ember-intl/test-support';
+import { setupIntl, t } from 'ember-intl/test-support';
 import { Response } from 'miragejs';
 
 import Service from '@ember/service';
@@ -47,11 +47,11 @@ module('Integration | Component | jira-account', function (hooks) {
 
     await render(hbs`<JiraAccount />`);
 
-    assert.dom('[data-test-jiraAccount-title]').hasText('t:jiraIntegration:()');
+    assert.dom('[data-test-jiraAccount-title]').hasText(t('jiraIntegration'));
 
     assert
       .dom('[data-test-jiraAccount-desc]')
-      .hasText('t:jiraIntegrationDesc:()');
+      .hasText(t('jiraIntegrationDesc'));
 
     assert
       .dom('[data-test-jiraAccount-hostInput]')
@@ -71,7 +71,7 @@ module('Integration | Component | jira-account', function (hooks) {
     assert
       .dom('[data-test-jiraAccount-integrateBtn]')
       .isNotDisabled()
-      .hasText('t:integrateJIRA:()');
+      .hasText(t('integrateJIRA'));
 
     assert.dom('[data-test-jiraAccount-logo]').doesNotExist();
     assert.dom('[data-test-jiraAccount-host]').doesNotExist();
@@ -86,7 +86,7 @@ module('Integration | Component | jira-account', function (hooks) {
 
     await render(hbs`<JiraAccount />`);
 
-    assert.dom('[data-test-jiraAccount-title]').hasText('t:jiraIntegration:()');
+    assert.dom('[data-test-jiraAccount-title]').hasText(t('jiraIntegration'));
 
     assert.dom('[data-test-jiraAccount-desc]').doesNotExist();
     assert.dom('[data-test-jiraAccount-hostInput]').doesNotExist();
@@ -105,7 +105,7 @@ module('Integration | Component | jira-account', function (hooks) {
     assert
       .dom('[data-test-jiraAccount-disconnectBtn]')
       .isNotDisabled()
-      .hasText('t:disconnect:()');
+      .hasText(t('disconnect'));
   });
 
   test.each(
@@ -130,39 +130,37 @@ module('Integration | Component | jira-account', function (hooks) {
 
       await render(hbs`<JiraAccount />`);
 
-      assert
-        .dom('[data-test-jiraAccount-title]')
-        .hasText('t:jiraIntegration:()');
+      assert.dom('[data-test-jiraAccount-title]').hasText(t('jiraIntegration'));
 
       assert
         .dom('[data-test-jiraAccount-disconnectBtn]')
         .isNotDisabled()
-        .hasText('t:disconnect:()');
+        .hasText(t('disconnect'));
 
       await click('[data-test-jiraAccount-disconnectBtn]');
 
-      assert.dom('[data-test-ak-modal-header]').hasText('t:confirm:()');
+      assert.dom('[data-test-ak-modal-header]').hasText(t('confirm'));
 
       assert
         .dom('[data-test-confirmbox-description]')
-        .hasText('t:confirmBox.revokeJira:()');
+        .hasText(t('confirmBox.revokeJira'));
 
       assert
         .dom('[data-test-confirmbox-confirmBtn]')
         .isNotDisabled()
-        .hasText('t:disconnect:()');
+        .hasText(t('disconnect'));
 
       assert
         .dom('[data-test-confirmbox-cancelBtn]')
         .isNotDisabled()
-        .hasText('t:cancel:()');
+        .hasText(t('cancel'));
 
       await click('[data-test-confirmbox-confirmBtn]');
 
       const notify = this.owner.lookup('service:notifications');
 
       if (fail) {
-        assert.strictEqual(notify.errorMsg, 't:pleaseTryAgain:()');
+        assert.strictEqual(notify.errorMsg, t('pleaseTryAgain'));
 
         assert.dom('[data-test-ak-modal-header]').exists();
         assert.dom('[data-test-confirmbox-description]').exists();
@@ -175,7 +173,7 @@ module('Integration | Component | jira-account', function (hooks) {
         assert.dom('[data-test-jiraAccount-apiKeyInput]').doesNotExist();
         assert.dom('[data-test-jiraAccount-integrateBtn]').doesNotExist();
       } else {
-        assert.strictEqual(notify.successMsg, 't:jiraWillBeRevoked:()');
+        assert.strictEqual(notify.successMsg, t('jiraWillBeRevoked'));
 
         assert.dom('[data-test-ak-modal-header]').doesNotExist();
         assert.dom('[data-test-confirmbox-description]').doesNotExist();
@@ -184,7 +182,7 @@ module('Integration | Component | jira-account', function (hooks) {
 
         assert
           .dom('[data-test-jiraAccount-desc]')
-          .hasText('t:jiraIntegrationDesc:()');
+          .hasText(t('jiraIntegrationDesc'));
 
         assert
           .dom('[data-test-jiraAccount-hostInput]')
@@ -204,7 +202,7 @@ module('Integration | Component | jira-account', function (hooks) {
         assert
           .dom('[data-test-jiraAccount-integrateBtn]')
           .isNotDisabled()
-          .hasText('t:integrateJIRA:()');
+          .hasText(t('integrateJIRA'));
       }
     }
   );
@@ -219,7 +217,7 @@ module('Integration | Component | jira-account', function (hooks) {
     assert
       .dom('[data-test-jiraAccount-integrateBtn]')
       .isNotDisabled()
-      .hasText('t:integrateJIRA:()');
+      .hasText(t('integrateJIRA'));
 
     assert
       .dom('[data-test-text-input-outlined]')
@@ -236,21 +234,21 @@ module('Integration | Component | jira-account', function (hooks) {
     'it should integrate jira-account',
     [
       { fail: false },
-      { fail: true, errorMsg: 't:pleaseTryAgain:()' },
+      { fail: true, errorMsg: () => t('pleaseTryAgain') },
       {
         fail: true,
         error: { host: ['https://appknox.atlassian.net/'] },
-        errorMsg: 'https://appknox.atlassian.net/',
+        errorMsg: () => 'https://appknox.atlassian.net/',
       },
       {
         fail: true,
         error: { username: ['username not valid'] },
-        errorMsg: 't:tInValidCredentials:()',
+        errorMsg: () => t('tInValidCredentials'),
       },
       {
         fail: true,
         error: { password: ['password not valid'] },
-        errorMsg: 't:tInValidCredentials:()',
+        errorMsg: () => t('tInValidCredentials'),
       },
     ],
     async function (assert, { fail, error, errorMsg }) {
@@ -290,7 +288,7 @@ module('Integration | Component | jira-account', function (hooks) {
       assert
         .dom('[data-test-jiraAccount-integrateBtn]')
         .isNotDisabled()
-        .hasText('t:integrateJIRA:()');
+        .hasText(t('integrateJIRA'));
 
       await fillIn(
         '[data-test-jiraAccount-hostInput]',
@@ -312,7 +310,7 @@ module('Integration | Component | jira-account', function (hooks) {
       const notify = this.owner.lookup('service:notifications');
 
       if (fail) {
-        assert.strictEqual(notify.errorMsg, errorMsg);
+        assert.strictEqual(notify.errorMsg, errorMsg());
 
         assert.dom('[data-test-jiraAccount-desc]').exists();
         assert.dom('[data-test-jiraAccount-hostInput]').exists();
@@ -320,7 +318,7 @@ module('Integration | Component | jira-account', function (hooks) {
         assert.dom('[data-test-jiraAccount-apiKeyInput]').exists();
         assert.dom('[data-test-jiraAccount-integrateBtn]').isNotDisabled();
       } else {
-        assert.strictEqual(notify.successMsg, 't:jiraIntegrated:()');
+        assert.strictEqual(notify.successMsg, t('jiraIntegrated'));
 
         // TODO: integration works but checkJira takes time so below assertion fails
 
@@ -341,7 +339,7 @@ module('Integration | Component | jira-account', function (hooks) {
         // assert
         //   .dom('[data-test-jiraAccount-disconnectBtn]')
         //   .isNotDisabled()
-        //   .hasText('t:disconnect:()');
+        //   .hasText(t('disconnect'));
       }
     }
   );

@@ -2,7 +2,7 @@ import { underscore } from '@ember/string';
 import { click, render } from '@ember/test-helpers';
 import { hbs } from 'ember-cli-htmlbars';
 import { setupMirage } from 'ember-cli-mirage/test-support';
-import { setupIntl } from 'ember-intl/test-support';
+import { setupIntl, t } from 'ember-intl/test-support';
 import { setupRenderingTest } from 'ember-qunit';
 import { module, test } from 'qunit';
 
@@ -33,14 +33,11 @@ module(
       });
 
       //Common Selectors
-      const dynamicScanCheckbox =
-        '[data-test-projectSetting-analysisSettings-reportPreference="t:dynamicScan:()"]';
+      const dynamicScanCheckbox = `[data-test-projectSetting-analysisSettings-reportPreference="${t('dynamicScan')}"]`;
 
-      const manualScanCheckbox =
-        '[data-test-projectSetting-analysisSettings-reportPreference="t:manualScan:()"]';
+      const manualScanCheckbox = `[data-test-projectSetting-analysisSettings-reportPreference="${t('manualScan')}"]`;
 
-      const apiScanCheckbox =
-        '[data-test-projectSetting-analysisSettings-reportPreference="t:apiScan:()"]';
+      const apiScanCheckbox = `[data-test-projectSetting-analysisSettings-reportPreference="${t('apiScan')}"]`;
 
       this.setProperties({
         dynamicScanCheckbox,
@@ -61,14 +58,14 @@ module(
           '[data-test-projectSetting-analysisSettings-reportPreference-headerText]'
         )
         .exists()
-        .hasText('t:reportPreferences:()');
+        .hasText(t('reportPreferences'));
 
       assert
         .dom(
           '[data-test-projectSetting-analysisSettings-reportPreference-headerDesc]'
         )
         .exists()
-        .hasText('t:reportPreferencesChooseTypes:()');
+        .hasText(t('reportPreferencesChooseTypes'));
 
       assert.dom(this.dynamicScanCheckbox).exists();
 

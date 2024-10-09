@@ -1,7 +1,7 @@
 import { render } from '@ember/test-helpers';
 import { hbs } from 'ember-cli-htmlbars';
 import { setupMirage } from 'ember-cli-mirage/test-support';
-import { setupIntl } from 'ember-intl/test-support';
+import { setupIntl, t } from 'ember-intl/test-support';
 import { setupRenderingTest } from 'ember-qunit';
 import { module, test } from 'qunit';
 
@@ -66,11 +66,11 @@ module(
 
       assert
         .dom('[data-test-fileDetailScanActions-manualScanTitle]')
-        .hasText('t:manualScan:()');
+        .hasText(t('manualScan'));
 
       assert
         .dom('[data-test-fileDetailScanActions-manualScanNotStartedStatus]')
-        .hasText('t:notStarted:()');
+        .hasText(t('notStarted'));
     });
 
     test.each(
@@ -100,19 +100,15 @@ module(
         if (this.file.manual === ENUMS.MANUAL.ASSESSING) {
           assert
             .dom('[data-test-fileDetailScanActions-manualScanStatus]')
-            .hasText(
-              this.file.isManualDone ? 't:completed:()' : 't:inProgress:()'
-            );
+            .hasText(this.file.isManualDone ? t('completed') : t('inProgress'));
         } else if (this.file.isManualRequested) {
           assert
             .dom('[data-test-fileDetailScanActions-manualScanStatus]')
-            .hasText(
-              this.file.isManualDone ? 't:completed:()' : 't:requested:()'
-            );
+            .hasText(this.file.isManualDone ? t('completed') : t('requested'));
         } else {
           assert
             .dom('[data-test-fileDetailScanActions-manualScanNotStartedStatus]')
-            .hasText('t:notStarted:()');
+            .hasText(t('notStarted'));
         }
       }
     );

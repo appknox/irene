@@ -3,7 +3,7 @@ import { setupRenderingTest } from 'ember-qunit';
 import { click, findAll, render, waitFor } from '@ember/test-helpers';
 import { hbs } from 'ember-cli-htmlbars';
 import { setupMirage } from 'ember-cli-mirage/test-support';
-import { setupIntl } from 'ember-intl/test-support';
+import { setupIntl, t } from 'ember-intl/test-support';
 import Service from '@ember/service';
 import { Response } from 'miragejs';
 
@@ -116,7 +116,7 @@ module(
           '[data-test-projectSettings-generalSettings-collaboratorsTableEmpty]'
         )
         .exists()
-        .containsText('t:noCollaborators:()');
+        .containsText(t('noCollaborators'));
     });
 
     test('it renders collaborators list', async function (assert) {
@@ -307,7 +307,7 @@ module(
         if (pass) {
           const notify = this.owner.lookup('service:notifications');
 
-          assert.strictEqual(notify.successMsg, 't:collaboratorRemoved:()');
+          assert.strictEqual(notify.successMsg, t('collaboratorRemoved'));
 
           collaboratorRows = findAll(
             '[data-test-generalSettings-collaboratorsTable-row]'
@@ -317,7 +317,7 @@ module(
         } else {
           const notify = this.owner.lookup('service:notifications');
 
-          assert.strictEqual(notify.errorMsg, 't:pleaseTryAgain:()');
+          assert.strictEqual(notify.errorMsg, t('pleaseTryAgain'));
 
           collaboratorRows = findAll(
             '[data-test-generalSettings-collaboratorsTable-row]'

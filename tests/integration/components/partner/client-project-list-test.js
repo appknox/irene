@@ -2,7 +2,7 @@
 import { module, test } from 'qunit';
 import { setupRenderingTest } from 'ember-qunit';
 import { setupMirage } from 'ember-cli-mirage/test-support';
-import { setupIntl } from 'ember-intl/test-support';
+import { setupIntl, t } from 'ember-intl/test-support';
 import { render } from '@ember/test-helpers';
 import { hbs } from 'ember-cli-htmlbars';
 
@@ -83,9 +83,9 @@ module(
       await render(
         hbs`<Partner::ClientProjectList @clientId={{this.clientId}}/>`
       );
-      assert.dom('[data-test-title]').hasText(`t:projects:()`);
+      assert.dom('[data-test-title]').hasText(t('projects'));
       assert.dom('[data-test-total-projects-count]').hasText('0');
-      assert.dom('[data-test-no-upload-msg]').hasText('t:noClientUploads:()');
+      assert.dom('[data-test-no-upload-msg]').hasText(t('noClientUploads'));
     });
 
     test('it should render table headers correctly', async function (assert) {
@@ -116,13 +116,11 @@ module(
         3,
         '3 table header exist'
       );
-      assert.dom('[data-test-table-header-platform]').hasText(`t:platform:()`);
+      assert.dom('[data-test-table-header-platform]').hasText(t('platform'));
       assert
         .dom(`[data-test-table-header-package_name]`)
-        .hasText(`t:packageName:()`);
-      assert
-        .dom(`[data-test-table-header-created_on]`)
-        .hasText(`t:createdOn:()`);
+        .hasText(t('packageName'));
+      assert.dom(`[data-test-table-header-created_on]`).hasText(t('createdOn'));
     });
 
     test('it should render error message on api error', async function (assert) {
@@ -141,9 +139,7 @@ module(
       await render(hbs`<Partner::ClientProjectList />`);
 
       assert.dom('[data-test-load-error]').exists();
-      assert
-        .dom('[data-test-load-error]')
-        .hasText('t:errorCouldNotLoadData:()');
+      assert.dom('[data-test-load-error]').hasText(t('errorCouldNotLoadData'));
     });
 
     test('it should render rows for each project', async function (assert) {
@@ -167,7 +163,7 @@ module(
       await render(
         hbs`<Partner::ClientProjectList @clientId={{this.clientId}}/>`
       );
-      assert.dom('[data-test-title]').hasText(`t:projects:()`);
+      assert.dom('[data-test-title]').hasText(t('projects'));
       assert.dom('[data-test-total-projects-count]').hasText('5');
       assert.equal(
         this.element.querySelectorAll(`[data-test-table-row]`).length,

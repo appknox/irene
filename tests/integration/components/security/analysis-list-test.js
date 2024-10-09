@@ -2,7 +2,7 @@ import Service from '@ember/service';
 import { click, fillIn, find, findAll, render } from '@ember/test-helpers';
 import { hbs } from 'ember-cli-htmlbars';
 import { setupMirage } from 'ember-cli-mirage/test-support';
-import { setupIntl } from 'ember-intl/test-support';
+import { setupIntl, t } from 'ember-intl/test-support';
 import { setupRenderingTest } from 'ember-qunit';
 import { module, test } from 'qunit';
 import { selectChoose } from 'ember-power-select/test-support';
@@ -37,13 +37,13 @@ const analysisStatusTextMap = {
   [ENUMS.ANALYSIS_STATUS.UNKNOWN]: 'Unknown',
 };
 
-const vulnerabilityTypeTextMap = {
-  [ENUMS.VULNERABILITY_TYPE.UNKNOWN]: 't:allScans:()',
-  [ENUMS.VULNERABILITY_TYPE.STATIC]: 't:static:()',
-  [ENUMS.VULNERABILITY_TYPE.DYNAMIC]: 't:dynamic:()',
-  [ENUMS.VULNERABILITY_TYPE.MANUAL]: 't:manual:()',
-  [ENUMS.VULNERABILITY_TYPE.API]: 't:api:()',
-};
+const vulnerabilityTypeTextMap = () => ({
+  [ENUMS.VULNERABILITY_TYPE.UNKNOWN]: t('allScans'),
+  [ENUMS.VULNERABILITY_TYPE.STATIC]: t('static'),
+  [ENUMS.VULNERABILITY_TYPE.DYNAMIC]: t('dynamic'),
+  [ENUMS.VULNERABILITY_TYPE.MANUAL]: t('manual'),
+  [ENUMS.VULNERABILITY_TYPE.API]: t('api'),
+});
 
 const assertAnalysisRowDetails = (assert, sa) => {
   const analyisRowElement = find(
@@ -97,7 +97,7 @@ const assertAnalysisRowDetails = (assert, sa) => {
           analyisRowElement
         )
         .exists()
-        .containsText(vulnerabilityTypeTextMap[String(type)]);
+        .containsText(vulnerabilityTypeTextMap()[String(type)]);
     });
 
     assert
@@ -328,7 +328,7 @@ module('Integration | Component | security/analysis-list', function (hooks) {
     const scanTypeSelectOptions = findAll('.ember-power-select-option');
 
     const defaultSelectedOption =
-      vulnerabilityTypeTextMap[ENUMS.VULNERABILITY_TYPE.UNKNOWN];
+      vulnerabilityTypeTextMap()[ENUMS.VULNERABILITY_TYPE.UNKNOWN];
 
     assert
       .dom('[data-test-securityAnalysisListTable-selectedScanType]')
@@ -345,13 +345,13 @@ module('Integration | Component | security/analysis-list', function (hooks) {
 
     await selectChoose(
       scanTypeSelectTrigger,
-      vulnerabilityTypeTextMap[vulnTypeToFilter]
+      vulnerabilityTypeTextMap()[vulnTypeToFilter]
     );
 
     // Assert the type is selected correctly
     assert
       .dom('[data-test-securityAnalysisListTable-selectedScanType]')
-      .containsText(vulnerabilityTypeTextMap[vulnTypeToFilter]);
+      .containsText(vulnerabilityTypeTextMap()[vulnTypeToFilter]);
 
     // Assert the table is filtered accordingly correctly
     const filteredAnalysisModelsCount = this.secAnalyses.filter((sa) =>

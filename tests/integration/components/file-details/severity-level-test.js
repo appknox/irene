@@ -1,7 +1,7 @@
 import { find, render } from '@ember/test-helpers';
 import { hbs } from 'ember-cli-htmlbars';
 import { setupMirage } from 'ember-cli-mirage/test-support';
-import { setupIntl } from 'ember-intl/test-support';
+import { setupIntl, t } from 'ember-intl/test-support';
 import { setupRenderingTest } from 'ember-qunit';
 import { module, test } from 'qunit';
 
@@ -50,37 +50,37 @@ module(
 
         assert
           .dom('[data-test-fileDetailSeverityLevel-title]')
-          .hasText('t:severityLevel:()');
+          .hasText(t('severityLevel'));
 
         const severityValues = [
           {
             value: this.file.countRiskCritical,
-            name: 't:critical:()',
+            name: t('critical'),
             severityType: 'critical',
           },
           {
             value: this.file.countRiskHigh,
-            name: 't:high:()',
+            name: t('high'),
             severityType: 'high',
           },
           {
             value: this.file.countRiskMedium,
-            name: 't:medium:()',
+            name: t('medium'),
             severityType: 'medium',
           },
           {
             value: this.file.countRiskLow,
-            name: 't:low:()',
+            name: t('low'),
             severityType: 'low',
           },
           {
             value: this.file.countRiskNone,
-            name: 't:passed:()',
+            name: t('passed'),
             severityType: 'passed',
           },
           unknownAnalysisStatus && {
             value: this.file.countRiskUnknown,
-            name: 't:untested:()',
+            name: t('untested'),
             severityType: 'none',
           },
         ].filter(Boolean);

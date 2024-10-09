@@ -8,7 +8,7 @@ import {
   triggerEvent,
   click,
 } from '@ember/test-helpers';
-import { setupIntl } from 'ember-intl/test-support';
+import { setupIntl, t } from 'ember-intl/test-support';
 import { hbs } from 'ember-cli-htmlbars';
 import Service from '@ember/service';
 import { Response } from 'miragejs';
@@ -99,8 +99,8 @@ module(
 
       const headerRow = findAll('[data-test-teamList-thead] th');
 
-      assert.dom(headerRow[0]).hasText('t:teamName:()');
-      assert.dom(headerRow[1]).hasText('t:action:()');
+      assert.dom(headerRow[0]).hasText(t('teamName'));
+      assert.dom(headerRow[1]).hasText(t('action'));
 
       const contentRows = findAll('[data-test-teamList-row]');
 
@@ -210,10 +210,10 @@ module(
         const latestRows = findAll('[data-test-teamList-row]');
 
         if (fail) {
-          assert.strictEqual(notify.errorMsg, 't:pleaseTryAgain:()');
+          assert.strictEqual(notify.errorMsg, t('pleaseTryAgain'));
           assert.strictEqual(latestRows.length, this.organizationTeams.length);
         } else {
-          assert.strictEqual(notify.successMsg, 't:teamMemberAdded:()');
+          assert.strictEqual(notify.successMsg, t('teamMemberAdded'));
 
           assert.strictEqual(
             latestRows.length,

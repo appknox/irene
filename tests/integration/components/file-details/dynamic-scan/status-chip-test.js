@@ -1,24 +1,24 @@
 import { module, test } from 'qunit';
 import { setupRenderingTest } from 'ember-qunit';
 import { setupMirage } from 'ember-cli-mirage/test-support';
-import { setupIntl } from 'ember-intl/test-support';
+import { setupIntl, t } from 'ember-intl/test-support';
 import { render } from '@ember/test-helpers';
 import { hbs } from 'ember-cli-htmlbars';
 
-const dynamicScanStatusText = {
-  '-1': 't:errored:()',
-  0: 't:notStarted:()',
-  1: 't:deviceInQueue:()',
-  2: 't:deviceBooting:()',
-  3: 't:deviceDownloading:()',
-  4: 't:deviceInstalling:()',
-  5: 't:deviceLaunching:()',
-  6: 't:deviceHooking:()',
-  7: 't:deviceReady:()',
-  8: 't:deviceShuttingDown:()',
-  9: 't:completed:()',
-  10: 't:inProgress:()',
-};
+const dynamicScanStatusText = () => ({
+  '-1': t('errored'),
+  0: t('notStarted'),
+  1: t('deviceInQueue'),
+  2: t('deviceBooting'),
+  3: t('deviceDownloading'),
+  4: t('deviceInstalling'),
+  5: t('deviceLaunching'),
+  6: t('deviceHooking'),
+  7: t('deviceReady'),
+  8: t('deviceShuttingDown'),
+  9: t('completed'),
+  10: t('inProgress'),
+});
 
 const dynamicScanStatusColor = {
   '-1': 'warn',
@@ -47,11 +47,13 @@ module(
       'it renders status chip for different dynamic scan status',
       [-1, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
       async function (assert, status) {
+        const statusText = dynamicScanStatusText();
+
         const dynamicscan = this.server.create('dynamicscan', {
           id: '1',
           mode: 1,
           status,
-          statusText: dynamicScanStatusText[status],
+          statusText: statusText[status],
           ended_on: null,
           isDynamicStatusError: status === -1,
           isDynamicStatusInProgress:
@@ -78,7 +80,7 @@ module(
 
         assert.dom('[data-test-fileDetails-dynamicScan-statusChip]').exists();
 
-        const expectedText = dynamicScanStatusText[status];
+        const expectedText = statusText[status];
 
         assert
           .dom('[data-test-fileDetails-dynamicScan-statusChip]')

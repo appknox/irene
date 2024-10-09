@@ -9,7 +9,7 @@ import {
 } from '@ember/test-helpers';
 import { hbs } from 'ember-cli-htmlbars';
 import { setupMirage } from 'ember-cli-mirage/test-support';
-import { setupIntl } from 'ember-intl/test-support';
+import { setupIntl, t } from 'ember-intl/test-support';
 
 module(
   'Integration | Component | project-settings/general-settings/add-project-team',
@@ -81,7 +81,7 @@ module(
       assert
         .dom('[data-test-generalSettings-addProjectTeam-button]')
         .exists()
-        .hasText('t:addTeam:()');
+        .hasText(t('addTeam'));
     });
 
     test('it renders project teams drawer with table', async function (assert) {
@@ -100,7 +100,7 @@ module(
       assert
         .dom('[data-test-addProjectTeam-drawerContainer-title]')
         .exists()
-        .containsText('t:projectSettings.drawerTitles.addTeam:()');
+        .containsText(t('projectSettings.drawerTitles.addTeam'));
 
       assert
         .dom('[data-test-addProjectTeam-drawerContainer-closeIconBtn]')

@@ -1,7 +1,7 @@
 import { module, test } from 'qunit';
 import { setupRenderingTest } from 'ember-qunit';
 import { setupMirage } from 'ember-cli-mirage/test-support';
-import { setupIntl } from 'ember-intl/test-support';
+import { setupIntl, t } from 'ember-intl/test-support';
 import { render, click, find, triggerEvent } from '@ember/test-helpers';
 import { hbs } from 'ember-cli-htmlbars';
 import { Response } from 'miragejs';
@@ -47,15 +47,15 @@ module(
 
       assert
         .dom('[data-test-preferences-title]')
-        .hasText('t:regulatoryPreferences:()');
+        .hasText(t('regulatoryPreferences'));
 
       assert
         .dom('[data-test-preferences-subtitle]')
-        .hasText('t:regulatoryPreferencesChooseForAll:()');
+        .hasText(t('regulatoryPreferencesChooseForAll'));
 
       assert
         .dom('[data-test-preferences-desc]')
-        .hasText('t:regulatoryPreferencesWarning:()');
+        .hasText(t('regulatoryPreferencesWarning'));
 
       assert
         .dom(
@@ -105,7 +105,7 @@ module(
 
       assert
         .dom('[data-test-ak-tooltip-content]')
-        .hasText('t:pcidssExpansion:()');
+        .hasText(t('pcidssExpansion'));
 
       await triggerEvent(
         `#${pcidssContainer.id} [data-test-ak-tooltip-root]`,
@@ -120,9 +120,7 @@ module(
         'mouseenter'
       );
 
-      assert
-        .dom('[data-test-ak-tooltip-content]')
-        .hasText('t:hipaaExpansion:()');
+      assert.dom('[data-test-ak-tooltip-content]').hasText(t('hipaaExpansion'));
 
       await triggerEvent(
         `#${hipaaContainer.id} [data-test-ak-tooltip-root]`,
@@ -137,9 +135,7 @@ module(
         'mouseenter'
       );
 
-      assert
-        .dom('[data-test-ak-tooltip-content]')
-        .hasText('t:gdprExpansion:()');
+      assert.dom('[data-test-ak-tooltip-content]').hasText(t('gdprExpansion'));
 
       await triggerEvent(
         `#${gdprContainer.id} [data-test-ak-tooltip-root]`,
@@ -154,9 +150,7 @@ module(
         'mouseenter'
       );
 
-      assert
-        .dom('[data-test-ak-tooltip-content]')
-        .hasText('t:nistExpansion:()');
+      assert.dom('[data-test-ak-tooltip-content]').hasText(t('nistExpansion'));
 
       await triggerEvent(
         `#${nistContainer.id} [data-test-ak-tooltip-root]`,
@@ -171,9 +165,7 @@ module(
         'mouseenter'
       );
 
-      assert
-        .dom('[data-test-ak-tooltip-content]')
-        .hasText('t:samaExpansion:()');
+      assert.dom('[data-test-ak-tooltip-content]').hasText(t('samaExpansion'));
 
       await triggerEvent(
         `#${samaContainer.id} [data-test-ak-tooltip-root]`,

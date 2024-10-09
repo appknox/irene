@@ -10,7 +10,7 @@ import {
   triggerEvent,
 } from '@ember/test-helpers';
 
-import { setupIntl } from 'ember-intl/test-support';
+import { setupIntl, t } from 'ember-intl/test-support';
 import { hbs } from 'ember-cli-htmlbars';
 import { Response } from 'miragejs';
 
@@ -86,11 +86,11 @@ module(
         </OrganizationTeam::AddTeamProject>
     `);
 
-      assert.dom('[data-test-addProjectList-title]').hasText('t:addProject:()');
+      assert.dom('[data-test-addProjectList-title]').hasText(t('addProject'));
 
       assert
         .dom('[data-test-addProjectList-description]')
-        .hasText('t:addTeamProjectDesc:()');
+        .hasText(t('addTeamProjectDesc'));
 
       assert
         .dom('[data-test-addProjectList-searchInput]')
@@ -99,8 +99,8 @@ module(
 
       const headerRow = findAll('[data-test-addProjectList-thead] th');
 
-      assert.dom(headerRow[0]).hasText('t:name:()');
-      assert.dom(headerRow[1]).hasText('t:action:()');
+      assert.dom(headerRow[0]).hasText(t('name'));
+      assert.dom(headerRow[1]).hasText(t('action'));
 
       const contentRows = findAll('[data-test-addProjectList-row]');
 
@@ -118,7 +118,7 @@ module(
       assert
         .dom('[data-test-action-btn]')
         .isDisabled()
-        .hasText('t:addProject:()');
+        .hasText(t('addProject'));
     });
 
     test('test add-team-project search', async function (assert) {
@@ -185,7 +185,7 @@ module(
         assert
           .dom('[data-test-action-btn]')
           .isDisabled()
-          .hasText('t:addProject:()');
+          .hasText(t('addProject'));
 
         const contentRows = findAll('[data-test-addProjectList-row]');
 
@@ -235,10 +235,10 @@ module(
         const latestRows = () => findAll('[data-test-addProjectList-row]');
 
         if (fail) {
-          assert.strictEqual(notify.errorMsg, 't:pleaseTryAgain:()');
+          assert.strictEqual(notify.errorMsg, t('pleaseTryAgain'));
           assert.strictEqual(latestRows().length, this.projects.length);
         } else {
-          assert.strictEqual(notify.successMsg, 't:teamProjectAdded:()');
+          assert.strictEqual(notify.successMsg, t('teamProjectAdded'));
           assert.strictEqual(latestRows().length, this.projects.length - 2);
         }
       }

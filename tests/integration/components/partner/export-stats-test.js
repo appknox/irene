@@ -3,7 +3,7 @@ import { click, render } from '@ember/test-helpers';
 import dayjs from 'dayjs';
 import { hbs } from 'ember-cli-htmlbars';
 import { setupMirage } from 'ember-cli-mirage/test-support';
-import { setupIntl } from 'ember-intl/test-support';
+import { setupIntl, t } from 'ember-intl/test-support';
 import { setupRenderingTest } from 'ember-qunit';
 import { module, test } from 'qunit';
 
@@ -27,14 +27,14 @@ module('Integration | Component | partner/export-stats', function (hooks) {
 
   test('it renders date range picker enabled', async function (assert) {
     await render(hbs`<Partner::ExportStats />`);
-    assert.dom(`[data-test-header]`).hasText(`t:downloadClientsStatData:()`);
+    assert.dom(`[data-test-header]`).hasText(t('downloadClientsStatData'));
     assert.dom(`[data-test-date-range-picker]`).exists();
     const iconElementClass = this.element.querySelector(
       `[data-test-date-range-icon]`
     ).className;
     assert.ok(iconElementClass, 'calendar');
-    assert.dom(`[data-test-date-range]`).hasText(`t:fromDate:() - t:toDate:()`);
-    assert.dom(`[data-test-export-btn]`).hasText(`t:exportCSV:()`);
+    assert.dom(`[data-test-date-range]`).hasText(t('fromDate:() - t:toDate'));
+    assert.dom(`[data-test-export-btn]`).hasText(t('exportCSV'));
   });
 
   test('it should show error, if export btn clicked with empty date range', async function (assert) {

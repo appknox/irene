@@ -1,7 +1,7 @@
 import { click, fillIn, find, findAll, render } from '@ember/test-helpers';
 import { hbs } from 'ember-cli-htmlbars';
 import { setupMirage } from 'ember-cli-mirage/test-support';
-import { setupIntl } from 'ember-intl/test-support';
+import { setupIntl, t } from 'ember-intl/test-support';
 import { setupRenderingTest } from 'ember-qunit';
 import { module, test } from 'qunit';
 import Service from '@ember/service';
@@ -19,16 +19,16 @@ const classes = {
   triggerError: styles['ak-select-trigger-error'],
 };
 
-const dynamicScanStatusText = {
-  [ENUMS.DYNAMIC_STATUS.INQUEUE]: 't:deviceInQueue:()',
-  [ENUMS.DYNAMIC_STATUS.BOOTING]: 't:deviceBooting:()',
-  [ENUMS.DYNAMIC_STATUS.DOWNLOADING]: 't:deviceDownloading:()',
-  [ENUMS.DYNAMIC_STATUS.INSTALLING]: 't:deviceInstalling:()',
-  [ENUMS.DYNAMIC_STATUS.LAUNCHING]: 't:deviceLaunching:()',
-  [ENUMS.DYNAMIC_STATUS.HOOKING]: 't:deviceHooking:()',
-  [ENUMS.DYNAMIC_STATUS.SHUTTING_DOWN]: 't:deviceShuttingDown:()',
-  [ENUMS.DYNAMIC_STATUS.COMPLETED]: 't:deviceCompleted:()',
-};
+const dynamicScanStatusText = () => ({
+  [ENUMS.DYNAMIC_STATUS.INQUEUE]: t('deviceInQueue'),
+  [ENUMS.DYNAMIC_STATUS.BOOTING]: t('deviceBooting'),
+  [ENUMS.DYNAMIC_STATUS.DOWNLOADING]: t('deviceDownloading'),
+  [ENUMS.DYNAMIC_STATUS.INSTALLING]: t('deviceInstalling'),
+  [ENUMS.DYNAMIC_STATUS.LAUNCHING]: t('deviceLaunching'),
+  [ENUMS.DYNAMIC_STATUS.HOOKING]: t('deviceHooking'),
+  [ENUMS.DYNAMIC_STATUS.SHUTTING_DOWN]: t('deviceShuttingDown'),
+  [ENUMS.DYNAMIC_STATUS.COMPLETED]: t('deviceCompleted'),
+});
 
 class NotificationsStub extends Service {
   errorMsg = null;
@@ -178,7 +178,7 @@ module(
 
       this.setProperties({
         file: store.push(store.normalize('file', file.toJSON())),
-        dynamicScanText: 't:modalCard.dynamicScan.title:()',
+        dynamicScanText: t('modalCard.dynamicScan.title'),
         devicePreference,
         availableDevices,
         store,
@@ -216,7 +216,7 @@ module(
           assert
             .dom('[data-test-fileDetails-dynamicScan-statusChip]')
             .exists()
-            .hasText('t:errored:()');
+            .hasText(t('errored'));
 
           assert
             .dom('[data-test-fileDetails-dynamicScanAction-restartBtn]')
@@ -247,7 +247,7 @@ module(
           assert
             .dom('[data-test-fileDetails-dynamicScanAction-stopBtn]')
             .exists()
-            .hasText('t:stop:()');
+            .hasText(t('stop'));
         } else if (
           this.file.dynamicStatus === ENUMS.DYNAMIC_STATUS.NONE &&
           this.file.isDynamicDone
@@ -255,7 +255,7 @@ module(
           assert
             .dom('[data-test-fileDetails-dynamicScan-statusChip]')
             .exists()
-            .hasText('t:completed:()');
+            .hasText(t('completed'));
 
           assert
             .dom('[data-test-fileDetails-dynamicScanAction-restartBtn]')
@@ -271,7 +271,7 @@ module(
         } else {
           assert.strictEqual(
             this.file.statusText,
-            dynamicScanStatusText[this.file.dynamicStatus] || 'Unknown Status'
+            dynamicScanStatusText()[this.file.dynamicStatus] || 'Unknown Status'
           );
 
           assert
@@ -369,11 +369,11 @@ module(
 
         assert
           .dom('[data-test-ak-appbar]')
-          .hasText('t:modalCard.dynamicScan.title:()');
+          .hasText(t('modalCard.dynamicScan.title'));
 
         assert
           .dom('[data-test-fileDetails-dynamicScanDrawerOld-warningAlert]')
-          .hasText('t:modalCard.dynamicScan.warning:()');
+          .hasText(t('modalCard.dynamicScan.warning'));
 
         if (this.file.minOsVersion) {
           assert
@@ -384,17 +384,17 @@ module(
 
           const deviceRequirements = [
             {
-              type: 't:modalCard.dynamicScan.osVersion:()',
+              type: t('modalCard.dynamicScan.osVersion'),
               value: `${this.file.project.get('platformDisplay')} ${
                 this.file.minOsVersion
               } t:modalCard.dynamicScan.orAbove:()`,
             },
             this.file.supportedCpuArchitectures && {
-              type: 't:modalCard.dynamicScan.processorArchitecture:()',
+              type: t('modalCard.dynamicScan.processorArchitecture'),
               value: this.file.supportedCpuArchitectures,
             },
             this.file.supportedDeviceTypes && {
-              type: 't:modalCard.dynamicScan.deviceTypes:()',
+              type: t('modalCard.dynamicScan.deviceTypes'),
               value: this.file.supportedDeviceTypes,
             },
           ].filter(Boolean);
@@ -428,17 +428,17 @@ module(
 
         assert
           .dom('[data-test-projectPreference-title]')
-          .hasText('t:devicePreferences:()');
+          .hasText(t('devicePreferences'));
 
         assert
           .dom('[data-test-projectPreference-description]')
-          .hasText('t:otherTemplates.selectPreferredDevice:()');
+          .hasText(t('otherTemplates.selectPreferredDevice'));
 
         assert
           .dom(
             '[data-test-projectPreference-deviceTypeSelect] [data-test-form-label]'
           )
-          .hasText('t:deviceType:()');
+          .hasText(t('deviceType'));
 
         assert
           .dom(
@@ -450,7 +450,7 @@ module(
           .dom(
             '[data-test-projectPreference-osVersionSelect] [data-test-form-label]'
           )
-          .hasText('t:osVersion:()');
+          .hasText(t('osVersion'));
 
         assert
           .dom(
@@ -462,7 +462,7 @@ module(
           .dom(
             '[data-test-fileDetails-dynamicScanDrawerOld-runApiScanFormControl] [data-test-ak-form-label]'
           )
-          .hasText('t:modalCard.dynamicScan.runApiScan:()');
+          .hasText(t('modalCard.dynamicScan.runApiScan'));
 
         assert
           .dom(
@@ -493,15 +493,15 @@ module(
             .dom(
               '[data-test-fileDetails-dynamicScanDrawerOld-apiSettingScanDescription]'
             )
-            .hasText('t:modalCard.dynamicScan.apiScanDescription:()');
+            .hasText(t('modalCard.dynamicScan.apiScanDescription'));
 
           assert
             .dom('[data-test-apiFilter-title]')
-            .hasText('t:templates.apiScanURLFilter:()');
+            .hasText(t('templates.apiScanURLFilter'));
 
           assert
             .dom('[data-test-apiFilter-description]')
-            .hasText('t:otherTemplates.specifyTheURL:()');
+            .hasText(t('otherTemplates.specifyTheURL'));
 
           assert
             .dom('[data-test-apiFilter-apiEndpointInput]')
@@ -511,7 +511,7 @@ module(
           assert
             .dom('[data-test-apiFilter-addApiEndpointBtn]')
             .isNotDisabled()
-            .hasText('t:templates.addNewUrlFilter:()');
+            .hasText(t('templates.addNewUrlFilter'));
 
           assert.dom('[data-test-apiFilter-table]').doesNotExist();
         } else {
@@ -539,18 +539,18 @@ module(
 
           assert
             .dom('[data-test-proxySettingsView-enableApiProxyLabel]')
-            .hasText('t:enable:() t:proxySettingsTitle:()');
+            .hasText(`${t('enable')} ${t('proxySettingsTitle')}`);
 
           assert
             .dom('[data-test-proxySettingsView-editSettings]')
             .hasTagName('a')
             .hasAttribute('href', '/dashboard/project/1/settings')
-            .hasText('t:edit:()');
+            .hasText(t('edit'));
 
           assert
             .dom('[data-test-proxySettingsView-proxySettingRoute]')
             .hasText(
-              `t:proxySettingsRouteVia:() ${proxySetting.host}:${proxySetting.port}`
+              `${t('proxySettingsRouteVia')} ${proxySetting.host}:${proxySetting.port}`
             );
         } else {
           assert.dom('[data-test-proxySettingsView-container]').doesNotExist();
@@ -573,33 +573,33 @@ module(
             .dom(
               '[data-test-fileDetails-dynamicScanDrawerOld-automatedDynamicScanTitle]'
             )
-            .hasText('t:dynamicScanAutomation:()');
+            .hasText(t('dynamicScanAutomation'));
 
           assert
             .dom(
               '[data-test-fileDetails-dynamicScanDrawerOld-automatedDynamicScanChip]'
             )
-            .hasText('t:experimentalFeature:()');
+            .hasText(t('experimentalFeature'));
 
           assert
             .dom(
               '[data-test-fileDetails-dynamicScanDrawerOld-automatedDynamicScanDescription]'
             )
-            .hasText('t:scheduleDynamicscanDesc:()');
+            .hasText(t('scheduleDynamicscanDesc'));
 
           assert
             .dom(
               '[data-test-fileDetails-dynamicScanDrawerOld-automatedDynamicScanScheduleBtn]'
             )
             .isNotDisabled()
-            .hasText('t:scheduleDynamicscan:()');
+            .hasText(t('scheduleDynamicscan'));
         } else {
           assert
             .dom(
               '[data-test-fileDetails-dynamicScanDrawerOld-device-settings-warning]'
             )
             .hasText(
-              't:note:(): t:modalCard.dynamicScan.deviceSettingsWarning:()'
+              `${t('note')}: ${t('modalCard.dynamicScan.deviceSettingsWarning')}`
             );
 
           assert
@@ -612,12 +612,12 @@ module(
         assert
           .dom('[data-test-fileDetails-dynamicScanDrawerOld-cancelBtn]')
           .isNotDisabled()
-          .hasText('t:cancel:()');
+          .hasText(t('cancel'));
 
         assert
           .dom('[data-test-fileDetails-dynamicScanDrawerOld-startBtn]')
           .isNotDisabled()
-          .hasText('t:modalCard.dynamicScan.start:()');
+          .hasText(t('modalCard.dynamicScan.start'));
       }
     );
 
@@ -692,15 +692,15 @@ module(
         .dom(
           '[data-test-fileDetails-dynamicScanDrawerOld-apiSettingScanDescription]'
         )
-        .hasText('t:modalCard.dynamicScan.apiScanDescription:()');
+        .hasText(t('modalCard.dynamicScan.apiScanDescription'));
 
       assert
         .dom('[data-test-apiFilter-title]')
-        .hasText('t:templates.apiScanURLFilter:()');
+        .hasText(t('templates.apiScanURLFilter'));
 
       assert
         .dom('[data-test-apiFilter-description]')
-        .hasText('t:otherTemplates.specifyTheURL:()');
+        .hasText(t('otherTemplates.specifyTheURL'));
 
       assert
         .dom('[data-test-apiFilter-apiEndpointInput]')
@@ -710,7 +710,7 @@ module(
       assert
         .dom('[data-test-apiFilter-addApiEndpointBtn]')
         .isNotDisabled()
-        .hasText('t:templates.addNewUrlFilter:()');
+        .hasText(t('templates.addNewUrlFilter'));
 
       assert.dom('[data-test-apiFilter-table]').doesNotExist();
 
@@ -719,7 +719,7 @@ module(
       // empty input
       await click('[data-test-apiFilter-addApiEndpointBtn]');
 
-      assert.strictEqual(notify.errorMsg, 't:emptyURLFilter:()');
+      assert.strictEqual(notify.errorMsg, t('emptyURLFilter'));
 
       // invalid url
       await fillIn(
@@ -738,7 +738,7 @@ module(
 
       await click('[data-test-apiFilter-addApiEndpointBtn]');
 
-      assert.strictEqual(notify.successMsg, 't:urlUpdated:()');
+      assert.strictEqual(notify.successMsg, t('urlUpdated'));
       assert.dom('[data-test-apiFilter-table]').exists();
 
       await fillIn(
@@ -751,8 +751,8 @@ module(
       const headers = findAll('[data-test-apiFilter-thead] th');
 
       assert.strictEqual(headers.length, 2);
-      assert.dom(headers[0]).hasText('t:apiURLFilter:()');
-      assert.dom(headers[1]).hasText('t:action:()');
+      assert.dom(headers[0]).hasText(t('apiURLFilter'));
+      assert.dom(headers[1]).hasText(t('action'));
 
       let rows = findAll('[data-test-apiFilter-row]');
 
@@ -774,22 +774,22 @@ module(
       );
 
       // confirm box is 2nd modal
-      assert.dom(findAll('[data-test-ak-appbar]')[1]).hasText('t:confirm:()');
+      assert.dom(findAll('[data-test-ak-appbar]')[1]).hasText(t('confirm'));
 
       assert
         .dom('[data-test-confirmbox-description]')
-        .hasText('t:confirmBox.removeURL:()');
+        .hasText(t('confirmBox.removeURL'));
 
       assert
         .dom('[data-test-confirmbox-confirmBtn]')
         .isNotDisabled()
-        .hasText('t:yes:()');
+        .hasText(t('yes'));
 
       await click('[data-test-confirmbox-confirmBtn]');
 
       rows = findAll('[data-test-apiFilter-row]');
 
-      assert.strictEqual(notify.successMsg, 't:urlUpdated:()');
+      assert.strictEqual(notify.successMsg, t('urlUpdated'));
       assert.strictEqual(rows.length, 1);
     });
 
@@ -872,7 +872,10 @@ module(
 
       const notify = this.owner.lookup('service:notifications');
 
-      assert.strictEqual(notify.infoMsg, 't:proxyTurned:() T:ON:()');
+      assert.strictEqual(
+        notify.infoMsg,
+        `${t('proxyTurned')} ${t('on').toUpperCase()}`
+      );
     });
 
     test.each(
@@ -1016,7 +1019,7 @@ module(
               '[data-test-fileDetails-dynamicScanDrawerOld-automatedDynamicScanScheduleBtn]'
             )
             .isNotDisabled()
-            .hasText('t:scheduleDynamicscan:()');
+            .hasText(t('scheduleDynamicscan'));
 
           await click(
             '[data-test-fileDetails-dynamicScanDrawerOld-automatedDynamicScanScheduleBtn]'
@@ -1025,7 +1028,7 @@ module(
           assert
             .dom('[data-test-fileDetails-dynamicScanDrawerOld-startBtn]')
             .isNotDisabled()
-            .hasText('t:modalCard.dynamicScan.start:()');
+            .hasText(t('modalCard.dynamicScan.start'));
 
           await click('[data-test-fileDetails-dynamicScanDrawerOld-startBtn]');
         }
@@ -1035,9 +1038,7 @@ module(
 
         assert.strictEqual(
           notify.successMsg,
-          automatedScan
-            ? 't:scheduleDynamicscanSuccess:()'
-            : 't:startingScan:()'
+          automatedScan ? t('scheduleDynamicscanSuccess') : t('startingScan')
         );
 
         // simulate polling
@@ -1062,7 +1063,7 @@ module(
           .dom('[data-test-fileDetails-dynamicScan-statusChip]')
           .exists()
           .hasText(
-            dynamicScanStatusText[
+            dynamicScanStatusText()[
               automatedScan
                 ? ENUMS.DYNAMIC_STATUS.INQUEUE
                 : ENUMS.DYNAMIC_STATUS.BOOTING
@@ -1155,7 +1156,7 @@ module(
 
       assert
         .dom('[data-test-fileDetails-dynamicScanAction-stopBtn]')
-        .hasText('t:stop:()');
+        .hasText(t('stop'));
       assert
         .dom('[data-test-fileDetails-dynamicScanAction-restartBtn]')
         .doesNotExist();
@@ -1169,7 +1170,7 @@ module(
       assert
         .dom('[data-test-fileDetails-dynamicScan-statusChip]')
         .exists()
-        .hasText(dynamicScanStatusText[ENUMS.DYNAMIC_STATUS.SHUTTING_DOWN]);
+        .hasText(dynamicScanStatusText()[ENUMS.DYNAMIC_STATUS.SHUTTING_DOWN]);
 
       // simulate polling
       if (poll.callback) {
@@ -1178,7 +1179,7 @@ module(
 
       assert
         .dom('[data-test-fileDetails-dynamicScan-statusChip]')
-        .hasText('t:completed:()');
+        .hasText(t('completed'));
 
       assert
         .dom('[data-test-fileDetails-dynamicScanAction-restartBtn]')
@@ -1273,7 +1274,7 @@ module(
 
       assert
         .dom('[data-test-projectPreference-deviceUnavailableError]')
-        .hasText('t:modalCard.dynamicScan.preferredDeviceNotAvailable:()');
+        .hasText(t('modalCard.dynamicScan.preferredDeviceNotAvailable'));
 
       assert
         .dom('[data-test-fileDetails-dynamicScanDrawerOld-startBtn]')

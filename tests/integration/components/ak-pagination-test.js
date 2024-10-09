@@ -1,6 +1,6 @@
 import { click, render, findAll } from '@ember/test-helpers';
 import { hbs } from 'ember-cli-htmlbars';
-import { setupIntl } from 'ember-intl/test-support';
+import { setupIntl, t } from 'ember-intl/test-support';
 import { setupRenderingTest } from 'ember-qunit';
 import { module, test } from 'qunit';
 import { selectChoose } from 'ember-power-select/test-support';
@@ -87,13 +87,13 @@ module('Integration | Component | ak-pagination', function (hooks) {
     assert
       .dom('[data-test-pagination-prev-btn]')
       .exists()
-      .containsText('t:previous:()');
+      .containsText(t('previous'));
     assert.dom('[data-test-prev-btn-icon]').exists();
 
     assert
       .dom('[data-test-pagination-next-btn]')
       .exists()
-      .containsText('t:next:()');
+      .containsText(t('next'));
     assert.dom('[data-test-next-btn-icon]').exists();
     assert.dom('[data-test-pagination-select]').exists();
 
@@ -154,12 +154,12 @@ module('Integration | Component | ak-pagination', function (hooks) {
     assert
       .dom('[data-test-pagination-prev-btn]')
       .exists()
-      .containsText('t:previous:()');
+      .containsText(t('previous'));
 
     assert
       .dom('[data-test-pagination-next-btn]')
       .exists()
-      .containsText('t:next:()');
+      .containsText(t('next'));
 
     await click('[data-test-pagination-next-btn]');
     await click('[data-test-pagination-prev-btn]');
@@ -239,11 +239,11 @@ module('Integration | Component | ak-pagination', function (hooks) {
     assert
       .dom('[data-test-pagination-prev-btn]')
       .exists()
-      .doesNotContainText('t:previous:()');
+      .doesNotContainText(t('previous'));
     assert
       .dom('[data-test-pagination-next-btn]')
       .exists()
-      .doesNotContainText('t:next:()');
+      .doesNotContainText(t('next'));
 
     // When labels for the next and previous buttons were provided
     await render(hbs`

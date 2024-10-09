@@ -3,7 +3,7 @@ import { Response } from 'miragejs';
 import { setupRenderingTest } from 'ember-qunit';
 import { render, click, triggerEvent, find } from '@ember/test-helpers';
 import { hbs } from 'ember-cli-htmlbars';
-import { setupIntl } from 'ember-intl/test-support';
+import { setupIntl, t } from 'ember-intl/test-support';
 import { setupMirage } from 'ember-cli-mirage/test-support';
 import { serializer } from 'irene/tests/test-utils';
 
@@ -76,7 +76,7 @@ module(
 
       assert
         .dom('[data-test-dropdown-tooltip-text]')
-        .hasText(`t:reportPassword:()`);
+        .hasText(t('reportPassword'));
     });
 
     test('it should not call unlock_key API without toggle click', async function (assert) {
@@ -197,14 +197,14 @@ module(
       assert.dom('[data-test-report-password]').exists();
       assert
         .dom('[data-test-report-password-title]')
-        .hasText(`t:reportPassword:()`);
+        .hasText(t('reportPassword'));
       assert
         .dom('[data-test-report-password-value]')
         .hasAttribute('id', `unlock-key-${this.reportId}`)
         .hasValue(unlockKey.unlockKey);
       assert
         .dom('[data-test-report-password-copy-button]')
-        .containsText(`t:copy:()`);
+        .containsText(t('copy'));
     });
 
     test('it should copy password to clipboard on click of copy button', async function (assert) {
@@ -353,7 +353,7 @@ module(
       assert
         .dom('[data-test-api-error]')
         .exists()
-        .hasText(`t:somethingWentWrong:()`);
+        .hasText(t('somethingWentWrong'));
     });
   }
 );

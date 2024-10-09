@@ -3,7 +3,7 @@ import { setupRenderingTest } from 'ember-qunit';
 import { render, findAll, click, find } from '@ember/test-helpers';
 import { hbs } from 'ember-cli-htmlbars';
 import { setupMirage } from 'ember-cli-mirage/test-support';
-import { setupIntl } from 'ember-intl/test-support';
+import { setupIntl, t } from 'ember-intl/test-support';
 import ENV from 'irene/config/environment';
 
 import Service from '@ember/service';
@@ -58,22 +58,22 @@ const menuItems = ({
   sbom,
 }) =>
   [
-    { label: 't:allProjects:()', icon: 'folder', hasBadge: true },
-    appMonitoring && { label: 't:appMonitoring:()', icon: 'inventory-2' },
-    sbom && { label: 't:SBOM:()', icon: 'receipt-long' },
-    analytics && { label: 't:analytics:()', icon: 'graphic-eq' },
-    { label: 't:organization:()', icon: 'people' },
-    publicApis && { label: 't:apiDocumentation:()' },
-    { label: 't:accountSettings:()', icon: 'account-box' },
-    market && { label: 't:marketplace:()', icon: 'account-balance' },
-    billing && { label: 't:billing:()', icon: 'credit-card' },
+    { label: t('allProjects'), icon: 'folder', hasBadge: true },
+    appMonitoring && { label: t('appMonitoring'), icon: 'inventory-2' },
+    sbom && { label: t('SBOM'), icon: 'receipt-long' },
+    analytics && { label: t('analytics'), icon: 'graphic-eq' },
+    { label: t('organization'), icon: 'people' },
+    publicApis && { label: t('apiDocumentation') },
+    { label: t('accountSettings'), icon: 'account-box' },
+    market && { label: t('marketplace'), icon: 'account-balance' },
+    billing && { label: t('billing'), icon: 'credit-card' },
     partner && {
-      label: 't:clients:()',
+      label: t('clients'),
       icon: 'groups-2',
       hasBadge: true,
-      badgeLabel: 't:beta:()',
+      badgeLabel: t('beta'),
     },
-    security && { label: 't:securityDashboard:()', icon: 'security' },
+    security && { label: t('securityDashboard'), icon: 'security' },
   ].filter(Boolean);
 
 const sections = (enabled) => ({
@@ -88,17 +88,17 @@ const sections = (enabled) => ({
 
 const lowerMenuItems = [
   {
-    title: 't:chatSupport:()',
+    title: () => t('chatSupport'),
     icon: 'chat-bubble',
   },
   {
-    title: 't:version:()',
+    title: () => t('version'),
     icon: 'info',
     enablePendo: false,
     divider: true,
   },
   {
-    title: 't:collapse:()',
+    title: () => t('collapse'),
     icon: 'keyboard-tab',
   },
 ];
@@ -308,7 +308,7 @@ module(
         hbs`<HomePage::OrganizationDashboard::SideNav @isCollapsed={{this.isCollapsed}} @toggleSidebar={{this.toggleSidebar}}  />`
       );
 
-      assert.dom(`[data-test-side-menu-item='t:SBOM:()']`).doesNotExist();
+      assert.dom(`[data-test-side-menu-item="${t('SBOM')}"]`).doesNotExist();
     });
 
     test('it should show lower menu items', async function (assert) {
@@ -332,7 +332,7 @@ module(
       const lowerMenuItemEle = findAll('[data-test-side-lower-menu-item]');
 
       const collapseButton = find(`[
-        data-test-side-lower-menu-item='t:collapse:()'
+        data-test-side-lower-menu-item="${t('collapse')}"
       ]`);
 
       assert.ok(collapseButton, 'Collapse button should exist');
@@ -353,7 +353,7 @@ module(
       });
 
       const expandButton = find(`[
-        data-test-side-lower-menu-item='t:expand:()'
+        data-test-side-lower-menu-item="${t('expand')}"
       ]`);
 
       await click(expandButton);
@@ -366,7 +366,7 @@ module(
       lowerMenuItems.forEach((it, index) => {
         assert
           .dom('[data-test-side-lower-menu-item-text]', lowerMenuItemEle[index])
-          .containsText(it.title);
+          .containsText(it.title());
 
         assert
           .dom('[data-test-side-lower-menu-item-icon]', lowerMenuItemEle[index])

@@ -3,7 +3,7 @@ import { Response } from 'miragejs';
 import { setupRenderingTest } from 'ember-qunit';
 import { find, render, triggerEvent } from '@ember/test-helpers';
 import { hbs } from 'ember-cli-htmlbars';
-import { setupIntl } from 'ember-intl/test-support';
+import { setupIntl, t } from 'ember-intl/test-support';
 import { setupMirage } from 'ember-cli-mirage/test-support';
 import { serializer } from 'irene/tests/test-utils';
 import styles from 'irene/components/partner/client-report-summary/index.scss';
@@ -146,9 +146,7 @@ module(
         .dom(`[data-test-riskindex-critical-key]`)
         .hasClass(styles['riskkey-color--critical']);
 
-      assert
-        .dom(`[data-test-riskindex-critical-label]`)
-        .hasText(`t:critical:()`);
+      assert.dom(`[data-test-riskindex-critical-label]`).hasText(t('critical'));
 
       assert
         .dom(`[data-test-riskindex-critical-count]`)
@@ -158,7 +156,7 @@ module(
         .dom(`[data-test-riskindex-high-key]`)
         .hasClass(styles['riskkey-color--high']);
 
-      assert.dom(`[data-test-riskindex-high-label]`).hasText(`t:high:()`);
+      assert.dom(`[data-test-riskindex-high-label]`).hasText(t('high'));
 
       assert
         .dom(`[data-test-riskindex-high-count]`)
@@ -168,7 +166,7 @@ module(
         .dom(`[data-test-riskindex-medium-key]`)
         .hasClass(styles['riskkey-color--medium']);
 
-      assert.dom(`[data-test-riskindex-medium-label]`).hasText(`t:medium:()`);
+      assert.dom(`[data-test-riskindex-medium-label]`).hasText(t('medium'));
 
       assert
         .dom(`[data-test-riskindex-medium-count]`)
@@ -178,7 +176,7 @@ module(
         .dom(`[data-test-riskindex-low-key]`)
         .hasClass(styles['riskkey-color--low']);
 
-      assert.dom(`[data-test-riskindex-low-label]`).hasText(`t:low:()`);
+      assert.dom(`[data-test-riskindex-low-label]`).hasText(t('low'));
 
       assert
         .dom(`[data-test-riskindex-low-count]`)
@@ -188,7 +186,7 @@ module(
         .dom(`[data-test-riskindex-passed-key]`)
         .hasClass(styles['riskkey-color--passed']);
 
-      assert.dom(`[data-test-riskindex-passed-label]`).hasText(`t:passed:()`);
+      assert.dom(`[data-test-riskindex-passed-label]`).hasText(t('passed'));
 
       assert
         .dom(`[data-test-riskindex-passed-count]`)
@@ -198,9 +196,7 @@ module(
         .dom(`[data-test-riskindex-untested-key]`)
         .hasClass(styles['riskkey-color--untested']);
 
-      assert
-        .dom(`[data-test-riskindex-untested-label]`)
-        .hasText(`t:untested:()`);
+      assert.dom(`[data-test-riskindex-untested-label]`).hasText(t('untested'));
 
       assert
         .dom(`[data-test-riskindex-untested-count]`)

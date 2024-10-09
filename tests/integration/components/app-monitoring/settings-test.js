@@ -1,7 +1,7 @@
 import { click, render } from '@ember/test-helpers';
 import { hbs } from 'ember-cli-htmlbars';
 import { setupMirage } from 'ember-cli-mirage/test-support';
-import { setupIntl } from 'ember-intl/test-support';
+import { setupIntl, t } from 'ember-intl/test-support';
 import { setupRenderingTest } from 'ember-qunit';
 import { module, test } from 'qunit';
 
@@ -49,10 +49,10 @@ module('Integration | Component | app-monitoring-settings', function (hooks) {
 
     assert
       .dom(`[data-test-app-monitoring-settings-heading]`)
-      .hasText(`t:appMonitoringHeading:()`);
+      .hasText(t('appMonitoringHeading'));
     assert
       .dom(`[data-test-app-monitoring-settings-description]`)
-      .hasText(`t:appMonitoringDescription:()`);
+      .hasText(t('appMonitoringDescription'));
     assert.dom(`[data-test-toggle-input]`).exists();
     assert.ok(this.element.querySelector(`[data-test-toggle-input]`).checked);
   });
@@ -66,10 +66,10 @@ module('Integration | Component | app-monitoring-settings', function (hooks) {
     await render(hbs`<AppMonitoring::Settings @settings={{this.settings}} />`);
     assert
       .dom(`[data-test-app-monitoring-settings-heading]`)
-      .hasText(`t:appMonitoringHeading:()`);
+      .hasText(t('appMonitoringHeading'));
     assert
       .dom(`[data-test-app-monitoring-settings-description]`)
-      .hasText(`t:appMonitoringDescription:()`);
+      .hasText(t('appMonitoringDescription'));
     assert.dom(`[data-test-toggle-input]`).exists();
 
     assert.notOk(

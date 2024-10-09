@@ -3,7 +3,7 @@ import { setupRenderingTest } from 'ember-qunit';
 import { render, click, fillIn } from '@ember/test-helpers';
 import { hbs } from 'ember-cli-htmlbars';
 import { setupMirage } from 'ember-cli-mirage/test-support';
-import { setupIntl } from 'ember-intl/test-support';
+import { setupIntl, t } from 'ember-intl/test-support';
 import { Response } from 'miragejs';
 
 import Service from '@ember/service';
@@ -66,7 +66,7 @@ module('Integration | Component | organization-name-header', function (hooks) {
       `
     );
 
-    assert.dom('[data-test-org-name-label]').hasText('t:organizationName:()');
+    assert.dom('[data-test-org-name-label]').hasText(t('organizationName'));
     assert.dom('[data-test-org-name]').hasText(this.organization.selected.name);
 
     assert.dom('[data-test-org-name-action-btn]').exists().isNotDisabled();
@@ -92,7 +92,7 @@ module('Integration | Component | organization-name-header', function (hooks) {
     assert
       .dom('[data-test-org-name-add-btn]')
       .exists()
-      .hasText('t:addOrgName:()')
+      .hasText(t('addOrgName'))
       .isNotDisabled();
   });
 
@@ -127,7 +127,7 @@ module('Integration | Component | organization-name-header', function (hooks) {
     assert
       .dom('[data-test-org-name-add-btn]')
       .exists()
-      .hasText('t:addOrgName:()')
+      .hasText(t('addOrgName'))
       .isDisabled();
   });
 
@@ -165,11 +165,11 @@ module('Integration | Component | organization-name-header', function (hooks) {
 
       await click('[data-test-org-name-action-btn]');
 
-      assert.dom('[data-test-ak-modal-header]').hasText('t:editName:()');
+      assert.dom('[data-test-ak-modal-header]').hasText(t('editName'));
 
       assert
         .dom('[data-test-form-label]')
-        .hasText('t:organizationNameEditLabel:()');
+        .hasText(t('organizationNameEditLabel'));
 
       assert
         .dom('[data-test-org-name-edit-input]')
@@ -188,30 +188,30 @@ module('Integration | Component | organization-name-header', function (hooks) {
       const notify = this.owner.lookup('service:notifications');
 
       if (fail) {
-        assert.strictEqual(notify.errorMsg, 't:pleaseTryAgain:()');
+        assert.strictEqual(notify.errorMsg, t('pleaseTryAgain'));
         assert.strictEqual(this.organization.selected.name, existingName);
-        assert.dom('[data-test-ak-modal-header]').hasText('t:editName:()');
+        assert.dom('[data-test-ak-modal-header]').hasText(t('editName'));
         assert.dom('[data-test-org-name-edit-input]').hasValue(updatedOrgName);
 
         assert.dom('[data-test-org-name-edit-save-btn]').exists();
 
         assert
           .dom('[data-test-form-label]')
-          .hasText('t:organizationNameEditLabel:()');
+          .hasText(t('organizationNameEditLabel'));
       } else {
         assert.strictEqual(this.organization.selected.name, updatedOrgName);
 
-        assert.dom('[data-test-ak-modal-header]').hasText('t:message:()');
+        assert.dom('[data-test-ak-modal-header]').hasText(t('message'));
 
         assert
           .dom('[data-test-org-name-success-message]')
           .exists()
-          .hasText('t:organizationNameAddedOrUpdated:("type":"edit")');
+          .hasText(t('organizationNameAddedOrUpdated', { type: 'edit' }));
 
         assert
           .dom('[data-test-org-name-success-okBtn]')
           .isNotDisabled()
-          .hasText('t:ok:()');
+          .hasText(t('ok'));
 
         await click('[data-test-org-name-success-okBtn]');
 
@@ -250,16 +250,16 @@ module('Integration | Component | organization-name-header', function (hooks) {
       assert
         .dom('[data-test-org-name-add-btn]')
         .exists()
-        .hasText('t:addOrgName:()')
+        .hasText(t('addOrgName'))
         .isNotDisabled();
 
       await click('[data-test-org-name-add-btn]');
 
-      assert.dom('[data-test-ak-modal-header]').hasText('t:addName:()');
+      assert.dom('[data-test-ak-modal-header]').hasText(t('addName'));
 
       assert
         .dom('[data-test-form-label]')
-        .hasText('t:organizationNameAddLabel:()');
+        .hasText(t('organizationNameAddLabel'));
 
       assert.dom('[data-test-org-name-edit-input]').exists().hasNoValue();
 
@@ -274,29 +274,29 @@ module('Integration | Component | organization-name-header', function (hooks) {
       const notify = this.owner.lookup('service:notifications');
 
       if (fail) {
-        assert.strictEqual(notify.errorMsg, 't:pleaseTryAgain:()');
+        assert.strictEqual(notify.errorMsg, t('pleaseTryAgain'));
         assert.strictEqual(this.organization.selected.name, '');
-        assert.dom('[data-test-ak-modal-header]').hasText('t:addName:()');
+        assert.dom('[data-test-ak-modal-header]').hasText(t('addName'));
         assert.dom('[data-test-org-name-edit-input]').hasValue(newOrgName);
         assert.dom('[data-test-org-name-edit-save-btn]').exists();
 
         assert
           .dom('[data-test-form-label]')
-          .hasText('t:organizationNameAddLabel:()');
+          .hasText(t('organizationNameAddLabel'));
       } else {
         assert.strictEqual(this.organization.selected.name, newOrgName);
 
-        assert.dom('[data-test-ak-modal-header]').hasText('t:message:()');
+        assert.dom('[data-test-ak-modal-header]').hasText(t('message'));
 
         assert
           .dom('[data-test-org-name-success-message]')
           .exists()
-          .hasText('t:organizationNameAddedOrUpdated:("type":"add")');
+          .hasText(t('organizationNameAddedOrUpdated', { type: 'add' }));
 
         assert
           .dom('[data-test-org-name-success-okBtn]')
           .isNotDisabled()
-          .hasText('t:ok:()');
+          .hasText(t('ok'));
 
         await click('[data-test-org-name-success-okBtn]');
 

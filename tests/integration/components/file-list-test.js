@@ -2,7 +2,7 @@ import { module, test } from 'qunit';
 import { setupRenderingTest } from 'ember-qunit';
 import { click, findAll, render, waitFor } from '@ember/test-helpers';
 import { hbs } from 'ember-cli-htmlbars';
-import { setupIntl } from 'ember-intl/test-support';
+import { setupIntl, t } from 'ember-intl/test-support';
 import { setupMirage } from 'ember-cli-mirage/test-support';
 
 module('Integration | Component | file-list', function (hooks) {
@@ -76,9 +76,9 @@ module('Integration | Component | file-list', function (hooks) {
 
   test('it renders project overview header', async function (assert) {
     const breadcrumbItems = [
-      't:allProjects:()',
+      t('allProjects'),
       this.project.get('packageName'),
-      't:allUploads:()',
+      t('allUploads'),
     ];
 
     await render(
@@ -94,7 +94,7 @@ module('Integration | Component | file-list', function (hooks) {
     assert
       .dom('[data-test-fileList-projectOverview-header]')
       .exists()
-      .containsText('t:allUploads:()');
+      .containsText(t('allUploads'));
 
     assert
       .dom('[data-test-fileList-projectOverview-headerFileCompare]')
@@ -103,7 +103,7 @@ module('Integration | Component | file-list', function (hooks) {
     assert
       .dom('[data-test-fileList-projectOverview-header-noSelectedFileText]')
       .exists()
-      .hasText('t:fileList.selectFilesHeaderText:()');
+      .hasText(t('fileList.selectFilesHeaderText'));
 
     assert
       .dom('[data-test-fileList-projectOverview-header-compareBtn]')
@@ -137,7 +137,7 @@ module('Integration | Component | file-list', function (hooks) {
     assert
       .dom('[data-test-fileList-loadingContainer]')
       .exists()
-      .hasText('t:loading:()...');
+      .hasText(`${t('loading')}...`);
 
     await waitFor('[data-test-fileList-fileOverview-item]', { timeout: 150 });
 
@@ -195,19 +195,19 @@ module('Integration | Component | file-list', function (hooks) {
         '[data-test-fileList-projectOverview-headerFileCompare-summaryText1]'
       )
       .exists()
-      .hasText('t:fileCompare.summary1:()');
+      .hasText(t('fileCompare.summary1'));
 
     assert
       .dom(
         '[data-test-fileList-projectOverview-headerFileCompare-summaryText2]'
       )
       .exists()
-      .hasText('t:fileCompare.summary2:()');
+      .hasText(t('fileCompare.summary2'));
 
     assert
       .dom('[data-test-fileList-projectOverview-header-compareBtn]')
       .exists()
-      .hasText('t:compare:()');
+      .hasText(t('compare'));
 
     assert
       .dom(
@@ -233,7 +233,7 @@ module('Integration | Component | file-list', function (hooks) {
         '[data-test-fileList-projectOverview-headerFileCompare-compareFileSelectText]'
       )
       .exists()
-      .hasText('t:fileCompare.selectCompareFile:()');
+      .hasText(t('fileCompare.selectCompareFile'));
 
     // Selects compare  file
     await click(
@@ -260,7 +260,7 @@ module('Integration | Component | file-list', function (hooks) {
         '[data-test-fileList-projectOverview-headerFileCompare-baseFileSelectText]'
       )
       .exists()
-      .hasText('t:fileCompare.selectAFile:()');
+      .hasText(t('fileCompare.selectAFile'));
 
     // Unselects compare file
     await click(

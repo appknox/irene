@@ -2,7 +2,7 @@ import { module, test } from 'qunit';
 import { setupRenderingTest } from 'ember-qunit';
 import { click, findAll, render } from '@ember/test-helpers';
 import { hbs } from 'ember-cli-htmlbars';
-import { setupIntl } from 'ember-intl/test-support';
+import { setupIntl, t } from 'ember-intl/test-support';
 import { setupMirage } from 'ember-cli-mirage/test-support';
 import Service from '@ember/service';
 import { Response } from 'miragejs';
@@ -28,11 +28,11 @@ class WindowStub extends Service {
 const sampleReportList = [
   {
     type: 'pdf',
-    primaryText: 't:fileReport.samplePDFReportText:()',
+    primaryText: () => t('fileReport.samplePDFReportText'),
   },
   {
     type: 'cyclonedx_json',
-    primaryText: 't:fileReport.sampleJsonReportText:()',
+    primaryText: () => t('fileReport.sampleJsonReportText'),
   },
 ];
 
@@ -66,17 +66,17 @@ module(
       assert
         .dom('[data-test-sbomReports-sbomSampleReportText1]')
         .exists()
-        .hasText('t:fileReport.sbomSampleReportText1:()');
+        .hasText(t('fileReport.sbomSampleReportText1'));
 
       assert
         .dom('[data-test-sbomReports-sbomSampleReportText2]')
         .exists()
-        .hasText('t:fileReport.sbomSampleReportText2:()');
+        .hasText(t('fileReport.sbomSampleReportText2'));
 
       assert
         .dom('[data-test-sbomReports-contactUsButton]')
         .exists()
-        .hasText('t:clickHere:()');
+        .hasText(t('clickHere'));
 
       assert
         .dom('[data-test-fileReportDrawer-sbomReports-sampleReports]')
@@ -90,7 +90,7 @@ module(
         assert
           .dom('[data-test-sampleReportItem-reportPrimaryText]', reportElement)
           .exists()
-          .hasText(report.primaryText);
+          .hasText(report.primaryText());
       });
     });
 
@@ -107,7 +107,7 @@ module(
       assert
         .dom('[data-test-sbomReports-contactSuccessSupportText1]')
         .exists()
-        .hasText('t:fileReport.sbomSampleContactSuccessMsg:()');
+        .hasText(t('fileReport.sbomSampleContactSuccessMsg'));
 
       const sampleReports = findAll('[data-test-sampleReportItem]');
 
@@ -117,7 +117,7 @@ module(
         assert
           .dom('[data-test-sampleReportItem-reportPrimaryText]', reportElement)
           .exists()
-          .hasText(report.primaryText);
+          .hasText(report.primaryText());
       });
     });
 
@@ -197,7 +197,7 @@ module(
       await click("[data-test-sampleReportItem-reportDownloadBtn='pdf']");
 
       const notifyService = this.owner.lookup('service:notifications');
-      assert.strictEqual(notifyService.errorMsg, 't:downloadUrlNotFound:()');
+      assert.strictEqual(notifyService.errorMsg, t('downloadUrlNotFound'));
     });
   }
 );

@@ -2,7 +2,7 @@ import Service from '@ember/service';
 import { click, render } from '@ember/test-helpers';
 import { hbs } from 'ember-cli-htmlbars';
 import { setupMirage } from 'ember-cli-mirage/test-support';
-import { setupIntl } from 'ember-intl/test-support';
+import { setupIntl, t } from 'ember-intl/test-support';
 import { clickTrigger } from 'ember-power-select/test-support/helpers';
 import { selectChoose } from 'ember-power-select/test-support';
 import { setupRenderingTest } from 'ember-qunit';
@@ -89,19 +89,19 @@ module(
       assert
         .dom('[data-test-projectSettings-genSettings-jiraProject-headerText]')
         .exists()
-        .hasText('t:jiraIntegration:()');
+        .hasText(t('jiraIntegration'));
 
       assert
         .dom('[data-test-projectSettings-genSettings-jiraProject-noProject]')
         .exists()
-        .hasText('t:jiraNoProject:()');
+        .hasText(t('jiraNoProject'));
 
       assert
         .dom(
           '[data-test-projectSettings-genSettings-jiraProject-noProject-integrationLink]'
         )
         .exists()
-        .hasText('t:clickingHere:()');
+        .hasText(t('clickingHere'));
     });
 
     test('it renders select button with atleast one JIRA project', async function (assert) {
@@ -128,14 +128,14 @@ module(
           '[data-test-projectSettings-genSettings-jiraProject-selectProjectText]'
         )
         .exists()
-        .hasText('t:otherTemplates.selectJIRAAccount:()');
+        .hasText(t('otherTemplates.selectJIRAAccount'));
 
       assert
         .dom(
           '[data-test-projectSettings-genSettings-jiraProject-selectProjectBtn]'
         )
         .exists()
-        .hasText('t:selectProject:()');
+        .hasText(t('selectProject'));
     });
 
     test('it opens and closes project edit modal', async function (assert) {
@@ -158,19 +158,19 @@ module(
       assert
         .dom(`[data-test-genSettings-jiraProject-editModal-title]`)
         .exists()
-        .hasText('t:otherTemplates.selectJIRAAccount:()');
+        .hasText(t('otherTemplates.selectJIRAAccount'));
 
       assert
         .dom(`[data-test-genSettings-jiraProject-editModal-saveProjectBtn]`)
         .exists()
-        .hasText('t:save:()');
+        .hasText(t('save'));
 
       assert
         .dom(
           `[data-test-genSettings-jiraProject-editModal-cancelSaveProjectBtn]`
         )
         .exists()
-        .hasText('t:cancel:()');
+        .hasText(t('cancel'));
 
       await click(
         '[data-test-genSettings-jiraProject-editModal-cancelSaveProjectBtn]'
@@ -188,13 +188,13 @@ module(
           {
             project_key: ['This field may not be null.'],
           },
-          't:invalidProject:()',
+          () => t('invalidProject'),
         ],
         [
           {
             risk_threshold: ['This field may not be null.'],
           },
-          't:invalidRisk:()',
+          () => t('invalidRisk'),
         ],
       ],
       async function (assert, [error, message]) {
@@ -218,7 +218,7 @@ module(
           '[data-test-genSettings-jiraProject-editModal-saveProjectBtn]'
         );
 
-        assert.strictEqual(this.notifyService.errorMsg, message);
+        assert.strictEqual(this.notifyService.errorMsg, message());
       }
     );
 
@@ -324,7 +324,7 @@ module(
         )
         .exists();
 
-      assert.strictEqual(this.notifyService.successMsg, `t:integratedJIRA:()`);
+      assert.strictEqual(this.notifyService.successMsg, t('integratedJIRA'));
     });
 
     test('it deletes selected project when delete trigger is clicked', async function (assert) {
@@ -398,7 +398,7 @@ module(
 
       assert.strictEqual(
         this.notifyService.successMsg,
-        't:projectRemoved:()',
+        t('projectRemoved'),
         'Displays the right success message'
       );
 
@@ -426,7 +426,7 @@ module(
           '[data-test-projectSettings-genSettings-jiraProject-selectProjectBtn]'
         )
         .exists()
-        .hasText('t:selectProject:()');
+        .hasText(t('selectProject'));
     });
 
     test('it edits the project when a new repo is selected', async function (assert) {
@@ -494,7 +494,7 @@ module(
         )
         .exists();
 
-      assert.strictEqual(this.notifyService.successMsg, 't:integratedJIRA:()');
+      assert.strictEqual(this.notifyService.successMsg, t('integratedJIRA'));
 
       // Flow for updating the existing JiraIntegration
       await click(
@@ -544,7 +544,7 @@ module(
         )
         .exists();
 
-      assert.strictEqual(this.notifyService.successMsg, 't:projectUpdated:()');
+      assert.strictEqual(this.notifyService.successMsg, t('projectUpdated'));
     });
   }
 );

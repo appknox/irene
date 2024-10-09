@@ -6,6 +6,7 @@ import {
   render,
   triggerEvent,
 } from '@ember/test-helpers';
+
 import { hbs } from 'ember-cli-htmlbars';
 import { setupMirage } from 'ember-cli-mirage/test-support';
 import { setupIntl, t } from 'ember-intl/test-support';
@@ -15,6 +16,7 @@ import Service from '@ember/service';
 import { Response } from 'miragejs';
 import { selectChoose } from 'ember-power-select/test-support';
 import { faker } from '@faker-js/faker';
+import { capitalize } from '@ember/string';
 
 import ENUMS from 'irene/enums';
 import { dsManualDevicePref } from 'irene/helpers/ds-manual-device-pref';
@@ -31,14 +33,14 @@ const classes = {
 };
 
 // const dynamicScanStatusText = {
-//   [ENUMS.DYNAMIC_STATUS.INQUEUE]: 't:deviceInQueue:()',
-//   [ENUMS.DYNAMIC_STATUS.BOOTING]: 't:deviceBooting:()',
-//   [ENUMS.DYNAMIC_STATUS.DOWNLOADING]: 't:deviceDownloading:()',
-//   [ENUMS.DYNAMIC_STATUS.INSTALLING]: 't:deviceInstalling:()',
-//   [ENUMS.DYNAMIC_STATUS.LAUNCHING]: 't:deviceLaunching:()',
-//   [ENUMS.DYNAMIC_STATUS.HOOKING]: 't:deviceHooking:()',
-//   [ENUMS.DYNAMIC_STATUS.SHUTTING_DOWN]: 't:deviceShuttingDown:()',
-//   [ENUMS.DYNAMIC_STATUS.COMPLETED]: 't:deviceCompleted:()',
+//   [ENUMS.DYNAMIC_STATUS.INQUEUE]: t('deviceInQueue'),
+//   [ENUMS.DYNAMIC_STATUS.BOOTING]: t('deviceBooting'),
+//   [ENUMS.DYNAMIC_STATUS.DOWNLOADING]: t('deviceDownloading'),
+//   [ENUMS.DYNAMIC_STATUS.INSTALLING]: t('deviceInstalling'),
+//   [ENUMS.DYNAMIC_STATUS.LAUNCHING]: t('deviceLaunching'),
+//   [ENUMS.DYNAMIC_STATUS.HOOKING]: t('deviceHooking'),
+//   [ENUMS.DYNAMIC_STATUS.SHUTTING_DOWN]: t('deviceShuttingDown'),
+//   [ENUMS.DYNAMIC_STATUS.COMPLETED]: t('deviceCompleted'),
 // };
 
 class NotificationsStub extends Service {
@@ -220,7 +222,7 @@ module(
       assert
         .dom('[data-test-fileDetails-dynamicScanDrawer-drawerContainer-title]')
         .exists()
-        .hasText('t:dastTabs.manualDAST:()');
+        .hasText(t('dastTabs.manualDAST'));
 
       assert
         .dom(
@@ -232,12 +234,12 @@ module(
       assert
         .dom('[data-test-fileDetails-dynamicScanDrawer-startBtn]')
         .exists()
-        .hasText('t:start:()');
+        .hasText(t('start'));
 
       assert
         .dom('[data-test-fileDetails-dynamicScanDrawer-cancelBtn]')
         .exists()
-        .hasText('t:cancel:()');
+        .hasText(t('cancel'));
 
       assert
         .dom('[data-test-fileDetails-dynamicScanDrawer-manualDast-header]')
@@ -254,14 +256,14 @@ module(
           '[data-test-fileDetails-dynamicScanDrawer-manualDast-headerDeviceRequirements]'
         )
         .exists()
-        .hasText('t:modalCard.dynamicScan.deviceRequirements:()');
+        .hasText(t('modalCard.dynamicScan.deviceRequirements'));
 
       assert
         .dom(
           '[data-test-fileDetails-dynamicScanDrawer-manualDast-headerOSInfoDesc]'
         )
         .exists()
-        .containsText('t:modalCard.dynamicScan.osVersion:()');
+        .containsText(t('modalCard.dynamicScan.osVersion'));
 
       assert
         .dom(
@@ -269,7 +271,7 @@ module(
         )
         .exists()
         .containsText(this.file.project.get('platformDisplay'))
-        .containsText('t:modalCard.dynamicScan.orAbove:()')
+        .containsText(t('modalCard.dynamicScan.orAbove'))
         .containsText(this.file.minOsVersion);
 
       assert
@@ -277,7 +279,7 @@ module(
           '[data-test-fileDetails-dynamicScanDrawer-manualDast-devicePrefHeaderDesc]'
         )
         .exists()
-        .containsText('t:devicePreferences:()');
+        .containsText(t('devicePreferences'));
 
       assert
         .dom(
@@ -306,7 +308,7 @@ module(
 
         assert.strictEqual(
           optionElement.textContent?.trim(),
-          `t:${dsManualDevicePref([deviceSelection])}:()`
+          t(dsManualDevicePref([deviceSelection]))
         );
       }
 
@@ -325,7 +327,7 @@ module(
           '[data-test-fileDetails-dynamicScanDrawer-manualDast-enableAPICapture]'
         )
         .exists()
-        .containsText('t:modalCard.dynamicScan.runApiScan:()');
+        .containsText(t('modalCard.dynamicScan.runApiScan'));
 
       assert
         .dom(
@@ -339,7 +341,7 @@ module(
         .dom(
           '[data-test-fileDetails-dynamicScanDrawer-manualDast-apiFilter-title]'
         )
-        .hasText('t:templates.apiScanURLFilter:()');
+        .hasText(t('templates.apiScanURLFilter'));
 
       assert.dom('[data-test-apiFilter-description]').doesNotExist();
 
@@ -351,7 +353,7 @@ module(
       assert
         .dom('[data-test-apiFilter-addApiEndpointBtn]')
         .isNotDisabled()
-        .hasText('t:templates.addNewUrlFilter:()');
+        .hasText(t('templates.addNewUrlFilter'));
 
       const apiURLTitleTooltip = find(
         '[data-test-fileDetails-dynamicScanDrawer-manualDast-apiURLFilter-iconTooltip]'
@@ -362,7 +364,7 @@ module(
       assert
         .dom('[data-test-ak-tooltip-content]')
         .exists()
-        .containsText('t:modalCard.dynamicScan.apiScanUrlFilterTooltipText:()');
+        .containsText(t('modalCard.dynamicScan.apiScanUrlFilterTooltipText'));
 
       await triggerEvent(apiURLTitleTooltip, 'mouseleave');
     });
@@ -418,7 +420,7 @@ module(
         .dom(
           '[data-test-fileDetails-dynamicScanDrawer-manualDast-apiFilter-title]'
         )
-        .hasText('t:templates.apiScanURLFilter:()');
+        .hasText(t('templates.apiScanURLFilter'));
 
       assert.dom('[data-test-apiFilter-description]').doesNotExist();
 
@@ -430,7 +432,7 @@ module(
       assert
         .dom('[data-test-apiFilter-addApiEndpointBtn]')
         .isNotDisabled()
-        .hasText('t:templates.addNewUrlFilter:()');
+        .hasText(t('templates.addNewUrlFilter'));
 
       assert.dom('[data-test-apiFilter-table]').doesNotExist();
 
@@ -439,7 +441,7 @@ module(
       // empty input
       await click('[data-test-apiFilter-addApiEndpointBtn]');
 
-      assert.strictEqual(notify.errorMsg, 't:emptyURLFilter:()');
+      assert.strictEqual(notify.errorMsg, t('emptyURLFilter'));
 
       // invalid url
       await fillIn(
@@ -451,14 +453,14 @@ module(
 
       assert.strictEqual(
         notify.errorMsg,
-        'https://api.example.com t:invalidURL:()'
+        `https://api.example.com ${t('invalidURL')}`
       );
 
       await fillIn('[data-test-apiFilter-apiEndpointInput]', 'api.example.com');
 
       await click('[data-test-apiFilter-addApiEndpointBtn]');
 
-      assert.strictEqual(notify.successMsg, 't:urlUpdated:()');
+      assert.strictEqual(notify.successMsg, t('urlUpdated'));
       assert.dom('[data-test-apiFilter-table]').exists();
 
       await fillIn(
@@ -471,8 +473,8 @@ module(
       const headers = findAll('[data-test-apiFilter-thead] th');
 
       assert.strictEqual(headers.length, 2);
-      assert.dom(headers[0]).hasText('t:apiURLFilter:()');
-      assert.dom(headers[1]).hasText('t:action:()');
+      assert.dom(headers[0]).hasText(t('apiURLFilter'));
+      assert.dom(headers[1]).hasText(t('action'));
 
       let rows = findAll('[data-test-apiFilter-row]');
 
@@ -496,22 +498,22 @@ module(
       assert
         .dom(findAll('[data-test-ak-modal-header]')[0])
         .exists()
-        .hasText('t:confirm:()');
+        .hasText(t('confirm'));
 
       assert
         .dom('[data-test-confirmbox-description]')
-        .hasText('t:confirmBox.removeURL:()');
+        .hasText(t('confirmBox.removeURL'));
 
       assert
         .dom('[data-test-confirmbox-confirmBtn]')
         .isNotDisabled()
-        .hasText('t:yes:()');
+        .hasText(t('yes'));
 
       await click('[data-test-confirmbox-confirmBtn]');
 
       rows = findAll('[data-test-apiFilter-row]');
 
-      assert.strictEqual(notify.successMsg, 't:urlUpdated:()');
+      assert.strictEqual(notify.successMsg, t('urlUpdated'));
       assert.strictEqual(rows.length, 1);
     });
 
@@ -593,7 +595,7 @@ module(
       assert
         .dom('[data-test-fileDetails-proxySettings-helpTooltipContent]')
         .exists()
-        .containsText('t:proxySettingsRouteVia:()')
+        .containsText(t('proxySettingsRouteVia'))
         .containsText(proxySetting.port)
         .containsText(proxySetting.host);
 
@@ -602,8 +604,8 @@ module(
       assert
         .dom('[data-test-fileDetails-proxySettings-enableApiProxyLabel]')
         .exists()
-        .containsText('t:enable:()')
-        .containsText('t:proxySettingsTitle:()');
+        .containsText(t('enable'))
+        .containsText(t('proxySettingsTitle'));
 
       const proxySettingsToggle =
         '[data-test-fileDetails-proxySettings-enableApiProxyToggle] [data-test-toggle-input]';
@@ -618,7 +620,10 @@ module(
 
       const notify = this.owner.lookup('service:notifications');
 
-      assert.strictEqual(notify.infoMsg, 't:proxyTurned:() T:ON:()');
+      assert.strictEqual(
+        notify.infoMsg,
+        `${t('proxyTurned')} ${capitalize(t('ON'))}`
+      );
     });
 
     test('manual DAST: it selects a device preference', async function (assert) {
@@ -707,11 +712,13 @@ module(
 
         assert.strictEqual(
           optionElement.textContent?.trim(),
-          `t:${dsManualDevicePref([deviceSelection])}:()`
+          t(dsManualDevicePref([deviceSelection]))
         );
       }
 
-      const anyDeviceLabel = `t:${dsManualDevicePref([ENUMS.DS_MANUAL_DEVICE_SELECTION.ANY_DEVICE])}:()`;
+      const anyDeviceLabel = t(
+        dsManualDevicePref([ENUMS.DS_MANUAL_DEVICE_SELECTION.ANY_DEVICE])
+      );
 
       // Select "Any Device"
       await selectChoose(`.${classes.trigger}`, anyDeviceLabel);
@@ -723,7 +730,9 @@ module(
       assert.dom(selectListItems[0]).hasAria('selected', 'true');
 
       //  Select 'Specific Device'
-      const specificDeviceLabel = `t:${dsManualDevicePref([ENUMS.DS_MANUAL_DEVICE_SELECTION.SPECIFIC_DEVICE])}:()`;
+      const specificDeviceLabel = t(
+        dsManualDevicePref([ENUMS.DS_MANUAL_DEVICE_SELECTION.SPECIFIC_DEVICE])
+      );
 
       await selectChoose(`.${classes.trigger}`, specificDeviceLabel);
 
@@ -747,7 +756,7 @@ module(
           '[data-test-fileDetails-dynamicScanDrawer-manualDast-devicePrefTableHeaderTitle]'
         )
         .exists()
-        .containsText('t:modalCard.dynamicScan.selectSpecificDevice:()');
+        .containsText(t('modalCard.dynamicScan.selectSpecificDevice'));
 
       assert
         .dom(
@@ -878,7 +887,7 @@ module(
             '[data-test-fileDetails-dynamicScanDrawer-drawerContainer-title]'
           )
           .exists()
-          .hasText('t:dastTabs.automatedDAST:()');
+          .hasText(t('dastTabs.automatedDAST'));
 
         assert
           .dom(
@@ -890,14 +899,14 @@ module(
         assert
           .dom('[data-test-fileDetails-dynamicScanDrawer-startBtn]')
           .exists()
-          .hasText('t:modalCard.dynamicScan.restartScan:()');
+          .hasText(t('modalCard.dynamicScan.restartScan'));
 
         assert
           .dom(
             '[data-test-fileDetails-dynamicScanDrawer-settingsPageRedirectBtn]'
           )
           .exists()
-          .hasText('t:modalCard.dynamicScan.goToGeneralSettings:()')
+          .hasText(t('modalCard.dynamicScan.goToGeneralSettings'))
           .hasAttribute('target', '_blank')
           .hasAttribute(
             'href',
@@ -909,14 +918,14 @@ module(
             '[data-test-fileDetails-dynamicScanDrawer-automatedDast-headerDeviceRequirements]'
           )
           .exists()
-          .hasText('t:modalCard.dynamicScan.deviceRequirements:()');
+          .hasText(t('modalCard.dynamicScan.deviceRequirements'));
 
         assert
           .dom(
             '[data-test-fileDetails-dynamicScanDrawer-automatedDast-headerOSInfoDesc]'
           )
           .exists()
-          .containsText('t:modalCard.dynamicScan.osVersion:()');
+          .containsText(t('modalCard.dynamicScan.osVersion'));
 
         assert
           .dom(
@@ -924,7 +933,7 @@ module(
           )
           .exists()
           .containsText(this.file.project.get('platformDisplay'))
-          .containsText('t:modalCard.dynamicScan.orAbove:()')
+          .containsText(t('modalCard.dynamicScan.orAbove'))
           .containsText(this.file.minOsVersion);
 
         // Device Preferences
@@ -969,21 +978,21 @@ module(
               '[data-test-fileDetails-dynamicScanDrawer-automatedDast-proxySettingsHeader]'
             )
             .exists()
-            .containsText('t:enable:() t:proxySettingsTitle:()');
+            .containsText(`${t('enable')} ${t('proxySettingsTitle')}`);
 
           assert
             .dom(
               '[data-test-fileDetails-dynamicScanDrawer-automatedDast-proxySettingsEnabledChip]'
             )
             .exists()
-            .hasText('t:enabled:()');
+            .hasText(t('enabled'));
 
           assert
             .dom(
               '[data-test-fileDetails-dynamicScanDrawer-automatedDast-proxySettingsRoutingInfo]'
             )
             .exists()
-            .containsText('t:modalCard.dynamicScan.apiRoutingText:()')
+            .containsText(t('modalCard.dynamicScan.apiRoutingText'))
             .containsText(proxySetting.host);
         } else {
           assert
@@ -1056,7 +1065,7 @@ module(
             '[data-test-fileDetails-dynamicScanDrawer-automatedDast-apiFilter-title]'
           )
           .exists()
-          .hasText('t:templates.apiScanURLFilter:()');
+          .hasText(t('templates.apiScanURLFilter'));
 
         const apiURLTitleTooltip = find(
           '[data-test-fileDetails-dynamicScanDrawer-automatedDast-apiURLFilter-iconTooltip]'
@@ -1067,9 +1076,7 @@ module(
         assert
           .dom('[data-test-ak-tooltip-content]')
           .exists()
-          .containsText(
-            't:modalCard.dynamicScan.apiScanUrlFilterTooltipText:()'
-          );
+          .containsText(t('modalCard.dynamicScan.apiScanUrlFilterTooltipText'));
 
         await triggerEvent(apiURLTitleTooltip, 'mouseleave');
 
@@ -1079,8 +1086,8 @@ module(
               '[data-test-fileDetails-dynamicScanDrawer-automatedDast-apiURLFiltersEmptyContainer]'
             )
             .exists()
-            .containsText('t:modalCard.dynamicScan.emptyAPIListHeaderText:()')
-            .containsText('t:modalCard.dynamicScan.emptyAPIListSubText:()');
+            .containsText(t('modalCard.dynamicScan.emptyAPIListHeaderText'))
+            .containsText(t('modalCard.dynamicScan.emptyAPIListSubText'));
         } else {
           apiScanOptions.apiUrlFilterItems.forEach((url) => {
             const filterElem = find(
@@ -1153,7 +1160,7 @@ module(
             '[data-test-fileDetails-dynamicScanDrawer-automatedDast-projectScenariosTitle]'
           )
           .exists()
-          .hasText('t:modalCard.dynamicScan.activeScenarios:()');
+          .hasText(t('modalCard.dynamicScan.activeScenarios'));
 
         if (emptyActiveList) {
           assert
@@ -1162,10 +1169,10 @@ module(
             )
             .exists()
             .containsText(
-              't:modalCard.dynamicScan.emptyActiveScenariosHeaderText:()'
+              t('modalCard.dynamicScan.emptyActiveScenariosHeaderText')
             )
             .containsText(
-              't:modalCard.dynamicScan.emptyActiveScenariosSubText:()'
+              t('modalCard.dynamicScan.emptyActiveScenariosSubText')
             );
         } else {
           scenarios.forEach((scenario) => {
@@ -1310,7 +1317,9 @@ module(
             .isDisabled();
 
           // Select "Any Device"
-          const anyDeviceLabel = `t:${dsManualDevicePref([ENUMS.DS_MANUAL_DEVICE_SELECTION.ANY_DEVICE])}:()`;
+          const anyDeviceLabel = t(
+            dsManualDevicePref([ENUMS.DS_MANUAL_DEVICE_SELECTION.ANY_DEVICE])
+          );
 
           await selectChoose(`.${classes.trigger}`, anyDeviceLabel);
 

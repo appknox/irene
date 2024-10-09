@@ -1,7 +1,7 @@
 import { render, findAll, find, click } from '@ember/test-helpers';
 import { hbs } from 'ember-cli-htmlbars';
 import { setupMirage } from 'ember-cli-mirage/test-support';
-import { setupIntl } from 'ember-intl/test-support';
+import { setupIntl, t } from 'ember-intl/test-support';
 import { setupRenderingTest } from 'ember-qunit';
 import { module, test } from 'qunit';
 import dayjs from 'dayjs';
@@ -87,9 +87,9 @@ module('Integration | Component | organization-namespace', function (hooks) {
     );
 
     // assert header row
-    assert.dom(headerRow[0]).hasText('t:namespace:()');
-    assert.dom(headerRow[1]).hasText('t:requestStatus:()');
-    assert.dom(headerRow[2]).hasText('t:approvalStatus:()');
+    assert.dom(headerRow[0]).hasText(t('namespace'));
+    assert.dom(headerRow[1]).hasText(t('requestStatus'));
+    assert.dom(headerRow[2]).hasText(t('approvalStatus'));
 
     const contentRows = findAll('[data-test-namespace-row]');
 
@@ -113,7 +113,7 @@ module('Integration | Component | organization-namespace', function (hooks) {
     assert
       .dom(contentRow[1])
       .hasText(
-        `${dayjs(this.namespaces[0].createdOn).fromNow()} t:by:() ${
+        `${dayjs(this.namespaces[0].createdOn).fromNow()} ${t('by')} ${
           requestedUser.username
         }`
       );
@@ -121,7 +121,7 @@ module('Integration | Component | organization-namespace', function (hooks) {
     assert
       .dom(contentRow[2])
       .hasText(
-        `${dayjs(this.namespaces[0].approvedOn).fromNow()} t:by:() ${
+        `${dayjs(this.namespaces[0].approvedOn).fromNow()} ${t('by')} ${
           approvedUser.username
         }`
       );
@@ -158,14 +158,14 @@ module('Integration | Component | organization-namespace', function (hooks) {
       assert
         .dom(contentRow[1])
         .hasText(
-          `${dayjs(this.namespaces[5].createdOn).fromNow()} t:by:() ${
+          `${dayjs(this.namespaces[5].createdOn).fromNow()} ${t('by')} ${
             requestedUser.username
           }`
         );
 
       assert
         .dom('[data-test-approval-status-chip]', contentRow[2])
-        .hasText('t:chipStatus.pending:()');
+        .hasText(t('chipStatus.pending'));
     }
   );
 
@@ -196,7 +196,7 @@ module('Integration | Component | organization-namespace', function (hooks) {
       .dom(contentRow[2])
       .containsText(dayjs(this.namespaces[5].approvedOn).fromNow());
 
-    assert.strictEqual(notify.successMsg, 't:namespaceApproved:()');
+    assert.strictEqual(notify.successMsg, t('namespaceApproved'));
   });
 
   test('test approve namespace failure', async function (assert) {
@@ -230,7 +230,7 @@ module('Integration | Component | organization-namespace', function (hooks) {
 
     assert.dom(approveBtn).exists();
 
-    assert.strictEqual(notify.errorMsg, 't:pleaseTryAgain:()');
+    assert.strictEqual(notify.errorMsg, t('pleaseTryAgain'));
   });
 
   test('test reject namespace success', async function (assert) {
@@ -259,7 +259,7 @@ module('Integration | Component | organization-namespace', function (hooks) {
     // check confirm popup is visible
     assert
       .dom('[data-test-confirmbox-description]')
-      .hasText('t:confirmBox.rejectNamespace:()');
+      .hasText(t('confirmBox.rejectNamespace'));
 
     assert.dom('[data-test-confirmbox-confirmBtn]').exists();
     assert.dom('[data-test-confirmbox-cancelBtn]').exists();
@@ -290,7 +290,7 @@ module('Integration | Component | organization-namespace', function (hooks) {
 
     assert.strictEqual(latestRows.length, this.namespaces.length - 1);
 
-    assert.strictEqual(notify.successMsg, 't:namespaceRejected:()');
+    assert.strictEqual(notify.successMsg, t('namespaceRejected'));
   });
 
   test('test reject namespace failure', async function (assert) {
@@ -323,7 +323,7 @@ module('Integration | Component | organization-namespace', function (hooks) {
     // check confirm popup is visible
     assert
       .dom('[data-test-confirmbox-description]')
-      .hasText('t:confirmBox.rejectNamespace:()');
+      .hasText(t('confirmBox.rejectNamespace'));
 
     assert.dom('[data-test-confirmbox-confirmBtn]').exists();
     assert.dom('[data-test-confirmbox-cancelBtn]').exists();
@@ -336,6 +336,6 @@ module('Integration | Component | organization-namespace', function (hooks) {
     assert.dom(contentRow[0]).exists();
     assert.dom(rejectBtn).exists();
 
-    assert.strictEqual(notify.errorMsg, 't:pleaseTryAgain:()');
+    assert.strictEqual(notify.errorMsg, t('pleaseTryAgain'));
   });
 });

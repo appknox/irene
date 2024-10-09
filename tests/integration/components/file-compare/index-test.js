@@ -1,5 +1,5 @@
 import { module, test } from 'qunit';
-import { setupIntl } from 'ember-intl/test-support';
+import { setupIntl, t } from 'ember-intl/test-support';
 import { setupMirage } from 'ember-cli-mirage/test-support';
 import { setupRenderingTest } from 'ember-qunit';
 import { click, render } from '@ember/test-helpers';
@@ -110,10 +110,10 @@ module('Integration | Component | file-compare', function (hooks) {
 
   test('it renders', async function (assert) {
     const breadcrumbItems = [
-      't:allProjects:()',
-      't:scanDetails:()',
-      't:fileCompare.fileSelection:()',
-      't:compare:()',
+      t('allProjects'),
+      t('scanDetails'),
+      t('fileCompare.fileSelection'),
+      t('compare'),
     ];
 
     await render(
@@ -146,7 +146,7 @@ module('Integration | Component | file-compare', function (hooks) {
     // assert
     //   .dom('[data-test-fileCompare-header-reportDownloadBtn]')
     //   .exists()
-    //   .hasText('t:downloadReport:()');
+    //   .hasText(t('downloadReport'));
 
     assert
       .dom('[data-test-fileCompare-header-showFilesOverview-icon]')
@@ -159,22 +159,22 @@ module('Integration | Component | file-compare', function (hooks) {
     const tabs = [
       {
         id: 'new-issues',
-        label: 't:fileCompare.newIssues:()',
+        label: t('fileCompare.newIssues'),
         badgeCount: fileCompareCategories.newRisks.length,
       },
       {
         id: 'recurring-issues',
-        label: 't:fileCompare.recurringIssues:()',
+        label: t('fileCompare.recurringIssues'),
         badgeCount: fileCompareCategories.recurring.length,
       },
       {
         id: 'resolved-issues',
-        label: 't:fileCompare.resolvedIssues:()',
+        label: t('fileCompare.resolvedIssues'),
         badgeCount: fileCompareCategories.resolved.length,
       },
       {
         id: 'untested-cases',
-        label: 't:untested:()',
+        label: t('untested'),
         badgeCount: fileCompareCategories.untested.length,
       },
     ];

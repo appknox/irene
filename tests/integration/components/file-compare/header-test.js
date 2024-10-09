@@ -1,5 +1,5 @@
 import { module, test } from 'qunit';
-import { setupIntl } from 'ember-intl/test-support';
+import { setupIntl, t } from 'ember-intl/test-support';
 import { setupMirage } from 'ember-cli-mirage/test-support';
 import { setupRenderingTest } from 'ember-qunit';
 import { render } from '@ember/test-helpers';
@@ -84,9 +84,9 @@ module('Integration | Component | file-compare/header', function (hooks) {
     assert
       .dom('[data-test-fileCompareHeader-fileCompare-content]')
       .exists()
-      .containsText('t:compare:()')
-      .containsText('t:fileCompare.summary1:()')
-      .containsText('t:fileCompare.summary2:()');
+      .containsText(t('compare'))
+      .containsText(t('fileCompare.summary1'))
+      .containsText(t('fileCompare.summary2'));
   });
 
   test('it shows settings redirect button and project details in overview if project exists', async function (assert) {
@@ -101,13 +101,13 @@ module('Integration | Component | file-compare/header', function (hooks) {
     assert
       .dom('[data-test-fileCompareHeader-projectOverview-projectID]')
       .exists()
-      .containsText('t:projectID:()')
+      .containsText(t('projectID'))
       .containsText(this.file1.project.get('id'));
 
     assert
       .dom('[data-test-fileCompareHeader-projectOverview-settingsBtn]')
       .exists()
-      .containsText('t:settings:()');
+      .containsText(t('settings'));
 
     assert
       .dom('[data-test-fileCompareHeader-projectOverview-settingsBtn-icon]')

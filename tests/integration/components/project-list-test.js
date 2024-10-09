@@ -3,7 +3,7 @@ import { isEmpty } from '@ember/utils';
 import { fillIn, findAll, render, click, waitFor } from '@ember/test-helpers';
 import { hbs } from 'ember-cli-htmlbars';
 import { setupMirage } from 'ember-cli-mirage/test-support';
-import { setupIntl } from 'ember-intl/test-support';
+import { setupIntl, t } from 'ember-intl/test-support';
 
 import { clickTrigger } from 'ember-power-select/test-support/helpers';
 import { selectChoose } from 'ember-power-select/test-support';
@@ -53,11 +53,11 @@ module('Integration | Component | project list', function (hooks) {
 
     assert
       .dom('[data-test-no-project-header]')
-      .hasTextContaining('t:uploadAnApp:()');
+      .hasTextContaining(t('uploadAnApp'));
 
     assert
       .dom('[data-test-no-project-text]')
-      .hasTextContaining('t:noProjectExists:()');
+      .hasTextContaining(t('noProjectExists'));
   });
 
   test('It renders successfully with at least one project', async function (assert) {
@@ -214,12 +214,12 @@ module('Integration | Component | project list', function (hooks) {
   test.each(
     'it renders with correct sortBy selected',
     [
-      ['t:dateUpdated:() t:mostRecent:()', 0],
-      ['t:dateUpdated:() t:leastRecent:()', 1],
-      ['t:dateCreated:() t:mostRecent:()', 2],
-      ['t:dateCreated:() t:leastRecent:()', 3],
-      ['t:packageName:() (Z -> A)', 4],
-      ['t:packageName:() (A -> Z)', 5],
+      [() => `${t('dateUpdated')} ${t('mostRecent')}`, 0],
+      [() => `${t('dateUpdated')} ${t('leastRecent')}`, 1],
+      [() => `${t('dateCreated')} ${t('mostRecent')}`, 2],
+      [() => `${t('dateCreated')} ${t('leastRecent')}`, 3],
+      [() => `${t('packageName')} (Z -> A)`, 4],
+      [() => `${t('packageName')} (A -> Z)`, 5],
     ],
     async function (assert, [sortLabel, index]) {
       const projects = this.server.createList('project', 4);
@@ -253,7 +253,7 @@ module('Integration | Component | project list', function (hooks) {
         index
       );
 
-      assert.dom('[data-test-project-sort-property]').containsText(sortLabel);
+      assert.dom('[data-test-project-sort-property]').containsText(sortLabel());
     }
   );
 

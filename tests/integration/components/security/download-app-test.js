@@ -1,7 +1,6 @@
 import { render } from '@ember/test-helpers';
 import { hbs } from 'ember-cli-htmlbars';
 import { setupMirage } from 'ember-cli-mirage/test-support';
-import { setupIntl } from 'ember-intl/test-support';
 import { setupRenderingTest } from 'ember-qunit';
 import { module, test } from 'qunit';
 import { fillIn, click } from '@ember/test-helpers';
@@ -32,7 +31,6 @@ class WindowStub extends Service {
 module('Integration | Component | security/download-app', function (hooks) {
   setupRenderingTest(hooks);
   setupMirage(hooks);
-  setupIntl(hooks);
 
   hooks.beforeEach(async function () {
     this.owner.register('service:notifications', NotificationsStub);

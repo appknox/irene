@@ -3,7 +3,7 @@ import { module, test } from 'qunit';
 import { setupRenderingTest } from 'ember-qunit';
 import { click, render } from '@ember/test-helpers';
 import { hbs } from 'ember-cli-htmlbars';
-import { setupIntl } from 'ember-intl/test-support';
+import { setupIntl, t } from 'ember-intl/test-support';
 import { setupMirage } from 'ember-cli-mirage/test-support';
 import Service from '@ember/service';
 
@@ -149,7 +149,7 @@ module(
       assert
         .dom('[data-test-vaReportListItem-generatingText]')
         .exists()
-        .hasText('t:generating:()...');
+        .hasText(`${t('generating')}...`);
 
       assert.dom('[data-test-vaReportListItem-passCopyBtn]').doesNotExist();
 
@@ -187,7 +187,7 @@ module(
 
       assert.strictEqual(
         notifyService.infoMsg,
-        't:passwordCopied:()',
+        t('passwordCopied'),
         'triggers copy notification'
       );
     });
@@ -271,7 +271,7 @@ module(
 
       const notifyService = this.owner.lookup('service:notifications');
 
-      assert.strictEqual(notifyService.errorMsg, 't:downloadUrlNotFound:()');
+      assert.strictEqual(notifyService.errorMsg, t('downloadUrlNotFound'));
     });
   }
 );

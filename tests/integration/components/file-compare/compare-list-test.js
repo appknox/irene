@@ -2,7 +2,7 @@ import { module, test } from 'qunit';
 import { setupRenderingTest } from 'ember-qunit';
 import { click, findAll, render, waitFor } from '@ember/test-helpers';
 import { hbs } from 'ember-cli-htmlbars';
-import { setupIntl } from 'ember-intl/test-support';
+import { setupIntl, t } from 'ember-intl/test-support';
 import { setupMirage } from 'ember-cli-mirage/test-support';
 
 module('Integration | Component | file-compare/compare-list', function (hooks) {
@@ -77,9 +77,9 @@ module('Integration | Component | file-compare/compare-list', function (hooks) {
 
   test('it renders file overview header', async function (assert) {
     const breadcrumbItems = [
-      't:allProjects:()',
-      't:scanDetails:()',
-      't:fileCompare.fileSelection:()',
+      t('allProjects'),
+      t('scanDetails'),
+      t('fileCompare.fileSelection'),
     ];
 
     await render(
@@ -113,13 +113,13 @@ module('Integration | Component | file-compare/compare-list', function (hooks) {
         '[data-test-fileCompare-compareListHeader-compareFileSelectTextChip]'
       )
       .exists()
-      .hasText('t:fileCompare.selectAFile:()');
+      .hasText(t('fileCompare.selectAFile'));
 
     assert
       .dom('[data-test-fileCompare-compareListHeader-compareBtn]')
       .exists()
       .hasAttribute('disabled')
-      .hasText('t:compare:()');
+      .hasText(t('compare'));
   });
 
   test('it renders loading state and files', async function (assert) {
@@ -149,7 +149,7 @@ module('Integration | Component | file-compare/compare-list', function (hooks) {
     assert
       .dom('[data-test-compareList-loadingContainer]')
       .exists()
-      .hasText('t:loading:()...');
+      .hasText(`${t('loading')}...`);
 
     await waitFor('[data-test-fileCompare-compareList-fileOverview-item]', {
       timeout: 150,

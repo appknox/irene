@@ -1,7 +1,7 @@
 import { click, render } from '@ember/test-helpers';
 import dayjs from 'dayjs';
 import { hbs } from 'ember-cli-htmlbars';
-import { setupIntl } from 'ember-intl/test-support';
+import { setupIntl, t } from 'ember-intl/test-support';
 import { setupRenderingTest } from 'ember-qunit';
 import { module, test } from 'qunit';
 import { setupMirage } from 'ember-cli-mirage/test-support';
@@ -97,7 +97,7 @@ module('Integration | Component | app-monitoring/details', function (hooks) {
     assert
       .dom('[data-test-app-latest-scanned-version-desc]')
       .exists()
-      .hasText('t:appMonitoringModule.latestScannedVersion:()');
+      .hasText(t('appMonitoringModule.latestScannedVersion'));
 
     assert
       .dom('[data-test-app-latest-scanned-version]')
@@ -108,7 +108,7 @@ module('Integration | Component | app-monitoring/details', function (hooks) {
     assert
       .dom('[data-test-app-monitoring-status]')
       .exists()
-      .hasText('t:activeCapital:()');
+      .hasText(t('activeCapital'));
   });
 
   test('it renders monitored date if amApp has a lastSynced date', async function (assert) {
@@ -136,7 +136,7 @@ module('Integration | Component | app-monitoring/details', function (hooks) {
     assert
       .dom('[data-test-app-last-monitored-date-desc]')
       .exists()
-      .containsText('t:appMonitoringModule.lastMonitoredOn:()');
+      .containsText(t('appMonitoringModule.lastMonitoredOn'));
 
     assert
       .dom('[data-test-app-last-monitored-date]')
@@ -169,7 +169,7 @@ module('Integration | Component | app-monitoring/details', function (hooks) {
     assert
       .dom('[data-test-app-last-monitored-date-pending-text]')
       .exists()
-      .containsText('t:appMonitoringModule.syncInProgress:()');
+      .containsText(t('appMonitoringModule.syncInProgress'));
   });
 
   test('it renders empty monitoring date if amApp has no last synced date and monitoring status is "INACTIVE"', async function (assert) {
@@ -195,10 +195,12 @@ module('Integration | Component | app-monitoring/details', function (hooks) {
   test.each(
     'it renders the right monitoring status based on the monitoring state',
     [
-      [true, 't:activeCapital:()'],
-      [false, 't:inactiveCapital:()'],
+      [true, 'activeCapital'],
+      [false, 'inactiveCapital'],
     ],
-    async function (assert, [status, statusText]) {
+    async function (assert, [status, statusTextKey]) {
+      const statusText = t(statusTextKey);
+
       const amApp = this.server.create('am-app', {
         id: 1,
         project: this.project.id,
@@ -222,10 +224,12 @@ module('Integration | Component | app-monitoring/details', function (hooks) {
   test.each(
     'it renders the history and details tabs',
     [
-      ['monitoring-details', 't:appMonitoringModule.monitoringDetails:()'],
-      ['monitoring-history', 't:appMonitoringModule.monitoringHistory:()'],
+      ['monitoring-details', 'appMonitoringModule.monitoringDetails'],
+      ['monitoring-history', 'appMonitoringModule.monitoringHistory'],
     ],
-    async function (assert, [tabId, tabLabel]) {
+    async function (assert, [tabId, tabLabelKey]) {
+      const tabLabel = t(tabLabelKey);
+
       const amApp = this.server.create('am-app', {
         id: 1,
         project: this.project.id,
@@ -288,7 +292,7 @@ module('Integration | Component | app-monitoring/details', function (hooks) {
       assert
         .dom('[data-test-app-monitoring-status-toggle-text]')
         .exists()
-        .containsText('t:appMonitoringModule.monitoringStatus:()');
+        .containsText(t('appMonitoringModule.monitoringStatus'));
 
       const monitoringStatusToggle =
         '[data-test-app-monitoring-toggle] [data-test-toggle-input]';

@@ -9,7 +9,7 @@ import {
 
 import { hbs } from 'ember-cli-htmlbars';
 import { setupMirage } from 'ember-cli-mirage/test-support';
-import { setupIntl } from 'ember-intl/test-support';
+import { setupIntl, t } from 'ember-intl/test-support';
 import { setupRenderingTest } from 'ember-qunit';
 import { module, test } from 'qunit';
 import { capitalize } from '@ember/string';
@@ -94,10 +94,10 @@ module(
       ).querySelectorAll('th');
 
       // assert header row
-      assert.dom(headerRow[0]).hasText('t:sbomModule.componentName:()');
-      assert.dom(headerRow[1]).hasText('t:sbomModule.componentType:()');
-      assert.dom(headerRow[2]).hasText('t:version:()');
-      assert.dom(headerRow[3]).hasText('t:status:()');
+      assert.dom(headerRow[0]).hasText(t('sbomModule.componentName'));
+      assert.dom(headerRow[1]).hasText(t('sbomModule.componentType'));
+      assert.dom(headerRow[2]).hasText(t('version'));
+      assert.dom(headerRow[3]).hasText(t('status'));
 
       const contentRows = findAll('[data-test-sbomComponent-row]');
 
@@ -124,26 +124,26 @@ module(
       if (sbomComponent.isOutdated) {
         assert
           .dom(
-            '[data-test-sbomComponent-status="t:chipStatus.outdated:()"]',
+            `[data-test-sbomComponent-status="${t('chipStatus.outdated')}"]`,
             firstRow[3]
           )
-          .hasText('t:chipStatus.outdated:()');
+          .hasText(t('chipStatus.outdated'));
       }
 
       if (sbomComponent.isVulnerable) {
         assert
           .dom(
-            '[data-test-sbomComponent-status="t:chipStatus.vulnerable:()"]',
+            `[data-test-sbomComponent-status="${t('chipStatus.vulnerable')}"]`,
             firstRow[3]
           )
-          .hasText('t:chipStatus.vulnerable:()');
+          .hasText(t('chipStatus.vulnerable'));
       } else {
         assert
           .dom(
-            '[data-test-sbomComponent-status="t:chipStatus.secure:()"]',
+            `[data-test-sbomComponent-status="${t('chipStatus.secure')}"]`,
             firstRow[3]
           )
-          .hasText('t:chipStatus.secure:()');
+          .hasText(t('chipStatus.secure'));
       }
     });
 
@@ -216,7 +216,7 @@ module(
 
       assert
         .dom(
-          '[data-test-sbomComponent-status="t:chipStatus.outdated:()"]',
+          `[data-test-sbomComponent-status="${t('chipStatus.outdated')}"]`,
           firstRow[3]
         )
         .doesNotExist();
@@ -232,10 +232,10 @@ module(
 
       assert
         .dom(
-          '[data-test-sbomComponent-status="t:chipStatus.outdated:()"]',
+          `[data-test-sbomComponent-status="${t('chipStatus.outdated')}"]`,
           secondRow[3]
         )
-        .hasText('t:chipStatus.outdated:()');
+        .hasText(t('chipStatus.outdated'));
     });
 
     test('it renders sbom scan component list loading & empty state', async function (assert) {
@@ -265,7 +265,7 @@ module(
       assert.dom('[data-test-sbom-loadingSvg]').exists();
 
       assert.dom('[data-test-sbom-loader]').exists();
-      assert.dom('[data-test-sbom-loadingText]').hasText('t:loading:()...');
+      assert.dom('[data-test-sbom-loadingText]').hasText(`${t('loading')}...`);
 
       await waitFor('[data-test-sbomComponent-emptyTextTitle]', {
         timeout: 500,
@@ -273,11 +273,11 @@ module(
 
       assert
         .dom('[data-test-sbomComponent-emptyTextTitle]')
-        .hasText('t:sbomModule.componentListEmptyText.title:()');
+        .hasText(t('sbomModule.componentListEmptyText.title'));
 
       assert
         .dom('[data-test-sbomComponent-emptyTextDescription]')
-        .hasText('t:sbomModule.componentListEmptyText.description:()');
+        .hasText(t('sbomModule.componentListEmptyText.description'));
 
       assert.dom('[data-test-sbomComponent-emptySvg]').exists();
     });

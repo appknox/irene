@@ -1,5 +1,5 @@
 import { hbs } from 'ember-cli-htmlbars';
-import { setupIntl } from 'ember-intl/test-support';
+import { setupIntl, t } from 'ember-intl/test-support';
 import { setupMirage } from 'ember-cli-mirage/test-support';
 import { setupRenderingTest } from 'ember-qunit';
 import { module, test } from 'qunit';
@@ -96,10 +96,12 @@ module(
     test.each(
       'it renders amApp details loading and empty state',
       [
-        [true, 't:appMonitoringMessages.monitoringHistoryEmpty.body:()'],
-        [false, 't:appMonitoringMessages.monitoringDetailsEmpty.body:()'],
+        [true, 'appMonitoringMessages.monitoringHistoryEmpty.body'],
+        [false, 'appMonitoringMessages.monitoringDetailsEmpty.body'],
       ],
-      async function (assert, [isHistoryTable, emptyMessage]) {
+      async function (assert, [isHistoryTable, emptyMessageKey]) {
+        const emptyMessage = t(emptyMessageKey);
+
         this.isHistoryTable = isHistoryTable;
 
         this.server.get(
@@ -119,7 +121,7 @@ module(
         assert
           .dom('[data-test-amVersionTable-loading]')
           .exists()
-          .hasText('t:loading:()...');
+          .hasText(`${t('loading')}...`);
 
         await waitFor('[data-test-amVersionTable-empty]', { timeout: 500 });
 
@@ -149,7 +151,7 @@ module(
       assert
         .dom('[data-test-amVersionTable-pendingStateLoader]')
         .exists()
-        .hasText('t:appMonitoringMessages.pendingStateLoadingText:()');
+        .hasText(t('appMonitoringMessages.pendingStateLoadingText'));
     });
 
     test.each(
@@ -185,11 +187,11 @@ module(
         assert.strictEqual(versionTableHeaders.length, isHistoryTable ? 5 : 4);
 
         const tableHeaderTitles = [
-          isHistoryTable ? 't:appMonitoringModule.foundOn:()' : null,
-          't:appMonitoringModule.storeVersion:()',
-          't:appMonitoringModule.appStatus:()',
-          't:appMonitoringModule.locatedIn:()',
-          't:action:()',
+          isHistoryTable ? t('appMonitoringModule.foundOn') : null,
+          t('appMonitoringModule.storeVersion'),
+          t('appMonitoringModule.appStatus'),
+          t('appMonitoringModule.locatedIn'),
+          t('action'),
         ].filter(Boolean);
 
         tableHeaderTitles.forEach((title, idx) => {
@@ -208,7 +210,7 @@ module(
         assert
           .dom('[data-test-amVersionTable-actionColumnHeader-tooltipContent]')
           .exists()
-          .containsText('t:appMonitoringModule.actionsInfo:()');
+          .containsText(t('appMonitoringModule.actionsInfo'));
 
         // Rows check
         const amAppRecordRowElements = findAll(
@@ -268,14 +270,14 @@ module(
           assert
             .dom('[data-test-amVersionTable-noActionRequired]', firstRow)
             .exists()
-            .containsText('t:noActionRequired:()');
+            .containsText(t('noActionRequired'));
         }
         // Show button if unscanned
         else {
           assert
             .dom('[data-test-amVersionTable-initiateUploadBtn]', firstRow)
             .exists()
-            .containsText('t:appMonitoringModule.initiateUpload:()');
+            .containsText(t('appMonitoringModule.initiateUpload'));
         }
 
         // Check for app scan status
@@ -303,7 +305,7 @@ module(
           assert
             .dom(notScannedStatusSelector, firstRow)
             .exists()
-            .containsText('t:notScanned:()');
+            .containsText(t('notScanned'));
 
           assert.dom(transitionArrowSelector, firstRow).doesNotExist();
           assert.dom(scannedStatusSelector, firstRow).doesNotExist();
@@ -314,14 +316,14 @@ module(
           assert
             .dom(notScannedStatusSelector, firstRow)
             .exists()
-            .containsText('t:notScanned:()');
+            .containsText(t('notScanned'));
 
           assert.dom(transitionArrowSelector, firstRow).exists();
 
           assert
             .dom(fileIDSelector, firstRow)
             .exists()
-            .containsText('t:fileID:()')
+            .containsText(t('fileID'))
             .containsText(firstRowVersionLatestFile?.id);
         }
 
@@ -333,13 +335,13 @@ module(
           assert
             .dom(fileIDSelector, firstRow)
             .exists()
-            .containsText('t:fileID:()')
+            .containsText(t('fileID'))
             .containsText(firstRowVersionLatestFile?.id);
 
           assert
             .dom(scannedStatusSelector, firstRow)
             .exists()
-            .containsText('t:scanned:()');
+            .containsText(t('scanned'));
         }
       }
     );

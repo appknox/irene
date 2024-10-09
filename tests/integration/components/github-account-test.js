@@ -3,7 +3,7 @@ import { setupRenderingTest } from 'ember-qunit';
 import { render, click } from '@ember/test-helpers';
 import { hbs } from 'ember-cli-htmlbars';
 import { setupMirage } from 'ember-cli-mirage/test-support';
-import { setupIntl } from 'ember-intl/test-support';
+import { setupIntl, t } from 'ember-intl/test-support';
 import { Response } from 'miragejs';
 
 import Service from '@ember/service';
@@ -45,16 +45,16 @@ module('Integration | Component | github-account', function (hooks) {
 
     assert
       .dom('[data-test-githubAccount-title]')
-      .hasText('t:githubIntegration:()');
+      .hasText(t('githubIntegration'));
 
     assert
       .dom('[data-test-githubAccount-desc]')
-      .hasText('t:githubIntegrationDesc:()');
+      .hasText(t('githubIntegrationDesc'));
 
     assert
       .dom('[data-test-githubAccount-integrateBtn]')
       .isNotDisabled()
-      .hasText('t:integrateGithub:()');
+      .hasText(t('integrateGithub'));
 
     assert.dom('[data-test-githubAccount-logo]').doesNotExist();
     assert.dom('[data-test-githubAccount-host]').doesNotExist();
@@ -67,16 +67,16 @@ module('Integration | Component | github-account', function (hooks) {
 
     assert
       .dom('[data-test-githubAccount-title]')
-      .hasText('t:githubIntegration:()');
+      .hasText(t('githubIntegration'));
 
     assert
       .dom('[data-test-githubAccount-desc]')
-      .hasText('t:integrationFailed:()');
+      .hasText(t('integrationFailed'));
 
     assert
       .dom('[data-test-githubAccount-integrateBtn]')
       .isNotDisabled()
-      .hasText('t:reconnect:()');
+      .hasText(t('reconnect'));
 
     assert.dom('[data-test-githubAccount-logo]').doesNotExist();
     assert.dom('[data-test-githubAccount-host]').doesNotExist();
@@ -98,7 +98,7 @@ module('Integration | Component | github-account', function (hooks) {
 
     assert
       .dom('[data-test-githubAccount-title]')
-      .hasText('t:githubIntegration:()');
+      .hasText(t('githubIntegration'));
 
     assert.dom('[data-test-githubAccount-logo]').exists();
 
@@ -111,7 +111,7 @@ module('Integration | Component | github-account', function (hooks) {
     assert
       .dom('[data-test-githubAccount-disconnectBtn]')
       .isNotDisabled()
-      .hasText('t:disconnect:()');
+      .hasText(t('disconnect'));
 
     assert.dom('[data-test-githubAccount-desc]').doesNotExist();
     assert.dom('[data-test-githubAccount-integrateBtn]').doesNotExist();
@@ -138,30 +138,30 @@ module('Integration | Component | github-account', function (hooks) {
 
       assert
         .dom('[data-test-githubAccount-title]')
-        .hasText('t:githubIntegration:()');
+        .hasText(t('githubIntegration'));
 
       assert
         .dom('[data-test-githubAccount-disconnectBtn]')
         .isNotDisabled()
-        .hasText('t:disconnect:()');
+        .hasText(t('disconnect'));
 
       await click('[data-test-githubAccount-disconnectBtn]');
 
-      assert.dom('[data-test-ak-modal-header]').hasText('t:confirm:()');
+      assert.dom('[data-test-ak-modal-header]').hasText(t('confirm'));
 
       assert
         .dom('[data-test-confirmbox-description]')
-        .hasText('t:confirmBox.revokeGithub:()');
+        .hasText(t('confirmBox.revokeGithub'));
 
       assert
         .dom('[data-test-confirmbox-confirmBtn]')
         .isNotDisabled()
-        .hasText('t:disconnect:()');
+        .hasText(t('disconnect'));
 
       assert
         .dom('[data-test-confirmbox-cancelBtn]')
         .isNotDisabled()
-        .hasText('t:cancel:()');
+        .hasText(t('cancel'));
 
       await click('[data-test-confirmbox-confirmBtn]');
 
@@ -178,7 +178,7 @@ module('Integration | Component | github-account', function (hooks) {
         assert.dom('[data-test-githubAccount-desc]').doesNotExist();
         assert.dom('[data-test-githubAccount-integrateBtn]').doesNotExist();
       } else {
-        assert.strictEqual(notify.successMsg, 't:githubWillBeRevoked:()');
+        assert.strictEqual(notify.successMsg, t('githubWillBeRevoked'));
 
         assert.dom('[data-test-ak-modal-header]').doesNotExist();
         assert.dom('[data-test-confirmbox-description]').doesNotExist();
@@ -187,12 +187,12 @@ module('Integration | Component | github-account', function (hooks) {
 
         assert
           .dom('[data-test-githubAccount-desc]')
-          .hasText('t:githubIntegrationDesc:()');
+          .hasText(t('githubIntegrationDesc'));
 
         assert
           .dom('[data-test-githubAccount-integrateBtn]')
           .isNotDisabled()
-          .hasText('t:integrateGithub:()');
+          .hasText(t('integrateGithub'));
       }
     }
   );
@@ -213,7 +213,7 @@ module('Integration | Component | github-account', function (hooks) {
       assert
         .dom('[data-test-githubAccount-integrateBtn]')
         .isNotDisabled()
-        .hasText('t:integrateGithub:()');
+        .hasText(t('integrateGithub'));
 
       assert.notStrictEqual(window.location.hash, data.url);
 
@@ -222,7 +222,7 @@ module('Integration | Component | github-account', function (hooks) {
       const notify = this.owner.lookup('service:notifications');
 
       if (fail) {
-        assert.strictEqual(notify.errorMsg, 't:githubErrorIntegration:()');
+        assert.strictEqual(notify.errorMsg, t('githubErrorIntegration'));
         assert.notStrictEqual(window.location.hash, data.url);
       } else {
         assert.strictEqual(window.location.hash, data.url);

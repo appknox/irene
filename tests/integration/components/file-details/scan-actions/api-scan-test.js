@@ -1,7 +1,7 @@
 import { render } from '@ember/test-helpers';
 import { hbs } from 'ember-cli-htmlbars';
 import { setupMirage } from 'ember-cli-mirage/test-support';
-import { setupIntl } from 'ember-intl/test-support';
+import { setupIntl, t } from 'ember-intl/test-support';
 import { setupRenderingTest } from 'ember-qunit';
 import { module, test } from 'qunit';
 
@@ -67,11 +67,11 @@ module(
 
       assert
         .dom('[data-test-fileDetailScanActions-apiScanTitle]')
-        .hasText('t:apiScan:()');
+        .hasText(t('apiScan'));
 
       assert
         .dom('[data-test-fileDetailScanActions-apiScanNotStartedStatus]')
-        .hasText('t:notStarted:()');
+        .hasText(t('notStarted'));
     });
 
     test.each(
@@ -107,15 +107,15 @@ module(
         if (this.file.isRunningApiScan) {
           assert
             .dom('[data-test-fileDetailScanActions-apiScanInProgressStatus]')
-            .hasText(`t:scanning:()... ${this.file.apiScanProgress}%`);
+            .hasText(`${t('scanning')}... ${this.file.apiScanProgress}%`);
         } else if (this.file.isApiDone) {
           assert
             .dom('[data-test-fileDetailScanActions-apiScanCompletedStatus]')
-            .hasText('t:completed:()');
+            .hasText(t('completed'));
         } else {
           assert
             .dom('[data-test-fileDetailScanActions-apiScanNotStartedStatus]')
-            .hasText('t:notStarted:()');
+            .hasText(t('notStarted'));
         }
       }
     );

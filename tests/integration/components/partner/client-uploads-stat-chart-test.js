@@ -2,7 +2,7 @@ import { click, render } from '@ember/test-helpers';
 import dayjs from 'dayjs';
 import { hbs } from 'ember-cli-htmlbars';
 import { setupMirage } from 'ember-cli-mirage/test-support';
-import { setupIntl } from 'ember-intl/test-support';
+import { setupIntl, t } from 'ember-intl/test-support';
 import { setupRenderingTest } from 'ember-qunit';
 import styles from 'irene/components/partner/client-uploads-stat-chart/index.scss';
 import { module, test } from 'qunit';
@@ -36,7 +36,7 @@ module(
 
       assert
         .dom(`[data-test-chart='title']`)
-        .hasText(`All t:uploadStatistics:()`);
+        .hasText(`All ${t('uploadStatistics')}`);
     });
 
     test('it should have date picker with default range selected', async function (assert) {
