@@ -42,6 +42,11 @@ export enum AkSvgComponentInvocationByNames {
   DastAutomationUpselling,
   NoApiUrlFilter,
   ToggleAutomatedDast,
+  AppknoxBgImg,
+  StoreknoxBgImg,
+  ConfigurationBgImg,
+  VpIndicator,
+  SmIndicator,
 }
 
 export enum AkSvgComponentInvocationByPaths {

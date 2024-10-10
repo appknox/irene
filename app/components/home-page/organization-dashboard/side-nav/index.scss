@@ -22,18 +22,13 @@
       width: 75%;
     }
 
-    .scroll-container {
-      display: flex;
-      flex: 1;
-    }
-
     .side-menu-list {
       margin: auto;
     }
   }
 
   .app-logo {
-    margin: 3em auto;
+    margin: 3em auto 1em;
     max-width: 56%;
     max-height: 9em;
 
@@ -64,6 +59,10 @@
     flex-direction: column;
     box-sizing: border-box;
     overflow-x: hidden;
+
+    &.no-switcher {
+      padding-top: 3em;
+    }
   }
 
   .scroll-container {
@@ -191,4 +190,46 @@
       cursor: default;
     }
   }
+
+  .switcher {
+    padding: 1em;
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+
+    &.collapsed {
+      justify-content: center;
+    }
+  }
 }
+
+.switcher-popover-container {
+  margin-left: 0.8em; // offset for arrow
+  border: var(--organization-dashboard-side-nav-border);
+  box-shadow: var(--organization-dashboard-side-nav-box-shadow);
+  min-width: 200px;
+  background-color: var(--organization-dashboard-side-nav-bg-light);
+
+  .sm-modal-item {
+    width: 100%;
+    margin: 0.3em 0;
+    justify-content: flex-start;
+
+    &:hover {
+      background-color: var(--organization-dashboard-side-nav-modal-item-hover-background);
+    }
+  }
+
+  .modal-title-text {
+    text-transform: uppercase;
+    font-size: 0.857rem;
+    background-color: var(--organization-dashboard-side-nav-modal-title-background);
+    padding: 1em;
+  }
+}
+
+.switcher-modal-arrow {
+  &::before {
+    background-color: var(--organization-dashboard-side-nav-modal-title-background);
+  }
+}  

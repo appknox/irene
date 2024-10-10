@@ -1,18 +1,23 @@
 import { action } from '@ember/object';
 import Component from '@glimmer/component';
 import { tracked } from '@glimmer/tracking';
+import { inject as service } from '@ember/service';
 
 import UserModel from 'irene/models/user';
+import FreshdeskService from 'irene/services/freshdesk';
+import triggerAnalytics from 'irene/utils/trigger-analytics';
 
 export interface HomePageSecurityDashboardNavSignature {
   Args: {
-    logoutAction: () => void;
     user: UserModel;
   };
 }
 
 export default class HomePageSecurityDashboardNavComponent extends Component<HomePageSecurityDashboardNavSignature> {
   @tracked profileAnchorRef: HTMLElement | null = null;
+
+  @service declare freshdesk: FreshdeskService;
+  @service declare session: any;
 
   get profileMenuItems() {
     return [
@@ -28,7 +33,7 @@ export default class HomePageSecurityDashboardNavComponent extends Component<Hom
         label: 'Logout',
         iconName: 'logout',
         color: 'primary',
-        onClick: this.args.logoutAction,
+        onClick: this.invalidateSession,
         isLast: true,
       },
     ];
@@ -56,6 +61,12 @@ export default class HomePageSecurityDashboardNavComponent extends Component<Hom
         currentWhen: 'authenticated.security.purgeanalysis',
       },
     ];
+  }
+
+  @action invalidateSession() {
+    this.freshdesk.logUserOutOfSupportWidget();
+    triggerAnalytics('logout', {} as CsbAnalyticsData);
+    this.session.invalidate();
   }
 
   @action
