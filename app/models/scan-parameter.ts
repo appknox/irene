@@ -19,10 +19,10 @@ export default class ScanParameterModel extends Model {
   @attr('date')
   declare updatedOn: Date;
 
-  @belongsTo('user')
+  @belongsTo('user', { async: true, inverse: null })
   declare lastUpdatedBy: AsyncBelongsTo<UserModel> | null;
 
-  @belongsTo('scan-parameter-group', { inverse: 'scanParameters' })
+  @belongsTo('scan-parameter-group', { inverse: 'scanParameters', async: true })
   declare scanParameterGroup: AsyncBelongsTo<ScanParameterGroupModel>;
 }
 

@@ -59,7 +59,7 @@ export default class ProjectSettingsGeneralSettingsCollaboratorsTableComponent e
 
   get projectCollaborators() {
     return (
-      this.projectCollaboratorsResponse?.toArray().sortBy('created:desc') || []
+      this.projectCollaboratorsResponse?.slice().sortBy('created:desc') || []
     );
   }
 
