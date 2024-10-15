@@ -93,6 +93,30 @@ export const API_ROUTES = {
     route: '/api/service_accounts/*',
     alias: 'serviceAccount',
   },
+  teamsList: {
+    route: '/api/organizations/*/teams*',
+    alias: 'teamsList',
+  },
+  organizationTeams: {
+    route: '/api/organizations/*/teams/*',
+    alias: 'organizationTeams',
+  },
+  teamMembers: {
+    route: '/api/organizations/*/teams/*/members/*',
+    alias: 'teamMembers',
+  },
+  teamMembersList: {
+    route: '/api/organizations/*/teams/*/members*',
+    alias: 'teamMembersList',
+  },
+  teamProject: {
+    route: '/api/organizations/*/teams/*/projects/*',
+    alias: 'teamProject',
+  },
+  organization: {
+    route: '/api/organizations/*',
+    alias: 'organization',
+  },
   editUserInfo: {
     route: '/api/organizations/*/users/*',
     alias: 'editUser',
@@ -113,12 +137,16 @@ export const API_ROUTES = {
     route: '/api/organizations/*/teams?include_user=*',
     alias: 'teamIncludesUser',
   },
-  teamMembers: {
-    route: '/api/organizations/*/teams/*/members/*',
-    alias: 'teamMembers',
-  },
   inviteUser: {
     route: '/api/organizations/*/invitations',
     alias: 'inviteUser',
+  },
+  usersList: {
+    route: '/api/organizations/*/users*',
+    alias: 'usersList',
+  },
+  inviteTeam: {
+    route: '/api/organizations/*/teams/*/invitations*',
+    alias: 'inviteTeam',
   },
 } as const;
