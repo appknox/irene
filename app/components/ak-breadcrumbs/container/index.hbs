@@ -1,9 +1,10 @@
 <AkStack
-  ...attributes
   id={{this.id}}
   @alignItems='center'
   @tag='ul'
-  {{breadcrumbs-container id=this.id}}
+  {{did-insert this.registerContainer}}
+  data-test-ak-breadcrumbs-container
+  ...attributes
 >
   {{yield}}
 </AkStack>

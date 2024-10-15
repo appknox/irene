@@ -19,6 +19,7 @@ export interface FileDetailsSummarySignature {
 
 interface FileMoreMenuItem {
   group?: string;
+  query?: Record<string, unknown>;
   label: string;
   iconName: string;
   route: string;
@@ -59,6 +60,7 @@ export default class FileDetailsSummaryComponent extends Component<FileDetailsSu
         iconName: 'settings',
         route: 'authenticated.dashboard.project.settings',
         routeModel: this.args.file.project.get('id'),
+        query: { file_id: this.args.file.id, referrer: 'file_details' },
         hideDivider: true,
       },
     ].filter(Boolean) as FileMoreMenuItem[];

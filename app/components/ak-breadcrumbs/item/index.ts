@@ -1,7 +1,9 @@
 import Component from '@glimmer/component';
-import BreadcrumbsService from 'irene/services/breadcrumbs';
 import { inject as service } from '@ember/service';
 import { guidFor } from '@ember/object/internals';
+import { action } from '@ember/object';
+
+import type BreadcrumbsService from 'irene/services/breadcrumbs';
 import styles from './index.scss';
 
 interface AkBreadcrumbsItemSignatureArgs {
@@ -14,6 +16,7 @@ interface AkBreadcrumbsItemSignatureArgs {
   model?: string;
   models?: string[];
   query?: Record<string, unknown>;
+  isAppendable?: boolean;
 }
 
 export interface AkBreadcrumbsItemSignature {
@@ -32,10 +35,26 @@ export default class AkBreadcrumbsItemComponent extends Component<AkBreadcrumbsI
     return this.args.id || `ak-breadcrumb-item-${guidFor(this)}`;
   }
 
+  get breadcrumbsContainerElement() {
+    return this.breadcrumbsService.container?.element as HTMLUListElement;
+  }
+
   get classes() {
     return {
       linkTextClass: styles['ak-breadcrumb-item-link-text'],
     };
+  }
+
+  @action initializeBreadcrumbsItem(element: HTMLLIElement) {
+    const replace = this.args.replace;
+
+    if (replace) {
+      this.breadcrumbsService.replacePreviousItem({
+        element,
+        id: this.id,
+        replace,
+      });
+    }
   }
 }
 

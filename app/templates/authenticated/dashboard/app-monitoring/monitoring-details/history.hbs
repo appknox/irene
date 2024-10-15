@@ -3,6 +3,7 @@
 <AkBreadcrumbs::Item
   @route='authenticated.dashboard.app-monitoring.monitoring-details.history'
   @linkTitle={{t 'appMonitoringModule.monitoringHistory'}}
+  @isAppendable={{true}}
 />
 
 <AppMonitoring::VersionTable @amApp={{@model}} @isHistoryTable={{true}} />

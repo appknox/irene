@@ -71,11 +71,12 @@ module('Integration | Component | ak-breadcrumbs/item', function (hooks) {
     this.replace = true;
 
     await render(hbs`
-    <AkBreadcrumbs::Container @id="breadcrumbs_container" data-test-breadcrumbs-container>
-      <AkBreadcrumbs::Item @route='' data-test-breadcrumbs-item  data-test-breadcrumbs-item-1>
+    <AkBreadcrumbs::Container @isModifiable={{true}} @id="breadcrumbs_container" data-test-breadcrumbs-container>
+      <AkBreadcrumbs::Item @isAppendable={{true}} @id="breadcrumbs-1" @route='' data-test-breadcrumbs-item  data-test-breadcrumbs-item-1>
           Breadcrumb item 1
         </AkBreadcrumbs::Item>
-        <AkBreadcrumbs::Item @route='' @replace={{this.replace}} data-test-breadcrumbs-item data-test-breadcrumbs-item-2>
+
+        <AkBreadcrumbs::Item @isAppendable={{true}} @id="breadcrumbs-2" @route='' @replace={{this.replace}} data-test-breadcrumbs-item data-test-breadcrumbs-item-2>
           Breadcrumb item 2
         </AkBreadcrumbs::Item>
       </AkBreadcrumbs::Container>
@@ -84,6 +85,7 @@ module('Integration | Component | ak-breadcrumbs/item', function (hooks) {
     assert.dom('[data-test-breadcrumbs-item-1]').doesNotExist();
 
     const breadcrumbItems = findAll('[data-test-breadcrumbs-item]');
+
     assert.strictEqual(
       breadcrumbItems.length,
       1,

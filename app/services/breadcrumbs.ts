@@ -1,6 +1,7 @@
-import Service from '@ember/service';
+import Service, { service } from '@ember/service';
 import { assert } from '@ember/debug';
 import { tracked } from '@glimmer/tracking';
+import type RouterService from '@ember/routing/router-service';
 
 export interface BreadCrumbsContainer {
   readonly element: HTMLUListElement;
@@ -14,53 +15,75 @@ export interface BreadCrumbsItem {
 }
 
 export default class BreadcrumbsService extends Service {
-  @tracked containers: BreadCrumbsContainer[] = [];
+  @service declare router: RouterService;
 
-  _containers: BreadCrumbsContainer[] = [];
+  @tracked container: BreadCrumbsContainer | null = null;
 
+  /**
+   * Registers a breadcrumb container.
+   * @param {BreadCrumbsContainer} container - The container to be registered.
+   * @throws Will throw an error if a container is already registered.
+   */
   registerContainer(container: BreadCrumbsContainer) {
     assert(
-      'A breadcrumb container with the same DOM element has already been registered before.',
-      !this._isContainerRegistered(container)
+      'A breadcrumb container is already registered. You cannot register multiple containers.',
+      this.container === null // Checks if a container already exists
     );
 
-    this._containers = [...this._containers, container];
-    this.containers = this._containers;
+    this.container = container;
   }
 
-  unregisterContainer(container: BreadCrumbsContainer) {
-    assert(
-      'No breadcrumb container was found with this DOM element.',
-      this._isContainerRegistered(container)
-    );
-
-    this._containers = this._containers.filter((registeredContainer) => {
-      return container.element !== registeredContainer.element;
-    });
-
-    this.containers = this._containers;
+  /**
+   * Unregisters a breadcrumb container.
+   */
+  unregisterContainer() {
+    this.container = null;
   }
 
-  replaceItem(item: BreadCrumbsItem) {
-    this._containers = this._containers.map((container) => {
-      const containerChildren = [
-        ...container.element.children,
-      ] as Array<HTMLElement>;
+  /**
+   * Replaces the previous child item in the breadcrumb container.
+   * @param {BreadCrumbsItem} item - The breadcrumb item to replace previous item with.
+   */
+  replacePreviousItem(item: BreadCrumbsItem) {
+    if (!this.container) {
+      return;
+    }
 
-      const itemToBeReplaced = containerChildren.find(
-        (child) => child.id === item.id
-      );
+    const container = this.container;
 
-      this._replacePreviousSibling(itemToBeReplaced, container);
+    const containerChildren = [
+      ...(container?.element.children as HTMLCollection),
+    ];
 
-      return container;
-    });
+    const itemToBeReplaced = containerChildren.find((it) => it.id === item.id);
 
-    this.containers = this._containers;
+    this._replacePreviousSibling(itemToBeReplaced, container);
+    this.container = container;
   }
 
+  /**
+   * Gets the page referrer.
+   * @template T
+   * @param {boolean} [fromParent=false] - Whether to get the referrer from the parent route.
+   * @returns {T} The page referrer.
+   */
+  getPageReferrer<T extends string>(fromParent?: boolean): T {
+    const currentRoute = this.router.currentRoute;
+
+    if (fromParent) {
+      return currentRoute?.parent?.queryParams?.['referrer'] as T;
+    }
+
+    return currentRoute?.queryParams?.['referrer'] as T;
+  }
+
+  /**
+   * Replaces the previous sibling of an element in the container.
+   * @param {Element} [itemToBeReplaced] - The element to replace with.
+   * @param {BreadCrumbsContainer} container - The container holding the elements.
+   */
   _replacePreviousSibling(
-    itemToBeReplaced: HTMLElement | undefined,
+    itemToBeReplaced: Element | undefined,
     container: BreadCrumbsContainer
   ) {
     if (!itemToBeReplaced) {
@@ -72,12 +95,6 @@ export default class BreadcrumbsService extends Service {
     if (previousSiblingElement) {
       container.element.removeChild(previousSiblingElement);
     }
-  }
-
-  _isContainerRegistered(container: BreadCrumbsContainer) {
-    return this._containers.some((registeredContainer) => {
-      return container.id === registeredContainer.id;
-    });
   }
 }
 

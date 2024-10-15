@@ -1,7 +1,10 @@
 import Component from '@glimmer/component';
 import { inject as service } from '@ember/service';
-import IntlService from 'ember-intl/services/intl';
-import ProjectModel from 'irene/models/project';
+import type IntlService from 'ember-intl/services/intl';
+
+import type ProjectModel from 'irene/models/project';
+import type BreadcrumbsService from 'irene/services/breadcrumbs';
+import type RouterService from '@ember/routing/router-service';
 
 interface ProjectSettingsHeaderSignature {
   Args: {
@@ -12,22 +15,33 @@ interface ProjectSettingsHeaderSignature {
 
 export default class ProjectSettingsHeaderComponent extends Component<ProjectSettingsHeaderSignature> {
   @service declare intl: IntlService;
+  @service declare router: RouterService;
+  @service('breadcrumbs') declare bCS: BreadcrumbsService;
 
   get project() {
     return this.args.project;
   }
 
   get breadcrumbItems() {
+    const isFromFileDetailsPage = this.bCS.getPageReferrer() === 'file_details';
+    const referringFileID = this.router.currentRoute?.queryParams['file_id'];
+
     return [
       {
         route: 'authenticated.dashboard.projects',
         linkTitle: this.intl.t('allProjects'),
       },
-      {
-        route: 'authenticated.dashboard.project.settings',
-        linkTitle: this.project?.get('packageName'),
-        model: this.project?.get('id'),
-      },
+      referringFileID && isFromFileDetailsPage
+        ? {
+            route: 'authenticated.dashboard.file',
+            linkTitle: this.intl.t('scanDetails'),
+            model: referringFileID,
+          }
+        : {
+            route: 'authenticated.dashboard.project.settings',
+            linkTitle: this.project?.get('packageName'),
+            model: this.project?.get('id'),
+          },
       this.args.isDASTScenarioPage
         ? {
             route: 'authenticated.dashboard.project.settings',
