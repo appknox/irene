@@ -67,7 +67,7 @@ export default class ProjectSettingsGeneralSettingsAddProjectTeamTableComponent 
   }
 
   get organizationTeams() {
-    return this.orgTeamRecordResponse?.toArray().sortBy('created:desc') || [];
+    return this.orgTeamRecordResponse?.slice().sortBy('created:desc') || [];
   }
 
   get hasNoOrgTeams() {
