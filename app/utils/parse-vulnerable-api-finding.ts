@@ -30,6 +30,8 @@ export interface VulnerableApiResponse {
 export interface VulnerableApiFinding {
   severity: string;
   confidence: string;
+  cvssScore: number | null;
+  cvssMetrics: string | null;
   description: string;
   url: string;
   request: VulnerableApiRequest;
@@ -64,6 +66,8 @@ function initializeVulnerableApiFinding(): VulnerableApiFinding {
     confidence: '',
     url: '',
     description: '',
+    cvssScore: null,
+    cvssMetrics: null,
   };
 }
 
@@ -279,6 +283,8 @@ function updateSection(
     cookies: currentSection.startsWith('response')
       ? 'response.cookies'
       : 'request.cookies',
+    cvss_base: 'cvssScore',
+    cvss_metrics_humanized: 'cvssMetrics',
   };
 
   return sectionMap[key] || currentSection;
@@ -321,6 +327,10 @@ function updateFindingField(
     finding.severity = value;
   } else if (key === 'confidence') {
     finding.confidence = value;
+  } else if (key === 'cvss_base') {
+    finding.cvssScore = Number(value);
+  } else if (key === 'cvss_metrics_humanized') {
+    finding.cvssMetrics = value;
   }
 }
 

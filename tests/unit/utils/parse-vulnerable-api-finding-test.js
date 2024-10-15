@@ -75,6 +75,8 @@ module('Unit | Utility | parse-vulnerable-api-finding', function (hooks) {
       url: 'p157-contacts.icloud.com:443/mm/sub',
       description:
         'A response to one of our payload requests has taken too long compared to the baseline request. This could indicate a vulnerability to time-based Regex DoS attacks',
+      cvssMetrics: null,
+      cvssScore: null,
     },
   ];
 
@@ -103,6 +105,8 @@ module('Unit | Utility | parse-vulnerable-api-finding', function (hooks) {
       confidence: '',
       url: 'https://token.safebrowsing.apple:443/api/v1/google.json',
       description: 'TRACE is enabled in the webserver configuration',
+      cvssMetrics: null,
+      cvssScore: null,
     },
   ];
 
@@ -166,6 +170,8 @@ module('Unit | Utility | parse-vulnerable-api-finding', function (hooks) {
       url: 'p157-contacts.icloud.com:443/mm/sub',
       description:
         'A response to one of our payload requests has taken too long compared to the baseline request. This could indicate a vulnerability to time-based SQL injection attacks',
+      cvssMetrics: null,
+      cvssScore: null,
     },
     {
       request: {
@@ -219,6 +225,57 @@ module('Unit | Utility | parse-vulnerable-api-finding', function (hooks) {
       confidence: 'LOW',
       url: '',
       description: '',
+      cvssMetrics: null,
+      cvssScore: null,
+    },
+  ];
+
+  const content4 =
+    'catalog.api.speechify.com:443/subscriptions/plans/default: CORS header vulnerability found.. Make sure that the header is not assigned a wildcard character.\nconfidence: HIGH\ncvss: CVSS:3.1/AV:N/AC:L/PR:L/UI:R/S:C/C:H/I:L/A:N\ncvss_base: 7.6\ncvss_metrics_humanized: \'[{"key": "Attack Vector", "value": "Network"}, {"key": "Attack Complexity", "value": "Low"}, {"key": "Privileges Required", "value": "None"}, {"key": "User Interaction", "value": "None"}, {"key": "Scope", "value": "Unchanged"}, {"key": "Confidentiality Impact", "value": "High"}, {"key": "Integrity Impact", "value": "None"}, {"key": "Availability Impact", "value": "None"}]\'\nrequest:\n  body: \'["<string>", "<string>"]\'\n  headers:\n    Accept: \'*/*\'\n    Accept-Encoding: gzip, deflate, br\n    Connection: keep-alive\n    Content-Length: \'23\'\n    Content-Type: application/json\n    Host: catalog.api.speechify.com:443\n    User-Agent: python-requests/2.32.3\n  method: PATCH\n  params: {}\n  url: https://catalog.api.speechify.com:443/subscriptions/plans/default\nresponse:\n  cookies: {}\n  headers:\n    Alt-Svc: h3=":443"; ma=2592000,h3-29=":443"; ma=2592000\n    Content-Length: \'74\'\n    Date: Fri, 20 Sep 2024 09:11:49 GMT\n    Server: Google Frontend\n    Via: 1.1 google\n    X-Cloud-Trace-Context: 17c083891d6ea81b4f7bf90d60e75c88\n    access-control-allow-origin: \'*\'\n    content-type: application/json; charset=utf-8\n  reason: Unauthorized\n  status_code: 401\n  text: \'{"message":"Missing auth token","detail":{"message":"Missing auth token"}}\'\n  url: https://catalog.api.speechify.com:443/subscriptions/plans/default\n  version: 11\nseverity: HIGH\n\n\n';
+
+  const expectedObject4 = [
+    {
+      request: {
+        body: '\'["<string>", "<string>"]\'',
+        headers: {
+          accept: "'*/*'",
+          'accept-encoding': 'gzip, deflate, br',
+          connection: 'keep-alive',
+          'content-length': "'23'",
+          'content-type': 'application/json',
+          host: 'catalog.api.speechify.com:443',
+          'user-agent': 'python-requests/2.32.3',
+        },
+        cookies: {},
+        method: 'PATCH',
+        params: {},
+        url: 'https://catalog.api.speechify.com:443/subscriptions/plans/default',
+      },
+      response: {
+        headers: {
+          'access-control-allow-origin': "'*'",
+          'alt-svc': 'h3=":443"; ma=2592000,h3-29=":443"; ma=2592000',
+          'content-length': "'74'",
+          'content-type': 'application/json; charset=utf-8',
+          date: 'Fri, 20 Sep 2024 09:11:49 GMT',
+          server: 'Google Frontend',
+          via: '1.1 google',
+          'x-cloud-trace-context': '17c083891d6ea81b4f7bf90d60e75c88',
+        },
+        cookies: {},
+        reason: 'Unauthorized',
+        status_code: 401,
+        text: '\'{"message":"Missing auth token","detail":{"message":"Missing auth token"}}\'',
+        url: 'https://catalog.api.speechify.com:443/subscriptions/plans/default',
+      },
+      severity: 'HIGH',
+      confidence: 'HIGH',
+      url: 'catalog.api.speechify.com:443/subscriptions/plans/default',
+      description:
+        'CORS header vulnerability found.. Make sure that the header is not assigned a wildcard character.',
+      cvssMetrics:
+        '\'[{"key": "Attack Vector", "value": "Network"}, {"key": "Attack Complexity", "value": "Low"}, {"key": "Privileges Required", "value": "None"}, {"key": "User Interaction", "value": "None"}, {"key": "Scope", "value": "Unchanged"}, {"key": "Confidentiality Impact", "value": "High"}, {"key": "Integrity Impact", "value": "None"}, {"key": "Availability Impact", "value": "None"}]\'',
+      cvssScore: 7.6,
     },
   ];
 
@@ -226,6 +283,7 @@ module('Unit | Utility | parse-vulnerable-api-finding', function (hooks) {
     { content: content1, expectedObject: expectedObject1 },
     { content: content2, expectedObject: expectedObject2 },
     { content: content3, expectedObject: expectedObject3 },
+    { content: content4, expectedObject: expectedObject4 },
   ];
 
   test.each(
