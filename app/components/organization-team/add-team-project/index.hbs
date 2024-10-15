@@ -57,7 +57,11 @@
     <AkTable @dense={{true}} as |t|>
       <t.head data-test-addProjectList-thead @columns={{this.columns}} />
       <t.body @rows={{pgc.currentPageResults}} as |b|>
-        <b.row data-test-addProjectList-row as |r|>
+        <b.row
+          data-test-cy='addProjectList-row'
+          data-test-addProjectList-row
+          as |r|
+        >
           <r.cell data-test-addProjectList-cell>
             {{#if r.columnValue.component}}
               {{#let (component r.columnValue.component) as |Component|}}
