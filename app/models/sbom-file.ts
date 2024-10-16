@@ -15,10 +15,10 @@ export enum SbomScanStatus {
 export default class SbomFileModel extends Model {
   @service declare intl: IntlService;
 
-  @belongsTo('file')
+  @belongsTo('file', { async: true, inverse: 'sbFile' })
   declare file: AsyncBelongsTo<FileModel>;
 
-  @belongsTo('sbom-project')
+  @belongsTo('sbom-project', { async: true, inverse: null })
   declare sbProject: AsyncBelongsTo<SbomProjectModel>;
 
   @attr('number')

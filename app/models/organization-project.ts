@@ -22,10 +22,10 @@ export default class OrganizationProjectModel extends Model {
   @attr('number')
   declare activeProfileId: number;
 
-  @belongsTo('organization')
+  @belongsTo('organization', { async: true, inverse: null })
   declare organization: AsyncBelongsTo<OrganizationModel>;
 
-  @hasMany('file', { inverse: 'project' })
+  @hasMany('file', { inverse: 'project', async: true })
   declare files: AsyncHasMany<FileModel>;
 
   @attr('string')

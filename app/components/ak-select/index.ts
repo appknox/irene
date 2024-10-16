@@ -26,7 +26,6 @@ interface AkSelectNamedArgs<O> extends PowerSelectArgs {
   renderInPlace?: boolean;
   error?: boolean;
   loadingMessage?: string;
-  selectedItemComponent?: string;
   labelTypographyVariant?: AkSelectLabelTypographyVariant;
   labelTypographyColor?: AkSelectLabelTypographyColor;
   verticalPosition?: 'above' | 'below' | 'auto';

@@ -77,11 +77,11 @@ export default class FileReportDrawerVaReportsComponent extends Component<FileRe
   }
 
   get latestReport() {
-    return this.reports?.firstObject;
+    return this.reports?.slice()?.[0];
   }
 
   get previousReport() {
-    return this.reports?.objectAt(1);
+    return this.reports?.slice()?.[1];
   }
 
   get latestReportIsGenerating() {

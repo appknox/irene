@@ -3,137 +3,194 @@ import installPendo from 'irene/utils/install-pendo';
 import installHotjar from 'irene/utils/install-hotjar';
 import customerSuccessBox from 'irene/utils/customer-success-box';
 
+/**
+ * Class to handle environment variables
+ */
 class ENVHandler {
+  /**
+   * @param {Object} envHandlerConst - The environment handler constants
+   */
   constructor(envHandlerConst) {
     this.envHandlerConst = envHandlerConst;
   }
 
+  /**
+   * Checks if runtime configuration is available
+   * @returns {boolean} True if runtime configuration is available
+   */
   isRuntimeAvailable() {
-    return !(typeof runtimeGlobalConfig == 'undefined');
+    return typeof runtimeGlobalConfig !== 'undefined';
   }
 
-  getEnv(env_key) {
-    const host_key = 'IRENE_API_HOST';
-    this.assertEnvKey(env_key);
-    if (this.isAvailableInRuntimeENV(env_key)) {
-      const runtimeValue = this.getRuntimeObject()[env_key];
-      if (env_key === host_key) {
-        if (runtimeValue === '/') {
-          return '';
-        }
+  /**
+   * Gets the value of an environment variable
+   * @param {string} envKey - The key of the environment variable
+   * @returns {string} The value of the environment variable
+   */
+  getEnv(envKey) {
+    const hostKey = 'IRENE_API_HOST';
+    this.assertEnvKey(envKey);
+
+    if (this.isAvailableInRuntimeENV(envKey)) {
+      const runtimeValue = this.getRuntimeObject()[envKey];
+
+      if (envKey === hostKey && runtimeValue === '/') {
+        return '';
       }
+
       return runtimeValue;
     }
-    if (this.isAvailableInProcessENV(env_key)) {
-      const processValue = this.envHandlerConst.processENV[env_key];
-      if (env_key === host_key) {
-        if (processValue === '/') {
-          return '';
-        }
+
+    if (this.isAvailableInProcessENV(envKey)) {
+      const processValue = this.envHandlerConst.processENV[envKey];
+
+      if (envKey === hostKey && processValue === '/') {
+        return '';
       }
+
       return processValue;
     }
-    return this.getDefault(env_key);
+
+    return this.getDefault(envKey);
   }
 
-  isRegisteredEnv(env_key) {
-    return this.envHandlerConst.possibleENVS.indexOf(env_key) > -1;
+  /**
+   * Checks if an environment variable is registered
+   * @param {string} envKey - The key of the environment variable
+   * @returns {boolean} True if the environment variable is registered
+   */
+  isRegisteredEnv(envKey) {
+    return this.envHandlerConst.possibleENVS.includes(envKey);
   }
 
-  isAvailableInENV(env_key) {
+  /**
+   * Checks if an environment variable is available in any environment
+   * @param {string} envKey - The key of the environment variable
+   * @returns {boolean} True if the environment variable is available
+   */
+  isAvailableInENV(envKey) {
     return (
-      this.isAvailableInRuntimeENV(env_key) ||
-      this.isAvailableInProcessENV(env_key)
+      this.isAvailableInRuntimeENV(envKey) ||
+      this.isAvailableInProcessENV(envKey)
     );
   }
 
+  /**
+   * Gets the runtime configuration object
+   * @returns {Object} The runtime configuration object
+   */
   getRuntimeObject() {
-    if (this.isRuntimeAvailable()) {
-      return runtimeGlobalConfig; // eslint-disable-line
+    // eslint-disable-next-line
+    return this.isRuntimeAvailable() ? runtimeGlobalConfig : {};
+  }
+
+  /**
+   * Checks if an environment variable is available in runtime environment
+   * @param {string} envKey - The key of the environment variable
+   * @returns {boolean} True if the environment variable is available in runtime
+   */
+  isAvailableInRuntimeENV(envKey) {
+    return envKey in this.getRuntimeObject();
+  }
+
+  /**
+   * Checks if an environment variable is available in process environment
+   * @param {string} envKey - The key of the environment variable
+   * @returns {boolean} True if the environment variable is available in process
+   */
+  isAvailableInProcessENV(envKey) {
+    return envKey in this.envHandlerConst.processENV;
+  }
+
+  /**
+   * Asserts that an environment variable is registered
+   * @param {string} envKey - The key of the environment variable
+   * @throws {Error} If the environment variable is not registered
+   */
+  assertEnvKey(envKey) {
+    if (!this.isRegisteredEnv(envKey)) {
+      throw new Error(`ENV: ${envKey} not registered`);
     }
-    return {};
   }
 
-  isAvailableInRuntimeENV(env_key) {
-    const runtimeObj = this.getRuntimeObject();
-    return env_key in runtimeObj;
-  }
-
-  isAvailableInProcessENV(env_key) {
-    return env_key in this.envHandlerConst.processENV;
-  }
-
-  assertEnvKey(env_key) {
-    if (!this.isRegisteredEnv(env_key)) {
-      throw new Error(`ENV: ${env_key} not registered`);
-    }
-  }
-
+  /**
+   * Checks if a value is true
+   * @param {*} value - The value to check
+   * @returns {boolean} True if the value is true
+   */
   isTrue(value) {
-    value = String(value).toLowerCase();
-    return value === 'true';
+    return String(value).toLowerCase() === 'true';
   }
 
-  getBoolean(env_key) {
-    return this.isTrue(this.getEnv(env_key));
+  /**
+   * Gets the boolean value of an environment variable
+   * @param {string} envKey - The key of the environment variable
+   * @returns {boolean} The boolean value of the environment variable
+   */
+  getBoolean(envKey) {
+    return this.isTrue(this.getEnv(envKey));
   }
 
-  getDefault(env_key) {
-    this.assertEnvKey(env_key);
-    return this.envHandlerConst.defaults[env_key];
+  /**
+   * Gets the default value of an environment variable
+   * @param {string} envKey - The key of the environment variable
+   * @returns {*} The default value of the environment variable
+   */
+  getDefault(envKey) {
+    this.assertEnvKey(envKey);
+
+    return this.envHandlerConst.defaults[envKey];
   }
 
-  getValueForPlugin(env_key) {
+  /**
+   * Gets the value for a plugin
+   * @param {string} envKey - The key of the environment variable
+   * @returns {boolean} The value for the plugin
+   */
+  getValueForPlugin(envKey) {
     const enterpriseKey = 'ENTERPRISE';
-    this.assertEnvKey(enterpriseKey);
-    this.assertEnvKey(env_key);
 
-    if (this.isAvailableInENV(env_key)) {
-      return this.getBoolean(env_key);
+    this.assertEnvKey(enterpriseKey);
+    this.assertEnvKey(envKey);
+
+    if (this.isAvailableInENV(envKey)) {
+      return this.getBoolean(envKey);
     }
 
     if (this.isAvailableInENV(enterpriseKey)) {
       return !this.getBoolean(enterpriseKey);
     }
 
-    return this.getDefault(env_key);
+    return this.getDefault(envKey);
   }
 }
 
 const handler = new ENVHandler(ENV.ENVHandlerCONST);
 
-const initialize = function (application) {
-  // inject Ajax
-  application.inject('route', 'ajax', 'service:ajax');
-  application.inject('component', 'ajax', 'service:ajax');
-
-  // Inject notify
-  application.inject('route', 'notify', 'service:notifications');
-  application.inject('component', 'notify', 'service:notifications');
-  application.inject('authenticator', 'notify', 'service:notifications');
-
-  // Inject realtime
-  application.inject('component', 'realtime', 'service:realtime');
-
-  // Inject Store
-  application.inject('component', 'store', 'service:store');
-
+/**
+ * Initializes the application
+ * @param {Object} application - The application instance
+ */
+const initialize = (application) => {
   ENV.host = handler.getEnv('IRENE_API_HOST');
   ENV.isEnterprise = handler.getBoolean('ENTERPRISE');
   ENV.showLicense = handler.getBoolean('IRENE_SHOW_LICENSE');
 
-  ENV.whitelabel = Object.assign({}, ENV.whitelabel, {
+  ENV.whitelabel = {
+    ...ENV.whitelabel,
     enabled: handler.getBoolean('WHITELABEL_ENABLED'),
-  });
+  };
+
   if (ENV.whitelabel.enabled) {
-    ENV.whitelabel = Object.assign({}, ENV.whitelabel, {
-      enabled: handler.getBoolean('WHITELABEL_ENABLED'), // adding for consistency
+    ENV.whitelabel = {
+      ...ENV.whitelabel,
       name: handler.getEnv('WHITELABEL_NAME'),
       logo: handler.getEnv('WHITELABEL_LOGO'),
       theme: handler.getEnv('WHITELABEL_THEME'),
       favicon: handler.getEnv('WHITELABEL_FAVICON'),
-    });
+    };
   }
+
   ENV.enableHotjar = handler.getValueForPlugin('IRENE_ENABLE_HOTJAR');
   ENV.enablePendo = handler.getValueForPlugin('IRENE_ENABLE_PENDO');
   ENV.enableCSB = handler.getValueForPlugin('IRENE_ENABLE_CSB');
@@ -146,14 +203,12 @@ const initialize = function (application) {
   installHotjar();
   customerSuccessBox();
 
-  // Inject ENV
+  // Register ENV
   if (ENV.environment !== 'test') {
-    // FIXME: Fix this test properly
     application.register('env:main', ENV, {
       singleton: true,
       instantiate: false,
     });
-    return application.inject('component', 'env', 'env:main');
   }
 };
 
@@ -163,4 +218,5 @@ const IreneInitializer = {
 };
 
 export { initialize };
+
 export default IreneInitializer;

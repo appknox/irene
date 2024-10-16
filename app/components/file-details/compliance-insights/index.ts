@@ -101,8 +101,7 @@ export default class FileDetailsComplianceInsightsComponent extends Component<Fi
     const owaspsIds: string[] = [];
     const owaspmobile2024s: string[] = [];
 
-    for (let item = 0; item < (this.analyses.length as number); item++) {
-      const analysis = this.analyses.objectAt(item);
+    for (const analysis of this.analyses.slice()) {
       const analysisRisk = analysis?.get('risk');
 
       const owasp2024 = await analysis?.get('owaspmobile2024');

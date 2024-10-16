@@ -19,13 +19,13 @@ export default class OrganizationNamespaceModel extends Model {
   @attr('boolean')
   declare isApproved: boolean;
 
-  @belongsTo('organization')
+  @belongsTo('organization', { async: true, inverse: null })
   declare organization: AsyncBelongsTo<OrganizationModel>;
 
-  @belongsTo('organization-user')
+  @belongsTo('organization-user', { async: true, inverse: null })
   declare requestedBy: AsyncBelongsTo<OrganizationUserModel>;
 
-  @belongsTo('organization-user')
+  @belongsTo('organization-user', { async: true, inverse: null })
   declare approvedBy: AsyncBelongsTo<OrganizationUserModel>;
 
   @attr('number')

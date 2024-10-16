@@ -31,16 +31,16 @@ export default class OrganizationModel extends Model {
   @attr('boolean')
   declare mandatoryMfa: boolean;
 
-  @hasMany('organization-member')
+  @hasMany('organization-member', { async: true, inverse: null })
   declare members: AsyncHasMany<OrganizationMemberModel>;
 
-  @hasMany('organization-namespace')
+  @hasMany('organization-namespace', { async: true, inverse: null })
   declare namespaces: AsyncHasMany<OrganizationNamespaceModel>;
 
-  @hasMany('organization-project')
+  @hasMany('organization-project', { async: true, inverse: null })
   declare projects: AsyncHasMany<OrganizationProjectModel>;
 
-  @hasMany('organization-team')
+  @hasMany('organization-team', { async: true, inverse: null })
   declare teams: AsyncHasMany<OrganizationTeamModel>;
 
   @attr()
