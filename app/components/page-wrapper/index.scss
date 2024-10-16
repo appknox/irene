@@ -1,0 +1,12 @@
+.page-wrapper-root {
+  padding: 0 1.5em 1.5em 1.5em;
+  margin: -0.5em;
+  background-color: var(--page-wrapper-background-color);
+  min-height: calc(100vh - 56px);
+
+  .page-wrapper-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    width: 100%;
+  }
+}
