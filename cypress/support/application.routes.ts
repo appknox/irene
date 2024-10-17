@@ -5,4 +5,5 @@ export const APPLICATION_ROUTES = {
   sbom: '/dashboard/sbom/apps',
   serviceAccount: '/dashboard/organization/settings/service-account',
   register: '/register',
+  organizationTeams: 'dashboard/organization/teams',
 } as const;
