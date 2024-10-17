@@ -1,10 +1,10 @@
 import Component from '@glimmer/component';
 import { inject as service } from '@ember/service';
 import { htmlSafe } from '@ember/template';
-import IntlService from 'ember-intl/services/intl';
+import type IntlService from 'ember-intl/services/intl';
 
 import ENUMS from 'irene/enums';
-import AnalysisModel from 'irene/models/analysis';
+import type AnalysisModel from 'irene/models/analysis';
 
 export interface FileCompareAnalysisDetailsSignature {
   Element: HTMLElement;
@@ -27,19 +27,6 @@ export default class FileCompareAnalysisDetailsComponent extends Component<FileC
 
   get isMarkedAsPassedOrRisky() {
     return this.isMarkedAsPassed || this.analysis?.isRisky;
-  }
-
-  get regulatoryContent() {
-    return {
-      owasp: this.analysis?.owasp.toArray(),
-      owaspmobile2024: this.analysis?.owaspmobile2024.toArray(),
-      cwe: this.analysis?.cwe.toArray(),
-      asvs: this.analysis?.asvs.toArray(),
-      mstg: this.analysis?.mstg.toArray(),
-      gdpr: this.analysis?.gdpr.toArray(),
-      pcidss: this.analysis?.pcidss.toArray(),
-      hipaa: this.analysis?.hipaa.toArray(),
-    };
   }
 
   get vulnerability() {

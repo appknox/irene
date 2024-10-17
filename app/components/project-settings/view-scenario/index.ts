@@ -56,7 +56,7 @@ export default class ProjectSettingsViewScenarioComponent extends Component<Proj
         })
       );
 
-      this.parameterList = parameterList.toArray();
+      this.parameterList = parameterList.slice();
     } catch (error) {
       this.notify.error(parseError(error));
     }

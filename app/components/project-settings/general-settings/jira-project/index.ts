@@ -89,7 +89,7 @@ export default class ProjectSettingsGeneralSettingsJiraProjectComponent extends 
   }
 
   get jiraProjects() {
-    return this.jiraProjectsResponse?.toArray() || [];
+    return this.jiraProjectsResponse?.slice() || [];
   }
 
   get hasJIRAProject() {

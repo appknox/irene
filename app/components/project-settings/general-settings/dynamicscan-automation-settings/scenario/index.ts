@@ -56,7 +56,7 @@ export default class ProjectSettingsGeneralSettingsDyanmicscanAutomationSettings
   }
 
   get scenarioList() {
-    return this.projectScenarios?.toArray() || [];
+    return this.projectScenarios?.slice() || [];
   }
 
   @action reloadProjectScenarios() {

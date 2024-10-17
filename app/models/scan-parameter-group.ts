@@ -29,13 +29,13 @@ export default class ScanParameterGroupModel extends Model {
   @attr('date')
   declare updatedOn: Date;
 
-  @belongsTo('project')
+  @belongsTo('project', { async: true, inverse: null })
   declare project: AsyncBelongsTo<ProjectModel>;
 
-  @belongsTo('user')
+  @belongsTo('user', { async: true, inverse: null })
   declare lastUpdatedBy: AsyncBelongsTo<UserModel> | null;
 
-  @hasMany('scan-parameter', { inverse: 'scanParameterGroup' })
+  @hasMany('scan-parameter', { inverse: 'scanParameterGroup', async: true })
   declare scanParameters: AsyncHasMany<ScanParameterModel>;
 }
 
