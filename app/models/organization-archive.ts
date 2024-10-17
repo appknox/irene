@@ -48,7 +48,7 @@ export default class OrganizationArchiveModel extends Model {
   @attr('date')
   declare availableUntil: Date;
 
-  @belongsTo('organization-user', { inverse: null })
+  @belongsTo('organization-user', { inverse: null, async: true })
   declare generatedBy: AsyncBelongsTo<OrganizationUserModel>;
 
   @attr('date')

@@ -198,7 +198,7 @@ module.exports = function (environment) {
     },
     rootURL: '/',
     favicon: '/images/favicon.ico',
-    locationType: 'auto',
+    locationType: 'history',
     modulePrefix: 'irene',
     environment: environment,
     enableHotjar: handler.getValueForPlugin('IRENE_ENABLE_HOTJAR'),

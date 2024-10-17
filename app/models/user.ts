@@ -32,16 +32,16 @@ export default class UserModel extends Model {
   @attr('string')
   declare lastName: string;
 
-  @hasMany('project', { inverse: 'owner' })
+  @hasMany('project', { inverse: 'owner', async: true })
   declare ownedProjects: AsyncHasMany<ProjectModel>;
 
-  @hasMany('project')
+  @hasMany('project', { async: true, inverse: null })
   declare projects: AsyncHasMany<ProjectModel>;
 
-  @hasMany('pricing')
+  @hasMany('pricing', { async: true, inverse: null })
   declare pricings: AsyncHasMany<PricingModel>;
 
-  @hasMany('submission', { inverse: 'user' })
+  @hasMany('submission', { inverse: 'user', async: true })
   declare submissions: AsyncHasMany<SubmissionModel>;
 
   @attr('string')

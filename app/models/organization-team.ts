@@ -15,7 +15,7 @@ export default class OrganizationTeamModel extends Model {
   @attr('string')
   declare name: string;
 
-  @hasMany('organization-team-member')
+  @hasMany('organization-team-member', { async: true, inverse: null })
   declare members: AsyncHasMany<OrganizationTeamMemberModel>;
 
   @attr('string')

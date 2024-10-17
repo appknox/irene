@@ -52,7 +52,7 @@ export default class ProjectListComponent extends Component {
   }
 
   get projects() {
-    return this.projectService.projectQueryResponse?.toArray() || [];
+    return this.projectService.projectQueryResponse?.slice() || [];
   }
 
   get hasProjects() {

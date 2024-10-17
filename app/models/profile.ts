@@ -117,7 +117,7 @@ export default class ProfileModel extends Model {
   @attr
   declare dsAutomatedDeviceType: number;
 
-  @hasMany('file', { inverse: 'profile' })
+  @hasMany('file', { inverse: 'profile', async: true })
   declare files: AsyncHasMany<FileModel>;
 
   @attr

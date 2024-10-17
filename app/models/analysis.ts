@@ -85,57 +85,57 @@ export default class AnalysisModel extends Model {
   declare overriddenDate: Date | null;
 
   @attr('number')
-  declare analiserVersion: string;
+  declare analiserVersion: number;
 
-  @hasMany('attachment')
+  @hasMany('attachment', { async: true, inverse: null })
   declare attachments: AsyncHasMany<AttachmentModel>;
 
-  @hasMany('owasp')
+  @hasMany('owasp', { async: true, inverse: null })
   declare owasp: AsyncHasMany<OwaspModel>;
 
-  @hasMany('owaspmobile2024')
+  @hasMany('owaspmobile2024', { async: true, inverse: null })
   declare owaspmobile2024: AsyncHasMany<OwaspMobile2024Model>;
 
-  @hasMany('owaspapi2023')
+  @hasMany('owaspapi2023', { async: true, inverse: null })
   declare owaspapi2023: AsyncHasMany<OwaspApi2023Model>;
 
-  @hasMany('cwe')
+  @hasMany('cwe', { async: true, inverse: null })
   declare cwe: AsyncHasMany<CweModel>;
 
-  @hasMany('asvs')
+  @hasMany('asvs', { async: true, inverse: null })
   declare asvs: AsyncHasMany<AsvsModel>;
 
-  @hasMany('masvs')
+  @hasMany('masvs', { async: true, inverse: null })
   declare masvs: AsyncHasMany<MasvsModel>;
 
-  @hasMany('mstg')
+  @hasMany('mstg', { async: true, inverse: null })
   declare mstg: AsyncHasMany<MstgModel>;
 
-  @hasMany('pcidss')
+  @hasMany('pcidss', { async: true, inverse: null })
   declare pcidss: AsyncHasMany<PcidssModel>;
 
-  @hasMany('pcidss4')
+  @hasMany('pcidss4', { async: true, inverse: null })
   declare pcidss4: AsyncHasMany<Pcidss4Model>;
 
-  @hasMany('hipaa')
+  @hasMany('hipaa', { async: true, inverse: null })
   declare hipaa: AsyncHasMany<HipaaModel>;
 
-  @hasMany('gdpr')
+  @hasMany('gdpr', { async: true, inverse: null })
   declare gdpr: AsyncHasMany<GdprModel>;
 
-  @hasMany('nistsp800171')
+  @hasMany('nistsp800171', { async: true, inverse: null })
   declare nistsp800171: AsyncHasMany<Nistsp800171Model>;
 
-  @hasMany('nistsp80053')
+  @hasMany('nistsp80053', { async: true, inverse: null })
   declare nistsp80053: AsyncHasMany<Nistsp80053Model>;
 
-  @hasMany('sama')
+  @hasMany('sama', { async: true, inverse: null })
   declare sama: AsyncHasMany<SamaModel>;
 
-  @belongsTo('vulnerability')
+  @belongsTo('vulnerability', { async: true, inverse: null })
   declare vulnerability: AsyncBelongsTo<VulnerabilityModel>;
 
-  @belongsTo('file', { inverse: 'analyses' })
+  @belongsTo('file', { inverse: 'analyses', async: true })
   declare file: AsyncBelongsTo<FileModel>;
 
   @attr('date')

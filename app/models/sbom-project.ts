@@ -4,10 +4,10 @@ import ProjectModel from './project';
 import SbomFileModel from './sbom-file';
 
 export default class SbomProjectModel extends Model {
-  @belongsTo('project')
+  @belongsTo('project', { async: true, inverse: null })
   declare project: AsyncBelongsTo<ProjectModel>;
 
-  @belongsTo('sbom-file')
+  @belongsTo('sbom-file', { async: true, inverse: null })
   declare latestSbFile: AsyncBelongsTo<SbomFileModel> | null;
 }
 
