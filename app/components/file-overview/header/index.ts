@@ -20,6 +20,7 @@ interface FileOverviewHeaderSignature {
 
 interface FileMoreMenuItem {
   group?: string;
+  query?: Record<string, unknown>;
   label: string;
   iconName: string;
   route: string;
@@ -81,6 +82,7 @@ export default class FileOverviewHeaderComponent extends Component<FileOverviewH
         iconName: 'settings',
         route: 'authenticated.dashboard.project.settings',
         routeModel: this.args.file?.project.get('id'),
+        query: {},
         hideDivider: true,
       },
     ].filter(Boolean) as FileMoreMenuItem[];

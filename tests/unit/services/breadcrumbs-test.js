@@ -22,73 +22,56 @@ module('Unit | Service | breadcrumbs', function (hooks) {
   });
 
   test('it registers a breadcrumb container', function (assert) {
-    let breadcrumbsContainers = this.service.containers;
+    let breadcrumbsContainer = this.service.container;
+
     assert.strictEqual(
-      breadcrumbsContainers.length,
-      0,
-      'Breadcrumbs containers is empty.'
+      breadcrumbsContainer,
+      null,
+      'Breadcrumbs container is empty.'
     );
 
     this.service.registerContainer(this.container);
 
-    breadcrumbsContainers = this.service.containers;
+    breadcrumbsContainer = this.service.container;
 
-    assert.strictEqual(
-      breadcrumbsContainers.length,
-      1,
+    assert.ok(
+      breadcrumbsContainer,
       'New container was registered successfully.'
     );
   });
 
   test('it unregisters a breadcrumb container succesfully', function (assert) {
-    // Creating a second container
-    this.secondContainerElement = document.createElement('ul');
-    this.secondContainerElement.id = 'second_breadcrumb_container';
-    this.secondContainer = {
-      element: this.secondContainerElement,
-      id: 'second_breadcrumb_container',
-    };
+    let breadcrumbsContainer = this.service.container;
 
-    let breadcrumbsContainers = this.service.containers;
     assert.strictEqual(
-      breadcrumbsContainers.length,
-      0,
-      'Breadcrumbs containers is empty.'
+      breadcrumbsContainer,
+      null,
+      'Breadcrumbs container is empty.'
     );
 
     this.service.registerContainer(this.container);
-    this.service.registerContainer(this.secondContainer);
 
-    breadcrumbsContainers = this.service.containers;
+    breadcrumbsContainer = this.service.container;
+
+    assert.ok(
+      breadcrumbsContainer,
+      'New container was registered successfully.'
+    );
+
+    this.service.unregisterContainer();
+
+    breadcrumbsContainer = this.service.container;
 
     assert.strictEqual(
-      breadcrumbsContainers.length,
-      2,
-      'Two new container were registered successfully.'
-    );
-
-    this.service.unregisterContainer(this.container);
-
-    breadcrumbsContainers = this.service.containers;
-
-    assert.strictEqual(
-      breadcrumbsContainers.length,
-      1,
-      'The first container was unregistered successfully.'
-    );
-
-    const firstContainer = breadcrumbsContainers.find(
-      (container) => container.id === this.container.id
-    );
-
-    assert.notOk(
-      firstContainer,
-      'First container no longer exists in containers list.'
+      breadcrumbsContainer,
+      null,
+      'Breadcrumbs container is empty.'
     );
   });
 
-  test('it throws an error when re-registering an existing container', function (assert) {
+  test('it throws an error when a container already exists', function (assert) {
     this.service.registerContainer(this.container);
+
     assert.throws(() => this.service.registerContainer(this.container));
   });
 
@@ -119,7 +102,7 @@ module('Unit | Service | breadcrumbs', function (hooks) {
       replace: true,
     };
 
-    this.service.replaceItem(itemToReplace);
+    this.service.replacePreviousItem(itemToReplace);
 
     const containerChildren = [...this.container.element.children];
 
