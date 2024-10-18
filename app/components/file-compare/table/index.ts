@@ -14,6 +14,7 @@ import {
   FileCompareFilterKey,
   FileComparisonItem,
 } from 'irene/utils/compare-files';
+import BreadcrumbsService from 'irene/services/breadcrumbs';
 
 export type FileCompareTableData =
   | FileComparisonItem
@@ -35,6 +36,7 @@ export default class FileCompareTableComponent extends Component<FileCompareTabl
   @service('browser/window') declare window: Window;
   @service declare intl: IntlService;
   @service declare router: RouterService;
+  @service('breadcrumbs') declare bCS: BreadcrumbsService;
 
   @tracked limit = 10;
   @tracked offset = 0;
@@ -131,7 +133,7 @@ export default class FileCompareTableComponent extends Component<FileCompareTabl
       String(comparison.vulnerability?.get('id')),
       {
         queryParams: {
-          referrer: this.router.currentRoute?.queryParams?.['referrer'],
+          referrer: this.bCS.getPageReferrer(),
         },
       }
     );

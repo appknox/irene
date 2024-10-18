@@ -1,8 +1,13 @@
 {{page-title 'Monitoring Details'}}
 
-<AkBreadcrumbs::Container @id='store-monitoring-breadcrumb' class='pl-3 pt-1'>
+<AkBreadcrumbs::Container
+  @id='store-monitoring-breadcrumb'
+  @isModifiable={{true}}
+  class='pl-3 pt-1'
+>
   <AkBreadcrumbs::Item
     @route='authenticated.dashboard.app-monitoring.index'
+    @isAppendable={{true}}
     @linkTitle={{t 'appMonitoring'}}
   />
 </AkBreadcrumbs::Container>

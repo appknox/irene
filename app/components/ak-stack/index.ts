@@ -92,5 +92,6 @@ export default class AkStackComponent extends Component<AkStackSignature> {
 declare module '@glint/environment-ember-loose/registry' {
   export default interface Registry {
     AkStack: typeof AkStackComponent;
+    'ak-stack': typeof AkStackComponent;
   }
 }

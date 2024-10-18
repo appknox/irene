@@ -15,6 +15,7 @@ import {
 
 import UnknownAnalysisStatusModel from 'irene/models/unknown-analysis-status';
 import { scrollOrganizationDashboardMainContainerTo } from 'irene/utils/scroll-to-top';
+import type BreadcrumbsService from 'irene/services/breadcrumbs';
 
 interface FileCompareSignature {
   Args: {
@@ -28,6 +29,7 @@ export default class FileCompareComponent extends Component<FileCompareSignature
   @service declare intl: IntlService;
   @service declare store: Store;
   @service declare router: RouterService;
+  @service('breadcrumbs') declare bCS: BreadcrumbsService;
 
   @tracked expandFilesOverview = false;
 
@@ -40,9 +42,7 @@ export default class FileCompareComponent extends Component<FileCompareSignature
   }
 
   get isAllUploadsBreadcrumb() {
-    return (
-      this.router.currentRoute?.queryParams?.['referrer'] === 'all_uploads'
-    );
+    return this.bCS.getPageReferrer<'all_uploads'>() === 'all_uploads';
   }
 
   get unknownAnalysisStatus() {

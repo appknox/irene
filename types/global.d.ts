@@ -1,8 +1,6 @@
 import '@glint/environment-ember-loose';
 import type { TemplateFactory } from 'ember-cli-htmlbars';
 import type { HelperLike, ComponentLike, ModifierLike } from '@glint/template';
-import type { BreadcrumbsContainerModifierArgs } from 'irene/modifiers/breadcrumbs-container';
-import type { BreadcrumbsItemModifierArgs } from 'irene/modifiers/breadcrumbs-item';
 import type EmberConcurrencyRegistry from 'ember-concurrency/template-registry';
 import type EmberPowerSelectRegistry from 'ember-power-select/template-registry';
 import type EmberBasicDropdownRegistry from 'ember-basic-dropdown/template-registry';
@@ -122,16 +120,6 @@ declare module '@glint/environment-ember-loose/registry' {
       Args: {
         Positional: [UnknownFnWithAnyArgType];
       };
-      Return: void;
-    }>;
-
-    'breadcrumbs-container': ModifierLike<{
-      Args: BreadcrumbsContainerModifierArgs;
-      Return: void;
-    }>;
-
-    'breadcrumbs-item': ModifierLike<{
-      Args: BreadcrumbsItemModifierArgs;
       Return: void;
     }>;
 

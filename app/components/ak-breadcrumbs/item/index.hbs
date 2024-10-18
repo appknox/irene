@@ -1,41 +1,71 @@
-{{#each this.breadcrumbsService.containers as |container|}}
-  {{#in-element container.element insertBefore=null}}
-    <AkList::Item
-      ...attributes
-      local-class='ak-breadcrumb-item'
-      id={{this.id}}
-      @noGutters={{true}}
-      @link={{true}}
-      @disabled={{@disabled}}
-      @route={{@route}}
-      @query={{@query}}
-      @model={{@model}}
-      @models={{@models}}
-      @linkClass={{this.classes.linkTextClass}}
-      {{breadcrumbs-item id=this.id replace=@replace}}
-      data-test-breadcrumb-item
-    >
-      <span local-class='breadcrumb-title'>
-        {{#if @linkTitle}}
-          {{@linkTitle}}
-        {{else}}
-          {{yield}}
-        {{/if}}
-      </span>
+{{#let
+  (component
+    'ak-list/item'
+    noGutters=true
+    link=true
+    disabled=@disabled
+    query=@query
+    route=@route
+    model=@model
+    models=@models
+    linkClass=this.classes.linkTextClass
+  )
+  as |ItemUI|
+}}
+  {{#let
+    (component 'ak-stack' tag='span' direction='row' alignItems='center')
+    as |Separator|
+  }}
+    {{#if (and @isAppendable this.breadcrumbsContainerElement)}}
+      {{#in-element this.breadcrumbsContainerElement insertBefore=null}}
+        <ItemUI
+          ...attributes
+          id={{this.id}}
+          local-class='ak-breadcrumb-item'
+          {{did-insert this.initializeBreadcrumbsItem}}
+          data-test-breadcrumb-item
+        >
+          <span local-class='breadcrumb-title'>
+            {{#if @linkTitle}}
+              {{@linkTitle}}
+            {{else}}
+              {{yield}}
+            {{/if}}
+          </span>
 
-      <AkStack
-        @tag='span'
-        @direction='row'
-        @alignItems='center'
-        local-class='separator'
-        data-test-breadcrumb-separator
+          <Separator local-class='separator' data-test-breadcrumb-separator>
+            {{#if (has-block 'separator')}}
+              {{yield to='separator'}}
+            {{else}}
+              {{if @separator @separator '/'}}
+            {{/if}}
+          </Separator>
+        </ItemUI>
+      {{/in-element}}
+    {{else}}
+      <ItemUI
+        ...attributes
+        id={{this.id}}
+        local-class='ak-breadcrumb-item'
+        {{did-insert this.initializeBreadcrumbsItem}}
+        data-test-breadcrumb-item
       >
-        {{#if (has-block 'separator')}}
-          {{yield to='separator'}}
-        {{else}}
-          {{if @separator @separator '/'}}
-        {{/if}}
-      </AkStack>
-    </AkList::Item>
-  {{/in-element}}
-{{/each}}
+        <span local-class='breadcrumb-title'>
+          {{#if @linkTitle}}
+            {{@linkTitle}}
+          {{else}}
+            {{yield}}
+          {{/if}}
+        </span>
+
+        <Separator local-class='separator' data-test-breadcrumb-separator>
+          {{#if (has-block 'separator')}}
+            {{yield to='separator'}}
+          {{else}}
+            {{if @separator @separator '/'}}
+          {{/if}}
+        </Separator>
+      </ItemUI>
+    {{/if}}
+  {{/let}}
+{{/let}}
