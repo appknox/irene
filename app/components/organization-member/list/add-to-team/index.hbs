@@ -6,6 +6,7 @@
 >
   <AkButton
     data-test-addToTeam-titleBtn
+    data-test-cy='add-to-team-back-btn'
     @variant='text'
     @typographyVariant='h5'
     @underline='none'
@@ -20,7 +21,7 @@
         <AkTypography @color='textPrimary' @fontWeight='medium'>
           {{@member.member.username}}
         </AkTypography>
-        <AkTypography @color='textPrimary' class="ml-1">
+        <AkTypography @color='textPrimary' class='ml-1'>
           ({{@member.member.email}})
         </AkTypography>
       </AkStack>
@@ -79,7 +80,13 @@
 
   {{else}}
     <div>
-      <AkTable @dense={{true}} class='px-3' data-test-teamList-table as |t|>
+      <AkTable
+        @dense={{true}}
+        class='px-3'
+        data-test-cy='teamList-table'
+        data-test-teamList-table
+        as |t|
+      >
         <t.head data-test-teamList-thead @columns={{this.columns}} />
         <t.body @rows={{pgc.currentPageResults}} as |b|>
           <b.row data-test-teamList-row as |r|>

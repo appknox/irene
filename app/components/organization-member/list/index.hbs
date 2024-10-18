@@ -2,7 +2,7 @@
   <div local-class='search-input'>
     <AkTextField
       data-test-user-search-input
-      @placeholder='Search user'
+      @placeholder={{t 'searchUser'}}
       @value={{@queryParams.user_query}}
       {{on 'keyup' this.searchUserForQuery}}
     >
@@ -74,11 +74,17 @@
     </AkStack>
 
   {{else}}
-    <AkTable @hoverable={{true}} data-test-org-user-table as |t|>
+    <AkTable
+      data-test-cy='org-user-table'
+      data-test-org-user-table
+      @hoverable={{true}}
+      as |t|
+    >
       <t.head data-test-org-user-thead @columns={{this.columns}} />
       <t.body @rows={{pgc.currentPageResults}} as |b|>
         <b.row
           data-test-org-user-row
+          data-test-cy='org-user-row'
           class={{unless b.rowValue.member.isActive 'user-disabled'}}
           {{style cursor='pointer'}}
           @onClick={{this.handleShowUserDetails}}
