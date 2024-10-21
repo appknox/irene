@@ -84,7 +84,7 @@ export default class FileListComponent extends Component<FileListSignature> {
   }
 
   get files() {
-    return this.filesResponse?.toArray();
+    return this.filesResponse?.slice();
   }
 
   get totalFilesCount() {
@@ -94,7 +94,7 @@ export default class FileListComponent extends Component<FileListSignature> {
   get sortedFiles() {
     const sortProperties = ['createdOn:desc'];
 
-    return this.filesResponse?.sortBy(...sortProperties).toArray();
+    return this.filesResponse?.slice().sortBy(...sortProperties);
   }
 
   get hasFiles() {

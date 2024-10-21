@@ -31,7 +31,7 @@ export default class GithubRepoModel extends Model {
   @attr()
   declare repoDetails: GithubRepoDetails;
 
-  @belongsTo('project')
+  @belongsTo('project', { async: true, inverse: null })
   declare project: AsyncBelongsTo<ProjectModel>;
 }
 
