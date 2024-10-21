@@ -1,0 +1,121 @@
+<div local-class='summary-bars-container'>
+  <AkTooltip
+    @arrow={{true}}
+    @placement='bottom'
+    @color='light'
+    {{style width=(concat this.vaResults.critical '%')}}
+  >
+    <:tooltipContent>
+      <AkStack
+        @alignItems='center'
+        @justifyContent='center'
+        @spacing='1'
+        class='p-1'
+      >
+        <span local-class='indicator critical'></span>
+
+        <AkTypography @fontWeight='medium' @variant='body2'>CRITICAL - 8</AkTypography>
+      </AkStack>
+    </:tooltipContent>
+
+    <:default>
+      <div local-class='bar critical'></div>
+    </:default>
+  </AkTooltip>
+
+  <AkTooltip
+    @arrow={{true}}
+    @placement='bottom'
+    @color='light'
+    {{style width=(concat this.vaResults.high '%')}}
+  >
+    <:tooltipContent>
+      <AkStack
+        @alignItems='center'
+        @justifyContent='center'
+        @spacing='1'
+        class='p-1'
+      >
+        <span local-class='indicator high'></span>
+
+        <AkTypography @fontWeight='medium' @variant='body2'>HIGH - 6</AkTypography>
+      </AkStack>
+    </:tooltipContent>
+
+    <:default>
+      <div local-class='bar high'></div>
+    </:default>
+  </AkTooltip>
+
+  <AkTooltip
+    @arrow={{true}}
+    @placement='bottom'
+    @color='light'
+    {{style width=(concat this.vaResults.medium '%')}}
+  >
+    <:tooltipContent>
+      <AkStack
+        @alignItems='center'
+        @justifyContent='center'
+        @spacing='1'
+        class='p-1'
+      >
+        <span local-class='indicator medium'></span>
+
+        <AkTypography @fontWeight='medium' @variant='body2'>MEDIUM - 8</AkTypography>
+      </AkStack>
+    </:tooltipContent>
+
+    <:default>
+      <div local-class='bar medium'></div>
+    </:default>
+  </AkTooltip>
+
+  <AkTooltip
+    @arrow={{true}}
+    @placement='bottom'
+    @color='light'
+    {{style width=(concat this.vaResults.low '%')}}
+  >
+    <:tooltipContent>
+      <AkStack
+        @alignItems='center'
+        @justifyContent='center'
+        @spacing='1'
+        class='p-1'
+      >
+        <span local-class='indicator low'></span>
+
+        <AkTypography @fontWeight='medium' @variant='body2'>LOW - 8</AkTypography>
+      </AkStack>
+    </:tooltipContent>
+
+    <:default>
+      <div local-class='bar low'></div>
+    </:default>
+  </AkTooltip>
+
+  <AkTooltip
+    @arrow={{true}}
+    @placement='bottom'
+    @color='light'
+    {{style width=(concat this.vaResults.passed '%')}}
+  >
+    <:tooltipContent>
+      <AkStack
+        @alignItems='center'
+        @justifyContent='center'
+        @spacing='1'
+        class='p-1'
+      >
+        <span local-class='indicator passed'></span>
+
+        <AkTypography @fontWeight='medium' @variant='body2'>PASSED - 8</AkTypography>
+      </AkStack>
+    </:tooltipContent>
+
+    <:default>
+      <div local-class='bar passed'></div>
+    </:default>
+  </AkTooltip>
+</div>

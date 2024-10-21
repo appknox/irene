@@ -49,6 +49,13 @@ export enum AkSvgComponentInvocationByNames {
   InfoIndicator,
   NoPendingItems,
   WelcomeToStoreknox,
+  InfoIndicator,
+  AoxIcon,
+  SoxIcon,
+  SoxInitiateUpload,
+  SoxUploadProcessing,
+  SoxUploadCompleted,
+  SoxInsufficientCredits,
 }
 
 export enum AkSvgComponentInvocationByPaths {

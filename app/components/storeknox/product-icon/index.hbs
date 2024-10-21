@@ -1,0 +1,51 @@
+<div>
+  <div
+    role='button'
+    local-class='product-icon product-{{@product}}'
+    {{on 'click' this.toggleProductInfo}}
+  >
+    {{yield}}
+  </div>
+
+  <AkPopover
+    @arrow={{true}}
+    @anchorRef={{this.anchorRef}}
+    @placement='bottom-start'
+    @clickOutsideToClose={{true}}
+    @closeHandler={{this.closeProductInfo}}
+    @unmountOnClose={{false}}
+  >
+    <AkStack
+      @width='full'
+      @direction='column'
+      @spacing='1'
+      local-class='product-info-tray'
+    >
+      <AkStack @width='full' @direction='column' @spacing='1' class='py-2 px-2'>
+        <AkStack @spacing='1' @alignItems='center'>
+          <AkIcon @iconName='info' @size='small' />
+
+          <AkTypography @color='neutral' @variant='body2'>INFO</AkTypography>
+        </AkStack>
+
+        <AkTypography>
+          This App is part of
+          <strong>{{get this.productTitle @product}}</strong>
+        </AkTypography>
+      </AkStack>
+
+      {{#if this.isAStore}}
+        <AkStack @width='full' local-class='store-link-container' class='px-2'>
+          <AkButton
+            @color='primary'
+            @variant='text'
+            @underline='always'
+            @typographyFontWeight='medium'
+          >
+            Check on Playstore
+          </AkButton>
+        </AkStack>
+      {{/if}}
+    </AkStack>
+  </AkPopover>
+</div>
