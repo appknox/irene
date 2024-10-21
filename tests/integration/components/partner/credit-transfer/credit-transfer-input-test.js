@@ -1,7 +1,7 @@
 /* eslint-disable qunit/no-assert-equal, qunit/require-expect */
 import { module, test } from 'qunit';
 import { setupRenderingTest } from 'ember-qunit';
-import { setupIntl } from 'ember-intl/test-support';
+import { setupIntl, t } from 'ember-intl/test-support';
 import { click, fillIn, render } from '@ember/test-helpers';
 import { hbs } from 'ember-cli-htmlbars';
 import { faker } from '@faker-js/faker';
@@ -42,8 +42,8 @@ module(
         .hasValue(`${this.transferCount}`);
       assert
         .dom(`[data-test-credit-type]`)
-        .hasText(`t:pluralScans:("itemCount":${this.transferCount})`);
-      assert.dom(`[data-test-transfer-btn]`).hasText(`t:transferCredits:()`);
+        .hasText(t('pluralScans', { itemCount: this.transferCount }));
+      assert.dom(`[data-test-transfer-btn]`).hasText(t('transferCredits'));
       assert.dom(`[data-test-transfer-btn]`).doesNotHaveAttribute(`disabled`);
     });
 
@@ -56,7 +56,7 @@ module(
       );
 
       assert.dom(`[data-test-client-title]`).hasClass(styles['empty-title']);
-      assert.dom(`[data-test-client-title]`).hasText(`t:noName:()`);
+      assert.dom(`[data-test-client-title]`).hasText(t('noName'));
     });
 
     test('it renders with input box', async function (assert) {
@@ -82,7 +82,7 @@ module(
 
       assert
         .dom(`[data-test-credit-type]`)
-        .hasText(`t:pluralScans:("itemCount":${this.transferCount})`);
+        .hasText(t('pluralScans', { itemCount: this.transferCount }));
     });
 
     test('it render transfer btn with active state', async function (assert) {
@@ -101,7 +101,7 @@ module(
       );
 
       assert.dom(`[data-test-transfer-btn]`).doesNotHaveAttribute('disabled');
-      assert.dom(`[data-test-transfer-btn]`).hasText(`t:transferCredits:()`);
+      assert.dom(`[data-test-transfer-btn]`).hasText(t('transferCredits'));
     });
 
     test('it should not render transfer btn', async function (assert) {

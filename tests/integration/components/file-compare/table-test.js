@@ -2,7 +2,7 @@ import { module, test } from 'qunit';
 import { setupRenderingTest } from 'ember-qunit';
 import { find, findAll, render, triggerEvent } from '@ember/test-helpers';
 import { hbs } from 'ember-cli-htmlbars';
-import { setupIntl } from 'ember-intl/test-support';
+import { setupIntl, t } from 'ember-intl/test-support';
 import { setupMirage } from 'ember-cli-mirage/test-support';
 import { faker } from '@faker-js/faker';
 
@@ -268,6 +268,6 @@ module('Integration | Component | file-compare/table', function (hooks) {
     assert
       .dom('[data-test-ak-tooltip-content]')
       .exists()
-      .containsText('t:fileCompare.nonExistentTestCase:()');
+      .containsText(t('fileCompare.nonExistentTestCase'));
   });
 });

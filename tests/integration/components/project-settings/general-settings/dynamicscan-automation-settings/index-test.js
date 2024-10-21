@@ -3,7 +3,7 @@ import { setupRenderingTest } from 'ember-qunit';
 import { click, render } from '@ember/test-helpers';
 import { hbs } from 'ember-cli-htmlbars';
 import { setupMirage } from 'ember-cli-mirage/test-support';
-import { setupIntl } from 'ember-intl/test-support';
+import { setupIntl, t } from 'ember-intl/test-support';
 import Service from '@ember/service';
 import { objectifyEncodedReqBody } from 'irene/tests/test-utils';
 
@@ -77,7 +77,8 @@ module(
       await render(hbs`
         <ProjectSettings::GeneralSettings::DynamicscanAutomationSettings 
           @project={{this.project}} 
-          @profileId={{this.project.activeProfileId}} 
+          @profileId={{this.project.activeProfileId}}  
+          @featureAvailable={{true}}
         />
       `);
 
@@ -86,17 +87,17 @@ module(
       assert
         .dom('[data-test-genSettings-dynScanAutoSettings-headerTitle]')
         .exists()
-        .hasText('t:dynamicScanAutomation:()');
+        .hasText(t('dynamicScanAutomation'));
 
       assert
         .dom('[data-test-genSettings-dynScanAutoSettings-headerInfoChip]')
         .exists()
-        .hasText('t:experimentalFeature:()');
+        .hasText(t('experimentalFeature'));
 
       assert
         .dom('[data-test-genSettings-dynScanAutoSettings-headerInfoDescNote]')
         .exists()
-        .hasText('t:dynScanAutoSchedNote:()');
+        .hasText(t('dynScanAutoSchedNote'));
     });
 
     test('it toggles scheduled automation', async function (assert) {
@@ -115,6 +116,7 @@ module(
         <ProjectSettings::GeneralSettings::DynamicscanAutomationSettings 
           @project={{this.project}} 
           @profileId={{this.project.activeProfileId}} 
+          @featureAvailable={{true}}
         />
       `);
 
@@ -123,7 +125,7 @@ module(
       assert
         .dom(selectors.dynamicscanModeToggleLabel)
         .exists()
-        .containsText('t:appiumScheduledAutomation:()');
+        .containsText(t('appiumScheduledAutomation'));
 
       assert.dom(selectors.dynScanAutoToggle).exists().isNotChecked();
 

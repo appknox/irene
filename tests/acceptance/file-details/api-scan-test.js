@@ -131,7 +131,7 @@ module('Acceptance | file-details/api-scan', function (hooks) {
     const breadcrumbItems = [
       t('allProjects'),
       t('scanDetails'),
-      t('apiScanResult'),
+      t('apiScanResults'),
     ];
 
     breadcrumbItems.map((item) => {
@@ -200,10 +200,6 @@ module('Acceptance | file-details/api-scan', function (hooks) {
     assert
       .dom('[data-test-fileDetails-apiScan-tabs="api-scan-tab"]')
       .hasText(t('apiScan'));
-
-    assert
-      .dom('[data-test-fileDetails-apiScan-capturedApi-desc]')
-      .hasText(t('capturedApiListDesc'));
 
     assert
       .dom('[data-test-fileDetails-apiScan-capturedApi-title]')
@@ -295,10 +291,6 @@ module('Acceptance | file-details/api-scan', function (hooks) {
     assert
       .dom('[data-test-fileDetails-apiScan-tabs="api-scan-tab"]')
       .hasText(t('apiScan'));
-
-    assert
-      .dom('[data-test-fileDetails-apiScan-capturedApi-desc]')
-      .hasText(t('capturedApiListDesc'));
 
     assert
       .dom('[data-test-fileDetails-apiScan-capturedApi-title]')
@@ -425,10 +417,6 @@ module('Acceptance | file-details/api-scan', function (hooks) {
       assert
         .dom('[data-test-fileDetails-apiScan-tabs="api-scan-tab"]')
         .hasText(t('apiScan'));
-
-      assert
-        .dom('[data-test-fileDetails-apiScan-capturedApi-desc]')
-        .hasText(t('capturedApiListDesc'));
 
       assert
         .dom('[data-test-fileDetails-apiScan-capturedApi-title]')
@@ -639,7 +627,7 @@ module('Acceptance | file-details/api-scan', function (hooks) {
 
     assert
       .dom(tabLink('api-results'))
-      .hasText(t('apiResults'))
+      .hasText(t('apiScanResults'))
       .hasClass(/active-shadow/);
 
     assert.strictEqual(

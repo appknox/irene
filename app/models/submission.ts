@@ -24,7 +24,7 @@ export const submissionStatusProgressPercentage = {
 };
 
 export default class SubmissionModel extends ModelBaseMixin {
-  @belongsTo('user', { inverse: 'submissions' })
+  @belongsTo('user', { inverse: 'submissions', async: true })
   declare user: AsyncBelongsTo<UserModel>;
 
   @attr('string')

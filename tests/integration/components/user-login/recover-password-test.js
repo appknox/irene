@@ -2,7 +2,7 @@ import { module, test } from 'qunit';
 import { setupRenderingTest } from 'ember-qunit';
 import { render, click, fillIn } from '@ember/test-helpers';
 import { hbs } from 'ember-cli-htmlbars';
-import { setupIntl } from 'ember-intl/test-support';
+import { setupIntl, t } from 'ember-intl/test-support';
 
 import Service from '@ember/service';
 import { setupMirage } from 'ember-cli-mirage/test-support';
@@ -35,7 +35,7 @@ module(
       assert
         .dom('[data-test-user-login-recover-password-header-text]')
         .exists()
-        .containsText('t:resetPasswordLabel:()');
+        .containsText(t('resetPasswordLabel'));
 
       assert.dom('[data-test-user-login-recover-password-footer]').exists();
     });
@@ -87,12 +87,12 @@ module(
       assert
         .dom('[data-test-user-login-recover-password-text-to-check]')
         .exists()
-        .containsText('t:resetPasswordMessageToCheck:()');
+        .containsText(t('resetPasswordMessageToCheck'));
 
       assert
         .dom('[data-test-user-login-recover-password-text-to-retry]')
         .exists()
-        .containsText('t:resetPasswordMessageToRetry:()');
+        .containsText(t('resetPasswordMessageToRetry'));
     });
 
     test('should hide footer after mail has been sent', async function (assert) {

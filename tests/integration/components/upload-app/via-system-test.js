@@ -1,7 +1,7 @@
 import { module, test } from 'qunit';
 import { setupRenderingTest } from 'ember-qunit';
 import { setupMirage } from 'ember-cli-mirage/test-support';
-import { setupIntl } from 'ember-intl/test-support';
+import { setupIntl, t } from 'ember-intl/test-support';
 import { render } from '@ember/test-helpers';
 import { hbs } from 'ember-cli-htmlbars';
 import { selectFiles } from 'ember-file-upload/test-support';
@@ -52,7 +52,7 @@ module('Integration | Component | upload-app/via-system', function (hooks) {
 
     assert.dom('[data-test-uploadApp-input]').exists();
 
-    assert.dom('[data-test-uploadApp-uploadBtn]').hasText('t:uploadApp:()');
+    assert.dom('[data-test-uploadApp-uploadBtn]').hasText(t('uploadApp'));
   });
 
   test.each(
@@ -77,7 +77,7 @@ module('Integration | Component | upload-app/via-system', function (hooks) {
 
       assert.dom('[data-test-uploadApp-input]').exists();
 
-      assert.dom('[data-test-uploadApp-uploadBtn]').hasText('t:uploadApp:()');
+      assert.dom('[data-test-uploadApp-uploadBtn]').hasText(t('uploadApp'));
 
       let file = new File(['Test apk file'], 'test.apk', {
         type: 'application/vnd.android.package-archive',
@@ -88,11 +88,11 @@ module('Integration | Component | upload-app/via-system', function (hooks) {
       const notify = this.owner.lookup('service:notifications');
 
       if (fail) {
-        assert.strictEqual(notify.errorMsg, 't:errorWhileUploading:()');
-        assert.dom('[data-test-uploadApp-uploadBtn]').hasText('t:uploadApp:()');
+        assert.strictEqual(notify.errorMsg, t('errorWhileUploading'));
+        assert.dom('[data-test-uploadApp-uploadBtn]').hasText(t('uploadApp'));
       } else {
-        assert.strictEqual(notify.successMsg, 't:fileUploadedSuccessfully:()');
-        assert.dom('[data-test-uploadApp-uploadBtn]').hasText('t:uploadApp:()');
+        assert.strictEqual(notify.successMsg, t('fileUploadedSuccessfully'));
+        assert.dom('[data-test-uploadApp-uploadBtn]').hasText(t('uploadApp'));
       }
     }
   );

@@ -30,7 +30,7 @@
 </AkStack>
 
 {{#if this.discoverClicked}}
-  <Storeknox::Discover::Results::Table />
+  <Storeknox::Discover::Results::Table @queryParams={{this.args.queryParams}} />
 {{else}}
   <Storeknox::Discover::Results::Empty />
 {{/if}}

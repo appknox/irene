@@ -3,11 +3,9 @@ import { module, test } from 'qunit';
 import { setupRenderingTest } from 'ember-qunit';
 import { render } from '@ember/test-helpers';
 import { hbs } from 'ember-cli-htmlbars';
-import { setupIntl } from 'ember-intl/test-support';
 
 module('Integration | Component | main-loader', function (hooks) {
   setupRenderingTest(hooks);
-  setupIntl(hooks);
 
   test('loading renders', async function (assert) {
     // Set any properties with this.set('myProperty', 'value');

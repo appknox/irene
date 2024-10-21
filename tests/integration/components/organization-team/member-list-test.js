@@ -1,6 +1,7 @@
 import { module, test } from 'qunit';
 import { setupRenderingTest } from 'ember-qunit';
 import { setupMirage } from 'ember-cli-mirage/test-support';
+
 import {
   click,
   render,
@@ -8,8 +9,10 @@ import {
   fillIn,
   triggerEvent,
 } from '@ember/test-helpers';
-import { setupIntl } from 'ember-intl/test-support';
+
+import { setupIntl, t } from 'ember-intl/test-support';
 import { hbs } from 'ember-cli-htmlbars';
+import { capitalize } from '@ember/string';
 import { Response } from 'miragejs';
 
 import Service from '@ember/service';
@@ -89,22 +92,22 @@ module(
         )
       );
 
-      assert.dom('[data-test-teamUserList-title]').hasText('t:users:()');
+      assert.dom('[data-test-teamUserList-title]').hasText(t('users'));
 
       assert
         .dom('[data-test-teamUserList-description]')
-        .hasText('t:teamUsersDesc:()');
+        .hasText(t('teamUsersDesc'));
 
       assert
         .dom('[data-test-teamUserList-addUserBtn]')
         .isNotDisabled()
-        .hasText('t:addUser:()');
+        .hasText(t('addUser'));
 
       const userHeaderRows = findAll('[data-test-teamUserList-thead] th');
 
-      assert.dom(userHeaderRows[0]).hasText('t:user:()');
-      assert.dom(userHeaderRows[1]).hasText('t:email:()');
-      assert.dom(userHeaderRows[2]).hasText('t:action:()');
+      assert.dom(userHeaderRows[0]).hasText(t('user'));
+      assert.dom(userHeaderRows[1]).hasText(t('email'));
+      assert.dom(userHeaderRows[2]).hasText(t('action'));
 
       const userContentRows = findAll('[data-test-teamUserList-row]');
 
@@ -147,7 +150,7 @@ module(
         )
       );
 
-      assert.dom('[data-test-teamUserList-title]').hasText('t:users:()');
+      assert.dom('[data-test-teamUserList-title]').hasText(t('users'));
       assert.dom('[data-test-teamUserList-searchInput]').hasNoValue();
       assert.notOk(this.query);
 
@@ -223,21 +226,21 @@ module(
           `#${userContentRow[2].id} [data-test-teamUserList-actionBtn]`
         );
 
-        assert.dom('[data-test-ak-modal-header]').hasText('t:confirm:()');
+        assert.dom('[data-test-ak-modal-header]').hasText(t('confirm'));
 
         assert
           .dom('[data-test-confirmBox-cancelBtn]')
           .isNotDisabled()
-          .hasText('t:cancel:()');
+          .hasText(t('cancel'));
 
         assert
           .dom('[data-test-confirmBox-confirmBtn]')
           .isNotDisabled()
-          .hasText('T:remove:()');
+          .hasText(capitalize(t('remove')));
 
         assert
           .dom('[data-test-form-label]')
-          .hasText('t:promptBox.removeMemberPrompt.description:()');
+          .hasText(t('promptBox.removeMemberPrompt.description'));
 
         assert.dom('[data-test-teamUserList-promptInput]').hasNoValue();
 
@@ -246,13 +249,13 @@ module(
 
         await click('[data-test-confirmBox-confirmBtn]');
 
-        assert.strictEqual(notify.errorMsg, 't:enterRightUserName:()');
+        assert.strictEqual(notify.errorMsg, t('enterRightUserName'));
 
         await fillIn('[data-test-teamUserList-promptInput]', 'wrongName');
 
         await click('[data-test-confirmBox-confirmBtn]');
 
-        assert.strictEqual(notify.errorMsg, 't:enterRightUserName:()');
+        assert.strictEqual(notify.errorMsg, t('enterRightUserName'));
 
         // correct input
 
@@ -270,11 +273,11 @@ module(
         const latestRows = findAll('[data-test-teamUserList-row]');
 
         if (fail) {
-          assert.strictEqual(notify.errorMsg, 't:pleaseTryAgain:()');
+          assert.strictEqual(notify.errorMsg, t('pleaseTryAgain'));
 
           assert.strictEqual(latestRows.length, this.organizationUsers.length);
         } else {
-          assert.strictEqual(notify.successMsg, 't:teamMemberRemoved:()');
+          assert.strictEqual(notify.successMsg, t('teamMemberRemoved'));
 
           assert.strictEqual(
             latestRows.length,

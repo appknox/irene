@@ -1,7 +1,7 @@
 import { module, test } from 'qunit';
 import { setupRenderingTest } from 'ember-qunit';
 import { setupMirage } from 'ember-cli-mirage/test-support';
-import { setupIntl } from 'ember-intl/test-support';
+import { setupIntl, t } from 'ember-intl/test-support';
 import { findAll, render } from '@ember/test-helpers';
 import { hbs } from 'ember-cli-htmlbars';
 
@@ -43,7 +43,7 @@ module(
 
       assert
         .dom('[data-test-onboarding-guide-modal]')
-        .containsText('t:onboardingGuides:()');
+        .containsText(t('onboardingGuides'));
 
       assert.dom('[data-test-onboarding-guide-category]').exists({ count: 3 });
 

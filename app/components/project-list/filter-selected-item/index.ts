@@ -25,5 +25,6 @@ export default class ProjectListFilterSelectedItemComponent extends Component<Pr
 declare module '@glint/environment-ember-loose/registry' {
   export default interface Registry {
     'ProjectList::FilterSelectedItem': typeof ProjectListFilterSelectedItemComponent;
+    'project-list/filter-selected-item': typeof ProjectListFilterSelectedItemComponent;
   }
 }

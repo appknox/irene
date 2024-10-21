@@ -2,7 +2,7 @@ import { module, test } from 'qunit';
 import { setupRenderingTest } from 'ember-qunit';
 import { setupMirage } from 'ember-cli-mirage/test-support';
 import { click, render, fillIn } from '@ember/test-helpers';
-import { setupIntl } from 'ember-intl/test-support';
+import { setupIntl, t } from 'ember-intl/test-support';
 import { hbs } from 'ember-cli-htmlbars';
 import { Response } from 'miragejs';
 
@@ -34,7 +34,7 @@ module(
         .dom('[data-test-invite-member-btn]')
         .exists()
         .isNotDisabled()
-        .hasText('t:inviteUsers:()');
+        .hasText(t('inviteUsers'));
     });
 
     test('test invite-user drawer', async function (assert) {
@@ -44,26 +44,20 @@ module(
         .dom('[data-test-invite-member-btn]')
         .exists()
         .isNotDisabled()
-        .hasText('t:inviteUsers:()');
+        .hasText(t('inviteUsers'));
 
       await click('[data-test-invite-member-btn]');
 
-      assert
-        .dom('[data-test-drawer-title]')
-        .exists()
-        .hasText('t:inviteUsers:()');
+      assert.dom('[data-test-drawer-title]').exists().hasText(t('inviteUsers'));
 
       assert.dom('[data-test-drawer-close-btn]').exists().isNotDisabled();
 
-      assert
-        .dom('[data-test-label-primary-text]')
-        .exists()
-        .hasText('t:email:()');
+      assert.dom('[data-test-label-primary-text]').exists().hasText(t('email'));
 
       assert
         .dom('[data-test-label-secondary-text]')
         .exists()
-        .hasText('t:inviteUserMultipleEmailHelperText:()');
+        .hasText(t('inviteUserMultipleEmailHelperText'));
 
       assert
         .dom('[data-test-invite-member-input]')
@@ -77,7 +71,7 @@ module(
         .dom('[data-test-send-invite-btn]')
         .exists()
         .isNotDisabled()
-        .hasText('t:invite:()');
+        .hasText(t('invite'));
 
       await click('[data-test-drawer-close-btn]');
 
@@ -111,7 +105,7 @@ module(
         .dom('[data-test-invite-member-btn]')
         .exists()
         .isNotDisabled()
-        .hasText('t:inviteUsers:()');
+        .hasText(t('inviteUsers'));
 
       await click('[data-test-invite-member-btn]');
 
@@ -131,7 +125,7 @@ module(
 
       const notify = this.owner.lookup('service:notifications');
 
-      assert.strictEqual(notify.successMsg, 't:orgMemberInvited:()');
+      assert.strictEqual(notify.successMsg, t('orgMemberInvited'));
       assert.dom('[data-test-drawer-title]').doesNotExist();
       assert.dom('[data-test-drawer-close-btn]').doesNotExist();
       assert.dom('[data-test-label-primary-text]').doesNotExist();
@@ -157,7 +151,7 @@ module(
         .dom('[data-test-invite-member-btn]')
         .exists()
         .isNotDisabled()
-        .hasText('t:inviteUsers:()');
+        .hasText(t('inviteUsers'));
 
       await click('[data-test-invite-member-btn]');
 
@@ -177,7 +171,7 @@ module(
 
       const notify = this.owner.lookup('service:notifications');
 
-      assert.strictEqual(notify.errorMsg, 't:pleaseTryAgain:()');
+      assert.strictEqual(notify.errorMsg, t('pleaseTryAgain'));
       assert.dom('[data-test-drawer-title]').exists();
       assert.dom('[data-test-drawer-close-btn]').exists();
       assert.dom('[data-test-label-primary-text]').exists();

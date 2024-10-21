@@ -2,7 +2,7 @@ import { find, render, waitFor } from '@ember/test-helpers';
 import dayjs from 'dayjs';
 import { hbs } from 'ember-cli-htmlbars';
 import { setupMirage } from 'ember-cli-mirage/test-support';
-import { setupIntl } from 'ember-intl/test-support';
+import { setupIntl, t } from 'ember-intl/test-support';
 import { setupRenderingTest } from 'ember-qunit';
 import { module, test } from 'qunit';
 import Service from '@ember/service';
@@ -103,19 +103,18 @@ module('Integration | Component | file-details/key-insights', function (hooks) {
 
       assert
         .dom('[data-test-fileDetailKeyInsights-title]')
-        .hasText('t:keyInsights:()');
+        .hasText(t('keyInsights'));
 
       const previousFile = await this.file.previousFile;
 
-      assert
-        .dom('[data-test-fileDetailKeyInsights-description]')
-        .hasText(
-          `t:keyInsightDesc.part1:() t:fileID:() - ${
-            previousFile.id
-          } t:keyInsightDesc.part2:("uploadedOn":"${dayjs(
-            previousFile.createdOn
-          ).format('DD MMM YYYY')}")`
-        );
+      assert.dom('[data-test-fileDetailKeyInsights-description]').hasText(
+        `${t('keyInsightDesc.part1')} ${t('fileID')} - ${previousFile.id} ${t(
+          'keyInsightDesc.part2',
+          {
+            uploadedOn: dayjs(previousFile.createdOn).format('DD MMM YYYY'),
+          }
+        )}`
+      );
 
       const comparison = getFileComparisonCategories(
         compareFiles(this.file, previousFile)
@@ -123,19 +122,19 @@ module('Integration | Component | file-details/key-insights', function (hooks) {
 
       const keyInsights = [
         {
-          label: 't:fileCompare.recurringIssues:()',
+          label: t('fileCompare.recurringIssues'),
           value: comparison?.recurring.length,
         },
         {
-          label: 't:fileCompare.resolvedIssues:()',
+          label: t('fileCompare.resolvedIssues'),
           value: comparison?.resolved.length,
         },
         {
-          label: 't:fileCompare.newIssues:()',
+          label: t('fileCompare.newIssues'),
           value: comparison?.newRisks.length,
         },
         unknownAnalysisStatus && {
-          label: 't:fileCompare.untestedIssues:()',
+          label: t('fileCompare.untestedIssues'),
           value: comparison?.untested.length,
         },
       ].filter(Boolean);
@@ -157,7 +156,7 @@ module('Integration | Component | file-details/key-insights', function (hooks) {
       assert
         .dom('[data-test-fileDetailKeyInsights-viewDetailsLink]')
         .hasTagName('a')
-        .hasText('t:viewDetails:()');
+        .hasText(t('viewDetails'));
     }
   );
 
@@ -182,13 +181,13 @@ module('Integration | Component | file-details/key-insights', function (hooks) {
 
     assert
       .dom('[data-test-fileDetailKeyInsights-title]')
-      .hasText('t:keyInsights:()');
+      .hasText(t('keyInsights'));
 
     assert.dom('[data-test-fileDetailKeyInsights-loader]').exists();
 
     assert
       .dom('[data-test-fileDetailKeyInsights-loadingText]')
-      .hasText('t:loading:()...');
+      .hasText(`${t('loading')}...`);
 
     await waitFor('[data-test-fileDetailKeyInsights-emptyTitle]', {
       timeout: 500,
@@ -196,11 +195,11 @@ module('Integration | Component | file-details/key-insights', function (hooks) {
 
     assert
       .dom('[data-test-fileDetailKeyInsights-emptyTitle]')
-      .hasText('t:fileCompare.noDataAvailable:()');
+      .hasText(t('fileCompare.noDataAvailable'));
 
     assert
       .dom('[data-test-fileDetailKeyInsights-emptyDescription]')
-      .hasText('t:fileCompare.uploadMoreFileDescription:()');
+      .hasText(t('fileCompare.uploadMoreFileDescription'));
 
     assert.dom('[data-test-fileDetailKeyInsights-emptySvg]').exists();
 

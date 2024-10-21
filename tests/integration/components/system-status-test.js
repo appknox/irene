@@ -3,7 +3,7 @@ import { setupRenderingTest } from 'ember-qunit';
 import { setupMirage } from 'ember-cli-mirage/test-support';
 import { render } from '@ember/test-helpers';
 import { hbs } from 'ember-cli-htmlbars';
-import { setupIntl } from 'ember-intl/test-support';
+import { setupIntl, t } from 'ember-intl/test-support';
 import { Response } from 'miragejs';
 
 import Service from '@ember/service';
@@ -30,7 +30,7 @@ module('Integration | Component | system-status', function (hooks) {
     assert
       .dom('[data-test-system-status-title]')
       .exists()
-      .containsText('t:systemStatus:()');
+      .containsText(t('systemStatus'));
 
     assert.dom('[data-test-system-status-systems]').exists({ count: 3 });
 
@@ -38,19 +38,19 @@ module('Integration | Component | system-status', function (hooks) {
       '[data-test-system-status-systems]'
     );
 
-    assert.dom(rows[0]).containsText('t:storage:()');
-    assert.dom(rows[1]).containsText('t:devicefarm:()');
-    assert.dom(rows[2]).containsText('t:api:() t:server:()');
+    assert.dom(rows[0]).containsText(t('storage'));
+    assert.dom(rows[1]).containsText(t('devicefarm'));
+    assert.dom(rows[2]).containsText(`${t('api')} ${t('server')}`);
 
     assert
       .dom('[data-test-system-status-operational]')
       .exists()
-      .containsText('t:operational:()');
+      .containsText(t('operational'));
 
     assert
       .dom('[data-test-system-status-unreachable]')
       .exists()
-      .containsText('t:unreachable:()');
+      .containsText(t('unreachable'));
   });
 
   test.each(
@@ -92,7 +92,7 @@ module('Integration | Component | system-status', function (hooks) {
       assert
         .dom('[data-test-system-status-title]')
         .exists()
-        .containsText('t:systemStatus:()');
+        .containsText(t('systemStatus'));
 
       if (fail) {
         assert

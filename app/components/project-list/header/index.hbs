@@ -66,7 +66,9 @@
             showLabel=true
             iconName='filter-list'
           }}
-          @selectedItemComponent='project-list/filter-selected-item'
+          @selectedItemComponent={{component
+            'project-list/filter-selected-item'
+          }}
           {{style width='auto'}}
           class='select-platform-class'
           data-test-select-platform-container
@@ -104,7 +106,9 @@
             showLabel=true
             iconName='filter-list'
           }}
-          @selectedItemComponent='project-list/filter-selected-item'
+          @selectedItemComponent={{component
+            'project-list/filter-selected-item'
+          }}
           class='select-team-class'
           local-class='select-team-class'
           data-test-select-team-container
@@ -160,7 +164,7 @@
           showLabel=false
           iconName='sort'
         }}
-        @selectedItemComponent='project-list/filter-selected-item'
+        @selectedItemComponent={{component 'project-list/filter-selected-item'}}
         {{style width='auto'}}
         class='select-sort-class'
         data-test-project-sort-property

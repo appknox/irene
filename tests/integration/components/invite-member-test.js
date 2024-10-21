@@ -2,7 +2,7 @@ import { module, test } from 'qunit';
 import { setupRenderingTest } from 'ember-qunit';
 import { setupMirage } from 'ember-cli-mirage/test-support';
 import { click, render, fillIn, findAll } from '@ember/test-helpers';
-import { setupIntl } from 'ember-intl/test-support';
+import { setupIntl, t } from 'ember-intl/test-support';
 import { hbs } from 'ember-cli-htmlbars';
 import { Response } from 'miragejs';
 
@@ -37,12 +37,12 @@ module('Integration | Component | invite-member', function (hooks) {
   test('it renders invite-member', async function (assert) {
     await render(hbs`<InviteMember />`);
 
-    assert.dom('[data-test-label-primary-text]').exists().hasText('t:email:()');
+    assert.dom('[data-test-label-primary-text]').exists().hasText(t('email'));
 
     assert
       .dom('[data-test-label-secondary-text]')
       .exists()
-      .hasText('t:inviteUserMultipleEmailHelperText:()');
+      .hasText(t('inviteUserMultipleEmailHelperText'));
 
     assert
       .dom('[data-test-invite-member-input]')
@@ -129,7 +129,7 @@ module('Integration | Component | invite-member', function (hooks) {
       .dom('[data-test-send-invite-btn]')
       .exists()
       .isNotDisabled()
-      .hasText('t:invite:()');
+      .hasText(t('invite'));
 
     await click('[data-test-send-invite-btn]');
 
@@ -137,7 +137,7 @@ module('Integration | Component | invite-member', function (hooks) {
       .dom('[data-test-text-input-outlined]')
       .hasClass(/ak-error-text-input/);
 
-    assert.dom('[data-test-helper-text]').exists().hasText('t:emptyEmailId:()');
+    assert.dom('[data-test-helper-text]').exists().hasText(t('emptyEmailId'));
   });
 
   test.each(
@@ -193,7 +193,7 @@ module('Integration | Component | invite-member', function (hooks) {
 
       const notify = this.owner.lookup('service:notifications');
 
-      assert.strictEqual(notify.successMsg, 't:orgMemberInvited:()');
+      assert.strictEqual(notify.successMsg, t('orgMemberInvited'));
 
       const realtime = this.owner.lookup('service:realtime');
 
@@ -249,7 +249,7 @@ module('Integration | Component | invite-member', function (hooks) {
 
       const notify = this.owner.lookup('service:notifications');
 
-      assert.strictEqual(notify.errorMsg, 't:pleaseTryAgain:()');
+      assert.strictEqual(notify.errorMsg, t('pleaseTryAgain'));
     }
   );
 });

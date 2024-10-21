@@ -2,7 +2,7 @@ import { render } from '@ember/test-helpers';
 import { hbs } from 'ember-cli-htmlbars';
 import { setupRenderingTest } from 'ember-qunit';
 import { module, test } from 'qunit';
-import { setupIntl } from 'ember-intl/test-support';
+import { setupIntl, t } from 'ember-intl/test-support';
 import { setupMirage } from 'ember-cli-mirage/test-support';
 
 import ENUMS from 'irene/enums';
@@ -35,7 +35,7 @@ module('Integration | Component | analysis-risk/text', function (hooks) {
       assert
         .dom('[data-test-analysisRiskText-text]')
         .exists()
-        .hasText(`t:${text}:()`)
+        .hasText(t(text))
         .hasClass(RegExp(`analysis-risk-text-${text}`));
     }
   );

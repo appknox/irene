@@ -1,7 +1,7 @@
 import { render } from '@ember/test-helpers';
 import { hbs } from 'ember-cli-htmlbars';
 import { setupMirage } from 'ember-cli-mirage/test-support';
-import { setupIntl } from 'ember-intl/test-support';
+import { setupIntl, t } from 'ember-intl/test-support';
 import { setupRenderingTest } from 'ember-qunit';
 import { module, test } from 'qunit';
 
@@ -64,16 +64,16 @@ module(
 
         assert
           .dom('[data-test-fileDetailScanActions-staticScanTitle]')
-          .hasText('t:sast:()');
+          .hasText(t('sast'));
 
         if (scanStatus === staticScanStatus.completed) {
           assert
             .dom('[data-test-fileDetailScanActions-staticScanCompletedStatus]')
-            .hasText('t:completed:()');
+            .hasText(t('completed'));
         } else {
           assert
             .dom('[data-test-fileDetailScanActions-staticScanInProgressStatus]')
-            .hasText('t:scanning:()... ' + this.file.staticScanProgress + '%');
+            .hasText(`${t('scanning')}... ${this.file.staticScanProgress}%`);
         }
       }
     );

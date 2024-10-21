@@ -1,44 +1,59 @@
-<AkStack
-  @justifyContent='space-between'
-  @alignItems='center'
-  local-class='result-header'
->
-  <AkStack @alignItems='center' local-class='close-search-text'>
-    <AkTypography @variant='h5' @fontWeight='regular'>
-      {{t 'storeknox.showingResults'}}
-    </AkTypography>
+{{#if this.loadingData}}
+  <AkStack
+    @justifyContent='space-between'
+    @alignItems='center'
+    local-class='result-header'
+  >
+    <AkSkeleton @height='16px' @width='250px' />
 
-    <AkTypography @variant='h5'>
-      &nbsp;"Shell Test"
-    </AkTypography>
+    <AkSkeleton @height='35px' @width='130px' />
   </AkStack>
+{{else}}
+  <AkStack
+    @justifyContent='space-between'
+    @alignItems='center'
+    local-class='result-header'
+  >
+    <AkStack @alignItems='center' local-class='close-search-text'>
+      <AkTypography @variant='h5' @fontWeight='regular'>
+        {{t 'storeknox.showingResults'}}
+      </AkTypography>
 
-  {{#if this.isAdmin}}
-    <AkButton>
-      <:leftIcon>
-        <AkIcon @iconName='add-box' />
-      </:leftIcon>
+      <AkTypography @variant='h5'>
+        &nbsp;"{{this.args.queryParams.app_query}}"
+      </AkTypography>
+    </AkStack>
 
-      <:default>
-        {{t 'storeknox.addToInventory'}}
-      </:default>
-    </AkButton>
-  {{else}}
-    <AkButton>
-      <:leftIcon>
-        <AkIcon @iconName='send' />
-      </:leftIcon>
+    {{#if this.isAdmin}}
+      <AkButton @disabled={{this.disabledButton}}>
+        <:leftIcon>
+          <AkIcon @iconName='add-box' />
+        </:leftIcon>
 
-      <:default>
-        {{t 'storeknox.sendRequest'}}
-      </:default>
-    </AkButton>
-  {{/if}}
+        <:default>
+          {{t 'storeknox.addToInventory'}}
+        </:default>
+      </AkButton>
+    {{else}}
+      <AkButton
+        @disabled={{this.disabledButton}}
+        {{on 'click' this.sendRequest}}
+      >
+        <:leftIcon>
+          <AkIcon @iconName='send' />
+        </:leftIcon>
 
-</AkStack>
+        <:default>
+          {{t 'storeknox.sendRequest'}}
+        </:default>
+      </AkButton>
+    {{/if}}
+
+  </AkStack>
+{{/if}}
 
 <AkPaginationProvider
-  @results={{this.tableData}}
+  @results={{this.searchResultsData}}
   @onItemPerPageChange={{this.onItemPerPageChange}}
   @totalItems={{this.totalCount}}
   @nextAction={{this.goToPage}}
@@ -54,7 +69,11 @@
         <r.cell as |column|>
           {{#if column.headerComponent}}
             {{#let (component column.headerComponent) as |Component|}}
-              <Component />
+              <Component
+                @selected={{this.skDiscoveryResult.allRowsSelected}}
+                @loading={{this.loadingData}}
+                @selectAllRow={{this.selectAllRow}}
+              />
             {{/let}}
           {{else}}
             {{column.name}}
@@ -62,11 +81,16 @@
         </r.cell>
       </h.row>
     </tb.head>
+
     <tb.body @rows={{pgc.currentPageResults}} as |b|>
       <b.row as |r|>
         <r.cell>
           {{#let (component r.columnValue.cellComponent) as |Component|}}
-            <Component @data={{r.rowValue}} />
+            <Component
+              @data={{r.rowValue}}
+              @loading={{this.loadingData}}
+              @selectRow={{this.selectRow}}
+            />
           {{/let}}
         </r.cell>
       </b.row>

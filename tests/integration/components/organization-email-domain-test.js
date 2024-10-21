@@ -3,7 +3,7 @@ import { setupRenderingTest } from 'ember-qunit';
 import { render, click, fillIn, findAll } from '@ember/test-helpers';
 import { hbs } from 'ember-cli-htmlbars';
 import { setupMirage } from 'ember-cli-mirage/test-support';
-import { setupIntl } from 'ember-intl/test-support';
+import { setupIntl, t } from 'ember-intl/test-support';
 import { Response } from 'miragejs';
 
 import Service from '@ember/service';
@@ -56,11 +56,11 @@ module('Integration | Component | organization-email-domain', function (hooks) {
 
     assert
       .dom('[data-test-orgEmailDomain-title]')
-      .hasText('t:emailDomainRestriction:()');
+      .hasText(t('emailDomainRestriction'));
 
     assert
       .dom('[data-test-orgEmailDomain-subtitle]')
-      .hasText('t:emailRestrictDesc:()');
+      .hasText(t('emailRestrictDesc'));
 
     assert.dom('[data-test-orgEmailDomain-input]').doesNotExist();
     assert.dom('[data-test-orgEmailDomain-saveBtn]').doesNotExist();
@@ -76,11 +76,11 @@ module('Integration | Component | organization-email-domain', function (hooks) {
 
     assert
       .dom('[data-test-orgEmailDomain-title]')
-      .hasText('t:emailDomainRestriction:()');
+      .hasText(t('emailDomainRestriction'));
 
     assert
       .dom('[data-test-orgEmailDomain-subtitle]')
-      .hasText('t:emailRestrictDesc:()');
+      .hasText(t('emailRestrictDesc'));
 
     assert.dom('[data-test-orgEmailDomain-input]').doesNotExist();
     assert.dom('[data-test-orgEmailDomain-saveBtn]').doesNotExist();
@@ -137,7 +137,7 @@ module('Integration | Component | organization-email-domain', function (hooks) {
         );
 
         assert.dom(chipSelector).doesNotExist();
-        assert.strictEqual(notify.successMsg, 't:domainDeleted:()');
+        assert.strictEqual(notify.successMsg, t('domainDeleted'));
       }
     }
   );
@@ -193,7 +193,7 @@ module('Integration | Component | organization-email-domain', function (hooks) {
       } else {
         assert.strictEqual(
           notify.successMsg,
-          `${this.response.domain_name} t:addedSuccessfully:()`
+          `${this.response.domain_name} ${t('addedSuccessfully')}`
         );
 
         assert.strictEqual(

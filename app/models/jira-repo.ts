@@ -11,7 +11,7 @@ export default class JiraRepoModel extends Model {
   @attr('number')
   declare risk_threshold: number;
 
-  @belongsTo('project')
+  @belongsTo('project', { async: true, inverse: null })
   declare project: AsyncBelongsTo<ProjectModel>;
 }
 

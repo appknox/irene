@@ -143,7 +143,7 @@ module.exports = function (environment) {
   var showLicense = handler.getBoolean('IRENE_SHOW_LICENSE');
   var ENV = {
     ENVHandlerCONST: ENVHandlerCONST,
-    productVersion: '24.9.1',
+    productVersion: '24.10.1',
     version: Date.now(),
     isDevknox: false,
     isAppknox: false,
@@ -198,7 +198,7 @@ module.exports = function (environment) {
     },
     rootURL: '/',
     favicon: '/images/favicon.ico',
-    locationType: 'auto',
+    locationType: 'history',
     modulePrefix: 'irene',
     environment: environment,
     enableHotjar: handler.getValueForPlugin('IRENE_ENABLE_HOTJAR'),

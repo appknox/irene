@@ -2,7 +2,7 @@ import { module, test } from 'qunit';
 import { setupRenderingTest } from 'ember-qunit';
 import { setupMirage } from 'ember-cli-mirage/test-support';
 import { render, findAll } from '@ember/test-helpers';
-import { setupIntl } from 'ember-intl/test-support';
+import { setupIntl, t } from 'ember-intl/test-support';
 import { hbs } from 'ember-cli-htmlbars';
 
 import Service from '@ember/service';
@@ -85,7 +85,7 @@ module('Integration | Component | organization-team', function (hooks) {
         assert
           .dom('[data-test-orgCreateTeam-btn]')
           .isNotDisabled()
-          .hasText('t:createTeam:()');
+          .hasText(t('createTeam'));
       }
 
       const teamList = findAll('[data-test-orgTeamOverview]');
@@ -98,11 +98,13 @@ module('Integration | Component | organization-team', function (hooks) {
 
       assert
         .dom('[data-test-orgTeamOverview-membersCount]', teamList[0])
-        .hasText(`t:users:() ${this.organizationTeams[0].members_count}`);
+        .hasText(`${t('users')} ${this.organizationTeams[0].members_count}`);
 
       assert
         .dom('[data-test-orgTeamOverview-projectsCount]', teamList[0])
-        .hasText(`t:projects:() ${this.organizationTeams[0].projects_count}`);
+        .hasText(
+          `${t('projects')} ${this.organizationTeams[0].projects_count}`
+        );
     }
   );
 });

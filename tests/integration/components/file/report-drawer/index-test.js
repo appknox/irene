@@ -2,7 +2,7 @@ import { module, test } from 'qunit';
 import { setupRenderingTest } from 'ember-qunit';
 import { findAll, render } from '@ember/test-helpers';
 import { hbs } from 'ember-cli-htmlbars';
-import { setupIntl } from 'ember-intl/test-support';
+import { setupIntl, t } from 'ember-intl/test-support';
 import { setupMirage } from 'ember-cli-mirage/test-support';
 import Service from '@ember/service';
 
@@ -31,11 +31,11 @@ class ConfigurationStub extends Service {
 const fileReportGroups = [
   {
     id: 'va-reports',
-    title: 't:fileReport.vaReports:()',
+    title: () => t('fileReport.vaReports'),
   },
   {
     id: 'sbom-reports',
-    title: 't:fileReport.sbomReports:()',
+    title: () => t('fileReport.sbomReports'),
   },
 ];
 
@@ -84,7 +84,7 @@ module('Integration | Component | file/report-drawer', function (hooks) {
     assert
       .dom('[data-test-fileReportDrawer-title]')
       .exists()
-      .hasText('t:downloadReport:()');
+      .hasText(t('downloadReport'));
 
     assert.dom('[data-test-fileReportDrawer-closeBtn]').exists();
 
@@ -93,7 +93,7 @@ module('Integration | Component | file/report-drawer', function (hooks) {
     assert
       .dom('[data-test-fileReportDrawer-headerText]')
       .exists()
-      .hasText('t:fileReport.reportDrawerHeaderText:()');
+      .hasText(t('fileReport.reportDrawerHeaderText'));
 
     const reportGroups = findAll('[data-test-fileReportDrawer-group]');
 

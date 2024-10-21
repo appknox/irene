@@ -76,6 +76,14 @@ export default class MarketplacePluginListComponent extends Component {
         published: false,
         instructions: htmlSafe(constants.instructions),
       },
+      {
+        title: this.intl.t('codemagic'),
+        description: this.intl.t('viewIntegrationInstructions'),
+        logo: '../images/codemagic-icon.png',
+        link: 'https://docs.codemagic.io/integrations/appknox-integration/',
+        published: true,
+        instructions: '',
+      },
     ];
   }
 }

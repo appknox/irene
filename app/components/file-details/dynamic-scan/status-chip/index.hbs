@@ -1,44 +1,35 @@
-{{#if @dynamicScan.isDynamicStatusError}}
+{{#if (or this.chipDetails.icon this.chipDetails.loaderColor)}}
   <AkChip
-    data-test-dynamicScan-statusChip
-    @variant='semi-filled-outlined'
-    @label={{t 'errored'}}
-    @color='warn'
+    data-test-fileDetails-dynamicScan-statusChip
+    @variant='semi-filled'
+    @size='small'
+    @label={{if @chipStatusText @chipStatusText this.chipDetails.label}}
+    @color={{this.chipDetails.color}}
+    {{style textTransform='uppercase'}}
+    ...attributes
   >
     <:icon>
-      <AkIcon @iconName='warning' />
+      {{#if this.chipDetails.icon}}
+        <AkIcon @iconName={{this.chipDetails.icon}} />
+      {{/if}}
+
+      {{#if this.chipDetails.loaderColor}}
+        <AkLoader
+          data-test-fileDetails-dynamicScan-statusChip-loader
+          @color={{this.chipDetails.loaderColor}}
+          @size={{13}}
+        />
+      {{/if}}
     </:icon>
   </AkChip>
-
-{{else if @file.isDynamicDone}}
-  <AkChip
-    data-test-dynamicScan-statusChip
-    @variant='semi-filled-outlined'
-    @label={{t 'completed'}}
-    @color='success'
-  />
-
-{{else if @dynamicScan.isDynamicStatusInProgress}}
-  <AkChip
-    data-test-dynamicScan-statusChip
-    @label={{@dynamicScan.statusText}}
-    @variant='semi-filled-outlined'
-    @color={{this.chipColor}}
-  >
-    <:icon>
-      <AkLoader
-        data-test-dynamicScan-statusChip-loader
-        @color={{this.loaderColor}}
-        @size={{13}}
-      />
-    </:icon>
-  </AkChip>
-
 {{else}}
   <AkChip
-    data-test-dynamicScan-statusChip
-    @label={{t 'notStarted'}}
-    @variant='semi-filled-outlined'
-    @color='secondary'
+    data-test-fileDetails-dynamicScan-statusChip
+    @label={{if @chipStatusText @chipStatusText this.chipDetails.label}}
+    @variant='semi-filled'
+    @size='small'
+    @color={{this.chipDetails.color}}
+    {{style textTransform='uppercase'}}
+    ...attributes
   />
 {{/if}}

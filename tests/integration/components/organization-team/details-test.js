@@ -1,6 +1,7 @@
 import { module, test } from 'qunit';
 import { setupRenderingTest } from 'ember-qunit';
 import { setupMirage } from 'ember-cli-mirage/test-support';
+
 import {
   click,
   render,
@@ -8,8 +9,10 @@ import {
   fillIn,
   triggerEvent,
 } from '@ember/test-helpers';
-import { setupIntl } from 'ember-intl/test-support';
+
+import { setupIntl, t } from 'ember-intl/test-support';
 import { hbs } from 'ember-cli-htmlbars';
+import { capitalize } from '@ember/string';
 import dayjs from 'dayjs';
 import { Response } from 'miragejs';
 
@@ -129,7 +132,7 @@ module('Integration | Component | organization-team/details', function (hooks) {
         <OrganizationTeam::Details @showTeamDetail={{true}} @team={{this.organizationTeam}} @organization={{this.organization}} />
     `);
 
-      assert.dom('[data-test-orgTeamDetail-title]').hasText('t:teamDetails:()');
+      assert.dom('[data-test-orgTeamDetail-title]').hasText(t('teamDetails'));
 
       // team info
       assert
@@ -142,12 +145,12 @@ module('Integration | Component | organization-team/details', function (hooks) {
         assert
           .dom('[data-test-orgTeamDetailsInfo-editBtn]')
           .isNotDisabled()
-          .hasText('t:editTeamName:()');
+          .hasText(t('editTeamName'));
       }
 
       assert
         .dom('[data-test-orgTeamDetailsInfo-totalProjectlabel]')
-        .hasText('t:totalProjects:()');
+        .hasText(t('totalProjects'));
 
       assert
         .dom('[data-test-orgTeamDetailsInfo-totalProjectCount]')
@@ -155,7 +158,7 @@ module('Integration | Component | organization-team/details', function (hooks) {
 
       assert
         .dom('[data-test-orgTeamDetailsInfo-totalUserlabel]')
-        .hasText('t:totalUsers:()');
+        .hasText(t('totalUsers'));
 
       assert
         .dom('[data-test-orgTeamDetailsInfo-totalUserCount]')
@@ -167,15 +170,15 @@ module('Integration | Component | organization-team/details', function (hooks) {
         assert
           .dom('[data-test-orgTeamDetailsInfo-deleteBtn]')
           .isNotDisabled()
-          .hasText('t:deleteTeam:()');
+          .hasText(t('deleteTeam'));
       }
 
       // projects
-      assert.dom('[data-test-teamProjectList-title]').hasText('t:projects:()');
+      assert.dom('[data-test-teamProjectList-title]').hasText(t('projects'));
 
       assert
         .dom('[data-test-teamProjectList-description]')
-        .hasText('t:teamProjectsDesc:()');
+        .hasText(t('teamProjectsDesc'));
 
       if (userRole === 'member') {
         assert.dom('[data-test-teamProjectList-addProjectBtn]').doesNotExist();
@@ -183,19 +186,19 @@ module('Integration | Component | organization-team/details', function (hooks) {
         assert
           .dom('[data-test-teamProjectList-addProjectBtn]')
           .isNotDisabled()
-          .hasText('t:addProject:()');
+          .hasText(t('addProject'));
       }
 
       const projectHeaderRows = findAll('[data-test-teamProjectList-thead] th');
 
-      assert.dom(projectHeaderRows[0]).hasText('T:project:()');
+      assert.dom(projectHeaderRows[0]).hasText(capitalize(t('project')));
 
       if (userRole === 'member') {
         assert.notOk(projectHeaderRows[1]);
         assert.notOk(projectHeaderRows[2]);
       } else {
-        assert.dom(projectHeaderRows[1]).hasText('t:accessPermissions:()');
-        assert.dom(projectHeaderRows[2]).hasText('t:action:()');
+        assert.dom(projectHeaderRows[1]).hasText(t('accessPermissions'));
+        assert.dom(projectHeaderRows[2]).hasText(t('action'));
       }
 
       const projectContentRows = findAll('[data-test-teamProjectList-row]');
@@ -217,7 +220,7 @@ module('Integration | Component | organization-team/details', function (hooks) {
       } else {
         assert
           .dom('[data-test-ak-form-label]', projectContentRow[1])
-          .hasText('t:allowEdit:()');
+          .hasText(t('allowEdit'));
 
         assert
           .dom('[data-test-accessPermission-checkbox]', projectContentRow[1])
@@ -237,23 +240,23 @@ module('Integration | Component | organization-team/details', function (hooks) {
         assert.dom('[data-test-teamUserList-row]').doesNotExist();
         assert.dom('[data-test-teamUserList-cell]').doesNotExist();
       } else {
-        assert.dom('[data-test-teamUserList-title]').hasText('t:users:()');
+        assert.dom('[data-test-teamUserList-title]').hasText(t('users'));
 
         assert
           .dom('[data-test-teamUserList-description]')
-          .hasText('t:teamUsersDesc:()');
+          .hasText(t('teamUsersDesc'));
 
         assert
           .dom('[data-test-teamUserList-addUserBtn]')
           .isNotDisabled()
-          .hasText('t:addUser:()');
+          .hasText(t('addUser'));
 
         const userHeaderRows = findAll('[data-test-teamUserList-thead] th');
 
-        assert.dom(userHeaderRows[0]).hasText('t:user:()');
-        assert.dom(userHeaderRows[1]).hasText('t:email:()');
+        assert.dom(userHeaderRows[0]).hasText(t('user'));
+        assert.dom(userHeaderRows[1]).hasText(t('email'));
 
-        assert.dom(userHeaderRows[2]).hasText('t:action:()');
+        assert.dom(userHeaderRows[2]).hasText(t('action'));
 
         const userContentRows = findAll('[data-test-teamUserList-row]');
 
@@ -287,23 +290,23 @@ module('Integration | Component | organization-team/details', function (hooks) {
       } else {
         assert
           .dom('[data-test-teamInviteList-title]')
-          .hasText('t:teamInvitations:()');
+          .hasText(t('teamInvitations'));
 
         assert
           .dom('[data-test-teamInviteList-description]')
-          .hasText('t:teamInvitationsDesc:()');
+          .hasText(t('teamInvitationsDesc'));
 
         assert
           .dom('[data-test-teamInviteList-inviteBtn]')
           .isNotDisabled()
-          .hasText('t:inviteUsers:()');
+          .hasText(t('inviteUsers'));
 
         const inviteHeaderRow = findAll('[data-test-invitation-list-thead] th');
 
-        assert.dom(inviteHeaderRow[0]).hasText('t:email:()');
-        assert.dom(inviteHeaderRow[1]).hasText('t:invitedOn:()');
-        assert.dom(inviteHeaderRow[2]).hasText('t:resend:()');
-        assert.dom(inviteHeaderRow[3]).hasText('t:delete:()');
+        assert.dom(inviteHeaderRow[0]).hasText(t('email'));
+        assert.dom(inviteHeaderRow[1]).hasText(t('invitedOn'));
+        assert.dom(inviteHeaderRow[2]).hasText(t('resend'));
+        assert.dom(inviteHeaderRow[3]).hasText(t('delete'));
 
         const inviteContentRows = findAll('[data-test-invitation-list-row]');
 
@@ -361,12 +364,12 @@ module('Integration | Component | organization-team/details', function (hooks) {
         <OrganizationTeam::Details @showTeamDetail={{true}} @team={{this.organizationTeam}} @organization={{this.organization}} />
     `);
 
-      assert.dom('[data-test-orgTeamDetail-title]').hasText('t:teamDetails:()');
+      assert.dom('[data-test-orgTeamDetail-title]').hasText(t('teamDetails'));
 
       assert
         .dom('[data-test-orgTeamDetailsInfo-editBtn]')
         .isNotDisabled()
-        .hasText('t:editTeamName:()');
+        .hasText(t('editTeamName'));
 
       await click('[data-test-orgTeamDetailsInfo-editBtn]');
 
@@ -375,9 +378,7 @@ module('Integration | Component | organization-team/details', function (hooks) {
         .isNotDisabled()
         .hasText(this.organizationTeam.name);
 
-      assert
-        .dom('[data-test-form-label]')
-        .hasText('t:editTeamNameInputLabel:()');
+      assert.dom('[data-test-form-label]').hasText(t('editTeamNameInputLabel'));
 
       assert
         .dom('[data-test-editTeamName-input]')
@@ -387,12 +388,12 @@ module('Integration | Component | organization-team/details', function (hooks) {
       assert
         .dom('[data-test-teamDetailAction-backBtn]')
         .isNotDisabled()
-        .hasText('t:back:()');
+        .hasText(t('back'));
 
       assert
         .dom('[data-test-teamDetailAction-actionBtn]')
         .isDisabled()
-        .hasText('t:edit:()');
+        .hasText(t('edit'));
 
       await fillIn('[data-test-editTeamName-input]', 'testEdit');
 
@@ -403,17 +404,14 @@ module('Integration | Component | organization-team/details', function (hooks) {
       const notify = this.owner.lookup('service:notifications');
 
       if (fail) {
-        assert.strictEqual(notify.errorMsg, 't:pleaseTryAgain:()');
+        assert.strictEqual(notify.errorMsg, t('pleaseTryAgain'));
 
         assert.dom('[data-test-teamDetailAction-titleBtn]').exists();
         assert.dom('[data-test-editTeamName-input]').exists();
         assert.dom('[data-test-teamDetailAction-backBtn]').exists();
         assert.dom('[data-test-teamDetailAction-actionBtn]').exists();
       } else {
-        assert.strictEqual(
-          notify.successMsg,
-          't:organizationTeamNameUpdated:()'
-        );
+        assert.strictEqual(notify.successMsg, t('organizationTeamNameUpdated'));
 
         assert.dom('[data-test-teamDetailAction-titleBtn]').doesNotExist();
         assert.dom('[data-test-editTeamName-input]').doesNotExist();
@@ -463,12 +461,12 @@ module('Integration | Component | organization-team/details', function (hooks) {
         <OrganizationTeam::Details @showTeamDetail={{true}} @team={{this.organizationTeam}} @organization={{this.organization}} />
     `);
 
-    assert.dom('[data-test-orgTeamDetail-title]').hasText('t:teamDetails:()');
+    assert.dom('[data-test-orgTeamDetail-title]').hasText(t('teamDetails'));
 
     assert
       .dom('[data-test-teamProjectList-addProjectBtn]')
       .isNotDisabled()
-      .hasText('t:addProject:()');
+      .hasText(t('addProject'));
 
     await click('[data-test-teamProjectList-addProjectBtn]');
 
@@ -477,11 +475,11 @@ module('Integration | Component | organization-team/details', function (hooks) {
       .isNotDisabled()
       .hasText(this.organizationTeam.name);
 
-    assert.dom('[data-test-addProjectList-title]').hasText('t:addProject:()');
+    assert.dom('[data-test-addProjectList-title]').hasText(t('addProject'));
 
     assert
       .dom('[data-test-addProjectList-description]')
-      .hasText('t:addTeamProjectDesc:()');
+      .hasText(t('addTeamProjectDesc'));
 
     assert
       .dom('[data-test-addProjectList-searchInput]')
@@ -490,8 +488,8 @@ module('Integration | Component | organization-team/details', function (hooks) {
 
     const headerRow = findAll('[data-test-addProjectList-thead] th');
 
-    assert.dom(headerRow[0]).hasText('t:name:()');
-    assert.dom(headerRow[1]).hasText('t:action:()');
+    assert.dom(headerRow[0]).hasText(t('name'));
+    assert.dom(headerRow[1]).hasText(t('action'));
 
     const contentRows = findAll('[data-test-addProjectList-row]');
 
@@ -509,12 +507,12 @@ module('Integration | Component | organization-team/details', function (hooks) {
     assert
       .dom('[data-test-teamDetailAction-backBtn]')
       .isNotDisabled()
-      .hasText('t:back:()');
+      .hasText(t('back'));
 
     assert
       .dom('[data-test-teamDetailAction-actionBtn]')
       .isDisabled()
-      .hasText('t:addProject:()');
+      .hasText(t('addProject'));
   });
 
   test('it renders organization-team add user action', async function (assert) {
@@ -557,12 +555,12 @@ module('Integration | Component | organization-team/details', function (hooks) {
         <OrganizationTeam::Details @showTeamDetail={{true}} @team={{this.organizationTeam}} @organization={{this.organization}} />
     `);
 
-    assert.dom('[data-test-orgTeamDetail-title]').hasText('t:teamDetails:()');
+    assert.dom('[data-test-orgTeamDetail-title]').hasText(t('teamDetails'));
 
     assert
       .dom('[data-test-teamUserList-addUserBtn]')
       .isNotDisabled()
-      .hasText('t:addUser:()');
+      .hasText(t('addUser'));
 
     await click('[data-test-teamUserList-addUserBtn]');
 
@@ -571,11 +569,11 @@ module('Integration | Component | organization-team/details', function (hooks) {
       .isNotDisabled()
       .hasText(this.organizationTeam.name);
 
-    assert.dom('[data-test-addUserList-title]').hasText('t:addUsers:()');
+    assert.dom('[data-test-addUserList-title]').hasText(t('addUsers'));
 
     assert
       .dom('[data-test-addUserList-description]')
-      .hasText('t:addTeamMemberDesc:()');
+      .hasText(t('addTeamMemberDesc'));
 
     assert
       .dom('[data-test-addUserList-searchInput]')
@@ -584,8 +582,8 @@ module('Integration | Component | organization-team/details', function (hooks) {
 
     const headerRow = findAll('[data-test-addUserList-thead] th');
 
-    assert.dom(headerRow[0]).hasText('t:name:()');
-    assert.dom(headerRow[1]).hasText('t:action:()');
+    assert.dom(headerRow[0]).hasText(t('name'));
+    assert.dom(headerRow[1]).hasText(t('action'));
 
     const contentRows = findAll('[data-test-addUserList-row]');
 
@@ -603,12 +601,12 @@ module('Integration | Component | organization-team/details', function (hooks) {
     assert
       .dom('[data-test-teamDetailAction-backBtn]')
       .isNotDisabled()
-      .hasText('t:back:()');
+      .hasText(t('back'));
 
     assert
       .dom('[data-test-teamDetailAction-actionBtn]')
       .isDisabled()
-      .hasText('t:addUsers:()');
+      .hasText(t('addUsers'));
   });
 
   test('it renders organization-team invite user action', async function (assert) {
@@ -645,12 +643,12 @@ module('Integration | Component | organization-team/details', function (hooks) {
         <OrganizationTeam::Details @showTeamDetail={{true}} @team={{this.organizationTeam}} @organization={{this.organization}} />
     `);
 
-    assert.dom('[data-test-orgTeamDetail-title]').hasText('t:teamDetails:()');
+    assert.dom('[data-test-orgTeamDetail-title]').hasText(t('teamDetails'));
 
     assert
       .dom('[data-test-teamInviteList-inviteBtn]')
       .isNotDisabled()
-      .hasText('t:inviteUsers:()');
+      .hasText(t('inviteUsers'));
 
     await click('[data-test-teamInviteList-inviteBtn]');
 
@@ -659,11 +657,11 @@ module('Integration | Component | organization-team/details', function (hooks) {
       .isNotDisabled()
       .hasText(this.organizationTeam.name);
 
-    assert.dom('[data-test-label-primary-text]').hasText('t:email:()');
+    assert.dom('[data-test-label-primary-text]').hasText(t('email'));
 
     assert
       .dom('[data-test-label-secondary-text]')
-      .hasText('t:inviteUserMultipleEmailHelperText:()');
+      .hasText(t('inviteUserMultipleEmailHelperText'));
 
     assert.dom('[data-test-invite-member-input]').isNotDisabled().hasNoValue();
 
@@ -672,12 +670,12 @@ module('Integration | Component | organization-team/details', function (hooks) {
     assert
       .dom('[data-test-teamDetailAction-backBtn]')
       .isNotDisabled()
-      .hasText('t:back:()');
+      .hasText(t('back'));
 
     assert
       .dom('[data-test-teamDetailAction-actionBtn]')
       .isNotDisabled()
-      .hasText('t:invite:()');
+      .hasText(t('invite'));
   });
 
   // TODO: remove skip once ui is uncommmented
@@ -717,11 +715,11 @@ module('Integration | Component | organization-team/details', function (hooks) {
         <OrganizationTeam::Details @showTeamDetail={{true}} @team={{this.organizationTeam}} @organization={{this.organization}} />
     `);
 
-    assert.dom('[data-test-orgTeamDetail-title]').hasText('t:teamDetails:()');
+    assert.dom('[data-test-orgTeamDetail-title]').hasText(t('teamDetails'));
 
     assert
       .dom('[data-test-teamInviteList-title]')
-      .hasText('t:teamInvitations:()');
+      .hasText(t('teamInvitations'));
 
     assert.dom('[data-test-teamInviteList-searchInput]').hasNoValue();
     assert.notOk(this.query);
@@ -774,12 +772,12 @@ module('Integration | Component | organization-team/details', function (hooks) {
         <OrganizationTeam::Details @showTeamDetail={{true}} @team={{this.organizationTeam}} @organization={{this.organization}} />
     `);
 
-      assert.dom('[data-test-orgTeamDetail-title]').hasText('t:teamDetails:()');
+      assert.dom('[data-test-orgTeamDetail-title]').hasText(t('teamDetails'));
 
       assert
         .dom('[data-test-teamInviteList-inviteBtn]')
         .isNotDisabled()
-        .hasText('t:inviteUsers:()');
+        .hasText(t('inviteUsers'));
 
       await click('[data-test-teamInviteList-inviteBtn]');
 
@@ -799,12 +797,12 @@ module('Integration | Component | organization-team/details', function (hooks) {
       assert
         .dom('[data-test-teamDetailAction-backBtn]')
         .isNotDisabled()
-        .hasText('t:back:()');
+        .hasText(t('back'));
 
       assert
         .dom('[data-test-teamDetailAction-actionBtn]')
         .isNotDisabled()
-        .hasText('t:invite:()');
+        .hasText(t('invite'));
 
       // test error state
       await click('[data-test-teamDetailAction-actionBtn]');
@@ -813,7 +811,7 @@ module('Integration | Component | organization-team/details', function (hooks) {
         .dom('[data-test-text-input-outlined]')
         .hasClass(/ak-error-text-input/);
 
-      assert.dom('[data-test-helper-text]').hasText('t:emptyEmailId:()');
+      assert.dom('[data-test-helper-text]').hasText(t('emptyEmailId'));
 
       // valid value
       await fillIn('[data-test-invite-member-input]', 'test@mail.com');
@@ -827,12 +825,12 @@ module('Integration | Component | organization-team/details', function (hooks) {
       const notify = this.owner.lookup('service:notifications');
 
       if (fail) {
-        assert.strictEqual(notify.errorMsg, 't:pleaseTryAgain:()');
+        assert.strictEqual(notify.errorMsg, t('pleaseTryAgain'));
         assert.dom('[data-test-invite-member-input]').hasValue('test@mail.com');
         assert.dom('[data-test-teamDetailAction-backBtn]').isNotDisabled();
         assert.dom('[data-test-teamDetailAction-actionBtn]').isNotDisabled();
       } else {
-        assert.strictEqual(notify.successMsg, 't:orgMemberInvited:()');
+        assert.strictEqual(notify.successMsg, t('orgMemberInvited'));
         assert.dom('[data-test-invite-member-input]').doesNotExist();
         assert.dom('[data-test-teamDetailAction-backBtn]').doesNotExist();
         assert.dom('[data-test-teamDetailAction-actionBtn]').doesNotExist();
@@ -893,30 +891,30 @@ module('Integration | Component | organization-team/details', function (hooks) {
         <OrganizationTeam::Details @handleTeamDetailClose={{this.handleTeamDetailClose}} @showTeamDetail={{true}} @team={{this.organizationTeam}} @organization={{this.organization}} />
     `);
 
-      assert.dom('[data-test-orgTeamDetail-title]').hasText('t:teamDetails:()');
+      assert.dom('[data-test-orgTeamDetail-title]').hasText(t('teamDetails'));
 
       assert
         .dom('[data-test-orgTeamDetailsInfo-deleteBtn]')
         .isNotDisabled()
-        .hasText('t:deleteTeam:()');
+        .hasText(t('deleteTeam'));
 
       await click('[data-test-orgTeamDetailsInfo-deleteBtn]');
 
-      assert.dom('[data-test-ak-modal-header]').hasText('t:confirm:()');
+      assert.dom('[data-test-ak-modal-header]').hasText(t('confirm'));
 
       assert
         .dom('[data-test-confirmBox-cancelBtn]')
         .isNotDisabled()
-        .hasText('t:cancel:()');
+        .hasText(t('cancel'));
 
       assert
         .dom('[data-test-confirmBox-confirmBtn]')
         .isNotDisabled()
-        .hasText('t:deleteTeam:()');
+        .hasText(t('deleteTeam'));
 
       assert
         .dom('[data-test-form-label]')
-        .hasText('t:promptBox.deleteTeamPrompt.description:()');
+        .hasText(t('promptBox.deleteTeamPrompt.description'));
 
       assert.dom('[data-test-orgTeamDetailsInfo-promptInput]').hasNoValue();
 
@@ -925,13 +923,13 @@ module('Integration | Component | organization-team/details', function (hooks) {
 
       await click('[data-test-confirmBox-confirmBtn]');
 
-      assert.strictEqual(notify.errorMsg, 't:enterRightTeamName:()');
+      assert.strictEqual(notify.errorMsg, t('enterRightTeamName'));
 
       await fillIn('[data-test-orgTeamDetailsInfo-promptInput]', 'wrongName');
 
       await click('[data-test-confirmBox-confirmBtn]');
 
-      assert.strictEqual(notify.errorMsg, 't:enterRightTeamName:()');
+      assert.strictEqual(notify.errorMsg, t('enterRightTeamName'));
 
       // correct input
       await fillIn(
@@ -942,7 +940,7 @@ module('Integration | Component | organization-team/details', function (hooks) {
       await click('[data-test-confirmBox-confirmBtn]');
 
       if (fail) {
-        assert.strictEqual(notify.errorMsg, 't:pleaseTryAgain:()');
+        assert.strictEqual(notify.errorMsg, t('pleaseTryAgain'));
 
         assert.dom('[data-test-ak-modal-header]').exists();
         assert.dom('[data-test-confirmBox-cancelBtn]').exists();
@@ -953,7 +951,7 @@ module('Integration | Component | organization-team/details', function (hooks) {
       } else {
         assert.strictEqual(
           notify.successMsg,
-          `${this.organizationTeam.name} t:teamDeleted:()`
+          `${this.organizationTeam.name} ${t('teamDeleted')}`
         );
 
         assert.dom('[data-test-ak-modal-header]').doesNotExist();

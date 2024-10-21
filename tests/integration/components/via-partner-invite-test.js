@@ -39,7 +39,7 @@ module(
 
       assert
         .dom('[data-test-registration-form-title]')
-        .hasText('t:completeRegistration:()');
+        .hasText(t('completeRegistration'));
 
       assert.dom('[data-test-registration-terms-accept]').exists();
 

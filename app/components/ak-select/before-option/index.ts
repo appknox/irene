@@ -56,5 +56,6 @@ export default class AkSelectBeforeOptionComponent extends Component<AkSelectBef
 declare module '@glint/environment-ember-loose/registry' {
   export default interface Registry {
     'AkSelect::BeforeOption': typeof AkSelectBeforeOptionComponent;
+    'ak-select/before-option': typeof AkSelectBeforeOptionComponent;
   }
 }

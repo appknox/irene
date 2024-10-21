@@ -67,7 +67,7 @@ export default class ProjectSettingsGeneralSettingsAddProjectCollaboratorTableCo
   }
 
   get orgMembers() {
-    return this.orgMemberRecordResponse?.toArray().sortBy('created:desc') || [];
+    return this.orgMemberRecordResponse?.slice().sortBy('created:desc') || [];
   }
 
   get hasNoOrgMembers() {

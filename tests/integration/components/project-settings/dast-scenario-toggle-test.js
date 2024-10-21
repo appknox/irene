@@ -3,7 +3,7 @@ import { setupRenderingTest } from 'ember-qunit';
 import { click, find, render, waitFor, waitUntil } from '@ember/test-helpers';
 import { hbs } from 'ember-cli-htmlbars';
 import { setupMirage } from 'ember-cli-mirage/test-support';
-import { setupIntl } from 'ember-intl/test-support';
+import { setupIntl, t } from 'ember-intl/test-support';
 import Service from '@ember/service';
 import { Response } from 'miragejs';
 
@@ -108,7 +108,7 @@ module(
 
       assert.strictEqual(
         notify.successMsg,
-        't:dastAutomation.scenarioStatusUpdated:()'
+        t('dastAutomation.scenarioStatusUpdated')
       );
     });
 

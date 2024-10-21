@@ -1,5 +1,5 @@
 import { module, test } from 'qunit';
-import { setupIntl } from 'ember-intl/test-support';
+import { setupIntl, t } from 'ember-intl/test-support';
 import { setupMirage } from 'ember-cli-mirage/test-support';
 import { setupRenderingTest } from 'ember-qunit';
 import { hbs } from 'ember-cli-htmlbars';
@@ -98,13 +98,13 @@ module(
       assert
         .dom('[data-test-fileOverview-version]')
         .exists()
-        .containsText('t:version:()')
+        .containsText(t('version'))
         .containsText(this.file.version);
 
       assert
         .dom('[data-test-fileOverview-versionCodeText]')
         .exists()
-        .containsText('t:versionCodeTitleCase:() -');
+        .containsText(`${t('versionCodeTitleCase')} -`);
 
       assert
         .dom('[data-test-fileOverview-versionCode]')
@@ -115,7 +115,7 @@ module(
 
       assert
         .dom('[data-test-fileOverview-fileID-text]')
-        .containsText('t:fileID:() -');
+        .containsText(`${t('fileID')} -`);
 
       assert.dom('[data-test-fileOverview-fileID]').containsText(this.file.id);
 
@@ -131,32 +131,32 @@ module(
       const severityValues = [
         {
           value: this.file.countRiskCritical,
-          name: 't:critical:()',
+          name: t('critical'),
           severityType: 'critical',
         },
         {
           value: this.file.countRiskHigh,
-          name: 't:high:()',
+          name: t('high'),
           severityType: 'high',
         },
         {
           value: this.file.countRiskMedium,
-          name: 't:medium:()',
+          name: t('medium'),
           severityType: 'medium',
         },
         {
           value: this.file.countRiskLow,
-          name: 't:low:()',
+          name: t('low'),
           severityType: 'low',
         },
         {
           value: this.file.countRiskNone,
-          name: 't:passed:()',
+          name: t('passed'),
           severityType: 'passed',
         },
         {
           value: this.file.countRiskUnknown,
-          name: 't:untested:()',
+          name: t('untested'),
           severityType: 'none',
         },
       ];
@@ -278,7 +278,7 @@ module(
 
       await triggerEvent(fileInactiveTooltip, 'mouseenter');
 
-      assert.dom(tooltipContentSelector).exists().hasText('t:fileInactive:()');
+      assert.dom(tooltipContentSelector).exists().hasText(t('fileInactive'));
 
       await triggerEvent(fileInactiveTooltip, 'mouseleave');
 
@@ -302,15 +302,15 @@ module(
       // All scan statuses except manual scan
       const scanStatuses = [
         {
-          name: 't:static:()',
+          name: t('static'),
           isDone: this.file.isStaticDone,
         },
         {
-          name: 't:dynamic:()',
+          name: t('dynamic'),
           isDone: this.file.isDynamicDone,
         },
         {
-          name: 't:api:()',
+          name: t('api'),
           isDone: this.file.isApiDone,
         },
       ];
@@ -351,7 +351,7 @@ module(
 
       assert
         .dom('[data-test-fileOverview-manualScanStatus-name]')
-        .hasText('t:manual:()');
+        .hasText(t('manual'));
     });
 
     test('it hides untested legend data for untested analyses if unknown analyis status is false.', async function (assert) {
@@ -366,8 +366,7 @@ module(
         hbs`<FileOverview @file={{this.file}} @profileId={{this.profile.id}} />`
       );
 
-      const legendContainer =
-        "[data-test-fileOverview-chartSeverity='t:untested:()']";
+      const legendContainer = `[data-test-fileOverview-chartSeverity="${t('untested')}"]`;
 
       assert.dom(legendContainer).doesNotExist();
 
@@ -398,7 +397,7 @@ module(
       assert
         .dom('[data-test-fileOverview-tags-empty]')
         .exists()
-        .hasText('t:fileCompare.noTagsMessage:()');
+        .hasText(t('fileCompare.noTagsMessage'));
     });
 
     test('it renders yielded content', async function (assert) {

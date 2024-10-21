@@ -1,5 +1,5 @@
 {{#if @data.requested}}
-  {{#if @data.exists}}
+  {{#if @data.approved}}
     <AkTooltip @placement='bottom' @arrow={{true}} @color='light'>
       <:tooltipContent>
         <div local-class='tooltip-content'>
@@ -37,11 +37,21 @@
     </AkTooltip>
   {{/if}}
 {{else}}
-  <AkIconButton>
-    {{#if this.isAdmin}}
-      <AkIcon @iconName='add-box' />
+  {{#if @loading}}
+    <AkStack @justifyContent='center'>
+      <AkSkeleton @width='30px' @height='30px' />
+    </AkStack>
+  {{else}}
+    {{#if @data.add_button_loading}}
+      <AkLoader @size={{16}} />
     {{else}}
-      <AkIcon @iconName='send' />
+      <AkIconButton {{on 'click' (fn this.addToInventory @data.docUlid)}}>
+        {{#if this.isAdmin}}
+          <AkIcon @iconName='add-box' />
+        {{else}}
+          <AkIcon @iconName='send' />
+        {{/if}}
+      </AkIconButton>
     {{/if}}
-  </AkIconButton>
+  {{/if}}
 {{/if}}

@@ -5,7 +5,7 @@ import { render, waitFor, find, findAll } from '@ember/test-helpers';
 
 import { hbs } from 'ember-cli-htmlbars';
 import { setupMirage } from 'ember-cli-mirage/test-support';
-import { setupIntl } from 'ember-intl/test-support';
+import { setupIntl, t } from 'ember-intl/test-support';
 import { selectFiles } from 'ember-file-upload/test-support';
 import ENUMS from 'irene/enums';
 
@@ -63,7 +63,7 @@ module('Integration | Component | upload-app', function (hooks) {
 
     assert.dom('[data-test-uploadApp-input]').exists();
 
-    assert.dom('[data-test-uploadApp-uploadBtn]').hasText('t:uploadApp:()');
+    assert.dom('[data-test-uploadApp-uploadBtn]').hasText(t('uploadApp'));
     // assert.dom('[data-test-uploadAppViaLink-btn]').isNotDisabled();
 
     assert.dom('[data-test-uploadAppStatus-loader]').doesNotExist();
@@ -133,7 +133,7 @@ module('Integration | Component | upload-app', function (hooks) {
 
     assert.dom('[data-test-uploadApp-input]').exists();
 
-    assert.dom('[data-test-uploadApp-uploadBtn]').hasText('t:uploadApp:()');
+    assert.dom('[data-test-uploadApp-uploadBtn]').hasText(t('uploadApp'));
     // assert.dom('[data-test-uploadAppViaLink-btn]').isNotDisabled();
 
     assert.dom('[data-test-uploadAppStatus-loader]').doesNotExist();
@@ -143,7 +143,7 @@ module('Integration | Component | upload-app', function (hooks) {
 
     // assert
     //   .dom('[data-test-ak-modal-header]')
-    //   .hasText('t:uploadAppModule.linkUploadPopupHeader:()');
+    //   .hasText(t('uploadAppModule.linkUploadPopupHeader'));
 
     // assert
     //   .dom('[data-test-uploadAppViaLinkModal-linkInput]')
@@ -153,7 +153,7 @@ module('Integration | Component | upload-app', function (hooks) {
     // assert
     //   .dom('[data-test-uploadAppViaLinkModal-confirmBtn]')
     //   .isDisabled()
-    //   .hasText('t:upload:()');
+    //   .hasText(t('upload'));
 
     // await fillIn('[data-test-uploadAppViaLinkModal-linkInput]', appLink);
 
@@ -182,8 +182,8 @@ module('Integration | Component | upload-app', function (hooks) {
 
     // TODO: add checks for via system upload while uploading
 
-    assert.strictEqual(notify.successMsg, 't:fileUploadedSuccessfully:()');
-    assert.dom('[data-test-uploadApp-uploadBtn]').hasText('t:uploadApp:()');
+    assert.strictEqual(notify.successMsg, t('fileUploadedSuccessfully'));
+    assert.dom('[data-test-uploadApp-uploadBtn]').hasText(t('uploadApp'));
 
     // trigger submission refetch
     realtime.incrementProperty('SubmissionCounter');
@@ -204,7 +204,7 @@ module('Integration | Component | upload-app', function (hooks) {
 
     assert
       .dom('[data-test-uploadAppStatusPopover-title]', popoverContainer)
-      .hasText('t:uploadStatus:()');
+      .hasText(t('uploadStatus'));
 
     // 1 in progress submissions created
     assert
@@ -271,7 +271,7 @@ module('Integration | Component | upload-app', function (hooks) {
 
       assert
         .dom('[data-test-uploadAppStatusDetails-uploadSourceTitle]', container)
-        .hasText('t:viaLink:()');
+        .hasText(t('viaLink'));
     } else {
       assert
         .dom('[data-test-uploadAppStatusDetails-uploadSourceTitle]', container)
@@ -279,7 +279,7 @@ module('Integration | Component | upload-app', function (hooks) {
 
       assert
         .dom('[data-test-uploadAppStatusDetails-uploadSourceTitle]', container)
-        .hasText('t:viaSystem:()');
+        .hasText(t('viaSystem'));
     }
 
     // default is in progress
@@ -289,7 +289,7 @@ module('Integration | Component | upload-app', function (hooks) {
 
     assert
       .dom('[data-test-uploadAppStatusDetails-statusLabel]', container)
-      .hasText('t:inProgress:()');
+      .hasText(t('inProgress'));
 
     assert
       .dom('[data-test-uploadAppStatusDetails-appIcon]', container)
@@ -337,7 +337,7 @@ module('Integration | Component | upload-app', function (hooks) {
       assert
         .dom('[data-test-uploadAppStatusDetails-storeLink]', container)
         .hasAttribute('href', submission.url)
-        .hasText('t:viewStoreLink:()');
+        .hasText(t('viewStoreLink'));
     } else {
       assert
         .dom('[data-test-uploadAppStatusDetails-appStoreLogo]', container)

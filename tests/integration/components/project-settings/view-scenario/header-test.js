@@ -3,7 +3,7 @@ import { setupRenderingTest } from 'ember-qunit';
 import { render } from '@ember/test-helpers';
 import { hbs } from 'ember-cli-htmlbars';
 import { setupMirage } from 'ember-cli-mirage/test-support';
-import { setupIntl } from 'ember-intl/test-support';
+import { setupIntl, t } from 'ember-intl/test-support';
 import Service from '@ember/service';
 
 class NotificationsStub extends Service {
@@ -121,13 +121,13 @@ module(
       assert
         .dom(selectors.headerScenarioName)
         .exists()
-        .containsText('t:scenario:()')
+        .containsText(t('scenario'))
         .containsText(this.scenario.name);
 
       assert
         .dom(selectors.headerScenarioStatus)
         .exists()
-        .containsText('t:enabled:()');
+        .containsText(t('enabled'));
 
       assert.dom(selectors.statusToggleSelector).exists().isNotChecked();
 

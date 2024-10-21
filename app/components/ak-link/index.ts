@@ -32,6 +32,7 @@ export interface AkLinkSignatureArgs {
   models?: string[];
   linkTextClass?: string;
   query?: Record<string, unknown>;
+  replace?: boolean;
 }
 
 export interface AkLinkSignature {

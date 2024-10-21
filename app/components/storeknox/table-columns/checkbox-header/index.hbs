@@ -1,1 +1,5 @@
-<AkCheckbox />
+<AkCheckbox
+  @onChange={{action this.handleChange}}
+  @checked={{@selected}}
+  @disabled={{@loading}}
+/>

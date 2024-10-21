@@ -3,7 +3,7 @@ import { setupRenderingTest } from 'ember-qunit';
 import { render, click } from '@ember/test-helpers';
 import { hbs } from 'ember-cli-htmlbars';
 import { setupMirage } from 'ember-cli-mirage/test-support';
-import { setupIntl } from 'ember-intl/test-support';
+import { setupIntl, t } from 'ember-intl/test-support';
 
 import Service from '@ember/service';
 
@@ -56,7 +56,7 @@ module('Integration | Component | organization-details', function (hooks) {
     assert
       .dom('[data-test-org-name-action-btn]')
       .exists()
-      .hasText('t:organizationSettings:()');
+      .hasText(t('organizationSettings'));
 
     await click('[data-test-org-name-action-btn]');
 

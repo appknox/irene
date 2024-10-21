@@ -1,6 +1,6 @@
 import { module, test } from 'qunit';
 import { setupRenderingTest } from 'ember-qunit';
-import { setupIntl } from 'ember-intl/test-support';
+import { setupIntl, t } from 'ember-intl/test-support';
 import { setupMirage } from 'ember-cli-mirage/test-support';
 import { render, click, fillIn } from '@ember/test-helpers';
 import { hbs } from 'ember-cli-htmlbars';
@@ -76,7 +76,7 @@ module(
       assert
         .dom('[data-test-securityAnalysisReportBtn]')
         .exists()
-        .hasText('t:generateReport:()');
+        .hasText(t('generateReport'));
 
       assert
         .dom('[data-test-securityAnalysisReportBtn-moreOptionsBtn]')
@@ -144,7 +144,7 @@ module(
       assert
         .dom('[data-test-securityAnalysisReportBtn-genReportModal-submitBtn]')
         .exists()
-        .hasText('t:generateReport:()');
+        .hasText(t('generateReport'));
 
       await click(
         '[data-test-securityAnalysisReportBtn-genReportModal-submitBtn]'
@@ -152,8 +152,8 @@ module(
 
       assert
         .dom('[data-test-securityAnalysisReportBtn-genReportModal]')
-        .containsText('t:reportGeneratedSuccessfully:()')
-        .containsText('t:reportSendTo:()');
+        .containsText(t('reportGeneratedSuccessfully'))
+        .containsText(t('reportSendTo'));
 
       for (const email of emailsToSendTo) {
         assert
@@ -169,29 +169,29 @@ module(
       'it should download all other report types',
       [
         {
-          label: 't:excelReport:()',
+          label: () => t('excelReport'),
           format: 'xlsx',
         },
         {
-          label: 't:jaHTMLReport:()',
+          label: () => t('jaHTMLReport'),
           format: 'html_ja',
         },
         {
-          label: 't:enHTMLReport:()',
+          label: () => t('enHTMLReport'),
           format: 'html_en',
         },
         {
-          label: 't:excelReport:()',
+          label: () => t('excelReport'),
           format: 'xlsx',
           error: true,
         },
         {
-          label: 't:jaHTMLReport:()',
+          label: () => t('jaHTMLReport'),
           format: 'html_ja',
           error: true,
         },
         {
-          label: 't:enHTMLReport:()',
+          label: () => t('enHTMLReport'),
           format: 'html_en',
           error: true,
         },
@@ -216,9 +216,11 @@ module(
 
         await click(availableReportsBtn);
 
-        const reportTypeDownloadTrigger = `[data-test-securityAnalysisReportBtn-moreOptionsItem='${label}'] button`;
+        const reportTypeDownloadTrigger = `[data-test-securityAnalysisReportBtn-moreOptionsItem='${label()}'] button`;
 
-        assert.dom(reportTypeDownloadTrigger).hasText(`t:download:() ${label}`);
+        assert
+          .dom(reportTypeDownloadTrigger)
+          .hasText(`${t('download')} ${label()}`);
 
         await click(reportTypeDownloadTrigger);
 
@@ -227,7 +229,7 @@ module(
         if (error) {
           assert.strictEqual(
             notifyService.get('errorMsg'),
-            `t:noReportExists:("format":"${label}")`
+            t('noReportExists', { format: label() })
           );
         } else {
           assert.strictEqual(this.window.url, downloadURL);

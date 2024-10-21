@@ -63,7 +63,7 @@ export default class SbomScanReportDrawerReportListComponent extends Component<S
   }
 
   get sbomReports() {
-    return this.scanReportQueryResponse?.toArray() || [];
+    return this.scanReportQueryResponse?.slice() || [];
   }
 
   get totalSbomScanReportCount() {

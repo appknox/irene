@@ -10,7 +10,7 @@ import OrganizationTeamModel from './organization-team';
 import OrganizationUserModel from './organization-user';
 
 export default class OrganizationMemberModel extends Model {
-  @belongsTo('organization-user')
+  @belongsTo('organization-user', { async: true, inverse: null })
   declare member: AsyncBelongsTo<OrganizationUserModel>;
 
   @attr('number')
@@ -28,7 +28,7 @@ export default class OrganizationMemberModel extends Model {
   @attr('date')
   declare lastLoggedIn: Date;
 
-  @hasMany('organization-team')
+  @hasMany('organization-team', { async: true, inverse: null })
   declare teams: AsyncHasMany<OrganizationTeamModel>;
 }
 

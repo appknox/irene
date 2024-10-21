@@ -1,7 +1,7 @@
 import { render } from '@ember/test-helpers';
 import { hbs } from 'ember-cli-htmlbars';
 import { setupMirage } from 'ember-cli-mirage/test-support';
-import { setupIntl } from 'ember-intl/test-support';
+import { setupIntl, t } from 'ember-intl/test-support';
 import { setupRenderingTest } from 'ember-qunit';
 import { module, test } from 'qunit';
 
@@ -52,11 +52,11 @@ module(
 
       assert
         .dom('[data-test-fileDetailScanActions-dynamicScanTitle]')
-        .hasText('t:dast:()');
+        .hasText(t('dast'));
 
       assert
         .dom('[data-test-fileDetailScanActions-dynamicScanStatus]')
-        .hasText('t:notStarted:()');
+        .hasText(t('notStarted'));
     });
 
     test.each(
@@ -82,19 +82,19 @@ module(
           assert
             .dom('[data-test-fileDetailScanActions-dynamicScanStatus]')
             .exists()
-            .hasText('t:completed:()');
+            .hasText(t('completed'));
         } else if (this.file.dynamicStatus === ENUMS.DYNAMIC_STATUS.INQUEUE) {
           assert
             .dom('[data-test-fileDetailScanActions-dynamicScanStatus]')
             .exists()
-            .hasText('t:deviceInQueue:()');
+            .hasText(t('deviceInQueue'));
         } else if (
           this.file.dynamicStatus === ENUMS.DYNAMIC_STATUS.DOWNLOADING
         ) {
           assert
             .dom('[data-test-fileDetailScanActions-dynamicScanStatus]')
             .exists()
-            .hasText('t:deviceDownloading:()');
+            .hasText(t('deviceDownloading'));
         }
       }
     );

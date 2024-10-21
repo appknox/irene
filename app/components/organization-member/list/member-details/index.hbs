@@ -117,7 +117,13 @@
 
   {{else}}
     <div>
-      <AkTable @dense={{true}} class='px-3' data-test-teamList-table as |t|>
+      <AkTable
+        data-test-cy='teamList-table'
+        @dense={{true}}
+        class='px-3'
+        data-test-teamList-table
+        as |t|
+      >
         <t.head data-test-teamList-thead @columns={{this.columns}} />
         <t.body @rows={{pgc.currentPageResults}} as |b|>
           <b.row data-test-teamList-row as |r|>

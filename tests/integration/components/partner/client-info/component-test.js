@@ -3,7 +3,7 @@ import { setupRenderingTest } from 'ember-qunit';
 import { render } from '@ember/test-helpers';
 import { hbs } from 'ember-cli-htmlbars';
 import { setupMirage } from 'ember-cli-mirage/test-support';
-import { setupIntl } from 'ember-intl/test-support';
+import { setupIntl, t } from 'ember-intl/test-support';
 import { underscore } from '@ember/string';
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
@@ -47,7 +47,7 @@ module('Integration | Component | partner/client-info', function (hooks) {
     });
     this.set('client', client);
     await render(hbs`<Partner::ClientInfo @client={{this.client}}/>`);
-    assert.dom('div[data-test-title]').hasText(`t:noName:()`);
+    assert.dom('div[data-test-title]').hasText(t('noName'));
     assert.dom('div[data-test-title]').hasClass(styles['empty-title']);
   });
 
@@ -88,7 +88,7 @@ module('Integration | Component | partner/client-info', function (hooks) {
     client.lastUploadedOn = null;
     this.set('client', client);
     await render(hbs`<Partner::ClientInfo @client={{this.client}}/>`);
-    assert.dom('div[data-test-last-upload]').hasText('t:noUploads:()');
+    assert.dom('div[data-test-last-upload]').hasText(t('noUploads'));
   });
 
   test('it should show last uploded date in relative format', async function (assert) {
@@ -96,7 +96,7 @@ module('Integration | Component | partner/client-info', function (hooks) {
     this.set('client', client);
     dayjs.extend(relativeTime);
     await render(hbs`<Partner::ClientInfo @client={{this.client}}/>`);
-    assert.dom('div[data-test-last-upload-label]').hasText(`t:lastUpload:()`);
+    assert.dom('div[data-test-last-upload-label]').hasText(t('lastUpload'));
     assert
       .dom('div[data-test-last-upload]')
       .hasText(dayjs(this.client.lastUploadedOn).fromNow());
@@ -130,7 +130,7 @@ module('Integration | Component | partner/client-info', function (hooks) {
     this.set('client', client);
     await render(hbs`<Partner::ClientInfo @client={{this.client}}/>`);
     assert.dom('div[data-test-payment-plan-row]').exists();
-    assert.dom('div[data-test-payment-plan-label]').hasText(`t:paymentPlan:()`);
+    assert.dom('div[data-test-payment-plan-label]').hasText(t('paymentPlan'));
     assert.dom('div[data-test-payment-plan]').exists();
   });
 

@@ -1,7 +1,7 @@
 import { click, render } from '@ember/test-helpers';
 import { hbs } from 'ember-cli-htmlbars';
 import { setupMirage } from 'ember-cli-mirage/test-support';
-import { setupIntl } from 'ember-intl/test-support';
+import { setupIntl, t } from 'ember-intl/test-support';
 import { setupRenderingTest } from 'ember-qunit';
 import { module, test } from 'qunit';
 import { capitalize } from '@ember/string';
@@ -43,15 +43,15 @@ module('Integration | Component | sbom/component-details', function (hooks) {
 
     assert
       .dom('[data-test-sbomComponentDetails-title]')
-      .hasText('t:sbomModule.componentDetails:()');
+      .hasText(t('sbomModule.componentDetails'));
 
     assert
       .dom('[data-test-sbomComponentDetails-description]')
-      .hasText('t:sbomModule.componentDetailsDescription:()');
+      .hasText(t('sbomModule.componentDetailsDescription'));
 
     assert
       .dom('[data-test-sbomComponentDetails-headerTitleLabel]')
-      .hasText('t:sbomModule.componentName:()');
+      .hasText(t('sbomModule.componentName'));
 
     assert
       .dom('[data-test-sbomComponentDetails-headerTitleValue]')
@@ -101,23 +101,23 @@ module('Integration | Component | sbom/component-details', function (hooks) {
     // Tests for the component details tab
     const componentSummaryList = [
       {
-        label: 't:sbomModule.componentType:()',
+        label: t('sbomModule.componentType'),
         value: capitalize(this.sbomComponent.type),
       },
       {
-        label: 't:version:()',
+        label: t('version'),
         value: this.sbomComponent.version,
       },
       {
-        label: 't:sbomModule.latestVersion:()',
+        label: t('sbomModule.latestVersion'),
         value: this.sbomComponent.latestVersion,
       },
       {
-        label: 't:author:()',
+        label: t('author'),
         value: this.sbomComponent.author,
       },
       {
-        label: 't:license:()',
+        label: t('license'),
         value: this.sbomComponent.licenses.join(', '),
       },
     ];
@@ -134,7 +134,7 @@ module('Integration | Component | sbom/component-details', function (hooks) {
 
     // assert
     //   .dom('[data-test-sbomScanDetails-componentDetails-howToFixTitle]')
-    //   .hasText('t:howToFix:()');
+    //   .hasText(t('howToFix'));
 
     // assert
     //   .dom('[data-test-sbomScanDetails-componentDetails-howToFixRemedy]')

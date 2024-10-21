@@ -20,6 +20,9 @@ export interface VncViewerSignature {
     profileId?: number;
     isAutomated?: boolean;
   };
+  Blocks: {
+    controls?: [];
+  };
 }
 
 export default class VncViewerComponent extends Component<VncViewerSignature> {

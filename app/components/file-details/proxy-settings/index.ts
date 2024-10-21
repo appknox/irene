@@ -72,7 +72,7 @@ export default class FileDetailsProxySettingsComponent extends Component<FileDet
       }
     } catch (error) {
       const err = error as AdapterError;
-      let errMsg = this.intl.t('plaseTryAgain');
+      let errMsg = this.intl.t('pleaseTryAgain');
 
       if (err.errors && err.errors.length) {
         errMsg = err.errors[0]?.detail || errMsg;

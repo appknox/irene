@@ -49,7 +49,7 @@ export default class FileDetailsManualScanComponent extends Component<FileDetail
       },
       {
         route: 'authenticated.dashboard.file.manual-scan',
-        linkTitle: 'Manual Scan',
+        linkTitle: this.intl.t('manualScan'),
         model: this.args.file.id,
       },
     ];
@@ -66,7 +66,7 @@ export default class FileDetailsManualScanComponent extends Component<FileDetail
       {
         id: 'manual-results',
         hidden: !this.args.file.isManualDone,
-        label: this.intl.t('manualResults'),
+        label: this.intl.t('manualScanResults'),
         hasBadge: true,
         badgeCount: this.args.file.manualVulnerabilityCount,
         route: 'authenticated.dashboard.file.manual-scan.results',

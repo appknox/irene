@@ -12,7 +12,7 @@ export default class DynamicscanModel extends Model {
   @service declare intl: IntlService;
 
   // Generic dynamic scan info
-  @belongsTo('file', { async: true })
+  @belongsTo('file', { async: true, inverse: null })
   declare file: AsyncBelongsTo<FileModel>;
 
   @attr('number')
@@ -22,10 +22,10 @@ export default class DynamicscanModel extends Model {
   declare status: number;
 
   // User actions
-  @belongsTo('user', { async: true })
+  @belongsTo('user', { async: true, inverse: null })
   declare startedByUser: AsyncBelongsTo<UserModel>;
 
-  @belongsTo('user', { async: true })
+  @belongsTo('user', { async: true, inverse: null })
   declare stoppedByUser: AsyncBelongsTo<UserModel>;
 
   // Scan user preferences
@@ -38,7 +38,7 @@ export default class DynamicscanModel extends Model {
   @attr('string')
   declare platformVersion: string;
 
-  @belongsTo('scan-parameter-group')
+  @belongsTo('scan-parameter-group', { async: true, inverse: null })
   declare scanParameterGroups: AsyncBelongsTo<ScanParameterModel>;
 
   @attr('boolean')
@@ -91,7 +91,7 @@ export default class DynamicscanModel extends Model {
   @attr('number')
   declare time: number;
 
-  @belongsTo('available-device')
+  @belongsTo('available-device', { async: true, inverse: null })
   declare availableDevice: AsyncBelongsTo<AvailableDeviceModel>;
 
   async extendTime(time: number) {

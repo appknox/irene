@@ -4,7 +4,7 @@ import { click, render } from '@ember/test-helpers';
 import { hbs } from 'ember-cli-htmlbars';
 import Service from '@ember/service';
 import { setupMirage } from 'ember-cli-mirage/test-support';
-import { setupIntl } from 'ember-intl/test-support';
+import { setupIntl, t } from 'ember-intl/test-support';
 
 module(
   'Integration | Component | organization-member/list/member-drawer',
@@ -57,7 +57,7 @@ module(
       );
 
       assert.dom('[data-test-member-drawer]').exists();
-      assert.dom('[data-test-member-drawer-title]').hasText('t:userDetails:()');
+      assert.dom('[data-test-member-drawer-title]').hasText(t('userDetails'));
       assert.dom('[data-test-member-drawer-content]').exists();
     });
 
@@ -77,7 +77,7 @@ module(
       await click('[data-test-add-to-team-button]');
 
       assert.dom('[data-test-add-to-team-modal]').exists();
-      assert.dom('[data-test-member-drawer-title]').hasText('t:addToTeams:()');
+      assert.dom('[data-test-member-drawer-title]').hasText(t('addToTeams'));
       assert.dom('[data-test-member-drawer-content]').exists();
     });
   }

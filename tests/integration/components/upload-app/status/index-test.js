@@ -3,7 +3,7 @@ import { setupRenderingTest } from 'ember-qunit';
 import { render, click, find, findAll } from '@ember/test-helpers';
 import { hbs } from 'ember-cli-htmlbars';
 import { setupMirage } from 'ember-cli-mirage/test-support';
-import { setupIntl } from 'ember-intl/test-support';
+import { setupIntl, t } from 'ember-intl/test-support';
 import ENUMS from 'irene/enums';
 
 import Service from '@ember/service';
@@ -131,7 +131,7 @@ module('Integration | Component | upload-app/status', function (hooks) {
 
     assert
       .dom('[data-test-uploadAppStatusPopover-title]', popoverContainer)
-      .hasText('t:uploadStatus:()');
+      .hasText(t('uploadStatus'));
 
     // default 2 in progress submissions created
     assert
@@ -176,7 +176,7 @@ module('Integration | Component | upload-app/status', function (hooks) {
           '[data-test-uploadAppStatusDetails-uploadSourceTitle]',
           submissionDetails[0]
         )
-        .hasText('t:viaLink:()');
+        .hasText(t('viaLink'));
     } else {
       assert
         .dom(
@@ -190,7 +190,7 @@ module('Integration | Component | upload-app/status', function (hooks) {
           '[data-test-uploadAppStatusDetails-uploadSourceTitle]',
           submissionDetails[0]
         )
-        .hasText('t:viaSystem:()');
+        .hasText(t('viaSystem'));
     }
 
     // default submission is in progress
@@ -206,7 +206,7 @@ module('Integration | Component | upload-app/status', function (hooks) {
         '[data-test-uploadAppStatusDetails-statusLabel]',
         submissionDetails[0]
       )
-      .hasText('t:inProgress:()');
+      .hasText(t('inProgress'));
 
     assert
       .dom('[data-test-uploadAppStatusDetails-appIcon]', submissionDetails[0])
@@ -272,7 +272,7 @@ module('Integration | Component | upload-app/status', function (hooks) {
           submissionDetails[0]
         )
         .hasAttribute('href', submission.url)
-        .hasText('t:viewStoreLink:()');
+        .hasText(t('viewStoreLink'));
     } else {
       assert
         .dom(
@@ -330,7 +330,7 @@ module('Integration | Component | upload-app/status', function (hooks) {
 
     assert
       .dom('[data-test-uploadAppStatusPopover-title]', popoverContainer)
-      .hasText('t:uploadStatus:()');
+      .hasText(t('uploadStatus'));
 
     // default 2 in progress submissions created
     assert

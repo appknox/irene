@@ -2,54 +2,67 @@ import Component from '@glimmer/component';
 import { action } from '@ember/object';
 import { inject as service } from '@ember/service';
 import RouterService from '@ember/routing/router-service';
-import { tracked } from '@glimmer/tracking';
 import IntlService from 'ember-intl/services/intl';
+import Store from '@ember-data/store';
+
 import MeService from 'irene/services/me';
+import { StoreknoxDiscoveryResultQueryParam } from 'irene/routes/authenticated/storeknox/discover/result';
+import SkDiscoveryResultService from 'irene/services/sk-discovery-result';
 
 interface LimitOffset {
   limit: number;
   offset: number;
 }
 
-export default class StoreknoxDiscoverResultsTableComponent extends Component {
+export interface StoreknoxDiscoverResultsTableSignature {
+  Args: {
+    queryParams: StoreknoxDiscoveryResultQueryParam;
+  };
+}
+
+export default class StoreknoxDiscoverResultsTableComponent extends Component<StoreknoxDiscoverResultsTableSignature> {
   @service declare router: RouterService;
   @service declare intl: IntlService;
   @service declare me: MeService;
+  @service declare skDiscoveryResult: SkDiscoveryResultService;
+  @service declare store: Store;
 
-  @tracked searchResults = [
-    {
-      isAndroid: true,
-      iconUrl:
-        'https://appknox-production-public.s3.amazonaws.com/908e507e-1148-4f4d-9939-6dba3d645abc.png',
-      name: 'Shell Asia',
-      packageName: 'com.shellasia.android',
-      companyName: 'Shell Information Technology International',
-      mailId: 'asiashell@shell.com',
-      requested: true,
-      exists: false,
-    },
-    {
-      isAndroid: true,
-      iconUrl:
-        'https://appknox-production-public.s3.amazonaws.com/908e507e-1148-4f4d-9939-6dba3d645abc.png',
-      name: 'Shell Recharge India',
-      packageName: 'com.shellrecharge.india',
-      companyName: 'Shell Information Technology International',
-      mailId: null,
-      requested: false,
-    },
-    {
-      isIos: true,
-      iconUrl:
-        'https://appknox-production-public.s3.amazonaws.com/908e507e-1148-4f4d-9939-6dba3d645abc.png',
-      name: 'Shell Mobility Site Manager',
-      packageName: 'com.shellmobility.ios',
-      companyName: 'Shell Information Technology International',
-      mailId: null,
-      requested: true,
-      exists: true,
-    },
-  ];
+  constructor(
+    owner: unknown,
+    args: StoreknoxDiscoverResultsTableSignature['Args']
+  ) {
+    super(owner, args);
+
+    const { app_limit, app_offset, app_search_id, app_query } =
+      args.queryParams;
+
+    if (app_search_id) {
+      this.skDiscoveryResult.fetchDiscoveryResults.perform(
+        app_limit,
+        app_offset,
+        app_search_id,
+        false
+      );
+    } else {
+      this.skDiscoveryResult.uploadSearchQuery.perform(
+        app_query,
+        app_limit,
+        app_offset
+      );
+    }
+  }
+
+  get searchResultsData() {
+    if (this.skDiscoveryResult.isFetchingData) {
+      return Array.from({ length: 5 }, () => ({}));
+    } else {
+      return this.skDiscoveryResult.skDiscoveryResultData?.toArray() || [];
+    }
+  }
+
+  get loadingData() {
+    return this.skDiscoveryResult.isFetchingData;
+  }
 
   get columns() {
     return [
@@ -89,28 +102,43 @@ export default class StoreknoxDiscoverResultsTableComponent extends Component {
 
   // Table Actions
   @action goToPage(args: LimitOffset) {
-    const { limit, offset } = args;
-    this.router.transitionTo('authenticated.storeknox.discover.result', {
-      queryParams: { app_limit: limit, app_offset: offset },
-    });
+    const { app_search_id } = this.args.queryParams;
+
+    this.skDiscoveryResult.fetchDiscoveryResults.perform(
+      args.limit,
+      args.offset,
+      app_search_id
+    );
   }
 
   @action onItemPerPageChange(args: LimitOffset) {
-    const { limit } = args;
-    const offset = 0;
+    const { app_search_id } = this.args.queryParams;
 
-    this.router.transitionTo('authenticated.storeknox.discover.result', {
-      queryParams: { app_limit: limit, app_offset: offset },
-    });
+    this.skDiscoveryResult.fetchDiscoveryResults.perform(
+      args.limit,
+      0,
+      app_search_id
+    );
+  }
+
+  @action selectRow(ulid: string, value: boolean) {
+    this.skDiscoveryResult.selectRow(ulid, value);
+  }
+
+  @action sendRequest() {
+    this.skDiscoveryResult.addMultipleToInventory.perform();
+  }
+
+  @action selectAllRow(value: boolean) {
+    this.skDiscoveryResult.selectAllRow(value);
+  }
+
+  get disabledButton() {
+    return this.skDiscoveryResult.selectedResults.length === 0;
   }
 
   get totalCount() {
-    return this.searchResults.length || 0;
-  }
-
-  get tableData() {
-    // console.log(this.searchResults);
-    return this.searchResults;
+    return this.skDiscoveryResult.skDiscoveryResultData?.meta?.count || 0;
   }
 
   get itemPerPageOptions() {
@@ -118,11 +146,11 @@ export default class StoreknoxDiscoverResultsTableComponent extends Component {
   }
 
   get limit() {
-    return 10;
+    return Number(this.args.queryParams.app_limit);
   }
 
   get offset() {
-    return 0;
+    return Number(this.args.queryParams.app_offset);
   }
 
   get isAdmin() {

@@ -1,7 +1,7 @@
 import { find, findAll, render } from '@ember/test-helpers';
 import { hbs } from 'ember-cli-htmlbars';
 import { setupMirage } from 'ember-cli-mirage/test-support';
-import { setupIntl } from 'ember-intl/test-support';
+import { setupIntl, t } from 'ember-intl/test-support';
 import { setupRenderingTest } from 'ember-qunit';
 import { module, test } from 'qunit';
 import Service from '@ember/service';
@@ -20,33 +20,33 @@ class NotificationsStub extends Service {
   }
 }
 
-const projectAccessOptions = [
-  { label: 't:allProjects:()', value: true },
-  { label: 't:serviceAccountModule.forSpecificProjects:()', value: false },
+const projectAccessOptions = () => [
+  { label: t('allProjects'), value: true },
+  { label: t('serviceAccountModule.forSpecificProjects'), value: false },
 ];
 
-const scopeDetails = [
+const scopeDetails = () => [
   {
     key: 'projects-read',
-    scopeLabel: 't:serviceAccountModule.scopes.projects.label:()',
-    scopeDescription:
-      't:serviceAccountModule.scopes.projects.readDescription:()',
-    accessType: 't:read:()',
+    scopeLabel: t('serviceAccountModule.scopes.projects.label'),
+    scopeDescription: t('serviceAccountModule.scopes.projects.readDescription'),
+    accessType: t('read'),
     scopeKey: 'scopePublicApiProjectRead',
   },
   {
     key: 'scan-results-va-read',
-    scopeLabel: 't:serviceAccountModule.scopes.scan-results-va.label:()',
-    scopeDescription:
-      't:serviceAccountModule.scopes.scan-results-va.readDescription:()',
-    accessType: 't:read:()',
+    scopeLabel: t('serviceAccountModule.scopes.scan-results-va.label'),
+    scopeDescription: t(
+      'serviceAccountModule.scopes.scan-results-va.readDescription'
+    ),
+    accessType: t('read'),
     scopeKey: 'scopePublicApiScanResultVa',
   },
   {
     key: 'user-read',
-    scopeLabel: 't:serviceAccountModule.scopes.user.label:()',
-    scopeDescription: 't:serviceAccountModule.scopes.user.readDescription:()',
-    accessType: 't:read:()',
+    scopeLabel: t('serviceAccountModule.scopes.user.label'),
+    scopeDescription: t('serviceAccountModule.scopes.user.readDescription'),
+    accessType: t('read'),
     scopeKey: 'scopePublicApiUserRead',
   },
 ];
@@ -91,11 +91,11 @@ module(
 
       assert
         .dom('[data-test-serviceAccountDetails-title]')
-        .hasText('t:serviceAccountModule.detailsTitle:()');
+        .hasText(t('serviceAccountModule.detailsTitle'));
 
       assert
         .dom('[data-test-serviceAccountDetails-description]')
-        .hasText('t:serviceAccountModule.detailsDescription:()');
+        .hasText(t('serviceAccountModule.detailsDescription'));
 
       assert
         .dom('[data-test-serviceAccountDetails-moreOptionsBtn]')
@@ -108,7 +108,7 @@ module(
       assert.strictEqual(sectionHeadings.length, 4);
 
       // assert account overview
-      assert.dom(sectionHeadings[0]).hasText('t:accountOverview:()');
+      assert.dom(sectionHeadings[0]).hasText(t('accountOverview'));
 
       assert
         .dom('[data-test-serviceAccountSection-accountOverview-actionBtn]')
@@ -116,7 +116,7 @@ module(
 
       assert
         .dom('[data-test-serviceAccountSection-accountOverview-nameLabel]')
-        .hasText('t:serviceAccountModule.nameOfTheServiceAccount:()');
+        .hasText(t('serviceAccountModule.nameOfTheServiceAccount'));
 
       assert
         .dom('[data-test-serviceAccountSection-accountOverview-auditInfoIcon]')
@@ -130,7 +130,7 @@ module(
         .dom(
           '[data-test-serviceAccountSection-accountOverview-descriptionLabel]'
         )
-        .hasText('t:description:()');
+        .hasText(t('description'));
 
       assert
         .dom(
@@ -139,7 +139,7 @@ module(
         .hasText(this.serviceAccount.description);
 
       // assert access token section
-      assert.dom(sectionHeadings[1]).hasText('t:accessToken:()');
+      assert.dom(sectionHeadings[1]).hasText(t('accessToken'));
 
       assert
         .dom('[data-test-serviceAccountSection-accessToken-actionBtn]')
@@ -147,7 +147,7 @@ module(
 
       assert
         .dom('[data-test-serviceAccountSection-accessToken-accountIdLabel]')
-        .hasText('t:accessKeyID:()');
+        .hasText(t('accessKeyID'));
 
       assert
         .dom('[data-test-serviceAccountSection-accessToken-accountIdValue]')
@@ -155,7 +155,7 @@ module(
 
       assert
         .dom('[data-test-serviceAccountSection-accessToken-secretKeyLabel]')
-        .hasText('t:serviceAccountModule.secretAccessKey:()');
+        .hasText(t('serviceAccountModule.secretAccessKey'));
 
       assert
         .dom('[data-test-serviceAccountSection-accessToken-secretKeyMasked]')
@@ -165,22 +165,22 @@ module(
         .dom(
           '[data-test-serviceAccountSection-accessToken-secretKeyHelperText]'
         )
-        .hasText('t:serviceAccountModule.maskedSecretAccessKeyHelperText:()');
+        .hasText(t('serviceAccountModule.maskedSecretAccessKeyHelperText'));
 
       assert
         .dom('[data-test-serviceAccountSection-accessToken-expiryLabel]')
-        .hasText('t:expiresOn:()');
+        .hasText(t('expiresOn'));
 
       assert
         .dom('[data-test-serviceAccountSection-accessToken-expiryValue]')
         .hasText(
           this.serviceAccount.expiry === null
-            ? 't:noExpiry:()'
+            ? t('noExpiry')
             : dayjs(this.serviceAccount.expiry).format('MMM DD, YYYY')
         );
 
       // assert scopes section
-      assert.dom(sectionHeadings[2]).hasText('t:selectedScope:()');
+      assert.dom(sectionHeadings[2]).hasText(t('selectedScope'));
 
       assert
         .dom('[data-test-serviceAccountSection-selectScope-actionBtn]')
@@ -195,9 +195,9 @@ module(
           '[data-test-serviceAccountSection-selectScope-nodeLabel]',
           parentContainer
         )
-        .containsText('t:serviceAccountModule.scopes.public-api.label:()');
+        .containsText(t('serviceAccountModule.scopes.public-api.label'));
 
-      for (const scope of scopeDetails) {
+      for (const scope of scopeDetails()) {
         const container = find(
           `[data-test-ak-checkbox-tree-nodeKey="${scope.key}"]`
         );
@@ -232,7 +232,7 @@ module(
       }
 
       // assert select project section
-      assert.dom(sectionHeadings[3]).hasText('t:selectedProject:()');
+      assert.dom(sectionHeadings[3]).hasText(t('selectedProject'));
 
       assert
         .dom('[data-test-serviceAccountSection-selectProject-actionBtn]')
@@ -242,7 +242,7 @@ module(
         .dom(
           '[data-test-serviceAccountSection-selectProject-projectAccessLabel]'
         )
-        .hasText('t:serviceAccountModule.projectAccess:()');
+        .hasText(t('serviceAccountModule.projectAccess'));
 
       assert
         .dom(
@@ -250,7 +250,7 @@ module(
         )
         .exists();
 
-      const selectedProjectAccess = projectAccessOptions.find(
+      const selectedProjectAccess = projectAccessOptions().find(
         (opt) => opt.value === this.serviceAccount.allProjects
       );
 
@@ -259,7 +259,9 @@ module(
           '[data-test-serviceAccountSection-selectProject-selectedProjectAccess]'
         )
         .hasText(
-          `t:serviceAccountModule.selectedProjectAccess:("projectAccess":"${selectedProjectAccess?.label}")`
+          t('serviceAccountModule.selectedProjectAccess', {
+            projectAccess: selectedProjectAccess?.label,
+          })
         );
 
       if (this.serviceAccount.allProjects) {

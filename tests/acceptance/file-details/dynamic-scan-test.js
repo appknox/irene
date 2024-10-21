@@ -172,13 +172,108 @@ module('Acceptance | file-details/dynamic-scan', function (hooks) {
       organization,
       file,
       profile,
+      project,
       store,
       dynamicscan,
       dynamicscanMode,
     });
   });
 
-  test('it renders dynamic scan manual', async function (assert) {
+  test('it visits manual DAST page', async function (assert) {
+    this.file = this.server.create('file', {
+      project: '1',
+      profile: '100',
+      dynamic_status: ENUMS.DYNAMIC_STATUS.READY,
+      is_dynamic_done: false,
+      is_active: true,
+    });
+
+    this.server.create('dynamicscan-old', { id: this.file.id });
+
+    this.server.get('/dynamicscan/:id', (schema, req) => {
+      return schema.dynamicscanOlds.find(`${req.params.id}`)?.toJSON();
+    });
+
+    await visit(`/dashboard/file/${this.file.id}/dynamic-scan/manual`);
+
+    assert
+      .dom('[data-test-fileDetails-dynamicScan-header-breadcrumbContainer]')
+      .exists();
+
+    const breadcrumbItems = [t('allProjects'), t('scanDetails'), t('dast')];
+
+    breadcrumbItems.map((item) => {
+      assert
+        .dom(
+          `[data-test-fileDetails-dynamicScan-header-breadcrumbItem="${item}"]`
+        )
+        .exists();
+    });
+
+    assert.dom('[data-test-fileDetailsSummary-root]').exists();
+
+    const tabs = [
+      { id: 'manual-dast-tab', label: 'dastTabs.manualDAST' },
+      // { id: 'automated-dast-tab', label: 'dastTabs.automatedDAST' },
+      { id: 'dast-results-tab', label: 'dastTabs.dastResults' },
+    ];
+
+    tabs.map((item) => {
+      assert
+        .dom(`[data-test-fileDetails-dynamicScan-header="${item.id}"]`)
+        .exists();
+
+      assert
+        .dom(`[data-test-fileDetails-dynamicScan-header="${item.id}"]`)
+        .containsText(t(item.label));
+    });
+
+    assert
+      .dom(`[data-test-fileDetails-dynamicScan-manualDast-vncViewer]`)
+      .exists();
+
+    assert
+      .dom('[data-test-fileDetails-dynamicScan-manualDast-fullscreenBtn]')
+      .exists();
+
+    await click('[data-test-fileDetails-dynamicScan-manualDast-fullscreenBtn]');
+
+    assert
+      .dom('[data-test-vncViewer-root]')
+      .exists()
+      .hasClass(/vnc-viewer-fullscreen/);
+
+    assert
+      .dom('[data-test-fileDetails-dynamicScan-manualDastFullScreen-title]')
+      .exists()
+      .containsText(t('realDevice'));
+
+    assert
+      .dom('[data-test-fileDetails-dynamicScanAction-stopBtn]')
+      .exists()
+      .containsText(t('stop'));
+
+    assert
+      .dom('[data-test-fileDetails-dynamicScan-manualDastFullScreen-closeBtn]')
+      .exists();
+
+    assert.dom('[data-test-vncViewer-device]').exists();
+
+    await click(
+      '[data-test-fileDetails-dynamicScan-manualDastFullScreen-closeBtn]'
+    );
+
+    assert
+      .dom('[data-test-vncViewer-root]')
+      .exists()
+      .doesNotHaveClass(/vnc-viewer-fullscreen/);
+
+    assert.dom('[data-test-NovncRfb-canvasContainer]').exists();
+  });
+
+  // TODO: Unskip when final DAST changes are ready
+  // Test for Final DAST Release
+  test.skip('it renders dynamic scan manual', async function (assert) {
     this.server.create('dynamicscan', {
       id: this.profile.id,
       mode: 0,
@@ -210,7 +305,7 @@ module('Acceptance | file-details/dynamic-scan', function (hooks) {
 
     const tabs = [
       { id: 'manual-dast-tab', label: 'dastTabs.manualDAST' },
-      { id: 'automated-dast-tab', label: 'dastTabs.automatedDAST' },
+      // { id: 'automated-dast-tab', label: 'dastTabs.automatedDAST' },
       { id: 'dast-results-tab', label: 'dastTabs.dastResults' },
     ];
 
@@ -252,6 +347,48 @@ module('Acceptance | file-details/dynamic-scan', function (hooks) {
   });
 
   test('it renders expiry correctly', async function (assert) {
+    this.file = this.server.create('file', {
+      project: '1',
+      profile: '100',
+      dynamic_status: ENUMS.DYNAMIC_STATUS.READY,
+      is_dynamic_done: false,
+      is_active: true,
+    });
+
+    this.server.create('dynamicscan-old', {
+      id: this.file.id,
+      expires_on: new Date(Date.now() + 10 * 60 * 1000).toISOString(),
+    });
+
+    this.server.get('/dynamicscan/:id', (schema, req) => {
+      return schema.dynamicscanOlds.find(`${req.params.id}`)?.toJSON();
+    });
+
+    await visit(`/dashboard/file/${this.file.id}/dynamic-scan/manual`);
+
+    assert.dom('[data-test-fileDetailsSummary-root]').exists();
+
+    assert.dom('[data-test-fileDetails-dynamicScan-expiry]').exists();
+
+    assert
+      .dom('[data-test-fileDetails-dynamicScan-expiry-time]')
+      .hasText(/09:5/i);
+
+    await click('[data-test-fileDetails-dynamicScan-expiry-extendBtn]');
+
+    assert
+      .dom('[data-test-fileDetails-dynamicScan-expiry-extendTime-menu-item]')
+      .exists({ count: 3 });
+
+    assert
+      .dom(`[data-test-fileDetails-dynamicScan-manualDast-vncViewer]`)
+      .exists();
+
+    assert.dom(`[data-test-vncViewer-device]`).exists();
+  });
+
+  // TODO: For completed DAST implementation
+  test.skip('it renders expiry correctly', async function (assert) {
     this.server.create('dynamicscan', {
       id: this.profile.id,
       mode: 0,
@@ -287,7 +424,7 @@ module('Acceptance | file-details/dynamic-scan', function (hooks) {
     assert.dom(`[data-test-vncViewer-device]`).exists();
   });
 
-  test('it renders dynamic scan automated', async function (assert) {
+  test.skip('it renders dynamic scan automated', async function (assert) {
     await visit(`/dashboard/file/${this.file.id}/dynamic-scan/automated`);
 
     assert
@@ -343,7 +480,7 @@ module('Acceptance | file-details/dynamic-scan', function (hooks) {
       .doesNotExist();
   });
 
-  test.each(
+  test.skip(
     'test: start dynamic scan',
     [{ isAutomated: false }, { isAutomated: true }],
     async function (assert, { isAutomated }) {
@@ -404,12 +541,12 @@ module('Acceptance | file-details/dynamic-scan', function (hooks) {
       );
 
       assert
-        .dom('[data-test-dynamicscan-startbtn]')
+        .dom('[data-test-fileDetails-dynamicScanAction-startBtn]')
         .exists()
         .containsText(`${scanTypeText} DAST`);
 
       // Load dynamic scan drawer
-      await click('[data-test-dynamicScan-startBtn]');
+      await click('[data-test-fileDetails-dynamicScanAction-startBtn]');
 
       assert
         .dom('[data-test-fileDetails-dynamicScanDrawer-drawerContainer-title]')
@@ -472,9 +609,9 @@ module('Acceptance | file-details/dynamic-scan', function (hooks) {
     }
   );
 
-  test.each(
+  test.skip(
     'test: cancel/stop dynamic scan',
-    [{ isAutomated: false }, { isAutomated: true }],
+    [{ isAutomated: false }],
     async function (assert, { isAutomated }) {
       assert.expect();
 
@@ -490,7 +627,7 @@ module('Acceptance | file-details/dynamic-scan', function (hooks) {
         mode: isAutomated ? 1 : 0,
         status: isAutomated
           ? ENUMS.DYNAMIC_STATUS.RUNNING
-          : ENUMS.DYNAMIC_STATUS.READY,
+          : ENUMS.DYNAMIC_STATUS.NONE,
       });
 
       this.server.get('/profiles/:id/api_scan_options', (schema, req) => {
@@ -513,10 +650,11 @@ module('Acceptance | file-details/dynamic-scan', function (hooks) {
         `/dashboard/file/${this.file.id}/dynamic-scan/${scanTypeText.toLowerCase()}`
       );
 
-      const statusChipSelector = '[data-test-dynamicScan-statusChip]';
-      const stopBtn = '[data-test-dynamicScan-stopBtn]';
-      const cancelBtn = '[data-test-dynamicScan-cancelBtn]';
-      const scanStartBtn = '[data-test-dynamicScan-startBtn]';
+      const statusChipSelector =
+        '[data-test-fileDetails-dynamicScan-statusChip]';
+      const stopBtn = '[data-test-fileDetails-dynamicScanAction-stopBtn]';
+      const cancelBtn = '[data-test-fileDetails-dynamicScanAction-cancelBtn]';
+      const scanStartBtn = '[data-test-fileDetails-dynamicScanAction-startBtn]';
 
       assert.dom(scanStartBtn).doesNotExist();
 
@@ -555,7 +693,7 @@ module('Acceptance | file-details/dynamic-scan', function (hooks) {
     }
   );
 
-  test('it should render toggle dast ui if automated dast is not enabled', async function (assert) {
+  test.skip('it should render toggle dast ui if automated dast is not enabled', async function (assert) {
     this.dynamicscanMode.update({ dynamicscan_mode: 'Manual' });
 
     this.server.create('proxy-setting', { id: this.profile.id });
@@ -671,7 +809,7 @@ module('Acceptance | file-details/dynamic-scan', function (hooks) {
     );
   });
 
-  test('it should render upselling ui if automated dast is not enabled', async function (assert) {
+  test.skip('it should render upselling ui if automated dast is not enabled', async function (assert) {
     this.file.update({ can_run_automated_dynamicscan: false });
 
     this.organization.update({
@@ -696,17 +834,18 @@ module('Acceptance | file-details/dynamic-scan', function (hooks) {
       .hasText(t('dastTabs.manualDAST'))
       .hasClass(/active-shadow/);
 
-    await click(tabLink('automated-dast-tab'));
+    // TODO: Uncomment when full DAST feature is ready
+    // await click(tabLink('automated-dast-tab'));
 
-    assert
-      .dom(tabLink('automated-dast-tab'))
-      .hasText(t('dastTabs.automatedDAST'))
-      .hasClass(/active-shadow/);
+    // assert
+    //   .dom(tabLink('automated-dast-tab'))
+    //   .hasText(t('dastTabs.automatedDAST'))
+    //   .hasClass(/active-shadow/);
 
-    assert.strictEqual(
-      currentURL(),
-      `/dashboard/file/${this.file.id}/dynamic-scan/automated`
-    );
+    // assert.strictEqual(
+    //   currentURL(),
+    //   `/dashboard/file/${this.file.id}/dynamic-scan/automated`
+    // );
 
     await click(tabLink('dast-results-tab'));
 

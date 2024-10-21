@@ -2,7 +2,7 @@ import { module, test } from 'qunit';
 import { setupRenderingTest } from 'ember-qunit';
 import { click, fillIn, render } from '@ember/test-helpers';
 import { hbs } from 'ember-cli-htmlbars';
-import { setupIntl } from 'ember-intl/test-support';
+import { setupIntl, t } from 'ember-intl/test-support';
 import { setupMirage } from 'ember-cli-mirage/test-support';
 import Service from '@ember/service';
 import { Response } from 'miragejs';
@@ -43,7 +43,7 @@ module(
 
       assert
         .dom('[data-test-registration-form-title]')
-        .hasText('t:completeRegistration:()');
+        .hasText(t('completeRegistration'));
 
       assert.dom('[data-test-registration-terms-accept]').exists();
 
@@ -213,12 +213,12 @@ module(
       assert
         .dom('[data-test-register-confirm-title]')
         .exists()
-        .hasText('t:invitationRegisterConfirmation:()');
+        .hasText(t('invitationRegisterConfirmation'));
 
       assert
         .dom('[data-test-register-confirm-message]')
         .exists()
-        .hasText('t:pleaseLogin:()');
+        .hasText(t('pleaseLogin'));
     });
 
     test('it should show error message if registration fails', async function (assert) {

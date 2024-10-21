@@ -1,27 +1,34 @@
-<AkStack @direction='column' @spacing='0.5'>
+{{#if @loading}}
+  <AkStack @direction='column' @spacing='0.5'>
+    <AkSkeleton @width='180px' @height='16px' />
 
-  <AkTypography
-    @color='secondary'
-    @noWrap={{true}}
-    title={{@data.companyName}}
-    class='pr-4'
-    {{style width='100%'}}
-  >
-    {{@data.companyName}}
-  </AkTypography>
-
-  {{#if @data.mailId}}
+    <AkSkeleton @width='115px' @height='16px' />
+  </AkStack>
+{{else}}
+  <AkStack @direction='column' @spacing='0.5'>
     <AkTypography
-      @color='neutral'
+      @color='secondary'
       @noWrap={{true}}
-      title={{@data.mailId}}
+      title={{@data.devName}}
       class='pr-4'
+      {{style width='100%'}}
     >
-      {{@data.mailId}}
+      {{@data.devName}}
     </AkTypography>
-  {{else}}
-    <AkTypography @color='neutral' @noWrap={{true}} class='pr-4'>
-      {{t 'noDataAvailable'}}
-    </AkTypography>
-  {{/if}}
-</AkStack>
+
+    {{#if @data.devEmail}}
+      <AkTypography
+        @color='neutral'
+        @noWrap={{true}}
+        title={{@data.devEmail}}
+        class='pr-4'
+      >
+        {{@data.devEmail}}
+      </AkTypography>
+    {{else}}
+      <AkTypography @color='neutral' @noWrap={{true}} class='pr-4'>
+        {{t 'noDataAvailable'}}
+      </AkTypography>
+    {{/if}}
+  </AkStack>
+{{/if}}

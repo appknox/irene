@@ -109,28 +109,28 @@ export default class FileModel extends ModelBaseMixin {
   @attr('boolean')
   declare canRunAutomatedDynamicscan: boolean;
 
-  @hasMany('tag', { async: false })
+  @hasMany('tag', { async: false, inverse: null })
   declare tags: SyncHasMany<TagModel>;
 
-  @hasMany('file-report', { async: true })
+  @hasMany('file-report', { async: true, inverse: null })
   declare reports: AsyncHasMany<FileReportModel>;
 
   @hasMany('analysis', { inverse: 'file', async: false })
   declare analyses: SyncHasMany<AnalysisModel>;
 
-  @belongsTo('project', { inverse: 'files' })
+  @belongsTo('project', { inverse: 'files', async: true })
   declare project: AsyncBelongsTo<ProjectModel>;
 
-  @belongsTo('profile', { inverse: 'files' })
+  @belongsTo('profile', { inverse: 'files', async: true })
   declare profile: AsyncBelongsTo<ProfileModel>;
 
-  @belongsTo('sbom-file', { inverse: 'file' })
+  @belongsTo('sbom-file', { inverse: 'file', async: true })
   declare sbFile: AsyncBelongsTo<SbomFileModel>;
 
-  @belongsTo('submission')
+  @belongsTo('submission', { async: true, inverse: null })
   declare submission: AsyncBelongsTo<SubmissionModel>;
 
-  @belongsTo('file', { inverse: null })
+  @belongsTo('file', { inverse: null, async: true })
   declare previousFile: AsyncBelongsTo<FileModel>;
 
   analysesSorting = ['computedRisk:desc'];

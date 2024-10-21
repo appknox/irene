@@ -1,7 +1,13 @@
-{{#if @data.isIos}}
-  <AkSvg::AppstoreLogo />
-{{/if}}
+{{#if @loading}}
+  <AkStack @justifyContent='center'>
+    <AkSkeleton @width='30px' @height='30px' @variant='circular' />
+  </AkStack>
+{{else}}
+  {{#if @data.isIos}}
+    <AkSvg::AppstoreLogo />
+  {{/if}}
 
-{{#if @data.isAndroid}}
-  <AkSvg::StoreknoxPlaystoreLogo />
+  {{#if @data.isAndroid}}
+    <AkSvg::StoreknoxPlaystoreLogo />
+  {{/if}}
 {{/if}}

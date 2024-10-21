@@ -58,7 +58,7 @@ export default class ProjectSettingsGeneralSettingsProjectTeamTableComponent ext
   }
 
   get projectTeamList() {
-    return this.projectTeamListResponse?.toArray().sortBy('created:desc') || [];
+    return this.projectTeamListResponse?.slice().sortBy('created:desc') || [];
   }
 
   get hasNoProjectTeams() {

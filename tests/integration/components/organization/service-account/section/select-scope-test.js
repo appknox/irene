@@ -1,7 +1,7 @@
 import { click, find, render, triggerEvent } from '@ember/test-helpers';
 import { hbs } from 'ember-cli-htmlbars';
 import { setupMirage } from 'ember-cli-mirage/test-support';
-import { setupIntl } from 'ember-intl/test-support';
+import { setupIntl, t } from 'ember-intl/test-support';
 import { setupRenderingTest } from 'ember-qunit';
 import { module, test } from 'qunit';
 import { Response } from 'miragejs';
@@ -20,28 +20,28 @@ class NotificationsStub extends Service {
   }
 }
 
-const scopeDetails = [
+const scopeDetails = () => [
   {
     key: 'projects-read',
-    scopeLabel: 't:serviceAccountModule.scopes.projects.label:()',
-    scopeDescription:
-      't:serviceAccountModule.scopes.projects.readDescription:()',
-    accessType: 't:read:()',
+    scopeLabel: t('serviceAccountModule.scopes.projects.label'),
+    scopeDescription: t('serviceAccountModule.scopes.projects.readDescription'),
+    accessType: t('read'),
     scopeKey: 'scopePublicApiProjectRead',
   },
   {
     key: 'scan-results-va-read',
-    scopeLabel: 't:serviceAccountModule.scopes.scan-results-va.label:()',
-    scopeDescription:
-      't:serviceAccountModule.scopes.scan-results-va.readDescription:()',
-    accessType: 't:read:()',
+    scopeLabel: t('serviceAccountModule.scopes.scan-results-va.label'),
+    scopeDescription: t(
+      'serviceAccountModule.scopes.scan-results-va.readDescription'
+    ),
+    accessType: t('read'),
     scopeKey: 'scopePublicApiScanResultVa',
   },
   {
     key: 'user-read',
-    scopeLabel: 't:serviceAccountModule.scopes.user.label:()',
-    scopeDescription: 't:serviceAccountModule.scopes.user.readDescription:()',
-    accessType: 't:read:()',
+    scopeLabel: t('serviceAccountModule.scopes.user.label'),
+    scopeDescription: t('serviceAccountModule.scopes.user.readDescription'),
+    accessType: t('read'),
     scopeKey: 'scopePublicApiUserRead',
   },
 ];
@@ -78,7 +78,7 @@ module(
 
       assert
         .dom('[data-test-serviceAccountSection-title]')
-        .hasText('t:selectedScope:()');
+        .hasText(t('selectedScope'));
 
       assert
         .dom('[data-test-serviceAccountSection-selectScope-actionBtn]')
@@ -93,9 +93,9 @@ module(
           '[data-test-serviceAccountSection-selectScope-nodeLabel]',
           parentContainer
         )
-        .containsText('t:serviceAccountModule.scopes.public-api.label:()');
+        .containsText(t('serviceAccountModule.scopes.public-api.label'));
 
-      for (const scope of scopeDetails) {
+      for (const scope of scopeDetails()) {
         const container = find(
           `[data-test-ak-checkbox-tree-nodeKey="${scope.key}"]`
         );
@@ -216,7 +216,7 @@ module(
 
         assert
           .dom('[data-test-serviceAccountSection-title]')
-          .hasText('t:selectedScope:()');
+          .hasText(t('selectedScope'));
 
         assert
           .dom('[data-test-serviceAccountSection-selectScope-actionBtn]')
@@ -233,7 +233,7 @@ module(
 
         assert
           .dom('[data-test-serviceAccountSection-title]')
-          .hasText('t:selectScope:()');
+          .hasText(t('selectScope'));
 
         assert.dom('[data-test-ak-checkbox-tree-nodeCheckbox]').exists();
         assert.dom('[data-test-serviceAccountSection-footer]').exists();
@@ -241,12 +241,12 @@ module(
         assert
           .dom('[data-test-serviceAccountSection-selectScope-updateBtn]')
           .isNotDisabled()
-          .hasText('t:update:()');
+          .hasText(t('update'));
 
         assert
           .dom('[data-test-serviceAccountSection-selectScope-cancelBtn]')
           .isNotDisabled()
-          .hasText('t:cancel:()');
+          .hasText(t('cancel'));
 
         let parentContainer = find(
           '[data-test-ak-checkbox-tree-nodeKey="public-api"]'
@@ -259,7 +259,7 @@ module(
             )
           );
         } else {
-          for (const scope of scopeDetails) {
+          for (const scope of scopeDetails()) {
             const container = find(
               `[data-test-ak-checkbox-tree-nodeKey="${scope.key}"]`
             );
@@ -291,7 +291,7 @@ module(
 
           assert
             .dom('[data-test-serviceAccountSection-title]')
-            .hasText('t:selectScope:()');
+            .hasText(t('selectScope'));
 
           assert.dom('[data-test-ak-checkbox-tree-nodeCheckbox]').exists();
           assert.dom('[data-test-serviceAccountSection-footer]').exists();
@@ -299,21 +299,21 @@ module(
           assert
             .dom('[data-test-serviceAccountSection-selectScope-updateBtn]')
             .isNotDisabled()
-            .hasText('t:update:()');
+            .hasText(t('update'));
 
           assert
             .dom('[data-test-serviceAccountSection-selectScope-cancelBtn]')
             .isNotDisabled()
-            .hasText('t:cancel:()');
+            .hasText(t('cancel'));
         } else {
           assert.strictEqual(
             notify.successMsg,
-            't:serviceAccountModule.editSuccessMsg:()'
+            t('serviceAccountModule.editSuccessMsg')
           );
 
           assert
             .dom('[data-test-serviceAccountSection-title]')
-            .hasText('t:selectedScope:()');
+            .hasText(t('selectedScope'));
 
           assert
             .dom('[data-test-ak-checkbox-tree-nodeCheckbox]')
@@ -333,7 +333,7 @@ module(
             )
             .exists();
 
-          for (const scope of scopeDetails) {
+          for (const scope of scopeDetails()) {
             const container = find(
               `[data-test-ak-checkbox-tree-nodeKey="${scope.key}"]`
             );

@@ -1,13 +1,13 @@
-.dynamic-scan-modal {
+.dynamic-scan-drawer {
   height: fit-content;
 
-  .dynamic-scan-modal-body {
+  .dynamic-scan-drawer-body {
     width: 650px;
     min-height: calc(100vh - 120px);
     height: fit-content;
   }
 
-  .dynamic-scan-modal-cta {
+  .dynamic-scan-drawer-cta {
     z-index: 10;
     position: sticky;
     bottom: 0;

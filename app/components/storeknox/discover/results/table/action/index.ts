@@ -1,21 +1,31 @@
 import Component from '@glimmer/component';
-import { action } from '@ember/object';
+import Store from '@ember-data/store';
 import { inject as service } from '@ember/service';
-import RouterService from '@ember/routing/router-service';
-import { tracked } from '@glimmer/tracking';
-import IntlService from 'ember-intl/services/intl';
-import MeService from 'irene/services/me';
+import { action } from '@ember/object';
 
-interface LimitOffset {
-  limit: number;
-  offset: number;
+import MeService from 'irene/services/me';
+import SkDiscoverySearchResultModel from 'irene/models/sk-discovery-result';
+import SkDiscoveryResultService from 'irene/services/sk-discovery-result';
+
+interface StoreknoxDiscoverResultsTableActionSignature {
+  Args: {
+    data: SkDiscoverySearchResultModel;
+    loading: boolean;
+  };
 }
 
-export default class StoreknoxDiscoverResultsTableActionComponent extends Component {
+export default class StoreknoxDiscoverResultsTableActionComponent extends Component<StoreknoxDiscoverResultsTableActionSignature> {
   @service declare me: MeService;
+  @service declare store: Store;
+  @service declare skDiscoveryResult: SkDiscoveryResultService;
 
   get isAdmin() {
     return this.me.org?.is_admin;
+  }
+
+  @action
+  addToInventory(ulid: string) {
+    this.skDiscoveryResult.addToInventory.perform(ulid);
   }
 }
 

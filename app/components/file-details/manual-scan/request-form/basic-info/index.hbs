@@ -26,13 +26,13 @@
       data-test-manualScanBasicInfo-minOSVersionLabel
       local-class='basic-info-label'
     >
-      {{t 'modalCard.manual.minOSVersion'}}
+      {{t 'minOSVersion'}}
     </AkTypography>
 
     <div local-class='basic-info-input-container'>
       <AkTextField
         data-test-manualScanBasicInfo-minOSVersionInput
-        @placeholder={{t 'modalCard.manual.minOSVersion'}}
+        @placeholder={{t 'minOSVersion'}}
         @value={{@manualscan.minOsVersion}}
         @disabled={{not @file.isActive}}
       />

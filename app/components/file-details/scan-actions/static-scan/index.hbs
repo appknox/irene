@@ -3,6 +3,7 @@
   @alignItems='center'
   @flexWrap='wrap'
   class='p-2'
+  data-test-cy='staticScan-infoContainer'
 >
   <AkTypography @variant='h5' data-test-fileDetailScanActions-staticScanTitle>
     {{t 'sast'}}
@@ -40,8 +41,11 @@
   @color='primary'
   @underline='always'
   @fontWeight='bold'
+  @route='authenticated.dashboard.file.static-scan'
+  @model={{@file.id}}
   class='px-2 py-1'
   local-class='view-details-icon'
+  data-test-fileDetailScanActions-staticScanViewDetails
 >
   <:default>
     {{t 'viewDetails'}}

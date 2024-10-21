@@ -55,16 +55,16 @@ export default class ProjectModel extends ModelBaseMixin {
   @attr('date')
   declare lastFileCreatedOn: Date;
 
-  @belongsTo('user', { inverse: 'ownedProjects' })
+  @belongsTo('user', { inverse: 'ownedProjects', async: true })
   declare owner: AsyncBelongsTo<UserModel>;
 
-  @belongsTo('file')
+  @belongsTo('file', { async: true, inverse: null })
   declare lastFileId: AsyncBelongsTo<FileModel>;
 
   @alias('lastFileId')
   declare lastFile: ComputedProperty<FileModel>;
 
-  @hasMany('file', { inverse: 'project' })
+  @hasMany('file', { inverse: 'project', async: true })
   declare files: AsyncHasMany<FileModel>;
 
   get pdfPassword() {
