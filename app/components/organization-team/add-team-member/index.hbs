@@ -57,7 +57,7 @@
     <AkTable @dense={{true}} as |t|>
       <t.head data-test-addUserList-thead @columns={{this.columns}} />
       <t.body @rows={{pgc.currentPageResults}} as |b|>
-        <b.row data-test-addUserList-row as |r|>
+        <b.row data-test-cy='userList-row' data-test-addUserList-row as |r|>
           <r.cell data-test-addUserList-cell as |value|>
             {{#if r.columnValue.component}}
               {{#let (component r.columnValue.component) as |CheckBox|}}
