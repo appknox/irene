@@ -1,0 +1,85 @@
+{{#if (eq @data.status 'pending')}}
+  {{#if @loading}}
+    <AkStack @justifyContent='center'>
+      <AkSkeleton @width='50px' @height='30px' />
+    </AkStack>
+  {{else}}
+    {{#if @data.statusButtonsLoading}}
+      <AkLoader @size={{16}} />
+    {{else}}
+      <AkStack @spacing='1' @justifyContent='center'>
+        <AkIconButton
+          @variant='outlined'
+          {{on 'click' (fn this.approveApp @data.id)}}
+        >
+          <AkIcon @color='success' @iconName='done' />
+        </AkIconButton>
+
+        <AkIconButton
+          @variant='outlined'
+          {{on 'click' (fn this.rejectApp @data.id)}}
+        >
+          <AkIcon @color='error' @iconName='close' />
+        </AkIconButton>
+      </AkStack>
+    {{/if}}
+  {{/if}}
+{{else if (eq @data.status 'approved')}}
+  <AkStack @justifyContent='center' @direction='column'>
+    <AkTypography @color='success'>
+      {{t 'storeknox.approved'}}
+    </AkTypography>
+
+    <AkStack @alignItems='center' @spacing='0.5'>
+      <AkTypography>
+        {{t 'by'}}
+        {{@data.approvedBy.username}}
+      </AkTypography>
+
+      <AkTooltip @placement='bottom' @arrow={{true}} @color='light'>
+        <:tooltipContent>
+          <AkStack @spacing='0.5' @alignItems='center'>
+            <AkIcon @iconName='check-circle' @size='small' />
+
+            <AkTypography @color='inherit'>
+              {{day-js date=@data.approvedOn format='MMMM D, YYYY, HH:mm'}}
+            </AkTypography>
+          </AkStack>
+        </:tooltipContent>
+
+        <:default>
+          <AkIcon @iconName='info' local-class='info-icon' />
+        </:default>
+      </AkTooltip>
+    </AkStack>
+  </AkStack>
+{{else if (eq @data.status 'rejected')}}
+  <AkStack @justifyContent='center' @direction='column'>
+    <AkTypography @color='error'>
+      {{t 'rejected'}}
+    </AkTypography>
+
+    <AkStack @alignItems='center' @spacing='0.5'>
+      <AkTypography>
+        {{t 'by'}}
+        {{@data.actionTakenBy}}
+      </AkTypography>
+
+      <AkTooltip @placement='bottom' @arrow={{true}} @color='light'>
+        <:tooltipContent>
+          <AkStack @spacing='0.5' @alignItems='center'>
+            <AkIcon @iconName='check-circle' @size='small' />
+
+            <AkTypography @color='inherit'>
+              {{day-js date=@data.rejectedOn format='MMMM D, YYYY, HH:mm'}}
+            </AkTypography>
+          </AkStack>
+        </:tooltipContent>
+
+        <:default>
+          <AkIcon @iconName='info' local-class='info-icon' />
+        </:default>
+      </AkTooltip>
+    </AkStack>
+  </AkStack>
+{{/if}}
