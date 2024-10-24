@@ -25,5 +25,6 @@ export default class SbomAppListFilterSelectedItemComponent extends Component<Sb
 declare module '@glint/environment-ember-loose/registry' {
   export default interface Registry {
     'Sbom::AppList::FilterSelectedItem': typeof SbomAppListFilterSelectedItemComponent;
+    'sbom/app-list/filter-selected-item': typeof SbomAppListFilterSelectedItemComponent;
   }
 }

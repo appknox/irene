@@ -60,7 +60,7 @@
         showLabel=true
         iconName='filter-list'
       }}
-      @selectedItemComponent='sbom/app-list/filter-selected-item'
+      @selectedItemComponent={{component 'sbom/app-list/filter-selected-item'}}
       {{style width='auto'}}
       class='select-platform-class'
       data-test-select-platform-container

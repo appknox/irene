@@ -71,7 +71,7 @@ export default class SbomAppListComponent extends Component<SbomAppListSignature
   }
 
   get sbomProjectList() {
-    return this.sbomProjectQueryResponse?.toArray() || [];
+    return this.sbomProjectQueryResponse?.slice() || [];
   }
 
   get totalSbomProjectCount() {
