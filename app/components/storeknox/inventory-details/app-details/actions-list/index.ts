@@ -9,27 +9,29 @@ interface StoreknoxInventoryDetailsAppDetailsActionsListSignature {
 
 export default class StoreknoxInventoryDetailsAppDetailsActionsListComponent extends Component<StoreknoxInventoryDetailsAppDetailsActionsListSignature> {
   get actionsList() {
+    const skAppId = this.args.app?.id as string;
+
     return [
       {
         disabled: false,
         label: 'Unscanned Version',
-        needsAction: false,
-        route: 'authenticated.dashboard.storeknox.inventory.unscanned-version',
-        models: ['3257', '3257'],
+        needsAction: true,
+        route: 'authenticated.storeknox.inventory-details.unscanned-version',
+        models: [skAppId, '3257'],
       },
       {
         disabled: false,
         label: 'Brand Abuse',
         needsAction: false,
-        route: 'authenticated.dashboard.storeknox.inventory.brand-abuse',
-        models: ['3257'],
+        route: 'authenticated.storeknox.inventory-details.brand-abuse',
+        models: [skAppId],
       },
       {
         disabled: false,
         label: 'Malware Detected',
         needsAction: false,
-        route: 'authenticated.dashboard.storeknox.inventory.malware-detected',
-        models: ['3257'],
+        route: 'authenticated.storeknox.inventory-details.malware-detected',
+        models: [skAppId],
       },
     ];
   }

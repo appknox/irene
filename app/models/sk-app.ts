@@ -1,6 +1,6 @@
 import Model, { attr } from '@ember-data/model';
 
-export interface AppMetadata {
+export interface SkAppMetadata {
   doc_ulid: string;
   doc_hash: string;
   app_id: string;
@@ -40,7 +40,7 @@ export interface Store {
   platform_display: string;
 }
 
-export interface AvailabilityData {
+export interface SkAppAvailabilityData {
   storeknox: boolean;
   appknox: boolean;
 }
@@ -95,10 +95,10 @@ export default class SkAppModel extends Model {
   declare approvedBy: number;
 
   @attr()
-  declare appMetadata: AppMetadata;
+  declare appMetadata: Partial<SkAppMetadata>;
 
   @attr()
-  declare availability: AvailabilityData;
+  declare availability: Partial<SkAppAvailabilityData>;
 }
 
 declare module 'ember-data/types/registries/model' {

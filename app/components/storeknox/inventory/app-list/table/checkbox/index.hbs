@@ -4,8 +4,8 @@
   </AkStack>
 {{else}}
   <AkCheckbox
-    @disabled={{@data.requested}}
-    @checked={{@data.selected}}
-    @onChange={{this.handleChange}}
+    @disabled={{@disabledChecking}}
+    @checked={{this.isChecked}}
+    @onClick={{this.handleChange}}
   />
 {{/if}}

@@ -1,43 +1,26 @@
-.summary-bars-container {
-  width: 500px;
-  display: flex;
-  align-items: center;
-  gap: 2px;
-
-  .bar {
-    height: 15px;
-    width: 100%;
-  }
-}
-
 .indicator {
   display: flex;
-  width: 14px;
-  height: 14px;
+  width: 10px;
+  height: 10px;
   border-radius: 100%;
-}
 
-.critical,
-.indicator.critical {
-  background-color: var(--severity-critical);
-}
+  &.critical {
+    background-color: var(--severity-critical);
+  }
 
-.high,
-.indicator.high {
-  background-color: var(--severity-high);
-}
+  &.high {
+    background-color: var(--severity-high);
+  }
 
-.medium,
-.indicator.medium {
-  background-color: var(--severity-medium);
-}
+  &.medium {
+    background-color: var(--severity-medium);
+  }
 
-.low,
-.indicator.low {
-  background-color: var(--severity-low);
-}
+  &.low {
+    background-color: var(--severity-low);
+  }
 
-.passed,
-.indicator.passed {
-  background-color: var(--severity-passed);
+  &.passed {
+    background-color: var(--severity-passed);
+  }
 }

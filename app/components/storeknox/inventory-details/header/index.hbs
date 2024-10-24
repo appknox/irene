@@ -6,7 +6,7 @@
     {{#each this.breadcrumbItems as |item|}}
       <AkBreadcrumbs::Item
         @route={{item.route}}
-        @models={{item.model}}
+        @models={{item.models}}
         @linkTitle={{item.linkTitle}}
         data-test-fileDetails-breadcrumbItem='{{item.linkTitle}}'
       />
@@ -17,13 +17,12 @@
     <AkStack @direction='column' @width='full'>
       <Storeknox::InventoryDetails::SectionHeader {{style height='44px'}}>
         <:icon>
-          <AkSvg::InfoIndicator />
+          <AkSvg::InfoIndicator {{style width='16px'}} />
         </:icon>
 
         <:default>
           <AkTypography @fontWeight='medium'>
-            This app is not a part of Appknox, upload to Appknox Dashboard for
-            better results. Check the latest VA Results Section.
+            {{t 'storeknox.appNotPartOfAppknox'}}
           </AkTypography>
         </:default>
       </Storeknox::InventoryDetails::SectionHeader>
@@ -35,8 +34,8 @@
         <AkStack @width='full' @direction='column'>
           <img
             local-class='app-info-logo'
-            src={{this.whitelabel.favicon}}
-            alt={{this.whitelabel.name}}
+            src={{@skApp.appMetadata.icon_url}}
+            alt={{@skApp.appMetadata.title}}
             {{style width='50px' height='50px'}}
           />
 
@@ -46,11 +45,11 @@
             @gutterBottom={{true}}
             class='mt-1'
           >
-            Test App
+            {{@skApp.appMetadata.title}}
           </AkTypography>
 
           <AkTypography @color='neutral' @gutterBottom={{true}}>
-            com.test.android
+            {{@skApp.appMetadata.package_name}}
           </AkTypography>
 
           <AkStack @spacing='1'>
@@ -67,14 +66,15 @@
             <Storeknox::ProductIcon @product='vapt'>
               <AkSvg::AoxIcon />
             </Storeknox::ProductIcon>
-
-            <Storeknox::ProductIcon @product='sm'>
-              <AkSvg::SoxIcon />
-            </Storeknox::ProductIcon>
           </AkStack>
         </AkStack>
 
-        <AkStack @alignItems='center' @spacing='1'>
+        <AkStack
+          @alignItems='center'
+          @justifyContent='flex-end'
+          @spacing='1'
+          {{style minWidth='300px'}}
+        >
           {{#if this.activeRouteTag}}
             <Storeknox::InventoryDetails::AppDetails::ActionsList::Button
               @disabled={{true}}

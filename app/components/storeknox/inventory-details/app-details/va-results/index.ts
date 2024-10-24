@@ -1,17 +1,25 @@
+import { action } from '@ember/object';
 import Component from '@glimmer/component';
-import dayjs from 'dayjs';
 
 export default class StoreknoxInventoryDetailsAppDetailsVaResultsComponent extends Component {
   get vaResults() {
-    const totalResultsCount = 130;
-
     return {
-      critical: (50 / totalResultsCount) * 100,
-      high: (10 / totalResultsCount) * 100,
-      medium: (15 / totalResultsCount) * 100,
-      low: (25 / totalResultsCount) * 100,
-      passed: (30 / totalResultsCount) * 100,
+      critical: 50,
+      high: 10,
+      medium: 15,
+      low: 25,
+      passed: 30,
     };
+  }
+
+  get vaResultsCategories() {
+    return Object.keys(this.vaResults) as Array<
+      'medium' | 'critical' | 'high' | 'low' | 'passed'
+    >;
+  }
+
+  @action getVaCategoryResultCount(category: keyof typeof this.vaResults) {
+    return this.vaResults[category];
   }
 }
 

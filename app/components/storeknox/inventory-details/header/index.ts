@@ -1,12 +1,22 @@
 import Component from '@glimmer/component';
 import { inject as service } from '@ember/service';
+import type RouterService from '@ember/routing/router-service';
+import type WhitelabelService from 'irene/services/whitelabel';
+import SkAppModel from 'irene/models/sk-app';
 
-import WhitelabelService from 'irene/services/whitelabel';
-import RouterService from '@ember/routing/router-service';
+interface StoreknoxInventoryDetailsHeaderSignature {
+  Args: {
+    skApp: SkAppModel;
+  };
+}
 
-export default class StoreknoxInventoryDetailsHeaderComponent extends Component {
+export default class StoreknoxInventoryDetailsHeaderComponent extends Component<StoreknoxInventoryDetailsHeaderSignature> {
   @service declare whitelabel: WhitelabelService;
   @service declare router: RouterService;
+
+  get skApp() {
+    return this.args.skApp;
+  }
 
   get routeLocalName() {
     return this.router.currentRoute.name;
@@ -39,42 +49,41 @@ export default class StoreknoxInventoryDetailsHeaderComponent extends Component 
   get breadcrumbItems() {
     return [
       {
-        route: 'authenticated.dashboard.storeknox',
+        route: 'authenticated.storeknox.inventory.app-list',
         linkTitle: 'Home',
       },
       {
-        route: 'authenticated.dashboard.storeknox.inventory',
+        route: 'authenticated.storeknox.inventory.app-list',
         linkTitle: 'Inventory',
       },
       {
-        route: 'authenticated.dashboard.storeknox.inventory.inventory-details',
+        route: 'authenticated.storeknox.inventory-details.index',
         linkTitle: 'Inventory Details',
-        model: ['3257'],
+        models: [this.skApp.id],
       },
 
       this.isBrandAbuseRoute
         ? {
-            route: 'authenticated.dashboard.storeknox.inventory.brand-abuse',
+            route: 'authenticated.storeknox.inventory-details.brand-abuse',
             linkTitle: 'Brand Abuse',
-            model: ['3257'],
+            models: [this.skApp.id],
           }
         : null,
 
       this.isMalwareDetectedRoute
         ? {
-            route:
-              'authenticated.dashboard.storeknox.inventory.malware-detected',
+            route: 'authenticated.storeknox.inventory-details.malware-detected',
             linkTitle: 'Malware Detected',
-            model: ['3257'],
+            models: [this.skApp.id],
           }
         : null,
 
       this.isUnscannedVersionRoute
         ? {
             route:
-              'authenticated.dashboard.storeknox.inventory.unscanned-version.index',
+              'authenticated.storeknox.inventory-details.unscanned-version.index',
             linkTitle: 'Unscanned Version',
-            model: ['3257', '3257'],
+            models: [this.skApp.id, '3257'],
           }
         : null,
     ].filter(Boolean);

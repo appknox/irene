@@ -19,11 +19,26 @@
     </AkTextField>
   </div>
 
-  <AkLink @route='authenticated.storeknox.review-logs'>
-    <AkButton @color='neutral' @variant='outlined'>
-      Archived Apps
+  <AkStack @spacing='1.5' @alignItems='center'>
+    <AkButton
+      @disabled={{this.showMoveToInventoryBtn}}
+      @color='primary'
+      @variant='filled'
+    >
+      Move To Inventory
     </AkButton>
-  </AkLink>
+
+    {{! <AkLink @route='authenticated.storeknox.review-logs'>
+      <AkButton @color='neutral' @variant='outlined'>
+        Archived Apps
+      </AkButton>
+    </AkLink> }}
+  </AkStack>
 </AkStack>
 
-<Storeknox::Inventory::DisabledApps::Table />
+<div local-class='app-list-table'>
+  <Storeknox::Inventory::AppList::Table
+    @handleSelectedDisabledApps={{this.handleSelectedDisabledApps}}
+    @loadDisabledApps={{true}}
+  />
+</div>

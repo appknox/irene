@@ -1534,7 +1534,10 @@
     "waitingForApproval": "Waiting for approval",
     "developer": "Developer",
     "addedToInventoryOn": "Added to Inventory on",
-    "appNotPartOfAppknox": "This app is not a part of Appknox, upload to Appknox Dashboard for better results. Check the latest VA Results Section."
+    "appNotPartOfAppknox": "This app is not a part of Appknox, upload to Appknox Dashboard for better results. Check the latest VA Results Section.",
+    "needsAction": "Needs Action",
+    "noActionNeeded": "No Action Needed",
+    "hasBeenDetected": "has been detected"
   },
   "storeLowercase": "store",
   "submit": "Submit",

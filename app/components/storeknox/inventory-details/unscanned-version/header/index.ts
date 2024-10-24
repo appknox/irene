@@ -46,13 +46,13 @@ export default class StoreknoxInventoryDetailsUnscannedVersionHeaderComponent ex
       {
         id: 'monitoring-details',
         route:
-          'authenticated.dashboard.storeknox.inventory.unscanned-version.index',
+          'authenticated.storeknox.inventory-details.unscanned-version.index',
         label: this.intl.t('appMonitoringModule.monitoringDetails'),
       },
       {
         id: 'monitoring-history',
         route:
-          'authenticated.dashboard.storeknox.inventory.unscanned-version.history',
+          'authenticated.storeknox.inventory-details.unscanned-version.history',
         label: this.intl.t('appMonitoringModule.monitoringHistory'),
       },
     ];

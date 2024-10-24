@@ -65,6 +65,10 @@ export enum AkSvgComponentInvocationByPaths {
   'csv-icon',
   'public-api-icon',
   'no-api-url-filter',
+  'sm-indicator',
+  'info-indicator',
+  'vapt-indicator',
+  'disabled-vapt-indicator',
 }
 
 type AkSvgComponent = ComponentLike<{
