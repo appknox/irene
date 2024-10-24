@@ -1,7 +1,4 @@
-{{#let
-  (component (ensure-safe-component this.componentName))
-  as |CalendarComponent|
-}}
+{{#let (component this.componentName) as |CalendarComponent|}}
   <div ...attributes>
     <div
       local-class='ak-date-picker-trigger'
@@ -29,7 +26,7 @@
         <CalendarComponent
           data-test-akDatePicker-calendar
           class='ak-date-picker-calendar'
-          @navComponent={{this.navComponent}}
+          @navComponent={{component this.navComponent}}
           @center={{this.center}}
           @onCenterChange={{this.handleCenterChange}}
           @selected={{@selected}}

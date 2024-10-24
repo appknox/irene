@@ -72,19 +72,19 @@ export default class AccountSettingsSecurityMultiFactorAuthComponent extends Com
 
   @computed('mfas.records.@each.enabled')
   get isMFAEnabled() {
-    return !!this.mfas.records?.findBy('enabled', true);
+    return !!this.mfas.records?.find((it) => it.enabled === true);
   }
 
   @computed('mfas.records.@each.enabled')
   get isEmailMFAEnabled() {
-    const emailMFA = this.mfas.records?.findBy('isEmail', true);
+    const emailMFA = this.mfas.records?.find((it) => it.isEmail === true);
 
     return emailMFA?.enabled ?? false;
   }
 
   @computed('mfas.records.@each.enabled')
   get isAppMFAEnabled() {
-    const appMFA = this.mfas.records?.findBy('isApp', true);
+    const appMFA = this.mfas.records?.find((it) => it.isApp === true);
 
     return appMFA?.enabled ?? false;
   }

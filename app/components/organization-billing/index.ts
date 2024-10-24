@@ -60,7 +60,7 @@ export default class OrganizationBillingComponent extends Component {
   }
 
   get sortedPlans() {
-    return this.plans?.sortBy(...this.sortPlanProperties);
+    return this.plans?.slice().sortBy(...this.sortPlanProperties);
   }
 
   get durations() {

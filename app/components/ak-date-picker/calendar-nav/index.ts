@@ -35,5 +35,6 @@ export default class AkDatePickerCalendarNavComponent extends Component<AkDatePi
 declare module '@glint/environment-ember-loose/registry' {
   export default interface Registry {
     'AkDatePicker::CalendarNav': typeof AkDatePickerCalendarNavComponent;
+    'ak-date-picker/calendar-nav': typeof AkDatePickerCalendarNavComponent;
   }
 }
