@@ -1,6 +1,6 @@
 <div {{style width='400px'}}>
   {{#if this.isNotPerScan}}
-    <AkTable class='my-2' @variant='bordered' @borderColor='dark' as |t|>
+    <AkTable class='my-2' @variant='full-bordered' @borderColor='dark' as |t|>
       <t.head @columns={{this.columns}} as |h|>
         <h.row as |r|>
           <r.cell colspan='2' as |columnValue|>

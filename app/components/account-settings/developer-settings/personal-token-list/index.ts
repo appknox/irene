@@ -26,7 +26,7 @@ export default class AccountSettingsDeveloperSettingsPersonaltokenListComponent 
   );
 
   get personalTokenList() {
-    return this.personalTokens.records?.toArray() || [];
+    return this.personalTokens.records?.slice() || [];
   }
 
   get hasPersonalTokens() {
