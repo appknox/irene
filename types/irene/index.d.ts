@@ -133,6 +133,11 @@ declare global {
       options?: Omit<NotificationOption, 'message' | 'type'>
     ) => void;
 
+    alert: (
+      message: string,
+      options?: Omit<NotificationOption, 'message' | 'type'>
+    ) => void;
+
     setDefaultAutoClear: (value: boolean) => void;
   }
 

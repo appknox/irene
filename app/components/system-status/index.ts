@@ -1,20 +1,36 @@
 import Component from '@glimmer/component';
-import { task } from 'ember-concurrency';
-import { isNotFoundError, AjaxError } from 'ember-ajax/errors';
-import ENV from 'irene/config/environment';
+import { task, timeout } from 'ember-concurrency';
+import { isNotFoundError, type AjaxError } from 'ember-ajax/errors';
 import { inject as service } from '@ember/service';
-import DevicefarmService from 'irene/services/devicefarm';
 import { tracked } from '@glimmer/tracking';
-import IntlService from 'ember-intl/services/intl';
+import { next } from '@ember/runloop';
+import { waitForPromise } from '@ember/test-waiters';
+import type Store from '@ember-data/store';
+import type IntlService from 'ember-intl/services/intl';
+
+import ENV from 'irene/config/environment';
+import type DevicefarmService from 'irene/services/devicefarm';
+import type WebsocketService from 'irene/services/websocket';
+
+import type {
+  SocketHealthMessage,
+  SocketInstance,
+} from 'irene/services/websocket';
 
 export default class SystemStatusComponent extends Component {
   @service declare devicefarm: DevicefarmService;
+  @service declare websocket: WebsocketService;
   @service declare ajax: any;
+  @service declare session: any;
+  @service declare store: Store;
   @service declare intl: IntlService;
 
   @tracked isStorageWorking = false;
   @tracked isDeviceFarmWorking = false;
   @tracked isAPIServerWorking = false;
+  @tracked isWebsocketWorking = false;
+
+  socket?: SocketInstance;
 
   constructor(owner: unknown, args: object) {
     super(owner, args);
@@ -22,6 +38,24 @@ export default class SystemStatusComponent extends Component {
     this.getStorageStatus.perform();
     this.getDeviceFarmStatus.perform();
     this.getAPIServerStatus.perform();
+
+    if (this.showRealtimeServerStatus) {
+      next(this, () => this.getWebsocketHealthStatus.perform());
+    }
+  }
+
+  willDestroy(): void {
+    super.willDestroy();
+
+    this.handleSocketHealthCheckCleanUp();
+  }
+
+  get isAuthenticated() {
+    return this.session.isAuthenticated;
+  }
+
+  get showRealtimeServerStatus() {
+    return this.isAuthenticated;
   }
 
   get columns() {
@@ -32,7 +66,7 @@ export default class SystemStatusComponent extends Component {
   }
 
   get rows() {
-    return [
+    const statusRows = [
       {
         id: 'storage',
         system: this.intl.t('storage'),
@@ -53,6 +87,17 @@ export default class SystemStatusComponent extends Component {
         isWorking: this.isAPIServerWorking,
       },
     ];
+
+    if (this.showRealtimeServerStatus) {
+      statusRows.push({
+        id: 'websocket',
+        system: this.intl.t('realtimeServer'),
+        isRunning: this.getWebsocketHealthStatus.isRunning,
+        isWorking: this.isWebsocketWorking,
+      });
+    }
+
+    return statusRows;
   }
 
   getStorageStatus = task({ drop: true }, async () => {
@@ -84,6 +129,61 @@ export default class SystemStatusComponent extends Component {
       this.isAPIServerWorking = false;
     }
   });
+
+  getWebsocketHealthStatus = task({ drop: true }, async () => {
+    const userId = this.session.data.authenticated.user_id;
+    this.socket = this.websocket.getSocketInstance();
+
+    try {
+      this.socket.on(
+        'websocket_health_check',
+        this.onWebsocketHealthCheck.bind(this)
+      );
+
+      const user = await this.store.findRecord('user', userId);
+
+      if (user.socketId) {
+        await waitForPromise(
+          this.triggerWebsocketHealthCheck.perform(user.socketId)
+        );
+      }
+    } catch (_) {
+      this.isWebsocketWorking = false;
+
+      this.handleSocketHealthCheckCleanUp();
+    }
+  });
+
+  triggerWebsocketHealthCheck = task(async (socketId: string) => {
+    this.socket?.emit('subscribe', { room: socketId });
+
+    // wait for user to join room
+    await timeout(1000);
+
+    await this.ajax.post('/api/websocket_health_check', { data: {} });
+
+    // wait for socket to notify
+    await timeout(1000);
+  });
+
+  onWebsocketHealthCheck(data: SocketHealthMessage) {
+    this.isWebsocketWorking =
+      ENV.environment === 'test'
+        ? JSON.parse(`${data}`).is_healthy
+        : data.is_healthy;
+
+    this.handleSocketHealthCheckCleanUp();
+  }
+
+  handleSocketHealthCheckCleanUp() {
+    this.socket?.off(
+      'websocket_health_check',
+      this.onWebsocketHealthCheck,
+      this
+    );
+
+    this.websocket.closeSocketConnection();
+  }
 }
 
 declare module '@glint/environment-ember-loose/registry' {
