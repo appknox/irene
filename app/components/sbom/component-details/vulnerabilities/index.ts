@@ -53,7 +53,7 @@ export default class SbomComponentDetailsVulnerabilitiesComponent extends Compon
   }
 
   get sbomVulnerabilityList() {
-    return this.componentVulnerabilityQueryResponse?.toArray() || [];
+    return this.componentVulnerabilityQueryResponse?.slice() || [];
   }
 
   get totalSbomVulnerabilityCount() {

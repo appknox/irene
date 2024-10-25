@@ -7,7 +7,7 @@ export interface SbomComponentProperty {
 }
 
 export default class SbomComponentModel extends Model {
-  @belongsTo('sbom-file')
+  @belongsTo('sbom-file', { async: true, inverse: null })
   declare sbFile: AsyncBelongsTo<SbomFileModel>;
 
   @attr('string')

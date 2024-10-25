@@ -73,7 +73,7 @@ export default class SbomAppScanListComponent extends Component<SbomAppScanListS
   }
 
   get sbomFileList() {
-    return this.sbomFileQueryResponse?.toArray() || [];
+    return this.sbomFileQueryResponse?.slice() || [];
   }
 
   get totalSbomScanCount() {

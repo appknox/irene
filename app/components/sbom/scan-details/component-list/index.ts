@@ -74,7 +74,7 @@ export default class SbomScanDetailsComponentListComponent extends Component<Sbo
   }
 
   get sbomComponentList() {
-    return this.componentQueryResponse?.toArray() || [];
+    return this.componentQueryResponse?.slice() || [];
   }
 
   get totalSbomComponentCount() {
