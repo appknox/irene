@@ -222,10 +222,104 @@ module('Unit | Utility | parse-vulnerable-api-finding', function (hooks) {
     },
   ];
 
+  const content4 =
+    'mobile.useinsider.com:443/api/v3/session/start: The time elapsed between the sending of the request and the arrival of the response exceeds the expected amount of time, suggesting a vulnerability to command injection attacks.\nconfidence: MEDIUM\nparam:\n  location: headers\n  method: POST\n  variables:\n  - Accept\n  - Content-Type\n  - Accept-Language\n  - Host\n  - Content-Length\n  - Connection\n  - Accept-Encoding\n  - User-Agent\n  - Ts\nrequest:\n  body: \'{"insider_id": "53B4EFCC2CFD40AAA5BF73B303F90BEB", "device_info": {"location_enabled":\n    false, "app_version": "5.6.0", "push_enabled": false, "os_version": "16.7.7",\n    "battery": 100, "sdk_version": "13.0.0", "connection": "wifi"}, "partner_name":\n    "nbdliv", "calledDueToInsiderIdChange": false, "first_run": true, "udid": "53B4EFCC2CFD40AAA5BF73B303F90BEB"}\'\n  headers:\n    Accept: \'*/*\'\n    Accept-Encoding: gzip, deflate, br\n    Ts: \'1717657521\'\n    User-Agent: Liv/666 CFNetwork/1410.1 Darwin/22.6.0\n  method: POST\n  params: {}\n  url: https://mobile.useinsider.com:443/api/v3/session/start\nresponse:\n  cookies:\n    __cf_bm: Y344vnTG2lq7wTlqEMFGsTIQ3PlYUFLpHkTrqTVlEzI-1717659521-1.0.1.1-mYaqUeGWUgRuX6qX3QSTYeBDLGEiWy7QvsPT.m.V81ZZla2e22iXwUZND2QPqL4Cv2r0yvmQuigDf0_Y_dAx8A\n  headers:\n    CF-RAY: 88f6be8aaa872258-ORD\n    Cache-Control: private,\n    Vary: Accept-Encoding\n    X-Frame-Options: SAMEORIGIN\n  reason: Forbidden\n  status_code: 403\n  text: "\\uFFFD(\\uFFFD\\0 \\uFFFDM"';
+
+  const expectedObject4 = [
+    {
+      confidence: 'MEDIUM',
+      description:
+        'The time elapsed between the sending of the request and the arrival of the response exceeds the expected amount of time, suggesting a vulnerability to command injection attacks.',
+      request: {
+        body: '\'{"insider_id": "53B4EFCC2CFD40AAA5BF73B303F90BEB", "device_info": {"location_enabled":\n    false, "app_version": "5.6.0", "push_enabled": false, "os_version": "16.7.7",\n    "battery": 100, "sdk_version": "13.0.0", "connection": "wifi"}, "partner_name":\n    "nbdliv", "calledDueToInsiderIdChange": false, "first_run": true, "udid": "53B4EFCC2CFD40AAA5BF73B303F90BEB"}\'',
+        cookies: {},
+        headers: {
+          accept: "'*/*'",
+          'accept-encoding': 'gzip, deflate, br',
+          ts: "'1717657521'",
+          'user-agent': 'Liv/666 CFNetwork/1410.1 Darwin/22.6.0',
+        },
+        method: 'POST',
+        params: {},
+        url: 'https://mobile.useinsider.com:443/api/v3/session/start',
+      },
+      response: {
+        cookies: {
+          __cf_bm:
+            'Y344vnTG2lq7wTlqEMFGsTIQ3PlYUFLpHkTrqTVlEzI-1717659521-1.0.1.1-mYaqUeGWUgRuX6qX3QSTYeBDLGEiWy7QvsPT.m.V81ZZla2e22iXwUZND2QPqL4Cv2r0yvmQuigDf0_Y_dAx8A',
+        },
+        headers: {
+          'cache-control': 'private,',
+          'cf-ray': '88f6be8aaa872258-ORD',
+          vary: 'Accept-Encoding',
+          'x-frame-options': 'SAMEORIGIN',
+        },
+        reason: 'Forbidden',
+        status_code: 403,
+        text: '"\\uFFFD(\\uFFFD\\0 \\uFFFDM"',
+        url: '',
+      },
+      severity: '',
+      url: 'mobile.useinsider.com:443/api/v3/session/start',
+    },
+  ];
+
+  const content5 =
+    'mobile-collector.newrelic.com:443/mobile/v3/data: The difference in length between the response to the baseline request and the request returned when sending an attack string exceeds 1000.0 percent, which could indicate a vulnerability to injection attacks\nconfidence: LOW\nparam:\n  location: headers\n  method: POST\n  variables:\n  - Connection\n  - Content-Length\n  - Content-Type\n  - User-Agent\n  - Content-Encoding\n  - Accept-Encoding\n  - X-Newrelic-Connect-Time\nrequest:\n  body: \'[[482998014, 594496047], ["Android", "10", "Mi A2", "AndroidAgent", "6.9.0",\n    "b36f41b0-37ae-4a68-9a54-d860c6876323", "", "", "Xiaomi", {"size": "normal", "platform":\n    "Native", "platformVersion": "6.9.0"}], 0.0, [], [[{"scope": "", "name": "Memory/Used"},\n    {"count": 1, "total": 76.3740234375, "min": 76.3740234375, "max": 76.3740234375,\n    "sum_of_squares": 5832.991456031799}]], [], [], [], {}, []]\'\n  headers:\n    Accept-Encoding: gzip\n    Connection: Keep-Alive\n    Content-Encoding: identity\n    Content-Length: \'358\'\n    Content-Type: application/json\n    Host: mobile-collector.newrelic.com:443\n    User-Agent: Dalvik/2.1.0 (Linux; U; Android 10; Mi A2 Build/QQ3A.200805.001)\n    X-App-License-Key: AAa728a7f147e1cf95a25a315203d656a36f602257-NRMA\n    X-Newrelic-Connect-Time: \'*!@#$^&()[]{}|.,"\\\'\'/\'\'\'\'"\'\n  method: POST\n  params: {}\n  url: https://mobile-collector.newrelic.com:443/mobile/v3/data\nresponse:\n  cookies: {}\n  headers:\n    CF-Cache-Status: DYNAMIC\n    CF-Ray: 89e502ccbbcbc5cb-ORD\n    Connection: keep-alive\n    Content-Length: \'2\'\n    Content-Type: application/json; charset=UTF-8\n    Date: Fri, 05 Jul 2024 05:38:48 GMT\n    Server: cloudflare\n    Vary: Accept-Encoding\n  reason: OK\n  status_code: 200\n  text: \'{}\'';
+
+  const expectedObject5 = [
+    {
+      confidence: 'LOW',
+      description:
+        'The difference in length between the response to the baseline request and the request returned when sending an attack string exceeds 1000.0 percent, which could indicate a vulnerability to injection attacks',
+      request: {
+        body: '\'[[482998014, 594496047], ["Android", "10", "Mi A2", "AndroidAgent", "6.9.0",\n    "b36f41b0-37ae-4a68-9a54-d860c6876323", "", "", "Xiaomi", {"size": "normal", "platform":\n    "Native", "platformVersion": "6.9.0"}], 0.0, [], [[{"scope": "", "name": "Memory/Used"},\n    {"count": 1, "total": 76.3740234375, "min": 76.3740234375, "max": 76.3740234375,\n    "sum_of_squares": 5832.991456031799}]], [], [], [], {}, []]\'',
+        cookies: {},
+        headers: {
+          'accept-encoding': 'gzip',
+          connection: 'Keep-Alive',
+          'content-encoding': 'identity',
+          'content-length': "'358'",
+          'content-type': 'application/json',
+          host: 'mobile-collector.newrelic.com:443',
+          'user-agent':
+            'Dalvik/2.1.0 (Linux; U; Android 10; Mi A2 Build/QQ3A.200805.001)',
+          'x-app-license-key':
+            'AAa728a7f147e1cf95a25a315203d656a36f602257-NRMA',
+          'x-newrelic-connect-time': "'*!@#$^&()[]{}|.,\"\\''/''''\"'",
+        },
+        method: 'POST',
+        params: {},
+        url: 'https://mobile-collector.newrelic.com:443/mobile/v3/data',
+      },
+      response: {
+        cookies: {},
+        headers: {
+          'cf-cache-status': 'DYNAMIC',
+          'cf-ray': '89e502ccbbcbc5cb-ORD',
+          connection: 'keep-alive',
+          'content-length': "'2'",
+          'content-type': 'application/json; charset=UTF-8',
+          date: 'Fri, 05 Jul 2024 05:38:48 GMT',
+          server: 'cloudflare',
+          vary: 'Accept-Encoding',
+        },
+        reason: 'OK',
+        status_code: 200,
+        text: "'{}'",
+        url: '',
+      },
+      severity: '',
+      url: 'mobile-collector.newrelic.com:443/mobile/v3/data',
+    },
+  ];
+
   const vulnerableApiFindings = [
     { content: content1, expectedObject: expectedObject1 },
     { content: content2, expectedObject: expectedObject2 },
     { content: content3, expectedObject: expectedObject3 },
+    { content: content4, expectedObject: expectedObject4 },
+    { content: content5, expectedObject: expectedObject5 },
   ];
 
   test.each(

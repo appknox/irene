@@ -132,6 +132,39 @@ function splitVulnerableApiFindingIntoBlocks(content: string): string[] {
   return content.split(/\n{2,3}/);
 }
 
+function handleBodyField(
+  key: string,
+  value: string,
+  lines: string[],
+  i: number
+): { updatedBuffer: string; updatedIndex: number } {
+  let currentBuffer = value;
+  let nextIndex = i + 1;
+
+  // Check if body value is a multi-line JSON or array
+  if (
+    (value.startsWith("'{") && !value.endsWith("}'")) ||
+    (value.startsWith("'[") && !value.endsWith("]'"))
+  ) {
+    // Keep reading lines until the closing quote
+    while (
+      nextIndex < lines.length &&
+      !(lines[nextIndex]?.includes("}'") || lines[nextIndex]?.includes("]'"))
+    ) {
+      currentBuffer += '\n' + lines[nextIndex];
+      nextIndex++;
+    }
+
+    // Add the final line with the closing quote if found
+    if (nextIndex < lines.length) {
+      currentBuffer += '\n' + lines[nextIndex];
+      nextIndex++;
+    }
+  }
+
+  return { updatedBuffer: currentBuffer, updatedIndex: nextIndex - 1 };
+}
+
 /**
  * Parses a block of text into a `VulnerableApiFinding` object.
  * @param block - The text block to parse.
@@ -148,25 +181,48 @@ function parseVulnerableApiFindingBlock(block: string): VulnerableApiFinding {
   // Process the first line separately to handle initial URL or description
   processFirstLine(lines, finding);
 
-  lines.forEach((line) => {
+  for (let i = 0; i < lines.length; i++) {
+    const line = lines[i] || '';
+    const trimmedLine = line.trim();
     const parsedLine = parseLine(line);
 
     if (parsedLine) {
       const [key, value] = parsedLine;
 
       if (currentKey && currentBuffer) {
-        // If a previous key exists, update it with the accumulated buffer
+        // Update the previous key with the accumulated buffer
         updateFindingField(finding, currentKey, currentBuffer, currentSection);
+
         currentBuffer = null; // Reset buffer after updating
         currentKey = null; // Reset key after updating
       }
 
       if (key) {
-        if (currentKey && currentBuffer) {
-          // Continue accumulating the value if the same key is detected
-          currentBuffer += `\n${value}`;
+        if (key === 'body') {
+          // Special handling for body field
+          const { updatedBuffer, updatedIndex } = handleBodyField(
+            key,
+            value,
+            lines,
+            i
+          );
+
+          currentBuffer = updatedBuffer;
+          i = updatedIndex;
+          currentKey = key;
+
+          const { updatedSection } = updateVulnerableApiFinding(
+            finding,
+            key,
+            currentBuffer,
+            currentSection
+          );
+
+          if (updatedSection !== currentSection) {
+            currentSection = updatedSection;
+          }
         } else {
-          // If a new key is detected, update section and headers
+          // Normal key-value handling
           const { updatedSection } = updateVulnerableApiFinding(
             finding,
             key,
@@ -184,10 +240,14 @@ function parseVulnerableApiFindingBlock(block: string): VulnerableApiFinding {
         }
       }
     } else if (currentBuffer) {
-      // Continue accumulating the value if no new key is detected
-      currentBuffer += `\n${line}`;
+      // Handle normal line continuations (non-body content)
+      if (line.match(/^\s{2,}/)) {
+        currentBuffer += ' ' + trimmedLine;
+      } else {
+        currentBuffer += '\n' + line;
+      }
     }
-  });
+  }
 
   // Finalize any remaining buffer
   if (currentBuffer && currentKey) {
