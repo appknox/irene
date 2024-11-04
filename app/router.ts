@@ -142,6 +142,25 @@ Router.map(function () {
           this.route('disabled-apps');
         });
 
+        this.route(
+          'inventory-details',
+          { path: '/inventory-details/:id' },
+          function () {
+            this.route('brand-abuse');
+            this.route('malware-detected');
+
+            this.route(
+              'unscanned-version',
+              {
+                path: '/inventory-details/:id/unscanned-version/:am_app_id',
+              },
+              function () {
+                this.route('history');
+              }
+            );
+          }
+        );
+
         this.route('review-logs', { path: '/discover/review-logs' });
         this.route('archived-apps', { path: '/inventory/archived-apps' });
       });

@@ -1,4 +1,4 @@
-<AkStack local-class='app-list-header'>
+{{!-- <AkStack local-class='app-list-header'>
   <div local-class='search-input-container-width'>
     <AkTextField @placeholder={{t 'search'}} @value={{this.searchQuery}}>
       <:rightAdornment>
@@ -16,6 +16,8 @@
       </:rightAdornment>
     </AkTextField>
   </div>
-</AkStack>
+</AkStack> --}}
 
-<Storeknox::Inventory::AppList::Table />
+<div local-class='app-list-table'>
+  <Storeknox::Inventory::AppList::Table />
+</div>

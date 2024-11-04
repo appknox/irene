@@ -1,0 +1,141 @@
+<AkStack @direction='column' @width='full' class='pt-3'>
+  <AkTabs local-class='app-details-tabs' as |Akt|>
+    {{#each this.tabItems as |item|}}
+      <Akt.tabItem
+        @id={{item.id}}
+        @hasBadge={{false}}
+        @route={{item.route}}
+        @model={{'3257'}}
+        @indicatorVariant='shadow'
+        data-test-app-details-tabs='{{item.id}}-tab'
+      >
+        {{item.label}}
+      </Akt.tabItem>
+    {{/each}}
+  </AkTabs>
+
+  <AkAccordion
+    @isExpanded={{this.showSMDetails}}
+    @onChange={{this.handleToggleSMDetails}}
+    @summaryText='Store Monitoring Overview'
+    @variant='light'
+    class='my-3'
+  >
+    <:content>
+      <Storeknox::InventoryDetails::SectionInfo
+        @width='full'
+        @spacing='1'
+        @alignItems='center'
+        local-class='sm-summary-overview'
+      >
+        <AkStack @direction='column' @width='full' @spacing='1.5'>
+          <AkStack @alignItems='center' @width='9/12' @spacing='2.5'>
+            <AkTypography @color='neutral' {{style width='150px'}}>
+              Monitoring Action
+            </AkTypography>
+
+            <AkStack @alignItems='center' @spacing='1'>
+              <AkToggle
+                @size='small'
+                @onChange={{this.onMonitoringActionToggle}}
+                @checked={{this.amApp.isActive}}
+                @disabled={{this.disableAppMonitoringToggle}}
+              />
+
+              {{#if this.toggleAmAppMonitoring.isRunning}}
+                <AkLoader @size={{14}} />
+              {{/if}}
+            </AkStack>
+          </AkStack>
+
+          <AkDivider @color='light' />
+
+          <AkStack @alignItems='center' @width='9/12' @spacing='2.5'>
+            <AkTypography @color='neutral' {{style width='150px'}}>
+              File ID
+            </AkTypography>
+
+            {{#if this.lastFile}}
+              <AkLink
+                @underline='always'
+                @color='primary'
+                @fontWeight='medium'
+                @route='authenticated.dashboard.file'
+                @model={{this.lastFile.id}}
+                target='_blank'
+                rel='noopener noreferrer'
+              >
+                {{this.lastFile.id}}
+              </AkLink>
+            {{else}}
+              -
+            {{/if}}
+          </AkStack>
+
+          <AkDivider @color='light' />
+
+          <AkStack @alignItems='center' @width='9/12' @spacing='2.5'>
+            <AkTypography @color='neutral' {{style width='150px'}}>
+              Last Scanned Version
+            </AkTypography>
+
+            <AkTypography @fontWeight='medium'>
+              {{if
+                this.lastFile.comparableVersion
+                this.lastFile.comparableVersion
+                '-'
+              }}
+            </AkTypography>
+          </AkStack>
+
+          <AkDivider @color='light' />
+
+          <AkStack @alignItems='center' @width='9/12' @spacing='2.5'>
+            <AkTypography @color='neutral' {{style width='150px'}}>
+              Last monitored on
+            </AkTypography>
+
+            <AkStack @direction='row' @alignItems='center' @tag='p'>
+              {{#if this.lastSyncedDate}}
+                <AkTypography @fontWeight='medium'>
+                  {{this.lastSyncedDate}}
+                </AkTypography>
+
+              {{else if this.amApp.isActive}}
+                <AkStack
+                  @direction='row'
+                  @alignItems='center'
+                  @tag='span'
+                  class='mr-1'
+                >
+                  <AkLoader @size={{13}} />
+                </AkStack>
+
+                <AkTypography @tag='span' @variant='body1' @color='secondary'>
+                  {{t 'appMonitoringModule.syncInProgress'}}
+                </AkTypography>
+              {{else}}
+                ---
+              {{/if}}
+            </AkStack>
+          </AkStack>
+
+          <AkDivider @color='light' />
+
+          <AkStack @alignItems='center' @width='9/12' @spacing='2.5'>
+            <AkTypography @color='neutral' {{style width='150px'}}>
+              Monitoring Status
+            </AkTypography>
+
+            <AkTypography @tag='span' @variant='body1' @color='textSecondary'>
+              <AppMonitoring::Status
+                @condition='{{am-monitoring-condition this.amApp}}'
+                @label='{{am-monitoring-text this.amApp}}'
+              />
+            </AkTypography>
+          </AkStack>
+        </AkStack>
+      </Storeknox::InventoryDetails::SectionInfo>
+    </:content>
+  </AkAccordion>
+</AkStack>
