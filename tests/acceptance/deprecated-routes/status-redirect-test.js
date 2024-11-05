@@ -3,6 +3,8 @@ import { visit, currentURL } from '@ember/test-helpers';
 import { setupApplicationTest } from 'ember-qunit';
 import { setupMirage } from 'ember-cli-mirage/test-support';
 import Service from '@ember/service';
+import { SocketIO } from 'mock-socket';
+
 import { setupRequiredEndpoints } from '../../helpers/acceptance-utils';
 
 class IntegrationStub extends Service {
@@ -23,6 +25,12 @@ class WebsocketStub extends Service {
   async connect() {}
 
   async configure() {}
+
+  getSocketInstance() {
+    return new SocketIO('https://socket.app.test');
+  }
+
+  closeSocketConnection() {}
 }
 
 module('Acceptance | Status Route Redirect', function (hooks) {
