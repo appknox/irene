@@ -57,7 +57,7 @@ export default class AppMonitoringVersionTableCountriesComponent extends Compone
         amAppVersionId,
       })) as AmAppRecordModelArray;
 
-      const records = amAppRecords.toArray();
+      const records = amAppRecords.slice();
       const countryCodes = [];
 
       for (let idx = 0; idx < records.length; idx++) {

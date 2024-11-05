@@ -22,13 +22,13 @@ export default class AmAppVersionModel extends Model {
   @attr('string')
   declare appName: string;
 
-  @belongsTo('am-app')
+  @belongsTo('am-app', { async: true, inverse: null })
   declare amApp: AsyncBelongsTo<AmAppModel>;
 
-  @belongsTo('submission')
+  @belongsTo('submission', { async: true, inverse: null })
   declare uploadSubmission: AsyncBelongsTo<SubmissionModel>;
 
-  @belongsTo('file', { inverse: null })
+  @belongsTo('file', { async: true, inverse: null })
   declare latestFile: AsyncBelongsTo<FileModel>;
 }
 

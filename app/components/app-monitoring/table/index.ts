@@ -58,7 +58,7 @@ export default class AppMonitoringTableComponent extends Component<AppMonitoring
   }
 
   get monitoringData() {
-    return this.appmonitoring.appMonitoringData?.toArray();
+    return this.appmonitoring.appMonitoringData?.slice();
   }
 
   get limit() {

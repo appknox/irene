@@ -5,7 +5,7 @@ export default class AMConfigurationModel extends Model {
   @attr('boolean')
   declare enabled: boolean;
 
-  @belongsTo('organization')
+  @belongsTo('organization', { async: true, inverse: null })
   declare organization: AsyncBelongsTo<OrganizationModel>;
 }
 

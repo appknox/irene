@@ -146,7 +146,7 @@ export default class AppMonitoringVersionTableComponent extends Component<AppMon
       })) as AmAppVersionsModelArray;
 
       this.totalStoreVersions = amAppVersions.meta.count;
-      this.storeVersionsToDisplay = amAppVersions.toArray();
+      this.storeVersionsToDisplay = amAppVersions.slice();
     } catch (error) {
       this.notify.error(parseError(error));
     }

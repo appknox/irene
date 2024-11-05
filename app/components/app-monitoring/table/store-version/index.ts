@@ -48,7 +48,7 @@ export default class AppMonitoringTableStoreVersionComponent extends Component<A
 
     // Fetch the latest versions for
     const latestAmAppVersions = await this.store.query('am-app-version', query);
-    const versions = latestAmAppVersions.toArray();
+    const versions = latestAmAppVersions.slice();
 
     this.latestAmAppVersions = versions;
   });
