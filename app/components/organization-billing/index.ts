@@ -43,12 +43,16 @@ export default class OrganizationBillingComponent extends Component {
     }
   });
 
+  get subscriptionList() {
+    return this.subscriptions?.slice() || [];
+  }
+
   get subscription() {
-    return this.subscriptions?.firstObject;
+    return this.subscriptionList[0];
   }
 
   get subscriptionCount() {
-    return (this.subscriptions?.slice() || []).length;
+    return this.subscriptionList.length;
   }
 
   get hasSubscription() {
@@ -60,7 +64,7 @@ export default class OrganizationBillingComponent extends Component {
   }
 
   get sortedPlans() {
-    return this.plans?.sortBy(...this.sortPlanProperties);
+    return this.plans?.slice().sortBy(...this.sortPlanProperties);
   }
 
   get durations() {
