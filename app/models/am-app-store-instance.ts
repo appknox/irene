@@ -17,6 +17,6 @@ export default class AmAppStoreInstanceModel extends Model {
   @attr('string')
   declare countryCode: string;
 
-  @belongsTo('am-app')
+  @belongsTo('am-app', { async: true, inverse: null })
   declare amApp: AsyncBelongsTo<AmAppModel>;
 }

@@ -21,25 +21,25 @@ export default class AmAppModel extends Model {
   @attr('boolean')
   declare isActive: boolean;
 
-  @belongsTo('amconfiguration')
+  @belongsTo('amconfiguration', { async: true, inverse: null })
   declare amConfiguration: AsyncBelongsTo<AMConfigurationModel>;
 
-  @belongsTo('project')
+  @belongsTo('project', { async: true, inverse: null })
   declare project: AsyncBelongsTo<ProjectModel>;
 
-  @belongsTo('am-app-sync', { inverse: null })
+  @belongsTo('am-app-sync', { async: true, inverse: 'amApp' })
   declare lastSync: AsyncBelongsTo<AmAppSyncModel>;
 
-  @belongsTo('am-app-version', { inverse: null })
+  @belongsTo('am-app-version', { async: true, inverse: null })
   declare latestAmAppVersion: AsyncBelongsTo<AmAppVersionModel>;
 
-  @belongsTo('am-app-version', { inverse: null })
+  @belongsTo('am-app-version', { async: true, inverse: null })
   declare relevantAmAppVersion: AsyncBelongsTo<AmAppVersionModel>;
 
-  @hasMany('am-app-sync')
+  @hasMany('am-app-sync', { async: true, inverse: null })
   declare amAppSyncs: AsyncHasMany<AmAppSyncModel>;
 
-  @hasMany('am-app-version')
+  @hasMany('am-app-version', { async: true, inverse: null })
   declare amAppVersions: AsyncHasMany<AmAppVersionModel>;
 
   get isPending() {

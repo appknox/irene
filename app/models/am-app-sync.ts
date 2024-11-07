@@ -5,7 +5,7 @@ export default class AmAppSyncModel extends Model {
   @attr('date')
   declare syncedOn: Date;
 
-  @belongsTo('am-app')
+  @belongsTo('am-app', { async: true, inverse: 'lastSync' })
   declare amApp: AsyncBelongsTo<AmAppModel>;
 }
 

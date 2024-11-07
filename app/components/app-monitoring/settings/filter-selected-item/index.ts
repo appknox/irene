@@ -1,7 +1,7 @@
 import Component from '@glimmer/component';
 
 interface AppMonitoringSettingsFilterSelectedItemArgs {
-  extra?: Record<string, unknown>;
+  extra?: Record<string, string>;
 }
 
 export default class AppMonitoringSettingsFilterSelectedItemComponent extends Component<AppMonitoringSettingsFilterSelectedItemArgs> {
@@ -18,7 +18,7 @@ export default class AppMonitoringSettingsFilterSelectedItemComponent extends Co
   }
 
   get iconName() {
-    return this.args.extra?.['iconName'];
+    return this.args.extra?.['iconName'] as string;
   }
 }
 

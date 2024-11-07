@@ -53,7 +53,9 @@
           showLabel=true
           iconName='filter-list'
         }}
-        @selectedItemComponent='app-monitoring/settings/filter-selected-item'
+        @selectedItemComponent={{component
+          'app-monitoring/settings/filter-selected-item'
+        }}
         {{style width='auto'}}
         class='select-platform-class'
         data-test-select-platform-container
