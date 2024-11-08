@@ -51,7 +51,7 @@ export default class MemberDetailsComponent extends Component<MemberDetailsCompo
   }
 
   get teamsList() {
-    return this.teamResponse?.toArray() || [];
+    return this.teamResponse?.slice() || [];
   }
 
   get totalTeamCount() {

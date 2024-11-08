@@ -52,7 +52,7 @@ export default class OrganizationTeamComponent extends Component<OrganizationTea
   }
 
   get teamList() {
-    return this.teamResponse?.toArray() || [];
+    return this.teamResponse?.slice() || [];
   }
 
   get totalTeamCount() {

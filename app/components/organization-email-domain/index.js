@@ -26,7 +26,7 @@ export default class OrganizationEmailDomainComponent extends Component {
   fetchDomains = task(async () => {
     this.domains = (
       await this.store.findAll('organization-email-domain')
-    ).toArray();
+    ).slice();
   });
 
   addDomain = task(async () => {

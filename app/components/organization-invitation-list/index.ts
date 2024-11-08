@@ -126,7 +126,7 @@ export default class OrganizationInvitationListComponent extends Component<Organ
   }
 
   get inviteList() {
-    return this.inviteResponse?.toArray() || [];
+    return this.inviteResponse?.slice() || [];
   }
 
   get totalInviteCount() {

@@ -101,7 +101,7 @@ export default class AddToTeamComponent extends Component<AddToTeamComponentSign
   }
 
   get teamList() {
-    return this.teamResponse?.toArray() || [];
+    return this.teamResponse?.slice() || [];
   }
 
   get totalTeamCount() {
