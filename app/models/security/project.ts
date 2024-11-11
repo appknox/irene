@@ -16,10 +16,10 @@ export default class SecurityProjectModel extends Model {
   @attr('boolean')
   declare isManualScanAvailable: boolean;
 
-  @belongsTo('user', { inverse: 'ownedProjects' })
+  @belongsTo('user', { async: true, inverse: 'ownedProjects' })
   declare owner: AsyncBelongsTo<UserModel>;
 
-  @hasMany('security/file')
+  @hasMany('security/file', { async: true, inverse: null })
   declare files: AsyncHasMany<SecurityFileModel>;
 }
 

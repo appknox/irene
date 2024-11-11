@@ -525,6 +525,11 @@ module('Integration | Component | security/analysis-list', function (hooks) {
             risk: ENUMS.RISK.UNKNOWN,
             status: ENUMS.ANALYSIS_STATUS.WAITING,
           });
+
+          const file = schema['security/files'].find(newAnalysis.file);
+
+          file.analyses.push(newAnalysis.id);
+          file.save();
         }
 
         return new Response(

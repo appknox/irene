@@ -56,7 +56,7 @@ export default class SecurityFileSearchListComponent extends Component<SecurityF
   }
 
   get sortedSecurityFiles() {
-    return this.securityFilesQuery?.sortBy(...this.sortProperties).toArray();
+    return this.securityFilesQuery?.slice()?.sortBy(...this.sortProperties);
   }
 
   get totalFiles() {
