@@ -24,9 +24,9 @@ export default class MarketplacePluginListComponent extends Component {
         title: this.intl.t('jenkinsPipeline'),
         description: this.intl.t('viewIntegrationInstructions'),
         logo: '../images/jenkins-icon.png',
-        link: '',
-        published: false,
-        instructions: htmlSafe(constants.instructions),
+        link: 'https://plugins.jenkins.io/appknox-scanner/',
+        published: true,
+        instructions: '',
       },
       {
         title: this.intl.t('circleCIPipeline'),
