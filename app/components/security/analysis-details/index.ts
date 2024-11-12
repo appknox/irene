@@ -202,20 +202,20 @@ export default class SecurityAnalysisDetailsComponent extends Component<Security
     }
 
     const risk = this.analysisDetails?.risk;
-    const owasp = this.analysisDetails?.owasp;
-    const owaspmobile2024 = this.analysisDetails?.owaspmobile2024;
-    const owaspapi2023 = this.analysisDetails?.owaspapi2023;
-    const pcidss = this.analysisDetails?.pcidss;
-    const pcidss4 = this.analysisDetails?.pcidss4;
-    const hipaa = this.analysisDetails?.hipaa;
-    const masvs = this.analysisDetails?.masvs;
-    const mstg = this.analysisDetails?.mstg;
-    const asvs = this.analysisDetails?.asvs;
-    const cwe = this.analysisDetails?.cwe;
-    const gdpr = this.analysisDetails?.gdpr;
-    const nistsp800171 = this.analysisDetails?.nistsp800171;
-    const nistsp80053 = this.analysisDetails?.nistsp80053;
-    const sama = this.analysisDetails?.sama;
+    const owasp = await this.analysisDetails?.owasp;
+    const owaspmobile2024 = await this.analysisDetails?.owaspmobile2024;
+    const owaspapi2023 = await this.analysisDetails?.owaspapi2023;
+    const pcidss = await this.analysisDetails?.pcidss;
+    const pcidss4 = await this.analysisDetails?.pcidss4;
+    const hipaa = await this.analysisDetails?.hipaa;
+    const masvs = await this.analysisDetails?.masvs;
+    const mstg = await this.analysisDetails?.mstg;
+    const asvs = await this.analysisDetails?.asvs;
+    const cwe = await this.analysisDetails?.cwe;
+    const gdpr = await this.analysisDetails?.gdpr;
+    const nistsp800171 = await this.analysisDetails?.nistsp800171;
+    const nistsp80053 = await this.analysisDetails?.nistsp80053;
+    const sama = await this.analysisDetails?.sama;
 
     const status = this.analysisDetails?.status as number | { value: number };
 

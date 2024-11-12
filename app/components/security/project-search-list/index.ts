@@ -60,7 +60,7 @@ export default class SecurityProjectSearchListComponent extends Component<Securi
   }
 
   get sortedSecurityProjects() {
-    return this.securityProjectsQuery?.sortBy(...this.sortProperties).toArray();
+    return this.securityProjectsQuery?.slice()?.sortBy(...this.sortProperties);
   }
 
   get totalProjects() {

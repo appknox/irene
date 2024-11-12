@@ -743,7 +743,7 @@ module('Integration | Component | security/analysis-details', function (hooks) {
       // Check default selected
       let regulatorySelectOptions = findAll('.ember-power-select-option');
 
-      const selectedOptions = this.secAnalysis.get(valueKey).slice();
+      const selectedOptions = (await this.secAnalysis.get(valueKey)).slice();
 
       selectedOptions.forEach((op) => {
         const optionLabelParts = selectOptLabelConstructKeys

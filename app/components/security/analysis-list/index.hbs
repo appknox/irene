@@ -13,7 +13,9 @@
           @triggerClass={{this.triggerClass}}
           @dropdownClass={{this.dropDownClass}}
           @optionTitle={{'Scan type'}}
-          @selectedItemComponent='security/analysis-list/filter-selected-item'
+          @selectedItemComponent={{component
+            'security/analysis-list/filter-selected-item'
+          }}
           @extra={{hash
             selectedItem=this.vulnerabilityType
             showLabel=true

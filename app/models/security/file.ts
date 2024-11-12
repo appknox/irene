@@ -6,7 +6,6 @@ import Model, {
   AsyncBelongsTo,
   AsyncHasMany,
 } from '@ember-data/model';
-import ComputedProperty, { sort } from '@ember/object/computed';
 
 import ENUMS from 'irene/enums';
 import UserModel from '../user';
@@ -14,8 +13,6 @@ import SecurityProjectModel from './project';
 import SecurityAnalysisModel from './analysis';
 
 export default class SecurityFileModel extends Model {
-  analysesSorting = ['risk:desc'];
-
   @attr('string')
   declare name: string;
 
@@ -25,17 +22,14 @@ export default class SecurityFileModel extends Model {
   @attr('number')
   declare apiScanStatus: number;
 
-  @belongsTo('user')
+  @belongsTo('user', { async: true, inverse: null })
   declare user: AsyncBelongsTo<UserModel>;
 
-  @belongsTo('security/project')
+  @belongsTo('security/project', { async: true, inverse: null })
   declare project: AsyncBelongsTo<SecurityProjectModel>;
 
-  @hasMany('security/analysis')
+  @hasMany('security/analysis', { async: true, inverse: 'file' })
   declare analyses: AsyncHasMany<SecurityAnalysisModel>;
-
-  @sort<SecurityAnalysisModel>('analyses', 'analysesSorting')
-  declare sortedAnalyses: ComputedProperty<SecurityAnalysisModel[]>;
 
   @attr('boolean')
   declare isDynamicDone: boolean;

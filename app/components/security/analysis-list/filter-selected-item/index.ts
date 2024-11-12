@@ -28,5 +28,6 @@ export default class SecurityAnalysisListFilterSelectedItemComponent extends Com
 declare module '@glint/environment-ember-loose/registry' {
   export default interface Registry {
     'Security::AnalysisList::FilterSelectedItem': typeof SecurityAnalysisListFilterSelectedItemComponent;
+    'security/analysis-list/filter-selected-item': typeof SecurityAnalysisListFilterSelectedItemComponent;
   }
 }

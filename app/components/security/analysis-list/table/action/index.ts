@@ -64,22 +64,28 @@ export default class SecurityAnalysisListTableActionComponent extends Component<
         contentType: 'application/json',
         data: JSON.stringify({
           ...this.PASSED_STATE,
-          owasp: this.analysis.owasp.map((a) => a.get('id')),
-          owaspmobile2024: this.analysis.owaspmobile2024.map((a) =>
+          owasp: (await this.analysis.owasp).map((a) => a.get('id')),
+          owaspmobile2024: (await this.analysis.owaspmobile2024).map((a) =>
             a.get('id')
           ),
-          owaspapi2023: this.analysis.owaspapi2023.map((a) => a.get('id')),
-          pcidss: this.analysis.pcidss.map((a) => a.get('id')),
-          pcidss4: this.analysis.pcidss4.map((a) => a.get('id')),
-          hipaa: this.analysis.hipaa.map((a) => a.get('id')),
-          masvs: this.analysis.masvs.map((a) => a.get('id')),
-          mstg: this.analysis.mstg.map((a) => a.get('id')),
-          asvs: this.analysis.asvs.map((a) => a.get('id')),
-          cwe: this.analysis.cwe.map((a) => a.get('id')),
-          gdpr: this.analysis.gdpr.map((a) => a.get('id')),
-          nistsp80053: this.analysis.nistsp80053.map((a) => a.get('id')),
-          nistsp800171: this.analysis.nistsp800171.map((a) => a.get('id')),
-          sama: this.analysis.sama.map((a) => a.get('id')),
+          owaspapi2023: (await this.analysis.owaspapi2023).map((a) =>
+            a.get('id')
+          ),
+          pcidss: (await this.analysis.pcidss).map((a) => a.get('id')),
+          pcidss4: (await this.analysis.pcidss4).map((a) => a.get('id')),
+          hipaa: (await this.analysis.hipaa).map((a) => a.get('id')),
+          masvs: (await this.analysis.masvs).map((a) => a.get('id')),
+          mstg: (await this.analysis.mstg).map((a) => a.get('id')),
+          asvs: (await this.analysis.asvs).map((a) => a.get('id')),
+          cwe: (await this.analysis.cwe).map((a) => a.get('id')),
+          gdpr: (await this.analysis.gdpr).map((a) => a.get('id')),
+          nistsp80053: (await this.analysis.nistsp80053).map((a) =>
+            a.get('id')
+          ),
+          nistsp800171: (await this.analysis.nistsp800171).map((a) =>
+            a.get('id')
+          ),
+          sama: (await this.analysis.sama).map((a) => a.get('id')),
           findings: this.analysis.findings,
           overridden_risk: this.analysis.overriddenRisk || 'None',
           overridden_risk_comment: this.analysis.overriddenRiskComment || '',
