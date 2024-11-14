@@ -1,15 +1,16 @@
-import Route from '@ember/routing/route';
 import { inject as service } from '@ember/service';
-import ProjectModel from 'irene/models/project';
+import type Store from '@ember-data/store';
+
+import AkBreadcrumbsRoute from 'irene/utils/ak-breadcrumbs-route';
 import { ScrollToTop } from 'irene/utils/scroll-to-top';
-import Store from '@ember-data/store';
+import type ProjectModel from 'irene/models/project';
 
 export interface ProjectSettingsDastAutomationQueryParams {
   scenario_id: string;
 }
 
 export default class AuthenticatedDashboardProjectSettingsDastAutomationRoute extends ScrollToTop(
-  Route
+  AkBreadcrumbsRoute
 ) {
   @service declare store: Store;
 

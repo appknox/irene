@@ -1,7 +1,8 @@
-import Route from '@ember/routing/route';
 import { inject as service } from '@ember/service';
+import AkBreadcrumbsRoute from 'irene/utils/ak-breadcrumbs-route';
 import { ScrollToTop } from 'irene/utils/scroll-to-top';
-import Store from '@ember-data/store';
+import type Store from '@ember-data/store';
+import type FileModel from 'irene/models/file';
 
 export interface ChooseFilesQueryParams {
   files_limit: string;
@@ -9,8 +10,16 @@ export interface ChooseFilesQueryParams {
   fileid?: string;
 }
 
+export interface ChooseFilesModel {
+  file: FileModel;
+  queryParams: {
+    files_limit: string;
+    files_offset: string;
+  };
+}
+
 export default class AuthenticatedDashboardChooseRoute extends ScrollToTop(
-  Route
+  AkBreadcrumbsRoute
 ) {
   @service declare store: Store;
 

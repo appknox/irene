@@ -42,20 +42,9 @@ module('Integration | Component | project-settings/header', function (hooks) {
         hbs`<ProjectSettings::Header @project={{this.project}} @isDASTScenarioPage={{this.isDASTScenarioPage}} />`
       );
 
-      const breadcrumbItems = [
-        t('allProjects'),
-        this.project.get('packageName'),
-        isDASTScenarioPage
-          ? t('dastAutomation.dastAutomationScenario')
-          : t('settings'),
-      ];
-
-      // Checks rendering of breadcrumbs
-      breadcrumbItems.forEach((item) => {
-        assert
-          .dom(`[data-test-projectSettingsHeader-breadcrumbItem="${item}"]`)
-          .exists();
-      });
+      assert
+        .dom('[data-test-projectSettingsHeader-breadcrumbsContainer]')
+        .exists();
 
       if (!isDASTScenarioPage) {
         assert

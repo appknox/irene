@@ -37,25 +37,6 @@ export default class FileDetailsDastHeader extends Component<FileDetailsDastHead
     return this.args.dynamicScan?.isRunning;
   }
 
-  get breadcrumbItems() {
-    return [
-      {
-        route: 'authenticated.dashboard.projects',
-        linkTitle: this.intl.t('allProjects'),
-      },
-      {
-        route: 'authenticated.dashboard.file',
-        linkTitle: this.intl.t('scanDetails'),
-        model: this.args.file.id,
-      },
-      {
-        route: 'authenticated.dashboard.file.dynamic-scan',
-        linkTitle: this.intl.t('dast'),
-        model: this.args.file.id,
-      },
-    ];
-  }
-
   get tabs() {
     return [
       {

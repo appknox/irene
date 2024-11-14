@@ -1,8 +1,7 @@
 import Route from '@ember/routing/route';
-import RouterService from '@ember/routing/router-service';
-import { inject as service } from '@ember/service';
-
-import OrganizationService from 'irene/services/organization';
+import { service } from '@ember/service';
+import type RouterService from '@ember/routing/router-service';
+import type OrganizationService from 'irene/services/organization';
 
 export default class AuthenticatedDashboardSbomRoute extends Route {
   @service declare organization: OrganizationService;

@@ -1,17 +1,8 @@
 <div local-class='file-details-root'>
-  <AkBreadcrumbs::Container
+  <AkBreadcrumbs::AutoTrail
     class='mt-2 mb-3'
     data-test-fileDetails-breadcrumbContainer
-  >
-    {{#each this.breadcrumbItems as |item|}}
-      <AkBreadcrumbs::Item
-        @route={{item.route}}
-        @model={{item.model}}
-        @linkTitle={{item.linkTitle}}
-        data-test-fileDetails-breadcrumbItem='{{item.linkTitle}}'
-      />
-    {{/each}}
-  </AkBreadcrumbs::Container>
+  />
 
   <AkStack @direction='column' @spacing='2.5'>
     <FileDetails::Summary @file={{@file}} />

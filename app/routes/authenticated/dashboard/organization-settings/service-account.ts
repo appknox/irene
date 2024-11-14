@@ -1,10 +1,10 @@
-import Route from '@ember/routing/route';
 import { service } from '@ember/service';
 import type RouterService from '@ember/routing/router-service';
 
+import AkBreadcrumbsRoute from 'irene/utils/ak-breadcrumbs-route';
+import { ScrollToTop } from 'irene/utils/scroll-to-top';
 import type MeService from 'irene/services/me';
 import type OrganizationService from 'irene/services/organization';
-import { ScrollToTop } from 'irene/utils/scroll-to-top';
 
 export interface OrganizationSettingsServiceAccountRouteQueryParams {
   sa_limit: number;
@@ -13,7 +13,7 @@ export interface OrganizationSettingsServiceAccountRouteQueryParams {
 }
 
 export default class AuthenticatedDashboardOrganizationSettingsServiceAccountRoute extends ScrollToTop(
-  Route
+  AkBreadcrumbsRoute
 ) {
   @service declare router: RouterService;
   @service declare me: MeService;

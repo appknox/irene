@@ -1,6 +1,6 @@
-import Route from '@ember/routing/route';
-import { inject as service } from '@ember/service';
-import Store from '@ember-data/store';
+import { service } from '@ember/service';
+import AkBreadcrumbsRoute from 'irene/utils/ak-breadcrumbs-route';
+import type Store from '@ember-data/store';
 
 export interface SbomAppScanQueryParam {
   scan_limit: string;
@@ -12,7 +12,7 @@ export interface SbomAppScanParam extends SbomAppScanQueryParam {
   sbom_project_id: string;
 }
 
-export default class AuthenticatedDashboardSbomAppScansRoute extends Route {
+export default class AuthenticatedDashboardSbomAppScansRoute extends AkBreadcrumbsRoute {
   @service declare store: Store;
 
   queryParams = {
@@ -35,8 +35,17 @@ export default class AuthenticatedDashboardSbomAppScansRoute extends Route {
       scan_query = '',
     } = params;
 
+    const sbomProject = await this.store.findRecord(
+      'sbom-project',
+      sbom_project_id
+    );
+
+    const sbomPrj = await sbomProject.get('project');
+    const projectLastFile = await sbomPrj.get('lastFileId');
+
     return {
-      sbomProject: await this.store.findRecord('sbom-project', sbom_project_id),
+      sbomProject,
+      projectLastFile,
       queryParams: { scan_limit, scan_offset, scan_query },
     };
   }

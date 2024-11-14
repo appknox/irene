@@ -1,12 +1,7 @@
 {{page-title 'Monitoring Details'}}
 
 <PageWrapper @backgroundColor='inherit'>
-  <AkBreadcrumbs::Container @id='store-monitoring-breadcrumb' class='pt-2'>
-    <AkBreadcrumbs::Item
-      @route='authenticated.dashboard.app-monitoring.index'
-      @linkTitle={{t 'appMonitoring'}}
-    />
-  </AkBreadcrumbs::Container>
+  <AkBreadcrumbs::AutoTrail class='pt-2' />
 
   <AppMonitoring::Details
     @amApp={{@model.amApp}}

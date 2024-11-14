@@ -5,7 +5,6 @@ import RouterService from '@ember/routing/router-service';
 import IntlService from 'ember-intl/services/intl';
 
 import FileModel from 'irene/models/file';
-import { AkBreadcrumbsItemSignature } from 'irene/components/ak-breadcrumbs/item';
 import ProjectModel from 'irene/models/project';
 
 interface FileCompareHeaderSignature {
@@ -43,25 +42,6 @@ export default class FileCompareHeaderComponent extends Component<FileCompareHea
       this.args.project?.get('platformIconClass') ||
       this.file1?.project.get('platformIconClass')
     );
-  }
-
-  get breadcrumbItems(): AkBreadcrumbsItemSignature['Args'][] {
-    return [
-      {
-        route: 'authenticated.dashboard.projects',
-        linkTitle: this.intl.t('allProjects'),
-      },
-      {
-        route: 'authenticated.dashboard.file',
-        linkTitle: this.intl.t('scanDetails'),
-        model: this.file1?.id,
-      },
-      {
-        route: 'authenticated.dashboard.compare',
-        linkTitle: this.intl.t('compare'),
-        model: `${this.file1?.id}...${this.file2?.id}`,
-      },
-    ];
   }
 
   @action goToSettings() {

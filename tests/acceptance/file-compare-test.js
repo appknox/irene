@@ -139,7 +139,7 @@ module('Acceptance | file compare', function (hooks) {
 
     assert.strictEqual(
       currentURL(),
-      `/dashboard/compare/${baseFile?.id}...${compareFile?.id}?referrer=all_uploads`
+      `/dashboard/compare/${baseFile?.id}...${compareFile?.id}`
     );
   });
 
@@ -219,30 +219,26 @@ module('Acceptance | file compare', function (hooks) {
     );
   });
 
-  test('it renders all upload page breadcrumbs if page referrer is "all_uploads"', async function (assert) {
+  test('it redirects to all uploads page if user navigates to compare page from all uploads route', async function (assert) {
+    await visit(`/dashboard/project/${this.fileOld?.id}/files`);
+
     const [baseFile, compareFile] = this.fileRecords;
 
-    await visit(
-      `/dashboard/compare/${baseFile?.id}...${compareFile?.id}?referrer=all_uploads`
+    const baseFileSelector = `[data-test-fileList-fileOverview='${baseFile.id}']`;
+    const compareFileSelector = `[data-test-fileList-fileOverview='${compareFile.id}']`;
+
+    // Selects base and compare files
+    await click(`${baseFileSelector} [data-test-fileOverview-selectCheckBox]`);
+
+    await click(
+      `${compareFileSelector} [data-test-fileOverview-selectCheckBox]`
     );
 
-    const project = this.server.db.projects.find(this.fileOld.project);
+    await click('[data-test-fileList-projectOverview-header-compareBtn]');
 
-    const breadcrumbItems = ['All Projects', project.package_name, 'Compare'];
-
-    assert.dom('[data-test-fileCompare-header]').exists();
-    assert.dom('[data-test-fileCompare-breadcrumbContainer]').exists();
-
-    breadcrumbItems.map((item) =>
-      assert.dom(`[data-test-fileCompare-breadcrumbItem="${item}"]`).exists()
-    );
-  });
-
-  test('it redirects to all uploads page if compare file edit icon is clicked and page referrer is "all_uploads"', async function (assert) {
-    const [baseFile, compareFile] = this.fileRecords;
-
-    await visit(
-      `/dashboard/compare/${baseFile?.id}...${compareFile?.id}?referrer=all_uploads`
+    assert.strictEqual(
+      currentURL(),
+      `/dashboard/compare/${baseFile?.id}...${compareFile?.id}`
     );
 
     assert.dom('[data-test-fileCompare-header-compareFileEditIcon]').exists();
@@ -255,7 +251,7 @@ module('Acceptance | file compare', function (hooks) {
     );
   });
 
-  test('it redirects to compare list page if compare file edit icon is clicked and page referrer is empty', async function (assert) {
+  test('it redirects to compare list page if compare file edit icon is clicked and user navigates from compare list page', async function (assert) {
     const [baseFile, compareFile] = this.fileRecords;
 
     await visit(`/dashboard/compare/${baseFile?.id}...${compareFile?.id}`);

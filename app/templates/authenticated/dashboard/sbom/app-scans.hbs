@@ -1,18 +1,6 @@
 {{page-title 'App Scans'}}
 
-<AkBreadcrumbs::Container @id='app-scans-breadcrumb' class='pt-2 pb-3'>
-  <AkBreadcrumbs::Item
-    @route='authenticated.dashboard.sbom.apps'
-    @linkTitle={{t 'SBOM'}}
-  />
-
-  <AkBreadcrumbs::Item
-    @route='authenticated.dashboard.sbom.app-scans'
-    @linkTitle='{{t
-      "sbomModule.pastSbomAnalyses"
-    }} ({{@model.sbomProject.project.lastFile.name}})'
-  />
-</AkBreadcrumbs::Container>
+<AkBreadcrumbs::AutoTrail class='pt-2 pb-3' />
 
 <Sbom::AppScan
   @sbomProject={{@model.sbomProject}}

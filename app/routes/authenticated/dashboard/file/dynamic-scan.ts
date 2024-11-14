@@ -1,10 +1,12 @@
-import Route from '@ember/routing/route';
+import { service } from '@ember/service';
 import type Store from '@ember-data/store';
-import { inject as service } from '@ember/service';
 
+import AkBreadcrumbsRoute from 'irene/utils/ak-breadcrumbs-route';
 import { ScrollToTop } from 'irene/utils/scroll-to-top';
 
-export default class AuthenticatedFileDastRoute extends ScrollToTop(Route) {
+export default class AuthenticatedFileDastRoute extends ScrollToTop(
+  AkBreadcrumbsRoute
+) {
   @service declare store: Store;
 
   async model() {

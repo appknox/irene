@@ -1,27 +1,19 @@
-import Route from '@ember/routing/route';
 import Store from '@ember-data/store';
 import RouterService from '@ember/routing/router-service';
 import { inject as service } from '@ember/service';
 import { debug } from '@ember/debug';
 import { action } from '@ember/object';
 
-import FileModel from 'irene/models/file';
-import VulnerabilityModel from 'irene/models/vulnerability';
+import AkBreadcrumbsRoute from 'irene/utils/ak-breadcrumbs-route';
 import { ScrollToTop } from 'irene/utils/scroll-to-top';
-
-interface CompareRouteModel {
-  file1: FileModel;
-  file2: FileModel;
-  vulnerability: VulnerabilityModel;
-}
 
 export interface CompareRouteQueryParams {
   files: string;
   vulnerability_id: string;
 }
 
-export default class AuthenticatedDashboardFileVulCompareRoute extends ScrollToTop<CompareRouteModel>(
-  Route
+export default class AuthenticatedDashboardFileVulCompareRoute extends ScrollToTop(
+  AkBreadcrumbsRoute
 ) {
   @service declare store: Store;
   @service declare router: RouterService;
@@ -50,6 +42,11 @@ export default class AuthenticatedDashboardFileVulCompareRoute extends ScrollToT
       vulnerability_id
     );
 
-    return { file1, file2, vulnerability };
+    return {
+      controllerProps: { packageName: file1.get('project') },
+      file1,
+      file2,
+      vulnerability,
+    };
   }
 }

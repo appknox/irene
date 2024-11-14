@@ -1,11 +1,11 @@
-import Route from '@ember/routing/route';
 import { service } from '@ember/service';
 
 import type MeService from 'irene/services/me';
 import type { ModelFrom } from 'irene/utils/types';
 import type AuthenticatedOrganizationSettingsRoute from '../organization-settings';
+import AkBreadcrumbsRoute from 'irene/utils/ak-breadcrumbs-route';
 
-export default class AuthenticatedDashboardOrganizationSettingsIndexRoute extends Route {
+export default class AuthenticatedDashboardOrganizationSettingsIndexRoute extends AkBreadcrumbsRoute {
   @service declare me: MeService;
   @service declare ajax: any;
 

@@ -1,0 +1,40 @@
+<AkStack
+  id={{this.id}}
+  @alignItems='center'
+  @tag='ul'
+  data-test-ak-breadcrumbs-auto-trail-container
+  ...attributes
+>
+  {{#each this.breadcrumbsService.breadcrumbItems as |item|}}
+    <AkList::Item
+      @noGutters={{true}}
+      @link={{true}}
+      @disabled={{item.disabled}}
+      @query={{item.query}}
+      @route={{item.route}}
+      @models={{item.models}}
+      @linkClass={{this.classes.linkTextClass}}
+      local-class='ak-breadcrumb-auto-trail-item'
+      data-test-breadcrumb-trail-item
+      data-test-breadcrumb-trail-item-key='{{item.route}}'
+    >
+      <span local-class='breadcrumb-title'>
+        {{item.title}}
+      </span>
+
+      <AkStack
+        tag='span'
+        direction='row'
+        alignItems='center'
+        local-class='separator'
+        data-test-breadcrumb-separator
+      >
+        {{#if (has-block 'separator')}}
+          {{yield to='separator'}}
+        {{else}}
+          {{if @separator @separator '/'}}
+        {{/if}}
+      </AkStack>
+    </AkList::Item>
+  {{/each}}
+</AkStack>

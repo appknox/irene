@@ -1,7 +1,7 @@
 import Component from '@glimmer/component';
 import { inject as service } from '@ember/service';
-import IntlService from 'ember-intl/services/intl';
-import ProjectModel from 'irene/models/project';
+import type IntlService from 'ember-intl/services/intl';
+import type ProjectModel from 'irene/models/project';
 
 interface ProjectSettingsHeaderSignature {
   Args: {
@@ -15,31 +15,6 @@ export default class ProjectSettingsHeaderComponent extends Component<ProjectSet
 
   get project() {
     return this.args.project;
-  }
-
-  get breadcrumbItems() {
-    return [
-      {
-        route: 'authenticated.dashboard.projects',
-        linkTitle: this.intl.t('allProjects'),
-      },
-      {
-        route: 'authenticated.dashboard.project.settings',
-        linkTitle: this.project?.get('packageName'),
-        model: this.project?.get('id'),
-      },
-      this.args.isDASTScenarioPage
-        ? {
-            route: 'authenticated.dashboard.project.settings',
-            linkTitle: this.intl.t('dastAutomation.dastAutomationScenario'),
-            model: this.project?.get('id'),
-          }
-        : {
-            route: 'authenticated.dashboard.project.settings',
-            linkTitle: this.intl.t('settings'),
-            model: this.project?.get('id'),
-          },
-    ];
   }
 
   get tabItems() {

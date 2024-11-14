@@ -1,9 +1,9 @@
-import Route from '@ember/routing/route';
-import { inject as service } from '@ember/service';
-import Store from '@ember-data/store';
+import { service } from '@ember/service';
+import type Store from '@ember-data/store';
 
-import SbomComponentModel from 'irene/models/sbom-component';
+import AkBreadcrumbsRoute from 'irene/utils/ak-breadcrumbs-route';
 import { ScrollToTop } from 'irene/utils/scroll-to-top';
+import type SbomComponentModel from 'irene/models/sbom-component';
 
 export interface SbomAppScanQueryParam {
   vulnerability_limit: string;
@@ -24,7 +24,7 @@ export interface ComponentDetailsModel {
 }
 
 export default class AuthenticatedDashboardSbomComponentDetailsRoute extends ScrollToTop(
-  Route
+  AkBreadcrumbsRoute
 ) {
   @service declare store: Store;
 
@@ -52,8 +52,17 @@ export default class AuthenticatedDashboardSbomComponentDetailsRoute extends Scr
       sbomComponentId: sbom_component_id,
     });
 
+    const sbFileId = sbomComponent.sbFile?.get('id') as string;
+    const sbomFile = await this.store.findRecord('sbom-file', sbFileId);
+    const sbomProject = await sbomFile?.get('sbProject');
+    const sbomPrj = await sbomProject.get('project');
+    const projectLastFile = await sbomPrj.get('lastFileId');
+
     return {
       sbomComponent,
+      sbomProject,
+      sbomFile,
+      projectLastFile,
       queryParams: {
         vulnerability_limit,
         vulnerability_offset,

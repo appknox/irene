@@ -1,6 +1,6 @@
-import Route from '@ember/routing/route';
+import AkBreadcrumbsRoute from 'irene/utils/ak-breadcrumbs-route';
 
-export default class AuthenticatedOrganizationNamespacesRoute extends Route {
+export default class AuthenticatedOrganizationNamespacesRoute extends AkBreadcrumbsRoute {
   queryParams = {
     namespace_limit: {
       refreshModel: true,

@@ -27,25 +27,6 @@ export default class FileDetailsStaticScan extends Component<FileDetailsStaticSc
     { isAscending: false, valuePath: 'computedRisk' },
   ];
 
-  get breadcrumbItems() {
-    return [
-      {
-        route: 'authenticated.dashboard.projects',
-        linkTitle: this.intl.t('allProjects'),
-      },
-      {
-        route: 'authenticated.dashboard.file',
-        linkTitle: this.intl.t('scanDetails'),
-        model: this.args.file.id,
-      },
-      {
-        route: 'authenticated.dashboard.file.static-scan',
-        linkTitle: this.intl.t('sastResults'),
-        model: this.args.file.id,
-      },
-    ];
-  }
-
   get tRescanInitiated() {
     return this.intl.t('rescanInitiated');
   }

@@ -1,13 +1,5 @@
 <AkStack @width='full' @alignItems='center' class='mb-3'>
-  <AkBreadcrumbs::Container>
-    {{#each this.breadcrumbItems as |item|}}
-      <AkBreadcrumbs::Item
-        @route={{item.route}}
-        @model={{item.model}}
-        @linkTitle={{item.linkTitle}}
-      />
-    {{/each}}
-  </AkBreadcrumbs::Container>
+  <AkBreadcrumbs::AutoTrail />
 </AkStack>
 
 <AkStack

@@ -63,9 +63,11 @@ module('Acceptance | sbom', function (hooks) {
       this.server.create('sbom-project', { latest_sb_file: sbomFile.id })
     );
 
-    this.server.create('sbom-scan-summary');
+    const sbomComponents = sbomFiles.map((sbomFile) =>
+      this.server.create('sbom-component', { sb_file: sbomFile.id })
+    );
 
-    const sbomComponents = this.server.createList('sbom-component', 10);
+    this.server.create('sbom-scan-summary');
 
     this.server.get('/v2/server_configuration', () => {
       return {

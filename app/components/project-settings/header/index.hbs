@@ -1,17 +1,9 @@
 <div local-class='project-settings-header-root'>
-  <AkBreadcrumbs::Container
+  <AkBreadcrumbs::AutoTrail
     local-class='settings-header-breadcrumbs'
     class='pt-2'
-  >
-    {{#each this.breadcrumbItems as |item|}}
-      <AkBreadcrumbs::Item
-        @route={{item.route}}
-        @model={{item.model}}
-        @linkTitle={{item.linkTitle}}
-        data-test-projectSettingsHeader-breadcrumbItem='{{item.linkTitle}}'
-      />
-    {{/each}}
-  </AkBreadcrumbs::Container>
+    data-test-projectSettingsHeader-breadcrumbsContainer
+  />
 
   {{#unless @isDASTScenarioPage}}
     <div class='my-2' data-test-projectSettingsHeader-descText>
