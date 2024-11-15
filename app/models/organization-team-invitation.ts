@@ -11,7 +11,7 @@ export default class OrganizationTeamInvitationModel extends Model {
   @attr('date')
   declare updatedOn: Date;
 
-  @belongsTo('organization')
+  @belongsTo('organization', { async: true, inverse: null })
   declare organization: AsyncBelongsTo<OrganizationModel>;
 
   async delete() {

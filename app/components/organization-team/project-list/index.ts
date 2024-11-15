@@ -49,7 +49,7 @@ export default class OrganizationTeamProjectListComponent extends Component<Orga
   }
 
   get teamProjectList() {
-    return this.teamProjectResponse?.toArray() || [];
+    return this.teamProjectResponse?.slice() || [];
   }
 
   get totalTeamProjectCount() {

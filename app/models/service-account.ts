@@ -33,7 +33,7 @@ export default class ServiceAccountModel extends Model {
   @attr('boolean')
   declare allProjects: boolean;
 
-  @hasMany('service-account-project')
+  @hasMany('service-account-project', { async: true, inverse: null })
   declare projects: AsyncHasMany<ServiceAccountProjectModel>;
 
   @attr('date')
@@ -60,10 +60,10 @@ export default class ServiceAccountModel extends Model {
   @attr('date')
   declare createdOn: Date;
 
-  @belongsTo('organization-user')
+  @belongsTo('organization-user', { async: true, inverse: null })
   declare updatedByUser: AsyncBelongsTo<OrganizationUserModel> | null;
 
-  @belongsTo('organization-user')
+  @belongsTo('organization-user', { async: true, inverse: null })
   declare createdByUser: AsyncBelongsTo<OrganizationUserModel>;
 
   async resetKey(expiry: Date | null) {

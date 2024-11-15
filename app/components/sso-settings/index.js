@@ -20,6 +20,7 @@ export default class SsoSettingsComponent extends Component {
   @tracked idpMetadata = null;
   @tracked idpMetadataXml = null;
   @tracked spConfig = 'manual';
+  @tracked sso = null;
 
   spMetadataKeys = [
     { labelKey: 'entityID', valueKey: 'entity_id' },
@@ -38,10 +39,7 @@ export default class SsoSettingsComponent extends Component {
 
     this.SPMetadata.perform();
     this.getIdPMetadata.perform();
-  }
-
-  get sso() {
-    return this.store.queryRecord('organization-sso', {});
+    this.getSSOData.perform();
   }
 
   // Switch SP config format
@@ -74,6 +72,14 @@ export default class SsoSettingsComponent extends Component {
       this.idpMetadata = idpMetadata;
     } catch (error) {
       // catch error
+    }
+  });
+
+  getSSOData = task(async () => {
+    try {
+      this.sso = await this.store.queryRecord('organization-sso', {});
+    } catch (e) {
+      this.notify.error(parseError(e));
     }
   });
 

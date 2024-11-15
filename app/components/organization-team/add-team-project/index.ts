@@ -56,7 +56,7 @@ export default class OrganizationTeamAddTeamProjectComponent extends Component<O
   }
 
   get projectList() {
-    const list = this.projectResponse?.toArray() || [];
+    const list = this.projectResponse?.slice() || [];
 
     return list.map((project: OrganizationProjectModel) => ({
       project,

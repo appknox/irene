@@ -58,7 +58,7 @@ export default class OrganizationTeamAddTeamMemberComponent extends Component<Or
   }
 
   get userList() {
-    const list = this.userResponse?.toArray() || [];
+    const list = this.userResponse?.slice() || [];
 
     return list.map((user) => ({
       user,

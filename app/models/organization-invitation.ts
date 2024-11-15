@@ -12,10 +12,10 @@ export default class OrganizationInvitationModel extends Model {
   @attr('date')
   declare updatedOn: Date;
 
-  @belongsTo('organization-team')
+  @belongsTo('organization-team', { async: true, inverse: null })
   declare team: AsyncBelongsTo<OrganizationTeamModel>;
 
-  @belongsTo('organization')
+  @belongsTo('organization', { async: true, inverse: null })
   declare organization: AsyncBelongsTo<OrganizationModel>;
 
   resend() {

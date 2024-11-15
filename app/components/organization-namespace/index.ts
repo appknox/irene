@@ -54,7 +54,7 @@ export default class OrganizationNamespaceComponent extends Component<Organizati
   }
 
   get namespaceList() {
-    return this.namespaceResponse?.toArray() || [];
+    return this.namespaceResponse?.slice() || [];
   }
 
   get totalNamespaceCount() {

@@ -53,7 +53,7 @@ export default class OrganizationTeamMemberListComponent extends Component<Organ
   }
 
   get teamMemberList() {
-    return this.teamMemberResponse?.toArray() || [];
+    return this.teamMemberResponse?.slice() || [];
   }
 
   get totalTeamMemberCount() {

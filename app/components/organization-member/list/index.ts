@@ -90,7 +90,7 @@ export default class OrganizationMemberListComponent extends Component<Organizat
   }
 
   get userList() {
-    return this.userResponse?.toArray() || [];
+    return this.userResponse?.slice() || [];
   }
 
   get totalUserCount() {
