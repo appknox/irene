@@ -1,4 +1,4 @@
-import Model, { belongsTo, attr } from '@ember-data/model';
+import Model, { belongsTo, attr, AsyncBelongsTo } from '@ember-data/model';
 import { inject as service } from '@ember/service';
 import IntlService from 'ember-intl/services/intl';
 import OrganizationUserModel from 'irene/models/organization-user';
@@ -6,8 +6,8 @@ import OrganizationUserModel from 'irene/models/organization-user';
 export default class OrganizationCleanupModel extends Model {
   @service declare intl: IntlService;
 
-  @belongsTo('organization-user')
-  declare user: OrganizationUserModel;
+  @belongsTo('organization-user', { async: true, inverse: null })
+  declare user: AsyncBelongsTo<OrganizationUserModel>;
 
   @attr('date')
   declare createdOn: Date;

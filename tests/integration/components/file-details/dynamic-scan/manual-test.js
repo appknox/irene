@@ -76,10 +76,7 @@ module(
       });
 
       this.server.get('/v2/projects/:id', (schema, req) => {
-        return {
-          ...schema.projects.find(`${req.params.id}`)?.toJSON(),
-          platform: 0,
-        };
+        return schema.projects.find(`${req.params.id}`)?.toJSON();
       });
 
       this.server.get('/profiles/:id/proxy_settings', (_, req) => {
@@ -102,7 +99,7 @@ module(
       this.server.get('/profiles/:id/device_preference', (schema, req) => {
         return {
           ...schema.devicePreferences.find(`${req.params.id}`)?.toJSON(),
-          device_type: ENUMS.DEVICE_TYPE.TABLET_REQUIRED,
+          device_type: ENUMS.DEVICE_TYPE.NO_PREFERENCE,
         };
       });
 
@@ -142,13 +139,12 @@ module(
         profile: profile.id,
       });
 
-      const project = this.server.create('project', { file: file.id, id: '1' });
+      const project = this.server.create('project', {
+        last_file_id: file.id,
+        id: '1',
+      });
 
       const availableDevices = [
-        ...this.server.createList('project-available-device', 5, {
-          is_tablet: true,
-          platform: 0,
-        }),
         ...this.server.createList('project-available-device', 5, {
           is_tablet: true,
           platform: 1,
@@ -179,6 +175,7 @@ module(
       this.setProperties({
         file: store.push(store.normalize('file', file.toJSON())),
         dynamicScanText: t('modalCard.dynamicScan.title'),
+        project,
         devicePreference,
         availableDevices,
         store,
@@ -296,26 +293,22 @@ module(
       [
         { withApiProxySetting: true },
         { withApiScan: true },
-        { withDeviceRequirements: true },
         { withAutomatedDynamicScan: true },
       ],
       async function (
         assert,
-        {
-          withApiProxySetting,
-          withApiScan,
-          withDeviceRequirements,
-          withAutomatedDynamicScan,
-        }
+        { withApiProxySetting, withApiScan, withAutomatedDynamicScan }
       ) {
         this.file.dynamicStatus = ENUMS.DYNAMIC_STATUS.NONE;
         this.file.isDynamicDone = false;
         this.file.isActive = true;
 
-        if (withDeviceRequirements) {
-          this.file.minOsVersion = '10.0';
+        // make sure all available devices are not filtered based on minOsVersion
+        this.file.minOsVersion = this.devicePreference.platform_version;
+
+        if (ENUMS.PLATFORM.IOS === this.project.platform) {
           this.file.supportedCpuArchitectures = 'arm64';
-          this.file.supportedDeviceTypes = 'iPhone';
+          this.file.supportedDeviceTypes = 'iPhone, iPad';
         }
 
         if (withAutomatedDynamicScan) {
@@ -882,20 +875,32 @@ module(
       'test start dynamic scan',
       [{ automatedScan: false }, { automatedScan: true }],
       async function (assert, { automatedScan }) {
+        const isIOS = ENUMS.PLATFORM.IOS === this.project.platform;
+
         const file = this.server.create('file', {
-          project: '1',
+          project: this.project.id,
           profile: '100',
           dynamic_status: ENUMS.DYNAMIC_STATUS.NONE,
           is_dynamic_done: false,
           can_run_automated_dynamicscan: automatedScan,
           is_active: true,
+          min_os_version: '0', // so that we can select any option for version
+          supported_cpu_architectures: isIOS ? 'arm64' : '',
+          supported_device_types: isIOS ? 'iPhone, iPad' : '', // required for Ios to show device types
         });
 
+        // update project with latest file
+        this.project.update({
+          last_file_id: file.id,
+        });
+
+        // set the file
         this.set(
           'file',
           this.store.push(this.store.normalize('file', file.toJSON()))
         );
 
+        // server mocks
         this.server.get('/profiles/:id/proxy_settings', (_, req) => {
           return {
             id: req.params.id,
@@ -943,7 +948,7 @@ module(
           .dom(
             `[data-test-projectPreference-deviceTypeSelect] .${classes.trigger}`
           )
-          .hasText(`t:${deviceType([ENUMS.DEVICE_TYPE.TABLET_REQUIRED])}:()`);
+          .hasText(t(deviceType([ENUMS.DEVICE_TYPE.NO_PREFERENCE])));
 
         assert
           .dom(
@@ -953,7 +958,7 @@ module(
 
         await selectChoose(
           `[data-test-projectPreference-deviceTypeSelect] .${classes.trigger}`,
-          `t:${deviceType([ENUMS.DEVICE_TYPE.PHONE_REQUIRED])}:()`
+          t(deviceType([ENUMS.DEVICE_TYPE.PHONE_REQUIRED]))
         );
 
         // verify ui
@@ -961,7 +966,7 @@ module(
           .dom(
             `[data-test-projectPreference-deviceTypeSelect] .${classes.trigger}`
           )
-          .hasText(`t:${deviceType([ENUMS.DEVICE_TYPE.PHONE_REQUIRED])}:()`);
+          .hasText(t(deviceType([ENUMS.DEVICE_TYPE.PHONE_REQUIRED])));
 
         // verify network data
         assert.strictEqual(
@@ -970,7 +975,7 @@ module(
         );
 
         const filteredDevices = this.availableDevices.filter(
-          (it) => it.platform === 0 && !it.is_tablet
+          (it) => it.platform === this.project.platform && !it.is_tablet
         );
 
         await selectChoose(
@@ -1187,63 +1192,148 @@ module(
         .hasText(this.dynamicScanText);
     });
 
-    test('test when preferred device is not available', async function (assert) {
-      const preferredDeviceType = this.devicePreference.device_type;
-      const preferredPlatformVersion = this.devicePreference.platform_version;
+    test.each(
+      'test device unavailability scenarios',
+      [
+        {
+          scenario: 'preferred device not available',
+          removePreferredOnly: true,
+          expectedError: () =>
+            t('modalCard.dynamicScan.preferredDeviceNotAvailable'),
+        },
+        {
+          scenario: 'all devices allocated',
+          removePreferredOnly: false,
+          expectedError: () =>
+            t('modalCard.dynamicScan.allDevicesAreAllocated'),
+        },
+      ],
+      async function (assert, { removePreferredOnly, expectedError }) {
+        const preferredDeviceType = this.devicePreference.device_type;
+        const preferredPlatformVersion = this.devicePreference.platform_version;
 
-      // there can be duplicates
-      const preferredDeviceList = this.server.db.projectAvailableDevices.where(
-        (ad) =>
-          ad.platform_version === preferredPlatformVersion &&
-          (ad.is_tablet
-            ? preferredDeviceType === ENUMS.DEVICE_TYPE.TABLET_REQUIRED
-            : preferredDeviceType === ENUMS.DEVICE_TYPE.PHONE_REQUIRED)
-      );
+        if (removePreferredOnly) {
+          // Remove only preferred devices
+          const preferredDeviceList =
+            this.server.db.projectAvailableDevices.where(
+              (ad) =>
+                ad.platform_version === preferredPlatformVersion &&
+                (ad.is_tablet
+                  ? preferredDeviceType === ENUMS.DEVICE_TYPE.TABLET_REQUIRED
+                  : preferredDeviceType === ENUMS.DEVICE_TYPE.PHONE_REQUIRED)
+            );
 
-      // simulate preferred device not available
-      preferredDeviceList.forEach(({ id }) => {
-        this.server.db.projectAvailableDevices.remove(id);
+          preferredDeviceList.forEach(({ id }) => {
+            this.server.db.projectAvailableDevices.remove(id);
+          });
+        } else {
+          // Remove all devices
+          this.server.db.projectAvailableDevices.remove();
+        }
+
+        const file = this.server.create('file', {
+          project: '1',
+          profile: '100',
+          dynamic_status: ENUMS.DYNAMIC_STATUS.NONE,
+          is_dynamic_done: false,
+          can_run_automated_dynamicscan: false,
+          is_active: true,
+        });
+
+        this.set(
+          'file',
+          this.store.push(this.store.normalize('file', file.toJSON()))
+        );
+
+        // Server mocks
+        this.server.get('/v2/projects/:id', (schema, req) => {
+          return schema.projects.find(`${req.params.id}`)?.toJSON();
+        });
+
+        this.server.get('/profiles/:id', (schema, req) =>
+          schema.profiles.find(`${req.params.id}`)?.toJSON()
+        );
+
+        this.server.get('/profiles/:id/device_preference', (schema, req) => {
+          return schema.devicePreferences.find(`${req.params.id}`)?.toJSON();
+        });
+
+        this.server.get('/projects/:id/available-devices', (schema) => {
+          const results = schema.projectAvailableDevices.all().models;
+          return { count: results.length, next: null, previous: null, results };
+        });
+
+        this.server.get('/profiles/:id/proxy_settings', (_, req) => {
+          return {
+            id: req.params.id,
+            host: '',
+            port: '',
+            enabled: false,
+          };
+        });
+
+        await render(hbs`
+          <FileDetails::DynamicScan::Manual @file={{this.file}} @dynamicScanText={{this.dynamicScanText}} />
+        `);
+
+        assert
+          .dom('[data-test-fileDetails-dynamicScanAction-startBtn]')
+          .hasText(this.dynamicScanText);
+
+        assert
+          .dom('[data-test-fileDetails-dynamicScanDrawerOld-startBtn]')
+          .doesNotExist();
+
+        await click('[data-test-fileDetails-dynamicScanAction-startBtn]');
+
+        // Verify error states
+        assert
+          .dom(
+            `[data-test-projectPreference-deviceTypeSelect] .${classes.trigger}`
+          )
+          .hasClass(classes.triggerError);
+
+        assert
+          .dom(
+            `[data-test-projectPreference-osVersionSelect] .${classes.trigger}`
+          )
+          .hasClass(classes.triggerError);
+
+        assert
+          .dom('[data-test-projectPreference-deviceUnavailableError]')
+          .hasText(expectedError());
+
+        assert
+          .dom('[data-test-fileDetails-dynamicScanDrawerOld-startBtn]')
+          .isDisabled();
+      }
+    );
+
+    test('test os version filtering based on min os version', async function (assert) {
+      this.file.dynamicStatus = ENUMS.DYNAMIC_STATUS.NONE;
+      this.file.isDynamicDone = false;
+      this.file.isActive = true;
+      this.file.minOsVersion = '14.0'; // Update file's min_os_version
+
+      // Clear existing devices and create new ones with specific versions
+      this.server.db.projectAvailableDevices.remove();
+
+      this.server.createList('project-available-device', 2, {
+        platform: this.project.platform,
+        platform_version: '13.0 (d10)',
+        is_tablet: false,
       });
 
-      const file = this.server.create('file', {
-        project: '1',
-        profile: '100',
-        dynamic_status: ENUMS.DYNAMIC_STATUS.NONE,
-        is_dynamic_done: false,
-        can_run_automated_dynamicscan: false,
-        is_active: true,
+      this.server.createList('project-available-device', 2, {
+        platform: this.project.platform,
+        platform_version: '14.2',
+        is_tablet: false,
       });
 
-      this.set(
-        'file',
-        this.store.push(this.store.normalize('file', file.toJSON()))
-      );
-
-      this.server.get('/v2/projects/:id', (schema, req) => {
-        return schema.projects.find(`${req.params.id}`)?.toJSON();
-      });
-
-      this.server.get('/profiles/:id', (schema, req) =>
-        schema.profiles.find(`${req.params.id}`)?.toJSON()
-      );
-
-      this.server.get('/profiles/:id/device_preference', (schema, req) => {
-        return schema.devicePreferences.find(`${req.params.id}`)?.toJSON();
-      });
-
-      this.server.get('/projects/:id/available-devices', (schema) => {
-        const results = schema.projectAvailableDevices.all().models;
-
-        return { count: results.length, next: null, previous: null, results };
-      });
-
-      this.server.get('/profiles/:id/proxy_settings', (_, req) => {
-        return {
-          id: req.params.id,
-          host: '',
-          port: '',
-          enabled: false,
-        };
+      this.server.createList('project-available-device', 2, {
+        platform: this.project.platform,
+        platform_version: '15.0 (d101) sim',
+        is_tablet: false,
       });
 
       await render(hbs`
@@ -1254,31 +1344,96 @@ module(
         .dom('[data-test-fileDetails-dynamicScanAction-startBtn]')
         .hasText(this.dynamicScanText);
 
-      assert
-        .dom('[data-test-fileDetails-dynamicScanDrawerOld-startBtn]')
-        .doesNotExist();
-
       await click('[data-test-fileDetails-dynamicScanAction-startBtn]');
 
-      assert
-        .dom(
-          `[data-test-projectPreference-deviceTypeSelect] .${classes.trigger}`
-        )
-        .hasClass(classes.triggerError);
+      // Open OS version dropdown
+      await click(
+        `[data-test-projectPreference-osVersionSelect] .${classes.trigger}`
+      );
 
-      assert
-        .dom(
-          `[data-test-projectPreference-osVersionSelect] .${classes.trigger}`
-        )
-        .hasClass(classes.triggerError);
+      const options = findAll(`.${classes.dropdown} [data-option-index]`);
+      const versions = Array.from(options).map((el) => el.textContent.trim());
 
-      assert
-        .dom('[data-test-projectPreference-deviceUnavailableError]')
-        .hasText(t('modalCard.dynamicScan.preferredDeviceNotAvailable'));
+      // Should only include "Any Version" (0) and versions >= 14.0
+      assert.deepEqual(
+        versions,
+        [t('anyVersion'), '15.0 (d101) sim', '14.2'],
+        'Only shows versions >= min_os_version and "Any Version" option'
+      );
 
-      assert
-        .dom('[data-test-fileDetails-dynamicScanDrawerOld-startBtn]')
-        .isDisabled();
+      // Versions below min_os_version should not be present
+      assert.notOk(
+        versions.includes('13.0 (d10)'),
+        'Does not show versions below min_os_version'
+      );
     });
+
+    test.each(
+      'test device type filtering based on platform and supported types',
+      [
+        {
+          platform: ENUMS.PLATFORM.IOS,
+          supportedDeviceTypes: 'iPhone, iPad',
+          expectedTypes: ['No Preference', 'Phone Required', 'Tablet Required'],
+        },
+        {
+          platform: ENUMS.PLATFORM.IOS,
+          supportedDeviceTypes: 'iPhone',
+          expectedTypes: ['No Preference', 'Phone Required'],
+        },
+        {
+          platform: ENUMS.PLATFORM.IOS,
+          supportedDeviceTypes: 'iPad',
+          expectedTypes: ['No Preference', 'Tablet Required'],
+        },
+        {
+          platform: ENUMS.PLATFORM.ANDROID,
+          supportedDeviceTypes: '',
+          expectedTypes: ['No Preference', 'Phone Required'],
+        },
+      ],
+      async function (
+        assert,
+        { platform, supportedDeviceTypes, expectedTypes }
+      ) {
+        // Update project platform
+        this.project.update({ platform });
+
+        this.file.dynamicStatus = ENUMS.DYNAMIC_STATUS.NONE;
+        this.file.isDynamicDone = false;
+        this.file.isActive = true;
+        // Update file's supported device types
+        this.file.supportedDeviceTypes = supportedDeviceTypes;
+
+        await render(hbs`
+          <FileDetails::DynamicScan::Manual @file={{this.file}} @dynamicScanText={{this.dynamicScanText}} />
+        `);
+
+        await click('[data-test-fileDetails-dynamicScanAction-startBtn]');
+
+        // Open device type dropdown
+        await click(
+          `[data-test-projectPreference-deviceTypeSelect] .${classes.trigger}`
+        );
+
+        const options = findAll(`.${classes.dropdown} [data-option-index]`);
+
+        const deviceTypes = Array.from(options).map((el) =>
+          el.textContent.trim()
+        );
+
+        assert.deepEqual(
+          deviceTypes,
+          expectedTypes.map((type) =>
+            t(
+              deviceType([
+                ENUMS.DEVICE_TYPE[type.replace(' ', '_').toUpperCase()],
+              ])
+            )
+          ),
+          `Shows correct device types for ${platform === ENUMS.PLATFORM.IOS ? 'iOS' : 'Android'} with supported types: ${supportedDeviceTypes || 'Phone'}`
+        );
+      }
+    );
   }
 );
