@@ -37,7 +37,7 @@ export default class PartnerClientListComponent extends Component {
   }
 
   get partnerClientList() {
-    return this.partnerClientReponse?.toArray() || [];
+    return this.partnerClientReponse?.slice() || [];
   }
 
   get totalParnterClientCount() {

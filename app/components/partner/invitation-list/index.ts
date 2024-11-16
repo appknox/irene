@@ -6,6 +6,7 @@ import { inject as service } from '@ember/service';
 import { task } from 'ember-concurrency';
 import IntlService from 'ember-intl/services/intl';
 import Store from '@ember-data/store';
+import dayjs from 'dayjs';
 
 // eslint-disable-next-line ember/use-ember-data-rfc-395-imports
 import { DS } from 'ember-data';
@@ -32,8 +33,6 @@ export default class PartnerInvitationListComponent extends Component {
   @tracked hasErrored = false;
   @tracked limit = 10;
   @tracked offset = 0;
-
-  sortProperties = ['updatedOn:asc'];
 
   constructor(owner: unknown, args: object) {
     super(owner, args);
@@ -71,8 +70,10 @@ export default class PartnerInvitationListComponent extends Component {
   get partnerRegistrationRequestList() {
     return (
       this.partnerRegistrationRequestReponse
-        ?.toArray()
-        .sortBy(...this.sortProperties) || []
+        ?.slice()
+        .sort(
+          (a, b) => dayjs(b.updatedOn).valueOf() - dayjs(a.updatedOn).valueOf()
+        ) || []
     );
   }
 
