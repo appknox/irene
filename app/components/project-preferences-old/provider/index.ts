@@ -14,6 +14,7 @@ import ENV from 'irene/config/environment';
 import ProjectModel from 'irene/models/project';
 import DevicePreferenceModel from 'irene/models/device-preference';
 import ProjectAvailableDeviceModel from 'irene/models/project-available-device';
+import FileModel from 'irene/models/file';
 
 export interface DevicePreferenceContext {
   deviceTypes: DeviceType[];
@@ -27,6 +28,7 @@ export interface DevicePreferenceContext {
 
 export interface ProjectPreferencesOldProviderSignature {
   Args: {
+    file?: FileModel | null;
     project?: ProjectModel | null;
     profileId?: number | string;
     platform?: number;
@@ -75,7 +77,7 @@ export default class ProjectPreferencesOldProviderComponent extends Component<Pr
         }
       );
 
-      this.selectedDeviceType = this.filteredDeviceTypes.find(
+      this.selectedDeviceType = this.deviceTypes.find(
         (it) => it.value === this.devicePreference?.deviceType
       );
 
@@ -100,9 +102,39 @@ export default class ProjectPreferencesOldProviderComponent extends Component<Pr
   }
 
   get filteredDeviceTypes() {
-    return this.deviceTypes.filter(
-      (type) => ENUMS.DEVICE_TYPE.UNKNOWN !== type.value
-    );
+    const supportedTypes =
+      this.args.file?.supportedDeviceTypes ||
+      this.args.project?.get('lastFile')?.get('supportedDeviceTypes');
+
+    const platform = this.args.project?.get('platform');
+
+    return this.deviceTypes.filter((type) => {
+      switch (type.value) {
+        // Always filter out unknown device type
+        case ENUMS.DEVICE_TYPE.UNKNOWN:
+          return false;
+
+        // Always show "Any Device" option
+        case ENUMS.DEVICE_TYPE.NO_PREFERENCE:
+          return true;
+
+        // For iOS, show tablet option only if iPad is supported
+        case ENUMS.DEVICE_TYPE.TABLET_REQUIRED:
+          return supportedTypes?.includes('iPad');
+
+        case ENUMS.DEVICE_TYPE.PHONE_REQUIRED:
+          // For Android, only show phone options
+          if (ENUMS.PLATFORM.ANDROID === platform) {
+            return true;
+          }
+
+          // For iOS, show phone option only if iPhone is supported
+          return supportedTypes?.includes('iPhone');
+
+        default:
+          return true;
+      }
+    });
   }
 
   get availableDevices() {
@@ -130,7 +162,26 @@ export default class ProjectPreferencesOldProviderComponent extends Component<Pr
   }
 
   get uniqueDevices() {
-    return this.filteredDevices?.uniqBy('platformVersion');
+    const devices = this.filteredDevices?.uniqBy('platformVersion');
+
+    const minOsVersion =
+      this.args.file?.minOsVersion ||
+      this.args.project?.get('lastFile')?.get('minOsVersion');
+
+    // Sort the unique devices versions in descending order
+    const sortedDevices = devices?.sort((a, b) =>
+      this.compareVersions(b.platformVersion, a.platformVersion)
+    );
+
+    if (!minOsVersion && sortedDevices) {
+      return [...sortedDevices];
+    }
+
+    return sortedDevices?.filter((d) => {
+      return (
+        this.compareVersions(d.platformVersion, minOsVersion as string) >= 0
+      );
+    });
   }
 
   get devicePlatformVersionOptions() {
@@ -142,6 +193,11 @@ export default class ProjectPreferencesOldProviderComponent extends Component<Pr
     if (this.devicePreference && this.uniqueDevices) {
       const deviceType = Number(this.devicePreference.deviceType);
       const version = this.devicePreference.platformVersion;
+
+      // if all devices are allocated
+      if (this.uniqueDevices.length === 0) {
+        return false;
+      }
 
       // if both device type and os is any then return true
       if (deviceType === 0 && version === '0') {
@@ -170,6 +226,43 @@ export default class ProjectPreferencesOldProviderComponent extends Component<Pr
     }
 
     return null;
+  }
+
+  private parseVersion(version: string): number[] {
+    // Extract version numbers (e.g., "15.8.3 support" -> [15,8,3])
+    const match = version.match(/^(\d+)(?:\.(\d+))?(?:\.(\d+))?/);
+
+    if (!match) {
+      return [0];
+    }
+
+    // Convert matched groups to numbers, defaulting to 0 if not present
+    return [
+      parseInt(match[1] || '0', 10),
+      parseInt(match[2] || '0', 10),
+      parseInt(match[3] || '0', 10),
+    ];
+  }
+
+  private compareVersions(v1: string, v2: string): number {
+    const v1Parts = this.parseVersion(v1);
+    const v2Parts = this.parseVersion(v2);
+
+    // Compare each part of the version
+    for (let i = 0; i < 3; i++) {
+      const v1Part = v1Parts[i] as number;
+      const v2Part = v2Parts[i] as number;
+
+      if (v1Part > v2Part) {
+        return 1;
+      }
+
+      if (v1Part < v2Part) {
+        return -1;
+      }
+    }
+
+    return 0;
   }
 
   @action

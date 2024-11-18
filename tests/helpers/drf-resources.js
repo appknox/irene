@@ -6,23 +6,23 @@ import { EmbeddedRecordsMixin } from '@ember-data/serializer/rest';
 export class PostModel extends Model {
   @attr('string') postTitle;
   @attr('string') body;
-  @hasMany('comment', { async: true }) comments;
+  @hasMany('comment', { async: true, inverse: null }) comments;
 }
 
 export class CommentModel extends Model {
   @attr('string') body;
-  @belongsTo('post', { async: true }) post;
+  @belongsTo('post', { async: true, inverse: null }) post;
 }
 
 export class EmbeddedCommentsPostModel extends Model {
   @attr('string') postTitle;
   @attr('string') body;
-  @hasMany('comment', { async: false }) comments;
+  @hasMany('comment', { async: false, inverse: null }) comments;
 }
 
 export class EmbeddedPostCommentModel extends Model {
   @attr('string') body;
-  @belongsTo('post', { async: false }) post;
+  @belongsTo('post', { async: false, inverse: null }) post;
 }
 
 export class PostAdapter extends CommonDRFAdapter {

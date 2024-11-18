@@ -14,6 +14,13 @@ export default class ProjectPreferencesOldDevicePreferenceComponent extends Comp
   get isPreferredDeviceNotAvailable() {
     return this.args.dpContext.isPreferredDeviceAvailable === false;
   }
+
+  get isAllDevicesAllocated() {
+    return (
+      this.isPreferredDeviceNotAvailable &&
+      this.args.dpContext.devicePlatformVersions.length === 1
+    );
+  }
 }
 
 declare module '@glint/environment-ember-loose/registry' {
