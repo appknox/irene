@@ -11,7 +11,7 @@
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "engines": {
-    "node": ">=18"
+    "node": ">=20"
   },
   "dependencies": {
     "express": "^4.21.1",
@@ -20,6 +20,6 @@
     "serve-static": "^1.16.2"
   },
   "volta": {
-    "node": "18.19.1"
+    "node": "^20.18.0"
   }
 }
