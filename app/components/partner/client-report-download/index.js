@@ -63,9 +63,7 @@ export default class PartnerClientReportDownloadComponent extends Component {
         }
       );
       if (this.reports.length) {
-        await waitForPromise(
-          this.getReport.perform(this.reports.firstObject.id)
-        );
+        await waitForPromise(this.getReport.perform(this.reports[0].id));
 
         this.pollReportProgress();
       } else {

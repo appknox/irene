@@ -11,7 +11,7 @@ export default class ClientPlanComponent extends Component {
 
   @task(function* () {
     try {
-      this.clientPlan = yield this.store.find(
+      this.clientPlan = yield this.store.findRecord(
         'partner/partnerclient-plan',
         this.args.clientId
       );

@@ -146,6 +146,8 @@ export default class HomePageOrganizationDashboardSideNavComponent extends Compo
         route: 'authenticated.partner.clients',
         hasBadge: true,
         badgeLabel: this.intl.t('beta'),
+        currentWhen:
+          'authenticated.partner.clients authenticated.partner.client authenticated.partner.analytics',
       },
       this.args.isSecurityEnabled && {
         label: this.intl.t('security'),

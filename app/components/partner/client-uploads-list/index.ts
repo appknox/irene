@@ -45,7 +45,7 @@ export default class PartnerClientUploadsListComponent extends Component<Partner
   }
 
   get partnerClientUploadList() {
-    return this.partnerClientUploadsReponse?.toArray() || [];
+    return this.partnerClientUploadsReponse?.slice() || [];
   }
 
   get totalParnterClientUploadsCount() {

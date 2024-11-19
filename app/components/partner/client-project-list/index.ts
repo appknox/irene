@@ -45,7 +45,7 @@ export default class PartnerClientProjectListComponent extends Component<Partner
   }
 
   get partnerClientProjectList() {
-    return this.partnerClientProjectsReponse?.toArray() || [];
+    return this.partnerClientProjectsReponse?.slice() || [];
   }
 
   get totalParnterClientProjectsCount() {

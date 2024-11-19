@@ -90,7 +90,7 @@ export default class PartnerCreditTransferComponent extends Component {
 
   fetchClientPlan = task(async () => {
     try {
-      this.clientPlan = await this.store.find(
+      this.clientPlan = await this.store.findRecord(
         'partner/partnerclient-plan',
         this.args.client.id
       );
