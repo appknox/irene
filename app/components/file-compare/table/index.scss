@@ -1,6 +1,6 @@
 .file-compare-table {
   table {
-    background-color: transparent;
+    background-color: var(--file-compare-table-background-light);
   }
 
   tr:first-of-type:hover td {

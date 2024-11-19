@@ -1,15 +1,17 @@
 {{page-title 'Monitoring Details'}}
 
-<AkBreadcrumbs::Container @id='store-monitoring-breadcrumb' class='pl-3 pt-1'>
-  <AkBreadcrumbs::Item
-    @route='authenticated.dashboard.app-monitoring.index'
-    @linkTitle={{t 'appMonitoring'}}
+<PageWrapper @backgroundColor='inherit'>
+  <AkBreadcrumbs::Container @id='store-monitoring-breadcrumb' class='pt-2'>
+    <AkBreadcrumbs::Item
+      @route='authenticated.dashboard.app-monitoring.index'
+      @linkTitle={{t 'appMonitoring'}}
+    />
+  </AkBreadcrumbs::Container>
+
+  <AppMonitoring::Details
+    @amApp={{@model.amApp}}
+    @amOrgSettings={{@model.settings}}
   />
-</AkBreadcrumbs::Container>
 
-<AppMonitoring::Details
-  @amApp={{@model.amApp}}
-  @amOrgSettings={{@model.settings}}
-/>
-
-{{outlet}}
+  {{outlet}}
+</PageWrapper>

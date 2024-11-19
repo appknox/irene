@@ -485,11 +485,13 @@ body {
   // variables for app-upload/via-link
   --app-upload-via-link-button-stack-shadow: var(--box-shadow-4);
   --app-upload-via-link-url-format-bullet-color: var(--text-primary);
-  
+
   // variables for app-upload/via-link/preview
   --app-upload-via-link-preview-background-color: var(--background-light);
   --app-upload-via-link-preview-border-color: var(--neutral-grey-100);
-  --app-upload-via-link-preview-footer-background-color: var(--neutral-grey-100);
+  --app-upload-via-link-preview-footer-background-color: var(
+    --neutral-grey-100
+  );
 
   //variables for side-nav
   --side-nav-inherit-background: var(--background-main);
@@ -508,13 +510,16 @@ body {
   --side-nav-zIndex: calc(var(--zIndex-appbar) + 1);
 
   //variables for side-nav/product-switcher
-  --side-nav-product-switcher-modal-item-hover-background: var(--neutral-grey-100);
+  --side-nav-product-switcher-modal-item-hover-background: var(
+    --neutral-grey-100
+  );
   --side-nav-product-switcher-modal-title-background: var(--neutral-grey-100);
   --side-nav-product-switcher-border: 1px solid var(--border-color-1);
   --side-nav-product-switcher-bg-main: var(--background-main);
   --side-nav-product-switcher-box-shadow: var(--box-shadow-light);
-  --side-nav-product-switcher-item-hover-background: var(--hover-light-background);
-
+  --side-nav-product-switcher-item-hover-background: var(
+    --hover-light-background
+  );
 
   // variables for organization-namespace/namespace-value
   --organization-namespace-value-color-ios: var(--ios);
@@ -841,23 +846,43 @@ body {
   --analysis-risk-color-waiting: var(--neutral-grey-500);
 
   // analysis-risk/override-edit-drawer/content
-  --analysis-risk-override-edit-drawer-content-border-color: var(--border-color-1);
-  --analysis-risk-override-edit-drawer-content-border-radius: var(--border-radius);
+  --analysis-risk-override-edit-drawer-content-border-color: var(
+    --border-color-1
+  );
+  --analysis-risk-override-edit-drawer-content-border-radius: var(
+    --border-radius
+  );
 
   // analysis-risk/override-edit-drawer/divider
   --analysis-risk-override-edit-drawer-divider-color: var(--border-color-1);
-  --analysis-risk-override-edit-drawer-divider-label-background-color: var(--neutral-grey-100);
+  --analysis-risk-override-edit-drawer-divider-label-background-color: var(
+    --neutral-grey-100
+  );
 
   // analysis-risk/override-edit-drawer/override-details
-  --analysis-risk-override-edit-drawer-override-details-border-color: var(--border-color-1);
-  --analysis-risk-override-edit-drawer-override-details-border-radius: var(--border-radius);
+  --analysis-risk-override-edit-drawer-override-details-border-color: var(
+    --border-color-1
+  );
+  --analysis-risk-override-edit-drawer-override-details-border-radius: var(
+    --border-radius
+  );
 
   // analysis-risk/override-edit-drawer/override-form
-  --analysis-risk-override-edit-drawer-override-form-textarea-border-color: var(--border-color-1);
-  --analysis-risk-override-edit-drawer-override-form-textarea-color: var(--text-primary);
-  --analysis-risk-override-edit-drawer-override-form-error-color: var(--error-main);
-  --analysis-risk-override-edit-drawer-override-form-border-radius: var(--border-radius);
-  --analysis-risk-override-edit-drawer-override-form-severity-container-border-color: var(--border-color-2);
+  --analysis-risk-override-edit-drawer-override-form-textarea-border-color: var(
+    --border-color-1
+  );
+  --analysis-risk-override-edit-drawer-override-form-textarea-color: var(
+    --text-primary
+  );
+  --analysis-risk-override-edit-drawer-override-form-error-color: var(
+    --error-main
+  );
+  --analysis-risk-override-edit-drawer-override-form-border-radius: var(
+    --border-radius
+  );
+  --analysis-risk-override-edit-drawer-override-form-severity-container-border-color: var(
+    --border-color-2
+  );
 
   // variables for file-details
   --file-details-background-color: var(--background-light);
@@ -1220,12 +1245,21 @@ body {
   );
 
   // variables for file-list
-  --file-list-root-background-color: var(--background-main);
   --file-list-selected-file-chip-color: var(--text-primary);
   --file-list-selected-file-chip-background: var(--primary-main-10);
 
   // variables for file-compare/index
   --file-compare-tabs-background-color: var(--common-white);
+
+  // variables for file-compare/loader
+  --file-compare-loader-border-color: var(--neutral-white-100);
+  --file-compare-loader-border-radius: var(--border-radius);
+
+  // variables for file-compare/empty
+  --file-compare-empty-background-light: var(--background-light);
+
+  // variables for file-compare/table
+  --file-compare-table-background-light: var(--background-light);
 
   // variables for file-compare/analysis-details
   --file-compare-analysis-details-border-color: var(--border-color-1);
@@ -1241,10 +1275,8 @@ body {
   --file-compare-analysis-details-findings-border-radius: var(--border-radius);
   --file-compare-analysis-details-findings-color-primary: var(--primary-main);
 
-  // variables for file-compare/compare-list
-  --file-compare-compare-list-wrapper-background-color: var(--background-main);
-
   // variables for file-compare/header
+  --file-compare-header-background-light: var(--background-light);
   --file-compare-header-white-background-color: var(--common-white);
   --file-compare-header-divider-background-color: var(--border-color-2);
   --file-compare-header-dark-border-color: var(--neutral-grey-300);
@@ -1347,9 +1379,6 @@ body {
   --project-settings-loading-container-border: var(--border-color-1);
   --project-settings-loading-container-border-radius: var(--border-radius);
 
-  // variables for project-settings/page-wrapper
-  --project-settings-page-wrapper-background-color: var(--background-light);
-
   // variables for project-settings/header
   --project-settings-header-background-color: var(--background-light);
   --project-settings-header-border-color: var(--border-color-1);
@@ -1415,6 +1444,7 @@ body {
   );
 
   // variables for project-settings/analysis-settings
+  --project-settings-analysis-settings-background-color: var(--background-main);
   --project-settings-analysis-settings-border-color: var(--neutral-grey-200);
   --project-settings-analysis-settings-border-radius: var(--border-radius);
 
@@ -1479,7 +1509,9 @@ body {
   --organization-analytics-app-scan-chart-border-radius: var(--border-radius);
 
   // variables for organization-analytics/recent-issues
-  --organization-analytics-recent-issues-background-color: var(--neutral-grey-200);
+  --organization-analytics-recent-issues-background-color: var(
+    --neutral-grey-200
+  );
   --organization-analytics-recent-issues-box-shadow: var(--box-shadow-2);
   --organization-analytics-recent-issues-border-radius: var(--border-radius);
   --organization-analytics-recent-issues-border-color: var(--border-color-1);
@@ -1517,7 +1549,9 @@ body {
   --project-list-header-border-radius: var(--border-radius);
   --project-list-header-filter-border-color: var(--neutral-grey-200);
   --project-list-header-filter-hover-border-color: var(--neutral-grey-400);
-  --project-list-header-filter-option-hover-background: var(--hover-light-background);
+  --project-list-header-filter-option-hover-background: var(
+    --hover-light-background
+  );
   --project-list-header-divider-background-color: var(--neutral-grey-200);
   --project-list-header-clear-filter-color: var(--neutral-grey-600);
   --project-list-header-clear-filter-hover-color: var(--primary-main);
@@ -1766,11 +1800,6 @@ body {
   --license-detail-success-light: var(--success-light);
   --license-detail-primary-light: var(--primary-main-10);
 
-  // variables for file-details/dynamic-scan/page-wrapper
-  --file-details-dynamic-scan-page-wrapper-background-color: var(
-    --background-light
-  );
-
   // variables for file-details/dynamic-scan/header
   --file-details-dynamic-scan-header-background-color: var(--background-light);
 
@@ -1851,6 +1880,9 @@ body {
   --home-page-product-card-border-radius: var(--border-radius);
   --home-page-product-card-border-color: var(--border-color-1);
   --home-page-product-card-background-color: var(--background-main);
+
+  // variables for page-wrapper
+  --page-wrapper-background-color: var(--background-light);
 
   &.theme-light {
     //variables for appknox-wrapper

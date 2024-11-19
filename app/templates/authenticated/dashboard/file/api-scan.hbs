@@ -1,5 +1,7 @@
 {{page-title (t 'apiScan')}}
 
-<FileDetails::ApiScan @file={{@model.file}}>
-  {{outlet}}
-</FileDetails::ApiScan>
+<PageWrapper>
+  <FileDetails::ApiScan @file={{@model.file}}>
+    {{outlet}}
+  </FileDetails::ApiScan>
+</PageWrapper>

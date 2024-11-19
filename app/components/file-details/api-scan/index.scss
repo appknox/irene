@@ -1,30 +1,23 @@
 $container-width: 1200px;
 
 .api-scan-root {
-  padding: 0 1.5em 1.5em;
-  margin: -0.5em;
+  padding: 0 0em 1.5em;
   background-color: var(--file-details-api-scan-background-color);
   min-height: calc(100vh - 56px);
 
-  .api-scan-container {
-    max-width: $container-width;
-    margin: 0 auto;
+  .api-scan-breadcrumbs-container,
+  .api-scan-tabs-container {
+    position: sticky;
+    z-index: 100;
+    background-color: var(--file-details-api-scan-background-color);
+  }
 
-    .api-scan-breadcrumbs-container,
-    .api-scan-tabs-container {
-      position: sticky;
-      z-index: 100;
-      background-color: var(--file-details-api-scan-background-color);
-    }
+  .api-scan-breadcrumbs-container {
+    top: -0.5em;
+  }
 
-    .api-scan-breadcrumbs-container {
-      padding: 1.5em 0;
-      top: -0.5em;
-    }
-
-    .api-scan-tabs-container {
-      top: 3.5em;
-    }
+  .api-scan-tabs-container {
+    top: 3em;
   }
 
   .bagde-count-text {

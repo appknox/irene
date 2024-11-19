@@ -1,9 +1,4 @@
-<AkStack
-  @direction='column'
-  @width='full'
-  local-class='analysis-details-root'
-  class='px-3'
->
+<AkStack @direction='column' @width='full'>
   <AkBreadcrumbs::Container>
     {{#each this.breadcrumbItems as |item|}}
       <AkBreadcrumbs::Item

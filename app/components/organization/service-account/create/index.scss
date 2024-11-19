@@ -1,34 +1,26 @@
 .service-account-details-root {
-  padding: 0 1.5em 1.5em;
-  margin: -0.5em;
   background-color: var(--organization-service-account-create-background-color);
   min-height: calc(100vh - 56px);
 
-  .service-account-details-container {
-    max-width: $container-width;
-    margin: 0 auto;
+  .service-account-details-breadcrumbs-container,
+  .service-account-details-header {
+    position: sticky;
+    z-index: 100;
+  }
 
-    .service-account-details-breadcrumbs-container,
-    .service-account-details-header {
-      position: sticky;
-      z-index: 100;
-    }
+  .service-account-details-breadcrumbs-container {
+    top: -0.5em;
+    background-color: var(
+      --organization-service-account-create-background-color
+    );
+  }
 
-    .service-account-details-breadcrumbs-container {
-      padding: 1.5em 0;
-      top: -0.5em;
-      background-color: var(
-        --organization-service-account-create-background-color
-      );
-    }
-
-    .service-account-details-header {
-      top: 3.5em;
-      background-color: var(
-        --organization-service-account-create-header-background-main
-      );
-      border: 1px solid var(--organization-service-account-create-border-color);
-      border-radius: var(--organization-service-account-create-border-radius);
-    }
+  .service-account-details-header {
+    top: 3em;
+    background-color: var(
+      --organization-service-account-create-header-background-main
+    );
+    border: 1px solid var(--organization-service-account-create-border-color);
+    border-radius: var(--organization-service-account-create-border-radius);
   }
 }

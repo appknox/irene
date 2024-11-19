@@ -1,5 +1,10 @@
 {{page-title (t 'dast')}}
 
-<FileDetails::DynamicScan @file={{@model.file}} @profileId={{@model.profileId}}>
-  {{outlet}}
-</FileDetails::DynamicScan>
+<PageWrapper>
+  <FileDetails::DynamicScan
+    @file={{@model.file}}
+    @profileId={{@model.profileId}}
+  >
+    {{outlet}}
+  </FileDetails::DynamicScan>
+</PageWrapper>

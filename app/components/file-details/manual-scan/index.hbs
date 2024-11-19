@@ -1,64 +1,63 @@
 <div local-class='manual-scan-root'>
-  <div local-class='manual-scan-container'>
-    <AkBreadcrumbs::Container
-      local-class='manual-scan-breadcrumbs-container'
-      data-test-fileDetails-manualScan-breadcrumbContainer
-    >
-      {{#each this.breadcrumbItems as |item|}}
-        <AkBreadcrumbs::Item
-          @route={{item.route}}
-          @model={{item.model}}
-          @linkTitle={{item.linkTitle}}
-          data-test-fileDetails-manualScan-breadcrumbItem='{{item.linkTitle}}'
-        />
-      {{/each}}
-    </AkBreadcrumbs::Container>
-
-    <FileDetails::Summary @file={{@file}} />
-
-    {{#if this.showManualScanRequestForm}}
-      <FileDetails::ManualScan::RequestForm
-        @file={{@file}}
-        @manualscan={{this.manualscan}}
+  <AkBreadcrumbs::Container
+    local-class='manual-scan-breadcrumbs-container'
+    class='pb-3 pt-2'
+    data-test-fileDetails-manualScan-breadcrumbContainer
+  >
+    {{#each this.breadcrumbItems as |item|}}
+      <AkBreadcrumbs::Item
+        @route={{item.route}}
+        @model={{item.model}}
+        @linkTitle={{item.linkTitle}}
+        data-test-fileDetails-manualScan-breadcrumbItem='{{item.linkTitle}}'
       />
-    {{else}}
-      <div class='my-3'>
-        <AkTabs local-class='manual-scan-tabs-container' as |Akt|>
-          {{#each this.tabItems as |item|}}
-            {{#unless item.hidden}}
-              <Akt.tabItem
-                @id={{item.id}}
-                @hasBadge={{item.hasBadge}}
-                @route={{item.route}}
-                @currentWhen={{item.currentWhen}}
-                @indicatorVariant='shadow'
-                data-test-fileDetails-manualScan-tabs='{{item.id}}-tab'
-              >
-                <:badge>
-                  <AkStack @alignItems='center'>
-                    <AkIcon @iconName='bug-report' @size='small' />
+    {{/each}}
+  </AkBreadcrumbs::Container>
 
-                    <AkTypography
-                      local-class='bagde-count-text'
-                      @color='inherit'
-                      @tag='span'
-                      @fontWeight='bold'
-                    >
-                      {{item.badgeCount}}
-                    </AkTypography>
-                  </AkStack>
-                </:badge>
+  <FileDetails::Summary @file={{@file}} />
 
-                <:default>{{item.label}}</:default>
-              </Akt.tabItem>
-            {{/unless}}
-          {{/each}}
-        </AkTabs>
+  {{#if this.showManualScanRequestForm}}
+    <FileDetails::ManualScan::RequestForm
+      @file={{@file}}
+      @manualscan={{this.manualscan}}
+    />
+  {{else}}
+    <div class='my-3'>
+      <AkTabs local-class='manual-scan-tabs-container' as |Akt|>
+        {{#each this.tabItems as |item|}}
+          {{#unless item.hidden}}
+            <Akt.tabItem
+              @id={{item.id}}
+              @hasBadge={{item.hasBadge}}
+              @route={{item.route}}
+              @currentWhen={{item.currentWhen}}
+              @indicatorVariant='shadow'
+              data-test-fileDetails-manualScan-tabs='{{item.id}}-tab'
+            >
+              <:badge>
+                <AkStack @alignItems='center'>
+                  <AkIcon @iconName='bug-report' @size='small' />
 
-        {{yield}}
-      </div>
-    {{/if}}
-  </div>
+                  <AkTypography
+                    local-class='bagde-count-text'
+                    @color='inherit'
+                    @tag='span'
+                    @fontWeight='bold'
+                  >
+                    {{item.badgeCount}}
+                  </AkTypography>
+                </AkStack>
+              </:badge>
+
+              <:default>{{item.label}}</:default>
+            </Akt.tabItem>
+          {{/unless}}
+        {{/each}}
+      </AkTabs>
+
+      {{yield}}
+    </div>
+  {{/if}}
 
   {{#if this.showManualScanRequestForm}}
     <AkStack

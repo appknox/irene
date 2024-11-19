@@ -1,6 +1,8 @@
 {{page-title 'All Files'}}
 
-<Security::FileSearchList
-  @projectId={{@model.projectid}}
-  @queryParams={{@model.queryParams}}
-/>
+<PageWrapper @backgroundColor='inherit' class='mx-0'>
+  <Security::FileSearchList
+    @projectId={{@model.projectid}}
+    @queryParams={{@model.queryParams}}
+  />
+</PageWrapper>

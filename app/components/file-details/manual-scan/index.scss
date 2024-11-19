@@ -1,30 +1,21 @@
-$container-width: 1200px;
-
 .manual-scan-root {
-  padding: 0 1.5em 1.5em;
-  margin: -0.5em;
+  padding: 0 0em 1.5em;
   background-color: var(--file-details-manual-scan-background-color);
   min-height: calc(100vh - 56px);
 
-  .manual-scan-container {
-    max-width: $container-width;
-    margin: 0 auto;
+  .manual-scan-breadcrumbs-container,
+  .manual-scan-tabs-container {
+    position: sticky;
+    z-index: 100;
+    background-color: var(--file-details-manual-scan-background-color);
+  }
 
-    .manual-scan-breadcrumbs-container,
-    .manual-scan-tabs-container {
-      position: sticky;
-      z-index: 100;
-      background-color: var(--file-details-manual-scan-background-color);
-    }
+  .manual-scan-breadcrumbs-container {
+    top: -0.5em;
+  }
 
-    .manual-scan-breadcrumbs-container {
-      padding: 1.5em 0;
-      top: -0.5em;
-    }
-
-    .manual-scan-tabs-container {
-      top: 3.5em;
-    }
+  .manual-scan-tabs-container {
+    top: 3em;
   }
 
   .bagde-count-text {
