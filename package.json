@@ -202,14 +202,14 @@
     "swagger-ui": "^5.17.14"
   },
   "engines": {
-    "node": ">=18"
+    "node": ">=20"
   },
   "ember": {
     "edition": "octane"
   },
   "volta": {
-    "node": "18.19.1",
-    "npm": "10.2.4"
+    "node": "^20.18.0",
+    "npm": "10.8.2"
   },
   "ember-addon": {
     "paths": [
