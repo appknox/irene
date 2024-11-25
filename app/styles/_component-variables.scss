@@ -1,4 +1,18 @@
+// variables for ak-components
 body {
+  // variables for ak-appbar
+  --ak-appbar-default-background: var(--background-main);
+  --ak-appbar-default-border-bottom: 1px solid var(--border-color-1);
+  --ak-appbar-default-background-text-color: var(--text-primary);
+  --ak-appbar-light-background: var(--background-light);
+  --ak-appbar-light-border-bottom: 1px solid var(--border-color-1);
+  --ak-appbar-light-background-text-color: var(--text-primary);
+  --ak-appbar-dark-background: var(--background-dark);
+  --ak-appbar-dark-border-bottom: none;
+  --ak-appbar-dark-background-text-color: var(--common-white);
+  --ak-appbar-dark-hover-background: var(--hover-dark-background);
+  --ak-appbar-zIndex: var(--zIndex-appbar);
+
   // variables for ak-icon
   --ak-icon-color-primary: var(--primary-main);
   --ak-icon-color-secondary: var(--secondary-main);
@@ -220,35 +234,6 @@ body {
   --ak-chip-color-semi-filled-outlined-info-background: var(--info-light);
   --ak-chip-color-semi-filled-outlined-info-contrast-text: var(--info-dark);
 
-  // variables for ak-app-bar
-  --ak-appbar-default-background: var(--background-main);
-  --ak-appbar-default-border-bottom: 1px solid var(--border-color-1);
-  --ak-appbar-default-background-text-color: var(--text-primary);
-  --ak-appbar-light-background: var(--background-light);
-  --ak-appbar-light-border-bottom: 1px solid var(--border-color-1);
-  --ak-appbar-light-background-text-color: var(--text-primary);
-  --ak-appbar-dark-background: var(--background-dark);
-  --ak-appbar-dark-border-bottom: none;
-  --ak-appbar-dark-background-text-color: var(--common-white);
-  --ak-appbar-dark-hover-background: var(--hover-dark-background);
-  --ak-appbar-zIndex: var(--zIndex-appbar);
-
-  &.theme-light {
-    --ak-appbar-inherit-background: var(--background-light);
-    --ak-appbar-inherit-border-bottom: 1px solid var(--border-color-1);
-    --ak-appbar-inherit-background-text-color: var(--text-primary);
-    --ak-appbar-inherit-hover-background: var(--hover-light-background);
-    --ak-appbar-box-shadow: var(--box-shadow-light);
-  }
-
-  &.theme-dark {
-    --ak-appbar-inherit-background: var(--background-dark);
-    --ak-appbar-inherit-border-bottom: none;
-    --ak-appbar-inherit-background-text-color: var(--common-white);
-    --ak-appbar-inherit-hover-background: var(--hover-dark-background);
-    --ak-appbar-box-shadow: var(--box-shadow-dark);
-  }
-
   // variables for ak-autocomplete
   --ak-autocomplete-x-btn-zIndex: var(--zIndex-tooltip);
   --ak-autocomplete-background: var(--background-main);
@@ -323,82 +308,197 @@ body {
   --ak-checkbox-tree-secondary-background-white: var(--background-main);
   --ak-checkbox-tree-secondary-background: var(--background-light);
   --ak-checkbox-tree-secondary-border-color: var(--border-color-1);
+
+  // variables for ak-appbar
+  &.theme-light {
+    --ak-appbar-inherit-background: var(--background-light);
+    --ak-appbar-inherit-border-bottom: 1px solid var(--border-color-1);
+    --ak-appbar-inherit-background-text-color: var(--text-primary);
+    --ak-appbar-inherit-hover-background: var(--hover-light-background);
+    --ak-appbar-box-shadow: var(--box-shadow-light);
+  }
+
+  &.theme-dark {
+    --ak-appbar-inherit-background: var(--background-dark);
+    --ak-appbar-inherit-border-bottom: none;
+    --ak-appbar-inherit-background-text-color: var(--common-white);
+    --ak-appbar-inherit-hover-background: var(--hover-dark-background);
+    --ak-appbar-box-shadow: var(--box-shadow-dark);
+  }
 }
 
+// variables for security dashboard
 body {
-  //variables for home-page/organization-dashboard/header
-  &.theme-light {
-    --organization-dashboard-header-background-color: var(--background-main);
-    --organization-dashboard-header-text-color: var(--text-primary);
-    --organization-dashboard-header-security-dashboard-btn-color: var(
-      --secondary-main
-    );
-  }
+  // variables for home-page/security-dashboard-nav
+  --security-dashboard-nav-bg-color: var(--background-main);
 
-  &.theme-dark {
-    --organization-dashboard-header-background-color: var(--secondary-main);
-    --organization-dashboard-header-text-color: var(--secondary-contrast-text);
-    --organization-dashboard-header-security-dashboard-btn-color: var(
-      --secondary-contrast-text
-    );
-  }
+  // variables for security/download-app
+  --security-download-app-container-border-color: var(--neutral-grey-200);
+  --security-download-app-container-box-shadow: var(--box-shadow-3);
+  --security-download-app-container-border-radius: var(--border-radius);
+
+  // variables for security/purge-api-analysis
+  --security-purge-api-analysis-container-border-color: var(--neutral-grey-200);
+  --security-purge-api-analysis-container-box-shadow: var(--box-shadow-3);
+  --security-purge-api-analysis-container-border-radius: var(--border-radius);
+
+  // variables for security/project-search-list/header
+  --security-project-search-list-header-border-color: var(--neutral-white-100);
+  --security-project-search-list-header-border-radius: var(--border-radius);
+
+  // variables for security/project-search-list/empty-loading-view
+  --security-project-empty-loading-view-border-radius: var(--border-radius);
+  --security-project-empty-loading-view-border-color: var(--border-color-1);
+
+  // variables for security/file-search-list/header
+  --security-file-search-list-header-border-color: var(--neutral-white-100);
+  --security-file-search-list-header-border-radius: var(--border-radius);
+
+  // variables for security/file-search-list/empty-loading-view
+  --security-file-empty-loading-view-border-radius: var(--border-radius);
+  --security-file-empty-loading-view-border-color: var(--border-color-1);
+
+  // variables for security/analysis-list/index
+  --security-analysis-list-filter-option-background-color: var(--common-white);
+  --security-analysis-list-filter-border-color: var(--neutral-grey-200);
+  --security-analysis-list-filter-hover-border-color: var(--neutral-grey-400);
+  --security-analysis-list-filter-option-hover-background: var(
+    --hover-light-background
+  );
+  --security-analysis-list-divider-background-color: var(--neutral-grey-200);
+  --security-analysis-list-clear-filter-color: var(--neutral-grey-600);
+  --security-analysis-list-clear-filter-hover-color: var(--primary-main);
+
+  // variables for security/analysis-list/header
+  --security-analysis-list-header-background-color: var(--common-white);
+  --security-analysis-list-header-border-color: var(--neutral-white-100);
+  --security-analysis-list-header-border-radius: var(--border-radius);
+
+  // variables for security/analysis-list/table/index
+  --security-analysis-list-table-border-radius: var(--border-radius);
+  --security-analysis-list-table-border-color: var(--neutral-white-100);
+
+  // variables for security/file-detail-actions
+  --security-file-details-actions-background-color: var(--background-main);
+  --security-file-details-actions-border-color: var(--border-color-1);
+
+  // variables for security/analysis-details/index
+  --security-analysis-details-background-color: var(--background-main);
+  --security-analysis-details-border-color: var(--border-color-1);
+
+  // variables for security/analysis-details/header
+  --security-analysis-details-header-background-color: var(--background-main);
+  --security-analysis-details-header-border-color: var(--border-color-1);
+  --security-analysis-details-header-marked-as-passed-background-color: var(
+    --success-main
+  );
+  --security-analysis-details-header-marked-as-passed-border-color: var(
+    --success-main
+  );
+  --security-analysis-details-header-marked-as-passed-color: var(
+    --common-white
+  );
+
+  // variables for security/analysis-details/cvss-metrics
+  --security-analysis-details-cvss-metrics-white-color: var(--common-white);
+  --security-analysis-details-cvss-metrics-risk-medium-color: var(
+    --risk-medium
+  );
+  --security-analysis-details-cvss-metrics-risk-low-color: var(--risk-low);
+  --security-analysis-details-cvss-metrics-risk-high-color: var(--risk-high);
+  --security-analysis-details-cvss-metrics-risk-critical-color: var(
+    --risk-critical
+  );
+  --security-analysis-details-cvss-metrics-risk-passed-color: var(
+    --risk-passed
+  );
+  --security-analysis-details-cvss-metrics-risk-error-color: var(
+    --primary-main
+  );
+  --security-analysis-details-cvss-metrics-progress-color: var(--risk-untested);
+  --security-analysis-details-cvss-metrics-progress-border-color: var(
+    --primary-main-10
+  );
+
+  // variables for security/analysis-details/footer
+  --security-analysis-details-footer-white-background-color: var(
+    --common-white
+  );
+  --security-analysis-details-footer-cta-border-color: var(--neutral-grey-300);
+  --security-analysis-details-footer-cta-box-shadow: var(--box-shadow-6);
+
+  // variables for security/analysis-details/attachments
+  --security-analysis-details-attachments-list-box-shadow: var(--box-shadow-7);
+  --security-analysis-details-attachments-list-border-radius: var(
+    --border-radius
+  );
+  --security-analysis-details-attachments-list-border-color: var(
+    --border-color-1
+  );
+  --security-analysis-details-attachments-type-background-color: var(
+    --text-default
+  );
+  --security-analysis-details-attachments-type-text-color: var(--common-white);
+
+  // variables for security/analysis-details/finding/add-form
+  --security-analysis-details-finding-add-form-note-background-color: var(
+    --neutral-grey-200
+  );
+  --security-analysis-details-finding-add-form-note-border-radius: var(
+    --border-radius
+  );
+  --security-analysis-details-finding-add-form-textarea-border-color: var(
+    --border-color-1
+  );
+  --security-analysis-details-finding-add-form-textarea-border-radius: var(
+    --border-radius
+  );
+  --security-analysis-details-finding-add-form-textarea-color: var(
+    --text-primary
+  );
+
+  // variables for security/analysis-details/findings/table/title
+  --security-analysis-details-findings-table-title-textarea-border-color: var(
+    --border-color-1
+  );
+  --security-analysis-details-findings-table-title-textarea-border-radius: var(
+    --border-radius
+  );
+  --security-analysis-details-findings-table-title-textarea-color: var(
+    --text-primary
+  );
+
+  // variables for security/analysis-details/findings/table/description
+  --security-analysis-details-findings-table-description-textarea-border-color: var(
+    --border-color-1
+  );
+  --security-analysis-details-findings-table-description-textarea-border-radius: var(
+    --border-radius
+  );
+  --security-analysis-details-findings-table-description-textarea-color: var(
+    --text-primary
+  );
+}
+
+// variables for app dashboard
+body {
+  // variables for app-upload/via-link
+  --app-upload-via-link-button-stack-shadow: var(--box-shadow-4);
+  --app-upload-via-link-url-format-bullet-color: var(--text-primary);
+  
+  // variables for app-upload/via-link/preview
+  --app-upload-via-link-preview-background-color: var(--background-light);
+  --app-upload-via-link-preview-border-color: var(--neutral-grey-100);
+  --app-upload-via-link-preview-footer-background-color: var(--neutral-grey-100);
 
   //variables for home-page/organization-dashboard/side-nav
-  --organization-dashboard-side-nav-font-weight-medium: var(
-    --font-weight-medium
-  );
+  --organization-dashboard-side-nav-font-weight-medium: var(--font-weight-medium);
   --organization-dashboard-side-nav-text-primary: var(--primary-main);
   --organization-dashboard-side-nav-text-secondary: var(--text-secondary);
-  --organization-dashboard-side-nav-item-active-badge-background: var(
-    --primary-main
-  );
-  --organization-dashboard-side-nav-item-active-badge-text-color: var(
-    --primary-contrast-text
-  );
-  --organization-dashboard-side-nav-item-active-border-color: var(
-    --primary-main
-  );
+  --organization-dashboard-side-nav-item-active-badge-background: var(--primary-main);
+  --organization-dashboard-side-nav-item-active-badge-text-color: var(--primary-contrast-text);
+  --organization-dashboard-side-nav-item-active-border-color: var(--primary-main);
   --organization-dashboard-side-nav-zIndex: calc(var(--zIndex-appbar) + 1);
-
-  &.theme-light {
-    --organization-dashboard-side-nav-bg-color: var(--background-main);
-    --organization-dashboard-side-nav-text-color: var(--text-primary);
-    --organization-dashboard-side-nav-box-shadow: var(--box-shadow-light);
-    --organization-dashboard-side-nav-item-badge-background: var(
-      --neutral-grey-200
-    );
-    --organization-dashboard-side-nav-item-badge-text-color: var(
-      --text-primary
-    );
-    --organization-dashboard-side-nav-item-hover-background: var(
-      --hover-light-background
-    );
-    --organization-dashboard-side-nav-item-active-background: var(
-      --side-menu-active-background-light
-    );
-    --organization-dashboard-side-nav-border: 1px solid var(--border-color-1);
-  }
-
-  &.theme-dark {
-    --organization-dashboard-side-nav-bg-color: var(--background-dark);
-    --organization-dashboard-side-nav-text-color: var(
-      --secondary-contrast-text
-    );
-    --organization-dashboard-side-nav-box-shadow: var(--box-shadow-dark);
-    --organization-dashboard-side-nav-item-badge-background: var(
-      --neutral-grey-900
-    );
-    --organization-dashboard-side-nav-item-badge-text-color: var(
-      --secondary-contrast-text
-    );
-    --organization-dashboard-side-nav-item-hover-background: var(
-      --hover-dark-background
-    );
-    --organization-dashboard-side-nav-item-active-background: var(
-      --side-menu-active-background-dark
-    );
-    --organization-dashboard-side-nav-border: none;
-  }
 
   // variables for organization-namespace/namespace-value
   --organization-namespace-value-color-ios: var(--ios);
@@ -549,11 +649,6 @@ body {
   --notification-bell-icon-dot-background-color: var(--primary-main);
   --notification-bell-icon-dot-border-color: var(--black-700);
   --notification-bell-icon-color: var(--background-main);
-
-  &.theme-light {
-    --notification-bell-icon-dot-border-color: var(--background-main);
-    --notification-bell-icon-color: var(--text-primary);
-  }
 
   --notification-unread-count-color-primary: var(--primary-main);
   --notification-unread-count-background-color: var(--primary-main-10);
@@ -730,43 +825,23 @@ body {
   --analysis-risk-color-waiting: var(--neutral-grey-500);
 
   // analysis-risk/override-edit-drawer/content
-  --analysis-risk-override-edit-drawer-content-border-color: var(
-    --border-color-1
-  );
-  --analysis-risk-override-edit-drawer-content-border-radius: var(
-    --border-radius
-  );
+  --analysis-risk-override-edit-drawer-content-border-color: var(--border-color-1);
+  --analysis-risk-override-edit-drawer-content-border-radius: var(--border-radius);
 
   // analysis-risk/override-edit-drawer/divider
   --analysis-risk-override-edit-drawer-divider-color: var(--border-color-1);
-  --analysis-risk-override-edit-drawer-divider-label-background-color: var(
-    --neutral-grey-100
-  );
+  --analysis-risk-override-edit-drawer-divider-label-background-color: var(--neutral-grey-100);
 
   // analysis-risk/override-edit-drawer/override-details
-  --analysis-risk-override-edit-drawer-override-details-border-color: var(
-    --border-color-1
-  );
-  --analysis-risk-override-edit-drawer-override-details-border-radius: var(
-    --border-radius
-  );
+  --analysis-risk-override-edit-drawer-override-details-border-color: var(--border-color-1);
+  --analysis-risk-override-edit-drawer-override-details-border-radius: var(--border-radius);
 
   // analysis-risk/override-edit-drawer/override-form
-  --analysis-risk-override-edit-drawer-override-form-textarea-border-color: var(
-    --border-color-1
-  );
-  --analysis-risk-override-edit-drawer-override-form-textarea-color: var(
-    --text-primary
-  );
-  --analysis-risk-override-edit-drawer-override-form-error-color: var(
-    --error-main
-  );
-  --analysis-risk-override-edit-drawer-override-form-border-radius: var(
-    --border-radius
-  );
-  --analysis-risk-override-edit-drawer-override-form-severity-container-border-color: var(
-    --border-color-2
-  );
+  --analysis-risk-override-edit-drawer-override-form-textarea-border-color: var(--border-color-1);
+  --analysis-risk-override-edit-drawer-override-form-textarea-color: var(--text-primary);
+  --analysis-risk-override-edit-drawer-override-form-error-color: var(--error-main);
+  --analysis-risk-override-edit-drawer-override-form-border-radius: var(--border-radius);
+  --analysis-risk-override-edit-drawer-override-form-severity-container-border-color: var(--border-color-2);
 
   // variables for file-details
   --file-details-background-color: var(--background-light);
@@ -1388,9 +1463,7 @@ body {
   --organization-analytics-app-scan-chart-border-radius: var(--border-radius);
 
   // variables for organization-analytics/recent-issues
-  --organization-analytics-recent-issues-background-color: var(
-    --neutral-grey-200
-  );
+  --organization-analytics-recent-issues-background-color: var(--neutral-grey-200);
   --organization-analytics-recent-issues-box-shadow: var(--box-shadow-2);
   --organization-analytics-recent-issues-border-radius: var(--border-radius);
   --organization-analytics-recent-issues-border-color: var(--border-color-1);
@@ -1408,25 +1481,6 @@ body {
   --app-upload-status-dropdown-box-shadow: var(--box-shadow-9);
   --app-upload-status-green-loader-color: var(--success-main);
   --app-upload-status-green-loader-track-color: var(--success-light);
-
-  // variables for app-upload/via-link
-  --app-upload-via-link-button-stack-shadow: var(--box-shadow-4);
-  --app-upload-via-link-url-format-bullet-color: var(--text-primary);
-
-  &.theme-light {
-    --app-upload-via-link-button-color: var(--text-primary);
-  }
-
-  &.theme-dark {
-    --app-upload-via-link-button-color: var(--common-white);
-  }
-
-  // variables for app-upload/via-link/preview
-  --app-upload-via-link-preview-background-color: var(--background-light);
-  --app-upload-via-link-preview-border-color: var(--neutral-grey-100);
-  --app-upload-via-link-preview-footer-background-color: var(
-    --neutral-grey-100
-  );
 
   // variables for file-overview
   --file-overview-store-logo-container-background-color: var(--common-white);
@@ -1447,9 +1501,7 @@ body {
   --project-list-header-border-radius: var(--border-radius);
   --project-list-header-filter-border-color: var(--neutral-grey-200);
   --project-list-header-filter-hover-border-color: var(--neutral-grey-400);
-  --project-list-header-filter-option-hover-background: var(
-    --hover-light-background
-  );
+  --project-list-header-filter-option-hover-background: var(--hover-light-background);
   --project-list-header-divider-background-color: var(--neutral-grey-200);
   --project-list-header-clear-filter-color: var(--neutral-grey-600);
   --project-list-header-clear-filter-hover-color: var(--primary-main);
@@ -1522,170 +1574,6 @@ body {
   // variables for marketplace/integration-card
   --marketplace-integration-card-text-color: var(--text-secondary);
   --marketplace-integration-card-border-color: var(--border-color-1);
-}
-
-body {
-  // variables for security/download-app
-  --security-download-app-container-border-color: var(--neutral-grey-200);
-  --security-download-app-container-box-shadow: var(--box-shadow-3);
-  --security-download-app-container-border-radius: var(--border-radius);
-
-  // variables for security/purge-api-analysis
-  --security-purge-api-analysis-container-border-color: var(--neutral-grey-200);
-  --security-purge-api-analysis-container-box-shadow: var(--box-shadow-3);
-  --security-purge-api-analysis-container-border-radius: var(--border-radius);
-
-  // variables for home-page/security-dashboard-nav
-  --security-dashboard-nav-bg-color: var(--background-main);
-
-  // variables for system-status
-  --system-status-root-container-border-color: var(--neutral-grey-200);
-  --system-status-root-container-box-shadow: var(--box-shadow-3);
-  --system-status-root-container-border-radius: var(--border-radius);
-
-  // variables for security/project-search-list/header
-  --security-project-search-list-header-border-color: var(--neutral-white-100);
-  --security-project-search-list-header-border-radius: var(--border-radius);
-
-  // variables for security/project-search-list/empty-loading-view
-  --security-project-empty-loading-view-border-radius: var(--border-radius);
-  --security-project-empty-loading-view-border-color: var(--border-color-1);
-
-  // variables for security/file-search-list/header
-  --security-file-search-list-header-border-color: var(--neutral-white-100);
-  --security-file-search-list-header-border-radius: var(--border-radius);
-
-  // variables for security/file-search-list/empty-loading-view
-  --security-file-empty-loading-view-border-radius: var(--border-radius);
-  --security-file-empty-loading-view-border-color: var(--border-color-1);
-
-  // variables for security/analysis-list/index
-  --security-analysis-list-filter-option-background-color: var(--common-white);
-  --security-analysis-list-filter-border-color: var(--neutral-grey-200);
-  --security-analysis-list-filter-hover-border-color: var(--neutral-grey-400);
-  --security-analysis-list-filter-option-hover-background: var(
-    --hover-light-background
-  );
-  --security-analysis-list-divider-background-color: var(--neutral-grey-200);
-  --security-analysis-list-clear-filter-color: var(--neutral-grey-600);
-  --security-analysis-list-clear-filter-hover-color: var(--primary-main);
-
-  // variables for security/analysis-list/header
-  --security-analysis-list-header-background-color: var(--common-white);
-  --security-analysis-list-header-border-color: var(--neutral-white-100);
-  --security-analysis-list-header-border-radius: var(--border-radius);
-
-  // variables for security/analysis-list/table/index
-  --security-analysis-list-table-border-radius: var(--border-radius);
-  --security-analysis-list-table-border-color: var(--neutral-white-100);
-
-  // variables for security/file-detail-actions
-  --security-file-details-actions-background-color: var(--background-main);
-  --security-file-details-actions-border-color: var(--border-color-1);
-
-  // variables for file-details/static-scan
-  --file-details-static-scan-border-color: var(--border-color-1);
-  --file-details-static-scan-background-color: var(--background-light);
-  --file-details-static-scan-background-main: var(--background-main);
-  --file-details-static-scan-primary-light: var(--primary-light);
-  --file-details-static-scan-text-primary: var(--text-primary);
-
-  // variables for security/analysis-details/index
-  --security-analysis-details-background-color: var(--background-main);
-  --security-analysis-details-border-color: var(--border-color-1);
-
-  // variables for security/analysis-details/header
-  --security-analysis-details-header-background-color: var(--background-main);
-  --security-analysis-details-header-border-color: var(--border-color-1);
-  --security-analysis-details-header-marked-as-passed-background-color: var(
-    --success-main
-  );
-  --security-analysis-details-header-marked-as-passed-border-color: var(
-    --success-main
-  );
-  --security-analysis-details-header-marked-as-passed-color: var(
-    --common-white
-  );
-
-  // variables for security/analysis-details/cvss-metrics
-  --security-analysis-details-cvss-metrics-white-color: var(--common-white);
-  --security-analysis-details-cvss-metrics-risk-medium-color: var(
-    --risk-medium
-  );
-  --security-analysis-details-cvss-metrics-risk-low-color: var(--risk-low);
-  --security-analysis-details-cvss-metrics-risk-high-color: var(--risk-high);
-  --security-analysis-details-cvss-metrics-risk-critical-color: var(
-    --risk-critical
-  );
-  --security-analysis-details-cvss-metrics-risk-passed-color: var(
-    --risk-passed
-  );
-  --security-analysis-details-cvss-metrics-risk-error-color: var(
-    --primary-main
-  );
-  --security-analysis-details-cvss-metrics-progress-color: var(--risk-untested);
-  --security-analysis-details-cvss-metrics-progress-border-color: var(
-    --primary-main-10
-  );
-
-  // variables for security/analysis-details/footer
-  --security-analysis-details-footer-white-background-color: var(
-    --common-white
-  );
-  --security-analysis-details-footer-cta-border-color: var(--neutral-grey-300);
-  --security-analysis-details-footer-cta-box-shadow: var(--box-shadow-6);
-
-  // variables for security/analysis-details/attachments
-  --security-analysis-details-attachments-list-box-shadow: var(--box-shadow-7);
-  --security-analysis-details-attachments-list-border-radius: var(
-    --border-radius
-  );
-  --security-analysis-details-attachments-list-border-color: var(
-    --border-color-1
-  );
-  --security-analysis-details-attachments-type-background-color: var(
-    --text-default
-  );
-  --security-analysis-details-attachments-type-text-color: var(--common-white);
-
-  // variables for security/analysis-details/finding/add-form
-  --security-analysis-details-finding-add-form-note-background-color: var(
-    --neutral-grey-200
-  );
-  --security-analysis-details-finding-add-form-note-border-radius: var(
-    --border-radius
-  );
-  --security-analysis-details-finding-add-form-textarea-border-color: var(
-    --border-color-1
-  );
-  --security-analysis-details-finding-add-form-textarea-border-radius: var(
-    --border-radius
-  );
-  --security-analysis-details-finding-add-form-textarea-color: var(
-    --text-primary
-  );
-
-  // variables for security/analysis-details/findings/table/title
-  --security-analysis-details-findings-table-title-textarea-border-color: var(
-    --border-color-1
-  );
-  --security-analysis-details-findings-table-title-textarea-border-radius: var(
-    --border-radius
-  );
-  --security-analysis-details-findings-table-title-textarea-color: var(
-    --text-primary
-  );
-
-  // variables for security/analysis-details/findings/table/description
-  --security-analysis-details-findings-table-description-textarea-border-color: var(
-    --border-color-1
-  );
-  --security-analysis-details-findings-table-description-textarea-border-radius: var(
-    --border-radius
-  );
-  --security-analysis-details-findings-table-description-textarea-color: var(
-    --text-primary
-  );
 
   // variables for dynamicscan-automation-upselling-feature
   --dynamicscan-automation-upselling-feature-box-shadow: var(--box-shadow-7);
@@ -1922,4 +1810,60 @@ body {
   --file-details-dynamic-scan-drawer-old-proxy-settings-view-border-color: var(
     --border-color-1
   );
+
+  // variables for file-details/static-scan
+  --file-details-static-scan-border-color: var(--border-color-1);
+  --file-details-static-scan-background-color: var(--background-light);
+  --file-details-static-scan-background-main: var(--background-main);
+  --file-details-static-scan-primary-light: var(--primary-light);
+  --file-details-static-scan-text-primary: var(--text-primary);
+
+  // variables for system-status
+  --system-status-root-container-border-color: var(--neutral-grey-200);
+  --system-status-root-container-box-shadow: var(--box-shadow-3);
+  --system-status-root-container-border-radius: var(--border-radius);
+
+  &.theme-light {
+    //variables for home-page/organization-dashboard/header
+    --organization-dashboard-header-background-color: var(--background-main);
+    --organization-dashboard-header-text-color: var(--text-primary);
+    --organization-dashboard-header-security-dashboard-btn-color: var(--secondary-main);
+
+    //variables for home-page/organization-dashboard/side-nav
+    --organization-dashboard-side-nav-bg-color: var(--background-main);
+    --organization-dashboard-side-nav-text-color: var(--text-primary);
+    --organization-dashboard-side-nav-box-shadow: var(--box-shadow-light);
+    --organization-dashboard-side-nav-item-badge-background: var(--neutral-grey-200);
+    --organization-dashboard-side-nav-item-badge-text-color: var(--text-primary);
+    --organization-dashboard-side-nav-item-hover-background: var(--hover-light-background);
+    --organization-dashboard-side-nav-item-active-background: var(--side-menu-active-background-light);
+    --organization-dashboard-side-nav-border: 1px solid var(--border-color-1);
+
+    //variables for app-upload/via-link
+    --app-upload-via-link-button-color: var(--text-primary);
+
+    //variables for notifications
+    --notification-bell-icon-dot-border-color: var(--background-main);
+    --notification-bell-icon-color: var(--text-primary);
+  }
+
+  &.theme-dark {
+    //variables for home-page/organization-dashboard/header
+    --organization-dashboard-header-background-color: var(--secondary-main);
+    --organization-dashboard-header-text-color: var(--secondary-contrast-text);
+    --organization-dashboard-header-security-dashboard-btn-color: var(--secondary-contrast-text);
+
+    //variables for home-page/organization-dashboard/side-nav
+    --organization-dashboard-side-nav-bg-color: var(--background-dark);
+    --organization-dashboard-side-nav-text-color: var(--secondary-contrast-text);
+    --organization-dashboard-side-nav-box-shadow: var(--box-shadow-dark);
+    --organization-dashboard-side-nav-item-badge-background: var(--neutral-grey-900);
+    --organization-dashboard-side-nav-item-badge-text-color: var(--secondary-contrast-text);
+    --organization-dashboard-side-nav-item-hover-background: var(--hover-dark-background);
+    --organization-dashboard-side-nav-item-active-background: var(--side-menu-active-background-dark);
+    --organization-dashboard-side-nav-border: none;
+
+    // variables for app-upload/via-link
+    --app-upload-via-link-button-color: var(--common-white);
+  }
 }
