@@ -14,32 +14,32 @@
 .riskkey-color {
   width: 0.8rem;
   height: 0.8rem;
-  background-color: var(--black-200);
+  background-color: var(--neutral-grey-200);
 }
 
 .riskblock--critical,
 .riskkey-color--critical {
-  background: var(--risk-critical);
+  background: var(--severity-critical);
 }
 .riskblock--high,
 .riskkey-color--high {
-  background: var(--risk-high);
+  background: var(--severity-high);
 }
 .riskblock--medium,
 .riskkey-color--medium {
-  background: var(--risk-medium);
+  background: var(--severity-medium);
 }
 .riskblock--low,
 .riskkey-color--low {
-  background: var(--risk-low);
+  background: var(--severity-low);
 }
 .riskblock--passed,
 .riskkey-color--passed {
-  background: var(--risk-passed);
+  background: var(--severity-passed);
 }
 .riskblock--untested,
 .riskkey-color--untested {
-  background: var(--risk-untested);
+  background: var(--severity-untested);
 }
 
 .index {
@@ -61,9 +61,9 @@
   gap: 0.36rem;
 }
 .riskkey-text {
-  color: var(--black-800);
+  color: var(--neutral-grey-800);
 }
 .riskkey-count {
-  color: var(--black-900);
+  color: var(--neutral-grey-900);
   font-weight: 600;
 }

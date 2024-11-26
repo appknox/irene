@@ -37,20 +37,20 @@
   margin-right: 0.4em;
 }
 .severity-color--critical {
-  background-color: var(--risk-critical);
+  background-color: var(--severity-critical);
 }
 .severity-color--high {
-  background-color: var(--risk-high);
+  background-color: var(--severity-high);
 }
 .severity-color--medium {
-  background-color: var(--risk-medium);
+  background-color: var(--severity-medium);
 }
 .severity-color--low {
-  background-color: var(--risk-low);
+  background-color: var(--severity-low);
 }
 .severity-color--passed {
-  background-color: var(--risk-passed);
+  background-color: var(--severity-passed);
 }
 .severity-color--untested {
-  background-color: var(--risk-untested);
+  background-color: var(--severity-untested);
 }

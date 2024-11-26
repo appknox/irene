@@ -1,8 +1,8 @@
 .subnav {
-  background-color: var(--bg-gray-darken-040);
+  background-color: var(--neutral-grey-200);
   margin: 0 -10px;
   padding: 0.4rem 1.5rem 0;
-  border-bottom: 1px solid var(--bg-gray-darken-080);
+  border-bottom: 1px solid var(--border-color-1);
 }
 
 .subnav-link {
@@ -13,14 +13,15 @@
   margin-bottom: -1px;
   border-width: 1px;
   border-style: solid;
-  border-color: var(--bg-gray-darken-080);
+  border-color: var(--border-color-1);
   border-top-left-radius: 0.3rem;
   border-top-right-radius: 0.3rem;
-  background-color: var(--bg-gray-darken-020);
+  background-color: var(--neutral-grey-100);
+
   &.active {
     background-color: var(--background-main);
     color: var(--primary-main);
-    border-color: var(--bg-gray-darken-080) var(--bg-gray-darken-080)
-      var(--common-white) var(--bg-gray-darken-080);
+    border-color: var(--border-color-1) var(--border-color-1)
+      var(--common-white) var(--border-color-1);
   }
 }
