@@ -1,7 +1,9 @@
 {{page-title 'Choose File'}}
 
-<FileCompare::CompareList
-  @project={{@model.file.project}}
-  @fileOld={{@model.file}}
-  @queryParams={{@model.queryParams}}
-/>
+<PageWrapper>
+  <FileCompare::CompareList
+    @project={{@model.file.project}}
+    @fileOld={{@model.file}}
+    @queryParams={{@model.queryParams}}
+  />
+</PageWrapper>

@@ -1,13 +1,11 @@
 .swagger-ui-wrapper {
   position: relative;
-  padding: 0.714em 4.285em 0 4.285em;
-  max-width: 1200px;
-  margin: 0 auto;
+  padding-top: 0.714em;
 
   .service-account-link {
     position: absolute;
     top: 24px;
-    right: 4.285em;
+    right: 0em;
   }
 
   .tabs-container {

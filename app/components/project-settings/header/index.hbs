@@ -1,5 +1,8 @@
 <div local-class='project-settings-header-root'>
-  <AkBreadcrumbs::Container local-class='settings-header-breadcrumbs'>
+  <AkBreadcrumbs::Container
+    local-class='settings-header-breadcrumbs'
+    class='pt-2'
+  >
     {{#each this.breadcrumbItems as |item|}}
       <AkBreadcrumbs::Item
         @route={{item.route}}

@@ -1,5 +1,4 @@
 .file-list-root {
-  background-color: var(--file-list-root-background-color);
   min-height: calc(100vh - 70px);
 
   .file-list-compare-header-chip {
@@ -15,7 +14,6 @@
   .file-list-wrapper {
     margin-top: 1.4286em;
     margin-bottom: 1em;
-    padding: 0em 0.9286em;
   }
 
   .file-list-container {

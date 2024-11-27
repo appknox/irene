@@ -1,6 +1,7 @@
 .empty-container {
-  margin-top: 4.625em;
-  margin-bottom: 4.625em;
+  background-color: var(--file-compare-empty-background-light);
+  padding-top: 4.625em;
+  padding-bottom: 4.625em;
 
   .empty-state-vector {
     margin-bottom: 1.5625em;

@@ -1,9 +1,11 @@
 {{page-title 'File Compare'}}
 
-<FileCompare
-  @file1={{@model.file}}
-  @file2={{@model.fileOld}}
-  @unknownAnalysisStatus={{@model.unknownAnalysisStatus}}
-/>
+<PageWrapper>
+  <FileCompare
+    @file1={{@model.file}}
+    @file2={{@model.fileOld}}
+    @unknownAnalysisStatus={{@model.unknownAnalysisStatus}}
+  />
 
-{{outlet}}
+  {{outlet}}
+</PageWrapper>

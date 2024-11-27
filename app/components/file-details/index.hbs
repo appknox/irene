@@ -1,27 +1,25 @@
 <div local-class='file-details-root'>
-  <div local-class='file-details-container'>
-    <AkBreadcrumbs::Container
-      class='mt-2 mb-3'
-      data-test-fileDetails-breadcrumbContainer
-    >
-      {{#each this.breadcrumbItems as |item|}}
-        <AkBreadcrumbs::Item
-          @route={{item.route}}
-          @model={{item.model}}
-          @linkTitle={{item.linkTitle}}
-          data-test-fileDetails-breadcrumbItem='{{item.linkTitle}}'
-        />
-      {{/each}}
-    </AkBreadcrumbs::Container>
+  <AkBreadcrumbs::Container
+    class='mt-2 mb-3'
+    data-test-fileDetails-breadcrumbContainer
+  >
+    {{#each this.breadcrumbItems as |item|}}
+      <AkBreadcrumbs::Item
+        @route={{item.route}}
+        @model={{item.model}}
+        @linkTitle={{item.linkTitle}}
+        data-test-fileDetails-breadcrumbItem='{{item.linkTitle}}'
+      />
+    {{/each}}
+  </AkBreadcrumbs::Container>
 
-    <AkStack @direction='column' @spacing='2.5'>
-      <FileDetails::Summary @file={{@file}} />
+  <AkStack @direction='column' @spacing='2.5'>
+    <FileDetails::Summary @file={{@file}} />
 
-      <FileDetails::ScanActions @file={{@file}} />
+    <FileDetails::ScanActions @file={{@file}} />
 
-      <FileDetails::InsightsWrapper @file={{@file}} />
-    </AkStack>
+    <FileDetails::InsightsWrapper @file={{@file}} />
+  </AkStack>
 
-    <FileDetails::VulnerabilityAnalysis @file={{@file}} />
-  </div>
+  <FileDetails::VulnerabilityAnalysis @file={{@file}} />
 </div>

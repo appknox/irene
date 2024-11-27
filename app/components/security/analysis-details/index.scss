@@ -1,9 +1,4 @@
-.analysis-details-root {
-  max-width: 1200px;
-  margin: 0 auto;
-
-  .analysis-details-section-wrapper {
-    background-color: var(--security-analysis-details-background-color);
-    border: 1px solid var(--security-analysis-details-border-color);
-  }
+.analysis-details-section-wrapper {
+  background-color: var(--security-analysis-details-background-color);
+  border: 1px solid var(--security-analysis-details-border-color);
 }
