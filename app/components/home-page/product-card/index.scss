@@ -1,0 +1,15 @@
+.product-card-container {
+  border-radius: var(--home-page-product-card-border-radius);
+  border: 1px solid var(--home-page-product-card-border-color);
+  max-width: 314px;
+
+  .product-card-content {
+    background-color: var(--home-page-product-card-background-color);
+    padding: 1.5em;
+  }
+
+  .product-icon {
+    width: 42px;
+    height: 42px;
+  }
+}

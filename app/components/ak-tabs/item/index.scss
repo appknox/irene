@@ -40,12 +40,13 @@
 
   .active-line {
     position: relative;
-    color: var(--ak-tabs-text-color-primary) !important;
+    color: var(--ak-tabs-text-color-primary);
     font-weight: var(--ak-tabs-font-weight-bold);
 
     &:hover,
     &:focus {
       background-color: unset;
+      color: var(--ak-tabs-text-color-primary);
     }
 
     .ak-tab-badge {

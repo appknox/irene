@@ -17,6 +17,7 @@ export interface AkPopoverSignature {
     anchorRef?: HTMLElement | null;
     arrow?: boolean;
     arrowColor?: 'light' | 'dark';
+    arrowClass?: string;
     sameWidthAsRef?: boolean;
     placement?: Placement;
     modifiers?: Partial<Modifier<string, object>>[];

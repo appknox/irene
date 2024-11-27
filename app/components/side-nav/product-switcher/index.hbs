@@ -1,0 +1,81 @@
+<AkDivider @color='dark' class='mt-4' />
+
+<AkTooltip
+  @disabled={{this.isSidebarExpanded}}
+  @color='dark'
+  @placement='right'
+  @arrow={{true}}
+  @title={{t 'appSwitcher'}}
+  local-class='switcher-menu-tooltip'
+  role='button'
+  {{on 'click' this.onClickSwitcher}}
+>
+  <div
+    data-test-side-menu-switcher
+    local-class='switcher {{if this.isSidebarExpanded "expanded" "collapsed"}}'
+  >
+    <AkIcon
+      data-test-side-menu-switcher-icon
+      class={{@classes.menuItemIcon}}
+      @iconName='apps'
+    />
+
+    {{#if this.isSidebarExpanded}}
+      <AkStack
+        class='ml-2'
+        @width='full'
+        @direction='row'
+        @justifyContent='space-between'
+        @alignItems='center'
+      >
+        <AkTypography
+          @noWrap={{true}}
+          class={{@classes.menuItemText}}
+          data-test-side-menu-switcher-text
+        >
+          {{t 'appSwitcher'}}
+        </AkTypography>
+
+        <AkIcon class={{@classes.menuItemIcon}} @iconName='chevron-right' />
+      </AkStack>
+    {{/if}}
+  </div>
+</AkTooltip>
+
+<AkDivider @color='dark' class='mb-4' />
+
+<AkPopover
+  data-test-side-menu-switcher-modal
+  @anchorRef={{this.anchorRef}}
+  @arrow={{true}}
+  @arrowClass={{this.classes.switcherPopoverArrow}}
+  @closeHandler={{this.closeSwitcherPopover}}
+  @hasBackdrop={{true}}
+  @clickOutsideToClose={{true}}
+  @placement='right-start'
+>
+  <div local-class='switcher-menu-container'>
+    <AkTypography local-class='switcher-menu-title' @fontWeight='bold'>
+      {{t 'switchTo'}}
+    </AkTypography>
+
+    {{#each this.switcherMenuItems as |switcherItem|}}
+      <AkLink
+        data-test-switcher-popover-item-link
+        local-class='switcher-menu-item'
+        @underline='none'
+        @route={{switcherItem.route}}
+      >
+        <AkStack @direction='row' @alignItems='center' @spacing='1'>
+          {{#let (component switcherItem.svg) as |SvgIcon|}}
+            <SvgIcon data-test-side-menu-switcher-modal='{{switcherItem.id}}' />
+          {{/let}}
+
+          <AkTypography data-test-side-menu-switcher-modal-switch-to>
+            {{switcherItem.label}}
+          </AkTypography>
+        </AkStack>
+      </AkLink>
+    {{/each}}
+  </div>
+</AkPopover>

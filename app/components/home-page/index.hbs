@@ -1,25 +1,69 @@
-{{#if this.isLoaded}}
-  {{#if this.isSecurityDashboard}}
-    <HomePage::SecurityDashboardNav
-      @user={{@user}}
-      @logoutAction={{this.invalidateSession}}
-    />
-
-    {{yield}}
-  {{else}}
-    <HomePage::OrganizationDashboard
-      @isSecurityEnabled={{this.isSecurityEnabled}}
-      @user={{@user}}
-      @logoutAction={{this.invalidateSession}}
+<AkStack
+  data-test-home-page
+  @direction='column'
+  @alignItems='center'
+  local-class='home-page-container'
+>
+  <AkStack @direction='column' @width='10/12' local-class='home-page-content'>
+    <AkStack
+      data-test-home-page-appLogo
+      local-class='logo-container'
+      class='py-2'
     >
-      {{yield}}
-    </HomePage::OrganizationDashboard>
-  {{/if}}
-{{/if}}
+      <AuthAssets />
+    </AkStack>
 
-{{#if this.showAddEditModal}}
-  <OrganizationNameHeader::AddEditModal
-    @organization={{this.organization.selected}}
-    @handleCancel={{this.handleCancel}}
-  />
-{{/if}}
+    <AkStack class='py-2' @width='full' @direction='column' @spacing='0.5'>
+      <AkTypography @variant='h5' @fontWeight='regular'>
+        {{t 'selectThePath'}}
+      </AkTypography>
+
+      <AkStack
+        @direction='row'
+        @width='full'
+        @justifyContent='space-between'
+        @alignItems='center'
+      >
+
+        <AkTypography
+          data-test-home-page-title
+          @variant='h2'
+          @fontWeight='bold'
+        >
+          {{t 'toSecureYourMobileApps'}}
+        </AkTypography>
+
+        <AkButton
+          @variant='outlined'
+          @color='neutral'
+          local-class='logout-button'
+          {{on 'click' this.userAuth.invalidateSession}}
+          data-test-home-page-logoutBtn
+        >
+          <:leftIcon>
+            <AkIcon @iconName='logout' />
+          </:leftIcon>
+
+          <:default>
+            {{t 'logout'}}
+          </:default>
+        </AkButton>
+      </AkStack>
+    </AkStack>
+
+    <AkDivider @color='dark' class='mb-2' />
+
+    <AkStack class='py-1' @direction='row' @spacing='4' @flexWrap='wrap'>
+      {{#each this.productCardDetails as |productCardDetails|}}
+        <HomePage::ProductCard
+          @name={{productCardDetails.title}}
+          @description={{productCardDetails.desc}}
+          @route={{productCardDetails.link}}
+          @linkText={{t 'takeMeToDashboard'}}
+          @coverBackgroundImage={{productCardDetails.coverImage}}
+          @indicatorSvg={{productCardDetails.indicator}}
+        />
+      {{/each}}
+    </AkStack>
+  </AkStack>
+</AkStack>

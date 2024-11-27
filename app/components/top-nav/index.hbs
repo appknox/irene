@@ -1,0 +1,74 @@
+<AkAppbar
+  local-class='navbar-root'
+  @elevation={{true}}
+  ...attributes
+  data-test-topNav
+>
+  <AkStack @alignItems='center' @spacing='1.5' @width='full'>
+    {{#if @title}}
+      {{!-- <AkTypography
+        data-test-topNav-title
+        local-class='navbar-title'
+        @variant='h4'
+        @noWrap={{true}}
+      >
+        {{@title}}
+      </AkTypography> --}}
+    {{else}}
+      <AkStack data-test-topNav-logo local-class='appknox-logo'>
+        <AuthAssets />
+      </AkStack>
+    {{/if}}
+
+    <div local-class='spacer'>
+      {{yield (hash classes=this.classes)}}
+    </div>
+
+    <AkStack local-class='right-nav' @spacing='1.5'>
+      {{#if this.showNotifications}}
+        <NotificationsPage::BellIcon />
+      {{/if}}
+
+      <AkButton
+        class={{this.classes.navbarBtn}}
+        {{on 'click' this.handleProfileBtnClick}}
+        data-test-topNav-profileBtn
+      >
+        <:leftIcon>
+          <AkIcon @iconName='account-circle' />
+        </:leftIcon>
+
+        <:default>{{@user.username}}</:default>
+
+        <:rightIcon>
+          <AkIcon @iconName='arrow-drop-down' />
+        </:rightIcon>
+      </AkButton>
+    </AkStack>
+  </AkStack>
+</AkAppbar>
+
+<AkMenu
+  @anchorRef={{this.profileAnchorRef}}
+  @arrow={{true}}
+  @onClose={{this.handleProfileMenuClose}}
+>
+  {{#each this.profileMenuItems as |pmi|}}
+    <AkList::Item
+      @divider={{not pmi.isLast}}
+      @button={{if pmi.onClick true}}
+      @onClick={{pmi.onClick}}
+      data-test-topNav-profileMenuItem
+    >
+      <AkIcon
+        class='mr-1'
+        @color={{or pmi.color 'textPrimary'}}
+        @iconName={{pmi.iconName}}
+      />
+
+      <AkTypography @color={{or pmi.color 'textPrimary'}}>
+        {{pmi.label}}
+      </AkTypography>
+    </AkList::Item>
+  {{/each}}
+</AkMenu>

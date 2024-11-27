@@ -1,0 +1,26 @@
+<div
+  local-class='storeknox-root {{if
+    this.isSidebarCollapsed
+    "collapsed"
+    "expanded"
+  }}'
+>
+  <TopNav
+    local-class='storeknox-header'
+    @user={{@user}}
+    @title={{if this.orgIsAnEnterprise (t 'appMonitoring') (t 'storeknox')}}
+  />
+
+  <SideNav
+    local-class='storeknox-sidenav'
+    @isCollapsed={{this.isSidebarCollapsed}}
+    @toggleSidebar={{this.toggleSidebar}}
+    @menuItems={{this.storeknoxMenuItems}}
+    @productSwitcherFilterKey='storeknox'
+  />
+
+  {{! #id is required for scroll-to-top util }}
+  <main id='ak-dashboard-main-scroll-container' local-class='storeknox-main'>
+    {{yield}}
+  </main>
+</div>

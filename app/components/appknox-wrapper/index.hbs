@@ -1,0 +1,86 @@
+<div
+  local-class='appknox-wrapper-root {{if
+    this.isSidebarCollapsed
+    "collapsed"
+    "expanded"
+  }}'
+>
+  <TopNav
+    local-class='dashboard-header'
+    @title={{t 'vapt'}}
+    @user={{@user}}
+    as |topNav|
+  >
+    <AkStack local-class='top-nav-content' @justifyContent='space-between'>
+      <AkStack @alignItems='center' @spacing='1'>
+        {{! <div local-class='divider' /> }}
+
+        <AkTypography data-test-topNav-startScanLabel @color='inherit'>
+          {{t 'startNewScan'}}
+        </AkTypography>
+
+        <UploadApp />
+      </AkStack>
+
+      <AkStack @alignItems='center' @spacing='0.5'>
+        {{#unless this.orgIsAnEnterprise}}
+          <AkButton
+            class={{topNav.classes.navbarBtn}}
+            {{on 'click' this.onToggleOnboardingGuide}}
+            data-test-topNav-OnboardingGuideBtn
+          >
+            <:leftIcon>
+              <AkIcon @iconName='tungsten' />
+            </:leftIcon>
+
+            <:default>
+              {{t 'onboardingGuides'}}
+            </:default>
+          </AkButton>
+        {{/unless}}
+
+        {{#if this.showKnowledgeBase}}
+          <AkButton
+            class={{topNav.classes.navbarBtn}}
+            {{on 'click' this.onOpenKnowledgeBase}}
+            data-test-topNav-KnowledgeBaseBtn
+          >
+            <:leftIcon>
+              <AkIcon @iconName='import-contacts' />
+            </:leftIcon>
+
+            <:default>{{t 'knowledgeBase'}}</:default>
+          </AkButton>
+        {{/if}}
+      </AkStack>
+    </AkStack>
+  </TopNav>
+
+  <SideNav
+    local-class='dashboard-sidenav'
+    @isSecurityEnabled={{this.isSecurityEnabled}}
+    @isCollapsed={{this.isSidebarCollapsed}}
+    @toggleSidebar={{this.toggleSidebar}}
+    @menuItems={{this.menuItems}}
+    @lowerMenuItems={{this.lowerMenuItems}}
+    @productSwitcherFilterKey='appknox'
+  />
+
+  {{! #id is required for scroll-to-top util }}
+  <main id='ak-dashboard-main-scroll-container' local-class='dashboard-main'>
+    {{yield}}
+  </main>
+
+  {{#if this.showOnboardingGuide}}
+    <AppknoxWrapper::OnboardingGuide
+      @onClose={{this.onToggleOnboardingGuide}}
+    />
+  {{/if}}
+
+  {{#if this.showAddEditModal}}
+    <OrganizationNameHeader::AddEditModal
+      @organization={{this.organization.selected}}
+      @handleCancel={{this.handleAddEditOrgNameCancel}}
+    />
+  {{/if}}
+</div>
