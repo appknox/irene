@@ -1,10 +1,12 @@
 import { module, test } from 'qunit';
 
-import { click, currentURL, visit } from '@ember/test-helpers';
+import { click, currentURL, findAll, visit } from '@ember/test-helpers';
 import { setupMirage } from 'ember-cli-mirage/test-support';
 import { setupApplicationTest } from 'ember-qunit';
 import Service from '@ember/service';
 import { setupBrowserFakes } from 'ember-browser-services/test-support';
+import { t } from 'ember-intl/test-support';
+import { Response } from 'miragejs';
 
 import { setupRequiredEndpoints } from '../helpers/acceptance-utils';
 
@@ -122,14 +124,14 @@ module('Acceptance | side nav test', function (hooks) {
     'it should switch between VAPT and Store Monitoring',
     [
       {
-        expectedUrl: '/dashboard/storeknox/discover',
+        expectedUrl: '/dashboard/storeknox/inventory',
         visitUrl: '/dashboard/projects',
         icon: 'sm-svg',
       },
       {
         expectedUrl: '/dashboard/projects',
-        visitUrl: '/dashboard/storeknox/discover',
-        icon: 'vp-svg',
+        visitUrl: '/dashboard/storeknox/inventory',
+        icon: 'vapt-svg',
       },
     ],
 
@@ -155,6 +157,61 @@ module('Acceptance | side nav test', function (hooks) {
       await click('[data-test-switcher-popover-item-link]');
 
       assert.strictEqual(currentURL(), details.expectedUrl);
+    }
+  );
+
+  test.each(
+    'it should show product switcher menu items',
+    [
+      { storeknox: true, security: false },
+      { storeknox: true, security: true },
+      { storeknox: false, security: true },
+      { storeknox: false, security: false },
+    ],
+    async function (assert, products) {
+      this.server.get('/hudson-api/projects', () => {
+        return products.security ? new Response(200) : new Response(404);
+      });
+
+      this.organization.update({
+        features: {
+          storeknox: products.storeknox,
+        },
+      });
+
+      await visit('/dashboard/projects');
+
+      if (!products.security && !products.storeknox) {
+        assert.dom('[data-test-side-menu-switcher]').doesNotExist();
+      } else {
+        assert.dom('[data-test-side-menu-switcher]').exists();
+
+        await click('[data-test-side-menu-switcher]');
+
+        assert.dom('[data-test-side-menu-switcher-modal]').exists();
+
+        if (products.security && products.storeknox) {
+          assert
+            .dom('[data-test-switcher-popover-item-link]')
+            .exists({ count: 2 });
+
+          const items = findAll('[data-test-switcher-popover-item-link]');
+
+          assert.dom(items[0]).hasText(t('appMonitoring'));
+
+          assert.dom(items[1]).hasText(t('securityDashboard'));
+        } else if (products.storeknox && !products.security) {
+          assert
+            .dom('[data-test-switcher-popover-item-link]')
+            .exists({ count: 1 })
+            .hasText(t('appMonitoring'));
+        } else if (!products.storeknox && products.security) {
+          assert
+            .dom('[data-test-switcher-popover-item-link]')
+            .exists({ count: 1 })
+            .hasText(t('securityDashboard'));
+        }
+      }
     }
   );
 });

@@ -39,16 +39,16 @@ export default class StoreknoxWrapperComponent extends Component<StoreknoxWrappe
   get storeknoxMenuItems() {
     return [
       {
-        label: this.intl.t('discovery'),
-        icon: 'search',
-        route: 'authenticated.storeknox.discover',
-        currentWhen: 'authenticated.storeknox.discover',
-      },
-      {
         label: this.intl.t('inventory'),
         icon: 'inventory-2',
         route: 'authenticated.storeknox.inventory',
         currentWhen: 'authenticated.storeknox.inventory',
+      },
+      {
+        label: this.intl.t('discovery'),
+        icon: 'search',
+        route: 'authenticated.storeknox.discover',
+        currentWhen: 'authenticated.storeknox.discover',
       },
     ] as MenuItem[];
   }

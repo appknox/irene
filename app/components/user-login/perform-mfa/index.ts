@@ -37,7 +37,7 @@ export default class UserLoginPerformMFAComponent extends Component<UserLoginPer
   });
 
   get showLinkContactSupport() {
-    return this.whitelabel.show_contact_support;
+    return this.whitelabel.is_appknox_url;
   }
 }
 
