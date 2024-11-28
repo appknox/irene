@@ -1,12 +1,25 @@
 import Component from '@glimmer/component';
 import { action } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
-import { inject as service } from '@ember/service';
+import { service } from '@ember/service';
 import type IntlService from 'ember-intl/services/intl';
 
 import styles from './index.scss';
-import type { SwitcherMenuItem } from '..';
 import type ConfigurationService from 'irene/services/configuration';
+import type WhitelabelService from 'irene/services/whitelabel';
+import type OrganizationService from 'irene/services/organization';
+
+interface SwitcherMenuItem {
+  id: string;
+  svg:
+    | 'ak-svg/sm-indicator'
+    | 'ak-svg/vapt-indicator'
+    | 'ak-svg/security-indicator';
+  label: string;
+  route: string;
+  key: string;
+  openInNewTab?: boolean;
+}
 
 export interface SideNavProductSwitcherSignature {
   Args: {
@@ -23,6 +36,8 @@ export interface SideNavProductSwitcherSignature {
 export default class SideNavProductSwitcherComponent extends Component<SideNavProductSwitcherSignature> {
   @service declare intl: IntlService;
   @service declare configuration: ConfigurationService;
+  @service declare whitelabel: WhitelabelService;
+  @service declare organization: OrganizationService;
 
   @tracked anchorRef: HTMLElement | null = null;
 
@@ -36,35 +51,53 @@ export default class SideNavProductSwitcherComponent extends Component<SideNavPr
     return this.configuration.serverData.enterprise;
   }
 
+  get isWhitelabel() {
+    return !this.whitelabel.is_appknox_url;
+  }
+
   get isSidebarExpanded() {
     return !this.args.isCollapsed;
   }
 
+  get showStoreknox() {
+    return this.organization?.selected?.features?.storeknox;
+  }
+
+  get isSecurityEnabled() {
+    return this.organization.isSecurityEnabled;
+  }
+
   get switcherMenuItems() {
-    const allMenuItems: SwitcherMenuItem[] = [
+    const allMenuItems = [
       {
-        id: 'vp-svg',
-        svg: 'ak-svg/vp-indicator',
-        label: this.orgIsAnEnterprise
-          ? this.intl.t('vapt')
-          : this.intl.t('appknox'),
+        id: 'vapt-svg',
+        svg: 'ak-svg/vapt-indicator',
+        label: this.isWhitelabel ? this.intl.t('vapt') : this.intl.t('appknox'),
         route: 'authenticated.dashboard.projects',
         key: 'appknox',
       },
-      {
+      this.showStoreknox && {
         id: 'sm-svg',
         svg: 'ak-svg/sm-indicator',
-        label: this.orgIsAnEnterprise
+        label: this.isWhitelabel
           ? this.intl.t('appMonitoring')
           : this.intl.t('storeknox'),
-        route: 'authenticated.storeknox.discover',
+        route: 'authenticated.storeknox.inventory',
         key: 'storeknox',
+      },
+      this.isSecurityEnabled && {
+        id: 'security-svg',
+        svg: 'ak-svg/security-indicator',
+        label: this.intl.t('securityDashboard'),
+        route: 'authenticated.security.projects',
+        key: 'security',
+        openInNewTab: true,
       },
     ];
 
     return allMenuItems.filter(
-      (item) => item.key !== this.args.productSwitcherFilterKey
-    );
+      (item) => item && item.key !== this.args.productSwitcherFilterKey
+    ) as SwitcherMenuItem[];
   }
 
   @action onClickSwitcher(event: MouseEvent) {

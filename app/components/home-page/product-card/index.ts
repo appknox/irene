@@ -9,8 +9,15 @@ export interface ProductCardComponentSignature {
     description: string;
     linkText: string;
     route: string;
-    coverBackgroundImage: 'ak-svg/storeknox-bg-img' | 'ak-svg/appknox-bg-img';
-    indicatorSvg: 'ak-svg/sm-indicator' | 'ak-svg/vp-indicator';
+    coverBackgroundImage:
+      | 'ak-svg/storeknox-bg-img'
+      | 'ak-svg/appknox-bg-img'
+      | 'ak-svg/security-bg-img';
+    indicatorSvg:
+      | 'ak-svg/sm-indicator'
+      | 'ak-svg/vapt-indicator'
+      | 'ak-svg/security-indicator';
+    openInNewTab?: boolean;
   };
   Blocks: {
     default: [];

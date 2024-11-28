@@ -70,7 +70,9 @@ export default class WhitelabelService extends Service {
     return this.configuration.imageData.logo_on_darkbg;
   }
 
-  get show_contact_support() {
-    return this.window.location.href.includes('secure.appknox.com');
+  get is_appknox_url() {
+    const urls = ['secure.appknox.com'];
+
+    return urls.some((url) => this.window.location.href.includes(url));
   }
 }

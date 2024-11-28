@@ -4,7 +4,7 @@ import { setupMirage } from 'ember-cli-mirage/test-support';
 import { setupIntl, t } from 'ember-intl/test-support';
 import { click, find, findAll, render } from '@ember/test-helpers';
 import { hbs } from 'ember-cli-htmlbars';
-
+import { setupBrowserFakes } from 'ember-browser-services/test-support';
 import Service from '@ember/service';
 
 class NotificationsStub extends Service {
@@ -43,12 +43,12 @@ class IntegrationStub extends Service {
 
 const storeknoxMenuItems = [
   {
-    label: () => t('discovery'),
-    icon: 'search',
-  },
-  {
     label: () => t('inventory'),
     icon: 'inventory-2',
+  },
+  {
+    label: () => t('discovery'),
+    icon: 'search',
   },
 ].filter(Boolean);
 
@@ -56,6 +56,7 @@ module('Integration | Component | storeknox-wrapper', function (hooks) {
   setupRenderingTest(hooks);
   setupMirage(hooks);
   setupIntl(hooks);
+  setupBrowserFakes(hooks, { window: true, localStorage: true });
 
   hooks.beforeEach(async function () {
     this.server.createList('organization', 1);
@@ -80,6 +81,10 @@ module('Integration | Component | storeknox-wrapper', function (hooks) {
     this.owner.register('service:configuration', ConfigurationStub);
 
     const organization = this.owner.lookup('service:organization');
+
+    const window = this.owner.lookup('service:browser/window');
+
+    window.localStorage.clear();
 
     this.setProperties({
       title: t('storeknox'),
