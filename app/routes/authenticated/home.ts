@@ -9,7 +9,10 @@ export default class HomeRoute extends Route {
   @service declare router: RouterService;
 
   beforeModel() {
-    if (!this.organization.selected?.features?.storeknox) {
+    const securityDashboard = this.organization.isSecurityEnabled;
+    const storeknox = this.organization.selected?.features?.storeknox;
+
+    if (!storeknox && !securityDashboard) {
       this.router.transitionTo('authenticated.dashboard.projects');
     }
   }

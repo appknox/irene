@@ -44,9 +44,10 @@ export enum AkSvgComponentInvocationByNames {
   ToggleAutomatedDast,
   AppknoxBgImg,
   StoreknoxBgImg,
-  ConfigurationBgImg,
-  VpIndicator,
+  SecurityBgImg,
+  VaptIndicator,
   SmIndicator,
+  SecurityIndicator,
 }
 
 export enum AkSvgComponentInvocationByPaths {

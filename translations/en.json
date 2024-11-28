@@ -1380,6 +1380,7 @@
   "searchTeamByName": "Search by team name",
   "security": "Security",
   "securityDashboard": "Security Dashboard",
+  "securityDashboardDesc": "For security researchers to perform manual assessments (PT)",
   "selectAnyTeam": "Please select any team",
   "selectThePath": "Select the path",
   "selectDevice": "Select the device",

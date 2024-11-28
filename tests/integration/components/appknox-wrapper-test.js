@@ -56,7 +56,6 @@ const menuItems = ({
   market,
   billing,
   partner,
-  security,
 }) =>
   [
     {
@@ -78,7 +77,6 @@ const menuItems = ({
       hasBadge: true,
       badgeLabel: t('beta'),
     },
-    security && { label: t('securityDashboard'), icon: 'security' },
   ].filter(Boolean);
 
 const sections = (enabled) => ({
@@ -86,7 +84,6 @@ const sections = (enabled) => ({
   appMonitoring: enabled,
   market: enabled,
   partner: enabled,
-  security: enabled,
   sbom: enabled,
   publicApis: enabled,
   analytics: enabled,
@@ -295,14 +292,6 @@ module('Integration | Component | appknox-wrapper', function (hooks) {
         public_apis: sectionConfig.publicApis,
         sbom: sectionConfig.sbom,
       };
-
-      this.server.get('/hudson-api/projects', () => {
-        if (sectionConfig.security) {
-          return new Response(200);
-        } else {
-          return new Response(404);
-        }
-      });
 
       await render(hbs`<AppknoxWrapper @user={{this.user}} />`);
 

@@ -310,7 +310,10 @@ Router.map(function () {
           this.route('review');
         });
 
-        this.route('inventory');
+        this.route('inventory', function () {
+          this.route('app-list');
+          this.route('disabled-apps');
+        });
       });
     }
   );

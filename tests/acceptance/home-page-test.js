@@ -1,10 +1,11 @@
 import { module, test } from 'qunit';
 
-import { click, currentURL, visit } from '@ember/test-helpers';
+import { click, currentURL, findAll, visit } from '@ember/test-helpers';
 import { setupMirage } from 'ember-cli-mirage/test-support';
 import { t } from 'ember-intl/test-support';
 import { setupApplicationTest } from 'ember-qunit';
 import Service from '@ember/service';
+import { Response } from 'miragejs';
 
 import { setupRequiredEndpoints } from '../helpers/acceptance-utils';
 
@@ -67,7 +68,7 @@ module('Acceptance | home page', function (hooks) {
       .hasText(t('logout'));
 
     assert.dom('[data-test-home-page-product-card]').exists({
-      count: 2,
+      count: 3,
     });
   });
 
@@ -75,17 +76,18 @@ module('Acceptance | home page', function (hooks) {
     await visit('/dashboard/home');
 
     assert.dom('[data-test-home-page-product-card]').exists({
-      count: 2,
+      count: 3,
     });
 
-    assert.dom('[data-test-home-page-product-card-title]').exists({ count: 2 });
+    assert.dom('[data-test-home-page-product-card-title]').exists({ count: 3 });
 
     const titles = this.element.querySelectorAll(
       '[data-test-home-page-product-card-title]'
     );
 
-    assert.strictEqual(titles[0].textContent.trim(), t('appknox'));
-    assert.strictEqual(titles[1].textContent.trim(), t('storeknox'));
+    assert.strictEqual(titles[0].textContent.trim(), t('vapt'));
+    assert.strictEqual(titles[1].textContent.trim(), t('appMonitoring'));
+    assert.strictEqual(titles[2].textContent.trim(), t('securityDashboard'));
 
     const links = this.element.querySelectorAll(
       '[data-test-home-page-product-card-link]'
@@ -93,7 +95,7 @@ module('Acceptance | home page', function (hooks) {
 
     assert
       .dom('[data-test-home-page-product-card-indicator-icon]')
-      .exists({ count: 2 });
+      .exists({ count: 3 });
 
     await click(links[0]);
 
@@ -108,7 +110,7 @@ module('Acceptance | home page', function (hooks) {
     await visit('/dashboard/home');
 
     assert.dom('[data-test-home-page-product-card]').exists({
-      count: 2,
+      count: 3,
     });
 
     const links = this.element.querySelectorAll(
@@ -117,22 +119,26 @@ module('Acceptance | home page', function (hooks) {
 
     assert
       .dom('[data-test-home-page-product-card-indicator-icon]')
-      .exists({ count: 2 });
+      .exists({ count: 3 });
 
     await click(links[1]);
 
     assert.strictEqual(
       currentURL(),
-      '/dashboard/storeknox/discover',
+      '/dashboard/storeknox/inventory/app-list',
       'Redirected to storeknox'
     );
   });
 
-  test('it redirects to appknox dashboard if app monitoring is disabled', async function (assert) {
+  test('it redirects to appknox dashboard if app monitoring and security is disabled', async function (assert) {
     this.organization.update({
       features: {
         storeknox: false,
       },
+    });
+
+    this.server.get('/hudson-api/projects', () => {
+      return new Response(404);
     });
 
     await visit('/dashboard/home');
@@ -145,4 +151,56 @@ module('Acceptance | home page', function (hooks) {
 
     assert.dom('[data-test-side-menu-switcher]').doesNotExist();
   });
+
+  test.each(
+    'it should show right product cards',
+    [
+      { storeknox: true, security: false },
+      { storeknox: true, security: true },
+      { storeknox: false, security: true },
+    ],
+    async function (assert, products) {
+      this.server.get('/hudson-api/projects', () => {
+        return products.security ? new Response(200) : new Response(404);
+      });
+
+      this.organization.update({
+        features: {
+          storeknox: products.storeknox,
+        },
+      });
+
+      await visit('/dashboard/home');
+
+      if (products.security && products.storeknox) {
+        assert.dom('[data-test-home-page-product-card]').exists({
+          count: 3,
+        });
+      } else if (products.security && !products.storeknox) {
+        assert.dom('[data-test-home-page-product-card]').exists({
+          count: 2,
+        });
+
+        const productTitles = findAll(
+          '[data-test-home-page-product-card-title]'
+        );
+
+        assert.dom(productTitles[0]).hasText(t('vapt'));
+
+        assert.dom(productTitles[1]).hasText(t('securityDashboard'));
+      } else if (!products.security && products.storeknox) {
+        assert.dom('[data-test-home-page-product-card]').exists({
+          count: 2,
+        });
+
+        const productTitles = findAll(
+          '[data-test-home-page-product-card-title]'
+        );
+
+        assert.dom(productTitles[0]).hasText(t('vapt'));
+
+        assert.dom(productTitles[1]).hasText(t('appMonitoring'));
+      }
+    }
+  );
 });

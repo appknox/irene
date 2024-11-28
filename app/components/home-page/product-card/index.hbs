@@ -35,6 +35,8 @@
         @route={{this.route}}
         @underline='always'
         @fontWeight='medium'
+        target={{if @openInNewTab '_blank'}}
+        rel={{if @openInNewTab 'noopener noreferrer'}}
       >
         {{@linkText}}
       </AkLink>
