@@ -402,20 +402,20 @@ body {
   // variables for security/analysis-details/cvss-metrics
   --security-analysis-details-cvss-metrics-white-color: var(--common-white);
   --security-analysis-details-cvss-metrics-risk-medium-color: var(
-    --risk-medium
+    --severity-medium
   );
-  --security-analysis-details-cvss-metrics-risk-low-color: var(--risk-low);
-  --security-analysis-details-cvss-metrics-risk-high-color: var(--risk-high);
+  --security-analysis-details-cvss-metrics-risk-low-color: var(--severity-low);
+  --security-analysis-details-cvss-metrics-risk-high-color: var(--severity-high);
   --security-analysis-details-cvss-metrics-risk-critical-color: var(
-    --risk-critical
+    --severity-critical
   );
   --security-analysis-details-cvss-metrics-risk-passed-color: var(
-    --risk-passed
+    --severity-passed
   );
   --security-analysis-details-cvss-metrics-risk-error-color: var(
     --primary-main
   );
-  --security-analysis-details-cvss-metrics-progress-color: var(--risk-untested);
+  --security-analysis-details-cvss-metrics-progress-color: var(--severity-untested);
   --security-analysis-details-cvss-metrics-progress-border-color: var(
     --primary-main-10
   );
@@ -668,7 +668,7 @@ body {
 
   //variables for notifications
   --notification-bell-icon-dot-background-color: var(--primary-main);
-  --notification-bell-icon-dot-border-color: var(--black-700);
+  --notification-bell-icon-dot-border-color: var(--neutral-grey-700);
   --notification-bell-icon-color: var(--background-main);
 
   --notification-unread-count-color-primary: var(--primary-main);

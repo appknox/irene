@@ -11,7 +11,7 @@
 }
 
 .invitation-expired {
-  background-color: var(--bg-gray-lighten-015);
+  background-color: var(--background-light);
   opacity: 0.6;
 }
 
@@ -23,16 +23,16 @@
 }
 
 .source-backoffice {
-  color: var(--label-orange-color);
-  background-color: var(--label-orange-bg);
+  color: var(--primary-main);
+  background-color: var(--primary-light);
 }
 
 .source-invitation {
-  color: var(--label-green-color);
-  background-color: var(--label-green-bg);
+  color: var(--success-main);
+  background-color: var(--success-light);
 }
 
 .source-registration {
-  color: var(--label-blue-color);
-  background-color: var(--label-blue-bg);
+  color: var(--info-dark);
+  background-color: var(--info-light);
 }

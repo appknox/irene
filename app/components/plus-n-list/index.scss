@@ -4,7 +4,7 @@
 }
 
 .first-item {
-  color: var(--black-700);
+  color: var(--neutral-grey-700);
 }
 
 .list-item:not(:last-child) {
@@ -15,7 +15,7 @@
   padding: 0 0.36rem 0 0.3rem;
   display: flex;
   align-items: center;
-  background: var(--bg-gray-darken-060);
+  background: var(--neutral-grey-300);
   min-width: 1.95em;
   height: 1.5em;
   border-radius: 0.3em;

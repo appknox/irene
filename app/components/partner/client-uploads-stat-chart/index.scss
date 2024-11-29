@@ -9,17 +9,17 @@
   line-height: 3rem;
   font-size: 1.1rem;
   font-weight: bold;
-  color: var(--black-600);
+  color: var(--neutral-grey-700);
 }
 
 .body {
-  border: 1px solid var(--bg-gray-darken-050);
+  border: 1px solid var(--border-color-1);
   border-radius: 0.3rem;
   padding-right: 1rem;
   padding-top: 1rem;
   padding-bottom: 0.5rem;
   position: relative;
-  background: var(--bg-gray-lighten-015);
+  background: var(--background-light);
 }
 
 .filter {
@@ -35,7 +35,7 @@
       column-gap: 8px;
       justify-content: left;
       align-items: center;
-      border: 1px solid var(--bg-gray-darken-050);
+      border: 1px solid var(--border-color-1);
       background: var(--background-main);
       border-radius: 0.3rem;
       padding: 0.4rem 1rem;
@@ -68,7 +68,7 @@
       &:hover,
       &:active,
       &:focus {
-        background-color: var(--primary-transparent-005);
+        background-color: var(--primary-light);
       }
       &:first-child {
         border-top-left-radius: 0.34rem;
@@ -98,7 +98,7 @@
 }
 
 .tooltip {
-  border: 1px solid var(--bg-gray-darken-080);
+  border: 1px solid var(--border-color-1);
   width: max-content;
   padding: 0.5rem;
   border-radius: 5px;

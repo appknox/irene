@@ -2,15 +2,15 @@
   line-height: 3rem;
   font-size: 1.1rem;
   font-weight: bold;
-  color: var(--black-600);
+  color: var(--neutral-grey-700);
 }
 .body {
   display: flex;
   align-items: center;
   justify-content: center;
-  background-color: var(--bg-gray-lighten-015);
+  background-color: var(--background-light);
   padding: 2rem;
-  border: 1px solid var(--bg-gray-darken-050);
+  border: 1px solid var(--border-color-1);
   border-radius: 0.3rem;
 }
 
@@ -21,7 +21,7 @@
   min-width: 14rem;
   padding: 0.4rem;
   cursor: pointer;
-  border: 1px solid var(--bg-gray-darken-080);
+  border: 1px solid var(--border-color-1);
   border-radius: 0.3rem;
   background-color: var(--background-main);
 }
