@@ -149,7 +149,7 @@ module.exports = function (environment) {
     isAppknox: false,
     isEnterprise: isEnterprise,
     showLicense: showLicense,
-    exportApplicationGlobal: true,
+    exportApplicationGlobal: false,
     devknoxPrice: 9, // This should also change in `mycroft/settings.py`
     platform: -1,
     paginate: {

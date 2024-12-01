@@ -1,6 +1,6 @@
 import Component from '@glimmer/component';
 import { task, timeout } from 'ember-concurrency';
-import { isNotFoundError, type AjaxError } from 'ember-ajax/errors';
+import { isNotFoundResponse } from 'ember-fetch/errors';
 import { inject as service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
 import { next } from '@ember/runloop';
@@ -106,7 +106,7 @@ export default class SystemStatusComponent extends Component {
 
       await this.ajax.request(status.data.storage, { headers: {} });
     } catch (error) {
-      this.isStorageWorking = !!isNotFoundError(error as AjaxError);
+      this.isStorageWorking = !!isNotFoundResponse(error as Response);
     }
   });
 
