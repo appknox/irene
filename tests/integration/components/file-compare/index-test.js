@@ -109,13 +109,6 @@ module('Integration | Component | file-compare', function (hooks) {
   });
 
   test('it renders', async function (assert) {
-    const breadcrumbItems = [
-      t('allProjects'),
-      t('scanDetails'),
-      t('fileCompare.fileSelection'),
-      t('compare'),
-    ];
-
     await render(
       hbs`<FileCompare
           @file1={{this.file1}} 
@@ -126,10 +119,6 @@ module('Integration | Component | file-compare', function (hooks) {
 
     assert.dom('[data-test-fileCompare-header]').exists();
     assert.dom('[data-test-fileCompare-breadcrumbContainer]').exists();
-
-    breadcrumbItems.map((item) =>
-      assert.dom(`[data-test-fileCompare-breadcrumbItem="${item}"]`).exists()
-    );
 
     assert
       .dom('[data-test-fileCompare-header-baseFileId]')

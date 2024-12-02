@@ -1,8 +1,8 @@
-import Route from '@ember/routing/route';
+import AkBreadcrumbsRoute from 'irene/utils/ak-breadcrumbs-route';
 import { ScrollToTop } from 'irene/utils/scroll-to-top';
 
 export default class AuthenticatedOrganizationTeamsRoute extends ScrollToTop(
-  Route
+  AkBreadcrumbsRoute
 ) {
   queryParams = {
     team_limit: {

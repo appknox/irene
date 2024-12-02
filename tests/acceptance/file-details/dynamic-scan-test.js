@@ -124,6 +124,7 @@ module('Acceptance | file-details/dynamic-scan', function (hooks) {
     this.owner.register('service:integration', IntegrationStub);
     this.owner.register('service:websocket', WebsocketStub);
     this.owner.register('service:poll', PollServiceStub);
+    this.breadcrumbsService = this.owner.lookup('service:ak-breadcrumbs');
 
     this.server.create('device-preference', {
       id: profile.id,
@@ -196,18 +197,16 @@ module('Acceptance | file-details/dynamic-scan', function (hooks) {
 
     await visit(`/dashboard/file/${this.file.id}/dynamic-scan/manual`);
 
+    // Breadcrumbs test
     assert
       .dom('[data-test-fileDetails-dynamicScan-header-breadcrumbContainer]')
       .exists();
 
-    const breadcrumbItems = [t('allProjects'), t('scanDetails'), t('dast')];
-
-    breadcrumbItems.map((item) => {
+    this.breadcrumbsService.breadcrumbItems.map((item) => {
       assert
-        .dom(
-          `[data-test-fileDetails-dynamicScan-header-breadcrumbItem="${item}"]`
-        )
-        .exists();
+        .dom(`[data-test-breadcrumb-trail-item-key="${item.route}"]`)
+        .exists()
+        .containsText(item.title);
     });
 
     assert.dom('[data-test-fileDetailsSummary-root]').exists();

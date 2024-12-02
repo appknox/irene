@@ -3,15 +3,9 @@
     local-class='organization-settings-breadcrumbs-container'
     class='pt-2 pb-3'
   >
-    <AkBreadcrumbs::Container data-test-fileDetails-apiScan-breadcrumbContainer>
-      {{#each this.breadcrumbItems as |item|}}
-        <AkBreadcrumbs::Item
-          @route={{item.route}}
-          @linkTitle={{item.linkTitle}}
-          data-test-fileDetails-apiScan-breadcrumbItem='{{item.linkTitle}}'
-        />
-      {{/each}}
-    </AkBreadcrumbs::Container>
+    <AkBreadcrumbs::AutoTrail
+      data-test-fileDetails-apiScan-breadcrumbContainer
+    />
   </div>
 
   <OrganizationNameHeader @organization={{@organization}}>

@@ -12,7 +12,6 @@ import RouterService from '@ember/routing/router-service';
 import FileModel from 'irene/models/file';
 import { PaginationProviderActionsArgs } from 'irene/components/ak-pagination-provider';
 import ProjectModel from 'irene/models/project';
-import { AkBreadcrumbsItemSignature } from 'irene/components/ak-breadcrumbs/item';
 import parseError from 'irene/utils/parse-error';
 import { ChooseFilesQueryParams } from 'irene/routes/authenticated/dashboard/choose';
 
@@ -71,25 +70,6 @@ export default class FileCompareCompareListComponent extends Component<FileCompa
     );
 
     return otherFiles;
-  }
-
-  get breadcrumbItems(): AkBreadcrumbsItemSignature['Args'][] {
-    return [
-      {
-        route: 'authenticated.dashboard.projects',
-        linkTitle: this.intl.t('allProjects'),
-      },
-      {
-        route: 'authenticated.dashboard.file',
-        linkTitle: this.intl.t('scanDetails'),
-        model: this.fileOld?.id,
-      },
-      {
-        route: 'authenticated.dashboard.compare',
-        linkTitle: this.intl.t('fileCompare.fileSelection'),
-        model: this.fileOld?.id,
-      },
-    ];
   }
 
   get hasFiles() {

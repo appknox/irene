@@ -50,12 +50,6 @@ module('Integration | Component | file-details/static-scan', function (hooks) {
   });
 
   test('it renders', async function (assert) {
-    const breadcrumbItems = [
-      t('allProjects'),
-      t('scanDetails'),
-      t('sastResults'),
-    ];
-
     this.server.get('/v2/projects/:id', (schema, req) => {
       return schema.projects.find(`${req.params.id}`)?.toJSON();
     });
@@ -65,12 +59,6 @@ module('Integration | Component | file-details/static-scan', function (hooks) {
     assert
       .dom('[data-test-fileDetails-staticscan-breadcrumbContainer]')
       .exists();
-
-    breadcrumbItems.map((item) => {
-      assert
-        .dom(`[data-test-fileDetails-staticscan-breadcrumbItem="${item}"]`)
-        .exists();
-    });
 
     assert
       .dom('[data-test-fileDetails-staticscan-sast-results-tab]')

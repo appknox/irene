@@ -36,25 +36,6 @@ export default class FileDetailsManualScanComponent extends Component<FileDetail
     this.fetchManualScan.perform();
   }
 
-  get breadcrumbItems() {
-    return [
-      {
-        route: 'authenticated.dashboard.projects',
-        linkTitle: this.intl.t('allProjects'),
-      },
-      {
-        route: 'authenticated.dashboard.file',
-        linkTitle: this.intl.t('scanDetails'),
-        model: this.args.file.id,
-      },
-      {
-        route: 'authenticated.dashboard.file.manual-scan',
-        linkTitle: this.intl.t('manualScan'),
-        model: this.args.file.id,
-      },
-    ];
-  }
-
   get tabItems() {
     return [
       {

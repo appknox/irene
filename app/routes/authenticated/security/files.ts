@@ -1,4 +1,4 @@
-import Route from '@ember/routing/route';
+import AkBreadcrumbsRoute from 'irene/utils/ak-breadcrumbs-route';
 
 export interface SecurityFilesQueryParam {
   app_limit: string;
@@ -9,7 +9,7 @@ interface RouteParams extends Partial<SecurityFilesQueryParam> {
   projectid: string;
 }
 
-export default class AuthenticatedSecurityFilesRoute extends Route {
+export default class AuthenticatedSecurityFilesRoute extends AkBreadcrumbsRoute {
   queryParams = {
     app_limit: {
       refreshModel: true,

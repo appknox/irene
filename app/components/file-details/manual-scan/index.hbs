@@ -1,18 +1,9 @@
 <div local-class='manual-scan-root'>
-  <AkBreadcrumbs::Container
+  <AkBreadcrumbs::AutoTrail
     local-class='manual-scan-breadcrumbs-container'
     class='pb-3 pt-2'
     data-test-fileDetails-manualScan-breadcrumbContainer
-  >
-    {{#each this.breadcrumbItems as |item|}}
-      <AkBreadcrumbs::Item
-        @route={{item.route}}
-        @model={{item.model}}
-        @linkTitle={{item.linkTitle}}
-        data-test-fileDetails-manualScan-breadcrumbItem='{{item.linkTitle}}'
-      />
-    {{/each}}
-  </AkBreadcrumbs::Container>
+  />
 
   <FileDetails::Summary @file={{@file}} />
 

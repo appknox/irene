@@ -16,7 +16,6 @@ import ProjectModel from 'irene/models/project';
 import FileModel from 'irene/models/file';
 import { PaginationProviderActionsArgs } from 'irene/components/ak-pagination-provider';
 import RealtimeService from 'irene/services/realtime';
-import { AkBreadcrumbsItemSignature } from 'irene/components/ak-breadcrumbs/item';
 import parseError from 'irene/utils/parse-error';
 import { ProjectFilesQueryParams } from 'irene/routes/authenticated/dashboard/project/files';
 
@@ -50,25 +49,6 @@ export default class FileListComponent extends Component<FileListSignature> {
     const { files_limit, files_offset } = args.queryParams;
 
     this.getFiles.perform(files_limit, files_offset, false);
-  }
-
-  get breadcrumbItems(): AkBreadcrumbsItemSignature['Args'][] {
-    return [
-      {
-        route: 'authenticated.dashboard.projects',
-        linkTitle: this.intl.t('allProjects'),
-      },
-      {
-        route: 'authenticated.dashboard.project.files',
-        linkTitle: this.project?.get('packageName'),
-        model: this.project?.get('id'),
-      },
-      {
-        route: 'authenticated.dashboard.project.files',
-        linkTitle: this.intl.t('allUploads'),
-        model: this.project?.get('id'),
-      },
-    ];
   }
 
   get limit() {
@@ -136,8 +116,7 @@ export default class FileListComponent extends Component<FileListSignature> {
   @action onCompareBtnClick() {
     this.router.transitionTo(
       'authenticated.dashboard.compare',
-      `${this.baseFile?.id}...${this.fileToCompare?.id}`,
-      { queryParams: { referrer: 'all_uploads' } }
+      `${this.baseFile?.id}...${this.fileToCompare?.id}`
     );
   }
 

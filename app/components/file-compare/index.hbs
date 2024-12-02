@@ -5,16 +5,7 @@
   data-test-fileCompare-header
 >
   <:breadcrumbs>
-    <AkBreadcrumbs::Container data-test-fileCompare-breadcrumbContainer>
-      {{#each this.breadcrumbItems as |item|}}
-        <AkBreadcrumbs::Item
-          @route={{item.route}}
-          @model={{item.model}}
-          @linkTitle={{item.linkTitle}}
-          data-test-fileCompare-breadcrumbItem='{{item.linkTitle}}'
-        />
-      {{/each}}
-    </AkBreadcrumbs::Container>
+    <AkBreadcrumbs::AutoTrail data-test-fileCompare-breadcrumbContainer />
   </:breadcrumbs>
 
   <:file1Content>

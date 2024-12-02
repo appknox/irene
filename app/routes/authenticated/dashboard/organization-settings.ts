@@ -1,13 +1,13 @@
-import { inject as service } from '@ember/service';
-import Route from '@ember/routing/route';
+import { service } from '@ember/service';
 import type RouterService from '@ember/routing/router-service';
 
+import AkBreadcrumbsRoute from 'irene/utils/ak-breadcrumbs-route';
 import type UserModel from 'irene/models/user';
 import type OrganizationModel from 'irene/models/organization';
 import type MeService from 'irene/services/me';
 import type OrganizationService from 'irene/services/organization';
 
-export default class AuthenticatedOrganizationSettingsRoute extends Route {
+export default class AuthenticatedOrganizationSettingsRoute extends AkBreadcrumbsRoute {
   @service declare me: MeService;
   @service declare organization: OrganizationService;
   @service declare router: RouterService;

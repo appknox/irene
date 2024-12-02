@@ -128,16 +128,13 @@ module('Acceptance | file-details/api-scan', function (hooks) {
 
     assert.dom('[data-test-fileDetails-apiScan-breadcrumbContainer]').exists();
 
-    const breadcrumbItems = [
-      t('allProjects'),
-      t('scanDetails'),
-      t('apiScanResults'),
-    ];
+    const breadcrumbsService = this.owner.lookup('service:ak-breadcrumbs');
 
-    breadcrumbItems.map((item) => {
+    breadcrumbsService.breadcrumbItems.map((item) => {
       assert
-        .dom(`[data-test-fileDetails-apiScan-breadcrumbItem="${item}"]`)
-        .exists();
+        .dom(`[data-test-breadcrumb-trail-item-key="${item.route}"]`)
+        .exists()
+        .containsText(item.title);
     });
 
     assert.dom('[data-test-fileDetailsSummary-root]').exists();

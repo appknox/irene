@@ -39,6 +39,30 @@ Router.map(function () {
       path: '/',
     },
     function () {
+      /*
+       * DO NOT REMOVE!. For Test purposes
+       * Ref: tests/acceptance/breadcrumbs-test.js
+       * ============ START ===============
+       */
+      this.route('tr-a-root', function () {
+        this.route('parent-a', function () {
+          this.route('child-a');
+          this.route('child-b');
+        });
+
+        this.route('parent-b', function () {
+          this.route('child-a');
+        });
+      });
+
+      this.route('tr-b-root', function () {
+        this.route('parent-a', function () {
+          this.route('child-a');
+        });
+      });
+
+      // ============ END ===============
+
       this.route('index', {
         path: '/',
       });

@@ -1,10 +1,11 @@
-import Route from '@ember/routing/route';
-import OrganizationService from 'irene/services/organization';
 import Store from '@ember-data/store';
-import { inject as service } from '@ember/service';
-import { AppMonitoringDetailsQueryParams } from 'irene/routes/authenticated/dashboard/app-monitoring/monitoring-details';
+import { service } from '@ember/service';
 
-export default class AuthenticatedDashboardAppMonitoringMonitoringDetailsIndexRoute extends Route {
+import AkBreadcrumbsRoute from 'irene/utils/ak-breadcrumbs-route';
+import type OrganizationService from 'irene/services/organization';
+import type { AppMonitoringDetailsQueryParams } from 'irene/routes/authenticated/dashboard/app-monitoring/monitoring-details';
+
+export default class AuthenticatedDashboardAppMonitoringMonitoringDetailsIndexRoute extends AkBreadcrumbsRoute {
   @service declare organization: OrganizationService;
   @service declare store: Store;
 

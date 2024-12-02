@@ -10,7 +10,7 @@ import {
 } from 'irene/utils/compare-files';
 import UnknownAnalysisStatusModel from 'irene/models/unknown-analysis-status';
 
-interface CompareRouteModel {
+export interface CompareRouteModel {
   file: FileModel;
   unknownAnalysisStatus?: UnknownAnalysisStatusModel | null;
   fileOld: FileModel;

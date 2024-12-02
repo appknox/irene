@@ -75,21 +75,11 @@ module('Integration | Component | file-list', function (hooks) {
   });
 
   test('it renders project overview header', async function (assert) {
-    const breadcrumbItems = [
-      t('allProjects'),
-      this.project.get('packageName'),
-      t('allUploads'),
-    ];
-
     await render(
       hbs`<FileList @project={{this.project}} @queryParams={{this.queryParams}} />`
     );
 
     assert.dom('[data-test-fileList-projectOverview-container]').exists();
-
-    breadcrumbItems.map((item) => {
-      assert.dom(`[data-test-fileList-breadcrumbItem="${item}"]`).exists();
-    });
 
     assert
       .dom('[data-test-fileList-projectOverview-header]')

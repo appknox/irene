@@ -1,9 +1,12 @@
-import Route from '@ember/routing/route';
-import { inject as service } from '@ember/service';
-import Store from '@ember-data/store';
-import { ScrollToTop } from 'irene/utils/scroll-to-top';
+import { service } from '@ember/service';
+import type Store from '@ember-data/store';
 
-export default class AuthenticatedFileIndexRoute extends ScrollToTop(Route) {
+import { ScrollToTop } from 'irene/utils/scroll-to-top';
+import AkBreadcrumbsRoute from 'irene/utils/ak-breadcrumbs-route';
+
+export default class AuthenticatedFileIndexRoute extends ScrollToTop(
+  AkBreadcrumbsRoute
+) {
   @service declare store: Store;
 
   async model() {
@@ -15,7 +18,7 @@ export default class AuthenticatedFileIndexRoute extends ScrollToTop(Route) {
 
     return {
       file,
-      profileId: (await file.project).activeProfileId,
+      profileId: (await file.project)?.activeProfileId,
     };
   }
 }

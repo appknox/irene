@@ -1,18 +1,6 @@
 {{page-title 'Scan Details'}}
 
-<AkBreadcrumbs::Container @id='sbom-scan-details-breadcrumb' class='pt-2 pb-3'>
-  <AkBreadcrumbs::Item
-    @route='authenticated.dashboard.sbom.apps'
-    @linkTitle={{t 'SBOM'}}
-  />
-
-  <AkBreadcrumbs::Item
-    @route='authenticated.dashboard.sbom.scan-details'
-    @linkTitle='{{t
-      "sbomModule.allComponentsAndVulnerabilities"
-    }} ({{@model.sbomProject.project.lastFile.name}})'
-  />
-</AkBreadcrumbs::Container>
+<AkBreadcrumbs::AutoTrail class='pt-2 pb-3' />
 
 <Sbom::ScanDetails
   @sbomProject={{@model.sbomProject}}

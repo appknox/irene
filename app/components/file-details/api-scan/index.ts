@@ -18,25 +18,6 @@ export default class FileDetailsApiScanComponent extends Component<FileDetailsAp
   @service declare intl: IntlService;
   @service declare apiScan: ApiScanService;
 
-  get breadcrumbItems() {
-    return [
-      {
-        route: 'authenticated.dashboard.projects',
-        linkTitle: this.intl.t('allProjects'),
-      },
-      {
-        route: 'authenticated.dashboard.file',
-        linkTitle: this.intl.t('scanDetails'),
-        model: this.args.file.id,
-      },
-      {
-        route: 'authenticated.dashboard.file.api-scan',
-        linkTitle: this.intl.t('apiScanResults'),
-        model: this.args.file.id,
-      },
-    ];
-  }
-
   get tabItems() {
     return [
       {

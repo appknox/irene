@@ -1,6 +1,7 @@
-import Route from '@ember/routing/route';
 import { inject as service } from '@ember/service';
 import Store from '@ember-data/store';
+
+import AkBreadcrumbsRoute from 'irene/utils/ak-breadcrumbs-route';
 
 import {
   CompareChildrenRoutesModel,
@@ -12,7 +13,7 @@ import {
   getFileComparisonCategories,
 } from 'irene/utils/compare-files';
 
-export default class AuthenticatedDashboardCompareUnchangedTestCasesRoute extends Route {
+export default class AuthenticatedDashboardCompareUnchangedTestCasesRoute extends AkBreadcrumbsRoute {
   @service declare store: Store;
 
   parentRoute = 'authenticated.dashboard.compare';

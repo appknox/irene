@@ -76,28 +76,15 @@ module('Integration | Component | file-compare/compare-list', function (hooks) {
   });
 
   test('it renders file overview header', async function (assert) {
-    const breadcrumbItems = [
-      t('allProjects'),
-      t('scanDetails'),
-      t('fileCompare.fileSelection'),
-    ];
-
     await render(
       hbs`<FileCompare::CompareList @fileOld={{this.fileOld}} @queryParams={{this.queryParams}} @project={{this.project}} />`
     );
 
     assert.dom('[data-test-fileCompare-compareListHeader-container]').exists();
+
     assert
       .dom('[data-test-fileCompare-compareList-breadcrumbContainer]')
       .exists();
-
-    breadcrumbItems.map((item) => {
-      assert
-        .dom(
-          `[data-test-fileCompare-compareListHeader-breadcrumbItem="${item}"]`
-        )
-        .exists();
-    });
 
     assert
       .dom('[data-test-fileCompare-compareListHeader-baseFileId]')

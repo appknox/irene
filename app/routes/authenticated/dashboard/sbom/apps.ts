@@ -1,4 +1,4 @@
-import Route from '@ember/routing/route';
+import AkBreadcrumbsRoute from 'irene/utils/ak-breadcrumbs-route';
 
 export interface SbomAppQueryParam {
   app_limit: string;
@@ -7,7 +7,7 @@ export interface SbomAppQueryParam {
   app_platform: string;
 }
 
-export default class AuthenticatedDashboardSbomAppsRoute extends Route {
+export default class AuthenticatedDashboardSbomAppsRoute extends AkBreadcrumbsRoute {
   queryParams = {
     app_limit: {
       refreshModel: true,

@@ -20,19 +20,6 @@ export default class OrganizationSettingsWrapperComponent extends Component<Orga
   @service declare me: MeService;
   @service declare organization: OrganizationService;
 
-  get breadcrumbItems() {
-    return [
-      {
-        route: 'authenticated.dashboard.organization.namespaces',
-        linkTitle: this.intl.t('organization'),
-      },
-      {
-        route: 'authenticated.dashboard.organization-settings',
-        linkTitle: this.intl.t('settings'),
-      },
-    ];
-  }
-
   get isPublicApiEnabled() {
     return this.organization.selected?.features?.public_apis;
   }

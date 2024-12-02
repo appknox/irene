@@ -47,27 +47,6 @@ export default class ServiceAccountCreateComponent extends Component<ServiceAcco
     this.serviceAccountService.selectedProjectsForCreate = {};
   }
 
-  get breadcrumbItems() {
-    return [
-      {
-        route: 'authenticated.dashboard.organization.namespaces',
-        linkTitle: this.intl.t('organization'),
-      },
-      {
-        route: 'authenticated.dashboard.organization-settings',
-        linkTitle: this.intl.t('settings'),
-      },
-      {
-        route: 'authenticated.dashboard.organization-settings.service-account',
-        linkTitle: this.intl.t('serviceAccount'),
-      },
-      {
-        route: 'authenticated.dashboard.service-account-create',
-        linkTitle: this.intl.t('create'),
-      },
-    ];
-  }
-
   initServiceAccount(duplicateServiceAccount: ServiceAccountModel | null) {
     const noExpiry = duplicateServiceAccount?.expiry === null;
 

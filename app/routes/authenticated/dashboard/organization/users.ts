@@ -1,4 +1,4 @@
-import Route from '@ember/routing/route';
+import AkBreadcrumbsRoute from 'irene/utils/ak-breadcrumbs-route';
 import { ScrollToTop } from 'irene/utils/scroll-to-top';
 
 export interface OrganizationMembersRouteQueryParams {
@@ -11,7 +11,7 @@ export interface OrganizationMembersRouteQueryParams {
 }
 
 export default class AuthenticatedOrganizationMembersRoute extends ScrollToTop(
-  Route
+  AkBreadcrumbsRoute
 ) {
   queryParams = {
     user_limit: {

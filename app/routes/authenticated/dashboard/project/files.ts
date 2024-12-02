@@ -1,5 +1,5 @@
-import Route from '@ember/routing/route';
-import ProjectModel from 'irene/models/project';
+import AkBreadcrumbsRoute from 'irene/utils/ak-breadcrumbs-route';
+import type ProjectModel from 'irene/models/project';
 import { ScrollToTop } from 'irene/utils/scroll-to-top';
 
 export interface ProjectFilesQueryParams {
@@ -7,8 +7,16 @@ export interface ProjectFilesQueryParams {
   files_offset: string;
 }
 
+export interface ProjectFilesModel {
+  project: ProjectModel;
+  queryParams: {
+    files_limit: string;
+    files_offset: string;
+  };
+}
+
 export default class AuthenticatedDashboardProjectFilesRoute extends ScrollToTop(
-  Route
+  AkBreadcrumbsRoute
 ) {
   queryParams = {
     files_limit: {
@@ -19,7 +27,7 @@ export default class AuthenticatedDashboardProjectFilesRoute extends ScrollToTop
     },
   };
 
-  model(params: Partial<ProjectFilesQueryParams>) {
+  model(params: Partial<ProjectFilesQueryParams>): ProjectFilesModel {
     const { files_limit = '10', files_offset = '0' } = params;
 
     const project = this.modelFor(

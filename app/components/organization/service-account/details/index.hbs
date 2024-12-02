@@ -3,18 +3,9 @@
     local-class='service-account-details-breadcrumbs-container'
     class='pt-2 pb-3'
   >
-    <AkBreadcrumbs::Container
+    <AkBreadcrumbs::AutoTrail
       data-test-serviceAccountDetails-breadcrumbContainer
-    >
-      {{#each this.breadcrumbItems as |item|}}
-        <AkBreadcrumbs::Item
-          @route={{item.route}}
-          @linkTitle={{item.linkTitle}}
-          data-test-serviceAccountDetails-breadcrumbItem='{{item.linkTitle}}'
-          data-test-cy='serviceAccountDetails-breadcrumbItem-{{item.linkTitle}}'
-        />
-      {{/each}}
-    </AkBreadcrumbs::Container>
+    />
   </div>
 
   <AkStack

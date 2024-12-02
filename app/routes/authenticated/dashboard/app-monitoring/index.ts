@@ -1,9 +1,10 @@
-import Route from '@ember/routing/route';
 import { inject as service } from '@ember/service';
-import OrganizationService from 'irene/services/organization';
-import AppMonitoringService from 'irene/services/appmonitoring';
-import AMConfigurationModel from 'irene/models/amconfiguration';
-import RouterService from '@ember/routing/router-service';
+import type RouterService from '@ember/routing/router-service';
+
+import AkBreadcrumbsRoute from 'irene/utils/ak-breadcrumbs-route';
+import type OrganizationService from 'irene/services/organization';
+import type AppMonitoringService from 'irene/services/appmonitoring';
+import type AMConfigurationModel from 'irene/models/amconfiguration';
 
 interface QueryParams {
   app_limit: number;
@@ -16,7 +17,7 @@ export interface AppMonitoringRouteModel {
   settings: AMConfigurationModel | undefined;
 }
 
-export default class AuthenticatedDashboardAppMonitoringIndexRoute extends Route {
+export default class AuthenticatedDashboardAppMonitoringIndexRoute extends AkBreadcrumbsRoute {
   @service declare organization: OrganizationService;
   @service declare appmonitoring: AppMonitoringService;
   @service declare router: RouterService;

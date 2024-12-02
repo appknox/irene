@@ -1,11 +1,11 @@
-import Route from '@ember/routing/route';
 import { inject as service } from '@ember/service';
 import type Store from '@ember-data/store';
 
 import { ScrollToTop } from 'irene/utils/scroll-to-top';
+import AkBreadcrumbsRoute from 'irene/utils/ak-breadcrumbs-route';
 
 export default class AuthenticatedDashboardFileApiScanRoute extends ScrollToTop(
-  Route
+  AkBreadcrumbsRoute
 ) {
   @service declare store: Store;
 

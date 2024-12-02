@@ -128,12 +128,7 @@ export default class FileCompareTableComponent extends Component<FileCompareTabl
     this.router.transitionTo(
       'authenticated.dashboard.file-vul-compare',
       `${this.file1?.id}...${this.file2?.id}`,
-      String(comparison.vulnerability?.get('id')),
-      {
-        queryParams: {
-          referrer: this.router.currentRoute?.queryParams?.['referrer'],
-        },
-      }
+      String(comparison.vulnerability?.get('id'))
     );
   }
 

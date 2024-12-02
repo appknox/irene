@@ -44,42 +44,6 @@ export default class SecurityAnalysisDetailsComponent extends Component<Security
     return this.intl.t('pleaseTryAgain');
   }
 
-  get analysisFile() {
-    return this.analysisDetails?.get('file');
-  }
-
-  get analysisProjectID() {
-    return this.analysisFile?.get('project')?.get('id');
-  }
-
-  get breadcrumbItems() {
-    if (!this.analysisProjectID) {
-      return [];
-    }
-
-    return [
-      {
-        route: 'authenticated.security.projects',
-        linkTitle: 'All Projects',
-      },
-      {
-        route: 'authenticated.security.files',
-        linkTitle: 'List of Files',
-        model: this.analysisProjectID,
-      },
-      {
-        route: 'authenticated.security.file',
-        linkTitle: 'File Details',
-        model: this.analysisFile?.get('id'),
-      },
-      {
-        route: 'authenticated.security.analysis',
-        linkTitle: 'Analysis Details',
-        model: this.analysisDetails?.get('id'),
-      },
-    ].filter(Boolean);
-  }
-
   get isEmptyCvssVector() {
     return (
       this.analysisDetails?.attackVector == ENUMS.ATTACK_VECTOR.UNKNOWN &&

@@ -19,6 +19,7 @@ export interface FileDetailsSummarySignature {
 
 interface FileMoreMenuItem {
   group?: string;
+  query?: Record<string, unknown>;
   label: string;
   iconName: string;
   route: string;

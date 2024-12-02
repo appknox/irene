@@ -7,14 +7,14 @@ import RouterService from '@ember/routing/router-service';
 import { tracked } from '@glimmer/tracking';
 
 import FileModel from 'irene/models/file';
+import UnknownAnalysisStatusModel from 'irene/models/unknown-analysis-status';
+import AkBreadcrumbsService from 'irene/services/ak-breadcrumbs';
+import { scrollDashboardMainContainerTo } from 'irene/utils/scroll-to-top';
 
 import {
   compareFiles,
   getFileComparisonCategories,
 } from 'irene/utils/compare-files';
-
-import UnknownAnalysisStatusModel from 'irene/models/unknown-analysis-status';
-import { scrollDashboardMainContainerTo } from 'irene/utils/scroll-to-top';
 
 interface FileCompareSignature {
   Args: {
@@ -28,6 +28,7 @@ export default class FileCompareComponent extends Component<FileCompareSignature
   @service declare intl: IntlService;
   @service declare store: Store;
   @service declare router: RouterService;
+  @service('ak-breadcrumbs') declare breadcrumbsService: AkBreadcrumbsService;
 
   @tracked expandFilesOverview = false;
 
@@ -39,49 +40,8 @@ export default class FileCompareComponent extends Component<FileCompareSignature
     return this.args.file2;
   }
 
-  get isAllUploadsBreadcrumb() {
-    return (
-      this.router.currentRoute?.queryParams?.['referrer'] === 'all_uploads'
-    );
-  }
-
   get unknownAnalysisStatus() {
     return this.args.unknownAnalysisStatus;
-  }
-
-  get breadcrumbItems() {
-    return [
-      {
-        route: 'authenticated.dashboard.projects',
-        linkTitle: this.intl.t('allProjects'),
-      },
-      this.isAllUploadsBreadcrumb
-        ? {
-            route: 'authenticated.dashboard.project.files',
-            linkTitle: this.file1?.project?.get('packageName'),
-            model: this.file1?.project?.get('id'),
-          }
-        : null,
-      !this.isAllUploadsBreadcrumb
-        ? {
-            route: 'authenticated.dashboard.file',
-            linkTitle: `${this.intl.t('scanDetails')}`,
-            model: this.file1?.id,
-          }
-        : null,
-      !this.isAllUploadsBreadcrumb
-        ? {
-            route: 'authenticated.dashboard.choose',
-            linkTitle: this.intl.t('fileCompare.fileSelection'),
-            model: this.file1?.id,
-          }
-        : null,
-      {
-        route: 'authenticated.dashboard.compare',
-        linkTitle: this.intl.t('compare'),
-        model: `${this.file1?.id}`,
-      },
-    ].filter(Boolean);
   }
 
   get comparisons() {
@@ -119,6 +79,12 @@ export default class FileCompareComponent extends Component<FileCompareSignature
           }
         : null,
     ].filter(Boolean);
+  }
+
+  get isAllUploadsBreadcrumb() {
+    return this.breadcrumbsService.breadcrumbItems.find((it) =>
+      it.route?.includes('authenticated.dashboard.project.files')
+    );
   }
 
   @action
