@@ -185,50 +185,35 @@ export default class AkBreadcrumbsService extends Service {
     const originCrumbProps =
       this._extractCrumbPropsFromCtrller(originRouteCtrller);
 
-    const routeFromCrumbProps =
-      this._extractCrumbPropsFromCtrller(routeFromCtrller);
-
     // Retrieved breadcrumbs info from local storage
     const lastTransInfo = this._getCrumbsTransInfoFromLStorage();
     const lastTransItems = lastTransInfo?.items ?? [];
     const breadcrumbsExist = lastTransItems && lastTransItems.length > 0;
     const lastTransitionedItem = lastTransItems[lastTransItems.length - 1];
 
-    // The route you're accessing the current page from was the last user transition
-    const routeFromIsLastTransitioned =
-      lastTransitionedItem?.route === routeFrom?.name;
+    const routeFromCrumbProps =
+      this._extractCrumbPropsFromCtrller(routeFromCtrller);
 
-    // The route you're accessing the current page from is a sibling of the last transition
-    const routeFromIsASiblingOfLastTransitioned =
-      !!lastTransitionedItem?.siblingRoutes?.some(
-        (r) =>
-          r.includes(String(routeFrom?.name)) || routeFrom?.name.includes(r)
-      );
-
-    const routeFromIsASiblingOfOriginRoute = this._checkIfTwoRoutesAreSiblings(
-      originRouteName,
-      routeFrom?.name,
-      originRouteClass
+    // NOTE: Cases where fallback crumbs should be utilized or a recomputation should happen
+    const originRouteIndexWithoutModelCheck = Number(
+      lastTransItems?.findIndex((it) => it.route === originRouteName)
     );
 
-    const originRouteIndexInCrumbs = this._getRouteIndexInCrumbs(
-      lastTransItems,
-      originRouteClass.routeName,
-      originCrumbProps
-    );
+    const originRouteHasDiffModelWithSameRouteInCrumbs =
+      originRouteIndexWithoutModelCheck > -1
+        ? lastTransItems[originRouteIndexWithoutModelCheck]?.models?.join(
+            ':'
+          ) !== originCrumbProps?.models?.join(':')
+        : false;
 
-    const originRouteIsLastCrumbItem =
-      lastTransitionedItem?.route === originRouteName;
-
-    const originRouteAlreadyAdded = originRouteIndexInCrumbs > -1;
-    const canRetrieveBreadcrumbs = routeFrom && breadcrumbsExist;
-
-    // If navigation to a page is from a different route group return fallback or an empty array to allow for regenration;
+    // SCENARIO A: In cases where same route exists in crumbs but with diff models, return fallback or recalculate breadcrumbs
+    // SCENARIO B: If navigation to a page is from a different route group return fallback or an empty array to allow for regenration;
     if (
-      routeFrom &&
-      originCrumbProps?.title &&
-      routeFromCrumbProps?.title &&
-      originCrumbProps?.routeGroup !== routeFromCrumbProps?.routeGroup
+      (routeFrom &&
+        originCrumbProps?.title &&
+        routeFromCrumbProps?.title &&
+        originCrumbProps?.routeGroup !== routeFromCrumbProps?.routeGroup) ||
+      originRouteHasDiffModelWithSameRouteInCrumbs
     ) {
       return (
         originCrumbProps?.fallbackCrumbs?.map((it) => ({
@@ -237,6 +222,28 @@ export default class AkBreadcrumbsService extends Service {
         })) ?? []
       );
     }
+
+    // NOTE: Cases where retrieved breadcrumbs from local storage can be utilized
+    const routeFromIsLastTransitioned =
+      lastTransitionedItem?.route === routeFrom?.name;
+
+    const originRouteIsLastCrumbItem =
+      lastTransitionedItem?.route === originRouteName;
+
+    const originRouteIndexInCrumbs = this._getRouteIndexInCrumbs(
+      lastTransItems,
+      originRouteName,
+      originCrumbProps
+    );
+
+    const routeFromIsASiblingOfOriginRoute = this._checkIfTwoRoutesAreSiblings(
+      originRouteName,
+      routeFrom?.name,
+      originRouteClass
+    );
+
+    const canRetrieveBreadcrumbs = routeFrom && breadcrumbsExist;
+    const originRouteAlreadyAdded = originRouteIndexInCrumbs > -1;
 
     // Sibling routes share the same breadcrumbs with origin route
     if (canRetrieveBreadcrumbs && routeFromIsASiblingOfOriginRoute) {
@@ -248,6 +255,14 @@ export default class AkBreadcrumbsService extends Service {
       return lastTransItems;
     }
 
+    // The route you're accessing the current page from is a sibling of the last transition
+    const routeFromIsASiblingOfLastTransitioned =
+      !!lastTransitionedItem?.siblingRoutes?.some(
+        (r) =>
+          r.includes(String(routeFrom?.name)) || routeFrom?.name.includes(r)
+      );
+
+    // SCENARIO: In cases where origin route hasn't been added before
     if (
       canRetrieveBreadcrumbs &&
       (routeFromIsLastTransitioned || routeFromIsASiblingOfLastTransitioned) &&
@@ -260,6 +275,7 @@ export default class AkBreadcrumbsService extends Service {
       return lastTransItems;
     }
 
+    // SCENARIO: In cases where origin route has been added before and other items exists after it in stored breadcrumbs
     if (
       canRetrieveBreadcrumbs &&
       (routeFromIsLastTransitioned || routeFromIsASiblingOfLastTransitioned) &&

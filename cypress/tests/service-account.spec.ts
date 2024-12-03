@@ -455,7 +455,7 @@ describe('Service Account', () => {
     );
 
     //click on service account breadcrumb to go back
-    cy.findByTestId('serviceAccountDetails-breadcrumbItem-Service Account')
+    cy.findByTestId('ak-breadcrumbs-auto-trail-item-Service Account')
       .as('ServiceAccountBreadcrumb')
       .should('exist');
 

@@ -59,6 +59,14 @@ Router.map(function () {
         this.route('parent-a', function () {
           this.route('child-a');
         });
+
+        this.route(
+          'parent-with-model',
+          { path: '/parent-with-model/:id' },
+          function () {
+            this.route('child');
+          }
+        );
       });
 
       // ============ END ===============
