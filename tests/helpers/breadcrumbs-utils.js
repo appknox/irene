@@ -33,7 +33,7 @@ export const doBreadcrumbItemsCompare = (
 
     if (!skipUICheck) {
       assert
-        .dom(`[data-test-breadcrumb-trail-item-key="${it?.route}"]`)
+        .dom(`[data-test-ak-breadcrumbs-auto-trail-item-key="${it?.route}"]`)
         .exists();
     }
   });

@@ -204,7 +204,7 @@ module('Acceptance | file-details/dynamic-scan', function (hooks) {
 
     this.breadcrumbsService.breadcrumbItems.map((item) => {
       assert
-        .dom(`[data-test-breadcrumb-trail-item-key="${item.route}"]`)
+        .dom(`[data-test-ak-breadcrumbs-auto-trail-item-key="${item.route}"]`)
         .exists()
         .containsText(item.title);
     });
