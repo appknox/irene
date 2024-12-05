@@ -1,3 +1,4 @@
+import { action } from '@ember/object';
 import { hbs } from 'ember-cli-htmlbars';
 
 export default {
@@ -24,19 +25,17 @@ const objectOptions = [
   { label: 'username2' },
 ];
 
-const AutocompleteTemplate = (args) => {
-  const actions = {
-    onChange(searchValue) {
-      this.set('searchQuery', searchValue);
-    },
-  };
+function onChange(searchValue) {
+  this.set('searchQuery', searchValue);
+}
 
+const AutocompleteTemplate = (args) => {
   return {
     template: hbs`
       <AkAutocomplete
         @options={{this.options}}
         @searchQuery={{this.searchQuery}}
-        @onChange={{action this.onChange}}
+        @onChange={{this.handleChange}}
         @loading={{this.loadingOptions}}
         @filterFn={{this.filterFn}}
         @filterKey={{this.filterKey}}
@@ -52,7 +51,7 @@ const AutocompleteTemplate = (args) => {
       `,
     context: {
       ...args,
-      ...actions,
+      handleChange: action(onChange),
       options: args.objectOptions ? objectOptions : stringOptions,
     },
   };
