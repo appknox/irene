@@ -28,7 +28,11 @@
     @direction='column'
     @spacing='1'
   >
-    {{#each this.severityLevelCounts as |slc|}}
+    {{#each this.severityLevelCounts as |slc idx|}}
+      {{#if (not-eq idx 0)}}
+        <AkDivider />
+      {{/if}}
+
       <AkStack
         @width='full'
         @justifyContent='space-between'
@@ -97,10 +101,6 @@
           </AkTooltip>
         {{/if}}
       </AkStack>
-
-      {{#if (not-eq slc this.severityLevelCounts.lastObject)}}
-        <AkDivider />
-      {{/if}}
     {{/each}}
   </AkStack>
 {{/if}}

@@ -31,7 +31,7 @@ module('Integration | Component | plus-n-list', function (hooks) {
 
   test('it renders 3 default items', async function (assert) {
     this.set('emails', emails);
-    await render(hbs`<PlusNList @list={{this.emails}} @defaultCount=3/>`);
+    await render(hbs`<PlusNList @list={{this.emails}} @defaultCount={{3}}/>`);
     const defaultEmails = this.emails.slice(0, 3).join(', ');
     assert.dom('[data-test-default-items]').hasText(defaultEmails);
   });

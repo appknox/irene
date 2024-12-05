@@ -67,7 +67,7 @@ module('Integration | Component | partner/client-info', function (hooks) {
     });
     this.set('client', client);
     await render(
-      hbs`<div style="width:100px"><Partner::ClientInfo @client={{this.client}}/></div>`
+      hbs`<div {{style width='100px'}}><Partner::ClientInfo @client={{this.client}}/></div>`
     );
     const titleEle = this.element.querySelector('div[data-test-title]');
     assert.ok(titleEle.offsetWidth < titleEle.scrollWidth);

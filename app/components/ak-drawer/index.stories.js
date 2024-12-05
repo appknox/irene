@@ -1,4 +1,5 @@
 import { hbs } from 'ember-cli-htmlbars';
+import { action } from '@ember/object';
 
 export default {
   title: 'AkDrawer',
@@ -6,20 +7,18 @@ export default {
   excludeStories: [],
 };
 
-const Template = (args) => {
-  const actions = {
-    handleOpen() {
-      this.set('open', true);
-    },
-    handleClose() {
-      this.set('open', false);
-    },
-  };
+function handleOpen() {
+  this.set('open', true);
+}
 
+function handleClose() {
+  this.set('open', false);
+}
+
+const Template = (args) => {
   return {
     template: hbs`
-        {{!-- template-lint-disable no-action --}}
-        <AkButton {{on 'click' (action this.handleOpen)}}>
+        <AkButton {{on 'click' this.handleOpen}}>
             Open drawer
         </AkButton>
 
@@ -27,11 +26,11 @@ const Template = (args) => {
             @anchor={{this.anchor}} 
             @open={{this.open}} 
             @disableBackdropClick={{this.disableBackdropClick}} 
-            @onClose={{action this.handleClose}}>
+            @onClose={{this.handleClose}}>
                 <div {{style (hash width="250px")}} />
         </AkDrawer>
   `,
-    context: { ...args, ...actions },
+    context: { ...args },
   };
 };
 
@@ -41,4 +40,6 @@ Basic.args = {
   open: false,
   anchor: 'left',
   disableBackdropClick: false,
+  handleOpen: action(handleOpen),
+  handleClose: action(handleClose),
 };

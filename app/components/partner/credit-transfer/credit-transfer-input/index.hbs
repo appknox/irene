@@ -16,13 +16,13 @@
       {{/if}}
     </div>
     <div local-class='tranfer-count'>
-      <Input
+      <AkTextField
         local-class='input-count'
         @type='number'
         min={{1}}
         max={{@partnerPlan.scansLeft}}
         @value={{@transferCount}}
-        autofocus='autofocus'
+        @autofocus='autofocus'
         data-test-data-input-count
         aria-label='Credit tranfer input'
       />

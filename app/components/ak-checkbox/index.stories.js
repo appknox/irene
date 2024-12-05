@@ -1,5 +1,5 @@
 import { hbs } from 'ember-cli-htmlbars';
-import { computed } from '@ember/object';
+import { action, computed } from '@ember/object';
 
 export default {
   title: 'AkCheckbox',
@@ -63,11 +63,16 @@ Label.args = {
   indeterminate: false,
 };
 
+function handleChange(event, checked) {
+  console.log('select all change:', checked);
+  this.set('checked1', checked);
+  this.set('checked2', checked);
+}
+
 const IndeterminateTemplate = (args) => ({
   template: hbs`
-    {{!-- template-lint-disable no-action --}}
     <AkFormControlLabel @label="Select all">
-      <AkCheckbox @onChange={{action this.handleChange}} @checked={{this.selectAllChecked}} @indeterminate={{this.selectAllIndeterminate}} />
+      <AkCheckbox @onChange={{this.handleChange}} @checked={{this.selectAllChecked}} @indeterminate={{this.selectAllIndeterminate}} />
     </AkFormControlLabel>
 
     <AkFormControlLabel @label="Check 1">
@@ -93,11 +98,7 @@ const IndeterminateTemplate = (args) => ({
     selectAllIndeterminate: computed('checked1', 'checked2', function () {
       return this.checked1 !== this.checked2;
     }),
-    handleChange(event, checked) {
-      console.log('select all change:', checked);
-      this.set('checked1', checked);
-      this.set('checked2', checked);
-    },
+    handleChange: action(handleChange),
   },
 });
 
