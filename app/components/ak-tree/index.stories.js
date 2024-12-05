@@ -1,3 +1,4 @@
+import { action } from '@ember/object';
 import { hbs } from 'ember-cli-htmlbars';
 
 export default {
@@ -74,16 +75,18 @@ const TREE_DATA = [
 ];
 
 const actions = {
-  onExpand(expandedItems) {
-    this.set('expanded', expandedItems);
-  },
-  onCheck(checkedItems) {
-    this.set('checked', checkedItems);
-  },
   calculatePadding(treeDepth) {
     return `${(treeDepth + 1) * 0.9286}em`;
   },
 };
+
+function onExpand(expandedItems) {
+  this.set('expanded', expandedItems);
+}
+
+function onCheck(checkedItems) {
+  this.set('checked', checkedItems);
+}
 
 const Template = (args) => ({
   template: hbs`
@@ -92,8 +95,8 @@ const Template = (args) => ({
       @expanded={{this.expanded}}
       @cascade={{this.cascade}}
       @checked={{this.checked}}
-      @onCheck={{action this.onCheck}}
-      @onExpand={{action this.onExpand}}
+      @onCheck={{this.onCheck}}
+      @onExpand={{this.onExpand}}
       as |node tree|
     >
       <AkStack @alignItems="center" {{style paddingLeft=(this.calculatePadding node.treeDepth)}}>
@@ -124,4 +127,6 @@ Default.args = {
   treeData: TREE_DATA,
   expanded: ['Root1', 'Root2', 'Root3'],
   checked: [],
+  onExpand: action(onExpand),
+  onCheck: action(onCheck),
 };
