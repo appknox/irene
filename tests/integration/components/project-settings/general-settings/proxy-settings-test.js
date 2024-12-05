@@ -6,7 +6,6 @@ import { click, fillIn, render } from '@ember/test-helpers';
 import { hbs } from 'ember-cli-htmlbars';
 import { faker } from '@faker-js/faker';
 import Service from '@ember/service';
-import { capitalize } from '@ember/string';
 
 class NotificationsStub extends Service {
   errorMsg = null;
@@ -31,7 +30,7 @@ module(
   function (hooks) {
     setupRenderingTest(hooks);
     setupMirage(hooks);
-    setupIntl(hooks);
+    setupIntl(hooks, 'en');
 
     hooks.beforeEach(async function () {
       this.server.get('/profiles/:id/proxy_settings', (schema, req) => {
@@ -232,7 +231,7 @@ module(
       const notify = this.owner.lookup('service:notifications');
       assert.strictEqual(
         notify.successMsg,
-        `${t('proxyTurned')}${capitalize(t('ON'))}`
+        `${t('proxyTurned')}${t('on').toUpperCase()}`
       );
       assert.dom(toggleSelector).exists().isChecked();
 
@@ -240,7 +239,7 @@ module(
 
       assert.strictEqual(
         notify.successMsg,
-        `${t('proxyTurned')}${capitalize(t('OFF'))}`
+        `${t('proxyTurned')}${t('off').toUpperCase()}`
       );
       assert.dom(toggleSelector).exists().isNotChecked();
     });

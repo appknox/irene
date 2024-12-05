@@ -44,7 +44,7 @@ class WindowStub extends Service {
 module('Integration | Component | sbom/scan-report-drawer', function (hooks) {
   setupRenderingTest(hooks);
   setupMirage(hooks);
-  setupIntl(hooks);
+  setupIntl(hooks, 'en');
 
   hooks.beforeEach(async function () {
     const store = this.owner.lookup('service:store');

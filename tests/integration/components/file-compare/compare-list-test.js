@@ -7,7 +7,7 @@ import { setupMirage } from 'ember-cli-mirage/test-support';
 
 module('Integration | Component | file-compare/compare-list', function (hooks) {
   setupRenderingTest(hooks);
-  setupIntl(hooks);
+  setupIntl(hooks, 'en');
   setupMirage(hooks);
 
   hooks.beforeEach(async function () {

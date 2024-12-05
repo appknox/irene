@@ -23,7 +23,7 @@ module(
   'Integration | Component | user-registration/via-partner-invite',
   function (hooks) {
     setupRenderingTest(hooks);
-    setupIntl(hooks);
+    setupIntl(hooks, 'en');
     setupMirage(hooks);
 
     hooks.beforeEach(function () {

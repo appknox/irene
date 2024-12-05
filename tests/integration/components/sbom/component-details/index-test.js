@@ -9,7 +9,7 @@ import { capitalize } from '@ember/string';
 module('Integration | Component | sbom/component-details', function (hooks) {
   setupRenderingTest(hooks);
   setupMirage(hooks);
-  setupIntl(hooks);
+  setupIntl(hooks, 'en');
 
   hooks.beforeEach(async function () {
     // Close handler

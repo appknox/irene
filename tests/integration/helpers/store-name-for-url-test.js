@@ -6,7 +6,7 @@ import { setupIntl, t } from 'ember-intl/test-support';
 
 module('Integration | Helper | store-name-for-url', function (hooks) {
   setupRenderingTest(hooks);
-  setupIntl(hooks);
+  setupIntl(hooks, 'en');
 
   test.each(
     'it renders',

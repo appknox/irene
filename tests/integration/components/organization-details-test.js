@@ -18,7 +18,7 @@ class RouterStub extends Service {
 module('Integration | Component | organization-details', function (hooks) {
   setupRenderingTest(hooks);
   setupMirage(hooks);
-  setupIntl(hooks);
+  setupIntl(hooks, 'en');
 
   hooks.beforeEach(async function () {
     this.server.createList('organization', 1);

@@ -26,7 +26,7 @@ module(
   function (hooks) {
     setupRenderingTest(hooks);
     setupMirage(hooks);
-    setupIntl(hooks);
+    setupIntl(hooks, 'en');
 
     hooks.beforeEach(async function () {
       this.owner.register('service:notifications', NotificationsStub);
@@ -318,25 +318,28 @@ module(
 
       const currentReport = reportItems[0];
       const summaryReports = reportItems.slice(1, reportItems.length - 1);
+      const summaryReportTypes = reportTypes.slice(1, reportTypes.length - 1);
       const previousReport = reportItems[reportItems.length - 1];
 
       assert
         .dom(currentReport)
         .exists()
-        .hasText(new RegExp(t('fileReport.detailedReport')))
+        .containsText(t('fileReport.detailedReport', { reportType: 'pdf' }))
         .containsText(this.file.project.get('pdfPassword'));
 
       assert
         .dom(previousReport)
         .exists()
-        .hasText(new RegExp(t('fileReport.previousReport')))
+        .containsText(t('fileReport.previousReport', { reportType: 'pdf' }))
         .containsText(this.file.project.get('pdfPassword'));
 
-      summaryReports.forEach((report) => {
+      summaryReports.forEach((report, idx) => {
+        const type = summaryReportTypes[idx];
+
         assert
           .dom(report)
           .exists()
-          .hasText(new RegExp(t('fileReport.summaryReport')))
+          .containsText(t('fileReport.summaryReport', { reportType: type }))
           .hasText(new RegExp(t('fileReport.noPasswordRequired')));
       });
     });

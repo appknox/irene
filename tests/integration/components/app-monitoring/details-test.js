@@ -10,7 +10,7 @@ import styles from 'irene/components/app-monitoring/details/index.scss';
 module('Integration | Component | app-monitoring/details', function (hooks) {
   setupRenderingTest(hooks);
   setupMirage(hooks);
-  setupIntl(hooks);
+  setupIntl(hooks, 'en');
 
   hooks.beforeEach(async function () {
     this.store = this.owner.lookup('service:store');

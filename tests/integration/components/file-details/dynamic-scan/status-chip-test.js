@@ -40,7 +40,7 @@ module(
   function (hooks) {
     setupRenderingTest(hooks);
     setupMirage(hooks);
-    setupIntl(hooks);
+    setupIntl(hooks, 'en');
 
     // TODO: Unskip when full DAST feature is ready.
     test.skip(

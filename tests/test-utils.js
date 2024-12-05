@@ -1,4 +1,5 @@
 import { underscore } from '@ember/string';
+import { find } from '@ember/test-helpers';
 
 function _serialize_object(payload) {
   return Object.keys(payload.attrs).reduce((acc, curr) => {
@@ -33,3 +34,19 @@ export function objectifyEncodedReqBody(reqBody = '') {
 
   return paramsObject;
 }
+
+export const compareInnerHTMLWithIntlTranslation = (
+  assert,
+  { element, selector, message, doIncludesCheck }
+) => {
+  const innerHTML =
+    element?.innerHTML || find(selector.trim()).innerHTML.trim();
+
+  const assertMessage = `Element HTML: "${innerHTML}" <=====> Compared HTML: "${message}"`;
+
+  if (doIncludesCheck) {
+    assert.true(innerHTML.includes(message), assertMessage);
+  } else {
+    assert.strictEqual(innerHTML, message, assertMessage);
+  }
+};

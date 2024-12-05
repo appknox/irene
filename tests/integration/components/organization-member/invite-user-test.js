@@ -25,7 +25,7 @@ module(
   function (hooks) {
     setupRenderingTest(hooks);
     setupMirage(hooks);
-    setupIntl(hooks);
+    setupIntl(hooks, 'en');
 
     test('it renders invite-user', async function (assert) {
       await render(hbs`<OrganizationMember::InviteUser />`);

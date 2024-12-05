@@ -9,7 +9,7 @@ import { hbs } from 'ember-cli-htmlbars';
 module('Integration | Component | notifications-page/header', function (hooks) {
   setupRenderingTest(hooks);
   setupMirage(hooks);
-  setupIntl(hooks);
+  setupIntl(hooks, 'en');
 
   class AkNotificationsServiceStub extends Service {
     get notifications() {

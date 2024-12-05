@@ -7,6 +7,8 @@ import { setupIntl, t } from 'ember-intl/test-support';
 import Service from '@ember/service';
 import { Response } from 'miragejs';
 
+import { compareInnerHTMLWithIntlTranslation } from 'irene/tests/test-utils';
+
 class NotificationsStub extends Service {
   errorMsg = null;
   successMsg = null;
@@ -44,7 +46,7 @@ module(
   function (hooks) {
     setupRenderingTest(hooks);
     setupMirage(hooks);
-    setupIntl(hooks);
+    setupIntl(hooks, 'en');
 
     hooks.beforeEach(async function () {
       this.owner.register('service:notifications', NotificationsStub);
@@ -176,6 +178,8 @@ module(
     });
 
     test('it shows parameter name errors in inputType textfield helper if thrown', async function (assert) {
+      assert.expect(4);
+
       const duplicateNameError = 'Name already exists';
 
       this.server.post(
@@ -212,11 +216,10 @@ module(
 
       await triggerEvent(selectors.inputTypeErrorTooltip, 'mouseenter');
 
-      assert
-        .dom(selectors.dupInputTypeErrorText)
-        .containsText(
-          t('dastAutomation.paramTypeDupText', { type: this.inputType })
-        );
+      compareInnerHTMLWithIntlTranslation(assert, {
+        selector: selectors.dupInputTypeErrorText,
+        message: t('dastAutomation.paramTypeDupText', { type: this.inputType }),
+      });
     });
 
     test('it clears input type and value textfields onClear button click', async function (assert) {

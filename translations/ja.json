@@ -109,7 +109,7 @@
   },
   "appMonitoringModule": {
     "locatedIn": "Located In",
-    "initiateUploadComingSoon": " App Store integration will be released soon. For now, please upload the app binary.",
+    "initiateUploadComingSoon": "App Store integration will be released soon. For now, please upload the app binary.",
     "lastUploadAttemptText": "Upload was last attempted on",
     "retryUpload": "Retry Upload",
     "checkDetails": "Check Details",
@@ -300,7 +300,7 @@
     "automationScenarios": "Automation Scenarios",
     "scenarioListDesc": "Create multiple scenarios and configure them with the necessary settings for utilization in the automation of Dynamic Application Security Testing (DAST)",
     "deleteDefaultScenarioInfo": "You cannot delete a default scenario.",
-    "inputTypeColumnHeaderInfo": "<strong>Example values for Input Type</strong> are <br /> Username, Password or Email ID etc...",
+    "inputTypeColumnHeaderInfo": "<strong>Example values for Input Type</strong> are <br> Username, Password or Email ID etc...",
     "paramTypeDupText": "<strong>Input type - \"{type}\"</strong> already exists. Kindly use a different input type.",
     "inputValue": "Input Value",
     "inputType": "Input Type",

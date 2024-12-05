@@ -6,7 +6,7 @@ import { hbs } from 'ember-cli-htmlbars';
 
 module('Integration | Component | confirm-box', function (hooks) {
   setupRenderingTest(hooks);
-  setupIntl(hooks);
+  setupIntl(hooks, 'en');
 
   test('it renders confirm-box', async function (assert) {
     this.setProperties({
