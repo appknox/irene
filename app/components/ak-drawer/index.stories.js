@@ -14,12 +14,16 @@ const Template = (args) => {
     handleClose() {
       this.set('open', false);
     },
+    init() {
+      this._super(...arguments);
+      this.boundHandleOpen = this.handleOpen.bind(this);
+      this.boundHandleClose = this.handleClose.bind(this);
+    },
   };
 
   return {
     template: hbs`
-        {{!-- template-lint-disable no-action --}}
-        <AkButton {{on 'click' (action this.handleOpen)}}>
+        <AkButton {{on 'click' this.boundHandleOpen}}>
             Open drawer
         </AkButton>
 
@@ -27,7 +31,7 @@ const Template = (args) => {
             @anchor={{this.anchor}} 
             @open={{this.open}} 
             @disableBackdropClick={{this.disableBackdropClick}} 
-            @onClose={{action this.handleClose}}>
+            @onClose={{this.boundHandleClose}}>
                 <div {{style (hash width="250px")}} />
         </AkDrawer>
   `,

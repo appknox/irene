@@ -83,6 +83,11 @@ const actions = {
   calculatePadding(treeDepth) {
     return `${(treeDepth + 1) * 0.9286}em`;
   },
+  init() {
+    this._super(...arguments);
+    this.boundOnExpand = this.onExpand.bind(this);
+    this.boundOnCheck = this.onCheck.bind(this);
+  },
 };
 
 const Template = (args) => ({
@@ -92,8 +97,8 @@ const Template = (args) => ({
       @expanded={{this.expanded}}
       @cascade={{this.cascade}}
       @checked={{this.checked}}
-      @onCheck={{action this.onCheck}}
-      @onExpand={{action this.onExpand}}
+      @onCheck={{this.boundOnCheck}}
+      @onExpand={{this.boundOnExpand}}
       as |node tree|
     >
       <AkStack @alignItems="center" {{style paddingLeft=(this.calculatePadding node.treeDepth)}}>

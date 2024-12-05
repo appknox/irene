@@ -13,6 +13,11 @@ const actions = {
   handleClose() {
     this.set('anchorRef', null);
   },
+  init() {
+    this._super(...arguments);
+    this.boundHandleMoreClick = this.handleMoreClick.bind(this);
+    this.boundHandleClose = this.handleClose.bind(this);
+  },
 };
 
 const styles = {
@@ -27,10 +32,9 @@ const styles = {
 
 const Template = (args) => ({
   template: hbs`
-    {{!-- template-lint-disable no-action --}}
     <AkTypography @color="textSecondary" @gutterBottom={{true}}>Experiment with me</AkTypography>
     
-    <AkIconButton @variant="outlined" {{on 'click' (action this.handleMoreClick)}}>
+    <AkIconButton @variant="outlined" {{on 'click' this.boundHandleMoreClick}}>
         <AkIcon @iconName="more-vert" />
     </AkIconButton>
 
@@ -42,9 +46,9 @@ const Template = (args) => ({
       @arrow={{this.arrow}} 
       @arrowColor={{this.arrowColor}}
       @hasBackdrop={{this.hasBackdrop}} 
-      @onBackdropClick={{action this.handleClose}}
+      @onBackdropClick={{this.boundHandleClose}}
       @clickOutsideToClose={{this.clickOutsideToClose}}
-      @closeHandler={{action this.handleClose}}
+      @closeHandler={{this.boundHandleClose}}
       >
         <div {{style this.styles.container}} class="p-2">
             <AkTypography>I am inside a popover</AkTypography>

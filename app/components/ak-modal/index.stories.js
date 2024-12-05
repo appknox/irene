@@ -13,12 +13,16 @@ export const actionsData = {
   onClose: function () {
     this.set('showModal', false);
   },
+  init() {
+    this._super(...arguments);
+    this.boundHandleOpenModal = this.openModal.bind(this);
+    this.boundHandleClose = this.onClose.bind(this);
+  },
 };
 
 const Template = (args) => ({
   template: hbs`
-    {{!-- template-lint-disable no-action --}}
-    <AkButton {{on 'click' (action this.openModal)}}>Open Modal</AkButton>
+    <AkButton {{on 'click' this.boundHandleOpenModal}}>Open Modal</AkButton>
 
     {{#if this.showModal}}
         <AkModal
@@ -27,7 +31,7 @@ const Template = (args) => ({
             @disableClose={{this.disableClose}}
             @disableOverlayClick={{this.disableOverlayClick}}
             @blurOverlay={{this.blurOverlay}}
-            @onClose={{action this.onClose}}
+            @onClose={{this.boundHandleClose}}
             >
             <div class='flex-column flex-align-center flex-justify-center'>
                 <AkTypography>

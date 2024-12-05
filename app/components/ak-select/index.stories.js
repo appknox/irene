@@ -27,15 +27,18 @@ const actions = {
   handleSelectChange(selected) {
     this.set('selected', selected);
   },
+  init() {
+    this._super(...arguments);
+    this.boundHandleSelectChange = this.handleSelectChange.bind(this);
+  },
 };
 
 const Template = (args) => ({
   template: hbs`
-    {{!-- template-lint-disable no-action --}}
     {{!-- renderInPlace set true to work with storybook --}}
     <div class="m-2 w-4/12">
       <AkSelect 
-        @onChange={{action this.handleSelectChange}} 
+        @onChange={{this.boundHandleSelectChange}} 
         @options={{this.selectItems}} 
         @selected={{this.selected}}
         @renderInPlace={{true}} 
@@ -58,11 +61,10 @@ Default.args = selectCommonArgs;
 
 const SelectMultipleTemplate = (args) => ({
   template: hbs`
-    {{!-- template-lint-disable no-action --}}
     {{!-- renderInPlace set true to work with storybook --}}
     <div class="m-2 w-4/12">
       <AkSelect 
-        @onChange={{action this.handleSelectChange}} 
+        @onChange={{this.boundHandleSelectChange}} 
         @options={{this.selectItems}} 
         @selected={{this.selected}}
         @renderInPlace={{true}} 
