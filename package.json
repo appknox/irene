@@ -32,7 +32,8 @@
     "storybook": "storybook dev -p 6006",
     "storybook-dev": "concurrently \"npm:start\" \"npm:storybook\" --names \"dev-server,storybook\"",
     "prebuild-storybook": "ember build",
-    "build-storybook": "storybook build"
+    "build-storybook": "storybook build",
+    "netlify:deploy": "netlify deploy --dir dist"
   },
   "devDependencies": {
     "@appknox/ember-pace": "^1.0.1",
@@ -170,6 +171,7 @@
     "loader.js": "^4.7.0",
     "miragejs": "^0.1.48",
     "mock-socket": "9.0.8",
+    "netlify-cli": "^17.37.2",
     "pace-progressbar": "1.0.9",
     "postcss": "^8.4.39",
     "prettier": "^3.2.5",

@@ -1,0 +1,22 @@
+name: Deploy WhiteLabel
+on:
+  push:
+    branches:
+      - main
+      - master
+
+concurrency:
+  group: ${{ github.workflow }}-ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  trigger_deploy:
+    name: Trigger WhiteLabel Deployment
+    runs-on: [ubuntu-latest]
+    steps:
+      - uses: convictional/trigger-workflow-and-wait@v1.6.5
+        with:
+          owner: appknox
+          repo: whitelabel-deployment
+          github_token: ${{ secrets.WHITELABEL_DEPLOYMENT_ACCESS_TOKEN }}
+          workflow_file_name: deploy.yaml
