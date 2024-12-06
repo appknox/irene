@@ -59,20 +59,29 @@
       {{t 'switchTo'}}
     </AkTypography>
 
-    {{#each this.switcherMenuItems as |switcherItem|}}
+    {{#each this.switcherMenuItems as |item index|}}
+      {{#if (not-eq index 0)}}
+        <AkDivider />
+      {{/if}}
+
       <AkLink
         data-test-switcher-popover-item-link
         local-class='switcher-menu-item'
         @underline='none'
-        @route={{switcherItem.route}}
+        @route={{item.route}}
+        target={{if item.openInNewTab '_blank'}}
+        rel={{if item.openInNewTab 'noopener noreferrer'}}
       >
         <AkStack @direction='row' @alignItems='center' @spacing='1'>
-          {{#let (component switcherItem.svg) as |SvgIcon|}}
-            <SvgIcon data-test-side-menu-switcher-modal='{{switcherItem.id}}' />
+          {{#let (component item.svg) as |SvgIcon|}}
+            <SvgIcon
+              local-class='switcher-menu-item-icon'
+              data-test-side-menu-switcher-modal='{{item.id}}'
+            />
           {{/let}}
 
           <AkTypography data-test-side-menu-switcher-modal-switch-to>
-            {{switcherItem.label}}
+            {{item.label}}
           </AkTypography>
         </AkStack>
       </AkLink>

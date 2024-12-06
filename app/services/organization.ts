@@ -8,8 +8,10 @@ import { tracked } from '@glimmer/tracking';
 export default class OrganizationService extends Service {
   @service declare store: Store;
   @service declare notifications: NotificationService;
+  @service declare ajax: any;
 
   @tracked selected: OrganizationModel | null = null;
+  @tracked isSecurityEnabled = false;
 
   get selectedOrgProjectsCount() {
     if (this.selected) {
@@ -17,6 +19,16 @@ export default class OrganizationService extends Service {
     }
 
     return 0;
+  }
+
+  async setSecurityDashboardEnabled() {
+    try {
+      await this.ajax.request('projects', { namespace: 'api/hudson-api' });
+
+      this.isSecurityEnabled = true;
+    } catch (error) {
+      this.isSecurityEnabled = false;
+    }
   }
 
   async load() {
@@ -31,5 +43,7 @@ export default class OrganizationService extends Service {
         ENV.notifications
       );
     }
+
+    await this.setSecurityDashboardEnabled();
   }
 }

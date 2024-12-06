@@ -1380,6 +1380,7 @@
   "searchTeamByName": "Search by team name",
   "security": "セキュリティ",
   "securityDashboard": "Security Dashboard",
+  "securityDashboardDesc": "For security researchers to perform manual assessments (PT)",
   "selectAnyTeam": "チームを選択してください",
   "selectThePath": "Select the path",
   "selectDevice": "デバイスを選択する",

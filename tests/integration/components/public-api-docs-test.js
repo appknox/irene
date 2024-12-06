@@ -137,6 +137,12 @@ module('Integration | Component | public-api-docs', function (hooks) {
       hbs`<PublicApiDocs::ApiEndpoints @data={{this.publicApiData}} />`
     );
 
+    await waitUntil(() => {
+      return find(
+        '[data-test-publicApiDocs-apis-container]'
+      ).textContent.includes(this.apiPathName);
+    });
+
     assert
       .dom('[data-test-publicApiDocs-apis-container]')
       .exists()
@@ -146,6 +152,12 @@ module('Integration | Component | public-api-docs', function (hooks) {
 
   test('it renders schemas', async function (assert) {
     await render(hbs`<PublicApiDocs::Schemas @data={{this.publicApiData}} />`);
+
+    await waitUntil(() => {
+      return find(
+        '[data-test-publicApiDocs-schemas-container]'
+      ).textContent.includes(this.schemaName);
+    });
 
     assert
       .dom('[data-test-publicApiDocs-schemas-container]')

@@ -26,7 +26,7 @@ export default class UserLoginViaUsernamePasswordComponent extends Component<Use
   });
 
   get showLinkContactSupport() {
-    return this.whitelabel.show_contact_support;
+    return this.whitelabel.is_appknox_url;
   }
 }
 
