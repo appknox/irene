@@ -11,7 +11,7 @@ import { riskText } from 'irene/helpers/risk-text';
 module('Integration | Component | analysis-risk/text', function (hooks) {
   setupRenderingTest(hooks);
   setupMirage(hooks);
-  setupIntl(hooks);
+  setupIntl(hooks, 'en');
 
   test.each(
     'it renders risk text for different risk correctly',

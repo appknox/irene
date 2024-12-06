@@ -10,7 +10,7 @@ module(
 
   function (hooks) {
     setupRenderingTest(hooks);
-    setupIntl(hooks);
+    setupIntl(hooks, 'en');
     setupMirage(hooks);
 
     test('it renders', async function (assert) {

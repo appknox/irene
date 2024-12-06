@@ -8,7 +8,7 @@ import { setupMirage } from 'ember-cli-mirage/test-support';
 module('Integration | Helper | am-status-text', function (hooks) {
   setupRenderingTest(hooks);
   setupMirage(hooks);
-  setupIntl(hooks);
+  setupIntl(hooks, 'en');
 
   hooks.beforeEach(async function () {
     this.store = this.owner.lookup('service:store');

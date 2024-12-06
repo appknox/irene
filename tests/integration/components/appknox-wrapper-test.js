@@ -112,7 +112,7 @@ const lowerMenuItems = [
 module('Integration | Component | appknox-wrapper', function (hooks) {
   setupRenderingTest(hooks);
   setupMirage(hooks);
-  setupIntl(hooks);
+  setupIntl(hooks, 'en');
   setupBrowserFakes(hooks, { window: true, localStorage: true });
 
   hooks.beforeEach(async function () {

@@ -19,7 +19,7 @@ module(
   function (hooks) {
     setupRenderingTest(hooks);
     setupMirage(hooks);
-    setupIntl(hooks);
+    setupIntl(hooks, 'en');
 
     hooks.beforeEach(async function () {
       this.sbomProject = this.server.create('sbom-project');

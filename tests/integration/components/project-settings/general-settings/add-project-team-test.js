@@ -16,7 +16,7 @@ module(
   function (hooks) {
     setupRenderingTest(hooks);
     setupMirage(hooks);
-    setupIntl(hooks);
+    setupIntl(hooks, 'en');
 
     hooks.beforeEach(async function () {
       // Server mocks

@@ -9,6 +9,7 @@ import Service from '@ember/service';
 import { selectChoose } from 'ember-power-select/test-support';
 
 import styles from 'irene/components/ak-select/index.scss';
+import { compareInnerHTMLWithIntlTranslation } from 'irene/tests/test-utils';
 
 class NotificationsStub extends Service {
   errorMsg = null;
@@ -37,7 +38,7 @@ module(
   function (hooks) {
     setupRenderingTest(hooks);
     setupMirage(hooks);
-    setupIntl(hooks);
+    setupIntl(hooks, 'en');
 
     hooks.beforeEach(async function () {
       const store = this.owner.lookup('service:store');
@@ -77,6 +78,8 @@ module(
         { allProjects: false, hasProjects: false },
       ],
       async function (assert, { allProjects, hasProjects }) {
+        assert.expect(allProjects ? 7 : !allProjects && hasProjects ? 13 : 12);
+
         this.serviceAccount.allProjects = allProjects;
 
         this.server.get(
@@ -127,15 +130,13 @@ module(
           (opt) => opt.value === this.serviceAccount.allProjects
         );
 
-        assert
-          .dom(
-            '[data-test-serviceAccountSection-selectProject-selectedProjectAccess]'
-          )
-          .hasText(
-            t('serviceAccountModule.selectedProjectAccess', {
-              projectAccess: selectedProjectAccess?.label,
-            })
-          );
+        compareInnerHTMLWithIntlTranslation(assert, {
+          selector:
+            '[data-test-serviceAccountSection-selectProject-selectedProjectAccess]',
+          message: t('serviceAccountModule.selectedProjectAccess', {
+            projectAccess: selectedProjectAccess?.label,
+          }),
+        });
 
         if (allProjects) {
           assert
@@ -239,6 +240,8 @@ module(
       'it should update project access type',
       [false, true],
       async function (assert, fail) {
+        assert.expect(fail ? 20 : 17);
+
         this.server.get(
           '/service_accounts/:id/service_account_projects',
           () => {
@@ -287,15 +290,13 @@ module(
           (opt) => opt.value === this.serviceAccount.allProjects
         );
 
-        assert
-          .dom(
-            '[data-test-serviceAccountSection-selectProject-selectedProjectAccess]'
-          )
-          .hasText(
-            t('serviceAccountModule.selectedProjectAccess', {
-              projectAccess: selectedProjectAccess?.label,
-            })
-          );
+        compareInnerHTMLWithIntlTranslation(assert, {
+          selector:
+            '[data-test-serviceAccountSection-selectProject-selectedProjectAccess]',
+          message: t('serviceAccountModule.selectedProjectAccess', {
+            projectAccess: selectedProjectAccess?.label,
+          }),
+        });
 
         assert.dom('[data-test-serviceAccountSection-footer]').doesNotExist();
 
@@ -366,15 +367,13 @@ module(
             t('serviceAccountModule.editSuccessMsg')
           );
 
-          assert
-            .dom(
-              '[data-test-serviceAccountSection-selectProject-selectedProjectAccess]'
-            )
-            .hasText(
-              t('serviceAccountModule.selectedProjectAccess', {
-                projectAccess: optionToSelect?.label,
-              })
-            );
+          compareInnerHTMLWithIntlTranslation(assert, {
+            selector:
+              '[data-test-serviceAccountSection-selectProject-selectedProjectAccess]',
+            message: t('serviceAccountModule.selectedProjectAccess', {
+              projectAccess: optionToSelect?.label,
+            }),
+          });
 
           assert
             .dom('[data-test-serviceAccountSection-selectProject-actionBtn]')
@@ -569,6 +568,8 @@ module(
       'it should remove project from service account',
       [false, true],
       async function (assert, fail) {
+        assert.expect(fail ? 19 : 16);
+
         this.serviceAccount.updateValues({
           all_projects: false,
         });
@@ -657,13 +658,13 @@ module(
           this.serviceAccountProjects[0].id
         );
 
-        assert
-          .dom('[data-test-serviceAccount-confirmDrawer-removeConfirmText]')
-          .hasText(
-            t('serviceAccountModule.removeProjectConfirmText', {
-              projectName: serviceAccountProject.project.get('packageName'),
-            })
-          );
+        compareInnerHTMLWithIntlTranslation(assert, {
+          selector:
+            '[data-test-serviceAccount-confirmDrawer-removeConfirmText]',
+          message: t('serviceAccountModule.removeProjectConfirmText', {
+            projectName: serviceAccountProject.project.get('packageName'),
+          }),
+        });
 
         assert
           .dom('[data-test-serviceAccount-confirmDrawer-confirmBtn]')

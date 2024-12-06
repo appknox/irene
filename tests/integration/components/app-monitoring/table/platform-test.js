@@ -10,7 +10,7 @@ module(
   function (hooks) {
     setupRenderingTest(hooks);
     setupMirage(hooks);
-    setupIntl(hooks);
+    setupIntl(hooks, 'en');
 
     test('It renders with the right icon in the platform column', async function (assert) {
       // Server mocks

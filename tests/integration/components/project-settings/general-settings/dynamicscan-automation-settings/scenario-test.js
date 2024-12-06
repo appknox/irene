@@ -1,5 +1,6 @@
 import { module, test } from 'qunit';
 import { setupRenderingTest } from 'ember-qunit';
+
 import {
   click,
   fillIn,
@@ -10,11 +11,14 @@ import {
   waitFor,
   waitUntil,
 } from '@ember/test-helpers';
+
 import { hbs } from 'ember-cli-htmlbars';
 import { setupMirage } from 'ember-cli-mirage/test-support';
 import { setupIntl, t } from 'ember-intl/test-support';
 import Service from '@ember/service';
 import { Response } from 'miragejs';
+
+import { compareInnerHTMLWithIntlTranslation } from 'irene/tests/test-utils';
 
 class NotificationsStub extends Service {
   errorMsg = null;
@@ -79,7 +83,7 @@ module(
   function (hooks) {
     setupRenderingTest(hooks);
     setupMirage(hooks);
-    setupIntl(hooks);
+    setupIntl(hooks, 'en');
 
     hooks.beforeEach(async function () {
       // Server mocks
@@ -214,6 +218,8 @@ module(
     });
 
     test('it renders', async function (assert) {
+      assert.expect(8);
+
       this.server.get(
         '/v2/projects/:projectId/scan_parameter_groups',
         function (schema, request) {
@@ -266,10 +272,10 @@ module(
         .exists()
         .containsText(t('dastAutomation.automationScenarios'));
 
-      assert
-        .dom(selectors.scenariosListDesc)
-        .exists()
-        .containsText(t('dastAutomation.scenarioListDesc'));
+      compareInnerHTMLWithIntlTranslation(assert, {
+        selector: selectors.scenariosListDesc,
+        message: t('dastAutomation.scenarioListDesc'),
+      });
 
       assert
         .dom(selectors.addScenarioBtn)

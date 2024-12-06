@@ -11,7 +11,7 @@ import { NotificationMap } from 'irene/components/notifications-page/notificatio
 module('Integration | Component | notifications-page', function (hooks) {
   setupRenderingTest(hooks);
   setupMirage(hooks);
-  setupIntl(hooks);
+  setupIntl(hooks, 'en');
 
   hooks.beforeEach(async function () {
     class NotificationMesaageTest extends Component {}

@@ -11,7 +11,7 @@ module(
   'Integration | Component | partner/credit-transfer/credit-transfer-input',
   function (hooks) {
     setupRenderingTest(hooks);
-    setupIntl(hooks);
+    setupIntl(hooks, 'en');
 
     test('it renders', async function (assert) {
       this.set('partnerPlan', {
@@ -34,7 +34,7 @@ module(
       assert
         .dom(`[data-test-transferable-credits]`)
         .hasText(
-          `${this.partnerPlan.scansLeft} t:pluralScans:("itemCount":${this.partnerPlan.scansLeft})`
+          `${this.partnerPlan.scansLeft} ${t('pluralScans', { itemCount: this.partnerPlan.scansLeft })}`
         );
       assert.dom(`[data-test-client-title]`).hasText(this.clientName);
       assert

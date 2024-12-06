@@ -4,19 +4,23 @@ import { setupIntl, t } from 'ember-intl/test-support';
 import { setupRenderingTest } from 'ember-qunit';
 import { render } from '@ember/test-helpers';
 import { hbs } from 'ember-cli-htmlbars';
+
 import { NotificationMap } from 'irene/components/notifications-page/notification_map';
+import { compareInnerHTMLWithIntlTranslation } from 'irene/tests/test-utils';
 
 module(
   'Integration | Component | notifications-page/messages/nf-str-url-upload-success',
   function (hooks) {
     setupRenderingTest(hooks);
     setupMirage(hooks);
-    setupIntl(hooks);
+    setupIntl(hooks, 'en');
 
     const messageCode = 'NF_STR_URL_UPLOAD_SUCCESS';
     const ContextClass = NotificationMap[messageCode].context;
 
     test('it renders', async function (assert) {
+      assert.expect(8);
+
       this.notification = this.server.create('nf-in-app-notification', {
         hasRead: true,
         messageCode,
@@ -37,19 +41,25 @@ module(
         hbs`<NotificationsPage::Messages::NfStrUrlUploadSuccess @notification={{this.notification}} @context={{this.context}}/>`
       );
 
-      assert
-        .dom('[data-test-nf-str-url-upload-success-primary-message]')
-        .exists()
-        .hasText(
-          t('notificationModule.messages.nf-str-url-upload-success.prefix', {
+      compareInnerHTMLWithIntlTranslation(assert, {
+        selector: '[data-test-nf-str-url-upload-success-primary-message]',
+        message: t(
+          'notificationModule.messages.nf-str-url-upload-success.prefix',
+          {
             platform_display: this.context.platform_display,
             package_name: this.context.package_name,
             store_name: t('googlePlayStore'),
-          })
-            .concat(` ${t('fileID')} ${this.context.file_id} `)
-            .concat(
-              t('notificationModule.messages.nf-str-url-upload-success.suffix')
-            )
+          }
+        ),
+        doIncludesCheck: true,
+      });
+
+      assert
+        .dom('[data-test-nf-str-url-upload-success-primary-message]')
+        .exists()
+        .containsText(`${t('fileID')} ${this.context.file_id}`)
+        .containsText(
+          t('notificationModule.messages.nf-str-url-upload-success.suffix')
         );
 
       assert

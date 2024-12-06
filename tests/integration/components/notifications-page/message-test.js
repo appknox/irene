@@ -13,7 +13,7 @@ module(
   function (hooks) {
     setupRenderingTest(hooks);
     setupMirage(hooks);
-    setupIntl(hooks);
+    setupIntl(hooks, 'en');
 
     test('it should render error component for non registered messageCode', async function (assert) {
       this.notification = this.server.create('nf-in-app-notification', {

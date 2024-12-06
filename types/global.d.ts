@@ -5,6 +5,7 @@ import type EmberConcurrencyRegistry from 'ember-concurrency/template-registry';
 import type EmberPowerSelectRegistry from 'ember-power-select/template-registry';
 import type EmberBasicDropdownRegistry from 'ember-basic-dropdown/template-registry';
 import type EmberTableRegistry from 'ember-table/template-registry';
+import type EmberIntlRegistry from 'ember-intl/template-registry';
 import type AkSvgRegistry from 'ak-svg';
 
 // Types for compiled templates
@@ -21,7 +22,8 @@ declare module '@glint/environment-ember-loose/registry' {
       EmberTableRegistry,
       EmberConcurrencyRegistry,
       EmberPowerSelectRegistry,
-      EmberBasicDropdownRegistry {
+      EmberBasicDropdownRegistry,
+      EmberIntlRegistry {
     element: HelperLike<{
       Args: { Positional: [tagName: string] };
       Return: ComponentLike<{
@@ -49,17 +51,6 @@ declare module '@glint/environment-ember-loose/registry' {
         Named: {
           date?: Date;
           format?: string;
-        };
-      };
-      Return: string;
-    }>;
-
-    t: HelperLike<{
-      Args: {
-        Positional: [string];
-        Named: {
-          [key: string]: unknown;
-          htmlSafe?: boolean;
         };
       };
       Return: string;

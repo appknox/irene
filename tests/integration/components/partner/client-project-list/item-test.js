@@ -11,7 +11,7 @@ module(
   function (hooks) {
     setupRenderingTest(hooks);
     setupMirage(hooks);
-    setupIntl(hooks);
+    setupIntl(hooks, 'en');
 
     test('it should show project details', async function (assert) {
       this.set('project', this.server.create('partner/partnerclient-project'));

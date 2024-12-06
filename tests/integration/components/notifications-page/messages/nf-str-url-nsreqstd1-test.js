@@ -4,14 +4,16 @@ import { setupIntl, t } from 'ember-intl/test-support';
 import { setupRenderingTest } from 'ember-qunit';
 import { click, render } from '@ember/test-helpers';
 import { hbs } from 'ember-cli-htmlbars';
+
 import { NotificationMap } from 'irene/components/notifications-page/notification_map';
+import { compareInnerHTMLWithIntlTranslation } from 'irene/tests/test-utils';
 
 module(
   'Integration | Component | notifications-page/messages/nf-str-url-nsreqstd1',
   function (hooks) {
     setupRenderingTest(hooks);
     setupMirage(hooks);
-    setupIntl(hooks);
+    setupIntl(hooks, 'en');
 
     const ContextClass = NotificationMap['NF_STR_URL_NSREQSTD1'].context;
 
@@ -39,6 +41,8 @@ module(
     });
 
     test('it should show approved state if namespace is approved and you if approver is current user', async function (assert) {
+      assert.expect(6);
+
       const organization = this.server.schema.organizations.first();
       const currentUser = this.server.schema.currentUsers.first();
       const user = this.server.schema.users.find(currentUser.id);
@@ -82,20 +86,25 @@ module(
 
       this.context = this.notification.context;
 
-      await render(hbs`<NotificationsPage::Messages::NfStrUrlNsreqstd1 @notification={{this.notification}}
-      @context={{this.context}}/>`);
+      await render(hbs`
+        <NotificationsPage::Messages::NfStrUrlNsreqstd1 
+          @notification={{this.notification}}
+          @context={{this.context}}
+        />
+      `);
 
       assert
         .dom('[data-test-namespaceMessage-title]')
         .hasText(t('approvalRequest'));
 
-      assert.dom('[data-test-namespaceMessage-primary-message]').hasText(
-        t('notificationModule.messages.nf-str-url-nsreqstd1', {
+      compareInnerHTMLWithIntlTranslation(assert, {
+        selector: '[data-test-namespaceMessage-primary-message]',
+        message: t('notificationModule.messages.nf-str-url-nsreqstd1', {
           requester_username: 'appknox_requester',
           platform_display: 'android',
           namespace_value: 'com.mfva.test',
-        })
-      );
+        }),
+      });
 
       assert.dom('[data-test-namespaceMessage-approved-message]').hasText(
         t('notificationModule.namespaceMessage.approved', {
@@ -112,6 +121,8 @@ module(
     });
 
     test('it should show approved state if namespace is approved', async function (assert) {
+      assert.expect(6);
+
       const organization = this.server.schema.organizations.first();
 
       const org_user_requestedby = this.server.create('organization-user', {
@@ -153,20 +164,25 @@ module(
 
       this.context = this.notification.context;
 
-      await render(hbs`<NotificationsPage::Messages::NfStrUrlNsreqstd1 @notification={{this.notification}}
-      @context={{this.context}}/>`);
+      await render(hbs`
+        <NotificationsPage::Messages::NfStrUrlNsreqstd1 
+          @notification={{this.notification}}
+          @context={{this.context}}
+        />
+      `);
 
       assert
         .dom('[data-test-namespaceMessage-title]')
         .hasText(t('approvalRequest'));
 
-      assert.dom('[data-test-namespaceMessage-primary-message]').hasText(
-        t('notificationModule.messages.nf-str-url-nsreqstd1', {
+      compareInnerHTMLWithIntlTranslation(assert, {
+        selector: '[data-test-namespaceMessage-primary-message]',
+        message: t('notificationModule.messages.nf-str-url-nsreqstd1', {
           requester_username: 'appknox_requester',
           platform_display: 'android',
           namespace_value: 'com.mfva.test',
-        })
-      );
+        }),
+      });
 
       assert.dom('[data-test-namespaceMessage-approved-message]').hasText(
         t('notificationModule.namespaceMessage.approved', {
@@ -183,6 +199,8 @@ module(
     });
 
     test('it should show rejected state if namespace is rejected', async function (assert) {
+      assert.expect(6);
+
       this.notification = this.server.create('nf-in-app-notification', {
         hasRead: true,
         messageCode: 'NF_STR_URL_NSREQSTD1',
@@ -199,20 +217,25 @@ module(
 
       this.context = this.notification.context;
 
-      await render(hbs`<NotificationsPage::Messages::NfStrUrlNsreqstd1 @notification={{this.notification}}
-      @context={{this.context}}/>`);
+      await render(hbs`
+        <NotificationsPage::Messages::NfStrUrlNsreqstd1 
+          @notification={{this.notification}}
+          @context={{this.context}}
+        />
+      `);
 
       assert
         .dom('[data-test-namespaceMessage-title]')
         .hasText(t('approvalRequest'));
 
-      assert.dom('[data-test-namespaceMessage-primary-message]').hasText(
-        t('notificationModule.messages.nf-str-url-nsreqstd1', {
+      compareInnerHTMLWithIntlTranslation(assert, {
+        selector: '[data-test-namespaceMessage-primary-message]',
+        message: t('notificationModule.messages.nf-str-url-nsreqstd1', {
           requester_username: 'appknox_requester',
           platform_display: 'android',
           namespace_value: 'com.mfva.test',
-        })
-      );
+        }),
+      });
 
       assert
         .dom('[data-test-namespaceMessage-rejected-message]')
@@ -227,6 +250,8 @@ module(
     });
 
     test('it should show approve and reject for unmoderated namespace', async function (assert) {
+      assert.expect(8);
+
       const organization = this.server.schema.organizations.first();
 
       const org_user_requestedby = this.server.create('organization-user', {
@@ -262,20 +287,25 @@ module(
 
       this.context = this.notification.context;
 
-      await render(hbs`<NotificationsPage::Messages::NfStrUrlNsreqstd1 @notification={{this.notification}}
-      @context={{this.context}}/>`);
+      await render(hbs`
+        <NotificationsPage::Messages::NfStrUrlNsreqstd1 
+          @notification={{this.notification}}
+          @context={{this.context}}
+        />
+      `);
 
       assert
         .dom('[data-test-namespaceMessage-title]')
         .hasText(t('approvalRequest'));
 
-      assert.dom('[data-test-namespaceMessage-primary-message]').hasText(
-        t('notificationModule.messages.nf-str-url-nsreqstd1', {
+      compareInnerHTMLWithIntlTranslation(assert, {
+        selector: '[data-test-namespaceMessage-primary-message]',
+        message: t('notificationModule.messages.nf-str-url-nsreqstd1', {
           requester_username: 'appknox_requester',
           platform_display: 'android',
           namespace_value: 'com.mfva.test',
-        })
-      );
+        }),
+      });
 
       assert.dom('[data-test-namespaceMessage-approve-button]').exists();
 
@@ -293,6 +323,8 @@ module(
     });
 
     test('it should approve namespace when approve is clicked for unmoderated namespace', async function (assert) {
+      assert.expect(13);
+
       const organization = this.server.schema.organizations.first();
 
       const org_user_requestedby = this.server.create('organization-user', {
@@ -328,20 +360,25 @@ module(
 
       this.context = this.notification.context;
 
-      await render(hbs`<NotificationsPage::Messages::NfStrUrlNsreqstd1 @notification={{this.notification}}
-      @context={{this.context}}/>`);
+      await render(hbs`
+        <NotificationsPage::Messages::NfStrUrlNsreqstd1 
+          @notification={{this.notification}}
+          @context={{this.context}}
+        />
+      `);
 
       assert
         .dom('[data-test-namespaceMessage-title]')
         .hasText(t('approvalRequest'));
 
-      assert.dom('[data-test-namespaceMessage-primary-message]').hasText(
-        t('notificationModule.messages.nf-str-url-nsreqstd1', {
+      compareInnerHTMLWithIntlTranslation(assert, {
+        selector: '[data-test-namespaceMessage-primary-message]',
+        message: t('notificationModule.messages.nf-str-url-nsreqstd1', {
           requester_username: 'appknox_requester',
           platform_display: 'android',
           namespace_value: 'com.mfva.test',
-        })
-      );
+        }),
+      });
 
       assert
         .dom('[data-test-namespaceMessage-viewNamespacelink]')
@@ -361,23 +398,27 @@ module(
       assert.dom('[data-test-namespaceMessage-approve-button]').doesNotExist();
       assert.dom('[data-test-namespaceMessage-reject-button]').doesNotExist();
 
-      assert.dom('[data-test-namespaceMessage-primary-message]').hasText(
-        t('notificationModule.messages.nf-str-url-nsreqstd1', {
+      compareInnerHTMLWithIntlTranslation(assert, {
+        selector: '[data-test-namespaceMessage-primary-message]',
+        message: t('notificationModule.messages.nf-str-url-nsreqstd1', {
           requester_username: 'appknox_requester',
           platform_display: 'android',
           namespace_value: 'com.mfva.test',
-        })
-      );
+        }),
+      });
 
       assert.dom('[data-test-namespaceMessage-approved-message]').hasText(
         t('notificationModule.namespaceMessage.approved', {
           moderaterName: 'You',
         })
       );
+
       assert.dom('[data-test-namespaceMessage-approved-icon]').exists();
     });
 
     test('it should reject namespace when reject is clicked for unmoderated namespace', async function (assert) {
+      assert.expect(13);
+
       const organization = this.server.schema.organizations.first();
 
       const org_user_requestedby = this.server.create('organization-user', {
@@ -413,20 +454,25 @@ module(
 
       this.context = this.notification.context;
 
-      await render(hbs`<NotificationsPage::Messages::NfStrUrlNsreqstd1 @notification={{this.notification}}
-      @context={{this.context}}/>`);
+      await render(hbs`
+        <NotificationsPage::Messages::NfStrUrlNsreqstd1 
+          @notification={{this.notification}}
+          @context={{this.context}}
+        />
+      `);
 
       assert
         .dom('[data-test-namespaceMessage-title]')
         .hasText(t('approvalRequest'));
 
-      assert.dom('[data-test-namespaceMessage-primary-message]').hasText(
-        t('notificationModule.messages.nf-str-url-nsreqstd1', {
+      compareInnerHTMLWithIntlTranslation(assert, {
+        selector: '[data-test-namespaceMessage-primary-message]',
+        message: t('notificationModule.messages.nf-str-url-nsreqstd1', {
           requester_username: 'appknox_requester',
           platform_display: 'android',
           namespace_value: 'com.mfva.test',
-        })
-      );
+        }),
+      });
 
       assert
         .dom('[data-test-namespaceMessage-viewNamespacelink]')
@@ -446,13 +492,14 @@ module(
       assert.dom('[data-test-namespaceMessage-approve-button]').doesNotExist();
       assert.dom('[data-test-namespaceMessage-reject-button]').doesNotExist();
 
-      assert.dom('[data-test-namespaceMessage-primary-message]').hasText(
-        t('notificationModule.messages.nf-str-url-nsreqstd1', {
+      compareInnerHTMLWithIntlTranslation(assert, {
+        selector: '[data-test-namespaceMessage-primary-message]',
+        message: t('notificationModule.messages.nf-str-url-nsreqstd1', {
           requester_username: 'appknox_requester',
           platform_display: 'android',
           namespace_value: 'com.mfva.test',
-        })
-      );
+        }),
+      });
 
       assert
         .dom('[data-test-namespaceMessage-rejected-message]')

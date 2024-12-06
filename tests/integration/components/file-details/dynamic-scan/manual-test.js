@@ -12,6 +12,7 @@ import { faker } from '@faker-js/faker';
 import ENUMS from 'irene/enums';
 import { deviceType } from 'irene/helpers/device-type';
 import styles from 'irene/components/ak-select/index.scss';
+import { compareInnerHTMLWithIntlTranslation } from 'irene/tests/test-utils';
 
 const classes = {
   dropdown: styles['ak-select-dropdown'],
@@ -67,7 +68,7 @@ module(
   function (hooks) {
     setupRenderingTest(hooks);
     setupMirage(hooks);
-    setupIntl(hooks);
+    setupIntl(hooks, 'en');
 
     hooks.beforeEach(async function () {
       // Server mocks
@@ -299,6 +300,8 @@ module(
         assert,
         { withApiProxySetting, withApiScan, withAutomatedDynamicScan }
       ) {
+        assert.expect();
+
         this.file.dynamicStatus = ENUMS.DYNAMIC_STATUS.NONE;
         this.file.isDynamicDone = false;
         this.file.isActive = true;
@@ -380,7 +383,7 @@ module(
               type: t('modalCard.dynamicScan.osVersion'),
               value: `${this.file.project.get('platformDisplay')} ${
                 this.file.minOsVersion
-              } t:modalCard.dynamicScan.orAbove:()`,
+              } ${t('modalCard.dynamicScan.orAbove')}`,
             },
             this.file.supportedCpuArchitectures && {
               type: t('modalCard.dynamicScan.processorArchitecture'),
@@ -437,7 +440,7 @@ module(
           .dom(
             `[data-test-projectPreference-deviceTypeSelect] .${classes.trigger}`
           )
-          .hasText(`t:${deviceType([this.devicePreference.device_type])}:()`);
+          .hasText(t(deviceType([this.devicePreference.device_type])));
 
         assert
           .dom(
@@ -482,11 +485,11 @@ module(
             )
             .exists();
 
-          assert
-            .dom(
-              '[data-test-fileDetails-dynamicScanDrawerOld-apiSettingScanDescription]'
-            )
-            .hasText(t('modalCard.dynamicScan.apiScanDescription'));
+          compareInnerHTMLWithIntlTranslation(assert, {
+            selector:
+              '[data-test-fileDetails-dynamicScanDrawerOld-apiSettingScanDescription]',
+            message: t('modalCard.dynamicScan.apiScanDescription'),
+          });
 
           assert
             .dom('[data-test-apiFilter-title]')
@@ -615,6 +618,8 @@ module(
     );
 
     test('test add & delete of api filter endpoint', async function (assert) {
+      assert.expect(29);
+
       this.file.dynamicStatus = ENUMS.DYNAMIC_STATUS.NONE;
       this.file.isDynamicDone = false;
       this.file.isActive = true;
@@ -681,11 +686,11 @@ module(
         )
         .exists();
 
-      assert
-        .dom(
-          '[data-test-fileDetails-dynamicScanDrawerOld-apiSettingScanDescription]'
-        )
-        .hasText(t('modalCard.dynamicScan.apiScanDescription'));
+      compareInnerHTMLWithIntlTranslation(assert, {
+        selector:
+          '[data-test-fileDetails-dynamicScanDrawerOld-apiSettingScanDescription]',
+        message: t('modalCard.dynamicScan.apiScanDescription'),
+      });
 
       assert
         .dom('[data-test-apiFilter-title]')
@@ -724,7 +729,7 @@ module(
 
       assert.strictEqual(
         notify.errorMsg,
-        'https://api.example.com t:invalidURL:()'
+        `https://api.example.com ${t('invalidURL')}`
       );
 
       await fillIn('[data-test-apiFilter-apiEndpointInput]', 'api.example.com');

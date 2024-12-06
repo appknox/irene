@@ -37,7 +37,7 @@ class SessionStub extends Service {
 module('Integration | Component | user-login', function (hooks) {
   setupRenderingTest(hooks);
   setupMirage(hooks);
-  setupIntl(hooks);
+  setupIntl(hooks, 'en');
 
   hooks.beforeEach(function () {
     this.owner.register('service:session', SessionStub);

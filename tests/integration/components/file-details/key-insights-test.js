@@ -12,6 +12,8 @@ import {
   getFileComparisonCategories,
 } from 'irene/utils/compare-files';
 
+import { compareInnerHTMLWithIntlTranslation } from 'irene/tests/test-utils';
+
 class NotificationsStub extends Service {
   errorMsg = null;
   successMsg = null;
@@ -27,7 +29,7 @@ class NotificationsStub extends Service {
 module('Integration | Component | file-details/key-insights', function (hooks) {
   setupRenderingTest(hooks);
   setupMirage(hooks);
-  setupIntl(hooks);
+  setupIntl(hooks, 'en');
 
   hooks.beforeEach(async function () {
     this.server.createList('organization', 1);
@@ -84,6 +86,8 @@ module('Integration | Component | file-details/key-insights', function (hooks) {
     'it renders file-details/key-insights',
     [true, false],
     async function (assert, unknownAnalysisStatus) {
+      assert.expect(unknownAnalysisStatus ? 13 : 11);
+
       this.server.get('/profiles/:id/unknown_analysis_status', (_, req) => {
         return { id: req.params.id, status: unknownAnalysisStatus };
       });
@@ -107,14 +111,19 @@ module('Integration | Component | file-details/key-insights', function (hooks) {
 
       const previousFile = await this.file.previousFile;
 
-      assert.dom('[data-test-fileDetailKeyInsights-description]').hasText(
-        `${t('keyInsightDesc.part1')} ${t('fileID')} - ${previousFile.id} ${t(
-          'keyInsightDesc.part2',
-          {
-            uploadedOn: dayjs(previousFile.createdOn).format('DD MMM YYYY'),
-          }
-        )}`
-      );
+      assert
+        .dom('[data-test-fileDetailKeyInsights-description]')
+        .containsText(
+          `${t('keyInsightDesc.part1')} ${t('fileID')} - ${previousFile.id}`
+        );
+
+      compareInnerHTMLWithIntlTranslation(assert, {
+        selector: '[data-test-fileDetailKeyInsights-description]',
+        message: t('keyInsightDesc.part2', {
+          uploadedOn: dayjs(previousFile.createdOn).format('DD MMM YYYY'),
+        }),
+        doIncludesCheck: true,
+      });
 
       const comparison = getFileComparisonCategories(
         compareFiles(this.file, previousFile)

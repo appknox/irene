@@ -17,7 +17,7 @@ class WindowStub extends Service {
 
 module('Integration | Component | attachment-detail', function (hooks) {
   setupRenderingTest(hooks);
-  setupIntl(hooks);
+  setupIntl(hooks, 'en');
   setupMirage(hooks);
 
   hooks.beforeEach(async function () {

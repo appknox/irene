@@ -14,7 +14,7 @@ const selectOptions = [
 
 module('Integration | Component | ak-pagination', function (hooks) {
   setupRenderingTest(hooks);
-  setupIntl(hooks);
+  setupIntl(hooks, 'en');
 
   hooks.beforeEach(async function () {
     this.setProperties({

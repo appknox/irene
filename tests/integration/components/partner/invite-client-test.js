@@ -19,7 +19,7 @@ class RealtimeStub extends Service {
 module('Integration | Component | partner/invite-client', function (hooks) {
   setupRenderingTest(hooks);
   setupMirage(hooks);
-  setupIntl(hooks, 'en');
+  setupIntl(hooks, 'en', 'en');
 
   hooks.beforeEach(function () {
     this.owner.register('service:organization', OrganizationStub);

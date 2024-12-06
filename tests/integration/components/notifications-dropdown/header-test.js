@@ -11,7 +11,7 @@ module(
   function (hooks) {
     setupRenderingTest(hooks);
     setupMirage(hooks);
-    setupIntl(hooks);
+    setupIntl(hooks, 'en');
 
     class AkNotificationsServiceStub extends Service {
       get notifications() {

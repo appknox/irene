@@ -12,7 +12,7 @@ import dayjs from 'dayjs';
 module('Integration | Component | upload-app/status/details', function (hooks) {
   setupRenderingTest(hooks);
   setupMirage(hooks);
-  setupIntl(hooks);
+  setupIntl(hooks, 'en');
 
   hooks.beforeEach(async function () {
     this.server.createList('organization', 1);

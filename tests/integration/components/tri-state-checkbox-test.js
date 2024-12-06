@@ -7,7 +7,7 @@ import styles from 'irene/components/tri-state-checkbox/index.scss';
 
 module('Integration | Component | tri-state-checkbox', function (hooks) {
   setupRenderingTest(hooks);
-  setupIntl(hooks);
+  setupIntl(hooks, 'en');
 
   test('it does not render component if label is not passed', async function (assert) {
     await render(hbs`<TriStateCheckbox />`);

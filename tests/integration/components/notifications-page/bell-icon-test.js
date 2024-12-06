@@ -10,7 +10,7 @@ module(
   function (hooks) {
     setupRenderingTest(hooks);
     setupMirage(hooks);
-    setupIntl(hooks);
+    setupIntl(hooks, 'en');
 
     test('it should render bell icon and should open dropdown on click', async function (assert) {
       await render(hbs`<NotificationsPage::BellIcon />`);

@@ -10,7 +10,7 @@ module(
   function (hooks) {
     setupRenderingTest(hooks);
     setupMirage(hooks);
-    setupIntl(hooks);
+    setupIntl(hooks, 'en');
 
     test('it renders the correct row version', async function (assert) {
       // Server mocks

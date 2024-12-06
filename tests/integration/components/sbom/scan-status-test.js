@@ -10,7 +10,7 @@ import { SbomScanStatus } from 'irene/models/sbom-file';
 module('Integration | Component | sbom/scan-status', function (hooks) {
   setupRenderingTest(hooks);
   setupMirage(hooks);
-  setupIntl(hooks);
+  setupIntl(hooks, 'en');
 
   hooks.beforeEach(async function () {
     const store = this.owner.lookup('service:store');

@@ -4,6 +4,8 @@ import { render, triggerEvent } from '@ember/test-helpers';
 import { hbs } from 'ember-cli-htmlbars';
 import { setupIntl, t } from 'ember-intl/test-support';
 
+import { compareInnerHTMLWithIntlTranslation } from 'irene/tests/test-utils';
+
 const selectors = {
   inputTypeColumnHeaderTooltip:
     '[data-test-projectSettings-scenarioDetails-inputTypeColumnHeader-tooltip]',
@@ -21,9 +23,11 @@ module(
   'Integration | Component | project-settings/view-scenario/details-column-header',
   function (hooks) {
     setupRenderingTest(hooks);
-    setupIntl(hooks);
+    setupIntl(hooks, 'en');
 
     test('it renders', async function (assert) {
+      assert.expect(6);
+
       await render(hbs`
         <ProjectSettings::ViewScenario::DetailsColumnHeader 
           @project={{this.project}} 
@@ -39,10 +43,13 @@ module(
       // Tootlip selector input type column
       await triggerEvent(selectors.inputTypeColumnHeaderTooltip, 'mouseenter');
 
-      assert
-        .dom(selectors.inputTypeColumnHeaderTooltipContent)
-        .exists()
-        .containsText(t('dastAutomation.inputTypeColumnHeaderInfo'));
+      compareInnerHTMLWithIntlTranslation(assert, {
+        element: this.element.querySelector(
+          selectors.inputTypeColumnHeaderTooltipContent
+        ),
+        message: t('dastAutomation.inputTypeColumnHeaderInfo'),
+        doIncludesCheck: true,
+      });
 
       assert.dom(selectors.inputTypeColumnHeaderTooltipIcon).exists();
 

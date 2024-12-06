@@ -14,7 +14,7 @@ module(
   function (hooks) {
     setupRenderingTest(hooks);
     setupMirage(hooks);
-    setupIntl(hooks, 'en');
+    setupIntl(hooks, 'en', 'en');
 
     test('it renders email', async function (assert) {
       this.set('request', {

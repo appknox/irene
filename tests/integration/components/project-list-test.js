@@ -24,7 +24,7 @@ class OrganizationStub extends Service {
 module('Integration | Component | project list', function (hooks) {
   setupRenderingTest(hooks);
   setupMirage(hooks);
-  setupIntl(hooks);
+  setupIntl(hooks, 'en');
 
   hooks.beforeEach(async function () {
     const store = this.owner.lookup('service:store');
@@ -214,10 +214,10 @@ module('Integration | Component | project list', function (hooks) {
   test.each(
     'it renders with correct sortBy selected',
     [
-      [() => `${t('dateUpdated')} ${t('mostRecent')}`, 0],
-      [() => `${t('dateUpdated')} ${t('leastRecent')}`, 1],
-      [() => `${t('dateCreated')} ${t('mostRecent')}`, 2],
-      [() => `${t('dateCreated')} ${t('leastRecent')}`, 3],
+      [() => `${t('dateUpdated')}${t('mostRecent')}`, 0],
+      [() => `${t('dateUpdated')}${t('leastRecent')}`, 1],
+      [() => `${t('dateCreated')}${t('mostRecent')}`, 2],
+      [() => `${t('dateCreated')}${t('leastRecent')}`, 3],
       [() => `${t('packageName')} (Z -> A)`, 4],
       [() => `${t('packageName')} (A -> Z)`, 5],
     ],

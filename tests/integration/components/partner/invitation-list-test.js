@@ -55,7 +55,7 @@ function registrationRequestSerializer(data, many = false) {
 module('Integration | Component | partner/invitation-list', function (hooks) {
   setupRenderingTest(hooks);
   setupMirage(hooks);
-  setupIntl(hooks, 'en');
+  setupIntl(hooks, 'en', 'en');
 
   hooks.beforeEach(function () {
     this.owner.register('service:organization', OrganizationStub);

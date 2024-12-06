@@ -12,7 +12,7 @@ module(
   function (hooks) {
     setupRenderingTest(hooks);
     setupMirage(hooks);
-    setupIntl(hooks);
+    setupIntl(hooks, 'en');
 
     hooks.beforeEach(async function () {
       await this.server.createList('organization', 2);
@@ -71,11 +71,7 @@ module(
       await this.owner.lookup('service:partner').load();
       await render(hbs`<Partner::ClientUploadsStatChart/>`);
 
-      const filterOptions = [
-        { buttonSelectorText: 'day', intlVariable: '' },
-        { buttonSelectorText: 'week', intlVariable: '' },
-        { buttonSelectorText: 'month', intlVariable: '' },
-      ];
+      const filterOptions = ['day', 'week', 'month'];
 
       assert.strictEqual(
         this.element.querySelectorAll(
@@ -86,9 +82,7 @@ module(
       );
 
       filterOptions.forEach((option, seq) => {
-        assert
-          .dom(`[data-test-chart='filter-btns-${seq}']`)
-          .hasText(`t:${option.buttonSelectorText}:(${option.intlVariable})`);
+        assert.dom(`[data-test-chart='filter-btns-${seq}']`).hasText(t(option));
       });
 
       assert

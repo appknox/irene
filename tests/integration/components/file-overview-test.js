@@ -9,7 +9,7 @@ module(
   'Integration | Component | file-compare/file-overview',
   function (hooks) {
     setupRenderingTest(hooks);
-    setupIntl(hooks);
+    setupIntl(hooks, 'en');
     setupMirage(hooks);
 
     hooks.beforeEach(async function () {

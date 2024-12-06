@@ -8,7 +8,7 @@ import { setupBrowserFakes } from 'ember-browser-services/test-support';
 
 module('Integration | Component | file-chart-abc', function (hooks) {
   setupRenderingTest(hooks);
-  setupIntl(hooks);
+  setupIntl(hooks, 'en');
   setupMirage(hooks);
   setupBrowserFakes(hooks, { window: true, localStorage: true });
 

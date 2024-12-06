@@ -23,7 +23,7 @@ const riskTypes = [
 
 module('Integration | Component | file-compare/table', function (hooks) {
   setupRenderingTest(hooks);
-  setupIntl(hooks);
+  setupIntl(hooks, 'en');
   setupMirage(hooks);
 
   hooks.beforeEach(async function () {
