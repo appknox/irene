@@ -15,12 +15,15 @@ const commonArgs = {
   maxDate: null,
   disabledDates: [],
   quickSelectTitle: '',
+  init() {
+    this._super(...arguments);
+    this.boundOnSelect = this.onSelect.bind(this);
+  },
 };
 
 const AkDatePickerTemplate = (args) => {
   return {
     template: hbs`
-        {{!-- template-lint-disable no-action --}}
         <AkDatePicker 
           @dayClass={{this.dayClass}}
           @startOfWeek={{this.startOfWeek}}
@@ -36,7 +39,7 @@ const AkDatePickerTemplate = (args) => {
           @maxLength={{this.maxLength}}
           @proximitySelection={{this.proximitySelection}}
           @selected={{this.selected}}
-          @onSelect={{action this.onSelect}} 
+          @onSelect={{this.boundOnSelect}} 
           @quickSelectOptions={{this.quickSelectOptions}}
         >
           <AkButton>

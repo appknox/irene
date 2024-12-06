@@ -127,17 +127,21 @@ const EventedTemplate = (args) => {
     handleBlur(event) {
       alert(event.target.value);
     },
+    init() {
+      this._super(...arguments);
+      this.boundHandleChange = this.handleChange.bind(this);
+      this.boundHandleBlur = this.handleBlur.bind(this);
+    },
   };
 
   return {
     template: hbs`
-    {{!-- template-lint-disable no-action --}}
     <AkTextField 
       @label={{this.label}} 
       @placeholder={{this.placeholder}}
       @value={{this.value}}
-      {{on 'change' (action this.handleChange)}}
-      {{on 'blur' (action this.handleBlur)}}> 
+      {{on 'change' this.boundHandleChange}}
+      {{on 'blur' this.boundHandleBlur}}> 
     </AkTextField>
   `,
     context: { ...args, ...actions },

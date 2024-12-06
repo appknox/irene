@@ -29,6 +29,10 @@ const AutocompleteTemplate = (args) => {
     onChange(searchValue) {
       this.set('searchQuery', searchValue);
     },
+    init() {
+      this._super(...arguments);
+      this.boundHandleChange = this.onChange.bind(this);
+    },
   };
 
   return {
@@ -36,7 +40,7 @@ const AutocompleteTemplate = (args) => {
       <AkAutocomplete
         @options={{this.options}}
         @searchQuery={{this.searchQuery}}
-        @onChange={{action this.onChange}}
+        @onChange={{this.boundHandleChange}}
         @loading={{this.loadingOptions}}
         @filterFn={{this.filterFn}}
         @filterKey={{this.filterKey}}

@@ -33,6 +33,12 @@ const paginationCommonArgs = {
     this.set('limit', args.limit);
     this.set('offset', args.offset);
   },
+  init() {
+    this._super(...arguments);
+    this.boundOnItemPerPageChange = this.onItemPerPageChange.bind(this);
+    this.boundNextAction = this.nextAction.bind(this);
+    this.boundPrevAction = this.prevAction.bind(this);
+  },
 };
 
 export default {
@@ -47,10 +53,10 @@ const Template = (args) => {
     <div class="flex-column mt-1 p-2">
       <AkPaginationProvider
         @results={{this.tableData}}
-        @onItemPerPageChange={{action this.onItemPerPageChange}}
+        @onItemPerPageChange={{this.boundOnItemPerPageChange}}
         @totalItems={{this.totalCount}}
-        @nextAction={{action this.nextAction}}
-        @prevAction={{action this.prevAction}}
+        @nextAction={{this.boundNextAction}}
+        @prevAction={{this.boundPrevAction}}
         @itemPerPageOptions={{this.itemPerPageOptions}}
         @defaultLimit={{this.limit}}
         @offset={{this.offset}}
@@ -96,10 +102,10 @@ const CompactPaginationTemplate = (args) => {
     <div class="flex-column mt-1 p-2">
       <AkPaginationProvider
         @results={{this.tableData}}
-        @onItemPerPageChange={{action this.onItemPerPageChange}}
+        @onItemPerPageChange={{this.boundOnItemPerPageChange}}
         @totalItems={{this.totalCount}}
-        @nextAction={{action this.nextAction}}
-        @prevAction={{action this.prevAction}}
+        @nextAction={{this.boundNextAction}}
+        @prevAction={{this.boundPrevAction}}
         @itemPerPageOptions={{this.itemPerPageOptions}}
         @defaultLimit={{this.limit}}
         @offset={{this.offset}}
@@ -149,10 +155,10 @@ const CustomPaginationUITemplate = (args) => {
     <div class="flex-column mt-1">
       <AkPaginationProvider
         @results={{this.tableData}}
-        @onItemPerPageChange={{action this.onItemPerPageChange}}
+        @onItemPerPageChange={{this.boundOnItemPerPageChange}}
         @totalItems={{this.totalCount}}
-        @nextAction={{action this.nextAction}}
-        @prevAction={{action this.prevAction}}
+        @nextAction={{this.boundNextAction}}
+        @prevAction={{this.boundPrevAction}}
         @itemPerPageOptions={{this.itemPerPageOptions}}
         @defaultLimit={{this.limit}}
         @offset={{this.offset}}
@@ -175,15 +181,13 @@ const CustomPaginationUITemplate = (args) => {
           <div class="flex-row ml-6">
             <button
               disabled={{pgc.disablePrev}}
-              class="button is-primary mr-1"
-              {{on "click" pgc.prevAction}}
+              class="button is-primary mr-1" type="button" {{on "click" pgc.prevAction}}
             >
               Previous
             </button>
             <button
               disabled={{pgc.disableNext}}
-              class="button is-primary"
-              {{on "click" pgc.nextAction}}
+              class="button is-primary" type="button" {{on "click" pgc.nextAction}}
             >
               Next
             </button>
