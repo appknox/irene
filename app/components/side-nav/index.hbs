@@ -15,7 +15,7 @@
     </LinkTo>
   </div>
 
-  {{#if this.showStoreknox}}
+  {{#if (or this.isSecurityEnabled this.showStoreknox)}}
     <SideNav::ProductSwitcher
       @isCollapsed={{@isCollapsed}}
       @classes={{this.classes}}
@@ -29,77 +29,61 @@
       as |akl|
     >
       {{#each @menuItems as |it|}}
-        {{#if it.component}}
-          <akl.listItem
-            aria-label='{{it.label}} side menu item'
-            @noGutters={{true}}
-            data-test-side-menu-item='{{it.label}}'
+        <akl.listItem
+          aria-label='{{it.label}} side menu item'
+          @noGutters={{true}}
+          @link={{true}}
+          @route={{it.route}}
+          @query={{it.query}}
+          @currentWhen={{it.currentWhen}}
+          @activeLinkClass={{this.classes.menuItemLinkActive}}
+          data-test-side-menu-item='{{it.label}}'
+          @linkClass={{this.classes.menuItemLink}}
+          as |li|
+        >
+          <AkTooltip
+            @disabled={{this.isSidebarExpanded}}
+            @color='dark'
+            @placement='right'
+            @arrow={{true}}
+            @title={{it.label}}
+            class={{this.classes.menuItemTooltip}}
           >
-            {{#let (component it.component) as |Component|}}
-              <Component
-                @isCollapsed={{@isCollapsed}}
-                @classes={{this.classes}}
-              />
-            {{/let}}
-          </akl.listItem>
-
-        {{else}}
-          <akl.listItem
-            aria-label='{{it.label}} side menu item'
-            @noGutters={{true}}
-            @link={{true}}
-            @route={{it.route}}
-            @query={{it.query}}
-            @currentWhen={{it.currentWhen}}
-            @activeLinkClass={{this.classes.menuItemLinkActive}}
-            data-test-side-menu-item='{{it.label}}'
-            @linkClass={{this.classes.menuItemLink}}
-            as |li|
-          >
-            <AkTooltip
-              @disabled={{this.isSidebarExpanded}}
-              @color='dark'
-              @placement='right'
-              @arrow={{true}}
-              @title={{it.label}}
-              class={{this.classes.menuItemTooltip}}
-            >
-              <li.leftIcon @rightGutter={{this.isSidebarExpanded}}>
-                {{#if it.icon}}
-                  <AkIcon
-                    local-class='menu-item-icon'
-                    data-test-side-menu-item-icon
-                    @iconName={{it.icon}}
-                  />
-                {{else if it.customIconComponent}}
-                  {{#let (component it.customIconComponent) as |CustomIcon|}}
-                    <CustomIcon local-class='menu-item-icon-svg' />
-                  {{/let}}
-                {{/if}}
-              </li.leftIcon>
-
-              {{#if this.isSidebarExpanded}}
-                <li.text
-                  data-test-side-menu-item-text
-                  @primaryText={{it.label}}
-                  @primaryTextClass={{this.classes.menuItemText}}
+            <li.leftIcon @rightGutter={{this.isSidebarExpanded}}>
+              {{#if it.icon}}
+                <AkIcon
+                  local-class='menu-item-icon'
+                  data-test-side-menu-item-icon
+                  @iconName={{it.icon}}
                 />
+              {{else if it.customIconComponent}}
+                {{#let (component it.customIconComponent) as |CustomIcon|}}
+                  <CustomIcon local-class='menu-item-icon-svg' />
+                {{/let}}
               {{/if}}
+            </li.leftIcon>
 
-              {{#if (and it.hasBadge this.isSidebarExpanded)}}
-                <AkStack @alignItems='center' @justifyContent='center'>
-                  <AkChip
-                    data-test-side-menu-item-badge
-                    local-class='menu-item-badge'
-                    @variant='filled'
-                    @size='small'
-                    @label={{it.badgeLabel}}
-                  />
-                </AkStack>
-              {{/if}}
-            </AkTooltip>
-          </akl.listItem>
-        {{/if}}
+            {{#if this.isSidebarExpanded}}
+              <li.text
+                data-test-side-menu-item-text
+                @primaryText={{it.label}}
+                @primaryTextClass={{this.classes.menuItemText}}
+              />
+            {{/if}}
+
+            {{#if (and it.hasBadge this.isSidebarExpanded)}}
+              <AkStack @alignItems='center' @justifyContent='center'>
+                <AkChip
+                  data-test-side-menu-item-badge
+                  local-class='menu-item-badge'
+                  @variant='filled'
+                  @size='small'
+                  @label={{it.badgeLabel}}
+                />
+              </AkStack>
+            {{/if}}
+          </AkTooltip>
+        </akl.listItem>
       {{/each}}
     </AkList>
   </div>

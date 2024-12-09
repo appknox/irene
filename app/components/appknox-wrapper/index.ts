@@ -38,7 +38,6 @@ export default class AppknoxWrapperComponent extends Component<AppknoxWrapperSig
   @service declare configuration: ConfigurationService;
   @service('browser/window') declare window: Window;
 
-  @tracked isSecurityEnabled = false;
   @tracked isEmptyOrgName = this.checkIfOrgNameIsEmpty;
   @tracked showAddEditModal = this.isEmptyOrgName;
   @tracked showOnboardingGuide = false;
@@ -53,8 +52,6 @@ export default class AppknoxWrapperComponent extends Component<AppknoxWrapperSig
     const storedState = this.window.localStorage.getItem('sidebarState');
     this.isSidebarCollapsed =
       storedState !== null ? storedState === 'collapsed' : true;
-
-    this.securityEnabled();
   }
 
   get checkIfOrgNameIsEmpty() {
@@ -190,10 +187,6 @@ export default class AppknoxWrapperComponent extends Component<AppknoxWrapperSig
         currentWhen:
           'authenticated.partner.clients authenticated.partner.client authenticated.partner.analytics',
       },
-      this.isSecurityEnabled && {
-        label: this.intl.t('security'),
-        component: 'side-nav/security-menu-item' as const,
-      },
     ].filter(Boolean) as MenuItem[];
   }
 
@@ -267,22 +260,6 @@ export default class AppknoxWrapperComponent extends Component<AppknoxWrapperSig
 
   @action onOpenKnowledgeBase() {
     this.freshdesk.openSupportWidget();
-  }
-
-  @action
-  securityEnabled() {
-    this.ajax
-      .request('projects', {
-        namespace: 'api/hudson-api',
-      })
-      .then(
-        () => {
-          this.isSecurityEnabled = true;
-        },
-        () => {
-          this.isSecurityEnabled = false;
-        }
-      );
   }
 
   @action

@@ -147,7 +147,7 @@ describe('User Login', () => {
     // Logs user to dashboard via API
     loginActions.loginWithCredAndSaveSession({ username, password });
 
-    cy.visit('/');
+    cy.visit(APPLICATION_ROUTES.projects);
 
     // Navigates to project listing route
     cy.url({ timeout: 15000 }).should('include', APPLICATION_ROUTES.projects);

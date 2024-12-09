@@ -1,5 +1,5 @@
 import Component from '@glimmer/component';
-import { inject as service } from '@ember/service';
+import { service } from '@ember/service';
 import type IntlService from 'ember-intl/services/intl';
 
 import type MeService from 'irene/services/me';
@@ -22,7 +22,6 @@ export interface SideNavSignature {
   Args: {
     menuItems: MenuItem[];
     lowerMenuItems?: LowerMenuItem[];
-    isSecurityEnabled?: boolean;
     isCollapsed: boolean;
     toggleSidebar: () => void;
     productSwitcherFilterKey: string;
@@ -41,7 +40,6 @@ export interface MenuItem {
   currentWhen?: string;
   hasBadge?: boolean;
   badgeLabel?: string;
-  component?: 'side-nav/security-menu-item';
   customIconComponent?: 'ak-svg/public-api-icon';
 }
 
@@ -54,14 +52,6 @@ export interface LowerMenuItem {
   iconClass?: string;
   textClass?: string;
   listItemClass?: string;
-}
-
-export interface SwitcherMenuItem {
-  id: string;
-  svg: 'ak-svg/sm-indicator' | 'ak-svg/vp-indicator';
-  label: string;
-  route: string;
-  key: string;
 }
 
 export default class SideNavComponent extends Component<SideNavSignature> {
@@ -120,6 +110,10 @@ export default class SideNavComponent extends Component<SideNavSignature> {
 
   get showStoreknox() {
     return this.organization?.selected?.features?.storeknox;
+  }
+
+  get isSecurityEnabled() {
+    return this.organization.isSecurityEnabled;
   }
 }
 
