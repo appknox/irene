@@ -18,7 +18,7 @@ function serializer(payload) {
 module('Integration | Component | partner/partner-plan', function (hooks) {
   setupRenderingTest(hooks);
   setupMirage(hooks);
-  setupIntl(hooks);
+  setupIntl(hooks, 'en');
 
   hooks.beforeEach(async function () {
     await this.server.createList('organization', 2);

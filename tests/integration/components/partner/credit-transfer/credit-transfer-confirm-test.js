@@ -10,7 +10,7 @@ module(
   'Integration | Component | partner/credit-transfer/credit-transfer-confirm',
   function (hooks) {
     setupRenderingTest(hooks);
-    setupIntl(hooks);
+    setupIntl(hooks, 'en');
 
     test('it renders partner credits section', async function (assert) {
       this.set('partnerPlan', { scansLeft: 26 });
@@ -33,7 +33,7 @@ module(
       assert
         .dom(`[data-test-partner-current-credits-value]`)
         .hasText(
-          `${this.partnerPlan.scansLeft} t:pluralScans:("itemCount":${this.partnerPlan.scansLeft})`
+          `${this.partnerPlan.scansLeft} ${t('pluralScans', { itemCount: this.partnerPlan.scansLeft })}`
         );
 
       assert
@@ -42,7 +42,7 @@ module(
       assert
         .dom(`[data-test-partner-remaining-credits-value]`)
         .hasText(
-          `${this.remainingCredits} t:pluralScans:("itemCount":${this.remainingCredits})`
+          `${this.remainingCredits} ${t('pluralScans', { itemCount: this.remainingCredits })}`
         );
     });
 
@@ -72,14 +72,14 @@ module(
       assert
         .dom(`[data-test-client-current-credits-value]`)
         .hasText(
-          `${this.clientPlan.scansLeft} t:pluralScans:("itemCount":${this.clientPlan.scansLeft})`
+          `${this.clientPlan.scansLeft} ${t('pluralScans', { itemCount: this.clientPlan.scansLeft })}`
         );
 
       assert.dom(`[data-test-new-credits-key]`).hasText(`${t('newCredits')}:`);
       assert
         .dom(`[data-test-new-credits-value]`)
         .hasText(
-          `${this.transferCount} t:pluralScans:("itemCount":${this.transferCount})`
+          `${this.transferCount} ${t('pluralScans', { itemCount: this.transferCount })}`
         );
     });
 

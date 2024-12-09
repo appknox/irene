@@ -32,7 +32,7 @@ class NotificationsStub extends Service {
 module('Integration | Component | sbom/app-scan', function (hooks) {
   setupRenderingTest(hooks);
   setupMirage(hooks);
-  setupIntl(hooks);
+  setupIntl(hooks, 'en');
 
   hooks.beforeEach(async function () {
     this.server.createList('organization', 1);

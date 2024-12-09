@@ -16,7 +16,6 @@ import Service from '@ember/service';
 import { Response } from 'miragejs';
 import { selectChoose } from 'ember-power-select/test-support';
 import { faker } from '@faker-js/faker';
-import { capitalize } from '@ember/string';
 
 import ENUMS from 'irene/enums';
 import { dsManualDevicePref } from 'irene/helpers/ds-manual-device-pref';
@@ -80,7 +79,7 @@ module(
   function (hooks) {
     setupRenderingTest(hooks);
     setupMirage(hooks);
-    setupIntl(hooks);
+    setupIntl(hooks, 'en');
 
     hooks.beforeEach(async function () {
       this.server.createList('organization', 1);
@@ -622,7 +621,7 @@ module(
 
       assert.strictEqual(
         notify.infoMsg,
-        `${t('proxyTurned')} ${capitalize(t('ON'))}`
+        `${t('proxyTurned')} ${t('on').toUpperCase()}`
       );
     });
 
@@ -795,7 +794,7 @@ module(
 
         assert.dom(deviceElem).containsText(`${deviceModel.device_identifier}`);
 
-        assert.dom(deviceElem).containsText(`${deviceTypeLabel}`);
+        assert.dom(deviceElem).containsText(t(deviceTypeLabel));
 
         assert
           .dom(deviceElem)

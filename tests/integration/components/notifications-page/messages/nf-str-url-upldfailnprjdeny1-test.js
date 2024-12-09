@@ -4,19 +4,23 @@ import { setupIntl, t } from 'ember-intl/test-support';
 import { setupRenderingTest } from 'ember-qunit';
 import { render } from '@ember/test-helpers';
 import { hbs } from 'ember-cli-htmlbars';
+
 import { NotificationMap } from 'irene/components/notifications-page/notification_map';
+import { compareInnerHTMLWithIntlTranslation } from 'irene/tests/test-utils';
 
 module(
   'Integration | Component | notifications-page/messages/nf-str-url-upldfailnprjdeny1',
   function (hooks) {
     setupRenderingTest(hooks);
     setupMirage(hooks);
-    setupIntl(hooks);
+    setupIntl(hooks, 'en');
 
     const messageCode = 'NF_STR_URL_UPLDFAILNPRJDENY1';
     const ContextClass = NotificationMap[messageCode].context;
 
     test('it renders', async function (assert) {
+      assert.expect(3);
+
       this.notification = this.server.create('nf-in-app-notification', {
         hasRead: true,
         messageCode,
@@ -35,15 +39,13 @@ module(
         hbs`<NotificationsPage::Messages::NfStrUrlUpldfailnprjdeny1 @notification={{this.notification}} @context={{this.context}}/>`
       );
 
-      assert
-        .dom('[data-test-nf-str-url-upldfailnprjdeny1-primary-message]')
-        .exists()
-        .hasText(
-          t('notificationModule.messages.nf-str-url-upldfailnprjdeny1', {
-            package_name: this.context.package_name,
-            store_name: t('googlePlayStore'),
-          })
-        );
+      compareInnerHTMLWithIntlTranslation(assert, {
+        selector: '[data-test-nf-str-url-upldfailnprjdeny1-primary-message]',
+        message: t('notificationModule.messages.nf-str-url-upldfailnprjdeny1', {
+          package_name: this.context.package_name,
+          store_name: t('googlePlayStore'),
+        }),
+      });
 
       assert
         .dom('[data-test-nf-str-url-upldfailnprjdeny1-link]')

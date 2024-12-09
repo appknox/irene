@@ -18,7 +18,7 @@ const getRiskStatusObj = (
 module('Integration | Component | analysis-risk/tag', function (hooks) {
   setupRenderingTest(hooks);
   setupMirage(hooks);
-  setupIntl(hooks);
+  setupIntl(hooks, 'en');
 
   test.each(
     'it renders risk tag for different computedRisk correctly',

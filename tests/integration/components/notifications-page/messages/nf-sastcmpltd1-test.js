@@ -4,18 +4,22 @@ import { setupIntl, t } from 'ember-intl/test-support';
 import { setupRenderingTest } from 'ember-qunit';
 import { render } from '@ember/test-helpers';
 import { hbs } from 'ember-cli-htmlbars';
+
 import { NotificationMap } from 'irene/components/notifications-page/notification_map';
+import { compareInnerHTMLWithIntlTranslation } from 'irene/tests/test-utils';
 
 module(
   'Integration | Component | notifications-page/messages/nf-sastcmpltd1',
   function (hooks) {
     setupRenderingTest(hooks);
     setupMirage(hooks);
-    setupIntl(hooks);
+    setupIntl(hooks, 'en');
 
     const ContextClass = NotificationMap['NF_SASTCMPLTD1'].context;
 
     test('it renders', async function (assert) {
+      assert.expect(7);
+
       this.notification = this.server.create('nf-in-app-notification', {
         hasRead: true,
         messageCode: 'NF_DASTCMPLTD1',
@@ -38,19 +42,21 @@ module(
 
       this.context = this.notification.context;
 
-      await render(hbs`<NotificationsPage::Messages::NfSastcmpltd1 @notification={{this.notification}}
-      @context={{this.context}}/>`);
+      await render(hbs`
+        <NotificationsPage::Messages::NfSastcmpltd1 
+          @notification={{this.notification}}
+          @context={{this.context}}
+        />
+      `);
 
-      assert
-        .dom('[data-test-nf-sastcmpltd1-primary-message]')
-        .exists()
-        .containsText(
-          t('notificationModule.messages.nf-sastcmpltd1', {
-            platform_display: 'android',
-            file_name: 'mfva',
-            package_name: 'com.mfva.test',
-          })
-        );
+      compareInnerHTMLWithIntlTranslation(assert, {
+        selector: '[data-test-nf-sastcmpltd1-primary-message]',
+        message: t('notificationModule.messages.nf-sastcmpltd1', {
+          platform_display: 'android',
+          file_name: 'mfva',
+          package_name: 'com.mfva.test',
+        }),
+      });
 
       assert
         .dom('[data-test-nf-sastcmpltd1-version]')
@@ -58,6 +64,7 @@ module(
         .containsText(
           `${t('versionLowercase')}: 1.0.1 | ${t('versionCode')}: 63434`
         );
+
       assert
         .dom('[data-test-nf-sastcmpltd1-risk-count]')
         .exists()

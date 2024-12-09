@@ -7,7 +7,7 @@ import { hbs } from 'ember-cli-htmlbars';
 
 module('Integration | Component | file-compare/header', function (hooks) {
   setupRenderingTest(hooks);
-  setupIntl(hooks);
+  setupIntl(hooks, 'en');
   setupMirage(hooks);
 
   hooks.beforeEach(async function () {

@@ -17,7 +17,7 @@ class NotificationsStub extends Service {
 module('Integration | Component | partner/export-stats', function (hooks) {
   setupRenderingTest(hooks);
   setupMirage(hooks);
-  setupIntl(hooks);
+  setupIntl(hooks, 'en');
 
   hooks.beforeEach(async function () {
     await this.server.createList('organization', 2);
@@ -33,7 +33,9 @@ module('Integration | Component | partner/export-stats', function (hooks) {
       `[data-test-date-range-icon]`
     ).className;
     assert.ok(iconElementClass, 'calendar');
-    assert.dom(`[data-test-date-range]`).hasText(t('fromDate:() - t:toDate'));
+    assert
+      .dom(`[data-test-date-range]`)
+      .hasText(`${t('fromDate')} - ${t('toDate')}`);
     assert.dom(`[data-test-export-btn]`).hasText(t('exportCSV'));
   });
 

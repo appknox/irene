@@ -10,7 +10,7 @@ module(
   function (hooks) {
     setupRenderingTest(hooks);
     setupMirage(hooks);
-    setupIntl(hooks);
+    setupIntl(hooks, 'en');
 
     test('It renders with the right amApp names ', async function (assert) {
       this.server.get('/v2/files/:id', (schema, req) => {

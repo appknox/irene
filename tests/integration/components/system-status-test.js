@@ -32,7 +32,7 @@ class WebsocketStub extends Service {
 module('Integration | Component | system-status', function (hooks) {
   setupRenderingTest(hooks);
   setupMirage(hooks);
-  setupIntl(hooks);
+  setupIntl(hooks, 'en');
 
   hooks.beforeEach(async function () {
     this.server.create('user');
@@ -114,16 +114,16 @@ module('Integration | Component | system-status', function (hooks) {
       const statusEntities = [
         {
           id: 'storage',
-          label: 't:storage:()',
-          message: 't:proxyWarning:()',
+          label: t('storage'),
+          message: t('proxyWarning'),
         },
         {
           id: 'devicefarm',
-          label: 't:devicefarm:()',
+          label: t('devicefarm'),
         },
         {
           id: 'api-server',
-          label: 't:api:() t:server:()',
+          label: `${t('api')} ${t('server')}`,
         },
       ];
 
@@ -138,12 +138,12 @@ module('Integration | Component | system-status', function (hooks) {
           assert
             .dom(row.querySelector('[data-test-system-status-unreachable]'))
             .hasText(
-              message ? 't:unreachable:() ' + message : 't:unreachable:()'
+              message ? `${t('unreachable')}  ${message}` : t('unreachable')
             );
         } else {
           assert
             .dom(row.querySelector('[data-test-system-status-operational]'))
-            .hasText('t:operational:()');
+            .hasText(t('operational'));
         }
       }
     }
@@ -182,26 +182,26 @@ module('Integration | Component | system-status', function (hooks) {
       assert
         .dom('[data-test-system-status-title]')
         .exists()
-        .containsText('t:systemStatus:()');
+        .containsText(t('systemStatus'));
 
       const websocketRow = find('[data-test-system-status-rows="websocket"]');
 
       assert
         .dom(websocketRow.querySelector('[data-test-system-status-systems]'))
-        .hasText('t:realtimeServer:()');
+        .hasText(t('realtimeServer'));
 
       if (fail) {
         assert
           .dom(
             websocketRow.querySelector('[data-test-system-status-unreachable]')
           )
-          .hasText('t:unreachable:()');
+          .hasText(t('unreachable'));
       } else {
         assert
           .dom(
             websocketRow.querySelector('[data-test-system-status-operational]')
           )
-          .hasText('t:operational:()');
+          .hasText(t('operational'));
       }
 
       mockServer.stop();

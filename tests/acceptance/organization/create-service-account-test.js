@@ -15,10 +15,11 @@ import { t } from 'ember-intl/test-support';
 import { underscore } from '@ember/string';
 import Service from '@ember/service';
 import dayjs from 'dayjs';
-
-import { setupRequiredEndpoints } from '../../helpers/acceptance-utils';
-import styles from 'irene/components/ak-select/index.scss';
 import { faker } from '@faker-js/faker';
+
+import styles from 'irene/components/ak-select/index.scss';
+import { setupRequiredEndpoints } from 'irene/tests/helpers/acceptance-utils';
+import { compareInnerHTMLWithIntlTranslation } from 'irene/tests/test-utils';
 
 class IntegrationStub extends Service {
   async configure(user) {
@@ -435,6 +436,8 @@ module('Acceptance | Create service account', function (hooks) {
     'it creates service account',
     [{ duplicate: false }, { duplicate: true }],
     async function (assert, { duplicate }) {
+      assert.expect(duplicate ? 40 : 30);
+
       // feature is enabled
       this.organization.update({
         features: {
@@ -771,14 +774,13 @@ module('Acceptance | Create service account', function (hooks) {
         (opt) => opt.value === this.createdServiceAccount.all_projects
       );
 
-      assert.strictEqual(
-        find(
-          '[data-test-serviceAccountSection-selectProject-selectedProjectAccess]'
-        ).innerHTML.trim(),
-        t('serviceAccountModule.selectedProjectAccess', {
+      compareInnerHTMLWithIntlTranslation(assert, {
+        selector:
+          '[data-test-serviceAccountSection-selectProject-selectedProjectAccess]',
+        message: t('serviceAccountModule.selectedProjectAccess', {
           projectAccess: t(projectAccess?.label),
-        })
-      );
+        }),
+      });
 
       if (this.createdServiceAccount.all_projects) {
         assert

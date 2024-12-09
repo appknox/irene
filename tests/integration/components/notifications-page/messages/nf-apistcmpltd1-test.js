@@ -5,17 +5,20 @@ import { setupRenderingTest } from 'ember-qunit';
 import { render } from '@ember/test-helpers';
 import { hbs } from 'ember-cli-htmlbars';
 import { NotificationMap } from 'irene/components/notifications-page/notification_map';
+import { compareInnerHTMLWithIntlTranslation } from 'irene/tests/test-utils';
 
 module(
   'Integration | Component | notifications-page/messages/nf-apistcmpltd1',
   function (hooks) {
     setupRenderingTest(hooks);
     setupMirage(hooks);
-    setupIntl(hooks);
+    setupIntl(hooks, 'en');
 
     const ContextClass = NotificationMap['NF_APISTCMPLTD1'].context;
 
     test('it renders', async function (assert) {
+      assert.expect(7);
+
       this.notification = this.server.create('nf-in-app-notification', {
         hasRead: true,
         messageCode: 'NF_APISTCMPLTD1',
@@ -38,18 +41,21 @@ module(
 
       this.context = this.notification.context;
 
-      await render(hbs`<NotificationsPage::Messages::NfApistcmpltd1 @notification={{this.notification}}
-      @context={{this.context}}/>`);
-      assert
-        .dom('[data-test-nf-apistcmpltd1-primary-message]')
-        .exists()
-        .containsText(
-          t('notificationModule.messages.nf-apistcmpltd1', {
-            platform_display: 'android',
-            file_name: 'mfva',
-            package_name: 'com.mfva.test',
-          })
-        );
+      await render(hbs`
+        <NotificationsPage::Messages::NfApistcmpltd1 
+          @notification={{this.notification}}
+          @context={{this.context}}
+        />
+      `);
+
+      compareInnerHTMLWithIntlTranslation(assert, {
+        selector: '[data-test-nf-apistcmpltd1-primary-message]',
+        message: t('notificationModule.messages.nf-apistcmpltd1', {
+          platform_display: 'android',
+          file_name: 'mfva',
+          package_name: 'com.mfva.test',
+        }),
+      });
 
       assert
         .dom('[data-test-nf-apistcmpltd1-version]')
@@ -57,6 +63,7 @@ module(
         .containsText(
           `${t('versionLowercase')}: 1.0.1 | ${t('versionCode')}: 23434`
         );
+
       assert
         .dom('[data-test-nf-apistcmpltd1-risk-count]')
         .exists()

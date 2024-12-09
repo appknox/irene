@@ -8,7 +8,7 @@ import { setupIntl, t } from 'ember-intl/test-support';
 module('Integration | Component | project-settings/header', function (hooks) {
   setupRenderingTest(hooks);
   setupMirage(hooks);
-  setupIntl(hooks);
+  setupIntl(hooks, 'en');
 
   test.each(
     'it renders',

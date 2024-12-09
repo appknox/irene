@@ -1,5 +1,6 @@
 import { module, test } from 'qunit';
 import { setupRenderingTest } from 'ember-qunit';
+
 import {
   click,
   fillIn,
@@ -9,10 +10,13 @@ import {
   waitFor,
   waitUntil,
 } from '@ember/test-helpers';
+
 import { hbs } from 'ember-cli-htmlbars';
 import { setupMirage } from 'ember-cli-mirage/test-support';
 import { setupIntl, t } from 'ember-intl/test-support';
 import Service from '@ember/service';
+
+import { compareInnerHTMLWithIntlTranslation } from 'irene/tests/test-utils';
 
 class NotificationsStub extends Service {
   errorMsg = null;
@@ -74,7 +78,7 @@ module(
   function (hooks) {
     setupRenderingTest(hooks);
     setupMirage(hooks);
-    setupIntl(hooks);
+    setupIntl(hooks, 'en');
 
     hooks.beforeEach(async function () {
       this.owner.register('service:notifications', NotificationsStub);
@@ -328,14 +332,14 @@ module(
 
       await click(selectors.paramDeleteBtn);
 
-      assert
-        .dom(selectors.deleteConfirmText)
-        .exists()
-        .hasText(
-          t('dastAutomation.parameterDeleteConfirm', {
-            scenarioName: this.scenario.name,
-          })
-        );
+      assert.dom(selectors.deleteConfirmText).exists();
+
+      compareInnerHTMLWithIntlTranslation(assert, {
+        selector: selectors.deleteConfirmText,
+        message: t('dastAutomation.parameterDeleteConfirm', {
+          scenarioName: this.scenario.name,
+        }),
+      });
 
       assert
         .dom(selectors.deleteInputTypeInfo)

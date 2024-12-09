@@ -21,7 +21,7 @@ class NotificationsStub extends Service {
 
 module('Integration | Component | via-login-page', function (hooks) {
   setupRenderingTest(hooks);
-  setupIntl(hooks);
+  setupIntl(hooks, 'en');
   setupMirage(hooks);
 
   test('it renders', async function (assert) {

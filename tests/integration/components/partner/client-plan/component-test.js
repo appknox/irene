@@ -20,7 +20,7 @@ function serializer(payload) {
 module('Integration | Component | partner/client-plan', function (hooks) {
   setupRenderingTest(hooks);
   setupMirage(hooks);
-  setupIntl(hooks);
+  setupIntl(hooks, 'en');
 
   hooks.beforeEach(async function () {
     await this.server.createList('organization', 2);
@@ -55,7 +55,7 @@ module('Integration | Component | partner/client-plan', function (hooks) {
     assert
       .dom('strong[data-test-projects-left]')
       .hasText(
-        `${clientPlan.projectsLimit} t:pluralApps:("itemCount":${clientPlan.projectsLimit})`
+        `${clientPlan.projectsLimit} ${t('pluralApps', { itemCount: clientPlan.projectsLimit })}`
       );
     assert
       .dom('span[data-test-plan-expiry]')
@@ -95,7 +95,7 @@ module('Integration | Component | partner/client-plan', function (hooks) {
     assert
       .dom('strong[data-test-projects-left]')
       .hasText(
-        `${clientPlan.projectsLimit} t:pluralApps:("itemCount":${clientPlan.projectsLimit})`
+        `${clientPlan.projectsLimit} ${t('pluralApps', { itemCount: clientPlan.projectsLimit })}`
       );
     assert
       .dom('span[data-test-plan-expiry]')
@@ -133,7 +133,7 @@ module('Integration | Component | partner/client-plan', function (hooks) {
     assert
       .dom('strong[data-test-scans-left]')
       .hasText(
-        `${clientPlan.scansLeft} t:pluralScans:("itemCount":${clientPlan.scansLeft})`
+        `${clientPlan.scansLeft} ${t('pluralScans', { itemCount: clientPlan.scansLeft })}`
       );
     assert.dom('div[data-test-plan-status]').hasText(
       `${clientPlan.scansLeft} ${t('pluralScans', {

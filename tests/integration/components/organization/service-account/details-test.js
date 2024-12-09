@@ -7,6 +7,8 @@ import { module, test } from 'qunit';
 import Service from '@ember/service';
 import dayjs from 'dayjs';
 
+import { compareInnerHTMLWithIntlTranslation } from 'irene/tests/test-utils';
+
 class NotificationsStub extends Service {
   errorMsg = null;
   successMsg = null;
@@ -56,7 +58,7 @@ module(
   function (hooks) {
     setupRenderingTest(hooks);
     setupMirage(hooks);
-    setupIntl(hooks);
+    setupIntl(hooks, 'en');
 
     hooks.beforeEach(async function () {
       const store = this.owner.lookup('service:store');
@@ -77,6 +79,8 @@ module(
     });
 
     test('it renders', async function (assert) {
+      assert.expect(43);
+
       this.server.get('/service_accounts/:id/service_account_projects', () => {
         return { count: 0, next: null, previous: null, results: [] };
       });
@@ -254,15 +258,13 @@ module(
         (opt) => opt.value === this.serviceAccount.allProjects
       );
 
-      assert
-        .dom(
-          '[data-test-serviceAccountSection-selectProject-selectedProjectAccess]'
-        )
-        .hasText(
-          t('serviceAccountModule.selectedProjectAccess', {
-            projectAccess: selectedProjectAccess?.label,
-          })
-        );
+      compareInnerHTMLWithIntlTranslation(assert, {
+        selector:
+          '[data-test-serviceAccountSection-selectProject-selectedProjectAccess]',
+        message: t('serviceAccountModule.selectedProjectAccess', {
+          projectAccess: selectedProjectAccess?.label,
+        }),
+      });
 
       if (this.serviceAccount.allProjects) {
         assert

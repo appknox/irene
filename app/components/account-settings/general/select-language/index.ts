@@ -1,11 +1,14 @@
 import Component from '@glimmer/component';
 import { inject as service } from '@ember/service';
 import { task } from 'ember-concurrency';
-import IntlService from 'ember-intl/services/intl';
 import { action } from '@ember/object';
+import { tracked } from '@glimmer/tracking';
+import type IntlService from 'ember-intl/services/intl';
+import type Store from '@ember-data/store';
 
 import ENV from 'irene/config/environment';
-import DatetimeService from 'irene/services/datetime';
+import parseError from 'irene/utils/parse-error';
+import type DatetimeService from 'irene/services/datetime';
 
 const localeStrings = {
   en: 'English',
@@ -18,12 +21,20 @@ export default class AccountSettingsGeneralSelectLanguageComponent extends Compo
   @service declare intl: IntlService;
   @service declare ajax: any;
   @service declare datetime: DatetimeService;
+  @service declare session: any;
+  @service declare store: Store;
   @service('notifications') declare notify: NotificationService;
 
+  @tracked userLangPref = 'en';
+
+  constructor(owner: unknown, args: object) {
+    super(owner, args);
+
+    this.getUserLangPref.perform();
+  }
+
   get currentLocale() {
-    return this.allLocales.find(
-      ({ locale }) => locale === this.intl.locale.toString()
-    );
+    return this.allLocales.find(({ locale }) => locale === this.userLangPref);
   }
 
   get allLocales() {
@@ -35,10 +46,17 @@ export default class AccountSettingsGeneralSelectLanguageComponent extends Compo
       .filter((f) => Boolean(f.localeString));
   }
 
+  @action
+  handleLocaleChange(selection: { locale: string; localeString: string }) {
+    this.setLocale.perform(selection);
+  }
+
   setLocale = task(async (selection) => {
     const lang = selection.locale;
 
-    this.intl.locale = lang;
+    this.userLangPref = lang;
+
+    this.intl.setLocale(lang);
 
     this.datetime.setLocale(lang);
 
@@ -58,10 +76,17 @@ export default class AccountSettingsGeneralSelectLanguageComponent extends Compo
     }
   });
 
-  @action
-  handleLocaleChange(selection: { locale: string; localeString: string }) {
-    this.setLocale.perform(selection);
-  }
+  getUserLangPref = task(async () => {
+    try {
+      const userId = this.session.data.authenticated.user_id;
+
+      const user = await this.store.findRecord('user', userId);
+
+      this.userLangPref = user.lang;
+    } catch (err) {
+      this.notify.error(parseError(err));
+    }
+  });
 }
 
 declare module '@glint/environment-ember-loose/registry' {

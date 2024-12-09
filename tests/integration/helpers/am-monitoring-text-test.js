@@ -6,7 +6,7 @@ import { setupIntl, t } from 'ember-intl/test-support';
 
 module('Integration | Helper | am-monitoring-text', function (hooks) {
   setupRenderingTest(hooks);
-  setupIntl(hooks);
+  setupIntl(hooks, 'en');
 
   hooks.beforeEach(async function () {
     this.store = this.owner.lookup('service:store');

@@ -158,7 +158,7 @@ class NotificationsStub extends Service {
 module('Integration | Component | security/analysis-list', function (hooks) {
   setupRenderingTest(hooks);
   setupMirage(hooks);
-  setupIntl(hooks);
+  setupIntl(hooks, 'en');
 
   hooks.beforeEach(async function () {
     // Services

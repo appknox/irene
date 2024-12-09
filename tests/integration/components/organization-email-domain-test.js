@@ -23,7 +23,7 @@ class NotificationsStub extends Service {
 module('Integration | Component | organization-email-domain', function (hooks) {
   setupRenderingTest(hooks);
   setupMirage(hooks);
-  setupIntl(hooks);
+  setupIntl(hooks, 'en');
 
   hooks.beforeEach(async function () {
     await this.server.createList('organization', 2);
