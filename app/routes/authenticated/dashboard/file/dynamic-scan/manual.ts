@@ -15,10 +15,12 @@ export default class AuthenticatedFileDastManualDastRoute extends ScrollToTop(
     };
 
     const file = await this.store.findRecord('file', fileid);
+    const projectPlatform = file.project.get('platform');
 
     return {
       file,
       profileId: (await file.project).activeProfileId,
+      projectPlatform,
     };
   }
 }

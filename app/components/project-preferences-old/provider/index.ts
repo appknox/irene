@@ -17,6 +17,7 @@ import ProjectAvailableDeviceModel from 'irene/models/project-available-device';
 import FileModel from 'irene/models/file';
 
 export interface DevicePreferenceContext {
+  filteredDevices?: ProjectAvailableDeviceModel[];
   deviceTypes: DeviceType[];
   selectedDeviceType?: DeviceType;
   handleSelectDeviceType: (deviceType: DeviceType) => void;
@@ -24,6 +25,11 @@ export interface DevicePreferenceContext {
   devicePlatformVersions: string[];
   handleSelectVersion: (version: string) => void;
   isPreferredDeviceAvailable: boolean | null;
+
+  updateDevicePref(
+    device_type: string | number | undefined,
+    platform_version: string
+  ): void;
 }
 
 export interface ProjectPreferencesOldProviderSignature {
@@ -266,49 +272,62 @@ export default class ProjectPreferencesOldProviderComponent extends Component<Pr
   }
 
   @action
+  updateDevicePref(
+    device_type: string | number | undefined,
+    platform_version: string
+  ) {
+    this.versionSelected.perform(device_type, platform_version);
+  }
+
+  @action
   handleSelectDeviceType(deviceType: DeviceType) {
     this.selectedDeviceType = deviceType;
     this.selectedVersion = '0';
 
-    this.versionSelected.perform();
+    this.updateDevicePref(this.selectedDeviceType?.value, this.selectedVersion);
   }
 
   @action
   handleSelectVersion(version: string) {
     this.selectedVersion = version;
 
-    this.versionSelected.perform();
+    this.updateDevicePref(this.selectedDeviceType?.value, this.selectedVersion);
   }
 
-  versionSelected = task(async () => {
-    try {
-      const profileId = this.args.profileId;
+  versionSelected = task(
+    async (
+      device_type: string | number | undefined,
+      platform_version: string
+    ) => {
+      try {
+        const profileId = this.args.profileId;
 
-      const devicePreferences = [
-        ENV.endpoints['profiles'],
-        profileId,
-        ENV.endpoints['devicePreferences'],
-      ].join('/');
+        const devicePreferences = [
+          ENV.endpoints['profiles'],
+          profileId,
+          ENV.endpoints['devicePreferences'],
+        ].join('/');
 
-      const data = {
-        device_type: this.selectedDeviceType?.value,
-        platform_version: this.selectedVersion,
-      };
+        const data = {
+          device_type,
+          platform_version,
+        };
 
-      await this.ajax.put(devicePreferences, { data });
+        await this.ajax.put(devicePreferences, { data });
 
-      if (!this.isDestroyed && this.devicePreference) {
-        this.devicePreference.deviceType = this.selectedDeviceType
-          ?.value as number;
+        if (!this.isDestroyed && this.devicePreference) {
+          this.devicePreference.deviceType = this.selectedDeviceType
+            ?.value as number;
 
-        this.devicePreference.platformVersion = this.selectedVersion;
+          this.devicePreference.platformVersion = this.selectedVersion;
 
-        this.notify.success(this.intl.t('savedPreferences'));
+          this.notify.success(this.intl.t('savedPreferences'));
+        }
+      } catch (e) {
+        this.notify.error(this.intl.t('somethingWentWrong'));
       }
-    } catch (e) {
-      this.notify.error(this.intl.t('somethingWentWrong'));
     }
-  });
+  );
 }
 
 declare module '@glint/environment-ember-loose/registry' {

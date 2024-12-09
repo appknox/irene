@@ -8,7 +8,11 @@ import { type AkBreadcrumbsItemProps } from 'irene/services/ak-breadcrumbs';
 export default class AuthenticatedDashboardFileDynamicScanManualController extends Controller {
   @service declare intl: IntlService;
 
-  declare model: { file: FileModel; profileId: number };
+  declare model: {
+    projectPlatform: number | undefined;
+    file: FileModel;
+    profileId: number;
+  };
 
   get breadcrumbs(): AkBreadcrumbsItemProps {
     const routeModels = [this.model?.file?.id];

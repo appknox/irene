@@ -10,6 +10,7 @@ import triggerAnalytics from 'irene/utils/trigger-analytics';
 import type FileModel from 'irene/models/file';
 import type PollService from 'irene/services/poll';
 import type DynamicscanModel from 'irene/models/dynamicscan';
+import type { DevicePreferenceContext } from 'irene/components/project-preferences-old/provider';
 
 export interface DynamicScanActionSignature {
   Args: {
@@ -18,6 +19,7 @@ export interface DynamicScanActionSignature {
     dynamicScanText: string;
     isAutomatedScan?: boolean;
     dynamicScan: DynamicscanModel | null;
+    dpContext: DevicePreferenceContext;
   };
 }
 
