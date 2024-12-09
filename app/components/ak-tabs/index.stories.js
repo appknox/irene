@@ -37,6 +37,10 @@ const commonArgs = {
   onTabClick(tabId) {
     this.set('activeTab', tabId);
   },
+  init() {
+    this._super(...arguments);
+    this.boundOnTabClick = this.onTabClick.bind(this);
+  },
 };
 
 const Template = (args) => ({
@@ -52,7 +56,7 @@ const Template = (args) => ({
                 @badgeCount={{item.badgeCount}}
                 @isActive={{eq this.activeTab item.id}}
                 @buttonVariant={{this.buttonVariant}}
-                @onTabClick={{action this.onTabClick}}
+                @onTabClick={{this.boundOnTabClick}}
                 @indicatorVariant={{this.indicatorVariant}}
               >
                 <:tabIcon>
@@ -74,7 +78,7 @@ const Template = (args) => ({
               <span class="pb-1">-<span class="bold"> N/B:</span> The link variant works with the ember routing system so it technically won't work here.</span>
             {{/unless}}
               <div class="flex-row pb-1">- This is the content for <AkTypography @color="success" @underline="always" class="ml-1 bold">{{this.currentTabDetails.label}}</AkTypography> </div>
-              <span class="pb-1">- Tab Type: <span class="bold">{{if this.buttonVariant "Button" "Link"}}</span>  (Toggle "buttonVaraint" property to see effect)</span>
+              <span class="pb-1">- Tab Type: <span class="bold">{{if this.buttonVariant "Button" "Link"}}</span>  (Toggle "buttonVariant" property to see effect)</span>
             </div>
         </div>
     </div>
@@ -104,7 +108,7 @@ export const CustomBadgeContent = (args) => ({
               @badgeBackground={{this.badgeBackground}}
               @isActive={{eq this.activeTab item.id}}
               @buttonVariant={{this.buttonVariant}}
-              @onTabClick={{action this.onTabClick}}
+              @onTabClick={{this.boundOnTabClick}}
               @indicatorVariant={{this.indicatorVariant}}
             >
               <:tabIcon>

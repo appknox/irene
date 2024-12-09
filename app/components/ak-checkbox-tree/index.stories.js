@@ -100,6 +100,11 @@ const actions = {
   onCheck(checkedItems) {
     this.set('checked', checkedItems);
   },
+  init() {
+    this._super(...arguments);
+    this.boundOnCheck = this.onCheck.bind(this);
+    this.boundOnExpand = this.onExpand.bind(this);
+  },
 };
 
 const Template = (args) => ({
@@ -109,8 +114,8 @@ const Template = (args) => ({
       @expanded={{this.expanded}}
       @cascade={{this.cascade}}
       @checked={{this.checked}}
-      @onCheck={{action this.onCheck}}
-      @onExpand={{action this.onExpand}}
+      @onCheck={{this.boundOnCheck}}
+      @onExpand={{this.boundOnExpand}}
     />
   `,
   context: { ...args, ...actions },

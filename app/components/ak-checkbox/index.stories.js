@@ -65,9 +65,8 @@ Label.args = {
 
 const IndeterminateTemplate = (args) => ({
   template: hbs`
-    {{!-- template-lint-disable no-action --}}
     <AkFormControlLabel @label="Select all">
-      <AkCheckbox @onChange={{action this.handleChange}} @checked={{this.selectAllChecked}} @indeterminate={{this.selectAllIndeterminate}} />
+      <AkCheckbox @onChange={{this.boundHandleChange}} @checked={{this.selectAllChecked}} @indeterminate={{this.selectAllIndeterminate}} />
     </AkFormControlLabel>
 
     <AkFormControlLabel @label="Check 1">
@@ -97,6 +96,10 @@ const IndeterminateTemplate = (args) => ({
       console.log('select all change:', checked);
       this.set('checked1', checked);
       this.set('checked2', checked);
+    },
+    init() {
+      this._super(...arguments);
+      this.boundHandleChange = this.handleChange.bind(this);
     },
   },
 });
