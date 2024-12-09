@@ -1,0 +1,18 @@
+<AkStack @alignItems='center' @spacing='0.5' @justifyContent='center'>
+  <AkTypography @fontWeight='medium'>{{t 'action'}}</AkTypography>
+
+  <AkTooltip @placement='bottom' @arrow={{true}}>
+
+    <:tooltipContent>
+      <div local-class='tooltip-content'>
+        <AkTypography @color='inherit'>
+          {{this.tooltipText}}
+        </AkTypography>
+      </div>
+    </:tooltipContent>
+
+    <:default>
+      <AkIcon @iconName='info' @size='small' @color='textSecondary' />
+    </:default>
+  </AkTooltip>
+</AkStack>

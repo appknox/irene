@@ -103,6 +103,7 @@ export default class AppMonitoringTableComponent extends Component<AppMonitoring
   // Table Actions
   @action goToPage(args: LimitOffset) {
     const { limit, offset } = args;
+
     this.router.transitionTo('authenticated.dashboard.app-monitoring', {
       queryParams: { app_limit: limit, app_offset: offset },
     });

@@ -1,0 +1,14 @@
+.empty-container {
+  background-color: var(--storeknox-discover-results-empty-bg-color);
+  padding-top: 3em;
+  padding-bottom: 3em;
+
+  .header {
+    margin-top: 1.5625em;
+  }
+
+  .body-text {
+    text-align: center;
+    max-width: 500px;
+  }
+}
