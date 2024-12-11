@@ -74,6 +74,10 @@ export default class AkAutocompleteComponent<T> extends Component<
     return this.args.options;
   }
 
+  get filteredOptionsLength() {
+    return this.filteredOptions.length - 1;
+  }
+
   get filteredOptions() {
     const query = this.searchQuery.toLowerCase();
 

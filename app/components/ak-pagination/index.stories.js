@@ -1,7 +1,7 @@
 /* eslint-disable ember/no-get*/
 
 import { hbs } from 'ember-cli-htmlbars';
-import { computed } from '@ember/object';
+import { action, computed } from '@ember/object';
 import { faker } from '@faker-js/faker';
 
 const paginationCommonArgs = {
@@ -21,18 +21,9 @@ const paginationCommonArgs = {
       this.limit + this.offset
     );
   }),
-  onItemPerPageChange(args) {
-    this.set('limit', args.limit);
-    this.set('offset', args.offset);
-  },
-  nextAction(args) {
-    this.set('limit', args.limit);
-    this.set('offset', args.offset);
-  },
-  prevAction(args) {
-    this.set('limit', args.limit);
-    this.set('offset', args.offset);
-  },
+  onItemPerPageChange: action(onItemPerPageChange),
+  nextAction: action(nextAction),
+  prevAction: action(prevAction),
 };
 
 export default {
@@ -41,16 +32,31 @@ export default {
   excludeStories: [],
 };
 
+function onItemPerPageChange(args) {
+  this.set('limit', args.limit);
+  this.set('offset', args.offset);
+}
+
+function nextAction(args) {
+  this.set('limit', args.limit);
+  this.set('offset', args.offset);
+}
+
+function prevAction(args) {
+  this.set('limit', args.limit);
+  this.set('offset', args.offset);
+}
+
 const Template = (args) => {
   return {
     template: hbs`
     <div class="flex-column mt-1 p-2">
       <AkPaginationProvider
         @results={{this.tableData}}
-        @onItemPerPageChange={{action this.onItemPerPageChange}}
+        @onItemPerPageChange={{this.onItemPerPageChange}}
         @totalItems={{this.totalCount}}
-        @nextAction={{action this.nextAction}}
-        @prevAction={{action this.prevAction}}
+        @nextAction={{this.nextAction}}
+        @prevAction={{this.prevAction}}
         @itemPerPageOptions={{this.itemPerPageOptions}}
         @defaultLimit={{this.limit}}
         @offset={{this.offset}}
@@ -96,10 +102,10 @@ const CompactPaginationTemplate = (args) => {
     <div class="flex-column mt-1 p-2">
       <AkPaginationProvider
         @results={{this.tableData}}
-        @onItemPerPageChange={{action this.onItemPerPageChange}}
+        @onItemPerPageChange={{this.onItemPerPageChange}}
         @totalItems={{this.totalCount}}
-        @nextAction={{action this.nextAction}}
-        @prevAction={{action this.prevAction}}
+        @nextAction={{this.nextAction}}
+        @prevAction={{this.prevAction}}
         @itemPerPageOptions={{this.itemPerPageOptions}}
         @defaultLimit={{this.limit}}
         @offset={{this.offset}}
@@ -149,10 +155,10 @@ const CustomPaginationUITemplate = (args) => {
     <div class="flex-column mt-1">
       <AkPaginationProvider
         @results={{this.tableData}}
-        @onItemPerPageChange={{action this.onItemPerPageChange}}
+        @onItemPerPageChange={{this.onItemPerPageChange}}
         @totalItems={{this.totalCount}}
-        @nextAction={{action this.nextAction}}
-        @prevAction={{action this.prevAction}}
+        @nextAction={{this.nextAction}}
+        @prevAction={{this.prevAction}}
         @itemPerPageOptions={{this.itemPerPageOptions}}
         @defaultLimit={{this.limit}}
         @offset={{this.offset}}
@@ -175,15 +181,13 @@ const CustomPaginationUITemplate = (args) => {
           <div class="flex-row ml-6">
             <button
               disabled={{pgc.disablePrev}}
-              class="button is-primary mr-1"
-              {{on "click" pgc.prevAction}}
+              class="button is-primary mr-1" type="button" {{on "click" pgc.prevAction}}
             >
               Previous
             </button>
             <button
               disabled={{pgc.disableNext}}
-              class="button is-primary"
-              {{on "click" pgc.nextAction}}
+              class="button is-primary" type="button" {{on "click" pgc.nextAction}}
             >
               Next
             </button>

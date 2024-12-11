@@ -1,3 +1,4 @@
+import { action } from '@ember/object';
 import { hbs } from 'ember-cli-htmlbars';
 
 const selectItems = [
@@ -15,6 +16,7 @@ const selectCommonArgs = {
   error: false,
   required: false,
   onChange() {},
+  handleSelectChange: action(handleSelectChange),
 };
 
 export default {
@@ -23,19 +25,16 @@ export default {
   excludeStories: [],
 };
 
-const actions = {
-  handleSelectChange(selected) {
-    this.set('selected', selected);
-  },
-};
+function handleSelectChange(selected) {
+  this.set('selected', selected);
+}
 
 const Template = (args) => ({
   template: hbs`
-    {{!-- template-lint-disable no-action --}}
     {{!-- renderInPlace set true to work with storybook --}}
     <div class="m-2 w-4/12">
       <AkSelect 
-        @onChange={{action this.handleSelectChange}} 
+        @onChange={{this.handleSelectChange}} 
         @options={{this.selectItems}} 
         @selected={{this.selected}}
         @renderInPlace={{true}} 
@@ -49,7 +48,7 @@ const Template = (args) => ({
       </AkSelect>
     </div>
   `,
-  context: { ...args, selectItems, ...actions },
+  context: { ...args, selectItems },
 });
 
 export const Default = Template.bind({});
@@ -58,11 +57,10 @@ Default.args = selectCommonArgs;
 
 const SelectMultipleTemplate = (args) => ({
   template: hbs`
-    {{!-- template-lint-disable no-action --}}
     {{!-- renderInPlace set true to work with storybook --}}
     <div class="m-2 w-4/12">
       <AkSelect 
-        @onChange={{action this.handleSelectChange}} 
+        @onChange={{this.handleSelectChange}} 
         @options={{this.selectItems}} 
         @selected={{this.selected}}
         @renderInPlace={{true}} 
@@ -77,7 +75,7 @@ const SelectMultipleTemplate = (args) => ({
       </AkSelect>
     </div>
   `,
-  context: { ...args, selectItems, ...actions },
+  context: { ...args, selectItems },
 });
 
 export const SelectMultiple = SelectMultipleTemplate.bind({});
