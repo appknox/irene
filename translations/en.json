@@ -370,6 +370,7 @@
   "download": "Download",
   "downloadClientsStatData": "Download Clients Statistics Data",
   "downloadPrevReport": "Download Previous Report",
+  "downloadRawFile": "Download Raw File",
   "downloadReport": "Download Report",
   "downloadUrlNotFound": "Couldn't download the report!",
   "dragDropFile": "Drag & drop file",
