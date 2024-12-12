@@ -1,0 +1,40 @@
+{{#if this.isPending}}
+  <AkChip
+    @label={{t 'storeknox.waitingForApproval'}}
+    @variant='semi-filled'
+    @color='success'
+  >
+    <:icon>
+      <AkIcon @iconName='schedule-send' />
+    </:icon>
+  </AkChip>
+{{else}}
+  <AkStack @justifyContent='center' @direction='column'>
+    <AkTypography @color={{this.statusDetails.color}}>
+      {{this.statusDetails.text}}
+    </AkTypography>
+
+    <AkStack @alignItems='center' @spacing='0.5'>
+      <AkTypography>
+        {{t 'by'}}
+        {{this.statusDetails.by}}
+      </AkTypography>
+
+      <AkTooltip @placement='bottom' @arrow={{true}} @color='light'>
+        <:tooltipContent>
+          <AkStack @spacing='0.5' @alignItems='center'>
+            <AkIcon @iconName='check-circle' @size='small' />
+
+            <AkTypography @color='inherit'>
+              {{this.statusDetails.date}}
+            </AkTypography>
+          </AkStack>
+        </:tooltipContent>
+
+        <:default>
+          <AkIcon @iconName='info' local-class='info-icon' />
+        </:default>
+      </AkTooltip>
+    </AkStack>
+  </AkStack>
+{{/if}}
