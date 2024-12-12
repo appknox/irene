@@ -5,16 +5,94 @@ on:
     types: [opened, reopened]
 
 jobs:
-  test:
+  setup:
+    name: Setup & Build Application
     runs-on: [ubuntu-latest]
-    concurrency:
-      group: ${{ github.workflow }}-ci-${{ github.ref }}
-      cancel-in-progress: true
     steps:
       - uses: actions/checkout@v4
 
       - name: Setup Application
         uses: ./.github/actions/setup-app
 
-      - name: Run tests
-        run: npm test
+      - name: Build ember app
+        run: npm run build:test
+
+      - name: Upload built ember app
+        uses: actions/upload-artifact@v4
+        with:
+          name: dist
+          path: dist
+
+  lint:
+    name: Run Linting
+    needs: [setup]
+    runs-on: [ubuntu-latest]
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Restore Cached Node Modules
+        uses: actions/cache@v4
+        with:
+          path: node_modules
+          key: ${{ runner.os }}-npm-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-npm-
+
+      - name: Run Linting
+        run: npm run lint
+
+  test:
+    name: Run ${{ matrix.tests.type }}
+    needs: [setup]
+    runs-on: [ubuntu-latest]
+    strategy:
+      fail-fast: false
+      matrix:
+        tests:
+          - type: Unit Tests
+            commandArgs: --file-path='/irene/tests/unit*.js' --split=3 --parallel=3 --load-balance
+          - type: Acceptance Tests
+            commandArgs: --file-path='/irene/tests/acceptance*.js' --split=3 --parallel=3 --load-balance
+          - type: Integration Tests - Part 1
+            commandArgs: --file-path='/irene/tests/integration*.js' --split=8 --partition=1 --parallel=12 --load-balance
+          - type: Integration Tests - Part 2
+            commandArgs: --file-path='/irene/tests/integration*.js' --split=8 --partition=2 --parallel=12 --load-balance
+          - type: Integration Tests - Part 3
+            commandArgs: --file-path='/irene/tests/integration*.js' --split=8 --partition=3 --parallel=12 --load-balance
+          - type: Integration Tests - Part 4
+            commandArgs: --file-path='/irene/tests/integration*.js' --split=8 --partition=4 --parallel=12 --load-balance
+          - type: Integration Tests - Part 5
+            commandArgs: --file-path='/irene/tests/integration*.js' --split=8 --partition=5 --parallel=12 --load-balance
+          - type: Integration Tests - Part 6
+            commandArgs: --file-path='/irene/tests/integration*.js' --split=8 --partition=6 --parallel=12 --load-balance
+          - type: Integration Tests - Part 7
+            commandArgs: --file-path='/irene/tests/integration*.js' --split=8 --partition=7 --parallel=12 --load-balance
+          - type: Integration Tests - Part 8
+            commandArgs: --file-path='/irene/tests/integration*.js' --split=8 --partition=8 --parallel=12 --load-balance
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/download-artifact@v4
+        with:
+          name: dist
+          path: dist
+
+      - name: Restore Cached Node Modules
+        uses: actions/cache@v4
+        with:
+          path: node_modules
+          key: ${{ runner.os }}-npm-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-npm-
+
+      - name: Run ${{ matrix.tests.type }}
+        run: |
+          npm run test:ember -- ${{matrix.tests.commandArgs}} --path=dist --wmmf
+
+      - name: Job Summary
+        if: always()
+        run: |
+          echo "| Module | Total | Passed | Failed | Skipped | Duration (ms) |" >> $GITHUB_STEP_SUMMARY
+          echo "| --- | --- | --- | --- | --- | --- |" >> $GITHUB_STEP_SUMMARY
+
+          cat module-metadata-*.json | jq -r '.modules[] | "\(.moduleName | gsub("\\|"; "\\\\|")) | \(.total) | \(.passed) | \(.failed) | \(.skipped) | \(.duration) "' >> $GITHUB_STEP_SUMMARY
