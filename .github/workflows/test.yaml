@@ -5,7 +5,7 @@ on:
     types: [opened, reopened]
 
 jobs:
-  test:
+  build:
     runs-on: [ubuntu-latest]
     concurrency:
       group: ${{ github.workflow }}-ci-${{ github.ref }}
@@ -16,5 +16,65 @@ jobs:
       - name: Setup Application
         uses: ./.github/actions/setup-app
 
-      - name: Run tests
-        run: npm test
+      - name: Build ember app
+        run: npm run build:test
+
+      - name: Upload built ember app
+        uses: actions/upload-artifact@v4
+        with:
+          name: dist
+          path: dist
+
+  unitTests:
+    needs: [build]
+    runs-on: [ubuntu-latest]
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Download built ember app
+        uses: actions/download-artifact@v4
+        with:
+          name: dist
+          path: dist
+
+      - name: Setup Application
+        uses: ./.github/actions/setup-app
+
+      - name: Run unit tests
+        run: npm run test:unit
+
+  integrationTests:
+    needs: [build]
+    runs-on: [ubuntu-latest]
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Download built ember app
+        uses: actions/download-artifact@v4
+        with:
+          name: dist
+          path: dist
+
+      - name: Setup Application
+        uses: ./.github/actions/setup-app
+
+      - name: Run integration tests
+        run: npm run test:integration
+
+  acceptanceTests:
+    needs: [build]
+    runs-on: [ubuntu-latest]
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Download built ember app
+        uses: actions/download-artifact@v4
+        with:
+          name: dist
+          path: dist
+
+      - name: Setup Application
+        uses: ./.github/actions/setup-app
+
+      - name: Run acceptance tests
+        run: npm run test:acceptance
