@@ -12,6 +12,7 @@
   "repository": "https://github.com/appknox/irene",
   "scripts": {
     "build": "ember build --environment=production",
+    "build:test": "ember build --environment=test",
     "lint": "concurrently \"npm:lint:*(!fix)\" --names \"lint:\"",
     "lint:css": "stylelint \"**/*.{css,scss}\" --allow-empty-input",
     "lint:css:fix": "concurrently \"npm:lint:css -- --fix\"",
@@ -24,7 +25,7 @@
     "startstaging": "cross-env IRENE_API_HOST=https://api.appknox.io ember server",
     "startprod": "cross-env IRENE_API_HOST=https://api.appknox.com ember server",
     "test": "concurrently \"npm:lint\" \"npm:test:*\" --names \"lint,test:\"",
-    "test:ember": "ember exam --split=6 --parallel",
+    "test:ember": "ember exam",
     "cypress:open": "cypress open",
     "cypress:run": "cypress run --browser chrome",
     "deploy": "ember deploy production --verbose=true --activate=true --show-progress=true",

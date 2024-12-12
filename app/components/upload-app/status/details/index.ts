@@ -7,6 +7,7 @@ import { addObserver, removeObserver } from '@ember/object/observers';
 import { action } from '@ember/object';
 import RouterService from '@ember/routing/router-service';
 import { helper } from '@ember/component/helper';
+import relativeTime from 'dayjs/plugin/relativeTime';
 
 import { SubmissionModelWithSystemFileData } from '../index';
 import ENUMS from 'irene/enums';
@@ -110,6 +111,7 @@ export default class UploadAppStatusDetailsComponent extends Component<UploadApp
   }
 
   get createdOn() {
+    dayjs.extend(relativeTime);
     return dayjs(this.args.submission.createdOn).fromNow();
   }
 }
