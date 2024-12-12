@@ -20,3 +20,17 @@
 .ak-divider-color-dark {
   border-color: var(--ak-divider-color-dark);
 }
+
+.ak-divider-direction-vertical {
+  width: 1px;
+  height: auto;
+  align-self: stretch;
+}
+
+.ak-divider-vertical-color-light {
+  background-color: var(--ak-divider-color-light);
+}
+
+.ak-divider-vertical-color-dark {
+  background-color: var(--ak-divider-color-dark);
+}

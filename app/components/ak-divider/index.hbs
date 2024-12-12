@@ -1,11 +1,21 @@
 {{! @glint-nocheck : or}}
-{{#let (element (or @tag 'hr')) as |Tag|}}
-  <Tag
+{{#if this.isVertical}}
+  <div
     data-test-ak-divider
     ...attributes
     local-class='
+    ak-divider-vertical-color-{{or @color "light"}}
+    ak-divider-direction-vertical'
+  />
+{{else}}
+  {{#let (element (or @tag 'hr')) as |Tag|}}
+    <Tag
+      data-test-ak-divider
+      ...attributes
+      local-class='
       ak-divider-root 
       ak-divider-variant-{{or @variant "fullWidth"}} 
       ak-divider-color-{{or @color "light"}}'
-  />
-{{/let}}
+    />
+  {{/let}}
+{{/if}}
