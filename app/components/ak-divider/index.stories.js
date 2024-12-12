@@ -52,3 +52,24 @@ Default.args = {
   variant: 'fullWidth',
   color: 'light',
 };
+
+const VerticalTemplate = (args) => ({
+  template: hbs`
+    <AkTypography @color="textSecondary" @gutterBottom={{true}}>Experiment with me</AkTypography>
+    
+    <div {{style height="200px"}} class="flex-row flex-align-center flex-justify-space-around p-3 w-full m-3">
+      <AkTypography @color="textSecondary" @gutterBottom={{true}}>A</AkTypography>
+        <AkDivider @color={{this.color}} @direction={{this.direction}} @variant={{this.variant}} />
+      <AkTypography @color="textSecondary" @gutterBottom={{true}}>B</AkTypography>
+    </div>
+  `,
+  context: { ...args },
+});
+
+export const Vertical = VerticalTemplate.bind({});
+
+Vertical.args = {
+  color: 'dark',
+  direction: 'vertical',
+  variant: 'fullWidth',
+};
