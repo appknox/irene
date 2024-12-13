@@ -1,0 +1,23 @@
+<AkTooltip @placement='bottom' @arrow={{true}} @color='light'>
+  <:tooltipContent>
+    <div local-class='tooltip-content'>
+      <AkStack @spacing='0.5' @alignItems='center'>
+        <AkIcon @iconName='info' @color='textSecondary' @size='small' />
+
+        <AkTypography @color='textSecondary'>
+          {{t 'storeknox.info'}}
+        </AkTypography>
+      </AkStack>
+
+      <AkTypography class='mt-1'>
+        {{@indicatorInfo}}
+      </AkTypography>
+    </div>
+  </:tooltipContent>
+
+  <:default>
+    {{#let (component @svgComponent) as |SvgComponent|}}
+      <SvgComponent />
+    {{/let}}
+  </:default>
+</AkTooltip>

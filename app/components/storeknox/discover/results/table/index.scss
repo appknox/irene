@@ -1,0 +1,37 @@
+.result-header {
+  border: 1px solid var(--storeknox-discover-results-table-header-border-color);
+  padding: 1em;
+  background-color: var(--storeknox-discover-results-table-header-bg-color);
+  border-top: 0;
+  border-bottom: 0;
+}
+
+.results-back-icon {
+  font-size: 1.714rem !important;
+  margin-right: 0.214em;
+}
+
+.results-table {
+  tr {
+    background-color: var(--storeknox-discover-results-table-row-color);
+    border: 1px solid var(--storeknox-discover-results-table-row-border-color);
+    border-top: 0;
+  }
+}
+
+.empty-container {
+  padding-top: 5em;
+  padding-bottom: 5em;
+  border: 1px solid var(--storeknox-discover-results-table-header-border-color);
+  background-color: var(--storeknox-discover-results-table-header-bg-color);
+  border-top: 0;
+
+  .header {
+    margin-top: 1.5625em;
+  }
+
+  .body-text {
+    text-align: center;
+    max-width: 550px;
+  }
+}

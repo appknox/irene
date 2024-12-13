@@ -1,0 +1,8 @@
+.review-table {
+  tr {
+    background-color: var(--storeknox-inventory-pending-review-table-row-color);
+    border: 1px solid
+      var(--storeknox-inventory-pending-review-table-row-border-color);
+    border-top: 0;
+  }
+}
