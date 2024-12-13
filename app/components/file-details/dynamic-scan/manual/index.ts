@@ -41,9 +41,7 @@ export default class FileDetailsDastManual extends Component<FileDetailsDastManu
   }
 
   get showActionButton() {
-    if (this.dynamicScan?.isReady || this.dynamicScan?.isStatusError) {
-      return true;
-    } else if (this.dynamicScan?.isDynamicStatusInProgress) {
+    if (this.dynamicScan?.isShuttingDown) {
       return false;
     }
 

@@ -1,54 +1,59 @@
 import Component from '@glimmer/component';
 import { action } from '@ember/object';
 import { inject as service } from '@ember/service';
-import ENUMS from 'irene/enums';
 import type IntlService from 'ember-intl/services/intl';
 
+import { DsComputedStatus } from 'irene/models/dynamicscan';
 import { type AkLoaderColor } from 'irene/components/ak-loader';
 import { type AkChipColor } from 'irene/components/ak-chip';
-import type DynamicscanModel from 'irene/models/dynamicscan';
-import type FileModel from 'irene/models/file';
 
 export interface DynamicScanStatusChipSignature {
   Element: HTMLElement;
   Args: {
-    file: FileModel;
-    dynamicScan?: DynamicscanModel | null;
-    uppercase?: boolean;
-    chipStatusText?: string;
-    isAutomatedScan?: boolean;
+    status: DsComputedStatus | undefined;
+    statusText?: string;
   };
 }
 
 export default class DynamicScanStatusChipComponent extends Component<DynamicScanStatusChipSignature> {
   @service declare intl: IntlService;
 
-  get dynamicScan() {
-    return this.args.dynamicScan;
+  get status() {
+    return this.args.status;
+  }
+
+  get statusText() {
+    return this.args.statusText;
   }
 
   get chipColor() {
-    return this.getColor(this.dynamicScan?.status, false) as AkChipColor;
+    return this.getColor(this.status, false) as AkChipColor;
   }
 
   get loaderColor() {
-    return this.getColor(this.dynamicScan?.status, true) as AkLoaderColor;
+    return this.getColor(this.status, true) as AkLoaderColor;
   }
 
   get chipDetails() {
-    if (this.dynamicScan?.isStatusError) {
+    if (this.status === DsComputedStatus.ERROR) {
       return {
         label: this.intl.t('errored'),
         color: 'error' as const,
         icon: 'warning',
       };
-    } else if (this.dynamicScan?.isDynamicStatusInProgress) {
+    } else if (this.status === DsComputedStatus.IN_PROGRESS) {
       return {
-        label: this.dynamicScan.statusText,
+        label: this.statusText || this.intl.t('inProgress'),
         color: this.chipColor,
         loaderColor: this.loaderColor,
       };
-    } else if (this.dynamicScan?.isCompleted) {
+    } else if (this.status === DsComputedStatus.RUNNING) {
+      return {
+        label: this.statusText || this.intl.t('running'),
+        color: this.chipColor,
+        loaderColor: this.loaderColor,
+      };
+    } else if (this.status === DsComputedStatus.COMPLETED) {
       return {
         label: this.intl.t('completed'),
         color: 'success' as const,
@@ -66,16 +71,13 @@ export default class DynamicScanStatusChipComponent extends Component<DynamicSca
     status: string | number | undefined,
     isLoader: boolean
   ): AkChipColor | AkLoaderColor {
-    if (
-      this.dynamicScan?.isDynamicStatusInProgress &&
-      this.dynamicScan.isRunning
-    ) {
+    if (status === DsComputedStatus.IN_PROGRESS) {
       return isLoader ? 'warn-dark' : 'warn';
-    } else if (status === ENUMS.DYNAMIC_STATUS.COMPLETED) {
+    } else if (status === DsComputedStatus.COMPLETED) {
       return 'success';
-    } else if (status === ENUMS.DYNAMIC_STATUS.NONE) {
+    } else if (status === DsComputedStatus.NOT_STARTED) {
       return 'secondary';
-    } else if (status === ENUMS.DYNAMIC_STATUS.RUNNING) {
+    } else if (status === DsComputedStatus.RUNNING) {
       return isLoader ? 'info-dark' : 'info';
     } else {
       return isLoader ? 'warn-dark' : 'warn';

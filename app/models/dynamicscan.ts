@@ -1,12 +1,19 @@
-import Model, { attr, belongsTo, AsyncBelongsTo } from '@ember-data/model';
-import UserModel from './user';
-import ENUMS from 'irene/enums';
-// import DevicePreferenceModel from './device-preference';
-import AvailableDeviceModel from './available-device';
-import ScanParameterModel from './scan-parameter';
+import Model, { attr, belongsTo, type AsyncBelongsTo } from '@ember-data/model';
 import { inject as service } from '@ember/service';
-import IntlService from 'ember-intl/services/intl';
-import FileModel from './file';
+import type IntlService from 'ember-intl/services/intl';
+
+import ENUMS from 'irene/enums';
+import type UserModel from './user';
+import type FileModel from './file';
+import type DeviceModel from './device';
+
+export enum DsComputedStatus {
+  NOT_STARTED,
+  IN_PROGRESS,
+  RUNNING,
+  COMPLETED,
+  ERROR,
+}
 
 export default class DynamicscanModel extends Model {
   @service declare intl: IntlService;
@@ -15,11 +22,29 @@ export default class DynamicscanModel extends Model {
   @belongsTo('file', { async: true, inverse: null })
   declare file: AsyncBelongsTo<FileModel>;
 
+  @attr('string')
+  declare packageName: string;
+
   @attr('number')
   declare mode: number;
 
+  @attr('string')
+  declare modeDisplay: string;
+
   @attr('number')
   declare status: number;
+
+  @attr('string')
+  declare statusDisplay: string;
+
+  @attr('string')
+  declare moriartyDynamicscanrequestId: string;
+
+  @attr('string')
+  declare moriartyDynamicscanId: string;
+
+  @attr('string')
+  declare moriartyDynamicscanToken: string;
 
   // User actions
   @belongsTo('user', { async: true, inverse: null })
@@ -28,71 +53,28 @@ export default class DynamicscanModel extends Model {
   @belongsTo('user', { async: true, inverse: null })
   declare stoppedByUser: AsyncBelongsTo<UserModel>;
 
-  // Scan user preferences
-  // @belongsTo('device-preference')
-  // declare devicePreference: AsyncBelongsTo<DevicePreferenceModel>;
+  @attr('date')
+  declare createdOn: Date;
 
-  @attr('number')
-  declare deviceType: number;
+  @attr('date')
+  declare endedOn: Date;
 
-  @attr('string')
-  declare platformVersion: string;
+  @attr('date')
+  declare autoShutdownOn: Date;
 
-  @belongsTo('scan-parameter-group', { async: true, inverse: null })
-  declare scanParameterGroups: AsyncBelongsTo<ScanParameterModel>;
-
-  @attr('boolean')
-  declare enableApiCapture: boolean;
+  // will be {} for device allocation failure state
+  // @belongsTo('device', { async: false, inverse: null })
+  @attr()
+  declare deviceUsed: unknown;
 
   @attr()
-  declare apiCaptureFilters: unknown; //TODO: Check this type <json default=list>
-
-  @attr('string')
-  declare proxyHost: string;
-
-  @attr('string')
-  declare proxyPort: string;
-
-  // Devicefarm scan info
-  @attr('string')
-  declare moriartyDynamicscanId: string;
-
-  @attr('string')
-  declare moriartyDynamicscanToken: string;
-
-  @attr()
-  declare deviceUsed: unknown; //TODO: Check this type <json default=dict>
+  declare devicePreference: unknown;
 
   @attr('string')
   declare errorCode: string;
 
   @attr('string')
   declare errorMessage: string;
-
-  @attr('date')
-  declare createdOn: Date;
-
-  @attr('date')
-  declare updatedOn: Date;
-
-  @attr('date')
-  declare endedOn: Date;
-
-  @attr('date')
-  declare timeoutOn: Date;
-
-  @attr('date')
-  declare autoShutdownOn: Date;
-
-  // Post interaction
-  @attr('boolean')
-  declare isAnalysisDone: boolean;
-
-  @attr('number')
-  declare time: number;
-
-  @belongsTo('available-device', { async: true, inverse: null })
-  declare availableDevice: AsyncBelongsTo<AvailableDeviceModel>;
 
   async extendTime(time: number) {
     const adapter = this.store.adapterFor('dynamicscan');
@@ -203,7 +185,6 @@ export default class DynamicscanModel extends Model {
       ENUMS.DYNAMIC_SCAN_STATUS.SHUTTING_DOWN,
       ENUMS.DYNAMIC_SCAN_STATUS.CLEANING_DEVICE,
       ENUMS.DYNAMIC_SCAN_STATUS.RUNTIME_DETECTION_COMPLETED,
-      ENUMS.DYNAMIC_SCAN_STATUS.TERMINATED,
     ].includes(this.status);
   }
 
@@ -211,6 +192,7 @@ export default class DynamicscanModel extends Model {
     return [
       ENUMS.DYNAMIC_SCAN_STATUS.ERROR,
       ENUMS.DYNAMIC_SCAN_STATUS.TIMED_OUT,
+      ENUMS.DYNAMIC_SCAN_STATUS.TERMINATED,
     ].includes(this.status);
   }
 
@@ -225,15 +207,18 @@ export default class DynamicscanModel extends Model {
     return this.status === ENUMS.DYNAMIC_SCAN_STATUS.CANCELLED;
   }
 
-  get isDynamicStatusInProgress() {
+  get isStarting() {
     return (
       this.isInqueue ||
       this.isBooting ||
       this.isInstalling ||
       this.isLaunching ||
-      this.isHooking ||
-      this.isShuttingDown
+      this.isHooking
     );
+  }
+
+  get isStartingOrShuttingInProgress() {
+    return this.isStarting || this.isShuttingDown;
   }
 
   get isDynamicStatusNoneOrError() {
@@ -242,6 +227,26 @@ export default class DynamicscanModel extends Model {
 
   get isReadyOrRunning() {
     return this.isReady || this.isRunning;
+  }
+
+  get computedStatus() {
+    if (this.isStartingOrShuttingInProgress) {
+      return DsComputedStatus.IN_PROGRESS;
+    }
+
+    if (this.isRunning || this.isReady) {
+      return DsComputedStatus.RUNNING;
+    }
+
+    if (this.isCompleted) {
+      return DsComputedStatus.COMPLETED;
+    }
+
+    if (this.isStatusError) {
+      return DsComputedStatus.ERROR;
+    }
+
+    return DsComputedStatus.NOT_STARTED;
   }
 
   get statusText() {
@@ -266,7 +271,7 @@ export default class DynamicscanModel extends Model {
     }
 
     if (this.isRunning) {
-      return this.intl.t('inProgress');
+      return this.intl.t('running');
     }
 
     if (this.isShuttingDown) {

@@ -3,6 +3,7 @@ import { tracked } from '@glimmer/tracking';
 import { inject as service } from '@ember/service';
 import { task } from 'ember-concurrency';
 import { action } from '@ember/object';
+import type IntlService from 'ember-intl/services/intl';
 
 import ENV from 'irene/config/environment';
 import triggerAnalytics from 'irene/utils/trigger-analytics';
@@ -21,7 +22,7 @@ export interface DynamicScanActionSignature {
 }
 
 export default class DynamicScanActionComponent extends Component<DynamicScanActionSignature> {
-  @service declare ajax: any;
+  @service declare intl: IntlService;
   @service('notifications') declare notify: NotificationService;
 
   @tracked showDynamicScanDrawer = false;
@@ -36,6 +37,49 @@ export default class DynamicScanActionComponent extends Component<DynamicScanAct
 
   get profileId() {
     return this.file.profile.get('id');
+  }
+
+  get dynamicScanActionButton() {
+    if (this.args.dynamicScan?.isStarting) {
+      return {
+        icon: 'close',
+        text: this.intl.t('cancelScan'),
+        testId: 'cancelBtn',
+        variant: 'outlined' as const,
+        color: 'neutral' as const,
+        onClick: () => this.dynamicShutdown.perform(),
+        loading: this.dynamicShutdown.isRunning,
+      };
+    }
+
+    if (this.args.dynamicScan?.isReadyOrRunning) {
+      return {
+        icon: 'stop-circle',
+        text: this.intl.t('stop'),
+        testId: 'stopBtn',
+        loading: this.dynamicShutdown.isRunning,
+        onClick: () => this.dynamicShutdown.perform(),
+      };
+    }
+
+    if (
+      this.args.dynamicScan?.isCompleted ||
+      this.args.dynamicScan?.isStatusError
+    ) {
+      return {
+        icon: 'refresh',
+        text: this.args.dynamicScanText,
+        testId: 'restartBtn',
+        onClick: this.openDynamicScanDrawer,
+      };
+    }
+
+    return {
+      icon: 'play-arrow',
+      text: this.args.dynamicScanText,
+      testId: 'startBtn',
+      onClick: this.openDynamicScanDrawer,
+    };
   }
 
   @action
@@ -54,15 +98,11 @@ export default class DynamicScanActionComponent extends Component<DynamicScanAct
   }
 
   dynamicShutdown = task({ drop: true }, async () => {
-    this.args.dynamicScan?.setShuttingDown();
-
     try {
       await this.args.dynamicScan?.destroyRecord();
 
       this.args.onScanShutdown?.();
     } catch (error) {
-      this.args.dynamicScan?.setNone();
-
       this.notify.error((error as AdapterError).payload.error);
     }
   });
