@@ -62,7 +62,9 @@
     <AkIcon @iconName='warning' @color='error' @size='small' />
 
     <AkTypography @color='error' @variant='body2'>
-      {{#if this.isAllDevicesAllocated}}
+      {{#if this.minOsVersionUnsupported}}
+        {{t 'modalCard.dynamicScan.minOSVersionUnsupported'}}
+      {{else if this.isAllDevicesAllocated}}
         {{t 'modalCard.dynamicScan.allDevicesAreAllocated'}}
       {{else}}
         {{t 'modalCard.dynamicScan.preferredDeviceNotAvailable'}}
