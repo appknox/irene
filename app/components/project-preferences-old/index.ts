@@ -24,7 +24,11 @@ export interface ProjectPreferencesOldSignature {
   };
 }
 
-export default class ProjectPreferencesOldComponent extends Component<ProjectPreferencesOldSignature> {}
+export default class ProjectPreferencesOldComponent extends Component<ProjectPreferencesOldSignature> {
+  get projectLastFile() {
+    return this.args.project?.get('lastFile');
+  }
+}
 
 declare module '@glint/environment-ember-loose/registry' {
   export default interface Registry {

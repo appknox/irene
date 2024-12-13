@@ -1,6 +1,14 @@
 {{page-title (t 'manual')}}
 
-<FileDetails::DynamicScan::Manual
-  @file={{@model.file}}
+<ProjectPreferencesOld::Provider
   @profileId={{@model.profileId}}
-/>
+  @project={{@model.file.project}}
+  @file={{@model.file}}
+  as |dpContext|
+>
+  <FileDetails::DynamicScan::Manual
+    @dpContext={{dpContext}}
+    @file={{@model.file}}
+    @profileId={{@model.profileId}}
+  />
+</ProjectPreferencesOld::Provider>

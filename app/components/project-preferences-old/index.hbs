@@ -2,13 +2,14 @@
   @file={{@file}}
   @project={{@project}}
   @profileId={{@profileId}}
-  @platform={{@platform}}
   as |dpContext|
 >
   {{yield
     (hash
       DevicePreferenceComponent=(component
-        'project-preferences-old/device-preference' dpContext=dpContext
+        'project-preferences-old/device-preference'
+        file=this.projectLastFile
+        dpContext=dpContext
       )
     )
   }}

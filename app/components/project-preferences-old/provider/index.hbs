@@ -1,5 +1,6 @@
 {{yield
   (hash
+    filteredDevices=this.filteredDevices
     deviceTypes=this.filteredDeviceTypes
     selectedDeviceType=this.selectedDeviceType
     handleSelectDeviceType=this.handleSelectDeviceType
@@ -7,5 +8,7 @@
     devicePlatformVersions=this.devicePlatformVersionOptions
     handleSelectVersion=this.handleSelectVersion
     isPreferredDeviceAvailable=this.isPreferredDeviceAvailable
+    updateDevicePref=this.updateDevicePref
+    compareVersions=this.compareVersions
   )
 }}

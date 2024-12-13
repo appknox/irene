@@ -1,3 +1,4 @@
+/* eslint-disable qunit/no-conditional-assertions */
 import { click, fillIn, find, findAll, render } from '@ember/test-helpers';
 import { hbs } from 'ember-cli-htmlbars';
 import { setupMirage } from 'ember-cli-mirage/test-support';
@@ -176,6 +177,7 @@ module(
       this.setProperties({
         file: store.push(store.normalize('file', file.toJSON())),
         dynamicScanText: t('modalCard.dynamicScan.title'),
+        profile,
         project,
         devicePreference,
         availableDevices,
@@ -207,7 +209,14 @@ module(
         });
 
         await render(hbs`
-          <FileDetails::DynamicScan::Manual @file={{this.file}} @dynamicScanText={{this.dynamicScanText}} />
+          <ProjectPreferencesOld::Provider
+            @profileId={{this.file.profile.id}}
+            @project={{this.file.project}}
+            @file={{this.file}}
+            as |dpContext|
+          >
+            <FileDetails::DynamicScan::Manual @file={{this.file}} @dynamicScanText={{this.dynamicScanText}} @dpContext={{dpContext}} />
+          </ProjectPreferencesOld::Provider>
         `);
 
         if (this.file.dynamicStatus === ENUMS.DYNAMIC_STATUS.ERROR) {
@@ -350,7 +359,14 @@ module(
         });
 
         await render(hbs`
-            <FileDetails::DynamicScan::Manual @file={{this.file}} @dynamicScanText={{this.dynamicScanText}} />
+          <ProjectPreferencesOld::Provider
+            @profileId={{this.file.profile.id}}
+            @project={{this.file.project}}
+            @file={{this.file}}
+            as |dpContext|
+          >
+            <FileDetails::DynamicScan::Manual @file={{this.file}} @dynamicScanText={{this.dynamicScanText}} @dpContext={{dpContext}} />
+          </ProjectPreferencesOld::Provider>
         `);
 
         assert
@@ -656,7 +672,14 @@ module(
       });
 
       await render(hbs`
-        <FileDetails::DynamicScan::Manual @file={{this.file}} @dynamicScanText={{this.dynamicScanText}} />
+        <ProjectPreferencesOld::Provider
+          @profileId={{this.file.profile.id}}
+          @project={{this.file.project}}
+          @file={{this.file}}
+          as |dpContext|
+        >
+          <FileDetails::DynamicScan::Manual @file={{this.file}} @dynamicScanText={{this.dynamicScanText}} @dpContext={{dpContext}} />
+        </ProjectPreferencesOld::Provider>
       `);
 
       assert
@@ -828,7 +851,14 @@ module(
       });
 
       await render(hbs`
-        <FileDetails::DynamicScan::Manual @file={{this.file}} @dynamicScanText={{this.dynamicScanText}} />
+        <ProjectPreferencesOld::Provider
+          @profileId={{this.file.profile.id}}
+          @project={{this.file.project}}
+          @file={{this.file}}
+          as |dpContext|
+        >
+          <FileDetails::DynamicScan::Manual @file={{this.file}} @dynamicScanText={{this.dynamicScanText}} @dpContext={{dpContext}} />
+        </ProjectPreferencesOld::Provider>
       `);
 
       assert
@@ -935,7 +965,14 @@ module(
         );
 
         await render(hbs`
-          <FileDetails::DynamicScan::Manual @file={{this.file}} @dynamicScanText={{this.dynamicScanText}} />
+          <ProjectPreferencesOld::Provider
+            @profileId={{this.file.profile.id}}
+            @project={{this.file.project}}
+            @file={{this.file}}
+            as |dpContext|
+          >
+            <FileDetails::DynamicScan::Manual @file={{this.file}} @dynamicScanText={{this.dynamicScanText}} @dpContext={{dpContext}} />
+          </ProjectPreferencesOld::Provider>
         `);
 
         assert
@@ -1140,7 +1177,14 @@ module(
       });
 
       await render(hbs`
-        <FileDetails::DynamicScan::Manual @file={{this.file}} @dynamicScanText={{this.dynamicScanText}} />
+        <ProjectPreferencesOld::Provider
+          @profileId={{this.file.profile.id}}
+          @project={{this.file.project}}
+          @file={{this.file}}
+          as |dpContext|
+        >
+          <FileDetails::DynamicScan::Manual @file={{this.file}} @dynamicScanText={{this.dynamicScanText}} @dpContext={{dpContext}} />
+        </ProjectPreferencesOld::Provider>
       `);
 
       assert
@@ -1212,8 +1256,30 @@ module(
           expectedError: () =>
             t('modalCard.dynamicScan.allDevicesAreAllocated'),
         },
+        {
+          scenario: 'minimum OS version is unsupported (Android)',
+          removePreferredOnly: false,
+          minAndroidOsVersion: 15, // Current min supported android OS is 14
+          expectedError: () =>
+            t('modalCard.dynamicScan.minOSVersionUnsupported'),
+        },
+        {
+          scenario: 'minimum OS version is unsupported (iOS)',
+          removePreferredOnly: false,
+          minIOSOSVersion: 18, // Current min supported android OS is 17
+          expectedError: () =>
+            t('modalCard.dynamicScan.minOSVersionUnsupported'),
+        },
       ],
-      async function (assert, { removePreferredOnly, expectedError }) {
+      async function (
+        assert,
+        {
+          removePreferredOnly,
+          expectedError,
+          minAndroidOsVersion,
+          minIOSOSVersion,
+        }
+      ) {
         const preferredDeviceType = this.devicePreference.device_type;
         const preferredPlatformVersion = this.devicePreference.platform_version;
 
@@ -1243,6 +1309,11 @@ module(
           is_dynamic_done: false,
           can_run_automated_dynamicscan: false,
           is_active: true,
+          min_os_version: minAndroidOsVersion
+            ? minAndroidOsVersion
+            : minIOSOSVersion
+              ? minIOSOSVersion
+              : faker.number.int({ min: 9, max: 12 }),
         });
 
         this.set(
@@ -1252,7 +1323,16 @@ module(
 
         // Server mocks
         this.server.get('/v2/projects/:id', (schema, req) => {
-          return schema.projects.find(`${req.params.id}`)?.toJSON();
+          const project = schema.projects.find(`${req.params.id}`)?.toJSON();
+
+          return {
+            ...project,
+            platform: minIOSOSVersion
+              ? ENUMS.PLATFORM.IOS
+              : minAndroidOsVersion
+                ? ENUMS.PLATFORM.ANDROID
+                : project.platform,
+          };
         });
 
         this.server.get('/profiles/:id', (schema, req) =>
@@ -1278,7 +1358,14 @@ module(
         });
 
         await render(hbs`
-          <FileDetails::DynamicScan::Manual @file={{this.file}} @dynamicScanText={{this.dynamicScanText}} />
+          <ProjectPreferencesOld::Provider
+            @profileId={{this.file.profile.id}}
+            @project={{this.file.project}}
+            @file={{this.file}}
+            as |dpContext|
+          >
+            <FileDetails::DynamicScan::Manual @file={{this.file}} @dynamicScanText={{this.dynamicScanText}} @dpContext={{dpContext}} />
+          </ProjectPreferencesOld::Provider>
         `);
 
         assert
@@ -1342,7 +1429,14 @@ module(
       });
 
       await render(hbs`
-        <FileDetails::DynamicScan::Manual @file={{this.file}} @dynamicScanText={{this.dynamicScanText}} />
+        <ProjectPreferencesOld::Provider
+          @profileId={{this.file.profile.id}}
+          @project={{this.file.project}}
+          @file={{this.file}}
+          as |dpContext|
+        >
+          <FileDetails::DynamicScan::Manual @file={{this.file}} @dynamicScanText={{this.dynamicScanText}} @dpContext={{dpContext}} />
+        </ProjectPreferencesOld::Provider>
       `);
 
       assert
@@ -1411,7 +1505,14 @@ module(
         this.file.supportedDeviceTypes = supportedDeviceTypes;
 
         await render(hbs`
-          <FileDetails::DynamicScan::Manual @file={{this.file}} @dynamicScanText={{this.dynamicScanText}} />
+          <ProjectPreferencesOld::Provider
+            @profileId={{this.file.profile.id}}
+            @project={{this.file.project}}
+            @file={{this.file}}
+            as |dpContext|
+          >
+            <FileDetails::DynamicScan::Manual @file={{this.file}} @dynamicScanText={{this.dynamicScanText}} @dpContext={{dpContext}} />
+          </ProjectPreferencesOld::Provider>
         `);
 
         await click('[data-test-fileDetails-dynamicScanAction-startBtn]');
@@ -1440,5 +1541,180 @@ module(
         );
       }
     );
+
+    test('test selects random phone device type and version if any device is selected and resets after scan starts', async function (assert) {
+      assert.expect();
+
+      const isIOS = ENUMS.PLATFORM.IOS === this.project.platform;
+
+      const file = this.server.create('file', {
+        project: this.project.id,
+        profile: '100',
+        dynamic_status: ENUMS.DYNAMIC_STATUS.NONE,
+        is_dynamic_done: false,
+        is_active: true,
+        min_os_version: '0', // so that we can select any option for version
+        supported_cpu_architectures: isIOS ? 'arm64' : '',
+        supported_device_types: isIOS ? 'iPhone, iPad' : '', // required for Ios to show device types
+      });
+
+      // update project with latest file
+      this.project.update({
+        last_file_id: file.id,
+      });
+
+      // set the file
+      this.set(
+        'file',
+        this.store.push(this.store.normalize('file', file.toJSON()))
+      );
+
+      // server mocks
+      this.server.get('/profiles/:id/proxy_settings', (_, req) => {
+        return {
+          id: req.params.id,
+          host: faker.internet.ip(),
+          port: faker.internet.port(),
+          enabled: false,
+        };
+      });
+
+      this.server.put('/dynamicscan/:id', (schema, req) => {
+        schema.db.files.update(`${req.params.id}`, {
+          dynamic_status: ENUMS.DYNAMIC_STATUS.BOOTING,
+        });
+
+        return new Response(200);
+      });
+
+      this.server.post(
+        '/dynamicscan/:id/schedule_automation',
+        (schema, req) => {
+          schema.db.files.update(`${req.params.id}`, {
+            dynamic_status: ENUMS.DYNAMIC_STATUS.INQUEUE,
+          });
+
+          return new Response(201);
+        }
+      );
+
+      this.server.put('/profiles/:id/device_preference', (schema, req) => {
+        const data = req.requestBody
+          .split('&')
+          .map((it) => it.split('='))
+          .reduce((acc, [key, value]) => ({ ...acc, [key]: value }), {});
+
+        this.set('requestBody', data);
+
+        // Preference should be reset after dynamic scan enters an in progress state
+        if (this.checkPreferenceReset) {
+          const windowService = this.owner.lookup('service:browser/window');
+
+          const actualDevicePrefData = JSON.parse(
+            windowService.localStorage.getItem('actualDevicePrefData')
+          );
+
+          assert.strictEqual(
+            data.device_type,
+            String(actualDevicePrefData.device_type)
+          );
+
+          assert.strictEqual(
+            data.platform_version,
+            String(actualDevicePrefData.platform_version)
+          );
+        }
+        // When dynamic scan is started, the phone device type is selected with an random device version
+        else if (this.verifyPreferenceChange) {
+          assert.notEqual(data.platform_version, '0'); // Device OS version should not be any device
+
+          assert.strictEqual(
+            data.device_type,
+            String(ENUMS.DEVICE_TYPE.PHONE_REQUIRED)
+          );
+
+          this.set('checkPreferenceReset', true);
+        }
+
+        return new Response(200);
+      });
+
+      await render(hbs`
+        <ProjectPreferencesOld::Provider
+          @profileId={{this.file.profile.id}}
+          @project={{this.file.project}}
+          @file={{this.file}}
+          as |dpContext|
+        >
+          <FileDetails::DynamicScan::Manual @file={{this.file}} @dynamicScanText={{this.dynamicScanText}} @dpContext={{dpContext}} />
+        </ProjectPreferencesOld::Provider>
+      `);
+
+      await click('[data-test-fileDetails-dynamicScanAction-startBtn]');
+
+      const deviceTypeTrigger = `[data-test-projectPreference-deviceTypeSelect] .${classes.trigger}`;
+
+      const anyDeviceTypeLabel = t(
+        deviceType([ENUMS.DEVICE_TYPE.NO_PREFERENCE])
+      );
+
+      // Open device type dropdown
+      await click(deviceTypeTrigger);
+
+      await selectChoose(deviceTypeTrigger, anyDeviceTypeLabel);
+
+      assert.dom(deviceTypeTrigger).hasText(anyDeviceTypeLabel);
+
+      const osVersionSelectTrigger = `[data-test-projectPreference-osVersionSelect] .${classes.trigger}`;
+      const anyOSVersionLabel = t('anyVersion');
+
+      // Open OS version dropdown
+      await click(osVersionSelectTrigger);
+
+      await selectChoose(osVersionSelectTrigger, anyOSVersionLabel);
+
+      // verify ui
+      assert.dom(osVersionSelectTrigger).hasText(anyOSVersionLabel);
+
+      this.set('verifyPreferenceChange', true);
+
+      assert
+        .dom('[data-test-fileDetails-dynamicScanDrawerOld-startBtn]')
+        .isNotDisabled()
+        .hasText(t('modalCard.dynamicScan.start'));
+
+      await click('[data-test-fileDetails-dynamicScanDrawerOld-startBtn]');
+
+      const notify = this.owner.lookup('service:notifications');
+      const poll = this.owner.lookup('service:poll');
+
+      assert.strictEqual(notify.successMsg, t('startingScan'));
+
+      // simulate polling
+      if (poll.callback) {
+        await poll.callback();
+      }
+
+      // modal should close
+      assert.dom('[data-test-ak-appbar]').doesNotExist();
+
+      assert
+        .dom('[data-test-fileDetails-dynamicScanAction-startBtn]')
+        .doesNotExist();
+
+      assert
+        .dom('[data-test-fileDetails-dynamicScan-statusChip]')
+        .exists()
+        .hasText(dynamicScanStatusText()[ENUMS.DYNAMIC_STATUS.BOOTING]);
+
+      // Preference should be deleted from local storage
+      const windowService = this.owner.lookup('service:browser/window');
+
+      const actualDevicePrefData = JSON.parse(
+        windowService.localStorage.getItem('actualDevicePrefData')
+      );
+
+      assert.notOk(actualDevicePrefData);
+    });
   }
 );

@@ -36,6 +36,7 @@
 
       {{#if this.showActionButton}}
         <FileDetails::DynamicScan::Action
+          @dpContext={{@dpContext}}
           @file={{@file}}
           @dynamicScanText={{t 'modalCard.dynamicScan.title'}}
           @onScanShutdown={{this.handleFullscreenClose}}
@@ -114,6 +115,7 @@
             {{#if this.isFullscreenView}}
               <FileDetails::DynamicScan::Action
                 @file={{@file}}
+                @dpContext={{@dpContext}}
                 @dynamicScanText={{t 'modalCard.dynamicScan.title'}}
                 @onScanShutdown={{this.toggleFullscreenView}}
                 @dynamicScan={{this.dynamicScan}}
