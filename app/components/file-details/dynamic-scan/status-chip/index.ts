@@ -23,32 +23,32 @@ export interface DynamicScanStatusChipSignature {
 export default class DynamicScanStatusChipComponent extends Component<DynamicScanStatusChipSignature> {
   @service declare intl: IntlService;
 
-  get file() {
-    return this.args.file;
+  get dynamicScan() {
+    return this.args.dynamicScan;
   }
 
   get chipColor() {
-    return this.getColor(this.file?.dynamicStatus, false) as AkChipColor;
+    return this.getColor(this.dynamicScan?.status, false) as AkChipColor;
   }
 
   get loaderColor() {
-    return this.getColor(this.file?.dynamicStatus, true) as AkLoaderColor;
+    return this.getColor(this.dynamicScan?.status, true) as AkLoaderColor;
   }
 
   get chipDetails() {
-    if (this.file.isDynamicStatusError) {
+    if (this.dynamicScan?.isStatusError) {
       return {
         label: this.intl.t('errored'),
         color: 'error' as const,
         icon: 'warning',
       };
-    } else if (this.file.isDynamicStatusInProgress) {
+    } else if (this.dynamicScan?.isDynamicStatusInProgress) {
       return {
-        label: this.file.statusText,
+        label: this.dynamicScan.statusText,
         color: this.chipColor,
         loaderColor: this.loaderColor,
       };
-    } else if (this.file.isDynamicDone) {
+    } else if (this.dynamicScan?.isCompleted) {
       return {
         label: this.intl.t('completed'),
         color: 'success' as const,
@@ -66,7 +66,10 @@ export default class DynamicScanStatusChipComponent extends Component<DynamicSca
     status: string | number | undefined,
     isLoader: boolean
   ): AkChipColor | AkLoaderColor {
-    if (this.file?.isDynamicStatusInProgress) {
+    if (
+      this.dynamicScan?.isDynamicStatusInProgress &&
+      this.dynamicScan.isRunning
+    ) {
       return isLoader ? 'warn-dark' : 'warn';
     } else if (status === ENUMS.DYNAMIC_STATUS.COMPLETED) {
       return 'success';

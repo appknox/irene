@@ -5,15 +5,14 @@
   @direction='column'
   @spacing='3'
 >
-  {{!-- {{#if @dynamicScan.isDynamicStatusInProgress}} --}}
-  {{#if @file.isReady}}
+  {{#if @dynamicScan.isReady}}
     <AkStack
       @justifyContent='center'
       @alignItems='center'
       @direction='column'
       @spacing='1.5'
     >
-      <FileDetails::DynamicScan::ExpiryOld @file={{@file}} />
+      <FileDetails::DynamicScan::Action::Expiry @dynamicscan={{@dynamicScan}} />
 
       {{#if (has-block 'controls')}}
         {{yield to='controls'}}
@@ -21,7 +20,7 @@
     </AkStack>
   {{/if}}
 
-  {{#if @file.isDynamicStatusStarting}}
+  {{#if @dynamicScan.isDynamicStatusInProgress}}
     <AkTypography>
       <strong>{{t 'note'}} -</strong>
       {{t 'dynamicScanText'}}
@@ -64,8 +63,7 @@
       data-test-vncViewer-deviceScreen
       class={{if this.screenRequired 'noscreen' 'screen'}}
     >
-      {{!-- {{#if (and @dynamicScan.isReadyOrRunning this.deviceType)}} --}}
-      {{#if (and @file.isReady this.deviceType)}}
+      {{#if (and @dynamicScan.isReadyOrRunning this.deviceType)}}
         {{#if this.isAutomated}}
           <AkStack
             data-test-vncViewer-automatedNote

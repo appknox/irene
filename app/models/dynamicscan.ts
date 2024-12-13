@@ -132,167 +132,160 @@ export default class DynamicscanModel extends Model {
     this.setDynamicScanMode(ENUMS.DYNAMIC_MODE.AUTOMATED);
   }
 
-  setBootingStatus() {
-    this.setDynamicStatus(ENUMS.DYNAMIC_STATUS.BOOTING);
-  }
-
-  setInQueueStatus() {
-    this.setDynamicStatus(ENUMS.DYNAMIC_STATUS.INQUEUE);
-  }
-
   setShuttingDown() {
-    this.setDynamicStatus(ENUMS.DYNAMIC_STATUS.SHUTTING_DOWN);
+    this.setDynamicStatus(ENUMS.DYNAMIC_SCAN_STATUS.STOP_SCAN_REQUESTED);
   }
 
   setNone() {
-    this.setDynamicStatus(ENUMS.DYNAMIC_STATUS.NONE);
+    this.setDynamicStatus(ENUMS.DYNAMIC_SCAN_STATUS.NOT_STARTED);
   }
 
-  setReady() {
-    this.setDynamicStatus(ENUMS.DYNAMIC_STATUS.READY);
+  get isNone() {
+    return this.status === ENUMS.DYNAMIC_SCAN_STATUS.NOT_STARTED;
   }
 
-  setRunning() {
-    this.setDynamicStatus(ENUMS.DYNAMIC_STATUS.RUNNING);
+  get isNotNone() {
+    return !this.isNone;
+  }
+
+  get isInqueue() {
+    return [
+      ENUMS.DYNAMIC_SCAN_STATUS.PREPROCESSING,
+      ENUMS.DYNAMIC_SCAN_STATUS.PROCESSING_SCAN_REQUEST,
+      ENUMS.DYNAMIC_SCAN_STATUS.IN_QUEUE,
+    ].includes(this.status);
+  }
+
+  get isBooting() {
+    return [
+      ENUMS.DYNAMIC_SCAN_STATUS.DEVICE_ALLOCATED,
+      ENUMS.DYNAMIC_SCAN_STATUS.CONNECTING_TO_DEVICE,
+      ENUMS.DYNAMIC_SCAN_STATUS.PREPARING_DEVICE,
+      ENUMS.DYNAMIC_SCAN_STATUS.DOWNLOADING_AUTO_SCRIPT,
+      ENUMS.DYNAMIC_SCAN_STATUS.CONFIGURING_AUTO_INTERACTION,
+    ].includes(this.status);
+  }
+
+  get isInstalling() {
+    return this.status === ENUMS.DYNAMIC_SCAN_STATUS.INSTALLING;
+  }
+
+  get isLaunching() {
+    return this.status === ENUMS.DYNAMIC_SCAN_STATUS.LAUNCHING;
+  }
+
+  get isHooking() {
+    return [
+      ENUMS.DYNAMIC_SCAN_STATUS.CONFIGURING_API_CAPTURE,
+      ENUMS.DYNAMIC_SCAN_STATUS.HOOKING,
+    ].includes(this.status);
   }
 
   get isReady() {
-    const status = this.status;
-    return status === ENUMS.DYNAMIC_STATUS.READY;
+    return this.status === ENUMS.DYNAMIC_SCAN_STATUS.READY_FOR_INTERACTION;
   }
 
-  get isDynamicStatusNone() {
-    const status = this.status;
-    return status === ENUMS.DYNAMIC_STATUS.NONE;
-  }
-
-  get isDynamicStatusError() {
-    const status = this.status;
-    return status === ENUMS.DYNAMIC_STATUS.ERROR;
-  }
-
-  get isDynamicStatusReady() {
-    const status = this.status;
-    return status === ENUMS.DYNAMIC_STATUS.READY;
-  }
-
-  get isDynamicStatusNotReady() {
-    return !this.isDynamicStatusReady;
-  }
-
-  get isDynamicStatusNotNone() {
-    return !this.isDynamicStatusNone;
-  }
-
-  get isDynamicStatusNeitherNoneNorReadyNorError() {
-    const status = this.status;
-    return ![
-      ENUMS.DYNAMIC_STATUS.READY,
-      ENUMS.DYNAMIC_STATUS.NONE,
-      ENUMS.DYNAMIC_STATUS.ERROR,
-    ].includes(status);
-  }
-
-  get isDynamicStatusNoneOrError() {
-    const status = this.status;
-    return [ENUMS.DYNAMIC_STATUS.NONE, ENUMS.DYNAMIC_STATUS.ERROR].includes(
-      status
-    );
-  }
-
-  get isDynamicStatusNoneOrReady() {
-    const status = this.status;
-    return [ENUMS.DYNAMIC_STATUS.READY, ENUMS.DYNAMIC_STATUS.NONE].includes(
-      status
-    );
-  }
-
-  get isReadyOrRunning() {
-    const status = this.status;
-    return [ENUMS.DYNAMIC_STATUS.READY, ENUMS.DYNAMIC_STATUS.RUNNING].includes(
-      status
-    );
-  }
-
-  get isDynamicStatusStarting() {
-    const status = this.status;
-    return ![
-      ENUMS.DYNAMIC_STATUS.READY,
-      ENUMS.DYNAMIC_STATUS.RUNNING,
-      ENUMS.DYNAMIC_STATUS.NONE,
-      ENUMS.DYNAMIC_STATUS.SHUTTING_DOWN,
-    ].includes(status);
-  }
-
-  get isDynamicStatusInProgress() {
-    const status = this.status;
-    return [
-      ENUMS.DYNAMIC_STATUS.INQUEUE,
-      ENUMS.DYNAMIC_STATUS.BOOTING,
-      ENUMS.DYNAMIC_STATUS.DOWNLOADING,
-      ENUMS.DYNAMIC_STATUS.INSTALLING,
-      ENUMS.DYNAMIC_STATUS.LAUNCHING,
-      ENUMS.DYNAMIC_STATUS.HOOKING,
-      ENUMS.DYNAMIC_STATUS.READY,
-      ENUMS.DYNAMIC_STATUS.RUNNING,
-      ENUMS.DYNAMIC_STATUS.SHUTTING_DOWN,
-    ].includes(status);
-  }
-
-  get isNeitherNoneNorReady() {
-    const status = this.status;
-    return ![ENUMS.DYNAMIC_STATUS.READY, ENUMS.DYNAMIC_STATUS.NONE].includes(
-      status
-    );
-  }
-
-  get startingScanStatus() {
-    return this.isDynamicStatusStarting;
-  }
-
-  get showScheduleAutomatedDynamicScan() {
-    const status = this.status;
-    return status !== ENUMS.DYNAMIC_STATUS.INQUEUE;
+  get isNotReady() {
+    return !this.isReady;
   }
 
   get isRunning() {
-    const status = this.status;
-    return status === ENUMS.DYNAMIC_STATUS.RUNNING;
+    return [
+      ENUMS.DYNAMIC_SCAN_STATUS.INITIATING_AUTO_INTERACTION,
+      ENUMS.DYNAMIC_SCAN_STATUS.AUTO_INTERACTION_COMPLETED,
+    ].includes(this.status);
+  }
+
+  get isShuttingDown() {
+    return [
+      ENUMS.DYNAMIC_SCAN_STATUS.STOP_SCAN_REQUESTED,
+      ENUMS.DYNAMIC_SCAN_STATUS.SCAN_TIME_LIMIT_EXCEEDED,
+      ENUMS.DYNAMIC_SCAN_STATUS.SHUTTING_DOWN,
+      ENUMS.DYNAMIC_SCAN_STATUS.CLEANING_DEVICE,
+      ENUMS.DYNAMIC_SCAN_STATUS.RUNTIME_DETECTION_COMPLETED,
+      ENUMS.DYNAMIC_SCAN_STATUS.TERMINATED,
+    ].includes(this.status);
+  }
+
+  get isStatusError() {
+    return [
+      ENUMS.DYNAMIC_SCAN_STATUS.ERROR,
+      ENUMS.DYNAMIC_SCAN_STATUS.TIMED_OUT,
+    ].includes(this.status);
+  }
+
+  get isCompleted() {
+    return [
+      ENUMS.DYNAMIC_SCAN_STATUS.ANALYZING,
+      ENUMS.DYNAMIC_SCAN_STATUS.ANALYSIS_COMPLETED,
+    ].includes(this.status);
+  }
+
+  get isCancelled() {
+    return this.status === ENUMS.DYNAMIC_SCAN_STATUS.CANCELLED;
+  }
+
+  get isDynamicStatusInProgress() {
+    return (
+      this.isInqueue ||
+      this.isBooting ||
+      this.isInstalling ||
+      this.isLaunching ||
+      this.isHooking ||
+      this.isShuttingDown
+    );
+  }
+
+  get isDynamicStatusNoneOrError() {
+    return this.isNone || this.isStatusError;
+  }
+
+  get isReadyOrRunning() {
+    return this.isReady || this.isRunning;
   }
 
   get statusText() {
-    const tDeviceInQueue = this.intl.t('deviceInQueue');
-    const tDeviceBooting = this.intl.t('deviceBooting');
-    const tDeviceDownloading = this.intl.t('deviceDownloading');
-    const tDeviceInstalling = this.intl.t('deviceInstalling');
-    const tDeviceLaunching = this.intl.t('deviceLaunching');
-    const tDeviceHooking = this.intl.t('deviceHooking');
-    const tDeviceShuttingDown = this.intl.t('deviceShuttingDown');
-    const tDeviceCompleted = this.intl.t('deviceCompleted');
-    const tDeviceRunning = this.intl.t('inProgress');
-
-    switch (this.status) {
-      case ENUMS.DYNAMIC_STATUS.INQUEUE:
-        return tDeviceInQueue;
-      case ENUMS.DYNAMIC_STATUS.BOOTING:
-        return tDeviceBooting;
-      case ENUMS.DYNAMIC_STATUS.DOWNLOADING:
-        return tDeviceDownloading;
-      case ENUMS.DYNAMIC_STATUS.INSTALLING:
-        return tDeviceInstalling;
-      case ENUMS.DYNAMIC_STATUS.LAUNCHING:
-        return tDeviceLaunching;
-      case ENUMS.DYNAMIC_STATUS.HOOKING:
-        return tDeviceHooking;
-      case ENUMS.DYNAMIC_STATUS.SHUTTING_DOWN:
-        return tDeviceShuttingDown;
-      case ENUMS.DYNAMIC_STATUS.COMPLETED:
-        return tDeviceCompleted;
-      case ENUMS.DYNAMIC_STATUS.RUNNING:
-        return tDeviceRunning;
-      default:
-        return 'Unknown Status';
+    if (this.isInqueue) {
+      return this.intl.t('deviceInQueue');
     }
+
+    if (this.isBooting) {
+      return this.intl.t('deviceBooting');
+    }
+
+    if (this.isInstalling) {
+      return this.intl.t('deviceInstalling');
+    }
+
+    if (this.isLaunching) {
+      return this.intl.t('deviceLaunching');
+    }
+
+    if (this.isHooking) {
+      return this.intl.t('deviceHooking');
+    }
+
+    if (this.isRunning) {
+      return this.intl.t('inProgress');
+    }
+
+    if (this.isShuttingDown) {
+      return this.intl.t('deviceShuttingDown');
+    }
+
+    if (this.isCompleted) {
+      return this.intl.t('deviceCompleted');
+    }
+
+    if (this.isStatusError) {
+      return this.intl.t('error');
+    }
+
+    if (this.isCancelled) {
+      return this.intl.t('cancelled');
+    }
+
+    return this.intl.t('unknown');
   }
 }
 

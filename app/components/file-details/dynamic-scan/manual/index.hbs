@@ -31,19 +31,19 @@
           @file={{@file}}
           @dynamicScan={{this.dynamicScan}}
         />
-
       {{/if}}
 
       {{#if this.showActionButton}}
         <FileDetails::DynamicScan::Action
           @file={{@file}}
           @dynamicScanText={{t 'modalCard.dynamicScan.title'}}
-          @onScanShutdown={{this.handleFullscreenClose}}
+          @onScanStart={{this.handleScanStart}}
+          @onScanShutdown={{this.handleScanShutdown}}
           @dynamicScan={{this.dynamicScan}}
         />
       {{/if}}
 
-      {{#if (and @file.isReady (not this.isFullscreenView))}}
+      {{#if (and this.dynamicScan.isReady (not this.isFullscreenView))}}
         <AkIconButton
           data-test-cy='manualDast-fullscreenBtn'
           data-test-fileDetails-dynamicScan-manualDast-fullscreenBtn
@@ -115,7 +115,8 @@
               <FileDetails::DynamicScan::Action
                 @file={{@file}}
                 @dynamicScanText={{t 'modalCard.dynamicScan.title'}}
-                @onScanShutdown={{this.toggleFullscreenView}}
+                @onScanStart={{this.handleScanStart}}
+                @onScanShutdown={{this.handleScanShutdown}}
                 @dynamicScan={{this.dynamicScan}}
               />
             {{/if}}

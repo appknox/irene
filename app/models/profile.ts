@@ -3,8 +3,8 @@ import Model, { AsyncHasMany, attr, hasMany } from '@ember-data/model';
 import type FileModel from './file';
 
 export enum ProfileDynamicScanMode {
-  MANUAL = 'Manual',
-  AUTOMATED = 'Automated',
+  MANUAL = 0,
+  AUTOMATED = 1,
 }
 
 export enum ProfilleCapabilitiesTranslationsMap {
