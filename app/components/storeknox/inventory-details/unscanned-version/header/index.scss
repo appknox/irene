@@ -1,0 +1,28 @@
+.app-details-tabs {
+  width: 100%;
+  position: sticky;
+  top: 232px;
+  background: var(--background-light);
+  z-index: 1;
+
+  &.not-appknox {
+    top: 282px;
+  }
+}
+
+.sm-summary-overview {
+  border: none;
+}
+
+.overview-summary {
+  padding: 1em 1.4285em !important;
+}
+
+.status {
+  text-transform: uppercase;
+  width: fit-content;
+
+  & > span {
+    font-weight: var(--appmonitoring-font-weight-medium);
+  }
+}
