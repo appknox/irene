@@ -1,0 +1,23 @@
+{{!-- <AkStack local-class='app-list-header'>
+  <div local-class='search-input-container-width'>
+    <AkTextField @placeholder={{t 'search'}} @value={{this.searchQuery}}>
+      <:rightAdornment>
+        {{#if this.searchQuery}}
+          <AkStack
+            @alignItems='center'
+            local-class='close-search-text'
+            {{on 'click' this.clearSearch}}
+          >
+            <AkIcon @iconName='close' />
+          </AkStack>
+        {{else}}
+          <AkIcon @iconName='search' @color='textSecondary' />
+        {{/if}}
+      </:rightAdornment>
+    </AkTextField>
+  </div>
+</AkStack> --}}
+
+<div local-class='app-list-table'>
+  <Storeknox::Inventory::AppList::Table />
+</div>

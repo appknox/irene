@@ -1,0 +1,8 @@
+{{#if @loading}}
+  <AkSkeleton @variant='circular' @height='34px' @width='34px' />
+{{else}}
+  <Storeknox::Indicator
+    @svgComponent={{this.svgComponent}}
+    @indicatorInfo={{t 'storeknox.infoIndicatorWhitelabelText' htmlSafe=true}}
+  />
+{{/if}}

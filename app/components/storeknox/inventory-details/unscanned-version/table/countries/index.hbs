@@ -1,0 +1,24 @@
+<AkTypography data-test-details-table-countriesCodes>
+  {{#if this.showEmptyCountryList}}
+    -
+  {{else}}
+    {{#each this.countryCodes as |countryCode idx|}}
+      <AkTooltip
+        @placement='top'
+        @arrow={{true}}
+        @title={{get this.countryNamesMap countryCode}}
+        data-test-amVersionTable-countryCodeTooltipId='{{countryCode}}'
+      >
+        <AkTypography
+          data-test-amVersionTable-countryCode
+          data-test-amVersionTable-countryCodeId='{{countryCode}}'
+        >
+          {{countryCode}}{{if
+            (not-eq (add idx 1) this.countryCodes.length)
+            ','
+          }}
+        </AkTypography>
+      </AkTooltip>
+    {{/each}}
+  {{/if}}
+</AkTypography>

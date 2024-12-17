@@ -1,0 +1,55 @@
+<AkTooltip
+  @placement='bottom'
+  @disabled={{or @loading this.appIsDisabled}}
+  @arrow={{true}}
+  @color='light'
+>
+  <:tooltipContent>
+    <div local-class='tooltip-content'>
+      <AkTypography
+        @color='textSecondary'
+        {{style textTransform='uppercase'}}
+        data-test-storeknoxInventory-appListTable-monitoringStatusTooltipHeaderText
+      >
+        {{t 'reason'}}
+      </AkTypography>
+
+      <AkTypography
+        class='mt-1'
+        data-test-storeknoxInventory-appListTable-monitoringStatusTooltipText
+      >
+        <strong>{{this.tooltipMessage}}</strong>
+        {{t 'storeknox.haveBeenDetected'}}
+      </AkTypography>
+    </div>
+  </:tooltipContent>
+
+  <:default>
+    <AkStack @alignItems='center' @spacing='0.5'>
+      {{#if @loading}}
+        <AkSkeleton @variant='circular' @height='16px' @width='16px' />
+
+        <AkSkeleton @variant='rounded' @height='19px' @width='100px' />
+      {{else}}
+        <AkIcon
+          @iconName={{this.monitoringStatusIconDetails.name}}
+          @color={{this.monitoringStatusIconDetails.color}}
+          @size='small'
+          data-test-storeknoxInventory-appListTable-monitoringStatusIcon
+        />
+
+        <AkTypography
+          data-test-storeknoxInventory-appListTable-monitoringStatusText
+        >
+          {{#if this.appIsDisabled}}
+            {{t 'disabled'}}
+          {{else if this.needsAction}}
+            {{t 'storeknox.needsAction'}}
+          {{else}}
+            {{t 'storeknox.noActionNeeded'}}
+          {{/if}}
+        </AkTypography>
+      {{/if}}
+    </AkStack>
+  </:default>
+</AkTooltip>

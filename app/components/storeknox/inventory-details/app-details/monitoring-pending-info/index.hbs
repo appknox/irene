@@ -1,0 +1,50 @@
+<Storeknox::InventoryDetails::SectionInfo
+  @width='full'
+  @spacing='4'
+  @direction='column'
+  @alignItems='center'
+  @justifyContent='center'
+  class='p-6'
+>
+
+  {{#if @skInventoryApp.monitoringEnabled}}
+    <AkSvg::SoxMonitoringResultsPending
+      data-test-storeknoxInventoryDetails-monitoringResultsPendingIllustration
+    />
+
+    <AkTypography
+      @align='center'
+      {{style maxWidth='500px'}}
+      data-test-storeknoxInventoryDetails-monitoringResultsPendingText
+    >
+      {{t 'storeknox.monitoringResultsPending'}}
+    </AkTypography>
+
+  {{else}}
+    <AkSvg::SoxMonitoringResultsPendingWithMonitoringOff
+      data-test-storeknoxInventoryDetails-monitoringResultsPendingWithMonitoringOffIllustration
+    />
+
+    <AkStack
+      @direction='column'
+      @alignItems='center'
+      @spacing='0.5'
+      {{style maxWidth='485px'}}
+    >
+      <AkTypography
+        @variant='h5'
+        @align='center'
+        data-test-storeknoxInventoryDetails-monitoringResultsPendingOffHeaderText
+      >
+        {{t 'storeknox.enableMonitoringForApp'}}
+      </AkTypography>
+
+      <AkTypography
+        @align='center'
+        data-test-storeknoxInventoryDetails-monitoringResultsPendingOff
+      >
+        {{t 'storeknox.monitoringResultsPendingWithMonitoringOff'}}
+      </AkTypography>
+    </AkStack>
+  {{/if}}
+</Storeknox::InventoryDetails::SectionInfo>

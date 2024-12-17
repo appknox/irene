@@ -1,0 +1,31 @@
+<Storeknox::InventoryDetails::SectionInfo
+  @direction='column'
+  @alignItems='center'
+  @justifyContent='center'
+  @width='full'
+  @spacing='2.5'
+  class='py-6'
+  {{style minHeight='310px'}}
+>
+  {{#if this.uploadCompleted}}
+    <AkSvg::SoxUploadCompleted />
+  {{else}}
+    <AkSvg::SoxUploadProcessing />
+  {{/if}}
+
+  <AkTypography @align='center'>
+    {{#if this.uploadCompleted}}
+      {{t 'completed'}}
+    {{else}}
+      Processing...
+    {{/if}}
+    <strong>{{if @uploadNotStarted 0 @submission.progress}}%</strong>
+  </AkTypography>
+
+  <AkLoader::Linear
+    @color='success'
+    @variant='determinate'
+    @progress={{if @uploadNotStarted 0 @submission.progress}}
+    {{style maxWidth='270px'}}
+  />
+</Storeknox::InventoryDetails::SectionInfo>

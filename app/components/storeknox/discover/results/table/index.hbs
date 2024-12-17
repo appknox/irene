@@ -1,4 +1,4 @@
-{{#if @isLoading}}
+{{#if this.isLoadingDiscoveryResults}}
   <AkStack
     @justifyContent='space-between'
     @alignItems='center'
@@ -21,7 +21,7 @@
       </AkTypography>
 
       <AkTypography @variant='h5'>
-        &nbsp;"{{@queryParams.app_query}}"
+        &nbsp;"{{this.skDiscoverySearchResult.searchQuery}}"
       </AkTypography>
     </AkStack>
 
@@ -56,13 +56,13 @@
 {{else}}
   <AkPaginationProvider
     @results={{this.searchResultsData}}
-    @onItemPerPageChange={{@onItemPerPageChange}}
+    @onItemPerPageChange={{this.onItemPerPageChange}}
     @totalItems={{this.totalCount}}
-    @nextAction={{@goToPage}}
-    @prevAction={{@goToPage}}
+    @nextAction={{this.goToPage}}
+    @prevAction={{this.goToPage}}
     @itemPerPageOptions={{this.itemPerPageOptions}}
-    @defaultLimit={{this.limit}}
-    @offset={{this.offset}}
+    @defaultLimit={{this.skDiscoverySearchResult.limit}}
+    @offset={{this.skDiscoverySearchResult.offset}}
     as |pgc|
   >
     <AkTable local-class='results-table' as |tb|>
@@ -71,7 +71,7 @@
           <r.cell as |column|>
             {{#if column.headerComponent}}
               {{#let (component column.headerComponent) as |Component|}}
-                <Component @loading={{@isLoading}} />
+                <Component @loading={{this.isLoadingDiscoveryResults}} />
               {{/let}}
             {{else}}
               {{column.name}}
@@ -90,8 +90,8 @@
             {{#let (component r.columnValue.cellComponent) as |Component|}}
               <Component
                 @data={{r.rowValue}}
-                @loading={{@isLoading}}
-                @queryParams={{@queryParams}}
+                @loading={{this.isLoadingDiscoveryResults}}
+                @queryParams={{this.queryParams}}
               />
             {{/let}}
           </r.cell>

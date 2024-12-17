@@ -56,13 +56,14 @@
     <AkStack class='py-1' @direction='row' @spacing='4' @flexWrap='wrap'>
       {{#each this.productCardDetails as |productCardDetails|}}
         <HomePage::ProductCard
-          @name={{productCardDetails.title}}
-          @description={{productCardDetails.desc}}
-          @route={{productCardDetails.link}}
+          @title={{productCardDetails.title}}
+          @description={{productCardDetails.description}}
+          @route={{productCardDetails.route}}
           @linkText={{t 'takeMeToDashboard'}}
-          @coverBackgroundImage={{productCardDetails.coverImage}}
-          @indicatorSvg={{productCardDetails.indicator}}
+          @coverBackgroundImage={{productCardDetails.coverBackgroundImage}}
+          @indicatorSvg={{productCardDetails.indicatorSvg}}
           @openInNewTab={{productCardDetails.openInNewTab}}
+          @isBeta={{productCardDetails.isBeta}}
         />
       {{/each}}
     </AkStack>

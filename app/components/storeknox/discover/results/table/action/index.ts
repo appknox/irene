@@ -25,9 +25,10 @@ export default class StoreknoxDiscoverResultsTableActionComponent extends Compon
   @service declare intl: IntlService;
   @service('notifications') declare notify: NotificationService;
 
-  @tracked requested: boolean = false;
-  @tracked approved: boolean = false;
-  @tracked buttonLoading: boolean = false;
+  @tracked requested = false;
+  @tracked approved = false;
+  @tracked buttonLoading = false;
+  @tracked firstTimeApproveOrRequest = false;
 
   get isOwner() {
     return this.me.org?.is_owner;
@@ -59,6 +60,7 @@ export default class StoreknoxDiscoverResultsTableActionComponent extends Compon
         discoverApp.addAppToInventory(discoverApp.docUlid, searchId)
       );
 
+      this.firstTimeApproveOrRequest = true;
       this.requested = true;
 
       if (res.approvalStatus === ENUMS.SK_APPROVAL_STATUS.APPROVED) {
@@ -113,6 +115,11 @@ export default class StoreknoxDiscoverResultsTableActionComponent extends Compon
   @action
   handleCheckStatus() {
     this.checkStatus.perform();
+  }
+
+  @action
+  handleCloseReqOrApproveTooltip() {
+    this.firstTimeApproveOrRequest = false;
   }
 }
 
