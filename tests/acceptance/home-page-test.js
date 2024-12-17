@@ -107,6 +107,14 @@ module('Acceptance | home page', function (hooks) {
   });
 
   test('it redirects to storeknox dashboard', async function (assert) {
+    const notify = this.owner.lookup('service:notifications');
+
+    notify.setDefaultClearDuration(0);
+
+    this.server.get('v2/sk_app_detail', () => {
+      return { count: 0, next: null, previous: null, results: [] };
+    });
+
     await visit('/dashboard/home');
 
     assert.dom('[data-test-home-page-product-card]').exists({

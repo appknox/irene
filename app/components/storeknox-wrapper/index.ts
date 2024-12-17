@@ -45,14 +45,14 @@ export default class StoreknoxWrapperComponent extends Component<StoreknoxWrappe
         icon: 'inventory-2',
         route: 'authenticated.storeknox.inventory.app-list',
         currentWhen:
-          'authenticated.storeknox.inventory.app-list authenticated.storeknox.inventory.disabled-apps',
+          'authenticated.storeknox.inventory.app-list authenticated.storeknox.inventory.pending-reviews authenticated.storeknox.inventory.disabled-apps authenticated.storeknox.inventory-details.index',
       },
       {
         label: this.intl.t('discovery'),
         icon: 'search',
         route: 'authenticated.storeknox.discover.result',
         currentWhen:
-          'authenticated.storeknox.discover.result authenticated.storeknox.discover.requested authenticated.storeknox.discover.review',
+          'authenticated.storeknox.discover.result authenticated.storeknox.discover.requested',
       },
     ] as MenuItem[];
   }

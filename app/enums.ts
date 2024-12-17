@@ -260,6 +260,13 @@ const ENUMS = {
     ACTIVE: 1,
     ARCHIVED: 2,
   },
+
+  SK_APP_MONITORING_STATUS: {
+    PENDING: 0,
+    SCANNED: 1,
+    UNSCANNED: 2,
+    NOT_FOUND: 3,
+  },
 };
 
 export const ENUMS_DISPLAY = {

@@ -1,0 +1,49 @@
+<AkStack @direction='column' @width='full'>
+  <Storeknox::InventoryDetails::SectionHeader
+    @color='white'
+    {{style height='50px'}}
+  >
+    <:icon>
+      <AkIcon @iconName='auto-graph' @color='textPrimary' />
+    </:icon>
+
+    <:default>
+      <AkStack
+        @width='full'
+        @justifyContent='space-between'
+        @alignItems='center'
+      >
+        <AkTypography @fontWeight='medium'>
+          {{t 'storeknox.actionNeeded'}}
+          ({{this.actionableItemsCount}})
+        </AkTypography>
+
+        <AkTooltip @title='Last Monitored Date' @color='light' @arrow={{true}}>
+          <AkStack @spacing='0.5' local-class='last-monitored-date'>
+            <AkIcon @iconName='event' @color='textPrimary' />
+
+            <AkTypography>
+              {{this.lastMonitoredDate}}
+            </AkTypography>
+          </AkStack>
+        </AkTooltip>
+      </AkStack>
+    </:default>
+  </Storeknox::InventoryDetails::SectionHeader>
+
+  <Storeknox::InventoryDetails::SectionInfo
+    @width='full'
+    @spacing='1'
+    @alignItems='center'
+  >
+    {{#each this.actionsList as |action|}}
+      <AkLink @route={{action.route}} @model={{this.skInventoryApp.id}}>
+        <Storeknox::InventoryDetails::AppDetails::ActionsList::Button
+          @needsAction={{action.needsAction}}
+          @featureInProgress={{action.featureInProgress}}
+          @label={{action.label}}
+        />
+      </AkLink>
+    {{/each}}
+  </Storeknox::InventoryDetails::SectionInfo>
+</AkStack>

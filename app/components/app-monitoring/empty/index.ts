@@ -1,10 +1,11 @@
 import Component from '@glimmer/component';
 
 interface AppMonitoringEmptySignature {
-  Element: HTMLDivElement;
+  Element: HTMLElement;
   Args: {
     header?: string;
     body?: string;
+    isHistoryTable?: boolean;
   };
 }
 

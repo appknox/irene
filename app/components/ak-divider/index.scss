@@ -1,11 +1,11 @@
 .ak-divider-root {
   flex-shrink: 0;
   border-style: solid;
-  
+
   &.ak-divider-direction-horizontal {
     border-width: 0px 0px thin;
   }
-  
+
   &.ak-divider-direction-vertical {
     flex-shrink: unset;
     border-width: 0px thin 0px 0px;
@@ -43,4 +43,21 @@
 
 .ak-divider-color-dark {
   border-color: var(--ak-divider-color-dark);
+}
+
+.ak-divider-variant-vertical {
+  display: block;
+  width: 1px;
+  min-height: 15px;
+  height: 100%;
+  border: none;
+  margin: 0px;
+
+  &.ak-divider-color-light {
+    background-color: var(--ak-divider-color-light);
+  }
+
+  &.ak-divider-color-dark {
+    background-color: var(--ak-divider-color-dark);
+  }
 }
