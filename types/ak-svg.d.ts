@@ -45,8 +45,6 @@ export enum AkSvgComponentInvocationByNames {
   AppknoxBgImg,
   StoreknoxBgImg,
   SecurityBgImg,
-  VaptIndicator,
-  SmIndicator,
   SecurityIndicator,
   StoreknoxSearchApps,
   StoreknoxPlaystoreLogo,
@@ -55,6 +53,28 @@ export enum AkSvgComponentInvocationByNames {
   InfoIndicator,
   NoPendingItems,
   WelcomeToStoreknox,
+  InfoIndicator,
+  AoxIcon,
+  SoxIcon,
+  SoxInitiateUpload,
+  SoxUploadProcessing,
+  SoxUploadCompleted,
+  SoxInsufficientCredits,
+  AppknoxBgImg,
+  StoreknoxBgImg,
+  ConfigurationBgImg,
+  VpIndicator,
+  SecurityBgImg,
+  SecurityIndicator,
+  StoreknoxSearchApps,
+  StoreknoxPlaystoreLogo,
+  SmIndicator,
+  VaptIndicator,
+  InfoIndicator,
+  NoPendingItems,
+  WelcomeToStoreknox,
+  SoxBrandAbuseFeatureAbsence,
+  SoxMalwareFeatureAbsence,
 }
 
 export enum AkSvgComponentInvocationByPaths {
@@ -64,6 +84,10 @@ export enum AkSvgComponentInvocationByPaths {
   'csv-icon',
   'public-api-icon',
   'no-api-url-filter',
+  'sm-indicator',
+  'info-indicator',
+  'vapt-indicator',
+  'disabled-vapt-indicator',
 }
 
 type AkSvgComponent = ComponentLike<{

@@ -136,6 +136,14 @@ module('Acceptance | side nav test', function (hooks) {
     ],
 
     async function (assert, details) {
+      const notify = this.owner.lookup('service:notifications');
+
+      notify.setDefaultClearDuration(0);
+
+      this.server.get('v2/sk_app_detail', () => {
+        return { count: 0, next: null, previous: null, results: [] };
+      });
+
       const window = this.owner.lookup('service:browser/window');
 
       window.location.href = details.visitUrl;

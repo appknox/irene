@@ -1,0 +1,120 @@
+<AkStack @direction='column' @width='full'>
+  <AkTabs local-class='app-details-tabs' as |Akt|>
+    {{#each this.tabItems as |item|}}
+      <Akt.tabItem
+        @id={{item.id}}
+        @hasBadge={{false}}
+        @route={{item.route}}
+        @model={{@skInventoryApp.id}}
+        @indicatorVariant='shadow'
+        data-test-app-details-tabs='{{item.id}}-tab'
+      >
+        {{item.label}}
+      </Akt.tabItem>
+    {{/each}}
+  </AkTabs>
+
+  <AkAccordion
+    @isExpanded={{this.showSMDetails}}
+    @onChange={{this.handleToggleSMDetails}}
+    @customSumaryClass={{this.classes.overviewSummary}}
+    @summaryText='Store Monitoring Overview'
+    @variant='light'
+    class='my-3'
+  >
+    <:content>
+      <Storeknox::InventoryDetails::SectionInfo
+        @width='full'
+        @spacing='1'
+        @alignItems='center'
+        local-class='sm-summary-overview'
+      >
+        <AkStack @direction='column' @width='full' @spacing='1.5'>
+          <AkStack @alignItems='center' @width='9/12' @spacing='2.5'>
+            <AkTypography @color='neutral' {{style width='150px'}}>
+              Monitoring Action
+            </AkTypography>
+
+            <AkStack @alignItems='center' @spacing='1'>
+              <AkToggle
+                @size='small'
+                @onChange={{this.onMonitoringActionToggle}}
+                @checked={{this.skInventoryApp.monitoringEnabled}}
+                @disabled={{this.toggleSkInventoryAppMonitoring.isRunning}}
+                {{style margin='0em'}}
+              />
+
+              {{#if this.toggleSkInventoryAppMonitoring.isRunning}}
+                <AkLoader @size={{14}} />
+              {{/if}}
+            </AkStack>
+          </AkStack>
+
+          <AkDivider @color='light' />
+
+          <AkStack @alignItems='center' @width='9/12' @spacing='2.5'>
+            <AkTypography @color='neutral' {{style width='150px'}}>
+              File ID
+            </AkTypography>
+
+            {{#if this.coreProjectLatestVersionId}}
+              <AkLink
+                @underline='always'
+                @color='primary'
+                @fontWeight='medium'
+                @route='authenticated.dashboard.file'
+                @model={{this.coreProjectLatestVersionId}}
+                target='_blank'
+                rel='noopener noreferrer'
+              >
+                {{this.coreProjectLatestVersionId}}
+              </AkLink>
+            {{else}}
+              -
+            {{/if}}
+          </AkStack>
+
+          <AkDivider @color='light' />
+
+          <AkStack @alignItems='center' @width='9/12' @spacing='2.5'>
+            <AkTypography @color='neutral' {{style width='150px'}}>
+              Last Scanned Version
+            </AkTypography>
+
+            <AkTypography @fontWeight='medium'>
+              {{or this.skInventoryCoreProjectLatestVersion.version '-'}}
+            </AkTypography>
+          </AkStack>
+
+          <AkDivider @color='light' />
+
+          <AkStack @alignItems='center' @width='9/12' @spacing='2.5'>
+            <AkTypography @color='neutral' {{style width='150px'}}>
+              Last monitored on
+            </AkTypography>
+
+            <AkTypography @fontWeight='medium'>
+              {{this.lastSyncedDate}}
+            </AkTypography>
+          </AkStack>
+
+          <AkDivider @color='light' />
+
+          <AkStack @alignItems='center' @width='9/12' @spacing='2.5'>
+            <AkTypography @color='neutral' {{style width='150px'}}>
+              Monitoring Status
+            </AkTypography>
+
+            <AkChip
+              @size='small'
+              @variant='semi-filled'
+              @color={{if this.monitoringEnabled 'success' 'error'}}
+              @label={{if this.monitoringEnabled (t 'active') (t 'inactive')}}
+              local-class='status'
+            />
+          </AkStack>
+        </AkStack>
+      </Storeknox::InventoryDetails::SectionInfo>
+    </:content>
+  </AkAccordion>
+</AkStack>

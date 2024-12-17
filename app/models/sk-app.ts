@@ -39,7 +39,7 @@ export default class SkAppModel extends Model {
   declare monitoringEnabled: boolean;
 
   @attr('number')
-  declare monitoringStatus: number;
+  declare storeMonitoringStatus: number;
 
   @attr('number')
   declare skOrganization: number;
@@ -55,9 +55,6 @@ export default class SkAppModel extends Model {
 
   @attr('date')
   declare rejectedOn: Date;
-
-  @attr('number', { allowNull: true })
-  declare coreProject: number | null;
 
   @belongsTo('sk-app-metadata', { async: false, inverse: null })
   declare appMetadata: SkAppMetadataModel;
@@ -120,6 +117,12 @@ export default class SkAppModel extends Model {
     const adapter = this.store.adapterFor('sk-app');
 
     return await adapter.rejectApp(id);
+  }
+
+  async toggleMonitoring(checked: boolean) {
+    const adapter = this.store.adapterFor('sk-app');
+
+    return await adapter.toggleMonitoring(this.id, checked);
   }
 }
 
