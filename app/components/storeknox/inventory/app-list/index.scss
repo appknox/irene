@@ -1,0 +1,13 @@
+.app-list-header,
+.app-list-table {
+  background-color: var(--storeknox-inventory-app-list-table-bg-color);
+}
+
+.search-input-container-width {
+  width: 170px;
+  margin: 1em 1.5714em;
+
+  .close-search-text {
+    cursor: pointer;
+  }
+}

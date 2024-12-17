@@ -1,0 +1,33 @@
+.storeknox-inventory-details-unscanned-version-header-tabs {
+  width: 100%;
+  position: sticky;
+  top: 232px;
+  z-index: 1;
+
+  background: var(
+    --storeknox-inventory-details-unscanned-version-header-tabs-bg-color
+  );
+
+  &.not-appknox {
+    top: 282px;
+  }
+}
+
+.sm-summary-overview {
+  border: none;
+}
+
+.overview-summary {
+  padding: 1em 1.4285em !important;
+}
+
+.status {
+  text-transform: uppercase;
+  width: fit-content;
+
+  & > span {
+    font-weight: var(
+      --storeknox-inventory-details-unscanned-version-header-summary-status-font-weight
+    );
+  }
+}

@@ -25,7 +25,9 @@ export interface AkBreadcrumbsItemProps {
     | 'app-monitoring'
     | 'sec-dashboard'
     | 'sbom'
-    | 'organization';
+    | 'organization'
+    | 'storeknox/inventory'
+    | 'storeknox/discovery';
 
   // Fallback crumbs when no context as to what route a user is coming from. Can also be useful when switching from one route group to another.
   fallbackCrumbs?: Array<

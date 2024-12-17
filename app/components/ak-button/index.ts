@@ -8,7 +8,7 @@ import {
 type ButtonColors = TypographyColors;
 type ButtonVariants = TypographyVariant;
 type ButtonFontWeight = TypographyFontWeight;
-type ButtonTags = 'button' | 'a' | 'div' | 'label' | 'span';
+export type ButtonTags = 'button' | 'a' | 'div' | 'label' | 'span';
 
 export interface AkButtonSignature<T extends ButtonTags> {
   Element: HTMLElementTagNameMap[T];

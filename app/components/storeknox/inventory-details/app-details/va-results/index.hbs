@@ -1,0 +1,17 @@
+<AkStack @alignItems='center' @spacing='2.5'>
+  {{#each this.vaResultsCategories as |reCat|}}
+    <AkStack @alignItems='center' @spacing='1.5'>
+      <AkStack @spacing='1' @alignItems='center'>
+        <span local-class='indicator {{reCat}}'></span>
+
+        <AkTypography>
+          {{t reCat}}
+        </AkTypography>
+      </AkStack>
+
+      <AkTypography @fontWeight='bold'>
+        {{this.getVaCategoryResultCount reCat}}
+      </AkTypography>
+    </AkStack>
+  {{/each}}
+</AkStack>

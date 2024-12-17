@@ -32,18 +32,18 @@
   min-width: 200px;
   max-width: 220px;
   background-color: var(--side-nav-product-switcher-bg-main);
-  
+
   .switcher-menu-item {
     width: 100%;
     margin: 0.2em 0;
     padding: 0.75em 1em;
     justify-content: flex-start;
-  
+
     &:hover {
       background-color: var(--side-nav-product-switcher-item-hover-background);
     }
   }
-  
+
   .switcher-menu-title {
     text-transform: uppercase;
     font-size: 0.857rem;
@@ -57,9 +57,9 @@
     width: 24px;
   }
 }
-  
+
 .switcher-popover-arrow {
   &::before {
     background-color: var(--side-nav-product-switcher-modal-title-background);
   }
-}  
+}

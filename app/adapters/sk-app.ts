@@ -9,6 +9,11 @@ export interface ApprovalStatusResponse {
   approval_status_display: string;
 }
 
+export interface ToggleSkAppMonitoringStatusResponse {
+  id: number;
+  monitoring_enabled: boolean;
+}
+
 export default class SkAppAdapter extends CommonDRFAdapter {
   _buildURL() {
     const baseurl = `${this.namespace_v2}/sk_app`;
@@ -59,6 +64,21 @@ export default class SkAppAdapter extends CommonDRFAdapter {
     };
 
     return await this.ajax(url, 'GET', { data });
+  }
+
+  async toggleMonitoring(
+    id: string,
+    checked: boolean
+  ): Promise<ToggleSkAppMonitoringStatusResponse> {
+    const url = this.buildURL().concat(
+      `/${id}/update_monitoring_enabled_status`
+    );
+
+    const data = {
+      monitoring_enabled: checked,
+    };
+
+    return await this.ajax(url, 'PUT', { data });
   }
 }
 

@@ -1,0 +1,117 @@
+<AkStack
+  @direction='row'
+  @alignItems='center'
+  @justifyContent='space-between'
+  local-class='header-storeknox-discover-page'
+>
+  <AkStack @direction='column' @spacing='0.5'>
+    <AkTypography @variant='subtitle1'>
+      {{t 'storeknox.inventoryHeader'}}
+    </AkTypography>
+
+    <AkTypography @variant='body2' @color='neutral'>
+      {{t 'storeknox.inventoryDescription'}}
+    </AkTypography>
+  </AkStack>
+
+  <AkStack @alignItems='center' @justifyContent='center' @spacing='1.5'>
+    <AkButton>
+      <AkLink
+        @underline='none'
+        @color='inherit'
+        @route='authenticated.storeknox.discover.result'
+      >
+        {{t 'storeknox.discoverHeader'}}
+      </AkLink>
+    </AkButton>
+
+    {{#if this.isOwner}}
+      <AkDivider
+        @variant='vertical'
+        @color='dark'
+        @height='32px'
+        @width='1px'
+      />
+
+      <AkIconButton
+        @size='medium'
+        @variant='outlined'
+        {{on 'click' this.openSettingsDrawer}}
+      >
+        <AkIcon @iconName='settings' />
+      </AkIconButton>
+    {{/if}}
+  </AkStack>
+</AkStack>
+
+<AkTabs class='mb-3' as |Akt|>
+  {{#each this.tabItems as |item|}}
+    <Akt.tabItem
+      @id={{item.id}}
+      @badgeBackground={{true}}
+      @route={{item.route}}
+      @hasBadge={{item.hasBadge}}
+      @badgeCount={{item.badgeCount}}
+    >
+      {{item.label}}
+    </Akt.tabItem>
+  {{/each}}
+</AkTabs>
+
+<AkDrawer
+  @open={{and this.isOwner this.showSettingsDrawer}}
+  @onClose={{this.closeSettingsDrawer}}
+  @anchor='right'
+  as |dr|
+>
+  <AkStack @direction='column' {{style width='640px'}}>
+    <AkAppbar
+      @position='sticky'
+      @justifyContent='space-between'
+      class='px-3'
+      as |ab|
+    >
+      <AkTypography
+        @color='inherit'
+        @variant='h5'
+        @fontWeight='medium'
+        data-test-addProjectTeam-drawerContainer-title
+      >
+        {{t 'storeknox.inventorySettings'}}
+      </AkTypography>
+
+      <AkIconButton
+        {{on 'click' dr.closeHandler}}
+        class={{ab.classes.defaultIconBtn}}
+        data-test-addProjectTeam-drawerContainer-closeIconBtn
+      >
+        <AkIcon @iconName='close' />
+      </AkIconButton>
+    </AkAppbar>
+
+    <AkStack
+      @width='full'
+      @justifyContent='space-between'
+      @alignItems='center'
+      class='px-3 py-4'
+    >
+      <AkStack @direction='column' @spacing='0.5' {{style maxWidth='450px'}}>
+        <AkTypography @fontWeight='bold'>
+          {{t 'storeknox.addAppknoxProjectsByDefault'}}
+        </AkTypography>
+
+        <AkTypography @variant='body2' @color='neutral'>
+          {{t 'storeknox.addAppknoxProjectsByDefaultToggleDescription'}}
+        </AkTypography>
+      </AkStack>
+
+      <AkToggle
+        @size='small'
+        @checked={{this.selectedSkOrg.addAppknoxProjectToInventoryByDefault}}
+        @onChange={{this.onToggleAddToInventoryByDefault}}
+      />
+    </AkStack>
+
+    <AkDivider @color='dark' />
+  </AkStack>
+</AkDrawer>

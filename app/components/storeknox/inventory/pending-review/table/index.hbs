@@ -38,19 +38,21 @@
     </tb.body>
   </AkTable>
 
-  <AkPagination
-    @disableNext={{pgc.disableNext}}
-    @nextAction={{pgc.nextAction}}
-    @disablePrev={{pgc.disablePrev}}
-    @prevAction={{pgc.prevAction}}
-    @endItemIdx={{pgc.endItemIdx}}
-    @startItemIdx={{pgc.startItemIdx}}
-    @itemPerPageOptions={{pgc.itemPerPageOptions}}
-    @onItemPerPageChange={{pgc.onItemPerPageChange}}
-    @selectedOption={{pgc.selectedOption}}
-    @tableItemLabel={{t 'apps'}}
-    @perPageTranslation={{t 'recordPerPage'}}
-    @totalItems={{pgc.totalItems}}
-    class='mt-0'
-  />
+  {{#if this.showPagination}}
+    <AkPagination
+      @disableNext={{pgc.disableNext}}
+      @nextAction={{pgc.nextAction}}
+      @disablePrev={{pgc.disablePrev}}
+      @prevAction={{pgc.prevAction}}
+      @endItemIdx={{pgc.endItemIdx}}
+      @startItemIdx={{pgc.startItemIdx}}
+      @itemPerPageOptions={{pgc.itemPerPageOptions}}
+      @onItemPerPageChange={{pgc.onItemPerPageChange}}
+      @selectedOption={{pgc.selectedOption}}
+      @tableItemLabel={{t 'apps'}}
+      @perPageTranslation={{t 'recordPerPage'}}
+      @totalItems={{pgc.totalItems}}
+      class='mt-0'
+    />
+  {{/if}}
 </AkPaginationProvider>

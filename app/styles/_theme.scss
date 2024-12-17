@@ -68,6 +68,7 @@
   --box-shadow-8: -5px 0px 9px 0px rgba(64, 64, 64, 0.03);
   --box-shadow-9: 0 5px 20px 0px rgba(0, 0, 0, 0.1);
   --box-shadow-10: 5px 0px 10px 0px rgba(0, 0, 0, 0.05);
+  --box-shadow-11: inset 0 0 0 0.5px;
 
   --hover-dark-background: rgba(255, 255, 255, 0.15);
   --hover-light-background: rgba(0, 0, 0, 0.04);
@@ -120,6 +121,12 @@
   // special case variable for project-settings/general-settings/dynamicscan-automation-settings/upselling-feature
   --upselling-feature-footer-bg-color: #f7f3ff;
   --upselling-feature-footer-color: #3e0e8c;
+
+  // special case variable storeknox feature in progress for brand abuse and malware detected
+  --storeknox-feature-in-progress-button-color: #3e0e8c;
+  --storeknox-feature-in-progress-button-bg-color: #f7f3ff;
+  --storeknox-needs-action-button-bg-color: #fff5f5;
+  --storeknox-no-action-button-bg-color: #f6fff7;
 }
 
 // TODO: need to remove this so do not use it
