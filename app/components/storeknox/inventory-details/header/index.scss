@@ -1,0 +1,12 @@
+.app-inventory-header-root {
+  position: sticky;
+  z-index: 10;
+  top: -0.5em;
+  // TODO: Remove style
+  background-color: var(--page-wrapper-background-color);
+
+  .app-info-logo {
+    border-radius: 100%;
+    object-fit: cover;
+  }
+}

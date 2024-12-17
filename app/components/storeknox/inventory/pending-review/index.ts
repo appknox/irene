@@ -3,12 +3,12 @@ import { action } from '@ember/object';
 import { inject as service } from '@ember/service';
 import type IntlService from 'ember-intl/services/intl';
 
-import type { StoreknoxDiscoveryReviewQueryParam } from 'irene/routes/authenticated/storeknox/discover/review';
+import type { StoreknoxInventoryPendingReviewsQueryParam } from 'irene/routes/authenticated/storeknox/inventory/pending-reviews';
 import type SkPendingReviewService from 'irene/services/sk-pending-review';
 
 export interface StoreknoxInventoryResultsSignature {
   Args: {
-    queryParams: StoreknoxDiscoveryReviewQueryParam;
+    queryParams: StoreknoxInventoryPendingReviewsQueryParam;
   };
 }
 

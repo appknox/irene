@@ -1,6 +1,6 @@
 import Component from '@glimmer/component';
 
-import type { StoreknoxDiscoveryReviewQueryParam } from 'irene/routes/authenticated/storeknox/discover/review';
+import type { StoreknoxInventoryPendingReviewsQueryParam } from 'irene/routes/authenticated/storeknox/inventory/pending-reviews';
 import type SkAppModel from 'irene/models/sk-app';
 
 interface LimitOffset {
@@ -17,7 +17,7 @@ export interface StoreknoxInventoryPendingReviewTableSignature {
     totalCount: number;
     goToPage: (args: LimitOffset) => void;
     onItemPerPageChange: (args: LimitOffset) => void;
-    queryParams: StoreknoxDiscoveryReviewQueryParam;
+    queryParams: StoreknoxInventoryPendingReviewsQueryParam;
   };
 }
 

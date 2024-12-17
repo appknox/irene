@@ -1,0 +1,14 @@
+<AkStack
+  @width='full'
+  @spacing='1.5'
+  @alignItems='center'
+  local-class='app-header-info-banner {{this.color}}'
+  class='py-1 px-3'
+  ...attributes
+>
+  {{#if (has-block 'icon')}}
+    {{yield to='icon'}}
+  {{/if}}
+
+  {{yield}}
+</AkStack>
