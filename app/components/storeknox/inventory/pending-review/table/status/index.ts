@@ -8,7 +8,7 @@ import parseError from 'irene/utils/parse-error';
 import type IntlService from 'ember-intl/services/intl';
 
 import type SkAppModel from 'irene/models/sk-app';
-import type { StoreknoxDiscoveryReviewQueryParam } from 'irene/routes/authenticated/storeknox/discover/review';
+import type { StoreknoxInventoryPendingReviewsQueryParam } from 'irene/routes/authenticated/storeknox/inventory/pending-reviews';
 import type SkPendingReviewService from 'irene/services/sk-pending-review';
 import ENUMS from 'irene/enums';
 
@@ -16,7 +16,7 @@ interface StoreknoxInventoryPendingReviewTableStatusSignature {
   Args: {
     data: SkAppModel;
     loading: boolean;
-    queryParams: StoreknoxDiscoveryReviewQueryParam;
+    queryParams: StoreknoxInventoryPendingReviewsQueryParam;
   };
 }
 
