@@ -48,7 +48,7 @@
     }
   }
 
-  &:checked + .ak-svg-checkbox-icon {
+  &.checked + .ak-svg-checkbox-icon {
     color: var(--ak-checkbox-color-checked);
 
     &::before {

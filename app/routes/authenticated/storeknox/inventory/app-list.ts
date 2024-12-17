@@ -1,11 +1,11 @@
-import Route from '@ember/routing/route';
+import AkBreadcrumbsRoute from 'irene/utils/ak-breadcrumbs-route';
 
-export interface StoreknoxDiscoveryReviewQueryParam {
+export interface StoreknoxInventoryAppListQueryParams {
   app_limit: number;
   app_offset: number;
 }
 
-export default class AuthenticatedStoreknoxDiscoveryReviewRoute extends Route {
+export default class AuthenticatedStoreknoxInventoryAppListRoute extends AkBreadcrumbsRoute {
   queryParams = {
     app_limit: {
       refreshModel: true,
@@ -15,7 +15,7 @@ export default class AuthenticatedStoreknoxDiscoveryReviewRoute extends Route {
     },
   };
 
-  model(params: Partial<StoreknoxDiscoveryReviewQueryParam>) {
+  model(params: Partial<StoreknoxInventoryAppListQueryParams>) {
     const { app_limit, app_offset } = params;
 
     return {

@@ -3,12 +3,13 @@ import { action } from '@ember/object';
 import { inject as service } from '@ember/service';
 import type IntlService from 'ember-intl/services/intl';
 
-import type { StoreknoxDiscoveryReviewQueryParam } from 'irene/routes/authenticated/storeknox/discover/review';
+import type { StoreknoxInventoryPendingReviewsQueryParam } from 'irene/routes/authenticated/storeknox/inventory/pending-reviews';
 import type SkPendingReviewService from 'irene/services/sk-pending-review';
+import type SkAppModel from 'irene/models/sk-app';
 
 export interface StoreknoxInventoryResultsSignature {
   Args: {
-    queryParams: StoreknoxDiscoveryReviewQueryParam;
+    queryParams: StoreknoxInventoryPendingReviewsQueryParam;
   };
 }
 
@@ -75,7 +76,7 @@ export default class StoreknoxInventoryPendingReviewComponent extends Component<
 
   get reviewAppsData() {
     if (this.isFetchingData) {
-      return Array.from({ length: 5 }, () => ({}));
+      return Array.from({ length: 5 }, () => ({})) as SkAppModel[];
     } else {
       return this.skPendingReview.skPendingReviewData?.slice() || [];
     }

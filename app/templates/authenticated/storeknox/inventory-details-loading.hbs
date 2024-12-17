@@ -1,0 +1,89 @@
+<PageWrapper>
+  <AkStack @width='full' @direction='column' class='mb-3 pt-2'>
+    <AkStack @spacing='0.5' class='pb-3'>
+      <AkSkeleton @variant='rectangular' @height='17px' @width='120px' />
+
+      <AkSkeleton @variant='rectangular' @height='17px' @width='200px' />
+    </AkStack>
+
+    <Storeknox::InventoryDetails::SectionInfo
+      @width='full'
+      @direction='column'
+      class='py-1'
+    >
+      <AkSkeleton @variant='circular' @height='50px' @width='50px' />
+
+      <AkSkeleton
+        @variant='rectangular'
+        @height='17px'
+        @width='150px'
+        class='my-1'
+      />
+
+      <AkSkeleton
+        @variant='rectangular'
+        @height='17px'
+        @width='200px'
+        class='mb-1'
+      />
+
+      <AkStack @spacing='1'>
+        <AkSkeleton @variant='circular' @height='32px' @width='32px' />
+
+        <AkSkeleton @variant='circular' @height='32px' @width='32px' />
+      </AkStack>
+    </Storeknox::InventoryDetails::SectionInfo>
+  </AkStack>
+
+  <AkStack @direction='column' class=''>
+    <Storeknox::InventoryDetails::SectionHeader @color='white'>
+      <AkStack
+        @justifyContent='space-between'
+        @alignItems='center'
+        @width='full'
+        class='py-1'
+      >
+        <AkSkeleton @variant='rectangular' @height='17px' @width='125px' />
+
+        <AkSkeleton @variant='rectangular' @height='25px' @width='150px' />
+      </AkStack>
+    </Storeknox::InventoryDetails::SectionHeader>
+
+    <Storeknox::InventoryDetails::SectionInfo
+      @width='full'
+      @spacing='1'
+      @alignItems='center'
+    >
+      <AkSkeleton @variant='rectangular' @height='32px' @width='120px' />
+      <AkSkeleton @variant='rectangular' @height='32px' @width='120px' />
+      <AkSkeleton @variant='rectangular' @height='32px' @width='120px' />
+    </Storeknox::InventoryDetails::SectionInfo>
+  </AkStack>
+
+  <AkStack @direction='column' class='my-3'>
+    <Storeknox::InventoryDetails::SectionHeader
+      @color='default'
+      {{style height='40px'}}
+    >
+      <AkSkeleton @variant='rectangular' @height='17px' @width='125px' />
+    </Storeknox::InventoryDetails::SectionHeader>
+
+    <Storeknox::InventoryDetails::SectionInfo
+      @width='full'
+      @spacing='1'
+      @direction='column'
+    >
+      {{#each (array 1 2 3) as |idx|}}
+        {{#if (gt idx 1)}}
+          <AkDivider @color='light' class='my-1' />
+        {{/if}}
+
+        <AkStack @alignItems='center' @width='full' @spacing='2.5'>
+          <AkSkeleton @variant='rectangular' @height='17px' @width='150px' />
+
+          <AkSkeleton @variant='rectangular' @height='17px' @width='130px' />
+        </AkStack>
+      {{/each}}
+    </Storeknox::InventoryDetails::SectionInfo>
+  </AkStack>
+</PageWrapper>

@@ -1,0 +1,108 @@
+<AkStack
+  @direction='column'
+  @justifyContent='center'
+  @spacing='2'
+  @width='full'
+  local-class='app-details-table-root'
+  data-test-skAppVersionTable-container
+>
+  <AkPaginationProvider
+    @results={{this.skAppVersionsToDisplay}}
+    @onItemPerPageChange={{this.onItemPerPageChange}}
+    @totalItems={{this.totalStoreVersions}}
+    @nextAction={{this.goToPage}}
+    @prevAction={{this.goToPage}}
+    @itemPerPageOptions={{array 5 10 20}}
+    @defaultLimit={{this.limit}}
+    @offset={{this.offset}}
+    as |pgc|
+  >
+
+    {{#if this.fetchAllSkAppVersions.isRunning}}
+      <Storeknox::InventoryDetails::UnscannedVersion::TableLoading
+        @loadingText='{{t "loading"}}...'
+        data-test-skAppVersionTable-loading
+      />
+
+    {{else if this.hasNoSkAppVersions}}
+      <Storeknox::InventoryDetails::UnscannedVersion::TableEmpty
+        @header='{{t "notFound"}}'
+        @body={{this.noVersionsFoundMsg}}
+        @isHistoryTable={{@isHistoryTable}}
+        data-test-skAppVersionTable-empty
+      />
+
+    {{else if this.skAppVersionsToDisplay.length}}
+      <div local-class='app-details-table-wrapper'>
+        <div local-class='app-details-table-container'>
+          <AkTable
+            @variant='full-bordered'
+            @borderColor='dark'
+            @dense={{true}}
+            local-class='app-details-table'
+            as |tb|
+          >
+            <tb.head
+              @columns={{this.columns}}
+              data-test-skAppVersionTable-header
+              as |h|
+            >
+              <h.row as |r|>
+                <r.cell as |column|>
+                  {{#if column.headerComponent}}
+                    {{#let (component column.headerComponent) as |Component|}}
+                      <Component />
+                    {{/let}}
+                  {{else}}
+                    {{column.name}}
+                  {{/if}}
+                </r.cell>
+              </h.row>
+            </tb.head>
+
+            <tb.body
+              @rows={{this.skAppVersionsToDisplay}}
+              @renderAll={{true}}
+              as |b|
+            >
+              <b.row
+                local-class='table-row'
+                data-test-skAppVersionTable-row
+                as |r|
+              >
+                <r.cell data-test-skAppVersionTable-cell as |value|>
+                  {{#if r.columnValue.component}}
+                    {{#let (component r.columnValue.component) as |Component|}}
+                      <Component @skAppVersion={{r.rowValue}} />
+                    {{/let}}
+                  {{else}}
+                    <AkTypography>
+                      {{value}}
+                    </AkTypography>
+                  {{/if}}
+                </r.cell>
+              </b.row>
+            </tb.body>
+          </AkTable>
+        </div>
+      </div>
+
+      {{#if this.showPagination}}
+        <AkPagination
+          @disableNext={{pgc.disableNext}}
+          @nextAction={{pgc.nextAction}}
+          @disablePrev={{pgc.disablePrev}}
+          @prevAction={{pgc.prevAction}}
+          @endItemIdx={{pgc.endItemIdx}}
+          @startItemIdx={{pgc.startItemIdx}}
+          @itemPerPageOptions={{pgc.itemPerPageOptions}}
+          @onItemPerPageChange={{pgc.onItemPerPageChange}}
+          @selectedOption={{pgc.selectedOption}}
+          @tableItemLabel={{t 'versions'}}
+          @perPageTranslation={{t 'recordPerPage'}}
+          @totalItems={{pgc.totalItems}}
+        />
+      {{/if}}
+    {{/if}}
+  </AkPaginationProvider>
+</AkStack>

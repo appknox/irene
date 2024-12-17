@@ -1,0 +1,69 @@
+<AkPaginationProvider
+  @results={{this.tableData}}
+  @onItemPerPageChange={{this.onItemPerPageChange}}
+  @totalItems={{this.totalAppsCount}}
+  @nextAction={{this.goToPage}}
+  @prevAction={{this.goToPage}}
+  @itemPerPageOptions={{array 10 25 50}}
+  @defaultLimit={{@queryParams.app_limit}}
+  @offset={{@queryParams.app_offset}}
+  as |pgc|
+>
+  <AkTable @hoverable={{not this.disableRowClick}} as |tb|>
+    <tb.head @columns={{this.columns}} as |h|>
+      <h.row as |r|>
+        <r.cell as |column|>
+          {{#if column.headerComponent}}
+            {{#let (component column.headerComponent) as |Component|}}
+              <Component />
+            {{/let}}
+          {{else}}
+            {{column.name}}
+          {{/if}}
+        </r.cell>
+      </h.row>
+    </tb.head>
+
+    <tb.body @rows={{pgc.currentPageResults}} as |b|>
+      <b.row
+        {{style cursor=(unless this.disableRowClick 'pointer')}}
+        {{on 'click' (fn this.handleRowClick b.rowValue)}}
+        as |r|
+      >
+        <r.cell>
+          {{#let (component r.columnValue.cellComponent) as |Component|}}
+            <Component
+              @loading={{this.fetchSkInventoryApps.isRunning}}
+              @app={{r.rowValue.app}}
+              {{! Data used in storeknox common table columns }}
+              @data={{r.rowValue}}
+              {{! For disabled apps select column }}
+              {{! TODO: Uncomment when disabled apps feature is ready for release }}
+              {{!-- @disabledChecking={{@isAddingAppToInventory}}
+              @appIsSelected={{r.rowValue.appIsSelected}}
+              @selectedDisabledAppIds={{this.selectedDisabledAppIds}}
+              @selectDisabledAppRow={{this.selectDisabledAppRow}} --}}
+            />
+          {{/let}}
+        </r.cell>
+      </b.row>
+    </tb.body>
+  </AkTable>
+
+  {{#unless this.isFetchingTableData}}
+    <AkPagination
+      @disableNext={{pgc.disableNext}}
+      @nextAction={{pgc.nextAction}}
+      @disablePrev={{pgc.disablePrev}}
+      @prevAction={{pgc.prevAction}}
+      @endItemIdx={{pgc.endItemIdx}}
+      @startItemIdx={{pgc.startItemIdx}}
+      @itemPerPageOptions={{pgc.itemPerPageOptions}}
+      @onItemPerPageChange={{pgc.onItemPerPageChange}}
+      @selectedOption={{pgc.selectedOption}}
+      @tableItemLabel={{t 'apps'}}
+      @perPageTranslation={{t 'recordPerPage'}}
+      @totalItems={{pgc.totalItems}}
+    />
+  {{/unless}}
+</AkPaginationProvider>
