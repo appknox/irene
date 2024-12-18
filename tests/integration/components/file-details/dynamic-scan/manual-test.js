@@ -106,10 +106,7 @@ module(
       });
 
       this.server.put('/profiles/:id/device_preference', (_, req) => {
-        const data = req.requestBody
-          .split('&')
-          .map((it) => it.split('='))
-          .reduce((acc, [key, value]) => ({ ...acc, [key]: value }), {});
+        const data = JSON.parse(req.requestBody);
 
         this.set('requestBody', data);
 
@@ -1013,7 +1010,7 @@ module(
         // verify network data
         assert.strictEqual(
           this.requestBody.device_type,
-          `${ENUMS.DEVICE_TYPE.PHONE_REQUIRED}`
+          ENUMS.DEVICE_TYPE.PHONE_REQUIRED
         );
 
         const filteredDevices = this.availableDevices.filter(

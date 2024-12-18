@@ -10,15 +10,15 @@ import type IntlService from 'ember-intl/services/intl';
 import { waitForPromise } from '@ember/test-waiters';
 
 import parseError from 'irene/utils/parse-error';
-import type NetworkService from 'irene/services/network';
 import type MeService from 'irene/services/me';
+import type IreneAjaxService from 'irene/services/ajax';
 
 export type SwaggerUIDataProps = Partial<
   Record<'components' | 'paths' | 'openapi' | 'info', string | object>
 >;
 
 export default class PublicApiDocsComponent extends Component {
-  @service declare network: NetworkService;
+  @service declare ajax: IreneAjaxService;
   @service declare intl: IntlService;
   @service declare me: MeService;
   @service('notifications') declare notify: NotificationService;
@@ -79,14 +79,12 @@ export default class PublicApiDocsComponent extends Component {
   fetchSchemaData = task(async () => {
     try {
       const res = await waitForPromise(
-        this.network.request('/api/public_api/schema', {
+        this.ajax.request('/api/public_api/schema', {
           headers: { accept: 'application/json, */*' },
         })
       );
 
-      const data = (await waitForPromise(res.json())) as SwaggerUIDataProps;
-
-      this.data = data;
+      this.data = res as SwaggerUIDataProps;
     } catch (error) {
       this.notify.error(parseError(error, this.intl.t('pleaseTryAgain')));
     }

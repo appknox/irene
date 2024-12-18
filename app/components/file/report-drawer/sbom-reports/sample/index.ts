@@ -8,9 +8,9 @@ import { task } from 'ember-concurrency';
 import Store from '@ember-data/store';
 import { waitForPromise } from '@ember/test-waiters';
 
-import NetworkService from 'irene/services/network';
 import SbomReportModel, { SbomReportType } from 'irene/models/sbom-report';
 import parseError from 'irene/utils/parse-error';
+import type IreneAjaxService from 'irene/services/ajax';
 
 type SbomScanReportQueryResponse =
   DS.AdapterPopulatedRecordArray<SbomReportModel> & {
@@ -18,8 +18,7 @@ type SbomScanReportQueryResponse =
   };
 
 export default class FileReportDrawerSbomReportsSampleComponent extends Component {
-  @service declare ajax: any;
-  @service declare network: NetworkService;
+  @service declare ajax: IreneAjaxService;
   @service declare store: Store;
   @service declare intl: IntlService;
   @service('notifications') declare notify: NotificationService;

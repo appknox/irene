@@ -11,6 +11,7 @@ import InviteOnlyRegisterValidation from '../../../validations/register-invite';
 import LoggerService from 'irene/services/logger';
 import { ChangesetBufferProps } from '../form';
 import IntlService from 'ember-intl/services/intl';
+import type IreneAjaxService from 'irene/services/ajax';
 
 interface ViaPartnerInviteSignature {
   Args: {
@@ -33,7 +34,7 @@ interface RegistrationData {
 
 export default class ViaPartnerInviteComponent extends Component<ViaPartnerInviteSignature> {
   @service declare session: any;
-  @service declare ajax: any;
+  @service declare ajax: IreneAjaxService;
   @service declare logger: LoggerService;
   @service('notifications') declare notify: NotificationService;
   @service declare intl: IntlService;
@@ -62,9 +63,9 @@ export default class ViaPartnerInviteComponent extends Component<ViaPartnerInvit
     const url = this.inviteEndpoint + '?token=' + this.args.token;
 
     try {
-      const data = await this.ajax.request(url, {
+      const data = (await this.ajax.request(url, {
         namespace: ENV.namespace_v2,
-      });
+      })) as RegistrationData;
 
       this.initialData = data;
 
@@ -86,10 +87,10 @@ export default class ViaPartnerInviteComponent extends Component<ViaPartnerInvit
     const url = this.inviteEndpoint;
 
     try {
-      const logininfo = await this.ajax.post(url, {
+      const logininfo = (await this.ajax.post(url, {
         data: data,
         namespace: ENV.namespace_v2,
-      });
+      })) as RegistrationData;
 
       this.authenticate(logininfo);
     } catch (err) {
