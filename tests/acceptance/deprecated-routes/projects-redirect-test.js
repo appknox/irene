@@ -33,7 +33,13 @@ module('Acceptance | projects redirect', function (hooks) {
     const { vulnerabilities } = await setupRequiredEndpoints(this.server);
 
     const profile = this.server.create('profile');
-    const project = this.server.create('project');
+
+    const file = this.server.create('file', 1);
+
+    const project = this.server.create('project', {
+      id: 1,
+      last_file_id: file.id,
+    });
 
     const analyses = vulnerabilities.map((v, id) =>
       this.server.create('analysis', { id, vulnerability: v.id }).toJSON()
@@ -177,6 +183,10 @@ module('Acceptance | projects redirect', function (hooks) {
       '/projects/:id/jira',
       () => new Response(404, {}, { detail: 'JIRA not integrated' })
     );
+
+    this.server.get('/v2/files/:id', (schema, req) => {
+      return schema.files.find(`${req.params.id}`)?.toJSON();
+    });
 
     // to dismiss notification quickly
     const notify = this.owner.lookup('service:notifications');

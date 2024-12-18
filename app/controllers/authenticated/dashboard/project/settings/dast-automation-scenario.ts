@@ -17,21 +17,35 @@ export default class AuthenticatedDashboardProjectSettingsDastAutomationScenario
   get breadcrumbs(): AkBreadcrumbsItemProps {
     const projectId = this.model?.project?.id;
 
-    return {
+    const crumb: AkBreadcrumbsItemProps = {
       title: `${this.intl.t('dastAutomation.dastAutomationScenario')}`,
       models: [projectId, this.model?.scenario?.id],
       routeGroup: 'project/files',
 
       route:
         'authenticated.dashboard.project.settings.dast-automation-scenario',
+    };
 
-      parentCrumb: {
-        title: this.intl.t('settings'),
-        route: 'authenticated.dashboard.project.settings.index',
-        models: [projectId],
-        siblingRoutes: ['authenticated.dashboard.project.settings.analysis'],
-        routeGroup: 'project/files',
-      },
+    const parentCrumb: AkBreadcrumbsItemProps['parentCrumb'] = {
+      title: `${this.intl.t('settings')} (${this.model?.project?.get('packageName')})`,
+      route: 'authenticated.dashboard.project.settings.index',
+      models: [projectId],
+      multiPageAccess: true,
+      routeGroup: 'project/files',
+    };
+
+    return {
+      ...crumb,
+      parentCrumb,
+
+      fallbackCrumbs: [
+        {
+          title: this.intl.t('allProjects'),
+          route: 'authenticated.dashboard.projects',
+        },
+        parentCrumb,
+        crumb,
+      ],
     };
   }
 }

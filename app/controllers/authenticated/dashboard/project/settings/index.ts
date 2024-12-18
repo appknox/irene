@@ -12,11 +12,10 @@ export default class AuthenticatedDashboardProjectSettingsIndexController extend
 
   get breadcrumbs(): AkBreadcrumbsItemProps {
     return {
-      title: `${this.intl.t('settings')} (${this.model.packageName})`,
+      title: `${this.intl.t('settings')} (${this.model?.packageName})`,
       route: 'authenticated.dashboard.project.settings.index',
       models: [this.model?.id],
       multiPageAccess: true,
-      siblingRoutes: ['authenticated.dashboard.project.settings.analysis'],
       routeGroup: 'project/files',
 
       parentCrumb: {

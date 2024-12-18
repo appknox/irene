@@ -775,6 +775,7 @@
       "deviceTypes": "Device types",
       "deviceSettingsWarning": "Please ensure the mobile device settings remain unchanged during the dynamic scan. Altering device settings outside your application can cause the scanner to malfunction. Kindly refrain from actions such as updating the OS, disconnecting from WiFi, performing factory resets, uninstalling apps or changing system settings.",
       "preferredDeviceNotAvailable": "Preferred device type and OS is not available.",
+      "minOSVersionUnsupported": "Minimum OS Version Unsupported",
       "allDevicesAreAllocated": "All Devices are currently being used please try again in sometime.",
       "runApiScan": "Enable API Capture",
       "apiScanDescription": "During dynamic scan <strong>network traffic made by the app, filtered by the below provided API endpoints</strong> will be recorded. Currently traffic capturing is <strong>not supported for the apps that employ SSL pinning.</strong>",

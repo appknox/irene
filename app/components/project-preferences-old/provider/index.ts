@@ -17,6 +17,7 @@ import ProjectAvailableDeviceModel from 'irene/models/project-available-device';
 import FileModel from 'irene/models/file';
 
 export interface DevicePreferenceContext {
+  filteredDevices?: ProjectAvailableDeviceModel[];
   deviceTypes: DeviceType[];
   selectedDeviceType?: DeviceType;
   handleSelectDeviceType: (deviceType: DeviceType) => void;
@@ -24,6 +25,14 @@ export interface DevicePreferenceContext {
   devicePlatformVersions: string[];
   handleSelectVersion: (version: string) => void;
   isPreferredDeviceAvailable: boolean | null;
+
+  updateDevicePref(
+    device_type: string | number | undefined,
+    platform_version: string,
+    silentNotifications?: boolean
+  ): void;
+
+  compareVersions(v1: string, v2: string): number;
 }
 
 export interface ProjectPreferencesOldProviderSignature {
@@ -31,7 +40,6 @@ export interface ProjectPreferencesOldProviderSignature {
     file?: FileModel | null;
     project?: ProjectModel | null;
     profileId?: number | string;
-    platform?: number;
   };
   Blocks: {
     default: [DevicePreferenceContext];
@@ -228,7 +236,8 @@ export default class ProjectPreferencesOldProviderComponent extends Component<Pr
     return null;
   }
 
-  private parseVersion(version: string): number[] {
+  @action
+  parseVersion(version: string): number[] {
     // Extract version numbers (e.g., "15.8.3 support" -> [15,8,3])
     const match = version.match(/^(\d+)(?:\.(\d+))?(?:\.(\d+))?/);
 
@@ -244,7 +253,8 @@ export default class ProjectPreferencesOldProviderComponent extends Component<Pr
     ];
   }
 
-  private compareVersions(v1: string, v2: string): number {
+  @action
+  compareVersions(v1: string, v2: string): number {
     const v1Parts = this.parseVersion(v1);
     const v2Parts = this.parseVersion(v2);
 
@@ -266,49 +276,72 @@ export default class ProjectPreferencesOldProviderComponent extends Component<Pr
   }
 
   @action
+  updateDevicePref(
+    device_type: string | number | undefined,
+    platform_version: string,
+    silentNotifications?: boolean
+  ) {
+    this.versionSelected.perform(
+      device_type,
+      platform_version,
+      silentNotifications
+    );
+  }
+
+  @action
   handleSelectDeviceType(deviceType: DeviceType) {
     this.selectedDeviceType = deviceType;
     this.selectedVersion = '0';
 
-    this.versionSelected.perform();
+    this.updateDevicePref(this.selectedDeviceType?.value, this.selectedVersion);
   }
 
   @action
   handleSelectVersion(version: string) {
     this.selectedVersion = version;
 
-    this.versionSelected.perform();
+    this.updateDevicePref(this.selectedDeviceType?.value, this.selectedVersion);
   }
 
-  versionSelected = task(async () => {
-    try {
-      const profileId = this.args.profileId;
+  versionSelected = task(
+    async (
+      device_type: string | number | undefined,
+      platform_version: string,
+      silentNotifications = false
+    ) => {
+      try {
+        const profileId = this.args.profileId;
 
-      const devicePreferences = [
-        ENV.endpoints['profiles'],
-        profileId,
-        ENV.endpoints['devicePreferences'],
-      ].join('/');
+        const devicePreferences = [
+          ENV.endpoints['profiles'],
+          profileId,
+          ENV.endpoints['devicePreferences'],
+        ].join('/');
 
-      const data = {
-        device_type: this.selectedDeviceType?.value,
-        platform_version: this.selectedVersion,
-      };
+        const data = {
+          device_type,
+          platform_version,
+        };
 
-      await this.ajax.put(devicePreferences, { data });
+        await this.ajax.put(devicePreferences, { data });
 
-      if (!this.isDestroyed && this.devicePreference) {
-        this.devicePreference.deviceType = this.selectedDeviceType
-          ?.value as number;
+        if (!this.isDestroyed && this.devicePreference) {
+          this.devicePreference.deviceType = this.selectedDeviceType
+            ?.value as number;
 
-        this.devicePreference.platformVersion = this.selectedVersion;
+          this.devicePreference.platformVersion = this.selectedVersion;
 
-        this.notify.success(this.intl.t('savedPreferences'));
+          if (!silentNotifications) {
+            this.notify.success(this.intl.t('savedPreferences'));
+          }
+        }
+      } catch (e) {
+        if (!silentNotifications) {
+          this.notify.error(this.intl.t('somethingWentWrong'));
+        }
       }
-    } catch (e) {
-      this.notify.error(this.intl.t('somethingWentWrong'));
     }
-  });
+  );
 }
 
 declare module '@glint/environment-ember-loose/registry' {

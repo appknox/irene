@@ -76,18 +76,26 @@ module(
         },
       });
 
-      const project = this.server.create('project');
       const profile = this.server.create('profile');
 
       const analyses = vulnerabilities.map((v, id) =>
         this.server.create('analysis', { id, vulnerability: v.id }).toJSON()
       );
 
-      // File Models
-      const files = this.server.createList('file', 3, {
-        project: project.id,
+      // File Model
+      const file = this.server.create('file', {
+        id: 1,
         profile: profile.id,
         analyses,
+      });
+
+      const project = this.server.create('project', {
+        id: 1,
+        last_file_id: file.id,
+      });
+
+      this.setProperties({
+        project,
       });
 
       this.server.create('device-preference', {
@@ -99,6 +107,13 @@ module(
 
       this.owner.register('service:integration', IntegrationStub);
       this.owner.register('service:websocket', WebsocketStub);
+
+      // Server Mocks
+      this.server.get('/v2/files/:id', (schema, req) => {
+        const data = schema.files.find(`${req.params.id}`)?.toJSON();
+
+        return { ...data, project: project.id };
+      });
 
       this.server.get('/v2/projects/:id', (schema, req) => {
         return schema.projects.find(req.params.id).toJSON();
@@ -214,11 +229,6 @@ module(
       const notify = this.owner.lookup('service:notifications');
 
       notify.setDefaultClearDuration(0);
-
-      this.setProperties({
-        project,
-        files,
-      });
     });
 
     test('it navigates to project scenario page on scenario click', async function (assert) {

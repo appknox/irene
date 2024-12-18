@@ -2,18 +2,22 @@ import Component from '@glimmer/component';
 import { inject as service } from '@ember/service';
 import { task } from 'ember-concurrency';
 import { action } from '@ember/object';
-import ENV from 'irene/config/environment';
-import triggerAnalytics from 'irene/utils/trigger-analytics';
 import IntlService from 'ember-intl/services/intl';
 import Store from '@ember-data/store';
 import { tracked } from '@glimmer/tracking';
-import FileModel from 'irene/models/file';
+
+import ENV from 'irene/config/environment';
+import ENUMS from 'irene/enums';
+import triggerAnalytics from 'irene/utils/trigger-analytics';
+import type FileModel from 'irene/models/file';
+import type { DevicePreferenceContext } from 'irene/components/project-preferences-old/provider';
 
 export interface FileDetailsDynamicScanDrawerOldSignature {
   Args: {
     onClose: () => void;
     pollDynamicStatus: () => void;
     file: FileModel;
+    dpContext: DevicePreferenceContext;
   };
 }
 
@@ -21,6 +25,7 @@ export default class FileDetailsDynamicScanDrawerOldComponent extends Component<
   @service declare intl: IntlService;
   @service declare ajax: any;
   @service declare store: Store;
+  @service('browser/window') declare window: Window;
   @service('notifications') declare notify: NotificationService;
 
   @tracked showApiScanSettings = false;
@@ -28,6 +33,10 @@ export default class FileDetailsDynamicScanDrawerOldComponent extends Component<
 
   get tStartingScan() {
     return this.intl.t('startingScan');
+  }
+
+  get devicePrefContext() {
+    return this.args.dpContext;
   }
 
   get tScheduleDynamicscanSuccess() {
@@ -156,8 +165,34 @@ export default class FileDetailsDynamicScanDrawerOldComponent extends Component<
     }
   });
 
+  get currentDevicePref() {
+    return {
+      device_type: this.devicePrefContext.selectedDeviceType?.value,
+      platform_version: this.devicePrefContext.selectedVersion,
+    };
+  }
+
+  get deviceTypeIsAny() {
+    return (
+      this.currentDevicePref.device_type === ENUMS.DEVICE_TYPE.NO_PREFERENCE
+    );
+  }
+
+  get devicePlatformVersionIsAny() {
+    return this.currentDevicePref.platform_version === '0';
+  }
+
+  @action
+  pickRandomItemFromList<T>(list: T[]) {
+    return list[Math.floor(Math.random() * list.length)]; // NOSONAR
+  }
+
   @action
   runDynamicScan() {
+    if (this.deviceTypeIsAny || this.devicePlatformVersionIsAny) {
+      this.saveDevicePrefToLocalStorage.perform();
+    }
+
     triggerAnalytics(
       'feature',
       ENV.csb['runDynamicScan'] as CsbAnalyticsFeatureData
@@ -165,6 +200,37 @@ export default class FileDetailsDynamicScanDrawerOldComponent extends Component<
 
     this.startDynamicScan.perform();
   }
+
+  saveDevicePrefToLocalStorage = task(async () => {
+    const modifiedDevicePref = { ...this.currentDevicePref };
+
+    if (this.deviceTypeIsAny) {
+      modifiedDevicePref.device_type = ENUMS.DEVICE_TYPE.PHONE_REQUIRED;
+    }
+
+    if (
+      this.devicePlatformVersionIsAny &&
+      this.devicePrefContext.filteredDevices?.length
+    ) {
+      const randomDevice = this.pickRandomItemFromList(
+        this.devicePrefContext.filteredDevices
+      );
+
+      modifiedDevicePref.platform_version =
+        randomDevice?.platformVersion as string;
+    }
+
+    this.window.localStorage.setItem(
+      'actualDevicePrefData',
+      JSON.stringify({ ...this.currentDevicePref, file_id: this.args.file.id })
+    );
+
+    this.devicePrefContext.updateDevicePref(
+      modifiedDevicePref.device_type,
+      modifiedDevicePref.platform_version,
+      true
+    );
+  });
 }
 
 declare module '@glint/environment-ember-loose/registry' {

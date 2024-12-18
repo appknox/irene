@@ -71,7 +71,10 @@ module('Acceptance | file compare', function (hooks) {
     });
 
     this.server.get('/v2/projects/:id', (schema, req) => {
-      return schema.projects.find(req.params.id).toJSON();
+      return {
+        ...schema.projects.find(req.params.id).toJSON(),
+        last_file_id: files[files.length - 1].id,
+      };
     });
 
     this.server.get('/profiles/:id', (schema, req) =>

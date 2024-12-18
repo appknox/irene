@@ -73,6 +73,7 @@
 
 {{#if this.showDynamicScanDrawer}}
   <FileDetails::DynamicScan::DrawerOld
+    @dpContext={{@dpContext}}
     @onClose={{this.closeDynamicScanDrawer}}
     @pollDynamicStatus={{this.pollDynamicStatus}}
     @file={{@file}}

@@ -774,6 +774,7 @@
       "processorArchitecture": "Processor architecture",
       "deviceTypes": "Device types",
       "deviceSettingsWarning": "Please ensure the mobile device settings remain unchanged during the dynamic scan. Altering device settings outside your application can cause the scanner to malfunction. Kindly refrain from actions such as updating the OS, disconnecting from WiFi, performing factory resets, uninstalling apps or changing system settings.",
+      "minOSVersionUnsupported": "Minimum OS Version Unsupported",
       "preferredDeviceNotAvailable": "Preferred device type and OS is not available.",
       "allDevicesAreAllocated": "All Devices are currently being used please try again in sometime.",
       "runApiScan": "Enable API Capture",

@@ -5,24 +5,28 @@ import { action } from '@ember/object';
 import { task } from 'ember-concurrency';
 import type Store from '@ember-data/store';
 import type IntlService from 'ember-intl/services/intl';
-import type DynamicscanModel from 'irene/models/dynamicscan';
 
-import type FileModel from 'irene/models/file';
 import parseError from 'irene/utils/parse-error';
+import type DynamicscanModel from 'irene/models/dynamicscan';
+import type FileModel from 'irene/models/file';
+import type { DevicePreferenceContext } from 'irene/components/project-preferences-old/provider';
 
 export interface FileDetailsDastManualSignature {
   Args: {
     file: FileModel;
     profileId: number;
+    dpContext: DevicePreferenceContext;
   };
 }
 
 export default class FileDetailsDastManual extends Component<FileDetailsDastManualSignature> {
   @service declare intl: IntlService;
   @service declare store: Store;
+  @service('browser/window') declare window: Window;
   @service('notifications') declare notify: NotificationService;
 
   @tracked isFullscreenView = false;
+  @tracked devicePrefObserverRegistered = false;
   @tracked dynamicScan: DynamicscanModel | null = null;
 
   constructor(owner: unknown, args: FileDetailsDastManualSignature['Args']) {
