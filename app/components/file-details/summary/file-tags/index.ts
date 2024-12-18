@@ -9,6 +9,7 @@ import styles from './index.scss';
 import FileModel from 'irene/models/file';
 import ENV from 'irene/config/environment';
 import TagModel from 'irene/models/tag';
+import type IreneAjaxService from 'irene/services/ajax';
 
 export interface FileDetailsSummaryFileTagsSignature {
   Args: {
@@ -18,7 +19,7 @@ export interface FileDetailsSummaryFileTagsSignature {
 
 export default class FileDetailsSummaryFileTagsComponent extends Component<FileDetailsSummaryFileTagsSignature> {
   @service declare intl: IntlService;
-  @service declare ajax: any;
+  @service declare ajax: IreneAjaxService;
   @service('notifications') declare notify: NotificationService;
 
   @tracked showAddTagForm = false;

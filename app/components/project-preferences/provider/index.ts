@@ -23,6 +23,7 @@ import ProfileModel, {
   type ProfileDSAutomatedDevicePrefData,
   type ProfileDSManualDevicePrefData,
 } from 'irene/models/profile';
+import type IreneAjaxService from 'irene/services/ajax';
 
 type ProfileDsSelectFuncHandler = (option: { value: number }) => void;
 
@@ -67,7 +68,7 @@ type DeviceType = EnumObject;
 
 export default class ProjectPreferencesProviderComponent extends Component<ProjectPreferencesProviderSignature> {
   @service declare intl: IntlService;
-  @service declare ajax: any;
+  @service declare ajax: IreneAjaxService;
   @service('notifications') declare notify: NotificationService;
   @service declare store: Store;
 

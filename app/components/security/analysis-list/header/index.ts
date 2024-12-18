@@ -18,6 +18,7 @@ import type { Owner } from '@ember/test-helpers/build-owner';
 
 import type SecurityFileModel from 'irene/models/security/file';
 import type VulnerabilityModel from 'irene/models/vulnerability';
+import type IreneAjaxService from 'irene/services/ajax';
 
 type VulnerabilityQueryResponse =
   DS.AdapterPopulatedRecordArray<VulnerabilityModel> & {
@@ -39,7 +40,7 @@ export default class SecurityAnalysisListHeaderComponent extends Component<Secur
   @service declare store: Store;
   @service declare intl: IntlService;
   @service('notifications') declare notify: NotificationService;
-  @service declare ajax: any;
+  @service declare ajax: IreneAjaxService;
 
   @tracked selectedVulnerability: number | null = null;
   @tracked showPurgeAPIAnalysisConfirmBox = false;
