@@ -17,6 +17,7 @@ import parseError from 'irene/utils/parse-error';
 import SubmissionModel from 'irene/models/submission';
 import RealtimeService from 'irene/services/realtime';
 import ENUMS from 'irene/enums';
+import type IreneAjaxService from 'irene/services/ajax';
 
 dayjs.extend(advancedFormat);
 
@@ -27,7 +28,7 @@ interface AppMonitoringVersionTableActionsSignature {
 }
 
 export default class AppMonitoringVersionTableActionsComponent extends Component<AppMonitoringVersionTableActionsSignature> {
-  @service declare ajax: any;
+  @service declare ajax: IreneAjaxService;
   @service('notifications') declare notify: NotificationService;
   @service declare store: Store;
   @service declare intl: IntlService;

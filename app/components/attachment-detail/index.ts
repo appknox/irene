@@ -3,6 +3,7 @@ import { inject as service } from '@ember/service';
 import ENV from 'irene/config/environment';
 import AttachmentModel from 'irene/models/attachment';
 import { task } from 'ember-concurrency';
+import type IreneAjaxService from 'irene/services/ajax';
 
 export interface AttachmentDetailSignature {
   Args: {
@@ -10,8 +11,14 @@ export interface AttachmentDetailSignature {
   };
 }
 
+interface DownloadResponse {
+  data: {
+    url: string;
+  };
+}
+
 export default class AttachmentDetailComponent extends Component<AttachmentDetailSignature> {
-  @service declare ajax: any;
+  @service declare ajax: IreneAjaxService;
   @service('notifications') declare notify: NotificationService;
   @service('browser/window') declare window: Window;
 
@@ -19,7 +26,7 @@ export default class AttachmentDetailComponent extends Component<AttachmentDetai
     const url = ENV.host + this.args.attachment.downloadUrl;
 
     try {
-      const result = await this.ajax.request(url);
+      const result = await this.ajax.request<DownloadResponse>(url);
 
       this.window.open(result.data.url);
     } catch (error) {

@@ -10,6 +10,7 @@ import triggerAnalytics from 'irene/utils/trigger-analytics';
 import ApiScanOptionsModel from 'irene/models/api-scan-options';
 import { task } from 'ember-concurrency';
 import { action } from '@ember/object';
+import type IreneAjaxService from 'irene/services/ajax';
 
 const isRegexFailed = function (url: string) {
   const reg =
@@ -29,7 +30,7 @@ export interface ApiFilterSignature {
 
 export default class ApiFilterComponent extends Component<ApiFilterSignature> {
   @service declare intl: IntlService;
-  @service declare ajax: any;
+  @service declare ajax: IreneAjaxService;
   @service declare store: Store;
   @service('notifications') declare notify: NotificationService;
 

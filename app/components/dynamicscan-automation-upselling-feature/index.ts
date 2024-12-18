@@ -6,9 +6,10 @@ import { inject as service } from '@ember/service';
 import type IntlService from 'ember-intl/services/intl';
 
 import parseError from 'irene/utils/parse-error';
+import type IreneAjaxService from 'irene/services/ajax';
 
 export default class DyanmicscanAutomationUpsellingFeatureComponent extends Component {
-  @service declare ajax: any;
+  @service declare ajax: IreneAjaxService;
   @service declare intl: IntlService;
   @service('notifications') declare notify: NotificationService;
   @service('browser/window') declare window: Window;

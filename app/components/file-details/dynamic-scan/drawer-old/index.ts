@@ -8,6 +8,7 @@ import IntlService from 'ember-intl/services/intl';
 import Store from '@ember-data/store';
 import { tracked } from '@glimmer/tracking';
 import FileModel from 'irene/models/file';
+import type IreneAjaxService from 'irene/services/ajax';
 
 export interface FileDetailsDynamicScanDrawerOldSignature {
   Args: {
@@ -19,7 +20,7 @@ export interface FileDetailsDynamicScanDrawerOldSignature {
 
 export default class FileDetailsDynamicScanDrawerOldComponent extends Component<FileDetailsDynamicScanDrawerOldSignature> {
   @service declare intl: IntlService;
-  @service declare ajax: any;
+  @service declare ajax: IreneAjaxService;
   @service declare store: Store;
   @service('notifications') declare notify: NotificationService;
 

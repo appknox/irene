@@ -13,6 +13,7 @@ import type IntlService from 'ember-intl/services/intl';
 import type Store from '@ember-data/store';
 
 import styles from './index.scss';
+import type IreneAjaxService from 'irene/services/ajax';
 
 enum AvailableManualDeviceModelKeyMap {
   ALL_AVAILABLE_DEVICES = 'all',
@@ -35,7 +36,7 @@ export interface FileDetailsDynamicScanDrawerDevicePrefTableSignature {
 export default class FileDetailsDynamicScanDrawerDevicePrefTableComponent extends Component<FileDetailsDynamicScanDrawerDevicePrefTableSignature> {
   @service declare store: Store;
   @service('notifications') declare notify: NotificationService;
-  @service declare ajax: any;
+  @service declare ajax: IreneAjaxService;
   @service declare intl: IntlService;
 
   @tracked limit = 5;
