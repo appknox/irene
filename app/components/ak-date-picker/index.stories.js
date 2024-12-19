@@ -1,3 +1,4 @@
+import { action } from '@ember/object';
 import { hbs } from 'ember-cli-htmlbars';
 
 export default {
@@ -17,10 +18,21 @@ const commonArgs = {
   quickSelectTitle: '',
 };
 
+function onSelectCollection(collection) {
+  this.set('selected', collection.date);
+}
+
+function onSelectRange(range) {
+  this.set('selected', range.date);
+}
+
+function onSelectDay(day) {
+  this.set('selected', day?.date);
+}
+
 const AkDatePickerTemplate = (args) => {
   return {
     template: hbs`
-        {{!-- template-lint-disable no-action --}}
         <AkDatePicker 
           @dayClass={{this.dayClass}}
           @startOfWeek={{this.startOfWeek}}
@@ -36,7 +48,7 @@ const AkDatePickerTemplate = (args) => {
           @maxLength={{this.maxLength}}
           @proximitySelection={{this.proximitySelection}}
           @selected={{this.selected}}
-          @onSelect={{action this.onSelect}} 
+          @onSelect={{this.onSelect}} 
           @quickSelectOptions={{this.quickSelectOptions}}
         >
           <AkButton>
@@ -71,9 +83,7 @@ export const Basic = AkDatePickerTemplate.bind({});
 Basic.args = {
   ...commonArgs,
   selected: new Date(),
-  onSelect(day) {
-    this.set('selected', day?.date);
-  },
+  onSelect: action(onSelectDay),
   quickSelectOptions: ['clear'],
 };
 
@@ -86,9 +96,7 @@ RangeSelection.args = {
   maxRange: Infinity,
   proximitySelection: false,
   selected: null,
-  onSelect(range) {
-    this.set('selected', range.date);
-  },
+  onSelect: action(onSelectRange),
   quickSelectOptions: ['last7Days', 'last3Months', 'lastYear'],
 };
 
@@ -99,8 +107,6 @@ MultipleSelection.args = {
   multiple: true,
   maxLength: 10,
   selected: null,
-  onSelect(collection) {
-    this.set('selected', collection.date);
-  },
+  onSelect: action(onSelectCollection),
   quickSelectOptions: ['today'],
 };

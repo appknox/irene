@@ -1,3 +1,4 @@
+import { action } from '@ember/object';
 import { hbs } from 'ember-cli-htmlbars';
 
 export default {
@@ -6,14 +7,13 @@ export default {
   excludeStories: [],
 };
 
-const actions = {
-  handleMoreClick(event) {
-    this.set('anchorRef', event.currentTarget);
-  },
-  handleClose() {
-    this.set('anchorRef', null);
-  },
-};
+function handleMoreClick(event) {
+  this.set('anchorRef', event.currentTarget);
+}
+
+function handleClose() {
+  this.set('anchorRef', null);
+}
 
 const styles = {
   container: {
@@ -27,10 +27,9 @@ const styles = {
 
 const Template = (args) => ({
   template: hbs`
-    {{!-- template-lint-disable no-action --}}
     <AkTypography @color="textSecondary" @gutterBottom={{true}}>Experiment with me</AkTypography>
     
-    <AkIconButton @variant="outlined" {{on 'click' (action this.handleMoreClick)}}>
+    <AkIconButton @variant="outlined" {{on 'click' this.handleMoreClick}}>
         <AkIcon @iconName="more-vert" />
     </AkIconButton>
 
@@ -42,16 +41,16 @@ const Template = (args) => ({
       @arrow={{this.arrow}} 
       @arrowColor={{this.arrowColor}}
       @hasBackdrop={{this.hasBackdrop}} 
-      @onBackdropClick={{action this.handleClose}}
+      @onBackdropClick={{this.handleClose}}
       @clickOutsideToClose={{this.clickOutsideToClose}}
-      @closeHandler={{action this.handleClose}}
+      @closeHandler={{this.handleClose}}
       >
         <div {{style this.styles.container}} class="p-2">
             <AkTypography>I am inside a popover</AkTypography>
         </div>
     </AkPopover>
   `,
-  context: { ...args, ...actions, styles },
+  context: { ...args, styles },
 });
 
 export const Default = Template.bind({});
@@ -65,4 +64,6 @@ Default.args = {
   arrowColor: 'light',
   hasBackdrop: true,
   clickOutsideToClose: false,
+  handleClose: action(handleClose),
+  handleMoreClick: action(handleMoreClick),
 };
