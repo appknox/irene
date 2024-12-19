@@ -43,19 +43,27 @@
           @direction='column'
           local-class='device-preference-table'
         >
-          {{!-- <AkStack @width='full' @alignItems='center'>
+          <AkStack @width='full' @alignItems='center'>
             <AkStack @width='4/12' class='ml-2'>
               <AkTypography>{{t 'deviceType'}}</AkTypography>
             </AkStack>
 
             {{#if dpContext}}
-              <AkRadio::Group @groupDirection='row' as |ctx|>
-                <AkFormControlLabel @label='Phone'>
-                  <AkRadio @radioCtx={{ctx}} @value='Phone' />
+              <AkRadio::Group
+                @groupDirection='row'
+                @value='{{dsAutoDevicePref.ds_automated_device_type}}'
+                as |ctx|
+              >
+                <AkFormControlLabel @label='Any'>
+                  <AkRadio @radioCtx={{ctx}} @value='0' />
+                </AkFormControlLabel>
+
+                <AkFormControlLabel class='mx-2' @label={{t 'phone'}}>
+                  <AkRadio @radioCtx={{ctx}} @value='1' />
                 </AkFormControlLabel>
 
                 <AkFormControlLabel @label='Tab'>
-                  <AkRadio @radioCtx={{ctx}} @value='Tab' />
+                  <AkRadio @radioCtx={{ctx}} @value='2' />
                 </AkFormControlLabel>
               </AkRadio::Group>
             {{else}}
@@ -71,7 +79,7 @@
             {{/if}}
           </AkStack>
 
-          <AkDivider @color='dark' /> --}}
+          <AkDivider @color='dark' />
 
           <AkStack
             @width='full'
@@ -94,7 +102,11 @@
                 data-test-projectSettings-generalSettings-devicePreferenceAutomatedDast-version-select
                 as |version|
               >
-                {{version}}
+                {{#if (eq version '')}}
+                  {{t 'anyVersion'}}
+                {{else}}
+                  {{version}}
+                {{/if}}
               </AkSelect>
             {{/if}}
           </AkStack>

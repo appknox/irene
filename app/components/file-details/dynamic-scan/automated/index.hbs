@@ -1,4 +1,4 @@
-{{#if this.fetchDynamicscan.isRunning}}
+{{#if (or this.getDynamicscanMode.isRunning this.fetchDynamicscan.isRunning)}}
   <AkStack
     local-class='loading-container'
     @alignItems='center'
@@ -11,7 +11,7 @@
       {{t 'loading'}}...
     </AkTypography>
   </AkStack>
-{{else if (and @file.canRunAutomatedDynamicscan this.automationEnabled)}}
+{{else if this.automationPreference.dynamicScanAutomationEnabled}}
   <AkStack
     local-class='automated-dast-container'
     @width='full'
@@ -36,24 +36,27 @@
 
       <AkStack @spacing='1' @alignItems='center'>
         <FileDetails::DynamicScan::StatusChip
-          @file={{@file}}
-          @dynamicScan={{this.dynamicScan}}
+          @status={{this.dynamicScan.computedStatus}}
+          @statusText={{this.dynamicScan.statusText}}
         />
 
-        <FileDetails::DynamicScan::Action
-          @file={{@file}}
-          @dynamicScanText={{t 'dastTabs.automatedDAST'}}
-          @onScanShutdown={{this.handleFullscreenClose}}
-          @isAutomatedScan={{true}}
-          @dynamicScan={{this.dynamicScan}}
-        />
+        {{#unless this.dynamicScan.isShuttingDown}}
+          <FileDetails::DynamicScan::Action
+            @file={{@file}}
+            @dynamicScanText={{t 'dastTabs.automatedDAST'}}
+            @onScanStart={{this.handleStartScan}}
+            @onScanShutdown={{this.handleFullscreenClose}}
+            @isAutomatedScan={{true}}
+            @dynamicScan={{this.dynamicScan}}
+          />
+        {{/unless}}
 
-        <AkIconButton
+        {{!-- <AkIconButton
           data-test-fileDetails-dynamicScan-automatedDast-fullscreenBtn
           {{on 'click' this.toggleFullscreenView}}
         >
           <AkIcon @iconName='open-in-full' />
-        </AkIconButton>
+        </AkIconButton> --}}
       </AkStack>
     </AkStack>
 
@@ -87,7 +90,7 @@
     {{/if}}
   </AkStack>
 
-{{else if (and @file.canRunAutomatedDynamicscan (not this.automationEnabled))}}
+{{else if (not this.automationPreference.dynamicScanAutomationEnabled)}}
   <AkStack
     @spacing='2'
     @direction='column'

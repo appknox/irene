@@ -17,11 +17,12 @@ import type Store from '@ember-data/store';
 import type FileModel from 'irene/models/file';
 import { type DevicePreferenceContext } from 'irene/components/project-preferences/provider';
 import type ProjectAvailableDeviceModel from 'irene/models/project-available-device';
+import type DynamicscanModel from 'irene/models/dynamicscan';
 
 export interface FileDetailsDynamicScanActionDrawerSignature {
   Args: {
     onClose: () => void;
-    pollDynamicStatus: () => void;
+    onScanStart: (dynamicscan: DynamicscanModel) => void;
     file: FileModel;
     isAutomatedScan?: boolean;
     dpContext: DevicePreferenceContext;
@@ -136,13 +137,16 @@ export default class FileDetailsDynamicScanActionDrawerComponent extends Compone
         ENV.endpoints['dynamicscans'],
       ].join('/');
 
-      await this.ajax.post(dynamicUrl, { namespace: ENV.namespace_v2, data });
+      const res = await this.ajax.post(dynamicUrl, {
+        namespace: ENV.namespace_v2,
+        data,
+      });
+
+      const normalized = this.store.normalize('dynamicscan', res);
+
+      this.args.onScanStart(this.store.push(normalized) as DynamicscanModel);
 
       this.args.onClose();
-
-      this.file.setBootingStatus();
-
-      this.args.pollDynamicStatus();
 
       this.notify.success(this.tStartingScan);
     } catch (error) {

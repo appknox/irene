@@ -5,15 +5,14 @@
   @direction='column'
   @spacing='3'
 >
-  {{!-- {{#if @dynamicScan.isDynamicStatusInProgress}} --}}
-  {{#if @file.isReady}}
+  {{#if @dynamicScan.isReady}}
     <AkStack
       @justifyContent='center'
       @alignItems='center'
       @direction='column'
       @spacing='1.5'
     >
-      <FileDetails::DynamicScan::ExpiryOld @file={{@file}} />
+      <FileDetails::DynamicScan::Action::Expiry @dynamicscan={{@dynamicScan}} />
 
       {{#if (has-block 'controls')}}
         {{yield to='controls'}}
@@ -21,14 +20,14 @@
     </AkStack>
   {{/if}}
 
-  {{#if @file.isDynamicStatusStarting}}
+  {{#if (and (not this.isAutomated) @dynamicScan.isStarting)}}
     <AkTypography>
       <strong>{{t 'note'}} -</strong>
       {{t 'dynamicScanText'}}
     </AkTypography>
   {{/if}}
 
-  {{#if (and this.isAutomated @dynamicScan.isDynamicStatusInProgress)}}
+  {{#if (and this.isAutomated @dynamicScan.isStartingOrShuttingInProgress)}}
     <AkStack @spacing='0.5' local-class='automated-scan-trigger-info'>
       <AkIcon @color='primary' @variant='outlined' @iconName='description' />
 
@@ -64,9 +63,12 @@
       data-test-vncViewer-deviceScreen
       class={{if this.screenRequired 'noscreen' 'screen'}}
     >
-      {{!-- {{#if (and @dynamicScan.isReadyOrRunning this.deviceType)}} --}}
-      {{#if (and @file.isReady this.deviceType)}}
-        {{#if this.isAutomated}}
+      {{#if this.isAutomated}}
+        {{#if
+          (or
+            @dynamicScan.isStartingOrShuttingInProgress @dynamicScan.isRunning
+          )
+        }}
           <AkStack
             data-test-vncViewer-automatedNote
             local-class='automated-scan-vnc-note'
@@ -77,8 +79,9 @@
               {{t 'automatedScanVncNote'}}
             </AkTypography>
           </AkStack>
-
-        {{else}}
+        {{/if}}
+      {{else}}
+        {{#if @dynamicScan.isReady}}
           <NovncRfb
             @deviceFarmURL={{this.deviceFarmURL}}
             @deviceFarmPassword={{this.deviceFarmPassword}}

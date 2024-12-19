@@ -8,9 +8,11 @@ import type IntlService from 'ember-intl/services/intl';
 import type RouterService from '@ember/routing/router-service';
 import type Store from '@ember-data/store';
 
+import ENUMS from 'irene/enums';
 import parseError from 'irene/utils/parse-error';
 import type DynamicscanModel from 'irene/models/dynamicscan';
 import type FileModel from 'irene/models/file';
+import type DsAutomationPreferenceModel from 'irene/models/ds-automation-preference';
 
 export interface FileDetailsDastAutomatedSignature {
   Args: {
@@ -26,7 +28,7 @@ export default class FileDetailsDastAutomated extends Component<FileDetailsDastA
   @service('notifications') declare notify: NotificationService;
 
   @tracked isFullscreenView = false;
-  @tracked automationEnabled = false;
+  @tracked automationPreference: DsAutomationPreferenceModel | null = null;
   @tracked dynamicScan: DynamicscanModel | null = null;
 
   constructor(owner: unknown, args: FileDetailsDastAutomatedSignature['Args']) {
@@ -54,25 +56,33 @@ export default class FileDetailsDastAutomated extends Component<FileDetailsDastA
     );
   }
 
+  @action
+  handleStartScan(dynamicScan: DynamicscanModel) {
+    this.dynamicScan = dynamicScan;
+  }
+
   getDynamicscanMode = task(async () => {
     try {
-      const dynScanMode = await waitForPromise(
-        this.store.queryRecord('dynamicscan-mode', {
-          id: this.args.profileId,
-        })
-      );
+      const adapter = this.store.adapterFor('ds-automation-preference');
+      adapter.setNestedUrlNamespace(String(this.args.profileId));
 
-      this.automationEnabled = dynScanMode.dynamicscanMode === 'Automated';
+      this.automationPreference = await this.store.queryRecord(
+        'ds-automation-preference',
+        {}
+      );
     } catch (error) {
       this.notify.error(parseError(error, this.intl.t('pleaseTryAgain')));
     }
   });
 
   fetchDynamicscan = task(async () => {
-    const id = this.args.profileId;
+    const file = this.args.file;
 
     try {
-      this.dynamicScan = await this.store.findRecord('dynamicscan', id);
+      this.dynamicScan = await file.getLastDynamicScan(
+        file.id,
+        ENUMS.DYNAMIC_MODE.AUTOMATED
+      );
     } catch (e) {
       this.notify.error(parseError(e, this.intl.t('pleaseTryAgain')));
     }

@@ -42,9 +42,13 @@ export default class VncViewerComponent extends Component<VncViewerSignature> {
   }
 
   get deviceFarmURL() {
-    const token = this.args.file.deviceToken;
+    const token = this.args.dynamicScan?.moriartyDynamicscanToken;
 
-    return this.devicefarm.getTokenizedWSURL(token);
+    if (token) {
+      return this.devicefarm.getTokenizedWSURL(token);
+    }
+
+    return null;
   }
 
   fetchDevicePreference = task(async () => {

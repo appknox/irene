@@ -9,6 +9,7 @@ import type DynamicscanModel from 'irene/models/dynamicscan';
 
 import type FileModel from 'irene/models/file';
 import parseError from 'irene/utils/parse-error';
+import ENUMS from 'irene/enums';
 
 export interface FileDetailsDastManualSignature {
   Args: {
@@ -28,35 +29,19 @@ export default class FileDetailsDastManual extends Component<FileDetailsDastManu
   constructor(owner: unknown, args: FileDetailsDastManualSignature['Args']) {
     super(owner, args);
 
-    // TODO: Uncomment when full DAST feature is ready.
-    // this.fetchDynamicscan.perform();
-  }
-
-  get file() {
-    return this.args.file;
+    this.fetchDynamicscan.perform();
   }
 
   get showStatusChip() {
-    if (this.file?.isDynamicStatusReady) {
+    if (this.dynamicScan?.isReady) {
       return false;
-    } else if (
-      this.file?.isDynamicStatusNoneOrError ||
-      this.file?.isDynamicStatusInProgress
-    ) {
-      return true;
     }
 
-    return false;
+    return true;
   }
 
   get showActionButton() {
-    if (this.isFullscreenView) {
-      return false;
-    }
-
-    if (this.file?.isDynamicStatusReady || this.file?.isDynamicStatusError) {
-      return true;
-    } else if (this.file?.isDynamicStatusInProgress) {
+    if (this.dynamicScan?.isShuttingDown) {
       return false;
     }
 
@@ -73,11 +58,26 @@ export default class FileDetailsDastManual extends Component<FileDetailsDastManu
     this.isFullscreenView = !this.isFullscreenView;
   }
 
+  @action
+  handleScanStart(dynamicScan: DynamicscanModel) {
+    this.dynamicScan = dynamicScan;
+  }
+
+  @action
+  handleScanShutdown() {
+    this.handleFullscreenClose();
+
+    this.fetchDynamicscan.perform();
+  }
+
   fetchDynamicscan = task(async () => {
-    const id = this.args.profileId;
+    const file = this.args.file;
 
     try {
-      this.dynamicScan = await this.store.findRecord('dynamicscan', id);
+      this.dynamicScan = await file.getLastDynamicScan(
+        file.id,
+        ENUMS.DYNAMIC_MODE.MANUAL
+      );
     } catch (e) {
       this.notify.error(parseError(e, this.intl.t('pleaseTryAgain')));
     }

@@ -2,13 +2,14 @@ import Component from '@glimmer/component';
 import { inject as service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
 import { task } from 'ember-concurrency';
-import Store from '@ember-data/store';
 import { waitForPromise } from '@ember/test-waiters';
+import type Store from '@ember-data/store';
 
-import MeService from 'irene/services/me';
-import ProjectModel from 'irene/models/project';
-import OrganizationService from 'irene/services/organization';
-import ProfileModel from 'irene/models/profile';
+import type ProjectModel from 'irene/models/project';
+import type ProfileModel from 'irene/models/profile';
+import type MeService from 'irene/services/me';
+import type OrganizationService from 'irene/services/organization';
+import type ConfigurationService from 'irene/services/configuration';
 
 interface ProjectSettingsGeneralSettingsSignature {
   Args: {
@@ -19,6 +20,7 @@ interface ProjectSettingsGeneralSettingsSignature {
 export default class ProjectSettingsGeneralSettingsComponent extends Component<ProjectSettingsGeneralSettingsSignature> {
   @service declare me: MeService;
   @service declare organization: OrganizationService;
+  @service declare configuration: ConfigurationService;
   @service declare store: Store;
 
   @tracked profile: ProfileModel | null = null;
@@ -38,6 +40,10 @@ export default class ProjectSettingsGeneralSettingsComponent extends Component<P
 
   get dynamicscanAutomationAvailable() {
     return !!this.organization.selected?.features?.dynamicscan_automation;
+  }
+
+  get orgIsAnEnterprise() {
+    return this.configuration.serverData.enterprise;
   }
 
   fetchProfile = task(async () => {

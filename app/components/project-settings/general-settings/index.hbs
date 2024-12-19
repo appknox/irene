@@ -5,25 +5,6 @@
   local-class='general-settings-root'
   data-test-projectSettings-generalSettings-root
 >
-  <AkStack @direction='column' class='px-3'>
-    <ProjectPreferencesOld
-      @profileId={{@project.activeProfileId}}
-      @platform={{@project.platform}}
-      @project={{@project}}
-      as |pp|
-    >
-      <pp.DevicePreferenceComponent>
-        <:title>
-          <AkTypography @variant='h5'>
-            {{t 'devicePreferences'}}
-          </AkTypography>
-        </:title>
-      </pp.DevicePreferenceComponent>
-    </ProjectPreferencesOld>
-  </AkStack>
-
-  <AkDivider @color='dark' />
-
   <AkStack @direction='column' @spacing='2' class='px-3'>
     <AkStack @direction='column' @spacing='0.5'>
       <AkTypography @variant='h5'>
@@ -86,24 +67,25 @@
     />
   </AkStack>
 
-  <AkDivider @color='dark' />
+  {{#unless this.orgIsAnEnterprise}}
+    <AkDivider @color='dark' />
 
-  <AkStack @width='9/12' class='px-3'>
-    <ProjectSettings::GeneralSettings::DynamicscanAutomationSettings
-      @profileId={{this.project.activeProfileId}}
-      @project={{this.project}}
-      @featureAvailable={{this.dynamicscanAutomationAvailable}}
-    />
-  </AkStack>
+    <AkStack @width='9/12' class='px-3'>
+      <ProjectSettings::GeneralSettings::DynamicscanAutomationSettings
+        @profileId={{this.project.activeProfileId}}
+        @project={{this.project}}
+        @featureAvailable={{this.dynamicscanAutomationAvailable}}
+      />
+    </AkStack>
 
-  {{! TODO:  uncomment when Automated DAST is ready}}
-  {{!-- <AkStack @width='9/12' class='px-3'>
-  <AkDivider @color='dark' />
+    <AkDivider @color='dark' />
 
-    <ProjectSettings::GeneralSettings::DevicePreferencesAutomatedDast
-      @project={{@project}}
-    />
-  </AkStack> --}}
+    <AkStack @width='9/12' class='px-3'>
+      <ProjectSettings::GeneralSettings::DevicePreferencesAutomatedDast
+        @project={{@project}}
+      />
+    </AkStack>
+  {{/unless}}
 
   <AkDivider @color='dark' />
 

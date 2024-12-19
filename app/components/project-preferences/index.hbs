@@ -4,11 +4,5 @@
   @platform={{@platform}}
   as |dpContext|
 >
-  {{yield
-    (hash
-      DevicePreferenceComponent=(component
-        'project-preferences/device-preference' dpContext=dpContext
-      )
-    )
-  }}
+  {{yield dpContext}}
 </ProjectPreferences::Provider>

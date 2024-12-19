@@ -6,6 +6,16 @@ import type Store from '@ember-data/store';
 
 import type DynamicscanModel from 'irene/models/dynamicscan';
 import type FileModel from 'irene/models/file';
+import type ConfigurationService from 'irene/services/configuration';
+
+interface TabItem {
+  id: string;
+  label: string;
+  route: string;
+  activeRoutes: string;
+  inProgress?: boolean;
+  count?: number;
+}
 
 export interface FileDetailsDastHeaderSignature {
   Args: {
@@ -19,6 +29,7 @@ export default class FileDetailsDastHeader extends Component<FileDetailsDastHead
   @service declare intl: IntlService;
   @service declare router: RouterService;
   @service declare store: Store;
+  @service declare configuration: ConfigurationService;
   @service('notifications') declare notify: NotificationService;
 
   get file() {
@@ -37,6 +48,10 @@ export default class FileDetailsDastHeader extends Component<FileDetailsDastHead
     return this.args.dynamicScan?.isRunning;
   }
 
+  get orgIsAnEnterprise() {
+    return this.configuration.serverData.enterprise;
+  }
+
   get tabs() {
     return [
       {
@@ -45,13 +60,13 @@ export default class FileDetailsDastHeader extends Component<FileDetailsDastHead
         route: 'authenticated.dashboard.file.dynamic-scan.manual',
         activeRoutes: 'authenticated.dashboard.file.dynamic-scan.manual',
       },
-      // {
-      //   id: 'automated-dast',
-      //   label: this.intl.t('dastTabs.automatedDAST'),
-      //   route: 'authenticated.dashboard.file.dynamic-scan.automated',
-      //   activeRoutes: 'authenticated.dashboard.file.dynamic-scan.automated',
-      //   inProgress: this.isAutomatedScanRunning,
-      // },
+      !this.orgIsAnEnterprise && {
+        id: 'automated-dast',
+        label: this.intl.t('dastTabs.automatedDAST'),
+        route: 'authenticated.dashboard.file.dynamic-scan.automated',
+        activeRoutes: 'authenticated.dashboard.file.dynamic-scan.automated',
+        inProgress: this.isAutomatedScanRunning,
+      },
       {
         id: 'dast-results',
         label: this.intl.t('dastTabs.dastResults'),
@@ -59,7 +74,7 @@ export default class FileDetailsDastHeader extends Component<FileDetailsDastHead
         activeRoutes: 'authenticated.dashboard.file.dynamic-scan.results',
         count: this.args.file.dynamicVulnerabilityCount,
       },
-    ];
+    ].filter(Boolean) as TabItem[];
   }
 }
 

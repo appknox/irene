@@ -1,12 +1,19 @@
-import Model, { attr, belongsTo, AsyncBelongsTo } from '@ember-data/model';
-import UserModel from './user';
-import ENUMS from 'irene/enums';
-// import DevicePreferenceModel from './device-preference';
-import AvailableDeviceModel from './available-device';
-import ScanParameterModel from './scan-parameter';
+import Model, { attr, belongsTo, type AsyncBelongsTo } from '@ember-data/model';
 import { inject as service } from '@ember/service';
-import IntlService from 'ember-intl/services/intl';
-import FileModel from './file';
+import type IntlService from 'ember-intl/services/intl';
+
+import ENUMS from 'irene/enums';
+import type UserModel from './user';
+import type FileModel from './file';
+import type DeviceModel from './device';
+
+export enum DsComputedStatus {
+  NOT_STARTED,
+  IN_PROGRESS,
+  RUNNING,
+  COMPLETED,
+  ERROR,
+}
 
 export default class DynamicscanModel extends Model {
   @service declare intl: IntlService;
@@ -15,11 +22,29 @@ export default class DynamicscanModel extends Model {
   @belongsTo('file', { async: true, inverse: null })
   declare file: AsyncBelongsTo<FileModel>;
 
+  @attr('string')
+  declare packageName: string;
+
   @attr('number')
   declare mode: number;
 
+  @attr('string')
+  declare modeDisplay: string;
+
   @attr('number')
   declare status: number;
+
+  @attr('string')
+  declare statusDisplay: string;
+
+  @attr('string')
+  declare moriartyDynamicscanrequestId: string;
+
+  @attr('string')
+  declare moriartyDynamicscanId: string;
+
+  @attr('string')
+  declare moriartyDynamicscanToken: string;
 
   // User actions
   @belongsTo('user', { async: true, inverse: null })
@@ -28,71 +53,28 @@ export default class DynamicscanModel extends Model {
   @belongsTo('user', { async: true, inverse: null })
   declare stoppedByUser: AsyncBelongsTo<UserModel>;
 
-  // Scan user preferences
-  // @belongsTo('device-preference')
-  // declare devicePreference: AsyncBelongsTo<DevicePreferenceModel>;
+  @attr('date')
+  declare createdOn: Date;
 
-  @attr('number')
-  declare deviceType: number;
+  @attr('date')
+  declare endedOn: Date;
 
-  @attr('string')
-  declare platformVersion: string;
+  @attr('date')
+  declare autoShutdownOn: Date;
 
-  @belongsTo('scan-parameter-group', { async: true, inverse: null })
-  declare scanParameterGroups: AsyncBelongsTo<ScanParameterModel>;
-
-  @attr('boolean')
-  declare enableApiCapture: boolean;
+  // will be {} for device allocation failure state
+  // @belongsTo('device', { async: false, inverse: null })
+  @attr()
+  declare deviceUsed: unknown;
 
   @attr()
-  declare apiCaptureFilters: unknown; //TODO: Check this type <json default=list>
-
-  @attr('string')
-  declare proxyHost: string;
-
-  @attr('string')
-  declare proxyPort: string;
-
-  // Devicefarm scan info
-  @attr('string')
-  declare moriartyDynamicscanId: string;
-
-  @attr('string')
-  declare moriartyDynamicscanToken: string;
-
-  @attr()
-  declare deviceUsed: unknown; //TODO: Check this type <json default=dict>
+  declare devicePreference: unknown;
 
   @attr('string')
   declare errorCode: string;
 
   @attr('string')
   declare errorMessage: string;
-
-  @attr('date')
-  declare createdOn: Date;
-
-  @attr('date')
-  declare updatedOn: Date;
-
-  @attr('date')
-  declare endedOn: Date;
-
-  @attr('date')
-  declare timeoutOn: Date;
-
-  @attr('date')
-  declare autoShutdownOn: Date;
-
-  // Post interaction
-  @attr('boolean')
-  declare isAnalysisDone: boolean;
-
-  @attr('number')
-  declare time: number;
-
-  @belongsTo('available-device', { async: true, inverse: null })
-  declare availableDevice: AsyncBelongsTo<AvailableDeviceModel>;
 
   async extendTime(time: number) {
     const adapter = this.store.adapterFor('dynamicscan');
@@ -132,167 +114,183 @@ export default class DynamicscanModel extends Model {
     this.setDynamicScanMode(ENUMS.DYNAMIC_MODE.AUTOMATED);
   }
 
-  setBootingStatus() {
-    this.setDynamicStatus(ENUMS.DYNAMIC_STATUS.BOOTING);
-  }
-
-  setInQueueStatus() {
-    this.setDynamicStatus(ENUMS.DYNAMIC_STATUS.INQUEUE);
-  }
-
   setShuttingDown() {
-    this.setDynamicStatus(ENUMS.DYNAMIC_STATUS.SHUTTING_DOWN);
+    this.setDynamicStatus(ENUMS.DYNAMIC_SCAN_STATUS.STOP_SCAN_REQUESTED);
   }
 
   setNone() {
-    this.setDynamicStatus(ENUMS.DYNAMIC_STATUS.NONE);
+    this.setDynamicStatus(ENUMS.DYNAMIC_SCAN_STATUS.NOT_STARTED);
   }
 
-  setReady() {
-    this.setDynamicStatus(ENUMS.DYNAMIC_STATUS.READY);
+  get isNone() {
+    return this.status === ENUMS.DYNAMIC_SCAN_STATUS.NOT_STARTED;
   }
 
-  setRunning() {
-    this.setDynamicStatus(ENUMS.DYNAMIC_STATUS.RUNNING);
+  get isNotNone() {
+    return !this.isNone;
+  }
+
+  get isInqueue() {
+    return [
+      ENUMS.DYNAMIC_SCAN_STATUS.PREPROCESSING,
+      ENUMS.DYNAMIC_SCAN_STATUS.PROCESSING_SCAN_REQUEST,
+      ENUMS.DYNAMIC_SCAN_STATUS.IN_QUEUE,
+    ].includes(this.status);
+  }
+
+  get isBooting() {
+    return [
+      ENUMS.DYNAMIC_SCAN_STATUS.DEVICE_ALLOCATED,
+      ENUMS.DYNAMIC_SCAN_STATUS.CONNECTING_TO_DEVICE,
+      ENUMS.DYNAMIC_SCAN_STATUS.PREPARING_DEVICE,
+      ENUMS.DYNAMIC_SCAN_STATUS.DOWNLOADING_AUTO_SCRIPT,
+      ENUMS.DYNAMIC_SCAN_STATUS.CONFIGURING_AUTO_INTERACTION,
+    ].includes(this.status);
+  }
+
+  get isInstalling() {
+    return this.status === ENUMS.DYNAMIC_SCAN_STATUS.INSTALLING;
+  }
+
+  get isLaunching() {
+    return this.status === ENUMS.DYNAMIC_SCAN_STATUS.LAUNCHING;
+  }
+
+  get isHooking() {
+    return [
+      ENUMS.DYNAMIC_SCAN_STATUS.CONFIGURING_API_CAPTURE,
+      ENUMS.DYNAMIC_SCAN_STATUS.HOOKING,
+    ].includes(this.status);
   }
 
   get isReady() {
-    const status = this.status;
-    return status === ENUMS.DYNAMIC_STATUS.READY;
+    return this.status === ENUMS.DYNAMIC_SCAN_STATUS.READY_FOR_INTERACTION;
   }
 
-  get isDynamicStatusNone() {
-    const status = this.status;
-    return status === ENUMS.DYNAMIC_STATUS.NONE;
-  }
-
-  get isDynamicStatusError() {
-    const status = this.status;
-    return status === ENUMS.DYNAMIC_STATUS.ERROR;
-  }
-
-  get isDynamicStatusReady() {
-    const status = this.status;
-    return status === ENUMS.DYNAMIC_STATUS.READY;
-  }
-
-  get isDynamicStatusNotReady() {
-    return !this.isDynamicStatusReady;
-  }
-
-  get isDynamicStatusNotNone() {
-    return !this.isDynamicStatusNone;
-  }
-
-  get isDynamicStatusNeitherNoneNorReadyNorError() {
-    const status = this.status;
-    return ![
-      ENUMS.DYNAMIC_STATUS.READY,
-      ENUMS.DYNAMIC_STATUS.NONE,
-      ENUMS.DYNAMIC_STATUS.ERROR,
-    ].includes(status);
-  }
-
-  get isDynamicStatusNoneOrError() {
-    const status = this.status;
-    return [ENUMS.DYNAMIC_STATUS.NONE, ENUMS.DYNAMIC_STATUS.ERROR].includes(
-      status
-    );
-  }
-
-  get isDynamicStatusNoneOrReady() {
-    const status = this.status;
-    return [ENUMS.DYNAMIC_STATUS.READY, ENUMS.DYNAMIC_STATUS.NONE].includes(
-      status
-    );
-  }
-
-  get isReadyOrRunning() {
-    const status = this.status;
-    return [ENUMS.DYNAMIC_STATUS.READY, ENUMS.DYNAMIC_STATUS.RUNNING].includes(
-      status
-    );
-  }
-
-  get isDynamicStatusStarting() {
-    const status = this.status;
-    return ![
-      ENUMS.DYNAMIC_STATUS.READY,
-      ENUMS.DYNAMIC_STATUS.RUNNING,
-      ENUMS.DYNAMIC_STATUS.NONE,
-      ENUMS.DYNAMIC_STATUS.SHUTTING_DOWN,
-    ].includes(status);
-  }
-
-  get isDynamicStatusInProgress() {
-    const status = this.status;
-    return [
-      ENUMS.DYNAMIC_STATUS.INQUEUE,
-      ENUMS.DYNAMIC_STATUS.BOOTING,
-      ENUMS.DYNAMIC_STATUS.DOWNLOADING,
-      ENUMS.DYNAMIC_STATUS.INSTALLING,
-      ENUMS.DYNAMIC_STATUS.LAUNCHING,
-      ENUMS.DYNAMIC_STATUS.HOOKING,
-      ENUMS.DYNAMIC_STATUS.READY,
-      ENUMS.DYNAMIC_STATUS.RUNNING,
-      ENUMS.DYNAMIC_STATUS.SHUTTING_DOWN,
-    ].includes(status);
-  }
-
-  get isNeitherNoneNorReady() {
-    const status = this.status;
-    return ![ENUMS.DYNAMIC_STATUS.READY, ENUMS.DYNAMIC_STATUS.NONE].includes(
-      status
-    );
-  }
-
-  get startingScanStatus() {
-    return this.isDynamicStatusStarting;
-  }
-
-  get showScheduleAutomatedDynamicScan() {
-    const status = this.status;
-    return status !== ENUMS.DYNAMIC_STATUS.INQUEUE;
+  get isNotReady() {
+    return !this.isReady;
   }
 
   get isRunning() {
-    const status = this.status;
-    return status === ENUMS.DYNAMIC_STATUS.RUNNING;
+    return [
+      ENUMS.DYNAMIC_SCAN_STATUS.INITIATING_AUTO_INTERACTION,
+      ENUMS.DYNAMIC_SCAN_STATUS.AUTO_INTERACTION_COMPLETED,
+    ].includes(this.status);
+  }
+
+  get isShuttingDown() {
+    return [
+      ENUMS.DYNAMIC_SCAN_STATUS.STOP_SCAN_REQUESTED,
+      ENUMS.DYNAMIC_SCAN_STATUS.SCAN_TIME_LIMIT_EXCEEDED,
+      ENUMS.DYNAMIC_SCAN_STATUS.SHUTTING_DOWN,
+      ENUMS.DYNAMIC_SCAN_STATUS.CLEANING_DEVICE,
+      ENUMS.DYNAMIC_SCAN_STATUS.RUNTIME_DETECTION_COMPLETED,
+    ].includes(this.status);
+  }
+
+  get isStatusError() {
+    return [
+      ENUMS.DYNAMIC_SCAN_STATUS.ERROR,
+      ENUMS.DYNAMIC_SCAN_STATUS.TIMED_OUT,
+      ENUMS.DYNAMIC_SCAN_STATUS.TERMINATED,
+    ].includes(this.status);
+  }
+
+  get isCompleted() {
+    return [
+      ENUMS.DYNAMIC_SCAN_STATUS.ANALYZING,
+      ENUMS.DYNAMIC_SCAN_STATUS.ANALYSIS_COMPLETED,
+    ].includes(this.status);
+  }
+
+  get isCancelled() {
+    return this.status === ENUMS.DYNAMIC_SCAN_STATUS.CANCELLED;
+  }
+
+  get isStarting() {
+    return (
+      this.isInqueue ||
+      this.isBooting ||
+      this.isInstalling ||
+      this.isLaunching ||
+      this.isHooking
+    );
+  }
+
+  get isStartingOrShuttingInProgress() {
+    return this.isStarting || this.isShuttingDown;
+  }
+
+  get isDynamicStatusNoneOrError() {
+    return this.isNone || this.isStatusError;
+  }
+
+  get isReadyOrRunning() {
+    return this.isReady || this.isRunning;
+  }
+
+  get computedStatus() {
+    if (this.isStartingOrShuttingInProgress) {
+      return DsComputedStatus.IN_PROGRESS;
+    }
+
+    if (this.isRunning || this.isReady) {
+      return DsComputedStatus.RUNNING;
+    }
+
+    if (this.isCompleted) {
+      return DsComputedStatus.COMPLETED;
+    }
+
+    if (this.isStatusError) {
+      return DsComputedStatus.ERROR;
+    }
+
+    return DsComputedStatus.NOT_STARTED;
   }
 
   get statusText() {
-    const tDeviceInQueue = this.intl.t('deviceInQueue');
-    const tDeviceBooting = this.intl.t('deviceBooting');
-    const tDeviceDownloading = this.intl.t('deviceDownloading');
-    const tDeviceInstalling = this.intl.t('deviceInstalling');
-    const tDeviceLaunching = this.intl.t('deviceLaunching');
-    const tDeviceHooking = this.intl.t('deviceHooking');
-    const tDeviceShuttingDown = this.intl.t('deviceShuttingDown');
-    const tDeviceCompleted = this.intl.t('deviceCompleted');
-    const tDeviceRunning = this.intl.t('inProgress');
-
-    switch (this.status) {
-      case ENUMS.DYNAMIC_STATUS.INQUEUE:
-        return tDeviceInQueue;
-      case ENUMS.DYNAMIC_STATUS.BOOTING:
-        return tDeviceBooting;
-      case ENUMS.DYNAMIC_STATUS.DOWNLOADING:
-        return tDeviceDownloading;
-      case ENUMS.DYNAMIC_STATUS.INSTALLING:
-        return tDeviceInstalling;
-      case ENUMS.DYNAMIC_STATUS.LAUNCHING:
-        return tDeviceLaunching;
-      case ENUMS.DYNAMIC_STATUS.HOOKING:
-        return tDeviceHooking;
-      case ENUMS.DYNAMIC_STATUS.SHUTTING_DOWN:
-        return tDeviceShuttingDown;
-      case ENUMS.DYNAMIC_STATUS.COMPLETED:
-        return tDeviceCompleted;
-      case ENUMS.DYNAMIC_STATUS.RUNNING:
-        return tDeviceRunning;
-      default:
-        return 'Unknown Status';
+    if (this.isInqueue) {
+      return this.intl.t('deviceInQueue');
     }
+
+    if (this.isBooting) {
+      return this.intl.t('deviceBooting');
+    }
+
+    if (this.isInstalling) {
+      return this.intl.t('deviceInstalling');
+    }
+
+    if (this.isLaunching) {
+      return this.intl.t('deviceLaunching');
+    }
+
+    if (this.isHooking) {
+      return this.intl.t('deviceHooking');
+    }
+
+    if (this.isRunning) {
+      return this.intl.t('running');
+    }
+
+    if (this.isShuttingDown) {
+      return this.intl.t('deviceShuttingDown');
+    }
+
+    if (this.isCompleted) {
+      return this.intl.t('deviceCompleted');
+    }
+
+    if (this.isStatusError) {
+      return this.intl.t('error');
+    }
+
+    if (this.isCancelled) {
+      return this.intl.t('cancelled');
+    }
+
+    return this.intl.t('unknown');
   }
 }
 
