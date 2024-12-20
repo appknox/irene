@@ -10,6 +10,7 @@ import triggerAnalytics from 'irene/utils/trigger-analytics';
 import type FileModel from 'irene/models/file';
 import type PollService from 'irene/services/poll';
 import type DynamicscanModel from 'irene/models/dynamicscan';
+import type { DevicePreferenceContext } from 'irene/components/project-preferences-old/provider';
 
 export interface DynamicScanActionSignature {
   Args: {
@@ -18,6 +19,7 @@ export interface DynamicScanActionSignature {
     dynamicScanText: string;
     isAutomatedScan?: boolean;
     dynamicScan: DynamicscanModel | null;
+    dpContext: DevicePreferenceContext;
   };
 }
 
@@ -25,6 +27,7 @@ export default class DynamicScanActionComponent extends Component<DynamicScanAct
   @service declare ajax: any;
   @service('notifications') declare notify: NotificationService;
   @service declare poll: PollService;
+  @service('browser/window') declare window: Window;
 
   @tracked showDynamicScanDrawer = false;
 
@@ -78,6 +81,26 @@ export default class DynamicScanActionComponent extends Component<DynamicScanAct
         this.file
           ?.reload()
           .then((f) => {
+            // Remove device preferences from local storage after start of dynamic scan
+            const { device_type, platform_version, file_id } = JSON.parse(
+              this.window.localStorage.getItem('actualDevicePrefData') ?? 'null'
+            ) as {
+              device_type: string | number | undefined;
+              platform_version: string;
+              file_id: string;
+            };
+
+            if (file_id && f.id === file_id && f.isDynamicStatusInProgress) {
+              this.args.dpContext.updateDevicePref(
+                device_type,
+                platform_version,
+                true
+              );
+
+              this.window.localStorage.removeItem('actualDevicePrefData');
+            }
+
+            // Stop polling
             if (
               f.dynamicStatus === ENUMS.DYNAMIC_STATUS.NONE ||
               f.dynamicStatus === ENUMS.DYNAMIC_STATUS.READY
