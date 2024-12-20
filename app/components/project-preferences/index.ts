@@ -1,8 +1,7 @@
 import Component from '@glimmer/component';
-import { WithBoundArgs } from '@glint/template';
 
-import ProjectModel from 'irene/models/project';
-import ProjectPreferencesDevicePreferenceComponent from './device-preference';
+import type ProjectModel from 'irene/models/project';
+import type { DevicePreferenceContext } from './provider';
 
 export interface ProjectPreferencesSignature {
   Args: {
@@ -11,14 +10,7 @@ export interface ProjectPreferencesSignature {
     platform?: number;
   };
   Blocks: {
-    default: [
-      {
-        DevicePreferenceComponent: WithBoundArgs<
-          typeof ProjectPreferencesDevicePreferenceComponent,
-          'dpContext'
-        >;
-      },
-    ];
+    default: [dpContext: DevicePreferenceContext];
   };
 }
 
