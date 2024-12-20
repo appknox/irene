@@ -3,7 +3,7 @@
     data-test-fileDetails-dynamicScan-statusChip
     @variant='semi-filled'
     @size='small'
-    @label={{if @chipStatusText @chipStatusText this.chipDetails.label}}
+    @label={{this.chipDetails.label}}
     @color={{this.chipDetails.color}}
     {{style textTransform='uppercase'}}
     ...attributes
@@ -25,7 +25,7 @@
 {{else}}
   <AkChip
     data-test-fileDetails-dynamicScan-statusChip
-    @label={{if @chipStatusText @chipStatusText this.chipDetails.label}}
+    @label={{this.chipDetails.label}}
     @variant='semi-filled'
     @size='small'
     @color={{this.chipDetails.color}}

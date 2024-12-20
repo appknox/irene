@@ -31,17 +31,6 @@ const classes = {
   triggerError: styles['ak-select-trigger-error'],
 };
 
-// const dynamicScanStatusText = {
-//   [ENUMS.DYNAMIC_STATUS.INQUEUE]: t('deviceInQueue'),
-//   [ENUMS.DYNAMIC_STATUS.BOOTING]: t('deviceBooting'),
-//   [ENUMS.DYNAMIC_STATUS.DOWNLOADING]: t('deviceDownloading'),
-//   [ENUMS.DYNAMIC_STATUS.INSTALLING]: t('deviceInstalling'),
-//   [ENUMS.DYNAMIC_STATUS.LAUNCHING]: t('deviceLaunching'),
-//   [ENUMS.DYNAMIC_STATUS.HOOKING]: t('deviceHooking'),
-//   [ENUMS.DYNAMIC_STATUS.SHUTTING_DOWN]: t('deviceShuttingDown'),
-//   [ENUMS.DYNAMIC_STATUS.COMPLETED]: t('deviceCompleted'),
-// };
-
 class NotificationsStub extends Service {
   errorMsg = null;
   successMsg = null;
@@ -400,7 +389,7 @@ module(
         };
       });
 
-      await render(hbs`        
+      await render(hbs`
         <ProjectPreferences::Provider
           @profileId={{this.profile.id}}
           @platform={{this.file.project.platform}}
@@ -561,7 +550,7 @@ module(
         };
       });
 
-      await render(hbs`        
+      await render(hbs`
         <ProjectPreferences::Provider
           @profileId={{this.profile.id}}
           @platform={{this.file.project.platform}}
@@ -669,7 +658,7 @@ module(
         return { count: results.length, next: null, previous: null, results };
       });
 
-      await render(hbs`        
+      await render(hbs`
         <ProjectPreferences::Provider
           @profileId={{this.profile.id}}
           @platform={{this.file.project.platform}}
@@ -1279,8 +1268,10 @@ module(
           const reqBody = objectifyEncodedReqBody(req.requestBody);
 
           assert.strictEqual(
-            reqBody.mode,
-            isAutomated ? 'Automated' : 'Manual'
+            parseInt(reqBody.mode),
+            isAutomated
+              ? ENUMS.DYNAMIC_MODE.AUTOMATED
+              : ENUMS.DYNAMIC_MODE.MANUAL
           );
 
           if (enableApiCapture) {
@@ -1292,7 +1283,7 @@ module(
           return new Response(200);
         });
 
-        await render(hbs`        
+        await render(hbs`
           <ProjectPreferences::Provider
             @profileId={{this.profile.id}}
             @platform={{this.file.project.platform}}

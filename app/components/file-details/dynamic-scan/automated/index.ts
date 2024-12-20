@@ -8,9 +8,12 @@ import type IntlService from 'ember-intl/services/intl';
 import type RouterService from '@ember/routing/router-service';
 import type Store from '@ember-data/store';
 
+import ENUMS from 'irene/enums';
 import parseError from 'irene/utils/parse-error';
 import type DynamicscanModel from 'irene/models/dynamicscan';
 import type FileModel from 'irene/models/file';
+import type DsAutomationPreferenceModel from 'irene/models/ds-automation-preference';
+import type OrganizationService from 'irene/services/organization';
 
 export interface FileDetailsDastAutomatedSignature {
   Args: {
@@ -23,10 +26,11 @@ export default class FileDetailsDastAutomated extends Component<FileDetailsDastA
   @service declare intl: IntlService;
   @service declare router: RouterService;
   @service declare store: Store;
+  @service declare organization: OrganizationService;
   @service('notifications') declare notify: NotificationService;
 
   @tracked isFullscreenView = false;
-  @tracked automationEnabled = false;
+  @tracked automationPreference: DsAutomationPreferenceModel | null = null;
   @tracked dynamicScan: DynamicscanModel | null = null;
 
   constructor(owner: unknown, args: FileDetailsDastAutomatedSignature['Args']) {
@@ -34,6 +38,10 @@ export default class FileDetailsDastAutomated extends Component<FileDetailsDastA
 
     this.getDynamicscanMode.perform();
     this.fetchDynamicscan.perform();
+  }
+
+  get dynamicscanAutomationFeatureAvailable() {
+    return !!this.organization.selected?.features?.dynamicscan_automation;
   }
 
   @action
@@ -54,25 +62,40 @@ export default class FileDetailsDastAutomated extends Component<FileDetailsDastA
     );
   }
 
+  @action
+  handleStartScan(dynamicScan: DynamicscanModel) {
+    this.dynamicScan = dynamicScan;
+  }
+
+  @action
+  handleScanShutdown() {
+    this.handleFullscreenClose();
+
+    this.fetchDynamicscan.perform();
+  }
+
   getDynamicscanMode = task(async () => {
     try {
-      const dynScanMode = await waitForPromise(
-        this.store.queryRecord('dynamicscan-mode', {
-          id: this.args.profileId,
-        })
-      );
+      const adapter = this.store.adapterFor('ds-automation-preference');
+      adapter.setNestedUrlNamespace(String(this.args.profileId));
 
-      this.automationEnabled = dynScanMode.dynamicscanMode === 'Automated';
+      this.automationPreference = await this.store.queryRecord(
+        'ds-automation-preference',
+        {}
+      );
     } catch (error) {
       this.notify.error(parseError(error, this.intl.t('pleaseTryAgain')));
     }
   });
 
   fetchDynamicscan = task(async () => {
-    const id = this.args.profileId;
+    const file = this.args.file;
 
     try {
-      this.dynamicScan = await this.store.findRecord('dynamicscan', id);
+      this.dynamicScan = await file.getLastDynamicScan(
+        file.id,
+        ENUMS.DYNAMIC_MODE.AUTOMATED
+      );
     } catch (e) {
       this.notify.error(parseError(e, this.intl.t('pleaseTryAgain')));
     }
