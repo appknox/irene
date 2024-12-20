@@ -7,11 +7,14 @@ import { addObserver, removeObserver } from '@ember/object/observers';
 import { action } from '@ember/object';
 import RouterService from '@ember/routing/router-service';
 import { helper } from '@ember/component/helper';
+import relativeTime from 'dayjs/plugin/relativeTime';
 
 import { SubmissionModelWithSystemFileData } from '../index';
 import ENUMS from 'irene/enums';
 import ProjectService from 'irene/services/project';
 import UploadAppService from 'irene/services/upload-app';
+
+dayjs.extend(relativeTime);
 
 interface UploadAppStatusDetailsSignature {
   Element: HTMLDivElement;

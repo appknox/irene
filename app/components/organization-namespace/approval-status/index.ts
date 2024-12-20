@@ -10,6 +10,8 @@ import IntlService from 'ember-intl/services/intl';
 import MeService from 'irene/services/me';
 import OrganizationNamespaceModel from 'irene/models/organization-namespace';
 
+dayjs.extend(relativeTime);
+
 export interface OrganizationNamespaceApprovalStatusSignature {
   Args: {
     namespace: OrganizationNamespaceModel;
@@ -59,7 +61,6 @@ export default class OrganizationNamespaceApprovalStatus extends Component<Organ
   });
 
   get approvedOnDate() {
-    dayjs.extend(relativeTime);
     return dayjs(this.args.namespace.approvedOn).fromNow();
   }
 }
