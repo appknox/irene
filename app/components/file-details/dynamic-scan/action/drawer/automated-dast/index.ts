@@ -14,7 +14,7 @@ import { dsAutomatedDevicePref } from 'irene/helpers/ds-automated-device-pref';
 import type IntlService from 'ember-intl/services/intl';
 import type Store from '@ember-data/store';
 import type ApiScanOptionsModel from 'irene/models/api-scan-options';
-import type { DevicePreferenceContext } from 'irene/components/project-preferences/provider';
+import type { DsPreferenceContext } from 'irene/components/ds-preference-provider';
 import type ScanParameterGroupModel from 'irene/models/scan-parameter-group';
 import type FileModel from 'irene/models/file';
 import type ProxySettingModel from 'irene/models/proxy-setting';
@@ -26,8 +26,7 @@ export interface FileDetailsDynamicScanDrawerAutomatedDastSignature {
   Element: HTMLElement;
   Args: {
     file: FileModel;
-    dpContext: DevicePreferenceContext;
-    enableApiScan(event: Event, checked: boolean): void;
+    dpContext: DsPreferenceContext;
   };
 }
 
@@ -95,7 +94,7 @@ export default class FileDetailsDynamicScanDrawerAutomatedDastComponent extends 
 
   get minOSVersion() {
     const version =
-      this.automatedDastDevicePreferences?.ds_automated_platform_version_min;
+      this.automatedDastDevicePreferences?.dsAutomatedPlatformVersionMin;
 
     return isEmpty(version) ? '-' : version;
   }
@@ -108,8 +107,7 @@ export default class FileDetailsDynamicScanDrawerAutomatedDastComponent extends 
         value: this.intl.t(
           dsAutomatedDevicePref([
             Number(
-              this.automatedDastDevicePreferences
-                ?.ds_automated_device_selection ||
+              this.automatedDastDevicePreferences?.dsAutomatedDeviceSelection ||
                 ENUMS.DS_AUTOMATED_DEVICE_SELECTION.FILTER_CRITERIA
             ),
           ])

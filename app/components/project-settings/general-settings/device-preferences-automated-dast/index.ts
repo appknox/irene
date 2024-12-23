@@ -1,15 +1,21 @@
 import { action } from '@ember/object';
 import Component from '@glimmer/component';
 import { inject as service } from '@ember/service';
-import ENUMS from 'irene/enums';
+import { tracked } from '@glimmer/tracking';
+import { task } from 'ember-concurrency';
 
+import ENUMS from 'irene/enums';
 import type IntlService from 'ember-intl/services/intl';
+import type Store from '@ember-data/store';
 import type ProjectModel from 'irene/models/project';
-import { type ProfileDSAutomatedDevicePrefData } from 'irene/models/profile';
+import type AvailableAutomatedDeviceModel from 'irene/models/available-automated-device';
+import type { DsPreferenceContext } from 'irene/components/ds-preference-provider';
+import type DsAutomatedDevicePreferenceModel from 'irene/models/ds-automated-device-preference';
 
 export interface ProjectSettingsGeneralSettingsDevicePreferencesAutomatedDastSignature {
   Args: {
     project?: ProjectModel | null;
+    dpContext: DsPreferenceContext;
   };
   Blocks: {
     title: [];
@@ -18,49 +24,115 @@ export interface ProjectSettingsGeneralSettingsDevicePreferencesAutomatedDastSig
 
 export default class ProjectSettingsGeneralSettingsDevicePreferencesAutomatedDastComponent extends Component<ProjectSettingsGeneralSettingsDevicePreferencesAutomatedDastSignature> {
   @service declare intl: IntlService;
+  @service declare store: Store;
+
+  @tracked availableAutomatedDevices: AvailableAutomatedDeviceModel[] = [];
 
   deviceSelectionTypes = ENUMS.DS_AUTOMATED_DEVICE_SELECTION.BASE_CHOICES;
 
-  filterDsAutomatedDeviceCriteria =
-    ENUMS.DS_AUTOMATED_DEVICE_SELECTION.FILTER_CRITERIA;
+  constructor(
+    owner: unknown,
+    args: ProjectSettingsGeneralSettingsDevicePreferencesAutomatedDastSignature['Args']
+  ) {
+    super(owner, args);
+
+    this.fetchAvailableAutomatedDevicesTask.perform();
+  }
+
+  get dpContext() {
+    return this.args.dpContext;
+  }
+
+  get devicePreference() {
+    return this.dpContext.dsAutomatedDevicePreference;
+  }
+
+  get minOSVersionOptions() {
+    const platformVersions = this.availableAutomatedDevices.map(
+      (it) => it.platformVersion
+    );
+
+    return ['', ...platformVersions.uniq()];
+  }
 
   get isIOSApp() {
     return this.args.project?.platform === ENUMS.PLATFORM.IOS;
   }
 
-  // TODO: Values to be updated in the future when DAST is supported on prem
-  get minOSVersionOptions() {
-    return this.isIOSApp ? ['13', '14', '15', '16'] : ['9', '10', '12', '13'];
-  }
-
-  @action getChosenDeviceSelection(selectedDevice?: string | number) {
+  get chosenDeviceSelection() {
     return this.deviceSelectionTypes.find(
-      (st) => String(st.value) === String(selectedDevice)
+      (st) =>
+        String(st.value) ===
+        String(this.devicePreference?.dsAutomatedDeviceSelection)
     );
   }
 
-  @action
-  getDeviceCapabilitiesOptionsData(
-    dsAutoDevicePref?: Partial<ProfileDSAutomatedDevicePrefData>
-  ) {
-    return [
-      {
-        label: this.intl.t('sim'),
-        id: 'ds_automated_sim_required',
-        checked: !!dsAutoDevicePref?.ds_automated_sim_required,
-      },
-      {
-        label: this.intl.t('vpn'),
-        id: 'ds_automated_vpn_required',
-        checked: !!dsAutoDevicePref?.ds_automated_vpn_required,
-      },
-      {
-        label: this.intl.t('pinLock'),
-        id: 'ds_automated_pin_lock_required',
-        checked: !!dsAutoDevicePref?.ds_automated_pin_lock_required,
-      },
-    ];
+  get filterAutomatedDeviceSelection() {
+    return (
+      this.devicePreference?.dsAutomatedDeviceSelection ===
+      ENUMS.DS_AUTOMATED_DEVICE_SELECTION.FILTER_CRITERIA
+    );
   }
+
+  // get deviceCapabilitiesOptions() {
+  //   return [
+  //     {
+  //       label: this.intl.t('sim'),
+  //       id: 'ds_automated_sim_required',
+  //       checked: !!this.devicePreference?.dsAutomatedSimRequired,
+  //     },
+  //     {
+  //       label: this.intl.t('vpn'),
+  //       id: 'ds_automated_vpn_required',
+  //       checked: !!this.devicePreference?.dsAutomatedVpnRequired,
+  //     },
+  //     {
+  //       label: this.intl.t('pinLock'),
+  //       id: 'ds_automated_pin_lock_required',
+  //       checked: !!this.devicePreference?.dsAutomatedPinLockRequired,
+  //     },
+  //   ];
+  // }
+
+  @action
+  handleSelectDeviceType(event: Event, type: string) {
+    const preference = this
+      .devicePreference as DsAutomatedDevicePreferenceModel;
+
+    preference.dsAutomatedDeviceType = Number(type);
+
+    this.dpContext.updateDsAutomatedDevicePref(preference);
+  }
+
+  @action
+  handleDsAutomatedMinOSVersionSelect(opt: string) {
+    const preference = this
+      .devicePreference as DsAutomatedDevicePreferenceModel;
+
+    preference.dsAutomatedPlatformVersionMin = opt;
+
+    this.dpContext.updateDsAutomatedDevicePref(preference);
+  }
+
+  @action
+  handleDsAutomatedDeviceSelection(option: { value: number }) {
+    const preference = this
+      .devicePreference as DsAutomatedDevicePreferenceModel;
+
+    preference.dsAutomatedDeviceSelection = option.value;
+
+    this.dpContext.updateDsAutomatedDevicePref(preference);
+  }
+
+  fetchAvailableAutomatedDevicesTask = task(async () => {
+    const adapter = this.store.adapterFor('available-automated-device');
+
+    adapter.setNestedUrlNamespace(this.args.project?.id as string);
+
+    const devices = await this.store.findAll('available-automated-device');
+
+    this.availableAutomatedDevices = devices.slice();
+  });
 }
 
 declare module '@glint/environment-ember-loose/registry' {
