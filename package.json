@@ -159,7 +159,7 @@
     "ember-simple-auth": "^6.0.0",
     "ember-source": "~4.12.1",
     "ember-table": "^5.0.6",
-    "ember-template-lint": "^3.4.2",
+    "ember-template-lint": "^6.0.0",
     "ember-test-selectors": "^6.0.0",
     "ember-tracked-storage-polyfill": "^1.0.0",
     "ember-wormhole": "^0.6.0",

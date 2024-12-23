@@ -69,7 +69,6 @@ module('Integration | Component | ak-tabs', function (hooks) {
             @hasBadge={{item.hasBadge}}
             @badgeCount={{item.badgeCount}}
             @isActive={{eq this.activeTab item.id}}
-            data-test-tab-item
             data-test-tab-item="tab-{{item.id}}"
           >
             <:tabIcon>

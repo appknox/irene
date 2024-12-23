@@ -24,7 +24,7 @@
           data-test-orgArchive-dateRangeLabel
           local-class='date-picker-dateText'
         >
-          {{#if this.dateRange.firstObject}}
+          {{#if this.startDate}}
             <AkTypography @tag='span' @color='textPrimary'>
               {{this.startDate}}
             </AkTypography>
@@ -38,7 +38,7 @@
             -
           </AkTypography>
 
-          {{#if this.dateRange.lastObject}}
+          {{#if this.endDate}}
             <AkTypography @tag='span' @color='textPrimary'>
               {{this.endDate}}
             </AkTypography>
