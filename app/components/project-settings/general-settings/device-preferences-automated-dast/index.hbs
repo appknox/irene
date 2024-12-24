@@ -1,105 +1,103 @@
-<ProjectPreferences::Provider
-  @profileId={{@project.activeProfileId}}
-  @platform={{@project.platform}}
-  @project={{@project}}
-  as |dpContext|
->
-  {{#let dpContext.dsAutomatedDevicePreference as |dsAutoDevicePref|}}
-    <AkStack @width='full' @direction='column'>
-      {{#if (has-block 'title')}}
-        {{yield to='title'}}
-      {{else}}
-        <AkTypography
-          @variant='h5'
-          data-test-projectSettings-generalSettings-devicePreferenceAutomatedDast-title
-        >
-          {{t 'devicePreferencesAutomatedDast'}}
-        </AkTypography>
-      {{/if}}
+<AkStack @width='full' @direction='column'>
+  {{#if (has-block 'title')}}
+    {{yield to='title'}}
+  {{else}}
+    <AkTypography
+      @variant='h5'
+      data-test-projectSettings-generalSettings-devicePreferenceAutomatedDast-title
+    >
+      {{t 'devicePreferencesAutomatedDast'}}
+    </AkTypography>
+  {{/if}}
 
-      <AkSelect
-        @placeholder='{{t "selectDevicePref"}}'
-        @options={{this.deviceSelectionTypes}}
-        @onChange={{dpContext.handleDsAutomatedDeviceSelection}}
-        @selected={{this.getChosenDeviceSelection
-          dsAutoDevicePref.ds_automated_device_selection
-        }}
-        local-class='device-preference-select'
-        {{style minWidth='345px'}}
-        data-test-projectSettings-generalSettings-devicePreferenceAutomatedDast-preference-select
-        as |dst|
-      >
-        {{t (ds-automated-device-pref dst.value)}}
-      </AkSelect>
+  <AkSelect
+    @placeholder='{{t "selectDevicePref"}}'
+    @options={{this.deviceSelectionTypes}}
+    @onChange={{this.handleDsAutomatedDeviceSelection}}
+    @selected={{this.chosenDeviceSelection}}
+    local-class='device-preference-select'
+    {{style minWidth='345px'}}
+    data-test-projectSettings-generalSettings-devicePreferenceAutomatedDast-preference-select
+    as |dst|
+  >
+    {{t (ds-automated-device-pref dst.value)}}
+  </AkSelect>
 
-      {{#if
-        (eq
-          dsAutoDevicePref.ds_automated_device_selection
-          this.filterDsAutomatedDeviceCriteria
-        )
-      }}
-        <AkStack
-          @width='full'
-          @direction='column'
-          local-class='device-preference-table'
-        >
-          {{!-- <AkStack @width='full' @alignItems='center'>
-            <AkStack @width='4/12' class='ml-2'>
-              <AkTypography>{{t 'deviceType'}}</AkTypography>
-            </AkStack>
+  {{#if this.filterAutomatedDeviceSelection}}
+    <AkStack
+      @width='full'
+      @direction='column'
+      local-class='device-preference-table'
+    >
+      <AkStack @width='full' @alignItems='center'>
+        <AkStack @width='4/12' class='ml-2'>
+          <AkTypography>{{t 'deviceType'}}</AkTypography>
+        </AkStack>
 
-            {{#if dpContext}}
-              <AkRadio::Group @groupDirection='row' as |ctx|>
-                <AkFormControlLabel @label='Phone'>
-                  <AkRadio @radioCtx={{ctx}} @value='Phone' />
-                </AkFormControlLabel>
+        {{#if @dpContext.loadingDsAutomatedDevicePref}}
+          <AkSkeleton @width='80px' @height='18px' @variant='rectangular' />
 
-                <AkFormControlLabel @label='Tab'>
-                  <AkRadio @radioCtx={{ctx}} @value='Tab' />
-                </AkFormControlLabel>
-              </AkRadio::Group>
-            {{else}}
-
-              <AkSkeleton @width='80px' @height='18px' @variant='rectangular' />
-
-              <AkSkeleton
-                @width='80px'
-                @height='18px'
-                @variant='rectangular'
-                class='ml-2 my-1'
-              />
-            {{/if}}
-          </AkStack>
-
-          <AkDivider @color='dark' /> --}}
-
-          <AkStack
-            @width='full'
-            @alignItems='center'
-            data-test-dast-preference-criteria-table
+          <AkSkeleton
+            @width='80px'
+            @height='18px'
+            @variant='rectangular'
+            class='ml-2 my-1'
+          />
+        {{else}}
+          <AkRadio::Group
+            @groupDirection='row'
+            @value='{{this.devicePreference.dsAutomatedDeviceType}}'
+            @onChange={{this.handleSelectDeviceType}}
+            as |ctx|
           >
-            <AkStack @width='4/12' class='ml-2'>
-              <AkTypography>{{t 'minOSVersion'}}</AkTypography>
-            </AkStack>
+            <AkFormControlLabel @label='Any'>
+              <AkRadio @radioCtx={{ctx}} @value='0' />
+            </AkFormControlLabel>
 
-            {{#if dpContext.loadingDsAutoDevicePref}}
-              <AkSkeleton @width='96px' @height='32px' @variant='rectangular' />
+            <AkFormControlLabel class='mx-2' @label={{t 'phone'}}>
+              <AkRadio @radioCtx={{ctx}} @value='1' />
+            </AkFormControlLabel>
+
+            <AkFormControlLabel @label='Tab'>
+              <AkRadio @radioCtx={{ctx}} @value='2' />
+            </AkFormControlLabel>
+          </AkRadio::Group>
+        {{/if}}
+      </AkStack>
+
+      <AkDivider @color='dark' />
+
+      <AkStack
+        @width='full'
+        @alignItems='center'
+        data-test-dast-preference-criteria-table
+      >
+        <AkStack @width='4/12' class='ml-2'>
+          <AkTypography>{{t 'minOSVersion'}}</AkTypography>
+        </AkStack>
+
+        {{#if @dpContext.loadingDsAutomatedDevicePref}}
+          <AkSkeleton @width='96px' @height='32px' @variant='rectangular' />
+        {{else}}
+          <AkSelect
+            @placeholder='{{t "selectMinOsVersion"}}'
+            @selected={{this.devicePreference.dsAutomatedPlatformVersionMin}}
+            @options={{this.minOSVersionOptions}}
+            @onChange={{this.handleDsAutomatedMinOSVersionSelect}}
+            local-class='version-select'
+            data-test-projectSettings-generalSettings-devicePreferenceAutomatedDast-version-select
+            as |version|
+          >
+            {{#if (eq version '')}}
+              {{t 'anyVersion'}}
             {{else}}
-              <AkSelect
-                @placeholder='{{t "selectMinOsVersion"}}'
-                @selected={{dpContext.dsAutomatedDevicePreference.ds_automated_platform_version_min}}
-                @options={{this.minOSVersionOptions}}
-                @onChange={{dpContext.handleDsAutomatedMinOSVersionSelect}}
-                local-class='version-select'
-                data-test-projectSettings-generalSettings-devicePreferenceAutomatedDast-version-select
-                as |version|
-              >
-                {{version}}
-              </AkSelect>
+              {{version}}
             {{/if}}
-          </AkStack>
+          </AkSelect>
+        {{/if}}
+      </AkStack>
 
-          {{!-- <AkDivider @color='dark' />
+      {{!-- <AkDivider @color='dark' />
 
           <AkStack @width='full' @alignItems='center'>
             <AkStack @width='4/12' class='ml-2'>
@@ -145,8 +143,6 @@
               />
             {{/if}}
           </AkStack> --}}
-        </AkStack>
-      {{/if}}
     </AkStack>
-  {{/let}}
-</ProjectPreferences::Provider>
+  {{/if}}
+</AkStack>

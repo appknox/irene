@@ -2,13 +2,12 @@ import Component from '@glimmer/component';
 import { inject as service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
 import { task } from 'ember-concurrency';
-import Store from '@ember-data/store';
-import IntlService from 'ember-intl/services/intl';
-import { waitForPromise } from '@ember/test-waiters';
+import type Store from '@ember-data/store';
+import type IntlService from 'ember-intl/services/intl';
 
-import ENV from 'irene/config/environment';
-import ProjectModel from 'irene/models/project';
 import parseError from 'irene/utils/parse-error';
+import type ProjectModel from 'irene/models/project';
+import type DsAutomationPreferenceModel from 'irene/models/ds-automation-preference';
 
 export interface ProjectSettingsGeneralSettingsDyanmicscanAutomationSettingsSignature {
   Args: {
@@ -21,10 +20,9 @@ export interface ProjectSettingsGeneralSettingsDyanmicscanAutomationSettingsSign
 export default class ProjectSettingsGeneralSettingsDyanmicscanAutomationSettingsComponent extends Component<ProjectSettingsGeneralSettingsDyanmicscanAutomationSettingsSignature> {
   @service declare store: Store;
   @service declare intl: IntlService;
-  @service declare ajax: any;
   @service('notifications') declare notify: NotificationService;
 
-  @tracked automationEnabled = false;
+  @tracked automationPreference: DsAutomationPreferenceModel | null = null;
 
   constructor(
     owner: unknown,
@@ -57,58 +55,36 @@ export default class ProjectSettingsGeneralSettingsDyanmicscanAutomationSettings
 
   getDynamicscanMode = task(async () => {
     try {
-      const dynScanMode = await waitForPromise(
-        this.store.queryRecord('dynamicscan-mode', {
-          id: this.profileId,
-        })
-      );
+      const adapter = this.store.adapterFor('ds-automation-preference');
+      adapter.setNestedUrlNamespace(this.profileId as string);
 
-      this.automationEnabled = dynScanMode.dynamicscanMode === 'Automated';
+      this.automationPreference = await this.store.queryRecord(
+        'ds-automation-preference',
+        {}
+      );
     } catch (error) {
       this.notify.error(parseError(error, this.tPleaseTryAgain));
     }
   });
 
-  toggleDynamicscanMode = task(async () => {
+  toggleDynamicscanMode = task(async (_: Event, enabled: boolean) => {
     try {
-      this.automationEnabled = !this.automationEnabled;
+      this.automationPreference?.set('dynamicScanAutomationEnabled', enabled);
 
-      const dynamicscanMode = [
-        ENV.endpoints['profiles'],
-        this.profileId,
-        ENV.endpoints['dynamicscanMode'],
-      ].join('/');
+      const adapter = this.store.adapterFor('ds-automation-preference');
+      adapter.setNestedUrlNamespace(this.profileId as string);
 
-      const data = {
-        dynamicscan_mode: this.automationEnabled ? 'Automated' : 'Manual',
-      };
+      await this.automationPreference?.save();
 
-      await waitForPromise(this.ajax.put(dynamicscanMode, { data }));
-
-      const successMsg = this.automationEnabled
+      const successMsg = enabled
         ? this.tAppiumScheduledAutomationSuccessOn
         : this.tAppiumScheduledAutomationSuccessOff;
 
       this.notify.success(successMsg);
     } catch (err) {
-      const error = err as AdapterError;
-      this.automationEnabled = !this.automationEnabled;
+      this.automationPreference?.rollbackAttributes();
 
-      if (error.payload) {
-        Object.keys(error.payload).forEach((p) => {
-          let errMsg = error.payload[p];
-
-          if (typeof errMsg !== 'string') {
-            errMsg = error.payload[p][0];
-          }
-
-          this.notify.error(errMsg);
-        });
-
-        return;
-      }
-
-      this.notify.error(parseError(error, this.tSomethingWentWrong));
+      this.notify.error(parseError(err, this.tSomethingWentWrong));
     }
   });
 }

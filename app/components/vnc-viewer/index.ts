@@ -2,7 +2,6 @@ import Component from '@glimmer/component';
 import { tracked } from '@glimmer/tracking';
 import { inject as service } from '@ember/service';
 import { action } from '@ember/object';
-import { task } from 'ember-concurrency';
 import type Store from '@ember-data/store';
 import type IntlService from 'ember-intl/services/intl';
 
@@ -38,56 +37,52 @@ export default class VncViewerComponent extends Component<VncViewerSignature> {
   constructor(owner: unknown, args: VncViewerSignature['Args']) {
     super(owner, args);
 
-    this.fetchDevicePreference.perform();
+    // TODO: get device details based on preference
+    // this.fetchDevicePreference.perform();
   }
 
   get deviceFarmURL() {
-    const token = this.args.file.deviceToken;
+    const token = this.args.dynamicScan?.moriartyDynamicscanToken;
 
-    return this.devicefarm.getTokenizedWSURL(token);
-  }
-
-  fetchDevicePreference = task(async () => {
-    const profileId = this.args.profileId;
-
-    if (profileId) {
-      this.devicePreference = await this.store.queryRecord(
-        'device-preference',
-        { id: profileId }
-      );
+    if (token) {
+      return this.devicefarm.getTokenizedWSURL(token);
     }
-  });
 
-  get screenRequired() {
-    const platform = this.args.file.project.get('platform');
-    const deviceType = this.devicePreference?.deviceType;
-
-    return (
-      platform === ENUMS.PLATFORM.ANDROID &&
-      deviceType === ENUMS.DEVICE_TYPE.TABLET_REQUIRED
-    );
+    return null;
   }
 
   get deviceType() {
     const platform = this.args.file.project.get('platform');
-    const deviceType = this.devicePreference?.deviceType;
 
     if (platform === ENUMS.PLATFORM.ANDROID) {
-      if (deviceType === ENUMS.DEVICE_TYPE.TABLET_REQUIRED) {
-        return 'tablet';
-      } else {
-        return 'nexus5';
-      }
+      return 'nexus5';
     } else if (platform === ENUMS.PLATFORM.IOS) {
-      if (deviceType === ENUMS.DEVICE_TYPE.TABLET_REQUIRED) {
-        return 'ipad black';
-      } else {
-        return 'iphone5s black';
-      }
+      return 'iphone5s black';
     }
 
     return '';
   }
+
+  // get deviceType() {
+  //   const platform = this.args.file.project.get('platform');
+  //   const deviceType = this.devicePreference?.deviceType;
+
+  //   if (platform === ENUMS.PLATFORM.ANDROID) {
+  //     if (deviceType === ENUMS.DEVICE_TYPE.TABLET_REQUIRED) {
+  //       return 'tablet';
+  //     } else {
+  //       return 'nexus5';
+  //     }
+  //   } else if (platform === ENUMS.PLATFORM.IOS) {
+  //     if (deviceType === ENUMS.DEVICE_TYPE.TABLET_REQUIRED) {
+  //       return 'ipad black';
+  //     } else {
+  //       return 'iphone5s black';
+  //     }
+  //   }
+
+  //   return '';
+  // }
 
   get isAutomated() {
     return this.args.isAutomated;
@@ -113,9 +108,7 @@ export default class VncViewerComponent extends Component<VncViewerSignature> {
   }
 
   get startedBy() {
-    const startedBy = this.dynamicScan?.startedByUser.get('username');
-
-    return startedBy;
+    return this.dynamicScan?.startedByUser?.get('username');
   }
 
   @action
