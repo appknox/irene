@@ -4,10 +4,12 @@ import BaseAuthenticator, { LoginSuccessDataProps, processData } from './base';
 export default class Saml2Auth extends BaseAuthenticator {
   authenticate(ssotoken: string) {
     return new Promise((resolve, reject) => {
-      const url = ENV['endpoints']['saml2Login'];
+      const url = String(ENV['endpoints']['saml2Login']);
 
       this.ajax.post(url, { data: { token: ssotoken } }).then(
-        (data: LoginSuccessDataProps) => {
+        (response) => {
+          let data = response as LoginSuccessDataProps;
+
           this.restoreLastTransition(data.user_id);
 
           data = processData(data);

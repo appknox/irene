@@ -7,6 +7,7 @@ import type IntlService from 'ember-intl/services/intl';
 
 import ENV from 'irene/config/environment';
 import type SubscriptionModel from 'irene/models/subscription';
+import type IreneAjaxService from 'irene/services/ajax';
 
 interface OrganizationBillingSubscriptionSignature {
   Args: {
@@ -16,7 +17,7 @@ interface OrganizationBillingSubscriptionSignature {
 
 export default class OrganizationBillingSubscriptionComponent extends Component<OrganizationBillingSubscriptionSignature> {
   @service declare intl: IntlService;
-  @service declare ajax: any;
+  @service declare ajax: IreneAjaxService;
   @service('notifications') declare notify: NotificationService;
 
   @tracked showCancelSubscriptionConfirmBox = false;

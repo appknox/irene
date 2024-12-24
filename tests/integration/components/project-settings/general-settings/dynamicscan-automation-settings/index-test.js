@@ -5,7 +5,6 @@ import { hbs } from 'ember-cli-htmlbars';
 import { setupMirage } from 'ember-cli-mirage/test-support';
 import { setupIntl, t } from 'ember-intl/test-support';
 import Service from '@ember/service';
-import { objectifyEncodedReqBody } from 'irene/tests/test-utils';
 
 class NotificationsStub extends Service {
   errorMsg = null;
@@ -102,7 +101,7 @@ module(
 
     test('it toggles scheduled automation', async function (assert) {
       this.server.put('/profiles/:id/dynamicscan_mode', (schema, req) => {
-        const reqBody = objectifyEncodedReqBody(req.requestBody);
+        const reqBody = JSON.parse(req.requestBody);
 
         this.set('dynamicscan_mode', reqBody.dynamicscan_mode);
 

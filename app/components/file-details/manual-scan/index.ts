@@ -11,6 +11,7 @@ import ENV from 'irene/config/environment';
 import type FileModel from 'irene/models/file';
 import type ManualscanModel from 'irene/models/manualscan';
 import type OrganizationService from 'irene/services/organization';
+import type IreneAjaxService from 'irene/services/ajax';
 
 export interface FileDetailsManualScanSignature {
   Args: {
@@ -23,7 +24,7 @@ export interface FileDetailsManualScanSignature {
 
 export default class FileDetailsManualScanComponent extends Component<FileDetailsManualScanSignature> {
   @service declare intl: IntlService;
-  @service declare ajax: any;
+  @service declare ajax: IreneAjaxService;
   @service declare organization: OrganizationService;
   @service declare store: Store;
   @service('notifications') declare notify: NotificationService;
@@ -150,7 +151,6 @@ export default class FileDetailsManualScanComponent extends Component<FileDetail
     try {
       await this.ajax.put(url, {
         data: JSON.stringify(data),
-        contentType: 'application/json',
       });
 
       triggerAnalytics(

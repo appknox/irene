@@ -44,7 +44,6 @@ type RiskOverrideCriteria = { label: string; value: string };
 
 export default class AnalysisRiskOverrideEditDrawerOverrideFormComponent extends Component<AnalysisRiskOverrideEditDrawerOverrideFormSignature> {
   @service declare intl: IntlService;
-  @service declare ajax: any;
   @service('notifications') declare notify: NotificationService;
 
   @tracked showOverrideSuccess = false;

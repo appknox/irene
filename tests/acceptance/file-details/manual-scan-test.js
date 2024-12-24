@@ -250,7 +250,9 @@ module('Acceptance | file-details/manual-scan', function (hooks) {
     });
 
     this.server.put('manualscans/:id', (_, req) => {
-      const data = JSON.parse(req.requestBody);
+      const reqBody = JSON.parse(req.requestBody);
+
+      const data = JSON.parse(reqBody);
 
       assert.strictEqual(data.app_env, this.appEnv);
       assert.strictEqual(data.min_os_version, `${this.minOsVersion}`);

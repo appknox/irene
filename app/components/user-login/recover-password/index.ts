@@ -11,6 +11,7 @@ import { BufferedChangeset } from 'ember-changeset/types';
 
 import ENV from 'irene/config/environment';
 import LoggerService from 'irene/services/logger';
+import type IreneAjaxService from 'irene/services/ajax';
 
 const ResetValidator = {
   username: [validatePresence(true)],
@@ -21,7 +22,7 @@ type ChangesetBufferProps = BufferedChangeset & {
 };
 
 export default class UserLoginRecoverPasswordComponent extends Component {
-  @service declare ajax: any;
+  @service declare ajax: IreneAjaxService;
   @service('notifications') declare notify: NotificationService;
   @service('rollbar') declare logger: LoggerService;
   @service declare intl: IntlService;
@@ -61,7 +62,7 @@ export default class UserLoginRecoverPasswordComponent extends Component {
     const username = changeset.get('username');
 
     try {
-      await this.ajax.post(this.recoverURL, {
+      await this.ajax.post(String(this.recoverURL), {
         data: {
           username: username,
         },

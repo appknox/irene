@@ -1,6 +1,5 @@
 import Component from '@glimmer/component';
 import { task, timeout } from 'ember-concurrency';
-import { isNotFoundError, type AjaxError } from 'ember-ajax/errors';
 import { inject as service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
 import { next } from '@ember/runloop';
@@ -16,11 +15,18 @@ import type {
   SocketHealthMessage,
   SocketInstance,
 } from 'irene/services/websocket';
+import type IreneAjaxService from 'irene/services/ajax';
+
+type StatusResponse = {
+  data: {
+    storage: string;
+  };
+};
 
 export default class SystemStatusComponent extends Component {
   @service declare devicefarm: DevicefarmService;
   @service declare websocket: WebsocketService;
-  @service declare ajax: any;
+  @service declare ajax: IreneAjaxService;
   @service declare session: any;
   @service declare store: Store;
   @service declare intl: IntlService;
@@ -102,11 +108,17 @@ export default class SystemStatusComponent extends Component {
 
   getStorageStatus = task({ drop: true }, async () => {
     try {
-      const status = await this.ajax.request(ENV.endpoints['status']);
+      const status = (await this.ajax.request(
+        String(ENV.endpoints['status'])
+      )) as StatusResponse;
 
       await this.ajax.request(status.data.storage, { headers: {} });
-    } catch (error) {
-      this.isStorageWorking = !!isNotFoundError(error as AjaxError);
+    } catch (err) {
+      const error = err as Error;
+
+      if (error && error.status === 404) {
+        this.isStorageWorking = true;
+      }
     }
   });
 
@@ -122,7 +134,7 @@ export default class SystemStatusComponent extends Component {
 
   getAPIServerStatus = task({ drop: true }, async () => {
     try {
-      await this.ajax.request(ENV.endpoints['ping']);
+      await this.ajax.request(String(ENV.endpoints['ping']));
 
       this.isAPIServerWorking = true;
     } catch (_) {

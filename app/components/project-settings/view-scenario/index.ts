@@ -25,7 +25,6 @@ export default class ProjectSettingsViewScenarioComponent extends Component<Proj
   @service declare store: Store;
   @service declare router: RouterService;
   @service('notifications') declare notify: NotificationService;
-  @service declare ajax: any;
 
   @tracked parameterList: ScanParameterModel[] = [];
 
