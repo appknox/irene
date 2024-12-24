@@ -209,11 +209,11 @@ export default class AkBreadcrumbsService extends Service {
     // SCENARIO A: In cases where same route exists in crumbs but with diff models, return fallback or recalculate breadcrumbs
     // SCENARIO B: If navigation to a page is from a different route group return fallback or an empty array to allow for regenration;
     if (
-      (routeFrom &&
-        originCrumbProps?.title &&
-        routeFromCrumbProps?.title &&
-        originCrumbProps?.routeGroup !== routeFromCrumbProps?.routeGroup) ||
-      originRouteHasDiffModelWithSameRouteInCrumbs
+      routeFrom &&
+      originCrumbProps?.title &&
+      routeFromCrumbProps?.title &&
+      (originCrumbProps?.routeGroup !== routeFromCrumbProps?.routeGroup ||
+        originRouteHasDiffModelWithSameRouteInCrumbs)
     ) {
       return (
         originCrumbProps?.fallbackCrumbs?.map((it) => ({
@@ -364,7 +364,7 @@ export default class AkBreadcrumbsService extends Service {
     items: Partial<AkBreadcrumbsItemProps>[],
     route: string
   ): void {
-    this.window.localStorage.setItem(
+    this.window.sessionStorage.setItem(
       'lastBreadcrumbsState',
       JSON.stringify({
         route,
@@ -384,7 +384,7 @@ export default class AkBreadcrumbsService extends Service {
     route: string;
   } | null {
     return JSON.parse(
-      this.window.localStorage.getItem('lastBreadcrumbsState') ?? 'null'
+      this.window.sessionStorage.getItem('lastBreadcrumbsState') ?? 'null'
     );
   }
 
@@ -444,7 +444,8 @@ export default class AkBreadcrumbsService extends Service {
           (it.route === routeName ||
             this._addIndexToRoute(it.route) === routeName ||
             it.route?.includes(String(routeName))) &&
-          it.models?.join(',') === routeCrumbs?.models?.join(',')
+          it.models?.join(',') === routeCrumbs?.models?.join(',') &&
+          it.title === routeCrumbs?.title
       )
     );
   }

@@ -2,7 +2,7 @@ import Controller from '@ember/controller';
 import type SecurityFileModel from 'irene/models/security/file';
 import type { AkBreadcrumbsItemProps } from 'irene/services/ak-breadcrumbs';
 
-export default class AuthenticatedSecurityAnalysisController extends Controller {
+export default class AuthenticatedSecurityFileController extends Controller {
   declare model: SecurityFileModel;
 
   get breadcrumbs(): AkBreadcrumbsItemProps {

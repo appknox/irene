@@ -143,7 +143,7 @@ module('Acceptance | Breadcrumbs Test', function (hooks) {
 
     // Clear breadcrumbs in local storage
     this.window = this.owner.lookup('service:browser/window');
-    this.window.localStorage.removeItem('lastBreadcrumbsState');
+    this.window.sessionStorage.removeItem('lastBreadcrumbsState');
   });
 
   test('forward navigation crumbs generation to registered routes (Root A -> Parent A -> Child A)', async function (assert) {
