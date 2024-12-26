@@ -1,4 +1,8 @@
 import Model, { attr } from '@ember-data/model';
+import Inflector from 'ember-inflector';
+
+const inflector = Inflector.inflector;
+inflector.irregular('sk-app-metadata', 'sk-app-metadata');
 
 export interface Region {
   id: number;

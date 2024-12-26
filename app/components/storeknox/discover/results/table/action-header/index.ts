@@ -15,12 +15,12 @@ export default class StoreknoxDiscoverResultsTableActionHeaderComponent extends 
   @service declare me: MeService;
   @service declare intl: IntlService;
 
-  get isAdmin() {
-    return this.me.org?.is_admin;
+  get isOwner() {
+    return this.me.org?.is_owner;
   }
 
   get tooltipText() {
-    if (this.isAdmin) {
+    if (this.isOwner) {
       return this.intl.t('storeknox.actionHeaderInfoOwner');
     }
 

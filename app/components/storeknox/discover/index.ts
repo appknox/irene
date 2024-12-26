@@ -17,7 +17,7 @@ export default class StoreknoxDiscoverComponent extends Component {
   constructor(owner: unknown, args: object) {
     super(owner, args);
 
-    if (!this.me.org?.is_admin) {
+    if (!this.me.org?.is_owner) {
       this.showWelcomeModal = false;
     }
   }
@@ -29,19 +29,11 @@ export default class StoreknoxDiscoverComponent extends Component {
         route: 'authenticated.storeknox.discover.result',
         label: this.intl.t('storeknox.discoveryResults'),
       },
-      this.me.org?.is_admin
-        ? {
-            id: 'pending-review',
-            route: 'authenticated.storeknox.discover.review',
-            label: this.intl.t('storeknox.pendingReview'),
-            hasBadge: true,
-            badgeCount: this.skPendingReview.totalCount,
-          }
-        : {
-            id: 'requested-apps',
-            route: 'authenticated.storeknox.discover.requested',
-            label: this.intl.t('storeknox.requestedApps'),
-          },
+      !this.me.org?.is_owner && {
+        id: 'requested-apps',
+        route: 'authenticated.storeknox.discover.requested',
+        label: this.intl.t('storeknox.requestedApps'),
+      },
     ].filter(Boolean);
   }
 

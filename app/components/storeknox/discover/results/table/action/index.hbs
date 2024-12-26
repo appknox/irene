@@ -10,7 +10,12 @@
       </AkStack>
     {{else}}
       {{#if this.requested}}
-        <AkTooltip @placement='bottom' @arrow={{true}} @color='light'>
+        <AkTooltip
+          @placement='bottom'
+          @arrow={{true}}
+          @color='light'
+          data-test-storeknoxDiscover-resultsTable-addedOrRequestedTooltip
+        >
           <:tooltipContent>
             <div local-class='tooltip-content'>
               <AkTypography @color='inherit'>
@@ -24,6 +29,7 @@
               @iconName={{this.iconValue.iconName}}
               @size='small'
               local-class='{{this.iconValue.className}}'
+              data-test-storeknoxDiscover-resultsTable-addedOrRequestedIcon
             />
           </:default>
         </AkTooltip>
@@ -31,11 +37,20 @@
         {{#if this.buttonLoading}}
           <AkLoader @size={{16}} />
         {{else}}
-          <AkIconButton {{on 'click' this.handleAddToInventory}}>
-            {{#if this.isAdmin}}
-              <AkIcon @iconName='add-box' />
+          <AkIconButton
+            {{on 'click' this.handleAddToInventory}}
+            data-test-storeknoxDiscover-resultsTable-addOrSendAddAppReqButton
+          >
+            {{#if this.isOwner}}
+              <AkIcon
+                @iconName='add-box'
+                data-test-storeknoxDiscover-resultsTable-addIcon
+              />
             {{else}}
-              <AkIcon @iconName='send' />
+              <AkIcon
+                @iconName='send'
+                data-test-storeknoxDiscover-resultsTable-SendAddAppReqIcon
+              />
             {{/if}}
           </AkIconButton>
         {{/if}}

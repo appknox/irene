@@ -4,28 +4,48 @@
       <AkTextField
         @placeholder={{t 'storeknox.searchQuery'}}
         @value={{this.searchQuery}}
+        data-test-storeknoxDiscover-results-searchQueryInput
       >
         <:rightAdornment>
           {{#if this.searchQuery}}
-            <AkIconButton @size='small' {{on 'click' this.clearSearch}}>
+            <AkIconButton
+              @size='small'
+              {{on 'click' this.clearSearch}}
+              data-test-storeknoxDiscover-results-searchClearIcon
+            >
               <AkIcon @iconName='close' />
             </AkIconButton>
           {{else}}
-            <AkIcon @iconName='search' @color='textSecondary' />
+            <AkIcon
+              @iconName='search'
+              @color='textSecondary'
+              data-test-storeknoxDiscover-results-searchIcon
+            />
           {{/if}}
         </:rightAdornment>
       </AkTextField>
     </div>
 
-    <AkButton @type='submit' @disabled={{not this.searchQuery}}>
+    <AkButton
+      @type='submit'
+      @disabled={{not this.searchQuery}}
+      data-test-storeknoxDiscover-results-searchTrigger
+    >
       {{t 'storeknox.discoverHeader'}}
     </AkButton>
   </AkStack>
 </form>
 
-<AkStack @alignItems='center' local-class='disclaimer-section'>
+<AkStack
+  @alignItems='center'
+  local-class='disclaimer-section'
+  data-test-storeknoxDiscover-results-disclaimerInfoSection
+>
   <AkStack local-class='warning-icon' class='p-1'>
-    <AkIcon @iconName='warning' />
+    <AkIcon
+      @iconName='warning'
+      data-test-storeknoxDiscover-results-disclaimerInfoWarningIcon
+    />
   </AkStack>
 
   <AkTypography @fontWeight='medium' class='ml-2'>
@@ -42,6 +62,7 @@
     @typographyFontWeight='bold'
     class='ml-1'
     {{on 'click' this.viewMore}}
+    data-test-storeknoxDiscover-results-viewMoreDisclaimerInfo
   >
     {{t 'viewMore'}}
   </AkButton>
@@ -54,7 +75,6 @@
     @goToPage={{this.goToPage}}
     @onItemPerPageChange={{this.onItemPerPageChange}}
     @skDiscoveryResultData={{this.skDiscoveryResultData}}
-    @selectedResults={{this.selectedResults}}
   />
 {{else}}
   <Storeknox::Discover::Results::Empty />
@@ -68,9 +88,15 @@
       class='pr-1'
       as |ab|
     >
-      <AkStack @alignItems='center'>
+      <AkStack
+        @alignItems='center'
+        data-test-storeknoxDiscover-results-disclaimerModalHeaderContainer
+      >
         <AkStack local-class='warning-icon' class='p-1'>
-          <AkIcon @iconName='warning' />
+          <AkIcon
+            @iconName='warning'
+            data-test-storeknoxDiscover-results-disclaimerModalWarningIcon
+          />
         </AkStack>
 
         <AkTypography
@@ -87,19 +113,26 @@
         class={{ab.classes.defaultIconBtn}}
         {{on 'click' this.closeDisclaimerModal}}
         @size='small'
+        data-test-storeknoxDiscover-results-disclaimerModalCloseBtn
       >
-        <AkIcon @iconName='close' />
+        <AkIcon
+          @iconName='close'
+          data-test-storeknoxDiscover-results-disclaimerModalCloseBtnIcon
+        />
       </AkIconButton>
     </AkAppbar>
 
     <AkStack @direction='column' @alignItems='center' class='p-3'>
-      <AkTypography @variant='h5'>
+      <AkTypography
+        @variant='h5'
+        data-test-storeknoxDiscover-results-disclaimerModalHeaderText
+      >
         {{t 'storeknox.disclaimerHeader'}}
       </AkTypography>
 
       <AkDivider @color='dark' class='my-2' />
 
-      <AkTypography>
+      <AkTypography data-test-storeknoxDiscover-results-disclaimerModalBodyText>
         {{t 'storeknox.disclaimerBody' htmlSafe=true}}
       </AkTypography>
     </AkStack>

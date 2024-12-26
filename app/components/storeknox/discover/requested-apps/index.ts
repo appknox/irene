@@ -74,7 +74,7 @@ export default class StoreknoxDiscoverRequestedAppsComponent extends Component<S
       }
 
       try {
-        this.skRequestedAppData = (await this.store.query('skRequestedApp', {
+        this.skRequestedAppData = (await this.store.query('sk-requested-app', {
           limit,
           offset,
         })) as SkRequestedAppResponse;
