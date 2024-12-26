@@ -1,6 +1,12 @@
-<AkStack @direction='column' @alignItems='center' local-class='empty-container'>
-
-  <AkSvg::StoreknoxSearchApps />
+<AkStack
+  @direction='column'
+  @alignItems='center'
+  local-class='empty-container'
+  data-test-storeknoxDiscover-resultsEmptyContainer
+>
+  <AkSvg::StoreknoxSearchApps
+    data-test-storeknoxDiscover-resultsEmptyIllustration
+  />
 
   <AkTypography @variant='h5' @gutterBottom={{true}} local-class='header'>
     {{t 'storeknox.searchForApps'}}
