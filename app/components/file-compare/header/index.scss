@@ -12,11 +12,9 @@
     background-color: var(--file-compare-header-white-background-color);
     border: 1px solid var(--file-compare-header-dark-border-color);
     padding: 1em 1.5em;
-
+    
     .divider {
-      width: 1px;
-      height: 26px;
-      background-color: var(--file-compare-header-divider-background-color);
+      border-color: var(--file-compare-header-divider-background-color) !important;
     }
 
     .file-icon {
