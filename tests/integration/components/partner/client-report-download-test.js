@@ -3,7 +3,13 @@ import dayjs from 'dayjs';
 import { Response } from 'miragejs';
 import { setupRenderingTest } from 'ember-qunit';
 import Service from '@ember/service';
-import { render, click, find, triggerEvent } from '@ember/test-helpers';
+import {
+  render,
+  click,
+  find,
+  triggerEvent,
+  waitUntil,
+} from '@ember/test-helpers';
 import { hbs } from 'ember-cli-htmlbars';
 import { setupIntl, t } from 'ember-intl/test-support';
 import { setupMirage } from 'ember-cli-mirage/test-support';
@@ -698,8 +704,12 @@ module(
       assert
         .dom(`[data-test-report-password-toggle-id="${report.id}"]`)
         .exists();
+
+      await waitUntil(() => find('[data-test-report-password-title]'));
+
       assert.dom('[data-test-dropdown-tray]').exists();
       assert.dom('[data-test-report-password]').exists();
+
       assert
         .dom('[data-test-report-password-title]')
         .hasText(t('reportPassword'));
@@ -756,6 +766,8 @@ module(
       );
 
       await click(downloadBtn);
+
+      await waitUntil(() => notifyService.get('errorMsg'));
 
       assert.strictEqual(
         notifyService.get('errorMsg'),

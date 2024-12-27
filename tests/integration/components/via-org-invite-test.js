@@ -167,20 +167,12 @@ module(
       assert.expect(13);
 
       this.server.post('/invite', (_, req) => {
-        const body = req.requestBody;
-
-        const data = body
-          .split('&')
-          .map((pair) => pair.split('='))
-          .reduce((acc, [key, value]) => {
-            value = decodeURIComponent(value.replace(/\+/g, ' '));
-            return { ...acc, [key]: value };
-          }, {});
+        const data = JSON.parse(req.requestBody);
 
         const { username, terms_accepted, password, confirm_password } = data;
 
         assert.strictEqual(username, 'test');
-        assert.strictEqual(terms_accepted, 'true');
+        assert.true(terms_accepted);
         assert.strictEqual(password, 'test@12345');
         assert.strictEqual(confirm_password, 'test@12345');
 

@@ -35,7 +35,6 @@ export interface FileDetailsDynamicScanDrawerDevicePrefTableSignature {
 export default class FileDetailsDynamicScanDrawerDevicePrefTableComponent extends Component<FileDetailsDynamicScanDrawerDevicePrefTableSignature> {
   @service declare store: Store;
   @service('notifications') declare notify: NotificationService;
-  @service declare ajax: any;
   @service declare intl: IntlService;
 
   @tracked limit = 5;

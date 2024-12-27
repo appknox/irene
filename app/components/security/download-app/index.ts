@@ -4,10 +4,11 @@ import Component from '@glimmer/component';
 import { tracked } from '@glimmer/tracking';
 import { task } from 'ember-concurrency';
 import ENV from 'irene/config/environment';
+import type IreneAjaxService from 'irene/services/ajax';
 import parseError from 'irene/utils/parse-error';
 
 export default class SecurityDownloadAppComponent extends Component {
-  @service declare ajax: any;
+  @service declare ajax: IreneAjaxService;
   @service('notifications') declare notify: NotificationService;
   @service('browser/window') declare window: Window;
 

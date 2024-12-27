@@ -2,10 +2,11 @@ import Component from '@glimmer/component';
 import { inject as service } from '@ember/service';
 import { action } from '@ember/object';
 import { task } from 'ember-concurrency';
-import ENV from 'irene/config/environment';
-import triggerAnalytics from 'irene/utils/trigger-analytics';
 import { tracked } from '@glimmer/tracking';
 import IntlService from 'ember-intl/services/intl';
+
+import ENV from 'irene/config/environment';
+import triggerAnalytics from 'irene/utils/trigger-analytics';
 import OrganizationInvitationModel from 'irene/models/organization-invitation';
 import OrganizationTeamInvitationModel from 'irene/models/organization-team-invitation';
 
@@ -20,7 +21,6 @@ interface OrganizationMemberInvitationListInviteDeleteSignature {
 
 export default class OrganizationMemberInvitationListInviteDelete extends Component<OrganizationMemberInvitationListInviteDeleteSignature> {
   @service declare intl: IntlService;
-  @service declare ajax: any;
   @service('notifications') declare notify: NotificationService;
 
   @tracked isDeletingInvitation = false;
