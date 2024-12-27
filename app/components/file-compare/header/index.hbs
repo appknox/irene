@@ -41,7 +41,7 @@
           </AkTypography>
         </AkStack>
 
-        <AkDivider local-class='divider' />
+        <AkDivider @direction='vertical' @height='26px' local-class='divider' />
 
         <AkStack @alignItems='center' @spacing='0.5'>
           <AkIcon @variant='outlined' @iconName='text-snippet' />
@@ -52,7 +52,11 @@
         </AkStack>
 
         {{#if @project}}
-          <AkDivider local-class='divider' />
+          <AkDivider
+            @direction='vertical'
+            @height='26px'
+            local-class='divider'
+          />
 
           <AkStack @alignItems='center' @spacing='0.5'>
             <AkIcon @variant='outlined' @iconName='folder' />
@@ -65,7 +69,7 @@
           </AkStack>
         {{/if}}
 
-        <AkDivider local-class='divider' />
+        <AkDivider @direction='vertical' @height='26px' local-class='divider' />
 
         <AkStack @alignItems='center'>
           <AkIcon
