@@ -1,3 +1,4 @@
+import { action } from '@ember/object';
 import { hbs } from 'ember-cli-htmlbars';
 
 export default {
@@ -119,25 +120,26 @@ WithIcon.args = {
   ...actionsData,
 };
 
-const EventedTemplate = (args) => {
-  const actions = {
-    handleChange(event) {
-      this.set('value', event.target.value);
-    },
-    handleBlur(event) {
-      alert(event.target.value);
-    },
-  };
+function handleChange(event) {
+  this.set('value', event.target.value);
+}
 
+const actions = {
+  handleChange: action(handleChange),
+  handleBlur(event) {
+    alert(event.target.value);
+  },
+};
+
+const EventedTemplate = (args) => {
   return {
     template: hbs`
-    {{!-- template-lint-disable no-action --}}
     <AkTextField 
       @label={{this.label}} 
       @placeholder={{this.placeholder}}
       @value={{this.value}}
-      {{on 'change' (action this.handleChange)}}
-      {{on 'blur' (action this.handleBlur)}}> 
+      {{on 'change' this.handleChange}}
+      {{on 'blur' this.handleBlur}}> 
     </AkTextField>
   `,
     context: { ...args, ...actions },

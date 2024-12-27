@@ -2,16 +2,18 @@
   width: 100%;
   display: flex;
   align-items: center;
+  padding: 1em;
+  background-color: unset !important;
 
   &.collapsed {
     justify-content: center;
+    padding: 1em;
   }
 }
 
 .switcher-menu-tooltip {
   display: flex;
   width: 100%;
-  padding: 1em;
   cursor: pointer;
 
   &.collapsed {

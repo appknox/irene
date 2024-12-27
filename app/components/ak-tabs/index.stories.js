@@ -1,4 +1,4 @@
-import { computed } from '@ember/object';
+import { action, computed } from '@ember/object';
 import { hbs } from 'ember-cli-htmlbars';
 
 export default {
@@ -6,6 +6,10 @@ export default {
   component: 'ak-tabs',
   excludeStories: [],
 };
+
+function onTabClick(tabId) {
+  this.set('activeTab', tabId);
+}
 
 const commonArgs = {
   buttonVariant: true,
@@ -33,10 +37,7 @@ const commonArgs = {
       iconName: 'people',
     },
   ],
-
-  onTabClick(tabId) {
-    this.set('activeTab', tabId);
-  },
+  onTabClick: action(onTabClick),
 };
 
 const Template = (args) => ({
@@ -52,7 +53,7 @@ const Template = (args) => ({
                 @badgeCount={{item.badgeCount}}
                 @isActive={{eq this.activeTab item.id}}
                 @buttonVariant={{this.buttonVariant}}
-                @onTabClick={{action this.onTabClick}}
+                @onTabClick={{this.onTabClick}}
                 @indicatorVariant={{this.indicatorVariant}}
               >
                 <:tabIcon>
@@ -74,7 +75,7 @@ const Template = (args) => ({
               <span class="pb-1">-<span class="bold"> N/B:</span> The link variant works with the ember routing system so it technically won't work here.</span>
             {{/unless}}
               <div class="flex-row pb-1">- This is the content for <AkTypography @color="success" @underline="always" class="ml-1 bold">{{this.currentTabDetails.label}}</AkTypography> </div>
-              <span class="pb-1">- Tab Type: <span class="bold">{{if this.buttonVariant "Button" "Link"}}</span>  (Toggle "buttonVaraint" property to see effect)</span>
+              <span class="pb-1">- Tab Type: <span class="bold">{{if this.buttonVariant "Button" "Link"}}</span>  (Toggle "buttonVariant" property to see effect)</span>
             </div>
         </div>
     </div>
@@ -104,7 +105,7 @@ export const CustomBadgeContent = (args) => ({
               @badgeBackground={{this.badgeBackground}}
               @isActive={{eq this.activeTab item.id}}
               @buttonVariant={{this.buttonVariant}}
-              @onTabClick={{action this.onTabClick}}
+              @onTabClick={{this.onTabClick}}
               @indicatorVariant={{this.indicatorVariant}}
             >
               <:tabIcon>

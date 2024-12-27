@@ -17,13 +17,15 @@
       ak-loader-svg 
       {{if this.isIndeterminateLoader "indeterminate"}}
     '
+    role='presentation'
     viewBox={{this.viewBox}}
     data-test-ak-loader-svg
   >
-    <g>
+    <g role='presentation'>
       <circle
         data-test-ak-loader-svg-track
         local-class='ak-loader-svg-track ak-loader-track-color-{{this.color}}'
+        role='presentation'
         class='ak-loader-svg-track'
         cx='{{this.viewPortSize}}'
         cy='{{this.viewPortSize}}'
@@ -39,6 +41,7 @@
           ak-loader-indicator-color-{{this.color}}
           {{if this.isIndeterminateLoader "indeterminate"}}
         '
+        role='presentation'
         class='ak-loader-circle-indicator'
         cx='{{this.viewPortSize}}'
         cy='{{this.viewPortSize}}'

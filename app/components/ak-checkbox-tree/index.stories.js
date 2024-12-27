@@ -1,3 +1,4 @@
+import { action } from '@ember/object';
 import { hbs } from 'ember-cli-htmlbars';
 
 export default {
@@ -93,14 +94,13 @@ const TREE_DATA = [
   },
 ];
 
-const actions = {
-  onExpand(expandedItems) {
-    this.set('expanded', expandedItems);
-  },
-  onCheck(checkedItems) {
-    this.set('checked', checkedItems);
-  },
-};
+function onExpand(expandedItems) {
+  this.set('expanded', expandedItems);
+}
+
+function onCheck(checkedItems) {
+  this.set('checked', checkedItems);
+}
 
 const Template = (args) => ({
   template: hbs`
@@ -109,11 +109,15 @@ const Template = (args) => ({
       @expanded={{this.expanded}}
       @cascade={{this.cascade}}
       @checked={{this.checked}}
-      @onCheck={{action this.onCheck}}
-      @onExpand={{action this.onExpand}}
+      @onCheck={{this.onCheck}}
+      @onExpand={{this.onExpand}}
     />
   `,
-  context: { ...args, ...actions },
+  context: {
+    ...args,
+    onCheck: action(onCheck),
+    onExpand: action(onExpand),
+  },
 });
 
 export const Basic = Template.bind({});

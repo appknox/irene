@@ -862,7 +862,7 @@ module('Acceptance | Breadcrumbs Test', function (hooks) {
           <AkStack @spacing="1" @direction="column" class="px-2" data-test-rootBTemplate-container>
             Root B
 
-            <AkLink @route="authenticated.tr-b-root.parent-with-model" @model={{"1"}} data-test-linkToRootBParentWithModel1>
+            <AkLink @route="authenticated.tr-b-root.parent-with-model" @model="1" data-test-linkToRootBParentWithModel1>
               Link to Root B - Parent With Model 1
             </AkLink>
 

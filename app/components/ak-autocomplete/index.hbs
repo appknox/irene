@@ -64,11 +64,11 @@
         {{/if}}
 
       {{else}}
-        {{#each this.filteredOptions as |option|}}
+        {{#each this.filteredOptions as |option idx|}}
           <AkList::Item
             data-test-ak-autocomplete-item
             @button={{true}}
-            @divider={{not-eq this.filteredOptions.lastObject option}}
+            @divider={{not-eq this.filteredOptionsLastIndex idx}}
             {{on 'click' (fn this.onOptionClick option)}}
           >
             {{yield option}}

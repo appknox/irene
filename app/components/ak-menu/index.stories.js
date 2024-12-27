@@ -1,3 +1,4 @@
+import { action } from '@ember/object';
 import { hbs } from 'ember-cli-htmlbars';
 
 export default {
@@ -6,13 +7,17 @@ export default {
   excludeStories: [],
 };
 
-const actions = {
-  handleMoreClick(event) {
-    this.set('anchorRef', event.currentTarget);
-  },
-  handleClose() {
-    this.set('anchorRef', null);
-  },
+function handleMoreClick(event) {
+  this.set('anchorRef', event.currentTarget);
+}
+
+function handleClose() {
+  this.set('anchorRef', null);
+}
+
+const commonActionArgs = {
+  handleMoreClick: action(handleMoreClick),
+  handleClose: action(handleClose),
 };
 
 const menuData = [
@@ -23,22 +28,21 @@ const menuData = [
 
 const Template = (args) => ({
   template: hbs`
-    {{!-- template-lint-disable no-action --}}
     <AkTypography @color="textSecondary" @gutterBottom={{true}}>Experiment with me</AkTypography>
     
-    <AkIconButton @variant="outlined" {{on 'click' (action this.handleMoreClick)}}>
+    <AkIconButton @variant="outlined" {{on 'click' this.handleMoreClick}}>
         <AkIcon @iconName="more-vert" />
     </AkIconButton>
 
-    <AkMenu @arrow={{this.arrow}} @anchorRef={{this.anchorRef}} @onClose={{action this.handleClose}} as |akm|>
+    <AkMenu @arrow={{this.arrow}} @anchorRef={{this.anchorRef}} @onClose={{this.handleClose}} as |akm|>
         {{#each this.menuData as |data|}}
-            <akm.listItem @onClick={{action this.handleClose}} @divider={{data.divider}}>
+            <akm.listItem @onClick={{this.handleClose}} @divider={{data.divider}}>
                 <AkTypography>{{data.label}}</AkTypography>
             </akm.listItem>
         {{/each}}
     </AkMenu>
   `,
-  context: { ...args, ...actions, menuData },
+  context: { ...args, menuData },
 });
 
 export const Default = Template.bind({});
@@ -46,18 +50,18 @@ export const Default = Template.bind({});
 Default.args = {
   anchorRef: null,
   arrow: false,
+  ...commonActionArgs,
 };
 
 const WithIconsTemplate = (args) => ({
   template: hbs`
-    {{!-- template-lint-disable no-action --}}
-    <AkIconButton @variant="outlined" {{on 'click' (action this.handleMoreClick)}}>
+    <AkIconButton @variant="outlined" {{on 'click' this.handleMoreClick}}>
         <AkIcon @iconName="more-vert" />
     </AkIconButton>
 
-    <AkMenu @arrow={{this.arrow}} @anchorRef={{this.anchorRef}} @onClose={{action this.handleClose}} as |akm|>
+    <AkMenu @arrow={{this.arrow}} @anchorRef={{this.anchorRef}} @onClose={{this.handleClose}} as |akm|>
         {{#each this.menuData as |data|}}
-            <akm.listItem @onClick={{action this.handleClose}} @divider={{data.divider}} as |li|>
+            <akm.listItem @onClick={{this.handleClose}} @divider={{data.divider}} as |li|>
                 <li.leftIcon>
                     <AkIcon @size="small" @iconName={{data.icon}} />
                 </li.leftIcon>
@@ -67,7 +71,7 @@ const WithIconsTemplate = (args) => ({
         {{/each}}
     </AkMenu>
   `,
-  context: { ...args, ...actions, menuData },
+  context: { ...args, menuData },
 });
 
 export const WithIcons = WithIconsTemplate.bind({});
@@ -75,17 +79,17 @@ export const WithIcons = WithIconsTemplate.bind({});
 WithIcons.args = {
   anchorRef: null,
   arrow: false,
+  ...commonActionArgs,
 };
 
 const DisabledTemplate = (args) => ({
   template: hbs`
-    {{!-- template-lint-disable no-action --}}
-    <AkIconButton @variant="outlined" {{on 'click' (action this.handleMoreClick)}}>
+    <AkIconButton @variant="outlined" {{on 'click' this.handleMoreClick}}>
         <AkIcon @iconName="more-vert" />
     </AkIconButton>
 
-    <AkMenu @arrow={{this.arrow}} @anchorRef={{this.anchorRef}} @onClose={{action this.handleClose}} as |akm|>
-        <akm.listItem @disabled={{this.disabled}} @onClick={{action this.handleClose}} @divider={{true}} as |li|>
+    <AkMenu @arrow={{this.arrow}} @anchorRef={{this.anchorRef}} @onClose={{this.handleClose}} as |akm|>
+        <akm.listItem @disabled={{this.disabled}} @onClick={{this.handleClose}} @divider={{true}} as |li|>
             <li.leftIcon>
                 <AkIcon @iconName="done" @size="small" />
             </li.leftIcon>
@@ -94,7 +98,7 @@ const DisabledTemplate = (args) => ({
         </akm.listItem>
 
         {{#each this.menuData as |data|}}
-            <akm.listItem @onClick={{action this.handleClose}} @divider={{data.divider}} as |li|>
+            <akm.listItem @onClick={{this.handleClose}} @divider={{data.divider}} as |li|>
                 <li.leftIcon>
                   <AkIcon @iconName={{data.icon}} @size="small" />
                 </li.leftIcon>
@@ -104,7 +108,7 @@ const DisabledTemplate = (args) => ({
         {{/each}}
     </AkMenu>
   `,
-  context: { ...args, ...actions, menuData },
+  context: { ...args, menuData },
 });
 
 export const Disabled = DisabledTemplate.bind({});
@@ -113,4 +117,5 @@ Disabled.args = {
   anchorRef: null,
   disabled: true,
   arrow: false,
+  ...commonActionArgs,
 };

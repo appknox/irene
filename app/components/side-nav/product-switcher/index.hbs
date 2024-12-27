@@ -7,20 +7,19 @@
   @arrow={{true}}
   @title={{t 'appSwitcher'}}
   local-class='switcher-menu-tooltip'
-  role='button'
-  {{on 'click' this.onClickSwitcher}}
 >
-  <div
-    data-test-side-menu-switcher
-    local-class='switcher {{if this.isSidebarExpanded "expanded" "collapsed"}}'
-  >
-    <AkIcon
-      data-test-side-menu-switcher-icon
-      class={{@classes.menuItemIcon}}
-      @iconName='apps'
-    />
+  {{#if this.isSidebarExpanded}}
+    <AkButton
+      data-test-side-menu-switcher
+      local-class='switcher'
+      {{on 'click' this.onClickSwitcher}}
+    >
+      <AkIcon
+        data-test-side-menu-switcher-icon
+        class={{@classes.menuItemIcon}}
+        @iconName='apps'
+      />
 
-    {{#if this.isSidebarExpanded}}
       <AkStack
         class='ml-2'
         @width='full'
@@ -38,8 +37,21 @@
 
         <AkIcon class={{@classes.menuItemIcon}} @iconName='chevron-right' />
       </AkStack>
-    {{/if}}
-  </div>
+    </AkButton>
+
+  {{else}}
+    <AkIconButton
+      data-test-side-menu-switcher
+      local-class='switcher collapsed'
+      {{on 'click' this.onClickSwitcher}}
+    >
+      <AkIcon
+        data-test-side-menu-switcher-icon
+        class={{@classes.menuItemIcon}}
+        @iconName='apps'
+      />
+    </AkIconButton>
+  {{/if}}
 </AkTooltip>
 
 <AkDivider @color='dark' class='mb-4' />
