@@ -59,7 +59,9 @@ module(
       const username = 'appknox';
 
       this.server.post('/v2/forgot_password', (schema, req) => {
-        const reqUsername = req.requestBody.split('=')[1];
+        const reqBody = JSON.parse(req.requestBody);
+
+        const reqUsername = reqBody.username;
 
         assert.strictEqual(username, reqUsername);
 
@@ -101,7 +103,9 @@ module(
       const username = 'appknox';
 
       this.server.post('/v2/forgot_password', (schema, req) => {
-        const reqUsername = req.requestBody.split('=')[1];
+        const reqBody = JSON.parse(req.requestBody);
+
+        const reqUsername = reqBody.username;
 
         assert.strictEqual(username, reqUsername);
 

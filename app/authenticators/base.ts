@@ -7,6 +7,7 @@ import RouterService from '@ember/routing/router-service';
 import ENV from 'irene/config/environment';
 import OidcService from 'irene/services/oidc';
 import FreshdeskService from 'irene/services/freshdesk';
+import type IreneAjaxService from 'irene/services/ajax';
 
 export interface LoginSuccessDataProps {
   token: string;
@@ -35,7 +36,7 @@ export const processData = (data: LoginSuccessDataProps) => {
 };
 
 export default class BaseAuthenticator extends Base {
-  @service declare ajax: any;
+  @service declare ajax: IreneAjaxService;
   @service declare session: any;
   @service declare router: RouterService;
   @service('notifications') declare notify: NotificationService;

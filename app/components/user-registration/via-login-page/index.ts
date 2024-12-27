@@ -11,9 +11,10 @@ import {
   validateFormat,
 } from 'ember-changeset-validations/validators';
 
-import NetworkService from 'irene/services/network';
 import { ChangesetBufferProps } from '../form';
 import IntlService from 'ember-intl/services/intl';
+import type IreneAjaxService from 'irene/services/ajax';
+import type { AjaxError } from 'irene/services/ajax';
 
 interface RegistrationComponentSignature {
   Args: {
@@ -35,7 +36,7 @@ interface RegistrationData {
 }
 
 export default class RegistrationComponent extends Component<RegistrationComponentSignature> {
-  @service declare network: NetworkService;
+  @service declare ajax: IreneAjaxService;
   @service('notifications') declare notify: NotificationService;
   @service declare intl: IntlService;
 
@@ -88,25 +89,11 @@ export default class RegistrationComponent extends Component<RegistrationCompone
     const url = this.registrationEndpoint;
 
     try {
-      const res = await this.network.post(url, data);
-
-      if (!res.ok) {
-        const err = new Error(res.statusText) as AdapterError;
-
-        try {
-          const error_payload = await res.json();
-
-          err.payload = error_payload;
-        } catch {
-          err.message = await res.text();
-        }
-
-        throw err;
-      }
+      await this.ajax.post(url, { data: data });
 
       this.showSuccess = true;
     } catch (err) {
-      const errors = err as AdapterError;
+      const errors = err as AjaxError;
       const changeset = this.changeset;
 
       if (errors.payload.recaptcha && errors.payload.recaptcha.length) {

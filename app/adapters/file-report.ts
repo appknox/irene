@@ -3,8 +3,6 @@ import { ModelSchema } from 'ember-data';
 import commondrf from './commondrf';
 import Store, { Snapshot } from '@ember-data/store';
 import ModelRegistry from 'ember-data/types/registries/model';
-import NetworkService from 'irene/services/network';
-import { inject as service } from '@ember/service';
 import { FileReportScanType } from 'irene/models/file-report';
 
 interface FileReportQuery {
@@ -18,8 +16,6 @@ enum REPORT_TYPE_ENDPOINT {
 }
 
 export default class FileReport extends commondrf {
-  @service declare network: NetworkService;
-
   filesBaseUrl = this.buildURLFromBase(`${this.namespace_v2}/files`);
   reportsBaseUrl = this.buildURLFromBase(`${this.namespace_v2}/reports`);
 
@@ -54,11 +50,11 @@ export default class FileReport extends commondrf {
     const reportTypeEndpoint = REPORT_TYPE_ENDPOINT[type];
     const url = `${this.reportsBaseUrl}/${reportId}/${reportTypeEndpoint}`;
 
-    const response = await this.network.request(url, {
+    const response = await this.ajax(url, 'GET', {
       headers: this.headers,
     });
 
-    return response.json() as { url?: string };
+    return response as { url?: string };
   }
 }
 

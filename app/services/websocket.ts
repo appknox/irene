@@ -10,8 +10,8 @@ import ENV from 'irene/config/environment';
 import type ConfigurationService from './configuration';
 import type RealtimeService from './realtime';
 import type AkNotificationsService from './ak-notifications';
-import type NetworkService from './network';
 import type UserModel from 'irene/models/user';
+import type IreneAjaxService from './ajax';
 
 export interface SocketInstance {
   on: (event: string, handler: (args: any) => void, target?: object) => void;
@@ -34,7 +34,7 @@ export default class WebsocketService extends Service {
   @service declare realtime: RealtimeService;
   @service declare notifications: NotificationService;
   @service declare akNotifications: AkNotificationsService;
-  @service declare network: NetworkService;
+  @service declare ajax: IreneAjaxService;
   @service('socket-io') socketIOService: any;
 
   connectionPath = '/websocket';
@@ -51,8 +51,8 @@ export default class WebsocketService extends Service {
       return hostFromConfig;
     }
 
-    if (this.network.host) {
-      return this.network.host;
+    if (this.ajax.host) {
+      return this.ajax.host;
     }
 
     return '/';

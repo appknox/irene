@@ -12,6 +12,8 @@ import OrganizationService from 'irene/services/organization';
 import ProjectModel from 'irene/models/project';
 import GithubRepoModel, { GithubRepoDetails } from 'irene/models/github-repo';
 import parseError from 'irene/utils/parse-error';
+import type IreneAjaxService from 'irene/services/ajax';
+import type { AjaxError } from 'irene/services/ajax';
 
 export interface ProjectSettingsGeneralSettingsGithubProjectSignature {
   Args: {
@@ -23,7 +25,7 @@ export default class ProjectSettingsGeneralSettingsGithubProjectComponent extend
   @service declare intl: IntlService;
   @service declare store: Store;
   @service('notifications') declare notify: NotificationService;
-  @service declare ajax: any;
+  @service declare ajax: IreneAjaxService;
   @service declare organization: OrganizationService;
 
   @tracked currentGithubRepo: GithubRepoModel | null = null;
@@ -184,7 +186,7 @@ export default class ProjectSettingsGeneralSettingsGithubProjectComponent extend
 
       this.githubRepos = repos.results;
     } catch (err) {
-      const error = err as AdapterError;
+      const error = err as AjaxError;
 
       if (
         'status' in error &&

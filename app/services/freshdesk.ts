@@ -6,15 +6,21 @@ import { action } from '@ember/object';
 
 import type ConfigurationService from './configuration';
 import type LoggerService from './logger';
-import type NetworkService from './network';
 import type OrganizationService from './organization';
 import type UserModel from 'irene/models/user';
+import type IreneAjaxService from './ajax';
+
+type WidgetAuthResponse = {
+  token: string;
+  name: string;
+  email: string;
+};
 
 export default class FreshdeskService extends Service {
   @service('browser/window') declare window: Window;
   @service declare configuration: ConfigurationService;
   @service declare logger: LoggerService;
-  @service declare network: NetworkService;
+  @service declare ajax: IreneAjaxService;
   @service declare organization: OrganizationService;
 
   @tracked widgetAuthToken = '';
@@ -100,8 +106,9 @@ export default class FreshdeskService extends Service {
   @action
   async authWidgetCallback() {
     try {
-      const authRes = await this.network.post(this.WIDGET_AUTH_ENDPOINT);
-      const widgetAuthData = await authRes.json();
+      const widgetAuthData = await this.ajax.post<WidgetAuthResponse>(
+        this.WIDGET_AUTH_ENDPOINT
+      );
 
       this.window.FreshworksWidget('authenticate', {
         token: widgetAuthData.token,
@@ -140,8 +147,10 @@ export default class FreshdeskService extends Service {
 
   getFreshWidgetToken = task(async () => {
     try {
-      const authRes = await this.network.post(this.WIDGET_AUTH_ENDPOINT);
-      const widgetAuthData = await authRes.json();
+      const widgetAuthData = await this.ajax.post<WidgetAuthResponse>(
+        this.WIDGET_AUTH_ENDPOINT
+      );
+
       this.widgetAuthToken = widgetAuthData.token;
     } catch (error) {
       this.logger.error(error);

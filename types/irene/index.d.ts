@@ -157,12 +157,6 @@ declare global {
     detail?: string;
   }
 
-  export interface AjaxError {
-    status: number;
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    payload: any;
-  }
-
   // Type Merging for Distinct Objects
   // SRC: https://stackoverflow.com/questions/60795256/typescript-type-merging
   type Primitive =

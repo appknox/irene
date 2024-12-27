@@ -2,8 +2,8 @@ import { inject as service } from '@ember/service';
 import Service from '@ember/service';
 import Store from '@ember-data/store';
 
-import NetworkService from './network';
 import LoggerService from './logger';
+import IreneAjaxService from './ajax';
 
 type ServerData = {
   websocket: string;
@@ -17,8 +17,59 @@ type DashboardData = {
   devicefarmURL: string;
 };
 
+type ImageData = {
+  logo_on_darkbg: string;
+  logo_on_lightbg: string;
+  favicon: string;
+};
+
+type IntegrationData = {
+  freshchat_key: string;
+  hotjar_key: string;
+  pendo_key: string;
+  csb_key: string;
+  rollbar_key: string;
+  freshdesk_configuration: {
+    widget_id: string;
+  };
+};
+
+type ThemeData = {
+  scheme: string;
+  primary_color: string;
+  primary_alt_color: string;
+  secondary_color: string;
+  secondary_alt_color: string;
+};
+
+type FrontendConfigResponse = {
+  name: string;
+  hide_poweredby_logo: boolean;
+  url: string;
+  registration_enabled: boolean;
+  registration_link: string;
+
+  images: ImageData;
+
+  integrations: IntegrationData;
+
+  theme: ThemeData;
+};
+
+type ServerResponse = {
+  websocket: string;
+  devicefarm_url: string;
+  enterprise: string | boolean;
+  url_upload_allowed: boolean;
+};
+
+type DashboardResponse = {
+  dashboard_url: string;
+  devicefarm_url: string;
+};
+
 export default class ConfigurationService extends Service {
-  @service declare network: NetworkService;
+  @service declare ajax: IreneAjaxService;
   @service declare logger: LoggerService;
   @service declare store: Store;
   @service declare session: any;
@@ -39,7 +90,7 @@ export default class ConfigurationService extends Service {
     registration_link: '',
   };
 
-  themeData = {
+  themeData: ThemeData = {
     scheme: '',
     primary_color: '',
     primary_alt_color: '',
@@ -47,13 +98,13 @@ export default class ConfigurationService extends Service {
     secondary_alt_color: '',
   };
 
-  imageData = {
+  imageData: ImageData = {
     favicon: '',
     logo_on_darkbg: '',
     logo_on_lightbg: '',
   };
 
-  integrationData = {
+  integrationData: IntegrationData = {
     freshchat_key: '',
     freshdesk_configuration: {
       widget_id: '',
@@ -76,19 +127,12 @@ export default class ConfigurationService extends Service {
     devicefarmURL: '',
   };
 
-  async fetchConfig(url: string) {
-    const res = await this.network.request(url);
-
-    if (res.ok) {
-      return await res.json();
-    }
-
-    throw new Error(`Error fetching ${url} configuration`);
-  }
-
   async frontendConfigFetch() {
     try {
-      const data = await this.fetchConfig(this.frontendConfigEndpoint);
+      const data = await this.ajax.request<FrontendConfigResponse>(
+        this.frontendConfigEndpoint
+      );
+
       this.frontendData.hide_poweredby_logo = data.hide_poweredby_logo == true;
       this.frontendData.name ||= data.name;
       this.frontendData.registration_enabled ||=
@@ -157,7 +201,9 @@ export default class ConfigurationService extends Service {
 
   async serverConfigFetch() {
     try {
-      const data = await this.fetchConfig(this.serverConfigEndpoint);
+      const data = await this.ajax.request<ServerResponse>(
+        this.serverConfigEndpoint
+      );
 
       this.serverData.websocket ||= data.websocket;
       this.serverData.enterprise ||= data.enterprise == true;
@@ -179,7 +225,9 @@ export default class ConfigurationService extends Service {
 
   async dashboardConfigFetch() {
     try {
-      const data = await this.fetchConfig(this.dashboardConfigEndpoint);
+      const data = await this.ajax.request<DashboardResponse>(
+        this.dashboardConfigEndpoint
+      );
 
       this.dashboardData.dashboardURL ||= data.dashboard_url;
       this.dashboardData.devicefarmURL ||= data.devicefarm_url;

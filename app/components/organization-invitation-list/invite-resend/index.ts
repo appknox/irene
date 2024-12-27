@@ -22,7 +22,6 @@ interface OrganizationInvitationListInviteResendSignature {
 
 export default class OrganizationInvitationListInviteResend extends Component<OrganizationInvitationListInviteResendSignature> {
   @service declare intl: IntlService;
-  @service declare ajax: any;
   @service('notifications') declare notify: NotificationService;
 
   @tracked isResendingInvitation = false;

@@ -9,6 +9,7 @@ import ENUMS from 'irene/enums';
 
 import type IntlService from 'ember-intl/services/intl';
 import type SecurityAnalysisModel from 'irene/models/security/analysis';
+import type IreneAjaxService from 'irene/services/ajax';
 
 export interface SecurityAnalysisListTableActionComponentSignature {
   Args: {
@@ -19,7 +20,7 @@ export interface SecurityAnalysisListTableActionComponentSignature {
 export default class SecurityAnalysisListTableActionComponent extends Component<SecurityAnalysisListTableActionComponentSignature> {
   @service('notifications') declare notify: NotificationService;
   @service declare intl: IntlService;
-  @service declare ajax: any;
+  @service declare ajax: IreneAjaxService;
 
   @tracked showMarkPassedConfirmBox = false;
 
@@ -61,7 +62,6 @@ export default class SecurityAnalysisListTableActionComponent extends Component<
 
       await this.ajax.put(url, {
         namespace: 'api/hudson-api',
-        contentType: 'application/json',
         data: JSON.stringify({
           ...this.PASSED_STATE,
           owasp: (await this.analysis.owasp).map((a) => a.get('id')),

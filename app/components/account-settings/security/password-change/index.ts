@@ -14,6 +14,8 @@ import { Changeset } from 'ember-changeset';
 
 import ENV from 'irene/config/environment';
 import triggerAnalytics from 'irene/utils/trigger-analytics';
+import type IreneAjaxService from 'irene/services/ajax';
+import type { AjaxError } from 'irene/services/ajax';
 
 type ChangesetBufferProps = BufferedChangeset & {
   old_password: string;
@@ -29,7 +31,7 @@ const ChangeValidator = {
 
 export default class AccountSettingsSecurityPasswordChangeComponent extends Component {
   @service declare intl: IntlService;
-  @service declare ajax: any;
+  @service declare ajax: IreneAjaxService;
   @service('rollbar') declare logger: any;
   @service declare router: RouterService;
   @service('notifications') declare notify: NotificationService;
@@ -63,7 +65,7 @@ export default class AccountSettingsSecurityPasswordChangeComponent extends Comp
     };
 
     try {
-      await this.ajax.post(this.changePasswordURL, {
+      await this.ajax.post(this.changePasswordURL as string, {
         data,
       });
 
@@ -76,7 +78,7 @@ export default class AccountSettingsSecurityPasswordChangeComponent extends Comp
 
       this.notify.success(this.intl.t('passwordChanged'));
     } catch (err) {
-      const errors = err as AdapterError;
+      const errors = err as AjaxError;
 
       if (errors.payload) {
         Object.keys(errors.payload).forEach((key) => {

@@ -9,6 +9,8 @@ import type { EmberTableSort } from 'ember-table';
 import ENUMS from 'irene/enums';
 import ENV from 'irene/config/environment';
 import type FileModel from 'irene/models/file';
+import type IreneAjaxService from 'irene/services/ajax';
+import type { AjaxError } from 'irene/services/ajax';
 
 export interface FileDetailsStaticScanSignature {
   Args: {
@@ -19,7 +21,7 @@ export interface FileDetailsStaticScanSignature {
 export default class FileDetailsStaticScan extends Component<FileDetailsStaticScanSignature> {
   @service declare intl: IntlService;
   @service('notifications') declare notify: NotificationService;
-  @service declare ajax: any;
+  @service declare ajax: IreneAjaxService;
 
   @tracked showRescanModal = false;
 
@@ -92,9 +94,7 @@ export default class FileDetailsStaticScan extends Component<FileDetailsStaticSc
         file_id: this.args.file.id,
       };
 
-      await this.ajax.post(ENV.endpoints['rescan'] ?? '', {
-        data,
-      });
+      await this.ajax.post(ENV.endpoints['rescan'] as string, { data });
 
       this.notify.info(this.tRescanInitiated);
 

@@ -4,6 +4,7 @@ import { task } from 'ember-concurrency';
 
 import ENV from 'irene/config/environment';
 import type InvoiceModel from 'irene/models/invoice';
+import type IreneAjaxService from 'irene/services/ajax';
 
 interface OrganizationBillingInvoiceListDownloadActionSignature {
   Args: {
@@ -11,8 +12,12 @@ interface OrganizationBillingInvoiceListDownloadActionSignature {
   };
 }
 
+type DownloadURLResponse = {
+  url: string;
+};
+
 export default class OrganizationBillingInvoiceListDownloadActionComponent extends Component<OrganizationBillingInvoiceListDownloadActionSignature> {
-  @service declare ajax: any;
+  @service declare ajax: IreneAjaxService;
   @service('browser/window') declare window: Window;
   @service('notifications') declare notify: NotificationService;
 
@@ -21,7 +26,7 @@ export default class OrganizationBillingInvoiceListDownloadActionComponent exten
     const url = new URL(downloadUrl, ENV.host).href;
 
     try {
-      const result = await this.ajax.request(url);
+      const result = await this.ajax.request<DownloadURLResponse>(url);
 
       if (!this.isDestroyed) {
         this.window.location.href = result.url;

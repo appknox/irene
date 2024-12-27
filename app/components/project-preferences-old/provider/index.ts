@@ -15,6 +15,7 @@ import ProjectModel from 'irene/models/project';
 import DevicePreferenceModel from 'irene/models/device-preference';
 import ProjectAvailableDeviceModel from 'irene/models/project-available-device';
 import FileModel from 'irene/models/file';
+import type IreneAjaxService from 'irene/services/ajax';
 
 export interface DevicePreferenceContext {
   filteredDevices?: ProjectAvailableDeviceModel[];
@@ -51,7 +52,7 @@ type DeviceType = EnumObject;
 
 export default class ProjectPreferencesOldProviderComponent extends Component<ProjectPreferencesOldProviderSignature> {
   @service declare intl: IntlService;
-  @service declare ajax: any;
+  @service declare ajax: IreneAjaxService;
   @service('notifications') declare notify: NotificationService;
   @service declare store: Store;
 

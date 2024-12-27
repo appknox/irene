@@ -26,7 +26,6 @@ export default class HomePageComponent extends Component {
   @service declare organization: OrganizationService;
   @service declare userAuth: UserAuthService;
   @service declare session: any;
-  @service declare ajax: any;
   @service declare whitelabel: WhitelabelService;
 
   get isStoreknoxEnabled() {

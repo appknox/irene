@@ -134,10 +134,8 @@ export default class PartnerClientReportDownloadComponent extends Component {
     try {
       const adapter = this.store.adapterFor('file-report');
 
-      const pdfReport = await adapter.getReportByType(
-        'file-report',
-        reportId,
-        REPORT.TYPE.PDF
+      const pdfReport = await waitForPromise(
+        adapter.getReportByType('file-report', reportId, REPORT.TYPE.PDF)
       );
 
       if (!pdfReport || !pdfReport.url) {

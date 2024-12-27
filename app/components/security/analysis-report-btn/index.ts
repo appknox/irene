@@ -10,6 +10,7 @@ import ENV from 'irene/config/environment';
 
 import type IntlService from 'ember-intl/services/intl';
 import type SecurityFileModel from 'irene/models/security/file';
+import type IreneAjaxService from 'irene/services/ajax';
 
 export interface SecurityFileAnalysisReportBtnSignature {
   Element: HTMLElement;
@@ -18,11 +19,23 @@ export interface SecurityFileAnalysisReportBtnSignature {
   };
 }
 
+type DownloadReportsResponse = {
+  xlsx: string;
+  html_en: string;
+  html_ja: string;
+};
+
+type DownloadReportType = {
+  label: string;
+  format: keyof DownloadReportsResponse;
+  icon: string;
+};
+
 export default class SecurityFileAnalysisReportBtnComponent extends Component<SecurityFileAnalysisReportBtnSignature> {
   @service declare intl: IntlService;
   @service('notifications') declare notify: NotificationService;
   @service('browser/window') declare window: Window;
-  @service declare ajax: any;
+  @service declare ajax: IreneAjaxService;
 
   @tracked isShowGenerateReportModal = false;
   @tracked emailsToSend = '';
@@ -115,7 +128,6 @@ export default class SecurityFileAnalysisReportBtnComponent extends Component<Se
       await this.ajax.put(url, {
         namespace: 'api/hudson-api',
         data,
-        contentType: 'application/json',
       });
 
       this.isReportGenerated = true;
@@ -129,13 +141,13 @@ export default class SecurityFileAnalysisReportBtnComponent extends Component<Se
   /**
    * Method to download excel report
    */
-  downloadReport = task(async (type) => {
+  downloadReport = task(async (type: DownloadReportType) => {
     try {
       const url = [ENV.endpoints['reports'], this.fileId, 'download_url'].join(
         '/'
       );
 
-      const data = await this.ajax.request(url, {
+      const data = await this.ajax.request<DownloadReportsResponse>(url, {
         namespace: 'api/hudson-api',
       });
 

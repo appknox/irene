@@ -23,7 +23,6 @@ export default class OrganizationTeamCreateTeam extends Component<OrganizationTe
   @service declare intl: IntlService;
   @service declare realtime: RealtimeService;
   @service declare store: Store;
-  @service declare ajax: any;
   @service('notifications') declare notify: NotificationService;
 
   @tracked teamName = '';

@@ -698,8 +698,10 @@ module(
       assert
         .dom(`[data-test-report-password-toggle-id="${report.id}"]`)
         .exists();
+
       assert.dom('[data-test-dropdown-tray]').exists();
       assert.dom('[data-test-report-password]').exists();
+
       assert
         .dom('[data-test-report-password-title]')
         .hasText(t('reportPassword'));

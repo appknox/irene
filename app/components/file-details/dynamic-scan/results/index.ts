@@ -17,7 +17,6 @@ export interface FileDetailsDastResultsSignature {
 export default class FileDetailsDastResults extends Component<FileDetailsDastResultsSignature> {
   @service declare intl: IntlService;
   @service('notifications') declare notify: NotificationService;
-  @service declare ajax: any;
 
   @tracked sorts: EmberTableSort[] = [
     { isAscending: false, valuePath: 'computedRisk' },

@@ -20,7 +20,6 @@ import { riskText } from 'irene/helpers/risk-text';
 
 import ENUMS from 'irene/enums';
 import styles from 'irene/components/ak-select/index.scss';
-import { objectifyEncodedReqBody } from 'irene/tests/test-utils';
 
 // JSON API Serializer
 const serializeForJsonApi = (payload, type) => ({
@@ -830,7 +829,7 @@ module('Integration | Component | security/analysis-details', function (hooks) {
       this.server.post(
         '/hudson-api/attachments/upload_finished',
         (schema, req) => {
-          const reqBody = objectifyEncodedReqBody(req.requestBody);
+          const reqBody = JSON.parse(req.requestBody);
 
           // Create an attachment
           const attachment = this.server.create('security/attachment', {
