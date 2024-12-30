@@ -2,8 +2,6 @@ import Component from '@glimmer/component';
 import { inject as service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
 import { task } from 'ember-concurrency';
-import { action } from '@ember/object';
-import { waitForPromise } from '@ember/test-waiters';
 import type IntlService from 'ember-intl/services/intl';
 
 import type FileModel from 'irene/models/file';
@@ -11,6 +9,7 @@ import type DynamicscanModel from 'irene/models/dynamicscan';
 import { DsComputedStatus } from 'irene/models/dynamicscan';
 import ENUMS from 'irene/enums';
 import parseError from 'irene/utils/parse-error';
+import { action } from '@ember/object';
 
 export interface FileDetailsScanActionsDynamicScanSignature {
   Args: {
@@ -83,12 +82,14 @@ export default class FileDetailsScanActionsDynamicScanComponent extends Componen
     try {
       const file = this.args.file;
 
-      this.automatedDynamicScan = await waitForPromise(
-        file.getLastDynamicScan(file.id, ENUMS.DYNAMIC_MODE.AUTOMATED)
+      this.automatedDynamicScan = await file.getLastDynamicScan(
+        file.id,
+        ENUMS.DYNAMIC_MODE.AUTOMATED
       );
 
-      this.manualDynamicScan = await waitForPromise(
-        file.getLastDynamicScan(file.id, ENUMS.DYNAMIC_MODE.MANUAL)
+      this.manualDynamicScan = await file.getLastDynamicScan(
+        file.id,
+        ENUMS.DYNAMIC_MODE.MANUAL
       );
     } catch (error) {
       this.notify.error(parseError(error));

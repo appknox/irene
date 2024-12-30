@@ -34,7 +34,7 @@ export default class OrganizationService extends Service {
 
   async fetchOrganization() {
     const organizations = await this.store.findAll('organization');
-    const selectedOrg = organizations.slice()[0];
+    const selectedOrg = organizations.slice(-1)[0];
 
     if (selectedOrg) {
       this.selected = selectedOrg;
