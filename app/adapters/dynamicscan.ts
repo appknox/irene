@@ -6,7 +6,7 @@ export default class DynamicscanAdapter extends commondrf {
 
   extendTime(modelName: string, snapshot: DynamicscanModel, time: number) {
     const id = snapshot.id;
-    const url = this.buildURL(modelName, id);
+    const url = `${this.buildURL(modelName, id)}/extend`;
 
     return this.ajax(url, 'PUT', {
       data: { time },

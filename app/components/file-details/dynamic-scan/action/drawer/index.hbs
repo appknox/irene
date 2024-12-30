@@ -49,16 +49,13 @@
         <FileDetails::DynamicScan::Action::Drawer::AutomatedDast
           @dpContext={{@dpContext}}
           @file={{@file}}
-          @enableApiScan={{this.enableApiScan}}
         />
       {{else}}
         <FileDetails::DynamicScan::Action::Drawer::ManualDast
           @dpContext={{@dpContext}}
           @file={{@file}}
-          @isApiScanEnabled={{this.isApiScanEnabled}}
-          @enableApiScan={{this.enableApiScan}}
-          @allAvailableManualDevices={{this.allAvailableManualDevices}}
-          @isFetchingManualDevices={{this.fetchAllAvailableManualDevices.isRunning}}
+          @isApiCaptureEnabled={{this.isApiCaptureEnabled}}
+          @onApiCaptureChange={{this.handleApiCaptureChange}}
         />
       {{/if}}
     </AkStack>

@@ -31,17 +31,6 @@ const classes = {
   triggerError: styles['ak-select-trigger-error'],
 };
 
-// const dynamicScanStatusText = {
-//   [ENUMS.DYNAMIC_STATUS.INQUEUE]: t('deviceInQueue'),
-//   [ENUMS.DYNAMIC_STATUS.BOOTING]: t('deviceBooting'),
-//   [ENUMS.DYNAMIC_STATUS.DOWNLOADING]: t('deviceDownloading'),
-//   [ENUMS.DYNAMIC_STATUS.INSTALLING]: t('deviceInstalling'),
-//   [ENUMS.DYNAMIC_STATUS.LAUNCHING]: t('deviceLaunching'),
-//   [ENUMS.DYNAMIC_STATUS.HOOKING]: t('deviceHooking'),
-//   [ENUMS.DYNAMIC_STATUS.SHUTTING_DOWN]: t('deviceShuttingDown'),
-//   [ENUMS.DYNAMIC_STATUS.COMPLETED]: t('deviceCompleted'),
-// };
-
 class NotificationsStub extends Service {
   errorMsg = null;
   successMsg = null;
@@ -184,447 +173,6 @@ module(
       this.owner.register('service:poll', PollServiceStub);
     });
 
-    test('manual DAST: it renders dynamic scan modal', async function (assert) {
-      assert.expect();
-
-      this.server.get('v2/profiles/:id/ds_manual_device_preference', () => {
-        return {
-          ds_manual_device_selection:
-            ENUMS.DS_MANUAL_DEVICE_SELECTION.ANY_DEVICE,
-
-          ds_manual_device_identifier: faker.string.alphanumeric({
-            casing: 'upper',
-            length: 6,
-          }),
-        };
-      });
-
-      this.server.get('/v2/projects/:id', (schema, req) => {
-        return schema.projects.find(`${req.params.id}`)?.toJSON();
-      });
-
-      await render(hbs`
-        <ProjectPreferences::Provider
-          @profileId={{this.profile.id}}
-          @platform={{this.file.project.platform}}
-          @project={{this.file.project}}
-          as |dpContext|
-        >
-          <FileDetails::DynamicScan::Action::Drawer
-            @onClose={{this.onClose}}
-            @file={{this.file}}
-            @dpContext={{dpContext}}
-          />
-        </ProjectPreferences::Provider>
-      `);
-
-      assert
-        .dom('[data-test-fileDetails-dynamicScanDrawer-drawerContainer-title]')
-        .exists()
-        .hasText(t('dastTabs.manualDAST'));
-
-      assert
-        .dom(
-          '[data-test-fileDetails-dynamicScanDrawer-drawerContainer-closeBtn]'
-        )
-        .exists();
-
-      // CTA Buttons
-      assert
-        .dom('[data-test-fileDetails-dynamicScanDrawer-startBtn]')
-        .exists()
-        .hasText(t('start'));
-
-      assert
-        .dom('[data-test-fileDetails-dynamicScanDrawer-cancelBtn]')
-        .exists()
-        .hasText(t('cancel'));
-
-      assert
-        .dom('[data-test-fileDetails-dynamicScanDrawer-manualDast-header]')
-        .exists();
-
-      assert
-        .dom(
-          '[data-test-fileDetails-dynamicScanDrawer-manualDast-modalBodyWrapper]'
-        )
-        .exists();
-
-      assert
-        .dom(
-          '[data-test-fileDetails-dynamicScanDrawer-manualDast-headerDeviceRequirements]'
-        )
-        .exists()
-        .hasText(t('modalCard.dynamicScan.deviceRequirements'));
-
-      assert
-        .dom(
-          '[data-test-fileDetails-dynamicScanDrawer-manualDast-headerOSInfoDesc]'
-        )
-        .exists()
-        .containsText(t('modalCard.dynamicScan.osVersion'));
-
-      assert
-        .dom(
-          '[data-test-fileDetails-dynamicScanDrawer-manualDast-headerOSInfoValue]'
-        )
-        .exists()
-        .containsText(this.file.project.get('platformDisplay'))
-        .containsText(t('modalCard.dynamicScan.orAbove'))
-        .containsText(this.file.minOsVersion);
-
-      assert
-        .dom(
-          '[data-test-fileDetails-dynamicScanDrawer-manualDast-devicePrefHeaderDesc]'
-        )
-        .exists()
-        .containsText(t('devicePreferences'));
-
-      assert
-        .dom(
-          '[data-test-fileDetails-dynamicScanDrawer-manualDast-devicePrefSelect]'
-        )
-        .exists();
-
-      await click(`.${classes.trigger}`);
-
-      assert.dom(`.${classes.dropdown}`).exists();
-
-      // Select options for manual dast device seletion
-      let selectListItems = findAll('.ember-power-select-option');
-
-      const manualDastBaseChoiceValues =
-        ENUMS.DS_MANUAL_DEVICE_SELECTION.BASE_VALUES;
-
-      assert.strictEqual(
-        selectListItems.length,
-        manualDastBaseChoiceValues.length
-      );
-
-      for (let i = 0; i < selectListItems.length; i++) {
-        const optionElement = selectListItems[i];
-        const deviceSelection = manualDastBaseChoiceValues[i];
-
-        assert.strictEqual(
-          optionElement.textContent?.trim(),
-          t(dsManualDevicePref([deviceSelection]))
-        );
-      }
-
-      // Default selected is any device or nothing
-      // This means the available devices do not show up
-      assert
-        .dom(
-          '[data-test-fileDetails-dynamicScanDrawer-manualDast-devicePrefTable-root]'
-        )
-        .doesNotExist();
-
-      assert.dom('[data-test-fileDetails-proxySettings-container]').exists();
-
-      assert
-        .dom(
-          '[data-test-fileDetails-dynamicScanDrawer-manualDast-enableAPICapture]'
-        )
-        .exists()
-        .containsText(t('modalCard.dynamicScan.runApiScan'));
-
-      assert
-        .dom(
-          '[data-test-fileDetails-dynamicScanDrawer-manualDast-enableAPICaptureCheckbox]'
-        )
-        .exists()
-        .isNotChecked();
-
-      // Sanity check for API URL filter section (Already tested)
-      assert
-        .dom(
-          '[data-test-fileDetails-dynamicScanDrawer-manualDast-apiFilter-title]'
-        )
-        .hasText(t('templates.apiScanURLFilter'));
-
-      assert.dom('[data-test-apiFilter-description]').doesNotExist();
-
-      assert
-        .dom('[data-test-apiFilter-apiEndpointInput]')
-        .isNotDisabled()
-        .hasNoValue();
-
-      assert
-        .dom('[data-test-apiFilter-addApiEndpointBtn]')
-        .isNotDisabled()
-        .hasText(t('templates.addNewUrlFilter'));
-
-      const apiURLTitleTooltip = find(
-        '[data-test-fileDetails-dynamicScanDrawer-manualDast-apiURLFilter-iconTooltip]'
-      );
-
-      await triggerEvent(apiURLTitleTooltip, 'mouseenter');
-
-      assert
-        .dom('[data-test-ak-tooltip-content]')
-        .exists()
-        .containsText(t('modalCard.dynamicScan.apiScanUrlFilterTooltipText'));
-
-      await triggerEvent(apiURLTitleTooltip, 'mouseleave');
-    });
-
-    test('manual DAST: test add & delete of api filter endpoint', async function (assert) {
-      this.server.get('/v2/projects/:id', (schema, req) => {
-        return schema.projects.find(`${req.params.id}`)?.toJSON();
-      });
-
-      this.server.get('/profiles/:id', (schema, req) =>
-        schema.profiles.find(`${req.params.id}`)?.toJSON()
-      );
-
-      this.server.get('/profiles/:id/device_preference', (schema, req) => {
-        return schema.devicePreferences.find(`${req.params.id}`)?.toJSON();
-      });
-
-      this.server.get('/projects/:id/available-devices', (schema) => {
-        const results = schema.projectAvailableDevices.all().models;
-
-        return { count: results.length, next: null, previous: null, results };
-      });
-
-      this.server.get('/profiles/:id/api_scan_options', (_, req) => {
-        return { api_url_filters: '', id: req.params.id };
-      });
-
-      this.server.get('/profiles/:id/proxy_settings', (_, req) => {
-        return {
-          id: req.params.id,
-          host: '',
-          port: '',
-          enabled: false,
-        };
-      });
-
-      await render(hbs`        
-        <ProjectPreferences::Provider
-          @profileId={{this.profile.id}}
-          @platform={{this.file.project.platform}}
-          @project={{this.file.project}}
-          as |dpContext|
-        >
-          <FileDetails::DynamicScan::Action::Drawer
-            @onClose={{this.onClose}}
-            @file={{this.file}}
-            @dpContext={{dpContext}}
-          />
-        </ProjectPreferences::Provider>
-      `);
-
-      assert
-        .dom(
-          '[data-test-fileDetails-dynamicScanDrawer-manualDast-apiFilter-title]'
-        )
-        .hasText(t('templates.apiScanURLFilter'));
-
-      assert.dom('[data-test-apiFilter-description]').doesNotExist();
-
-      assert
-        .dom('[data-test-apiFilter-apiEndpointInput]')
-        .isNotDisabled()
-        .hasNoValue();
-
-      assert
-        .dom('[data-test-apiFilter-addApiEndpointBtn]')
-        .isNotDisabled()
-        .hasText(t('templates.addNewUrlFilter'));
-
-      assert.dom('[data-test-apiFilter-table]').doesNotExist();
-
-      const notify = this.owner.lookup('service:notifications');
-
-      // empty input
-      await click('[data-test-apiFilter-addApiEndpointBtn]');
-
-      assert.strictEqual(notify.errorMsg, t('emptyURLFilter'));
-
-      // invalid url
-      await fillIn(
-        '[data-test-apiFilter-apiEndpointInput]',
-        'https://api.example.com'
-      );
-
-      await click('[data-test-apiFilter-addApiEndpointBtn]');
-
-      assert.strictEqual(
-        notify.errorMsg,
-        `https://api.example.com ${t('invalidURL')}`
-      );
-
-      await fillIn('[data-test-apiFilter-apiEndpointInput]', 'api.example.com');
-
-      await click('[data-test-apiFilter-addApiEndpointBtn]');
-
-      assert.strictEqual(notify.successMsg, t('urlUpdated'));
-      assert.dom('[data-test-apiFilter-table]').exists();
-
-      await fillIn(
-        '[data-test-apiFilter-apiEndpointInput]',
-        'api.example2.com'
-      );
-
-      await click('[data-test-apiFilter-addApiEndpointBtn]');
-
-      const headers = findAll('[data-test-apiFilter-thead] th');
-
-      assert.strictEqual(headers.length, 2);
-      assert.dom(headers[0]).hasText(t('apiURLFilter'));
-      assert.dom(headers[1]).hasText(t('action'));
-
-      let rows = findAll('[data-test-apiFilter-row]');
-
-      assert.strictEqual(rows.length, 2);
-
-      const firstRowCells = rows[0].querySelectorAll(
-        '[data-test-apiFilter-cell]'
-      );
-
-      assert.dom(firstRowCells[0]).hasText('api.example.com');
-
-      assert
-        .dom('[data-test-apiFilter-deleteBtn]', firstRowCells[1])
-        .isNotDisabled();
-
-      // delete first url
-      await click(
-        firstRowCells[1].querySelector('[data-test-apiFilter-deleteBtn]')
-      );
-
-      assert
-        .dom(findAll('[data-test-ak-modal-header]')[0])
-        .exists()
-        .hasText(t('confirm'));
-
-      assert
-        .dom('[data-test-confirmbox-description]')
-        .hasText(t('confirmBox.removeURL'));
-
-      assert
-        .dom('[data-test-confirmbox-confirmBtn]')
-        .isNotDisabled()
-        .hasText(t('yes'));
-
-      await click('[data-test-confirmbox-confirmBtn]');
-
-      rows = findAll('[data-test-apiFilter-row]');
-
-      assert.strictEqual(notify.successMsg, t('urlUpdated'));
-      assert.strictEqual(rows.length, 1);
-    });
-
-    test('manual DAST: test enable api proxy toggle', async function (assert) {
-      assert.expect(16);
-
-      this.server.get('/v2/projects/:id', (schema, req) => {
-        return schema.projects.find(`${req.params.id}`)?.toJSON();
-      });
-
-      this.server.get('/profiles/:id', (schema, req) =>
-        schema.profiles.find(`${req.params.id}`)?.toJSON()
-      );
-
-      this.server.get('/profiles/:id/device_preference', (schema, req) => {
-        return schema.devicePreferences.find(`${req.params.id}`)?.toJSON();
-      });
-
-      this.server.get('/projects/:id/available-devices', (schema) => {
-        const results = schema.projectAvailableDevices.all().models;
-
-        return { count: results.length, next: null, previous: null, results };
-      });
-
-      this.server.get('/profiles/:id/api_scan_options', (_, req) => {
-        return { api_url_filters: '', id: req.params.id };
-      });
-
-      this.server.get('/profiles/:id/proxy_settings', (_, req) => {
-        return {
-          id: req.params.id,
-          host: faker.internet.ip(),
-          port: faker.internet.port(),
-          enabled: false,
-        };
-      });
-
-      this.server.put('/profiles/:id/proxy_settings', (_, req) => {
-        const data = JSON.parse(req.requestBody);
-
-        assert.true(data.enabled);
-
-        return {
-          id: req.params.id,
-          ...data,
-        };
-      });
-
-      await render(hbs`        
-        <ProjectPreferences::Provider
-          @profileId={{this.profile.id}}
-          @platform={{this.file.project.platform}}
-          @project={{this.file.project}}
-          as |dpContext|
-        >
-          <FileDetails::DynamicScan::Action::Drawer
-            @onClose={{this.onClose}}
-            @file={{this.file}}
-            @dpContext={{dpContext}}
-          />
-        </ProjectPreferences::Provider>
-      `);
-
-      const proxySetting = this.store.peekRecord(
-        'proxy-setting',
-        this.file.profile.get('id')
-      );
-
-      assert.notOk(proxySetting.enabled);
-
-      assert.dom('[data-test-fileDetails-proxySettings-container]').exists();
-
-      const proxySettingsTooltip = find(
-        '[data-test-fileDetails-proxySettings-helpIcon]'
-      );
-
-      await triggerEvent(proxySettingsTooltip, 'mouseenter');
-
-      assert
-        .dom('[data-test-fileDetails-proxySettings-helpTooltipContent]')
-        .exists()
-        .containsText(t('proxySettingsRouteVia'))
-        .containsText(proxySetting.port)
-        .containsText(proxySetting.host);
-
-      await triggerEvent(proxySettingsTooltip, 'mouseleave');
-
-      assert
-        .dom('[data-test-fileDetails-proxySettings-enableApiProxyLabel]')
-        .exists()
-        .containsText(t('enable'))
-        .containsText(t('proxySettingsTitle'));
-
-      const proxySettingsToggle =
-        '[data-test-fileDetails-proxySettings-enableApiProxyToggle] [data-test-toggle-input]';
-
-      assert.dom(proxySettingsToggle).isNotDisabled().isNotChecked();
-
-      await click(proxySettingsToggle);
-
-      assert.dom(proxySettingsToggle).isNotDisabled().isChecked();
-
-      assert.true(proxySetting.enabled);
-
-      const notify = this.owner.lookup('service:notifications');
-
-      assert.strictEqual(
-        notify.infoMsg,
-        `${t('proxyTurned')} ${t('on').toUpperCase()}`
-      );
-    });
-
     test('manual DAST: it selects a device preference', async function (assert) {
       assert.expect();
 
@@ -669,11 +217,10 @@ module(
         return { count: results.length, next: null, previous: null, results };
       });
 
-      await render(hbs`        
-        <ProjectPreferences::Provider
+      await render(hbs`
+        <DsPreferenceProvider
           @profileId={{this.profile.id}}
-          @platform={{this.file.project.platform}}
-          @project={{this.file.project}}
+          @file={{this.file}}
           as |dpContext|
         >
           <FileDetails::DynamicScan::Action::Drawer
@@ -681,7 +228,7 @@ module(
             @file={{this.file}}
             @dpContext={{dpContext}}
           />
-        </ProjectPreferences::Provider>
+        </DsPreferenceProvider>
       `);
 
       assert
@@ -866,10 +413,9 @@ module(
         });
 
         await render(hbs`
-          <ProjectPreferences::Provider
+          <DsPreferenceProvider
             @profileId={{this.profile.id}}
-            @platform={{this.file.project.platform}}
-            @project={{this.file.project}}
+            @file={{this.file}}
             as |dpContext|
           >
             <FileDetails::DynamicScan::Action::Drawer
@@ -878,7 +424,7 @@ module(
               @dpContext={{dpContext}}
               @isAutomatedScan={{true}}
             />
-          </ProjectPreferences::Provider>
+          </DsPreferenceProvider>
         `);
 
         assert
@@ -1038,10 +584,9 @@ module(
         });
 
         await render(hbs`
-          <ProjectPreferences::Provider
+          <DsPreferenceProvider
             @profileId={{this.profile.id}}
-            @platform={{this.file.project.platform}}
-            @project={{this.file.project}}
+            @file={{this.file}}
             as |dpContext|
           >
             <FileDetails::DynamicScan::Action::Drawer
@@ -1050,7 +595,7 @@ module(
               @dpContext={{dpContext}}
               @isAutomatedScan={{true}}
             />
-          </ProjectPreferences::Provider>
+          </DsPreferenceProvider>
         `);
 
         assert
@@ -1133,10 +678,9 @@ module(
         });
 
         await render(hbs`
-          <ProjectPreferences::Provider
+          <DsPreferenceProvider
             @profileId={{this.profile.id}}
-            @platform={{this.file.project.platform}}
-            @project={{this.file.project}}
+            @file={{this.file}}
             as |dpContext|
           >
             <FileDetails::DynamicScan::Action::Drawer
@@ -1145,7 +689,7 @@ module(
               @dpContext={{dpContext}}
               @isAutomatedScan={{true}}
             />
-          </ProjectPreferences::Provider>
+          </DsPreferenceProvider>
         `);
 
         assert
@@ -1279,8 +823,10 @@ module(
           const reqBody = objectifyEncodedReqBody(req.requestBody);
 
           assert.strictEqual(
-            reqBody.mode,
-            isAutomated ? 'Automated' : 'Manual'
+            parseInt(reqBody.mode),
+            isAutomated
+              ? ENUMS.DYNAMIC_MODE.AUTOMATED
+              : ENUMS.DYNAMIC_MODE.MANUAL
           );
 
           if (enableApiCapture) {
@@ -1292,11 +838,10 @@ module(
           return new Response(200);
         });
 
-        await render(hbs`        
-          <ProjectPreferences::Provider
+        await render(hbs`
+          <DsPreferenceProvider
             @profileId={{this.profile.id}}
-            @platform={{this.file.project.platform}}
-            @project={{this.file.project}}
+            @file={{this.file}}
             as |dpContext|
           >
             <FileDetails::DynamicScan::Action::Drawer
@@ -1305,7 +850,7 @@ module(
               @dpContext={{dpContext}}
               @isAutomatedScan={{this.isAutomated}}
             />
-          </ProjectPreferences::Provider>
+          </DsPreferenceProvider>
         `);
 
         if (!isAutomated) {

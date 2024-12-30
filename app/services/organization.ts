@@ -1,9 +1,10 @@
 import Service from '@ember/service';
 import { inject as service } from '@ember/service';
-import ENV from 'irene/config/environment';
-import Store from '@ember-data/store';
-import OrganizationModel from '../models/organization';
 import { tracked } from '@glimmer/tracking';
+import type Store from '@ember-data/store';
+
+import ENV from 'irene/config/environment';
+import type OrganizationModel from 'irene/models/organization';
 
 export default class OrganizationService extends Service {
   @service declare store: Store;
@@ -31,9 +32,9 @@ export default class OrganizationService extends Service {
     }
   }
 
-  async load() {
-    const orgs = await this.store.findAll('organization');
-    const selectedOrg = orgs.map((_) => _)[0];
+  async fetchOrganization() {
+    const organizations = await this.store.findAll('organization');
+    const selectedOrg = organizations.slice()[0];
 
     if (selectedOrg) {
       this.selected = selectedOrg;
@@ -43,7 +44,13 @@ export default class OrganizationService extends Service {
         ENV.notifications
       );
     }
+  }
 
+  /**
+   * Loads Organization and check if security dashboard is enabled
+   */
+  async load() {
+    await this.fetchOrganization();
     await this.setSecurityDashboardEnabled();
   }
 }
