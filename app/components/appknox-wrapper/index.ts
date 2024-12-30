@@ -140,8 +140,7 @@ export default class AppknoxWrapperComponent extends Component<AppknoxWrapperSig
         icon: 'receipt-long',
         route: 'authenticated.dashboard.sbom.apps',
         query: { app_offset: 0 },
-        currentWhen:
-          'authenticated.dashboard.sbom.apps authenticated.dashboard.sbom.app-scans authenticated.dashboard.sbom.scan-details',
+        currentWhen: 'authenticated.dashboard.sbom',
       },
       this.isShowAnalytics && {
         label: this.intl.t('analytics'),
@@ -153,7 +152,7 @@ export default class AppknoxWrapperComponent extends Component<AppknoxWrapperSig
         icon: 'people',
         route: 'authenticated.dashboard.organization.namespaces',
         currentWhen:
-          'authenticated.dashboard.organization.namespaces authenticated.dashboard.organization.users authenticated.dashboard.organization.teams authenticated.dashboard.organization-settings',
+          'authenticated.dashboard.organization.namespaces authenticated.dashboard.organization.users authenticated.dashboard.organization.teams authenticated.dashboard.organization-settings authenticated.dashboard.service-account-details authenticated.dashboard.service-account-create',
       },
       this.showPublicApiDocs && {
         label: this.intl.t('apiDocumentation'),

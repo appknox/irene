@@ -7,6 +7,8 @@ export interface AkDividerSignature {
     variant?: 'fullWidth' | 'middle';
     color?: 'light' | 'dark';
     direction?: 'horizontal' | 'vertical';
+    height?: string;
+    width?: string;
   };
   Blocks: { default: [] };
 }
@@ -14,6 +16,14 @@ export interface AkDividerSignature {
 export default class AkDividerComponent extends Component<AkDividerSignature> {
   get isVertical() {
     return this.args.direction === 'vertical';
+  }
+
+  get height() {
+    return this.isVertical ? this.args.height || '100%' : '1px';
+  }
+
+  get width() {
+    return !this.isVertical ? this.args.width || '100%' : '1px';
   }
 }
 

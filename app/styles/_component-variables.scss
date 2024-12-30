@@ -722,9 +722,6 @@ body {
   --appmonitoring-settings-header-filter-option-hover-background: var(
     --hover-light-background
   );
-  --appmonitoring-settings-header-divider-background-color: var(
-    --neutral-grey-200
-  );
   --appmonitoring-settings-header-clear-filter-color: var(--neutral-grey-600);
   --appmonitoring-settings-header-clear-filter-hover-color: var(--primary-main);
 
@@ -764,7 +761,6 @@ body {
   --sbom-app-list-header-filter-option-hover-background: var(
     --hover-light-background
   );
-  --sbom-app-list-header-divider-background-color: var(--neutral-grey-200);
   --sbom-app-list-header-clear-filter-color: var(--neutral-grey-600);
   --sbom-app-list-header-clear-filter-hover-color: var(--primary-main);
 
@@ -1307,9 +1303,6 @@ body {
   --file-compare-list-skeleton-loader-breadcrumbs-seperator-color: var(
     --neutral-grey-500
   );
-  --file-compare-list-skeleton-loader-divider-background-color: var(
-    --border-color-2
-  );
 
   // variables for user-login
   --user-login-footer-background-color: var(--neutral-grey-100);
@@ -1559,7 +1552,6 @@ body {
   --project-list-header-filter-option-hover-background: var(
     --hover-light-background
   );
-  --project-list-header-divider-background-color: var(--neutral-grey-200);
   --project-list-header-clear-filter-color: var(--neutral-grey-600);
   --project-list-header-clear-filter-hover-color: var(--primary-main);
 
@@ -1695,9 +1687,6 @@ body {
     --success-main
   );
   --storeknox-inventory-pending-review-reject-button-color: var(--error-main);
-  --storeknox-inventory-pending-review-header-divider-background-color: var(
-    --neutral-grey-200
-  );
 
   // variables for storeknox/discover/requested-apps/table
   --storeknox-discover-requested-apps-table-row-color: var(--common-white);

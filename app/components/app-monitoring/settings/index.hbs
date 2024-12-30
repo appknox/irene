@@ -76,7 +76,12 @@
       </AkSelect>
 
       {{#if this.showClearFilter}}
-        <AkDivider local-class='divider' />
+        <AkDivider
+          @direction='vertical'
+          @color='dark'
+          @height='32px'
+          local-class='divider'
+        />
 
         <AkButton
           @color='textSecondary'
