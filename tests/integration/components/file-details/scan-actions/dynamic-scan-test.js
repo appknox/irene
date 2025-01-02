@@ -25,11 +25,31 @@ module(
 
       this.server.create('project', { file: file.id, id: '1' });
 
+      // set properties
       this.setProperties({
         file: store.push(store.normalize('file', file.toJSON())),
       });
 
       await this.owner.lookup('service:organization').load();
+
+      // server mocks
+      this.server.get('/v2/files/:id/dynamicscans', (schema, req) => {
+        const { limit, mode } = req.queryParams || {};
+
+        const results = schema.dynamicscans
+          .where({
+            file: req.params.id,
+            ...(mode ? { mode: Number(mode) } : {}),
+          })
+          .models.slice(0, limit ? Number(limit) : results.length);
+
+        return {
+          count: results.length,
+          next: null,
+          previous: null,
+          results,
+        };
+      });
     });
 
     test('it renders dynamic scan title & btn', async function (assert) {
@@ -45,10 +65,8 @@ module(
       });
 
       await render(hbs`
-        <FileDetails::ScanActions @file={{this.file}} />
-    `);
-
-      assert.dom('[data-test-fileDetailScanActions-scan-type-cards]').exists();
+        <FileDetails::ScanActions::DynamicScan @file={{this.file}} />
+      `);
 
       assert
         .dom('[data-test-fileDetailScanActions-dynamicScanTitle]')
@@ -57,45 +75,76 @@ module(
       assert
         .dom('[data-test-fileDetailScanActions-dynamicScanStatus]')
         .hasText(t('notStarted'));
+
+      assert
+        .dom('[data-test-fileDetailScanActions-dynamicScanViewDetails]')
+        .hasText(t('viewDetails'))
+        .hasAttribute(
+          'href',
+          `/dashboard/file/${this.file.id}/dynamic-scan/manual`
+        );
     });
 
     test.each(
       'it renders different states of dynamic scan',
       [
-        { dynamicStatus: ENUMS.DYNAMIC_STATUS.INQUEUE, done: false },
-        { dynamicStatus: ENUMS.DYNAMIC_STATUS.DOWNLOADING, done: false },
-        { dynamicStatus: ENUMS.DYNAMIC_STATUS.NONE, done: true },
+        {
+          automatedStatus: ENUMS.DYNAMIC_SCAN_STATUS.IN_QUEUE,
+          manualStatus: null,
+          expectedText: () => t('inProgress'),
+        },
+        {
+          automatedStatus:
+            ENUMS.DYNAMIC_SCAN_STATUS.INITIATING_AUTO_INTERACTION,
+          manualStatus: null,
+          expectedText: () => t('inProgress'),
+        },
+        {
+          automatedStatus: ENUMS.DYNAMIC_SCAN_STATUS.ANALYSIS_COMPLETED,
+          manualStatus: ENUMS.DYNAMIC_SCAN_STATUS.ANALYSIS_COMPLETED,
+          expectedText: () => t('completed'),
+        },
+        {
+          automatedStatus: ENUMS.DYNAMIC_SCAN_STATUS.ERROR,
+          manualStatus: ENUMS.DYNAMIC_SCAN_STATUS.ANALYSIS_COMPLETED,
+          expectedText: () => t('errored'),
+        },
+        {
+          automatedStatus: null,
+          manualStatus: null,
+          expectedText: () => t('notStarted'),
+        },
       ],
-      async function (assert, scan) {
-        this.file.dynamicStatus = scan.dynamicStatus;
-        this.file.isDynamicDone = scan.done;
+      async function (assert, { automatedStatus, manualStatus, expectedText }) {
+        // Create dynamicscan objects in the store
+        if (automatedStatus) {
+          this.server.create('dynamicscan', {
+            id: '1',
+            file: this.file.id,
+            mode: ENUMS.DYNAMIC_MODE.AUTOMATED,
+            status: automatedStatus,
+          });
+        }
 
-        this.server.get('/manualscans/:id', (schema, req) => {
-          return { id: req.params.id };
-        });
+        if (manualStatus) {
+          this.server.create('dynamicscan', {
+            id: '2',
+            file: this.file.id,
+            mode: ENUMS.DYNAMIC_MODE.MANUAL,
+            status: manualStatus,
+          });
+        }
 
         await render(hbs`
-            <FileDetails::ScanActions::DynamicScan @file={{this.file}} />
+          <FileDetails::ScanActions::DynamicScan 
+            @file={{this.file}} 
+          />
         `);
 
-        if (this.file.isDynamicDone) {
-          assert
-            .dom('[data-test-fileDetailScanActions-dynamicScanStatus]')
-            .exists()
-            .hasText(t('completed'));
-        } else if (this.file.dynamicStatus === ENUMS.DYNAMIC_STATUS.INQUEUE) {
-          assert
-            .dom('[data-test-fileDetailScanActions-dynamicScanStatus]')
-            .exists()
-            .hasText(t('deviceInQueue'));
-        } else if (
-          this.file.dynamicStatus === ENUMS.DYNAMIC_STATUS.DOWNLOADING
-        ) {
-          assert
-            .dom('[data-test-fileDetailScanActions-dynamicScanStatus]')
-            .exists()
-            .hasText(t('deviceDownloading'));
-        }
+        assert
+          .dom('[data-test-fileDetailScanActions-dynamicScanStatus]')
+          .exists()
+          .hasText(expectedText());
       }
     );
   }

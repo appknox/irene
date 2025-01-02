@@ -62,7 +62,7 @@
         @placeholder={{t 'modalCard.dynamicScan.selectDevicePreference'}}
         @options={{this.deviceSelectionTypes}}
         @selected={{this.selectedDeviceSelection}}
-        @onChange={{@dpContext.handleDsManualDeviceSelection}}
+        @onChange={{this.handleDsManualDeviceSelectionChange}}
         {{style minWidth='330px'}}
         data-test-fileDetails-dynamicScanDrawer-manualDast-devicePrefSelect
         as |dst|
@@ -75,8 +75,6 @@
       <FileDetails::DynamicScan::Action::Drawer::DevicePrefTable
         @file={{@file}}
         @dpContext={{@dpContext}}
-        @allAvailableManualDevices={{@allAvailableManualDevices}}
-        @isFetchingManualDevices={{@isFetchingManualDevices}}
       />
     {{/if}}
   </AkStack>
@@ -101,8 +99,8 @@
 
     <AkToggle
       @size='small'
-      @checked={{@isApiScanEnabled}}
-      @onClick={{@enableApiScan}}
+      @checked={{@isApiCaptureEnabled}}
+      @onChange={{@onApiCaptureChange}}
       data-test-fileDetails-dynamicScanDrawer-manualDast-enableAPICaptureCheckbox
     />
   </AkStack>
