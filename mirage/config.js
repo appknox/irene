@@ -441,14 +441,6 @@ function routes() {
     return {};
   });
 
-  this.put('/dynamicscan/:id', () => {
-    return {};
-  });
-
-  this.delete('/dynamicscan/:id', () => {
-    return {};
-  });
-
   this.post('/integrate_jira', () => {
     return {};
   });
@@ -475,12 +467,6 @@ function routes() {
 
   this.post('/lang', () => {
     return {};
-  });
-
-  this.put('/profiles/:id/device_preference', () => {
-    return {
-      id: '1',
-    };
   });
 
   this.post('/namespace_add', () => {

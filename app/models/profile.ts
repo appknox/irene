@@ -2,11 +2,6 @@ import Model, { AsyncHasMany, attr, hasMany } from '@ember-data/model';
 
 import type FileModel from './file';
 
-export enum ProfileDynamicScanMode {
-  MANUAL = 0,
-  AUTOMATED = 1,
-}
-
 interface ValueObject {
   value: boolean;
   is_inherited: boolean;
@@ -45,9 +40,6 @@ export default class ProfileModel extends Model {
 
   @attr('boolean')
   declare showUnknownAnalysis: boolean;
-
-  @attr
-  declare dynamicScanMode: ProfileDynamicScanMode;
 
   @hasMany('file', { inverse: 'profile', async: true })
   declare files: AsyncHasMany<FileModel>;
