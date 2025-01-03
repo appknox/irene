@@ -4,10 +4,12 @@
   </AkStack>
 {{else}}
   {{#if @data.isIos}}
-    <AkSvg::AppstoreLogo />
+    <AkSvg::AppstoreLogo data-test-storeknoxTableColumns-store-iosIcon />
   {{/if}}
 
   {{#if @data.isAndroid}}
-    <AkSvg::StoreknoxPlaystoreLogo />
+    <AkSvg::StoreknoxPlaystoreLogo
+      data-test-storeknoxTableColumns-store-playStoreIcon
+    />
   {{/if}}
 {{/if}}

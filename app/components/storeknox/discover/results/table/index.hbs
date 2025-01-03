@@ -13,6 +13,7 @@
     @justifyContent='space-between'
     @alignItems='center'
     local-class='result-header'
+    data-test-storeknoxDiscover-resultsTable-header
   >
     <AkStack @alignItems='center' local-class='close-search-text'>
       <AkTypography @variant='h5' @fontWeight='regular'>
@@ -80,7 +81,11 @@
       </tb.head>
 
       <tb.body @rows={{pgc.currentPageResults}} as |b|>
-        <b.row as |r|>
+        <b.row
+          data-test-storeknoxDiscover-resultsTable-row
+          data-test-storeknoxDiscover-resultsTable-rowId='{{b.rowValue.docUlid}}'
+          as |r|
+        >
           <r.cell>
             {{#let (component r.columnValue.cellComponent) as |Component|}}
               <Component

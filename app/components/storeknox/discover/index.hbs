@@ -2,6 +2,7 @@
   @direction='column'
   @spacing='0.5'
   local-class='header-storeknox-discover-page'
+  data-test-storeknoxDiscover-header-infoTexts
 >
   <AkTypography @variant='subtitle1'>
     {{t 'storeknox.discoverHeader'}}
@@ -23,6 +24,7 @@
       @currentWhen={{item.activeRoutes}}
       @hasBadge={{item.hasBadge}}
       @badgeCount={{item.badgeCount}}
+      data-test-storeknox-discovery-tabs='{{item.id}}-tab'
     >
       {{item.label}}
     </Akt.tabItem>
