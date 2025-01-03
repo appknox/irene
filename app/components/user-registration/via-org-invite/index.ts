@@ -12,6 +12,8 @@ import InviteRegisterValidation from '../../../validations/invite-register';
 import SSOInviteRegisterValidation from '../../../validations/sso-invite-register';
 import { ChangesetBufferProps } from '../form';
 import IntlService from 'ember-intl/services/intl';
+import type IreneAjaxService from 'irene/services/ajax';
+import type { AjaxError } from 'irene/services/ajax';
 
 export interface ViaOrgInviteSignature {
   Args: {
@@ -35,7 +37,7 @@ type RegistrationData = {
 };
 
 export default class ViaOrgInviteComponent extends Component<ViaOrgInviteSignature> {
-  @service declare ajax: any;
+  @service declare ajax: IreneAjaxService;
   @service declare router: RouterService;
   @service('notifications') declare notify: NotificationService;
   @service declare intl: IntlService;
@@ -85,8 +87,7 @@ export default class ViaOrgInviteComponent extends Component<ViaOrgInviteSignatu
     const url = [ENV.endpoints['invite'], token].join('/');
 
     try {
-      await this.ajax.request(url, {
-        method: 'POST',
+      await this.ajax.post(url, {
         data: data,
       });
 

@@ -11,6 +11,7 @@ import ENUMS from 'irene/enums';
 import triggerAnalytics from 'irene/utils/trigger-analytics';
 import type FileModel from 'irene/models/file';
 import type { DevicePreferenceContext } from 'irene/components/project-preferences-old/provider';
+import type IreneAjaxService from 'irene/services/ajax';
 
 export interface FileDetailsDynamicScanDrawerOldSignature {
   Args: {
@@ -23,7 +24,7 @@ export interface FileDetailsDynamicScanDrawerOldSignature {
 
 export default class FileDetailsDynamicScanDrawerOldComponent extends Component<FileDetailsDynamicScanDrawerOldSignature> {
   @service declare intl: IntlService;
-  @service declare ajax: any;
+  @service declare ajax: IreneAjaxService;
   @service declare store: Store;
   @service('browser/window') declare window: Window;
   @service('notifications') declare notify: NotificationService;

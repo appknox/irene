@@ -9,10 +9,12 @@ import { task } from 'ember-concurrency';
 import { query } from 'ember-data-resources';
 
 import PersonaltokenModel from 'irene/models/personaltoken';
+import type IreneAjaxService from 'irene/services/ajax';
+import type { AjaxError } from 'irene/services/ajax';
 
 export default class AccountSettingsDeveloperSettingsPersonaltokenListComponent extends Component {
   @service declare intl: IntlService;
-  @service declare ajax: any;
+  @service declare ajax: IreneAjaxService;
   @service declare store: Store;
   @service('notifications') declare notify: NotificationService;
 
@@ -78,7 +80,7 @@ export default class AccountSettingsDeveloperSettingsPersonaltokenListComponent 
         name: this.tokenName,
       };
 
-      await this.ajax.post(ENV.endpoints['personaltokens'], {
+      await this.ajax.post(ENV.endpoints['personaltokens'] as string, {
         data,
       });
 
@@ -91,7 +93,7 @@ export default class AccountSettingsDeveloperSettingsPersonaltokenListComponent 
       this.notify.success(tTokenCreated);
     } catch (error) {
       if (!this.isDestroyed) {
-        this.notify.error((error as AdapterError).payload.message);
+        this.notify.error((error as AjaxError).payload.message);
       }
     }
   });

@@ -9,6 +9,7 @@
     "baseUrl": ".",
     "verbatimModuleSyntax": false, // TODO: remove this later
     "paths": {
+      "fetch": ["node_modules/ember-fetch"],
       "irene/tests/*": ["tests/*"],
       "irene/mirage/*": ["mirage/*"],
       "irene/translations/*": ["translations/*"],

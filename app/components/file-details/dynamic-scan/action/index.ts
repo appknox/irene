@@ -11,6 +11,8 @@ import type FileModel from 'irene/models/file';
 import type PollService from 'irene/services/poll';
 import type DynamicscanModel from 'irene/models/dynamicscan';
 import type { DevicePreferenceContext } from 'irene/components/project-preferences-old/provider';
+import type IreneAjaxService from 'irene/services/ajax';
+import type { AjaxError } from 'irene/services/ajax';
 
 export interface DynamicScanActionSignature {
   Args: {
@@ -24,7 +26,7 @@ export interface DynamicScanActionSignature {
 }
 
 export default class DynamicScanActionComponent extends Component<DynamicScanActionSignature> {
-  @service declare ajax: any;
+  @service declare ajax: IreneAjaxService;
   @service('notifications') declare notify: NotificationService;
   @service declare poll: PollService;
   @service('browser/window') declare window: Window;
@@ -132,7 +134,7 @@ export default class DynamicScanActionComponent extends Component<DynamicScanAct
     } catch (error) {
       this.file.setNone();
 
-      this.notify.error((error as AdapterError).payload.error);
+      this.notify.error((error as AjaxError).payload.error);
     }
   });
 }

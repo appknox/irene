@@ -15,14 +15,21 @@ import ENUMS from 'irene/enums';
 import MeService from 'irene/services/me';
 import MfaModel from 'irene/models/mfa';
 import UserModel from 'irene/models/user';
+import type IreneAjaxService from 'irene/services/ajax';
+import type { AjaxError } from 'irene/services/ajax';
 
 type MfaConfirmEventData = { cancel: boolean; otp?: string };
+
+type TokenData = {
+  token: string;
+  secret: string;
+};
 
 export default class AccountSettingsSecurityMultiFactorAuthComponent extends Component.extend(
   Evented
 ) {
   @service declare intl: IntlService;
-  @service declare ajax: any;
+  @service declare ajax: IreneAjaxService;
   @service('notifications') declare notify: NotificationService;
   @service declare me: MeService;
   @service declare store: Store;
@@ -169,7 +176,7 @@ export default class AccountSettingsSecurityMultiFactorAuthComponent extends Com
   });
 
   getMFAEnableEmailToken = task(async () => {
-    return await this.ajax.post(this.mfaEndpoint, {
+    return await this.ajax.post<TokenData>(this.mfaEndpoint, {
       data: {
         method: ENUMS.MFA_METHOD.HOTP,
       },
@@ -188,7 +195,7 @@ export default class AccountSettingsSecurityMultiFactorAuthComponent extends Com
 
       return true;
     } catch (error) {
-      const errorObj = (error as AdapterError).payload || {};
+      const errorObj = (error as AjaxError).payload || {};
       const otpMsg = errorObj.otp && errorObj.otp[0];
 
       if (otpMsg) {
@@ -302,7 +309,7 @@ export default class AccountSettingsSecurityMultiFactorAuthComponent extends Com
   });
 
   getMFAEnableAppToken = task(async () => {
-    return await this.ajax.post(this.mfaEndpoint, {
+    return await this.ajax.post<TokenData>(this.mfaEndpoint, {
       data: {
         method: ENUMS.MFA_METHOD.TOTP,
       },
@@ -331,7 +338,7 @@ export default class AccountSettingsSecurityMultiFactorAuthComponent extends Com
 
       return true;
     } catch (error) {
-      const errorObj = (error as AdapterError).payload || {};
+      const errorObj = (error as AjaxError).payload || {};
       const otpMsg = errorObj.otp && errorObj.otp[0];
 
       if (otpMsg) {
@@ -448,14 +455,14 @@ export default class AccountSettingsSecurityMultiFactorAuthComponent extends Com
 
   verifySwitchToEmailAppOTP = task(async (otp) => {
     try {
-      return await this.ajax.post(this.mfaEndpoint, {
+      return await this.ajax.post<TokenData>(this.mfaEndpoint, {
         data: {
           method: ENUMS.MFA_METHOD.HOTP,
           otp: otp || '',
         },
       });
     } catch (error) {
-      const errorObj = (error as AdapterError).payload || {};
+      const errorObj = (error as AjaxError).payload || {};
       const otpMsg = errorObj.otp && errorObj.otp[0];
       if (otpMsg) {
         this.notify.error(this.tInvalidOTP);
@@ -481,7 +488,7 @@ export default class AccountSettingsSecurityMultiFactorAuthComponent extends Com
 
       return true;
     } catch (error) {
-      const errorObj = (error as AdapterError).payload || {};
+      const errorObj = (error as AjaxError).payload || {};
       const otpMsg = errorObj.otp && errorObj.otp[0];
 
       if (otpMsg) {
@@ -517,7 +524,7 @@ export default class AccountSettingsSecurityMultiFactorAuthComponent extends Com
       appOTPNotConfirmed = !(tokenData || {}).token;
     } while (appOTPNotConfirmed);
 
-    debug('SwitchTOEmail: App OTP Token Data ' + tokenData.token);
+    debug('SwitchTOEmail: App OTP Token Data ' + tokenData?.token);
 
     while (true) {
       debug('SwitchTOEmail: In Email OTP Loop');
@@ -529,7 +536,7 @@ export default class AccountSettingsSecurityMultiFactorAuthComponent extends Com
 
       const confirmed = await this.verifySwitchToEmailEmailOTP.perform(
         emailOTPData.otp,
-        tokenData.token
+        tokenData?.token
       );
 
       if (confirmed) {
@@ -651,7 +658,7 @@ export default class AccountSettingsSecurityMultiFactorAuthComponent extends Com
         },
       });
     } catch (error) {
-      const errorObj = (error as AdapterError).payload || {};
+      const errorObj = (error as AjaxError).payload || {};
       const otpMsg = errorObj.otp && errorObj.otp[0];
 
       if (otpMsg) {
@@ -672,14 +679,14 @@ export default class AccountSettingsSecurityMultiFactorAuthComponent extends Com
     }
 
     try {
-      return await this.ajax.post(this.mfaEndpoint, {
+      return await this.ajax.post<TokenData>(this.mfaEndpoint, {
         data: {
           method: ENUMS.MFA_METHOD.TOTP,
           otp: otp,
         },
       });
     } catch (error) {
-      const errorObj = (error as AdapterError).payload || {};
+      const errorObj = (error as AjaxError).payload || {};
       const otpMsg = errorObj.otp && errorObj.otp[0];
 
       if (otpMsg) {
@@ -712,7 +719,7 @@ export default class AccountSettingsSecurityMultiFactorAuthComponent extends Com
 
       return true;
     } catch (error) {
-      const errorObj = (error as AdapterError).payload || {};
+      const errorObj = (error as AjaxError).payload || {};
       const otpMsg = errorObj.otp && errorObj.otp[0];
 
       if (otpMsg) {
@@ -733,7 +740,7 @@ export default class AccountSettingsSecurityMultiFactorAuthComponent extends Com
     }
 
     let emailOTPNotConfirmed;
-    let tokenData;
+    let tokenData: TokenData;
 
     await this.staInitialEmail.perform();
 
@@ -745,7 +752,9 @@ export default class AccountSettingsSecurityMultiFactorAuthComponent extends Com
         return;
       }
 
-      tokenData = await this.staVerifyEmailOTP.perform(emailOTPData.otp);
+      tokenData = (await this.staVerifyEmailOTP.perform(
+        emailOTPData.otp
+      )) as TokenData;
 
       emailOTPNotConfirmed = !(tokenData || {}).token;
     } while (emailOTPNotConfirmed);
@@ -878,7 +887,7 @@ export default class AccountSettingsSecurityMultiFactorAuthComponent extends Com
         data,
       });
     } catch (error) {
-      const payload = (error as AdapterError).payload || {};
+      const payload = (error as AjaxError).payload || {};
 
       if (payload.otp && payload.otp.length) {
         return;
@@ -901,7 +910,7 @@ export default class AccountSettingsSecurityMultiFactorAuthComponent extends Com
 
       return true;
     } catch (error) {
-      const errorObj = (error as AdapterError).payload || {};
+      const errorObj = (error as AjaxError).payload || {};
       const otpMsg = errorObj.otp && errorObj.otp[0];
 
       if (otpMsg) {

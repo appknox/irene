@@ -100,7 +100,6 @@
     "cross-env": "^7.0.3",
     "cypress-visual-regression": "5.0.0",
     "dayjs": "^1.11.9",
-    "ember-ajax": "^5.1.2",
     "ember-auto-import": "^2.7.2",
     "ember-basic-dropdown": "^8.3.0",
     "ember-browser-services": "^4.0.4",

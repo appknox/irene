@@ -101,20 +101,12 @@ module(
       assert.expect(8);
 
       this.server.post('/v2/registration-via-invite', (_, req) => {
-        const body = req.requestBody;
-
-        const data = body
-          .split('&')
-          .map((pair) => pair.split('='))
-          .reduce((acc, [key, value]) => {
-            value = decodeURIComponent(value.replace(/\+/g, ' '));
-            return { ...acc, [key]: value };
-          }, {});
+        const data = JSON.parse(req.requestBody);
 
         assert.strictEqual(data.username, 'test');
         assert.strictEqual(data.password, 'test@12345');
         assert.strictEqual(data.confirm_password, 'test@12345');
-        assert.strictEqual(data.terms_accepted, 'true');
+        assert.true(data.terms_accepted);
 
         return new Response(201);
       });

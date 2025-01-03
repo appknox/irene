@@ -1,7 +1,7 @@
 import { faker } from '@faker-js/faker';
 import { module, test } from 'qunit';
 import { setupRenderingTest } from 'ember-qunit';
-import { click, render } from '@ember/test-helpers';
+import { click, render, waitUntil } from '@ember/test-helpers';
 import { hbs } from 'ember-cli-htmlbars';
 import { setupIntl, t } from 'ember-intl/test-support';
 import { setupMirage } from 'ember-cli-mirage/test-support';
@@ -230,6 +230,8 @@ module(
 
         const window = this.owner.lookup('service:browser/window');
 
+        await waitUntil(() => window.url);
+
         assert.strictEqual(
           window.url,
           `${type}_download_url.com`,
@@ -270,6 +272,8 @@ module(
       await click('[data-test-vaReportListItem-reportDownloadBtn]');
 
       const notifyService = this.owner.lookup('service:notifications');
+
+      await waitUntil(() => notifyService.get('errorMsg'));
 
       assert.strictEqual(notifyService.errorMsg, t('downloadUrlNotFound'));
     });

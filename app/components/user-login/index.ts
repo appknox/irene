@@ -8,17 +8,27 @@ import IntlService from 'ember-intl/services/intl';
 
 import ENV from 'irene/config/environment';
 import WhitelabelService from 'irene/services/whitelabel';
-import NetworkService from 'irene/services/network';
 import RegistrationService from 'irene/services/registration';
+import type IreneAjaxService from 'irene/services/ajax';
 
 type OtpError = { payload: { type: string; forced: string } };
+
+type SSOCheckData = {
+  is_sso: boolean;
+  is_sso_enforced: boolean;
+  token: string;
+};
+
+type SSOSaml2Data = {
+  url: string;
+};
 
 export default class UserLoginComponent extends Component {
   @service declare router: RouterService;
   @service declare intl: IntlService;
   @service declare session: any;
   @service declare whitelabel: WhitelabelService;
-  @service declare network: NetworkService;
+  @service declare ajax: IreneAjaxService;
   @service declare notifications: NotificationService;
   @service declare logger: any;
   @service declare registration: RegistrationService;
@@ -65,26 +75,11 @@ export default class UserLoginComponent extends Component {
 
   verifySSOTask = task(async () => {
     try {
-      const res = await this.network.post(this.SSOCheckEndpoint, {
-        username: this.username,
+      const data = await this.ajax.post<SSOCheckData>(this.SSOCheckEndpoint, {
+        data: {
+          username: this.username,
+        },
       });
-
-      if (!res.ok) {
-        const err = new Error(res.statusText);
-
-        try {
-          const error_payload = await res.json();
-
-          // @ts-expect-error TODO: remove/change this later
-          err.payload = error_payload;
-        } catch {
-          err.message = await res.text();
-        }
-
-        throw err;
-      }
-
-      const data = await res.json();
 
       this.isSSOEnabled = data.is_sso == true;
       this.isSSOEnforced = data.is_sso_enforced == true;
@@ -170,8 +165,7 @@ export default class UserLoginComponent extends Component {
     const endpoint = this.SSOAuthenticateEndpoint;
     const url = `${endpoint}?token=${token}&return_to=${return_to}`;
 
-    const res = await this.network.request(url);
-    const data = await res.json();
+    const data = await this.ajax.request<SSOSaml2Data>(url);
 
     if (!data.url) {
       this.logger.error('Invalid sso redirect call', data);

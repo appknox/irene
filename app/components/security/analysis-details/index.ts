@@ -13,6 +13,7 @@ import type Store from '@ember-data/store';
 import type IntlService from 'ember-intl/services/intl';
 import type RouterService from '@ember/routing/router-service';
 import type SecurityAnalysisModel from 'irene/models/security/analysis';
+import type IreneAjaxService from 'irene/services/ajax';
 
 export interface SecurityAnalysisDetailsComponentSignature {
   Args: {
@@ -20,12 +21,17 @@ export interface SecurityAnalysisDetailsComponentSignature {
   };
 }
 
+type CVSSResponse = {
+  cvss_base: number;
+  risk: number;
+};
+
 export default class SecurityAnalysisDetailsComponent extends Component<SecurityAnalysisDetailsComponentSignature> {
   @service declare store: Store;
   @service declare intl: IntlService;
   @service declare router: RouterService;
   @service declare notifications: NotificationService;
-  @service declare ajax: any;
+  @service declare ajax: IreneAjaxService;
 
   @tracked isInValidCvssBase = false;
   @tracked analysisDetails: SecurityAnalysisModel | null = null;
@@ -124,7 +130,7 @@ export default class SecurityAnalysisDetailsComponent extends Component<Security
       const url = `cvss?vector=${vector}`;
 
       try {
-        const data = await this.ajax.request(url);
+        const data = await this.ajax.request<CVSSResponse>(url);
 
         this.analysisDetails?.set('cvssBase', data.cvss_base);
         this.analysisDetails?.set('risk', data.risk);
@@ -235,7 +241,6 @@ export default class SecurityAnalysisDetailsComponent extends Component<Security
     return await this.ajax.put(url, {
       namespace: 'api/hudson-api',
       data: JSON.stringify(data),
-      contentType: 'application/json',
     });
   });
 

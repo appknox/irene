@@ -7,6 +7,8 @@ import IntlService from 'ember-intl/services/intl';
 import ENV from 'irene/config/environment';
 
 import PersonaltokenModel from 'irene/models/personaltoken';
+import type IreneAjaxService from 'irene/services/ajax';
+import type { AjaxError } from 'irene/services/ajax';
 
 export interface AccountSettingsDeveloperSettingsPersonaltokenListDeleteTokenSignature {
   Args: {
@@ -17,7 +19,7 @@ export interface AccountSettingsDeveloperSettingsPersonaltokenListDeleteTokenSig
 
 export default class AccountSettingsDeveloperSettingsPersonaltokenListDeleteTokenComponent extends Component<AccountSettingsDeveloperSettingsPersonaltokenListDeleteTokenSignature> {
   @service declare intl: IntlService;
-  @service declare ajax: any;
+  @service declare ajax: IreneAjaxService;
   @service('notifications') declare notify: NotificationService;
 
   @tracked showRevokePersonalTokenConfirmBox = false;
@@ -50,7 +52,7 @@ export default class AccountSettingsDeveloperSettingsPersonaltokenListDeleteToke
       this.notify.success(tTokenRevoked);
     } catch (error) {
       if (!this.isDestroyed) {
-        this.notify.error((error as AdapterError).payload.message);
+        this.notify.error((error as AjaxError).payload.message);
       }
     }
   });
