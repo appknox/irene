@@ -1,15 +1,16 @@
 import Component from '@glimmer/component';
 import { inject as service } from '@ember/service';
 import { action } from '@ember/object';
-import type IntlService from 'ember-intl/services/intl';
 import { task } from 'ember-concurrency';
 import { tracked } from '@glimmer/tracking';
+import { waitForPromise } from '@ember/test-waiters';
+import type IntlService from 'ember-intl/services/intl';
 
+import parseError from 'irene/utils/parse-error';
+import ENUMS from 'irene/enums';
 import type MeService from 'irene/services/me';
 import type SkDiscoverySearchResultModel from 'irene/models/sk-discovery-result';
 import type { StoreknoxDiscoveryResultQueryParam } from 'irene/routes/authenticated/storeknox/discover/result';
-import parseError from 'irene/utils/parse-error';
-import ENUMS from 'irene/enums';
 
 interface StoreknoxDiscoverResultsTableActionSignature {
   Args: {
@@ -28,8 +29,8 @@ export default class StoreknoxDiscoverResultsTableActionComponent extends Compon
   @tracked approved: boolean = false;
   @tracked buttonLoading: boolean = false;
 
-  get isAdmin() {
-    return this.me.org?.is_admin;
+  get isOwner() {
+    return this.me.org?.is_owner;
   }
 
   get iconValue() {
@@ -54,9 +55,8 @@ export default class StoreknoxDiscoverResultsTableActionComponent extends Compon
 
       const discoverApp = this.args.data;
 
-      const res = await discoverApp.addAppToInventory(
-        discoverApp.docUlid,
-        searchId
+      const res = await waitForPromise(
+        discoverApp.addAppToInventory(discoverApp.docUlid, searchId)
       );
 
       this.requested = true;
@@ -89,8 +89,8 @@ export default class StoreknoxDiscoverResultsTableActionComponent extends Compon
 
   checkStatus = task(async () => {
     try {
-      const response = await this.args.data.checkApprovalStatus(
-        this.args.data.docUlid
+      const response = await waitForPromise(
+        this.args.data.checkApprovalStatus(this.args.data.docUlid)
       );
 
       if (response.approval_status === ENUMS.SK_APPROVAL_STATUS.APPROVED) {

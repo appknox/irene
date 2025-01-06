@@ -1,19 +1,17 @@
-import Component from '@glimmer/component';
-import { tracked } from '@glimmer/tracking';
-import { action } from '@ember/object';
-import { inject as service } from '@ember/service';
-import type RouterService from '@ember/routing/router-service';
-import type Store from '@ember-data/store';
-import type IntlService from 'ember-intl/services/intl';
 // eslint-disable-next-line ember/use-ember-data-rfc-395-imports
 import type { DS } from 'ember-data';
 import { task } from 'ember-concurrency';
+import { tracked } from '@glimmer/tracking';
+import { action } from '@ember/object';
+import { inject as service } from '@ember/service';
+import Component from '@glimmer/component';
+import type RouterService from '@ember/routing/router-service';
+import type Store from '@ember-data/store';
+import type IntlService from 'ember-intl/services/intl';
 
+import parseError from 'irene/utils/parse-error';
 import type { StoreknoxDiscoveryResultQueryParam } from 'irene/routes/authenticated/storeknox/discover/result';
 import type SkDiscoverySearchResultModel from 'irene/models/sk-discovery-result';
-import parseError from 'irene/utils/parse-error';
-import type MeService from 'irene/services/me';
-import type SkPendingReviewService from 'irene/services/sk-pending-review';
 
 export type SkDiscoveryResultResponse =
   DS.AdapterPopulatedRecordArray<SkDiscoverySearchResultModel> & {
@@ -34,11 +32,10 @@ interface LimitOffset {
 export default class StoreknoxDiscoverResultsComponent extends Component<StoreknoxDiscoverResultsSignature> {
   @service declare store: Store;
   @service declare router: RouterService;
-  @service('notifications') declare notify: NotificationService;
   @service declare intl: IntlService;
+
+  @service('notifications') declare notify: NotificationService;
   @service('browser/window') declare window: Window;
-  @service declare me: MeService;
-  @service declare skPendingReview: SkPendingReviewService;
 
   @tracked searchQuery = '';
   @tracked showDiscoveryResults = false;
@@ -61,10 +58,6 @@ export default class StoreknoxDiscoverResultsComponent extends Component<Storekn
       );
 
       this.searchQuery = app_query;
-    }
-
-    if (this.me.org?.is_admin) {
-      this.skPendingReview.fetchPendingReviewApps.perform(10, 0, false);
     }
   }
 

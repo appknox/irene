@@ -40,6 +40,9 @@ export default class SkDiscoverySearchResultModel extends Model {
   declare description: string;
 
   @attr('string')
+  declare devEmail: string;
+
+  @attr('string')
   declare devName: string;
 
   @attr('string')

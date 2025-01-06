@@ -3,13 +3,17 @@
   @spacing='0.5'
   local-class='header-storeknox-discover-page'
 >
-  <AkTypography @variant='subtitle1'>
+  <AkTypography
+    @variant='subtitle1'
+    data-test-storeknoxDiscover-header-discoverHeaderText
+  >
     {{t 'storeknox.discoverHeader'}}
   </AkTypography>
 
   <AkTypography
     @variant='body2'
     local-class='description-storeknox-discover-page'
+    data-test-storeknoxDiscover-header-discoverDescriptionText
   >
     {{t 'storeknox.discoverDescription'}}
   </AkTypography>
@@ -23,6 +27,7 @@
       @currentWhen={{item.activeRoutes}}
       @hasBadge={{item.hasBadge}}
       @badgeCount={{item.badgeCount}}
+      data-test-storeknox-discovery-tabs='{{item.id}}-tab'
     >
       {{item.label}}
     </Akt.tabItem>

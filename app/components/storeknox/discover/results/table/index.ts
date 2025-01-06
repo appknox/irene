@@ -15,7 +15,7 @@ export interface StoreknoxDiscoverResultsTableSignature {
   Args: {
     queryParams: StoreknoxDiscoveryResultQueryParam;
     isLoading: boolean;
-    skDiscoveryResultData: SkDiscoveryResultResponse;
+    skDiscoveryResultData: SkDiscoveryResultResponse | null;
     goToPage: (args: LimitOffset) => void;
     onItemPerPageChange: (args: LimitOffset) => void;
   };
@@ -99,16 +99,16 @@ export default class StoreknoxDiscoverResultsTableComponent extends Component<St
     return this.args.queryParams.app_offset;
   }
 
-  get isAdmin() {
-    return this.me.org?.is_admin;
+  get isOwner() {
+    return this.me.org?.is_owner;
   }
 
   get buttonIconName() {
-    return this.isAdmin ? 'add-box' : 'send';
+    return this.isOwner ? 'add-box' : 'send';
   }
 
   get buttonText() {
-    return this.isAdmin
+    return this.isOwner
       ? this.intl.t('storeknox.addToInventory')
       : this.intl.t('storeknox.sendRequest');
   }
