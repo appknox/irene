@@ -175,9 +175,9 @@
     "loader.js": "^4.7.0",
     "miragejs": "^0.1.48",
     "mock-socket": "9.0.8",
-    "netlify-cli": "^17.37.2",
+    "netlify-cli": "^19.0.2",
     "pace-progressbar": "1.0.9",
-    "postcss": "^8.4.39",
+    "postcss": "^8.4.49",
     "prettier": "^3.2.5",
     "qunit": "^2.22.0",
     "qunit-dom": "^3.2.1",
@@ -218,7 +218,7 @@
     "edition": "octane"
   },
   "volta": {
-    "node": "^20.18.0",
+    "node": "20.18.0",
     "npm": "10.8.2"
   },
   "ember-addon": {
