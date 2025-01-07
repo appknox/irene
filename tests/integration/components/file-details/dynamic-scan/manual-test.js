@@ -437,8 +437,8 @@ module(
 
         const deviceTypeLabel = deviceType([
           device.is_tablet
-            ? ENUMS.DEVICE_TYPE.TABLET_REQUIRED
-            : ENUMS.DEVICE_TYPE.PHONE_REQUIRED,
+            ? ENUMS.DS_AUTOMATED_DEVICE_TYPE.TABLET_REQUIRED
+            : ENUMS.DS_AUTOMATED_DEVICE_TYPE.PHONE_REQUIRED,
         ]);
 
         // Verify device basic info

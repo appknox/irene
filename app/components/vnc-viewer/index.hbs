@@ -6,12 +6,7 @@
   @spacing='3'
 >
   {{#if this.isAutomated}}
-    {{#if
-      (or
-        @dynamicScan.isStartingOrShuttingInProgress
-        @dynamicScan.isReadyOrRunning
-      )
-    }}
+    {{#if @dynamicScan.isInProgress}}
       <AkStack
         data-test-vncViewer-scanTriggeredNote
         @spacing='0.5'

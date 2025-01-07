@@ -228,6 +228,10 @@ export default class DynamicscanModel extends Model {
     return this.isReady || this.isRunning;
   }
 
+  get isInProgress() {
+    return this.isStartingOrShuttingInProgress || this.isReadyOrRunning;
+  }
+
   get computedStatus() {
     if (this.isStartingOrShuttingInProgress) {
       return DsComputedStatus.IN_PROGRESS;

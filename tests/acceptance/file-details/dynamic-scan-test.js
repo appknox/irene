@@ -463,10 +463,7 @@ module('Acceptance | file-details/dynamic-scan', function (hooks) {
           assert.dom('[data-test-fileDetails-dynamicScan-expiry]').exists();
         }
       } else {
-        if (
-          dynamicscan.isStartingOrShuttingInProgress ||
-          dynamicscan.isReadyOrRunning
-        ) {
+        if (dynamicscan.isInProgress) {
           assert.dom('[data-test-vncViewer-manualScanNote]').doesNotExist();
 
           assert
