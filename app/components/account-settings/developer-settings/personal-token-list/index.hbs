@@ -9,7 +9,11 @@
     </AkTypography>
   </AkStack>
 
-  <form {{style width='100%' maxWidth='650px'}} class='my-3'>
+  <form
+    {{on 'submit' (perform this.generateToken)}}
+    {{style width='100%' maxWidth='650px'}}
+    class='my-3'
+  >
     <AkStack @width='full' @alignItems='center' @spacing='1.5'>
       <div {{style flex='1'}}>
         <AkTextField
@@ -19,10 +23,7 @@
         />
       </div>
 
-      <AkButton
-        @loading={{this.generateToken.isRunning}}
-        {{on 'click' (perform this.generateToken)}}
-      >
+      <AkButton @loading={{this.generateToken.isRunning}} @type='submit'>
         <:leftIcon>
           <AkIcon @iconName='add' />
         </:leftIcon>
