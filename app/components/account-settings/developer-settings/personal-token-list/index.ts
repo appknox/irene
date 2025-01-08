@@ -67,7 +67,9 @@ export default class AccountSettingsDeveloperSettingsPersonaltokenListComponent 
     ];
   }
 
-  generateToken = task(async () => {
+  generateToken = task(async (event) => {
+    event.preventDefault();
+
     const tTokenCreated = this.intl.t('personalTokenGenerated');
     const tEnterTokenName = this.intl.t('enterTokenName');
 
