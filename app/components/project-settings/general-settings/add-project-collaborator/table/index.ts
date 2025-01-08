@@ -8,7 +8,7 @@ import IntlService from 'ember-intl/services/intl';
 import Store from '@ember-data/store';
 import { action } from '@ember/object';
 import ProjectModel from 'irene/models/project';
-import { debounce } from '@ember/runloop';
+import { debounceTask } from 'ember-lifeline';
 import OrganizationMemberModel from 'irene/models/organization-member';
 import parseError from 'irene/utils/parse-error';
 
@@ -84,7 +84,7 @@ export default class ProjectSettingsGeneralSettingsAddProjectCollaboratorTableCo
   }
 
   @action setSearchQuery() {
-    debounce(this, this.updateSearchQuery, 500);
+    debounceTask(this, 'updateSearchQuery', 500);
   }
 
   @action

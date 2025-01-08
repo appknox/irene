@@ -2,7 +2,7 @@ import Component from '@glimmer/component';
 import { inject as service } from '@ember/service';
 import { action } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
-import { debounce } from '@ember/runloop';
+import { debounceTask } from 'ember-lifeline';
 import IntlService from 'ember-intl/services/intl';
 import MeService from 'irene/services/me';
 import OrganizationTeamModel from 'irene/models/organization-team';
@@ -70,9 +70,9 @@ export default class OrganizationTeamInvitationList extends Component<Organizati
 
   @action
   handleSearchQueryChange(event: Event) {
-    debounce(
+    debounceTask(
       this,
-      this.setSearchQuery,
+      'setSearchQuery',
       (event.target as HTMLInputElement).value,
       500
     );

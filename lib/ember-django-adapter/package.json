@@ -4,6 +4,8 @@
     "ember-addon"
   ],
   "dependencies": {
-    "ember-cli-babel": "^8.2.0"
+    "ember-cli-babel": "^8.2.0",
+    "ember-data": "~5.3.8",
+    "ember-auto-import": "^2.8.1"
   }
 }

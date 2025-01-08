@@ -3,7 +3,7 @@ import { tracked } from '@glimmer/tracking';
 import { inject as service } from '@ember/service';
 import { task } from 'ember-concurrency';
 import { action } from '@ember/object';
-import { debounce } from '@ember/runloop';
+import { debounceTask } from 'ember-lifeline';
 // eslint-disable-next-line ember/use-ember-data-rfc-395-imports
 import DS from 'ember-data';
 import Store from '@ember-data/store';
@@ -190,9 +190,9 @@ export default class OrganizationTeamAddTeamMemberComponent extends Component<Or
 
   @action
   handleSearchQueryChange(event: Event) {
-    debounce(
+    debounceTask(
       this,
-      this.setSearchQuery,
+      'setSearchQuery',
       (event.target as HTMLInputElement).value,
       500
     );
