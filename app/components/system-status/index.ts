@@ -2,7 +2,7 @@ import Component from '@glimmer/component';
 import { task, timeout } from 'ember-concurrency';
 import { inject as service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
-import { next } from '@ember/runloop';
+import { runTask } from 'ember-lifeline';
 import { waitForPromise } from '@ember/test-waiters';
 import type Store from '@ember-data/store';
 import type IntlService from 'ember-intl/services/intl';
@@ -47,7 +47,7 @@ export default class SystemStatusComponent extends Component {
     this.getAPIServerStatus.perform();
 
     if (this.showRealtimeServerStatus) {
-      next(this, () => this.getWebsocketHealthStatus.perform());
+      runTask(this, () => this.getWebsocketHealthStatus.perform());
     }
   }
 

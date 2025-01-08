@@ -1,10 +1,10 @@
-import { run } from '@ember/runloop';
-
 export default function destroyApp(application) {
-  run(application, 'destroy');
+  application.destroy();
+
   if (window.server) {
     window.server.shutdown();
   }
+
   // eslint-disable-next-line
   server.shutdown();
 }

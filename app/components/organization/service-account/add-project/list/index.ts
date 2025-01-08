@@ -2,7 +2,7 @@ import { task } from 'ember-concurrency';
 import Component from '@glimmer/component';
 import { inject as service } from '@ember/service';
 import { action } from '@ember/object';
-import { debounce } from '@ember/runloop';
+import { debounceTask } from 'ember-lifeline';
 import { tracked } from '@glimmer/tracking';
 import { waitForPromise } from '@ember/test-waiters';
 
@@ -166,9 +166,9 @@ export default class OrganizationServiceAccountAddProjectListComponent extends C
 
   @action
   handleSearchQueryChange(event: Event) {
-    debounce(
+    debounceTask(
       this,
-      this.setSearchQuery,
+      'setSearchQuery',
       (event.target as HTMLInputElement).value,
       500
     );

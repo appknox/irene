@@ -1,7 +1,7 @@
 import Component from '@glimmer/component';
 import { tracked } from '@glimmer/tracking';
 import { action } from '@ember/object';
-import { next } from '@ember/runloop';
+import { runTask } from 'ember-lifeline';
 import { inject as service } from '@ember/service';
 import type IntlService from 'ember-intl/services/intl';
 
@@ -105,7 +105,7 @@ export default class AppknoxWrapperOnboardingGuide extends Component<AppknoxWrap
 
   @action
   handleIframeInsertion() {
-    next(this, () => {
+    runTask(this, () => {
       this.mountIFrame = true;
     });
   }

@@ -1,6 +1,6 @@
 import { inject as service } from '@ember/service';
 import { action } from '@ember/object';
-import { debounce } from '@ember/runloop';
+import { debounceTask } from 'ember-lifeline';
 import { task } from 'ember-concurrency';
 import Component from '@glimmer/component';
 import { tracked } from '@glimmer/tracking';
@@ -76,9 +76,9 @@ export default class OrganizationTeamComponent extends Component<OrganizationTea
 
   @action
   handleSearchInputKeyUp(event: Event) {
-    debounce(
+    debounceTask(
       this,
-      this.setSearchQuery,
+      'setSearchQuery',
       (event.target as HTMLInputElement).value,
       500
     );

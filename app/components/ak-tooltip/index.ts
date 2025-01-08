@@ -1,7 +1,7 @@
 import Component from '@glimmer/component';
 import { action } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
-import { later, cancel } from '@ember/runloop';
+import { runTask, cancelTask } from 'ember-lifeline';
 import { Placement } from '@popperjs/core';
 import { EmberRunTimer } from '@ember/runloop/types';
 
@@ -27,15 +27,8 @@ export interface AkTooltipSignature {
 export default class AkTooltipComponent extends Component<AkTooltipSignature> {
   @tracked anchorRef: HTMLElement | null = null;
 
-  @tracked runShowToolipLater?: EmberRunTimer;
-  @tracked runHideToolipLater?: EmberRunTimer;
-
-  willDestroy() {
-    super.willDestroy();
-
-    cancel(this.runShowToolipLater);
-    cancel(this.runHideToolipLater);
-  }
+  @tracked runShowToolipLater?: EmberRunTimer | number;
+  @tracked runHideToolipLater?: EmberRunTimer | number;
 
   @action
   handleShowTooltip(event: MouseEvent) {
@@ -44,9 +37,11 @@ export default class AkTooltipComponent extends Component<AkTooltipSignature> {
     }
 
     if (this.args.enterDelay) {
-      this.runShowToolipLater = later(() => {
-        this.showTooltip(event, event.target as HTMLElement);
-      }, this.args.enterDelay);
+      this.runShowToolipLater = runTask(
+        this,
+        () => this.showTooltip(event, event.target as HTMLElement),
+        this.args.enterDelay
+      );
     } else {
       this.showTooltip(event, event.currentTarget as HTMLElement);
     }
@@ -67,7 +62,10 @@ export default class AkTooltipComponent extends Component<AkTooltipSignature> {
     }
 
     // cancel if mouse leaves before timeout
-    const cancelled = cancel(this.runShowToolipLater);
+    const cancelled = cancelTask(
+      this,
+      this.runShowToolipLater as EmberRunTimer
+    );
 
     // tooltip never appeared so onClose should not be called
     if (cancelled) {
@@ -75,9 +73,11 @@ export default class AkTooltipComponent extends Component<AkTooltipSignature> {
     }
 
     if (this.args.leaveDelay) {
-      this.runHideToolipLater = later(() => {
-        this.hideTooltip(event);
-      }, this.args.leaveDelay);
+      this.runHideToolipLater = runTask(
+        this,
+        () => this.hideTooltip(event),
+        this.args.leaveDelay
+      );
     } else {
       this.hideTooltip(event);
     }

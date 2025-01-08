@@ -4,7 +4,7 @@ import { task } from 'ember-concurrency';
 import IntlService from 'ember-intl/services/intl';
 import { action } from '@ember/object';
 import RouterService from '@ember/routing/router-service';
-import { debounce } from '@ember/runloop';
+import { debounceTask } from 'ember-lifeline';
 
 import AmConfigurationModel from 'irene/models/amconfiguration';
 import MeService from 'irene/services/me';
@@ -96,7 +96,7 @@ export default class AppMonitoringSettingsComponent extends Component<AppMonitor
   @action onSearchQueryChange(event: Event) {
     const query = (event.target as HTMLSelectElement).value;
 
-    debounce(this, this.setSearchQuery, query, 500);
+    debounceTask(this, 'setSearchQuery', query, 500);
   }
 
   @action clearSearchInput() {

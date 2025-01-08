@@ -2,7 +2,7 @@ import { action } from '@ember/object';
 import Component from '@glimmer/component';
 import { tracked } from '@glimmer/tracking';
 import { inject as service } from '@ember/service';
-import { later } from '@ember/runloop';
+import { runTask } from 'ember-lifeline';
 import RouterService from '@ember/routing/router-service';
 import IntlService from 'ember-intl/services/intl';
 
@@ -150,7 +150,11 @@ export default class FileCompareTableComponent extends Component<FileCompareTabl
     this.offset = offset;
 
     // Allows rendering table change before scrolling
-    later(() => scrollDashboardMainContainerTo({ top: 0, left: 0 }), 150);
+    runTask(
+      this,
+      () => scrollDashboardMainContainerTo({ top: 0, left: 0 }),
+      150
+    );
   }
 }
 

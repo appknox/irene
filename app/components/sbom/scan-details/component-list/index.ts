@@ -3,8 +3,8 @@ import { inject as service } from '@ember/service';
 import Component from '@glimmer/component';
 import { tracked } from '@glimmer/tracking';
 import { task } from 'ember-concurrency';
-import { debounce } from '@ember/runloop';
 import type IntlService from 'ember-intl/services/intl';
+import { debounceTask } from 'ember-lifeline';
 
 // eslint-disable-next-line ember/use-ember-data-rfc-395-imports
 import type { DS } from 'ember-data';
@@ -136,7 +136,7 @@ export default class SbomScanDetailsComponentListComponent extends Component<Sbo
   searchSbomComponentForQuery(event: Event) {
     const query = (event.target as HTMLInputElement).value;
 
-    debounce(this, this.setSearchQuery, query, 500);
+    debounceTask(this, 'setSearchQuery', query, 500);
   }
 
   /* Set debounced searchQuery */

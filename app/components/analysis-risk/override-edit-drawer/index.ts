@@ -3,7 +3,7 @@ import { service } from '@ember/service';
 import Component from '@glimmer/component';
 import { tracked } from '@glimmer/tracking';
 import IntlService from 'ember-intl/services/intl';
-import { next } from '@ember/runloop';
+import { runTask } from 'ember-lifeline';
 import { ComponentLike } from '@glint/template';
 
 import AnalysisModel from 'irene/models/analysis';
@@ -65,7 +65,7 @@ export default class AnalysisRiskOverrideEditDrawerComponent extends Component<A
 
   @action
   setAppBarData(appBarData: OverrideEditDrawerAppBarData) {
-    next(this, () => {
+    runTask(this, () => {
       this.appBarData = appBarData;
     });
   }

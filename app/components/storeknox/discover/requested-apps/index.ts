@@ -50,7 +50,7 @@ export default class StoreknoxDiscoverRequestedAppsComponent extends Component<S
 
     const { app_limit, app_offset } = args.queryParams;
 
-    this.fetchRequestedApps.perform(app_limit, app_offset);
+    this.fetchRequestedApps.perform(app_limit, app_offset, false);
   }
 
   // Table Actions
