@@ -3,7 +3,8 @@ import RouterService from '@ember/routing/router-service';
 import { task } from 'ember-concurrency';
 import IntlService from 'ember-intl/services/intl';
 
-import NetworkService from 'irene/services/network';
+import type IreneAjaxService from 'irene/services/ajax';
+import type { AjaxError } from 'irene/services/ajax';
 
 interface OidcResponse {
   valid: boolean;
@@ -32,7 +33,7 @@ export interface OidcAuthorizationResponse {
 }
 
 export default class OidcService extends Service {
-  @service declare network: NetworkService;
+  @service declare ajax: IreneAjaxService;
   @service declare session: any;
   @service declare intl: IntlService;
   @service declare router: RouterService;
@@ -61,27 +62,31 @@ export default class OidcService extends Service {
   }
 
   authorizeOidcAppPermissions = task(async (token: string, allow?: boolean) => {
-    const res = await this.network.post(this.oidcAuthorizeEndpoint, {
-      oidc_token: token,
-      allow,
-    });
+    try {
+      const data = await this.ajax.post<OidcAuthorizeResult>(
+        this.oidcAuthorizeEndpoint,
+        {
+          data: { oidc_token: token, allow },
+        }
+      );
 
-    const data = (await res.json()) as OidcAuthorizeResult;
-
-    if (data.error) {
-      if (data.redirect_url) {
+      if (data.valid && data.redirect_url) {
         this.window.location.href = data.redirect_url;
-      } else {
-        this.notify.error(
-          data.error.description || this.intl.t('somethingWentWrong')
-        );
       }
+    } catch (e) {
+      const err = e as AjaxError;
 
-      return;
-    }
+      if (err.payload.error) {
+        if (err.payload.redirect_url) {
+          this.window.location.href = err.payload.redirect_url;
+        } else {
+          this.notify.error(
+            err.payload.error.description || this.intl.t('somethingWentWrong')
+          );
+        }
 
-    if (data.valid && data.redirect_url) {
-      this.window.location.href = data.redirect_url;
+        return;
+      }
     }
   });
 
@@ -90,39 +95,40 @@ export default class OidcService extends Service {
       await this.validateOidcToken.perform(token);
     } else {
       this.router.transitionTo('login');
-
       this.window.sessionStorage.setItem('oidc_token', token);
     }
   }
 
   validateOidcToken = task(async (token: string) => {
-    const res = await this.network.post(this.oidcTokenValidateEndpoint, {
-      oidc_token: token,
-    });
+    try {
+      const data = await this.ajax.post<ValidateOidcTokenResponse>(
+        this.oidcTokenValidateEndpoint,
+        {
+          data: { oidc_token: token },
+        }
+      );
 
-    const data = (await res.json()) as ValidateOidcTokenResponse;
-
-    if (res.status === 400 || data.error) {
-      if (data.redirect_url) {
-        this.window.location.href = data.redirect_url;
-
-        return;
-      } else {
-        throw {
-          name: 'Error',
-          statusCode: res.status,
-          code: data.error?.code,
-          description: data.error?.description,
-        };
+      if (data.valid) {
+        this.router.transitionTo('oidc.authorize', {
+          queryParams: { oidc_token: token },
+        });
       }
-    }
+    } catch (e) {
+      const err = e as AjaxError;
 
-    if (data.valid) {
-      this.router.transitionTo('oidc.authorize', {
-        queryParams: {
-          oidc_token: token,
-        },
-      });
+      if (err.status === 400 || err.payload.error) {
+        if (err.payload.redirect_url) {
+          this.window.location.href = err.payload.redirect_url;
+          return;
+        } else {
+          throw {
+            name: 'Error',
+            statusCode: err.status,
+            code: err.payload.error?.code,
+            description: err.payload.error?.description,
+          };
+        }
+      }
     }
   });
 
@@ -134,33 +140,37 @@ export default class OidcService extends Service {
       };
     } else {
       this.router.transitionTo('login');
-
       this.window.sessionStorage.setItem('oidc_token', token);
     }
   }
 
   fetchOidcAuthorizationData = task(async (token: string) => {
-    const res = await this.network.post(this.oidcAuthorizationEndpoint, {
-      oidc_token: token,
-    });
+    try {
+      const data = await this.ajax.post<OidcAuthorizationResponse>(
+        this.oidcAuthorizationEndpoint,
+        {
+          data: { oidc_token: token },
+        }
+      );
 
-    const data = (await res.json()) as OidcAuthorizationResponse;
+      return data;
+    } catch (error) {
+      const err = error as AjaxError;
 
-    if (res.status === 400 || data.validation_result.error) {
-      if (data.validation_result.redirect_url) {
-        this.window.location.href = data.validation_result.redirect_url;
-
-        return;
-      } else {
-        throw {
-          name: 'Error',
-          statusCode: res.status,
-          code: data.validation_result.error?.code,
-          description: data.validation_result.error?.description,
-        };
+      if (err.status === 400 || err.payload.validation_result.error) {
+        if (err.payload.validation_result.redirect_url) {
+          this.window.location.href =
+            err.payload.validation_result.redirect_url;
+          return;
+        } else {
+          throw {
+            name: 'Error',
+            statusCode: err.status,
+            code: err.payload.validation_result.error?.code,
+            description: err.payload.validation_result.error?.description,
+          };
+        }
       }
     }
-
-    return data;
   });
 }

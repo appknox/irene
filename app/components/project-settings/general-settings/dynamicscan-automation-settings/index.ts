@@ -9,6 +9,7 @@ import { waitForPromise } from '@ember/test-waiters';
 import ENV from 'irene/config/environment';
 import ProjectModel from 'irene/models/project';
 import parseError from 'irene/utils/parse-error';
+import type IreneAjaxService from 'irene/services/ajax';
 
 export interface ProjectSettingsGeneralSettingsDyanmicscanAutomationSettingsSignature {
   Args: {
@@ -21,7 +22,7 @@ export interface ProjectSettingsGeneralSettingsDyanmicscanAutomationSettingsSign
 export default class ProjectSettingsGeneralSettingsDyanmicscanAutomationSettingsComponent extends Component<ProjectSettingsGeneralSettingsDyanmicscanAutomationSettingsSignature> {
   @service declare store: Store;
   @service declare intl: IntlService;
-  @service declare ajax: any;
+  @service declare ajax: IreneAjaxService;
   @service('notifications') declare notify: NotificationService;
 
   @tracked automationEnabled = false;

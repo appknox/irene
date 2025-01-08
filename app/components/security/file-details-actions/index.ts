@@ -11,6 +11,7 @@ import parseError from 'irene/utils/parse-error';
 import type IntlService from 'ember-intl/services/intl';
 import type Store from '@ember-data/store';
 import type SecurityFileModel from 'irene/models/security/file';
+import type IreneAjaxService from 'irene/services/ajax';
 
 export interface FileDetailsActionsSignature {
   Element: HTMLElement;
@@ -19,12 +20,16 @@ export interface FileDetailsActionsSignature {
   };
 }
 
+type DownloadAppResponse = {
+  url: string;
+};
+
 export default class FileDetailsActionsComponent extends Component<FileDetailsActionsSignature> {
   @service declare intl: IntlService;
   @service declare store: Store;
   @service declare notifications: NotificationService;
   @service('browser/window') declare window: Window;
-  @service declare ajax: any;
+  @service declare ajax: IreneAjaxService;
 
   get packageName() {
     return this.file.project.get('packageName');
@@ -173,7 +178,7 @@ export default class FileDetailsActionsComponent extends Component<FileDetailsAc
     try {
       const url = [ENV.endpoints['apps'], this.fileId].join('/');
 
-      const data = await this.ajax.request(url, {
+      const data = await this.ajax.request<DownloadAppResponse>(url, {
         namespace: 'api/hudson-api',
       });
 
@@ -195,7 +200,7 @@ export default class FileDetailsActionsComponent extends Component<FileDetailsAc
   downloadAppModified = task(async () => {
     const url = [ENV.endpoints['apps'], this.fileId, 'modified'].join('/');
 
-    const data = await this.ajax.request(url, {
+    const data = await this.ajax.request<DownloadAppResponse>(url, {
       namespace: 'api/hudson-api',
     });
 

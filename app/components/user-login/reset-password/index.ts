@@ -15,6 +15,8 @@ import {
 
 import IntlService from 'ember-intl/services/intl';
 import RouterService from '@ember/routing/router-service';
+import type IreneAjaxService from 'irene/services/ajax';
+import type { AjaxError } from 'irene/services/ajax';
 
 interface UserLoginResetPasswordComponentSignature {
   Args: {
@@ -34,7 +36,7 @@ const ResetValidator = {
 
 export default class UserLoginResetPasswordComponent extends Component<UserLoginResetPasswordComponentSignature> {
   @service declare intl: IntlService;
-  @service declare ajax: any;
+  @service declare ajax: IreneAjaxService;
   @service declare router: RouterService;
   @service('rollbar') declare logger: any;
   @service('notifications') declare notify: NotificationService;
@@ -121,7 +123,7 @@ export default class UserLoginResetPasswordComponent extends Component<UserLogin
 
       this.notify.success(this.intl.t('passwordIsReset'));
     } catch (err) {
-      const errors = err as AdapterError;
+      const errors = err as AjaxError;
 
       if (errors.payload) {
         Object.keys(errors.payload).forEach((key) => {

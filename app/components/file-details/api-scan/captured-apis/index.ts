@@ -14,6 +14,8 @@ import type { PaginationProviderActionsArgs } from 'irene/components/ak-paginati
 import type FileModel from 'irene/models/file';
 import type CapturedApiModel from 'irene/models/capturedapi';
 import type ApiScanService from 'irene/services/api-scan';
+import type IreneAjaxService from 'irene/services/ajax';
+import type { AjaxError } from 'irene/services/ajax';
 
 export interface FileDetailsApiScanCapturedApisSignature {
   Args: {
@@ -26,9 +28,14 @@ type CapturedApiQueryResponse =
     meta: { count: number };
   };
 
+type SelectAPIResponse = {
+  count: number;
+  results: unknown[];
+};
+
 export default class FileDetailsApiScanCapturedApisComponent extends Component<FileDetailsApiScanCapturedApisSignature> {
   @service declare intl: IntlService;
-  @service declare ajax: any;
+  @service declare ajax: IreneAjaxService;
   @service declare store: Store;
   @service declare apiScan: ApiScanService;
   @service('notifications') declare notify: NotificationService;
@@ -96,21 +103,27 @@ export default class FileDetailsApiScanCapturedApisComponent extends Component<F
       'capturedapis',
     ].join('/');
 
-    const data = { fileId: this.args.file.id, is_active: true };
+    const queryParams = new URLSearchParams({
+      fileId: this.args.file.id,
+      is_active: 'true',
+    }).toString();
 
-    return await this.ajax.request(url, { namespace: ENV.namespace_v2, data });
+    const fullUrl = `${url}?${queryParams}`;
+
+    return await this.ajax.request(fullUrl, { namespace: ENV.namespace_v2 });
   });
 
   setSelectedApiCount = task(async () => {
     try {
-      const selectedApis = await this.getSelectedApis.perform();
+      const selectedApis =
+        (await this.getSelectedApis.perform()) as SelectAPIResponse;
 
       this.selectedCount = selectedApis.count;
 
       // update for selected count
       this.setFooterComponentDetails();
     } catch (error) {
-      const err = error as AdapterError;
+      const err = error as AjaxError;
       this.notify.error(err.toString());
     }
   });

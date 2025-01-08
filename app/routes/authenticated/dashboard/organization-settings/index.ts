@@ -4,10 +4,12 @@ import type MeService from 'irene/services/me';
 import type { ModelFrom } from 'irene/utils/types';
 import type AuthenticatedOrganizationSettingsRoute from '../organization-settings';
 import AkBreadcrumbsRoute from 'irene/utils/ak-breadcrumbs-route';
+import type IreneAjaxService from 'irene/services/ajax';
+import type { AjaxError } from 'irene/services/ajax';
 
 export default class AuthenticatedDashboardOrganizationSettingsIndexRoute extends AkBreadcrumbsRoute {
   @service declare me: MeService;
-  @service declare ajax: any;
+  @service declare ajax: IreneAjaxService;
 
   async model() {
     const { organization, user } = this.modelFor(

@@ -5,6 +5,7 @@ import { inject as service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
 
 import OrganizationService from 'irene/services/organization';
+import type IreneAjaxService from 'irene/services/ajax';
 
 export interface IScanCount {
   api_scan_count: number;
@@ -18,7 +19,7 @@ export interface IScanCount {
 }
 
 export default class OrganizationAnalyticsComponent extends Component {
-  @service declare ajax: any;
+  @service declare ajax: IreneAjaxService;
   @service declare organization: OrganizationService;
 
   @tracked scanCount: IScanCount | null = null;

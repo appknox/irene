@@ -7,6 +7,7 @@ import ENV from 'irene/config/environment';
 import parseError from 'irene/utils/parse-error';
 import type FileModel from 'irene/models/file';
 import type OrganizationService from 'irene/services/organization';
+import type IreneAjaxService from 'irene/services/ajax';
 
 export interface FileDetailsManualScanRequestAccessSignature {
   Args: {
@@ -16,7 +17,7 @@ export interface FileDetailsManualScanRequestAccessSignature {
 
 export default class FileDetailsManualScanRequestAccessComponent extends Component<FileDetailsManualScanRequestAccessSignature> {
   @service declare intl: IntlService;
-  @service declare ajax: any;
+  @service declare ajax: IreneAjaxService;
   @service declare organization: OrganizationService;
   @service('notifications') declare notify: NotificationService;
 

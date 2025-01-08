@@ -9,6 +9,7 @@ import ENV from 'irene/config/environment';
 import triggerAnalytics from 'irene/utils/trigger-analytics';
 import parseError from 'irene/utils/parse-error';
 import type FileModel from 'irene/models/file';
+import type IreneAjaxService from 'irene/services/ajax';
 
 export interface FileDetailsApiScanCapturedApisFooterSignature {
   Args: {
@@ -18,7 +19,7 @@ export interface FileDetailsApiScanCapturedApisFooterSignature {
 }
 
 export default class FileDetailsApiScanCapturedApisFooterComponent extends Component<FileDetailsApiScanCapturedApisFooterSignature> {
-  @service declare ajax: any;
+  @service declare ajax: IreneAjaxService;
   @service declare intl: IntlService;
   @service('notifications') declare notify: NotificationService;
 

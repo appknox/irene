@@ -26,7 +26,6 @@ export interface AppknoxWrapperSignature {
 }
 
 export default class AppknoxWrapperComponent extends Component<AppknoxWrapperSignature> {
-  @service declare ajax: any;
   @service declare session: any;
   @service declare me: MeService;
   @service declare intl: IntlService;

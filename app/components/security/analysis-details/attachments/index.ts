@@ -11,6 +11,7 @@ import { type UploadFile } from 'ember-file-upload';
 import type IntlService from 'ember-intl/services/intl';
 import type Store from '@ember-data/store';
 import type SecurityAnalysisModel from 'irene/models/security/analysis';
+import type IreneAjaxService from 'irene/services/ajax';
 
 export interface SecurityAnalysisDetailsAttachmentsComponentSignature {
   Args: {
@@ -19,12 +20,19 @@ export interface SecurityAnalysisDetailsAttachmentsComponentSignature {
   };
 }
 
+type UploadAttachmentResponse = {
+  file_key: string;
+  file_key_signed: string;
+  file_uuid: string;
+  url: string;
+};
+
 export default class SecurityAnalysisDetailsAttachmentsComponent extends Component<SecurityAnalysisDetailsAttachmentsComponentSignature> {
   @service declare store: Store;
   @service('browser/window') declare window: Window;
   @service declare notifications: NotificationService;
   @service declare intl: IntlService;
-  @service declare ajax: any;
+  @service declare ajax: IreneAjaxService;
 
   @tracked showRemoveFileConfirmBox = false;
   @tracked fileIDToDelete: string | null = null;
@@ -99,10 +107,13 @@ export default class SecurityAnalysisDetailsAttachmentsComponent extends Compone
     };
 
     try {
-      const fileData = await this.ajax.post(ENV.endpoints['uploadFile'], {
-        namespace: 'api/hudson-api',
-        data,
-      });
+      const fileData = await this.ajax.post<UploadAttachmentResponse>(
+        ENV.endpoints['uploadFile'] as string,
+        {
+          namespace: 'api/hudson-api',
+          data,
+        }
+      );
 
       await file.uploadBinary(fileData.url, {
         method: 'PUT',
@@ -117,7 +128,7 @@ export default class SecurityAnalysisDetailsAttachmentsComponent extends Compone
         content_type: 'ANALYSIS',
       };
 
-      await this.ajax.post(ENV.endpoints['uploadedAttachment'], {
+      await this.ajax.post(ENV.endpoints['uploadedAttachment'] as string, {
         namespace: 'api/hudson-api',
         data: fileDetailsData,
       });

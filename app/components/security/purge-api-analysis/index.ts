@@ -4,11 +4,12 @@ import { tracked } from '@glimmer/tracking';
 import { task } from 'ember-concurrency';
 import IntlService from 'ember-intl/services/intl';
 import ENV from 'irene/config/environment';
+import type IreneAjaxService from 'irene/services/ajax';
 
 export default class SecurityPurgeApiAnalysisComponent extends Component {
   @service('notifications') declare notify: NotificationService;
   @service declare intl: IntlService;
-  @service declare ajax: any;
+  @service declare ajax: IreneAjaxService;
 
   @tracked fileNumber = '';
 

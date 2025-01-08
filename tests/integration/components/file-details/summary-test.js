@@ -210,7 +210,9 @@ module('Integration | Component | file-details/summary', function (hooks) {
         return new Response(500, {}, { errors: ['server error'] });
       }
 
-      const tag = schema.create('tag', { name: req.requestBody.split('=')[1] });
+      const requestBody = JSON.parse(req.requestBody);
+
+      const tag = schema.create('tag', { name: requestBody.name });
       const file = schema.files.find(this.file.id);
 
       file.tags.push(tag.toJSON());

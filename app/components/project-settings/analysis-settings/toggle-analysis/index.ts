@@ -9,6 +9,7 @@ import Store from '@ember-data/store';
 import UnknownAnalysisStatusModel from 'irene/models/unknown-analysis-status';
 import { task } from 'ember-concurrency';
 import parseError from 'irene/utils/parse-error';
+import type IreneAjaxService from 'irene/services/ajax';
 
 interface ProjectSettingsAnalysisSettingsToggleAnalysisSignature {
   Args: {
@@ -18,7 +19,7 @@ interface ProjectSettingsAnalysisSettingsToggleAnalysisSignature {
 
 export default class ProjectSettingsAnalysisSettingsToggleAnalysisComponent extends Component<ProjectSettingsAnalysisSettingsToggleAnalysisSignature> {
   @service declare intl: IntlService;
-  @service declare ajax: any;
+  @service declare ajax: IreneAjaxService;
   @service('notifications') declare notify: NotificationService;
   @service declare store: Store;
 

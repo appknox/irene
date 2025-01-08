@@ -7,6 +7,7 @@ import IntlService from 'ember-intl/services/intl';
 import SecurityFileModel from 'irene/models/security/file';
 import ENV from 'irene/config/environment';
 import parseError from 'irene/utils/parse-error';
+import type IreneAjaxService from 'irene/services/ajax';
 
 export interface SecurityFileSearchListDownloadComponentSignature {
   Args: {
@@ -18,7 +19,7 @@ export default class SecurityFileSearchListDownloadComponent extends Component<S
   @service('notifications') declare notify: NotificationService;
   @service('browser/window') declare window: Window;
   @service('intl') declare intl: IntlService;
-  @service declare ajax: any;
+  @service declare ajax: IreneAjaxService;
 
   get file() {
     return this.args.file;

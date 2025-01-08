@@ -4,6 +4,7 @@ import { task } from 'ember-concurrency';
 import IntlService from 'ember-intl/services/intl';
 import { action } from '@ember/object';
 import Store from '@ember-data/store';
+import { waitForPromise } from '@ember/test-waiters';
 
 import ClipboardJS from 'clipboard/src/clipboard';
 
@@ -90,7 +91,13 @@ export default class FileReportDrawerVaReportsReportItemComponent extends Compon
 
   getReportByType = task(async () => {
     try {
-      const report = await this.fileReport?.getReportByType(this.reportType);
+      let report;
+
+      if (this.fileReport) {
+        report = await waitForPromise(
+          this.fileReport.getReportByType(this.reportType)
+        );
+      }
 
       if (report && report.url) {
         this.window.open(report.url, '_blank');

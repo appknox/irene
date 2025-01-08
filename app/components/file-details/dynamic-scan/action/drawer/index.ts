@@ -17,6 +17,7 @@ import type Store from '@ember-data/store';
 import type FileModel from 'irene/models/file';
 import { type DevicePreferenceContext } from 'irene/components/project-preferences/provider';
 import type ProjectAvailableDeviceModel from 'irene/models/project-available-device';
+import type IreneAjaxService from 'irene/services/ajax';
 
 export interface FileDetailsDynamicScanActionDrawerSignature {
   Args: {
@@ -30,7 +31,7 @@ export interface FileDetailsDynamicScanActionDrawerSignature {
 
 export default class FileDetailsDynamicScanActionDrawerComponent extends Component<FileDetailsDynamicScanActionDrawerSignature> {
   @service declare intl: IntlService;
-  @service declare ajax: any;
+  @service declare ajax: IreneAjaxService;
   @service declare store: Store;
   @service('notifications') declare notify: NotificationService;
 

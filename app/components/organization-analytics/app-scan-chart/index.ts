@@ -16,6 +16,7 @@ import {
   CalendarOnSelectFunc,
   RangeDateObject,
 } from 'irene/components/ak-date-picker';
+import type IreneAjaxService from 'irene/services/ajax';
 
 export interface IAppScanResult {
   created_on_date: string;
@@ -43,7 +44,7 @@ interface AppScanDataItemGroup {
 }
 
 export default class OrganizationAnalyticsAppScanChartComponent extends Component {
-  @service declare ajax: any;
+  @service declare ajax: IreneAjaxService;
   @service declare organization: OrganizationService;
   @service('notifications') declare notify: NotificationService;
 

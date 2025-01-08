@@ -11,7 +11,7 @@ class IreneAuthenticator extends BaseAuthenticator {
 
     const url = ENV['ember-simple-auth']['loginEndPoint'];
 
-    return this.ajax.post(url, { data }).then((data: LoginSuccessDataProps) => {
+    return this.ajax.post<LoginSuccessDataProps>(url, { data }).then((data) => {
       this.restoreLastTransition(data.user_id);
 
       return processData(data);

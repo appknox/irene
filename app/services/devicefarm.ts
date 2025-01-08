@@ -1,11 +1,17 @@
 import Service from '@ember/service';
 import { inject as service } from '@ember/service';
+
 import ENV from 'irene/config/environment';
 import ConfigurationService from './configuration';
+import type IreneAjaxService from './ajax';
+
+type DevicefarmPingResponse = {
+  ping: string;
+};
 
 export default class DevicefarmService extends Service {
   @service declare session: any;
-  @service declare ajax: any;
+  @service declare ajax: IreneAjaxService;
   @service declare configuration: ConfigurationService;
 
   pingEndpoint = '/devicefarm/ping';
@@ -24,7 +30,8 @@ export default class DevicefarmService extends Service {
 
   async testPing() {
     const pingUrl = new URL(this.pingEndpoint, this.urlbase).href;
-    const pingContent = await this.ajax.request(pingUrl);
+    const pingContent =
+      await this.ajax.request<DevicefarmPingResponse>(pingUrl);
 
     return pingContent['ping'] === 'pong';
   }

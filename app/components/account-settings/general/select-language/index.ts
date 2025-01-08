@@ -9,6 +9,8 @@ import type Store from '@ember-data/store';
 import ENV from 'irene/config/environment';
 import parseError from 'irene/utils/parse-error';
 import type DatetimeService from 'irene/services/datetime';
+import type IreneAjaxService from 'irene/services/ajax';
+import type { AjaxError } from 'irene/services/ajax';
 
 const localeStrings = {
   en: 'English',
@@ -19,7 +21,7 @@ type LocaleKeys = keyof typeof localeStrings;
 
 export default class AccountSettingsGeneralSelectLanguageComponent extends Component {
   @service declare intl: IntlService;
-  @service declare ajax: any;
+  @service declare ajax: IreneAjaxService;
   @service declare datetime: DatetimeService;
   @service declare session: any;
   @service declare store: Store;
@@ -65,13 +67,14 @@ export default class AccountSettingsGeneralSelectLanguageComponent extends Compo
     };
 
     try {
-      await this.ajax.post(ENV.endpoints['lang'], { data });
+      await this.ajax.post(ENV.endpoints['lang'] as string, { data });
 
       if (!this.isDestroyed) {
         window.location.reload();
       }
     } catch (err) {
-      const error = err as AdapterError;
+      const error = err as AjaxError;
+
       this.notify.error(error.payload.message);
     }
   });

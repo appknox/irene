@@ -4,11 +4,12 @@ import ENV from 'irene/config/environment';
 import Store from '@ember-data/store';
 import OrganizationModel from '../models/organization';
 import { tracked } from '@glimmer/tracking';
+import type IreneAjaxService from './ajax';
 
 export default class OrganizationService extends Service {
   @service declare store: Store;
   @service declare notifications: NotificationService;
-  @service declare ajax: any;
+  @service declare ajax: IreneAjaxService;
 
   @tracked selected: OrganizationModel | null = null;
   @tracked isSecurityEnabled = false;
