@@ -144,7 +144,7 @@ export default class IreneAjaxService extends Service {
   @service declare session: any;
   @tracked headers?: Record<string, string>;
 
-  host: string = ENV.environment === 'test' ? window.location.origin : ENV.host;
+  host: string = ENV.host || window.location.origin;
 
   namespace: string = ENV.namespace;
   trustedHosts: string[] = [];
