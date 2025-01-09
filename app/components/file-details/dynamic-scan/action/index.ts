@@ -16,6 +16,7 @@ import type IreneAjaxService from 'irene/services/ajax';
 export interface DynamicScanActionSignature {
   Args: {
     onScanShutdown?: () => void;
+    onScanStart: (dynamicscan: DynamicscanModel) => void;
     file: FileModel;
     dynamicScanText: string;
     isAutomatedScan?: boolean;

@@ -49,6 +49,7 @@ module(
 
     hooks.beforeEach(async function () {
       const store = this.owner.lookup('service:store');
+      const dsService = this.owner.lookup('service:dynamic-scan');
 
       const profile = this.server.create('profile', { id: '100' });
 
@@ -100,6 +101,7 @@ module(
         devicePreference,
         availableDevices,
         store,
+        dsService,
       });
 
       // set up services
