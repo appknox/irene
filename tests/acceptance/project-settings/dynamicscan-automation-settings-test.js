@@ -98,13 +98,14 @@ module(
         project,
       });
 
-      this.server.create('device-preference', {
+      this.server.create('ds-automated-device-preference', {
         id: profile.id,
       });
 
       this.server.create('proxy-setting', { id: profile.id });
-      this.server.create('dynamicscan-mode', { id: profile.id });
+      this.server.createList('available-automated-device', 3);
 
+      // Register Services
       this.owner.register('service:integration', IntegrationStub);
       this.owner.register('service:websocket', WebsocketStub);
 
@@ -123,19 +124,60 @@ module(
         schema.profiles.find(`${req.params.id}`)?.toJSON()
       );
 
-      this.server.get('/dynamicscan/:id', (schema, req) => {
-        return schema.dynamicscanOlds.find(`${req.params.id}`)?.toJSON();
+      this.server.get('v2/profiles/:id/automation_preference', (_, req) => {
+        return { id: req.params.id, dynamic_scan_automation_enabled: true };
       });
 
-      this.server.get('/profiles/:id/device_preference', (schema, req) => {
-        return schema.devicePreferences.find(`${req.params.id}`)?.toJSON();
+      this.server.get('/v2/files/:id/dynamicscans', (schema, req) => {
+        const { limit, mode } = req.queryParams || {};
+
+        const results = schema.dynamicscans
+          .where({
+            file: req.params.id,
+            ...(mode ? { mode: Number(mode) } : {}),
+          })
+          .models.slice(0, limit ? Number(limit) : results.length);
+
+        return {
+          count: results.length,
+          next: null,
+          previous: null,
+          results,
+        };
       });
 
-      this.server.get('/projects/:id/available-devices', (schema) => {
-        const results = schema.projectAvailableDevices.all().models;
+      this.server.get(
+        '/v2/profiles/:id/ds_manual_device_preference',
+        (schema, req) => {
+          return schema.dsManualDevicePreferences
+            .find(`${req.params.id}`)
+            ?.toJSON();
+        }
+      );
+
+      this.server.get(
+        '/v2/profiles/:id/ds_automated_device_preference',
+        (schema, req) => {
+          return schema.dsAutomatedDevicePreferences
+            .find(`${req.params.id}`)
+            ?.toJSON();
+        }
+      );
+
+      this.server.get('/v2/projects/:id/available_manual_devices', (schema) => {
+        const results = schema.availableManualDevices.all().models;
 
         return { count: results.length, next: null, previous: null, results };
       });
+
+      this.server.get(
+        '/v2/projects/:id/available_automated_devices',
+        (schema) => {
+          const results = schema.availableAutomatedDevices.all().models;
+
+          return { count: results.length, next: null, previous: null, results };
+        }
+      );
 
       this.server.get('/profiles/:id/proxy_settings', (schema, req) => {
         return schema.proxySettings.find(`${req.params.id}`)?.toJSON();
@@ -163,10 +205,6 @@ module(
           return { count: results.length, next: null, previous: null, results };
         }
       );
-
-      this.server.get('/profiles/:id/dynamicscan_mode', (schema, req) => {
-        return schema.dynamicscanModes.find(req.params.id).toJSON();
-      });
 
       this.server.get('/v2/scan_parameter_groups/:id', (schema, req) =>
         schema.scanParameterGroups.find(req.params.id).toJSON()

@@ -1941,9 +1941,13 @@ body {
   // variables for file-details/dynamic-scan/header
   --file-details-dynamic-scan-header-background-color: var(--background-light);
 
-  // variables for file-details/dynamic-scan/manual
-  --file-details-dynamic-scan-manual-border-color: var(--border-color-1);
-  --file-details-dynamic-scan-manual-background-main: var(--background-main);
+  // variables for file-details/dynamic-scan/device-wrapper
+  --file-details-dynamic-scan-device-wrapper-border-color: var(
+    --border-color-1
+  );
+  --file-details-dynamic-scan-device-wrapper-background-main: var(
+    --background-main
+  );
 
   // variables for file-details/dynamic-scan/automated
   --file-details-dynamic-scan-automated-border-color: var(--border-color-1);

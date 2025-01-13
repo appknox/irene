@@ -1,15 +1,18 @@
-.manual-dast-container {
-  background-color: var(--file-details-dynamic-scan-manual-background-main);
-  border: 1px solid var(--file-details-dynamic-scan-manual-border-color);
+.device-wrapper-container {
+  background-color: var(
+    --file-details-dynamic-scan-device-wrapper-background-main
+  );
+  border: 1px solid var(--file-details-dynamic-scan-device-wrapper-border-color);
 }
 
-.manual-dast-header {
-  border-bottom: 1px solid var(--file-details-dynamic-scan-manual-border-color);
+.device-wrapper-header {
+  border-bottom: 1px solid
+    var(--file-details-dynamic-scan-device-wrapper-border-color);
   padding: 0.5em 1.5em;
   min-height: 48px;
 }
 
-.vnc-viewer-fullscreen {
+.device-viewer-fullscreen {
   position: fixed;
   inset: 0px;
   z-index: var(--vnc-viewer-modal-zIndex);
@@ -19,7 +22,7 @@
   justify-content: center;
 }
 
-.vnc-viewer-backdrop {
+.device-viewer-backdrop {
   position: fixed;
   display: flex;
   align-items: center;
@@ -29,7 +32,7 @@
   z-index: -1;
 }
 
-.vnc-viewer-fullscreen-container {
+.device-viewer-fullscreen-container {
   width: 450px;
   background-color: var(--vnc-viewer-modal-background);
   color: var(--vnc-viewer-modal-text-color);

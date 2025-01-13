@@ -12,6 +12,7 @@ import type RealtimeService from './realtime';
 import type AkNotificationsService from './ak-notifications';
 import type UserModel from 'irene/models/user';
 import type IreneAjaxService from './ajax';
+import type DynamicScanService from './dynamic-scan';
 
 export interface SocketInstance {
   on: (event: string, handler: (args: any) => void, target?: object) => void;
@@ -35,6 +36,7 @@ export default class WebsocketService extends Service {
   @service declare notifications: NotificationService;
   @service declare akNotifications: AkNotificationsService;
   @service declare ajax: IreneAjaxService;
+  @service('dynamic-scan') declare dsService: DynamicScanService;
   @service('socket-io') socketIOService: any;
 
   connectionPath = '/websocket';
@@ -254,7 +256,10 @@ export default class WebsocketService extends Service {
     try {
       this.store.modelFor(modelName);
 
-      await this.store.findRecord(modelName, id);
+      const model = await this.store.findRecord(modelName, id);
+
+      // to check if scan is in progress and update for real time status
+      this.dsService.checkScanInProgressAndUpdate.perform(model);
     } catch (error) {
       this.logger.error(error);
     }

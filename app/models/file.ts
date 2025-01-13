@@ -133,6 +133,16 @@ export default class FileModel extends ModelBaseMixin {
   @belongsTo('file', { inverse: null, async: true })
   declare previousFile: AsyncBelongsTo<FileModel>;
 
+  async getLastDynamicScan(
+    fileId: string,
+    mode: number,
+    isScheduledScan = false
+  ) {
+    const adapter = this.store.adapterFor('file');
+
+    return await adapter.getLastDynamicScan(fileId, mode, isScheduledScan);
+  }
+
   analysesSorting = ['computedRisk:desc'];
 
   scanProgressClass(type?: boolean) {

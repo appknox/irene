@@ -1,13 +1,8 @@
-import Component from '@glimmer/component';
-import { tracked } from '@glimmer/tracking';
-import { task } from 'ember-concurrency';
 import { service } from '@ember/service';
-import type Store from '@ember-data/store';
-import type IntlService from 'ember-intl/services/intl';
+import Component from '@glimmer/component';
 
-import parseError from 'irene/utils/parse-error';
-import type DynamicscanModel from 'irene/models/dynamicscan';
 import type FileModel from 'irene/models/file';
+import type DynamicScanService from 'irene/services/dynamic-scan';
 
 interface DynamicScanSignature {
   Args: {
@@ -20,21 +15,19 @@ interface DynamicScanSignature {
 }
 
 export default class DynamicScan extends Component<DynamicScanSignature> {
-  @service declare store: Store;
-  @service declare intl: IntlService;
-  @service('notifications') declare notify: NotificationService;
+  @service declare dynamicScan: DynamicScanService;
 
-  @tracked dynamicScan: DynamicscanModel | null = null;
+  constructor(owner: unknown, args: DynamicScanSignature['Args']) {
+    super(owner, args);
 
-  fetchDynamicscan = task(async () => {
-    const id = this.args.profileId;
+    this.dynamicScan.fetchLatestScans(this.args.file);
+  }
 
-    try {
-      this.dynamicScan = await this.store.findRecord('dynamicscan', id);
-    } catch (e) {
-      this.notify.error(parseError(e, this.intl.t('pleaseTryAgain')));
-    }
-  });
+  willDestroy(): void {
+    super.willDestroy();
+
+    this.dynamicScan.resetScans();
+  }
 }
 
 declare module '@glint/environment-ember-loose/registry' {

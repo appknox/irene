@@ -1,32 +1,46 @@
+import { action } from '@ember/object';
 import Component from '@glimmer/component';
 import ENUMS from 'irene/enums';
 
-import type { DevicePreferenceContext } from 'irene/components/project-preferences/provider';
-import type ProjectAvailableDeviceModel from 'irene/models/project-available-device';
 import type FileModel from 'irene/models/file';
+import type { DsPreferenceContext } from 'irene/components/ds-preference-provider';
+import type DsManualDevicePreferenceModel from 'irene/models/ds-manual-device-preference';
 
 export interface FileDetailsDynamicScanDrawerManualDastSignature {
   Element: HTMLElement;
   Args: {
     file: FileModel;
-    dpContext: DevicePreferenceContext;
-    isApiScanEnabled: boolean;
-    enableApiScan(event: MouseEvent, checked?: boolean): void;
-    allAvailableManualDevices: ProjectAvailableDeviceModel[];
-    isFetchingManualDevices: boolean;
+    dpContext: DsPreferenceContext;
+    isApiCaptureEnabled: boolean;
+    onApiCaptureChange(event: Event, checked?: boolean): void;
   };
 }
 
 export default class FileDetailsDynamicScanDrawerManualDastComponent extends Component<FileDetailsDynamicScanDrawerManualDastSignature> {
   deviceSelectionTypes = ENUMS.DS_MANUAL_DEVICE_SELECTION.BASE_CHOICES;
 
+  willDestroy(): void {
+    super.willDestroy();
+
+    if (this.dpContext.dsManualDevicePreference?.hasDirtyAttributes) {
+      this.dpContext.dsManualDevicePreference.rollbackAttributes();
+    }
+  }
+
   get file() {
     return this.args.file;
   }
 
+  get dpContext() {
+    return this.args.dpContext;
+  }
+
+  get devicePreference() {
+    return this.dpContext.dsManualDevicePreference;
+  }
+
   get manualDeviceSelection() {
-    return this.args.dpContext?.dsManualDevicePreference
-      ?.ds_manual_device_selection;
+    return this.devicePreference?.dsManualDeviceSelection;
   }
 
   get selectedDeviceSelection() {
@@ -52,6 +66,17 @@ export default class FileDetailsDynamicScanDrawerManualDastComponent extends Com
 
   get deviceDisplay() {
     return this.file.project.get('platformDisplay');
+  }
+
+  @action
+  handleDsManualDeviceSelectionChange(opt: { value: number }) {
+    const preference = this.devicePreference as DsManualDevicePreferenceModel;
+
+    preference.set('dsManualDeviceSelection', opt.value);
+
+    if (opt.value !== ENUMS.DS_MANUAL_DEVICE_SELECTION.SPECIFIC_DEVICE) {
+      this.dpContext.updateDsManualDevicePref(preference);
+    }
   }
 }
 

@@ -23,9 +23,9 @@ const selectors = {
   dynScanAutoRoot:
     '[data-test-projectSettings-genSettings-dynScanAutoSettings-root]',
   dynScanAutoToggle:
-    '[data-test-genSettings-dynScanAutoSettings-dynamicscanModeToggle] [data-test-toggle-input]',
+    '[data-test-genSettings-dynScanAutoSettings-dynamicscanAutomationToggle] [data-test-toggle-input]',
   dynamicscanModeToggleLabel:
-    '[data-test-genSettings-dynScanAutoSettings-dynamicscanModeToggleLabel]',
+    '[data-test-genSettings-dynScanAutoSettings-dynamicscanAutomationToggleLabel]',
 };
 
 module(
@@ -45,8 +45,26 @@ module(
         return schema.files.find(`${req.params.id}`)?.toJSON();
       });
 
-      this.server.get('/profiles/:id/dynamicscan_mode', (schema, req) =>
-        schema.dynamicscanModes.find(`${req.queryParams.id}`)?.toJSON()
+      this.server.create('ds-automation-preference', {
+        dynamic_scan_automation_enabled: false,
+      });
+
+      this.server.get(
+        '/v2/projects/:projectId/scan_parameter_groups',
+        function (schema) {
+          const results = schema.scanParameterGroups.all().models;
+
+          return {
+            count: results.length,
+            next: null,
+            previous: null,
+            results,
+          };
+        }
+      );
+
+      this.server.get('/v2/profiles/:id/automation_preference', (schema, req) =>
+        schema.dsAutomationPreferences.find(`${req.queryParams.id}`)?.toJSON()
       );
 
       this.owner.register('service:notifications', NotificationsStub);
@@ -68,11 +86,6 @@ module(
     });
 
     test('it renders', async function (assert) {
-      this.server.create('dynamicscan-mode', {
-        id: 1,
-        dynamicscan_mode: 'Manual',
-      });
-
       await render(hbs`
         <ProjectSettings::GeneralSettings::DynamicscanAutomationSettings 
           @project={{this.project}} 
@@ -100,13 +113,12 @@ module(
     });
 
     test('it toggles scheduled automation', async function (assert) {
-      this.server.put('/profiles/:id/dynamicscan_mode', (schema, req) => {
+      this.server.put('v2/profiles/:id/automation_preference', (_, req) => {
         const reqBody = JSON.parse(req.requestBody);
 
-        this.set('dynamicscan_mode', reqBody.dynamicscan_mode);
-
         return {
-          dynamicscan_mode: reqBody.dynamicscan_mode,
+          dynamic_scan_automation_enabled:
+            reqBody.dynamic_scan_automation_enabled,
           id: req.params.id,
         };
       });
@@ -124,7 +136,7 @@ module(
       assert
         .dom(selectors.dynamicscanModeToggleLabel)
         .exists()
-        .containsText(t('appiumScheduledAutomation'));
+        .containsText(t('enableAutomation'));
 
       assert.dom(selectors.dynScanAutoToggle).exists().isNotChecked();
 
@@ -132,13 +144,15 @@ module(
 
       assert.dom(selectors.dynScanAutoToggle).isChecked();
 
-      assert.ok(this.dynamicscan_mode, 'Automated');
+      const notify = this.owner.lookup('service:notifications');
+
+      assert.strictEqual(notify.successMsg, t('scheduledAutomationSuccessOn'));
 
       await click(selectors.dynScanAutoToggle);
 
       assert.dom(selectors.dynScanAutoToggle).isNotChecked();
 
-      assert.ok(this.dynamicscan_mode, 'Manual');
+      assert.strictEqual(notify.successMsg, t('scheduledAutomationSuccessOff'));
     });
   }
 );
