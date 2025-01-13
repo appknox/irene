@@ -45,7 +45,7 @@ export default class FileDetailsDynamicScanScheduledAutomatedComponent extends C
     // this will make showScheduledScan false
     this.dsService.scheduledScan = null;
 
-    this.dsService.fetchLatestAutomatedScan.perform(this.args.file);
+    this.args.file.reload();
   }
 }
 

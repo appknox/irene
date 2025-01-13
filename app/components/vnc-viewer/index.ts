@@ -2,6 +2,7 @@ import Component from '@glimmer/component';
 import { inject as service } from '@ember/service';
 import type Store from '@ember-data/store';
 import type IntlService from 'ember-intl/services/intl';
+import type { AsyncBelongsTo } from '@ember-data/model';
 
 import ENUMS from 'irene/enums';
 import ENV from 'irene/config/environment';
@@ -12,7 +13,7 @@ import type DevicefarmService from 'irene/services/devicefarm';
 export interface VncViewerSignature {
   Args: {
     file: FileModel;
-    dynamicScan: DynamicscanModel | null;
+    dynamicScan: AsyncBelongsTo<DynamicscanModel> | null;
     profileId?: number;
     isAutomated?: boolean;
   };
@@ -29,7 +30,7 @@ export default class VncViewerComponent extends Component<VncViewerSignature> {
   deviceFarmPassword = ENV.deviceFarmPassword;
 
   get deviceFarmURL() {
-    const token = this.args.dynamicScan?.moriartyDynamicscanToken;
+    const token = this.args.dynamicScan?.get('moriartyDynamicscanToken');
 
     if (token) {
       return this.devicefarm.getTokenizedWSURL(token);
@@ -39,7 +40,7 @@ export default class VncViewerComponent extends Component<VncViewerSignature> {
   }
 
   get deviceUsed() {
-    return this.args.dynamicScan?.deviceUsed;
+    return this.args.dynamicScan?.get('deviceUsed');
   }
 
   get deviceType() {
@@ -75,7 +76,7 @@ export default class VncViewerComponent extends Component<VncViewerSignature> {
   }
 
   get startedBy() {
-    return this.dynamicScan?.startedByUser?.get('username');
+    return this.dynamicScan?.get('startedByUser')?.get('username');
   }
 }
 

@@ -6,6 +6,7 @@ import { inject as service } from '@ember/service';
 import { later } from '@ember/runloop';
 import { EmberRunTimer } from '@ember/runloop/types';
 import type Store from '@ember-data/store';
+import type { AsyncBelongsTo } from '@ember-data/model';
 
 import { Duration } from 'dayjs/plugin/duration';
 import dayjs from 'dayjs';
@@ -16,7 +17,7 @@ import ENV from 'irene/config/environment';
 
 export interface DynamicScanExpirySignature {
   Args: {
-    dynamicscan: DynamicscanModel;
+    dynamicscan: AsyncBelongsTo<DynamicscanModel>;
   };
 }
 
@@ -92,7 +93,9 @@ export default class DynamicScanExpiryComponent extends Component<DynamicScanExp
   }
 
   updateDurationRemaining() {
-    const expiresOn = this.dynamicscan ? this.dynamicscan.autoShutdownOn : null;
+    const expiresOn = this.dynamicscan
+      ? this.dynamicscan.get('autoShutdownOn')
+      : null;
 
     if (!expiresOn) {
       return;
@@ -109,9 +112,10 @@ export default class DynamicScanExpiryComponent extends Component<DynamicScanExp
     this.handleExtendTimeMenuClose();
 
     try {
-      await this.dynamicscan.extendTime(time);
+      const ds = await this.dynamicscan;
 
-      await this.dynamicscan.reload();
+      await ds.extendTime(time);
+      await ds.reload();
     } catch (error) {
       const err = error as AdapterError;
 

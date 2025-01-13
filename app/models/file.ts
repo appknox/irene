@@ -25,6 +25,7 @@ import AnalysisModel from './analysis';
 import ProfileModel from './profile';
 import SbomFileModel from './sbom-file';
 import SubmissionModel from './submission';
+import DynamicscanModel from './dynamicscan';
 
 const _getAnalysesCount = (
   analysis: SyncHasMany<AnalysisModel>,
@@ -133,6 +134,20 @@ export default class FileModel extends ModelBaseMixin {
   @belongsTo('file', { inverse: null, async: true })
   declare previousFile: AsyncBelongsTo<FileModel>;
 
+  // query is added in serializer
+  // @hasMany('dynamicscan', { async: true, inverse: null })
+  // declare latestDsAutomatedScanQuery: AsyncHasMany<DynamicscanModel>;
+
+  // @hasMany('dynamicscan', { async: true, inverse: null })
+  // declare latestDsManualScanQuery: AsyncHasMany<DynamicscanModel>;
+
+  // currently for testing purpose
+  @belongsTo('dynamicscan', { async: true, inverse: null })
+  declare latestDsAutomatedScan: AsyncBelongsTo<DynamicscanModel> | null;
+
+  @belongsTo('dynamicscan', { async: true, inverse: null })
+  declare latestDsManualScan: AsyncBelongsTo<DynamicscanModel> | null;
+
   async getLastDynamicScan(
     fileId: string,
     mode: number,
@@ -151,6 +166,23 @@ export default class FileModel extends ModelBaseMixin {
     }
 
     return false;
+  }
+
+  get dsAutomatedScan() {
+    return this.latestDsAutomatedScan;
+    // return this.latestDsAutomatedScanQuery?.slice()?.[0] || null;
+  }
+
+  get dsManualScan() {
+    return this.latestDsManualScan;
+    // return this.latestDsManualScanQuery?.slice()?.[0] || null;
+  }
+
+  get isDynamicScanLoading() {
+    return (
+      this.latestDsAutomatedScan?.isPending ||
+      this.latestDsManualScan?.isPending
+    );
   }
 
   get isManualRequested() {

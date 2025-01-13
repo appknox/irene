@@ -1,16 +1,10 @@
 import Component from '@glimmer/component';
 import { inject as service } from '@ember/service';
-import { tracked } from '@glimmer/tracking';
-import { task } from 'ember-concurrency';
 import { action } from '@ember/object';
-import { waitForPromise } from '@ember/test-waiters';
 import type IntlService from 'ember-intl/services/intl';
 
 import type FileModel from 'irene/models/file';
-import type DynamicscanModel from 'irene/models/dynamicscan';
 import { DsComputedStatus } from 'irene/models/dynamicscan';
-import ENUMS from 'irene/enums';
-import parseError from 'irene/utils/parse-error';
 
 export interface FileDetailsScanActionsDynamicScanSignature {
   Args: {
@@ -22,21 +16,17 @@ export default class FileDetailsScanActionsDynamicScanComponent extends Componen
   @service declare intl: IntlService;
   @service('notifications') declare notify: NotificationService;
 
-  @tracked automatedDynamicScan: DynamicscanModel | null = null;
-  @tracked manualDynamicScan: DynamicscanModel | null = null;
+  get automatedDynamicScan() {
+    return this.args.file.dsAutomatedScan;
+  }
 
-  constructor(
-    owner: unknown,
-    args: FileDetailsScanActionsDynamicScanSignature['Args']
-  ) {
-    super(owner, args);
-
-    this.fetchLatestManualAutomaticScan.perform();
+  get manualDynamicScan() {
+    return this.args.file.dsManualScan;
   }
 
   get status() {
-    const automatedStatus = this.automatedDynamicScan?.computedStatus;
-    const manualStatus = this.manualDynamicScan?.computedStatus;
+    const automatedStatus = this.automatedDynamicScan?.get('computedStatus');
+    const manualStatus = this.manualDynamicScan?.get('computedStatus');
 
     if (automatedStatus && manualStatus) {
       return this.computeStatus(automatedStatus, manualStatus);
@@ -86,22 +76,6 @@ export default class FileDetailsScanActionsDynamicScanComponent extends Componen
 
     return DsComputedStatus.NOT_STARTED;
   }
-
-  fetchLatestManualAutomaticScan = task(async () => {
-    try {
-      const file = this.args.file;
-
-      this.automatedDynamicScan = await waitForPromise(
-        file.getLastDynamicScan(file.id, ENUMS.DYNAMIC_MODE.AUTOMATED)
-      );
-
-      this.manualDynamicScan = await waitForPromise(
-        file.getLastDynamicScan(file.id, ENUMS.DYNAMIC_MODE.MANUAL)
-      );
-    } catch (error) {
-      this.notify.error(parseError(error));
-    }
-  });
 }
 
 declare module '@glint/environment-ember-loose/registry' {

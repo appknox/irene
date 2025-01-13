@@ -46,13 +46,17 @@ export default class FileDetailsDastHeader extends Component<FileDetailsDastHead
   }
 
   get dsAutomatedScan() {
-    return this.dsService.automatedScan;
+    return this.file.dsAutomatedScan;
+  }
+
+  get dsManualScan() {
+    return this.file.dsManualScan;
   }
 
   get isAutomatedScanRunning() {
     return (
-      this.dsAutomatedScan?.isStartingOrShuttingInProgress ||
-      this.dsAutomatedScan?.isReadyOrRunning
+      this.dsAutomatedScan?.get('isStartingOrShuttingInProgress') ||
+      this.dsAutomatedScan?.get('isReadyOrRunning')
     );
   }
 
@@ -71,7 +75,7 @@ export default class FileDetailsDastHeader extends Component<FileDetailsDastHead
           this.currentRoute ===
           'authenticated.dashboard.file.dynamic-scan.manual',
         iconDetails: this.getScanStatusIconData(
-          this.dsService.manualScan?.computedStatus
+          this.dsManualScan?.get('computedStatus')
         ),
       },
       !this.orgIsAnEnterprise && {
@@ -84,7 +88,7 @@ export default class FileDetailsDastHeader extends Component<FileDetailsDastHead
           'authenticated.dashboard.file.dynamic-scan.automated',
         inProgress: this.isAutomatedScanRunning,
         iconDetails: this.getScanStatusIconData(
-          this.dsService.automatedScan?.computedStatus
+          this.dsAutomatedScan?.get('computedStatus')
         ),
       },
       this.dsService.showScheduledScan && {
@@ -116,7 +120,11 @@ export default class FileDetailsDastHeader extends Component<FileDetailsDastHead
     }
 
     if (status === DsComputedStatus.ERROR) {
-      return { icon: 'warning', color: 'warn' as const };
+      return { icon: 'warning', color: 'error' as const };
+    }
+
+    if (status === DsComputedStatus.CANCELLED) {
+      return { icon: 'block', color: 'error' as const };
     }
 
     return null;

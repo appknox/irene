@@ -3,7 +3,7 @@ import { tracked } from '@glimmer/tracking';
 import { task } from 'ember-concurrency';
 import { action } from '@ember/object';
 import type IntlService from 'ember-intl/services/intl';
-import type RouterService from '@ember/routing/router-service';
+import type Store from '@ember-data/store';
 
 import type FileModel from 'irene/models/file';
 import type OrganizationService from './organization';
@@ -13,15 +13,11 @@ import ENUMS from 'irene/enums';
 
 export default class DynamicScanService extends Service {
   @service declare intl: IntlService;
-  @service declare router: RouterService;
+  @service declare store: Store;
   @service declare organization: OrganizationService;
   @service('notifications') declare notify: NotificationService;
 
-  @tracked manualScan: DynamicscanModel | null = null;
-  @tracked automatedScan: DynamicscanModel | null = null;
   @tracked scheduledScan: DynamicscanModel | null = null;
-
-  currentFile: FileModel | null = null;
 
   get isSuperUserAndAutomationEnabled() {
     return (
@@ -42,12 +38,6 @@ export default class DynamicScanService extends Service {
    */
   @action
   fetchLatestScans(file: FileModel) {
-    // save file reference
-    this.currentFile = file;
-
-    this.fetchLatestManualScan.perform(file);
-    this.fetchLatestAutomatedScan.perform(file);
-
     if (this.isSuperUserAndAutomationEnabled) {
       this.fetchLatestScheduledScan.perform(file);
     }
@@ -55,47 +45,19 @@ export default class DynamicScanService extends Service {
 
   @action
   resetScans() {
-    this.manualScan = null;
-    this.automatedScan = null;
     this.scheduledScan = null;
-    this.currentFile = null;
   }
-
-  @action
-  async fetchLatestScan(
-    file: FileModel,
-    mode: number,
-    isScheduledScan = false
-  ) {
-    try {
-      return await file.getLastDynamicScan(file.id, mode, isScheduledScan);
-    } catch (e) {
-      this.notify.error(parseError(e, this.intl.t('pleaseTryAgain')));
-
-      return null;
-    }
-  }
-
-  fetchLatestManualScan = task(async (file: FileModel) => {
-    this.manualScan = await this.fetchLatestScan(
-      file,
-      ENUMS.DYNAMIC_MODE.MANUAL
-    );
-  });
-
-  fetchLatestAutomatedScan = task(async (file: FileModel) => {
-    this.automatedScan = await this.fetchLatestScan(
-      file,
-      ENUMS.DYNAMIC_MODE.AUTOMATED
-    );
-  });
 
   fetchLatestScheduledScan = task(async (file: FileModel) => {
-    this.scheduledScan = await this.fetchLatestScan(
-      file,
-      ENUMS.DYNAMIC_MODE.AUTOMATED,
-      true
-    );
+    try {
+      this.scheduledScan = await file.getLastDynamicScan(
+        file.id,
+        ENUMS.DYNAMIC_MODE.AUTOMATED,
+        true
+      );
+    } catch (e) {
+      this.notify.error(parseError(e, this.intl.t('pleaseTryAgain')));
+    }
   });
 
   /**
@@ -114,37 +76,19 @@ export default class DynamicScanService extends Service {
       return;
     }
 
-    // Check if we're on the correct route and have a current file
-    const isOnDynamicScanRoute = this.router.currentRouteName.includes(
-      'authenticated.dashboard.file.dynamic-scan'
-    );
+    let existingModel: DynamicscanModel | null | undefined;
 
-    if (!this.currentFile || !isOnDynamicScanRoute) {
-      return;
-    }
+    const file = this.store.peekRecord('file', model.file.get('id') as string);
 
-    // Check if the scan belongs to the current file
-    const isSameFile = model.file.get('id') === this.currentFile.id;
-
-    if (!isSameFile) {
-      return;
+    if (model.mode === ENUMS.DYNAMIC_MODE.MANUAL) {
+      existingModel = file?.get('dsManualScan')?.content;
+    } else if (model.mode === ENUMS.DYNAMIC_MODE.AUTOMATED) {
+      existingModel = file?.get('dsAutomatedScan')?.content;
     }
 
     // Update manual scan if conditions are met
-    if (
-      model.mode === ENUMS.DYNAMIC_MODE.MANUAL &&
-      model.id !== this.manualScan?.id
-    ) {
-      this.manualScan = model;
-      return;
-    }
-
-    // Update automated scan if conditions are met
-    if (
-      model.mode === ENUMS.DYNAMIC_MODE.AUTOMATED &&
-      model.id !== this.automatedScan?.id
-    ) {
-      this.automatedScan = model;
+    if (model.id !== existingModel?.id) {
+      file?.reload?.();
     }
   });
 }

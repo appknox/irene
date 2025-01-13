@@ -1,9 +1,6 @@
 import Component from '@glimmer/component';
-import { inject as service } from '@ember/service';
 import { action } from '@ember/object';
 
-import type DynamicScanService from 'irene/services/dynamic-scan';
-import type DynamicscanModel from 'irene/models/dynamicscan';
 import type FileModel from 'irene/models/file';
 
 export interface FileDetailsDastManualSignature {
@@ -14,34 +11,29 @@ export interface FileDetailsDastManualSignature {
 }
 
 export default class FileDetailsDastManual extends Component<FileDetailsDastManualSignature> {
-  @service('dynamic-scan') declare dsService: DynamicScanService;
+  get file() {
+    return this.args.file;
+  }
 
   get dynamicScan() {
-    return this.dsService.manualScan;
+    return this.file.dsManualScan;
   }
 
   get isFetchingDynamicScan() {
-    return this.dsService.fetchLatestManualScan.isRunning;
+    return this.file.latestDsManualScan?.isPending;
   }
 
   get showStatusChip() {
-    return !this.dynamicScan?.isReady;
+    return !this.dynamicScan?.get('isReady');
   }
 
   get showActionButton() {
-    return !this.dynamicScan?.isShuttingDown;
-  }
-
-  @action
-  handleScanStart(dynamicScan: DynamicscanModel) {
-    this.dsService.manualScan = dynamicScan;
+    return !this.dynamicScan?.get('isShuttingDown');
   }
 
   @action
   handleScanShutdown(closeFullscreen: () => void) {
     closeFullscreen();
-
-    this.dsService.fetchLatestManualScan.perform(this.args.file);
   }
 }
 

@@ -8,7 +8,7 @@
     {{t 'dast'}}
   </AkTypography>
 
-  {{#if this.fetchLatestManualAutomaticScan.isRunning}}
+  {{#if @file.isDynamicScanLoading}}
     <AkSkeleton @width='80px' />
   {{else}}
     <FileDetails::DynamicScan::StatusChip

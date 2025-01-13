@@ -4,26 +4,28 @@ import { inject as service } from '@ember/service';
 import { task } from 'ember-concurrency';
 import { action } from '@ember/object';
 import type IntlService from 'ember-intl/services/intl';
+import type { AsyncBelongsTo } from '@ember-data/model';
 
 import ENV from 'irene/config/environment';
 import parseError from 'irene/utils/parse-error';
 import triggerAnalytics from 'irene/utils/trigger-analytics';
 import type FileModel from 'irene/models/file';
 import type DynamicscanModel from 'irene/models/dynamicscan';
+import type IreneAjaxService from 'irene/services/ajax';
 
 export interface DynamicScanActionSignature {
   Args: {
     onScanShutdown?: () => void;
-    onScanStart: (dynamicscan: DynamicscanModel) => void;
     file: FileModel;
     dynamicScanText: string;
     isAutomatedScan?: boolean;
-    dynamicScan: DynamicscanModel | null;
+    dynamicScan: AsyncBelongsTo<DynamicscanModel> | null;
   };
 }
 
 export default class DynamicScanActionComponent extends Component<DynamicScanActionSignature> {
   @service declare intl: IntlService;
+  @service declare ajax: IreneAjaxService;
   @service('notifications') declare notify: NotificationService;
 
   @tracked showDynamicScanDrawer = false;
@@ -41,7 +43,7 @@ export default class DynamicScanActionComponent extends Component<DynamicScanAct
   }
 
   get dynamicScanActionButton() {
-    if (this.args.dynamicScan?.isStarting) {
+    if (this.args.dynamicScan?.get('isStarting')) {
       return {
         icon: 'close',
         text: this.intl.t('cancelScan'),
@@ -53,7 +55,7 @@ export default class DynamicScanActionComponent extends Component<DynamicScanAct
       };
     }
 
-    if (this.args.dynamicScan?.isReadyOrRunning) {
+    if (this.args.dynamicScan?.get('isReadyOrRunning')) {
       return {
         icon: 'stop-circle',
         text: this.intl.t('stop'),
@@ -64,8 +66,8 @@ export default class DynamicScanActionComponent extends Component<DynamicScanAct
     }
 
     if (
-      this.args.dynamicScan?.isCompleted ||
-      this.args.dynamicScan?.isStatusError
+      this.args.dynamicScan?.get('isCompleted') ||
+      this.args.dynamicScan?.get('isStatusError')
     ) {
       return {
         icon: 'refresh',
@@ -100,7 +102,12 @@ export default class DynamicScanActionComponent extends Component<DynamicScanAct
 
   dynamicShutdown = task({ drop: true }, async () => {
     try {
-      await this.args.dynamicScan?.destroyRecord();
+      await this.ajax.delete(
+        `/dynamicscans/${this.args.dynamicScan?.get('id')}`,
+        { namespace: ENV.namespace_v2 }
+      );
+
+      this.file.reload();
 
       this.args.onScanShutdown?.();
     } catch (error) {

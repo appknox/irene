@@ -21,6 +21,9 @@ module(
 
       const file = this.server.create('file', {
         project: '1',
+        latest_ds_manual_scan: null,
+        latest_ds_automated_scan: null,
+        is_active: true,
       });
 
       this.server.create('project', { file: file.id, id: '1' });
@@ -28,27 +31,14 @@ module(
       // set properties
       this.setProperties({
         file: store.push(store.normalize('file', file.toJSON())),
+        store,
       });
 
       await this.owner.lookup('service:organization').load();
 
       // server mocks
-      this.server.get('/v2/files/:id/dynamicscans', (schema, req) => {
-        const { limit, mode } = req.queryParams || {};
-
-        const results = schema.dynamicscans
-          .where({
-            file: req.params.id,
-            ...(mode ? { mode: Number(mode) } : {}),
-          })
-          .models.slice(0, limit ? Number(limit) : results.length);
-
-        return {
-          count: results.length,
-          next: null,
-          previous: null,
-          results,
-        };
+      this.server.get('/v2/dynamicscans/:id', (schema, req) => {
+        return schema.dynamicscans.find(`${req.params.id}`)?.toJSON();
       });
     });
 
@@ -56,9 +46,6 @@ module(
       this.server.get('/manualscans/:id', (schema, req) => {
         return { id: req.params.id };
       });
-
-      this.file.dynamicStatus = ENUMS.DYNAMIC_STATUS.NONE;
-      this.file.isDynamicDone = false;
 
       this.server.get('/v2/projects/:id', (schema, req) => {
         return schema.projects.find(`${req.params.id}`)?.toJSON();
@@ -216,24 +203,39 @@ module(
         },
       ],
       async function (assert, { automatedStatus, manualStatus, expectedText }) {
-        // Create dynamicscan objects in the store
+        // Create dynamicscan objects in the server
         if (automatedStatus) {
-          this.server.create('dynamicscan', {
+          this.dsAutomatedScan = this.server.create('dynamicscan', {
             id: '1',
-            file: this.file.id,
+            file: '10',
             mode: ENUMS.DYNAMIC_MODE.AUTOMATED,
             status: automatedStatus,
           });
         }
 
         if (manualStatus) {
-          this.server.create('dynamicscan', {
+          this.dsManualScan = this.server.create('dynamicscan', {
             id: '2',
-            file: this.file.id,
+            file: '10',
             mode: ENUMS.DYNAMIC_MODE.MANUAL,
             status: manualStatus,
           });
         }
+
+        // create file with latest dynamic scan
+        this.file = this.store.push(
+          this.store.normalize(
+            'file',
+            this.server
+              .create('file', {
+                id: '10',
+                latest_ds_manual_scan: this.dsManualScan?.id ?? null,
+                latest_ds_automated_scan: this.dsAutomatedScan?.id ?? null,
+                is_active: true,
+              })
+              .toJSON()
+          )
+        );
 
         await render(hbs`
           <FileDetails::ScanActions::DynamicScan 

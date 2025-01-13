@@ -49,7 +49,6 @@ module(
 
     hooks.beforeEach(async function () {
       const store = this.owner.lookup('service:store');
-      const dsService = this.owner.lookup('service:dynamic-scan');
 
       const profile = this.server.create('profile', { id: '100' });
 
@@ -57,6 +56,8 @@ module(
         project: '1',
         profile: profile.id,
         is_active: true,
+        latest_ds_automated_scan: null,
+        latest_ds_manual_scan: null,
       });
 
       const project = this.server.create('project', {
@@ -80,22 +81,8 @@ module(
       );
 
       // server mocks
-      this.server.get('/v2/files/:id/dynamicscans', (schema, req) => {
-        const { limit, mode } = req.queryParams || {};
-
-        const results = schema.dynamicscans
-          .where({
-            file: req.params.id,
-            ...(mode ? { mode: Number(mode) } : {}),
-          })
-          .models.slice(0, limit ? Number(limit) : results.length);
-
-        return {
-          count: results.length,
-          next: null,
-          previous: null,
-          results,
-        };
+      this.server.get('/v2/dynamicscans/:id', (schema, req) => {
+        return schema.dynamicscans.find(`${req.params.id}`)?.toJSON();
       });
 
       this.server.get('/v2/projects/:id', (schema, req) => {
@@ -103,9 +90,6 @@ module(
       });
 
       const fileModel = store.push(store.normalize('file', file.toJSON()));
-
-      // In real scenario this will be called in the root component
-      dsService.fetchLatestScans(fileModel);
 
       // set component properties
       this.setProperties({
@@ -116,7 +100,6 @@ module(
         devicePreference,
         availableDevices,
         store,
-        dsService,
       });
 
       // set up services
@@ -597,8 +580,8 @@ module(
         { canExtend: true, autoShutdownMinutes: 15 },
       ],
       async function (assert, { canExtend, autoShutdownMinutes }) {
-        this.server.create('dynamicscan', {
-          file: this.file.id,
+        const dynamicscan = this.server.create('dynamicscan', {
+          file: '10',
           mode: ENUMS.DYNAMIC_MODE.MANUAL,
           status: ENUMS.DYNAMIC_SCAN_STATUS.READY_FOR_INTERACTION,
 
@@ -608,6 +591,20 @@ module(
 
           ended_on: null,
         });
+
+        // create file with latest dynamic scan
+        this.file = this.store.push(
+          this.store.normalize(
+            'file',
+            this.server
+              .create('file', {
+                id: '10',
+                latest_ds_manual_scan: dynamicscan.id,
+                is_active: true,
+              })
+              .toJSON()
+          )
+        );
 
         this.server.get('/v2/dynamicscans/:id', (schema, req) => {
           return schema.dynamicscans.find(`${req.params.id}`).toJSON();
@@ -627,9 +624,6 @@ module(
             })
             .toJSON();
         });
-
-        // calling here again since dynamicscan is updated
-        this.dsService.fetchLatestScans(this.file);
 
         await render(hbs`
           <FileDetails::DynamicScan::Manual @file={{this.file}} @dynamicScanText={{this.dynamicScanText}} />

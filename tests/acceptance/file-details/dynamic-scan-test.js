@@ -14,6 +14,7 @@ import { module, test } from 'qunit';
 import Service from '@ember/service';
 import { t } from 'ember-intl/test-support';
 import { faker } from '@faker-js/faker';
+import { Response } from 'miragejs';
 
 import ENUMS from 'irene/enums';
 import WebsocketService from 'irene/services/websocket';
@@ -235,6 +236,8 @@ module('Acceptance | file-details/dynamic-scan', function (hooks) {
       is_active: true,
       project: project.id,
       profile: profile.id,
+      latest_ds_automated_scan: null,
+      latest_ds_manual_scan: null,
       analyses,
     });
 
@@ -266,22 +269,8 @@ module('Acceptance | file-details/dynamic-scan', function (hooks) {
       schema.profiles.find(`${req.params.id}`)?.toJSON()
     );
 
-    this.server.get('/v2/files/:id/dynamicscans', (schema, req) => {
-      const { limit, mode } = req.queryParams || {};
-
-      const results = schema.dynamicscans
-        .where({
-          file: req.params.id,
-          ...(mode ? { mode: Number(mode) } : {}),
-        })
-        .models.slice(0, limit ? Number(limit) : results.length);
-
-      return {
-        count: results.length,
-        next: null,
-        previous: null,
-        results,
-      };
+    this.server.get('/v2/dynamicscans/:id', (schema, req) => {
+      return schema.dynamicscans.find(`${req.params.id}`)?.toJSON();
     });
 
     this.server.get('v2/profiles/:id/automation_preference', (_, req) => {
@@ -334,6 +323,12 @@ module('Acceptance | file-details/dynamic-scan', function (hooks) {
         mode,
         status,
         ended_on: null,
+      });
+
+      this.file.update({
+        latest_ds_manual_scan: mode === ENUMS.DYNAMIC_MODE.MANUAL ? id : null,
+        latest_ds_automated_scan:
+          mode === ENUMS.DYNAMIC_MODE.AUTOMATED ? id : null,
       });
 
       const isManualMode = mode === ENUMS.DYNAMIC_MODE.MANUAL;
@@ -538,7 +533,7 @@ module('Acceptance | file-details/dynamic-scan', function (hooks) {
         this.server.create('dynamicscan', {
           file: this.file.id,
           mode: ENUMS.DYNAMIC_MODE[mode.toUpperCase()],
-          status: ENUMS.DYNAMIC_SCAN_STATUS.NOT_STARTED,
+          status: ENUMS.DYNAMIC_SCAN_STATUS.PREPROCESSING,
           ended_on: null,
           started_by_user: startedBy ? this.profile.id : null,
         });
@@ -573,11 +568,13 @@ module('Acceptance | file-details/dynamic-scan', function (hooks) {
         // create and set dynamicscan data reference
         this.dynamicscan = createDynamicscan();
 
-        return this.dynamicscan.toJSON();
-      });
+        this.file.update({
+          latest_ds_manual_scan: mode === 'manual' ? this.dynamicscan.id : null,
+          latest_ds_automated_scan:
+            mode === 'automated' ? this.dynamicscan.id : null,
+        });
 
-      this.server.get('/v2/dynamicscans/:id', (schema, req) => {
-        return schema.dynamicscans.find(`${req.params.id}`)?.toJSON();
+        return this.dynamicscan.toJSON();
       });
 
       this.server.delete('/v2/dynamicscans/:id', () => {
@@ -833,15 +830,43 @@ module('Acceptance | file-details/dynamic-scan', function (hooks) {
   );
 
   test('dynamic scan scheduled automated flow', async function (assert) {
-    assert.expect();
+    assert.expect(37);
 
-    const createDynamicscan = () =>
-      this.server.create('dynamicscan', {
+    const createDynamicscan = () => {
+      const scan = this.server.create('dynamicscan', {
         file: this.file.id,
         mode: ENUMS.DYNAMIC_MODE.AUTOMATED,
         status: ENUMS.DYNAMIC_SCAN_STATUS.NOT_STARTED,
         ended_on: null,
       });
+
+      this.file.update({
+        latest_ds_automated_scan: scan.id,
+      });
+
+      return scan;
+    };
+
+    this.server.get('/v2/files/:id/dynamicscans', (schema, req) => {
+      const { limit, mode, engine, group_status } = req.queryParams || {};
+
+      assert.strictEqual(engine, '2');
+      assert.strictEqual(group_status, 'running');
+
+      const results = schema.dynamicscans
+        .where({
+          file: req.params.id,
+          ...(mode ? { mode: Number(mode) } : {}),
+        })
+        .models.slice(0, limit ? Number(limit) : results.length);
+
+      return {
+        count: results.length,
+        next: null,
+        previous: null,
+        results,
+      };
+    });
 
     this.server.create('ds-automated-device-preference', {
       id: this.profile.id,
@@ -859,10 +884,6 @@ module('Acceptance | file-details/dynamic-scan', function (hooks) {
       this.dynamicscan = createDynamicscan();
 
       return this.dynamicscan.toJSON();
-    });
-
-    this.server.get('/v2/dynamicscans/:id', (schema, req) => {
-      return schema.dynamicscans.find(`${req.params.id}`)?.toJSON();
     });
 
     this.server.delete('/v2/dynamicscans/:id', () => {
