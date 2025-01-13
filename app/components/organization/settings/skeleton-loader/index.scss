@@ -1,0 +1,43 @@
+.org-settings-container {
+  background-color: var(
+    --organization-settings-skeleton-loader-background-color
+  );
+  margin-top: 1.5em;
+  padding: 1.5em 2em 5em 2em;
+  box-sizing: border-box;
+}
+
+.bordered-box {
+  border: 1px solid
+    var(--organization-settings-skeleton-loader-sso-border-color);
+  border-radius: var(--organization-settings-skeleton-loader-sso-border-radius);
+  box-sizing: border-box;
+
+  .bordered-box-section {
+    padding: 1em;
+    box-sizing: border-box;
+
+    &:not(:last-child) {
+      border-bottom: 1px solid
+        var(--organization-settings-skeleton-loader-sso-border-color);
+    }
+  }
+
+  .full-bordered-box-section {
+    box-sizing: border-box;
+
+    &:not(:last-child) {
+      border-bottom: 1px solid
+        var(--organization-settings-skeleton-loader-sso-border-color);
+    }
+
+    .full-bordered-box-section-column {
+      padding: 1em;
+
+      &:last-child {
+        border-left: 1px solid
+          var(--organization-settings-skeleton-loader-sso-border-color);
+      }
+    }
+  }
+}

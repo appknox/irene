@@ -498,6 +498,7 @@
     "untestedIssues": "Untested Issues",
     "summary1": "You are comparing file of ID",
     "summary2": "with file of ID",
+    "title": "File Compare",
     "nameOfTestCase": "Name of Test Case",
     "noTagsMessage": "No Tags Available",
     "selectAFile": "Select a File",

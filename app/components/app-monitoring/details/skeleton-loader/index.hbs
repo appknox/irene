@@ -1,0 +1,88 @@
+<AkSkeleton @width='250px' @height='14px' class='mt-2' />
+
+<AkStack
+  @direction='column'
+  @width='full'
+  local-class='app-details-container'
+  class='pt-3'
+>
+  <AkStack
+    @direction='column'
+    @tag='section'
+    @width='full'
+    local-class='app-details-wrapper'
+  >
+    <AkStack
+      @direction='row'
+      @justifyContent='space-between'
+      @alignItems='stretch'
+      @width='full'
+      local-class='overview-container'
+    >
+      <AkStack @direction='column' @tag='article'>
+        <AkStack @direction='row' @spacing='1.5' local-class='overview-icons'>
+          <AkSkeleton @width='40px' @height='40px' />
+
+          <AkSkeleton @width='40px' @height='40px' />
+        </AkStack>
+
+        <AkSkeleton @width='100px' @height='20px' class='mb-1' />
+
+        <AkSkeleton @width='200px' @height='16px' />
+      </AkStack>
+
+      <AkStack
+        @direction='column'
+        @alignItems='flex-start'
+        @justifyContent='center'
+        local-class='monitoring-toggle-container'
+      >
+        <AkSkeleton @width='125px' @height='16px' class='mb-1' />
+
+        <AkStack @alignItems='center' @spacing='1'>
+          <AkSkeleton @width='35px' @height='20px' class='mb-1' />
+        </AkStack>
+      </AkStack>
+    </AkStack>
+
+    <AkStack @direction='column' local-class='monitoring-details-container'>
+      <div local-class='monitoring-details-group'>
+        <AkStack>
+          <AkSkeleton @width='145px' @height='16px' class='mr-2' />
+
+          <AkSkeleton @width='30px' @height='16px' />
+        </AkStack>
+
+        <AkStack>
+          <AkSkeleton @width='145px' @height='16px' class='mr-2' />
+
+          <AkSkeleton @width='100px' @height='16px' />
+        </AkStack>
+      </div>
+
+      <div local-class='monitoring-details-group'>
+        <AkStack>
+          <AkSkeleton @width='145px' @height='16px' class='mr-2' />
+
+          <AkSkeleton @width='40px' @height='16px' />
+        </AkStack>
+
+        <AkStack class='mb-2'>
+          <AkSkeleton @width='145px' @height='16px' class='mr-2' />
+
+          <AkSkeleton @width='60px' @height='16px' />
+        </AkStack>
+      </div>
+    </AkStack>
+  </AkStack>
+
+  <AkStack class='mt-2 ml-2'>
+    <AkSkeleton @width='140px' @height='20px' class='mr-3' />
+
+    <AkSkeleton @width='140px' @height='20px' />
+  </AkStack>
+</AkStack>
+
+<AkSkeleton @width='500px' @height='20px' class='ml-2 mb-2' />
+
+<AppMonitoring::Loading @loadingText='{{t "loading"}}...' />

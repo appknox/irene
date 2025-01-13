@@ -1,0 +1,10 @@
+.summary-header-root {
+  border-radius: var(--sbom-scan-details-skeleton-loader-summary-border-radius);
+  border: 1px solid
+    var(--sbom-scan-details-skeleton-loader-summary-border-color);
+  box-sizing: border-box;
+
+  .summary-header-container {
+    padding: 0.75em 1em;
+  }
+}

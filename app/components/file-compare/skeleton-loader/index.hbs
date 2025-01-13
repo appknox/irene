@@ -1,0 +1,63 @@
+<AkSkeleton @width='250px' @height='16px' class='mt-2 mb-3' />
+
+<AkStack @direction='column' @width='full'>
+  <AkStack
+    @width='full'
+    @justifyContent='space-between'
+    @alignItems='center'
+    local-class='file-compare-header-project-overview'
+  >
+    <AkStack @width='full' @alignItems='center' @spacing='1.5'>
+      <AkStack @alignItems='center' @spacing='1'>
+        <AkSkeleton @width='25px' @height='25px' />
+
+        <AkSkeleton @width='75px' @height='16px' />
+      </AkStack>
+
+      <AkDivider @direction='vertical' @height='26px' />
+
+      <AkStack @alignItems='center' @spacing='0.5'>
+        <AkSkeleton @width='25px' @height='25px' />
+
+        <AkSkeleton @width='75px' @height='16px' />
+      </AkStack>
+
+      <AkDivider @direction='vertical' @height='26px' />
+
+      <AkStack @alignItems='center'>
+        <AkSkeleton @width='25px' @height='25px' />
+      </AkStack>
+    </AkStack>
+  </AkStack>
+
+  <AkStack
+    @width='full'
+    @justifyContent='space-between'
+    @alignItems='center'
+    local-class='file-compare-header-info'
+  >
+    <AkStack @direction='column' @spacing='1.5'>
+      <AkSkeleton @width='75px' @height='22px' />
+
+      <AkSkeleton @width='200px' @height='16px' />
+    </AkStack>
+
+    <AkSkeleton @width='25px' @height='25px' />
+  </AkStack>
+</AkStack>
+
+<div local-class='file-compare-tabs' class='pb-3'>
+  <AkStack @spacing='6' class='p-2'>
+    <AkSkeleton @width='100px' @height='16px' />
+
+    <AkSkeleton @width='100px' @height='16px' />
+
+    <AkSkeleton @width='100px' @height='16px' />
+
+    <AkSkeleton @width='100px' @height='16px' />
+  </AkStack>
+
+  <AkDivider @color='dark' />
+</div>
+
+<FileCompare::Loader @loadingText='{{t "loading"}}...' />
