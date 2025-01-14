@@ -191,6 +191,7 @@ module('Integration | Component | security/analysis-details', function (hooks) {
           .create('security/analysis', 'withAllRegulatory', {
             vulnerability: vulnerabilityModel.id,
             file: secFileModel.id,
+            risk: ENUMS.RISK.HIGH,
           })
           .toJSON()
       )
@@ -276,17 +277,6 @@ module('Integration | Component | security/analysis-details', function (hooks) {
   );
 
   test('it marks a test case as passed', async function (assert) {
-    this.secAnalysis = this.store.push(
-      this.store.normalize(
-        'security/analysis',
-        this.server.create('security/analysis', {
-          vulnerability: this.vulnerabilityModel.id,
-          file: this.secFileModel.id,
-          risk: ENUMS.RISK.HIGH,
-        })
-      )
-    );
-
     this.server.get('/cvss', () => {
       return {
         cvss_base: 0,
@@ -427,16 +417,6 @@ module('Integration | Component | security/analysis-details', function (hooks) {
         isInvalidCvssMetric,
       }
     ) {
-      this.secAnalysis = this.store.push(
-        this.store.normalize(
-          'security/analysis',
-          this.server.create('security/analysis', {
-            vulnerability: this.vulnerabilityModel.id,
-            file: this.secFileModel.id,
-          })
-        )
-      );
-
       this.secAnalysis.set(key, currValue);
 
       this.server.get('/cvss', () => {
@@ -537,17 +517,6 @@ module('Integration | Component | security/analysis-details', function (hooks) {
 
     const cvssBase = -1.0;
     const cvssRisk = ENUMS.RISK.UNKNOWN;
-
-    this.secAnalysis = this.store.push(
-      this.store.normalize(
-        'security/analysis',
-        this.server.create('security/analysis', {
-          vulnerability: this.vulnerabilityModel.id,
-          file: this.secFileModel.id,
-          risk: ENUMS.RISK.HIGH,
-        })
-      )
-    );
 
     this.server.put('/hudson-api/analyses/:id', (schema, req) => {
       const untestedCvssState = {
@@ -772,20 +741,6 @@ module('Integration | Component | security/analysis-details', function (hooks) {
       const fileName = `${faker.string.alphanumeric(10)}.${ext}`;
       const downloadURL = `https://www.download.com/${fileName}`;
 
-      // Create an analysis
-      this.secAnalysis = this.store.push(
-        this.store.normalize(
-          'security/analysis',
-          this.server
-            .create('security/analysis', {
-              vulnerability: this.vulnerabilityModel.id,
-              file: this.secFileModel.id,
-              risk: ENUMS.RISK.HIGH,
-            })
-            .toJSON()
-        )
-      );
-
       this.server.post('/hudson-api/attachments', () => {
         if (fail) {
           return new Response(400, {}, { detail: 'Network Error' });
@@ -872,9 +827,7 @@ module('Integration | Component | security/analysis-details', function (hooks) {
         .containsText('Upload File');
 
       // Creates a new file with extension
-      let file = new File(['Test  file'], fileName, {
-        type: ext,
-      });
+      const file = new File(['Test file'], fileName, { type: ext });
 
       await selectFiles(
         '[data-test-securityAnalysisDetails-attachments-uploadFileInput]',
@@ -956,24 +909,25 @@ module('Integration | Component | security/analysis-details', function (hooks) {
     async function (assert, { edit, add, clear }) {
       assert.expect();
 
-      // Give each finding an ID
-      let findingId = 0;
+      const findings = this.secAnalysis
+        .get('findings')
+        .map((finding, index) => ({
+          ...finding,
+          id: index + 1,
+        }));
 
-      const findings = this.secAnalysis.get('findings').map((finding) => {
-        findingId = findingId + 1;
-        finding.id = findingId;
-
-        return finding;
-      });
-
-      // Finings Edit details
-      const FINDING_ID_TO_EDIT = findings[0].id;
-      const EDITED_TITLE = 'EDITED TITLE';
-      const EDITED_DESCRIPTION = 'EDITED DESCRIPTION';
-
-      // New finding details
-      const NEW_TITLE = 'NEW TITLE';
-      const NEW_DESCRIPTION = 'NEW DESCRIPTION';
+      const testData = {
+        editCase: {
+          id: findings[0].id,
+          title: 'EDITED TITLE',
+          description: 'EDITED DESCRIPTION',
+        },
+        addCase: {
+          title: 'NEW TITLE',
+          description: 'NEW DESCRIPTION',
+          id: findings.length + 1,
+        },
+      };
 
       // Server Mocks
       this.server.put('/hudson-api/analyses/:id', (schema, req) => {
@@ -988,24 +942,24 @@ module('Integration | Component | security/analysis-details', function (hooks) {
           );
         } else if (add) {
           // assertions to ensure findings contain newly added finding
+          const newFinding = data.findings.find(
+            (f) => f.title === testData.addCase.title
+          );
+
           assert.deepEqual(
-            data.findings.find((f) => f.title === NEW_TITLE),
-            {
-              title: NEW_TITLE,
-              description: NEW_DESCRIPTION,
-              id: findingId + 1,
-            },
+            newFinding,
+            testData.addCase,
             'API CHECK: new finding is sent to API'
           );
         } else if (edit) {
           // assertions to ensure a finding was edited successfully
+          const editedFinding = data.findings.find(
+            (f) => f.id === testData.editCase.id
+          );
+
           assert.deepEqual(
-            data.findings.find((f) => f.id === FINDING_ID_TO_EDIT),
-            {
-              title: EDITED_TITLE,
-              description: EDITED_DESCRIPTION,
-              id: FINDING_ID_TO_EDIT,
-            },
+            editedFinding,
+            testData.editCase,
             'API CHECK: edited finding sent to API is edited accordingly'
           );
         }
@@ -1018,6 +972,12 @@ module('Integration | Component | security/analysis-details', function (hooks) {
       await render(
         hbs`<Security::AnalysisDetails @analysisId={{this.secAnalysis.id}} />`
       );
+
+      const selectors = {
+        findingsTable: '[data-test-securityAnalysisDetailsTable-row]',
+        saveButton:
+          '[data-test-securityAnalysisDetails-footer-saveAndContinueBtn]',
+      };
 
       assert
         .dom('[data-test-securityAnalysisDetails-findings-infoTexts]')
@@ -1032,9 +992,9 @@ module('Integration | Component | security/analysis-details', function (hooks) {
         .exists()
         .containsText('Clear All Findings');
 
-      let allFindingElements = findAll(
-        '[data-test-securityAnalysisDetailsTable-row]'
-      );
+      // Verify initial findings state
+      const getFindingElements = () => findAll(selectors.findingsTable);
+      let allFindingElements = getFindingElements();
 
       assert.strictEqual(allFindingElements.length, findings.length);
 
@@ -1086,31 +1046,26 @@ module('Integration | Component | security/analysis-details', function (hooks) {
           .exists();
 
         assert
-          .dom('[ data-test-securityAnalysisDetails-newFindingAddBtn]')
+          .dom('[data-test-securityAnalysisDetails-newFindingAddBtn]')
           .exists()
           .hasText('Add Finding');
 
+        // Add new finding
         await fillIn(
           '[data-test-securityAnalysisDetails-newFindingTitleInput]',
-          NEW_TITLE
+          testData.addCase.title
         );
 
         await fillIn(
           '[data-test-securityAnalysisDetails-newFindingDescriptionInput]',
-          NEW_DESCRIPTION
+          testData.addCase.description
         );
 
         await click('[data-test-securityAnalysisDetails-newFindingAddBtn]');
 
-        await click(
-          '[data-test-securityAnalysisDetails-footer-saveAndContinueBtn]'
-        );
+        await click(selectors.saveButton);
 
-        allFindingElements = findAll(
-          '[data-test-securityAnalysisDetailsTable-row]'
-        );
-
-        assert.strictEqual(allFindingElements.length, findings.length + 1);
+        assert.strictEqual(getFindingElements().length, findings.length + 1);
       }
 
       if (clear) {
@@ -1126,42 +1081,36 @@ module('Integration | Component | security/analysis-details', function (hooks) {
 
         await click('[data-test-confirmbox-confirmBtn]');
 
-        allFindingElements = findAll(
-          '[data-test-securityAnalysisDetailsTable-row]'
-        );
-
         // Finding will return to its original length
-        assert.strictEqual(allFindingElements.length, 0);
+        assert.strictEqual(getFindingElements().length, 0);
       }
 
       if (edit) {
-        const rowElementToEdit = `[data-test-securityAnalysisDetailsTable-rowId='${FINDING_ID_TO_EDIT}']`;
+        const rowSelector = `[data-test-securityAnalysisDetailsTable-rowId='${testData.editCase.id}']`;
 
         await fillIn(
-          `${rowElementToEdit} [data-test-securityAnalysisDetails-findingTitle]`,
-          EDITED_TITLE
+          `${rowSelector} [data-test-securityAnalysisDetails-findingTitle]`,
+          testData.editCase.title
         );
 
         await fillIn(
-          `${rowElementToEdit} [data-test-securityAnalysisDetails-findingDescription]`,
-          EDITED_DESCRIPTION
+          `${rowSelector} [data-test-securityAnalysisDetails-findingDescription]`,
+          testData.editCase.description
         );
 
         assert
           .dom(
-            `${rowElementToEdit} [data-test-securityAnalysisDetails-findingTitle]`
+            `${rowSelector} [data-test-securityAnalysisDetails-findingTitle]`
           )
-          .hasValue(EDITED_TITLE);
+          .hasValue(testData.editCase.title);
 
         assert
           .dom(
-            `${rowElementToEdit} [data-test-securityAnalysisDetails-findingDescription]`
+            `${rowSelector} [data-test-securityAnalysisDetails-findingDescription]`
           )
-          .hasValue(EDITED_DESCRIPTION);
+          .hasValue(testData.editCase.description);
 
-        await click(
-          '[data-test-securityAnalysisDetails-footer-saveAndContinueBtn]'
-        );
+        await click(selectors.saveButton);
       }
     }
   );
@@ -1169,15 +1118,10 @@ module('Integration | Component | security/analysis-details', function (hooks) {
   test('it deletes an analysis finding', async function (assert) {
     assert.expect();
 
-    // Give each finding an ID
-    let findingId = 0;
-
-    const findings = this.secAnalysis.get('findings').map((finding) => {
-      findingId = findingId + 1;
-      finding.id = findingId;
-
-      return finding;
-    });
+    const findings = this.secAnalysis.get('findings').map((finding, index) => ({
+      ...finding,
+      id: index + 1,
+    }));
 
     const FINDING_ID_TO_DELETE = findings[0].id;
 
