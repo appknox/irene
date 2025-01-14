@@ -1,0 +1,63 @@
+<Storeknox::InventoryDetails::SectionInfo
+  @direction='column'
+  @alignItems='center'
+  @width='full'
+  @spacing='3'
+  class='py-6'
+>
+  {{#if @uploadFailed}}
+    <AkSvg::SoxInvalidUploadUrl
+      data-test-storeknoxInventoryDetails-failedUploadIllustration
+    />
+
+  {{else}}
+    <AkSvg::SoxInitiateUpload
+      data-test-storeknoxInventoryDetails-initiateUploadIllustration
+    />
+  {{/if}}
+
+  <AkStack @width='full' @direction='column' @alignItems='center' @spacing='1'>
+    <AkTypography
+      @fontWeight='bold'
+      @align='center'
+      data-test-storeknoxInventoryDetails-appNotInAppknoxHeader
+    >
+      {{#if @uploadFailed}}
+        Failed to Complete Upload
+      {{else}}
+        {{t 'storeknox.appNotInAppknoxHeader'}}
+      {{/if}}
+    </AkTypography>
+
+    <AkTypography
+      @align='center'
+      {{style maxWidth='430px'}}
+      data-test-storeknoxInventoryDetails-appNotInAppknoxDescription
+    >
+      {{#if @uploadFailed}}
+        {{@submission.reason}}
+      {{else}}
+        {{t 'storeknox.appNotInAppknoxDescription'}}
+      {{/if}}
+    </AkTypography>
+  </AkStack>
+
+  <AkButton
+    @variant='outlined'
+    data-test-storeknoxInventoryDetails-initiateUploadBtn
+    @disabled={{this.doInitiateAppUpload.isRunning}}
+    {{on 'click' this.initiateAppUpload}}
+  >
+    <:leftIcon>
+      <AkIcon @iconName='cloud-upload' @variant='filled' />
+    </:leftIcon>
+
+    <:default>
+      {{#if @uploadFailed}}
+        Retry Upload
+      {{else}}
+        {{t 'appMonitoringModule.initiateUpload'}}
+      {{/if}}
+    </:default>
+  </AkButton>
+</Storeknox::InventoryDetails::SectionInfo>

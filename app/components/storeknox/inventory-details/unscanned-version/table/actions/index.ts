@@ -1,21 +1,22 @@
 /* eslint-disable ember/no-observers */
-import { action } from '@ember/object';
-import { inject as service } from '@ember/service';
 import Component from '@glimmer/component';
+import { action } from '@ember/object';
+import { service } from '@ember/service';
 import { task } from 'ember-concurrency';
-import Store from '@ember-data/store';
-import IntlService from 'ember-intl/services/intl';
 import { addObserver, removeObserver } from '@ember/object/observers';
 import { tracked } from '@glimmer/tracking';
+import type Store from '@ember-data/store';
+import type IntlService from 'ember-intl/services/intl';
 
 import dayjs from 'dayjs';
 import advancedFormat from 'dayjs/plugin/advancedFormat';
 
-import parseError from 'irene/utils/parse-error';
-import SubmissionModel from 'irene/models/submission';
-import RealtimeService from 'irene/services/realtime';
 import ENUMS from 'irene/enums';
-import SkAppVersionModel from 'irene/models/sk-app-version';
+import parseError from 'irene/utils/parse-error';
+import type SubmissionModel from 'irene/models/submission';
+import type SkAppVersionModel from 'irene/models/sk-app-version';
+import type IreneAjaxService from 'irene/services/ajax';
+import type MeService from 'irene/services/me';
 
 dayjs.extend(advancedFormat);
 
@@ -26,15 +27,16 @@ interface AppMonitoringVersionTableActionsSignature {
 }
 
 export default class AppMonitoringVersionTableActionsComponent extends Component<AppMonitoringVersionTableActionsSignature> {
-  @service declare ajax: any;
-  @service('notifications') declare notify: NotificationService;
+  @service declare ajax: IreneAjaxService;
   @service declare store: Store;
   @service declare intl: IntlService;
-  @service declare realtime: RealtimeService;
+  @service declare me: MeService;
+  @service('notifications') declare notify: NotificationService;
 
   @tracked relatedVersionSubmissionRecord: SubmissionModel | null = null;
   @tracked showAppUploadState = false;
   @tracked showErrorDetailsModal = false;
+  @tracked userCannotInitiateUpload = false;
 
   constructor(
     owner: unknown,
@@ -105,6 +107,10 @@ export default class AppMonitoringVersionTableActionsComponent extends Component
     return !this.showAppUploadState && this.isScanned;
   }
 
+  get showUploadedAppResult() {
+    return this.showAppUploadState || this.relatedVersionSubmissionRecord;
+  }
+
   @action triggerInitiateUpload() {
     this.initiateUpload.perform();
   }
@@ -113,7 +119,7 @@ export default class AppMonitoringVersionTableActionsComponent extends Component
     this.showErrorDetailsModal = !this.showErrorDetailsModal;
   }
 
-  @action reloadAmAppVersion() {
+  @action reloadSkAppVersion() {
     if (this.appIsAnalyzing) {
       this.reloadVersion.perform();
     }
@@ -135,44 +141,52 @@ export default class AppMonitoringVersionTableActionsComponent extends Component
   resolveVersionSubmission = task(async () => {
     const uploadSubmission = this.skAppVersion?.get('uploadSubmission');
 
-    if (uploadSubmission?.get('id')) {
-      const relatedVersionSubmissionRecord = await uploadSubmission;
-      this.relatedVersionSubmissionRecord = relatedVersionSubmissionRecord;
+    try {
+      if (uploadSubmission?.get('id')) {
+        const relatedVersionSubmissionRecord = await uploadSubmission;
 
-      if (relatedVersionSubmissionRecord) {
-        addObserver(
-          this.relatedVersionSubmissionRecord,
-          'status',
-          this,
-          this.reloadAmAppVersion
-        );
+        this.relatedVersionSubmissionRecord = relatedVersionSubmissionRecord;
+
+        if (relatedVersionSubmissionRecord) {
+          addObserver(
+            this.relatedVersionSubmissionRecord,
+            'status',
+            this,
+            this.reloadSkAppVersion
+          );
+        }
+      }
+    } catch (err) {
+      const error = err as AdapterError;
+
+      if (error?.errors?.[0]?.status === '404') {
+        this.userCannotInitiateUpload = true;
       }
     }
   });
 
   initiateUpload = task(async () => {
-    if (this.isIOSApp) {
-      return;
-    }
+    // TODO: Confirm if app upload is also available for iOS Apps
+    // if (this.isIOSApp) {
+    //   return;
+    // }
 
     try {
-      // TODO: APIs not available yet
-      // const URL = `${ENV.endpoints['amAppVersions']}/${this.amAppVersion.id}/initiate_upload`;
-      // const data = (await this.ajax.post(URL)) as {
-      //   id: number;
-      //   status: number;
-      // };
-      // this.relatedVersionSubmissionRecord = await this.store.findRecord(
-      //   'submission',
-      //   data.id
-      // );
-      // this.showAppUploadState = true;
-      // addObserver(
-      //   this.relatedVersionSubmissionRecord,
-      //   'status',
-      //   this,
-      //   this.reloadAmAppVersion
-      // );
+      const data = await this.skAppVersion?.iniiateAppUpload();
+
+      this.relatedVersionSubmissionRecord = await this.store.findRecord(
+        'submission',
+        data.id
+      );
+
+      this.showAppUploadState = true;
+
+      addObserver(
+        this.relatedVersionSubmissionRecord,
+        'status',
+        this,
+        this.reloadSkAppVersion
+      );
     } catch (error) {
       this.notify.error(parseError(error));
     }
@@ -186,7 +200,7 @@ export default class AppMonitoringVersionTableActionsComponent extends Component
         this.relatedVersionSubmissionRecord,
         'status',
         this,
-        this.reloadAmAppVersion
+        this.reloadSkAppVersion
       );
     }
   }

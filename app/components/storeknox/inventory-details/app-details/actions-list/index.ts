@@ -8,7 +8,7 @@ import type SkInventoryAppModel from 'irene/models/sk-inventory-app';
 
 interface StoreknoxInventoryDetailsAppDetailsActionsListSignature {
   Args: {
-    app?: SkInventoryAppModel;
+    skInventoryApp?: SkInventoryAppModel;
   };
 }
 
@@ -16,7 +16,7 @@ export default class StoreknoxInventoryDetailsAppDetailsActionsListComponent ext
   @service declare intl: IntlService;
 
   get skInventoryApp() {
-    return this.args.app;
+    return this.args.skInventoryApp;
   }
 
   get actionsList() {

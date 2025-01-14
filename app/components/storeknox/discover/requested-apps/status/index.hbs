@@ -1,4 +1,7 @@
-{{#if this.isPending}}
+{{#if @loading}}
+  <AkSkeleton @height='32px' @width='170px' />
+
+{{else if this.isPending}}
   <AkChip
     @label={{t 'storeknox.waitingForApproval'}}
     @variant='semi-filled'
@@ -12,6 +15,7 @@
       />
     </:icon>
   </AkChip>
+
 {{else}}
   <AkStack
     @justifyContent='center'

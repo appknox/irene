@@ -1,5 +1,3 @@
-// eslint-disable-next-line ember/use-ember-data-rfc-395-imports
-import DS from 'ember-data';
 import Component from '@glimmer/component';
 import { inject as service } from '@ember/service';
 import { action } from '@ember/object';
@@ -8,17 +6,11 @@ import { task } from 'ember-concurrency';
 import type Store from '@ember-data/store';
 import type IntlService from 'ember-intl/services/intl';
 
-import ENUMS from 'irene/enums';
 import parseError from 'irene/utils/parse-error';
 import type SkPendingReviewService from 'irene/services/sk-pending-review';
 import type MeService from 'irene/services/me';
-import type SkInventoryAppModel from 'irene/models/sk-inventory-app';
 import type SkOrganizationModel from 'irene/models/sk-organization';
-
-type SkAppsQueryResponse =
-  DS.AdapterPopulatedRecordArray<SkInventoryAppModel> & {
-    meta: { count: number };
-  };
+import type SkInventoryAppService from 'irene/services/sk-inventory-apps';
 
 export default class StoreknoxInventoryComponent extends Component {
   @service declare intl: IntlService;
@@ -27,22 +19,23 @@ export default class StoreknoxInventoryComponent extends Component {
   @service declare skPendingReview: SkPendingReviewService;
   @service('notifications') declare notify: NotificationService;
 
+  @service('sk-inventory-apps')
+  declare skInventoryAppsService: SkInventoryAppService;
+
   @tracked selectedSkOrg: SkOrganizationModel | undefined;
   @tracked showWelcomeModal = false;
   @tracked showSettingsDrawer = false;
 
-  @tracked totalInventoryAppsCount = 0;
   @tracked totalDisabledAppsCount = 0;
 
   constructor(owner: unknown, args: object) {
     super(owner, args);
 
-    this.getTabItemsCount.perform();
     this.getSkOrganization.perform();
   }
 
   get isOwner() {
-    return this.me.org?.is_owner;
+    return !!this.me.org?.is_owner;
   }
 
   get tabItems() {
@@ -51,15 +44,15 @@ export default class StoreknoxInventoryComponent extends Component {
         id: 'app-inventory',
         route: 'authenticated.storeknox.inventory.app-list',
         label: this.intl.t('storeknox.appInventory'),
-        hasBadge: this.totalInventoryAppsCount > 0,
-        badgeCount: this.totalInventoryAppsCount,
+        hasBadge: this.skInventoryAppsService.skInventoryAppsCount > 0,
+        badgeCount: this.skInventoryAppsService.skInventoryAppsCount,
       },
       this.isOwner && {
         id: 'pending-review',
         route: 'authenticated.storeknox.inventory.pending-reviews',
         label: this.intl.t('storeknox.pendingReview'),
-        hasBadge: this.skPendingReview.totalCount > 0,
-        badgeCount: this.skPendingReview.totalCount,
+        hasBadge: this.skPendingReview.skPendingReviewAppsCount > 0,
+        badgeCount: this.skPendingReview.skPendingReviewAppsCount,
       },
       // {
       //   id: 'disabled-apps',
@@ -87,21 +80,6 @@ export default class StoreknoxInventoryComponent extends Component {
   @action onToggleAddToInventoryByDefault(_: Event, checked?: boolean) {
     this.toggleAddToInventoryByDefault.perform(checked);
   }
-
-  getTabItemsCount = task(async () => {
-    // Fetches the inventory list items total count
-    this.totalInventoryAppsCount = (
-      (await this.store.query('sk-app', {
-        approval_status: ENUMS.SK_APPROVAL_STATUS.APPROVED,
-        app_status: ENUMS.SK_APP_STATUS.ACTIVE,
-      })) as SkAppsQueryResponse
-    ).meta.count;
-
-    // Get Pending review data
-    if (this.isOwner) {
-      this.skPendingReview.fetchPendingReviewApps.perform(10, 0, false);
-    }
-  });
 
   toggleAddToInventoryByDefault = task(async (checked?: boolean) => {
     try {

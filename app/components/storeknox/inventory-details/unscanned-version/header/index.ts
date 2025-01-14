@@ -29,7 +29,7 @@ export default class StoreknoxInventoryDetailsUnscannedVersionHeaderComponent ex
   }
 
   get coreProjectLatestVersionId() {
-    return this.skInventoryCoreProjectLatestVersion?.id;
+    return this.skInventoryCoreProjectLatestVersion?.get('id');
   }
 
   get monitoringEnabled() {

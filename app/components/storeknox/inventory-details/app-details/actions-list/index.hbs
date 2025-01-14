@@ -4,7 +4,11 @@
     {{style height='50px'}}
   >
     <:icon>
-      <AkIcon @iconName='auto-graph' @color='textPrimary' />
+      <AkIcon
+        @iconName='auto-graph'
+        @color='textPrimary'
+        data-test-storeknoxInventoryDetails-actionListHeaderIcon
+      />
     </:icon>
 
     <:default>
@@ -13,16 +17,28 @@
         @justifyContent='space-between'
         @alignItems='center'
       >
-        <AkTypography @fontWeight='medium'>
+        <AkTypography
+          @fontWeight='medium'
+          data-test-storeknoxInventoryDetails-actionListHeaderText
+        >
           {{t 'storeknox.actionNeeded'}}
           ({{this.actionableItemsCount}})
         </AkTypography>
 
-        <AkTooltip @title='Last Monitored Date' @color='light' @arrow={{true}}>
+        <AkTooltip
+          @title='Last Monitored Date'
+          @color='light'
+          @arrow={{true}}
+          data-test-storeknoxInventoryDetails-lastMonitoredDateTooltip
+        >
           <AkStack @spacing='0.5' local-class='last-monitored-date'>
-            <AkIcon @iconName='event' @color='textPrimary' />
+            <AkIcon
+              @iconName='event'
+              @color='textPrimary'
+              data-test-storeknoxInventoryDetails-lastMonitoredDateIcon
+            />
 
-            <AkTypography>
+            <AkTypography data-test-storeknoxInventoryDetails-lastMonitoredDate>
               {{this.lastMonitoredDate}}
             </AkTypography>
           </AkStack>
@@ -42,6 +58,7 @@
           @needsAction={{action.needsAction}}
           @featureInProgress={{action.featureInProgress}}
           @label={{action.label}}
+          data-test-storeknoxInventoryDetails-actionBtn
         />
       </AkLink>
     {{/each}}

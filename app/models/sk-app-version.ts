@@ -41,6 +41,12 @@ export default class SkAppVersionModel extends Model {
 
   @hasMany('sk-store-instance', { async: false, inverse: null })
   declare skStoreInstances: SyncHasMany<SkStoreInstanceModel>;
+
+  async iniiateAppUpload() {
+    const adapter = this.store.adapterFor('sk-app-version');
+
+    return await adapter.iniiateAppUpload(this.id);
+  }
 }
 
 declare module 'ember-data/types/registries/model' {

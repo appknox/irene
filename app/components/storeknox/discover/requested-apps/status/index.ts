@@ -9,6 +9,7 @@ import ENUMS from 'irene/enums';
 export interface StoreknoxDiscoverRequestedAppsStatusSignature {
   Args: {
     data: SkRequestedAppModel;
+    loading: boolean;
   };
 }
 

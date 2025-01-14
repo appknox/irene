@@ -1,27 +1,17 @@
-// eslint-disable-next-line ember/use-ember-data-rfc-395-imports
-import DS from 'ember-data';
 import Component from '@glimmer/component';
 import { action } from '@ember/object';
 import { service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
-import { task } from 'ember-concurrency';
 import type RouterService from '@ember/routing/router-service';
-import type { Owner } from '@ember/test-helpers/build-owner';
-
-import parseError from 'irene/utils/parse-error';
-import ENUMS from 'irene/enums';
 import type IntlService from 'ember-intl/services/intl';
-import type MeService from 'irene/services/me';
 import type Store from '@ember-data/store';
-import type SkInventoryAppModel from 'irene/models/sk-inventory-app';
+
+import ENUMS from 'irene/enums';
+import type MeService from 'irene/services/me';
 import type { StoreknoxCommonTableColumnsData } from 'irene/components/storeknox/table-columns';
 import type { PaginationProviderActionsArgs } from 'irene/components/ak-pagination-provider';
-import type { StoreknoxInventoryAppListQueryParams } from 'irene/routes/authenticated/storeknox/inventory/app-list';
-
-type SkAppsQueryResponse =
-  DS.AdapterPopulatedRecordArray<SkInventoryAppModel> & {
-    meta: { count: number };
-  };
+import type SkInventoryAppModel from 'irene/models/sk-inventory-app';
+import type SkInventoryAppService from 'irene/services/sk-inventory-apps';
 
 type StoreknoxInventoryTableDataItem = StoreknoxCommonTableColumnsData & {
   appIsSelected: boolean;
@@ -33,7 +23,6 @@ export interface StoreknoxInventoryAppListTableSignature {
   Args: {
     isAddingAppToInventory?: boolean;
     loadDisabledApps?: boolean;
-    queryParams: StoreknoxInventoryAppListQueryParams;
     handleSelectedDisabledApps?: (apps: string[]) => void;
   };
 }
@@ -45,27 +34,18 @@ export default class StoreknoxInventoryAppListTableComponent extends Component<S
   @service declare store: Store;
   @service('notifications') declare notify: NotificationService;
 
-  @tracked skAppsResponse: SkAppsQueryResponse | null = null;
+  @service('sk-inventory-apps')
+  declare skInventoryAppsService: SkInventoryAppService;
+
   @tracked selectedDisabledAppSet = new Set<string>();
   @tracked selectedDisabledAppIds: string[] = [];
-
-  constructor(
-    owner: Owner,
-    args: StoreknoxInventoryAppListTableSignature['Args']
-  ) {
-    super(owner, args);
-
-    const { app_limit, app_offset } = args.queryParams;
-
-    this.fetchSkInventoryApps.perform(app_limit, app_offset, false);
-  }
 
   get loadDisabledApps() {
     return this.args.loadDisabledApps;
   }
 
   get disableRowClick() {
-    return this.loadDisabledApps || this.fetchSkInventoryApps.isRunning;
+    return this.loadDisabledApps || this.isFetchingTableData;
   }
 
   get columns() {
@@ -110,7 +90,11 @@ export default class StoreknoxInventoryAppListTableComponent extends Component<S
   }
 
   get totalAppsCount() {
-    return this.skAppsResponse?.meta.count || 0;
+    return this.skInventoryAppsService.skInventoryAppsCount || 0;
+  }
+
+  get hasNoApps() {
+    return !this.isFetchingTableData && this.totalAppsCount === 0;
   }
 
   get tableData() {
@@ -118,7 +102,7 @@ export default class StoreknoxInventoryAppListTableComponent extends Component<S
       return this.mockLoadingData;
     }
 
-    return (this.skAppsResponse?.map((app) => {
+    return (this.skInventoryAppsService.skInventoryApps?.map((app) => {
       const { appMetadata } = app;
 
       return {
@@ -145,7 +129,7 @@ export default class StoreknoxInventoryAppListTableComponent extends Component<S
   }
 
   get isFetchingTableData() {
-    return this.fetchSkInventoryApps.isRunning;
+    return this.skInventoryAppsService.isFetchingSkInventoryApps;
   }
 
   @action selectDisabledAppRow(ulid: string, value: boolean) {
@@ -166,18 +150,19 @@ export default class StoreknoxInventoryAppListTableComponent extends Component<S
   }
 
   @action goToPage({ limit, offset }: PaginationProviderActionsArgs) {
-    this.fetchSkInventoryApps.perform(limit, offset);
-  }
-
-  @action onItemPerPageChange(args: PaginationProviderActionsArgs) {
-    this.fetchSkInventoryApps.perform(args.limit, 0);
-  }
-
-  @action updateRouteParams(limit: number, offset: number) {
     this.router.transitionTo({
       queryParams: {
         app_limit: limit,
         app_offset: offset,
+      },
+    });
+  }
+
+  @action onItemPerPageChange(args: PaginationProviderActionsArgs) {
+    this.router.transitionTo({
+      queryParams: {
+        app_limit: args.limit,
+        app_offset: 0,
       },
     });
   }
@@ -190,35 +175,6 @@ export default class StoreknoxInventoryAppListTableComponent extends Component<S
       );
     }
   }
-
-  fetchSkInventoryApps = task(
-    async (limit: number, offset: number, updateQueryParams = true) => {
-      if (updateQueryParams) {
-        this.updateRouteParams(limit, offset);
-      }
-
-      const query = !this.loadDisabledApps
-        ? {
-            approval_status: ENUMS.SK_APPROVAL_STATUS.APPROVED,
-            app_status: ENUMS.SK_APP_STATUS.ACTIVE,
-          }
-        : {
-            app_status: ENUMS.SK_APP_STATUS.INACTIVE,
-          };
-
-      try {
-        const data = (await this.store.query('sk-app', {
-          limit: limit,
-          offset: offset,
-          ...query,
-        })) as SkAppsQueryResponse;
-
-        this.skAppsResponse = data;
-      } catch (error) {
-        this.notify.error(parseError(error, this.intl.t('somethingWentWrong')));
-      }
-    }
-  );
 }
 
 declare module '@glint/environment-ember-loose/registry' {

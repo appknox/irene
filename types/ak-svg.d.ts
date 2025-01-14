@@ -77,7 +77,10 @@ export enum AkSvgComponentInvocationByNames {
   SoxMalwareFeatureAbsence,
   SoxUnscannedDetailsTableEmpty,
   SoxUnscannedHistoryTableEmpty,
-  SoxMonitoringPending,
+  SoxMonitoringResultsPending,
+  SoxMonitoringResultsPendingWithMonitoringOff,
+  NoAccessImage,
+  SoxInvalidUploadUrl,
 }
 
 export enum AkSvgComponentInvocationByPaths {

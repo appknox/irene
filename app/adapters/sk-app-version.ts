@@ -1,4 +1,5 @@
 import commondrf from './commondrf';
+import { InitiateUploadResponse } from './sk-app';
 
 export type SkAppVersionQuery = {
   skAppId?: string | number;
@@ -7,7 +8,7 @@ export type SkAppVersionQuery = {
 
 export default class SkAppVersionAdapter extends commondrf {
   _buildURL(_: string, id: string | number) {
-    const baseurl = `${this.namespace_v2}/sk_app_version`;
+    const baseurl = `${this.namespace_v2}/sk_app_versions`;
 
     if (id) {
       return this.buildURLFromBase(`${baseurl}/${encodeURIComponent(id)}`);
@@ -35,6 +36,12 @@ export default class SkAppVersionAdapter extends commondrf {
     }
 
     return super.urlForQuery(query, modelName);
+  }
+
+  async iniiateAppUpload(id: string) {
+    const url = this.buildURL().concat(`/${id}/sk_initiate_upload`);
+
+    return (await this.ajax(url, 'POST')) as InitiateUploadResponse;
   }
 }
 

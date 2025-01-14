@@ -1,17 +1,106 @@
-<AkStack @alignItems='center' @spacing='2.5'>
-  {{#each this.vaResultsCategories as |reCat|}}
-    <AkStack @alignItems='center' @spacing='1.5'>
-      <AkStack @spacing='1' @alignItems='center'>
-        <span local-class='indicator {{reCat}}'></span>
+<AkStack @direction='column' @width='full'>
+  <Storeknox::InventoryDetails::SectionHeader>
+    <:default>
+      <AkTypography
+        @fontWeight='medium'
+        data-test-storeknoxInventoryDetails-latestVAResultsHeaderInfoValue
+      >
+        {{t 'storeknox.latestVAResults'}}
+      </AkTypography>
+    </:default>
+  </Storeknox::InventoryDetails::SectionHeader>
 
-        <AkTypography>
-          {{t reCat}}
+  {{#if this.loadingVaData}}
+    <Storeknox::InventoryDetails::AppDetails::VaResults::LoadingResults />
+
+  {{else if this.uploadSubmissionFailed}}
+    <Storeknox::InventoryDetails::AppDetails::VaResults::InitiateUpload
+      @skInventoryApp={{@skInventoryApp}}
+      @updateSubmissionModel={{this.updateSubmissionModel}}
+      @uploadFailed={{true}}
+      @submission={{this.submission}}
+    />
+
+  {{else if (or this.appUploadIsProcessing this.uploadCompleted)}}
+    <Storeknox::InventoryDetails::AppDetails::VaResults::UploadProgress
+      @submission={{this.submission}}
+    />
+
+  {{else if this.fileNotAccessibleToUser}}
+    <Storeknox::InventoryDetails::AppDetails::VaResults::FileInaccessible />
+
+  {{else if @skInventoryApp.appIsNotAvailableOnAppknox}}
+    <Storeknox::InventoryDetails::AppDetails::VaResults::InitiateUpload
+      @skInventoryApp={{@skInventoryApp}}
+      @updateSubmissionModel={{this.updateSubmissionModel}}
+    />
+
+  {{else if @skInventoryApp.coreProjectLatestVersion}}
+    <Storeknox::InventoryDetails::AppDetails::VaResults::LatestFileResults
+      @skInventoryApp={{@skInventoryApp}}
+      @coreProjectLatestVersion={{this.coreProjectLatestVersion}}
+    />
+  {{/if}}
+</AkStack>
+
+{{! UPLOAD COMPLETE STATE - INITIATE UPLOAD }}
+{{!-- <AkStack @direction='column' @width='full'>
+    <Storeknox::InventoryDetails::SectionHeader>
+      <:default>
+        <AkTypography @fontWeight='medium'>
+          {{t 'storeknox.latestVAResults'}}
+        </AkTypography>
+      </:default>
+    </Storeknox::InventoryDetails::SectionHeader>
+
+    <Storeknox::InventoryDetails::SectionInfo
+      @direction='column'
+      @alignItems='center'
+      @width='full'
+      @spacing='2.5'
+      class='py-6'
+    >
+      
+    </Storeknox::InventoryDetails::SectionInfo>
+  </AkStack> --}}
+
+{{! INSUFFICIENT CREDITS - INITIATE UPLOAD }}
+{{!-- <AkStack @direction='column' @width='full'>
+    <Storeknox::InventoryDetails::SectionHeader>
+      <:default>
+        <AkTypography @fontWeight='medium'>
+          {{t 'storeknox.latestVAResults'}}
+        </AkTypography>
+      </:default>
+    </Storeknox::InventoryDetails::SectionHeader>
+
+    <Storeknox::InventoryDetails::SectionInfo
+      @direction='column'
+      @alignItems='center'
+      @width='full'
+      @spacing='3'
+      class='py-6'
+    >
+      <AkSvg::SoxInsufficientCredits />
+
+      <AkStack
+        @width='full'
+        @direction='column'
+        @alignItems='center'
+        @spacing='1'
+      >
+        <AkTypography @fontWeight='bold' @align='center'>
+          Insufficient Credits
+        </AkTypography>
+
+        <AkTypography @align='center' {{style maxWidth='430px'}}>
+          We tried to upload, due to Insufficient Credits. The upload has been
+          cancelled.
         </AkTypography>
       </AkStack>
 
-      <AkTypography @fontWeight='bold'>
-        {{this.getVaCategoryResultCount reCat}}
-      </AkTypography>
-    </AkStack>
-  {{/each}}
-</AkStack>
+      <AkButton>
+        Contact Support
+      </AkButton>
+    </Storeknox::InventoryDetails::SectionInfo>
+  </AkStack>--}}

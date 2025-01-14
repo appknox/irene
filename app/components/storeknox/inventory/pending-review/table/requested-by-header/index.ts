@@ -6,7 +6,7 @@ import type IntlService from 'ember-intl/services/intl';
 
 import ENUMS from 'irene/enums';
 
-export default class StoreknoxInventoryPendingReviewTableFoundByHeaderComponent extends Component {
+export default class StoreknoxInventoryPendingReviewTableRequestedByHeaderComponent extends Component {
   @service declare intl: IntlService;
 
   @tracked anchorRef: HTMLElement | null = null;
@@ -61,6 +61,6 @@ export default class StoreknoxInventoryPendingReviewTableFoundByHeaderComponent 
 
 declare module '@glint/environment-ember-loose/registry' {
   export default interface Registry {
-    'Storeknox::Inventory::PendingReview::Table::FoundByHeader': typeof StoreknoxInventoryPendingReviewTableFoundByHeaderComponent;
+    'Storeknox::Inventory::PendingReview::Table::RequestedByHeader': typeof StoreknoxInventoryPendingReviewTableRequestedByHeaderComponent;
   }
 }

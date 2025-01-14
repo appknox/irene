@@ -5,6 +5,7 @@ import type { AkBreadcrumbsItemProps } from 'irene/services/ak-breadcrumbs';
 
 export default class AuthenticatedStoreknoxInventoryPendingReviewsController extends Controller {
   @service declare intl: IntlService;
+
   queryParams = ['app_limit', 'app_offset', 'app_search_id', 'app_query'];
 
   app_limit = 10;

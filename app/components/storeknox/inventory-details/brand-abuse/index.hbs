@@ -1,9 +1,11 @@
 <Storeknox::InventoryDetails::FeatureUnavailable
-  @headerTitle='Unlock the Brand Abuse feature soon'
-  @headerDescription='Lorem ipsum dolor sit amet consectetur. Egestas amet facilisi dictum sapien velit a enim cras. Quis enim cursus malesuada varius.'
+  @headerTitle={{t 'storeknox.brandAbuseFeatureUnavailableHeader'}}
+  @headerDescription={{t 'storeknox.brandAbuseFeatureUnavailableSubText'}}
 >
   <:illustration>
-    <AkSvg::SoxMalwareFeatureAbsence />
+    <AkSvg::SoxBrandAbuseFeatureAbsence
+      data-test-storeknoxInventoryDetails-brandAbuseFeatureUnavailable-Illustration
+    />
   </:illustration>
 </Storeknox::InventoryDetails::FeatureUnavailable>
 

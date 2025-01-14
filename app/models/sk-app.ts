@@ -5,6 +5,7 @@ import type IntlService from 'ember-intl/services/intl';
 import ENUMS from 'irene/enums';
 import type OrganizationUserModel from './organization-user';
 import type SkAppMetadataModel from './sk-app-metadata';
+import SkOrganizationModel from './sk-organization';
 
 export interface AvailabilityData {
   storeknox: boolean;
@@ -41,8 +42,8 @@ export default class SkAppModel extends Model {
   @attr('number')
   declare storeMonitoringStatus: number;
 
-  @attr('number')
-  declare skOrganization: number;
+  @attr('string')
+  declare storeMonitoringStatusDisplay: string;
 
   @attr('date')
   declare approvedOn: Date;
@@ -70,6 +71,9 @@ export default class SkAppModel extends Model {
 
   @belongsTo('organization-user', { async: true, inverse: null })
   declare rejectedBy: AsyncBelongsTo<OrganizationUserModel> | string;
+
+  @belongsTo('sk-organization', { async: true, inverse: null })
+  declare skOrganization: AsyncBelongsTo<SkOrganizationModel>;
 
   get docUlid() {
     return this.appMetadata.get('docUlid');
@@ -129,6 +133,12 @@ export default class SkAppModel extends Model {
     const adapter = this.store.adapterFor('sk-app');
 
     return await adapter.toggleMonitoring(this.id, checked);
+  }
+
+  async iniiateAppUpload() {
+    const adapter = this.store.adapterFor('sk-app');
+
+    return await adapter.iniiateAppUpload(this.id);
   }
 }
 

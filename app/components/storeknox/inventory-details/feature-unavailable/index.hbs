@@ -5,6 +5,7 @@
   @width='full'
   local-class='feature-unavailable-root'
   {{style padding='4.2857em 1.5em'}}
+  data-test-storeknoxInventoryDetails-featureUnavailable-root
 >
   {{yield to='illustration'}}
 
@@ -14,11 +15,18 @@
     @spacing='0.5'
     {{style maxWidth='485px'}}
   >
-    <AkTypography @variant='h5' @align='center'>
+    <AkTypography
+      @variant='h5'
+      @align='center'
+      data-test-storeknoxInventoryDetails-featureUnavailable-headerTitle
+    >
       {{@headerTitle}}
     </AkTypography>
 
-    <AkTypography @align='center'>
+    <AkTypography
+      @align='center'
+      data-test-storeknoxInventoryDetails-featureUnavailable-headerDescription
+    >
       {{@headerDescription}}
     </AkTypography>
   </AkStack>

@@ -3,11 +3,17 @@
 {{else}}
   <AkStack @alignItems='center' @spacing='0.5'>
     {{#if this.isManual}}
-      <AkTypography @noWrap={{true}}>
+      <AkTypography
+        @noWrap={{true}}
+        data-test-storeknoxInventory-pendingReviewTable-requesterEmail
+      >
         {{@data.addedBy.email}}
       </AkTypography>
     {{else}}
-      <AkTypography @noWrap={{true}}>
+      <AkTypography
+        @noWrap={{true}}
+        data-test-storeknoxInventory-pendingReviewTable-systemRequested
+      >
         {{t 'system'}}
       </AkTypography>
     {{/if}}
@@ -19,11 +25,15 @@
             @color='inherit'
             @fontWeight='medium'
             local-class='section-header'
+            data-test-storeknoxInventory-pendingReviewTable-requestedOnHeaderText
           >
             {{t 'requestedOn'}}
           </AkTypography>
 
-          <AkTypography @color='inherit'>
+          <AkTypography
+            @color='inherit'
+            data-test-storeknoxInventory-pendingReviewTable-addedOnDate
+          >
             {{this.addedOn}}
           </AkTypography>
         </AkStack>
@@ -35,11 +45,15 @@
             @color='inherit'
             @fontWeight='medium'
             local-class='section-header'
+            data-test-storeknoxInventory-pendingReviewTable-foundByHeader
           >
             {{t 'type'}}
           </AkTypography>
 
-          <AkTypography @color='inherit'>
+          <AkTypography
+            @color='inherit'
+            data-test-storeknoxInventory-pendingReviewTable-foundBy
+          >
             {{this.foundBy}}
           </AkTypography>
         </AkStack>
@@ -47,7 +61,11 @@
       </:tooltipContent>
 
       <:default>
-        <AkIcon @iconName='info' local-class='info-icon' />
+        <AkIcon
+          @iconName='info'
+          local-class='info-icon'
+          data-test-storeknoxInventory-pendingReviewTable-requestByInfoTrigger
+        />
       </:default>
     </AkTooltip>
   </AkStack>

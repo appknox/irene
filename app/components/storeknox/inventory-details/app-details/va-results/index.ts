@@ -1,38 +1,92 @@
 import { action } from '@ember/object';
+import { service } from '@ember/service';
+import { task } from 'ember-concurrency';
 import Component from '@glimmer/component';
+import { tracked } from 'tracked-built-ins';
+
+import ENUMS from 'irene/enums';
+import parseError from 'irene/utils/parse-error';
 import type SkInventoryAppModel from 'irene/models/sk-inventory-app';
+import type FileModel from 'irene/models/file';
+import type SubmissionModel from 'irene/models/submission';
 
 interface StoreknoxInventoryDetailsAppDetailsVaResultsSignature {
   Args: {
-    app?: SkInventoryAppModel;
+    skInventoryApp?: SkInventoryAppModel;
   };
 }
 
 export default class StoreknoxInventoryDetailsAppDetailsVaResultsComponent extends Component<StoreknoxInventoryDetailsAppDetailsVaResultsSignature> {
-  get coreProjectLatestVersion() {
-    return this.args.app?.coreProjectLatestVersion;
+  @service('notifications') declare notify: NotificationService;
+
+  @tracked coreProjectLatestVersion: FileModel | null | undefined = null;
+  @tracked submission: SubmissionModel | null | undefined = null;
+  @tracked fileNotAccessibleToUser = false;
+
+  constructor(
+    owner: unknown,
+    args: StoreknoxInventoryDetailsAppDetailsVaResultsSignature['Args']
+  ) {
+    super(owner, args);
+
+    this.fetchCoreProjectLatestVersion.perform();
+    this.resolveSkAppSubmission.perform();
   }
 
-  get vaResults() {
-    return {
-      critical: this.coreProjectLatestVersion?.get('countRiskCritical'),
-      high: this.coreProjectLatestVersion?.get('countRiskHigh'),
-      medium: this.coreProjectLatestVersion?.get('countRiskMedium'),
-      low: this.coreProjectLatestVersion?.get('countRiskLow'),
-      passed: this.coreProjectLatestVersion?.get('countRiskNone'),
-      untested: this.coreProjectLatestVersion?.get('countRiskUnknown'),
-    };
+  get skInventoryApp() {
+    return this.args.skInventoryApp;
   }
 
-  get vaResultsCategories() {
-    return Object.keys(this.vaResults) as Array<
-      'medium' | 'critical' | 'high' | 'low' | 'passed' | 'untested'
-    >;
+  // If upload has already been initiated and failed
+  get uploadSubmissionFailed() {
+    return [
+      ENUMS.SUBMISSION_STATUS.DOWNLOAD_FAILED,
+      ENUMS.SUBMISSION_STATUS.VALIDATE_FAILED,
+      ENUMS.SUBMISSION_STATUS.STORE_URL_VALIDATION_FAILED,
+      ENUMS.SUBMISSION_STATUS.STORE_DOWNLOAD_FAILED,
+      ENUMS.SUBMISSION_STATUS.STORE_UPLOAD_FAILED,
+    ].includes(Number(this.submission?.status));
   }
 
-  @action getVaCategoryResultCount(category: keyof typeof this.vaResults) {
-    return this.vaResults[category];
+  get appUploadIsProcessing() {
+    return Number(this.submission?.progress) < 100;
   }
+
+  get uploadCompleted() {
+    return Number(this.submission?.progress) === 100;
+  }
+
+  get loadingVaData() {
+    return (
+      this.fetchCoreProjectLatestVersion.isRunning ||
+      this.resolveSkAppSubmission.isRunning
+    );
+  }
+
+  @action updateSubmissionModel(submission: SubmissionModel) {
+    this.submission = submission;
+  }
+
+  resolveSkAppSubmission = task(async () => {
+    try {
+      this.submission = await this.skInventoryApp?.uploadSubmission;
+    } catch (err) {
+      this.notify.error(parseError(err));
+    }
+  });
+
+  fetchCoreProjectLatestVersion = task(async () => {
+    try {
+      this.coreProjectLatestVersion =
+        await this.skInventoryApp?.coreProjectLatestVersion;
+    } catch (err) {
+      const error = err as AdapterError;
+
+      if (error?.errors?.[0]?.status === '404') {
+        this.fileNotAccessibleToUser = true;
+      }
+    }
+  });
 }
 
 declare module '@glint/environment-ember-loose/registry' {
