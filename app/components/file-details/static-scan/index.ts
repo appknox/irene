@@ -94,7 +94,16 @@ export default class FileDetailsStaticScan extends Component<FileDetailsStaticSc
         file_id: this.args.file.id,
       };
 
-      await this.ajax.post(ENV.endpoints['rescan'] as string, { data });
+      const url = [
+        ENV.endpoints['files'],
+        this.args.file.id,
+        ENV.endpoints['rescan'],
+      ].join('/');
+
+      await this.ajax.post(url, {
+        namespace: ENV.namespace_v2,
+        data,
+      });
 
       this.notify.info(this.tRescanInitiated);
 
