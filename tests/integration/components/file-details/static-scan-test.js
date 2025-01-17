@@ -97,7 +97,7 @@ module('Integration | Component | file-details/static-scan', function (hooks) {
       });
 
       if (isStaticDone) {
-        this.server.post('/rescan', () => {});
+        this.server.post('/v2/files/:id/rescan', () => {});
       }
 
       await render(hbs`<FileDetails::StaticScan @file={{this.file}} />`);

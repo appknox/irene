@@ -10,7 +10,7 @@ import ENV from 'irene/config/environment';
 import parseError from 'irene/utils/parse-error';
 import type DatetimeService from 'irene/services/datetime';
 import type IreneAjaxService from 'irene/services/ajax';
-import type { AjaxError } from 'irene/services/ajax';
+import { buildURLEncodedFormData, type AjaxError } from 'irene/services/ajax';
 
 const localeStrings = {
   en: 'English',
@@ -67,7 +67,10 @@ export default class AccountSettingsGeneralSelectLanguageComponent extends Compo
     };
 
     try {
-      await this.ajax.post(ENV.endpoints['lang'] as string, { data });
+      await this.ajax.post(ENV.endpoints['lang'] as string, {
+        data: buildURLEncodedFormData(data),
+        contentType: 'application/x-www-form-urlencoded',
+      });
 
       if (!this.isDestroyed) {
         window.location.reload();
