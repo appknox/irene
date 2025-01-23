@@ -1396,6 +1396,7 @@
   "security": "Security",
   "securityDashboard": "Security Dashboard",
   "securityDashboardDesc": "For security researchers to perform manual assessments (PT)",
+  "selectAll": "Select All",
   "selectAnyTeam": "Please select any team",
   "selectThePath": "Select the path",
   "selectDevice": "Select the device",

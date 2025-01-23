@@ -10,6 +10,7 @@ import type IntlService from 'ember-intl/services/intl';
 import type { DS } from 'ember-data';
 
 import ENV from 'irene/config/environment';
+import parseError from 'irene/utils/parse-error';
 import type { PaginationProviderActionsArgs } from 'irene/components/ak-pagination-provider';
 import type FileModel from 'irene/models/file';
 import type CapturedApiModel from 'irene/models/capturedapi';
@@ -41,6 +42,8 @@ export default class FileDetailsApiScanCapturedApisComponent extends Component<F
   @service('notifications') declare notify: NotificationService;
 
   @tracked selectedCount = 0;
+  @tracked allAPIsSelected = false;
+  @tracked showAPIListLoadingState = true;
   @tracked capturedApiResponse: CapturedApiQueryResponse | null = null;
   @tracked limit = 10;
   @tracked offset = 0;
@@ -51,6 +54,7 @@ export default class FileDetailsApiScanCapturedApisComponent extends Component<F
   ) {
     super(owner, args);
 
+    this.getAllAPIsSelectedStatus.perform();
     this.setSelectedApiCount.perform();
     this.fetchCapturedApis.perform(this.limit, this.offset);
   }
@@ -65,6 +69,14 @@ export default class FileDetailsApiScanCapturedApisComponent extends Component<F
 
   get hasNoCapturedApi() {
     return this.totalCapturedApiCount === 0;
+  }
+
+  get modAllSelectedAPIsEndpoint() {
+    return [
+      ENV.endpoints['files'],
+      this.args.file.id,
+      'toggle_captured_apis',
+    ].join('/');
   }
 
   setFooterComponentDetails() {
@@ -94,6 +106,11 @@ export default class FileDetailsApiScanCapturedApisComponent extends Component<F
     this.offset = 0;
 
     this.fetchCapturedApis.perform(limit, this.offset);
+  }
+
+  @action
+  handleSelectAllCapturedApis(_: Event, checked: boolean) {
+    this.selectAllCapturedApis.perform(checked);
   }
 
   getSelectedApis = task(async () => {
@@ -137,6 +154,8 @@ export default class FileDetailsApiScanCapturedApisComponent extends Component<F
       this.notify.success(this.intl.t('capturedApiSaveSuccessMsg'));
 
       this.setSelectedApiCount.perform();
+
+      await this.getAllAPIsSelectedStatus.perform();
     } catch (err) {
       const error = err as AdapterError;
       let errMsg = this.intl.t('tPleaseTryAgain');
@@ -148,6 +167,41 @@ export default class FileDetailsApiScanCapturedApisComponent extends Component<F
       }
 
       this.notify.error(errMsg);
+    }
+  });
+
+  selectAllCapturedApis = task(async (is_active: boolean) => {
+    this.showAPIListLoadingState = false;
+
+    try {
+      await this.ajax.put(this.modAllSelectedAPIsEndpoint, {
+        data: { is_active: is_active },
+        namespace: ENV.namespace_v2,
+      });
+
+      await this.fetchCapturedApis.perform(this.limit, this.offset);
+      await this.getAllAPIsSelectedStatus.perform();
+
+      this.setSelectedApiCount.perform();
+    } catch (err) {
+      this.notify.error(parseError(err, this.intl.t('tPleaseTryAgain')));
+    } finally {
+      this.showAPIListLoadingState = true;
+    }
+  });
+
+  getAllAPIsSelectedStatus = task(async () => {
+    try {
+      const allAPIsSelected = await this.ajax.request<{ is_active: boolean }>(
+        this.modAllSelectedAPIsEndpoint,
+        {
+          namespace: ENV.namespace_v2,
+        }
+      );
+
+      this.allAPIsSelected = allAPIsSelected.is_active;
+    } catch (err) {
+      this.notify.error(parseError(err, this.intl.t('tPleaseTryAgain')));
     }
   });
 

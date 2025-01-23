@@ -1396,6 +1396,7 @@
   "security": "セキュリティ",
   "securityDashboard": "Security Dashboard",
   "securityDashboardDesc": "For security researchers to perform manual assessments (PT)",
+  "selectAll": "Select All",
   "selectAnyTeam": "チームを選択してください",
   "selectThePath": "Select the path",
   "selectDevice": "デバイスを選択する",
