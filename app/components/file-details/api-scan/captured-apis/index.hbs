@@ -1,4 +1,4 @@
-{{#if this.fetchCapturedApis.isRunning}}
+{{#if (and this.fetchCapturedApis.isRunning this.showAPIListLoadingState)}}
   <AkStack @justifyContent='center' class='mt-7'>
     <div local-class='captured-api-status-card'>
       <FileDetails::ApiScan::CapturedApis::Loading />
@@ -25,12 +25,37 @@
     >
       <div class='mb-1'>
         <AkTypography
-          data-test-fileDetails-apiScan-capturedApi-title
+          @color='textSecondary'
           local-class='captured-api-title'
-          @variant='h6'
+          data-test-fileDetails-apiScan-capturedApi-title
         >
           {{t 'capturedApiListTitle'}}
         </AkTypography>
+
+        <AkStack
+          @alignItems='center'
+          @spacing='1'
+          local-class='select-all-captured-api-cta'
+          class='w-full px-2 py-1'
+        >
+          <AkCheckbox
+            @disabled={{this.selectAllCapturedApis.isRunning}}
+            @checked={{this.allAPIsSelected}}
+            @onChange={{this.handleSelectAllCapturedApis}}
+            data-test-fileDetails-apiScan-selectAllCapturedApis-checkbox
+          />
+
+          <AkTypography
+            @fontWeight='bold'
+            data-test-fileDetails-apiScan-selectAllCapturedApis-text
+          >
+            {{t 'selectAll'}}
+          </AkTypography>
+
+          {{#if this.selectAllCapturedApis.isRunning}}
+            <AkLoader @size={{13}} class='ml-1' />
+          {{/if}}
+        </AkStack>
 
         <AkStack @direction='column' @spacing='1.5'>
           {{#each pgc.currentPageResults as |ca|}}
