@@ -56,17 +56,18 @@
       {{/if}}
 
       {{#if @context.store_url}}
-        <AkLink
+        <AkButton
           data-test-namespaceMessage-viewAppOnStorelink
+          @tag='a'
+          @variant='text'
           @color={{unless this.isUnModerated 'primary'}}
           @underline='always'
           target='_blank'
           href={{@context.store_url}}
           rel='noopener noreferrer'
-          @title={{t 'notificationModule.viewAppOnStore'}}
         >
           {{t 'notificationModule.viewAppOnStore'}}
-        </AkLink>
+        </AkButton>
       {{/if}}
     </AkStack>
   {{/if}}
