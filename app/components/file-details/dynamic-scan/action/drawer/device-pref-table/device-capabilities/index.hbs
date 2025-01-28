@@ -1,10 +1,10 @@
-{{#if this.deviceCapabilities.length}}
+{{#if this.allCapabilities.length}}
   <AkStack @spacing='0.5' @flexWrap='wrap'>
-    {{#each this.deviceCapabilities as |capability|}}
+    {{#each this.allCapabilities as |capability|}}
       <AkChip
         @size='small'
         @variant='outlined'
-        @label={{t capability}}
+        @label={{capability}}
         @color='error'
         local-class='capability-chip'
         data-test-fileDetails-dynamicScanDrawer-devicePrefTable-capability
@@ -19,6 +19,6 @@
     @color='textSecondary'
     data-test-fileDetails-dynamicScanDrawer-devicePrefTable-noCapabilityText
   >
-    <em>{{t 'modalCard.dynamicScan.noDeviceCapability'}}</em>
+    -
   </AkTypography>
 {{/if}}

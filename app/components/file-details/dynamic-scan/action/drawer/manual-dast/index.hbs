@@ -62,9 +62,10 @@
         @placeholder={{t 'modalCard.dynamicScan.selectDevicePreference'}}
         @options={{this.deviceSelectionTypes}}
         @selected={{this.selectedDeviceSelection}}
-        @onChange={{@dpContext.handleDsManualDeviceSelection}}
+        @onChange={{this.handleDsManualDeviceSelectionChange}}
         {{style minWidth='330px'}}
         data-test-fileDetails-dynamicScanDrawer-manualDast-devicePrefSelect
+        data-test-cy='devicePrefSelect'
         as |dst|
       >
         {{t (ds-manual-device-pref dst.value)}}
@@ -75,8 +76,6 @@
       <FileDetails::DynamicScan::Action::Drawer::DevicePrefTable
         @file={{@file}}
         @dpContext={{@dpContext}}
-        @allAvailableManualDevices={{@allAvailableManualDevices}}
-        @isFetchingManualDevices={{@isFetchingManualDevices}}
       />
     {{/if}}
   </AkStack>
@@ -101,53 +100,53 @@
 
     <AkToggle
       @size='small'
-      @checked={{@isApiScanEnabled}}
-      @onClick={{@enableApiScan}}
+      @checked={{@isApiCaptureEnabled}}
+      @onChange={{@onApiCaptureChange}}
       data-test-fileDetails-dynamicScanDrawer-manualDast-enableAPICaptureCheckbox
     />
   </AkStack>
 
   <AkDivider @color='dark' />
 
-  <AkStack @width='full' local-class='scan-modal-section'>
-    <ApiFilter
-      @profileId={{this.activeProfileId}}
-      @hideDescriptionText={{true}}
-    >
-      <:title>
-        <AkStack
-          @alignItems='center'
-          @spacing='1'
-          data-test-fileDetails-dynamicScanDrawer-manualDast-apiFilter-title
-        >
-          <AkTypography @fontWeight='bold'>
-            {{t 'templates.apiScanURLFilter'}}
-          </AkTypography>
-
-          <AkTooltip
-            @arrow={{true}}
-            @placement='right'
-            data-test-fileDetails-dynamicScanDrawer-manualDast-apiURLFilter-iconTooltip
+  {{#if @isApiCaptureEnabled}}
+    <AkStack @width='full' local-class='scan-modal-section'>
+      <ApiFilter
+        @profileId={{this.activeProfileId}}
+        @hideDescriptionText={{true}}
+      >
+        <:title>
+          <AkStack
+            @alignItems='center'
+            @spacing='1'
+            data-test-fileDetails-dynamicScanDrawer-manualDast-apiFilter-title
           >
-            <:tooltipContent>
-              <div local-class='tooltip-content-container'>
-                {{t 'modalCard.dynamicScan.apiScanUrlFilterTooltipText'}}
-              </div>
-            </:tooltipContent>
+            <AkTypography @fontWeight='bold'>
+              {{t 'templates.apiScanURLFilter'}}
+            </AkTypography>
 
-            <:default>
-              <AkIcon
-                local-class='api-url-filter-help-icon'
-                @iconName='help'
-                @size='small'
-                data-test-fileDetails-dynamicScanDrawer-manualDast-apiURLFilter-helpIcon
-              />
-            </:default>
-          </AkTooltip>
-        </AkStack>
-      </:title>
-    </ApiFilter>
-  </AkStack>
+            <AkTooltip
+              @arrow={{true}}
+              @placement='right'
+              data-test-fileDetails-dynamicScanDrawer-manualDast-apiURLFilter-iconTooltip
+            >
+              <:tooltipContent>
+                <div local-class='tooltip-content-container'>
+                  {{t 'modalCard.dynamicScan.apiScanUrlFilterTooltipText'}}
+                </div>
+              </:tooltipContent>
 
-  <AkDivider @color='dark' />
+              <:default>
+                <AkIcon
+                  local-class='api-url-filter-help-icon'
+                  @iconName='help'
+                  @size='small'
+                  data-test-fileDetails-dynamicScanDrawer-manualDast-apiURLFilter-helpIcon
+                />
+              </:default>
+            </AkTooltip>
+          </AkStack>
+        </:title>
+      </ApiFilter>
+    </AkStack>
+  {{/if}}
 </AkStack>

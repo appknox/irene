@@ -1,0 +1,80 @@
+<AkStack
+  @direction='column'
+  @spacing='2.5'
+  @width='full'
+  data-test-projectSettings-dastAutomation-autoSettings-root
+>
+  <AkStack @spacing='1' @alignItems='center' class='mb-1'>
+    <AkTypography
+      @variant='h5'
+      data-test-projectSettings-dastAutomationSettings-headerTitle
+    >
+      {{t 'dynamicScanAutomation'}}
+    </AkTypography>
+
+    <AkChip
+      @label={{t 'experimentalFeature'}}
+      @variant='semi-filled'
+      @size='small'
+      @color='warn'
+      data-test-projectSettings-dastAutomationSettings-headerInfoChip
+    >
+      <:icon>
+        <AkIcon @iconName='build' />
+      </:icon>
+    </AkChip>
+  </AkStack>
+
+  {{#if @featureAvailable}}
+    <div local-class='dynamicscan-automation-settings-container'>
+      <AkStack class='py-2 px-3' @width='full' @justifyContent='space-between'>
+        <AkStack @width='9/12' @direction='column' @spacing='1'>
+          <AkTypography
+            @fontWeight='bold'
+            data-test-projectSettings-dastAutomationSettings-dynamicscanAutomationToggleLabel
+          >
+            {{t 'enableAutomation'}}
+          </AkTypography>
+
+          <AkTypography
+            {{style maxWidth='700px'}}
+            @variant='body2'
+            data-test-projectSettings-dastAutomationSettings-headerInfoDescNote
+          >
+            {{t 'dynScanAutoSchedNote'}}
+          </AkTypography>
+        </AkStack>
+
+        <AkToggle
+          @size='small'
+          @disabled={{this.toggleDsAutomationPreference.isRunning}}
+          @checked={{this.automationPreference.dynamicScanAutomationEnabled}}
+          @onChange={{perform this.toggleDsAutomationPreference}}
+          data-test-projectSettings-dastAutomationSettings-dynamicscanAutomationToggle
+        />
+      </AkStack>
+
+      <div class='my-2 px-3'>
+        <ProjectSettings::DastAutomation::AutomationSettings::Scenario
+          @project={{@project}}
+          @profileId={{@profileId}}
+        />
+      </div>
+
+      <AkStack @width='9/12' class='p-3'>
+        <DsPreferenceProvider
+          @profileId={{@profileId}}
+          @file={{@project.lastFile}}
+          as |dpContext|
+        >
+          <ProjectSettings::DastAutomation::AutomationSettings::DevicePreferences
+            @project={{@project}}
+            @dpContext={{dpContext}}
+          />
+        </DsPreferenceProvider>
+      </AkStack>
+    </div>
+  {{else}}
+    <DynamicscanAutomationUpsellingFeature />
+  {{/if}}
+</AkStack>

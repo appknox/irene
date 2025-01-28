@@ -144,7 +144,7 @@ export default class DynamicScanActions {
 
     // wait for page to fully reload
     cy.document()
-      .findByTestId('manualDast-statusChipAndScanCTAContainer', {
+      .findByTestId('deviceWrapper-statusChipAndScanCTAContainer', {
         timeout: DYNAMIC_SCAN_STATUS_TIMEOUT,
       })
       .findByRole('button', {
@@ -155,11 +155,15 @@ export default class DynamicScanActions {
       .as(DYNAMIC_SCAN_STOP_BTN_ALIAS);
 
     // check different status of dynamic scan status chip while starting
-    cy.findByTestId('manualDast-statusChipAndScanCTAContainer').within(() => {
-      cy.findByTestId('manualDast-fullscreenBtn', DEFAULT_ASSERT_OPTS)
-        .should('exist')
-        .click();
-    });
+    cy.findByTestId('deviceWrapper-statusChipAndScanCTAContainer').within(
+      () => {
+        cy.findByTestId('deviceWrapper-deviceViewer-fullscreenBtn', {
+          timeout: DYNAMIC_SCAN_STATUS_TIMEOUT,
+        })
+          .should('exist')
+          .click();
+      }
+    );
 
     // wait for device screen to render
     cy.wait(3000);
@@ -322,26 +326,13 @@ export default class DynamicScanActions {
   }
 
   /**
-   * Get text representation for device type
-   * @param {number} deviceType device type value
+   * Get text representation for device selection
+   * @param {number} selection device selection value
    * @returns {string}
    */
-  getDeviceTypeText(deviceType: number): string {
-    return deviceType === 1
-      ? cyTranslate('phone')
-      : deviceType === 2
-        ? cyTranslate('tablet')
-        : cyTranslate('anyDevice');
-  }
-
-  /**
-   * Get text representation for platform version
-   * @param {string} platformVersion platform version value
-   * @returns {string}
-   */
-  getPlatformVersionText(platformVersion: string): string {
-    return platformVersion === '0'
-      ? cyTranslate('anyVersion')
-      : platformVersion;
+  getManualDeviceSelection(selection: number): string {
+    return selection === 0
+      ? cyTranslate('anyAvailableDeviceWithAnyOS')
+      : cyTranslate('specificDevice');
   }
 }

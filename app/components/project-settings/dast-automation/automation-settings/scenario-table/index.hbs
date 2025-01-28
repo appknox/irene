@@ -1,0 +1,60 @@
+{{#if @loadingScenarioList}}
+  <ProjectSettings::Loader
+    data-test-projectSettings-dastAutomationSettings-scenarioListLoader
+  />
+
+{{else if (eq @scenarioList.length 0)}}
+  <ProjectSettings::EmptyList
+    @emptyListText={{t 'dastAutomation.noScenariosFound'}}
+    data-test-projectSettings-dastAutomationSettings-scenariosListEmpty
+  />
+
+{{else}}
+  <AkTable
+    @variant='semi-bordered'
+    @borderColor='dark'
+    @hoverable={{true}}
+    local-class='dast-scenario-table'
+    as |tb|
+  >
+    <tb.head
+      @columns={{this.columns}}
+      data-test-projectSettings-dastAutomationSettings-scenarioTableHeader
+      as |h|
+    >
+      <h.row as |r|>
+        <r.cell as |column|>
+          {{#if column.headerComponent}}
+            {{#let (component column.headerComponent) as |Component|}}
+              <Component />
+            {{/let}}
+          {{else}}
+            {{column.name}}
+          {{/if}}
+        </r.cell>
+      </h.row>
+    </tb.head>
+
+    <tb.body @rows={{@scenarioList}} @renderAll={{true}} as |b|>
+      <b.row
+        @onClick={{this.onScenarioClick}}
+        data-test-projectSettings-dastAutomationSettings-scenarioTableRow
+        as |r|
+      >
+        <r.cell as |value|>
+          {{#if r.columnValue.cellComponent}}
+            {{#let (component r.columnValue.cellComponent) as |Component|}}
+              <Component
+                @scenario={{r.rowValue}}
+                @reloadScenarioList={{@reloadScenarioList}}
+                @project={{@project}}
+              />
+            {{/let}}
+          {{else}}
+            {{value}}
+          {{/if}}
+        </r.cell>
+      </b.row>
+    </tb.body>
+  </AkTable>
+{{/if}}

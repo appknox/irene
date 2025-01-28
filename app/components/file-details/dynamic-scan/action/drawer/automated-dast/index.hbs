@@ -62,6 +62,58 @@
     {{/each}}
   </AkStack>
 
+  <AkStack
+    @direction='column'
+    @width='full'
+    local-class='scan-modal-section'
+    data-test-fileDetails-dynamicScanDrawer-automatedDast-projectScenariosContainer
+  >
+    <AkTypography
+      @tag='header'
+      @fontWeight='bold'
+      class='px-3'
+      data-test-fileDetails-dynamicScanDrawer-automatedDast-projectScenariosTitle
+    >
+      {{t 'modalCard.dynamicScan.activeScenarios'}}
+    </AkTypography>
+
+    <AkStack @direction='column' @width='full'>
+      {{#if this.fetchProjectScenarios.isRunning}}
+        <FileDetails::DynamicScan::Action::Drawer::AutomatedDast::Loading />
+
+      {{else if this.showEmptyScenarioListUI}}
+        <FileDetails::DynamicScan::Action::Drawer::AutomatedDast::EmptyListState
+          @headerText={{t
+            'modalCard.dynamicScan.emptyActiveScenariosHeaderText'
+          }}
+          @subText={{t 'modalCard.dynamicScan.emptyActiveScenariosSubText'}}
+          data-test-fileDetails-dynamicScanDrawer-automatedDast-scenariosEmptyContainer
+        />
+
+      {{else}}
+        {{#each this.activeScenarioList as |scenario idx|}}
+          <AkStack
+            class='px-3 {{if (eq idx 0) "py-2" "pb-2"}}'
+            @spacing='1'
+            @alignItems='center'
+            data-test-fileDetails-dynamicScanDrawer-automatedDast-projectScenario={{scenario.id}}
+          >
+            <AkIcon
+              @iconName='done'
+              @size='small'
+              @color='success'
+              data-test-fileDetails-dynamicScanDrawer-automatedDast-projectScenarioIcon
+            />
+
+            <AkTypography>
+              {{scenario.name}}
+            </AkTypography>
+          </AkStack>
+        {{/each}}
+      {{/if}}
+    </AkStack>
+  </AkStack>
+
   {{#if this.apiProxyIsEnabled}}
     <AkStack
       @direction='column'
@@ -164,58 +216,6 @@
 
             <AkTypography>
               {{filter.url}}
-            </AkTypography>
-          </AkStack>
-        {{/each}}
-      {{/if}}
-    </AkStack>
-  </AkStack>
-
-  <AkStack
-    @direction='column'
-    @width='full'
-    local-class='scan-modal-section'
-    data-test-fileDetails-dynamicScanDrawer-automatedDast-projectScenariosContainer
-  >
-    <AkTypography
-      @tag='header'
-      @fontWeight='bold'
-      class='px-3'
-      data-test-fileDetails-dynamicScanDrawer-automatedDast-projectScenariosTitle
-    >
-      {{t 'modalCard.dynamicScan.activeScenarios'}}
-    </AkTypography>
-
-    <AkStack @direction='column' @width='full'>
-      {{#if this.fetchProjectScenarios.isRunning}}
-        <FileDetails::DynamicScan::Action::Drawer::AutomatedDast::Loading />
-
-      {{else if this.showEmptyScenarioListUI}}
-        <FileDetails::DynamicScan::Action::Drawer::AutomatedDast::EmptyListState
-          @headerText={{t
-            'modalCard.dynamicScan.emptyActiveScenariosHeaderText'
-          }}
-          @subText={{t 'modalCard.dynamicScan.emptyActiveScenariosSubText'}}
-          data-test-fileDetails-dynamicScanDrawer-automatedDast-scenariosEmptyContainer
-        />
-
-      {{else}}
-        {{#each this.activeScenarioList as |scenario idx|}}
-          <AkStack
-            class='px-3 {{if (eq idx 0) "py-2" "pb-2"}}'
-            @spacing='1'
-            @alignItems='center'
-            data-test-fileDetails-dynamicScanDrawer-automatedDast-projectScenario={{scenario.id}}
-          >
-            <AkIcon
-              @iconName='done'
-              @size='small'
-              @color='success'
-              data-test-fileDetails-dynamicScanDrawer-automatedDast-projectScenarioIcon
-            />
-
-            <AkTypography>
-              {{scenario.name}}
             </AkTypography>
           </AkStack>
         {{/each}}

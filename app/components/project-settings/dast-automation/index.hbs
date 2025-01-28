@@ -1,0 +1,15 @@
+<AkStack
+  @direction='column'
+  @spacing='1.5'
+  class='mb-3 py-3'
+  local-class='dast-automation-settings-root'
+  data-test-projectSettings-dastAutomationSettings-root
+>
+  <AkStack @width='full' class='px-3'>
+    <ProjectSettings::DastAutomation::AutomationSettings
+      @profileId={{this.project.activeProfileId}}
+      @project={{this.project}}
+      @featureAvailable={{this.dynamicscanAutomationFeatureAvailable}}
+    />
+  </AkStack>
+</AkStack>

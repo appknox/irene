@@ -1420,34 +1420,37 @@ body {
   --project-settings-header-color-android: var(--android);
   --project-settings-header-color-ios: var(--ios);
 
+  // variables for project-settings/dast-automation
+  --project-settings-dast-automation-root-border-color: var(--border-color-1);
+  --project-settings-dast-automation-root-background-color: var(
+    --background-main
+  );
+
+  // variables for project-settings/dast-automation/automation-settings
+  --project-settings-dast-automation-automation-settings-border-radius: var(
+    --border-radius
+  );
+  --project-settings-dast-automation-automation-settings-border-color: var(
+    --border-color-1
+  );
+
+  // variables for project-settings/dast-automation/automation-settings/scenario
+  --project-settings-dast-automation-automation-settings-scenario-textfield-bg: var(
+    --neutral-grey-100
+  );
+  --project-settings-dast-automation-automation-settings-scenario-form-footer-box-shadow: var(
+    --box-shadow-4
+  );
+
+  // variables for project-settings/dast-automation/automation-settings/device-preferences
+  --project-settings-dast-automation-automation-settings-device-preferences-border-color: var(
+    --border-color-1
+  );
+
   // variables for project-settings/general-settings
   --project-settings-general-settings-root-border-color: var(--border-color-1);
   --project-settings-general-settings-root-background-color: var(
     --background-main
-  );
-
-  // variables for project-settings/general-settings/device-preferences-automated-dast
-  --project-settings-general-settings-device-preferences-automated-dast-border-color: var(
-    --border-color-1
-  );
-
-  // variables for project-settings/general-settings/dynamicscan-automation-settings
-  --project-settings-general-settings-dynamicscan-automation-settings-box-shadow: var(
-    --box-shadow-7
-  );
-  --project-settings-general-settings-dynamicscan-automation-settings-border-radius: var(
-    --border-radius
-  );
-  --project-settings-general-settings-dynamicscan-automation-settings-border-color: var(
-    --border-color-1
-  );
-
-  // variables for project-settings/general-settings/dynamicscan-automation-settings/scenario
-  --project-settings-general-settings-dynamicscan-automation-scenario-textfield-bg: var(
-    --neutral-grey-100
-  );
-  --project-settings-general-settings-dynamicscan-automation-scenario-form-footer-box-shadow: var(
-    --box-shadow-4
   );
 
   // variables for project-settings/general-settings/dynamicscan-automation-settings/upselling-feature
@@ -1983,9 +1986,13 @@ body {
   // variables for file-details/dynamic-scan/header
   --file-details-dynamic-scan-header-background-color: var(--background-light);
 
-  // variables for file-details/dynamic-scan/manual
-  --file-details-dynamic-scan-manual-border-color: var(--border-color-1);
-  --file-details-dynamic-scan-manual-background-main: var(--background-main);
+  // variables for file-details/dynamic-scan/device-wrapper
+  --file-details-dynamic-scan-device-wrapper-border-color: var(
+    --border-color-1
+  );
+  --file-details-dynamic-scan-device-wrapper-background-main: var(
+    --background-main
+  );
 
   // variables for file-details/dynamic-scan/automated
   --file-details-dynamic-scan-automated-border-color: var(--border-color-1);

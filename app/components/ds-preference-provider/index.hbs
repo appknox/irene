@@ -1,0 +1,15 @@
+{{yield
+  (hash
+    dsManualDevicePreference=this.dsManualDevicePreference
+    loadingDsManualDevicePref=this.fetchDsManualDevicePref.isRunning
+    dsAutomatedDevicePreference=this.dsAutomatedDevicePreference
+    loadingDsAutomatedDevicePref=this.fetchDsAutomatedDevicePref.isRunning
+    fetchAvailableDevices=(perform this.fetchAvailableDevices)
+    availableManualDevices=this.availableDevicesResponse
+    loadingAvailableDevices=this.fetchAvailableDevices.isRunning
+    updateDsManualDevicePref=this.handleUpdateDsManualDevicePreference
+    updatingDsManualDevicePref=this.updateDsManualDevicePreference.isRunning
+    updateDsAutomatedDevicePref=this.handleUpdateDsAutomatedDevicePreference
+    updatingDsAutomatedDevicePref=this.updateDsAutomatedDevicePreference.isRunning
+  )
+}}

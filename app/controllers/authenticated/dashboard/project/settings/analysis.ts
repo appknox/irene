@@ -15,7 +15,10 @@ export default class AuthenticatedDashboardProjectSettingsIndexController extend
       title: `${this.intl.t('analysisSettings')} (${this.model.packageName})`,
       route: 'authenticated.dashboard.project.settings.analysis',
       models: [this.model?.id],
-      siblingRoutes: ['authenticated.dashboard.project.settings.index'],
+      siblingRoutes: [
+        'authenticated.dashboard.project.settings.index',
+        'authenticated.dashboard.project.settings.dast-automation',
+      ],
       routeGroup: 'project/files',
 
       parentCrumb: {

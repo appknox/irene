@@ -1,0 +1,11 @@
+<AkStack @alignItems='center' @spacing='0.5'>
+  <AkTypography @tag='span'>
+    {{@deviceProps.deviceIdentifier}}
+  </AkTypography>
+
+  {{#if @deviceProps.customIdentifier}}
+    <AkTypography @tag='span' @color='textSecondary'>
+      ({{@deviceProps.customIdentifier}})
+    </AkTypography>
+  {{/if}}
+</AkStack>

@@ -176,6 +176,7 @@ Router.map(function () {
           function () {
             this.route('settings', function () {
               this.route('analysis');
+              this.route('dast-automation');
 
               this.route('dast-automation-scenario', {
                 path: '/dast-automation-scenario/:scenario_id',
@@ -203,7 +204,8 @@ Router.map(function () {
 
           this.route('dynamic-scan', function () {
             this.route('manual');
-            // this.route('automated');
+            this.route('automated');
+            this.route('scheduled-automated');
             this.route('results');
           });
         });

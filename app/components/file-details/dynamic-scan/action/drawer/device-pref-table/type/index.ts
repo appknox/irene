@@ -1,11 +1,11 @@
 import Component from '@glimmer/component';
-import type ProjectAvailableDeviceModel from 'irene/models/project-available-device';
+
 import ENUMS from 'irene/enums';
+import type AvailableManualDeviceModel from 'irene/models/available-manual-device';
 
 export interface FileDetailsDynamicScanDrawerDevicePrefTableTypeSignature {
   Args: {
-    deviceProps: ProjectAvailableDeviceModel;
-    selectedDevice: ProjectAvailableDeviceModel;
+    deviceProps: AvailableManualDeviceModel;
   };
 }
 

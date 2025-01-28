@@ -1,6 +1,4 @@
-/* eslint-disable ember/no-computed-properties-in-native-classes */
 import Inflector from 'ember-inflector';
-import { computed } from '@ember/object';
 import { isEmpty } from '@ember/utils';
 import Model, { attr } from '@ember-data/model';
 
@@ -11,17 +9,12 @@ export default class ApiScanOptionsModel extends Model {
   @attr('string')
   declare apiUrlFilters: string;
 
-  @computed('apiUrlFilters')
   get apiUrlFilterItems() {
-    if (!isEmpty(this.apiUrlFilters)) {
-      return this.apiUrlFilters != null
-        ? this.apiUrlFilters.split(',')
-        : undefined;
-    }
+    return isEmpty(this.apiUrlFilters) ? [] : this.apiUrlFilters.split(',');
   }
 
   get hasApiUrlFilters() {
-    return this.apiUrlFilterItems?.length;
+    return !isEmpty(this.apiUrlFilterItems);
   }
 }
 
