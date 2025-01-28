@@ -1,4 +1,3 @@
-/* eslint-disable ember/no-observers */
 import Component from '@glimmer/component';
 import { tracked } from '@glimmer/tracking';
 import { task } from 'ember-concurrency';
@@ -6,20 +5,19 @@ import { action } from '@ember/object';
 import { inject as service } from '@ember/service';
 import { later } from '@ember/runloop';
 import { EmberRunTimer } from '@ember/runloop/types';
-import { addObserver, removeObserver } from '@ember/object/observers';
 import type Store from '@ember-data/store';
+import type { AsyncBelongsTo } from '@ember-data/model';
 
 import { Duration } from 'dayjs/plugin/duration';
 import dayjs from 'dayjs';
 
-import type FileModel from 'irene/models/file';
 import type DatetimeService from 'irene/services/datetime';
 import type DynamicscanModel from 'irene/models/dynamicscan';
 import ENV from 'irene/config/environment';
 
 export interface DynamicScanExpirySignature {
   Args: {
-    file: FileModel;
+    dynamicscan: AsyncBelongsTo<DynamicscanModel>;
   };
 }
 
@@ -28,7 +26,6 @@ export default class DynamicScanExpiryComponent extends Component<DynamicScanExp
   @service declare store: Store;
   @service declare datetime: DatetimeService;
 
-  @tracked dynamicscan: DynamicscanModel | null = null;
   @tracked durationRemaining: null | Duration = null;
   @tracked clockStop = false;
   @tracked extendBtnAnchorRef: HTMLElement | null = null;
@@ -36,52 +33,21 @@ export default class DynamicScanExpiryComponent extends Component<DynamicScanExp
   constructor(owner: unknown, args: DynamicScanExpirySignature['Args']) {
     super(owner, args);
 
-    this.fetchDynamicscan.perform().then(() => {
-      this.clock();
-    });
+    this.clock();
   }
 
   willDestroy() {
     super.willDestroy();
 
     this.clockStop = true;
-
-    if (this.dynamicscan) {
-      removeObserver(
-        this.dynamicscan,
-        'isReadyOrRunning',
-        this.observeDeviceState
-      );
-    }
   }
 
   get extendTimeOptions() {
     return [5, 15, 30];
   }
 
-  get profileId() {
-    return this.args.file.profile.get('id');
-  }
-
-  fetchDynamicscan = task(async () => {
-    if (this.profileId) {
-      this.dynamicscan = await this.store.findRecord(
-        'dynamicscan',
-        this.profileId
-      );
-    }
-
-    if (this.dynamicscan) {
-      addObserver(
-        this.dynamicscan,
-        'isReadyOrRunning',
-        this.observeDeviceState
-      );
-    }
-  });
-
-  observeDeviceState() {
-    this.fetchDynamicscan.perform();
+  get dynamicscan() {
+    return this.args.dynamicscan;
   }
 
   get canExtend() {
@@ -97,7 +63,7 @@ export default class DynamicScanExpiryComponent extends Component<DynamicScanExp
   get timeRemaining() {
     const duration = this.durationRemaining;
 
-    if (!duration) {
+    if (!duration || duration.asMilliseconds() <= 0) {
       return {
         seconds: '00',
         minutes: '00',
@@ -105,8 +71,8 @@ export default class DynamicScanExpiryComponent extends Component<DynamicScanExp
     }
 
     return {
-      seconds: ('0' + duration.seconds()).slice(-2),
-      minutes: ('0' + Math.floor(duration.asMinutes())).slice(-2),
+      seconds: ('0' + Math.max(0, duration.seconds())).slice(-2),
+      minutes: ('0' + Math.max(0, Math.floor(duration.asMinutes()))).slice(-2),
     };
   }
 
@@ -117,15 +83,19 @@ export default class DynamicScanExpiryComponent extends Component<DynamicScanExp
 
     if (ENV.environment === 'test') {
       this.updateDurationRemaining();
+
       return;
     }
 
     this.updateDurationRemaining();
+
     later(this, this.clock, 1000);
   }
 
   updateDurationRemaining() {
-    const expiresOn = this.dynamicscan ? this.dynamicscan.timeoutOn : null;
+    const expiresOn = this.dynamicscan
+      ? this.dynamicscan.get('autoShutdownOn')
+      : null;
 
     if (!expiresOn) {
       return;
@@ -139,14 +109,13 @@ export default class DynamicScanExpiryComponent extends Component<DynamicScanExp
   }
 
   extendtime = task(async (time: number) => {
-    const dynamicscan = this.dynamicscan;
-
-    if (!dynamicscan) {
-      return;
-    }
+    this.handleExtendTimeMenuClose();
 
     try {
-      await dynamicscan.extendTime(time);
+      const ds = await this.dynamicscan;
+
+      await ds.extendTime(time);
+      await ds.reload();
     } catch (error) {
       const err = error as AdapterError;
 
@@ -158,8 +127,6 @@ export default class DynamicScanExpiryComponent extends Component<DynamicScanExp
 
       throw err;
     }
-
-    await this.fetchDynamicscan.perform();
   });
 
   @action

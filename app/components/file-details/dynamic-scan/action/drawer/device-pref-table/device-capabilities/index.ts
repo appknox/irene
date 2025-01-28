@@ -1,16 +1,16 @@
 import Component from '@glimmer/component';
-import type ProjectAvailableDeviceModel from 'irene/models/project-available-device';
+import type AvailableManualDeviceModel from 'irene/models/available-manual-device';
 
 enum CapabilitiesTranslationsMap {
   hasSim = 'sim',
   hasVpn = 'vpn',
   hasPinLock = 'pinLock',
-  hasVnc = 'vnc',
+  // hasVnc = 'vnc',
 }
 
 export interface FileDetailsDynamicScanDrawerDevicePrefTableDeviceCapabilitiesSignature {
   Args: {
-    deviceProps: ProjectAvailableDeviceModel;
+    deviceProps: AvailableManualDeviceModel;
   };
 }
 

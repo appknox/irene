@@ -2,27 +2,14 @@ import { render } from '@ember/test-helpers';
 import { hbs } from 'ember-cli-htmlbars';
 import { setupMirage } from 'ember-cli-mirage/test-support';
 import { setupRenderingTest } from 'ember-qunit';
+import { setupIntl } from 'ember-intl/test-support';
 import { module, test } from 'qunit';
-import Service from '@ember/service';
 
 import ENUMS from 'irene/enums';
 
-class PollServiceStub extends Service {
-  callback = null;
-  interval = null;
-
-  startPolling(cb, interval) {
-    function stop() {}
-
-    this.callback = cb;
-    this.interval = interval;
-
-    return stop;
-  }
-}
-
 module('Integration | Component | vnc-viewer', function (hooks) {
   setupRenderingTest(hooks);
+  setupIntl(hooks, 'en');
   setupMirage(hooks);
 
   hooks.beforeEach(async function () {
@@ -33,6 +20,7 @@ module('Integration | Component | vnc-viewer', function (hooks) {
     const file = this.server.create('file', {
       project: '1',
       profile: profile.id,
+      is_active: true,
     });
 
     this.server.create('project', {
@@ -41,67 +29,35 @@ module('Integration | Component | vnc-viewer', function (hooks) {
       active_profile_id: profile.id,
     });
 
-    const devicePreference = this.server.create('device-preference', {
-      id: profile.id,
-    });
-
-    const dynamicscan = this.server.create('dynamicscan', {
-      id: profile.id,
-      status: ENUMS.DYNAMIC_STATUS.NONE,
-      expires_on: null,
-    });
-
     this.setProperties({
       file: store.push(store.normalize('file', file.toJSON())),
-      dynamicScan: dynamicscan,
-      devicePreference,
       activeProfileId: profile.id,
       store,
     });
-
-    this.owner.register('service:poll', PollServiceStub);
   });
 
   test.each(
-    'it renders vnc viewer',
+    'it renders when not started & device not allocated',
     [
       {
         platform: ENUMS.PLATFORM.ANDROID,
-        deviceType: ENUMS.DEVICE_TYPE.TABLET_REQUIRED,
-        deviceClass: 'tablet',
-      },
-      {
-        platform: ENUMS.PLATFORM.IOS,
-        deviceType: ENUMS.DEVICE_TYPE.TABLET_REQUIRED,
-        deviceClass: 'ipad black',
-      },
-      {
-        platform: ENUMS.PLATFORM.ANDROID,
-        deviceType: ENUMS.DEVICE_TYPE.PHONE_REQUIRED,
         deviceClass: 'nexus5',
       },
       {
         platform: ENUMS.PLATFORM.IOS,
-        deviceType: ENUMS.DEVICE_TYPE.PHONE_REQUIRED,
-        deviceClass: 'iphone5s black',
-      },
-      {
-        platform: ENUMS.PLATFORM.ANDROID,
-        deviceType: ENUMS.DEVICE_TYPE.NO_PREFERENCE,
-        deviceClass: 'nexus5',
-      },
-      {
-        platform: ENUMS.PLATFORM.IOS,
-        deviceType: ENUMS.DEVICE_TYPE.NO_PREFERENCE,
         deviceClass: 'iphone5s black',
       },
     ],
-    async function (assert, { platform, deviceType, deviceClass }) {
-      this.file.dynamicStatus = ENUMS.DYNAMIC_STATUS.NONE;
-      this.file.isDynamicDone = true;
+    async function (assert, { platform, deviceClass }) {
+      const dynamicscan = this.server.create('dynamicscan', {
+        file: this.file.id,
+        status: ENUMS.DYNAMIC_SCAN_STATUS.NOT_STARTED,
+        ended_on: null,
+      });
 
-      // make sure file is active
-      this.file.isActive = true;
+      this.dynamicscan = this.store.push(
+        this.store.normalize('dynamicscan', dynamicscan.toJSON())
+      );
 
       this.server.get('/v2/projects/:id', (schema, req) => {
         return {
@@ -110,15 +66,8 @@ module('Integration | Component | vnc-viewer', function (hooks) {
         };
       });
 
-      this.server.get('/profiles/:id/device_preference', (schema, req) => {
-        return {
-          ...schema.devicePreferences.find(`${req.params.id}`)?.toJSON(),
-          device_type: deviceType,
-        };
-      });
-
       await render(hbs`
-        <VncViewer @file={{this.file}} @profileId={{this.activeProfileId}} @dynamicScan={{this.dynamicScan}} />
+        <VncViewer @file={{this.file}} @profileId={{this.activeProfileId}} @dynamicScan={{this.dynamicscan}} />
       `);
 
       deviceClass.split(' ').forEach((val) => {
@@ -126,7 +75,75 @@ module('Integration | Component | vnc-viewer', function (hooks) {
       });
 
       ['TopBar', 'Sleep', 'Volume'].forEach((it) => {
-        if (deviceType === ENUMS.DEVICE_TYPE.TABLET_REQUIRED) {
+        assert.dom(`[data-test-vncViewer-device${it}]`).doesNotExist();
+      });
+
+      assert.dom('[data-test-vncViewer-deviceCamera]').exists();
+      assert.dom('[data-test-vncViewer-deviceScreen]').hasClass('screen');
+
+      if (platform === ENUMS.PLATFORM.IOS) {
+        assert.dom('[data-test-vncViewer-deviceHome]').exists();
+
+        ['Speaker', 'BottomBar'].forEach((it) => {
+          assert.dom(`[data-test-vncViewer-device${it}]`).doesNotExist();
+        });
+      }
+    }
+  );
+
+  test.each(
+    'it renders when started & device allocated',
+    [
+      {
+        platform: ENUMS.PLATFORM.IOS,
+        isTablet: true,
+        deviceClass: 'ipad black',
+      },
+      {
+        platform: ENUMS.PLATFORM.ANDROID,
+        isTablet: false,
+        deviceClass: 'nexus5',
+      },
+      {
+        platform: ENUMS.PLATFORM.IOS,
+        isTablet: false,
+        deviceClass: 'iphone5s black',
+      },
+    ],
+    async function (assert, { platform, isTablet, deviceClass }) {
+      const deviceUsed = this.server.create('device', {
+        is_tablet: isTablet,
+        platform,
+      });
+
+      const dynamicscan = this.server.create('dynamicscan', {
+        file: this.file.id,
+        status: ENUMS.DYNAMIC_SCAN_STATUS.READY_FOR_INTERACTION,
+        ended_on: null,
+        device_used: deviceUsed.toJSON(),
+      });
+
+      this.dynamicscan = this.store.push(
+        this.store.normalize('dynamicscan', dynamicscan.toJSON())
+      );
+
+      this.server.get('/v2/projects/:id', (schema, req) => {
+        return {
+          ...schema.projects.find(`${req.params.id}`)?.toJSON(),
+          platform,
+        };
+      });
+
+      await render(hbs`
+        <VncViewer @file={{this.file}} @profileId={{this.activeProfileId}} @dynamicScan={{this.dynamicscan}} />
+      `);
+
+      deviceClass.split(' ').forEach((val) => {
+        assert.dom('[data-test-vncViewer-device]').hasClass(val);
+      });
+
+      ['TopBar', 'Sleep', 'Volume'].forEach((it) => {
+        if (isTablet) {
           assert.dom(`[data-test-vncViewer-device${it}]`).exists();
         } else {
           assert.dom(`[data-test-vncViewer-device${it}]`).doesNotExist();
@@ -134,21 +151,13 @@ module('Integration | Component | vnc-viewer', function (hooks) {
       });
 
       assert.dom('[data-test-vncViewer-deviceCamera]').exists();
-
-      assert
-        .dom('[data-test-vncViewer-deviceScreen]')
-        .hasClass(
-          platform === ENUMS.PLATFORM.ANDROID &&
-            deviceType === ENUMS.DEVICE_TYPE.TABLET_REQUIRED
-            ? 'noscreen'
-            : 'screen'
-        );
+      assert.dom('[data-test-vncViewer-deviceScreen]').hasClass('screen');
 
       if (platform === ENUMS.PLATFORM.IOS) {
         assert.dom('[data-test-vncViewer-deviceHome]').exists();
 
         ['Speaker', 'BottomBar'].forEach((it) => {
-          if (deviceType === ENUMS.DEVICE_TYPE.TABLET_REQUIRED) {
+          if (isTablet) {
             assert.dom(`[data-test-vncViewer-device${it}]`).exists();
           } else {
             assert.dom(`[data-test-vncViewer-device${it}]`).doesNotExist();

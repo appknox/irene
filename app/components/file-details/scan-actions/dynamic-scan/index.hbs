@@ -8,11 +8,14 @@
     {{t 'dast'}}
   </AkTypography>
 
-  <FileDetails::DynamicScan::StatusChip
-    @file={{@file}}
-    @chipStatusText={{this.chipStatusText}}
-    data-test-fileDetailScanActions-dynamicScanStatus
-  />
+  {{#if @file.isDynamicScanLoading}}
+    <AkSkeleton @width='80px' />
+  {{else}}
+    <FileDetails::DynamicScan::StatusChip
+      @status={{this.status}}
+      data-test-fileDetailScanActions-dynamicScanStatus
+    />
+  {{/if}}
 </AkStack>
 
 <AkDivider @color='dark' />

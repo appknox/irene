@@ -25,6 +25,7 @@ import AnalysisModel from './analysis';
 import ProfileModel from './profile';
 import SbomFileModel from './sbom-file';
 import SubmissionModel from './submission';
+import DynamicscanModel from './dynamicscan';
 
 const _getAnalysesCount = (
   analysis: SyncHasMany<AnalysisModel>,
@@ -133,6 +134,30 @@ export default class FileModel extends ModelBaseMixin {
   @belongsTo('file', { inverse: null, async: true })
   declare previousFile: AsyncBelongsTo<FileModel>;
 
+  // query is added in serializer
+  // @hasMany('dynamicscan', { async: true, inverse: null })
+  // declare latestDsAutomatedScanQuery: AsyncHasMany<DynamicscanModel>;
+
+  // @hasMany('dynamicscan', { async: true, inverse: null })
+  // declare latestDsManualScanQuery: AsyncHasMany<DynamicscanModel>;
+
+  // currently for testing purpose
+  @belongsTo('dynamicscan', { async: true, inverse: null })
+  declare latestDsAutomatedScan: AsyncBelongsTo<DynamicscanModel> | null;
+
+  @belongsTo('dynamicscan', { async: true, inverse: null })
+  declare latestDsManualScan: AsyncBelongsTo<DynamicscanModel> | null;
+
+  async getLastDynamicScan(
+    fileId: string,
+    mode: number,
+    isScheduledScan = false
+  ) {
+    const adapter = this.store.adapterFor('file');
+
+    return await adapter.getLastDynamicScan(fileId, mode, isScheduledScan);
+  }
+
   analysesSorting = ['computedRisk:desc'];
 
   scanProgressClass(type?: boolean) {
@@ -141,6 +166,23 @@ export default class FileModel extends ModelBaseMixin {
     }
 
     return false;
+  }
+
+  get dsAutomatedScan() {
+    return this.latestDsAutomatedScan;
+    // return this.latestDsAutomatedScanQuery?.slice()?.[0] || null;
+  }
+
+  get dsManualScan() {
+    return this.latestDsManualScan;
+    // return this.latestDsManualScanQuery?.slice()?.[0] || null;
+  }
+
+  get isDynamicScanLoading() {
+    return (
+      this.latestDsAutomatedScan?.isPending ||
+      this.latestDsManualScan?.isPending
+    );
   }
 
   get isManualRequested() {
@@ -161,193 +203,12 @@ export default class FileModel extends ModelBaseMixin {
     return this.scanProgressClass(isStaticDone);
   }
 
-  get isNoneStatus() {
-    const status = this.dynamicStatus;
-    return status === ENUMS.DYNAMIC_STATUS.NONE;
-  }
-
-  get isNotNoneStatus() {
-    return !this.isNoneStatus;
-  }
-  get isNotReady() {
-    return !this.isReady;
-  }
-
-  get isReady() {
-    const status = this.dynamicStatus;
-    return status === ENUMS.DYNAMIC_STATUS.READY;
-  }
-
-  get isDynamicStatusNone() {
-    const status = this.dynamicStatus;
-    return status === ENUMS.DYNAMIC_STATUS.NONE;
-  }
-
-  get isDynamicStatusError() {
-    const status = this.dynamicStatus;
-    return status === ENUMS.DYNAMIC_STATUS.ERROR;
-  }
-
-  get isDynamicStatusQueueAndHasAutomation() {
-    const status = this.dynamicStatus;
-    return (
-      status === ENUMS.DYNAMIC_STATUS.INQUEUE && this.canRunAutomatedDynamicscan
-    );
-  }
-
-  get isDynamicStatusReady() {
-    const status = this.dynamicStatus;
-    return status === ENUMS.DYNAMIC_STATUS.READY;
-  }
-
-  get isDynamicStatusNotReady() {
-    return !this.isDynamicStatusReady;
-  }
-
-  get isDynamicStatusNotNone() {
-    return !this.isDynamicStatusNone;
-  }
-
-  get isDynamicStatusNeitherNoneNorReadyNorError() {
-    const status = this.dynamicStatus;
-    return ![
-      ENUMS.DYNAMIC_STATUS.READY,
-      ENUMS.DYNAMIC_STATUS.NONE,
-      ENUMS.DYNAMIC_STATUS.ERROR,
-    ].includes(status);
-  }
-
-  get isDynamicStatusNoneOrError() {
-    const status = this.dynamicStatus;
-    return [ENUMS.DYNAMIC_STATUS.NONE, ENUMS.DYNAMIC_STATUS.ERROR].includes(
-      status
-    );
-  }
-
-  get isDynamicStatusNoneOrReady() {
-    const status = this.dynamicStatus;
-    return [ENUMS.DYNAMIC_STATUS.READY, ENUMS.DYNAMIC_STATUS.NONE].includes(
-      status
-    );
-  }
-
-  get isDynamicStatusStarting() {
-    const status = this.dynamicStatus;
-    return ![
-      ENUMS.DYNAMIC_STATUS.READY,
-      ENUMS.DYNAMIC_STATUS.RUNNING,
-      ENUMS.DYNAMIC_STATUS.NONE,
-      ENUMS.DYNAMIC_STATUS.SHUTTING_DOWN,
-    ].includes(status);
-  }
-
-  get isDynamicStatusInProgress() {
-    const status = this.dynamicStatus;
-    return [
-      ENUMS.DYNAMIC_STATUS.INQUEUE,
-      ENUMS.DYNAMIC_STATUS.BOOTING,
-      ENUMS.DYNAMIC_STATUS.DOWNLOADING,
-      ENUMS.DYNAMIC_STATUS.INSTALLING,
-      ENUMS.DYNAMIC_STATUS.LAUNCHING,
-      ENUMS.DYNAMIC_STATUS.HOOKING,
-      ENUMS.DYNAMIC_STATUS.READY,
-      ENUMS.DYNAMIC_STATUS.RUNNING,
-      ENUMS.DYNAMIC_STATUS.SHUTTING_DOWN,
-    ].includes(status);
-  }
-
-  get isNeitherNoneNorReady() {
-    const status = this.dynamicStatus;
-    return ![ENUMS.DYNAMIC_STATUS.READY, ENUMS.DYNAMIC_STATUS.NONE].includes(
-      status
-    );
-  }
-
-  get startingScanStatus() {
-    return this.isDynamicStatusStarting;
-  }
-
-  get showScheduleAutomatedDynamicScan() {
-    const status = this.dynamicStatus;
-    return (
-      status !== ENUMS.DYNAMIC_STATUS.INQUEUE && this.canRunAutomatedDynamicscan
-    );
-  }
-
-  get statusText() {
-    const tDeviceInQueue = this.intl.t('deviceInQueue');
-    const tDeviceBooting = this.intl.t('deviceBooting');
-    const tDeviceDownloading = this.intl.t('deviceDownloading');
-    const tDeviceInstalling = this.intl.t('deviceInstalling');
-    const tDeviceLaunching = this.intl.t('deviceLaunching');
-    const tDeviceHooking = this.intl.t('deviceHooking');
-    const tDeviceShuttingDown = this.intl.t('deviceShuttingDown');
-    const tDeviceCompleted = this.intl.t('deviceCompleted');
-
-    switch (this.dynamicStatus) {
-      case ENUMS.DYNAMIC_STATUS.INQUEUE:
-        return tDeviceInQueue;
-      case ENUMS.DYNAMIC_STATUS.BOOTING:
-        return tDeviceBooting;
-      case ENUMS.DYNAMIC_STATUS.DOWNLOADING:
-        return tDeviceDownloading;
-      case ENUMS.DYNAMIC_STATUS.INSTALLING:
-        return tDeviceInstalling;
-      case ENUMS.DYNAMIC_STATUS.LAUNCHING:
-        return tDeviceLaunching;
-      case ENUMS.DYNAMIC_STATUS.HOOKING:
-        return tDeviceHooking;
-      case ENUMS.DYNAMIC_STATUS.SHUTTING_DOWN:
-        return tDeviceShuttingDown;
-      case ENUMS.DYNAMIC_STATUS.COMPLETED:
-        return tDeviceCompleted;
-      default:
-        return 'Unknown Status';
-    }
-  }
-
   get comparableVersion() {
     const platform = this.project?.get('platform');
     if (platform === ENUMS.PLATFORM.IOS) {
       return this.version;
     }
     return this.versionCode;
-  }
-
-  setDynamicStatus(status: number) {
-    this.store.push({
-      data: {
-        id: this.id,
-        type: FileModel.modelName,
-        attributes: {
-          dynamicStatus: status,
-        },
-      },
-    });
-  }
-
-  setBootingStatus() {
-    this.setDynamicStatus(ENUMS.DYNAMIC_STATUS.BOOTING);
-  }
-
-  setInQueueStatus() {
-    this.setDynamicStatus(ENUMS.DYNAMIC_STATUS.INQUEUE);
-  }
-
-  setShuttingDown() {
-    this.setDynamicStatus(ENUMS.DYNAMIC_STATUS.SHUTTING_DOWN);
-  }
-
-  setNone() {
-    this.setDynamicStatus(ENUMS.DYNAMIC_STATUS.NONE);
-  }
-
-  setDynamicStatusNone() {
-    this.setDynamicStatus(ENUMS.DYNAMIC_STATUS.NONE);
-  }
-
-  setReady() {
-    this.setDynamicStatus(ENUMS.DYNAMIC_STATUS.READY);
   }
 
   @sort<AnalysisModel>('analyses', 'analysesSorting')

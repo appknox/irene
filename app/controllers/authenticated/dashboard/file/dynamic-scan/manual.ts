@@ -14,7 +14,7 @@ export default class AuthenticatedDashboardFileDynamicScanManualController exten
     const routeModels = [this.model?.file?.id];
 
     const crumb: AkBreadcrumbsItemProps = {
-      title: this.intl.t('dast'),
+      title: this.intl.t('dastTabs.manualDAST'),
       route: 'authenticated.dashboard.file.dynamic-scan.manual',
       models: routeModels,
       routeGroup: 'project/files',
@@ -22,6 +22,7 @@ export default class AuthenticatedDashboardFileDynamicScanManualController exten
       siblingRoutes: [
         'authenticated.dashboard.file.dynamic-scan.automated',
         'authenticated.dashboard.file.dynamic-scan.results',
+        'authenticated.dashboard.file.dynamic-scan.scheduled-automated',
       ],
     };
 

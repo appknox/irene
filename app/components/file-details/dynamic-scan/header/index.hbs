@@ -14,7 +14,7 @@
       @route={{item.route}}
       @currentWhen={{item.activeRoutes}}
       @indicatorVariant='shadow'
-      @hasBadge={{if (or item.inProgress item.count) true false}}
+      @hasBadge={{this.showTabIcon item}}
       @badgeBackground={{if item.count true false}}
     >
       <:badge>
@@ -33,8 +33,19 @@
             </AkTypography>
           </AkStack>
         {{/if}}
+
         {{#if item.inProgress}}
-          <AkLoader @size={{15}} @thickness={{6}} />
+          <AkLoader
+            data-test-fileDetails-dynamicScan-inProgress-loader
+            @size={{15}}
+            @thickness={{6}}
+          />
+        {{else if item.iconDetails}}
+          <AkIcon
+            @size='small'
+            @iconName={{item.iconDetails.icon}}
+            @color={{if item.isActive item.iconDetails.color 'inherit'}}
+          />
         {{/if}}
       </:badge>
 

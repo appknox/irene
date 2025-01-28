@@ -153,7 +153,7 @@ module('Acceptance | file compare', function (hooks) {
 
     await visit(`/dashboard/project/${this.fileOld?.id}/files`);
 
-    const profile = this.server.create('profile', { id: '1' });
+    this.server.create('profile', { id: '1' });
 
     this.server.get('/profiles/:id/proxy_settings', (_, req) => {
       return {
@@ -192,10 +192,6 @@ module('Acceptance | file compare', function (hooks) {
 
     this.server.get('/profiles/:id/api_scan_options', (_, req) => {
       return { api_url_filters: '', id: req.params.id };
-    });
-
-    this.server.create('device-preference', {
-      id: profile.id,
     });
 
     this.server.get('/organizations/:id/jira_projects', () => {

@@ -1,17 +1,17 @@
 import Component from '@glimmer/component';
-import type ProjectAvailableDeviceModel from 'irene/models/project-available-device';
+
 import ENUMS from 'irene/enums';
+import type AvailableManualDeviceModel from 'irene/models/available-manual-device';
 
 export interface FileDetailsDynamicScanDrawerDevicePrefTableTypeSignature {
   Args: {
-    deviceProps: ProjectAvailableDeviceModel;
-    selectedDevice: ProjectAvailableDeviceModel;
+    deviceProps: AvailableManualDeviceModel;
   };
 }
 
 export default class FileDetailsDynamicScanDrawerDevicePrefTableTypeComponent extends Component<FileDetailsDynamicScanDrawerDevicePrefTableTypeSignature> {
-  isPhoneDevice = ENUMS.DEVICE_TYPE.PHONE_REQUIRED;
-  isTabletDevice = ENUMS.DEVICE_TYPE.TABLET_REQUIRED;
+  isPhoneDevice = ENUMS.DS_AUTOMATED_DEVICE_TYPE.PHONE_REQUIRED;
+  isTabletDevice = ENUMS.DS_AUTOMATED_DEVICE_TYPE.TABLET_REQUIRED;
 }
 
 declare module '@glint/environment-ember-loose/registry' {

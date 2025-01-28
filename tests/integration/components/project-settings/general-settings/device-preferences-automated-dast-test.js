@@ -2,11 +2,13 @@ import { module, test } from 'qunit';
 import { setupRenderingTest } from 'ember-qunit';
 import { setupMirage } from 'ember-cli-mirage/test-support';
 import { setupIntl, t } from 'ember-intl/test-support';
-import { render, click, findAll } from '@ember/test-helpers';
+import { render, click } from '@ember/test-helpers';
 import { hbs } from 'ember-cli-htmlbars';
 import { selectChoose } from 'ember-power-select/test-support';
+import Service from '@ember/service';
 
 import styles from 'irene/components/ak-select/index.scss';
+import { dsAutomatedDevicePref } from 'irene/helpers/ds-automated-device-pref';
 import ENUMS from 'irene/enums';
 
 const classes = {
@@ -14,6 +16,19 @@ const classes = {
   trigger: styles['ak-select-trigger'],
   triggerError: styles['ak-select-trigger-error'],
 };
+
+class NotificationsStub extends Service {
+  errorMsg = null;
+  successMsg = null;
+
+  success(msg) {
+    this.successMsg = msg;
+  }
+
+  error(msg) {
+    this.errorMsg = msg;
+  }
+}
 
 module(
   'Integration | Component | project-settings/general-settings/device-preferences-automated-dast',
@@ -23,9 +38,12 @@ module(
     setupIntl(hooks, 'en');
 
     hooks.beforeEach(async function () {
-      await this.owner.lookup('service:organization').load();
-
       this.server.createList('organization', 1);
+
+      const availableDevices = this.server.createList(
+        'available-automated-device',
+        3
+      );
 
       const profile = this.server.create('profile', { id: '1' });
 
@@ -35,159 +53,304 @@ module(
       });
 
       const project = this.server.create('project', {
-        file: file.id,
         id: '1',
-        platform: ENUMS.PLATFORM.ANDROID,
+        file: file.id,
+        active_profile_id: profile.id,
       });
+
+      const devicePreference = this.server.create(
+        'ds-automated-device-preference',
+        { id: profile.id }
+      );
 
       this.server.get('/profiles/:id', (schema, req) =>
         schema.profiles.find(`${req.params.id}`)?.toJSON()
       );
 
-      this.server.get('/profiles/:id/device_preference', (schema, req) => {
-        return schema.devicePreferences.find(`${req.params.id}`)?.toJSON();
-      });
-
       this.server.get(
-        'v2/profiles/:id/ds_manual_device_preference',
-        () => ({})
+        'v2/profiles/:id/ds_automated_device_preference',
+        (schema, req) =>
+          schema.dsAutomatedDevicePreferences.find(req.params.id)?.toJSON()
       );
 
-      this.server.get('v2/profiles/:id/ds_automated_device_preference', () => ({
-        ds_automated_device_selection:
-          ENUMS.DS_AUTOMATED_DEVICE_SELECTION.ANY_DEVICE,
-        ds_automated_platform_version_min: 13,
-      }));
+      this.server.get(
+        '/v2/projects/:id/available_automated_devices',
+        (schema) => {
+          const results = schema.availableAutomatedDevices.all().models;
 
-      this.server.get('/projects/:id/available-devices', (schema) => {
-        const results = schema.projectAvailableDevices.all().models;
-        return { count: results.length, next: null, previous: null, results };
-      });
+          return { count: results.length, next: null, previous: null, results };
+        }
+      );
 
       const store = this.owner.lookup('service:store');
 
-      const normalizedProject = store.normalize('project', {
-        ...project.toJSON(),
+      this.setProperties({
+        project: store.push(store.normalize('project', project.toJSON())),
+        devicePreference,
+        availableDevices,
       });
 
-      this.setProperties({
-        project: store.push(normalizedProject),
-      });
+      await this.owner.lookup('service:organization').load();
+      this.owner.register('service:notifications', NotificationsStub);
     });
 
-    test('it renders', async function (assert) {
+    test.each(
+      'it renders',
+      [
+        ENUMS.DS_AUTOMATED_DEVICE_SELECTION.ANY_DEVICE,
+        ENUMS.DS_AUTOMATED_DEVICE_SELECTION.FILTER_CRITERIA,
+      ],
+      async function (assert, deviceSelection) {
+        this.devicePreference.update({
+          ds_automated_device_selection: deviceSelection,
+        });
+
+        await render(hbs`
+          <DsPreferenceProvider
+            @profileId={{this.project.activeProfileId}}
+            @file={{this.project.lastFile}}
+            as |dpContext|
+          >
+            <ProjectSettings::GeneralSettings::DevicePreferencesAutomatedDast @project={{this.project}} @dpContext={{dpContext}} />
+          </DsPreferenceProvider>
+        `);
+
+        assert
+          .dom(
+            '[data-test-projectSettings-generalSettings-devicePreferenceAutomatedDast-title]'
+          )
+          .exists()
+          .containsText(t('devicePreferencesAutomatedDast'));
+
+        assert
+          .dom(
+            '[data-test-projectSettings-generalSettings-devicePreferenceAutomatedDast-automatedPreferenceSelect]'
+          )
+          .exists();
+
+        assert
+          .dom(
+            `[data-test-projectSettings-generalSettings-devicePreferenceAutomatedDast-automatedPreferenceSelect] .${classes.trigger}`
+          )
+          .hasText(t(dsAutomatedDevicePref([deviceSelection])));
+
+        if (
+          deviceSelection ===
+          ENUMS.DS_AUTOMATED_DEVICE_SELECTION.FILTER_CRITERIA
+        ) {
+          assert
+            .dom(
+              '[data-test-projectSettings-generalSettings-devicePreferenceAutomatedDast-automatedPreferenceCriteriaContainer]'
+            )
+            .exists();
+
+          assert
+            .dom(
+              '[data-test-projectSettings-generalSettings-devicePreferenceAutomatedDast-automatedPreferenceCriteria-deviceTypeTitle]'
+            )
+            .exists()
+            .hasText(t('deviceType'));
+
+          assert
+            .dom(
+              `[data-test-projectSettings-generalSettings-devicePreferenceAutomatedDast-automatedPreferenceCriteria-deviceTypeRadioGroup] input[value="${this.devicePreference.ds_automated_device_type}"]`
+            )
+            .hasValue(`${this.devicePreference.ds_automated_device_type}`)
+            .isChecked();
+
+          assert
+            .dom(
+              '[data-test-projectSettings-generalSettings-devicePreferenceAutomatedDast-automatedPreferenceCriteria-minOSVersionTitle]'
+            )
+            .exists()
+            .hasText(t('minOSVersion'));
+
+          assert
+            .dom(
+              `[data-test-projectSettings-generalSettings-devicePreferenceAutomatedDast-automatedPreferenceCriteria-minOSVersionSelect] .${classes.trigger}`
+            )
+            .hasText(
+              this.devicePreference.ds_automated_platform_version_min ||
+                t('anyVersion')
+            );
+        } else {
+          assert
+            .dom(
+              '[data-test-projectSettings-generalSettings-devicePreferenceAutomatedDast-automatedPreferenceCriteriaContainer]'
+            )
+            .doesNotExist();
+        }
+      }
+    );
+
+    test('it selects preference filter criteria', async function (assert) {
+      this.devicePreference.update({
+        ds_automated_device_selection:
+          ENUMS.DS_AUTOMATED_DEVICE_SELECTION.ANY_DEVICE,
+      });
+
+      this.server.put(
+        'v2/profiles/:id/ds_automated_device_preference',
+        (schema, req) => {
+          const data = JSON.parse(req.requestBody);
+
+          this.set('requestBody', data);
+
+          return schema.dsAutomatedDevicePreferences
+            .find(req.params.id)
+            .update(data)
+            .toJSON();
+        }
+      );
+
       await render(hbs`
-        <ProjectSettings::GeneralSettings::DevicePreferencesAutomatedDast @project={{this.project}}/>
+        <DsPreferenceProvider
+          @profileId={{this.project.activeProfileId}}
+          @file={{this.project.lastFile}}
+          as |dpContext|
+        >
+          <ProjectSettings::GeneralSettings::DevicePreferencesAutomatedDast @project={{this.project}} @dpContext={{dpContext}} />
+        </DsPreferenceProvider>
       `);
 
-      assert
-        .dom(
-          '[data-test-projectSettings-generalSettings-devicePreferenceAutomatedDast-title]'
-        )
-        .exists()
-        .containsText(t('devicePreferencesAutomatedDast'));
+      const notify = this.owner.lookup('service:notifications');
+      const devicePreferenceCriteriaSelectTrigger = `[data-test-projectSettings-generalSettings-devicePreferenceAutomatedDast-automatedPreferenceSelect] .${classes.trigger}`;
 
       assert
         .dom(
-          '[data-test-projectSettings-generalSettings-devicePreferenceAutomatedDast-preference-select]'
+          '[data-test-projectSettings-generalSettings-devicePreferenceAutomatedDast-automatedPreferenceCriteriaContainer]'
+        )
+        .doesNotExist();
+
+      //  Select 'Filter Criteria'
+      const filterCriteriaLabel = t(
+        dsAutomatedDevicePref([
+          ENUMS.DS_AUTOMATED_DEVICE_SELECTION.FILTER_CRITERIA,
+        ])
+      );
+
+      await selectChoose(
+        devicePreferenceCriteriaSelectTrigger,
+        filterCriteriaLabel
+      );
+
+      //  "Filter Criteria" is second option
+      assert
+        .dom(devicePreferenceCriteriaSelectTrigger)
+        .hasText(filterCriteriaLabel);
+
+      assert.strictEqual(notify.successMsg, t('savedPreferences'));
+
+      assert.strictEqual(
+        this.requestBody.ds_automated_device_selection,
+        ENUMS.DS_AUTOMATED_DEVICE_SELECTION.FILTER_CRITERIA
+      );
+
+      assert
+        .dom(
+          '[data-test-projectSettings-generalSettings-devicePreferenceAutomatedDast-automatedPreferenceCriteriaContainer]'
         )
         .exists();
-    });
 
-    test('it selects criteria', async function (assert) {
-      this.server.put(
-        'v2/profiles/:id/ds_automated_device_preference',
-        (_, req) => {
-          const data = JSON.parse(req.requestBody);
-
-          this.set('requestBody', data);
-
-          const { ds_automated_device_selection } = JSON.parse(req.requestBody);
-
-          return {
-            ds_automated_device_selection: ds_automated_device_selection,
-          };
-        }
+      const anyDeviceLabel = t(
+        dsAutomatedDevicePref([ENUMS.DS_AUTOMATED_DEVICE_SELECTION.ANY_DEVICE])
       );
-
-      await render(hbs`
-        <ProjectSettings::GeneralSettings::DevicePreferencesAutomatedDast @project={{this.project}}/>
-      `);
-
-      let selectListItems = findAll('.ember-power-select-option');
-
-      const anyDeviceLabel = t('anyAvailableDeviceWithAnyOS');
 
       // Select "Any Device"
-      await selectChoose(`.${classes.trigger}`, anyDeviceLabel);
-
-      await click(`.${classes.trigger}`);
-      selectListItems = findAll('.ember-power-select-option');
+      await selectChoose(devicePreferenceCriteriaSelectTrigger, anyDeviceLabel);
 
       //  "Any Device" is first option
-      assert.dom(selectListItems[0]).hasAria('selected', 'true');
+      assert.dom(devicePreferenceCriteriaSelectTrigger).hasText(anyDeviceLabel);
 
-      assert.dom('[data-test-dast-preference-criteria-table]').doesNotExist();
+      assert
+        .dom(
+          '[data-test-projectSettings-generalSettings-devicePreferenceAutomatedDast-automatedPreferenceCriteriaContainer]'
+        )
+        .doesNotExist();
 
-      //  Select 'Specific Device'
-      const specificDeviceLabel = t('defineDeviceCriteria');
+      assert.strictEqual(notify.successMsg, t('savedPreferences'));
 
-      await selectChoose(`.${classes.trigger}`, specificDeviceLabel);
-
-      await click(`.${classes.trigger}`);
-
-      //  "Specific Device" is second option
-      selectListItems = findAll('.ember-power-select-option');
-
-      assert.dom(selectListItems[1]).hasAria('selected', 'true');
-
-      await click(`.${classes.trigger}`);
-
-      assert.strictEqual(this.requestBody.ds_automated_device_selection, 1);
-
-      assert.dom('[data-test-dast-preference-criteria-table]').exists();
+      assert.strictEqual(
+        this.requestBody.ds_automated_device_selection,
+        ENUMS.DS_AUTOMATED_DEVICE_SELECTION.ANY_DEVICE
+      );
     });
 
-    test('it selects min version', async function (assert) {
+    test('it selects device type & min version', async function (assert) {
+      this.devicePreference.update({
+        ds_automated_device_type: ENUMS.DS_AUTOMATED_DEVICE_TYPE.NO_PREFERENCE,
+        ds_automated_platform_version_min: '',
+        ds_automated_device_selection:
+          ENUMS.DS_AUTOMATED_DEVICE_SELECTION.FILTER_CRITERIA,
+      });
+
+      this.availableDevices[1].update({
+        platform_version: '12',
+      });
+
       this.server.put(
         'v2/profiles/:id/ds_automated_device_preference',
-        (_, req) => {
+        (schema, req) => {
           const data = JSON.parse(req.requestBody);
 
           this.set('requestBody', data);
 
-          const { ds_automated_platform_version_min } = JSON.parse(
-            req.requestBody
-          );
-
-          return {
-            ds_automated_device_selection:
-              ENUMS.DS_AUTOMATED_DEVICE_SELECTION.FILTER_CRITERIA,
-            ds_automated_platform_version_min:
-              ds_automated_platform_version_min,
-          };
+          return schema.dsAutomatedDevicePreferences
+            .find(req.params.id)
+            .update(data)
+            .toJSON();
         }
       );
 
       await render(hbs`
-        <ProjectSettings::GeneralSettings::DevicePreferencesAutomatedDast @project={{this.project}}/>
+        <DsPreferenceProvider
+          @profileId={{this.project.activeProfileId}}
+          @file={{this.project.lastFile}}
+          as |dpContext|
+        >
+          <ProjectSettings::GeneralSettings::DevicePreferencesAutomatedDast @project={{this.project}} @dpContext={{dpContext}} />
+        </DsPreferenceProvider>
       `);
 
-      //  Select 'Specific Device'
-      const specificDeviceLabel = t('defineDeviceCriteria');
+      const minOSVersionTrigger = `[data-test-projectSettings-generalSettings-devicePreferenceAutomatedDast-automatedPreferenceCriteria-minOSVersionSelect] .${classes.trigger}`;
 
-      await selectChoose(`.${classes.trigger}`, specificDeviceLabel);
+      assert
+        .dom(
+          '[data-test-projectSettings-generalSettings-devicePreferenceAutomatedDast-automatedPreferenceCriteriaContainer]'
+        )
+        .exists();
 
-      let triggerClass = findAll(`.${classes.trigger}`);
+      assert
+        .dom(
+          `[data-test-projectSettings-generalSettings-devicePreferenceAutomatedDast-automatedPreferenceCriteria-deviceTypeRadioGroup] input[value="${ENUMS.DS_AUTOMATED_DEVICE_TYPE.NO_PREFERENCE}"]`
+        )
+        .hasValue(`${ENUMS.DS_AUTOMATED_DEVICE_TYPE.NO_PREFERENCE}`)
+        .isChecked();
 
-      await selectChoose(triggerClass[1], '12');
+      assert.dom(minOSVersionTrigger).hasText(t('anyVersion'));
 
-      await click(triggerClass[1]);
+      // select device type
+      await click(
+        `[data-test-projectSettings-generalSettings-devicePreferenceAutomatedDast-automatedPreferenceCriteria-deviceTypeRadioGroup] input[value="${ENUMS.DS_AUTOMATED_DEVICE_TYPE.PHONE_REQUIRED}"]`
+      );
 
-      //  "12" is third option
-      let selectListItems = findAll('.ember-power-select-option');
+      assert
+        .dom(
+          `[data-test-projectSettings-generalSettings-devicePreferenceAutomatedDast-automatedPreferenceCriteria-deviceTypeRadioGroup] input[value="${ENUMS.DS_AUTOMATED_DEVICE_TYPE.PHONE_REQUIRED}"]`
+        )
+        .hasValue(`${ENUMS.DS_AUTOMATED_DEVICE_TYPE.PHONE_REQUIRED}`)
+        .isChecked();
 
-      assert.dom(selectListItems[2]).hasAria('selected', 'true');
+      assert.strictEqual(
+        this.requestBody.ds_automated_device_type,
+        ENUMS.DS_AUTOMATED_DEVICE_TYPE.PHONE_REQUIRED
+      );
+
+      // select min version
+      await selectChoose(minOSVersionTrigger, '12');
+
+      //  "12" is second option
+      assert.dom(minOSVersionTrigger).hasText('12');
 
       assert.strictEqual(
         this.requestBody.ds_automated_platform_version_min,

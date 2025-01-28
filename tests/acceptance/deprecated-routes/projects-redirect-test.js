@@ -73,8 +73,8 @@ module('Acceptance | projects redirect', function (hooks) {
       };
     });
 
-    this.server.create('device-preference', {
-      id: profile.id,
+    this.server.get('v2/profiles/:id/automation_preference', (_, req) => {
+      return { id: req.params.id, dynamic_scan_automation_enabled: true };
     });
 
     this.server.create('proxy-setting', { id: profile.id });
@@ -90,15 +90,14 @@ module('Acceptance | projects redirect', function (hooks) {
       schema.profiles.find(`${req.params.id}`)?.toJSON()
     );
 
-    this.server.get('/profiles/:id/device_preference', (schema, req) => {
-      return schema.devicePreferences.find(`${req.params.id}`)?.toJSON();
-    });
-
-    this.server.get('/projects/:id/available-devices', (schema) => {
-      const results = schema.projectAvailableDevices.all().models;
-
-      return { count: results.length, next: null, previous: null, results };
-    });
+    this.server.get(
+      '/v2/profiles/:id/ds_automated_device_preference',
+      (schema, req) => {
+        return schema.dsAutomatedDevicePreferences
+          .find(`${req.params.id}`)
+          ?.toJSON();
+      }
+    );
 
     this.server.get('/profiles/:id/proxy_settings', (schema, req) => {
       return schema.proxySettings.find(`${req.params.id}`)?.toJSON();
