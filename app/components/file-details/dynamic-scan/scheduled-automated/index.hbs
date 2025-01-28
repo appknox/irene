@@ -1,0 +1,43 @@
+<FileDetails::DynamicScan::DeviceWrapper
+  @loadingScanStatus={{this.isFetchingDynamicScan}}
+  @showStatusChip={{this.showStatusChip}}
+  @showActionButton={{this.showActionButton}}
+  @isFullscreenSupported={{this.dynamicScan.isReady}}
+>
+  <:statusChip>
+    <FileDetails::DynamicScan::StatusChip
+      @status={{this.dynamicScan.computedStatus}}
+      @statusText={{this.dynamicScan.statusText}}
+    />
+  </:statusChip>
+
+  <:actionButton>
+    <FileDetails::DynamicScan::Action
+      @file={{@file}}
+      @dynamicScanText={{t 'modalCard.dynamicScan.title'}}
+      @onScanStart={{this.handleScanStart}}
+      @onScanShutdown={{this.handleScanShutdown}}
+      @dynamicScan={{this.dynamicScan}}
+    />
+  </:actionButton>
+
+  <:default as |dw|>
+    <VncViewer
+      @file={{@file}}
+      @profileId={{@profileId}}
+      @dynamicScan={{this.dynamicScan}}
+    >
+      <:controls>
+        {{#if dw.isFullscreen}}
+          <FileDetails::DynamicScan::Action
+            @file={{@file}}
+            @dynamicScanText={{t 'modalCard.dynamicScan.title'}}
+            @onScanStart={{this.handleScanStart}}
+            @onScanShutdown={{this.handleScanShutdown}}
+            @dynamicScan={{this.dynamicScan}}
+          />
+        {{/if}}
+      </:controls>
+    </VncViewer>
+  </:default>
+</FileDetails::DynamicScan::DeviceWrapper>

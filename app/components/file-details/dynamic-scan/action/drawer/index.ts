@@ -9,23 +9,21 @@ import ENV from 'irene/config/environment';
 import triggerAnalytics from 'irene/utils/trigger-analytics';
 import ENUMS from 'irene/enums';
 import parseError from 'irene/utils/parse-error';
-import { ProfileDynamicScanMode } from 'irene/models/profile';
 
 import type IntlService from 'ember-intl/services/intl';
 import type Store from '@ember-data/store';
 
 import type FileModel from 'irene/models/file';
-import { type DevicePreferenceContext } from 'irene/components/project-preferences/provider';
-import type ProjectAvailableDeviceModel from 'irene/models/project-available-device';
+import type AvailableManualDeviceModel from 'irene/models/available-manual-device';
+import type { DsPreferenceContext } from 'irene/components/ds-preference-provider';
 import type IreneAjaxService from 'irene/services/ajax';
 
 export interface FileDetailsDynamicScanActionDrawerSignature {
   Args: {
+    dpContext: DsPreferenceContext;
     onClose: () => void;
-    pollDynamicStatus: () => void;
     file: FileModel;
     isAutomatedScan?: boolean;
-    dpContext: DevicePreferenceContext;
   };
 }
 
@@ -35,8 +33,8 @@ export default class FileDetailsDynamicScanActionDrawerComponent extends Compone
   @service declare store: Store;
   @service('notifications') declare notify: NotificationService;
 
-  @tracked isApiScanEnabled = false;
-  @tracked allAvailableManualDevices: ProjectAvailableDeviceModel[] = [];
+  @tracked isApiCaptureEnabled = false;
+  @tracked availableManualDevices: AvailableManualDeviceModel[] = [];
 
   constructor(
     owner: unknown,
@@ -45,7 +43,7 @@ export default class FileDetailsDynamicScanActionDrawerComponent extends Compone
     super(owner, args);
 
     if (!this.args.isAutomatedScan) {
-      this.fetchAllAvailableManualDevices.perform();
+      this.fetchAvailableManualDevices.perform();
     }
   }
 
@@ -55,6 +53,10 @@ export default class FileDetailsDynamicScanActionDrawerComponent extends Compone
 
   get projectId() {
     return this.file.project.get('id');
+  }
+
+  get profileId() {
+    return this.file.profile.get('id') as string;
   }
 
   get tStartingScan() {
@@ -70,13 +72,13 @@ export default class FileDetailsDynamicScanActionDrawerComponent extends Compone
   }
 
   get dsManualDeviceIdentifier() {
-    return this.args.dpContext?.dsManualDevicePreference
-      ?.ds_manual_device_identifier;
+    return this.args.dpContext.dsManualDevicePreference
+      ?.dsManualDeviceIdentifier;
   }
 
   get selectedManualDeviceIsInAvailableDeviceList() {
     return (
-      this.allAvailableManualDevices.findIndex(
+      this.availableManualDevices?.findIndex(
         (d) => d.deviceIdentifier === this.dsManualDeviceIdentifier
       ) !== -1
     );
@@ -92,7 +94,7 @@ export default class FileDetailsDynamicScanActionDrawerComponent extends Compone
         ENUMS.DS_MANUAL_DEVICE_SELECTION.SPECIFIC_DEVICE;
 
       const dsManualDeviceSelection =
-        dpContext.dsManualDevicePreference?.ds_manual_device_selection;
+        dpContext.dsManualDevicePreference?.dsManualDeviceSelection;
 
       return (
         dsManualDeviceSelection === anyDeviceSelection ||
@@ -106,8 +108,8 @@ export default class FileDetailsDynamicScanActionDrawerComponent extends Compone
   }
 
   @action
-  enableApiScan(_: Event, checked: boolean) {
-    this.isApiScanEnabled = !!checked;
+  handleApiCaptureChange(_: Event, checked: boolean) {
+    this.isApiCaptureEnabled = !!checked;
   }
 
   @action
@@ -120,15 +122,33 @@ export default class FileDetailsDynamicScanActionDrawerComponent extends Compone
     this.startDynamicScan.perform();
   }
 
+  fetchAvailableManualDevices = task(async () => {
+    try {
+      const adapter = this.store.adapterFor('available-manual-device');
+
+      adapter.setNestedUrlNamespace(
+        this.args.file.project?.get('id') as string
+      );
+
+      const devices = await this.store.query('available-manual-device', {
+        platform_version_min: this.args.file.minOsVersion,
+      });
+
+      this.availableManualDevices = devices.slice();
+    } catch (error) {
+      this.notify.error(this.intl.t('errorFetchingAvailableDevices'));
+    }
+  });
+
   startDynamicScan = task(async () => {
     try {
       const mode = this.args.isAutomatedScan
-        ? ProfileDynamicScanMode.AUTOMATED
-        : ProfileDynamicScanMode.MANUAL;
+        ? ENUMS.DYNAMIC_MODE.AUTOMATED
+        : ENUMS.DYNAMIC_MODE.MANUAL;
 
       const data = {
         mode,
-        enable_api_capture: this.isApiScanEnabled,
+        enable_api_capture: this.isApiCaptureEnabled,
       };
 
       const dynamicUrl = [
@@ -137,37 +157,18 @@ export default class FileDetailsDynamicScanActionDrawerComponent extends Compone
         ENV.endpoints['dynamicscans'],
       ].join('/');
 
-      await this.ajax.post(dynamicUrl, { namespace: ENV.namespace_v2, data });
+      await this.ajax.post(dynamicUrl, {
+        namespace: ENV.namespace_v2,
+        data,
+      });
+
+      await this.file.reload();
 
       this.args.onClose();
-
-      this.file.setBootingStatus();
-
-      this.args.pollDynamicStatus();
 
       this.notify.success(this.tStartingScan);
     } catch (error) {
       this.notify.error(parseError(error, this.tPleaseTryAgain));
-
-      this.args.file.setDynamicStatusNone();
-    }
-  });
-
-  fetchAllAvailableManualDevices = task(async (manualDevices = true) => {
-    try {
-      const query = {
-        projectId: this.projectId,
-        manualDevices,
-      };
-
-      const availableDevices = await this.store.query(
-        'project-available-device',
-        query
-      );
-
-      this.allAvailableManualDevices = availableDevices.slice();
-    } catch (error) {
-      this.notify.error(parseError(error));
     }
   });
 }

@@ -1,34 +1,35 @@
 import { action } from '@ember/object';
 import Component from '@glimmer/component';
 import { tracked } from 'tracked-built-ins';
-import { task } from 'ember-concurrency';
 import { inject as service } from '@ember/service';
-
-import { type PaginationProviderActionsArgs } from 'irene/components/ak-pagination-provider';
-import { type DevicePreferenceContext } from 'irene/components/project-preferences/provider';
-import type ProjectAvailableDeviceModel from 'irene/models/project-available-device';
-import type FileModel from 'irene/models/file';
-
 import type IntlService from 'ember-intl/services/intl';
 import type Store from '@ember-data/store';
 
 import styles from './index.scss';
+import ENUMS from 'irene/enums';
+import { type PaginationProviderActionsArgs } from 'irene/components/ak-pagination-provider';
+import type { DsPreferenceContext } from 'irene/components/ds-preference-provider';
+import type FileModel from 'irene/models/file';
+import type AvailableManualDeviceModel from 'irene/models/available-manual-device';
+import type DsManualDevicePreferenceModel from 'irene/models/ds-manual-device-preference';
 
-enum AvailableManualDeviceModelKeyMap {
+enum AvailableManualDeviceFilterKey {
   ALL_AVAILABLE_DEVICES = 'all',
-  DEVICES_WITH_SIM = 'hasSim',
-  DEVICES_WITH_VPN = 'hasVpn',
-  DEVICES_WITH_LOCK = 'hasPinLock',
+  DEVICES_WITH_SIM = 'has_sim',
+  DEVICES_WITH_VPN = 'has_vpn',
+  DEVICES_WITH_LOCK = 'has_pin_lock',
+  DEVICE_IS_RESERVED = 'is_reserved',
 }
 
-type DevicePrefFilterKey = keyof typeof AvailableManualDeviceModelKeyMap;
+type AvailableManualDeviceFilterOption = {
+  label: string;
+  value: AvailableManualDeviceFilterKey;
+};
 
 export interface FileDetailsDynamicScanDrawerDevicePrefTableSignature {
   Args: {
-    dpContext: DevicePreferenceContext;
+    dpContext: DsPreferenceContext;
     file: FileModel;
-    allAvailableManualDevices: ProjectAvailableDeviceModel[];
-    isFetchingManualDevices: boolean;
   };
 }
 
@@ -40,12 +41,24 @@ export default class FileDetailsDynamicScanDrawerDevicePrefTableComponent extend
   @tracked limit = 5;
   @tracked offset = 0;
 
-  @tracked filteredManualDevices: ProjectAvailableDeviceModel[] = [];
-  @tracked selectedDevicePrefFilterKey: DevicePrefFilterKey =
-    'ALL_AVAILABLE_DEVICES';
+  @tracked selectedDeviceFilter = this
+    .deviceFilterOptions[0] as AvailableManualDeviceFilterOption;
 
-  get allAvailableManualDevices() {
-    return this.args.allAvailableManualDevices;
+  constructor(
+    owner: unknown,
+    args: FileDetailsDynamicScanDrawerDevicePrefTableSignature['Args']
+  ) {
+    super(owner, args);
+
+    this.handleFetchAvailableDevices();
+  }
+
+  get dpContext() {
+    return this.args.dpContext;
+  }
+
+  get devicePreference() {
+    return this.dpContext.dsManualDevicePreference;
   }
 
   get loadingMockData() {
@@ -77,48 +90,34 @@ export default class FileDetailsDynamicScanDrawerDevicePrefTableComponent extend
         component:
           'file-details/dynamic-scan/action/drawer/device-pref-table/device-capabilities' as const,
         textAlign: 'left',
-        width: 200,
+        width: 180,
       },
       {
         name: this.intl.t('deviceId'),
-        valuePath: 'deviceIdentifier',
+        component:
+          'file-details/dynamic-scan/action/drawer/device-pref-table/device-id' as const,
       },
     ];
   }
 
-  get showAllManualDevices() {
-    return this.selectedDevicePrefFilterKey === 'ALL_AVAILABLE_DEVICES';
-  }
-
-  get currentDevicesInView() {
-    let data = this.showAllManualDevices
-      ? [...this.allAvailableManualDevices]
-      : [...this.filteredManualDevices];
-
-    if (data.length >= this.limit) {
-      data = data.splice(this.offset, this.limit);
-    }
-
-    return data;
-  }
-
-  get selectedFilterKeyLabelMap() {
-    return {
-      ALL_AVAILABLE_DEVICES: this.intl.t(
-        'modalCard.dynamicScan.allAvailableDevices'
-      ),
-      DEVICES_WITH_SIM: this.intl.t('modalCard.dynamicScan.devicesWithSim'),
-      DEVICES_WITH_VPN: this.intl.t('modalCard.dynamicScan.devicesWithVPN'),
-      DEVICES_WITH_LOCK: this.intl.t('modalCard.dynamicScan.devicesWithLock'),
-    };
-  }
-
-  get devicePreferenceTypes() {
+  get deviceFilterOptions() {
     return [
-      'ALL_AVAILABLE_DEVICES' as const,
-      'DEVICES_WITH_SIM' as const,
-      'DEVICES_WITH_VPN' as const,
-      'DEVICES_WITH_LOCK' as const,
+      {
+        label: this.intl.t('modalCard.dynamicScan.allAvailableDevices'),
+        value: AvailableManualDeviceFilterKey.ALL_AVAILABLE_DEVICES,
+      },
+      {
+        label: this.intl.t('modalCard.dynamicScan.devicesWithSim'),
+        value: AvailableManualDeviceFilterKey.DEVICES_WITH_SIM,
+      },
+      {
+        label: this.intl.t('modalCard.dynamicScan.devicesWithVPN'),
+        value: AvailableManualDeviceFilterKey.DEVICES_WITH_VPN,
+      },
+      {
+        label: this.intl.t('modalCard.dynamicScan.devicesWithLock'),
+        value: AvailableManualDeviceFilterKey.DEVICES_WITH_LOCK,
+      },
     ];
   }
 
@@ -126,57 +125,74 @@ export default class FileDetailsDynamicScanDrawerDevicePrefTableComponent extend
     return styles['filter-input'];
   }
 
-  get showEmptyAvailableDeviceList() {
-    return !this.showAllManualDevices && this.filteredManualDevices.length < 1;
+  get availableManualDevices() {
+    return this.dpContext.availableManualDevices?.slice() || [];
   }
 
-  get totalItemsCount() {
-    return this.showAllManualDevices
-      ? this.allAvailableManualDevices.length
-      : this.filteredManualDevices.length;
+  get hasNoAvailableManualDevice() {
+    return this.totalAvailableManualDevicesCount === 0;
   }
 
-  @action getSelectedFilterOptionLabel(opt: DevicePrefFilterKey) {
-    return this.selectedFilterKeyLabelMap[opt];
+  get totalAvailableManualDevicesCount() {
+    return this.dpContext.availableManualDevices?.meta?.count || 0;
   }
 
-  @action setDevicePrefFilter(opt: DevicePrefFilterKey) {
-    this.selectedDevicePrefFilterKey = opt;
-
-    this.goToPage({ limit: this.limit, offset: 0 });
-
-    this.filterAvailableDevices.perform(opt);
+  get showEmptyDeviceListContent() {
+    return (
+      !this.dpContext.loadingAvailableDevices && this.hasNoAvailableManualDevice
+    );
   }
 
-  @action setSelectedDevice(device: ProjectAvailableDeviceModel) {
-    this.args.dpContext.handleSelectDsManualIdentifier(device.deviceIdentifier);
+  @action
+  handleDeviceFilterChange(opt: AvailableManualDeviceFilterOption) {
+    this.offset = 0;
+    this.selectedDeviceFilter = opt;
+
+    this.handleFetchAvailableDevices();
+  }
+
+  @action
+  setSelectedDevice(device: AvailableManualDeviceModel) {
+    const preference = this.devicePreference as DsManualDevicePreferenceModel;
+
+    preference.dsManualDeviceSelection =
+      ENUMS.DS_MANUAL_DEVICE_SELECTION.SPECIFIC_DEVICE;
+
+    preference.dsManualDeviceIdentifier = device.deviceIdentifier;
+
+    this.dpContext.updateDsManualDevicePref(preference);
   }
 
   // Table Actions
-  @action goToPage(args: PaginationProviderActionsArgs) {
-    const { limit, offset } = args;
-
+  @action
+  goToPage({ limit, offset }: PaginationProviderActionsArgs) {
     this.limit = limit;
     this.offset = offset;
+
+    this.handleFetchAvailableDevices();
   }
 
-  @action onItemPerPageChange(args: PaginationProviderActionsArgs) {
-    const { limit } = args;
-    const offset = 0;
-
+  @action
+  onItemPerPageChange({ limit }: PaginationProviderActionsArgs) {
     this.limit = limit;
-    this.offset = offset;
+    this.offset = 0;
+
+    this.handleFetchAvailableDevices();
   }
 
-  filterAvailableDevices = task(async (filterkey: DevicePrefFilterKey) => {
-    const modelFilterKey = AvailableManualDeviceModelKeyMap[
-      filterkey
-    ] as keyof ProjectAvailableDeviceModel;
+  @action
+  handleFetchAvailableDevices() {
+    const filter = this.selectedDeviceFilter.value;
 
-    this.filteredManualDevices = this.allAvailableManualDevices.filter(
-      (dev) => filterkey === 'ALL_AVAILABLE_DEVICES' || dev[modelFilterKey]
-    );
-  });
+    const isAllDevices =
+      filter === AvailableManualDeviceFilterKey.ALL_AVAILABLE_DEVICES;
+
+    this.dpContext.fetchAvailableDevices({
+      limit: this.limit,
+      offset: this.offset,
+      ...(isAllDevices ? {} : { [filter]: true }),
+    });
+  }
 }
 
 declare module '@glint/environment-ember-loose/registry' {

@@ -123,10 +123,9 @@ const APP_TYPE_DETAILS = [
   },
 ];
 
-const DynamicStatusTexts = [cyTranslate('deviceBooting')];
+const DynamicStatusTexts = [cyTranslate('deviceInstalling')];
 
 const ANY_DEVICE = 0;
-const ANY_VERSION = '0';
 
 // fixes cross origin errors
 Cypress.on('uncaught:exception', () => {
@@ -136,7 +135,7 @@ Cypress.on('uncaught:exception', () => {
 
 describe('Dynamic Scan', () => {
   beforeEach(() => {
-    cy.viewport(1450, 1450);
+    cy.viewport(1450, 1650);
 
     // Hide websocket and analyses logs
     networkActions.hideNetworkLogsFor({ ...API_ROUTES.websockets });
@@ -176,6 +175,7 @@ describe('Dynamic Scan', () => {
     cy.intercept(API_ROUTES.check.route).as('checkUserRoute');
     cy.intercept(API_ROUTES.userInfo.route).as('userInfoRoute');
     cy.intercept(API_ROUTES.submissionList.route).as('submissionList');
+    cy.intercept(`${API_ROUTES.dynamicscan.route}`).as('dynamicscanRoute');
   });
 
   APP_TYPE_DETAILS.forEach((app) =>
@@ -214,7 +214,7 @@ describe('Dynamic Scan', () => {
           dynamicScanActions.doFilePageSanityCheck(file, app);
 
           // intercept device preference route to check & change options
-          cy.intercept(API_ROUTES.devicePreference.route).as(
+          cy.intercept(API_ROUTES.dsManualDevicePreference.route).as(
             'devicePreferenceReq'
           );
 
@@ -238,6 +238,17 @@ describe('Dynamic Scan', () => {
               .click();
           });
 
+          // save initial dynamic scan info
+          cy.get('@dynamicscanRoute')
+            .its('response.body')
+            .then((data) => {
+              if (data.mode === 0) {
+                cy.wrap(data).as('dsManualScan');
+              } else {
+                cy.wrap(data).as('dsAutomatedScan');
+              }
+            });
+
           // Check if in manual DAST page
           cy.url().should('contain', '/dynamic-scan/manual');
 
@@ -253,7 +264,7 @@ describe('Dynamic Scan', () => {
 
             cy.findByText(cyTranslate('realDevice')).should('exist');
 
-            cy.findAllByTestId('manualDast-headerContainer')
+            cy.findAllByTestId('deviceWrapper-headerContainer')
               .should('exist')
               .within(() => {
                 cy.findByText(
@@ -279,66 +290,49 @@ describe('Dynamic Scan', () => {
           // open dynamic scan modal
           cy.get('@startRestartdynamicScanBtn').click({ force: true });
 
-          // assert dynamic scan modal
-          cy.findByTestId('dynamicScanModal').within(() => {
-            cy.wait('@devicePreferenceReq');
+          cy.wait('@devicePreferenceReq');
 
+          // assert dynamic scan modal
+          cy.findByTestId('dynamicScanDrawer').within(() => {
             cy.findByRole('heading', {
-              name: cyTranslate('dynamicScan'),
+              name: cyTranslate('dastTabs.manualDAST'),
             }).should('exist');
 
             cy.get('@devicePreferenceReq')
               .its('response.body')
-              .then(({ device_type: type, platform_version: version }) => {
-                const deviceType = dynamicScanActions.getDeviceTypeText(type);
+              .then(({ ds_manual_device_selection }) => {
+                const deviceSection =
+                  dynamicScanActions.getManualDeviceSelection(
+                    ds_manual_device_selection
+                  );
 
-                const platformVersion =
-                  dynamicScanActions.getPlatformVersionText(version);
+                // check device selection
+                cy.findByText(deviceSection).should('exist');
 
-                // check device type and platform version texts
-                cy.findByText(deviceType).should('exist');
-                cy.findByText(platformVersion).should('exist');
-
-                // ref for device os version select
-                cy.findByTestId('device-preference-os-version-select')
+                // ref for device selection select
+                cy.findByTestId('devicePrefSelect')
                   .findByRole('combobox')
                   .should('exist')
-                  .as('deviceVersionSelect');
+                  .as('devicePrefSelect');
 
-                // ref for device type select
-                cy.findByTestId('device-preference-device-type-select')
-                  .findByRole('combobox')
-                  .should('exist')
-                  .as('deviceTypeSelect');
-
-                if (type !== ANY_DEVICE) {
+                if (ds_manual_device_selection !== ANY_DEVICE) {
                   // change to any device
                   dynamicScanActions.chooseDevicePreferenceOption(
-                    '@deviceTypeSelect',
-                    cyTranslate('anyDevice')
+                    '@devicePrefSelect',
+                    cyTranslate('anyAvailableDeviceWithAnyOS')
                   );
                 }
 
-                if (version !== ANY_VERSION) {
-                  // change to any version
-                  dynamicScanActions.chooseDevicePreferenceOption(
-                    '@deviceVersionSelect',
-                    cyTranslate('anyVersion')
-                  );
-                }
-
-                // assert preference is any device & version
-                cy.get('@deviceTypeSelect').within(() => {
-                  cy.findByText(cyTranslate('anyDevice')).should('exist');
-                });
-
-                cy.get('@deviceVersionSelect').within(() => {
-                  cy.findByText(cyTranslate('anyVersion')).should('exist');
+                // assert preference is any device
+                cy.get('@devicePrefSelect').within(() => {
+                  cy.findByText(
+                    cyTranslate('anyAvailableDeviceWithAnyOS')
+                  ).should('exist');
                 });
               });
 
             cy.findByRole('button', {
-              name: cyTranslate('modalCard.dynamicScan.start'),
+              name: cyTranslate('start'),
               ...DEFAULT_ASSERT_OPTS,
             })
               .should('not.be.disabled')
@@ -349,12 +343,12 @@ describe('Dynamic Scan', () => {
           cy.get('@startDynamicScanBtn').click({ force: true });
 
           // modal should get closed
-          cy.findByTestId('dynamicScanModal', DEFAULT_ASSERT_OPTS).should(
+          cy.findByTestId('dynamicScanDrawer', DEFAULT_ASSERT_OPTS).should(
             'not.exist'
           );
 
           // check different status of dynamic scan status chip while starting
-          cy.findByTestId('manualDast-statusChipAndScanCTAContainer').within(
+          cy.findByTestId('deviceWrapper-statusChipAndScanCTAContainer').within(
             () => {
               DynamicStatusTexts.forEach((status) => {
                 cy.findByText(status, {
@@ -372,8 +366,21 @@ describe('Dynamic Scan', () => {
             .should('exist')
             .as(DYNAMIC_SCAN_STOP_BTN_ALIAS);
 
+          // save initial dynamic scan info
+          cy.get('@dynamicscanRoute')
+            .its('response.body')
+            .then((data) => {
+              if (data.mode === 0) {
+                cy.wrap(data).as('dsManualScan');
+              } else {
+                cy.wrap(data).as('dsAutomatedScan');
+              }
+            });
+
           // open device in fullscreen
-          cy.findByTestId('manualDast-fullscreenBtn').should('exist').click();
+          cy.findByTestId('deviceWrapper-deviceViewer-fullscreenBtn')
+            .should('exist')
+            .click();
 
           // wait for screen to load
           cy.wait(5000);
@@ -390,7 +397,7 @@ describe('Dynamic Scan', () => {
             .click({ force: true });
 
           // check status of dynamic while stopping
-          cy.findByTestId('manualDast-statusChipAndScanCTAContainer')
+          cy.findByTestId('deviceWrapper-statusChipAndScanCTAContainer')
             .within(() => {
               cy.findByText(cyTranslate('deviceShuttingDown'), {
                 timeout: DYNAMIC_SCAN_STATUS_TIMEOUT,
@@ -405,10 +412,10 @@ describe('Dynamic Scan', () => {
   afterEach(() => {
     cy.get<boolean>('@testCompleted').then((testCompleted) => {
       if (!testCompleted) {
-        cy.get('@DYNAMIC_SCAN_FILE_ID').then((fileId) =>
+        cy.get<{ id: string }>('@dsManualScan').then((data) =>
           cy.makeAuthenticatedAPIRequest({
             method: 'DELETE',
-            url: `${API_HOST}/api/dynamicscan/${fileId}`,
+            url: `${API_HOST}/api/v2/dynamicscans/${data.id}`,
           })
         );
       }

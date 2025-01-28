@@ -81,9 +81,9 @@ export const API_ROUTES = {
     route: '/api/submissions',
     alias: 'submission',
   },
-  devicePreference: {
-    route: '/api/profiles/*/device_preference?*',
-    alias: 'devicePreference',
+  dsManualDevicePreference: {
+    route: '/api/v2/profiles/*/ds_manual_device_preference',
+    alias: 'dsManualDevicePreference',
   },
   editAnalysisRisk: {
     route: '/api/files/*/vulnerability_preferences/*/risk',
@@ -148,5 +148,9 @@ export const API_ROUTES = {
   inviteTeam: {
     route: '/api/organizations/*/teams/*/invitations*',
     alias: 'inviteTeam',
+  },
+  dynamicscan: {
+    route: '/api/v2/dynamicscans/*',
+    alias: 'dynamicscan',
   },
 } as const;

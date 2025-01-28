@@ -1,7 +1,9 @@
 import Component from '@glimmer/component';
 import { inject as service } from '@ember/service';
 import type IntlService from 'ember-intl/services/intl';
+
 import type ProjectModel from 'irene/models/project';
+import type ConfigurationService from 'irene/services/configuration';
 
 interface ProjectSettingsHeaderSignature {
   Args: {
@@ -10,11 +12,22 @@ interface ProjectSettingsHeaderSignature {
   };
 }
 
+interface TabItem {
+  id: string;
+  label: string;
+  route: string;
+}
+
 export default class ProjectSettingsHeaderComponent extends Component<ProjectSettingsHeaderSignature> {
   @service declare intl: IntlService;
+  @service declare configuration: ConfigurationService;
 
   get project() {
     return this.args.project;
+  }
+
+  get orgIsAnEnterprise() {
+    return this.configuration.serverData.enterprise;
   }
 
   get tabItems() {
@@ -29,7 +42,12 @@ export default class ProjectSettingsHeaderComponent extends Component<ProjectSet
         route: 'authenticated.dashboard.project.settings.analysis',
         label: this.intl.t('analysisSettings'),
       },
-    ];
+      !this.orgIsAnEnterprise && {
+        id: this.intl.t('dastAutomation.title'),
+        route: 'authenticated.dashboard.project.settings.dast-automation',
+        label: this.intl.t('dastAutomation.title'),
+      },
+    ].filter(Boolean) as TabItem[];
   }
 }
 

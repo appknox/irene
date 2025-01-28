@@ -6,7 +6,7 @@ import RFB from '@novnc/novnc/lib/rfb';
 
 export interface NovncRfbSignature {
   Args: {
-    deviceFarmURL: string;
+    deviceFarmURL: string | null;
     deviceFarmPassword: string;
   };
 }
@@ -41,5 +41,11 @@ export default class NovncRfbComponent extends Component<NovncRfbSignature> {
 
       this.rfb = null;
     });
+  }
+}
+
+declare module '@glint/environment-ember-loose/registry' {
+  export default interface Registry {
+    NovncRfb: typeof NovncRfbComponent;
   }
 }

@@ -18,6 +18,11 @@ export default class AuthenticatedDashboardProjectSettingsIndexController extend
       multiPageAccess: true,
       routeGroup: 'project/files',
 
+      siblingRoutes: [
+        'authenticated.dashboard.project.settings.analysis',
+        'authenticated.dashboard.project.settings.dast-automation',
+      ],
+
       parentCrumb: {
         title: this.intl.t('allProjects'),
         route: 'authenticated.dashboard.projects',

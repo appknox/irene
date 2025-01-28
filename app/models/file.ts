@@ -25,6 +25,7 @@ import AnalysisModel from './analysis';
 import ProfileModel from './profile';
 import SbomFileModel from './sbom-file';
 import SubmissionModel from './submission';
+import DynamicscanModel from './dynamicscan';
 
 const _getAnalysesCount = (
   analysis: SyncHasMany<AnalysisModel>,
@@ -133,6 +134,22 @@ export default class FileModel extends ModelBaseMixin {
   @belongsTo('file', { inverse: null, async: true })
   declare previousFile: AsyncBelongsTo<FileModel>;
 
+  @belongsTo('dynamicscan', { async: true, inverse: null })
+  declare lastAutomatedDynamicScan: AsyncBelongsTo<DynamicscanModel> | null;
+
+  @belongsTo('dynamicscan', { async: true, inverse: null })
+  declare lastManualDynamicScan: AsyncBelongsTo<DynamicscanModel> | null;
+
+  async getLastDynamicScan(
+    fileId: string,
+    mode: number,
+    isScheduledScan = false
+  ) {
+    const adapter = this.store.adapterFor('file');
+
+    return await adapter.getLastDynamicScan(fileId, mode, isScheduledScan);
+  }
+
   analysesSorting = ['computedRisk:desc'];
 
   scanProgressClass(type?: boolean) {
@@ -141,6 +158,13 @@ export default class FileModel extends ModelBaseMixin {
     }
 
     return false;
+  }
+
+  get isDynamicScanLoading() {
+    return (
+      this.lastAutomatedDynamicScan?.isPending ||
+      this.lastManualDynamicScan?.isPending
+    );
   }
 
   get isManualRequested() {

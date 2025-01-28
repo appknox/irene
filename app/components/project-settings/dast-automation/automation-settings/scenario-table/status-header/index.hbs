@@ -1,0 +1,29 @@
+<AkStack @alignItems='center' @justifyContent='flex-end' @spacing='1'>
+  <AkTypography @fontWeight='medium'>{{t 'status'}}</AkTypography>
+
+  <AkTooltip
+    @color='dark'
+    @placement='top'
+    @arrow={{true}}
+    data-test-projectSettings-dastAutomationSettings-statusColumnHeader-tooltip
+  >
+    <:tooltipContent>
+      <div
+        local-class='tooltip-content'
+        data-test-projectSettings-dastAutomationSettings-statusColumnHeader-tooltipContent
+      >
+        <AkTypography @color='inherit'>
+          {{t 'dastAutomation.statusColumnToggleInfo'}}
+        </AkTypography>
+      </div>
+    </:tooltipContent>
+
+    <:default>
+      <AkIcon
+        @iconName='info'
+        @size='small'
+        data-test-projectSettings-dastAutomationSettings-statusColumnHeader-tooltipIcon
+      />
+    </:default>
+  </AkTooltip>
+</AkStack>

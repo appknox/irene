@@ -13,30 +13,30 @@
     </AkTypography>
 
     <AkSelect
-      @selected={{this.selectedDevicePrefFilterKey}}
-      @options={{this.devicePreferenceTypes}}
-      @onChange={{this.setDevicePrefFilter}}
+      @selected={{this.selectedDeviceFilter}}
+      @options={{this.deviceFilterOptions}}
+      @onChange={{this.handleDeviceFilterChange}}
       @verticalPosition='auto'
       @triggerClass={{this.triggerClass}}
-      @selectedItemComponent='file-details/dynamic-scan/action/drawer/device-pref-table/filter-selected-item'
+      @selectedItemComponent={{component
+        'file-details/dynamic-scan/action/drawer/device-pref-table/filter-selected-item'
+      }}
       @extra={{hash
-        selectedOptionLabel=(this.getSelectedFilterOptionLabel
-          this.selectedDevicePrefFilterKey
-        )
+        selectedOptionLabel=this.selectedDeviceFilter.label
         iconName='filter-list'
       }}
       {{style width='200px'}}
       data-test-fileDetails-dynamicScanDrawer-manualDast-devicePrefTable-filterSelect
-      as |dPrefFilter|
+      as |opt|
     >
-      {{this.getSelectedFilterOptionLabel dPrefFilter}}
+      {{opt.label}}
     </AkSelect>
   </AkStack>
 
   <AkPaginationProvider
-    @results={{this.currentDevicesInView}}
+    @results={{this.availableManualDevices}}
     @onItemPerPageChange={{this.onItemPerPageChange}}
-    @totalItems={{this.totalItemsCount}}
+    @totalItems={{this.totalAvailableManualDevicesCount}}
     @nextAction={{this.goToPage}}
     @prevAction={{this.goToPage}}
     @itemPerPageOptions={{array 5 10 20}}
@@ -55,51 +55,48 @@
         @columns={{this.columns}}
       />
 
-      {{#unless this.showEmptyAvailableDeviceList}}
-        {{#if @isFetchingManualDevices}}
-          <t.body @rows={{this.loadingMockData}} as |b|>
-            <b.row as |r|>
-              <r.cell>
-                <AkSkeleton
-                  @width={{r.columnValue.component.width}}
-                  @height='20px'
-                />
-              </r.cell>
-            </b.row>
-          </t.body>
+      {{#if @dpContext.loadingAvailableDevices}}
+        <t.body @rows={{this.loadingMockData}} as |b|>
+          <b.row as |r|>
+            <r.cell>
+              <AkSkeleton
+                @width={{r.columnValue.component.width}}
+                @height='20px'
+              />
+            </r.cell>
+          </b.row>
+        </t.body>
 
-        {{else}}
-          <t.body @rows={{pgc.currentPageResults}} as |b|>
-            <b.row
-              data-test-fileDetails-dynamicScanDrawer-devicePrefTable-row
-              as |r|
+      {{else}}
+        <t.body @rows={{pgc.currentPageResults}} as |b|>
+          <b.row
+            data-test-fileDetails-dynamicScanDrawer-devicePrefTable-row
+            as |r|
+          >
+            <r.cell
+              data-test-fileDetails-dynamicScanDrawer-devicePrefTable-cell
+              as |value|
             >
-              <r.cell
-                data-test-fileDetails-dynamicScanDrawer-devicePrefTable-cell
-                as |value|
-              >
-                {{#if r.columnValue.component}}
-                  {{#let (component r.columnValue.component) as |Component|}}
-                    <Component
-                      @deviceProps={{r.rowValue}}
-                      @selectedDeviceId={{@dpContext.dsManualDevicePreference.ds_manual_device_identifier}}
-                      @onDeviceClick={{this.setSelectedDevice}}
-                      @dpContext={{@dpContext}}
-                    />
-                  {{/let}}
-                {{else}}
-                  <AkTypography title={{value}} @noWrap={{true}}>
-                    {{value}}
-                  </AkTypography>
-                {{/if}}
-              </r.cell>
-            </b.row>
-          </t.body>
-        {{/if}}
-      {{/unless}}
+              {{#if r.columnValue.component}}
+                {{#let (component r.columnValue.component) as |Component|}}
+                  <Component
+                    @deviceProps={{r.rowValue}}
+                    @selectedDeviceId={{this.devicePreference.dsManualDeviceIdentifier}}
+                    @onDeviceClick={{this.setSelectedDevice}}
+                  />
+                {{/let}}
+              {{else}}
+                <AkTypography title={{value}} @noWrap={{true}}>
+                  {{value}}
+                </AkTypography>
+              {{/if}}
+            </r.cell>
+          </b.row>
+        </t.body>
+      {{/if}}
     </AkTable>
 
-    {{#if this.showEmptyAvailableDeviceList}}
+    {{#if this.showEmptyDeviceListContent}}
       <AkStack
         @width='full'
         @direction='column'
@@ -115,7 +112,7 @@
       </AkStack>
     {{/if}}
 
-    {{#unless this.showEmptyAvailableDeviceList}}
+    {{#unless this.hasNoAvailableManualDevice}}
       <AkPagination
         @disableNext={{pgc.disableNext}}
         @nextAction={{pgc.nextAction}}

@@ -5,44 +5,56 @@
   @direction='column'
   @spacing='3'
 >
-  {{!-- {{#if @dynamicScan.isDynamicStatusInProgress}} --}}
-  {{#if @file.isReady}}
-    <AkStack
-      @justifyContent='center'
-      @alignItems='center'
-      @direction='column'
-      @spacing='1.5'
-    >
-      <FileDetails::DynamicScan::ExpiryOld @file={{@file}} />
+  {{#if this.isAutomated}}
+    {{#if
+      (or
+        @dynamicScan.isStartingOrShuttingInProgress
+        @dynamicScan.isReadyOrRunning
+      )
+    }}
+      <AkStack
+        data-test-vncViewer-scanTriggeredNote
+        @spacing='0.5'
+        local-class='automated-scan-trigger-info'
+      >
+        <AkIcon @color='primary' @variant='outlined' @iconName='description' />
 
-      {{#if (has-block 'controls')}}
-        {{yield to='controls'}}
-      {{/if}}
-    </AkStack>
-  {{/if}}
+        {{#if this.startedBy}}
+          <AkTypography data-test-vncViewer-scanStartedByText>
+            {{t 'scanStartedBy'}}
+            <strong>{{this.startedBy}}</strong>
+          </AkTypography>
+        {{else}}
+          <AkTypography data-test-vncViewer-scanTriggeredAutomaticallyText>
+            {{t 'scanTriggeredAutomatically'}}
+          </AkTypography>
+        {{/if}}
+      </AkStack>
+    {{/if}}
+  {{else}}
+    {{#if @dynamicScan.isReady}}
+      <AkStack
+        @justifyContent='center'
+        @alignItems='center'
+        @direction='column'
+        @spacing='1.5'
+      >
+        <FileDetails::DynamicScan::Action::Expiry
+          @dynamicscan={{@dynamicScan}}
+        />
 
-  {{#if @file.isDynamicStatusStarting}}
-    <AkTypography>
-      <strong>{{t 'note'}} -</strong>
-      {{t 'dynamicScanText'}}
-    </AkTypography>
-  {{/if}}
+        {{#if (has-block 'controls')}}
+          {{yield to='controls'}}
+        {{/if}}
+      </AkStack>
+    {{/if}}
 
-  {{#if (and this.isAutomated @dynamicScan.isDynamicStatusInProgress)}}
-    <AkStack @spacing='0.5' local-class='automated-scan-trigger-info'>
-      <AkIcon @color='primary' @variant='outlined' @iconName='description' />
-
-      {{#if this.startedBy}}
-        <AkTypography>
-          {{t 'scanStartedBy'}}
-          <strong>{{this.startedBy}}</strong>
-        </AkTypography>
-      {{else}}
-        <AkTypography data-test-vncViewer-scanTriggeredAutomaticallyText>
-          {{t 'scanTriggeredAutomatically'}}
-        </AkTypography>
-      {{/if}}
-    </AkStack>
+    {{#if @dynamicScan.isStarting}}
+      <AkTypography data-test-vncViewer-manualScanNote>
+        <strong>{{t 'note'}} -</strong>
+        {{t 'dynamicScanText'}}
+      </AkTypography>
+    {{/if}}
   {{/if}}
 
   <div data-test-vncViewer-device class='marvel-device {{this.deviceType}}'>
@@ -60,13 +72,14 @@
       {{/if}}
     {{/if}}
 
-    <div
-      data-test-vncViewer-deviceScreen
-      class={{if this.screenRequired 'noscreen' 'screen'}}
-    >
-      {{!-- {{#if (and @dynamicScan.isReadyOrRunning this.deviceType)}} --}}
-      {{#if (and @file.isReady this.deviceType)}}
-        {{#if this.isAutomated}}
+    <div data-test-vncViewer-deviceScreen class='screen'>
+      {{#if this.isAutomated}}
+        {{#if
+          (or
+            @dynamicScan.isStartingOrShuttingInProgress
+            @dynamicScan.isReadyOrRunning
+          )
+        }}
           <AkStack
             data-test-vncViewer-automatedNote
             local-class='automated-scan-vnc-note'
@@ -74,16 +87,21 @@
             <AkTypography @color='inherit'>
               <strong>{{t 'note'}}</strong>
               -
-              {{t 'automatedScanVncNote'}}
+              {{t
+                (if
+                  @dynamicScan.isInqueue
+                  'automatedScanQueuedVncNote'
+                  'automatedScanRunningVncNote'
+                )
+              }}
             </AkTypography>
           </AkStack>
-
-        {{else}}
-          <NovncRfb
-            @deviceFarmURL={{this.deviceFarmURL}}
-            @deviceFarmPassword={{this.deviceFarmPassword}}
-          />
         {{/if}}
+      {{else if @dynamicScan.isReady}}
+        <NovncRfb
+          @deviceFarmURL={{this.deviceFarmURL}}
+          @deviceFarmPassword={{this.deviceFarmPassword}}
+        />
       {{/if}}
     </div>
 

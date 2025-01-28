@@ -1,0 +1,114 @@
+<AkStack
+  local-class='device-wrapper-container'
+  @width='full'
+  @direction='column'
+  @alignItems='center'
+  @justifyContent='center'
+  class='my-2'
+  data-test-cy='deviceWrapper-headerContainer'
+>
+  <AkStack
+    local-class='device-wrapper-header'
+    @width='full'
+    @alignItems='center'
+    @justifyContent='space-between'
+  >
+    <AkTypography
+      data-test-fileDetails-dynamicScan-deviceWrapper-headerText
+      @variant='h6'
+      @fontWeight='bold'
+    >
+      {{t 'realDevice'}}
+    </AkTypography>
+
+    {{#if @loadingScanStatus}}
+      <AkSkeleton @width='100px' />
+    {{else}}
+      <AkStack
+        @spacing='1'
+        @alignItems='center'
+        data-test-cy='deviceWrapper-statusChipAndScanCTAContainer'
+      >
+        {{#if @showStatusChip}}
+          {{yield to='statusChip'}}
+        {{/if}}
+
+        {{#if @showActionButton}}
+          {{yield
+            (hash closeFullscreen=this.handleFullscreenClose)
+            to='actionButton'
+          }}
+        {{/if}}
+
+        {{#if @isFullscreenSupported}}
+          <AkIconButton
+            data-test-cy='deviceWrapper-deviceViewer-fullscreenBtn'
+            data-test-fileDetails-dynamicScan-deviceWrapper-deviceViewer-fullscreenBtn
+            {{on 'click' this.toggleFullscreenView}}
+          >
+            <AkIcon @iconName='open-in-full' />
+          </AkIconButton>
+        {{/if}}
+      </AkStack>
+    {{/if}}
+  </AkStack>
+
+  <div
+    data-test-fileDetails-dynamicScan-deviceWrapper-deviceViewer-root
+    local-class='{{if this.isFullscreenView "device-viewer-fullscreen"}}'
+  >
+    {{#if this.isFullscreenView}}
+      <div
+        data-test-fileDetails-dynamicScan-deviceWrapper-deviceViewer-backdrop
+        aria-hidden='true'
+        local-class='device-viewer-backdrop'
+      />
+    {{/if}}
+
+    <AkStack
+      @direction='column'
+      @alignItems='center'
+      local-class='{{if
+        this.isFullscreenView
+        "device-viewer-fullscreen-container"
+      }}'
+    >
+      {{#if this.isFullscreenView}}
+        <AkAppbar
+          @justifyContent='space-between'
+          @position='sticky'
+          class='px-3'
+          as |ab|
+        >
+          <AkTypography
+            data-test-fileDetails-dynamicScan-deviceWrapper-deviceViewer-fullscreenTitle
+            @color='inherit'
+            @variant='h5'
+          >
+            {{t 'realDevice'}}
+          </AkTypography>
+
+          <AkIconButton
+            data-test-fileDetails-dynamicScan-deviceWrapper-deviceViewer-fullscreenCloseBtn
+            {{on 'click' this.toggleFullscreenView}}
+            class={{ab.classes.defaultIconBtn}}
+          >
+            <AkIcon @iconName='close' />
+          </AkIconButton>
+        </AkAppbar>
+      {{/if}}
+
+      <AkStack
+        data-test-fileDetails-dynamicScan-deviceWrapper-deviceViewer
+        class='p-3 py-4'
+      >
+        {{yield
+          (hash
+            isFullscreen=this.isFullscreenView
+            closeFullscreen=this.handleFullscreenClose
+          )
+        }}
+      </AkStack>
+    </AkStack>
+  </div>
+</AkStack>

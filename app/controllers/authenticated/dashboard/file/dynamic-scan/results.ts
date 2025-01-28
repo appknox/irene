@@ -22,6 +22,7 @@ export default class AuthenticatedDashboardFileDynamicScanResultsController exte
       siblingRoutes: [
         'authenticated.dashboard.file.dynamic-scan.automated',
         'authenticated.dashboard.file.dynamic-scan.manual',
+        'authenticated.dashboard.file.dynamic-scan.scheduled-automated',
       ],
     };
 

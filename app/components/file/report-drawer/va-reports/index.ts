@@ -1,21 +1,23 @@
 /* eslint-disable ember/no-observers */
-// eslint-disable-next-line ember/use-ember-data-rfc-395-imports
-import DS from 'ember-data';
 import Component from '@glimmer/component';
 import { tracked } from '@glimmer/tracking';
 import { task } from 'ember-concurrency';
 import { inject as service } from '@ember/service';
 import { addObserver, removeObserver } from '@ember/object/observers';
-import Store from '@ember-data/store';
-import IntlService from 'ember-intl/services/intl';
 import { action } from '@ember/object';
 import { waitForPromise } from '@ember/test-waiters';
 
+// eslint-disable-next-line ember/use-ember-data-rfc-395-imports
+import type DS from 'ember-data';
+import type Store from '@ember-data/store';
+import type IntlService from 'ember-intl/services/intl';
+
 import parseError from 'irene/utils/parse-error';
-import FileModel from 'irene/models/file';
-import RealtimeService from 'irene/services/realtime';
-import FileReportModel, { FileReportScanType } from 'irene/models/file-report';
 import { REPORT } from 'irene/utils/constants';
+import { type FileReportScanType } from 'irene/models/file-report';
+import type FileReportModel from 'irene/models/file-report';
+import type FileModel from 'irene/models/file';
+import type RealtimeService from 'irene/services/realtime';
 
 type FileReportQueryResponse =
   DS.AdapterPopulatedRecordArray<FileReportModel> & {
@@ -100,14 +102,26 @@ export default class FileReportDrawerVaReportsComponent extends Component<FileRe
     return this.generateReport.isRunning;
   }
 
+  get isDynamicScanRunning() {
+    const automated = this.file.lastAutomatedDynamicScan;
+    const manual = this.file.lastManualDynamicScan;
+
+    return (
+      automated?.get('isStartingOrShuttingInProgress') ||
+      automated?.get('isReadyOrRunning') ||
+      manual?.get('isStartingOrShuttingInProgress') ||
+      manual?.get('isReadyOrRunning')
+    );
+  }
+
   get enableGenerateBtn() {
     return (
       ((this.canGenerateReport &&
         this.file.isStaticDone &&
         !this.isReportGenerating) ||
         this.latestReportIsGenerated ||
-        this.file.isDynamicStatusInProgress ||
-        this.file.isRunningApiScan) &&
+        !this.isDynamicScanRunning ||
+        !this.file.isRunningApiScan) &&
       !this.latestReportIsGenerating
     );
   }

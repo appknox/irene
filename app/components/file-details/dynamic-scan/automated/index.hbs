@@ -1,129 +1,86 @@
-{{#if this.fetchDynamicscan.isRunning}}
-  <AkStack
-    local-class='loading-container'
-    @alignItems='center'
-    @justifyContent='center'
-    @spacing='1.5'
-  >
-    <AkLoader @size={{16}} />
-
-    <AkTypography local-class='loading-text' @color='textSecondary'>
-      {{t 'loading'}}...
-    </AkTypography>
-  </AkStack>
-{{else if (and @file.canRunAutomatedDynamicscan this.automationEnabled)}}
-  <AkStack
-    local-class='automated-dast-container'
-    @width='full'
-    @alignItems='center'
-    @direction='column'
-    @justifyContent='center'
-    class='my-2'
-  >
+{{#if this.dynamicscanAutomationFeatureAvailable}}
+  {{#if this.getDsAutomationPreference.isRunning}}
     <AkStack
-      local-class='automated-dast-header'
-      @width='full'
+      local-class='loading-container'
       @alignItems='center'
-      @justifyContent='space-between'
+      @justifyContent='center'
+      @spacing='1.5'
     >
-      <AkTypography
-        data-test-fileDetails-dynamicScan-automatedDast-header-text
-        @variant='h6'
-        @fontWeight='bold'
-      >
-        {{t 'realDevice'}}
+      <AkLoader @size={{16}} />
+
+      <AkTypography local-class='loading-text' @color='textSecondary'>
+        {{t 'loading'}}...
       </AkTypography>
-
-      <AkStack @spacing='1' @alignItems='center'>
+    </AkStack>
+  {{else if this.automationPreference.dynamicScanAutomationEnabled}}
+    <FileDetails::DynamicScan::DeviceWrapper
+      @loadingScanStatus={{this.isFetchingDynamicScan}}
+      @showStatusChip={{true}}
+      @showActionButton={{not
+        (or this.dynamicScan.isReadyOrRunning this.dynamicScan.isShuttingDown)
+      }}
+    >
+      <:statusChip>
         <FileDetails::DynamicScan::StatusChip
-          @file={{@file}}
-          @dynamicScan={{this.dynamicScan}}
+          @status={{this.dynamicScan.computedStatus}}
+          @statusText={{this.dynamicScan.statusText}}
         />
+      </:statusChip>
 
+      <:actionButton>
         <FileDetails::DynamicScan::Action
           @file={{@file}}
           @dynamicScanText={{t 'dastTabs.automatedDAST'}}
-          @onScanShutdown={{this.handleFullscreenClose}}
           @isAutomatedScan={{true}}
           @dynamicScan={{this.dynamicScan}}
         />
+      </:actionButton>
 
-        <AkIconButton
-          data-test-fileDetails-dynamicScan-automatedDast-fullscreenBtn
-          {{on 'click' this.toggleFullscreenView}}
-        >
-          <AkIcon @iconName='open-in-full' />
-        </AkIconButton>
-      </AkStack>
+      <:default>
+        <VncViewer
+          @file={{@file}}
+          @profileId={{@profileId}}
+          @dynamicScan={{this.dynamicScan}}
+          @isAutomated={{true}}
+        />
+      </:default>
+    </FileDetails::DynamicScan::DeviceWrapper>
+  {{else}}
+    <AkStack
+      @spacing='2'
+      @direction='column'
+      @alignItems='center'
+      @justifyContent='center'
+      local-class='automated-dast-disabled-card'
+      class='py-5'
+      data-test-fileDetails-dynamicScan-automatedDast-disabledCard
+    >
+      <AkSvg::ToggleAutomatedDast />
+
+      <AkTypography
+        data-test-fileDetails-dynamicScan-automatedDast-disabledTitle
+        @variant='h5'
+      >
+        {{t 'toggleAutomatedDAST'}}
+      </AkTypography>
+
+      <AkTypography
+        data-test-fileDetails-dynamicScan-automatedDast-disabledDesc
+        @align='center'
+        @color='textSecondary'
+        local-class='helper-text'
+      >
+        {{t 'toggleAutomatedDASTDesc'}}
+      </AkTypography>
+
+      <AkButton
+        {{on 'click' this.goToSettings}}
+        data-test-fileDetails-dynamicScan-automatedDast-disabledActionBtn
+      >
+        {{t 'goToSettings'}}
+      </AkButton>
     </AkStack>
-
-    {{#if this.isFullscreenView}}
-      <AkModal
-        data-test-fileDetails-dynamicScan-automatedDast-fullscreenModal
-        @headerTitle={{t 'realDevice'}}
-        @showHeader={{true}}
-        @onClose={{this.toggleFullscreenView}}
-      >
-        <VncViewer
-          @isAutomated={{true}}
-          @file={{@file}}
-          @profileId={{@profileId}}
-          @dynamicScan={{this.dynamicScan}}
-        />
-      </AkModal>
-
-    {{else}}
-      <AkStack
-        data-test-fileDetails-dynamicScan-automatedDast-vncViewer
-        class='p-3'
-      >
-        <VncViewer
-          @file={{@file}}
-          @profileId={{@profileId}}
-          @dynamicScan={{this.dynamicScan}}
-          @isAutomated={{true}}
-        />
-      </AkStack>
-    {{/if}}
-  </AkStack>
-
-{{else if (and @file.canRunAutomatedDynamicscan (not this.automationEnabled))}}
-  <AkStack
-    @spacing='2'
-    @direction='column'
-    @alignItems='center'
-    @justifyContent='center'
-    local-class='automated-dast-disabled-card'
-    class='py-5'
-    data-test-fileDetails-dynamicScan-automatedDast-disabledCard
-  >
-    <AkSvg::ToggleAutomatedDast />
-
-    <AkTypography
-      data-test-fileDetails-dynamicScan-automatedDast-disabledTitle
-      @variant='h5'
-    >
-      {{t 'toggleAutomatedDAST'}}
-    </AkTypography>
-
-    <AkTypography
-      data-test-fileDetails-dynamicScan-automatedDast-disabledDesc
-      @align='center'
-      @color='textSecondary'
-      local-class='helper-text'
-    >
-      {{! TODO: Get the correct text for this description }}
-      lorem ipsum dolor sit amet consectetur adipiscing
-    </AkTypography>
-
-    <AkButton
-      {{on 'click' this.goToSettings}}
-      data-test-fileDetails-dynamicScan-automatedDast-disabledActionBtn
-    >
-      {{t 'goToSettings'}}
-    </AkButton>
-  </AkStack>
-
+  {{/if}}
 {{else}}
   <AkStack data-test-automated-dast-upselling class='my-2'>
     <DynamicscanAutomationUpsellingFeature />

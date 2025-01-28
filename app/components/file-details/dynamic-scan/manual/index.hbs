@@ -1,129 +1,41 @@
-<AkStack
-  local-class='manual-dast-container'
-  @width='full'
-  @direction='column'
-  @alignItems='center'
-  @justifyContent='center'
-  class='my-2'
-  data-test-cy='manualDast-headerContainer'
+<FileDetails::DynamicScan::DeviceWrapper
+  @loadingScanStatus={{this.isFetchingDynamicScan}}
+  @showStatusChip={{this.showStatusChip}}
+  @showActionButton={{this.showActionButton}}
+  @isFullscreenSupported={{this.dynamicScan.isReady}}
 >
-  <AkStack
-    local-class='manual-dast-header'
-    @width='full'
-    @alignItems='center'
-    @justifyContent='space-between'
-  >
-    <AkTypography
-      data-test-fileDetails-dynamicScan-manualDast-header-text
-      @variant='h6'
-      @fontWeight='bold'
+  <:statusChip>
+    <FileDetails::DynamicScan::StatusChip
+      @status={{this.dynamicScan.computedStatus}}
+      @statusText={{this.dynamicScan.statusText}}
+    />
+  </:statusChip>
+
+  <:actionButton as |dw|>
+    <FileDetails::DynamicScan::Action
+      @file={{@file}}
+      @dynamicScanText={{t 'modalCard.dynamicScan.title'}}
+      @onScanShutdown={{fn this.handleScanShutdown dw.closeFullscreen}}
+      @dynamicScan={{this.dynamicScan}}
+    />
+  </:actionButton>
+
+  <:default as |dw|>
+    <VncViewer
+      @file={{@file}}
+      @profileId={{@profileId}}
+      @dynamicScan={{this.dynamicScan}}
     >
-      {{t 'realDevice'}}
-    </AkTypography>
-
-    <AkStack
-      @spacing='1'
-      @alignItems='center'
-      data-test-cy='manualDast-statusChipAndScanCTAContainer'
-    >
-      {{#if this.showStatusChip}}
-        <FileDetails::DynamicScan::StatusChip
-          @file={{@file}}
-          @dynamicScan={{this.dynamicScan}}
-        />
-
-      {{/if}}
-
-      {{#if this.showActionButton}}
-        <FileDetails::DynamicScan::Action
-          @dpContext={{@dpContext}}
-          @file={{@file}}
-          @dynamicScanText={{t 'modalCard.dynamicScan.title'}}
-          @onScanShutdown={{this.handleFullscreenClose}}
-          @dynamicScan={{this.dynamicScan}}
-        />
-      {{/if}}
-
-      {{#if (and @file.isReady (not this.isFullscreenView))}}
-        <AkIconButton
-          data-test-cy='manualDast-fullscreenBtn'
-          data-test-fileDetails-dynamicScan-manualDast-fullscreenBtn
-          {{on 'click' this.toggleFullscreenView}}
-        >
-          <AkIcon @iconName='open-in-full' />
-        </AkIconButton>
-      {{/if}}
-    </AkStack>
-  </AkStack>
-
-  <div
-    data-test-vncViewer-root
-    local-class='
-    {{if this.isFullscreenView "vnc-viewer-fullscreen"}}'
-  >
-    {{#if this.isFullscreenView}}
-      <div
-        data-test-vncViewer-backdrop
-        aria-hidden='true'
-        local-class='vnc-viewer-backdrop'
-      />
-    {{/if}}
-
-    <AkStack
-      @direction='column'
-      @alignItems='center'
-      local-class='{{if
-        this.isFullscreenView
-        "vnc-viewer-fullscreen-container"
-      }}'
-    >
-      {{#if this.isFullscreenView}}
-        <AkAppbar
-          @justifyContent='space-between'
-          @position='sticky'
-          class='px-3'
-          as |ab|
-        >
-          <AkTypography
-            data-test-fileDetails-dynamicScan-manualDastFullScreen-title
-            @color='inherit'
-            @variant='h5'
-          >
-            {{t 'realDevice'}}
-          </AkTypography>
-
-          <AkIconButton
-            data-test-fileDetails-dynamicScan-manualDastFullScreen-closeBtn
-            {{on 'click' this.toggleFullscreenView}}
-            class={{ab.classes.defaultIconBtn}}
-          >
-            <AkIcon @iconName='close' />
-          </AkIconButton>
-        </AkAppbar>
-      {{/if}}
-
-      <AkStack
-        data-test-fileDetails-dynamicScan-manualDast-vncViewer
-        class='p-3 py-4'
-      >
-        <VncViewer
-          @file={{@file}}
-          @profileId={{@profileId}}
-          @dynamicScan={{this.dynamicScan}}
-        >
-          <:controls>
-            {{#if this.isFullscreenView}}
-              <FileDetails::DynamicScan::Action
-                @file={{@file}}
-                @dpContext={{@dpContext}}
-                @dynamicScanText={{t 'modalCard.dynamicScan.title'}}
-                @onScanShutdown={{this.toggleFullscreenView}}
-                @dynamicScan={{this.dynamicScan}}
-              />
-            {{/if}}
-          </:controls>
-        </VncViewer>
-      </AkStack>
-    </AkStack>
-  </div>
-</AkStack>
+      <:controls>
+        {{#if dw.isFullscreen}}
+          <FileDetails::DynamicScan::Action
+            @file={{@file}}
+            @dynamicScanText={{t 'modalCard.dynamicScan.title'}}
+            @onScanShutdown={{fn this.handleScanShutdown dw.closeFullscreen}}
+            @dynamicScan={{this.dynamicScan}}
+          />
+        {{/if}}
+      </:controls>
+    </VncViewer>
+  </:default>
+</FileDetails::DynamicScan::DeviceWrapper>

@@ -1,12 +1,12 @@
 import Component from '@glimmer/component';
 import { action } from '@ember/object';
-import type ProjectAvailableDeviceModel from 'irene/models/project-available-device';
+import type AvailableManualDeviceModel from 'irene/models/available-manual-device';
 
 export interface FileDetailsDynamicScanDrawerDevicePrefTableSelectedDeviceSignature {
   Args: {
-    deviceProps: ProjectAvailableDeviceModel;
+    deviceProps: AvailableManualDeviceModel;
     selectedDeviceId?: string;
-    onDeviceClick(device: ProjectAvailableDeviceModel): void;
+    onDeviceClick(device: AvailableManualDeviceModel): void;
   };
 }
 

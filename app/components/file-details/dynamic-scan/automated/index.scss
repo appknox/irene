@@ -1,14 +1,3 @@
-.automated-dast-container {
-  background-color: var(--file-details-dynamic-scan-automated-background-main);
-  border: 1px solid var(--file-details-dynamic-scan-automated-border-color);
-}
-
-.automated-dast-header {
-  border-bottom: 1px solid
-    var(--file-details-dynamic-scan-automated-border-color);
-  padding: 0.5em 1.5em;
-}
-
 .automated-dast-disabled-card {
   width: 518px;
   background-color: var(--file-details-dynamic-scan-automated-background-main);

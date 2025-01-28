@@ -78,12 +78,6 @@ module('Acceptance | file details', function (hooks) {
       status: true,
     });
 
-    this.server.create('dynamicscan-old', { expires_on: null });
-
-    this.server.create('device-preference', {
-      id: profile.id,
-    });
-
     // Server mocks
     this.server.get('/organizations/:id', (schema, req) =>
       schema.organizationMes.find(`${req.params.id}`)?.toJSON()
@@ -114,8 +108,22 @@ module('Acceptance | file details', function (hooks) {
       };
     });
 
-    this.server.get('/dynamicscan/:id', (schema, req) => {
-      return schema.dynamicscanOlds.find(`${req.params.id}`)?.toJSON();
+    this.server.get('/v2/files/:id/dynamicscans', (schema, req) => {
+      const { limit, mode } = req.queryParams || {};
+
+      const results = schema.dynamicscans
+        .where({
+          file: req.params.id,
+          ...(mode ? { mode: Number(mode) } : {}),
+        })
+        .models.slice(0, limit ? Number(limit) : results.length);
+
+      return {
+        count: results.length,
+        next: null,
+        previous: null,
+        results,
+      };
     });
 
     this.server.get('/profiles/:id/device_preference', (schema, req) => {
@@ -268,6 +276,14 @@ module('Acceptance | file details', function (hooks) {
   });
 
   test('test api view details click to navigate to api scan page', async function (assert) {
+    this.server.get('/v2/files/:id/capturedapis', (schema, req) => {
+      const results = req.queryParams.is_active
+        ? schema.db.capturedapis.where({ is_active: true })
+        : schema.capturedapis.all().models;
+
+      return { count: results.length, previous: null, next: null, results };
+    });
+
     await visit('/dashboard/file/1');
 
     await click('[data-test-fileDetailScanActions-apiScanViewDetails]');

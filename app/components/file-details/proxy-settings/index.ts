@@ -7,6 +7,7 @@ import type Store from '@ember-data/store';
 import type { AsyncBelongsTo } from '@ember-data/model';
 
 import ENV from 'irene/config/environment';
+import parseError from 'irene/utils/parse-error';
 import triggerAnalytics from 'irene/utils/trigger-analytics';
 import type ProxySettingModel from 'irene/models/proxy-setting';
 import type ProfileModel from 'irene/models/profile';
@@ -71,16 +72,9 @@ export default class FileDetailsProxySettingsComponent extends Component<FileDet
         );
       }
     } catch (error) {
-      const err = error as AdapterError;
-      let errMsg = this.intl.t('pleaseTryAgain');
+      this.proxy?.rollbackAttributes();
 
-      if (err.errors && err.errors.length) {
-        errMsg = err.errors[0]?.detail || errMsg;
-      } else if (err.message) {
-        errMsg = err.message;
-      }
-
-      this.notify.error(errMsg);
+      this.notify.error(parseError(error, this.intl.t('pleaseTryAgain')));
     }
   });
 }

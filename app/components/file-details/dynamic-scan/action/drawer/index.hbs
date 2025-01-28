@@ -2,7 +2,7 @@
   @anchor='right'
   @open={{true}}
   @disableBackdropClick={{true}}
-  data-test-cy='dynamicScanModal'
+  data-test-cy='dynamicScanDrawer'
   @onClose={{@onClose}}
   as |dr|
 >
@@ -49,23 +49,20 @@
         <FileDetails::DynamicScan::Action::Drawer::AutomatedDast
           @dpContext={{@dpContext}}
           @file={{@file}}
-          @enableApiScan={{this.enableApiScan}}
         />
       {{else}}
         <FileDetails::DynamicScan::Action::Drawer::ManualDast
           @dpContext={{@dpContext}}
           @file={{@file}}
-          @isApiScanEnabled={{this.isApiScanEnabled}}
-          @enableApiScan={{this.enableApiScan}}
-          @allAvailableManualDevices={{this.allAvailableManualDevices}}
-          @isFetchingManualDevices={{this.fetchAllAvailableManualDevices.isRunning}}
+          @isApiCaptureEnabled={{this.isApiCaptureEnabled}}
+          @onApiCaptureChange={{this.handleApiCaptureChange}}
         />
       {{/if}}
     </AkStack>
 
     <AkStack
       @width='full'
-      @justifyContent={{if @isAutomatedScan 'space-between' 'flex-start'}}
+      @justifyContent='space-between'
       @spacing='1.5'
       class='px-3 py-2'
       local-class='dynamic-scan-drawer-cta'
@@ -77,15 +74,11 @@
         data-test-fileDetails-dynamicScanDrawer-startBtn
       >
         <:leftIcon>
-          {{#if @isAutomatedScan}}
-            <AkIcon @iconName='refresh' />
-          {{/if}}
+          <AkIcon @iconName={{if @isAutomatedScan 'schedule' 'play-arrow'}} />
         </:leftIcon>
 
         <:default>
-          {{t
-            (if @isAutomatedScan 'modalCard.dynamicScan.restartScan' 'start')
-          }}
+          {{t (if @isAutomatedScan 'scheduleAutomation' 'start')}}
         </:default>
       </AkButton>
 
@@ -94,7 +87,7 @@
           @variant='outlined'
           @color='neutral'
           @tag='a'
-          href='/dashboard/project/{{this.projectId}}/settings'
+          href='/dashboard/project/{{this.projectId}}/settings/dast-automation'
           target='_blank'
           rel='noopener noreferrer'
           data-test-fileDetails-dynamicScanDrawer-settingsPageRedirectBtn

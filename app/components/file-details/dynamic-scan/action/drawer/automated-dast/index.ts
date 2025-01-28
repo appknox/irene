@@ -6,15 +6,15 @@ import { tracked } from 'tracked-built-ins';
 import { task } from 'ember-concurrency';
 import { inject as service } from '@ember/service';
 import { isEmpty } from '@ember/utils';
+import type IntlService from 'ember-intl/services/intl';
+import type Store from '@ember-data/store';
 
 import parseError from 'irene/utils/parse-error';
 import ENUMS from 'irene/enums';
 import { dsAutomatedDevicePref } from 'irene/helpers/ds-automated-device-pref';
-
-import type IntlService from 'ember-intl/services/intl';
-import type Store from '@ember-data/store';
+import { deviceType } from 'irene/helpers/device-type';
 import type ApiScanOptionsModel from 'irene/models/api-scan-options';
-import type { DevicePreferenceContext } from 'irene/components/project-preferences/provider';
+import type { DsPreferenceContext } from 'irene/components/ds-preference-provider';
 import type ScanParameterGroupModel from 'irene/models/scan-parameter-group';
 import type FileModel from 'irene/models/file';
 import type ProxySettingModel from 'irene/models/proxy-setting';
@@ -26,8 +26,7 @@ export interface FileDetailsDynamicScanDrawerAutomatedDastSignature {
   Element: HTMLElement;
   Args: {
     file: FileModel;
-    dpContext: DevicePreferenceContext;
-    enableApiScan(event: Event, checked: boolean): void;
+    dpContext: DsPreferenceContext;
   };
 }
 
@@ -93,11 +92,25 @@ export default class FileDetailsDynamicScanDrawerAutomatedDastComponent extends 
     return this.dpContext.dsAutomatedDevicePreference;
   }
 
+  get isAnyDevicePrefSelected() {
+    return (
+      this.automatedDastDevicePreferences?.dsAutomatedDeviceSelection ===
+      ENUMS.DS_AUTOMATED_DEVICE_SELECTION.ANY_DEVICE
+    );
+  }
+
+  get isSpecificDevicePrefSelected() {
+    return (
+      this.automatedDastDevicePreferences?.dsAutomatedDeviceSelection ===
+      ENUMS.DS_AUTOMATED_DEVICE_SELECTION.FILTER_CRITERIA
+    );
+  }
+
   get minOSVersion() {
     const version =
-      this.automatedDastDevicePreferences?.ds_automated_platform_version_min;
+      this.automatedDastDevicePreferences?.dsAutomatedPlatformVersionMin;
 
-    return isEmpty(version) ? '-' : version;
+    return isEmpty(version) ? this.intl.t('anyVersion') : version;
   }
 
   get devicePrefInfoData() {
@@ -108,19 +121,31 @@ export default class FileDetailsDynamicScanDrawerAutomatedDastComponent extends 
         value: this.intl.t(
           dsAutomatedDevicePref([
             Number(
-              this.automatedDastDevicePreferences
-                ?.ds_automated_device_selection ||
-                ENUMS.DS_AUTOMATED_DEVICE_SELECTION.FILTER_CRITERIA
+              this.automatedDastDevicePreferences?.dsAutomatedDeviceSelection ??
+                ENUMS.DS_AUTOMATED_DEVICE_SELECTION.ANY_DEVICE
             ),
           ])
         ),
+        hidden: this.isSpecificDevicePrefSelected,
+      },
+      {
+        id: 'deviceType',
+        title: this.intl.t('deviceType'),
+        value: this.intl.t(
+          deviceType([
+            this.automatedDastDevicePreferences?.dsAutomatedDeviceType ??
+              ENUMS.DS_AUTOMATED_DEVICE_TYPE.NO_PREFERENCE,
+          ])
+        ),
+        hidden: this.isAnyDevicePrefSelected,
       },
       {
         id: 'minOSVersion',
         title: this.intl.t('minOSVersion'),
         value: this.minOSVersion,
+        hidden: this.isAnyDevicePrefSelected,
       },
-    ];
+    ].filter((it) => !it.hidden);
   }
 
   get apiProxyIsEnabled() {
