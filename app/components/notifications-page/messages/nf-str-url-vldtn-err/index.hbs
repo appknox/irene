@@ -25,15 +25,16 @@
   </div>
 
   <div data-test-nf-str-url-vldtn-err-link>
-    <AkLink
+    <AkButton
+      @tag='a'
+      @variant='text'
       @color='primary'
       @underline='always'
       target='_blank'
       href={{@context.store_url}}
       rel='noopener noreferrer'
-      @title={{t 'notificationModule.viewAppOnStore'}}
     >
       {{t 'notificationModule.viewAppOnStore'}}
-    </AkLink>
+    </AkButton>
   </div>
 </AkStack>

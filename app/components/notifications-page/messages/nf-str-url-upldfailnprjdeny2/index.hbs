@@ -38,16 +38,17 @@
     {{#if @context.store_url}}
       <span local-class='pipe'>|</span>
 
-      <AkLink
+      <AkButton
         data-test-nf-str-url-upldfailnprjdeny2-viewAppOnStorelink
+        @tag='a'
+        @variant='text'
         @underline='always'
         target='_blank'
         href={{@context.store_url}}
         rel='noopener noreferrer'
-        @title={{t 'notificationModule.viewAppOnStore'}}
       >
         {{t 'notificationModule.viewAppOnStore'}}
-      </AkLink>
+      </AkButton>
     {{/if}}
   </AkStack>
 </AkStack>
