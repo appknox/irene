@@ -1,4 +1,22 @@
-{{#if this.orgPreference.reportPreference}}
+{{#if this.fetchOrganizationPreference.isRunning}}
+  <AkSkeleton @width='175px' @height='20px' class='mb-2' />
+
+  <AkStack @direction='column' @spacing='1'>
+    <AkSkeleton @width='300px' @height='14px' />
+
+    <AkSkeleton @width='400px' @height='12px' />
+  </AkStack>
+
+  <div class='mt-5'>
+    {{#each (array 0 1 2 3 4)}}
+      <AkStack @direction='row' @alignItems='center'>
+        <AkSkeleton @width='18px' @height='18px' class='m-1' />
+
+        <AkSkeleton @width='75px' @height='14px' />
+      </AkStack>
+    {{/each}}
+  </div>
+{{else if this.orgPreference.reportPreference}}
   <div local-class='preferences-container' data-test-preferences>
     <AkTypography
       @gutterBottom={{true}}

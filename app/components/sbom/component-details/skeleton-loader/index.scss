@@ -1,0 +1,12 @@
+.summary-header-root {
+  border-radius: var(
+    --sbom-component-details-skeleton-loader-summary-border-radius
+  );
+  border: 1px solid
+    var(--sbom-component-details-skeleton-loader-summary-border-color);
+  box-sizing: border-box;
+
+  .summary-header-container {
+    padding: 1.25em 1em;
+  }
+}

@@ -1,0 +1,41 @@
+.app-details-container {
+  padding-bottom: 1.3571em;
+
+  .app-details-wrapper {
+    padding: 1.5em;
+    border: 1px solid var(--appmonitoring-details-skeleton-loader-border-color);
+    margin-bottom: 1.5714em;
+
+    .overview-container {
+      height: fit-content;
+      margin-bottom: 1.4286em;
+
+      .overview-icons {
+        margin-bottom: 0.857em;
+      }
+
+      .monitoring-toggle-container {
+        border-left: 1px solid
+          var(--appmonitoring-details-skeleton-loader-toggle-border-color);
+        padding-left: 1.214em;
+      }
+    }
+
+    .monitoring-details-container {
+      width: 100%;
+
+      .monitoring-details-group {
+        width: 100%;
+        display: grid;
+        grid-template-columns: repeat(2, 400px);
+
+        &:first-of-type {
+          border-bottom: 1px solid
+            var(--appmonitoring-details-skeleton-loader-border-color);
+          padding-bottom: 0.6428em;
+          margin-bottom: 0.6428em;
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,103 @@
+<div local-class='org-settings-container'>
+  {{#if this.me.org.is_admin}}
+    <AkSkeleton @width='175px' @height='20px' class='mb-2' />
+
+    <AkStack @direction='column' @spacing='1'>
+      <AkSkeleton @width='300px' @height='14px' />
+
+      <AkSkeleton @width='400px' @height='12px' />
+    </AkStack>
+
+    <div class='mt-5'>
+      {{#each (array 0 1 2 3 4)}}
+        <AkStack @direction='row' @alignItems='center'>
+          <AkSkeleton @width='18px' @height='18px' class='m-1' />
+
+          <AkSkeleton @width='75px' @height='14px' />
+        </AkStack>
+      {{/each}}
+    </div>
+
+    <AkDivider class='my-3' @color='dark' />
+
+    <AkSkeleton @width='175px' @height='20px' class='mb-2' />
+
+    <AkStack @direction='column' @spacing='1'>
+      <AkSkeleton @width='300px' @height='14px' />
+
+      <AkStack @direction='column' @spacing='0.5'>
+        <AkSkeleton @width='400px' @height='12px' />
+
+        <AkSkeleton @width='400px' @height='12px' />
+      </AkStack>
+    </AkStack>
+
+    <AkStack @spacing='1' class='my-4'>
+      <AkSkeleton @width='35px' @height='16px' />
+
+      <AkSkeleton @width='200px' @height='16px' />
+    </AkStack>
+
+    <AkSkeleton @width='450px' @height='50px' class='mb-2' />
+
+    <AkDivider class='my-3' @color='dark' />
+  {{/if}}
+
+  <AkSkeleton @width='175px' @height='20px' class='mb-2' />
+
+  <AkStack @direction='column' @spacing='1'>
+    <AkSkeleton @width='300px' @height='14px' />
+
+    <AkStack @direction='column' @spacing='0.5'>
+      <AkSkeleton @width='400px' @height='12px' />
+
+      <AkSkeleton @width='400px' @height='12px' />
+    </AkStack>
+  </AkStack>
+
+  <div class='mt-4'>
+    <div local-class='bordered-box'>
+      <div class='p-2'>
+        <AkStack @direction='column' @spacing='1'>
+          <AkSkeleton @width='100px' @height='14px' />
+
+          <AkSkeleton @width='300px' @height='12px' />
+        </AkStack>
+      </div>
+
+      <AkDivider class='my-0' @color='dark' />
+
+      <div class='m-3'>
+        <AkStack @spacing='3'>
+          <AkSkeleton @width='140px' @height='20px' />
+
+          <AkSkeleton @width='140px' @height='20px' />
+        </AkStack>
+      </div>
+
+      <div class='m-2'>
+        <div local-class='bordered-box'>
+          {{#each (array 0 1 2)}}
+            <AkStack local-class='full-bordered-box-section'>
+              <div
+                class='w-4/12'
+                local-class='full-bordered-box-section-column'
+              >
+                <AkSkeleton @width='140px' @height='18px' />
+              </div>
+
+              <div
+                class='w-8/12'
+                local-class='full-bordered-box-section-column'
+              >
+                <AkSkeleton @width='140px' @height='18px' />
+              </div>
+            </AkStack>
+          {{/each}}
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <AkDivider class='my-3' @color='dark' />
+</div>

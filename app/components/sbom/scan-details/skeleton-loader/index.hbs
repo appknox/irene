@@ -1,0 +1,35 @@
+<AkSkeleton @width='250px' @height='14px' class='mt-2 mb-4' />
+
+<AkStack @direction='column' @spacing='1' class='mb-4'>
+  <AkSkeleton @width='100px' @height='20px' />
+
+  <AkSkeleton @width='250px' @height='14px' />
+</AkStack>
+
+<div local-class='summary-header-root' class='mb-3'>
+  <AkStack
+    @alignItems='center'
+    @justifyContent='space-between'
+    @spacing='1.5'
+    local-class='summary-header-container'
+  >
+    <AkStack @alignItems='center'>
+      <AkSkeleton @width='40px' @height='40px' />
+
+      <AkSkeleton @width='250px' @height='18px' class='ml-2' />
+    </AkStack>
+
+    <AkStack @alignItems='center' @spacing='1.5'>
+      <AkSkeleton @width='160px' @height='35px' />
+
+      <AkSkeleton @width='18px' @height='18px' class='ml-3' />
+    </AkStack>
+  </AkStack>
+</div>
+
+<Sbom::EmptyLoadingView
+  @empty={{false}}
+  @loading={{true}}
+  @loadingSvgHeight='200px'
+  @height='350px'
+/>

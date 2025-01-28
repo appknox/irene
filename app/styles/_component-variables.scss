@@ -704,9 +704,19 @@ body {
   --appmonitoring-border-radius: var(--border-radius);
   --appmonitoring-border-color: var(--neutral-white-100);
 
+  //variables for appmonitoring/skeleton-loader
+  --appmonitoring-skeleton-loader-header-border-color: var(--neutral-white-100);
+  --appmonitoring-skeleton-loader-header-border-radius: var(--border-radius);
+
   //variables for appmonitoring/details
   --appmonitoring-details-border-color: var(--neutral-grey-100);
   --appmonitoring-details-toggle-border-color: var(--neutral-grey-200);
+
+  //variables for appmonitoring/details/skeleton-loader
+  --appmonitoring-details-skeleton-loader-border-color: var(--neutral-grey-100);
+  --appmonitoring-details-skeleton-loader-toggle-border-color: var(
+    --neutral-grey-200
+  );
 
   //variables for appmonitoring/settings
   --appmonitoring-settings-block-description-text-color: var(
@@ -785,6 +795,14 @@ body {
   --sbom-scan-details-link-border-radius: var(--border-radius);
   --sbom-scan-details-link-border-color: var(--border-color-1);
 
+  // variables for sbom/scan-details/skeleton-loader
+  --sbom-scan-details-skeleton-loader-summary-border-radius: var(
+    --border-radius
+  );
+  --sbom-scan-details-skeleton-loader-summary-border-color: var(
+    --border-color-1
+  );
+
   // variables for sbom/component-details/vulnerabilities
   --sbom-component-details-vulnerabilities-list-header-background-color: var(
     --ak-table-header-background-neutral
@@ -826,6 +844,14 @@ body {
   );
   --sbom-component-details-vulnerabilities-severity-chip-text-color: var(
     --common-white
+  );
+
+  // variables for sbom/component-details/skeleton-loader
+  --sbom-component-details-skeleton-loader-summary-border-radius: var(
+    --border-radius
+  );
+  --sbom-component-details-skeleton-loader-summary-border-color: var(
+    --border-color-1
   );
 
   // variables for sbom/summary-header
@@ -1289,6 +1315,11 @@ body {
   --file-compare-header-info-box-shadow: var(--box-shadow-6);
   --file-compare-header-platform-android-color: var(--android);
   --file-compare-header-platform-ios-color: var(--ios);
+
+  // variables for file-compare/skeleton-loader
+  --file-compare-skeleton-loader-background-color: var(--common-white);
+  --file-compare-skeleton-loader-border-color: var(--neutral-grey-300);
+  --file-compare-skeleton-loader-box-shadow: var(--box-shadow-6);
 
   // variables for file-compare/vulnerability-details
   --file-compare-vulnerability-details-white-background: var(--common-white);
@@ -1914,6 +1945,17 @@ body {
 
   // variables for organization/settings
   --organization-settings-container-background-color: var(--background-main);
+
+  // variables for organization/settings/skeleton-loader
+  --organization-settings-skeleton-loader-background-color: var(
+    --background-main
+  );
+  --organization-settings-skeleton-loader-sso-border-color: var(
+    --border-color-1
+  );
+  --organization-settings-skeleton-loader-sso-border-radius: var(
+    --border-radius
+  );
 
   // variables for organization/settings-wrapper
   --organization-settings-wrapper-background-color: var(--background-light);
