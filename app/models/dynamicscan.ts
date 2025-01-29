@@ -5,7 +5,7 @@ import type IntlService from 'ember-intl/services/intl';
 import ENUMS from 'irene/enums';
 import type UserModel from './user';
 import type FileModel from './file';
-import type DeviceModel from './device';
+import type { RawDeviceType } from './device';
 
 export enum DsComputedStatus {
   NOT_STARTED,
@@ -63,8 +63,8 @@ export default class DynamicscanModel extends Model {
   @attr('date', { allowNull: true })
   declare autoShutdownOn: Date | null;
 
-  @belongsTo('device', { async: false, inverse: null })
-  declare deviceUsed: DeviceModel | null;
+  @attr()
+  declare deviceUsed: RawDeviceType | null;
 
   @attr()
   declare devicePreference: unknown;

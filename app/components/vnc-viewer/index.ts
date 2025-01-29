@@ -62,7 +62,14 @@ export default class VncViewerComponent extends Component<VncViewerSignature> {
   }
 
   get isTablet() {
-    return this.deviceUsed?.isTablet;
+    const isScanInProgress =
+      this.args.dynamicScan?.get('isBooting') ||
+      this.args.dynamicScan?.get('isInstalling') ||
+      this.args.dynamicScan?.get('isLaunching') ||
+      this.args.dynamicScan?.get('isHooking') ||
+      this.args.dynamicScan?.get('isReadyOrRunning');
+
+    return isScanInProgress && this.deviceUsed?.is_tablet;
   }
 
   get isIOSDevice() {

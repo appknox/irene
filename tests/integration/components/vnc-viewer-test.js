@@ -100,6 +100,12 @@ module('Integration | Component | vnc-viewer', function (hooks) {
         deviceClass: 'ipad black',
       },
       {
+        platform: ENUMS.PLATFORM.IOS,
+        isTablet: true,
+        deviceClass: 'iphone5s black', // since device might not be allocated so show default
+        status: ENUMS.DYNAMIC_SCAN_STATUS.IN_QUEUE,
+      },
+      {
         platform: ENUMS.PLATFORM.ANDROID,
         isTablet: false,
         deviceClass: 'nexus5',
@@ -110,7 +116,7 @@ module('Integration | Component | vnc-viewer', function (hooks) {
         deviceClass: 'iphone5s black',
       },
     ],
-    async function (assert, { platform, isTablet, deviceClass }) {
+    async function (assert, { platform, isTablet, deviceClass, status }) {
       const deviceUsed = this.server.create('device', {
         is_tablet: isTablet,
         platform,
@@ -118,7 +124,7 @@ module('Integration | Component | vnc-viewer', function (hooks) {
 
       const dynamicscan = this.server.create('dynamicscan', {
         file: this.file.id,
-        status: ENUMS.DYNAMIC_SCAN_STATUS.READY_FOR_INTERACTION,
+        status: status || ENUMS.DYNAMIC_SCAN_STATUS.READY_FOR_INTERACTION,
         ended_on: null,
         device_used: deviceUsed.toJSON(),
       });
@@ -138,12 +144,19 @@ module('Integration | Component | vnc-viewer', function (hooks) {
         <VncViewer @file={{this.file}} @profileId={{this.activeProfileId}} @dynamicScan={{this.dynamicscan}} />
       `);
 
+      const isScanInProgress =
+        this.dynamicscan.isBooting ||
+        this.dynamicscan.isInstalling ||
+        this.dynamicscan.isLaunching ||
+        this.dynamicscan.isHooking ||
+        this.dynamicscan.isReadyOrRunning;
+
       deviceClass.split(' ').forEach((val) => {
         assert.dom('[data-test-vncViewer-device]').hasClass(val);
       });
 
       ['TopBar', 'Sleep', 'Volume'].forEach((it) => {
-        if (isTablet) {
+        if (isScanInProgress && isTablet) {
           assert.dom(`[data-test-vncViewer-device${it}]`).exists();
         } else {
           assert.dom(`[data-test-vncViewer-device${it}]`).doesNotExist();
@@ -157,7 +170,7 @@ module('Integration | Component | vnc-viewer', function (hooks) {
         assert.dom('[data-test-vncViewer-deviceHome]').exists();
 
         ['Speaker', 'BottomBar'].forEach((it) => {
-          if (isTablet) {
+          if (isScanInProgress && isTablet) {
             assert.dom(`[data-test-vncViewer-device${it}]`).exists();
           } else {
             assert.dom(`[data-test-vncViewer-device${it}]`).doesNotExist();
