@@ -1,0 +1,27 @@
+.privacy-module-trackers-root {
+  background-color: var(--background-main);
+
+  &.blur {
+    pointer-events: none;
+    opacity: 0.3;
+  }
+
+  .privacy-module-tracker {
+    cursor: pointer;
+
+    &:hover {
+      background-color: rgba(0, 0, 0, 0.01);
+    }
+  }
+}
+
+.tracker-info-drawer-content {
+  margin: 1.5em;
+  width: 640px;
+  border: 1px solid var(--ak-divider-color-light);
+}
+
+.tag {
+  background-color: #edf2ff !important;
+  color: var(--text-primary);
+}

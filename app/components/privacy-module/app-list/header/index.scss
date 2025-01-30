@@ -1,0 +1,9 @@
+.header-privacy-module-page {
+  background-color: var(--appmonitoring-settings-header-background-color);
+  border: 1px solid var(--appmonitoring-settings-header-border-color);
+  border-radius: var(--appmonitoring-settings-header-border-radius);
+
+  .header-privacy-module-page-title {
+    padding: 1em 1.285em;
+  }
+}

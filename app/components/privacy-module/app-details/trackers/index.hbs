@@ -1,0 +1,172 @@
+<AkStack
+  @direction='column'
+  @width='full'
+  local-class='privacy-module-trackers-root 
+  {{if this.fileSummaryIsExpanded "blur"}}'
+>
+  <AkTypography class='p-2'>
+    Following trackers were detected
+  </AkTypography>
+
+  <AkDivider />
+
+  <AkPaginationProvider
+    @results={{this.trackersTableData}}
+    @onItemPerPageChange={{this.goToPage}}
+    @totalItems={{this.trackersTableData.length}}
+    @nextAction={{this.goToPage}}
+    @prevAction={{this.goToPage}}
+    @itemPerPageOptions={{array 5 10 20}}
+    @defaultLimit={{this.limit}}
+    @offset={{this.offset}}
+    as |pgc|
+  >
+
+    {{#if this.isFetchingTrackers}}
+      <AkSkeleton @height='20px' />
+
+    {{else}}
+      <AkStack @direction='column' @width='full'>
+        {{#each pgc.currentPageResults as |tracker|}}
+          <AkStack
+            @width='full'
+            @direction='column'
+            @spacing='1'
+            local-class='privacy-module-tracker'
+            class='p-2'
+            {{on 'click' (fn this.openTrackerInfoDrawer tracker)}}
+          >
+            <AkButton
+              @tag='div'
+              @variant='text'
+              @underline='none'
+              @typographyFontWeight='medium'
+            >
+              <:default>
+                {{tracker.name}}
+              </:default>
+
+              <:rightIcon>
+                <AkIcon @iconName='arrow-right' />
+              </:rightIcon>
+            </AkButton>
+
+            <AkStack @alignItems='center' @flexWrap='wrap' @spacing='1'>
+              {{#each tracker.tags as |tag|}}
+                <AkChip
+                  @variant='semi-filled'
+                  @label={{tag}}
+                  local-class='tag'
+                />
+              {{/each}}
+            </AkStack>
+          </AkStack>
+
+          <AkDivider />
+        {{/each}}
+      </AkStack>
+    {{/if}}
+
+    <AkPagination
+      @disableNext={{pgc.disableNext}}
+      @nextAction={{pgc.nextAction}}
+      @disablePrev={{pgc.disablePrev}}
+      @prevAction={{pgc.prevAction}}
+      @endItemIdx={{pgc.endItemIdx}}
+      @startItemIdx={{pgc.startItemIdx}}
+      @itemPerPageOptions={{pgc.itemPerPageOptions}}
+      @onItemPerPageChange={{pgc.onItemPerPageChange}}
+      @selectedOption={{pgc.selectedOption}}
+      @tableItemLabel='Trackers'
+      @perPageTranslation={{t 'recordPerPage'}}
+      @totalItems={{pgc.totalItems}}
+    />
+  </AkPaginationProvider>
+</AkStack>
+
+<AkDrawer
+  @open={{this.trackerIsSelected}}
+  @onClose={{this.closeTrackerInfoDrawer}}
+  @anchor='right'
+  as |dr|
+>
+  <AkAppbar
+    @justifyContent='space-between'
+    @position='sticky'
+    class='px-3'
+    as |ab|
+  >
+    <AkTypography @color='inherit' @variant='h5'>
+      Dangerous Permissions Details
+    </AkTypography>
+
+    <AkIconButton
+      {{on 'click' dr.closeHandler}}
+      class={{ab.classes.defaultIconBtn}}
+    >
+      <AkIcon @iconName='close' />
+    </AkIconButton>
+  </AkAppbar>
+
+  <AkStack
+    @width='full'
+    @direction='column'
+    local-class='tracker-info-drawer-content'
+  >
+    <AkStack @width='full' class='py-2 px-3' {{style gap='4.2857em'}}>
+      <AkTypography @color='textSecondary' {{style minWidth='160px'}}>
+        Name of Permission
+      </AkTypography>
+
+      <AkTypography @fontWeight='medium'>
+        {{this.selectedTracker.name}}
+      </AkTypography>
+    </AkStack>
+
+    <AkDivider />
+
+    <AkStack @width='full' class='py-2 px-3' {{style gap='4.2857em'}}>
+      <AkTypography @color='textSecondary' {{style minWidth='160px'}}>
+        Tags
+      </AkTypography>
+
+      <AkStack @alignItems='center' @flexWrap='wrap' @spacing='1'>
+        {{#each this.selectedTracker.tags as |tag|}}
+          <AkChip @variant='semi-filled' @label={{tag}} local-class='tag' />
+        {{/each}}
+      </AkStack>
+    </AkStack>
+
+    <AkDivider />
+
+    <AkStack @width='full' class='py-2 px-3' {{style gap='4.2857em'}}>
+      <AkStack @alignItems='center' @spacing='0.75' {{style minWidth='160px'}}>
+        <AkTypography @color='textSecondary'>
+          Code Signature
+        </AkTypography>
+
+        <AkIcon @iconName='help' @color='textSecondary' @size='small' />
+      </AkStack>
+
+      <AkTypography @fontWeight='medium'>
+        {{this.selectedTracker.code_signature}}
+      </AkTypography>
+    </AkStack>
+
+    <AkDivider />
+
+    <AkStack @width='full' class='py-2 px-3' {{style gap='4.2857em'}}>
+      <AkStack @alignItems='center' @spacing='0.75' {{style minWidth='160px'}}>
+        <AkTypography @color='textSecondary'>
+          Network Signature
+        </AkTypography>
+
+        <AkIcon @iconName='help' @color='textSecondary' @size='small' />
+      </AkStack>
+
+      <AkTypography @fontWeight='medium'>
+        {{this.selectedTracker.network_signature}}
+      </AkTypography>
+    </AkStack>
+  </AkStack>
+</AkDrawer>

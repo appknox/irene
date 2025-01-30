@@ -208,10 +208,13 @@ body {
   --ak-chip-color-outlined-info: var(--info-main);
 
   --ak-chip-color-semi-filled-outlined-default-background: var(
-    --neutral-grey-200
+    --neutral-grey-100
   );
   --ak-chip-color-semi-filled-outlined-default-contrast-text: var(
-    --neutral-grey-700
+    --text-primary
+  );
+  --ak-chip-color-semi-filled-outlined-default-border-color: var(
+    --neutral-grey-200
   );
   --ak-chip-color-semi-filled-outlined-primary-background: var(--primary-light);
   --ak-chip-color-semi-filled-outlined-primary-contrast-text: var(
@@ -794,7 +797,9 @@ body {
   // variables for sbom/scan-details
   --sbom-scan-details-link-border-radius: var(--border-radius);
   --sbom-scan-details-border-color: var(--border-color-1);
-  --sbom-scan-details-background-color: var(--side-menu-active-background-light);
+  --sbom-scan-details-background-color: var(
+    --side-menu-active-background-light
+  );
 
   // variables for sbom/scan-details/skeleton-loader
   --sbom-scan-details-skeleton-loader-summary-border-radius: var(
@@ -872,9 +877,15 @@ body {
   --sbom-scan-details-component-tree-border-color: var(--border-color-1);
   --sbom-scan-details-component-tree-border-radius: var(--border-radius);
   --sbom-scan-details-component-tree-background-color: var(--background-main);
-  --sbom-scan-details-component-tree-header-background-color: var(--neutral-grey-100);
-  --sbom-scan-details-component-tree-highlighted-background-color: var(--common-black);
-  --sbom-scan-details-component-tree-highlighted-text-color: var(--common-white);
+  --sbom-scan-details-component-tree-header-background-color: var(
+    --neutral-grey-100
+  );
+  --sbom-scan-details-component-tree-highlighted-background-color: var(
+    --common-black
+  );
+  --sbom-scan-details-component-tree-highlighted-text-color: var(
+    --common-white
+  );
 
   // variables for analysis-risk/tag
   // variables for analysis-risk/text

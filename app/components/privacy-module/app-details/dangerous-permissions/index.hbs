@@ -1,0 +1,57 @@
+<AkStack
+  @direction='column'
+  @width='full'
+  local-class='privacy-module-danger-perms-root 
+  {{if this.fileSummaryIsExpanded "blur"}}'
+>
+  <AkTypography class='p-2'>
+    Following Dangerous Permissions were detected
+  </AkTypography>
+
+  <AkDivider />
+
+  <AkPaginationProvider
+    @results={{this.dangerousPermissions}}
+    @onItemPerPageChange={{this.goToPage}}
+    @totalItems={{this.dangerousPermissions.length}}
+    @nextAction={{this.goToPage}}
+    @prevAction={{this.goToPage}}
+    @itemPerPageOptions={{array 5 10 20}}
+    @defaultLimit={{this.limit}}
+    @offset={{this.offset}}
+    as |pgc|
+  >
+
+    {{#if this.isFetchingDangerPerms}}
+      <AkSkeleton @height='20px' />
+
+    {{else}}
+      <AkStack @direction='column' @width='full'>
+        {{#each pgc.currentPageResults as |dPerm|}}
+          <AkStack @width='full' @direction='column' @spacing='0.5' class='p-2'>
+            <AkTypography @fontWeight='medium'>{{dPerm.name}}</AkTypography>
+
+            <AkTypography>{{dPerm.description}}</AkTypography>
+          </AkStack>
+
+          <AkDivider />
+        {{/each}}
+      </AkStack>
+    {{/if}}
+
+    <AkPagination
+      @disableNext={{pgc.disableNext}}
+      @nextAction={{pgc.nextAction}}
+      @disablePrev={{pgc.disablePrev}}
+      @prevAction={{pgc.prevAction}}
+      @endItemIdx={{pgc.endItemIdx}}
+      @startItemIdx={{pgc.startItemIdx}}
+      @itemPerPageOptions={{pgc.itemPerPageOptions}}
+      @onItemPerPageChange={{pgc.onItemPerPageChange}}
+      @selectedOption={{pgc.selectedOption}}
+      @tableItemLabel='Permissions'
+      @perPageTranslation={{t 'recordPerPage'}}
+      @totalItems={{pgc.totalItems}}
+    />
+  </AkPaginationProvider>
+</AkStack>

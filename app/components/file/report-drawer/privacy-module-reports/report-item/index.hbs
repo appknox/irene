@@ -1,0 +1,83 @@
+<AkList::Item
+  ...attributes
+  @divider={{true}}
+  {{style padding='0.7857em 1.4285em'}}
+  data-test-fileVaReports-reportListItem
+  as |li|
+>
+  <li.leftIcon data-test-vaReportListItem-leftIcon>
+    {{#let (component @reportDetails.iconComponent) as |Icon|}}
+      <Icon />
+    {{/let}}
+  </li.leftIcon>
+
+  <AkStack @direction='column' @width='full' @spacing='0.5' class='pl-1'>
+
+    <AkTypography @variant='subtitle1' data-test-vaReportListItem-primaryText>
+      {{@reportDetails.primaryText}}
+    </AkTypography>
+
+    {{#if this.showGeneratingText}}
+      <AkTypography
+        @color='textSecondary'
+        data-test-vaReportListItem-generatingText
+      >
+        {{t 'generating'}}...
+      </AkTypography>
+    {{else}}
+      <AkStack @alignItems='center' @spacing='0.5'>
+        <AkTypography data-test-vaReportListItem-secondaryText>
+          {{@reportDetails.secondaryText}}
+        </AkTypography>
+
+        {{#if @reportDetails.copyText}}
+          <AkClipboard
+            @onSuccess={{this.handleCopySuccess}}
+            @onError={{this.handleCopyError}}
+            as |cb|
+          >
+            <AkIconButton
+              id={{cb.triggerId}}
+              @size='small'
+              data-test-vaReportListItem-passCopyBtn
+              data-clipboard-text={{@reportDetails.copyText}}
+            >
+              <AkIcon @iconName='content-copy' @color='primary' />
+            </AkIconButton>
+          </AkClipboard>
+        {{/if}}
+      </AkStack>
+    {{/if}}
+
+    <AkTypography
+      @variant='body2'
+      @color='textSecondary'
+      data-test-vaReportListItem-generatedOnDateTime
+    >
+      {{@reportDetails.generatedOnDateTime}}
+    </AkTypography>
+  </AkStack>
+
+  <li.rightIcon>
+    {{#if this.showDownloadButton}}
+      <AkIconButton
+        disabled={{this.reportIsDownloading}}
+        {{on 'click' this.getReport}}
+        data-test-vaReportListItem-reportDownloadBtn
+      >
+        {{#if this.reportIsDownloading}}
+          <AkLoader
+            @size={{16}}
+            data-test-vaReportListItem-reportDownloadBtn-loadingIcon
+          />
+        {{else}}
+          <AkIcon
+            @variant='outlined'
+            @iconName='file-download'
+            data-test-vaReportListItem-reportDownloadBtn-icon
+          />
+        {{/if}}
+      </AkIconButton>
+    {{/if}}
+  </li.rightIcon>
+</AkList::Item>

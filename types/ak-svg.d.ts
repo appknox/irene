@@ -55,6 +55,7 @@ export enum AkSvgComponentInvocationByNames {
   InfoIndicator,
   NoPendingItems,
   WelcomeToStoreknox,
+  TurnOnSettings,
 }
 
 export enum AkSvgComponentInvocationByPaths {

@@ -46,6 +46,14 @@ export default class OrganizationSettingsWrapperComponent extends Component<Orga
               'authenticated.dashboard.organization-settings.service-account',
           }
         : null,
+      {
+        id: 'ai-powered-features',
+        label: 'AI Powered Features',
+        route:
+          'authenticated.dashboard.organization-settings.ai-powered-features',
+        currentWhen:
+          'authenticated.dashboard.organization-settings.ai-powered-features',
+      },
     ].filter(Boolean);
   }
 
