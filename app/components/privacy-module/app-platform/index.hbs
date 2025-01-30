@@ -1,0 +1,13 @@
+<AkStack
+  ...attributes
+  data-test-privacy-appPlatform-container
+  local-class='app-platform-icon-container {{if @bordered "bordered"}}'
+  @justifyContent='center'
+  @alignItems='center'
+>
+  <AkIcon
+    data-test-privacy-appPlatform-icon
+    @iconName='{{this.iconName}}'
+    local-class='app-platform-icon-{{this.platformIconClass}}'
+  />
+</AkStack>

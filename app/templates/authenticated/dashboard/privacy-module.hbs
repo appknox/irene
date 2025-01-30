@@ -1,0 +1,9 @@
+{{page-title (t 'privacyModule.title')}}
+
+<PageWrapper>
+  {{#if @model.isPrivacyEnabled}}
+    {{outlet}}
+  {{else}}
+    <PrivacyModule::Upselling />
+  {{/if}}
+</PageWrapper>

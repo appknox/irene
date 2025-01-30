@@ -1,0 +1,85 @@
+<AkStack
+  @direction='column'
+  @width='full'
+  local-class='privacy-module-danger-perms-root'
+>
+  {{#if this.isFetchingDangerPerms}}
+    <PrivacyModule::Loader @loadingText='{{t "loading"}}...' />
+  {{else}}
+    {{#if this.showEmptyContent}}
+      <PrivacyModule::Status
+        @heading={{t 'privacyModule.emptyDangerPermsHeader'}}
+        @description={{t 'privacyModule.emptyDangerPermsDesc'}}
+        @svgComponent='ak-svg/privacy-not-found'
+      />
+    {{else}}
+      {{#unless this.isFetchingDangerPerms}}
+        <AkTypography
+          class='p-2'
+          data-test-privacyModule-dangerPerms-detectedTxt
+        >
+          {{t 'privacyModule.dangerPermsDetected'}}
+        </AkTypography>
+      {{/unless}}
+
+      <AkDivider />
+
+      <AkPaginationProvider
+        @results={{this.dangerousPermissionList}}
+        @onItemPerPageChange={{this.handleItemPerPageChange}}
+        @totalItems={{this.dangerousPermissionCount}}
+        @nextAction={{this.handlePrevNextAction}}
+        @prevAction={{this.handlePrevNextAction}}
+        @itemPerPageOptions={{array 10 25 50}}
+        @defaultLimit={{this.limit}}
+        @offset={{this.offset}}
+        @resultDependencies={{this.resultDependencies}}
+        @onResultDependenciesChange={{this.handleResultDependenciesChange}}
+        as |pgc|
+      >
+        <AkStack
+          @direction='column'
+          @width='full'
+          data-test-privacyModule-dangerPerms-list
+        >
+          {{#each pgc.currentPageResults as |dPerm|}}
+            <AkStack
+              @width='full'
+              @direction='column'
+              @spacing='0.5'
+              class='p-2'
+            >
+              <AkTypography
+                @fontWeight='medium'
+                data-test-privacyModule-dangerPerms-permissionName
+              >
+                {{dPerm.permissionName}}
+              </AkTypography>
+
+              <AkTypography data-test-privacyModule-dangerPerms-category>
+                {{dPerm.category}}
+              </AkTypography>
+            </AkStack>
+
+            <AkDivider />
+          {{/each}}
+        </AkStack>
+
+        <AkPagination
+          @disableNext={{pgc.disableNext}}
+          @nextAction={{pgc.nextAction}}
+          @disablePrev={{pgc.disablePrev}}
+          @prevAction={{pgc.prevAction}}
+          @endItemIdx={{pgc.endItemIdx}}
+          @startItemIdx={{pgc.startItemIdx}}
+          @itemPerPageOptions={{pgc.itemPerPageOptions}}
+          @onItemPerPageChange={{pgc.onItemPerPageChange}}
+          @selectedOption={{pgc.selectedOption}}
+          @tableItemLabel={{t 'privacyModule.permissions'}}
+          @perPageTranslation={{t 'recordPerPage'}}
+          @totalItems={{pgc.totalItems}}
+        />
+      </AkPaginationProvider>
+    {{/if}}
+  {{/if}}
+</AkStack>

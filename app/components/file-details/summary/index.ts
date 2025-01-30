@@ -14,6 +14,7 @@ dayjs.extend(relativeTime);
 export interface FileDetailsSummarySignature {
   Args: {
     file: FileModel;
+    onShowMoreFileSummary?: (open: boolean, fileId: string) => void;
   };
 }
 

@@ -1,0 +1,29 @@
+.privacy-module-trackers-root {
+  background-color: var(--privacy-module-trackers-row-bg-color);
+
+  .privacy-module-tracker {
+    cursor: pointer;
+
+    &:hover {
+      background-color: var(--privacy-module-trackers-row-bg-color-hover);
+    }
+  }
+}
+
+.tracker-info-drawer-content {
+  margin: 1.5em;
+  width: 640px;
+  border: 1px solid var(--privacy-module-trackers-drawer-border-color);
+}
+
+.tag {
+  background-color: var(--privacy-module-trackers-tag-bg-color) !important;
+  color: var(--privacy-module-trackers-tag-color);
+}
+
+.tooltip-content-container {
+  width: 280px;
+  padding: 0.5em;
+  box-sizing: border-box;
+  white-space: normal;
+}
