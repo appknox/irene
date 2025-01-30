@@ -1,0 +1,8 @@
+.privacy-module-danger-perms-root {
+  background-color: var(--background-main);
+
+  &.blur {
+    pointer-events: none;
+    opacity: 0.3;
+  }
+}

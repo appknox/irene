@@ -1,0 +1,75 @@
+<AkStack @direction='column'>
+  <AkPaginationProvider
+    @results={{this.tableData}}
+    @onItemPerPageChange={{this.goToPage}}
+    @totalItems={{this.tableData.length}}
+    @nextAction={{this.goToPage}}
+    @prevAction={{this.goToPage}}
+    @itemPerPageOptions={{array 5 10 20}}
+    @defaultLimit={{this.limit}}
+    @offset={{this.offset}}
+    as |pgc|
+  >
+    <AkTable
+      @hoverable={{true}}
+      local-class='privacy-app-list-table-containe'
+      data-test-privacyModule-appListTable
+      as |t|
+    >
+      <t.head
+        data-test-privacyModule-appListTable-thead
+        @columns={{this.columns}}
+      />
+
+      {{#if this.isFetchingPrivacyApps}}
+        <t.body @rows={{this.loadingMockData}} as |b|>
+          <b.row as |r|>
+            <r.cell>
+              <AkSkeleton
+                @width={{r.columnValue.component.width}}
+                @height='20px'
+              />
+            </r.cell>
+          </b.row>
+        </t.body>
+
+      {{else}}
+        <t.body @rows={{pgc.currentPageResults}} as |b|>
+          <b.row
+            data-test-privacyModule-appListTable-row
+            {{on 'click' this.onRowItemClick}}
+            {{style cursor='pointer'}}
+            as |r|
+          >
+            <r.cell data-test-privacyModule-appListTable-cell as |value|>
+              {{#if r.columnValue.component}}
+                {{#let (component r.columnValue.component) as |Component|}}
+                  <Component @privacyApp={{r.rowValue}} />
+                {{/let}}
+              {{else}}
+                <AkTypography title={{value}} @noWrap={{true}}>
+                  {{value}}
+                </AkTypography>
+              {{/if}}
+            </r.cell>
+          </b.row>
+        </t.body>
+      {{/if}}
+    </AkTable>
+
+    <AkPagination
+      @disableNext={{pgc.disableNext}}
+      @nextAction={{pgc.nextAction}}
+      @disablePrev={{pgc.disablePrev}}
+      @prevAction={{pgc.prevAction}}
+      @endItemIdx={{pgc.endItemIdx}}
+      @startItemIdx={{pgc.startItemIdx}}
+      @itemPerPageOptions={{pgc.itemPerPageOptions}}
+      @onItemPerPageChange={{pgc.onItemPerPageChange}}
+      @selectedOption={{pgc.selectedOption}}
+      @tableItemLabel={{t 'apps'}}
+      @perPageTranslation={{t 'recordPerPage'}}
+      @totalItems={{pgc.totalItems}}
+    />
+  </AkPaginationProvider>
+</AkStack>

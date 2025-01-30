@@ -14,6 +14,10 @@ dayjs.extend(relativeTime);
 export interface FileDetailsSummarySignature {
   Args: {
     file: FileModel;
+    onShowMoreFileSummary?: (open: boolean, fileId: string) => void;
+  };
+  Blocks: {
+    customCTA: [];
   };
 }
 
@@ -91,7 +95,11 @@ export default class FileDetailsSummaryComponent extends Component<FileDetailsSu
 
   @action
   handleFileSummaryToggle() {
-    this.showMoreFileSummary = !this.showMoreFileSummary;
+    const status = !this.showMoreFileSummary;
+
+    this.showMoreFileSummary = status;
+
+    this.args.onShowMoreFileSummary?.(status, this.args.file.id);
   }
 }
 

@@ -1,0 +1,31 @@
+<AkIconButton {{on 'click' this.handleOpenMenu}}>
+  <AkIcon @iconName='more-vert' />
+</AkIconButton>
+
+<AkMenu
+  @anchorRef={{this.anchorRef}}
+  @arrow={{true}}
+  @onClose={{this.handleCloseMenu}}
+  as |akm|
+>
+  {{#each this.menuItems as |it|}}
+    {{#unless it.hidden}}
+      <akm.listItem
+        @button={{it.button}}
+        @onClick={{it.onClick}}
+        @divider={{it.divider}}
+        as |li|
+      >
+        <li.leftIcon>
+          <AkIcon
+            @variant={{it.iconVariant}}
+            @iconName={{it.icon}}
+            @color='textPrimary'
+          />
+        </li.leftIcon>
+
+        <li.text @primaryText={{it.label}} />
+      </akm.listItem>
+    {{/unless}}
+  {{/each}}
+</AkMenu>
