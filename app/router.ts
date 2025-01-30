@@ -168,6 +168,15 @@ Router.map(function () {
       this.route('dashboard', function () {
         this.route('projects');
 
+        this.route('privacy-module', function () {
+          this.route('index', { path: '/' });
+          this.route('app-details', { path: '/:app_id' }, function () {
+            this.route('index', { path: '/trackers' });
+            this.route('pii');
+            this.route('danger-perms');
+          });
+        });
+
         this.route(
           'project',
           {
@@ -281,6 +290,7 @@ Router.map(function () {
           function () {
             this.route('index', { path: '/' });
             this.route('service-account');
+            this.route('ai-powered-features');
           }
         );
 

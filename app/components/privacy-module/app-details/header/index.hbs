@@ -1,0 +1,84 @@
+<AkStack
+  @direction='column'
+  @width='full'
+  local-class='privacy-module-app-details-header'
+>
+  <AkBreadcrumbs::AutoTrail class='pb-3' />
+
+  <AkStack @direction='column' @spacing='4' @width='full'>
+    <FileDetails::Summary
+      @onShowMoreFileSummary={{this.onShowMoreFileSummary}}
+      @file={{@app}}
+    >
+      <:customCTA>
+        <AkStack @alignItems='center' @spacing='1'>
+          <AkButton
+            {{style paddingRight='12px'}}
+            {{on 'click' this.downloadReport}}
+            data-test-fileReportBtn
+          >
+            <:leftIcon>
+              <AkIcon
+                @variant='filled'
+                @iconName='download'
+                data-test-fileReportBtn-icon
+              />
+            </:leftIcon>
+
+            <:default>
+              {{t 'viewReport'}}
+            </:default>
+          </AkButton>
+
+          {{!-- <AkIconButton
+            @borderColor='secondary'
+            {{on 'click' this.handleOpenMenu}}
+          >
+            <AkIcon @iconName='more-vert' />
+          </AkIconButton> --}}
+        </AkStack>
+      </:customCTA>
+    </FileDetails::Summary>
+
+    <AkTabs
+      local-class='{{if this.fileSummaryIsExpanded "privacy-module-tabs-blur"}}'
+      class='mb-2 w-full'
+      as |Akt|
+    >
+      {{#each this.tabItems as |item|}}
+        <Akt.tabItem
+          @id={{item.id}}
+          @route={{item.route}}
+          @currentWhen={{item.activeRoutes}}
+          @hasBadge={{item.hasBadge}}
+          @badgeCount={{item.badgeCount}}
+          @indicatorVariant='shadow'
+        >
+          {{item.label}}
+        </Akt.tabItem>
+      {{/each}}
+    </AkTabs>
+  </AkStack>
+</AkStack>
+
+{{!-- <AkMenu
+  @anchorRef={{this.anchorRef}}
+  @arrow={{true}}
+  @onClose={{this.handleCloseMenu}}
+  as |akm|
+>
+  {{#each this.menuItems as |it|}}
+    <akm.listItem
+      @link={{true}}
+      @route='authenticated.dashboard.projects'
+      target='_blank'
+      as |li|
+    >
+      <li.leftIcon>
+        <AkIcon @iconName={{it.icon}} @color='textPrimary' />
+      </li.leftIcon>
+
+      <li.text @primaryText={{it.label}} />
+    </akm.listItem>
+  {{/each}}
+</AkMenu> --}}

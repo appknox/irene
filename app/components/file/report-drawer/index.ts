@@ -28,6 +28,11 @@ export default class FileReportDrawerComponent extends Component<FileReportDrawe
         contentComponent: 'file/report-drawer/va-reports' as const,
       },
       {
+        id: 'privacy-module-reports',
+        title: this.intl.t('fileReport.privacyReport'),
+        contentComponent: 'file/report-drawer/privacy-reports' as const,
+      },
+      {
         id: 'sbom-reports',
         hideGroup: this.orgIsAnEnterprise,
         title: this.intl.t('fileReport.sbomReports'),

@@ -1,0 +1,29 @@
+<AkStack
+  @direction='column'
+  @alignItems='center'
+  @width='full'
+  class='p-3 my-6'
+  data-test-privacyModule-emptyState
+>
+  <AkSvg::NoApisCaptured />
+
+  <AkStack
+    class='mt-3'
+    @direction='column'
+    @alignItems='center'
+    @spacing='1.5'
+    local-class='text-width'
+  >
+    <AkTypography
+      @align='center'
+      @variant='h5'
+      data-test-privacyModule-emptyState-header
+    >
+      {{@heading}}
+    </AkTypography>
+
+    <AkTypography @align='center' data-test-privacyModule-emptyState-desc>
+      {{@description}}
+    </AkTypography>
+  </AkStack>
+</AkStack>

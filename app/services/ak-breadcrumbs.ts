@@ -26,7 +26,8 @@ export interface AkBreadcrumbsItemProps {
     | 'sbom'
     | 'organization'
     | 'storeknox/inventory'
-    | 'storeknox/discovery';
+    | 'storeknox/discovery'
+    | 'privacy-module';
 
   // Fallback crumbs when no context as to what route a user is coming from. Can also be useful when switching from one route group to another.
   fallbackCrumbs?: Array<

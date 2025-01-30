@@ -24,8 +24,13 @@
     <AkDivider @color='dark' />
 
     {{#each @features as |feature|}}
-      <AkStack data-test-upselling-module-feature @spacing='1'>
-        <AkIcon @iconName='beenhere' @variant='filled' @color='success' />
+      <AkStack
+        @spacing='1'
+        @alignItems='center'
+        data-test-upselling-module-feature
+      >
+        <AkIcon @iconName='verified-user' @variant='filled' @color='success' />
+
         <AkTypography>{{feature}}</AkTypography>
       </AkStack>
     {{/each}}

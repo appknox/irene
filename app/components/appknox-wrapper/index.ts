@@ -107,6 +107,13 @@ export default class AppknoxWrapperComponent extends Component<AppknoxWrapperSig
         currentWhen:
           'authenticated.dashboard.projects authenticated.dashboard.project.files authenticated.dashboard.project.settings authenticated.dashboard.compare authenticated.dashboard.file authenticated.dashboard.file-vul-compare authenticated.dashboard.choose authenticated.dashboard.file',
       },
+      {
+        label: 'Privacy Module',
+        icon: 'shield',
+        iconVariant: 'outlined',
+        route: 'authenticated.dashboard.privacy-module',
+        currentWhen: 'authenticated.dashboard.privacy-module',
+      },
       this.showAppMonitoringDashboard && {
         label: this.intl.t('appMonitoring'),
         icon: 'inventory-2',

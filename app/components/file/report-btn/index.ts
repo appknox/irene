@@ -18,6 +18,7 @@ export default class FileReportBtn extends Component<FileReportBtnSignature> {
   }
 
   get disableReportBtn() {
+    return false; //Privacy TO DO: remove once decided
     return !this.isStaticScanDone;
   }
 

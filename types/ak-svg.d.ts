@@ -82,6 +82,7 @@ export enum AkSvgComponentInvocationByNames {
   NoAccessImage,
   SoxInvalidUploadUrl,
   StoreknoxUpsellingUi,
+  TurnOnSettings,
 }
 
 export enum AkSvgComponentInvocationByPaths {

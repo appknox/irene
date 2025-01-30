@@ -1,0 +1,14 @@
+.privacy-module-app-details-header {
+  padding-top: 0.5em;
+  background-color: var(
+    --file-details-manual-scan-results-tab-container-background
+  );
+  position: sticky;
+  top: -0.5em;
+  z-index: 100;
+
+  .privacy-module-tabs-blur {
+    pointer-events: none;
+    opacity: 0.3;
+  }
+}

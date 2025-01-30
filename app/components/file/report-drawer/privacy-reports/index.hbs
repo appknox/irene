@@ -1,0 +1,49 @@
+<AkStack
+  @direction='column'
+  @tag='section'
+  @justifyContent='center'
+  @width='full'
+  class='p-0'
+  data-test-fileReportDrawer-privacyReports-root
+>
+  {{#if this.privacyIsActive}}
+    <AkStack
+      @width='full'
+      @direction='column'
+      @alignItems='stretch'
+      @spacing='0'
+      data-test-fileReportDrawer-privacyReports-reportsList
+    >
+      <File::ReportDrawer::PrivacyReports::Item @file={{this.file}} />
+
+      <AkDivider />
+
+      <AkLink
+        @color='primary'
+        @route='authenticated.dashboard.privacy-module.app-details'
+        @model={{this.file.id}}
+        @fontWeight='bold'
+        @underline='always'
+        class='mx-3 my-2'
+        target='_blank'
+        rel='noopener noreferrer'
+        {{style width='fit-content'}}
+        data-test-fileReportDrawer-privacyReports-sbomFileLink
+      >
+        <:leftIcon>
+          <AkIcon
+            @color='primary'
+            @iconName='open-in-new'
+            {{style fontSize='1.5714rem !important'}}
+          />
+        </:leftIcon>
+
+        <:default>
+          {{t 'privacyModule.title'}}
+        </:default>
+      </AkLink>
+    </AkStack>
+  {{else}}
+    <File::ReportDrawer::PrivacyReports::Sample />
+  {{/if}}
+</AkStack>

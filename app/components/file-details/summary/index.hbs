@@ -26,21 +26,25 @@
       </AkStack>
     </AkStack>
 
-    <AkStack @alignItems='stretch' @spacing='1.5'>
-      <div>
-        <File::ReportBtn @file={{@file}} />
-      </div>
+    {{#if (has-block 'customCTA')}}
+      {{yield to='customCTA'}}
+    {{else}}
+      <AkStack @alignItems='stretch' @spacing='1.5'>
+        <div>
+          <File::ReportBtn @file={{@file}} />
+        </div>
 
-      <AkIconButton
-        {{style padding='0.5em'}}
-        {{on 'click' this.handleFileMoreMenuOpen}}
-        @variant='outlined'
-        aria-label='file summary more button'
-        data-test-fileDetailsSummary-moreMenuBtn
-      >
-        <AkIcon @iconName='more-vert' />
-      </AkIconButton>
-    </AkStack>
+        <AkIconButton
+          {{style padding='0.5em'}}
+          {{on 'click' this.handleFileMoreMenuOpen}}
+          @variant='outlined'
+          aria-label='file summary more button'
+          data-test-fileDetailsSummary-moreMenuBtn
+        >
+          <AkIcon @iconName='more-vert' />
+        </AkIconButton>
+      </AkStack>
+    {{/if}}
   </AkStack>
 
   <AkDivider @color='dark' />
