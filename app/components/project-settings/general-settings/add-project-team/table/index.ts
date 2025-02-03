@@ -7,9 +7,10 @@ import { task } from 'ember-concurrency';
 import IntlService from 'ember-intl/services/intl';
 import Store from '@ember-data/store';
 import { action } from '@ember/object';
+import { debounceTask } from 'ember-lifeline';
+
 import OrganizationTeamModel from 'irene/models/organization-team';
 import ProjectModel from 'irene/models/project';
-import { debounce } from '@ember/runloop';
 import parseError from 'irene/utils/parse-error';
 
 interface LimitOffset {
@@ -84,7 +85,7 @@ export default class ProjectSettingsGeneralSettingsAddProjectTeamTableComponent 
   }
 
   @action setSearchQuery() {
-    debounce(this, this.updateSearchQuery, 500);
+    debounceTask(this, 'updateSearchQuery', 500);
   }
 
   @action

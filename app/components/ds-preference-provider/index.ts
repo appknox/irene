@@ -6,35 +6,13 @@ import { task } from 'ember-concurrency';
 import type Store from '@ember-data/store';
 import type IntlService from 'ember-intl/services/intl';
 
-// eslint-disable-next-line ember/use-ember-data-rfc-395-imports
-import type DS from 'ember-data';
-
 import type FileModel from 'irene/models/file';
 import type DsManualDevicePreferenceModel from 'irene/models/ds-manual-device-preference';
-import type AvailableManualDeviceModel from 'irene/models/available-manual-device';
 import type DsAutomatedDevicePreferenceModel from 'irene/models/ds-automated-device-preference';
-
-export interface AvailableManualDeviceQueryParams {
-  limit?: number;
-  offset?: number;
-  has_sim?: boolean;
-  has_vpn?: boolean;
-  has_pin_lock?: boolean;
-  is_reserved?: boolean;
-  platform_version_min?: string;
-  platform_version_max?: string;
-}
-
-type AvailableManualDeviceQueryResponse =
-  DS.AdapterPopulatedRecordArray<AvailableManualDeviceModel> & {
-    meta: { count: number };
-  };
 
 export interface DsPreferenceContext {
   dsManualDevicePreference: DsManualDevicePreferenceModel | null;
   dsAutomatedDevicePreference: DsAutomatedDevicePreferenceModel | null;
-  availableManualDevices: AvailableManualDeviceQueryResponse | null;
-  loadingAvailableDevices: boolean;
   loadingDsManualDevicePref: boolean;
   loadingDsAutomatedDevicePref: boolean;
   updatingDsManualDevicePref: boolean;
@@ -46,10 +24,6 @@ export interface DsPreferenceContext {
 
   updateDsAutomatedDevicePref: (
     devicePreference: DsAutomatedDevicePreferenceModel
-  ) => void;
-
-  fetchAvailableDevices: (
-    queryParams?: AvailableManualDeviceQueryParams
   ) => void;
 }
 
@@ -73,9 +47,6 @@ export default class DsPreferenceProviderComponent extends Component<DsPreferenc
 
   @tracked
   dsAutomatedDevicePreference: DsAutomatedDevicePreferenceModel | null = null;
-
-  @tracked availableDevicesResponse: AvailableManualDeviceQueryResponse | null =
-    null;
 
   constructor(owner: unknown, args: DsPreferenceProviderSignature['Args']) {
     super(owner, args);
@@ -156,25 +127,6 @@ export default class DsPreferenceProviderComponent extends Component<DsPreferenc
         devicePreference.rollbackAttributes();
 
         this.notify.error(this.intl.t('failedToUpdateDsAutomatedDevicePref'));
-      }
-    }
-  );
-
-  fetchAvailableDevices = task(
-    async (queryParams: AvailableManualDeviceQueryParams = {}) => {
-      try {
-        const adapter = this.store.adapterFor('available-manual-device');
-
-        adapter.setNestedUrlNamespace(
-          this.args.file.project?.get('id') as string
-        );
-
-        this.availableDevicesResponse = (await this.store.query(
-          'available-manual-device',
-          { ...queryParams, platform_version_min: this.args.file.minOsVersion }
-        )) as AvailableManualDeviceQueryResponse;
-      } catch (error) {
-        this.notify.error(this.intl.t('errorFetchingAvailableDevices'));
       }
     }
   );

@@ -2,7 +2,7 @@ import { inject as service } from '@ember/service';
 import { singularize } from 'ember-inflector';
 import Service from '@ember/service';
 import { task } from 'ember-concurrency';
-import { debounce } from '@ember/runloop';
+import { debounceTask } from 'ember-lifeline';
 import type Store from '@ember-data/store';
 
 import ENUMS from 'irene/enums';
@@ -235,7 +235,7 @@ export default class WebsocketService extends Service {
       this.modelNameIdMapper[`${modelName}-${id}`] = { modelName, id };
 
       // debounce and pass copy of mapper object
-      debounce(this, this.handlePullModel, { ...this.modelNameIdMapper }, 300);
+      debounceTask(this, 'handlePullModel', { ...this.modelNameIdMapper }, 300);
     }
   );
 

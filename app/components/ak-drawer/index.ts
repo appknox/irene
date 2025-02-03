@@ -1,6 +1,6 @@
 import Component from '@glimmer/component';
 import { action } from '@ember/object';
-import { later } from '@ember/runloop';
+import { runTask } from 'ember-lifeline';
 
 export interface DrawerSignature {
   Element: HTMLDivElement;
@@ -38,9 +38,7 @@ export default class DrawerComponent extends Component<DrawerSignature> {
 
   @action
   handleDrawerClose() {
-    later(() => {
-      this.args.onClose();
-    }, 300);
+    runTask(this, () => this.args.onClose(), 300);
 
     if (this.backdropElement) {
       this.backdropElement.style.opacity = '0';
@@ -55,22 +53,30 @@ export default class DrawerComponent extends Component<DrawerSignature> {
 
   @action
   backdropInserted(element: HTMLElement) {
-    later(() => {
-      this.backdropElement = element;
+    runTask(
+      this,
+      () => {
+        this.backdropElement = element;
 
-      element.style.opacity = '1';
-      element.style.transition = 'opacity 225ms ease-in-out 0ms';
-    }, 0);
+        element.style.opacity = '1';
+        element.style.transition = 'opacity 225ms ease-in-out 0ms';
+      },
+      0
+    );
   }
 
   @action
   drawerInserted(element: HTMLElement) {
-    later(() => {
-      this.drawerElement = element;
+    runTask(
+      this,
+      () => {
+        this.drawerElement = element;
 
-      element.style.transform = 'none';
-      element.style.transition = 'transform 225ms ease-out 0ms';
-    }, 0);
+        element.style.transform = 'none';
+        element.style.transition = 'transform 225ms ease-out 0ms';
+      },
+      0
+    );
   }
 }
 

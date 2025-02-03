@@ -55,7 +55,7 @@
         @columns={{this.columns}}
       />
 
-      {{#if @dpContext.loadingAvailableDevices}}
+      {{#if this.loadingAvailableDevices}}
         <t.body @rows={{this.loadingMockData}} as |b|>
           <b.row as |r|>
             <r.cell>

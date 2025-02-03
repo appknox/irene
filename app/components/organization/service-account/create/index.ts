@@ -3,7 +3,7 @@ import Component from '@glimmer/component';
 import { tracked } from '@glimmer/tracking';
 import { task } from 'ember-concurrency';
 import { action } from '@ember/object';
-import { next } from '@ember/runloop';
+import { runTask } from 'ember-lifeline';
 import { waitForPromise } from '@ember/test-waiters';
 import type { BufferedChangeset } from 'ember-changeset/types';
 import type RouterService from '@ember/routing/router-service';
@@ -101,7 +101,7 @@ export default class ServiceAccountCreateComponent extends Component<ServiceAcco
   setChangeset(changeset: BufferedChangeset) {
     const mergedChangeset = this.changeset?.merge(changeset) || changeset;
 
-    next(() => {
+    runTask(this, () => {
       this.changeset = mergedChangeset;
     });
 

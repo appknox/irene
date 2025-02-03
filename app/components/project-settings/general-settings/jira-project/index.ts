@@ -239,7 +239,6 @@ export default class ProjectSettingsGeneralSettingsJiraProjectComponent extends 
       jiraProject.setProperties(projectDetails);
     } else {
       jiraProject = this.store.createRecord('jira-repo', {
-        id: this.project?.id,
         project: this.project,
         ...projectDetails,
       });
