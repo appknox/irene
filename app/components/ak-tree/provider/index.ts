@@ -116,6 +116,8 @@ export default class AkTreeProviderComponent<
   initialize() {
     this.flatNodes = {};
 
+    console.log(this.args.treeData);
+
     this.flattenNodes(this.args.treeData);
     this.deserializeLists();
   }

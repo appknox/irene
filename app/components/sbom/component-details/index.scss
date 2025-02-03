@@ -1,0 +1,10 @@
+.summary-header-root {
+  border-radius: var(--sbom-summary-header-border-radius);
+  border: 1px solid var(--sbom-summary-header-border-color);
+  box-sizing: border-box;
+}
+
+.summary-header-value {
+  font-family: monospace;
+  margin-top: 0.3em;
+}

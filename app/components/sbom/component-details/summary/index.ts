@@ -22,6 +22,10 @@ export default class SbomComponentDetailsSummaryComponent extends Component<Sbom
         value: capitalize(this.args.sbomComponent?.type || ''),
       },
       {
+        label: 'Dependency Type',
+        value: this.args.sbomComponent?.isDependency ? 'Transitive' : 'Direct',
+      },
+      {
         label: this.intl.t('version'),
         value: this.args.sbomComponent?.version,
       },

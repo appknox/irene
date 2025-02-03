@@ -97,8 +97,8 @@ export default class SbomScanDetailsComponentListComponent extends Component<Sbo
         component: 'sbom/scan-details/component-list/type',
       },
       {
-        name: this.intl.t('version'),
-        component: 'sbom/scan-details/component-list/version',
+        name: 'Dependency Type',
+        component: 'sbom/scan-details/component-list/dependency-type',
       },
       {
         name: this.intl.t('status'),
@@ -113,7 +113,8 @@ export default class SbomScanDetailsComponentListComponent extends Component<Sbo
       'authenticated.dashboard.sbom.component-details',
       this.args.sbomProject.id,
       this.args.sbomFile.id,
-      rowValue.id
+      rowValue.id,
+      0
     );
   }
 

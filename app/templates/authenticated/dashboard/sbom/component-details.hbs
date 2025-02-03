@@ -2,4 +2,9 @@
 
 <AkBreadcrumbs::AutoTrail class='pt-2 pb-3' />
 
-<Sbom::ComponentDetails @sbomComponent={{@model.sbomComponent}} />
+<Sbom::ComponentDetails
+  @sbomComponent={{@model.sbomComponent}}
+  @queryParams={{@model.queryParams}}
+/>
+
+{{outlet}}

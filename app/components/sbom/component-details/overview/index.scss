@@ -1,0 +1,20 @@
+.section-container {
+  border: 1px solid var(--border-color-1);
+  margin-top: 1em;
+}
+
+.header-container {
+  background-color: var(--neutral-grey-100);
+  border-bottom: 1px solid var(--border-color-1);
+  padding: 0.5em 1em;
+}
+
+.ak-table-bordered {
+  border-width: 1px 0px 1px 1px;
+  border-color: var(--border-color-1);
+  border-style: solid;
+}
+
+.component-details {
+  width: 100%;
+}

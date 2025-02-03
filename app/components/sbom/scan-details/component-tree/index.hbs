@@ -1,0 +1,217 @@
+<Sbom::EmptyLoadingView
+  @empty={{this.hasNoSbomComponent}}
+  @loading={{or
+    this.fetchSbomComponents.isRunning
+    this.loadComponentView.isRunning
+  }}
+  @loadingSvgHeight='200px'
+  @height='350px'
+>
+  <:emptySvg>
+    <AkSvg::NoResult data-test-sbomComponent-emptySvg />
+  </:emptySvg>
+
+  <:emptyText>
+    <AkStack class='mt-2' @direction='column' @alignItems='center' @spacing='1'>
+      <AkTypography data-test-sbomComponent-emptyTextTitle @variant='h5'>
+        {{t 'sbomModule.componentListEmptyText.title'}}
+      </AkTypography>
+
+      <AkTypography
+        data-test-sbomComponent-emptyTextDescription
+        {{style width='600px'}}
+        @color='textSecondary'
+        @align='center'
+      >
+        {{t 'sbomModule.componentListEmptyText.description'}}
+      </AkTypography>
+    </AkStack>
+  </:emptyText>
+
+  <:default>
+    <AkStack
+      id='component-tree-container'
+      @width='full'
+      @direction='column'
+      local-class='component-tree-container'
+    >
+      <AkStack
+        @width='full'
+        @alignItems='center'
+        @spacing='1'
+        local-class='header-container'
+      >
+        <AkIcon @iconName='arrow-drop-down' @color='secondary' />
+
+        <div local-class='tree-connector-parent-line' />
+
+        <AkTypography local-class='tree-label' @variant='h6'>
+          {{@packageName}}
+        </AkTypography>
+      </AkStack>
+
+      <AkTree
+        data-test-component-tree
+        @treeData={{@treeNodes}}
+        @expanded={{@expandedNodes}}
+        @onExpand={{perform this.handleNodeExpand}}
+        @checked={{@expandedNodes}}
+        @onCheck={{perform this.handleNodeExpand}}
+        as |node tree|
+      >
+        {{#if
+          (or
+            this.handleNodeExpand.isRunning
+            this.transformApiDataToTreeFormat.isRunning
+          )
+        }}
+          <AkSkeleton class='mt-1 ml-3' @width='600px' @height='19px' />
+        {{else}}
+          <AkStack
+            id={{this.calculateNodeContainerId node.key}}
+            @alignItems='center'
+            @width='full'
+            @alignItems='center'
+            local-class='tree-node {{if
+              (or node.dataObject.nextSibling this.hasMoreComponents)
+              ""
+              "last-node"
+            }}'
+            @spacing='2'
+            data-test-component-tree-node
+          >
+            <AkStack
+              @alignItems='center'
+              {{on 'click' (fn tree.onExpand node)}}
+            >
+              {{#if node.dataObject.isDependency}}
+                {{#each (this.depthArray node) as |depth|}}
+                  <div
+                    local-class='space {{if
+                      (this.calculateMargin
+                        node.treeDepth node.parent.dataObject.nextSibling
+                      )
+                      "margin"
+                    }}'
+                  />
+                {{/each}}
+              {{/if}}
+
+              <div local-class='tree-connectors' />
+              <AkIcon
+                @iconName='arrow-drop-down'
+                @color='{{if
+                  node.dataObject.hasChildren
+                  "textPrimary"
+                  "textSecondary"
+                }}'
+                local-class='expanded-icon {{if
+                  (this.isNodeExpanded node.key)
+                  "down"
+                }}'
+                data-test-component-tree-nodeExpandIcon
+              />
+            </AkStack>
+
+            <AkStack
+              local-class='{{if
+                node.dataObject.isHighlighted
+                "tree-label-highlighted"
+              }}'
+              {{on 'click' (fn this.handleComponentClick node node.parent.key)}}
+            >
+              <AkTypography
+                local-class='tree-label'
+                @color={{if
+                  node.dataObject.isHighlighted
+                  'textSecondary'
+                  'secondary'
+                }}
+                data-test-component-tree-nodeLabel
+              >
+                {{node.dataObject.bomRef}}&nbsp;:&nbsp;{{node.label}}
+              </AkTypography>
+            </AkStack>
+
+            <Sbom::ComponentStatus
+              @sbomComponent={{node.dataObject.originalComponent}}
+            />
+          </AkStack>
+
+          {{#if node.dataObject.isDependency}}
+            {{#if
+              (and
+                (not node.dataObject.nextSibling)
+                (or
+                  (this.hasMoreChildren node.parent.key)
+                  (this.isNodeScrollable node.parent.key)
+                )
+              )
+            }}
+              <AkStack class='ml-3 mb-1' @alignItems='center' @spacing='2'>
+                {{#if (this.hasMoreChildren node.parent.key)}}
+                  <AkButton
+                    @variant='text'
+                    @color='secondary'
+                    @underline='always'
+                    @typographyFontWeight='medium'
+                    {{on
+                      'click'
+                      (fn this.handleLoadMoreChildren node.parent.key)
+                    }}
+                  >
+                    <:default>View more</:default>
+                    <:rightIcon><AkIcon
+                        @iconName='arrow-downward'
+                      /></:rightIcon>
+                  </AkButton>
+                {{/if}}
+
+                {{#if (this.isNodeScrollable node.parent.key)}}
+                  <AkButton
+                    @variant='text'
+                    @color='secondary'
+                    @underline='always'
+                    @typographyFontWeight='medium'
+                    {{on 'click' (fn this.scrollToParent node.parent.key)}}
+                  >
+                    <:default>Go to Parent Component</:default>
+                    <:rightIcon><AkIcon @iconName='arrow-upward' /></:rightIcon>
+                  </AkButton>
+                {{/if}}
+              </AkStack>
+            {{/if}}
+          {{/if}}
+        {{/if}}
+      </AkTree>
+
+      <AkStack class='ml-3 mt-2' @alignItems='center' @spacing='2'>
+        {{#if this.hasMoreComponents}}
+          <AkButton
+            @variant='text'
+            @color='secondary'
+            @underline='always'
+            @typographyFontWeight='medium'
+            {{on 'click' this.handleLoadMoreAction}}
+          >
+            <:default>View more</:default>
+            <:rightIcon><AkIcon @iconName='arrow-downward' /></:rightIcon>
+          </AkButton>
+        {{/if}}
+
+        {{#if this.isScrollable}}
+          <AkButton
+            @variant='text'
+            @color='secondary'
+            @underline='always'
+            @typographyFontWeight='medium'
+            {{on 'click' this.scrollToTop}}
+          >
+            <:default>Go to top</:default>
+            <:rightIcon><AkIcon @iconName='arrow-upward' /></:rightIcon>
+          </AkButton>
+        {{/if}}
+      </AkStack>
+    </AkStack>
+  </:default>
+</Sbom::EmptyLoadingView>

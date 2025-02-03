@@ -12,3 +12,40 @@
 .show-more-container {
   width: 100%;
 }
+
+.component-tree-container {
+  border: 1px solid var(--ak-checkbox-tree-secondary-border-color);
+}
+
+.tree-view-button {
+  border-top-left-radius: 0px;
+  border-bottom-left-radius: 0px;
+  border-color: var(--border-color-1) !important;
+
+  &.active {
+    background-color: var(--side-menu-active-background-light);
+  }
+}
+
+.list-view-button {
+  border-right: 0px !important;
+  border-top-right-radius: 0px;
+  border-bottom-right-radius: 0px;
+  border-color: var(--border-color-1) !important;
+
+  &.active {
+    background-color: var(--side-menu-active-background-light);
+  }
+}
+
+.switch-view-header {
+  padding: 0.7em 1em;
+  margin-top: 1em;
+  border: 1px solid var(--sbom-scan-details-link-border-color);
+  border-radius: var(--sbom-scan-details-link-border-radius);
+}
+
+.toggle-button {
+  border-color: var(--border-color-1) !important;
+  height: 32px;
+}

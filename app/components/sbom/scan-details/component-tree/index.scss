@@ -1,0 +1,73 @@
+.expanded-icon {
+  cursor: pointer;
+  transition: transform 0.2s ease-in-out;
+  transform: rotate(-90deg);
+  
+  &.down {
+    transform: rotate(0deg);
+  }
+}
+
+.expand-button {
+  min-width: 24px;
+  height: 24px;
+  padding: 0;
+}
+
+.tree-label {
+  font-family: monospace !important;
+}
+  
+.tree-node {
+  background-color: var(--ak-checkbox-tree-secondary-background-white);
+  height: 34px;
+  margin-left: 20px;
+
+  &.last-node {
+    border-left: 0px;
+  }
+
+  .tree-connectors {
+    width: 20px;
+    height: 34px;
+    top: -17px;
+    position: relative;
+    border-bottom: 1px solid var(--ak-checkbox-tree-secondary-border-color);
+    border-left: 1px solid var(--ak-checkbox-tree-secondary-border-color);
+  }  
+
+  .space {
+    position: relative;
+    top: -17px;
+    width: 20px;
+    height: 34px;
+    border-left: 1px solid var(--ak-checkbox-tree-secondary-border-color);
+
+    &.margin {
+      border-left: 0px;
+    }
+  }
+}  
+
+.header-container {
+  background-color: var(--neutral-grey-100);
+  margin-bottom: 15px;
+  padding: 0.3em 0.7em;
+}
+
+.tree-connector-parent-line {
+  width: 5px;
+  height: 1px;
+  border-top: 1px solid var(--ak-checkbox-tree-secondary-border-color);
+}
+
+.component-tree-container {
+  overflow: auto;
+  max-height: 500px;
+}
+
+.tree-label-highlighted {
+  background-color: black;
+  border-radius: 4px;
+  padding: 4px;
+}

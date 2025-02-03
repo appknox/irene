@@ -30,6 +30,9 @@ export default class SbomFileModel extends Model {
   @attr('date')
   declare completedAt: Date;
 
+  @attr('boolean')
+  declare isOutdated: boolean;
+
   get statusValue() {
     switch (this.status) {
       case SbomScanStatus.PENDING:

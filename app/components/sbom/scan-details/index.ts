@@ -7,8 +7,30 @@ import IntlService from 'ember-intl/services/intl';
 import styles from './index.scss';
 
 import { SbomComponentQueryParam } from 'irene/routes/authenticated/dashboard/sbom/scan-details';
+import SbomComponentModel from 'irene/models/sbom-component';
 import SbomProjectModel from 'irene/models/sbom-project';
 import SbomScanSummaryModel from 'irene/models/sbom-scan-summary';
+import RouterService from '@ember/routing/router-service';
+
+interface TreeNodeDataObject {
+  name: string;
+  bomRef: string;
+  version: string;
+  latestVersion: string;
+  vulnerabilitiesCount: number;
+  hasChildren: boolean;
+  nextSibling: boolean;
+  dependencyCount: number;
+  isDependency: boolean;
+  originalComponent: SbomComponentModel;
+}
+
+export type AkTreeNodeProps = {
+  key: string;
+  label: string;
+  dataObject: TreeNodeDataObject;
+  children?: AkTreeNodeProps[];
+};
 
 export interface SbomScanDetailsSignature {
   Args: {
@@ -21,8 +43,12 @@ export interface SbomScanDetailsSignature {
 
 export default class SbomScanDetailsComponent extends Component<SbomScanDetailsSignature> {
   @service declare intl: IntlService;
+  @service declare router: RouterService;
 
   @tracked openViewReportDrawer = false;
+  @tracked isTreeView = true;
+  @tracked expandedNodes: string[] = [];
+  @tracked treeNodes: AkTreeNodeProps[] = [];
 
   get classes() {
     return {
@@ -56,6 +82,20 @@ export default class SbomScanDetailsComponent extends Component<SbomScanDetailsS
     return this.args.sbomFile.status === SbomScanStatus.FAILED;
   }
 
+  get isTreeExpanded() {
+    return this.expandedNodes.length > 0;
+  }
+
+  @action
+  updateExpandedNodes(nodes: string[]) {
+    this.expandedNodes = nodes;
+  }
+
+  @action
+  updateTreeNodes(nodes: AkTreeNodeProps[]) {
+    this.treeNodes = nodes;
+  }
+
   @action
   handleViewReportDrawerOpen() {
     this.openViewReportDrawer = true;
@@ -64,6 +104,28 @@ export default class SbomScanDetailsComponent extends Component<SbomScanDetailsS
   @action
   handleViewReportDrawerClose() {
     this.openViewReportDrawer = false;
+  }
+
+  @action
+  handleTreeViewClick() {
+    this.isTreeView = true;
+  }
+
+  @action
+  handleListViewClick() {
+    this.isTreeView = false;
+  }
+
+  @action
+  collapseAll() {
+    // Clear expanded nodes
+    this.expandedNodes = [];
+
+    // Create new tree nodes array with cleared children
+    this.treeNodes = this.treeNodes.map((node) => ({
+      ...node,
+      children: [],
+    }));
   }
 }
 

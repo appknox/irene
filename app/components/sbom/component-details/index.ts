@@ -8,6 +8,9 @@ export interface SbomComponentDetailsSignature {
   Args: {
     sbomComponent: SbomComponentModel | null;
   };
+  Blocks: {
+    default: [];
+  };
 }
 
 export default class SbomComponentDetailsComponent extends Component<SbomComponentDetailsSignature> {
@@ -19,6 +22,24 @@ export default class SbomComponentDetailsComponent extends Component<SbomCompone
 
   get sbomProject() {
     return this.sbomFile?.get('sbProject');
+  }
+
+  get tabs() {
+    return [
+      {
+        id: 'overview',
+        label: this.intl.t('overview'),
+        route: 'authenticated.dashboard.sbom.component-details.overview',
+        activeRoutes: 'authenticated.dashboard.sbom.component-details.overview',
+      },
+      {
+        id: 'vulnerabilities',
+        label: this.intl.t('vulnerabilities'),
+        route: 'authenticated.dashboard.sbom.component-details.vulnerabilities',
+        activeRoutes:
+          'authenticated.dashboard.sbom.component-details.vulnerabilities',
+      },
+    ];
   }
 }
 
