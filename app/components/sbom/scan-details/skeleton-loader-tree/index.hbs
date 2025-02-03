@@ -1,0 +1,30 @@
+<AkStack
+  class='pt-1'
+  @alignItems='flex-start'
+  @direction='column'
+  @spacing='1'
+  {{style alignSelf='flex-start'}}
+  data-test-component-tree-skeleton-loader
+>
+  <AkSkeleton class='ml-2' @width='500px' @height='19px' />
+  <AkSkeleton class='ml-4' @width='400px' @height='19px' />
+  <AkSkeleton class='ml-6' @width='400px' @height='19px' />
+  <AkSkeleton class='ml-6' @width='400px' @height='19px' />
+  <AkSkeleton class='ml-6' @width='400px' @height='19px' />
+  <AkSkeleton class='ml-2' @width='500px' @height='19px' />
+
+  {{#unless @isFilteredTree}}
+    <AkSkeleton class='ml-2' @width='500px' @height='19px' />
+    <AkSkeleton class='ml-4' @width='600px' @height='19px' />
+    <AkSkeleton class='ml-4' @width='600px' @height='19px' />
+    <AkSkeleton class='ml-2' @width='400px' @height='19px' />
+    <AkSkeleton class='ml-4' @width='600px' @height='19px' />
+    <AkSkeleton class='ml-2' @width='400px' @height='19px' />
+    <AkSkeleton class='ml-2' @width='400px' @height='19px' />
+    <AkSkeleton class='ml-2' @width='500px' @height='19px' />
+    <AkSkeleton class='ml-4' @width='600px' @height='19px' />
+    <AkSkeleton class='ml-4' @width='600px' @height='19px' />
+    <AkSkeleton class='ml-6' @width='400px' @height='19px' />
+    <AkSkeleton class='ml-2' @width='500px' @height='19px' />
+  {{/unless}}
+</AkStack>

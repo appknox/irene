@@ -1,0 +1,40 @@
+<AkStack local-class='section-container' @direction='column'>
+  <AkStack @width='full' local-class='header-container'>
+    <AkTypography @variant='h6' @fontWeight='medium'>
+      {{t 'sbomModule.componentDetails'}}
+    </AkTypography>
+  </AkStack>
+
+  <AkStack class='p-1' @width='full'>
+    <Sbom::ComponentDetails::Summary
+      local-class='component-details'
+      @sbomComponent={{@sbomComponent}}
+    />
+  </AkStack>
+</AkStack>
+
+{{#if this.isNotOutdated}}
+  <AkStack @direction='column'>
+    <AkStack @width='full' local-class='header-container full-border'>
+      <AkTypography
+        data-test-sbom-component-tree-header
+        @variant='h6'
+        @fontWeight='medium'
+      >
+        {{t 'dependencyTree'}}
+      </AkTypography>
+    </AkStack>
+
+    <Sbom::ScanDetails::ComponentTree
+      @sbomProject={{this.sbomProject}}
+      @sbomFile={{this.sbomFile}}
+      @packageName={{this.packageName}}
+      @updateExpandedNodes={{this.updateExpandedNodes}}
+      @expandedNodes={{this.expandedNodes}}
+      @treeNodes={{this.treeNodes}}
+      @updateTreeNodes={{this.updateTreeNodes}}
+      @parentId={{this.parentId}}
+      @componentId={{this.componentId}}
+    />
+  </AkStack>
+{{/if}}

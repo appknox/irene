@@ -1,0 +1,10 @@
+.sbom-component-details-root {
+  border-radius: var(--sbom-component-details-border-radius);
+  border: 1px solid var(--sbom-component-details-border-color);
+  box-sizing: border-box;
+}
+
+.sbom-component-details-value {
+  font-family: monospace;
+  margin-top: 0.3em;
+}

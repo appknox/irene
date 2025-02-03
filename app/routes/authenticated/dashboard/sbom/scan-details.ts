@@ -6,6 +6,7 @@ export interface SbomComponentQueryParam {
   component_limit: string;
   component_offset: string;
   component_query: string;
+  view_type?: 'tree' | 'list';
 }
 
 export interface SbomScanDetailParam extends SbomComponentQueryParam {
@@ -26,12 +27,16 @@ export default class AuthenticatedDashboardSbomScanDetailsRoute extends AkBreadc
     component_query: {
       refreshModel: true,
     },
+    view_type: {
+      refreshModel: true,
+    },
   };
 
   async model(params: SbomScanDetailParam) {
     const {
       sbom_project_id,
       sbom_file_id,
+      view_type,
       component_limit = '25',
       component_offset = '0',
       component_query = '',
@@ -58,7 +63,12 @@ export default class AuthenticatedDashboardSbomScanDetailsRoute extends AkBreadc
       sbomProject,
       sbomFile,
       sbomScanSummary,
-      queryParams: { component_limit, component_offset, component_query },
+      queryParams: {
+        component_limit,
+        component_offset,
+        component_query,
+        view_type,
+      },
     };
   }
 }

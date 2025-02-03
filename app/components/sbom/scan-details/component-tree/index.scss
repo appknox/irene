@@ -1,0 +1,96 @@
+.expand-icon {
+  position: absolute;
+  top: 5px;
+  z-index: 1;
+}
+
+.main-tree {
+  padding-left: 1.5em;
+}
+
+.tree-action-container {
+  position: relative;
+}
+
+.tree-label {
+  font-family: monospace !important;
+
+  &.tree-label-highlighted-text {
+    color: var(--sbom-scan-details-component-tree-highlighted-text-color);
+
+    &:hover {
+      text-decoration: none;
+    }
+  }
+}
+  
+.tree-node {
+  background-color: var(--sbom-scan-details-component-tree-background-color);
+  height: 34px;
+  margin-left: 20px;
+
+  &:hover {
+    cursor: pointer;
+  }
+
+  &.last-node {
+    border-left: 0px;
+  }
+
+  .tree-connectors {
+    width: 20px;
+    height: 34px;
+    top: -17px;
+    position: relative;
+    border-bottom: 1px solid var(--sbom-scan-details-component-tree-border-color);
+    border-left: 1px solid var(--sbom-scan-details-component-tree-border-color);
+  }  
+
+  .space {
+    position: relative;
+    top: -17px;
+    width: 20px;
+    height: 34px;
+    border-left: 1px solid var(--sbom-scan-details-component-tree-border-color);
+
+    &.margin {
+      border-left: 0px;
+    }
+  }
+}  
+
+.tree-package-name-container {
+  background-color: var(--sbom-scan-details-component-tree-header-background-color);
+  margin-bottom: 15px;
+  padding: 0.3em 0.7em;
+}
+
+.tree-connector-parent-line {
+  width: 5px;
+  height: 1px;
+  border-top: 1px solid var(--sbom-scan-details-component-tree-border-color);
+}
+
+.component-tree-container {
+  overflow: auto;
+  max-height: 500px;
+  border: 1px solid var(--sbom-scan-details-component-tree-border-color);
+  border-bottom-left-radius: var(--sbom-scan-details-component-tree-border-radius);
+  border-bottom-right-radius: var(--sbom-scan-details-component-tree-border-radius);
+}
+
+.tree-label-highlighted {
+  background-color: var(--sbom-scan-details-component-tree-highlighted-background-color);
+  border-radius: 4px;
+  padding: 2px 5px;
+}
+
+.highlighted-return-icon-container {
+  background-color: var(--sbom-scan-details-component-tree-highlighted-background-color);
+  border-radius: 50%;
+  padding: 2px;
+
+  .highlighted-return-icon {
+    color: var(--sbom-scan-details-component-tree-highlighted-text-color);
+  }
+}

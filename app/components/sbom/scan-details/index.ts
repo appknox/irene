@@ -1,14 +1,38 @@
 import { action } from '@ember/object';
 import Component from '@glimmer/component';
 import { tracked } from '@glimmer/tracking';
-import SbomFileModel, { SbomScanStatus } from 'irene/models/sbom-file';
 import { inject as service } from '@ember/service';
-import IntlService from 'ember-intl/services/intl';
+import type IntlService from 'ember-intl/services/intl';
+import type RouterService from '@ember/routing/router-service';
+
+import type SbomFileModel from 'irene/models/sbom-file';
+import type { SbomComponentQueryParam } from 'irene/routes/authenticated/dashboard/sbom/scan-details';
+import type SbomComponentModel from 'irene/models/sbom-component';
+import type SbomProjectModel from 'irene/models/sbom-project';
+import type SbomScanSummaryModel from 'irene/models/sbom-scan-summary';
+import { SbomScanStatus } from 'irene/models/sbom-file';
 import styles from './index.scss';
 
-import { SbomComponentQueryParam } from 'irene/routes/authenticated/dashboard/sbom/scan-details';
-import SbomProjectModel from 'irene/models/sbom-project';
-import SbomScanSummaryModel from 'irene/models/sbom-scan-summary';
+interface TreeNodeDataObject {
+  name: string;
+  bomRef: string;
+  version: string;
+  latestVersion: string;
+  vulnerabilitiesCount: number;
+  hasChildren: boolean;
+  hasNextSibling: boolean;
+  dependencyCount: number;
+  isDependency: boolean;
+  isHighlighted: boolean;
+  originalComponent: SbomComponentModel;
+}
+
+export type AkTreeNodeProps = {
+  key: string;
+  label: string;
+  dataObject: TreeNodeDataObject;
+  children: AkTreeNodeProps[];
+};
 
 export interface SbomScanDetailsSignature {
   Args: {
@@ -21,8 +45,13 @@ export interface SbomScanDetailsSignature {
 
 export default class SbomScanDetailsComponent extends Component<SbomScanDetailsSignature> {
   @service declare intl: IntlService;
+  @service declare router: RouterService;
 
   @tracked openViewReportDrawer = false;
+  @tracked expandedNodes: string[] = [];
+  @tracked treeNodes: AkTreeNodeProps[] = [];
+  @tracked currentViewType: 'tree' | 'list' =
+    this.args.queryParams.view_type || 'tree';
 
   get classes() {
     return {
@@ -56,6 +85,28 @@ export default class SbomScanDetailsComponent extends Component<SbomScanDetailsS
     return this.args.sbomFile.status === SbomScanStatus.FAILED;
   }
 
+  get isTreeExpanded() {
+    return this.expandedNodes.length > 0;
+  }
+
+  get isNotOutdated() {
+    return !this.args.sbomFile.isOutdated;
+  }
+
+  get isTreeView() {
+    return this.currentViewType !== 'list';
+  }
+
+  @action
+  updateExpandedNodes(nodes: string[]) {
+    this.expandedNodes = nodes;
+  }
+
+  @action
+  updateTreeNodes(nodes: AkTreeNodeProps[]) {
+    this.treeNodes = nodes;
+  }
+
   @action
   handleViewReportDrawerOpen() {
     this.openViewReportDrawer = true;
@@ -64,6 +115,30 @@ export default class SbomScanDetailsComponent extends Component<SbomScanDetailsS
   @action
   handleViewReportDrawerClose() {
     this.openViewReportDrawer = false;
+  }
+
+  @action
+  handleTreeViewClick() {
+    this.currentViewType = 'tree';
+    this.router.transitionTo({ queryParams: { view_type: 'tree' } });
+  }
+
+  @action
+  handleListViewClick() {
+    this.currentViewType = 'list';
+    this.router.transitionTo({ queryParams: { view_type: 'list' } });
+  }
+
+  @action
+  collapseAll() {
+    // Clear expanded nodes
+    this.expandedNodes = [];
+
+    // Create new tree nodes array with cleared children
+    this.treeNodes = this.treeNodes.map((node) => ({
+      ...node,
+      children: [],
+    }));
   }
 }
 

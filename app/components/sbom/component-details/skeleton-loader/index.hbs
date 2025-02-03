@@ -1,11 +1,5 @@
 <AkSkeleton @width='250px' @height='14px' class='mt-2 mb-4' />
 
-<AkStack @direction='column' @spacing='1' class='mb-4'>
-  <AkSkeleton @width='100px' @height='20px' />
-
-  <AkSkeleton @width='250px' @height='14px' />
-</AkStack>
-
 <div local-class='summary-header-root' class='mb-3'>
   <AkStack
     @alignItems='center'
@@ -13,13 +7,7 @@
     @spacing='1.5'
     local-class='summary-header-container'
   >
-    <AkStack @alignItems='center'>
-      <AkSkeleton @width='150px' @height='18px' />
-
-      <AkSkeleton @width='75px' @height='18px' class='ml-4' />
-    </AkStack>
-
-    <AkSkeleton @width='18px' @height='18px' />
+    <AkSkeleton @width='150px' @height='18px' />
   </AkStack>
 </div>
 
@@ -27,5 +15,5 @@
   @empty={{false}}
   @loading={{true}}
   @loadingSvgHeight='200px'
-  @height='350px'
+  @height='500px'
 />

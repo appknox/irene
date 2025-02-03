@@ -253,9 +253,16 @@ Router.map(function () {
             path: 'apps/:sbom_project_id/scans/:sbom_file_id',
           });
 
-          this.route('component-details', {
-            path: 'apps/:sbom_project_id/scans/:sbom_file_id/components/:sbom_component_id',
-          });
+          this.route(
+            'component-details',
+            {
+              path: 'apps/:sbom_project_id/scans/:sbom_file_id/components/:sbom_component_id/:sbom_component_parent_id',
+            },
+            function () {
+              this.route('overview');
+              this.route('vulnerabilities');
+            }
+          );
         });
 
         this.route(

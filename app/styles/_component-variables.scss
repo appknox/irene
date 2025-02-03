@@ -793,7 +793,8 @@ body {
 
   // variables for sbom/scan-details
   --sbom-scan-details-link-border-radius: var(--border-radius);
-  --sbom-scan-details-link-border-color: var(--border-color-1);
+  --sbom-scan-details-border-color: var(--border-color-1);
+  --sbom-scan-details-background-color: var(--side-menu-active-background-light);
 
   // variables for sbom/scan-details/skeleton-loader
   --sbom-scan-details-skeleton-loader-summary-border-radius: var(
@@ -857,6 +858,23 @@ body {
   // variables for sbom/summary-header
   --sbom-summary-header-border-radius: var(--border-radius);
   --sbom-summary-header-border-color: var(--border-color-1);
+
+  // variables for sbom/component-details
+  --sbom-component-details-border-radius: var(--border-radius);
+  --sbom-component-details-border-color: var(--border-color-1);
+
+  // variables for sbom/component-details/overview
+  --sbom-component-details-overview-border-color: var(--border-color-1);
+  --sbom-component-details-overview-border-radius: var(--border-radius);
+  --sbom-component-details-overview-background-color: var(--neutral-grey-100);
+
+  //variables for sbom/scan-details/component-tree
+  --sbom-scan-details-component-tree-border-color: var(--border-color-1);
+  --sbom-scan-details-component-tree-border-radius: var(--border-radius);
+  --sbom-scan-details-component-tree-background-color: var(--background-main);
+  --sbom-scan-details-component-tree-header-background-color: var(--neutral-grey-100);
+  --sbom-scan-details-component-tree-highlighted-background-color: var(--common-black);
+  --sbom-scan-details-component-tree-highlighted-text-color: var(--common-white);
 
   // variables for analysis-risk/tag
   // variables for analysis-risk/text

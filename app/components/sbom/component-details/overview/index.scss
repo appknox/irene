@@ -1,0 +1,24 @@
+.section-container {
+  border: 1px solid var(--sbom-component-details-overview-border-color);
+  border-radius: var(--sbom-component-details-overview-border-radius);
+  margin-top: 1em;
+}
+
+.header-container {
+  background-color: var(--sbom-component-details-overview-background-color);
+  border-bottom: 1px solid var(--sbom-component-details-overview-border-color);
+  padding: 0.5em 1em;
+
+  &.full-border {
+    border-color: var(--sbom-component-details-overview-border-color);
+    border-width: 1px 1px 0px 1px;
+    border-top-left-radius: var(--sbom-component-details-overview-border-radius);
+    border-top-right-radius: var(--sbom-component-details-overview-border-radius);
+    border-style: solid;
+    margin-top: 1.5em;
+  }
+}
+
+.component-details {
+  width: 100%;
+}

@@ -1,45 +1,28 @@
 <div class='py-1' data-test-sbomComponentDetails-container>
-  <AkStack class='mb-3' @direction='column' @spacing='0.5'>
-    <AkTypography data-test-sbomComponentDetails-title @variant='h5'>
-      {{t 'sbomModule.componentDetails'}}
-    </AkTypography>
-
+  <AkStack
+    data-test-sbomComponentDetails-sbomHeader
+    local-class='sbom-component-details-root'
+    class='p-2'
+  >
     <AkTypography
-      data-test-sbomComponentDetails-description
-      @variant='body2'
-      @color='textSecondary'
+      data-test-sbomComponentDetails-headerTitleValue
+      @variant='h5'
+      local-class='sbom-component-details-value'
     >
-      {{t 'sbomModule.componentDetailsDescription'}}
+      {{this.componentName}}
     </AkTypography>
   </AkStack>
 
-  <Sbom::SummaryHeader>
-    <:summary>
-      <AkStack class='p-1'>
-        <AkTypography
-          data-test-sbomComponentDetails-headerTitleLabel
-          {{style width='160px'}}
-          @color='textSecondary'
-        >
-          {{t 'sbomModule.componentName'}}
-        </AkTypography>
-
-        <AkTypography
-          data-test-sbomComponentDetails-headerTitleValue
-          @variant='h6'
-        >
-          {{@sbomComponent.name}}
-        </AkTypography>
-      </AkStack>
-    </:summary>
-
-    <:collapsibleContent>
-      <Sbom::ComponentDetails::Summary @sbomComponent={{@sbomComponent}} />
-    </:collapsibleContent>
-  </Sbom::SummaryHeader>
-
-  <Sbom::ComponentDetails::Vulnerabilities
-    class='mt-3'
-    @sbomComponent={{@sbomComponent}}
-  />
+  <AkTabs class='mt-3' as |Akt|>
+    {{#each this.tabs as |item|}}
+      <Akt.tabItem
+        @id={{item.id}}
+        @route={{item.route}}
+        @currentWhen={{item.activeRoutes}}
+        data-test-sbomComponentDetails-tab='{{item.id}}'
+      >
+        {{item.label}}
+      </Akt.tabItem>
+    {{/each}}
+  </AkTabs>
 </div>
