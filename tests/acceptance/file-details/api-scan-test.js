@@ -261,6 +261,92 @@ module('Acceptance | file-details/api-scan', function (hooks) {
       .hasText(t('apiScan'));
   });
 
+  test.each(
+    'it selects and unselects all captured APIs',
+    [true, false],
+    async function (assert, is_active) {
+      // Return opposite toggle states for all API endpoints
+      this.server.db.capturedapis.update({ is_active });
+
+      this.server.get('/v2/files/:id/capturedapis', (schema) => {
+        const results = schema.capturedapis.all().models;
+
+        return { count: results.length, previous: null, next: null, results };
+      });
+
+      this.server.put('/v2/files/:id/toggle_captured_apis', (schema, req) => {
+        const { is_active } = JSON.parse(req.requestBody);
+
+        const results = schema.capturedapis.all().models;
+
+        results.forEach((api) => api.update({ is_active }));
+
+        return { count: results.length, previous: null, next: null, results };
+      });
+
+      this.server.get('/v2/files/:id/toggle_captured_apis', () => {
+        return { is_active };
+      });
+
+      await visit(`/dashboard/file/${this.file.id}/api-scan`);
+
+      assert
+        .dom('[data-test-fileDetails-apiScan-breadcrumbContainer]')
+        .exists();
+      assert.dom('[data-test-fileDetailsSummary-root]').exists();
+
+      assert
+        .dom('[data-test-fileDetails-apiScan-tabs="api-scan-tab"]')
+        .hasText(t('apiScan'));
+
+      assert
+        .dom('[data-test-fileDetails-apiScan-capturedApi-title]')
+        .hasText(t('capturedApiListTitle'));
+
+      assert
+        .dom('[data-test-fileDetails-apiScan-selectAllCapturedApis-text]')
+        .hasText(t('selectAll'));
+
+      let apiEndpoints = findAll(
+        '[data-test-fileDetails-apiScan-capturedApi-endpointContainer]'
+      );
+
+      assert.strictEqual(apiEndpoints.length, 10);
+
+      // All APIs should reflect the correct states
+      apiEndpoints.forEach((endpoint) => {
+        const endpointSelector =
+          '[data-test-fileDetails-apiScan-capturedApi-endpointSelectCheckbox]';
+
+        if (is_active) {
+          assert.dom(endpointSelector, endpoint).isNotDisabled().isChecked();
+        } else {
+          assert.dom(endpointSelector, endpoint).isNotDisabled().isNotChecked();
+        }
+      });
+
+      await click(
+        '[data-test-fileDetails-apiScan-selectAllCapturedApis-checkbox]'
+      );
+
+      apiEndpoints = findAll(
+        '[data-test-fileDetails-apiScan-capturedApi-endpointContainer]'
+      );
+
+      // All APIs should reflect the correct states
+      apiEndpoints.forEach((endpoint) => {
+        const endpointSelector =
+          '[data-test-fileDetails-apiScan-capturedApi-endpointSelectCheckbox]';
+
+        if (is_active) {
+          assert.dom(endpointSelector, endpoint).isNotDisabled().isNotChecked();
+        } else {
+          assert.dom(endpointSelector, endpoint).isNotDisabled().isChecked();
+        }
+      });
+    }
+  );
+
   test('test toggle api endpoint selection', async function (assert) {
     this.server.get('/v2/files/:id/capturedapis', (schema, req) => {
       const results = req.queryParams.is_active
