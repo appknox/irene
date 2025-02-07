@@ -67,10 +67,10 @@ module('Integration | Component | api-filter', function (hooks) {
     });
 
     this.server.put('/profiles/:id/api_scan_options', (schema, req) => {
-      const [, value] = req.requestBody.split('=');
+      const { api_url_filters } = JSON.parse(req.requestBody);
 
       return {
-        api_url_filters: decodeURIComponent(value),
+        api_url_filters,
         id: this.profile.id,
       };
     });
@@ -133,22 +133,32 @@ module('Integration | Component | api-filter', function (hooks) {
 
   test('it handles URL deletion', async function (assert) {
     this.server.get('/profiles/:id/api_scan_options', (_, req) => {
-      return { api_url_filters: 'api.example.com', id: req.params.id };
+      return {
+        api_url_filters: 'api1.example.com,api2.example.com',
+        id: req.params.id,
+      };
     });
 
     this.server.put('/profiles/:id/api_scan_options', (schema, req) => {
-      const [, value] = req.requestBody.split('=');
+      const { api_url_filters } = JSON.parse(req.requestBody);
 
       return {
-        api_url_filters: decodeURIComponent(value),
+        api_url_filters,
         id: this.profile.id,
       };
     });
 
     await render(hbs`<ApiFilter @profileId={{this.profile.id}} />`);
 
+    const rows = findAll('[data-test-apiFilter-row]');
+    assert.strictEqual(rows.length, 2);
+
+    let firstRowCells = rows[0].querySelectorAll('[data-test-apiFilter-cell]');
+
     // Click delete button
-    await click('[data-test-apiFilter-deleteBtn]');
+    await click(
+      firstRowCells[1].querySelector('[data-test-apiFilter-deleteBtn]')
+    );
 
     // Verify confirmation modal
     assert
@@ -172,7 +182,11 @@ module('Integration | Component | api-filter', function (hooks) {
     const notify = this.owner.lookup('service:notifications');
 
     assert.strictEqual(notify.successMsg, t('urlUpdated'));
-    assert.strictEqual(findAll('[data-test-apiFilter-row]').length, 0);
+    assert.strictEqual(findAll('[data-test-apiFilter-row]').length, 1);
+
+    firstRowCells = rows[0].querySelectorAll('[data-test-apiFilter-cell]');
+
+    assert.dom(firstRowCells[0]).hasText('api2.example.com');
   });
 
   test('it hides description when hideDescriptionText is true', async function (assert) {

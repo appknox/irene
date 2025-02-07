@@ -10,14 +10,19 @@ interface DeviceWrapperSignature {
     isFullscreenSupported?: boolean;
   };
   Blocks: {
-    statusChip: [];
-    actionButton: [{ closeFullscreen: () => void }];
     default: [{ isFullscreen: boolean; closeFullscreen: () => void }];
+    statusChip: [];
+    actionDrawer: [{ closeActionDrawer: () => void }];
+
+    actionButton: [
+      { closeFullscreen: () => void; openActionDrawer: () => void },
+    ];
   };
 }
 
 export default class FileDetailsDynamicScanDeviceWrapper extends Component<DeviceWrapperSignature> {
   @tracked isFullscreenView = false;
+  @tracked showActionDrawer = false;
 
   @action
   handleFullscreenClose() {
@@ -27,6 +32,16 @@ export default class FileDetailsDynamicScanDeviceWrapper extends Component<Devic
   @action
   toggleFullscreenView() {
     this.isFullscreenView = !this.isFullscreenView;
+  }
+
+  @action
+  handleActionDrawerOpen() {
+    this.showActionDrawer = true;
+  }
+
+  @action
+  handleActionDrawerClose() {
+    this.showActionDrawer = false;
   }
 }
 

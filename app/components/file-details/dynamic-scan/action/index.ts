@@ -1,5 +1,4 @@
 import Component from '@glimmer/component';
-import { tracked } from '@glimmer/tracking';
 import { inject as service } from '@ember/service';
 import { task } from 'ember-concurrency';
 import { action } from '@ember/object';
@@ -16,6 +15,7 @@ import type IreneAjaxService from 'irene/services/ajax';
 export interface DynamicScanActionSignature {
   Args: {
     onScanShutdown?: () => void;
+    openActionDrawer?: () => void;
     file: FileModel;
     dynamicScanText: string;
     isAutomatedScan?: boolean;
@@ -28,18 +28,12 @@ export default class DynamicScanActionComponent extends Component<DynamicScanAct
   @service declare ajax: IreneAjaxService;
   @service('notifications') declare notify: NotificationService;
 
-  @tracked showDynamicScanDrawer = false;
-
   get file() {
     return this.args.file;
   }
 
   get projectPlatform() {
     return this.file.project.get('platform');
-  }
-
-  get profileId() {
-    return this.file.profile.get('id') as string;
   }
 
   get dynamicScanActionButton() {
@@ -93,12 +87,7 @@ export default class DynamicScanActionComponent extends Component<DynamicScanAct
       ENV.csb['dynamicScanBtnClick'] as CsbAnalyticsFeatureData
     );
 
-    this.showDynamicScanDrawer = true;
-  }
-
-  @action
-  closeDynamicScanDrawer() {
-    this.showDynamicScanDrawer = false;
+    this.args.openActionDrawer?.();
   }
 
   dynamicShutdown = task({ drop: true }, async () => {

@@ -17,8 +17,23 @@
       @dynamicScanText={{t 'modalCard.dynamicScan.title'}}
       @onScanShutdown={{fn this.handleScanShutdown dw.closeFullscreen}}
       @dynamicScan={{this.dynamicScan}}
+      @openActionDrawer={{dw.openActionDrawer}}
     />
   </:actionButton>
+
+  <:actionDrawer as |dw|>
+    <DsPreferenceProvider
+      @profileId={{this.profileId}}
+      @file={{@file}}
+      as |dpContext|
+    >
+      <FileDetails::DynamicScan::Action::Drawer
+        @onClose={{dw.closeActionDrawer}}
+        @file={{@file}}
+        @dpContext={{dpContext}}
+      />
+    </DsPreferenceProvider>
+  </:actionDrawer>
 
   <:default as |dw|>
     <VncViewer

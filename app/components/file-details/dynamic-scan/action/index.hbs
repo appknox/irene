@@ -1,42 +1,25 @@
-<AkStack @direction='column' @alignItems='center' @spacing='1'>
-  <AkButton
-    data-test-cy='dynamicScan-{{this.dynamicScanActionButton.testId}}'
-    data-test-fileDetails-dynamicScanAction='{{this.dynamicScanActionButton.testId}}'
-    local-class='dynamic-scan-btn'
-    {{on 'click' this.dynamicScanActionButton.onClick}}
-    @disabled={{or (not @file.isActive) this.dynamicScanActionButton.loading}}
-    @variant={{this.dynamicScanActionButton.variant}}
-    @color={{this.dynamicScanActionButton.color}}
-    @loading={{this.dynamicScanActionButton.loading}}
-  >
-    <:leftIcon>
-      {{#if this.dynamicScanActionButton.loading}}
-        <AkLoader
-          @size={{13}}
-          @color={{this.dynamicScanActionButton.loaderColor}}
-        />
-      {{else}}
-        <AkIcon @iconName={{this.dynamicScanActionButton.icon}} />
-      {{/if}}
-    </:leftIcon>
-
-    <:default>
-      {{this.dynamicScanActionButton.text}}
-    </:default>
-  </AkButton>
-
-  {{#if this.showDynamicScanDrawer}}
-    <DsPreferenceProvider
-      @profileId={{this.profileId}}
-      @file={{@file}}
-      as |dpContext|
-    >
-      <FileDetails::DynamicScan::Action::Drawer
-        @onClose={{this.closeDynamicScanDrawer}}
-        @file={{@file}}
-        @dpContext={{dpContext}}
-        @isAutomatedScan={{@isAutomatedScan}}
+<AkButton
+  data-test-cy='dynamicScan-{{this.dynamicScanActionButton.testId}}'
+  data-test-fileDetails-dynamicScanAction='{{this.dynamicScanActionButton.testId}}'
+  local-class='dynamic-scan-btn'
+  {{on 'click' this.dynamicScanActionButton.onClick}}
+  @disabled={{or (not @file.isActive) this.dynamicScanActionButton.loading}}
+  @variant={{this.dynamicScanActionButton.variant}}
+  @color={{this.dynamicScanActionButton.color}}
+  @loading={{this.dynamicScanActionButton.loading}}
+>
+  <:leftIcon>
+    {{#if this.dynamicScanActionButton.loading}}
+      <AkLoader
+        @size={{13}}
+        @color={{this.dynamicScanActionButton.loaderColor}}
       />
-    </DsPreferenceProvider>
-  {{/if}}
-</AkStack>
+    {{else}}
+      <AkIcon @iconName={{this.dynamicScanActionButton.icon}} />
+    {{/if}}
+  </:leftIcon>
+
+  <:default>
+    {{this.dynamicScanActionButton.text}}
+  </:default>
+</AkButton>

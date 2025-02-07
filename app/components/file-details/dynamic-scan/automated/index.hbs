@@ -27,14 +27,30 @@
         />
       </:statusChip>
 
-      <:actionButton>
+      <:actionButton as |dw|>
         <FileDetails::DynamicScan::Action
           @file={{@file}}
           @dynamicScanText={{t 'dastTabs.automatedDAST'}}
           @isAutomatedScan={{true}}
           @dynamicScan={{this.dynamicScan}}
+          @openActionDrawer={{dw.openActionDrawer}}
         />
       </:actionButton>
+
+      <:actionDrawer as |dw|>
+        <DsPreferenceProvider
+          @profileId={{this.profileId}}
+          @file={{@file}}
+          as |dpContext|
+        >
+          <FileDetails::DynamicScan::Action::Drawer
+            @onClose={{dw.closeActionDrawer}}
+            @file={{@file}}
+            @dpContext={{dpContext}}
+            @isAutomatedScan={{true}}
+          />
+        </DsPreferenceProvider>
+      </:actionDrawer>
 
       <:default>
         <VncViewer
