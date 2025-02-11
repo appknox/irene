@@ -15,6 +15,10 @@ export default class FileDetailsDastManual extends Component<FileDetailsDastManu
     return this.args.file;
   }
 
+  get profileId() {
+    return this.file.profile.get('id') as string;
+  }
+
   get dynamicScan() {
     return this.file.lastManualDynamicScan;
   }

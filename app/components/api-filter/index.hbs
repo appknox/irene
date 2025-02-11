@@ -53,7 +53,10 @@
               {{#if r.columnValue.component}}
                 {{#let (component r.columnValue.component) as |Component|}}
                   <Component
-                    @onDeleteClick={{fn this.openRemoveURLConfirmBox value}}
+                    @onDeleteClick={{fn
+                      this.openRemoveURLConfirmBox
+                      r.rowValue.url
+                    }}
                   />
                 {{/let}}
               {{else}}

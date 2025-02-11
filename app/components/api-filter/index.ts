@@ -143,6 +143,10 @@ export default class ApiFilterComponent extends Component<ApiFilterSignature> {
           `${this.newUrlFilter} ${this.intl.t('invalidURL')}`
         );
       }
+
+      if (this.apiUrlFilters.some((it) => it.url === this.newUrlFilter)) {
+        return this.notify.error(this.intl.t('urlAlreadyExists'));
+      }
     }
 
     const apiUrlFilters = this.apiScanOptions?.apiUrlFilters;

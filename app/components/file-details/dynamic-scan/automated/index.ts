@@ -38,6 +38,10 @@ export default class FileDetailsDastAutomated extends Component<FileDetailsDastA
     return this.args.file;
   }
 
+  get profileId() {
+    return this.file.profile.get('id') as string;
+  }
+
   get dynamicScan() {
     return this.file.lastAutomatedDynamicScan;
   }

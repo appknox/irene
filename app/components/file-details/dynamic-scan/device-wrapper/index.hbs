@@ -35,7 +35,10 @@
 
         {{#if @showActionButton}}
           {{yield
-            (hash closeFullscreen=this.handleFullscreenClose)
+            (hash
+              closeFullscreen=this.handleFullscreenClose
+              openActionDrawer=this.handleActionDrawerOpen
+            )
             to='actionButton'
           }}
         {{/if}}
@@ -112,3 +115,10 @@
     </AkStack>
   </div>
 </AkStack>
+
+{{#if this.showActionDrawer}}
+  {{yield
+    (hash closeActionDrawer=this.handleActionDrawerClose)
+    to='actionDrawer'
+  }}
+{{/if}}
