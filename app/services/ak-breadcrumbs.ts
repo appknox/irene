@@ -22,7 +22,6 @@ export interface AkBreadcrumbsItemProps {
   // Available route groups in irene
   routeGroup:
     | 'project/files'
-    | 'app-monitoring'
     | 'sec-dashboard'
     | 'sbom'
     | 'organization'
@@ -179,8 +178,9 @@ export default class AkBreadcrumbsService extends Service {
     // Origin Route Variables
     const originRouteName = originRouteClass.routeName;
 
+    const routeFromName = routeFrom?.name;
     const routeFromCtrller = this._getRouteController(
-      routeFrom?.name,
+      routeFromName,
       originRouteClass
     );
 
@@ -197,6 +197,9 @@ export default class AkBreadcrumbsService extends Service {
       this._extractCrumbPropsFromCtrller(routeFromCtrller);
 
     // NOTE: Cases where fallback crumbs should be utilized or a recomputation should happen
+    // SCENARIO A: In cases where same route exists in crumbs but with diff models, return fallback or recalculate breadcrumbs
+    // SCENARIO B: If navigation to a page is from a different route group return fallback or an empty array to allow for regenration;
+    // SCENARIO C: If navigation to a page is from a root route with same route group. Reason being, navigation to a root route would clear crumb items;
     const originRouteIndexWithoutModelCheck = Number(
       lastTransItems?.findIndex((it) => it.route === originRouteName)
     );
@@ -208,14 +211,21 @@ export default class AkBreadcrumbsService extends Service {
           ) !== originCrumbProps?.models?.join(':')
         : false;
 
-    // SCENARIO A: In cases where same route exists in crumbs but with diff models, return fallback or recalculate breadcrumbs
-    // SCENARIO B: If navigation to a page is from a different route group return fallback or an empty array to allow for regenration;
+    const routeFromAndToTitlesExist =
+      originCrumbProps?.title && routeFromCrumbProps?.title;
+
+    const routFromAndRouteToHaveDistinctGroups =
+      originCrumbProps?.routeGroup !== routeFromCrumbProps?.routeGroup;
+
+    const transitionFromRootRouteWithSameGroup =
+      routeFromCrumbProps?.isRootCrumb && !routFromAndRouteToHaveDistinctGroups;
+
     if (
       routeFrom &&
-      originCrumbProps?.title &&
-      routeFromCrumbProps?.title &&
-      (originCrumbProps?.routeGroup !== routeFromCrumbProps?.routeGroup ||
-        originRouteHasDiffModelWithSameRouteInCrumbs)
+      routeFromAndToTitlesExist &&
+      (originRouteHasDiffModelWithSameRouteInCrumbs ||
+        routFromAndRouteToHaveDistinctGroups ||
+        transitionFromRootRouteWithSameGroup)
     ) {
       return (
         originCrumbProps?.fallbackCrumbs?.map((it) => ({
@@ -227,7 +237,7 @@ export default class AkBreadcrumbsService extends Service {
 
     // NOTE: Cases where retrieved breadcrumbs from local storage can be utilized
     const routeFromIsLastTransitioned =
-      lastTransitionedItem?.route === routeFrom?.name;
+      lastTransitionedItem?.route === routeFromName;
 
     const originRouteIsLastCrumbItem =
       lastTransitionedItem?.route === originRouteName;
@@ -240,7 +250,7 @@ export default class AkBreadcrumbsService extends Service {
 
     const routeFromIsASiblingOfOriginRoute = this._checkIfTwoRoutesAreSiblings(
       originRouteName,
-      routeFrom?.name,
+      routeFromName,
       originRouteClass
     );
 
@@ -260,8 +270,7 @@ export default class AkBreadcrumbsService extends Service {
     // The route you're accessing the current page from is a sibling of the last transition
     const routeFromIsASiblingOfLastTransitioned =
       !!lastTransitionedItem?.siblingRoutes?.some(
-        (r) =>
-          r.includes(String(routeFrom?.name)) || routeFrom?.name.includes(r)
+        (r) => r.includes(String(routeFromName)) || routeFromName?.includes(r)
       );
 
     // SCENARIO: In cases where origin route hasn't been added before

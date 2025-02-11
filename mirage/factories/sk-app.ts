@@ -6,8 +6,24 @@ import { faker } from '@faker-js/faker';
 import ENUMS from 'irene/enums';
 
 export default Factory.extend({
+  approved_on: () => faker.date.past(),
+  added_on: () => faker.date.past(),
+  updated_on: () => faker.date.recent(),
+  rejected_on: () => faker.date.past(),
+  monitoring_enabled: () => faker.datatype.boolean(),
+  monitoring_status: () => faker.number.int({ min: 0, max: 3 }),
+
+  app_status: () => faker.helpers.arrayElement(ENUMS.SK_APP_STATUS.BASE_VALUES),
+
+  app_status_display() {
+    const app_status = this.app_status as number;
+
+    return ENUMS.SK_APP_STATUS.BASE_CHOICES.find((c) => c.value === app_status)
+      ?.key;
+  },
+
   approval_status: () =>
-    faker.helpers.arrayElement(ENUMS.SK_APPROVAL_STATUS.VALUES),
+    faker.helpers.arrayElement(ENUMS.SK_APPROVAL_STATUS.BASE_VALUES),
 
   approval_status_display() {
     const approval_status = this.approval_status as number;
@@ -17,27 +33,16 @@ export default Factory.extend({
     )?.key;
   },
 
-  app_status: () => faker.helpers.arrayElement(ENUMS.SK_APP_STATUS.VALUES),
+  store_monitoring_status: () =>
+    faker.helpers.arrayElement(ENUMS.SK_APP_MONITORING_STATUS.BASE_VALUES),
 
-  app_status_display() {
-    const app_status = this.app_status as number;
+  store_monitoring_status_display() {
+    const store_monitoring_status = this.store_monitoring_status as number;
 
-    return ENUMS.SK_APP_STATUS.BASE_CHOICES.find((c) => c.value === app_status)
-      ?.key;
+    return ENUMS.SK_APP_MONITORING_STATUS.BASE_CHOICES.find(
+      (c) => c.value === store_monitoring_status
+    )?.key;
   },
-
-  monitoring_enabled: () => faker.datatype.boolean(),
-  monitoring_status: () => faker.number.int({ min: 0, max: 3 }),
-
-  approved_on: () => faker.date.past(),
-  added_on: () => faker.date.past(),
-  updated_on: () => faker.date.recent(),
-  rejected_on: () => faker.date.past(),
-
-  availability: () => ({
-    storeknox: faker.datatype.boolean(),
-    appknox: faker.datatype.boolean(),
-  }),
 
   // @ts-expect-error
   afterCreate(skApp: ModelInstance, server: Server) {
@@ -55,6 +60,11 @@ export default Factory.extend({
   }),
 
   withApprovedStatus: trait({
+    approval_status: ENUMS.SK_APPROVAL_STATUS.APPROVED,
+    app_status: ENUMS.SK_APP_STATUS.ACTIVE,
+  }),
+
+  withAddedToAppknox: trait({
     approval_status: ENUMS.SK_APPROVAL_STATUS.APPROVED,
     app_status: ENUMS.SK_APP_STATUS.ACTIVE,
   }),

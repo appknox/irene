@@ -1,34 +1,19 @@
 import Component from '@glimmer/component';
-import { task } from 'ember-concurrency';
-import { inject as service } from '@ember/service';
-import Store from '@ember-data/store';
-import { tracked } from '@glimmer/tracking';
+import { service } from '@ember/service';
+import type Store from '@ember-data/store';
 
-import AmAppRecordModel from 'irene/models/am-app-record';
 import { COUNTRY_NAMES_MAP } from 'irene/utils/constants';
-import SkAppVersionModel from 'irene/models/sk-app-version';
+import type SkAppVersionModel from 'irene/models/sk-app-version';
 
-interface AppMonitoringVersionTableCountriesSignature {
+interface StoreknoxInventoryDetailsUnscannedVersionTableCountriesSignature {
   Args: {
     skAppVersion: SkAppVersionModel;
   };
 }
 
-export default class AppMonitoringVersionTableCountriesComponent extends Component<AppMonitoringVersionTableCountriesSignature> {
+export default class StoreknoxInventoryDetailsUnscannedVersionTableCountriesComponent extends Component<StoreknoxInventoryDetailsUnscannedVersionTableCountriesSignature> {
   @service declare store: Store;
   @service('notifications') declare notify: NotificationService;
-
-  @tracked storeRecords: AmAppRecordModel[] = [];
-  @tracked countryCodes: string[] = [];
-
-  constructor(
-    owner: unknown,
-    args: AppMonitoringVersionTableCountriesSignature['Args']
-  ) {
-    super(owner, args);
-
-    this.compileVersionCountryCodes.perform();
-  }
 
   get skAppVersion() {
     return this.args.skAppVersion;
@@ -42,9 +27,9 @@ export default class AppMonitoringVersionTableCountriesComponent extends Compone
     return COUNTRY_NAMES_MAP;
   }
 
-  compileVersionCountryCodes = task(async () => {
-    const storeInstances = this.skAppVersion?.skStoreInstances.slice();
-
-    this.countryCodes = storeInstances.map((si) => si.countryCode);
-  });
+  get countryCodes() {
+    return this.skAppVersion?.skStoreInstances
+      .slice()
+      .map((si) => si.countryCode);
+  }
 }

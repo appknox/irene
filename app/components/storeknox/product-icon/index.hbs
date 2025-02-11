@@ -1,62 +1,69 @@
-<div>
-  <div
-    role='button'
-    local-class='
+<div
+  role='button'
+  local-class='
     product-icon product-{{@product}}
     {{if @notClickable "not-clickable"}}
     '
-    {{on 'click' this.toggleProductInfo}}
+  {{on 'click' this.toggleProductInfo}}
+  data-test-storeknox-productIconContainer
+>
+  {{yield}}
+</div>
+
+<AkPopover
+  @arrow={{true}}
+  @anchorRef={{this.anchorRef}}
+  @placement='bottom-start'
+  @clickOutsideToClose={{true}}
+  @closeHandler={{this.closeProductInfo}}
+  @unmountOnClose={{false}}
+>
+  <AkStack
+    @width='full'
+    @direction='column'
+    @spacing='1'
+    local-class='product-info-tray'
   >
-    {{yield}}
-  </div>
+    <AkStack @width='full' @direction='column' @spacing='1' class='py-2 px-2'>
+      <AkStack @spacing='1' @alignItems='center'>
+        <AkIcon @iconName='info' @size='small' />
 
-  <AkPopover
-    @arrow={{true}}
-    @anchorRef={{this.anchorRef}}
-    @placement='bottom-start'
-    @clickOutsideToClose={{true}}
-    @closeHandler={{this.closeProductInfo}}
-    @unmountOnClose={{false}}
-  >
-    <AkStack
-      @width='full'
-      @direction='column'
-      @spacing='1'
-      local-class='product-info-tray'
-    >
-      <AkStack @width='full' @direction='column' @spacing='1' class='py-2 px-2'>
-        <AkStack @spacing='1' @alignItems='center'>
-          <AkIcon @iconName='info' @size='small' />
-
-          <AkTypography @color='neutral' @variant='body2'>INFO</AkTypography>
-        </AkStack>
-
-        <AkTypography>
-          {{t 'storeknox.appIsPartOf'}}
-          <strong>{{get this.productTitle @product}}</strong>
+        <AkTypography
+          @color='neutral'
+          @variant='body2'
+          data-test-storeknox-productInfoCaptionText
+        >
+          {{t 'infoCapitalCase'}}
         </AkTypography>
       </AkStack>
 
-      {{#if this.isAStore}}
-        <AkStack @width='full' local-class='store-link-container' class='px-2'>
-          <a
-            href={{@storeLink}}
-            target='_blank'
-            rel='noopener noreferrer'
-            {{style fontSize='0.85714em'}}
-          >
-            <AkButton
-              @color='primary'
-              @variant='text'
-              @underline='always'
-              @typographyFontWeight='medium'
-            >
-              {{t 'storeknox.checkOn'}}
-              {{get this.productTitle @product}}
-            </AkButton>
-          </a>
-        </AkStack>
-      {{/if}}
+      <AkTypography data-test-storeknox-productInfo-appIsPartOfText>
+        {{t 'storeknox.appIsPartOf'}}
+        <strong>{{get this.productTitle @product}}</strong>
+      </AkTypography>
     </AkStack>
-  </AkPopover>
-</div>
+
+    {{#if this.isAStore}}
+      <AkStack @width='full' local-class='store-link-container' class='px-2'>
+        <a
+          href={{@storeLink}}
+          target='_blank'
+          rel='noopener noreferrer'
+          {{style fontSize='0.85714em'}}
+          data-test-storeknox-productInfo-appStoreLink
+        >
+          <AkButton
+            @color='primary'
+            @variant='text'
+            @underline='always'
+            @typographyFontWeight='medium'
+            data-test-storeknox-productInfo-appStoreLinkBtn
+          >
+            {{t 'storeknox.checkOn'}}
+            {{get this.productTitle @product}}
+          </AkButton>
+        </a>
+      </AkStack>
+    {{/if}}
+  </AkStack>
+</AkPopover>

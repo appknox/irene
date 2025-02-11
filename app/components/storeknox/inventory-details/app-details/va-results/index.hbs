@@ -1,17 +1,40 @@
-<AkStack @alignItems='center' @spacing='2.5'>
-  {{#each this.vaResultsCategories as |reCat|}}
-    <AkStack @alignItems='center' @spacing='1.5'>
-      <AkStack @spacing='1' @alignItems='center'>
-        <span local-class='indicator {{reCat}}'></span>
-
-        <AkTypography>
-          {{t reCat}}
-        </AkTypography>
-      </AkStack>
-
-      <AkTypography @fontWeight='bold'>
-        {{this.getVaCategoryResultCount reCat}}
+<AkStack @direction='column' @width='full'>
+  <Storeknox::InventoryDetails::SectionHeader>
+    <:default>
+      <AkTypography
+        @fontWeight='medium'
+        data-test-storeknoxInventoryDetails-latestVAResultsHeaderInfoValue
+      >
+        {{t 'storeknox.latestVAResults'}}
       </AkTypography>
-    </AkStack>
-  {{/each}}
+    </:default>
+  </Storeknox::InventoryDetails::SectionHeader>
+
+  {{#if this.loadingVaData}}
+    <Storeknox::InventoryDetails::AppDetails::VaResults::LoadingResults />
+
+  {{else if this.coreProjectLatestVersionInaccessible}}
+    <Storeknox::InventoryDetails::AppDetails::VaResults::FileInaccessible />
+
+  {{else if this.showUploadProgressState}}
+    <Storeknox::InventoryDetails::AppDetails::VaResults::UploadProgress
+      @submission={{this.submission}}
+      @uploadNotStarted={{this.uploadNotStarted}}
+    />
+
+  {{else if @skInventoryApp.coreProjectLatestVersion}}
+    <Storeknox::InventoryDetails::AppDetails::VaResults::LatestFileResults
+      @skInventoryApp={{@skInventoryApp}}
+      @coreProjectLatestVersion={{this.coreProjectLatestVersion}}
+    />
+
+  {{else}}
+    <Storeknox::InventoryDetails::AppDetails::VaResults::InitiateUpload
+      @skInventoryApp={{@skInventoryApp}}
+      @submission={{this.submission}}
+      @userCanAccessSubmission={{this.userCanAccessSubmission}}
+      @initiateUploadIsInProgress={{this.doInitiateAppUpload.isRunning}}
+      @initiateAppUpload={{this.initiateAppUpload}}
+    />
+  {{/if}}
 </AkStack>

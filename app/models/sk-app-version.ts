@@ -21,11 +21,20 @@ export default class SkAppVersionModel extends Model {
   @attr('boolean')
   declare isLatest: boolean;
 
+  @attr('boolean')
+  declare canInitiateUpload: boolean;
+
   @attr('number')
   declare appScanStatus: number;
 
   @attr('string')
   declare appScanStatusDisplay: string;
+
+  @attr('string')
+  declare submissionErrorHeader: string;
+
+  @attr('string')
+  declare submissionErrorMessage: string;
 
   @attr('date')
   declare createdOn: Date;
@@ -41,6 +50,12 @@ export default class SkAppVersionModel extends Model {
 
   @hasMany('sk-store-instance', { async: false, inverse: null })
   declare skStoreInstances: SyncHasMany<SkStoreInstanceModel>;
+
+  async iniiateAppUpload() {
+    const adapter = this.store.adapterFor('sk-app-version');
+
+    return await adapter.iniiateAppUpload(this.id);
+  }
 }
 
 declare module 'ember-data/types/registries/model' {

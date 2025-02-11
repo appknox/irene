@@ -5,7 +5,7 @@
   data-test-amVersionTable-scanStatusRoot
 >
   {{#if (or this.transitionedFromUnscannedToScanned this.isNotScanned)}}
-    <AppMonitoring::Status
+    <Storeknox::InventoryDetails::UnscannedVersion::Status
       @condition='error'
       @label='{{t "notScanned"}}'
       data-test-amVersionTable-storeVersionStatus-notScanned
@@ -21,27 +21,25 @@
 
   {{#if this.isScanned}}
     <AkStack @spacing='1'>
-      <AppMonitoring::Status
+      <Storeknox::InventoryDetails::UnscannedVersion::Status
         @condition='success'
         @label='{{t "scanned"}}'
         data-test-amVersionTable-storeVersionStatus-scanned
       />
-
       -
-
       <AkLink
         @underline='always'
         @color='primary'
         @fontWeight='medium'
         @route='authenticated.dashboard.file'
-        @model={{this.skAppVersion.file.id}}
+        @model={{this.latestFileId}}
         target='_blank'
         rel='noopener noreferrer'
         data-test-amVersionTable-storeVersion-fileID
       >
         {{t 'fileID'}}
         -
-        {{this.skAppVersion.file.id}}
+        {{this.latestFileId}}
       </AkLink>
     </AkStack>
   {{/if}}

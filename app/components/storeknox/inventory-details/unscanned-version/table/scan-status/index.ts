@@ -1,28 +1,32 @@
-import { inject as service } from '@ember/service';
 import Component from '@glimmer/component';
+import { service } from '@ember/service';
 import dayjs from 'dayjs';
 import type IntlService from 'ember-intl/services/intl';
 import type SkAppVersionModel from 'irene/models/sk-app-version';
 
-interface AppMonitoringVersionTableScanStatusSignature {
+interface StoreknoxInventoryDetailsUnscannedVersionTableScanStatusSignature {
   Args: {
     skAppVersion: SkAppVersionModel;
   };
 }
 
-export default class AppMonitoringVersionTableScanStatusComponent extends Component<AppMonitoringVersionTableScanStatusSignature> {
+export default class StoreknoxInventoryDetailsUnscannedVersionTableScanStatusComponent extends Component<StoreknoxInventoryDetailsUnscannedVersionTableScanStatusSignature> {
   @service declare intl: IntlService;
 
   get skAppVersion() {
     return this.args.skAppVersion;
   }
 
-  get hasComparableVersion() {
+  get hasVersion() {
     return Boolean(this.skAppVersion?.version);
   }
 
   get latestFile() {
     return this.skAppVersion.get('file');
+  }
+
+  get latestFileId() {
+    return this.latestFile?.get('id');
   }
 
   get hasLatestFile() {
@@ -34,16 +38,18 @@ export default class AppMonitoringVersionTableScanStatusComponent extends Compon
   }
 
   get transitionedFromUnscannedToScanned() {
-    if (!this.latestFile?.get('createdOn')) {
+    const latestFileCreatedOnDate = this.latestFile?.get('createdOn');
+
+    if (!latestFileCreatedOnDate) {
       return false;
     }
 
-    return dayjs(this.latestFile?.get('createdOn')).isAfter(
+    return dayjs(latestFileCreatedOnDate).isAfter(
       this.skAppVersion.get('createdOn')
     );
   }
 
   get isNotScanned() {
-    return this.hasComparableVersion && !this.hasLatestFile;
+    return this.hasVersion && !this.hasLatestFile;
   }
 }

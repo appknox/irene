@@ -6,16 +6,18 @@
 >
   <:tooltipContent>
     <div local-class='tooltip-content'>
-      <AkStack @spacing='0.5' @alignItems='center'>
-        <AkTypography
-          @color='textSecondary'
-          {{style textTransform='uppercase'}}
-        >
-          {{t 'reason'}}
-        </AkTypography>
-      </AkStack>
+      <AkTypography
+        @color='textSecondary'
+        {{style textTransform='uppercase'}}
+        data-test-storeknoxInventory-appListTable-monitoringStatusTooltipHeaderText
+      >
+        {{t 'reason'}}
+      </AkTypography>
 
-      <AkTypography class='mt-1'>
+      <AkTypography
+        class='mt-1'
+        data-test-storeknoxInventory-appListTable-monitoringStatusTooltipText
+      >
         <strong>{{this.tooltipMessage}}</strong>
         {{t 'storeknox.haveBeenDetected'}}
       </AkTypography>
@@ -33,9 +35,12 @@
           @iconName={{this.monitoringStatusIconDetails.name}}
           @color={{this.monitoringStatusIconDetails.color}}
           @size='small'
+          data-test-storeknoxInventory-appListTable-monitoringStatusIcon
         />
 
-        <AkTypography>
+        <AkTypography
+          data-test-storeknoxInventory-appListTable-monitoringStatusText
+        >
           {{#if this.appIsDisabled}}
             {{t 'disabled'}}
           {{else if this.needsAction}}

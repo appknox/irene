@@ -1,20 +1,20 @@
+// eslint-disable-next-line ember/use-ember-data-rfc-395-imports
+import type { DS } from 'ember-data';
 import Service, { service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
 import { task } from 'ember-concurrency';
-// eslint-disable-next-line ember/use-ember-data-rfc-395-imports
-import type { DS } from 'ember-data';
 import type Store from '@ember-data/store';
 import type RouterService from '@ember/routing/router-service';
 
 import parseError from 'irene/utils/parse-error';
-import type SkAppModel from 'irene/models/sk-app';
 import ENUMS from 'irene/enums';
+import type SkAppModel from 'irene/models/sk-app';
 
 type SkPendingReviewResponse = DS.AdapterPopulatedRecordArray<SkAppModel> & {
   meta: { count: number };
 };
 
-export default class ServiceAccountService extends Service {
+export default class SkPendingReviewService extends Service {
   @tracked skPendingReviewData: SkPendingReviewResponse | null = null;
   @tracked singleUpdate: boolean = false;
 
@@ -22,42 +22,40 @@ export default class ServiceAccountService extends Service {
   @service declare router: RouterService;
   @service('notifications') declare notify: NotificationService;
 
-  fetchPendingReviewApps = task(
-    { drop: true },
-    async (
-      limit: number = 10,
-      offset: number = 0,
-      setQueryParams: boolean = true
-    ) => {
-      try {
-        if (setQueryParams) {
-          this.setRouteQueryParams(limit, offset);
-        }
+  @tracked limit = 10;
+  @tracked offset = 0;
+  @tracked skPendingReviewAppsCount = 0;
 
-        this.skPendingReviewData = (await this.store.query('skApp', {
-          limit,
-          offset,
-          approval_status: ENUMS.SK_APPROVAL_STATUS.PENDING_APPROVAL,
-          app_status: ENUMS.SK_APP_STATUS.ACTIVE,
-        })) as SkPendingReviewResponse;
+  get isFetchingSkPendingReviewApps() {
+    return this.fetchPendingReviewApps.isRunning;
+  }
 
-        this.singleUpdate = false;
-      } catch (e) {
-        this.notify.error(parseError(e));
-      }
+  setLimitOffset({ limit = 10, offset = 0 }) {
+    this.limit = limit;
+    this.offset = offset;
+
+    return this;
+  }
+
+  async reload() {
+    await this.fetchPendingReviewApps.perform();
+  }
+
+  fetchPendingReviewApps = task({ keepLatest: true }, async () => {
+    try {
+      const skPendingReviewData = (await this.store.query('sk-app', {
+        limit: this.limit,
+        offset: this.offset,
+        approval_status: ENUMS.SK_APPROVAL_STATUS.PENDING_APPROVAL,
+        app_status: ENUMS.SK_APP_STATUS.ACTIVE,
+      })) as SkPendingReviewResponse;
+
+      this.skPendingReviewData = skPendingReviewData;
+      this.skPendingReviewAppsCount = skPendingReviewData.meta.count;
+
+      this.singleUpdate = false;
+    } catch (e) {
+      this.notify.error(parseError(e));
     }
-  );
-
-  get totalCount() {
-    return this.skPendingReviewData?.meta?.count || 0;
-  }
-
-  setRouteQueryParams(limit: number, offset: number) {
-    this.router.transitionTo({
-      queryParams: {
-        app_limit: limit,
-        app_offset: offset,
-      },
-    });
-  }
+  });
 }

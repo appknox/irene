@@ -6,7 +6,6 @@ import type IntlService from 'ember-intl/services/intl';
 import type RouterService from '@ember/routing/router-service';
 import type Store from '@ember-data/store';
 
-import ENUMS from 'irene/enums';
 import parseError from 'irene/utils/parse-error';
 import type SkInventoryAppModel from 'irene/models/sk-inventory-app';
 import type OrganizationService from 'irene/services/organization';
@@ -71,18 +70,15 @@ export default class StoreknoxInventoryDetailsHeaderComponent extends Component<
 
   get routeTagList() {
     const skInventoryAppId = this.skInventoryApp?.id as string;
-    const appCoreProjectLatestVersionId = this.appCoreProjectLatestVersion?.id;
 
     return [
       {
         id: 'unscanned-version',
         disabled: false,
         label: this.intl.t('storeknox.unscannedVersion'),
-        needsAction:
-          this.skInventoryApp?.storeMonitoringStatus ===
-          ENUMS.SK_APP_MONITORING_STATUS.UNSCANNED,
+        needsAction: this.skInventoryApp?.containsUnscannedVersion,
         route: 'authenticated.storeknox.inventory-details.unscanned-version',
-        models: [skInventoryAppId, appCoreProjectLatestVersionId as string],
+        models: [skInventoryAppId],
       },
       {
         id: 'brand-abuse',
@@ -115,18 +111,15 @@ export default class StoreknoxInventoryDetailsHeaderComponent extends Component<
 
   toggleSkInventoryAppMonitoring = task(async (checked: boolean) => {
     try {
-      this.skInventoryApp?.set('monitoringEnabled', checked);
-
       await this.skInventoryApp?.toggleMonitoring(checked);
       await this.skInventoryApp?.reload();
 
       this.notify.success(
-        'Monitoring ' + `${checked ? 'Enabled' : 'Disabled'}`
+        this.intl.t('storeknox.monitoring') +
+          ` ${checked ? this.intl.t('enabled') : this.intl.t('disabled')}`
       );
     } catch (error) {
       this.notify.error(parseError(error));
-
-      this.skInventoryApp?.rollbackAttributes();
     }
   });
 }

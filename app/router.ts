@@ -224,19 +224,7 @@ Router.map(function () {
           this.route('developersettings');
         });
 
-        this.route(
-          'app-monitoring',
-          { path: '/store-monitoring' },
-          function () {
-            this.route(
-              'monitoring-details',
-              { path: '/monitoring-details/:am_app_id' },
-              function () {
-                this.route('history');
-              }
-            );
-          }
-        );
+        this.route('app-monitoring', { path: '/store-monitoring' });
 
         this.route('marketplace');
 

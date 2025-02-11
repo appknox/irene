@@ -1,0 +1,48 @@
+<AkStack @direction='column' @width='full'>
+  <Storeknox::InventoryDetails::SectionHeader>
+    <:default>
+      <AkTypography
+        @fontWeight='medium'
+        data-test-storeknoxInventoryDetails-appDetailsHeaderText
+      >
+        {{t 'storeknox.appDetails'}}
+      </AkTypography>
+    </:default>
+  </Storeknox::InventoryDetails::SectionHeader>
+
+  <Storeknox::InventoryDetails::SectionInfo
+    @width='full'
+    @spacing='1'
+    @alignItems='center'
+  >
+    <AkStack @direction='column' @width='full' @spacing='1.5'>
+      {{#each this.appDetailsInfo as |info idx|}}
+        {{#if (gt idx 0)}}
+          <AkDivider @color='light' />
+        {{/if}}
+
+        <AkStack
+          @alignItems='center'
+          @width='9/12'
+          @spacing='2.5'
+          data-test-storeknoxInventoryDetails-appDetailsHeader='{{info.id}}'
+        >
+          <AkTypography
+            @color='neutral'
+            {{style width='150px'}}
+            data-test-storeknoxInventoryDetails-appDetailsHeaderInfoText
+          >
+            {{info.title}}
+          </AkTypography>
+
+          <AkTypography
+            @fontWeight='medium'
+            data-test-storeknoxInventoryDetails-appDetailsHeaderInfoValue
+          >
+            {{or info.value '-'}}
+          </AkTypography>
+        </AkStack>
+      {{/each}}
+    </AkStack>
+  </Storeknox::InventoryDetails::SectionInfo>
+</AkStack>

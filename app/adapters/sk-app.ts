@@ -14,6 +14,12 @@ export interface ToggleSkAppMonitoringStatusResponse {
   monitoring_enabled: boolean;
 }
 
+export interface InitiateUploadResponse {
+  id: number;
+  url: string;
+  status: number;
+}
+
 export default class SkAppAdapter extends CommonDRFAdapter {
   _buildURL() {
     const baseurl = `${this.namespace_v2}/sk_app`;
@@ -79,6 +85,12 @@ export default class SkAppAdapter extends CommonDRFAdapter {
     };
 
     return await this.ajax(url, 'PUT', { data });
+  }
+
+  async iniiateAppUpload(id: string) {
+    const url = this.buildURL().concat(`/${id}/sk_app_upload`);
+
+    return (await this.ajax(url, 'POST')) as InitiateUploadResponse;
   }
 }
 

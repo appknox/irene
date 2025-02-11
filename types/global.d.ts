@@ -63,9 +63,23 @@ declare module '@glint/environment-ember-loose/registry' {
       Return: boolean;
     }>;
 
+    gt: HelperLike<{
+      Args: {
+        Positional: (string | number | boolean | undefined | null)[];
+      };
+      Return: boolean;
+    }>;
+
+    or: HelperLike<{
+      Args: {
+        Positional: (string | number | boolean | undefined | null)[];
+      };
+      Return: boolean;
+    }>;
+
     and: HelperLike<{
       Args: {
-        Positional: unknown[];
+        Positional: (string | number | boolean)[];
       };
       Return: boolean;
     }>;

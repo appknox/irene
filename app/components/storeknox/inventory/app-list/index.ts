@@ -2,15 +2,7 @@ import Component from '@glimmer/component';
 import { tracked } from '@glimmer/tracking';
 import { action } from '@ember/object';
 
-import { type StoreknoxInventoryAppListQueryParams } from 'irene/routes/authenticated/storeknox/inventory/app-list';
-
-export interface StoreknoxInventoryAppListSignature {
-  Args: {
-    queryParams: StoreknoxInventoryAppListQueryParams;
-  };
-}
-
-export default class StoreknoxInventoryAppListComponent extends Component<StoreknoxInventoryAppListSignature> {
+export default class StoreknoxInventoryAppListComponent extends Component {
   @tracked searchQuery = '';
   @tracked discoverClicked = false;
 

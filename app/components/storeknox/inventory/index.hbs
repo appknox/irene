@@ -2,14 +2,21 @@
   @direction='row'
   @alignItems='center'
   @justifyContent='space-between'
-  local-class='header-storeknox-discover-page'
+  local-class='header-storeknox-inventory-page'
 >
   <AkStack @direction='column' @spacing='0.5'>
-    <AkTypography @variant='subtitle1'>
+    <AkTypography
+      @variant='subtitle1'
+      data-test-storeknoxInventory-inventoryHeaderText
+    >
       {{t 'storeknox.inventoryHeader'}}
     </AkTypography>
 
-    <AkTypography @variant='body2' @color='neutral'>
+    <AkTypography
+      @variant='body2'
+      @color='neutral'
+      data-test-storeknoxInventory-inventoryDescriptionText
+    >
       {{t 'storeknox.inventoryDescription'}}
     </AkTypography>
   </AkStack>
@@ -20,6 +27,7 @@
         @underline='none'
         @color='inherit'
         @route='authenticated.storeknox.discover.result'
+        data-test-storeknoxInventory-discoveryPageLink
       >
         {{t 'storeknox.discoverHeader'}}
       </AkLink>
@@ -37,6 +45,7 @@
         @size='medium'
         @variant='outlined'
         {{on 'click' this.openSettingsDrawer}}
+        data-test-storeknoxInventory-settingsDrawerTrigger
       >
         <AkIcon @iconName='settings' />
       </AkIconButton>
@@ -52,6 +61,7 @@
       @route={{item.route}}
       @hasBadge={{item.hasBadge}}
       @badgeCount={{item.badgeCount}}
+      data-test-storeknoxInventory-tabs='{{item.id}}-tab'
     >
       {{item.label}}
     </Akt.tabItem>
@@ -75,7 +85,7 @@
         @color='inherit'
         @variant='h5'
         @fontWeight='medium'
-        data-test-addProjectTeam-drawerContainer-title
+        data-test-storeknoxInventory-settingsDrawer-title
       >
         {{t 'storeknox.inventorySettings'}}
       </AkTypography>
@@ -83,7 +93,7 @@
       <AkIconButton
         {{on 'click' dr.closeHandler}}
         class={{ab.classes.defaultIconBtn}}
-        data-test-addProjectTeam-drawerContainer-closeIconBtn
+        data-test-storeknoxInventory-settingsDrawer-closeIconBtn
       >
         <AkIcon @iconName='close' />
       </AkIconButton>
@@ -96,12 +106,30 @@
       class='px-3 py-4'
     >
       <AkStack @direction='column' @spacing='0.5' {{style maxWidth='450px'}}>
-        <AkTypography @fontWeight='bold'>
+        <AkTypography
+          @fontWeight='bold'
+          data-test-storeknoxInventory-settingsDrawer-addAppknoxProjectsByDefaultTitle
+        >
           {{t 'storeknox.addAppknoxProjectsByDefault'}}
         </AkTypography>
 
-        <AkTypography @variant='body2' @color='neutral'>
-          {{t 'storeknox.addAppknoxProjectsByDefaultToggleDescription'}}
+        <AkTypography
+          @variant='body2'
+          @color='neutral'
+          data-test-storeknoxInventory-settingsDrawer-addAppknoxProjectsByDefaultDesc
+        >
+          {{t 'storeknox.addVAPTPrjsByDefaultToggleDesc1'}}
+          <AkLink
+            @color='primary'
+            @route='authenticated.dashboard.projects'
+            @underline='always'
+            @typographyVariant='body2'
+            target='_blank'
+            rel='noopener noreferrer'
+          >
+            {{t 'vapt'}}
+          </AkLink>
+          {{t 'storeknox.addVAPTPrjsByDefaultToggleDesc2'}}
         </AkTypography>
       </AkStack>
 
@@ -109,6 +137,7 @@
         @size='small'
         @checked={{this.selectedSkOrg.addAppknoxProjectToInventoryByDefault}}
         @onChange={{this.onToggleAddToInventoryByDefault}}
+        data-test-storeknoxInventory-settingsDrawer-addAppknoxProjectsByDefaultToggle
       />
     </AkStack>
 

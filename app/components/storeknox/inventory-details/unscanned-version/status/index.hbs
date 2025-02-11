@@ -1,0 +1,12 @@
+{{#if this.showChip}}
+  <AkChip
+    ...attributes
+    @size='small'
+    @variant='semi-filled'
+    @color={{@condition}}
+    @label={{@label}}
+    local-class='status'
+    data-test-am-status-element
+    data-test-am-status={{@condition}}
+  />
+{{/if}}

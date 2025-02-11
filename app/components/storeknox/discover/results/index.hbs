@@ -68,14 +68,8 @@
   </AkButton>
 </AkStack>
 
-{{#if this.showDiscoveryResults}}
-  <Storeknox::Discover::Results::Table
-    @queryParams={{@queryParams}}
-    @isLoading={{this.isFetchingData}}
-    @goToPage={{this.goToPage}}
-    @onItemPerPageChange={{this.onItemPerPageChange}}
-    @skDiscoveryResultData={{this.skDiscoveryResultData}}
-  />
+{{#if this.skDiscoverySearchResult.showDiscoveryResults}}
+  <Storeknox::Discover::Results::Table />
 {{else}}
   <Storeknox::Discover::Results::Empty />
 {{/if}}

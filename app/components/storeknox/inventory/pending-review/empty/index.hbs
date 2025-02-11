@@ -1,11 +1,21 @@
 <AkStack @direction='column' @alignItems='center' local-class='empty-container'>
-  <AkSvg::NoPendingItems />
+  <AkSvg::NoPendingItems
+    data-test-storeknoxInventory-pendingReviewEmptyIllustration
+  />
 
-  <AkTypography @variant='h5' @gutterBottom={{true}} local-class='header'>
+  <AkTypography
+    @variant='h5'
+    @gutterBottom={{true}}
+    local-class='header'
+    data-test-storeknoxInventory-pendingReviewEmptyHeaderText
+  >
     {{t 'storeknox.noPendingItems'}}
   </AkTypography>
 
-  <AkTypography local-class='body-text'>
+  <AkTypography
+    local-class='body-text'
+    data-test-storeknoxInventory-pendingReviewEmptyDescriptionText
+  >
     {{t 'storeknox.noPendingItemsDescription'}}
   </AkTypography>
 </AkStack>

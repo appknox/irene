@@ -5,13 +5,13 @@ import type SkAppVersionModel from 'irene/models/sk-app-version';
 
 dayjs.extend(advancedFormat);
 
-interface AppMonitoringVersionTableDateFoundSignature {
+interface StoreknoxInventoryDetailsUnscannedVersionTableDateFoundSignature {
   Args: {
     skAppVersion: SkAppVersionModel;
   };
 }
 
-export default class AppMonitoringVersionTableDateFoundComponent extends Component<AppMonitoringVersionTableDateFoundSignature> {
+export default class StoreknoxInventoryDetailsUnscannedVersionTableDateFoundComponent extends Component<StoreknoxInventoryDetailsUnscannedVersionTableDateFoundSignature> {
   get dateFound() {
     return dayjs(this.args.skAppVersion.get('createdOn')).format('Do MMM YYYY');
   }

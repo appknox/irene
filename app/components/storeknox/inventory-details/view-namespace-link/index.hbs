@@ -1,0 +1,22 @@
+<AkLink
+  @color='primary'
+  @route='authenticated.dashboard.organization.namespaces'
+  @underline='always'
+  @fontWeight='bold'
+  target='_blank'
+  rel='noopener noreferrer'
+  {{style textTransform='capitalize'}}
+  ...attributes
+>
+  <:leftIcon>
+    <AkIcon
+      @color='primary'
+      @iconName='open-in-new'
+      {{style fontSize='1.5714rem !important'}}
+    />
+  </:leftIcon>
+
+  <:default>
+    {{t 'notificationModule.viewNamespaces'}}
+  </:default>
+</AkLink>

@@ -13,3 +13,10 @@
       var(--storeknox-inventory-details-header-app-logo-border-color);
   }
 }
+
+.tooltip-content-container {
+  width: 320px;
+  padding: 0.5em;
+  box-sizing: border-box;
+  white-space: normal;
+}

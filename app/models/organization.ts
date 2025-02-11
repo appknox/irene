@@ -3,7 +3,6 @@ import OrganizationMemberModel from './organization-member';
 import OrganizationNamespaceModel from './organization-namespace';
 import OrganizationProjectModel from './organization-project';
 import OrganizationTeamModel from './organization-team';
-import AmConfigurationModel from 'irene/models/amconfiguration';
 
 interface Features {
   app_monitoring: boolean;
@@ -65,14 +64,6 @@ export default class OrganizationModel extends Model {
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore
     return this.members?.meta?.count;
-  }
-
-  async get_am_configuration(): Promise<AmConfigurationModel> {
-    const adapter = this.store.adapterFor('amconfiguration');
-    const payload = await adapter.from_organization(this.id);
-
-    const normalized = this.store.normalize('amconfiguration', payload);
-    return this.store.push(normalized) as AmConfigurationModel;
   }
 }
 

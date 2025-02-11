@@ -62,7 +62,7 @@ export default class StoreknoxInventoryDetailsUnscannedVersionTableComponent ext
       },
       {
         name: this.intl.t('appMonitoringModule.appStatus'),
-        width: this.isHistoryTable ? 250 : 200,
+        width: 300,
         textAlign: 'center',
         component:
           'storeknox/inventory-details/unscanned-version/table/scan-status',
@@ -77,7 +77,7 @@ export default class StoreknoxInventoryDetailsUnscannedVersionTableComponent ext
       {
         name: this.intl.t('action'),
         textAlign: 'center',
-        width: 150,
+        width: 180,
 
         component:
           'storeknox/inventory-details/unscanned-version/table/actions',

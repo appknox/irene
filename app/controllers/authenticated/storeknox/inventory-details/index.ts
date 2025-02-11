@@ -14,7 +14,7 @@ export default class AuthenticatedStoreknoxInventoryDetailsController extends Co
     return {
       title: `Inventory Details (${this.model?.appMetadata?.packageName})`,
       route: 'authenticated.storeknox.inventory-details.index',
-      models: [this.model.id],
+      models: [this.model?.id],
       routeGroup: 'storeknox/inventory',
 
       parentCrumb: {

@@ -1,10 +1,10 @@
 import Component from '@glimmer/component';
 import type SkAppVersionModel from 'irene/models/sk-app-version';
 
-interface AppMonitoringVersionTableStoreVersionSignature {
+interface StoreknoxInventoryDetailsUnscannedVersionTableStoreVersionSignature {
   Args: {
     skAppVersion: SkAppVersionModel;
   };
 }
 
-export default class AppMonitoringVersionTableStoreVersionComponent extends Component<AppMonitoringVersionTableStoreVersionSignature> {}
+export default class StoreknoxInventoryDetailsUnscannedVersionTableStoreVersionComponent extends Component<StoreknoxInventoryDetailsUnscannedVersionTableStoreVersionSignature> {}

@@ -29,15 +29,15 @@ export default class StoreknoxInventoryDetailsUnscannedVersionHeaderComponent ex
   }
 
   get coreProjectLatestVersionId() {
-    return this.skInventoryCoreProjectLatestVersion?.id;
+    return this.skInventoryCoreProjectLatestVersion?.get('id');
   }
 
   get monitoringEnabled() {
     return this.skInventoryApp?.monitoringEnabled;
   }
 
-  get lastSyncedDate() {
-    return dayjs(this.skInventoryApp?.updatedOn).format('DD MMMM, YYYY');
+  get lastMonitoredOn() {
+    return dayjs(this.skInventoryApp?.lastMonitoredOn).format('DD MMMM, YYYY');
   }
 
   get tabItems() {

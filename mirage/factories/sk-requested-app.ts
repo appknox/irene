@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
 // @ts-expect-error "trait" prop missing from miragejs
-import { ModelInstance, Server, trait } from 'miragejs';
+import { trait } from 'miragejs';
 import { faker } from '@faker-js/faker';
 
 import ENUMS from 'irene/enums';
@@ -28,14 +28,4 @@ export default SkAppFactory.extend({
     rejected_by: () => faker.person.firstName(),
     approval_status: ENUMS.SK_APPROVAL_STATUS.REJECTED,
   }),
-
-  // @ts-expect-error
-  afterCreate(skApp: ModelInstance, server: Server) {
-    // @ts-expect-error
-    if (!skApp.app_metadata) {
-      skApp.update({
-        app_metadata: server.create('sk-app-metadata'),
-      });
-    }
-  },
 });

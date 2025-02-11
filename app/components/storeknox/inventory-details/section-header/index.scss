@@ -1,8 +1,9 @@
 .storeknox-inventory-details-section-header-root {
   height: 40px;
-  border-bottom: 0px;
   border: 1px solid
     var(--storeknox-inventory-details-section-header-root-border-color);
+
+  border-bottom: 0px;
 
   &.default {
     background: var(

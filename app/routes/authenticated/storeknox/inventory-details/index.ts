@@ -14,8 +14,15 @@ export default class AuthenticatedStoreknoxInventoryDetailsIndexRoute extends Ak
   @service declare router: RouterService;
 
   async model(): Promise<SkInventoryAppModel> {
-    return this.modelFor(
+    const params = this.paramsFor(
       'authenticated.storeknox.inventory-details'
-    ) as SkInventoryAppModel;
+    ) as { id: string };
+
+    const skInventoryApp = await this.store.findRecord(
+      'sk-inventory-app',
+      params.id
+    );
+
+    return skInventoryApp;
   }
 }

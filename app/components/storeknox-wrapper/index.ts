@@ -45,7 +45,7 @@ export default class StoreknoxWrapperComponent extends Component<StoreknoxWrappe
         icon: 'inventory-2',
         route: 'authenticated.storeknox.inventory.app-list',
         currentWhen:
-          'authenticated.storeknox.inventory.app-list authenticated.storeknox.inventory.pending-reviews authenticated.storeknox.inventory.disabled-apps authenticated.storeknox.inventory-details.index',
+          'authenticated.storeknox.inventory.app-list authenticated.storeknox.inventory.pending-reviews authenticated.storeknox.inventory.disabled-apps authenticated.storeknox.inventory-details.index authenticated.storeknox.inventory-details.unscanned-version authenticated.storeknox.inventory-details.unscanned-version.history authenticated.storeknox.inventory-details.unscanned-version.index authenticated.storeknox.inventory-details.brand-abuse authenticated.storeknox.inventory-details.malware-detected',
       },
       {
         label: this.intl.t('discovery'),
