@@ -59,6 +59,12 @@ export default class FileDetailsApiScanCapturedApisComponent extends Component<F
     this.fetchCapturedApis.perform(this.limit, this.offset);
   }
 
+  willDestroy(): void {
+    super.willDestroy();
+
+    this.apiScan.setFooterComponent(null, {});
+  }
+
   get capturedApiList() {
     return this.capturedApiResponse?.toArray() || [];
   }
