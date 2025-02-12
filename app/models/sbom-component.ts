@@ -46,6 +46,15 @@ export default class SbomComponentModel extends Model {
   @attr('string')
   declare remediation: string;
 
+  @attr('string')
+  declare bomRef: string;
+
+  @attr('number')
+  declare dependencyCount: number;
+
+  @attr('boolean')
+  declare isDependency: boolean;
+
   get isVulnerable() {
     return this.vulnerabilitiesCount > 0;
   }

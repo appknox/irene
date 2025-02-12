@@ -104,11 +104,26 @@ module('Acceptance | sbom', function (hooks) {
       }
     );
 
-    this.server.get('/v2/sb_files/:scan_id/sb_components', (schema) => {
-      const results = schema.sbomComponents.all().models;
+    this.server.get(
+      '/v2/sb_files/:id/sb_file_components',
+      (schema, request) => {
+        this.set('query', request.queryParams.q);
 
-      return { count: results.length, next: null, previous: null, results };
-    });
+        const results = schema.sbomComponents.all().models;
+
+        const retdata = results.slice(
+          request.queryParams.offset,
+          request.queryParams.offset + request.queryParams.limit
+        );
+
+        return {
+          count: retdata.length,
+          next: null,
+          previous: null,
+          results: retdata,
+        };
+      }
+    );
 
     this.owner.register('service:integration', IntegrationStub);
     this.owner.register('service:websocket', WebsocketStub);
@@ -180,15 +195,19 @@ module('Acceptance | sbom', function (hooks) {
     );
   });
 
-  test('it triggers sbom scan component details route on row click', async function (assert) {
-    this.server.createList('sbom-vulnerability-audit', 3);
+  test('test sbom scan details', async function (assert) {
+    this.server.get('/v2/sb_projects/:id/sb_files', (schema) => {
+      const results = schema.sbomFiles.all().models;
 
-    this.server.get('/v2/sb_components/:id', (schema, req) =>
+      return { count: results.length, next: null, previous: null, results };
+    });
+
+    this.server.get('/v2/sb_file_component/:id', (schema, req) =>
       schema.sbomComponents.find(`${req.params.id}`)?.toJSON()
     );
 
     this.server.get(
-      '/v2/sb_components/:comp_id/sb_vulnerability_audits',
+      '/v2/sb_file_component/:comp_id/sb_vulnerability_audits',
       (schema) => {
         const results = schema.sbomVulnerabilityAudits.all().models;
 
@@ -200,16 +219,265 @@ module('Acceptance | sbom', function (hooks) {
       `/dashboard/sbom/apps/${this.sbomProjects[1].id}/scans/${this.sbomFiles[1].id}`
     );
 
-    const contentRows = findAll('[data-test-sbomComponent-row]');
+    assert.dom('[data-test-sbomScanDetails-container]').exists();
 
-    assert.strictEqual(contentRows.length, this.sbomComponents.length);
+    assert.dom('[data-test-sbomScanDetails-switch-header]').exists();
 
-    await click(contentRows[2]);
+    assert.dom('[data-test-sbomScanDetails-switch-listViewButton]').exists();
+
+    assert
+      .dom('[data-test-sbomScanDetails-switch-treeViewButton]')
+      .exists()
+      .hasClass(/active/);
+
+    assert
+      .dom('[data-test-sbomScanDetails-collapseAllButton]')
+      .exists()
+      .isDisabled();
+
+    assert.dom('[data-test-component-tree]').exists();
+
+    const nodes = findAll('[data-test-component-tree-node]');
+
+    assert.strictEqual(nodes.length, this.sbomComponents.length);
+
+    const nodeLabels = findAll('[data-test-component-tree-nodeLabel]');
+
+    await click(nodeLabels[0]);
 
     assert.strictEqual(
       currentURL(),
-      `/dashboard/sbom/apps/${this.sbomProjects[1].id}/scans/${this.sbomFiles[1].id}/components/${this.sbomComponents[2].id}`
+      `/dashboard/sbom/apps/${this.sbomProjects[1].id}/scans/${this.sbomFiles[1].id}/components/${this.sbomComponents[0].id}/0/overview`
     );
+
+    assert
+      .dom('[data-test-sbomComponentDetails-headerTitleValue]')
+      .containsText(this.sbomComponents[0].name);
+
+    assert
+      .dom('[data-test-sbom-component-tree-header]')
+      .exists()
+      .hasText(t('dependencyTree'));
+
+    assert
+      .dom('[data-test-sbomComponentDetails-tab="vulnerabilities"]')
+      .exists();
+
+    assert.dom('[data-test-sbomComponentDetails-tab="overview"]').exists();
+
+    assert
+      .dom('[data-test-component-tree-nodeLabel]')
+      .containsText(this.sbomComponents[0].name)
+      .hasClass(/tree-label-highlighted-text/);
+
+    assert.dom('[data-test-component-tree-returnIcon]').exists();
+
+    await click(`[data-test-sbomComponentDetails-tab="vulnerabilities"] a`);
+
+    assert.strictEqual(
+      currentURL(),
+      `/dashboard/sbom/apps/${this.sbomProjects[1].id}/scans/${this.sbomFiles[1].id}/components/${this.sbomComponents[0].id}/0/vulnerabilities`
+    );
+  });
+
+  test('test sbom scan details for outdated files', async function (assert) {
+    this.sbomFiles[1].update({ is_outdated: true });
+
+    this.server.get('/v2/sb_projects/:id/sb_files', (schema) => {
+      const results = schema.sbomFiles.all().models;
+
+      return { count: results.length, next: null, previous: null, results };
+    });
+
+    this.server.get('/v2/sb_file_component/:id', (schema, req) =>
+      schema.sbomComponents.find(`${req.params.id}`)?.toJSON()
+    );
+
+    this.server.get(
+      '/v2/sb_file_component/:comp_id/sb_vulnerability_audits',
+      (schema) => {
+        const results = schema.sbomVulnerabilityAudits.all().models;
+
+        return { count: results.length, next: null, previous: null, results };
+      }
+    );
+
+    await visit(
+      `/dashboard/sbom/apps/${this.sbomProjects[1].id}/scans/${this.sbomFiles[1].id}`
+    );
+
+    assert.dom('[data-test-sbomScanDetails-container]').exists();
+
+    assert.dom('[data-test-sbomScanDetails-switch-header]').doesNotExist();
+
+    assert
+      .dom('[data-test-sbomScanDetails-switch-listViewButton]')
+      .doesNotExist();
+
+    assert
+      .dom('[data-test-sbomScanDetails-switch-treeViewButton]')
+      .doesNotExist();
+
+    assert.dom('[data-test-component-tree]').doesNotExist();
+
+    const contentRows = findAll('[data-test-sbomComponent-row]');
+
+    await click(contentRows[1]);
+
+    assert.strictEqual(
+      currentURL(),
+      `/dashboard/sbom/apps/${this.sbomProjects[1].id}/scans/${this.sbomFiles[1].id}/components/${this.sbomComponents[1].id}/0/overview`
+    );
+
+    assert
+      .dom('[data-test-sbomComponentDetails-headerTitleValue]')
+      .containsText(this.sbomComponents[1].name);
+
+    assert
+      .dom('[data-test-sbomComponentDetails-tab="vulnerabilities"]')
+      .exists();
+
+    assert.dom('[data-test-sbomComponentDetails-tab="overview"]').exists();
+
+    assert.dom('[data-test-sbomScanDetails-componentDetails-summary]').exists();
+
+    assert.dom('[data-test-component-tree]').doesNotExist();
+
+    assert.dom('[data-test-component-tree-node]').doesNotExist();
+
+    assert.dom('[data-test-sbom-component-tree-header]').doesNotExist();
+
+    await click(`[data-test-sbomComponentDetails-tab="vulnerabilities"] a`);
+
+    assert.strictEqual(
+      currentURL(),
+      `/dashboard/sbom/apps/${this.sbomProjects[1].id}/scans/${this.sbomFiles[1].id}/components/${this.sbomComponents[1].id}/0/vulnerabilities`
+    );
+  });
+
+  test('test sbom component tree nodes expand collapse', async function (assert) {
+    this.sbomComponents[0].update({ dependency_count: 2, is_outdated: false });
+
+    this.server.get('/v2/sb_projects/:id/sb_files', (schema) => {
+      const results = schema.sbomFiles.all().models;
+
+      return { count: results.length, next: null, previous: null, results };
+    });
+
+    this.server.get('/v2/sb_file_component/:id', (schema, req) =>
+      schema.sbomComponents.find(`${req.params.id}`)?.toJSON()
+    );
+
+    const dependencies = this.server.createList('sbom-component', 2, {
+      sb_file: this.sbomFiles[1].id,
+      is_dependency: true,
+      parentId: this.sbomComponents[0].id,
+    });
+
+    this.server.get('/v2/sb_file_component/:comp_id/dependencies', () => {
+      return {
+        count: dependencies.length,
+        next: null,
+        previous: null,
+        results: dependencies,
+      };
+    });
+
+    await visit(
+      `/dashboard/sbom/apps/${this.sbomProjects[1].id}/scans/${this.sbomFiles[1].id}`
+    );
+
+    assert.dom('[data-test-sbomScanDetails-container]').exists();
+
+    assert.dom('[data-test-sbomScanDetails-switch-header]').exists();
+
+    assert.dom('[data-test-sbomScanDetails-switch-listViewButton]').exists();
+
+    assert
+      .dom('[data-test-sbomScanDetails-switch-treeViewButton]')
+      .exists()
+      .hasClass(/active/);
+
+    assert
+      .dom('[data-test-sbomScanDetails-collapseAllButton]')
+      .exists()
+      .isDisabled();
+
+    assert.dom('[data-test-component-tree]').exists();
+
+    const nodes = findAll('[data-test-component-tree-node]');
+
+    assert.notEqual(nodes.length, this.sbomComponents.length);
+
+    // Test node expansion
+    const expandIcon = nodes[0].querySelector(
+      '[data-test-component-tree-nodeExpandIcon]'
+    );
+
+    // Click to expand
+    await click(expandIcon);
+
+    assert.strictEqual(nodes.length, this.sbomComponents.length + 2);
+
+    // Test collapse all button
+    assert
+      .dom('[data-test-sbomScanDetails-collapseAllButton]')
+      .exists()
+      .isNotDisabled();
+
+    await click('[data-test-sbomScanDetails-collapseAllButton]');
+
+    assert.notEqual(nodes.length, this.sbomComponents.length);
+
+    // Click to expand
+    await click(expandIcon);
+
+    assert.strictEqual(nodes.length, this.sbomComponents.length + 2);
+
+    // Click to collapse
+    await click(expandIcon);
+
+    assert.notEqual(nodes.length, this.sbomComponents.length);
+  });
+
+  test('it triggers sbom scan component details route on row click', async function (assert) {
+    this.server.createList('sbom-vulnerability-audit', 3);
+
+    this.server.get('/v2/sb_file_component/:id', (schema, req) =>
+      schema.sbomComponents.find(`${req.params.id}`)?.toJSON()
+    );
+
+    this.server.get(
+      '/v2/sb_file_component/:comp_id/sb_vulnerability_audits',
+      (schema) => {
+        const results = schema.sbomVulnerabilityAudits.all().models;
+
+        return { count: results.length, next: null, previous: null, results };
+      }
+    );
+
+    await visit(
+      `/dashboard/sbom/apps/${this.sbomProjects[1].id}/scans/${this.sbomFiles[1].id}`
+    );
+
+    assert.dom('[data-test-sbomScanDetails-switch-listViewButton]').exists();
+
+    await click('[data-test-sbomScanDetails-switch-listViewButton]');
+
+    const contentRows = findAll('[data-test-sbomComponent-row]');
+
+    await click(contentRows[1]);
+
+    assert.strictEqual(
+      currentURL(),
+      `/dashboard/sbom/apps/${this.sbomProjects[1].id}/scans/${this.sbomFiles[1].id}/components/${this.sbomComponents[1].id}/0/overview`
+    );
+
+    assert
+      .dom('[data-test-sbomComponentDetails-tab="vulnerabilities"]')
+      .exists();
+
+    assert.dom('[data-test-sbomComponentDetails-tab="overview"]').exists();
   });
 
   test('test search in sbom app list', async function (assert) {

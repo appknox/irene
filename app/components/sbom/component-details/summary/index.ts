@@ -1,9 +1,9 @@
+import Component from '@glimmer/component';
 import { inject as service } from '@ember/service';
 import { capitalize } from '@ember/string';
-import Component from '@glimmer/component';
+import type IntlService from 'ember-intl/services/intl';
 
-import SbomComponentModel from 'irene/models/sbom-component';
-import IntlService from 'ember-intl/services/intl';
+import type SbomComponentModel from 'irene/models/sbom-component';
 
 export interface SbomComponentDetailsSummarySignature {
   Element: HTMLDivElement;
@@ -20,6 +20,12 @@ export default class SbomComponentDetailsSummaryComponent extends Component<Sbom
       {
         label: this.intl.t('sbomModule.componentType'),
         value: capitalize(this.args.sbomComponent?.type || ''),
+      },
+      {
+        label: this.intl.t('dependencyType'),
+        value: this.args.sbomComponent?.isDependency
+          ? this.intl.t('dependencyTypes.transitive')
+          : this.intl.t('dependencyTypes.direct'),
       },
       {
         label: this.intl.t('version'),

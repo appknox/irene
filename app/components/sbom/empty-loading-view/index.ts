@@ -4,6 +4,8 @@ export interface SbomEmptyLoadingViewSignature {
   Args: {
     empty: boolean;
     loading: boolean;
+    tree?: 'filtered' | 'full';
+    skeleton?: boolean;
     loadingSvgWidth?: string;
     loadingSvgHeight?: string;
     emptySvgWidth?: string;
@@ -19,7 +21,19 @@ export interface SbomEmptyLoadingViewSignature {
   };
 }
 
-export default class SbomEmptyLoadingViewComponent extends Component<SbomEmptyLoadingViewSignature> {}
+export default class SbomEmptyLoadingViewComponent extends Component<SbomEmptyLoadingViewSignature> {
+  get tree() {
+    return this.args.tree ? true : false;
+  }
+
+  get isFilteredTree() {
+    return this.args.tree === 'filtered';
+  }
+
+  get skeleton() {
+    return this.args.skeleton ?? false;
+  }
+}
 
 declare module '@glint/environment-ember-loose/registry' {
   export default interface Registry {

@@ -290,6 +290,11 @@ const ENUMS = {
     ACTIVE: 1,
     ARCHIVED: 2,
   },
+
+  DEPENDENCY_TYPE: {
+    DEPENDENCIES: 1,
+    PARENTS: 2,
+  },
 };
 
 export const ENUMS_DISPLAY = {

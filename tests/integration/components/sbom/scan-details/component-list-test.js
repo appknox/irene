@@ -72,11 +72,26 @@ module(
     });
 
     test('it renders sbom scan component list', async function (assert) {
-      this.server.get('/v2/sb_files/:scan_id/sb_components', (schema) => {
-        const results = schema.sbomComponents.all().models;
+      this.server.get(
+        '/v2/sb_files/:id/sb_file_components',
+        (schema, request) => {
+          this.set('query', request.queryParams.q);
 
-        return { count: results.length, next: null, previous: null, results };
-      });
+          const results = schema.sbomComponents.all().models;
+
+          const retdata = results.slice(
+            request.queryParams.offset,
+            request.queryParams.offset + request.queryParams.limit
+          );
+
+          return {
+            count: retdata.length,
+            next: null,
+            previous: null,
+            results: retdata,
+          };
+        }
+      );
 
       await render(hbs`
         <Sbom::ScanDetails::ComponentList 
@@ -96,7 +111,7 @@ module(
       // assert header row
       assert.dom(headerRow[0]).hasText(t('sbomModule.componentName'));
       assert.dom(headerRow[1]).hasText(t('sbomModule.componentType'));
-      assert.dom(headerRow[2]).hasText(t('version'));
+      assert.dom(headerRow[2]).hasText(t('dependencyType'));
       assert.dom(headerRow[3]).hasText(t('status'));
 
       const contentRows = findAll('[data-test-sbomComponent-row]');
@@ -118,8 +133,18 @@ module(
       assert.dom(firstRow[1]).hasText(capitalize(sbomComponent.type));
 
       assert
-        .dom('[data-test-sbomComponent-version]', firstRow[2])
-        .hasText(sbomComponent.version);
+        .dom('[data-test-sbomComponent-dependencyType]', firstRow[2])
+        .exists();
+
+      if (sbomComponent.isDependency) {
+        assert
+          .dom('[data-test-sbomComponent-dependencyType]', firstRow[2])
+          .hasText(t('dependencyTypes.transitive'));
+      } else {
+        assert
+          .dom('[data-test-sbomComponent-dependencyType]', firstRow[2])
+          .hasText(t('dependencyTypes.direct'));
+      }
 
       if (sbomComponent.isOutdated) {
         assert
@@ -148,13 +173,16 @@ module(
     });
 
     test.skip('test sbom scan component list search', async function (assert) {
-      this.server.get('/v2/sb_files/:scan_id/sb_components', (schema, req) => {
-        this.set('query', req.queryParams.q);
+      this.server.get(
+        '/v2/sb_files/:scan_id/sb_file_components',
+        (schema, req) => {
+          this.set('query', req.queryParams.q);
 
-        const results = schema.sbomComponents.all().models;
+          const results = schema.sbomComponents.all().models;
 
-        return { count: results.length, next: null, previous: null, results };
-      });
+          return { count: results.length, next: null, previous: null, results };
+        }
+      );
 
       await render(hbs`
         <Sbom::ScanDetails::ComponentList 
@@ -187,7 +215,7 @@ module(
 
       this.sbomComponents[1].latest_version = '2.0.0';
 
-      this.server.get('/v2/sb_files/:scan_id/sb_components', () => {
+      this.server.get('/v2/sb_files/:scan_id/sb_file_components', () => {
         const results = this.sbomComponents;
         return { count: results.length, next: null, previous: null, results };
       });
@@ -211,10 +239,6 @@ module(
       );
 
       assert
-        .dom('[data-test-sbomComponent-version]', firstRow[2])
-        .hasText(this.sbomComponents[0].version);
-
-      assert
         .dom(
           `[data-test-sbomComponent-status="${t('chipStatus.outdated')}"]`,
           firstRow[3]
@@ -227,10 +251,6 @@ module(
       );
 
       assert
-        .dom('[data-test-sbomComponent-version]', secondRow[2])
-        .hasText(this.sbomComponents[1].version);
-
-      assert
         .dom(
           `[data-test-sbomComponent-status="${t('chipStatus.outdated')}"]`,
           secondRow[3]
@@ -240,7 +260,7 @@ module(
 
     test('it renders sbom scan component list loading & empty state', async function (assert) {
       this.server.get(
-        '/v2/sb_files/:scan_id/sb_components',
+        '/v2/sb_files/:scan_id/sb_file_components',
         () => {
           return { count: 0, next: null, previous: null, results: [] };
         },
@@ -256,16 +276,13 @@ module(
         />
       `);
 
-      await waitFor('[data-test-sbom-loadingSvg]', { timeout: 500 });
+      await waitFor('[data-test-component-list-skeleton-loader]', {
+        timeout: 500,
+      });
 
       // assert.dom('[data-test-sbomComponent-searchInput]').hasNoValue();
 
       assert.dom('[data-test-sbomComponent-table]').doesNotExist();
-
-      assert.dom('[data-test-sbom-loadingSvg]').exists();
-
-      assert.dom('[data-test-sbom-loader]').exists();
-      assert.dom('[data-test-sbom-loadingText]').hasText(`${t('loading')}...`);
 
       await waitFor('[data-test-sbomComponent-emptyTextTitle]', {
         timeout: 500,

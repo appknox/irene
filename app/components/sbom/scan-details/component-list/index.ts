@@ -2,23 +2,23 @@ import { action } from '@ember/object';
 import { inject as service } from '@ember/service';
 import Component from '@glimmer/component';
 import { tracked } from '@glimmer/tracking';
-import IntlService from 'ember-intl/services/intl';
 import { task } from 'ember-concurrency';
 import { debounce } from '@ember/runloop';
+import type IntlService from 'ember-intl/services/intl';
 
 // eslint-disable-next-line ember/use-ember-data-rfc-395-imports
-import { DS } from 'ember-data';
-import Store from '@ember-data/store';
-import RouterService from '@ember/routing/router-service';
+import type { DS } from 'ember-data';
+import type Store from '@ember-data/store';
+import type RouterService from '@ember/routing/router-service';
 
-import { PaginationProviderActionsArgs } from 'irene/components/ak-pagination-provider';
+import type { PaginationProviderActionsArgs } from 'irene/components/ak-pagination-provider';
 import parseError from 'irene/utils/parse-error';
 
-import SbomProjectModel from 'irene/models/sbom-project';
-import SbomFileModel from 'irene/models/sbom-file';
-import SbomComponentModel from 'irene/models/sbom-component';
-import { SbomComponentQueryParam } from 'irene/routes/authenticated/dashboard/sbom/scan-details';
-import SbomScanSummaryModel from 'irene/models/sbom-scan-summary';
+import type SbomProjectModel from 'irene/models/sbom-project';
+import type SbomFileModel from 'irene/models/sbom-file';
+import type SbomComponentModel from 'irene/models/sbom-component';
+import type { SbomComponentQueryParam } from 'irene/routes/authenticated/dashboard/sbom/scan-details';
+import type SbomScanSummaryModel from 'irene/models/sbom-scan-summary';
 
 export interface SbomScanDetailsComponentListSignature {
   Element: HTMLDivElement;
@@ -97,8 +97,8 @@ export default class SbomScanDetailsComponentListComponent extends Component<Sbo
         component: 'sbom/scan-details/component-list/type',
       },
       {
-        name: this.intl.t('version'),
-        component: 'sbom/scan-details/component-list/version',
+        name: this.intl.t('dependencyType'),
+        component: 'sbom/scan-details/component-list/dependency-type',
       },
       {
         name: this.intl.t('status'),
@@ -113,7 +113,8 @@ export default class SbomScanDetailsComponentListComponent extends Component<Sbo
       'authenticated.dashboard.sbom.component-details',
       this.args.sbomProject.id,
       this.args.sbomFile.id,
-      rowValue.id
+      rowValue.id,
+      0
     );
   }
 

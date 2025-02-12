@@ -1,4 +1,4 @@
-<div ...attributes class='mt-3'>
+<div ...attributes>
   <AkPaginationProvider
     @results={{this.sbomComponentList}}
     @onItemPerPageChange={{this.handleItemPerPageChange}}
@@ -13,8 +13,8 @@
     <Sbom::EmptyLoadingView
       @empty={{this.hasNoSbomComponent}}
       @loading={{this.fetchSbomComponents.isRunning}}
-      @loadingSvgHeight='200px'
-      @height='350px'
+      @skeleton={{true}}
+      @height='500px'
     >
       <:emptySvg>
         <AkSvg::NoResult data-test-sbomComponent-emptySvg />

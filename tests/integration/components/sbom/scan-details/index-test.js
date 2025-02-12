@@ -20,6 +20,8 @@ module('Integration | Component | sbom/scan-details', function (hooks) {
     const project = this.server.create('project', 1, { last_file_id: file.id });
     const sbomScanSummary = this.server.create('sbom-scan-summary', 1);
 
+    this.server.createList('sbom-component', 10);
+
     const sbomProject = this.server.create('sbom-project', 1, {
       project: project.id,
     });
@@ -74,6 +76,17 @@ module('Integration | Component | sbom/scan-details', function (hooks) {
     async function (assert, status) {
       this.sbomFile.status = status;
 
+      this.server.get('/v2/sb_files/:id/sb_file_components', (schema) => {
+        const results = schema.sbomComponents.all().models;
+
+        return {
+          count: results.length,
+          next: null,
+          previous: null,
+          results: results,
+        };
+      });
+
       await render(hbs`
         <Sbom::ScanDetails 
           @sbomProject={{this.sbomProject}} 
@@ -82,14 +95,6 @@ module('Integration | Component | sbom/scan-details', function (hooks) {
           @queryParams={{this.queryParams}} 
         />
       `);
-
-      assert
-        .dom('[data-test-sbomScanDetails-componentTitle]')
-        .hasText(t('sbomModule.allComponents'));
-
-      assert
-        .dom('[data-test-sbomScanDetails-componentDescription]')
-        .hasText(t('sbomModule.componentDescription'));
 
       // assert.dom('[data-test-sbomScanDetails-componentSearchInput]').hasNoValue();
 
@@ -121,9 +126,7 @@ module('Integration | Component | sbom/scan-details', function (hooks) {
       assert.dom('[data-test-fileScanSummary-container]').doesNotExist();
 
       if (status === SbomScanStatus.COMPLETED) {
-        assert
-          .dom('[data-test-sbomScanDetails-componentList-container]')
-          .exists();
+        assert.dom('[data-test-component-tree]').exists();
       } else {
         if (status === SbomScanStatus.FAILED) {
           assert
@@ -161,7 +164,18 @@ module('Integration | Component | sbom/scan-details', function (hooks) {
     }
   );
 
-  test('it toggles file and scan  summary on header toggle collapse button click', async function (assert) {
+  test('it toggles file and scan summary on header toggle collapse button click', async function (assert) {
+    this.server.get('/v2/sb_files/:id/sb_file_components', (schema) => {
+      const results = schema.sbomComponents.all().models;
+
+      return {
+        count: results.length,
+        next: null,
+        previous: null,
+        results: results,
+      };
+    });
+
     this.sbomFile.status = SbomScanStatus.COMPLETED;
 
     await render(hbs`
@@ -303,6 +317,17 @@ module('Integration | Component | sbom/scan-details', function (hooks) {
 
   test('it launches download report drawer on download report button click', async function (assert) {
     this.sbomFile.status = SbomScanStatus.COMPLETED;
+
+    this.server.get('/v2/sb_files/:id/sb_file_components', (schema) => {
+      const results = schema.sbomComponents.all().models;
+
+      return {
+        count: results.length,
+        next: null,
+        previous: null,
+        results: results,
+      };
+    });
 
     await render(hbs`
       <Sbom::ScanDetails 

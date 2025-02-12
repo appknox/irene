@@ -38,7 +38,7 @@ module(
 
     test('tests loading and empty states for sbom component vunerabilities', async function (assert) {
       this.server.get(
-        '/v2/sb_components/:comp_id/sb_vulnerability_audits',
+        '/v2/sb_file_component/:comp_id/sb_vulnerability_audits',
         () => {
           return { count: 0, next: null, previous: null, results: [] };
         },
@@ -76,7 +76,7 @@ module(
 
     test('it renders the vulnerabilities of a component', async function (assert) {
       this.server.get(
-        '/v2/sb_components/:comp_id/sb_vulnerability_audits',
+        '/v2/sb_file_component/:comp_id/sb_vulnerability_audits',
         (schema) => {
           const results = schema.sbomVulnerabilityAudits.all().models;
 
@@ -149,7 +149,7 @@ module(
 
     test('it toggles & render the vulnerability details', async function (assert) {
       this.server.get(
-        '/v2/sb_components/:comp_id/sb_vulnerability_audits',
+        '/v2/sb_file_component/:comp_id/sb_vulnerability_audits',
         (schema) => {
           const results = schema.sbomVulnerabilityAudits.all().models;
 
@@ -331,7 +331,7 @@ module(
       ],
       async function (assert, versions) {
         this.server.get(
-          '/v2/sb_components/:comp_id/sb_vulnerability_audits',
+          '/v2/sb_file_component/:comp_id/sb_vulnerability_audits',
           (schema) => {
             const results = schema.sbomVulnerabilityAudits.all().models;
 

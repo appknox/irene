@@ -1,54 +1,41 @@
-import { service } from '@ember/service';
+import type RouterService from '@ember/routing/router-service';
+import type Transition from '@ember/routing/transition';
 import type Store from '@ember-data/store';
+import { service } from '@ember/service';
 
+import type SbomComponentModel from 'irene/models/sbom-component';
 import AkBreadcrumbsRoute from 'irene/utils/ak-breadcrumbs-route';
 import { ScrollToTop } from 'irene/utils/scroll-to-top';
-import type SbomComponentModel from 'irene/models/sbom-component';
 
-export interface SbomAppScanQueryParam {
-  vulnerability_limit: string;
-  vulnerability_offset: string;
-  vulnerability_query: string;
-}
-
-export interface SbomAppScanParam extends SbomAppScanQueryParam {
+export interface SbomAppScanParam {
   sbom_project_id: string;
   sbom_file_id: string;
   sbom_component_id: string;
+  sbom_component_parent_id: string;
 }
 
 export interface ComponentDetailsModel {
   sbomComponent: SbomComponentModel;
   projectName: string | undefined;
-  queryParams: SbomAppScanQueryParam;
+  queryParams: SbomAppScanParam;
 }
 
-export default class AuthenticatedDashboardSbomComponentDetailsRoute extends ScrollToTop(
+export default class AuthenticatedSbomComponentDetailsRoute extends ScrollToTop(
   AkBreadcrumbsRoute
 ) {
+  @service declare router: RouterService;
   @service declare store: Store;
-
-  queryParams = {
-    vulnerability_limit: {
-      refreshModel: true,
-    },
-    vulnerability_offset: {
-      refreshModel: true,
-    },
-    vulnerability_query: {
-      refreshModel: true,
-    },
-  };
 
   async model(params: SbomAppScanParam) {
     const {
+      sbom_project_id,
       sbom_component_id,
-      vulnerability_limit = '10',
-      vulnerability_offset = '0',
-      vulnerability_query = '',
+      sbom_file_id,
+      sbom_component_parent_id,
     } = params;
 
     const sbomComponent = await this.store.queryRecord('sbom-component', {
+      sbomFileId: sbom_file_id,
       sbomComponentId: sbom_component_id,
     });
 
@@ -64,10 +51,35 @@ export default class AuthenticatedDashboardSbomComponentDetailsRoute extends Scr
       sbomFile,
       projectLastFile,
       queryParams: {
-        vulnerability_limit,
-        vulnerability_offset,
-        vulnerability_query,
+        sbom_project_id,
+        sbom_file_id,
+        sbom_component_id,
+        sbom_component_parent_id,
       },
     };
+  }
+
+  redirect(model: unknown, transition: Transition) {
+    const currentRoute = transition.to?.name;
+
+    if (
+      currentRoute === 'authenticated.dashboard.sbom.component-details.index'
+    ) {
+      const { queryParams } = model as ComponentDetailsModel;
+      const {
+        sbom_project_id,
+        sbom_file_id,
+        sbom_component_id,
+        sbom_component_parent_id,
+      } = queryParams;
+
+      this.router.transitionTo(
+        'authenticated.dashboard.sbom.component-details.overview',
+        sbom_project_id,
+        sbom_file_id,
+        sbom_component_id,
+        sbom_component_parent_id
+      );
+    }
   }
 }
