@@ -62,8 +62,12 @@ export default class FileDetailsDynamicScanDrawerAutomatedDastComponent extends 
     return this.file.profile.get('id');
   }
 
+  get projectId() {
+    return this.file.project.get('id');
+  }
+
   get apiUrlFilters() {
-    return (this.apiScanOptions?.apiUrlFilterItems || []).map((url) => ({
+    return (this.apiScanOptions?.dsApiCaptureFilters || []).map((url) => ({
       url,
     }));
   }
