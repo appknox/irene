@@ -87,6 +87,9 @@
             'modalCard.dynamicScan.emptyActiveScenariosHeaderText'
           }}
           @subText={{t 'modalCard.dynamicScan.emptyActiveScenariosSubText'}}
+          @projectId={{this.projectId}}
+          @link='authenticated.dashboard.project.settings.dast-automation'
+          @linkText={{t 'modalCard.dynamicScan.goToDastAutomationSettings'}}
           data-test-fileDetails-dynamicScanDrawer-automatedDast-scenariosEmptyContainer
         />
 
@@ -196,6 +199,9 @@
         <FileDetails::DynamicScan::Action::Drawer::AutomatedDast::EmptyListState
           @headerText={{t 'modalCard.dynamicScan.emptyAPIListHeaderText'}}
           @subText={{t 'modalCard.dynamicScan.emptyAPIListSubText'}}
+          @projectId={{this.projectId}}
+          @link='authenticated.dashboard.project.settings'
+          @linkText={{t 'modalCard.dynamicScan.goToGeneralSettings'}}
           data-test-fileDetails-dynamicScanDrawer-automatedDast-apiURLFiltersEmptyContainer
         />
 

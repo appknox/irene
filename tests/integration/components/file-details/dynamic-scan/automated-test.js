@@ -1,4 +1,11 @@
-import { render, click, find, triggerEvent } from '@ember/test-helpers';
+import {
+  render,
+  click,
+  find,
+  triggerEvent,
+  findAll,
+} from '@ember/test-helpers';
+
 import { hbs } from 'ember-cli-htmlbars';
 import { setupMirage } from 'ember-cli-mirage/test-support';
 import { setupIntl, t } from 'ember-intl/test-support';
@@ -232,14 +239,14 @@ module(
           withApiProxy: true,
           hasApiFilters: true,
           hasActiveScenarios: true,
-          assertions: 32,
+          assertions: 29,
         },
         {
           anyDeviceSelected: false,
           withApiProxy: false,
           hasApiFilters: false,
           hasActiveScenarios: false,
-          assertions: 27,
+          assertions: 30,
         },
       ],
       async function (
@@ -263,8 +270,8 @@ module(
         });
 
         const apiUrlFilters = hasApiFilters
-          ? 'api.example.com,api.example2.com'
-          : '';
+          ? ['api.example.com', 'api.example2.com']
+          : [];
 
         // Create a dynamic scan
         this.server.create('dynamicscan', {
@@ -293,7 +300,7 @@ module(
 
         this.server.get('/profiles/:id/api_scan_options', (_, req) => {
           return {
-            api_url_filters: apiUrlFilters,
+            ds_api_capture_filters: apiUrlFilters,
             id: req.params.id,
           };
         });
@@ -447,7 +454,7 @@ module(
         await triggerEvent(apiURLTitleTooltip, 'mouseleave');
 
         if (hasApiFilters) {
-          apiUrlFilters.split(',').forEach((url) => {
+          apiUrlFilters.forEach((url) => {
             const filterElem = find(
               `[data-test-fileDetails-dynamicScanDrawer-automatedDast-apiURLFilter='${url}']`
             );
@@ -468,6 +475,27 @@ module(
             )
             .containsText(t('modalCard.dynamicScan.emptyAPIListHeaderText'))
             .containsText(t('modalCard.dynamicScan.emptyAPIListSubText'));
+
+          const settingsLink = findAll(
+            '[data-test-fileDetails-dynamicScanDrawer-settingsPageRedirectLink]'
+          );
+
+          assert
+            .dom(settingsLink[1])
+            .hasText(
+              t('modalCard.dynamicScan.goToGeneralSettings'),
+              'Settings link has correct text'
+            )
+            .hasAttribute(
+              'target',
+              '_blank',
+              'Settings button opens in new tab'
+            )
+            .hasAttribute(
+              'href',
+              `/dashboard/project/${this.file.project.id}/settings`,
+              'Settings link has correct href'
+            );
         }
 
         // Active scenarios section
@@ -502,6 +530,25 @@ module(
             )
             .containsText(
               t('modalCard.dynamicScan.emptyActiveScenariosSubText')
+            );
+
+          assert
+            .dom(
+              '[data-test-fileDetails-dynamicScanDrawer-settingsPageRedirectLink]'
+            )
+            .hasText(
+              t('modalCard.dynamicScan.goToDastAutomationSettings'),
+              'Settings link has correct text'
+            )
+            .hasAttribute(
+              'target',
+              '_blank',
+              'Settings button opens in new tab'
+            )
+            .hasAttribute(
+              'href',
+              `/dashboard/project/${this.file.project.id}/settings/dast-automation`,
+              'Settings link has correct href'
             );
         }
 
@@ -545,21 +592,6 @@ module(
           .hasText(
             t('scheduleAutomation'),
             'Start scan button has correct text'
-          );
-
-        assert
-          .dom(
-            '[data-test-fileDetails-dynamicScanDrawer-settingsPageRedirectBtn]'
-          )
-          .hasText(
-            t('modalCard.dynamicScan.goToGeneralSettings'),
-            'Settings button has correct text'
-          )
-          .hasAttribute('target', '_blank', 'Settings button opens in new tab')
-          .hasAttribute(
-            'href',
-            `/dashboard/project/${this.file.project.id}/settings/dast-automation`,
-            'Settings button has correct href'
           );
       }
     );

@@ -37,7 +37,7 @@ export default class ApiFilterComponent extends Component<ApiFilterSignature> {
 
   @tracked newUrlFilter = '';
   @tracked deletedURL = '';
-  @tracked updatedURLFilters = '';
+  @tracked updatedURLFilters: string[] = [];
   @tracked showRemoveURLConfirmBox = false;
   @tracked apiScanOptions?: ApiScanOptionsModel;
 
@@ -60,7 +60,7 @@ export default class ApiFilterComponent extends Component<ApiFilterSignature> {
   }
 
   get apiUrlFilters() {
-    return (this.apiScanOptions?.apiUrlFilterItems || []).map((url) => ({
+    return (this.apiScanOptions?.dsApiCaptureFilters || []).map((url) => ({
       url,
     }));
   }
@@ -85,16 +85,18 @@ export default class ApiFilterComponent extends Component<ApiFilterSignature> {
 
   @action
   confirmCallback() {
-    const splittedURLs = this.apiScanOptions?.apiUrlFilters.split(',');
+    const currentURLs = this.apiScanOptions?.dsApiCaptureFilters;
 
-    if (splittedURLs) {
-      const index = splittedURLs.indexOf(this.deletedURL);
+    if (currentURLs) {
+      const index = currentURLs.indexOf(this.deletedURL);
 
-      splittedURLs.splice(index, 1);
+      if (index !== -1) {
+        this.updatedURLFilters = currentURLs.filter(
+          (it) => it !== this.deletedURL
+        );
 
-      this.updatedURLFilters = splittedURLs.join(',');
-
-      this.saveApiUrlFilter.perform();
+        this.saveApiUrlFilter.perform();
+      }
     }
   }
 
@@ -107,7 +109,7 @@ export default class ApiFilterComponent extends Component<ApiFilterSignature> {
       ].join('/');
 
       const data = {
-        api_url_filters: this.updatedURLFilters,
+        ds_api_capture_filters: this.updatedURLFilters,
       };
 
       triggerAnalytics(
@@ -122,7 +124,7 @@ export default class ApiFilterComponent extends Component<ApiFilterSignature> {
       if (!this.isDestroyed) {
         this.closeRemoveURLConfirmBox();
 
-        this.apiScanOptions?.set('apiUrlFilters', this.updatedURLFilters);
+        this.apiScanOptions?.set('dsApiCaptureFilters', this.updatedURLFilters);
 
         this.newUrlFilter = '';
       }
@@ -149,12 +151,12 @@ export default class ApiFilterComponent extends Component<ApiFilterSignature> {
       }
     }
 
-    const apiUrlFilters = this.apiScanOptions?.apiUrlFilters;
+    const apiUrlFilters = this.apiScanOptions?.dsApiCaptureFilters;
 
     const combinedURLS =
       apiUrlFilters && !isEmpty(apiUrlFilters)
-        ? apiUrlFilters.concat(',', this.newUrlFilter)
-        : this.newUrlFilter;
+        ? [...apiUrlFilters, this.newUrlFilter]
+        : [this.newUrlFilter];
 
     this.updatedURLFilters = combinedURLS;
 

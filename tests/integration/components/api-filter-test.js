@@ -33,7 +33,7 @@ module('Integration | Component | api-filter', function (hooks) {
 
   test('it renders', async function (assert) {
     this.server.get('/profiles/:id/api_scan_options', (_, req) => {
-      return { api_url_filters: '', id: req.params.id };
+      return { ds_api_capture_filters: [], id: req.params.id };
     });
 
     await render(hbs`<ApiFilter @profileId={{this.profile.id}} />`);
@@ -63,14 +63,14 @@ module('Integration | Component | api-filter', function (hooks) {
 
   test('it handles URL validation and addition', async function (assert) {
     this.server.get('/profiles/:id/api_scan_options', (_, req) => {
-      return { api_url_filters: '', id: req.params.id };
+      return { ds_api_capture_filters: [], id: req.params.id };
     });
 
     this.server.put('/profiles/:id/api_scan_options', (schema, req) => {
-      const { api_url_filters } = JSON.parse(req.requestBody);
+      const { ds_api_capture_filters } = JSON.parse(req.requestBody);
 
       return {
-        api_url_filters,
+        ds_api_capture_filters,
         id: this.profile.id,
       };
     });
@@ -134,16 +134,16 @@ module('Integration | Component | api-filter', function (hooks) {
   test('it handles URL deletion', async function (assert) {
     this.server.get('/profiles/:id/api_scan_options', (_, req) => {
       return {
-        api_url_filters: 'api1.example.com,api2.example.com',
+        ds_api_capture_filters: ['api1.example.com', 'api2.example.com'],
         id: req.params.id,
       };
     });
 
     this.server.put('/profiles/:id/api_scan_options', (schema, req) => {
-      const { api_url_filters } = JSON.parse(req.requestBody);
+      const { ds_api_capture_filters } = JSON.parse(req.requestBody);
 
       return {
-        api_url_filters,
+        ds_api_capture_filters,
         id: this.profile.id,
       };
     });
@@ -191,7 +191,7 @@ module('Integration | Component | api-filter', function (hooks) {
 
   test('it hides description when hideDescriptionText is true', async function (assert) {
     this.server.get('/profiles/:id/api_scan_options', (_, req) => {
-      return { api_url_filters: '', id: req.params.id };
+      return { ds_api_capture_filters: [], id: req.params.id };
     });
 
     await render(

@@ -82,30 +82,15 @@
         </:default>
       </AkButton>
 
-      {{#if @isAutomatedScan}}
-        <AkButton
-          @variant='outlined'
-          @color='neutral'
-          @tag='a'
-          href='/dashboard/project/{{this.projectId}}/settings/dast-automation'
-          target='_blank'
-          rel='noopener noreferrer'
-          data-test-fileDetails-dynamicScanDrawer-settingsPageRedirectBtn
-        >
-          {{t 'modalCard.dynamicScan.goToGeneralSettings'}}
-        </AkButton>
-
-      {{else}}
-        <AkButton
-          @variant='outlined'
-          @color='neutral'
-          {{on 'click' @onClose}}
-          @disabled={{this.startDynamicScan.isRunning}}
-          data-test-fileDetails-dynamicScanDrawer-cancelBtn
-        >
-          {{t 'cancel'}}
-        </AkButton>
-      {{/if}}
+      <AkButton
+        @variant='outlined'
+        @color='neutral'
+        {{on 'click' @onClose}}
+        @disabled={{this.startDynamicScan.isRunning}}
+        data-test-fileDetails-dynamicScanDrawer-cancelBtn
+      >
+        {{t 'cancel'}}
+      </AkButton>
     </AkStack>
   </AkStack>
 </AkDrawer>
