@@ -520,13 +520,13 @@ module('Acceptance | file-details/dynamic-scan', function (hooks) {
       {
         mode: 'automated',
         // cancelInBetween: false, For now stop while running is not supported
-        expectedAssertions: 46,
+        expectedAssertions: 43,
         startedBy: true,
       },
       {
         mode: 'automated',
         cancelInBetween: true,
-        expectedAssertions: 41,
+        expectedAssertions: 38,
         startedBy: false,
       },
     ],
@@ -619,7 +619,7 @@ module('Acceptance | file-details/dynamic-scan', function (hooks) {
 
       this.server.get('/profiles/:id/api_scan_options', () => ({
         id: '1',
-        api_url_filters: '',
+        ds_api_capture_filters: [],
       }));
 
       this.server.get('/profiles/:id/proxy_settings', () => ({
@@ -683,19 +683,6 @@ module('Acceptance | file-details/dynamic-scan', function (hooks) {
         .dom('[data-test-fileDetails-dynamicScanDrawer-startBtn]')
         .isNotDisabled()
         .hasText(mode === 'manual' ? t('start') : t('scheduleAutomation'));
-
-      if (mode === 'automated') {
-        assert
-          .dom(
-            '[data-test-fileDetails-dynamicScanDrawer-settingsPageRedirectBtn]'
-          )
-          .hasText(t('modalCard.dynamicScan.goToGeneralSettings'))
-          .hasAttribute('target', '_blank')
-          .hasAttribute(
-            'href',
-            `/dashboard/project/${this.file.project}/settings/dast-automation`
-          );
-      }
 
       // start dynamic scan
       await click('[data-test-fileDetails-dynamicScanDrawer-startBtn]');
@@ -908,7 +895,7 @@ module('Acceptance | file-details/dynamic-scan', function (hooks) {
 
     this.server.get('/profiles/:id/api_scan_options', () => ({
       id: '1',
-      api_url_filters: '',
+      ds_api_capture_filters: [],
     }));
 
     this.server.get('/profiles/:id/proxy_settings', () => ({

@@ -186,7 +186,7 @@ module(
 
       this.server.get('/profiles/:id/api_scan_options', (_, req) => ({
         id: req.params.id,
-        api_url_filters: '',
+        ds_api_capture_filters: [],
       }));
 
       this.server.get(
