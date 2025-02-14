@@ -30,20 +30,15 @@ module('Acceptance | file compare', function (hooks) {
   setupMirage(hooks);
 
   hooks.beforeEach(async function () {
-    const { vulnerabilities } = await setupRequiredEndpoints(this.server);
+    await setupRequiredEndpoints(this.server);
 
     const project = this.server.create('project');
     const profile = this.server.create('profile');
-
-    const analyses = vulnerabilities.map((v, id) =>
-      this.server.create('analysis', { id, vulnerability: v.id }).toJSON()
-    );
 
     // File Models
     const files = this.server.createList('file', 3, {
       project: project.id,
       profile: profile.id,
-      analyses,
     });
 
     // Unknown Analysis Status

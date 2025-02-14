@@ -19,7 +19,7 @@ export default class AuthenticatedDashboardAppMonitoringMonitoringDetailsRoute e
 
   beforeModel() {
     if (!this.organization.selected?.features.app_monitoring) {
-      this.transitionTo('authenticated.dashboard.projects');
+      this.router.transitionTo('authenticated.dashboard.projects');
     }
   }
 

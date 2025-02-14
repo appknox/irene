@@ -5,7 +5,7 @@ import { tracked } from '@glimmer/tracking';
 import dayjs from 'dayjs';
 import { task } from 'ember-concurrency';
 import { waitForPromise } from '@ember/test-waiters';
-import { next } from '@ember/runloop';
+import { runTask } from 'ember-lifeline';
 import type IntlService from 'ember-intl/services/intl';
 
 import parseError from 'irene/utils/parse-error';
@@ -39,9 +39,7 @@ export default class OrganizationServiceAccountSectionAccessTokenComponent exten
     this.doesNotExpire = this.args.serviceAccount.expiry === null;
 
     // sets the expiry in create mode
-    next(() => {
-      this.setCreateServiceAccountExpiry();
-    });
+    runTask(this, () => this.setCreateServiceAccountExpiry());
   }
 
   get renderType() {

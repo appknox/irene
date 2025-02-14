@@ -9,7 +9,7 @@ import { task } from 'ember-concurrency';
 import Store from '@ember-data/store';
 import { action } from '@ember/object';
 import RouterService from '@ember/routing/router-service';
-import { debounce } from '@ember/runloop';
+import { debounceTask } from 'ember-lifeline';
 
 import parseError from 'irene/utils/parse-error';
 import { PaginationProviderActionsArgs } from 'irene/components/ak-pagination-provider';
@@ -93,7 +93,7 @@ export default class SecurityProjectSearchListComponent extends Component<Securi
   searchProjectsQuery(event: Event): void {
     const query = (event.target as HTMLInputElement).value;
 
-    debounce(this, this.searchProjects, query, 500);
+    debounceTask(this, 'searchProjects', query, 500);
   }
 
   @action

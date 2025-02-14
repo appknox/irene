@@ -92,7 +92,7 @@ export default class PartnerClientReportDownloadComponent extends Component {
           'partner/partnerclient-report',
           {
             clientId: this.args.clientId,
-            id: this.reports.firstObject.id,
+            id: this.reports[0].id,
           }
         );
 
