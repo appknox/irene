@@ -2,19 +2,29 @@ import Component from '@glimmer/component';
 import { tracked } from '@glimmer/tracking';
 import { task } from 'ember-concurrency';
 import { inject as service } from '@ember/service';
-import parseError from 'irene/utils/parse-error';
 import { isEmpty } from '@ember/utils';
+import type Store from '@ember-data/store';
+import type IntlService from 'ember-intl/services/intl';
 
-export default class OrganizationEmailDomainComponent extends Component {
-  @service store;
-  @service('notifications') notify;
-  @service intl;
+import parseError from 'irene/utils/parse-error';
+import type OrganizationEmailDomainModel from 'irene/models/organization-email-domain';
+
+export interface OrganizationEmailDomainSignature {
+  Args: {
+    isEditable?: boolean;
+  };
+}
+
+export default class OrganizationEmailDomainComponent extends Component<OrganizationEmailDomainSignature> {
+  @service declare store: Store;
+  @service('notifications') declare notify: NotificationService;
+  @service declare intl: IntlService;
 
   @tracked tDomain = '';
-  @tracked domains = [];
+  @tracked domains: OrganizationEmailDomainModel[] = [];
 
-  constructor() {
-    super(...arguments);
+  constructor(owner: unknown, args: OrganizationEmailDomainSignature['Args']) {
+    super(owner, args);
 
     this.fetchDomains.perform();
   }
@@ -32,10 +42,9 @@ export default class OrganizationEmailDomainComponent extends Component {
   addDomain = task(async () => {
     const domainName = this.tDomain;
 
-    const domainInfo = await this.store.createRecord(
-      'organization-email-domain',
-      { domainName }
-    );
+    const domainInfo = this.store.createRecord('organization-email-domain', {
+      domainName,
+    });
 
     try {
       await domainInfo.save();
@@ -70,4 +79,10 @@ export default class OrganizationEmailDomainComponent extends Component {
       );
     }
   });
+}
+
+declare module '@glint/environment-ember-loose/registry' {
+  export default interface Registry {
+    OrganizationEmailDomain: typeof OrganizationEmailDomainComponent;
+  }
 }
