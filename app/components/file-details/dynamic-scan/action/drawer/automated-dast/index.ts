@@ -138,7 +138,7 @@ export default class FileDetailsDynamicScanDrawerAutomatedDastComponent extends 
         value: this.intl.t(
           deviceType([
             this.automatedDastDevicePreferences?.dsAutomatedDeviceType ??
-              ENUMS.DS_AUTOMATED_DEVICE_TYPE.NO_PREFERENCE,
+              ENUMS.DS_DEVICE_TYPE.NO_PREFERENCE,
           ])
         ),
         hidden: this.isAnyDevicePrefSelected,

@@ -10,8 +10,8 @@ export interface FileDetailsDynamicScanDrawerDevicePrefTableTypeSignature {
 }
 
 export default class FileDetailsDynamicScanDrawerDevicePrefTableTypeComponent extends Component<FileDetailsDynamicScanDrawerDevicePrefTableTypeSignature> {
-  isPhoneDevice = ENUMS.DEVICE_TYPE.PHONE_REQUIRED;
-  isTabletDevice = ENUMS.DEVICE_TYPE.TABLET_REQUIRED;
+  isPhoneDevice = ENUMS.DS_DEVICE_TYPE.PHONE_REQUIRED;
+  isTabletDevice = ENUMS.DS_DEVICE_TYPE.TABLET_REQUIRED;
 }
 
 declare module '@glint/environment-ember-loose/registry' {

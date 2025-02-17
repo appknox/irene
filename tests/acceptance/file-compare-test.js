@@ -179,12 +179,6 @@ module('Acceptance | file compare', function (hooks) {
       return schema.devicePreferences.find(`${req.params.id}`)?.toJSON();
     });
 
-    this.server.get('/projects/:id/available-devices', (schema) => {
-      const results = schema.projectAvailableDevices.all().models;
-
-      return { count: results.length, next: null, previous: null, results };
-    });
-
     this.server.get('/profiles/:id/api_scan_options', (_, req) => {
       return { ds_api_capture_filters: [], id: req.params.id };
     });

@@ -42,7 +42,7 @@ export const PROJECT_FACTORY_DEF = {
   },
 
   device_type() {
-    return faker.helpers.arrayElement(ENUMS.DEVICE_TYPE.VALUES);
+    return faker.helpers.arrayElement(ENUMS.DS_DEVICE_TYPE.VALUES);
   },
 
   platformIconClass() {

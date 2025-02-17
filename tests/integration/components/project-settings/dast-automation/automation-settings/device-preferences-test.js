@@ -278,7 +278,7 @@ module(
 
     test('it selects device type & min version', async function (assert) {
       this.devicePreference.update({
-        ds_automated_device_type: ENUMS.DS_AUTOMATED_DEVICE_TYPE.NO_PREFERENCE,
+        ds_automated_device_type: ENUMS.DS_DEVICE_TYPE.NO_PREFERENCE,
         ds_automated_platform_version_min: '',
         ds_automated_device_selection:
           ENUMS.DS_AUTOMATED_DEVICE_SELECTION.FILTER_CRITERIA,
@@ -322,28 +322,28 @@ module(
 
       assert
         .dom(
-          `[data-test-projectSettings-dastAutomationSettings-devicePreference-automatedPreferenceCriteria-deviceTypeRadioGroup] input[value="${ENUMS.DS_AUTOMATED_DEVICE_TYPE.NO_PREFERENCE}"]`
+          `[data-test-projectSettings-dastAutomationSettings-devicePreference-automatedPreferenceCriteria-deviceTypeRadioGroup] input[value="${ENUMS.DS_DEVICE_TYPE.NO_PREFERENCE}"]`
         )
-        .hasValue(`${ENUMS.DS_AUTOMATED_DEVICE_TYPE.NO_PREFERENCE}`)
+        .hasValue(`${ENUMS.DS_DEVICE_TYPE.NO_PREFERENCE}`)
         .isChecked();
 
       assert.dom(minOSVersionTrigger).hasText(t('anyVersion'));
 
       // select device type
       await click(
-        `[data-test-projectSettings-dastAutomationSettings-devicePreference-automatedPreferenceCriteria-deviceTypeRadioGroup] input[value="${ENUMS.DS_AUTOMATED_DEVICE_TYPE.PHONE_REQUIRED}"]`
+        `[data-test-projectSettings-dastAutomationSettings-devicePreference-automatedPreferenceCriteria-deviceTypeRadioGroup] input[value="${ENUMS.DS_DEVICE_TYPE.PHONE_REQUIRED}"]`
       );
 
       assert
         .dom(
-          `[data-test-projectSettings-dastAutomationSettings-devicePreference-automatedPreferenceCriteria-deviceTypeRadioGroup] input[value="${ENUMS.DS_AUTOMATED_DEVICE_TYPE.PHONE_REQUIRED}"]`
+          `[data-test-projectSettings-dastAutomationSettings-devicePreference-automatedPreferenceCriteria-deviceTypeRadioGroup] input[value="${ENUMS.DS_DEVICE_TYPE.PHONE_REQUIRED}"]`
         )
-        .hasValue(`${ENUMS.DS_AUTOMATED_DEVICE_TYPE.PHONE_REQUIRED}`)
+        .hasValue(`${ENUMS.DS_DEVICE_TYPE.PHONE_REQUIRED}`)
         .isChecked();
 
       assert.strictEqual(
         this.requestBody.ds_automated_device_type,
-        ENUMS.DS_AUTOMATED_DEVICE_TYPE.PHONE_REQUIRED
+        ENUMS.DS_DEVICE_TYPE.PHONE_REQUIRED
       );
 
       // select min version

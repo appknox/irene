@@ -94,7 +94,6 @@ module('Acceptance | file-details/manual-scan', function (hooks) {
       is_manual_done: false,
       manual: ENUMS.MANUAL.NONE,
       is_active: true,
-      dynamic_status: ENUMS.DYNAMIC_STATUS.NONE,
       project: project.id,
       profile: profile.id,
       analyses,
