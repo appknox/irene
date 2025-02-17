@@ -40,21 +40,6 @@ const ENUMS = {
     ERROR: 5,
   },
 
-  DYNAMIC_STATUS: {
-    ERROR: -1,
-    NONE: 0,
-    INQUEUE: 1,
-    BOOTING: 2,
-    DOWNLOADING: 3,
-    INSTALLING: 4,
-    LAUNCHING: 5,
-    HOOKING: 6,
-    READY: 7,
-    SHUTTING_DOWN: 8,
-    COMPLETED: 9,
-    RUNNING: 10, // TODO: check with backend after api is ready
-  },
-
   DYNAMIC_SCAN_STATUS: {
     NOT_STARTED: 0,
     PREPROCESSING: 1,
@@ -151,12 +136,6 @@ const ENUMS = {
     YEARLY: 10,
   },
 
-  DEVICE_TYPE: {
-    NO_PREFERENCE: 0,
-    PHONE_REQUIRED: 1,
-    TABLET_REQUIRED: 2,
-  },
-
   DS_MANUAL_DEVICE_SELECTION: {
     ANY_DEVICE: 0,
     SPECIFIC_DEVICE: 1,
@@ -167,7 +146,7 @@ const ENUMS = {
     FILTER_CRITERIA: 1,
   },
 
-  DS_AUTOMATED_DEVICE_TYPE: {
+  DS_DEVICE_TYPE: {
     NO_PREFERENCE: 0,
     PHONE_REQUIRED: 1,
     TABLET_REQUIRED: 2,

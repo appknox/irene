@@ -10,7 +10,7 @@ export default Factory.extend({
   ds_automated_device_selection_display: faker.lorem.sentence(),
 
   ds_automated_device_type: () =>
-    faker.helpers.arrayElement(ENUMS.DS_AUTOMATED_DEVICE_TYPE.BASE_VALUES),
+    faker.helpers.arrayElement(ENUMS.DS_DEVICE_TYPE.BASE_VALUES),
 
   ds_automated_platform_version_min: '',
   ds_automated_platform_version_max: '',

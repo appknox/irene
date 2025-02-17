@@ -1,5 +1,4 @@
 import { faker } from '@faker-js/faker';
-import ENUMS from 'irene/enums';
 import { RISK_COLOR_CODE } from 'irene/utils/constants';
 import Base from './base';
 
@@ -47,10 +46,6 @@ export const FILE_FACTORY_DEF = {
 
   is_active() {
     return faker.datatype.boolean();
-  },
-
-  dynamic_status() {
-    return faker.helpers.arrayElement(ENUMS.DYNAMIC_STATUS.VALUES);
   },
 
   name() {

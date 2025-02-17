@@ -358,14 +358,6 @@ function routes() {
     return {};
   });
 
-  this.get('/dynamic/:id', () => {
-    return {};
-  });
-
-  this.get('/manual/:id', () => {
-    return {};
-  });
-
   this.get('/jira_projects', () => {
     return {};
   });
@@ -441,11 +433,11 @@ function routes() {
     return {};
   });
 
-  this.put('/dynamicscan/:id', () => {
+  this.delete('/v2/dynamicscans/:id', () => {
     return {};
   });
 
-  this.delete('/dynamicscan/:id', () => {
+  this.put('/v2/dynamicscans/:id/extend', () => {
     return {};
   });
 
@@ -475,12 +467,6 @@ function routes() {
 
   this.post('/lang', () => {
     return {};
-  });
-
-  this.put('/profiles/:id/device_preference', () => {
-    return {
-      id: '1',
-    };
   });
 
   this.post('/namespace_add', () => {
@@ -520,10 +506,6 @@ function routes() {
   });
 
   this.delete('/delete_github_repo/:id', () => {
-    return {};
-  });
-
-  this.get('/dynamic_shutdown//:id', () => {
     return {};
   });
 

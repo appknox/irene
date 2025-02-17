@@ -81,7 +81,6 @@ module('Acceptance | file-details/api-scan', function (hooks) {
       is_dynamic_done: true,
       is_api_done: false,
       is_active: true,
-      dynamic_status: ENUMS.DYNAMIC_STATUS.NONE,
       project: project.id,
       profile: profile.id,
       analyses,
