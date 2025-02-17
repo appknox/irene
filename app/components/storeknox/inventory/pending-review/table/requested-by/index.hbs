@@ -1,0 +1,72 @@
+{{#if @loading}}
+  <AkSkeleton @width='120px' @height='16px' />
+{{else}}
+  <AkStack @alignItems='center' @spacing='0.5'>
+    {{#if this.isManual}}
+      <AkTypography
+        @noWrap={{true}}
+        data-test-storeknoxInventory-pendingReviewTable-requesterEmail
+      >
+        {{@data.addedBy.email}}
+      </AkTypography>
+    {{else}}
+      <AkTypography
+        @noWrap={{true}}
+        data-test-storeknoxInventory-pendingReviewTable-systemRequested
+      >
+        {{t 'system'}}
+      </AkTypography>
+    {{/if}}
+
+    <AkTooltip @placement='bottom' @arrow={{true}} @color='light'>
+      <:tooltipContent>
+        <AkStack @direction='column' @spacing='0.5' class='mb-1'>
+          <AkTypography
+            @color='inherit'
+            @fontWeight='medium'
+            local-class='section-header'
+            data-test-storeknoxInventory-pendingReviewTable-requestedOnHeaderText
+          >
+            {{t 'requestedOn'}}
+          </AkTypography>
+
+          <AkTypography
+            @color='inherit'
+            data-test-storeknoxInventory-pendingReviewTable-addedOnDate
+          >
+            {{this.addedOn}}
+          </AkTypography>
+        </AkStack>
+
+        <AkDivider @color='dark' class='my-2' />
+
+        <AkStack @direction='column' @spacing='0.5' class='mt-1'>
+          <AkTypography
+            @color='inherit'
+            @fontWeight='medium'
+            local-class='section-header'
+            data-test-storeknoxInventory-pendingReviewTable-sourceOfRequestHeader
+          >
+            {{t 'type'}}
+          </AkTypography>
+
+          <AkTypography
+            @color='inherit'
+            data-test-storeknoxInventory-pendingReviewTable-sourceOfRequest
+          >
+            {{this.sourceOfRequest}}
+          </AkTypography>
+        </AkStack>
+
+      </:tooltipContent>
+
+      <:default>
+        <AkIcon
+          @iconName='info'
+          local-class='info-icon'
+          data-test-storeknoxInventory-pendingReviewTable-requestByInfoTrigger
+        />
+      </:default>
+    </AkTooltip>
+  </AkStack>
+{{/if}}

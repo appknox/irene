@@ -7,16 +7,34 @@
     <AkLoader @size={{16}} />
   {{else}}
     <AkStack @spacing='1' @justifyContent='center'>
-      <AkIconButton @variant='outlined' {{on 'click' this.handleApproveApp}}>
-        <AkIcon @color='success' @iconName='done' />
+      <AkIconButton
+        @variant='outlined'
+        {{on 'click' this.handleApproveApp}}
+        data-test-storeknoxInventory-pendingReviewTable-approveBtn
+      >
+        <AkIcon
+          @color='success'
+          @iconName='done'
+          data-test-storeknoxInventory-pendingReviewTable-approveBtnIcon
+        />
       </AkIconButton>
 
-      <AkIconButton @variant='outlined' {{on 'click' this.handleRejectApp}}>
-        <AkIcon @color='error' @iconName='close' />
+      <AkIconButton
+        @variant='outlined'
+        {{on 'click' this.handleRejectApp}}
+        data-test-storeknoxInventory-pendingReviewTable-rejectBtn
+      >
+        <AkIcon
+          @color='error'
+          @iconName='close'
+          data-test-storeknoxInventory-pendingReviewTable-rejectBtnIcon
+        />
       </AkIconButton>
     </AkStack>
   {{/if}}
-{{else}}
+
+  {{! TODO: Intended for Review Logs Table }}
+  {{!-- {{else}}
   <AkStack @justifyContent='center' @direction='column'>
     <AkTypography @color={{this.statusDetails.color}}>
       {{this.statusDetails.text}}
@@ -44,5 +62,5 @@
         </:default>
       </AkTooltip>
     </AkStack>
-  </AkStack>
+  </AkStack> --}}
 {{/if}}

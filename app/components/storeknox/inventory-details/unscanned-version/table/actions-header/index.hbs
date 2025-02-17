@@ -1,0 +1,17 @@
+<AkStack @alignItems='center' @justifyContent='center' @spacing='1'>
+  <AkTypography @fontWeight='medium'>{{t 'action'}}</AkTypography>
+
+  <AkTooltip @color='dark' @placement='top-start' @arrow={{true}}>
+    <:tooltipContent>
+      <div local-class='tooltip-content'>
+        <AkTypography @color='inherit'>
+          {{t 'storeknox.actionsInfo'}}
+        </AkTypography>
+      </div>
+    </:tooltipContent>
+
+    <:default>
+      <AkIcon @iconName='info' @size='small' />
+    </:default>
+  </AkTooltip>
+</AkStack>

@@ -1,8 +1,11 @@
-{{#if this.isPending}}
+{{#if @loading}}
+  <AkSkeleton @height='32px' @width='170px' />
+
+{{else if this.isPending}}
   <AkChip
     @label={{t 'storeknox.waitingForApproval'}}
     @variant='semi-filled'
-    @color='success'
+    @color='warn'
     data-test-storeknoxDiscover-requestedAppsTable-row-waitingForApprovalChip
   >
     <:icon>
@@ -12,6 +15,7 @@
       />
     </:icon>
   </AkChip>
+
 {{else}}
   <AkStack
     @justifyContent='center'

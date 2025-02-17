@@ -1,0 +1,99 @@
+<Storeknox::InventoryDetails::SectionInfo
+  @width='full'
+  @spacing='1'
+  @alignItems='center'
+>
+  <AkStack @direction='column' @width='full' @spacing='1.5'>
+    <AkStack @alignItems='center' @width='9/12' @spacing='2.5'>
+      <AkTypography
+        @color='neutral'
+        {{style minWidth='150px'}}
+        data-test-storeknoxInventoryDetails-latestVAResultsSummary
+      >
+        {{t 'summary'}}
+      </AkTypography>
+
+      <AkStack @alignItems='center' @spacing='2.5'>
+        {{#each this.vaResultsRiskInfoCategories as |resultCat|}}
+          <AkStack
+            @alignItems='center'
+            @spacing='1.5'
+            data-test-storeknoxInventoryDetails-latestVAResultsSummary='{{resultCat}}'
+          >
+            <AkStack @spacing='1' @alignItems='center'>
+              <span local-class='indicator {{resultCat}}'></span>
+
+              <AkTypography
+                data-test-storeknoxInventoryDetails-latestVAResultsSummary-categoryTitle
+              >
+                {{t resultCat}}
+              </AkTypography>
+            </AkStack>
+
+            <AkTypography
+              @fontWeight='bold'
+              data-test-storeknoxInventoryDetails-latestVAResultsSummary-categoryResultCount
+            >
+              {{get this.vaResultsRiskInfo resultCat}}
+            </AkTypography>
+          </AkStack>
+        {{/each}}
+      </AkStack>
+    </AkStack>
+
+    <AkDivider @color='light' />
+
+    <AkStack @alignItems='center' @width='9/12' @spacing='2.5'>
+      <AkTypography
+        @color='neutral'
+        {{style width='150px'}}
+        data-test-storeknoxInventoryDetails-latestVAResultsFileId
+      >
+        {{t 'fileID'}}
+      </AkTypography>
+
+      {{#if this.latestVersionId}}
+        <AkLink
+          @route='authenticated.dashboard.file'
+          @model={{this.latestVersionId}}
+          @color='primary'
+          @fontWeight='medium'
+          @underline='always'
+          target='_blank'
+          rel='noopener noreferrer'
+          data-test-storeknoxInventoryDetails-latestVAResultsFileIdLink
+        >
+          {{this.latestVersionId}}
+        </AkLink>
+      {{else}}
+        -
+      {{/if}}
+    </AkStack>
+
+    {{#each this.vaResultsData as |info|}}
+      <AkDivider @color='light' />
+
+      <AkStack
+        @alignItems='center'
+        @width='9/12'
+        @spacing='2.5'
+        data-test-storeknoxInventoryDetails-latestVAResultsInfo='{{info.title}}'
+      >
+        <AkTypography
+          @color='neutral'
+          {{style width='150px'}}
+          data-test-storeknoxInventoryDetails-latestVAResultsInfoTitle
+        >
+          {{info.title}}
+        </AkTypography>
+
+        <AkTypography
+          @fontWeight='medium'
+          data-test-storeknoxInventoryDetails-latestVAResultsInfoValue
+        >
+          {{info.value}}
+        </AkTypography>
+      </AkStack>
+    {{/each}}
+  </AkStack>
+</Storeknox::InventoryDetails::SectionInfo>

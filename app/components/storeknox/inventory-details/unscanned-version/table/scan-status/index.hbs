@@ -1,0 +1,46 @@
+<AkStack
+  @alignItems='center'
+  @justifyContent='center'
+  @spacing='2'
+  data-test-storeknoxInventoryDetails-unscannedVersionTable-scanStatusRoot
+>
+  {{#if (or this.transitionedFromUnscannedToScanned this.isNotScanned)}}
+    <Storeknox::InventoryDetails::UnscannedVersion::Status
+      @condition='error'
+      @label='{{t "notScanned"}}'
+      data-test-storeknoxInventoryDetails-unscannedVersionTable-storeVersionStatus-notScanned
+    />
+
+    {{#if this.transitionedFromUnscannedToScanned}}
+      <AkIcon
+        @iconName='east'
+        data-test-storeknoxInventoryDetails-unscannedVersionTable-storeVersion-transitionArrow
+      />
+    {{/if}}
+  {{/if}}
+
+  {{#if this.isScanned}}
+    <AkStack @spacing='1'>
+      <Storeknox::InventoryDetails::UnscannedVersion::Status
+        @condition='success'
+        @label='{{t "scanned"}}'
+        data-test-storeknoxInventoryDetails-unscannedVersionTable-storeVersionStatus-scanned
+      />
+      -
+      <AkLink
+        @underline='always'
+        @color='primary'
+        @fontWeight='medium'
+        @route='authenticated.dashboard.file'
+        @model={{this.latestFileId}}
+        target='_blank'
+        rel='noopener noreferrer'
+        data-test-storeknoxInventoryDetails-unscannedVersionTable-storeVersion-fileID
+      >
+        {{t 'fileID'}}
+        -
+        {{this.latestFileId}}
+      </AkLink>
+    </AkStack>
+  {{/if}}
+</AkStack>

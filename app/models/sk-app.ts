@@ -5,6 +5,7 @@ import type IntlService from 'ember-intl/services/intl';
 import ENUMS from 'irene/enums';
 import type OrganizationUserModel from './organization-user';
 import type SkAppMetadataModel from './sk-app-metadata';
+import type SkOrganizationModel from './sk-organization';
 
 export interface AvailabilityData {
   storeknox: boolean;
@@ -39,10 +40,10 @@ export default class SkAppModel extends Model {
   declare monitoringEnabled: boolean;
 
   @attr('number')
-  declare monitoringStatus: number;
+  declare storeMonitoringStatus: number;
 
-  @attr('number')
-  declare skOrganization: number;
+  @attr('string')
+  declare storeMonitoringStatusDisplay: string;
 
   @attr('date')
   declare approvedOn: Date;
@@ -55,9 +56,6 @@ export default class SkAppModel extends Model {
 
   @attr('date')
   declare rejectedOn: Date;
-
-  @attr('number', { allowNull: true })
-  declare coreProject: number | null;
 
   @belongsTo('sk-app-metadata', { async: false, inverse: null })
   declare appMetadata: SkAppMetadataModel;
@@ -73,6 +71,9 @@ export default class SkAppModel extends Model {
 
   @belongsTo('organization-user', { async: true, inverse: null })
   declare rejectedBy: AsyncBelongsTo<OrganizationUserModel> | string;
+
+  @belongsTo('sk-organization', { async: true, inverse: null })
+  declare skOrganization: AsyncBelongsTo<SkOrganizationModel>;
 
   get docUlid() {
     return this.appMetadata.get('docUlid');
@@ -110,6 +111,12 @@ export default class SkAppModel extends Model {
     return this.appMetadata.get('platform') === ENUMS.PLATFORM.IOS;
   }
 
+  get monitoringStatusIsPending() {
+    return (
+      this.storeMonitoringStatus === ENUMS.SK_APP_MONITORING_STATUS.PENDING
+    );
+  }
+
   async approveApp(id: string) {
     const adapter = this.store.adapterFor('sk-app');
 
@@ -120,6 +127,18 @@ export default class SkAppModel extends Model {
     const adapter = this.store.adapterFor('sk-app');
 
     return await adapter.rejectApp(id);
+  }
+
+  async toggleMonitoring(checked: boolean) {
+    const adapter = this.store.adapterFor('sk-app');
+
+    return await adapter.toggleMonitoring(this.id, checked);
+  }
+
+  async initiateAppUpload() {
+    const adapter = this.store.adapterFor('sk-app');
+
+    return await adapter.initiateAppUpload(this.id);
   }
 }
 

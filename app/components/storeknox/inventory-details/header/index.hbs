@@ -1,0 +1,175 @@
+<div local-class='app-inventory-header-root' class='w-full mb-3 pt-2'>
+  <AkBreadcrumbs::AutoTrail
+    class='pb-3'
+    data-test-storeknoxInventoryDetails-breadcrumbContainer
+  />
+
+  <AkStack @direction='column' @spacing='2' @width='full'>
+    <AkStack @direction='column' @width='full'>
+      {{#if this.skInventoryApp.appIsNotAvailableOnAppknox}}
+        <Storeknox::InventoryDetails::SectionHeader {{style minHeight='44px'}}>
+          <:icon>
+            <AkIcon
+              @iconName='info'
+              @size='small'
+              data-test-storeknoxInventoryDetails-appNotPartOfAppknoxIcon
+            />
+          </:icon>
+
+          <:default>
+            <AkTypography
+              @fontWeight='medium'
+              data-test-storeknoxInventoryDetails-appNotPartOfAppknoxIconText
+            >
+              {{t 'storeknox.appNotPartOfAppknox'}}
+            </AkTypography>
+          </:default>
+        </Storeknox::InventoryDetails::SectionHeader>
+      {{/if}}
+
+      <Storeknox::InventoryDetails::SectionInfo
+        @width='full'
+        @alignItems='flex-end'
+      >
+        <AkStack @width='full' @direction='column'>
+          <img
+            local-class='app-info-logo'
+            src={{@skInventoryApp.appMetadata.iconUrl}}
+            alt={{@skInventoryApp.appMetadata.title}}
+            data-test-storeknoxInventoryDetails-appLogoImage
+          />
+
+          <AkTypography
+            @variant='h5'
+            @fontWeight='bold'
+            @gutterBottom={{true}}
+            class='mt-1'
+            data-test-storeknoxInventoryDetails-headerAppTitle
+          >
+            {{@skInventoryApp.appMetadata.title}}
+          </AkTypography>
+
+          <AkTypography
+            @color='neutral'
+            @gutterBottom={{true}}
+            data-test-storeknoxInventoryDetails-headerAppPackageName
+          >
+            {{@skInventoryApp.appMetadata.packageName}}
+          </AkTypography>
+
+          <AkStack @spacing='1'>
+            <Storeknox::ProductIcon @notClickable={{true}} @product='android'>
+              <AppPlatformIcon
+                @platform={{if this.skInventoryApp.isAndroid 'android' 'apple'}}
+                data-test-storeknoxInventoryDetails-headerPlatformIcon
+              />
+            </Storeknox::ProductIcon>
+
+            <Storeknox::ProductIcon
+              @product={{if this.skInventoryApp.isAndroid 'android' 'ios'}}
+              @storeLink={{@skInventoryApp.appMetadata.url}}
+            >
+              {{#if this.skInventoryApp.isAndroid}}
+                <AkSvg::PlaystoreLogo
+                  {{style width='16px'}}
+                  data-test-storeknoxInventoryDetails-playStoreLogo
+                />
+
+              {{else}}
+                <AkSvg::AppstoreLogo
+                  {{style width='16px'}}
+                  data-test-storeknoxInventoryDetails-appStoreLogo
+                />
+              {{/if}}
+            </Storeknox::ProductIcon>
+
+            {{! TODO: Uncomment when feature is fully ready }}
+            {{!-- {{#unless this.skInventoryApp.appIsNotAvailableOnAppknox}}
+              <Storeknox::ProductIcon @product='vapt'>
+                <AkSvg::AoxIcon data-test-storeknoxInventoryDetails-vaptLogo />
+              </Storeknox::ProductIcon>
+            {{/unless}} --}}
+
+            {{! <Storeknox::ProductIcon @product='sm'>
+              <AkSvg::SoxIcon />
+            </Storeknox::ProductIcon> }}
+          </AkStack>
+        </AkStack>
+
+        <AkStack
+          @alignItems='center'
+          @justifyContent='flex-end'
+          @spacing='1'
+          {{style minWidth='300px'}}
+        >
+          {{#if this.activeRouteTagProps}}
+            <Storeknox::InventoryDetails::AppDetails::ActionsList::Button
+              @disabled={{true}}
+              @needsAction={{this.activeRouteTagProps.needsAction}}
+              @featureInProgress={{this.activeRouteTagProps.featureInProgress}}
+              @label={{this.activeRouteTagProps.label}}
+              @hideRightIcon={{true}}
+              {{style height='32px' border='none'}}
+              data-test-storeknoxInventoryDetails-pageInfoTag
+            />
+
+          {{else}}
+            <AkStack @alignItems='center' @spacing='1'>
+              {{#if this.toggleSkInventoryAppMonitoring.isRunning}}
+                <AkLoader @size={{14}} />
+              {{/if}}
+
+              <AkTooltip
+                @disabled={{this.canToggleMonitoring}}
+                @placement='top'
+                @arrow={{true}}
+                data-test-storeknoxInventoryDetails-monitoringStatusToggleTooltip
+              >
+                <:tooltipContent>
+                  <div local-class='tooltip-content-container'>
+                    <AkTypography
+                      @tag='span'
+                      @color='inherit'
+                      data-test-storeknoxInventoryDetails-monitoringStatusToggleTooltipText
+                    >
+                      {{t 'storeknox.cannotPerformStatusToggleText'}}
+                    </AkTypography>
+                  </div>
+                </:tooltipContent>
+
+                <:default>
+                  <AkToggle
+                    @size='small'
+                    @onChange={{this.onMonitoringActionToggle}}
+                    @checked={{this.skInventoryApp.monitoringEnabled}}
+                    @disabled={{this.disableMonitoringToggle}}
+                    {{style margin='0em'}}
+                    data-test-storeknoxInventoryDetails-monitoringStatusToggle
+                  />
+                </:default>
+              </AkTooltip>
+            </AkStack>
+
+            <AkTypography
+              @color='neutral'
+              data-test-storeknoxInventoryDetails-monitoringStatusInfoText
+            >
+              {{t 'storeknox.monitoringAction'}}
+            </AkTypography>
+          {{/if}}
+
+          {{! TODO: Uncomment when feature is fully ready }}
+          {{!-- <AkDivider
+              @variant='vertical'
+              @color='dark'
+              {{style height='32px'}}
+            />
+
+              <AkIconButton @variant='outlined'>
+                <AkIcon @iconName='archive' @color='textPrimary' />
+              </AkIconButton> --}}
+        </AkStack>
+      </Storeknox::InventoryDetails::SectionInfo>
+    </AkStack>
+  </AkStack>
+</div>

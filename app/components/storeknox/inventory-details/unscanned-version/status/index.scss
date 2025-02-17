@@ -1,0 +1,10 @@
+.status {
+  text-transform: uppercase;
+  width: fit-content;
+
+  & > span {
+    font-weight: var(
+      --storeknox-inventory-details-unscanned-version-status-chip-font-weight
+    );
+  }
+}

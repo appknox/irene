@@ -1,0 +1,25 @@
+.app-details-table-root {
+  background-color: var(
+    --storeknox-inventory-details-unscanned-version-table-root-bg-color
+  );
+
+  .app-details-table-wrapper {
+    overflow-x: auto;
+
+    .app-details-table-container {
+      .app-details-table {
+        td:first-child {
+          border-left: none !important;
+        }
+
+        td:last-child {
+          border-right: none !important;
+        }
+
+        .table-row {
+          height: 47px !important;
+        }
+      }
+    }
+  }
+}

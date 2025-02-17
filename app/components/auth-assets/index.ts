@@ -1,6 +1,10 @@
 import Component from '@glimmer/component';
 
-export default class AuthAssetsComponent extends Component {}
+interface AuthAssetsSignature {
+  Element: HTMLImageElement;
+}
+
+export default class AuthAssetsComponent extends Component<AuthAssetsSignature> {}
 
 declare module '@glint/environment-ember-loose/registry' {
   export default interface Registry {

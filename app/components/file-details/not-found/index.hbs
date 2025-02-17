@@ -1,0 +1,21 @@
+<AkStack
+  @width='full'
+  @direction='column'
+  @alignItems='center'
+  @justifyContent='center'
+  @spacing='3'
+  class='mt-5 py-6'
+  local-class='file-not-found-root'
+>
+  <AkSvg::NoAccessImage />
+
+  <AkStack @direction='column' @alignItems='center' {{style gap='0.7143em'}}>
+    <AkTypography @variant='h6' @align='center'>
+      {{t 'unableToViewScanResults'}}
+    </AkTypography>
+
+    <AkTypography @align='center' {{style maxWidth='400px'}}>
+      {{t 'unableToViewScanSubText'}}
+    </AkTypography>
+  </AkStack>
+</AkStack>

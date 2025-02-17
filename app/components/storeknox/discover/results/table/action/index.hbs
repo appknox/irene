@@ -11,9 +11,11 @@
     {{else}}
       {{#if this.requested}}
         <AkTooltip
+          @enterDelay={{if this.firstTimeApproveOrRequest 3000}}
           @placement='bottom'
           @arrow={{true}}
           @color='light'
+          @onClose={{this.handleCloseReqOrApproveTooltip}}
           data-test-storeknoxDiscover-resultsTable-addedOrRequestedTooltip
         >
           <:tooltipContent>

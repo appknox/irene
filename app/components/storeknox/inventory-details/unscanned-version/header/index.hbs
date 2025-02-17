@@ -1,0 +1,127 @@
+<AkStack @direction='column' @width='full'>
+  <AkTabs
+    local-class='storeknox-inventory-details-unscanned-version-header-tabs
+    {{if this.skInventoryApp.appIsNotAvailableOnAppknox "not-appknox"}}'
+    as |Akt|
+  >
+    {{#each this.tabItems as |item|}}
+      <Akt.tabItem
+        @id={{item.id}}
+        @hasBadge={{false}}
+        @route={{item.route}}
+        @model={{@skInventoryApp.id}}
+        @indicatorVariant='shadow'
+        data-test-storeknoxInventoryDetails-unscannedVersion-tab='{{item.id}}'
+      >
+        {{item.label}}
+      </Akt.tabItem>
+    {{/each}}
+  </AkTabs>
+
+  <AkAccordion
+    @isExpanded={{this.showSMDetails}}
+    @onChange={{this.handleToggleSMDetails}}
+    @customSumaryClass={{this.classes.overviewSummary}}
+    @summaryText={{t 'storeknox.storeMonitoringOverview'}}
+    @variant='light'
+    class='my-3'
+    data-test-storeknoxInventoryDetails-unscannedVersionHeader-accordion
+  >
+    <:content>
+      <Storeknox::InventoryDetails::SectionInfo
+        @width='full'
+        @spacing='1'
+        @alignItems='center'
+        local-class='sm-summary-overview'
+      >
+        <AkStack @direction='column' @width='full' @spacing='1.5'>
+          <AkStack @alignItems='center' @width='9/12' @spacing='2.5'>
+            <AkTypography
+              @color='neutral'
+              {{style width='150px'}}
+              data-test-storeknoxInventoryDetails-unscannedVersionHeader-fileId
+            >
+              {{t 'fileID'}}
+            </AkTypography>
+
+            {{#if this.coreProjectLatestVersionId}}
+              <AkLink
+                @underline='always'
+                @color='primary'
+                @fontWeight='medium'
+                @route='authenticated.dashboard.file'
+                @model={{this.coreProjectLatestVersionId}}
+                target='_blank'
+                rel='noopener noreferrer'
+                data-test-storeknoxInventoryDetails-unscannedVersionHeader-fileIdLink
+              >
+                {{this.coreProjectLatestVersionId}}
+              </AkLink>
+            {{else}}
+              -
+            {{/if}}
+          </AkStack>
+
+          <AkDivider @color='light' />
+
+          <AkStack @alignItems='center' @width='9/12' @spacing='2.5'>
+            <AkTypography
+              @color='neutral'
+              {{style width='150px'}}
+              data-test-storeknoxInventoryDetails-unscannedVersionHeader-lastScannedVersion
+            >
+              {{t 'storeknox.lastScannedVersion'}}
+            </AkTypography>
+
+            <AkTypography
+              @fontWeight='medium'
+              data-test-storeknoxInventoryDetails-unscannedVersionHeader-lastScannedVersionValue
+            >
+              {{or this.coreProjectLatestVersion.version '-'}}
+            </AkTypography>
+          </AkStack>
+
+          <AkDivider @color='light' />
+
+          <AkStack @alignItems='center' @width='9/12' @spacing='2.5'>
+            <AkTypography
+              @color='neutral'
+              {{style width='150px'}}
+              data-test-storeknoxInventoryDetails-unscannedVersionHeader-lastMonitoredOn
+            >
+              {{t 'storeknox.lastMonitoredOn'}}
+            </AkTypography>
+
+            <AkTypography
+              @fontWeight='medium'
+              data-test-storeknoxInventoryDetails-unscannedVersionHeader-lastMonitoredOnValue
+            >
+              {{this.lastMonitoredOn}}
+            </AkTypography>
+          </AkStack>
+
+          <AkDivider @color='light' />
+
+          <AkStack @alignItems='center' @width='9/12' @spacing='2.5'>
+            <AkTypography
+              @color='neutral'
+              {{style width='150px'}}
+              data-test-storeknoxInventoryDetails-unscannedVersionHeader-monitoringStatus
+            >
+              {{t 'storeknox.monitoringStatus'}}
+            </AkTypography>
+
+            <AkChip
+              @size='small'
+              @variant='semi-filled'
+              @color={{if this.monitoringEnabled 'success' 'error'}}
+              @label={{if this.monitoringEnabled (t 'active') (t 'inactive')}}
+              local-class='status'
+              data-test-storeknoxInventoryDetails-unscannedVersionHeader-monitoringStatusChip
+            />
+          </AkStack>
+        </AkStack>
+      </Storeknox::InventoryDetails::SectionInfo>
+    </:content>
+  </AkAccordion>
+</AkStack>
