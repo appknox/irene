@@ -1,6 +1,6 @@
 import Service from '@ember/service';
 import { inject as service } from '@ember/service';
-import { scheduleOnce } from '@ember/runloop';
+import { scheduleTask } from 'ember-lifeline';
 
 export default class BodyClassService extends Service {
   // https://github.com/ember-cli/ember-page-title/blob/a886af4d83c7a3a3c716372e8a322258a4f92991/addon/services/page-title-list.js#L27
@@ -61,7 +61,7 @@ export default class BodyClassService extends Service {
   }
 
   scheduleUpdate() {
-    scheduleOnce('afterRender', this, this._updateClass);
+    scheduleTask(this, 'render', () => this._updateClass());
   }
 
   applyTokenDefaults(token) {

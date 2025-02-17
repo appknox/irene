@@ -14,7 +14,7 @@ export default class JiraRepoAdapter extends commondrf {
     modelName: string | number,
     snapshot: Snapshot<K>
   ) {
-    return this._buildURL(modelName, snapshot.id);
+    return this._buildURL(modelName, snapshot.record.project.get('id'));
   }
 }
 

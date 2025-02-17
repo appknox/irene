@@ -26,7 +26,7 @@ module('Integration | Component | plus-n-list', function (hooks) {
     }
     this.set('emails', emails);
     await render(hbs`<PlusNList @list={{this.emails}}/>`);
-    assert.dom('[data-test-default-items]').hasText(this.emails.firstObject);
+    assert.dom('[data-test-default-items]').hasText(this.emails[0]);
   });
 
   test('it renders 3 default items', async function (assert) {

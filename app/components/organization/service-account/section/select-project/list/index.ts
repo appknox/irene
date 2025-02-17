@@ -3,7 +3,7 @@ import { service } from '@ember/service';
 import Component from '@glimmer/component';
 import { tracked } from '@glimmer/tracking';
 import { task } from 'ember-concurrency';
-import { debounce } from '@ember/runloop';
+import { debounceTask } from 'ember-lifeline';
 
 // eslint-disable-next-line ember/use-ember-data-rfc-395-imports
 import type DS from 'ember-data';
@@ -117,9 +117,9 @@ export default class OrganizationServiceAccountSectionSelectProjectListComponent
 
   @action
   handleSearchQueryChange(event: Event) {
-    debounce(
+    debounceTask(
       this,
-      this.setSearchQuery,
+      'setSearchQuery',
       (event.target as HTMLInputElement).value,
       500
     );

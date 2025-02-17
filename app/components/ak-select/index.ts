@@ -1,7 +1,7 @@
 import { guidFor } from '@ember/object/internals';
 import Component from '@glimmer/component';
 import { action } from '@ember/object';
-import { next } from '@ember/runloop';
+import { runTask } from 'ember-lifeline';
 
 import type {
   PowerSelectArgs,
@@ -70,7 +70,7 @@ export default class AkSelectComponent<O> extends Component<
   @action
   onOpen(select: Select, event: Event) {
     // Reposition the dropdown to make sure it's properly aligned
-    next(this, () => select.actions.reposition());
+    runTask(this, () => select.actions.reposition());
 
     this.args.onOpen?.(select, event);
   }

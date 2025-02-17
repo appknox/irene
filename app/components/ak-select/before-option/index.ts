@@ -1,7 +1,7 @@
 import { action } from '@ember/object';
 import Component from '@glimmer/component';
 import { Select } from 'ember-power-select/components/power-select';
-import { later, scheduleOnce } from '@ember/runloop';
+import { runTask, scheduleTask } from 'ember-lifeline';
 
 interface AkSelectBeforeOptionArgs {
   select: Select;
@@ -22,16 +22,16 @@ export default class AkSelectBeforeOptionComponent extends Component<AkSelectBef
 
   @action
   clearSearch(): void {
-    scheduleOnce('actions', this.args.select.actions, 'search', '');
+    scheduleTask(this, 'actions', () => this.args.select.actions.search(''));
   }
 
   @action
   focusInput(el: HTMLElement) {
-    later(() => {
+    runTask(this, () => {
       if (this.args.autofocus !== false) {
         el.focus();
       }
-    }, 0);
+    });
   }
 
   @action

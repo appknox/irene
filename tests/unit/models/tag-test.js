@@ -2,14 +2,12 @@
 import { module, test } from 'qunit';
 import { setupTest } from 'ember-qunit';
 
-import { run } from '@ember/runloop';
-
-module('Unit | Model | tag', function(hooks) {
+module('Unit | Model | tag', function (hooks) {
   setupTest(hooks);
 
-  test('it exists', function(assert) {
-    let model = run(() => this.owner.lookup('service:store').createRecord('tag'));
-    // let store = this.store();
+  test('it exists', function (assert) {
+    let model = this.owner.lookup('service:store').createRecord('tag');
+
     assert.ok(!!model);
   });
 });

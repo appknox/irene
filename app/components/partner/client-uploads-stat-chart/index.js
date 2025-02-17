@@ -22,13 +22,6 @@ export default class PartnerClientUploadsStatChartComponent extends Component {
   @service intl;
   @service partner;
 
-  constructor() {
-    super(...arguments);
-    dayjs.extend(advancedFormat);
-    dayjs.extend(weekOfYear);
-    dayjs.extend(weekday);
-  }
-
   // Properties
   datepickerOptions = [
     'last7Days',
@@ -79,13 +72,22 @@ export default class PartnerClientUploadsStatChartComponent extends Component {
     },
   ];
 
-  @tracked currentTimeline = this.timelinePlaceholders.objectAt(0);
+  @tracked currentTimeline;
 
   @tracked chartContainer = null;
 
   @tracked dateRange = [dayjs().subtract(1, 'months'), dayjs()];
 
   maxDate = dayjs(Date.now()).toDate();
+
+  constructor() {
+    super(...arguments);
+    dayjs.extend(advancedFormat);
+    dayjs.extend(weekOfYear);
+    dayjs.extend(weekday);
+
+    this.currentTimeline = this.timelinePlaceholders.objectAt(0);
+  }
 
   get startDate() {
     return this.dateRange.objectAt(0);

@@ -13,10 +13,16 @@ export default class GithubAccountComponent extends Component {
   @service organization;
 
   @tracked showRevokeGithubConfirmBox = false;
-  @tracked integratedUser = this.args.integratedUser;
+  @tracked integratedUser;
 
   tGithubWillBeRevoked = this.intl.t('githubWillBeRevoked');
   tGithubErrorIntegration = this.intl.t('githubErrorIntegration');
+
+  constructor() {
+    super(...arguments);
+
+    this.integratedUser = this.args.integratedUser;
+  }
 
   redirectAPI = task(async () => {
     return await this.ajax.request(

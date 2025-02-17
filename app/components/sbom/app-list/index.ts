@@ -4,7 +4,7 @@ import IntlService from 'ember-intl/services/intl';
 import { task } from 'ember-concurrency';
 import { tracked } from '@glimmer/tracking';
 import { action } from '@ember/object';
-import { debounce } from '@ember/runloop';
+import { debounceTask } from 'ember-lifeline';
 
 // eslint-disable-next-line ember/use-ember-data-rfc-395-imports
 import { DS } from 'ember-data';
@@ -165,7 +165,7 @@ export default class SbomAppListComponent extends Component<SbomAppListSignature
   searchSbomProjectForQuery(event: Event) {
     const query = (event.target as HTMLInputElement).value;
 
-    debounce(this, this.setSearchQuery, query, 500);
+    debounceTask(this, 'setSearchQuery', query, 500);
   }
 
   /* Set debounced searchQuery */

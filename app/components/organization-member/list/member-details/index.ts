@@ -2,7 +2,7 @@ import Component from '@glimmer/component';
 import { inject as service } from '@ember/service';
 import { action } from '@ember/object';
 import { task } from 'ember-concurrency';
-import { debounce } from '@ember/runloop';
+import { debounceTask } from 'ember-lifeline';
 import { tracked } from '@glimmer/tracking';
 import Store from '@ember-data/store';
 import IntlService from 'ember-intl/services/intl';
@@ -127,9 +127,9 @@ export default class MemberDetailsComponent extends Component<MemberDetailsCompo
 
   @action
   handleSearchQueryChange(event: Event) {
-    debounce(
+    debounceTask(
       this,
-      this.setSearchQuery,
+      'setSearchQuery',
       (event.target as HTMLInputElement)?.value,
       500
     );

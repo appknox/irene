@@ -1,5 +1,6 @@
 import { service } from '@ember/service';
 import type Store from '@ember-data/store';
+import type RouterService from '@ember/routing/router-service';
 
 import AkBreadcrumbsRoute from 'irene/utils/ak-breadcrumbs-route';
 import type OrganizationService from 'irene/services/organization';
@@ -8,12 +9,13 @@ import type { AppMonitoringDetailsQueryParams } from 'irene/routes/authenticated
 export default class AuthenticatedDashboardAppMonitoringMonitoringDetailsHistoryRoute extends AkBreadcrumbsRoute {
   @service declare organization: OrganizationService;
   @service declare store: Store;
+  @service declare router: RouterService;
 
   parentRoute = 'authenticated.dashboard.app-monitoring.monitoring-details';
 
   beforeModel() {
     if (!this.organization.selected?.features.app_monitoring) {
-      this.transitionTo('authenticated.dashboard.projects');
+      this.router.transitionTo('authenticated.dashboard.projects');
     }
   }
 
