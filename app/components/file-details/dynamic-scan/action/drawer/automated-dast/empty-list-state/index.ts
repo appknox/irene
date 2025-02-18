@@ -5,6 +5,9 @@ export interface FileDetailsDynamicScanActionDrawerAutomatedDastEmptyListStateSi
   Args: {
     headerText: string;
     subText: string;
+    projectId?: string;
+    link?: string;
+    linkText?: string;
   };
 }
 

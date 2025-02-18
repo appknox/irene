@@ -139,7 +139,7 @@ module(
         );
 
         this.server.get('/profiles/:id/api_scan_options', (_, req) => {
-          return { api_url_filters: '', id: req.params.id };
+          return { ds_api_capture_filters: [], id: req.params.id };
         });
 
         this.server.get('/profiles/:id/proxy_settings', (_, req) => {
@@ -352,7 +352,7 @@ module(
       );
 
       this.server.get('/profiles/:id/api_scan_options', (_, req) => {
-        return { api_url_filters: '', id: req.params.id };
+        return { ds_api_capture_filters: [], id: req.params.id };
       });
 
       this.server.get('/profiles/:id/proxy_settings', (_, req) => {
@@ -528,7 +528,7 @@ module(
         );
 
         this.server.get('/profiles/:id/api_scan_options', (_, req) => {
-          return { api_url_filters: '', id: req.params.id };
+          return { ds_api_capture_filters: [], id: req.params.id };
         });
 
         this.server.get('/profiles/:id/proxy_settings', (_, req) => {

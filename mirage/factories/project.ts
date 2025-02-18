@@ -59,16 +59,6 @@ export const PROJECT_FACTORY_DEF = {
         return 'mobile';
     }
   },
-
-  api_url_filters() {
-    const desc = [];
-
-    for (let i = 0; i < 5; i++) {
-      desc.push(faker.internet.domainName().split(' ').join(' -> '));
-    }
-
-    return desc.join(',');
-  },
 };
 
 export default Base.extend(PROJECT_FACTORY_DEF);

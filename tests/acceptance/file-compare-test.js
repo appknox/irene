@@ -186,7 +186,7 @@ module('Acceptance | file compare', function (hooks) {
     });
 
     this.server.get('/profiles/:id/api_scan_options', (_, req) => {
-      return { api_url_filters: '', id: req.params.id };
+      return { ds_api_capture_filters: [], id: req.params.id };
     });
 
     this.server.get('/organizations/:id/jira_projects', () => {

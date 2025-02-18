@@ -6,15 +6,11 @@ const inflector = Inflector.inflector;
 inflector.irregular('api-scan-options', 'api-scan-options');
 
 export default class ApiScanOptionsModel extends Model {
-  @attr('string')
-  declare apiUrlFilters: string;
-
-  get apiUrlFilterItems() {
-    return isEmpty(this.apiUrlFilters) ? [] : this.apiUrlFilters.split(',');
-  }
+  @attr
+  declare dsApiCaptureFilters: string[];
 
   get hasApiUrlFilters() {
-    return !isEmpty(this.apiUrlFilterItems);
+    return !isEmpty(this.dsApiCaptureFilters);
   }
 }
 

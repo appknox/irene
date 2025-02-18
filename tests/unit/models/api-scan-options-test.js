@@ -11,10 +11,6 @@ module('Unit | Model | api scan options', function (hooks) {
 
     apiScanOptions.set('apiUrlFilters', 'test.com');
 
-    assert.equal(
-      apiScanOptions.get('apiUrlFilterItems'),
-      'test.com',
-      'No role'
-    );
+    assert.equal(apiScanOptions.get('apiUrlFilters'), ['test.com'], 'No role');
   });
 });
