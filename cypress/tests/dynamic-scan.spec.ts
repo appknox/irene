@@ -254,9 +254,9 @@ describe('Dynamic Scan', () => {
 
           cy.get<MirageFactoryDefProps['file']>('@currentFile').then((file) => {
             // Check tabs info
-            cy.findByRole('link', {
-              name: cyTranslate('dastTabs.manualDAST'),
-            }).should('exist');
+            cy.findByTestId('manual-dast-tab')
+              .should('exist')
+              .should('contain.text', cyTranslate('dastTabs.manualDAST'));
 
             cy.findByRole('link', {
               name: new RegExp(cyTranslate('dastTabs.dastResults'), 'i'),
@@ -389,12 +389,15 @@ describe('Dynamic Scan', () => {
           app.performInteraction(app.interactions, app);
 
           // stop dynamic scan
-          cy.findByRole('button', {
-            name: cyTranslate('stop'),
-            timeout: DYNAMIC_SCAN_STATUS_TIMEOUT,
-          })
-            .should('exist')
-            .click({ force: true });
+          cy.findByTestId('deviceViewer-container').within(() =>
+            cy
+              .findByRole('button', {
+                name: cyTranslate('stop'),
+                timeout: DYNAMIC_SCAN_STATUS_TIMEOUT,
+              })
+              .should('exist')
+              .click({ force: true })
+          );
 
           // check status of dynamic while stopping
           cy.findByTestId('deviceWrapper-statusChipAndScanCTAContainer')

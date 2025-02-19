@@ -19,13 +19,21 @@ module(
 
     test('it should trigger onClick', async function (assert) {
       assert.expect(2);
-      this.onClick = function () {
-        assert.true(true);
+
+      this.onViewAllNotificationClick = () => {
+        assert.true(true, 'onViewAllNotificationClick handler was called');
       };
-      await render(
-        hbs`<NotificationsDropdown::Footer @onViewAllNotificationClick={{this.onClick}} />`
-      );
-      assert.dom('[data-test-notification-dropdown-link]').exists();
+
+      await render(hbs`
+        <NotificationsDropdown::Footer 
+          @onViewAllNotificationClick={{this.onViewAllNotificationClick}} 
+        />
+      `);
+
+      assert
+        .dom('[data-test-notification-dropdown-link]')
+        .exists('Notification dropdown link exists');
+
       await click('[data-test-notification-dropdown-link]');
     });
   }
