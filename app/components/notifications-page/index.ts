@@ -1,8 +1,9 @@
 import Component from '@glimmer/component';
-import { inject as service } from '@ember/service';
+import { service } from '@ember/service';
 import { action } from '@ember/object';
-import RouterService from '@ember/routing/router-service';
-import AkNotificationsService from 'irene/services/ak-notifications';
+import type RouterService from '@ember/routing/router-service';
+
+import type AkNotificationsService from 'irene/services/ak-notifications';
 
 interface LimitOffset {
   limit: number;
@@ -46,6 +47,7 @@ export default class NotificationsPageComponent extends Component {
   @action onItemPerPageChange(args: LimitOffset) {
     const { limit } = args;
     const offset = 0;
+
     this.router.transitionTo(this.notificationPageRoute, {
       queryParams: { notification_limit: limit, notification_offset: offset },
     });
@@ -53,8 +55,15 @@ export default class NotificationsPageComponent extends Component {
 
   @action goToPage(args: LimitOffset) {
     const { limit, offset } = args;
+
     this.router.transitionTo(this.notificationPageRoute, {
       queryParams: { notification_limit: limit, notification_offset: offset },
     });
+  }
+}
+
+declare module '@glint/environment-ember-loose/registry' {
+  export default interface Registry {
+    NotificationsPage: typeof NotificationsPageComponent;
   }
 }

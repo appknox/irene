@@ -4,12 +4,16 @@
       <AkTypography @variant='h4'>
         <span local-class='notification_title'>{{t 'notifications'}}</span>
       </AkTypography>
+
       <AkTypography
         @variant='h5'
         local-class='notifications_unread_count'
         data-test-unread-count
-      >{{this.unReadCount}}</AkTypography>
+      >
+        {{this.unReadCount}}
+      </AkTypography>
     </div>
+
     <AkButton
       @type='button'
       @color='primary'

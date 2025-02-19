@@ -1,14 +1,18 @@
 import { action } from '@ember/object';
-import { inject as service } from '@ember/service';
+import { service } from '@ember/service';
 import Component from '@glimmer/component';
 import { Modifier } from '@popperjs/core';
-import AkNotificationsService from 'irene/services/ak-notifications';
 
-interface NotificationsDropdownComponentArgs {
-  Args: { anchorRef: HTMLElement | null; onClose?: () => void };
+import type AkNotificationsService from 'irene/services/ak-notifications';
+
+interface NotificationsDropdownComponentSignature {
+  Args: {
+    anchorRef: HTMLElement | null;
+    onClose: () => void;
+  };
 }
 
-export default class NotificationsDropdownComponent extends Component<NotificationsDropdownComponentArgs> {
+export default class NotificationsDropdownComponent extends Component<NotificationsDropdownComponentSignature> {
   @service declare akNotifications: AkNotificationsService;
 
   get modifiers(): Partial<Modifier<string, object>>[] {
@@ -30,10 +34,9 @@ export default class NotificationsDropdownComponent extends Component<Notificati
     return this.akNotifications.unReadCount == 0;
   }
 
-  @action closeNotifications() {
-    if (this.args.onClose) {
-      this.args.onClose();
-    }
+  @action
+  closeNotifications() {
+    this.args.onClose();
   }
 }
 

@@ -10,6 +10,7 @@
   {{#each this.tabs as |item|}}
     <Akt.tabItem
       data-test-fileDetails-dynamicScan-header='{{item.id}}-tab'
+      data-test-cy='{{item.id}}-tab'
       @id={{item.id}}
       @route={{item.route}}
       @currentWhen={{item.activeRoutes}}

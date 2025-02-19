@@ -91,7 +91,6 @@
 
               {{#if node.dataObject.hasChildren}}
                 <AkIconButton
-                  data-test-component-tree-nodeExpandIcon
                   local-class='expand-icon'
                   @size='small'
                   disabled={{this.loadChildrenAndTransform.isRunning}}
@@ -99,9 +98,15 @@
                   {{on 'click' (fn tree.onExpand node)}}
                 >
                   {{#if node.expanded}}
-                    <AkIcon @iconName='indeterminate-check-box' />
+                    <AkIcon
+                      data-test-component-tree-nodeCollapseIcon
+                      @iconName='indeterminate-check-box'
+                    />
                   {{else}}
-                    <AkIcon @iconName='add-box' />
+                    <AkIcon
+                      data-test-component-tree-nodeExpandIcon
+                      @iconName='add-box'
+                    />
                   {{/if}}
                 </AkIconButton>
               {{/if}}
