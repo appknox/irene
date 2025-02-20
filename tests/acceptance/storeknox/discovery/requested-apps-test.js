@@ -29,7 +29,7 @@ module('Acceptance | storeknox/discovery/requested-apps', function (hooks) {
   test('it renders empty state when no app exists', async function (assert) {
     assert.expect(4);
 
-    this.currentOrganizationMe.update({ is_admin: false });
+    this.currentOrganizationMe.update({ is_owner: false });
 
     // Server mocks
     this.server.get('v2/sk_requested_apps', () => {
@@ -63,7 +63,7 @@ module('Acceptance | storeknox/discovery/requested-apps', function (hooks) {
       const pending_approval = !approved && !rejected;
 
       // Models/Test variables
-      this.currentOrganizationMe.update({ is_admin: false });
+      this.currentOrganizationMe.update({ is_owner: false });
 
       const skRequestedApp = this.server.create(
         'sk-requested-app',

@@ -1,0 +1,36 @@
+<AkStack
+  ...attributes
+  @direction='column'
+  @alignItems='center'
+  @width='full'
+  local-class='empty-container'
+  data-test-storeknoxInventoryDetails-unscannedVersions-tableEmpty-errorContainer
+>
+
+  {{#if @isHistoryTable}}
+    <AkSvg::SoxUnscannedHistoryTableEmpty
+      local-class='empty-state-vector'
+      data-test-storeknoxInventoryDetails-unscannedVersions-tableEmpty-historyErrorIllustration
+    />
+  {{else}}
+    <AkSvg::SoxUnscannedDetailsTableEmpty
+      local-class='empty-state-vector'
+      data-test-storeknoxInventoryDetails-unscannedVersions-tableEmpty-detailsErrorIllustration
+    />
+  {{/if}}
+
+  <AkTypography
+    @variant='h5'
+    @gutterBottom={{true}}
+    data-test-storeknoxInventoryDetails-unscannedVersions-tableEmpty-emptyHeaderText
+  >
+    {{@header}}
+  </AkTypography>
+
+  <AkTypography
+    local-class='body-text'
+    data-test-storeknoxInventoryDetails-unscannedVersions-tableEmpty-emptyBodyText
+  >
+    {{@body}}
+  </AkTypography>
+</AkStack>

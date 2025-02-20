@@ -1,22 +1,36 @@
 <AkStack
-  @direction='column'
-  @spacing='0.5'
+  @direction='row'
+  @alignItems='center'
+  @justifyContent='space-between'
   local-class='header-storeknox-discover-page'
 >
-  <AkTypography
-    @variant='subtitle1'
-    data-test-storeknoxDiscover-header-discoverHeaderText
-  >
-    {{t 'storeknox.discoverHeader'}}
-  </AkTypography>
+  <AkStack @direction='column' @spacing='0.5'>
+    <AkTypography
+      @variant='subtitle1'
+      data-test-storeknoxDiscover-header-discoverHeaderText
+    >
+      {{t 'storeknox.discoverHeader'}}
+    </AkTypography>
 
-  <AkTypography
-    @variant='body2'
-    local-class='description-storeknox-discover-page'
-    data-test-storeknoxDiscover-header-discoverDescriptionText
-  >
-    {{t 'storeknox.discoverDescription'}}
-  </AkTypography>
+    <AkTypography
+      @variant='body2'
+      local-class='description-storeknox-discover-page'
+      data-test-storeknoxDiscover-header-discoverDescriptionText
+    >
+      {{t 'storeknox.discoverDescription'}}
+    </AkTypography>
+  </AkStack>
+
+  <AkButton>
+    <AkLink
+      @underline='none'
+      @color='inherit'
+      @route='authenticated.storeknox.inventory.app-list'
+      data-test-storeknoxInventory-inventoryAppListPageLink
+    >
+      {{t 'storeknox.appInventory'}}
+    </AkLink>
+  </AkButton>
 </AkStack>
 
 <AkTabs local-class='discover-tabs' as |Akt|>

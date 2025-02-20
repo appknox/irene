@@ -1,0 +1,42 @@
+.indicator {
+  display: flex;
+  width: 10px;
+  height: 10px;
+  border-radius: 100%;
+
+  &.critical {
+    background-color: var(
+      --storeknox-inventory-details-app-details-va-results-risk-color-critical
+    );
+  }
+
+  &.high {
+    background-color: var(
+      --storeknox-inventory-details-app-details-va-results-risk-color-high
+    );
+  }
+
+  &.medium {
+    background-color: var(
+      --storeknox-inventory-details-app-details-va-results-risk-color-medium
+    );
+  }
+
+  &.low {
+    background-color: var(
+      --storeknox-inventory-details-app-details-va-results-risk-color-low
+    );
+  }
+
+  &.passed {
+    background-color: var(
+      --storeknox-inventory-details-app-details-va-results-risk-color-passed
+    );
+  }
+
+  &.untested {
+    background-color: var(
+      --storeknox-inventory-details-app-details-va-results-risk-color-untested
+    );
+  }
+}

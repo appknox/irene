@@ -16,13 +16,24 @@
         />
       {{/let}}
 
-      <AkTypography
-        data-test-home-page-product-card-title
-        @variant='h6'
-        @fontWeight='bold'
-      >
-        {{@name}}
-      </AkTypography>
+      <AkStack @alignItems='center' @spacing='1'>
+        <AkTypography
+          data-test-home-page-product-card-title
+          @variant='h6'
+          @fontWeight='bold'
+        >
+          {{@title}}
+        </AkTypography>
+
+        {{#if @isBeta}}
+          <AkChip
+            @variant='outlined'
+            @size='small'
+            @label={{t 'beta'}}
+            local-class='beta-chip'
+          />
+        {{/if}}
+      </AkStack>
 
       <AkTypography @variant='subtitle2' @fontWeight='regular'>
         {{@description}}

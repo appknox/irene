@@ -1,0 +1,24 @@
+.found-by-filter {
+  width: 12.5em;
+  background-color: var(
+    --storeknox-inventory-pending-review-table-requested-by-filter-background-color
+  );
+  box-shadow: var(
+    --storeknox-inventory-pending-review-table-requested-by-filter-box-shadow
+  );
+  border-radius: var(
+    --storeknox-inventory-pending-review-table-requested-by-filter-border-radius
+  );
+
+  .filter-option:hover {
+    background-color: var(
+      --storeknox-inventory-pending-review-table-requested-by-filter-option-hover-background-color
+    );
+  }
+
+  .clear-filter-section {
+    background-color: var(
+      --storeknox-inventory-pending-review-table-requested-by-filter-option-clear-filter-background-color
+    );
+  }
+}

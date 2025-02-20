@@ -1,0 +1,24 @@
+.tooltip-content {
+  width: 260px;
+  padding: 0.5em;
+  box-sizing: border-box;
+  white-space: normal;
+}
+
+.flip-icon {
+  transform: rotate(180deg);
+}
+
+.beta-chip {
+  background-color: var(
+    --storeknox-inventory-details-unscanned-version-table-beta-tag-bg
+  );
+
+  border-color: var(
+    --storeknox-inventory-details-unscanned-version-table-beta-tag-bg
+  ) !important;
+
+  color: var(
+    --storeknox-inventory-details-unscanned-version-table-beta-tag-color
+  ) !important;
+}

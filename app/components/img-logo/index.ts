@@ -3,7 +3,11 @@ import Component from '@glimmer/component';
 
 import WhitelabelService from 'irene/services/whitelabel';
 
-export default class ImgLogoComponent extends Component {
+interface ImgLogoSignature {
+  Element: HTMLImageElement;
+}
+
+export default class ImgLogoComponent extends Component<ImgLogoSignature> {
   @service declare whitelabel: WhitelabelService;
 }
 

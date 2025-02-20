@@ -1,0 +1,40 @@
+<AkStack @direction='column' @width='full'>
+  <Storeknox::InventoryDetails::SectionHeader>
+    <:default>
+      <AkTypography
+        @fontWeight='medium'
+        data-test-storeknoxInventoryDetails-latestVAResultsHeaderInfoValue
+      >
+        {{t 'storeknox.latestVAResults'}}
+      </AkTypography>
+    </:default>
+  </Storeknox::InventoryDetails::SectionHeader>
+
+  {{#if this.loadingVaData}}
+    <Storeknox::InventoryDetails::AppDetails::VaResults::LoadingResults />
+
+  {{else if this.coreProjectLatestVersionInaccessible}}
+    <Storeknox::InventoryDetails::AppDetails::VaResults::FileInaccessible />
+
+  {{else if this.showUploadProgressState}}
+    <Storeknox::InventoryDetails::AppDetails::VaResults::UploadProgress
+      @submission={{this.submission}}
+      @uploadNotStarted={{this.uploadNotStarted}}
+    />
+
+  {{else if @skInventoryApp.coreProjectLatestVersion}}
+    <Storeknox::InventoryDetails::AppDetails::VaResults::LatestFileResults
+      @skInventoryApp={{@skInventoryApp}}
+      @coreProjectLatestVersion={{this.coreProjectLatestVersion}}
+    />
+
+  {{else}}
+    <Storeknox::InventoryDetails::AppDetails::VaResults::InitiateUpload
+      @skInventoryApp={{@skInventoryApp}}
+      @submission={{this.submission}}
+      @userCanAccessSubmission={{this.userCanAccessSubmission}}
+      @initiateUploadIsInProgress={{this.doInitiateAppUpload.isRunning}}
+      @initiateAppUpload={{this.initiateAppUpload}}
+    />
+  {{/if}}
+</AkStack>

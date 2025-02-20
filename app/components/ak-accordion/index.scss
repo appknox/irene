@@ -30,6 +30,12 @@
       border-color: var(--ak-accordion-summary-secondary-border-color);
     }
 
+    &.light {
+      border: none;
+      background-color: var(--ak-accordion-summary-light-background);
+      box-shadow: var(--ak-accordion-summary-light-box-shadow);
+    }
+
     &.disabled {
       cursor: not-allowed;
     }

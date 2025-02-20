@@ -5,21 +5,7 @@ import type IntlService from 'ember-intl/services/intl';
 import type OrganizationService from 'irene/services/organization';
 import type UserAuthService from 'irene/services/user-auth';
 import type WhitelabelService from 'irene/services/whitelabel';
-
-interface productCardDetails {
-  title: string;
-  desc: string;
-  link: string;
-  indicator:
-    | 'ak-svg/sm-indicator'
-    | 'ak-svg/vapt-indicator'
-    | 'ak-svg/security-indicator';
-  coverImage:
-    | 'ak-svg/storeknox-bg-img'
-    | 'ak-svg/appknox-bg-img'
-    | 'ak-svg/security-bg-img';
-  openInNewTab?: boolean;
-}
+import type { ProductCardDetails } from './product-card';
 
 export default class HomePageComponent extends Component {
   @service declare intl: IntlService;
@@ -27,6 +13,14 @@ export default class HomePageComponent extends Component {
   @service declare userAuth: UserAuthService;
   @service declare session: any;
   @service declare whitelabel: WhitelabelService;
+
+  faviconImage: HTMLImageElement = new Image();
+
+  constructor(owner: unknown, args: object) {
+    super(owner, args);
+
+    this.faviconImage.src = this.whitelabel.favicon;
+  }
 
   get isStoreknoxEnabled() {
     return this.organization.selected?.features?.storeknox;
@@ -36,33 +30,38 @@ export default class HomePageComponent extends Component {
     return !this.whitelabel.is_appknox_url;
   }
 
+  get logo() {
+    return this.isWhitelabel ? this.whitelabel.logo : this.faviconImage.src;
+  }
+
   get productCardDetails() {
     return [
       {
         title: this.isWhitelabel ? this.intl.t('vapt') : this.intl.t('appknox'),
-        desc: this.intl.t('appknoxDesc'),
-        link: 'authenticated.dashboard.projects',
-        indicator: 'ak-svg/vapt-indicator',
-        coverImage: 'ak-svg/appknox-bg-img',
+        description: this.intl.t('appknoxDesc'),
+        route: 'authenticated.dashboard.projects',
+        indicatorSvg: 'ak-svg/vapt-indicator',
+        coverBackgroundImage: 'ak-svg/appknox-bg-img',
       },
       this.isStoreknoxEnabled && {
         title: this.isWhitelabel
           ? this.intl.t('appMonitoring')
           : this.intl.t('storeknox.title'),
-        desc: this.intl.t('storeknox.description'),
-        link: 'authenticated.storeknox.inventory.app-list',
-        indicator: 'ak-svg/sm-indicator',
-        coverImage: 'ak-svg/storeknox-bg-img',
+        description: this.intl.t('storeknox.description'),
+        route: 'authenticated.storeknox.inventory.app-list',
+        indicatorSvg: 'ak-svg/sm-indicator',
+        coverBackgroundImage: 'ak-svg/storeknox-bg-img',
+        isBeta: true,
       },
       this.isSecurityEnabled && {
         title: this.intl.t('securityDashboard'),
-        desc: this.intl.t('securityDashboardDesc'),
-        link: 'authenticated.security.projects',
-        indicator: 'ak-svg/security-indicator',
-        coverImage: 'ak-svg/security-bg-img',
+        description: this.intl.t('securityDashboardDesc'),
+        route: 'authenticated.security.projects',
+        indicatorSvg: 'ak-svg/security-indicator',
+        coverBackgroundImage: 'ak-svg/security-bg-img',
         openInNewTab: true,
       },
-    ].filter(Boolean) as productCardDetails[];
+    ].filter(Boolean) as ProductCardDetails[];
   }
 
   get isSecurityEnabled() {

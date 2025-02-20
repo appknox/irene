@@ -16,6 +16,7 @@ declare module 'irene/templates/*' {
 
 declare module '@glint/environment-ember-loose/registry' {
   type UnknownFnWithAnyArgType = (...args: any[]) => void;
+  type PrimitiveTypes = string | number | boolean | undefined | null;
 
   export default interface Registry
     extends AkSvgRegistry,
@@ -63,9 +64,23 @@ declare module '@glint/environment-ember-loose/registry' {
       Return: boolean;
     }>;
 
+    gt: HelperLike<{
+      Args: {
+        Positional: PrimitiveTypes[];
+      };
+      Return: boolean;
+    }>;
+
+    or: HelperLike<{
+      Args: {
+        Positional: PrimitiveTypes[];
+      };
+      Return: boolean;
+    }>;
+
     and: HelperLike<{
       Args: {
-        Positional: unknown[];
+        Positional: PrimitiveTypes[];
       };
       Return: boolean;
     }>;
