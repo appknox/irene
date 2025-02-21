@@ -1,5 +1,6 @@
-<div local-class='notification_container'>
+<div data-test-notification-page local-class='notification_container'>
   <NotificationsPage::Header />
+
   <main local-class='notification_main_list'>
     <AkPaginationProvider
       @results={{this.tableData}}
@@ -14,18 +15,22 @@
     >
 
       {{#if this.isLoading}}
-        <NotificationsPage::Divider />
+        <AkDivider />
+
         <div local-class='loading'>
           <AkLoader />
         </div>
       {{else if this.isEmpty}}
-        <NotificationsPage::Divider />
+        <AkDivider />
+
         <NotificationsPage::Empty @message='No Notifications' />
       {{else}}
         {{#each pgc.currentPageResults as |notification|}}
-          <NotificationsPage::Divider />
+          <AkDivider />
+
           <NotificationsPage::Message @notification={{notification}} />
         {{/each}}
+
         <AkPagination
           @disableNext={{pgc.disableNext}}
           @nextAction={{pgc.nextAction}}
@@ -41,7 +46,6 @@
           @totalItems={{pgc.totalItems}}
         />
       {{/if}}
-
     </AkPaginationProvider>
   </main>
 </div>

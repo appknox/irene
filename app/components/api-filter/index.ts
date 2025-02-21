@@ -88,15 +88,11 @@ export default class ApiFilterComponent extends Component<ApiFilterSignature> {
     const currentURLs = this.apiScanOptions?.dsApiCaptureFilters;
 
     if (currentURLs) {
-      const index = currentURLs.indexOf(this.deletedURL);
+      this.updatedURLFilters = currentURLs.filter(
+        (it) => it !== this.deletedURL
+      );
 
-      if (index !== -1) {
-        this.updatedURLFilters = currentURLs.filter(
-          (it) => it !== this.deletedURL
-        );
-
-        this.saveApiUrlFilter.perform();
-      }
+      this.saveApiUrlFilter.perform();
     }
   }
 

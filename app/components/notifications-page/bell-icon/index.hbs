@@ -8,11 +8,11 @@
   >
     <div local-class='icon-container' data-test-bell-icon-trigger>
       <AkIcon @iconName='notifications' data-test-notification-icon />
+
       {{#if this.akNotifications.hasUnReadNotifications}}
         <div local-class='nf-unread-dot' data-test-unread-dot></div>
       {{/if}}
     </div>
-
   </button>
 
   <NotificationsDropdown

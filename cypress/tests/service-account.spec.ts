@@ -97,15 +97,21 @@ describe('Service Account', () => {
       'serviceAccountCreate'
     );
 
-    //visit Service Account
-    cy.visit(APPLICATION_ROUTES.serviceAccount);
-
-    // Necessary API call before showing elements
-    cy.wait('@serviceAccountList', NETWORK_WAIT_OPTS);
+    cy.intercept('GET', API_ROUTES.vulnerabilityList.route).as(
+      'vulnerabilityList'
+    );
   });
 
   SERVICE_ACCOUNT_CREATION_TYPE_DETAILS.forEach((app) =>
     it(`should create service account ${app.type} & delete it`, function () {
+      //visit Service Account
+      cy.visit(APPLICATION_ROUTES.serviceAccount);
+
+      cy.wait('@vulnerabilityList', NETWORK_WAIT_OPTS);
+
+      // Necessary API call before showing elements
+      cy.wait('@serviceAccountList', NETWORK_WAIT_OPTS);
+
       //click create service account button
       cy.findByTestId('serviceAccountList-createBtn')
         .as('CreateSAButton')
@@ -287,6 +293,14 @@ describe('Service Account', () => {
   );
 
   it(`should create duplicate and edit`, function () {
+    //visit Service Account
+    cy.visit(APPLICATION_ROUTES.serviceAccount);
+
+    cy.wait('@vulnerabilityList', NETWORK_WAIT_OPTS);
+
+    // Necessary API call before showing elements
+    cy.wait('@serviceAccountList', NETWORK_WAIT_OPTS);
+
     //click view more option button on table
     cy.findByTestId(`serviceAccountList-row-${duplicateId}`).within(() => {
       cy.findByTestId('serviceAccountList-moreOptionBtn').click();
@@ -423,6 +437,14 @@ describe('Service Account', () => {
   });
 
   it(`should check table, view and edit description`, function () {
+    //visit Service Account
+    cy.visit(APPLICATION_ROUTES.serviceAccount);
+
+    cy.wait('@vulnerabilityList', NETWORK_WAIT_OPTS);
+
+    // Necessary API call before showing elements
+    cy.wait('@serviceAccountList', NETWORK_WAIT_OPTS);
+
     //check position of particular service accoun
     cy.findByTestId('serviceAccountList-table')
       .find('tr')

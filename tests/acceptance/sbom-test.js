@@ -1,5 +1,12 @@
 import { module, test } from 'qunit';
-import { visit, currentURL, findAll, click } from '@ember/test-helpers';
+import {
+  visit,
+  currentURL,
+  findAll,
+  click,
+  waitFor,
+} from '@ember/test-helpers';
+
 import { setupApplicationTest } from 'ember-qunit';
 import { setupRequiredEndpoints } from 'irene/tests/helpers/acceptance-utils';
 import { setupMirage } from 'ember-cli-mirage/test-support';
@@ -409,15 +416,24 @@ module('Acceptance | sbom', function (hooks) {
 
     assert.notEqual(nodes.length, this.sbomComponents.length);
 
-    // Test node expansion
-    const expandIcon = nodes[0].querySelector(
-      '[data-test-component-tree-nodeExpandIcon]'
-    );
-
     // Click to expand
-    await click(expandIcon);
+    await click('[data-test-component-tree-nodeExpandIcon]');
 
     assert.strictEqual(nodes.length, this.sbomComponents.length + 2);
+
+    await waitFor('[data-test-component-tree-nodeCollapseIcon]', {
+      timeout: 3000,
+    });
+
+    // Click to collapse
+    await click('[data-test-component-tree-nodeCollapseIcon]');
+
+    assert.dom('[data-test-component-tree-nodeCollapseIcon]').doesNotExist();
+
+    // Click to expand
+    await click('[data-test-component-tree-nodeExpandIcon]');
+
+    assert.dom('[data-test-component-tree-nodeCollapseIcon]').exists();
 
     // Test collapse all button
     assert
@@ -429,15 +445,7 @@ module('Acceptance | sbom', function (hooks) {
 
     assert.notEqual(nodes.length, this.sbomComponents.length);
 
-    // Click to expand
-    await click(expandIcon);
-
-    assert.strictEqual(nodes.length, this.sbomComponents.length + 2);
-
-    // Click to collapse
-    await click(expandIcon);
-
-    assert.notEqual(nodes.length, this.sbomComponents.length);
+    assert.dom('[data-test-sbomScanDetails-collapseAllButton]').isDisabled();
   });
 
   test('it triggers sbom scan component details route on row click', async function (assert) {
