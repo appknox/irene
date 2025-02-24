@@ -3,10 +3,10 @@ import { inject as service } from '@ember/service';
 import { task } from 'ember-concurrency';
 import { tracked } from '@glimmer/tracking';
 import { waitForPromise } from '@ember/test-waiters';
-import IntlService from 'ember-intl/services/intl';
-import Store from '@ember-data/store';
+import type IntlService from 'ember-intl/services/intl';
+import type Store from '@ember-data/store';
 
-import OrganizationPreferenceModel from 'irene/models/organization-preference';
+import type OrganizationPreferenceModel from 'irene/models/organization-preference';
 import parseError from 'irene/utils/parse-error';
 
 export default class RegulatoryPreferenceOrganizationComponent extends Component {
@@ -111,4 +111,10 @@ export default class RegulatoryPreferenceOrganizationComponent extends Component
       }
     }
   );
+}
+
+declare module '@glint/environment-ember-loose/registry' {
+  export default interface Registry {
+    RegulatoryPreferenceOrganization: typeof RegulatoryPreferenceOrganizationComponent;
+  }
 }
