@@ -65,7 +65,7 @@
                   {{#let (component r.columnValue.component) as |Component|}}
                     <Component
                       @sbomProject={{r.rowValue}}
-                      @sbomFile={{r.rowValue.latestSbFile.content}}
+                      @sbomFile={{r.rowValue.latestSbFile}}
                       @onViewReportClick={{this.handleViewReportOpen}}
                     />
                   {{/let}}

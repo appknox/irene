@@ -1,9 +1,11 @@
-{{#unless @sbomFile.isLoading}}
+{{#if @sbomFile.isPending}}
+  -
+{{else}}
   <AkChip
     @variant='semi-filled'
-    @label={{this.statusValue}}
+    @label={{or @sbomFile.statusValue (t 'chipStatus.neverInitiated')}}
     @size='small'
-    @color={{this.statusColor}}
+    @color={{@sbomFile.statusColor}}
     data-test-sbom-scanStatus
   />
-{{/unless}}
+{{/if}}
