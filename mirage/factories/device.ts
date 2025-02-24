@@ -3,7 +3,7 @@ import { faker } from '@faker-js/faker';
 
 import ENUMS from 'irene/enums';
 
-export default Factory.extend({
+export const DEVICE_FACTORY_DEF = {
   state: () => faker.helpers.arrayElement(['available', 'busy', 'offline']),
 
   device_identifier: () =>
@@ -28,4 +28,6 @@ export default Factory.extend({
   has_persistent_apps: () => faker.datatype.boolean(),
   persistent_apps: () => [],
   has_vnc: () => faker.datatype.boolean(),
-});
+};
+
+export default Factory.extend(DEVICE_FACTORY_DEF);

@@ -44,6 +44,10 @@ import Submission, {
   SUBMISSION_FACTORY_DEF,
 } from 'irene/mirage/factories/submission';
 
+import DeviceFactory, {
+  DEVICE_FACTORY_DEF,
+} from 'irene/mirage/factories/device';
+
 // Extract factory method return values from a factory definition
 type FlattenFactoryMethods<T> = {
   [K in keyof T]: T[K] extends (n: number) => infer V ? V : T[K];
@@ -73,6 +77,7 @@ export interface MirageFactoryDefProps {
   'upload-app-link': FlattenFactoryMethods<typeof UPLOAD_APP_LINK_FACTORY_DEF>;
   'sbom-file': FlattenFactoryMethods<typeof SBOM_FILE_FACTORY_DEF>;
   'sbom-project': FlattenFactoryMethods<typeof SBOM_PROJECT_FACTORY_DEF>;
+  'available-manual-device': FlattenFactoryMethods<typeof DEVICE_FACTORY_DEF>;
 
   submission: FlattenFactoryMethods<
     typeof SUBMISSION_FACTORY_DEF & {
@@ -125,6 +130,7 @@ const MIRAGE_FACTORIES: Record<
   submission: Submission,
   'sbom-file': SbomFileFactory,
   'sbom-project': SbomProjectFactory,
+  'available-manual-device': DeviceFactory,
 };
 
 export { MIRAGE_FACTORIES };

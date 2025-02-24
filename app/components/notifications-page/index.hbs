@@ -15,18 +15,18 @@
     >
 
       {{#if this.isLoading}}
-        <AkDivider />
+        <AkDivider @color='dark' />
 
         <div local-class='loading'>
           <AkLoader />
         </div>
       {{else if this.isEmpty}}
-        <AkDivider />
+        <AkDivider @color='dark' />
 
         <NotificationsPage::Empty @message='No Notifications' />
       {{else}}
         {{#each pgc.currentPageResults as |notification|}}
-          <AkDivider />
+          <AkDivider @color='dark' />
 
           <NotificationsPage::Message @notification={{notification}} />
         {{/each}}

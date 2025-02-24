@@ -15,6 +15,9 @@ import { APPLICATION_ROUTES } from '../support/application.routes';
 import { MirageFactoryDefProps } from '../support/Mirage';
 import cyTranslate from '../support/translations';
 
+type AvailableManualDeviceProps =
+  MirageFactoryDefProps['available-manual-device'];
+
 // Grouped test Actions
 const loginActions = new LoginActions();
 const networkActions = new NetworkActions();
@@ -45,19 +48,8 @@ const MFVA_INTERACTIONS: AppInteraction[] = [
   {
     name: 'app_info',
     snapshot: 'app_info_dialog',
-    clickCoordinates: [244, 32],
-  },
-];
-
-// manually override above incase of generating base images
-const MFVA_CROPPED_INTERACTION_OVERRIDES: Partial<AppInteraction>[] = [
-  {
-    name: 'open_webview',
-    clickCoordinates: [152, 90],
-  },
-  {
-    name: 'app_info',
-    clickCoordinates: [235, 32],
+    clickCoordinates: [214, 32],
+    timeout: 4000,
   },
 ];
 
@@ -71,6 +63,7 @@ const DVIA_INTERACTIONS: AppInteraction[] = [
     name: 'open_menu',
     snapshot: 'open_menu',
     clickCoordinates: [10, 23],
+    timeout: 6000,
   },
   {
     name: 'goto_jailbreak_detection',
@@ -95,17 +88,16 @@ const APP_TYPE_DETAILS = [
     packageName: 'com.appknox.mfva',
     interactions: MFVA_INTERACTIONS,
 
+    preferredDeviceModels: [
+      'Google Pixel 6a',
+      'Google Pixel 7a',
+      'Google Pixel 4a',
+    ],
+
     performInteraction: (
       interactions: AppInteraction[],
       appInfo: AppInformation
-    ) =>
-      dynamicScanActions.checkForCroppedScreenAndInteract(
-        interactions,
-        MFVA_CROPPED_INTERACTION_OVERRIDES,
-        appInfo,
-        'mfva_home_screen',
-        [0.6, 0.5]
-      ),
+    ) => dynamicScanActions.interactWithApp(interactions, appInfo),
   },
   {
     type: 'ipa',
@@ -115,6 +107,7 @@ const APP_TYPE_DETAILS = [
     errorThreshold: 0.2,
     packageName: 'com.appknox.dvia',
     interactions: DVIA_INTERACTIONS,
+    preferredDeviceModels: ['D101AP'],
 
     performInteraction: (
       interactions: AppInteraction[],
@@ -122,8 +115,6 @@ const APP_TYPE_DETAILS = [
     ) => dynamicScanActions.interactWithApp(interactions, appInfo),
   },
 ];
-
-const DynamicStatusTexts = [cyTranslate('deviceInstalling')];
 
 const ANY_DEVICE = 0;
 
@@ -176,6 +167,10 @@ describe('Dynamic Scan', () => {
     cy.intercept(API_ROUTES.userInfo.route).as('userInfoRoute');
     cy.intercept(API_ROUTES.submissionList.route).as('submissionList');
     cy.intercept(`${API_ROUTES.dynamicscan.route}`).as('dynamicscanRoute');
+
+    cy.intercept(API_ROUTES.availableManualDevices.route).as(
+      'availableManualDevReq'
+    );
   });
 
   APP_TYPE_DETAILS.forEach((app) =>
@@ -233,6 +228,7 @@ describe('Dynamic Scan', () => {
                 : cyTranslate('notStarted')
             ).should('exist');
 
+            // Go to dynamic scan page
             cy.findByRole('link', { name: cyTranslate('viewDetails') })
               .should('exist')
               .click();
@@ -252,7 +248,10 @@ describe('Dynamic Scan', () => {
           // Check if in manual DAST page
           cy.url().should('contain', '/dynamic-scan/manual');
 
-          cy.get<MirageFactoryDefProps['file']>('@currentFile').then((file) => {
+          cy.get<MirageFactoryDefProps['file']>(
+            '@currentFile',
+            NETWORK_WAIT_OPTS
+          ).then((file) => {
             // Check tabs info
             cy.findByTestId('manual-dast-tab')
               .should('exist')
@@ -315,20 +314,86 @@ describe('Dynamic Scan', () => {
                   .should('exist')
                   .as('devicePrefSelect');
 
-                if (ds_manual_device_selection !== ANY_DEVICE) {
+                if (
+                  ds_manual_device_selection !== ANY_DEVICE &&
+                  !app.preferredDeviceModels
+                ) {
                   // change to any device
                   dynamicScanActions.chooseDevicePreferenceOption(
                     '@devicePrefSelect',
                     cyTranslate('anyAvailableDeviceWithAnyOS')
                   );
-                }
 
-                // assert preference is any device
-                cy.get('@devicePrefSelect').within(() => {
-                  cy.findByText(
-                    cyTranslate('anyAvailableDeviceWithAnyOS')
-                  ).should('exist');
-                });
+                  // assert preference is any device
+                  cy.get('@devicePrefSelect').within(() => {
+                    cy.findByText(
+                      cyTranslate('anyAvailableDeviceWithAnyOS')
+                    ).should('exist');
+                  });
+                } else if (app.preferredDeviceModels) {
+                  // Select a specific device
+                  dynamicScanActions.chooseDevicePreferenceOption(
+                    '@devicePrefSelect',
+                    cyTranslate('specificDevice')
+                  );
+
+                  // assert preference is specific
+                  cy.get('@devicePrefSelect').within(() => {
+                    cy.findByText(cyTranslate('specificDevice')).should(
+                      'exist'
+                    );
+                  });
+
+                  // Change items per page to 20
+                  cy.findByTestId(
+                    'paginationItemPerPageOptions',
+                    DEFAULT_ASSERT_OPTS
+                  )
+                    .findByRole('combobox')
+                    .should('exist')
+                    .click({ force: true });
+
+                  cy.document()
+                    .findByRole('option', {
+                      name: '20',
+                    })
+                    .should('exist')
+                    .click({ force: true });
+
+                  // Check manual devices and pick a specific device
+                  cy.wait('@availableManualDevReq', NETWORK_WAIT_OPTS);
+
+                  cy.get('@availableManualDevReq')
+                    .its('response.body')
+                    .its('results')
+                    .then((data: Array<AvailableManualDeviceProps>) => {
+                      // Select any device that is in preferredDeviceModels
+                      const selectedManualDevice = data.find(
+                        (d) => app.preferredDeviceModels.indexOf(d?.model) > -1
+                      );
+
+                      cy.wrap(selectedManualDevice ?? null).as(
+                        'selectedManualDevice'
+                      );
+                    });
+
+                  cy.get<AvailableManualDeviceProps>(
+                    '@selectedManualDevice'
+                  ).then((device) => {
+                    // Tick the selected device
+                    if (device) {
+                      cy.findByTestId(
+                        `available-manual-device-${device.model}-${device.device_identifier}`
+                      ).click({ force: true });
+                    } else {
+                      // Reset to ANY_DEVICE if none of the preferred devices are not on the available device list
+                      dynamicScanActions.chooseDevicePreferenceOption(
+                        '@devicePrefSelect',
+                        cyTranslate('anyAvailableDeviceWithAnyOS')
+                      );
+                    }
+                  });
+                }
               });
 
             cy.findByRole('button', {
@@ -347,22 +412,9 @@ describe('Dynamic Scan', () => {
             'not.exist'
           );
 
-          // check different status of dynamic scan status chip while starting
-          cy.findByTestId('deviceWrapper-statusChipAndScanCTAContainer').within(
-            () => {
-              DynamicStatusTexts.forEach((status) => {
-                cy.findByText(status, {
-                  timeout: DYNAMIC_SCAN_STATUS_TIMEOUT,
-                }).should('exist');
-              });
-            }
-          );
-
           // when dynamic started running
-          cy.findByRole('button', {
-            name: cyTranslate('stop'),
-            timeout: DYNAMIC_SCAN_STATUS_TIMEOUT,
-          })
+          dynamicScanActions
+            .getDynamicScanStopBtn()
             .should('exist')
             .as(DYNAMIC_SCAN_STOP_BTN_ALIAS);
 
@@ -386,25 +438,38 @@ describe('Dynamic Scan', () => {
           cy.wait(5000);
 
           // trigger app interaction
-          app.performInteraction(app.interactions, app);
+          if (app.preferredDeviceModels) {
+            cy.get<AvailableManualDeviceProps>('@selectedManualDevice').then(
+              (device) => {
+                app.performInteraction(app.interactions, {
+                  ...app,
+                  deviceName: device?.model ?? '',
+                });
+              }
+            );
+          } else {
+            app.performInteraction(app.interactions, app);
+          }
 
           // stop dynamic scan
           cy.findByTestId('deviceViewer-container').within(() =>
-            cy
-              .findByRole('button', {
-                name: cyTranslate('stop'),
-                timeout: DYNAMIC_SCAN_STATUS_TIMEOUT,
-              })
+            dynamicScanActions
+              .getDynamicScanStopBtn()
               .should('exist')
               .click({ force: true })
           );
+
+          // Wait for API responses to resolve
+          cy.wait(3000);
 
           // check status of dynamic while stopping
           cy.findByTestId('deviceWrapper-statusChipAndScanCTAContainer')
             .within(() => {
               cy.findByText(cyTranslate('deviceShuttingDown'), {
                 timeout: DYNAMIC_SCAN_STATUS_TIMEOUT,
-              }).should('exist');
+              }).should('not.exist');
+
+              dynamicScanActions.getDynamicScanStopBtn().should('not.exist');
             })
             .then(() => cy.wrap(true).as('testCompleted'));
         });

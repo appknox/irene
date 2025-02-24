@@ -85,6 +85,10 @@ export const API_ROUTES = {
     route: '/api/v2/profiles/*/ds_manual_device_preference',
     alias: 'dsManualDevicePreference',
   },
+  availableManualDevices: {
+    route: '/api/v2/projects/*/available_manual_devices*',
+    alias: 'availableManualDevices',
+  },
   editAnalysisRisk: {
     route: '/api/files/*/vulnerability_preferences/*/risk',
     alias: 'editAnalysisRisk',

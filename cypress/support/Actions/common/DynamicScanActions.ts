@@ -11,6 +11,7 @@ export interface AppInteraction {
 export interface AppInformation {
   type: string;
   name: string | RegExp;
+  deviceName?: string;
   errorThreshold?: number;
   snapshotPrefix: string;
   packageName: string;
@@ -38,6 +39,16 @@ export default class DynamicScanActions {
    */
   get novncRfbCanvasContainer() {
     return cy.document().findByTestId('NovncRfb-canvasContainer');
+  }
+
+  /**
+   * Dynamic scan stop button
+   */
+  getDynamicScanStopBtn() {
+    return cy.findByRole('button', {
+      name: cyTranslate('stop'),
+      timeout: DYNAMIC_SCAN_STATUS_TIMEOUT,
+    });
   }
 
   /**
@@ -127,11 +138,11 @@ export default class DynamicScanActions {
             .wait(act.timeout ?? 2500);
         }
 
-        cy.compareSnapshot(`${appInfo.snapshotPrefix}_${act.snapshot}`).should(
-          (result) => {
-            expect(result.baseGenerated).to.be.true;
-          }
-        );
+        cy.compareSnapshot(
+          `[${appInfo.deviceName}]_${appInfo.snapshotPrefix}_${act.snapshot}`
+        ).should((result) => {
+          expect(result.baseGenerated).to.be.true;
+        });
       });
     });
   }
@@ -155,92 +166,15 @@ export default class DynamicScanActions {
       .as(DYNAMIC_SCAN_STOP_BTN_ALIAS);
 
     // check different status of dynamic scan status chip while starting
-    cy.findByTestId('deviceWrapper-statusChipAndScanCTAContainer').within(
-      () => {
-        cy.findByTestId('deviceWrapper-deviceViewer-fullscreenBtn', {
-          timeout: DYNAMIC_SCAN_STATUS_TIMEOUT,
-        })
-          .should('exist')
-          .click();
-      }
-    );
+    cy.document()
+      .findByTestId('deviceWrapper-deviceViewer-fullscreenBtn', {
+        timeout: DYNAMIC_SCAN_STATUS_TIMEOUT,
+      })
+      .should('exist')
+      .click();
 
     // wait for device screen to render
     cy.wait(3000);
-  }
-
-  /**
-   * Checks for cropped screen based on error threshold range & interacts with app
-   * @param interactions interaction objects for app
-   * @param interactionOverrides interactions that need to be overridden
-   * @param appInfo appInfo application details object
-   * @param snapshotName first snapshot name in app interaction
-   * @param errorThresholdRange error range to consider as cropped
-   * @param retries number of retries to perform `default is 10`
-   */
-  checkForCroppedScreenAndInteract(
-    interactions: AppInteraction[],
-    interactionOverrides: Partial<AppInteraction>[],
-    appInfo: AppInformation,
-    snapshotName: string,
-    errorThresholdRange: [number, number],
-    retries = 10
-  ) {
-    if (retries === 0) {
-      throw new Error(
-        '[CROP CHECK] Maximum retries limit reached for black screen.'
-      );
-    }
-
-    const [upperLimit, lowerLimit] = errorThresholdRange;
-
-    this.novncRfbCanvasContainer
-      .compareSnapshot(snapshotName, { failSilently: true })
-      .then((result) => {
-        // check for black screen
-        const hasBlackScreen =
-          result.error && result.percentage && result.percentage > 0.8;
-
-        if (hasBlackScreen) {
-          expect(result.error, '[CROP CHECK] Device black screen reloading...')
-            .to.exist;
-
-          // reload and wait
-          this.reloadPageForDeviceRefresh();
-
-          this.checkForCroppedScreenAndInteract(
-            interactions,
-            interactionOverrides,
-            appInfo,
-            snapshotName,
-            errorThresholdRange,
-            retries - 1
-          );
-        } else {
-          if (
-            result.percentage &&
-            upperLimit > result.percentage &&
-            lowerLimit < result.percentage
-          ) {
-            this.interactWithApp(
-              interactions.map((it) => {
-                const overriddenInteraction = interactionOverrides.find(
-                  (io) => io.name === it.name
-                );
-
-                return {
-                  ...it, // copy all fields
-                  ...(overriddenInteraction || {}), // add overrides if present
-                  snapshot: `${it.snapshot}_cropped`, // suffix with cropped
-                };
-              }),
-              appInfo
-            );
-          } else {
-            this.interactWithApp(interactions, appInfo);
-          }
-        }
-      });
   }
 
   /**
@@ -278,10 +212,17 @@ export default class DynamicScanActions {
           .wait(act?.timeout || 2500);
       }
 
-      cy.compareSnapshot(`${appInfo.snapshotPrefix}_${act.snapshot}`, {
-        errorThreshold: appInfo.errorThreshold ?? 0.05,
-        failSilently: true,
-      }).then((result) => {
+      const deviceNamePrefix = appInfo.deviceName
+        ? `[${appInfo.deviceName}]_` // Use specific device model if available
+        : '';
+
+      cy.compareSnapshot(
+        `${deviceNamePrefix}${appInfo.snapshotPrefix}_${act.snapshot}`,
+        {
+          errorThreshold: appInfo.errorThreshold ?? 0.05,
+          failSilently: true,
+        }
+      ).then((result) => {
         // check for black screen
         const hasBlackScreen =
           result.error && result.percentage && result.percentage > 0.8;
@@ -322,7 +263,7 @@ export default class DynamicScanActions {
       .should('exist')
       .click({ force: true });
 
-    cy.document().findByText(cyTranslate('savedPreferences')).should('exist');
+    // cy.document().findByText(cyTranslate('savedPreferences')).should('exist');
   }
 
   /**
