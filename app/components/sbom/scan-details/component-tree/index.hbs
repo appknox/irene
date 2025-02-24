@@ -64,7 +64,7 @@
             @alignItems='center'
             @width='full'
             local-class='tree-node {{if
-              (or node.dataObject.hasNextSibling this.hasMoreComponents)
+              node.dataObject.hasNextSibling
               ""
               "last-node"
             }}'
@@ -133,7 +133,7 @@
                 @underline='hover'
                 data-test-component-tree-nodeLabel
               >
-                {{node.dataObject.bomRef}}&nbsp;:&nbsp;{{node.label}}
+                {{node.label}}
               </AkTypography>
             </AkButton>
 
@@ -142,14 +142,19 @@
             />
 
             {{#if node.dataObject.isHighlighted}}
-              <AkStack local-class='highlighted-return-icon-container'>
+              <AkTooltip
+                @title={{t 'highlightedNodeTooltip'}}
+                @placement='right'
+                @arrow={{true}}
+                local-class='highlighted-return-icon-container'
+              >
                 <AkIcon
                   data-test-component-tree-returnIcon
                   @iconName='keyboard-return'
                   @size='small'
                   local-class='highlighted-return-icon'
                 />
-              </AkStack>
+              </AkTooltip>
             {{/if}}
           </AkStack>
 
@@ -162,10 +167,8 @@
                     @color='secondary'
                     @underline='always'
                     @typographyFontWeight='medium'
-                    {{on
-                      'click'
-                      (fn this.handleLoadMoreChildren node.parent.key)
-                    }}
+                    {{on 'click' (fn this.handleLoadMoreChildren node.parent)}}
+                    data-test-component-tree-child-viewMore
                   >
                     <:default>{{t 'viewMore'}}</:default>
                     <:rightIcon>
@@ -174,11 +177,7 @@
                   </AkButton>
                 {{/if}}
 
-                {{#if
-                  (this.isNodeScrollable
-                    node.parent.key node.parent.dataObject.dependencyCount
-                  )
-                }}
+                {{#if (this.isNodeScrollable node.parent)}}
                   <AkButton
                     @variant='text'
                     @color='secondary'
