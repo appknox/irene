@@ -1,0 +1,21 @@
+.tree-connectors {
+  width: 20px;
+  height: 34px;
+  top: -17px;
+  position: relative;
+  border-bottom: 1px solid var(--sbom-scan-details-component-tree-border-color);
+  border-left: 1px solid var(--sbom-scan-details-component-tree-border-color);
+}
+
+.node-container {
+  height: 34px;
+  margin-left: 2em;
+}
+
+.tree-package-name-container {
+  background-color: var(
+    --sbom-scan-details-component-tree-header-background-color
+  );
+  margin-bottom: 1em;
+  padding: 0.3em 0.7em;
+}

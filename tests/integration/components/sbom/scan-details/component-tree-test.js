@@ -165,8 +165,14 @@ module(
 
       const nodeLabels = findAll('[data-test-component-tree-nodeLabel]');
 
+      const bomRefParts = this.sbomComponents[0].bom_ref
+        .split(':')
+        .filter(Boolean);
+
+      const purl = `pkg:${bomRefParts[0]}/${bomRefParts[1]}/${this.sbomComponents[0].name}@${this.sbomComponents[0].version}`;
+
       // First node sanity check
-      assert.dom(nodeLabels[0]).containsText(this.sbomComponents[0].name);
+      assert.dom(nodeLabels[0]).hasText(purl);
 
       // Test node expansion
       const expandIcon = nodes[0].querySelector(

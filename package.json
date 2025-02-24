@@ -182,6 +182,7 @@
     "qunit": "^2.22.0",
     "qunit-dom": "^3.2.1",
     "sass": "^1.77.8",
+    "semver": "^7.7.1",
     "storybook": "8.4.6",
     "stream-browserify": "^3.0.0",
     "stylelint": "^15.11.0",

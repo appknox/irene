@@ -5,6 +5,7 @@ import { setupIntl, t } from 'ember-intl/test-support';
 import { setupRenderingTest } from 'ember-qunit';
 import { module, test } from 'qunit';
 import { capitalize } from '@ember/string';
+import * as semver from 'semver';
 
 module(
   'Integration | Component | sbom/component-details/summary',
@@ -63,7 +64,12 @@ module(
         },
         {
           label: t('sbomModule.latestVersion'),
-          value: this.sbomComponent.latestVersion,
+          value: semver.lt(
+            this.sbomComponent.latestVersion,
+            this.sbomComponent.version
+          )
+            ? '-'
+            : this.sbomComponent.latestVersion,
         },
         {
           label: t('author'),

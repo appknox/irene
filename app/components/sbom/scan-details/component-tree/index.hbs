@@ -32,7 +32,7 @@
       id='component-tree-container'
       @width='full'
       @direction='column'
-      local-class='component-tree-container'
+      local-class='component-tree-container scrollbox'
       data-test-component-tree
     >
       <AkStack
@@ -64,7 +64,7 @@
             @alignItems='center'
             @width='full'
             local-class='tree-node {{if
-              (or node.dataObject.hasNextSibling this.hasMoreComponents)
+              node.dataObject.hasNextSibling
               ""
               "last-node"
             }}'
@@ -94,7 +94,7 @@
                   local-class='expand-icon'
                   @size='small'
                   disabled={{this.loadChildrenAndTransform.isRunning}}
-                  {{style left=(this.calculateMargin node.treeDepth)}}
+                  {{style left=(this.calculateMargin -10 node.treeDepth)}}
                   {{on 'click' (fn tree.onExpand node)}}
                 >
                   {{#if node.expanded}}
@@ -133,7 +133,7 @@
                 @underline='hover'
                 data-test-component-tree-nodeLabel
               >
-                {{node.dataObject.bomRef}}&nbsp;:&nbsp;{{node.label}}
+                {{node.label}}
               </AkTypography>
             </AkButton>
 
@@ -142,30 +142,37 @@
             />
 
             {{#if node.dataObject.isHighlighted}}
-              <AkStack local-class='highlighted-return-icon-container'>
+              <AkTooltip
+                @title={{t 'highlightedNodeTooltip'}}
+                @placement='right'
+                @arrow={{true}}
+                local-class='highlighted-return-icon-container'
+              >
                 <AkIcon
                   data-test-component-tree-returnIcon
                   @iconName='keyboard-return'
                   @size='small'
                   local-class='highlighted-return-icon'
                 />
-              </AkStack>
+              </AkTooltip>
             {{/if}}
           </AkStack>
 
           {{#if node.dataObject.isDependency}}
             {{#unless node.dataObject.hasNextSibling}}
-              <AkStack class='ml-6' @alignItems='center' @spacing='2'>
+              <AkStack
+                {{style marginLeft=(this.calculateMargin 55 node.treeDepth)}}
+                @alignItems='center'
+                @spacing='2'
+              >
                 {{#if (this.shouldShowViewMoreForChild node)}}
                   <AkButton
                     @variant='text'
                     @color='secondary'
                     @underline='always'
                     @typographyFontWeight='medium'
-                    {{on
-                      'click'
-                      (fn this.handleLoadMoreChildren node.parent.key)
-                    }}
+                    {{on 'click' (fn this.handleLoadMoreChildren node.parent)}}
+                    data-test-component-tree-child-viewMore
                   >
                     <:default>{{t 'viewMore'}}</:default>
                     <:rightIcon>
@@ -174,11 +181,7 @@
                   </AkButton>
                 {{/if}}
 
-                {{#if
-                  (this.isNodeScrollable
-                    node.parent.key node.parent.dataObject.dependencyCount
-                  )
-                }}
+                {{#if (this.isNodeScrollable node)}}
                   <AkButton
                     @variant='text'
                     @color='secondary'
@@ -187,7 +190,12 @@
                     {{on 'click' (fn this.scrollToParent node.parent.key)}}
                   >
                     <:default>{{t 'goToParent'}}</:default>
-                    <:rightIcon><AkIcon @iconName='arrow-upward' /></:rightIcon>
+                    <:rightIcon>
+                      <AkIcon
+                        @iconName='supervisor-account'
+                        @variant='outlined'
+                      />
+                    </:rightIcon>
                   </AkButton>
                 {{/if}}
               </AkStack>
@@ -200,7 +208,7 @@
               @direction='column'
               @spacing='1'
               class='my-1'
-              {{style marginLeft=(this.calculateLoaderMargin node.treeDepth)}}
+              {{style marginLeft=(this.calculateMargin 55 node.treeDepth)}}
             >
               <AkSkeleton class='p-1' @width='600px' @height='16px' />
               <AkSkeleton class='p-1' @width='600px' @height='16px' />
