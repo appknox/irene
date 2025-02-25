@@ -1,8 +1,9 @@
 import Component from '@glimmer/component';
-import { inject as service } from '@ember/service';
-import AkNotificationsService from 'irene/services/ak-notifications';
-import { action } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
+import { service } from '@ember/service';
+import { action } from '@ember/object';
+
+import type AkNotificationsService from 'irene/services/ak-notifications';
 
 export default class NotificationsPageBellIconComponent extends Component {
   @tracked anchorRef: HTMLElement | null = null;
@@ -28,5 +29,11 @@ export default class NotificationsPageBellIconComponent extends Component {
   @action
   fetchNotifications() {
     this.akNotifications.fetchUnRead.perform();
+  }
+}
+
+declare module '@glint/environment-ember-loose/registry' {
+  export default interface Registry {
+    'NotificationsPage::BellIcon': typeof NotificationsPageBellIconComponent;
   }
 }

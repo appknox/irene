@@ -1,7 +1,8 @@
 import Component from '@glimmer/component';
-import { inject as service } from '@ember/service';
-import AkNotificationsService from 'irene/services/ak-notifications';
+import { service } from '@ember/service';
 import { action } from '@ember/object';
+
+import type AkNotificationsService from 'irene/services/ak-notifications';
 
 export default class NotificationsPageHeaderComponent extends Component {
   @service declare akNotifications: AkNotificationsService;
@@ -18,5 +19,11 @@ export default class NotificationsPageHeaderComponent extends Component {
   @action
   markAllAsRead() {
     this.akNotifications.markAllAsRead.perform();
+  }
+}
+
+declare module '@glint/environment-ember-loose/registry' {
+  export default interface Registry {
+    'NotificationsPage::Header': typeof NotificationsPageHeaderComponent;
   }
 }

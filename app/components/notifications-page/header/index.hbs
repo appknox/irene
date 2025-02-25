@@ -4,14 +4,19 @@
       <AkTypography local-class='notification_title' @variant='h4'>
         <span>{{t 'notifications'}}</span>
       </AkTypography>
+
       <AkTypography
         @variant='h5'
         local-class='notifications_unread_count'
         data-test-unread-count
-      >{{this.unReadCount}}</AkTypography>
+      >
+        {{this.unReadCount}}
+      </AkTypography>
     </div>
+
     <div local-class='notification_settings_area'>
       <span local-class='notification_unread_text'>Only show unread</span>
+
       <AkToggle
         @checked={{this.akNotifications.showUnReadOnly}}
         @size='small'
@@ -25,8 +30,10 @@
       </AkIconButton> }}
     </div>
   </div>
+
   <div local-class='notification_header_line'>
     <AkTypography @variant='h5'>LATEST</AkTypography>
+
     <AkButton
       @type='button'
       @color='primary'

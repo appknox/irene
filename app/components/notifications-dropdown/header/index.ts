@@ -1,7 +1,8 @@
 import Component from '@glimmer/component';
-import { inject as service } from '@ember/service';
-import AkNotificationsService from 'irene/services/ak-notifications';
+import { service } from '@ember/service';
 import { action } from '@ember/object';
+
+import type AkNotificationsService from 'irene/services/ak-notifications';
 
 export default class NotificationsDropdownHeaderComponent extends Component {
   @service declare akNotifications: AkNotificationsService;

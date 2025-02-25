@@ -20,7 +20,7 @@
       local-class='notification_main_list'
     >
       {{#if this.isLoading}}
-        <NotificationsPage::Divider />
+        <AkDivider @color='dark' />
 
         <AkStack
           @width='full'
@@ -31,12 +31,12 @@
           <AkLoader />
         </AkStack>
       {{else if this.isEmpty}}
-        <NotificationsPage::Divider />
+        <AkDivider @color='dark' />
 
         <NotificationsPage::Empty @message='No unread notifications' />
       {{else}}
         {{#each this.akNotifications.notificaions_drop_down as |notification|}}
-          <NotificationsPage::Divider />
+          <AkDivider @color='dark' />
 
           <NotificationsPage::Message @notification={{notification}} />
         {{/each}}
