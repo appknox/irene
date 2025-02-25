@@ -19,6 +19,22 @@ class WindowStub extends Service {
   url = null;
   target = null;
 
+  localStorage = {
+    storage: new Map(),
+
+    getItem(key) {
+      return this.storage.get(key) ?? null;
+    },
+
+    setItem(key, value) {
+      this.storage.set(key, value);
+    },
+
+    clear() {
+      this.storage.clear();
+    },
+  };
+
   open(url, target) {
     this.url = url;
     this.target = target;
@@ -53,8 +69,16 @@ module(
         return schema.sbomReports.find(`${req.params.id}`)?.toJSON();
       });
 
-      this.server.post('/v2/feature_request/sbom', (schema, req) => {
-        return schema.sbomReports.find(`${req.params.id}`)?.toJSON();
+      this.server.post('/v2/feature_request/sbom', () => {
+        return 200;
+      });
+
+      const window = this.owner.lookup('service:browser/window');
+
+      window.localStorage.clear();
+
+      this.setProperties({
+        window,
       });
     });
 
@@ -100,6 +124,11 @@ module(
       assert.dom('[data-test-sbomReports-contactUsButton]').exists();
 
       await click('[data-test-sbomReports-contactUsButton]');
+
+      assert.strictEqual(
+        this.window.localStorage.getItem('sbomRequest'),
+        'true'
+      );
 
       assert.dom('[data-test-sbomReports-contactUsButton]').doesNotExist();
       assert.dom('[data-test-sbomReports-contactSuccessIllustration]').exists();

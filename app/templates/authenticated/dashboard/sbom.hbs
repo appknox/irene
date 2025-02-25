@@ -1,5 +1,9 @@
 {{page-title 'SBOM'}}
 
 <PageWrapper @backgroundColor='inherit'>
-  {{outlet}}
+  {{#if @model.isSbomEnabled}}
+    {{outlet}}
+  {{else}}
+    <Sbom::Upselling />
+  {{/if}}
 </PageWrapper>
