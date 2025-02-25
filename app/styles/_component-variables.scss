@@ -2177,6 +2177,11 @@ body {
   --home-page-product-card-beta-tag-bg: var(--storeknox-beta-tag-bg);
   --home-page-product-card-beta-tag-color: var(--storeknox-beta-tag-color);
 
+  // variables for upselling-module
+  --upselling-module-background-color: var(--background-main);
+  --upselling-module-box-shadow-6: var(--box-shadow-6);
+  --upselling-module-box-shadow-4: var(--box-shadow-4);
+
   &.theme-light {
     //variables for appknox-wrapper
     --appknox-wrapper-text-color: var(--text-primary);

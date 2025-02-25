@@ -33,6 +33,10 @@ export default class FileReportDrawerSbomReportsSampleComponent extends Componen
   constructor(owner: unknown, args: object) {
     super(owner, args);
 
+    const storedState = this.window.localStorage.getItem('sbomRequest');
+
+    this.hasContactedSupport = storedState === 'true';
+
     this.fetchSampleReport.perform();
   }
 
@@ -58,6 +62,8 @@ export default class FileReportDrawerSbomReportsSampleComponent extends Componen
   contactSupport = task(async () => {
     try {
       await waitForPromise(this.ajax.post(this.CONTACT_SUPPORT_ENDPOINT));
+
+      this.window.localStorage.setItem('sbomRequest', 'true');
 
       this.hasContactedSupport = true;
     } catch (err) {
