@@ -1081,6 +1081,7 @@
     "addATeam": "Add a team which you want to collaborate with this project",
     "selectGHRepo": "Select the Github Repo where you want us to create issues for the risks we find in your project",
     "selectJIRAAccount": "Select the JIRA account where you want us to create issues for the risks we find in your project",
+    "selectJIRAAccountNote": "The vulnerabilities from Appknox will be mapped to the Issue Type of <em>\"Bug\"</em> on JIRA. So, kindly ensure that such an issue type exists in your JIRA Project.",
     "selectPreferredDevice": "Select the Preferred Device Type and OS Version for Dynamic Scan"
   },
   "outOf": "out of",

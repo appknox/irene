@@ -1081,6 +1081,7 @@
     "addATeam": "このプロジェクトにコラボレートするチームを追加する",
     "selectGHRepo": "プロジェクトで見つかったリスクに関するIssueを作成するGithub のリポジトリを選択してください",
     "selectJIRAAccount": "プロジェクトで見つかったリスクに関するIssueを作成するJIRAアカウントを選択してください",
+    "selectJIRAAccountNote": "The vulnerabilities from Appknox will be mapped to the Issue Type of <em>\"Bug\"</em> on JIRA. So, kindly ensure that such an issue type exists in your JIRA Project.",
     "selectPreferredDevice": "動的診断のデバイスタイプとOSバージョンを選択してください"
   },
   "outOf": "out of",
