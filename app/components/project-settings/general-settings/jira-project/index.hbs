@@ -144,63 +144,76 @@
       @disableClose={{this.selectProject.isRunning}}
     >
       <:default>
-        <AkStack
-          @direction='column'
-          @spacing='2'
-          {{style maxWidth='600px'}}
-          data-test-projectSettings-genSettings-jiraProject-editModal
-        >
-          <AkTypography
-            @variant='h5'
-            @fontWeight='regular'
-            @color='textPrimary'
-            data-test-genSettings-jiraProject-editModal-title
+        <AkStack @direction='column' {{style maxWidth='600px'}}>
+          <AkStack
+            @direction='column'
+            @spacing='2'
+            @width='full'
+            data-test-projectSettings-genSettings-jiraProject-editModal
           >
-            {{t 'otherTemplates.selectJIRAAccount'}}
+            <AkTypography
+              @variant='h5'
+              @fontWeight='regular'
+              @color='textPrimary'
+              data-test-genSettings-jiraProject-editModal-title
+            >
+              {{t 'otherTemplates.selectJIRAAccount'}}
+            </AkTypography>
+
+            {{#if this.jiraProjects}}
+              <AkStack @width='full' @spacing='1.5'>
+                <AkStack @direction='column' @width='8/12' @spacing='1'>
+                  <AkTypography
+                    @variant='h6'
+                    data-test-genSettings-jiraProject-editModal-repoListTitle
+                  >
+                    {{t 'repo'}}
+                  </AkTypography>
+
+                  <AkSelect
+                    @options={{this.jiraProjects}}
+                    @selected={{this.selectedRepo}}
+                    @onChange={{this.selectRepo}}
+                    @placeholder='{{t "selectRepo"}}'
+                    @triggerClass='select-repo-class'
+                    {{style width='100%'}}
+                    data-test-genSettings-jiraProject-editModal-repoList
+                    as |repo|
+                  >
+                    {{repo.key}}-{{repo.name}}
+                  </AkSelect>
+                </AkStack>
+
+                <AkStack @direction='column' @width='4/12' @spacing='1'>
+                  <AkTypography @variant='h6'>{{t 'threshold'}}</AkTypography>
+
+                  <AkSelect
+                    @selected={{this.selectedThreshold}}
+                    @options={{this.thresholds}}
+                    @onChange={{this.selectThreshold}}
+                    @placeholder='{{t "selectThreshold"}}'
+                    @triggerClass='select-threshold-class'
+                    {{style width='100%'}}
+                    data-test-genSettings-jiraProject-editModal-thresholdList
+                    as |threshold|
+                  >
+                    {{threshold-status threshold}}
+                  </AkSelect>
+                </AkStack>
+              </AkStack>
+            {{/if}}
+          </AkStack>
+
+          <AkDivider class='my-3' @color='dark' />
+
+          <AkTypography
+            @variant='body2'
+            @color='textSecondary'
+            data-test-genSettings-jiraProject-editModal-note
+          >
+            <strong>{{t 'note'}}:</strong>
+            {{t 'otherTemplates.selectJIRAAccountNote' htmlSafe=true}}
           </AkTypography>
-
-          {{#if this.jiraProjects}}
-            <AkStack @width='full' @spacing='1.5'>
-              <AkStack @direction='column' @width='8/12' @spacing='1'>
-                <AkTypography
-                  @variant='h6'
-                  data-test-genSettings-jiraProject-editModal-repoListTitle
-                >
-                  {{t 'repo'}}
-                </AkTypography>
-
-                <AkSelect
-                  @options={{this.jiraProjects}}
-                  @selected={{this.selectedRepo}}
-                  @onChange={{this.selectRepo}}
-                  @placeholder='{{t "selectRepo"}}'
-                  @triggerClass='select-repo-class'
-                  {{style width='100%'}}
-                  data-test-genSettings-jiraProject-editModal-repoList
-                  as |repo|
-                >
-                  {{repo.key}}-{{repo.name}}
-                </AkSelect>
-              </AkStack>
-
-              <AkStack @direction='column' @width='4/12' @spacing='1'>
-                <AkTypography @variant='h6'>{{t 'threshold'}}</AkTypography>
-
-                <AkSelect
-                  @selected={{this.selectedThreshold}}
-                  @options={{this.thresholds}}
-                  @onChange={{this.selectThreshold}}
-                  @placeholder='{{t "selectThreshold"}}'
-                  @triggerClass='select-threshold-class'
-                  {{style width='100%'}}
-                  data-test-genSettings-jiraProject-editModal-thresholdList
-                  as |threshold|
-                >
-                  {{threshold-status threshold}}
-                </AkSelect>
-              </AkStack>
-            </AkStack>
-          {{/if}}
         </AkStack>
       </:default>
 

@@ -8,6 +8,7 @@ import { selectChoose } from 'ember-power-select/test-support';
 import { setupRenderingTest } from 'ember-qunit';
 import { module, test } from 'qunit';
 import { Response } from 'miragejs';
+import { compareInnerHTMLWithIntlTranslation } from 'irene/tests/test-utils';
 
 class NotificationsStub extends Service {
   errorMsg = null;
@@ -139,6 +140,8 @@ module(
     });
 
     test('it opens and closes project edit modal', async function (assert) {
+      assert.expect(9);
+
       await render(
         hbs`<ProjectSettings::GeneralSettings::JiraProject @project={{this.project}} />`
       );
@@ -161,9 +164,14 @@ module(
         .hasText(t('otherTemplates.selectJIRAAccount'));
 
       assert
-        .dom(`[data-test-genSettings-jiraProject-editModal-saveProjectBtn]`)
-        .exists()
-        .hasText(t('save'));
+        .dom('[data-test-genSettings-jiraProject-editModal-note]')
+        .containsText(t('note'));
+
+      compareInnerHTMLWithIntlTranslation(assert, {
+        selector: '[data-test-genSettings-jiraProject-editModal-note]',
+        message: t('otherTemplates.selectJIRAAccountNote'),
+        doIncludesCheck: true,
+      });
 
       assert
         .dom(
