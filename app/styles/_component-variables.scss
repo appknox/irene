@@ -299,6 +299,8 @@ body {
   --ak-accordion-summary-secondary-border-color: var(--border-color-1);
   --ak-accordion-summary-primary-background: var(--primary-main-10);
   --ak-accordion-summary-primary-border-color: var(--primary-main-10);
+  --ak-accordion-summary-light-background: var(--background-main);
+  --ak-accordion-summary-light-box-shadow: var(--box-shadow-12);
 
   // variables for ak-skeleton
   --ak-skeleton-linear-gradient-color-1: var(--neutral-grey-100);
@@ -696,60 +698,9 @@ body {
   --notifications-dropdown-border-color: var(--border-color-1);
   --notifications-dropdown-box-shadow: var(--box-shadow-9);
 
-  //variables for appmonitoring
-  --appmonitoring-font-weight-medium: var(--font-weight-medium);
-  --appmonitoring-color-black: var(--common-black);
-  --appmonitoring-platform-ios-color: var(--ios);
-  --appmonitoring-platform-android-color: var(--android);
-  --appmonitoring-border-radius: var(--border-radius);
-  --appmonitoring-border-color: var(--neutral-white-100);
-
-  //variables for appmonitoring/skeleton-loader
-  --appmonitoring-skeleton-loader-header-border-color: var(--neutral-white-100);
-  --appmonitoring-skeleton-loader-header-border-radius: var(--border-radius);
-
-  //variables for appmonitoring/details
-  --appmonitoring-details-border-color: var(--neutral-grey-100);
-  --appmonitoring-details-toggle-border-color: var(--neutral-grey-200);
-
-  //variables for appmonitoring/details/skeleton-loader
-  --appmonitoring-details-skeleton-loader-border-color: var(--neutral-grey-100);
-  --appmonitoring-details-skeleton-loader-toggle-border-color: var(
-    --neutral-grey-200
-  );
-
-  //variables for appmonitoring/settings
-  --appmonitoring-settings-block-description-text-color: var(
-    --neutral-grey-500
-  );
-  --appmonitoring-settings-header-background-color: var(--common-white);
-  --appmonitoring-settings-header-border-color: var(--neutral-white-100);
-  --appmonitoring-settings-header-border-radius: var(--border-radius);
-  --appmonitoring-settings-header-filter-border-color: var(--neutral-grey-200);
-  --appmonitoring-settings-header-filter-hover-border-color: var(
-    --neutral-grey-400
-  );
-  --appmonitoring-settings-header-filter-option-hover-background: var(
-    --hover-light-background
-  );
-  --appmonitoring-settings-header-clear-filter-color: var(--neutral-grey-600);
-  --appmonitoring-settings-header-clear-filter-hover-color: var(--primary-main);
-
-  //variables for appmonitoring/table/status-column
-  --appmonitoring-table-status-last-sync-color: var(--neutral-grey-600);
-
   //variables for app-logo
   --app-logo-border-radius: var(--border-radius);
   --app-logo-border-color: var(--neutral-grey-100);
-
-  //variables for appmonitoring/version-table/actions
-  --appmonitoring-version-table-divider-bg: var(--neutral-grey-300);
-  --appmonitoring-version-table-beta-tag-bg: var(
-    --am-version-table-beta-tag-bg
-  );
-  --appmonitoring-version-table-beta-tag-color: var(
-    --am-version-table-beta-tag-color
-  );
 
   // variables for file/report-drawer/va-reports
   --file-report-dr-va-reports-border-radius: var(--border-radius);
@@ -794,7 +745,9 @@ body {
   // variables for sbom/scan-details
   --sbom-scan-details-link-border-radius: var(--border-radius);
   --sbom-scan-details-border-color: var(--border-color-1);
-  --sbom-scan-details-background-color: var(--side-menu-active-background-light);
+  --sbom-scan-details-background-color: var(
+    --side-menu-active-background-light
+  );
 
   // variables for sbom/scan-details/skeleton-loader
   --sbom-scan-details-skeleton-loader-summary-border-radius: var(
@@ -872,9 +825,15 @@ body {
   --sbom-scan-details-component-tree-border-color: var(--border-color-1);
   --sbom-scan-details-component-tree-border-radius: var(--border-radius);
   --sbom-scan-details-component-tree-background-color: var(--background-main);
-  --sbom-scan-details-component-tree-header-background-color: var(--neutral-grey-100);
-  --sbom-scan-details-component-tree-highlighted-background-color: var(--common-black);
-  --sbom-scan-details-component-tree-highlighted-text-color: var(--common-white);
+  --sbom-scan-details-component-tree-header-background-color: var(
+    --neutral-grey-100
+  );
+  --sbom-scan-details-component-tree-highlighted-background-color: var(
+    --common-black
+  );
+  --sbom-scan-details-component-tree-highlighted-text-color: var(
+    --common-white
+  );
 
   // variables for analysis-risk/tag
   // variables for analysis-risk/text
@@ -1665,9 +1624,6 @@ body {
   --appknox-wrapper-text-primary: var(--primary-main);
   --appknox-wrapper-border-color: var(--border-color-1);
 
-  // variables for appknox-wrapper/onboarding-guide
-  --appknox-wrapper-onboarding-guide-list-border-color: var(--border-color-1);
-
   // variables for marketplace
   --marketplace-sub-header-description-text-color: var(--text-secondary);
 
@@ -1701,27 +1657,27 @@ body {
   );
 
   // variables for storeknox/inventory/pending-review/table/found-by
-  --storeknox-inventory-pending-review-table-found-by-info-icon-color: var(
+  --storeknox-inventory-pending-review-table-requested-by-info-icon-color: var(
     --neutral-grey-300
   );
-  --storeknox-inventory-pending-review-table-found-by-header-text-color: var(
+  --storeknox-inventory-pending-review-table-requested-by-header-text-color: var(
     --text-secondary
   );
 
   // variables for storeknox/inventory/pending-review/table/found-by-header
-  --storeknox-inventory-pending-review-table-found-by-filter-background-color: var(
+  --storeknox-inventory-pending-review-table-requested-by-filter-background-color: var(
     --background-main
   );
-  --storeknox-inventory-pending-review-table-found-by-filter-box-shadow: var(
+  --storeknox-inventory-pending-review-table-requested-by-filter-box-shadow: var(
     --box-shadow-7
   );
-  --storeknox-inventory-pending-review-table-found-by-filter-option-hover-background-color: var(
+  --storeknox-inventory-pending-review-table-requested-by-filter-option-hover-background-color: var(
     --neutral-grey-200
   );
-  --storeknox-inventory-pending-review-table-found-by-filter-option-clear-filter-background-color: var(
+  --storeknox-inventory-pending-review-table-requested-by-filter-option-clear-filter-background-color: var(
     --neutral-grey-200
   );
-  --storeknox-inventory-pending-review-table-found-by-filter-border-radius: var(
+  --storeknox-inventory-pending-review-table-requested-by-filter-border-radius: var(
     --border-radius
   );
 
@@ -1814,6 +1770,158 @@ body {
   );
   --storeknox-table-columns-store-header-filter-border-radius: var(
     --border-radius
+  );
+
+  // variables for file-details/file-not-found
+  --file-details-file-not-found-background-color: var(--background-main);
+
+  // variables for storeknox/inventory
+  --storeknox-inventory-header-background-color: var(--background-main);
+  --storeknox-inventory-header-border-color: var(--neutral-grey-200);
+
+  // variables for storeknox/inventory/app-list
+  --storeknox-inventory-app-list-table-bg-color: var(--background-main);
+
+  // variables for storeknox/inventory/app-list/table
+  --storeknox-inventory-app-list-table-empty-color: var(--common-white);
+  --storeknox-inventory-app-list-table-empty-border-color: var(
+    --neutral-grey-100
+  );
+
+  // variables for storeknox/inventory-details/app-details/actions-list/button
+  --storeknox-inventory-details-app-details-action-list-last-monitored-bg-color: var(
+    --neutral-grey-100
+  );
+
+  // variables for storeknox/inventory-details/app-details/actions-list/button
+  --storeknox-inventory-details-app-details-action-button-box-shadow: var(
+    --box-shadow-11
+  );
+
+  --storeknox-inventory-details-app-details-action-button-no-action-color: var(
+    --success-main
+  );
+
+  --storeknox-inventory-details-app-details-action-button-no-action-bg: var(
+    --storeknox-no-action-button-bg-color
+  );
+
+  --storeknox-inventory-details-app-details-action-button-needs-action-color: var(
+    --primary-main
+  );
+
+  --storeknox-inventory-details-app-details-action-button-needs-action-bg: var(
+    --storeknox-needs-action-button-bg-color
+  );
+
+  --storeknox-inventory-details-app-details-action-button-feature-in-progress-color: var(
+    --storeknox-feature-in-progress-button-color
+  );
+
+  --storeknox-inventory-details-app-details-action-button-feature-in-progress-bg-color: var(
+    --storeknox-feature-in-progress-button-bg-color
+  );
+
+  // variables for storeknox/inventory-details/app-details/va-results
+  --storeknox-inventory-details-app-details-va-results-risk-color-critical: var(
+    --severity-critical
+  );
+
+  --storeknox-inventory-details-app-details-va-results-risk-color-high: var(
+    --severity-high
+  );
+
+  --storeknox-inventory-details-app-details-va-results-risk-color-medium: var(
+    --severity-medium
+  );
+
+  --storeknox-inventory-details-app-details-va-results-risk-color-low: var(
+    --severity-low
+  );
+
+  --storeknox-inventory-details-app-details-va-results-risk-color-passed: var(
+    --severity-passed
+  );
+
+  --storeknox-inventory-details-app-details-va-results-risk-color-untested: var(
+    --severity-untested
+  );
+
+  // variables for storeknox/inventory-details/feature-unavailable
+  --storeknox-inventory-details-feature-unavailable-bg-color: var(
+    --background-main
+  );
+
+  // variables for storeknox/inventory-details/header
+  --storeknox-inventory-details-header-bg-color: var(--background-light);
+  --storeknox-inventory-details-header-app-logo-border-color: var(
+    --neutral-grey-100
+  );
+
+  // variables for storeknox/inventory-details/section-header
+  --storeknox-inventory-details-section-header-root-border-color: var(
+    --border-color-1
+  );
+
+  --storeknox-inventory-details-section-header-default-bg-color: var(
+    --neutral-grey-100
+  );
+
+  --storeknox-inventory-details-section-header-white-bg-color: var(
+    --background-main
+  );
+
+  // variables for storeknox/inventory-details/section-info
+  --storeknox-inventory-details-section-info-root-bg-color: var(
+    --background-main
+  );
+
+  --storeknox-inventory-details-section-info-root-border-color: var(
+    --border-color-1
+  );
+
+  // variables for storeknox/inventory-details/unscanned-version/header
+  --storeknox-inventory-details-unscanned-version-header-tabs-bg-color: var(
+    --background-light
+  );
+
+  --storeknox-inventory-details-unscanned-version-header-summary-status-font-weight: var(
+    --font-weight-medium
+  );
+
+  --storeknox-inventory-details-unscanned-version-status-chip-font-weight: var(
+    --font-weight-medium
+  );
+
+  // variables for storeknox/inventory-details/unscanned-version/table
+  --storeknox-inventory-details-unscanned-version-table-root-bg-color: var(
+    --background-main
+  );
+  --storeknox-inventory-details-unscanned-version-table-beta-tag-bg: var(
+    --storeknox-beta-tag-bg
+  );
+  --storeknox-inventory-details-unscanned-version-table-beta-tag-color: var(
+    --storeknox-beta-tag-color
+  );
+
+  // variables for storeknox/inventory-details/unscanned-version/table-loading
+  --storeknox-inventory-details-unscanned-version-table-loading-border-radius: var(
+    --border-radius
+  );
+
+  // variables for storeknox/product-icon
+  --storeknox-product-icon-border-color: var(--border-color-1);
+  --storeknox-product-icon-info-tray-bg-color: var(--background-main);
+  --storeknox-product-icon-product-info-tray-box-shadow: var(--box-shadow-1);
+  --storeknox-product-icon-store-link-container-bg-color: var(
+    --neutral-grey-100
+  );
+
+  // variables for storeknox/upselling-ui
+  --storeknox-upselling-ui-border-color: var(--border-color-1);
+
+  --storeknox-upselling-ui-background-color: var(
+    --storeknox-upselling-ui-bg-color
   );
 
   // variables for page-wrapper
@@ -2083,14 +2191,15 @@ body {
   // variables for home-page/product-card
   --home-page-product-card-border-radius: var(--border-radius);
   --home-page-product-card-border-color: var(--border-color-1);
-  --home-page-product-card-background-color: var(--background-main);
-
-  // variables for page-wrapper
-  --page-wrapper-background-color: var(--background-light);
+  --home-page-product-card-beta-tag-bg: var(--storeknox-beta-tag-bg);
+  --home-page-product-card-beta-tag-color: var(--storeknox-beta-tag-color);
 
   &.theme-light {
     //variables for appknox-wrapper
     --appknox-wrapper-text-color: var(--text-primary);
+
+    // variables for top-nav/onboarding-guide
+    --top-nav-onboarding-guide-list-border-color: var(--border-color-1);
 
     //variables for top-nav
     --top-nav-background-color: var(--background-main);
@@ -2118,6 +2227,9 @@ body {
   &.theme-dark {
     //variables for appknox-wrapper
     --appknox-wrapper-text-color: var(--secondary-contrast-text);
+
+    // variables for top-nav/onboarding-guide
+    --top-nav-onboarding-guide-list-border-color: var(--border-color-1);
 
     //variables for top-nav
     --top-nav-background-color: var(--secondary-main);

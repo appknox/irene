@@ -1,35 +1,38 @@
 import Component from '@glimmer/component';
-import { inject as service } from '@ember/service';
+import { service } from '@ember/service';
+import { action } from '@ember/object';
 import type IntlService from 'ember-intl/services/intl';
+import type RouterService from '@ember/routing/router-service';
 
 import type MeService from 'irene/services/me';
-import type { StoreknoxDiscoveryResultQueryParam } from 'irene/routes/authenticated/storeknox/discover/result';
-import type { SkDiscoveryResultResponse } from '..';
+import type SkDiscoverySearchResultService from 'irene/services/sk-discovery-search-result';
 
 interface LimitOffset {
   limit: number;
   offset: number;
 }
 
-export interface StoreknoxDiscoverResultsTableSignature {
-  Args: {
-    queryParams: StoreknoxDiscoveryResultQueryParam;
-    isLoading: boolean;
-    skDiscoveryResultData: SkDiscoveryResultResponse | null;
-    goToPage: (args: LimitOffset) => void;
-    onItemPerPageChange: (args: LimitOffset) => void;
-  };
-}
-
-export default class StoreknoxDiscoverResultsTableComponent extends Component<StoreknoxDiscoverResultsTableSignature> {
+export default class StoreknoxDiscoverResultsTableComponent extends Component {
   @service declare intl: IntlService;
   @service declare me: MeService;
+  @service declare router: RouterService;
+  @service declare skDiscoverySearchResult: SkDiscoverySearchResultService;
+
+  get itemPerPageOptions() {
+    return [10, 25, 50];
+  }
+
+  get isLoadingDiscoveryResults() {
+    return this.skDiscoverySearchResult.isFetchingSkDiscoverySearchResults;
+  }
 
   get searchResultsData() {
-    if (this.args.isLoading) {
+    if (this.isLoadingDiscoveryResults) {
       return Array.from({ length: 5 }, () => ({}));
     } else {
-      return this.args.skDiscoveryResultData?.slice() || [];
+      return (
+        this.skDiscoverySearchResult.skDiscoverySearchResults?.slice() || []
+      );
     }
   }
 
@@ -69,34 +72,29 @@ export default class StoreknoxDiscoverResultsTableComponent extends Component<St
     ];
   }
 
+  get queryParams() {
+    return {
+      app_limit: this.skDiscoverySearchResult.limit,
+      app_offset: this.skDiscoverySearchResult.offset,
+      app_search_id: this.skDiscoverySearchResult.searchId,
+      app_query: this.skDiscoverySearchResult.searchQuery,
+    };
+  }
+
   get disabledButton() {
     return true;
   }
 
   get totalCount() {
-    return this.args.skDiscoveryResultData?.meta?.count || 0;
+    return this.skDiscoverySearchResult.skDiscoverySearchResultsCount || 0;
   }
 
   get hasNoApps() {
-    const appCount = this.args.skDiscoveryResultData?.meta?.count;
-
-    if (this.args.isLoading) {
+    if (this.isLoadingDiscoveryResults) {
       return false;
     }
 
-    return !appCount;
-  }
-
-  get itemPerPageOptions() {
-    return [10, 25, 50];
-  }
-
-  get limit() {
-    return this.args.queryParams.app_limit;
-  }
-
-  get offset() {
-    return this.args.queryParams.app_offset;
+    return this.totalCount === 0;
   }
 
   get isOwner() {
@@ -111,6 +109,23 @@ export default class StoreknoxDiscoverResultsTableComponent extends Component<St
     return this.isOwner
       ? this.intl.t('storeknox.addToInventory')
       : this.intl.t('storeknox.sendRequest');
+  }
+
+  @action goToPage(args: LimitOffset) {
+    this.setRouteQueryParams(args.limit, args.offset);
+  }
+
+  @action onItemPerPageChange(args: LimitOffset) {
+    this.setRouteQueryParams(args.limit, 0);
+  }
+
+  setRouteQueryParams(limit: number, offset: number) {
+    this.router.transitionTo({
+      queryParams: {
+        app_limit: limit,
+        app_offset: offset,
+      },
+    });
   }
 }
 

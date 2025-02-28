@@ -21,7 +21,7 @@ class NotificationsStub extends Service {
 
 class FreshdeskStub extends Service {
   supportWidgetIsEnabled = false;
-  freshchatEnabled = false;
+  freshchatEnabled = true;
 }
 
 class ConfigurationStub extends Service {
@@ -50,7 +50,24 @@ const storeknoxMenuItems = [
     label: () => t('discovery'),
     icon: 'search',
   },
-].filter(Boolean);
+];
+
+const lowerMenuItems = [
+  {
+    title: () => t('chatSupport'),
+    icon: 'chat-bubble',
+    enabled: false,
+  },
+  {
+    title: () => t('version'),
+    icon: 'info',
+    enabled: false,
+  },
+  {
+    title: () => t('collapse'),
+    icon: 'keyboard-tab',
+  },
+];
 
 module('Integration | Component | storeknox-wrapper', function (hooks) {
   setupRenderingTest(hooks);
@@ -97,6 +114,30 @@ module('Integration | Component | storeknox-wrapper', function (hooks) {
   });
 
   test('it renders main top-nav with title', async function (assert) {
+    const guideCategories = [
+      {
+        category: t('storeknox.title'),
+        guides: [
+          {
+            id: 'accessing-storeknox',
+            title: t('storeknox.accessingStoreknox'),
+          },
+          {
+            id: 'using-inventory',
+            title: t('storeknox.usingInventory'),
+          },
+          {
+            id: 'discovering-apps',
+            title: t('storeknox.discoveringApps'),
+          },
+          {
+            id: 'reviewing-apps',
+            title: t('storeknox.reviewingAppRequests'),
+          },
+        ],
+      },
+    ];
+
     await render(hbs`
       <StoreknoxWrapper 
         @user={{this.user}} 
@@ -107,12 +148,43 @@ module('Integration | Component | storeknox-wrapper', function (hooks) {
 
     // assert.dom('[data-test-topNav-title]').hasText(this.title);
 
-    assert.dom('[data-test-bell-icon]').isNotDisabled();
+    assert.dom('[data-test-bell-icon]').doesNotExist();
 
     assert
       .dom('[data-test-topNav-profileBtn]')
       .isNotDisabled()
       .hasText(this.user.username);
+
+    assert.dom('[data-test-topNav-OnboardingGuideBtn]').exists();
+
+    await click('[data-test-topNav-OnboardingGuideBtn]');
+
+    assert
+      .dom('[data-test-onboarding-guide-modal]')
+      .exists()
+      .containsText(t('onboardingGuides'));
+
+    guideCategories.forEach((gCat) => {
+      const category = find(
+        `[data-test-onboarding-guide-category='${gCat.category}']`
+      );
+
+      assert.dom(category).hasText(gCat.category);
+
+      gCat.guides.forEach((guide) => {
+        const guideElem = find(
+          `[data-test-onboarding-guide-list-item='${guide.id}']`
+        );
+
+        assert.dom(guideElem).hasText(guide.title);
+      });
+    });
+
+    const defaultSelectedGuide = guideCategories[0].guides[0];
+
+    assert
+      .dom(`[data-test-onboarding-guide-iframe='${defaultSelectedGuide.id}']`)
+      .exists();
   });
 
   test('it should render storeknox side nav', async function (assert) {
@@ -140,13 +212,17 @@ module('Integration | Component | storeknox-wrapper', function (hooks) {
         .hasText(it.label());
     });
 
-    assert
-      .dom('[data-test-side-lower-menu-item-text]')
-      .containsText(t('collapse'));
+    let lowerMenuItemEle = findAll('[data-test-side-lower-menu-item]');
 
-    assert
-      .dom('[data-test-side-lower-menu-item-icon]')
-      .hasClass('ak-icon-keyboard-tab');
+    lowerMenuItems.forEach((it, index) => {
+      assert
+        .dom('[data-test-side-lower-menu-item-text]', lowerMenuItemEle[index])
+        .containsText(it.title());
+
+      assert
+        .dom('[data-test-side-lower-menu-item-icon]', lowerMenuItemEle[index])
+        .hasClass(`ak-icon-${it.icon}`);
+    });
 
     const collapseButton = find(
       `[data-test-side-lower-menu-item="${t('collapse')}"]`
@@ -156,10 +232,16 @@ module('Integration | Component | storeknox-wrapper', function (hooks) {
 
     await click(collapseButton);
 
-    assert.dom('[data-test-side-lower-menu-item-text]').doesNotExist();
+    lowerMenuItemEle = findAll('[data-test-side-lower-menu-item]');
 
-    assert
-      .dom('[data-test-side-lower-menu-item-icon]')
-      .hasClass('ak-icon-keyboard-tab');
+    lowerMenuItems.forEach((it, index) => {
+      assert
+        .dom('[data-test-side-lower-menu-item-text]', lowerMenuItemEle[index])
+        .doesNotExist();
+
+      assert
+        .dom('[data-test-side-lower-menu-item-icon]', lowerMenuItemEle[index])
+        .hasClass(`ak-icon-${it.icon}`);
+    });
   });
 });

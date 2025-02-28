@@ -36,14 +36,18 @@ module('Acceptance | home page', function (hooks) {
   hooks.beforeEach(async function () {
     const { organization } = await setupRequiredEndpoints(this.server);
 
-    this.owner.register('service:integration', IntegrationStub);
-    this.owner.register('service:websocket', WebsocketStub);
-
     organization.update({
       features: {
         storeknox: true,
       },
     });
+
+    // Services
+    this.owner.register('service:integration', IntegrationStub);
+    this.owner.register('service:websocket', WebsocketStub);
+
+    // Models
+    this.server.create('sk-organization');
 
     this.setProperties({
       organization,
@@ -107,6 +111,29 @@ module('Acceptance | home page', function (hooks) {
   });
 
   test('it redirects to storeknox dashboard', async function (assert) {
+    const notify = this.owner.lookup('service:notifications');
+
+    notify.setDefaultClearDuration(0);
+
+    this.server.get('v2/sk_app_detail', () => {
+      return { count: 0, next: null, previous: null, results: [] };
+    });
+
+    this.server.get('v2/sk_app', () => {
+      return { count: 0, next: null, previous: null, results: [] };
+    });
+
+    this.server.get('/v2/sk_organization', (schema) => {
+      const skOrganizations = schema.skOrganizations.all().models;
+
+      return {
+        count: skOrganizations.length,
+        next: null,
+        previous: null,
+        results: skOrganizations,
+      };
+    });
+
     await visit('/dashboard/home');
 
     assert.dom('[data-test-home-page-product-card]').exists({

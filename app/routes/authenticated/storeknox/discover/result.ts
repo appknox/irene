@@ -1,4 +1,6 @@
 import Route from '@ember/routing/route';
+import { inject as service } from '@ember/service';
+import type SkDiscoverySearchResultService from 'irene/services/sk-discovery-search-result';
 
 export interface StoreknoxDiscoveryResultQueryParam {
   app_limit: number;
@@ -8,6 +10,8 @@ export interface StoreknoxDiscoveryResultQueryParam {
 }
 
 export default class AuthenticatedStoreknoxDiscoverResultRoute extends Route {
+  @service declare skDiscoverySearchResult: SkDiscoverySearchResultService;
+
   queryParams = {
     app_limit: {
       refreshModel: true,
@@ -26,8 +30,18 @@ export default class AuthenticatedStoreknoxDiscoverResultRoute extends Route {
   model(params: Partial<StoreknoxDiscoveryResultQueryParam>) {
     const { app_limit, app_offset, app_search_id, app_query } = params;
 
-    return {
-      queryParams: { app_limit, app_offset, app_search_id, app_query },
-    };
+    this.skDiscoverySearchResult
+      .setLimitOffset({
+        limit: app_limit,
+        offset: app_offset,
+      })
+      .setQueryData({
+        searchId: app_search_id,
+        searchQuery: app_query,
+      });
+
+    if (app_query) {
+      this.skDiscoverySearchResult.fetchDiscoveryResults();
+    }
   }
 }

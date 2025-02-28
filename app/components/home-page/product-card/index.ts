@@ -2,23 +2,28 @@ import Component from '@glimmer/component';
 import { service } from '@ember/service';
 import type IntlService from 'ember-intl/services/intl';
 
+export interface ProductCardDetails {
+  title: string;
+  description: string;
+  linkText?: string;
+  route: string;
+  isBeta?: boolean;
+  openInNewTab?: boolean;
+
+  coverBackgroundImage:
+    | 'ak-svg/storeknox-bg-img'
+    | 'ak-svg/appknox-bg-img'
+    | 'ak-svg/security-bg-img';
+
+  indicatorSvg:
+    | 'ak-svg/sm-indicator'
+    | 'ak-svg/vapt-indicator'
+    | 'ak-svg/security-indicator';
+}
+
 export interface ProductCardComponentSignature {
   Element: HTMLElement;
-  Args: {
-    name: string;
-    description: string;
-    linkText: string;
-    route: string;
-    coverBackgroundImage:
-      | 'ak-svg/storeknox-bg-img'
-      | 'ak-svg/appknox-bg-img'
-      | 'ak-svg/security-bg-img';
-    indicatorSvg:
-      | 'ak-svg/sm-indicator'
-      | 'ak-svg/vapt-indicator'
-      | 'ak-svg/security-indicator';
-    openInNewTab?: boolean;
-  };
+  Args: ProductCardDetails;
   Blocks: {
     default: [];
   };

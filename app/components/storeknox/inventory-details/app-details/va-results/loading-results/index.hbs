@@ -1,0 +1,37 @@
+<Storeknox::InventoryDetails::SectionInfo
+  @width='full'
+  @spacing='1'
+  @alignItems='center'
+>
+  <AkStack @direction='column' @width='full' @spacing='1.5'>
+    <AkStack @alignItems='center' @width='9/12' @spacing='2.5'>
+      <AkTypography @color='neutral' {{style width='150px'}}>
+        {{t 'summary'}}
+      </AkTypography>
+
+      <AkSkeleton @width='500px' @height='16px' />
+    </AkStack>
+
+    <AkDivider @color='light' />
+
+    <AkStack @alignItems='center' @width='9/12' @spacing='2.5'>
+      <AkTypography @color='neutral' {{style width='150px'}}>
+        {{t 'fileID'}}
+      </AkTypography>
+
+      <AkSkeleton @width='100px' @height='16px' />
+    </AkStack>
+
+    {{#each this.vaResultsData as |info|}}
+      <AkDivider @color='light' />
+
+      <AkStack @alignItems='center' @width='9/12' @spacing='2.5'>
+        <AkTypography @color='neutral' {{style width='150px'}}>
+          {{info}}
+        </AkTypography>
+
+        <AkSkeleton @width='100px' @height='16px' />
+      </AkStack>
+    {{/each}}
+  </AkStack>
+</Storeknox::InventoryDetails::SectionInfo>

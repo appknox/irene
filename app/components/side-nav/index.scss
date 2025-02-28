@@ -85,25 +85,19 @@
 
     &:hover,
     &:focus {
-      background-color: var(
-        --side-nav-inherit-hover-background
-      ) !important;
+      background-color: var(--side-nav-inherit-hover-background) !important;
     }
 
     &.active {
       position: relative;
-      background-color: var(
-        --side-nav-item-active-background
-      );
+      background-color: var(--side-nav-item-active-background);
 
       &::before {
         content: '';
         display: block;
         width: 2px;
         height: 100%;
-        background-color: var(
-          --side-nav-item-active-border-color
-        );
+        background-color: var(--side-nav-item-active-border-color);
         position: absolute;
         left: 0;
         top: 0;
@@ -116,17 +110,11 @@
 
       .menu-item-badge {
         height: 18px !important;
-        background-color: var(
-          --side-nav-item-active-badge-background
-        );
+        background-color: var(--side-nav-item-active-badge-background);
 
         span {
-          color: var(
-            --side-nav-item-active-badge-text-color
-          );
-          font-weight: var(
-            --side-nav-font-weight-medium
-          );
+          color: var(--side-nav-item-active-badge-text-color);
+          font-weight: var(--side-nav-font-weight-medium);
           opacity: unset;
         }
       }
@@ -134,9 +122,7 @@
 
     .menu-item-badge {
       height: 18px !important;
-      background-color: var(
-        --side-nav-item-badge-background
-      );
+      background-color: var(--side-nav-item-badge-background);
 
       span {
         color: var(--side-nav-item-badge-text-color);
@@ -146,7 +132,8 @@
     }
   }
 
-  .menu-item-icon, .menu-item-text {
+  .menu-item-icon,
+  .menu-item-text {
     color: var(--side-nav-inherit-background-text-color) !important;
   }
 
@@ -159,16 +146,6 @@
   .lower-menu {
     display: flex;
     flex-direction: column;
-
-    .pendo-icon {
-      height: 18px;
-      width: 18px;
-      position: absolute;
-    }
-
-    .pendo-ak-icon {
-      position: relative;
-    }
 
     .rotated-icon {
       transform: rotate(180deg);
@@ -192,4 +169,8 @@
       cursor: default;
     }
   }
+}
+
+.lower-menu-chat {
+  color: var(--appknox-wrapper-text-primary) !important;
 }

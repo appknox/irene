@@ -101,6 +101,7 @@
 
       <akl.listItem
         @noGutters={{true}}
+        id={{if lmi.enablePendo @pendoContainerId}}
         class={{this.classes.menuItemLink}}
         local-class='{{lmi.listItemClass}}'
         {{on 'click' lmi.onClick}}
@@ -116,13 +117,6 @@
           class={{this.classes.menuItemTooltip}}
         >
           <li.leftIcon @rightGutter={{this.isSidebarExpanded}}>
-            {{#if lmi.enablePendo}}
-              <div
-                id={{if lmi.enablePendo 'ak-pendo-version-container'}}
-                local-class='menu-item-icon pendo-icon'
-              />
-            {{/if}}
-
             <AkIcon
               data-test-side-lower-menu-item-icon
               @iconName={{lmi.icon}}

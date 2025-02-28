@@ -50,15 +50,13 @@
 
 {{#if this.showTable}}
   <Storeknox::Inventory::PendingReview::Table
-    @columns={{this.columns}}
     @skAppList={{this.reviewAppsData}}
-    @limit={{@queryParams.app_limit}}
-    @offset={{@queryParams.app_offset}}
+    @limit={{this.skPendingReview.limit}}
+    @offset={{this.skPendingReview.offset}}
     @loadingData={{this.isFetchingData}}
     @totalCount={{this.totalCount}}
     @goToPage={{this.goToPage}}
     @onItemPerPageChange={{this.changePerPageItem}}
-    @queryParams={{@queryParams}}
   />
 {{else}}
   <Storeknox::Inventory::PendingReview::Empty />

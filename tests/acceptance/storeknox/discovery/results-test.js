@@ -73,6 +73,10 @@ module('Acceptance | storeknox/discovery/results', function (hooks) {
         .dom('[data-test-storeknoxDiscover-header-discoverDescriptionText]')
         .hasText(t('storeknox.discoverDescription'));
 
+      assert
+        .dom('[data-test-storeknoxInventory-inventoryAppListPageLink]')
+        .hasText(t('storeknox.appInventory'));
+
       const tabItems = [
         {
           id: 'discovery-results',
@@ -352,7 +356,7 @@ module('Acceptance | storeknox/discovery/results', function (hooks) {
     'it adds/requests add an app to the inventory',
     [true, false],
     async function (assert, is_owner) {
-      assert.expect(9);
+      assert.expect(10);
 
       // role set to owner
       this.currentOrganizationMe.update({
@@ -475,6 +479,7 @@ module('Acceptance | storeknox/discovery/results', function (hooks) {
 
       assert
         .dom(addOrRequestedIconSelector, srElement)
+        .exists()
         .hasClass(is_owner ? /ak-icon-inventory-2/ : /ak-icon-schedule-send/);
     }
   );

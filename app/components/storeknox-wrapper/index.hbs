@@ -7,20 +7,51 @@
 >
   <TopNav
     local-class='storeknox-header'
+    @isStoreknoxNav={{true}}
     @user={{@user}}
     @title={{if this.isWhitelabel (t 'appMonitoring') (t 'storeknox.title')}}
-  />
+    as |topNav|
+  >
+    <AkStack @alignItems='center' @justifyContent='flex-end' @spacing='0.5'>
+      {{#unless this.orgIsAnEnterprise}}
+        <AkButton
+          class={{topNav.classes.navbarBtn}}
+          {{on 'click' this.onToggleOnboardingGuide}}
+          data-test-topNav-OnboardingGuideBtn
+        >
+          <:leftIcon>
+            <AkIcon @iconName='tungsten' />
+          </:leftIcon>
+
+          <:default>
+            {{t 'onboardingGuides'}}
+          </:default>
+        </AkButton>
+      {{/unless}}
+
+      <TopNav::KnowledgeBase @triggerBtnClass={{topNav.classes.navbarBtn}} />
+    </AkStack>
+  </TopNav>
 
   <SideNav
-    local-class='storeknox-sidenav'
+    @pendoContainerId='sk-pendo-version-container'
+    @productVersion={{this.productVersion}}
     @isCollapsed={{this.isSidebarCollapsed}}
     @toggleSidebar={{this.toggleSidebar}}
     @menuItems={{this.storeknoxMenuItems}}
     @productSwitcherFilterKey='storeknox'
+    local-class='storeknox-sidenav'
   />
 
   {{! #id is required for scroll-to-top util }}
   <main id='ak-dashboard-main-scroll-container' local-class='storeknox-main'>
     {{yield}}
   </main>
+
+  {{#if this.showOnboardingGuide}}
+    <TopNav::OnboardingGuide
+      @guideCategories={{this.guideCategories}}
+      @onClose={{this.onToggleOnboardingGuide}}
+    />
+  {{/if}}
 </div>

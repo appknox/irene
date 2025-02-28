@@ -71,14 +71,14 @@ export default class SideNavProductSwitcherComponent extends Component<SideNavPr
     const allMenuItems = [
       {
         id: 'vapt-svg',
-        svg: 'ak-svg/vapt-indicator',
+        svg: this.isWhitelabel ? 'ak-svg/vapt-indicator' : 'ak-svg/ak-icon',
         label: this.isWhitelabel ? this.intl.t('vapt') : this.intl.t('appknox'),
         route: 'authenticated.dashboard.projects',
         key: 'appknox',
       },
       this.showStoreknox && {
         id: 'sm-svg',
-        svg: 'ak-svg/sm-indicator',
+        svg: this.isWhitelabel ? 'ak-svg/sm-indicator' : 'ak-svg/sk-icon',
         label: this.isWhitelabel
           ? this.intl.t('appMonitoring')
           : this.intl.t('storeknox.title'),

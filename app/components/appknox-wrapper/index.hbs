@@ -39,30 +39,19 @@
           </AkButton>
         {{/unless}}
 
-        {{#if this.showKnowledgeBase}}
-          <AkButton
-            class={{topNav.classes.navbarBtn}}
-            {{on 'click' this.onOpenKnowledgeBase}}
-            data-test-topNav-KnowledgeBaseBtn
-          >
-            <:leftIcon>
-              <AkIcon @iconName='import-contacts' />
-            </:leftIcon>
-
-            <:default>{{t 'knowledgeBase'}}</:default>
-          </AkButton>
-        {{/if}}
+        <TopNav::KnowledgeBase @triggerBtnClass={{topNav.classes.navbarBtn}} />
       </AkStack>
     </AkStack>
   </TopNav>
 
   <SideNav
-    local-class='dashboard-sidenav'
+    @pendoContainerId='ak-pendo-version-container'
+    @productVersion={{this.productVersion}}
     @isCollapsed={{this.isSidebarCollapsed}}
     @toggleSidebar={{this.toggleSidebar}}
     @menuItems={{this.menuItems}}
-    @lowerMenuItems={{this.lowerMenuItems}}
     @productSwitcherFilterKey='appknox'
+    local-class='dashboard-sidenav'
   />
 
   {{! #id is required for scroll-to-top util }}
@@ -71,7 +60,8 @@
   </main>
 
   {{#if this.showOnboardingGuide}}
-    <AppknoxWrapper::OnboardingGuide
+    <TopNav::OnboardingGuide
+      @guideCategories={{this.guideCategories}}
       @onClose={{this.onToggleOnboardingGuide}}
     />
   {{/if}}

@@ -1,0 +1,10 @@
+{{#if this.showChip}}
+  <AkChip
+    ...attributes
+    @size='small'
+    @variant='semi-filled'
+    @color={{@condition}}
+    @label={{@label}}
+    local-class='status'
+  />
+{{/if}}

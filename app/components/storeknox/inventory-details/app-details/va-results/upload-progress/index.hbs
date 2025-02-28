@@ -1,0 +1,37 @@
+<Storeknox::InventoryDetails::SectionInfo
+  @direction='column'
+  @alignItems='center'
+  @justifyContent='center'
+  @width='full'
+  @spacing='2.5'
+  class='py-6'
+  {{style minHeight='310px'}}
+>
+  {{#if this.uploadCompleted}}
+    <AkSvg::SoxUploadCompleted />
+  {{else}}
+    <AkSvg::SoxUploadProcessing
+      data-test-storeknoxInventoryDetailsAppDetails-vaResults-uploadProgressIllustration
+    />
+  {{/if}}
+
+  <AkTypography
+    @align='center'
+    data-test-storeknoxInventoryDetailsAppDetails-vaResults-uploadProgressInfo
+  >
+    {{#if this.uploadCompleted}}
+      {{t 'completed'}}
+    {{else}}
+      {{t 'processing'}}
+    {{/if}}
+    <strong>{{if @uploadNotStarted 0 @submission.progress}}%</strong>
+  </AkTypography>
+
+  <AkLoader::Linear
+    @color='success'
+    @variant='determinate'
+    @progress={{if @uploadNotStarted 0 @submission.progress}}
+    {{style maxWidth='270px'}}
+    data-test-storeknoxInventoryDetailsAppDetails-vaResults-uploadProgressBar
+  />
+</Storeknox::InventoryDetails::SectionInfo>

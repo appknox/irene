@@ -154,6 +154,49 @@ module('Integration | Component | appknox-wrapper', function (hooks) {
     'test top nav and upload app status',
     [{ knowledgeBase: true, hasUploadAppStatus: true }, {}],
     async function (assert, { knowledgeBase, hasUploadAppStatus }) {
+      const guideCategories = [
+        {
+          category: t('onboardingGuideModule.VA'),
+          guides: [
+            {
+              id: 'va-guide',
+              title: t('onboardingGuideModule.initiateVA'),
+              url: 'https://appknox.portal.trainn.co/share/bEK4jmKvG16y1lqH9b9sPA/embed?mode=interactive',
+            },
+            {
+              id: 'scan-results-guide',
+              title: t('onboardingGuideModule.viewReports'),
+              url: 'https://appknox.portal.trainn.co/share/gKJQU8gka8sX3ZLJD80CWg/embed?mode=interactive',
+            },
+            {
+              id: 'invitation-guide',
+              title: t('inviteUsers'),
+              url: 'https://appknox.portal.trainn.co/share/bXBvltZ53ZpWxvrrhrqkbA/embed?mode=interactive',
+            },
+            {
+              id: 'creating-teams-guide',
+              title: t('onboardingGuideModule.createTeams'),
+              url: 'https://appknox.portal.trainn.co/share/01VQVnUV64rjHIBsx6tzqQ/embed?mode=interactive',
+            },
+            {
+              id: 'upload-access-guide',
+              title: t('onboardingGuideModule.uploadAccess'),
+              url: 'https://appknox.portal.trainn.co/share/FPsW0wVu5g6NtAZzHjrNrA/embed?mode=interactive',
+            },
+          ],
+        },
+        {
+          category: t('SBOM'),
+          guides: [
+            {
+              id: 'sbom-guide',
+              title: t('onboardingGuideModule.generateSBOM'),
+              url: 'https://appknox.portal.trainn.co/share/mMfpJY5qpu0czTtC4TKdtQ/embed?mode=interactive',
+            },
+          ],
+        },
+      ];
+
       const freshdesk = this.owner.lookup('service:freshdesk');
 
       freshdesk.supportWidgetIsEnabled = knowledgeBase;
@@ -195,8 +238,39 @@ module('Integration | Component | appknox-wrapper', function (hooks) {
         assert.dom('[data-test-uploadAppStatus-icon]').doesNotExist();
       }
 
+      // Onboarding guides
       assert.dom('[data-test-topNav-OnboardingGuideBtn]').exists();
 
+      await click('[data-test-topNav-OnboardingGuideBtn]');
+
+      assert
+        .dom('[data-test-onboarding-guide-modal]')
+        .exists()
+        .containsText(t('onboardingGuides'));
+
+      guideCategories.forEach((gCat) => {
+        const category = find(
+          `[data-test-onboarding-guide-category='${gCat.category}']`
+        );
+
+        assert.dom(category).hasText(gCat.category);
+
+        gCat.guides.forEach((guide) => {
+          const guideElem = find(
+            `[data-test-onboarding-guide-list-item='${guide.id}']`
+          );
+
+          assert.dom(guideElem).hasText(guide.title);
+        });
+      });
+
+      const defaultSelectedGuide = guideCategories[0].guides[0];
+
+      assert
+        .dom(`[data-test-onboarding-guide-iframe='${defaultSelectedGuide.id}']`)
+        .exists();
+
+      // Knowledge base
       if (knowledgeBase) {
         assert
           .dom('[data-test-topNav-KnowledgeBaseBtn]')

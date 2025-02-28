@@ -1,0 +1,29 @@
+<Storeknox::InventoryDetails::SectionInfo
+  @direction='column'
+  @alignItems='center'
+  @width='full'
+  @spacing='3'
+  class='py-6'
+>
+  <AkSvg::NoAccessImage
+    data-test-storeknoxInventoryDetails-vaFileNotAccessibleIllustration
+  />
+
+  <AkStack @width='full' @direction='column' @alignItems='center' @spacing='1'>
+    <AkTypography
+      @fontWeight='bold'
+      @align='center'
+      data-test-storeknoxInventoryDetails-vaFileNotAccessibleHeaderText
+    >
+      {{t 'storeknox.noAcessToVAResultsHeaderText'}}
+    </AkTypography>
+
+    <AkTypography
+      @align='center'
+      {{style maxWidth='430px'}}
+      data-test-storeknoxInventoryDetails-vaFileNotAccessibleSubText
+    >
+      {{t 'storeknox.noAcessToVAResultsSubtext'}}
+    </AkTypography>
+  </AkStack>
+</Storeknox::InventoryDetails::SectionInfo>

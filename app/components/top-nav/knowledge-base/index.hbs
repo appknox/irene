@@ -1,0 +1,13 @@
+{{#if this.showKnowledgeBase}}
+  <AkButton
+    class={{@triggerBtnClass}}
+    {{on 'click' this.onOpenKnowledgeBase}}
+    data-test-topNav-KnowledgeBaseBtn
+  >
+    <:leftIcon>
+      <AkIcon @iconName='import-contacts' />
+    </:leftIcon>
+
+    <:default>{{t 'knowledgeBase'}}</:default>
+  </AkButton>
+{{/if}}

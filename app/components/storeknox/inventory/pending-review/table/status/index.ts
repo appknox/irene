@@ -3,20 +3,18 @@ import { action } from '@ember/object';
 import dayjs from 'dayjs';
 import { task } from 'ember-concurrency';
 import { inject as service } from '@ember/service';
-
-import parseError from 'irene/utils/parse-error';
+import { waitForPromise } from '@ember/test-waiters';
 import type IntlService from 'ember-intl/services/intl';
 
-import type SkAppModel from 'irene/models/sk-app';
-import type { StoreknoxDiscoveryReviewQueryParam } from 'irene/routes/authenticated/storeknox/discover/review';
-import type SkPendingReviewService from 'irene/services/sk-pending-review';
+import parseError from 'irene/utils/parse-error';
 import ENUMS from 'irene/enums';
+import type SkAppModel from 'irene/models/sk-app';
+import type SkPendingReviewService from 'irene/services/sk-pending-review';
 
 interface StoreknoxInventoryPendingReviewTableStatusSignature {
   Args: {
     data: SkAppModel;
     loading: boolean;
-    queryParams: StoreknoxDiscoveryReviewQueryParam;
   };
 }
 
@@ -25,76 +23,8 @@ export default class StoreknoxInventoryPendingReviewTableStatusComponent extends
   @service declare skPendingReview: SkPendingReviewService;
   @service declare intl: IntlService;
 
-  @action
-  handleApproveApp() {
-    this.approveApp.perform();
-  }
-
-  @action
-  handleRejectApp() {
-    this.rejectApp.perform();
-  }
-
-  approveApp = task(async () => {
-    try {
-      const skApp = this.args.data;
-
-      await skApp.approveApp(skApp.id);
-
-      const { app_limit, app_offset } = this.args.queryParams;
-
-      this.skPendingReview.fetchPendingReviewApps.perform(
-        app_limit,
-        app_offset
-      );
-
-      this.notify.success(
-        this.intl.t('storeknox.appAddedToInventory', {
-          appName: skApp.title,
-        })
-      );
-
-      this.skPendingReview.singleUpdate = true;
-    } catch (error) {
-      this.notify.error(parseError(error));
-    }
-  });
-
-  rejectApp = task(async () => {
-    try {
-      const skApp = this.args.data;
-
-      await skApp.rejectApp(skApp.id);
-
-      const { app_limit, app_offset } = this.args.queryParams;
-
-      this.skPendingReview.fetchPendingReviewApps.perform(
-        app_limit,
-        app_offset
-      );
-
-      this.notify.success(
-        this.intl.t('storeknox.appRejected', {
-          appName: skApp.title,
-        })
-      );
-
-      this.skPendingReview.singleUpdate = true;
-    } catch (error) {
-      this.notify.error(parseError(error));
-    }
-  });
-
   get buttonsLoading() {
     return this.rejectApp.isRunning || this.approveApp.isRunning;
-  }
-
-  get approvedOn() {
-    return dayjs(this.args.data.approvedOn).format('MMMM D, YYYY, HH:mm');
-  }
-
-  get rejectedOn() {
-    return dayjs(this.args.data.rejectedOn).format('MMMM D, YYYY, HH:mm');
   }
 
   get isPending() {
@@ -110,6 +40,14 @@ export default class StoreknoxInventoryPendingReviewTableStatusComponent extends
 
   get isRejected() {
     return this.args.data.approvalStatus === ENUMS.SK_APPROVAL_STATUS.REJECTED;
+  }
+
+  get approvedOn() {
+    return dayjs(this.args.data.approvedOn).format('MMMM D, YYYY, HH:mm');
+  }
+
+  get rejectedOn() {
+    return dayjs(this.args.data.rejectedOn).format('MMMM D, YYYY, HH:mm');
   }
 
   get statusDetails() {
@@ -129,6 +67,56 @@ export default class StoreknoxInventoryPendingReviewTableStatusComponent extends
       };
     }
   }
+
+  @action
+  handleApproveApp() {
+    this.approveApp.perform();
+  }
+
+  @action
+  handleRejectApp() {
+    this.rejectApp.perform();
+  }
+
+  approveApp = task(async () => {
+    try {
+      const skApp = this.args.data;
+
+      await waitForPromise(skApp.approveApp(skApp.id));
+
+      this.skPendingReview.reload();
+
+      this.notify.success(
+        this.intl.t('storeknox.appAddedToInventory', {
+          appName: skApp.title,
+        })
+      );
+
+      this.skPendingReview.singleUpdate = true;
+    } catch (error) {
+      this.notify.error(parseError(error));
+    }
+  });
+
+  rejectApp = task(async () => {
+    try {
+      const skApp = this.args.data;
+
+      await waitForPromise(skApp.rejectApp(skApp.id));
+
+      this.skPendingReview.reload();
+
+      this.notify.success(
+        this.intl.t('storeknox.appRejected', {
+          appName: skApp.title,
+        })
+      );
+
+      this.skPendingReview.singleUpdate = true;
+    } catch (error) {
+      this.notify.error(parseError(error));
+    }
+  });
 }
 
 declare module '@glint/environment-ember-loose/registry' {

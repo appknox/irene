@@ -7,6 +7,7 @@ import type IntlService from 'ember-intl/services/intl';
 import type UserModel from 'irene/models/user';
 import type FreshdeskService from 'irene/services/freshdesk';
 import type UserAuthService from 'irene/services/user-auth';
+
 import styles from './index.scss';
 
 type DefaultBlock = {
@@ -17,6 +18,7 @@ type DefaultBlock = {
 
 export interface TopNavSignature {
   Args: {
+    isStoreknoxNav?: boolean;
     user: UserModel;
     title?: string;
     showNotifications?: boolean;
@@ -53,7 +55,7 @@ export default class TopNavComponent extends Component<TopNavSignature> {
   }
 
   get showNotifications() {
-    return this.args.showNotifications ?? true;
+    return (!this.args.isStoreknoxNav && this.args.showNotifications) ?? true;
   }
 
   get profileMenuItems() {

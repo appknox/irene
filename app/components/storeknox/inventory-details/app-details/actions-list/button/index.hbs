@@ -1,0 +1,32 @@
+<AkButton
+  @variant='outlined'
+  @disabled={{@disabled}}
+  @color={{if @needsAction 'primary'}}
+  local-class='action-button-root 
+  {{if @needsAction "needs-action"}} 
+  {{if @featureInProgress "feature-in-progress"}}'
+  ...attributes
+>
+  <:leftIcon>
+    <AkIcon
+      @iconName={{if @featureInProgress 'auto-fix-high' 'report'}}
+      @color='inherit'
+      data-test-storeknoxInventoryDetails-actionBtn-leftIcon
+    />
+  </:leftIcon>
+
+  <:default>
+    {{@label}}
+  </:default>
+
+  <:rightIcon>
+    {{#unless @hideRightIcon}}
+      <AkIcon
+        @iconName='arrow-outward'
+        @color='textPrimary'
+        {{style fontSize='1.2857em !important'}}
+        data-test-storeknoxInventoryDetails-actionBtn-rightIcon
+      />
+    {{/unless}}
+  </:rightIcon>
+</AkButton>

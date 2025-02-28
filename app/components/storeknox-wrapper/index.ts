@@ -4,10 +4,11 @@ import { service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
 import type IntlService from 'ember-intl/services/intl';
 
-import type UserModel from 'irene/models/user';
 import type { MenuItem } from '../side-nav';
+import type UserModel from 'irene/models/user';
 import type ConfigurationService from 'irene/services/configuration';
 import type WhitelabelService from 'irene/services/whitelabel';
+import ENV from 'irene/config/environment';
 
 export interface StoreknoxWrapperComponentSignature {
   Args: {
@@ -25,6 +26,8 @@ export default class StoreknoxWrapperComponent extends Component<StoreknoxWrappe
   @service declare whitelabel: WhitelabelService;
 
   @tracked isSidebarCollapsed: boolean;
+  @tracked showOnboardingGuide = false;
+  productVersion = ENV.productVersions['storeknox'];
 
   constructor(
     owner: unknown,
@@ -45,16 +48,50 @@ export default class StoreknoxWrapperComponent extends Component<StoreknoxWrappe
         icon: 'inventory-2',
         route: 'authenticated.storeknox.inventory.app-list',
         currentWhen:
-          'authenticated.storeknox.inventory.app-list authenticated.storeknox.inventory.disabled-apps',
+          'authenticated.storeknox.inventory.app-list authenticated.storeknox.inventory.pending-reviews authenticated.storeknox.inventory.disabled-apps authenticated.storeknox.inventory-details.index authenticated.storeknox.inventory-details.unscanned-version authenticated.storeknox.inventory-details.unscanned-version.history authenticated.storeknox.inventory-details.unscanned-version.index authenticated.storeknox.inventory-details.brand-abuse authenticated.storeknox.inventory-details.malware-detected',
       },
       {
         label: this.intl.t('discovery'),
         icon: 'search',
         route: 'authenticated.storeknox.discover.result',
         currentWhen:
-          'authenticated.storeknox.discover.result authenticated.storeknox.discover.requested authenticated.storeknox.discover.review',
+          'authenticated.storeknox.discover.result authenticated.storeknox.discover.requested',
       },
     ] as MenuItem[];
+  }
+
+  get orgIsAnEnterprise() {
+    return this.configuration.serverData.enterprise;
+  }
+
+  get guideCategories() {
+    return [
+      {
+        category: this.intl.t('storeknox.title'),
+        guides: [
+          {
+            id: 'accessing-storeknox',
+            title: this.intl.t('storeknox.accessingStoreknox'),
+            url: 'https://appknox.portal.trainn.co/share/VHHxO3qE3vgYJDEuusQPRw/embed?mode=interactive',
+          },
+          {
+            id: 'using-inventory',
+            title: this.intl.t('storeknox.usingInventory'),
+            url: 'https://appknox.portal.trainn.co/share/M2A4zJU5qMWSCLRnuzU4EA/embed?mode=interactive',
+          },
+          {
+            id: 'discovering-apps',
+            title: this.intl.t('storeknox.discoveringApps'),
+            url: 'https://appknox.portal.trainn.co/share/THztrvyoj3cyvXkXOpa5pg/embed?mode=interactive',
+          },
+          {
+            id: 'reviewing-apps',
+            title: this.intl.t('storeknox.reviewingAppRequests'),
+            url: 'https://appknox.portal.trainn.co/share/c6V0l6M3YpwRKFymbUHTpg/embed?mode=interactive',
+          },
+        ],
+      },
+    ];
   }
 
   get isWhitelabel() {
@@ -69,6 +106,11 @@ export default class StoreknoxWrapperComponent extends Component<StoreknoxWrappe
       'sidebarState',
       this.isSidebarCollapsed ? 'collapsed' : 'expanded'
     );
+  }
+
+  @action
+  onToggleOnboardingGuide() {
+    this.showOnboardingGuide = !this.showOnboardingGuide;
   }
 }
 

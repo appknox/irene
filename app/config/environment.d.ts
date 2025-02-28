@@ -4,7 +4,7 @@
  */
 declare const config: {
   ENVHandlerCONST: ENVHandlerCONST;
-  productVersion: string;
+  productVersions: ProductVersions;
   version: number;
   isDevknox: boolean;
   isAppknox: boolean;
@@ -185,6 +185,11 @@ export interface Paginate {
   perPageLimit: number;
   pagePadding: number;
   offsetMultiplier: number;
+}
+
+export interface ProductVersions {
+  appknox: string;
+  storeknox: string;
 }
 
 export interface Whitelabel {

@@ -1,0 +1,64 @@
+<AkStack @spacing='0.5'>
+  <AkTypography @fontWeight='medium'>
+    {{t 'storeknox.requestedBy'}}
+  </AkTypography>
+
+  {{!-- <AkIcon
+    @iconName='filter-list'
+    @color={{if this.filterApplied 'primary' 'inherit'}}
+    {{style cursor="pointer"}}
+    {{on 'click' this.handleClick}}
+  /> --}}
+</AkStack>
+
+<AkPopover
+  @anchorRef={{this.anchorRef}}
+  @placement='bottom'
+  @arrow={{false}}
+  @closeHandler={{this.handleOptionsClose}}
+  @clickOutsideToClose={{true}}
+>
+  <AkStack @direction='column' local-class='found-by-filter'>
+    <AkTypography class='pb-1 pt-2 pl-2'>
+      {{t 'filterBy'}}
+    </AkTypography>
+
+    {{#each this.discoveryObject as |discovery|}}
+      <AkStack
+        @spacing='1'
+        @width='full'
+        local-class='filter-option'
+        class='py-1 pl-2'
+        {{style cursor='pointer'}}
+        {{on 'click' (fn this.selectDiscovery discovery.value)}}
+      >
+        <AkStack @alignItems='center'>
+          {{#if (eq this.selectedDiscovery discovery.value)}}
+            <AkIcon @iconName='radio-button-checked' @color='success' />
+          {{else}}
+            <AkIcon @iconName='radio-button-unchecked' />
+          {{/if}}
+        </AkStack>
+
+        <AkTypography>{{discovery.key}}</AkTypography>
+      </AkStack>
+    {{/each}}
+
+    {{#if this.filterApplied}}
+      <AkStack
+        class='py-1 pl-2'
+        local-class='clear-filter-section'
+        @width='full'
+      >
+        <AkTypography
+          @underline='always'
+          @color='primary'
+          local-class='cursor-pointer'
+          {{on 'click' this.clearFilter}}
+        >
+          {{t 'clearFilter'}}
+        </AkTypography>
+      </AkStack>
+    {{/if}}
+  </AkStack>
+</AkPopover>
