@@ -2,12 +2,13 @@
   width: 100%;
   display: grid;
   grid-template-areas:
-    "sidenav topnav"
-    "sidenav main";
+    'sidenav topnav'
+    'sidenav main';
   height: 100vh;
   grid-template-rows: 4em auto;
 
-  &.expanded, &.collapsed {
+  &.expanded,
+  &.collapsed {
     transition: grid-template-columns 0.2s ease-in-out;
   }
 
@@ -33,10 +34,6 @@
 
   .dashboard-sidenav {
     grid-area: sidenav;
-  }
-
-  .lower-menu-chat {
-    color: var(--appknox-wrapper-text-primary) !important;
   }
 
   .divider {

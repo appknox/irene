@@ -1,0 +1,33 @@
+<AkStack
+  @direction='column'
+  @spacing='4'
+  @alignItems='center'
+  @width='full'
+  local-class='feature-unavailable-root'
+  {{style padding='4.2857em 1.5em'}}
+  data-test-storeknoxInventoryDetails-featureUnavailable-root
+>
+  {{yield to='illustration'}}
+
+  <AkStack
+    @direction='column'
+    @alignItems='center'
+    @spacing='0.5'
+    {{style maxWidth='485px'}}
+  >
+    <AkTypography
+      @variant='h5'
+      @align='center'
+      data-test-storeknoxInventoryDetails-featureUnavailable-headerTitle
+    >
+      {{@headerTitle}}
+    </AkTypography>
+
+    <AkTypography
+      @align='center'
+      data-test-storeknoxInventoryDetails-featureUnavailable-headerDescription
+    >
+      {{@headerDescription}}
+    </AkTypography>
+  </AkStack>
+</AkStack>

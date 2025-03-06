@@ -1,0 +1,147 @@
+<AkStack
+  @direction='row'
+  @alignItems='center'
+  @justifyContent='space-between'
+  local-class='header-storeknox-inventory-page'
+>
+  <AkStack @direction='column' @spacing='0.5'>
+    <AkTypography
+      @variant='subtitle1'
+      data-test-storeknoxInventory-inventoryHeaderText
+    >
+      {{t 'storeknox.inventoryHeader'}}
+    </AkTypography>
+
+    <AkTypography
+      @variant='body2'
+      @color='neutral'
+      data-test-storeknoxInventory-inventoryDescriptionText
+    >
+      {{t 'storeknox.inventoryDescription'}}
+    </AkTypography>
+  </AkStack>
+
+  <AkStack @alignItems='center' @justifyContent='center' @spacing='1.5'>
+    <AkButton>
+      <AkLink
+        @underline='none'
+        @color='inherit'
+        @route='authenticated.storeknox.discover.result'
+        data-test-storeknoxInventory-discoveryPageLink
+      >
+        {{t 'storeknox.discoverHeader'}}
+      </AkLink>
+    </AkButton>
+
+    {{#if this.isOwner}}
+      <AkDivider
+        @direction='vertical'
+        @color='dark'
+        @height='32px'
+        @width='1px'
+      />
+
+      <AkIconButton
+        @size='medium'
+        @variant='outlined'
+        {{on 'click' this.openSettingsDrawer}}
+        data-test-storeknoxInventory-settingsDrawerTrigger
+      >
+        <AkIcon @iconName='settings' />
+      </AkIconButton>
+    {{/if}}
+  </AkStack>
+</AkStack>
+
+<AkTabs class='mb-3' as |Akt|>
+  {{#each this.tabItems as |item|}}
+    <Akt.tabItem
+      @id={{item.id}}
+      @badgeBackground={{true}}
+      @route={{item.route}}
+      @hasBadge={{item.hasBadge}}
+      @badgeCount={{item.badgeCount}}
+      data-test-storeknoxInventory-tabs='{{item.id}}-tab'
+    >
+      {{item.label}}
+    </Akt.tabItem>
+  {{/each}}
+</AkTabs>
+
+<AkDrawer
+  @open={{and this.isOwner this.showSettingsDrawer}}
+  @onClose={{this.closeSettingsDrawer}}
+  @anchor='right'
+  as |dr|
+>
+  <AkStack @direction='column' {{style width='640px'}}>
+    <AkAppbar
+      @position='sticky'
+      @justifyContent='space-between'
+      class='px-3'
+      as |ab|
+    >
+      <AkTypography
+        @color='inherit'
+        @variant='h5'
+        @fontWeight='medium'
+        data-test-storeknoxInventory-settingsDrawer-title
+      >
+        {{t 'storeknox.inventorySettings'}}
+      </AkTypography>
+
+      <AkIconButton
+        {{on 'click' dr.closeHandler}}
+        class={{ab.classes.defaultIconBtn}}
+        data-test-storeknoxInventory-settingsDrawer-closeIconBtn
+      >
+        <AkIcon @iconName='close' />
+      </AkIconButton>
+    </AkAppbar>
+
+    <AkStack
+      @width='full'
+      @justifyContent='space-between'
+      @alignItems='center'
+      class='px-3 py-4'
+    >
+      <AkStack @direction='column' @spacing='0.5' {{style maxWidth='450px'}}>
+        <AkTypography
+          @fontWeight='bold'
+          data-test-storeknoxInventory-settingsDrawer-addAppknoxProjectsByDefaultTitle
+        >
+          {{t 'storeknox.addAppknoxProjectsByDefault'}}
+        </AkTypography>
+
+        <AkTypography
+          @variant='body2'
+          @color='neutral'
+          data-test-storeknoxInventory-settingsDrawer-addAppknoxProjectsByDefaultDesc
+        >
+          {{t 'storeknox.addVAPTPrjsByDefaultToggleDesc1'}}
+          <AkLink
+            @color='primary'
+            @route='authenticated.dashboard.projects'
+            @underline='always'
+            @typographyVariant='body2'
+            target='_blank'
+            rel='noopener noreferrer'
+            data-test-storeknoxInventory-settingsDrawer-addAppknoxProjectsByDefaultDescVAPTLink
+          >
+            {{t 'vapt'}}
+          </AkLink>
+          {{t 'storeknox.addVAPTPrjsByDefaultToggleDesc2'}}
+        </AkTypography>
+      </AkStack>
+
+      <AkToggle
+        @size='small'
+        @checked={{this.selectedSkOrg.addAppknoxProjectToInventoryByDefault}}
+        @onChange={{this.onToggleAddToInventoryByDefault}}
+        data-test-storeknoxInventory-settingsDrawer-addAppknoxProjectsByDefaultToggle
+      />
+    </AkStack>
+
+    <AkDivider @color='dark' />
+  </AkStack>
+</AkDrawer>

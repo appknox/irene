@@ -1,12 +1,23 @@
 import CommonDRFAdapter from './commondrf';
 
-import type SkAppModel from 'irene/models/sk-app';
 import ENUMS from 'irene/enums';
+import type SkAppModel from 'irene/models/sk-app';
 
 export interface ApprovalStatusResponse {
   id: number;
   approval_status: number;
   approval_status_display: string;
+}
+
+export interface ToggleSkAppMonitoringStatusResponse {
+  id: number;
+  monitoring_enabled: boolean;
+}
+
+export interface InitiateUploadResponse {
+  id: number;
+  url: string;
+  status: number;
 }
 
 export default class SkAppAdapter extends CommonDRFAdapter {
@@ -59,6 +70,27 @@ export default class SkAppAdapter extends CommonDRFAdapter {
     };
 
     return await this.ajax(url, 'GET', { data });
+  }
+
+  async toggleMonitoring(
+    id: string,
+    checked: boolean
+  ): Promise<ToggleSkAppMonitoringStatusResponse> {
+    const url = this.buildURL().concat(
+      `/${id}/update_monitoring_enabled_status`
+    );
+
+    const data = {
+      monitoring_enabled: checked,
+    };
+
+    return await this.ajax(url, 'PUT', { data });
+  }
+
+  async initiateAppUpload(id: string) {
+    const url = this.buildURL().concat(`/${id}/sk_app_upload`);
+
+    return (await this.ajax(url, 'POST')) as InitiateUploadResponse;
   }
 }
 

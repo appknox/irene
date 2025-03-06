@@ -4,13 +4,13 @@
   @totalItems={{@totalCount}}
   @nextAction={{@goToPage}}
   @prevAction={{@goToPage}}
-  @itemPerPageOptions={{this.itemPerPageOptions}}
+  @itemPerPageOptions={{array 10 25 50}}
   @defaultLimit={{@limit}}
   @offset={{@offset}}
   as |pgc|
 >
   <AkTable local-class='review-table' as |tb|>
-    <tb.head @columns={{@columns}} as |h|>
+    <tb.head @columns={{this.columns}} as |h|>
       <h.row as |r|>
         <r.cell as |column|>
           {{#if column.headerComponent}}
@@ -24,33 +24,35 @@
       </h.row>
     </tb.head>
     <tb.body @rows={{pgc.currentPageResults}} as |b|>
-      <b.row as |r|>
+      <b.row
+        data-test-storeknoxInventory-pendingReviewTable-row
+        data-test-storeknoxInventory-pendingReviewTable-rowId='{{b.rowValue.id}}'
+        as |r|
+      >
         <r.cell>
           {{#let (component r.columnValue.cellComponent) as |Component|}}
-            <Component
-              @data={{r.rowValue}}
-              @loading={{@loadingData}}
-              @queryParams={{@queryParams}}
-            />
+            <Component @data={{r.rowValue}} @loading={{@loadingData}} />
           {{/let}}
         </r.cell>
       </b.row>
     </tb.body>
   </AkTable>
 
-  <AkPagination
-    @disableNext={{pgc.disableNext}}
-    @nextAction={{pgc.nextAction}}
-    @disablePrev={{pgc.disablePrev}}
-    @prevAction={{pgc.prevAction}}
-    @endItemIdx={{pgc.endItemIdx}}
-    @startItemIdx={{pgc.startItemIdx}}
-    @itemPerPageOptions={{pgc.itemPerPageOptions}}
-    @onItemPerPageChange={{pgc.onItemPerPageChange}}
-    @selectedOption={{pgc.selectedOption}}
-    @tableItemLabel={{t 'apps'}}
-    @perPageTranslation={{t 'recordPerPage'}}
-    @totalItems={{pgc.totalItems}}
-    class='mt-0'
-  />
+  {{#if this.showPagination}}
+    <AkPagination
+      @disableNext={{pgc.disableNext}}
+      @nextAction={{pgc.nextAction}}
+      @disablePrev={{pgc.disablePrev}}
+      @prevAction={{pgc.prevAction}}
+      @endItemIdx={{pgc.endItemIdx}}
+      @startItemIdx={{pgc.startItemIdx}}
+      @itemPerPageOptions={{pgc.itemPerPageOptions}}
+      @onItemPerPageChange={{pgc.onItemPerPageChange}}
+      @selectedOption={{pgc.selectedOption}}
+      @tableItemLabel={{t 'apps'}}
+      @perPageTranslation={{t 'recordPerPage'}}
+      @totalItems={{pgc.totalItems}}
+      class='mt-0'
+    />
+  {{/if}}
 </AkPaginationProvider>

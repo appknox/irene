@@ -295,6 +295,20 @@ const ENUMS = {
     DEPENDENCIES: 1,
     PARENTS: 2,
   },
+
+  SK_APP_MONITORING_STATUS: {
+    PENDING: 0,
+    SCANNED: 1,
+    UNSCANNED: 2,
+    NOT_FOUND: 3,
+  },
+
+  SK_ORGANIZATION_MEMBERSHIP_ROLES: {
+    MEMBER: 1,
+    COLLABORATOR: 2,
+    ADMIN: 3,
+    OWNER: 4,
+  },
 };
 
 export const ENUMS_DISPLAY = {

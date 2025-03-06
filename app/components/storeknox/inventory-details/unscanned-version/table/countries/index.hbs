@@ -1,0 +1,26 @@
+<AkTypography
+  data-test-storeknoxInventoryDetails-unscannedVersionTable-countriesCodes
+>
+  {{#if this.showEmptyCountryList}}
+    -
+  {{else}}
+    {{#each this.countryCodes as |countryCode idx|}}
+      <AkTooltip
+        @placement='top'
+        @arrow={{true}}
+        @title={{get this.countryNamesMap countryCode}}
+        data-test-storeknoxInventoryDetails-unscannedVersionTable-countryCodeTooltipId='{{countryCode}}'
+      >
+        <AkTypography
+          data-test-storeknoxInventoryDetails-unscannedVersionTable-countryCode
+          data-test-storeknoxInventoryDetails-unscannedVersionTable-countryCodeId='{{countryCode}}'
+        >
+          {{countryCode}}{{if
+            (not-eq (add idx 1) this.countryCodes.length)
+            ','
+          }}
+        </AkTypography>
+      </AkTooltip>
+    {{/each}}
+  {{/if}}
+</AkTypography>

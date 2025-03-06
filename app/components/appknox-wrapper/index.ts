@@ -8,12 +8,10 @@ import type RouterService from '@ember/routing/router-service';
 import ENV from 'irene/config/environment';
 import type UserModel from 'irene/models/user';
 import type MeService from 'irene/services/me';
-import type FreshdeskService from 'irene/services/freshdesk';
 import type IntegrationService from 'irene/services/integration';
 import type OrganizationService from 'irene/services/organization';
 import type ConfigurationService from 'irene/services/configuration';
-import type { LowerMenuItem, MenuItem } from '../side-nav';
-import styles from './index.scss';
+import type { MenuItem } from '../side-nav';
 
 export interface AppknoxWrapperSignature {
   Args: {
@@ -30,7 +28,6 @@ export default class AppknoxWrapperComponent extends Component<AppknoxWrapperSig
   @service declare me: MeService;
   @service declare intl: IntlService;
   @service declare router: RouterService;
-  @service declare freshdesk: FreshdeskService;
   @service declare integration: IntegrationService;
   @service declare organization: OrganizationService;
   @service declare notifications: NotificationService;
@@ -43,7 +40,7 @@ export default class AppknoxWrapperComponent extends Component<AppknoxWrapperSig
   @tracked isSidebarCollapsed: boolean;
 
   showMarketplace = ENV.enableMarketplace;
-  productVersion = ENV.productVersion;
+  productVersion = ENV.productVersions['appknox'];
 
   constructor(owner: unknown, args: AppknoxWrapperSignature['Args']) {
     super(owner, args);
@@ -100,20 +97,6 @@ export default class AppknoxWrapperComponent extends Component<AppknoxWrapperSig
       this.organization.selected?.features?.sbom &&
       !this.configuration.serverData.enterprise
     );
-  }
-
-  get enablePendo() {
-    return this.integration.isPendoEnabled();
-  }
-
-  get enableChatSupport() {
-    return this.freshdesk.freshchatEnabled;
-  }
-
-  get versionText() {
-    const version = this.productVersion;
-    const translated = this.intl.t('version');
-    return `${translated} - ${version}`;
   }
 
   get menuItems() {
@@ -188,57 +171,53 @@ export default class AppknoxWrapperComponent extends Component<AppknoxWrapperSig
     ].filter(Boolean) as MenuItem[];
   }
 
-  get lowerMenuItems() {
+  get guideCategories() {
     return [
-      this.enableChatSupport && {
-        title: this.intl.t('chatSupport'),
-        icon: 'chat-bubble',
-        onClick: this.openChatBox,
-        iconClass: 'lower-menu-chat',
-        textClass: styles['lower-menu-chat'],
+      {
+        category: this.intl.t('onboardingGuideModule.VA'),
+        guides: [
+          {
+            id: 'va-guide',
+            title: this.intl.t('onboardingGuideModule.initiateVA'),
+            url: 'https://appknox.portal.trainn.co/share/bEK4jmKvG16y1lqH9b9sPA/embed?mode=interactive',
+          },
+          {
+            id: 'scan-results-guide',
+            title: this.intl.t('onboardingGuideModule.viewReports'),
+            url: 'https://appknox.portal.trainn.co/share/gKJQU8gka8sX3ZLJD80CWg/embed?mode=interactive',
+          },
+          {
+            id: 'invitation-guide',
+            title: this.intl.t('inviteUsers'),
+            url: 'https://appknox.portal.trainn.co/share/bXBvltZ53ZpWxvrrhrqkbA/embed?mode=interactive',
+          },
+          {
+            id: 'creating-teams-guide',
+            title: this.intl.t('onboardingGuideModule.createTeams'),
+            url: 'https://appknox.portal.trainn.co/share/01VQVnUV64rjHIBsx6tzqQ/embed?mode=interactive',
+          },
+          {
+            id: 'upload-access-guide',
+            title: this.intl.t('onboardingGuideModule.uploadAccess'),
+            url: 'https://appknox.portal.trainn.co/share/FPsW0wVu5g6NtAZzHjrNrA/embed?mode=interactive',
+          },
+        ],
       },
       {
-        title: this.versionText,
-        icon: 'info',
-        iconClass: 'pendo-ak-icon',
-        enablePendo: this.enablePendo,
-        onClick: this.showGuide,
-        textClass: styles['menu-item-text'],
-        listItemClass: this.enablePendo ? '' : 'no-hover',
+        category: this.intl.t('SBOM'),
+        guides: [
+          {
+            id: 'sbom-guide',
+            title: this.intl.t('onboardingGuideModule.generateSBOM'),
+            url: 'https://appknox.portal.trainn.co/share/mMfpJY5qpu0czTtC4TKdtQ/embed?mode=interactive',
+          },
+        ],
       },
-    ].filter(Boolean) as LowerMenuItem[];
-  }
-
-  get showKnowledgeBase() {
-    return this.freshdesk.supportWidgetIsEnabled;
-  }
-
-  get showChatSupport() {
-    return this.freshdesk.freshchatEnabled;
+    ];
   }
 
   get orgIsAnEnterprise() {
     return this.configuration.serverData.enterprise;
-  }
-
-  @action async showGuide() {
-    if (this.enablePendo) {
-      try {
-        const guide = this.window.pendo
-          .getActiveGuides()
-          .find(function (element) {
-            return element.launchMethod === 'auto-badge';
-          });
-
-        await guide?.show();
-      } catch (e) {
-        console.error(e);
-      }
-    }
-  }
-
-  @action openChatBox() {
-    this.freshdesk.openFreshchatWidget();
   }
 
   @action
@@ -254,10 +233,6 @@ export default class AppknoxWrapperComponent extends Component<AppknoxWrapperSig
   @action
   onToggleOnboardingGuide() {
     this.showOnboardingGuide = !this.showOnboardingGuide;
-  }
-
-  @action onOpenKnowledgeBase() {
-    this.freshdesk.openSupportWidget();
   }
 
   @action

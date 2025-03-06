@@ -1,0 +1,20 @@
+<AkStack @direction='column' @spacing='2' @width='full'>
+  {{#if @skInventoryApp.monitoringStatusIsPending}}
+    <Storeknox::InventoryDetails::AppDetails::MonitoringPendingInfo
+      @skInventoryApp={{@skInventoryApp}}
+    />
+
+  {{else}}
+    <Storeknox::InventoryDetails::AppDetails::ActionsList
+      @skInventoryApp={{@skInventoryApp}}
+    />
+  {{/if}}
+
+  <Storeknox::InventoryDetails::AppDetails::AppInfo
+    @skInventoryApp={{@skInventoryApp}}
+  />
+
+  <Storeknox::InventoryDetails::AppDetails::VaResults
+    @skInventoryApp={{@skInventoryApp}}
+  />
+</AkStack>

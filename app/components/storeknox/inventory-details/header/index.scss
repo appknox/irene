@@ -1,0 +1,22 @@
+.app-inventory-header-root {
+  position: sticky;
+  z-index: 10;
+  top: -0.5em;
+  background-color: var(--storeknox-inventory-details-header-bg-color);
+
+  .app-info-logo {
+    border-radius: 100%;
+    object-fit: contain;
+    width: 50px;
+    height: 50px;
+    border: 1px solid
+      var(--storeknox-inventory-details-header-app-logo-border-color);
+  }
+}
+
+.tooltip-content-container {
+  width: 320px;
+  padding: 0.5em;
+  box-sizing: border-box;
+  white-space: normal;
+}

@@ -23,8 +23,8 @@
         summary 
         {{if @disabled "disabled"}} 
         {{this.variant}} 
-        {{@customSumaryClass}}
       '
+      class='{{@customSumaryClass}}'
       {{on 'click' this.onSummaryClick}}
       data-test-ak-accordion-summary
     >
