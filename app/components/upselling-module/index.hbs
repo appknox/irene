@@ -1,0 +1,59 @@
+<AkStack
+  data-test-upselling-module
+  local-class='upsell-container'
+  @direction='column'
+>
+  <AkStack
+    @width='full'
+    @alignItems='center'
+    @justifyContent='center'
+    local-class='gradient-fill'
+  >
+    {{yield to='gradientContent'}}
+  </AkStack>
+
+  <AkStack local-class='upsell-content' @direction='column' @spacing='2'>
+    <AkTypography data-test-upselling-module-title @variant='h5'>
+      {{@title}}
+    </AkTypography>
+
+    <AkTypography data-test-upselling-module-subtitle>
+      {{@subtitle}}
+    </AkTypography>
+
+    <AkDivider @color='dark' />
+
+    {{#each @features as |feature|}}
+      <AkStack data-test-upselling-module-feature @spacing='1'>
+        <AkIcon @iconName='beenhere' @variant='filled' @color='success' />
+        <AkTypography>{{feature}}</AkTypography>
+      </AkStack>
+    {{/each}}
+  </AkStack>
+
+  <AkStack
+    @spacing='1'
+    @width='full'
+    @alignItems='center'
+    local-class='upsell-footer'
+  >
+    {{#if @showSuccess}}
+      <AkSvg::ThumbsUpIcon
+        data-test-upselling-module-thumbs-up
+        local-class='thumbsup-icon'
+      />
+
+      <AkTypography data-test-upselling-module-successMessage>
+        {{@successMessage}}
+      </AkTypography>
+    {{else}}
+      <AkButton
+        data-test-upselling-module-contact-cta
+        {{on 'click' @onClickContactCTA}}
+        @color='primary'
+      >
+        {{t 'imInterested'}}
+      </AkButton>
+    {{/if}}
+  </AkStack>
+</AkStack>

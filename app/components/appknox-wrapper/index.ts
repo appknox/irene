@@ -96,10 +96,7 @@ export default class AppknoxWrapperComponent extends Component<AppknoxWrapperSig
   }
 
   get showSbomDashboard() {
-    return (
-      this.organization.selected?.features?.sbom &&
-      !this.configuration.serverData.enterprise
-    );
+    return !this.configuration.serverData.enterprise;
   }
 
   get enablePendo() {
