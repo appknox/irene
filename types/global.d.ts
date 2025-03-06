@@ -124,6 +124,13 @@ declare module '@glint/environment-ember-loose/registry' {
       Return: void;
     }>;
 
+    'did-update': ModifierLike<{
+      Args: {
+        Positional: [callback: UnknownFnWithAnyArgType, params?: unknown];
+      };
+      Return: void;
+    }>;
+
     'will-destroy': ModifierLike<{
       Args: {
         Positional: [UnknownFnWithAnyArgType];
