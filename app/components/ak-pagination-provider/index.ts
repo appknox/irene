@@ -4,10 +4,15 @@ import { tracked } from '@glimmer/tracking';
 // eslint-disable-next-line ember/use-ember-data-rfc-395-imports
 import { DS } from 'ember-data';
 
-export type PaginationProviderActionsArgs = {
-  limit: number;
-  offset: number;
-};
+type ResultDependency =
+  | string // e.g., "search", "category", etc.
+  | number // e.g., for pagination, limit, etc.
+  | boolean // e.g., isActive, sortOrder, etc.
+  | string[] // e.g., tags, selected categories, etc.
+  | number[] // e.g., multiple selected IDs
+  | null; // Nullable params (e.g., optional filters)
+
+export type PaginationProviderActionsArgs = { limit: number; offset: number };
 
 export type PaginationItemPerPageOptionProps = {
   selected: boolean;
@@ -36,13 +41,13 @@ export interface AkPaginationProviderSignature<R> {
     totalItems: number;
     itemPerPageOptions: number[];
     defaultLimit: number;
+    resultDependencies?: ResultDependency[];
     onItemPerPageChange: (args: PaginationProviderActionsArgs) => void;
     nextAction: (args: PaginationProviderActionsArgs) => void;
     prevAction: (args: PaginationProviderActionsArgs) => void;
+    onResultDependenciesChange?: () => void;
   };
-  Blocks: {
-    default: [PaginationProviderDefaultBlockHash<R>];
-  };
+  Blocks: { default: [PaginationProviderDefaultBlockHash<R>] };
 }
 
 export default class AkPaginationProviderComponent<R> extends Component<
@@ -53,6 +58,12 @@ export default class AkPaginationProviderComponent<R> extends Component<
 
   @tracked itemPerPageOptions: PaginationItemPerPageOptionProps[] =
     this.defaultItemPerPageOptions;
+
+  get resultDependencies() {
+    return (
+      this.args.resultDependencies ?? [this.args.offset, this.args.defaultLimit]
+    );
+  }
 
   get currentPageResults() {
     return this.args.results;
@@ -125,12 +136,14 @@ export default class AkPaginationProviderComponent<R> extends Component<
   }
 
   @action
+  handleResultDependenciesChange() {
+    this.args.onResultDependenciesChange?.();
+  }
+
+  @action
   onItemPerPageChange(selectedItem: PaginationItemPerPageOptionProps) {
     this._updatePageItemSelectOptions(Number(selectedItem.value));
-    this.args.onItemPerPageChange({
-      limit: this.limit,
-      offset: 0,
-    });
+    this.args.onItemPerPageChange({ limit: this.limit, offset: 0 });
   }
 
   @action nextAction() {
