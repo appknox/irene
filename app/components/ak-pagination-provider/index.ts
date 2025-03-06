@@ -36,9 +36,11 @@ export interface AkPaginationProviderSignature<R> {
     totalItems: number;
     itemPerPageOptions: number[];
     defaultLimit: number;
+    tableParams?: string[];
     onItemPerPageChange: (args: PaginationProviderActionsArgs) => void;
     nextAction: (args: PaginationProviderActionsArgs) => void;
     prevAction: (args: PaginationProviderActionsArgs) => void;
+    updateTable?: () => void;
   };
   Blocks: {
     default: [PaginationProviderDefaultBlockHash<R>];
@@ -122,6 +124,11 @@ export default class AkPaginationProviderComponent<R> extends Component<
       this.itemPerPageOptions.find((item) => item.selected) ||
       this.itemPerPageOptions[0]
     );
+  }
+
+  @action
+  updateTable() {
+    this.args.updateTable?.();
   }
 
   @action
