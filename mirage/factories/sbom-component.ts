@@ -27,14 +27,15 @@ export default Factory.extend({
   // Reference and ecosystem info
   bom_ref() {
     const namespace = faker.helpers.arrayElement([
-      'pkg',
       'maven',
       'npm',
       'pypi',
+      'nuget',
     ]);
+    const group = faker.string.alphanumeric(10).toLowerCase();
     const name = faker.string.alphanumeric(10).toLowerCase();
-    const version = faker.system.semver();
-    return `${namespace}:${name}@${version}`;
+
+    return `${namespace}::${group}:${name}`;
   },
 
   properties() {

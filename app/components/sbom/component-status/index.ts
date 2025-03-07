@@ -2,6 +2,7 @@ import { inject as service } from '@ember/service';
 import Component from '@glimmer/component';
 import IntlService from 'ember-intl/services/intl';
 import SbomComponentModel from 'irene/models/sbom-component';
+import * as semver from 'semver';
 
 export interface SbomComponentStatusSignature {
   Args: {
@@ -16,6 +17,26 @@ type ComponentStatus = {
 
 export default class SbomComponentStatusComponent extends Component<SbomComponentStatusSignature> {
   @service declare intl: IntlService;
+
+  get isOutdated() {
+    const component = this.args.sbomComponent;
+
+    if (!component?.latestVersion || !component?.version) {
+      return false;
+    } else if (
+      !semver.valid(component.cleanVersion) ||
+      !semver.valid(component.cleanLatestVersion)
+    ) {
+      return false;
+    } else if (
+      semver.compare(component.cleanVersion, component.cleanLatestVersion) ===
+      -1
+    ) {
+      return true;
+    }
+
+    return false;
+  }
 
   get componentStatus() {
     const status = [] as ComponentStatus[];
@@ -34,7 +55,7 @@ export default class SbomComponentStatusComponent extends Component<SbomComponen
         });
       }
 
-      if (component.isOutdated) {
+      if (this.isOutdated) {
         status.push({
           label: this.intl.t('chipStatus.outdated'),
           color: 'default',
