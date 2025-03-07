@@ -645,13 +645,9 @@ body {
     --border-color-1
   );
 
-  // variables for jira-account
-  --jira-account-border-radius: var(--border-radius);
-  --jira-account-border-color: var(--border-color-1);
-
-  // variables for github-account
-  --github-account-border-radius: var(--border-radius);
-  --github-account-border-color: var(--border-color-1);
+  // variables for organization/integrations/integrated-ui
+  --organization-integrations-integrated-ui-border-radius: var(--border-radius);
+  --organization-integrations-integrated-ui-border-color: var(--border-color-1);
 
   // variables for organization-name-header
   --organization-name-header-background-color: var(--background-main);
@@ -1449,11 +1445,6 @@ body {
     --neutral-grey-200
   );
 
-  // variables for project-settings/general-settings/jira-project
-  --project-settings-general-settings-jira-project-background-color: var(
-    --neutral-grey-200
-  );
-
   // variables for project-settings/analysis-settings
   --project-settings-analysis-settings-background-color: var(--background-main);
   --project-settings-analysis-settings-border-color: var(--neutral-grey-200);
@@ -1501,6 +1492,21 @@ body {
   );
   --project-settings-view-scenario-parameter-text-field-background: var(
     --neutral-grey-100
+  );
+
+  // variables for project-settings/integrations/config-drawer
+  --project-settings-integrations-config-drawer-background-main: var(
+    --background-main
+  );
+
+  --project-settings-integrations-config-drawer-box-shadow: var(--box-shadow-4);
+
+  --project-settings-integrations-config-drawer-border-color: var(
+    --border-color-1
+  );
+
+  --project-settings-integrations-config-drawer-footer-border-radius: var(
+    --border-radius
   );
 
   // variables for tri-state-checkbox

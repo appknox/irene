@@ -1,0 +1,40 @@
+<AkStack @direction='column' @spacing='2' class='mt-2'>
+  <AkStack @direction='column' @spacing='1'>
+    <AkTypography
+      @variant='body2'
+      @fontWeight='bold'
+      data-test-prjSettings-integrations-githubProject-repoHeaderText
+    >
+      {{t 'repo'}}
+    </AkTypography>
+
+    <AkTypography
+      @tag='a'
+      @color='primary'
+      @underline='always'
+      target='_blank'
+      href={{@currentGithubRepo.repoDetails.html_url}}
+      rel='noopener noreferrer'
+      {{style fontFamily='monospace'}}
+      data-test-prjSettings-integrations-githubProject-accountAndRepo
+    >
+      {{@currentGithubRepo.account}}/{{@currentGithubRepo.repo}}
+    </AkTypography>
+  </AkStack>
+
+  <AkStack @direction='column' @spacing='1'>
+    <AkTypography
+      @variant='body2'
+      @fontWeight='bold'
+      data-test-prjSettings-integrations-githubProject-riskHeaderText
+    >
+      {{t 'threshold'}}
+    </AkTypography>
+
+    <ProjectSettings::Integrations::RiskThreshold
+      @computedRisk={{@currentGithubRepo.riskThreshold}}
+      data-test-projectSettings-integrations-githubProject-risk
+    />
+
+  </AkStack>
+</AkStack>

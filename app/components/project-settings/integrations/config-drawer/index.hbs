@@ -1,0 +1,80 @@
+<AkDrawer
+  @open={{@openDrawer}}
+  @onClose={{@closeDrawerHandler}}
+  @anchor='right'
+  data-test-prjSettings-integrations-configDrawer-root
+  as |dr|
+>
+  <AkStack
+    @direction='column'
+    local-class='project-integrations-config-drawer-container'
+  >
+    <AkAppbar
+      @justifyContent='space-between'
+      @position='sticky'
+      class='px-3'
+      as |ab|
+    >
+      <AkTypography
+        @color='inherit'
+        @variant='h5'
+        data-test-prjSettings-integrations-configDrawer-title
+      >
+        {{@drawerTitle}}
+      </AkTypography>
+
+      <AkIconButton
+        class={{ab.classes.defaultIconBtn}}
+        {{on 'click' dr.closeHandler}}
+        data-test-prjSettings-integrations-configDrawer-closeBtn
+      >
+        <AkIcon @iconName='close' />
+      </AkIconButton>
+    </AkAppbar>
+
+    <AkStack
+      @direction='column'
+      @justifyContent='space-between'
+      @width='full'
+      local-class='height-full'
+      class='p-2'
+    >
+      <AkStack
+        @direction='column'
+        @spacing='3'
+        @width='full'
+        local-class='bordered-box'
+        class='p-2'
+        data-test-prjSettings-integrations-configDrawer-content
+      >
+        {{yield to='drawerContent'}}
+      </AkStack>
+    </AkStack>
+
+    <AkStack
+      @width='full'
+      @spacing='1.5'
+      class='px-3 py-2'
+      local-class='project-integrations-settings-drawer-footer'
+    >
+      <AkButton
+        @variant='filled'
+        @disabled={{@loadingDrawerSaveAction}}
+        @loading={{@loadingDrawerSaveAction}}
+        {{on 'click' @drawerSaveAction}}
+        data-test-prjSettings-integrations-configDrawer-saveBtn
+      >
+        {{t 'save'}}
+      </AkButton>
+
+      <AkButton
+        @variant='outlined'
+        @color='neutral'
+        {{on 'click' @closeDrawerHandler}}
+        data-test-prjSettings-integrations-configDrawer-cancelBtn
+      >
+        {{t 'cancel'}}
+      </AkButton>
+    </AkStack>
+  </AkStack>
+</AkDrawer>
