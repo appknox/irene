@@ -1,0 +1,15 @@
+<div local-class='org-integration-settings-integrations-container'>
+  <Organization::Integrations::JiraAccount @user={{@model.user}} />
+
+  <AkDivider class='my-3' @color='dark' />
+
+  <Organization::Integrations::GithubAccount
+    @integratedUser={{@model.integratedUser}}
+    @reconnect={{@model.reconnect}}
+    @user={{@model.user}}
+  />
+
+  <AkDivider class='my-3' @color='dark' />
+
+  <Organization::Integrations::ServiceNow @user={{@model.user}} />
+</div>

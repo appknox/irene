@@ -1,0 +1,102 @@
+<AkTypography
+  @variant='h5'
+  @gutterBottom={{true}}
+  data-test-orgIntegrations-serviceNow-title
+>
+  {{t 'serviceNowIntegration'}}
+</AkTypography>
+
+{{#if this.showIntegratedOrLoadingUI}}
+  <Organization::Integrations::IntegratedUi
+    @imageSource='/images/service-now.png'
+    @imageAlt='service now icon'
+    @hostURL={{this.snInstanceURL}}
+    @username={{this.snUsername}}
+    @onDisconnectClick={{this.openRevokeServiceNowConfirmBox}}
+    @loading={{this.isLoadingSNData}}
+    data-test-orgIntegrations-serviceNow-integratedHeader
+  />
+{{else}}
+  <AkTypography
+    @variant='body2'
+    @color='textSecondary'
+    data-test-orgIntegrations-serviceNow-desc
+  >
+    {{t 'serviceNowIntegrationDesc'}}
+  </AkTypography>
+
+  <form class='mt-2' {{style maxWidth='300px'}}>
+    <AkStack @direction='column' @spacing='2'>
+      <AkTextField
+        @placeholder={{t 'serviceNow.enterInstanceURL'}}
+        @label={{t 'serviceNow.instanceURL'}}
+        @labelTypographyVariant='subtitle2'
+        @labelTypographyColor='textPrimary'
+        @value={{this.changeset.instanceURL}}
+        @error={{this.changeset.error.instanceURL}}
+        data-test-orgIntegrations-serviceNow-instanceURLInput
+      />
+
+      <AkTextField
+        @placeholder={{t 'enterUsername'}}
+        @label={{t 'username'}}
+        @labelTypographyVariant='subtitle2'
+        @labelTypographyColor='textPrimary'
+        @value={{this.changeset.username}}
+        @error={{this.changeset.error.username}}
+        data-test-orgIntegrations-serviceNow-usernameInput
+      />
+
+      <AkTextField
+        @placeholder={{t 'enterPassword'}}
+        @label={{t 'password'}}
+        @labelTypographyVariant='subtitle2'
+        @labelTypographyColor='textPrimary'
+        @type='password'
+        @value={{this.changeset.password}}
+        @error={{this.changeset.error.password}}
+        autocomplete='service-now-password'
+        data-test-orgIntegrations-serviceNow-passwordInput
+      />
+
+      <AkStack @direction='column' {{style gap='0.4em'}}>
+        <AkTypography
+          @variant='subtitle2'
+          data-test-orgIntegrations-serviceNow-selectServiceNowTableTitle
+        >
+          {{t 'serviceNow.serviceNowTable'}}
+        </AkTypography>
+
+        <AkSelect
+          @options={{this.snTableItems}}
+          @onChange={{this.setSNTable}}
+          @selected={{this.selectedSNTable}}
+          @placeholder={{t 'serviceNow.selectServiceNowTable'}}
+          {{style width='300px'}}
+          data-test-orgIntegrations-serviceNow-serviceNowTableSelect
+          as |aks|
+        >
+          {{aks.label}}
+        </AkSelect>
+      </AkStack>
+    </AkStack>
+
+    <AkButton
+      @loading={{this.integrateServiceNow.isRunning}}
+      class='mt-2'
+      {{on 'click' (perform this.integrateServiceNow this.changeset)}}
+      {{style minWidth='190px'}}
+      data-test-orgIntegrations-serviceNow-integrateBtn
+    >
+      {{t 'integrateServiceNow'}}
+    </AkButton>
+  </form>
+{{/if}}
+
+<ConfirmBox
+  @delegate={{this}}
+  @isActive={{this.showRevokeServiceNowConfirmBox}}
+  @disabled={{this.revokeServiceNow.isRunning}}
+  @description={{t 'confirmBox.revokeServiceNow'}}
+  @confirmText={{t 'disconnect'}}
+/>

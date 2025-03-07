@@ -1,0 +1,79 @@
+<AkTypography data-test-jiraAccount-title @variant='h5' @gutterBottom={{true}}>
+  {{t 'jiraIntegration'}}
+</AkTypography>
+
+{{#if this.showIntegratedOrLoadingUI}}
+  <Organization::Integrations::IntegratedUi
+    @imageSource='/images/jira-icon.png'
+    @imageAlt='jira icon'
+    @hostURL={{this.connectedHost}}
+    @username={{this.connectedUsername}}
+    @onDisconnectClick={{this.openRevokeJIRAConfirmBox}}
+    @loading={{this.isLoadingJIRAIntegrationInfo}}
+    data-test-orgIntegrations-jiraAccount-integratedHeader
+  />
+
+{{else}}
+  <AkTypography
+    data-test-jiraAccount-desc
+    @variant='body2'
+    @color='textSecondary'
+  >
+    {{t 'jiraIntegrationDesc'}}
+  </AkTypography>
+
+  <form class='mt-2'>
+    <AkStack @direction='column' @spacing='2' {{style maxWidth='300px'}}>
+      <AkTextField
+        data-test-jiraAccount-hostInput
+        @placeholder={{concat 'Enter ' (t 'jiraHost')}}
+        @value={{this.changeset.host}}
+        @label={{t 'jiraHost'}}
+        @labelTypographyVariant='subtitle2'
+        @labelTypographyColor='textPrimary'
+        @error={{this.changeset.error.host}}
+      />
+
+      <AkTextField
+        data-test-jiraAccount-usernameInput
+        @placeholder={{concat 'Enter ' (t 'username')}}
+        @label={{t 'username'}}
+        @labelTypographyVariant='subtitle2'
+        @labelTypographyColor='textPrimary'
+        @value={{this.changeset.username}}
+        @error={{this.changeset.error.username}}
+      />
+
+      <AkTextField
+        data-test-jiraAccount-apiKeyInput
+        @placeholder={{concat 'Enter ' (t 'apiKey')}}
+        @label={{t 'apiKey'}}
+        @labelTypographyVariant='subtitle2'
+        @labelTypographyColor='textPrimary'
+        @type='password'
+        @value={{this.changeset.password}}
+        @error={{this.changeset.error.password}}
+        autocomplete='jira-password'
+      />
+    </AkStack>
+
+    <AkButton
+      data-test-jiraAccount-integrateBtn
+      class='mt-2'
+      @loading={{this.integrateJIRA.isRunning}}
+      {{style minWidth='190px'}}
+      {{on 'click' (perform this.integrateJIRA this.changeset)}}
+    >
+      {{t 'integrateJIRA'}}
+    </AkButton>
+  </form>
+{{/if}}
+
+<ConfirmBox
+  @isActive={{this.showRevokeJIRAConfirmBox}}
+  @description={{t 'confirmBox.revokeJira'}}
+  @delegate={{this}}
+  @disabled={{this.isRevokingJIRA}}
+  @confirmText={{t 'disconnect'}}
+  @confirmAction={{perform this.revokeJIRA}}
+/>

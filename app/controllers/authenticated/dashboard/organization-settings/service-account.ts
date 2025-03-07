@@ -18,6 +18,10 @@ export default class AuthenticatedDashboardOrganizationSettingsServiceAccountCon
       route: 'authenticated.dashboard.organization-settings.service-account',
       routeGroup: 'organization',
 
+      siblingRoutes: [
+        'authenticated.dashboard.organization-settings.integrations',
+      ],
+
       parentCrumb: {
         title: this.intl.t('organizationSettings'),
         route: 'authenticated.dashboard.organization-settings.index',

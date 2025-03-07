@@ -103,6 +103,7 @@ Router.map(function () {
         function () {
           this.route('settings', function () {
             this.route('analysis');
+            this.route('integrations');
 
             this.route('dast-automation-scenario', {
               path: '/dast-automation-scenario/:scenario_id',
@@ -177,6 +178,7 @@ Router.map(function () {
             this.route('settings', function () {
               this.route('analysis');
               this.route('dast-automation');
+              this.route('integrations');
 
               this.route('dast-automation-scenario', {
                 path: '/dast-automation-scenario/:scenario_id',
@@ -280,6 +282,7 @@ Router.map(function () {
           { path: '/organization/settings' },
           function () {
             this.route('index', { path: '/' });
+            this.route('integrations');
             this.route('service-account');
           }
         );

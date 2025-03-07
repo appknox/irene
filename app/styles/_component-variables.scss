@@ -635,13 +635,9 @@ body {
     --border-color-1
   );
 
-  // variables for jira-account
-  --jira-account-border-radius: var(--border-radius);
-  --jira-account-border-color: var(--border-color-1);
-
-  // variables for github-account
-  --github-account-border-radius: var(--border-radius);
-  --github-account-border-color: var(--border-color-1);
+  // variables for organization/integrations/integrated-ui
+  --organization-integrations-integrated-ui-border-radius: var(--border-radius);
+  --organization-integrations-integrated-ui-border-color: var(--border-color-1);
 
   // variables for organization-name-header
   --organization-name-header-background-color: var(--background-main);
@@ -1402,29 +1398,14 @@ body {
     --background-main
   );
 
-  // variables for project-settings/general-settings/dynamicscan-automation-settings/upselling-feature
-  --project-settings-general-settings-dynamicscan-automation-upselling-feature-box-shadow: var(
-    --box-shadow-7
-  );
-  --project-settings-general-settings-dynamicscan-automation-upselling-feature-upgrade-note-color: var(
-    --neutral-grey-800
-  );
-  --project-settings-general-settings-dynamicscan-automation-upselling-feature-footer-color: var(
-    --upselling-feature-footer-color
-  );
-  --project-settings-general-settings-dynamicscan-automation-upselling-feature-footer-bg-color: var(
-    --upselling-feature-footer-bg-color
-  );
-
-  // variables for project-settings/general-settings/github-project
-  --project-settings-general-settings-github-project-background-color: var(
+  // variables for project-settings/integrations/github-project
+  --project-settings-integrations-github-project-background-color: var(
     --neutral-grey-200
   );
 
-  // variables for project-settings/general-settings/jira-project
-  --project-settings-general-settings-jira-project-background-color: var(
-    --neutral-grey-200
-  );
+  // variables for project-settings/integrations
+  --project-settings-integrations-root-border-color: var(--border-color-1);
+  --project-settings-integrations-root-background-color: var(--background-main);
 
   // variables for project-settings/analysis-settings
   --project-settings-analysis-settings-background-color: var(--background-main);
@@ -1473,6 +1454,21 @@ body {
   );
   --project-settings-view-scenario-parameter-text-field-background: var(
     --neutral-grey-100
+  );
+
+  // variables for project-settings/integrations/config-drawer
+  --project-settings-integrations-config-drawer-background-main: var(
+    --background-main
+  );
+
+  --project-settings-integrations-config-drawer-box-shadow: var(--box-shadow-4);
+
+  --project-settings-integrations-config-drawer-border-color: var(
+    --border-color-1
+  );
+
+  --project-settings-integrations-config-drawer-footer-border-radius: var(
+    --border-radius
   );
 
   // variables for tri-state-checkbox
@@ -2046,6 +2042,9 @@ body {
 
   // variables for organization/settings
   --organization-settings-container-background-color: var(--background-main);
+
+  // variables for organization/settings/integrations
+  --organization-settings-integrations-background-color: var(--background-main);
 
   // variables for organization/settings/skeleton-loader
   --organization-settings-skeleton-loader-background-color: var(

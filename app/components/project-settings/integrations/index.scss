@@ -1,0 +1,9 @@
+.prj-settings-integrations-root {
+  border: 1px solid var(--project-settings-integrations-root-border-color);
+  border-top: 0em;
+  background-color: var(--project-settings-integrations-root-background-color);
+
+  .settings-section {
+    max-width: 800px;
+  }
+}
