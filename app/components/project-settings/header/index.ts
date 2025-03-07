@@ -42,6 +42,11 @@ export default class ProjectSettingsHeaderComponent extends Component<ProjectSet
         route: 'authenticated.dashboard.project.settings.analysis',
         label: this.intl.t('analysisSettings'),
       },
+      {
+        id: this.intl.t('integration'),
+        route: 'authenticated.dashboard.project.settings.integrations',
+        label: this.intl.t('integration'),
+      },
       !this.orgIsAnEnterprise && {
         id: this.intl.t('dastAutomation.title'),
         route: 'authenticated.dashboard.project.settings.dast-automation',

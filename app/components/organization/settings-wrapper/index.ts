@@ -36,6 +36,13 @@ export default class OrganizationSettingsWrapperComponent extends Component<Orga
         route: 'authenticated.dashboard.organization-settings.index',
         currentWhen: 'authenticated.dashboard.organization-settings.index',
       },
+      {
+        id: 'integrations',
+        label: 'Integrations',
+        route: 'authenticated.dashboard.organization-settings.integrations',
+        currentWhen:
+          'authenticated.dashboard.organization-settings.integrations',
+      },
       this.isPublicApiEnabled && this.isOwnerOrAdmin
         ? {
             id: 'service-account',

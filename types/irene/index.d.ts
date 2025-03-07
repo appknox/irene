@@ -155,6 +155,7 @@ declare global {
     status?: string | number;
     title?: string;
     detail?: string;
+    source?: { pointer?: string };
   }
 
   // Type Merging for Distinct Objects
