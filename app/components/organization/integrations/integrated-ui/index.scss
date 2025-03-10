@@ -1,0 +1,23 @@
+.bordered-box {
+  display: flex;
+  max-width: 800px;
+  border: 1px solid var(--organization-integrations-integrated-ui-border-color);
+  border-radius: var(--organization-integrations-integrated-ui-border-radius);
+  box-sizing: border-box;
+
+  .integration-logo-container {
+    padding: 1em;
+    border-right: 1px solid
+      var(--organization-integrations-integrated-ui-border-color);
+
+    img {
+      width: 40px;
+    }
+  }
+
+  .integration-account-container {
+    box-sizing: border-box;
+    padding: 1em;
+    width: 100%;
+  }
+}
