@@ -14,7 +14,7 @@ export type AkIconColorVariant =
 export interface AkIconSignature {
   Element: HTMLSpanElement;
   Args: {
-    variant?: 'filled' | 'rounded' | 'outlined';
+    variant?: 'filled' | 'rounded' | 'outlined' | 'symbol';
     iconName: string;
     size?: 'medium' | 'small';
     color?: AkIconColorVariant;
@@ -26,6 +26,7 @@ export default class AkIconComponent extends Component<AkIconSignature> {
     filled: 'ak-icon',
     rounded: 'ak-icon-round',
     outlined: 'ak-icon-outlined',
+    symbol: 'ak-symbol',
   };
 
   get variantClass() {

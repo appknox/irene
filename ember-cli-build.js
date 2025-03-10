@@ -34,6 +34,7 @@ module.exports = function (defaults) {
       includePaths: [
         'node_modules/billboard.js/dist/',
         'node_modules/material-icons/css/',
+        'node_modules/material-symbols/',
         'node_modules/swagger-ui/dist/',
       ],
       sourceMap: !isProduction,

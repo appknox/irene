@@ -1,4 +1,6 @@
+$material-symbols-font-path: '/fonts/';
 @import 'material-icons.scss';
+@import 'material-symbols/outlined.scss';
 
 @font-face {
   font-family: 'Material Icons';
@@ -27,8 +29,25 @@
     format('woff2');
 }
 
+@font-face {
+  font-family: 'Material Symbols Outlined';
+  font-style: normal;
+  font-weight: 400;
+  font-display: block;
+  src: url('/fonts/material-symbols-outlined.woff2') 
+    format('woff2');
+}
+
 .ak-icon {
   @extend .mi;
+}
+
+.ak-symbol {
+  @extend .material-symbols-outlined;
+}
+
+.ak-icon-network-intel-node::before {
+  content: "network_intel_node";
 }
 
 .ak-icon-outlined {
