@@ -352,6 +352,9 @@ module('Integration | Component | appknox-wrapper', function (hooks) {
     async function (assert, scenario) {
       const { owner, admin, ...sectionConfig } = scenario;
       const me = this.owner.lookup('service:me');
+      const configuration = this.owner.lookup('service:configuration');
+
+      configuration.serverData.enterprise = false;
 
       me.org.is_owner = owner;
       me.org.is_admin = admin;
@@ -364,7 +367,6 @@ module('Integration | Component | appknox-wrapper', function (hooks) {
       this.organization.selected.features = {
         app_monitoring: sectionConfig.appMonitoring,
         public_apis: sectionConfig.publicApis,
-        sbom: sectionConfig.sbom,
       };
 
       await render(hbs`<AppknoxWrapper @user={{this.user}} />`);
@@ -387,6 +389,7 @@ module('Integration | Component | appknox-wrapper', function (hooks) {
         ...sectionConfig,
         analytics: owner || admin,
         billing: owner && sectionConfig.billing,
+        sbom: true,
       }).forEach((it, index) => {
         if (it.icon) {
           assert

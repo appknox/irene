@@ -1,0 +1,25 @@
+.gradient-fill {
+  height: 375px;
+  background: linear-gradient(0deg, var(--upselling-module-gradient-light) 0%, var(--upselling-module-gradient) 69.79%);
+}
+
+.upsell-container {
+  padding: 0.714em 0 0;
+  background-color: var(--upselling-module-background-color);
+  box-shadow: var(--upselling-module-box-shadow-6);
+}
+
+.upsell-content {
+  padding: 2.5em 5em;
+}
+
+.upsell-footer {
+  box-shadow: var(--upselling-module-box-shadow-4);
+  background-color: var(--upselling-module-background-color);
+  padding: 1em 5em;
+}
+
+.thumbsup-icon {
+  height: 26px;
+  width: 26px;
+}
