@@ -203,6 +203,7 @@
     "ember-data-resources": "^5.2.1",
     "ember-websockets": "^10.2.1",
     "material-icons": "^1.11.6",
+    "material-symbols": "^0.29.0",
     "qrious": "^4.0.2",
     "swagger-ui": "^5.18.2"
   },

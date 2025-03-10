@@ -24,3 +24,23 @@ Default.args = {
   color: 'textPrimary',
   size: 'medium',
 };
+
+const MaterialSymbol = (args) => ({
+  template: hbs`
+    <AkTypography @color="textSecondary" @gutterBottom={{true}}>
+        Experiment with me
+    </AkTypography>
+
+    <AkIcon @variant={{this.variant}} @iconName={{this.iconName}} @color={{this.color}} @size={{this.size}} />
+  `,
+  context: args,
+});
+
+export const AkSymbol = MaterialSymbol.bind({});
+
+AkSymbol.args = {
+  iconName: 'network-intel-node',
+  color: 'textPrimary',
+  size: 'medium',
+  variant: 'symbol',
+};
