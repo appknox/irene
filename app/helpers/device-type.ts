@@ -5,13 +5,13 @@ export function deviceType(params: [string | number]) {
   const currentDevice = params[0];
 
   switch (currentDevice) {
-    case ENUMS.DS_AUTOMATED_DEVICE_TYPE.NO_PREFERENCE:
+    case ENUMS.DS_DEVICE_TYPE.NO_PREFERENCE:
       return 'anyDevice';
 
-    case ENUMS.DS_AUTOMATED_DEVICE_TYPE.PHONE_REQUIRED:
+    case ENUMS.DS_DEVICE_TYPE.PHONE_REQUIRED:
       return 'phone';
 
-    case ENUMS.DS_AUTOMATED_DEVICE_TYPE.TABLET_REQUIRED:
+    case ENUMS.DS_DEVICE_TYPE.TABLET_REQUIRED:
       return 'tablet';
 
     default:

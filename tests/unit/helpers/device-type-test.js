@@ -8,19 +8,19 @@ module('Unit | Helper | device type', function () {
     assert.equal(deviceType([42]), 'anyDevice', 'No Preference');
 
     assert.equal(
-      deviceType([ENUMS.DEVICE_TYPE.NO_PREFERENCE]),
+      deviceType([ENUMS.DS_DEVICE_TYPE.NO_PREFERENCE]),
       'anyDevice',
       'No Preference'
     );
 
     assert.equal(
-      deviceType([ENUMS.DEVICE_TYPE.PHONE_REQUIRED]),
+      deviceType([ENUMS.DS_DEVICE_TYPE.PHONE_REQUIRED]),
       'phone',
       'Phone'
     );
 
     assert.equal(
-      deviceType([ENUMS.DEVICE_TYPE.TABLET_REQUIRED]),
+      deviceType([ENUMS.DS_DEVICE_TYPE.TABLET_REQUIRED]),
       'tablet',
       'Tablet'
     );

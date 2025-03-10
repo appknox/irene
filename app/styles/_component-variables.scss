@@ -1238,18 +1238,6 @@ body {
   --vnc-viewer-info-border-color: var(--neutral-grey-300);
   --vnc-viewer-info-background: var(--neutral-grey-100);
 
-  // variables for file-details/dynamic-scan/drawer-old
-  --file-details-dynamic-scan-drawer-old-border-color: var(--border-color-1);
-  --file-details-dynamic-scan-drawer-old-border-radius: var(--border-radius);
-  --file-details-dynamic-scan-drawer-old-alert-background-color: var(
-    --warn-light
-  );
-  --file-details-dynamic-scan-drawer-old-alert-text-color: var(--warn-dark);
-  --file-details-dynamic-scan-drawer-old-alert-border-color: var(--warn-dark);
-  --file-details-dynamic-scan-drawer-old-device-settings-warning-text-color: var(
-    --neutral-grey-500
-  );
-
   // variables for file-list
   --file-list-selected-file-chip-color: var(--text-primary);
   --file-list-selected-file-chip-background: var(--primary-main-10);
@@ -2166,11 +2154,6 @@ body {
   --page-not-found-card-border-radius: var(--border-radius);
   --page-not-found-card-box-shadow: var(--box-shadow-2);
   --page-not-found-border-color: var(--border-color-1);
-
-  // variables for file-details/dynamic-scan/drawer-old/proxy-settings-view
-  --file-details-dynamic-scan-drawer-old-proxy-settings-view-border-color: var(
-    --border-color-1
-  );
 
   // variables for file-details/static-scan
   --file-details-static-scan-border-color: var(--border-color-1);

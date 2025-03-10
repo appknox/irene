@@ -7,7 +7,6 @@ import { t } from 'ember-intl/test-support';
 import Service from '@ember/service';
 
 import { serializer } from 'irene/tests/test-utils';
-import ENUMS from 'irene/enums';
 
 class IntegrationStub extends Service {
   async configure(user) {
@@ -69,7 +68,6 @@ module('Acceptance | file details', function (hooks) {
 
     const file = this.server.create('file', {
       is_static_done: true,
-      dynamic_status: ENUMS.DYNAMIC_STATUS.NONE,
       project: project.id,
       analyses,
     });
@@ -130,12 +128,6 @@ module('Acceptance | file details', function (hooks) {
       return schema.devicePreferences.find(`${req.params.id}`)?.toJSON();
     });
 
-    this.server.get('/projects/:id/available-devices', (schema) => {
-      const results = schema.projectAvailableDevices.all().models;
-
-      return { count: results.length, next: null, previous: null, results };
-    });
-
     this.server.get('/manualscans/:id', (schema, req) => {
       return { id: req.params.id };
     });
@@ -158,9 +150,7 @@ module('Acceptance | file details', function (hooks) {
     this.server.create('file-report', { id: '1', progress: 100 });
 
     // Creates a new file with id of 2
-    const latestFile = this.server.create('file', {
-      dynamic_status: ENUMS.DYNAMIC_STATUS.NONE,
-    });
+    const latestFile = this.server.create('file');
 
     // project that has a latest file of id 2
     this.project.update({ last_file_id: latestFile.id });

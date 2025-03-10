@@ -45,7 +45,6 @@ module(
         return { id: req.params.id };
       });
 
-      this.file.dynamicStatus = ENUMS.DYNAMIC_STATUS.NONE;
       this.file.isDynamicDone = true;
       this.file.isApiDone = false;
 
