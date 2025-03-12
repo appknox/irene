@@ -6,6 +6,7 @@ import { find, findAll, render, waitFor, waitUntil } from '@ember/test-helpers';
 import { hbs } from 'ember-cli-htmlbars';
 import Service from '@ember/service';
 import { SbomReportStatus } from 'irene/models/sbom-report';
+import { setupBrowserFakes } from 'ember-browser-services/test-support';
 
 class OrganizationStub extends Service {
   selected = {
@@ -22,11 +23,16 @@ module(
     setupRenderingTest(hooks);
     setupMirage(hooks);
     setupIntl(hooks, 'en');
+    setupBrowserFakes(hooks, { window: true, localStorage: true });
 
     hooks.beforeEach(async function () {
       this.owner.register('service:organization', OrganizationStub);
 
       const store = this.owner.lookup('service:store');
+
+      const window = this.owner.lookup('service:browser/window');
+
+      window.localStorage.clear();
 
       const createFile = (sbomId) => {
         if (!sbomId && sbomId !== null) {

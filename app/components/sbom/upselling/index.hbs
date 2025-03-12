@@ -1,0 +1,18 @@
+<UpsellingModule
+  @title={{t 'sbomModule.introducingSBOM'}}
+  @subtitle={{t 'sbomModule.sbomOverview'}}
+  @features={{this.features}}
+  @successMessage={{t 'sbomModule.sbomContactMessage'}}
+  @showSuccess={{this.hasContactedSupport}}
+  @onClickContactCTA={{this.onClickContactCTA}}
+>
+  <:gradientContent>
+    <img
+      data-test-sbom-upselling-image
+      height='274px'
+      width='434px'
+      src='/images/sbom-upselling.png'
+      alt='sbom-feature-request'
+    />
+  </:gradientContent>
+</UpsellingModule>
