@@ -20,7 +20,6 @@
             @size='small'
             title='Select date range'
           />
-
           <span data-test-date-range-selected>
             <span local-class='date' data-test-from-date>
               {{#if this.selectedDateRange.start}}
@@ -33,6 +32,7 @@
             <span>
               -
             </span>
+
             <span local-class='date' data-test-to-date>
               {{#if this.selectedDateRange.end}}
                 {{day-js date=this.selectedDateRange.end format='DD/MM/YYYY'}}

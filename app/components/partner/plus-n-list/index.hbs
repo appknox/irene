@@ -9,8 +9,8 @@
       class='ml-2'
       local-class='show-more-count-badge'
       title='View {{this.remainingCount}} more'
-      data-test-more-btn
       {{on 'click' this.toggleShowMoreModal}}
+      data-test-more-btn
     >
       +
       {{this.remainingCount}}
@@ -28,7 +28,7 @@
     @headerTitle={{@modalTitle}}
   >
     <div local-class='list' data-test-list-modal>
-      {{#each @list as |item seq|}}
+      {{#each this.list as |item seq|}}
         <div local-class='list-item' data-test-list-item='{{seq}}'>
           {{#if @isShowSeq}}
             {{add seq 1}}.

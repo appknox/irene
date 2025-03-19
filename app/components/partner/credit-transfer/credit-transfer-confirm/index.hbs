@@ -2,15 +2,20 @@
   <div local-class='partner-credits' data-test-partner-credits>
     <div local-class='row' data-test-row>
       <div local-class='key' data-test-partner-current-credits-key>
-        {{t 'currentCredits'}}:</div>
+        {{t 'currentCredits'}}:
+      </div>
+
       <strong local-class='value' data-test-partner-current-credits-value>
         {{@partnerPlan.scansLeft}}
         {{t 'pluralScans' itemCount=@partnerPlan.scansLeft}}
       </strong>
     </div>
+
     <div local-class='row' data-test-row>
       <div local-class='key' data-test-partner-remaining-credits-key>
-        {{t 'remainingCredits'}}:</div>
+        {{t 'remainingCredits'}}:
+      </div>
+
       <strong local-class='value' data-test-partner-remaining-credits-value>
         {{@remainingCredits}}
         {{t 'pluralScans' itemCount=@remainingCredits}}
@@ -25,6 +30,7 @@
       <div local-class='key' data-test-client-key>
         {{t 'client'}}:
       </div>
+
       <strong
         local-class='value {{unless @clientName "empty-title"}}'
         data-test-client-value
@@ -36,17 +42,23 @@
         {{/if}}
       </strong>
     </div>
+
     <div local-class='row' data-test-row>
       <div local-class='key' data-test-client-current-credits-key>
-        {{t 'currentCredits'}}:</div>
+        {{t 'currentCredits'}}:
+      </div>
+
       <strong local-class='value' data-test-client-current-credits-value>
         {{@clientPlan.scansLeft}}
         {{t 'pluralScans' itemCount=@clientPlan.scansLeft}}
       </strong>
     </div>
+
     <div local-class='row' data-test-row>
       <div local-class='key' data-test-new-credits-key>
-        {{t 'newCredits'}}:</div>
+        {{t 'newCredits'}}:
+      </div>
+
       <strong local-class='value' data-test-new-credits-value>
         {{@transferCount}}
         {{t 'pluralScans' itemCount=@transferCount}}

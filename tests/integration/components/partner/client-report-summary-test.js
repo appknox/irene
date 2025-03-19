@@ -32,12 +32,12 @@ module(
       const fileSummary = this.server.create(
         'partner/partnerclient-file-summary',
         {
-          riskCountCritical: 3,
-          riskCountHigh: 5,
-          riskCountMedium: 8,
-          riskCountLow: 13,
-          riskCountPassed: 21,
-          riskCountUntested: 34,
+          riskCountCritical: 10,
+          riskCountHigh: 20,
+          riskCountMedium: 5,
+          riskCountLow: 15,
+          riskCountPassed: 30,
+          riskCountUntested: 20,
         }
       );
       this.server.get(
@@ -59,43 +59,23 @@ module(
       assert.dom('[data-test-risk-summary-bar]').exists();
       assert.dom('[data-test-risk-summary-bar]').hasClass(styles['riskbar']);
 
-      assert
-        .dom('[data-test-riskblock-critical]')
-        .hasAttribute('style', `width: ${fileSummary.criticalPercent}%`);
-      assert
-        .dom('[data-test-riskblock-high]')
-        .hasAttribute('style', `width: ${fileSummary.highPercent}%`);
-      assert
-        .dom('[data-test-riskblock-medium]')
-        .hasAttribute('style', `width: ${fileSummary.mediumPercent}%`);
-      assert
-        .dom('[data-test-riskblock-low]')
-        .hasAttribute('style', `width: ${fileSummary.lowPercent}%`);
-      assert
-        .dom('[data-test-riskblock-passed]')
-        .hasAttribute('style', `width: ${fileSummary.passedPercent}%`);
-      assert
-        .dom('[data-test-riskblock-untested]')
-        .hasAttribute('style', `width: ${fileSummary.untestedPercent}%`);
+      // Risk Summary bar assertion
+      const riskWidthProps = [
+        ['critical', fileSummary.criticalPercent],
+        ['high', fileSummary.highPercent],
+        ['medium', fileSummary.mediumPercent],
+        ['low', fileSummary.lowPercent],
+        ['passed', fileSummary.passedPercent],
+        ['untested', fileSummary.untestedPercent],
+      ];
 
-      assert
-        .dom(`[data-test-riskblock-critical]`)
-        .hasClass(styles['riskblock--critical']);
-      assert
-        .dom(`[data-test-riskblock-high]`)
-        .hasClass(styles['riskblock--high']);
-      assert
-        .dom(`[data-test-riskblock-medium]`)
-        .hasClass(styles['riskblock--medium']);
-      assert
-        .dom(`[data-test-riskblock-low]`)
-        .hasClass(styles['riskblock--low']);
-      assert
-        .dom(`[data-test-riskblock-passed]`)
-        .hasClass(styles['riskblock--passed']);
-      assert
-        .dom(`[data-test-riskblock-untested]`)
-        .hasClass(styles['riskblock--untested']);
+      // Risks assertion
+      riskWidthProps.forEach(([key, width]) => {
+        assert
+          .dom(`[data-test-riskblock="${key}"]`)
+          .hasAttribute('style', new RegExp(`width: ${width}%`, 'i'))
+          .hasClass(styles[`riskblock--${key}`]);
+      });
     });
 
     test('it should render risk index tooltip on mouseenter', async function (assert) {
@@ -142,65 +122,27 @@ module(
 
       assert.dom('[data-test-risk-summary-tooltip]').exists();
 
-      assert
-        .dom(`[data-test-riskindex-critical-key]`)
-        .hasClass(styles['riskkey-color--critical']);
+      // Risks assertion
+      const riskProps = [
+        ['critical', t('critical'), fileSummary?.riskCountCritical],
+        ['high', t('high'), fileSummary?.riskCountHigh],
+        ['medium', t('medium'), fileSummary?.riskCountMedium],
+        ['low', t('low'), fileSummary?.riskCountLow],
+        ['passed', t('passed'), fileSummary?.riskCountPassed],
+        ['untested', t('untested'), fileSummary?.riskCountUntested],
+      ];
 
-      assert.dom(`[data-test-riskindex-critical-label]`).hasText(t('critical'));
+      riskProps.forEach(([key, label, riskCount]) => {
+        assert
+          .dom(`[data-test-riskindex-key="${key}"]`)
+          .hasClass(styles[`riskkey-color--${key}`]);
 
-      assert
-        .dom(`[data-test-riskindex-critical-count]`)
-        .hasText(`${fileSummary.riskCountCritical}`);
+        assert.dom(`[data-test-riskindex-label="${key}"]`).hasText(label);
 
-      assert
-        .dom(`[data-test-riskindex-high-key]`)
-        .hasClass(styles['riskkey-color--high']);
-
-      assert.dom(`[data-test-riskindex-high-label]`).hasText(t('high'));
-
-      assert
-        .dom(`[data-test-riskindex-high-count]`)
-        .hasText(`${fileSummary.riskCountHigh}`);
-
-      assert
-        .dom(`[data-test-riskindex-medium-key]`)
-        .hasClass(styles['riskkey-color--medium']);
-
-      assert.dom(`[data-test-riskindex-medium-label]`).hasText(t('medium'));
-
-      assert
-        .dom(`[data-test-riskindex-medium-count]`)
-        .hasText(`${fileSummary.riskCountMedium}`);
-
-      assert
-        .dom(`[data-test-riskindex-low-key]`)
-        .hasClass(styles['riskkey-color--low']);
-
-      assert.dom(`[data-test-riskindex-low-label]`).hasText(t('low'));
-
-      assert
-        .dom(`[data-test-riskindex-low-count]`)
-        .hasText(`${fileSummary.riskCountLow}`);
-
-      assert
-        .dom(`[data-test-riskindex-passed-key]`)
-        .hasClass(styles['riskkey-color--passed']);
-
-      assert.dom(`[data-test-riskindex-passed-label]`).hasText(t('passed'));
-
-      assert
-        .dom(`[data-test-riskindex-passed-count]`)
-        .hasText(`${fileSummary.riskCountPassed}`);
-
-      assert
-        .dom(`[data-test-riskindex-untested-key]`)
-        .hasClass(styles['riskkey-color--untested']);
-
-      assert.dom(`[data-test-riskindex-untested-label]`).hasText(t('untested'));
-
-      assert
-        .dom(`[data-test-riskindex-untested-count]`)
-        .hasText(`${fileSummary.riskCountUntested}`);
+        assert
+          .dom(`[data-test-riskindex-count="${key}"]`)
+          .hasText(String(riskCount));
+      });
     });
 
     test('it should not render graph and popover if summary api fails', async function (assert) {
@@ -259,19 +201,25 @@ module(
       this.server.create('partner/partner', {
         access: { list_files: true },
       });
+
       this.server.get('v2/partners/:id', (schema) => {
         return serializer(schema['partner/partners'].find(1));
       });
+
       await this.owner.lookup('service:partner').load();
 
-      this.server.create('partner/partnerclient-file-summary', {
-        riskCountCritical: 10,
-        riskCountHigh: 20,
-        riskCountMedium: 5,
-        riskCountLow: 15,
-        riskCountPassed: 30,
-        riskCountUntested: 20,
-      });
+      const fileSummary = this.server.create(
+        'partner/partnerclient-file-summary',
+        {
+          riskCountCritical: 10,
+          riskCountHigh: 20,
+          riskCountMedium: 5,
+          riskCountLow: 15,
+          riskCountPassed: 30,
+          riskCountUntested: 20,
+        }
+      );
+
       this.server.get(
         'v2/partnerclients/:clientId/files/:fileId/summary',
         (schema) => {
@@ -279,6 +227,7 @@ module(
           return serializer(data);
         }
       );
+
       this.set('clientId', 1);
       this.set('fileId', 1);
 
@@ -286,24 +235,22 @@ module(
         hbs`<Partner::ClientReportSummary @clientId={{this.clientId}} @fileId={{this.fileId}}/>`
       );
       assert.dom('[data-test-risk-summary-bar]').exists();
-      assert
-        .dom('[data-test-riskblock-critical]')
-        .hasAttribute('style', `width: 10%`);
-      assert
-        .dom('[data-test-riskblock-high]')
-        .hasAttribute('style', `width: 20%`);
-      assert
-        .dom('[data-test-riskblock-medium]')
-        .hasAttribute('style', `width: 5%`);
-      assert
-        .dom('[data-test-riskblock-low]')
-        .hasAttribute('style', `width: 15%`);
-      assert
-        .dom('[data-test-riskblock-passed]')
-        .hasAttribute('style', `width: 30%`);
-      assert
-        .dom('[data-test-riskblock-untested]')
-        .hasAttribute('style', `width: 20%`);
+
+      const riskWidthProps = [
+        ['critical', fileSummary.criticalPercent],
+        ['high', fileSummary.highPercent],
+        ['medium', fileSummary.mediumPercent],
+        ['low', fileSummary.lowPercent],
+        ['passed', fileSummary.passedPercent],
+        ['untested', fileSummary.untestedPercent],
+      ];
+
+      // Risks assertion
+      riskWidthProps.forEach(([key, width]) => {
+        assert
+          .dom(`[data-test-riskblock="${key}"]`)
+          .hasAttribute('style', new RegExp(`width: ${width}%`, 'i'));
+      });
     });
   }
 );

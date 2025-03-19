@@ -1,5 +1,10 @@
 import commondrf from '../commondrf';
 
+type PartnerAnalyticDownloadFilterOptions = {
+  start_timestamp: string;
+  end_timestamp: string;
+};
+
 export default class PartnerAnalyticAdapter extends commondrf {
   _buildURL() {
     return this.buildURLFromBase(
@@ -7,12 +12,10 @@ export default class PartnerAnalyticAdapter extends commondrf {
     );
   }
 
-  async getDownloadURL(filter: string) {
+  async getDownloadURL(filter: PartnerAnalyticDownloadFilterOptions) {
     const url = `${this._buildURL()}/download_url`;
 
-    return await this.ajax(url, 'GET', {
-      data: filter,
-    });
+    return (await this.ajax(url, 'GET', { data: filter })) as { csv: string };
   }
 }
 

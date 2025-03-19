@@ -1,4 +1,3 @@
-/* eslint-disable qunit/no-assert-equal, qunit/require-expect */
 import { module, test } from 'qunit';
 import { setupRenderingTest } from 'ember-qunit';
 import { setupIntl, t } from 'ember-intl/test-support';
@@ -17,18 +16,21 @@ module(
       this.set('partnerPlan', {
         scansLeft: 21,
       });
+
       this.set('clientName', faker.company.name());
       this.set('transferCount', 20);
       this.set('remainingCredits', 1);
       this.set('toggleMode', () => {});
 
       await render(
-        hbs`<Partner::CreditTransfer::CreditTransferInput
-        @partnerPlan={{this.partnerPlan}}
-        @transferCount={{this.transferCount}}
-        @remainingCredits={{this.remainingCredits}}
-        @clientName={{this.clientName}}
-        @toggleMode={{this.toggleMode}}/>`
+        hbs`
+        <Partner::CreditTransfer::CreditTransferInput
+          @partnerPlan={{this.partnerPlan}}
+          @transferCount={{this.transferCount}}
+          @remainingCredits={{this.remainingCredits}}
+          @clientName={{this.clientName}}
+          @toggleMode={{this.toggleMode}}/>
+      `
       );
 
       assert
@@ -36,13 +38,17 @@ module(
         .hasText(
           `${this.partnerPlan.scansLeft} ${t('pluralScans', { itemCount: this.partnerPlan.scansLeft })}`
         );
+
       assert.dom(`[data-test-client-title]`).hasText(this.clientName);
+
       assert
         .dom(`[data-test-data-input-count]`)
         .hasValue(`${this.transferCount}`);
+
       assert
         .dom(`[data-test-credit-type]`)
         .hasText(t('pluralScans', { itemCount: this.transferCount }));
+
       assert.dom(`[data-test-transfer-btn]`).hasText(t('transferCredits'));
       assert.dom(`[data-test-transfer-btn]`).doesNotHaveAttribute(`disabled`);
     });
@@ -60,22 +66,30 @@ module(
     });
 
     test('it renders with input box', async function (assert) {
-      this.set('partnerPlan', {
-        scansLeft: 21,
+      this.setProperties({
+        transferCount: 20,
+        updateTransferCount: (val) => {
+          this.set('transferCount', val);
+        },
+        partnerPlan: {
+          scansLeft: 21,
+        },
       });
-      this.set('transferCount', 20);
 
-      await render(
-        hbs`<Partner::CreditTransfer::CreditTransferInput
-        @partnerPlan={{this.partnerPlan}}
-        @transferCount={{this.transferCount}} />`
-      );
+      await render(hbs`
+        <Partner::CreditTransfer::CreditTransferInput
+          @partnerPlan={{this.partnerPlan}}
+          @transferCount={{this.transferCount}} 
+          @updateTransferCount={{this.updateTransferCount}}
+        />
+      `);
 
       assert
         .dom(`[data-test-data-input-count]`)
         .hasValue(`${this.transferCount}`);
-      assert.equal(
-        this.element.querySelector(`[data-test-data-input-count]`).max,
+
+      assert.strictEqual(
+        Number(this.element.querySelector(`[data-test-data-input-count]`).max),
         this.partnerPlan.scansLeft,
         'Input has max limit equals to partner scans left'
       );
@@ -139,13 +153,18 @@ module(
       this.set('transferCount', 1);
       this.set('partnerPlan', { scansLeft: 22 });
       this.set('remainingCredits', 21);
+      this.set('updateTransferCount', (val) => {
+        this.set('transferCount', val);
+      });
 
       await render(
-        hbs`<Partner::CreditTransfer::CreditTransferInput
+        hbs`
+        <Partner::CreditTransfer::CreditTransferInput
           @toggleMode={{this.toggleMode}}
-        @transferCount={{this.transferCount}}
-        @partnerPlan={{this.partnerPlan}}
-        @remainingCredits={{this.remainingCredits}}
+          @transferCount={{this.transferCount}}
+          @partnerPlan={{this.partnerPlan}}
+          @remainingCredits={{this.remainingCredits}}
+          @updateTransferCount={{this.updateTransferCount}}
         />`
       );
 
@@ -155,6 +174,7 @@ module(
           'disabled',
           `Should be in active state becuase of default value`
         );
+
       const inputBtn = this.element.querySelector(
         `[data-test-data-input-count]`
       );
@@ -200,9 +220,12 @@ module(
     });
 
     test('it should handle transfer credits btn action', async function (assert) {
+      assert.expect();
+
       this.set('toggleMode', () => {
         assert.ok(true, 'Tranfer Credits btn has clicked');
       });
+
       this.set('transferCount', 1);
       this.set('remainingCredits', 9);
 

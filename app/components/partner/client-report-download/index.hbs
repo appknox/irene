@@ -17,6 +17,7 @@
               {{else if this.latestReport.id}}
                 <span data-test-download-button-tooltip>
                   {{t 'generatedOn'}}
+
                   {{day-js
                     date=this.latestReport.generatedOn
                     format='DD MMM YYYY hh:mm a'

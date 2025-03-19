@@ -11,8 +11,16 @@ import { serializer } from 'irene/tests/test-utils';
 import styles from 'irene/components/partner/client-report-download/index.scss';
 
 class WindowStub extends Service {
-  locationAssign(url) {
-    return url;
+  removeEventListener(...args) {
+    window.removeEventListener(...args);
+  }
+
+  addEventListener(...args) {
+    window.addEventListener(...args);
+  }
+
+  open(url) {
+    this.url = url;
   }
 }
 
@@ -51,7 +59,7 @@ module(
 
     hooks.beforeEach(async function () {
       this.owner.register('service:notifications', NotificationsStub);
-      this.owner.register('service:window', WindowStub);
+      this.owner.register('service:browser/window', WindowStub);
       this.owner.register('service:poll', PollServiceStub);
 
       await this.server.create('organization');
@@ -598,9 +606,7 @@ module(
         return new Response(
           200,
           {},
-          {
-            url: 'http://localhost/report_signed_url.pdf',
-          }
+          { url: 'https://www.report_signed_url.pdf' }
         );
       });
 
@@ -614,6 +620,7 @@ module(
       );
 
       this.set('clientId', 1);
+
       this.set('fileId', 1);
 
       const notifyService = this.owner.lookup('service:notifications');
@@ -652,6 +659,7 @@ module(
       const report = this.server.create('partner/partnerclient-report', {
         progress: 100,
       });
+
       this.server.get('v2/partnerclients/:clientId/reports/:id', (schema) => {
         const data = schema['partner/partnerclientReports'].find(1);
         return serializer(data);
@@ -661,7 +669,7 @@ module(
         return new Response(
           200,
           {},
-          { url: 'http://localhost/report_signed_url.pdf' }
+          { url: 'https://www.report_signed_url.pdf' }
         );
       });
 
