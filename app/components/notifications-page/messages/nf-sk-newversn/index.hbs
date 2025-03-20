@@ -1,0 +1,28 @@
+<div>
+  <div data-test-nf-newversn-primary-message>
+    {{t
+      'notificationModule.messages.nf-sk-newversn'
+      platform_display=@context.platform_display
+      app_name=@context.app_name
+      package_name=@context.package_name
+      version_unscanned=@context.version_unscanned
+      htmlSafe=true
+    }}
+  </div>
+
+  <div>
+    <div class='pt-1'>
+      <AkLink
+        @title='{{t "notificationModule.viewMonitoringResults"}}'
+        @color='primary'
+        @route='authenticated.storeknox.inventory-details.unscanned-version'
+        @underline='always'
+        @model={{@context.sk_app_id}}
+      >
+        <:default>
+          {{t 'notificationModule.viewMonitoringResults'}}
+        </:default>
+      </AkLink>
+    </div>
+  </div>
+</div>

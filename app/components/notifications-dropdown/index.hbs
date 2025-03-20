@@ -12,7 +12,7 @@
     data-test-notification-dropdown
     local-class='notification-dropdown-container'
   >
-    <NotificationsDropdown::Header />
+    <NotificationsDropdown::Header @product={{@product}} />
 
     <AkStack
       @tag='main'
@@ -35,7 +35,10 @@
 
         <NotificationsPage::Empty @message='No unread notifications' />
       {{else}}
-        {{#each this.akNotifications.notificaions_drop_down as |notification|}}
+        {{#each
+          this.notificationService.notifications_drop_down
+          as |notification|
+        }}
           <AkDivider @color='dark' />
 
           <NotificationsPage::Message @notification={{notification}} />
@@ -45,6 +48,7 @@
 
     <NotificationsDropdown::Footer
       @onViewAllNotificationClick={{this.closeNotifications}}
+      @product={{@product}}
     />
   </div>
 </AkPopover>

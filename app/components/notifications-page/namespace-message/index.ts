@@ -9,10 +9,10 @@ import OrganizationNamespaceModel from 'irene/models/organization-namespace';
 import UserModel from 'irene/models/user';
 import OrganizationUserModel from 'irene/models/organization-user';
 
-import { NfNsreqstd2Context } from '../messages/nf-nsreqstd2/context';
-import { NfNsreqstd1Context } from '../messages/nf-nsreqstd1/context';
-import { NfStrUrlNsreqstd2Context } from '../messages/nf-str-url-nsreqstd2/context';
-import { NfStrUrlNsreqstd1Context } from '../messages/nf-str-url-nsreqstd1/context';
+import { type NfNsreqstd2Context } from '../messages/nf-nsreqstd2/context';
+import { type NfNsreqstd1Context } from '../messages/nf-nsreqstd1/context';
+import { type NfStrUrlNsreqstd2Context } from '../messages/nf-str-url-nsreqstd2/context';
+import { type NfStrUrlNsreqstd1Context } from '../messages/nf-str-url-nsreqstd1/context';
 
 interface NotificationsPageNamespaceMessageSignature {
   Args: {

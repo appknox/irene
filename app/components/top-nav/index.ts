@@ -18,7 +18,7 @@ type DefaultBlock = {
 
 export interface TopNavSignature {
   Args: {
-    isStoreknoxNav?: boolean;
+    product?: IreneProductVariants;
     user: UserModel;
     title?: string;
     showNotifications?: boolean;
@@ -55,7 +55,11 @@ export default class TopNavComponent extends Component<TopNavSignature> {
   }
 
   get showNotifications() {
-    return (!this.args.isStoreknoxNav && this.args.showNotifications) ?? true;
+    return this.args.showNotifications ?? true;
+  }
+
+  get product() {
+    return this.args.product ?? 'appknox';
   }
 
   get profileMenuItems() {

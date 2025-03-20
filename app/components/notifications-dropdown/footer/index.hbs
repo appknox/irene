@@ -7,7 +7,7 @@
 >
   <AkLink
     @color='primary'
-    @route='authenticated.dashboard.notifications'
+    @route={{this.viewAllNotificationsRoute}}
     @underline='always'
     @title='View notifications'
     {{on 'click' this.onClick}}

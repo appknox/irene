@@ -3,19 +3,20 @@
     type='button'
     local-class='nf-icon nf-button'
     {{on 'click' this.onClick}}
-    title='{{this.akNotifications.unReadCount}} unread notifications'
+    title='{{this.notificationService.unReadCount}} unread notifications'
     data-test-bell-icon
   >
     <div local-class='icon-container' data-test-bell-icon-trigger>
       <AkIcon @iconName='notifications' data-test-notification-icon />
 
-      {{#if this.akNotifications.hasUnReadNotifications}}
+      {{#if this.notificationService.hasUnReadNotifications}}
         <div local-class='nf-unread-dot' data-test-unread-dot></div>
       {{/if}}
     </div>
   </button>
 
   <NotificationsDropdown
+    @product={{@product}}
     @anchorRef={{this.anchorRef}}
     @onClose={{this.closeNotification}}
   />

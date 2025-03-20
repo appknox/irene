@@ -15,147 +15,190 @@ module(
     setupMirage(hooks);
     setupIntl(hooks, 'en');
 
-    test('it should render error component for non registered messageCode', async function (assert) {
-      this.notification = this.server.create('nf-in-app-notification', {
-        hasRead: true,
-        messageCode: 'NF_ERROR',
-        context: {
-          test_name: 'read',
-        },
-      });
-      await render(
-        hbs`<NotificationsPage::Message @notification={{this.notification}}/>`
-      );
-      assert
-        .dom('[data-test-notification-message-component]')
-        .exists()
-        .containsText('no message object registered for messageCode: NF_ERROR');
+    hooks.beforeEach(function () {
+      const getModelName = (product) =>
+        product === 'appknox'
+          ? 'nf-in-app-notification'
+          : 'sk-nf-in-app-notification';
+
+      this.setProperties({ getModelName });
     });
 
-    test('it should render context components based on message_code', async function (assert) {
-      class NotificationMesaageTest extends Component {}
-      class NotificationTestContext {
-        constructor(input) {
-          this.test_name = input.test_name;
-        }
+    test.each(
+      'it should render error component for non registered messageCode',
+      ['appknox', 'storeknox'],
+      async function (assert, product) {
+        this.set('product', product);
+
+        this.notification = this.server.create(this.getModelName(product), {
+          hasRead: true,
+          messageCode: 'NF_ERROR',
+          context: {
+            test_name: 'read',
+          },
+        });
+
+        await render(
+          hbs`<NotificationsPage::Message @notification={{this.notification}}/>`
+        );
+
+        assert
+          .dom('[data-test-notification-message-component]')
+          .exists()
+          .containsText(
+            'no message object registered for messageCode: NF_ERROR'
+          );
       }
+    );
 
-      setComponentTemplate(
-        hbs`<span data-test-notification-messages-test22>test {{@context.test_name}}</span>`,
-        NotificationMesaageTest
-      );
+    test.each(
+      'it should render context components based on message_code',
+      ['appknox', 'storeknox'],
+      async function (assert, product) {
+        this.set('product', product);
 
-      this.owner.register(
-        'component:notification-message-test',
-        NotificationMesaageTest
-      );
+        class NotificationMesaageTest extends Component {}
 
-      NotificationMap['NF_TEST'] = {
-        component: 'notification-message-test',
-        context: NotificationTestContext,
-      };
-
-      this.notification = this.server.create('nf-in-app-notification', {
-        hasRead: true,
-        messageCode: 'NF_TEST',
-        context: {
-          test_name: 'rand_read',
-        },
-      });
-
-      await render(
-        hbs`<NotificationsPage::Message @notification={{this.notification}}/>`
-      );
-
-      assert
-        .dom('[data-test-notification-message-component]')
-        .exists()
-        .containsText('test rand_read');
-    });
-
-    test('it should render relative createdOn', async function (assert) {
-      class NotificationMesaageTest extends Component {}
-      class NotificationTestContext {
-        constructor(input) {
-          this.test_name = input.test_name;
+        class NotificationTestContext {
+          constructor(input) {
+            this.test_name = input.test_name;
+          }
         }
+
+        setComponentTemplate(
+          hbs`<span data-test-notification-messages-test22>test {{@context.test_name}}</span>`,
+          NotificationMesaageTest
+        );
+
+        this.owner.register(
+          'component:notification-message-test',
+          NotificationMesaageTest
+        );
+
+        NotificationMap['NF_TEST'] = {
+          component: 'notification-message-test',
+          context: NotificationTestContext,
+        };
+
+        this.notification = this.server.create(this.getModelName(product), {
+          hasRead: true,
+          messageCode: 'NF_TEST',
+          context: {
+            test_name: 'rand_read',
+          },
+        });
+
+        await render(
+          hbs`<NotificationsPage::Message @notification={{this.notification}}/>`
+        );
+
+        assert
+          .dom('[data-test-notification-message-component]')
+          .exists()
+          .containsText('test rand_read');
       }
+    );
 
-      setComponentTemplate(
-        hbs`<span data-test-notification-messages-test22>test {{@context.test_name}}</span>`,
-        NotificationMesaageTest
-      );
+    test.each(
+      'it should render relative createdOn',
+      ['appknox', 'storeknox'],
+      async function (assert, product) {
+        this.set('product', product);
 
-      this.owner.register(
-        'component:notification-message-test',
-        NotificationMesaageTest
-      );
+        class NotificationMesaageTest extends Component {}
 
-      NotificationMap['NF_TEST'] = {
-        component: 'notification-message-test',
-        context: NotificationTestContext,
-      };
-
-      this.notification = this.server.create('nf-in-app-notification', {
-        hasRead: true,
-        messageCode: 'NF_TEST',
-        createdOn: new Date(),
-        context: {
-          test_name: 'rand_read',
-        },
-      });
-
-      await render(
-        hbs`<NotificationsPage::Message @notification={{this.notification}}/>`
-      );
-
-      assert
-        .dom('[data-test-notification-created-on]')
-        .exists()
-        .containsText('a few seconds ago');
-    });
-
-    test('it should unread/read notification', async function (assert) {
-      class NotificationMesaageTest extends Component {}
-      class NotificationTestContext {
-        constructor(input) {
-          this.test_name = input.test_name;
+        class NotificationTestContext {
+          constructor(input) {
+            this.test_name = input.test_name;
+          }
         }
+
+        setComponentTemplate(
+          hbs`<span data-test-notification-messages-test22>test {{@context.test_name}}</span>`,
+          NotificationMesaageTest
+        );
+
+        this.owner.register(
+          'component:notification-message-test',
+          NotificationMesaageTest
+        );
+
+        NotificationMap['NF_TEST'] = {
+          component: 'notification-message-test',
+          context: NotificationTestContext,
+        };
+
+        this.notification = this.server.create(this.getModelName(product), {
+          hasRead: true,
+          messageCode: 'NF_TEST',
+          createdOn: new Date(),
+          context: {
+            test_name: 'rand_read',
+          },
+        });
+
+        await render(
+          hbs`<NotificationsPage::Message @notification={{this.notification}}/>`
+        );
+
+        assert
+          .dom('[data-test-notification-created-on]')
+          .exists()
+          .containsText('a few seconds ago');
       }
+    );
 
-      setComponentTemplate(
-        hbs`<span data-test-notification-messages-test22>test {{@context.test_name}}</span>`,
-        NotificationMesaageTest
-      );
+    test.each(
+      'it should unread/read notification',
+      ['appknox', 'storeknox'],
+      async function (assert, product) {
+        this.set('product', product);
 
-      this.owner.register(
-        'component:notification-message-test',
-        NotificationMesaageTest
-      );
+        class NotificationMesaageTest extends Component {}
+        class NotificationTestContext {
+          constructor(input) {
+            this.test_name = input.test_name;
+          }
+        }
 
-      NotificationMap['NF_TEST'] = {
-        component: 'notification-message-test',
-        context: NotificationTestContext,
-      };
+        setComponentTemplate(
+          hbs`<span data-test-notification-messages-test22>test {{@context.test_name}}</span>`,
+          NotificationMesaageTest
+        );
 
-      this.notification = this.server.create('nf-in-app-notification', {
-        hasRead: true,
-        messageCode: 'NF_TEST',
-        createdOn: new Date(),
-        context: {
-          test_name: 'rand_read',
-        },
-      });
+        this.owner.register(
+          'component:notification-message-test',
+          NotificationMesaageTest
+        );
 
-      await render(
-        hbs`<NotificationsPage::Message @notification={{this.notification}}/>`
-      );
+        NotificationMap['NF_TEST'] = {
+          component: 'notification-message-test',
+          context: NotificationTestContext,
+        };
 
-      assert.dom('[data-test-notification-checkbox-label]').exists();
-      await click('[data-test-notification-checkbox-label]');
-      assert.false(this.notification.hasRead);
-      await click('[data-test-notification-checkbox-label]');
-      assert.true(this.notification.hasRead);
-    });
+        this.notification = this.server.create(this.getModelName(product), {
+          hasRead: true,
+          messageCode: 'NF_TEST',
+          createdOn: new Date(),
+          context: {
+            test_name: 'rand_read',
+          },
+        });
+
+        await render(
+          hbs`<NotificationsPage::Message @notification={{this.notification}}/>`
+        );
+
+        assert.dom('[data-test-notification-checkbox-label]').exists();
+
+        await click('[data-test-notification-checkbox-label]');
+
+        assert.false(this.notification.hasRead);
+
+        await click('[data-test-notification-checkbox-label]');
+
+        assert.true(this.notification.hasRead);
+      }
+    );
   }
 );
