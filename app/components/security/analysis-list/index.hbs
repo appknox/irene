@@ -26,14 +26,8 @@
           data-test-securityAnalysisListTable-scanTypeSelect
           as |vulnTypeObj|
         >
-          <AkStack @spacing='1'>
-            <AkStack @alignItems='center'>
-              {{#if (eq this.vulnerabilityType vulnTypeObj)}}
-                <AkIcon @iconName='radio-button-checked' @color='success' />
-              {{else}}
-                <AkIcon @iconName='radio-button-unchecked' />
-              {{/if}}
-            </AkStack>
+          <AkStack @spacing='1' @alignItems='center'>
+            <AkRadio @checked={{eq this.vulnerabilityType vulnTypeObj}} />
 
             {{#if (eq vulnTypeObj -1)}}
               {{t 'allScans'}}

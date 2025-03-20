@@ -527,10 +527,6 @@ body {
     --hover-light-background
   );
 
-  // variables for organization-namespace/namespace-value
-  --organization-namespace-value-color-ios: var(--ios);
-  --organization-namespace-value-color-android: var(--android);
-
   // variables for organization-namespace
   --organization-namespace-loading-container-background: var(
     --background-light
@@ -571,8 +567,6 @@ body {
   --add-team-member-loading-container-border-color: var(--border-color-1);
 
   // variables for organization-team/add-team-project
-  --add-team-project-color-ios: var(--ios);
-  --add-team-project-color-android: var(--android);
   --add-team-project-loading-container-border-radius: var(--border-radius);
   --add-team-project-loading-container-border-color: var(--border-color-1);
 
@@ -610,10 +604,6 @@ body {
   --organization-team-project-list-loading-container-border-color: var(
     --border-color-1
   );
-
-  // variables for organization-team/project-list/project-info
-  --organization-team-project-list-info-color-ios: var(--ios);
-  --organization-team-project-list-info-color-android: var(--android);
 
   // variables for organization-mfa
   --organization-mfa-border-radius: var(--border-radius);
@@ -1278,8 +1268,6 @@ body {
   --file-compare-header-file-icon-border-color: var(--neutral-grey-100);
   --file-compare-header-file-icon-border-radius: var(--border-radius);
   --file-compare-header-info-box-shadow: var(--box-shadow-6);
-  --file-compare-header-platform-android-color: var(--android);
-  --file-compare-header-platform-ios-color: var(--ios);
 
   // variables for file-compare/skeleton-loader
   --file-compare-skeleton-loader-background-color: var(--common-white);
@@ -1345,8 +1333,6 @@ body {
     --hover-light-background
   );
   --file-overview-border-color-dark: var(--border-color-1);
-  --file-overview-color-android: var(--android);
-  --file-overview-color-ios: var(--ios);
   --file-overview-store-logo-container-background-color: var(
     --neutral-grey-200
   );
@@ -1382,8 +1368,6 @@ body {
   --project-settings-header-info-text-color: var(--neutral-grey-500);
   --project-settings-header-tabs-box-shadow: var(--box-shadow-6);
   --project-settings-header-project-details-box-shadow: var(--box-shadow-8);
-  --project-settings-header-color-android: var(--android);
-  --project-settings-header-color-ios: var(--ios);
 
   // variables for project-settings/dast-automation
   --project-settings-dast-automation-root-border-color: var(--border-color-1);

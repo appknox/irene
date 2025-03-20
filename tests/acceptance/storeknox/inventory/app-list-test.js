@@ -360,7 +360,12 @@ module('Acceptance | storeknox/inventory/app-list', function (hooks) {
             iAppElement
           )
           .hasClass(with_action_required ? /error/ : /success/)
-          .hasClass(with_action_required ? /info/ : /check-circle/);
+          .hasAttribute(
+            'icon',
+            with_action_required
+              ? 'material-symbols:info'
+              : 'material-symbols:check-circle'
+          );
 
         // Check for needs action tooltip
         const tooltipTrigger =

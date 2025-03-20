@@ -27,15 +27,11 @@
         class='py-1 pl-2'
         {{on 'click' (fn this.selectPlatform platform.value)}}
       >
-        <AkStack @alignItems='center'>
-          {{#if (eq this.selectedPlatform platform.value)}}
-            <AkIcon @iconName='radio-button-checked' @color='success' />
-          {{else}}
-            <AkIcon @iconName='radio-button-unchecked' />
-          {{/if}}
-        </AkStack>
+        <AkStack @spacing='1' @alignItems='center'>
+          <AkRadio @checked={{eq this.selectedPlatform platform.value}} />
 
-        <AkTypography>{{platform.key}}</AkTypography>
+          <AkTypography>{{platform.key}}</AkTypography>
+        </AkStack>
       </AkStack>
     {{/each}}
 

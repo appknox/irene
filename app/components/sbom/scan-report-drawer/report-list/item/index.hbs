@@ -45,7 +45,11 @@
                 data-clipboard-text={{@reportDetails.copyText}}
                 data-test-sbomReportList-reportCopyBtn
               >
-                <AkIcon @iconName='content-copy' @color='primary' />
+                <AkIcon
+                  @iconName='content-copy'
+                  @variant='outlined'
+                  @color='primary'
+                />
               </AkIconButton>
             </AkClipboard>
           {{/if}}
@@ -65,7 +69,7 @@
           disabled={{this.handleDownloadReport.isRunning}}
           data-test-sbomReportList-reportDownloadBtn
         >
-          <AkIcon @variant='outlined' @iconName='file-download' />
+          <AkIcon @iconName='download' />
         </AkIconButton>
       {{/if}}
     </li.rightIcon>

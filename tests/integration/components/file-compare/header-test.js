@@ -66,12 +66,17 @@ module('Integration | Component | file-compare/header', function (hooks) {
       .dom('[data-test-fileCompareHeader-projectOverview-projectID]')
       .doesNotExist();
 
-    assert
-      .dom('[data-test-fileCompareHeader-projectOverview-platformIcon]')
-      .exists()
-      .hasClass(
-        RegExp(`platform-${this.file1.project.get('platformIconClass')}`)
-      );
+    if (this.file1.project.get('platformIconClass') === 'android') {
+      assert
+        .dom('[data-test-fileCompareHeader-projectOverview-platformIcon]')
+        .exists()
+        .hasAttribute('icon', 'material-symbols:android');
+    } else {
+      assert
+        .dom('[data-test-fileCompareHeader-projectOverview-platformIcon]')
+        .exists()
+        .hasAttribute('icon', 'fa-brands:apple');
+    }
 
     assert
       .dom('[data-test-fileCompareHeader-projectOverview-settingsBtn]')

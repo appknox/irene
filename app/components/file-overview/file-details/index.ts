@@ -12,6 +12,10 @@ export default class FileOverviewFileDetailsComponent extends Component<FileOver
   get hasVersion() {
     return typeof this.args.file?.version !== 'undefined';
   }
+
+  get platformIconClass() {
+    return this.args.file?.project.get('platformIconClass');
+  }
 }
 
 declare module '@glint/environment-ember-loose/registry' {

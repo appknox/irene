@@ -26,7 +26,7 @@ module('Integration | Component | ak-tabs', function (hooks) {
           badgeCount: 100,
           hasBadge: true,
           label: 'Tab Two',
-          iconName: 'people',
+          iconName: 'group',
         },
       ],
     });

@@ -199,7 +199,7 @@ module('Integration | Component | storeknox-wrapper', function (hooks) {
     storeknoxMenuItems.forEach((it, index) => {
       assert
         .dom('[data-test-side-menu-item-icon]', menuItemEle[index])
-        .hasClass(`ak-icon-${it.icon}`);
+        .hasAttribute('icon', `material-symbols:${it.icon}`);
     });
 
     assert.dom('[data-test-side-lower-menu]').exists();
@@ -221,7 +221,7 @@ module('Integration | Component | storeknox-wrapper', function (hooks) {
 
       assert
         .dom('[data-test-side-lower-menu-item-icon]', lowerMenuItemEle[index])
-        .hasClass(`ak-icon-${it.icon}`);
+        .hasAttribute('icon', `material-symbols:${it.icon}`);
     });
 
     const collapseButton = find(
@@ -241,7 +241,7 @@ module('Integration | Component | storeknox-wrapper', function (hooks) {
 
       assert
         .dom('[data-test-side-lower-menu-item-icon]', lowerMenuItemEle[index])
-        .hasClass(`ak-icon-${it.icon}`);
+        .hasAttribute('icon', `material-symbols:${it.icon}`);
     });
   });
 });

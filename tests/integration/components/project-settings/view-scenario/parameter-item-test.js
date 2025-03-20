@@ -134,10 +134,17 @@ module(
         .exists()
         .hasValue(this.parameter.value);
 
-      assert
-        .dom(selectors.paramValueTextFieldSecureIcon)
-        .exists()
-        .hasClass(this.parameter.isSecure ? /lock/ : /lock-open/);
+      if (this.parameter.isSecure) {
+        assert
+          .dom(selectors.paramValueTextFieldSecureIcon)
+          .exists()
+          .hasAttribute('icon', 'material-symbols:lock');
+      } else {
+        assert
+          .dom(selectors.paramValueTextFieldSecureIcon)
+          .exists()
+          .hasAttribute('icon', 'material-symbols:lock-open-outline');
+      }
 
       assert.dom(selectors.paramDeleteBtn).exists();
       assert.dom(selectors.paramDeleteBtnIcon).exists();
@@ -280,7 +287,7 @@ module(
       assert
         .dom(selectors.paramValueTextFieldSecureIcon)
         .exists()
-        .hasClass(/lock-open/);
+        .hasAttribute('icon', 'material-symbols:lock-open-outline');
 
       await click(selectors.paramValueTextFieldSecureIcon);
 
@@ -295,8 +302,8 @@ module(
 
       assert
         .dom(selectors.paramValueTextFieldSecureIcon)
-        .doesNotHaveClass(/lock-open/)
-        .hasClass(/lock/);
+        .exists()
+        .hasAttribute('icon', 'material-symbols:lock');
 
       const notify = this.owner.lookup('service:notifications');
 

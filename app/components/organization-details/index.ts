@@ -35,7 +35,7 @@ export default class OrganizationDetailsComponent extends Component {
         badgeCount: this.organization.selected?.membersCount,
         hasBadge: true,
         label: this.intl.t('users'),
-        iconName: 'people',
+        iconName: 'group',
       },
       {
         id: 'teams',

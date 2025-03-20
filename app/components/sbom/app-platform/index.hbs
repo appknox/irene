@@ -1,13 +1,15 @@
-<AkStack
-  ...attributes
-  data-test-appPlatform-container
-  local-class='app-platform-icon-container {{if @bordered "bordered"}}'
-  @justifyContent='center'
-  @alignItems='center'
->
-  <AkIcon
-    data-test-appPlatform-icon
-    @iconName='{{this.platformIconClass}}'
-    local-class='app-platform-icon-{{this.platformIconClass}}'
-  />
-</AkStack>
+{{#if this.platformIconClass}}
+  <AkStack
+    ...attributes
+    data-test-appPlatform-container
+    local-class='app-platform-icon-container {{if @bordered "bordered"}}'
+    @justifyContent='center'
+    @alignItems='center'
+  >
+    <AkIcon
+      data-test-appPlatform-icon
+      @iconName='{{this.platformIconName}}'
+      local-class='app-platform-icon-{{this.platformIconClass}}'
+    />
+  </AkStack>
+{{/if}}

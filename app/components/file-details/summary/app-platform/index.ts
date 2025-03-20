@@ -11,6 +11,16 @@ export default class FileDetailsSummaryAppPlatformComponent extends Component<Fi
   get platformIconClass() {
     return this.args.file.project.get('platformIconClass');
   }
+
+  get platformIconName() {
+    if (this.platformIconClass === 'apple') {
+      return 'fa-brands:apple';
+    } else if (this.platformIconClass === 'android') {
+      return 'android';
+    }
+
+    return '';
+  }
 }
 
 declare module '@glint/environment-ember-loose/registry' {

@@ -120,13 +120,13 @@ module('Integration | Component | file-details/summary', function (hooks) {
 
     assert
       .dom('[data-test-fileDetailsSummary-showMoreOrLessBtn-icon]')
-      .hasClass('ak-icon-arrow-drop-down');
+      .hasAttribute('icon', 'material-symbols:arrow-drop-down');
 
     await click('[data-test-fileDetailsSummary-showMoreOrLessBtn]');
 
     assert
       .dom('[data-test-fileDetailsSummary-showMoreOrLessBtn-icon]')
-      .hasClass('ak-icon-arrow-drop-up');
+      .hasAttribute('icon', 'material-symbols:arrow-drop-up');
 
     hiddenFileOverviewDetails.forEach((d) => {
       assert
@@ -227,7 +227,7 @@ module('Integration | Component | file-details/summary', function (hooks) {
 
     assert
       .dom('[data-test-fileDetailsSummary-showMoreOrLessBtn-icon]')
-      .hasClass('ak-icon-arrow-drop-down');
+      .hasAttribute('icon', 'material-symbols:arrow-drop-down');
 
     await click('[data-test-fileDetailsSummary-showMoreOrLessBtn]');
 
@@ -344,7 +344,7 @@ module('Integration | Component | file-details/summary', function (hooks) {
 
     assert
       .dom('[data-test-fileDetailsSummary-showMoreOrLessBtn-icon]')
-      .hasClass('ak-icon-arrow-drop-down');
+      .hasAttribute('icon', 'material-symbols:arrow-drop-down');
 
     await click('[data-test-fileDetailsSummary-showMoreOrLessBtn]');
 

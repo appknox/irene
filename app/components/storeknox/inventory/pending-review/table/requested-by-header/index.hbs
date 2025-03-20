@@ -32,15 +32,11 @@
         {{style cursor='pointer'}}
         {{on 'click' (fn this.selectDiscovery discovery.value)}}
       >
-        <AkStack @alignItems='center'>
-          {{#if (eq this.selectedDiscovery discovery.value)}}
-            <AkIcon @iconName='radio-button-checked' @color='success' />
-          {{else}}
-            <AkIcon @iconName='radio-button-unchecked' />
-          {{/if}}
-        </AkStack>
+        <AkStack @spacing='1' @alignItems='center'>
+          <AkRadio @checked={{eq this.selectedDiscovery discovery.value}} />
 
-        <AkTypography>{{discovery.key}}</AkTypography>
+          <AkTypography>{{discovery.key}}</AkTypography>
+        </AkStack>
       </AkStack>
     {{/each}}
 

@@ -480,7 +480,7 @@ module('Acceptance | storeknox/discovery/results', function (hooks) {
       assert
         .dom(addOrRequestedIconSelector, srElement)
         .exists()
-        .hasClass(is_owner ? /ak-icon-inventory-2/ : /ak-icon-schedule-send/);
+        .hasClass(is_owner ? /already-exist-icon/ : /requested-icon/);
     }
   );
 
@@ -627,9 +627,7 @@ module('Acceptance | storeknox/discovery/results', function (hooks) {
 
         assert
           .dom(addOrRequestedIconSelector, srElement)
-          .hasClass(
-            is_approved ? /ak-icon-inventory-2/ : /ak-icon-schedule-send/
-          );
+          .hasClass(is_approved ? /already-exist-icon/ : /requested-icon/);
       }
     }
   });

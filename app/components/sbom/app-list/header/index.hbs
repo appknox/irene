@@ -66,14 +66,10 @@
       data-test-select-platform-container
       as |platformObject|
     >
-      <AkStack @spacing='1'>
-        <AkStack @alignItems='center'>
-          {{#if (eq this.selectedPlatform.value platformObject.value)}}
-            <AkIcon @iconName='radio-button-checked' @color='success' />
-          {{else}}
-            <AkIcon @iconName='radio-button-unchecked' />
-          {{/if}}
-        </AkStack>
+      <AkStack @spacing='1' @alignItems='center'>
+        <AkRadio
+          @checked={{eq this.selectedPlatform.value platformObject.value}}
+        />
 
         {{platformObject.key}}
       </AkStack>

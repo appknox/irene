@@ -38,12 +38,10 @@
   </AkStack>
 
   <AkStack @spacing='1'>
-    <AkStack
-      local-class='platform-{{@file.project.platformIconClass}}'
+    <AppPlatformIcon
       data-test-fileOverview-platformIcon
-    >
-      <AkIcon @iconName={{@file.project.platformIconClass}} />
-    </AkStack>
+      @platform={{@file.project.platformIconClass}}
+    />
 
     {{#if @file.submission.url}}
       <AkTooltip

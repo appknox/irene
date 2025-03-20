@@ -42,7 +42,11 @@
               data-test-vaReportListItem-passCopyBtn
               data-clipboard-text={{@reportDetails.copyText}}
             >
-              <AkIcon @iconName='content-copy' @color='primary' />
+              <AkIcon
+                @iconName='content-copy'
+                @variant='outlined'
+                @color='primary'
+              />
             </AkIconButton>
           </AkClipboard>
         {{/if}}
@@ -72,8 +76,7 @@
           />
         {{else}}
           <AkIcon
-            @variant='outlined'
-            @iconName='file-download'
+            @iconName='download'
             data-test-vaReportListItem-reportDownloadBtn-icon
           />
         {{/if}}

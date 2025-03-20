@@ -13,6 +13,10 @@ export default class SbomAppPlatformComponent extends Component<SbomAppPlatformS
   get platformIconClass() {
     return this.args.sbomProject?.project.get('platformIconClass');
   }
+
+  get platformIconName() {
+    return this.platformIconClass === 'apple' ? 'fa-brands:apple' : 'android';
+  }
 }
 
 declare module '@glint/environment-ember-loose/registry' {

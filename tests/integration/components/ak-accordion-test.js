@@ -38,11 +38,10 @@ module('Integration | Component | ak-accordion', function (hooks) {
     assert.dom('[data-test-ak-accordion]').exists();
     assert.dom('[data-test-ak-accordion-summary]').exists();
 
-    const summaryIconClassName = new RegExp(this.summaryIconName);
     assert
       .dom('[data-test-akAccordion-summaryIcon]')
       .exists()
-      .hasClass(summaryIconClassName);
+      .hasAttribute('icon', `material-symbols:${this.summaryIconName}`);
 
     assert
       .dom('[data-test-akAccordion-summaryText]')
@@ -249,7 +248,7 @@ module('Integration | Component | ak-accordion', function (hooks) {
 
         <:summaryIcon>
           <AkIcon
-            @iconName='people'
+            @iconName='group'
             @color="success"
             data-test-accordion-custom-icon
           />

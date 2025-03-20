@@ -55,11 +55,3 @@
   grid-template-columns: repeat(auto-fill, minmax(475px, 1fr));
   gap: 1.4286em;
 }
-
-.platform-android {
-  color: var(--file-compare-header-platform-android-color);
-}
-
-.platform-apple {
-  color: var(--file-compare-header-platform-ios-color);
-}
