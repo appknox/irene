@@ -2,7 +2,7 @@ export class NfApistcmpltd1Context {
   package_name: string;
   platform: number;
   platform_display: string;
-  file_id: number;
+  file_id: string;
   file_name: string;
   version: string;
   version_code: string;

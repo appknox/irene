@@ -148,7 +148,7 @@ module('Integration | Component | storeknox-wrapper', function (hooks) {
 
     // assert.dom('[data-test-topNav-title]').hasText(this.title);
 
-    assert.dom('[data-test-bell-icon]').doesNotExist();
+    assert.dom('[data-test-bell-icon]').exists();
 
     assert
       .dom('[data-test-topNav-profileBtn]')

@@ -200,6 +200,7 @@ export default class AkBreadcrumbsService extends Service {
     // SCENARIO A: In cases where same route exists in crumbs but with diff models, return fallback or recalculate breadcrumbs
     // SCENARIO B: If navigation to a page is from a different route group return fallback or an empty array to allow for regenration;
     // SCENARIO C: If navigation to a page is from a root route with same route group. Reason being, navigation to a root route would clear crumb items;
+    // SCENARIO D: In cases where navigation is from a route with an errored model. Can happen when switching routes via the notifications drawer;
     const originRouteIndexWithoutModelCheck = Number(
       lastTransItems?.findIndex((it) => it.route === originRouteName)
     );
@@ -220,12 +221,16 @@ export default class AkBreadcrumbsService extends Service {
     const transitionFromRootRouteWithSameGroup =
       routeFromCrumbProps?.isRootCrumb && !routFromAndRouteToHaveDistinctGroups;
 
+    const routeFromExistsButWithNoBCInfo =
+      routeFrom !== null && routeFromCrumbProps && !routeFromCrumbProps.title;
+
     if (
-      routeFrom &&
-      routeFromAndToTitlesExist &&
-      (originRouteHasDiffModelWithSameRouteInCrumbs ||
-        routFromAndRouteToHaveDistinctGroups ||
-        transitionFromRootRouteWithSameGroup)
+      (routeFrom &&
+        routeFromAndToTitlesExist &&
+        (originRouteHasDiffModelWithSameRouteInCrumbs ||
+          routFromAndRouteToHaveDistinctGroups ||
+          transitionFromRootRouteWithSameGroup)) ||
+      routeFromExistsButWithNoBCInfo
     ) {
       return (
         originCrumbProps?.fallbackCrumbs?.map((it) => ({
@@ -454,6 +459,7 @@ export default class AkBreadcrumbsService extends Service {
         (it) =>
           (it.route === routeName ||
             this._addIndexToRoute(it.route) === routeName ||
+            this._addIndexToRoute(routeName) === it.route ||
             it.route?.includes(String(routeName))) &&
           it.models?.join(',') === routeCrumbs?.models?.join(',') &&
           it.title === routeCrumbs?.title

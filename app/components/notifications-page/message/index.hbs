@@ -1,17 +1,22 @@
 <div data-test-notification-message local-class='message_container_outer'>
   <div local-class='message_container_inner'>
     <div data-test-notification-message-component>
-      {{component
-        this.componentName
-        notification=this.notification
-        context=this.notificatonContext
-      }}
+      {{#let (component this.componentName) as |ComponentName|}}
+        <ComponentName
+          @context={{this.notificationContext}}
+          @notification={{@notification}}
+        />
+      {{/let}}
     </div>
+
     <AkTypography
       data-test-notification-created-on
       local-class='notification_created_on'
-    >{{dayjs-from-now this.notification.createdOn}}</AkTypography>
+    >
+      {{dayjs-from-now this.notification.createdOn}}
+    </AkTypography>
   </div>
+
   <div local-class='unread_container'>
     <input
       id='un_read_checkbox-{{this.uniqueID}}'
@@ -20,6 +25,7 @@
       local-class='unread'
       {{on 'input' this.changeRead}}
     />
+
     <label
       for='un_read_checkbox-{{this.uniqueID}}'
       local-class='unread_label'

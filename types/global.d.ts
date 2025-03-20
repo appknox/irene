@@ -60,9 +60,7 @@ declare module '@glint/environment-ember-loose/registry' {
     }>;
 
     'dayjs-from-now': HelperLike<{
-      Args: {
-        Positional: [Date];
-      };
+      Args: { Positional: [string | Date | number] };
       Return: string;
     }>;
 
@@ -84,14 +82,14 @@ declare module '@glint/environment-ember-loose/registry' {
       Args: {
         Positional: PrimitiveTypes[];
       };
-      Return: boolean;
+      Return: unknown;
     }>;
 
     and: HelperLike<{
       Args: {
         Positional: PrimitiveTypes[];
       };
-      Return: boolean;
+      Return: unknown;
     }>;
 
     not: HelperLike<{

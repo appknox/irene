@@ -8,10 +8,11 @@ import {
   NotificationMap,
   NotificationMessageKey,
 } from 'irene/components/notifications-page/notification_map';
+import SkNfInAppNotificationModel from 'irene/models/sk-nf-in-app-notification';
 
 export interface NotificationsPageMessageComponentArgs {
   Args: {
-    notification: NfInAppNotificationModel;
+    notification: NfInAppNotificationModel | SkNfInAppNotificationModel;
   };
 }
 
@@ -20,9 +21,11 @@ export default class NotificationsPageMessageComponent extends Component<Notific
 
   get notificationMapObject() {
     const nmo = NotificationMap[this.notificationCode];
+
     if (nmo) {
       return nmo;
     }
+
     return NotificationMap['ERROR'];
   }
 
@@ -42,12 +45,15 @@ export default class NotificationsPageMessageComponent extends Component<Notific
     return this.notificationMapObject.component;
   }
 
-  get notificatonContext() {
+  get notificationContext() {
     const contextClass = this.notificationMapObject.context;
+
     if (!contextClass) {
-      this.logger.error(`class not defiend for ${this.componentName}`);
+      this.logger.error(`class not defined for ${this.componentName}`);
+
       return;
     }
+
     return new contextClass(this.notification.context);
   }
 

@@ -1,7 +1,9 @@
-<AkStack
-  @direction='column'
-  @justifyContent='center'
-  data-test-storeknoxInventoryDetails-unscannedVersionTable-storeVersion
->
-  {{@skAppVersion.version}}
-</AkStack>
+<AkTooltip @placement='top' @arrow={{true}} @title={{@skAppVersion.version}}>
+  <AkTypography
+    @noWrap={{true}}
+    {{style maxWidth='100px'}}
+    data-test-storeknoxInventoryDetails-unscannedVersionTable-storeVersion
+  >
+    {{@skAppVersion.version}}
+  </AkTypography>
+</AkTooltip>
