@@ -3,7 +3,7 @@ export class NfStrUrlUploadSuccessContext {
   package_name: string;
   platform: number;
   platform_display: string;
-  file_id: number;
+  file_id: string;
   version: string;
   version_code: number;
 

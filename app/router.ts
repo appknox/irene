@@ -330,6 +330,7 @@ Router.map(function () {
 
         this.route('review-logs', { path: '/discover/review-logs' });
         this.route('archived-apps', { path: '/inventory/archived-apps' });
+        this.route('notifications');
       });
 
       this.route('admin', { path: '/dashboard/admin' }, function () {

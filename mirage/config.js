@@ -677,5 +677,46 @@ function routes() {
     return new Response(204, {}, {});
   });
 
+  this.get('v2/sk_nf_in_app_notifications', function (schema, request) {
+    let data = schema.skNfInAppNotifications.all();
+
+    if (request.queryParams.has_read) {
+      data = schema.skNfInAppNotifications.where({
+        hasRead: request.queryParams.has_read == 'true',
+      });
+    }
+
+    let limit = data.length;
+    let offset = 0;
+
+    if (request.queryParams.limit) {
+      limit = request.queryParams.limit;
+    }
+
+    if (request.queryParams.offset) {
+      offset = request.queryParams.offset;
+    }
+
+    const retdata = data.slice(offset, offset + limit);
+
+    return {
+      count: data.length,
+      next: null,
+      previous: null,
+      results: this.serialize(retdata).skNfInAppNotifications,
+    };
+  });
+
+  this.post(
+    'v2/sk_nf_in_app_notifications/mark_all_as_read',
+    function (schema) {
+      const notifications = schema.skNfInAppNotifications.all();
+
+      notifications.update('hasRead', true);
+
+      return new Response(204, {}, {});
+    }
+  );
+
   this.passthrough();
 }

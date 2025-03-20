@@ -23,59 +23,104 @@ module('Integration | Component | notifications-page/header', function (hooks) {
 
   hooks.beforeEach(function () {
     this.owner.register('service:ak-notifications', AkNotificationsServiceStub);
+    this.owner.register('service:sk-notifications', AkNotificationsServiceStub);
+
+    const getModelName = (product) =>
+      product === 'appknox'
+        ? 'nf-in-app-notification'
+        : 'sk-nf-in-app-notification';
+
+    const getServiceName = (product) =>
+      `service:${product === 'appknox' ? 'ak-notifications' : 'sk-notifications'}`;
+
+    this.setProperties({ getModelName, getServiceName });
   });
 
-  test('it renders', async function (assert) {
-    await render(hbs`<NotificationsPage::Header />`);
+  test.each(
+    'it renders',
+    ['appknox', 'storeknox'],
+    async function (assert, product) {
+      this.set('product', product);
 
-    assert.notEqual(
-      this.element.textContent.trim().indexOf(t('notifications')),
-      -1
-    );
-  });
+      await render(
+        hbs`<NotificationsPage::Header @product={{this.product}} />`
+      );
 
-  test('it should show unread count', async function (assert) {
-    await render(hbs`<NotificationsPage::Header />`);
+      assert.notEqual(
+        this.element.textContent.trim().indexOf(t('notifications')),
+        -1
+      );
+    }
+  );
 
-    assert.dom('[data-test-unread-count]').exists().containsText('0');
+  test.each(
+    'it should show unread count',
+    ['appknox', 'storeknox'],
+    async function (assert, product) {
+      this.set('product', product);
 
-    const service = this.owner.lookup('service:ak-notifications');
-    service.unReadCount = 1;
+      await render(
+        hbs`<NotificationsPage::Header @product={{this.product}} />`
+      );
 
-    await render(hbs`<NotificationsPage::Header />`);
+      assert.dom('[data-test-unread-count]').exists().containsText('0');
 
-    assert.dom('[data-test-unread-count]').containsText('1');
-  });
+      const service = this.owner.lookup(this.getServiceName(product));
+      service.unReadCount = 1;
 
-  test('it should trigger refresh on show unread change', async function (assert) {
-    assert.expect(2);
+      await render(
+        hbs`<NotificationsPage::Header @product={{this.product}} />`
+      );
 
-    const service = this.owner.lookup('service:ak-notifications');
+      assert.dom('[data-test-unread-count]').containsText('1');
+    }
+  );
 
-    service.refresh.perform = () => {
-      assert.true(true, 'refresh.perform called');
-    };
+  test.each(
+    'it should trigger refresh on show unread change',
+    ['appknox', 'storeknox'],
+    async function (assert, product) {
+      this.set('product', product);
 
-    await render(hbs`<NotificationsPage::Header />`);
+      assert.expect(2);
 
-    assert.dom('[data-test-ak-toggle-unread]').exists();
+      const service = this.owner.lookup(this.getServiceName(product));
 
-    await click('[data-test-ak-toggle-unread] [data-test-toggle-input]');
-  });
+      service.refresh.perform = () => {
+        assert.true(true, 'refresh.perform called');
+      };
 
-  test('it should trigger markAllAsRead', async function (assert) {
-    assert.expect(2);
+      await render(
+        hbs`<NotificationsPage::Header @product={{this.product}} />`
+      );
 
-    const service = this.owner.lookup('service:ak-notifications');
+      assert.dom('[data-test-ak-toggle-unread]').exists();
 
-    service.markAllAsRead.perform = () => {
-      assert.true(true, 'markAllAsRead.perform called');
-    };
+      await click('[data-test-ak-toggle-unread] [data-test-toggle-input]');
+    }
+  );
 
-    await render(hbs`<NotificationsPage::Header />`);
+  test.each(
+    'it should trigger markAllAsRead',
+    ['appknox', 'storeknox'],
+    async function (assert, product) {
+      this.set('product', product);
 
-    assert.dom('[data-test-ak-button-mark-all-as-read]').exists();
+      assert.expect(2);
 
-    await click('[data-test-ak-button-mark-all-as-read]');
-  });
+      const service = this.owner.lookup(this.getServiceName(product));
+
+      service.markAllAsRead.perform = () => {
+        assert.true(true, 'markAllAsRead.perform called');
+      };
+
+      await render(
+        hbs`<NotificationsPage::Header @product={{this.product}} />`
+      );
+
+      assert.dom('[data-test-ak-button-mark-all-as-read]').exists();
+
+      await click('[data-test-ak-button-mark-all-as-read]');
+    }
+  );
 });

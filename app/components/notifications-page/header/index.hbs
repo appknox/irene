@@ -18,10 +18,10 @@
       <span local-class='notification_unread_text'>Only show unread</span>
 
       <AkToggle
-        @checked={{this.akNotifications.showUnReadOnly}}
+        @checked={{this.notificationService.showUnReadOnly}}
         @size='small'
-        local-class='notification_unread_toggle'
         @onChange={{this.onShowUnReadOnlyChange}}
+        local-class='notification_unread_toggle'
         data-test-ak-toggle-unread
       />
       {{! <span local-class='vertical-divider'></span>

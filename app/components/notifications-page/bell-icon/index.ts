@@ -4,10 +4,38 @@ import { service } from '@ember/service';
 import { action } from '@ember/object';
 
 import type AkNotificationsService from 'irene/services/ak-notifications';
+import type SkNotificationsService from 'irene/services/sk-notifications';
+import type { NotificationServiceMap } from '..';
 
-export default class NotificationsPageBellIconComponent extends Component {
-  @tracked anchorRef: HTMLElement | null = null;
+interface NotificationsPageBellIconSignature {
+  Args: {
+    product: IreneProductVariants;
+  };
+}
+
+export default class NotificationsPageBellIconComponent extends Component<NotificationsPageBellIconSignature> {
   @service declare akNotifications: AkNotificationsService;
+  @service declare skNotifications: SkNotificationsService;
+
+  @tracked anchorRef: HTMLElement | null = null;
+
+  notificationServiceMap: NotificationServiceMap;
+
+  constructor(
+    owner: unknown,
+    args: NotificationsPageBellIconSignature['Args']
+  ) {
+    super(owner, args);
+
+    this.notificationServiceMap = {
+      appknox: this.akNotifications,
+      storeknox: this.skNotifications,
+    };
+  }
+
+  get notificationService() {
+    return this.notificationServiceMap[this.args.product];
+  }
 
   @action
   onClick(event: Event) {
@@ -28,7 +56,7 @@ export default class NotificationsPageBellIconComponent extends Component {
 
   @action
   fetchNotifications() {
-    this.akNotifications.fetchUnRead.perform();
+    this.notificationService.fetchUnRead.perform();
   }
 }
 

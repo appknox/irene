@@ -26,7 +26,7 @@ module('Unit | Service | ak-notifications', function (hooks) {
     assert.false(service.showUnReadOnly);
     assert.strictEqual(service.unReadCount, 3);
     assert.strictEqual(service.notifications.length, 10);
-    assert.strictEqual(service.notificaions_drop_down.length, 3);
+    assert.strictEqual(service.notifications_drop_down.length, 3);
   });
 
   test('it should only fetch only unread', async function (assert) {
@@ -47,6 +47,6 @@ module('Unit | Service | ak-notifications', function (hooks) {
     assert.true(service.showUnReadOnly);
     assert.strictEqual(service.unReadCount, 3);
     assert.strictEqual(service.notifications.length, 3);
-    assert.strictEqual(service.notificaions_drop_down.length, 3);
+    assert.strictEqual(service.notifications_drop_down.length, 3);
   });
 });

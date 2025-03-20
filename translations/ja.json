@@ -932,7 +932,8 @@
   "notificationModule": {
     "currentRiskStatusFile": "Current risk status of file",
     "messages": {
-      "nf-am-newversn": "Unscanned version of {platform_display} app <strong>{app_name} ({package_name})</strong> detected via store monitoring. Please <strong>upload app binary of version {version_unscanned} to perform scan.</strong>",
+      "nf-am-newversn": "Unscanned version of {platform_display} app <strong>{app_name} ({package_name})</strong> detected via storeknox. Please <strong>upload app binary of version {version_unscanned} to perform scan.</strong>",
+      "nf-sk-newversn": "Unscanned version of {platform_display} app <strong>{app_name} ({package_name})</strong> detected. Please <strong>upload app binary of version {version_unscanned} to perform scan.</strong>",
       "nf-apistcmpltd1": "<strong>API scan completed</strong> for {platform_display} app <strong>{file_name} ({package_name})</strong>.",
       "nf-dastcmpltd1": "<strong>Dynamic scan completed</strong> for {platform_display} app <strong>{file_name} ({package_name})</strong>.",
       "nf-nsapprvd1": "Your <strong>namespace request</strong> for {platform_display} app <strong>{namespace_value}</strong> created on {namespace_created_on} <strong>has approved</strong> by {moderator_username}. Please <strong>upload the app again</strong> to perform scan.",
@@ -989,6 +990,7 @@
     "viewProjectSettings": "View project settings",
     "viewStoreMonitoring": "View store monitoring",
     "viewStoreMonitoringResults": "View store monitoring results",
+    "viewMonitoringResults": "View monitoring results",
     "viewSBOMResults": "View SBOM results",
     "viewAppOnStore": "View App on Store"
   },

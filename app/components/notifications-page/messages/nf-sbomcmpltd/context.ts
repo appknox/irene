@@ -2,12 +2,12 @@ export class NfSbomcmpltdContext {
   package_name: string;
   platform: number;
   platform_display: string;
-  file_id: number;
+  file_id: string;
   file_name: string;
   version: string;
   version_code: string;
-  sb_project_id: number;
-  sb_file_id: number;
+  sb_project_id: string;
+  sb_file_id: string;
   components_with_updates_count: number;
   vulnerable_components_count: number;
   components_count: number;
