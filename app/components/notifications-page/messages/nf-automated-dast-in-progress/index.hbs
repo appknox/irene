@@ -1,0 +1,23 @@
+<AkTypography data-test-nf-automated-dast-in-progress-primary-message>
+  {{t 'notificationModule.messages.nf-automated-dast-in-progress.prefix'}}
+
+  <AkLink
+    {{style verticalAlign='unset'}}
+    @color='primary'
+    @route='authenticated.dashboard.file'
+    @model={{@context.file_id}}
+    @underline='always'
+    @title='{{t "viewFile"}} {{@context.file_id}}'
+    data-test-nf-automated-dast-in-progress-fileLink
+  >
+    {{t 'fileID'}}
+    {{@context.file_id}}
+  </AkLink>
+
+  {{t
+    'notificationModule.messages.nf-automated-dast-in-progress.suffix'
+    htmlSafe=true
+    platform_display=@context.platform
+    package_name=@context.package_name
+  }}
+</AkTypography>

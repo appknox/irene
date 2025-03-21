@@ -1,0 +1,34 @@
+<AkTypography data-test-nf-automated-dast-errored-primary-message>
+  {{t 'notificationModule.messages.nf-automated-dast-errored.prefix'}}
+
+  <AkLink
+    {{style verticalAlign='unset'}}
+    @color='primary'
+    @route='authenticated.dashboard.file'
+    @model={{@context.file_id}}
+    @underline='always'
+    @title='{{t "viewFile"}} {{@context.file_id}}'
+    data-test-nf-automated-dast-errored-fileLink
+  >
+    {{t 'fileID'}}
+    {{@context.file_id}}
+  </AkLink>
+
+  {{t
+    'notificationModule.messages.nf-automated-dast-errored.suffix'
+    htmlSafe=true
+    platform_display=@context.platform
+    package_name=@context.package_name
+    error_message=@context.error_message
+  }}
+
+  <AkLink
+    @color='primary'
+    @route='authenticated.dashboard.file.dynamic-scan.manual'
+    @model={{@context.file_id}}
+    @underline='always'
+    data-test-nf-automated-dast-errored-manualDASTLink
+  >
+    {{t 'here'}}
+  </AkLink>
+</AkTypography>

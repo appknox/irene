@@ -30,6 +30,9 @@ import { NfStrUrlUpldfailnprjdeny2Context } from './messages/nf-str-url-upldfail
 import { NfStrUrlVldtnErrContext } from './messages/nf-str-url-vldtn-err/context';
 import { NfStrUrlUploadSuccessContext } from './messages/nf-str-url-upload-success/context';
 import { NfSystmFileUploadSuccessContext } from './messages/nf-systm-file-upload-success/context';
+import { NfAutomatedDastCompletedContext } from './messages/nf-automated-dast-completed/context';
+import { NfAutomatedDastErroredContext } from './messages/nf-automated-dast-errored/context';
+import { NfAutomatedDastInProgressContext } from './messages/nf-automated-dast-in-progress/context';
 
 export const NotificationMap = {
   ERROR: {
@@ -165,7 +168,21 @@ export const NotificationMap = {
       'notifications-page/messages/nf-systm-file-upload-success' as const,
     context: NfSystmFileUploadSuccessContext,
   },
-};
+  NF_AUTOMATED_DAST_COMPLETED: {
+    component:
+      'notifications-page/messages/nf-automated-dast-completed' as const,
+    context: NfAutomatedDastCompletedContext,
+  },
+  NF_AUTOMATED_DAST_ERRORED: {
+    component: 'notifications-page/messages/nf-automated-dast-errored' as const,
+    context: NfAutomatedDastErroredContext,
+  },
+  NF_AUTOMATED_DAST_IN_PROGRESS: {
+    component:
+      'notifications-page/messages/nf-automated-dast-in-progress' as const,
+    context: NfAutomatedDastInProgressContext,
+  },
+} satisfies Record<string, { component: string; context: unknown }>;
 
 // Notification contexts
 export type NotificationContexts = {

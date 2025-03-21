@@ -559,6 +559,7 @@
   "halfYearly": "６か月",
   "halt": "診断を停止して、サポートに連絡してください",
   "hangInThere": "URLを処理する間、そのままお待ちください",
+  "here": "here",
   "hiddenAnalysis": "HIDDEN ANALYSIS",
   "hideVulnerability": "脆弱性を非表示にする",
   "high": "高",
@@ -971,7 +972,19 @@
       "nf-str-url-upldfailnsunaprv1": "The app upload you initiated from {store_name} has <strong>failed due to unapproved namespace</strong>.",
       "nf-str-url-upldfailnscreatd1": "The app upload you initiated from {store_name} has <strong>failed due to non-existent namespace</strong>. New namespace request has been submitted to your organization owner for approval.",
       "nf-str-url-upldfailpay2": "App {package_name} upload by {requester_username} from {store_name} has <strong>failed due to Insufficient Credits Error</strong>. Please upgrade your plan.",
-      "nf-str-url-upldfailpayrq1": "The app upload you initiated from {store_name} has <strong>failed due to Insufficient Credits Error</strong>. Please upgrade your plan."
+      "nf-str-url-upldfailpayrq1": "The app upload you initiated from {store_name} has <strong>failed due to Insufficient Credits Error</strong>. Please upgrade your plan.",
+      "nf-automated-dast-in-progress": {
+        "prefix": "Automated DAST is now in progress for",
+        "suffix": " of the <strong>{platform_display}</strong> app <strong>{package_name}</strong>."
+      },
+      "nf-automated-dast-errored": {
+        "prefix": "Automated DAST for",
+        "suffix": " of the <strong>{platform_display}</strong> app <strong>{package_name}</strong> has failed due to <strong>{error_message}</strong>. As an alternative, you can run the DAST from"
+      },
+      "nf-automated-dast-completed": {
+        "prefix": "Automated DAST for",
+        "suffix": " of the <strong>{platform_display}</strong> app <strong>{package_name}</strong> is now completed successfully."
+      }
     },
     "namespaceMessage": {
       "approved": "{moderaterName} approved this namespace",
@@ -1811,6 +1824,7 @@
   "viewMore": "View More",
   "viewOrEdit": "View or Edit",
   "viewReport": "View Report",
+  "viewResults": "View Results",
   "viewStoreLink": "View Store Link",
   "vnc": "VNC",
   "vpn": "VPN",
