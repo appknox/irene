@@ -1,0 +1,38 @@
+<AkStack @direction='column' @spacing='1'>
+  <AkTypography data-test-nf-automated-dast-completed-primary-message>
+    {{t 'notificationModule.messages.nf-automated-dast-completed.prefix'}}
+
+    <AkLink
+      {{style verticalAlign='unset'}}
+      @color='primary'
+      @route='authenticated.dashboard.file'
+      @model={{@context.file_id}}
+      @underline='always'
+      @title='{{t "viewFile"}} {{@context.file_id}}'
+      data-test-nf-automated-dast-completed-fileLink
+    >
+      {{t 'fileID'}}
+      {{@context.file_id}}
+    </AkLink>
+
+    {{t
+      'notificationModule.messages.nf-automated-dast-completed.suffix'
+      htmlSafe=true
+      platform_display=@context.platform
+      package_name=@context.package_name
+    }}
+  </AkTypography>
+
+  <AkLink
+    @color='primary'
+    @route='authenticated.dashboard.file.dynamic-scan.results'
+    @model={{@context.file_id}}
+    @underline='always'
+    @title='{{t "viewResults"}}'
+    data-test-nf-automated-dast-completed-fileLink
+  >
+    <:default>
+      {{t 'viewResults'}}
+    </:default>
+  </AkLink>
+</AkStack>

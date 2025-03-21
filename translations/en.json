@@ -559,6 +559,7 @@
   "halfYearly": "Half Yearly",
   "halt": "Halt the scan, contact us",
   "hangInThere": "Hang in there while we process your URL",
+  "here": "here",
   "hiddenAnalysis": "HIDDEN ANALYSIS",
   "hideVulnerability": "Hide Vulnerability",
   "high": "High",
@@ -970,7 +971,19 @@
       "nf-str-url-upldfailnsunaprv1": "The app upload you initiated from {store_name} has <strong>failed due to unapproved namespace</strong>.",
       "nf-str-url-upldfailnscreatd1": "The app upload you initiated from {store_name} has <strong>failed due to non-existent namespace</strong>. New namespace request has been submitted to your organization owner for approval.",
       "nf-str-url-upldfailpay2": "App {package_name} upload by {requester_username} from {store_name} has <strong>failed due to Insufficient Credits Error</strong>. Please upgrade your plan.",
-      "nf-str-url-upldfailpayrq1": "The app upload you initiated from {store_name} has <strong>failed due to Insufficient Credits Error</strong>. Please upgrade your plan."
+      "nf-str-url-upldfailpayrq1": "The app upload you initiated from {store_name} has <strong>failed due to Insufficient Credits Error</strong>. Please upgrade your plan.",
+      "nf-automated-dast-in-progress": {
+        "prefix": "Automated DAST is now in progress for",
+        "suffix": " of the <strong>{platform_display}</strong> app <strong>{package_name}</strong>."
+      },
+      "nf-automated-dast-errored": {
+        "prefix": "Automated DAST for",
+        "suffix": " of the <strong>{platform_display}</strong> app <strong>{package_name}</strong> has failed due to <strong>{error_message}</strong>. As an alternative, you can run the DAST from"
+      },
+      "nf-automated-dast-completed": {
+        "prefix": "Automated DAST for",
+        "suffix": " of the <strong>{platform_display}</strong> app <strong>{package_name}</strong> is now completed successfully."
+      }
     },
     "namespaceMessage": {
       "approved": "{moderaterName} approved this namespace",
@@ -1810,6 +1823,7 @@
   "viewMore": "View More",
   "viewOrEdit": "View or Edit",
   "viewReport": "View Report",
+  "viewResults": "View Results",
   "viewStoreLink": "View Store Link",
   "viewUploads": "View uploads",
   "vnc": "VNC",
