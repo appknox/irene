@@ -200,7 +200,7 @@ module(
       assert
         .dom(selectors.paramValueTextFieldSecureIcon, firstItemElement)
         .exists()
-        .hasClass(/lock-open/);
+        .hasAttribute('icon', 'material-symbols:lock-open-outline');
 
       assert.dom(selectors.paramDeleteBtn, firstItemElement).exists();
       assert.dom(selectors.paramDeleteBtnIcon, firstItemElement).exists();
@@ -222,8 +222,7 @@ module(
       assert
         .dom(selectors.paramValueTextFieldSecureIcon, secondItemElement)
         .exists()
-        .doesNotHaveClass(/lock-open/)
-        .hasClass(/lock/);
+        .hasAttribute('icon', 'material-symbols:lock');
 
       assert.dom(selectors.paramDeleteBtn, secondItemElement).exists();
       assert.dom(selectors.paramDeleteBtnIcon, secondItemElement).exists();

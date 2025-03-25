@@ -1003,7 +1003,12 @@ module(
           '[data-test-storeknoxInventoryDetails-actionBtn-leftIcon]',
           actionElement
         )
-        .hasClass(action.featureInProgress ? /auto-fix-high/ : /report/);
+        .hasAttribute(
+          'icon',
+          action.featureInProgress
+            ? 'material-symbols:auto-fix-high'
+            : 'material-symbols:report'
+        );
     };
 
     test.each(

@@ -75,7 +75,7 @@ module(
       assert
         .dom('[data-test-generalSettings-addProjectCollab-buttonIcon]')
         .exists()
-        .hasClass(/ak-icon-person/);
+        .hasAttribute('icon', 'material-symbols:person');
 
       assert
         .dom('[data-test-generalSettings-addProjectCollab-button]')

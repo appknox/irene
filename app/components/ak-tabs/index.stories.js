@@ -34,7 +34,7 @@ const commonArgs = {
       badgeCount: 100,
       hasBadge: true,
       label: 'Tab Two',
-      iconName: 'people',
+      iconName: 'group',
     },
   ],
   onTabClick: action(onTabClick),

@@ -48,7 +48,7 @@ export default class SecurityFileAnalysisReportBtnComponent extends Component<Se
       {
         label: this.intl.t('excelReport'),
         format: 'xlsx',
-        icon: 'description',
+        icon: 'mdi:microsoft-excel',
       },
       {
         label: this.intl.t('jaHTMLReport'),

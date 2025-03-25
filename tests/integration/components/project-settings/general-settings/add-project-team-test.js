@@ -76,7 +76,7 @@ module(
       assert
         .dom('[data-test-generalSettings-addProjectTeam-buttonIcon]')
         .exists()
-        .hasClass(/ak-icon-groups/);
+        .hasAttribute('icon', 'material-symbols:groups');
 
       assert
         .dom('[data-test-generalSettings-addProjectTeam-button]')

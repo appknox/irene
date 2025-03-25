@@ -16,9 +16,17 @@
     {{on 'click' this.onClick}}
   />
 
-  <span
-    data-test-checkbox-icon
-    local-class='ak-svg-checkbox-icon'
-    class='ak-icon'
-  ></span>
+  {{#if @indeterminate}}
+    <AkIcon local-class='ak-svg-checkbox-icon' @iconName='mdi:minus-box' />
+  {{else}}
+    <AkIcon
+      data-test-checkbox-icon
+      local-class='ak-svg-checkbox-icon'
+      @iconName={{if
+        @checked
+        'mdi:checkbox-marked'
+        'mdi:checkbox-blank-outline'
+      }}
+    />
+  {{/if}}
 </span>

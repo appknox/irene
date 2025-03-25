@@ -45,7 +45,6 @@ export interface MenuItem {
   currentWhen?: string;
   hasBadge?: boolean;
   badgeLabel?: string;
-  customIconComponent?: 'ak-svg/public-api-icon';
 }
 
 export interface LowerMenuItem {

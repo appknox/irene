@@ -10,7 +10,7 @@ const listData = [
   { label: 'Projects', icon: 'folder' },
   { label: 'Store Monitoring', icon: 'inventory-2' },
   { label: 'Analytics', icon: 'graphic-eq' },
-  { label: 'Organization', icon: 'people' },
+  { label: 'Organization', icon: 'group' },
   { label: 'Settings', icon: 'account-box' },
 ];
 

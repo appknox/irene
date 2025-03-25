@@ -1,5 +1,7 @@
-<AkIcon
-  ...attributes
-  @iconName='{{@platform}}'
-  local-class='app-platform-icon app-platform-icon-{{@platform}}'
-/>
+{{#if @platform}}
+  <AkIcon
+    ...attributes
+    @iconName='{{this.iconName}}'
+    local-class='app-platform-icon app-platform-icon-{{@platform}}'
+  />
+{{/if}}

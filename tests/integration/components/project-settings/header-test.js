@@ -73,12 +73,17 @@ module('Integration | Component | project-settings/header', function (hooks) {
           .containsText(t('projectID'))
           .containsText(this.project.id);
 
-        assert
-          .dom('[data-test-projectSettingsHeader-platformIcon]')
-          .exists()
-          .hasClass(
-            RegExp(`platform-${this.project.get('platformIconClass')}`)
-          );
+        if (this.project.get('platformIconClass') === 'android') {
+          assert
+            .dom('[data-test-projectSettingsHeader-platformIcon]')
+            .exists()
+            .hasAttribute('icon', 'material-symbols:android');
+        } else {
+          assert
+            .dom('[data-test-projectSettingsHeader-platformIcon]')
+            .exists()
+            .hasAttribute('icon', 'fa-brands:apple');
+        }
 
         // Checks rendering of tabs
         const tabItems = [t('generalSettings'), t('analysisSettings')];

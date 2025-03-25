@@ -128,16 +128,16 @@ export default class AppknoxWrapperComponent extends Component<AppknoxWrapperSig
       },
       {
         label: this.intl.t('organization'),
-        icon: 'people',
+        icon: 'group',
         route: 'authenticated.dashboard.organization.namespaces',
         currentWhen:
           'authenticated.dashboard.organization.namespaces authenticated.dashboard.organization.users authenticated.dashboard.organization.teams authenticated.dashboard.organization-settings authenticated.dashboard.service-account-details authenticated.dashboard.service-account-create',
       },
       this.showPublicApiDocs && {
         label: this.intl.t('apiDocumentation'),
+        icon: 'hugeicons:api',
         route: 'authenticated.dashboard.public-api.docs',
         currentWhen: 'authenticated.dashboard.public-api.docs',
-        customIconComponent: 'ak-svg/public-api-icon' as const,
       },
       {
         label: this.intl.t('accountSettings'),
@@ -153,7 +153,7 @@ export default class AppknoxWrapperComponent extends Component<AppknoxWrapperSig
       },
       this.showBilling && {
         label: this.intl.t('billing'),
-        icon: 'credit-card',
+        icon: 'credit-card-outline',
         route: 'authenticated.dashboard.billing',
       },
       this.showPartnerDashboard && {

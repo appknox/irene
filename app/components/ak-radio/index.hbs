@@ -17,16 +17,16 @@
   />
 
   {{#if this.checked}}
-    <span
+    <AkIcon
       data-test-radio-checked
       local-class='ak-svg-radio-icon ak-svg-radio-icon-checked'
-      class='ak-icon ak-icon-radio-button-checked'
-    ></span>
+      @iconName='mdi:radio-button-checked'
+    />
   {{else}}
-    <span
+    <AkIcon
       data-test-radio-unchecked
       local-class='ak-svg-radio-icon'
-      class='ak-icon ak-icon-radio-button-unchecked'
-    ></span>
+      @iconName='mdi:radio-button-unchecked'
+    />
   {{/if}}
 </span>

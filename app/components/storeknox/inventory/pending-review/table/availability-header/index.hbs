@@ -51,15 +51,13 @@
         class='py-1 pl-2'
         {{on 'click' (fn this.selectAvailability availability.value)}}
       >
-        <AkStack @alignItems='center'>
-          {{#if (eq this.selectedAvailability availability.value)}}
-            <AkIcon @iconName='radio-button-checked' @color='success' />
-          {{else}}
-            <AkIcon @iconName='radio-button-unchecked' />
-          {{/if}}
-        </AkStack>
+        <AkStack @alignItems='center' @spacing='1'>
+          <AkRadio
+            @checked={{eq this.selectedAvailability availability.value}}
+          />
 
-        <AkTypography>{{availability.key}}</AkTypography>
+          <AkTypography>{{availability.key}}</AkTypography>
+        </AkStack>
       </AkStack>
     {{/each}}
 

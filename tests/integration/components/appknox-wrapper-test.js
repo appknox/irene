@@ -66,11 +66,11 @@ const menuItems = ({
     appMonitoring && { label: t('appMonitoring'), icon: 'inventory-2' },
     sbom && { label: t('SBOM'), icon: 'receipt-long' },
     analytics && { label: t('analytics'), icon: 'graphic-eq' },
-    { label: t('organization'), icon: 'people' },
+    { label: t('organization'), icon: 'group' },
     publicApis && { label: t('apiDocumentation') },
     { label: t('accountSettings'), icon: 'account-box' },
     market && { label: t('marketplace'), icon: 'account-balance' },
-    billing && { label: t('billing'), icon: 'credit-card' },
+    billing && { label: t('billing'), icon: 'credit-card-outline' },
     partner && {
       label: t('clients'),
       icon: 'groups-2',
@@ -394,7 +394,7 @@ module('Integration | Component | appknox-wrapper', function (hooks) {
         if (it.icon) {
           assert
             .dom('[data-test-side-menu-item-icon]', menuItemEle[index])
-            .hasClass(`ak-icon-${it.icon}`);
+            .hasAttribute('icon', `material-symbols:${it.icon}`);
         }
 
         assert
@@ -420,7 +420,7 @@ module('Integration | Component | appknox-wrapper', function (hooks) {
 
         assert
           .dom('[data-test-side-lower-menu-item-icon]', lowerMenuItemEle[index])
-          .hasClass(`ak-icon-${it.icon}`);
+          .hasAttribute('icon', `material-symbols:${it.icon}`);
       });
 
       const collapseButton = find(`[

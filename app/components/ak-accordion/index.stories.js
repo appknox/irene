@@ -211,7 +211,7 @@ const CustomTemplate = (args) => ({
          >
           <:summaryIcon>
             <AkIcon
-              @iconName='people'
+              @iconName='group'
               @color="success"
             />
           </:summaryIcon>

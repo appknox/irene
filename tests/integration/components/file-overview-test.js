@@ -320,13 +320,13 @@ module(
           .dom(`[data-test-fileOverview-scanStatuses='${status.name}']`)
           .exists();
 
-        const iconName = status.isDone ? /check-circle/ : /circle/;
+        const iconName = status.isDone ? 'check-circle' : 'circle-outline';
 
         assert
           .dom(
             `[data-test-fileOverview-scanStatuses='${status.name}'] [data-test-fileOverview-scanStatus-icon]`
           )
-          .hasClass(iconName);
+          .hasAttribute('icon', `material-symbols:${iconName}`);
       });
 
       // Test for manual scan status
@@ -340,13 +340,18 @@ module(
           .dom(
             `${manualScanContainerSelector} [data-test-fileOverview-manualScanStatus-doneIcon]`
           )
-          .hasClass(/check-circle/);
+          .hasAttribute('icon', 'material-symbols:check-circle');
       } else {
         assert
           .dom(
             `${manualScanContainerSelector} [data-test-fileOverview-manualScanStatus-requestedPendingIcon]`
           )
-          .hasClass(this.file.isManualRequested ? /timer/ : /circle/);
+          .hasAttribute(
+            'icon',
+            this.file.isManualRequested
+              ? 'material-symbols:timer'
+              : 'material-symbols:circle-outline'
+          );
       }
 
       assert

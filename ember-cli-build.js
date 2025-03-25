@@ -33,8 +33,8 @@ module.exports = function (defaults) {
     sassOptions: {
       includePaths: [
         'node_modules/billboard.js/dist/',
-        'node_modules/material-icons/css/',
         'node_modules/swagger-ui/dist/',
+        'node_modules/iconify-icon',
       ],
       sourceMap: !isProduction,
       sourceMapEmbed: !isProduction,
