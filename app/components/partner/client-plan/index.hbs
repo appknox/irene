@@ -6,25 +6,28 @@
       <div local-class='plan' data-test-client-plan>
         <div
           local-class='plan-type
-            {{if this.clientPlan.limitedScans "per-scan" "per-app"}}'
+          {{if this.clientPlan.limitedScans "per-scan" "per-app"}}'
           data-test-plan-type
         >
-          <span>{{t
-              (if this.clientPlan.limitedScans 'perScan' 'perApp')
-            }}</span>
+          <span>
+            {{t (if this.clientPlan.limitedScans 'perScan' 'perApp')}}
+          </span>
         </div>
+
         <div local-class='plan-status' data-test-plan-status>
           {{#if this.clientPlan.limitedScans}}
             <strong class='mr-1' data-test-scans-left>
               {{this.clientPlan.scansLeft}}
               {{t 'pluralScans' itemCount=this.clientPlan.scansLeft}}
             </strong>
+
             {{t 'remaining'}}
           {{else}}
             <strong class='mr-1' data-test-projects-left>
               {{this.clientPlan.projectsLimit}}
               {{t 'pluralApps' itemCount=this.clientPlan.projectsLimit}}
             </strong>
+
             <span
               local-class='expiry-date
                 {{if this.clientPlan.isPaymentExpired "expiry-date-expired"}}'
@@ -33,6 +36,7 @@
               {{t
                 (if this.clientPlan.isPaymentExpired 'expiredOn' 'expiresOn')
               }}
+
               {{day-js date=this.clientPlan.expiryDate format='DD MMM YYYY'}}
             </span>
           {{/if}}

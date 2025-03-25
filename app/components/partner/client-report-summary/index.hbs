@@ -17,102 +17,30 @@
         <:tooltipContent>
           <div local-class='popover' class='p-1' data-test-risk-summary-tooltip>
             <div local-class='index' data-test-riskindex>
-              <div local-class='riskkey' data-test-riskindex-critical>
-                <div local-class='riskkey-label'>
+              {{#each this.riskProps as |rProps|}}
+                <div local-class='riskkey' data-test-riskindex={{rProps.key}}>
+                  <div local-class='riskkey-label'>
+                    <div
+                      local-class='riskkey-color riskkey-color--{{rProps.key}}'
+                      data-test-riskindex-key={{rProps.key}}
+                    ></div>
+
+                    <div
+                      local-class='riskkey-text'
+                      data-test-riskindex-label={{rProps.key}}
+                    >
+                      {{rProps.label}}
+                    </div>
+                  </div>
+
                   <div
-                    local-class='riskkey-color riskkey-color--critical'
-                    data-test-riskindex-critical-key
-                  ></div>
-                  <div
-                    local-class='riskkey-text'
-                    data-test-riskindex-critical-label
-                  >{{t 'critical'}}</div>
+                    local-class='riskkey-count'
+                    data-test-riskindex-count={{rProps.key}}
+                  >
+                    {{rProps.riskCount}}
+                  </div>
                 </div>
-                <div
-                  local-class='riskkey-count'
-                  data-test-riskindex-critical-count
-                >{{this.fileSummary.riskCountCritical}}</div>
-              </div>
-              <div local-class='riskkey' data-test-riskindex-high>
-                <div local-class='riskkey-label'>
-                  <div
-                    local-class='riskkey-color riskkey-color--high'
-                    data-test-riskindex-high-key
-                  ></div>
-                  <div
-                    local-class='riskkey-text'
-                    data-test-riskindex-high-label
-                  >{{t 'high'}}</div>
-                </div>
-                <div
-                  local-class='riskkey-count'
-                  data-test-riskindex-high-count
-                >{{this.fileSummary.riskCountHigh}}</div>
-              </div>
-              <div local-class='riskkey' data-test-riskindex-medium>
-                <div local-class='riskkey-label'>
-                  <div
-                    local-class='riskkey-color riskkey-color--medium'
-                    data-test-riskindex-medium-key
-                  ></div>
-                  <div
-                    local-class='riskkey-text'
-                    data-test-riskindex-medium-label
-                  >{{t 'medium'}}</div>
-                </div>
-                <div
-                  local-class='riskkey-count'
-                  data-test-riskindex-medium-count
-                >{{this.fileSummary.riskCountMedium}}</div>
-              </div>
-              <div local-class='riskkey' data-test-riskindex-low>
-                <div local-class='riskkey-label'>
-                  <div
-                    local-class='riskkey-color riskkey-color--low'
-                    data-test-riskindex-low-key
-                  ></div>
-                  <div
-                    local-class='riskkey-text'
-                    data-test-riskindex-low-label
-                  >{{t 'low'}}</div>
-                </div>
-                <div
-                  local-class='riskkey-count'
-                  data-test-riskindex-low-count
-                >{{this.fileSummary.riskCountLow}}</div>
-              </div>
-              <div local-class='riskkey' data-test-riskindex-passed>
-                <div local-class='riskkey-label'>
-                  <div
-                    local-class='riskkey-color riskkey-color--passed'
-                    data-test-riskindex-passed-key
-                  ></div>
-                  <div
-                    local-class='riskkey-text'
-                    data-test-riskindex-passed-label
-                  >{{t 'passed'}}</div>
-                </div>
-                <div
-                  local-class='riskkey-count'
-                  data-test-riskindex-passed-count
-                >{{this.fileSummary.riskCountPassed}}</div>
-              </div>
-              <div local-class='riskkey' data-test-riskindex-untested>
-                <div local-class='riskkey-label'>
-                  <div
-                    local-class='riskkey-color riskkey-color--untested'
-                    data-test-riskindex-untested-key
-                  ></div>
-                  <div
-                    local-class='riskkey-text'
-                    data-test-riskindex-untested-label
-                  >{{t 'untested'}}</div>
-                </div>
-                <div
-                  local-class='riskkey-count'
-                  data-test-riskindex-untested-count
-                >{{this.fileSummary.riskCountUntested}}</div>
-              </div>
+              {{/each}}
             </div>
           </div>
         </:tooltipContent>
@@ -120,53 +48,15 @@
         <:default>
           <div local-class='summary' data-test-risk-summary>
             <div local-class='riskbar' data-test-risk-summary-bar>
-              {{#if this.fileSummary.riskCountCritical}}
-                <div
-                  local-class='riskblock riskblock--critical'
-                  style={{this.criticalWidthStyle}}
-                  data-test-riskblock-critical
-                ></div>
-              {{/if}}
-
-              {{#if this.fileSummary.riskCountHigh}}
-                <div
-                  local-class='riskblock riskblock--high'
-                  style={{this.highWidthStyle}}
-                  data-test-riskblock-high
-                ></div>
-              {{/if}}
-
-              {{#if this.fileSummary.riskCountMedium}}
-                <div
-                  local-class='riskblock riskblock--medium'
-                  style={{this.mediumWidthStyle}}
-                  data-test-riskblock-medium
-                ></div>
-              {{/if}}
-
-              {{#if this.fileSummary.riskCountLow}}
-                <div
-                  local-class='riskblock riskblock--low'
-                  style={{this.lowWidthStyle}}
-                  data-test-riskblock-low
-                ></div>
-              {{/if}}
-
-              {{#if this.fileSummary.riskCountPassed}}
-                <div
-                  local-class='riskblock riskblock--passed'
-                  style={{this.passedWidthStyle}}
-                  data-test-riskblock-passed
-                ></div>
-              {{/if}}
-
-              {{#if this.fileSummary.riskCountUntested}}
-                <div
-                  local-class='riskblock riskblock--untested'
-                  style={{this.untestedWidthStyle}}
-                  data-test-riskblock-untested
-                ></div>
-              {{/if}}
+              {{#each this.riskProps as |rProps|}}
+                {{#if rProps.riskCount}}
+                  <div
+                    local-class='riskblock riskblock--{{rProps.key}}'
+                    data-test-riskblock={{rProps.key}}
+                    {{style width=rProps.width}}
+                  ></div>
+                {{/if}}
+              {{/each}}
             </div>
           </div>
         </:default>

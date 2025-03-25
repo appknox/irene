@@ -3,7 +3,9 @@
     {{@partnerPlan.scansLeft}}
     {{t 'pluralScans' itemCount=@partnerPlan.scansLeft}}
   </div>
+
   <AkIcon @iconName='south' local-class='tranfer-btn' />
+
   <div local-class='client'>
     <div
       local-class='title {{unless @clientName "empty-title"}}'
@@ -15,22 +17,26 @@
         {{t 'noName'}}
       {{/if}}
     </div>
+
     <div local-class='tranfer-count'>
       <AkTextField
-        local-class='input-count'
         @type='number'
+        @autofocus={{true}}
+        @value='{{@transferCount}}'
         min={{1}}
         max={{@partnerPlan.scansLeft}}
-        @value={{@transferCount}}
-        @autofocus='autofocus'
-        data-test-data-input-count
+        local-class='input-count'
         aria-label='Credit tranfer input'
+        {{on 'input' this.updateTransferCount}}
+        data-test-data-input-count
       />
+
       <span local-class='credit-type' data-test-credit-type>
         {{t 'pluralScans' itemCount=@transferCount}}
       </span>
     </div>
   </div>
+
   {{#if @toggleMode}}
     <AkButton
       @variant='outlined'

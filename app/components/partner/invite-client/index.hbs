@@ -17,7 +17,7 @@
     @onClose={{this.toggleInviteModal}}
     @showHeader={{true}}
     @headerTitle={{t 'inviteClient'}}
-    @onClickOverlay={{this.inviteModalOverlayClick}}
+    @disableOverlayClick={{true}}
   >
     <div
       local-class='invite-container'
@@ -32,7 +32,7 @@
           @labelTypographyVariant='subtitle2'
           @value={{this.changeset.email}}
           @error={{if this.changeset.error.email true false}}
-          @helperText={{this.changeset.error.email.validation}}
+          @helperText={{this.getHelperText 'email'}}
           @required={{true}}
           data-test-input-email
         />
@@ -45,7 +45,7 @@
           @autofocus={{true}}
           @value={{this.changeset.first_name}}
           @error={{if this.changeset.error.first_name true false}}
-          @helperText={{this.changeset.error.first_name.validation}}
+          @helperText={{this.getHelperText 'first_name'}}
           @labelTypographyColor='secondary'
           @labelTypographyVariant='subtitle2'
           autocomplete='fname'
@@ -58,7 +58,7 @@
           @placeholder={{t 'lastName'}}
           @value={{this.changeset.last_name}}
           @error={{if this.changeset.error.last_name true false}}
-          @helperText={{this.changeset.error.last_name.validation}}
+          @helperText={{this.getHelperText 'last_name'}}
           @labelTypographyColor='secondary'
           @labelTypographyVariant='subtitle2'
           autocomplete='lname'
@@ -74,7 +74,7 @@
           @labelTypographyVariant='subtitle2'
           @value={{this.changeset.company}}
           @error={{if this.changeset.error.company true false}}
-          @helperText={{this.changeset.error.company.validation}}
+          @helperText={{this.getHelperText 'company'}}
           @required={{true}}
           autocomplete='company'
           data-test-input-company

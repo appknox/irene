@@ -10,7 +10,7 @@ export default class PartnerPartnerclientProjectModel extends Model {
   @attr('date')
   declare createdOn: Date;
 
-  get platformIcon(): string {
+  get platformIcon(): 'apple' | 'android' {
     return this.platform === 'iOS' ? 'apple' : 'android';
   }
 }

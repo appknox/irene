@@ -7,7 +7,7 @@ import { setupIntl, t } from 'ember-intl/test-support';
 import dayjs from 'dayjs';
 import { faker } from '@faker-js/faker';
 import { underscore } from '@ember/string';
-import styles from 'irene/components/partner/client-plan/styles';
+import styles from 'irene/components/partner/client-plan/index.scss';
 
 function serializer(payload) {
   const serializedPayload = {};

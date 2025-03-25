@@ -23,7 +23,7 @@ export default class PartnerclientPlanModel extends Model {
     return dayjs().isAfter(this.expiryDate);
   }
 
-  transferScans(count: number) {
+  async transferScans(count: number) {
     const adapter = this.store.adapterFor(this.modelName);
 
     return adapter.transferScans(this.id, {

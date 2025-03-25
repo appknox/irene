@@ -2,7 +2,7 @@
   <div
     local-class='partner-plan'
     data-test-partner-plan
-    {{did-insert this.initalize}}
+    {{did-insert this.initialize}}
   >
     {{#if this.fetchPartnerPlan.isRunning}}
       <AkLoader @size={{13}} />
@@ -47,9 +47,10 @@
 
       <div local-class='plan'>
         <div local-class='plan-key'>
-          <div local-class='plan-label' data-test-plan-label>{{t
-              'yourPlan'
-            }}</div>
+          <div local-class='plan-label' data-test-plan-label>
+            {{t 'yourPlan'}}
+          </div>
+
           <div
             local-class='plan-type {{if
               this.partnerPlan.limitedScans
@@ -69,6 +70,7 @@
               {{this.partnerPlan.projectsLimit}}
             {{/if}}
           </span>
+
           <span local-class='credits-type' data-test-credits-type>
             {{#if this.partnerPlan.limitedScans}}
               {{t 'pluralScans' itemCount=this.partnerPlan.scansLeft}}

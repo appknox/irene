@@ -30,12 +30,14 @@
           {{#if this.getUnlockKey.isRunning}}
             <div local-class='password-loading' data-test-loading>
               <AkLoader @size={{13}} />
+
               {{t 'loading'}}
             </div>
           {{else if this.unlockKey}}
             <div local-class='password-title' data-test-report-password-title>
               {{t 'reportPassword'}}
             </div>
+
             <div local-class='password-display'>
               <input
                 type='text'
@@ -65,6 +67,7 @@
           {{else if this.apiError}}
             <div local-class='password-loading-error' data-test-api-error>
               <AkIcon @iconName='warning' />
+
               <div>{{t 'somethingWentWrong'}}</div>
             </div>
           {{/if}}

@@ -7,13 +7,15 @@ import { setupIntl, t } from 'ember-intl/test-support';
 import { underscore } from '@ember/string';
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
-import styles from 'irene/components/partner/client-info/styles';
+import styles from 'irene/components/partner/client-info/index.scss';
 
 function serializer(payload) {
   const serializedPayload = {};
+
   Object.keys(payload.attrs).map((_key) => {
     serializedPayload[underscore(_key)] = payload[_key];
   });
+
   return serializedPayload;
 }
 
@@ -119,6 +121,7 @@ module('Integration | Component | partner/client-info', function (hooks) {
       };
     });
     await this.owner.lookup('service:partner').load();
+
     this.server.get('v2/partnerclients/:id/plan', (schema, req) => {
       return {
         id: req.params.id,
@@ -190,11 +193,25 @@ module('Integration | Component | partner/client-info', function (hooks) {
         view_plans: true,
       },
     });
+
     this.server.get('v2/partners/:id', (schema, request) => {
       return serializer(schema['partner/partners'].find(request.params.id));
     });
 
+    this.server.get('v2/partners/:id/plan', (schema, request) => {
+      return serializer(schema['partner/plans'].find(request.params.id));
+    });
+
+    this.server.get('v2/partnerclients/:id/plan', (schema, req) => {
+      return {
+        id: req.params.id,
+        data: {},
+      };
+    });
+
     const client = this.server.create('partner/partnerclient');
+    this.server.create('partner/plan');
+
     this.set('client', client);
 
     await this.owner.lookup('service:partner').load();

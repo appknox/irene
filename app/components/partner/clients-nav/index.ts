@@ -1,10 +1,14 @@
 import Component from '@glimmer/component';
-import { inject as service } from '@ember/service';
+import { service } from '@ember/service';
 
-export default class PartnerClientNavComponent extends Component {
-  @service intl;
-  @service router;
-  @service partner;
+import type IntlService from 'ember-intl/services/intl';
+import type RouterService from '@ember/routing/router-service';
+import type PartnerService from 'irene/services/partner';
+
+export default class PartnerClientsNavComponent extends Component {
+  @service declare intl: IntlService;
+  @service declare router: RouterService;
+  @service declare partner: PartnerService;
 
   get tabs() {
     return [
@@ -23,7 +27,7 @@ export default class PartnerClientNavComponent extends Component {
       {
         id: 'registration-requests',
         label: this.intl.t('registrationRequests'),
-        enabled: this.partner.access.admin_registration,
+        enabled: this.partner?.access?.admin_registration,
         link: 'authenticated.partner.clients.registration-requests',
       },
     ];
@@ -31,5 +35,11 @@ export default class PartnerClientNavComponent extends Component {
 
   get currentRoute() {
     return this.router.currentRoute.name;
+  }
+}
+
+declare module '@glint/environment-ember-loose/registry' {
+  export default interface Registry {
+    'Partner::ClientsNav': typeof PartnerClientsNavComponent;
   }
 }

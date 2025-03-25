@@ -120,22 +120,28 @@ module(
       this.set('toggleMode', () => {
         assert.ok(true, 'Back btn has clicked');
       });
-      await render(hbs`<Partner::CreditTransfer::CreditTransferConfirm
-      @toggleMode={{this.toggleMode}}
-      />`);
 
-      click(this.element.querySelector(`[data-test-back-btn]`));
+      await render(hbs`
+        <Partner::CreditTransfer::CreditTransferConfirm
+          @toggleMode={{this.toggleMode}}
+          />
+      `);
+
+      await click(this.element.querySelector(`[data-test-back-btn]`));
     });
 
     test('it should handle confirm transfer btn action', async function (assert) {
       this.set('transferCredits', () => {
         assert.ok(true, 'Confirm transfer btn has clicked');
       });
-      await render(hbs`<Partner::CreditTransfer::CreditTransferConfirm
-      @transferCredits={{this.transferCredits}}
-      />`);
 
-      click(this.element.querySelector(`[data-test-confirm-btn]`));
+      await render(hbs`
+        <Partner::CreditTransfer::CreditTransferConfirm
+          @transferCredits={{this.transferCredits}}
+        />
+      `);
+
+      await click(this.element.querySelector(`[data-test-confirm-btn]`));
     });
   }
 );

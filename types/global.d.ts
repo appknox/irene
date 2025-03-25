@@ -59,9 +59,16 @@ declare module '@glint/environment-ember-loose/registry' {
       Return: string;
     }>;
 
+    'dayjs-from-now': HelperLike<{
+      Args: {
+        Positional: [Date];
+      };
+      Return: string;
+    }>;
+
     eq: HelperLike<{
       Args: {
-        Positional: [string | number, string | number];
+        Positional: [string | number | undefined, string | number | undefined];
       };
       Return: boolean;
     }>;

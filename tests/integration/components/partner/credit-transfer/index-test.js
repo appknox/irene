@@ -2,9 +2,17 @@ import { module, test } from 'qunit';
 import { setupRenderingTest } from 'ember-qunit';
 import { setupMirage } from 'ember-cli-mirage/test-support';
 import { setupIntl, t } from 'ember-intl/test-support';
-import { click, find, render, triggerEvent } from '@ember/test-helpers';
 import { hbs } from 'ember-cli-htmlbars';
 import { underscore } from '@ember/string';
+import { Response } from 'miragejs';
+
+import {
+  click,
+  find,
+  render,
+  triggerEvent,
+  waitUntil,
+} from '@ember/test-helpers';
 
 function serializer(payload) {
   const serializedPayload = {};
@@ -91,8 +99,17 @@ module('Integration | Component | partner/credit-transfer', function (hooks) {
         },
       };
     });
+
+    this.server.get('v2/partners/:id/plan', (schema) => {
+      return serializer(schema['partner/plans'].find(1));
+    });
+
+    this.server.create('partner/plan');
+
     await this.owner.lookup('service:partner').load();
+
     await render(hbs`<Partner::CreditTransfer />`);
+
     assert.dom('[data-test-credit-transfer]').exists();
   });
 
@@ -110,9 +127,11 @@ module('Integration | Component | partner/credit-transfer', function (hooks) {
     this.server.create('partner/plan', {
       limitedScans: false,
     });
+
     this.server.get('v2/partners/:id/plan', (schema) => {
       return serializer(schema['partner/plans'].find(1));
     });
+
     await this.owner.lookup('service:partner').load();
 
     await render(hbs`<Partner::CreditTransfer />`);
@@ -399,6 +418,12 @@ module('Integration | Component | partner/credit-transfer', function (hooks) {
   });
 
   test('it should close modal after hit confirm transfer btn', async function (assert) {
+    this.server.create('partner/plan', { limitedScans: true, scansLeft: 10 });
+
+    this.server.create('partner/partnerclient-plan', {
+      limitedScans: true,
+    });
+
     this.server.get('v2/partners/:id', (_, req) => {
       return {
         id: req.params.id,
@@ -409,14 +434,8 @@ module('Integration | Component | partner/credit-transfer', function (hooks) {
       };
     });
 
-    this.server.create('partner/plan', { limitedScans: true, scansLeft: 10 });
-
-    this.server.get('v2/partners/:id/plan', (schema) => {
-      return serializer(schema['partner/plans'].find(1));
-    });
-
-    this.server.create('partner/partnerclient-plan', {
-      limitedScans: true,
+    this.server.get('v2/partners/:id/plan', (schema, req) => {
+      return serializer(schema['partner/plans'].find(req.params.id));
     });
 
     this.server.get('v2/partnerclients/:id/plan', (schema) => {
@@ -452,6 +471,11 @@ module('Integration | Component | partner/credit-transfer', function (hooks) {
       .exists('Confirm screen shown after hit transfer credits btn');
 
     await click(this.element.querySelector(`[data-test-confirm-btn]`));
+
+    // Slight delay before modal closes
+    await waitUntil(() => find('[data-test-credit-transfer-modal]') === null, {
+      timeout: 500,
+    });
 
     assert
       .dom('[data-test-credit-transfer-modal]')
@@ -522,12 +546,13 @@ module('Integration | Component | partner/credit-transfer', function (hooks) {
     });
 
     this.server.get('v2/partners/:id/plan', () => {
-      return Response(500);
+      return Response(500, {});
     });
 
     this.server.get('v2/partnerclients/:id/plan', () => {
-      return Response(500);
+      return Response(500, {});
     });
+
     await this.owner.lookup('service:partner').load();
 
     this.set('client', this.server.create('partner/partnerclient'));
