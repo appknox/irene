@@ -1,15 +1,17 @@
-{{yield
-  (hash
-    currentPageResults=this.currentPageResults
-    onItemPerPageChange=this.onItemPerPageChange
-    itemPerPageOptions=this.itemPerPageOptions
-    selectedOption=this.selectedOption
-    totalItems=@totalItems
-    startItemIdx=this.startItemIdx
-    endItemIdx=this.endItemIdx
-    disablePrev=this.disablePrev
-    prevAction=this.prevAction
-    disableNext=this.disableNext
-    nextAction=this.nextAction
-  )
-}}
+<div {{did-update this.handleResultDependenciesChange this.resultDependencies}}>
+  {{yield
+    (hash
+      currentPageResults=this.currentPageResults
+      onItemPerPageChange=this.onItemPerPageChange
+      itemPerPageOptions=this.itemPerPageOptions
+      selectedOption=this.selectedOption
+      totalItems=@totalItems
+      startItemIdx=this.startItemIdx
+      endItemIdx=this.endItemIdx
+      disablePrev=this.disablePrev
+      prevAction=this.prevAction
+      disableNext=this.disableNext
+      nextAction=this.nextAction
+    )
+  }}
+</div>
