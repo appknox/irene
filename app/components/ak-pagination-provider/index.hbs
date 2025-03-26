@@ -1,4 +1,7 @@
-<div {{did-update this.handleResultDependenciesChange this.resultDependencies}}>
+<div
+  local-class='pagination-wrapper'
+  {{did-update this.handleResultDependenciesChange this.resultDependencies}}
+>
   {{yield
     (hash
       currentPageResults=this.currentPageResults
