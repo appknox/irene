@@ -98,5 +98,35 @@
         </AkStack>
       </AkLink>
     {{/each}}
+
+    {{#if this.showConfigureSection}}
+      <AkTypography
+        local-class='switcher-menu-title configure'
+        @fontWeight='bold'
+      >
+        {{t 'configure'}}
+      </AkTypography>
+
+      <AkLink
+        data-test-switcher-popover-item-link
+        local-class='switcher-menu-item'
+        @underline='none'
+        @route='authenticated.admin.user-management.users'
+      >
+        <AkStack @direction='row' @alignItems='center' @spacing='1'>
+          <AkStack
+            @alignItems='center'
+            @justifyContent='center'
+            local-class='switcher-menu-item-settings-icon'
+          >
+            <AkIcon @size='small' @iconName='settings' />
+          </AkStack>
+
+          <AkTypography data-test-side-menu-switcher-modal-switch-to>
+            {{t 'admin'}}
+          </AkTypography>
+        </AkStack>
+      </AkLink>
+    {{/if}}
   </div>
 </AkPopover>

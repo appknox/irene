@@ -1,0 +1,21 @@
+<AkStack @spacing='4' local-class='user-management-user-details'>
+  {{#each this.usersData as |users|}}
+    <AkStack
+      data-test-admin-user-data='{{users.id}}'
+      @direction='column'
+      @spacing='0.5'
+    >
+      <AkTypography @color='neutral'>
+        {{users.label}}
+      </AkTypography>
+      <AkTypography @variant='h4' @fontWeight='bold'>
+        {{users.value}}
+      </AkTypography>
+    </AkStack>
+  {{/each}}
+</AkStack>
+
+<Admin::UserManagement::Users::Table
+  @organization={{@organization}}
+  @queryParams={{@queryParams}}
+/>

@@ -47,14 +47,26 @@
   .switcher-menu-title {
     text-transform: uppercase;
     font-size: 0.857rem;
-    padding: 1.2em;
+    padding: 0.652em 1.2em;
     background-color: var(--side-nav-product-switcher-modal-title-background);
     border-bottom: var(--side-nav-product-switcher-border);
+
+    &.configure {
+      border-top: var(--side-nav-product-switcher-border);
+    }
   }
 
   .switcher-menu-item-icon {
     height: 24px;
     width: 24px;
+  }
+
+  .switcher-menu-item-settings-icon {
+    height: 24px;
+    width: 24px;
+    border-radius: 50%;
+    background-color: var(--side-nav-product-switcher-modal-title-background);
+    border: var(--side-nav-product-switcher-border);
   }
 }
   

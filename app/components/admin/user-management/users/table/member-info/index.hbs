@@ -1,0 +1,19 @@
+<AkStack @alignItems='center' @spacing='1.5'>
+  <AkTypography
+    data-test-org-user-username
+    title={{@member.member.username}}
+    @tag='span'
+    @noWrap={{true}}
+  >
+    {{@member.member.username}}
+  </AkTypography>
+
+  {{#if (eq @member.member.isActive false)}}
+    <AkChip
+      data-test-inactive-chip
+      @label={{t 'chipStatus.inactive'}}
+      @size='small'
+      @variant='semi-filled'
+    />
+  {{/if}}
+</AkStack>
