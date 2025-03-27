@@ -1,0 +1,59 @@
+<AkStack @spacing='0.5' @alignItems='center' @justifyContent='flex-start'>
+  <AkTypography @variant='subtitle2'>{{t 'status'}}</AkTypography>
+
+  <AkIcon
+    @iconName='filter-list'
+    @color={{if this.filterApplied 'primary' 'inherit'}}
+    local-class='cursor-pointer'
+    {{on 'click' this.handleClick}}
+  />
+</AkStack>
+
+<AkPopover
+  @anchorRef={{this.anchorRef}}
+  @placement='bottom'
+  @arrow={{false}}
+  @closeHandler={{this.handleOptionsClose}}
+  @clickOutsideToClose={{true}}
+>
+  <AkStack @direction='column' local-class='status-filter'>
+    <AkStack @width='full' local-class='filter-header'>
+      <AkTypography @variant='subtitle2' local-class='filter-header-text'>
+        {{t 'byStatus'}}
+      </AkTypography>
+    </AkStack>
+
+    {{#each this.statusObject as |status|}}
+      <AkStack
+        @spacing='1'
+        @width='full'
+        local-class='filter-option cursor-pointer'
+        class='py-1 pl-2'
+        {{on 'click' (fn this.selectStatus status.value)}}
+      >
+        <AkStack @alignItems='center' @spacing='1'>
+          <AkRadio @checked={{eq this.selectedStatus status.value}} />
+
+          <AkTypography>{{status.key}}</AkTypography>
+        </AkStack>
+      </AkStack>
+    {{/each}}
+
+    {{#if this.filterApplied}}
+      <AkStack
+        class='py-1 pl-2'
+        local-class='clear-filter-section'
+        @width='full'
+      >
+        <AkTypography
+          @underline='always'
+          @color='primary'
+          local-class='cursor-pointer'
+          {{on 'click' this.clearFilter}}
+        >
+          {{t 'clearFilter'}}
+        </AkTypography>
+      </AkStack>
+    {{/if}}
+  </AkStack>
+</AkPopover>

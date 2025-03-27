@@ -100,6 +100,10 @@ export default class SideNavProductSwitcherComponent extends Component<SideNavPr
     ) as SwitcherMenuItem[];
   }
 
+  get showConfigureSection() {
+    return this.args.productSwitcherFilterKey !== 'admin';
+  }
+
   @action onClickSwitcher(event: MouseEvent) {
     this.anchorRef = event.currentTarget as HTMLElement;
   }

@@ -1,0 +1,25 @@
+<AkButton
+  @variant='text'
+  @underline='none'
+  {{style minWidth='0'}}
+  {{on 'click' this.openDeleteInvitationConfirmBox}}
+>
+  <:leftIcon>
+    <AkIcon @iconName='delete' />
+  </:leftIcon>
+
+  <:default>
+    {{t 'delete'}}
+  </:default>
+</AkButton>
+
+<ConfirmBox
+  @isActive={{this.showDeleteInvitationConfirmBox}}
+  @description={{t 'confirmBox.deleteInvitation'}}
+  @delegate={{this}}
+  @confirmAction={{perform this.confirmDelete}}
+  @disabled={{this.isDeletingInvitation}}
+  @confirmText={{t 'delete'}}
+  @key='delete'
+  @blurOverlay={{@blurOverlay}}
+/>

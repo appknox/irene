@@ -1,0 +1,46 @@
+<AkStack @direction='column' local-class='email-domain-container'>
+  <AkStack @direction='column' @spacing='0.5'>
+    <AkTypography @variant='h4' @fontWeight='bold'>
+      {{t 'emailDomainRestriction'}}
+    </AkTypography>
+
+    <AkTypography @color='neutral'>
+      {{t 'emailRestrictDesc'}}
+    </AkTypography>
+  </AkStack>
+
+  <AkStack @alignItems='flex-end' class='mt-3'>
+    <div local-class='domain-input'>
+      <AkTextField
+        @label={{t 'addedEmailDomains'}}
+        @labelTypographyColor='textPrimary'
+        @labelTypographyVariant='subtitle1'
+        @value={{this.tDomain}}
+        @placeholder='example.com'
+        aria-label='domain input'
+        data-test-orgEmailDomain-input
+      />
+    </div>
+
+    <AkButton
+      {{on 'click' (perform this.addDomain)}}
+      @disabled={{this.isDisableSave}}
+      @loading={{this.addDomain.isRunning}}
+      class='mx-2'
+      data-test-orgEmailDomain-saveBtn
+    >
+      {{t 'addDomain'}}
+    </AkButton>
+  </AkStack>
+
+  <AkStack @spacing='1.5' @flexWrap='wrap' class='mt-2'>
+    {{#each this.domains as |domain idx|}}
+      <AkChip
+        data-test-orgEmailDomain-chip='{{idx}}-{{domain.id}}'
+        @variant='outlined'
+        @label={{domain.domainName}}
+        @onDelete={{perform this.deleteDomain domain idx}}
+      />
+    {{/each}}
+  </AkStack>
+</AkStack>

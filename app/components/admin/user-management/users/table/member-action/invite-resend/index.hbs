@@ -1,0 +1,27 @@
+<AkButton
+  data-test-invitation-resend-btn
+  title='{{t "resendInvitation"}}'
+  aria-label='{{t "resendInvitation"}}'
+  @variant='text'
+  @underline='none'
+  {{style minWidth='0'}}
+  {{on 'click' this.openResendInvitationConfirmBox}}
+>
+  <:leftIcon>
+    <AkIcon @iconName='refresh' />
+  </:leftIcon>
+  <:default>
+    {{t 'resend'}}
+  </:default>
+</AkButton>
+
+<ConfirmBox
+  @isActive={{this.showResendInvitationConfirmBox}}
+  @description={{t 'confirmBox.resendInvitation'}}
+  @delegate={{this}}
+  @confirmAction={{perform this.confirmResend}}
+  @disabled={{this.isResendingInvitation}}
+  @confirmText={{t 'resend'}}
+  @key='resend'
+  @blurOverlay={{@blurOverlay}}
+/>

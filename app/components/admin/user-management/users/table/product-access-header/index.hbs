@@ -1,0 +1,69 @@
+<AkStack @spacing='0.5' @alignItems='center' @justifyContent='flex-start'>
+  <AkTypography @variant='subtitle2'>{{t 'productAccess'}}</AkTypography>
+
+  <AkIcon
+    @iconName='filter-list'
+    @color={{if this.filterApplied 'primary' 'inherit'}}
+    local-class='cursor-pointer'
+    {{on 'click' this.handleClick}}
+  />
+</AkStack>
+
+<AkPopover
+  @anchorRef={{this.anchorRef}}
+  @placement='bottom'
+  @arrow={{false}}
+  @closeHandler={{this.handleOptionsClose}}
+  @clickOutsideToClose={{true}}
+>
+  <AkStack @direction='column' local-class='availability-filter'>
+    <AkStack @width='full' local-class='filter-header'>
+      <AkTypography @variant='subtitle2' local-class='filter-header-text'>
+        {{t 'byProductAccess'}}
+      </AkTypography>
+    </AkStack>
+
+    <AkStack
+      @spacing='1'
+      @width='full'
+      local-class='filter-option cursor-pointer'
+      class='py-1 pl-2'
+      {{on 'click' this.toggleVapt}}
+    >
+      <AkStack @alignItems='center' @spacing='1'>
+        <AkCheckbox @checked={{this.vapChecked}} />
+        <AkTypography>{{t 'storeknox.vapt'}}</AkTypography>
+      </AkStack>
+    </AkStack>
+
+    <AkStack
+      @spacing='1'
+      @width='full'
+      local-class='filter-option cursor-pointer'
+      class='py-1 pl-2'
+      {{on 'click' this.toggleAppMonitoring}}
+    >
+      <AkStack @alignItems='center' @spacing='1'>
+        <AkCheckbox @checked={{this.appMonitoringChecked}} />
+        <AkTypography>{{t 'appMonitoring'}}</AkTypography>
+      </AkStack>
+    </AkStack>
+
+    {{#if this.filterApplied}}
+      <AkStack
+        class='py-1 pl-2'
+        local-class='clear-filter-section'
+        @width='full'
+      >
+        <AkTypography
+          @underline='always'
+          @color='primary'
+          local-class='cursor-pointer'
+          {{on 'click' this.clearFilter}}
+        >
+          {{t 'clearFilter'}}
+        </AkTypography>
+      </AkStack>
+    {{/if}}
+  </AkStack>
+</AkPopover>

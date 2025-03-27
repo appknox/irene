@@ -1,0 +1,148 @@
+<AkStack class='py-3'>
+  <div local-class='search-input'>
+    <AkTextField
+      data-test-user-search-input
+      @placeholder={{t 'searchUser'}}
+      @value={{@queryParams.user_query}}
+      {{on 'keyup' this.searchUserForQuery}}
+    >
+      <:leftAdornment>
+        <AkIcon @iconName='search' @color='textSecondary' />
+      </:leftAdornment>
+    </AkTextField>
+  </div>
+
+  <AkStack @alignItems='center' @justifyContent='flex-end' @width='full'>
+    {{!-- <AkFormControlLabel
+      data-test-inactive-user-label
+      @label={{t 'includeInactiveMembers'}}
+    >
+      <AkCheckbox
+        data-test-inactive-user-checkbox
+        @checked={{@queryParams.show_inactive_user}}
+        @onChange={{this.showDeactivatedMembers}}
+      />
+    </AkFormControlLabel> --}}
+
+    {{#if this.me.org.is_owner}}
+      <div class='ml-3'>
+        <OrganizationMember::InviteUser @organization={{@organization}} />
+      </div>
+    {{/if}}
+  </AkStack>
+</AkStack>
+
+<AkStack local-class='user-table-container'>
+  <AkPaginationProvider
+    @results={{this.userList}}
+    @onItemPerPageChange={{this.handleItemPerPageChange}}
+    @totalItems={{this.totalUserCount}}
+    @nextAction={{this.handleNextAction}}
+    @prevAction={{this.handlePrevAction}}
+    @itemPerPageOptions={{array 10 25 50}}
+    @defaultLimit={{@queryParams.user_limit}}
+    @offset={{@queryParams.user_offset}}
+    as |pgc|
+  >
+    {{#if this.fetchUsers.isRunning}}
+      <AkTable data-test-component-list-skeleton-loader as |t|>
+        <t.head @columns={{this.columns}} />
+        <t.body @rows={{this.loadingMockData}} as |b|>
+          <b.row as |r|>
+            <r.cell>
+              <AkSkeleton @width='100px' @height='20px' />
+            </r.cell>
+          </b.row>
+        </t.body>
+      </AkTable>
+
+    {{else if this.hasNoUser}}
+      <AkStack
+        local-class='no-result-container'
+        @direction='column'
+        @alignItems='center'
+        @justifyContent='center'
+        @spacing='2'
+      >
+        <AkSvg::OrgUsersEmpty />
+
+        <AkTypography @variant='h5'>
+          {{t 'noMembers'}}
+        </AkTypography>
+      </AkStack>
+
+    {{else}}
+      <AkTable
+        data-test-cy='org-user-table'
+        data-test-org-user-table
+        @hoverable={{true}}
+        as |t|
+      >
+        <t.head @columns={{this.columns}} as |h|>
+          <h.row as |r|>
+            <r.cell as |column|>
+              {{#if column.headerComponent}}
+                {{#let (component column.headerComponent) as |Component|}}
+                  <Component />
+                {{/let}}
+              {{else}}
+                {{column.name}}
+              {{/if}}
+            </r.cell>
+          </h.row>
+        </t.head>
+
+        <t.body @rows={{pgc.currentPageResults}} as |b|>
+          <b.row
+            data-test-org-user-row
+            data-test-cy='org-user-row'
+            class={{unless b.rowValue.member.isActive 'user-disabled'}}
+            {{style cursor='pointer'}}
+            @onClick={{this.handleShowUserDetails}}
+            as |r|
+          >
+            <r.cell data-test-org-user-cell as |value|>
+              {{#if r.columnValue.component}}
+                {{#let (component r.columnValue.component) as |Component|}}
+                  <Component
+                    @member={{r.rowValue}}
+                    @organization={{@organization}}
+                    @color={{r.columnValue.color}}
+                    @label={{r.columnValue.statusText}}
+                  />
+                {{/let}}
+
+              {{else}}
+                <AkTypography title={{value}} @noWrap={{true}}>
+                  {{value}}
+                </AkTypography>
+              {{/if}}
+            </r.cell>
+          </b.row>
+        </t.body>
+      </AkTable>
+
+      <AkPagination
+        @disableNext={{pgc.disableNext}}
+        @nextAction={{pgc.nextAction}}
+        @disablePrev={{pgc.disablePrev}}
+        @prevAction={{pgc.prevAction}}
+        @endItemIdx={{pgc.endItemIdx}}
+        @startItemIdx={{pgc.startItemIdx}}
+        @itemPerPageOptions={{pgc.itemPerPageOptions}}
+        @onItemPerPageChange={{pgc.onItemPerPageChange}}
+        @selectedOption={{pgc.selectedOption}}
+        @tableItemLabel={{t 'users'}}
+        @perPageTranslation={{t 'recordPerPage'}}
+        @totalItems={{pgc.totalItems}}
+      />
+    {{/if}}
+  </AkPaginationProvider>
+</AkStack>
+
+{{!-- <OrganizationMember::List::MemberDrawer
+  @showUserDetailsView={{this.showUserDetailsView}}
+  @handleUserDetailClose={{this.handleUserDetailClose}}
+  @member={{this.selectedUser}}
+  @organization={{@organization}}
+/> --}}

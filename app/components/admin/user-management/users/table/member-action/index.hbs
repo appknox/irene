@@ -1,0 +1,28 @@
+<AkIconButton
+  data-test-sbomApp-actionBtn
+  @variant='outlined'
+  {{on 'click' this.handleOpenMenu}}
+  {{!-- disabled={{this.isDisabled}} --}}
+>
+  <AkIcon @iconName='more-vert' />
+</AkIconButton>
+
+<AkMenu
+  @anchorRef={{this.anchorRef}}
+  @arrow={{true}}
+  @onClose={{this.handleCloseMenu}}
+  as |akm|
+>
+  {{#each this.menuItems as |it|}}
+    <akm.listItem
+      data-test-sbomApp-actionMenuItem
+      @button={{true}}
+      {{!-- @onClick={{it.onClick}} --}}
+      @divider={{it.divider}}
+    >
+      {{#let (component it.component) as |Component|}}
+        <Component @member={{@member}} />
+      {{/let}}
+    </akm.listItem>
+  {{/each}}
+</AkMenu>

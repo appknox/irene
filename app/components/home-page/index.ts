@@ -1,11 +1,13 @@
 import { service } from '@ember/service';
 import Component from '@glimmer/component';
 import type IntlService from 'ember-intl/services/intl';
+import type RouterService from '@ember/routing/router-service';
 
 import type OrganizationService from 'irene/services/organization';
 import type UserAuthService from 'irene/services/user-auth';
 import type WhitelabelService from 'irene/services/whitelabel';
 import type { ProductCardDetails } from './product-card';
+import { action } from '@ember/object';
 
 export default class HomePageComponent extends Component {
   @service declare intl: IntlService;
@@ -13,6 +15,7 @@ export default class HomePageComponent extends Component {
   @service declare userAuth: UserAuthService;
   @service declare session: any;
   @service declare whitelabel: WhitelabelService;
+  @service declare router: RouterService;
 
   faviconImage: HTMLImageElement = new Image();
 
@@ -66,6 +69,11 @@ export default class HomePageComponent extends Component {
 
   get isSecurityEnabled() {
     return this.organization.isSecurityEnabled;
+  }
+
+  @action
+  onClickAdmin() {
+    this.router.transitionTo('authenticated.admin');
   }
 }
 

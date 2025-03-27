@@ -1,0 +1,29 @@
+<div
+  local-class='admin-root {{if this.isSidebarCollapsed "collapsed" "expanded"}}'
+>
+  <TopNav
+    local-class='admin-header'
+    @user={{@user}}
+    @title={{t 'admin'}}
+    as |topNav|
+  >
+    <AkStack @alignItems='center' @justifyContent='flex-end' @spacing='0.5'>
+      <TopNav::KnowledgeBase @triggerBtnClass={{topNav.classes.navbarBtn}} />
+    </AkStack>
+  </TopNav>
+
+  <SideNav
+    @pendoContainerId='sk-pendo-version-container'
+    @productVersion={{this.productVersion}}
+    @isCollapsed={{this.isSidebarCollapsed}}
+    @toggleSidebar={{this.toggleSidebar}}
+    @menuItems={{this.adminMenuItems}}
+    @productSwitcherFilterKey='admin'
+    local-class='admin-sidenav'
+  />
+
+  {{! #id is required for scroll-to-top util }}
+  <main id='ak-dashboard-main-scroll-container' local-class='admin-main'>
+    {{yield}}
+  </main>
+</div>

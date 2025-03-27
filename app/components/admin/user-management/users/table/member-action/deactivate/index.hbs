@@ -1,0 +1,39 @@
+<AkButton
+  data-test-change-activity-status
+  @variant='text'
+  @underline='none'
+  {{on 'click' this.editMemberSetting}}
+>
+  <:leftIcon>
+    {{#if @member.member.isActive}}
+      <AkIcon @iconName='person-off' @variant='outlined' />
+    {{else}}
+      <AkIcon @iconName='person' @variant='outlined' />
+    {{/if}}
+  </:leftIcon>
+
+  <:default>
+    {{if @member.member.isActive (t 'deactivateUser') (t 'activateUser')}}
+  </:default>
+</AkButton>
+
+<ConfirmBox
+  @isActive={{this.showEditModal}}
+  @disabled={{this.changeSetting.isRunning}}
+  @confirmAction={{perform this.changeSetting}}
+  @cancelAction={{this.closeModal}}
+  @title={{this.modaltitle}}
+  @confirmText={{t 'confirm'}}
+  @blurOverlay={{true}}
+>
+  <:content>
+    <AkTypography data-test-confirmbox-description>
+      {{t 'userActivationChangeMessage'}}
+
+      <strong>{{@member.member.username}}</strong>
+
+      {{if @member.member.isActive (t 'inactive') (t 'active')}}
+      ?
+    </AkTypography>
+  </:content>
+</ConfirmBox>

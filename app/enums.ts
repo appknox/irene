@@ -293,6 +293,12 @@ const ENUMS = {
     SN_VUL_APP_VULNERABLE_ITEM: 1,
     SN_VUL_VULNERABLE_ITEM: 2,
   },
+
+  MEMBER_STATUS: {
+    DEACTIVATED: 0,
+    ACTIVE: 1,
+    PENDING: 2,
+  },
 };
 
 export const ENUMS_DISPLAY = {

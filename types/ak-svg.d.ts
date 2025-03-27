@@ -82,6 +82,10 @@ export enum AkSvgComponentInvocationByNames {
   NoAccessImage,
   SoxInvalidUploadUrl,
   StoreknoxUpsellingUi,
+  VaptSoxIcon,
+  VaptSoxPendingIcon,
+  VaptSoxDisabledIcon,
+  SoxDisabledIcon,
 }
 
 export enum AkSvgComponentInvocationByPaths {
@@ -101,6 +105,11 @@ export enum AkSvgComponentInvocationByPaths {
   'sm-indicator',
   'vapt-indicator',
   'security-indicator',
+  'sox-icon',
+  'vapt-sox-icon',
+  'vapt-sox-pending-icon',
+  'vapt-sox-disabled-icon',
+  'sox-disabled-icon',
 }
 
 type AkSvgComponent = ComponentLike<{
