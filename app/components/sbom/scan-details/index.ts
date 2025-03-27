@@ -21,9 +21,9 @@ interface TreeNodeDataObject {
   vulnerabilitiesCount: number;
   hasChildren: boolean;
   hasNextSibling: boolean;
-  dependencyCount: number;
   isDependency: boolean;
   isHighlighted: boolean;
+  count: number;
   originalComponent: SbomComponentModel;
 }
 
