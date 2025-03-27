@@ -25,6 +25,8 @@ declare global {
 
   type UnknownFnType = (...args: unknown[]) => void;
 
+  type IreneProductVariants = 'appknox' | 'storeknox';
+
   // Types for the CSB Analytics
   interface CsbAnalytics {
     logout: () => void;

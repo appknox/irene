@@ -30,61 +30,99 @@ module('Integration | Component | notifications-page', function (hooks) {
       'component:notification-message-test',
       NotificationMesaageTest
     );
+
     NotificationMap['NF_TEST'] = {
       component: 'notification-message-test',
       context: NotificationTestContext,
     };
-  });
 
-  test('it renders', async function (assert) {
-    await render(hbs`<NotificationsPage />`);
-    assert.notEqual(
-      this.element.textContent.trim().indexOf(t('notifications')),
-      -1
-    );
-  });
+    const getModelName = (product) =>
+      product === 'appknox'
+        ? 'nf-in-app-notification'
+        : 'sk-nf-in-app-notification';
 
-  test('it should render all notification', async function (assert) {
-    this.unread_nf = this.server.createList('nf-in-app-notification', 3, {
-      hasRead: false,
-      messageCode: 'NF_TEST',
-      context: {
-        test_name: 'unread',
-      },
+    const getServiceName = (product) =>
+      `service:${product === 'appknox' ? 'ak-notifications' : 'sk-notifications'}`;
+
+    this.setProperties({
+      getModelName,
+      getServiceName,
     });
-
-    this.read_nf = this.server.createList('nf-in-app-notification', 10, {
-      hasRead: true,
-      messageCode: 'NF_TEST',
-      context: {
-        test_name: 'read',
-      },
-    });
-
-    const service = this.owner.lookup('service:ak-notifications');
-    await service.reload();
-    await render(hbs`<NotificationsPage />`);
-    assert.dom('[data-test-notification-message]').exists({ count: 10 });
-    assert.dom('[data-test-notification-empty]').doesNotExist();
   });
 
-  test('it should render empty', async function (assert) {
-    const service = this.owner.lookup('service:ak-notifications');
-    await service.reload();
-    await render(hbs`<NotificationsPage />`);
-    assert.dom('[data-test-notification-message]').doesNotExist();
-    assert.dom('[data-test-notification-empty]').exists();
-  });
+  test.each(
+    'it renders',
+    ['appknox', 'storeknox'],
+    async function (assert, product) {
+      this.set('product', product);
 
-  test('it should render loading', async function (assert) {
-    const service = this.owner.lookup('service:ak-notifications');
-    await service.reload();
-    service.fetch = {
-      isRunning: true,
-    };
-    await render(hbs`<NotificationsPage />`);
-    assert.dom('[data-test-notification-message]').doesNotExist();
-    assert.dom('[data-test-notification-empty]').doesNotExist();
-    assert.dom('[data-test-ak-loader]').exists();
-  });
+      await render(hbs`<NotificationsPage @product={{this.product}} />`);
+      assert.notEqual(
+        this.element.textContent.trim().indexOf(t('notifications')),
+        -1
+      );
+    }
+  );
+
+  test.each(
+    'it should render all notification',
+    ['appknox', 'storeknox'],
+    async function (assert, product) {
+      this.set('product', product);
+
+      this.unread_nf = this.server.createList(this.getModelName(product), 3, {
+        hasRead: false,
+        messageCode: 'NF_TEST',
+        context: {
+          test_name: 'unread',
+        },
+      });
+
+      this.read_nf = this.server.createList(this.getModelName(product), 10, {
+        hasRead: true,
+        messageCode: 'NF_TEST',
+        context: {
+          test_name: 'read',
+        },
+      });
+
+      const service = this.owner.lookup(this.getServiceName(product));
+      await service.reload();
+      await render(hbs`<NotificationsPage @product={{this.product}} />`);
+      assert.dom('[data-test-notification-message]').exists({ count: 10 });
+      assert.dom('[data-test-notification-empty]').doesNotExist();
+    }
+  );
+
+  test.each(
+    'it should render empty',
+    ['appknox', 'storeknox'],
+    async function (assert, product) {
+      this.set('product', product);
+
+      const service = this.owner.lookup(this.getServiceName(product));
+      await service.reload();
+      await render(hbs`<NotificationsPage @product={{this.product}} />`);
+      assert.dom('[data-test-notification-message]').doesNotExist();
+      assert.dom('[data-test-notification-empty]').exists();
+    }
+  );
+
+  test.each(
+    'it should render loading',
+    ['appknox', 'storeknox'],
+    async function (assert, product) {
+      this.set('product', product);
+
+      const service = this.owner.lookup(this.getServiceName(product));
+      await service.reload();
+      service.fetch = {
+        isRunning: true,
+      };
+      await render(hbs`<NotificationsPage @product={{this.product}} />`);
+      assert.dom('[data-test-notification-message]').doesNotExist();
+      assert.dom('[data-test-notification-empty]').doesNotExist();
+      assert.dom('[data-test-ak-loader]').exists();
+    }
+  );
 });

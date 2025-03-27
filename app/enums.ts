@@ -157,6 +157,11 @@ const ENUMS = {
     DEVKNOX: 1,
   },
 
+  NOTIF_PRODUCT: {
+    APPKNOX: 0,
+    STOREKNOX: 1,
+  },
+
   MFA_METHOD: {
     NONE: 0,
     TOTP: 1,

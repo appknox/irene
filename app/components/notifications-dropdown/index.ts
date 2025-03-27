@@ -1,12 +1,15 @@
+import Component from '@glimmer/component';
 import { action } from '@ember/object';
 import { service } from '@ember/service';
-import Component from '@glimmer/component';
-import { Modifier } from '@popperjs/core';
 
+import type { Modifier } from '@popperjs/core';
 import type AkNotificationsService from 'irene/services/ak-notifications';
+import type SkNotificationsService from 'irene/services/sk-notifications';
+import type { NotificationServiceMap } from 'irene/components/notifications-page';
 
 interface NotificationsDropdownComponentSignature {
   Args: {
+    product: IreneProductVariants;
     anchorRef: HTMLElement | null;
     onClose: () => void;
   };
@@ -14,6 +17,21 @@ interface NotificationsDropdownComponentSignature {
 
 export default class NotificationsDropdownComponent extends Component<NotificationsDropdownComponentSignature> {
   @service declare akNotifications: AkNotificationsService;
+  @service declare skNotifications: SkNotificationsService;
+
+  notificationServiceMap: NotificationServiceMap;
+
+  constructor(
+    owner: unknown,
+    args: NotificationsDropdownComponentSignature['Args']
+  ) {
+    super(owner, args);
+
+    this.notificationServiceMap = {
+      appknox: this.akNotifications,
+      storeknox: this.skNotifications,
+    };
+  }
 
   get modifiers(): Partial<Modifier<string, object>>[] {
     return [
@@ -26,12 +44,16 @@ export default class NotificationsDropdownComponent extends Component<Notificati
     ];
   }
 
+  get notificationService() {
+    return this.notificationServiceMap[this.args.product];
+  }
+
   get isLoading() {
-    return this.akNotifications.fetchUnRead.isRunning;
+    return this.notificationService.fetchUnRead.isRunning;
   }
 
   get isEmpty() {
-    return this.akNotifications.unReadCount == 0;
+    return this.notificationService.unReadCount == 0;
   }
 
   @action

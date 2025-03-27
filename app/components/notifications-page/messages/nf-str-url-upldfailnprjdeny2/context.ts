@@ -1,5 +1,5 @@
 export class NfStrUrlUpldfailnprjdeny2Context {
-  project_id: number;
+  project_id: string;
   package_name: string;
   platform: number;
   platform_display: string;

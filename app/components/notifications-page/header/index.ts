@@ -3,22 +3,49 @@ import { service } from '@ember/service';
 import { action } from '@ember/object';
 
 import type AkNotificationsService from 'irene/services/ak-notifications';
+import type SkNotificationsService from 'irene/services/sk-notifications';
+import type { NotificationServiceMap } from '..';
 
-export default class NotificationsPageHeaderComponent extends Component {
+interface NotificationsPageHeaderComponentSignature {
+  Args: {
+    product: IreneProductVariants;
+  };
+}
+
+export default class NotificationsPageHeaderComponent extends Component<NotificationsPageHeaderComponentSignature> {
   @service declare akNotifications: AkNotificationsService;
+  @service declare skNotifications: SkNotificationsService;
+
+  notificationServiceMap: NotificationServiceMap;
+
+  constructor(
+    owner: unknown,
+    args: NotificationsPageHeaderComponentSignature['Args']
+  ) {
+    super(owner, args);
+
+    this.notificationServiceMap = {
+      appknox: this.akNotifications,
+      storeknox: this.skNotifications,
+    };
+  }
+
+  get notificationService() {
+    return this.notificationServiceMap[this.args.product];
+  }
 
   get unReadCount() {
-    return this.akNotifications.unReadCount;
+    return this.notificationService.unReadCount;
   }
 
   @action
   onShowUnReadOnlyChange() {
-    this.akNotifications.refresh.perform();
+    this.notificationService.refresh.perform();
   }
 
   @action
   markAllAsRead() {
-    this.akNotifications.markAllAsRead.perform();
+    this.notificationService.markAllAsRead.perform();
   }
 }
 

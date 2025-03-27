@@ -17,6 +17,7 @@ import { NfSastcmpltd1Context } from './messages/nf-sastcmpltd1/context';
 import { NfDastcmpltd1Context } from './messages/nf-dastcmpltd1/context';
 import { NfApistcmpltd1Context } from './messages/nf-apistcmpltd1/context';
 import { NfAmNewversnContext } from './messages/nf-am-newversn/context';
+import { NfSkNewversnContext } from './messages/nf-sk-newversn/context';
 import { NfSbomcmpltdContext } from './messages/nf-sbomcmpltd/context';
 import { NfStrUrlUpldfailpayrq1Context } from './messages/nf-str-url-upldfailpayrq1/context';
 import { NfStrUrlUpldfailpay2Context } from './messages/nf-str-url-upldfailpay2/context';
@@ -103,6 +104,10 @@ export const NotificationMap = {
     component: 'notifications-page/messages/nf-apistcmpltd1' as const,
     context: NfApistcmpltd1Context,
   },
+  NF_SK_NEWVERSN: {
+    component: 'notifications-page/messages/nf-sk-newversn' as const,
+    context: NfSkNewversnContext,
+  },
   NF_AM_NEWVERSN: {
     component: 'notifications-page/messages/nf-am-newversn' as const,
     context: NfAmNewversnContext,
@@ -160,6 +165,11 @@ export const NotificationMap = {
       'notifications-page/messages/nf-systm-file-upload-success' as const,
     context: NfSystmFileUploadSuccessContext,
   },
-} satisfies Record<string, { component: string; context: unknown }>;
+};
+
+// Notification contexts
+export type NotificationContexts = {
+  [K in keyof typeof NotificationMap]: (typeof NotificationMap)[K]['context'];
+};
 
 export type NotificationMessageKey = keyof typeof NotificationMap;

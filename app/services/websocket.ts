@@ -12,6 +12,7 @@ import type RealtimeService from './realtime';
 import type AkNotificationsService from './ak-notifications';
 import type UserModel from 'irene/models/user';
 import type IreneAjaxService from './ajax';
+import type SkNotificationsService from './sk-notifications';
 
 export interface SocketInstance {
   on: (event: string, handler: (args: any) => void, target?: object) => void;
@@ -34,6 +35,7 @@ export default class WebsocketService extends Service {
   @service declare realtime: RealtimeService;
   @service declare notifications: NotificationService;
   @service declare akNotifications: AkNotificationsService;
+  @service declare skNotifications: SkNotificationsService;
   @service declare ajax: IreneAjaxService;
   @service('socket-io') socketIOService: any;
 
@@ -146,7 +148,7 @@ export default class WebsocketService extends Service {
     return this.onObject(...args);
   }
 
-  onNotification(data?: { unread_count: number }) {
+  onNotification(data?: { unread_count: number; product: number }) {
     if (!data) {
       this.logger.error(`invalid data for onNotification`);
 
@@ -161,9 +163,15 @@ export default class WebsocketService extends Service {
       return;
     }
 
-    this.akNotifications.realtimeUpdate({
-      unReadCount: data.unread_count,
-    });
+    const updateData = { unReadCount: data.unread_count };
+
+    if (data.product === ENUMS.NOTIF_PRODUCT.APPKNOX) {
+      this.akNotifications.realtimeUpdate(updateData);
+    }
+
+    if (data.product === ENUMS.NOTIF_PRODUCT.STOREKNOX) {
+      this.skNotifications.realtimeUpdate(updateData);
+    }
   }
 
   onMessage(data?: { message?: string; notifyType?: number }) {
