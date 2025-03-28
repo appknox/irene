@@ -1,0 +1,146 @@
+<AkStack
+  @width='full'
+  @direction='column'
+  data-test-prjSettings-integrations-jiraProject-root
+>
+  <ProjectSettings::Integrations::IntegratedHeader
+    @headerText={{t 'jiraIntegration'}}
+    @headerSubtext={{this.headerSubText}}
+    @editAction={{this.editJiraRepoModal}}
+    @deleteAction={{this.openDeleteJIRAConfirmBox}}
+    @showHeaderActions={{this.showHeaderActions}}
+  />
+
+  {{#if this.isLoadingJiraInfo}}
+    <ProjectSettings::Integrations::LoadingUi />
+
+  {{else if this.currentJiraProject}}
+    <ProjectSettings::Integrations::JiraProject::SelectedProject
+      @currentJiraProject={{this.currentJiraProject}}
+    />
+
+  {{else if (not this.isLoadingJiraInfo)}}
+    {{#if this.hasJIRAProject}}
+      <AkButton
+        @variant='outlined'
+        {{on 'click' this.editJiraRepoModal}}
+        class='mt-2'
+        data-test-prjSettings-integrations-jiraProject-selectProjectBtn
+      >
+        {{t 'selectProject'}}
+      </AkButton>
+
+    {{else if this.noAccess}}
+      <AkStack @alignItems='center' @spacing='1'>
+        <AkIcon @iconName='warning' @color='error' @variant='filled' />
+
+        <AkTypography @color='error'>
+          {{t 'adminPermissionProject'}}
+        </AkTypography>
+      </AkStack>
+
+    {{else if this.noIntegration}}
+      <AkStack @alignItems='center' @spacing='0.5'>
+        <AkTypography @color='textSecondary' @variant='body2'>
+          {{t 'jira'}}
+          {{t 'gotoSettings'}}
+        </AkTypography>
+
+        <AkLink
+          @typographyVariant='body2'
+          @route='authenticated.dashboard.organization-settings.integrations'
+          @color='primary'
+        >
+          {{t 'clickingHere'}}
+        </AkLink>
+      </AkStack>
+
+    {{else}}
+      <ProjectSettings::Integrations::JiraProject::NoProject
+        @reconnect={{this.reconnect}}
+      />
+    {{/if}}
+  {{/if}}
+</AkStack>
+
+{{! Project/Risk Threshold Config Drawer }}
+<ProjectSettings::Integrations::ConfigDrawer
+  @drawerTitle={{t 'jiraIntegration'}}
+  @openDrawer={{this.showEditJiraModal}}
+  @loadingDrawerSaveAction={{this.selectProject.isRunning}}
+  @closeDrawerHandler={{this.closeJiraRepoModal}}
+  @drawerSaveAction={{perform this.selectProject}}
+>
+  <:drawerContent>
+    <AkTypography
+      @variant='h6'
+      @fontWeight='regular'
+      @color='textSecondary'
+      data-test-prjSettings-integrations-jiraProject-configDrawer-headerText
+    >
+      {{t 'otherTemplates.selectJIRAAccount'}}
+    </AkTypography>
+
+    {{#if this.jiraProjects}}
+      <AkStack @direction='column' @width='full' @spacing='3'>
+        <AkStack @direction='column' @width='8/12' @spacing='1'>
+          <AkTypography
+            @variant='h6'
+            data-test-prjSettings-integrations-jiraProject-configDrawer-repoListTitle
+          >
+            {{t 'repo'}}
+          </AkTypography>
+
+          <AkSelect
+            @options={{this.jiraProjects}}
+            @selected={{this.selectedRepo}}
+            @onChange={{this.selectRepo}}
+            @placeholder='{{t "selectRepo"}}'
+            @triggerClass='select-repo-class'
+            {{style width='100%'}}
+            data-test-prjSettings-integrations-jiraProject-configDrawer-repoList
+            as |repo|
+          >
+            {{repo.key}}-{{repo.name}}
+          </AkSelect>
+        </AkStack>
+
+        <AkStack @direction='column' @width='4/12' @spacing='1'>
+          <AkTypography @variant='h6'>{{t 'threshold'}}</AkTypography>
+
+          <AkSelect
+            @selected={{this.selectedThreshold}}
+            @options={{this.thresholds}}
+            @onChange={{this.selectThreshold}}
+            @placeholder='{{t "selectThreshold"}}'
+            @triggerClass='select-threshold-class'
+            {{style width='100%'}}
+            data-test-prjSettings-integrations-jiraProject-configDrawer-thresholdList
+            as |threshold|
+          >
+            {{threshold-status threshold}}
+          </AkSelect>
+        </AkStack>
+      </AkStack>
+    {{/if}}
+
+    <AkDivider @color='dark' />
+
+    <AkTypography
+      @variant='body2'
+      @color='textSecondary'
+      data-test-prjSettings-integrations-jiraProject-configDrawer-note
+    >
+      <strong>{{t 'note'}}:</strong>
+      {{t 'otherTemplates.selectJIRAAccountNote' htmlSafe=true}}
+    </AkTypography>
+  </:drawerContent>
+</ProjectSettings::Integrations::ConfigDrawer>
+
+{{! Delete JIRA Integration }}
+<ConfirmBox
+  @isActive={{this.showDeleteJIRAConfirmBox}}
+  @description={{t 'confirmBox.removeJIRA'}}
+  @delegate={{this}}
+  @disabled={{this.deleteRepo.isRunning}}
+/>

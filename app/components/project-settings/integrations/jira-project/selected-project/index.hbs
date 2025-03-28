@@ -1,0 +1,35 @@
+<AkStack @direction='column' @spacing='2' class='mt-2'>
+  <AkStack @direction='column' @spacing='1'>
+    <AkTypography
+      @variant='body2'
+      @fontWeight='bold'
+      data-test-prjSettings-integrations-jiraProject-repoHeaderText
+    >
+      {{t 'repo'}}
+    </AkTypography>
+
+    <AkTypography
+      @variant='body2'
+      @color='primary'
+      {{style fontFamily='monospace'}}
+      data-test-prjSettings-integrations-jiraProject-repoKeyAndName
+    >
+      {{@currentJiraProject.project_key}}-{{@currentJiraProject.project_name}}
+    </AkTypography>
+  </AkStack>
+
+  <AkStack @direction='column' @spacing='1'>
+    <AkTypography
+      @variant='body2'
+      @fontWeight='bold'
+      data-test-prjSettings-integrations-jiraProject-riskHeaderText
+    >
+      {{t 'threshold'}}
+    </AkTypography>
+
+    <ProjectSettings::Integrations::RiskThreshold
+      @computedRisk={{@currentJiraProject.risk_threshold}}
+      data-test-prjSettings-integrations-jiraProject-risk
+    />
+  </AkStack>
+</AkStack>

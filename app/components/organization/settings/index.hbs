@@ -26,17 +26,5 @@
 
   <AkDivider class='my-3' @color='dark' />
 
-  <JiraAccount @user={{@model.user}} />
-
-  <AkDivider class='my-3' @color='dark' />
-
-  <GithubAccount
-    @integratedUser={{@model.integratedUser}}
-    @reconnect={{@model.reconnect}}
-    @user={{@model.user}}
-  />
-
-  <AkDivider class='my-3' @color='dark' />
-
   <FileCleanup />
 </div>

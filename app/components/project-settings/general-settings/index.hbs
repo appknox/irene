@@ -1,7 +1,7 @@
 <AkStack
   @direction='column'
   @spacing='3/2'
-  class='mb-3 pt-3'
+  class='mb-3 py-3'
   local-class='general-settings-root'
   data-test-projectSettings-generalSettings-root
 >
@@ -65,19 +65,5 @@
     <ProjectSettings::GeneralSettings::CollaboratorsTable
       @project={{this.project}}
     />
-  </AkStack>
-
-  <AkDivider @color='dark' />
-
-  <AkStack @width='9/12' class='px-3'>
-    <ProjectSettings::GeneralSettings::GithubProject
-      @project={{this.project}}
-    />
-  </AkStack>
-
-  <AkDivider @color='dark' />
-
-  <AkStack @width='9/12' class='px-3'>
-    <ProjectSettings::GeneralSettings::JiraProject @project={{this.project}} />
   </AkStack>
 </AkStack>

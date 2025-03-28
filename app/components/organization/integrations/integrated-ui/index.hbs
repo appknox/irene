@@ -1,0 +1,50 @@
+<div local-class='bordered-box' ...attributes>
+  <div local-class='integration-logo-container'>
+    {{#if @loading}}
+      <AkSkeleton @width='40px' @height='40px' />
+    {{else}}
+      <img
+        data-test-orgIntegrations-integratedUI-logo
+        src={{@imageSource}}
+        alt={{@imageAlt}}
+      />
+    {{/if}}
+  </div>
+
+  <AkStack
+    @alignItems='center'
+    @justifyContent='space-between'
+    local-class='integration-account-container'
+  >
+    <div class='mr-2'>
+      {{#if @loading}}
+        <AkSkeleton @width='190px' @height='19px' />
+
+        <AkSkeleton @width='90px' @height='19px' class='mt-1' />
+      {{else}}
+        <AkTypography
+          @color='textSecondary'
+          data-test-orgIntegrations-integratedUI-hostURL
+        >
+          {{@hostURL}}
+        </AkTypography>
+
+        <AkTypography data-test-orgIntegrations-integratedUI-username>
+          {{@username}}
+        </AkTypography>
+      {{/if}}
+    </div>
+
+    {{#if @loading}}
+      <AkSkeleton @width='94px' @height='38px' />
+    {{else}}
+      <AkButton
+        data-test-orgIntegrations-integratedUI-disconnectBtn
+        @variant='outlined'
+        {{on 'click' @onDisconnectClick}}
+      >
+        {{t 'disconnect'}}
+      </AkButton>
+    {{/if}}
+  </AkStack>
+</div>

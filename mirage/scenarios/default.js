@@ -19,8 +19,6 @@ export default function (server) {
     availableDeviceCount = getRandomInt(3, 3),
     organizationCount = getRandomInt(1, 1),
     teamCount = 3,
-    githubCount = 1,
-    jiraCount = 1,
     vulnerabilityPreferenceCount = 10,
     projectCount = getRandomInt(4, 5),
     project = null,
@@ -40,8 +38,6 @@ export default function (server) {
   server.createList('analytic', analyticsCount);
   server.createList('personaltoken', personalTokenCount);
   server.createList('invitation', invitationCount);
-  server.createList('github-integration', githubCount);
-  server.createList('jira-integration', jiraCount);
   server.createList('vulnerability-preference', vulnerabilityPreferenceCount);
   server.createList('available-device', availableDeviceCount);
   server.createList('organization', organizationCount);

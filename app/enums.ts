@@ -288,6 +288,11 @@ const ENUMS = {
     ADMIN: 3,
     OWNER: 4,
   },
+
+  SERVICE_NOW_TABLE_SELECTION: {
+    SN_VUL_APP_VULNERABLE_ITEM: 1,
+    SN_VUL_VULNERABLE_ITEM: 2,
+  },
 };
 
 export const ENUMS_DISPLAY = {

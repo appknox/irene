@@ -271,6 +271,7 @@ module.exports = function (environment) {
       revokeGitHub: 'unauthorize_github',
       revokeJira: 'unauthorize_jira',
       integrateJira: 'integrate_jira',
+      integrateServiceNow: 'servicenow',
       changePassword: 'v2/change_password',
       namespaceAdd: 'namespace_add',
       applyCoupon: 'apply_coupon',
@@ -465,6 +466,11 @@ module.exports = function (environment) {
       },
       integrateJIRA: {
         feature: 'Integrate JIRA',
+        module: 'Report',
+        product: 'Appknox',
+      },
+      integrateServiceNow: {
+        feature: 'Integrate ServiceNow',
         module: 'Report',
         product: 'Appknox',
       },

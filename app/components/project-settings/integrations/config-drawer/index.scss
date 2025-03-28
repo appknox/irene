@@ -1,0 +1,27 @@
+.project-integrations-config-drawer-container {
+  width: 640px;
+  height: 100%;
+  overflow-y: auto;
+
+  .project-integrations-settings-drawer-footer {
+    position: sticky;
+    bottom: 0;
+    background-color: var(
+      --project-settings-integrations-config-drawer-background-main
+    );
+    box-shadow: var(--project-settings-integrations-config-drawer-box-shadow);
+  }
+
+  .height-full {
+    height: 100%;
+  }
+
+  .bordered-box {
+    border: 1px solid
+      var(--project-settings-integrations-config-drawer-border-color);
+    border-radius: var(
+      --project-settings-integrations-config-drawer-footer-border-radius
+    );
+    box-sizing: border-box;
+  }
+}
