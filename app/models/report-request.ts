@@ -1,7 +1,37 @@
 import Model, { attr } from '@ember-data/model';
 
+// Advanced Filter types
+export interface AdditionalFilterErroredFieldProp {
+  field: boolean;
+  operator: boolean;
+}
+
+export type AdditionalFilterFilterDetailsExpressionValues =
+  | string
+  | number
+  | boolean
+  | number[]
+  | string[]
+  | Date
+  | Date[]
+  | null;
+
+export type AdditionalFilterFilterDetailsExpression = {
+  operator: string;
+  filterMetaInfo?: PreviewFilterField;
+  value:
+    | AdditionalFilterFilterDetailsExpressionValues
+    | AdditionalFilterFilterDetailsExpressionValues[];
+};
+
+export interface AdditionalFilter {
+  id: string;
+  filter_details: Record<string, AdditionalFilterFilterDetailsExpression>;
+}
+
+// Report Preview types
 export interface ReportPreviewData {
-  [key: string]: any;
+  [key: string]: unknown;
 }
 
 export interface ReportPreviewColumn {
@@ -19,10 +49,12 @@ export interface ReportPreviewPagination {
 
 export interface PreviewFilterField {
   field: string;
+  filter_key: string;
   label: string;
   type: string;
   choices?: [string, string | number | boolean][];
   is_nullable: boolean;
+  range?: boolean;
 }
 
 export interface PreviewFilterDetails {
@@ -38,14 +70,6 @@ export interface ReportRequestPreview {
   data: ReportPreviewData[];
   pagination: ReportPreviewPagination;
   filter_details: PreviewFilterDetails[];
-}
-
-export interface AdditionalFilter {
-  id: string;
-  filter_details: Record<
-    string,
-    { operator: string; value: string | number | boolean | null }
-  >;
 }
 
 export enum ReportRequestStatus {
