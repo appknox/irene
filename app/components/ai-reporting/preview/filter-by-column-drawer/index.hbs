@@ -1,0 +1,26 @@
+<AkDrawer
+  @open={{@open}}
+  @onClose={{this.handleClose}}
+  @anchor='right'
+  @disableBackdropClick={{true}}
+  as |dr|
+>
+  <AkAppbar @justifyContent='space-between' as |ab|>
+    <AkTypography @variant='h5' @color='inherit'>
+      {{t 'reportModule.filterByColumns'}}
+    </AkTypography>
+
+    <AkIconButton
+      class={{ab.classes.defaultIconBtn}}
+      {{on 'click' dr.closeHandler}}
+    >
+      <AkIcon @iconName='close' />
+    </AkIconButton>
+  </AkAppbar>
+
+  <AiReporting::Preview::FilterSections::Columns
+    @allColumnsMap={{this.allColumnsMap}}
+    @applyAndClose={{this.applyAndClose}}
+    @onColumnsChange={{this.handleColumnsChange}}
+  />
+</AkDrawer>

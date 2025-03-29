@@ -1,0 +1,93 @@
+<AkDatePicker
+  @multiple={{this.isMultipleDateSelect}}
+  @range={{this.isRangeDate}}
+  @maxDate={{this.maxDate}}
+  @selected={{this.currentValue}}
+  @onSelect={{this.onSelectDay}}
+>
+  <AkStack
+    @alignItems='center'
+    local-class='date-picker-btn
+    {{if @isErrored "is-errored"}}
+    {{if this.isMultipleDateSelect "is-multiple-date-select"}}'
+    data-test-date-picker-toggle-button
+  >
+    <AkIcon
+      @iconName='event'
+      @size='small'
+      @color='textPrimary'
+      title='Select date range'
+      local-class='date-picker-icon'
+      {{style minWidth='11px'}}
+    />
+
+    <div
+      local-class='
+      date-picker-date-text
+      {{if this.isRangeDate "range-date"}}
+      {{if
+        (and this.isMultipleDateSelect this.hasMultipleDates)
+        "is-multiple-date-select"
+      }}
+    '
+    >
+      {{#if this.isMultipleDateSelect}}
+        <AkStack @direction='row' @flexWrap='wrap' @spacing='1'>
+          {{#each this.multipleDates as |date|}}
+            <AkChip
+              @size='small'
+              @label={{day-js date=date format='DD/MM/YY'}}
+              @onDelete={{fn this.onDeleteDate date}}
+            />
+          {{else}}
+            <AkTypography @tag='span' @variant='body2' @color='textSecondary'>
+              {{t 'reportModule.advancedFilters.selectMultipleDates'}}
+            </AkTypography>
+          {{/each}}
+        </AkStack>
+
+      {{else if this.isRangeDate}}
+        <AkStack
+          @width='full'
+          @direction='row'
+          @justifyContent='center'
+          @spacing='1'
+        >
+          {{#if this.rangeDate.start}}
+            <AkTypography @tag='span' @variant='body2' @color='textPrimary'>
+              {{day-js date=this.rangeDate.start format='DD MMM, YYYY'}}
+            </AkTypography>
+          {{else}}
+            <AkTypography @tag='span' @variant='body2' @color='textSecondary'>
+              {{t 'fromDate'}}
+            </AkTypography>
+          {{/if}}
+
+          <AkTypography @tag='span' @variant='body2' @color='textSecondary'>
+            -
+          </AkTypography>
+
+          {{#if this.rangeDate.end}}
+            <AkTypography @tag='span' @variant='body2' @color='textPrimary'>
+              {{day-js date=this.rangeDate.end format='DD MMM, YYYY'}}
+            </AkTypography>
+          {{else}}
+            <AkTypography @tag='span' @variant='body2' @color='textSecondary'>
+              {{t 'toDate'}}
+            </AkTypography>
+          {{/if}}
+        </AkStack>
+      {{else}}
+        {{#if this.singleDate}}
+          <AkTypography @tag='span' @variant='body2' @color='textPrimary'>
+            {{day-js date=this.singleDate format='DD MMM, YYYY'}}
+          </AkTypography>
+        {{else}}
+          <AkTypography @tag='span' @variant='body2' @color='textSecondary'>
+            {{t 'reportModule.advancedFilters.selectDate'}}
+          </AkTypography>
+        {{/if}}
+      {{/if}}
+    </div>
+  </AkStack>
+</AkDatePicker>

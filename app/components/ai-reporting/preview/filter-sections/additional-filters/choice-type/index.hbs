@@ -1,0 +1,14 @@
+<AkSelect
+  @placeholder={{t 'reportModule.advancedFilters.selectValue' label=this.label}}
+  @selected={{this.selectedChoice}}
+  @options={{this.choices}}
+  @onChange={{this.handleChoiceSelection}}
+  @multiple={{this.isMultiple}}
+  @dropdownClass={{this.dropdownClass}}
+  @error={{@isErrored}}
+  local-class='choice-select-option'
+  {{style maxWidth='200px'}}
+  as |opt|
+>
+  <AkTypography @variant='body2'>{{this.getOptionLabel opt}}</AkTypography>
+</AkSelect>
