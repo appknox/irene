@@ -1,28 +1,45 @@
 import Component from '@glimmer/component';
 import { action } from '@ember/object';
-import { tracked } from '@glimmer/tracking';
 
-import type { PreviewFilterField } from 'irene/models/report-request';
+import ENUMS from 'irene/enums';
+
+import type {
+  AdditionalFilterFilterDetailsExpressionValues,
+  PreviewFilterField,
+} from 'irene/models/report-request';
+
+import styles from './index.scss';
+
+type ChoiceValueType = string | number | boolean | null;
 
 interface AiReportingPreviewFilterSectionsAdditionalFiltersChoiceTypeSignature {
   Args: {
     field: PreviewFilterField;
     operator: string;
-    currentValue: string | number | boolean | null;
+    isErrored: boolean;
+    currentValue:
+      | AdditionalFilterFilterDetailsExpressionValues
+      | AdditionalFilterFilterDetailsExpressionValues[];
+
     onAddUpdateFilter: (
       operator: string,
-      value: string | number | boolean | null
+      value:
+        | AdditionalFilterFilterDetailsExpressionValues
+        | AdditionalFilterFilterDetailsExpressionValues[]
     ) => void;
   };
 }
 
-type ChoiceType = [string, string | number | boolean];
-
 export default class AiReportingPreviewFilterSectionsAdditionalFiltersChoiceTypeComponent extends Component<AiReportingPreviewFilterSectionsAdditionalFiltersChoiceTypeSignature> {
-  @tracked choiceValue: string | number | boolean | null = this.currentValue;
+  get field() {
+    return this.args.field;
+  }
 
-  get selectedChoice() {
-    return this.choices?.find((c) => c.value == this.choiceValue);
+  get isMultiple() {
+    return [
+      ENUMS.AI_REPORTING_FILTER_OPERATOR.IN,
+      ENUMS.AI_REPORTING_FILTER_OPERATOR.NOT_IN,
+    ].includes(this.args.operator);
   }
 
   get currentValue() {
@@ -30,17 +47,35 @@ export default class AiReportingPreviewFilterSectionsAdditionalFiltersChoiceType
   }
 
   get choices() {
-    return (this.args.field.choices as ChoiceType[]).map((c) => ({
-      label: c[0],
-      value: String(c[1]),
-    }));
+    return this.field.choices?.map((c) => String(c[1])) ?? [];
+  }
+
+  get label() {
+    return this.field.label || this.field.filter_key;
+  }
+
+  get selectedChoice() {
+    const selectedChoices = this.currentValue as
+      | ChoiceValueType
+      | ChoiceValueType[];
+
+    return this.isMultiple && Array.isArray(selectedChoices)
+      ? this.choices?.filter((c) => selectedChoices?.includes(c))
+      : this.choices?.find((c) => c == selectedChoices);
+  }
+
+  get dropdownClass() {
+    return styles['choice-type-dropdown'];
   }
 
   @action
-  handleChoiceSelection(selection: { label: string; value: string }) {
-    this.choiceValue = selection.value;
+  getOptionLabel(opt: ChoiceValueType) {
+    return this.field.choices?.find((c) => c[1] == opt)?.[0];
+  }
 
-    this.args.onAddUpdateFilter(this.args.operator, this.choiceValue);
+  @action
+  handleChoiceSelection(selection: ChoiceValueType | ChoiceValueType[]) {
+    this.args.onAddUpdateFilter(this.args.operator, selection);
   }
 }
 

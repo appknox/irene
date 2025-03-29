@@ -33,7 +33,11 @@ export default class AiReportingPreviewColumnValue extends Component<AiReporting
     const value = this.getNestedValue(data, field);
 
     if (this.args.column.field_type === 'datetime') {
-      return dayjs(value).format('MMM DD, YYYY');
+      if (value) {
+        return dayjs(value).format('MMM DD, YYYY');
+      }
+
+      return;
     }
 
     return value;

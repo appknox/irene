@@ -1,0 +1,51 @@
+.date-picker-btn {
+  cursor: pointer;
+  user-select: none;
+  max-height: 32px;
+  border: 1px solid
+    var(
+      --ai-reporting-preview-filter-sections-date-type-date-picker-border-color
+    );
+
+  border-radius: var(
+    --ai-reporting-preview-filter-sections-date-type-date-picker-border-radius
+  );
+
+  &.is-errored,
+  &.is-errored .date-picker-date-text {
+    border-color: var(
+      --ai-reporting-preview-filter-sections-date-type-date-picker-error-border-color
+    ) !important;
+  }
+
+  &.is-multiple-date-select {
+    max-height: 100px;
+  }
+
+  .date-picker-date-text {
+    padding: 0.5em 1.5em;
+    padding-left: 0.75em;
+    max-height: 64px;
+    overflow-y: scroll;
+    border-left: 1px solid
+      var(
+        --ai-reporting-preview-filter-sections-date-type-date-picker-border-color
+      );
+
+    &.is-multiple-date-select {
+      max-width: 200px;
+      padding: 0.5em;
+      overflow-y: scroll;
+    }
+
+    &.range-date {
+      padding: 0.5em 0.75em;
+      min-width: 220px;
+      max-width: 220px;
+    }
+  }
+
+  .date-picker-icon {
+    margin: 0 0.6em;
+  }
+}

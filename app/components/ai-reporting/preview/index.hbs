@@ -51,36 +51,44 @@
         <:leftIcon>
           <AkIcon
             @iconName='filter-list'
-            @color={{if (not this.disableFilters) 'primary' 'inherit'}}
+            @color={{if this.disableFilters 'inherit' 'primary'}}
           />
         </:leftIcon>
 
         <:default>
           {{t 'reportModule.filterByColumns'}}
 
-          {{#if (not this.disableFilters)}}
+          {{#unless this.disableFilters}}
             -&nbsp;
             <strong>{{this.noSelectedColumns}}</strong>
-          {{/if}}
+          {{/unless}}
         </:default>
       </AkButton>
 
       <AkButton
         @variant='filled'
-        @disabled={{this.disableFilters}}
+        @disabled={{this.disableAdvanceFilterButton}}
         @color='primary'
         {{on 'click' this.handleAdvanceFilterDrawerOpen}}
-        local-class='custom-button {{if this.disableFilters "disabled"}}'
+        local-class='custom-button {{unless
+          @reportRequest.isRelevant
+          "disabled"
+        }}'
       >
         <:leftIcon>
           <AkIcon
             @iconName='add'
-            @color={{if (not this.disableFilters) 'primary' 'inherit'}}
+            @color={{if @reportRequest.isRelevant 'primary' 'inherit'}}
           />
         </:leftIcon>
 
         <:default>
-          {{t 'reportModule.advanceFilter'}}
+          {{t 'reportModule.advancedFilter'}}
+
+          {{#if @reportRequest.isRelevant}}
+            -&nbsp;
+            <strong>{{this.noSelectedAdvancedFilters}}</strong>
+          {{/if}}
         </:default>
       </AkButton>
     </AkStack>
@@ -193,13 +201,14 @@
   @allColumnsMap={{this.allColumnsMap}}
 />
 
-<AiReporting::Preview::AdvanceFilterDrawer
-  @open={{this.advanceFilterDrawerOpen}}
-  @onClose={{this.handleAdvanceFilterDrawerClose}}
-  @onApply={{this.handleAdvanceFilterDrawerApply}}
-  @filterDetails={{this.filterDetails}}
-  @additionalFilters={{this.additionalFilters}}
-/>
+{{#if this.showAdvanceFilterDrawer}}
+  <AiReporting::Preview::AdvanceFilterDrawer
+    @onClose={{this.handleAdvanceFilterDrawerClose}}
+    @onApply={{this.handleAdvanceFilterDrawerApply}}
+    @filterDetails={{this.filterDetails}}
+    @additionalFilters={{this.additionalFilters}}
+  />
+{{/if}}
 
 {{#if this.downloadUrl}}
   <AiReporting::Preview::IframeWrapper

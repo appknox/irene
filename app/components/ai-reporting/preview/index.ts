@@ -36,7 +36,6 @@ export default class AiReportingPreview extends Component<AiReportingPreviewSign
   @tracked downloadUrl: string | null = null;
 
   @tracked allColumnsMap: Map<string, FilterColumn> = new Map();
-
   @tracked additionalFilters: AdditionalFilter[] = [];
   @tracked errorScreenHeader: string = '';
   @tracked errorScreenDesc: string = '';
@@ -72,6 +71,12 @@ export default class AiReportingPreview extends Component<AiReportingPreviewSign
 
   get noSelectedColumns() {
     return this.selectedColumns.length;
+  }
+
+  get noSelectedAdvancedFilters() {
+    return this.additionalFilters.reduce((acc, curr) => {
+      return acc + Object.keys(curr.filter_details).length;
+    }, 0);
   }
 
   get hasDefaultFilters(): boolean {
@@ -113,6 +118,20 @@ export default class AiReportingPreview extends Component<AiReportingPreviewSign
 
   get disableDownload() {
     return this.disableFilters || this.reportPreview?.data.length === 0;
+  }
+
+  get disableAdvanceFilterButton() {
+    return (
+      this.previewReportRequest.isRunning || !this.args.reportRequest.isRelevant
+    );
+  }
+
+  get hasAdvancedFilters() {
+    return this.filterDetails.length > 0;
+  }
+
+  get showAdvanceFilterDrawer() {
+    return this.hasAdvancedFilters && this.advanceFilterDrawerOpen;
   }
 
   @action
@@ -165,10 +184,19 @@ export default class AiReportingPreview extends Component<AiReportingPreviewSign
   @action
   handleFilterByColumnDrawerApply(allColumnsMap: Map<string, FilterColumn>) {
     this.allColumnsMap = allColumnsMap;
+
+    this.previewReportRequest.perform(false, this.limit, 0);
   }
 
   @action
   handleAdvanceFilterDrawerApply(additionalFilters: AdditionalFilter[] = []) {
+    // Do not run preview request if no filters are applied and updated filters are empty
+    if (additionalFilters.length === 0 && this.additionalFilters.length === 0) {
+      return;
+    }
+
+    this.offset = 0;
+
     this.additionalFilters = additionalFilters;
 
     this.previewReportRequest.perform(false, this.limit, 0);

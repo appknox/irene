@@ -1,28 +1,44 @@
 import Component from '@glimmer/component';
 import { action } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
-import { debounceTask } from 'ember-lifeline';
 
-import type { PreviewFilterField } from 'irene/models/report-request';
+import ENUMS from 'irene/enums';
+
+import type {
+  AdditionalFilterFilterDetailsExpressionValues,
+  PreviewFilterField,
+} from 'irene/models/report-request';
 
 interface AiReportingPreviewFilterSectionsAdditionalFiltersTextTypeSignature {
   Args: {
     field: PreviewFilterField;
-    currentValue: string | null;
     operator: string;
+    isErrored: boolean;
+    currentValue:
+      | AdditionalFilterFilterDetailsExpressionValues
+      | AdditionalFilterFilterDetailsExpressionValues[];
+
     onAddUpdateFilter: (
       operator: string,
-      value: string | number | boolean | null
+      value: AdditionalFilterFilterDetailsExpressionValues
     ) => void;
   };
 }
 
 export default class AiReportingPreviewFilterSectionsAdditionalFiltersTextTypeComponent extends Component<AiReportingPreviewFilterSectionsAdditionalFiltersTextTypeSignature> {
-  @tracked value = this.args.currentValue || '';
+  @tracked value = this.currentValue;
 
-  @action
-  handleAddUpdateFilter(value: string) {
-    this.args.onAddUpdateFilter(this.args.operator, value);
+  get currentValue() {
+    const value = (this.args.currentValue || '') as string | string[];
+
+    return Array.isArray(value) ? value.join(',') : value;
+  }
+
+  get isInOperator() {
+    return [
+      ENUMS.AI_REPORTING_FILTER_OPERATOR.IN,
+      ENUMS.AI_REPORTING_FILTER_OPERATOR.NOT_IN,
+    ].includes(this.args.operator);
   }
 
   @action
@@ -30,7 +46,10 @@ export default class AiReportingPreviewFilterSectionsAdditionalFiltersTextTypeCo
     const value = (event.target as HTMLInputElement).value;
     this.value = value;
 
-    debounceTask(this, 'handleAddUpdateFilter', value, 500);
+    const valueToUpdate =
+      this.isInOperator && value.length > 0 ? value.split(',') : value;
+
+    this.args.onAddUpdateFilter(this.args.operator, valueToUpdate);
   }
 }
 
