@@ -1,0 +1,28 @@
+<AkSelect
+  @selected={{this.operator}}
+  @options={{@operators}}
+  @onChange={{this.handleOperatorChange}}
+  @dropdownClass={{this.filterFieldDropdownClass}}
+  @extra={{hash selectedItemLabel=(this.getFilterOperatorLabel this.operator)}}
+  @selectedItemComponent={{component
+    'ai-reporting/preview/filter-sections/additional-filters/truncated-filter-label'
+  }}
+  {{style maxWidth='120px'}}
+  as |opt|
+>
+  {{this.getFilterOperatorLabel opt}}
+</AkSelect>
+
+{{#unless this.hideValueComponent}}
+  <div local-class='filter-field-container'>
+    {{#let (component this.valueComponent) as |ValueComponent|}}
+      <ValueComponent
+        @field={{@field}}
+        @operator={{this.operator}}
+        @currentValue={{this.currentValue}}
+        @onAddUpdateFilter={{this.handleAddUpdateFilter}}
+        @isErrored={{this.fieldError}}
+      />
+    {{/let}}
+  </div>
+{{/unless}}

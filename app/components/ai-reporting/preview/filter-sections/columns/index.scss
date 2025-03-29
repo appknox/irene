@@ -1,0 +1,31 @@
+.add-remove-header {
+  border-bottom: 1px solid
+    var(--ai-reporting-preview-filter-sections-columns-header-border-color);
+  padding: 1em 1.5em;
+}
+
+.reorder-icon {
+  cursor: grab;
+  color: var(
+    --ai-reporting-preview-filter-sections-columns-reorder-icon-color
+  ) !important;
+}
+
+.column-item.drag-over {
+  border-bottom: 1px solid
+    var(--ai-reporting-preview-filter-sections-columns-drag-border-color);
+}
+
+.filter-drawer-footer {
+  padding: 1em 1.5em;
+  background-color: var(
+    --ai-reporting-preview-filter-sections-columns-bg-color
+  );
+  box-shadow: var(--ai-reporting-preview-filter-sections-columns-box-shadow);
+}
+
+.add-remove-section {
+  height: 100%;
+  width: 450px;
+  overflow-y: auto;
+}

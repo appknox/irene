@@ -1,0 +1,71 @@
+.filter-group-container {
+  width: 100%;
+  display: flex;
+  gap: 1rem;
+  position: relative;
+  padding: 1rem;
+
+  border: 1px solid
+    var(--ai-reporting-preview-filter-sections-filter-group-border-color);
+
+  border-radius: var(
+    --ai-reporting-preview-filter-sections-filter-group-border-radius
+  );
+
+  .field-group-label {
+    position: absolute;
+    top: -12px;
+    left: 1em;
+    padding: 0 1em !important;
+    width: max-content;
+    background-color: var(
+      --ai-reporting-preview-filter-sections-filter-group-background-main
+    );
+  }
+
+  .empty-filter-group-container {
+    width: 100%;
+    padding: 1em 1.5em;
+
+    border: 1px solid
+      var(
+        --ai-reporting-preview-filter-sections-filter-group-empty-filter-group-border-color
+      );
+
+    border-radius: var(
+      --ai-reporting-preview-filter-sections-filter-group-empty-filter-group-border-radius
+    );
+
+    background-color: var(
+      --ai-reporting-preview-filter-sections-filter-group-background-light
+    );
+
+    .add-filter-btn {
+      background-color: var(
+        --ai-reporting-preview-filter-sections-filter-group-background-main
+      ) !important;
+    }
+  }
+
+  .add-new-condition-btn {
+    background-color: var(
+      --ai-reporting-preview-filter-sections-filter-group-add-new-condition-btn-background-color
+    ) !important;
+
+    color: var(
+      --ai-reporting-preview-filter-sections-filter-group-add-new-condition-btn-color
+    ) !important;
+
+    border: 1px solid
+      var(
+        --ai-reporting-preview-filter-sections-filter-group-add-new-condition-btn-border-color
+      ) !important;
+
+    &:hover {
+      border: 1px solid
+        var(
+          --ai-reporting-preview-filter-sections-filter-group-add-new-condition-btn-color
+        ) !important;
+    }
+  }
+}

@@ -38,6 +38,10 @@ export default class DynamicScanActionComponent extends Component<DynamicScanAct
     return this.file.project.get('platform');
   }
 
+  get projectOrganizationId() {
+    return this.file.project.get('organization')?.get('id');
+  }
+
   get dynamicScanActionButton() {
     if (this.args.dynamicScan?.get('isStarting')) {
       return {

@@ -1,0 +1,86 @@
+<div
+  id='filter-group-{{@sectionId}}'
+  local-class='filter-group-container'
+  {{did-insert this.initFilterGroup}}
+>
+  <AkTypography @variant='h6' local-class='field-group-label'>
+    {{@filterDetails.model_name}}
+  </AkTypography>
+
+  <div class='p-1 w-full'>
+    {{#if this.hasSelectedFilters}}
+      <AkStack @direction='column' @spacing='1.5'>
+        {{#each this.selectedFilters as |filterObj idx|}}
+          <AiReporting::Preview::FilterSections::FilterGroup::Item
+            @filterObj={{filterObj}}
+            @filterIdx={{idx}}
+            @selectedFilters={{this.selectedFilters}}
+            @availableFiltersFields={{this.availableFiltersFields}}
+            @mappedAdditionalFilters={{this.mappedAdditionalFilters}}
+            @updateSelectedFilters={{this.updateSelectedFilters}}
+            @updateMappedAdditionalFilters={{this.updateMappedAdditionalFilters}}
+            @sectionId={{@sectionId}}
+            @filterDetails={{@filterDetails}}
+            @erroredFields={{@erroredFields}}
+            @clearErrorField={{@clearErrorField}}
+          />
+        {{/each}}
+      </AkStack>
+
+      <AkDivider class='my-2' />
+
+      <AkButton
+        @disabled={{this.preventFilterAddition}}
+        local-class={{unless
+          this.preventFilterAddition
+          'add-new-condition-btn'
+        }}
+        {{on 'click' this.addNewFilter}}
+      >
+        <:leftIcon>
+          <AkIcon
+            @iconName='add'
+            @color={{if this.preventFilterAddition 'inherit' 'primary'}}
+          />
+        </:leftIcon>
+
+        <:default>
+          {{t 'reportModule.advancedFilters.addNewCondition'}}
+        </:default>
+      </AkButton>
+
+    {{else if this.noSelectedFilters}}
+      <AkStack
+        @direction='column'
+        @alignItems='center'
+        @spacing='1.5'
+        local-class='empty-filter-group-container'
+      >
+        <AkSvg::GenerateReport />
+
+        <AkTypography
+          @variant='body2'
+          @align='center'
+          {{style maxWidth='340px'}}
+        >
+          {{t 'reportModule.advancedFilters.noFiltersSelected'}}
+        </AkTypography>
+
+        <AkButton
+          @variant='outlined'
+          @color='neutral'
+          local-class='add-filter-btn'
+          {{on 'click' this.addNewFilter}}
+        >
+          <:leftIcon>
+            <AkIcon @iconName='add' />
+          </:leftIcon>
+
+          <:default>
+            {{t 'reportModule.advancedFilters.addFilter'}}
+          </:default>
+        </AkButton>
+      </AkStack>
+    {{/if}}
+  </div>
+</div>

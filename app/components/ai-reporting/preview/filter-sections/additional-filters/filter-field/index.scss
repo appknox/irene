@@ -1,0 +1,36 @@
+.filter-field {
+  width: 100%;
+  display: flex;
+  gap: 1em;
+  position: relative;
+  padding: 1em;
+
+  border: 1px solid
+    var(--ai-reporting-preview-filter-sections-filter-field-border-color);
+
+  border-radius: var(
+    --ai-reporting-preview-filter-sections-filter-field-border-radius
+  );
+}
+
+.field-label {
+  position: absolute;
+  top: -12px;
+  left: 1em;
+  padding: 0 1em !important;
+  width: max-content;
+
+  background-color: var(
+    --ai-reporting-preview-filter-sections-filter-field-background-main
+  );
+}
+
+.filter-field-container {
+  background-color: var(
+    --ai-reporting-preview-filter-sections-filter-field-background-main
+  );
+}
+
+.filter-field-dropdown {
+  width: 210px !important;
+}

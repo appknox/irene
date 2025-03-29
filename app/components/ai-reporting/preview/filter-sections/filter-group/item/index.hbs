@@ -1,0 +1,75 @@
+<AkStack
+  @width='full'
+  @justifyContent='space-between'
+  @alignItems='center'
+  @spacing='1.5'
+  local-class='filter-group-item {{if
+    (this.getInOperatorSelected @filterObj.filter)
+    "in-operator"
+  }}'
+  class='p-2'
+>
+  <AkStack
+    @direction='row'
+    @alignItems='center'
+    @spacing='2'
+    local-class='filter-group-item-content'
+  >
+    <div local-class='filter-group-item-line' />
+
+    {{#if (eq @filterIdx 0)}}
+      <AkTypography
+        @variant='body2'
+        @align='center'
+        @fontWeight='medium'
+        local-class='base-filter-indicator'
+        {{style minWidth='65px'}}
+      >
+        {{t 'reportModule.advancedFilters.where'}}
+      </AkTypography>
+    {{else}}
+      <AkSelect
+        @onChange={{this.noop}}
+        @options={{this.unionOperators}}
+        @selected={{this.selectedUnionOperator}}
+        {{style minWidth='65px'}}
+        as |opt|
+      >
+        <AkTypography @variant='body2'>{{opt}}</AkTypography>
+      </AkSelect>
+    {{/if}}
+
+    <AkSelect
+      @options={{@availableFiltersFields}}
+      @selected={{@filterObj.filter}}
+      @dropdownClass={{this.filterFieldsDropdownClass}}
+      @extra={{hash selectedItemLabel=@filterObj.filter.label}}
+      @onChange={{fn (this.replaceFilterAtIndex @filterIdx)}}
+      @placeholder={{t 'reportModule.advancedFilters.selectField'}}
+      @noMatchesMessage={{t 'reportModule.advancedFilters.noMoreFields'}}
+      @selectedItemComponent={{component
+        'ai-reporting/preview/filter-sections/additional-filters/truncated-filter-label'
+      }}
+      {{style width='180px'}}
+      as |opt|
+    >
+      <AkTypography @variant='body2'>{{opt.label}}</AkTypography>
+    </AkSelect>
+
+    <AiReporting::Preview::FilterSections::AdditionalFilters::FilterField
+      @sectionId={{@filterDetails.id}}
+      @field={{@filterObj.filter}}
+      @allCurrFilters={{@mappedAdditionalFilters}}
+      @operators={{ai-report-filter-operators @filterObj.filter}}
+      @erroredFields={{@erroredFields}}
+      @onAddUpdateFilter={{fn (this.onFilterUpdate @filterIdx)}}
+    />
+  </AkStack>
+
+  <AkIconButton
+    {{on 'click' (fn this.removeFilterAtIndex @filterIdx)}}
+    local-class='remove-filter-btn'
+  >
+    <AkIcon @iconName='delete' />
+  </AkIconButton>
+</AkStack>

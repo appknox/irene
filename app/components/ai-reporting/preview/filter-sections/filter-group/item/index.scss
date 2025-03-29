@@ -1,0 +1,46 @@
+.filter-group-item {
+  min-height: 64px;
+  background-color: var(
+    --ai-reporting-preview-filter-sections-filter-group-item-background-color
+  );
+
+  &.in-operator {
+    padding-bottom: 3.1429em;
+  }
+
+  .filter-group-item-content {
+    position: relative;
+
+    & > *:not(.filter-group-item-line) {
+      z-index: 3;
+    }
+
+    .filter-group-item-line {
+      z-index: 1;
+      position: absolute;
+      top: 50%;
+      left: 1em;
+      transform: translateY(-50%);
+      width: calc(100% - 2em);
+      height: 1px;
+
+      border-bottom: 1px dotted
+        var(
+          --ai-reporting-preview-filter-sections-filter-group-item-line-border-color
+        );
+    }
+  }
+
+  .base-filter-indicator {
+    border-radius: 0.4286em;
+    padding: 0.4286em 0.5714em;
+
+    background-color: var(
+      --ai-reporting-preview-filter-sections-filter-group-item-base-filter-indicator-background-color
+    );
+  }
+}
+
+.filter-fields-dropdown {
+  width: 210px !important;
+}

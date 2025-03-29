@@ -155,11 +155,12 @@ export default class FileDetailsDynamicScanActionDrawerComponent extends Compone
         ENV.endpoints['dynamicscans'],
       ].join('/');
 
-      await this.ajax.post(dynamicUrl, {
+      const newDynamicScanObj = (await this.ajax.post(dynamicUrl, {
         namespace: ENV.namespace_v2,
         data,
-      });
+      })) as { id: string };
 
+      await this.store.findRecord('dynamicscan', newDynamicScanObj.id);
       await this.file.reload();
 
       this.args.onClose();

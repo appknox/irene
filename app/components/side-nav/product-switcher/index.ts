@@ -3,6 +3,7 @@ import { action } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
 import { service } from '@ember/service';
 import type IntlService from 'ember-intl/services/intl';
+import type Store from '@ember-data/store';
 
 import styles from './index.scss';
 import type ConfigurationService from 'irene/services/configuration';
@@ -38,6 +39,7 @@ export default class SideNavProductSwitcherComponent extends Component<SideNavPr
   @service declare configuration: ConfigurationService;
   @service declare whitelabel: WhitelabelService;
   @service declare organization: OrganizationService;
+  @service declare store: Store;
 
   @tracked anchorRef: HTMLElement | null = null;
 
@@ -67,6 +69,13 @@ export default class SideNavProductSwitcherComponent extends Component<SideNavPr
     return this.organization.isSecurityEnabled;
   }
 
+  get showReporting() {
+    return (
+      this.organization?.selected?.aiFeatures?.reporting &&
+      !this.orgIsAnEnterprise
+    );
+  }
+
   get switcherMenuItems() {
     const allMenuItems = [
       {
@@ -92,6 +101,13 @@ export default class SideNavProductSwitcherComponent extends Component<SideNavPr
         route: 'authenticated.security.projects',
         key: 'security',
         openInNewTab: true,
+      },
+      this.showReporting && {
+        id: 'report-svg',
+        svg: 'ak-svg/report-indicator',
+        label: this.intl.t('reportModule.title'),
+        route: 'authenticated.reports',
+        key: 'report',
       },
     ];
 

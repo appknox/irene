@@ -1,0 +1,19 @@
+<div local-class='text-type-text-field-container'>
+  <AkTextField
+    @placeholder={{t 'reportModule.advancedFilters.enterValue'}}
+    @value={{this.value}}
+    @error={{@isErrored}}
+    {{on 'input' this.handleValueChange}}
+    {{style fontSize='0.928rem'}}
+  />
+
+  {{#if this.isInOperator}}
+    <AkTypography
+      local-class='text-type-text-field-helper-text'
+      @color='textSecondary'
+      {{style fontSize='0.7857em'}}
+    >
+      {{t 'reportModule.advancedFilters.enterCommaSeparatedValues'}}
+    </AkTypography>
+  {{/if}}
+</div>

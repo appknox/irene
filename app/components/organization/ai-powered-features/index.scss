@@ -1,31 +1,9 @@
-//TODO: Update this file when PII is ready
+.ai-powered-features-wrapper {
+  background-color: var(--organization-ai-powered-features-bg-color);
+  border: 1px solid var(--organization-ai-powered-features-border-color);
+  border-top: none;
 
-.pii-feature-body {
-  padding: 16px;
-  background-color: white;
-}
-
-.powered-by-chip {
-  background-color: #14badc;
-  padding: 4px 6px;
-  border-radius: 2px;
-  border: 1px solid #14badc;
-  cursor: pointer;
-
-  .text {
-    color: white;
-    font-size: 12px;
+  .ai-powered-feature-body {
+    padding: 1.142em;
   }
-
-  &:hover {
-    border: 1px solid #139ab5;
-  }
-}
-
-.ai-drawer-body {
-  border: 1px solid #f8f8f8;
-  margin: 17px 22px;
-  padding: 20px;
-  height: inherit;
-  width: 640px;
 }

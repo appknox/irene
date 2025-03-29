@@ -13,12 +13,14 @@ export interface ProductCardDetails {
   coverBackgroundImage:
     | 'ak-svg/storeknox-bg-img'
     | 'ak-svg/appknox-bg-img'
-    | 'ak-svg/security-bg-img';
+    | 'ak-svg/security-bg-img'
+    | 'ak-svg/report-bg-img';
 
   indicatorSvg:
     | 'ak-svg/sm-indicator'
     | 'ak-svg/vapt-indicator'
-    | 'ak-svg/security-indicator';
+    | 'ak-svg/security-indicator'
+    | 'ak-svg/report-indicator';
 }
 
 export interface ProductCardComponentSignature {

@@ -16,8 +16,8 @@
     {{/if}}
 
     <div
-      local-class='ak-select-trigger-root 
-      {{if @label "ak-form-label-spacing"}} 
+      local-class='ak-select-trigger-root
+      {{if @label "ak-form-label-spacing"}}
       {{if @multiple "ak-select-trigger-root-multiple"}}'
     >
       {{#let
@@ -29,7 +29,7 @@
           @dropdownClass='{{@dropdownClass}} {{this.classes.dropdown}}'
           @triggerClass='
           {{@triggerClass}}
-          {{this.classes.trigger}} 
+          {{this.classes.trigger}}
           {{if @error this.classes.triggerError}}'
           @options={{@options}}
           @onChange={{@onChange}}
@@ -48,6 +48,7 @@
           @searchPlaceholder={{@searchPlaceholder}}
           @extra={{this.extra}}
           @search={{@search}}
+          @noMatchesMessage={{@noMatchesMessage}}
           @beforeOptionsComponent={{or
             @beforeOptionsComponent
             (component 'ak-select/before-option')

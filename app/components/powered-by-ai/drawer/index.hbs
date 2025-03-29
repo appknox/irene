@@ -1,0 +1,61 @@
+<AkDrawer @open={{@aiDrawerOpen}} @onClose={{@onClose}} @anchor='right' as |dr|>
+  <AkAppbar
+    @justifyContent='space-between'
+    @position='sticky'
+    class='px-3'
+    as |ab|
+  >
+    <AkTypography @color='inherit' @variant='h5'>
+      {{t 'aiPoweredFeatures'}}
+    </AkTypography>
+
+    <AkIconButton
+      {{on 'click' dr.closeHandler}}
+      class={{ab.classes.defaultIconBtn}}
+    >
+      <AkIcon @iconName='close' />
+    </AkIconButton>
+  </AkAppbar>
+
+  <AkStack @direction='column' local-class='ai-drawer-body'>
+    <PoweredByAi::Chip @clickable={{false}} />
+
+    {{#each @info as |section|}}
+      <AkTypography
+        @fontWeight='bold'
+        @gutterBottom={{true}}
+        class={{section.marginTop}}
+      >
+        {{section.title}}
+      </AkTypography>
+
+      {{#if section.contentList}}
+        <ul local-class='ai-drawer-body-list'>
+          {{#each section.contentList as |content|}}
+            <li class='mb-1'>
+              {{content}}
+            </li>
+          {{/each}}
+        </ul>
+      {{else}}
+        <AkTypography @variant='body2'>
+          {{section.body}}
+        </AkTypography>
+      {{/if}}
+    {{/each}}
+  </AkStack>
+
+  {{#if @showButtons}}
+    <AkStack @spacing='1' local-class='footer' class='py-2 pl-5'>
+      <AkButton {{on 'click' this.onClick}}>{{@buttonText}}</AkButton>
+
+      <AkButton
+        @variant='outlined'
+        @color='neutral'
+        {{on 'click' dr.closeHandler}}
+      >
+        {{t 'back'}}
+      </AkButton>
+    </AkStack>
+  {{/if}}
+</AkDrawer>

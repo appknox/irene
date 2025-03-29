@@ -1,0 +1,21 @@
+.empty-container {
+  background-color: var(--ai-reporting-turn-on-settings-bg-color);
+  max-width: 750px;
+  justify-self: center;
+  margin-top: 4em;
+  box-shadow: var(--ai-reporting-turn-on-settings-box-shadow);
+
+  .body {
+    padding: 2.14em;
+
+    .header {
+      margin-top: 1.25em;
+    }
+  }
+
+  .footer {
+    box-shadow: var(--ai-reporting-turn-on-settings-footer-box-shadow);
+    width: 100%;
+    padding: 1.07em 2.14em;
+  }
+}

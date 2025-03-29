@@ -1,0 +1,76 @@
+<AkDrawer
+  @open={{@openDrawer}}
+  @onClose={{@closeDrawer}}
+  @anchor='right'
+  data-test-fileReportDrawer
+  as |dr|
+>
+  <div local-class='report-download-drawer-container'>
+    <AkAppbar @justifyContent='space-between' class='px-3' as |ab|>
+      <AkTypography
+        data-test-fileReportDrawer-title
+        @color='inherit'
+        @variant='h5'
+      >
+        {{t 'downloadReport'}}
+      </AkTypography>
+
+      <AkIconButton
+        data-test-fileReportDrawer-closeBtn
+        {{on 'click' dr.closeHandler}}
+        class={{ab.classes.defaultIconBtn}}
+      >
+        <AkIcon @iconName='close' data-test-fileReportDrawer-closeBtn-icon />
+      </AkIconButton>
+    </AkAppbar>
+
+    <AkTypography
+      @variant='subtitle2'
+      class='px-3 py-2'
+      data-test-fileReportDrawer-headerText
+    >
+      Please select the report type you wish to download:
+    </AkTypography>
+
+    <div
+      local-class='report-download-drawer-content'
+      data-test-fileReportDrawer-vaReports
+    >
+      <AkList {{style padding='0px'}} data-test-vaReports-reportList>
+        {{#each this.reportDetails as |details|}}
+          {{#unless details.hideReport}}
+            <AiReporting::Preview::ReportDownloadDrawer::ReportItem
+              @reportDetails={{details}}
+              @reportRequest={{@reportRequest}}
+              @selectedReportType={{this.selectedReportType}}
+              @onReportTypeSelect={{this.handleReportTypeSelect}}
+              data-test-aiReporting-reportList-reportItem
+              data-test-aiReporting-reportList-Item='{{details.type}}'
+            />
+          {{/unless}}
+        {{/each}}
+      </AkList>
+    </div>
+
+    <AkStack
+      @width='full'
+      @alignItems='center'
+      @justifyContent='flex-end'
+      @spacing='1.5'
+      local-class='report-download-drawer-footer'
+      class='px-3 py-2'
+    >
+      <AkButton
+        @variant='outlined'
+        @color='neutral'
+        {{on 'click' dr.closeHandler}}
+      >
+        {{t 'cancel'}}
+      </AkButton>
+
+      <AkButton {{on 'click' this.handleDownload}}>
+        {{t 'download'}}
+      </AkButton>
+    </AkStack>
+  </div>
+</AkDrawer>

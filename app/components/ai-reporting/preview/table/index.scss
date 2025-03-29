@@ -1,0 +1,28 @@
+.report-preview {
+  height: calc(100vh - 150px);
+  max-height: 1000px;
+}
+
+.report-preview-table-container {
+  height: 100%;
+}
+
+.report-preview-table {
+  max-height: calc(100% - 54px);
+  height: auto;
+
+  table {
+    table-layout: auto;
+
+    thead tr th,
+    tbody tr td {
+      width: auto !important;
+      min-width: 150px !important;
+      max-width: 600px !important;
+    }
+
+    tbody tr td {
+      overflow: auto;
+    }
+  }
+}
