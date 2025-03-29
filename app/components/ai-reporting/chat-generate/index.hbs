@@ -1,0 +1,92 @@
+{{#if this.isGenerating}}
+  <AiReporting::GenerateLoader />
+{{else}}
+  <div class='p-3'>
+    <AkStack @direction='column' @width='full' @spacing='6'>
+      <AkTypography @variant='h1' @color='primary'>
+        {{t 'reportModule.describeTheReport'}}
+      </AkTypography>
+
+      <AkStack @direction='column' @spacing='2' @width='full'>
+        <AkTypography @variant='h5'>
+          {{t 'reportModule.whatDoYouWantToLearn'}}
+        </AkTypography>
+
+        <Textarea
+          rows='6'
+          aria-label='Overridden Risk Comment'
+          placeholder='For Example - Generate an audit log of all the scan activities over the last 30 days.'
+          @value={{this.reportQuery}}
+          {{on 'input' this.updateReportDescription}}
+          local-class='textarea-input'
+        />
+
+        <AkStack @direction='row' @width='full' @justifyContent='flex-end'>
+          <AkTypography @variant='body2' @color='textSecondary'>
+            {{this.reportQuery.length}}
+            / 400 characters
+          </AkTypography>
+        </AkStack>
+
+        <AkButton
+          @disabled={{this.disableGenerateButton}}
+          @loading={{this.generateReport.isRunning}}
+          {{on 'click' (perform this.generateReport)}}
+        >
+          {{t 'reportModule.generateReport'}}
+        </AkButton>
+      </AkStack>
+
+      <AkStack @direction='column' @spacing='1'>
+        <AkTypography @variant='h5'>
+          {{t 'reportModule.notSureWhatToWrite'}}
+        </AkTypography>
+
+        <AkTypography @color='textSecondary'>
+          {{t 'reportModule.clickPrompt'}}
+        </AkTypography>
+
+        <div class='mt-3'>
+          <div {{style width='250px'}}>
+            <AkSelect
+              @label={{t 'reportModule.category'}}
+              @labelTypographyVariant='h6'
+              @labelTypographyColor='textPrimary'
+              @options={{this.categories}}
+              @onChange={{this.updateSelectedCategory}}
+              @selected={{this.selectedCategory}}
+              as |option|
+            >
+              {{option.label}}
+            </AkSelect>
+          </div>
+
+          <div class='mt-4'>
+            <AkTypography @variant='h6'>
+              {{t 'reportModule.basedOnTheCategory'}}
+            </AkTypography>
+
+            <AkStack @direction='column' @spacing='1' class='mt-1'>
+              {{#each this.filteredPrompts as |prompt|}}
+                <AkStack @direction='row' @spacing='1.5' @alignItems='center'>
+                  <AkIcon
+                    @iconName='auto-awesome'
+                    @variant='outlined'
+                    @color='info'
+                  />
+
+                  <AkButton
+                    @variant='text'
+                    {{on 'click' (fn this.usePrompt prompt)}}
+                  >
+                    {{prompt}}
+                  </AkButton>
+                </AkStack>
+              {{/each}}
+            </AkStack>
+          </div>
+        </div>
+      </AkStack>
+    </AkStack>
+  </div>
+{{/if}}

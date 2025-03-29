@@ -1,0 +1,33 @@
+<div
+  local-class='report-root {{if
+    this.isSidebarCollapsed
+    "collapsed"
+    "expanded"
+  }}'
+>
+  <TopNav
+    local-class='report-header'
+    @user={{@user}}
+    @title={{if this.isWhitelabel (t 'report') (t 'reportModule.title')}}
+    as |topNav|
+  >
+    <AkStack @alignItems='center' @justifyContent='flex-end' @spacing='0.5'>
+      <TopNav::KnowledgeBase @triggerBtnClass={{topNav.classes.navbarBtn}} />
+    </AkStack>
+  </TopNav>
+
+  <SideNav
+    @pendoContainerId='report-pendo-version-container'
+    @productVersion={{this.productVersion}}
+    @isCollapsed={{this.isSidebarCollapsed}}
+    @toggleSidebar={{this.toggleSidebar}}
+    @menuItems={{this.reportMenuItems}}
+    @productSwitcherFilterKey='report'
+    local-class='report-sidenav'
+  />
+
+  {{! #id is required for scroll-to-top util }}
+  <main id='ak-report-main-scroll-container' local-class='report-main'>
+    {{yield}}
+  </main>
+</div> 

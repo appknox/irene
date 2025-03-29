@@ -1,0 +1,55 @@
+<div>
+  <AkStack @alignItems='center' @justifyContent='space-between'>
+    <AkTypography @variant='subtitle2'>
+      Add/Remove Columns
+    </AkTypography>
+
+    <AkButton @variant='text' @color='primary' {{on 'click' this.resetColumns}}>
+      Reset
+    </AkButton>
+  </AkStack>
+
+  <div>
+    <div local-class='selection-count' class='my-1'>
+      <AkTypography @tag='span'>
+        {{this.noSelectedColumns}}
+        selected / out of
+        {{this.allColumns.length}}
+      </AkTypography>
+    </div>
+
+    <AkFormControlLabel @label={{t 'selectAll'}}>
+      <AkCheckbox
+        @checked={{this.allColumnsSelected}}
+        @onChange={{this.toggleAllColumns}}
+      />
+    </AkFormControlLabel>
+
+    {{#each this.allColumns as |column|}}
+      <AkStack
+        @alignItems='center'
+        @justifyContent='space-between'
+        class={{this.getColumnClass column}}
+        draggable='true'
+        {{on 'dragstart' (fn this.handleColumnDragStart column)}}
+        {{on 'dragend' this.handleColumnDragEnd}}
+        {{on 'dragover' (fn this.handleColumnDragOver column)}}
+        {{on 'dragleave' (fn this.handleColumnDragLeave column)}}
+        {{on 'drop' (fn this.handleColumnDrop column)}}
+      >
+        <AkFormControlLabel @label={{column.name}}>
+          <AkCheckbox
+            @checked={{column.selected}}
+            @onChange={{fn this.toggleColumn column}}
+          />
+        </AkFormControlLabel>
+
+        <AkIcon
+          @iconName='reorder'
+          @color='textSecondary'
+          local-class='reorder-icon'
+        />
+      </AkStack>
+    {{/each}}
+  </div>
+</div>

@@ -1,0 +1,50 @@
+<AkDrawer @open={{@open}} @onClose={{@onClose}} @anchor='right' as |dr|>
+  <AkAppbar @justifyContent='space-between' as |ab|>
+    <AkTypography
+      data-test-serviceAccount-confirmDrawer-heading
+      @variant='h5'
+      @color='inherit'
+    >
+      Filter
+    </AkTypography>
+
+    <AkIconButton
+      class={{ab.classes.defaultIconBtn}}
+      {{on 'click' dr.closeHandler}}
+    >
+      <AkIcon @iconName='close' />
+    </AkIconButton>
+  </AkAppbar>
+
+  <div local-class='filter-sections'>
+    {{#if this.reportPreview}}
+      <AiReporting::Preview::FilterSections
+        @reportPreview={{this.reportPreview}}
+        @onColumnsChange={{this.handleColumnsChange}}
+        @selectedColumnsMap={{@selectedColumnsMap}}
+      />
+    {{else}}
+      <AkTypography @align='center' class='p-4'>
+        Loading Filters...
+      </AkTypography>
+    {{/if}}
+  </div>
+
+  <AkStack
+    @alignItems='center'
+    @justifyContent='space-between'
+    local-class='filter-drawer-footer'
+  >
+    <AkButton
+      @variant='outlined'
+      @color='neutral'
+      {{on 'click' dr.closeHandler}}
+    >
+      Cancel
+    </AkButton>
+
+    <AkButton {{on 'click' this.applyAndClose}}>
+      Apply
+    </AkButton>
+  </AkStack>
+</AkDrawer>
