@@ -331,6 +331,13 @@ Router.map(function () {
         this.route('review-logs', { path: '/discover/review-logs' });
         this.route('archived-apps', { path: '/inventory/archived-apps' });
       });
+
+      // Report routes
+      this.route('reports', { path: '/dashboard/reports' }, function () {
+        this.route('index', { path: '/' });
+        this.route('generate');
+        this.route('preview', { path: '/preview/:id' });
+      });
     }
   );
 

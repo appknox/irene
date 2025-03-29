@@ -53,6 +53,13 @@ export default class HomePageComponent extends Component {
         coverBackgroundImage: 'ak-svg/storeknox-bg-img',
         isBeta: true,
       },
+      {
+        title: this.intl.t('reportModule.title'),
+        description: this.intl.t('reportModule.description'),
+        route: 'authenticated.reports',
+        indicatorSvg: 'ak-svg/report-indicator',
+        coverBackgroundImage: 'ak-svg/report-bg-img',
+      },
       this.isSecurityEnabled && {
         title: this.intl.t('securityDashboard'),
         description: this.intl.t('securityDashboardDesc'),

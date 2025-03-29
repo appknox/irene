@@ -1,0 +1,21 @@
+<AkTable as |tb|>
+  <tb.head @columns={{this.loadingCols}} as |h|>
+    <h.row as |r|>
+      <r.cell as |column|>
+        {{#if column.name}}
+          {{column.name}}
+        {{else}}
+          <AkSkeleton @height='20px' @width='100px' />
+        {{/if}}
+      </r.cell>
+    </h.row>
+  </tb.head>
+
+  <tb.body @rows={{this.loadingRows}} as |b|>
+    <b.row data-test-ak-table-loading-row as |r|>
+      <r.cell>
+        <AkSkeleton @height='20px' @width='100px' />
+      </r.cell>
+    </b.row>
+  </tb.body>
+</AkTable>
