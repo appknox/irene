@@ -4,7 +4,7 @@ import OrganizationNamespaceModel from './organization-namespace';
 import OrganizationProjectModel from './organization-project';
 import OrganizationTeamModel from './organization-team';
 
-interface Features {
+export interface Features {
   app_monitoring: boolean;
   dynamicscan_automation: boolean;
   manualscan: boolean;
@@ -14,6 +14,10 @@ interface Features {
   public_apis: boolean;
   storeknox: boolean;
   privacy: boolean;
+}
+
+export interface AiFeatures {
+  reporting: boolean;
 }
 
 export default class OrganizationModel extends Model {
@@ -55,6 +59,9 @@ export default class OrganizationModel extends Model {
 
   @attr('number')
   declare teamsCount: number;
+
+  @attr()
+  declare aiFeatures: AiFeatures;
 
   get showBilling() {
     return !this.billingHidden;

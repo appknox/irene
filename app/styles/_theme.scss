@@ -69,9 +69,9 @@
   --box-shadow-9: 0 5px 20px 0px rgba(0, 0, 0, 0.1);
   --box-shadow-10: 5px 0px 10px 0px rgba(0, 0, 0, 0.05);
   --box-shadow-11: inset 0 0 0 0.5px;
-  --box-shadow-12:
-    1px 0px 0px 0px #f8f8f8 inset, -1px 0px 0px 0px #f8f8f8 inset,
-    0px 1px 0px 0px #f8f8f8 inset, -1px -1px 0px 0px #f8f8f8 inset;
+  --box-shadow-12: 1px 0px 0px 0px #f8f8f8 inset,
+    -1px 0px 0px 0px #f8f8f8 inset, 0px 1px 0px 0px #f8f8f8 inset,
+    -1px -1px 0px 0px #f8f8f8 inset;
 
   --hover-dark-background: rgba(255, 255, 255, 0.15);
   --hover-light-background: rgba(0, 0, 0, 0.04);
@@ -136,6 +136,14 @@
 
   // special case variable for privacy-module/trackers
   --privacy-module-trackers-tag-bg-color: #edf2ff;
+
+  // special case variable for ai-reporting/preview
+  --ai-reporting-preview-custom-button-bg-color: #fe4d3f1a;
+  --ai-reporting-preview-custom-button-border-color: #fe4d3f;
+
+  // special case variable for powered-by-ai/chip
+  --powered-by-ai-chip-bg-color: #14badc;
+  --powered-by-ai-chip-hover-border-color: #139ab5;
 }
 
 // TODO: need to remove this so do not use it

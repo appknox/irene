@@ -1,0 +1,73 @@
+<div local-class='add-remove-section'>
+  <AkStack
+    @alignItems='center'
+    @justifyContent='space-between'
+    local-class='add-remove-header'
+  >
+    <AkTypography @fontWeight='bold'>
+      {{t 'reportModule.addRemoveColumns'}}
+    </AkTypography>
+
+    <AkChip
+      @variant='semi-filled'
+      @color='success'
+      @label={{this.label}}
+      @size='small'
+      {{style height='24px'}}
+    />
+  </AkStack>
+
+  <div class='pr-3 py-2 pl-2'>
+    <AkFormControlLabel @label={{t 'selectAll'}}>
+      <AkCheckbox
+        @checked={{this.allColumnsSelected}}
+        @onChange={{this.toggleAllColumns}}
+      />
+    </AkFormControlLabel>
+
+    {{#each this.allColumns as |column|}}
+      <AkStack
+        @alignItems='center'
+        @justifyContent='space-between'
+        local-class={{this.getColumnClass column}}
+        draggable='true'
+        {{on 'dragstart' (fn this.handleColumnDragStart column)}}
+        {{on 'dragend' this.handleColumnDragEnd}}
+        {{on 'dragover' (fn this.handleColumnDragOver column)}}
+        {{on 'dragleave' (fn this.handleColumnDragLeave column)}}
+        {{on 'drop' (fn this.handleColumnDrop column)}}
+      >
+        <AkFormControlLabel @label={{column.name}}>
+          <AkCheckbox
+            @checked={{column.selected}}
+            @onChange={{fn this.toggleColumn column}}
+          />
+        </AkFormControlLabel>
+
+        <AkIcon
+          @iconName='reorder'
+          @color='textSecondary'
+          local-class='reorder-icon'
+        />
+      </AkStack>
+    {{/each}}
+  </div>
+</div>
+
+<AkStack
+  @alignItems='center'
+  @justifyContent='space-between'
+  local-class='filter-drawer-footer'
+>
+  <AkButton
+    @variant='outlined'
+    @color='neutral'
+    {{on 'click' this.resetColumns}}
+  >
+    {{t 'resetToDefault'}}
+  </AkButton>
+
+  <AkButton @disabled={{this.disableApply}} {{on 'click' @applyAndClose}}>
+    {{t 'apply'}}
+  </AkButton>
+</AkStack>

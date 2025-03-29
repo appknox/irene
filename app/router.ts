@@ -342,6 +342,13 @@ Router.map(function () {
         this.route('archived-apps', { path: '/inventory/archived-apps' });
         this.route('notifications');
       });
+
+      // Report routes
+      this.route('reports', { path: '/dashboard/reports' }, function () {
+        this.route('index', { path: '/' });
+        this.route('generate');
+        this.route('preview', { path: '/preview/:id' });
+      });
     }
   );
 

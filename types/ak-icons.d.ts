@@ -155,6 +155,9 @@ export const AkIconVariant = [
   'fa-brands:apple',
   // ic icons
   'ic:outline-drive-file-rename-outline',
+  'network-intel-node',
+  'auto-awesome',
+  'reorder',
 ] as const;
 
 export type AkIconVariantType = (typeof AkIconVariant)[number];

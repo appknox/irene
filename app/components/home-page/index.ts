@@ -6,6 +6,7 @@ import type OrganizationService from 'irene/services/organization';
 import type UserAuthService from 'irene/services/user-auth';
 import type WhitelabelService from 'irene/services/whitelabel';
 import type { ProductCardDetails } from './product-card';
+import type ConfigurationService from 'irene/services/configuration';
 
 export default class HomePageComponent extends Component {
   @service declare intl: IntlService;
@@ -13,6 +14,7 @@ export default class HomePageComponent extends Component {
   @service declare userAuth: UserAuthService;
   @service declare session: any;
   @service declare whitelabel: WhitelabelService;
+  @service declare configuration: ConfigurationService;
 
   faviconImage: HTMLImageElement = new Image();
 
@@ -20,6 +22,10 @@ export default class HomePageComponent extends Component {
     super(owner, args);
 
     this.faviconImage.src = this.whitelabel.favicon;
+  }
+
+  get orgIsAnEnterprise() {
+    return this.configuration.serverData.enterprise;
   }
 
   get isStoreknoxEnabled() {
@@ -32,6 +38,13 @@ export default class HomePageComponent extends Component {
 
   get logo() {
     return this.isWhitelabel ? this.whitelabel.logo : this.faviconImage.src;
+  }
+
+  get showReporting() {
+    return (
+      this.organization?.selected?.aiFeatures?.reporting &&
+      !this.orgIsAnEnterprise
+    );
   }
 
   get productCardDetails() {
@@ -52,6 +65,13 @@ export default class HomePageComponent extends Component {
         indicatorSvg: 'ak-svg/sm-indicator',
         coverBackgroundImage: 'ak-svg/storeknox-bg-img',
         isBeta: true,
+      },
+      this.showReporting && {
+        title: this.intl.t('reportModule.title'),
+        description: this.intl.t('reportModule.description'),
+        route: 'authenticated.reports',
+        indicatorSvg: 'ak-svg/report-indicator',
+        coverBackgroundImage: 'ak-svg/report-bg-img',
       },
       this.isSecurityEnabled && {
         title: this.intl.t('securityDashboard'),
