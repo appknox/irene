@@ -2230,6 +2230,10 @@ body {
   // variables for privacy-module/status
   --privacy-module-status-background: var(--background-main);
 
+  // variables for ai-reporting/generate-loader
+  --ai-reporting-generate-loader-background-color: var(--background-main);
+  --ai-reporting-generate-loader-border-radius: var(--border-radius);
+
   &.theme-light {
     //variables for appknox-wrapper
     --appknox-wrapper-text-color: var(--text-primary);
