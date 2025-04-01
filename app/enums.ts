@@ -293,6 +293,32 @@ const ENUMS = {
     SN_VUL_APP_VULNERABLE_ITEM: 1,
     SN_VUL_VULNERABLE_ITEM: 2,
   },
+
+  AI_REPORTING_FIELD_TYPE: {
+    STRING: 'string',
+    INTEGER: 'integer',
+    NUMBER: 'number',
+    DATETIME: 'DateTimeField',
+    BOOLEAN: 'boolean',
+  },
+
+  AI_REPORTING_FILTER_OPERATOR: {
+    EQ: 'eq',
+    NEQ: 'neq',
+    GT: 'gt',
+    GTE: 'gte',
+    LT: 'lt',
+    LTE: 'lte',
+    IN: 'in',
+    NOT_IN: 'not_in',
+    CONTAINS: 'contains',
+    ICONTAINS: 'icontains',
+    STARTSWITH: 'startswith',
+    ENDSWITH: 'endswith',
+    RANGE: 'range',
+    EXISTS: 'exists',
+    ISNULL: 'isnull',
+  },
 };
 
 export const ENUMS_DISPLAY = {

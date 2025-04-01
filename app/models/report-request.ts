@@ -15,6 +15,28 @@ export interface ReportRequestPreview {
   data: ReportPreviewData[];
 }
 
+export interface PreviewFilterField {
+  field: string;
+  label: string;
+  type: string;
+  choices?: [string, string | number | boolean][];
+}
+
+export interface PreviewFilterDetails {
+  id: string;
+  model_name: string;
+  has_filters: boolean;
+  fields: PreviewFilterField[];
+}
+
+export interface AdditionalFilter {
+  id: string;
+  filter_details: Record<
+    string,
+    { operator: string; value: string | number | boolean | null }
+  >;
+}
+
 export enum ReportRequestStatus {
   PENDING = 0,
   PROCESSING = 1,
@@ -47,10 +69,16 @@ export default class ReportRequestModel extends Model {
   @attr('date')
   declare updatedOn: Date;
 
-  async previewReport() {
+  async previewReport(additionalFilters?: AdditionalFilter[]) {
     const adapter = this.store.adapterFor('report-request');
 
-    return await adapter.previewReport(this.id);
+    return await adapter.previewReport(this.id, additionalFilters);
+  }
+
+  async filterDetails() {
+    const adapter = this.store.adapterFor('report-request');
+
+    return await adapter.filterDetails(this.id);
   }
 }
 

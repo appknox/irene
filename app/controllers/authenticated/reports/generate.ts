@@ -4,8 +4,8 @@ import { type AkBreadcrumbsItemProps } from 'irene/services/ak-breadcrumbs';
 export default class AuthenticatedReportsGenerateController extends Controller {
   get breadcrumbs(): AkBreadcrumbsItemProps {
     const crumb: AkBreadcrumbsItemProps = {
-      title: 'Report Generated',
-      route: 'authenticated.reports.preview',
+      title: 'AI Generate Engine',
+      route: 'authenticated.reports.generate',
       routeGroup: 'ai-reporting',
       isRootCrumb: true,
     };

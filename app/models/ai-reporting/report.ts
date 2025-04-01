@@ -1,4 +1,5 @@
 import Model, { attr, belongsTo, type AsyncBelongsTo } from '@ember-data/model';
+import type { AdditionalFilter } from 'irene/models/report-request';
 
 import type ReportRequestModel from '../report-request';
 
@@ -28,6 +29,9 @@ export default class AiReportingReportModel extends Model {
 
   @attr('date')
   declare updatedOn: Date;
+
+  @attr()
+  declare filters: AdditionalFilter[];
 
   async downloadUrl() {
     const adapter = this.store.adapterFor('ai-reporting/report');

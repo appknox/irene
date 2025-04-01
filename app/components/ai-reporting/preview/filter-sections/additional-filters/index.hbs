@@ -1,0 +1,21 @@
+<AkStack @direction='column' @spacing={{3}}>
+  {{#each @filterDetails as |fd|}}
+    <div class='w-full'>
+      <AkTypography @variant='h6'>
+        {{fd.model_name}}
+      </AkTypography>
+
+      <AkStack @direction='column' @spacing={{5}} class='mt-4'>
+        {{#each fd.fields as |field|}}
+          <AiReporting::Preview::FilterSections::AdditionalFilters::FilterField
+            @sectionId={{fd.id}}
+            @field={{field}}
+            @operators={{this.getFilterOperators field.type}}
+            @additionalFilters={{@additionalFilters}}
+            @onAddUpdateFilter={{@onAddUpdateFilter}}
+          />
+        {{/each}}
+      </AkStack>
+    </div>
+  {{/each}}
+</AkStack>
