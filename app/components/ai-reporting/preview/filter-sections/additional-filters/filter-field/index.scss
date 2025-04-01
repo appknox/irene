@@ -1,0 +1,18 @@
+.filter-field {
+  width: 100%;
+  display: flex;
+  gap: 1rem;
+  position: relative;
+  border: 1px solid var(--border-color-1);
+  padding: 1rem;
+  border-radius: var(--border-radius);
+}
+
+.field-label {
+  position: absolute;
+  top: -12px;
+  left: 1rem;
+  background-color: var(--background-main);
+  padding: 0 1rem !important;
+  width: max-content;
+}

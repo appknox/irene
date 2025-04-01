@@ -1,3 +1,17 @@
 <AkTypography {{style width=this.computedWidth}}>
-  {{this.value}}
+  {{this.displayValue}}
+
+  {{#if this.shouldShowToggle}}
+    <AkButton
+      @variant='text'
+      @color='primary'
+      {{on 'click' this.toggleDetails}}
+    >
+      {{#if this.isExpanded}}
+        {{t 'lessDetails'}}
+      {{else}}
+        {{t 'moreDetails'}}
+      {{/if}}
+    </AkButton>
+  {{/if}}
 </AkTypography>

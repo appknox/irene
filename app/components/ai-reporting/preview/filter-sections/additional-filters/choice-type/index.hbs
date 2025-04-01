@@ -1,0 +1,10 @@
+<AkSelect
+  @selected={{this.selectedChoice}}
+  @options={{this.choices}}
+  @onChange={{this.handleChoiceSelection}}
+  @placeholder='Select value'
+  {{style width='180px'}}
+  as |opt|
+>
+  {{opt.label}}
+</AkSelect>

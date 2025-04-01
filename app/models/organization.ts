@@ -16,6 +16,10 @@ interface Features {
   privacy: boolean;
 }
 
+interface AiFeatures {
+  reporting: boolean;
+}
+
 export default class OrganizationModel extends Model {
   @attr('string')
   declare name: string;
@@ -55,6 +59,9 @@ export default class OrganizationModel extends Model {
 
   @attr('number')
   declare teamsCount: number;
+
+  @attr()
+  declare aiFeatures: AiFeatures;
 
   get showBilling() {
     return !this.billingHidden;

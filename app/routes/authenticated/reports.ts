@@ -1,17 +1,16 @@
 import Route from '@ember/routing/route';
-import { inject as service } from '@ember/service';
-import type RouterService from '@ember/routing/router-service';
-import type MeService from 'irene/services/me';
+import { service } from '@ember/service';
+import RouterService from '@ember/routing/router-service';
+
+import OrganizationService from 'irene/services/organization';
 
 export default class AuthenticatedReportsRoute extends Route {
+  @service declare organization: OrganizationService;
   @service declare router: RouterService;
-  @service declare me: MeService;
 
-  model() {
-    return this.me.user;
+  async beforeModel() {
+    if (!this.organization.selected?.aiFeatures?.reporting) {
+      this.router.transitionTo('authenticated.home');
+    }
   }
-
-  // Optional logic can be added here if needed
-  // For example, to check if the user has access to reports
-  // or to redirect to a specific sub-route
 }

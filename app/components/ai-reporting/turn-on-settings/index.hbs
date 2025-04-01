@@ -1,0 +1,39 @@
+<AkStack @direction='column' local-class='empty-container'>
+  <AkStack @direction='column' local-class='body'>
+    <AkSvg::TurnOnSettings />
+
+    <AkTypography @variant='h5' @gutterBottom={{true}} local-class='header'>
+      {{this.headerText}}
+    </AkTypography>
+
+    <AkTypography local-class='body-text'>
+      {{this.bodyText}}
+    </AkTypography>
+
+    <AkDivider @color='dark' class='my-2' />
+
+    <AkTypography>
+      {{t 'reportModule.turnOnSettingsFeatureHeader'}}
+    </AkTypography>
+
+    {{#each this.features as |feature|}}
+      <AkStack @spacing='1' @alignItems='center' class='mt-1 mb-1'>
+        <AkIcon @iconName='verified-user' @variant='filled' @color='success' />
+
+        <AkTypography>{{feature}}</AkTypography>
+      </AkStack>
+    {{/each}}
+  </AkStack>
+
+  {{#if this.me.org.is_owner}}
+    <AkStack local-class='footer'>
+      <AkButton
+        @tag='a'
+        href='/dashboard/organization/settings/ai-powered-features'
+        target='_blank'
+      >
+        {{t 'reportModule.turnOnSettingsButtonLabel'}}
+      </AkButton>
+    </AkStack>
+  {{/if}}
+</AkStack>

@@ -36,6 +36,7 @@ export default class ReportWrapperComponent extends Component<ReportWrapperCompo
         label: this.intl.t('reportModule.generateReport'),
         icon: 'auto-awesome',
         route: 'authenticated.reports.generate',
+        currentWhen: 'authenticated.reports',
       },
     ] as MenuItem[];
   }
@@ -52,6 +53,27 @@ export default class ReportWrapperComponent extends Component<ReportWrapperCompo
       'reportSidebarState',
       this.isSidebarCollapsed ? 'collapsed' : 'expanded'
     );
+  }
+
+  get drawerInfo() {
+    return [
+      {
+        title: 'What data does this AI model access in my app?',
+        body: 'Lorem ipsum dolor sit amet consectetur. Volutpat ullamcorper in placerat viverra ipsum imperdiet malesuada tellus. Fermentum quis varius eget faucibus vivamus. Commodo sagittis non duis sit tincidunt facilisi bibendum mi. Tortor aliquam egestas in non. Fermentum.',
+        marginTop: 'mt-2',
+      },
+      {
+        title:
+          'Does any 3rd party product/service have access to this model which has been trained using my organizations applications?',
+        body: 'Lorem ipsum dolor sit amet consectetur. Laoreet fermentum arcu at elementum amet maecenas est ultrices. Enim dapibus facilisi adipiscing commodo velit accumsan vitae.',
+        marginTop: 'mt-3',
+      },
+      {
+        title: 'How is this AI model secured from potential threats?',
+        body: 'Lorem ipsum dolor sit amet consectetur. Volutpat ullamcorper in placerat viverra ipsum imperdiet malesuada tellus. Fermentum quis varius eget faucibus vivamus. Commodo sagittis non duis sit tincidunt facilisi bibendum mi. Tortor aliquam egestas in non. Fermentum faucibus elementum tristique donec elit vitae posuere etiam. Sem est commodo mattis elementum etiam vitae pellentesque aliquet.',
+        marginTop: 'mt-3',
+      },
+    ];
   }
 }
 

@@ -7,12 +7,45 @@ export interface ReportPreviewData {
 export interface ReportPreviewColumn {
   field: string;
   label: string;
+  type: string;
+  is_default: boolean;
+}
+
+export interface ReportPreviewPagination {
+  count: number;
+  offset: number;
+  limit: number;
+}
+
+export interface PreviewFilterField {
+  field: string;
+  label: string;
+  type: string;
+  choices?: [string, string | number | boolean][];
+  is_nullable: boolean;
+}
+
+export interface PreviewFilterDetails {
+  id: string;
+  model_name: string;
+  has_filters: boolean;
+  fields: PreviewFilterField[];
 }
 
 export interface ReportRequestPreview {
   title: string;
   columns: ReportPreviewColumn[];
   data: ReportPreviewData[];
+  pagination: ReportPreviewPagination;
+  filter_details: PreviewFilterDetails[];
+}
+
+export interface AdditionalFilter {
+  id: string;
+  filter_details: Record<
+    string,
+    { operator: string; value: string | number | boolean | null }
+  >;
 }
 
 export enum ReportRequestStatus {
@@ -47,10 +80,25 @@ export default class ReportRequestModel extends Model {
   @attr('date')
   declare updatedOn: Date;
 
-  async previewReport() {
+  async previewReport(
+    limit: number,
+    offset: number,
+    additionalFilters?: AdditionalFilter[]
+  ) {
     const adapter = this.store.adapterFor('report-request');
 
-    return await adapter.previewReport(this.id);
+    return await adapter.previewReport(
+      this.id,
+      limit,
+      offset,
+      additionalFilters
+    );
+  }
+
+  async downloadUrl() {
+    const adapter = this.store.adapterFor('report-request');
+
+    return await adapter.downloadUrl(this.id);
   }
 }
 

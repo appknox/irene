@@ -11,7 +11,22 @@
     @title={{if this.isWhitelabel (t 'report') (t 'reportModule.title')}}
     as |topNav|
   >
-    <AkStack @alignItems='center' @justifyContent='flex-end' @spacing='0.5'>
+    <AkStack
+      @alignItems='center'
+      @justifyContent='space-between'
+      @spacing='0.5'
+    >
+      <AkStack @alignItems='center'>
+        <AkTypography @variant='h5' @fontWeight='bold' class='mr-1'>
+          {{t 'reportModule.generateReport'}}
+        </AkTypography>
+
+        <PoweredByAi::Chip
+          @clickable={{true}}
+          @drawerInfo={{this.drawerInfo}}
+        />
+      </AkStack>
+
       <TopNav::KnowledgeBase @triggerBtnClass={{topNav.classes.navbarBtn}} />
     </AkStack>
   </TopNav>
@@ -30,4 +45,4 @@
   <main id='ak-report-main-scroll-container' local-class='report-main'>
     {{yield}}
   </main>
-</div> 
+</div>

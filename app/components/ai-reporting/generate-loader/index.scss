@@ -1,13 +1,10 @@
 .generate-loader-container {
-  display: flex;
-  justify-content: center;
-  align-items: center;
   height: calc(100vh - (92px + 3em));
   max-height: 1000px;
-  width: 100%;
   margin: 1.5em;
   background-color: var(--ai-reporting-generate-loader-background-color);
   border-radius: var(--ai-reporting-generate-loader-border-radius);
   padding: 1.5em;
   box-sizing: border-box;
+  text-align: center;
 }
