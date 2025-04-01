@@ -1,0 +1,25 @@
+.powered-by-chip {
+  background-color: var(--powered-by-ai-chip-bg-color);
+  padding: 0.285em 0.428em;
+  border-radius: var(--powered-by-ai-chip-border-radius);
+  border: 1px solid var(--powered-by-ai-chip-bg-color);
+  color: var(--powered-by-ai-chip-color);
+
+  .text {
+    color: var(--powered-by-ai-chip-color);
+    font-size: 0.857em;
+    margin-left: 0.428em;
+  }
+
+  .icon {
+    font-size: 1.142em !important;
+  }
+
+  &.clickable {
+    cursor: pointer;
+
+    &:hover {
+      border: 1px solid var(--powered-by-ai-chip-hover-border-color);
+    }
+  }
+}

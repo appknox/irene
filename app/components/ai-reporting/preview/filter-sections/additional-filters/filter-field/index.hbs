@@ -1,0 +1,26 @@
+<div local-class='filter-field'>
+  <AkTypography local-class='field-label' @tag='span'>
+    {{@field.label}}
+  </AkTypography>
+
+  <AkStack class='mt-2' @spacing='1.5'>
+    <AkSelect
+      {{style width='150px'}}
+      @selected={{this.operator}}
+      @options={{@operators}}
+      @onChange={{this.handleOperatorChange}}
+      as |opt|
+    >
+      {{opt}}
+    </AkSelect>
+
+    {{#let (component this.valueComponent) as |ValueComponent|}}
+      <ValueComponent
+        @field={{@field}}
+        @operator={{this.operator}}
+        @currentValue={{this.currentValue}}
+        @onAddUpdateFilter={{this.handleAddUpdateFilter}}
+      />
+    {{/let}}
+  </AkStack>
+</div>

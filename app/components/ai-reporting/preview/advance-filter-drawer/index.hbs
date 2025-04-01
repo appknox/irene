@@ -1,11 +1,17 @@
-<AkDrawer @open={{@open}} @onClose={{@onClose}} @anchor='right' as |dr|>
+<AkDrawer
+  @open={{@open}}
+  @onClose={{this.handleClose}}
+  @anchor='right'
+  @disableBackdropClick={{true}}
+  as |dr|
+>
   <AkAppbar @justifyContent='space-between' as |ab|>
     <AkTypography
       data-test-serviceAccount-confirmDrawer-heading
       @variant='h5'
       @color='inherit'
     >
-      Filter
+      Advance Filter
     </AkTypography>
 
     <AkIconButton
@@ -17,17 +23,11 @@
   </AkAppbar>
 
   <div local-class='filter-sections'>
-    {{#if this.reportPreview}}
-      <AiReporting::Preview::FilterSections
-        @reportPreview={{this.reportPreview}}
-        @onColumnsChange={{this.handleColumnsChange}}
-        @selectedColumnsMap={{@selectedColumnsMap}}
-      />
-    {{else}}
-      <AkTypography @align='center' class='p-4'>
-        Loading Filters...
-      </AkTypography>
-    {{/if}}
+    <AiReporting::Preview::FilterSections::AdditionalFilters
+      @additionalFilters={{@additionalFilters}}
+      @filterDetails={{@filterDetails}}
+      @onAddUpdateFilter={{this.handleAddUpdateAdditionalFilter}}
+    />
   </div>
 
   <AkStack

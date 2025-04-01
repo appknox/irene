@@ -1,3 +1,16 @@
-<div local-class='generate-loader-container'>
-  <MainLoader />
-</div>
+<AkStack
+  @direction='column'
+  @justifyContent='center'
+  @alignItems='center'
+  local-class='generate-loader-container'
+>
+  <MainLoaderAi />
+
+  <AkTypography @variant='h5' @fontWeight='bold' class='mt-2'>
+    {{t 'reportModule.promtGenerateLoadingHeader'}}
+  </AkTypography>
+
+  <AkTypography class='mt-1' {{style maxWidth='400px'}}>
+    {{t 'reportModule.promtGenerateLoadingDesc'}}
+  </AkTypography>
+</AkStack>

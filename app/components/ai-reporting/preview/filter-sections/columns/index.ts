@@ -1,24 +1,22 @@
 import Component from '@glimmer/component';
+import { service } from '@ember/service';
 import { action } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
+import type IntlService from 'ember-intl/services/intl';
 
-import type { FilterColumn } from 'irene/components/ai-reporting/preview';
+import type { FilterColumn } from 'irene/services/ai-reporting';
 
-import type {
-  ReportRequestPreview,
-  ReportPreviewData,
-} from 'irene/models/report-request';
-
-interface AiReportingPreviewFilterSectionsSignature {
+interface AiReportingPreviewFilterSectionsColumnsSignature {
   Args: {
-    reportPreview: ReportRequestPreview;
-    onColumnsChange: (selectedColumns: FilterColumn[]) => void;
-    selectedColumnsMap: Map<string, FilterColumn>;
+    onColumnsChange: (allColumnsMap: Map<string, FilterColumn>) => void;
+    applyAndClose: () => void;
+    allColumnsMap: Map<string, FilterColumn>;
   };
 }
 
-export default class AiReportingPreviewFilterSections extends Component<AiReportingPreviewFilterSectionsSignature> {
-  @tracked allColumnsMap: Map<string, FilterColumn> = new Map();
+export default class AiReportingPreviewFilterSectionsColumnsComponent extends Component<AiReportingPreviewFilterSectionsColumnsSignature> {
+  @service declare intl: IntlService;
+
   @tracked allColumnsSelected = false;
 
   /**
@@ -35,30 +33,25 @@ export default class AiReportingPreviewFilterSections extends Component<AiReport
 
   constructor(
     owner: unknown,
-    args: AiReportingPreviewFilterSectionsSignature['Args']
+    args: AiReportingPreviewFilterSectionsColumnsSignature['Args']
   ) {
     super(owner, args);
 
-    this.allColumnsMap = this.getAllColumnsMap();
     this.allColumnsSelected = this.allColumns.every((c) => c.selected);
   }
 
-  willDestroy(): void {
-    super.willDestroy();
-
-    this.args.onColumnsChange([]);
-  }
-
-  get reportPreview() {
-    return this.args.reportPreview;
-  }
-
-  get selectedColumnsMap() {
-    return this.args.selectedColumnsMap;
+  get allColumnsMap() {
+    return this.args.allColumnsMap;
   }
 
   get allColumns() {
-    return [...this.allColumnsMap.values()].sort((a, b) => a.order - b.order);
+    const columns: FilterColumn[] = [];
+
+    this.allColumnsMap.forEach((column) => {
+      columns.push(column);
+    });
+
+    return columns.sort((a, b) => a.order - b.order);
   }
 
   get noSelectedColumns() {
@@ -77,10 +70,6 @@ export default class AiReportingPreviewFilterSections extends Component<AiReport
   getColumnClass(column: FilterColumn): string {
     const classes = ['column-item'];
 
-    if (this.draggedColumn && this.draggedColumn.field === column.field) {
-      classes.push('dragging');
-    }
-
     if (this.dropTargetColumn && this.dropTargetColumn.field === column.field) {
       classes.push('drag-over');
     }
@@ -98,13 +87,7 @@ export default class AiReportingPreviewFilterSections extends Component<AiReport
       selected: !column.selected,
     });
 
-    this.allColumnsMap = new Map(this.allColumnsMap);
-
-    this.args.onColumnsChange(
-      [...this.allColumnsMap.values()]
-        .filter((c) => c.selected)
-        .sort((a, b) => a.order - b.order)
-    );
+    this.args.onColumnsChange(this.allColumnsMap);
 
     this.allColumnsSelected = [...this.allColumnsMap.values()].every(
       (c) => c.selected
@@ -118,17 +101,17 @@ export default class AiReportingPreviewFilterSections extends Component<AiReport
   toggleAllColumns(event: Event, checked: boolean) {
     this.allColumnsSelected = checked;
 
-    // Create a new map with updated selection status for all columns
-    const updatedColumns = [...this.allColumnsMap.values()].map((c) => ({
-      ...c,
-      selected: checked,
-    }));
+    const updatedMap = new Map<string, FilterColumn>();
 
-    this.allColumnsMap = new Map(updatedColumns.map((c) => [c.field, c]));
+    // update selection status for all columns
+    this.allColumnsMap.forEach((c, field) => {
+      this.allColumnsMap.set(field, {
+        ...c,
+        selected: checked,
+      });
+    });
 
-    this.args.onColumnsChange(
-      checked ? updatedColumns.sort((a, b) => a.order - b.order) : []
-    );
+    this.args.onColumnsChange(this.allColumnsMap);
   }
 
   /**
@@ -137,20 +120,19 @@ export default class AiReportingPreviewFilterSections extends Component<AiReport
   @action
   resetColumns() {
     // Create a new map with reset selection status for all columns
-    const resetColumns = [...this.allColumnsMap.values()].map((c) => {
-      const isDefault = Boolean(c.default);
-      return {
+    this.allColumnsMap.forEach((c, field) => {
+      this.allColumnsMap.set(field, {
         ...c,
-        selected: isDefault,
-      };
+        selected: Boolean(c.default),
+      });
     });
 
-    this.allColumnsMap = new Map(resetColumns.map((c) => [c.field, c]));
-
     // Update allColumnsSelected based on whether all columns are default
-    this.allColumnsSelected = resetColumns.every((c) => c.selected);
+    this.allColumnsSelected = [...this.allColumnsMap.values()].every(
+      (c) => c.selected
+    );
 
-    this.args.onColumnsChange([]);
+    this.args.onColumnsChange(this.allColumnsMap);
   }
 
   /**
@@ -255,15 +237,7 @@ export default class AiReportingPreviewFilterSections extends Component<AiReport
       });
     }
 
-    // Create a new map reference to trigger reactivity
-    this.allColumnsMap = new Map(this.allColumnsMap);
-
-    // Get selected columns
-    const selectedColumns = [...this.allColumnsMap.values()]
-      .filter((c) => c.selected)
-      .sort((a, b) => a.order - b.order);
-
-    this.args.onColumnsChange(selectedColumns);
+    this.args.onColumnsChange(this.allColumnsMap);
   }
 
   /**
@@ -277,88 +251,17 @@ export default class AiReportingPreviewFilterSections extends Component<AiReport
     this.dropTargetColumn = null;
   }
 
-  /**
-   * Extract all columns from the data, including nested objects
-   * and create objects with field and label properties
-   */
-  private getAllColumnsMap(): Map<string, FilterColumn> {
-    if (!this.reportPreview.data.length) {
-      return new Map();
-    }
-
-    const data = this.reportPreview.data[0] as ReportPreviewData;
-
-    // Flatten the data structure and extract all fields
-    const columnsMap: Map<string, FilterColumn> = new Map();
-
-    // Process all keys from the data object
-    this.extractFieldsFromObject(data, '', columnsMap);
-
-    return columnsMap;
+  get label() {
+    return `(${this.noSelectedColumns}/${this.allColumns.length}) ${this.intl.t('selected')}`;
   }
 
-  /**
-   * Recursively extract fields from nested objects
-   * @param obj The object to extract fields from
-   * @param prefix The prefix for nested fields (e.g., 'project__' for project.id to become 'project__id')
-   * @param columnsMap Map to collect the extracted columns
-   */
-  private extractFieldsFromObject(
-    obj: Record<string, any>,
-    prefix: string,
-    columnsMap: Map<string, FilterColumn>
-  ): void {
-    // Keep track of the original order as fields are discovered
-    let currentIndex = columnsMap.size;
-
-    for (const [key, value] of Object.entries(obj)) {
-      const field = prefix ? `${prefix}${key}` : key;
-
-      if (
-        value !== null &&
-        typeof value === 'object' &&
-        !Array.isArray(value)
-      ) {
-        // For nested objects, recursively extract fields
-        this.extractFieldsFromObject(value, `${field}__`, columnsMap);
-      } else {
-        // For primitive values or arrays, add the field
-        // Check if the field exists in selectedColumnsMap to maintain order
-        const selectedColumn = this.selectedColumnsMap.get(field);
-
-        // Only add if this field hasn't been added yet
-        if (!columnsMap.has(field)) {
-          columnsMap.set(field, {
-            name: selectedColumn?.name || this.formatFieldLabel(field),
-            field,
-            selected: !!selectedColumn,
-            // Use the selectedColumn's order if available, otherwise use the discovery order
-            order: selectedColumn?.order ?? currentIndex,
-            default: selectedColumn?.default,
-          });
-
-          currentIndex++;
-        }
-      }
-    }
-  }
-
-  /**
-   * Format a field name into a human-readable label
-   * For example: 'project__package_name' -> 'Project Package Name'
-   */
-  private formatFieldLabel(field: string): string {
-    return field
-      .replace(/__/g, ' ')
-      .replace(/_/g, ' ')
-      .split(' ')
-      .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
-      .join(' ');
+  get disableApply() {
+    return this.noSelectedColumns === 0;
   }
 }
 
 declare module '@glint/environment-ember-loose/registry' {
   export default interface Registry {
-    'AiReporting::Preview::FilterSections': typeof AiReportingPreviewFilterSections;
+    'AiReporting::Preview::FilterSections::Columns': typeof AiReportingPreviewFilterSectionsColumnsComponent;
   }
 }

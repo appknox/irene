@@ -1,11 +1,6 @@
 .textarea-input {
-    border-width: 0;
-    border-radius: var(--ai-reporting-chat-generate-border-radius);
-    color: var(--ai-reporting-chat-generate-textarea-color);
-    display: inline-flex;
-    justify-content: flex-start;
-    align-items: center;
-    padding: 0.75em;
-    max-width: 100%;
-    width: 100%;
+  border-width: 0;
+  padding: 0.75em;
+  max-width: 100%;
+  width: 100%;
 }

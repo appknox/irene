@@ -1,90 +1,15 @@
-<AkStack @direction='column' @spacing='1' local-class='pii-feature-body'>
-  <AkStack local-class='powered-by-chip' {{on 'click' this.openAIDrawer}}>
-    <AkTypography local-class='text'>Powered by
-      <strong>AI</strong>
-    </AkTypography>
-  </AkStack>
+<AkStack @direction='column' @spacing='1' local-class='ai-powered-feature-body'>
+  <PoweredByAi::Chip @clickable={{true}} @drawerInfo={{this.drawerInfo}} />
 
   <AkStack @justifyContent='space-between' @width='full' @alignItems='center'>
-    <AkTypography @fontWeight='medium'>Personally Identifiable Information (PII)</AkTypography>
+    <AkTypography @fontWeight='medium'>
+      {{t 'reportModule.settingsHeader'}}
+    </AkTypography>
 
     <AkToggle @size='small' />
   </AkStack>
 
   <AkTypography @variant='body2' @color='textSecondary' class='w-8/12'>
-    Lorem ipsum dolor sit amet consectetur. Laoreet fermentum arcu at elementum
-    amet maecenas est ultrices. Enim dapibus facilisi adipiscing commodo velit
-    accumsan vitae.
+    {{t 'reportModule.settingsDesc'}}
   </AkTypography>
-
 </AkStack>
-
-<AkDrawer
-  @open={{this.aiDrawerOpen}}
-  @onClose={{this.closeAiDrawer}}
-  @anchor='right'
-  as |dr|
->
-  <AkAppbar
-    @justifyContent='space-between'
-    @position='sticky'
-    class='px-3'
-    as |ab|
-  >
-    <AkTypography @color='inherit' @variant='h5'>
-      {{t 'aiPoweredFeatures'}}
-    </AkTypography>
-
-    <AkIconButton
-      {{on 'click' dr.closeHandler}}
-      class={{ab.classes.defaultIconBtn}}
-    >
-      <AkIcon @iconName='close' />
-    </AkIconButton>
-  </AkAppbar>
-
-  <AkStack @direction='column' local-class='ai-drawer-body'>
-    <AkStack local-class='powered-by-chip' class='mb-2'>
-      <AkTypography local-class='text'>Powered by
-        <strong>AI</strong>
-      </AkTypography>
-    </AkStack>
-
-    <AkTypography @fontWeight='bold' @gutterBottom={{true}}>
-      What data does this AI model access in my app?
-    </AkTypography>
-
-    <AkTypography @variant='body2'>
-      Lorem ipsum dolor sit amet consectetur. Volutpat ullamcorper in placerat
-      viverra ipsum imperdiet malesuada tellus. Fermentum quis varius eget
-      faucibus vivamus. Commodo sagittis non duis sit tincidunt facilisi
-      bibendum mi. Tortor aliquam egestas in non. Fermentum.
-    </AkTypography>
-
-    <AkTypography @fontWeight='bold' @gutterBottom={{true}} class='mt-3'>
-      Does any 3rd party product/service have access to this model which has
-      been trained using my organizations applications?
-    </AkTypography>
-
-    <AkTypography @variant='body2'>
-      Lorem ipsum dolor sit amet consectetur. Laoreet fermentum arcu at
-      elementum amet maecenas est ultrices. Enim dapibus facilisi adipiscing
-      commodo velit accumsan vitae.
-    </AkTypography>
-
-    <AkTypography @fontWeight='bold' @gutterBottom={{true}} class='mt-3'>
-      How is this AI model secured from potential threats?
-    </AkTypography>
-
-    <AkTypography @variant='body2'>
-      Lorem ipsum dolor sit amet consectetur. Volutpat ullamcorper in placerat
-      viverra ipsum imperdiet malesuada tellus. Fermentum quis varius eget
-      faucibus vivamus. Commodo sagittis non duis sit tincidunt facilisi
-      bibendum mi. Tortor aliquam egestas in non. Fermentum faucibus elementum
-      tristique donec elit vitae posuere etiam. Sem est commodo mattis elementum
-      etiam vitae pellentesque aliquet.
-    </AkTypography>
-
-  </AkStack>
-
-</AkDrawer>

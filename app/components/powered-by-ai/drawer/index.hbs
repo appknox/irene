@@ -1,0 +1,37 @@
+<AkDrawer @open={{@aiDrawerOpen}} @onClose={{@onClose}} @anchor='right' as |dr|>
+  <AkAppbar
+    @justifyContent='space-between'
+    @position='sticky'
+    class='px-3'
+    as |ab|
+  >
+    <AkTypography @color='inherit' @variant='h5'>
+      {{t 'aiPoweredFeatures'}}
+    </AkTypography>
+
+    <AkIconButton
+      {{on 'click' dr.closeHandler}}
+      class={{ab.classes.defaultIconBtn}}
+    >
+      <AkIcon @iconName='close' />
+    </AkIconButton>
+  </AkAppbar>
+
+  <AkStack @direction='column' local-class='ai-drawer-body'>
+    <PoweredByAi::Chip @clickable={{false}} />
+
+    {{#each @info as |section|}}
+      <AkTypography
+        @fontWeight='bold'
+        @gutterBottom={{true}}
+        class={{section.marginTop}}
+      >
+        {{section.title}}
+      </AkTypography>
+
+      <AkTypography @variant='body2'>
+        {{section.body}}
+      </AkTypography>
+    {{/each}}
+  </AkStack>
+</AkDrawer>

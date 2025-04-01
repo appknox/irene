@@ -2067,6 +2067,9 @@ body {
   // variables for organization/settings-wrapper
   --organization-settings-wrapper-background-color: var(--background-light);
 
+  // variables for organization/ai-powered-features
+  --organization-ai-powered-features-bg-color: var(--common-white);
+
   // variables for public-api-docs/index
   --public-api-docs-tabs-background-color: var(--common-white);
 
@@ -2233,6 +2236,37 @@ body {
   // variables for ai-reporting/generate-loader
   --ai-reporting-generate-loader-background-color: var(--background-main);
   --ai-reporting-generate-loader-border-radius: var(--border-radius);
+
+  // variables for ai-reporting/preview
+  --ai-reporting-preview-border-radius: var(--border-radius);
+  --ai-reporting-preview-background-color: var(--background-main);
+  --ai-reporting-preview-custom-button-color: var(--text-primary);
+  --ai-reporting-preview-note-border-color: var(--neutral-grey-200);
+  --ai-reporting-preview-note-bg-color: var(--neutral-grey-100);
+
+  // variables for ai-reporting/preview/filter-sections/columns
+  --ai-reporting-preview-filter-sections-columns-header-border-color: var(
+    --neutral-grey-100
+  );
+  --ai-reporting-preview-filter-sections-columns-reorder-icon-color: var(
+    --neutral-grey-300
+  );
+  --ai-reporting-preview-filter-sections-columns-drag-border-color: var(
+    --primary-main
+  );
+  --ai-reporting-preview-filter-sections-columns-bg-color: var(
+    --background-main
+  );
+  --ai-reporting-preview-filter-sections-columns-box-shadow: var(
+    --box-shadow-4
+  );
+
+  // variables for powered-by-ai/chip
+  --powered-by-ai-chip-border-radius: var(--border-radius);
+  --powered-by-ai-chip-color: var(--common-white);
+
+  // variables for powered-by-ai/drawer
+  --powered-by-ai-chip-border-color: var(--border-color-1);
 
   &.theme-light {
     //variables for appknox-wrapper

@@ -14,8 +14,7 @@
 
         <Textarea
           rows='6'
-          aria-label='Overridden Risk Comment'
-          placeholder='For Example - Generate an audit log of all the scan activities over the last 30 days.'
+          placeholder={{t 'reportModule.generateReportPlaceholder'}}
           @value={{this.reportQuery}}
           {{on 'input' this.updateReportDescription}}
           local-class='textarea-input'
@@ -24,7 +23,8 @@
         <AkStack @direction='row' @width='full' @justifyContent='flex-end'>
           <AkTypography @variant='body2' @color='textSecondary'>
             {{this.reportQuery.length}}
-            / 400 characters
+            /
+            {{t 'reportModule.characterLimit'}}
           </AkTypography>
         </AkStack>
 

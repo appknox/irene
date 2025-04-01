@@ -1,23 +1,23 @@
-<div>
-  <AkStack @alignItems='center' @justifyContent='space-between'>
-    <AkTypography @variant='subtitle2'>
-      Add/Remove Columns
+<div local-class='add-remove-section'>
+  <AkStack
+    @alignItems='center'
+    @justifyContent='space-between'
+    local-class='add-remove-header'
+  >
+    <AkTypography @fontWeight='bold'>
+      {{t 'addRemoveColumns'}}
     </AkTypography>
 
-    <AkButton @variant='text' @color='primary' {{on 'click' this.resetColumns}}>
-      Reset
-    </AkButton>
+    <AkChip
+      @variant='semi-filled'
+      @color='success'
+      @label={{this.label}}
+      @size='small'
+      {{style height='24px'}}
+    />
   </AkStack>
 
-  <div>
-    <div local-class='selection-count' class='my-1'>
-      <AkTypography @tag='span'>
-        {{this.noSelectedColumns}}
-        selected / out of
-        {{this.allColumns.length}}
-      </AkTypography>
-    </div>
-
+  <div class='pr-3 py-2 pl-2'>
     <AkFormControlLabel @label={{t 'selectAll'}}>
       <AkCheckbox
         @checked={{this.allColumnsSelected}}
@@ -29,7 +29,7 @@
       <AkStack
         @alignItems='center'
         @justifyContent='space-between'
-        class={{this.getColumnClass column}}
+        local-class={{this.getColumnClass column}}
         draggable='true'
         {{on 'dragstart' (fn this.handleColumnDragStart column)}}
         {{on 'dragend' this.handleColumnDragEnd}}
@@ -53,3 +53,21 @@
     {{/each}}
   </div>
 </div>
+
+<AkStack
+  @alignItems='center'
+  @justifyContent='space-between'
+  local-class='filter-drawer-footer'
+>
+  <AkButton
+    @variant='outlined'
+    @color='neutral'
+    {{on 'click' this.resetColumns}}
+  >
+    {{t 'resetToDefault'}}
+  </AkButton>
+
+  <AkButton @disabled={{this.disableApply}} {{on 'click' @applyAndClose}}>
+    {{t 'apply'}}
+  </AkButton>
+</AkStack>

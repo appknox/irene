@@ -7,8 +7,8 @@ import type RouterService from '@ember/routing/router-service';
 import type IntlService from 'ember-intl/services/intl';
 import type Store from '@ember-data/store';
 
-import type ReportRequestModel from 'irene/models/report-request';
 import { ReportRequestStatus } from 'irene/models/report-request';
+import type ReportRequestModel from 'irene/models/report-request';
 import type PollService from 'irene/services/poll';
 
 interface AiReportingChatGenerateSignature {}
@@ -25,28 +25,47 @@ export default class AiReportingChatGenerate extends Component<AiReportingChatGe
 
   @tracked selectedCategory: { id: string; label: string } = {
     id: 'scan',
-    label: 'Scan',
+    label: 'VAPT Scan',
   };
 
   @tracked reportRequest: ReportRequestModel | null = null;
 
   stopPolling: (() => void) | null = null;
 
-  // Categories of report prompts available to users
-  categories = [{ id: 'scan', label: 'Scan' }];
-
-  // All prompt examples by category
-  promptsByCategory = {
-    scan: [
-      'Get all the projects',
-      'List all the open issues',
-      'I need a OWASP Mobile Top 10 2024 report for all my apps',
-    ],
-  };
-
   willDestroy(): void {
     super.willDestroy();
     this.stopPolling?.();
+  }
+
+  // Categories of report prompts available to users
+  get categories() {
+    return [
+      { id: 'scan', label: this.intl.t('reportModule.categories.scan.label') },
+      {
+        id: 'users',
+        label: this.intl.t('reportModule.categories.users.label'),
+      },
+    ];
+  }
+
+  // All prompt examples by category
+  get promptsByCategory() {
+    return {
+      scan: [
+        this.intl.t('reportModule.categories.scan.prompt1'),
+        this.intl.t('reportModule.categories.scan.prompt2'),
+        this.intl.t('reportModule.categories.scan.prompt3'),
+        this.intl.t('reportModule.categories.scan.prompt4'),
+        this.intl.t('reportModule.categories.scan.prompt5'),
+      ],
+      users: [
+        this.intl.t('reportModule.categories.users.prompt1'),
+        this.intl.t('reportModule.categories.users.prompt2'),
+        this.intl.t('reportModule.categories.users.prompt3'),
+        this.intl.t('reportModule.categories.users.prompt4'),
+        this.intl.t('reportModule.categories.users.prompt5'),
+      ],
+    };
   }
 
   // Filtered prompts based on selected category
@@ -103,15 +122,27 @@ export default class AiReportingChatGenerate extends Component<AiReportingChatGe
       return;
     }
 
-    this.reportRequest = this.store.createRecord('report-request', {
-      query: this.reportQuery,
-    });
+    try {
+      this.reportRequest = this.store.createRecord('report-request', {
+        query: this.reportQuery,
+      });
 
-    await this.reportRequest.save();
+      await this.reportRequest.save();
 
-    this.isGenerating = true;
+      this.isGenerating = true;
 
-    this.pollReportGenerationStatus();
+      this.pollReportGenerationStatus();
+    } catch (err) {
+      const error = err as AdapterError;
+      let errMsg = this.intl.t('pleaseTryAgain');
+
+      if (error.errors && error.errors[0]?.detail) {
+        const payload = JSON.parse(error.errors[0].detail);
+        errMsg = payload.message || errMsg;
+      }
+
+      this.notify.error(errMsg);
+    }
   });
 }
 

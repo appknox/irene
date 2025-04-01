@@ -93,6 +93,13 @@ export default class SideNavProductSwitcherComponent extends Component<SideNavPr
         key: 'security',
         openInNewTab: true,
       },
+      {
+        id: 'report-svg',
+        svg: 'ak-svg/report-indicator',
+        label: this.intl.t('reportModule.title'),
+        route: 'authenticated.reports',
+        key: 'report',
+      },
     ];
 
     return allMenuItems.filter(
