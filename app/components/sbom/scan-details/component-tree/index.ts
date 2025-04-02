@@ -106,7 +106,7 @@ export default class SbomScanDetailsComponentTreeComponent extends Component<Sbo
 
   @action
   addMargin(depth: number, hasNextSibling: boolean) {
-    if (depth === 1 && !hasNextSibling && !this.hasMoreComponents) {
+    if (depth === 1 && !hasNextSibling) {
       return true;
     }
 
@@ -114,16 +114,7 @@ export default class SbomScanDetailsComponentTreeComponent extends Component<Sbo
   }
 
   @action
-  calculateMargin(depth: number) {
-    const base = -10;
-
-    return `${base + depth * 20}px`;
-  }
-
-  @action
-  calculateLoaderMargin(depth: number) {
-    const base = 55;
-
+  calculateMargin(base: number, depth: number) {
     return `${base + depth * 20}px`;
   }
 
@@ -160,9 +151,11 @@ export default class SbomScanDetailsComponentTreeComponent extends Component<Sbo
 
   @action
   shouldShowViewMoreForChild(node: AkTreeNodeFlattenedProps) {
-    // Return false if not a dependency or no parent
-    // @ts-expect-error to be fixed
-    if (!node.dataObject?.isDependency || !node.parent) {
+    // Find the current node in the tree
+    const currentNode = this.findNodeInTree(this.args.treeNodes, node.key);
+
+    // Return false if node or currentNode not found, or not a dependency, or no parent
+    if (!currentNode || !currentNode.dataObject?.isDependency || !node.parent) {
       return false;
     }
 
@@ -180,64 +173,62 @@ export default class SbomScanDetailsComponentTreeComponent extends Component<Sbo
     const isLastLoadedChild =
       parentNode.children[parentNode.children.length - 1]?.key === node.key;
 
-    return isLastLoadedChild && this.hasMoreChildren(node.parent.key);
+    return isLastLoadedChild && this.hasMoreChildren(currentNode, parentNode);
   }
 
   @action
-  handleLoadMoreChildren(nodeKey: string) {
-    const node = this.args.treeNodes.find((n) => n.key === nodeKey);
-    if (!node) {
-      return;
-    }
-
+  handleLoadMoreChildren(node: AkTreeNodeProps) {
     const currentChildrenCount = node.children?.length ?? 0;
 
     this.loadChildrenAndTransform
-      .perform(15, currentChildrenCount, nodeKey)
+      .perform(15, currentChildrenCount, node.key)
       .then((newChildren) => {
-        // Create a map of existing children keys for deduplication
-        const existingChildrenKeys = new Set(
-          node.children?.map((child) => child.key) ?? []
+        const updatedNodes = this.updateNodeInTree(
+          this.args.treeNodes,
+          node.key,
+          {
+            children: newChildren,
+          }
         );
 
-        // Filter out any duplicate children
-        const uniqueNewChildren = newChildren.filter(
-          (child) => !existingChildrenKeys.has(child.key)
-        );
-
-        this.args.updateTreeNodes(
-          this.args.treeNodes.map((n) =>
-            n.key === nodeKey
-              ? {
-                  ...n,
-                  children: [...(n.children ?? []), ...uniqueNewChildren],
-                }
-              : n
-          )
-        );
+        this.args.updateTreeNodes(updatedNodes);
       });
   }
 
   @action
-  hasMoreChildren(nodeKey: string) {
-    const node = this.args.treeNodes.find((node) => node.key === nodeKey);
-
-    if (!node?.children) {
-      return;
-    } else if (node?.children?.length < node?.dataObject?.dependencyCount) {
-      return true;
+  hasMoreChildren(
+    node: AkTreeNodeProps | null,
+    parentNode: AkTreeNodeProps | null
+  ) {
+    // Early return if either node is null
+    if (!node || !parentNode?.children) {
+      return false;
     }
 
-    return false;
+    const currentChildrenCount = parentNode.children.length;
+    const totalCount = node.dataObject?.count ?? 0;
+
+    // Return true if current children count is less than total expected count
+    return currentChildrenCount < totalCount;
   }
 
   @action
-  isNodeScrollable(nodeKey: string, dependencyCount: number) {
-    if (dependencyCount < 7) {
+  isNodeScrollable(node: AkTreeNodeFlattenedProps) {
+    const parent = node.parent;
+
+    if (!parent.children) {
+      return false;
+    }
+
+    // Check if this is the last loaded child
+    const isLastLoadedChild =
+      parent.children[parent.children.length - 1]?.key === node.key;
+
+    if (parent.children.length < 9 || !isLastLoadedChild) {
       return false;
     } else {
       const nodeContainer = document.getElementById(
-        this.calculateNodeContainerId(nodeKey)
+        this.calculateNodeContainerId(parent.key)
       );
 
       const mainContainer = document.getElementById('component-tree-container');
@@ -361,27 +352,41 @@ export default class SbomScanDetailsComponentTreeComponent extends Component<Sbo
   @action
   transformApiDataToTreeFormat(
     components: SbomComponentModel[],
-    parentId?: string
+    count?: number,
+    parentKey?: string
   ) {
-    return components.map((item: SbomComponentModel, index) => ({
-      // For children, create composite key. For parents, use just the ID
-      key: parentId ? `${parentId}:${item.id}` : item.id.toString(),
-      label: item.name,
-      dataObject: {
-        name: item.name,
-        bomRef: item.bomRef.substring(0, item.bomRef.lastIndexOf(':')),
-        version: item.version,
-        latestVersion: item.latestVersion,
-        vulnerabilitiesCount: item.vulnerabilitiesCount,
-        hasChildren: item.dependencyCount > 0,
-        dependencyCount: item.dependencyCount,
-        hasNextSibling: index < components.length - 1,
-        isDependency: parentId ? true : false,
-        originalComponent: item,
-        isHighlighted: false,
-      },
-      children: [] as AkTreeNodeProps[],
-    }));
+    return components.map((item: SbomComponentModel, index) => {
+      // Extract parts from bomRef
+      const bomRefParts = item.bomRef.split(':').filter(Boolean);
+      const ecosystem = bomRefParts[0] || 'generic';
+      const group = bomRefParts.length === 3 ? bomRefParts[1] : ''; // Present only in 3-part bomRef
+
+      // Construct PURL
+      const groupPrefix = group ? `${group}/` : '';
+      const versionSuffix = item.version ? `@${item.version}` : '';
+      const purl = `pkg:${ecosystem}/${groupPrefix}${item.name}${versionSuffix}`;
+
+      return {
+        // For root components, use just the ID
+        // For children, chain the new ID to the parent's full path
+        key: parentKey ? `${parentKey}:${item.id}` : item.id.toString(),
+        label: purl,
+        dataObject: {
+          name: item.name,
+          bomRef: item.bomRef,
+          version: item.version,
+          latestVersion: item.latestVersion,
+          vulnerabilitiesCount: item.vulnerabilitiesCount,
+          hasChildren: item.dependencyCount > 0,
+          hasNextSibling: index < components.length - 1,
+          isDependency: !!parentKey,
+          originalComponent: item,
+          isHighlighted: false,
+          count: count || 0,
+        },
+        children: [] as AkTreeNodeProps[],
+      };
+    });
   }
 
   handleNodeExpand = task(async (newExpandedKeys: string[]) => {
@@ -400,13 +405,10 @@ export default class SbomScanDetailsComponentTreeComponent extends Component<Sbo
       if (expandingNode && expandingNode.dataObject.hasChildren) {
         // Only load children if we need to
         if (this.needsChildrenLoad(addedKey)) {
-          // Extract the actual component ID from the composite key
-          const componentId = this.getComponentId(addedKey);
-
           const children = await this.loadChildrenAndTransform.perform(
             15,
             0,
-            componentId.toString()
+            addedKey
           );
 
           // Update the node with its children at any level in the tree
@@ -444,10 +446,18 @@ export default class SbomScanDetailsComponentTreeComponent extends Component<Sbo
       // Get component ID directly from the original component
       const componentId = node.dataObject.originalComponent.id;
 
-      // Get parent ID from the last segment of parentKey if it exists
-      const parentComponentId = parentKey
-        ? Number(parentKey.split(':').pop())
-        : 0;
+      // For the parent ID, we need the immediate parent, not the last in the entire chain
+      let parentComponentId = 0;
+
+      if (parentKey) {
+        // If node key has a parent structure (meaning it's not a root component),
+        // extract the immediate parent ID
+        const nodeKeyParts = node.key.split(':');
+        if (nodeKeyParts.length > 1) {
+          // The immediate parent ID is the second-to-last segment in the node's key
+          parentComponentId = Number(nodeKeyParts[nodeKeyParts.length - 2]);
+        }
+      }
 
       this.router.transitionTo(
         'authenticated.dashboard.sbom.component-details.overview',
@@ -473,44 +483,57 @@ export default class SbomScanDetailsComponentTreeComponent extends Component<Sbo
     const responseArray = [response];
     const nodes = this.transformApiDataToTreeFormat(responseArray);
 
-    // Load children
-    const children = await this.loadChildrenAndTransform.perform(
-      15,
-      0,
-      componentId
-    );
-    nodes[0]!.children = children;
-
-    // If args.componentId exists and doesn't match the parent's id,
-    // it must be one of the children we need to highlight
-    if (this.args.componentId && this.args.componentId !== componentId) {
-      // Find and highlight the child component
-      const childToHighlight = children.find(
-        (child: AkTreeNodeProps) =>
-          child.dataObject.originalComponent.id === this.args.componentId
+    if (nodes[0]?.key) {
+      // Load children using the component's ID as the parent key
+      const children = await this.loadChildrenAndTransform.perform(
+        15,
+        0,
+        nodes[0].key
       );
-      if (childToHighlight) {
-        childToHighlight.dataObject.isHighlighted = true;
+
+      nodes[0].children = children;
+
+      // If args.componentId exists and doesn't match the parent's id,
+      // it must be one of the children we need to highlight
+      if (this.args.componentId && this.args.componentId !== componentId) {
+        // Find and highlight the child component
+        const childToHighlight = children.find(
+          (child: AkTreeNodeProps) =>
+            child.dataObject.originalComponent.id === this.args.componentId
+        );
+        if (childToHighlight) {
+          childToHighlight.dataObject.isHighlighted = true;
+        }
+      } else {
+        // Highlight the parent node if it matches componentId
+        nodes[0].dataObject.isHighlighted = true;
       }
     } else {
-      // Highlight the parent node if it matches componentId
-      nodes[0]!.dataObject.isHighlighted = true;
+      if (nodes[0]) {
+        nodes[0].children = [];
+      }
     }
 
-    this.handleNodeExpand.perform([componentId]);
-    this.args.updateExpandedNodes([componentId]);
+    if (nodes[0]?.key) {
+      this.handleNodeExpand.perform([nodes[0].key]);
+      this.args.updateExpandedNodes([nodes[0].key]);
+    }
+
     this.args.updateTreeNodes(nodes);
   });
 
   loadChildrenAndTransform = task(
-    async (limit: number, offset: number, parentId: string) => {
+    async (limit: number, offset: number, parentKey: string) => {
       // Add to loading array
-      this.loadingChildrenKeys = [...this.loadingChildrenKeys, parentId];
+      this.loadingChildrenKeys = [...this.loadingChildrenKeys, parentKey];
+
+      // Extract the component ID from the parent key
+      const componentId = this.getComponentId(parentKey);
 
       const queryParams = {
         type: 1,
         sbomFileId: this.args.sbomFile.id,
-        componentId: parentId,
+        componentId: componentId,
         limit,
         offset,
       };
@@ -520,21 +543,22 @@ export default class SbomScanDetailsComponentTreeComponent extends Component<Sbo
           this.store.query('sbom-component', queryParams)
         )) as SbomComponentQueryResponse;
 
-        // Pass parentId to create composite keys for children
+        // Pass the full parent key to create properly chained composite keys for children
         const transformedChildren = this.transformApiDataToTreeFormat(
           response.slice(),
-          parentId
+          response.meta.count,
+          parentKey
         );
 
         // Return transformed children without updating the tree directly
         this.loadingChildrenKeys = this.loadingChildrenKeys.filter(
-          (key) => key !== parentId
+          (key) => key !== parentKey
         );
 
         return transformedChildren;
       } catch (error) {
         this.loadingChildrenKeys = this.loadingChildrenKeys.filter(
-          (key) => key !== parentId
+          (key) => key !== parentKey
         );
 
         return [];
@@ -562,7 +586,8 @@ export default class SbomScanDetailsComponentTreeComponent extends Component<Sbo
       )) as SbomComponentQueryResponse;
 
       const newTreeNodes = this.transformApiDataToTreeFormat(
-        sbomComponentResponse.slice()
+        sbomComponentResponse.slice(),
+        sbomComponentResponse.meta.count
       );
 
       // If offset is 0, replace the entire array; otherwise append

@@ -1,10 +1,10 @@
 {{! @glint-nocheck: or}}
 {{#if (or @empty @loading)}}
   <AkStack
-    local-class='empty-loading-container'
+    local-class='empty-loading-container 
+    {{if @skeleton "skeleton"}} 
+    {{if this.tree "" "list"}}'
     {{style height=(or @height '500px')}}
-    @alignItems='center'
-    @justifyContent='center'
     @direction='column'
     @spacing='2.5'
   >
@@ -23,7 +23,7 @@
         {{else}}
           <AkSvg::EmptyLoadingList
             width={{@loadingSvgWidth}}
-            height={{or @loadingSvgHeight '50%'}}
+            height={{or @loadingSvgHeight '40%'}}
             data-test-sbom-loadingSvg
           />
         {{/if}}

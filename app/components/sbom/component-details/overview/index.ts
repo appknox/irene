@@ -31,6 +31,7 @@ export default class SbomComponentDetailsOverviewComponent extends Component<Sbo
   @service declare intl: IntlService;
   @service declare store: Store;
   @service declare router: RouterService;
+  @service('notifications') declare notify: NotificationService;
 
   @tracked expandedNodes: string[] = [];
   @tracked treeNodes: AkTreeNodeProps[] = [];
@@ -69,45 +70,6 @@ export default class SbomComponentDetailsOverviewComponent extends Component<Sbo
 
   get componentId() {
     return this.args.queryParams.sbom_component_id;
-  }
-
-  get componentDetailsList() {
-    return [
-      {
-        name: this.intl.t('sbomModule.componentType'),
-        value: this.args.sbomComponent?.type,
-      },
-      {
-        name: this.intl.t('version'),
-        value: this.args.sbomComponent?.version,
-      },
-      {
-        name: this.intl.t('sbomModule.latestVersion'),
-        value: this.args.sbomComponent?.latestVersion,
-      },
-      {
-        name: this.intl.t('status'),
-        component: 'sbom/component-status' as const,
-      },
-      {
-        name: this.intl.t('author'),
-        value: this.args.sbomComponent?.author,
-      },
-    ];
-  }
-
-  get columns() {
-    return [
-      {
-        name: this.intl.t('sbomModule.componentDetails'),
-        valuePath: 'name',
-        width: 40,
-      },
-      {
-        name: '',
-        valuePath: 'value',
-      },
-    ];
   }
 
   @action
@@ -157,6 +119,8 @@ export default class SbomComponentDetailsOverviewComponent extends Component<Sbo
     if (this.parentVerificationStatus === false) {
       const sbProjectId = this.sbomProject?.get('id') || '';
       const sbFileId = this.sbomFile?.get('id') || '';
+
+      this.notify.error(this.intl.t('sbomModule.parentComponentNotFound'));
 
       this.router.transitionTo(
         'authenticated.dashboard.sbom.component-details',

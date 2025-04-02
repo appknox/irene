@@ -3,17 +3,34 @@ import { inject as service } from '@ember/service';
 import { capitalize } from '@ember/string';
 import type IntlService from 'ember-intl/services/intl';
 
+import * as semver from 'semver';
 import type SbomComponentModel from 'irene/models/sbom-component';
 
 export interface SbomComponentDetailsSummarySignature {
   Element: HTMLDivElement;
   Args: {
-    sbomComponent: SbomComponentModel | null;
+    sbomComponent: SbomComponentModel;
   };
 }
 
 export default class SbomComponentDetailsSummaryComponent extends Component<SbomComponentDetailsSummarySignature> {
   @service declare intl: IntlService;
+
+  get isLatestVersionLess() {
+    const latestVersion = this.args.sbomComponent?.cleanLatestVersion;
+    const version = this.args.sbomComponent?.cleanVersion;
+
+    if (
+      !latestVersion ||
+      !version ||
+      !semver.valid(latestVersion) ||
+      !semver.valid(version)
+    ) {
+      return false;
+    }
+
+    return semver.lt(latestVersion, version);
+  }
 
   get componentSummary() {
     return [
@@ -29,11 +46,13 @@ export default class SbomComponentDetailsSummaryComponent extends Component<Sbom
       },
       {
         label: this.intl.t('version'),
-        value: this.args.sbomComponent?.version,
+        value: this.args.sbomComponent?.cleanVersion,
       },
       {
         label: this.intl.t('sbomModule.latestVersion'),
-        value: this.args.sbomComponent?.latestVersion,
+        value: this.isLatestVersionLess
+          ? null
+          : this.args.sbomComponent?.cleanLatestVersion,
       },
       {
         label: this.intl.t('status'),

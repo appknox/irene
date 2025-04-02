@@ -1,14 +1,10 @@
-<AkStack
-  @alignItems='flex-start'
-  @direction='column'
-  {{style alignSelf='flex-start'}}
->
-  {{#each (array 0 1 2 3 4 5 6 7 8 9 10 11 12 13)}}
-    <AkSkeleton
-      class='mt-2 ml-2'
-      @width='600px'
-      @height='19px'
-      data-test-component-list-skeleton-loader
-    />
-  {{/each}}
-</AkStack>
+<AkTable data-test-component-list-skeleton-loader as |t|>
+  <t.head @columns={{this.columns}} />
+  <t.body @rows={{this.loadingMockData}} as |b|>
+    <b.row as |r|>
+      <r.cell>
+        <AkSkeleton @width='100px' @height='20px' />
+      </r.cell>
+    </b.row>
+  </t.body>
+</AkTable>

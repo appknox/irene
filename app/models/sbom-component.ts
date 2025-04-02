@@ -1,5 +1,4 @@
 import Model, { attr, belongsTo, AsyncBelongsTo } from '@ember-data/model';
-import { isEmpty } from '@ember/utils';
 import SbomFileModel from './sbom-file';
 
 export interface SbomComponentProperty {
@@ -59,12 +58,12 @@ export default class SbomComponentModel extends Model {
     return this.vulnerabilitiesCount > 0;
   }
 
-  get isOutdated() {
-    if (isEmpty(this.version) || isEmpty(this.latestVersion)) {
-      return false;
-    }
+  get cleanVersion() {
+    return this.version.trim().replace(/(^")|("$)/g, '');
+  }
 
-    return this.version !== this.latestVersion;
+  get cleanLatestVersion() {
+    return this.latestVersion.trim().replace(/(^")|("$)/g, '');
   }
 }
 

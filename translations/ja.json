@@ -562,6 +562,7 @@
   "hiddenAnalysis": "HIDDEN ANALYSIS",
   "hideVulnerability": "脆弱性を非表示にする",
   "high": "高",
+  "highlightedNodeTooltip": "This is the component from the tree that you are currently viewing",
   "hipaa": "HIPAA",
   "hipaaExpansion": "Health Insurance Portability and Accountability Act",
   "home": "Home",
@@ -1278,6 +1279,7 @@
     "versionCode": "Version Code",
     "lastSbomAnalysisOn": "Last SBOM Analysis On",
     "latestVersion": "Latest Version",
+    "parentComponentNotFound": "Parent component not found",
     "pastSbomAnalyses": "Past SBOM Analyses",
     "pastSbomAnalysesDescription": "Here you see all SBOM reports related to the {projectName} project.",
     "appScanEmptyText": {

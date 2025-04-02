@@ -38,6 +38,26 @@ class WebsocketStub extends Service {
   async configure() {}
 }
 
+class NotificationsStub extends Service {
+  errorMsg = null;
+  successMsg = null;
+  infoMsg = null;
+
+  error(msg) {
+    this.errorMsg = msg;
+  }
+
+  success(msg) {
+    this.successMsg = msg;
+  }
+
+  info(msg) {
+    this.infoMsg = msg;
+  }
+
+  setDefaultAutoClear() {}
+}
+
 module('Acceptance | sbom', function (hooks) {
   setupApplicationTest(hooks);
   setupMirage(hooks);
@@ -134,6 +154,7 @@ module('Acceptance | sbom', function (hooks) {
 
     this.owner.register('service:integration', IntegrationStub);
     this.owner.register('service:websocket', WebsocketStub);
+    this.owner.register('service:notifications', NotificationsStub);
 
     this.setProperties({
       projects,
@@ -378,7 +399,6 @@ module('Acceptance | sbom', function (hooks) {
     const dependencies = this.server.createList('sbom-component', 2, {
       sb_file: this.sbomFiles[1].id,
       is_dependency: true,
-      parentId: this.sbomComponents[0].id,
     });
 
     this.server.get('/v2/sb_file_component/:comp_id/dependencies', () => {
@@ -446,6 +466,248 @@ module('Acceptance | sbom', function (hooks) {
     assert.notEqual(nodes.length, this.sbomComponents.length);
 
     assert.dom('[data-test-sbomScanDetails-collapseAllButton]').isDisabled();
+  });
+
+  test('test sbom component tree with parent component loaded from API', async function (assert) {
+    const parentComponent = this.server.createList('sbom-component', 1, {
+      sb_file: this.sbomFiles[1].id,
+      is_dependency: false,
+      dependency_count: 2,
+      name: 'Parent Component',
+      version: '1.0.0',
+      latest_version: '1.2.0',
+      bom_ref: 'pkg:npm/parent-component@1.0.0',
+    });
+
+    const dependencies = this.server.createList('sbom-component', 2, {
+      sb_file: this.sbomFiles[1].id,
+      is_dependency: true,
+    });
+
+    this.server.get('/v2/sb_file_component/:id', (schema, req) =>
+      schema.sbomComponents.find(`${req.params.id}`)?.toJSON()
+    );
+
+    // Mock API for dependencies
+    this.server.get('/v2/sb_file_component/:comp_id/dependencies', () => {
+      return {
+        count: dependencies.length,
+        next: null,
+        previous: null,
+        results: dependencies,
+      };
+    });
+
+    // Mock API for parents
+    this.server.get('/v2/sb_file_component/:comp_id/parents', () => {
+      return {
+        count: parentComponent.length,
+        next: null,
+        previous: null,
+        results: parentComponent,
+      };
+    });
+
+    await visit(
+      `/dashboard/sbom/apps/${this.sbomProjects[1].id}/scans/${this.sbomFiles[1].id}/components/${dependencies[0].id}/${parentComponent[0].id}/overview`
+    );
+
+    assert.dom('[data-test-component-tree]').exists();
+
+    assert.dom('[data-test-component-tree-nodeLabel]').exists();
+
+    // Component should be auto-expanded
+    assert.dom('[data-test-component-tree-nodeCollapseIcon]').exists();
+
+    assert.dom('[data-test-component-tree-node]').exists({ count: 3 }); // Parent + 2 children
+
+    const nodeLabels = findAll('[data-test-component-tree-nodeLabel]');
+
+    assert.dom(nodeLabels[0]).containsText(parentComponent[0].name);
+
+    assert
+      .dom(nodeLabels[1])
+      .containsText(dependencies[0].name)
+      .hasClass(/tree-label-highlighted-text/);
+
+    // visit with wrong parent id
+    await visit(
+      `/dashboard/sbom/apps/${this.sbomProjects[1].id}/scans/${this.sbomFiles[1].id}/components/${dependencies[0].id}/299/overview`
+    );
+
+    const notify = this.owner.lookup('service:notifications');
+
+    assert.strictEqual(
+      notify.errorMsg,
+      t('sbomModule.parentComponentNotFound')
+    );
+
+    // redirect to parent 0
+    assert.strictEqual(
+      currentURL(),
+      `/dashboard/sbom/apps/${this.sbomProjects[1].id}/scans/${this.sbomFiles[1].id}/components/${dependencies[0].id}/0/overview`
+    );
+  });
+
+  test('test sbom component tree with third level children', async function (assert) {
+    // Set up the hierarchy: Root -> Level 2 -> Level 3
+    const rootComponent = this.server.createList('sbom-component', 1, {
+      sb_file: this.sbomFiles[1].id,
+      is_dependency: false,
+      dependency_count: 2,
+      is_outdated: false,
+      name: 'Root Component',
+    });
+
+    // Level 2 dependencies
+    const level2Dependencies = this.server.createList('sbom-component', 2, {
+      sb_file: this.sbomFiles[1].id,
+      is_dependency: true,
+      dependency_count: 2,
+      name: 'Level 2 Component',
+    });
+
+    // Level 3 dependencies
+    const level3Dependencies = this.server.createList('sbom-component', 2, {
+      sb_file: this.sbomFiles[1].id,
+      is_dependency: true,
+      dependency_count: 0,
+      name: 'Level 3 Component',
+    });
+
+    this.server.get('/v2/sb_files/:id/sb_file_components', () => {
+      return {
+        count: rootComponent.length,
+        next: null,
+        previous: null,
+        results: rootComponent,
+      };
+    });
+
+    this.server.get(
+      '/v2/sb_file_component/:comp_id/dependencies',
+      (schema, request) => {
+        const componentId = request.params.comp_id;
+
+        if (componentId == rootComponent[0].id) {
+          return {
+            count: level2Dependencies.length,
+            next: null,
+            previous: null,
+            results: level2Dependencies,
+          };
+        } else {
+          return {
+            count: level3Dependencies.length,
+            next: null,
+            previous: null,
+            results: level3Dependencies,
+          };
+        }
+      }
+    );
+
+    await visit(
+      `/dashboard/sbom/apps/${this.sbomProjects[1].id}/scans/${this.sbomFiles[1].id}`
+    );
+
+    assert.dom('[data-test-component-tree]').exists();
+
+    assert
+      .dom('[data-test-component-tree-nodeLabel]')
+      .exists()
+      .containsText('Root Component');
+
+    assert.dom('[data-test-component-tree-nodeExpandIcon]').exists();
+
+    await click('[data-test-component-tree-nodeExpandIcon]');
+
+    const nodes = findAll('[data-test-component-tree-node]');
+
+    assert.strictEqual(nodes.length, 3); // Root + 2 level 2
+
+    const expandButtons = findAll('[data-test-component-tree-nodeExpandIcon]');
+
+    await click(expandButtons[1]);
+
+    const newNodes = findAll('[data-test-component-tree-node]');
+
+    assert.strictEqual(newNodes.length, 5); // Root + 2 level 2 + 2 level 3
+  });
+
+  test('test sbom component tree "View More" for children', async function (assert) {
+    const rootComponent = this.server.createList('sbom-component', 1, {
+      sb_file: this.sbomFiles[1].id,
+      is_dependency: false,
+      dependency_count: 20,
+      is_outdated: false,
+      name: 'Root Component',
+    });
+
+    // Initial batch of dependencies (first 15)
+    const initialDependencies = this.server.createList('sbom-component', 15, {
+      sb_file: this.sbomFiles[1].id,
+      is_dependency: true,
+      parentId: this.sbomComponents[0].id,
+    });
+
+    // Second batch of dependencies (next 5)
+    const moreDependencies = this.server.createList('sbom-component', 5, {
+      sb_file: this.sbomFiles[1].id,
+      is_dependency: true,
+      parentId: this.sbomComponents[0].id,
+      name: (i) => `More Dependency ${i}`,
+    });
+
+    const BATCH_SIZE = 15;
+
+    this.server.get('/v2/sb_files/:id/sb_file_components', () => {
+      return {
+        count: rootComponent.length,
+        next: null,
+        previous: null,
+        results: rootComponent,
+      };
+    });
+
+    this.server.get(
+      '/v2/sb_file_component/:comp_id/dependencies',
+      (schema, request) => {
+        const requestOffset = parseInt(request.queryParams.offset) || 0;
+        const limit = BATCH_SIZE;
+
+        const allDependencies = [...initialDependencies, ...moreDependencies];
+        const results = allDependencies.slice(
+          requestOffset,
+          requestOffset + limit
+        );
+
+        return {
+          count: allDependencies.length,
+          next: requestOffset + limit < allDependencies.length ? 'next' : null,
+          previous: null,
+          results: results,
+        };
+      }
+    );
+
+    await visit(
+      `/dashboard/sbom/apps/${this.sbomProjects[1].id}/scans/${this.sbomFiles[1].id}`
+    );
+
+    await click('[data-test-component-tree-nodeExpandIcon]');
+
+    const nodes = findAll('[data-test-component-tree-node]');
+
+    assert.strictEqual(nodes.length, 16); // Root + 15 children
+
+    assert.dom('[data-test-component-tree-child-viewMore]').exists();
+
+    await click('[data-test-component-tree-child-viewMore]');
+
+    const newNodes = findAll('[data-test-component-tree-node]');
+
+    assert.strictEqual(newNodes.length, 21); // Root + 15 + 5 more
   });
 
   test('it triggers sbom scan component details route on row click', async function (assert) {
