@@ -220,6 +220,12 @@ Router.map(function () {
 
         this.route('billing');
 
+        this.route('users', function () {
+          this.route('index', { path: '/' });
+          this.route('storeknox');
+          this.route('pending-invite');
+        });
+
         this.route('account-settings', { path: '/settings' }, function () {
           this.route('general');
           this.route('security');

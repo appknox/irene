@@ -139,7 +139,7 @@ module('Integration | Component | storeknox-wrapper', function (hooks) {
     ];
 
     await render(hbs`
-      <StoreknoxWrapper 
+      <AppWrappers::Storeknox 
         @user={{this.user}} 
       />
     `);
@@ -189,7 +189,7 @@ module('Integration | Component | storeknox-wrapper', function (hooks) {
 
   test('it should render storeknox side nav', async function (assert) {
     await render(hbs`
-      <StoreknoxWrapper 
+      <AppWrappers::Storeknox 
         @user={{this.user}} 
       />
     `);

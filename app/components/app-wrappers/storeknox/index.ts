@@ -10,7 +10,7 @@ import type ConfigurationService from 'irene/services/configuration';
 import type WhitelabelService from 'irene/services/whitelabel';
 import ENV from 'irene/config/environment';
 
-export interface StoreknoxWrapperComponentSignature {
+export interface AppWrappersStoreknoxComponentSignature {
   Args: {
     user: UserModel;
   };
@@ -19,7 +19,7 @@ export interface StoreknoxWrapperComponentSignature {
   };
 }
 
-export default class StoreknoxWrapperComponent extends Component<StoreknoxWrapperComponentSignature> {
+export default class AppWrappersStoreknoxComponent extends Component<AppWrappersStoreknoxComponentSignature> {
   @service('browser/window') declare window: Window;
   @service declare intl: IntlService;
   @service declare configuration: ConfigurationService;
@@ -31,7 +31,7 @@ export default class StoreknoxWrapperComponent extends Component<StoreknoxWrappe
 
   constructor(
     owner: unknown,
-    args: StoreknoxWrapperComponentSignature['Args']
+    args: AppWrappersStoreknoxComponentSignature['Args']
   ) {
     super(owner, args);
 
@@ -116,6 +116,6 @@ export default class StoreknoxWrapperComponent extends Component<StoreknoxWrappe
 
 declare module '@glint/environment-ember-loose/registry' {
   export default interface Registry {
-    StoreknoxWrapper: typeof StoreknoxWrapperComponent;
+    'AppWrappers::Storeknox': typeof AppWrappersStoreknoxComponent;
   }
 }

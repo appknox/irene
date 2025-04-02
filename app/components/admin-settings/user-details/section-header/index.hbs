@@ -1,0 +1,15 @@
+<AkStack
+  @width='full'
+  @spacing='1.5'
+  @alignItems='center'
+  @justifyContent='space-between'
+  local-class='storeknox-inventory-details-section-header-root {{this.color}}'
+  class='py-1 px-3'
+  ...attributes
+>
+  {{yield}}
+
+  {{#if (has-block 'headerCTA')}}
+    {{yield to='headerCTA'}}
+  {{/if}}
+</AkStack>

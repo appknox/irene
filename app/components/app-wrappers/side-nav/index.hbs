@@ -16,7 +16,7 @@
   </div>
 
   {{#if (or this.isSecurityEnabled this.showStoreknox)}}
-    <SideNav::ProductSwitcher
+    <AppWrappers::SideNav::ProductSwitcher
       @isCollapsed={{@isCollapsed}}
       @classes={{this.classes}}
       @productSwitcherFilterKey={{@productSwitcherFilterKey}}

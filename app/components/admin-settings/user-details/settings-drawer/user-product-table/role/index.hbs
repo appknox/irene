@@ -1,0 +1,16 @@
+{{#if this.roleIsAdminOrOwner}}
+  <AkTypography data-test-member-role-text>
+    {{t (user-role @product.role)}}
+  </AkTypography>
+{{else}}
+  <AkSelect
+    @triggerClass='user-role-select-trigger'
+    @selected={{this.selectedRole}}
+    @options={{this.roles}}
+    @onChange={{perform this.selectMemberRole}}
+    {{style width='120px'}}
+    as |role|
+  >
+    {{t (user-role role.value)}}
+  </AkSelect>
+{{/if}}

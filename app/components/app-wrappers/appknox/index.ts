@@ -11,9 +11,9 @@ import type MeService from 'irene/services/me';
 import type IntegrationService from 'irene/services/integration';
 import type OrganizationService from 'irene/services/organization';
 import type ConfigurationService from 'irene/services/configuration';
-import type { MenuItem } from '../side-nav';
+import { MenuItem } from 'irene/components/app-wrappers/side-nav';
 
-export interface AppknoxWrapperSignature {
+export interface AppWrappersAppknoxComponentSignature {
   Args: {
     user: UserModel;
   };
@@ -23,7 +23,7 @@ export interface AppknoxWrapperSignature {
   };
 }
 
-export default class AppknoxWrapperComponent extends Component<AppknoxWrapperSignature> {
+export default class AppWrappersAppknoxComponent extends Component<AppWrappersAppknoxComponentSignature> {
   @service declare session: any;
   @service declare me: MeService;
   @service declare intl: IntlService;
@@ -42,7 +42,10 @@ export default class AppknoxWrapperComponent extends Component<AppknoxWrapperSig
   showMarketplace = ENV.enableMarketplace;
   productVersion = ENV.productVersions['appknox'];
 
-  constructor(owner: unknown, args: AppknoxWrapperSignature['Args']) {
+  constructor(
+    owner: unknown,
+    args: AppWrappersAppknoxComponentSignature['Args']
+  ) {
     super(owner, args);
 
     const storedState = this.window.localStorage.getItem('sidebarState');
@@ -156,6 +159,11 @@ export default class AppknoxWrapperComponent extends Component<AppknoxWrapperSig
         icon: 'credit-card-outline',
         route: 'authenticated.dashboard.billing',
       },
+      {
+        label: this.intl.t('users'),
+        icon: 'group',
+        route: 'authenticated.dashboard.users',
+      },
       this.showPartnerDashboard && {
         label: this.intl.t('clients'),
         icon: 'groups-2',
@@ -240,6 +248,6 @@ export default class AppknoxWrapperComponent extends Component<AppknoxWrapperSig
 
 declare module '@glint/environment-ember-loose/registry' {
   export default interface Registry {
-    AppknoxWrapper: typeof AppknoxWrapperComponent;
+    'AppWrappers::Appknox': typeof AppWrappersAppknoxComponent;
   }
 }

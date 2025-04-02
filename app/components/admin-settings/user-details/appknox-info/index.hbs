@@ -1,0 +1,28 @@
+<AkStack @direction='column' @width='full'>
+  <AdminSettings::UserDetails::Header />
+
+  <AkStack
+    @direction='column'
+    @width='full'
+    @spacing='3'
+    local-class={{if this.memberIsDeactivated 'deactivated-user-content'}}
+  >
+    <AdminSettings::UserDetails::UserInfoSection
+      @userDetails={{this.userDetailsSections}}
+    />
+
+    <AkStack @direction='column' @width='full'>
+      <AdminSettings::UserDetails::AppknoxInfo::Teams
+        @member={{null}}
+        @organization={{this.organization.selected}}
+      />
+    </AkStack>
+
+    <AkStack @direction='column' @width='full'>
+      <AdminSettings::UserDetails::AppknoxInfo::Projects
+        @member={{null}}
+        @organization={{this.organization.selected}}
+      />
+    </AkStack>
+  </AkStack>
+</AkStack>

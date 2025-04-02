@@ -1,0 +1,39 @@
+.admin-user-details-header-root {
+  position: sticky;
+  z-index: 10;
+  top: -0.5em;
+  background-color: var(--background-main);
+
+  .app-info-logo {
+    border-radius: 100%;
+    object-fit: contain;
+    width: 50px;
+    height: 50px;
+    border: 1px solid
+      var(--storeknox-inventory-details-header-app-logo-border-color);
+  }
+
+  .admin-user-details-header-info-container {
+    background-color: var(
+      --storeknox-inventory-details-section-info-root-bg-color
+    );
+
+    border: 1px solid
+      var(--storeknox-inventory-details-section-info-root-border-color);
+  }
+}
+
+.deactivated-user-message-banner {
+  height: 42px;
+  border: 1px solid
+    var(--storeknox-inventory-details-header-app-logo-border-color);
+
+  & > * {
+    height: 100%;
+  }
+
+  .error-icon-container {
+    width: 53px;
+    background-color: var(--error-light);
+  }
+}

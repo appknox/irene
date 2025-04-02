@@ -1,0 +1,19 @@
+<AkTable data-test-adminSettings-userDetails-productTable as |t|>
+  <t.head
+    @columns={{this.columns}}
+    data-test-adminSettings-userDetails-productTable-thead
+  />
+
+  <t.body @rows={{this.userProductList}} as |b|>
+    <b.row data-test-adminSettings-userDetails-productTable-row as |r|>
+      <r.cell data-test-adminSettings-userDetails-productTable-cell>
+        {{#let (component r.columnValue.component) as |Component|}}
+          <Component
+            @product={{r.rowValue}}
+            @editProductAccess={{@editProductAccess}}
+          />
+        {{/let}}
+      </r.cell>
+    </b.row>
+  </t.body>
+</AkTable>

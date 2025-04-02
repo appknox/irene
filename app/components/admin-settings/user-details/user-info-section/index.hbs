@@ -1,0 +1,23 @@
+<AkStack @direction='column' @width='full'>
+  <AdminSettings::UserDetails::SectionHeader>
+    <AkTypography @fontWeight='bold'>
+      {{t 'userDetails'}}
+    </AkTypography>
+  </AdminSettings::UserDetails::SectionHeader>
+
+  <AdminSettings::UserDetails::SectionInfo @width='full' class='p-3 pb-4'>
+    <AkStack {{style gap='84px'}}>
+      {{#each @userDetails as |section|}}
+        <AkStack @direction='column' @spacing='1'>
+          <AkTypography>
+            {{section.title}}
+          </AkTypography>
+
+          <AkTypography @fontWeight='medium'>
+            {{section.value}}
+          </AkTypography>
+        </AkStack>
+      {{/each}}
+    </AkStack>
+  </AdminSettings::UserDetails::SectionInfo>
+</AkStack>

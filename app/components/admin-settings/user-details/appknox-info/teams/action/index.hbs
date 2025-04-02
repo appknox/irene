@@ -1,0 +1,25 @@
+<AkIconButton
+  @size='small'
+  @variant='outlined'
+  {{style padding='0.5em'}}
+  {{on 'click' this.handleTeamActionsOpen}}
+>
+  <AkIcon @iconName='more-vert' />
+</AkIconButton>
+
+<AkMenu
+  @anchorRef={{this.teamActionsMenuRef}}
+  @onClose={{this.handleTeamActionsClose}}
+  @arrow={{true}}
+  as |akm|
+>
+  {{#each this.teamActions as |it|}}
+    <akm.listItem @button={{true}} @onClick={{it.action}} as |li|>
+      <li.leftIcon>
+        <AkIcon @size='small' @variant='filled' @iconName={{it.icon}} />
+      </li.leftIcon>
+
+      <li.text @primaryText='{{it.label}}' />
+    </akm.listItem>
+  {{/each}}
+</AkMenu>

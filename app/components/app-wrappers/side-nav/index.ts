@@ -21,7 +21,7 @@ type DefaultBlock = {
   };
 };
 
-export interface SideNavSignature {
+export interface AppWrappersSideNavSignature {
   Args: {
     pendoContainerId: string;
     productVersion: string;
@@ -58,7 +58,7 @@ export interface LowerMenuItem {
   listItemClass?: string;
 }
 
-export default class SideNavComponent extends Component<SideNavSignature> {
+export default class AppWrappersSideNavComponent extends Component<AppWrappersSideNavSignature> {
   @service declare me: MeService;
   @service declare organization: OrganizationService;
   @service declare integration: IntegrationService;
@@ -70,7 +70,7 @@ export default class SideNavComponent extends Component<SideNavSignature> {
   faviconImage: HTMLImageElement = new Image();
   appLogoImage: HTMLImageElement = new Image();
 
-  constructor(owner: unknown, args: SideNavSignature['Args']) {
+  constructor(owner: unknown, args: AppWrappersSideNavSignature['Args']) {
     super(owner, args);
 
     this.faviconImage.src = this.whitelabel.favicon;
@@ -175,6 +175,6 @@ export default class SideNavComponent extends Component<SideNavSignature> {
 
 declare module '@glint/environment-ember-loose/registry' {
   export default interface Registry {
-    SideNav: typeof SideNavComponent;
+    'AppWrappers::SideNav': typeof AppWrappersSideNavComponent;
   }
 }

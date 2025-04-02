@@ -1,0 +1,12 @@
+<AkStack @alignItems='center' @spacing='1.5'>
+  {{#let
+    (component (get this.productInfoIconMap @product.product))
+    as |ProductIcon|
+  }}
+    <ProductIcon />
+  {{/let}}
+
+  <AkTypography>
+    {{@product.title}}
+  </AkTypography>
+</AkStack>

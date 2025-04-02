@@ -1,0 +1,150 @@
+<AkDrawer
+  @onClose={{@handleDrawerClose}}
+  @open={{@showAddToProjectsDrawer}}
+  @anchor='right'
+  as |dr|
+>
+  <AkAppbar @justifyContent='space-between' class='px-3' as |ab|>
+    <AkTypography @color='inherit' @variant='h5'>
+      {{t 'addToTeams'}}
+    </AkTypography>
+
+    <AkIconButton
+      class={{ab.classes.defaultIconBtn}}
+      {{on 'click' dr.closeHandler}}
+    >
+      <AkIcon @iconName='close' />
+    </AkIconButton>
+  </AkAppbar>
+
+  <AkStack
+    @direction='column'
+    @alignItems='space-between'
+    {{style height='100%'}}
+  >
+    <div local-class='add-to-projects-drawer-content' class='p-3'>
+      <AkStack
+        @alignItems='center'
+        @justifyContent='space-between'
+        class='mb-3'
+      >
+        <AkStack @direction='column' @spacing='0.5'>
+          <AkTypography data-test-addProjectList-title @variant='h6'>
+            {{t 'addProject'}}
+          </AkTypography>
+
+          <AkTypography
+            data-test-addProjectList-description
+            @color='textSecondary'
+            @variant='body2'
+          >
+            {{t 'addTeamProjectDesc'}}
+          </AkTypography>
+        </AkStack>
+
+        <div {{style width='180px'}}>
+          <AkTextField
+            data-test-addProjectList-searchInput
+            @placeholder={{t 'searchProject'}}
+            {{on 'keyup' this.handleSearchQueryChange}}
+          >
+            <:leftAdornment>
+              <AkIcon @iconName='search' @color='textSecondary' />
+            </:leftAdornment>
+          </AkTextField>
+        </div>
+      </AkStack>
+
+      <AkPaginationProvider
+        @results={{this.projectList}}
+        @onItemPerPageChange={{this.handleItemPerPageChange}}
+        @totalItems={{this.totalProjectCount}}
+        @nextAction={{this.handleNextPrevAction}}
+        @prevAction={{this.handleNextPrevAction}}
+        @itemPerPageOptions={{array 10 25 50}}
+        @defaultLimit={{this.limit}}
+        @offset={{this.offset}}
+        as |pgc|
+      >
+        {{#if this.fetchProjects.isRunning}}
+          <div local-class='loading-container'>
+            <AkStack @alignItems='center' @spacing='2'>
+              <AkLoader @size={{16}} />
+              <AkTypography>{{t 'loading'}}...</AkTypography>
+            </AkStack>
+          </div>
+        {{else if this.hasNoProject}}
+          <div local-class='emtpy-container'>
+            <AkSvg::OrgUsersEmpty local-class='empty-svg' />
+
+            <AkTypography @variant='h6'>
+              {{t 'noProject'}}
+            </AkTypography>
+          </div>
+        {{else}}
+          <AkTable @dense={{true}} as |t|>
+            <t.head data-test-addProjectList-thead @columns={{this.columns}} />
+
+            <t.body @rows={{pgc.currentPageResults}} as |b|>
+              <b.row
+                data-test-cy='addProjectList-row'
+                data-test-addProjectList-row
+                as |r|
+              >
+                <r.cell data-test-addProjectList-cell>
+                  {{#if r.columnValue.component}}
+                    {{#let (component r.columnValue.component) as |Component|}}
+                      <Component
+                        @project={{r.rowValue.project}}
+                        @checked={{r.rowValue.checked}}
+                        @onChange={{fn this.selectionChange r.rowValue.project}}
+                        @disabled={{this.isAddingProject}}
+                      />
+                    {{/let}}
+                  {{/if}}
+                </r.cell>
+              </b.row>
+            </t.body>
+          </AkTable>
+
+          <AkPagination
+            @disableNext={{pgc.disableNext}}
+            @nextAction={{pgc.nextAction}}
+            @disablePrev={{pgc.disablePrev}}
+            @prevAction={{pgc.prevAction}}
+            @endItemIdx={{pgc.endItemIdx}}
+            @startItemIdx={{pgc.startItemIdx}}
+            @itemPerPageOptions={{pgc.itemPerPageOptions}}
+            @onItemPerPageChange={{pgc.onItemPerPageChange}}
+            @selectedOption={{pgc.selectedOption}}
+            @tableItemLabel={{t 'projects'}}
+            @perPageTranslation={{t 'recordPerPage'}}
+            @totalItems={{pgc.totalItems}}
+            @variant='compact'
+          />
+        {{/if}}
+      </AkPaginationProvider>
+    </div>
+
+    <AkAppbar
+      @position='absolute'
+      @placement='bottom'
+      @justifyContent='flex-end'
+      @spacing='1.5'
+      @color='default'
+      local-class='add-to-projects-footer'
+    >
+      <AkButton
+        @variant='outlined'
+        @color='neutral'
+        {{on 'click' dr.closeHandler}}
+      >
+        {{t 'cancel'}}
+      </AkButton>
+
+      <AkButton {{on 'click' (perform this.addMemberToSelectedProjects)}}>
+        {{t 'add'}}
+      </AkButton>
+    </AkAppbar>
+  </AkStack>
+</AkDrawer>

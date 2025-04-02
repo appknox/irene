@@ -1,0 +1,10 @@
+<AkStack @alignItems='center' @spacing='2'>
+  <AppPlatformIcon
+    @platform={{@project.platformIconClass}}
+    local-class='team-project-icon'
+  />
+
+  <AkTypography @noWrap={{true}} title={{@project.packageName}}>
+    {{@project.packageName}}
+  </AkTypography>
+</AkStack>

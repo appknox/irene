@@ -1,0 +1,105 @@
+<AkDrawer
+  @open={{@showSettingsDrawer}}
+  @onClose={{this.closeSettingsDrawer}}
+  @anchor='right'
+  as |dr|
+>
+  <AkStack @direction='column' {{style width='640px'}}>
+    <AkAppbar
+      @position='sticky'
+      @justifyContent='space-between'
+      class='px-3'
+      as |ab|
+    >
+      <AkTypography
+        @color='inherit'
+        @variant='h5'
+        @fontWeight='medium'
+        data-test-storeknoxInventory-settingsDrawer-title
+      >
+        {{t 'settings'}}
+      </AkTypography>
+
+      <AkIconButton
+        class={{ab.classes.defaultIconBtn}}
+        {{on 'click' dr.closeHandler}}
+        data-test-storeknoxInventory-settingsDrawer-closeIconBtn
+      >
+        <AkIcon @iconName='close' />
+      </AkIconButton>
+    </AkAppbar>
+
+    <AkStack @direction='column' @width='full' class='px-3 py-4'>
+      {{#if this.showProductStatusTogglePrompt}}
+        <AkStack @direction='column' local-class='product-status-cta-container'>
+          <AkTypography class='px-3 pt-3'>
+            Could you please confirm that you want to
+            {{this.productStatusToggleMsg.actionTerm}}
+            the user
+            <AkTypography @tag='span' @fontWeight='bold'>“sujith”</AkTypography>
+            {{this.productStatusToggleMsg.msgSuffix}}
+          </AkTypography>
+
+          <AkDivider @color='dark' class='mt-3 mb-2' />
+
+          <AkStack @spacing='1.5' @alignItems='center' class='px-3 pb-2'>
+            <AkButton>
+              {{t 'yes'}},
+              {{this.productStatusToggleMsg.actionTermCapital}}
+            </AkButton>
+
+            <AkButton
+              @variant='outlined'
+              @color='neutral'
+              {{on 'click' this.resetEditState}}
+            >
+              {{t 'cancel'}}
+            </AkButton>
+          </AkStack>
+        </AkStack>
+      {{else}}
+        <AdminSettings::UserDetails::SettingsDrawer::UserProductTable
+          @editProductAccess={{this.editProductAccess}}
+          @member={{@member}}
+        />
+
+        <AkDivider @color='dark' class='my-3' />
+
+        <AkStack
+          @width='full'
+          @direction='column'
+          @spacing='2'
+          local-class='product-status-cta-container'
+          class='p-2 pb-3'
+        >
+          <AkStack @direction='column'>
+            <AkTypography @fontWeight='bold'>
+              Overall Access
+            </AkTypography>
+
+            <AkTypography>
+              {{this.statusToggleSectionMsgs.headerSubtext}}
+            </AkTypography>
+          </AkStack>
+
+          <AkButton
+            @color='neutral'
+            @variant='outlined'
+            {{on 'click' this.deactivateOrActivateAllProducts}}
+          >
+            <:leftIcon>
+              <AkIcon
+                @iconName={{if this.oneProductActive 'person-off' 'person'}}
+                @variant='filled'
+              />
+            </:leftIcon>
+
+            <:default>
+              {{this.statusToggleSectionMsgs.btnTitle}}
+            </:default>
+          </AkButton>
+        </AkStack>
+      {{/if}}
+    </AkStack>
+  </AkStack>
+</AkDrawer>

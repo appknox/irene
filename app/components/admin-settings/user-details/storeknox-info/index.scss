@@ -1,0 +1,26 @@
+.deactivated-user-content {
+  opacity: 0.6;
+}
+
+.upselling-ui-root {
+  border-radius: 3px;
+  background: var(--background-main);
+  box-shadow: var(--box-shadow-7);
+
+  .new-tag {
+    padding: 0.2857em 0.4286em;
+    gap: 0.2857em;
+    background-color: var(--upselling-feature-footer-bg-color);
+    color: var(--upselling-feature-footer-color);
+    text-transform: capitalize;
+  }
+
+  .upgrade-now-cta-wrapper {
+    padding: 0.7143em 1em;
+    background-color: var(--upselling-feature-footer-bg-color);
+
+    .upgrade-now-cta {
+      color: var(--upselling-feature-footer-color) !important;
+    }
+  }
+}

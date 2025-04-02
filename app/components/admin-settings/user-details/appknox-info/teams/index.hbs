@@ -1,0 +1,129 @@
+<AdminSettings::UserDetails::SectionHeader>
+  <:default>
+    <AkTypography @fontWeight='bold'>
+      {{t 'teams'}}
+    </AkTypography>
+  </:default>
+
+  <:headerCTA>
+    <AkStack @alignItems='center' @spacing='1'>
+      <div local-class='teams-search-query-input' {{style width='170px'}}>
+        <AkTextField
+          @textFieldRootClass={{this.classes.textFieldRootClass}}
+          @placeholder={{t 'searchTeam'}}
+          {{on 'keyup' this.handleSearchQueryChange}}
+        >
+          <:leftAdornment>
+            <AkIcon @iconName='search' @color='textSecondary' />
+          </:leftAdornment>
+        </AkTextField>
+      </div>
+
+      <div local-class='teams-add-cta'>
+        <AkIconButton
+          {{on 'click' this.launchAddToTeamDrawer}}
+          {{style height='28px'}}
+        >
+          <AkIcon @iconName='group-add' />
+        </AkIconButton>
+      </div>
+
+      <div local-class='teams-add-cta'>
+        <AkLink
+          @route='authenticated.dashboard.organization.teams'
+          target='_blank'
+          rel='noopener noreferrer'
+        >
+          <AkIconButton {{style height='28px'}}>
+            <AkIcon @iconName='add-circle' />
+          </AkIconButton>
+        </AkLink>
+      </div>
+    </AkStack>
+  </:headerCTA>
+</AdminSettings::UserDetails::SectionHeader>
+
+<AdminSettings::UserDetails::SectionInfo @width='full'>
+  <AkPaginationProvider
+    @results={{this.teamsList}}
+    @onItemPerPageChange={{this.handleItemPerPageChange}}
+    @totalItems={{this.totalTeamCount}}
+    @nextAction={{this.handleNextPrevAction}}
+    @prevAction={{this.handleNextPrevAction}}
+    @itemPerPageOptions={{array 5 10 20}}
+    @defaultLimit={{this.limit}}
+    @offset={{this.offset}}
+    as |pgc|
+  >
+    {{#if this.fetchTeams.isRunning}}
+      <div local-class='empty-container' class='px-3'>
+        <AkStack @alignItems='center' @spacing='2'>
+          <AkLoader @size={{16}} />
+
+          <AkTypography>{{t 'loading'}}...</AkTypography>
+        </AkStack>
+      </div>
+
+    {{else if this.hasNoTeam}}
+      <div local-class='empty-container' class='px-3'>
+        <AkSvg::TeamsEmpty local-class='empty-svg' />
+
+        <AkTypography @variant='h6'>
+          {{t 'noTeams'}}
+        </AkTypography>
+      </div>
+
+    {{else}}
+      <div>
+        <AkTable @dense={{true}} as |t|>
+          <t.head @columns={{this.columns}} {{style display='none'}} />
+
+          <t.body @rows={{pgc.currentPageResults}} as |b|>
+            <b.row data-test-teamList-row as |r|>
+              <r.cell data-test-teamList-cell as |value|>
+                {{#if r.columnValue.component}}
+                  {{#let (component r.columnValue.component) as |Component|}}
+                    <Component
+                      @member={{@member.member}}
+                      @team={{r.rowValue}}
+                      @reloadTeams={{this.handleReloadTeams}}
+                    />
+                  {{/let}}
+                {{else}}
+                  <AkTypography title={{value}} @noWrap={{true}}>
+                    {{value}}
+                  </AkTypography>
+                {{/if}}
+              </r.cell>
+            </b.row>
+          </t.body>
+        </AkTable>
+      </div>
+
+      <AkPagination
+        @disableNext={{pgc.disableNext}}
+        @nextAction={{pgc.nextAction}}
+        @disablePrev={{pgc.disablePrev}}
+        @prevAction={{pgc.prevAction}}
+        @endItemIdx={{pgc.endItemIdx}}
+        @startItemIdx={{pgc.startItemIdx}}
+        @itemPerPageOptions={{pgc.itemPerPageOptions}}
+        @onItemPerPageChange={{pgc.onItemPerPageChange}}
+        @selectedOption={{pgc.selectedOption}}
+        @tableItemLabel={{t 'teams'}}
+        @perPageTranslation={{t 'recordPerPage'}}
+        @totalItems={{pgc.totalItems}}
+        @variant='compact'
+      />
+    {{/if}}
+  </AkPaginationProvider>
+</AdminSettings::UserDetails::SectionInfo>
+
+{{! Add to teams drawer }}
+<AdminSettings::UserDetails::AppknoxInfo::AddToTeam
+  @member={{null}}
+  @organization={{@organization}}
+  @showAddToTeamsDrawer={{this.showAddToTeamsDrawer}}
+  @handleDrawerClose={{this.closeAddToTeamsDrawer}}
+  @handleBackToTeamDetail={{this.closeAddToTeamsDrawer}}
+/>

@@ -1,0 +1,125 @@
+<AkStack
+  @direction='column'
+  @width='full'
+  local-class='admin-user-details-header-root'
+  class='mb-2 pt-2'
+>
+  <AkBreadcrumbs::AutoTrail class='pb-3' />
+
+  <AkStack @direction='column' @spacing='2' @width='full'>
+    <AkStack
+      @width='full'
+      @alignItems='flex-end'
+      local-class='admin-user-details-header-info-container'
+      class='p-3'
+    >
+      <AkStack @width='full' @direction='column'>
+        <AkTypography @variant='h5' @fontWeight='bold' class='mt-1'>
+          Yibaebi
+        </AkTypography>
+
+        <AkTypography
+          @color='neutral'
+          {{style marginBottom='0.8571em !important'}}
+        >
+          yibaebi@appknox.com
+        </AkTypography>
+
+        {{#let (component this.userProductIcon) as |ProductIcon|}}
+          <ProductIcon />
+        {{/let}}
+      </AkStack>
+
+      {{#if (has-block 'headerCTA')}}
+        {{yield to='headerCTA'}}
+      {{else}}
+        <AkStack
+          @alignItems='center'
+          @justifyContent='flex-end'
+          @spacing='1'
+          {{style minWidth='300px'}}
+        >
+          <AkChip
+            @color='success'
+            @size='small'
+            @variant='semi-filled'
+            @label='ACTIVE'
+          />
+
+          <AkDivider @direction='vertical' @color='dark' @height='19px' />
+
+          <AkIconButton
+            @variant='outlined'
+            @size='small'
+            {{on 'click' this.openSettingsDrawer}}
+          >
+            <AkIcon @iconName='settings' @color='textPrimary' @size='small' />
+          </AkIconButton>
+        </AkStack>
+      {{/if}}
+    </AkStack>
+
+    {{! User Details Tabs }}
+    {{#unless @hideNavTabs}}
+      <AkTabs class='w-full' as |Akt|>
+        {{#each this.tabItems as |item|}}
+          <Akt.tabItem
+            @id={{item.id}}
+            @badgeBackground={{true}}
+            @route={{item.route}}
+            data-test-adminSettings-userDetails-tabs='{{item.id}}-tab'
+          >
+            {{item.label}}
+          </Akt.tabItem>
+        {{/each}}
+      </AkTabs>
+    {{/unless}}
+
+    {{#if this.showUserDisableNotifBanner}}
+      <AkStack
+        @alignItems='center'
+        @width='full'
+        local-class='deactivated-user-message-banner'
+        class='my-1'
+      >
+        <AkStack
+          @alignItems='center'
+          @justifyContent='center'
+          local-class='error-icon-container'
+        >
+          <AkIcon @iconName='warning' @color='error' />
+        </AkStack>
+
+        <AkStack
+          @alignItems='center'
+          @spacing='1'
+          @width='full'
+          local-class='message'
+          class='px-2'
+        >
+          <AkTypography>
+            The access has been disabled for both Appknox and Storeknox. Revoke
+            the access of Appknox by using
+          </AkTypography>
+
+          <AkButton
+            @tag='span'
+            @underline='always'
+            @typographyFontWeight='bold'
+            @variant='text'
+            {{style minWidth='unset'}}
+            {{on 'click' this.openSettingsDrawer}}
+          >
+            Settings
+          </AkButton>
+        </AkStack>
+      </AkStack>
+    {{/if}}
+  </AkStack>
+</AkStack>
+
+{{! User Settings Drawer }}
+<AdminSettings::UserDetails::SettingsDrawer
+  @showSettingsDrawer={{this.showSettingsDrawer}}
+  @closeSettingsDrawer={{this.closeSettingsDrawer}}
+/>

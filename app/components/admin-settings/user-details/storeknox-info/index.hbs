@@ -1,0 +1,75 @@
+<AkStack @direction='column' @width='full'>
+  <AdminSettings::UserDetails::Header />
+
+  <AkStack
+    @width='full'
+    @direction='column'
+    @spacing='3'
+    {{!-- local-class={{if this.memberIsDeactivated 'deactivated-user-content'}} --}}
+  >
+    <AkStack @width='full' @direction='column' local-class='upselling-ui-root'>
+      <AkStack @width='full' @direction='column' class='p-2 pb-3'>
+        <AkStack @width='full' @direction='column' @spacing='1.5'>
+          <AkStack @alignItems='center' local-class='new-tag'>
+            <AkIcon @iconName='auto-fix-high' @color='inherit' />
+
+            <AkTypography
+              @variant='subtitle2'
+              @fontWeight='medium'
+              @tag='span'
+              @color='inherit'
+            >
+              {{t 'new'}}
+            </AkTypography>
+          </AkStack>
+
+          <AkStack @width='full' @direction='column'>
+            <AkTypography @fontWeight='medium' @gutterBottom={{true}}>
+              {{t 'storeknox.title'}}
+            </AkTypography>
+
+            <AkTypography>
+              Monitor your mobile apps on Play Store and App Store
+            </AkTypography>
+          </AkStack>
+
+          <AkDivider @color='dark' class='my-1' />
+
+          <AkStack @width='full' @direction='column' @spacing='1.5'>
+            <AkTypography @fontWeight='medium'>
+              Advantages of Storeknox
+            </AkTypography>
+
+            <AkStack @width='full' @direction='column' @spacing='1.5'>
+              {{#each (array 1 2 3 4 5) as |item|}}
+                <AkStack @alignItems='center' @spacing='0.5'>
+                  <AkIcon @color='success' @iconName='verified-user' />
+
+                  <AkTypography title={{item}}>
+                    Lorem ipsum dolor sit, amet consectetur adipisicing elit.
+                  </AkTypography>
+                </AkStack>
+              {{/each}}
+            </AkStack>
+          </AkStack>
+        </AkStack>
+      </AkStack>
+
+      <AkStack @width='full' local-class='upgrade-now-cta-wrapper'>
+        <AkButton
+          @variant='text'
+          @underline='always'
+          @typographyFontWeight='bold'
+          @color='inherit'
+          local-class='upgrade-now-cta'
+        >
+          Upgrade Now
+        </AkButton>
+      </AkStack>
+    </AkStack>
+
+    <AdminSettings::UserDetails::UserInfoSection
+      @userDetails={{this.userDetailsSections}}
+    />
+  </AkStack>
+</AkStack>

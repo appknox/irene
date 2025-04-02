@@ -1,0 +1,21 @@
+.pending-invite-user-message-banner {
+  height: 86px;
+  border: 1px solid var(--border-color-1);
+
+  & > * {
+    height: 100%;
+  }
+
+  .warn-icon-container {
+    width: 53px;
+    background-color: var(--warn-light);
+
+    .icon {
+      color: var(--warn-dark);
+    }
+  }
+
+  .divider {
+    border-color: var(--common-black);
+  }
+}

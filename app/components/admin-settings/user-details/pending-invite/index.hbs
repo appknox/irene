@@ -1,0 +1,71 @@
+<AkStack @direction='column' @width='full'>
+  <AdminSettings::UserDetails::Header
+    @hideNavTabs={{true}}
+    @hideUserDisableMsg={{true}}
+  >
+    <:headerCTA>
+      <AkChip
+        @color='warn'
+        @size='small'
+        @variant='semi-filled'
+        @label='PENDING'
+      />
+    </:headerCTA>
+  </AdminSettings::UserDetails::Header>
+
+  <AkStack
+    @width='full'
+    local-class='pending-invite-user-message-banner'
+    class='my-1'
+  >
+    <AkStack
+      @alignItems='center'
+      @justifyContent='center'
+      local-class='warn-icon-container'
+    >
+      <AkIcon @iconName='warning' @color='inherit' local-class='icon' />
+    </AkStack>
+
+    <AkStack
+      @direction='column'
+      @justifyContent='center'
+      @spacing='1.5'
+      @width='full'
+      local-class='message'
+      class='px-2'
+    >
+      <AkTypography>
+        This user has not accepted the invite. To proceed further,
+        <AkTypography @tag='span' @fontWeight='bold'>
+          raghu@appknox.com
+        </AkTypography>
+        need to accept the invite. Invited on -
+        <AkTypography @tag='span' @fontWeight='bold'>20th Oct 2024</AkTypography>
+      </AkTypography>
+
+      <AkStack @alignItems='center' @spacing='1.5'>
+        <AkButton
+          @tag='span'
+          @underline='always'
+          @variant='text'
+          @typographyFontWeight='medium'
+          {{style minWidth='unset'}}
+        >
+          Resend Invite
+        </AkButton>
+
+        <AkDivider @direction='vertical' @height='16px' local-class='divider' />
+
+        <AkButton
+          @tag='span'
+          @underline='always'
+          @variant='text'
+          @typographyFontWeight='medium'
+          {{style minWidth='unset'}}
+        >
+          Delete Invite
+        </AkButton>
+      </AkStack>
+    </AkStack>
+  </AkStack>
+</AkStack>

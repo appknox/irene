@@ -1,0 +1,28 @@
+.empty-container {
+  display: flex;
+  flex-direction: column;
+  padding: 1.5em;
+  align-items: center;
+  justify-content: center;
+  gap: 1em;
+  min-height: 260px;
+  border-radius: var(--organization-member-list-member-details-border-radius);
+  box-sizing: border-box;
+
+  .empty-svg {
+    height: 120px;
+  }
+}
+
+.projects-search-query-input,
+.projects-add-cta {
+  background-color: var(--background-main);
+}
+
+.projects-search-query-root-class {
+  height: 28px;
+
+  & > input::placeholder {
+    font-size: 0.8571em;
+  }
+}
