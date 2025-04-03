@@ -41,3 +41,60 @@
     </VncViewer>
   </:default>
 </FileDetails::DynamicScan::DeviceWrapper>
+
+{{#if this.showNotifyUserModal}}
+  <AkModal
+    @headerTitle={{t 'confirmation'}}
+    @noGutter={{true}}
+    @showHeader={{true}}
+    @disableClose={{this.disableNotifUserModalActions}}
+    @onClose={{fn this.confirmNotifyUserOfCompletion false}}
+  >
+    <:default>
+      <AkStack
+        @direction='column'
+        @spacing='2'
+        class='p-3 pr-6'
+        {{style maxWidth='420px'}}
+      >
+        <AkTypography
+          data-test-projectSettings-viewScenario-maskFieldModal-maskParameterText
+        >
+          Do you also want to notify the customer of the successful completion
+          of DAST?
+        </AkTypography>
+      </AkStack>
+    </:default>
+
+    <:footer>
+      <AkDivider />
+
+      <AkStack
+        @justifyContent='flex-start'
+        @alignItems='center'
+        @spacing='1.5'
+        local-class='parameter-modal-footer-container'
+        class='px-3 py-2'
+      >
+        <AkButton
+          @variant='outlined'
+          @color='neutral'
+          @disabled={{this.disableNotifUserModalActions}}
+          {{on 'click' (fn this.confirmNotifyUserOfCompletion true)}}
+          data-test-projectSettings-viewScenario-maskFieldModal-maskCancelBtn
+        >
+          {{t 'yes'}}
+        </AkButton>
+
+        <AkButton
+          @variant='filled'
+          @loading={{this.disableNotifUserModalActions}}
+          {{on 'click' (fn this.confirmNotifyUserOfCompletion false)}}
+          data-test-projectSettings-viewScenario-maskFieldModal-maskSaveBtn
+        >
+          {{t 'no'}}
+        </AkButton>
+      </AkStack>
+    </:footer>
+  </AkModal>
+{{/if}}
