@@ -331,6 +331,20 @@ Router.map(function () {
         this.route('review-logs', { path: '/discover/review-logs' });
         this.route('archived-apps', { path: '/inventory/archived-apps' });
       });
+
+      this.route('admin', { path: '/dashboard/admin' }, function () {
+        this.route('index', { path: '/' });
+
+        this.route('user-management', function () {
+          this.route('users');
+          this.route('email-domain-restrictions');
+        });
+
+        this.route('sso');
+        this.route('mfa');
+        this.route('service-account');
+        this.route('billing');
+      });
     }
   );
 

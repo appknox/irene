@@ -2157,8 +2157,8 @@ body {
   // variables for home-page/product-card
   --home-page-product-card-border-radius: var(--border-radius);
   --home-page-product-card-border-color: var(--border-color-1);
-  --home-page-product-card-beta-tag-bg: var(--storeknox-beta-tag-bg);
-  --home-page-product-card-beta-tag-color: var(--storeknox-beta-tag-color);
+  --home-page-product-card-trial-tag-bg: var(--storeknox-feature-in-progress-button-bg-color);
+  --home-page-product-card-trial-tag-color: var(--storeknox-feature-in-progress-button-color);
 
   // variables for upselling-module
   --upselling-module-background-color: var(--background-main);

@@ -417,6 +417,7 @@
   "expiry": "Expiry",
   "expiryDate": "Expiry Date",
   "expiryOn": "Expiry On",
+  "exploreFreeTrial": "Explore Free Trial",
   "exports": "Exports",
   "exportCSV": "Export CSV",
   "failed": "Failed",
@@ -1302,7 +1303,7 @@
       "oneClickAnalysis": "Get the SBOM analysis done for your mobile applications, with just 1 click.",
       "identifyDependencies": "Identify Direct and Transitive dependencies.",
       "uncoverVulnerabilities": "Quickly uncover vulnerable and outdated components to take corrective action.",
-      "componentInsights": "Get valuable insights related to the components, such as the Author, License, and the Version used."  
+      "componentInsights": "Get valuable insights related to the components, such as the Author, License, and the Version used."
     },
     "sbomContactMessage": "Thanks for showing interest in SBOM. Our team will get back to you.",
     "totalComponents": "Total Components",
@@ -1729,6 +1730,7 @@
   "totalProjects": "Total Projects",
   "totalUsers": "Total Users",
   "transferCredits": "Transfer Credits",
+  "trialVersion": "Trial Version",
   "trialWillBeConverted": "Your free trial will be converted into paid subscription on",
   "trialWillExpireOn": "Your trial will expire on",
   "tryAdjustingFilter": "Try adjusting your search or filter",

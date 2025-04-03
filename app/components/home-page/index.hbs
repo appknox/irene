@@ -33,21 +33,39 @@
           {{t 'toSecureYourMobileApps'}}
         </AkTypography>
 
-        <AkButton
-          @variant='outlined'
-          @color='neutral'
-          local-class='logout-button'
-          {{on 'click' this.userAuth.invalidateSession}}
-          data-test-home-page-logoutBtn
-        >
-          <:leftIcon>
-            <AkIcon @iconName='logout' />
-          </:leftIcon>
+        <AkStack @spacing='2'>
+          <AkButton
+            @variant='outlined'
+            @color='neutral'
+            local-class='cta-button'
+            {{on 'click' this.onClickAdmin}}
+            data-test-home-page-logoutBtn
+          >
+            <:leftIcon>
+              <AkIcon @iconName='settings' />
+            </:leftIcon>
 
-          <:default>
-            {{t 'logout'}}
-          </:default>
-        </AkButton>
+            <:default>
+              {{t 'admin'}}
+            </:default>
+          </AkButton>
+
+          <AkButton
+            @variant='outlined'
+            @color='neutral'
+            local-class='cta-button'
+            {{on 'click' this.userAuth.invalidateSession}}
+            data-test-home-page-logoutBtn
+          >
+            <:leftIcon>
+              <AkIcon @iconName='logout' />
+            </:leftIcon>
+
+            <:default>
+              {{t 'logout'}}
+            </:default>
+          </AkButton>
+        </AkStack>
       </AkStack>
     </AkStack>
 
@@ -59,11 +77,16 @@
           @title={{productCardDetails.title}}
           @description={{productCardDetails.description}}
           @route={{productCardDetails.route}}
-          @linkText={{t 'takeMeToDashboard'}}
+          @route2={{productCardDetails.route2}}
+          @linkText={{productCardDetails.linkText}}
+          @link2Text={{productCardDetails.link2Text}}
           @coverBackgroundImage={{productCardDetails.coverBackgroundImage}}
+          @isGreyscale={{productCardDetails.isGreyscale}}
           @indicatorSvg={{productCardDetails.indicatorSvg}}
           @openInNewTab={{productCardDetails.openInNewTab}}
-          @isBeta={{productCardDetails.isBeta}}
+          @chipColor={{productCardDetails.chipColor}}
+          @chipText={{productCardDetails.chipText}}
+          @linkDisabled={{productCardDetails.linkDisabled}}
         />
       {{/each}}
     </AkStack>

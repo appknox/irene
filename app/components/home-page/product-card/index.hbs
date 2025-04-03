@@ -4,55 +4,86 @@
   local-class='product-card-container'
 >
   {{#let (component @coverBackgroundImage) as |Cover|}}
-    <Cover />
+    <Cover style={{if @isGreyscale 'filter: grayscale(1);'}} />
   {{/let}}
 
   <AkStack @direction='column' @spacing='4' local-class='product-card-content'>
     <AkStack @direction='column' @spacing='1'>
       {{#let (component @indicatorSvg) as |SvgIcon|}}
-        <SvgIcon
-          data-test-home-page-product-card-indicator-icon
-          local-class='product-icon'
-        />
+        <AkStack
+          @width='full'
+          @alignItems='center'
+          @justifyContent='space-between'
+        >
+          <SvgIcon
+            data-test-home-page-product-card-indicator-icon
+            local-class='product-icon'
+            style={{if @isGreyscale 'filter: grayscale(1);'}}
+          />
+
+          {{#if (and @chipColor @chipText)}}
+            <AkChip
+              @variant='semi-filled'
+              @size='small'
+              @label={{this.chipText}}
+              @color={{this.chipColor}}
+              local-class={{if this.isTrialVersionChip 'trial-chip'}}
+            />
+          {{/if}}
+        </AkStack>
       {{/let}}
 
-      <AkStack @alignItems='center' @spacing='1'>
-        <AkTypography
-          data-test-home-page-product-card-title
-          @variant='h6'
-          @fontWeight='bold'
-        >
-          {{@title}}
-        </AkTypography>
-
-        {{#if @isBeta}}
-          <AkChip
-            @variant='outlined'
-            @size='small'
-            @label={{t 'beta'}}
-            local-class='beta-chip'
-          />
-        {{/if}}
-      </AkStack>
+      <AkTypography
+        data-test-home-page-product-card-title
+        @variant='h6'
+        @fontWeight='bold'
+      >
+        {{@title}}
+      </AkTypography>
 
       <AkTypography @variant='subtitle2' @fontWeight='regular'>
         {{@description}}
       </AkTypography>
     </AkStack>
 
-    <AkStack @direction='row' @spacing='1' @alignItems='center'>
-      <AkLink
-        data-test-home-page-product-card-link
-        @route={{this.route}}
-        @underline='always'
-        @fontWeight='medium'
-        target={{if @openInNewTab '_blank'}}
-        rel={{if @openInNewTab 'noopener noreferrer'}}
-      >
-        {{@linkText}}
-      </AkLink>
+    <AkStack @direction='column' @spacing='1'>
+      <AkStack @direction='row' @spacing='1' @alignItems='center'>
+        <AkLink
+          data-test-home-page-product-card-link
+          @route={{this.route}}
+          @underline='always'
+          @fontWeight='medium'
+          @disabled={{@linkDisabled}}
+          target={{if @openInNewTab '_blank'}}
+          rel={{if @openInNewTab 'noopener noreferrer'}}
+        >
+          {{@linkText}}
+        </AkLink>
 
-      <AkIcon @iconName='north-east' @size='small' @color='primary' />
+        <AkIcon
+          style={{if @linkDisabled 'opacity: 0.5;'}}
+          @iconName='north-east'
+          @size='small'
+          @color='primary'
+        />
+      </AkStack>
+
+      {{#if @link2Text}}
+        <AkStack @direction='row' @spacing='1' @alignItems='center'>
+          <AkLink
+            data-test-home-page-product-card-link
+            @route={{@route2}}
+            @underline='always'
+            @fontWeight='medium'
+            target={{if @openInNewTab '_blank'}}
+            rel={{if @openInNewTab 'noopener noreferrer'}}
+          >
+            {{@link2Text}}
+          </AkLink>
+
+          <AkIcon @iconName='north-east' @size='small' @color='primary' />
+        </AkStack>
+      {{/if}}
     </AkStack>
   </AkStack>
 </AkStack>

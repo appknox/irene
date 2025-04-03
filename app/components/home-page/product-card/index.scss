@@ -13,9 +13,8 @@
     height: 42px;
   }
 
-  .beta-chip {
-    border-color: var(--home-page-product-card-beta-tag-bg);
-    background-color: var(--home-page-product-card-beta-tag-bg);
-    color: var(--home-page-product-card-beta-tag-color) !important;
+  .trial-chip {
+    background-color: var(--home-page-product-card-trial-tag-bg);
+    color: var(--home-page-product-card-trial-tag-color) !important;
   }
 }

@@ -1,14 +1,20 @@
 import Component from '@glimmer/component';
 import { service } from '@ember/service';
 import type IntlService from 'ember-intl/services/intl';
+import type { AkChipColor } from 'irene/components/ak-chip';
 
 export interface ProductCardDetails {
   title: string;
   description: string;
   linkText?: string;
-  route: string;
-  isBeta?: boolean;
+  link2Text?: string;
+  route?: string;
+  route2?: string;
+  chipText?: string;
+  chipColor?: string;
   openInNewTab?: boolean;
+  isGreyscale?: boolean;
+  linkDisabled?: boolean;
 
   coverBackgroundImage:
     | 'ak-svg/storeknox-bg-img'
@@ -34,6 +40,22 @@ export default class ProductCardComponent extends Component<ProductCardComponent
 
   get route() {
     return this.args.route;
+  }
+
+  get chipText() {
+    return this.args.chipText?.toUpperCase();
+  }
+
+  get chipColor() {
+    return this.args.chipColor as AkChipColor;
+  }
+
+  get isTrialVersionChip() {
+    if (this.args.chipColor === 'purple') {
+      return true;
+    }
+
+    return false;
   }
 }
 
