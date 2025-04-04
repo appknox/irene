@@ -17,6 +17,12 @@ interface SbomComponentDetailsQueryParams {
   sbom_component_parent_id: string;
 }
 
+interface ParentLabel {
+  id: string;
+  label: string;
+  route: string;
+}
+
 export interface SbomComponentDetailsOverviewSignature {
   Args: {
     sbomComponent: SbomComponentModel;
@@ -36,6 +42,7 @@ export default class SbomComponentDetailsOverviewComponent extends Component<Sbo
   @tracked expandedNodes: string[] = [];
   @tracked treeNodes: AkTreeNodeProps[] = [];
   @tracked parentVerificationStatus = false;
+  @tracked parentLabels: ParentLabel[] = [];
 
   constructor(
     owner: unknown,
@@ -43,9 +50,7 @@ export default class SbomComponentDetailsOverviewComponent extends Component<Sbo
   ) {
     super(owner, args);
 
-    if (this.parentId && this.parentId !== '0') {
-      this.redirectIfVerificationFailed.perform();
-    }
+    this.redirectIfVerificationFailed.perform();
   }
 
   get sbomComponent() {
@@ -85,15 +90,56 @@ export default class SbomComponentDetailsOverviewComponent extends Component<Sbo
   get parentId() {
     const parentId = this.args.queryParams.sbom_component_parent_id;
 
-    if (parentId === '0' || !parentId) {
-      return undefined;
-    }
-
     return parentId;
   }
 
   get isNotOutdated() {
     return !this.sbomFile?.get('isOutdated');
+  }
+
+  get showMultipleParents() {
+    return this.parentLabels.length > 1;
+  }
+
+  get effectiveParentId() {
+    if (!this.sbomComponent.isDependency) {
+      return undefined;
+    }
+
+    if (this.parentId === '0') {
+      return this.parentLabels.length > 0
+        ? this.parentLabels[0]?.id
+        : undefined;
+    }
+
+    return this.parentId;
+  }
+
+  get remainingParentLabels() {
+    // If component is not a dependency, show all parents
+    if (!this.sbomComponent.isDependency) {
+      return this.parentLabels;
+    }
+
+    if (this.parentId === '0' && this.parentLabels.length > 0) {
+      // Skip the first parent since it's being used as the main parent
+      return this.parentLabels.slice(1);
+    }
+
+    // Otherwise filter out the current parent
+    return this.parentLabels.filter((parent) => parent.id !== this.parentId);
+  }
+
+  @action
+  getLabel(item: SbomComponentModel) {
+    const bomRefParts = item.bomRef.split(':').filter(Boolean);
+    const ecosystem = bomRefParts[0] || 'generic';
+    const group = bomRefParts.length === 3 ? bomRefParts[1] : '';
+    const groupPrefix = group ? `${group}/` : '';
+    const versionSuffix = item.version ? `@${item.version}` : '';
+    const purl = `pkg:${ecosystem}/${groupPrefix}${item.name}${versionSuffix}`;
+
+    return purl;
   }
 
   verifyParentId = task(async () => {
@@ -105,11 +151,23 @@ export default class SbomComponentDetailsOverviewComponent extends Component<Sbo
 
       const parents = await this.loadParents.perform(this.componentId);
 
-      this.parentVerificationStatus = parents.some(
-        (parent) => parent.id.toString() === this.parentId
-      );
+      this.parentLabels = parents.map((parent) => ({
+        id: parent.id,
+        label: this.getLabel(parent),
+        route: 'authenticated.dashboard.sbom.component-details.overview',
+      }));
+
+      // If parentId is '0' consider it verified
+      if (this.parentId === '0') {
+        this.parentVerificationStatus = true;
+      } else {
+        this.parentVerificationStatus = parents.some(
+          (parent) => parent.id.toString() === this.parentId
+        );
+      }
     } catch (error) {
       this.parentVerificationStatus = false;
+      this.parentLabels = [];
     }
   });
 
@@ -123,7 +181,7 @@ export default class SbomComponentDetailsOverviewComponent extends Component<Sbo
       this.notify.error(this.intl.t('sbomModule.parentComponentNotFound'));
 
       this.router.transitionTo(
-        'authenticated.dashboard.sbom.component-details',
+        'authenticated.dashboard.sbom.component-details.overview',
         sbProjectId,
         sbFileId,
         this.componentId,

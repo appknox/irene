@@ -110,7 +110,7 @@ export default class SbomScanDetailsComponentListComponent extends Component<Sbo
   @action
   handleComponentClick({ rowValue }: { rowValue: SbomComponentModel }) {
     this.router.transitionTo(
-      'authenticated.dashboard.sbom.component-details',
+      'authenticated.dashboard.sbom.component-details.overview',
       this.args.sbomProject.id,
       this.args.sbomFile.id,
       rowValue.id,

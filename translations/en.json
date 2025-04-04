@@ -860,6 +860,7 @@
   "mstgExpansion": "Mobile Security Testing Guide",
   "multiFactorAuth": "Multi Factor Authentication",
   "multiFactorAuthSubtitle": "Mandatory multi factor authentication",
+  "multipleParents": "Selected child has multiple parents. Here are the links -",
   "name": "Name",
   "nameIDFormat": "Name ID Format",
   "namespace": "Namespace",
