@@ -1,0 +1,332 @@
+<AkStack
+  @justifyContent='space-between'
+  @alignItems='center'
+  local-class='note-power-by-ai'
+>
+  <AkTypography>
+    Lorem ipsum dolor sit amet consectetur. Risus placerat aliquam vitae erat
+    arcu tincidunt penatibus.
+  </AkTypography>
+
+  <AkStack local-class='powered-by-chip' {{on 'click' this.openAIDrawer}}>
+    <AkTypography local-class='text'>Powered by
+      <strong>AI</strong>
+    </AkTypography>
+  </AkStack>
+</AkStack>
+
+{{#if this.feature}}
+  <AkPaginationProvider
+    @results={{this.tableData}}
+    @onItemPerPageChange={{this.goToPage}}
+    @totalItems={{this.tableData.length}}
+    @nextAction={{this.goToPage}}
+    @prevAction={{this.goToPage}}
+    @itemPerPageOptions={{array 5 10 20}}
+    @defaultLimit={{this.limit}}
+    @offset={{this.offset}}
+    as |pgc|
+  >
+    <AkTable @hoverable={{true}} as |tb|>
+      <tb.head @columns={{this.columns}} />
+      <tb.body @rows={{pgc.currentPageResults}} as |b|>
+        <b.row
+          @onClick={{this.openPiiDetailsDrawer}}
+          local-class='app-monitoring-table-row'
+          {{style cursor='pointer'}}
+          as |r|
+        >
+          <r.cell>
+            {{#let (component r.columnValue.component) as |Component|}}
+              <Component @data={{r.rowValue}} @id={{r.rowValue.id}} />
+            {{/let}}
+          </r.cell>
+        </b.row>
+      </tb.body>
+    </AkTable>
+
+    <AkPagination
+      @disableNext={{pgc.disableNext}}
+      @nextAction={{pgc.nextAction}}
+      @disablePrev={{pgc.disablePrev}}
+      @prevAction={{pgc.prevAction}}
+      @endItemIdx={{pgc.endItemIdx}}
+      @startItemIdx={{pgc.startItemIdx}}
+      @itemPerPageOptions={{pgc.itemPerPageOptions}}
+      @onItemPerPageChange={{pgc.onItemPerPageChange}}
+      @selectedOption={{pgc.selectedOption}}
+      @tableItemLabel='PII'
+      @perPageTranslation={{t 'recordPerPage'}}
+      @totalItems={{pgc.totalItems}}
+    />
+  </AkPaginationProvider>
+
+{{else}}
+  {{#if this.owner}}
+    <AkStack
+      @direction='column'
+      @alignItems='center'
+      local-class='empty-container'
+    >
+      <AkSvg::TurnOnSettings />
+
+      <AkTypography @variant='h5' @gutterBottom={{true}} local-class='header'>
+        Kindly turn-on the feature from the Org. Settings
+      </AkTypography>
+
+      <AkTypography local-class='body-text'>
+        Lorem ipsum dolor sit amet consectetur. Massa molestie sagittis nunc
+        fermentum ut platea.
+      </AkTypography>
+
+      <AkButton
+        @tag='a'
+        href='/dashboard/organization/settings/ai-powered-features'
+        target='_blank'
+        class='mt-2'
+      >
+        Go to Organization Settings
+      </AkButton>
+    </AkStack>
+  {{else}}
+    <AkStack
+      @direction='column'
+      @alignItems='center'
+      local-class='empty-container'
+    >
+      <AkSvg::TurnOnSettings />
+
+      <AkTypography @variant='h5' @gutterBottom={{true}} local-class='header'>
+        Contact your Organisation
+      </AkTypography>
+
+      <AkTypography local-class='body-text'>
+        Lorem ipsum dolor sit amet consectetur. Massa molestie sagittis nunc
+        fermentum ut platea.
+      </AkTypography>
+    </AkStack>
+  {{/if}}
+
+{{/if}}
+
+<AkDrawer
+  @open={{this.piiIsSelected}}
+  @onClose={{this.closePiiDetailsDrawer}}
+  @anchor='right'
+  as |dr|
+>
+  <AkAppbar
+    @justifyContent='space-between'
+    @position='sticky'
+    class='px-3'
+    as |ab|
+  >
+    <AkTypography @color='inherit' @variant='h5'>
+      PII Details
+    </AkTypography>
+
+    <AkIconButton
+      {{on 'click' dr.closeHandler}}
+      class={{ab.classes.defaultIconBtn}}
+    >
+      <AkIcon @iconName='close' />
+    </AkIconButton>
+  </AkAppbar>
+
+  <AkStack
+    @width='full'
+    @direction='column'
+    local-class='pii-details-drawer-content'
+  >
+    <AkStack @direction='column' @width='full' @spacing='2' class='py-2 px-3'>
+      <AkTypography @color='textSecondary'>
+        PII Category
+      </AkTypography>
+
+      <AkTypography @fontWeight='medium'>
+        {{this.selectedPii.categoryName}}
+      </AkTypography>
+    </AkStack>
+
+    <AkDivider />
+
+    <AkStack @direction='column' @width='full' @spacing='2' class='py-2 px-3'>
+      <AkStack @spacing='1' @alignItems='center'>
+        <AkTypography @color='textSecondary'>
+          PII Data Found
+        </AkTypography>
+        {{#if this.multiplePiiData}}
+          <AkChip
+            @label={{this.selectedPii.dataFound.length}}
+            @size='small'
+            @variant='semi-filled-outlined'
+          />
+        {{/if}}
+      </AkStack>
+
+      {{#if this.multiplePiiData}}
+        <AkStack
+          @width='full'
+          @direction='column'
+          local-class='pii-multiple-data'
+        >
+          {{#each this.selectedPii.dataFound as |dataItem|}}
+            <AkStack
+              @width='full'
+              @justifyContent='space-between'
+              @alignItems='center'
+              class='py-2 px-3'
+            >
+              <AkTypography @fontWeight='medium'>
+                {{dataItem.value}}
+              </AkTypography>
+
+              <AkChip
+                @label={{dataItem.source}}
+                @size='small'
+                @color='primary'
+                @variant='semi-filled'
+              />
+            </AkStack>
+
+            {{#if dataItem.urls}}
+              <AkStack
+                @width='full'
+                @direction='column'
+                @spacing='1'
+                local-class='pii-details-api-urls-section'
+                class='py-2 px-3'
+              >
+
+                <AkStack @spacing='1'>
+                  <AkTypography
+                    @fontWeight='bold'
+                    {{style fontSize='0.857rem'}}
+                  >
+                    API URL’s
+                  </AkTypography>
+
+                  <AkIcon @iconName='help' @size='small' />
+                </AkStack>
+
+                {{#each dataItem.urls as |url|}}
+                  <AkStack @alignItems='center' @spacing='1'>
+                    <AkTypography @underline='always'>{{url}}</AkTypography>
+
+                    <AkClipboard
+                      @onSuccess={{this.handleCopySuccess}}
+                      @onError={{this.handleCopyError}}
+                      as |ac|
+                    >
+                      <AkIconButton
+                        data-clipboard-text={{url}}
+                        id={{ac.triggerId}}
+                        @size='small'
+                      >
+                        <AkIcon
+                          @iconName='content-copy'
+                          @size='small'
+                          @color='textSecondary'
+                        />
+                      </AkIconButton>
+                    </AkClipboard>
+                  </AkStack>
+                {{/each}}
+              </AkStack>
+            {{/if}}
+
+            <AkDivider />
+          {{/each}}
+        </AkStack>
+      {{else}}
+        <AkStack
+          @width='full'
+          @justifyContent='space-between'
+          @alignItems='center'
+        >
+          <AkTypography @fontWeight='medium'>
+            {{this.selectedPiiData.value}}
+          </AkTypography>
+
+          <AkChip
+            @label={{this.selectedPiiData.source}}
+            @size='small'
+            @color='primary'
+            @variant='semi-filled'
+          />
+        </AkStack>
+      {{/if}}
+    </AkStack>
+
+  </AkStack>
+</AkDrawer>
+
+<AkDrawer
+  @open={{this.aiDrawerOpen}}
+  @onClose={{this.closeAiDrawer}}
+  @anchor='right'
+  as |dr|
+>
+  <AkAppbar
+    @justifyContent='space-between'
+    @position='sticky'
+    class='px-3'
+    as |ab|
+  >
+    <AkTypography @color='inherit' @variant='h5'>
+      {{t 'aiPoweredFeatures'}}
+    </AkTypography>
+
+    <AkIconButton
+      {{on 'click' dr.closeHandler}}
+      class={{ab.classes.defaultIconBtn}}
+    >
+      <AkIcon @iconName='close' />
+    </AkIconButton>
+  </AkAppbar>
+
+  <AkStack @direction='column' local-class='ai-drawer-body'>
+    <AkStack local-class='powered-by-chip' class='mb-2'>
+      <AkTypography local-class='text'>Powered by
+        <strong>AI</strong>
+      </AkTypography>
+    </AkStack>
+
+    <AkTypography @fontWeight='bold' @gutterBottom={{true}}>
+      What data does this AI model access in my app?
+    </AkTypography>
+
+    <AkTypography @variant='body2'>
+      Lorem ipsum dolor sit amet consectetur. Volutpat ullamcorper in placerat
+      viverra ipsum imperdiet malesuada tellus. Fermentum quis varius eget
+      faucibus vivamus. Commodo sagittis non duis sit tincidunt facilisi
+      bibendum mi. Tortor aliquam egestas in non. Fermentum.
+    </AkTypography>
+
+    <AkTypography @fontWeight='bold' @gutterBottom={{true}} class='mt-3'>
+      Does any 3rd party product/service have access to this model which has
+      been trained using my organizations applications?
+    </AkTypography>
+
+    <AkTypography @variant='body2'>
+      Lorem ipsum dolor sit amet consectetur. Laoreet fermentum arcu at
+      elementum amet maecenas est ultrices. Enim dapibus facilisi adipiscing
+      commodo velit accumsan vitae.
+    </AkTypography>
+
+    <AkTypography @fontWeight='bold' @gutterBottom={{true}} class='mt-3'>
+      How is this AI model secured from potential threats?
+    </AkTypography>
+
+    <AkTypography @variant='body2'>
+      Lorem ipsum dolor sit amet consectetur. Volutpat ullamcorper in placerat
+      viverra ipsum imperdiet malesuada tellus. Fermentum quis varius eget
+      faucibus vivamus. Commodo sagittis non duis sit tincidunt facilisi
+      bibendum mi. Tortor aliquam egestas in non. Fermentum faucibus elementum
+      tristique donec elit vitae posuere etiam. Sem est commodo mattis elementum
+      etiam vitae pellentesque aliquet.
+    </AkTypography>
+
+  </AkStack>
+
+</AkDrawer>

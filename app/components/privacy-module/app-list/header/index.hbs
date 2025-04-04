@@ -1,0 +1,29 @@
+<AkStack
+  @width='full'
+  @direction='column'
+  local-class='header-privacy-module-page'
+>
+  <AkStack
+    @width='full'
+    @justifyContent='space-between'
+    @alignItems='center'
+    @spacing='1.5'
+    local-class='header-privacy-module-page-title'
+  >
+    <AkStack @direction='column' @spacing='0.5'>
+      <AkTypography
+        @fontWeight='bold'
+        data-test-privacyModule-appListHeader-headingText
+      >
+        {{t 'privacyModule.title'}}
+      </AkTypography>
+
+      <AkTypography
+        @color='textSecondary'
+        data-test-privacyModule-appListHeader-subText
+      >
+        {{t 'privacyModule.description'}}
+      </AkTypography>
+    </AkStack>
+  </AkStack>
+</AkStack>

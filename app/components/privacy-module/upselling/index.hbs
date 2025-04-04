@@ -1,0 +1,18 @@
+<UpsellingModule
+  @title={{t 'privacyModule.introducing'}}
+  @subtitle={{t 'privacyModule.overview'}}
+  @features={{this.features}}
+  @successMessage={{t 'privacyModule.contactMessage' htmlSafe=true}}
+  @showSuccess={{this.hasContactedSupport}}
+  @onClickContactCTA={{this.onClickContactCTA}}
+>
+  <:gradientContent>
+    <img
+      data-test-privacy-upselling-image
+      height='274px'
+      width='434px'
+      src='/images/privacy-upselling.png'
+      alt='privacy-module-feature-request'
+    />
+  </:gradientContent>
+</UpsellingModule>

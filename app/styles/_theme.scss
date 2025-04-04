@@ -69,7 +69,8 @@
   --box-shadow-9: 0 5px 20px 0px rgba(0, 0, 0, 0.1);
   --box-shadow-10: 5px 0px 10px 0px rgba(0, 0, 0, 0.05);
   --box-shadow-11: inset 0 0 0 0.5px;
-  --box-shadow-12: 1px 0px 0px 0px #f8f8f8 inset, -1px 0px 0px 0px #f8f8f8 inset,
+  --box-shadow-12:
+    1px 0px 0px 0px #f8f8f8 inset, -1px 0px 0px 0px #f8f8f8 inset,
     0px 1px 0px 0px #f8f8f8 inset, -1px -1px 0px 0px #f8f8f8 inset;
 
   --hover-dark-background: rgba(255, 255, 255, 0.15);
@@ -121,8 +122,8 @@
   --upselling-feature-footer-color: #3e0e8c;
 
   // special case variable for upselling module
-  --upselling-module-gradient: #350B6C;
-  --upselling-module-gradient-light: #6715D2;
+  --upselling-module-gradient: #350b6c;
+  --upselling-module-gradient-light: #6715d2;
 
   // special case variable for storeknox
   --storeknox-feature-in-progress-button-color: #3e0e8c;
@@ -132,6 +133,9 @@
   --storeknox-beta-tag-bg: #d9e6ff;
   --storeknox-beta-tag-color: #034bd6;
   --storeknox-upselling-ui-bg-color: #fe4d3f0d;
+
+  // special case variable for privacy-module/trackers
+  --privacy-module-trackers-tag-bg-color: #edf2ff;
 }
 
 // TODO: need to remove this so do not use it
