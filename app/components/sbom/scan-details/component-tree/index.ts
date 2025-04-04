@@ -29,6 +29,9 @@ export interface SbomScanDetailsComponentTreeSignature {
     componentId?: string;
     parentId?: string;
   };
+  Blocks: {
+    multipleParentsBlock?: [];
+  };
 }
 
 export type SbomComponentQueryResponse =

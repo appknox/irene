@@ -21,7 +21,7 @@ export default class AuthenticatedDashboardSbomComponentDetailsController extend
   get breadcrumbs(): AkBreadcrumbsItemProps {
     const crumb: AkBreadcrumbsItemProps = {
       title: this.intl.t('sbomModule.componentDetails'),
-      route: 'authenticated.dashboard.sbom.component-details',
+      route: 'authenticated.dashboard.sbom.component-details.overview',
       routeGroup: 'sbom',
 
       models: [
