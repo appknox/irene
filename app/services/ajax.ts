@@ -265,7 +265,12 @@ export default class IreneAjaxService extends Service {
     // Only include headers if _shouldSendHeaders returns true
     const headers = this._shouldSendHeaders(finalUrl, options.host)
       ? {
-          'Content-Type': options.contentType || 'application/json',
+          // For data transfer objects we allow the browser set the content type of the request
+          ...([FormData, Blob].some(
+            (dataType) => options.data instanceof dataType
+          )
+            ? {}
+            : { 'Content-Type': options.contentType || 'application/json' }),
           ...this.defaultHeaders,
           ...options.headers,
         }
@@ -327,11 +332,13 @@ export default class IreneAjaxService extends Service {
    * @param {Response} response - The fetch response to parse.
    * @returns {Promise<any | string>} - The parsed JSON or raw text.
    */
-  private async parseResponseText<T>(response: Response): Promise<T | string> {
+  private async parseResponseText<T extends object>(
+    response: Response
+  ): Promise<T | string> {
     const text = await response.text();
 
     try {
-      return text ? JSON.parse(text) : {};
+      return text ? JSON.parse(text) : ({} as T);
     } catch {
       return text;
     }
