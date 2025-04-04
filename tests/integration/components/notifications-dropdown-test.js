@@ -30,6 +30,7 @@ module('Integration | Component | notifications-dropdown', function (hooks) {
       'component:notification-message-test',
       NotificationMesaageTest
     );
+
     NotificationMap['NF_TEST'] = {
       component: 'notification-message-test',
       context: NotificationTestContext,
@@ -41,10 +42,18 @@ module('Integration | Component | notifications-dropdown', function (hooks) {
         <NotificationsDropdown
             @onClose={{this.closeDropdown}}
             @anchorRef={{this.anchorRef}}
+            @product={{this.product}}
           />
       </div>
-    
     `;
+
+    const getModelName = (product) =>
+      product === 'appknox'
+        ? 'nf-in-app-notification'
+        : 'sk-nf-in-app-notification';
+
+    const getServiceName = (product) =>
+      `service:${product === 'appknox' ? 'ak-notifications' : 'sk-notifications'}`;
 
     this.setProperties({
       anchorRef: null,
@@ -55,71 +64,96 @@ module('Integration | Component | notifications-dropdown', function (hooks) {
         this.anchorRef = null;
       },
       template,
+      getModelName,
+      getServiceName,
     });
   });
 
-  test('it renders', async function (assert) {
-    await render(this.template);
-    await click('#notification-button');
+  test.each(
+    'it renders',
+    ['appknox', 'storeknox'],
+    async function (assert, product) {
+      this.set('product', product);
 
-    assert.dom('[data-test-notification-dropdown]').exists();
+      await render(this.template);
+      await click('#notification-button');
 
-    assert.notEqual(
-      this.element.textContent.trim().indexOf(t('notifications')),
-      -1
-    );
-  });
+      assert.dom('[data-test-notification-dropdown]').exists();
 
-  test('it should render only unread notification', async function (assert) {
-    this.unread_nf = this.server.createList('nf-in-app-notification', 3, {
-      hasRead: false,
-      messageCode: 'NF_TEST',
-      context: {
-        test_name: 'unread',
-      },
-    });
+      assert.notEqual(
+        this.element.textContent.trim().indexOf(t('notifications')),
+        -1
+      );
+    }
+  );
 
-    this.read_nf = this.server.createList('nf-in-app-notification', 10, {
-      hasRead: true,
-      messageCode: 'NF_TEST',
-      context: {
-        test_name: 'read',
-      },
-    });
+  test.each(
+    'it should render only unread notification',
+    ['appknox', 'storeknox'],
+    async function (assert, product) {
+      this.set('product', product);
 
-    await render(this.template);
+      this.unread_nf = this.server.createList(this.getModelName(product), 3, {
+        hasRead: false,
+        messageCode: 'NF_TEST',
+        context: {
+          test_name: 'unread',
+        },
+      });
 
-    await click('#notification-button');
-    await click('#notification-button');
-    const service = this.owner.lookup('service:ak-notifications');
-    await service.reload();
-    assert.dom('[data-test-notification-message]').exists({ count: 3 });
-    assert.dom('[data-test-notification-empty]').doesNotExist();
-  });
+      this.read_nf = this.server.createList(this.getModelName(product), 10, {
+        hasRead: true,
+        messageCode: 'NF_TEST',
+        context: {
+          test_name: 'read',
+        },
+      });
 
-  test('it should render empty', async function (assert) {
-    await render(this.template);
-    await click('#notification-button');
-    const service = this.owner.lookup('service:ak-notifications');
-    await service.reload();
-    assert.dom('[data-test-notification-message]').doesNotExist();
-    assert.dom('[data-test-notification-empty]').exists();
-  });
+      await render(this.template);
 
-  test('it should render loading', async function (assert) {
-    await render(this.template);
-    await click('#notification-button');
+      await click('#notification-button');
+      const service = this.owner.lookup(this.getServiceName(product));
+      await service.reload();
+      assert.dom('[data-test-notification-message]').exists({ count: 3 });
+      assert.dom('[data-test-notification-empty]').doesNotExist();
+    }
+  );
 
-    const service = this.owner.lookup('service:ak-notifications');
-    service.reload();
-    service.fetchUnRead = {
-      isRunning: true,
-    };
+  test.each(
+    'it should render empty',
+    ['appknox', 'storeknox'],
+    async function (assert, product) {
+      this.set('product', product);
 
-    await render(this.template);
+      await render(this.template);
+      await click('#notification-button');
+      const service = this.owner.lookup(this.getServiceName(product));
+      await service.reload();
+      assert.dom('[data-test-notification-message]').doesNotExist();
+      assert.dom('[data-test-notification-empty]').exists();
+    }
+  );
 
-    assert.dom('[data-test-notification-message]').doesNotExist();
-    assert.dom('[data-test-notification-empty]').doesNotExist();
-    assert.dom('[data-test-ak-loader]').exists();
-  });
+  test.each(
+    'it should render loading',
+    ['appknox', 'storeknox'],
+    async function (assert, product) {
+      this.set('product', product);
+
+      await render(this.template);
+      await click('#notification-button');
+
+      const service = this.owner.lookup(this.getServiceName(product));
+      service.reload();
+      service.fetchUnRead = {
+        isRunning: true,
+      };
+
+      await render(this.template);
+
+      assert.dom('[data-test-notification-message]').doesNotExist();
+      assert.dom('[data-test-notification-empty]').doesNotExist();
+      assert.dom('[data-test-ak-loader]').exists();
+    }
+  );
 });

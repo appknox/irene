@@ -2,7 +2,7 @@ export class NfAmNewversnContext {
   package_name: string;
   app_name: string;
   am_app_version_id: number;
-  am_app_id: number;
+  am_app_id: string;
   project_id: number;
   platform: number;
   platform_display: string;

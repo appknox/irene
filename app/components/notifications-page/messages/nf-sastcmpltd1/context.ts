@@ -2,7 +2,7 @@ export class NfSastcmpltd1Context {
   package_name: string;
   platform: number;
   platform_display: string;
-  file_id: number;
+  file_id: string;
   file_name: string;
   submission_source_display: string;
   version: string;

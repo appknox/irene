@@ -6,10 +6,10 @@
   }}'
 >
   <TopNav
-    local-class='storeknox-header'
-    @isStoreknoxNav={{true}}
+    @product='storeknox'
     @user={{@user}}
     @title={{if this.isWhitelabel (t 'appMonitoring') (t 'storeknox.title')}}
+    local-class='storeknox-header'
     as |topNav|
   >
     <AkStack @alignItems='center' @justifyContent='flex-end' @spacing='0.5'>
