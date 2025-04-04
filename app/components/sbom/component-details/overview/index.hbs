@@ -13,7 +13,11 @@
   </AkStack>
 </AkStack>
 
-{{#if this.isNotOutdated}}
+{{#if this.verifyParentId.isRunning}}
+  <AkStack local-class='loading-container'>
+    <Sbom::ScanDetails::SkeletonLoaderTree @isFilteredTree={{true}} />
+  </AkStack>
+{{else if this.isNotOutdated}}
   <AkStack @direction='column'>
     <AkStack @width='full' local-class='header-container full-border'>
       <AkTypography
@@ -33,8 +37,45 @@
       @expandedNodes={{this.expandedNodes}}
       @treeNodes={{this.treeNodes}}
       @updateTreeNodes={{this.updateTreeNodes}}
-      @parentId={{this.parentId}}
+      @parentId={{this.effectiveParentId}}
       @componentId={{this.componentId}}
-    />
+    >
+      <:multipleParentsBlock>
+        {{#if this.showMultipleParents}}
+          <AkStack @direction='column' local-class='multiple-parents-container'>
+            <AkStack
+              @width='full'
+              @direction='row'
+              @spacing='1'
+              local-class='multiple-parents-header'
+            >
+              <AkIcon @size='small' @iconName='description' />
+
+              <AkTypography @variant='h6' @fontWeight='medium'>
+                {{t 'multipleParents'}}
+              </AkTypography>
+            </AkStack>
+
+            <AkStack class='p-2' @direction='column' @spacing='2'>
+              {{#each this.remainingParentLabels as |parent|}}
+                <AkStack @direction='row' @alignItems='center' @spacing='1'>
+                  <AkIcon @size='small' @iconName='east' />
+
+                  <AkLink
+                    @route={{parent.route}}
+                    @models={{array parent.id '0'}}
+                    @underline='always'
+                  >
+                    <AkTypography local-class='multiple-parents-link'>
+                      {{parent.label}}
+                    </AkTypography>
+                  </AkLink>
+                </AkStack>
+              {{/each}}
+            </AkStack>
+          </AkStack>
+        {{/if}}
+      </:multipleParentsBlock>
+    </Sbom::ScanDetails::ComponentTree>
   </AkStack>
 {{/if}}

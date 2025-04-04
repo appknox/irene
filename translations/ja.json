@@ -860,6 +860,7 @@
   "mstgExpansion": "Mobile Security Testing Guide",
   "multiFactorAuth": "マルチファクタ認証",
   "multiFactorAuthSubtitle": "Mandatory multi factor authentication",
+  "multipleParents": "Selected child has multiple parents. Here are the links -",
   "name": "名前",
   "nameIDFormat": "Name ID Format",
   "namespace": "名前空間",
@@ -1302,7 +1303,7 @@
       "oneClickAnalysis": "Get the SBOM analysis done for your mobile applications, with just 1 click.",
       "identifyDependencies": "Identify Direct and Transitive dependencies.",
       "uncoverVulnerabilities": "Quickly uncover vulnerable and outdated components to take corrective action.",
-      "componentInsights": "Get valuable insights related to the components, such as the Author, License, and the Version used."  
+      "componentInsights": "Get valuable insights related to the components, such as the Author, License, and the Version used."
     },
     "sbomContactMessage": "Thanks for showing interest in SBOM. Our team will get back to you.",
     "totalComponents": "Total Components",
