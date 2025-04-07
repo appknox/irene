@@ -26,7 +26,7 @@ const createBCRouteCtrller = (breadcrumbs = {}, empty = false) =>
         }
       };
 
-// Resgiter a route and its controller and templates
+// Register a route and its controller and templates
 function setupRoute(
   owner,
   { routeName, routeClass, controllerClass, template = null }
@@ -827,7 +827,7 @@ module('Acceptance | Breadcrumbs Test', function (hooks) {
     );
   });
 
-  test('It recalculates breadcrumbs if visiting existing route in crumbs but with different models', async function (assert) {
+  test('It recalculates breadcrumbs if visiting existing route in crumbs but with different models (Without browser refresh)', async function (assert) {
     assert.expect(35);
 
     const parentWithModelRouteFallbackCrumbs = (id) => [
@@ -984,6 +984,135 @@ module('Acceptance | Breadcrumbs Test', function (hooks) {
 
     // Go to back to parent route with model with ID of 2
     await click('[data-test-linkToRootBParentWithModel2]');
+
+    // Defaults to fallback crumbs
+    doBreadcrumbItemsCompare(
+      akBreadcrumbsService.breadcrumbItems,
+      parentWithModelRouteFallbackCrumbs(2),
+      assert
+    );
+  });
+
+  test('It recalculates breadcrumbs if visiting existing route in crumbs but with different models (With browser refresh)', async function (assert) {
+    assert.expect(21);
+
+    const parentWithModelRouteFallbackCrumbs = (id) => [
+      ALL_ROUTE_CRUMB_PROPS['tr-b-root'],
+      { ...ALL_ROUTE_CRUMB_PROPS['tr-b-root/parent-with-model'], models: [id] },
+    ];
+
+    class ParentWithModelController extends Controller {
+      get breadcrumbs() {
+        return {
+          ...ALL_ROUTE_CRUMB_PROPS['tr-b-root/parent-with-model'],
+          models: [this.model.id],
+          fallbackCrumbs: parentWithModelRouteFallbackCrumbs(this.model.id),
+        };
+      }
+    }
+
+    // Register routes to be tested
+    const routesConfig = [
+      {
+        routeName: 'tr-b-root/index',
+        routeClass: createBCRoute(),
+        controllerClass: createBCRouteCtrller(
+          ALL_ROUTE_CRUMB_PROPS['tr-b-root']
+        ),
+      },
+      {
+        routeName: 'tr-b-root',
+        routeClass: createBCRoute(),
+        controllerClass: createBCRouteCtrller({}, true),
+        template: hbs`
+          <AkStack @spacing="1" @direction="column" class="px-2" data-test-rootBTemplate-container>
+            Root B
+
+            <AkLink @route="authenticated.tr-b-root.parent-with-model" @model="1" data-test-linkToRootBParentWithModel1>
+              Link to Root B - Parent With Model 1
+            </AkLink>
+
+            <AkLink @route="authenticated.tr-b-root.parent-with-model" @models={{array 2}} data-test-linkToRootBParentWithModel2>
+              Link to Root B - Parent With Model 2
+            </AkLink>
+
+            {{outlet}}
+          </AkStack>
+        `,
+      },
+      {
+        routeName: 'tr-b-root/parent-with-model',
+        routeClass: createBCRoute(),
+        controllerClass: ParentWithModelController,
+        template: hbs`
+          <AkStack @spacing="1" @direction="column" class="px-2 my-2" data-test-rootAParentBTemplate-container>
+            Root B - Parent With Model - {{@model.id}}
+    
+            <AkDivider @color='dark' />
+    
+            <AkStack @spacing="1" @direction="column">
+              Parent With Model ({{@model.id}}) - Route Breadcrumb Items
+    
+              <AkBreadcrumbs::AutoTrail />
+            </AkStack>
+
+            <AkLink @route="authenticated.tr-b-root.parent-with-model.child" @models={{array @model.id}} data-test-LinkToRootBParentWithModelChild>
+              Link to Parent With Model ({{@model.id}}) Child
+            </AkLink>
+
+            {{outlet}}
+          </AkStack>
+        `,
+      },
+    ];
+
+    routesConfig.forEach((route) => setupRoute(this.owner, route));
+
+    // Start of test
+    await visit('/tr-b-root');
+
+    assert.strictEqual(currentURL(), '/tr-b-root', 'Route is at Root B');
+
+    assert.dom('[data-test-linkToRootBParentWithModel1]').exists();
+    assert.dom('[data-test-linkToRootBParentWithModel2]').exists();
+
+    // Go to route with model with ID of 1
+    await click('[data-test-linkToRootBParentWithModel1]');
+
+    const akBreadcrumbsService = this.owner.lookup('service:ak-breadcrumbs');
+
+    let expectedCrumbs = [
+      ALL_ROUTE_CRUMB_PROPS['tr-b-root'],
+      {
+        ...ALL_ROUTE_CRUMB_PROPS['tr-b-root/parent-with-model'],
+        models: [1],
+      },
+    ];
+
+    doBreadcrumbItemsCompare(
+      akBreadcrumbsService.breadcrumbItems,
+      expectedCrumbs,
+      assert
+    );
+
+    // Get router service
+    const router = this.owner.lookup('service:router');
+
+    // Reset router namespace simulates a window reload
+    router._router.reset();
+
+    const routeHandler = (transition) => {
+      if (transition.to.name === 'authenticated.tr-b-root.parent-with-model') {
+        // Ensure that routeFrom is null. Similar to a page refresh
+        // eslint-disable-next-line qunit/no-conditional-assertions
+        assert.strictEqual(transition.from, null);
+      }
+    };
+
+    router.on('routeWillChange', routeHandler);
+
+    // Go to parent route with model with ID of 2
+    await visit('/tr-b-root/parent-with-model/2');
 
     // Defaults to fallback crumbs
     doBreadcrumbItemsCompare(

@@ -149,6 +149,7 @@ export default class SsoSettingsComponent extends Component<SsoSettingsSignature
 
       await this.ajax.post(url, {
         data: idpFormData,
+        contentType: null,
       });
 
       this.idpMetadataXml = null;
