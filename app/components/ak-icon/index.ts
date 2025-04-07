@@ -1,4 +1,5 @@
 import Component from '@glimmer/component';
+import type { AkIconVariantType } from 'ak-icons';
 
 export type AkIconColorVariant =
   | 'inherit'
@@ -15,7 +16,7 @@ export interface AkIconSignature {
   Element: HTMLSpanElement;
   Args: {
     variant?: 'filled' | 'outlined';
-    iconName: string;
+    iconName: AkIconVariantType;
     size?: 'medium' | 'small';
     color?: AkIconColorVariant;
   };
