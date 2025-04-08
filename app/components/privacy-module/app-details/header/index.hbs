@@ -1,0 +1,63 @@
+<AkStack
+  @direction='column'
+  @width='full'
+  local-class='privacy-module-app-details-header'
+  data-test-privacy-appDetails-header
+>
+  <AkBreadcrumbs::AutoTrail class='pb-3' />
+
+  <AkStack @direction='column' @spacing='4' @width='full'>
+    <PrivacyModule::AppDetails::Header::Summary
+      @file={{@app.latestFile}}
+      @project={{@app.project}}
+      @loading={{this.loading}}
+      @showReportButton={{this.completedStatus}}
+    />
+
+    <AkStack @direction='column' @width='full'>
+      {{#if this.failedStatus}}
+        <AkStack
+          @alignItems='center'
+          @width='full'
+          @spacing='2'
+          local-class='warning-error-wrapper'
+        >
+          <div local-class='warning-icon-wrapper' class='p-1'>
+            <AkIcon @iconName='warning' @color='error' />
+          </div>
+
+          <AkTypography data-test-privacy-appDetails-header-failed-note>
+            {{t 'privacyModule.failedNote'}}
+          </AkTypography>
+        </AkStack>
+      {{/if}}
+
+      {{#if this.statusInfo}}
+        <PrivacyModule::Status
+          @heading={{this.statusInfo.heading}}
+          @description={{this.statusInfo.description}}
+          @svgComponent={{this.statusInfo.svgComponent}}
+        />
+      {{else}}
+        <AkTabs
+          data-test-privacy-appDetails-header-tabs
+          class='mb-2 w-full'
+          as |Akt|
+        >
+          {{#each this.tabItems as |item|}}
+            <Akt.tabItem
+              @id={{item.id}}
+              @route={{item.route}}
+              @currentWhen={{item.activeRoutes}}
+              @hasBadge={{item.hasBadge}}
+              @badgeCount={{item.badgeCount}}
+              @indicatorVariant='shadow'
+            >
+              {{item.label}}
+            </Akt.tabItem>
+          {{/each}}
+        </AkTabs>
+      {{/if}}
+    </AkStack>
+  </AkStack>
+</AkStack>

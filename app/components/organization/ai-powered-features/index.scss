@@ -1,0 +1,31 @@
+//TODO: Update this file when PII is ready
+
+.pii-feature-body {
+  padding: 16px;
+  background-color: white;
+}
+
+.powered-by-chip {
+  background-color: #14badc;
+  padding: 4px 6px;
+  border-radius: 2px;
+  border: 1px solid #14badc;
+  cursor: pointer;
+
+  .text {
+    color: white;
+    font-size: 12px;
+  }
+
+  &:hover {
+    border: 1px solid #139ab5;
+  }
+}
+
+.ai-drawer-body {
+  border: 1px solid #f8f8f8;
+  margin: 17px 22px;
+  padding: 20px;
+  height: inherit;
+  width: 640px;
+}

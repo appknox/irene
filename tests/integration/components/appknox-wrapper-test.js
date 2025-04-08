@@ -49,6 +49,7 @@ class IntegrationStub extends Service {
 }
 
 const menuItems = ({
+  privacy,
   appMonitoring,
   sbom,
   analytics,
@@ -63,6 +64,7 @@ const menuItems = ({
       icon: 'folder',
       hasBadge: true,
     },
+    privacy && { label: t('privacyModule.title'), icon: 'shield-outline' },
     appMonitoring && { label: t('appMonitoring'), icon: 'inventory-2' },
     sbom && { label: t('SBOM'), icon: 'receipt-long' },
     analytics && { label: t('analytics'), icon: 'graphic-eq' },
@@ -87,6 +89,7 @@ const sections = (enabled) => ({
   sbom: enabled,
   publicApis: enabled,
   analytics: enabled,
+  privacy: enabled,
 });
 
 const lowerMenuItems = [
@@ -390,6 +393,7 @@ module('Integration | Component | appknox-wrapper', function (hooks) {
         analytics: owner || admin,
         billing: owner && sectionConfig.billing,
         sbom: true,
+        privacy: true,
       }).forEach((it, index) => {
         if (it.icon) {
           assert

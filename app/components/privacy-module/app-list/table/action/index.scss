@@ -1,0 +1,9 @@
+.menu-button-padding {
+  padding: 0.5em 1em;
+  width: 100%;
+  justify-content: left;
+
+  &:hover {
+    background-color: var(--privacy-module-applist-table-action-hover-bg-color);
+  }
+}

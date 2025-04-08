@@ -208,10 +208,13 @@ body {
   --ak-chip-color-outlined-info: var(--info-main);
 
   --ak-chip-color-semi-filled-outlined-default-background: var(
-    --neutral-grey-200
+    --neutral-grey-100
   );
   --ak-chip-color-semi-filled-outlined-default-contrast-text: var(
-    --neutral-grey-700
+    --text-primary
+  );
+  --ak-chip-color-semi-filled-outlined-default-border-color: var(
+    --neutral-grey-200
   );
   --ak-chip-color-semi-filled-outlined-primary-background: var(--primary-light);
   --ak-chip-color-semi-filled-outlined-primary-contrast-text: var(
@@ -698,6 +701,10 @@ body {
   // variables for file/report-drawer/sbom-reports
   --file-report-dr-sbom-reports-border-color: var(--neutral-grey-200);
   --file-report-dr-sbom-reports-border-radius: var(--border-radius);
+
+  // variables for file/report-drawer/privacy-reports
+  --file-report-dr-privacy-reports-border-color: var(--border-color-1);
+  --file-report-dr-privacy-reports-border-radius: var(--border-radius);
 
   // variables for sbom/app-list
   --sbom-app-list-header-background-color: var(--common-white);
@@ -2164,6 +2171,64 @@ body {
   --upselling-module-background-color: var(--background-main);
   --upselling-module-box-shadow-6: var(--box-shadow-6);
   --upselling-module-box-shadow-4: var(--box-shadow-4);
+
+  //variables for privacy-module/app-list/header
+  --privacy-module-applist-header-background-color: var(--common-white);
+  --privacy-module-applist-header-border-color: var(--border-color-1);
+
+  //variables for privacy-module/app-list/table/platform
+  --privacy-module-applist-table-platform-android-color: var(--android);
+  --privacy-module-applist-table-platform-ios-color: var(--ios);
+
+  //variables for privacy-module/app-list/table
+  --privacy-module-applist-table-bg-color: var(--background-main);
+
+  //variables for privacy-module/app-list/table/action
+  --privacy-module-applist-table-action-hover-bg-color: var(
+    --hover-light-background
+  );
+
+  //variables for privacy-module/app-details/header
+  --privacy-module-app-details-header-bg-color: var(--background-light);
+  --privacy-module-app-details-header-warning-bg-color: var(--background-main);
+  --privacy-module-app-details-header-warning-border: var(--border-color-1);
+  --privacy-module-app-details-header-warning-icon-bg: var(--error-light);
+
+  //variables for privacy-module/app-details/trackers
+  --privacy-module-trackers-row-bg-color: var(--background-main);
+  --privacy-module-trackers-row-bg-color-hover: var(--neutral-grey-50);
+  --privacy-module-trackers-drawer-border-color: var(--neutral-grey-100);
+  --privacy-module-trackers-tag-color: var(--text-primary);
+
+  //variables for privacy-module/app-details/dangerous-permssion
+  --privacy-module-danger-perms-bg-color: var(--background-main);
+
+  // variables for privacy-module/app-details/header/summary
+  --privacy-module-app-summary-background-color: var(--background-main);
+  --privacy-module-app-summary-border-color: var(--border-color-1);
+  --privacy-module-app-summary-store-logo-container-bg-color: var(
+    --common-white
+  );
+  --privacy-module-app-summary-store-logo-container-border-color: var(
+    --neutral-grey-200
+  );
+  --privacy-module-app-summary-header-box-shadow: var(--box-shadow-3);
+  --privacy-module-app-summary-header-file-id-text: var(--primary-main);
+
+  // variables for privacy-module/app-platform
+  --privacy-module-app-platform-border-radius: var(--border-radius);
+  --privacy-module-app-platform-border-color: var(--neutral-grey-100);
+  --privacy-module-app-platform-color-ios: var(--ios);
+  --privacy-module-app-platform-color-android: var(--android);
+
+  // variables for privacy-module/report-drawer/app-details
+  --privacy-module-report-dr-app-details-box-shadow: var(--box-shadow-3);
+
+  // variables for privacy-module/app-details/header
+  --privacy-module-app-details-header-background: var(--background-main);
+
+  // variables for privacy-module/status
+  --privacy-module-status-background: var(--background-main);
 
   &.theme-light {
     //variables for appknox-wrapper

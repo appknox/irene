@@ -53,6 +53,14 @@ export default class OrganizationSettingsWrapperComponent extends Component<Orga
               'authenticated.dashboard.organization-settings.service-account',
           }
         : null,
+      // {
+      //   id: 'ai-powered-features',
+      //   label: this.intl.t('aiPoweredFeatures'),
+      //   route:
+      //     'authenticated.dashboard.organization-settings.ai-powered-features',
+      //   currentWhen:
+      //     'authenticated.dashboard.organization-settings.ai-powered-features',
+      // },
     ].filter(Boolean);
   }
 

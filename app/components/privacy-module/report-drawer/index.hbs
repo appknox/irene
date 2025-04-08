@@ -1,0 +1,48 @@
+<AkDrawer
+  @open={{@open}}
+  @onClose={{@onClose}}
+  @anchor='right'
+  data-test-privacyReportDrawer-drawer
+  as |dr|
+>
+  <div {{style width='420px'}}>
+    <AkAppbar @justifyContent='space-between' as |ab|>
+      <AkTypography
+        data-test-privacyReportDrawer-title
+        @color='inherit'
+        @variant='h5'
+      >
+        {{t 'downloadReport'}}
+      </AkTypography>
+
+      <AkIconButton
+        data-test-privacyReportDrawer-closeBtn
+        {{on 'click' dr.closeHandler}}
+        class={{ab.classes.defaultIconBtn}}
+      >
+        <AkIcon @iconName='close' />
+      </AkIconButton>
+    </AkAppbar>
+
+    {{#if @showAppDetails}}
+      <div class='py-2' data-test-privacyReportDrawer-appDetails>
+        <PrivacyModule::ReportDrawer::AppDetails
+          @file={{@file}}
+          @project={{@project}}
+        />
+      </div>
+    {{else}}
+      <AkTypography data-test-privacyReportDrawer-description class='px-3 py-2'>
+        {{t 'privacyModule.downloadReportDescription'}}
+      </AkTypography>
+
+      <AkDivider @color='dark' />
+    {{/if}}
+
+    <File::ReportDrawer::PrivacyReports::Item
+      @file={{@file}}
+      @privacyReport={{this.privacyReport}}
+      @loading={{this.fetchPrivacyReports.isRunning}}
+    />
+  </div>
+</AkDrawer>

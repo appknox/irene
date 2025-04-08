@@ -1,0 +1,33 @@
+<div local-class='status-wrapper' class='py-6'>
+  <AkStack
+    @direction='column'
+    @alignItems='center'
+    @width='full'
+    class='py-6 my-6'
+    data-test-privacyModule-status
+  >
+    {{#let (component @svgComponent) as |SvgComponent|}}
+      <SvgComponent />
+    {{/let}}
+
+    <AkStack
+      class='mt-3'
+      @direction='column'
+      @alignItems='center'
+      @spacing='1.5'
+      local-class='text-width'
+    >
+      <AkTypography
+        @align='center'
+        @variant='h5'
+        data-test-privacyModule-status-header
+      >
+        {{@heading}}
+      </AkTypography>
+
+      <AkTypography @align='center' data-test-privacyModule-status-desc>
+        {{@description}}
+      </AkTypography>
+    </AkStack>
+  </AkStack>
+</div>

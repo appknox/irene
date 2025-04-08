@@ -1,0 +1,48 @@
+.summary-root {
+  width: 100%;
+  border: 1px solid var(--privacy-module-app-summary-border-color);
+  background-color: var(--privacy-module-app-summary-background-color);
+  box-sizing: border-box;
+
+  .summary-header {
+    box-shadow: var(--privacy-module-app-summary-header-box-shadow);
+  }
+
+  .summary-padding {
+    padding: 0.75em 0;
+
+    .show-more-icon {
+      font-size: 1.5rem !important;
+    }
+  }
+
+  .summary-file-id {
+    margin-left: 0.35em;
+    display: flex;
+
+    &:hover {
+      color: var(--privacy-module-app-summary-header-file-id-text);
+    }
+  }
+}
+
+.store-logo-container {
+  display: flex;
+  height: 24px;
+  width: 24px;
+  align-items: center;
+  justify-content: center;
+
+  &:hover {
+    background-color: var(
+      --privacy-module-app-summary-store-logo-container-bg-color
+    );
+    border: 1px solid
+      var(--privacy-module-app-summary-store-logo-container-border-color);
+  }
+}
+
+.appstore-logo-vector {
+  height: 16px;
+  width: 16px;
+}

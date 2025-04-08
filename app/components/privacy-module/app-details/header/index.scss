@@ -1,0 +1,16 @@
+.privacy-module-app-details-header {
+  padding-top: 0.5em;
+  position: sticky;
+  top: -0.5em;
+  z-index: 100;
+  background-color: var(--privacy-module-app-details-header-bg-color);
+}
+
+.warning-error-wrapper {
+  background-color: var(--privacy-module-app-details-header-warning-bg-color);
+  border: 1px solid var(--privacy-module-app-details-header-warning-border);
+
+  .warning-icon-wrapper {
+    background-color: var(--privacy-module-app-details-header-warning-icon-bg);
+  }
+}

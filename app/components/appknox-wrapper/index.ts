@@ -96,6 +96,10 @@ export default class AppknoxWrapperComponent extends Component<AppknoxWrapperSig
     return !this.configuration.serverData.enterprise;
   }
 
+  get showPrivacyDashboard() {
+    return !this.orgIsAnEnterprise;
+  }
+
   get menuItems() {
     return [
       {
@@ -106,6 +110,13 @@ export default class AppknoxWrapperComponent extends Component<AppknoxWrapperSig
         badgeLabel: this.organization.selected?.projectsCount,
         currentWhen:
           'authenticated.dashboard.projects authenticated.dashboard.project.files authenticated.dashboard.project.settings authenticated.dashboard.compare authenticated.dashboard.file authenticated.dashboard.file-vul-compare authenticated.dashboard.choose authenticated.dashboard.file',
+      },
+      this.showPrivacyDashboard && {
+        label: this.intl.t('privacyModule.title'),
+        icon: 'shield',
+        iconVariant: 'outlined',
+        route: 'authenticated.dashboard.privacy-module',
+        currentWhen: 'authenticated.dashboard.privacy-module',
       },
       this.showAppMonitoringDashboard && {
         label: this.intl.t('appMonitoring'),

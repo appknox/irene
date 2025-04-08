@@ -1,0 +1,103 @@
+<AkStack
+  @direction='column'
+  @tag='section'
+  @justifyContent='center'
+  @width='full'
+  class='p-0'
+  data-test-fileReportDrawer-privacyReports-root
+>
+  {{#if this.privacyIsActive}}
+    {{#if this.reUpload}}
+      <AkStack
+        @direction='column'
+        @alignItems='center'
+        @width='full'
+        @spacing='0.5'
+        class='p-4'
+      >
+        <AkSvg::PrivacyUpload />
+
+        <AkTypography @fontWeight='bold' class='mt-1'>
+          {{t 'privacyModule.reportNotAvailableHeading'}}
+        </AkTypography>
+
+        <AkTypography>
+          {{t 'privacyModule.reportNotAvailableDesc'}}
+        </AkTypography>
+      </AkStack>
+    {{else}}
+      {{#if this.fetchPrivacyReports.isRunning}}
+        <AkStack
+          data-test-privacyReport-loader
+          class='p-2'
+          @alignItems='center'
+          @justifyContent='center'
+        >
+          <AkLoader @size={{18}} />
+        </AkStack>
+      {{else}}
+        <AkStack
+          @width='full'
+          @direction='column'
+          @spacing='0'
+          data-test-fileReportDrawer-privacyReports-reportsList
+        >
+          {{#if this.statusInfo}}
+            <AkStack @direction='column' @spacing='1' class='px-3 pt-3 pb-2'>
+              <AkChip
+                @label={{t this.statusInfo.label}}
+                @variant='semi-filled'
+                @color={{this.statusInfo.color}}
+                @size='small'
+              >
+                <:icon>
+                  <AkIcon @iconName={{this.statusInfo.icon}} />
+                </:icon>
+              </AkChip>
+
+              <AkTypography
+                data-test-fileReportDrawer-privacyReports-statusText
+              >
+                {{this.statusInfo.text}}
+              </AkTypography>
+            </AkStack>
+          {{else}}
+            <File::ReportDrawer::PrivacyReports::Item
+              @file={{this.file}}
+              @privacyReport={{this.privacyReport}}
+            />
+          {{/if}}
+
+          <AkDivider />
+
+          <AkLink
+            @color='primary'
+            @route='authenticated.dashboard.privacy-module.app-details'
+            @model={{this.privacyReport.privacyProject.id}}
+            @fontWeight='bold'
+            @underline='always'
+            class='mx-3 my-1'
+            target='_blank'
+            rel='noopener noreferrer'
+            {{style width='fit-content'}}
+            data-test-fileReportDrawer-privacyReports-fileLink
+          >
+            <:leftIcon>
+              <AkIcon
+                @color='primary'
+                @iconName='open-in-new'
+                {{style fontSize='1.5714rem !important'}}
+              />
+            </:leftIcon>
+
+            <:default>
+              {{t 'privacyModule.title'}}
+            </:default>
+          </AkLink>
+        </AkStack>
+      {{/if}}
+    {{/if}}
+  {{else}}
+    <File::ReportDrawer::PrivacyReports::Sample />
+  {{/if}}
+</AkStack>
