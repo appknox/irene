@@ -16,7 +16,7 @@ module(
     setupIntl(hooks, 'en');
 
     test('it renders', async function (assert) {
-      assert.expect(4);
+      assert.expect(6);
 
       this.notification = this.server.create('nf-in-app-notification', {
         hasRead: true,
@@ -45,8 +45,8 @@ module(
 
       assert
         .dom('[data-test-nf-automated-dast-completed-fileLink]')
-        .hasAttribute('href', /dynamic-scan\/results/)
-        .hasText(t('viewResults'));
+        .containsText(t('fileID'))
+        .containsText(this.context.file_id);
 
       compareInnerHTMLWithIntlTranslation(assert, {
         doIncludesCheck: true,
@@ -61,9 +61,9 @@ module(
       });
 
       assert
-        .dom('[data-test-nf-automated-dast-completed-fileLink]')
-        .containsText(t('fileID'))
-        .containsText(this.context.file_id);
+        .dom('[data-test-nf-automated-dast-completed-viewResultsLink]')
+        .hasAttribute('href', /dynamic-scan\/results/)
+        .hasText(t('viewResults'));
     });
   }
 );

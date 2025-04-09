@@ -41,3 +41,58 @@
     </VncViewer>
   </:default>
 </FileDetails::DynamicScan::DeviceWrapper>
+
+{{#if this.showNotifyUserModal}}
+  <AkModal
+    @headerTitle={{t 'confirmation'}}
+    @noGutter={{true}}
+    @showHeader={{true}}
+    @disableClose={{this.disableNotifUserModalActions}}
+    @onClose={{fn this.confirmNotifyUserOfCompletion false}}
+  >
+    <:default>
+      <AkStack
+        @direction='column'
+        @spacing='2'
+        class='p-3 pr-6'
+        {{style maxWidth='420px'}}
+      >
+        <AkTypography
+          data-test-fileDetailsDynamicScan-scheduledAutomated-notifyUserModalHeader
+        >
+          {{t 'modalCard.scheduledAutomatedNotifyUser.headerTitle'}}
+        </AkTypography>
+      </AkStack>
+    </:default>
+
+    <:footer>
+      <AkDivider />
+
+      <AkStack
+        @justifyContent='flex-start'
+        @alignItems='center'
+        @spacing='1.5'
+        class='px-3 py-2'
+      >
+        <AkButton
+          @variant='filled'
+          @loading={{this.disableNotifUserModalActions}}
+          {{on 'click' (fn this.confirmNotifyUserOfCompletion true)}}
+          data-test-fileDetailsDynamicScan-scheduledAutomated-notifyUserModal-confirmBtn
+        >
+          {{t 'yes'}}
+        </AkButton>
+
+        <AkButton
+          @color='neutral'
+          @variant='outlined'
+          @disabled={{this.disableNotifUserModalActions}}
+          {{on 'click' (fn this.confirmNotifyUserOfCompletion false)}}
+          data-test-fileDetailsDynamicScan-scheduledAutomated-notifyUserModal-cancelBtn
+        >
+          {{t 'no'}}
+        </AkButton>
+      </AkStack>
+    </:footer>
+  </AkModal>
+{{/if}}
