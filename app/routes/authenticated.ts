@@ -14,11 +14,11 @@ import type TrialService from 'irene/services/trial';
 import type IntegrationService from 'irene/services/integration';
 import type OrganizationService from 'irene/services/organization';
 import type ConfigurationService from 'irene/services/configuration';
-import type WebsocketService from 'irene/services/websocket';
 import type UserModel from 'irene/models/user';
 import { CSBMap } from 'irene/router';
 import ENV from 'irene/config/environment';
 import triggerAnalytics from 'irene/utils/trigger-analytics';
+import type WsService from 'irene/services/ws/main';
 
 export default class AuthenticatedRoute extends Route {
   @service declare session: any;
@@ -27,12 +27,13 @@ export default class AuthenticatedRoute extends Route {
   @service declare datetime: DatetimeService;
   @service declare trial: TrialService;
   @service declare rollbar: any;
-  @service declare websocket: WebsocketService;
   @service declare integration: IntegrationService;
   @service declare store: Store;
+  @service declare configuration: ConfigurationService;
+
   @service('notifications') declare notify: NotificationService;
   @service('organization') declare org: OrganizationService;
-  @service declare configuration: ConfigurationService;
+  @service('ws/main') declare websocket: WsService;
 
   @service declare router: RouterService;
   @service('browser/window') declare window: Window;

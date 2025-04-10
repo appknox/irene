@@ -1,4 +1,3 @@
-/* eslint-disable ember/no-observers */
 /* eslint-disable ember/use-ember-data-rfc-395-imports */
 import DS from 'ember-data';
 import { tracked } from 'tracked-built-ins';
@@ -9,7 +8,6 @@ import Component from '@glimmer/component';
 import { action } from '@ember/object';
 import Store from '@ember-data/store';
 import { inject as service } from '@ember/service';
-import { addObserver, removeObserver } from '@ember/object/observers';
 import { task } from 'ember-concurrency';
 import { waitForPromise } from '@ember/test-waiters';
 import IntlService from 'ember-intl/services/intl';
@@ -19,6 +17,7 @@ import parseError from 'irene/utils/parse-error';
 import RealtimeService from 'irene/services/realtime';
 import UploadAppService from 'irene/services/upload-app';
 import SubmissionModel from 'irene/models/submission';
+import WsService from 'irene/services/ws/main';
 
 dayjs.extend(relativeTime);
 
@@ -46,6 +45,7 @@ export default class UploadAppStatusComponent extends Component {
   @service declare uploadApp: UploadAppService;
   @service declare intl: IntlService;
   @service('notifications') declare notify: NotificationService;
+  @service('ws/main') declare wsService: WsService;
 
   @tracked submissions: DS.AdapterPopulatedRecordArray<SubmissionModel> | null =
     null;
@@ -193,23 +193,19 @@ export default class UploadAppStatusComponent extends Component {
   }
 
   @action initialize() {
-    addObserver(
-      this.realtime,
-      'SubmissionCounter',
-      this,
-      this.observeSubmissionCounter
-    );
+    this.wsService.registerCounterEventHandler({
+      key: 'Submission',
+      handler: this.observeSubmissionCounter,
+    });
 
     this.getSubmissions.perform();
   }
 
   @action removeSubmissionCounterObserver() {
-    removeObserver(
-      this.realtime,
-      'SubmissionCounter',
-      this,
-      this.observeSubmissionCounter
-    );
+    this.wsService.removeCounterEventHandler({
+      key: 'Submission',
+      handler: this.observeSubmissionCounter,
+    });
   }
 
   @action

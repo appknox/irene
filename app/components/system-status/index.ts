@@ -8,13 +8,8 @@ import type Store from '@ember-data/store';
 import type IntlService from 'ember-intl/services/intl';
 
 import ENV from 'irene/config/environment';
+import WsCoreService, { type SocketInstance } from 'irene/services/ws/core';
 import type DevicefarmService from 'irene/services/devicefarm';
-import type WebsocketService from 'irene/services/websocket';
-
-import type {
-  SocketHealthMessage,
-  SocketInstance,
-} from 'irene/services/websocket';
 import type IreneAjaxService from 'irene/services/ajax';
 import type { AjaxError } from 'irene/services/ajax';
 
@@ -24,9 +19,13 @@ type StatusResponse = {
   };
 };
 
+export interface SocketHealthMessage {
+  is_healthy: boolean;
+}
+
 export default class SystemStatusComponent extends Component {
   @service declare devicefarm: DevicefarmService;
-  @service declare websocket: WebsocketService;
+  @service('ws/core') declare websocket: WsCoreService;
   @service declare ajax: IreneAjaxService;
   @service declare session: any;
   @service declare store: Store;
