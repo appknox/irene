@@ -860,6 +860,7 @@
   "mstgExpansion": "Mobile Security Testing Guide",
   "multiFactorAuth": "マルチファクタ認証",
   "multiFactorAuthSubtitle": "Mandatory multi factor authentication",
+  "multipleParents": "Selected child has multiple parents. Here are the links -",
   "name": "名前",
   "nameIDFormat": "Name ID Format",
   "namespace": "名前空間",

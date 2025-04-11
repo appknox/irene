@@ -224,6 +224,10 @@ module('Acceptance | sbom', function (hooks) {
   });
 
   test('test sbom scan details', async function (assert) {
+    this.sbomFiles[0].update({
+      status: SbomScanStatus.COMPLETED,
+    });
+
     this.server.get('/v2/sb_projects/:id/sb_files', (schema) => {
       const results = schema.sbomFiles.all().models;
 
@@ -244,7 +248,7 @@ module('Acceptance | sbom', function (hooks) {
     );
 
     await visit(
-      `/dashboard/sbom/apps/${this.sbomProjects[1].id}/scans/${this.sbomFiles[1].id}`
+      `/dashboard/sbom/apps/${this.sbomProjects[0].id}/scans/${this.sbomFiles[0].id}`
     );
 
     assert.dom('[data-test-sbomScanDetails-container]').exists();
@@ -275,7 +279,7 @@ module('Acceptance | sbom', function (hooks) {
 
     assert.strictEqual(
       currentURL(),
-      `/dashboard/sbom/apps/${this.sbomProjects[1].id}/scans/${this.sbomFiles[1].id}/components/${this.sbomComponents[0].id}/0/overview`
+      `/dashboard/sbom/apps/${this.sbomProjects[0].id}/scans/${this.sbomFiles[0].id}/components/${this.sbomComponents[0].id}/0/overview`
     );
 
     assert
@@ -304,7 +308,7 @@ module('Acceptance | sbom', function (hooks) {
 
     assert.strictEqual(
       currentURL(),
-      `/dashboard/sbom/apps/${this.sbomProjects[1].id}/scans/${this.sbomFiles[1].id}/components/${this.sbomComponents[0].id}/0/vulnerabilities`
+      `/dashboard/sbom/apps/${this.sbomProjects[0].id}/scans/${this.sbomFiles[0].id}/components/${this.sbomComponents[0].id}/0/vulnerabilities`
     );
   });
 
@@ -546,6 +550,85 @@ module('Acceptance | sbom', function (hooks) {
     assert.strictEqual(
       currentURL(),
       `/dashboard/sbom/apps/${this.sbomProjects[1].id}/scans/${this.sbomFiles[1].id}/components/${dependencies[0].id}/0/overview`
+    );
+  });
+
+  test('test sbom component tree with multiple parents', async function (assert) {
+    const parentComponent = this.server.createList('sbom-component', 2, {
+      sb_file: this.sbomFiles[1].id,
+      is_dependency: false,
+    });
+
+    const dependencies = this.server.createList('sbom-component', 2, {
+      sb_file: this.sbomFiles[1].id,
+      is_dependency: true,
+    });
+
+    this.server.get('/v2/sb_file_component/:id', (schema, req) =>
+      schema.sbomComponents.find(`${req.params.id}`)?.toJSON()
+    );
+
+    // Mock API for dependencies
+    this.server.get('/v2/sb_file_component/:comp_id/dependencies', () => {
+      return {
+        count: dependencies.length,
+        next: null,
+        previous: null,
+        results: dependencies,
+      };
+    });
+
+    // Mock API for parents
+    this.server.get('/v2/sb_file_component/:comp_id/parents', () => {
+      return {
+        count: parentComponent.length,
+        next: null,
+        previous: null,
+        results: parentComponent,
+      };
+    });
+
+    await visit(
+      `/dashboard/sbom/apps/${this.sbomProjects[1].id}/scans/${this.sbomFiles[1].id}/components/${dependencies[0].id}/${parentComponent[0].id}/overview`
+    );
+
+    assert.dom('[data-test-component-tree]').exists();
+
+    assert.dom('[data-test-component-tree-nodeLabel]').exists();
+
+    assert.dom('[data-test-component-tree-node]').exists({ count: 3 }); // Parent + 2 children
+
+    const nodeLabels = findAll('[data-test-component-tree-nodeLabel]');
+
+    assert.dom(nodeLabels[0]).containsText(parentComponent[0].name);
+
+    assert
+      .dom(nodeLabels[1])
+      .containsText(dependencies[0].name)
+      .hasClass(/tree-label-highlighted-text/);
+
+    assert
+      .dom('[data-test-sbom-component-tree-multiple-parents-header]')
+      .exists()
+      .containsText(t('multipleParents'));
+
+    assert
+      .dom('[data-test-sbom-component-tree-multiple-parents-link]')
+      .exists()
+      .containsText(parentComponent[1].name);
+
+    await click('[data-test-sbom-component-tree-multiple-parents-link]');
+
+    assert.dom('[data-test-sbomcomponentdetails-container]').exists();
+
+    assert
+      .dom('[data-test-sbomcomponentdetails-headertitlevalue]')
+      .exists()
+      .containsText(parentComponent[1].name);
+
+    assert.strictEqual(
+      currentURL(),
+      `/dashboard/sbom/apps/${this.sbomProjects[1].id}/scans/${this.sbomFiles[1].id}/components/${parentComponent[1].id}/0/overview`
     );
   });
 

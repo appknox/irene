@@ -22,3 +22,25 @@
 .component-details {
   width: 100%;
 }
+
+.multiple-parents-container {
+  margin: 0em 1em 1em;
+  min-width: 97%;
+  border: 1px solid var(--sbom-component-details-overview-border-color);
+  border-radius: var(--sbom-component-details-overview-border-radius);
+
+  .multiple-parents-header {
+    background-color: var(--sbom-component-details-overview-background-color);
+    border-bottom: 1px solid var(--sbom-component-details-overview-border-color);
+    padding: 0.5em 1em;
+  }
+
+  .multiple-parents-link {
+    font-family: monospace !important;
+  }
+}
+
+.loading-container {
+  border: 1px solid var(--sbom-component-details-overview-border-color);
+  border-radius: var(--sbom-component-details-overview-border-radius);
+}
