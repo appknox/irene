@@ -17,7 +17,7 @@ interface RequestOptions extends RequestInit {
   /** Optional host URL to override the default API host */
   host?: string;
   /** Optional Content Type to override the default Content Type */
-  contentType?: string;
+  contentType?: string | null;
 }
 
 /**
@@ -261,16 +261,15 @@ export default class IreneAjaxService extends Service {
    */
   async makeRequest<T>(url: string, options: RequestOptions = {}): Promise<T> {
     const finalUrl = this._buildURL(url, options);
+    const contentType = options.contentType;
 
     // Only include headers if _shouldSendHeaders returns true
     const headers = this._shouldSendHeaders(finalUrl, options.host)
       ? {
           // For data transfer objects we allow the browser set the content type of the request
-          ...([FormData, Blob].some(
-            (dataType) => options.data instanceof dataType
-          )
+          ...(contentType === null
             ? {}
-            : { 'Content-Type': options.contentType || 'application/json' }),
+            : { 'Content-Type': contentType || 'application/json' }),
           ...this.defaultHeaders,
           ...options.headers,
         }

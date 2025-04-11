@@ -300,7 +300,12 @@ export default class AkBreadcrumbsService extends Service {
       return lastTransItems.slice(0, originRouteIndexInCrumbs + 1);
     }
 
-    return originRouteIsLastCrumbItem ? (lastTransInfo?.items ?? []) : [];
+    // Necessary to check 'originRouteHasDiffModelWithSameRouteInCrumbs' in scenarios where
+    // a model change happens on the route which was last added to the crumbs list.
+    return !originRouteHasDiffModelWithSameRouteInCrumbs &&
+      originRouteIsLastCrumbItem
+      ? (lastTransInfo?.items ?? [])
+      : [];
   }
 
   /**
