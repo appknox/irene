@@ -11,6 +11,7 @@ interface SessionService {
       b64token: string;
     };
   };
+  invalidate: () => Promise<void>;
 }
 
 const AuthenticationBase = (
@@ -18,6 +19,7 @@ const AuthenticationBase = (
 ) =>
   class extends Superclass {
     declare session: SessionService;
+    declare window: Window;
 
     get headers() {
       const data = this.session.data.authenticated;
@@ -33,14 +35,32 @@ const AuthenticationBase = (
         'X-Product': ENV.product,
       };
     }
+
+    handleResponse(
+      status: number,
+      headers: object,
+      payload: any,
+      requestData?: object
+    ) {
+      if (status === 401) {
+        // Session is invalid, logout and redirect to login
+        this.session.invalidate();
+        this.window.location.replace('/login?sessionExpired=true');
+        return;
+      }
+
+      return super.handleResponse(status, headers, payload, requestData);
+    }
   };
 
 export class JSONAPIAuthenticationBase extends AuthenticationBase(
   JSONAPIAdapter
 ) {
   @service declare session: SessionService;
+  @service('browser/window') declare window: Window;
 }
 
 export class DRFAuthenticationBase extends AuthenticationBase(DRFAdapter) {
   @service declare session: SessionService;
+  @service('browser/window') declare window: Window;
 }

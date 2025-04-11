@@ -3,6 +3,8 @@ import { setupApplicationTest } from 'ember-qunit';
 import { setupMirage } from 'ember-cli-mirage/test-support';
 import { registerRequiredResources } from 'irene/tests/helpers/drf-resources';
 import { Response } from 'miragejs';
+import { PostAdapter } from '../../helpers/drf-resources';
+import { UnauthorizedError } from '@ember-data/adapter/error';
 
 module('Acceptance | DRF: CRUD Failure', function (hooks) {
   setupApplicationTest(hooks);
@@ -113,6 +115,25 @@ module('Acceptance | DRF: CRUD Failure', function (hooks) {
   test('Permission denied error', async function (assert) {
     assert.expect(4);
 
+    class CustomAuthAdapter extends PostAdapter {
+      handleResponse(status, payload) {
+        if (status === 401) {
+          const errorPayload = [
+            {
+              status: '401',
+              detail:
+                payload.detail ||
+                'Authentication credentials were not provided.',
+            },
+          ];
+
+          throw new UnauthorizedError(errorPayload);
+        }
+      }
+    }
+
+    this.owner.register('adapter:post', CustomAuthAdapter);
+
     try {
       await this.store.findRecord('post', 1);
     } catch (err) {
@@ -126,7 +147,7 @@ module('Acceptance | DRF: CRUD Failure', function (hooks) {
         'Authentication credentials were not provided.'
       );
 
-      assert.strictEqual(err.message, 'Unauthorized');
+      assert.strictEqual(err.message, 'The adapter operation is unauthorized');
     }
   });
 
