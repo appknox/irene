@@ -1,7 +1,6 @@
 import Component from '@glimmer/component';
 import { action } from '@ember/object';
 import { service } from '@ember/service';
-import { htmlSafe } from '@ember/template';
 import { tracked } from '@glimmer/tracking';
 import { task } from 'ember-concurrency';
 
@@ -10,7 +9,6 @@ import advancedFormat from 'dayjs/plugin/advancedFormat';
 import weekday from 'dayjs/plugin/weekday';
 import weekOfYear from 'dayjs/plugin/weekOfYear';
 
-import bb, { type Chart, type PrimitiveArray } from 'billboard.js';
 import type Store from '@ember-data/store';
 import type IntlService from 'ember-intl/services/intl';
 
@@ -19,12 +17,18 @@ import type IreneAjaxService from 'irene/services/ajax';
 import type MeService from 'irene/services/me';
 import type PartnerService from 'irene/services/partner';
 import type { PartnerAnalyticUploadTimelineData } from 'irene/models/partner/analytic';
+import type { ECOption, ECInstance } from 'irene/components/ak-chart';
 
 import type {
   RangeDateObject,
   MultipleDateObject,
   CalendarDay,
 } from 'irene/components/ak-date-picker';
+
+import {
+  TopLevelFormatterParams,
+  CallbackDataParams,
+} from 'echarts/types/dist/shared';
 
 import styles from './index.scss';
 
@@ -55,11 +59,9 @@ export default class PartnerClientUploadsStatChartComponent extends Component<Pa
 
   maxDate = dayjs(Date.now()).toDate();
 
-  @tracked isHideLegend = true;
-  @tracked isRedrawChart = false;
-  @tracked chartData: PrimitiveArray[] | undefined;
-  @tracked chartContainer: Chart | null = null;
   @tracked currentTimeline;
+  @tracked chartInstance: ECInstance | null = null;
+  @tracked chartOption: ECOption = {};
 
   @tracked dateRange: [dayjs.Dayjs | null, dayjs.Dayjs | null] = [
     dayjs().subtract(1, 'months'),
@@ -77,6 +79,8 @@ export default class PartnerClientUploadsStatChartComponent extends Component<Pa
     dayjs.extend(weekday);
 
     this.currentTimeline = this.timelinePlaceholders.objectAt(0);
+
+    this.loadChart.perform();
   }
 
   get timelinePlaceholders() {
@@ -142,8 +146,6 @@ export default class PartnerClientUploadsStatChartComponent extends Component<Pa
   @action
   onChangeTimeline(option: typeof this.currentTimeline) {
     this.currentTimeline = option;
-    this.isRedrawChart = true;
-
     this.loadChart.perform();
   }
 
@@ -154,45 +156,26 @@ export default class PartnerClientUploadsStatChartComponent extends Component<Pa
     const dayjs = (value as RangeDateObject)?.dayjs;
 
     this.dateRange = [dayjs.start, dayjs.end];
-
-    this.isRedrawChart = true;
     this.loadChart.perform();
   }
 
-  async redrawChart() {
-    this.chartContainer?.axis.labels({
-      x: this.currentTimeline?.axisText.toUpperCase() as string,
-    });
-
-    this.chartContainer?.load({
-      columns: this.chartData,
-    });
-
-    return;
-  }
-
-  async parseChartData(rawData: PartnerAnalyticUploadTimelineData[]) {
-    const dataPoints = await this.generateTimeseriesData(
-      rawData,
-      this.currentTimeline?.dayjsSelector
-    );
-
-    this.chartData = [dataPoints.x, dataPoints.y];
-
-    return;
+  @action
+  onChartInit(instance: ECInstance) {
+    this.chartInstance = instance;
   }
 
   async generateTimeseriesData(
     rawData: PartnerAnalyticUploadTimelineData[] = [],
     groupBy = 'day'
   ) {
-    const x = ['x'];
-    const y: PrimitiveArray = ['y'];
+    const xAxisData: string[] = [];
+    const seriesData: number[] = [];
 
     let curPointDate = dayjs(this.startDate);
 
     while (dayjs(curPointDate).isBefore(this.endDate)) {
       const curpointFormattedDate = curPointDate.format('YYYY-MM-DD');
+      const displayDate = curPointDate.format(this.currentTimeline?.format);
 
       // Find all data points which fall under given group
       const dataPoints = rawData.filter(
@@ -202,130 +185,113 @@ export default class PartnerClientUploadsStatChartComponent extends Component<Pa
             .format('YYYY-MM-DD') == curpointFormattedDate
       );
 
-      // Insert/Update by date
+      // Calculate total uploads for this date
+      let totalUploads = 0;
       if (dataPoints.length) {
-        dataPoints.forEach((dataPoint) => {
-          let indexOfPoint = x.indexOf(curpointFormattedDate);
-
-          if (indexOfPoint == -1) {
-            x.push(curpointFormattedDate);
-
-            indexOfPoint = x.length - 1;
-          }
-
-          const indexPointY = y[indexOfPoint];
-
-          if (indexPointY) {
-            y[indexOfPoint] = Number(indexPointY) + dataPoint.upload_count;
-          } else {
-            y[indexOfPoint] = dataPoint.upload_count;
-          }
-        });
-      } else {
-        //Default data points {date, count}
-        x.push(curpointFormattedDate);
-        y.push(0);
+        totalUploads = dataPoints.reduce(
+          (sum, point) => sum + point.upload_count,
+          0
+        );
       }
 
-      const groupByVal = groupBy as dayjs.ManipulateType;
+      xAxisData.push(displayDate);
+      seriesData.push(totalUploads);
 
+      const groupByVal = groupBy as dayjs.ManipulateType;
       curPointDate = dayjs(curPointDate).add(1, groupByVal).startOf(groupByVal);
     }
 
     return {
-      x,
-      y,
+      xAxisData,
+      seriesData,
     };
   }
 
-  async drawChart(element: Element) {
-    // eslint-disable-next-line @typescript-eslint/no-this-alias
-    const component = this;
+  async updateChartOption(rawData: PartnerAnalyticUploadTimelineData[]) {
+    const { xAxisData, seriesData } = await this.generateTimeseriesData(
+      rawData,
+      this.currentTimeline?.dayjsSelector
+    );
 
-    component.chartContainer = bb.generate({
-      data: {
-        x: 'x',
-        columns: this.chartData,
-        type: 'area', // for ESM specify as: bar()
-      },
-      grid: {
-        focus: {
-          show: false,
-        },
-      },
-      axis: {
-        x: {
-          padding: {
-            right: 1000 * 60 * 60 * 12,
-          },
-          type: 'timeseries',
-          tick: {
-            format: function (val: dayjs.ConfigType) {
-              return dayjs(val).format(component?.currentTimeline?.format);
-            },
-          },
-          label: {
-            text: `${component?.currentTimeline?.axisText.toUpperCase()}`,
-            position: 'outer-center',
-          },
-        },
-        y: {
-          padding: {
-            bottom: 0,
-          },
-          min: 0,
-          default: [0, 5],
-          tick: {
-            stepSize: 1,
-          },
-          label: {
-            text: this.intl.t('uploadCount'),
-            position: 'outer-middle',
-          },
-        },
-      },
-      legend: {
-        show: false,
-      },
-      tooltip: {
-        contents: function (d) {
-          return component
-            .tooltipTemplate(component, d[0].x, d[0].value)
-            .toString(); // formatted html as you want
-        },
-      },
-      transition: {
-        duration: 500,
-      },
-      bindto: element,
-    });
-
-    component.isRedrawChart = false;
-
-    return;
+    this.chartOption = this.createChartOption(xAxisData, seriesData);
   }
 
-  /**
-   * Method to get custom tooltip body
-   * @type {PartnerClientUploadsStatChartComponent} component
-   * @param {Date} x
-   * @param {Number} y
-   */
-  tooltipTemplate(component = this, x: Date, y: number) {
-    return htmlSafe(`
-      <div class="${styles['tooltip']}">
-        <div>${component.currentTimeline?.tooltipFormat(x)}</div>
+  createChartOption(xAxisData: string[], seriesData: number[]): ECOption {
+    return {
+      tooltip: {
+        trigger: 'axis',
+        formatter: (params: TopLevelFormatterParams) => {
+          const cbParams = (params as CallbackDataParams[])[0];
+          const dataIndex = cbParams?.dataIndex;
 
-        <div><span class="${styles['tt-val-label']}">Uploads</span>: ${y}</div>
-      </div>
-    `);
+          const date = dayjs(this.startDate)
+            .add(
+              Number(dataIndex),
+              this.currentTimeline?.dayjsSelector as dayjs.ManipulateType
+            )
+            .startOf(this.currentTimeline?.dayjsSelector as dayjs.UnitType);
+
+          return `
+            <div class="${styles['tooltip']}">
+              <div>${this.currentTimeline?.tooltipFormat(date)}</div>
+              <div><span class="${styles['tt-val-label']}">Uploads</span>: ${cbParams?.value}</div>
+            </div>
+          `;
+        },
+        extraCssText: 'padding: 0 !important; margin: 0 !important;',
+      },
+      grid: {
+        left: '10%',
+        right: '10%',
+        bottom: '10%',
+        top: '10%',
+        containLabel: true,
+      },
+      xAxis: {
+        type: 'category',
+        data: xAxisData,
+        name: this.currentTimeline?.axisText.toUpperCase(),
+        nameLocation: 'middle',
+        nameGap: 30,
+        boundaryGap: false,
+        axisLine: { show: true, lineStyle: { color: '#000', width: 1 } },
+        axisLabel: { show: true, color: '#000' },
+        axisTick: { show: true },
+      },
+      yAxis: {
+        type: 'value',
+        name: this.intl.t('uploadCount'),
+        nameLocation: 'middle',
+        nameGap: 40,
+        minInterval: 1,
+        axisLine: { show: true, lineStyle: { color: '#000', width: 1 } },
+        axisLabel: { show: true, color: '#000' },
+        axisTick: { show: true },
+      },
+      series: [
+        {
+          name: 'Uploads',
+          type: 'line',
+          data: seriesData,
+          showSymbol: true,
+          symbol: 'circle', // Add dots at data points
+          symbolSize: 6,
+          lineStyle: {
+            width: 2, // Line thickness
+          },
+          areaStyle: {
+            opacity: 0.3,
+          },
+        },
+      ],
+    };
   }
 
   /**
    * @function loadChart
    * Method to load chart data and inject chart into the DOM
    */
-  loadChart = task(async (element?: Element) => {
+  loadChart = task(async () => {
     if (this.targetModel) {
       const filter = {
         start_timestamp: dayjs(this.startDate).format(),
@@ -338,13 +304,7 @@ export default class PartnerClientUploadsStatChartComponent extends Component<Pa
         filter
       );
 
-      await this.parseChartData(rawChartData.uploadTimeline);
-
-      if (!this.isRedrawChart && element) {
-        await this.drawChart(element);
-      } else {
-        await this.redrawChart();
-      }
+      await this.updateChartOption(rawChartData.uploadTimeline);
     }
   });
 }
