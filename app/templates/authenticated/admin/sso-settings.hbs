@@ -1,0 +1,8 @@
+{{page-title (t 'sso')}}
+
+<PageWrapper @backgroundColor='inherit'>
+  <Admin::SsoSettings
+    @organization={{@model.organization}}
+    @user={{@model.user}}
+  />
+</PageWrapper>

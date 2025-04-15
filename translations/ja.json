@@ -50,6 +50,8 @@
   "addedSuccessfully": "added successfully",
   "admin": "管理者",
   "adminPermissionProject": "Admin permission is required to connect project to JIRA",
+  "adminSSOSettings": "Administration (Single Sign SSO)",
+  "adminMFASettings": "Administration (Multi Factor Authentication)",
   "all": "All",
   "allFutureAnalyses": "All Future Analyses",
   "allPlatforms": "全プラットフォーム",
@@ -1419,6 +1421,7 @@
   "serviceProvider": "Service Provider",
   "serviceAccount": "Service Account",
   "serviceAccountModule": {
+    "adminServiceAccount": "Administration (Service Account)",
     "listTitle": "All Service Accounts",
     "listDescription": "Here you can view all the service accounts created.",
     "detailsTitle": "View/Edit Service Account",

@@ -341,9 +341,14 @@ Router.map(function () {
           this.route('email-domain-restrictions');
         });
 
-        this.route('sso');
-        this.route('mfa');
-        this.route('service-account');
+        this.route('service-account', function () {
+          this.route('index', { path: '/' });
+          this.route('details', { path: '/details/:id' });
+          this.route('create');
+        });
+
+        this.route('sso-settings');
+        this.route('mfa-settings');
         this.route('billing');
       });
     }

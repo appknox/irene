@@ -118,12 +118,8 @@ module('Integration | Component | public-api-docs', function (hooks) {
       if (is_admin || is_owner) {
         assert
           .dom('[data-test-publicApiDocs-serviceAccountLink]')
-          .exists()
           .containsText(t('goToServiceAccounts'))
-          .hasAttribute(
-            'href',
-            '/dashboard/organization/settings/service-account'
-          );
+          .hasAttribute('href', '/dashboard/admin/service-account');
       } else {
         assert
           .dom('[data-test-publicApiDocs-serviceAccountLink]')

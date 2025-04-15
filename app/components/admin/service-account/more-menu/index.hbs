@@ -1,0 +1,39 @@
+<AkMenu
+  @anchorRef={{@anchorRef}}
+  @arrow={{true}}
+  @onClose={{@onClose}}
+  as |akm|
+>
+  {{#each this.menuItems as |it|}}
+    <akm.listItem
+      data-test-serviceAccountList-moreOptionMenuItem='{{it.label}}'
+      @button={{it.button}}
+      @link={{it.link}}
+      @route={{it.route}}
+      @query={{it.query}}
+      @onClick={{it.onClick}}
+      @divider={{it.divider}}
+      as |li|
+    >
+      <li.text @primaryText={{it.label}} />
+    </akm.listItem>
+  {{/each}}
+</AkMenu>
+
+<Admin::ServiceAccount::ConfirmDrawer
+  @onClose={{this.handleDeleteConfirmClose}}
+  @open={{this.showDeleteConfirm}}
+  @disabled={{this.deleteServiceAccount.isRunning}}
+  @confirmText={{t 'delete'}}
+  @confirmAction={{perform this.deleteServiceAccount}}
+>
+  <:confirmTitle>
+    <AkTypography data-test-serviceAccount-confirmDrawer-description>
+      {{t
+        'serviceAccountModule.deleteConfirmText'
+        name=@serviceAccount.name
+        htmlSafe=true
+      }}
+    </AkTypography>
+  </:confirmTitle>
+</Admin::ServiceAccount::ConfirmDrawer>

@@ -1,0 +1,30 @@
+<AkList::Item
+  data-test-serviceAccountSection-selectProjectList-item
+  @divider={{true}}
+  as |li|
+>
+  <li.leftIcon>
+    <AppPlatformIcon
+      data-test-serviceAccountSection-selectProjectList-platformIcon='{{this.platformIcon}}'
+      @platform='{{this.platformIcon}}'
+    />
+  </li.leftIcon>
+
+  <li.text
+    data-test-serviceAccountSection-selectProjectList-projectName
+    data-test-cy='serviceAccountSection-selectProjectList-projectName'
+    class='mx-1'
+    @primaryText={{this.packageName}}
+  />
+
+  {{#if (or @isEditView @isCreateView)}}
+    <AkIconButton
+      data-test-serviceAccountSection-selectProjectList-removeBtn
+      title='{{t "remove"}}'
+      @size='small'
+      {{on 'click' this.handleRemoveClick}}
+    >
+      <AkIcon @iconName='delete' />
+    </AkIconButton>
+  {{/if}}
+</AkList::Item>

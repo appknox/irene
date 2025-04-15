@@ -42,8 +42,8 @@ export default class AdminWrapperComponent extends Component<AdminWrapperCompone
       {
         label: this.intl.t('sso'),
         icon: 'key',
-        route: 'authenticated.admin.sso',
-        currentWhen: 'authenticated.admin.sso',
+        route: 'authenticated.admin.sso-settings',
+        currentWhen: 'authenticated.admin.sso-settings',
       },
       {
         label: this.intl.t('userManagement'),
@@ -55,13 +55,13 @@ export default class AdminWrapperComponent extends Component<AdminWrapperCompone
       {
         label: this.intl.t('mfa'),
         icon: 'lock',
-        route: 'authenticated.admin.mfa',
-        currentWhen: 'authenticated.admin.mfa',
+        route: 'authenticated.admin.mfa-settings',
+        currentWhen: 'authenticated.admin.mfa-settings',
       },
       {
         label: this.intl.t('serviceAccount'),
         icon: 'manage-accounts',
-        route: 'authenticated.admin.service-account',
+        route: 'authenticated.admin.service-account.index',
         currentWhen: 'authenticated.admin.service-account',
       },
       // {

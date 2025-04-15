@@ -1,0 +1,11 @@
+.scope-info-icon,
+.scope-unchecked-icon {
+  color: var(
+    --organization-service-account-section-select-scope-icon-color
+  ) !important;
+}
+
+.scope-info-tooltip-content {
+  width: 300px;
+  white-space: normal;
+}

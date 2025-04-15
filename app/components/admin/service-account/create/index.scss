@@ -1,0 +1,26 @@
+.service-account-details-root {
+  background-color: var(--organization-service-account-create-background-color);
+  min-height: calc(100vh - 56px);
+
+  .service-account-details-breadcrumbs-container,
+  .service-account-details-header {
+    position: sticky;
+    z-index: 100;
+  }
+
+  .service-account-details-breadcrumbs-container {
+    top: -0.5em;
+    background-color: var(
+      --organization-service-account-create-background-color
+    );
+  }
+
+  .service-account-details-header {
+    top: 3em;
+    background-color: var(
+      --organization-service-account-create-header-background-main
+    );
+    border: 1px solid var(--organization-service-account-create-border-color);
+    border-radius: var(--organization-service-account-create-border-radius);
+  }
+}

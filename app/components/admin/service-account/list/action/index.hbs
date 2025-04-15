@@ -1,0 +1,22 @@
+<AkStack @justifyContent='center' @alignItems='center' @spacing='1'>
+  <AkLink
+    data-test-serviceAccountList-viewDetailsLink
+    data-test-cy='serviceAccountList-viewDetailsLink'
+    @route='authenticated.admin.service-account.details'
+    @model={{@serviceAccount.id}}
+  >
+    <AkIconButton title='{{t "viewDetails"}}'>
+      <AnalysisRisk::OverrideDetailsIcon />
+    </AkIconButton>
+  </AkLink>
+
+  <div local-class='divider' />
+
+  <AkIconButton
+    data-test-serviceAccountList-moreOptionBtn
+    data-test-cy='serviceAccountList-moreOptionBtn'
+    {{on 'click' (fn @onMoreMenuClick @serviceAccount)}}
+  >
+    <AkIcon @iconName='more-vert' />
+  </AkIconButton>
+</AkStack>

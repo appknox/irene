@@ -1,0 +1,12 @@
+.service-account-container {
+  margin-bottom: 0.7143em;
+  background-color: var(--organization-service-account-list-background-main);
+  border: 1px solid var(--organization-service-account-list-border-color);
+  box-sizing: border-box;
+
+  .divider {
+    width: 1px;
+    height: 34px;
+    background-color: var(--organization-service-account-list-divider-color);
+  }
+}

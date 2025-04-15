@@ -1,0 +1,132 @@
+<Admin::ServiceAccount::Section::Card
+  @title={{t 'accountOverview'}}
+  @headerColor={{if this.isEditView 'primary'}}
+  @showHeaderAction={{this.showHeaderAction}}
+  @showFooterAction={{this.isEditView}}
+>
+  <:headerAction as |ha|>
+    <AkTooltip
+      @placement='top'
+      @arrow={{true}}
+      @title='{{t "edit"}} {{t "accountOverview"}}'
+    >
+      <AkIconButton
+        @variant='outlined'
+        class={{ha.classes.headerActionBtn}}
+        {{on 'click' this.handleShowEditView}}
+        data-test-serviceAccountSection-accountOverview-actionBtn
+        data-test-cy='serviceAccountSection-accountOverview-actionBtn'
+      >
+        <AkIcon @iconName='edit' />
+      </AkIconButton>
+    </AkTooltip>
+  </:headerAction>
+
+  <:default>
+    {{#if this.isEditOrCreateView}}
+      <AkTextField
+        data-test-serviceAccountSection-accountOverview-nameInput
+        data-test-cy='serviceAccountSection-accountOverview-nameInput'
+        @label='{{t "serviceAccountModule.nameOfTheServiceAccount"}}'
+        @labelTypographyColor='textPrimary'
+        @labelTypographyVariant='subtitle1'
+        @required={{true}}
+        @value={{this.changeset.name}}
+        @helperText='{{this.changeset.error.name.validation}}'
+        @error={{this.hasInputError 'name'}}
+      />
+
+      <AkStack class='mt-3' @direction='column' @spacing='1'>
+        <AkTypography
+          data-test-serviceAccountSection-accountOverview-descriptionLabel
+          @tag='label'
+          @variant='subtitle1'
+        >
+          {{t 'description'}}
+          *
+        </AkTypography>
+
+        <Textarea
+          data-test-serviceAccountSection-accountOverview-descriptionInput
+          data-test-cy='serviceAccountSection-accountOverview-descriptionInput'
+          id='service-account-description'
+          rows='6'
+          local-class='
+            textarea-input
+            {{if (this.hasInputError "description") "textarea-input-error"}}'
+          @value={{this.changeset.description}}
+        />
+
+        {{#if (this.hasInputError 'description')}}
+          <AkTypography
+            data-test-serviceAccountSection-accountOverview-descriptionInputError
+            @color='error'
+            @tag='p'
+            @variant='body2'
+          >
+            {{this.changeset.error.description.validation}}
+          </AkTypography>
+        {{/if}}
+      </AkStack>
+    {{else}}
+      <AkStack @direction='column' @spacing='0.5'>
+        <AkStack @alignItems='center' @spacing='1'>
+          <AkTypography
+            data-test-serviceAccountSection-accountOverview-nameLabel
+            @variant='subtitle1'
+          >
+            {{t 'serviceAccountModule.nameOfTheServiceAccount'}}
+          </AkTypography>
+
+          <Admin::ServiceAccount::Section::AccountOverview::AuditInfo
+            @serviceAccount={{@serviceAccount}}
+          />
+        </AkStack>
+
+        <AkTypography
+          data-test-serviceAccountSection-accountOverview-nameValue
+          data-test-cy='serviceAccountSection-accountOverview-nameValue'
+        >
+          {{@serviceAccount.name}}
+        </AkTypography>
+      </AkStack>
+
+      <AkStack class='mt-3' @direction='column' @spacing='0.5'>
+        <AkTypography
+          data-test-serviceAccountSection-accountOverview-descriptionLabel
+          @variant='subtitle1'
+        >
+          {{t 'description'}}
+        </AkTypography>
+
+        <AkTypography
+          data-test-serviceAccountSection-accountOverview-descriptionValue
+          data-test-cy='serviceAccountSection-accountOverview-descriptionValue'
+        >
+          {{@serviceAccount.description}}
+        </AkTypography>
+      </AkStack>
+    {{/if}}
+  </:default>
+
+  <:footerAction>
+    <AkButton
+      data-test-serviceAccountSection-accountOverview-updateBtn
+      data-test-cy='serviceAccountSection-accountOverview-updateBtn'
+      @loading={{this.updateServiceAccount.isRunning}}
+      {{on 'click' this.handleUpdateServiceAccount}}
+    >
+      {{t 'update'}}
+    </AkButton>
+
+    <AkButton
+      data-test-serviceAccountSection-accountOverview-cancelBtn
+      @variant='outlined'
+      @color='neutral'
+      @disabled={{this.updateServiceAccount.isRunning}}
+      {{on 'click' this.handleCancelEditView}}
+    >
+      {{t 'cancel'}}
+    </AkButton>
+  </:footerAction>
+</Admin::ServiceAccount::Section::Card>

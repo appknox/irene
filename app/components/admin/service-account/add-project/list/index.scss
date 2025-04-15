@@ -1,0 +1,41 @@
+.add-project-list-container {
+  height: calc(100% - 120px);
+  overflow-y: auto;
+}
+
+.status-container {
+  display: flex;
+  padding: 1.5em;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(
+    --organization-service-account-add-project-list-border-radius
+  );
+  border: 1px solid
+    var(--organization-service-account-add-project-list-border-color);
+  box-sizing: border-box;
+}
+
+.emtpy-container {
+  flex-direction: column;
+  gap: 1em;
+  min-height: 250px;
+
+  .empty-svg {
+    width: 200px;
+    height: 100px;
+  }
+}
+
+.loading-container {
+  min-height: 150px;
+}
+
+.add-project-list-footer {
+  background-color: var(
+    --organization-service-account-add-project-list-footer-background-main
+  );
+  box-shadow: var(
+    --organization-service-account-add-project-list-footer-box-shadow
+  );
+}
