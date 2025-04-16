@@ -1,0 +1,15 @@
+<AkModal
+  @showHeader={{true}}
+  @headerTitle={{t 'modalCard.mfaTitle.enable'}}
+  @onClose={{this.closeAppEnable}}
+>
+  <AccountSettings::Security::MfaAppverify
+    @secret={{this.mfaAppSecret}}
+    @email={{this.user.email}}
+    @otp={{this.appOTP}}
+    @onContinue={{perform this.verifyAppOTP}}
+    @onCancel={{this.closeAppEnable}}
+    @waiting={{this.verifyAppOTP.isRunning}}
+    @loading={{this.noMFAEnableApp.isRunning}}
+  />
+</AkModal>

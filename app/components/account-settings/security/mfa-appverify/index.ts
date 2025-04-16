@@ -15,6 +15,7 @@ interface AccountSettingsSecurityMfaAppverifySignature {
     onContinue: (otp: string) => void;
     onCancel: () => void;
     waiting: boolean;
+    loading?: boolean;
   };
 }
 
@@ -45,7 +46,9 @@ export default class AccountSettingsSecurityMfaAppverifyComponent extends Compon
   }
 
   @action
-  continue() {
+  continue(event: Event) {
+    event.preventDefault();
+
     if (this.args.onContinue instanceof Function) {
       this.args.onContinue(this.args.otp);
     }
