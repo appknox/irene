@@ -1,0 +1,106 @@
+<AkModal
+  @showHeader={{true}}
+  @headerTitle={{t 'mfaSwitchToEmailTitle'}}
+  @onClose={{this.closeSwitchToEmail}}
+>
+  <:default>
+    {{#if this.showSwitchToEmailConfirm}}
+      <AkTypography data-test-switch-to-email-desc>
+        {{t 'mfaSwitchToEmailDescription' htmlSafe=true}}
+      </AkTypography>
+    {{/if}}
+
+    {{#if this.showSwitchToEmailAppVerify}}
+      <AkTypography data-test-switch-to-email-app-verify>
+        {{t 'modalCard.disableMFA.enterOTP'}}
+        {{t 'modalCard.disableMFA.viaApp'}}
+      </AkTypography>
+
+      <form
+        {{on 'submit' (perform this.verifySwitchToEmailAppOTP)}}
+        aria-label='Switch to Email disable app MFA Otp'
+        class='mt-3'
+      >
+        <AkTextField
+          @value={{this.appOTP}}
+          data-test-switch-to-email-app-verify-textfield
+        />
+      </form>
+    {{/if}}
+
+    {{#if this.showSwitchTOEmailEmailVerify}}
+      <div local-class='info-box' class='px-3 py-2'>
+        <AkTypography data-test-switch-to-email-enable-email>
+          {{t 'modalCard.enableMFAEmail.description'}}
+          <strong>{{this.user.email}}</strong>
+        </AkTypography>
+      </div>
+
+      <form
+        {{on 'submit' (perform this.verifySwitchToEmailEmailOTP)}}
+        aria-label='Switch to Email MFA Otp'
+        class='mt-3'
+      >
+        <AkTextField
+          @label={{t 'modalCard.enableMFAEmail.enterCode'}}
+          @value={{this.emailOTP}}
+          data-test-switch-to-email-enable-email-textfield
+        />
+      </form>
+    {{/if}}
+  </:default>
+
+  <:footer>
+    <AkStack
+      class='px-3 py-2'
+      @alignItems='center'
+      @justifyContent='flex-end'
+      @spacing='1.5'
+    >
+      {{#if this.showSwitchToEmailConfirm}}
+        <AkButton
+          {{on 'click' this.showSwitchToEmailVerifyApp}}
+          data-test-switch-to-email-confirm
+        >
+          {{t 'continue'}}
+        </AkButton>
+
+        <AkButton
+          @variant='outlined'
+          @color='neutral'
+          {{on 'click' this.closeSwitchToEmail}}
+        >
+          {{t 'cancel'}}
+        </AkButton>
+      {{/if}}
+
+      {{#if this.showSwitchToEmailAppVerify}}
+        <AkButton
+          @loading={{this.verifySwitchToEmailAppOTP.isRunning}}
+          {{on 'click' (perform this.verifySwitchToEmailAppOTP)}}
+          data-test-switch-to-email-app-verify-confirm
+        >
+          {{t 'confirm'}}
+        </AkButton>
+
+        <AkButton
+          @variant='outlined'
+          @color='neutral'
+          {{on 'click' this.closeSwitchToEmail}}
+        >
+          {{t 'cancel'}}
+        </AkButton>
+      {{/if}}
+
+      {{#if this.showSwitchTOEmailEmailVerify}}
+        <AkButton
+          @loading={{this.verifySwitchToEmailEmailOTP.isRunning}}
+          {{on 'click' (perform this.verifySwitchToEmailEmailOTP)}}
+          data-test-switch-to-email-enable-email-confirm
+        >
+          {{t 'confirm'}}
+        </AkButton>
+      {{/if}}
+    </AkStack>
+  </:footer>
+</AkModal>
