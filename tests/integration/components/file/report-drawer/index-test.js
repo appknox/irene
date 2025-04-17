@@ -34,6 +34,10 @@ const fileReportGroups = [
     title: () => t('fileReport.vaReports'),
   },
   {
+    id: 'privacy-module-reports',
+    title: () => t('fileReport.privacyReport'),
+  },
+  {
     id: 'sbom-reports',
     title: () => t('fileReport.sbomReports'),
   },
@@ -125,7 +129,7 @@ module('Integration | Component | file/report-drawer', function (hooks) {
       .hasClass(/expanded/);
   });
 
-  test('it hides sbom reports if org is an enterprise', async function (assert) {
+  test('it hides sbom & privacy reports if org is an enterprise', async function (assert) {
     this.owner.register('service:configuration', ConfigurationStub);
 
     await render(

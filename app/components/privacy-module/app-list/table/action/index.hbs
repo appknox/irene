@@ -1,0 +1,51 @@
+<AkIconButton {{on 'click' this.handleOpenMenu}} data-test-privacy-actionButton>
+  <AkIcon @iconName='more-vert' />
+</AkIconButton>
+
+<AkMenu
+  @anchorRef={{this.anchorRef}}
+  @arrow={{true}}
+  @onClose={{this.handleCloseMenu}}
+>
+  <AkButton
+    @tag='a'
+    @variant='text'
+    @underline='none'
+    href='/file/{{this.fileId}}'
+    target='_blank'
+    rel='noopener noreferrer'
+    local-class='menu-button-padding'
+    data-test-privacy-viewScanDetails-button
+  >
+    <:leftIcon>
+      <AkIcon @iconName='open-in-new' />
+    </:leftIcon>
+
+    <:default>
+      <AkTypography @tag='span' @color='inherit' @noWrap={{true}}>
+        {{t 'privacyModule.viewScanDetails'}}
+      </AkTypography>
+    </:default>
+  </AkButton>
+
+  {{#if this.statusCompleted}}
+    <AkDivider />
+
+    <AkButton
+      @color='neutral'
+      local-class='menu-button-padding'
+      {{on 'click' this.handleViewReportClick}}
+      data-test-privacy-viewReport-button
+    >
+      <:leftIcon>
+        <AkIcon @iconName='description' @variant='outlined' />
+      </:leftIcon>
+
+      <:default>
+        <AkTypography @tag='span' @color='inherit' @noWrap={{true}}>
+          {{t 'viewReport'}}
+        </AkTypography>
+      </:default>
+    </AkButton>
+  {{/if}}
+</AkMenu>

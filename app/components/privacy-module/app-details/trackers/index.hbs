@@ -1,0 +1,253 @@
+<AkStack
+  @direction='column'
+  @width='full'
+  local-class='privacy-module-trackers-root'
+>
+  {{#if this.isFetchingTrackers}}
+    <PrivacyModule::Loader @loadingText='{{t "loading"}}...' />
+  {{else}}
+    {{#if this.showEmptyContent}}
+      <PrivacyModule::Status
+        @heading={{t 'privacyModule.emptyTrackersHeader'}}
+        @description={{t 'privacyModule.emptyTrackersDesc'}}
+        @svgComponent='ak-svg/privacy-not-found'
+      />
+    {{else}}
+      <AkTypography
+        class='p-2'
+        data-test-privacyModule-trackers-trackersDetectedTxt
+      >
+        {{t 'privacyModule.trackerDetected'}}
+      </AkTypography>
+
+      <AkDivider />
+
+      <AkPaginationProvider
+        @results={{this.trackerDataList}}
+        @onItemPerPageChange={{this.handleItemPerPageChange}}
+        @totalItems={{this.trackerDataCount}}
+        @nextAction={{this.handlePrevNextAction}}
+        @prevAction={{this.handlePrevNextAction}}
+        @itemPerPageOptions={{array 10 25 50}}
+        @defaultLimit={{this.limit}}
+        @offset={{this.offset}}
+        @resultDependencies={{this.resultDependencies}}
+        @onResultDependenciesChange={{this.handleResultDependenciesChange}}
+        as |pgc|
+      >
+        <AkStack
+          @direction='column'
+          @width='full'
+          data-test-privacyModule-trackers-list
+        >
+          {{#each pgc.currentPageResults as |tracker|}}
+            <AkStack
+              @width='full'
+              @direction='column'
+              @spacing='1'
+              local-class='privacy-module-tracker'
+              class='p-2'
+              {{on 'click' (fn this.openTrackerInfoDrawer tracker)}}
+            >
+              <AkStack @alignItems='center'>
+                <AkTypography
+                  @fontWeight='medium'
+                  data-test-privacyModule-trackers-name
+                >
+                  {{tracker.name}}
+                </AkTypography>
+
+                <AkIcon @iconName='arrow-right' @size='medium' />
+              </AkStack>
+
+              <AkStack @alignItems='center' @flexWrap='wrap' @spacing='1'>
+                {{#if tracker.categories}}
+                  {{#each tracker.categories as |tag|}}
+                    <AkChip
+                      @variant='semi-filled'
+                      @label={{tag}}
+                      local-class='tag'
+                    />
+                  {{/each}}
+                {{else}}
+                  <AkChip
+                    @variant='semi-filled'
+                    @label={{t 'privacyModule.noCategories'}}
+                  />
+                {{/if}}
+              </AkStack>
+            </AkStack>
+
+            <AkDivider />
+          {{/each}}
+        </AkStack>
+
+        <AkPagination
+          @disableNext={{pgc.disableNext}}
+          @nextAction={{pgc.nextAction}}
+          @disablePrev={{pgc.disablePrev}}
+          @prevAction={{pgc.prevAction}}
+          @endItemIdx={{pgc.endItemIdx}}
+          @startItemIdx={{pgc.startItemIdx}}
+          @itemPerPageOptions={{pgc.itemPerPageOptions}}
+          @onItemPerPageChange={{pgc.onItemPerPageChange}}
+          @selectedOption={{pgc.selectedOption}}
+          @tableItemLabel={{t 'privacyModule.trackers'}}
+          @perPageTranslation={{t 'recordPerPage'}}
+          @totalItems={{pgc.totalItems}}
+        />
+      </AkPaginationProvider>
+    {{/if}}
+  {{/if}}
+</AkStack>
+
+<AkDrawer
+  @open={{this.trackerIsSelected}}
+  @onClose={{this.closeTrackerInfoDrawer}}
+  @anchor='right'
+  as |dr|
+>
+  <AkAppbar
+    @justifyContent='space-between'
+    @position='sticky'
+    class='px-3'
+    as |ab|
+  >
+    <AkTypography
+      @color='inherit'
+      @variant='h5'
+      data-test-privacyModule-trackers-drawer-header
+    >
+      {{t 'privacyModule.trackerDrawerHeader'}}
+    </AkTypography>
+
+    <AkIconButton
+      {{on 'click' dr.closeHandler}}
+      class={{ab.classes.defaultIconBtn}}
+    >
+      <AkIcon @iconName='close' />
+    </AkIconButton>
+  </AkAppbar>
+
+  <AkStack
+    @width='full'
+    @direction='column'
+    local-class='tracker-info-drawer-content'
+  >
+    <AkStack @width='full' class='py-2 px-3' {{style gap='4.2857em'}}>
+      <AkTypography
+        @color='textSecondary'
+        {{style minWidth='160px'}}
+        data-test-privacyModule-trackers-drawer-name-label
+      >
+        {{t 'privacyModule.nameOfTracker'}}
+      </AkTypography>
+
+      <AkTypography
+        @fontWeight='medium'
+        data-test-privacyModule-trackers-drawer-name
+      >
+        {{this.selectedTracker.name}}
+      </AkTypography>
+    </AkStack>
+
+    <AkDivider />
+
+    <AkStack @width='full' class='py-2 px-3' {{style gap='4.2857em'}}>
+      <AkTypography @color='textSecondary' {{style minWidth='160px'}}>
+        {{t 'privacyModule.categories'}}
+      </AkTypography>
+
+      <AkStack @alignItems='center' @flexWrap='wrap' @spacing='1'>
+        {{#if this.selectedTracker.categories}}
+          {{#each this.selectedTracker.categories as |tag|}}
+            <AkChip @variant='semi-filled' @label={{tag}} local-class='tag' />
+          {{/each}}
+        {{else}}
+          <AkChip
+            @variant='semi-filled'
+            @label={{t 'privacyModule.noCategories'}}
+          />
+        {{/if}}
+      </AkStack>
+    </AkStack>
+
+    <AkDivider />
+
+    <AkStack @width='full' class='py-2 px-3' {{style gap='4.2857em'}}>
+      <AkStack @alignItems='center' @spacing='0.75' {{style minWidth='160px'}}>
+        <AkTypography @color='textSecondary'>
+          {{t 'privacyModule.codeSignature'}}
+        </AkTypography>
+
+        {{!-- <AkTooltip @arrow={{true}} @placement='bottom'>
+          <:tooltipContent>
+            <div local-class='tooltip-content-container'>
+              <AkTypography @color='inherit'>
+                <strong>Code Signature</strong> - Lorem ipsum dolor sit amet consectetur. Nunc cum mattis magnain enim ipsum mauris
+              </AkTypography>
+            </div>
+          </:tooltipContent>
+
+          <:default>
+            <AkIcon @iconName='help' @color='textSecondary' @size='small' />
+          </:default>
+        </AkTooltip> --}}
+      </AkStack>
+
+      {{#if this.hasCodeSignature}}
+        <AkStack @direction='column' @spacing='1'>
+          {{#each this.selectedTracker.codeSignature as |signature|}}
+            <AkTypography @fontWeight='medium'>{{signature}}</AkTypography>
+          {{/each}}
+        </AkStack>
+      {{else}}
+        <AkTypography
+          @color='textSecondary'
+          {{style text-transform='capitalize'}}
+        >
+          {{t 'unavailable'}}
+        </AkTypography>
+      {{/if}}
+    </AkStack>
+
+    <AkDivider />
+
+    <AkStack @width='full' class='py-2 px-3' {{style gap='4.2857em'}}>
+      <AkStack @alignItems='center' @spacing='0.75' {{style minWidth='160px'}}>
+        <AkTypography @color='textSecondary'>
+          {{t 'privacyModule.networkSignature'}}
+        </AkTypography>
+
+        {{!-- <AkTooltip @arrow={{true}} @placement='bottom'>
+          <:tooltipContent>
+            <div local-class='tooltip-content-container'>
+              <AkTypography @color='inherit'>
+                <strong>Network Signature</strong> - Lorem ipsum dolor sit amet consectetur. Nunc cum mattis magnain enim ipsum mauris
+              </AkTypography>
+            </div>
+          </:tooltipContent>
+
+          <:default>
+            <AkIcon @iconName='help' @color='textSecondary' @size='small' />
+          </:default>
+        </AkTooltip> --}}
+      </AkStack>
+
+      {{#if this.hasNetworkSignature}}
+        <AkStack @direction='column' @spacing='1'>
+          {{#each this.selectedTracker.networkSignature as |signature|}}
+            <AkTypography @fontWeight='medium'>{{signature}}</AkTypography>
+          {{/each}}
+        </AkStack>
+      {{else}}
+        <AkTypography
+          @color='textSecondary'
+          {{style text-transform='capitalize'}}
+        >
+          {{t 'unavailable'}}
+        </AkTypography>
+      {{/if}}
+    </AkStack>
+  </AkStack>
+</AkDrawer>

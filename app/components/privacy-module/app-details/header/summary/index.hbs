@@ -1,0 +1,189 @@
+<div local-class='summary-root'>
+  <AkStack
+    class='p-2'
+    local-class='summary-header'
+    @alignItems='center'
+    @justifyContent='space-between'
+  >
+    {{#if @loading}}
+      <AkStack @alignItems='center' @spacing='1.5'>
+        <AppLogo @loading={{true}} />
+
+        <AkStack @direction='column' @spacing='0.5'>
+          <AkSkeleton @width='180px' @height='16px' />
+
+          <AkSkeleton @width='115px' @height='16px' />
+        </AkStack>
+      </AkStack>
+    {{else}}
+      <AkStack @alignItems='center' @spacing='1.5'>
+        <AppLogo @src={{@file.iconUrl}} @alt={{concat @file.name ' - logo'}} />
+
+        <AkStack @direction='column' @spacing='0.5'>
+          <AkTypography
+            @variant='subtitle1'
+            data-test-privacy-appDetails-header-fileName
+          >
+            {{@file.name}}
+          </AkTypography>
+
+          <AkTypography
+            @color='textSecondary'
+            data-test-privacy-appDetails-header-packageName
+          >
+            {{this.packageName}}
+          </AkTypography>
+        </AkStack>
+      </AkStack>
+    {{/if}}
+
+    {{#if @showReportButton}}
+      <PrivacyModule::ReportDrawer
+        @file={{@file}}
+        @project={{@project}}
+        @open={{this.openViewReportDrawer}}
+        @onClose={{this.handleViewReportDrawerClose}}
+      />
+
+      <AkStack @alignItems='center' @spacing='1'>
+        <AkButton
+          {{style paddingRight='12px'}}
+          {{on 'click' this.handleViewReportDrawerOpen}}
+          data-test-privacy-appDetails-header-viewReport-button
+        >
+          <:leftIcon>
+            <AkIcon @variant='outlined' @iconName='description' />
+          </:leftIcon>
+
+          <:default>
+            {{t 'viewReport'}}
+          </:default>
+        </AkButton>
+      </AkStack>
+    {{/if}}
+  </AkStack>
+
+  <AkDivider @color='dark' />
+
+  <div class='px-2'>
+    <AkStack
+      local-class='summary-padding'
+      @alignItems='center'
+      @justifyContent='space-between'
+    >
+      <AkStack @alignItems='center'>
+        {{#if @loading}}
+          <AkSkeleton @width='115px' @height='16px' class='my-2' />
+        {{else}}
+          <AkIconButton
+            @size='small'
+            {{on 'click' this.handleFileSummaryToggle}}
+            data-test-privacy-appDetails-header-fileSummary-expandButton
+          >
+            <AkIcon
+              @iconName={{if
+                this.showMoreFileSummary
+                'arrow-drop-up'
+                'arrow-drop-down'
+              }}
+              local-class='show-more-icon'
+            />
+          </AkIconButton>
+
+          <AkTypography @variant='subtitle1'>
+            {{t 'fileID'}}
+            -
+          </AkTypography>
+
+          <div local-class='summary-file-id'>
+            <AkLink
+              @typographyVariant='subtitle1'
+              @route='authenticated.dashboard.file'
+              @model={{@file.id}}
+              @underline='always'
+              @color='inherit'
+              target='_blank'
+              rel='noopener noreferrer'
+            >
+              {{@file.id}}
+            </AkLink>
+          </div>
+        {{/if}}
+      </AkStack>
+
+      <AkStack @alignItems='center' @spacing='1'>
+        {{#if @loading}}
+          <AkSkeleton @width='25px' @height='16px' />
+        {{else}}
+          <PrivacyModule::AppPlatform @file={{@file}} @project={{@project}} />
+        {{/if}}
+
+        {{#if @file.submission.url}}
+          <AkTooltip
+            @placement='top'
+            @arrow={{true}}
+            @title='{{if
+              @file.submission.isIos
+              (t "openInAppstore")
+              (t "openInPlaystore")
+            }}'
+          >
+            <a
+              target='_blank'
+              href={{@file.submission.url}}
+              rel='noopener noreferrer'
+              local-class='store-logo-container'
+            >
+              {{#if @file.submission.isIos}}
+                <AkSvg::AppstoreLogo local-class='appstore-logo-vector' />
+              {{/if}}
+
+              {{#if @file.submission.isAndroid}}
+                <AkSvg::PlaystoreLogo />
+              {{/if}}
+            </a>
+          </AkTooltip>
+        {{/if}}
+
+        {{#unless (or @loading @file.isActive)}}
+          <AkTooltip
+            @placement='bottom'
+            @arrow={{true}}
+            @title={{t 'fileInactive'}}
+            @color='dark'
+          >
+            <AkIcon @color='warn' @iconName='warning' />
+          </AkTooltip>
+        {{/unless}}
+      </AkStack>
+    </AkStack>
+
+    {{#if this.showMoreFileSummary}}
+      <AkDivider />
+
+      {{#each this.fileSummary as |fs|}}
+        <AkStack
+          local-class='summary-padding'
+          data-test-privacy-appDetails-header-fileSummary-section
+        >
+          <AkTypography
+            {{style width='160px'}}
+            @color='textSecondary'
+            data-test-privacy-appDetails-header-fileSummary-labels
+          >
+            {{fs.label}}
+          </AkTypography>
+
+          <AkTypography
+            @variant='h6'
+            data-test-privacy-appDetails-header-fileSummary-values
+          >
+            {{fs.value}}
+          </AkTypography>
+        </AkStack>
+
+        <AkDivider />
+      {{/each}}
+    {{/if}}
+  </div>
+</div>

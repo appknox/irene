@@ -1,0 +1,89 @@
+<AkStack @direction='column' @width='full'>
+  <AkPaginationProvider
+    @results={{this.privacyProjectList}}
+    @onItemPerPageChange={{this.handleItemPerPageChange}}
+    @totalItems={{this.totalPrivacyProjectCount}}
+    @nextAction={{this.handlePrevNextAction}}
+    @prevAction={{this.handlePrevNextAction}}
+    @itemPerPageOptions={{array 10 25 50}}
+    @defaultLimit={{this.limit}}
+    @offset={{this.offset}}
+    @resultDependencies={{this.resultDependencies}}
+    @onResultDependenciesChange={{this.handleResultDependenciesChange}}
+    as |pgc|
+  >
+    {{#if this.isPrivacyListEmpty}}
+      <PrivacyModule::Status
+        @heading={{t 'privacyModule.appListEmptyHeader'}}
+        @description={{t 'privacyModule.appListEmptyDescription'}}
+        @svgComponent='ak-svg/privacy-upload'
+        data-test-privacyModule-loadingSvg
+      />
+    {{else}}
+      {{#if this.fetchPrivacyProjects.isRunning}}
+        <AkTable::Loading />
+      {{else}}
+        <AkTable
+          @hoverable={{true}}
+          local-class='privacy-app-list-table-container'
+          data-test-privacyModule-appListTable
+          as |t|
+        >
+          <t.head
+            data-test-privacyModule-appListTable-thead
+            @columns={{this.columns}}
+          />
+
+          <t.body @rows={{pgc.currentPageResults}} as |b|>
+            <b.row
+              data-test-privacyModule-appListTable-row
+              @onClick={{this.onRowItemClick}}
+              {{style cursor='pointer'}}
+              as |r|
+            >
+              <r.cell data-test-privacyModule-appListTable-cell as |value|>
+                {{#if r.columnValue.component}}
+                  {{#let (component r.columnValue.component) as |Component|}}
+                    <Component
+                      @privacyProject={{r.rowValue}}
+                      @onViewReportClick={{this.handleViewReportOpen}}
+                    />
+                  {{/let}}
+                {{else}}
+                  <AkTypography title={{value}} @noWrap={{true}}>
+                    {{value}}
+                  </AkTypography>
+                {{/if}}
+              </r.cell>
+            </b.row>
+          </t.body>
+        </AkTable>
+      {{/if}}
+
+      <AkPagination
+        @disableNext={{pgc.disableNext}}
+        @nextAction={{pgc.nextAction}}
+        @disablePrev={{pgc.disablePrev}}
+        @prevAction={{pgc.prevAction}}
+        @endItemIdx={{pgc.endItemIdx}}
+        @startItemIdx={{pgc.startItemIdx}}
+        @itemPerPageOptions={{pgc.itemPerPageOptions}}
+        @onItemPerPageChange={{pgc.onItemPerPageChange}}
+        @selectedOption={{pgc.selectedOption}}
+        @tableItemLabel={{t 'apps'}}
+        @perPageTranslation={{t 'recordPerPage'}}
+        @totalItems={{pgc.totalItems}}
+      />
+    {{/if}}
+
+    {{#if this.selectedFile}}
+      <PrivacyModule::ReportDrawer
+        @open={{this.openViewReportDrawer}}
+        @onClose={{this.handleViewReportClose}}
+        @file={{this.selectedFile}}
+        @project={{this.selectedFile.project}}
+        @showAppDetails={{true}}
+      />
+    {{/if}}
+  </AkPaginationProvider>
+</AkStack>

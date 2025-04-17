@@ -1,0 +1,30 @@
+<AkStack @alignItems='center' @spacing='1.5'>
+  <AppLogo @src={{this.iconUrl}} @role='none' />
+
+  <AkStack
+    @direction='column'
+    @spacing='0.5'
+    {{style maxWidth='calc(100% - 40px)'}}
+  >
+    <AkTypography
+      @fontWeight='medium'
+      @noWrap={{true}}
+      title={{this.name}}
+      class='pr-4'
+      data-test-privacy-name
+    >
+      {{this.name}}
+    </AkTypography>
+
+    <AkTypography
+      @color='neutral'
+      @noWrap={{true}}
+      title={{this.packageName}}
+      class='pr-4'
+      {{style width='100%'}}
+      data-test-privacy-packageName
+    >
+      {{this.packageName}}
+    </AkTypography>
+  </AkStack>
+</AkStack>

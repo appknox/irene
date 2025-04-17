@@ -1,8 +1,9 @@
 import Component from '@glimmer/component';
-import { inject as service } from '@ember/service';
-import IntlService from 'ember-intl/services/intl';
-import FileModel from 'irene/models/file';
-import ConfigurationService from 'irene/services/configuration';
+import { service } from '@ember/service';
+import type IntlService from 'ember-intl/services/intl';
+
+import type FileModel from 'irene/models/file';
+import type ConfigurationService from 'irene/services/configuration';
 
 interface FileReportDrawerSignature {
   Args: {
@@ -26,6 +27,12 @@ export default class FileReportDrawerComponent extends Component<FileReportDrawe
         id: 'va-reports',
         title: this.intl.t('fileReport.vaReports'),
         contentComponent: 'file/report-drawer/va-reports' as const,
+      },
+      {
+        id: 'privacy-module-reports',
+        hideGroup: this.orgIsAnEnterprise,
+        title: this.intl.t('fileReport.privacyReport'),
+        contentComponent: 'file/report-drawer/privacy-reports' as const,
       },
       {
         id: 'sbom-reports',

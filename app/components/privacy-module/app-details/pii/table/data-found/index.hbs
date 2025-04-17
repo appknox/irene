@@ -1,0 +1,11 @@
+<AkStack @alignItems='center' @spacing='1'>
+  {{this.value}}
+
+  {{#if this.showChip}}
+    <AkChip
+      @label={{this.chipValue}}
+      @size='small'
+      @variant='semi-filled-outlined'
+    />
+  {{/if}}
+</AkStack>

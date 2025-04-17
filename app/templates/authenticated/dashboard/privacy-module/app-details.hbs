@@ -1,0 +1,7 @@
+{{page-title (t 'appDetails')}}
+
+<PrivacyModule::AppDetails::Header @app={{@model.privacyProject}} />
+
+{{#if @model.scanCompleted}}
+  {{outlet}}
+{{/if}}
