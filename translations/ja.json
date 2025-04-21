@@ -1142,6 +1142,7 @@
   "pleaseEnterValidAccountDetail": "Please enter valid account details",
   "pleaseEnterValidEmail": "Please enter valid email or username",
   "pleaseLogin": "Please login to continue.",
+  "pleaseLoginAgain": "Your session has expired. Please log in again.",
   "pleaseSelectValidIdp": "Please select valid Idp file",
   "pleaseTryAgain": "失敗しました。もう一度お試しください。",
   "pleaseVisit": "ご案内",
