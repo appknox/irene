@@ -62,16 +62,26 @@
           {{/each}}
         </div>
       </div>
-      <div
-        local-class='chart-container'
-        {{did-insert (perform this.loadChart)}}
-        data-test-chart='container'
-      ></div>
-      {{#if this.loadChart.isRunning}}
-        <div local-class='loading-spinner'>
-          <AkLoader @size={{16}} />
-        </div>
-      {{/if}}
+
+      <div data-test-chart='container' local-class='chart-container'>
+        {{#if this.loadChart.isRunning}}
+          <AkStack
+            local-class='loading-spinner'
+            @alignItems='center'
+            @justifyContent='center'
+            @width='full'
+          >
+            <AkLoader @size={{16}} />
+          </AkStack>
+        {{/if}}
+
+        <AkChart
+          @option={{this.chartOption}}
+          @width='100%'
+          @height='400px'
+          @onInit={{this.onChartInit}}
+        />
+      </div>
     </div>
   </div>
 {{/if}}

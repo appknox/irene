@@ -5,12 +5,14 @@ import { addObserver, removeObserver } from '@ember/object/observers';
 // Import the echarts core module, which provides the necessary interfaces for using echarts.
 import * as echarts from 'echarts/core';
 
-// Import bar charts, all suffixed with Chart
+// Import charts
 import {
   BarChart,
   BarSeriesOption,
   PieChart,
   PieSeriesOption,
+  LineChart,
+  LineSeriesOption,
 } from 'echarts/charts';
 
 // Import the tooltip, title, rectangular coordinate system, dataset and transform components
@@ -41,6 +43,7 @@ import { tracked } from '@glimmer/tracking';
 echarts.use([
   BarChart,
   PieChart,
+  LineChart,
   TitleComponent,
   TooltipComponent,
   GridComponent,
@@ -56,6 +59,7 @@ echarts.use([
 export type ECOption = echarts.ComposeOption<
   | BarSeriesOption
   | PieSeriesOption
+  | LineSeriesOption
   | TitleComponentOption
   | TooltipComponentOption
   | GridComponentOption
