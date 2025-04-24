@@ -2,7 +2,11 @@
   position: sticky;
   z-index: 10;
   top: -0.5em;
-  background-color: var(--storeknox-inventory-details-header-bg-color);
+  background-color: var(--background-light);
+
+  &.archived {
+    top: calc(-0.5em + 50px);
+  }
 
   .app-info-logo {
     border-radius: 100%;
@@ -19,4 +23,25 @@
   padding: 0.5em;
   box-sizing: border-box;
   white-space: normal;
+}
+
+// TODO: Change styles
+.confirm-drawer-container {
+  width: 640px;
+  margin: 1.5em;
+  border: 1px solid
+    var(--organization-service-account-confirm-drawer-border-color);
+  border-radius: var(
+    --organization-service-account-confirm-drawer-border-radius
+  );
+  box-sizing: border-box;
+}
+
+.confirm-action-container {
+  background-color: var(
+    --organization-service-account-confirm-drawer-background-main
+  );
+  box-shadow: var(
+    --organization-service-account-confirm-drawer-action-box-shadow
+  );
 }

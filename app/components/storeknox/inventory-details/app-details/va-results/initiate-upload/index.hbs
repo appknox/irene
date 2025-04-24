@@ -41,7 +41,7 @@
 
   {{#if this.canInitiateUpload}}
     <AkTooltip
-      @disabled={{not this.skInventoryApp.isIos}}
+      @disabled={{this.hideTooltipMessage}}
       @placement='left'
       @arrow={{true}}
       data-test-skAppVersionTable-initiateUploadBtn-tooltip
@@ -50,9 +50,14 @@
         <div local-class='tooltip-content'>
           <AkTypography
             @color='inherit'
-            data-test-skAppVersionTable-initiateUploadBtn-tooltipText
+            @variant='body2'
+            data-test-skAppVersionTable-initiateUploadBtn-tooltipContent
           >
-            {{t 'storeknox.initiateUploadComingSoon'}}
+            {{#if this.skInventoryApp.isArchived}}
+              {{t 'storeknox.cannotUploadForArchivedApps'}}
+            {{else}}
+              {{t 'storeknox.initiateUploadComingSoon'}}
+            {{/if}}
           </AkTypography>
         </div>
       </:tooltipContent>
@@ -60,12 +65,16 @@
       <:default>
         <AkButton
           @variant='outlined'
-          @disabled={{or @initiateUploadIsInProgress this.skInventoryApp.isIos}}
+          @disabled={{this.disableInitiateUploadBtn}}
           {{on 'click' @initiateAppUpload}}
           data-test-storeknoxInventoryDetails-initiateUploadBtn
         >
           <:leftIcon>
-            <AkIcon @iconName='cloud-upload' @variant='filled' />
+            <AkIcon
+              @iconName='cloud-upload'
+              @variant='filled'
+              data-test-storeknoxInventoryDetails-initiateUploadBtnIcon
+            />
           </:leftIcon>
 
           <:default>

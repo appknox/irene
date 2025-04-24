@@ -2,6 +2,9 @@ import Component from '@glimmer/component';
 import { service } from '@ember/service';
 import { task } from 'ember-concurrency';
 import { action } from '@ember/object';
+import { tracked } from '@glimmer/tracking';
+import dayjs from 'dayjs';
+
 import type IntlService from 'ember-intl/services/intl';
 import type RouterService from '@ember/routing/router-service';
 import type Store from '@ember-data/store';
@@ -25,15 +28,21 @@ export default class StoreknoxInventoryDetailsHeaderComponent extends Component<
   @service declare me: MeService;
   @service('notifications') declare notify: NotificationService;
 
+  @tracked isArchiveAppDrawerOpen = false;
+
   get skInventoryApp() {
     return this.args.skInventoryApp;
   }
 
-  get canToggleMonitoring() {
+  get isOwnerOrAdmin() {
     const isOwner = this.me.org?.is_owner;
     const isAdmin = this.me.org?.is_admin;
 
     return isOwner || isAdmin;
+  }
+
+  get canToggleMonitoring() {
+    return this.isOwnerOrAdmin;
   }
 
   get routeLocalName() {
@@ -105,8 +114,42 @@ export default class StoreknoxInventoryDetailsHeaderComponent extends Component<
     );
   }
 
+  get disableMonitoringTooltipText() {
+    return this.intl.t('storeknox.cannotPerformStatusToggleText');
+  }
+
   get activeRouteTagProps() {
     return this.routeTagList.find((t) => t.id === this.activeRouteTagId);
+  }
+
+  get archiveDateStringFromNow() {
+    return dayjs().add(6, 'month').format('MMM D, YYYY');
+  }
+
+  get appTitle() {
+    return this.skInventoryApp?.appMetadata.title;
+  }
+
+  get disableArchiving() {
+    return (
+      this.skInventoryApp?.isArchived && !this.skInventoryApp?.canUnarchive
+    );
+  }
+
+  get showArchiveButton() {
+    return this.isOwnerOrAdmin;
+  }
+
+  @action openArchiveAppDrawer() {
+    this.isArchiveAppDrawerOpen = true;
+  }
+
+  @action closeArchiveAppDrawer() {
+    this.isArchiveAppDrawerOpen = false;
+  }
+
+  @action confirmArchiveApp() {
+    this.doArchiveApp.perform();
   }
 
   @action onMonitoringActionToggle(_: Event, checked?: boolean) {
@@ -114,6 +157,22 @@ export default class StoreknoxInventoryDetailsHeaderComponent extends Component<
       this.toggleSkInventoryAppMonitoring.perform(!!checked);
     }
   }
+
+  get nextArchiveActionDate() {
+    return dayjs().add(6, 'month').format('MMM D, YYYY');
+  }
+
+  doArchiveApp = task(async () => {
+    try {
+      await this.skInventoryApp?.toggleArchiveStatus();
+      await this.skInventoryApp?.reload();
+
+      this.closeArchiveAppDrawer();
+      this.notify.success('App archived successfully.');
+    } catch (error) {
+      this.notify.error(parseError(error));
+    }
+  });
 
   toggleSkInventoryAppMonitoring = task(async (checked: boolean) => {
     try {
@@ -125,6 +184,7 @@ export default class StoreknoxInventoryDetailsHeaderComponent extends Component<
           ` ${checked ? this.intl.t('enabled') : this.intl.t('disabled')}`
       );
     } catch (error) {
+      this.skInventoryApp?.rollbackAttributes();
       this.notify.error(parseError(error));
     }
   });

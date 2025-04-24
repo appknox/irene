@@ -23,7 +23,21 @@
       );
   }
 
-  &.needs-action {
+  &.archived:not(.feature-in-progress) {
+    color: #000 !important;
+    border-color: #000 !important;
+    background-color: #e9e9e9;
+
+    &:focus,
+    &:hover {
+      box-shadow: var(
+          --storeknox-inventory-details-app-details-action-button-box-shadow
+        )
+        #000;
+    }
+  }
+
+  &.needs-action:not(.archived) {
     color: var(
       --storeknox-inventory-details-app-details-action-button-needs-action-color
     ) !important;
