@@ -2,18 +2,15 @@ import Controller from '@ember/controller';
 import { service } from '@ember/service';
 import type IntlService from 'ember-intl/services/intl';
 
-import type SkInventoryAppModel from 'irene/models/sk-inventory-app';
 import type { AkBreadcrumbsItemProps } from 'irene/services/ak-breadcrumbs';
 
-export default class AuthenticatedStoreknoxInventoryDetailsController extends Controller {
+export default class AuthenticatedStoreknoxArchivedAppsController extends Controller {
   @service declare intl: IntlService;
-
-  declare model: SkInventoryAppModel;
 
   get breadcrumbs(): AkBreadcrumbsItemProps {
     return {
-      title: `${this.intl.t('storeknox.inventoryDetails')} (${this.model?.appMetadata?.packageName})`,
-      route: 'authenticated.storeknox.inventory-details',
+      title: this.intl.t('storeknox.archivedApps'),
+      route: 'authenticated.storeknox.archived-apps',
       routeGroup: 'storeknox/inventory',
 
       parentCrumb: {

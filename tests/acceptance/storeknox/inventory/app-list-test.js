@@ -31,7 +31,7 @@ module('Acceptance | storeknox/inventory/app-list', function (hooks) {
   setupMirage(hooks);
 
   hooks.beforeEach(async function () {
-    const { organization, currentOrganizationMe } =
+    const { organization, currentOrganizationMe, currentSkOrganization } =
       await setupRequiredEndpoints(this.server);
 
     organization.update({
@@ -50,21 +50,10 @@ module('Acceptance | storeknox/inventory/app-list', function (hooks) {
       };
     });
 
-    this.server.get('/v2/sk_organization', (schema) => {
-      const skOrganizations = schema.skOrganizations.all().models;
-
-      return {
-        count: skOrganizations.length,
-        next: null,
-        previous: null,
-        results: skOrganizations,
-      };
-    });
-
     // Services
     this.owner.register('service:notifications', NotificationsStub);
 
-    this.setProperties({ currentOrganizationMe });
+    this.setProperties({ currentOrganizationMe, currentSkOrganization });
   });
 
   test.each(
@@ -156,8 +145,7 @@ module('Acceptance | storeknox/inventory/app-list', function (hooks) {
       // Models
       this.currentOrganizationMe.update({ is_owner: true });
 
-      const selectedSkOrg = this.server.create('sk-organization', {
-        id: 4,
+      this.currentSkOrganization.update({
         add_appknox_project_to_inventory_by_default: false,
       });
 
@@ -183,12 +171,13 @@ module('Acceptance | storeknox/inventory/app-list', function (hooks) {
         );
 
         // Request is made by the selected org
-        assert.strictEqual(selectedSkOrg.id, req.params.id);
+        assert.strictEqual(this.currentSkOrganization.id, req.params.id);
 
         // Toggle value is opposite of what is default
         assert.strictEqual(
           add_appknox_project_to_inventory_by_default,
-          !selectedSkOrg.add_appknox_project_to_inventory_by_default
+          !this.currentSkOrganization
+            .add_appknox_project_to_inventory_by_default
         );
 
         const skOrg = schema.db.skOrganizations.update(`${req.params.id}`, {

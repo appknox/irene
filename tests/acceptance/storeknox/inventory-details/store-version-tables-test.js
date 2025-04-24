@@ -16,6 +16,23 @@ import { faker } from '@faker-js/faker';
 
 import ENUMS from 'irene/enums';
 import { setupRequiredEndpoints } from 'irene/tests/helpers/acceptance-utils';
+import Service from '@ember/service';
+
+// Create notification service stub
+class NotificationsStub extends Service {
+  errorMsg = null;
+  successMsg = null;
+
+  success(msg) {
+    this.successMsg = msg;
+  }
+
+  error(msg) {
+    this.errorMsg = msg;
+  }
+
+  setDefaultAutoClear() {}
+}
 
 module(
   'Acceptance | storeknox/inventory-details/store-version-tables',
@@ -32,6 +49,8 @@ module(
           storeknox: true,
         },
       });
+
+      this.owner.register('service:notifications', NotificationsStub);
 
       // Server mocks
       this.server.get('v2/sk_app_detail/:id', (schema, req) => {
@@ -61,6 +80,17 @@ module(
           results: skOrganizations,
         };
       });
+
+      this.server.get(
+        '/v2/sk_organization/:id/sk_subscription',
+        (schema, req) => {
+          return {
+            id: req.params.id,
+            is_active: true,
+            is_trial: false,
+          };
+        }
+      );
 
       this.server.get('/v2/files/:id', (schema, req) => {
         return schema.files.find(`${req.params.id}`)?.toJSON();
@@ -226,6 +256,16 @@ module(
           subStatus: ENUMS.SUBMISSION_STATUS.ANALYZING,
           uploadInProgress: false,
         },
+
+        // When app has not been uploaded yet
+        // SCENARIO 9: Disabled upload button if app is archived
+        {
+          canInitiateUpload: true,
+          canAccessSubmission: true,
+          hasSubmission: false,
+          isArchived: true,
+          platform: ENUMS.PLATFORM.IOS,
+        },
       ],
       async function (
         assert,
@@ -239,6 +279,7 @@ module(
           uploadFailed,
           uploadInProgress,
           platform,
+          isArchived,
         }
       ) {
         // Update org props
@@ -264,7 +305,7 @@ module(
         // Models
         const inventoryApp = this.server.create(
           'sk-inventory-app',
-          'withApprovedStatus',
+          isArchived ? 'withArchivedStatus' : 'withApprovedStatus',
           {
             core_project: core_project.id,
             core_project_latest_version: core_prj_latest_file.id,
@@ -352,12 +393,14 @@ module(
         }
 
         // SCENARIO 2: Upload has not been initiated for all user roles but app is iOS
+        // SCENARIO 9: Disabled upload button if app is archived
+
         const scenario_2 =
           !hasSubmission &&
           canInitiateUpload &&
           platform === ENUMS.PLATFORM.IOS;
 
-        if (scenario_2) {
+        if (scenario_2 || isArchived) {
           assert
             .dom(
               '[data-test-skAppVersionTable-initiateUploadBtnIcon]',
@@ -386,9 +429,14 @@ module(
 
           await triggerEvent(initiateUploadBtnTooltip, 'mouseenter');
 
+          // Only the tooltip text is different for archived apps
           assert
             .dom('[data-test-skAppVersionTable-initiateUploadBtn-tooltipText]')
-            .hasText(t('storeknox.initiateUploadComingSoon'));
+            .hasText(
+              isArchived
+                ? t('storeknox.cannotUploadForArchivedApps')
+                : t('storeknox.initiateUploadComingSoon')
+            );
         }
 
         // SCENARIO 3: When Upload is in progress and current user is the initiator

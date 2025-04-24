@@ -1,4 +1,11 @@
-import { visit, find, click, waitFor, triggerEvent } from '@ember/test-helpers';
+import {
+  visit,
+  find,
+  click,
+  waitFor,
+  triggerEvent,
+  waitUntil,
+} from '@ember/test-helpers';
 import { module, test } from 'qunit';
 import { setupApplicationTest } from 'ember-qunit';
 import { setupMirage } from 'ember-cli-mirage/test-support';
@@ -9,6 +16,7 @@ import dayjs from 'dayjs';
 
 import { setupRequiredEndpoints } from 'irene/tests/helpers/acceptance-utils';
 import ENUMS from 'irene/enums';
+import { compareInnerHTMLWithIntlTranslation } from 'irene/tests/test-utils';
 
 // Notification Service
 class NotificationsStub extends Service {
@@ -139,16 +147,16 @@ module(
         return { ...app.toJSON(), app_metadata: app.app_metadata };
       });
 
-      this.server.get('/v2/sk_organization', (schema) => {
-        const skOrganizations = schema.skOrganizations.all().models;
-
-        return {
-          count: skOrganizations.length,
-          next: null,
-          previous: null,
-          results: skOrganizations,
-        };
-      });
+      this.server.get(
+        '/v2/sk_organization/:id/sk_subscription',
+        (schema, req) => {
+          return {
+            id: req.params.id,
+            is_active: true,
+            is_trial: false,
+          };
+        }
+      );
 
       this.server.get('/v2/files/:id', (schema, req) => {
         return schema.files.find(`${req.params.id}`)?.toJSON();
@@ -170,10 +178,19 @@ module(
           })
         );
 
+      // Creates an archived app
+      const createArchivedApp = () => {
+        return this.server.create('sk-inventory-app', 'withArchivedStatus', {
+          archived_on: dayjs().subtract(6, 'months').toDate(),
+          unarchive_available_on: dayjs().subtract(5, 'months').toDate(),
+        });
+      };
+
       this.setProperties({
         currentOrganizationMe,
         store,
         normalizeSKInventoryApp,
+        createArchivedApp,
       });
     });
 
@@ -622,6 +639,15 @@ module(
           subStatus: ENUMS.SUBMISSION_STATUS.ANALYZING,
           uploadInProgress: false,
         },
+
+        // Disabled upload button if app is archived
+        // SCENARIO 8: For initiator who can access submission
+        {
+          canInitiateUpload: true,
+          canAccessSubmission: true,
+          hasSubmission: false,
+          isArchived: true,
+        },
       ],
       async function (
         assert,
@@ -634,6 +660,7 @@ module(
           isOwner,
           uploadFailed,
           uploadInProgress,
+          isArchived,
         }
       ) {
         // Update org props
@@ -655,7 +682,7 @@ module(
 
         const inventoryApp = this.server.create(
           'sk-inventory-app',
-          'withApprovedStatus',
+          isArchived ? 'withArchivedStatus' : 'withApprovedStatus',
           {
             availability: { appknox: false, storeknox: true },
             can_initiate_upload: canInitiateUpload,
@@ -856,6 +883,33 @@ module(
           assert
             .dom('[data-test-storeknoxInventoryDetails-initiateUploadBtn]')
             .doesNotExist();
+        }
+
+        // SCENARIO 8: Disabled upload button if app is archived
+        if (isArchived) {
+          // Assert the archived banner is shown
+          assert
+            .dom('[data-test-storeknoxInventory-archivedApps-banner]')
+            .exists();
+
+          assert
+            .dom('[data-test-storeknoxInventoryDetails-initiateUploadBtn]')
+            .isDisabled();
+
+          // Assert tooltip content
+          const uploadBtnIcon = find(
+            '[data-test-storeknoxInventoryDetails-initiateUploadBtnIcon]'
+          );
+
+          await triggerEvent(uploadBtnIcon, 'mouseenter');
+
+          assert
+            .dom(
+              '[data-test-skAppVersionTable-initiateUploadBtn-tooltipContent]'
+            )
+            .containsText(t('storeknox.cannotUploadForArchivedApps'));
+
+          await triggerEvent(uploadBtnIcon, 'mouseleave');
         }
       }
     );
@@ -1143,6 +1197,169 @@ module(
             actionBtnElement
           )
           .doesNotExist();
+      }
+    );
+
+    test('it shows archived banner in inventory details page if app is archived', async function (assert) {
+      assert.expect(3);
+
+      const archivedApp = this.createArchivedApp();
+
+      await visit(`/dashboard/storeknox/inventory-details/${archivedApp.id}`);
+
+      assert.dom('[data-test-storeknoxInventory-archivedApps-banner]').exists();
+
+      assert
+        .dom('[data-test-storeknoxInventory-archivedApps-bannerIcon]')
+        .exists();
+
+      const formatDate = (date) => dayjs(date).format('MMM DD, YYYY');
+
+      compareInnerHTMLWithIntlTranslation(assert, {
+        selector: '[data-test-storeknoxInventory-archivedApps-bannerText]',
+        message: t('storeknox.archivedBanner', {
+          archivedDate: formatDate(archivedApp.archived_on),
+          unarchiveDate: formatDate(archivedApp.unarchive_available_on),
+        }),
+      });
+    });
+
+    test.each(
+      'test: archive app',
+      [{ doArchiveApp: false }, { doArchiveApp: true }],
+      async function (assert, { doArchiveApp }) {
+        const archivedApp = doArchiveApp
+          ? this.server.create('sk-inventory-app', 'withApprovedStatus')
+          : this.createArchivedApp();
+
+        // Server Mocks
+        this.server.put('/v2/sk_app/:id/update_app_status', (schema, req) => {
+          const { app_status } = JSON.parse(req.requestBody);
+
+          schema.db.skInventoryApps.update(`${req.params.id}`, {
+            app_status,
+          });
+
+          const appStatusDisplay =
+            ENUMS.SK_APP_STATUS.BASE_CHOICES[app_status].key;
+
+          return {
+            id: req.params.id,
+            app_status,
+            app_status_display: appStatusDisplay,
+          };
+        });
+
+        // Test Start
+        await visit(`/dashboard/storeknox/inventory-details/${archivedApp.id}`);
+
+        // Archive App Banner
+        const archiveAppBannerSelector =
+          '[data-test-storeknoxInventory-archivedApps-banner]';
+
+        if (doArchiveApp) {
+          assert.dom(archiveAppBannerSelector).doesNotExist();
+        } else {
+          assert.dom(archiveAppBannerSelector).exists();
+        }
+
+        // Archive/Unarchive Action
+        const archiveButton = find(
+          '[data-test-storeknoxInventoryDetails-archiveButton]'
+        );
+
+        const archiveButtonIconElement = find(
+          '[data-test-storeknoxInventoryDetails-archiveButtonIcon]'
+        );
+
+        assert.dom(archiveButton).doesNotHaveAttribute('disabled');
+
+        assert
+          .dom(archiveButtonIconElement)
+          .hasAttribute('icon', doArchiveApp ? /archive/ : /unarchive/);
+
+        await click(archiveButton);
+
+        assert
+          .dom('[data-test-storeknoxInventoryDetails-archiveDrawer]')
+          .exists();
+
+        assert
+          .dom('[data-test-storeknoxInventoryDetails-archiveDrawerHeading]')
+          .hasText(t('confirmation'));
+
+        compareInnerHTMLWithIntlTranslation(assert, {
+          selector:
+            '[data-test-storeknoxInventoryDetails-archiveDrawerMessage]',
+          message: t(
+            doArchiveApp
+              ? 'storeknox.archiveLockPeriodMessage'
+              : 'storeknox.unarchiveLockPeriodMessage',
+            {
+              appTitle: archivedApp.app_metadata.title,
+            }
+          ),
+        });
+
+        compareInnerHTMLWithIntlTranslation(assert, {
+          selector: '[data-test-storeknoxInventoryDetails-archiveDrawerNote]',
+          message: t(
+            doArchiveApp
+              ? 'storeknox.unarchiveLockPeriodNote'
+              : 'storeknox.archiveLockPeriodNote',
+            {
+              date: dayjs().add(6, 'months').format('MMM DD, YYYY'),
+            }
+          ),
+        });
+
+        assert
+          .dom('[data-test-storeknoxInventoryDetails-archiveDrawerConfirmBtn]')
+          .containsText(t('yes'))
+          .containsText(
+            doArchiveApp ? t('storeknox.archive') : t('storeknox.unarchive')
+          );
+
+        assert
+          .dom('[data-test-storeknoxInventoryDetails-archiveDrawerCancelBtn]')
+          .hasText(t('cancel'));
+
+        await click(
+          '[data-test-storeknoxInventoryDetails-archiveDrawerConfirmBtn]'
+        );
+
+        // Wait for the banner to be updated
+        await waitUntil(
+          () =>
+            doArchiveApp
+              ? find(archiveAppBannerSelector)
+              : !find(archiveAppBannerSelector),
+          {
+            timeout: 10000,
+          }
+        );
+
+        // Assert the banner is updated
+        if (doArchiveApp) {
+          assert.dom(archiveAppBannerSelector).exists();
+        } else {
+          assert.dom(archiveAppBannerSelector).doesNotExist();
+        }
+
+        // Assert the unarchive button is disabled
+        if (doArchiveApp) {
+          assert.dom(archiveButton).isDisabled();
+
+          await triggerEvent(archiveButtonIconElement, 'mouseenter');
+
+          assert
+            .dom('[data-test-ak-tooltip-content]')
+            .containsText(t('storeknox.actionDisabledDueToLockPeriod'));
+
+          await triggerEvent(archiveButtonIconElement, 'mouseleave');
+        } else {
+          assert.dom(archiveButton).isNotDisabled();
+        }
       }
     );
   }

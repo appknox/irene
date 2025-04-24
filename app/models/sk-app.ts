@@ -6,6 +6,7 @@ import ENUMS from 'irene/enums';
 import type OrganizationUserModel from './organization-user';
 import type SkAppMetadataModel from './sk-app-metadata';
 import type SkOrganizationModel from './sk-organization';
+import dayjs from 'dayjs';
 
 export interface AvailabilityData {
   storeknox: boolean;
@@ -56,6 +57,15 @@ export default class SkAppModel extends Model {
 
   @attr('date')
   declare rejectedOn: Date;
+
+  @attr('date')
+  declare archivedOn: Date;
+
+  @attr('date')
+  declare unarchiveAvailableOn: Date;
+
+  @attr('string')
+  declare archivedBy: string;
 
   @belongsTo('sk-app-metadata', { async: false, inverse: null })
   declare appMetadata: SkAppMetadataModel;
@@ -108,13 +118,25 @@ export default class SkAppModel extends Model {
   }
 
   get isIos() {
-    return this.appMetadata.get('platform') === ENUMS.PLATFORM.IOS;
+    return !!(this.appMetadata.get('platform') === ENUMS.PLATFORM.IOS);
   }
 
   get monitoringStatusIsPending() {
-    return (
+    return !!(
       this.storeMonitoringStatus === ENUMS.SK_APP_MONITORING_STATUS.PENDING
     );
+  }
+
+  get isArchived() {
+    return !!this.archivedOn && this.appStatus === ENUMS.SK_APP_STATUS.ARCHIVED;
+  }
+
+  get unarchiveDateString() {
+    return dayjs(this.unarchiveAvailableOn).format('MMM D, YYYY');
+  }
+
+  get canUnarchive() {
+    return this.archivedOn && dayjs().isAfter(this.unarchiveAvailableOn);
   }
 
   async approveApp(id: string) {
@@ -139,6 +161,12 @@ export default class SkAppModel extends Model {
     const adapter = this.store.adapterFor('sk-app');
 
     return await adapter.initiateAppUpload(this.id);
+  }
+
+  async toggleArchiveStatus() {
+    const adapter = this.store.adapterFor('sk-app');
+
+    return await adapter.toggleArchiveStatus(this);
   }
 }
 

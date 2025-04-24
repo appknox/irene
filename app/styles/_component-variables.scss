@@ -1828,7 +1828,6 @@ body {
   );
 
   // variables for storeknox/inventory-details/header
-  --storeknox-inventory-details-header-bg-color: var(--background-light);
   --storeknox-inventory-details-header-app-logo-border-color: var(
     --neutral-grey-100
   );
@@ -1897,6 +1896,33 @@ body {
 
   --storeknox-upselling-ui-background-color: var(
     --storeknox-upselling-ui-bg-color
+  );
+
+  // variables for storeknox/inventory/archived-apps
+  --storeknox-inventory-archived-apps-table-bg-color: var(--background-main);
+
+  // variables for storeknox/inventory/archived-apps/table
+  --storeknox-inventory-archived-apps-table-empty-color: var(--common-white);
+  --storeknox-inventory-archived-apps-table-empty-border-color: var(
+    --neutral-grey-100
+  );
+
+  // variables for storeknox/inventory/archived-apps/header
+  --storeknox-inventory-archived-apps-header-background-color: var(
+    --background-main
+  );
+
+  --storeknox-inventory-archived-apps-header-border-color: var(
+    --neutral-grey-200
+  );
+
+  // variables for storeknox/inventory-details/archived-banner
+  --storeknox-inventory-details-archived-banner-bg-color: var(
+    --background-main
+  );
+  --storeknox-inventory-details-archived-banner-icon-color: var(--common-white);
+  --storeknox-inventory-details-archived-banner-icon-bg-color: var(
+    --error-main
   );
 
   // variables for page-wrapper

@@ -142,6 +142,7 @@ export const AkIconVariant = [
   'report',
   'arrow-outward',
   'beenhere',
+  'unarchive',
   // md icons
   'mdi:checkbox-marked',
   'mdi:checkbox-blank-outline',
