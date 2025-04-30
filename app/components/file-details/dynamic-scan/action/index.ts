@@ -11,6 +11,7 @@ import triggerAnalytics from 'irene/utils/trigger-analytics';
 import type FileModel from 'irene/models/file';
 import type DynamicscanModel from 'irene/models/dynamicscan';
 import type IreneAjaxService from 'irene/services/ajax';
+import type DynamicScanService from 'irene/services/dynamic-scan';
 
 export interface DynamicScanActionSignature {
   Args: {
@@ -27,6 +28,7 @@ export default class DynamicScanActionComponent extends Component<DynamicScanAct
   @service declare intl: IntlService;
   @service declare ajax: IreneAjaxService;
   @service('notifications') declare notify: NotificationService;
+  @service('dynamic-scan') declare dsService: DynamicScanService;
 
   get file() {
     return this.args.file;
@@ -96,6 +98,13 @@ export default class DynamicScanActionComponent extends Component<DynamicScanAct
         `/dynamicscans/${this.args.dynamicScan?.get('id')}`,
         { namespace: ENV.namespace_v2 }
       );
+
+      // Poll the dynamic scan status if the project org is different from the selected org
+      // Pertains to the case where the file is being accessed by a superuser
+      await this.dsService.pollDynamicScanStatusForSuperUser({
+        file: this.file,
+        isAutomatedScan: this.args.isAutomatedScan,
+      });
 
       this.args.onScanShutdown?.();
 

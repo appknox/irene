@@ -13,10 +13,11 @@ import parseError from 'irene/utils/parse-error';
 import type IntlService from 'ember-intl/services/intl';
 import type Store from '@ember-data/store';
 
+import type { DsPreferenceContext } from 'irene/components/ds-preference-provider';
 import type FileModel from 'irene/models/file';
 import type AvailableManualDeviceModel from 'irene/models/available-manual-device';
-import type { DsPreferenceContext } from 'irene/components/ds-preference-provider';
 import type IreneAjaxService from 'irene/services/ajax';
+import type DynamicScanService from 'irene/services/dynamic-scan';
 
 export interface FileDetailsDynamicScanActionDrawerSignature {
   Args: {
@@ -31,6 +32,7 @@ export default class FileDetailsDynamicScanActionDrawerComponent extends Compone
   @service declare intl: IntlService;
   @service declare ajax: IreneAjaxService;
   @service declare store: Store;
+  @service('dynamic-scan') declare dynamicScanService: DynamicScanService;
   @service('notifications') declare notify: NotificationService;
 
   @tracked isApiCaptureEnabled = false;
@@ -49,10 +51,6 @@ export default class FileDetailsDynamicScanActionDrawerComponent extends Compone
 
   get file() {
     return this.args.file;
-  }
-
-  get projectId() {
-    return this.file.project.get('id');
   }
 
   get profileId() {
@@ -167,6 +165,13 @@ export default class FileDetailsDynamicScanActionDrawerComponent extends Compone
       this.args.onClose();
 
       this.notify.success(this.tStartingScan);
+
+      // Poll the dynamic scan status if the project org is different from the selected org
+      // Only necessary for the case where the file is being accessed by a superuser
+      await this.dynamicScanService.pollDynamicScanStatusForSuperUser({
+        file: this.file,
+        isAutomatedScan: this.args.isAutomatedScan,
+      });
     } catch (error) {
       this.notify.error(parseError(error, this.tPleaseTryAgain));
     }

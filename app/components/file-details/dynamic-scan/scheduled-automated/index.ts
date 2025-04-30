@@ -28,6 +28,20 @@ export default class FileDetailsDynamicScanScheduledAutomatedComponent extends C
   @service('notifications') declare notify: NotificationService;
   @service('dynamic-scan') declare dsService: DynamicScanService;
 
+  constructor(
+    owner: unknown,
+    args: FileDetailsDynamicScanScheduledAutomatedSignature['Args']
+  ) {
+    super(owner, args);
+
+    // Poll the dynamic scan status if the project org is different from the selected org
+    // Only necessary for the case where the file is being accessed by a superuser
+    this.dsService.pollDynamicScanStatusForSuperUser({
+      file: this.args.file,
+      isAutomatedScan: true,
+    });
+  }
+
   @tracked notifyUserOfCompletionOrError = false;
   @tracked isPerformingNotifyAction = false;
   @tracked showNotifyUserModal = false;
