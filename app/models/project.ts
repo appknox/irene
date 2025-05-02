@@ -14,6 +14,7 @@ import { ModelBaseMixin } from 'irene/mixins/base-model';
 
 import FileModel from './file';
 import UserModel from './user';
+import OrganizationModel from './organization';
 
 export default class ProjectModel extends ModelBaseMixin {
   @attr('string')
@@ -57,6 +58,9 @@ export default class ProjectModel extends ModelBaseMixin {
 
   @belongsTo('user', { inverse: 'ownedProjects', async: true })
   declare owner: AsyncBelongsTo<UserModel>;
+
+  @belongsTo('organization', { inverse: null, async: true })
+  declare organization: AsyncBelongsTo<OrganizationModel>;
 
   @belongsTo('file', { async: true, inverse: null })
   declare lastFileId: AsyncBelongsTo<FileModel>;
