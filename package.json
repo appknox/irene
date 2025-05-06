@@ -175,7 +175,7 @@
     "loader.js": "^4.7.0",
     "miragejs": "^0.1.48",
     "mock-socket": "9.0.8",
-    "netlify-cli": "^19.0.2",
+    "netlify-cli": "^20.1.1",
     "pace-progressbar": "1.0.9",
     "postcss": "^8.4.49",
     "prettier": "^3.2.5",
