@@ -1,37 +1,87 @@
 <div {{style width='450px'}}>
-  <AkStack
-    @direction='column'
-    @alignItems='center'
-    @justifyContent='center'
-    @spacing='2'
-  >
-    <AkTypography @variant='h4' @fontWeight='regular'>
-      {{t 'modalCard.enableMFAApp.scanBarcode'}}
-    </AkTypography>
-
-    <canvas {{did-insert this.onCanvasElementInsert}} />
-  </AkStack>
-
-  <form aria-label='Enable MFA App Otp'>
-    <AkTypography @color='textSecondary'>
-      {{t 'modalCard.enableMFAApp.enterCode'}}
-    </AkTypography>
-
-    <AkTextField @formControlClass='mt-2' @value={{@otp}} />
-
+  {{#if @loading}}
     <AkStack
-      class='mt-2'
+      @direction='column'
       @alignItems='center'
-      @justifyContent='flex-end'
-      @spacing='1.5'
+      @justifyContent='center'
+      @spacing='2'
     >
-      <AkButton @loading={{@waiting}} {{on 'click' this.continue}}>
-        {{t 'continue'}}
-      </AkButton>
+      <AkSkeleton @height='28px' @width='340px' />
 
-      <AkButton @variant='outlined' @color='neutral' {{on 'click' this.cancel}}>
-        {{t 'cancel'}}
-      </AkButton>
+      <AkSkeleton @height='250px' @width='250px' class='m-3' />
     </AkStack>
-  </form>
+
+    <AkStack @direction='column'>
+      <AkSkeleton @height='38px' @width='100%' />
+
+      <AkSkeleton @height='35px' @width='100%' class='mt-2' />
+
+      <AkStack
+        class='mt-2'
+        @alignItems='center'
+        @justifyContent='flex-end'
+        @spacing='1.5'
+        @width='full'
+      >
+        <AkSkeleton @height='35px' @width='80px' />
+
+        <AkSkeleton @height='35px' @width='80px' />
+      </AkStack>
+    </AkStack>
+  {{else}}
+    <AkStack
+      @direction='column'
+      @alignItems='center'
+      @justifyContent='center'
+      @spacing='2'
+    >
+      <AkTypography
+        @variant='h4'
+        @fontWeight='regular'
+        data-test-mfa-appverify-title
+      >
+        {{t 'modalCard.enableMFAApp.scanBarcode'}}
+      </AkTypography>
+
+      <canvas
+        {{did-insert this.onCanvasElementInsert}}
+        data-test-mfa-appverify-qrcode
+      />
+    </AkStack>
+
+    <form {{on 'submit' this.continue}} aria-label='Enable MFA App Otp'>
+      <AkTypography @color='textSecondary'>
+        {{t 'modalCard.enableMFAApp.enterCode'}}
+      </AkTypography>
+
+      <AkTextField
+        @formControlClass='mt-2'
+        @value={{@otp}}
+        data-test-mfa-appverify-textfield
+      />
+
+      <AkStack
+        class='mt-2'
+        @alignItems='center'
+        @justifyContent='flex-end'
+        @spacing='1.5'
+      >
+        <AkButton
+          @loading={{@waiting}}
+          {{on 'click' this.continue}}
+          data-test-mfa-appverify-continue-button
+        >
+          {{t 'continue'}}
+        </AkButton>
+
+        <AkButton
+          @variant='outlined'
+          @color='neutral'
+          {{on 'click' this.cancel}}
+        >
+          {{t 'cancel'}}
+        </AkButton>
+      </AkStack>
+    </form>
+  {{/if}}
 </div>
