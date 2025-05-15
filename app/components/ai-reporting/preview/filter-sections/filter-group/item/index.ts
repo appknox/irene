@@ -12,7 +12,7 @@ import {
   AdditionalFilterErroredFieldProp,
   AdditionalFilter,
   AdditionalFilterFilterDetailsExpression,
-} from 'irene/models/report-request';
+} from 'irene/models/ai-reporting/report-request';
 
 import styles from './index.scss';
 

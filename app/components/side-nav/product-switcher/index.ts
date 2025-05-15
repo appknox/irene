@@ -3,7 +3,6 @@ import { action } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
 import { service } from '@ember/service';
 import type IntlService from 'ember-intl/services/intl';
-import type Store from '@ember-data/store';
 
 import styles from './index.scss';
 import type ConfigurationService from 'irene/services/configuration';
@@ -39,7 +38,6 @@ export default class SideNavProductSwitcherComponent extends Component<SideNavPr
   @service declare configuration: ConfigurationService;
   @service declare whitelabel: WhitelabelService;
   @service declare organization: OrganizationService;
-  @service declare store: Store;
 
   @tracked anchorRef: HTMLElement | null = null;
 

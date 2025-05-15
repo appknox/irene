@@ -3,12 +3,16 @@ import { service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
 import { task } from 'ember-concurrency';
 import { action } from '@ember/object';
-
-import type { AiReportType } from '../report-download-drawer';
-import type { AdditionalFilter } from 'irene/models/report-request';
-import type { FilterColumn } from 'irene/services/ai-reporting';
 import type IntlService from 'ember-intl/services/intl';
-import type ReportRequestModel from 'irene/models/report-request';
+
+import ENV from 'irene/config/environment';
+import type { AiReportType } from '../report-download-drawer';
+import type ReportRequestModel from 'irene/models/ai-reporting/report-request';
+
+import type {
+  AdditionalFilter,
+  FilterColumn,
+} from 'irene/models/ai-reporting/report-request';
 
 interface AiReportingPreviewGenerateReportSignature {
   Args: {
@@ -21,10 +25,9 @@ interface AiReportingPreviewGenerateReportSignature {
 
 export default class AiReportingPreviewGenerateReport extends Component<AiReportingPreviewGenerateReportSignature> {
   @service('notifications') declare notify: NotificationService;
+  @service('browser/window') declare window: Window;
   @service declare intl: IntlService;
 
-  @tracked downloadUrl: string | null = null;
-  @tracked isGenerating = false;
   @tracked showReportDownloadDrawer = false;
   @tracked selectedReportType: AiReportType;
 
@@ -34,33 +37,16 @@ export default class AiReportingPreviewGenerateReport extends Component<AiReport
   ) {
     super(owner, args);
 
-    console.log(this.args.reportRequest.reportType);
-
     this.selectedReportType =
       (this.args.reportRequest.reportType as AiReportType) ?? 'csv';
   }
 
-  get downloadColumns() {
-    const cols = this.args.selectedColumns.map((column) => ({
-      label: column.name,
-      field: column.field,
-    }));
-
-    return JSON.stringify(cols);
-  }
-
-  get downloadAdditionalFilters() {
-    return JSON.stringify(this.args.addtionalFilters);
-  }
-
   get isLoadingReportDownload() {
-    return this.fetchDownloadUrl.isRunning || this.isGenerating;
+    return this.fetchDownloadUrl.isRunning;
   }
 
-  @action
-  handleDownloadReset() {
-    this.isGenerating = false;
-    this.downloadUrl = null;
+  get hideInputs() {
+    return ENV.environment !== 'test';
   }
 
   @action
@@ -85,12 +71,28 @@ export default class AiReportingPreviewGenerateReport extends Component<AiReport
     try {
       const reportRequest = this.args.reportRequest;
 
-      const { url } = await reportRequest.downloadUrl();
+      const columns = this.args.selectedColumns.map((column) => ({
+        label: column.name,
+        field: column.field,
+      }));
 
-      this.downloadUrl = url;
-      this.isGenerating = true;
+      const { url } = await reportRequest.downloadUrl({
+        columns,
+        report_type: this.selectedReportType,
+        additional_filters: this.args.addtionalFilters,
+      });
+
+      this.window.open(url, '_blank');
     } catch (e) {
-      this.notify.error(this.intl.t('reportModule.failedToDownload'));
+      const error = e as AdapterError;
+      let errMsg = this.intl.t('reportModule.failedToDownload');
+
+      if (error?.errors?.[0]?.detail) {
+        const payload = JSON.parse(error.errors[0].detail);
+        errMsg = payload?.message ?? errMsg;
+      }
+
+      this.notify.error(errMsg);
     }
   });
 }

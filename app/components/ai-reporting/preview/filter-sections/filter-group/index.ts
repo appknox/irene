@@ -14,7 +14,7 @@ import type {
   AdditionalFilterErroredFieldProp,
   PreviewFilterDetails,
   PreviewFilterField,
-} from 'irene/models/report-request';
+} from 'irene/models/ai-reporting/report-request';
 
 interface AiReportingPreviewFilterSectionsFilterGroupSignature {
   Args: {
@@ -43,8 +43,20 @@ interface AiReportingPreviewFilterSectionsFilterGroupSignature {
 export default class AiReportingPreviewFilterSectionsFilterGroup extends Component<AiReportingPreviewFilterSectionsFilterGroupSignature> {
   @tracked sectionContainer: HTMLElement | null = null;
 
+  // Filter groups with different names
+  filterGroupNameMap: Record<string, string> = {
+    Analysis: 'Vulnerability',
+    OrganizationMember: 'User',
+  };
+
   get selectedFilters() {
     return this.args.allSelectedFilters[this.sectionId] ?? [];
+  }
+
+  get filterGroupName() {
+    const filterName = this.filterDetails.model_name;
+
+    return this.filterGroupNameMap[filterName] ?? filterName;
   }
 
   get mappedAdditionalFilters() {

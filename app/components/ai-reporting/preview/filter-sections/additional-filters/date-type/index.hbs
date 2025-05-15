@@ -4,13 +4,14 @@
   @maxDate={{this.maxDate}}
   @selected={{this.currentValue}}
   @onSelect={{this.onSelectDay}}
+  data-test-aiReporting-preview-filterByColumnDrawer-filterGroupContent-field-dateTypeSelect
 >
   <AkStack
     @alignItems='center'
     local-class='date-picker-btn
     {{if @isErrored "is-errored"}}
     {{if this.isMultipleDateSelect "is-multiple-date-select"}}'
-    data-test-date-picker-toggle-button
+    data-test-aiReporting-preview-filterByColumnDrawer-filterGroupContent-field-datePicker-toggleBtn
   >
     <AkIcon
       @iconName='event'
@@ -19,6 +20,7 @@
       title='Select date range'
       local-class='date-picker-icon'
       {{style minWidth='11px'}}
+      data-test-aiReporting-preview-filterByColumnDrawer-filterGroupContent-field-datePicker-toggleBtn-icon
     />
 
     <div
@@ -32,15 +34,26 @@
     '
     >
       {{#if this.isMultipleDateSelect}}
-        <AkStack @direction='row' @flexWrap='wrap' @spacing='1'>
+        <AkStack
+          @direction='row'
+          @flexWrap='wrap'
+          @spacing='1'
+          data-test-aiReporting-preview-filterByColumnDrawer-filterGroupContent-field-dateTypeSelect-multipleDates
+        >
           {{#each this.multipleDates as |date|}}
             <AkChip
               @size='small'
-              @label={{day-js date=date format='DD/MM/YY'}}
+              @label={{this.getMultipleDateDisplayValue date}}
               @onDelete={{fn this.onDeleteDate date}}
+              data-test-aiReporting-preview-filterByColumnDrawer-filterGroupContent-field-dateTypeSelect-multipleDates-chip
             />
           {{else}}
-            <AkTypography @tag='span' @variant='body2' @color='textSecondary'>
+            <AkTypography
+              @tag='span'
+              @variant='body2'
+              @color='textSecondary'
+              data-test-aiReporting-preview-filterByColumnDrawer-filterGroupContent-field-dateTypeSelect-multipleDates-noDates
+            >
               {{t 'reportModule.advancedFilters.selectMultipleDates'}}
             </AkTypography>
           {{/each}}
@@ -52,38 +65,74 @@
           @direction='row'
           @justifyContent='center'
           @spacing='1'
+          data-test-aiReporting-preview-filterByColumnDrawer-filterGroupContent-field-dateTypeSelect-rangeDates
         >
           {{#if this.rangeDate.start}}
-            <AkTypography @tag='span' @variant='body2' @color='textPrimary'>
-              {{day-js date=this.rangeDate.start format='DD MMM, YYYY'}}
+            <AkTypography
+              @tag='span'
+              @variant='body2'
+              @color='textPrimary'
+              data-test-aiReporting-preview-filterByColumnDrawer-filterGroupContent-field-dateTypeSelect-rangeDates-start
+            >
+              {{this.rangeDateDisplayValues.start}}
             </AkTypography>
           {{else}}
-            <AkTypography @tag='span' @variant='body2' @color='textSecondary'>
+            <AkTypography
+              @tag='span'
+              @variant='body2'
+              @color='textSecondary'
+              data-test-aiReporting-preview-filterByColumnDrawer-filterGroupContent-field-dateTypeSelect-rangeDates-start-noDate
+            >
               {{t 'fromDate'}}
             </AkTypography>
           {{/if}}
 
-          <AkTypography @tag='span' @variant='body2' @color='textSecondary'>
+          <AkTypography
+            @tag='span'
+            @variant='body2'
+            @color='textSecondary'
+            data-test-aiReporting-preview-filterByColumnDrawer-filterGroupContent-field-dateTypeSelect-rangeDates-delimiter
+          >
             -
           </AkTypography>
 
           {{#if this.rangeDate.end}}
-            <AkTypography @tag='span' @variant='body2' @color='textPrimary'>
-              {{day-js date=this.rangeDate.end format='DD MMM, YYYY'}}
+            <AkTypography
+              @tag='span'
+              @variant='body2'
+              @color='textPrimary'
+              data-test-aiReporting-preview-filterByColumnDrawer-filterGroupContent-field-dateTypeSelect-rangeDates-end
+            >
+              {{this.rangeDateDisplayValues.end}}
             </AkTypography>
           {{else}}
-            <AkTypography @tag='span' @variant='body2' @color='textSecondary'>
+            <AkTypography
+              @tag='span'
+              @variant='body2'
+              @color='textSecondary'
+              data-test-aiReporting-preview-filterByColumnDrawer-filterGroupContent-field-dateTypeSelect-rangeDates-end-noDate
+            >
               {{t 'toDate'}}
             </AkTypography>
           {{/if}}
         </AkStack>
       {{else}}
         {{#if this.singleDate}}
-          <AkTypography @tag='span' @variant='body2' @color='textPrimary'>
-            {{day-js date=this.singleDate format='DD MMM, YYYY'}}
+          <AkTypography
+            @tag='span'
+            @variant='body2'
+            @color='textPrimary'
+            data-test-aiReporting-preview-filterByColumnDrawer-filterGroupContent-field-dateTypeSelect-singleDate
+          >
+            {{this.singleDateDisplayValue}}
           </AkTypography>
         {{else}}
-          <AkTypography @tag='span' @variant='body2' @color='textSecondary'>
+          <AkTypography
+            @tag='span'
+            @variant='body2'
+            @color='textSecondary'
+            data-test-aiReporting-preview-filterByColumnDrawer-filterGroupContent-field-dateTypeSelect-singleDate-noDate
+          >
             {{t 'reportModule.advancedFilters.selectDate'}}
           </AkTypography>
         {{/if}}

@@ -3,16 +3,22 @@
   @onClose={{this.handleClose}}
   @anchor='right'
   @disableBackdropClick={{true}}
+  data-test-aiReporting-preview-filterByColumnDrawer
   as |dr|
 >
   <AkAppbar @justifyContent='space-between' as |ab|>
-    <AkTypography @variant='h5' @color='inherit'>
-      {{t 'reportModule.filterByColumns'}}
+    <AkTypography
+      @variant='h5'
+      @color='inherit'
+      data-test-aiReporting-preview-filterByColumnDrawer-title
+    >
+      {{t 'reportModule.selectedColumns'}}
     </AkTypography>
 
     <AkIconButton
       class={{ab.classes.defaultIconBtn}}
       {{on 'click' dr.closeHandler}}
+      data-test-aiReporting-preview-filterByColumnDrawer-close-btn
     >
       <AkIcon @iconName='close' />
     </AkIconButton>

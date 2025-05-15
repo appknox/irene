@@ -1,7 +1,7 @@
 import Component from '@glimmer/component';
 import { action } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
-import { PoweredByAiDrawerInfo } from '../drawer';
+import type { PoweredByAiDrawerInfo } from '../drawer';
 
 interface PoweredByAiChipSignature {
   Element: HTMLElement;

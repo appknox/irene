@@ -10,9 +10,19 @@ import type {
   AdditionalFilterFilterDetailsExpression,
   AdditionalFilterFilterDetailsExpressionValues,
   AdditionalFilterErroredFieldProp,
-} from 'irene/models/report-request';
+} from 'irene/models/ai-reporting/report-request';
 
 import styles from './index.scss';
+
+// Component Types
+export const AI_REPORT_FILTER_TEXT_TYPE_COMPONENT =
+  'ai-reporting/preview/filter-sections/additional-filters/text-type';
+
+export const AI_REPORT_FILTER_DATE_TYPE_COMPONENT =
+  'ai-reporting/preview/filter-sections/additional-filters/date-type';
+
+export const AI_REPORT_FILTER_CHOICE_TYPE_COMPONENT =
+  'ai-reporting/preview/filter-sections/additional-filters/choice-type';
 
 // Filter operators labels
 const FILTER_OPERATORS_LABELS = {
@@ -50,9 +60,6 @@ interface AiReportingPreviewFilterSectionsAdditionalFiltersFilterFieldSignature 
 
 export default class AiReportingPreviewFilterSectionsAdditionalFiltersFilterFieldComponent extends Component<AiReportingPreviewFilterSectionsAdditionalFiltersFilterFieldSignature> {
   @service declare intl: IntlService;
-
-  textTypeValueComponent =
-    'ai-reporting/preview/filter-sections/additional-filters/text-type' as const;
 
   get allCurrFilters() {
     return this.args.allCurrFilters;
@@ -96,23 +103,25 @@ export default class AiReportingPreviewFilterSectionsAdditionalFiltersFilterFiel
   }
 
   get valueComponent() {
-    if (this.args.field.choices) {
-      return 'ai-reporting/preview/filter-sections/additional-filters/choice-type';
+    if (this.field.choices) {
+      return AI_REPORT_FILTER_CHOICE_TYPE_COMPONENT;
     }
 
-    switch (this.args.field.type) {
+    switch (this.field.type) {
+      case ENUMS.AI_REPORTING_FIELD_TYPE.BOOLEAN:
+        return AI_REPORT_FILTER_CHOICE_TYPE_COMPONENT;
+
       case ENUMS.AI_REPORTING_FIELD_TYPE.STRING:
       case ENUMS.AI_REPORTING_FIELD_TYPE.INTEGER:
       case ENUMS.AI_REPORTING_FIELD_TYPE.NUMBER:
-      case ENUMS.AI_REPORTING_FIELD_TYPE.BOOLEAN:
       case ENUMS.AI_REPORTING_FIELD_TYPE.FLOAT:
-        return this.textTypeValueComponent;
+        return AI_REPORT_FILTER_TEXT_TYPE_COMPONENT;
 
       case ENUMS.AI_REPORTING_FIELD_TYPE.DATETIME:
-        return 'ai-reporting/preview/filter-sections/additional-filters/date-type';
+        return AI_REPORT_FILTER_DATE_TYPE_COMPONENT;
 
       default:
-        return this.textTypeValueComponent;
+        return AI_REPORT_FILTER_TEXT_TYPE_COMPONENT;
     }
   }
 
@@ -179,7 +188,7 @@ export default class AiReportingPreviewFilterSectionsAdditionalFiltersFilterFiel
     const operatorIsExists = newOperator === this.existsOperator;
 
     const isTextFieldValue =
-      this.valueComponent === this.textTypeValueComponent;
+      this.valueComponent === AI_REPORT_FILTER_TEXT_TYPE_COMPONENT;
 
     let value = null;
 

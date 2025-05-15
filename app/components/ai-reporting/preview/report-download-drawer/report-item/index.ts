@@ -1,11 +1,10 @@
 import Component from '@glimmer/component';
-import { action } from '@ember/object';
 import { service } from '@ember/service';
+import { action } from '@ember/object';
 import type IntlService from 'ember-intl/services/intl';
 import type Store from '@ember-data/store';
-import type ClipboardJS from 'clipboard/src/clipboard';
 
-import type ReportRequestModel from 'irene/models/report-request';
+import type ReportRequestModel from 'irene/models/ai-reporting/report-request';
 import type { AiReportDetails, AiReportType } from '..';
 
 export interface AiReportingPreviewReportDownloadDrawerReportItemSignature {
@@ -34,18 +33,6 @@ export default class AiReportingPreviewReportDownloadDrawerReportItemComponent e
 
   get isPregeneratedReport() {
     return ['csv', 'xlsx'].includes(this.reportType);
-  }
-
-  @action
-  handleCopySuccess(event: ClipboardJS.Event) {
-    this.notify.info(this.intl.t('passwordCopied'));
-
-    event.clearSelection();
-  }
-
-  @action
-  handleCopyError() {
-    this.notify.error(this.intl.t('pleaseTryAgain'));
   }
 
   @action

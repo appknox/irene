@@ -8,7 +8,7 @@ import type { CalendarSelectValue } from 'irene/components/ak-date-picker';
 import type {
   PreviewFilterField,
   AdditionalFilterFilterDetailsExpressionValues,
-} from 'irene/models/report-request';
+} from 'irene/models/ai-reporting/report-request';
 
 interface AiReportingPreviewFilterSectionsAdditionalFiltersDateTypeSignature {
   Args: {
@@ -64,6 +64,17 @@ export default class AiReportingPreviewFilterSectionsAdditionalFiltersDateTypeCo
     return dayjs().toDate();
   }
 
+  get singleDateDisplayValue() {
+    return this.formatDate(this.singleDate, 'DD MMM, YYYY');
+  }
+
+  get rangeDateDisplayValues() {
+    return {
+      start: this.formatDate(this.rangeDate?.start, 'DD MMM, YYYY'),
+      end: this.formatDate(this.rangeDate?.end, 'DD MMM, YYYY'),
+    };
+  }
+
   get isMultipleDateSelect() {
     return [
       ENUMS.AI_REPORTING_FILTER_OPERATOR.IN,
@@ -82,13 +93,18 @@ export default class AiReportingPreviewFilterSectionsAdditionalFiltersDateTypeCo
   }
 
   @action
+  getMultipleDateDisplayValue(date: Date) {
+    return this.formatDate(date, 'DD/MM/YY');
+  }
+
+  @action
   convertToDate(date?: string | null) {
     return date ? dayjs(date).toDate() : null;
   }
 
   @action
-  formatDate(date: Date | null) {
-    return date ? dayjs(date).format() : '';
+  formatDate(date: Date | null, format = '') {
+    return date ? dayjs(date).format(format) : '';
   }
 
   // On multiple date item delete
@@ -129,7 +145,7 @@ export default class AiReportingPreviewFilterSectionsAdditionalFiltersDateTypeCo
   onDateChange(date: (Date | null) | (Date | null)[]) {
     // Process the date value based on its type
     const formattedDate = Array.isArray(date)
-      ? date.map(this.formatDate)
+      ? date.map((d) => this.formatDate(d))
       : this.formatDate(date);
 
     this.args.onAddUpdateFilter(this.args.operator, formattedDate);

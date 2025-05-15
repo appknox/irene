@@ -1,8 +1,8 @@
 import Route from '@ember/routing/route';
 import { service } from '@ember/service';
-import RouterService from '@ember/routing/router-service';
 
-import OrganizationService from 'irene/services/organization';
+import type RouterService from '@ember/routing/router-service';
+import type OrganizationService from 'irene/services/organization';
 
 export default class AuthenticatedReportsRoute extends Route {
   @service declare organization: OrganizationService;

@@ -1,4 +1,7 @@
-<AkTypography {{style width=this.computedWidth}}>
+<AkTypography
+  {{style width=this.computedWidth}}
+  data-test-aiReporting-preview-column-value='{{@column.name}}'
+>
   {{this.displayValue}}
 
   {{#if this.shouldShowToggle}}

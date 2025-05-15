@@ -1,0 +1,26 @@
+<AkStack
+  @direction='column'
+  @justifyContent='center'
+  @alignItems='center'
+  local-class='generate-loader-container'
+  data-test-aiReporting-chatGenerate-generateLoader
+>
+  <MainLoaderAi />
+
+  <AkTypography
+    @variant='h5'
+    @fontWeight='bold'
+    class='mt-2'
+    data-test-aiReporting-chatGenerate-generateLoader-headerText
+  >
+    {{t 'reportModule.promtGenerateLoadingHeader'}}
+  </AkTypography>
+
+  <AkTypography
+    class='mt-1'
+    {{style maxWidth='400px'}}
+    data-test-aiReporting-chatGenerate-generateLoader-descriptionText
+  >
+    {{t 'reportModule.promtGenerateLoadingDesc'}}
+  </AkTypography>
+</AkStack>

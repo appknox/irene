@@ -1,45 +1,31 @@
 <AkList::Item
   @divider={{true}}
   {{style padding='0.7857em 1.4285em'}}
-  data-test-aiReportingPreview-reportListItem
+  ...attributes
   as |li|
 >
-  <li.leftIcon data-test-aiReportListItem-leftIcon>
+  <li.leftIcon
+    data-test-aiReporting-preview-reportDownloadDrawer-reportItem-leftIcon
+  >
     {{#let (component @reportDetails.iconComponent) as |Icon|}}
       <Icon />
     {{/let}}
   </li.leftIcon>
 
   <AkStack @direction='column' @width='full' @spacing='0.5' class='pl-1'>
-    <AkTypography @variant='subtitle1' data-test-aiReportListItem-primaryText>
+    <AkTypography
+      @variant='subtitle1'
+      data-test-aiReporting-preview-reportDownloadDrawer-reportItem-primaryText
+    >
       {{@reportDetails.primaryText}}
     </AkTypography>
 
     <AkStack @alignItems='center' @spacing='0.5'>
-      <AkTypography data-test-aiReportListItem-secondaryText>
+      <AkTypography
+        data-test-aiReporting-preview-reportDownloadDrawer-reportItem-secondaryText
+      >
         {{@reportDetails.secondaryText}}
       </AkTypography>
-
-      {{#if @reportDetails.copyText}}
-        <AkClipboard
-          @onSuccess={{this.handleCopySuccess}}
-          @onError={{this.handleCopyError}}
-          as |cb|
-        >
-          <AkIconButton
-            id={{cb.triggerId}}
-            @size='small'
-            data-test-aiReportListItem-passCopyBtn
-            data-clipboard-text={{@reportDetails.copyText}}
-          >
-            <AkIcon
-              @iconName='content-copy'
-              @variant='outlined'
-              @color='primary'
-            />
-          </AkIconButton>
-        </AkClipboard>
-      {{/if}}
     </AkStack>
   </AkStack>
 
@@ -47,6 +33,7 @@
     <AkRadio
       @checked={{this.isSelected}}
       @onChange={{this.handleReportTypeSelect}}
+      data-test-aiReporting-preview-reportDownloadDrawer-reportItem-radio
     />
   </li.rightIcon>
 </AkList::Item>

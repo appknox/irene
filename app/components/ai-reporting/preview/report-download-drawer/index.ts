@@ -3,7 +3,7 @@ import { service } from '@ember/service';
 import { action } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
 import type IntlService from 'ember-intl/services/intl';
-import type ReportRequestModel from 'irene/models/report-request';
+import type ReportRequestModel from 'irene/models/ai-reporting/report-request';
 
 export type AiReportType = 'xlsx' | 'csv';
 export type AiReportIconComponent = 'ak-svg/xlsx-icon' | 'ak-svg/csv-icon';
@@ -29,7 +29,15 @@ export interface AiReportingPreviewReportDownloadDrawerSignature {
 export default class AiReportingPreviewReportDownloadDrawerComponent extends Component<AiReportingPreviewReportDownloadDrawerSignature> {
   @service declare intl: IntlService;
 
-  @tracked selectedReportType: AiReportType = this.reportType;
+  @tracked selectedReportType: AiReportType;
+
+  constructor(
+    owner: unknown,
+    args: AiReportingPreviewReportDownloadDrawerSignature['Args']
+  ) {
+    super(owner, args);
+    this.selectedReportType = this.reportType;
+  }
 
   get reportDetails(): AiReportDetails[] {
     const xlsxPrimaryText = this.intl.t('reportModule.aiReportDownload', {

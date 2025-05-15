@@ -1,7 +1,10 @@
 import { action } from '@ember/object';
 import Component from '@glimmer/component';
-import type { ReportRequestPreview } from 'irene/models/report-request';
-import type { FilterColumn } from 'irene/services/ai-reporting';
+
+import type {
+  ReportRequestPreview,
+  FilterColumn,
+} from 'irene/models/ai-reporting/report-request';
 
 interface AiReportingPreviewTableSignature {
   Args: {

@@ -6,15 +6,19 @@ import { task } from 'ember-concurrency';
 import type IntlService from 'ember-intl/services/intl';
 import type Store from '@ember-data/store';
 
-import type ReportRequestModel from 'irene/models/report-request';
-import type { AdditionalFilter } from 'irene/models/report-request';
-import type { FilterColumn } from 'irene/services/ai-reporting';
+import type ReportRequestModel from 'irene/models/ai-reporting/report-request';
+
+import type {
+  AdditionalFilter,
+  FilterColumn,
+} from 'irene/models/ai-reporting/report-request';
+
 import type IreneAjaxService from 'irene/services/ajax';
 
 import type {
   ReportRequestPreview,
   PreviewFilterDetails,
-} from 'irene/models/report-request';
+} from 'irene/models/ai-reporting/report-request';
 
 interface AiReportingPreviewSignature {
   Args: { reportRequest: ReportRequestModel };
@@ -138,8 +142,6 @@ export default class AiReportingPreview extends Component<AiReportingPreviewSign
   @action
   handleFilterByColumnDrawerApply(allColumnsMap: Map<string, FilterColumn>) {
     this.allColumnsMap = allColumnsMap;
-
-    this.previewReportRequest.perform(false, this.limit, 0);
   }
 
   @action
@@ -155,29 +157,69 @@ export default class AiReportingPreview extends Component<AiReportingPreviewSign
     this.previewReportRequest.perform(false, this.limit, 0);
   }
 
+  setPreviewErrors(headerKey: string, descKey: string) {
+    this.errorScreenHeader = this.intl.t(headerKey);
+    this.errorScreenDesc = this.intl.t(descKey);
+  }
+
+  checkReportReqRelevancy(reportRequest: ReportRequestModel) {
+    if (reportRequest.isRelevant) {
+      return true;
+    }
+
+    const errorType = reportRequest.error
+      ? 'somethingWentWrong'
+      : 'rephrasingError';
+
+    this.setPreviewErrors(
+      `reportModule.${errorType}Header`,
+      `reportModule.${errorType}Desc`
+    );
+
+    return false;
+  }
+
+  processColumnsAndFilters() {
+    const columns = this.reportPreview?.columns || [];
+    let hasSelectedColumns = false;
+
+    this.allColumnsMap = new Map(
+      columns.map((column, index) => {
+        const isSelected = !!column.is_default;
+
+        if (isSelected) {
+          hasSelectedColumns = true;
+        }
+
+        return [
+          column.field,
+          {
+            name: column.label,
+            field: column.field,
+            type: column.type,
+            selected: isSelected,
+            order: index,
+            default: isSelected,
+          },
+        ];
+      })
+    );
+
+    if (!hasSelectedColumns) {
+      this.setPreviewErrors(
+        'reportModule.noSelectedColumnsHeader',
+        'reportModule.noSelectedColumnsDesc'
+      );
+    }
+
+    this.filterDetails = this.reportPreview?.filter_details || [];
+  }
+
   previewReportRequest = task(
     async (computeFiltersAndColumns = true, limit = 10, offset = 0) => {
       const reportRequest = this.args.reportRequest;
 
-      if (!reportRequest.isRelevant) {
-        if (reportRequest.error) {
-          this.errorScreenHeader = this.intl.t(
-            'reportModule.somethingWentWrongHeader'
-          );
-
-          this.errorScreenDesc = this.intl.t(
-            'reportModule.somethingWentWrongDesc'
-          );
-        } else {
-          this.errorScreenHeader = this.intl.t(
-            'reportModule.rephrasingErrorHeader'
-          );
-
-          this.errorScreenDesc = this.intl.t(
-            'reportModule.rephrasingErrorDesc'
-          );
-        }
-
+      if (!this.checkReportReqRelevancy(reportRequest)) {
         return;
       }
 
@@ -189,46 +231,11 @@ export default class AiReportingPreview extends Component<AiReportingPreviewSign
         );
 
         if (this.reportPreview?.data.length === 0) {
-          this.errorScreenHeader = this.intl.t('noResultsFound');
-
-          this.errorScreenDesc = this.intl.t('reportModule.noResultDesc');
+          this.setPreviewErrors('noResultsFound', 'reportModule.noResultDesc');
         }
 
         if (computeFiltersAndColumns) {
-          let hasSelectedColumns = false;
-
-          this.allColumnsMap = new Map(
-            (this.reportPreview?.columns || []).map((column, index) => {
-              const isSelected = !!column.is_default;
-              if (isSelected) {
-                hasSelectedColumns = true;
-              }
-
-              return [
-                column.field,
-                {
-                  name: column.label,
-                  field: column.field,
-                  type: column.type,
-                  selected: column.is_default,
-                  order: index,
-                  default: column.is_default,
-                },
-              ];
-            })
-          );
-
-          if (!hasSelectedColumns) {
-            this.errorScreenHeader = this.intl.t(
-              'reportModule.noSelectedColumnsHeader'
-            );
-
-            this.errorScreenDesc = this.intl.t(
-              'reportModule.noSelectedColumnsDesc'
-            );
-          }
-
-          this.filterDetails = this.reportPreview?.filter_details || [];
+          this.processColumnsAndFilters();
         }
       } catch (err) {
         const error = err as AdapterError;
@@ -239,8 +246,7 @@ export default class AiReportingPreview extends Component<AiReportingPreviewSign
           errMsg = payload.message || errMsg;
         }
 
-        this.errorScreenHeader = this.intl.t('reportModule.failedToPreview');
-        this.errorScreenDesc = errMsg;
+        this.setPreviewErrors('reportModule.failedToPreview', errMsg);
       }
     }
   );

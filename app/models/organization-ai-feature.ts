@@ -1,7 +1,7 @@
 import Model, { attr } from '@ember-data/model';
 
 export default class OrganizationAiFeatureModel extends Model {
-  @attr()
+  @attr('boolean')
   declare reporting: boolean;
 }
 

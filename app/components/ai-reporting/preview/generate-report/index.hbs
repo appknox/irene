@@ -3,8 +3,13 @@
     @disabled={{@disabled}}
     @loading={{this.isLoadingReportDownload}}
     {{on 'click' this.handleReportDownloadDrawerOpen}}
+    data-test-aiReporting-preview-generateReport-button
   >
-    {{if this.isGenerating (t 'reportModule.generating') (t 'downloadReport')}}
+    {{if
+      this.isLoadingReportDownload
+      (t 'reportModule.generating')
+      (t 'downloadReport')
+    }}
   </AkButton>
 
   {{! Drawer to select report type }}
@@ -16,36 +21,4 @@
       @onDownload={{this.handleReportDownload}}
     />
   {{/unless}}
-
-  {{! Iframe to download report }}
-  {{#if this.downloadUrl}}
-    <AiReporting::Preview::IframeWrapper
-      @name='download-frame'
-      @downloadUrl={{this.downloadUrl}}
-      @onDownloadReset={{this.handleDownloadReset}}
-      as |initDownload|
-    >
-      <form
-        id='download-form'
-        method='POST'
-        target='download-frame'
-        {{did-insert initDownload}}
-      >
-        <input type='hidden' name='title' value='' />
-        <input type='hidden' name='columns' value={{this.downloadColumns}} />
-
-        <input
-          type='hidden'
-          name='report_type'
-          value={{this.selectedReportType}}
-        />
-
-        <input
-          type='hidden'
-          name='additional_filters'
-          value={{this.downloadAdditionalFilters}}
-        />
-      </form>
-    </AiReporting::Preview::IframeWrapper>
-  {{/if}}
 </AkStack>

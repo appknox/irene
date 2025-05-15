@@ -12,39 +12,47 @@
       @direction='column'
       @spacing='1'
       local-class='ai-powered-feature-body'
+      data-test-organzation-aiPoweredFeatures-featureBody={{feature.featureKey}}
     >
-      <PoweredByAi::Chip @clickable={{true}} @drawerInfo={{this.drawerInfo}} />
+      <PoweredByAi::Chip
+        @clickable={{true}}
+        @drawerInfo={{this.drawerInfo}}
+        data-test-organzation-aiPoweredFeatures-poweredByAiChip
+      />
 
       <AkStack
         @justifyContent='space-between'
         @width='full'
         @alignItems='center'
       >
-        <AkTypography @fontWeight='medium'>
+        <AkTypography
+          @fontWeight='medium'
+          data-test-organzation-aiPoweredFeatures-header
+        >
           {{feature.header}}
         </AkTypography>
 
-        <AkTooltip
-          @arrow={{true}}
-          @placement='bottom'
-          @disabled={{feature.enabled}}
-        >
-          <:tooltipContent>
-            {{feature.tooltipContent}}
-          </:tooltipContent>
+        <AkStack @direction='row' @alignItems='center' @spacing='1'>
+          <AkToggle
+            @size='small'
+            @checked={{feature.isChecked}}
+            @onChange={{this.toggleAiFeature feature.featureKey}}
+            @disabled={{or feature.isToggling (not feature.enabled)}}
+            data-test-organzation-aiPoweredFeatures-featureToggle
+          />
 
-          <:default>
-            <AkToggle
-              @size='small'
-              @checked={{feature.isChecked}}
-              @onChange={{this.toggleAiFeature feature.featureKey}}
-              @disabled={{not feature.enabled}}
-            />
-          </:default>
-        </AkTooltip>
+          {{#if feature.isToggling}}
+            <AkLoader @size={{14}} />
+          {{/if}}
+        </AkStack>
       </AkStack>
 
-      <AkTypography @variant='body2' @color='textSecondary' class='w-8/12'>
+      <AkTypography
+        @variant='body2'
+        @color='textSecondary'
+        class='w-8/12'
+        data-test-organzation-aiPoweredFeatures-description
+      >
         {{feature.description}}
       </AkTypography>
 

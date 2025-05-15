@@ -2,12 +2,21 @@
   id='filter-group-{{@sectionId}}'
   local-class='filter-group-container'
   {{did-insert this.initFilterGroup}}
+  data-test-aiReporting-preview-filterByColumnDrawer-filterGroupContainer
+  data-test-aiReporting-preview-filterByColumnDrawer-filterGroup='{{@sectionId}}'
 >
-  <AkTypography @variant='h6' local-class='field-group-label'>
-    {{@filterDetails.model_name}}
+  <AkTypography
+    @variant='h6'
+    local-class='field-group-label'
+    data-test-aiReporting-preview-filterByColumnDrawer-filterGroupLabel
+  >
+    {{this.filterGroupName}}
   </AkTypography>
 
-  <div class='p-1 w-full'>
+  <div
+    class='p-1 w-full'
+    data-test-aiReporting-preview-filterByColumnDrawer-filterGroupContent
+  >
     {{#if this.hasSelectedFilters}}
       <AkStack @direction='column' @spacing='1.5'>
         {{#each this.selectedFilters as |filterObj idx|}}
@@ -55,6 +64,7 @@
         @alignItems='center'
         @spacing='1.5'
         local-class='empty-filter-group-container'
+        data-test-aiReporting-preview-filterByColumnDrawer-emptyFilterGroupContainer
       >
         <AkSvg::GenerateReport />
 
@@ -62,6 +72,7 @@
           @variant='body2'
           @align='center'
           {{style maxWidth='340px'}}
+          data-test-aiReporting-preview-filterByColumnDrawer-emptyFilterGroupText
         >
           {{t 'reportModule.advancedFilters.noFiltersSelected'}}
         </AkTypography>
@@ -70,10 +81,14 @@
           @variant='outlined'
           @color='neutral'
           local-class='add-filter-btn'
+          data-test-aiReporting-preview-filterByColumnDrawer-emptyFilterGroupAddFilterBtn
           {{on 'click' this.addNewFilter}}
         >
           <:leftIcon>
-            <AkIcon @iconName='add' />
+            <AkIcon
+              @iconName='add'
+              data-test-aiReporting-preview-filterByColumnDrawer-emptyFilterGroupAddFilterBtnIcon
+            />
           </:leftIcon>
 
           <:default>

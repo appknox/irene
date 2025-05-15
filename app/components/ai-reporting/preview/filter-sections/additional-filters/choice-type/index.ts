@@ -6,7 +6,7 @@ import ENUMS from 'irene/enums';
 import type {
   AdditionalFilterFilterDetailsExpressionValues,
   PreviewFilterField,
-} from 'irene/models/report-request';
+} from 'irene/models/ai-reporting/report-request';
 
 import styles from './index.scss';
 
@@ -35,19 +35,35 @@ export default class AiReportingPreviewFilterSectionsAdditionalFiltersChoiceType
     return this.args.field;
   }
 
-  get isMultiple() {
+  get isMultipleOperator() {
     return [
       ENUMS.AI_REPORTING_FILTER_OPERATOR.IN,
       ENUMS.AI_REPORTING_FILTER_OPERATOR.NOT_IN,
     ].includes(this.args.operator);
   }
 
+  // Boolean field types can't have multiple operators
+  get isBooleanFieldType() {
+    return this.field.type === ENUMS.AI_REPORTING_FIELD_TYPE.BOOLEAN;
+  }
+
   get currentValue() {
     return this.args.currentValue;
   }
 
+  get booleanChoices() {
+    return [
+      ['True', 'true'],
+      ['False', 'false'],
+    ];
+  }
+
+  get fieldChoices() {
+    return this.isBooleanFieldType ? this.booleanChoices : this.field.choices;
+  }
+
   get choices() {
-    return this.field.choices?.map((c) => String(c[1])) ?? [];
+    return this.fieldChoices?.map((c) => String(c[1])) ?? [];
   }
 
   get label() {
@@ -55,13 +71,11 @@ export default class AiReportingPreviewFilterSectionsAdditionalFiltersChoiceType
   }
 
   get selectedChoice() {
-    const selectedChoices = this.currentValue as
-      | ChoiceValueType
-      | ChoiceValueType[];
+    const currChoice = this.currentValue as ChoiceValueType | ChoiceValueType[];
 
-    return this.isMultiple && Array.isArray(selectedChoices)
-      ? this.choices?.filter((c) => selectedChoices?.includes(c))
-      : this.choices?.find((c) => c == selectedChoices);
+    return this.isMultipleOperator && Array.isArray(currChoice)
+      ? this.choices?.filter((c) => currChoice?.includes(c))
+      : this.choices?.find((c) => c === String(currChoice));
   }
 
   get dropdownClass() {
@@ -70,12 +84,15 @@ export default class AiReportingPreviewFilterSectionsAdditionalFiltersChoiceType
 
   @action
   getOptionLabel(opt: ChoiceValueType) {
-    return this.field.choices?.find((c) => c[1] == opt)?.[0];
+    return this.fieldChoices?.find((c) => String(c[1]) === String(opt))?.[0];
   }
 
   @action
   handleChoiceSelection(selection: ChoiceValueType | ChoiceValueType[]) {
-    this.args.onAddUpdateFilter(this.args.operator, selection);
+    this.args.onAddUpdateFilter(
+      this.args.operator,
+      this.isBooleanFieldType ? selection === 'true' : selection
+    );
   }
 }
 

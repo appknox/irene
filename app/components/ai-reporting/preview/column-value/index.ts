@@ -3,7 +3,7 @@ import { tracked } from '@glimmer/tracking';
 import dayjs from 'dayjs';
 import customParseFormat from 'dayjs/plugin/customParseFormat';
 
-import type { ReportPreviewData } from 'irene/models/report-request';
+import type { ReportPreviewData } from 'irene/models/ai-reporting/report-request';
 
 type TableColumn = { name: string; val_field: string; field_type: string };
 

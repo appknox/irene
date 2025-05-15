@@ -3,6 +3,7 @@
   @onClose={{this.handleClose}}
   @anchor='right'
   @disableBackdropClick={{true}}
+  data-test-aiReporting-preview-filterByColumnDrawer
   as |dr|
 >
   <AkStack
@@ -13,7 +14,7 @@
   >
     <AkAppbar @position='sticky' @justifyContent='space-between' as |ab|>
       <AkTypography
-        data-test-serviceAccount-confirmDrawer-heading
+        data-test-aiReporting-preview-filterByColumnDrawer-heading
         @variant='h5'
         @color='inherit'
       >
@@ -34,13 +35,22 @@
         @direction='column'
         local-class='filter-drawer-content'
         class='p-3'
+        data-test-aiReporting-preview-filterByColumnDrawer-content
       >
         <AkStack @width='full' @direction='column' @spacing='0.5'>
-          <AkTypography @variant='h6'>
+          <AkTypography
+            @variant='h6'
+            data-test-aiReporting-preview-filterByColumnDrawer-contentHeading
+          >
             {{t 'reportModule.advancedFilters.customiseReportData'}}
           </AkTypography>
 
-          <AkTypography @color='neutral' @variant='body2' @fontWeight='medium'>
+          <AkTypography
+            @color='neutral'
+            @variant='body2'
+            @fontWeight='medium'
+            data-test-aiReporting-preview-filterByColumnDrawer-contentSubHeading
+          >
             {{t 'reportModule.advancedFilters.selectFieldsToApplyFilters'}}
           </AkTypography>
         </AkStack>
@@ -75,6 +85,7 @@
         @variant='outlined'
         @color='primary'
         {{on 'click' this.clearAllFilters}}
+        data-test-aiReporting-preview-filterByColumnDrawer-clearAllBtn
       >
         <:leftIcon>
           <AkIcon @iconName='close' />
@@ -90,11 +101,15 @@
           @variant='outlined'
           @color='neutral'
           {{on 'click' dr.closeHandler}}
+          data-test-aiReporting-preview-filterByColumnDrawer-cancelBtn
         >
           {{t 'cancel'}}
         </AkButton>
 
-        <AkButton {{on 'click' this.applyAndClose}}>
+        <AkButton
+          {{on 'click' this.applyAndClose}}
+          data-test-aiReporting-preview-filterByColumnDrawer-applyBtn
+        >
           {{t 'apply'}}
         </AkButton>
       </AkStack>

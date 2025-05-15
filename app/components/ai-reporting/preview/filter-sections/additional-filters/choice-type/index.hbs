@@ -3,11 +3,13 @@
   @selected={{this.selectedChoice}}
   @options={{this.choices}}
   @onChange={{this.handleChoiceSelection}}
-  @multiple={{this.isMultiple}}
+  @multiple={{this.isMultipleOperator}}
   @dropdownClass={{this.dropdownClass}}
   @error={{@isErrored}}
   local-class='choice-select-option'
+  class='{{@field.field}}-filter-group-item-field-choice-select'
   {{style maxWidth='200px'}}
+  data-test-aiReporting-preview-filterByColumnDrawer-filterGroupContent-field-choiceTypeSelect
   as |opt|
 >
   <AkTypography @variant='body2'>{{this.getOptionLabel opt}}</AkTypography>
