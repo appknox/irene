@@ -4,7 +4,7 @@ import { action } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
 import type IntlService from 'ember-intl/services/intl';
 
-import type { FilterColumn } from 'irene/services/ai-reporting';
+import type { FilterColumn } from 'irene/models/ai-reporting/report-request';
 
 interface AiReportingPreviewFilterSectionsColumnsSignature {
   Args: {
@@ -100,8 +100,6 @@ export default class AiReportingPreviewFilterSectionsColumnsComponent extends Co
   @action
   toggleAllColumns(event: Event, checked: boolean) {
     this.allColumnsSelected = checked;
-
-    const updatedMap = new Map<string, FilterColumn>();
 
     // update selection status for all columns
     this.allColumnsMap.forEach((c, field) => {

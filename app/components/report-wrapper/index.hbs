@@ -18,13 +18,19 @@
       @spacing='0.5'
     >
       <AkStack @alignItems='center'>
-        <AkTypography @variant='h5' @fontWeight='bold' class='mr-1'>
-          {{t 'reportModule.generateReport'}}
+        <AkTypography
+          @variant='h5'
+          @fontWeight='bold'
+          class='mr-1'
+          data-test-report-title
+        >
+          {{t 'reportModule.reportingEngine'}}
         </AkTypography>
 
         <PoweredByAi::Chip
           @clickable={{true}}
           @drawerInfo={{this.drawerInfo}}
+          data-test-report-powered-by-ai-chip
         />
       </AkStack>
 

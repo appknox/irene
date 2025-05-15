@@ -7,15 +7,13 @@ import type RouterService from '@ember/routing/router-service';
 import type IntlService from 'ember-intl/services/intl';
 import type Store from '@ember-data/store';
 
-import { ReportRequestStatus } from 'irene/models/report-request';
+import { ReportRequestStatus } from 'irene/models/ai-reporting/report-request';
 import parseError from 'irene/utils/parse-error';
-import type ReportRequestModel from 'irene/models/report-request';
+import type ReportRequestModel from 'irene/models/ai-reporting/report-request';
 import type PollService from 'irene/services/poll';
 import type OrganizationAiFeatureModel from 'irene/models/organization-ai-feature';
 
-interface AiReportingChatGenerateSignature {}
-
-export default class AiReportingChatGenerate extends Component<AiReportingChatGenerateSignature> {
+export default class AiReportingChatGenerate extends Component {
   @service declare router: RouterService;
   @service declare intl: IntlService;
   @service declare store: Store;
@@ -29,28 +27,12 @@ export default class AiReportingChatGenerate extends Component<AiReportingChatGe
   @tracked reportRequest: ReportRequestModel | null = null;
   @tracked aiFeatures: OrganizationAiFeatureModel | null = null;
 
+  stopPolling: (() => void) | null = null;
+
   constructor(owner: unknown, args: object) {
     super(owner, args);
 
     this.fetchOrganizationAiFeatures.perform();
-  }
-
-  fetchOrganizationAiFeatures = task(async () => {
-    try {
-      this.aiFeatures = await this.store.queryRecord(
-        'organization-ai-feature',
-        {}
-      );
-    } catch (err) {
-      this.notify.error(parseError(err));
-    }
-  });
-
-  stopPolling: (() => void) | null = null;
-
-  willDestroy(): void {
-    super.willDestroy();
-    this.stopPolling?.();
   }
 
   // Categories of report prompts available to users
@@ -109,7 +91,7 @@ export default class AiReportingChatGenerate extends Component<AiReportingChatGe
   }
 
   @action
-  updateReportDescription(event: Event) {
+  handleUserPromptInput(event: Event) {
     const target = event.target as HTMLTextAreaElement;
     this.reportQuery = target.value;
   }
@@ -148,9 +130,10 @@ export default class AiReportingChatGenerate extends Component<AiReportingChatGe
     }
 
     try {
-      this.reportRequest = this.store.createRecord('report-request', {
-        query: this.reportQuery,
-      });
+      this.reportRequest = this.store.createRecord(
+        'ai-reporting/report-request',
+        { query: this.reportQuery }
+      );
 
       await this.reportRequest.save();
 
@@ -169,6 +152,22 @@ export default class AiReportingChatGenerate extends Component<AiReportingChatGe
       this.notify.error(errMsg);
     }
   });
+
+  fetchOrganizationAiFeatures = task(async () => {
+    try {
+      this.aiFeatures = await this.store.queryRecord(
+        'organization-ai-feature',
+        {}
+      );
+    } catch (err) {
+      this.notify.error(parseError(err));
+    }
+  });
+
+  willDestroy(): void {
+    super.willDestroy();
+    this.stopPolling?.();
+  }
 }
 
 declare module '@glint/environment-ember-loose/registry' {

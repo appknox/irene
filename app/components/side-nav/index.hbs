@@ -15,7 +15,7 @@
     </LinkTo>
   </div>
 
-  {{#if (or this.isSecurityEnabled this.showStoreknox)}}
+  {{#if this.showProductSwitcher}}
     <SideNav::ProductSwitcher
       @isCollapsed={{@isCollapsed}}
       @classes={{this.classes}}

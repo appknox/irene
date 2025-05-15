@@ -2267,6 +2267,15 @@ body {
   --ai-reporting-turn-on-settings-box-shadow: var(--box-shadow-7);
   --ai-reporting-turn-on-settings-footer-box-shadow: var(--box-shadow-4);
 
+  // variables for ai-reporting/preview/filter-by-column-drawer
+  --ai-reporting-preview-filter-by-column-drawer-footer-background-color: var(
+    --background-main
+  );
+
+  --ai-reporting-preview-filter-by-column-drawer-footer-box-shadow: var(
+    --box-shadow-4
+  );
+
   // variables for ai-reporting/preview/advance-filter-drawer
   --ai-reporting-preview-advance-filter-drawer-background-main: var(
     --background-main

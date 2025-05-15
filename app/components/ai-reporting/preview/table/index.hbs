@@ -12,6 +12,7 @@
       @defaultLimit={{@limit}}
       @offset={{@offset}}
       local-class='report-preview-table-container'
+      data-test-aiReporting-preview-table-container
       as |pgc|
     >
       <AkTable
@@ -23,10 +24,11 @@
           @columns={{this.columns}}
           @scrollIndicators='horizontal'
           @columnKeyPath='val_field'
+          data-test-aiReporting-preview-table-head
         />
 
         <t.body @rows={{pgc.currentPageResults}} @renderAll={{true}} as |b|>
-          <b.row as |r|>
+          <b.row data-test-aiReporting-preview-table-row as |r|>
             <r.cell>
               {{#if r.columnValue.component}}
                 {{#let (component r.columnValue.component) as |Component|}}
@@ -59,8 +61,12 @@
       @alignItems='center'
       @justifyContent='center'
       {{style height='500px'}}
+      data-test-aiReporting-preview-table-errorScreen-container
     >
-      <AkSvg::NoApisCaptured class='mt-3' />
+      <AkSvg::NoApisCaptured
+        class='mt-3'
+        data-test-aiReporting-preview-table-errorScreen-illustration
+      />
 
       <AkStack
         @direction='column'
@@ -68,11 +74,19 @@
         @spacing='1'
         class='mt-3'
       >
-        <AkTypography @align='center' @variant='h5'>
+        <AkTypography
+          @align='center'
+          @variant='h5'
+          data-test-aiReporting-preview-table-errorScreenHeader
+        >
           {{@errorScreenHeader}}
         </AkTypography>
 
-        <AkTypography @align='center' {{style maxWidth='400px'}}>
+        <AkTypography
+          @align='center'
+          {{style maxWidth='400px'}}
+          data-test-aiReporting-preview-table-errorScreenDesc
+        >
           {{@errorScreenDesc}}
         </AkTypography>
       </AkStack>

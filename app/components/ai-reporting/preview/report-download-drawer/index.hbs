@@ -2,13 +2,13 @@
   @open={{@openDrawer}}
   @onClose={{@closeDrawer}}
   @anchor='right'
-  data-test-fileReportDrawer
+  data-test-aiReporting-preview-reportDownloadDrawer
   as |dr|
 >
   <div local-class='report-download-drawer-container'>
     <AkAppbar @justifyContent='space-between' class='px-3' as |ab|>
       <AkTypography
-        data-test-fileReportDrawer-title
+        data-test-aiReporting-preview-reportDownloadDrawer-title
         @color='inherit'
         @variant='h5'
       >
@@ -16,27 +16,27 @@
       </AkTypography>
 
       <AkIconButton
-        data-test-fileReportDrawer-closeBtn
         {{on 'click' dr.closeHandler}}
         class={{ab.classes.defaultIconBtn}}
+        data-test-aiReporting-preview-reportDownloadDrawer-closeBtn
       >
-        <AkIcon @iconName='close' data-test-fileReportDrawer-closeBtn-icon />
+        <AkIcon @iconName='close' />
       </AkIconButton>
     </AkAppbar>
 
     <AkTypography
       @variant='subtitle2'
       class='px-3 py-2'
-      data-test-fileReportDrawer-headerText
+      data-test-aiReporting-preview-reportDownloadDrawer-headerText
     >
-      Please select the report type you wish to download:
+      {{t 'reportModule.aiReportDownloadHeaderText'}}
     </AkTypography>
 
-    <div
-      local-class='report-download-drawer-content'
-      data-test-fileReportDrawer-vaReports
-    >
-      <AkList {{style padding='0px'}} data-test-vaReports-reportList>
+    <div local-class='report-download-drawer-content'>
+      <AkList
+        {{style padding='0px'}}
+        data-test-aiReporting-preview-reportDownloadDrawer-reportList
+      >
         {{#each this.reportDetails as |details|}}
           {{#unless details.hideReport}}
             <AiReporting::Preview::ReportDownloadDrawer::ReportItem
@@ -44,8 +44,8 @@
               @reportRequest={{@reportRequest}}
               @selectedReportType={{this.selectedReportType}}
               @onReportTypeSelect={{this.handleReportTypeSelect}}
-              data-test-aiReporting-reportList-reportItem
-              data-test-aiReporting-reportList-Item='{{details.type}}'
+              data-test-aiReporting-preview-reportDownloadDrawer-reportItem
+              data-test-aiReporting-preview-reportDownloadDrawer-reportItem-type={{details.type}}
             />
           {{/unless}}
         {{/each}}
@@ -64,11 +64,15 @@
         @variant='outlined'
         @color='neutral'
         {{on 'click' dr.closeHandler}}
+        data-test-aiReporting-preview-reportDownloadDrawer-cancelBtn
       >
         {{t 'cancel'}}
       </AkButton>
 
-      <AkButton {{on 'click' this.handleDownload}}>
+      <AkButton
+        {{on 'click' this.handleDownload}}
+        data-test-aiReporting-preview-reportDownloadDrawer-downloadBtn
+      >
         {{t 'download'}}
       </AkButton>
     </AkStack>

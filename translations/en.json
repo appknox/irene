@@ -1310,7 +1310,7 @@
         "label": "Organisation Users",
         "prompt1": "List of users who have not logged in during the last 7 days",
         "prompt2": "Generate audit log of inactive users",
-        "prompt3": "List all members of the organization",
+        "prompt3": "List all users",
         "prompt4": "Generate audit log of all the user activities",
         "prompt5": "List of inactive users and their last activity"
       }
@@ -1323,8 +1323,9 @@
     "description": "Generate reports related to Scans & Users",
     "failedToDownload": "Failed to get donwload url.",
     "failedToPreview": "Failed to preview report",
-    "filterByColumns": "Filter by Columns",
+    "selectedColumns": "Selected Columns",
     "generateReport": "Generate Report",
+    "reportingEngine": "Reporting Engine",
     "generateReportPlaceholder": "For Example - Generate an audit log of all the activities over the last 30 days.",
     "generationTimedOut": "Generation timed out. May be data is too large please try downloading with some filters",
     "generating": "Generating...",
@@ -1346,7 +1347,6 @@
     "scanReports": "Scan Reports",
     "settingsHeader": "AI Reporting",
     "settingsDesc": "Create custom reports using natural language prompts. This feature uses AI to analyze your data and generate insightful summaries, saving your time and helping you make informed decisions faster.",
-    "settingsNoAccess": "You do not have access to this feature",
     "somethingWentWrongHeader": "Something went wrong",
     "somethingWentWrongDesc": "Something went wrong while processing the report request. Please try again.",
     "title": "Reporting",
@@ -1396,7 +1396,8 @@
       "customiseReportData": "Customise your report data",
       "selectFieldsToApplyFilters": "Select the fields to apply filters to."
     },
-    "aiReportDownload": "Report Download ({reportType})"
+    "aiReportDownload": "Report Download ({reportType})",
+    "aiReportDownloadHeaderText": "Please select the report type you wish to download:"
   },
   "reportGenerateError": "Problem while generating report, please try again!",
   "reportGeneratedSuccessfully": "Report generated successfully",
@@ -1702,6 +1703,7 @@
   "staticScan": "Static Scan",
   "status": "Status",
   "statusCode": "Status Code",
+  "statusUpdatedSuccessfully": "Status Updated Successfully.",
   "stop": "Stop",
   "storage": "Storage",
   "storageManagement": "Storage Management",
