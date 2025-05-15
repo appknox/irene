@@ -1,12 +1,12 @@
 import { helper } from '@ember/component/helper';
 import ENUMS from 'irene/enums';
-import type { PreviewFilterField } from 'irene/models/report-request';
+import type { PreviewFilterField } from 'irene/models/ai-reporting/report-request';
 
 export function aiReportFilterOperators(params: [PreviewFilterField]) {
   const filter = params[0];
 
   // FIELD TYPES
-  const { DATETIME, INTEGER, FLOAT, NUMBER, STRING } =
+  const { DATETIME, INTEGER, FLOAT, NUMBER, STRING, BOOLEAN } =
     ENUMS.AI_REPORTING_FIELD_TYPE;
 
   // OPERATORS
@@ -46,6 +46,9 @@ export function aiReportFilterOperators(params: [PreviewFilterField]) {
   ];
 
   switch (filterType) {
+    case BOOLEAN:
+      return [EQ, NEQ, ...(filterIsNullable ? [ISNULL] : []), EXISTS];
+
     case STRING:
       return [...baseOperators, CONTAINS, ICONTAINS, STARTSWITH, ENDSWITH];
 

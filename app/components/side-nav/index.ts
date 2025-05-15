@@ -146,12 +146,20 @@ export default class SideNavComponent extends Component<SideNavSignature> {
     return this.organization?.selected?.features?.storeknox;
   }
 
+  get showReport() {
+    return this.organization?.selected?.aiFeatures?.reporting;
+  }
+
   get isSecurityEnabled() {
     return this.organization.isSecurityEnabled;
   }
 
   get enableChatSupport() {
     return this.freshdesk.freshchatEnabled;
+  }
+
+  get showProductSwitcher() {
+    return this.isSecurityEnabled || this.showStoreknox || this.showReport;
   }
 
   @action openChatBox() {

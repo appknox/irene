@@ -3,11 +3,12 @@
   @justifyContent='space-between'
   @alignItems='center'
   @spacing='1.5'
-  local-class='filter-group-item {{if
-    (this.getInOperatorSelected @filterObj.filter)
-    "in-operator"
-  }}'
+  local-class='
+    filter-group-item
+    {{if (this.getInOperatorSelected @filterObj.filter) "in-operator"}}
+  '
   class='p-2'
+  data-test-aiReporting-preview-filterByColumnDrawer-filterGroupItem='{{@sectionId}}-{{@filterIdx}}'
 >
   <AkStack
     @direction='row'
@@ -24,6 +25,7 @@
         @fontWeight='medium'
         local-class='base-filter-indicator'
         {{style minWidth='65px'}}
+        data-test-aiReporting-preview-filterByColumnDrawer-filterGroupItemIndicator
       >
         {{t 'reportModule.advancedFilters.where'}}
       </AkTypography>
@@ -33,6 +35,8 @@
         @options={{this.unionOperators}}
         @selected={{this.selectedUnionOperator}}
         {{style minWidth='65px'}}
+        class='{{@filterObj.filter.field}}-filter-group-item-union-operator-select'
+        data-test-aiReporting-preview-filterByColumnDrawer-filterGroupItem-unionOperatorSelect
         as |opt|
       >
         <AkTypography @variant='body2'>{{opt}}</AkTypography>
@@ -50,7 +54,9 @@
       @selectedItemComponent={{component
         'ai-reporting/preview/filter-sections/additional-filters/truncated-filter-label'
       }}
+      class='{{@filterObj.filter.field}}-filter-group-item-field-select'
       {{style width='180px'}}
+      data-test-aiReporting-preview-filterByColumnDrawer-filterGroupItemFieldSelect='{{@filterObj.filter.field}}'
       as |opt|
     >
       <AkTypography @variant='body2'>{{opt.label}}</AkTypography>
@@ -69,6 +75,7 @@
   <AkIconButton
     {{on 'click' (fn this.removeFilterAtIndex @filterIdx)}}
     local-class='remove-filter-btn'
+    data-test-aiReporting-preview-filterByColumnDrawer-filterGroupItem-removeBtn
   >
     <AkIcon @iconName='delete' />
   </AkIconButton>

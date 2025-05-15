@@ -29,6 +29,13 @@ export interface AdditionalFilter {
   filter_details: Record<string, AdditionalFilterFilterDetailsExpression>;
 }
 
+export interface DownloadUrlPayload {
+  additional_filters?: AdditionalFilter[];
+  title?: string;
+  columns?: { label: string; field: string }[];
+  report_type?: 'csv' | 'xlsx';
+}
+
 // Report Preview types
 export interface ReportPreviewData {
   [key: string]: unknown;
@@ -79,7 +86,16 @@ export enum ReportRequestStatus {
   FAILED = 3,
 }
 
-export default class ReportRequestModel extends Model {
+export interface FilterColumn {
+  name: string;
+  field: string;
+  selected: boolean;
+  order: number;
+  default?: boolean;
+  type?: string;
+}
+
+export default class AiReportingReportRequestModel extends Model {
   @attr('string')
   declare query: string;
 
@@ -109,7 +125,7 @@ export default class ReportRequestModel extends Model {
     offset: number,
     additionalFilters?: AdditionalFilter[]
   ) {
-    const adapter = this.store.adapterFor('report-request');
+    const adapter = this.store.adapterFor('ai-reporting/report-request');
 
     return await adapter.previewReport(
       this.id,
@@ -119,15 +135,15 @@ export default class ReportRequestModel extends Model {
     );
   }
 
-  async downloadUrl() {
-    const adapter = this.store.adapterFor('report-request');
+  async downloadUrl(payload: DownloadUrlPayload) {
+    const adapter = this.store.adapterFor('ai-reporting/report-request');
 
-    return await adapter.downloadUrl(this.id);
+    return await adapter.downloadUrl(this.id, payload);
   }
 }
 
 declare module 'ember-data/types/registries/model' {
   export default interface ModelRegistry {
-    'report-request': ReportRequestModel;
+    'ai-reporting/report-request': AiReportingReportRequestModel;
   }
 }

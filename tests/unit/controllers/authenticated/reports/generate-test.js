@@ -1,5 +1,5 @@
 import { module, test } from 'qunit';
-import { setupTest } from 'irene/tests/helpers';
+import { setupTest } from 'ember-qunit';
 
 module('Unit | Controller | authenticated/reports/generate', function (hooks) {
   setupTest(hooks);

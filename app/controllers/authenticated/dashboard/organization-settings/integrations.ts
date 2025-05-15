@@ -18,6 +18,7 @@ export default class AuthenticatedDashboardOrganizationSettingsIntegrationsContr
 
       siblingRoutes: [
         'authenticated.dashboard.organization-settings.service-account',
+        'authenticated.dashboard.organization-settings.ai-powered-features',
       ],
 
       parentCrumb: {

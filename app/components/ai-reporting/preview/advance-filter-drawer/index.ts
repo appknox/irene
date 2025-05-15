@@ -10,7 +10,7 @@ import type {
   AdditionalFilterErroredFieldProp,
   AdditionalFilterFilterDetailsExpression,
   PreviewFilterDetails,
-} from 'irene/models/report-request';
+} from 'irene/models/ai-reporting/report-request';
 
 export interface PreviewFilterProps {
   filter: PreviewFilterField;
@@ -31,8 +31,9 @@ interface AiReportingPreviewAdvanceFilterDrawerSignature {
 }
 
 export default class AiReportingPreviewAdvanceFilterDrawer extends Component<AiReportingPreviewAdvanceFilterDrawerSignature> {
-  // It is optimal to keep track of separate selected filters and mapped additional filters
-  // because if selected filters is derived from mapped additional filters, it leads to poor UI performance due to recomputations.
+  // Selected filters keep track of the selected filters for each filter group
+  // Mapped additional filters keep track of the selected filter values and their expressions.
+  // The separation is important to prevent rerendering of the selected filters list on every change of the applied filters operation or values.
   @tracked selectedFilters: Record<string, PreviewFilterProps[]> = {};
   @tracked mappedAdditionalFilters: MappedAdditionalFilters = {};
 
@@ -169,7 +170,7 @@ export default class AiReportingPreviewAdvanceFilterDrawer extends Component<AiR
           operator === ENUMS.AI_REPORTING_FILTER_OPERATOR.ISNULL;
 
         const fieldCanBeNull = operatorIsExists || fieldIsNullable;
-        const valueIsEmpty = !fieldCanBeNull && !value;
+        const valueIsEmpty = !fieldCanBeNull && value === null;
 
         // If operator is IN or NOT IN, check if the value is an array
         const operatorIsIn =
@@ -236,7 +237,7 @@ export default class AiReportingPreviewAdvanceFilterDrawer extends Component<AiR
     this.erroredFields = { ...currErroredFields };
   }
 
-  //
+  // Get the filter field key
   @action
   getFilterFieldKey(field: PreviewFilterField) {
     return field.filter_key ?? field.field;
@@ -246,10 +247,13 @@ export default class AiReportingPreviewAdvanceFilterDrawer extends Component<AiR
    * Recompute the selected and mapped filters from default/pre-existing filters.
    * Useful for persisting filters when the user closes the filter drawer and reopens it.
    *
-   * @returns void
+   * @returns {selectedFilters: Record<string, PreviewFilterProps[]>, mappedFilters: MappedAdditionalFilters}
    */
   @action
-  computeDefaultSelectedAndMappedFilters() {
+  computeDefaultSelectedAndMappedFilters(): {
+    selectedFilters: Record<string, PreviewFilterProps[]>;
+    mappedFilters: MappedAdditionalFilters;
+  } {
     const selectedFilters: Record<string, PreviewFilterProps[]> = {};
     const mappedFilters: MappedAdditionalFilters = {};
 
