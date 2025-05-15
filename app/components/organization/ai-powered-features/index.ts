@@ -44,6 +44,10 @@ export default class OrganizationAiPoweredFeaturesComponent extends Component {
         description: this.intl.t('reportModule.settingsDesc'),
         header: this.intl.t('reportModule.settingsHeader'),
         tooltipContent: this.intl.t('reportModule.settingsNoAccess'),
+
+        isToggling:
+          this.featureToToggle === 'reporting' &&
+          this.toggleReporting.isRunning,
       },
     ];
   }
@@ -113,6 +117,9 @@ export default class OrganizationAiPoweredFeaturesComponent extends Component {
         this.aiDrawerOpen = false;
 
         await this.aiFeatures?.save();
+        await this.fetchOrganizationAiFeatures.perform();
+
+        this.notify.success(this.intl.t('statusUpdatedSuccessfully'));
       } catch (err) {
         this.notify.error(parseError(err));
       }

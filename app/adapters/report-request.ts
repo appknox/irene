@@ -2,8 +2,10 @@ import CommonDRFAdapter from './commondrf';
 import { underscore } from '@ember/string';
 import type ModelRegistry from 'ember-data/types/registries/model';
 
-import type { AdditionalFilter } from 'irene/models/report-request';
-
+import type {
+  AdditionalFilter,
+  DownloadUrlPayload,
+} from 'irene/models/report-request';
 export interface DownloadUrlResponse {
   url: string;
 }
@@ -30,10 +32,13 @@ export default class ReportRequestAdapter extends CommonDRFAdapter {
     return await this.ajax(`${baseUrl}/preview`, 'POST', { data });
   }
 
-  async downloadUrl(id: string): Promise<DownloadUrlResponse> {
+  async downloadUrl(
+    id: string,
+    data: DownloadUrlPayload
+  ): Promise<DownloadUrlResponse> {
     const baseUrl = this.buildURL('report-request', id);
 
-    return await this.ajax(`${baseUrl}/download_url`, 'GET');
+    return await this.ajax(`${baseUrl}/download_url`, 'POST', { data });
   }
 }
 

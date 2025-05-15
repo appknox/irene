@@ -1,4 +1,4 @@
-import { setupTest } from 'irene/tests/helpers';
+import { setupTest } from 'ember-qunit';
 import { module, test } from 'qunit';
 
 module('Unit | Adapter | report request', function (hooks) {

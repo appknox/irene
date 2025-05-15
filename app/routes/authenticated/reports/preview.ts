@@ -13,7 +13,7 @@ export default class AuthenticatedReportsPreviewRoute extends AkBreadcrumbsRoute
 
   beforeModel() {
     if (!this.organization.selected?.aiFeatures?.reporting) {
-      this.router.transitionTo('authenticated.reports.generate');
+      this.router.replaceWith('authenticated.reports.generate');
     }
   }
 

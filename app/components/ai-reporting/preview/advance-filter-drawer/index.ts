@@ -169,7 +169,7 @@ export default class AiReportingPreviewAdvanceFilterDrawer extends Component<AiR
           operator === ENUMS.AI_REPORTING_FILTER_OPERATOR.ISNULL;
 
         const fieldCanBeNull = operatorIsExists || fieldIsNullable;
-        const valueIsEmpty = !fieldCanBeNull && !value;
+        const valueIsEmpty = !fieldCanBeNull && value === null;
 
         // If operator is IN or NOT IN, check if the value is an array
         const operatorIsIn =

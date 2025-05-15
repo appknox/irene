@@ -29,6 +29,13 @@ export interface AdditionalFilter {
   filter_details: Record<string, AdditionalFilterFilterDetailsExpression>;
 }
 
+export interface DownloadUrlPayload {
+  additional_filters?: AdditionalFilter[];
+  title?: string;
+  columns?: { label: string; field: string }[];
+  report_type?: 'csv' | 'xlsx';
+}
+
 // Report Preview types
 export interface ReportPreviewData {
   [key: string]: unknown;
@@ -79,6 +86,15 @@ export enum ReportRequestStatus {
   FAILED = 3,
 }
 
+export interface FilterColumn {
+  name: string;
+  field: string;
+  selected: boolean;
+  order: number;
+  default?: boolean;
+  type?: string;
+}
+
 export default class ReportRequestModel extends Model {
   @attr('string')
   declare query: string;
@@ -119,10 +135,10 @@ export default class ReportRequestModel extends Model {
     );
   }
 
-  async downloadUrl() {
+  async downloadUrl(payload: DownloadUrlPayload) {
     const adapter = this.store.adapterFor('report-request');
 
-    return await adapter.downloadUrl(this.id);
+    return await adapter.downloadUrl(this.id, payload);
   }
 }
 

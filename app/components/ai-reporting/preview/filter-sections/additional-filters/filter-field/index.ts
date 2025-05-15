@@ -12,6 +12,11 @@ import type {
   AdditionalFilterErroredFieldProp,
 } from 'irene/models/report-request';
 
+import {
+  aiReportAdvFilterValComp,
+  AI_REPORT_FILTER_TEXT_TYPE_COMPONENT,
+} from 'irene/helpers/ai-report-adv-filter-val-comp';
+
 import styles from './index.scss';
 
 // Filter operators labels
@@ -50,9 +55,6 @@ interface AiReportingPreviewFilterSectionsAdditionalFiltersFilterFieldSignature 
 
 export default class AiReportingPreviewFilterSectionsAdditionalFiltersFilterFieldComponent extends Component<AiReportingPreviewFilterSectionsAdditionalFiltersFilterFieldSignature> {
   @service declare intl: IntlService;
-
-  textTypeValueComponent =
-    'ai-reporting/preview/filter-sections/additional-filters/text-type' as const;
 
   get allCurrFilters() {
     return this.args.allCurrFilters;
@@ -96,24 +98,7 @@ export default class AiReportingPreviewFilterSectionsAdditionalFiltersFilterFiel
   }
 
   get valueComponent() {
-    if (this.args.field.choices) {
-      return 'ai-reporting/preview/filter-sections/additional-filters/choice-type';
-    }
-
-    switch (this.args.field.type) {
-      case ENUMS.AI_REPORTING_FIELD_TYPE.STRING:
-      case ENUMS.AI_REPORTING_FIELD_TYPE.INTEGER:
-      case ENUMS.AI_REPORTING_FIELD_TYPE.NUMBER:
-      case ENUMS.AI_REPORTING_FIELD_TYPE.BOOLEAN:
-      case ENUMS.AI_REPORTING_FIELD_TYPE.FLOAT:
-        return this.textTypeValueComponent;
-
-      case ENUMS.AI_REPORTING_FIELD_TYPE.DATETIME:
-        return 'ai-reporting/preview/filter-sections/additional-filters/date-type';
-
-      default:
-        return this.textTypeValueComponent;
-    }
+    return aiReportAdvFilterValComp([this.args.field]);
   }
 
   get filterFieldDropdownClass() {
@@ -179,7 +164,7 @@ export default class AiReportingPreviewFilterSectionsAdditionalFiltersFilterFiel
     const operatorIsExists = newOperator === this.existsOperator;
 
     const isTextFieldValue =
-      this.valueComponent === this.textTypeValueComponent;
+      this.valueComponent === AI_REPORT_FILTER_TEXT_TYPE_COMPONENT;
 
     let value = null;
 

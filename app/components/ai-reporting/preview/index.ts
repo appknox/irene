@@ -7,8 +7,12 @@ import type IntlService from 'ember-intl/services/intl';
 import type Store from '@ember-data/store';
 
 import type ReportRequestModel from 'irene/models/report-request';
-import type { AdditionalFilter } from 'irene/models/report-request';
-import type { FilterColumn } from 'irene/services/ai-reporting';
+
+import type {
+  AdditionalFilter,
+  FilterColumn,
+} from 'irene/models/report-request';
+
 import type IreneAjaxService from 'irene/services/ajax';
 
 import type {
@@ -200,6 +204,7 @@ export default class AiReportingPreview extends Component<AiReportingPreviewSign
           this.allColumnsMap = new Map(
             (this.reportPreview?.columns || []).map((column, index) => {
               const isSelected = !!column.is_default;
+
               if (isSelected) {
                 hasSelectedColumns = true;
               }
