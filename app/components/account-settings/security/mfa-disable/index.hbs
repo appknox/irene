@@ -1,0 +1,99 @@
+<AkModal
+  @showHeader={{true}}
+  @headerTitle={{t 'modalCard.mfaTitle.disable'}}
+  @onClose={{this.closeMFADisable}}
+>
+  <:default>
+    {{#if (and this.showConfirmDisableMFA this.user.canDisableMfa)}}
+      <AkTypography data-test-mfa-disable-email-title>
+        {{t 'modalCard.enableMFAEmail.sendMailMsg'}}
+      </AkTypography>
+    {{else}}
+      <AkStack
+        @alignItems='center'
+        class='mb-2 p-2'
+        local-class='alert-success'
+        {{style width='450px'}}
+      >
+        <AkStack @alignItems='center' @spacing='1'>
+          <AkIcon @iconName='security' color='inherit' />
+
+          <AkTypography data-test-mfa-disable-denied>
+            {{t 'disableMFADenied'}}
+          </AkTypography>
+        </AkStack>
+      </AkStack>
+    {{/if}}
+
+    {{#if this.showDisableMFA}}
+      <AkTypography data-test-mfa-disable-desc>
+        {{t 'modalCard.disableMFA.enterOTP'}}
+
+        {{#if this.isEmailMFAEnabled}}
+          {{t 'modalCard.disableMFA.viaEmail'}}
+        {{/if}}
+
+        {{#if this.isAppMFAEnabled}}
+          {{t 'modalCard.disableMFA.viaApp'}}
+        {{/if}}
+      </AkTypography>
+
+      <form
+        {{on 'submit' (perform this.verifyDisableOTP)}}
+        aria-label='Disable Email MFA Otp'
+        class='mt-3'
+      >
+        <AkTextField
+          @value={{this.disableOTP}}
+          data-test-mfa-disable-textfield
+        />
+      </form>
+
+    {{/if}}
+  </:default>
+
+  <:footer>
+    <AkStack
+      class='px-3 py-2'
+      @alignItems='center'
+      @justifyContent='flex-end'
+      @spacing='1.5'
+    >
+      {{#if (and this.showConfirmDisableMFA this.user.canDisableMfa)}}
+        <AkButton
+          @loading={{this.sendDisableMFAOTPEmail.isRunning}}
+          {{on 'click' (perform this.continueDisableMFA)}}
+          data-test-mfa-disable-continue
+        >
+          {{t 'continue'}}
+        </AkButton>
+
+        <AkButton
+          @variant='outlined'
+          @color='neutral'
+          {{on 'click' this.closeMFADisable}}
+        >
+          {{t 'cancel'}}
+        </AkButton>
+      {{/if}}
+
+      {{#if this.showDisableMFA}}
+        <AkButton
+          @loading={{this.verifyDisableOTP.isRunning}}
+          {{on 'click' (perform this.verifyDisableOTP)}}
+          data-test-mfa-disable-confirm
+        >
+          {{t 'confirm'}}
+        </AkButton>
+
+        <AkButton
+          @variant='outlined'
+          @color='neutral'
+          {{on 'click' this.closeMFADisable}}
+        >
+          {{t 'cancel'}}
+        </AkButton>
+      {{/if}}
+    </AkStack>
+  </:footer>
+</AkModal>

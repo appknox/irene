@@ -1,0 +1,8 @@
+.alert-success {
+  border: 1px solid
+    var(--account-settings-security-mfa-alert-success-border-color);
+  background-color: var(
+    --account-settings-security-mfa-alert-success-background
+  );
+  color: var(--account-settings-security-mfa-alert-success-text-color);
+}
