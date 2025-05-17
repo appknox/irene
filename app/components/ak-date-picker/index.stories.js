@@ -33,7 +33,7 @@ function onSelectDay(day) {
 const AkDatePickerTemplate = (args) => {
   return {
     template: hbs`
-        <AkDatePicker 
+        <AkDatePicker
           @dayClass={{this.dayClass}}
           @startOfWeek={{this.startOfWeek}}
           @weekdayFormat={{this.weekdayFormat}}
@@ -48,7 +48,7 @@ const AkDatePickerTemplate = (args) => {
           @maxLength={{this.maxLength}}
           @proximitySelection={{this.proximitySelection}}
           @selected={{this.selected}}
-          @onSelect={{this.onSelect}} 
+          @onSelect={{this.onSelect}}
           @quickSelectOptions={{this.quickSelectOptions}}
         >
           <AkButton>

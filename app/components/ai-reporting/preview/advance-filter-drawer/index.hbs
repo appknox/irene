@@ -1,0 +1,118 @@
+<AkDrawer
+  @open={{true}}
+  @onClose={{this.handleClose}}
+  @anchor='right'
+  @disableBackdropClick={{true}}
+  data-test-aiReporting-preview-filterByColumnDrawer
+  as |dr|
+>
+  <AkStack
+    @direction='column'
+    @width='full'
+    local-class='filter-drawer-container'
+    {{style width='860px'}}
+  >
+    <AkAppbar @position='sticky' @justifyContent='space-between' as |ab|>
+      <AkTypography
+        data-test-aiReporting-preview-filterByColumnDrawer-heading
+        @variant='h5'
+        @color='inherit'
+      >
+        {{t 'reportModule.advancedFilter'}}
+      </AkTypography>
+
+      <AkIconButton
+        class={{ab.classes.defaultIconBtn}}
+        {{on 'click' dr.closeHandler}}
+      >
+        <AkIcon @iconName='close' />
+      </AkIconButton>
+    </AkAppbar>
+
+    <AkStack @width='full' class='p-3'>
+      <AkStack
+        @width='full'
+        @direction='column'
+        local-class='filter-drawer-content'
+        class='p-3'
+        data-test-aiReporting-preview-filterByColumnDrawer-content
+      >
+        <AkStack @width='full' @direction='column' @spacing='0.5'>
+          <AkTypography
+            @variant='h6'
+            data-test-aiReporting-preview-filterByColumnDrawer-contentHeading
+          >
+            {{t 'reportModule.advancedFilters.customiseReportData'}}
+          </AkTypography>
+
+          <AkTypography
+            @color='neutral'
+            @variant='body2'
+            @fontWeight='medium'
+            data-test-aiReporting-preview-filterByColumnDrawer-contentSubHeading
+          >
+            {{t 'reportModule.advancedFilters.selectFieldsToApplyFilters'}}
+          </AkTypography>
+        </AkStack>
+
+        {{#each this.filterDetails as |fd|}}
+          <AkDivider class='my-4' />
+
+          <AiReporting::Preview::FilterSections::FilterGroup
+            @sectionId={{fd.id}}
+            @filterDetails={{fd}}
+            @clearErrorField={{this.clearErrorField}}
+            @erroredFields={{this.erroredFields}}
+            @allSelectedFilters={{this.selectedFilters}}
+            @allMappedAdditionalFilters={{this.mappedAdditionalFilters}}
+            @additionalFilters={{this.additionalFilters}}
+            @updateSelectedFilters={{this.updateSelectedFilters}}
+            @updateMappedAdditionalFilters={{this.updateMappedAdditionalFilters}}
+          />
+        {{/each}}
+      </AkStack>
+    </AkStack>
+
+    <AkStack
+      @width='full'
+      @alignItems='center'
+      @justifyContent='space-between'
+      @spacing='1.5'
+      local-class='filter-drawer-footer'
+      class='px-3 py-2'
+    >
+      <AkButton
+        @variant='outlined'
+        @color='primary'
+        {{on 'click' this.clearAllFilters}}
+        data-test-aiReporting-preview-filterByColumnDrawer-clearAllBtn
+      >
+        <:leftIcon>
+          <AkIcon @iconName='close' />
+        </:leftIcon>
+
+        <:default>
+          {{t 'clearFilters'}}
+        </:default>
+      </AkButton>
+
+      <AkStack @alignItems='center' @spacing='1.5'>
+        <AkButton
+          @variant='outlined'
+          @color='neutral'
+          {{on 'click' dr.closeHandler}}
+          data-test-aiReporting-preview-filterByColumnDrawer-cancelBtn
+        >
+          {{t 'cancel'}}
+        </AkButton>
+
+        <AkButton
+          {{on 'click' this.applyAndClose}}
+          data-test-aiReporting-preview-filterByColumnDrawer-applyBtn
+        >
+          {{t 'apply'}}
+        </AkButton>
+      </AkStack>
+    </AkStack>
+  </AkStack>
+</AkDrawer>

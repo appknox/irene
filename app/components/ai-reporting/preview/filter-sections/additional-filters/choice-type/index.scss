@@ -1,0 +1,12 @@
+.choice-select-option {
+  width: 210px !important;
+
+  :global(.ember-power-select-multiple-options) {
+    padding: 0.285em;
+    max-height: 64px;
+  }
+
+  :global(.ember-power-select-placeholder) {
+    font-size: 0.928rem;
+  }
+}
