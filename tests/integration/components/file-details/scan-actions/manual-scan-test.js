@@ -1,4 +1,4 @@
-import { render } from '@ember/test-helpers';
+import { find, render, triggerEvent } from '@ember/test-helpers';
 import { hbs } from 'ember-cli-htmlbars';
 import { setupMirage } from 'ember-cli-mirage/test-support';
 import { setupIntl, t } from 'ember-intl/test-support';
@@ -110,6 +110,40 @@ module(
             .dom('[data-test-fileDetailScanActions-manualScanNotStartedStatus]')
             .hasText(t('notStarted'));
         }
+
+        // Scan overview section
+        const vulnerabilityCount = this.file.isManualDone
+          ? String(this.file.manualVulnerabilityCount)
+          : '-';
+
+        const scanOverviewSection = find(
+          '[data-test-fileDetails-scanActions-scanOverview-manualScanRoot]'
+        );
+
+        assert
+          .dom(
+            '[data-test-fileDetails-scanActions-scanOverview-vulnerabilitiesFoundIcon]',
+            scanOverviewSection
+          )
+          .exists();
+
+        assert
+          .dom(scanOverviewSection)
+          .containsText(t('scanOverview'))
+          .containsText(vulnerabilityCount);
+
+        // Vulnerabilities found tooltip
+        const vulnerabilitiesFoundTooltip = find(
+          '[data-test-fileDetails-scanActions-scanOverview-vulnerabilitiesFoundTooltip]'
+        );
+
+        await triggerEvent(vulnerabilitiesFoundTooltip, 'mouseenter');
+
+        assert
+          .dom('[data-test-ak-tooltip-content]')
+          .containsText(t('vulnerabilitiesFound'));
+
+        await triggerEvent(vulnerabilitiesFoundTooltip, 'mouseleave');
       }
     );
   }

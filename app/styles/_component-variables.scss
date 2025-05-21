@@ -2171,6 +2171,50 @@ body {
     --neutral-grey-100
   );
 
+  // variables for file-details/dynamic-scan/results/header
+  --file-details-dynamic-scan-results-header-background-color: var(
+    --background-main
+  );
+
+  --file-details-dynamic-scan-results-header-border-color: var(
+    --border-color-1
+  );
+
+  // variables for file-details/dynamic-scan/results/scan-coverage
+  --file-details-dynamic-scan-results-scan-coverage-container-border-color: var(
+    --border-color-1
+  );
+
+  // variables for file-details/dynamic-scan/results/coverage-table/status-header
+  --file-details-dynamic-scan-results-coverage-table-status-header-background-color: var(
+    --background-main
+  );
+
+  --file-details-dynamic-scan-results-coverage-table-status-header-box-shadow: var(
+    --box-shadow-7
+  );
+
+  --file-details-dynamic-scan-results-coverage-table-status-header-border-radius: var(
+    --box-shadow-7
+  );
+
+  --file-details-dynamic-scan-results-coverage-table-status-header-filter-option-hover-background-color: var(
+    --neutral-grey-200
+  );
+
+  --file-details-dynamic-scan-results-coverage-table-status-header-filter-option-clear-filter-background-color: var(
+    --neutral-grey-200
+  );
+
+  --file-details-dynamic-scan-results-coverage-table-status-header-filter-header-background-color: var(
+    --neutral-grey-100
+  );
+
+  // variables for file-details/dynamic-scan/results/scan-coverage/status
+  --file-details-dynamic-scan-results-scan-coverage-status-box-shadow: var(
+    --box-shadow-3
+  );
+
   // variables for page-not-found
   --page-not-found-container-background-color: var(--background-light);
   --page-not-found-card-background-color: var(--background-main);
@@ -2185,6 +2229,9 @@ body {
   --file-details-static-scan-background-main: var(--background-main);
   --file-details-static-scan-primary-light: var(--primary-light);
   --file-details-static-scan-text-primary: var(--text-primary);
+
+  // variables for file-details/scan-actions/scan-overview
+  --file-details-scan-actions-scan-overview-border-color: var(--border-color-1);
 
   // variables for system-status
   --system-status-root-container-border-color: var(--neutral-grey-200);

@@ -1,0 +1,13 @@
+<AkChip
+  @size='small'
+  @variant='semi-filled'
+  @color={{if @coverage.visited 'success' 'error'}}
+  @label={{if
+    @coverage.visited
+    (t 'scanCoverage.visitedCapitalized')
+    (t 'scanCoverage.notVisitedCapitalized')
+  }}
+  {{style width='90px'}}
+  class='mx-2'
+  data-test-fileDetails-dynamicScan-results-coverageTable-status
+/>

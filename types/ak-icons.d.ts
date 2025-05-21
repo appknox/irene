@@ -142,6 +142,7 @@ export const AkIconVariant = [
   'report',
   'arrow-outward',
   'beenhere',
+  'bug-report',
   // md icons
   'mdi:checkbox-marked',
   'mdi:checkbox-blank-outline',
@@ -158,6 +159,8 @@ export const AkIconVariant = [
   'network-intel-node',
   'auto-awesome',
   'reorder',
+  // bx icons
+  'bx:mobile-alt',
 ] as const;
 
 export type AkIconVariantType = (typeof AkIconVariant)[number];

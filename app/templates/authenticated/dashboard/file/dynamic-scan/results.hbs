@@ -1,3 +1,13 @@
 {{page-title (t 'scanResults')}}
 
-<FileDetails::DynamicScan::Results @file={{@model.file}} />
+<FileDetails::DynamicScan::Results::ScanCoverageProvider
+  @file={{@model.file}}
+  as |context|
+>
+  <FileDetails::DynamicScan::Results::Header
+    @file={{@model.file}}
+    @scanCoverage={{context.scanCoverage}}
+  />
+</FileDetails::DynamicScan::Results::ScanCoverageProvider>
+
+{{outlet}}

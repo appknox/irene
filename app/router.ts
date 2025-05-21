@@ -217,7 +217,10 @@ Router.map(function () {
             this.route('manual');
             this.route('automated');
             this.route('scheduled-automated');
-            this.route('results');
+            this.route('results', function () {
+              this.route('index', { path: '/' });
+              this.route('scan-coverage');
+            });
           });
         });
 

@@ -34,10 +34,20 @@ module('Acceptance | account settings redirect', function (hooks) {
 
     this.owner.register('service:integration', IntegrationStub);
     this.owner.register('service:websocket', WebsocketStub);
+
+    this.server.get('/v2/mfa', () => {
+      return {
+        count: 0,
+        next: null,
+        previous: null,
+        results: [],
+      };
+    });
   });
 
   test('It redirects to authenticated.dashboard.account-settings route', async function (assert) {
     await visit('/settings');
+
     assert.strictEqual(currentURL(), '/dashboard/settings/general');
 
     await visit('/settings/general');

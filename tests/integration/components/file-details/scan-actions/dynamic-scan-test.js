@@ -1,4 +1,4 @@
-import { render } from '@ember/test-helpers';
+import { find, render, triggerEvent } from '@ember/test-helpers';
 import { hbs } from 'ember-cli-htmlbars';
 import { setupMirage } from 'ember-cli-mirage/test-support';
 import { setupIntl, t } from 'ember-intl/test-support';
@@ -61,7 +61,7 @@ module(
 
       assert
         .dom('[data-test-fileDetailScanActions-dynamicScanTitle]')
-        .hasText(t('dast'));
+        .hasText(t('dynamicScan'));
 
       assert
         .dom('[data-test-fileDetailScanActions-dynamicScanStatus]')
@@ -241,9 +241,26 @@ module(
           )
         );
 
+        // Scan coverage model
+        const scan_coverage = this.server.create('scan-coverage', {
+          status: ENUMS.SCAN_COVERAGE_STATUS.COMPLETED,
+          is_any_screen_coverage_complete: true,
+        });
+
+        this.scanCoverage = this.store.push(
+          this.store.normalize('scan-coverage', scan_coverage.toJSON())
+        );
+
+        // Server mocks
+        this.server.get('/v2/files/:id/screen_coverage', (schema) => {
+          return this.file.isDynamicDone
+            ? schema.scanCoverages.find(scan_coverage.id)?.toJSON()
+            : null;
+        });
+
         await render(hbs`
-          <FileDetails::ScanActions::DynamicScan 
-            @file={{this.file}} 
+          <FileDetails::ScanActions::DynamicScan
+            @file={{this.file}}
           />
         `);
 
@@ -251,6 +268,88 @@ module(
           .dom('[data-test-fileDetailScanActions-dynamicScanStatus]')
           .exists()
           .hasText(expectedText());
+
+        // Scan overview section
+        const vulnerabilityCount = this.file.isDynamicDone
+          ? String(this.file.dynamicVulnerabilityCount)
+          : '-';
+
+        const scanOverviewSection = find(
+          '[data-test-fileDetails-scanActions-scanOverview-dynamicScanRoot]'
+        );
+
+        // Vulnerabilities found section
+        assert
+          .dom(
+            '[data-test-fileDetails-scanActions-scanOverview-vulnerabilitiesFoundIcon]',
+            scanOverviewSection
+          )
+          .exists();
+
+        assert
+          .dom(
+            '[data-test-fileDetails-scanActions-scanOverview-vulnerabilitiesFoundValue]',
+            scanOverviewSection
+          )
+          .containsText(vulnerabilityCount);
+
+        // Vulnerabilities found tooltip
+        const vulnerabilitiesFoundTooltip = find(
+          '[data-test-fileDetails-scanActions-scanOverview-vulnerabilitiesFoundTooltip]'
+        );
+
+        await triggerEvent(vulnerabilitiesFoundTooltip, 'mouseenter');
+
+        assert
+          .dom('[data-test-ak-tooltip-content]')
+          .containsText(t('vulnerabilitiesFound'));
+
+        await triggerEvent(vulnerabilitiesFoundTooltip, 'mouseleave');
+
+        // Screen coverage section
+        if (this.file.isDynamicDone) {
+          // Screen coverage tooltip
+          const screenCoverageTooltip = find(
+            '[data-test-fileDetails-scanActions-scanOverview-screenCoverageTooltip]'
+          );
+
+          await triggerEvent(screenCoverageTooltip, 'mouseenter');
+
+          assert
+            .dom('[data-test-ak-tooltip-content]')
+            .hasText(t('scanCoverage.screenCoverage'));
+
+          await triggerEvent(screenCoverageTooltip, 'mouseleave');
+
+          // Screen coverage section
+          assert
+            .dom(
+              '[data-test-fileDetails-scanActions-scanOverview-screenCoverageRoot]',
+              scanOverviewSection
+            )
+            .exists();
+
+          assert
+            .dom(
+              '[data-test-fileDetails-scanActions-scanOverview-screenCoverageIcon]',
+              scanOverviewSection
+            )
+            .exists();
+
+          assert
+            .dom(
+              '[data-test-fileDetails-scanActions-scanOverview-screenCoverageValue]',
+              scanOverviewSection
+            )
+            .hasText(`${String(this.scanCoverage.coverage)}%`);
+        } else {
+          assert
+            .dom(
+              '[data-test-fileDetails-scanActions-scanOverview-screenCoverageRoot]',
+              scanOverviewSection
+            )
+            .doesNotExist();
+        }
       }
     );
   }
