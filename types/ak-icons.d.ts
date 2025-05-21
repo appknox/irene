@@ -142,6 +142,7 @@ export const AkIconVariant = [
   'report',
   'arrow-outward',
   'beenhere',
+  'bug-report',
   // md icons
   'mdi:checkbox-marked',
   'mdi:checkbox-blank-outline',
@@ -155,6 +156,8 @@ export const AkIconVariant = [
   'fa-brands:apple',
   // ic icons
   'ic:outline-drive-file-rename-outline',
+  // bx icons
+  'bx:mobile-alt',
 ] as const;
 
 export type AkIconVariantType = (typeof AkIconVariant)[number];

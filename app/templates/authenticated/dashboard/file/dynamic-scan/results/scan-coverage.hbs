@@ -1,0 +1,16 @@
+{{page-title (t 'scanCoverage.title')}}
+
+<FileDetails::DynamicScan::Results::ScanCoverageProvider
+  @file={{@model.file}}
+  as |context|
+>
+  {{#if context.isLoadingScreenCoverage}}
+    <FileDetails::DynamicScan::Results::ScanCoverage::Loading />
+  {{else}}
+    <FileDetails::DynamicScan::Results::ScanCoverage
+      @file={{@model.file}}
+      @scanCoverage={{context.scanCoverage}}
+      @isOldFileWithNoCoverage={{context.isOldFileWithNoCoverage}}
+    />
+  {{/if}}
+</FileDetails::DynamicScan::Results::ScanCoverageProvider>

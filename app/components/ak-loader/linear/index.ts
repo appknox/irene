@@ -38,12 +38,10 @@ export default class AkLoaderLinearComponent extends Component<AkLoaderLinearSig
     return progress;
   }
 
-  get progressIndicatorPosition() {
-    if (this.progress > 100) {
-      return 0;
-    }
-
-    return this.progress - 100;
+  get progressIndicatorPositionStyle() {
+    return {
+      transform: `translateX(${this.progress}%)`,
+    };
   }
 
   get color() {
