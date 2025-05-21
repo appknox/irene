@@ -1,0 +1,24 @@
+<AkTabs local-class='dast-results-tabs' as |Akt|>
+  {{#each this.tabItems as |item|}}
+    <Akt.tabItem
+      @id={{item.id}}
+      @route={{item.route}}
+      @currentWhen={{item.route}}
+      @models={{item.models}}
+      @hasBadge={{item.hasBadge}}
+      data-test-fileDetails-dynamicScan-results-tabs='{{item.id}}-tab'
+    >
+      <:badge>
+        {{#if item.hasBadge}}
+          <AkTypography @color='inherit' @variant='body2' @fontWeight='bold'>
+            {{item.badgeCount}}%
+          </AkTypography>
+        {{/if}}
+      </:badge>
+
+      <:default>
+        {{item.label}}
+      </:default>
+    </Akt.tabItem>
+  {{/each}}
+</AkTabs>

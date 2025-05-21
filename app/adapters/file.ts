@@ -1,5 +1,6 @@
 import CommonDRFAdapter from './commondrf';
 import type DynamicscanModel from 'irene/models/dynamicscan';
+import type ScanCoverageModel from 'irene/models/scan-coverage';
 
 interface ProjectFilesQuery {
   projectId: string;
@@ -42,6 +43,19 @@ export default class File extends CommonDRFAdapter {
       const normailized = this.store.normalize('dynamicscan', res.results[0]);
 
       return this.store.push(normailized) as DynamicscanModel;
+    }
+
+    return null;
+  }
+
+  async getScreenCoverage(fileId: string) {
+    const url = `${this._buildURL('file', fileId)}/screen_coverage`;
+    const res = await this.ajax(url, 'GET');
+
+    if (res) {
+      const normailized = this.store.normalize('scan-coverage', res);
+
+      return this.store.push(normailized) as ScanCoverageModel;
     }
 
     return null;

@@ -1,0 +1,13 @@
+<AkStack @direction='column'>
+  <AkStack
+    @direction='row'
+    @alignItems='center'
+    @spacing='2'
+    class='p-2'
+    {{style height='40px'}}
+  >
+    <AkSkeleton @height='20px' @width='450px' />
+  </AkStack>
+
+  <AkTable::Loading @columns={{array 1 2}} />
+</AkStack>

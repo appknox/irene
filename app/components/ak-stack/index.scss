@@ -207,3 +207,16 @@
 .ak-stack-width-auto {
   width: auto;
 }
+
+// Background color
+.ak-stack-bg-color-transparent {
+  background-color: transparent;
+}
+
+.ak-stack-bg-color-white {
+  background-color: var(--background-main);
+}
+
+.ak-stack-bg-color-light {
+  background-color: var(--background-light);
+}
