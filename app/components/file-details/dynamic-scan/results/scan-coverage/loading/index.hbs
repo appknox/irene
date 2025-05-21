@@ -1,0 +1,29 @@
+<AkStack
+  @direction='row'
+  @justifyContent='space-between'
+  @alignItems='center'
+  @spacing='2.5'
+  @bgColor='white'
+  class='p-3'
+>
+  <AkStack @direction='column' @spacing='1'>
+    <AkSkeleton @width='200px' @height='24px' @variant='rounded' />
+    <AkSkeleton @width='450px' @height='20px' @variant='rounded' />
+  </AkStack>
+
+  <AkStack @direction='column' @alignItems='flex-end' @spacing='1'>
+    <AkSkeleton @width='190px' @height='11px' @variant='rounded' />
+
+    <AkStack
+      @direction='column'
+      @alignItems='flex-end'
+      @spacing='0.5'
+      class='mt-1'
+    >
+      <AkSkeleton @width='100px' @height='20px' @variant='rounded' />
+      <AkSkeleton @width='120px' @height='16px' @variant='rounded' />
+    </AkStack>
+  </AkStack>
+</AkStack>
+
+<AkTable::Loading />

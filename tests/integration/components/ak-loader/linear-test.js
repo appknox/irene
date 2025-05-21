@@ -20,7 +20,6 @@ module('Integration | Component | ak-loader/linear', function (hooks) {
   test('test determinate ak-loader-linear progress', async function (assert) {
     this.setProperties({
       progress: 30,
-
       // Divides the loader to 100 equal units for test purposes
       width: 100,
     });
@@ -47,14 +46,14 @@ module('Integration | Component | ak-loader/linear', function (hooks) {
 
     assert.strictEqual(
       linearProgressIndicator.style.transform,
-      'translateX(-70%)'
+      `translateX(${this.progress}%)`
     );
 
     this.set('progress', 45.5);
 
     assert.strictEqual(
       linearProgressIndicator.style.transform,
-      'translateX(-54.5%)'
+      `translateX(${this.progress}%)`
     );
   });
 

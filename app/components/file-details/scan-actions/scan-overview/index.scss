@@ -1,0 +1,13 @@
+.scan-overview-item {
+  min-width: 50px;
+  gap: 0.2857em;
+  padding: 0.5714em;
+  border-radius: 3px;
+  border: 1px solid var(--file-details-scan-actions-scan-overview-border-color);
+
+  .result-value {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+}

@@ -1,0 +1,76 @@
+{{#if @scanCoverage.isAnyScreenCoverageComplete}}
+  <AkStack
+    @direction='row'
+    @justifyContent='space-between'
+    @alignItems='center'
+    @spacing='2.5'
+    @bgColor='white'
+    local-class='screen-coverage-container'
+    class='p-3'
+    data-test-fileDetails-dynamicScan-results-scanCoverage-container
+  >
+    <AkStack @direction='column' @spacing='1'>
+      <AkTypography
+        @variant='h5'
+        @fontWeight='bold'
+        @gutterBottom={{true}}
+        data-test-fileDetails-dynamicScan-results-scanCoverage-percentage
+      >
+        {{t 'scanCoverage.percentageDone' percentage=@scanCoverage.coverage}}
+      </AkTypography>
+
+      <AkTypography
+        @variant='body1'
+        @color='textSecondary'
+        {{style maxWidth='450px'}}
+        data-test-fileDetails-dynamicScan-results-scanCoverage-description
+      >
+        {{t 'scanCoverage.description'}}
+      </AkTypography>
+    </AkStack>
+
+    <AkStack @direction='column' @alignItems='flex-end' @spacing='1'>
+      <AkLoader::Linear
+        @height={{11}}
+        @progress={{@scanCoverage.coverage}}
+        @variant='determinate'
+        @color='success'
+        {{style width='190px'}}
+        data-test-fileDetails-dynamicScan-results-scanCoverage-percentage-bar
+      />
+
+      <AkStack
+        @direction='column'
+        @alignItems='flex-end'
+        class='mt-1'
+        data-test-fileDetails-dynamicScan-results-scanCoverage-stats
+      >
+        <AkTypography
+          @fontWeight='bold'
+          data-test-fileDetails-dynamicScan-results-scanCoverage-stats-screensCovered
+        >
+          {{t
+            'scanCoverage.screensCovered'
+            covered=@scanCoverage.totalNumOfVisitedScreens
+            total=@scanCoverage.totalNumOfScreens
+          }}
+        </AkTypography>
+
+        <AkTypography
+          @color='textSecondary'
+          data-test-fileDetails-dynamicScan-results-scanCoverage-stats-screensCoveredText
+        >
+          {{t 'scanCoverage.screensCoveredText'}}
+        </AkTypography>
+      </AkStack>
+    </AkStack>
+  </AkStack>
+
+  <FileDetails::DynamicScan::Results::CoverageTable @file={{@file}} />
+{{else}}
+  <FileDetails::DynamicScan::Results::ScanCoverage::Status
+    @scanCoverage={{@scanCoverage}}
+    @file={{@file}}
+    @isOldFileWithNoCoverage={{@isOldFileWithNoCoverage}}
+  />
+{{/if}}
