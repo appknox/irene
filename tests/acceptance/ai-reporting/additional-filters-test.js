@@ -101,7 +101,9 @@ module('Acceptance | ai-reporting/additional-filters', function (hooks) {
     });
 
     this.server.get('/ai_reporting/report_request/:id', (schema, request) => {
-      return schema.reportRequests.find(request.params.id).toJSON();
+      return schema['aiReporting/reportRequests']
+        .find(request.params.id)
+        .toJSON();
     });
 
     // Setup required endpoints
@@ -212,7 +214,7 @@ module('Acceptance | ai-reporting/additional-filters', function (hooks) {
     const DATA_COUNT = 5;
     const testData = AI_REPORT_UTILS.generateTestData(DATA_COUNT);
 
-    const reportRequest = this.server.create('report-request', {
+    const reportRequest = this.server.create('ai-reporting/report-request', {
       is_relevant: true,
     });
 
@@ -293,7 +295,7 @@ module('Acceptance | ai-reporting/additional-filters', function (hooks) {
     let selectedFiltersInfo = []; // To be updated with selected filters
     const pkgNameFilterVal = testData.data[0]?.package_name;
 
-    const reportRequest = this.server.create('report-request', {
+    const reportRequest = this.server.create('ai-reporting/report-request', {
       is_relevant: true,
     });
 
@@ -692,12 +694,11 @@ module('Acceptance | ai-reporting/additional-filters', function (hooks) {
     const mockFilterGroups = testData.filter_details;
     let selectedFiltersInfo = [];
 
-    const reportRequest = this.server.create('report-request', {
+    const reportRequest = this.server.create('ai-reporting/report-request', {
       is_relevant: true,
       report_type: 'xlsx',
     });
 
-    // Server mock
     // Server mock
     this.server.post(
       '/ai_reporting/report_request/:id/preview',

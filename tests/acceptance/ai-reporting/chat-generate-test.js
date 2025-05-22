@@ -14,7 +14,7 @@ import { t } from 'ember-intl/test-support';
 import { Response } from 'miragejs';
 import Service from '@ember/service';
 
-import { ReportRequestStatus } from 'irene/models/report-request';
+import { ReportRequestStatus } from 'irene/models/ai-reporting/report-request';
 import { setupRequiredEndpoints } from 'irene/tests/helpers/acceptance-utils';
 
 import {
@@ -345,9 +345,11 @@ module('Acceptance | ai-reporting/chat-generate', function (hooks) {
           // Assert report command
           assert.strictEqual(body.query, reportCommand);
 
-          const reportRequest = this.server.create('report-request', body, {
-            status: ReportRequestStatus.PENDING,
-          });
+          const reportRequest = this.server.create(
+            'ai-reporting/report-request',
+            body,
+            { status: ReportRequestStatus.PENDING }
+          );
 
           this.set('reportGenerated', true);
 
@@ -366,7 +368,9 @@ module('Acceptance | ai-reporting/chat-generate', function (hooks) {
       );
 
       this.server.get('/ai_reporting/report_request/:id', (schema, request) => {
-        const reportRequest = schema.reportRequests.find(request.params.id);
+        const reportRequest = schema['aiReporting/reportRequests'].find(
+          request.params.id
+        );
 
         // Update report request
         reportRequest.update({

@@ -57,18 +57,18 @@
         @color='primary'
         {{on 'click' this.handleFilterByColumnDrawerOpen}}
         local-class='custom-button {{if this.disableFilters "disabled"}}'
-        data-test-aiReporting-preview-filterByColumnsBtn
+        data-test-aiReporting-preview-selectedColumnsBtn
       >
         <:leftIcon>
           <AkIcon
             @iconName='filter-list'
             @color={{if this.disableFilters 'inherit' 'primary'}}
-            data-test-aiReporting-preview-filterByColumnsIcon
+            data-test-aiReporting-preview-selectedColumnsIcon
           />
         </:leftIcon>
 
         <:default>
-          {{t 'reportModule.filterByColumns'}}
+          {{t 'reportModule.selectedColumns'}}
 
           {{#unless this.disableFilters}}
             -&nbsp;

@@ -6,19 +6,19 @@ import { task } from 'ember-concurrency';
 import type IntlService from 'ember-intl/services/intl';
 import type Store from '@ember-data/store';
 
-import type ReportRequestModel from 'irene/models/report-request';
+import type ReportRequestModel from 'irene/models/ai-reporting/report-request';
 
 import type {
   AdditionalFilter,
   FilterColumn,
-} from 'irene/models/report-request';
+} from 'irene/models/ai-reporting/report-request';
 
 import type IreneAjaxService from 'irene/services/ajax';
 
 import type {
   ReportRequestPreview,
   PreviewFilterDetails,
-} from 'irene/models/report-request';
+} from 'irene/models/ai-reporting/report-request';
 
 interface AiReportingPreviewSignature {
   Args: { reportRequest: ReportRequestModel };

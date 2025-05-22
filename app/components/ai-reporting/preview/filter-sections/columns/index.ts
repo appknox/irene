@@ -4,7 +4,7 @@ import { action } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
 import type IntlService from 'ember-intl/services/intl';
 
-import type { FilterColumn } from 'irene/models/report-request';
+import type { FilterColumn } from 'irene/models/ai-reporting/report-request';
 
 interface AiReportingPreviewFilterSectionsColumnsSignature {
   Args: {

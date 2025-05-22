@@ -7,12 +7,12 @@ import type IntlService from 'ember-intl/services/intl';
 
 import ENV from 'irene/config/environment';
 import type { AiReportType } from '../report-download-drawer';
-import type ReportRequestModel from 'irene/models/report-request';
+import type ReportRequestModel from 'irene/models/ai-reporting/report-request';
 
 import type {
   AdditionalFilter,
   FilterColumn,
-} from 'irene/models/report-request';
+} from 'irene/models/ai-reporting/report-request';
 
 interface AiReportingPreviewGenerateReportSignature {
   Args: {

@@ -1,6 +1,6 @@
 import { helper } from '@ember/component/helper';
 import ENUMS from 'irene/enums';
-import type { PreviewFilterField } from 'irene/models/report-request';
+import type { PreviewFilterField } from 'irene/models/ai-reporting/report-request';
 
 export function aiReportFilterOperators(params: [PreviewFilterField]) {
   const filter = params[0];

@@ -1323,7 +1323,7 @@
     "description": "Generate reports related to Scans & Users",
     "failedToDownload": "Failed to get donwload url.",
     "failedToPreview": "Failed to preview report",
-    "filterByColumns": "Filter by Columns",
+    "selectedColumns": "Selected Columns",
     "generateReport": "Generate Report",
     "reportingEngine": "Reporting Engine",
     "generateReportPlaceholder": "For Example - Generate an audit log of all the activities over the last 30 days.",

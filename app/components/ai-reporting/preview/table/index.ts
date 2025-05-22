@@ -4,7 +4,7 @@ import Component from '@glimmer/component';
 import type {
   ReportRequestPreview,
   FilterColumn,
-} from 'irene/models/report-request';
+} from 'irene/models/ai-reporting/report-request';
 
 interface AiReportingPreviewTableSignature {
   Args: {

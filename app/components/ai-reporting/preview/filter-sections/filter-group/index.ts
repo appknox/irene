@@ -14,7 +14,7 @@ import type {
   AdditionalFilterErroredFieldProp,
   PreviewFilterDetails,
   PreviewFilterField,
-} from 'irene/models/report-request';
+} from 'irene/models/ai-reporting/report-request';
 
 interface AiReportingPreviewFilterSectionsFilterGroupSignature {
   Args: {

@@ -1,18 +1,19 @@
-import CommonDRFAdapter from './commondrf';
+import CommonDRFAdapter from '../commondrf';
 import { underscore } from '@ember/string';
 import type ModelRegistry from 'ember-data/types/registries/model';
 
 import type {
   AdditionalFilter,
   DownloadUrlPayload,
-} from 'irene/models/report-request';
+} from 'irene/models/ai-reporting/report-request';
+
 export interface DownloadUrlResponse {
   url: string;
 }
 
-export default class ReportRequestAdapter extends CommonDRFAdapter {
+export default class AiReportingReportRequestAdapter extends CommonDRFAdapter {
   pathForType(type: keyof ModelRegistry) {
-    return `ai_reporting/${underscore(`${type}`)}`;
+    return underscore(`${type}`);
   }
 
   async previewReport(
@@ -21,7 +22,7 @@ export default class ReportRequestAdapter extends CommonDRFAdapter {
     offset: number,
     additionalFilters?: AdditionalFilter[]
   ) {
-    const baseUrl = this.buildURL('report-request', id);
+    const baseUrl = this.buildURL('ai-reporting/report-request', id);
 
     const data = {
       ...(additionalFilters ? { additional_filters: additionalFilters } : {}),
@@ -36,7 +37,7 @@ export default class ReportRequestAdapter extends CommonDRFAdapter {
     id: string,
     data: DownloadUrlPayload
   ): Promise<DownloadUrlResponse> {
-    const baseUrl = this.buildURL('report-request', id);
+    const baseUrl = this.buildURL('ai-reporting/report-request', id);
 
     return await this.ajax(`${baseUrl}/download_url`, 'POST', { data });
   }
@@ -44,6 +45,6 @@ export default class ReportRequestAdapter extends CommonDRFAdapter {
 
 declare module 'ember-data/types/registries/adapter' {
   export default interface AdapterRegistry {
-    'report-request': ReportRequestAdapter;
+    'ai-reporting/report-request': AiReportingReportRequestAdapter;
   }
 }

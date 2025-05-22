@@ -6,7 +6,7 @@ import ENUMS from 'irene/enums';
 import type {
   AdditionalFilterFilterDetailsExpressionValues,
   PreviewFilterField,
-} from 'irene/models/report-request';
+} from 'irene/models/ai-reporting/report-request';
 
 import styles from './index.scss';
 

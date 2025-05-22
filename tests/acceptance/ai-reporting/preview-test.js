@@ -91,7 +91,9 @@ module('Acceptance | ai-reporting/preview', function (hooks) {
     });
 
     this.server.get('/ai_reporting/report_request/:id', (schema, request) => {
-      return schema.reportRequests.find(request.params.id).toJSON();
+      return schema['aiReporting/reportRequests']
+        .find(request.params.id)
+        .toJSON();
     });
 
     // Setup required endpoints
@@ -181,7 +183,7 @@ module('Acceptance | ai-reporting/preview', function (hooks) {
 
       const previewTitle = 'Example Report';
 
-      const reportRequest = this.server.create('report-request', {
+      const reportRequest = this.server.create('ai-reporting/report-request', {
         is_relevant: relevant,
         error: error,
       });
@@ -229,8 +231,8 @@ module('Acceptance | ai-reporting/preview', function (hooks) {
         assert.dom('[data-test-aiReporting-preview-filterButtons]').exists();
 
         assert
-          .dom('[data-test-aiReporting-preview-filterByColumnsBtn]')
-          .containsText(t('reportModule.filterByColumns'))
+          .dom('[data-test-aiReporting-preview-selectedColumnsBtn]')
+          .containsText(t('reportModule.selectedColumns'))
           .containsText('0'); // No filter applied
 
         assert
@@ -261,8 +263,8 @@ module('Acceptance | ai-reporting/preview', function (hooks) {
           .exists();
 
         assert
-          .dom('[data-test-aiReporting-preview-filterByColumnsBtn]')
-          .containsText(t('reportModule.filterByColumns'))
+          .dom('[data-test-aiReporting-preview-selectedColumnsBtn]')
+          .containsText(t('reportModule.selectedColumns'))
           .isDisabled();
 
         assert
@@ -306,7 +308,7 @@ module('Acceptance | ai-reporting/preview', function (hooks) {
     const DATA_COUNT = 5;
     const testData = AI_REPORT_UTILS.generateTestData(DATA_COUNT);
 
-    const reportRequest = this.server.create('report-request', {
+    const reportRequest = this.server.create('ai-reporting/report-request', {
       is_relevant: true,
     });
 
@@ -335,8 +337,8 @@ module('Acceptance | ai-reporting/preview', function (hooks) {
 
     // Check filter buttons are enabled
     assert
-      .dom('[data-test-aiReporting-preview-filterByColumnsBtn]')
-      .containsText(t('reportModule.filterByColumns'))
+      .dom('[data-test-aiReporting-preview-selectedColumnsBtn]')
+      .containsText(t('reportModule.selectedColumns'))
       .isNotDisabled();
 
     assert
@@ -356,8 +358,8 @@ module('Acceptance | ai-reporting/preview', function (hooks) {
     );
 
     assert
-      .dom('[data-test-aiReporting-preview-filterByColumnsBtn]')
-      .containsText(t('reportModule.filterByColumns'))
+      .dom('[data-test-aiReporting-preview-selectedColumnsBtn]')
+      .containsText(t('reportModule.selectedColumns'))
       .containsText(defaultColumnCount);
 
     // Sanity check for table data
@@ -416,7 +418,7 @@ module('Acceptance | ai-reporting/preview', function (hooks) {
     const DATA_COUNT = 5;
     const testData = AI_REPORT_UTILS.generateTestData(DATA_COUNT);
 
-    const reportRequest = this.server.create('report-request', {
+    const reportRequest = this.server.create('ai-reporting/report-request', {
       is_relevant: true,
     });
 
@@ -440,20 +442,20 @@ module('Acceptance | ai-reporting/preview', function (hooks) {
 
     // Check filter buttons are enabled
     assert
-      .dom('[data-test-aiReporting-preview-filterByColumnsBtn]')
-      .containsText(t('reportModule.filterByColumns'))
+      .dom('[data-test-aiReporting-preview-selectedColumnsBtn]')
+      .containsText(t('reportModule.selectedColumns'))
       .containsText(noSelectedColumns)
       .isNotDisabled();
 
     // Open filter by column drawer
-    await click('[data-test-aiReporting-preview-filterByColumnsBtn]');
+    await click('[data-test-aiReporting-preview-selectedColumnsBtn]');
 
     // Check filter by column drawer is open
     assert.dom('[data-test-aiReporting-preview-filterByColumnDrawer]').exists();
 
     assert
       .dom('[data-test-aiReporting-preview-filterByColumnDrawer-title]')
-      .hasText(t('reportModule.filterByColumns'));
+      .hasText(t('reportModule.selectedColumns'));
 
     assert
       .dom('[data-test-aiReporting-preview-filterByColumnDrawer-close-btn]')
@@ -527,7 +529,7 @@ module('Acceptance | ai-reporting/preview', function (hooks) {
     );
 
     assert
-      .dom('[data-test-aiReporting-preview-filterByColumnsBtn]')
+      .dom('[data-test-aiReporting-preview-selectedColumnsBtn]')
       .containsText(noSelectedColumns + 1);
   });
 
@@ -543,7 +545,7 @@ module('Acceptance | ai-reporting/preview', function (hooks) {
     const DATA_COUNT = 5;
     const testData = AI_REPORT_UTILS.generateTestData(DATA_COUNT); // Contains at least 1 selected
 
-    const reportRequest = this.server.create('report-request', {
+    const reportRequest = this.server.create('ai-reporting/report-request', {
       is_relevant: true,
     });
 
@@ -566,13 +568,13 @@ module('Acceptance | ai-reporting/preview', function (hooks) {
 
     // Check filter buttons are enabled
     assert
-      .dom('[data-test-aiReporting-preview-filterByColumnsBtn]')
-      .containsText(t('reportModule.filterByColumns'))
+      .dom('[data-test-aiReporting-preview-selectedColumnsBtn]')
+      .containsText(t('reportModule.selectedColumns'))
       .containsText(noSelectedColumns)
       .isNotDisabled();
 
     // Open filter by column drawer
-    await click('[data-test-aiReporting-preview-filterByColumnsBtn]');
+    await click('[data-test-aiReporting-preview-selectedColumnsBtn]');
 
     // Check filter by column drawer is open
     assert.dom('[data-test-aiReporting-preview-filterByColumnDrawer]').exists();
@@ -692,7 +694,7 @@ module('Acceptance | ai-reporting/preview', function (hooks) {
     const DATA_COUNT = 5;
     const testData = AI_REPORT_UTILS.generateTestData(DATA_COUNT); // Contains at least 1 selected
 
-    const reportRequest = this.server.create('report-request', {
+    const reportRequest = this.server.create('ai-reporting/report-request', {
       is_relevant: true,
       report_type: 'xlsx',
     });
@@ -745,13 +747,13 @@ module('Acceptance | ai-reporting/preview', function (hooks) {
 
     // Check filter buttons are enabled
     assert
-      .dom('[data-test-aiReporting-preview-filterByColumnsBtn]')
-      .containsText(t('reportModule.filterByColumns'))
+      .dom('[data-test-aiReporting-preview-selectedColumnsBtn]')
+      .containsText(t('reportModule.selectedColumns'))
       .containsText(noSelectedColumns)
       .isNotDisabled();
 
     // Open filter by column drawer
-    await click('[data-test-aiReporting-preview-filterByColumnsBtn]');
+    await click('[data-test-aiReporting-preview-selectedColumnsBtn]');
 
     // Check filter by column drawer is open
     assert.dom('[data-test-aiReporting-preview-filterByColumnDrawer]').exists();

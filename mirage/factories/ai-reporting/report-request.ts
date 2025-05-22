@@ -3,8 +3,8 @@
 import { trait } from 'miragejs';
 import { faker } from '@faker-js/faker';
 
-import { ReportRequestStatus } from 'irene/models/report-request';
-import Base from './base';
+import { ReportRequestStatus } from 'irene/models/ai-reporting/report-request';
+import Base from '../base';
 
 export default Base.extend({
   id(i) {

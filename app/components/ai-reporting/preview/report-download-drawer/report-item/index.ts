@@ -5,7 +5,7 @@ import type IntlService from 'ember-intl/services/intl';
 import type Store from '@ember-data/store';
 import type ClipboardJS from 'clipboard/src/clipboard';
 
-import type ReportRequestModel from 'irene/models/report-request';
+import type ReportRequestModel from 'irene/models/ai-reporting/report-request';
 import type { AiReportDetails, AiReportType } from '..';
 
 export interface AiReportingPreviewReportDownloadDrawerReportItemSignature {

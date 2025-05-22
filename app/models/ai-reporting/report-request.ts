@@ -95,7 +95,7 @@ export interface FilterColumn {
   type?: string;
 }
 
-export default class ReportRequestModel extends Model {
+export default class AiReportingReportRequestModel extends Model {
   @attr('string')
   declare query: string;
 
@@ -125,7 +125,7 @@ export default class ReportRequestModel extends Model {
     offset: number,
     additionalFilters?: AdditionalFilter[]
   ) {
-    const adapter = this.store.adapterFor('report-request');
+    const adapter = this.store.adapterFor('ai-reporting/report-request');
 
     return await adapter.previewReport(
       this.id,
@@ -136,7 +136,7 @@ export default class ReportRequestModel extends Model {
   }
 
   async downloadUrl(payload: DownloadUrlPayload) {
-    const adapter = this.store.adapterFor('report-request');
+    const adapter = this.store.adapterFor('ai-reporting/report-request');
 
     return await adapter.downloadUrl(this.id, payload);
   }
@@ -144,6 +144,6 @@ export default class ReportRequestModel extends Model {
 
 declare module 'ember-data/types/registries/model' {
   export default interface ModelRegistry {
-    'report-request': ReportRequestModel;
+    'ai-reporting/report-request': AiReportingReportRequestModel;
   }
 }

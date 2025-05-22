@@ -8,7 +8,7 @@ import type { CalendarSelectValue } from 'irene/components/ak-date-picker';
 import type {
   PreviewFilterField,
   AdditionalFilterFilterDetailsExpressionValues,
-} from 'irene/models/report-request';
+} from 'irene/models/ai-reporting/report-request';
 
 interface AiReportingPreviewFilterSectionsAdditionalFiltersDateTypeSignature {
   Args: {

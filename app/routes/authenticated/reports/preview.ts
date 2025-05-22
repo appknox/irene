@@ -3,7 +3,7 @@ import { service } from '@ember/service';
 import type Store from '@ember-data/store';
 import type RouterService from '@ember/routing/router-service';
 
-import type ReportRequestModel from 'irene/models/report-request';
+import type AiReportingReportRequestModel from 'irene/models/ai-reporting/report-request';
 import type OrganizationService from 'irene/services/organization';
 
 export default class AuthenticatedReportsPreviewRoute extends AkBreadcrumbsRoute {
@@ -17,7 +17,10 @@ export default class AuthenticatedReportsPreviewRoute extends AkBreadcrumbsRoute
     }
   }
 
-  async model(params: { id: string }): Promise<ReportRequestModel> {
-    return await this.store.findRecord('report-request', params.id);
+  async model(params: { id: string }): Promise<AiReportingReportRequestModel> {
+    return await this.store.findRecord(
+      'ai-reporting/report-request',
+      params.id
+    );
   }
 }
