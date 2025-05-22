@@ -1447,6 +1447,26 @@
   "scheduleDynamicscanSuccess": "Automated dynamic scan scheduled successfully",
   "scheduledAutomationSuccessOff": "Dynamic Scan Automation has been turned OFF for this project",
   "scheduledAutomationSuccessOn": "Dynamic Scan Automation has been scheduled for this project",
+  "scanCoverage": {
+    "title": "Scan Coverage",
+    "percentageDone": "{percentage}% screen coverage done",
+    "description": "Aggregated screen coverage from all dynamic scan runs of this file. Here is a list of screens extracted from the app binary, indicating whether they were accessed during any of the dynamic scans.",
+    "screensCovered": "{covered} out of {total}",
+    "screensCoveredText": "screens covered",
+    "screensLabel": "Screens",
+    "unsupported": {
+      "title": "The Scan Coverage feature is currently available only for native Android apps",
+      "description": "Eventually, we will expand the support for scan coverage to other Android and iOS apps"
+    },
+    "notStartedMsg": "No screen coverage details available because no DAST has been completed for this file.",
+    "inProgressMsg": "Screen coverage analysis is in progress. Please check back after some time.",
+    "errorMsg": "No screen coverage details available because an error occurred while performing DAST.",
+    "visitedCapitalized": "VISITED",
+    "notVisitedCapitalized": "NOT VISITED",
+    "visited": "Visited",
+    "notVisited": "Not Visited",
+    "noFilterResults": "No results found for the selected filter."
+  },
   "search": "検索",
   "searchUser": "Search user",
   "searchProject": "Search project",

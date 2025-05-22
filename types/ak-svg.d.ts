@@ -86,6 +86,9 @@ export enum AkSvgComponentInvocationByNames {
   PrivacyInProgress,
   PrivacyUpload,
   PrivacyNotFound,
+  ScvUnsupported,
+  ScvNotStarted,
+  ScvErrored,
 }
 
 export enum AkSvgComponentInvocationByPaths {
@@ -105,6 +108,7 @@ export enum AkSvgComponentInvocationByPaths {
   'sm-indicator',
   'vapt-indicator',
   'security-indicator',
+  'scv-unsupported',
 }
 
 type AkSvgComponent = ComponentLike<{
