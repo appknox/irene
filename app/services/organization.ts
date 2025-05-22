@@ -23,6 +23,18 @@ export default class OrganizationService extends Service {
     return 0;
   }
 
+  get allSelectedOrgAiFeaturesDisabled() {
+    const aiFeatures = this.selected?.aiFeatures;
+
+    if (!aiFeatures) {
+      return false;
+    }
+
+    return Object.keys(aiFeatures).every(
+      (feature) => !aiFeatures[feature as keyof typeof aiFeatures]
+    );
+  }
+
   async setSecurityDashboardEnabled() {
     try {
       await this.ajax.request('projects', { namespace: 'api/hudson-api' });

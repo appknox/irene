@@ -1,0 +1,19 @@
+<AkStack
+  @justifyContent='center'
+  @alignItems='center'
+  @direction='column'
+  @spacing='1'
+  local-class='loading-container'
+  data-test-main-loader-ai-container
+>
+  {{#let (component this.currentLoaderImage) as |LoaderImage|}}
+    <LoaderImage data-test-main-loader-ai-illustration />
+  {{/let}}
+
+  <AkLoader::Linear
+    @variant='determinate'
+    @progress={{this.fakeProgress}}
+    local-class='progress-container'
+    data-test-main-loader-ai-linear-progress
+  />
+</AkStack>
