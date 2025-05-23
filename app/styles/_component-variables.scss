@@ -216,6 +216,9 @@ body {
   --ak-chip-color-semi-filled-outlined-default-border-color: var(
     --neutral-grey-200
   );
+  --ak-chip-color-semi-filled-outlined-default-contrast-border: var(
+    --border-color-1
+  );
   --ak-chip-color-semi-filled-outlined-primary-background: var(--primary-light);
   --ak-chip-color-semi-filled-outlined-primary-contrast-text: var(
     --primary-dark
@@ -2067,6 +2070,10 @@ body {
   // variables for organization/settings-wrapper
   --organization-settings-wrapper-background-color: var(--background-light);
 
+  // variables for organization/ai-powered-features
+  --organization-ai-powered-features-bg-color: var(--common-white);
+  --organization-ai-powered-features-border-color: var(--border-color-1);
+
   // variables for public-api-docs/index
   --public-api-docs-tabs-background-color: var(--common-white);
 
@@ -2194,6 +2201,12 @@ body {
   --privacy-module-app-details-header-warning-border: var(--border-color-1);
   --privacy-module-app-details-header-warning-icon-bg: var(--error-light);
 
+  //variables for privacy-module/app-details/pii
+  --privacy-module-pii-border-color: var(--divider);
+  --privacy-module-pii-bg-color: var(--common-white);
+  --privacy-module-pii-url-bg-color: var(--neutral-grey-100);
+  --privacy-module-pii-drawer-border-color: var(--neutral-grey-100);
+
   //variables for privacy-module/app-details/trackers
   --privacy-module-trackers-row-bg-color: var(--background-main);
   --privacy-module-trackers-row-bg-color-hover: var(--neutral-grey-50);
@@ -2229,6 +2242,14 @@ body {
 
   // variables for privacy-module/status
   --privacy-module-status-background: var(--background-main);
+
+  // variables for powered-by-ai/chip
+  --powered-by-ai-chip-border-radius: var(--border-radius);
+  --powered-by-ai-chip-color: var(--common-white);
+
+  // variables for powered-by-ai/drawer
+  --powered-by-ai-chip-border-color: var(--border-color-1);
+  --powered-by-ai-chip-footer-box-shadow: var(--box-shadow-4);
 
   &.theme-light {
     //variables for appknox-wrapper
