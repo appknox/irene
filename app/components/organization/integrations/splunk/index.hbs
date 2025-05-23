@@ -1,0 +1,455 @@
+<Organization::Integrations::Card
+  @data={{this.data}}
+  @onClickIntegrate={{this.openDrawer}}
+  @loading={{this.isLoadingSplunkData}}
+/>
+
+<AkDrawer
+  @open={{this.integrationDrawer}}
+  @onClose={{this.closeDrawer}}
+  @anchor='right'
+>
+  {{! --- Configure Mode --- }}
+  <AkAppbar class='px-3' @justifyContent='space-between' as |ab|>
+    <AkTypography
+      @variant='h5'
+      @color='inherit'
+      data-test-orgIntegrations-splunk-drawer-title
+    >
+      {{t
+        (if this.showRevokeSplunkConfirmBox 'confirmation' 'splunkIntegration')
+      }}
+    </AkTypography>
+
+    <AkIconButton
+      {{on 'click' this.closeDrawer}}
+      class={{ab.classes.defaultIconBtn}}
+    >
+      <AkIcon @iconName='close' />
+    </AkIconButton>
+  </AkAppbar>
+
+  <AkStack @direction='column' local-class='height-full'>
+    {{! --- Disconnect Confirmation --- }}
+    {{#if this.showRevokeSplunkConfirmBox}}
+      <AkStack
+        local-class='drawer-content form'
+        @direction='column'
+        class='p-2 m-3'
+      >
+        <AkTypography
+          data-test-orgIntegrations-splunkAccount-revoke-confirmation
+          @variant='body1'
+        >
+          {{t 'confirmBox.revokeSplunk'}}
+        </AkTypography>
+
+        <AkStack @spacing='1.5' class='pt-4'>
+          <AkButton
+            @variant='filled'
+            @loading={{this.revokeSplunk.isRunning}}
+            @disabled={{this.revokeSplunk.isRunning}}
+            {{on 'click' (perform this.revokeSplunk)}}
+            data-test-orgIntegrations-splunkAccount-disconnectBtnConfirmation
+          >
+            {{t 'yesDisconnect'}}
+          </AkButton>
+
+          <AkButton
+            @variant='outlined'
+            @color='neutral'
+            {{on 'click' this.closeRevokeSplunkConfirmBox}}
+            data-test-orgIntegrations-splunkAccount-cancelBtnConfirmation
+          >
+            {{t 'cancel'}}
+          </AkButton>
+        </AkStack>
+      </AkStack>
+    {{else}}
+      {{! --- Main Integration UI --- }}
+      {{#unless this.showIntegratedOrLoadingUI}}
+        <AkStack
+          @justifyContent='space-between'
+          @alignItems='flex-end'
+          @width='full'
+        >
+          <AkTypography
+            data-test-orgIntegrations-splunkAccount-stepTitle
+            class='mt-2 ml-3'
+            @variant='h5'
+          >
+            {{t (if this.isStep2 'configureStep2' 'configureStep1')}}
+          </AkTypography>
+
+          {{#if this.isStep2}}
+            <AkButton
+              @tag='a'
+              @variant='text'
+              @color='primary'
+              @underline='always'
+              class='mr-3'
+              target='_blank'
+              href='https://docs.splunk.com/Documentation/Splunk/9.4.0/Indexer/Aboutindexesandindexers#Indexes'
+              rel='noopener noreferrer'
+            >
+              <:default>
+                {{t 'splunk.splunkIndexes'}}
+              </:default>
+              <:rightIcon>
+                <AkIcon
+                  @size='small'
+                  @color='primary'
+                  @iconName='open-in-new'
+                />
+              </:rightIcon>
+            </AkButton>
+          {{/if}}
+        </AkStack>
+      {{/unless}}
+
+      <AkStack local-class='drawer-content height-full' @direction='column'>
+        {{#if this.showIntegratedOrLoadingUI}}
+          <Organization::Integrations::IntegratedUi
+            @imageSource='/images/splunk-icon.png'
+            @imageAlt='splunk icon'
+            @property={{this.selectedVulnIndex.label}}
+            @propertyTitle={{t 'splunk.vulnIndex'}}
+            @hostURL={{this.splunkInstanceURL}}
+            @loading={{this.isLoadingSplunkData}}
+          />
+
+          <AkStack
+            local-class='form'
+            @spacing='2'
+            @direction='column'
+            class='p-2 mt-2'
+          >
+            <AkStack @direction='column' @alignItems='flex-start' @spacing='1'>
+              <AkToggle
+                @checked={{this.sendUserLogs}}
+                @onChange={{this.toggleSendUserLogs}}
+                data-test-orgIntegrations-splunkAccount-userLogs-toggle
+              />
+
+              <AkTypography
+                data-test-orgIntegrations-splunkAccount-userLogs-title
+                class='ml-1'
+                @variant='subtitle2'
+              >
+                {{t 'splunk.sendUserLogs'}}
+              </AkTypography>
+
+              <AkTypography
+                class='ml-1'
+                @variant='body2'
+                @color='textSecondary'
+                data-test-orgIntegrations-splunkAccount-userLogs-desc
+              >
+                {{t 'splunk.sendUserLogsDesc'}}
+              </AkTypography>
+            </AkStack>
+
+            {{#if this.sendUserLogs}}
+              <AkDivider @color='dark' />
+
+              <AkStack
+                class='ml-1'
+                @width='full'
+                @justifyContent='space-between'
+                @alignItems='flex-start'
+              >
+                <AkStack @direction='column' @spacing='2'>
+                  <AkStack @direction='column' {{style gap='0.4em'}}>
+                    <AkTypography
+                      data-test-orgIntegrations-splunk-userLogsIndex
+                      @variant='subtitle2'
+                    >
+                      {{t 'splunk.userLogsIndex'}}
+                    </AkTypography>
+                    {{#if this.isEditing}}
+                      <AkSelect
+                        @options={{this.indexOptions}}
+                        @onChange={{this.setUserLogIndex}}
+                        @selected={{this.selectedUserLogIndex}}
+                        local-class='select-width'
+                        data-test-orgIntegrations-splunk-userLogsSelect
+                        as |aks|
+                      >
+                        {{aks.label}}
+                      </AkSelect>
+                    {{else}}
+                      <AkTypography
+                        data-test-orgIntegrations-splunk-userLogs
+                        @variant='body2'
+                        @color='textSecondary'
+                      >
+                        {{this.selectedUserLogIndex.label}}
+                      </AkTypography>
+                    {{/if}}
+                  </AkStack>
+
+                  <AkStack @direction='column' {{style gap='0.4em'}}>
+                    <AkTypography @variant='subtitle2'>
+                      {{t 'splunk.timeInterval'}}
+                    </AkTypography>
+
+                    {{#if this.isEditing}}
+                      <AkSelect
+                        @options={{this.logHourOptions}}
+                        @onChange={{this.setLogHour}}
+                        @selected={{this.selectedLogHour}}
+                        local-class='select-width'
+                        data-test-orgIntegrations-splunk-logHoursSelect
+                        as |aks|
+                      >
+                        {{aks.label}}
+                      </AkSelect>
+                    {{else}}
+                      <AkTypography
+                        data-test-orgIntegrations-splunk-logHours
+                        @variant='body2'
+                        @color='textSecondary'
+                      >
+                        {{this.selectedLogHour.label}}
+                      </AkTypography>
+                    {{/if}}
+                  </AkStack>
+
+                  {{#if this.isEditing}}
+                    <AkButton
+                      @variant='filled'
+                      data-test-orgIntegrations-splunk-saveUserLogsBtn
+                      {{on 'click' this.saveUserLogDetails}}
+                    >
+                      {{t 'save'}}
+                    </AkButton>
+                  {{/if}}
+                </AkStack>
+
+                {{#unless this.isEditing}}
+                  <AkIconButton
+                    @variant='outlined'
+                    data-test-orgIntegrations-splunk-editBtn
+                    {{on 'click' this.editDetails}}
+                  >
+                    <AkIcon @iconName='edit' />
+                  </AkIconButton>
+                {{/unless}}
+              </AkStack>
+            {{/if}}
+          </AkStack>
+
+        {{else if (not this.isStep2)}}
+          {{! --- Step 1 Form --- }}
+          <form label='step1' local-class='form' class='p-2'>
+            <AkStack @width='full' @direction='column' @spacing='2'>
+              <AkStack @width='full' @direction='column' {{style gap='0.4em'}}>
+                <AkStack @spacing='1' @alignItems='center'>
+                  <AkTypography @variant='subtitle2'>
+                    {{t 'instanceURL'}}
+                  </AkTypography>
+                  <AkTooltip
+                    @title={{t 'splunk.instanceURLDesc'}}
+                    @placement='right'
+                    @arrow={{true}}
+                  >
+                    <AkIcon @iconName='info' @size='small' @color='secondary' />
+                  </AkTooltip>
+                </AkStack>
+
+                <AkTextField
+                  @placeholder={{t 'splunk.enterInstanceURL'}}
+                  @value={{this.changeset.instance_url}}
+                  @error={{this.changeset.error.instance_url}}
+                  data-test-orgIntegrations-splunk-instanceURLInput
+                />
+              </AkStack>
+
+              <AkStack @width='full' @direction='column' {{style gap='0.4em'}}>
+                <AkStack @spacing='1' @alignItems='center'>
+                  <AkTypography @variant='subtitle2'>
+                    {{t 'splunk.hecToken'}}
+                  </AkTypography>
+                  <AkTooltip
+                    @title={{t 'splunk.hecTokenDesc'}}
+                    @placement='right'
+                    @arrow={{true}}
+                  >
+                    <AkIcon @iconName='info' @size='small' @color='secondary' />
+                  </AkTooltip>
+                </AkStack>
+
+                <AkTextField
+                  @placeholder={{t 'splunk.enterHecToken'}}
+                  @value={{this.changeset.hec_token}}
+                  @error={{this.changeset.error.hec_token}}
+                  data-test-orgIntegrations-splunk-hecTokenInput
+                />
+              </AkStack>
+
+              <AkStack @width='full' @direction='column' {{style gap='0.4em'}}>
+                <AkStack @spacing='1' @alignItems='center'>
+                  <AkTypography @variant='subtitle2'>
+                    {{t 'splunk.apiToken'}}
+                  </AkTypography>
+                  <AkTooltip
+                    @title={{t 'splunk.apiTokenDesc'}}
+                    @placement='right'
+                    @arrow={{true}}
+                  >
+                    <AkIcon @iconName='info' @size='small' @color='secondary' />
+                  </AkTooltip>
+                </AkStack>
+
+                <AkTextField
+                  @placeholder={{t 'splunk.enterApiToken'}}
+                  @value={{this.changeset.api_token}}
+                  @error={{this.changeset.error.api_token}}
+                  data-test-orgIntegrations-splunk-apiTokenInput
+                />
+              </AkStack>
+            </AkStack>
+            <AkButton
+              class='mt-3'
+              @variant='filled'
+              {{on 'click' (perform this.goToStep2)}}
+              data-test-orgIntegrations-splunk-saveAndProceed
+            >
+              {{t 'saveAndProceed'}}
+            </AkButton>
+          </form>
+        {{else}}
+          {{! --- Step 2 Form --- }}
+          <AkStack local-class='height-full' @direction='column'>
+            <AkStack @direction='column' @spacing='2'>
+              <form label='vulnerabilities' local-class='form' class='p-2'>
+                <AkStack @direction='column' {{style gap='0.4em'}}>
+                  <AkTypography @variant='subtitle2'>
+                    {{t 'splunk.vulnIndex'}}
+                  </AkTypography>
+                  <AkSelect
+                    @options={{this.indexOptions}}
+                    @onChange={{this.setVulnIndex}}
+                    @selected={{this.selectedVulnIndex}}
+                    local-class='select-width'
+                    data-test-orgIntegrations-splunk-vulnIndexSelect
+                    as |aks|
+                  >
+                    {{aks.label}}
+                  </AkSelect>
+                </AkStack>
+              </form>
+
+              <form label='options' local-class='form'>
+                <AkStack local-class='optional-heading' @width='full'>
+                  <AkTypography @variant='subtitle2'>
+                    {{t 'optional'}}
+                  </AkTypography>
+                </AkStack>
+
+                <AkStack @direction='column' @spacing='2' class='p-2'>
+                  <AkStack
+                    @direction='column'
+                    @alignItems='flex-start'
+                    @spacing='1'
+                  >
+                    <AkToggle
+                      @checked={{this.sendUserLogs}}
+                      @onChange={{this.toggleSendUserLogs}}
+                      data-test-orgIntegrations-splunkAccount-userLogs-toggle
+                    />
+
+                    <AkTypography class='ml-1' @variant='subtitle2'>
+                      {{t 'splunk.sendUserLogs'}}
+                    </AkTypography>
+
+                    <AkTypography
+                      class='ml-1'
+                      @variant='body2'
+                      @color='textSecondary'
+                      data-test-orgIntegrations-splunkAccount-userLogs-desc
+                    >
+                      {{t 'splunk.sendUserLogsDesc'}}
+                    </AkTypography>
+                  </AkStack>
+
+                  {{#if this.sendUserLogs}}
+                    <AkStack @direction='column' {{style gap='0.4em'}}>
+                      <AkTypography @variant='subtitle2'>
+                        {{t 'splunk.userLogsIndex'}}
+                      </AkTypography>
+                      <AkSelect
+                        @options={{this.indexOptions}}
+                        @onChange={{this.setUserLogIndex}}
+                        @selected={{this.selectedUserLogIndex}}
+                        local-class='select-width'
+                        data-test-orgIntegrations-splunk-userLogsSelect
+                        as |aks|
+                      >
+                        {{aks.label}}
+                      </AkSelect>
+                    </AkStack>
+
+                    <AkStack @direction='column' {{style gap='0.4em'}}>
+                      <AkTypography @variant='subtitle2'>
+                        {{t 'splunk.timeInterval'}}
+                      </AkTypography>
+                      <AkSelect
+                        @options={{this.logHourOptions}}
+                        @onChange={{this.setLogHour}}
+                        @selected={{this.selectedLogHour}}
+                        local-class='select-width'
+                        data-test-orgIntegrations-splunk-logHoursSelect
+                        as |aks|
+                      >
+                        {{aks.label}}
+                      </AkSelect>
+                    </AkStack>
+                  {{/if}}
+                </AkStack>
+              </form>
+            </AkStack>
+          </AkStack>
+        {{/if}}
+      </AkStack>
+
+      {{#if (or this.isStep2 this.showIntegratedOrLoadingUI)}}
+        <AkStack
+          @width='full'
+          class='px-3 py-2'
+          @spacing='1.5'
+          local-class='integration-drawer-footer'
+        >
+          {{#if this.showIntegratedOrLoadingUI}}
+            <AkButton
+              @variant='outlined'
+              {{on 'click' this.openRevokeSplunkConfirmBox}}
+              data-test-orgIntegrations-splunkAccount-disconnectBtn
+            >
+              {{t 'disconnect'}}
+            </AkButton>
+          {{else}}
+            <AkButton
+              @variant='filled'
+              @disabled={{this.integrateSplunk.isRunning}}
+              @loading={{this.integrateSplunk.isRunning}}
+              {{on 'click' this.completeIntegration}}
+              data-test-orgIntegrations-splunkAccount-saveBtn
+            >
+              {{t 'integrate'}}
+            </AkButton>
+
+            <AkButton
+              @variant='outlined'
+              @color='neutral'
+              {{on 'click' this.onClickCancel}}
+              data-test-orgIntegrations-splunkAccount-cancelBtn
+            >
+              {{t 'cancel'}}
+            </AkButton>
+          {{/if}}
+        </AkStack>
+      {{/if}}
+    {{/if}}
+  </AkStack>
+</AkDrawer>

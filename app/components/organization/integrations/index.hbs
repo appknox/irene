@@ -1,15 +1,15 @@
 <div local-class='org-integration-settings-integrations-container'>
-  <Organization::Integrations::JiraAccount @user={{@model.user}} />
+  <AkStack @alignItems='center' @flexWrap='wrap'>
+    <Organization::Integrations::GithubAccount
+      @integratedUser={{@model.integratedUser}}
+      @reconnect={{@model.reconnect}}
+      @user={{@model.user}}
+    />
 
-  <AkDivider class='my-3' @color='dark' />
+    <Organization::Integrations::JiraAccount @user={{@model.user}} />
 
-  <Organization::Integrations::GithubAccount
-    @integratedUser={{@model.integratedUser}}
-    @reconnect={{@model.reconnect}}
-    @user={{@model.user}}
-  />
+    <Organization::Integrations::ServiceNow @user={{@model.user}} />
 
-  <AkDivider class='my-3' @color='dark' />
-
-  <Organization::Integrations::ServiceNow @user={{@model.user}} />
+    <Organization::Integrations::Splunk @user={{@model.user}} />
+  </AkStack>
 </div>

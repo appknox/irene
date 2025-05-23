@@ -1,79 +1,157 @@
-<AkTypography data-test-jiraAccount-title @variant='h5' @gutterBottom={{true}}>
-  {{t 'jiraIntegration'}}
-</AkTypography>
-
-{{#if this.showIntegratedOrLoadingUI}}
-  <Organization::Integrations::IntegratedUi
-    @imageSource='/images/jira-icon.png'
-    @imageAlt='jira icon'
-    @hostURL={{this.connectedHost}}
-    @username={{this.connectedUsername}}
-    @onDisconnectClick={{this.openRevokeJIRAConfirmBox}}
-    @loading={{this.isLoadingJIRAIntegrationInfo}}
-    data-test-orgIntegrations-jiraAccount-integratedHeader
-  />
-
-{{else}}
-  <AkTypography
-    data-test-jiraAccount-desc
-    @variant='body2'
-    @color='textSecondary'
-  >
-    {{t 'jiraIntegrationDesc'}}
-  </AkTypography>
-
-  <form class='mt-2'>
-    <AkStack @direction='column' @spacing='2' {{style maxWidth='300px'}}>
-      <AkTextField
-        data-test-jiraAccount-hostInput
-        @placeholder={{concat 'Enter ' (t 'jiraHost')}}
-        @value={{this.changeset.host}}
-        @label={{t 'jiraHost'}}
-        @labelTypographyVariant='subtitle2'
-        @labelTypographyColor='textPrimary'
-        @error={{this.changeset.error.host}}
-      />
-
-      <AkTextField
-        data-test-jiraAccount-usernameInput
-        @placeholder={{concat 'Enter ' (t 'username')}}
-        @label={{t 'username'}}
-        @labelTypographyVariant='subtitle2'
-        @labelTypographyColor='textPrimary'
-        @value={{this.changeset.username}}
-        @error={{this.changeset.error.username}}
-      />
-
-      <AkTextField
-        data-test-jiraAccount-apiKeyInput
-        @placeholder={{concat 'Enter ' (t 'apiKey')}}
-        @label={{t 'apiKey'}}
-        @labelTypographyVariant='subtitle2'
-        @labelTypographyColor='textPrimary'
-        @type='password'
-        @value={{this.changeset.password}}
-        @error={{this.changeset.error.password}}
-        autocomplete='jira-password'
-      />
-    </AkStack>
-
-    <AkButton
-      data-test-jiraAccount-integrateBtn
-      class='mt-2'
-      @loading={{this.integrateJIRA.isRunning}}
-      {{style minWidth='190px'}}
-      {{on 'click' (perform this.integrateJIRA this.changeset)}}
-    >
-      {{t 'integrateJIRA'}}
-    </AkButton>
-  </form>
-{{/if}}
-
-<ConfirmBox
-  @isActive={{this.showRevokeJIRAConfirmBox}}
-  @description={{t 'confirmBox.revokeJira'}}
-  @delegate={{this}}
-  @disabled={{this.isRevokingJIRA}}
-  @confirmText={{t 'disconnect'}}
-  @confirmAction={{perform this.revokeJIRA}}
+<Organization::Integrations::Card
+  @data={{this.data}}
+  @onClickIntegrate={{this.openDrawer}}
+  @loading={{this.isLoadingJIRAIntegrationInfo}}
 />
+
+<AkDrawer
+  @open={{this.integrationDrawer}}
+  @onClose={{this.closeDrawer}}
+  @anchor='right'
+  as |dr|
+>
+  <AkAppbar
+    @justifyContent='space-between'
+    @position='sticky'
+    class='px-3'
+    as |ab|
+  >
+    <AkTypography
+      data-test-orgIntegrations-jiraAccount-drawer-title
+      @color='inherit'
+      @variant='h5'
+    >
+      {{t (if this.showRevokeJIRAConfirmBox 'confirmation' 'jiraIntegration')}}
+    </AkTypography>
+
+    <AkIconButton
+      {{on 'click' dr.closeHandler}}
+      class={{ab.classes.defaultIconBtn}}
+    >
+      <AkIcon @iconName='close' />
+    </AkIconButton>
+  </AkAppbar>
+
+  <AkStack @direction='column' local-class='height-full'>
+    {{#if this.showRevokeJIRAConfirmBox}}
+      <AkStack
+        local-class='drawer-content form'
+        @direction='column'
+        class='p-2 m-3'
+      >
+        <AkTypography
+          data-test-orgIntegrations-jiraAccount-revoke-confirmation
+          @variant='body1'
+        >
+          {{t 'confirmBox.revokeJira'}}
+        </AkTypography>
+
+        <AkStack @spacing='1.5' class='pt-4'>
+          <AkButton
+            @variant='filled'
+            @loading={{this.revokeJIRA.isRunning}}
+            @disabled={{this.revokeJIRA.isRunning}}
+            {{on 'click' (perform this.revokeJIRA)}}
+            data-test-orgIntegrations-jiraAccount-disconnectBtnConfirmation
+          >
+            {{t 'yesDisconnect'}}
+          </AkButton>
+
+          <AkButton
+            @variant='outlined'
+            @color='neutral'
+            {{on 'click' this.closeRevokeJIRAConfirmBox}}
+            data-test-orgIntegrations-jiraAccount-cancelBtnConfirmation
+          >
+            {{t 'cancel'}}
+          </AkButton>
+        </AkStack>
+      </AkStack>
+    {{else}}
+      <AkStack local-class='drawer-content' @direction='column'>
+        {{#if this.showIntegratedOrLoadingUI}}
+          <Organization::Integrations::IntegratedUi
+            @imageSource='/images/jira-icon.png'
+            @imageAlt='jira icon'
+            @hostURL={{this.connectedHost}}
+            @property={{this.connectedUsername}}
+            @propertyTitle={{t 'username'}}
+            @loading={{this.isLoadingJIRAIntegrationInfo}}
+          />
+
+        {{else}}
+          <form local-class='form' class='p-2'>
+            <AkStack @direction='column' @spacing='2'>
+              <AkTextField
+                data-test-jiraAccount-hostInput
+                @placeholder={{concat 'Enter ' (t 'jiraHost')}}
+                @value={{this.changeset.host}}
+                @label={{t 'jiraHost'}}
+                @labelTypographyVariant='subtitle2'
+                @labelTypographyColor='textPrimary'
+                @error={{this.changeset.error.host}}
+              />
+
+              <AkTextField
+                data-test-jiraAccount-usernameInput
+                @placeholder={{concat 'Enter ' (t 'username')}}
+                @label={{t 'username'}}
+                @labelTypographyVariant='subtitle2'
+                @labelTypographyColor='textPrimary'
+                @value={{this.changeset.username}}
+                @error={{this.changeset.error.username}}
+              />
+
+              <AkTextField
+                data-test-jiraAccount-apiKeyInput
+                @placeholder={{concat 'Enter ' (t 'apiKey')}}
+                @label={{t 'apiKey'}}
+                @labelTypographyVariant='subtitle2'
+                @labelTypographyColor='textPrimary'
+                @type='password'
+                @value={{this.changeset.password}}
+                @error={{this.changeset.error.password}}
+                autocomplete='jira-password'
+              />
+            </AkStack>
+          </form>
+        {{/if}}
+      </AkStack>
+    {{/if}}
+  </AkStack>
+
+  <AkStack
+    @width='full'
+    @spacing='1.5'
+    class='px-3 py-2'
+    local-class='integration-drawer-footer'
+  >
+    {{#if this.showIntegratedOrLoadingUI}}
+      <AkButton
+        @variant='outlined'
+        {{on 'click' this.openRevokeJIRAConfirmBox}}
+        data-test-orgIntegrations-jiraAccount-disconnectBtn
+      >
+        {{t 'disconnect'}}
+      </AkButton>
+    {{else}}
+      <AkButton
+        @variant='filled'
+        @disabled={{this.integrateJIRA.isRunning}}
+        @loading={{this.integrateJIRA.isRunning}}
+        {{on 'click' (perform this.integrateJIRA this.changeset)}}
+        data-test-orgIntegrations-jiraAccount-saveBtn
+      >
+        {{t 'save'}}
+      </AkButton>
+
+      <AkButton
+        @variant='outlined'
+        @color='neutral'
+        {{on 'click' this.closeDrawer}}
+      >
+        {{t 'cancel'}}
+      </AkButton>
+    {{/if}}
+  </AkStack>
+</AkDrawer>
