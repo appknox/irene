@@ -51,30 +51,42 @@
       </AkStack>
     </AkStack>
 
-    <AkStack
-      @width='full'
-      @spacing='1.5'
-      class='px-3 py-2'
-      local-class='project-integrations-settings-drawer-footer'
-    >
-      <AkButton
-        @variant='filled'
-        @disabled={{@loadingDrawerSaveAction}}
-        @loading={{@loadingDrawerSaveAction}}
-        {{on 'click' @drawerSaveAction}}
-        data-test-prjSettings-integrations-configDrawer-saveBtn
+    {{#unless @noFooter}}
+      <AkStack
+        @width='full'
+        @spacing='1.5'
+        class='px-3 py-2'
+        local-class='project-integrations-settings-drawer-footer'
       >
-        {{t 'save'}}
-      </AkButton>
+        {{#if @showDeleteButton}}
+          <AkButton
+            @variant='outlined'
+            {{on 'click' @drawerSaveAction}}
+            data-test-prjSettings-integrations-configDrawer-deleteBtn
+          >
+            {{t 'delete'}}
+          </AkButton>
+        {{else}}
+          <AkButton
+            @variant='filled'
+            @disabled={{@loadingDrawerSaveAction}}
+            @loading={{@loadingDrawerSaveAction}}
+            {{on 'click' @drawerSaveAction}}
+            data-test-prjSettings-integrations-configDrawer-saveBtn
+          >
+            {{t 'save'}}
+          </AkButton>
 
-      <AkButton
-        @variant='outlined'
-        @color='neutral'
-        {{on 'click' @closeDrawerHandler}}
-        data-test-prjSettings-integrations-configDrawer-cancelBtn
-      >
-        {{t 'cancel'}}
-      </AkButton>
-    </AkStack>
+          <AkButton
+            @variant='outlined'
+            @color='neutral'
+            {{on 'click' @closeDrawerHandler}}
+            data-test-prjSettings-integrations-configDrawer-cancelBtn
+          >
+            {{t 'cancel'}}
+          </AkButton>
+        {{/if}}
+      </AkStack>
+    {{/unless}}
   </AkStack>
 </AkDrawer>

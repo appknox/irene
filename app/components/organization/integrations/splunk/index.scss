@@ -1,0 +1,26 @@
+.drawer-content {
+  padding: 1em 1.5em;
+}
+
+.form {
+  width: 350px;
+  border: 1px solid var(--organization-integrations-splunk-border-color);
+  border-radius: var(--organization-integrations-splunk-border-radius);
+  box-sizing: border-box;
+}
+
+.integration-drawer-footer {
+  position: sticky;
+  bottom: 0;
+  background-color: var(--organization-integrations-splunk-background-main);
+  box-shadow: var(--organization-integrations-splunk-box-shadow);
+}
+
+.height-full {
+  height: 100%;
+}
+
+.select-width {
+  width: 320px;
+}
+

@@ -1,125 +1,115 @@
-<AkStack
-  @width='full'
-  @direction='column'
-  data-test-projectSettings-genSettings-serviceNow-root
->
-  <ProjectSettings::Integrations::IntegratedHeader
-    @headerText={{t 'serviceNowIntegration'}}
-    @headerSubtext={{this.headerSubText}}
-    @editAction={{this.openSNRiskEditModal}}
-    @deleteAction={{this.openDeleteSNConfigConfirmBox}}
-    @showHeaderActions={{this.showHeaderActions}}
-  />
+<Organization::Integrations::Card
+  @data={{this.data}}
+  @onIntegrateClick={{if
+    this.data.isIntegrated
+    this.openSNRiskEditModal
+    this.navigateToOrgSettings
+  }}
+  @loading={{this.isFetchingSNConfig}}
+/>
 
-  {{#if this.fetchServiceNowConfig.isRunning}}
-    <ProjectSettings::Integrations::LoadingUi />
-
-  {{else if this.serviceNowConfig}}
-    <AkStack @direction='column' @spacing='1' class='mt-2'>
-      <AkTypography
-        @variant='body2'
-        @fontWeight='bold'
-        data-test-prjSettings-integrations-serviceNow-riskHeaderText
-      >
-        {{t 'threshold'}}
-      </AkTypography>
-
-      <ProjectSettings::Integrations::RiskThreshold
-        @computedRisk={{this.serviceNowConfig.riskThreshold}}
-        data-test-prjSettings-integrations-serviceNow-risk
-      />
-    </AkStack>
-
-  {{else if this.fetchServiceNowConfig.isIdle}}
-    {{#if this.noAccess}}
-      <AkStack @alignItems='center' @spacing='1'>
-        <AkIcon @iconName='warning' @color='error' @variant='filled' />
-
-        <AkTypography @color='error'>
-          {{t 'adminPermissionProject'}}
-        </AkTypography>
-      </AkStack>
-
-    {{else if this.noIntegration}}
-      <AkStack @alignItems='center' @spacing='0.5'>
-        <AkTypography
-          @color='textSecondary'
-          @variant='body2'
-          data-test-prjSettings-integrations-serviceNow-noIntegrationHeaderText
-        >
-          {{t 'serviceNow.title'}}
-          {{t 'gotoSettings'}}
-        </AkTypography>
-
-        <AkLink
-          @typographyVariant='body2'
-          @route='authenticated.dashboard.organization-settings.integrations'
-          @color='primary'
-          data-test-prjSettings-integrations-serviceNow-noIntegrationSettingsLink
-        >
-          {{t 'clickingHere'}}
-        </AkLink>
-      </AkStack>
-
-    {{else}}
-      <AkButton
-        @variant='outlined'
-        class='mt-2'
-        {{on 'click' this.openSNRiskEditModal}}
-        data-test-prjSettings-integrations-serviceNow-selectThresholdBtn
-      >
-        {{t 'selectThreshold'}}
-      </AkButton>
-    {{/if}}
-  {{/if}}
-</AkStack>
-
-{{! Risk Threshold Config Drawer }}
 <ProjectSettings::Integrations::ConfigDrawer
   @drawerTitle={{t 'serviceNowIntegration'}}
   @openDrawer={{this.showEditSNRiskModal}}
   @loadingDrawerSaveAction={{this.selectRiskThreshold.isRunning}}
   @closeDrawerHandler={{this.closeSNRiskEditModal}}
-  @drawerSaveAction={{this.saveSelectedRiskThreshold}}
+  @drawerSaveAction={{if
+    this.showSelectUI
+    this.saveSelectedRiskThreshold
+    this.openDeleteSNConfigConfirmBox
+  }}
+  @showDeleteButton={{if this.showSelectUI false true}}
+  @noFooter={{this.showDeleteSNConfigConfirmBox}}
 >
   <:drawerContent>
-    <AkTypography
-      @variant='h6'
-      @fontWeight='regular'
-      @color='textSecondary'
-      data-test-prjSettings-integrations-serviceNow-configDrawer-note
-    >
-      {{t 'otherTemplates.selectServiceNowRisk'}}
-    </AkTypography>
-
-    <AkStack @direction='column' @width='4/12' @spacing='1'>
+    {{#if this.showSelectUI}}
       <AkTypography
         @variant='h6'
-        data-test-prjSettings-integrations-serviceNow-configDrawer-thresholdTitle
+        @fontWeight='regular'
+        @color='textSecondary'
+        data-test-prjSettings-integrations-serviceNow-configDrawer-note
       >
-        {{t 'threshold'}}
+        {{t 'otherTemplates.selectServiceNowRisk'}}
       </AkTypography>
 
-      <AkSelect
-        @selected={{this.selectedThreshold}}
-        @options={{this.thresholds}}
-        @onChange={{this.selectThreshold}}
-        @placeholder='{{t "selectThreshold"}}'
-        @triggerClass='select-threshold-class'
-        {{style width='100%'}}
-        data-test-prjSettings-integrations-serviceNow-configDrawer-thresholdList
-        as |threshold|
-      >
-        {{threshold-status threshold}}
-      </AkSelect>
-    </AkStack>
+      <AkStack @direction='column' @spacing='1'>
+        <AkTypography
+          @variant='h6'
+          data-test-prjSettings-integrations-serviceNow-configDrawer-thresholdTitle
+        >
+          {{t 'threshold'}}
+        </AkTypography>
+
+        <AkSelect
+          @selected={{this.selectedThreshold}}
+          @options={{this.thresholds}}
+          @onChange={{this.selectThreshold}}
+          @placeholder='{{t "selectThreshold"}}'
+          @triggerClass='select-threshold-class'
+          {{style width='300px'}}
+          data-test-prjSettings-integrations-serviceNow-configDrawer-thresholdList
+          as |threshold|
+        >
+          {{threshold-status threshold}}
+        </AkSelect>
+      </AkStack>
+    {{else if this.showDeleteSNConfigConfirmBox}}
+      <AkStack @direction='column' @spacing='1'>
+        <AkTypography
+          data-test-prjSettings-integrations-snProject-confirmDelete
+          @variant='body1'
+        >
+          {{t 'confirmBox.removeServiceNow'}}
+        </AkTypography>
+
+        <AkStack @spacing='1.5' class='pt-4'>
+          <AkButton
+            data-test-prjSettings-integrations-snProject-confirmDeleteBtn
+            {{on 'click' (perform this.deleteServiceNowConfig)}}
+          >
+            {{t 'yesDelete'}}
+          </AkButton>
+
+          <AkButton
+            @variant='outlined'
+            {{on 'click' this.closeDeleteSNConfigConfirmBox}}
+          >
+            {{t 'cancel'}}
+          </AkButton>
+        </AkStack>
+      </AkStack>
+
+    {{else if this.serviceNowConfig}}
+      <AkStack @justifyContent='space-between' @spacing='3' @width='full'>
+        <AkStack @direction='column' @spacing='1'>
+          <AkTypography @color='textSecondary' @variant='body2'>
+            {{t 'riskThresholdIntegrationDescription'}}
+          </AkTypography>
+
+          <AkTypography
+            @variant='body2'
+            @fontWeight='bold'
+            data-test-prjSettings-integrations-serviceNow-riskHeaderText
+          >
+            {{t 'threshold'}}
+          </AkTypography>
+
+          <ProjectSettings::Integrations::RiskThreshold
+            @computedRisk={{this.serviceNowConfig.riskThreshold}}
+            data-test-prjSettings-integrations-serviceNow-risk
+          />
+        </AkStack>
+
+        {{#unless this.isEditing}}
+          <AkIconButton
+            data-test-prjSettings-integrations-serviceNow-editBtn
+            @variant='outlined'
+            {{on 'click' this.onEditClick}}
+          >
+            <AkIcon @iconName='edit' />
+          </AkIconButton>
+        {{/unless}}
+      </AkStack>
+    {{/if}}
   </:drawerContent>
 </ProjectSettings::Integrations::ConfigDrawer>
-
-{{! Delete Confirm Modal }}
-<ConfirmBox
-  @delegate={{this}}
-  @isActive={{this.showDeleteSNConfigConfirmBox}}
-  @description={{t 'confirmBox.removeServiceNow'}}
-  @disabled={{this.deleteServiceNowConfig.isRunning}}
-/>

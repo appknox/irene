@@ -1,5 +1,5 @@
 import Service from '@ember/service';
-import { click, findAll, render } from '@ember/test-helpers';
+import { click, render } from '@ember/test-helpers';
 import { hbs } from 'ember-cli-htmlbars';
 import { setupMirage } from 'ember-cli-mirage/test-support';
 import { setupIntl, t } from 'ember-intl/test-support';
@@ -24,28 +24,6 @@ class NotificationsStub extends Service {
     this.successMsg = msg;
   }
 }
-
-// Checks if header action items are visible
-const assertIntegratedHeaderActionItems = async (assert) => {
-  const integratedHeaderMoreActionsSelector =
-    '[data-test-prjSettings-integrations-integratedHeader-moreActionTrigger]';
-
-  assert.dom(integratedHeaderMoreActionsSelector).exists();
-
-  await click(integratedHeaderMoreActionsSelector);
-
-  const menuItems = findAll(
-    '[data-test-prjSettings-integrations-integratedHeader-menuItem]'
-  );
-
-  // edit action items should be two
-  assert.strictEqual(menuItems.length, 2);
-
-  assert.dom(menuItems[0]).hasText(t('edit'));
-  assert.dom(menuItems[1]).hasText(t('delete'));
-
-  return menuItems;
-};
 
 // Get Analysis Risk
 const getAnalysisRisklabel = (risk) =>
@@ -91,30 +69,20 @@ module(
       );
 
       assert
-        .dom('[data-test-projectSettings-genSettings-serviceNow-root]')
-        .exists();
+        .dom('[data-test-org-integration-card-title="ServiceNow"]')
+        .hasText(t('serviceNow.title'));
+
+      assert.dom('[data-test-org-integration-card-logo]').exists();
 
       assert
-        .dom('[data-test-prjSettings-integrations-integratedHeader-headerText]')
+        .dom('[data-test-org-integration-card-integrated-chip]')
+        .doesNotExist();
 
-        .hasText(t('serviceNowIntegration'));
-
-      assert
-        .dom(
-          '[data-test-prjSettings-integrations-serviceNow-noIntegrationHeaderText]'
-        )
-        .containsText(t('serviceNow.title'))
-        .containsText(t('gotoSettings'));
+      assert.dom('[data-test-org-integration-card-selectBtn]').doesNotExist();
 
       assert
-        .dom(
-          '[data-test-prjSettings-integrations-serviceNow-noIntegrationSettingsLink]'
-        )
-        .hasText(t('clickingHere'))
-        .hasAttribute(
-          'href',
-          new RegExp('organization/settings/integrations', 'i')
-        );
+        .dom('[data-test-org-integration-card-connectBtn]')
+        .hasText(t('connect'));
     });
 
     test('it opens and closes threshold config drawer', async function (assert) {
@@ -131,24 +99,23 @@ module(
         .doesNotExist();
 
       assert
-        .dom(
-          '[data-test-prjSettings-integrations-serviceNow-selectThresholdBtn]'
-        )
+        .dom('[data-test-org-integration-card-selectBtn]')
         .hasText(t('selectThreshold'));
 
-      await click(
-        '[data-test-prjSettings-integrations-serviceNow-selectThresholdBtn]'
-      );
+      await click('[data-test-org-integration-card-selectBtn]');
 
       assert
         .dom('[data-test-prjSettings-integrations-configDrawer-root]')
         .exists();
 
       assert
+        .dom('[data-test-prjSettings-integrations-configDrawer-title]')
+        .hasText(t('serviceNowIntegration'));
+
+      assert
         .dom(
           '[data-test-prjSettings-integrations-serviceNow-configDrawer-note]'
         )
-        .exists()
         .hasText(t('otherTemplates.selectServiceNowRisk'));
 
       assert
@@ -187,9 +154,7 @@ module(
           hbs`<ProjectSettings::Integrations::ServiceNow @project={{this.project}} />`
         );
 
-        await click(
-          '[data-test-prjSettings-integrations-serviceNow-selectThresholdBtn]'
-        );
+        await click('[data-test-org-integration-card-selectBtn]');
 
         assert
           .dom(`[data-test-prjSettings-integrations-configDrawer-root`)
@@ -204,7 +169,7 @@ module(
     );
 
     test('it saves the selected threshold when I select a valid threshold from the config drawer', async function (assert) {
-      assert.expect(9);
+      assert.expect(4);
 
       this.server.get('/projects/:id/servicenow', () => {
         return new Response(400, {});
@@ -228,9 +193,7 @@ module(
         hbs`<ProjectSettings::Integrations::ServiceNow @project={{this.project}} />`
       );
 
-      await click(
-        '[data-test-prjSettings-integrations-serviceNow-selectThresholdBtn]'
-      );
+      await click('[data-test-org-integration-card-selectBtn]');
 
       assert
         .dom(
@@ -251,14 +214,10 @@ module(
 
       await click('[data-test-prjSettings-integrations-configDrawer-saveBtn]');
 
+      await click('[data-test-org-integration-card-manageBtn]');
+
       // Created in the create request block
       const createdServiceNowConfig = this.createdServiceNowConfig;
-
-      assert
-        .dom(
-          '[data-test-prjSettings-integrations-integratedHeader-headerSubText]'
-        )
-        .hasText(t('integratedServiceNow'));
 
       assert
         .dom('[data-test-prjSettings-integrations-serviceNow-riskHeaderText]')
@@ -268,9 +227,6 @@ module(
         .dom('[data-test-prjSettings-integrations-serviceNow-risk]')
         .hasText(getAnalysisRisklabel(createdServiceNowConfig.risk_threshold));
 
-      // Check if action items are visible
-      await assertIntegratedHeaderActionItems(assert);
-
       assert.strictEqual(
         this.notifyService.successMsg,
         t('integratedServiceNow')
@@ -278,7 +234,7 @@ module(
     });
 
     test('it deletes selected risk threshold when delete trigger is clicked', async function (assert) {
-      assert.expect(12);
+      assert.expect(8);
 
       const createdServiceNowConfig = this.server.create('servicenow-config');
 
@@ -294,11 +250,7 @@ module(
         hbs`<ProjectSettings::Integrations::ServiceNow @project={{this.project}} />`
       );
 
-      assert
-        .dom(
-          '[data-test-prjSettings-integrations-integratedHeader-headerSubText]'
-        )
-        .hasText(t('integratedServiceNow'));
+      await click('[data-test-org-integration-card-manageBtn]');
 
       assert
         .dom('[data-test-prjSettings-integrations-serviceNow-riskHeaderText]')
@@ -308,16 +260,21 @@ module(
         .dom('[data-test-prjSettings-integrations-serviceNow-risk]')
         .hasText(getAnalysisRisklabel(createdServiceNowConfig.risk_threshold));
 
-      // Check if action items are visible
-      const [, deleteBtn] = await assertIntegratedHeaderActionItems(assert);
+      await click(
+        '[data-test-prjSettings-integrations-configDrawer-deleteBtn]'
+      );
 
-      const deleteTrigger = deleteBtn.querySelector('button');
+      assert
+        .dom('[data-test-prjSettings-integrations-snProject-confirmDelete]')
+        .containsText(t('confirmBox.removeServiceNow'));
 
-      await click(deleteTrigger);
+      assert
+        .dom('[data-test-prjSettings-integrations-snProject-confirmDeleteBtn]')
+        .containsText(t('yesDelete'));
 
-      assert.dom('[data-test-ak-modal-header]').exists();
-
-      await click('[data-test-confirmbox-confirmBtn]');
+      await click(
+        '[data-test-prjSettings-integrations-snProject-confirmDeleteBtn]'
+      );
 
       assert.strictEqual(
         this.notifyService.successMsg,
@@ -332,16 +289,18 @@ module(
         .dom('[data-test-prjSettings-integrations-serviceNow-risk]')
         .doesNotExist();
 
+      await click(
+        '[data-test-prjSettings-integrations-configDrawer-cancelBtn]'
+      );
+
       // Check for select button
       assert
-        .dom(
-          '[data-test-prjSettings-integrations-serviceNow-selectThresholdBtn]'
-        )
+        .dom('[data-test-org-integration-card-selectBtn]')
         .hasText(t('selectThreshold'));
     });
 
-    test('it edits the project when a new repo is selected', async function (assert) {
-      assert.expect(13);
+    test('it edits the project when a new threshold is selected', async function (assert) {
+      assert.expect(5);
 
       const createdServiceNowConfig = this.server.create('servicenow-config', {
         project: this.project.id,
@@ -367,6 +326,8 @@ module(
         hbs`<ProjectSettings::Integrations::ServiceNow @project={{this.project}} />`
       );
 
+      await click('[data-test-org-integration-card-manageBtn]');
+
       assert
         .dom('[data-test-prjSettings-integrations-serviceNow-riskHeaderText]')
         .hasText(t('threshold'));
@@ -375,13 +336,7 @@ module(
         .dom('[data-test-prjSettings-integrations-serviceNow-risk]')
         .hasText(getAnalysisRisklabel(createdServiceNowConfig.risk_threshold));
 
-      // Check if action items are visible
-      const [editBtn] = await assertIntegratedHeaderActionItems(assert);
-
-      // Flow for updating the existing ServiceNow Integration
-      const editTrigger = editBtn.querySelector('button');
-
-      await click(editTrigger);
+      await click('[data-test-prjSettings-integrations-serviceNow-editBtn]');
 
       await clickTrigger(
         '[data-test-prjSettings-integrations-serviceNow-configDrawer-thresholdList]'
@@ -397,6 +352,13 @@ module(
       // Triggers PUT request for update
       await click('[data-test-prjSettings-integrations-configDrawer-saveBtn]');
 
+      assert.strictEqual(
+        this.notifyService.successMsg,
+        t('serviceNow.riskThresholdUpdated')
+      );
+
+      await click('[data-test-org-integration-card-manageBtn]');
+
       assert
         .dom('[data-test-prjSettings-integrations-serviceNow-riskHeaderText]')
         .hasText(t('threshold'));
@@ -404,13 +366,6 @@ module(
       assert
         .dom('[data-test-prjSettings-integrations-serviceNow-risk]')
         .hasText(getAnalysisRisklabel(this.requestBody.risk_threshold));
-
-      await assertIntegratedHeaderActionItems(assert);
-
-      assert.strictEqual(
-        this.notifyService.successMsg,
-        t('serviceNow.riskThresholdUpdated')
-      );
     });
   }
 );

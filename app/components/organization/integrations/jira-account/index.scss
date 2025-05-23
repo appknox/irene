@@ -1,0 +1,11 @@
+.drawer-content {
+  padding: 1.5em;
+}
+
+.form {
+  min-width: 350px;
+  max-width: 400px;
+  border: 1px solid var(--organization-integrations-jira-border-color);
+  border-radius: var(--organization-integrations-jira-border-radius);
+  box-sizing: border-box;
+}

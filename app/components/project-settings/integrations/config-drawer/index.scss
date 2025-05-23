@@ -1,5 +1,4 @@
 .project-integrations-config-drawer-container {
-  width: 640px;
   height: 100%;
   overflow-y: auto;
 
@@ -23,5 +22,6 @@
       --project-settings-integrations-config-drawer-footer-border-radius
     );
     box-sizing: border-box;
+    max-width: 350px;
   }
 }

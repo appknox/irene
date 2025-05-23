@@ -35,7 +35,11 @@
   </AkStack>
 
   {{#if @showMenuButton}}
-    <AkIconButton @size='small' {{on 'click' this.handleFileMoreMenuOpen}}>
+    <AkIconButton
+      disabled={{if @file.iconUrl false true}}
+      @size='small'
+      {{on 'click' this.handleFileMoreMenuOpen}}
+    >
       <AkIcon @iconName='more-vert' />
     </AkIconButton>
   {{/if}}

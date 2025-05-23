@@ -6,8 +6,8 @@ export interface ProjectSettingsIntegrationsIntegratedUiSignature {
     imageSource: string;
     imageAlt: string;
     hostURL: string;
-    username: string;
-    onDisconnectClick(): void;
+    propertyTitle: string;
+    property: string;
     loading?: boolean;
   };
 }

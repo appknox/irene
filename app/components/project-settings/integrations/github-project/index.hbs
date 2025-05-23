@@ -1,122 +1,146 @@
-<AkStack
-  @width='full'
-  @direction='column'
-  data-test-projectSettings-integrations-githubProject-root
->
-  <ProjectSettings::Integrations::IntegratedHeader
-    @headerText={{t 'githubIntegration'}}
-    @headerSubtext={{this.headerSubText}}
-    @editAction={{this.editGithubRepoModal}}
-    @deleteAction={{this.openDeleteGHConfirmBox}}
-    @showHeaderActions={{this.showHeaderActions}}
-  />
+<Organization::Integrations::Card
+  @data={{this.data}}
+  @onIntegrateClick={{if
+    this.data.isIntegrated
+    this.editGithubRepoModal
+    this.navigateToOrgSettings
+  }}
+  @loading={{this.isLoadingRepos}}
+/>
 
-  {{#if this.isLoadingRepos}}
-    <ProjectSettings::Integrations::LoadingUi />
-
-  {{else if this.currentGithubRepo.account}}
-    <ProjectSettings::Integrations::GithubProject::SelectedRepo
-      @currentGithubRepo={{this.currentGithubRepo}}
-    />
-
-  {{else if this.showSelectPrjCTA}}
-    <AkButton
-      @variant='outlined'
-      {{on 'click' this.editGithubRepoModal}}
-      class='mt-2'
-      data-test-projectSettings-integrations-githubProject-selectProjectBtn
-    >
-      {{t 'selectProject'}}
-    </AkButton>
-
-  {{else}}
-    <AkStack @alignItems='center' @spacing='0.5'>
-      <AkTypography
-        @color='textSecondary'
-        @variant='body2'
-        data-test-projectSettings-integrations-githubProject-noReposInfoText
-      >
-        {{this.noIntegrationOrNoRepoSubtext}}
-      </AkTypography>
-
-      <AkLink
-        @typographyVariant='body2'
-        @route='authenticated.dashboard.organization-settings.integrations'
-        @color='primary'
-        data-test-projectSettings-integrations-githubProject-orgSettingsLink
-      >
-        {{t 'clickingHere'}}
-      </AkLink>
-    </AkStack>
-  {{/if}}
-</AkStack>
-
-{{! Risk Threshold Config Drawer }}
 <ProjectSettings::Integrations::ConfigDrawer
   @drawerTitle={{t 'githubIntegration'}}
   @openDrawer={{this.showEditGithubModal}}
   @loadingDrawerSaveAction={{this.selectProject.isRunning}}
   @closeDrawerHandler={{this.closeGithubRepoModal}}
-  @drawerSaveAction={{this.selectProjectAction}}
+  @drawerSaveAction={{if
+    this.showSelectUI
+    this.selectProjectAction
+    this.openDeleteGHConfirmBox
+  }}
+  @showDeleteButton={{if this.showSelectUI false true}}
+  @noFooter={{or this.showDeleteGHConfirmBox this.hasNoGithubProjects}}
 >
   <:drawerContent>
-    <AkTypography
-      @variant='h6'
-      @fontWeight='regular'
-      @color='textSecondary'
-      data-test-prjSettings-integrations-githubProject-configDrawer-title
-    >
-      {{t 'otherTemplates.selectGHRepo'}}
-    </AkTypography>
+    {{#if this.hasNoGithubProjects}}
+      <AkTypography
+        @color='textSecondary'
+        @variant='body2'
+        data-test-projectSettings-integrations-githubProject-noReposInfoText
+      >
+        {{this.noRepoSubtext}}
 
-    {{#if this.githubRepos}}
-      <AkStack @direction='column' @width='full' @spacing='3'>
-        <AkStack @direction='column' @width='8/12' @spacing='1'>
-          <AkTypography @variant='h6'>
-            {{t 'repo'}}
+        <AkLink
+          @typographyVariant='body2'
+          @route='authenticated.dashboard.organization-settings.integrations'
+          @color='primary'
+          @underline='always'
+          data-test-projectSettings-integrations-githubProject-orgSettingsLink
+        >
+          {{t 'clickingHere'}}
+        </AkLink>
+      </AkTypography>
+
+    {{else}}
+      {{#if this.showSelectUI}}
+        <AkTypography
+          @variant='h6'
+          @fontWeight='regular'
+          @color='textSecondary'
+          data-test-prjSettings-integrations-githubProject-configDrawer-headerText
+        >
+          {{t 'otherTemplates.selectGHRepo'}}
+        </AkTypography>
+
+        {{#if this.githubRepos}}
+          <AkStack @direction='column' @width='full' @spacing='3'>
+            <AkStack @direction='column' @width='8/12' @spacing='1'>
+              <AkTypography
+                @variant='h6'
+                data-test-prjSettings-integrations-githubProject-configDrawer-repoListTitle
+              >
+                {{t 'repo'}}
+              </AkTypography>
+
+              <AkSelect
+                @options={{this.githubRepos}}
+                @selected={{this.selectedRepo}}
+                @onChange={{this.selectRepo}}
+                @placeholder='{{t "selectRepo"}}'
+                @triggerClass='select-repo-class'
+                {{style width='100%'}}
+                data-test-prjSettings-integrations-githubProject-configDrawer-repoList
+                as |repo|
+              >
+                {{repo.full_name}}
+              </AkSelect>
+            </AkStack>
+
+            <AkStack @direction='column' @spacing='1'>
+              <AkTypography @variant='h6'>{{t 'threshold'}}</AkTypography>
+
+              <AkSelect
+                @selected={{this.selectedThreshold}}
+                @options={{this.thresholds}}
+                @onChange={{this.selectThreshold}}
+                @placeholder={{t 'selectThreshold'}}
+                @triggerClass='select-threshold-class'
+                {{style width='100%'}}
+                data-test-prjSettings-integrations-githubProject-configDrawer-thresholdList
+                as |threshold|
+              >
+                {{threshold-status threshold}}
+              </AkSelect>
+            </AkStack>
+          </AkStack>
+        {{/if}}
+
+      {{else if this.showDeleteGHConfirmBox}}
+        <AkStack @direction='column' @spacing='1'>
+          <AkTypography @variant='body1'>
+            {{t 'confirmBox.removeProject'}}
           </AkTypography>
 
-          <AkSelect
-            @options={{this.githubRepos}}
-            @selected={{this.selectedRepo}}
-            @onChange={{this.selectRepo}}
-            @placeholder='{{t "selectRepo"}}'
-            @triggerClass='select-repo-class'
-            {{style width='100%'}}
-            data-test-prjSettings-integrations-githubProject-configDrawer-repoList
-            as |repo|
-          >
-            {{repo.full_name}}
-          </AkSelect>
+          <AkStack @spacing='1.5' class='pt-4'>
+            <AkButton
+              data-test-prjSettings-integrations-githubProject-confirmDelete
+              {{on 'click' (perform this.deleteRepo)}}
+            >
+              {{t 'yesDelete'}}
+            </AkButton>
+
+            <AkButton
+              @variant='outlined'
+              {{on 'click' this.closeDeleteGHConfirmBox}}
+            >
+              {{t 'cancel'}}
+            </AkButton>
+          </AkStack>
         </AkStack>
 
-        <AkStack @direction='column' @width='4/12' @spacing='1'>
-          <AkTypography @variant='h6'>
-            {{t 'threshold'}}
-          </AkTypography>
+      {{else if this.currentGithubRepo.account}}
+        <AkStack @justifyContent='space-between' @spacing='3' @width='full'>
+          <AkStack @direction='column'>
+            <AkTypography @color='textSecondary' @variant='body2'>
+              {{t 'integratedGithub'}}
+            </AkTypography>
 
-          <AkSelect
-            @selected={{this.selectedThreshold}}
-            @options={{this.thresholds}}
-            @onChange={{this.selectThreshold}}
-            @placeholder={{t 'selectThreshold'}}
-            @triggerClass='select-threshold-class'
-            {{style width='100%'}}
-            data-test-prjSettings-integrations-githubProject-configDrawer-thresholdList
-            as |threshold|
-          >
-            {{threshold-status threshold}}
-          </AkSelect>
+            <ProjectSettings::Integrations::GithubProject::SelectedRepo
+              @currentGithubRepo={{this.currentGithubRepo}}
+            />
+          </AkStack>
+
+          {{#unless this.isEditing}}
+            <AkIconButton
+              data-test-prjSettings-integrations-githubProject-editBtn
+              @variant='outlined'
+              {{on 'click' this.onEditClick}}
+            >
+              <AkIcon @iconName='edit' />
+            </AkIconButton>
+          {{/unless}}
         </AkStack>
-      </AkStack>
+      {{/if}}
     {{/if}}
   </:drawerContent>
 </ProjectSettings::Integrations::ConfigDrawer>
-
-{{! Delete GH Project }}
-<ConfirmBox
-  @isActive={{this.showDeleteGHConfirmBox}}
-  @description='{{t "confirmBox.removeProject"}}'
-  @delegate={{this}}
-  @disabled={{this.deleteRepo.isRunning}}
-/>

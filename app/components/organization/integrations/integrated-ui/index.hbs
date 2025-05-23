@@ -1,4 +1,9 @@
-<div local-class='bordered-box' ...attributes>
+<AkStack
+  @spacing='2'
+  @direction='column'
+  local-class='bordered-box'
+  ...attributes
+>
   <div local-class='integration-logo-container'>
     {{#if @loading}}
       <AkSkeleton @width='40px' @height='40px' />
@@ -22,29 +27,33 @@
 
         <AkSkeleton @width='90px' @height='19px' class='mt-1' />
       {{else}}
-        <AkTypography
-          @color='textSecondary'
-          data-test-orgIntegrations-integratedUI-hostURL
-        >
-          {{@hostURL}}
-        </AkTypography>
+        <AkStack @direction='column' @spacing='1'>
+          <AkStack @direction='column' {{style gap='0.4em'}}>
+            <AkTypography @variant='subtitle2'>
+              {{t 'instanceURL'}}
+            </AkTypography>
+            <AkTypography
+              @color='textSecondary'
+              data-test-orgIntegrations-integratedUI-hostURL
+            >
+              {{@hostURL}}
+            </AkTypography>
+          </AkStack>
 
-        <AkTypography data-test-orgIntegrations-integratedUI-username>
-          {{@username}}
-        </AkTypography>
+          <AkStack @direction='column' {{style gap='0.4em'}}>
+            <AkTypography @variant='subtitle2'>
+              {{@propertyTitle}}
+            </AkTypography>
+
+            <AkTypography
+              @color='textSecondary'
+              data-test-orgIntegrations-integratedUI-property
+            >
+              {{@property}}
+            </AkTypography>
+          </AkStack>
+        </AkStack>
       {{/if}}
     </div>
-
-    {{#if @loading}}
-      <AkSkeleton @width='94px' @height='38px' />
-    {{else}}
-      <AkButton
-        data-test-orgIntegrations-integratedUI-disconnectBtn
-        @variant='outlined'
-        {{on 'click' @onDisconnectClick}}
-      >
-        {{t 'disconnect'}}
-      </AkButton>
-    {{/if}}
   </AkStack>
-</div>
+</AkStack>

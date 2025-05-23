@@ -1,19 +1,21 @@
 import { action } from '@ember/object';
-import { inject as service } from '@ember/service';
+import { service } from '@ember/service';
 import Component from '@glimmer/component';
 import { tracked } from '@glimmer/tracking';
 import { task } from 'ember-concurrency';
-import IntlService from 'ember-intl/services/intl';
-import Store from '@ember-data/store';
 import { waitForPromise } from '@ember/test-waiters';
+import type Store from '@ember-data/store';
+import type IntlService from 'ember-intl/services/intl';
 
 import ENUMS from 'irene/enums';
-import OrganizationService from 'irene/services/organization';
-import ProjectModel from 'irene/models/project';
-import GithubRepoModel, { GithubRepoDetails } from 'irene/models/github-repo';
 import parseError from 'irene/utils/parse-error';
+import type OrganizationService from 'irene/services/organization';
+import type ProjectModel from 'irene/models/project';
+import type GithubRepoModel from 'irene/models/github-repo';
+import type { GithubRepoDetails } from 'irene/models/github-repo';
 import type IreneAjaxService from 'irene/services/ajax';
 import type { AjaxError } from 'irene/services/ajax';
+import type RouterService from '@ember/routing/router-service';
 
 export interface ProjectSettingsIntegrationsGithubProjectSignature {
   Args: {
@@ -27,6 +29,7 @@ export default class ProjectSettingsIntegrationsGithubProjectComponent extends C
   @service('notifications') declare notify: NotificationService;
   @service declare ajax: IreneAjaxService;
   @service declare organization: OrganizationService;
+  @service declare router: RouterService;
 
   @tracked currentGithubRepo: GithubRepoModel | null = null;
   @tracked selectedRepo: GithubRepoDetails | null = null;
@@ -38,6 +41,7 @@ export default class ProjectSettingsIntegrationsGithubProjectComponent extends C
   @tracked showDeleteGHConfirmBox = false;
   @tracked showEditGithubModal = false;
   @tracked selectedThreshold = ENUMS.THRESHOLD.LOW;
+  @tracked isEditing = false;
 
   constructor(
     owner: unknown,
@@ -71,35 +75,7 @@ export default class ProjectSettingsIntegrationsGithubProjectComponent extends C
     return this.intl.t('invalidRisk');
   }
 
-  get showHeaderActions() {
-    return !!this.currentGithubRepo;
-  }
-
-  get headerSubText() {
-    if (this.reconnect || this.noIntegration) {
-      return '';
-    }
-
-    if (this.currentGithubRepo?.account) {
-      return this.intl.t('integratedGithub');
-    }
-
-    if (this.hasGitHubProject) {
-      return this.intl.t('otherTemplates.selectGHRepo');
-    }
-
-    return '';
-  }
-
-  get noIntegrationOrNoRepoSubtext() {
-    if (this.reconnect) {
-      return `${this.intl.t('github')} ${this.intl.t('reconnectGotoSettings')}`;
-    }
-
-    if (this.noIntegration) {
-      return `${this.intl.t('github')} ${this.intl.t('gotoSettings')}`;
-    }
-
+  get noRepoSubtext() {
     return this.intl.t('githubNoProject');
   }
 
@@ -134,8 +110,31 @@ export default class ProjectSettingsIntegrationsGithubProjectComponent extends C
     );
   }
 
-  get showSelectPrjCTA() {
-    return this.hasGitHubProject && !(this.reconnect || this.noIntegration);
+  get showSelectUI() {
+    return this.isEditing || !this.currentGithubRepo;
+  }
+
+  get data() {
+    return {
+      id: 'Github',
+      title: this.intl.t('github'),
+      description: this.intl.t('githubIntegrationDesc'),
+      logo: '../../../../images/github-icon.png',
+      isIntegrated: !this.noIntegration && !this.reconnect,
+      showSelectBtn:
+        !this.currentGithubRepo && !this.noIntegration && !this.reconnect,
+      selectBtnText: this.intl.t('selectProject'),
+    };
+  }
+
+  @action navigateToOrgSettings() {
+    this.router.transitionTo(
+      'authenticated.dashboard.organization-settings.integrations'
+    );
+  }
+
+  @action onEditClick() {
+    this.isEditing = true;
   }
 
   @action
@@ -147,6 +146,10 @@ export default class ProjectSettingsIntegrationsGithubProjectComponent extends C
   @action
   openDeleteGHConfirmBox() {
     this.showDeleteGHConfirmBox = true;
+  }
+
+  closeDeleteGHConfirmBox() {
+    this.showDeleteGHConfirmBox = false;
   }
 
   @action
@@ -270,6 +273,7 @@ export default class ProjectSettingsIntegrationsGithubProjectComponent extends C
 
       this.currentGithubRepo = currentGithubRepo;
       this.showEditGithubModal = false;
+      this.isEditing = false;
 
       this.notify.success(successMsg);
     } catch (e) {

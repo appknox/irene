@@ -15,6 +15,7 @@ import parseError from 'irene/utils/parse-error';
 import type ProjectModel from 'irene/models/project';
 import type JiraRepoModel from 'irene/models/jira-repo';
 import type OrganizationJiraProjectModel from 'irene/models/organization-jiraproject';
+import type RouterService from '@ember/routing/router-service';
 
 type JiraProjectsQueryResponse =
   DS.AdapterPopulatedRecordArray<OrganizationJiraProjectModel> & {
@@ -36,6 +37,7 @@ export default class ProjectSettingsIntegrationsJiraProjectComponent extends Com
   @service declare intl: IntlService;
   @service declare store: Store;
   @service('notifications') declare notify: NotificationService;
+  @service declare router: RouterService;
 
   @tracked jiraProjectsResponse: JiraProjectsQueryResponse | null = null;
   @tracked noIntegration = false;
@@ -44,6 +46,7 @@ export default class ProjectSettingsIntegrationsJiraProjectComponent extends Com
 
   @tracked currentJiraProject: JiraRepoModel | null = null;
   @tracked selectedRepo: JiraSelectedRepoProps | null = null;
+  @tracked isEditing = false;
 
   @tracked showEditJiraModal = false;
   @tracked showDeleteJIRAConfirmBox = false;
@@ -99,29 +102,39 @@ export default class ProjectSettingsIntegrationsJiraProjectComponent extends Com
     return Number(this.jiraProjectsResponse?.length) > 0;
   }
 
+  get hasNoJIRAProjects() {
+    return Number(this.jiraProjectsResponse?.length) === 0;
+  }
+
   get project() {
     return this.args.project;
   }
-
-  get showHeaderActions() {
-    return !!this.currentJiraProject;
-  }
-
-  get headerSubText() {
-    if (this.currentJiraProject) {
-      return this.intl.t('integratedJIRA');
-    }
-
-    if (this.hasJIRAProject && !this.isLoadingJiraInfo) {
-      return this.intl.t('otherTemplates.selectJIRAAccount');
-    }
-
-    return '';
+  get data() {
+    return {
+      id: 'JIRA',
+      title: this.intl.t('jira'),
+      description: this.intl.t('jiraIntegrationDesc'),
+      logo: '../../../../images/jira-icon.png',
+      isIntegrated: !this.noIntegration && !this.noAccess && !this.reconnect,
+      showSelectBtn:
+        !this.currentJiraProject && !this.noIntegration && !this.noAccess,
+      selectBtnText: this.intl.t('selectProject'),
+    };
   }
 
   get isLoadingJiraInfo() {
     return (
       this.fetchJIRAProjects.isRunning || this.setCurrentJiraRepo.isRunning
+    );
+  }
+
+  get showSelectUI() {
+    return this.isEditing || !this.currentJiraProject;
+  }
+
+  @action navigateToOrgSettings() {
+    this.router.transitionTo(
+      'authenticated.dashboard.organization-settings.integrations'
     );
   }
 
@@ -132,6 +145,14 @@ export default class ProjectSettingsIntegrationsJiraProjectComponent extends Com
 
   @action openDeleteJIRAConfirmBox() {
     this.showDeleteJIRAConfirmBox = true;
+  }
+
+  @action closeDeleteJIRAConfirmBox() {
+    this.showDeleteJIRAConfirmBox = false;
+  }
+
+  @action onEditClick() {
+    this.isEditing = true;
   }
 
   @action
@@ -274,6 +295,7 @@ export default class ProjectSettingsIntegrationsJiraProjectComponent extends Com
 
       this.currentJiraProject = jiraProject;
       this.showEditJiraModal = false;
+      this.isEditing = false;
 
       this.notify.success(successMsg);
     } catch (err) {

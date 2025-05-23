@@ -1,0 +1,27 @@
+.integration-card {
+  border: 1px solid var(--organization-integrations-card-border-color);
+  border-radius: var(--organization-integrations-card-border-radius);
+  height: 260px;
+  width: 300px;
+  margin: 1em;
+
+  .integration-card-icon {
+    border: 1px solid var(--organization-integrations-card-border-color);
+    border-radius: 50%;
+    height: 5rem;
+    width: 5rem;
+  }
+
+  .integration-card-content {
+    padding: 1em;
+  }
+
+  .integration-card-button {
+    margin: 1em;
+  }
+
+  .integration-card-chip {
+    color: var(--organization-integrations-card-text-color);
+    margin: 1em;
+  }
+}
