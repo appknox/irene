@@ -45,32 +45,20 @@ module(
       await render(hbs`<Organization::Integrations::GithubAccount />`);
 
       assert
-        .dom('[data-test-githubAccount-title]')
-        .hasText(t('githubIntegration'));
+        .dom('[data-test-org-integration-card-title="Github"]')
+        .hasText(t('github'));
 
       assert
-        .dom('[data-test-githubAccount-desc]')
+        .dom('[data-test-org-integration-card-description="Github"]')
         .hasText(t('githubIntegrationDesc'));
 
       assert
-        .dom('[data-test-githubAccount-integrateBtn]')
+        .dom('[data-test-org-integration-card-connectBtn]')
         .isNotDisabled()
-        .hasText(t('integrateGithub'));
+        .hasText(t('connect'));
 
       assert
-        .dom('[data-test-orgIntegrations-integratedUI-logo]')
-        .doesNotExist();
-
-      assert
-        .dom('[data-test-orgIntegrations-integratedUI-hostURL]')
-        .doesNotExist();
-
-      assert
-        .dom('[data-test-orgIntegrations-integratedUI-username]')
-        .doesNotExist();
-
-      assert
-        .dom('[data-test-orgIntegrations-integratedUI-disconnectBtn]')
+        .dom('[data-test-org-integration-card-integrated-chip]')
         .doesNotExist();
     });
 
@@ -80,29 +68,20 @@ module(
       );
 
       assert
-        .dom('[data-test-githubAccount-title]')
-        .hasText(t('githubIntegration'));
+        .dom('[data-test-org-integration-card-title="Github"]')
+        .hasText(t('github'));
 
       assert
-        .dom('[data-test-githubAccount-desc]')
-        .hasText(t('integrationFailed'));
+        .dom('[data-test-org-integration-card-description="Github"]')
+        .hasText(t('githubIntegrationDesc'));
 
       assert
-        .dom('[data-test-githubAccount-integrateBtn]')
+        .dom('[data-test-org-integration-card-connectBtn]')
         .isNotDisabled()
-        .hasText(t('reconnect'));
+        .hasText(t('connect'));
 
       assert
-        .dom('[data-test-orgIntegrations-integratedUI-logo]')
-        .doesNotExist();
-      assert
-        .dom('[data-test-orgIntegrations-integratedUI-hostURL]')
-        .doesNotExist();
-      assert
-        .dom('[data-test-orgIntegrations-integratedUI-username]')
-        .doesNotExist();
-      assert
-        .dom('[data-test-orgIntegrations-integratedUI-disconnectBtn]')
+        .dom('[data-test-org-integration-card-integrated-chip]')
         .doesNotExist();
     });
 
@@ -119,26 +98,32 @@ module(
       );
 
       assert
-        .dom('[data-test-githubAccount-title]')
-        .hasText(t('githubIntegration'));
+        .dom('[data-test-org-integration-card-title="Github"]')
+        .hasText(t('github'));
 
-      assert.dom('[data-test-orgIntegrations-integratedUI-logo]').exists();
+      assert.dom('[data-test-org-integration-card-logo]').exists();
+
+      assert.dom('[data-test-org-integration-card-integrated-chip]').exists();
+
+      assert
+        .dom('[data-test-org-integration-card-manageBtn]')
+        .exists()
+        .containsText(t('manage'));
+
+      await click('[data-test-org-integration-card-manageBtn]');
 
       assert
         .dom('[data-test-orgIntegrations-integratedUI-hostURL]')
         .hasText('https://github.com');
 
       assert
-        .dom('[data-test-orgIntegrations-integratedUI-username]')
+        .dom('[data-test-orgIntegrations-integratedUI-property]')
         .hasText(this.integratedUser.login);
 
       assert
-        .dom('[data-test-orgIntegrations-integratedUI-disconnectBtn]')
+        .dom('[data-test-orgIntegrations-configDrawer-disconnectBtn]')
         .isNotDisabled()
         .hasText(t('disconnect'));
-
-      assert.dom('[data-test-githubAccount-desc]').doesNotExist();
-      assert.dom('[data-test-githubAccount-integrateBtn]').doesNotExist();
     });
 
     test.each(
@@ -161,62 +146,116 @@ module(
         );
 
         assert
-          .dom('[data-test-githubAccount-title]')
-          .hasText(t('githubIntegration'));
+          .dom('[data-test-org-integration-card-title="Github"]')
+          .hasText(t('github'));
+
+        assert.dom('[data-test-org-integration-card-logo]').exists();
+
+        assert.dom('[data-test-org-integration-card-integrated-chip]').exists();
 
         assert
-          .dom('[data-test-orgIntegrations-integratedUI-disconnectBtn]')
+          .dom('[data-test-org-integration-card-manageBtn]')
+          .exists()
+          .containsText(t('manage'));
+
+        await click('[data-test-org-integration-card-manageBtn]');
+
+        assert
+          .dom('[data-test-orgIntegrations-integratedUI-hostURL]')
+          .hasText('https://github.com');
+
+        assert
+          .dom('[data-test-orgIntegrations-integratedUI-property]')
+          .hasText(this.integratedUser.login);
+
+        assert
+          .dom('[data-test-orgIntegrations-configDrawer-disconnectBtn]')
           .isNotDisabled()
           .hasText(t('disconnect'));
 
-        await click('[data-test-orgIntegrations-integratedUI-disconnectBtn]');
-
-        assert.dom('[data-test-ak-modal-header]').hasText(t('confirm'));
+        await click('[data-test-orgIntegrations-configDrawer-disconnectBtn]');
 
         assert
-          .dom('[data-test-confirmbox-description]')
+          .dom('[data-test-orgIntegrations-configDrawer-title]')
+          .hasText(t('confirmation'));
+
+        assert
+          .dom('[data-test-orgIntegrations-githubAccount-revoke-confirmation]')
           .hasText(t('confirmBox.revokeGithub'));
 
         assert
-          .dom('[data-test-confirmbox-confirmBtn]')
+          .dom(
+            '[data-test-orgIntegrations-githubAccount-disconnectBtnConfirmation]'
+          )
           .isNotDisabled()
-          .hasText(t('disconnect'));
+          .hasText(t('yesDisconnect'));
 
         assert
-          .dom('[data-test-confirmbox-cancelBtn]')
+          .dom(
+            '[data-test-orgIntegrations-githubAccount-cancelBtnConfirmation]'
+          )
           .isNotDisabled()
           .hasText(t('cancel'));
 
-        await click('[data-test-confirmbox-confirmBtn]');
+        await click(
+          '[data-test-orgIntegrations-githubAccount-disconnectBtnConfirmation]'
+        );
 
         const notify = this.owner.lookup('service:notifications');
 
         if (fail) {
           assert.strictEqual(notify.errorMsg, error.detail);
 
-          assert.dom('[data-test-ak-modal-header]').exists();
-          assert.dom('[data-test-confirmbox-description]').exists();
-          assert.dom('[data-test-confirmbox-confirmBtn]').exists();
-          assert.dom('[data-test-confirmbox-cancelBtn]').exists();
+          assert.dom('[data-test-orgIntegrations-configDrawer-title]').exists();
+          assert
+            .dom(
+              '[data-test-orgIntegrations-githubAccount-revoke-confirmation]'
+            )
+            .exists();
+          assert
+            .dom(
+              '[data-test-orgIntegrations-githubAccount-disconnectBtnConfirmation]'
+            )
+            .exists();
+          assert
+            .dom(
+              '[data-test-orgIntegrations-githubAccount-cancelBtnConfirmation]'
+            )
+            .exists();
 
-          assert.dom('[data-test-githubAccount-desc]').doesNotExist();
-          assert.dom('[data-test-githubAccount-integrateBtn]').doesNotExist();
+          assert
+            .dom('[data-test-org-integration-card-connectBtn]')
+            .doesNotExist();
         } else {
           assert.strictEqual(notify.successMsg, t('githubWillBeRevoked'));
 
-          assert.dom('[data-test-ak-modal-header]').doesNotExist();
-          assert.dom('[data-test-confirmbox-description]').doesNotExist();
-          assert.dom('[data-test-confirmbox-confirmBtn]').doesNotExist();
-          assert.dom('[data-test-confirmbox-cancelBtn]').doesNotExist();
+          assert
+            .dom('[data-test-orgIntegrations-configDrawer-title]')
+            .doesNotExist();
+          assert
+            .dom(
+              '[data-test-orgIntegrations-githubAccount-revoke-confirmation]'
+            )
+            .doesNotExist();
+          assert
+            .dom(
+              '[data-test-orgIntegrations-githubAccount-disconnectBtnConfirmation]'
+            )
+            .doesNotExist();
+          assert
+            .dom(
+              '[data-test-orgIntegrations-githubAccount-cancelBtnConfirmation]'
+            )
+            .doesNotExist();
 
           assert
-            .dom('[data-test-githubAccount-desc]')
+            .dom('[data-test-org-integration-card-description="Github"]')
             .hasText(t('githubIntegrationDesc'));
 
           assert
-            .dom('[data-test-githubAccount-integrateBtn]')
+            .dom('[data-test-org-integration-card-connectBtn]')
             .isNotDisabled()
-            .hasText(t('integrateGithub'));
+            .hasText(t('connect'));
         }
       }
     );
@@ -235,13 +274,13 @@ module(
         await render(hbs`<Organization::Integrations::GithubAccount />`);
 
         assert
-          .dom('[data-test-githubAccount-integrateBtn]')
+          .dom('[data-test-org-integration-card-connectBtn]')
           .isNotDisabled()
-          .hasText(t('integrateGithub'));
+          .hasText(t('connect'));
 
         assert.notStrictEqual(window.location.hash, data.url);
 
-        await click('[data-test-githubAccount-integrateBtn]');
+        await click('[data-test-org-integration-card-connectBtn]');
 
         const notify = this.owner.lookup('service:notifications');
 

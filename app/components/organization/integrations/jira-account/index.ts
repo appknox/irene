@@ -1,10 +1,10 @@
 import Component from '@glimmer/component';
 import { tracked } from '@glimmer/tracking';
-import { inject as service } from '@ember/service';
+import { service } from '@ember/service';
 import { action } from '@ember/object';
 import { task } from 'ember-concurrency';
-import lookupValidator from 'ember-changeset-validations';
 import { Changeset } from 'ember-changeset';
+import lookupValidator from 'ember-changeset-validations';
 import type { BufferedChangeset } from 'ember-changeset/types';
 import type IntlService from 'ember-intl/services/intl';
 
@@ -53,7 +53,6 @@ export default class OrganizationIntegrationsJiraAccountComponent extends Compon
   @tracked jiraPOJO: Record<string, unknown> = {};
 
   @tracked isRevokingJIRA = false;
-  @tracked isIntegratingJIRA = false;
 
   tInValidCredentials: string;
   tJiraIntegrated: string;
@@ -65,6 +64,7 @@ export default class OrganizationIntegrationsJiraAccountComponent extends Compon
   @tracked connectedHost = '';
   @tracked connectedUsername = '';
   @tracked showRevokeJIRAConfirmBox = false;
+  @tracked integrationDrawerIsOpen = false;
 
   constructor(
     owner: unknown,
@@ -89,6 +89,16 @@ export default class OrganizationIntegrationsJiraAccountComponent extends Compon
     this.checkJIRA.perform();
   }
 
+  get data() {
+    return {
+      id: 'JIRA',
+      title: this.intl.t('jira'),
+      description: this.intl.t('jiraIntegrationDesc'),
+      logo: '../../../images/jira-icon.png',
+      isIntegrated: this.isJIRAConnected,
+    };
+  }
+
   get baseURL() {
     return [
       '/api/organizations',
@@ -103,6 +113,16 @@ export default class OrganizationIntegrationsJiraAccountComponent extends Compon
 
   get showIntegratedOrLoadingUI() {
     return this.isJIRAConnected || this.isLoadingJIRAIntegrationInfo;
+  }
+
+  @action
+  openDrawer() {
+    this.integrationDrawerIsOpen = true;
+  }
+
+  @action
+  closeDrawer() {
+    this.integrationDrawerIsOpen = false;
   }
 
   confirmCallback() {

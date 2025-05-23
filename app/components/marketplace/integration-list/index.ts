@@ -27,6 +27,13 @@ export default class MarketplaceIntegrationListComponent extends Component {
         link: 'authenticated.dashboard.organization-settings.integrations',
       },
       {
+        title: this.intl.t('splunk.title'),
+        description:
+          this.intl.t('integrateAppknoxTo') + this.intl.t('splunk.title'),
+        logo: '../images/splunk-icon.png',
+        link: 'authenticated.dashboard.organization-settings.integrations',
+      },
+      {
         title: this.intl.t('slack'),
         description: this.intl.t('comingSoon'),
         logo: '../images/slack-icon.png',

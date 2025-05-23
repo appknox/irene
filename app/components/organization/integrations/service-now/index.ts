@@ -1,6 +1,6 @@
 import Component from '@glimmer/component';
 import { tracked } from '@glimmer/tracking';
-import { inject as service } from '@ember/service';
+import { service } from '@ember/service';
 import { action } from '@ember/object';
 import { task } from 'ember-concurrency';
 import { Changeset } from 'ember-changeset';
@@ -68,6 +68,7 @@ export default class OrganizationIntegrationsServiceNowComponent extends Compone
 
   @tracked isServiceNowIntegrated = false;
   @tracked showRevokeServiceNowConfirmBox = false;
+  @tracked integrationDrawerIsOpen = false;
 
   constructor(
     owner: unknown,
@@ -88,6 +89,16 @@ export default class OrganizationIntegrationsServiceNowComponent extends Compone
     ) as ChangesetBufferProps;
 
     this.checkServiceNowIntegration.perform();
+  }
+
+  get data() {
+    return {
+      id: 'ServiceNow',
+      title: this.intl.t('serviceNow.title'),
+      description: this.intl.t('serviceNowIntegrationDesc'),
+      logo: '../../../images/service-now.png',
+      isIntegrated: this.isServiceNowIntegrated,
+    };
   }
 
   get snTableItems() {
@@ -117,6 +128,16 @@ export default class OrganizationIntegrationsServiceNowComponent extends Compone
 
   get showIntegratedOrLoadingUI() {
     return this.isServiceNowIntegrated || this.isLoadingSNData;
+  }
+
+  @action
+  openDrawer() {
+    this.integrationDrawerIsOpen = true;
+  }
+
+  @action
+  closeDrawer() {
+    this.integrationDrawerIsOpen = false;
   }
 
   @action

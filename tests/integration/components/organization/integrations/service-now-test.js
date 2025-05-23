@@ -38,8 +38,15 @@ class NotificationsStub extends Service {
 
 const assertNonIntegratedUI = async (assert) => {
   assert
-    .dom('[data-test-orgIntegrations-serviceNow-desc]')
+    .dom('[data-test-org-integration-card-description="ServiceNow"]')
     .hasText(t('serviceNowIntegrationDesc'));
+
+  assert
+    .dom('[data-test-org-integration-card-connectBtn]')
+    .isNotDisabled()
+    .hasText(t('connect'));
+
+  await click('[data-test-org-integration-card-connectBtn]');
 
   assert
     .dom('[data-test-orgIntegrations-serviceNow-instanceURLInput]')
@@ -61,31 +68,17 @@ const assertNonIntegratedUI = async (assert) => {
     .hasText(t('serviceNow.serviceNowTable'));
 
   assert
-    .dom('[data-test-orgIntegrations-serviceNow-integrateBtn]')
+    .dom('[data-test-orgIntegrations-configDrawer-integrateBtn]')
     .isNotDisabled()
-    .hasText(t('integrateServiceNow'));
+    .hasText(t('integrate'));
 
   // Integrated UI should not be visible
-  const integratedUIContainer = find(
-    '[data-test-orgIntegrations-serviceNow-integratedHeader]'
-  );
+  assert.dom('[data-test-orgIntegrations-integratedUI-logo]').doesNotExist();
+
+  assert.dom('[data-test-orgIntegrations-integratedUI-hostURL]').doesNotExist();
 
   assert
-    .dom('[data-test-orgIntegrations-integratedUI-logo]', integratedUIContainer)
-    .doesNotExist();
-
-  assert
-    .dom(
-      '[data-test-orgIntegrations-integratedUI-hostURL]',
-      integratedUIContainer
-    )
-    .doesNotExist();
-
-  assert
-    .dom(
-      '[data-test-orgIntegrations-integratedUI-username]',
-      integratedUIContainer
-    )
+    .dom('[data-test-orgIntegrations-integratedUI-property]')
     .doesNotExist();
 
   assert
@@ -95,15 +88,21 @@ const assertNonIntegratedUI = async (assert) => {
     .hasText(t('serviceNow.selectServiceNowTable'));
 
   assert
-    .dom(
-      '[data-test-orgIntegrations-integratedUI-disconnectBtn]',
-      integratedUIContainer
-    )
+    .dom('[data-test-orgIntegrations-configDrawer-disconnectBtn]')
     .doesNotExist();
 };
 
-const assertIntegratedUI = (assert, sNIntegrationInfo) => {
-  assert.dom('[data-test-orgIntegrations-serviceNow-desc]').doesNotExist();
+const assertIntegratedUI = async (assert, sNIntegrationInfo) => {
+  assert
+    .dom('[data-test-org-integration-card-description="ServiceNow"]')
+    .exists();
+
+  assert
+    .dom('[data-test-org-integration-card-manageBtn]')
+    .isNotDisabled()
+    .hasText(t('manage'));
+
+  await click('[data-test-org-integration-card-manageBtn]');
 
   assert
     .dom('[data-test-orgIntegrations-serviceNow-instanceURLInput]')
@@ -122,37 +121,22 @@ const assertIntegratedUI = (assert, sNIntegrationInfo) => {
     .doesNotExist();
 
   assert
-    .dom('[data-test-orgIntegrations-serviceNow-integrateBtn]')
+    .dom('[data-test-orgIntegrations-configDrawer-integrateBtn]')
     .doesNotExist();
 
   // Test integrated header
-  const integratedUIContainer = find(
-    '[data-test-orgIntegrations-serviceNow-integratedHeader]'
-  );
+  assert.dom('[data-test-orgIntegrations-integratedUI-logo]').exists();
 
   assert
-    .dom('[data-test-orgIntegrations-integratedUI-logo]', integratedUIContainer)
-    .exists();
-
-  assert
-    .dom(
-      '[data-test-orgIntegrations-integratedUI-hostURL]',
-      integratedUIContainer
-    )
+    .dom('[data-test-orgIntegrations-integratedUI-hostURL]')
     .hasText(sNIntegrationInfo.instance_url);
 
   assert
-    .dom(
-      '[data-test-orgIntegrations-integratedUI-username]',
-      integratedUIContainer
-    )
+    .dom('[data-test-orgIntegrations-integratedUI-property]')
     .hasText(sNIntegrationInfo.username);
 
   assert
-    .dom(
-      '[data-test-orgIntegrations-integratedUI-disconnectBtn]',
-      integratedUIContainer
-    )
+    .dom('[data-test-orgIntegrations-configDrawer-disconnectBtn]')
     .isNotDisabled()
     .hasText(t('disconnect'));
 };
@@ -182,8 +166,8 @@ module(
       await render(hbs`<Organization::Integrations::ServiceNow />`);
 
       assert
-        .dom('[data-test-orgIntegrations-serviceNow-title]')
-        .hasText(t('serviceNowIntegration'));
+        .dom('[data-test-org-integration-card-title="ServiceNow"]')
+        .hasText(t('serviceNow.title'));
 
       await assertNonIntegratedUI(assert);
     });
@@ -207,8 +191,8 @@ module(
       assertIntegratedUI(assert, sNIntegrationInfo);
 
       assert
-        .dom('[data-test-orgIntegrations-serviceNow-title]')
-        .hasText(t('serviceNowIntegration'));
+        .dom('[data-test-org-integration-card-title="ServiceNow"]')
+        .hasText(t('serviceNow.title'));
     });
 
     test.each(
@@ -241,53 +225,97 @@ module(
         await render(hbs`<Organization::Integrations::ServiceNow />`);
 
         assert
-          .dom('[data-test-orgIntegrations-serviceNow-title]')
-          .hasText(t('serviceNowIntegration'));
-
-        const disconnecBtn = find(
-          '[data-test-orgIntegrations-serviceNow-integratedHeader] [data-test-orgIntegrations-integratedUI-disconnectBtn]'
-        );
-
-        assert.dom(disconnecBtn).isNotDisabled().hasText(t('disconnect'));
-
-        await click(disconnecBtn);
-
-        assert.dom('[data-test-ak-modal-header]').hasText(t('confirm'));
+          .dom('[data-test-org-integration-card-title="ServiceNow"]')
+          .hasText(t('serviceNow.title'));
 
         assert
-          .dom('[data-test-confirmbox-description]')
+          .dom('[data-test-org-integration-card-manageBtn]')
+          .isNotDisabled()
+          .hasText(t('manage'));
+
+        await click('[data-test-org-integration-card-manageBtn]');
+
+        const disconnectBtn = find(
+          '[data-test-orgIntegrations-configDrawer-disconnectBtn]'
+        );
+
+        assert.dom(disconnectBtn).isNotDisabled().hasText(t('disconnect'));
+
+        await click(disconnectBtn);
+
+        assert
+          .dom('[data-test-orgIntegrations-configDrawer-title]')
+          .hasText(t('confirmation'));
+
+        assert
+          .dom(
+            '[data-test-orgIntegrations-serviceNowAccount-revoke-confirmation]'
+          )
           .hasText(t('confirmBox.revokeServiceNow'));
 
         assert
-          .dom('[data-test-confirmbox-confirmBtn]')
+          .dom(
+            '[data-test-orgIntegrations-serviceNowAccount-disconnectBtnConfirmation]'
+          )
           .isNotDisabled()
-          .hasText(t('disconnect'));
+          .hasText(t('yesDisconnect'));
 
         assert
-          .dom('[data-test-confirmbox-cancelBtn]')
+          .dom(
+            '[data-test-orgIntegrations-serviceNowAccount-cancelBtnConfirmation]'
+          )
           .isNotDisabled()
           .hasText(t('cancel'));
 
-        await click('[data-test-confirmbox-confirmBtn]');
+        await click(
+          '[data-test-orgIntegrations-serviceNowAccount-disconnectBtnConfirmation]'
+        );
 
         const notify = this.owner.lookup('service:notifications');
 
         if (fail) {
           assert.strictEqual(notify.errorMsg, t('pleaseTryAgain'));
 
-          assert.dom('[data-test-ak-modal-header]').exists();
-          assert.dom('[data-test-confirmbox-description]').exists();
-          assert.dom('[data-test-confirmbox-confirmBtn]').exists();
-          assert.dom('[data-test-confirmbox-cancelBtn]').exists();
+          assert.dom('[data-test-orgIntegrations-configDrawer-title]').exists();
+          assert
+            .dom(
+              '[data-test-orgIntegrations-serviceNowAccount-revoke-confirmation]'
+            )
+            .exists();
+          assert
+            .dom(
+              '[data-test-orgIntegrations-serviceNowAccount-disconnectBtnConfirmation]'
+            )
+            .exists();
+          assert
+            .dom(
+              '[data-test-orgIntegrations-serviceNowAccount-cancelBtnConfirmation]'
+            )
+            .exists();
+
+          await click(
+            '[data-test-orgIntegrations-serviceNowAccount-cancelBtnConfirmation]'
+          );
 
           assertIntegratedUI(assert, sNIntegrationInfo);
         } else {
           assert.strictEqual(notify.successMsg, t('serviceNow.willBeRevoked'));
 
-          assert.dom('[data-test-ak-modal-header]').doesNotExist();
-          assert.dom('[data-test-confirmbox-description]').doesNotExist();
-          assert.dom('[data-test-confirmbox-confirmBtn]').doesNotExist();
-          assert.dom('[data-test-confirmbox-cancelBtn]').doesNotExist();
+          assert
+            .dom(
+              '[data-test-orgIntegrations-serviceNowAccount-revoke-confirmation]'
+            )
+            .doesNotExist();
+          assert
+            .dom(
+              '[data-test-orgIntegrations-serviceNowAccount-disconnectBtnConfirmation]'
+            )
+            .doesNotExist();
+          assert
+            .dom(
+              '[data-test-orgIntegrations-serviceNowAccount-cancelBtnConfirmation]'
+            )
+            .doesNotExist();
 
           await assertNonIntegratedUI(assert);
         }
@@ -302,15 +330,22 @@ module(
       await render(hbs`<Organization::Integrations::ServiceNow />`);
 
       assert
-        .dom('[data-test-orgIntegrations-serviceNow-integrateBtn]')
+        .dom('[data-test-org-integration-card-connectBtn]')
         .isNotDisabled()
-        .hasText(t('integrateServiceNow'));
+        .hasText(t('connect'));
+
+      await click('[data-test-org-integration-card-connectBtn]');
+
+      assert
+        .dom('[data-test-orgIntegrations-configDrawer-integrateBtn]')
+        .isNotDisabled()
+        .hasText(t('integrate'));
 
       assert
         .dom('[data-test-text-input-outlined]')
         .doesNotHaveClass(/ak-error-text-input/);
 
-      await click('[data-test-orgIntegrations-serviceNow-integrateBtn]');
+      await click('[data-test-orgIntegrations-configDrawer-integrateBtn]');
 
       assert
         .dom('[data-test-text-input-outlined]')
@@ -421,7 +456,7 @@ module(
           )
           .hasText(selectedTableRow.label);
 
-        await click('[data-test-orgIntegrations-serviceNow-integrateBtn]');
+        await click('[data-test-orgIntegrations-configDrawer-integrateBtn]');
 
         const notify = this.owner.lookup('service:notifications');
 
