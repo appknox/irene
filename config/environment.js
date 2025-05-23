@@ -272,6 +272,7 @@ module.exports = function (environment) {
       revokeJira: 'unauthorize_jira',
       integrateJira: 'integrate_jira',
       integrateServiceNow: 'servicenow',
+      integrateSplunk: 'splunk',
       changePassword: 'v2/change_password',
       namespaceAdd: 'namespace_add',
       applyCoupon: 'apply_coupon',
@@ -471,6 +472,11 @@ module.exports = function (environment) {
       },
       integrateServiceNow: {
         feature: 'Integrate ServiceNow',
+        module: 'Report',
+        product: 'Appknox',
+      },
+      integrateSplunk: {
+        feature: 'Integrate Splunk',
         module: 'Report',
         product: 'Appknox',
       },
