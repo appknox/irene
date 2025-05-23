@@ -1,11 +1,13 @@
 import Component from '@glimmer/component';
 import { tracked } from '@glimmer/tracking';
 import { service } from '@ember/service';
+import type Store from '@ember-data/store';
 import type IntlService from 'ember-intl/services/intl';
 
 import ENUMS from 'irene/enums';
 import type PrivacyProjectModel from 'irene/models/privacy-project';
 import type PrivacyModuleService from 'irene/services/privacy-module';
+import type OrganizationService from 'irene/services/organization';
 
 export interface PrivacyModuleAppDetailsHeaderSignature {
   Args: {
@@ -16,8 +18,12 @@ export interface PrivacyModuleAppDetailsHeaderSignature {
 export default class PrivacyModuleAppDetailsHeaderComponent extends Component<PrivacyModuleAppDetailsHeaderSignature> {
   @service declare privacyModule: PrivacyModuleService;
   @service declare intl: IntlService;
+  @service declare store: Store;
+  @service('notifications') declare notify: NotificationService;
+  @service declare organization: OrganizationService;
 
   @tracked anchorRef: HTMLElement | null = null;
+  @tracked piiEnabled: boolean = false;
 
   constructor(
     owner: unknown,
@@ -33,6 +39,14 @@ export default class PrivacyModuleAppDetailsHeaderComponent extends Component<Pr
       this.fileId,
       false
     );
+
+    if (this.showPii) {
+      this.privacyModule.fetchPiiData.perform(10, 0, this.fileId, false);
+    }
+  }
+
+  get aiFeatures() {
+    return this.organization.selected?.aiFeatures;
   }
 
   get app() {
@@ -57,6 +71,10 @@ export default class PrivacyModuleAppDetailsHeaderComponent extends Component<Pr
     return (
       this.app.latestFilePrivacyAnalysisStatus === ENUMS.PM_STATUS.IN_PROGRESS
     );
+  }
+
+  get showPii() {
+    return this.aiFeatures?.pii;
   }
 
   get statusInfo() {
@@ -102,15 +120,15 @@ export default class PrivacyModuleAppDetailsHeaderComponent extends Component<Pr
         activeRoutes:
           'authenticated.dashboard.privacy-module.app-details.danger-perms',
       },
-      // {
-      //   id: 'pii',
-      //   label: this.intl.t('privacyModule.pii'),
-      //   badgeCount: 6,
-      //   hasBadge: true,
-      //   route: 'authenticated.dashboard.privacy-module.app-details.pii',
-      //   activeRoutes: 'authenticated.dashboard.privacy-module.app-details.pii',
-      // },
-    ];
+      this.showPii && {
+        id: 'pii',
+        label: this.intl.t('privacyModule.pii'),
+        badgeCount: this.privacyModule.piiDataCount,
+        hasBadge: this.privacyModule.piiDataAvailable,
+        route: 'authenticated.dashboard.privacy-module.app-details.pii',
+        activeRoutes: 'authenticated.dashboard.privacy-module.app-details.pii',
+      },
+    ].filter(Boolean);
   }
 
   willDestroy(): void {
