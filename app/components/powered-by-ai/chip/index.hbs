@@ -1,0 +1,30 @@
+<AkStack>
+  {{#if @clickable}}
+    <AkStack
+      @alignItems='center'
+      local-class='powered-by-chip clickable'
+      {{on 'click' this.openAIDrawer}}
+      ...attributes
+    >
+      <AkIcon @iconName='network-intel-node' local-class='icon' />
+
+      <AkTypography local-class='text'>
+        {{t 'poweredByAi' htmlSafe=true}}
+      </AkTypography>
+    </AkStack>
+  {{else}}
+    <AkStack @alignItems='center' local-class='powered-by-chip' ...attributes>
+      <AkIcon @iconName='network-intel-node' local-class='icon' />
+
+      <AkTypography local-class='text'>
+        {{t 'poweredByAi' htmlSafe=true}}
+      </AkTypography>
+    </AkStack>
+  {{/if}}
+
+  <PoweredByAi::Drawer
+    @aiDrawerOpen={{this.aiDrawerOpen}}
+    @onClose={{this.closeAiDrawer}}
+    @info={{@drawerInfo}}
+  />
+</AkStack>

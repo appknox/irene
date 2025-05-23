@@ -2,20 +2,54 @@ import Component from '@glimmer/component';
 import { service } from '@ember/service';
 import { action } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
+import { task } from 'ember-concurrency';
+import type Store from '@ember-data/store';
 
+import parseError from 'irene/utils/parse-error';
 import type { PaginationProviderActionsArgs } from 'irene/components/ak-pagination-provider';
+import type { PrivacyModulePiiQueryParam } from 'irene/routes/authenticated/dashboard/privacy-module/app-details/pii';
+import type FileModel from 'irene/models/file';
+import type PrivacyModuleService from 'irene/services/privacy-module';
+import type PiiModel from 'irene/models/pii';
+import type MeService from 'irene/services/me';
 
-export default class PrivacyModuleAppDetailsPiiComponent extends Component {
+export interface PrivacyModuleAppDetailsPiiSignature {
+  Args: {
+    queryParams: PrivacyModulePiiQueryParam;
+    file: FileModel;
+  };
+}
+
+export default class PrivacyModuleAppDetailsPiiComponent extends Component<PrivacyModuleAppDetailsPiiSignature> {
+  @service declare store: Store;
   @service('notifications') declare notify: NotificationService;
+  @service declare privacyModule: PrivacyModuleService;
+  @service declare me: MeService;
 
-  @tracked limit = 10;
-  @tracked offset = 0;
-  @tracked selectedPii = null;
-
+  @tracked selectedPii: PiiModel | null = null;
   @tracked aiDrawerOpen = false;
+  @tracked piiEnabled: boolean = false;
 
-  @tracked feature = false;
-  @tracked owner = false;
+  constructor(
+    owner: unknown,
+    args: PrivacyModuleAppDetailsPiiSignature['Args']
+  ) {
+    super(owner, args);
+
+    this.fetchOrganizationAiFeatures.perform();
+  }
+
+  get limit() {
+    return Number(this.args.queryParams.app_limit);
+  }
+
+  get offset() {
+    return Number(this.args.queryParams.app_offset);
+  }
+
+  get fileId() {
+    return this.args.file.id;
+  }
 
   get columns() {
     return [
@@ -32,93 +66,20 @@ export default class PrivacyModuleAppDetailsPiiComponent extends Component {
     ];
   }
 
-  get tableData() {
-    return [
-      {
-        categoryName: 'CREDIT_CARD',
-        dataFound: [
-          {
-            value: '4082 4323 4533 2335',
-            source: 'APP BINARY',
-          },
-          {
-            value: '4544 6755 4532 9809',
-            source: 'APP BINARY',
-          },
-          {
-            value: '9650 0959 0002 0009',
-            source: 'API',
-            urls: [
-              'https://pushy-saxophone.name',
-              'https://far-integrity.org',
-              'https://assured-eyeliner.org',
-            ],
-          },
-          {
-            value: '4124 4674 7654 7778',
-            source: 'API',
-            urls: [
-              'https://pushy-saxophone.name',
-              'https://far-integrity.org',
-              'https://assured-eyeliner.org',
-            ],
-          },
-        ],
-      },
-      {
-        categoryName: 'EMAIL_ADDRESS',
-        dataFound: [
-          {
-            value: 'raghu@appnknox.com',
-            source: 'API',
-          },
-        ],
-      },
-      {
-        categoryName: 'IP_ADDRESS',
-        dataFound: [
-          {
-            value: '127.454.345.12',
-            source: 'APP BINARY',
-          },
-        ],
-      },
-      {
-        categoryName: 'IN_AADHAAR',
-        dataFound: [
-          {
-            value: '1234 8976 5644 7865',
-            source: 'APP BINARY',
-          },
-          {
-            value: '7896 1234 7766 5678',
-            source: 'APP BINARY',
-          },
-          {
-            value: '4567 9861 2123 1234',
-            source: 'APP BINARY',
-          },
-        ],
-      },
-      {
-        categoryName: 'PERSON',
-        dataFound: [
-          {
-            value: 'RAGHU',
-            source: 'APP BINARY',
-          },
-        ],
-      },
-      {
-        categoryName: 'PHONE_NUMBER',
-        dataFound: [
-          {
-            value: '(91) 944 342 30 20',
-            source: 'APP BINARY',
-          },
-        ],
-      },
-    ];
+  get piiDataList() {
+    return this.privacyModule.piiDataList;
+  }
+
+  get piiDataCount() {
+    return this.privacyModule.piiDataCount;
+  }
+
+  get justifyContentValue() {
+    return this.piiEnabled ? 'space-between' : 'right';
+  }
+
+  get isOwner() {
+    return this.me.org?.get('is_owner');
   }
 
   @action goToPage(args: PaginationProviderActionsArgs) {
@@ -146,11 +107,64 @@ export default class PrivacyModuleAppDetailsPiiComponent extends Component {
   }
 
   get selectedPiiData() {
-    return this.selectedPii?.dataFound[0];
+    return this.selectedPii?.piiData[0];
+  }
+
+  get multiplePiiDataLength() {
+    return this.selectedPii?.piiData?.length ?? 0;
   }
 
   get multiplePiiData() {
-    return this.selectedPii?.dataFound?.length > 1;
+    return this.multiplePiiDataLength > 1;
+  }
+
+  get isFetching() {
+    return (
+      this.privacyModule.fetchPiiData.isRunning ||
+      this.fetchOrganizationAiFeatures.isRunning
+    );
+  }
+
+  get hasNoPii() {
+    return this.piiDataCount === 0;
+  }
+
+  get showEmptyContent() {
+    return !this.isFetching && this.hasNoPii && this.piiEnabled;
+  }
+
+  get source() {
+    return this.piiDataCount === 0;
+  }
+
+  get drawerInfo() {
+    return [
+      {
+        title: 'What data does this AI model access in my app? ',
+        body: 'Lorem ipsum dolor sit amet consectetur. Volutpat ullamcorper in placerat viverra ipsum imperdiet malesuada tellus. Fermentum quis varius eget faucibus vivamus. Commodo sagittis non duis sit tincidunt facilisi bibendum mi. Tortor aliquam egestas in non. Fermentum.',
+        marginTop: 'mt-2',
+      },
+      {
+        title:
+          'Does any 3rd party product/service have access to this model which has been trained using my organizations applications?',
+        body: 'Lorem ipsum dolor sit amet consectetur. Laoreet fermentum arcu at elementum amet maecenas est ultrices. Enim dapibus facilisi adipiscing commodo velit accumsan vitae.',
+        marginTop: 'mt-2',
+      },
+      {
+        title: 'How is this AI model secured from potential threats?',
+        body: 'Lorem ipsum dolor sit amet consectetur. Volutpat ullamcorper in placerat viverra ipsum imperdiet malesuada tellus. Fermentum quis varius eget faucibus vivamus. Commodo sagittis non duis sit tincidunt facilisi bibendum mi. Tortor aliquam egestas in non. Fermentum faucibus elementum tristique donec elit vitae posuere etiam. Sem est commodo mattis elementum etiam vitae pellentesque aliquet.',
+        marginTop: 'mt-2',
+      },
+    ];
+  }
+
+  @action
+  getSource(source?: string) {
+    if (source === 'BINARY') {
+      return 'APP BINARY';
+    }
+
+    return 'API';
   }
 
   @action
@@ -164,6 +178,28 @@ export default class PrivacyModuleAppDetailsPiiComponent extends Component {
   handleCopyError() {
     this.notify.error('Please Try Again');
   }
+
+  fetchOrganizationAiFeatures = task(async () => {
+    try {
+      const aiFeatures = await this.store.queryRecord(
+        'organization-ai-feature',
+        {}
+      );
+
+      this.piiEnabled = aiFeatures.pii;
+
+      if (this.piiEnabled) {
+        this.privacyModule.fetchPiiData.perform(
+          this.limit,
+          this.offset,
+          this.fileId,
+          false
+        );
+      }
+    } catch (err) {
+      this.notify.error(parseError(err));
+    }
+  });
 }
 
 declare module '@glint/environment-ember-loose/registry' {

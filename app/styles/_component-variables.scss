@@ -2067,6 +2067,10 @@ body {
   // variables for organization/settings-wrapper
   --organization-settings-wrapper-background-color: var(--background-light);
 
+  // variables for organization/ai-powered-features
+  --organization-ai-powered-features-bg-color: var(--common-white);
+  --organization-ai-powered-features-border-color: var(--border-color-1);
+
   // variables for public-api-docs/index
   --public-api-docs-tabs-background-color: var(--common-white);
 
@@ -2229,6 +2233,14 @@ body {
 
   // variables for privacy-module/status
   --privacy-module-status-background: var(--background-main);
+
+  // variables for powered-by-ai/chip
+  --powered-by-ai-chip-border-radius: var(--border-radius);
+  --powered-by-ai-chip-color: var(--common-white);
+
+  // variables for powered-by-ai/drawer
+  --powered-by-ai-chip-border-color: var(--border-color-1);
+  --powered-by-ai-chip-footer-box-shadow: var(--box-shadow-4);
 
   &.theme-light {
     //variables for appknox-wrapper

@@ -2,7 +2,7 @@ import Component from '@glimmer/component';
 
 export default class PrivacyModuleAppDetailsPiiTableDataFoundComponent extends Component {
   get dataFound() {
-    return this.args.data.dataFound;
+    return this.args.data.piiData;
   }
 
   get value() {

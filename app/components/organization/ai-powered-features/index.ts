@@ -1,9 +1,86 @@
 import Component from '@glimmer/component';
 import { action } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
+import { task } from 'ember-concurrency';
+import { service } from '@ember/service';
+import type Store from '@ember-data/store';
+import type IntlService from 'ember-intl/services/intl';
+
+import parseError from 'irene/utils/parse-error';
+import type OrganizationService from 'irene/services/organization';
+import type OrganizationAiFeatureModel from 'irene/models/organization-ai-feature';
+
+type AiFeatureKey = 'pii' | 'reporting';
 
 export default class OrganizationAiPoweredFeaturesComponent extends Component {
+  @service declare store: Store;
+  @service declare organization: OrganizationService;
+  @service declare intl: IntlService;
+  @service('notifications') declare notify: NotificationService;
+
   @tracked aiDrawerOpen = false;
+  @tracked aiFeatures: OrganizationAiFeatureModel | null = null;
+  @tracked drawerButtonLabel: string = '';
+  @tracked featureToToggle: AiFeatureKey | null = null;
+  @tracked targettedToggle: HTMLInputElement | null = null;
+
+  constructor(owner: unknown, args: object) {
+    super(owner, args);
+
+    this.fetchOrganizationAiFeatures.perform();
+  }
+
+  get features() {
+    return this.organization.selected?.aiFeatures;
+  }
+
+  get aiFeaturesList() {
+    return [
+      {
+        featureKey: 'pii' as const,
+        isChecked: this.aiFeatures?.pii,
+        enabled: this.features?.pii,
+        label: 'Personally Identifiable Information (PII)',
+        description: 'PII Desc',
+        header: 'Personally Identifiable Information (PII)',
+        tooltipContent: 'PII tooltipContent',
+        drawerInfo: this.piiDrawerInfo,
+
+        isToggling:
+          this.featureToToggle === 'pii' && this.toggleFeature.isRunning,
+      },
+    ];
+  }
+
+  get drawerInfo() {
+    switch (this.featureToToggle) {
+      case 'pii':
+        return this.piiDrawerInfo;
+      default:
+        return null;
+    }
+  }
+
+  get piiDrawerInfo() {
+    return [
+      {
+        title: 'What data does this AI model access in my app? ',
+        body: 'Lorem ipsum dolor sit amet consectetur. Volutpat ullamcorper in placerat viverra ipsum imperdiet malesuada tellus. Fermentum quis varius eget faucibus vivamus. Commodo sagittis non duis sit tincidunt facilisi bibendum mi. Tortor aliquam egestas in non. Fermentum.',
+        marginTop: 'mt-2',
+      },
+      {
+        title:
+          'Does any 3rd party product/service have access to this model which has been trained using my organizations applications?',
+        body: 'Lorem ipsum dolor sit amet consectetur. Laoreet fermentum arcu at elementum amet maecenas est ultrices. Enim dapibus facilisi adipiscing commodo velit accumsan vitae.',
+        marginTop: 'mt-2',
+      },
+      {
+        title: 'How is this AI model secured from potential threats?',
+        body: 'Lorem ipsum dolor sit amet consectetur. Volutpat ullamcorper in placerat viverra ipsum imperdiet malesuada tellus. Fermentum quis varius eget faucibus vivamus. Commodo sagittis non duis sit tincidunt facilisi bibendum mi. Tortor aliquam egestas in non. Fermentum faucibus elementum tristique donec elit vitae posuere etiam. Sem est commodo mattis elementum etiam vitae pellentesque aliquet.',
+        marginTop: 'mt-2',
+      },
+    ];
+  }
 
   @action openAIDrawer() {
     this.aiDrawerOpen = true;
@@ -12,6 +89,57 @@ export default class OrganizationAiPoweredFeaturesComponent extends Component {
   @action closeAiDrawer() {
     this.aiDrawerOpen = false;
   }
+
+  @action confirmFeatureToggle() {
+    if (this.featureToToggle) {
+      this.toggleFeature.perform(
+        this.featureToToggle,
+        this.targettedToggle?.checked
+      );
+    }
+  }
+
+  @action toggleAiFeature(featureKey: AiFeatureKey) {
+    return (event: Event) => {
+      this.targettedToggle = event.target as HTMLInputElement;
+
+      this.targettedToggle.checked = !this.targettedToggle.checked;
+      this.featureToToggle = featureKey;
+
+      if (this.targettedToggle.checked) {
+        this.drawerButtonLabel = this.intl.t('yesTurnOff');
+      } else {
+        this.drawerButtonLabel = this.intl.t('yesTurnOn');
+      }
+
+      this.aiDrawerOpen = true;
+    };
+  }
+
+  toggleFeature = task(async (featureKey: AiFeatureKey, checked?: boolean) => {
+    try {
+      this.aiFeatures?.set(featureKey, !checked);
+      this.aiDrawerOpen = false;
+
+      await this.aiFeatures?.save();
+      await this.fetchOrganizationAiFeatures.perform();
+
+      this.notify.success(this.intl.t('statusUpdatedSuccessfully'));
+    } catch (err) {
+      this.notify.error(parseError(err));
+    }
+  });
+
+  fetchOrganizationAiFeatures = task(async () => {
+    try {
+      this.aiFeatures = await this.store.queryRecord(
+        'organization-ai-feature',
+        {}
+      );
+    } catch (err) {
+      this.notify.error(parseError(err));
+    }
+  });
 }
 
 declare module '@glint/environment-ember-loose/registry' {
