@@ -110,6 +110,9 @@ export default class FileModel extends ModelBaseMixin {
   @attr('boolean')
   declare canRunAutomatedDynamicscan: boolean;
 
+  @attr('number')
+  declare devFramework: number;
+
   @hasMany('tag', { async: false, inverse: null })
   declare tags: SyncHasMany<TagModel>;
 
@@ -285,6 +288,12 @@ export default class FileModel extends ModelBaseMixin {
         },
       ],
     };
+  }
+
+  get screenCoverageSupported() {
+    return [ENUMS.FILE_DEV_FRAMEWORK.ANDROID_NATIVE].includes(
+      this.devFramework
+    );
   }
 }
 

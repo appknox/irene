@@ -1,0 +1,94 @@
+<AkStack
+  @width='full'
+  @alignItems='center'
+  @justifyContent='flex-end'
+  class='px-2'
+>
+  <AkStack
+    @width='full'
+    @spacing='0.5'
+    @alignItems='center'
+    @justifyContent='center'
+    data-test-fileDetailsDynamicScanResults-coverageTableStatusHeader-container
+    {{style width='90px'}}
+  >
+    <AkIcon
+      @iconName='filter-list'
+      @color={{if this.filterApplied 'primary' 'inherit'}}
+      local-class='cursor-pointer'
+      {{on 'click' this.handleClick}}
+      data-test-fileDetailsDynamicScanResults-coverageTableStatusHeader-icon
+    />
+
+    <AkTypography
+      @variant='subtitle2'
+      data-test-fileDetailsDynamicScanResults-coverageTableStatusHeader-text
+    >
+      {{t 'status'}}
+    </AkTypography>
+  </AkStack>
+</AkStack>
+
+<AkPopover
+  @anchorRef={{this.anchorRef}}
+  @placement='bottom'
+  @arrow={{false}}
+  @closeHandler={{this.handleOptionsClose}}
+  @clickOutsideToClose={{true}}
+  data-test-fileDetailsDynamicScanResults-coverageTableStatusHeader-popover
+>
+  <AkStack @direction='column' local-class='status-filter'>
+    <AkStack @width='full' local-class='filter-header'>
+      <AkTypography
+        @variant='subtitle2'
+        local-class='filter-header-text'
+        data-test-fileDetailsDynamicScanResults-coverageTableStatusHeader-popover-headerText
+      >
+        {{t 'status'}}
+      </AkTypography>
+    </AkStack>
+
+    {{#each this.statusOptions as |status|}}
+      <AkStack
+        @spacing='1'
+        @width='full'
+        local-class='filter-option cursor-pointer'
+        class='py-1 pl-2'
+        {{on 'click' (fn this.selectStatus status.value)}}
+        data-test-fileDetailsDynamicScanResults-coverageTableStatusHeader-option
+      >
+        <AkStack @alignItems='center' @spacing='1'>
+          <AkRadio
+            @checked={{eq this.selectedStatus status.value}}
+            data-test-fileDetailsDynamicScanResults-coverageTableStatusHeader-radio={{status.key}}
+          />
+
+          <AkTypography
+            data-test-fileDetailsDynamicScanResults-coverageTableStatusHeader-option-text
+          >
+            {{status.key}}
+          </AkTypography>
+        </AkStack>
+      </AkStack>
+    {{/each}}
+
+    {{#if this.filterApplied}}
+      <AkStack
+        class='py-1 pl-2'
+        local-class='clear-filter-section'
+        @width='full'
+        data-test-fileDetailsDynamicScanResults-coverageTableStatusHeader-clearFilter
+      >
+        <AkTypography
+          @underline='always'
+          @color='primary'
+          local-class='cursor-pointer'
+          {{on 'click' this.clearFilter}}
+          data-test-fileDetailsDynamicScanResults-coverageTableStatusHeader-clearFilter-text
+        >
+          {{t 'clearFilter'}}
+        </AkTypography>
+      </AkStack>
+    {{/if}}
+  </AkStack>
+</AkPopover>

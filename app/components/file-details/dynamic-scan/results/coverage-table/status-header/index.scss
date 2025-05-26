@@ -1,0 +1,44 @@
+.status-filter {
+  width: 12.5em;
+
+  background-color: var(
+    --file-details-dynamic-scan-results-coverage-table-status-header-background-color
+  );
+
+  box-shadow: var(
+    --file-details-dynamic-scan-results-coverage-table-status-header-box-shadow
+  );
+
+  border-radius: var(
+    --file-details-dynamic-scan-results-coverage-table-status-header-border-radius
+  );
+
+  .filter-option:hover {
+    background-color: var(
+      --file-details-dynamic-scan-results-coverage-table-status-header-filter-option-hover-background-color
+    );
+  }
+
+  .clear-filter-section {
+    background-color: var(
+      --file-details-dynamic-scan-results-coverage-table-status-header-filter-option-clear-filter-background-color
+    );
+  }
+
+  .filter-header {
+    background-color: var(
+      --file-details-dynamic-scan-results-coverage-table-status-header-filter-header-background-color
+    );
+
+    padding: 0.5em 1em;
+
+    .filter-header-text {
+      text-transform: uppercase;
+      font-size: 0.825rem !important;
+    }
+  }
+}
+
+.cursor-pointer {
+  cursor: pointer;
+}
