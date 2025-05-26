@@ -1,0 +1,39 @@
+<AkList::Item
+  @divider={{true}}
+  {{style padding='0.7857em 1.4285em'}}
+  ...attributes
+  as |li|
+>
+  <li.leftIcon
+    data-test-aiReporting-preview-reportDownloadDrawer-reportItem-leftIcon
+  >
+    {{#let (component @reportDetails.iconComponent) as |Icon|}}
+      <Icon />
+    {{/let}}
+  </li.leftIcon>
+
+  <AkStack @direction='column' @width='full' @spacing='0.5' class='pl-1'>
+    <AkTypography
+      @variant='subtitle1'
+      data-test-aiReporting-preview-reportDownloadDrawer-reportItem-primaryText
+    >
+      {{@reportDetails.primaryText}}
+    </AkTypography>
+
+    <AkStack @alignItems='center' @spacing='0.5'>
+      <AkTypography
+        data-test-aiReporting-preview-reportDownloadDrawer-reportItem-secondaryText
+      >
+        {{@reportDetails.secondaryText}}
+      </AkTypography>
+    </AkStack>
+  </AkStack>
+
+  <li.rightIcon>
+    <AkRadio
+      @checked={{this.isSelected}}
+      @onChange={{this.handleReportTypeSelect}}
+      data-test-aiReporting-preview-reportDownloadDrawer-reportItem-radio
+    />
+  </li.rightIcon>
+</AkList::Item>

@@ -1,0 +1,147 @@
+<AkBreadcrumbs::AutoTrail />
+
+{{#if this.title}}
+  <AkTypography @variant='h5' class='mt-3' data-test-aiReporting-preview-title>
+    {{this.title}}
+  </AkTypography>
+{{/if}}
+
+<AkStack
+  @justifyContent='space-between'
+  @alignItems='center'
+  class='mt-3'
+  local-class='query-container'
+  data-test-aiReporting-preview-queryContainer
+>
+  <AkStack @direction='column' @spacing={{1}}>
+    <AkTypography @variant='h6' data-test-aiReporting-preview-queryHeaderText>
+      {{t 'reportModule.reportQuery'}}
+    </AkTypography>
+
+    <AkTypography data-test-aiReporting-preview-queryText>
+      {{@reportRequest.query}}
+    </AkTypography>
+  </AkStack>
+</AkStack>
+
+<div local-class='preview-container' class='mt-3'>
+  {{#if this.hasDefaultFilters}}
+    <AkStack
+      @alignItems='center'
+      local-class='default-filter-note'
+      data-test-aiReporting-preview-defaultFilterNote
+    >
+      <div local-class='warning-icon-container'>
+        <AkIcon @iconName='warning' data-test-aiReporting-preview-warningIcon />
+      </div>
+
+      <AkTypography
+        class='ml-1'
+        data-test-aiReporting-preview-defaultFilterText
+      >
+        {{t 'reportModule.defaultFilter'}}
+      </AkTypography>
+    </AkStack>
+  {{/if}}
+
+  <AkStack
+    @direction='row'
+    @justifyContent='space-between'
+    @alignItems='center'
+    class='p-2'
+  >
+    <AkStack @spacing='1.5' data-test-aiReporting-preview-filterButtons>
+      <AkButton
+        @variant='filled'
+        @disabled={{this.disableFilters}}
+        @color='primary'
+        {{on 'click' this.handleFilterByColumnDrawerOpen}}
+        local-class='custom-button {{if this.disableFilters "disabled"}}'
+        data-test-aiReporting-preview-selectedColumnsBtn
+      >
+        <:leftIcon>
+          <AkIcon
+            @iconName='filter-list'
+            @color={{if this.disableFilters 'inherit' 'primary'}}
+            data-test-aiReporting-preview-selectedColumnsIcon
+          />
+        </:leftIcon>
+
+        <:default>
+          {{t 'reportModule.selectedColumns'}}
+
+          {{#unless this.disableFilters}}
+            -&nbsp;
+            <strong
+              data-test-aiReporting-preview-selectedColumnsCount
+            >{{this.noSelectedColumns}}</strong>
+          {{/unless}}
+        </:default>
+      </AkButton>
+
+      <AkButton
+        @variant='filled'
+        @disabled={{this.disableAdvanceFilterButton}}
+        @color='primary'
+        {{on 'click' this.handleAdvanceFilterDrawerOpen}}
+        local-class='custom-button {{if this.disableFilters "disabled"}}'
+        data-test-aiReporting-preview-advancedFilterBtn
+      >
+        <:leftIcon>
+          <AkIcon
+            @iconName='add'
+            @color={{if @reportRequest.isRelevant 'primary' 'inherit'}}
+            data-test-aiReporting-preview-advancedFilterIcon
+          />
+        </:leftIcon>
+
+        <:default>
+          {{t 'reportModule.advancedFilter'}}
+
+          {{#if @reportRequest.isRelevant}}
+            -&nbsp;
+            <strong
+              data-test-aiReporting-preview-selectedAdvancedFiltersCount
+            >{{this.noSelectedAdvancedFilters}}</strong>
+          {{/if}}
+        </:default>
+      </AkButton>
+    </AkStack>
+
+    <AiReporting::Preview::GenerateReport
+      @disabled={{this.disableDownload}}
+      @selectedColumns={{this.selectedColumns}}
+      @addtionalFilters={{this.additionalFilters}}
+      @reportRequest={{@reportRequest}}
+    />
+  </AkStack>
+
+  <AkDivider @color='dark' />
+
+  <AiReporting::Preview::Table
+    @isFetchingReportPreview={{this.previewReportRequest.isRunning}}
+    @reportPreview={{this.reportPreview}}
+    @selectedColumns={{this.selectedColumns}}
+    @errorScreenHeader={{this.errorScreenHeader}}
+    @errorScreenDesc={{this.errorScreenDesc}}
+    @refetchPreviewRequest={{this.handleRefetchPreviewRequest}}
+    @limit={{this.limit}}
+    @offset={{this.offset}}
+  />
+</div>
+
+<AiReporting::Preview::FilterByColumnDrawer
+  @open={{this.filterByColumnDrawerOpen}}
+  @onClose={{this.handleFilterByColumnDrawerClose}}
+  @onApply={{this.handleFilterByColumnDrawerApply}}
+  @allColumnsMap={{this.allColumnsMap}}
+/>
+
+{{#if this.showAdvanceFilterDrawer}}
+  <AiReporting::Preview::AdvanceFilterDrawer
+    @onClose={{this.handleAdvanceFilterDrawerClose}}
+    @onApply={{this.handleAdvanceFilterDrawerApply}}
+    @filterDetails={{this.filterDetails}}
+    @additionalFilters={{this.additionalFilters}}
+  />
+{{/if}}

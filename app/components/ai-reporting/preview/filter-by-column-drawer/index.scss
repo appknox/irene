@@ -1,0 +1,16 @@
+.filter-sections {
+  height: 100%;
+  width: 450px;
+  overflow-y: auto;
+}
+
+.filter-drawer-footer {
+  padding: 1em 1.5em;
+  background-color: var(
+    --ai-reporting-preview-filter-by-column-drawer-footer-background-color
+  );
+
+  box-shadow: var(
+    --ai-reporting-preview-filter-by-column-drawer-footer-box-shadow
+  );
+}

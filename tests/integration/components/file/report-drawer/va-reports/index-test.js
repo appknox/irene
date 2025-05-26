@@ -170,8 +170,8 @@ module(
       // Reports are generated the "pdf", "xlsx", and "csv" formats.
       const reportTypes = [
         ['pdf', t('generating')],
-        ['xlsx', t('fileReport.noPasswordRequired')],
-        ['csv', t('fileReport.noPasswordRequired')],
+        ['xlsx', t('noPasswordRequired')],
+        ['csv', t('noPasswordRequired')],
       ];
 
       assert.strictEqual(
@@ -340,7 +340,7 @@ module(
           .dom(report)
           .exists()
           .containsText(t('fileReport.summaryReport', { reportType: type }))
-          .hasText(new RegExp(t('fileReport.noPasswordRequired')));
+          .hasText(new RegExp(t('noPasswordRequired')));
       });
     });
 
