@@ -9,7 +9,6 @@ type ServerData = {
   websocket: string;
   devicefarmURL: string;
   enterprise: string | boolean;
-  urlUploadAllowed: boolean;
 };
 
 type DashboardData = {
@@ -60,7 +59,6 @@ type ServerResponse = {
   websocket: string;
   devicefarm_url: string;
   enterprise: string | boolean;
-  url_upload_allowed: boolean;
 };
 
 type DashboardResponse = {
@@ -119,7 +117,6 @@ export default class ConfigurationService extends Service {
     websocket: '',
     devicefarmURL: '',
     enterprise: '',
-    urlUploadAllowed: false,
   };
 
   dashboardData: DashboardData = {
@@ -208,7 +205,6 @@ export default class ConfigurationService extends Service {
       this.serverData.websocket ||= data.websocket;
       this.serverData.enterprise ||= data.enterprise == true;
       this.serverData.devicefarmURL ||= data.devicefarm_url;
-      this.serverData.urlUploadAllowed ||= data.url_upload_allowed;
     } catch (error) {
       this.logger.error('Error getting server configuration', error);
     }

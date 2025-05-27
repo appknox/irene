@@ -41,6 +41,5 @@ declare namespace IreneAPIResponses {
   interface ServerConfig {
     websocket: string;
     enterprise: boolean;
-    url_upload_allowed: boolean;
   }
 }

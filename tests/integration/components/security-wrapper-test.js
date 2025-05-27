@@ -28,7 +28,7 @@ class ConfigurationStub extends Service {
   frontendData = {};
   themeData = {};
   imageData = {};
-  serverData = { urlUploadAllowed: true, enterprise: false };
+  serverData = { enterprise: false };
 }
 
 class IntegrationStub extends Service {
@@ -81,8 +81,8 @@ module('Integration | Component | security-wrapper', function (hooks) {
 
   test('it renders main top-nav with logo', async function (assert) {
     await render(hbs`
-        <SecurityWrapper 
-          @user={{this.user}} 
+        <SecurityWrapper
+          @user={{this.user}}
         />
     `);
 

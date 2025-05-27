@@ -14,6 +14,7 @@ interface Features {
   public_apis: boolean;
   storeknox: boolean;
   privacy: boolean;
+  upload_via_url: boolean;
 }
 
 export default class OrganizationModel extends Model {
