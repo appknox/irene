@@ -1,5 +1,5 @@
 import Service from '@ember/service';
-import { click, findAll, render } from '@ember/test-helpers';
+import { click, render } from '@ember/test-helpers';
 import { hbs } from 'ember-cli-htmlbars';
 import { setupMirage } from 'ember-cli-mirage/test-support';
 import { setupIntl, t } from 'ember-intl/test-support';
@@ -25,29 +25,6 @@ class NotificationsStub extends Service {
     this.successMsg = msg;
   }
 }
-
-// Checks if header action items are visible
-const assertIntegratedHeaderActionItems = async (assert) => {
-  const integratedHeaderMoreActionsSelector =
-    '[data-test-prjSettings-integrations-integratedHeader-moreActionTrigger]';
-
-  assert.dom(integratedHeaderMoreActionsSelector).exists();
-
-  await click(integratedHeaderMoreActionsSelector);
-
-  const menuItems = findAll(
-    '[data-test-prjSettings-integrations-integratedHeader-menuItem]'
-  );
-
-  // edit action items should be two
-  assert.strictEqual(menuItems.length, 2);
-
-  assert.dom(menuItems[0]).hasText(t('edit'));
-  assert.dom(menuItems[1]).hasText(t('delete'));
-
-  // Edit button is in position 1, delete in position 2
-  return menuItems;
-};
 
 // Get Analysis Risk
 const getAnalysisRisklabel = (risk) =>
@@ -115,16 +92,30 @@ module(
       );
 
       assert
-        .dom('[data-test-prjSettings-integrations-jiraProject-root]')
+        .dom('[data-test-integration-card-title="JIRA"]')
+        .hasText(t('jira'));
+
+      assert.dom('[data-test-integration-card-logo]').exists();
+
+      assert.dom('[data-test-integration-card-integrated-chip]').doesNotExist();
+
+      assert.dom('[data-test-integration-card-connectBtn]').doesNotExist();
+
+      assert.dom('[data-test-integration-card-selectBtn]').exists();
+
+      await click('[data-test-integration-card-selectBtn]');
+
+      assert
+        .dom('[data-test-prjSettings-integrations-configDrawer-root]')
         .exists();
 
       assert
-        .dom('[data-test-prjSettings-integrations-integratedHeader-headerText]')
+        .dom('[data-test-prjSettings-integrations-configDrawer-title]')
         .hasText(t('jiraIntegration'));
 
       assert
         .dom('[data-test-prjSettings-integrations-jiraProject-noProject]')
-        .hasText(t('jiraNoProject'));
+        .containsText(t('jiraNoProject'));
 
       assert
         .dom(
@@ -144,8 +135,18 @@ module(
       );
 
       assert
-        .dom('[data-test-prjSettings-integrations-jiraProject-root]')
-        .exists();
+        .dom('[data-test-integration-card-title="JIRA"]')
+        .hasText(t('jira'));
+
+      assert.dom('[data-test-integration-card-logo]').exists();
+
+      assert.dom('[data-test-integration-card-integrated-chip]').doesNotExist();
+
+      assert.dom('[data-test-integration-card-connectBtn]').doesNotExist();
+
+      assert.dom('[data-test-integration-card-selectBtn]').exists();
+
+      await click('[data-test-integration-card-selectBtn]');
 
       assert
         .dom('[data-test-prjSettings-integrations-jiraProject-noProject]')
@@ -158,26 +159,22 @@ module(
         .doesNotExist();
 
       assert
-        .dom('[data-test-prjSettings-integrations-integratedHeader-headerText]')
+        .dom('[data-test-prjSettings-integrations-configDrawer-title]')
         .hasText(t('jiraIntegration'));
 
       assert
         .dom(
-          '[data-test-prjSettings-integrations-integratedHeader-headerSubText]'
+          '[data-test-prjSettings-integrations-jiraProject-configDrawer-headerText]'
         )
-
         .hasText(t('otherTemplates.selectJIRAAccount'));
 
       assert
-        .dom(
-          '[data-test-prjSettings-integrations-jiraProject-selectProjectBtn]'
-        )
-
+        .dom('[data-test-integration-card-selectBtn]')
         .hasText(t('selectProject'));
     });
 
     test('it opens and closes project config drawer', async function (assert) {
-      assert.expect(7);
+      assert.expect(8);
 
       await render(
         hbs`<ProjectSettings::Integrations::JiraProject @project={{this.project}} />`
@@ -187,9 +184,9 @@ module(
         .dom(`[data-test-prjSettings-integrations-configDrawer]`)
         .doesNotExist();
 
-      await click(
-        '[data-test-prjSettings-integrations-jiraProject-selectProjectBtn]'
-      );
+      assert.dom('[data-test-integration-card-selectBtn]').exists();
+
+      await click('[data-test-integration-card-selectBtn]');
 
       assert
         .dom('[data-test-prjSettings-integrations-configDrawer-root]')
@@ -252,9 +249,7 @@ module(
           hbs`<ProjectSettings::Integrations::JiraProject @project={{this.project}} />`
         );
 
-        await click(
-          '[data-test-prjSettings-integrations-jiraProject-selectProjectBtn]'
-        );
+        await click('[data-test-integration-card-selectBtn]');
 
         assert
           .dom(`[data-test-prjSettings-integrations-configDrawer-root`)
@@ -273,9 +268,7 @@ module(
         hbs`<ProjectSettings::Integrations::JiraProject @project={{this.project}} />`
       );
 
-      await click(
-        '[data-test-prjSettings-integrations-jiraProject-selectProjectBtn]'
-      );
+      await click('[data-test-integration-card-selectBtn]');
 
       await clickTrigger(
         `[data-test-prjSettings-integrations-jiraProject-configDrawer-repoList]`
@@ -301,7 +294,7 @@ module(
     });
 
     test('it saves the selected project when I select a valid repo from the config drawer', async function (assert) {
-      assert.expect(11);
+      assert.expect(7);
 
       this.server.get('/projects/:id/jira', () => {
         return new Response(404, {}, { detail: 'No connected JIRA project' });
@@ -335,9 +328,7 @@ module(
         hbs`<ProjectSettings::Integrations::JiraProject @project={{this.project}} />`
       );
 
-      await click(
-        '[data-test-prjSettings-integrations-jiraProject-selectProjectBtn]'
-      );
+      await click('[data-test-integration-card-selectBtn]');
 
       await clickTrigger(
         '[data-test-prjSettings-integrations-jiraProject-configDrawer-repoList]'
@@ -362,8 +353,10 @@ module(
       // Created in the create request block
       const createdJiraPrj = this.createdJiraPrj;
 
+      await click('[data-test-integration-card-manageBtn]');
+
       assert
-        .dom('[ data-test-prjSettings-integrations-jiraProject-repoHeaderText]')
+        .dom('[data-test-prjSettings-integrations-jiraProject-repoHeaderText]')
         .hasText(t('repo'));
 
       assert
@@ -379,8 +372,6 @@ module(
       assert
         .dom('[data-test-prjSettings-integrations-jiraProject-risk]')
         .hasText(getAnalysisRisklabel(createdJiraPrj.risk_threshold));
-
-      await assertIntegratedHeaderActionItems(assert);
 
       assert.strictEqual(this.notifyService.successMsg, t('integratedJIRA'));
     });
@@ -402,8 +393,10 @@ module(
         hbs`<ProjectSettings::Integrations::JiraProject @project={{this.project}} />`
       );
 
+      await click('[data-test-integration-card-manageBtn]');
+
       assert
-        .dom('[ data-test-prjSettings-integrations-jiraProject-repoHeaderText]')
+        .dom('[data-test-prjSettings-integrations-jiraProject-repoHeaderText]')
         .hasText(t('repo'));
 
       assert
@@ -420,14 +413,25 @@ module(
         .dom('[data-test-prjSettings-integrations-jiraProject-risk]')
         .hasText(getAnalysisRisklabel(createdJiraPrj.risk_threshold));
 
-      const [, deleteBtn] = await assertIntegratedHeaderActionItems(assert);
-      const deleteTrigger = deleteBtn.querySelector('button');
+      await click(
+        '[data-test-prjSettings-integrations-configDrawer-deleteBtn]'
+      );
 
-      await click(deleteTrigger);
+      assert
+        .dom('[data-test-prjSettings-integrations-jiraProject-confirmDelete]')
+        .exists()
+        .containsText(t('confirmBox.removeJIRA'));
 
-      assert.dom('[data-test-ak-modal-header]').exists();
+      assert
+        .dom(
+          '[data-test-prjSettings-integrations-jiraProject-confirmDeleteBtn]'
+        )
+        .exists()
+        .containsText(t('yesDelete'));
 
-      await click('[data-test-confirmbox-confirmBtn]');
+      await click(
+        '[data-test-prjSettings-integrations-jiraProject-confirmDeleteBtn]'
+      );
 
       assert.strictEqual(
         this.notifyService.successMsg,
@@ -451,11 +455,13 @@ module(
         .dom('[data-test-prjSettings-integrations-jiraProject-risk]')
         .doesNotExist();
 
+      await click(
+        '[data-test-prjSettings-integrations-configDrawer-cancelBtn]'
+      );
+
       // Check for select button
       assert
-        .dom(
-          '[data-test-prjSettings-integrations-jiraProject-selectProjectBtn]'
-        )
+        .dom('[data-test-integration-card-selectBtn]')
         .hasText(t('selectProject'));
     });
 
@@ -491,6 +497,8 @@ module(
         hbs`<ProjectSettings::Integrations::JiraProject @project={{this.project}} />`
       );
 
+      await click('[data-test-integration-card-manageBtn]');
+
       assert
         .dom('[ data-test-prjSettings-integrations-jiraProject-repoHeaderText]')
         .hasText(t('repo'));
@@ -509,12 +517,8 @@ module(
         .dom('[data-test-prjSettings-integrations-jiraProject-risk]')
         .hasText(getAnalysisRisklabel(createdJiraPrj.risk_threshold));
 
-      const [editBtn] = await assertIntegratedHeaderActionItems(assert);
-
       // Flow for updating the existing JiraIntegration
-      const editTrigger = editBtn.querySelector('button');
-
-      await click(editTrigger);
+      await click('[data-test-prjSettings-integrations-jiraProject-editBtn]');
 
       await clickTrigger(
         '[data-test-prjSettings-integrations-jiraProject-configDrawer-repoList]'
@@ -537,6 +541,8 @@ module(
       // Triggers PUT request for update
       await click('[data-test-prjSettings-integrations-configDrawer-saveBtn]');
 
+      await click('[data-test-integration-card-manageBtn]');
+
       assert
         .dom('[data-test-prjSettings-integrations-jiraProject-repoKeyAndName]')
         .containsText(
@@ -546,8 +552,6 @@ module(
       assert
         .dom('[data-test-prjSettings-integrations-jiraProject-risk]')
         .hasText(getAnalysisRisklabel(this.requestBody.risk_threshold));
-
-      await assertIntegratedHeaderActionItems(assert);
 
       assert.strictEqual(this.notifyService.successMsg, t('projectUpdated'));
     });

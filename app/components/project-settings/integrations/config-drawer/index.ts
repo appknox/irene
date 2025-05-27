@@ -7,6 +7,8 @@ export interface ProjectSettingsIntegrationsConfigDrawerSignature {
     loadingDrawerSaveAction: boolean;
     drawerSaveAction(): void;
     closeDrawerHandler(): void;
+    showDeleteButton?: boolean;
+    noFooter?: boolean;
   };
 
   Blocks: { default: []; drawerContent: [] };

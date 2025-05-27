@@ -1,5 +1,5 @@
 import Service from '@ember/service';
-import { click, findAll, render } from '@ember/test-helpers';
+import { click, render } from '@ember/test-helpers';
 import { hbs } from 'ember-cli-htmlbars';
 import { setupMirage } from 'ember-cli-mirage/test-support';
 import { setupIntl, t } from 'ember-intl/test-support';
@@ -40,28 +40,6 @@ const creatOrgRepo = (propsOverride = {}) => {
     },
     ...propsOverride,
   };
-};
-
-// Checks if header action items are visible
-const assertIntegratedHeaderActionItems = async (assert) => {
-  const integratedHeaderMoreActionsSelector =
-    '[data-test-prjSettings-integrations-integratedHeader-moreActionTrigger]';
-
-  assert.dom(integratedHeaderMoreActionsSelector).exists();
-
-  await click(integratedHeaderMoreActionsSelector);
-
-  const menuItems = findAll(
-    '[data-test-prjSettings-integrations-integratedHeader-menuItem]'
-  );
-
-  // edit action items should be two
-  assert.strictEqual(menuItems.length, 2);
-
-  assert.dom(menuItems[0]).hasText(t('edit'));
-  assert.dom(menuItems[1]).hasText(t('delete'));
-
-  return menuItems;
 };
 
 // Get Analysis Risk
@@ -132,9 +110,6 @@ module(
       const configDrawerSaveBtn =
         '[data-test-prjSettings-integrations-configDrawer-saveBtn]';
 
-      const selectProjectBtn =
-        '[data-test-projectSettings-integrations-githubProject-selectProjectBtn]';
-
       const repoListSelector =
         '[data-test-prjSettings-integrations-githubProject-configDrawer-repoList]';
 
@@ -153,7 +128,6 @@ module(
         // Selectors
         projectConfigDrawerSelector,
         configDrawerSaveBtn,
-        selectProjectBtn,
         repoListSelector,
         accountAndRepoNameSelector,
         thresholdListSelector,
@@ -175,18 +149,27 @@ module(
       );
 
       assert
-        .dom('[data-test-projectSettings-integrations-githubProject-root]')
-        .exists();
+        .dom('[data-test-integration-card-title="Github"]')
+        .hasText(t('github'));
 
-      assert
-        .dom('[data-test-prjSettings-integrations-integratedHeader-headerText]')
-        .hasText(t('githubIntegration'));
+      assert.dom('[data-test-integration-card-logo]').exists();
+
+      assert.dom('[data-test-integration-card-integrated-chip]').doesNotExist();
+
+      assert.dom('[data-test-integration-card-connectBtn]').doesNotExist();
+
+      assert.dom('[data-test-integration-card-selectBtn]').exists();
+
+      await click('[data-test-integration-card-selectBtn]');
+
+      assert.dom(this.projectConfigDrawerSelector).exists();
 
       assert
         .dom(
           '[data-test-projectSettings-integrations-githubProject-noReposInfoText]'
         )
-        .hasText(t('githubNoProject'));
+        .exists()
+        .containsText(t('githubNoProject'));
 
       assert
         .dom(
@@ -210,26 +193,30 @@ module(
       );
 
       assert
-        .dom('[data-test-projectSettings-integrations-githubProject-root]')
-        .exists();
+        .dom('[data-test-integration-card-title="Github"]')
+        .hasText(t('github'));
 
-      assert
-        .dom('[data-test-projectSettings-integrations-githubProject-noProject]')
-        .doesNotExist();
+      assert.dom('[data-test-integration-card-logo]').exists();
+
+      assert.dom('[data-test-integration-card-integrated-chip]').doesNotExist();
+
+      assert.dom('[data-test-integration-card-selectBtn]').exists();
+
+      await click('[data-test-integration-card-selectBtn]');
 
       assert
         .dom(
-          '[data-test-projectSettings-integrations-githubProject-noProject-integrationLink]'
+          '[data-test-projectSettings-integrations-githubProject-noReposInfoText]'
         )
         .doesNotExist();
 
       assert
         .dom(
-          '[data-test-prjSettings-integrations-integratedHeader-headerSubText]'
+          '[data-test-prjSettings-integrations-githubProject-configDrawer-headerText]'
         )
         .hasText(t('otherTemplates.selectGHRepo'));
 
-      assert.dom(this.selectProjectBtn).exists().hasText(t('selectProject'));
+      assert.dom(this.configDrawerSaveBtn).exists().hasText(t('save'));
     });
 
     test('it opens and closes project config drawer', async function (assert) {
@@ -243,13 +230,13 @@ module(
 
       assert.dom(this.projectConfigDrawerSelector).doesNotExist();
 
-      await click(this.selectProjectBtn);
+      await click('[data-test-integration-card-selectBtn]');
 
       assert.dom(this.projectConfigDrawerSelector).exists();
 
       assert
         .dom(
-          `[data-test-prjSettings-integrations-githubProject-configDrawer-title]`
+          `[data-test-prjSettings-integrations-githubProject-configDrawer-headerText]`
         )
         .exists()
         .hasText(t('otherTemplates.selectGHRepo'));
@@ -298,7 +285,7 @@ module(
           hbs`<ProjectSettings::Integrations::GithubProject @project={{this.project}} />`
         );
 
-        await click(this.selectProjectBtn);
+        await click('[data-test-integration-card-selectBtn]');
 
         assert.dom(this.projectConfigDrawerSelector).exists();
 
@@ -319,7 +306,7 @@ module(
         hbs`<ProjectSettings::Integrations::GithubProject @project={{this.project}} />`
       );
 
-      await click(this.selectProjectBtn);
+      await click('[data-test-integration-card-selectBtn]');
 
       await clickTrigger(this.repoListSelector);
 
@@ -343,7 +330,7 @@ module(
     });
 
     test('it saves valid selected repo', async function (assert) {
-      assert.expect(10);
+      assert.expect(8);
 
       this.server.post('/projects/:id/github', (schema, req) => {
         const requestBody = JSON.parse(req.requestBody);
@@ -364,7 +351,7 @@ module(
         hbs`<ProjectSettings::Integrations::GithubProject @project={{this.project}} />`
       );
 
-      await click(this.selectProjectBtn);
+      await click('[data-test-integration-card-selectBtn]');
 
       await clickTrigger(this.repoListSelector);
 
@@ -383,10 +370,15 @@ module(
       await click(this.configDrawerSaveBtn);
 
       assert
-        .dom(
-          '[data-test-prjSettings-integrations-integratedHeader-headerSubText]'
-        )
-        .hasText(t('integratedGithub'));
+        .dom('[data-test-integration-card-integrated-chip]')
+        .hasText(t('integrated'));
+
+      assert
+        .dom('[data-test-integration-card-manageBtn]')
+        .exists()
+        .containsText(t('manage'));
+
+      await click('[data-test-integration-card-manageBtn]');
 
       assert
         .dom(
@@ -410,9 +402,6 @@ module(
         .dom(this.prjRiskValSelector)
         .hasText(getAnalysisRisklabel(this.createdGithubPrj.risk_threshold));
 
-      // Assert if header action items are available
-      await assertIntegratedHeaderActionItems(assert);
-
       assert.strictEqual(this.notifyService.successMsg, t('repoIntegrated'));
     });
 
@@ -434,10 +423,15 @@ module(
       );
 
       assert
-        .dom(
-          '[data-test-prjSettings-integrations-integratedHeader-headerSubText]'
-        )
-        .hasText(t('integratedGithub'));
+        .dom('[data-test-integration-card-integrated-chip]')
+        .hasText(t('integrated'));
+
+      assert
+        .dom('[data-test-integration-card-manageBtn]')
+        .exists()
+        .containsText(t('manage'));
+
+      await click('[data-test-integration-card-manageBtn]');
 
       assert
         .dom(this.accountAndRepoNameSelector)
@@ -447,15 +441,23 @@ module(
         .dom(this.prjRiskValSelector)
         .hasText(getAnalysisRisklabel(createdGithubPrj.risk_threshold));
 
-      // Assert if header action items are available
-      const [, deleteBtn] = await assertIntegratedHeaderActionItems(assert);
-      const deleteCTA = deleteBtn.querySelector('button');
+      await click(
+        '[data-test-prjsettings-integrations-configdrawer-deletebtn]'
+      );
 
-      await click(deleteCTA);
+      assert
+        .dom('[data-test-prjSettings-integrations-configDrawer-title]')
+        .exists()
+        .containsText(t('githubIntegration'));
 
-      assert.dom('[data-test-ak-modal-header]').exists();
+      assert
+        .dom('[data-test-prjSettings-integrations-githubProject-confirmDelete]')
+        .exists()
+        .containsText(t('yesDelete'));
 
-      await click('[data-test-confirmbox-confirmBtn]');
+      await click(
+        '[data-test-prjSettings-integrations-githubProject-confirmDelete]'
+      );
 
       assert.strictEqual(
         this.notifyService.successMsg,
@@ -467,17 +469,15 @@ module(
 
       assert.dom(this.prjRiskValSelector).doesNotExist();
 
-      const integratedHeaderMoreActionsSelector =
-        '[data-test-prjSettings-integrations-integratedHeader-moreActionTrigger]';
-
-      assert.dom(integratedHeaderMoreActionsSelector).doesNotExist();
-
       // Check for select button
-      assert.dom(this.selectProjectBtn).exists().hasText(t('selectProject'));
+      assert
+        .dom('[data-test-integration-card-selectBtn]')
+        .exists()
+        .hasText(t('selectProject'));
     });
 
     test('it edits the project when a new repo is selected', async function (assert) {
-      assert.expect(13);
+      assert.expect(11);
 
       const createdGithubPrj = this.server.create('github-repo', {
         project: this.project.id,
@@ -524,6 +524,17 @@ module(
       );
 
       assert
+        .dom('[data-test-integration-card-integrated-chip]')
+        .hasText(t('integrated'));
+
+      assert
+        .dom('[data-test-integration-card-manageBtn]')
+        .exists()
+        .containsText(t('manage'));
+
+      await click('[data-test-integration-card-manageBtn]');
+
+      assert
         .dom(this.accountAndRepoNameSelector)
         .containsText(`${createdGithubPrj.account}/${createdGithubPrj.repo}`);
 
@@ -531,12 +542,12 @@ module(
         .dom(this.prjRiskValSelector)
         .hasText(getAnalysisRisklabel(createdGithubPrj.risk_threshold));
 
-      const [editBtn] = await assertIntegratedHeaderActionItems(assert);
-
-      const editBtnElement = editBtn.querySelector('button');
+      assert
+        .dom('[data-test-prjSettings-integrations-githubProject-editBtn]')
+        .exists();
 
       // Flow for updating the existing Github Integration
-      await click(editBtnElement);
+      await click('[data-test-prjSettings-integrations-githubProject-editBtn]');
 
       await clickTrigger(this.repoListSelector);
 
@@ -555,15 +566,20 @@ module(
       // Triggers PUT request for update
       await click(this.configDrawerSaveBtn);
 
+      assert.strictEqual(this.notifyService.successMsg, t('projectUpdated'));
+
+      assert
+        .dom('[data-test-integration-card-manageBtn]')
+        .exists()
+        .containsText(t('manage'));
+
+      await click('[data-test-integration-card-manageBtn]');
+
       assert
         .dom(this.accountAndRepoNameSelector)
         .containsText(`${this.requestBody.account}/${this.requestBody.repo}`);
 
       assert.dom(this.prjRiskValSelector).containsText(`Medium`);
-
-      await assertIntegratedHeaderActionItems(assert);
-
-      assert.strictEqual(this.notifyService.successMsg, t('projectUpdated'));
     });
   }
 );

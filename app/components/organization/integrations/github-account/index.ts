@@ -41,6 +41,7 @@ export default class OrganizationIntegrationsGithubAccountComponent extends Comp
 
   @tracked showRevokeGithubConfirmBox = false;
   @tracked integratedUser: IntegratedUserType | null = null;
+  @tracked integrationDrawer = false;
 
   tGithubWillBeRevoked: string;
   tGithubErrorIntegration: string;
@@ -55,6 +56,26 @@ export default class OrganizationIntegrationsGithubAccountComponent extends Comp
     this.tGithubErrorIntegration = this.intl.t('githubErrorIntegration');
 
     this.integratedUser = this.args.integratedUser;
+  }
+
+  get data() {
+    return {
+      id: 'Github',
+      title: this.intl.t('github'),
+      description: this.intl.t('githubIntegrationDesc'),
+      logo: '../../../images/github-icon.png',
+      isIntegrated: !!this.integratedUser,
+    };
+  }
+
+  @action
+  openIntegrationDrawer() {
+    this.integrationDrawer = true;
+  }
+
+  @action
+  closeIntegrationDrawer() {
+    this.integrationDrawer = false;
   }
 
   @action
@@ -105,6 +126,8 @@ export default class OrganizationIntegrationsGithubAccountComponent extends Comp
       this.notify.success(this.tGithubWillBeRevoked);
 
       this.closeRevokeGithubConfirmBox();
+
+      this.integrationDrawer = false;
 
       this.integratedUser = null;
     } catch (e) {
