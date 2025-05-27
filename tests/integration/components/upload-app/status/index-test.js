@@ -22,10 +22,6 @@ class NotificationsStub extends Service {
   }
 }
 
-class ConfigurationStub extends Service {
-  serverData = { urlUploadAllowed: true };
-}
-
 module('Integration | Component | upload-app/status', function (hooks) {
   setupRenderingTest(hooks);
   setupMirage(hooks);
@@ -43,7 +39,6 @@ module('Integration | Component | upload-app/status', function (hooks) {
     await this.owner.lookup('service:organization').load();
 
     this.owner.register('service:notifications', NotificationsStub);
-    this.owner.register('service:configuration', ConfigurationStub);
 
     this.setProperties({
       submissions,

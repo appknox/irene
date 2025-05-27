@@ -254,7 +254,6 @@ module('Acceptance | file-details/dynamic-scan', function (hooks) {
       devicefarm_url: 'https://devicefarm.app.com',
       websocket: '',
       enterprise: false,
-      url_upload_allowed: false,
     }));
 
     this.server.get('/v2/files/:id', (schema, req) => {

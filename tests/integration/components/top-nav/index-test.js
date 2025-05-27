@@ -28,7 +28,7 @@ class ConfigurationStub extends Service {
   frontendData = {};
   themeData = {};
   imageData = {};
-  serverData = { urlUploadAllowed: true, enterprise: false };
+  serverData = { enterprise: false };
 }
 
 class IntegrationStub extends Service {
@@ -82,8 +82,8 @@ module('Integration | Component | top-nav', function (hooks) {
 
   test('it renders main top-nav with title', async function (assert) {
     await render(hbs`
-      <TopNav 
-        @user={{this.user}} 
+      <TopNav
+        @user={{this.user}}
         @title={{this.title}}
       />
     `);
@@ -102,8 +102,8 @@ module('Integration | Component | top-nav', function (hooks) {
 
   test('it renders main top-nav without title', async function (assert) {
     await render(hbs`
-      <TopNav 
-        @user={{this.user}} 
+      <TopNav
+        @user={{this.user}}
       />
     `);
 
@@ -124,8 +124,8 @@ module('Integration | Component | top-nav', function (hooks) {
     [{ chatSupport: true }, { chatSupport: false }],
     async function (assert, { chatSupport }) {
       await render(hbs`
-        <TopNav 
-          @user={{this.user}} 
+        <TopNav
+          @user={{this.user}}
           @title={{this.title}}
         />
       `);

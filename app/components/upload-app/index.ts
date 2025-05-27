@@ -1,13 +1,13 @@
 import Component from '@glimmer/component';
 import { inject as service } from '@ember/service';
 
-import ConfigurationService from 'irene/services/configuration';
+import OrganizationService from 'irene/services/organization';
 
 export default class UploadAppComponent extends Component {
-  @service declare configuration: ConfigurationService;
+  @service declare organization: OrganizationService;
 
   get urlUploadAllowed() {
-    return this.configuration.serverData.urlUploadAllowed;
+    return this.organization?.selected?.features?.upload_via_url;
   }
 }
 
