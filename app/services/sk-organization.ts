@@ -47,9 +47,12 @@ export default class SkOrganizationService extends Service {
     }
   }
 
-  /**
-   * Loads Storeknox Organization and Subscription
-   */
+  async reloadOrgSub() {
+    await this.fetchSkOrgSub();
+
+    return this.selectedSkOrgSub;
+  }
+
   async load() {
     await this.fetchOrganization();
     await this.fetchSkOrgSub();

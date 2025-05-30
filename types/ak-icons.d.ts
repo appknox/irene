@@ -156,6 +156,8 @@ export const AkIconVariant = [
   'fa-brands:apple',
   // ic icons
   'ic:outline-drive-file-rename-outline',
+  // Material Symbols
+  'material-symbols:license-outline-rounded',
 ] as const;
 
 export type AkIconVariantType = (typeof AkIconVariant)[number];

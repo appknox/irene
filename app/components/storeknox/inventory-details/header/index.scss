@@ -4,6 +4,18 @@
   top: -0.5em;
   background-color: var(--background-light);
 
+  .app-inventory-header-info {
+    position: relative;
+
+    .license-icon-container {
+      background-color: var(--neutral-grey-100);
+      border-radius: 3px;
+      position: absolute;
+      right: 1em;
+      top: 1em;
+    }
+  }
+
   &.archived {
     top: calc(-0.5em + 50px);
   }
@@ -23,25 +35,4 @@
   padding: 0.5em;
   box-sizing: border-box;
   white-space: normal;
-}
-
-// TODO: Change styles
-.confirm-drawer-container {
-  width: 640px;
-  margin: 1.5em;
-  border: 1px solid
-    var(--organization-service-account-confirm-drawer-border-color);
-  border-radius: var(
-    --organization-service-account-confirm-drawer-border-radius
-  );
-  box-sizing: border-box;
-}
-
-.confirm-action-container {
-  background-color: var(
-    --organization-service-account-confirm-drawer-background-main
-  );
-  box-shadow: var(
-    --organization-service-account-confirm-drawer-action-box-shadow
-  );
 }

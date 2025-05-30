@@ -67,6 +67,9 @@ export default class SkAppModel extends Model {
   @attr('string')
   declare archivedBy: string;
 
+  @attr('number')
+  declare licenseAllocated: number;
+
   @belongsTo('sk-app-metadata', { async: false, inverse: null })
   declare appMetadata: SkAppMetadataModel;
 
@@ -131,12 +134,20 @@ export default class SkAppModel extends Model {
     return !!this.archivedOn && this.appStatus === ENUMS.SK_APP_STATUS.ARCHIVED;
   }
 
+  get isApproved() {
+    return this.approvalStatus === ENUMS.SK_APPROVAL_STATUS.APPROVED;
+  }
+
   get unarchiveDateString() {
     return dayjs(this.unarchiveAvailableOn).format('MMM D, YYYY');
   }
 
   get canUnarchive() {
     return this.archivedOn && dayjs().isAfter(this.unarchiveAvailableOn);
+  }
+
+  get hasLicense() {
+    return this.licenseAllocated > 0;
   }
 
   async approveApp(id: string) {

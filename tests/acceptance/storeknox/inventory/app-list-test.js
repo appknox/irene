@@ -235,23 +235,62 @@ module('Acceptance | storeknox/inventory/app-list', function (hooks) {
   );
 
   test.each(
-    'it renders with approved apps (With Action Required and No Action Required)',
+    'it renders with approved app statuses',
     [
       {
-        with_action_required: true,
         store_monitoring_status: ENUMS.SK_APP_MONITORING_STATUS.UNSCANNED,
+        icon_key: 'action-needed',
+        monitoring_enabled: true,
+        status_text: () => t('storeknox.needsAction'),
+        tooltip: {
+          message: () => t('storeknox.actionsNeededMsg'),
+          subtext: () => t('storeknox.haveBeenDetected'),
+        },
       },
       {
-        with_action_required: false,
         store_monitoring_status: ENUMS.SK_APP_MONITORING_STATUS.SCANNED,
+        icon_key: 'no-action-needed',
+        monitoring_enabled: true,
+        status_text: () => t('storeknox.noActionNeeded'),
+        tooltip: {
+          message: () => t('storeknox.noActionsNeededMsg'),
+          subtext: () => t('storeknox.haveBeenDetected'),
+        },
+      },
+      {
+        store_monitoring_status: ENUMS.SK_APP_MONITORING_STATUS.PENDING,
+        icon_key: 'initializing',
+        monitoring_enabled: true,
+        status_text: () => t('storeknox.beingInitialized'),
+        tooltip: {
+          message: () => t('storeknox.initializingMsg'),
+        },
+      },
+      {
+        store_monitoring_status: ENUMS.SK_APP_MONITORING_STATUS.PENDING,
+        icon_key: 'disabled',
+        monitoring_enabled: false,
+        status_text: () => t('disabled'),
+        tooltip: {
+          message: () => t('storeknox.disabledMsg'),
+        },
       },
     ],
-    async function (assert, { with_action_required, store_monitoring_status }) {
+    async function (
+      assert,
+      {
+        store_monitoring_status,
+        icon_key,
+        monitoring_enabled,
+        status_text,
+        tooltip,
+      }
+    ) {
       const inventoryApps = this.server.createList(
         'sk-inventory-app',
-        3,
+        1,
         'withApprovedStatus',
-        { store_monitoring_status }
+        { store_monitoring_status, monitoring_enabled }
       );
 
       // Server mocks
@@ -287,106 +326,100 @@ module('Acceptance | storeknox/inventory/app-list', function (hooks) {
       assert.strictEqual(appElementList.length, inventoryApps.length);
 
       // Sanity check for rendered apps
-      for (let index = 0; index < inventoryApps.length; index++) {
-        const iApp = inventoryApps[index];
+      const iApp = inventoryApps[0];
 
-        const iAppElement = find(
-          `[data-test-storeknoxInventory-appListTable-rowId='${iApp.id}']`
-        );
+      const iAppElement = find(
+        `[data-test-storeknoxInventory-appListTable-rowId='${iApp.id}']`
+      );
 
-        const metadata = iApp.app_metadata;
+      const metadata = iApp.app_metadata;
 
-        if (iApp.platform === ENUMS.PLATFORM.ANDROID) {
-          assert
-            .dom(
-              '[data-test-storeknoxTableColumns-store-playStoreIcon]',
-              iAppElement
-            )
-            .exists();
-        }
-
-        if (iApp.platform === ENUMS.PLATFORM.IOS) {
-          assert
-            .dom('[data-test-storeknoxTableColumns-store-iosIcon]', iAppElement)
-            .exists();
-        }
-
+      if (iApp.platform === ENUMS.PLATFORM.ANDROID) {
         assert
           .dom(
-            '[data-test-storeknoxTableColumns-applicationDevName]',
+            '[data-test-storeknoxTableColumns-store-playStoreIcon]',
             iAppElement
           )
-          .hasText(metadata.dev_name);
+          .exists();
+      }
 
+      if (iApp.platform === ENUMS.PLATFORM.IOS) {
         assert
-          .dom(
-            '[data-test-storeknoxTableColumns-applicationDevEmail]',
-            iAppElement
-          )
-          .hasText(metadata.dev_email);
+          .dom('[data-test-storeknoxTableColumns-store-iosIcon]', iAppElement)
+          .exists();
+      }
 
-        assert
-          .dom(
-            '[data-test-storeknoxTableColumns-applicationTitle]',
-            iAppElement
-          )
-          .hasText(metadata.title);
+      assert
+        .dom(
+          '[data-test-storeknoxTableColumns-applicationDevName]',
+          iAppElement
+        )
+        .hasText(metadata.dev_name);
 
-        assert
-          .dom(
-            '[data-test-storeknoxTableColumns-applicationPackageName]',
-            iAppElement
-          )
-          .hasText(metadata.package_name);
+      assert
+        .dom(
+          '[data-test-storeknoxTableColumns-applicationDevEmail]',
+          iAppElement
+        )
+        .hasText(metadata.dev_email);
 
-        assert
-          .dom('[data-test-applogo-img]', iAppElement)
-          .hasAttribute('src', metadata.icon_url);
+      assert
+        .dom('[data-test-storeknoxTableColumns-applicationTitle]', iAppElement)
+        .hasText(metadata.title);
 
-        assert
-          .dom(
-            '[data-test-storeknoxInventory-appListTable-monitoringStatusIcon]',
-            iAppElement
-          )
-          .hasClass(with_action_required ? /error/ : /success/)
-          .hasAttribute(
-            'icon',
-            with_action_required
-              ? 'material-symbols:info'
-              : 'material-symbols:check-circle'
-          );
+      assert
+        .dom(
+          '[data-test-storeknoxTableColumns-applicationPackageName]',
+          iAppElement
+        )
+        .hasText(metadata.package_name);
 
-        // Check for needs action tooltip
-        const tooltipTrigger =
-          '[data-test-storeknoxInventory-appListTable-monitoringStatusIcon]';
+      assert
+        .dom('[data-test-applogo-img]', iAppElement)
+        .hasAttribute('src', metadata.icon_url);
 
-        const needsActionTooltipTriggerElement = find(tooltipTrigger);
+      const iconElement = `[data-test-storeknoxInventory-appListTable-monitoringStatusIcon='${icon_key}']`;
 
-        const tooltipContentSelector = '[data-test-ak-tooltip-content]';
+      assert.dom(iconElement, iAppElement).exists();
 
-        await triggerEvent(needsActionTooltipTriggerElement, 'mouseenter');
+      assert
+        .dom(
+          '[data-test-storeknoxInventory-appListTable-monitoringStatusText]',
+          iAppElement
+        )
+        .hasText(status_text());
 
-        assert.dom(tooltipContentSelector).exists();
+      // Check for needs action tooltip
+      const needsActionTooltipTriggerElement = find(iconElement);
 
-        assert
-          .dom(
-            '[data-test-storeknoxInventory-appListTable-monitoringStatusTooltipHeaderText]'
-          )
-          .hasText(t('reason'));
+      const tooltipContentSelector = '[data-test-ak-tooltip-content]';
 
+      await triggerEvent(needsActionTooltipTriggerElement, 'mouseenter');
+
+      assert.dom(tooltipContentSelector).exists();
+
+      assert
+        .dom(
+          '[data-test-storeknoxInventory-appListTable-monitoringStatusTooltipHeaderText]'
+        )
+        .hasText(t('reason'));
+
+      compareInnerHTMLWithIntlTranslation(assert, {
+        selector:
+          '[data-test-storeknoxInventory-appListTable-monitoringStatusTooltipText]',
+        message: tooltip.message(),
+        doIncludesCheck: true,
+      });
+
+      if (tooltip.subtext) {
         assert
           .dom(
             '[data-test-storeknoxInventory-appListTable-monitoringStatusTooltipText]'
           )
-          .containsText(
-            with_action_required
-              ? t('storeknox.actionsNeededMsg')
-              : t('storeknox.noActionsNeededMsg')
-          )
-          .containsText(t('storeknox.haveBeenDetected'));
-
-        await triggerEvent(needsActionTooltipTriggerElement, 'mouseleave');
+          .containsText(tooltip.subtext());
       }
+
+      await triggerEvent(needsActionTooltipTriggerElement, 'mouseleave');
     }
   );
 });

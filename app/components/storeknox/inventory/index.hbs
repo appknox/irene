@@ -69,7 +69,7 @@
 </AkTabs>
 
 <AkDrawer
-  @open={{and this.isOwner this.showSettingsDrawer}}
+  @open={{this.shouldShowSettingsDrawer}}
   @onClose={{this.closeSettingsDrawer}}
   @anchor='right'
   as |dr|
@@ -136,7 +136,7 @@
 
       <AkToggle
         @size='small'
-        @checked={{this.selectedSkOrg.addAppknoxProjectToInventoryByDefault}}
+        @checked={{this.skOrg.addAppknoxProjectToInventoryByDefault}}
         @onChange={{this.onToggleAddToInventoryByDefault}}
         data-test-storeknoxInventory-settingsDrawer-addAppknoxProjectsByDefaultToggle
       />

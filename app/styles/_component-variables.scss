@@ -1611,6 +1611,31 @@ body {
   --marketplace-integration-card-text-color: var(--text-secondary);
   --marketplace-integration-card-border-color: var(--border-color-1);
 
+  // variables for storeknox/inventory/app-list/table/monitoring-status-header
+  --storeknox-inventory-app-list-table-monitoring-status-header-background-color: var(
+    --background-main
+  );
+
+  --storeknox-inventory-app-list-table-monitoring-status-header-box-shadow: var(
+    --box-shadow-7
+  );
+
+  --storeknox-inventory-app-list-table-monitoring-status-header-border-radius: var(
+    --box-shadow-7
+  );
+
+  --storeknox-inventory-app-list-table-monitoring-status-header-filter-option-hover-background-color: var(
+    --neutral-grey-200
+  );
+
+  --storeknox-inventory-app-list-table-monitoring-status-header-filter-option-clear-filter-background-color: var(
+    --neutral-grey-200
+  );
+
+  --storeknox-inventory-app-list-table-monitoring-status-header-filter-header-background-color: var(
+    --neutral-grey-100
+  );
+
   // variables for storeknox/inventory/pending-review/table/availability-header
   --storeknox-inventory-pending-review-table-availability-header-info-icon-color: var(
     --neutral-grey-400

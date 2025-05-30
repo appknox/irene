@@ -13,6 +13,7 @@ import parseError from 'irene/utils/parse-error';
 import type SkInventoryAppModel from 'irene/models/sk-inventory-app';
 import type OrganizationService from 'irene/services/organization';
 import type MeService from 'irene/services/me';
+import type SkOrganizationService from 'irene/services/sk-organization';
 
 interface StoreknoxInventoryDetailsHeaderSignature {
   Args: {
@@ -26,12 +27,29 @@ export default class StoreknoxInventoryDetailsHeaderComponent extends Component<
   @service declare router: RouterService;
   @service declare intl: IntlService;
   @service declare me: MeService;
+
+  @service('sk-organization') declare skOrg: SkOrganizationService;
   @service('notifications') declare notify: NotificationService;
 
   @tracked isArchiveAppDrawerOpen = false;
+  @tracked openToggleMonitoringDrawer = false;
+  @tracked monitoringChecked = false;
+
+  constructor(
+    owner: unknown,
+    args: StoreknoxInventoryDetailsHeaderSignature['Args']
+  ) {
+    super(owner, args);
+
+    this.monitoringChecked = args.skInventoryApp?.monitoringEnabled;
+  }
 
   get skInventoryApp() {
     return this.args.skInventoryApp;
+  }
+
+  get appHasLicense() {
+    return this.skInventoryApp?.hasLicense;
   }
 
   get isOwnerOrAdmin() {
@@ -148,42 +166,52 @@ export default class StoreknoxInventoryDetailsHeaderComponent extends Component<
     this.isArchiveAppDrawerOpen = false;
   }
 
-  @action confirmArchiveApp() {
-    this.doArchiveApp.perform();
+  @action closeToggleMonitoringDrawer() {
+    this.openToggleMonitoringDrawer = false;
   }
 
-  @action onMonitoringActionToggle(_: Event, checked?: boolean) {
-    if (this.canToggleMonitoring) {
-      this.toggleSkInventoryAppMonitoring.perform(!!checked);
+  @action async onMonitoringActionToggle(_: Event, checked?: boolean) {
+    if (!this.canToggleMonitoring) {
+      return;
     }
-  }
 
-  get nextArchiveActionDate() {
-    return dayjs().add(6, 'month').format('MMM D, YYYY');
-  }
+    this.monitoringChecked = !!checked;
 
-  doArchiveApp = task(async () => {
-    try {
-      await this.skInventoryApp?.toggleArchiveStatus();
-      await this.skInventoryApp?.reload();
+    if (this.appHasLicense || this.skInventoryApp?.isArchived) {
+      this.confirmMonitoringToggle();
 
-      this.closeArchiveAppDrawer();
-      this.notify.success('App archived successfully.');
-    } catch (error) {
-      this.notify.error(parseError(error));
+      return;
     }
-  });
 
-  toggleSkInventoryAppMonitoring = task(async (checked: boolean) => {
+    this.openToggleMonitoringDrawer = true;
+  }
+
+  @action cancelMonitoringToggle() {
+    this.monitoringChecked = !this.monitoringChecked;
+    this.openToggleMonitoringDrawer = false;
+  }
+
+  @action confirmMonitoringToggle() {
+    this.toggleSkInventoryAppMonitoring.perform();
+  }
+
+  toggleSkInventoryAppMonitoring = task(async () => {
     try {
-      await this.skInventoryApp?.toggleMonitoring(checked);
+      await this.skInventoryApp?.toggleMonitoring(this.monitoringChecked);
       await this.skInventoryApp?.reload();
 
       this.notify.success(
         this.intl.t('storeknox.monitoring') +
-          ` ${checked ? this.intl.t('enabled') : this.intl.t('disabled')}`
+          ` ${this.monitoringChecked ? this.intl.t('enabled') : this.intl.t('disabled')}`
       );
+
+      // Reload org sub to update the licenses remaining count
+      if (!this.appHasLicense) {
+        await this.skOrg.reloadOrgSub();
+      }
     } catch (error) {
+      this.monitoringChecked = !this.monitoringChecked;
+
       this.skInventoryApp?.rollbackAttributes();
       this.notify.error(parseError(error));
     }

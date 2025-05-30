@@ -1,0 +1,28 @@
+<AkStack
+  @direction='column'
+  @alignItems='center'
+  local-class='empty-container'
+  data-test-storeknoxInventory-appListTable-tableEmpty
+>
+  <AkSvg::ProjectListEmpty
+    data-test-storeknoxInventory-appListTable-tableEmptyIllustration
+  />
+
+  <AkTypography
+    @variant='h5'
+    @gutterBottom={{true}}
+    local-class='header'
+    data-test-storeknoxInventory-appListTable-tableEmptyHeaderText
+  >
+    {{t 'storeknox.noInventoryAppsFound'}}
+  </AkTypography>
+
+  {{#if @subText}}
+    <AkTypography
+      local-class='body-text'
+      data-test-storeknoxInventory-appListTable-tableEmptyHeaderDescription
+    >
+      {{@subText}}
+    </AkTypography>
+  {{/if}}
+</AkStack>

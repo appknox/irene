@@ -79,6 +79,9 @@ export default class StoreknoxInventoryAppListTableComponent extends Component<S
         name: 'Monitoring Status',
         cellComponent: 'storeknox/inventory/app-list/table/monitoring-status',
         width: 150,
+        textAlign: 'left',
+        headerComponent:
+          'storeknox/inventory/app-list/table/monitoring-status-header',
       },
       // {
       //   headerComponent:
@@ -132,6 +135,24 @@ export default class StoreknoxInventoryAppListTableComponent extends Component<S
     return this.skInventoryAppsService.isFetchingSkInventoryApps;
   }
 
+  get monitoringStatusFilter() {
+    return this.skInventoryAppsService.monitoringStatusFilter;
+  }
+
+  get filterApplied() {
+    return this.monitoringStatusFilter > -1;
+  }
+
+  @action onStatusChange(status: number) {
+    this.router.transitionTo({
+      queryParams: {
+        app_limit: this.skInventoryAppsService.limit,
+        app_offset: 0,
+        monitoring_status: status,
+      },
+    });
+  }
+
   @action selectDisabledAppRow(ulid: string, value: boolean) {
     const selectedApsIds = [...this.selectedDisabledAppIds];
 
@@ -154,6 +175,7 @@ export default class StoreknoxInventoryAppListTableComponent extends Component<S
       queryParams: {
         app_limit: limit,
         app_offset: offset,
+        monitoring_status: this.monitoringStatusFilter,
       },
     });
   }
@@ -163,6 +185,7 @@ export default class StoreknoxInventoryAppListTableComponent extends Component<S
       queryParams: {
         app_limit: args.limit,
         app_offset: 0,
+        monitoring_status: this.monitoringStatusFilter,
       },
     });
   }
