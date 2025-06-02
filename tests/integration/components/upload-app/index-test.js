@@ -29,10 +29,6 @@ class RealtimeStub extends Service {
   @tracked SubmissionCounter = 0;
 }
 
-class ConfigurationStub extends Service {
-  serverData = { urlUploadAllowed: true };
-}
-
 module('Integration | Component | upload-app', function (hooks) {
   setupRenderingTest(hooks);
   setupMirage(hooks);
@@ -47,7 +43,6 @@ module('Integration | Component | upload-app', function (hooks) {
 
     this.owner.register('service:notifications', NotificationsStub);
     this.owner.register('service:realtime', RealtimeStub);
-    this.owner.register('service:configuration', ConfigurationStub);
 
     this.setProperties({
       store,

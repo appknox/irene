@@ -28,7 +28,7 @@ class ConfigurationStub extends Service {
   frontendData = {};
   themeData = {};
   imageData = {};
-  serverData = { urlUploadAllowed: true, enterprise: false };
+  serverData = { enterprise: false };
 }
 
 class IntegrationStub extends Service {
@@ -139,8 +139,8 @@ module('Integration | Component | storeknox-wrapper', function (hooks) {
     ];
 
     await render(hbs`
-      <StoreknoxWrapper 
-        @user={{this.user}} 
+      <StoreknoxWrapper
+        @user={{this.user}}
       />
     `);
 
@@ -189,8 +189,8 @@ module('Integration | Component | storeknox-wrapper', function (hooks) {
 
   test('it should render storeknox side nav', async function (assert) {
     await render(hbs`
-      <StoreknoxWrapper 
-        @user={{this.user}} 
+      <StoreknoxWrapper
+        @user={{this.user}}
       />
     `);
 

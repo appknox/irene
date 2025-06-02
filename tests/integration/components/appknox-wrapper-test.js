@@ -31,7 +31,7 @@ class ConfigurationStub extends Service {
   frontendData = {};
   themeData = {};
   imageData = {};
-  serverData = { urlUploadAllowed: true, enterprise: false };
+  serverData = { enterprise: false };
 }
 
 class IntegrationStub extends Service {
@@ -214,9 +214,13 @@ module('Integration | Component | appknox-wrapper', function (hooks) {
         });
       }
 
+      this.organization.selected.features = {
+        upload_via_url: true,
+      };
+
       await render(hbs`
-        <AppknoxWrapper 
-          @user={{this.user}} 
+        <AppknoxWrapper
+          @user={{this.user}}
         />
       `);
 
@@ -298,8 +302,8 @@ module('Integration | Component | appknox-wrapper', function (hooks) {
     };
 
     await render(hbs`
-      <AppknoxWrapper 
-        @user={{this.user}} 
+      <AppknoxWrapper
+        @user={{this.user}}
       />
     `);
 
@@ -321,8 +325,8 @@ module('Integration | Component | appknox-wrapper', function (hooks) {
       configuration.serverData.enterprise = isEnterprise;
 
       await render(hbs`
-        <AppknoxWrapper 
-          @user={{this.user}} 
+        <AppknoxWrapper
+          @user={{this.user}}
         />
       `);
 
@@ -450,8 +454,8 @@ module('Integration | Component | appknox-wrapper', function (hooks) {
       };
 
       await render(hbs`
-        <AppknoxWrapper 
-          @user={{this.user}} 
+        <AppknoxWrapper
+          @user={{this.user}}
         />
       `);
 
