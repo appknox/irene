@@ -1,11 +1,14 @@
 <AkStack @alignItems='center' @spacing='1'>
-  {{this.value}}
+  <AkTypography data-test-privacyModule-pii-data-value>
+    {{this.value}}
+  </AkTypography>
 
   {{#if this.showChip}}
     <AkChip
       @label={{this.chipValue}}
       @size='small'
       @variant='semi-filled-outlined'
+      data-test-privacyModule-pii-data-value-chip
     />
   {{/if}}
 </AkStack>
