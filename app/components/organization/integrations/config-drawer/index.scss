@@ -1,0 +1,10 @@
+.integration-drawer-footer {
+  position: sticky;
+  bottom: 0;
+  background-color: var(--organization-integrations-github-background-main);
+  box-shadow: var(--organization-integrations-github-box-shadow);
+}
+
+.height-full {
+  height: 100%;
+}

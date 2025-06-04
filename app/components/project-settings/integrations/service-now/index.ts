@@ -5,6 +5,7 @@ import { tracked } from '@glimmer/tracking';
 import { task } from 'ember-concurrency';
 import type Store from '@ember-data/store';
 import type IntlService from 'ember-intl/services/intl';
+import type RouterService from '@ember/routing/router-service';
 
 import ENUMS from 'irene/enums';
 import parseError from 'irene/utils/parse-error';
@@ -21,11 +22,13 @@ export default class ProjectSettingsIntegrationsServiceNowComponent extends Comp
   @service declare intl: IntlService;
   @service declare store: Store;
   @service('notifications') declare notify: NotificationService;
+  @service declare router: RouterService;
 
   @tracked noIntegration = false;
   @tracked noAccess = false;
   @tracked showEditSNRiskModal = false;
   @tracked showDeleteSNConfigConfirmBox = false;
+  @tracked isEditing = false;
 
   @tracked serviceNowConfig: ServiceNowConfigModel | null = null;
   @tracked selectedThreshold = ENUMS.THRESHOLD.LOW;
@@ -48,24 +51,24 @@ export default class ProjectSettingsIntegrationsServiceNowComponent extends Comp
     return this.args.project;
   }
 
-  get showHeaderActions() {
-    return !!this.serviceNowConfig;
+  get showSelectUI() {
+    return !this.serviceNowConfig || this.isEditing;
   }
 
-  get headerSubText() {
-    if (
-      this.noAccess ||
-      this.noIntegration ||
-      this.fetchServiceNowConfig.isRunning
-    ) {
-      return '';
-    }
+  get data() {
+    return {
+      id: 'ServiceNow',
+      title: this.intl.t('serviceNow.title'),
+      description: this.intl.t('serviceNowIntegrationDesc'),
+      logo: '../../../../images/service-now.png',
+      isIntegrated: !this.noIntegration && !this.noAccess,
+      showSelectBtn: !this.serviceNowConfig && !this.noIntegration,
+      selectBtnText: this.intl.t('selectThreshold'),
+    };
+  }
 
-    if (this.serviceNowConfig) {
-      return this.intl.t('integratedServiceNow');
-    }
-
-    return this.intl.t('otherTemplates.selectServiceNowRisk');
+  get isFetchingSNConfig() {
+    return this.fetchServiceNowConfig.isRunning;
   }
 
   @action fetchSNIntegrationProps() {
@@ -76,6 +79,20 @@ export default class ProjectSettingsIntegrationsServiceNowComponent extends Comp
     this.showDeleteSNConfigConfirmBox = true;
   }
 
+  @action closeDeleteSNConfigConfirmBox() {
+    this.showDeleteSNConfigConfirmBox = false;
+  }
+
+  @action navigateToOrgSettings() {
+    this.router.transitionTo(
+      'authenticated.dashboard.organization-settings.integrations'
+    );
+  }
+
+  @action onEditClick() {
+    this.isEditing = true;
+  }
+
   @action
   confirmCallback() {
     this.deleteServiceNowConfig.perform();
@@ -83,6 +100,7 @@ export default class ProjectSettingsIntegrationsServiceNowComponent extends Comp
 
   @action saveSelectedRiskThreshold() {
     this.selectRiskThreshold.perform();
+    this.isEditing = false;
   }
 
   @action openSNRiskEditModal() {
@@ -112,16 +130,24 @@ export default class ProjectSettingsIntegrationsServiceNowComponent extends Comp
       this.selectedThreshold = config.riskThreshold;
     } catch (err) {
       const error = err as AdapterError;
-      const { detail: errorDetail, status } = error.errors?.[0] ?? {};
+      const errorInfo = error.errors?.[0];
+      const errorDetail = errorInfo?.detail;
 
-      if (status === 404) {
+      if (errorDetail === 'Servicenow not integrated') {
+        this.noIntegration = true;
+
+        return;
+      }
+
+      if (errorDetail === 'Servicenow not connected') {
         this.noAccess = true;
 
         return;
       }
 
-      if (errorDetail === 'Servicenow not integrated') {
+      if (errorDetail?.includes('Not Found (404)')) {
         this.noIntegration = true;
+        this.noAccess = true;
 
         return;
       }
@@ -185,7 +211,7 @@ export default class ProjectSettingsIntegrationsServiceNowComponent extends Comp
         [
           '/data/attributes/riskThreshold',
           '/data/attributes/risk_threshold',
-        ].indexOf(String(source?.pointer)) > -1
+        ].includes(String(source?.pointer))
       ) {
         this.notify.error(this.intl.t('invalidRisk'));
 

@@ -1,0 +1,134 @@
+{{#if @showOptionalHeading}}
+  <AkStack local-class='optional-heading' @width='full'>
+    <AkTypography @variant='subtitle2'>
+      {{t 'optional'}}
+    </AkTypography>
+  </AkStack>
+{{/if}}
+
+<AkStack
+  @direction='column'
+  @spacing='2'
+  class={{if @showOptionalHeading 'p-2' 'p-0'}}
+>
+  <AkStack @direction='column' @alignItems='flex-start' @spacing='1'>
+    <AkToggle
+      @checked={{@sendUserLogs}}
+      @onChange={{@onToggleSendUserLogs}}
+      data-test-orgIntegrations-splunkAccount-userLogs-toggle
+    />
+
+    <AkTypography
+      class='ml-1'
+      @variant='subtitle2'
+      data-test-orgIntegrations-splunkAccount-userLogs-title
+    >
+      {{t 'splunk.sendUserLogs'}}
+    </AkTypography>
+
+    <AkTypography
+      class='ml-1'
+      @variant='body2'
+      @color='textSecondary'
+      data-test-orgIntegrations-splunkAccount-userLogs-desc
+    >
+      {{t 'splunk.sendUserLogsDesc'}}
+    </AkTypography>
+  </AkStack>
+
+  {{#if @sendUserLogs}}
+    {{#if this.notShowOptionalHeading}}
+      <AkDivider @color='dark' />
+    {{/if}}
+
+    <AkStack
+      class={{if this.notShowOptionalHeading 'ml-1' ''}}
+      @width='full'
+      @justifyContent={{if
+        this.notShowOptionalHeading
+        'space-between'
+        'flex-start'
+      }}
+      @alignItems='flex-start'
+    >
+      <AkStack @direction='column' @spacing='2'>
+        <AkStack @direction='column' {{style gap='0.4em'}}>
+          <AkTypography
+            data-test-orgIntegrations-splunk-userLogsIndex
+            @variant='subtitle2'
+          >
+            {{t 'splunk.userLogsIndex'}}
+          </AkTypography>
+
+          {{#if @isEditing}}
+            <AkSelect
+              @options={{@indexOptions}}
+              @onChange={{@onSetUserLogIndex}}
+              @selected={{@selectedUserLogIndex}}
+              local-class='select-width'
+              data-test-orgIntegrations-splunk-userLogsSelect
+              as |aks|
+            >
+              {{aks.label}}
+            </AkSelect>
+          {{else}}
+            <AkTypography
+              data-test-orgIntegrations-splunk-userLogs
+              @variant='body2'
+              @color='textSecondary'
+            >
+              {{@selectedUserLogIndex.label}}
+            </AkTypography>
+          {{/if}}
+        </AkStack>
+
+        <AkStack @direction='column' {{style gap='0.4em'}}>
+          <AkTypography @variant='subtitle2'>
+            {{t 'splunk.timeInterval'}}
+          </AkTypography>
+
+          {{#if @isEditing}}
+            <AkSelect
+              @options={{@logHourOptions}}
+              @onChange={{@onSetLogHour}}
+              @selected={{@selectedLogHour}}
+              local-class='select-width'
+              data-test-orgIntegrations-splunk-logHoursSelect
+              as |aks|
+            >
+              {{aks.label}}
+            </AkSelect>
+          {{else}}
+            <AkTypography
+              data-test-orgIntegrations-splunk-logHours
+              @variant='body2'
+              @color='textSecondary'
+            >
+              {{@selectedLogHour.label}}
+            </AkTypography>
+          {{/if}}
+        </AkStack>
+
+        {{#if (and @isEditing this.notShowOptionalHeading)}}
+          <AkButton
+            @variant='filled'
+            data-test-orgIntegrations-splunk-saveUserLogsBtn
+            {{on 'click' @onSaveUserLogDetails}}
+          >
+            {{t 'save'}}
+          </AkButton>
+        {{/if}}
+      </AkStack>
+
+      {{#if (and this.notShowOptionalHeading (not @isEditing))}}
+        <AkIconButton
+          @variant='outlined'
+          data-test-orgIntegrations-splunk-editBtn
+          {{on 'click' @onEditDetails}}
+        >
+          <AkIcon @iconName='edit' />
+        </AkIconButton>
+      {{/if}}
+    </AkStack>
+  {{/if}}
+</AkStack>

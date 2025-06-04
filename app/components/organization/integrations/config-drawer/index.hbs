@@ -1,0 +1,69 @@
+<AkDrawer
+  @open={{@openDrawer}}
+  @onClose={{@closeDrawerHandler}}
+  @anchor='right'
+  as |dr|
+>
+  <AkAppbar
+    @justifyContent='space-between'
+    @position='sticky'
+    class='px-3'
+    as |ab|
+  >
+    <AkTypography
+      data-test-orgIntegrations-configDrawer-title
+      @color='inherit'
+      @variant='h5'
+    >
+      {{@drawerTitle}}
+    </AkTypography>
+
+    <AkIconButton
+      {{on 'click' dr.closeHandler}}
+      class={{ab.classes.defaultIconBtn}}
+    >
+      <AkIcon @iconName='close' />
+    </AkIconButton>
+  </AkAppbar>
+
+  <AkStack @direction='column' local-class='height-full'>
+    {{yield to='drawerContent'}}
+  </AkStack>
+
+  {{#unless @noFooter}}
+    <AkStack
+      @width='full'
+      @spacing='1.5'
+      class='px-3 py-2'
+      local-class='integration-drawer-footer'
+    >
+      {{#if @showDeleteButton}}
+        <AkButton
+          data-test-orgIntegrations-configDrawer-disconnectBtn
+          @variant='outlined'
+          {{on 'click' @drawerSaveAction}}
+        >
+          {{t 'disconnect'}}
+        </AkButton>
+      {{else}}
+        <AkButton
+          data-test-orgIntegrations-configDrawer-integrateBtn
+          @variant='filled'
+          @loading={{@loadingDrawerSaveAction}}
+          {{on 'click' @drawerSaveAction}}
+        >
+          {{t 'integrate'}}
+        </AkButton>
+
+        <AkButton
+          data-test-orgIntegrations-configDrawer-cancelBtn
+          @variant='outlined'
+          @color='neutral'
+          {{on 'click' @closeDrawerHandler}}
+        >
+          {{t 'cancel'}}
+        </AkButton>
+      {{/if}}
+    </AkStack>
+  {{/unless}}
+</AkDrawer>
