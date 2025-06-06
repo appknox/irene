@@ -447,11 +447,17 @@ module('Integration | Component | appknox-wrapper', function (hooks) {
 
   test.each(
     'it should render switcher modal',
-    [true, false],
-    async function (assert, storeknox) {
-      this.organization.selected.features = {
-        storeknox,
-      };
+    [
+      { storeknox: true, aiFeatures: { reporting: true } },
+      { storeknox: false, aiFeatures: { reporting: true } },
+      { storeknox: false, aiFeatures: { reporting: false } },
+      { storeknox: true, aiFeatures: { reporting: false } },
+    ],
+    async function (assert, scenario) {
+      const { storeknox, aiFeatures } = scenario;
+
+      this.organization.selected.features = { storeknox };
+      this.organization.selected.aiFeatures = aiFeatures;
 
       await render(hbs`
         <AppknoxWrapper
@@ -465,7 +471,7 @@ module('Integration | Component | appknox-wrapper', function (hooks) {
 
       await click(expandButton);
 
-      if (storeknox) {
+      if (storeknox || aiFeatures.reporting) {
         assert.dom('[data-test-side-menu-switcher]').exists();
 
         assert.dom('[data-test-side-menu-switcher-modal]').doesNotExist();

@@ -1,0 +1,25 @@
+.report-download-drawer-container {
+  height: fit-content;
+
+  .report-download-drawer-content {
+    min-height: calc(100vh - 164px);
+    height: fit-content;
+  }
+
+  .report-download-drawer-footer {
+    z-index: 10;
+    position: sticky;
+    bottom: 0;
+
+    border-top: 1px solid
+      var(--ai-reporting-preview-report-download-drawer-border-color);
+
+    background-color: var(
+      --ai-reporting-preview-report-download-drawer-background-main
+    );
+
+    box-shadow: var(
+      --ai-reporting-preview-report-download-drawer-cta-box-shadow
+    );
+  }
+}

@@ -244,4 +244,33 @@ module('Integration | Component | storeknox-wrapper', function (hooks) {
         .hasAttribute('icon', `material-symbols:${it.icon}`);
     });
   });
+
+  test.each(
+    'it should render switcher modal if ai reporting feature is available',
+    [true, false],
+    async function (assert, reporting) {
+      this.organization.selected.aiFeatures = { reporting };
+
+      await render(hbs`<StoreknoxWrapper @user={{this.user}} />`);
+
+      if (reporting) {
+        assert.dom('[data-test-side-menu-switcher]').exists();
+
+        assert.dom('[data-test-side-menu-switcher-modal]').doesNotExist();
+
+        assert.dom('[data-test-side-menu-switcher-icon]').exists();
+
+        assert
+          .dom('[data-test-side-menu-switcher-text]')
+          .exists()
+          .hasText(t('appSwitcher'));
+
+        await click('[data-test-side-menu-switcher]');
+
+        assert.dom('[data-test-side-menu-switcher-modal]').exists();
+      } else {
+        assert.dom('[data-test-side-menu-switcher]').doesNotExist();
+      }
+    }
+  );
 });
