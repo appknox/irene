@@ -1,4 +1,4 @@
-import { render } from '@ember/test-helpers';
+import { find, render, triggerEvent } from '@ember/test-helpers';
 import { hbs } from 'ember-cli-htmlbars';
 import { setupMirage } from 'ember-cli-mirage/test-support';
 import { setupIntl, t } from 'ember-intl/test-support';
@@ -64,7 +64,7 @@ module(
 
         assert
           .dom('[data-test-fileDetailScanActions-staticScanTitle]')
-          .hasText(t('sast'));
+          .hasText(t('staticScan'));
 
         if (scanStatus === staticScanStatus.completed) {
           assert
@@ -75,6 +75,40 @@ module(
             .dom('[data-test-fileDetailScanActions-staticScanInProgressStatus]')
             .hasText(`${t('scanning')}... ${this.file.staticScanProgress}%`);
         }
+
+        // Scan overview section
+        const vulnerabilityCount = this.file.isStaticDone
+          ? String(this.file.staticVulnerabilityCount)
+          : '-';
+
+        const scanOverviewSection = find(
+          '[data-test-fileDetails-scanActions-scanOverview-staticScanRoot]'
+        );
+
+        assert
+          .dom(
+            '[data-test-fileDetails-scanActions-scanOverview-vulnerabilitiesFoundIcon]',
+            scanOverviewSection
+          )
+          .exists();
+
+        assert
+          .dom(scanOverviewSection)
+          .containsText(t('scanOverview'))
+          .containsText(vulnerabilityCount);
+
+        // Vulnerabilities found tooltip
+        const vulnerabilitiesFoundTooltip = find(
+          '[data-test-fileDetails-scanActions-scanOverview-vulnerabilitiesFoundTooltip]'
+        );
+
+        await triggerEvent(vulnerabilitiesFoundTooltip, 'mouseenter');
+
+        assert
+          .dom('[data-test-ak-tooltip-content]')
+          .containsText(t('vulnerabilitiesFound'));
+
+        await triggerEvent(vulnerabilitiesFoundTooltip, 'mouseleave');
       }
     );
   }

@@ -1,21 +1,38 @@
-<AkStack
-  @justifyContent='space-between'
-  @alignItems='center'
-  @flexWrap='wrap'
-  class='p-2'
->
-  <AkTypography @variant='h5' data-test-fileDetailScanActions-dynamicScanTitle>
-    {{t 'dast'}}
-  </AkTypography>
+<AkStack @direction='column' @width='full'>
+  <AkStack
+    @width='full'
+    @justifyContent='space-between'
+    @alignItems='center'
+    @flexWrap='wrap'
+    class='p-2'
+  >
+    <AkTypography
+      @variant='h5'
+      data-test-fileDetailScanActions-dynamicScanTitle
+    >
+      {{t 'dynamicScan'}}
+    </AkTypography>
 
-  {{#if @file.isDynamicScanLoading}}
-    <AkSkeleton @width='80px' />
-  {{else}}
-    <FileDetails::DynamicScan::StatusChip
-      @status={{this.status}}
-      data-test-fileDetailScanActions-dynamicScanStatus
-    />
-  {{/if}}
+    {{#if @file.isDynamicScanLoading}}
+      <AkSkeleton @width='80px' />
+    {{else}}
+      <FileDetails::DynamicScan::StatusChip
+        @status={{this.status}}
+        data-test-fileDetailScanActions-dynamicScanStatus
+      />
+    {{/if}}
+  </AkStack>
+
+  <FileDetails::ScanActions::ScanOverview
+    @file={{@file}}
+    @isDynamicScanAction={{true}}
+    @vulnerabilityCount={{if
+      @file.isDynamicDone
+      @file.dynamicVulnerabilityCount
+      null
+    }}
+    data-test-fileDetails-scanActions-scanOverview-dynamicScanRoot
+  />
 </AkStack>
 
 <AkDivider @color='dark' />
