@@ -1,0 +1,95 @@
+<div class='p-2' local-class='report-preview'>
+  {{#if @isFetchingReportPreview}}
+    <AkTable::Loading />
+  {{else if this.hasPreviewData}}
+    <AkPaginationProvider
+      @results={{this.rows}}
+      @onItemPerPageChange={{this.handleItemPerPageChange}}
+      @totalItems={{this.totalRows}}
+      @nextAction={{this.handleNextPrevAction}}
+      @prevAction={{this.handleNextPrevAction}}
+      @itemPerPageOptions={{array 10 25 50}}
+      @defaultLimit={{@limit}}
+      @offset={{@offset}}
+      local-class='report-preview-table-container'
+      data-test-aiReporting-preview-table-container
+      as |pgc|
+    >
+      <AkTable
+        local-class='report-preview-table'
+        @variant='full-bordered'
+        as |t|
+      >
+        <t.head
+          @columns={{this.columns}}
+          @scrollIndicators='horizontal'
+          @columnKeyPath='val_field'
+          data-test-aiReporting-preview-table-head
+        />
+
+        <t.body @rows={{pgc.currentPageResults}} @renderAll={{true}} as |b|>
+          <b.row data-test-aiReporting-preview-table-row as |r|>
+            <r.cell>
+              {{#if r.columnValue.component}}
+                {{#let (component r.columnValue.component) as |Component|}}
+                  <Component @column={{r.columnValue}} @value={{r.rowValue}} />
+                {{/let}}
+              {{/if}}
+            </r.cell>
+          </b.row>
+        </t.body>
+      </AkTable>
+
+      <AkPagination
+        @disableNext={{pgc.disableNext}}
+        @nextAction={{pgc.nextAction}}
+        @disablePrev={{pgc.disablePrev}}
+        @prevAction={{pgc.prevAction}}
+        @endItemIdx={{pgc.endItemIdx}}
+        @startItemIdx={{pgc.startItemIdx}}
+        @itemPerPageOptions={{pgc.itemPerPageOptions}}
+        @onItemPerPageChange={{pgc.onItemPerPageChange}}
+        @selectedOption={{pgc.selectedOption}}
+        @tableItemLabel={{t 'exports'}}
+        @perPageTranslation={{t 'recordPerPage'}}
+        @totalItems={{pgc.totalItems}}
+      />
+    </AkPaginationProvider>
+  {{else}}
+    <AkStack
+      @direction='column'
+      @alignItems='center'
+      @justifyContent='center'
+      {{style height='500px'}}
+      data-test-aiReporting-preview-table-errorScreen-container
+    >
+      <AkSvg::NoApisCaptured
+        class='mt-3'
+        data-test-aiReporting-preview-table-errorScreen-illustration
+      />
+
+      <AkStack
+        @direction='column'
+        @alignItems='center'
+        @spacing='1'
+        class='mt-3'
+      >
+        <AkTypography
+          @align='center'
+          @variant='h5'
+          data-test-aiReporting-preview-table-errorScreenHeader
+        >
+          {{@errorScreenHeader}}
+        </AkTypography>
+
+        <AkTypography
+          @align='center'
+          {{style maxWidth='400px'}}
+          data-test-aiReporting-preview-table-errorScreenDesc
+        >
+          {{@errorScreenDesc}}
+        </AkTypography>
+      </AkStack>
+    </AkStack>
+  {{/if}}
+</div>

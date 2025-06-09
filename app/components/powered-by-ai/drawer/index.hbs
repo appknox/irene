@@ -1,0 +1,85 @@
+<AkDrawer @open={{@aiDrawerOpen}} @onClose={{@onClose}} @anchor='right' as |dr|>
+  <AkAppbar
+    @justifyContent='space-between'
+    @position='sticky'
+    class='px-3'
+    data-test-poweredByAi-drawer
+    as |ab|
+  >
+    <AkTypography
+      @color='inherit'
+      @variant='h5'
+      data-test-poweredByAi-drawer-title
+    >
+      {{t 'aiPoweredFeatures'}}
+    </AkTypography>
+
+    <AkIconButton
+      {{on 'click' dr.closeHandler}}
+      class={{ab.classes.defaultIconBtn}}
+      data-test-poweredByAi-drawer-close-btn
+    >
+      <AkIcon @iconName='close' />
+    </AkIconButton>
+  </AkAppbar>
+
+  <AkStack @direction='column' local-class='ai-drawer-body'>
+    <PoweredByAi::Chip @clickable={{false}} data-test-poweredByAi-drawer-chip />
+
+    {{#each @info as |section|}}
+      <AkTypography
+        @fontWeight='bold'
+        @gutterBottom={{true}}
+        class={{section.marginTop}}
+        data-test-poweredByAi-drawer-section-title={{section.title}}
+      >
+        {{section.title}}
+      </AkTypography>
+
+      {{#if section.contentList}}
+        <ul
+          local-class='ai-drawer-body-list'
+          data-test-poweredByAi-drawer-section-list
+        >
+          {{#each section.contentList as |content|}}
+            <li class='mb-1' data-test-poweredByAi-drawer-section-list-item>
+              {{content}}
+            </li>
+          {{/each}}
+        </ul>
+      {{else}}
+        <AkTypography
+          @variant='body2'
+          data-test-poweredByAi-drawer-section-body
+        >
+          {{section.body}}
+        </AkTypography>
+      {{/if}}
+    {{/each}}
+  </AkStack>
+
+  {{#if @showButtons}}
+    <AkStack
+      @spacing='1'
+      local-class='footer'
+      class='py-2 pl-5'
+      data-test-poweredByAi-drawer-footer
+    >
+      <AkButton
+        {{on 'click' this.onClick}}
+        data-test-poweredByAi-drawer-footer-button
+      >
+        {{@buttonText}}
+      </AkButton>
+
+      <AkButton
+        @variant='outlined'
+        @color='neutral'
+        {{on 'click' dr.closeHandler}}
+        data-test-poweredByAi-drawer-footer-back-btn
+      >
+        {{t 'back'}}
+      </AkButton>
+    </AkStack>
+  {{/if}}
+</AkDrawer>

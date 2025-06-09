@@ -44,8 +44,14 @@ export interface CalendarDay {
   isRangeEnd: boolean;
 }
 
+export type CalendarSelectValue =
+  | CalendarDay
+  | RangeDateObject
+  | MultipleDateObject
+  | null;
+
 export type CalendarOnSelectFunc = (
-  value: CalendarDay | RangeDateObject | MultipleDateObject | null,
+  value: CalendarSelectValue,
   calendar: Calendar,
   event: Event,
   datePickerCloseHanlder: () => void
@@ -68,7 +74,7 @@ export interface CalendarActions {
   changeCenter?: CalendarOnCenterChangeFunc;
 
   select?: (
-    value: CalendarDay | RangeDateObject | MultipleDateObject | null,
+    value: CalendarSelectValue,
     calendar: Calendar,
     event: Event
   ) => void;
@@ -128,7 +134,7 @@ type AkDatePickerCustomArgs = {
 
 type QuickSelectionObject = {
   label: string;
-  value: null | CalendarDay | RangeDateObject | MultipleDateObject;
+  value: CalendarSelectValue;
 };
 
 type CalendarQuickSelection = Record<
@@ -273,7 +279,7 @@ export default class AkDatePickerComponent extends Component<AkDatePickerSignatu
 
   @action
   handleSelectChange(
-    value: CalendarDay | RangeDateObject | MultipleDateObject | null,
+    value: CalendarSelectValue,
     calendar: Calendar,
     event: Event
   ) {
@@ -295,7 +301,7 @@ export default class AkDatePickerComponent extends Component<AkDatePickerSignatu
 
   @action
   handleQuickSelectClick(
-    value: CalendarDay | RangeDateObject | MultipleDateObject | null,
+    value: CalendarSelectValue,
     calendar: Calendar,
     event: Event
   ) {

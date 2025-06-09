@@ -35,6 +35,7 @@ interface PaginationProviderDefaultBlockHash<R> {
 }
 
 export interface AkPaginationProviderSignature<R> {
+  Element: HTMLDivElement;
   Args: {
     results: R[] | DS.AdapterPopulatedRecordArray<R> | undefined;
     offset: number;

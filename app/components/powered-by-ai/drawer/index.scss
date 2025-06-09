@@ -1,0 +1,16 @@
+.ai-drawer-body {
+  border: 1px solid var(--powered-by-ai-chip-border-color);
+  margin: 1.214em 1.57em;
+  padding: 1.428em;
+  height: inherit;
+  width: 640px;
+
+  .ai-drawer-body-list {
+    padding-left: 1em;
+    list-style: disc;
+  }
+}
+
+.footer {
+  box-shadow: var(--powered-by-ai-chip-footer-box-shadow);
+}

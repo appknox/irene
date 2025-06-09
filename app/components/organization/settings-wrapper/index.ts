@@ -3,6 +3,7 @@ import Component from '@glimmer/component';
 import type IntlService from 'ember-intl/services/intl';
 
 import type OrganizationModel from 'irene/models/organization';
+import type ConfigurationService from 'irene/services/configuration';
 import type MeService from 'irene/services/me';
 import type OrganizationService from 'irene/services/organization';
 
@@ -19,6 +20,7 @@ export default class OrganizationSettingsWrapperComponent extends Component<Orga
   @service declare intl: IntlService;
   @service declare me: MeService;
   @service declare organization: OrganizationService;
+  @service declare configuration: ConfigurationService;
 
   get isPublicApiEnabled() {
     return this.organization.selected?.features?.public_apis;
@@ -26,6 +28,25 @@ export default class OrganizationSettingsWrapperComponent extends Component<Orga
 
   get isOwnerOrAdmin() {
     return this.me.org?.get('is_owner') || this.me.org?.get('is_admin');
+  }
+
+  get isOwner() {
+    return this.me.org?.get('is_owner');
+  }
+
+  get orgIsAnEnterprise() {
+    return this.configuration.serverData.enterprise;
+  }
+
+  get shouldShowAiPoweredFeaturesForUser() {
+    return this.isOwner && !this.orgIsAnEnterprise;
+  }
+
+  get showAiPoweredFeatures() {
+    return (
+      !this.organization.allSelectedOrgAiFeaturesDisabled &&
+      this.shouldShowAiPoweredFeaturesForUser
+    );
   }
 
   get tabItems() {
@@ -53,14 +74,16 @@ export default class OrganizationSettingsWrapperComponent extends Component<Orga
               'authenticated.dashboard.organization-settings.service-account',
           }
         : null,
-      // {
-      //   id: 'ai-powered-features',
-      //   label: this.intl.t('aiPoweredFeatures'),
-      //   route:
-      //     'authenticated.dashboard.organization-settings.ai-powered-features',
-      //   currentWhen:
-      //     'authenticated.dashboard.organization-settings.ai-powered-features',
-      // },
+      this.showAiPoweredFeatures
+        ? {
+            id: 'ai-powered-features',
+            label: this.intl.t('aiPoweredFeatures'),
+            route:
+              'authenticated.dashboard.organization-settings.ai-powered-features',
+            currentWhen:
+              'authenticated.dashboard.organization-settings.ai-powered-features',
+          }
+        : null,
     ].filter(Boolean);
   }
 

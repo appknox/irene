@@ -67,6 +67,13 @@ export default class SideNavProductSwitcherComponent extends Component<SideNavPr
     return this.organization.isSecurityEnabled;
   }
 
+  get showReporting() {
+    return (
+      this.organization?.selected?.aiFeatures?.reporting &&
+      !this.orgIsAnEnterprise
+    );
+  }
+
   get switcherMenuItems() {
     const allMenuItems = [
       {
@@ -92,6 +99,13 @@ export default class SideNavProductSwitcherComponent extends Component<SideNavPr
         route: 'authenticated.security.projects',
         key: 'security',
         openInNewTab: true,
+      },
+      this.showReporting && {
+        id: 'report-svg',
+        svg: 'ak-svg/report-indicator',
+        label: this.intl.t('reportModule.title'),
+        route: 'authenticated.reports',
+        key: 'report',
       },
     ];
 

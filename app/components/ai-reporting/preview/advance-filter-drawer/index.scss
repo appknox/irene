@@ -1,0 +1,32 @@
+.filter-drawer-container {
+  height: fit-content;
+
+  .filter-drawer-content {
+    min-height: calc(100vh - 164px);
+    height: fit-content;
+
+    border: 1px solid
+      var(--ai-reporting-preview-advance-filter-drawer-border-color);
+
+    background-color: var(
+      --ai-reporting-preview-advance-filter-drawer-background-main
+    );
+  }
+
+  .filter-drawer-footer {
+    z-index: 10;
+    position: sticky;
+    bottom: 0;
+
+    border-top: 1px solid
+      var(--ai-reporting-preview-advance-filter-drawer-border-color);
+
+    background-color: var(
+      --ai-reporting-preview-advance-filter-drawer-background-main
+    );
+
+    box-shadow: var(
+      --ai-reporting-preview-advance-filter-drawer-cta-box-shadow
+    );
+  }
+}

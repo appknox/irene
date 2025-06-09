@@ -1,0 +1,80 @@
+<AkDrawer
+  @open={{@openDrawer}}
+  @onClose={{@closeDrawer}}
+  @anchor='right'
+  data-test-aiReporting-preview-reportDownloadDrawer
+  as |dr|
+>
+  <div local-class='report-download-drawer-container'>
+    <AkAppbar @justifyContent='space-between' class='px-3' as |ab|>
+      <AkTypography
+        data-test-aiReporting-preview-reportDownloadDrawer-title
+        @color='inherit'
+        @variant='h5'
+      >
+        {{t 'downloadReport'}}
+      </AkTypography>
+
+      <AkIconButton
+        {{on 'click' dr.closeHandler}}
+        class={{ab.classes.defaultIconBtn}}
+        data-test-aiReporting-preview-reportDownloadDrawer-closeBtn
+      >
+        <AkIcon @iconName='close' />
+      </AkIconButton>
+    </AkAppbar>
+
+    <AkTypography
+      @variant='subtitle2'
+      class='px-3 py-2'
+      data-test-aiReporting-preview-reportDownloadDrawer-headerText
+    >
+      {{t 'reportModule.aiReportDownloadHeaderText'}}
+    </AkTypography>
+
+    <div local-class='report-download-drawer-content'>
+      <AkList
+        {{style padding='0px'}}
+        data-test-aiReporting-preview-reportDownloadDrawer-reportList
+      >
+        {{#each this.reportDetails as |details|}}
+          {{#unless details.hideReport}}
+            <AiReporting::Preview::ReportDownloadDrawer::ReportItem
+              @reportDetails={{details}}
+              @reportRequest={{@reportRequest}}
+              @selectedReportType={{this.selectedReportType}}
+              @onReportTypeSelect={{this.handleReportTypeSelect}}
+              data-test-aiReporting-preview-reportDownloadDrawer-reportItem
+              data-test-aiReporting-preview-reportDownloadDrawer-reportItem-type={{details.type}}
+            />
+          {{/unless}}
+        {{/each}}
+      </AkList>
+    </div>
+
+    <AkStack
+      @width='full'
+      @alignItems='center'
+      @justifyContent='flex-end'
+      @spacing='1.5'
+      local-class='report-download-drawer-footer'
+      class='px-3 py-2'
+    >
+      <AkButton
+        @variant='outlined'
+        @color='neutral'
+        {{on 'click' dr.closeHandler}}
+        data-test-aiReporting-preview-reportDownloadDrawer-cancelBtn
+      >
+        {{t 'cancel'}}
+      </AkButton>
+
+      <AkButton
+        {{on 'click' this.handleDownload}}
+        data-test-aiReporting-preview-reportDownloadDrawer-downloadBtn
+      >
+        {{t 'download'}}
+      </AkButton>
+    </AkStack>
+  </div>
+</AkDrawer>

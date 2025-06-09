@@ -1,0 +1,21 @@
+<div local-class='text-type-text-field-container'>
+  <AkTextField
+    @placeholder={{t 'reportModule.advancedFilters.enterValue'}}
+    @value={{this.value}}
+    @error={{@isErrored}}
+    {{on 'input' this.handleValueChange}}
+    {{style fontSize='0.928rem'}}
+    data-test-aiReporting-preview-filterByColumnDrawer-filterGroupContent-field-textTypeInput
+  />
+
+  {{#if this.isInOperator}}
+    <AkTypography
+      @color='textSecondary'
+      local-class='text-type-text-field-helper-text'
+      {{style fontSize='0.7857em'}}
+      data-test-aiReporting-preview-filterByColumnDrawer-filterGroupContent-field-textType-helperText
+    >
+      {{t 'reportModule.advancedFilters.enterCommaSeparatedValues'}}
+    </AkTypography>
+  {{/if}}
+</div>

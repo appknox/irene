@@ -1,0 +1,93 @@
+<div
+  local-class='add-remove-section'
+  data-test-aiReporting-preview-filterByColumnDrawer-reorderAddOrRemoveContainer
+>
+  <AkStack
+    @alignItems='center'
+    @justifyContent='space-between'
+    local-class='add-remove-header'
+  >
+    <AkTypography
+      @fontWeight='bold'
+      data-test-aiReporting-preview-filterByColumnDrawer-reorderAddOrRemoveHeader
+    >
+      {{t 'reportModule.addRemoveColumns'}}
+    </AkTypography>
+
+    <AkChip
+      @variant='semi-filled'
+      @color='success'
+      @label={{this.label}}
+      @size='small'
+      {{style height='24px'}}
+      data-test-aiReporting-preview-filterByColumnDrawer-selectColsCountChip
+    />
+  </AkStack>
+
+  <div class='pr-3 py-2 pl-2'>
+    <AkFormControlLabel @label={{t 'selectAll'}}>
+      <AkCheckbox
+        @checked={{this.allColumnsSelected}}
+        @onChange={{this.toggleAllColumns}}
+        data-test-aiReporting-preview-filterByColumnDrawer-selectAllCheckbox
+      />
+    </AkFormControlLabel>
+
+    {{#each this.allColumns as |column|}}
+      <AkStack
+        @alignItems='center'
+        @justifyContent='space-between'
+        local-class={{this.getColumnClass column}}
+        draggable='true'
+        {{on 'dragstart' (fn this.handleColumnDragStart column)}}
+        {{on 'dragend' this.handleColumnDragEnd}}
+        {{on 'dragover' (fn this.handleColumnDragOver column)}}
+        {{on 'dragleave' (fn this.handleColumnDragLeave column)}}
+        {{on 'drop' (fn this.handleColumnDrop column)}}
+        data-test-aiReporting-preview-filterByColumnDrawer-selectColumnItem
+        data-test-aiReporting-preview-filterByColumnDrawer-selectColumn='{{column.field}}'
+      >
+        <AkFormControlLabel
+          @label={{column.name}}
+          data-test-aiReporting-preview-filterByColumnDrawer-selectColumnLabel
+        >
+          <AkCheckbox
+            @checked={{column.selected}}
+            @onChange={{fn this.toggleColumn column}}
+            data-test-aiReporting-preview-filterByColumnDrawer-selectColumnCheckbox
+          />
+        </AkFormControlLabel>
+
+        <AkIcon
+          @iconName='reorder'
+          @color='textSecondary'
+          local-class='reorder-icon'
+          data-test-aiReporting-preview-filterByColumnDrawer-reorderIcon
+        />
+      </AkStack>
+    {{/each}}
+  </div>
+</div>
+
+<AkStack
+  @alignItems='center'
+  @justifyContent='space-between'
+  local-class='filter-drawer-footer'
+>
+  <AkButton
+    @variant='outlined'
+    @color='neutral'
+    {{on 'click' this.resetColumns}}
+    data-test-aiReporting-preview-filterByColumnDrawer-resetBtn
+  >
+    {{t 'resetToDefault'}}
+  </AkButton>
+
+  <AkButton
+    @disabled={{this.disableApply}}
+    {{on 'click' @applyAndClose}}
+    data-test-aiReporting-preview-filterByColumnDrawer-applyBtn
+  >
+    {{t 'apply'}}
+  </AkButton>
+</AkStack>

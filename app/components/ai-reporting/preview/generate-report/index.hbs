@@ -1,0 +1,24 @@
+<AkStack>
+  <AkButton
+    @disabled={{@disabled}}
+    @loading={{this.isLoadingReportDownload}}
+    {{on 'click' this.handleReportDownloadDrawerOpen}}
+    data-test-aiReporting-preview-generateReport-button
+  >
+    {{if
+      this.isLoadingReportDownload
+      (t 'reportModule.generating')
+      (t 'downloadReport')
+    }}
+  </AkButton>
+
+  {{! Drawer to select report type }}
+  {{#unless @disabled}}
+    <AiReporting::Preview::ReportDownloadDrawer
+      @reportRequest={{@reportRequest}}
+      @openDrawer={{this.showReportDownloadDrawer}}
+      @closeDrawer={{this.handleReportDownloadDrawerClose}}
+      @onDownload={{this.handleReportDownload}}
+    />
+  {{/unless}}
+</AkStack>

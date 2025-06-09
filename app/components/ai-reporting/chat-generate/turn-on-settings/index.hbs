@@ -1,0 +1,40 @@
+<AkStack
+  @direction='column'
+  local-class='empty-container'
+  data-test-aiReporting-chatGenerate-turnOnSettings-root
+>
+  <AkStack @direction='column' local-class='body'>
+    <AkSvg::TurnOnSettings
+      data-test-aiReporting-chatGenerate-turnOnSettings-svg
+    />
+
+    <AkTypography
+      @variant='h5'
+      @gutterBottom={{true}}
+      local-class='header'
+      data-test-aiReporting-chatGenerate-turnOnSettings-headerText
+    >
+      {{t 'reportModule.turnOnSettingsHeaderText'}}
+    </AkTypography>
+
+    <AkTypography
+      local-class='body-text'
+      data-test-aiReporting-chatGenerate-turnOnSettings-bodyText
+    >
+      {{t 'reportModule.turnOnSettingsBodyText'}}
+    </AkTypography>
+  </AkStack>
+
+  {{#if this.me.org.is_owner}}
+    <AkStack local-class='footer'>
+      <AkButton
+        @tag='a'
+        href='/dashboard/organization/settings/ai-powered-features'
+        target='_blank'
+        data-test-aiReporting-chatGenerate-turnOnSettings-button
+      >
+        {{t 'reportModule.turnOnSettingsButtonLabel'}}
+      </AkButton>
+    </AkStack>
+  {{/if}}
+</AkStack>

@@ -1,0 +1,20 @@
+<AkTypography
+  {{style width=this.computedWidth}}
+  data-test-aiReporting-preview-column-value='{{@column.name}}'
+>
+  {{this.displayValue}}
+
+  {{#if this.shouldShowToggle}}
+    <AkButton
+      @variant='text'
+      @color='primary'
+      {{on 'click' this.toggleDetails}}
+    >
+      {{#if this.isExpanded}}
+        {{t 'lessDetails'}}
+      {{else}}
+        {{t 'moreDetails'}}
+      {{/if}}
+    </AkButton>
+  {{/if}}
+</AkTypography>
