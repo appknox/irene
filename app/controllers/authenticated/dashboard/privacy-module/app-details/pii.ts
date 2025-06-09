@@ -1,20 +1,20 @@
 import Controller from '@ember/controller';
 import { service } from '@ember/service';
-
 import type IntlService from 'ember-intl/services/intl';
-import type FileModel from 'irene/models/file';
+
 import type { AkBreadcrumbsItemProps } from 'irene/services/ak-breadcrumbs';
+import type { PrivacyModulePiiModel } from 'irene/routes/authenticated/dashboard/privacy-module/app-details/pii';
 
 export default class AuthenticatedDashboardPrivacyModuleAppDetailsPiiController extends Controller {
   @service declare intl: IntlService;
 
-  declare model: FileModel;
+  declare model: PrivacyModulePiiModel;
 
   get breadcrumbs(): AkBreadcrumbsItemProps {
     return {
-      title: this.model.name as string,
+      title: this.model.file.name as string,
       route: 'authenticated.dashboard.privacy-module.app-details.pii',
-      models: [this.model.id],
+      models: [this.model.file.id],
       routeGroup: 'privacy-module',
 
       siblingRoutes: [
@@ -35,9 +35,9 @@ export default class AuthenticatedDashboardPrivacyModuleAppDetailsPiiController 
           route: 'authenticated.dashboard.privacy-module.index',
         },
         {
-          title: this.model.name as string,
+          title: this.model.file.name as string,
           route: 'authenticated.dashboard.privacy-module.app-details.index',
-          models: [this.model.id],
+          models: [this.model.file.id],
           routeGroup: 'privacy-module',
         },
       ],

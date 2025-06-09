@@ -19,6 +19,7 @@ export interface Features {
 
 export interface AiFeatures {
   reporting: boolean;
+  pii: boolean;
 }
 
 export default class OrganizationModel extends Model {
