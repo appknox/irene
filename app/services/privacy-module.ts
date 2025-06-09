@@ -13,6 +13,7 @@ import ENUMS from 'irene/enums';
 import parseError from 'irene/utils/parse-error';
 import type TrackersModel from 'irene/models/trackers';
 import type DangerousPermissionModel from 'irene/models/dangerous-permission';
+import type PiiModel from 'irene/models/pii';
 
 type TrackersModelArray = DS.AdapterPopulatedRecordArray<TrackersModel> & {
   meta: { count: number };
@@ -22,6 +23,10 @@ type DangerousPermissionModelArray =
   DS.AdapterPopulatedRecordArray<DangerousPermissionModel> & {
     meta: { count: number };
   };
+
+type PiiModelArray = DS.AdapterPopulatedRecordArray<PiiModel> & {
+  meta: { count: number };
+};
 
 export default class PrivacyModuleService extends Service {
   @service declare store: Store;
@@ -35,6 +40,27 @@ export default class PrivacyModuleService extends Service {
   @tracked
   dangerousPermissionList?: DS.AdapterPopulatedRecordArray<DangerousPermissionModel>;
   @tracked dangerousPermissionCount: number = 0;
+  @tracked piiDataCount: number = 0;
+  @tracked
+  piiDataList?: DS.AdapterPopulatedRecordArray<PiiModel>;
+  @tracked piiDataAvailable: boolean = false;
+
+  setRouteQueryParams(limit: string | number, offset: string | number) {
+    this.router.transitionTo({
+      queryParams: {
+        app_limit: limit,
+        app_offset: offset,
+      },
+    });
+  }
+
+  // Resets the count values to ensure the previous record's counts do not persist
+  resetCountValues() {
+    this.trackerDataCount = 0;
+    this.dangerousPermissionCount = 0;
+    this.piiDataCount = 0;
+    this.piiDataAvailable = false;
+  }
 
   fetchTrackerData = task(
     async (limit, offset, fileId, setQueryParams = true) => {
@@ -112,18 +138,50 @@ export default class PrivacyModuleService extends Service {
     return await this.store.queryRecord('dangerous-permission-request', {});
   });
 
-  setRouteQueryParams(limit: string | number, offset: string | number) {
-    this.router.transitionTo({
-      queryParams: {
-        app_limit: limit,
-        app_offset: offset,
-      },
-    });
-  }
+  fetchPiiData = task(async (limit, offset, fileId, setQueryParams = true) => {
+    if (setQueryParams) {
+      this.setRouteQueryParams(limit, offset);
+    }
 
-  // Resets the count values to ensure the previous record's counts do not persist
-  resetCountValues() {
-    this.trackerDataCount = 0;
-    this.dangerousPermissionCount = 0;
-  }
+    try {
+      const pii = await this.getPiiRequest.perform(fileId);
+
+      if (pii.status === ENUMS.PM_PII_STATUS.SUCCESS) {
+        const queryParams = {
+          limit: limit,
+          offset: offset,
+          fileId: fileId,
+          piiExtractionId: pii.id,
+        };
+
+        const piiDataList = (await this.store.query(
+          'pii',
+          queryParams
+        )) as PiiModelArray;
+
+        this.piiDataList = piiDataList;
+        this.piiDataCount = piiDataList.meta.count;
+        this.piiDataAvailable = true;
+      }
+    } catch (err) {
+      const error = err as AdapterError;
+
+      if (error.errors) {
+        const status = error.errors[0]?.status;
+
+        if (status == 404) {
+          this.piiDataAvailable = false;
+        } else {
+          this.notify.error(parseError(error, this.intl.t('pleaseTryAgain')));
+        }
+      }
+    }
+  });
+
+  getPiiRequest = task(async (fileId) => {
+    const adapter = this.store.adapterFor('pii-request');
+    adapter.setNestedUrlNamespace(String(fileId));
+
+    return await this.store.queryRecord('pii-request', {});
+  });
 }

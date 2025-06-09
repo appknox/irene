@@ -11,12 +11,13 @@
     <AkStack
       @direction='column'
       @spacing='1'
+      @width='full'
       local-class='ai-powered-feature-body'
       data-test-organzation-aiPoweredFeatures-featureBody={{feature.featureKey}}
     >
       <PoweredByAi::Chip
         @clickable={{true}}
-        @drawerInfo={{this.drawerInfo}}
+        @drawerInfo={{feature.drawerInfo}}
         data-test-organzation-aiPoweredFeatures-poweredByAiChip
       />
 

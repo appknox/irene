@@ -1,30 +1,28 @@
-//TODO: Update this file when PII is ready
-
 .pii-details-drawer-content {
   margin: 1.5em;
   width: 640px;
-  border: 1px solid var(--ak-divider-color-light);
+  border: 1px solid var(--privacy-module-pii-border-color);
 }
 
 .pii-multiple-data {
-  border: 1px solid var(--ak-divider-color-light);
+  border: 1px solid var(--privacy-module-pii-border-color);
 }
 
 .pii-details-api-urls-section {
-  border: 1px solid var(--ak-divider-color-light);
-  background-color: #f5f5f5;
+  border: 1px solid var(--privacy-module-pii-border-color);
+  background-color: var(--privacy-module-pii-url-bg-color);
 }
 
 .note-power-by-ai {
-  background-color: white;
+  background-color: var(--privacy-module-pii-bg-color);
   padding: 10px 14px;
 }
 
 .empty-container {
   padding-top: 4em;
   padding-bottom: 4em;
-  background-color: var(--storeknox-discover-results-table-header-bg-color);
-  border-top: 1px solid #f8f8f8;
+  background-color: var(--privacy-module-pii-bg-color);
+  border-top: 1px solid var(--privacy-module-pii-border-color);
 
   .header {
     margin-top: 1.25em;
@@ -34,29 +32,4 @@
     text-align: center;
     max-width: 500px;
   }
-}
-
-.powered-by-chip {
-  background-color: #14badc;
-  padding: 4px 6px;
-  border-radius: 2px;
-  border: 1px solid #14badc;
-  cursor: pointer;
-
-  .text {
-    color: white;
-    font-size: 12px;
-  }
-
-  &:hover {
-    border: 1px solid #139ab5;
-  }
-}
-
-.ai-drawer-body {
-  border: 1px solid #f8f8f8;
-  margin: 17px 22px;
-  padding: 20px;
-  height: inherit;
-  width: 640px;
 }

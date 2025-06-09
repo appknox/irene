@@ -398,6 +398,13 @@ const ENUMS = {
     FILE: 2,
     MACHINE_LEARNING_MODEL: 3,
   },
+
+  PM_PII_STATUS: {
+    STARTED: 0,
+    PENDING: 1,
+    SUCCESS: 2,
+    FAILED: 3,
+  },
 };
 
 export const ENUMS_DISPLAY = {

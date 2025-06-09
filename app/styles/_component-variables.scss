@@ -216,6 +216,9 @@ body {
   --ak-chip-color-semi-filled-outlined-default-border-color: var(
     --neutral-grey-200
   );
+  --ak-chip-color-semi-filled-outlined-default-contrast-border: var(
+    --border-color-1
+  );
   --ak-chip-color-semi-filled-outlined-primary-background: var(--primary-light);
   --ak-chip-color-semi-filled-outlined-primary-contrast-text: var(
     --primary-dark
@@ -2411,6 +2414,12 @@ body {
   --privacy-module-app-details-header-warning-bg-color: var(--background-main);
   --privacy-module-app-details-header-warning-border: var(--border-color-1);
   --privacy-module-app-details-header-warning-icon-bg: var(--error-light);
+
+  //variables for privacy-module/app-details/pii
+  --privacy-module-pii-border-color: var(--divider);
+  --privacy-module-pii-bg-color: var(--common-white);
+  --privacy-module-pii-url-bg-color: var(--neutral-grey-100);
+  --privacy-module-pii-drawer-border-color: var(--neutral-grey-100);
 
   //variables for privacy-module/app-details/trackers
   --privacy-module-trackers-row-bg-color: var(--background-main);
