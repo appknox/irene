@@ -71,6 +71,10 @@ export default class ProjectModel extends ModelBaseMixin {
   @hasMany('file', { inverse: 'project', async: true })
   declare files: AsyncHasMany<FileModel>;
 
+  get activeProfileIdString() {
+    return this.activeProfileId ? String(this.activeProfileId) : '';
+  }
+
   get pdfPassword() {
     const uuid = this.uuid;
 

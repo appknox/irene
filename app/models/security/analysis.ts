@@ -5,7 +5,6 @@ import Model, {
   AsyncBelongsTo,
   AsyncHasMany,
 } from '@ember-data/model';
-import Inflector from 'ember-inflector';
 import { isEmpty } from '@ember/utils';
 
 import ENUMS from 'irene/enums';
@@ -26,9 +25,9 @@ import Nistsp80053Model from '../nistsp80053';
 import Nistsp800171Model from '../nistsp800171';
 import SamaModel from '../sama';
 import Pcidss4Model from '../pcidss4';
+import { irregular } from '@ember-data/request-utils/string';
 
-const inflector = Inflector.inflector;
-inflector.irregular('asvs', 'asvses');
+irregular('asvs', 'asvses');
 
 export interface SecurityAnalysisFinding {
   id?: number;

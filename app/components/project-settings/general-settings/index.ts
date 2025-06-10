@@ -36,10 +36,10 @@ export default class ProjectSettingsGeneralSettingsComponent extends Component<P
 
   fetchProfile = task(async () => {
     try {
-      const profileId = this.args.project?.activeProfileId;
+      const profileId = this.args.project?.activeProfileIdString || '';
 
       this.profile = await waitForPromise(
-        this.store.findRecord('profile', String(profileId))
+        this.store.findRecord('profile', profileId)
       );
     } catch (e) {
       this.profile = null;

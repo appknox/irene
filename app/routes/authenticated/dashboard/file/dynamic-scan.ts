@@ -16,7 +16,7 @@ export default class AuthenticatedFileDastRoute extends ScrollToTop(Route) {
 
     return {
       file,
-      profileId: (await file.project).activeProfileId,
+      profileId: (await file.project).activeProfileIdString,
     };
   }
 }

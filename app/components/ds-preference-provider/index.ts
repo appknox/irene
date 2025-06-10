@@ -72,7 +72,7 @@ export default class DsPreferenceProviderComponent extends Component<DsPreferenc
   fetchDsManualDevicePref = task(async () => {
     try {
       const adapter = this.store.adapterFor('ds-manual-device-preference');
-      adapter.setNestedUrlNamespace(this.args.profileId);
+      adapter.setNestedUrlNamespace(this.args.profileId.toString());
 
       this.dsManualDevicePreference = await this.store.queryRecord(
         'ds-manual-device-preference',
@@ -86,7 +86,7 @@ export default class DsPreferenceProviderComponent extends Component<DsPreferenc
   fetchDsAutomatedDevicePref = task(async () => {
     try {
       const adapter = this.store.adapterFor('ds-automated-device-preference');
-      adapter.setNestedUrlNamespace(this.args.profileId);
+      adapter.setNestedUrlNamespace(this.args.profileId.toString());
 
       this.dsAutomatedDevicePreference = await this.store.queryRecord(
         'ds-automated-device-preference',
@@ -101,7 +101,7 @@ export default class DsPreferenceProviderComponent extends Component<DsPreferenc
     async (devicePreference: DsManualDevicePreferenceModel) => {
       try {
         const adapter = this.store.adapterFor('ds-manual-device-preference');
-        adapter.setNestedUrlNamespace(this.args.profileId);
+        adapter.setNestedUrlNamespace(this.args.profileId.toString());
 
         this.dsManualDevicePreference = await devicePreference.save();
 
@@ -118,7 +118,7 @@ export default class DsPreferenceProviderComponent extends Component<DsPreferenc
     async (devicePreference: DsAutomatedDevicePreferenceModel) => {
       try {
         const adapter = this.store.adapterFor('ds-automated-device-preference');
-        adapter.setNestedUrlNamespace(this.args.profileId);
+        adapter.setNestedUrlNamespace(this.args.profileId.toString());
 
         this.dsAutomatedDevicePreference = await devicePreference.save();
 

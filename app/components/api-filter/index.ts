@@ -67,7 +67,7 @@ export default class ApiFilterComponent extends Component<ApiFilterSignature> {
 
   fetchApiScanOptions = task(async () => {
     this.apiScanOptions = await this.store.queryRecord('api-scan-options', {
-      id: this.args.profileId,
+      id: String(this.args.profileId),
     });
   });
 
@@ -100,7 +100,7 @@ export default class ApiFilterComponent extends Component<ApiFilterSignature> {
     try {
       const url = [
         ENV.endpoints['profiles'],
-        this.args.profileId,
+        this.args.profileId?.toString(),
         ENV.endpoints['apiScanOptions'],
       ].join('/');
 

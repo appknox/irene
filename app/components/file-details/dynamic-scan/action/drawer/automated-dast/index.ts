@@ -59,7 +59,7 @@ export default class FileDetailsDynamicScanDrawerAutomatedDastComponent extends 
   }
 
   get profileId() {
-    return this.file.profile.get('id');
+    return this.file.profile.get('id') as string;
   }
 
   get projectId() {
@@ -174,10 +174,11 @@ export default class FileDetailsDynamicScanDrawerAutomatedDastComponent extends 
 
   fetchProxySetting = task(async () => {
     try {
-      const profileId = this.file.profile.get('id');
-
-      if (profileId) {
-        this.proxy = await this.store.findRecord('proxy-setting', profileId);
+      if (this.profileId) {
+        this.proxy = await this.store.findRecord(
+          'proxy-setting',
+          this.profileId
+        );
       }
     } catch (error) {
       this.notify.error(parseError(error));

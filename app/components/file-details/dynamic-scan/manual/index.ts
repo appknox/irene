@@ -8,7 +8,7 @@ import type DynamicScanService from 'irene/services/dynamic-scan';
 export interface FileDetailsDastManualSignature {
   Args: {
     file: FileModel;
-    profileId: number;
+    profileId: string | number;
   };
 }
 

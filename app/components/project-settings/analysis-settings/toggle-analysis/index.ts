@@ -35,7 +35,8 @@ export default class ProjectSettingsAnalysisSettingsToggleAnalysisComponent exte
   }
 
   fetchUnknownAnalysisStatus = task(async () => {
-    const profileId = this.args.project?.activeProfileId;
+    const profileId = this.args.project?.activeProfileIdString;
+
     this.unknownAnalysisStatus = await this.store.queryRecord(
       'unknown-analysis-status',
       {
@@ -48,7 +49,7 @@ export default class ProjectSettingsAnalysisSettingsToggleAnalysisComponent exte
     const target = event.target as HTMLInputElement;
     const tSavedPreferences = this.intl.t('savedPreferences');
     const isChecked = target.checked;
-    const profileId = this.args.project?.activeProfileId;
+    const profileId = this.args.project?.activeProfileIdString;
     const url = `${ENV.endpoints['profiles']}/${profileId}/${ENV.endpoints['unknownAnalysisStatus']}`;
     const data = { status: isChecked };
 
