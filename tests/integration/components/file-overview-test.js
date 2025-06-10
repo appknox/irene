@@ -64,9 +64,7 @@ module(
     });
 
     test('it renders', async function (assert) {
-      await render(
-        hbs`<FileOverview @file={{this.file}} @profileId={{this.profile.id}} />`
-      );
+      await render(hbs`<FileOverview @file={{this.file}} />`);
 
       assert.dom('[data-test-fileOverview-root]').exists();
       assert.dom('[data-test-fileOverview-header]').exists();
@@ -207,7 +205,6 @@ module(
         hbs`<FileOverview
             @hideCTAs={{this.hideCTAs}}
             @file={{this.file}}
-            @profileId={{this.profile.id}}
             @hideOpenInNewTabIcon={{this.hideOpenInNewTabIcon}}
          />`
       );
@@ -240,7 +237,6 @@ module(
       await render(
         hbs`<FileOverview
             @file={{this.file}}
-            @profileId={{this.profile.id}}
             @isSelectedFile={{eq this.file.id this.selectedFile.id}}
             @onFileSelect={{this.onFileSelect}}
           />`
@@ -263,9 +259,7 @@ module(
     test('it shows file inactive icon if file is inactive', async function (assert) {
       this.file.isActive = false;
 
-      await render(
-        hbs`<FileOverview @file={{this.file}} @profileId={{this.profile.id}} />`
-      );
+      await render(hbs`<FileOverview @file={{this.file}} />`);
 
       assert.dom('[data-test-fileOverview-fileInactiveIndicator]').exists();
 
@@ -295,9 +289,7 @@ module(
 
       this.file.isActive = false;
 
-      await render(
-        hbs`<FileOverview @file={{this.file}} @profileId={{this.profile.id}} />`
-      );
+      await render(hbs`<FileOverview @file={{this.file}} />`);
 
       // All scan statuses except manual scan
       const scanStatuses = [
@@ -367,9 +359,7 @@ module(
         };
       });
 
-      await render(
-        hbs`<FileOverview @file={{this.file}} @profileId={{this.profile.id}} />`
-      );
+      await render(hbs`<FileOverview @file={{this.file}} />`);
 
       const legendContainer = `[data-test-fileOverview-chartSeverity="${t('untested')}"]`;
 
@@ -395,7 +385,7 @@ module(
 
       await render(
         hbs`
-        <FileOverview @file={{this.file}} @profileId={{this.profile.id}} />
+        <FileOverview @file={{this.file}} />
         `
       );
 
@@ -408,7 +398,7 @@ module(
     test('it renders yielded content', async function (assert) {
       await render(
         hbs`
-        <FileOverview @file={{this.file}} @profileId={{this.profile.id}}>
+        <FileOverview @file={{this.file}}>
           <AkButton data-test-yielded-content>Button</AkButton>
         </FileOverview>`
       );
