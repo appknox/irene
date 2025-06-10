@@ -12,6 +12,7 @@ import { setupApplicationTest } from 'ember-qunit';
 import { setupMirage } from 'ember-cli-mirage/test-support';
 import { t } from 'ember-intl/test-support';
 import Service from '@ember/service';
+import { Response } from 'miragejs';
 
 import { setupRequiredEndpoints } from 'irene/tests/helpers/acceptance-utils';
 import ENV from 'irene/config/environment';
@@ -177,11 +178,17 @@ module('Acceptance | ai-reporting/preview', function (hooks) {
    */
   test.each(
     'it renders empty report preview',
-    [{ relevant: true }, { relevant: false }, { relevant: false, error: true }],
-    async function (assert, { relevant, error }) {
+    [
+      { shouldFail: true, relevant: true },
+      { relevant: true },
+      { relevant: false },
+      { relevant: false, error: true },
+    ],
+    async function (assert, { relevant, error, shouldFail }) {
       assert.expect();
 
       const previewTitle = 'Example Report';
+      const errorMessage = 'Custom Error Message';
 
       const reportRequest = this.server.create('ai-reporting/report-request', {
         is_relevant: relevant,
@@ -190,6 +197,19 @@ module('Acceptance | ai-reporting/preview', function (hooks) {
 
       // Server mock
       this.server.post('/ai_reporting/report_request/:id/preview', () => {
+        if (shouldFail) {
+          return new Response(
+            408,
+            {},
+            {
+              error: true,
+              message: errorMessage,
+              status_code: 408,
+              error_code: 'DATA_RETRIEVAL_ERROR',
+            }
+          );
+        }
+
         return {
           title: previewTitle,
           columns: [],
@@ -215,7 +235,26 @@ module('Acceptance | ai-reporting/preview', function (hooks) {
         .isDisabled();
 
       // Relevant report displays report preview with no filters applied
-      if (relevant) {
+      if (shouldFail) {
+        await waitFor(
+          '[data-test-aiReporting-preview-table-errorScreen-illustration]',
+          { timeout: 300 }
+        );
+
+        assert.dom('[data-test-aiReporting-preview-title]').doesNotExist();
+
+        assert
+          .dom('[data-test-aiReporting-preview-table-errorScreen-container]')
+          .exists();
+
+        assert
+          .dom('[data-test-aiReporting-preview-table-errorScreenHeader]')
+          .hasText(t('reportModule.failedToPreview'));
+
+        assert
+          .dom('[data-test-aiReporting-preview-table-errorScreenDesc]')
+          .hasText(errorMessage);
+      } else if (relevant) {
         await waitFor('[data-test-aiReporting-preview-title]', {
           timeout: 300,
         });
