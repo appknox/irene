@@ -157,9 +157,9 @@ export default class AiReportingPreview extends Component<AiReportingPreviewSign
     this.previewReportRequest.perform(false, this.limit, 0);
   }
 
-  setPreviewErrors(headerKey: string, descKey: string) {
-    this.errorScreenHeader = this.intl.t(headerKey);
-    this.errorScreenDesc = this.intl.t(descKey);
+  setPreviewErrors(headerKey: string, descKey: string, translate = true) {
+    this.errorScreenHeader = translate ? this.intl.t(headerKey) : headerKey;
+    this.errorScreenDesc = translate ? this.intl.t(descKey) : descKey;
   }
 
   checkReportReqRelevancy(reportRequest: ReportRequestModel) {
@@ -246,7 +246,11 @@ export default class AiReportingPreview extends Component<AiReportingPreviewSign
           errMsg = payload.message || errMsg;
         }
 
-        this.setPreviewErrors('reportModule.failedToPreview', errMsg);
+        this.setPreviewErrors(
+          this.intl.t('reportModule.failedToPreview'),
+          errMsg,
+          false
+        );
       }
     }
   );
