@@ -8,7 +8,7 @@ import Model, {
 
 import { inject as service } from '@ember/service';
 import { isEmpty } from '@ember/utils';
-import Inflector from 'ember-inflector';
+import { irregular } from '@ember-data/request-utils/string';
 import IntlService from 'ember-intl/services/intl';
 import ENUMS from 'irene/enums';
 import AsvsModel from './asvs';
@@ -29,8 +29,7 @@ import Nistsp80053Model from './nistsp80053';
 import SamaModel from './sama';
 import Pcidss4Model from './pcidss4';
 
-const inflector = Inflector.inflector;
-inflector.irregular('asvs', 'asvses');
+irregular('asvs', 'asvses');
 
 export interface CvssMetricHumanized {
   key: string;
