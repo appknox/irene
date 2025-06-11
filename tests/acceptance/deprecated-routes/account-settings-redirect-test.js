@@ -34,6 +34,24 @@ module('Acceptance | account settings redirect', function (hooks) {
 
     this.owner.register('service:integration', IntegrationStub);
     this.owner.register('service:websocket', WebsocketStub);
+
+    this.server.get('/v2/mfa', () => {
+      return {
+        count: 2,
+        next: null,
+        previous: null,
+        results: [
+          {
+            method: 1,
+            enabled: false,
+          },
+          {
+            method: 2,
+            enabled: false,
+          },
+        ],
+      };
+    });
   });
 
   test('It redirects to authenticated.dashboard.account-settings route', async function (assert) {
