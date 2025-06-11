@@ -1,0 +1,128 @@
+{{this.mountEffect}}
+{{this.keyboardEffect}}
+{{this.asyncNameEffect}}
+{{this.titleEffect}}
+{{this.nameEffect}}
+
+<div local-class='effect-lifecycle-demo'>
+  <AkTypography @gutterBottom={{true}} @variant='h4'>Resource-Based Effects</AkTypography>
+
+  <AkTypography @gutterBottom={{true}}>
+    UseEffect-like functionality using Ember Resources
+  </AkTypography>
+
+  <div local-class='current-state'>
+    <AkTypography @variant='h5'>Current State</AkTypography>
+
+    <div local-class='state-display'>
+      <div local-class='state-item'>
+        <strong>Count:</strong>
+        <span
+          id='resource-count-display'
+          local-class='count-value'
+        >{{this.count}}</span>
+      </div>
+      <div local-class='state-item'>
+        <strong>Name:</strong>
+        <span local-class='name-value'>{{this.name}}</span>
+      </div>
+
+      <div local-class='state-item'>
+        <strong>User ID:</strong>
+        <span local-class='user-id-value'>{{this.userId}}</span>
+      </div>
+
+      {{#if this.userData}}
+        <div local-class='state-item'>
+          <strong>User Data:</strong>
+          <span local-class='user-data-value'>{{this.userData.name}}
+            ({{this.userData.email}})</span>
+        </div>
+      {{/if}}
+    </div>
+  </div>
+
+  <div local-class='effects-section'>
+    <AkTypography @variant='h5'>Resource Effects</AkTypography>
+
+    <div local-class='effect-container'>
+      <h4>Mount Effect (Once)</h4>
+      <p><code>useEffect(this, fn, [])</code>
+        - Runs only once on component mount. Check console.</p>
+      <p><strong>Status:</strong>
+        Automatically triggers on component initialization</p>
+    </div>
+
+    <div local-class='effect-container'>
+      <h4>Count Effect (Reactive Dependencies)</h4>
+      <p><code>useEffect(this, fn, [this.count])</code>
+        - Reactively tracks count changes.</p>
+
+      <p><strong>Current Count:</strong> {{this.count}}</p>
+    </div>
+
+    <div local-class='effect-container'>
+      <h4>Async Data Fetching Effect</h4>
+      <p><code>useEffect(this, fetchFn, [this.userId])</code>
+        - Simulates API calls.</p>
+      <p>Automatically fetches user data when userId changes.</p>
+      <p><strong>Current User ID:</strong> {{this.userId}}</p>
+    </div>
+
+    <div local-class='effect-container'>
+      <h4>Keyboard Effect (Global)</h4>
+      <p><code>useEffect(this, fn, [])</code> - Global keyboard listener.</p>
+      <p><strong>Tip:</strong> Press spacebar to increment count!</p>
+    </div>
+  </div>
+
+  <AkStack @direction='column' @spacing='2'>
+    <AkTypography @variant='h5'>Controls</AkTypography>
+
+    <AkStack @alignItems='center' @spacing='2'>
+      <button
+        type='button'
+        {{on 'click' this.incrementCount}}
+        local-class='btn btn-primary'
+      >
+        Increment Count ({{this.count}})
+      </button>
+
+      <div local-class='input-group'>
+        <label for='resource-name-input'>Name:</label>
+        <input
+          id='resource-name-input'
+          type='text'
+          value={{this.name}}
+          {{on 'input' this.changeName}}
+          placeholder='Enter a name'
+          local-class='text-input'
+        />
+      </div>
+
+      <button
+        type='button'
+        {{on 'click' this.changeUser}}
+        local-class='btn btn-secondary'
+      >
+        Change User ({{this.userId}})
+      </button>
+
+      <button
+        type='button'
+        {{on 'click' this.triggerAsyncNameEffect}}
+        local-class='btn btn-secondary'
+      >
+        Trigger Async Name Effect
+      </button>
+
+      <button
+        type='button'
+        {{on 'click' this.resetState}}
+        local-class='btn btn-secondary'
+      >
+        Reset All State
+      </button>
+    </AkStack>
+  </AkStack>
+</div>

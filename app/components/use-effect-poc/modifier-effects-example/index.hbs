@@ -1,0 +1,99 @@
+<div local-class='modifier-effects-example'>
+  <div
+    {{use-effect this.setupGlobalListenersEffect}}
+    {{use-effect this.documentTitleEffect (array this.count this.name)}}
+    {{use-effect this.fetchDataEffect (array this.name)}}
+  />
+
+  <h2>Modifier-Based Effects</h2>
+  <p>Effects that run based on dependency changes using the use-effect modifier</p>
+
+  <div local-class='current-state'>
+    <h3>Current State</h3>
+
+    <div local-class='state-display'>
+      <div local-class='state-item'>
+        <strong>Count:</strong>
+        <span
+          id='modifier-count-display'
+          local-class='count-value'
+        >{{this.count}}</span>
+      </div>
+
+      <div local-class='state-item'>
+        <strong>Name:</strong>
+        <span local-class='name-value'>{{this.name}}</span>
+      </div>
+
+      <div local-class='state-item'>
+        <strong>Data:</strong>
+        <span local-class='data-value'>
+          {{#if this.data}}
+            {{this.data.message}}
+          {{else}}
+            No data loaded
+          {{/if}}
+        </span>
+      </div>
+    </div>
+  </div>
+
+  <div local-class='effects-section'>
+    <h3>Effects</h3>
+
+    {{! Document title effect - runs when count or name changes }}
+    <div local-class='effect-container'>
+      <h4>Document Title Effect</h4>
+      <p>Updates document title when count or name changes</p>
+      <p><strong>Dependencies:</strong> [count, name]</p>
+    </div>
+
+    {{! Data fetching effect - runs when name changes }}
+    <div local-class='effect-container'>
+      <h4>Data Fetch Effect</h4>
+      <p>Simulates API call when name changes</p>
+      <p><strong>Dependencies:</strong> [name]</p>
+    </div>
+
+    {{! Global listeners effect - runs once on mount }}
+    <div local-class='effect-container'>
+      <h4>Global Listeners Effect</h4>
+      <p>Sets up window resize and keydown listeners (try resizing window or
+        pressing Escape)</p>
+      <p><strong>Dependencies:</strong> [] (runs once)</p>
+    </div>
+  </div>
+
+  <div local-class='controls'>
+    <h3>Controls</h3>
+    <div local-class='control-buttons'>
+      <button
+        type='button'
+        {{on 'click' this.incrementCount}}
+        local-class='btn btn-primary'
+      >
+        Increment Count ({{this.count}})
+      </button>
+
+      <div local-class='input-group'>
+        <label for='modifier-name-input'>Name:</label>
+        <input
+          id='modifier-name-input'
+          type='text'
+          value={{this.name}}
+          {{on 'input' this.changeName}}
+          placeholder='Enter a name'
+          local-class='text-input'
+        />
+      </div>
+
+      <button
+        type='button'
+        {{on 'click' this.resetState}}
+        local-class='btn btn-secondary'
+      >
+        Reset State
+      </button>
+    </div>
+  </div>
+</div>
