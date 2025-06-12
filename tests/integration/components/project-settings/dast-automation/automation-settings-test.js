@@ -96,9 +96,9 @@ module(
 
     test('it renders', async function (assert) {
       await render(hbs`
-        <ProjectSettings::DastAutomation::AutomationSettings 
-          @project={{this.project}} 
-          @profileId={{this.project.activeProfileId}}  
+        <ProjectSettings::DastAutomation::AutomationSettings
+          @project={{this.project}}
+          @profileId={{this.project.activeProfileId}}
           @featureAvailable={{true}}
         />
       `);
@@ -137,9 +137,9 @@ module(
       });
 
       await render(hbs`
-        <ProjectSettings::DastAutomation::AutomationSettings 
-          @project={{this.project}} 
-          @profileId={{this.project.activeProfileId}} 
+        <ProjectSettings::DastAutomation::AutomationSettings
+          @project={{this.project}}
+          @profileId={{this.project.activeProfileId}}
           @featureAvailable={{true}}
         />
       `);
