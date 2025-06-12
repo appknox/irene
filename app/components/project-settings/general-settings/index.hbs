@@ -24,7 +24,7 @@
   <AkDivider @color='dark' />
 
   <AkStack class='px-3' @width='9/12'>
-    <ApiFilter @profileId={{this.project.activeProfileIdString}}>
+    <ApiFilter @profileId={{this.project.activeProfileId}}>
       <:title>
         <AkTypography data-test-apiFilter-title @variant='h5'>
           {{t 'templates.apiScanURLFilter'}}

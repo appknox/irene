@@ -32,7 +32,7 @@ export default class AuthenticatedDashboardFileDynamicScanScheduledAutomatedRout
 
     return {
       file,
-      profileId: (await file.project).activeProfileIdString,
+      profileId: (await file.project).activeProfileId,
     };
   }
 }

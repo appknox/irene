@@ -85,10 +85,10 @@ export default class ProjectSettingsAnalysisSettingsRegulatoryPreferenceComponen
   }
 
   fetchProfile = task(async () => {
-    if (this.args.project?.activeProfileIdString) {
+    if (this.args.project?.activeProfileId) {
       this.profile = await this.store.findRecord(
         'profile',
-        this.args.project.activeProfileIdString
+        String(this.args.project.activeProfileId)
       );
     }
   });

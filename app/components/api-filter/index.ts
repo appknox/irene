@@ -21,7 +21,7 @@ const isRegexFailed = function (url: string) {
 
 export interface ApiFilterSignature {
   Args: {
-    profileId?: string | number;
+    profileId?: string;
     hideDescriptionText?: boolean;
   };
   Blocks: {
@@ -100,7 +100,7 @@ export default class ApiFilterComponent extends Component<ApiFilterSignature> {
     try {
       const url = [
         ENV.endpoints['profiles'],
-        this.args.profileId?.toString(),
+        this.args.profileId,
         ENV.endpoints['apiScanOptions'],
       ].join('/');
 

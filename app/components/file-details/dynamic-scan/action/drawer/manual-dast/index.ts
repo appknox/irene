@@ -61,7 +61,7 @@ export default class FileDetailsDynamicScanDrawerManualDastComponent extends Com
   }
 
   get activeProfileId() {
-    return this.file.project.get('activeProfileIdString');
+    return this.file.project.get('activeProfileId')?.id;
   }
 
   get deviceDisplay() {

@@ -55,10 +55,6 @@ export default class OrganizationProjectModel extends Model {
   @attr('number')
   declare fileCount: number;
 
-  get activeProfileIdString() {
-    return this.activeProfileId ? String(this.activeProfileId) : '';
-  }
-
   @computed('fileCount', 'id', 'store')
   get lastFile() {
     const params = {

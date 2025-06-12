@@ -131,7 +131,7 @@ export default class FileChartComponent extends Component<FileChartSignature> {
     this.unknownAnalysisStatus = await this.store.queryRecord(
       'unknown-analysis-status',
       {
-        id: this.args.file?.profile.get('id'),
+        id: String(this.args.file?.profile.get('id')),
       }
     );
   });
