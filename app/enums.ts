@@ -359,6 +359,13 @@ const ENUMS = {
     EXISTS: 'exists',
     ISNULL: 'isnull',
   },
+
+  PM_PII_STATUS: {
+    STARTED: 0,
+    PENDING: 1,
+    SUCCESS: 2,
+    FAILED: 3,
+  },
 };
 
 export const ENUMS_DISPLAY = {
