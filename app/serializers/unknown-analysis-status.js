@@ -5,12 +5,12 @@ export default DRFSerializer.extend({
   normalizeResponse: function (store, primaryModelClass, payload) {
     return {
       data: {
-        id: payload.id,
+        id: String(payload.id),
         type: 'unknown-analysis-status',
         attributes: {
-          status: payload.status
-        }
-      }
+          status: payload.status,
+        },
+      },
     };
-  }
+  },
 });
