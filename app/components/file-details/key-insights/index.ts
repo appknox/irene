@@ -88,7 +88,7 @@ export default class FileDetailsKeyInsightsComponent extends Component<FileDetai
     this.unknownAnalysisStatus = await this.store.queryRecord(
       'unknown-analysis-status',
       {
-        id: this.args.file.profile.get('id'),
+        id: String(this.args.file.profile.get('id')),
       }
     );
   });

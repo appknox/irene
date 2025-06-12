@@ -36,6 +36,7 @@ export default class ProjectSettingsAnalysisSettingsToggleAnalysisComponent exte
 
   fetchUnknownAnalysisStatus = task(async () => {
     const profileId = this.args.project?.activeProfileId;
+
     this.unknownAnalysisStatus = await this.store.queryRecord(
       'unknown-analysis-status',
       {

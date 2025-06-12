@@ -120,8 +120,8 @@ export default class ProjectSettingsAnalysisSettingsReportPreferenceComponent ex
   );
 
   getProfileTask = task(async () => {
-    const profileId = this.project?.activeProfileIdString || '';
-    this.profile = await this.store.findRecord('profile', profileId);
+    const profileId = this.project?.activeProfileId;
+    this.profile = await this.store.findRecord('profile', String(profileId));
   });
 }
 

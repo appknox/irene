@@ -252,8 +252,8 @@ module(
 
       render(hbs`
         <ProjectSettings::DastAutomation::AutomationSettings::Scenario
-          @project={{this.project}} 
-          @profileId={{this.project.activeProfileId}} 
+          @project={{this.project}}
+          @profileId={{this.project.activeProfileId}}
         />
       `);
 
@@ -293,8 +293,8 @@ module(
 
       await render(hbs`
         <ProjectSettings::DastAutomation::AutomationSettings::Scenario
-          @project={{this.project}} 
-          @profileId={{this.project.activeProfileId}} 
+          @project={{this.project}}
+          @profileId={{this.project.activeProfileId}}
         />
       `);
 
@@ -434,8 +434,8 @@ module(
 
       await render(hbs`
         <ProjectSettings::DastAutomation::AutomationSettings::Scenario
-          @project={{this.project}} 
-          @profileId={{this.project.activeProfileId}} 
+          @project={{this.project}}
+          @profileId={{this.project.activeProfileId}}
         />
       `);
 
@@ -479,8 +479,8 @@ module(
 
       await render(hbs`
         <ProjectSettings::DastAutomation::AutomationSettings::Scenario
-          @project={{this.project}} 
-          @profileId={{this.project.activeProfileId}} 
+          @project={{this.project}}
+          @profileId={{this.project.activeProfileId}}
         />
       `);
 
