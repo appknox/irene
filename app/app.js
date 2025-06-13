@@ -1,3 +1,6 @@
+import 'iconify-icon';
+import './deprecation-workflow';
+
 import ENUMS from 'irene/enums';
 import config from 'irene/config/environment';
 import Application from '@ember/application';
