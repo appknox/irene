@@ -1,0 +1,98 @@
+<div local-class='decorator-effects-example'>
+  <AkTypography @gutterBottom={{true}} @variant='h4'>Decorator-Based Effects</AkTypography>
+
+  <AkTypography>
+    Effects triggered manually via decorated methods with type-safe dependency
+    tracking</AkTypography>
+
+  <div local-class='current-state'>
+    <AkTypography @variant='h5'>Current State</AkTypography>
+
+    <div local-class='state-display'>
+      <div local-class='state-item'>
+        <strong>Count:</strong>
+        <span
+          id='decorator-count-display'
+          local-class='count-value'
+        >{{this.count}}</span>
+      </div>
+
+      <div local-class='state-item'>
+        <strong>Name:</strong>
+        <span local-class='name-value'>{{this.name}}</span>
+      </div>
+    </div>
+  </div>
+
+  <div local-class='effects-section'>
+    <AkTypography @variant='h5'>Effects</AkTypography>
+
+    <div local-class='effect-container'>
+      <h4>Setup Effect (Once)</h4>
+      <p><code>@useEffect([])</code>
+        - Runs only once on component mount. Check console on page load.</p>
+      <p><strong>Status:</strong> Runs automatically in constructor</p>
+    </div>
+
+    <div local-class='effect-container'>
+      <h4>Count Effect (Type-Safe Dependencies)</h4>
+      <p><code>@useEffect(['count'])</code>
+        - Type-safe decorator that tracks the 'count' property.</p>
+      <p>Triggered manually when count changes with property-based dependency
+        comparison.</p>
+      <p><strong>Current Count:</strong> {{this.count}}</p>
+    </div>
+
+    <div local-class='effect-container'>
+      <h4>Name Effect (Type-Safe Dependencies)</h4>
+      <p><code>@useEffect(['name'])</code>
+        - Type-safe decorator that tracks the 'name' property.</p>
+      <p>Triggered manually when name changes with property-based dependency
+        comparison.</p>
+      <p><strong>Current Name:</strong> "{{this.name}}"</p>
+    </div>
+  </div>
+
+  <div local-class='controls'>
+    <AkTypography @variant='h5'>Controls</AkTypography>
+
+    <AkStack @alignItems='center' @spacing='2'>
+      <button
+        type='button'
+        {{on 'click' this.incrementCount}}
+        local-class='btn btn-primary'
+      >
+        Increment Count ({{this.count}})
+      </button>
+
+      <div local-class='input-group'>
+        <label for='decorator-name-input'>Name:</label>
+
+        <input
+          id='decorator-name-input'
+          type='text'
+          value={{this.name}}
+          {{on 'input' this.changeName}}
+          placeholder='Enter a name'
+          local-class='text-input'
+        />
+      </div>
+
+      <button
+        type='button'
+        {{on 'click' this.resetState}}
+        local-class='btn btn-secondary'
+      >
+        Reset State
+      </button>
+
+      <button
+        type='button'
+        {{on 'click' this.triggerNameEffectAsync}}
+        local-class='btn btn-secondary'
+      >
+        Trigger Name Effect Async
+      </button>
+    </AkStack>
+  </div>
+</div>

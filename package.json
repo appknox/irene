@@ -201,6 +201,7 @@
     "cypress": "^13.6.3",
     "echarts": "^5.4.2",
     "ember-data-resources": "^5.2.1",
+    "ember-resources": "^7.0.4",
     "ember-websockets": "^10.2.1",
     "iconify-icon": "^2.3.0",
     "qrious": "^4.0.2",

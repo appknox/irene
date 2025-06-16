@@ -1,3 +1,10 @@
+<div
+  {{use-effect
+    this.reloadSubmissions
+    (array this.realtime.SubmissionCounter this.hasSubmissions)
+  }}
+/>
+
 <AkStack @spacing='1.5' @alignItems='center'>
   {{#if this.hasSubmissions}}
     <div local-class='divider'></div>
