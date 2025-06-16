@@ -75,57 +75,27 @@
       </AkStack>
     {{/if}}
   {{else}}
-    <AkTooltip
-      @disabled={{not this.isIOSApp}}
-      @placement='left'
-      @arrow={{true}}
-      data-test-skAppVersionTable-initiateUploadBtn-tooltip
-    >
-      <:tooltipContent>
-        <div local-class='tooltip-content'>
-          <AkTypography
-            @color='inherit'
-            data-test-skAppVersionTable-initiateUploadBtn-tooltipText
-          >
-            {{t 'storeknox.initiateUploadComingSoon'}}
-          </AkTypography>
-        </div>
-      </:tooltipContent>
 
-      <:default>
-        <AkStack @spacing='1.5' @alignItems='center'>
-          <AkButton
-            @disabled={{this.isIOSApp}}
-            @loading={{this.initiateUpload.isRunning}}
-            {{on 'click' this.triggerInitiateUpload}}
-            {{style minWidth='140px'}}
-            data-test-skAppVersionTable-initiateUploadBtn
-          >
-            <:leftIcon>
-              <AkIcon
-                @iconName='cloud-upload'
-                @variant='filled'
-                data-test-skAppVersionTable-initiateUploadBtnIcon
-              />
-            </:leftIcon>
+    <AkStack @spacing='1.5' @alignItems='center'>
+      <AkButton
+        @loading={{this.initiateUpload.isRunning}}
+        {{on 'click' this.triggerInitiateUpload}}
+        {{style minWidth='140px'}}
+        data-test-skAppVersionTable-initiateUploadBtn
+      >
+        <:leftIcon>
+          <AkIcon
+            @iconName='cloud-upload'
+            @variant='filled'
+            data-test-skAppVersionTable-initiateUploadBtnIcon
+          />
+        </:leftIcon>
 
-            <:default>
-              {{t 'storeknox.initiateUpload'}}
-            </:default>
-          </AkButton>
-
-          {{#unless this.isIOSApp}}
-            <AkChip
-              @variant='outlined'
-              @size='small'
-              @label={{t 'beta'}}
-              local-class='beta-chip'
-              data-test-skAppVersionTable-initiateUploadBetaChip
-            />
-          {{/unless}}
-        </AkStack>
-      </:default>
-    </AkTooltip>
+        <:default>
+          {{t 'storeknox.initiateUpload'}}
+        </:default>
+      </AkButton>
+    </AkStack>
   {{/if}}
 {{/if}}
 

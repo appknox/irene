@@ -40,44 +40,24 @@
   </AkStack>
 
   {{#if this.canInitiateUpload}}
-    <AkTooltip
-      @disabled={{not this.skInventoryApp.isIos}}
-      @placement='left'
-      @arrow={{true}}
-      data-test-skAppVersionTable-initiateUploadBtn-tooltip
+    <AkButton
+      @variant='outlined'
+      @disabled={{@initiateUploadIsInProgress}}
+      {{on 'click' @initiateAppUpload}}
+      data-test-storeknoxInventoryDetails-initiateUploadBtn
     >
-      <:tooltipContent>
-        <div local-class='tooltip-content'>
-          <AkTypography
-            @color='inherit'
-            data-test-skAppVersionTable-initiateUploadBtn-tooltipText
-          >
-            {{t 'storeknox.initiateUploadComingSoon'}}
-          </AkTypography>
-        </div>
-      </:tooltipContent>
+      <:leftIcon>
+        <AkIcon @iconName='cloud-upload' @variant='filled' />
+      </:leftIcon>
 
       <:default>
-        <AkButton
-          @variant='outlined'
-          @disabled={{or @initiateUploadIsInProgress this.skInventoryApp.isIos}}
-          {{on 'click' @initiateAppUpload}}
-          data-test-storeknoxInventoryDetails-initiateUploadBtn
-        >
-          <:leftIcon>
-            <AkIcon @iconName='cloud-upload' @variant='filled' />
-          </:leftIcon>
-
-          <:default>
-            {{#if this.uploadFailed}}
-              {{t 'storeknox.retryUpload'}}
-            {{else}}
-              {{t 'storeknox.initiateUpload'}}
-            {{/if}}
-          </:default>
-        </AkButton>
+        {{#if this.uploadFailed}}
+          {{t 'storeknox.retryUpload'}}
+        {{else}}
+          {{t 'storeknox.initiateUpload'}}
+        {{/if}}
       </:default>
-    </AkTooltip>
+    </AkButton>
   {{/if}}
 
   {{#if this.showNamespacesLink}}

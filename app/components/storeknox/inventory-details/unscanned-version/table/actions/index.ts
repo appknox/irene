@@ -177,10 +177,6 @@ export default class StoreknoxInventoryDetailsUnscannedVersionTableActionsCompon
       : this.intl.t('storeknox.initiateUploadMessages.uploadInitiatedDesc');
   }
 
-  get isIOSApp() {
-    return this.skApp.get('isIos');
-  }
-
   get isScanned() {
     return this.skAppVersion.file.get('id') !== null;
   }
@@ -270,10 +266,6 @@ export default class StoreknoxInventoryDetailsUnscannedVersionTableActionsCompon
   }
 
   initiateUpload = task(async () => {
-    if (this.isIOSApp) {
-      return;
-    }
-
     try {
       const skAppVersion = await this.skAppVersion.reload();
 

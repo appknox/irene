@@ -22,7 +22,7 @@ type ChangesetBufferProps = BufferedChangeset & {
 };
 
 const StoreUrlValidator = {
-  url: [validatePresence(true), validateStoreDomain(), validateStorePathname()],
+  url: [validatePresence(true)],
 };
 
 export default class UploadAppViaLinkComponent extends Component {
