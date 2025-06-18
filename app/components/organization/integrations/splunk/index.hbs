@@ -1,0 +1,198 @@
+<Organization::Integrations::Card
+  @data={{this.data}}
+  @onIntegrateClick={{this.openDrawer}}
+  @loading={{this.isLoadingSplunkData}}
+/>
+
+<Organization::Integrations::ConfigDrawer
+  @openDrawer={{this.integrationDrawerIsOpen}}
+  @drawerTitle={{this.drawerTitle}}
+  @loadingDrawerSaveAction={{this.loadingDrawerSaveAction}}
+  @drawerSaveAction={{this.drawerSaveAction}}
+  @closeDrawerHandler={{this.closeDrawer}}
+  @showDeleteButton={{this.showIntegratedOrLoadingUI}}
+  @noFooter={{this.noFooter}}
+>
+  <:drawerContent>
+    {{#if this.showRevokeSplunkConfirmBox}}
+      <AkStack
+        local-class='drawer-content form'
+        @direction='column'
+        class='p-2 m-3'
+      >
+        <Organization::Integrations::Splunk::RevokeConfirmation
+          @onConfirm={{perform this.revokeSplunk}}
+          @onCancel={{this.closeRevokeSplunkConfirmBox}}
+          @isRevoking={{this.revokeSplunk.isRunning}}
+        />
+      </AkStack>
+    {{else}}
+      {{! --- Main Integration UI --- }}
+      {{#unless this.showIntegratedOrLoadingUI}}
+        <Organization::Integrations::Splunk::StepHeader
+          @isStep2={{this.isStep2}}
+          @onGoBack={{this.goBack}}
+        />
+      {{/unless}}
+
+      <AkStack local-class='drawer-content height-full' @direction='column'>
+        {{#if this.showIntegratedOrLoadingUI}}
+          <Organization::Integrations::IntegratedUi
+            @imageSource='/images/splunk-icon.png'
+            @imageAlt='splunk icon'
+            @property={{this.selectedVulnIndex.label}}
+            @propertyTitle={{t 'splunk.vulnIndex'}}
+            @hostURL={{this.splunkInstanceURL}}
+            @loading={{this.isLoadingSplunkData}}
+          />
+
+          <AkStack
+            local-class='form'
+            @spacing='2'
+            @direction='column'
+            class='p-2 mt-2'
+          >
+            <Organization::Integrations::Splunk::UserLogsSection
+              @sendUserLogs={{this.sendUserLogs}}
+              @onToggleSendUserLogs={{this.toggleSendUserLogsAPI}}
+              @indexOptions={{this.indexOptions}}
+              @selectedUserLogIndex={{this.selectedUserLogIndex}}
+              @onSetUserLogIndex={{this.setUserLogIndex}}
+              @logHourOptions={{this.logHourOptions}}
+              @selectedLogHour={{this.selectedLogHour}}
+              @onSetLogHour={{this.setLogHour}}
+              @showOptionalHeading={{false}}
+              @isEditing={{this.isEditing}}
+              @onEditDetails={{this.editDetails}}
+              @onSaveUserLogDetails={{this.saveUserLogDetails}}
+            />
+          </AkStack>
+
+        {{else if (not this.isStep2)}}
+          {{! --- Step 1 Form --- }}
+          <form aria-label='step1' local-class='form' class='p-2'>
+            <AkStack @width='full' @direction='column' @spacing='2'>
+              <AkStack @width='full' @direction='column' {{style gap='0.4em'}}>
+                <AkStack @spacing='1' @alignItems='center'>
+                  <AkTypography @variant='subtitle2'>
+                    {{t 'instanceURL'}}
+                  </AkTypography>
+
+                  <AkTooltip
+                    @title={{t 'splunk.instanceURLDesc'}}
+                    @placement='right'
+                    @arrow={{true}}
+                  >
+                    <AkIcon @iconName='info' @size='small' @color='secondary' />
+                  </AkTooltip>
+                </AkStack>
+
+                <AkTextField
+                  @placeholder={{t 'splunk.enterInstanceURL'}}
+                  @value={{this.changeset.instance_url}}
+                  @error={{this.changeset.error.instance_url}}
+                  data-test-orgIntegrations-splunk-instanceURLInput
+                />
+              </AkStack>
+
+              <AkStack @width='full' @direction='column' {{style gap='0.4em'}}>
+                <AkStack @spacing='1' @alignItems='center'>
+                  <AkTypography @variant='subtitle2'>
+                    {{t 'splunk.hecToken'}}
+                  </AkTypography>
+
+                  <AkTooltip
+                    @title={{t 'splunk.hecTokenDesc'}}
+                    @placement='right'
+                    @arrow={{true}}
+                  >
+                    <AkIcon @iconName='info' @size='small' @color='secondary' />
+                  </AkTooltip>
+                </AkStack>
+
+                <AkTextField
+                  @placeholder={{t 'splunk.enterHecToken'}}
+                  @value={{this.changeset.hec_token}}
+                  @error={{this.changeset.error.hec_token}}
+                  data-test-orgIntegrations-splunk-hecTokenInput
+                />
+              </AkStack>
+
+              <AkStack @width='full' @direction='column' {{style gap='0.4em'}}>
+                <AkStack @spacing='1' @alignItems='center'>
+                  <AkTypography @variant='subtitle2'>
+                    {{t 'splunk.apiToken'}}
+                  </AkTypography>
+
+                  <AkTooltip
+                    @title={{t 'splunk.apiTokenDesc'}}
+                    @placement='right'
+                    @arrow={{true}}
+                  >
+                    <AkIcon @iconName='info' @size='small' @color='secondary' />
+                  </AkTooltip>
+                </AkStack>
+
+                <AkTextField
+                  @placeholder={{t 'splunk.enterApiToken'}}
+                  @value={{this.changeset.api_token}}
+                  @error={{this.changeset.error.api_token}}
+                  data-test-orgIntegrations-splunk-apiTokenInput
+                />
+              </AkStack>
+            </AkStack>
+
+            <AkButton
+              class='mt-3'
+              @variant='filled'
+              @loading={{this.isLoadingIndexes}}
+              {{on 'click' (perform this.goToStep2)}}
+              data-test-orgIntegrations-splunk-saveAndProceed
+            >
+              {{t 'saveAndProceed'}}
+            </AkButton>
+          </form>
+        {{else}}
+          {{! --- Step 2 Form --- }}
+          <AkStack local-class='height-full' @direction='column'>
+            <AkStack @direction='column' @spacing='2'>
+              <form aria-label='vulnerabilities' local-class='form' class='p-2'>
+                <AkStack @direction='column' {{style gap='0.4em'}}>
+                  <AkTypography @variant='subtitle2'>
+                    {{t 'splunk.vulnIndex'}}
+                  </AkTypography>
+
+                  <AkSelect
+                    @options={{this.indexOptions}}
+                    @onChange={{this.setVulnIndex}}
+                    @selected={{this.selectedVulnIndex}}
+                    local-class='select-width'
+                    data-test-orgIntegrations-splunk-vulnIndexSelect
+                    as |aks|
+                  >
+                    {{aks.label}}
+                  </AkSelect>
+                </AkStack>
+              </form>
+
+              <form aria-label='options' local-class='form'>
+                <Organization::Integrations::Splunk::UserLogsSection
+                  @sendUserLogs={{this.sendUserLogs}}
+                  @onToggleSendUserLogs={{this.toggleSendUserLogs}}
+                  @indexOptions={{this.indexOptions}}
+                  @selectedUserLogIndex={{this.selectedUserLogIndex}}
+                  @onSetUserLogIndex={{this.setUserLogIndex}}
+                  @logHourOptions={{this.logHourOptions}}
+                  @selectedLogHour={{this.selectedLogHour}}
+                  @onSetLogHour={{this.setLogHour}}
+                  @showOptionalHeading={{true}}
+                  @isEditing={{true}}
+                />
+              </form>
+            </AkStack>
+          </AkStack>
+        {{/if}}
+      </AkStack>
+    {{/if}}
+  </:drawerContent>
+</Organization::Integrations::ConfigDrawer>

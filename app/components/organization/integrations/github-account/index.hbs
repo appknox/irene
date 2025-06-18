@@ -1,46 +1,71 @@
-<AkTypography
-  data-test-githubAccount-title
-  @variant='h5'
-  @gutterBottom={{true}}
->
-  {{t 'githubIntegration'}}
-</AkTypography>
-
-{{#if this.integratedUser}}
-  <Organization::Integrations::IntegratedUi
-    @imageSource='/images/github-icon.png'
-    @imageAlt='Github icon'
-    @hostURL='https://github.com'
-    @username={{this.integratedUser.login}}
-    @onDisconnectClick={{this.openRevokeGithubConfirmBox}}
-  />
-{{else}}
-  <AkTypography
-    data-test-githubAccount-desc
-    @variant='body2'
-    @color='textSecondary'
-  >
-    {{#if @reconnect}}
-      {{t 'integrationFailed'}}
-    {{else}}
-      {{t 'githubIntegrationDesc'}}
-    {{/if}}
-  </AkTypography>
-
-  <AkButton
-    data-test-githubAccount-integrateBtn
-    class='my-2'
-    @loading={{this.integrateGithub.isRunning}}
-    {{on 'click' (perform this.integrateGithub)}}
-  >
-    {{if @reconnect (t 'reconnect') (t 'integrateGithub')}}
-  </AkButton>
-{{/if}}
-
-<ConfirmBox
-  @delegate={{this}}
-  @disabled={{this.removeIntegration.isRunning}}
-  @isActive={{this.showRevokeGithubConfirmBox}}
-  @description={{t 'confirmBox.revokeGithub'}}
-  @confirmText={{t 'disconnect'}}
+<Organization::Integrations::Card
+  @data={{this.data}}
+  @onIntegrateClick={{if
+    this.integratedUser
+    this.openIntegrationDrawer
+    (perform this.integrateGithub)
+  }}
 />
+
+<Organization::Integrations::ConfigDrawer
+  @openDrawer={{this.integrationDrawerIsOpen}}
+  @drawerTitle={{t
+    (if this.showRevokeGithubConfirmBox 'confirmation' 'githubIntegration')
+  }}
+  @loadingDrawerSaveAction={{this.integrateGithub.isRunning}}
+  @drawerSaveAction={{if
+    this.integratedUser
+    this.openRevokeGithubConfirmBox
+    (perform this.integrateGithub)
+  }}
+  @closeDrawerHandler={{this.closeIntegrationDrawer}}
+  @showDeleteButton={{this.integratedUser}}
+>
+  <:drawerContent>
+    {{#if this.showRevokeGithubConfirmBox}}
+      <AkStack
+        local-class='drawer-content form'
+        @direction='column'
+        class='p-2 m-3'
+      >
+        <AkTypography
+          data-test-orgIntegrations-githubAccount-revoke-confirmation
+          @variant='body1'
+        >
+          {{t 'confirmBox.revokeGithub'}}
+        </AkTypography>
+
+        <AkStack @spacing='1.5' class='pt-4'>
+          <AkButton
+            @variant='filled'
+            @loading={{this.removeIntegration.isRunning}}
+            @disabled={{this.removeIntegration.isRunning}}
+            {{on 'click' (perform this.removeIntegration)}}
+            data-test-orgIntegrations-githubAccount-disconnectBtnConfirmation
+          >
+            {{t 'yesDisconnect'}}
+          </AkButton>
+
+          <AkButton
+            @variant='outlined'
+            @color='neutral'
+            {{on 'click' this.closeRevokeGithubConfirmBox}}
+            data-test-orgIntegrations-githubAccount-cancelBtnConfirmation
+          >
+            {{t 'cancel'}}
+          </AkButton>
+        </AkStack>
+      </AkStack>
+    {{else if this.integratedUser}}
+      <AkStack local-class='drawer-content' @direction='column'>
+        <Organization::Integrations::IntegratedUi
+          @imageSource='/images/github-icon.png'
+          @imageAlt='Github icon'
+          @hostURL='https://github.com'
+          @property={{this.integratedUser.login}}
+          @propertyTitle={{t 'username'}}
+        />
+      </AkStack>
+    {{/if}}
+  </:drawerContent>
+</Organization::Integrations::ConfigDrawer>

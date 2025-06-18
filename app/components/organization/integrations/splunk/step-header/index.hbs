@@ -1,0 +1,47 @@
+<AkStack @justifyContent='space-between' @alignItems='flex-end' @width='full'>
+  {{#if @isStep2}}
+    <AkStack class='mt-2' @spacing='1' @alignItems='center'>
+      <AkIconButton
+        class='ml-3'
+        {{on 'click' @onGoBack}}
+        data-test-orgIntegrations-splunkAccount-backBtn
+      >
+        <AkIcon @iconName='arrow-back' />
+      </AkIconButton>
+
+      <AkTypography
+        data-test-orgIntegrations-splunkAccount-stepTitle
+        @variant='h5'
+      >
+        {{t 'configureStep2'}}
+      </AkTypography>
+    </AkStack>
+
+    <AkButton
+      @tag='a'
+      @variant='text'
+      @color='primary'
+      @underline='always'
+      class='mr-3'
+      target='_blank'
+      href='https://docs.splunk.com/Documentation/Splunk/9.4.0/Indexer/Aboutindexesandindexers#Indexes'
+      rel='noopener noreferrer'
+    >
+      <:default>
+        {{t 'splunk.splunkIndexes'}}
+      </:default>
+
+      <:rightIcon>
+        <AkIcon @size='small' @color='primary' @iconName='open-in-new' />
+      </:rightIcon>
+    </AkButton>
+  {{else}}
+    <AkTypography
+      data-test-orgIntegrations-splunkAccount-stepTitle
+      @variant='h5'
+      class='mt-2 ml-3'
+    >
+      {{t 'configureStep1'}}
+    </AkTypography>
+  {{/if}}
+</AkStack>

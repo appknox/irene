@@ -1,79 +1,108 @@
-<AkTypography data-test-jiraAccount-title @variant='h5' @gutterBottom={{true}}>
-  {{t 'jiraIntegration'}}
-</AkTypography>
-
-{{#if this.showIntegratedOrLoadingUI}}
-  <Organization::Integrations::IntegratedUi
-    @imageSource='/images/jira-icon.png'
-    @imageAlt='jira icon'
-    @hostURL={{this.connectedHost}}
-    @username={{this.connectedUsername}}
-    @onDisconnectClick={{this.openRevokeJIRAConfirmBox}}
-    @loading={{this.isLoadingJIRAIntegrationInfo}}
-    data-test-orgIntegrations-jiraAccount-integratedHeader
-  />
-
-{{else}}
-  <AkTypography
-    data-test-jiraAccount-desc
-    @variant='body2'
-    @color='textSecondary'
-  >
-    {{t 'jiraIntegrationDesc'}}
-  </AkTypography>
-
-  <form class='mt-2'>
-    <AkStack @direction='column' @spacing='2' {{style maxWidth='300px'}}>
-      <AkTextField
-        data-test-jiraAccount-hostInput
-        @placeholder={{concat 'Enter ' (t 'jiraHost')}}
-        @value={{this.changeset.host}}
-        @label={{t 'jiraHost'}}
-        @labelTypographyVariant='subtitle2'
-        @labelTypographyColor='textPrimary'
-        @error={{this.changeset.error.host}}
-      />
-
-      <AkTextField
-        data-test-jiraAccount-usernameInput
-        @placeholder={{concat 'Enter ' (t 'username')}}
-        @label={{t 'username'}}
-        @labelTypographyVariant='subtitle2'
-        @labelTypographyColor='textPrimary'
-        @value={{this.changeset.username}}
-        @error={{this.changeset.error.username}}
-      />
-
-      <AkTextField
-        data-test-jiraAccount-apiKeyInput
-        @placeholder={{concat 'Enter ' (t 'apiKey')}}
-        @label={{t 'apiKey'}}
-        @labelTypographyVariant='subtitle2'
-        @labelTypographyColor='textPrimary'
-        @type='password'
-        @value={{this.changeset.password}}
-        @error={{this.changeset.error.password}}
-        autocomplete='jira-password'
-      />
-    </AkStack>
-
-    <AkButton
-      data-test-jiraAccount-integrateBtn
-      class='mt-2'
-      @loading={{this.integrateJIRA.isRunning}}
-      {{style minWidth='190px'}}
-      {{on 'click' (perform this.integrateJIRA this.changeset)}}
-    >
-      {{t 'integrateJIRA'}}
-    </AkButton>
-  </form>
-{{/if}}
-
-<ConfirmBox
-  @isActive={{this.showRevokeJIRAConfirmBox}}
-  @description={{t 'confirmBox.revokeJira'}}
-  @delegate={{this}}
-  @disabled={{this.isRevokingJIRA}}
-  @confirmText={{t 'disconnect'}}
-  @confirmAction={{perform this.revokeJIRA}}
+<Organization::Integrations::Card
+  @data={{this.data}}
+  @onIntegrateClick={{this.openDrawer}}
+  @loading={{this.isLoadingJIRAIntegrationInfo}}
 />
+
+<Organization::Integrations::ConfigDrawer
+  @openDrawer={{this.integrationDrawerIsOpen}}
+  @drawerTitle={{t
+    (if this.showRevokeJIRAConfirmBox 'confirmation' 'jiraIntegration')
+  }}
+  @loadingDrawerSaveAction={{this.integrateJIRA.isRunning}}
+  @drawerSaveAction={{if
+    this.showIntegratedOrLoadingUI
+    this.openRevokeJIRAConfirmBox
+    (perform this.integrateJIRA this.changeset)
+  }}
+  @closeDrawerHandler={{this.closeDrawer}}
+  @showDeleteButton={{this.showIntegratedOrLoadingUI}}
+>
+  <:drawerContent>
+    {{#if this.showRevokeJIRAConfirmBox}}
+      <AkStack
+        local-class='drawer-content form'
+        @direction='column'
+        class='p-2 m-3'
+      >
+        <AkTypography
+          data-test-orgIntegrations-jiraAccount-revoke-confirmation
+          @variant='body1'
+        >
+          {{t 'confirmBox.revokeJira'}}
+        </AkTypography>
+
+        <AkStack @spacing='1.5' class='pt-4'>
+          <AkButton
+            @variant='filled'
+            @loading={{this.revokeJIRA.isRunning}}
+            @disabled={{this.revokeJIRA.isRunning}}
+            {{on 'click' (perform this.revokeJIRA)}}
+            data-test-orgIntegrations-jiraAccount-disconnectBtnConfirmation
+          >
+            {{t 'yesDisconnect'}}
+          </AkButton>
+
+          <AkButton
+            @variant='outlined'
+            @color='neutral'
+            {{on 'click' this.closeRevokeJIRAConfirmBox}}
+            data-test-orgIntegrations-jiraAccount-cancelBtnConfirmation
+          >
+            {{t 'cancel'}}
+          </AkButton>
+        </AkStack>
+      </AkStack>
+    {{else}}
+      <AkStack local-class='drawer-content' @direction='column'>
+        {{#if this.showIntegratedOrLoadingUI}}
+          <Organization::Integrations::IntegratedUi
+            @imageSource='/images/jira-icon.png'
+            @imageAlt='jira icon'
+            @hostURL={{this.connectedHost}}
+            @property={{this.connectedUsername}}
+            @propertyTitle={{t 'username'}}
+            @loading={{this.isLoadingJIRAIntegrationInfo}}
+          />
+
+        {{else}}
+          <form local-class='form' class='p-2'>
+            <AkStack @direction='column' @spacing='2'>
+              <AkTextField
+                data-test-jiraAccount-hostInput
+                @placeholder={{concat 'Enter ' (t 'jiraHost')}}
+                @value={{this.changeset.host}}
+                @label={{t 'jiraHost'}}
+                @labelTypographyVariant='subtitle2'
+                @labelTypographyColor='textPrimary'
+                @error={{this.changeset.error.host}}
+              />
+
+              <AkTextField
+                data-test-jiraAccount-usernameInput
+                @placeholder={{concat 'Enter ' (t 'username')}}
+                @label={{t 'username'}}
+                @labelTypographyVariant='subtitle2'
+                @labelTypographyColor='textPrimary'
+                @value={{this.changeset.username}}
+                @error={{this.changeset.error.username}}
+              />
+
+              <AkTextField
+                data-test-jiraAccount-apiKeyInput
+                @placeholder={{concat 'Enter ' (t 'apiKey')}}
+                @label={{t 'apiKey'}}
+                @labelTypographyVariant='subtitle2'
+                @labelTypographyColor='textPrimary'
+                @type='password'
+                @value={{this.changeset.password}}
+                @error={{this.changeset.error.password}}
+                autocomplete='jira-password'
+              />
+            </AkStack>
+          </form>
+        {{/if}}
+      </AkStack>
+    {{/if}}
+  </:drawerContent>
+</Organization::Integrations::ConfigDrawer>

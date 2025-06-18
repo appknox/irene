@@ -642,6 +642,36 @@ body {
   --organization-integrations-integrated-ui-border-radius: var(--border-radius);
   --organization-integrations-integrated-ui-border-color: var(--border-color-1);
 
+  // variables for organization/integrations/card
+  --organization-integrations-card-border-radius: var(--border-radius);
+  --organization-integrations-card-border-color: var(--border-color-1);
+  --organization-integrations-card-text-color: var(--text-primary);
+
+  // variables for organization/integrations/github
+  --organization-integrations-github-border-radius: var(--border-radius);
+  --organization-integrations-github-border-color: var(--border-color-1);
+  --organization-integrations-github-box-shadow: var(--box-shadow-4);
+  --organization-integrations-github-background-main: var(--background-main);
+
+  // variables for organization/integrations/jira
+  --organization-integrations-jira-border-radius: var(--border-radius);
+  --organization-integrations-jira-border-color: var(--border-color-1);
+  --organization-integrations-jira-box-shadow: var(--box-shadow-4);
+  --organization-integrations-jira-background-main: var(--background-main);
+
+  // variables for organization/integrations/serviceNow
+  --organization-integrations-serviceNow-border-radius: var(--border-radius);
+  --organization-integrations-serviceNow-border-color: var(--border-color-1);
+  --organization-integrations-serviceNow-box-shadow: var(--box-shadow-4);
+  --organization-integrations-serviceNow-background-main: var(--background-main);
+
+  // variables for organization/integrations/splunk
+  --organization-integrations-splunk-border-radius: var(--border-radius);
+  --organization-integrations-splunk-border-color: var(--border-color-1);
+  --organization-integrations-splunk-box-shadow: var(--box-shadow-4);
+  --organization-integrations-splunk-background-main: var(--background-main);
+  --organization-integrations-splunk-background-neutral: var(--neutral-grey-100);
+
   // variables for organization-name-header
   --organization-name-header-background-color: var(--background-main);
   --organization-name-header-border-color: var(--border-color-1);
@@ -1405,14 +1435,29 @@ body {
     --background-main
   );
 
+  // variables for project-settings/integrations
+  --project-settings-integrations-root-border-color: var(--border-color-1);
+  --project-settings-integrations-root-background-color: var(--background-main);
+
   // variables for project-settings/integrations/github-project
   --project-settings-integrations-github-project-background-color: var(
     --neutral-grey-200
   );
 
-  // variables for project-settings/integrations
-  --project-settings-integrations-root-border-color: var(--border-color-1);
-  --project-settings-integrations-root-background-color: var(--background-main);
+  // variables for project-settings/integrations/config-drawer
+  --project-settings-integrations-config-drawer-background-main: var(
+    --background-main
+  );
+
+  --project-settings-integrations-config-drawer-box-shadow: var(--box-shadow-4);
+
+  --project-settings-integrations-config-drawer-border-color: var(
+    --border-color-1
+  );
+
+  --project-settings-integrations-config-drawer-footer-border-radius: var(
+    --border-radius
+  );
 
   // variables for project-settings/analysis-settings
   --project-settings-analysis-settings-background-color: var(--background-main);
@@ -1461,21 +1506,6 @@ body {
   );
   --project-settings-view-scenario-parameter-text-field-background: var(
     --neutral-grey-100
-  );
-
-  // variables for project-settings/integrations/config-drawer
-  --project-settings-integrations-config-drawer-background-main: var(
-    --background-main
-  );
-
-  --project-settings-integrations-config-drawer-box-shadow: var(--box-shadow-4);
-
-  --project-settings-integrations-config-drawer-border-color: var(
-    --border-color-1
-  );
-
-  --project-settings-integrations-config-drawer-footer-border-radius: var(
-    --border-radius
   );
 
   // variables for tri-state-checkbox

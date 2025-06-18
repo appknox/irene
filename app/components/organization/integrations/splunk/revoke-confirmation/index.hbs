@@ -1,0 +1,27 @@
+<AkTypography
+  data-test-orgIntegrations-splunkAccount-revoke-confirmation
+  @variant='body1'
+>
+  {{t 'confirmBox.revokeSplunk'}}
+</AkTypography>
+
+<AkStack @spacing='1.5' class='pt-4'>
+  <AkButton
+    @variant='filled'
+    @loading={{@isRevoking}}
+    @disabled={{@isRevoking}}
+    {{on 'click' @onConfirm}}
+    data-test-orgIntegrations-splunkAccount-disconnectBtnConfirmation
+  >
+    {{t 'yesDisconnect'}}
+  </AkButton>
+
+  <AkButton
+    @variant='outlined'
+    @color='neutral'
+    {{on 'click' @onCancel}}
+    data-test-orgIntegrations-splunkAccount-cancelBtnConfirmation
+  >
+    {{t 'cancel'}}
+  </AkButton>
+</AkStack>

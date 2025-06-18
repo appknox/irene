@@ -49,11 +49,24 @@ module(
 
       await render(hbs`<Organization::Integrations::JiraAccount />`);
 
-      assert.dom('[data-test-jiraAccount-title]').hasText(t('jiraIntegration'));
+      assert
+        .dom('[data-test-org-integration-card-title="JIRA"]')
+        .hasText(t('jira'));
 
       assert
-        .dom('[data-test-jiraAccount-desc]')
+        .dom('[data-test-org-integration-card-description="JIRA"]')
         .hasText(t('jiraIntegrationDesc'));
+
+      assert
+        .dom('[data-test-org-integration-card-connectBtn]')
+        .isNotDisabled()
+        .hasText(t('connect'));
+
+      await click('[data-test-org-integration-card-connectBtn]');
+
+      assert
+        .dom('[data-test-orgIntegrations-configDrawer-title]')
+        .hasText(t('jiraIntegration'));
 
       assert
         .dom('[data-test-jiraAccount-hostInput]')
@@ -71,9 +84,9 @@ module(
         .hasNoValue();
 
       assert
-        .dom('[data-test-jiraAccount-integrateBtn]')
+        .dom('[data-test-orgIntegrations-configDrawer-integrateBtn]')
         .isNotDisabled()
-        .hasText(t('integrateJIRA'));
+        .hasText(t('integrate'));
 
       // Integrated UI should not be visible
       const integratedUIContainer = find(
@@ -96,7 +109,7 @@ module(
 
       assert
         .dom(
-          '[data-test-orgIntegrations-integratedUI-username]',
+          '[data-test-orgIntegrations-integratedUI-property]',
           integratedUIContainer
         )
         .doesNotExist();
@@ -116,13 +129,27 @@ module(
 
       await render(hbs`<Organization::Integrations::JiraAccount />`);
 
-      assert.dom('[data-test-jiraAccount-title]').hasText(t('jiraIntegration'));
+      assert
+        .dom('[data-test-org-integration-card-title="JIRA"]')
+        .hasText(t('jira'));
 
-      assert.dom('[data-test-jiraAccount-desc]').doesNotExist();
+      assert.dom('[data-test-org-integration-card-logo]').exists();
+
+      assert.dom('[data-test-org-integration-card-integrated-chip]').exists();
+
+      assert
+        .dom('[data-test-org-integration-card-manageBtn]')
+        .exists()
+        .containsText(t('manage'));
+
+      await click('[data-test-org-integration-card-manageBtn]');
+
       assert.dom('[data-test-jiraAccount-hostInput]').doesNotExist();
       assert.dom('[data-test-jiraAccount-usernameInput]').doesNotExist();
       assert.dom('[data-test-jiraAccount-apiKeyInput]').doesNotExist();
-      assert.dom('[data-test-jiraAccount-integrateBtn]').doesNotExist();
+      assert
+        .dom('[data-test-orgIntegrations-configDrawer-integrateBtn]')
+        .doesNotExist();
 
       const integratedUIContainer = find(
         '[data-test-orgIntegrations-jiraAccount-integratedHeader]'
@@ -144,16 +171,13 @@ module(
 
       assert
         .dom(
-          '[data-test-orgIntegrations-integratedUI-username]',
+          '[data-test-orgIntegrations-integratedUI-property]',
           integratedUIContainer
         )
         .hasText('appknox');
 
       assert
-        .dom(
-          '[data-test-orgIntegrations-integratedUI-disconnectBtn]',
-          integratedUIContainer
-        )
+        .dom('[data-test-orgIntegrations-configDrawer-disconnectBtn]')
         .isNotDisabled()
         .hasText(t('disconnect'));
     });
@@ -184,61 +208,109 @@ module(
         await render(hbs`<Organization::Integrations::JiraAccount />`);
 
         assert
-          .dom('[data-test-jiraAccount-title]')
-          .hasText(t('jiraIntegration'));
+          .dom('[data-test-org-integration-card-title="JIRA"]')
+          .hasText(t('jira'));
 
-        const disconnecBtn = find(
-          '[data-test-orgIntegrations-jiraAccount-integratedHeader] [data-test-orgIntegrations-integratedUI-disconnectBtn]'
-        );
+        assert.dom('[data-test-org-integration-card-logo]').exists();
 
-        assert.dom(disconnecBtn).isNotDisabled().hasText(t('disconnect'));
-
-        await click(disconnecBtn);
-
-        assert.dom('[data-test-ak-modal-header]').hasText(t('confirm'));
+        assert.dom('[data-test-org-integration-card-integrated-chip]').exists();
 
         assert
-          .dom('[data-test-confirmbox-description]')
+          .dom('[data-test-org-integration-card-manageBtn]')
+          .exists()
+          .containsText(t('manage'));
+
+        await click('[data-test-org-integration-card-manageBtn]');
+
+        const disconnectBtn = find(
+          '[data-test-orgIntegrations-configDrawer-disconnectBtn]'
+        );
+
+        assert.dom(disconnectBtn).isNotDisabled().hasText(t('disconnect'));
+
+        await click(disconnectBtn);
+
+        assert
+          .dom('[data-test-orgIntegrations-configDrawer-title]')
+          .hasText(t('confirmation'));
+
+        assert
+          .dom('[data-test-orgIntegrations-jiraAccount-revoke-confirmation]')
           .hasText(t('confirmBox.revokeJira'));
 
         assert
-          .dom('[data-test-confirmbox-confirmBtn]')
+          .dom(
+            '[data-test-orgIntegrations-jiraAccount-disconnectBtnConfirmation]'
+          )
           .isNotDisabled()
-          .hasText(t('disconnect'));
+          .hasText(t('yesDisconnect'));
 
         assert
-          .dom('[data-test-confirmbox-cancelBtn]')
+          .dom('[data-test-orgIntegrations-jiraAccount-cancelBtnConfirmation]')
           .isNotDisabled()
           .hasText(t('cancel'));
 
-        await click('[data-test-confirmbox-confirmBtn]');
+        await click(
+          '[data-test-orgIntegrations-jiraAccount-disconnectBtnConfirmation]'
+        );
 
         const notify = this.owner.lookup('service:notifications');
 
         if (fail) {
           assert.strictEqual(notify.errorMsg, t('pleaseTryAgain'));
 
-          assert.dom('[data-test-ak-modal-header]').exists();
-          assert.dom('[data-test-confirmbox-description]').exists();
-          assert.dom('[data-test-confirmbox-confirmBtn]').exists();
-          assert.dom('[data-test-confirmbox-cancelBtn]').exists();
+          assert.dom('[data-test-orgIntegrations-configDrawer-title]').exists();
+          assert
+            .dom('[data-test-orgIntegrations-jiraAccount-revoke-confirmation]')
+            .exists();
+          assert
+            .dom(
+              '[data-test-orgIntegrations-jiraAccount-disconnectBtnConfirmation]'
+            )
+            .exists();
+          assert
+            .dom(
+              '[data-test-orgIntegrations-jiraAccount-cancelBtnConfirmation]'
+            )
+            .exists();
 
-          assert.dom('[data-test-jiraAccount-desc]').doesNotExist();
+          assert
+            .dom('[data-test-org-integration-card-connectBtn]')
+            .doesNotExist();
+
           assert.dom('[data-test-jiraAccount-hostInput]').doesNotExist();
           assert.dom('[data-test-jiraAccount-usernameInput]').doesNotExist();
           assert.dom('[data-test-jiraAccount-apiKeyInput]').doesNotExist();
-          assert.dom('[data-test-jiraAccount-integrateBtn]').doesNotExist();
+          assert
+            .dom('[data-test-orgIntegrations-configDrawer-integrateBtn]')
+            .doesNotExist();
         } else {
           assert.strictEqual(notify.successMsg, t('jiraWillBeRevoked'));
 
-          assert.dom('[data-test-ak-modal-header]').doesNotExist();
-          assert.dom('[data-test-confirmbox-description]').doesNotExist();
-          assert.dom('[data-test-confirmbox-confirmBtn]').doesNotExist();
-          assert.dom('[data-test-confirmbox-cancelBtn]').doesNotExist();
+          assert
+            .dom('[data-test-orgIntegrations-jiraAccount-revoke-confirmation]')
+            .doesNotExist();
+          assert
+            .dom(
+              '[data-test-orgIntegrations-jiraAccount-disconnectBtnConfirmation]'
+            )
+            .doesNotExist();
+          assert
+            .dom(
+              '[data-test-orgIntegrations-jiraAccount-cancelBtnConfirmation]'
+            )
+            .doesNotExist();
 
           assert
-            .dom('[data-test-jiraAccount-desc]')
+            .dom('[data-test-org-integration-card-description="JIRA"]')
             .hasText(t('jiraIntegrationDesc'));
+
+          assert
+            .dom('[data-test-org-integration-card-connectBtn]')
+            .isNotDisabled()
+            .hasText(t('connect'));
+
+          await click('[data-test-org-integration-card-connectBtn]');
 
           assert
             .dom('[data-test-jiraAccount-hostInput]')
@@ -254,11 +326,6 @@ module(
             .dom('[data-test-jiraAccount-apiKeyInput]')
             .isNotDisabled()
             .hasNoValue();
-
-          assert
-            .dom('[data-test-jiraAccount-integrateBtn]')
-            .isNotDisabled()
-            .hasText(t('integrateJIRA'));
         }
       }
     );
@@ -271,15 +338,22 @@ module(
       await render(hbs`<Organization::Integrations::JiraAccount />`);
 
       assert
-        .dom('[data-test-jiraAccount-integrateBtn]')
+        .dom('[data-test-org-integration-card-connectBtn]')
         .isNotDisabled()
-        .hasText(t('integrateJIRA'));
+        .hasText(t('connect'));
+
+      await click('[data-test-org-integration-card-connectBtn]');
+
+      assert
+        .dom('[data-test-orgIntegrations-configDrawer-integrateBtn]')
+        .isNotDisabled()
+        .hasText(t('integrate'));
 
       assert
         .dom('[data-test-text-input-outlined]')
         .doesNotHaveClass(/ak-error-text-input/);
 
-      await click('[data-test-jiraAccount-integrateBtn]');
+      await click('[data-test-orgIntegrations-configDrawer-integrateBtn]');
 
       assert
         .dom('[data-test-text-input-outlined]')
@@ -335,6 +409,13 @@ module(
         await render(hbs`<Organization::Integrations::JiraAccount />`);
 
         assert
+          .dom('[data-test-org-integration-card-connectBtn]')
+          .isNotDisabled()
+          .hasText(t('connect'));
+
+        await click('[data-test-org-integration-card-connectBtn]');
+
+        assert
           .dom('[data-test-jiraAccount-hostInput]')
           .isNotDisabled()
           .hasNoValue();
@@ -350,9 +431,9 @@ module(
           .hasNoValue();
 
         assert
-          .dom('[data-test-jiraAccount-integrateBtn]')
+          .dom('[data-test-orgIntegrations-configDrawer-integrateBtn]')
           .isNotDisabled()
-          .hasText(t('integrateJIRA'));
+          .hasText(t('integrate'));
 
         await fillIn(
           '[data-test-jiraAccount-hostInput]',
@@ -381,57 +462,45 @@ module(
           .dom('[data-test-jiraAccount-apiKeyInput]')
           .hasValue(jiraIntegrationProps.password);
 
-        await click('[data-test-jiraAccount-integrateBtn]');
+        await click('[data-test-orgIntegrations-configDrawer-integrateBtn]');
 
         const notify = this.owner.lookup('service:notifications');
 
         if (fail) {
           assert.strictEqual(notify.errorMsg, errorMsg());
 
-          assert.dom('[data-test-jiraAccount-desc]').exists();
+          assert
+            .dom('[data-test-org-integration-card-description="JIRA"]')
+            .exists();
           assert.dom('[data-test-jiraAccount-hostInput]').exists();
           assert.dom('[data-test-jiraAccount-usernameInput]').exists();
           assert.dom('[data-test-jiraAccount-apiKeyInput]').exists();
-          assert.dom('[data-test-jiraAccount-integrateBtn]').isNotDisabled();
+          assert
+            .dom('[data-test-orgIntegrations-configDrawer-integrateBtn]')
+            .isNotDisabled();
         } else {
           assert.strictEqual(notify.successMsg, t('jiraIntegrated'));
 
           assert.dom('[data-test-jiraAccount-hostInput]').doesNotExist();
           assert.dom('[data-test-jiraAccount-usernameInput]').doesNotExist();
           assert.dom('[data-test-jiraAccount-apiKeyInput]').doesNotExist();
-          assert.dom('[data-test-jiraAccount-integrateBtn]').doesNotExist();
+          assert
+            .dom('[data-test-orgIntegrations-configDrawer-integrateBtn]')
+            .doesNotExist();
 
           // Test integrated UI
-          const integratedUIContainer = find(
-            '[data-test-orgIntegrations-jiraAccount-integratedHeader]'
-          );
+          assert.dom('[data-test-orgIntegrations-integratedUI-logo]').exists();
 
           assert
-            .dom(
-              '[data-test-orgIntegrations-integratedUI-logo]',
-              integratedUIContainer
-            )
-            .exists();
-
-          assert
-            .dom(
-              '[data-test-orgIntegrations-integratedUI-hostURL]',
-              integratedUIContainer
-            )
+            .dom('[data-test-orgIntegrations-integratedUI-hostURL]')
             .hasText(jiraIntegrationProps.host);
 
           assert
-            .dom(
-              '[data-test-orgIntegrations-integratedUI-username]',
-              integratedUIContainer
-            )
+            .dom('[data-test-orgIntegrations-integratedUI-property]')
             .hasText(jiraIntegrationProps.username);
 
           assert
-            .dom(
-              '[data-test-orgIntegrations-integratedUI-disconnectBtn]',
-              integratedUIContainer
-            )
+            .dom('[data-test-orgIntegrations-configDrawer-disconnectBtn]')
             .isNotDisabled()
             .hasText(t('disconnect'));
         }

@@ -1,0 +1,115 @@
+<Organization::Integrations::Card
+  @data={{this.data}}
+  @onIntegrateClick={{if
+    this.data.isIntegrated
+    this.openSplunkRiskEditModal
+    this.navigateToOrgSettings
+  }}
+  @loading={{this.isFetchingSplunkConfig}}
+/>
+
+<ProjectSettings::Integrations::ConfigDrawer
+  @drawerTitle={{t 'splunkIntegration'}}
+  @openDrawer={{this.showEditSplunkRiskModal}}
+  @loadingDrawerSaveAction={{this.selectRiskThreshold.isRunning}}
+  @closeDrawerHandler={{this.closeSplunkRiskEditModal}}
+  @drawerSaveAction={{if
+    this.showSelectUI
+    this.saveSelectedRiskThreshold
+    this.openDeleteSplunkConfigConfirmBox
+  }}
+  @showDeleteButton={{if this.showSelectUI false true}}
+  @noFooter={{this.showDeleteSplunkConfigConfirmBox}}
+>
+  <:drawerContent>
+    {{#if this.showSelectUI}}
+      <AkTypography
+        @variant='h6'
+        @fontWeight='regular'
+        @color='textSecondary'
+        data-test-prjSettings-integrations-splunk-configDrawer-note
+      >
+        {{t 'otherTemplates.selectSplunkRisk'}}
+      </AkTypography>
+
+      <AkStack @direction='column' @spacing='1'>
+        <AkTypography
+          @variant='h6'
+          data-test-prjSettings-integrations-splunk-configDrawer-thresholdTitle
+        >
+          {{t 'threshold'}}
+        </AkTypography>
+
+        <AkSelect
+          @selected={{this.selectedThreshold}}
+          @options={{this.thresholds}}
+          @onChange={{this.selectThreshold}}
+          @placeholder='{{t "selectThreshold"}}'
+          @triggerClass='select-threshold-class'
+          {{style width='300px'}}
+          data-test-prjSettings-integrations-splunk-configDrawer-thresholdList
+          as |threshold|
+        >
+          {{threshold-status threshold}}
+        </AkSelect>
+      </AkStack>
+
+    {{else if this.showDeleteSplunkConfigConfirmBox}}
+      <AkStack @direction='column' @spacing='1'>
+        <AkTypography
+          data-test-prjSettings-integrations-splunkProject-confirmDelete
+          @variant='body1'
+        >
+          {{t 'confirmBox.removeSplunk'}}
+        </AkTypography>
+
+        <AkStack @spacing='1.5' class='pt-4'>
+          <AkButton
+            data-test-prjSettings-integrations-splunkProject-confirmDeleteBtn
+            {{on 'click' (perform this.deleteSplunkConfig)}}
+          >
+            {{t 'yesDelete'}}
+          </AkButton>
+
+          <AkButton
+            @variant='outlined'
+            {{on 'click' this.closeDeleteSplunkConfigConfirmBox}}
+          >
+            {{t 'cancel'}}
+          </AkButton>
+        </AkStack>
+      </AkStack>
+    {{else if this.splunkConfig}}
+      <AkStack @justifyContent='space-between' @spacing='3' @width='full'>
+        <AkStack @direction='column' @spacing='1'>
+          <AkTypography @color='textSecondary' @variant='body2'>
+            {{t 'riskThresholdIntegrationDescription'}}
+          </AkTypography>
+
+          <AkTypography
+            @variant='body2'
+            @fontWeight='bold'
+            data-test-prjSettings-integrations-splunk-riskHeaderText
+          >
+            {{t 'threshold'}}
+          </AkTypography>
+
+          <ProjectSettings::Integrations::RiskThreshold
+            @computedRisk={{this.splunkConfig.riskThreshold}}
+            data-test-prjSettings-integrations-splunk-risk
+          />
+        </AkStack>
+
+        {{#unless this.isEditing}}
+          <AkIconButton
+            data-test-prjSettings-integrations-splunk-editBtn
+            @variant='outlined'
+            {{on 'click' this.onEditClick}}
+          >
+            <AkIcon @iconName='edit' />
+          </AkIconButton>
+        {{/unless}}
+      </AkStack>
+    {{/if}}
+  </:drawerContent>
+</ProjectSettings::Integrations::ConfigDrawer>

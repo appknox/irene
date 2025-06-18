@@ -1,0 +1,119 @@
+{{#if @loading}}
+  <AkStack
+    class='p-2'
+    local-class='integration-card'
+    @direction='column'
+    @spacing='2'
+  >
+    <AkSkeleton @variant='circular' @width='5rem' @height='5rem' />
+    <AkSkeleton @variant='rectangular' @width='80px' @height='19px' />
+    <AkSkeleton @variant='rectangular' @width='250px' @height='55px' />
+    <AkDivider @color='dark' />
+    <AkSkeleton @variant='rectangular' @width='80px' @height='19px' />
+  </AkStack>
+{{else}}
+  <AkStack
+    @direction='column'
+    @justifyContent='space-between'
+    local-class='integration-card'
+  >
+    <AkStack
+      @direction='column'
+      @spacing='1'
+      local-class='integration-card-content'
+    >
+      <div
+        data-test-org-integration-card-logo
+        local-class='integration-card-icon'
+      >
+        <img src={{@data.logo}} alt='ic-logo' />
+      </div>
+
+      <AkTypography
+        data-test-org-integration-card-title='{{@data.id}}'
+        @variant='subtitle1'
+      >
+        {{@data.title}}
+      </AkTypography>
+
+      <AkTypography
+        @color='textSecondary'
+        local-class='integration-card-description'
+        data-test-org-integration-card-description='{{@data.id}}'
+      >
+        {{@data.description}}
+      </AkTypography>
+    </AkStack>
+
+    <AkStack @direction='column' @width='full'>
+      <AkDivider @color='dark' />
+
+      <AkStack
+        @justifyContent='space-between'
+        @alignItems='center'
+        @width='full'
+      >
+        {{#if @data.isIntegrated}}
+          {{#if @data.showSelectBtn}}
+            <AkButton
+              @variant='outlined'
+              local-class='integration-card-button'
+              {{on 'click' @onIntegrateClick}}
+              data-test-org-integration-card-selectBtn
+            >
+              {{@data.selectBtnText}}
+            </AkButton>
+          {{else}}
+            <AkChip
+              @variant='semi-filled-outlined'
+              @color='success'
+              @label={{t 'integrated'}}
+              local-class='integration-card-chip'
+              data-test-org-integration-card-integrated-chip
+            >
+              <:icon>
+                <AkIcon @color='success' @iconName='check-circle' />
+              </:icon>
+            </AkChip>
+          {{/if}}
+        {{else}}
+          <AkButton
+            @variant='outlined'
+            @color='neutral'
+            local-class='integration-card-button'
+            {{on 'click' @onIntegrateClick}}
+            data-test-org-integration-card-connectBtn
+          >
+            <:leftIcon>
+              <AkIcon @iconName='add' />
+            </:leftIcon>
+
+            <:default>
+              {{t 'connect'}}
+            </:default>
+          </AkButton>
+        {{/if}}
+
+        {{#unless @data.showSelectBtn}}
+          {{#if @data.isIntegrated}}
+            <AkButton
+              @variant='outlined'
+              @color='neutral'
+              local-class='integration-card-button'
+              {{on 'click' @onIntegrateClick}}
+              data-test-org-integration-card-manageBtn
+            >
+              <:leftIcon>
+                <AkIcon @iconName='settings' />
+              </:leftIcon>
+
+              <:default>
+                {{t 'manage'}}
+              </:default>
+            </AkButton>
+          {{/if}}
+        {{/unless}}
+      </AkStack>
+    </AkStack>
+  </AkStack>
+{{/if}}

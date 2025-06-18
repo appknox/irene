@@ -1,0 +1,28 @@
+.drawer-content {
+  padding: 1.5em;
+}
+
+.form {
+  min-width: 350px;
+  max-width: 400px;
+  border: 1px solid var(--organization-integrations-serviceNow-border-color);
+  border-radius: var(--organization-integrations-serviceNow-border-radius);
+  box-sizing: border-box;
+}
+
+.select-service-now-table {
+  width: 320px;
+}
+
+.integration-drawer-footer {
+  position: sticky;
+  bottom: 0;
+  background-color: var(
+    --organization-integrations-serviceNow-background-main
+  );
+  box-shadow: var(--organization-integrations-serviceNow-box-shadow);
+}
+
+.height-full {
+  height: 100%;
+}

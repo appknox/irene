@@ -1,6 +1,6 @@
 import Component from '@glimmer/component';
 import { tracked } from '@glimmer/tracking';
-import { inject as service } from '@ember/service';
+import { service } from '@ember/service';
 import { action } from '@ember/object';
 import { task } from 'ember-concurrency';
 import type IntlService from 'ember-intl/services/intl';
@@ -41,6 +41,7 @@ export default class OrganizationIntegrationsGithubAccountComponent extends Comp
 
   @tracked showRevokeGithubConfirmBox = false;
   @tracked integratedUser: IntegratedUserType | null = null;
+  @tracked integrationDrawerIsOpen = false;
 
   tGithubWillBeRevoked: string;
   tGithubErrorIntegration: string;
@@ -55,6 +56,26 @@ export default class OrganizationIntegrationsGithubAccountComponent extends Comp
     this.tGithubErrorIntegration = this.intl.t('githubErrorIntegration');
 
     this.integratedUser = this.args.integratedUser;
+  }
+
+  get data() {
+    return {
+      id: 'Github',
+      title: this.intl.t('github'),
+      description: this.intl.t('githubIntegrationDesc'),
+      logo: '../../../images/github-icon.png',
+      isIntegrated: !!this.integratedUser,
+    };
+  }
+
+  @action
+  openIntegrationDrawer() {
+    this.integrationDrawerIsOpen = true;
+  }
+
+  @action
+  closeIntegrationDrawer() {
+    this.integrationDrawerIsOpen = false;
   }
 
   @action
@@ -105,6 +126,8 @@ export default class OrganizationIntegrationsGithubAccountComponent extends Comp
       this.notify.success(this.tGithubWillBeRevoked);
 
       this.closeRevokeGithubConfirmBox();
+
+      this.integrationDrawerIsOpen = false;
 
       this.integratedUser = null;
     } catch (e) {
