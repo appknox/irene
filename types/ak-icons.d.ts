@@ -143,24 +143,25 @@ export const AkIconVariant = [
   'arrow-outward',
   'beenhere',
   'bug-report',
-  // md icons
+  'network-intel-node',
+  'auto-awesome',
+  'reorder',
+  // custom icons
   'mdi:checkbox-marked',
   'mdi:checkbox-blank-outline',
   'mdi:radio-button-checked',
   'mdi:radio-button-unchecked',
   'mdi:microsoft-excel',
   'mdi:minus-box',
-  // huge icons
-  'huge-icons:api',
-  // fa icons
+  'mdi:wand',
+  'hugeicons:api',
+  'hugeicons:ai-brain-04',
   'fa-brands:apple',
-  // ic icons
   'ic:outline-drive-file-rename-outline',
-  'network-intel-node',
-  'auto-awesome',
-  'reorder',
-  // bx icons
   'bx:mobile-alt',
+  'ph:diamonds-four',
+  'solar:library-linear',
+  'mynaui:frame',
 ] as const;
 
 export type AkIconVariantType = (typeof AkIconVariant)[number];

@@ -59,6 +59,10 @@
   </Sbom::SummaryHeader>
 
   {{#if this.scanStatusCompleted}}
+    <Sbom::ScanDetails::Overview
+      @sbomFile={{@sbomFile}}
+      @sbomScanSummary={{@sbomScanSummary}}
+    />
     {{#if this.isNotOutdated}}
       <AkStack
         data-test-sbomScanDetails-switch-header

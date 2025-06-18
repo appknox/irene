@@ -772,6 +772,12 @@ body {
     --side-menu-active-background-light
   );
 
+  // variables for sbom/scan-details/overview
+  --sbom-scan-details-overview-border-radius: var(--border-radius);
+  --sbom-scan-details-overview-border-color: var(--border-color-1);
+  --sbom-scan-details-overview-new-feature-background-color: var(--new-feature-ai-bg-color);
+  --sbom-scan-details-overview-new-feature-text-color: var(--new-feature-ai-color);
+
   // variables for sbom/scan-details/skeleton-loader
   --sbom-scan-details-skeleton-loader-summary-border-radius: var(
     --border-radius
@@ -1820,11 +1826,11 @@ body {
   );
 
   --storeknox-inventory-details-app-details-action-button-feature-in-progress-color: var(
-    --storeknox-feature-in-progress-button-color
+    --new-feature-ai-color
   );
 
   --storeknox-inventory-details-app-details-action-button-feature-in-progress-bg-color: var(
-    --storeknox-feature-in-progress-button-bg-color
+    --new-feature-ai-bg-color
   );
 
   // variables for storeknox/inventory-details/app-details/va-results
