@@ -1,0 +1,67 @@
+<AkTypography
+  data-test-sbomScanDetails-overview-title
+  class='mt-3'
+  @variant='h5'
+>
+  {{t 'overview'}}
+</AkTypography>
+
+<AkStack
+  local-class='overview-container'
+  data-test-sbomScanDetails-overview-container
+>
+  {{#each this.scanSummary as |ss|}}
+    <AkStack
+      @alignItems='center'
+      data-test-sbomScanDetails-overview-scanSummary='{{ss.label}}'
+    >
+      <AkStack @spacing='1' @alignItems='center'>
+        <AkIcon
+          data-test-sbomScanDetails-overview-icon
+          @size='small'
+          @iconName={{ss.iconName}}
+          @variant='outlined'
+        />
+
+        <AkTypography data-test-sbomScanDetails-overview-scanSummary-label>
+          {{ss.label}}
+        </AkTypography>
+      </AkStack>
+
+      <AkTypography class='mx-1'>-</AkTypography>
+
+      <AkTypography
+        @variant='h6'
+        data-test-sbomScanDetails-overview-scanSummary-value
+      >
+        {{ss.value}}
+      </AkTypography>
+
+      {{#if ss.newFeature}}
+        <AkTooltip
+          @title={{t 'sbomModule.newFeature'}}
+          @arrow={{true}}
+          @placement='bottom'
+        >
+          <AkStack class='ml-1' local-class='new-feature-container'>
+            <AkIcon
+              data-test-sbomScanDetails-overview-newFeatureIcon
+              @size='small'
+              @iconName='mdi:wand'
+              local-class='new-feature-icon'
+            />
+          </AkStack>
+        </AkTooltip>
+      {{/if}}
+
+      {{#unless ss.hideDivider}}
+        <AkDivider
+          class='mx-1'
+          @color='dark'
+          @direction='vertical'
+          @height='18px'
+        />
+      {{/unless}}
+    </AkStack>
+  {{/each}}
+</AkStack>

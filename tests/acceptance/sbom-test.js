@@ -5,6 +5,8 @@ import {
   findAll,
   click,
   waitFor,
+  fillIn,
+  triggerEvent,
 } from '@ember/test-helpers';
 
 import { setupApplicationTest } from 'ember-qunit';
@@ -971,5 +973,146 @@ module('Acceptance | sbom', function (hooks) {
     await click('[data-test-sbom-list-header-clear-filter]');
 
     assert.dom('[data-test-sbom-list-header-clear-filter]').doesNotExist();
+  });
+
+  test('test sbom scan component list search', async function (assert) {
+    this.server.get(
+      '/v2/sb_files/:scan_id/sb_file_components',
+      (schema, req) => {
+        this.set('query', req.queryParams.q);
+
+        const results = schema.sbomComponents.all().models;
+
+        return { count: results.length, next: null, previous: null, results };
+      }
+    );
+
+    await visit(
+      `/dashboard/sbom/apps/${this.sbomProjects[1].id}/scans/${this.sbomFiles[1].id}`
+    );
+
+    assert.dom('[data-test-sbomScanDetails-switch-listViewButton]').exists();
+
+    await click('[data-test-sbomScanDetails-switch-listViewButton]');
+
+    assert.dom('[data-test-sbomScanDetails-componentSearchInput]').hasNoValue();
+
+    await fillIn(
+      '[data-test-sbomScanDetails-componentSearchInput]',
+      'some query'
+    );
+
+    await triggerEvent(
+      '[data-test-sbomScanDetails-componentSearchInput]',
+      'keyup'
+    );
+
+    assert
+      .dom('[data-test-sbomScanDetails-componentSearchInput]')
+      .isNotDisabled()
+      .hasValue('some query');
+
+    assert.strictEqual(this.query, 'some query');
+
+    // Clear search input
+    await fillIn('[data-test-sbomScanDetails-componentSearchInput]', '');
+
+    await triggerEvent(
+      '[data-test-sbomScanDetails-componentSearchInput]',
+      'keyup'
+    );
+
+    assert
+      .dom('[data-test-sbomScanDetails-componentSearchInput]')
+      .isNotDisabled()
+      .hasValue('');
+
+    assert.strictEqual(this.query, '');
+  });
+
+  test('test sbom filters in list view', async function (assert) {
+    this.server.get(
+      '/v2/sb_files/:scan_id/sb_file_components',
+      (schema, req) => {
+        this.set('component_type', req.queryParams.component_type);
+        this.set('is_dependency', req.queryParams.is_dependency);
+
+        const results = schema.sbomComponents.all().models;
+
+        return { count: results.length, next: null, previous: null, results };
+      }
+    );
+
+    await visit(
+      `/dashboard/sbom/apps/${this.sbomProjects[1].id}/scans/${this.sbomFiles[1].id}`
+    );
+
+    assert.dom('[data-test-sbomScanDetails-switch-listViewButton]').exists();
+
+    await click('[data-test-sbomScanDetails-switch-listViewButton]');
+
+    assert.dom('[data-test-sbomScanDetails-componentSearchInput]').hasNoValue();
+
+    await click('[data-test-sbom-scanDetails-dependencyTypeHeader-icon]');
+
+    assert
+      .dom('[data-test-sbom-scanDetails-dependencyTypeHeader-popover]')
+      .exists();
+
+    assert
+      .dom(
+        '[data-test-sbom-scanDetails-dependencyTypeHeader-popover-headerText]'
+      )
+      .hasText(t('dependencyType'));
+
+    assert
+      .dom('[data-test-sbom-scanDetails-dependencyTypeHeader-option]')
+      .exists({ count: 3 });
+
+    await click(
+      `[data-test-sbom-scanDetails-dependencyTypeHeader-radio="${t('dependencyTypes.direct')}"]`
+    );
+
+    assert.strictEqual(this.is_dependency, 'false');
+
+    await click('[data-test-sbom-scanDetails-dependencyTypeHeader-icon]');
+
+    // Clear filter of dependency type
+    await click(
+      '[data-test-sbom-scanDetails-dependencyTypeHeader-clearFilter-text]'
+    );
+
+    assert.strictEqual(this.is_dependency, undefined);
+
+    await click('[data-test-sbom-scanDetails-componentTypeHeader-icon]');
+
+    assert
+      .dom('[data-test-sbom-scanDetails-componentTypeHeader-popover]')
+      .exists();
+
+    assert
+      .dom(
+        '[data-test-sbom-scanDetails-componentTypeHeader-popover-headerText]'
+      )
+      .hasText(t('sbomModule.componentType'));
+
+    assert
+      .dom('[data-test-sbom-scanDetails-componentTypeHeader-option]')
+      .exists({ count: 5 });
+
+    await click(
+      `[data-test-sbom-scanDetails-componentTypeHeader-radio="${t('library')}"]`
+    );
+
+    assert.strictEqual(this.component_type, 'library');
+
+    await click('[data-test-sbom-scanDetails-componentTypeHeader-icon]');
+
+    // Clear filter of component type
+    await click(
+      '[data-test-sbom-scanDetails-componentTypeHeader-clearFilter-text]'
+    );
+
+    assert.strictEqual(this.component_type, undefined);
   });
 });

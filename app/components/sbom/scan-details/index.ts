@@ -1,16 +1,18 @@
-import { action } from '@ember/object';
 import Component from '@glimmer/component';
+import { action } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
-import { inject as service } from '@ember/service';
+import { service } from '@ember/service';
+import { debounceTask } from 'ember-lifeline';
 import type IntlService from 'ember-intl/services/intl';
 import type RouterService from '@ember/routing/router-service';
 
+import { SbomScanStatus } from 'irene/models/sbom-file';
 import type SbomFileModel from 'irene/models/sbom-file';
 import type { SbomComponentQueryParam } from 'irene/routes/authenticated/dashboard/sbom/scan-details';
 import type SbomComponentModel from 'irene/models/sbom-component';
 import type SbomProjectModel from 'irene/models/sbom-project';
 import type SbomScanSummaryModel from 'irene/models/sbom-scan-summary';
-import { SbomScanStatus } from 'irene/models/sbom-file';
+
 import styles from './index.scss';
 
 interface TreeNodeDataObject {
@@ -52,6 +54,7 @@ export default class SbomScanDetailsComponent extends Component<SbomScanDetailsS
   @tracked treeNodes: AkTreeNodeProps[] = [];
   @tracked currentViewType: 'tree' | 'list' =
     this.args.queryParams.view_type || 'tree';
+  @tracked searchInputRef: HTMLInputElement | null = null;
 
   get classes() {
     return {
@@ -139,6 +142,47 @@ export default class SbomScanDetailsComponent extends Component<SbomScanDetailsS
       ...node,
       children: [],
     }));
+  }
+
+  @action
+  setupSearchInputRef(element: HTMLInputElement) {
+    this.searchInputRef = element;
+    const query = element.value;
+
+    if (query) {
+      element.focus();
+    }
+  }
+
+  @action
+  searchSbomComponentForQuery(event: Event) {
+    const query = (event.target as HTMLInputElement).value;
+
+    debounceTask(this, 'setSearchQuery', query, 800);
+  }
+
+  @action
+  handleSearchInput(event: Event) {
+    // Store the current cursor position
+    const input = event.target as HTMLInputElement;
+    const cursorPosition = input.selectionStart;
+
+    // Store cursor position for restoration
+    if (this.searchInputRef) {
+      setTimeout(() => {
+        this.searchInputRef!.setSelectionRange(cursorPosition, cursorPosition);
+      }, 0);
+    }
+  }
+
+  @action
+  setSearchQuery(query: string) {
+    this.router.replaceWith(this.router.currentRouteName, {
+      queryParams: {
+        component_query: query || '',
+        component_offset: 0,
+      },
+    });
   }
 }
 

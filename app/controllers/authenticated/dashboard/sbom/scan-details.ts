@@ -17,6 +17,34 @@ export default class AuthenticatedDashboardSbomScanDetailsController extends Con
     sbomScanSummary: SbomScanSummaryModel;
   };
 
+  queryParams = [
+    {
+      component_limit: { type: 'number' as const },
+    },
+    {
+      component_offset: { type: 'number' as const },
+    },
+    {
+      component_query: { type: 'string' as const },
+    },
+    {
+      is_dependency: { type: 'string' as const },
+    },
+    {
+      component_type: { type: 'string' as const },
+    },
+    {
+      view_type: { type: 'string' as const },
+    },
+  ];
+
+  component_limit = 25;
+  component_offset = 0;
+  component_query = '';
+  is_dependency = null;
+  component_type = null;
+  view_type = 'tree';
+
   get breadcrumbs(): AkBreadcrumbsItemProps {
     return {
       title: `${this.intl.t('sbomModule.allComponentsAndVulnerabilities')} (${this.model.projectLastFileName})`,

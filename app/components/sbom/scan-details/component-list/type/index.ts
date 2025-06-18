@@ -1,7 +1,9 @@
 import Component from '@glimmer/component';
 import { capitalize } from '@ember/string';
+import { service } from '@ember/service';
+import type IntlService from 'ember-intl/services/intl';
 
-import SbomComponentModel from 'irene/models/sbom-component';
+import type SbomComponentModel from 'irene/models/sbom-component';
 
 export interface SbomScanDetailsComponentListTypeSignature {
   Args: {
@@ -10,8 +12,14 @@ export interface SbomScanDetailsComponentListTypeSignature {
 }
 
 export default class SbomScanDetailsComponentListTypeComponent extends Component<SbomScanDetailsComponentListTypeSignature> {
+  @service declare intl: IntlService;
+
   get type() {
-    return capitalize(this.args.sbomComponent.type);
+    if (this.args.sbomComponent?.isMLModel) {
+      return this.intl.t('sbomModule.mlModel');
+    }
+
+    return capitalize(this.args.sbomComponent?.type) || '-';
   }
 }
 
