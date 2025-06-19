@@ -1,0 +1,53 @@
+<AkStack
+  @width='full'
+  @direction='column'
+  @alignItems='center'
+  @justifyContent='center'
+  @spacing='2.5'
+  @bgColor='white'
+  local-class='scan-coverage-status-container'
+  data-test-fileDetails-dynamicScan-results-scanCoverage-status-container
+>
+  {{#if (or this.scanCoverage.coverageIsInProgress this.coverageIsUnsupported)}}
+    <AkSvg::ScvUnsupported
+      data-test-fileDetails-dynamicScan-results-scanCoverage-status-unsupported-svg
+    />
+  {{else if this.scanCoverage.coverageIsErrored}}
+    <AkSvg::ScvErrored
+      data-test-fileDetails-dynamicScan-results-scanCoverage-status-errored-svg
+    />
+  {{else}}
+    <AkSvg::ScvNotStarted
+      data-test-fileDetails-dynamicScan-results-scanCoverage-status-notStarted-svg
+    />
+  {{/if}}
+
+  <AkStack
+    @direction='column'
+    @alignItems='center'
+    @justifyContent='center'
+    @spacing='1'
+  >
+    <AkTypography
+      @variant='h5'
+      @fontWeight='bold'
+      @align='center'
+      {{style maxWidth=(if this.coverageIsUnsupported '100%' '450px')}}
+      data-test-fileDetails-dynamicScan-results-scanCoverage-status-text
+    >
+      {{this.statusTitle}}
+    </AkTypography>
+
+    {{#if this.statusSubtext}}
+      <AkTypography
+        @variant='body2'
+        @color='textSecondary'
+        @align='center'
+        {{style maxWidth='420px'}}
+        data-test-fileDetails-dynamicScan-results-scanCoverage-status-subtext
+      >
+        {{this.statusSubtext}}
+      </AkTypography>
+    {{/if}}
+  </AkStack>
+</AkStack>

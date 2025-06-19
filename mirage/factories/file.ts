@@ -1,6 +1,8 @@
 import { faker } from '@faker-js/faker';
-import { RISK_COLOR_CODE } from 'irene/utils/constants';
 import Base from './base';
+
+import { RISK_COLOR_CODE } from 'irene/utils/constants';
+import ENUMS from 'irene/enums';
 
 export const FILE_FACTORY_DEF = {
   uuid: faker.number.int(),
@@ -53,6 +55,10 @@ export const FILE_FACTORY_DEF = {
   },
 
   created_on: faker.date.recent().toString(),
+
+  dev_framework() {
+    return faker.helpers.arrayElement(ENUMS.FILE_DEV_FRAMEWORK.BASE_CHOICES);
+  },
 
   doughnutData() {
     const countRiskCritical = faker.number.int({

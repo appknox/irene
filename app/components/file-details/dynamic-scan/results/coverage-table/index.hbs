@@ -1,0 +1,97 @@
+{{#if this.fetchCoverageTable.isRunning}}
+  <AkTable::Loading @columns={{array 1 2}} />
+{{else}}
+  <AkStack @width='full' @bgColor='white'>
+    <AkPaginationProvider
+      @results={{this.coverageTableData}}
+      @totalItems={{this.totalCoverageCount}}
+      @onItemPerPageChange={{this.handleItemPerPageChange}}
+      @nextAction={{this.handleNextPrevAction}}
+      @prevAction={{this.handleNextPrevAction}}
+      @defaultLimit={{this.limit}}
+      @offset={{this.offset}}
+      @itemPerPageOptions={{array 10 25 50}}
+      as |pgc|
+    >
+      <AkTable @dense={{true}} as |t|>
+        <t.head
+          @columns={{this.columns}}
+          data-test-fileDetailsDynamicScanResultsCoverageTable-thead
+          as |h|
+        >
+          <h.row as |r|>
+            <r.cell as |column|>
+              {{#if column.headerComponent}}
+                {{#let (component column.headerComponent) as |Component|}}
+                  <Component
+                    @onStatusChange={{this.handleStatusChange}}
+                    @selectedStatus={{this.screenStatus}}
+                  />
+                {{/let}}
+              {{else}}
+                {{column.name}}
+              {{/if}}
+            </r.cell>
+          </h.row>
+        </t.head>
+
+        <t.body @rows={{pgc.currentPageResults}} as |b|>
+          <b.row
+            data-test-fileDetailsDynamicScanResultsCoverageTable-row
+            as |r|
+          >
+            <r.cell
+              data-test-fileDetailsDynamicScanResultsCoverageTable-cell
+              as |value|
+            >
+              {{#if r.columnValue.component}}
+                {{#let (component r.columnValue.component) as |Component|}}
+                  <Component @coverage={{r.rowValue}} />
+                {{/let}}
+              {{else}}
+                <AkTypography title={{value}} @noWrap={{true}}>
+                  {{value}}
+                </AkTypography>
+              {{/if}}
+            </r.cell>
+          </b.row>
+        </t.body>
+      </AkTable>
+
+      {{! Empty filter results }}
+      {{#if this.noFilterResults}}
+        <AkStack
+          @width='full'
+          @direction='column'
+          @alignItems='center'
+          @spacing='2'
+          class='py-3'
+          data-test-fileDetailsDynamicScanResultsCoverageTable-emptyFilterResults
+        >
+          <AkSvg::NoApiUrlFilter
+            data-test-fileDetailsDynamicScanResultsCoverageTable-emptyFilterResults-svg
+          />
+
+          <AkTypography>
+            {{t 'scanCoverage.noFilterResults'}}
+          </AkTypography>
+        </AkStack>
+      {{/if}}
+
+      <AkPagination
+        @disableNext={{pgc.disableNext}}
+        @nextAction={{pgc.nextAction}}
+        @disablePrev={{pgc.disablePrev}}
+        @prevAction={{pgc.prevAction}}
+        @endItemIdx={{pgc.endItemIdx}}
+        @startItemIdx={{pgc.startItemIdx}}
+        @itemPerPageOptions={{pgc.itemPerPageOptions}}
+        @onItemPerPageChange={{pgc.onItemPerPageChange}}
+        @selectedOption={{pgc.selectedOption}}
+        @tableItemLabel={{t 'scanCoverage.screensLabel'}}
+        @perPageTranslation={{t 'recordPerPage'}}
+        @totalItems={{pgc.totalItems}}
+      />
+    </AkPaginationProvider>
+  </AkStack>
+{{/if}}

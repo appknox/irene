@@ -2,27 +2,25 @@ import Controller from '@ember/controller';
 import { service } from '@ember/service';
 
 import type IntlService from 'ember-intl/services/intl';
-import type FileModel from 'irene/models/file';
-import { type AkBreadcrumbsItemProps } from 'irene/services/ak-breadcrumbs';
+import type { AkBreadcrumbsItemProps } from 'irene/services/ak-breadcrumbs';
+import type { FileDASTResultsModel } from 'irene/routes/authenticated/dashboard/file/dynamic-scan/results';
 
-export default class AuthenticatedDashboardFileDynamicScanResultsController extends Controller {
+export default class AuthenticatedDashboardFileDynamicScanResultsScanCoverageController extends Controller {
   @service declare intl: IntlService;
 
-  declare model: { file: FileModel; profileId: number };
+  declare model: FileDASTResultsModel;
 
   get breadcrumbs(): AkBreadcrumbsItemProps {
-    const routeModels = [this.model?.file?.id];
+    const routeModels = [this.model.file.id];
 
     const crumb: AkBreadcrumbsItemProps = {
-      title: this.intl.t('dastTabs.dastResults'),
-      route: 'authenticated.dashboard.file.dynamic-scan.results',
+      title: this.intl.t('scanCoverage.title'),
+      route: 'authenticated.dashboard.file.dynamic-scan.results.scan-coverage',
       models: routeModels,
       routeGroup: 'project/files',
 
       siblingRoutes: [
-        'authenticated.dashboard.file.dynamic-scan.automated',
-        'authenticated.dashboard.file.dynamic-scan.manual',
-        'authenticated.dashboard.file.dynamic-scan.scheduled-automated',
+        'authenticated.dashboard.file.dynamic-scan.results.index',
       ],
     };
 

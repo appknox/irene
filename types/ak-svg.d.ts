@@ -86,6 +86,9 @@ export enum AkSvgComponentInvocationByNames {
   PrivacyInProgress,
   PrivacyUpload,
   PrivacyNotFound,
+  ScvUnsupported,
+  ScvNotStarted,
+  ScvErrored,
 }
 
 export enum AkSvgComponentInvocationByPaths {

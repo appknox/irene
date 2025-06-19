@@ -1,0 +1,11 @@
+.dast-results-tabs {
+  position: sticky;
+  top: 5.92em;
+  z-index: 100;
+  width: 100%;
+  margin-top: 1em;
+  border: 1px solid var(--file-details-dynamic-scan-results-header-border-color);
+  background-color: var(
+    --file-details-dynamic-scan-results-header-background-color
+  );
+}

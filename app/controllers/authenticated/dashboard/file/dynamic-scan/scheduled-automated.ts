@@ -21,6 +21,8 @@ export default class AuthenticatedDashboardFileDynamicScanScheduledAutomatedCont
 
       siblingRoutes: [
         'authenticated.dashboard.file.dynamic-scan.results',
+        'authenticated.dashboard.file.dynamic-scan.results.index',
+        'authenticated.dashboard.file.dynamic-scan.results.scan-coverage',
         'authenticated.dashboard.file.dynamic-scan.manual',
         'authenticated.dashboard.file.dynamic-scan.automated',
       ],

@@ -1,38 +1,51 @@
-<AkStack
-  @justifyContent='space-between'
-  @alignItems='center'
-  @flexWrap='wrap'
-  class='p-2'
-  data-test-cy='staticScan-infoContainer'
->
-  <AkTypography @variant='h5' data-test-fileDetailScanActions-staticScanTitle>
-    {{t 'sast'}}
-  </AkTypography>
+<AkStack @direction='column' @width='full'>
+  <AkStack
+    @width='full'
+    @justifyContent='space-between'
+    @alignItems='center'
+    @flexWrap='wrap'
+    class='p-2'
+    data-test-cy='staticScan-infoContainer'
+  >
+    <AkTypography @variant='h5' data-test-fileDetailScanActions-staticScanTitle>
+      {{t 'staticScan'}}
+    </AkTypography>
 
-  {{#if @file.isStaticCompleted}}
-    <AkChip
-      @label={{t 'completed'}}
-      @color='success'
-      @variant='semi-filled'
-      @size='small'
-      local-class='chips-uppercase'
-      data-test-fileDetailScanActions-staticScanCompletedStatus
-    />
-  {{else}}
-    <AkStack @alignItems='center' local-class='scanning-chip chips-uppercase'>
-      <AkLoader @size={{12}} />
+    {{#if @file.isStaticCompleted}}
+      <AkChip
+        @label={{t 'completed'}}
+        @color='success'
+        @variant='semi-filled'
+        @size='small'
+        local-class='chips-uppercase'
+        data-test-fileDetailScanActions-staticScanCompletedStatus
+      />
+    {{else}}
+      <AkStack @alignItems='center' local-class='scanning-chip chips-uppercase'>
+        <AkLoader @size={{12}} />
 
-      <AkTypography
-        @color='textSecondary'
-        @fontWeight='bold'
-        local-class='scanning-text'
-        data-test-fileDetailScanActions-staticScanInProgressStatus
-      >
-        {{t 'scanning'}}...
-        {{@file.staticScanProgress}}%
-      </AkTypography>
-    </AkStack>
-  {{/if}}
+        <AkTypography
+          @color='textSecondary'
+          @fontWeight='bold'
+          local-class='scanning-text'
+          data-test-fileDetailScanActions-staticScanInProgressStatus
+        >
+          {{t 'scanning'}}...
+          {{@file.staticScanProgress}}%
+        </AkTypography>
+      </AkStack>
+    {{/if}}
+  </AkStack>
+
+  <FileDetails::ScanActions::ScanOverview
+    @file={{@file}}
+    @vulnerabilityCount={{if
+      @file.isStaticCompleted
+      @file.staticVulnerabilityCount
+      null
+    }}
+    data-test-fileDetails-scanActions-scanOverview-staticScanRoot
+  />
 </AkStack>
 
 <AkDivider @color='dark' />

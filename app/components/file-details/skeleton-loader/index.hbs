@@ -35,61 +35,35 @@
 
   {{! scan actions }}
   <AkStack @flexWrap='wrap' @spacing='2' @width='full'>
-    <div local-class='box-section-root scan-actions-status-card'>
-      <AkStack @justifyContent='space-between' class='p-2'>
-        <AkSkeleton @width='100px' />
+    {{#each (array 1 2 3 4)}}
+      <div local-class='box-section-root scan-actions-status-card'>
+        <AkStack @justifyContent='space-between' class='p-2'>
+          <AkSkeleton @width='100px' />
 
-        <AkSkeleton @width='70px' />
-      </AkStack>
+          <AkSkeleton @width='70px' />
+        </AkStack>
 
-      <AkDivider @color='dark' />
+        <AkStack
+          @width='full'
+          @direction='column'
+          @spacing='1'
+          class='px-2 py-1 mb-3'
+        >
+          <AkSkeleton @width='100px' />
 
-      <AkStack class='px-2 py-1'>
-        <AkSkeleton @width='100px' />
-      </AkStack>
-    </div>
+          <AkStack @alignItems='center' @spacing='0.5'>
+            <AkSkeleton @width='21px' @height='21px' />
+            <AkSkeleton @width='28px' @height='21px' />
+          </AkStack>
+        </AkStack>
 
-    <div local-class='box-section-root scan-actions-status-card'>
-      <AkStack @justifyContent='space-between' class='p-2'>
-        <AkSkeleton @width='100px' />
+        <AkDivider @color='dark' />
 
-        <AkSkeleton @width='70px' />
-      </AkStack>
-
-      <AkDivider @color='dark' />
-
-      <AkStack class='px-2 py-1'>
-        <AkSkeleton @width='100px' />
-      </AkStack>
-    </div>
-
-    <div local-class='box-section-root scan-actions-status-card'>
-      <AkStack @justifyContent='space-between' class='p-2'>
-        <AkSkeleton @width='100px' />
-
-        <AkSkeleton @width='70px' />
-      </AkStack>
-
-      <AkDivider @color='dark' />
-
-      <AkStack class='px-2 py-1'>
-        <AkSkeleton @width='100px' />
-      </AkStack>
-    </div>
-
-    <div local-class='box-section-root scan-actions-status-card'>
-      <AkStack @justifyContent='space-between' class='p-2'>
-        <AkSkeleton @width='100px' />
-
-        <AkSkeleton @width='70px' />
-      </AkStack>
-
-      <AkDivider @color='dark' />
-
-      <AkStack class='px-2 py-1'>
-        <AkSkeleton @width='100px' />
-      </AkStack>
-    </div>
+        <AkStack class='px-2 py-1'>
+          <AkSkeleton @width='100px' />
+        </AkStack>
+      </div>
+    {{/each}}
   </AkStack>
 
   {{! insights wrapper }}

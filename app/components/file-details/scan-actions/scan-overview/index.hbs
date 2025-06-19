@@ -1,0 +1,80 @@
+<AkStack
+  @width='full'
+  @direction='column'
+  @spacing='1'
+  class='px-2 py-1 mb-3'
+  data-test-fileDetails-scanActions-scanOverview-root
+  ...attributes
+>
+  <AkTypography @variant='body2' @color='textSecondary'>
+    {{t 'scanOverview'}}
+  </AkTypography>
+
+  <AkStack @spacing='1'>
+    <AkTooltip
+      @arrow={{true}}
+      @title={{t 'vulnerabilitiesFound'}}
+      @placement='bottom'
+      data-test-fileDetails-scanActions-scanOverview-vulnerabilitiesFoundTooltip
+    >
+      <AkStack @alignItems='center' local-class='scan-overview-item'>
+        <AkIcon
+          @iconName='bug-report'
+          @color='error'
+          data-test-fileDetails-scanActions-scanOverview-vulnerabilitiesFoundIcon
+        />
+
+        <AkTypography
+          @fontWeight='bold'
+          local-class='result-value'
+          {{style minWidth='16px'}}
+          data-test-fileDetails-scanActions-scanOverview-vulnerabilitiesFoundValue
+        >
+          {{this.vulnerabilityCount}}
+        </AkTypography>
+      </AkStack>
+    </AkTooltip>
+
+    {{#if @isDynamicScanAction}}
+      <FileDetails::DynamicScan::Results::ScanCoverageProvider
+        @file={{@file}}
+        as |sctx|
+      >
+        {{#if sctx.isLoadingScreenCoverage}}
+          <AkStack @alignItems='center' local-class='scan-overview-item'>
+            <AkSkeleton @width='21px' @height='21px' />
+            <AkSkeleton @width='28px' @height='21px' />
+          </AkStack>
+        {{else if sctx.scanCoverage.isAnyScreenCoverageComplete}}
+          <AkTooltip
+            @arrow={{true}}
+            @title={{t 'scanCoverage.screenCoverage'}}
+            @placement='bottom'
+            data-test-fileDetails-scanActions-scanOverview-screenCoverageTooltip
+          >
+            <AkStack
+              @alignItems='center'
+              local-class='scan-overview-item'
+              data-test-fileDetails-scanActions-scanOverview-screenCoverageRoot
+            >
+              <AkIcon
+                @iconName='bx:mobile-alt'
+                @color='info'
+                {{style minWidth='21px'}}
+                data-test-fileDetails-scanActions-scanOverview-screenCoverageIcon
+              />
+
+              <AkTypography
+                @fontWeight='bold'
+                local-class='result-value'
+                data-test-fileDetails-scanActions-scanOverview-screenCoverageValue
+              >
+                {{sctx.scanCoverage.coverage}}%
+              </AkTypography>
+            </AkStack>
+          </AkTooltip>
+        {{/if}}
+      </FileDetails::DynamicScan::Results::ScanCoverageProvider>
+    {{/if}}
+  </AkStack>
+</AkStack>

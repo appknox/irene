@@ -1,31 +1,44 @@
-<AkStack
-  @justifyContent='space-between'
-  @alignItems='center'
-  @flexWrap='wrap'
-  class='p-2'
->
-  <AkTypography @variant='h5' data-test-fileDetailScanActions-manualScanTitle>
-    {{t 'manualScan'}}
-  </AkTypography>
+<AkStack @direction='column' @width='full'>
+  <AkStack
+    @width='full'
+    @justifyContent='space-between'
+    @alignItems='center'
+    @flexWrap='wrap'
+    class='p-2'
+  >
+    <AkTypography @variant='h5' data-test-fileDetailScanActions-manualScanTitle>
+      {{t 'manualScan'}}
+    </AkTypography>
 
-  {{#if @file.isManualRequested}}
-    <AkChip
-      @label={{this.manualScanStatusText}}
-      @color='success'
-      @variant='semi-filled'
-      @size='small'
-      local-class='chips-uppercase'
-      data-test-fileDetailScanActions-manualScanStatus
-    />
-  {{else}}
-    <AkChip
-      @label={{t 'notStarted'}}
-      @variant='semi-filled'
-      @size='small'
-      local-class='chips-uppercase'
-      data-test-fileDetailScanActions-manualScanNotStartedStatus
-    />
-  {{/if}}
+    {{#if @file.isManualRequested}}
+      <AkChip
+        @label={{this.manualScanStatusText}}
+        @color='success'
+        @variant='semi-filled'
+        @size='small'
+        local-class='chips-uppercase'
+        data-test-fileDetailScanActions-manualScanStatus
+      />
+    {{else}}
+      <AkChip
+        @label={{t 'notStarted'}}
+        @variant='semi-filled'
+        @size='small'
+        local-class='chips-uppercase'
+        data-test-fileDetailScanActions-manualScanNotStartedStatus
+      />
+    {{/if}}
+  </AkStack>
+
+  <FileDetails::ScanActions::ScanOverview
+    @file={{@file}}
+    @vulnerabilityCount={{if
+      @file.isManualDone
+      @file.manualVulnerabilityCount
+      null
+    }}
+    data-test-fileDetails-scanActions-scanOverview-manualScanRoot
+  />
 </AkStack>
 
 <AkDivider @color='dark' />

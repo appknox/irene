@@ -1,45 +1,54 @@
-<AkStack
-  @justifyContent='space-between'
-  @alignItems='center'
-  @flexWrap='wrap'
-  class='p-2'
->
-  <AkTypography @variant='h5' data-test-fileDetailScanActions-apiScanTitle>
-    {{t 'apiScan'}}
-  </AkTypography>
+<AkStack @direction='column' @width='full'>
+  <AkStack
+    @width='full'
+    @justifyContent='space-between'
+    @alignItems='center'
+    @flexWrap='wrap'
+    class='p-2'
+  >
+    <AkTypography @variant='h5' data-test-fileDetailScanActions-apiScanTitle>
+      {{t 'apiScan'}}
+    </AkTypography>
 
-  {{#if @file.isRunningApiScan}}
-    <AkStack @alignItems='center' local-class='scanning-chip chips-uppercase'>
-      <AkLoader @size={{12}} />
+    {{#if @file.isRunningApiScan}}
+      <AkStack @alignItems='center' local-class='scanning-chip chips-uppercase'>
+        <AkLoader @size={{12}} />
 
-      <AkTypography
-        @color='textSecondary'
-        @fontWeight='bold'
-        local-class='scanning-text'
-        data-test-fileDetailScanActions-apiScanInProgressStatus
-      >
-        {{t 'scanning'}}...
-        {{@file.apiScanProgress}}%
-      </AkTypography>
-    </AkStack>
-  {{else if @file.isApiDone}}
-    <AkChip
-      @label={{t 'completed'}}
-      @color='success'
-      @variant='semi-filled'
-      @size='small'
-      local-class='chips-uppercase'
-      data-test-fileDetailScanActions-apiScanCompletedStatus
-    />
-  {{else if @file.isApiNotDone}}
-    <AkChip
-      @label={{t 'notStarted'}}
-      @variant='semi-filled'
-      @size='small'
-      local-class='chips-uppercase'
-      data-test-fileDetailScanActions-apiScanNotStartedStatus
-    />
-  {{/if}}
+        <AkTypography
+          @color='textSecondary'
+          @fontWeight='bold'
+          local-class='scanning-text'
+          data-test-fileDetailScanActions-apiScanInProgressStatus
+        >
+          {{t 'scanning'}}...
+          {{@file.apiScanProgress}}%
+        </AkTypography>
+      </AkStack>
+    {{else if @file.isApiDone}}
+      <AkChip
+        @label={{t 'completed'}}
+        @color='success'
+        @variant='semi-filled'
+        @size='small'
+        local-class='chips-uppercase'
+        data-test-fileDetailScanActions-apiScanCompletedStatus
+      />
+    {{else if @file.isApiNotDone}}
+      <AkChip
+        @label={{t 'notStarted'}}
+        @variant='semi-filled'
+        @size='small'
+        local-class='chips-uppercase'
+        data-test-fileDetailScanActions-apiScanNotStartedStatus
+      />
+    {{/if}}
+  </AkStack>
+
+  <FileDetails::ScanActions::ScanOverview
+    @file={{@file}}
+    @vulnerabilityCount={{if @file.isApiDone @file.apiVulnerabilityCount null}}
+    data-test-fileDetails-scanActions-scanOverview-apiScanRoot
+  />
 </AkStack>
 
 <AkDivider @color='dark' />

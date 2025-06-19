@@ -1,0 +1,8 @@
+.screen-coverage-container {
+  border: 1px solid
+    var(
+      --file-details-dynamic-scan-results-scan-coverage-container-border-color
+    );
+  border-top: none;
+  border-bottom: none;
+}
