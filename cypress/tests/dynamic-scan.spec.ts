@@ -220,7 +220,9 @@ describe('Dynamic Scan', () => {
           ).within(() => {
             const assertOpts = { ...DEFAULT_ASSERT_OPTS };
 
-            cy.findByText(cyTranslate('dast'), assertOpts).should('exist');
+            cy.findByText(cyTranslate('dynamicScan'), assertOpts).should(
+              'exist'
+            );
 
             cy.findByText(
               file.is_dynamic_done
