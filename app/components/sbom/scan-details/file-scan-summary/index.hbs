@@ -12,24 +12,30 @@
         {{fs.label}}
       </AkTypography>
 
-      {{#if fs.link}}
-        <AkLink
-          @typographyVariant='h6'
-          @color='primary'
-          @underline='always'
-          @route={{fs.linkArgs.route}}
-          @model={{fs.linkArgs.model}}
-          data-test-sbomScanDetails-fileSummaryGroup-link
-        >
-          {{fs.value}}
-        </AkLink>
+      {{#if fs.component}}
+        {{#let (component fs.component) as |Component|}}
+          <Component @sbomFile={{@sbomFile}} />
+        {{/let}}
       {{else}}
-        <AkTypography
-          @variant='h6'
-          data-test-sbomScanDetails-fileSummaryGroup-value
-        >
-          {{fs.value}}
-        </AkTypography>
+        {{#if fs.link}}
+          <AkLink
+            @typographyVariant='h6'
+            @color='primary'
+            @underline='always'
+            @route={{fs.linkArgs.route}}
+            @model={{fs.linkArgs.model}}
+            data-test-sbomScanDetails-fileSummaryGroup-link
+          >
+            {{fs.value}}
+          </AkLink>
+        {{else}}
+          <AkTypography
+            @variant='h6'
+            data-test-sbomScanDetails-fileSummaryGroup-value
+          >
+            {{fs.value}}
+          </AkTypography>
+        {{/if}}
       {{/if}}
     </AkStack>
 
@@ -37,52 +43,4 @@
       <AkDivider />
     {{/unless}}
   {{/each}}
-
-  {{#if this.scanStatusCompleted}}
-    <div class='my-2'>
-      <AkTypography @variant='h5'>
-        {{t 'sbomModule.sbomSummary'}}
-      </AkTypography>
-    </div>
-
-    {{#each this.scanSummary as |ss|}}
-      <AkStack
-        class='py-1'
-        data-test-sbomScanDetails-scanSummaryGroup='{{ss.label}}'
-      >
-        <AkTypography
-          {{style width='180px'}}
-          @color='textSecondary'
-          data-test-sbomScanDetails-scanSummaryGroup-label
-        >
-          {{ss.label}}
-        </AkTypography>
-
-        <AkStack
-          {{style gap='0.5em 2.5em'}}
-          @alignItems='center'
-          @flexWrap='wrap'
-        >
-          {{#if ss.component}}
-            {{#let (component ss.component) as |Component|}}
-              <Component @sbomFile={{@sbomFile}} />
-            {{/let}}
-          {{else}}
-            {{#each ss.value as |val|}}
-              <AkTypography
-                @variant='h6'
-                data-test-sbomScanDetails-scanSummaryGroup-value='{{val}}'
-              >
-                {{val}}
-              </AkTypography>
-            {{/each}}
-          {{/if}}
-        </AkStack>
-      </AkStack>
-
-      {{#unless ss.isLast}}
-        <AkDivider />
-      {{/unless}}
-    {{/each}}
-  {{/if}}
 </AkStack>

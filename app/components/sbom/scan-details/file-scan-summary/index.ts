@@ -13,6 +13,18 @@ export interface SbomScanDetailsFileScanSummarySignature {
   };
 }
 
+interface FileScanSummaryItem {
+  label: string;
+  value?: string;
+  component?: 'sbom/scan-status' | null;
+  link?: boolean;
+  linkArgs?: {
+    route: string;
+    model: string;
+  };
+  hideDivider?: boolean;
+}
+
 export default class SbomScanDetailsFileScanSummaryComponent extends Component<SbomScanDetailsFileScanSummarySignature> {
   @service declare intl: IntlService;
 
@@ -22,6 +34,14 @@ export default class SbomScanDetailsFileScanSummaryComponent extends Component<S
 
   get fileSummary() {
     return [
+      this.scanStatusCompleted && {
+        label: this.intl.t('status'),
+        component: 'sbom/scan-status' as const,
+      },
+      this.scanStatusCompleted && {
+        label: this.intl.t('sbomModule.generatedDate'),
+        value: dayjs(this.args.sbomFile.completedAt).format('MMM DD, YYYY'),
+      },
       {
         label: this.intl.t('version'),
         value: this.args.sbomFile.file.get('version'),
@@ -38,58 +58,9 @@ export default class SbomScanDetailsFileScanSummaryComponent extends Component<S
           route: 'authenticated.dashboard.file',
           model: this.args.sbomFile.file.get('id'),
         },
-        hideDivider: this.args.sbomFile.status !== SbomScanStatus.COMPLETED,
+        hideDivider: true,
       },
-    ];
-  }
-
-  get scanSummary() {
-    return [
-      {
-        label: this.intl.t('sbomModule.totalComponents'),
-        value: [`${this.args.sbomScanSummary?.componentCount ?? ''}`],
-      },
-      {
-        label: this.intl.t('sbomModule.componentType'),
-        value: this.componentTypeCounts,
-      },
-      {
-        label: this.intl.t('status'),
-        component: 'sbom/scan-status' as const,
-      },
-      {
-        label: this.intl.t('sbomModule.generatedDate'),
-        value: [dayjs(this.args.sbomFile.completedAt).format('MMM DD, YYYY')],
-        isLast: true,
-      },
-    ];
-  }
-
-  get componentTypeCounts() {
-    type SbomScanSummaryCountKey = keyof typeof this.scanSummaryKeyLabelMap;
-
-    return Object.entries(this.scanSummaryKeyLabelMap)
-      .map(([key, label]) => {
-        const count = this.args.sbomScanSummary?.get(
-          key as SbomScanSummaryCountKey
-        );
-
-        return count ? `${label} - ${count}` : null;
-      })
-      .filter(Boolean);
-  }
-
-  get scanSummaryKeyLabelMap() {
-    return {
-      applicationCount: this.intl.t('application'),
-      containerCount: this.intl.t('container'),
-      deviceCount: this.intl.t('device'),
-      fileCount: this.intl.t('file'),
-      firmwareCount: this.intl.t('firmware'),
-      frameworkCount: this.intl.t('framework'),
-      libraryCount: this.intl.t('library'),
-      operatingSystemCount: this.intl.t('operatingSystem'),
-    };
+    ].filter(Boolean) as FileScanSummaryItem[];
   }
 }
 

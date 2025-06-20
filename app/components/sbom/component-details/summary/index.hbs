@@ -1,5 +1,5 @@
 <div ...attributes data-test-sbomScanDetails-componentDetails-summary>
-  {{#each this.componentSummary as |cs|}}
+  {{#each this.componentSummary as |cs index|}}
     <AkStack
       class='p-1'
       data-test-sbomScanDetails-componentDetails-summary='{{cs.label}}'
@@ -13,13 +13,29 @@
           <Component @sbomComponent={{@sbomComponent}} />
         {{/let}}
       {{else}}
-        <AkTypography @variant='h6'>
-          {{or cs.value '-'}}
-        </AkTypography>
+        {{#if cs.isLink}}
+          <a
+            href={{cs.value}}
+            target='_blank'
+            rel='noopener noreferrer'
+            data-test-sbomScanDetails-componentDetails-summary-link
+          >
+            <AkTypography @variant='h6' @underline='always'>
+              {{cs.value}}
+            </AkTypography>
+          </a>
+        {{else}}
+          <AkTypography
+            data-test-sbomScanDetails-componentDetails-summary-value
+            @variant='h6'
+          >
+            {{cs.value}}
+          </AkTypography>
+        {{/if}}
       {{/if}}
     </AkStack>
 
-    {{#unless cs.isLast}}
+    {{#unless (eq index this.componentSummaryLength)}}
       <AkDivider />
     {{/unless}}
   {{/each}}
