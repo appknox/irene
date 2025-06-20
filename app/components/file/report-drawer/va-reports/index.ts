@@ -1,9 +1,7 @@
-/* eslint-disable ember/no-observers */
 import Component from '@glimmer/component';
 import { tracked } from '@glimmer/tracking';
 import { task } from 'ember-concurrency';
 import { inject as service } from '@ember/service';
-import { addObserver, removeObserver } from '@ember/object/observers';
 import { action } from '@ember/object';
 import { waitForPromise } from '@ember/test-waiters';
 
@@ -14,6 +12,7 @@ import type IntlService from 'ember-intl/services/intl';
 
 import parseError from 'irene/utils/parse-error';
 import { REPORT } from 'irene/utils/constants';
+import { useEffect } from 'irene/helpers/use-effect';
 import { type FileReportScanType } from 'irene/models/file-report';
 import type FileReportModel from 'irene/models/file-report';
 import type FileModel from 'irene/models/file';
@@ -57,14 +56,13 @@ export default class FileReportDrawerVaReportsComponent extends Component<FileRe
 
   modelName = 'file-report' as const;
 
-  constructor(
-    owner: unknown,
-    args: FileReportDrawerVaReportsSignature['Args']
-  ) {
-    super(owner, args);
-
-    this.initializeDrawer();
-  }
+  // Effect to observe the report counter
+  reloadReportsEffect = useEffect(this, {
+    effect: this.reloadReports,
+    dependencies: {
+      reportCounter: () => this.realtime.ReportCounter,
+    },
+  });
 
   get file() {
     return this.args.file;
@@ -211,28 +209,8 @@ export default class FileReportDrawerVaReportsComponent extends Component<FileRe
 
   // Actions
   @action
-  observeReportCounter() {
+  reloadReports() {
     this.getReports.perform();
-  }
-
-  @action initializeDrawer() {
-    addObserver(
-      this.realtime,
-      'ReportCounter',
-      this,
-      this.observeReportCounter
-    );
-
-    this.getReports.perform();
-  }
-
-  @action removeReportCounterObserver() {
-    removeObserver(
-      this.realtime,
-      'ReportCounter',
-      this,
-      this.observeReportCounter
-    );
   }
 
   generateReport = task(async () => {

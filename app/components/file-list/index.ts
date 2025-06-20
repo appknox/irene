@@ -1,23 +1,22 @@
-/* eslint-disable ember/no-observers */
-// eslint-disable-next-line ember/use-ember-data-rfc-395-imports
-import DS from 'ember-data';
-
 import Component from '@glimmer/component';
 import { tracked } from '@glimmer/tracking';
 import { task } from 'ember-concurrency';
-import Store from '@ember-data/store';
-import { inject as service } from '@ember/service';
+import { service } from '@ember/service';
 import { action } from '@ember/object';
-import { addObserver, removeObserver } from '@ember/object/observers';
-import RouterService from '@ember/routing/router-service';
-import IntlService from 'ember-intl/services/intl';
+import type Store from '@ember-data/store';
+import type RouterService from '@ember/routing/router-service';
+import type IntlService from 'ember-intl/services/intl';
 
-import ProjectModel from 'irene/models/project';
-import FileModel from 'irene/models/file';
-import { PaginationProviderActionsArgs } from 'irene/components/ak-pagination-provider';
-import RealtimeService from 'irene/services/realtime';
+// eslint-disable-next-line ember/use-ember-data-rfc-395-imports
+import type DS from 'ember-data';
+
+import { useEffect } from 'irene/helpers/use-effect';
 import parseError from 'irene/utils/parse-error';
-import { ProjectFilesQueryParams } from 'irene/routes/authenticated/dashboard/project/files';
+import type { PaginationProviderActionsArgs } from 'irene/components/ak-pagination-provider';
+import type { ProjectFilesQueryParams } from 'irene/routes/authenticated/dashboard/project/files';
+import type RealtimeService from 'irene/services/realtime';
+import type ProjectModel from 'irene/models/project';
+import type FileModel from 'irene/models/file';
 
 type FilesQueryResponse = DS.AdapterPopulatedRecordArray<FileModel> & {
   meta: { count: number };
@@ -41,14 +40,20 @@ export default class FileListComponent extends Component<FileListSignature> {
   @tracked baseFile: FileModel | null = null;
   @tracked fileToCompare: FileModel | null = null;
 
+  // Effect to observe the file counter
+  reloadFilesEffect = useEffect(this, {
+    effect: this.reloadFiles,
+    dependencies: {
+      fileCounter: () => this.realtime.FileCounter,
+      limit: () => this.args.queryParams.files_limit,
+      offset: () => this.args.queryParams.files_offset,
+    },
+  });
+
   constructor(owner: unknown, args: FileListSignature['Args']) {
     super(owner, args);
 
-    addObserver(this.realtime, 'FileCounter', this, this.observeFileCounter);
-
-    const { files_limit, files_offset } = args.queryParams;
-
-    this.getFiles.perform(files_limit, files_offset, false);
+    this.getFiles.perform(this.limit, this.offset);
   }
 
   get limit() {
@@ -86,31 +91,23 @@ export default class FileListComponent extends Component<FileListSignature> {
   }
 
   // Reloads the files list whenever the file counter changes
-  observeFileCounter() {
+  @action
+  reloadFiles() {
     this.getFiles.perform(this.limit, this.offset);
-  }
-
-  removeFileCounterObserver() {
-    removeObserver(this.realtime, 'FileCounter', this, this.observeFileCounter);
-  }
-
-  willDestroy() {
-    super.willDestroy();
-    this.removeFileCounterObserver();
   }
 
   // Table Actions
   @action goToPage(args: PaginationProviderActionsArgs) {
     const { limit, offset } = args;
 
-    this.getFiles.perform(limit, offset);
+    this.setRouteQueryParams(limit, offset);
   }
 
   @action onItemPerPageChange(args: PaginationProviderActionsArgs) {
     const { limit } = args;
     const offset = 0;
 
-    this.getFiles.perform(limit, offset);
+    this.setRouteQueryParams(limit, offset);
   }
 
   @action onCompareBtnClick() {
@@ -152,6 +149,7 @@ export default class FileListComponent extends Component<FileListSignature> {
     this.fileToCompare = null;
   }
 
+  @action
   setRouteQueryParams(limit: string | number, offset: string | number) {
     this.router.transitionTo({
       queryParams: {
@@ -161,35 +159,25 @@ export default class FileListComponent extends Component<FileListSignature> {
     });
   }
 
-  getFiles = task(
-    async (
-      limit: string | number,
-      offset: string | number,
-      setQueryParams = true
-    ) => {
-      if (setQueryParams) {
-        this.setRouteQueryParams(limit, offset);
-      }
+  getFiles = task(async (limit: string | number, offset: string | number) => {
+    const query = {
+      projectId: this.project?.get('id'),
+      limit: limit,
+      offset: offset,
+    };
 
-      const query = {
-        projectId: this.project?.get('id'),
-        limit: limit,
-        offset: offset,
-      };
+    try {
+      const files = (await this.store.query(
+        'file',
+        query
+      )) as FilesQueryResponse;
 
-      try {
-        const files = (await this.store.query(
-          'file',
-          query
-        )) as FilesQueryResponse;
-
-        this.filesResponse = files;
-      } catch (err) {
-        this.notify.error(parseError(err));
-        this.filesResponse = null;
-      }
+      this.filesResponse = files;
+    } catch (err) {
+      this.notify.error(parseError(err));
+      this.filesResponse = null;
     }
-  );
+  });
 }
 
 declare module '@glint/environment-ember-loose/registry' {

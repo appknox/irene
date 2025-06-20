@@ -1,20 +1,19 @@
-/* eslint-disable ember/no-observers */
 import { inject as service } from '@ember/service';
 import Component from '@glimmer/component';
 import { task } from 'ember-concurrency';
-import IntlService from 'ember-intl/services/intl';
 import { tracked } from '@glimmer/tracking';
-import { addObserver, removeObserver } from '@ember/object/observers';
+import { action } from '@ember/object';
+import type IntlService from 'ember-intl/services/intl';
+import type Store from '@ember-data/store';
 
 // eslint-disable-next-line ember/use-ember-data-rfc-395-imports
-import { DS } from 'ember-data';
-import Store from '@ember-data/store';
+import type { DS } from 'ember-data';
+
+import { useEffect } from 'irene/helpers/use-effect';
 import parseError from 'irene/utils/parse-error';
-
-import SbomFileModel from 'irene/models/sbom-file';
-
 import SbomReportModel, { SbomReportStatus } from 'irene/models/sbom-report';
-import RealtimeService from 'irene/services/realtime';
+import type SbomFileModel from 'irene/models/sbom-file';
+import type RealtimeService from 'irene/services/realtime';
 
 type SbomScanReportQueryResponse =
   DS.AdapterPopulatedRecordArray<SbomReportModel> & {
@@ -35,8 +34,12 @@ export default class SbomScanReportDrawerReportListComponent extends Component<S
 
   @tracked scanReportQueryResponse: SbomScanReportQueryResponse | null = null;
 
-  // translation variables
-  tPleaseTryAgain: string;
+  reloadLatestSbomScanReportEffect = useEffect(this, {
+    effect: this.triggerReloadLatestSbomScanReport,
+    dependencies: {
+      realtime: () => this.realtime.SbomReportCounter,
+    },
+  });
 
   constructor(
     owner: unknown,
@@ -44,22 +47,11 @@ export default class SbomScanReportDrawerReportListComponent extends Component<S
   ) {
     super(owner, args);
 
-    this.tPleaseTryAgain = this.intl.t('pleaseTryAgain');
-
     this.fetchSbomScanReports.perform();
-
-    addObserver(
-      this.realtime,
-      'SbomReportCounter',
-      this,
-      this.observeSbomReportCounter
-    );
   }
 
-  willDestroy() {
-    super.willDestroy();
-
-    this.removeSbomReportCounterObserver();
+  get tPleaseTryAgain() {
+    return this.intl.t('pleaseTryAgain');
   }
 
   get sbomReports() {
@@ -100,18 +92,14 @@ export default class SbomScanReportDrawerReportListComponent extends Component<S
     ];
   }
 
-  observeSbomReportCounter() {
-    this.latestSbomScanReport?.reload();
+  @action
+  triggerReloadLatestSbomScanReport() {
+    this.reloadLatestSbomScanReport.perform();
   }
 
-  removeSbomReportCounterObserver() {
-    removeObserver(
-      this.realtime,
-      'SbomReportCounter',
-      this,
-      this.observeSbomReportCounter
-    );
-  }
+  reloadLatestSbomScanReport = task(async () => {
+    await this.latestSbomScanReport?.reload();
+  });
 
   fetchSbomScanReports = task(async () => {
     try {

@@ -1,3 +1,7 @@
+{{! Effect List }}
+{{this.reloadInvitesEffect}}
+
+{{! Component Start }}
 <AkPaginationProvider
   @results={{this.inviteList}}
   @onItemPerPageChange={{this.handleItemPerPageChange}}
@@ -39,7 +43,7 @@
                   @invitation={{r.rowValue}}
                   @organization={{@organization}}
                   @blurOverlay={{@blurConfirmBoxOverlay}}
-                  @reloadInvites={{this.handleReloadInvites}}
+                  @reloadInvites={{this.reloadInvites}}
                 />
               {{/let}}
             {{else}}
