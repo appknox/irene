@@ -1,18 +1,16 @@
-/* eslint-disable ember/no-observers */
 import Component from '@glimmer/component';
 import { inject as service } from '@ember/service';
 import { action } from '@ember/object';
 import { tracked } from 'tracked-built-ins';
 import { task } from 'ember-concurrency';
-import { addObserver, removeObserver } from '@ember/object/observers';
 import type RouterService from '@ember/routing/router-service';
 import type IntlService from 'ember-intl/services/intl';
 
+import { useEffect } from 'irene/helpers/use-effect';
 import parseError from 'irene/utils/parse-error';
 import type DynamicScanService from 'irene/services/dynamic-scan';
 import type FileModel from 'irene/models/file';
 import type IreneAjaxService from 'irene/services/ajax';
-import type DynamicscanModel from 'irene/models/dynamicscan';
 
 export interface FileDetailsDynamicScanScheduledAutomatedSignature {
   Args: {
@@ -27,6 +25,17 @@ export default class FileDetailsDynamicScanScheduledAutomatedComponent extends C
   @service declare intl: IntlService;
   @service('notifications') declare notify: NotificationService;
   @service('dynamic-scan') declare dsService: DynamicScanService;
+
+  @tracked trackDynamicScanStatus = false;
+
+  // Effect to notify the user of the status
+  notifyUserOfStatusEffect = useEffect(this, {
+    effect: this.notifyUserOfStatus,
+    dependencies: {
+      trackDynamicScanStatus: () => this.trackDynamicScanStatus,
+      scheduledScanStatus: () => this.dsService.scheduledScan?.status,
+    },
+  });
 
   constructor(
     owner: unknown,
@@ -97,21 +106,14 @@ export default class FileDetailsDynamicScanScheduledAutomatedComponent extends C
 
     // If scan is not yet completed
     if (!this.dynamicScanCompleted) {
-      this.notifyUserOfCompletionOrError = true; // To remove observer if registered
-
-      addObserver(
-        this.dynamicScan as DynamicscanModel,
-        'status',
-        this,
-        this.notifyUserOfStatus
-      );
+      this.trackDynamicScanStatus = true;
     } else {
       this.doNotifyUserOfStatus.perform();
     }
   }
 
   @action notifyUserOfStatus() {
-    if (this.dynamicScanCompleted) {
+    if (this.dynamicScanCompleted || this.trackDynamicScanStatus) {
       this.doNotifyUserOfStatus.perform();
     }
   }
@@ -152,21 +154,6 @@ export default class FileDetailsDynamicScanScheduledAutomatedComponent extends C
       this.notify.error(errorMsg);
     }
   });
-
-  willDestroy() {
-    super.willDestroy();
-
-    if (this.notifyUserOfCompletionOrError) {
-      removeObserver(
-        this.dynamicScan as DynamicscanModel,
-        'status',
-        this,
-        this.notifyUserOfStatus
-      );
-
-      this.notifyUserOfCompletionOrError = false;
-    }
-  }
 }
 
 declare module '@glint/environment-ember-loose/registry' {

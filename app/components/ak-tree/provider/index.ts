@@ -1,8 +1,7 @@
-/* eslint-disable ember/no-observers */
 import Component from '@glimmer/component';
 import { tracked } from 'tracked-built-ins';
 import { action } from '@ember/object';
-import { addObserver, removeObserver } from '@ember/object/observers';
+import { useEffect } from 'irene/helpers/use-effect';
 
 // Base Tree Node Shape
 export interface AkTreeNodeProps {
@@ -82,19 +81,13 @@ export default class AkTreeProviderComponent<
 > extends Component<AkTreeProviderSignature<N>> {
   @tracked flatNodes: AkTreeProviderFlatNodes = {};
 
-  constructor(owner: unknown, args: AkTreeProviderSignature<N>['Args']) {
-    super(owner, args);
-
-    this.initialize();
-
-    addObserver(this.args, 'treeData', this.initialize);
-  }
-
-  willDestroy(): void {
-    super.willDestroy();
-
-    removeObserver(this.args, 'treeData', this.initialize);
-  }
+  // Effect to initialize the tree data
+  initializeEffect = useEffect(this, {
+    effect: this.initialize,
+    dependencies: {
+      treeData: () => this.args.treeData,
+    },
+  });
 
   get expanded() {
     return this.args.expanded;
