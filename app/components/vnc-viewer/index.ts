@@ -14,7 +14,7 @@ export interface VncViewerSignature {
   Args: {
     file: FileModel;
     dynamicScan: AsyncBelongsTo<DynamicscanModel> | null;
-    profileId?: number;
+    profileId?: string | number;
     isAutomated?: boolean;
   };
   Blocks: {

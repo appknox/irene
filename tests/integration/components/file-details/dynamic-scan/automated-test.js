@@ -113,9 +113,9 @@ module(
       this.dsService.fetchLatestScans(this.file);
 
       await render(hbs`
-        <FileDetails::DynamicScan::Automated 
-          @file={{this.file}} 
-          @profileId={{this.file.project.activeProfileId}} 
+        <FileDetails::DynamicScan::Automated
+          @file={{this.file}}
+          @profileId={{this.file.project.activeProfileId}}
         />
       `);
 
@@ -204,8 +204,8 @@ module(
       });
 
       await render(hbs`
-        <FileDetails::DynamicScan::Automated 
-          @file={{this.file}} 
+        <FileDetails::DynamicScan::Automated
+          @file={{this.file}}
           @profileId={{this.file.project.activeProfileId}}
         />
       `);
@@ -331,9 +331,9 @@ module(
         this.dsService.fetchLatestScans(this.file);
 
         await render(hbs`
-          <FileDetails::DynamicScan::Automated 
-            @file={{this.file}} 
-            @profileId={{this.file.project.activeProfileId}} 
+          <FileDetails::DynamicScan::Automated
+            @file={{this.file}}
+            @profileId={{this.file.project.activeProfileId}}
           />
         `);
 

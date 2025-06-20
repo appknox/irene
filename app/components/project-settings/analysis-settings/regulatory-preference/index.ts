@@ -88,7 +88,7 @@ export default class ProjectSettingsAnalysisSettingsRegulatoryPreferenceComponen
     if (this.args.project?.activeProfileId) {
       this.profile = await this.store.findRecord(
         'profile',
-        this.args.project.activeProfileId
+        String(this.args.project.activeProfileId)
       );
     }
   });
