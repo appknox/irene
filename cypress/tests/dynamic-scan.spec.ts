@@ -87,12 +87,7 @@ const APP_TYPE_DETAILS = [
     errorThreshold: 0.065,
     packageName: 'com.appknox.mfva',
     interactions: MFVA_INTERACTIONS,
-
-    preferredDeviceModels: [
-      'Google Pixel 6a',
-      'Google Pixel 7a',
-      'Google Pixel 4a',
-    ],
+    preferredDeviceModels: ['Google Pixel 7a-BKGCYPY'],
 
     performInteraction: (
       interactions: AppInteraction[],
@@ -107,7 +102,7 @@ const APP_TYPE_DETAILS = [
     errorThreshold: 0.2,
     packageName: 'com.appknox.dvia',
     interactions: DVIA_INTERACTIONS,
-    preferredDeviceModels: ['D101AP'],
+    preferredDeviceModels: ['N71mAP-2HWILEQ'],
 
     performInteraction: (
       interactions: AppInteraction[],
@@ -220,7 +215,9 @@ describe('Dynamic Scan', () => {
           ).within(() => {
             const assertOpts = { ...DEFAULT_ASSERT_OPTS };
 
-            cy.findByText(cyTranslate('dast'), assertOpts).should('exist');
+            cy.findByText(cyTranslate('dynamicScan'), assertOpts).should(
+              'exist'
+            );
 
             cy.findByText(
               file.is_dynamic_done
@@ -369,7 +366,10 @@ describe('Dynamic Scan', () => {
                     .then((data: Array<AvailableManualDeviceProps>) => {
                       // Select any device that is in preferredDeviceModels
                       const selectedManualDevice = data.find(
-                        (d) => app.preferredDeviceModels.indexOf(d?.model) > -1
+                        (d) =>
+                          app.preferredDeviceModels.indexOf(
+                            `${d?.model}-${d?.device_identifier}`
+                          ) > -1
                       );
 
                       cy.wrap(selectedManualDevice ?? null).as(
