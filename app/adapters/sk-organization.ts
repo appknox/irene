@@ -12,15 +12,16 @@ export default class SkOrganizationAdapter extends CommonDRFAdapter {
     return this.buildURLFromBase(baseurl);
   }
 
-  async toggleAddToInventoryByDefault(
+  async toggleOrganizationSetting(
     modelName: string,
     id: string | number,
-    addToInventoryByDefault: boolean
-  ) {
+    settingKey: string,
+    value: boolean
+  ): Promise<SkOrganizationModel> {
     const url = this._buildURL(modelName, id);
 
     const data = {
-      add_appknox_project_to_inventory_by_default: addToInventoryByDefault,
+      [settingKey]: value,
     };
 
     const response = await this.ajax(url, 'PATCH', { data });

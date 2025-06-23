@@ -143,5 +143,38 @@
     </AkStack>
 
     <AkDivider @color='dark' />
+
+    <AkStack
+      @width='full'
+      @justifyContent='space-between'
+      @alignItems='center'
+      class='px-3 py-4'
+    >
+      <AkStack @direction='column' @spacing='0.5' {{style maxWidth='450px'}}>
+        <AkTypography
+          @fontWeight='bold'
+          data-test-storeknoxInventory-settingsDrawer-autoDiscoveryEnabledHeading
+        >
+          {{t 'storeknox.autoDiscovery'}}
+        </AkTypography>
+
+        <AkTypography
+          @variant='body2'
+          @color='neutral'
+          data-test-storeknoxInventory-settingsDrawer-autoDiscoveryEnabledHeadingDesc
+        >
+          {{t 'storeknox.autoDiscoveryToggleDesc'}}
+        </AkTypography>
+      </AkStack>
+
+      <AkToggle
+        @size='small'
+        @checked={{this.selectedSkOrg.autoDiscoveryEnabled}}
+        @onChange={{this.onToggleAutoDiscoveryEnabled}}
+        data-test-storeknoxInventory-settingsDrawer-autoDiscoveryEnabledHeadingToggle
+      />
+    </AkStack>
+
+    <AkDivider @color='dark' />
   </AkStack>
 </AkDrawer>
