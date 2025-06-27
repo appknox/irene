@@ -84,6 +84,10 @@ export default class AppknoxWrapperComponent extends Component<AppknoxWrapperSig
     return this.me.org?.can_access_partner_dashboard;
   }
 
+  get showAppMonitoringDashboard() {
+    return this.organization?.selected?.features?.app_monitoring;
+  }
+
   get showPublicApiDocs() {
     return this.organization?.selected?.features?.public_apis;
   }
@@ -113,6 +117,13 @@ export default class AppknoxWrapperComponent extends Component<AppknoxWrapperSig
         iconVariant: 'outlined',
         route: 'authenticated.dashboard.privacy-module',
         currentWhen: 'authenticated.dashboard.privacy-module',
+      },
+      this.showAppMonitoringDashboard && {
+        label: this.intl.t('appMonitoring'),
+        icon: 'inventory-2',
+        route: 'authenticated.dashboard.app-monitoring',
+        query: { app_offset: 0 },
+        currentWhen: 'authenticated.dashboard.app-monitoring',
       },
       this.showSbomDashboard && {
         label: this.intl.t('SBOM'),

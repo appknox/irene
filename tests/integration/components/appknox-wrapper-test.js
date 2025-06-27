@@ -50,6 +50,7 @@ class IntegrationStub extends Service {
 
 const menuItems = ({
   privacy,
+  appMonitoring,
   sbom,
   analytics,
   publicApis,
@@ -64,6 +65,7 @@ const menuItems = ({
       hasBadge: true,
     },
     privacy && { label: t('privacyModule.title'), icon: 'shield-outline' },
+    appMonitoring && { label: t('appMonitoring'), icon: 'inventory-2' },
     sbom && { label: t('SBOM'), icon: 'receipt-long' },
     analytics && { label: t('analytics'), icon: 'graphic-eq' },
     { label: t('organization'), icon: 'group' },
@@ -81,6 +83,7 @@ const menuItems = ({
 
 const sections = (enabled) => ({
   billing: enabled,
+  appMonitoring: enabled,
   market: enabled,
   partner: enabled,
   sbom: enabled,
@@ -369,6 +372,7 @@ module('Integration | Component | appknox-wrapper', function (hooks) {
       this.organization.selected.billingHidden = !sectionConfig.billing;
 
       this.organization.selected.features = {
+        app_monitoring: sectionConfig.appMonitoring,
         public_apis: sectionConfig.publicApis,
       };
 

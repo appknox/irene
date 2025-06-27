@@ -1913,6 +1913,14 @@
       "fileBeingAnalyzedMsg": "This app upload has been completed. Kindly give a minute to get VA results. If nothing happens after a while please refresh page.",
       "cannotIntiateUpload": "You cannot initiate an upload at the moment.",
       "cannotIntiateUploadForVersion": "You cannot initiate an upload for this version."
+    },
+    "upsellingMessages": {
+      "header1": "Store Monitoring is now part of our new product, Storeknox!",
+      "header2": "Using Storeknox, you can",
+      "message1": "Discover apps that belong to your organization.",
+      "message2": "Create and maintain a centralized inventory of all your mobile applications.",
+      "message3": "Detect unscanned versions of your apps when they are released to the stores.",
+      "message4": "Identify fake apps impersonating your brand and much more."
     }
   },
   "storeLowercase": "store",
