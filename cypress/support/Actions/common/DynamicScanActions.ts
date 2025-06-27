@@ -94,7 +94,9 @@ export default class DynamicScanActions {
     // check completed static scan info
     cy.findByTestId('staticScan-infoContainer', DEFAULT_ASSERT_OPTS).within(
       () => {
-        cy.findByText(cyTranslate('sast'), DEFAULT_ASSERT_OPTS).should('exist');
+        cy.findByText(cyTranslate('staticScan'), DEFAULT_ASSERT_OPTS).should(
+          'exist'
+        );
 
         cy.findByText(cyTranslate('completed'), DEFAULT_ASSERT_OPTS).should(
           'exist'
