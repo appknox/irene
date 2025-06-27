@@ -663,14 +663,18 @@ body {
   --organization-integrations-serviceNow-border-radius: var(--border-radius);
   --organization-integrations-serviceNow-border-color: var(--border-color-1);
   --organization-integrations-serviceNow-box-shadow: var(--box-shadow-4);
-  --organization-integrations-serviceNow-background-main: var(--background-main);
+  --organization-integrations-serviceNow-background-main: var(
+    --background-main
+  );
 
   // variables for organization/integrations/splunk
   --organization-integrations-splunk-border-radius: var(--border-radius);
   --organization-integrations-splunk-border-color: var(--border-color-1);
   --organization-integrations-splunk-box-shadow: var(--box-shadow-4);
   --organization-integrations-splunk-background-main: var(--background-main);
-  --organization-integrations-splunk-background-neutral: var(--neutral-grey-100);
+  --organization-integrations-splunk-background-neutral: var(
+    --neutral-grey-100
+  );
 
   // variables for organization-name-header
   --organization-name-header-background-color: var(--background-main);
@@ -1920,13 +1924,6 @@ body {
   --storeknox-product-icon-product-info-tray-box-shadow: var(--box-shadow-1);
   --storeknox-product-icon-store-link-container-bg-color: var(
     --neutral-grey-100
-  );
-
-  // variables for storeknox/upselling-ui
-  --storeknox-upselling-ui-border-color: var(--border-color-1);
-
-  --storeknox-upselling-ui-background-color: var(
-    --storeknox-upselling-ui-bg-color
   );
 
   // variables for page-wrapper

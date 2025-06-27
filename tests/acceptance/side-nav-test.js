@@ -42,7 +42,6 @@ module('Acceptance | side nav test', function (hooks) {
     this.owner.register('service:websocket', WebsocketStub);
 
     const menuItems = [
-      { label: 'Store Monitoring', url: '/dashboard/store-monitoring' },
       { label: 'SBOM', url: '/dashboard/sbom/apps?app_offset=0' },
       { label: 'Analytics', url: '/dashboard/analytics' },
       { label: 'Organization', url: '/dashboard/organization/namespaces' },
@@ -79,7 +78,7 @@ module('Acceptance | side nav test', function (hooks) {
   });
 
   test('it should show the correct page on click of menu items', async function (assert) {
-    assert.expect(14);
+    assert.expect(12);
 
     await visit('/dashboard/projects');
 
