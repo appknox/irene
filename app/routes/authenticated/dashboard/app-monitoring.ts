@@ -10,6 +10,8 @@ export default class AuthenticatedDashboardAppMonitoringIndexRoute extends Route
   beforeModel() {
     if (!this.organization?.selected?.features?.storeknox) {
       this.router.transitionTo('authenticated.dashboard.projects');
+    } else {
+      this.router.transitionTo('authenticated.storeknox.inventory.app-list');
     }
   }
 }
