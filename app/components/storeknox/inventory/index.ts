@@ -12,6 +12,11 @@ import type MeService from 'irene/services/me';
 import type SkOrganizationModel from 'irene/models/sk-organization';
 import type SkInventoryAppService from 'irene/services/sk-inventory-apps';
 
+const STOREKNOX_TOGGLE_KEYS = {
+  ADD_TO_INVENTORY: 'add_appknox_project_to_inventory_by_default',
+  AUTO_DISCOVERY: 'auto_discovery_enabled',
+};
+
 export default class StoreknoxInventoryComponent extends Component {
   @service declare intl: IntlService;
   @service declare store: Store;
@@ -77,20 +82,27 @@ export default class StoreknoxInventoryComponent extends Component {
     this.showSettingsDrawer = false;
   }
 
-  @action onToggleAddToInventoryByDefault(_: Event, checked?: boolean) {
-    this.toggleAddToInventoryByDefault.perform(checked);
+  @action
+  onToggleAddToInventoryByDefault(_: Event, checked: boolean) {
+    this.handleToggleTask.perform(
+      STOREKNOX_TOGGLE_KEYS.ADD_TO_INVENTORY,
+      checked
+    );
   }
 
-  toggleAddToInventoryByDefault = task(async (checked?: boolean) => {
+  @action
+  onToggleAutoDiscoveryEnabled(_: Event, checked: boolean) {
+    this.handleToggleTask.perform(
+      STOREKNOX_TOGGLE_KEYS.AUTO_DISCOVERY,
+      checked
+    );
+  }
+
+  handleToggleTask = task(async (key: string, checked: boolean) => {
     try {
-      const org =
-        await this.selectedSkOrg?.toggleAddToInventoryByDefault(!!checked);
+      this.selectedSkOrg?.toggleEvent(key, !!checked);
 
-      this.selectedSkOrg = org;
-
-      this.notify.success(
-        this.intl.t('storeknox.addAppknoxProjectsByDefaultSuccessMessage')
-      );
+      this.notify.success(this.intl.t('storeknox.statusToggleSuccessMessage'));
     } catch (error) {
       this.notify.error(parseError(error));
     }
