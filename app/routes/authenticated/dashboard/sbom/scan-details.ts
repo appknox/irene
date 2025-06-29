@@ -7,6 +7,8 @@ export interface SbomComponentQueryParam {
   component_offset: string;
   component_query: string;
   view_type?: 'tree' | 'list';
+  component_type?: string;
+  is_dependency?: string;
 }
 
 export interface SbomScanDetailParam extends SbomComponentQueryParam {
@@ -30,6 +32,12 @@ export default class AuthenticatedDashboardSbomScanDetailsRoute extends AkBreadc
     view_type: {
       refreshModel: true,
     },
+    component_type: {
+      refreshModel: true,
+    },
+    is_dependency: {
+      refreshModel: true,
+    },
   };
 
   async model(params: SbomScanDetailParam) {
@@ -40,6 +48,8 @@ export default class AuthenticatedDashboardSbomScanDetailsRoute extends AkBreadc
       component_limit = '25',
       component_offset = '0',
       component_query = '',
+      component_type = null,
+      is_dependency = null,
     } = params;
 
     const sbomProject = await this.store.findRecord(
@@ -68,6 +78,8 @@ export default class AuthenticatedDashboardSbomScanDetailsRoute extends AkBreadc
         component_offset,
         component_query,
         view_type,
+        component_type,
+        is_dependency,
       },
     };
   }

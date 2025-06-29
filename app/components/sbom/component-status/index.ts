@@ -41,7 +41,12 @@ export default class SbomComponentStatusComponent extends Component<SbomComponen
     const component = this.args.sbomComponent;
 
     if (component) {
-      if (component.isVulnerable) {
+      if (component.isMLModel && !component.isVulnerable) {
+        status.push({
+          label: this.intl.t('chipStatus.unknown'),
+          color: 'default',
+        });
+      } else if (component.isVulnerable) {
         status.push({
           label: this.intl.t('chipStatus.vulnerable'),
           color: 'primary',

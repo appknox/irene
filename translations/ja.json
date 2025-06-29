@@ -163,7 +163,8 @@
     "neverInitiated": "NEVER INITIATED",
     "outdated": "OUTDATED",
     "vulnerable": "VULNERABLE",
-    "secure": "SECURE"
+    "secure": "SECURE",
+    "unknown": "UNKNOWN"
   },
   "circleCIPipeline": "Circle CI Pipeline",
   "clear": "Clear",
@@ -415,6 +416,7 @@
   "errorWhileUploading": "事前署名付きURLへのファイルのアップロード中にエラー",
   "errored": "Errored",
   "errorMessage": "Error message",
+  "evidenceLocation": "Evidence Location",
   "evidences": "Evidences",
   "excelReport": "Excel Report",
   "expand": "Expand",
@@ -1280,6 +1282,7 @@
   "recoverPassword": "パスワードの復元",
   "recordPerPage": "Records per page",
   "recurring": "recurring",
+  "referenceLink": "Reference Link",
   "register": "登録",
   "registerToday": "Register Today",
   "registerConfirmation": "Registration has been initiated.",
@@ -1510,6 +1513,9 @@
     },
     "sbomContactMessage": "Thanks for showing interest in SBOM. Our team will get back to you.",
     "totalComponents": "Total Components",
+    "mlModel": "ML Model",
+    "machineLearningModel": "Machine Learning Model",
+    "newFeature": "New Feature (Beta) - Now SBOM detects ML Models in the Apps",
     "allComponents": "All Components",
     "allComponentsAndVulnerabilities": "All Components and Vulnerabilities",
     "components": "Components",
@@ -1550,7 +1556,8 @@
     "scanReportEmptyText": {
       "title": "No SBOM Report Found",
       "description": "We could not locate any report associated with this SBOM analysis."
-    }
+    },
+    "noComponentsFoundFilter": "No components found for the selected filter. Please try a different filter."
   },
   "scan": "診断",
   "scanned": "scanned",

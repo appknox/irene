@@ -390,6 +390,13 @@ const ENUMS = {
     VISITED: 0,
     NOT_VISITED: 1,
   },
+
+  SBOM_COMPONENT_TYPE: {
+    FRAMEWORK: 0,
+    LIBRARY: 1,
+    FILE: 2,
+    MACHINE_LEARNING_MODEL: 3,
+  },
 };
 
 export const ENUMS_DISPLAY = {

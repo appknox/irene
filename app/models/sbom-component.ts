@@ -5,6 +5,16 @@ export interface SbomComponentProperty {
   [key: string]: string;
 }
 
+export interface SbomComponentEvidence {
+  occurrences: {
+    location: string[];
+  };
+}
+
+export interface SbomComponentExternalReferences {
+  website: string[];
+}
+
 export default class SbomComponentModel extends Model {
   @belongsTo('sbom-file', { async: true, inverse: null })
   declare sbFile: AsyncBelongsTo<SbomFileModel>;
@@ -54,6 +64,12 @@ export default class SbomComponentModel extends Model {
   @attr('boolean')
   declare isDependency: boolean;
 
+  @attr()
+  declare evidence: SbomComponentEvidence;
+
+  @attr()
+  declare externalReferences: SbomComponentExternalReferences;
+
   get isVulnerable() {
     return this.vulnerabilitiesCount > 0;
   }
@@ -64,6 +80,30 @@ export default class SbomComponentModel extends Model {
 
   get cleanLatestVersion() {
     return this.latestVersion.trim().replace(/(^")|("$)/g, '');
+  }
+
+  get evidenceLocation() {
+    return this.evidence?.occurrences?.location || ['-'];
+  }
+
+  get link() {
+    return this.externalReferences?.website || ['-'];
+  }
+
+  get primaryEvidenceLocation() {
+    const locations = this.evidenceLocation;
+
+    return locations.length > 0 ? locations[0] : null;
+  }
+
+  get primaryLink() {
+    const links = this.link;
+
+    return links.length > 0 ? links[0] : null;
+  }
+
+  get isMLModel() {
+    return this.type === 'machine-learning-model';
   }
 }
 

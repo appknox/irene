@@ -1,11 +1,4 @@
-import {
-  render,
-  findAll,
-  find,
-  fillIn,
-  triggerEvent,
-  waitFor,
-} from '@ember/test-helpers';
+import { render, findAll, find, waitFor } from '@ember/test-helpers';
 
 import { hbs } from 'ember-cli-htmlbars';
 import { setupMirage } from 'ember-cli-mirage/test-support';
@@ -94,11 +87,11 @@ module(
       );
 
       await render(hbs`
-        <Sbom::ScanDetails::ComponentList 
-          @sbomProject={{this.sbomProject}} 
-          @sbomFile={{this.sbomFile}} 
-          @sbomScanSummary={{this.sbomScanSummary}} 
-          @queryParams={{this.queryParams}} 
+        <Sbom::ScanDetails::ComponentList
+          @sbomProject={{this.sbomProject}}
+          @sbomFile={{this.sbomFile}}
+          @sbomScanSummary={{this.sbomScanSummary}}
+          @queryParams={{this.queryParams}}
         />
       `);
 
@@ -172,40 +165,6 @@ module(
       }
     });
 
-    test.skip('test sbom scan component list search', async function (assert) {
-      this.server.get(
-        '/v2/sb_files/:scan_id/sb_file_components',
-        (schema, req) => {
-          this.set('query', req.queryParams.q);
-
-          const results = schema.sbomComponents.all().models;
-
-          return { count: results.length, next: null, previous: null, results };
-        }
-      );
-
-      await render(hbs`
-        <Sbom::ScanDetails::ComponentList 
-          @sbomProject={{this.sbomProject}} 
-          @sbomFile={{this.sbomFile}} 
-          @sbomScanSummary={{this.sbomScanSummary}} 
-          @queryParams={{this.queryParams}} 
-        />
-      `);
-
-      assert.dom('[data-test-sbomComponent-searchInput]').hasNoValue();
-
-      await fillIn('[data-test-sbomComponent-searchInput]', 'some query');
-      await triggerEvent('[data-test-sbomComponent-searchInput]', 'keyup');
-
-      assert
-        .dom('[data-test-sbomComponent-searchInput]')
-        .isNotDisabled()
-        .hasValue(this.queryParams.component_query);
-
-      assert.strictEqual(this.query, this.queryParams.component_query);
-    });
-
     test('test sbom scan component outdated version', async function (assert) {
       this.sbomComponents[0].version = '1.0.0';
 
@@ -221,11 +180,11 @@ module(
       });
 
       await render(hbs`
-        <Sbom::ScanDetails::ComponentList 
-          @sbomProject={{this.sbomProject}} 
-          @sbomFile={{this.sbomFile}} 
-          @sbomScanSummary={{this.sbomScanSummary}} 
-          @queryParams={{this.queryParams}} 
+        <Sbom::ScanDetails::ComponentList
+          @sbomProject={{this.sbomProject}}
+          @sbomFile={{this.sbomFile}}
+          @sbomScanSummary={{this.sbomScanSummary}}
+          @queryParams={{this.queryParams}}
         />
       `);
 
@@ -268,11 +227,11 @@ module(
       );
 
       render(hbs`
-        <Sbom::ScanDetails::ComponentList 
-          @sbomProject={{this.sbomProject}} 
-          @sbomFile={{this.sbomFile}} 
-          @sbomScanSummary={{this.sbomScanSummary}} 
-          @queryParams={{this.queryParams}} 
+        <Sbom::ScanDetails::ComponentList
+          @sbomProject={{this.sbomProject}}
+          @sbomFile={{this.sbomFile}}
+          @sbomScanSummary={{this.sbomScanSummary}}
+          @queryParams={{this.queryParams}}
         />
       `);
 
