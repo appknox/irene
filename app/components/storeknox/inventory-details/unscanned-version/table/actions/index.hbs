@@ -1,3 +1,7 @@
+{{! Effect to reload SK app version on submission status change }}
+{{this.reloadSkAppVersionEffect}}
+
+{{! Component Start }}
 {{#if this.isLoadingNecessaryData}}
   <AkLoader @size={{16}} />
 {{else if this.showNoActionText}}

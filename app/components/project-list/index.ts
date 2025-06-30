@@ -89,14 +89,16 @@ export default class ProjectListComponent extends Component {
     this.limit = limit;
     this.offset = offset;
 
-    this.projectService.fetchProjects.perform(
-      limit,
-      offset,
-      this.query,
-      this.sortKey,
-      this.platform,
-      this.team
-    );
+    this.projectService
+      .setQueryParams({
+        limit,
+        offset,
+        query: this.query,
+        sortKey: this.sortKey,
+        platform: this.platform,
+        team: this.team,
+      })
+      .fetchProjects.perform();
   }
 
   @action
@@ -104,69 +106,79 @@ export default class ProjectListComponent extends Component {
     this.limit = limit;
     this.offset = 0;
 
-    this.projectService.fetchProjects.perform(
-      limit,
-      0,
-      this.query,
-      this.sortKey,
-      this.platform,
-      this.team
-    );
+    this.projectService
+      .setQueryParams({
+        limit,
+        offset: 0,
+        query: this.query,
+        sortKey: this.sortKey,
+        platform: this.platform,
+        team: this.team,
+      })
+      .fetchProjects.perform();
   }
 
   @action sortProjects(selected: SortingKeyObject) {
     this.sortKey = selected?.key;
     this.offset = 0;
 
-    this.projectService.fetchProjects.perform(
-      this.limit,
-      0,
-      this.query,
-      this.sortKey,
-      this.platform,
-      this.team
-    );
+    this.projectService
+      .setQueryParams({
+        limit: this.limit,
+        offset: 0,
+        query: this.query,
+        sortKey: this.sortKey,
+        platform: this.platform,
+        team: this.team,
+      })
+      .fetchProjects.perform();
   }
 
   @action filterPlatform(platform: PlatformObject) {
     this.platform = platform.value;
     this.offset = 0;
 
-    this.projectService.fetchProjects.perform(
-      this.limit,
-      0,
-      this.query,
-      this.sortKey,
-      this.platform,
-      this.team
-    );
+    this.projectService
+      .setQueryParams({
+        limit: this.limit,
+        offset: 0,
+        query: this.query,
+        sortKey: this.sortKey,
+        platform: this.platform,
+        team: this.team,
+      })
+      .fetchProjects.perform();
   }
 
   @action
   handleClear() {
     this.query = '';
 
-    this.projectService.fetchProjects.perform(
-      this.limit,
-      0,
-      this.query,
-      this.sortKey,
-      this.platform,
-      this.team
-    );
+    this.projectService
+      .setQueryParams({
+        limit: this.limit,
+        offset: 0,
+        query: this.query,
+        sortKey: this.sortKey,
+        platform: this.platform,
+        team: this.team,
+      })
+      .fetchProjects.perform();
   }
 
   @action onSelectTeam(team: Team) {
     this.team = team?.id || '';
 
-    this.projectService.fetchProjects.perform(
-      this.limit,
-      0,
-      this.query,
-      this.sortKey,
-      this.platform,
-      this.team
-    );
+    this.projectService
+      .setQueryParams({
+        limit: this.limit,
+        offset: 0,
+        query: this.query,
+        sortKey: this.sortKey,
+        platform: this.platform,
+        team: this.team,
+      })
+      .fetchProjects.perform();
   }
 
   @action onQueryChange(event: Event) {
@@ -175,14 +187,16 @@ export default class ProjectListComponent extends Component {
     if (query.length >= INPUT.MIN_LENGTH || query === '') {
       this.query = query;
 
-      this.projectService.fetchProjects.perform(
-        this.limit,
-        0,
-        this.query,
-        this.sortKey,
-        this.platform,
-        this.team
-      );
+      this.projectService
+        .setQueryParams({
+          limit: this.limit,
+          offset: 0,
+          query: this.query,
+          sortKey: this.sortKey,
+          platform: this.platform,
+          team: this.team,
+        })
+        .fetchProjects.perform();
     }
   }
 }
