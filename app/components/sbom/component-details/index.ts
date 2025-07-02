@@ -1,5 +1,5 @@
 import Component from '@glimmer/component';
-import { inject as service } from '@ember/service';
+import { service } from '@ember/service';
 import type IntlService from 'ember-intl/services/intl';
 
 import type SbomComponentModel from 'irene/models/sbom-component';
@@ -11,6 +11,13 @@ export interface SbomComponentDetailsSignature {
   Blocks: {
     default: [];
   };
+}
+
+interface tabComponentItem {
+  id: string;
+  label: string;
+  route: string;
+  activeRoutes: string;
 }
 
 export default class SbomComponentDetailsComponent extends Component<SbomComponentDetailsSignature> {
@@ -39,14 +46,14 @@ export default class SbomComponentDetailsComponent extends Component<SbomCompone
         route: 'authenticated.dashboard.sbom.component-details.overview',
         activeRoutes: 'authenticated.dashboard.sbom.component-details.overview',
       },
-      {
+      !this.args.sbomComponent?.isMLModel && {
         id: 'vulnerabilities',
         label: this.intl.t('vulnerabilities'),
         route: 'authenticated.dashboard.sbom.component-details.vulnerabilities',
         activeRoutes:
           'authenticated.dashboard.sbom.component-details.vulnerabilities',
       },
-    ];
+    ].filter(Boolean) as tabComponentItem[];
   }
 }
 

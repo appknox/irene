@@ -1,0 +1,88 @@
+<AkStack @width='full' @alignItems='center' @justifyContent='flex-start'>
+  <AkStack
+    @width='full'
+    @spacing='0.5'
+    @alignItems='center'
+    data-test-sbom-scanDetails-componentTypeHeader-container
+    {{style width='180px'}}
+  >
+    <AkIcon
+      @iconName='filter-list'
+      @color={{if this.filterApplied 'primary' 'inherit'}}
+      local-class='cursor-pointer'
+      {{on 'click' this.handleClick}}
+      data-test-sbom-scanDetails-componentTypeHeader-icon
+    />
+
+    <AkTypography
+      @variant='subtitle2'
+      data-test-sbom-scanDetails-componentTypeHeader-text
+    >
+      {{t 'sbomModule.componentType'}}
+    </AkTypography>
+  </AkStack>
+</AkStack>
+
+<AkPopover
+  @anchorRef={{this.anchorRef}}
+  @placement='bottom'
+  @arrow={{false}}
+  @closeHandler={{this.handleOptionsClose}}
+  @clickOutsideToClose={{true}}
+  data-test-sbom-scanDetails-componentTypeHeader-popover
+>
+  <AkStack @direction='column' local-class='type-filter'>
+    <AkStack @width='full' local-class='filter-header'>
+      <AkTypography
+        @variant='subtitle2'
+        local-class='filter-header-text'
+        data-test-sbom-scanDetails-componentTypeHeader-popover-headerText
+      >
+        {{t 'sbomModule.componentType'}}
+      </AkTypography>
+    </AkStack>
+
+    {{#each this.typeOptions as |types|}}
+      <AkStack
+        @spacing='1'
+        @width='full'
+        local-class='filter-option cursor-pointer'
+        class='py-1 pl-2'
+        {{on 'click' (fn this.selectComponentType types.value)}}
+        data-test-sbom-scanDetails-componentTypeHeader-option
+      >
+        <AkStack @alignItems='center' @spacing='1'>
+          <AkRadio
+            @checked={{eq this.selectedComponentType types.value}}
+            data-test-sbom-scanDetails-componentTypeHeader-radio={{types.key}}
+          />
+
+          <AkTypography
+            data-test-sbom-scanDetails-componentTypeHeader-option-text
+          >
+            {{types.key}}
+          </AkTypography>
+        </AkStack>
+      </AkStack>
+    {{/each}}
+
+    {{#if this.filterApplied}}
+      <AkStack
+        class='py-1 pl-2'
+        local-class='clear-filter-section'
+        @width='full'
+        data-test-sbom-scanDetails-componentTypeHeader-clearFilter
+      >
+        <AkTypography
+          @underline='always'
+          @color='primary'
+          local-class='cursor-pointer'
+          {{on 'click' this.clearFilter}}
+          data-test-sbom-scanDetails-componentTypeHeader-clearFilter-text
+        >
+          {{t 'clearFilter'}}
+        </AkTypography>
+      </AkStack>
+    {{/if}}
+  </AkStack>
+</AkPopover>

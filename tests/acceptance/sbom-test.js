@@ -5,6 +5,8 @@ import {
   findAll,
   click,
   waitFor,
+  fillIn,
+  triggerEvent,
 } from '@ember/test-helpers';
 
 import { setupApplicationTest } from 'ember-qunit';
@@ -971,5 +973,362 @@ module('Acceptance | sbom', function (hooks) {
     await click('[data-test-sbom-list-header-clear-filter]');
 
     assert.dom('[data-test-sbom-list-header-clear-filter]').doesNotExist();
+  });
+
+  test('test sbom scan component list search', async function (assert) {
+    this.server.get(
+      '/v2/sb_files/:scan_id/sb_file_components',
+      (schema, req) => {
+        this.set('query', req.queryParams.q);
+
+        // Apply manual filtering logic for search query
+        let results = schema.sbomComponents.all().models;
+
+        if (this.query) {
+          const query = this.query.toLowerCase();
+
+          results = results.filter(
+            (component) =>
+              component.name.toLowerCase().includes(query) ||
+              component.package_name?.toLowerCase().includes(query) ||
+              component.version?.toLowerCase().includes(query)
+          );
+        }
+
+        return { count: results.length, next: null, previous: null, results };
+      }
+    );
+
+    await visit(
+      `/dashboard/sbom/apps/${this.sbomProjects[1].id}/scans/${this.sbomFiles[1].id}`
+    );
+
+    assert.dom('[data-test-sbomScanDetails-switch-listViewButton]').exists();
+
+    await click('[data-test-sbomScanDetails-switch-listViewButton]');
+
+    // Sanity check: Verify initial state before filtering
+    let initialComponentRows = findAll('[data-test-sbomComponent-row]');
+    let totalComponents = this.sbomComponents.length;
+
+    assert.strictEqual(
+      initialComponentRows.length,
+      totalComponents,
+      'Initial component list shows all components'
+    );
+
+    assert.dom('[data-test-sbomScanDetails-componentSearchInput]').hasNoValue();
+
+    // Apply search filter
+    const searchQuery = 'com';
+
+    await fillIn(
+      '[data-test-sbomScanDetails-componentSearchInput]',
+      searchQuery
+    );
+
+    await triggerEvent(
+      '[data-test-sbomScanDetails-componentSearchInput]',
+      'keyup'
+    );
+
+    assert
+      .dom('[data-test-sbomScanDetails-componentSearchInput]')
+      .isNotDisabled()
+      .hasValue(searchQuery);
+
+    assert.strictEqual(this.query, searchQuery);
+
+    // Sanity check: Verify filtered results are reflected in the table
+    let filteredComponentRows = findAll('[data-test-sbomComponent-row]');
+
+    let expectedFilteredCount = this.sbomComponents.filter(
+      (component) =>
+        component.name.toLowerCase().includes(searchQuery) ||
+        component.package_name?.toLowerCase().includes(searchQuery) ||
+        component.version?.toLowerCase().includes(searchQuery)
+    ).length;
+
+    assert.strictEqual(
+      filteredComponentRows.length,
+      expectedFilteredCount,
+      `Filtered component list shows ${expectedFilteredCount} components matching search query`
+    );
+
+    // Clear search input
+    await fillIn('[data-test-sbomScanDetails-componentSearchInput]', '');
+
+    await triggerEvent(
+      '[data-test-sbomScanDetails-componentSearchInput]',
+      'keyup'
+    );
+
+    assert
+      .dom('[data-test-sbomScanDetails-componentSearchInput]')
+      .isNotDisabled()
+      .hasNoValue();
+
+    // Sanity check: Verify table returns to showing all components
+    let clearedComponentRows = findAll('[data-test-sbomComponent-row]');
+    assert.strictEqual(
+      clearedComponentRows.length,
+      totalComponents,
+      'Component list returns to showing all components after clearing search'
+    );
+  });
+
+  test('test sbom filters in list view', async function (assert) {
+    this.server.get(
+      '/v2/sb_files/:scan_id/sb_file_components',
+      (schema, req) => {
+        this.set('component_type', req.queryParams.component_type);
+        this.set('is_dependency', req.queryParams.is_dependency);
+
+        // Apply manual filtering logic for component type and dependency type
+        let results = schema.sbomComponents.all().models;
+
+        // Filter by component type
+        if (this.component_type) {
+          results = results.filter(
+            (component) => component.component_type === this.component_type
+          );
+        }
+
+        // Filter by dependency type
+        if (this.is_dependency !== undefined) {
+          const isDependency = this.is_dependency === 'true';
+
+          results = results.filter(
+            (component) => component.is_dependency === isDependency
+          );
+        }
+
+        return { count: results.length, next: null, previous: null, results };
+      }
+    );
+
+    await visit(
+      `/dashboard/sbom/apps/${this.sbomProjects[1].id}/scans/${this.sbomFiles[1].id}`
+    );
+
+    assert.dom('[data-test-sbomScanDetails-switch-listViewButton]').exists();
+
+    await click('[data-test-sbomScanDetails-switch-listViewButton]');
+
+    // Sanity check: Verify initial state before filtering
+    let initialComponentRows = findAll('[data-test-sbomComponent-row]');
+    let totalComponents = this.sbomComponents.length;
+
+    assert.strictEqual(
+      initialComponentRows.length,
+      totalComponents,
+      'Initial component list shows all components'
+    );
+
+    assert.dom('[data-test-sbomScanDetails-componentSearchInput]').hasNoValue();
+
+    await click('[data-test-sbom-scanDetails-dependencyTypeHeader-icon]');
+
+    assert
+      .dom('[data-test-sbom-scanDetails-dependencyTypeHeader-popover]')
+      .exists();
+
+    assert
+      .dom(
+        '[data-test-sbom-scanDetails-dependencyTypeHeader-popover-headerText]'
+      )
+      .hasText(t('dependencyType'));
+
+    assert
+      .dom('[data-test-sbom-scanDetails-dependencyTypeHeader-option]')
+      .exists({ count: 3 });
+
+    await click(
+      `[data-test-sbom-scanDetails-dependencyTypeHeader-radio="${t('dependencyTypes.direct')}"]`
+    );
+
+    assert.strictEqual(this.is_dependency, 'false');
+
+    // Sanity check: Verify filtered results for direct dependencies
+    let directDependencyRows = findAll('[data-test-sbomComponent-row]');
+
+    let expectedDirectCount = this.sbomComponents.filter(
+      (component) => component.is_dependency === false
+    ).length;
+
+    assert.strictEqual(
+      directDependencyRows.length,
+      expectedDirectCount,
+      `Component list shows ${expectedDirectCount} direct dependencies`
+    );
+
+    await click('[data-test-sbom-scanDetails-dependencyTypeHeader-icon]');
+
+    // Clear filter of dependency type
+    await click(
+      '[data-test-sbom-scanDetails-dependencyTypeHeader-clearFilter-text]'
+    );
+
+    assert.strictEqual(this.is_dependency, undefined);
+
+    // Sanity check: Verify table returns to showing all components
+    let clearedDependencyRows = findAll('[data-test-sbomComponent-row]');
+
+    assert.strictEqual(
+      clearedDependencyRows.length,
+      totalComponents,
+      'Component list returns to showing all components after clearing dependency filter'
+    );
+
+    // Test component type filtering
+    await click('[data-test-sbom-scanDetails-componentTypeHeader-icon]');
+
+    assert
+      .dom('[data-test-sbom-scanDetails-componentTypeHeader-popover]')
+      .exists();
+
+    assert
+      .dom(
+        '[data-test-sbom-scanDetails-componentTypeHeader-popover-headerText]'
+      )
+      .hasText(t('sbomModule.componentType'));
+
+    assert
+      .dom('[data-test-sbom-scanDetails-componentTypeHeader-option]')
+      .exists({ count: 5 });
+
+    await click(
+      `[data-test-sbom-scanDetails-componentTypeHeader-radio="${t('library')}"]`
+    );
+
+    assert.strictEqual(this.component_type, 'library');
+
+    let libraryComponentRows = findAll('[data-test-sbomComponent-row]');
+
+    let expectedLibraryCount = this.sbomComponents.filter(
+      (component) => component.component_type === 'library'
+    ).length;
+
+    assert.strictEqual(
+      libraryComponentRows.length,
+      expectedLibraryCount,
+      `Component list shows ${expectedLibraryCount} library components`
+    );
+
+    await click('[data-test-sbom-scanDetails-componentTypeHeader-icon]');
+
+    // Clear filter of component type
+    await click(
+      '[data-test-sbom-scanDetails-componentTypeHeader-clearFilter-text]'
+    );
+
+    assert.strictEqual(this.component_type, undefined);
+
+    // Sanity check: Verify table returns to showing all components
+    let clearedComponentTypeRows = findAll('[data-test-sbomComponent-row]');
+    assert.strictEqual(
+      clearedComponentTypeRows.length,
+      totalComponents,
+      'Component list returns to showing all components after clearing component type filter'
+    );
+  });
+
+  // Test for combined filters
+  test('test sbom combined filters in list view', async function (assert) {
+    this.server.get(
+      '/v2/sb_files/:scan_id/sb_file_components',
+      (schema, req) => {
+        this.set('component_type', req.queryParams.component_type);
+        this.set('is_dependency', req.queryParams.is_dependency);
+        this.set('query', req.queryParams.q);
+
+        // Apply manual filtering logic for all filters combined
+        let results = schema.sbomComponents.all().models;
+
+        // Filter by search query
+        if (this.query) {
+          const query = this.query.toLowerCase();
+
+          results = results.filter(
+            (component) =>
+              component.name.toLowerCase().includes(query) ||
+              component.package_name?.toLowerCase().includes(query) ||
+              component.version?.toLowerCase().includes(query)
+          );
+        }
+
+        // Filter by component type
+        if (this.component_type) {
+          results = results.filter(
+            (component) => component.component_type === this.component_type
+          );
+        }
+
+        // Filter by dependency type
+        if (this.is_dependency !== undefined) {
+          const isDependency = this.is_dependency === 'true';
+
+          results = results.filter(
+            (component) => component.is_dependency === isDependency
+          );
+        }
+
+        return { count: results.length, next: null, previous: null, results };
+      }
+    );
+
+    await visit(
+      `/dashboard/sbom/apps/${this.sbomProjects[1].id}/scans/${this.sbomFiles[1].id}`
+    );
+
+    assert.dom('[data-test-sbomScanDetails-switch-listViewButton]').exists();
+    await click('[data-test-sbomScanDetails-switch-listViewButton]');
+
+    // Sanity check: Initial state
+    let initialRows = findAll('[data-test-sbomComponent-row]');
+    assert.strictEqual(initialRows.length, this.sbomComponents.length);
+
+    // Apply multiple filters
+    const searchQuery = 'test';
+
+    await fillIn(
+      '[data-test-sbomScanDetails-componentSearchInput]',
+      searchQuery
+    );
+
+    await triggerEvent(
+      '[data-test-sbomScanDetails-componentSearchInput]',
+      'keyup'
+    );
+
+    await click('[data-test-sbom-scanDetails-componentTypeHeader-icon]');
+    await click(
+      `[data-test-sbom-scanDetails-componentTypeHeader-radio="${t('library')}"]`
+    );
+
+    await click('[data-test-sbom-scanDetails-dependencyTypeHeader-icon]');
+    await click(
+      `[data-test-sbom-scanDetails-dependencyTypeHeader-radio="${t('dependencyTypes.direct')}"]`
+    );
+
+    // Sanity check: Verify combined filters work
+    let combinedFilterRows = findAll('[data-test-sbomComponent-row]');
+    let expectedCombinedCount = this.sbomComponents.filter((component) => {
+      const matchesSearch =
+        component.name.toLowerCase().includes(searchQuery) ||
+        component.package_name?.toLowerCase().includes(searchQuery) ||
+        component.version?.toLowerCase().includes(searchQuery);
+
+      const matchesComponentType = component.component_type === 'library';
+      const matchesDependencyType = component.is_dependency === false;
+
+      return matchesSearch && matchesComponentType && matchesDependencyType;
+    }).length;
+
+    assert.strictEqual(
+      combinedFilterRows.length,
+      expectedCombinedCount,
+      `Combined filters show ${expectedCombinedCount} components matching all criteria`
+    );
   });
 });

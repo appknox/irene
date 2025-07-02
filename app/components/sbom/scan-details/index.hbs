@@ -1,19 +1,4 @@
 <div class='py-1' data-test-sbomScanDetails-container>
-  {{! <AkStack class='mb-3' @alignItems='center' @justifyContent='space-between'> }}
-  {{!-- <div {{style width='180px'}}>
-      <AkTextField
-        data-test-sbomScanDetails-componentSearchInput
-        @placeholder={{t 'search'}}
-        @value={{@queryParams.component_query}}
-        {{on 'keyup' this.searchSbomComponentForQuery}}
-      >
-        <:leftAdornment>
-          <AkIcon @iconName='search' @color='textSecondary' />
-        </:leftAdornment>
-      </AkTextField>
-    </div> --}}
-  {{! </AkStack> }}
-
   <Sbom::SummaryHeader>
     <:summary>
       <AkStack @alignItems='center' @spacing='1.5'>
@@ -59,56 +44,79 @@
   </Sbom::SummaryHeader>
 
   {{#if this.scanStatusCompleted}}
+    <Sbom::ScanDetails::Overview
+      @sbomFile={{@sbomFile}}
+      @sbomScanSummary={{@sbomScanSummary}}
+    />
+
     {{#if this.isNotOutdated}}
       <AkStack
         data-test-sbomScanDetails-switch-header
         local-class='switch-view-header'
-        @justifyContent='flex-end'
+        @alignItems='center'
+        @justifyContent='{{if this.isTreeView "flex-end" "space-between"}}'
       >
-        {{#if this.isTreeView}}
-          <AkButton
-            data-test-sbomScanDetails-collapseAllButton
-            {{on 'click' this.collapseAll}}
+        {{#unless this.isTreeView}}
+          <div {{style width='180px'}}>
+            <AkTextField
+              data-test-sbomScanDetails-componentSearchInput
+              @placeholder={{t 'search'}}
+              @value={{this.sbomScanDetailsService.searchQuery}}
+              {{on 'input' this.handleSearchInput}}
+            >
+              <:leftAdornment>
+                <AkIcon @iconName='search' @color='textSecondary' />
+              </:leftAdornment>
+            </AkTextField>
+          </div>
+        {{/unless}}
+
+        <AkStack>
+          {{#if this.isTreeView}}
+            <AkButton
+              data-test-sbomScanDetails-collapseAllButton
+              {{on 'click' this.collapseAll}}
+              @variant='outlined'
+              @color='neutral'
+              @disabled={{not this.isTreeExpanded}}
+              local-class='toggle-button'
+              class='mr-2'
+            >
+              <:leftIcon>
+                <AkIcon @iconName='unfold-less' />
+              </:leftIcon>
+
+              <:default>
+                {{t 'collapseAll'}}
+              </:default>
+            </AkButton>
+          {{/if}}
+
+          <AkIconButton
+            local-class='switch-button tree {{if this.isTreeView "active"}}'
             @variant='outlined'
-            @color='neutral'
-            @disabled={{not this.isTreeExpanded}}
-            local-class='toggle-button'
-            class='mr-2'
+            @size='medium'
+            {{on 'click' this.handleTreeViewClick}}
+            data-test-sbomScanDetails-switch-treeViewButton
           >
-            <:leftIcon>
-              <AkIcon @iconName='unfold-less' />
-            </:leftIcon>
+            <AkIcon
+              @color={{if this.isTreeView 'primary'}}
+              @iconName='account-tree'
+            />
+          </AkIconButton>
 
-            <:default>
-              {{t 'collapseAll'}}
-            </:default>
-          </AkButton>
-        {{/if}}
-
-        <AkIconButton
-          local-class='switch-button tree {{if this.isTreeView "active"}}'
-          @variant='outlined'
-          @size='medium'
-          {{on 'click' this.handleTreeViewClick}}
-          data-test-sbomScanDetails-switch-treeViewButton
-        >
-          <AkIcon
-            @color={{if this.isTreeView 'primary'}}
-            @iconName='account-tree'
-          />
-        </AkIconButton>
-
-        <AkIconButton
-          local-class='switch-button list {{if this.isTreeView "" "active"}}'
-          @variant='outlined'
-          {{on 'click' this.handleListViewClick}}
-          data-test-sbomScanDetails-switch-listViewButton
-        >
-          <AkIcon
-            @color={{unless this.isTreeView 'primary'}}
-            @iconName='format-list-bulleted'
-          />
-        </AkIconButton>
+          <AkIconButton
+            local-class='switch-button list {{if this.isTreeView "" "active"}}'
+            @variant='outlined'
+            {{on 'click' this.handleListViewClick}}
+            data-test-sbomScanDetails-switch-listViewButton
+          >
+            <AkIcon
+              @color={{unless this.isTreeView 'primary'}}
+              @iconName='format-list-bulleted'
+            />
+          </AkIconButton>
+        </AkStack>
       </AkStack>
     {{/if}}
 
@@ -127,7 +135,6 @@
         @sbomProject={{@sbomProject}}
         @sbomFile={{@sbomFile}}
         @sbomScanSummary={{@sbomScanSummary}}
-        @queryParams={{@queryParams}}
         class={{if this.isNotOutdated '' 'mt-2'}}
         data-test-sbomScanDetails-componentList-container
       />

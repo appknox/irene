@@ -1,8 +1,19 @@
 import Model, { attr, belongsTo, AsyncBelongsTo } from '@ember-data/model';
 import SbomFileModel from './sbom-file';
+import { ENUMS_DISPLAY } from 'irene/enums';
 
 export interface SbomComponentProperty {
   [key: string]: string;
+}
+
+export interface SbomComponentEvidence {
+  occurrences: {
+    location: string[];
+  };
+}
+
+export interface SbomComponentExternalReferences {
+  website: string[];
 }
 
 export default class SbomComponentModel extends Model {
@@ -54,6 +65,12 @@ export default class SbomComponentModel extends Model {
   @attr('boolean')
   declare isDependency: boolean;
 
+  @attr()
+  declare evidence: SbomComponentEvidence;
+
+  @attr()
+  declare externalReferences: SbomComponentExternalReferences;
+
   get isVulnerable() {
     return this.vulnerabilitiesCount > 0;
   }
@@ -64,6 +81,34 @@ export default class SbomComponentModel extends Model {
 
   get cleanLatestVersion() {
     return this.latestVersion.trim().replace(/(^")|("$)/g, '');
+  }
+
+  get evidenceLocations() {
+    return this.evidence?.occurrences?.location?.length
+      ? this.evidence.occurrences.location
+      : ['-'];
+  }
+
+  get externalReferenceLinks() {
+    return this.externalReferences?.website?.length
+      ? this.externalReferences.website
+      : ['-'];
+  }
+
+  get primaryEvidenceLocation() {
+    const locations = this.evidenceLocations;
+
+    return locations.length > 0 ? locations[0] : null;
+  }
+
+  get primaryLink() {
+    const links = this.externalReferenceLinks;
+
+    return links.length > 0 ? links[0] : null;
+  }
+
+  get isMLModel() {
+    return this.type === ENUMS_DISPLAY.SBOM_COMPONENT_TYPE_NAMES[3];
   }
 }
 

@@ -390,6 +390,13 @@ const ENUMS = {
     VISITED: 0,
     NOT_VISITED: 1,
   },
+
+  SBOM_COMPONENT_TYPE: {
+    FRAMEWORK: 0,
+    LIBRARY: 1,
+    FILE: 2,
+    MACHINE_LEARNING_MODEL: 3,
+  },
 };
 
 export const ENUMS_DISPLAY = {
@@ -399,6 +406,14 @@ export const ENUMS_DISPLAY = {
     [ENUMS.PLATFORM.WINDOWS]: 'Windows',
     [ENUMS.PLATFORM.BLACKBERRY]: 'Blackberry',
     [ENUMS.PLATFORM.FIREFOX]: 'Firefox',
+  },
+
+  SBOM_COMPONENT_TYPE_NAMES: {
+    [ENUMS.SBOM_COMPONENT_TYPE.FRAMEWORK]: 'framework',
+    [ENUMS.SBOM_COMPONENT_TYPE.LIBRARY]: 'library',
+    [ENUMS.SBOM_COMPONENT_TYPE.FILE]: 'file',
+    [ENUMS.SBOM_COMPONENT_TYPE.MACHINE_LEARNING_MODEL]:
+      'machine-learning-model',
   },
 };
 

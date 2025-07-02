@@ -14,19 +14,10 @@ export default class SbomScanSummaryModel extends Model {
   declare frameworkCount: number;
 
   @attr('number')
-  declare containerCount: number;
-
-  @attr('number')
-  declare deviceCount: number;
-
-  @attr('number')
   declare fileCount: number;
 
   @attr('number')
-  declare firmwareCount: number;
-
-  @attr('number')
-  declare operatingSystemCount: number;
+  declare machineLearningModelCount: number;
 }
 
 declare module 'ember-data/types/registries/model' {

@@ -13,4 +13,10 @@
   &.list {
     border: 0px;
   }
+
+  .empty-loading-content-bordered {
+    padding: 2em;
+    border: 1px solid var(--sbom-empty-loading-view-border-color);
+    border-radius: var(--sbom-empty-loading-view-border-radius);
+  }
 }

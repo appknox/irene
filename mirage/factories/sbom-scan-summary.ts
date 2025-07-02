@@ -6,9 +6,6 @@ export default Factory.extend({
   library_count: faker.number.int(125),
   framework_count: faker.number.int(125),
   application_count: faker.number.int(125),
-  container_count: faker.number.int(125),
-  device_count: faker.number.int(125),
   file_count: faker.number.int(125),
-  firmware_count: faker.number.int(125),
-  operating_system_count: faker.number.int(125),
+  machine_learning_model_count: faker.number.int(125),
 });

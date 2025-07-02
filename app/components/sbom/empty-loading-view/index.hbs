@@ -1,8 +1,8 @@
 {{! @glint-nocheck: or}}
 {{#if (or @empty @loading)}}
   <AkStack
-    local-class='empty-loading-container 
-    {{if @skeleton "skeleton"}} 
+    local-class='empty-loading-container
+    {{if @skeleton "skeleton"}}
     {{if this.tree "" "list"}}'
     {{style height=(or @height '500px')}}
     @direction='column'
@@ -41,6 +41,8 @@
         @alignItems='center'
         @justifyContent='center'
         @direction='column'
+        @width='full'
+        local-class='{{if @bordered "empty-loading-content-bordered"}}'
       >
         {{#if (has-block 'emptySvg')}}
           {{yield to='emptySvg'}}

@@ -11,9 +11,10 @@
     as |pgc|
   >
     <Sbom::EmptyLoadingView
-      @empty={{this.hasNoSbomComponent}}
-      @loading={{this.fetchSbomComponents.isRunning}}
+      @empty={{this.isEmptyAndNoFilterApplied}}
+      @loading={{this.isFetchingSbomComponentList}}
       @skeleton={{true}}
+      @bordered={{true}}
       @height='500px'
     >
       <:emptySvg>
@@ -44,7 +45,29 @@
 
       <:default>
         <AkTable @hoverable={{true}} data-test-sbomComponent-table as |t|>
-          <t.head data-test-sbomComponent-thead @columns={{this.columns}} />
+          <t.head
+            @columns={{this.columns}}
+            data-test-sbomComponent-thead
+            as |h|
+          >
+            <h.row as |r|>
+              <r.cell as |column|>
+                {{#if column.headerComponent}}
+                  {{#let (component column.headerComponent) as |Component|}}
+                    <Component
+                      @onDependencyTypeChange={{this.onDependencyTypeChange}}
+                      @selectedDependencyType={{this.selectedDependencyType}}
+                      @onComponentTypeChange={{this.onComponentTypeChange}}
+                      @selectedComponentType={{this.selectedComponentType}}
+                    />
+                  {{/let}}
+                {{else}}
+                  {{column.name}}
+                {{/if}}
+              </r.cell>
+            </h.row>
+          </t.head>
+
           <t.body @rows={{pgc.currentPageResults}} as |b|>
             <b.row
               {{style cursor='pointer'}}
@@ -66,6 +89,31 @@
             </b.row>
           </t.body>
         </AkTable>
+
+        {{#if this.isEmptyAndFilterApplied}}
+          <AkStack
+            @direction='column'
+            @alignItems='center'
+            @justifyContent='center'
+            @spacing='1'
+            class='py-5'
+          >
+            <AkSvg::NoResult data-test-sbomComponent-emptySvg />
+
+            <AkTypography data-test-sbomComponent-emptyTextTitle @variant='h5'>
+              {{this.tNoComponentsFound}}
+            </AkTypography>
+
+            <AkTypography
+              data-test-sbomComponent-emptyTextDescription
+              {{style width='600px'}}
+              @color='textSecondary'
+              @align='center'
+            >
+              {{this.tNoComponentsFoundFilter}}
+            </AkTypography>
+          </AkStack>
+        {{/if}}
 
         <AkPagination
           @disableNext={{pgc.disableNext}}

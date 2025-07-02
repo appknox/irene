@@ -52,6 +52,9 @@ module('Integration | Component | sbom/scan-details', function (hooks) {
         component_limit: 10,
         component_offset: 0,
         component_query: '',
+        view_type: 'tree',
+        component_type: -1,
+        is_dependency: null,
       },
     });
 
@@ -88,11 +91,11 @@ module('Integration | Component | sbom/scan-details', function (hooks) {
       });
 
       await render(hbs`
-        <Sbom::ScanDetails 
-          @sbomProject={{this.sbomProject}} 
-          @sbomFile={{this.sbomFile}} 
-          @sbomScanSummary={{this.sbomScanSummary}} 
-          @queryParams={{this.queryParams}} 
+        <Sbom::ScanDetails
+          @sbomProject={{this.sbomProject}}
+          @sbomFile={{this.sbomFile}}
+          @sbomScanSummary={{this.sbomScanSummary}}
+          @queryParams={{this.queryParams}}
         />
       `);
 
@@ -179,13 +182,13 @@ module('Integration | Component | sbom/scan-details', function (hooks) {
     this.sbomFile.status = SbomScanStatus.COMPLETED;
 
     await render(hbs`
-      <Sbom::ScanDetails 
-        @sbomProject={{this.sbomProject}} 
-        @sbomFile={{this.sbomFile}} 
-        @sbomScanSummary={{this.sbomScanSummary}} 
-        @queryParams={{this.queryParams}} 
-      />
-    `);
+    <Sbom::ScanDetails
+      @sbomProject={{this.sbomProject}}
+      @sbomFile={{this.sbomFile}}
+      @sbomScanSummary={{this.sbomScanSummary}}
+      @queryParams={{this.queryParams}}
+    />
+  `);
 
     assert.dom('[data-test-fileScanSummary-container]').doesNotExist();
 
@@ -206,6 +209,16 @@ module('Integration | Component | sbom/scan-details', function (hooks) {
 
     // File summary tests
     const fileSummaryDetailsList = [
+      {
+        label: t('status'),
+        isComponent: true,
+        assertValue: () =>
+          assert.dom('[data-test-sbom-scanStatus]').hasAnyText(),
+      },
+      {
+        label: t('sbomModule.generatedDate'),
+        value: dayjs(this.sbomFile.completedAt).format('MMM DD, YYYY'),
+      },
       {
         label: t('version'),
         value: this.sbomFile.get('file').get('version'),
@@ -235,81 +248,26 @@ module('Integration | Component | sbom/scan-details', function (hooks) {
         .exists()
         .hasText(fileSummary.label);
 
-      if (!fileSummary.link) {
-        assert
-          .dom(
-            `[data-test-sbomScanDetails-fileSummaryGroup="${fileSummary.label}"] [data-test-sbomScanDetails-fileSummaryGroup-value]`
-          )
-          .exists()
-          .hasText(fileSummary.value);
-      } else {
+      if (fileSummary.isComponent && fileSummary.assertValue) {
+        fileSummary.assertValue();
+      } else if (fileSummary.link) {
         assert
           .dom(
             `[data-test-sbomScanDetails-fileSummaryGroup="${fileSummary.label}"] [data-test-sbomScanDetails-fileSummaryGroup-link]`
           )
           .exists()
           .hasText(fileSummary.value);
-      }
-    }
-
-    // Scan summary tests
-    const scanSummaryDetailsList = [
-      {
-        label: t('sbomModule.totalComponents'),
-        value: [`${this.sbomScanSummary.componentCount}`],
-      },
-      {
-        label: t('sbomModule.componentType'),
-        value: [
-          `${t('library')} - ${this.sbomScanSummary.libraryCount}`,
-          `${t('framework')} - ${this.sbomScanSummary.frameworkCount}`,
-          `${t('application')} - ${this.sbomScanSummary.applicationCount}`,
-          `${t('container')} - ${this.sbomScanSummary.containerCount}`,
-          `${t('device')} - ${this.sbomScanSummary.deviceCount}`,
-          `${t('file')} - ${this.sbomScanSummary.fileCount}`,
-          `${t('firmware')} - ${this.sbomScanSummary.firmwareCount}`,
-          `${t('operatingSystem')} - ${this.sbomScanSummary.operatingSystemCount}`,
-        ].filter((it) => !it.endsWith(' - 0')), // remove zero counts it will not be rendered
-      },
-      {
-        label: t('status'),
-        value: [],
-        assertValue: () =>
-          assert.dom('[data-test-sbom-scanStatus]').hasAnyText(),
-      },
-      {
-        label: t('sbomModule.generatedDate'),
-        value: [dayjs(this.sbomFile.completedAt).format('MMM DD, YYYY')],
-      },
-    ];
-
-    for (const scanSummary of scanSummaryDetailsList) {
-      assert
-        .dom(
-          `[data-test-sbomScanDetails-scanSummaryGroup="${scanSummary.label}"]`
-        )
-        .exists();
-
-      assert
-        .dom(
-          `[data-test-sbomScanDetails-scanSummaryGroup="${scanSummary.label}"] [data-test-sbomScanDetails-scanSummaryGroup-label]`
-        )
-        .exists()
-        .hasText(scanSummary.label);
-
-      for (const value of scanSummary.value) {
+      } else {
         assert
-          .dom(`[data-test-sbomScanDetails-scanSummaryGroup-value="${value}"]`)
+          .dom(
+            `[data-test-sbomScanDetails-fileSummaryGroup="${fileSummary.label}"] [data-test-sbomScanDetails-fileSummaryGroup-value]`
+          )
           .exists()
-          .hasText(value);
-      }
-
-      if (scanSummary.assertValue) {
-        scanSummary.assertValue();
+          .hasText(fileSummary.value);
       }
     }
 
-    // collapse file and scan summary
+    // Collapse file and scan summary
     await click('[data-test-sbomSummaryHeader-collapsibleToggleBtn]');
 
     assert.dom('[data-test-fileScanSummary-container]').doesNotExist();
@@ -330,11 +288,11 @@ module('Integration | Component | sbom/scan-details', function (hooks) {
     });
 
     await render(hbs`
-      <Sbom::ScanDetails 
-        @sbomProject={{this.sbomProject}} 
-        @sbomFile={{this.sbomFile}} 
-        @sbomScanSummary={{this.sbomScanSummary}} 
-        @queryParams={{this.queryParams}} 
+      <Sbom::ScanDetails
+        @sbomProject={{this.sbomProject}}
+        @sbomFile={{this.sbomFile}}
+        @sbomScanSummary={{this.sbomScanSummary}}
+        @queryParams={{this.queryParams}}
       />
     `);
 

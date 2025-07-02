@@ -163,7 +163,8 @@
     "neverInitiated": "NEVER INITIATED",
     "outdated": "OUTDATED",
     "vulnerable": "VULNERABLE",
-    "secure": "SECURE"
+    "secure": "SECURE",
+    "unknown": "UNKNOWN"
   },
   "circleCIPipeline": "Circle CI Pipeline",
   "clear": "Clear",
@@ -415,6 +416,7 @@
   "errorWhileUploading": "Error while uploading file to presigned URL",
   "errored": "Errored",
   "errorMessage": "Error message",
+  "evidenceLocation": "Evidence Location",
   "evidences": "Evidences",
   "excelReport": "Excel Report",
   "expand": "Expand",
@@ -1280,6 +1282,7 @@
   "recoverPassword": "Recover your password",
   "recordPerPage": "Records per page",
   "recurring": "recurring",
+  "referenceLink": "Reference Link",
   "register": "Register",
   "registerToday": "Register Today",
   "registerConfirmation": "Registration has been initiated.",
@@ -1544,13 +1547,17 @@
     "sbomDownloadJsonSecondaryText": "No Password Required",
     "viewReport": "View Report",
     "scanReports": "Scan Reports",
+    "mlModel": "ML Model",
+    "machineLearningModel": "Machine Learning Model",
+    "newFeature": "New Feature (Beta) - Now SBOM detects ML Models in the Apps",
     "neverInitiated": "Never Initiated",
     "noScanAlertDescription": "Upload the app to initiate SBOM analysis.",
     "generateReportDescription": "Report is not available yet. Please click on the Generate button to access the SBOM report.",
     "scanReportEmptyText": {
       "title": "No SBOM Report Found",
       "description": "We could not locate any report associated with this SBOM analysis."
-    }
+    },
+    "noComponentsFoundFilter": "No components found for the selected filter. Please try a different filter."
   },
   "scan": "scan(s)",
   "scanned": "scanned",
