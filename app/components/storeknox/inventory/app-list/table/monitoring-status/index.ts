@@ -16,35 +16,108 @@ export interface StoreknoxInventoryAppListTableMonitoringStatusSignature {
 export default class StoreknoxInventoryAppListTableMonitoringStatusComponent extends Component<StoreknoxInventoryAppListTableMonitoringStatusSignature> {
   @service declare intl: IntlService;
 
+  get app() {
+    return this.args.app;
+  }
+
   get needsAction() {
     return (
-      this.args.app?.storeMonitoringStatus ===
-      ENUMS.SK_APP_MONITORING_STATUS.UNSCANNED
+      this.app?.storeMonitoringStatus ===
+      ENUMS.SK_APP_MONITORING_STATUS.ACTION_NEEDED
+    );
+  }
+
+  get noActionNeeded() {
+    return (
+      this.app?.storeMonitoringStatus ===
+      ENUMS.SK_APP_MONITORING_STATUS.NO_ACTION_NEEDED
     );
   }
 
   get appIsDisabled() {
-    return this.args.app?.appStatus === ENUMS.SK_APP_STATUS.INACTIVE;
+    return (
+      !this.app?.monitoringEnabled && !this.needsAction && !this.noActionNeeded
+    );
+  }
+
+  get appIsInitializing() {
+    return this.app?.monitoringEnabled && this.app?.monitoringStatusIsPending;
+  }
+
+  get disableTooltip() {
+    return this.args.loading;
   }
 
   get tooltipMessage() {
     if (this.needsAction) {
-      return this.intl.t('storeknox.actionsNeededMsg');
+      return this.intl.t('storeknox.actionsNeededMsg', {
+        htmlSafe: true,
+      });
     }
 
-    return this.intl.t('storeknox.noActionsNeededMsg');
+    if (this.appIsInitializing) {
+      return this.intl.t('storeknox.initializingMsg');
+    }
+
+    if (this.appIsDisabled) {
+      return this.intl.t('storeknox.disabledMsg');
+    }
+
+    return this.intl.t('storeknox.noActionsNeededMsg', {
+      htmlSafe: true,
+    });
   }
 
-  get monitoringStatusIconDetails() {
-    if (this.appIsDisabled) {
-      return { name: 'do-not-disturb-on', color: 'textSecondary' as const };
+  get tooltipSuffix() {
+    if (this.appIsInitializing || this.appIsDisabled) {
+      return '';
     }
 
+    return this.intl.t('storeknox.haveBeenDetected');
+  }
+
+  get iconDetails() {
     if (this.needsAction) {
-      return { name: 'info', color: 'error' as const };
+      return {
+        icon: 'ak-svg/sox-monitoring-stats-icons/action-needed' as const,
+        key: 'action-needed',
+      };
     }
 
-    return { name: 'check-circle', color: 'success' as const };
+    if (this.appIsInitializing) {
+      return {
+        icon: 'ak-svg/sox-monitoring-stats-icons/initializing' as const,
+        key: 'initializing',
+      };
+    }
+
+    if (this.appIsDisabled) {
+      return {
+        icon: 'ak-svg/sox-monitoring-stats-icons/disabled' as const,
+        key: 'disabled',
+      };
+    }
+
+    return {
+      icon: 'ak-svg/sox-monitoring-stats-icons/no-action-needed' as const,
+      key: 'no-action-needed',
+    };
+  }
+
+  get statusText() {
+    if (this.needsAction) {
+      return this.intl.t('storeknox.needsAction');
+    }
+
+    if (this.appIsInitializing) {
+      return this.intl.t('storeknox.beingInitialized');
+    }
+
+    if (this.appIsDisabled) {
+      return this.intl.t('disabled');
+    }
+
+    return this.intl.t('storeknox.noActionNeeded');
   }
 }
 
