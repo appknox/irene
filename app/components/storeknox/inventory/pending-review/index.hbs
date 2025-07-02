@@ -48,16 +48,18 @@
   </AkStack>
 </AkStack> --}}
 
-{{#if this.showTable}}
-  <Storeknox::Inventory::PendingReview::Table
-    @skAppList={{this.reviewAppsData}}
-    @limit={{this.skPendingReview.limit}}
-    @offset={{this.skPendingReview.offset}}
-    @loadingData={{this.isFetchingData}}
-    @totalCount={{this.totalCount}}
-    @goToPage={{this.goToPage}}
-    @onItemPerPageChange={{this.changePerPageItem}}
-  />
-{{else}}
-  <Storeknox::Inventory::PendingReview::Empty />
-{{/if}}
+<AkStack @width='full' class='mt-3'>
+  {{#if this.showTable}}
+    <Storeknox::Inventory::PendingReview::Table
+      @skAppList={{this.reviewAppsData}}
+      @limit={{this.skPendingReview.limit}}
+      @offset={{this.skPendingReview.offset}}
+      @loadingData={{this.isFetchingData}}
+      @totalCount={{this.totalCount}}
+      @goToPage={{this.goToPage}}
+      @onItemPerPageChange={{this.changePerPageItem}}
+    />
+  {{else}}
+    <Storeknox::Inventory::PendingReview::Empty />
+  {{/if}}
+</AkStack>

@@ -27,7 +27,7 @@ export default class StoreknoxInventoryDetailsAppDetailsActionsListComponent ext
         route: 'authenticated.storeknox.inventory-details.unscanned-version',
         needsAction:
           this.skInventoryApp?.storeMonitoringStatus ===
-          ENUMS.SK_APP_MONITORING_STATUS.UNSCANNED,
+          ENUMS.SK_APP_MONITORING_STATUS.ACTION_NEEDED,
       },
       {
         id: 'brand-abuse',
