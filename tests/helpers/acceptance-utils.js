@@ -30,6 +30,14 @@ export async function setupRequiredEndpoints(server, skipLogin = true) {
     id: currentUser.id,
   });
 
+  const currentSkOrganization = server.create('sk-organization', {
+    organization,
+  });
+
+  const currentSkOrganizationSub = server.create('sk-organization-sub', {
+    skOrganization: currentSkOrganization,
+  });
+
   if (skipLogin) {
     await createAuthSession(currentUser.id);
   } else {
@@ -73,6 +81,21 @@ export async function setupRequiredEndpoints(server, skipLogin = true) {
     };
   });
 
+  server.get('/v2/sk_organization', (schema) => {
+    const skOrganizations = schema.skOrganizations.all().models;
+
+    return {
+      count: skOrganizations.length,
+      next: null,
+      previous: null,
+      results: skOrganizations,
+    };
+  });
+
+  server.get('/v2/sk_organization/:id/sk_subscription', (schema, req) => {
+    return schema.skOrganizationSubs.find(req.params.id)?.toJSON();
+  });
+
   server.get('/organizations/:id/me', function () {
     return currentOrganizationMe.toJSON();
   });
@@ -97,5 +120,7 @@ export async function setupRequiredEndpoints(server, skipLogin = true) {
     currentOrganizationUser,
     vulnerabilities,
     organization,
+    currentSkOrganization,
+    currentSkOrganizationSub,
   };
 }

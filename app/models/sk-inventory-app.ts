@@ -34,7 +34,8 @@ export default class SkInventoryAppModel extends SkAppModel {
 
   get containsUnscannedVersion() {
     return (
-      this.storeMonitoringStatus === ENUMS.SK_APP_MONITORING_STATUS.UNSCANNED
+      this.storeMonitoringStatus ===
+      ENUMS.SK_APP_MONITORING_STATUS.ACTION_NEEDED
     );
   }
 }

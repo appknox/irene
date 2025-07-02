@@ -1673,6 +1673,31 @@ body {
   --marketplace-integration-card-text-color: var(--text-secondary);
   --marketplace-integration-card-border-color: var(--border-color-1);
 
+  // variables for storeknox/inventory/app-list/table/monitoring-status-header
+  --storeknox-inventory-app-list-table-monitoring-status-header-background-color: var(
+    --background-main
+  );
+
+  --storeknox-inventory-app-list-table-monitoring-status-header-box-shadow: var(
+    --box-shadow-7
+  );
+
+  --storeknox-inventory-app-list-table-monitoring-status-header-border-radius: var(
+    --border-radius
+  );
+
+  --storeknox-inventory-app-list-table-monitoring-status-header-filter-option-hover-background-color: var(
+    --neutral-grey-200
+  );
+
+  --storeknox-inventory-app-list-table-monitoring-status-header-filter-option-clear-filter-background-color: var(
+    --neutral-grey-200
+  );
+
+  --storeknox-inventory-app-list-table-monitoring-status-header-filter-header-background-color: var(
+    --neutral-grey-100
+  );
+
   // variables for storeknox/inventory/pending-review/table/availability-header
   --storeknox-inventory-pending-review-table-availability-header-info-icon-color: var(
     --neutral-grey-400
@@ -1859,6 +1884,18 @@ body {
     --new-feature-ai-bg-color
   );
 
+  --storeknox-inventory-details-app-details-action-button-archived-color: var(
+    --common-black
+  );
+
+  --storeknox-inventory-details-app-details-action-button-archived-border-color: var(
+    --common-black
+  );
+
+  --storeknox-inventory-details-app-details-action-button-archived-bg-color: var(
+    --neutral-grey-200
+  );
+
   // variables for storeknox/inventory-details/app-details/va-results
   --storeknox-inventory-details-app-details-va-results-risk-color-critical: var(
     --severity-critical
@@ -1890,8 +1927,15 @@ body {
   );
 
   // variables for storeknox/inventory-details/header
-  --storeknox-inventory-details-header-bg-color: var(--background-light);
   --storeknox-inventory-details-header-app-logo-border-color: var(
+    --neutral-grey-100
+  );
+
+  --storeknox-inventory-details-header-background-color: var(
+    --background-light
+  );
+
+  --storeknox-inventory-details-header-license-icon-container-background-color: var(
     --neutral-grey-100
   );
 
@@ -1952,6 +1996,74 @@ body {
   --storeknox-product-icon-product-info-tray-box-shadow: var(--box-shadow-1);
   --storeknox-product-icon-store-link-container-bg-color: var(
     --neutral-grey-100
+  );
+
+  // variables for storeknox/upselling-ui
+  --storeknox-upselling-ui-border-color: var(--border-color-1);
+
+  --storeknox-upselling-ui-background-color: var(
+    --storeknox-upselling-ui-bg-color
+  );
+
+  // variables for storeknox/inventory/archived-apps
+  --storeknox-inventory-archived-apps-table-bg-color: var(--background-main);
+
+  // variables for storeknox/inventory/archived-apps/table
+  --storeknox-inventory-archived-apps-table-empty-color: var(--common-white);
+  --storeknox-inventory-archived-apps-table-empty-border-color: var(
+    --neutral-grey-100
+  );
+
+  // variables for storeknox/inventory/archived-apps/header
+  --storeknox-inventory-archived-apps-header-background-color: var(
+    --background-main
+  );
+
+  --storeknox-inventory-archived-apps-header-border-color: var(
+    --neutral-grey-200
+  );
+
+  // variables for storeknox/inventory-details/archived-banner
+  --storeknox-inventory-details-archived-banner-bg-color: var(
+    --background-main
+  );
+  --storeknox-inventory-details-archived-banner-icon-color: var(--common-white);
+  --storeknox-inventory-details-archived-banner-icon-bg-color: var(
+    --error-main
+  );
+
+  // variables for storeknox/inventory-details/header/archive-drawer
+  --storeknox-inventory-details-header-archive-drawer-border-color: var(
+    --border-color-1
+  );
+
+  --storeknox-inventory-details-header-archive-drawer-border-radius: var(
+    --border-radius
+  );
+
+  --storeknox-inventory-details-header-archive-drawer-background-main: var(
+    --background-main
+  );
+
+  --storeknox-inventory-details-header-archive-drawer-action-box-shadow: var(
+    --box-shadow-4
+  );
+
+  // variables for storeknox/inventory-details/header/toggle-monitoring-drawer
+  --storeknox-inventory-details-header-toggle-monitoring-drawer-border-color: var(
+    --border-color-1
+  );
+
+  --storeknox-inventory-details-header-toggle-monitoring-drawer-border-radius: var(
+    --border-radius
+  );
+
+  --storeknox-inventory-details-header-toggle-monitoring-drawer-background-main: var(
+    --background-main
+  );
+
+  --storeknox-inventory-details-header-toggle-monitoring-drawer-action-box-shadow: var(
+    --box-shadow-4
   );
 
   // variables for page-wrapper

@@ -1,0 +1,22 @@
+.confirm-drawer-container {
+  width: 640px;
+  margin: 1.5em;
+  border: 1px solid
+    var(
+      --storeknox-inventory-details-header-toggle-monitoring-drawer-border-color
+    );
+
+  border-radius: var(
+    --storeknox-inventory-details-header-toggle-monitoring-drawer-border-radius
+  );
+
+  .confirm-action-container {
+    background-color: var(
+      --storeknox-inventory-details-header-toggle-monitoring-drawer-background-main
+    );
+
+    box-shadow: var(
+      --storeknox-inventory-details-header-toggle-monitoring-drawer-action-box-shadow
+    );
+  }
+}

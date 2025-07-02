@@ -12,7 +12,6 @@ export default Factory.extend({
   rejected_on: () => faker.date.past(),
   monitoring_enabled: () => faker.datatype.boolean(),
   monitoring_status: () => faker.number.int({ min: 0, max: 3 }),
-
   app_status: () => faker.helpers.arrayElement(ENUMS.SK_APP_STATUS.BASE_VALUES),
 
   app_status_display() {
@@ -21,6 +20,9 @@ export default Factory.extend({
     return ENUMS.SK_APP_STATUS.BASE_CHOICES.find((c) => c.value === app_status)
       ?.key;
   },
+
+  archived_on: () => faker.date.past(),
+  unarchive_available_on: () => faker.date.future(),
 
   approval_status: () =>
     faker.helpers.arrayElement(ENUMS.SK_APPROVAL_STATUS.BASE_VALUES),
@@ -62,6 +64,11 @@ export default Factory.extend({
   withApprovedStatus: trait({
     approval_status: ENUMS.SK_APPROVAL_STATUS.APPROVED,
     app_status: ENUMS.SK_APP_STATUS.ACTIVE,
+  }),
+
+  withArchivedStatus: trait({
+    approval_status: ENUMS.SK_APPROVAL_STATUS.APPROVED,
+    app_status: ENUMS.SK_APP_STATUS.ARCHIVED,
   }),
 
   withAddedToAppknox: trait({

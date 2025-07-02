@@ -23,7 +23,31 @@
       );
   }
 
-  &.needs-action {
+  &.archived:not(.feature-in-progress) {
+    color: var(
+      --storeknox-inventory-details-app-details-action-button-archived-color
+    ) !important;
+
+    border-color: var(
+      --storeknox-inventory-details-app-details-action-button-archived-border-color
+    ) !important;
+
+    background-color: var(
+      --storeknox-inventory-details-app-details-action-button-archived-bg-color
+    );
+
+    &:focus,
+    &:hover {
+      box-shadow: var(
+          --storeknox-inventory-details-app-details-action-button-box-shadow
+        )
+        var(
+          --storeknox-inventory-details-app-details-action-button-archived-color
+        );
+    }
+  }
+
+  &.needs-action:not(.archived) {
     color: var(
       --storeknox-inventory-details-app-details-action-button-needs-action-color
     ) !important;

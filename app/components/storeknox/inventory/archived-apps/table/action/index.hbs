@@ -1,0 +1,39 @@
+{{#if @loading}}
+  <AkSkeleton @width='2em' @height='2em' />
+{{else}}
+  <AkTooltip
+    @disabled={{not this.isUnarchiveDisabled}}
+    @arrow={{true}}
+    @placement='left'
+  >
+    <:tooltipContent>
+      <div local-class='tooltip-content'>
+        <AkTypography
+          @color='inherit'
+          data-test-storeknoxInventory-archivedAppsTable-unarchiveButtonTooltipText
+        >
+          {{t 'storeknox.unarchiveDisabled'}}
+          {{this.skApp.unarchiveDateString}}.
+        </AkTypography>
+      </div>
+    </:tooltipContent>
+
+    <:default>
+      <AkIconButton
+        @size='medium'
+        disabled={{this.isUnarchiveDisabled}}
+        {{on 'click' this.unarchiveApp}}
+        data-test-storeknoxInventory-archivedAppsTable-unarchiveButton
+      >
+        <AkIcon
+          @iconName='unarchive'
+          data-test-storeknoxInventory-archivedAppsTable-unarchiveButtonIcon
+        />
+
+        {{#if this.doUnarchive.isRunning}}
+          <AkLoader @size={{13}} class='ml-1' />
+        {{/if}}
+      </AkIconButton>
+    </:default>
+  </AkTooltip>
+{{/if}}

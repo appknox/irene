@@ -1,7 +1,11 @@
 {{page-title 'Inventory Details'}}
 
-<PageWrapper>
-  <Storeknox::InventoryDetails::Header @skInventoryApp={{@model}} />
+<AkStack @width='full' @direction='column' @spacing='2'>
+  <Storeknox::InventoryDetails::ArchivedBanner @skInventoryApp={{@model}} />
 
-  {{outlet}}
-</PageWrapper>
+  <PageWrapper>
+    <Storeknox::InventoryDetails::Header @skInventoryApp={{@model}} />
+
+    {{outlet}}
+  </PageWrapper>
+</AkStack>

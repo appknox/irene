@@ -1,6 +1,7 @@
 import Service, { service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
 import { task } from 'ember-concurrency';
+import { action } from '@ember/object';
 import type Store from '@ember-data/store';
 
 // eslint-disable-next-line ember/use-ember-data-rfc-395-imports
@@ -24,15 +25,22 @@ export default class SkInventoryAppService extends Service {
 
   @tracked limit = 10;
   @tracked offset = 0;
+  @tracked monitoringStatusFilter = -1;
   @tracked skInventoryAppsCount = 0;
 
   get isFetchingSkInventoryApps() {
     return this.fetch.isRunning;
   }
 
-  setLimitOffset({ limit = 10, offset = 0 }) {
+  @action
+  setQueryParams({
+    limit = this.limit,
+    offset = this.offset,
+    monitoringStatusFilter = this.monitoringStatusFilter,
+  }) {
     this.limit = limit;
     this.offset = offset;
+    this.monitoringStatusFilter = monitoringStatusFilter;
 
     return this;
   }
@@ -47,6 +55,9 @@ export default class SkInventoryAppService extends Service {
       offset: this.offset,
       approval_status: ENUMS.SK_APPROVAL_STATUS.APPROVED,
       app_status: ENUMS.SK_APP_STATUS.ACTIVE,
+      ...(this.monitoringStatusFilter !== -1 && {
+        monitoring_status: this.monitoringStatusFilter,
+      }),
     };
 
     try {

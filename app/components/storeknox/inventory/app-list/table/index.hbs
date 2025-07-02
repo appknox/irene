@@ -1,30 +1,10 @@
-{{#if this.hasNoApps}}
-  <AkStack
-    @direction='column'
-    @alignItems='center'
-    local-class='empty-container'
-    data-test-storeknoxInventory-appListTable-tableEmpty
-  >
-    <AkSvg::ProjectListEmpty
-      data-test-storeknoxInventory-appListTable-tableEmptyIllustration
-    />
+{{#if this.isFetchingTableData}}
+  <AkTable::Loading @columns={{this.columns}} />
 
-    <AkTypography
-      @variant='h5'
-      @gutterBottom={{true}}
-      local-class='header'
-      data-test-storeknoxInventory-appListTable-tableEmptyHeaderText
-    >
-      {{t 'storeknox.noInventoryAppsFound'}}
-    </AkTypography>
-
-    <AkTypography
-      local-class='body-text'
-      data-test-storeknoxInventory-appListTable-tableEmptyHeaderDescription
-    >
-      {{t 'storeknox.noInventoryAppsFoundDescription' htmlSafe=true}}
-    </AkTypography>
-  </AkStack>
+{{else if (and this.hasNoApps (not this.filterApplied))}}
+  <Storeknox::Inventory::AppList::Table::Empty
+    @subText={{t 'storeknox.noInventoryAppsFoundDescription' htmlSafe=true}}
+  />
 
 {{else}}
   <AkPaginationProvider
@@ -44,7 +24,10 @@
           <r.cell as |column|>
             {{#if column.headerComponent}}
               {{#let (component column.headerComponent) as |Component|}}
-                <Component />
+                <Component
+                  @selectedMonitoringStatus={{this.monitoringStatusFilter}}
+                  @onStatusChange={{this.onStatusChange}}
+                />
               {{/let}}
             {{else}}
               {{column.name}}
@@ -66,14 +49,7 @@
               <Component
                 @loading={{this.isFetchingTableData}}
                 @app={{r.rowValue.app}}
-                {{! Data used in storeknox common table columns }}
                 @data={{r.rowValue}}
-                {{! For disabled apps select column }}
-                {{! TODO: Uncomment when disabled apps feature is ready for release }}
-                {{!-- @disabledChecking={{@isAddingAppToInventory}}
-                      @appIsSelected={{r.rowValue.appIsSelected}}
-                      @selectedDisabledAppIds={{this.selectedDisabledAppIds}}
-                      @selectDisabledAppRow={{this.selectDisabledAppRow}} --}}
               />
             {{/let}}
           </r.cell>
@@ -81,7 +57,13 @@
       </tb.body>
     </AkTable>
 
-    {{#unless this.isFetchingTableData}}
+    {{#if this.showEmptyState}}
+      <Storeknox::Inventory::AppList::Table::Empty
+        @subText={{t 'storeknox.noAppMatchesYourCurrentFilter'}}
+      />
+    {{/if}}
+
+    {{#unless this.hidePagination}}
       <AkPagination
         @disableNext={{pgc.disableNext}}
         @nextAction={{pgc.nextAction}}

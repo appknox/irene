@@ -1,0 +1,103 @@
+<AkDrawer
+  @open={{@open}}
+  @onClose={{@onClose}}
+  @anchor='right'
+  @disableBackdropClick={{true}}
+  data-test-storeknoxInventoryDetails-toggleMonitoringDrawer
+  as |dr|
+>
+  <AkAppbar @justifyContent='space-between' as |ab|>
+    <AkTypography
+      @variant='h5'
+      @color='inherit'
+      data-test-storeknoxInventoryDetails-toggleMonitoringDrawerHeading
+    >
+      {{t 'confirmation'}}
+    </AkTypography>
+
+    <AkIconButton
+      class={{ab.classes.defaultIconBtn}}
+      {{on 'click' (fn this.cancelMonitoringToggle dr.closeHandler)}}
+      data-test-storeknoxInventoryDetails-toggleMonitoringDrawerCloseBtn
+    >
+      <AkIcon @iconName='close' />
+    </AkIconButton>
+  </AkAppbar>
+
+  <div local-class='confirm-drawer-container'>
+    {{#if this.loadOrgSubStatus.isRunning}}
+      <AkStack
+        @direction='column'
+        @spacing='1'
+        {{style padding='1.1429em 1.5em'}}
+      >
+        <AkSkeleton @width='100%' @height='17px' />
+        <AkSkeleton @width='50%' @height='17px' />
+      </AkStack>
+
+      <AkDivider @color='dark' />
+
+      <AkStack
+        @alignItems='center'
+        @spacing='1.5'
+        local-class='confirm-action-container'
+        class='p-2'
+      >
+        <AkSkeleton @width='126px' @height='35px' />
+        <AkSkeleton @width='80px' @height='35px' />
+      </AkStack>
+    {{else}}
+      <AkStack @direction='column' {{style padding='1.1429em 1.5em'}}>
+        {{#if this.hasContactedSupport}}
+          <AkSvg::ThumbsUpIcon
+            data-test-storeknoxInventoryDetails-toggleMonitoringDrawerSuccessIllustration
+            class='mb-2'
+          />
+
+          <AkTypography
+            {{style width='80%'}}
+            data-test-storeknoxInventoryDetails-toggleMonitoringDrawerSuccessMessage
+          >
+            {{t 'storeknox.creditRequestSuccess'}}
+          </AkTypography>
+        {{else}}
+          <AkTypography
+            {{style marginBottom='3em !important'}}
+            data-test-storeknoxInventoryDetails-toggleMonitoringDrawerMessage
+          >
+            {{this.drawerMessages.message}}
+          </AkTypography>
+        {{/if}}
+      </AkStack>
+
+      <AkDivider @color='dark' />
+
+      <AkStack
+        @alignItems='center'
+        @spacing='1.5'
+        local-class='confirm-action-container'
+        class='p-2'
+      >
+        {{#unless this.hasContactedSupport}}
+          <AkButton
+            @loading={{this.loadingConfirmButton}}
+            {{on 'click' this.confirmMonitoringToggle}}
+            {{style textTransform='capitalize'}}
+            data-test-storeknoxInventoryDetails-toggleMonitoringDrawerConfirmBtn
+          >
+            {{this.drawerMessages.confirmButtonText}}
+          </AkButton>
+        {{/unless}}
+
+        <AkButton
+          @variant='outlined'
+          @color='neutral'
+          {{on 'click' (fn this.cancelMonitoringToggle dr.closeHandler)}}
+          data-test-storeknoxInventoryDetails-toggleMonitoringDrawerCancelBtn
+        >
+          {{this.drawerMessages.cancelButtonText}}
+        </AkButton>
+      </AkStack>
+    {{/if}}
+  </div>
+</AkDrawer>

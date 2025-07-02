@@ -1,7 +1,6 @@
 import Component from '@glimmer/component';
 import { action } from '@ember/object';
 import { service } from '@ember/service';
-import { tracked } from '@glimmer/tracking';
 import type RouterService from '@ember/routing/router-service';
 import type IntlService from 'ember-intl/services/intl';
 import type Store from '@ember-data/store';
@@ -14,20 +13,10 @@ import type SkInventoryAppModel from 'irene/models/sk-inventory-app';
 import type SkInventoryAppService from 'irene/services/sk-inventory-apps';
 
 type StoreknoxInventoryTableDataItem = StoreknoxCommonTableColumnsData & {
-  appIsSelected: boolean;
   app: SkInventoryAppModel;
 };
 
-export interface StoreknoxInventoryAppListTableSignature {
-  Element: HTMLElement;
-  Args: {
-    isAddingAppToInventory?: boolean;
-    loadDisabledApps?: boolean;
-    handleSelectedDisabledApps?: (apps: string[]) => void;
-  };
-}
-
-export default class StoreknoxInventoryAppListTableComponent extends Component<StoreknoxInventoryAppListTableSignature> {
+export default class StoreknoxInventoryAppListTableComponent extends Component {
   @service declare router: RouterService;
   @service declare intl: IntlService;
   @service declare me: MeService;
@@ -37,27 +26,32 @@ export default class StoreknoxInventoryAppListTableComponent extends Component<S
   @service('sk-inventory-apps')
   declare skInventoryAppsService: SkInventoryAppService;
 
-  @tracked selectedDisabledAppSet = new Set<string>();
-  @tracked selectedDisabledAppIds: string[] = [];
+  get isFetchingTableData() {
+    return this.skInventoryAppsService.isFetchingSkInventoryApps;
+  }
 
-  get loadDisabledApps() {
-    return this.args.loadDisabledApps;
+  get monitoringStatusFilter() {
+    return this.skInventoryAppsService.monitoringStatusFilter;
+  }
+
+  get filterApplied() {
+    return this.monitoringStatusFilter > -1;
   }
 
   get disableRowClick() {
-    return this.loadDisabledApps || this.isFetchingTableData;
+    return this.isFetchingTableData;
+  }
+
+  get showEmptyState() {
+    return this.hasNoApps && this.filterApplied;
+  }
+
+  get hidePagination() {
+    return this.showEmptyState || this.isFetchingTableData;
   }
 
   get columns() {
     return [
-      this.loadDisabledApps
-        ? {
-            cellComponent: 'storeknox/inventory/app-list/table/checkbox',
-            minWidth: 20,
-            width: 20,
-            textAlign: 'center',
-          }
-        : null,
       {
         headerComponent: 'storeknox/table-columns/store-header',
         cellComponent: 'storeknox/table-columns/store',
@@ -79,6 +73,9 @@ export default class StoreknoxInventoryAppListTableComponent extends Component<S
         name: 'Monitoring Status',
         cellComponent: 'storeknox/inventory/app-list/table/monitoring-status',
         width: 150,
+        textAlign: 'left',
+        headerComponent:
+          'storeknox/inventory/app-list/table/monitoring-status-header',
       },
       // {
       //   headerComponent:
@@ -117,9 +114,6 @@ export default class StoreknoxInventoryAppListTableComponent extends Component<S
         devName: appMetadata.devName,
         devEmail: appMetadata.devEmail,
         app,
-        appIsSelected: this.selectedDisabledAppIds.some(
-          (id) => id === (appMetadata.docUlid as string)
-        ),
       };
     }) || []) as StoreknoxInventoryTableDataItem[];
   }
@@ -128,25 +122,14 @@ export default class StoreknoxInventoryAppListTableComponent extends Component<S
     return Array.from(new Array(7)).map(() => ({}));
   }
 
-  get isFetchingTableData() {
-    return this.skInventoryAppsService.isFetchingSkInventoryApps;
-  }
-
-  @action selectDisabledAppRow(ulid: string, value: boolean) {
-    const selectedApsIds = [...this.selectedDisabledAppIds];
-
-    if (value) {
-      selectedApsIds.push(ulid);
-      this.selectedDisabledAppIds = selectedApsIds;
-    } else {
-      this.selectedDisabledAppIds = selectedApsIds.filter((id) => id !== ulid);
-    }
-
-    this.args.handleSelectedDisabledApps?.(this.selectedDisabledAppIds);
-  }
-
-  @action getRowIsSelected(ulid: string, selectedItems: string[]) {
-    return selectedItems.some((id) => id === ulid);
+  @action onStatusChange(status: number) {
+    this.router.transitionTo({
+      queryParams: {
+        app_limit: this.skInventoryAppsService.limit,
+        app_offset: 0,
+        monitoring_status: status,
+      },
+    });
   }
 
   @action goToPage({ limit, offset }: PaginationProviderActionsArgs) {
@@ -154,6 +137,7 @@ export default class StoreknoxInventoryAppListTableComponent extends Component<S
       queryParams: {
         app_limit: limit,
         app_offset: offset,
+        monitoring_status: this.monitoringStatusFilter,
       },
     });
   }
@@ -163,6 +147,7 @@ export default class StoreknoxInventoryAppListTableComponent extends Component<S
       queryParams: {
         app_limit: args.limit,
         app_offset: 0,
+        monitoring_status: this.monitoringStatusFilter,
       },
     });
   }

@@ -1,5 +1,10 @@
-{{!-- <AkStack local-class='app-list-header'>
-  <div local-class='search-input-container-width'>
+<AkStack
+  local-class='app-list-header'
+  @justifyContent='flex-end'
+  @alignItems='center'
+  class='p-2'
+>
+  {{!-- <div local-class='search-input-container-width'>
     <AkTextField @placeholder={{t 'search'}} @value={{this.searchQuery}}>
       <:rightAdornment>
         {{#if this.searchQuery}}
@@ -15,8 +20,21 @@
         {{/if}}
       </:rightAdornment>
     </AkTextField>
-  </div>
-</AkStack> --}}
+  </div> --}}
+
+  {{#if this.showArchivedAppsLink}}
+    <AkButton @color='neutral' @variant='outlined' class='p-0'>
+      <AkLink
+        @route='authenticated.storeknox.archived-apps'
+        @underline='none'
+        {{style padding='0.4em 0.7em !important'}}
+        data-test-storeknoxInventory-archivedApps-link
+      >
+        {{t 'storeknox.archivedApps'}}
+      </AkLink>
+    </AkButton>
+  {{/if}}
+</AkStack>
 
 <div local-class='app-list-table'>
   <Storeknox::Inventory::AppList::Table />

@@ -1,21 +1,12 @@
 import Component from '@glimmer/component';
-import { tracked } from '@glimmer/tracking';
-import { action } from '@ember/object';
+import { service } from '@ember/service';
+import type MeService from 'irene/services/me';
 
 export default class StoreknoxInventoryAppListComponent extends Component {
-  @tracked searchQuery = '';
-  @tracked discoverClicked = false;
+  @service declare me: MeService;
 
-  @action
-  discoverApp() {
-    this.searchQuery = 'Shell Test';
-    this.discoverClicked = true;
-  }
-
-  @action
-  clearSearch() {
-    this.searchQuery = '';
-    this.discoverClicked = false;
+  get showArchivedAppsLink() {
+    return this.me.org?.get('is_owner') || this.me.org?.get('is_admin');
   }
 }
 

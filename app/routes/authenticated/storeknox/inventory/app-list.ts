@@ -7,6 +7,7 @@ import type SkInventoryAppService from 'irene/services/sk-inventory-apps';
 export interface StoreknoxInventoryAppListQueryParams {
   app_limit: number;
   app_offset: number;
+  monitoring_status: number;
 }
 
 export default class AuthenticatedStoreknoxInventoryAppListRoute extends AkBreadcrumbsRoute {
@@ -22,15 +23,19 @@ export default class AuthenticatedStoreknoxInventoryAppListRoute extends AkBread
     app_offset: {
       refreshModel: true,
     },
+    monitoring_status: {
+      refreshModel: true,
+    },
   };
 
   async model(params: Partial<StoreknoxInventoryAppListQueryParams>) {
-    const { app_limit, app_offset } = params;
+    const { app_limit, app_offset, monitoring_status } = params;
 
     this.skInventoryAppsService
-      .setLimitOffset({
+      .setQueryParams({
         limit: app_limit,
         offset: app_offset,
+        monitoringStatusFilter: monitoring_status,
       })
       .reload();
 
