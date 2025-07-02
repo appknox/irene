@@ -77,6 +77,14 @@ export default class SbomComponentDetailsOverviewComponent extends Component<Sbo
     return this.args.queryParams.sbom_component_id;
   }
 
+  get showDependencyTree() {
+    if (this.sbomComponent.isMLModel) {
+      return false;
+    }
+
+    return this.isNotOutdated;
+  }
+
   @action
   updateExpandedNodes(nodes: string[]) {
     this.expandedNodes = nodes;

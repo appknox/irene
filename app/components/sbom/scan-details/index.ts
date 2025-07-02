@@ -1,16 +1,19 @@
-import { action } from '@ember/object';
 import Component from '@glimmer/component';
+import { action } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
-import { inject as service } from '@ember/service';
+import { service } from '@ember/service';
+import { debounceTask } from 'ember-lifeline';
 import type IntlService from 'ember-intl/services/intl';
 import type RouterService from '@ember/routing/router-service';
 
+import { SbomScanStatus } from 'irene/models/sbom-file';
 import type SbomFileModel from 'irene/models/sbom-file';
-import type { SbomComponentQueryParam } from 'irene/routes/authenticated/dashboard/sbom/scan-details';
 import type SbomComponentModel from 'irene/models/sbom-component';
 import type SbomProjectModel from 'irene/models/sbom-project';
 import type SbomScanSummaryModel from 'irene/models/sbom-scan-summary';
-import { SbomScanStatus } from 'irene/models/sbom-file';
+import type SbomScanDetailsService from 'irene/services/sbom-scan-details';
+import type { SbomScanDetailParam } from 'irene/routes/authenticated/dashboard/sbom/scan-details';
+
 import styles from './index.scss';
 
 interface TreeNodeDataObject {
@@ -39,7 +42,7 @@ export interface SbomScanDetailsSignature {
     sbomProject: SbomProjectModel;
     sbomFile: SbomFileModel;
     sbomScanSummary: SbomScanSummaryModel | null;
-    queryParams: SbomComponentQueryParam;
+    queryParams: SbomScanDetailParam;
   };
 }
 
@@ -47,11 +50,40 @@ export default class SbomScanDetailsComponent extends Component<SbomScanDetailsS
   @service declare intl: IntlService;
   @service declare router: RouterService;
 
+  @service('sbom-scan-details')
+  declare sbomScanDetailsService: SbomScanDetailsService;
+
   @tracked openViewReportDrawer = false;
   @tracked expandedNodes: string[] = [];
   @tracked treeNodes: AkTreeNodeProps[] = [];
-  @tracked currentViewType: 'tree' | 'list' =
-    this.args.queryParams.view_type || 'tree';
+
+  constructor(owner: unknown, args: SbomScanDetailsSignature['Args']) {
+    super(owner, args);
+
+    const {
+      view_type,
+      component_query,
+      is_dependency,
+      component_type,
+      component_limit,
+      component_offset,
+    } = args.queryParams;
+
+    // Fetch with default queries from the route
+    this.sbomScanDetailsService
+      .setQueryData({
+        sbomFile: this.args.sbomFile,
+        view_type,
+        component_query: component_query,
+        dependency_type: is_dependency,
+        component_type: Number(component_type),
+      })
+      .setLimitOffset({
+        limit: Number(component_limit),
+        offset: Number(component_offset),
+      })
+      .reload();
+  }
 
   get classes() {
     return {
@@ -94,7 +126,7 @@ export default class SbomScanDetailsComponent extends Component<SbomScanDetailsS
   }
 
   get isTreeView() {
-    return this.currentViewType !== 'list';
+    return this.sbomScanDetailsService.viewType !== 'list';
   }
 
   @action
@@ -119,14 +151,23 @@ export default class SbomScanDetailsComponent extends Component<SbomScanDetailsS
 
   @action
   handleTreeViewClick() {
-    this.currentViewType = 'tree';
-    this.router.transitionTo({ queryParams: { view_type: 'tree' } });
+    const queryParams = {
+      view_type: 'tree' as const,
+      component_type: -1,
+      is_dependency: null,
+      component_query: '',
+    };
+
+    this.router.transitionTo({ queryParams });
+    this.sbomScanDetailsService.setQueryData({ ...queryParams }).reload();
   }
 
   @action
   handleListViewClick() {
-    this.currentViewType = 'list';
-    this.router.transitionTo({ queryParams: { view_type: 'list' } });
+    const queryParams = { view_type: 'list' as const };
+
+    this.router.transitionTo({ queryParams });
+    this.sbomScanDetailsService.setQueryData(queryParams).reload();
   }
 
   @action
@@ -139,6 +180,29 @@ export default class SbomScanDetailsComponent extends Component<SbomScanDetailsS
       ...node,
       children: [],
     }));
+  }
+
+  @action
+  handleSearchInput(event: Event) {
+    const query = (event.target as HTMLInputElement).value;
+
+    debounceTask(this, 'setSearchQuery', query, 500);
+  }
+
+  @action
+  setSearchQuery(query: string) {
+    this.router.transitionTo({
+      queryParams: {
+        component_query: query,
+        component_offset: 0,
+      },
+    });
+
+    // Reload Service Table Data
+    this.sbomScanDetailsService
+      .setQueryData({ component_query: query })
+      .setLimitOffset({ offset: 0 })
+      .reload();
   }
 }
 

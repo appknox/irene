@@ -1,0 +1,17 @@
+.overview-container {
+  width: fit-content;
+  margin-top: 1em;
+  padding: 0.5em 1em;
+  border: 1px solid var(--sbom-scan-details-overview-border-color);
+  border-radius: var(--sbom-scan-details-overview-border-radius);
+}
+
+.new-feature-container {
+  background-color: var(--sbom-scan-details-overview-new-feature-background-color);
+  border-radius: var(--sbom-scan-details-overview-border-radius);
+  padding: 0.2em;
+}
+
+.new-feature-icon {
+  color: var(--sbom-scan-details-overview-new-feature-text-color);
+}

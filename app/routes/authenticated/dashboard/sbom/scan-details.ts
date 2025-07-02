@@ -1,12 +1,16 @@
 import { service } from '@ember/service';
-import AkBreadcrumbsRoute from 'irene/utils/ak-breadcrumbs-route';
 import type Store from '@ember-data/store';
 
+import AkBreadcrumbsRoute from 'irene/utils/ak-breadcrumbs-route';
+import type SbomScanDetailsService from 'irene/services/sbom-scan-details';
+
 export interface SbomComponentQueryParam {
-  component_limit: string;
-  component_offset: string;
+  component_limit: number;
+  component_offset: number;
   component_query: string;
-  view_type?: 'tree' | 'list';
+  view_type: 'tree' | 'list';
+  component_type: number | null;
+  is_dependency: string | null;
 }
 
 export interface SbomScanDetailParam extends SbomComponentQueryParam {
@@ -16,31 +20,32 @@ export interface SbomScanDetailParam extends SbomComponentQueryParam {
 
 export default class AuthenticatedDashboardSbomScanDetailsRoute extends AkBreadcrumbsRoute {
   @service declare store: Store;
+  @service('sbom-scan-details')
+  declare sbomScanDetailsService: SbomScanDetailsService;
 
   queryParams = {
     component_limit: {
-      refreshModel: true,
+      refreshModel: false,
     },
     component_offset: {
-      refreshModel: true,
+      refreshModel: false,
     },
     component_query: {
-      refreshModel: true,
+      refreshModel: false,
     },
     view_type: {
-      refreshModel: true,
+      refreshModel: false,
+    },
+    component_type: {
+      refreshModel: false,
+    },
+    is_dependency: {
+      refreshModel: false,
     },
   };
 
   async model(params: SbomScanDetailParam) {
-    const {
-      sbom_project_id,
-      sbom_file_id,
-      view_type,
-      component_limit = '25',
-      component_offset = '0',
-      component_query = '',
-    } = params;
+    const { sbom_project_id, sbom_file_id } = params;
 
     const sbomProject = await this.store.findRecord(
       'sbom-project',
@@ -63,12 +68,7 @@ export default class AuthenticatedDashboardSbomScanDetailsRoute extends AkBreadc
       sbomProject,
       sbomFile,
       sbomScanSummary,
-      queryParams: {
-        component_limit,
-        component_offset,
-        component_query,
-        view_type,
-      },
+      queryParams: params,
     };
   }
 }
