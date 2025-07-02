@@ -16,7 +16,7 @@ module(
     setupMirage(hooks);
     setupIntl(hooks, 'en');
 
-    test('it renders', async function (assert) {
+    test.each('it renders', [true, false], async function (assert, is_trial) {
       assert.expect(1);
 
       this.notification = this.server.create('nf-in-app-notification', {
@@ -26,6 +26,7 @@ module(
           organization_name: 'Test Organization',
           weeks_remaining: 2,
           subscription_end_date: '2025-06-25',
+          is_trial,
         }),
       });
 
@@ -40,11 +41,16 @@ module(
 
       compareInnerHTMLWithIntlTranslation(assert, {
         selector: '[data-test-nf-subexp-primary-message]',
-        message: t('notificationModule.messages.nf-sk-subexp', {
-          sub_expiry_date: dayjs(this.context.subscription_end_date).format(
-            'MMM D, YYYY'
-          ),
-        }),
+        message: t(
+          is_trial
+            ? 'notificationModule.messages.nf-sk-subexp-trial'
+            : 'notificationModule.messages.nf-sk-subexp',
+          {
+            sub_expiry_date: dayjs(this.context.subscription_end_date).format(
+              'MMM D, YYYY'
+            ),
+          }
+        ),
         doIncludesCheck: true,
       });
     });

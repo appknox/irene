@@ -1,4 +1,10 @@
-<div local-class='app-inventory-header-root' class='w-full mb-3 pt-2'>
+<div
+  local-class='
+    app-inventory-header-root
+    {{if @skInventoryApp.isArchived "archived"}}
+  '
+  class='w-full mb-3 pt-2'
+>
   <AkBreadcrumbs::AutoTrail
     class='pb-3'
     data-test-storeknoxInventoryDetails-breadcrumbContainer
@@ -30,7 +36,25 @@
       <Storeknox::InventoryDetails::SectionInfo
         @width='full'
         @alignItems='flex-end'
+        local-class='app-inventory-header-info'
       >
+        {{#if this.appHasLicense}}
+          <AkStack local-class='license-icon-container' class='p-1'>
+            <AkTooltip
+              @arrow={{true}}
+              @title={{t 'storeknox.licenseAllocated'}}
+            >
+              <AkIcon
+                @iconName='license-outline-rounded'
+                @size='small'
+                @color='success'
+                {{style fontSize='2em !important'}}
+                data-test-storeknoxInventoryDetails-licenseAllocatedIcon
+              />
+            </AkTooltip>
+          </AkStack>
+        {{/if}}
+
         <AkStack @width='full' @direction='column'>
           <img
             local-class='app-info-logo'
@@ -104,6 +128,7 @@
         >
           {{#if this.activeRouteTagProps}}
             <Storeknox::InventoryDetails::AppDetails::ActionsList::Button
+              @skInventoryApp={{this.skInventoryApp}}
               @disabled={{true}}
               @needsAction={{this.activeRouteTagProps.needsAction}}
               @featureInProgress={{this.activeRouteTagProps.featureInProgress}}
@@ -113,8 +138,12 @@
               data-test-storeknoxInventoryDetails-pageInfoTag
             />
 
-          {{else}}
-            <AkStack @alignItems='center' @spacing='1'>
+          {{else if (not this.skInventoryApp.isArchived)}}
+            <AkStack
+              @alignItems='center'
+              @spacing='1'
+              data-test-storeknoxInventoryDetails-monitoringStatusToggleContainer
+            >
               {{#if this.toggleSkInventoryAppMonitoring.isRunning}}
                 <AkLoader @size={{14}} />
               {{/if}}
@@ -132,7 +161,7 @@
                       @color='inherit'
                       data-test-storeknoxInventoryDetails-monitoringStatusToggleTooltipText
                     >
-                      {{t 'storeknox.cannotPerformStatusToggleText'}}
+                      {{this.disableMonitoringTooltipText}}
                     </AkTypography>
                   </div>
                 </:tooltipContent>
@@ -140,8 +169,8 @@
                 <:default>
                   <AkToggle
                     @size='small'
+                    @checked={{this.monitoringChecked}}
                     @onChange={{this.onMonitoringActionToggle}}
-                    @checked={{this.skInventoryApp.monitoringEnabled}}
                     @disabled={{this.disableMonitoringToggle}}
                     {{style margin='0em'}}
                     data-test-storeknoxInventoryDetails-monitoringStatusToggle
@@ -158,18 +187,61 @@
             </AkTypography>
           {{/if}}
 
-          {{! TODO: Uncomment when feature is fully ready }}
-          {{!-- <AkDivider
-              @variant='vertical'
-              @color='dark'
-              {{style height='32px'}}
-            />
+          {{#if this.showArchiveButton}}
+            {{#if this.showArchivedAppsInfoTagDivider}}
+              <AkDivider
+                @direction='vertical'
+                @color='dark'
+                @height='32px'
+                class='mx-1'
+              />
+            {{/if}}
 
-              <AkIconButton @variant='outlined'>
-                <AkIcon @iconName='archive' @color='textPrimary' />
-              </AkIconButton> --}}
+            <AkTooltip
+              @disabled={{not this.disableArchiving}}
+              @arrow={{true}}
+              @placement='left'
+              @title={{t 'storeknox.actionDisabledDueToLockPeriod'}}
+              data-test-storeknoxInventoryDetails-archiveButtonTooltip
+            >
+              <AkIconButton
+                @variant='outlined'
+                disabled={{this.disableArchiving}}
+                {{on 'click' this.openArchiveAppDrawer}}
+                data-test-storeknoxInventoryDetails-archiveButton
+              >
+                <AkIcon
+                  @color='textPrimary'
+                  @iconName={{if
+                    this.skInventoryApp.isArchived
+                    'unarchive'
+                    'archive'
+                  }}
+                  data-test-storeknoxInventoryDetails-archiveButtonIcon
+                />
+              </AkIconButton>
+            </AkTooltip>
+          {{/if}}
         </AkStack>
       </Storeknox::InventoryDetails::SectionInfo>
     </AkStack>
   </AkStack>
 </div>
+
+{{! Archive App Drawer }}
+<Storeknox::InventoryDetails::Header::ArchiveDrawer
+  @open={{this.isArchiveAppDrawerOpen}}
+  @onClose={{this.closeArchiveAppDrawer}}
+  @skInventoryApp={{this.skInventoryApp}}
+/>
+
+{{! Toggle Monitoring Drawer }}
+{{#if this.openToggleMonitoringDrawer}}
+  <Storeknox::InventoryDetails::Header::ToggleMonitoringDrawer
+    @open={{true}}
+    @onClose={{this.closeToggleMonitoringDrawer}}
+    @confirmMonitoringToggle={{this.confirmMonitoringToggle}}
+    @cancelMonitoringToggle={{this.cancelMonitoringToggle}}
+    @skInventoryApp={{this.skInventoryApp}}
+  />
+{{/if}}

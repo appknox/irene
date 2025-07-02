@@ -8,6 +8,12 @@ import Model, {
 import type SkOrganizationMembershipModel from './sk-organization-membership';
 import type OrganizationModel from './organization';
 
+interface SkFeatures {
+  inventory: boolean;
+  drift_detection: boolean;
+  fake_app_detection: boolean;
+}
+
 export type SkOrganizationModelName = 'sk-organization';
 
 export default class SkOrganizationModel extends Model {
@@ -33,6 +39,9 @@ export default class SkOrganizationModel extends Model {
     inverse: 'skOrganization',
   })
   declare members: AsyncHasMany<SkOrganizationMembershipModel>;
+
+  @attr()
+  declare skFeatures: SkFeatures;
 
   async toggleAddToInventoryByDefault(addToInventoryByDefault: boolean) {
     const adapter = this.store.adapterFor('sk-organization');

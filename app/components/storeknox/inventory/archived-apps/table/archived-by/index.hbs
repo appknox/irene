@@ -1,0 +1,7 @@
+{{#if @loading}}
+  <AkSkeleton @height='20px' @width='100px' />
+{{else}}
+  <AkTypography data-test-storeknoxInventory-archivedAppsTable-archivedBy>
+    {{@skApp.archivedBy}}
+  </AkTypography>
+{{/if}}
