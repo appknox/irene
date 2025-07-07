@@ -1,0 +1,92 @@
+<Organization::Integrations::Card
+  @data={{this.data}}
+  @onIntegrateClick={{this.openDrawer}}
+  @loading={{this.isLoadingSlackData}}
+/>
+
+<Organization::Integrations::ConfigDrawer
+  @openDrawer={{this.integrationDrawerIsOpen}}
+  @drawerTitle={{t
+    (if this.showRevokeSlackConfirmBox 'confirmation' 'slackIntegration')
+  }}
+  @closeDrawerHandler={{this.closeDrawer}}
+  @drawerSaveAction={{if
+    this.showIntegratedOrLoadingUI
+    this.openRevokeSlackConfirmBox
+    (fn this.integrateSlack.perform this.changeset)
+  }}
+  @loadingDrawerSaveAction={{or
+    this.revokeSlack.isRunning
+    this.integrateSlack.isRunning
+  }}
+  @showDeleteButton={{this.showIntegratedOrLoadingUI}}
+  @isEditing={{this.isEditing}}
+  @drawerEditAction={{this.onEditSave}}
+  @noFooter={{this.showRevokeSlackConfirmBox}}
+>
+  <:drawerContent>
+    {{#if this.showRevokeSlackConfirmBox}}
+      <AkStack
+        local-class='drawer-content form'
+        @direction='column'
+        class='p-2 m-3'
+      >
+        <AkTypography
+          data-test-orgIntegrations-slackAccount-revoke-confirmation
+          @variant='body1'
+        >
+          {{t 'confirmBox.revokeSlack'}}
+        </AkTypography>
+
+        <AkStack @spacing='1.5' class='pt-4'>
+          <AkButton
+            @variant='filled'
+            @loading={{this.revokeSlack.isRunning}}
+            @disabled={{this.revokeSlack.isRunning}}
+            {{on 'click' (perform this.revokeSlack)}}
+            data-test-orgIntegrations-slackAccount-disconnectBtnConfirmation
+          >
+            {{t 'yesDisconnect'}}
+          </AkButton>
+
+          <AkButton
+            @variant='outlined'
+            @color='neutral'
+            {{on 'click' this.closeRevokeSlackConfirmBox}}
+            data-test-orgIntegrations-slackAccount-cancelBtnConfirmation
+          >
+            {{t 'cancel'}}
+          </AkButton>
+        </AkStack>
+      </AkStack>
+    {{else}}
+      <AkStack local-class='drawer-content' @direction='column'>
+        {{#if this.showIntegratedOrLoadingUI}}
+          <Organization::Integrations::IntegratedUi
+            @imageSource='/images/slack-icon.png'
+            @imageAlt='slack icon'
+            @property={{this.slackChannelId}}
+            @propertyTitle={{t 'slack.channelId'}}
+            @loading={{this.isLoadingSlackData}}
+            @showEditButton={{this.showEditButton}}
+            @onEditClick={{this.handleEditClick}}
+          />
+        {{else}}
+          <form local-class='form' class='p-2'>
+            <AkStack @direction='column' @spacing='2'>
+              <AkTextField
+                @placeholder={{t 'slack.enterChannelId'}}
+                @label={{t 'slack.channelId'}}
+                @labelTypographyVariant='subtitle2'
+                @labelTypographyColor='textPrimary'
+                @value={{this.changeset.channelId}}
+                @error={{this.changeset.error.channelId}}
+                data-test-orgIntegrations-slack-channelIdInput
+              />
+            </AkStack>
+          </form>
+        {{/if}}
+      </AkStack>
+    {{/if}}
+  </:drawerContent>
+</Organization::Integrations::ConfigDrawer>
