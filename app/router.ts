@@ -147,6 +147,10 @@ Router.map(function () {
         this.route('redirect');
       });
 
+      this.route('slack-cloud', function () {
+        this.route('redirect');
+      });
+
       this.route('partner', function () {
         this.route('clients', function () {
           this.route('overview');
