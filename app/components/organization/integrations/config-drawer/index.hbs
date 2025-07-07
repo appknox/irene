@@ -46,14 +46,25 @@
           {{t 'disconnect'}}
         </AkButton>
       {{else}}
-        <AkButton
-          data-test-orgIntegrations-configDrawer-integrateBtn
-          @variant='filled'
-          @loading={{@loadingDrawerSaveAction}}
-          {{on 'click' @drawerSaveAction}}
-        >
-          {{t 'integrate'}}
-        </AkButton>
+        {{#if @isEditing}}
+          <AkButton
+            data-test-orgIntegrations-configDrawer-saveBtn
+            @variant='filled'
+            @loading={{@loadingDrawerSaveAction}}
+            {{on 'click' @drawerEditAction}}
+          >
+            {{t 'save'}}
+          </AkButton>
+        {{else}}
+          <AkButton
+            data-test-orgIntegrations-configDrawer-integrateBtn
+            @variant='filled'
+            @loading={{@loadingDrawerSaveAction}}
+            {{on 'click' @drawerSaveAction}}
+          >
+            {{t 'integrate'}}
+          </AkButton>
+        {{/if}}
 
         <AkButton
           data-test-orgIntegrations-configDrawer-cancelBtn
