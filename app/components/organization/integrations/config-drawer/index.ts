@@ -9,6 +9,8 @@ export interface OrganizationIntegrationsConfigDrawerSignature {
     closeDrawerHandler(): void;
     showDeleteButton?: boolean;
     noFooter?: boolean;
+    isEditing?: boolean;
+    drawerEditAction?: () => void;
   };
 
   Blocks: { default: []; drawerContent: [] };
