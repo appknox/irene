@@ -43,6 +43,8 @@ export default class SsoSettingsComponent extends Component<SsoSettingsSignature
   @tracked spConfig: string = 'manual';
   @tracked sso: OrganizationSsoModel | null = null;
 
+  @tracked activeTab: any = 1;
+
   spMetadataKeys = [
     { labelKey: 'entityID', valueKey: 'entity_id' },
     { labelKey: 'acsURL', valueKey: 'acs_url' },
@@ -62,163 +64,187 @@ export default class SsoSettingsComponent extends Component<SsoSettingsSignature
     );
     this.tRemovedSSOSuccessfully = this.intl.t('removedSSOSuccessfully');
 
-    this.SPMetadata.perform();
-    this.getIdPMetadata.perform();
-    this.getSSOData.perform();
+    // this.SPMetadata.perform();
+    // this.getIdPMetadata.perform();
+    // this.getSSOData.perform();
   }
 
-  // Switch SP config format
-  @action
-  handleSpConfigChange(event: Event) {
-    const target = event.target as HTMLSelectElement;
+  // // Switch SP config format
+  // @action
+  // handleSpConfigChange(event: Event) {
+  //   const target = event.target as HTMLSelectElement;
 
-    this.spConfig = target.value;
+  //   this.spConfig = target.value;
+  // }
+
+  // get spConfigIsManual() {
+  //   return this.spConfig === 'manual';
+  // }
+
+  // get spConfigIsXml() {
+  //   return this.spConfig === 'xml';
+  // }
+
+  get tabItems() {
+    return [
+      {
+        id: 1,
+        label: 'Tab One',
+        component: 'sso-settings/saml' as const,
+      },
+      {
+        id: 2,
+        label: 'Tab Two',
+        component: 'sso-settings/oidc' as const,
+      },
+    ];
   }
-
-  get spConfigIsManual() {
-    return this.spConfig === 'manual';
-  }
-
-  get spConfigIsXml() {
-    return this.spConfig === 'xml';
-  }
-
-  // Fetch SP Metadata
-  SPMetadata = task({ restartable: true }, async () => {
-    const spMetadata = await this.ajax.request<SpMetadata>(
-      ENV.endpoints['saml2SPMetadata'] as string
-    );
-
-    this.spMetadata = spMetadata;
-  });
-
-  // Fetch IdP Metadata
-  getIdPMetadata = task({ restartable: true }, async () => {
-    try {
-      const idpMetadata = await this.store.queryRecord(
-        'saml2-idp-metadata',
-        {}
-      );
-      this.idpMetadata = idpMetadata;
-    } catch (error) {
-      // catch error
-    }
-  });
-
-  getSSOData = task(async () => {
-    try {
-      this.sso = await this.store.queryRecord('organization-sso', {});
-    } catch (e) {
-      this.notify.error(parseError(e));
-    }
-  });
-
-  // Parse & upload IdP metadata
-  parseIdpMetadataXml = task(async (file) => {
-    const idpMetadataXml = await file.readAsText();
-
-    this.idpMetadataXml = idpMetadataXml;
-  });
 
   @action
-  cancelIdpMetadataXmlUpload() {
-    this.idpMetadataXml = null;
+  onTabClick(tabId: any) {
+    this.activeTab = tabId;
   }
 
-  uploadIdPMetadata = task({ restartable: true }, async (event) => {
-    event.preventDefault();
-
-    try {
-      $.parseXML(this.idpMetadataXml!);
-    } catch (err) {
-      this.notify.error('Please enter a valid XML file');
-
-      return;
-    }
-
-    try {
-      const blob = new Blob([this.idpMetadataXml ?? ''], { type: 'text/xml' });
-      const idpFormData = new FormData();
-      idpFormData.append('filename', blob);
-
-      const url = [
-        ENV.endpoints['organizations'],
-        this.args.organization.id,
-        ENV.endpoints['saml2IdPMetadata'],
-      ].join('/');
-
-      await this.ajax.post(url, {
-        data: idpFormData,
-        contentType: null,
-      });
-
-      this.idpMetadataXml = null;
-
-      this.notify.success('Uploaded IdP Metadata Config successfully');
-
-      this.getIdPMetadata.perform();
-    } catch (err) {
-      this.notify.error(parseError(err, this.tPleaseTryAgain));
-    }
-  });
-
-  // Delete IdP Metadata
-  @action
-  openDeleteIdpMetadataConfirm() {
-    this.showDeleteIdpMetadataConfirm = true;
+  get activeTabComponent() {
+    return this.tabItems.find((t) => t.id === this.activeTab)?.component;
   }
 
-  deleteIdpConfig = task({ restartable: true }, async () => {
-    try {
-      const ssoObj = await this.store.queryRecord('saml2-idp-metadata', {});
+  // // Fetch SP Metadata
+  // SPMetadata = task({ restartable: true }, async () => {
+  //   const spMetadata = await this.ajax.request<SpMetadata>(
+  //     ENV.endpoints['saml2SPMetadata'] as string
+  //   );
 
-      await ssoObj.deleteRecord();
-      await ssoObj.save();
-      await this.store.unloadAll('saml2-idp-metadata');
+  //   this.spMetadata = spMetadata;
+  // });
 
-      this.notify.success('Deleted IdP Metadata Config successfully');
-      this.showDeleteIdpMetadataConfirm = false;
-      this.idpMetadata = null;
-    } catch (err) {
-      this.notify.error(parseError(err, this.tPleaseTryAgain));
-    }
-  });
+  // // Fetch IdP Metadata
+  // getIdPMetadata = task({ restartable: true }, async () => {
+  //   try {
+  //     const idpMetadata = await this.store.queryRecord(
+  //       'saml2-idp-metadata',
+  //       {}
+  //     );
+  //     this.idpMetadata = idpMetadata;
+  //   } catch (error) {
+  //     // catch error
+  //   }
+  // });
 
-  // Enable SSO
-  toggleSSOEnable = task({ restartable: true }, async (event, value) => {
-    try {
-      const ssoObj = this.store.peekRecord(
-        'organization-sso',
-        this.args.organization.id
-      );
-      ssoObj?.set('enabled', value);
+  // getSSOData = task(async () => {
+  //   try {
+  //     this.sso = await this.store.queryRecord('organization-sso', {});
+  //   } catch (e) {
+  //     this.notify.error(parseError(e));
+  //   }
+  // });
 
-      await ssoObj?.save();
+  // // Parse & upload IdP metadata
+  // parseIdpMetadataXml = task(async (file) => {
+  //   const idpMetadataXml = await file.readAsText();
 
-      this.notify.success(
-        `SSO authentication ${value ? 'enabled' : 'disabled'}`
-      );
-    } catch (err) {
-      this.notify.error(parseError(err, this.tPleaseTryAgain));
-    }
-  });
+  //   this.idpMetadataXml = idpMetadataXml;
+  // });
 
-  // Enforce SSO
-  toggleSSOEnforce = task({ restartable: true }, async (event, value) => {
-    try {
-      const ssoObj = this.store.peekRecord(
-        'organization-sso',
-        this.args.organization.id
-      );
-      ssoObj?.set('enforced', value);
+  // @action
+  // cancelIdpMetadataXmlUpload() {
+  //   this.idpMetadataXml = null;
+  // }
 
-      await ssoObj?.save();
+  // uploadIdPMetadata = task({ restartable: true }, async (event) => {
+  //   event.preventDefault();
 
-      this.notify.success(`SSO enforce turned ${value ? 'ON' : 'OFF'}`);
-    } catch (err) {
-      this.notify.error(parseError(err, this.tPleaseTryAgain));
-    }
-  });
+  //   try {
+  //     $.parseXML(this.idpMetadataXml!);
+  //   } catch (err) {
+  //     this.notify.error('Please enter a valid XML file');
+
+  //     return;
+  //   }
+
+  //   try {
+  //     const blob = new Blob([this.idpMetadataXml ?? ''], { type: 'text/xml' });
+  //     const idpFormData = new FormData();
+  //     idpFormData.append('filename', blob);
+
+  //     const url = [
+  //       ENV.endpoints['organizations'],
+  //       this.args.organization.id,
+  //       ENV.endpoints['saml2IdPMetadata'],
+  //     ].join('/');
+
+  //     await this.ajax.post(url, {
+  //       data: idpFormData,
+  //       contentType: null,
+  //     });
+
+  //     this.idpMetadataXml = null;
+
+  //     this.notify.success('Uploaded IdP Metadata Config successfully');
+
+  //     this.getIdPMetadata.perform();
+  //   } catch (err) {
+  //     this.notify.error(parseError(err, this.tPleaseTryAgain));
+  //   }
+  // });
+
+  // // Delete IdP Metadata
+  // @action
+  // openDeleteIdpMetadataConfirm() {
+  //   this.showDeleteIdpMetadataConfirm = true;
+  // }
+
+  // deleteIdpConfig = task({ restartable: true }, async () => {
+  //   try {
+  //     const ssoObj = await this.store.queryRecord('saml2-idp-metadata', {});
+
+  //     await ssoObj.deleteRecord();
+  //     await ssoObj.save();
+  //     await this.store.unloadAll('saml2-idp-metadata');
+
+  //     this.notify.success('Deleted IdP Metadata Config successfully');
+  //     this.showDeleteIdpMetadataConfirm = false;
+  //     this.idpMetadata = null;
+  //   } catch (err) {
+  //     this.notify.error(parseError(err, this.tPleaseTryAgain));
+  //   }
+  // });
+
+  // // Enable SSO
+  // toggleSSOEnable = task({ restartable: true }, async (event, value) => {
+  //   try {
+  //     const ssoObj = this.store.peekRecord(
+  //       'organization-sso',
+  //       this.args.organization.id
+  //     );
+  //     ssoObj?.set('enabled', value);
+
+  //     await ssoObj?.save();
+
+  //     this.notify.success(
+  //       `SSO authentication ${value ? 'enabled' : 'disabled'}`
+  //     );
+  //   } catch (err) {
+  //     this.notify.error(parseError(err, this.tPleaseTryAgain));
+  //   }
+  // });
+
+  // // Enforce SSO
+  // toggleSSOEnforce = task({ restartable: true }, async (event, value) => {
+  //   try {
+  //     const ssoObj = this.store.peekRecord(
+  //       'organization-sso',
+  //       this.args.organization.id
+  //     );
+  //     ssoObj?.set('enforced', value);
+
+  //     await ssoObj?.save();
+
+  //     this.notify.success(`SSO enforce turned ${value ? 'ON' : 'OFF'}`);
+  //   } catch (err) {
+  //     this.notify.error(parseError(err, this.tPleaseTryAgain));
+  //   }
+  // });
 }
 
 declare module '@glint/environment-ember-loose/registry' {

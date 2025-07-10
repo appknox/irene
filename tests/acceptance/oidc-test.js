@@ -125,7 +125,7 @@ module('Acceptance | oidc login', function (hooks) {
     }
   };
 
-  const handleUserLoginFlow = async (assert, server, sso = false) => {
+  const handleUserLoginFlow = async (assert, server, sso = false, oidcProvider = null) => {
     server.post(
       'v2/sso/check',
       () =>
@@ -136,6 +136,7 @@ module('Acceptance | oidc login', function (hooks) {
             is_sso: Boolean(sso),
             is_sso_enforced: Boolean(sso),
             token: SSO_TOKEN,
+            oidc_provider: oidcProvider,
           }
         )
     );
@@ -158,6 +159,20 @@ module('Acceptance | oidc login', function (hooks) {
           }
         )
     );
+
+    // Mock OIDC SSO endpoint
+    server.post('/v2/sso/oidc/auth/login/', (_, req) => {
+      const data = JSON.parse(req.requestBody);
+
+      return new Response(
+        200,
+        {},
+        {
+          url: `https://accounts.google.com/o/oauth2/auth?client_id=${faker.string.alphanumeric(20)}&redirect_uri=${encodeURIComponent(data.redirect_uri)}&response_type=code&scope=openid%20email%20profile`,
+          provider: data.provider_name,
+        }
+      );
+    });
 
     server.post(
       '/login',
@@ -308,7 +323,7 @@ module('Acceptance | oidc login', function (hooks) {
         }
 
         if (loginBySSO) {
-          await handleUserLoginFlow(assert, this.server, true);
+          await handleUserLoginFlow(assert, this.server, true, 'google-test');
         }
 
         // Simulating redirect from authenticator since window is stubbed
@@ -339,6 +354,113 @@ module('Acceptance | oidc login', function (hooks) {
       );
     }
   );
+
+  test('oidc sso login flow', async function (assert) {
+    assert.expect(4);
+
+    this.server.post(
+      'v2/sso/check',
+      () =>
+        new Response(
+          200,
+          {},
+          {
+            is_sso: true,
+            is_sso_enforced: true,
+            token: SSO_TOKEN,
+            oidc_provider: 'google-test',
+          }
+        )
+    );
+
+    this.server.post('/v2/sso/oidc/auth/login/', (_, req) => {
+      const data = JSON.parse(req.requestBody);
+
+      assert.strictEqual(data.provider_name, 'google-test');
+      assert.strictEqual(data.redirect_uri, `${window.location.origin}/api/v2/sso/oidc/auth/callback/`);
+
+      return new Response(
+        200,
+        {},
+        {
+          url: `https://accounts.google.com/o/oauth2/auth?client_id=test&redirect_uri=${encodeURIComponent(data.redirect_uri)}&response_type=code&scope=openid%20email%20profile`,
+          provider: 'google-test',
+        }
+      );
+    });
+
+    await visit('/login');
+
+    await fillIn(
+      '[data-test-user-login-check-type-username-input]',
+      'testuser@example.com'
+    );
+
+    await click('[data-test-user-login-check-type-button]');
+
+    assert
+      .dom('[data-test-user-login-via-sso-forced-username-input]')
+      .hasValue('testuser@example.com');
+
+    assert
+      .dom('[data-test-user-login-via-sso-forced-button]')
+      .isNotDisabled();
+
+    await click('[data-test-user-login-via-sso-forced-button]');
+  });
+
+    test('oidc sso callback flow', async function (assert) {
+    assert.expect(5);
+
+    // Set up session storage with oidc_provider
+    const window = this.owner.lookup('service:browser/window');
+    window.sessionStorage.setItem('oidc_provider', 'google-test');
+
+    this.server.post('/api/v2/sso/oidc/auth/callback/', (_, req) => {
+      const data = JSON.parse(req.requestBody);
+
+      assert.strictEqual(data.code, 'test_auth_code');
+      assert.strictEqual(data.state, 'test_state');
+      assert.strictEqual(data.provider_name, 'google-test');
+
+      return new Response(
+        200,
+        {},
+        {
+          message: 'Successfully logged in via google-test',
+          user: {
+            id: 1,
+            username: 'testuser',
+            email: 'testuser@example.com',
+            first_name: '',
+            last_name: '',
+          },
+          provider: 'google-test',
+          token: 'test_login_token',
+        }
+      );
+    });
+
+    // Mock the login endpoint that will be called by the authenticator
+    this.server.post('/login', () =>
+      new Response(
+        200,
+        {},
+        {
+          user_id: 1,
+          token: 'test_login_token',
+        }
+      )
+    );
+
+    await visit('/sso/oidc/redirect/?code=test_auth_code&state=test_state');
+
+    // Should redirect to authenticated.index after successful login
+    assert.strictEqual(currentURL(), '/', 'Redirected to home dashboard');
+
+    // Verify session storage is cleaned up
+    assert.strictEqual(window.sessionStorage.getItem('oidc_provider'), null, 'Session storage cleaned up');
+  });
 
   test.each(
     'oidc login error scenarios',
