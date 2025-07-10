@@ -1,5 +1,6 @@
 import Model, { attr, belongsTo, type AsyncBelongsTo } from '@ember-data/model';
-import { inject as service } from '@ember/service';
+import { service } from '@ember/service';
+import dayjs from 'dayjs';
 import type IntlService from 'ember-intl/services/intl';
 
 import ENUMS from 'irene/enums';
@@ -57,6 +58,18 @@ export default class SkAppModel extends Model {
   @attr('date')
   declare rejectedOn: Date;
 
+  @attr('date')
+  declare archivedOn: Date;
+
+  @attr('date')
+  declare unarchiveAvailableOn: Date;
+
+  @attr('string')
+  declare archivedBy: string;
+
+  @attr('number')
+  declare licenseAllocated: number;
+
   @belongsTo('sk-app-metadata', { async: false, inverse: null })
   declare appMetadata: SkAppMetadataModel;
 
@@ -108,13 +121,40 @@ export default class SkAppModel extends Model {
   }
 
   get isIos() {
-    return this.appMetadata.get('platform') === ENUMS.PLATFORM.IOS;
+    return !!(this.appMetadata.get('platform') === ENUMS.PLATFORM.IOS);
   }
 
   get monitoringStatusIsPending() {
     return (
-      this.storeMonitoringStatus === ENUMS.SK_APP_MONITORING_STATUS.PENDING
+      this.storeMonitoringStatus === ENUMS.SK_APP_MONITORING_STATUS.INITIALIZING
     );
+  }
+
+  get monitoringPendingOrDisabled() {
+    return [
+      ENUMS.SK_APP_MONITORING_STATUS.INITIALIZING,
+      ENUMS.SK_APP_MONITORING_STATUS.DISABLED,
+    ].includes(this.storeMonitoringStatus);
+  }
+
+  get isArchived() {
+    return !!this.archivedOn && this.appStatus === ENUMS.SK_APP_STATUS.ARCHIVED;
+  }
+
+  get isApproved() {
+    return this.approvalStatus === ENUMS.SK_APPROVAL_STATUS.APPROVED;
+  }
+
+  get unarchiveDateString() {
+    return dayjs(this.unarchiveAvailableOn).format('MMM DD, YYYY');
+  }
+
+  get canUnarchive() {
+    return this.archivedOn && dayjs().isAfter(this.unarchiveAvailableOn);
+  }
+
+  get hasLicense() {
+    return this.licenseAllocated > 0;
   }
 
   async approveApp(id: string) {
@@ -139,6 +179,12 @@ export default class SkAppModel extends Model {
     const adapter = this.store.adapterFor('sk-app');
 
     return await adapter.initiateAppUpload(this.id);
+  }
+
+  async toggleArchiveStatus() {
+    const adapter = this.store.adapterFor('sk-app');
+
+    return await adapter.toggleArchiveStatus(this);
   }
 }
 
