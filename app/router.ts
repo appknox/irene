@@ -21,6 +21,16 @@ Router.map(function () {
     this.route('authorize');
   });
 
+  this.route('oidc-sso', function () {
+    this.route('redirect');
+  });
+
+  this.route('sso', function () {
+    this.route('oidc', function () {
+      this.route('redirect');
+    });
+  });
+
   this.route('register');
 
   this.route('register-via-invite', {

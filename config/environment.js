@@ -311,6 +311,7 @@ module.exports = function (environment) {
       saml2IdPMetadata: 'sso/saml2/idp_metadata',
       saml2SPMetadata: 'v2/sso/saml2/metadata',
       saml2Login: 'sso/saml2/login',
+      oidcSsoLogin: 'sso/oidc/auth/login/',
       files: 'files',
       profiles: 'profiles',
       analyses: 'analyses',
