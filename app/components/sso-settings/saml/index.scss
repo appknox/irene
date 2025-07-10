@@ -1,4 +1,8 @@
-.sso-settings-container {
+.sso-settings-header-container {
+  max-width: 600px;
+}
+
+.sso-settings-main-container {
   max-width: 800px;
 }
 
@@ -60,8 +64,7 @@
 }
 
 .textarea-input {
-  border: 1px solid
-    var(--sso-settings-textarea-border-color);
+  border: 1px solid var(--sso-settings-textarea-border-color);
   border-radius: var(--sso-settings-textarea-border-radius);
   color: var(--sso-settings-textarea-color);
   display: inline-flex;

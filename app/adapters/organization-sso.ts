@@ -2,9 +2,9 @@ import commondrf from './commondrf';
 
 export default class OrganizationSSOAdapter extends commondrf {
   _buildURL() {
-    return this.buildURLFromBase(
-      `${this.namespace}/organizations/${this.organization.selected?.id}/sso/saml2`
-    );
+    const baseURL = `${this.namespace}/v2/sso/provider`;
+
+    return this.buildURLFromBase(baseURL);
   }
 }
 

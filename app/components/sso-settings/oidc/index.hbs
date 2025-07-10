@@ -1,0 +1,66 @@
+{{#if this.hasProviders}}
+  <AkStack @width='full' @justifyContent='space-between' @alignItems='center'>
+    <AkStack @direction='column' @spacing='1'>
+      <AkTypography @variant='h6'>Discovery URL</AkTypography>
+
+      <AkTypography>{{this.discoveryUrl}}</AkTypography>
+    </AkStack>
+
+    {{#if (and @sso (not @sso.enabled))}}
+      <AkIconButton
+        @variant='outlined'
+        disabled={{this.deleteProvider.isRunning}}
+        {{on 'click' (perform this.deleteProvider)}}
+      >
+        <AkIcon @iconName='delete' />
+      </AkIconButton>
+    {{/if}}
+  </AkStack>
+
+{{else}}
+  <div local-class='oidc-provider-form'>
+    <h3>Connect a new OIDC Provider</h3>
+
+    <AkStack @spacing='2' @direction='column'>
+      <AkTextField
+        @label='Client ID'
+        @value={{this.changeset.client_id}}
+        @onInput={{fn (mut this.changeset.client_id)}}
+        @error={{this.changeset.error.client_id}}
+      />
+
+      <AkTextField
+        @label='Client Secret'
+        @type='password'
+        @value={{this.changeset.client_secret}}
+        @onInput={{fn (mut this.changeset.client_secret)}}
+        @error={{this.changeset.error.client_secret}}
+      />
+
+      <AkTextField
+        @label='Discovery URL'
+        @value={{this.changeset.discovery_url}}
+        @onInput={{fn (mut this.changeset.discovery_url)}}
+        @error={{this.changeset.error.discovery_url.validation}}
+      />
+    </AkStack>
+
+    <AkStack @spacing='2' class='my-2'>
+      <AkButton
+        @disabled={{this.createProvider.isRunning}}
+        {{on 'click' (perform this.createProvider)}}
+      >
+        {{if this.createProvider.isRunning 'Creating...' 'Create Provider'}}
+      </AkButton>
+
+      <AkButton
+        @variant='outlined'
+        @color='neutral'
+        @disabled={{this.deleteProvider.isRunning}}
+        {{on 'click' (perform this.deleteProvider)}}
+      >
+        {{if this.deleteProvider.isRunning 'Deleting...' 'Delete Provider'}}
+      </AkButton>
+    </AkStack>
+  </div>
+{{/if}}

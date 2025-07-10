@@ -17,10 +17,16 @@ type SSOCheckData = {
   is_sso: boolean;
   is_sso_enforced: boolean;
   token: string;
+  is_oidc?: boolean;
 };
 
 type SSOSaml2Data = {
   url: string;
+};
+
+type SSOOidcData = {
+  url: string;
+  provider: string;
 };
 
 export default class UserLoginComponent extends Component {
@@ -42,6 +48,7 @@ export default class UserLoginComponent extends Component {
 
   @tracked isSSOEnabled = false;
   @tracked isSSOEnforced = false;
+  @tracked isOidc = false;
 
   @tracked MFAEnabled = false;
   @tracked MFAIsEmail = false;
@@ -53,6 +60,7 @@ export default class UserLoginComponent extends Component {
 
   SSOCheckEndpoint = 'v2/sso/check';
   SSOAuthenticateEndpoint = 'sso/saml2';
+  SSOOidcAuthenticateEndpoint = 'v2/sso/oidc/auth/login/';
 
   get origin() {
     return this.window.location.origin;
@@ -61,6 +69,13 @@ export default class UserLoginComponent extends Component {
   get samlRedirectURL() {
     const origin = this.origin;
     const redirectURL = this.router.urlFor('saml2.redirect');
+
+    return `${origin}${redirectURL}`;
+  }
+
+  get oidcRedirectURL() {
+    const origin = this.origin;
+    const redirectURL = this.router.urlFor('oidc-sso.redirect');
 
     return `${origin}${redirectURL}`;
   }
@@ -84,7 +99,13 @@ export default class UserLoginComponent extends Component {
       this.isSSOEnabled = data.is_sso == true;
       this.isSSOEnforced = data.is_sso_enforced == true;
       this.checkToken = data.token;
+      this.isOidc = data.is_oidc || false;
       this.isCheckDone = true;
+
+      // Store is_oidc in session storage for callback
+      if (data.is_oidc) {
+        this.window.sessionStorage.setItem('is_oidc', String(data.is_oidc));
+      }
     } catch (error) {
       this.logger.error(error);
 
@@ -92,6 +113,7 @@ export default class UserLoginComponent extends Component {
       this.isCheckDone = false;
       this.isSSOEnabled = false;
       this.isSSOEnforced = false;
+      this.isOidc = false;
 
       this.notifications.error(
         this.intl.t('pleaseTryAgain'),
@@ -160,6 +182,15 @@ export default class UserLoginComponent extends Component {
   });
 
   ssologinTask = task(async () => {
+    // Check if OIDC provider is available
+    if (this.isOidc) {
+      await this.oidcLoginTask.perform();
+    } else {
+      await this.samlLoginTask.perform();
+    }
+  });
+
+  samlLoginTask = task(async () => {
     const return_to = this.samlRedirectURL;
     const token = this.checkToken;
     const endpoint = this.SSOAuthenticateEndpoint;
@@ -174,6 +205,33 @@ export default class UserLoginComponent extends Component {
     }
 
     this.window.location.href = data.url;
+  });
+
+  oidcLoginTask = task(async () => {
+    try {
+      const data = await this.ajax.post<SSOOidcData>(
+        this.SSOOidcAuthenticateEndpoint,
+        {
+          data: {
+            is_oidc: this.isOidc,
+            redirect_uri: `${this.origin}/sso/oidc/redirect/`,
+          },
+        }
+      );
+
+      if (!data.url) {
+        this.logger.error('Invalid oidc redirect call', data);
+        return;
+      }
+
+      this.window.location.href = data.url;
+    } catch (error) {
+      this.logger.error('OIDC login failed', error);
+      this.notifications.error(
+        this.intl.t('pleaseTryAgain'),
+        ENV.notifications
+      );
+    }
   });
 
   handleOTP(error: OtpError) {
@@ -211,12 +269,16 @@ export default class UserLoginComponent extends Component {
     this.checkToken = '';
     this.isSSOEnabled = false;
     this.isSSOEnforced = false;
+    this.isOidc = false;
     this.MFAEnabled = false;
     this.MFAIsEmail = false;
     this.MFAForced = false;
     this.MFAIsAuthApp = false;
     this.showCredError = false;
     this.showAccountLockError = false;
+
+    // Clean up session storage
+    this.window.sessionStorage.removeItem('is_oidc');
   }
 
   @action

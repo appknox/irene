@@ -1,5 +1,4 @@
 /* eslint-disable ember/no-jquery */
-import $ from 'jquery';
 import Component from '@glimmer/component';
 import { tracked } from '@glimmer/tracking';
 import { action } from '@ember/object';
@@ -9,12 +8,12 @@ import type Store from '@ember-data/store';
 import type IntlService from 'ember-intl/services/intl';
 
 import parseError from 'irene/utils/parse-error';
-import ENV from 'irene/config/environment';
 import type IreneAjaxService from 'irene/services/ajax';
 import type Saml2IdPMetadataModel from 'irene/models/saml2-idp-metadata';
 import type UserModel from 'irene/models/user';
 import type OrganizationModel from 'irene/models/organization';
 import type OrganizationSsoModel from 'irene/models/organization-sso';
+import type OidcProviderModel from 'irene/models/oidc-provider';
 
 interface SpMetadata {
   entity_id: string;
@@ -42,6 +41,9 @@ export default class SsoSettingsComponent extends Component<SsoSettingsSignature
   @tracked idpMetadataXml: string | null = null;
   @tracked spConfig: string = 'manual';
   @tracked sso: OrganizationSsoModel | null = null;
+  @tracked providers: OidcProviderModel[] = [];
+
+  @tracked activeTab: number | null = null;
 
   spMetadataKeys = [
     { labelKey: 'entityID', valueKey: 'entity_id' },
@@ -62,34 +64,49 @@ export default class SsoSettingsComponent extends Component<SsoSettingsSignature
     );
     this.tRemovedSSOSuccessfully = this.intl.t('removedSSOSuccessfully');
 
-    this.SPMetadata.perform();
-    this.getIdPMetadata.perform();
+    this.setDefaultTab.perform();
     this.getSSOData.perform();
   }
 
-  // Switch SP config format
+  get tabItems() {
+    return [
+      {
+        id: 1,
+        label: 'SAML Authentication',
+        component: 'sso-settings/saml' as const,
+      },
+      {
+        id: 2,
+        label: 'OIDC',
+        component: 'sso-settings/oidc' as const,
+      },
+    ];
+  }
+
+  get activeTabComponent() {
+    return this.tabItems.find((t) => t.id === this.activeTab)?.component;
+  }
+
+  get hasSamlOrOidc() {
+    return this.idpMetadata || (this.providers && this.providers.length > 0);
+  }
+
   @action
-  handleSpConfigChange(event: Event) {
-    const target = event.target as HTMLSelectElement;
-
-    this.spConfig = target.value;
+  onTabClick(tabId: number) {
+    this.activeTab = tabId;
   }
 
-  get spConfigIsManual() {
-    return this.spConfig === 'manual';
-  }
+  setDefaultTab = task(async () => {
+    await this.getIdPMetadata.perform();
+    await this.loadProviders.perform();
 
-  get spConfigIsXml() {
-    return this.spConfig === 'xml';
-  }
-
-  // Fetch SP Metadata
-  SPMetadata = task({ restartable: true }, async () => {
-    const spMetadata = await this.ajax.request<SpMetadata>(
-      ENV.endpoints['saml2SPMetadata'] as string
-    );
-
-    this.spMetadata = spMetadata;
+    if (this.providers?.length) {
+      this.activeTab = 2; // OIDC tab
+    } else if (this.idpMetadata) {
+      this.activeTab = 1; // SAML tab
+    } else {
+      this.activeTab = 1;
+    }
   });
 
   // Fetch IdP Metadata
@@ -99,9 +116,19 @@ export default class SsoSettingsComponent extends Component<SsoSettingsSignature
         'saml2-idp-metadata',
         {}
       );
+
       this.idpMetadata = idpMetadata;
     } catch (error) {
       // catch error
+    }
+  });
+
+  loadProviders = task({ restartable: true }, async () => {
+    try {
+      const providers = await this.store.findAll('oidc-provider');
+      this.providers = providers.toArray();
+    } catch (err) {
+      this.notify.error(parseError(err, 'Failed to load providers'));
     }
   });
 
@@ -110,77 +137,6 @@ export default class SsoSettingsComponent extends Component<SsoSettingsSignature
       this.sso = await this.store.queryRecord('organization-sso', {});
     } catch (e) {
       this.notify.error(parseError(e));
-    }
-  });
-
-  // Parse & upload IdP metadata
-  parseIdpMetadataXml = task(async (file) => {
-    const idpMetadataXml = await file.readAsText();
-
-    this.idpMetadataXml = idpMetadataXml;
-  });
-
-  @action
-  cancelIdpMetadataXmlUpload() {
-    this.idpMetadataXml = null;
-  }
-
-  uploadIdPMetadata = task({ restartable: true }, async (event) => {
-    event.preventDefault();
-
-    try {
-      $.parseXML(this.idpMetadataXml!);
-    } catch (err) {
-      this.notify.error('Please enter a valid XML file');
-
-      return;
-    }
-
-    try {
-      const blob = new Blob([this.idpMetadataXml ?? ''], { type: 'text/xml' });
-      const idpFormData = new FormData();
-      idpFormData.append('filename', blob);
-
-      const url = [
-        ENV.endpoints['organizations'],
-        this.args.organization.id,
-        ENV.endpoints['saml2IdPMetadata'],
-      ].join('/');
-
-      await this.ajax.post(url, {
-        data: idpFormData,
-        contentType: null,
-      });
-
-      this.idpMetadataXml = null;
-
-      this.notify.success('Uploaded IdP Metadata Config successfully');
-
-      this.getIdPMetadata.perform();
-    } catch (err) {
-      this.notify.error(parseError(err, this.tPleaseTryAgain));
-    }
-  });
-
-  // Delete IdP Metadata
-  @action
-  openDeleteIdpMetadataConfirm() {
-    this.showDeleteIdpMetadataConfirm = true;
-  }
-
-  deleteIdpConfig = task({ restartable: true }, async () => {
-    try {
-      const ssoObj = await this.store.queryRecord('saml2-idp-metadata', {});
-
-      await ssoObj.deleteRecord();
-      await ssoObj.save();
-      await this.store.unloadAll('saml2-idp-metadata');
-
-      this.notify.success('Deleted IdP Metadata Config successfully');
-      this.showDeleteIdpMetadataConfirm = false;
-      this.idpMetadata = null;
-    } catch (err) {
-      this.notify.error(parseError(err, this.tPleaseTryAgain));
     }
   });
 
