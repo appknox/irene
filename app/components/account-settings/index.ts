@@ -23,6 +23,12 @@ export default class AccountSettingsComponent extends Component {
         activeRoutes:
           'authenticated.dashboard.account-settings.developersettings',
       },
+      {
+        label: 'Notification Preferences',
+        route: 'authenticated.dashboard.account-settings.notification-settings',
+        activeRoutes:
+          'authenticated.dashboard.account-settings.notification-settings',
+      },
     ];
   }
 }

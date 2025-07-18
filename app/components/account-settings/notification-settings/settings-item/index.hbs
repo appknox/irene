@@ -1,0 +1,38 @@
+<AkStack @width='full' @direction='row' @alignItems='center' @spacing='2'>
+  <AkStack @direction='column' @spacing='0.5' @width='full'>
+    <AkTypography @fontWeight='medium'>
+      {{@item.title}}
+    </AkTypography>
+
+    <AkTypography @variant='body1' @color='textSecondary'>
+      {{@item.description}}
+    </AkTypography>
+  </AkStack>
+
+  <AkStack @alignItems='center' @spacing='1'>
+    {{#if this.toggleNotificationPreference.isRunning}}
+      <AkLoader @size={{16}} />
+    {{/if}}
+
+    <AkTooltip @arrow={{true}} @disabled={{not @item.disable_toggling}}>
+      <:tooltipContent>
+        <div local-class='tooltip-content-container'>
+          <AkTypography @variant='body1' @color='inherit'>
+            If you want to turn on the
+            <strong>Individual Scan-Level Notification</strong>. Kindly turn off
+            the VA Notification.
+          </AkTypography>
+        </div>
+      </:tooltipContent>
+
+      <:default>
+        <AkToggle
+          @size='small'
+          @checked={{@item.enabled}}
+          @onChange={{this.toggleSetting}}
+          @disabled={{this.isDisabled}}
+        />
+      </:default>
+    </AkTooltip>
+  </AkStack>
+</AkStack>

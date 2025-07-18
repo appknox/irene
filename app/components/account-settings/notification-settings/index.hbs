@@ -1,0 +1,90 @@
+<AkStack @width='full' @direction='column' class='p-3 pb-4'>
+  <AkTypography @variant='h5'>
+    Send me an Email with the summary of scan results when:
+  </AkTypography>
+
+  <AkStack @width='full' @direction='column' @spacing='2' class='my-3'>
+    <AkStack @direction='row' @alignItems='center' @spacing='0.5'>
+      <AkTypography @variant='h6' @fontWeight='bold'>
+        VA Notification
+      </AkTypography>
+
+      <AkTooltip @arrow={{true}} @placement='right'>
+        <:tooltipContent>
+          <div local-class='tooltip-content-container'>
+            <AkTypography @variant='body1' @color='inherit'>
+              When the VA notification is activated, the Individual Scan level
+              notifications cannot be initiated.
+            </AkTypography>
+          </div>
+        </:tooltipContent>
+
+        <:default>
+          <AkIcon @iconName='info' @size='small' />
+        </:default>
+      </AkTooltip>
+    </AkStack>
+
+    <AkStack
+      @width='full'
+      @direction='column'
+      @spacing='2'
+      local-class='va-notification-group-settings'
+    >
+      {{#each this.vaNotificationGroupSettings as |setting|}}
+        <AccountSettings::NotificationSettings::SettingsItem
+          @item={{setting}}
+          @updateUserNotifPref={{this.updateUserNotificationPreferences}}
+        />
+      {{/each}}
+    </AkStack>
+  </AkStack>
+
+  <AkStack @width='full' @direction='column' @spacing='2' class='mb-3'>
+    <AkStack @direction='row' @alignItems='center' @spacing='0.5'>
+      <AkTypography @variant='h6' @fontWeight='bold'>
+        Individual Scan-Level Notification
+      </AkTypography>
+
+      <AkTooltip @arrow={{true}} @placement='right'>
+        <:tooltipContent>
+          <div local-class='tooltip-content-container'>
+            <AkTypography @variant='body1' @color='inherit'>
+              When the Individual Scan level notifications is activated, the VA
+              notification cannot be initiated.
+            </AkTypography>
+          </div>
+        </:tooltipContent>
+
+        <:default>
+          <AkIcon @iconName='info' @size='small' />
+        </:default>
+      </AkTooltip>
+    </AkStack>
+
+    <AkStack
+      @width='full'
+      @direction='column'
+      local-class='va-notification-group-settings'
+    >
+      {{#each this.individualScanLevelNotification as |setting index|}}
+        {{#unless (eq index 0)}}
+          <AkDivider @color='dark' class='my-2' />
+        {{/unless}}
+
+        <AccountSettings::NotificationSettings::SettingsItem
+          @item={{setting}}
+          @updateUserNotifPref={{this.updateUserNotificationPreferences}}
+        />
+      {{/each}}
+    </AkStack>
+  </AkStack>
+
+  <AkTypography {{style maxWidth='700px'}}>
+    <strong>
+      Please note:
+    </strong>
+    Notifications will be sent to users who have uploaded the app and those who
+    have configured their email addresses in the Analysis Settings.
+  </AkTypography>
+</AkStack>

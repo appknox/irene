@@ -1,0 +1,51 @@
+<div local-class='notification-email'>
+  <AkTypography
+    data-test-projectSettings-analysisSettings-notification-email-title
+    @variant='h5'
+    @gutterBottom={{true}}
+  >
+    Email Notifications
+  </AkTypography>
+
+  <AkTypography
+    @variant='body2'
+    @color='textSecondary'
+    data-test-projectSettings-analysisSettings-notification-email-subtitle
+  >
+    Set up email notifications based on user preferences.
+  </AkTypography>
+
+  <AkStack @alignItems='flex-end' class='mt-2'>
+    <div class='w-8/12'>
+      <AkTextField
+        @labelTypographyColor='textPrimary'
+        @labelTypographyVariant='subtitle1'
+        @value={{this.newEmail}}
+        @placeholder='example@mail.com'
+        aria-label='email input'
+        data-test-projectSettings-analysisSettings-notification-email-input
+      />
+    </div>
+
+    <AkButton
+      @disabled={{this.isDisableSave}}
+      @loading={{this.addNewEmail.isRunning}}
+      {{on 'click' (perform this.addNewEmail)}}
+      class='mx-2'
+      data-test-projectSettings-analysisSettings-notification-email-saveBtn
+    >
+      Add Email
+    </AkButton>
+  </AkStack>
+
+  <AkStack @spacing='1.5' @flexWrap='wrap' class='mt-2'>
+    {{#each this.emails as |email idx|}}
+      <AkChip
+        @variant='outlined'
+        @label={{email.email}}
+        @onDelete={{perform this.deleteEmail email idx}}
+        data-test-projectSettings-analysisSettings-notification-email-chip='{{idx}}-{{email.email}}'
+      />
+    {{/each}}
+  </AkStack>
+</div>
