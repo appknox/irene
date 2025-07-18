@@ -10,10 +10,11 @@ export default class AuthenticatedStoreknoxAppListController extends Controller 
 
   declare model: { queryParams: StoreknoxInventoryAppListQueryParams };
 
-  queryParams = ['app_limit', 'app_offset'];
+  queryParams = ['app_limit', 'app_offset', 'monitoring_status'];
 
   app_limit = 10;
   app_offset = 0;
+  monitoring_status = -1;
 
   get breadcrumbs(): AkBreadcrumbsItemProps {
     return {

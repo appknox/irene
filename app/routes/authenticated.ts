@@ -8,17 +8,18 @@ import type Store from '@ember-data/store';
 import type IntlService from 'ember-intl/services/intl';
 import type RouterService from '@ember/routing/router-service';
 
+import { CSBMap } from 'irene/router';
+import ENV from 'irene/config/environment';
+import triggerAnalytics from 'irene/utils/trigger-analytics';
 import type MeService from 'irene/services/me';
 import type DatetimeService from 'irene/services/datetime';
 import type TrialService from 'irene/services/trial';
 import type IntegrationService from 'irene/services/integration';
 import type OrganizationService from 'irene/services/organization';
 import type ConfigurationService from 'irene/services/configuration';
+import type SkOrganizationService from 'irene/services/sk-organization';
 import type WebsocketService from 'irene/services/websocket';
 import type UserModel from 'irene/models/user';
-import { CSBMap } from 'irene/router';
-import ENV from 'irene/config/environment';
-import triggerAnalytics from 'irene/utils/trigger-analytics';
 
 export default class AuthenticatedRoute extends Route {
   @service declare session: any;
@@ -33,6 +34,7 @@ export default class AuthenticatedRoute extends Route {
   @service('notifications') declare notify: NotificationService;
   @service('organization') declare org: OrganizationService;
   @service declare configuration: ConfigurationService;
+  @service declare skOrganization: SkOrganizationService;
 
   @service declare router: RouterService;
   @service('browser/window') declare window: Window;
@@ -60,6 +62,7 @@ export default class AuthenticatedRoute extends Route {
     await all([
       this.store.findAll('Vulnerability'),
       this.org.load(),
+      this.skOrganization.load(),
       this.configuration.getDashboardConfig(),
     ]);
 

@@ -1,0 +1,86 @@
+<AkStack
+  @spacing='0.5'
+  @alignItems='center'
+  data-test-storeknoxInventory-appListTable-monitoringStatus-header-container
+>
+  <AkIcon
+    @iconName='filter-list'
+    @color={{if this.filterApplied 'primary' 'inherit'}}
+    local-class='cursor-pointer'
+    {{on 'click' this.handleClick}}
+    data-test-storeknoxInventory-appListTable-monitoringStatus-header-icon
+  />
+
+  <AkTypography
+    @variant='subtitle2'
+    data-test-storeknoxInventory-appListTable-monitoringStatus-header-text
+  >
+    {{t 'storeknox.monitoringStatus'}}
+  </AkTypography>
+</AkStack>
+
+<AkPopover
+  @anchorRef={{this.anchorRef}}
+  @placement='bottom'
+  @arrow={{false}}
+  @closeHandler={{this.handleOptionsClose}}
+  @clickOutsideToClose={{true}}
+  data-test-storeknoxInventory-appListTable-monitoringStatus-header-popover
+>
+  <AkStack @direction='column' local-class='status-filter'>
+    <AkStack @width='full' local-class='filter-header'>
+      <AkTypography
+        @variant='subtitle2'
+        local-class='filter-header-text'
+        data-test-storeknoxInventory-appListTable-monitoringStatus-header-popover-headerText
+      >
+        {{t 'status'}}
+      </AkTypography>
+    </AkStack>
+
+    {{#each this.statusOptions as |status|}}
+      <AkStack
+        @spacing='1'
+        @width='full'
+        local-class='filter-option cursor-pointer'
+        class='py-1 pl-2'
+        {{on 'click' (fn this.selectStatus status.value)}}
+        data-test-storeknoxInventory-appListTable-monitoringStatus-header-option={{status.key}}
+      >
+        <AkStack @alignItems='center' @spacing='1'>
+          <AkRadio
+            @checked={{eq this.selectedMonitoringStatus status.value}}
+            data-test-storeknoxInventory-appListTable-monitoringStatus-header-radio
+          />
+
+          <AkTypography
+            data-test-storeknoxInventory-appListTable-monitoringStatus-header-option-text
+          >
+            {{status.key}}
+          </AkTypography>
+        </AkStack>
+      </AkStack>
+
+      <AkDivider />
+    {{/each}}
+
+    {{#if this.filterApplied}}
+      <AkStack
+        class='py-1 pl-2'
+        local-class='clear-filter-section'
+        @width='full'
+        data-test-storeknoxInventory-appListTable-monitoringStatus-header-clearFilter
+      >
+        <AkTypography
+          @underline='always'
+          @color='primary'
+          local-class='cursor-pointer'
+          {{on 'click' this.clearFilter}}
+          data-test-storeknoxInventory-appListTable-monitoringStatus-header-clearFilter-text
+        >
+          {{t 'clearFilter'}}
+        </AkTypography>
+      </AkStack>
+    {{/if}}
+  </AkStack>
+</AkPopover>

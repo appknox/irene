@@ -2,7 +2,27 @@
   position: sticky;
   z-index: 10;
   top: -0.5em;
-  background-color: var(--storeknox-inventory-details-header-bg-color);
+  background-color: var(--storeknox-inventory-details-header-background-color);
+
+  .app-inventory-header-info {
+    position: relative;
+
+    .license-icon-container {
+      background-color: var(
+        --storeknox-inventory-details-header-license-icon-container-background-color
+      );
+
+      border-radius: 3px;
+      position: absolute;
+      right: 1em;
+      top: 1em;
+    }
+  }
+
+  &.archived {
+    top: calc(-0.5em + 50px);
+    margin-bottom: calc(1.5em + 1.4286em) !important;
+  }
 
   .app-info-logo {
     border-radius: 100%;

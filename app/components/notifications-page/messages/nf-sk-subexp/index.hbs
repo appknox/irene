@@ -1,0 +1,13 @@
+<div data-test-nf-subexp-primary-message>
+  <AkTypography>
+    {{t
+      (if
+        @context.is_trial
+        'notificationModule.messages.nf-sk-subexp-trial'
+        'notificationModule.messages.nf-sk-subexp'
+      )
+      sub_expiry_date=this.subscriptionExpiryDate
+      htmlSafe=true
+    }}
+  </AkTypography>
+</div>
