@@ -1,0 +1,24 @@
+.drawer-content {
+  padding: 1.5em;
+}
+
+.form {
+  min-width: 350px;
+  max-width: 400px;
+  border: 1px solid var(--organization-integrations-slack-border-color);
+  border-radius: var(--organization-integrations-slack-border-radius);
+  box-sizing: border-box;
+}
+
+.integration-drawer-footer {
+  position: sticky;
+  bottom: 0;
+  background-color: var(
+    --organization-integrations-slack-background-main
+  );
+  box-shadow: var(--organization-integrations-slack-box-shadow);
+}
+
+.height-full {
+  height: 100%;
+}

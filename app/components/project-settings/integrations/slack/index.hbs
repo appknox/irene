@@ -1,0 +1,115 @@
+<Organization::Integrations::Card
+  @data={{this.data}}
+  @onIntegrateClick={{if
+    this.data.isIntegrated
+    this.openSlackRiskEditModal
+    this.navigateToOrgSettings
+  }}
+  @loading={{this.isFetchingSlackConfig}}
+/>
+
+<ProjectSettings::Integrations::ConfigDrawer
+  @drawerTitle={{t 'slackIntegration'}}
+  @openDrawer={{this.showEditSlackRiskModal}}
+  @loadingDrawerSaveAction={{this.selectRiskThreshold.isRunning}}
+  @closeDrawerHandler={{this.closeSlackRiskEditModal}}
+  @drawerSaveAction={{if
+    this.showSelectUI
+    this.saveSelectedRiskThreshold
+    this.openDeleteSlackConfigConfirmBox
+  }}
+  @showDeleteButton={{if this.showSelectUI false true}}
+  @noFooter={{this.showDeleteSlackConfigConfirmBox}}
+>
+  <:drawerContent>
+    {{#if this.showSelectUI}}
+      <AkTypography
+        @variant='h6'
+        @fontWeight='regular'
+        @color='textSecondary'
+        data-test-prjSettings-integrations-slack-configDrawer-note
+      >
+        {{t 'otherTemplates.selectSlackRisk'}}
+      </AkTypography>
+
+      <AkStack @direction='column' @spacing='1'>
+        <AkTypography
+          @variant='h6'
+          data-test-prjSettings-integrations-slack-configDrawer-thresholdTitle
+        >
+          {{t 'threshold'}}
+        </AkTypography>
+
+        <AkSelect
+          @selected={{this.selectedThreshold}}
+          @options={{this.thresholds}}
+          @onChange={{this.selectThreshold}}
+          @placeholder={{t 'selectThreshold'}}
+          @triggerClass='select-threshold-class'
+          {{style width='300px'}}
+          data-test-prjSettings-integrations-slack-configDrawer-thresholdList
+          as |threshold|
+        >
+          {{threshold-status threshold}}
+        </AkSelect>
+      </AkStack>
+
+    {{else if this.showDeleteSlackConfigConfirmBox}}
+      <AkStack @direction='column' @spacing='1'>
+        <AkTypography
+          data-test-prjSettings-integrations-slackProject-confirmDelete
+          @variant='body1'
+        >
+          {{t 'confirmBox.removeSlack'}}
+        </AkTypography>
+
+        <AkStack @spacing='1.5' class='pt-4'>
+          <AkButton
+            data-test-prjSettings-integrations-slackProject-confirmDeleteBtn
+            {{on 'click' (perform this.deleteSlackConfig)}}
+          >
+            {{t 'yesDelete'}}
+          </AkButton>
+
+          <AkButton
+            @variant='outlined'
+            {{on 'click' this.closeDeleteSlackConfigConfirmBox}}
+          >
+            {{t 'cancel'}}
+          </AkButton>
+        </AkStack>
+      </AkStack>
+    {{else if this.slackConfig}}
+      <AkStack @justifyContent='space-between' @spacing='3' @width='full'>
+        <AkStack @direction='column' @spacing='1'>
+          <AkTypography @color='textSecondary' @variant='body2'>
+            {{t 'riskThresholdIntegrationDescription'}}
+          </AkTypography>
+
+          <AkTypography
+            @variant='body2'
+            @fontWeight='bold'
+            data-test-prjSettings-integrations-slack-riskHeaderText
+          >
+            {{t 'threshold'}}
+          </AkTypography>
+
+          <ProjectSettings::Integrations::RiskThreshold
+            @computedRisk={{this.slackConfig.riskThreshold}}
+            data-test-prjSettings-integrations-slack-risk
+          />
+        </AkStack>
+
+        {{#unless this.isEditing}}
+          <AkIconButton
+            data-test-prjSettings-integrations-slack-editBtn
+            @variant='outlined'
+            {{on 'click' this.onEditClick}}
+          >
+            <AkIcon @iconName='edit' />
+          </AkIconButton>
+        {{/unless}}
+      </AkStack>
+    {{/if}}
+  </:drawerContent>
+</ProjectSettings::Integrations::ConfigDrawer>
