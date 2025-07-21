@@ -1,4 +1,3 @@
-/* eslint-disable ember/no-observers */
 import Component from '@glimmer/component';
 import { action } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
@@ -14,6 +13,7 @@ import type { DS } from 'ember-data';
 import parseError from 'irene/utils/parse-error';
 import type RealtimeService from 'irene/services/realtime';
 import type PartnerRegistrationRequestModel from 'irene/models/partner/registration-request';
+import { useEffect } from 'irene/helpers/use-effect';
 
 type PartnerRegistrationRequestResponseModel =
   DS.AdapterPopulatedRecordArray<PartnerRegistrationRequestModel> & {
@@ -34,37 +34,18 @@ export default class PartnerInvitationListComponent extends Component {
   @tracked limit = 10;
   @tracked offset = 0;
 
+  reloadRegistrationRequestEffect = useEffect(this, {
+    effect: this.reloadRegistrationRequest,
+    dependencies: {
+      registrationRequestCounter: () =>
+        this.realtime.RegistrationRequestCounter,
+    },
+  });
+
   constructor(owner: unknown, args: object) {
     super(owner, args);
 
     this.fetchPartnerRegistrationRequest.perform(this.limit, this.offset);
-
-    this.realtime.addObserver(
-      'RegistrationRequestCounter',
-      this,
-      this.registrationRequestDidChange
-    );
-  }
-
-  willDestroy() {
-    super.willDestroy();
-
-    this.realtime.removeObserver(
-      'RegistrationRequestCounter',
-      this,
-      this.registrationRequestDidChange
-    );
-  }
-
-  async registrationRequestDidChange() {
-    if (
-      this.offset > 0 &&
-      this.partnerRegistrationRequestReponse?.length === 0
-    ) {
-      this.offset = 0;
-    }
-
-    await this.fetchPartnerRegistrationRequest.perform(this.limit, this.offset);
   }
 
   get partnerRegistrationRequestList() {
@@ -109,6 +90,18 @@ export default class PartnerInvitationListComponent extends Component {
   @action
   onDelete(request: PartnerRegistrationRequestModel) {
     this.deleteInvite.perform(request);
+  }
+
+  @action
+  reloadRegistrationRequest() {
+    if (
+      this.offset > 0 &&
+      this.partnerRegistrationRequestReponse?.length === 0
+    ) {
+      this.offset = 0;
+    }
+
+    this.fetchPartnerRegistrationRequest.perform(this.limit, this.offset);
   }
 
   resendInvite = task(async (request: PartnerRegistrationRequestModel) => {

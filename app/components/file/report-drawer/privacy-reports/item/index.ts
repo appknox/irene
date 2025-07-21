@@ -1,14 +1,13 @@
-/* eslint-disable ember/no-observers */
 import Component from '@glimmer/component';
 import { service } from '@ember/service';
 import { waitForPromise } from '@ember/test-waiters';
 import { action } from '@ember/object';
-import { addObserver, removeObserver } from '@ember/object/observers';
 import { task } from 'ember-concurrency';
 import type IntlService from 'ember-intl/services/intl';
 
 import ENUMS from 'irene/enums';
 import parseError from 'irene/utils/parse-error';
+import { useEffect } from 'irene/helpers/use-effect';
 import type PrivacyReportModel from 'irene/models/privacy-report';
 import type ClipboardJS from 'clipboard/src/clipboard';
 import type RealtimeService from 'irene/services/realtime';
@@ -28,28 +27,16 @@ export default class FileReportDrawerPrivacyReportsItemComponent extends Compone
   @service('browser/window') declare window: Window;
   @service declare realtime: RealtimeService;
 
-  tPleaseTryAgain: string;
+  // Effect to observe the privacy report counter
+  reloadReportsEffect = useEffect(this, {
+    effect: this.reloadReports,
+    dependencies: {
+      privacyReportCounter: () => this.realtime.PrivacyReportCounter,
+    },
+  });
 
-  constructor(
-    owner: unknown,
-    args: FileReportDrawerPrivacyReportsItemSignature['Args']
-  ) {
-    super(owner, args);
-
-    this.tPleaseTryAgain = this.intl.t('pleaseTryAgain');
-
-    addObserver(
-      this.realtime,
-      'PrivacyReportCounter',
-      this,
-      this.observePrivacyReportCounter
-    );
-  }
-
-  willDestroy() {
-    super.willDestroy();
-
-    this.removePrivacyReportCounterObserver();
+  get tPleaseTryAgain() {
+    return this.intl.t('pleaseTryAgain');
   }
 
   get privacyReport() {
@@ -60,19 +47,6 @@ export default class FileReportDrawerPrivacyReportsItemComponent extends Compone
     return this.intl.t('privacyModule.downloadPdfSecondaryText', {
       password: this.privacyReport?.reportPassword || '',
     });
-  }
-
-  observePrivacyReportCounter() {
-    this.privacyReport?.reload();
-  }
-
-  removePrivacyReportCounterObserver() {
-    removeObserver(
-      this.realtime,
-      'PrivacyReportCounter',
-      this,
-      this.observePrivacyReportCounter
-    );
   }
 
   get isReportGenerating() {
@@ -96,6 +70,11 @@ export default class FileReportDrawerPrivacyReportsItemComponent extends Compone
   @action
   handleCopyError() {
     this.notify.error(this.tPleaseTryAgain);
+  }
+
+  @action
+  reloadReports() {
+    this.privacyReport?.reload();
   }
 
   handleDownloadReport = task(async () => {

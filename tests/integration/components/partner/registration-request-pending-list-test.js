@@ -1,4 +1,3 @@
-/* eslint-disable qunit/no-assert-equal */
 import { module, test } from 'qunit';
 import { setupRenderingTest } from 'ember-qunit';
 import { render, click } from '@ember/test-helpers';
@@ -12,10 +11,6 @@ class OrganizationStub extends Service {
   selected = {
     id: 1,
   };
-}
-
-class RealtimeStub extends Service {
-  RegistrationRequestCounter = 0;
 }
 
 function registrationRequestSerializer(data, many = false) {
@@ -40,7 +35,6 @@ module(
 
     hooks.beforeEach(function () {
       this.owner.register('service:organization', OrganizationStub);
-      this.owner.register('service:realtime', RealtimeStub);
     });
 
     test('it renders translated section title', async function (assert) {

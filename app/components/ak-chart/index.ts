@@ -1,6 +1,4 @@
-/* eslint-disable ember/no-observers */
 import Component from '@glimmer/component';
-import { addObserver, removeObserver } from '@ember/object/observers';
 
 // Import the echarts core module, which provides the necessary interfaces for using echarts.
 import * as echarts from 'echarts/core';
@@ -38,6 +36,7 @@ import { LabelLayout, UniversalTransition } from 'echarts/features';
 import { CanvasRenderer } from 'echarts/renderers';
 import { action } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
+import { useEffect } from 'irene/helpers/use-effect';
 
 // Register the required components
 echarts.use([
@@ -82,6 +81,13 @@ interface AkChartSignature {
 export default class AkChartComponent extends Component<AkChartSignature> {
   @tracked echartInstance: ECInstance | null = null;
 
+  chartOptionChangeEffect = useEffect(this, {
+    effect: this.handleOptionChange,
+    dependencies: {
+      option: () => this.args.option,
+    },
+  });
+
   @action
   initialiseEChart(element: HTMLDivElement) {
     this.echartInstance = echarts.init(element);
@@ -90,8 +96,6 @@ export default class AkChartComponent extends Component<AkChartSignature> {
     if (this.args.onInit) {
       this.args.onInit(this.echartInstance);
     }
-
-    addObserver(this.args, 'option', this, this.handleOptionChange);
   }
 
   @action
@@ -102,8 +106,6 @@ export default class AkChartComponent extends Component<AkChartSignature> {
   @action
   disposeEChartInstance() {
     this.echartInstance?.dispose();
-
-    removeObserver(this.args, 'option', this, this.handleOptionChange);
   }
 }
 

@@ -1,4 +1,7 @@
-{{! @glint-nocheck : did-insert, will-destroy, or}}
+{{! Initialize toggle mount content effect }}
+{{this.toggleMountContentEffect}}
+
+{{! Component Start }}
 {{#if this.mountContent}}
   <EmberWormhole @to='ak-component-wormhole' @renderInPlace={{@renderInPlace}}>
     <div
@@ -31,7 +34,7 @@
             data-popper-arrow
             class='{{@arrowClass}}'
             local-class='
-              ak-popover-arrow 
+              ak-popover-arrow
               ak-popover-arrow-color-{{or @arrowColor "light"}}'
           ></span>
         {{/if}}
