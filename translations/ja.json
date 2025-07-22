@@ -2075,6 +2075,8 @@
   "vulnerabilityPreferences": "Vulnerability Preferences",
   "vulnerabilityPreferencesCondition": "Changes made to vulnerability here will be applied to all future analyses of this project",
   "vulnerabilityPreferencesEdit": "You can edit the vulnerability preferences below",
+  "vulnerabilityDeprecated": "廃止予定",
+  "vulnerabilityDeprecatedReadonly": "この脆弱性は廃止予定のため読み取り専用です",
   "vulnerableApis": "Vulnerable API's",
   "warning": "WARNING",
   "week": "Week",

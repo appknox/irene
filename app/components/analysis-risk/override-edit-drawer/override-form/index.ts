@@ -17,6 +17,7 @@ import triggerAnalytics from 'irene/utils/trigger-analytics';
 import { AnalysisRiskDataModel, OverrideEditDrawerAppBarData } from '..';
 import { ActiveContentComponent } from '../content';
 import parseError from 'irene/utils/parse-error';
+import AnalysisModel from 'irene/models/analysis';
 
 type ChangesetBufferProps = BufferedChangeset & {
   risk: number;
@@ -230,6 +231,17 @@ export default class AnalysisRiskOverrideEditDrawerOverrideFormComponent extends
     await this.changeset?.validate();
 
     if (this.changeset?.isInvalid) {
+      return;
+    }
+
+    // Prevent saving overrides for deprecated/inactive vulnerabilities
+    const vulnerability = (this.dataModel.model as AnalysisModel)?.get(
+      'vulnerability'
+    );
+
+    if (vulnerability?.get?.('isActive') === false) {
+      this.notify.error(this.intl.t('vulnerabilityDeprecatedReadonly'));
+
       return;
     }
 
