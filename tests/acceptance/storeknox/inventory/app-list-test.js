@@ -246,6 +246,103 @@ module('Acceptance | storeknox/inventory/app-list', function (hooks) {
   );
 
   test.each(
+    'it toggles auto discovery enabled',
+    [
+      { fail: true },
+      {
+        fail: false,
+        error: { detail: 'disconnect error' },
+      },
+    ],
+    async function (assert, { fail, error }) {
+      assert.expect();
+
+      this.owner.register('service:notifications', NotificationsStub);
+
+      // Models
+      this.currentOrganizationMe.update({ is_owner: true });
+
+      const selectedSkOrg = this.server.create('sk-organization', {
+        id: 4,
+        auto_discovery_enabled: false,
+      });
+
+      // Server Mocks
+      this.server.get('/v2/sk_organization', (schema) => {
+        const skOrganizations = schema.skOrganizations.all().models;
+
+        return {
+          count: skOrganizations.length,
+          next: null,
+          previous: null,
+          results: skOrganizations,
+        };
+      });
+
+      this.server.patch('/v2/sk_organization/:id', (schema, req) => {
+        if (fail) {
+          return new Response(400, {}, error);
+        }
+
+        const { auto_discovery_enabled } = JSON.parse(req.requestBody);
+
+        // Request is made by the selected org
+        assert.strictEqual(selectedSkOrg.id, req.params.id);
+
+        // Toggle value is opposite of what is default
+        assert.strictEqual(
+          auto_discovery_enabled,
+          !selectedSkOrg.auto_discovery_enabled
+        );
+
+        const skOrg = schema.db.skOrganizations.update(`${req.params.id}`, {
+          auto_discovery_enabled,
+        });
+
+        return skOrg;
+      });
+
+      // Test Start
+      await visit('/dashboard/storeknox/inventory/app-list');
+
+      assert
+        .dom('[data-test-storeknoxInventory-settingsDrawerTrigger]')
+        .exists();
+
+      await click('[data-test-storeknoxInventory-settingsDrawerTrigger]');
+
+      assert
+        .dom('[data-test-storeknoxInventory-settingsDrawer-closeIconBtn]')
+        .exists();
+
+      assert
+        .dom('[data-test-storeknoxInventory-settingsDrawer-title]')
+        .hasText(t('storeknox.inventorySettings'));
+
+      assert
+        .dom(
+          '[data-test-storeknoxInventory-settingsDrawer-autoDiscoveryEnabledHeading]'
+        )
+        .hasText(t('storeknox.autoDiscovery'));
+
+      assert
+        .dom(
+          '[data-test-storeknoxInventory-settingsDrawer-autoDiscoveryEnabledHeadingDesc]'
+        )
+        .hasText(t('storeknox.autoDiscoveryToggleDesc'));
+
+      const autoDiscoveryEnabledToggle =
+        '[data-test-storeknoxInventory-settingsDrawer-autoDiscoveryEnabledHeadingToggle] [data-test-toggle-input]';
+
+      assert.dom(autoDiscoveryEnabledToggle).isNotChecked();
+
+      await click(autoDiscoveryEnabledToggle);
+
+      assert.dom(autoDiscoveryEnabledToggle).isChecked();
+    }
+  );
+
+  test.each(
     'it renders with approved apps (With Action Required and No Action Required)',
     [
       {

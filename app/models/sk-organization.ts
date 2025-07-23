@@ -7,6 +7,7 @@ import Model, {
 
 import type SkOrganizationMembershipModel from './sk-organization-membership';
 import type OrganizationModel from './organization';
+import type { SkOrgSettingsToggleProps } from 'irene/adapters/sk-organization';
 
 export type SkOrganizationModelName = 'sk-organization';
 
@@ -25,6 +26,9 @@ export default class SkOrganizationModel extends Model {
   @attr('boolean')
   declare autodiscoveryOnboardingDone: boolean;
 
+  @attr('boolean')
+  declare autoDiscoveryEnabled: boolean;
+
   @belongsTo('organization', { async: false, inverse: null })
   declare organization: OrganizationModel;
 
@@ -34,13 +38,13 @@ export default class SkOrganizationModel extends Model {
   })
   declare members: AsyncHasMany<SkOrganizationMembershipModel>;
 
-  async toggleAddToInventoryByDefault(addToInventoryByDefault: boolean) {
+  async toggleEvent(data: SkOrgSettingsToggleProps) {
     const adapter = this.store.adapterFor('sk-organization');
 
-    return await adapter.toggleAddToInventoryByDefault(
+    return await adapter.toggleOrganizationSetting(
       this.modelName,
       this.id,
-      addToInventoryByDefault
+      data
     );
   }
 }
