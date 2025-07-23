@@ -1,5 +1,9 @@
 {{page-title 'Settings'}}
 
-<AccountSettings />
+<PageWrapper>
+  <AccountSettings />
 
-{{outlet}}
+  <AccountSettings::PageContentWrapper>
+    {{outlet}}
+  </AccountSettings::PageContentWrapper>
+</PageWrapper>

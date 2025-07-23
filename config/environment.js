@@ -335,6 +335,7 @@ module.exports = function (environment) {
       tags: 'tags',
       capturedApiScanStart: 'start_apiscan',
       amAppVersions: 'v2/am_app_versions',
+      userVaNotificationPref: 'nf_email_notification_preference',
     },
     csb: {
       userLoggedIn: {

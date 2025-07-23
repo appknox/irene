@@ -1,11 +1,25 @@
-<AkTabs as |Akt|>
-  {{#each this.tabs as |item|}}
-    <Akt.tabItem
-      @id={{item.id}}
-      @route={{item.route}}
-      @currentWhen={{item.activeRoutes}}
-    >
-      {{item.label}}
-    </Akt.tabItem>
-  {{/each}}
-</AkTabs>
+<AkTypography
+  @variant='body1'
+  @fontWeight='medium'
+  {{style marginBottom='1.5em !important' marginTop='0.5em !important'}}
+>
+  {{t 'accountSettings'}}
+</AkTypography>
+
+<AkStack
+  @bgColor='white'
+  @width='full'
+  local-class='account-settings-tabs-root'
+>
+  <AkTabs class='w-full' as |Akt|>
+    {{#each this.tabs as |item|}}
+      <Akt.tabItem
+        @id={{item.route}}
+        @route={{item.route}}
+        @currentWhen={{item.activeRoutes}}
+      >
+        {{item.label}}
+      </Akt.tabItem>
+    {{/each}}
+  </AkTabs>
+</AkStack>
