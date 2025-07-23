@@ -1,0 +1,78 @@
+<AkStack
+  @width='full'
+  @direction='column'
+  class='p-3 pb-4'
+  data-test-accountSettings-notificationSettings
+>
+  <AkTypography
+    @variant='h5'
+    data-test-accountSettings-notificationSettings-title
+  >
+    {{t 'accountNotifSettings.emailSummaryTitle'}}
+  </AkTypography>
+
+  {{#each this.notificationSettingsGroups as |group index|}}
+    <AkStack
+      @width='full'
+      @direction='column'
+      @spacing='2'
+      class='{{if (eq index 0) "my-3" "mb-3"}}'
+      data-test-accountSettings-notificationSettings={{group.id}}
+    >
+      <AkStack @direction='row' @alignItems='center' @spacing='0.5'>
+        <AkTypography @variant='h6' @fontWeight='bold'>
+          {{group.title}}
+        </AkTypography>
+
+        <AkTooltip
+          @arrow={{true}}
+          @placement='right'
+          data-test-accountSettings-notificationSettings-tooltip={{group.id}}
+        >
+          <:tooltipContent>
+            <div local-class='tooltip-content-container'>
+              <AkTypography @variant='body1' @color='inherit'>
+                {{group.tooltipText}}
+              </AkTypography>
+            </div>
+          </:tooltipContent>
+
+          <:default>
+            <AkIcon
+              @iconName='info'
+              @size='small'
+              data-test-accountSettings-notificationSettings-tooltipIcon
+            />
+          </:default>
+        </AkTooltip>
+      </AkStack>
+
+      <AkStack
+        @width='full'
+        @direction='column'
+        local-class='va-notification-group-settings'
+      >
+        {{#each group.settings as |setting idx|}}
+          {{#unless (eq idx 0)}}
+            <AkDivider @color='dark' class='my-2' />
+          {{/unless}}
+
+          <AccountSettings::NotificationSettings::SettingsItem
+            @item={{setting}}
+            @updateUserNotifPref={{this.updateUserNotificationPreferences}}
+            @userNotificationPreferences={{this.userNotificationPreferences}}
+            @loadingUserNotificationPreferences={{this.fetchUserNotificationPreferences.isRunning}}
+            data-test-accountSettings-notificationSettings-settingsItem={{setting.id}}
+          />
+        {{/each}}
+      </AkStack>
+    </AkStack>
+  {{/each}}
+
+  <AkTypography
+    {{style maxWidth='700px'}}
+    data-test-accountSettings-notificationSettings-note
+  >
+    {{t 'accountNotifSettings.notificationNote' htmlSafe=true}}
+  </AkTypography>
+</AkStack>
