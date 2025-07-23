@@ -1817,7 +1817,7 @@
     "appInventory": "App Inventory",
     "approved": "Approved",
     "autoDiscovery": "Auto Discovery",
-    "autoDiscoveryToggleDesc": "Setup the search criteria by using the key words. System will automatically detect by using the meta data and send the results to pending tab for the approvals.",
+    "autoDiscoveryToggleDesc": "Our discovery engine will automatically uncover apps that may be owned by your org, based on the metadata of apps already present in your Org Inventory. Such apps found will be available in the Pending Review tab with the source as System.",
     "availability": "Availability",
     "availableColumnInfo": "This column indicates whether the app is present only on <strong>Appknox or Storeknox or on both products</strong>",
     "description": "Discover your apps, Maintain a centralized inventory and Monitor them on stores.",
