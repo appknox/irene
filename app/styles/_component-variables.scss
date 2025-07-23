@@ -777,26 +777,52 @@ body {
   );
 
   // variables for sbom/scan-details/component-list/type-header
-  --sbom-scanDetails-componentList-typeHeader-background-color: var(--background-main);
+  --sbom-scanDetails-componentList-typeHeader-background-color: var(
+    --background-main
+  );
   --sbom-scanDetails-componentList-typeHeader-box-shadow: var(--box-shadow-7);
-  --sbom-scanDetails-componentList-typeHeader-border-radius: var(--box-shadow-7);
-  --sbom-scanDetails-componentList-typeHeader-filter-option-hover-background-color: var(--neutral-grey-200);
-  --sbom-scanDetails-componentList-typeHeader-filter-option-clear-filter-background-color: var(--neutral-grey-200);
-  --sbom-scanDetails-componentList-typeHeader-filter-header-background-color: var(--neutral-grey-100);
+  --sbom-scanDetails-componentList-typeHeader-border-radius: var(
+    --box-shadow-7
+  );
+  --sbom-scanDetails-componentList-typeHeader-filter-option-hover-background-color: var(
+    --neutral-grey-200
+  );
+  --sbom-scanDetails-componentList-typeHeader-filter-option-clear-filter-background-color: var(
+    --neutral-grey-200
+  );
+  --sbom-scanDetails-componentList-typeHeader-filter-header-background-color: var(
+    --neutral-grey-100
+  );
 
   // variables for sbom/scan-details/component-list/type-header
-  --sbom-scanDetails-componentList-dependencyTypeHeader-background-color: var(--background-main);
-  --sbom-scanDetails-componentList-dependencyTypeHeader-box-shadow: var(--box-shadow-7);
-  --sbom-scanDetails-componentList-dependencyTypeHeader-border-radius: var(--box-shadow-7);
-  --sbom-scanDetails-componentList-dependencyTypeHeader-filter-option-hover-background-color: var(--neutral-grey-200);
-  --sbom-scanDetails-componentList-dependencyTypeHeader-filter-option-clear-filter-background-color: var(--neutral-grey-200);
-  --sbom-scanDetails-componentList-dependencyTypeHeader-filter-header-background-color: var(--neutral-grey-100);
+  --sbom-scanDetails-componentList-dependencyTypeHeader-background-color: var(
+    --background-main
+  );
+  --sbom-scanDetails-componentList-dependencyTypeHeader-box-shadow: var(
+    --box-shadow-7
+  );
+  --sbom-scanDetails-componentList-dependencyTypeHeader-border-radius: var(
+    --box-shadow-7
+  );
+  --sbom-scanDetails-componentList-dependencyTypeHeader-filter-option-hover-background-color: var(
+    --neutral-grey-200
+  );
+  --sbom-scanDetails-componentList-dependencyTypeHeader-filter-option-clear-filter-background-color: var(
+    --neutral-grey-200
+  );
+  --sbom-scanDetails-componentList-dependencyTypeHeader-filter-header-background-color: var(
+    --neutral-grey-100
+  );
 
   // variables for sbom/scan-details/overview
   --sbom-scan-details-overview-border-radius: var(--border-radius);
   --sbom-scan-details-overview-border-color: var(--border-color-1);
-  --sbom-scan-details-overview-new-feature-background-color: var(--new-feature-ai-bg-color);
-  --sbom-scan-details-overview-new-feature-text-color: var(--new-feature-ai-color);
+  --sbom-scan-details-overview-new-feature-background-color: var(
+    --new-feature-ai-bg-color
+  );
+  --sbom-scan-details-overview-new-feature-text-color: var(
+    --new-feature-ai-color
+  );
 
   // variables for sbom/scan-details/skeleton-loader
   --sbom-scan-details-skeleton-loader-summary-border-radius: var(
@@ -1410,6 +1436,17 @@ body {
     --success-light
   );
   --account-settings-security-mfa-primary-color: var(--primary-main);
+
+  // variables for account-settings/notification-settings
+  --account-settings-notification-settings-group-border-color: var(
+    --border-color-1
+  );
+
+  // variables for account-settings-page-content-wrapper-border-color
+  --account-settings-page-content-wrapper-border-color: var(--border-color-1);
+
+  // variables for account-settings-tabs-border-color
+  --account-settings-tabs-border-color: var(--border-color-1);
 
   // variables for project-settings/empty-list
   --project-settings-empty-list-border-radius: var(--border-radius);
