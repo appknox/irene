@@ -15,6 +15,14 @@
 
   <AkDivider @color='dark' />
 
+  <div class='py-2 px-3'>
+    <ProjectSettings::AnalysisSettings::EmailNotifications
+      @profileId={{this.project.activeProfileId}}
+    />
+  </div>
+
+  <AkDivider @color='dark' />
+
   <div class='py-2'>
     <ProjectSettings::AnalysisSettings::ReportPreference
       @project={{this.project}}
