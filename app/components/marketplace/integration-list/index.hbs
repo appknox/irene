@@ -1,7 +1,11 @@
 <div local-class='marketplace-list'>
   {{#each this.data as |d|}}
     <div local-class='marketplace-icon'>
-      <Marketplace::IntegrationCard @data={{d}} />
+      {{#if d.instructions}}
+        <Marketplace::PluginCard @data={{d}} />
+      {{else}}
+        <Marketplace::IntegrationCard @data={{d}} />
+      {{/if}}
     </div>
   {{/each}}
 </div>
