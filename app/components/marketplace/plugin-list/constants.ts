@@ -107,4 +107,37 @@ $ appknox upload &lt;path to apk/ipa file&gt; | xargs appknox cicheck --risk-thr
 </pre>
     </div>
   `,
+  armorcodeInstructions: `
+    <ol class="mx-4">
+      <li class="mb-2">
+        Generate a personal access token from <a href="/dashboard/settings/developersettings" target="_blank">Developer Settings</a> in the Appknox Dashboard.
+      </li>
+      <li class="mb-2">
+        Log in to your ArmorCode dashboard and navigate to <strong>Manage > Security Tools > Appknox</strong>.
+      </li>
+      <li class="mb-2">
+        Click <strong>Add Configuration</strong> and enter the following details:
+        <ul style="list-style-type:disc" class="ml-4 mt-1">
+          <li><strong>Configuration Name:</strong> Provide a unique name.</li>
+          <li><strong>API Token:</strong> Paste the token generated in Step 1.</li>
+        </ul>
+      </li>
+      <li class="mb-2">
+        After saving the configuration, the system will prompt you to map your projects. Select:
+        <ul style="list-style-type:disc" class="ml-4 mt-1">
+          <li><strong>Organization</strong> from Appknox</li>
+          <li><strong>Appknox Package</strong> you want to monitor</li>
+          <li><strong>ArmorCode Product</strong>, <strong>Subproduct</strong>, and <strong>Environment</strong> to link the findings</li>
+        </ul>
+        Click <strong>Add Mapping</strong> to create multiple mappings if needed.
+      </li>
+      <li class="mb-2">
+        Click <strong>Save</strong> to finalize your integration. Once a scan is complete in Appknox, findings will automatically sync and can be accessed by clicking the <strong>Scan ID</strong> or <strong>Result Details</strong> in ArmorCode.
+      </li>
+    </ol>
+    <hr class="my-1">
+    <div>
+      <em>Optional:</em> You can also configure alerting and sync settings. For more, see <a href="https://support.armorcode.com/hc/en-us/articles/28507109043475-Configuring-Notifications-and-Settings-for-Security-Tools" target="_blank">ArmorCode Notification Settings</a>.
+    </div>
+  `,
 };
