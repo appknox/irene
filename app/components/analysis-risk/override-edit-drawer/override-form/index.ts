@@ -233,6 +233,15 @@ export default class AnalysisRiskOverrideEditDrawerOverrideFormComponent extends
       return;
     }
 
+    // Prevent saving overrides for deprecated/inactive vulnerabilities
+    const vulnerability = 
+      (this.dataModel.model as any)?.vulnerability ||
+      (this.dataModel.model as any)?.get?.('vulnerability');
+    if (vulnerability?.isActive === false) {
+      this.notify.error(this.intl.t('vulnerabilityDeprecatedReadonly'));
+      return;
+    }
+
     try {
       const comment = this.changeset?.comment;
       const riskOverride = this.changeset?.risk;

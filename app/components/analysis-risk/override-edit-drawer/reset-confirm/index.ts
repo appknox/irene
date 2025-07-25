@@ -51,6 +51,15 @@ export default class AnalysisRiskOverrideEditDrawerResetConfirmComponent extends
   }
 
   resetHandlerTask = task(async (all: boolean) => {
+    // Prevent resetting overrides for deprecated/inactive vulnerabilities
+    const vulnerability =
+      (this.dataModel.model as any)?.vulnerability ||
+      (this.dataModel.model as any)?.get?.('vulnerability');
+    if (vulnerability?.isActive === false) {
+      this.notify.error(this.intl.t('vulnerabilityDeprecatedReadonly'));
+      return;
+    }
+
     try {
       await this.dataModel.resetOverrideHandler(all);
 
