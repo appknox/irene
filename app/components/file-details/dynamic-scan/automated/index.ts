@@ -15,7 +15,7 @@ import type OrganizationService from 'irene/services/organization';
 export interface FileDetailsDastAutomatedSignature {
   Args: {
     file: FileModel;
-    profileId: number;
+    profileId: string | number;
   };
 }
 

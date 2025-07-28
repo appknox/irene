@@ -17,7 +17,7 @@ import type DynamicscanModel from 'irene/models/dynamicscan';
 export interface FileDetailsDynamicScanScheduledAutomatedSignature {
   Args: {
     file: FileModel;
-    profileId: number;
+    profileId: string | number;
   };
 }
 

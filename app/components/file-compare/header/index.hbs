@@ -145,7 +145,6 @@
   <AkStack local-class='files-overview-container'>
     <FileOverview
       @file={{@file1}}
-      @profileId={{@file1.profile.id}}
       @hideCTAs={{true}}
       data-test-fileCompareHeader-file1Overview
     />
@@ -153,7 +152,6 @@
     {{#if @file2}}
       <FileOverview
         @file={{@file2}}
-        @profileId={{@file2.profile.id}}
         @hideCTAs={{true}}
         data-test-fileCompareHeader-file2Overview
       />

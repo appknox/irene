@@ -38,7 +38,7 @@ export default class FileDetailsProxySettingsComponent extends Component<FileDet
   }
 
   fetchProxySetting = task(async () => {
-    const profileId = this.args.profile.get('id');
+    const profileId = String(this.args.profile.get('id'));
 
     if (profileId) {
       this.proxy = await this.store.findRecord('proxy-setting', profileId);

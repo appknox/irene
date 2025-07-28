@@ -7,7 +7,7 @@ import type DynamicScanService from 'irene/services/dynamic-scan';
 interface DynamicScanSignature {
   Args: {
     file: FileModel;
-    profileId: number;
+    profileId: string | number;
   };
   Blocks: {
     default: [];

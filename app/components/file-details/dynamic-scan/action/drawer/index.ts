@@ -53,10 +53,6 @@ export default class FileDetailsDynamicScanActionDrawerComponent extends Compone
     return this.args.file;
   }
 
-  get profileId() {
-    return this.file.profile.get('id') as string;
-  }
-
   get tStartingScan() {
     return this.intl.t('startingScan');
   }
