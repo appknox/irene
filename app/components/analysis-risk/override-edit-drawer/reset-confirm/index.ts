@@ -1,12 +1,13 @@
 import Component from '@glimmer/component';
 import { tracked } from '@glimmer/tracking';
 import { action } from '@ember/object';
-import { inject as service } from '@ember/service';
-import IntlService from 'ember-intl/services/intl';
-
-import { AnalysisRiskDataModel, OverrideEditDrawerAppBarData } from '..';
-import { ActiveContentComponent } from '../content';
+import { service } from '@ember/service';
 import { task } from 'ember-concurrency';
+
+import type IntlService from 'ember-intl/services/intl';
+import type { AnalysisRiskDataModel, OverrideEditDrawerAppBarData } from '..';
+import type { ActiveContentComponent } from '../content';
+import type AnalysisModel from 'irene/models/analysis';
 
 export interface AnalysisRiskOverrideEditDrawerResetConfirmSignature {
   Args: {
@@ -51,6 +52,17 @@ export default class AnalysisRiskOverrideEditDrawerResetConfirmComponent extends
   }
 
   resetHandlerTask = task(async (all: boolean) => {
+    // Prevent resetting overrides for deprecated/inactive vulnerabilities
+    const vulnerability = (this.dataModel.model as AnalysisModel)?.get?.(
+      'vulnerability'
+    );
+
+    if (vulnerability?.get?.('isActive') === false) {
+      this.notify.error(this.intl.t('vulnerabilityDeprecatedReadonly'));
+
+      return;
+    }
+
     try {
       await this.dataModel.resetOverrideHandler(all);
 
