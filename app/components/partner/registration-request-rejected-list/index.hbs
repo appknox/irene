@@ -1,74 +1,79 @@
-<div>
-  <AkPaginationProvider
-    @results={{this.partnerRegistrationRequestList}}
-    @onItemPerPageChange={{this.handleItemPerPageChange}}
-    @totalItems={{this.totalPartnerRegistrationRequestCount}}
-    @nextAction={{this.handleNextPrevAction}}
-    @prevAction={{this.handleNextPrevAction}}
-    @itemPerPageOptions={{array 10 25 50}}
-    @defaultLimit={{this.limit}}
-    @offset={{this.offset}}
-    as |pgc|
-  >
-    {{#if this.partnerRegistrationRequestReponse}}
-      <h3 local-class='title' class='mt-6'>{{t 'rejectedRequests'}}</h3>
+<UseEffect
+  @effect={{this.reloadRegistrationRequest}}
+  @dependencies={{this.reloadRegistrationRequestDependencies}}
+>
+  <div>
+    <AkPaginationProvider
+      @results={{this.partnerRegistrationRequestList}}
+      @onItemPerPageChange={{this.handleItemPerPageChange}}
+      @totalItems={{this.totalPartnerRegistrationRequestCount}}
+      @nextAction={{this.handleNextPrevAction}}
+      @prevAction={{this.handleNextPrevAction}}
+      @itemPerPageOptions={{array 10 25 50}}
+      @defaultLimit={{this.limit}}
+      @offset={{this.offset}}
+      as |pgc|
+    >
+      {{#if this.partnerRegistrationRequestReponse}}
+        <h3 local-class='title' class='mt-6'>{{t 'rejectedRequests'}}</h3>
 
-      <div>
-        <div local-class='table'>
-          <div local-class='table-header'>
-            <AkTypography @fontWeight='bold' @color='neutral'>
-              {{t 'requested'}}
-              {{t 'by'}}
-            </AkTypography>
+        <div>
+          <div local-class='table'>
+            <div local-class='table-header'>
+              <AkTypography @fontWeight='bold' @color='neutral'>
+                {{t 'requested'}}
+                {{t 'by'}}
+              </AkTypography>
 
-            <AkTypography @fontWeight='bold' @color='neutral'>
-              {{t 'company'}}
-            </AkTypography>
+              <AkTypography @fontWeight='bold' @color='neutral'>
+                {{t 'company'}}
+              </AkTypography>
 
-            <AkTypography @fontWeight='bold' @color='neutral'>
-              {{t 'requested'}}
-            </AkTypography>
+              <AkTypography @fontWeight='bold' @color='neutral'>
+                {{t 'requested'}}
+              </AkTypography>
 
-            <AkTypography @fontWeight='bold' @color='neutral'>
-              {{t 'rejected'}}
-            </AkTypography>
+              <AkTypography @fontWeight='bold' @color='neutral'>
+                {{t 'rejected'}}
+              </AkTypography>
 
-            <div></div>
+              <div></div>
+            </div>
+
+            <div local-class='table-body'>
+              {{#each pgc.currentPageResults as |request|}}
+                <div local-class='table-row'>
+                  <Partner::RegistrationRequestRejected
+                    @request={{request}}
+                    @onUndoReject={{this.onUndoReject}}
+                  />
+                </div>
+              {{/each}}
+            </div>
           </div>
 
-          <div local-class='table-body'>
-            {{#each pgc.currentPageResults as |request|}}
-              <div local-class='table-row'>
-                <Partner::RegistrationRequestRejected
-                  @request={{request}}
-                  @onUndoReject={{this.onUndoReject}}
+          {{#let (and pgc.disableNext pgc.disablePrev) as |hidePagination|}}
+            {{#unless hidePagination}}
+              <div local-class='pagination'>
+                <AkPagination
+                  @disableNext={{pgc.disableNext}}
+                  @nextAction={{pgc.nextAction}}
+                  @disablePrev={{pgc.disablePrev}}
+                  @prevAction={{pgc.prevAction}}
+                  @endItemIdx={{pgc.endItemIdx}}
+                  @startItemIdx={{pgc.startItemIdx}}
+                  @itemPerPageOptions={{pgc.itemPerPageOptions}}
+                  @onItemPerPageChange={{pgc.onItemPerPageChange}}
+                  @selectedOption={{pgc.selectedOption}}
+                  @tableItemLabel={{t 'invitations'}}
+                  @perPageTranslation={{t 'recordPerPage'}}
+                  @totalItems={{pgc.totalItems}}
                 />
               </div>
-            {{/each}}
-          </div>
+            {{/unless}}
+          {{/let}}
         </div>
-
-        {{#let (and pgc.disableNext pgc.disablePrev) as |hidePagination|}}
-          {{#unless hidePagination}}
-            <div local-class='pagination'>
-              <AkPagination
-                @disableNext={{pgc.disableNext}}
-                @nextAction={{pgc.nextAction}}
-                @disablePrev={{pgc.disablePrev}}
-                @prevAction={{pgc.prevAction}}
-                @endItemIdx={{pgc.endItemIdx}}
-                @startItemIdx={{pgc.startItemIdx}}
-                @itemPerPageOptions={{pgc.itemPerPageOptions}}
-                @onItemPerPageChange={{pgc.onItemPerPageChange}}
-                @selectedOption={{pgc.selectedOption}}
-                @tableItemLabel={{t 'invitations'}}
-                @perPageTranslation={{t 'recordPerPage'}}
-                @totalItems={{pgc.totalItems}}
-              />
-            </div>
-          {{/unless}}
-        {{/let}}
-      </div>
-    {{/if}}
-  </AkPaginationProvider>
-</div>
+      {{/if}}
+    </AkPaginationProvider>
+  </div>
+</UseEffect>

@@ -1,20 +1,19 @@
-/* eslint-disable ember/no-observers */
 import Component from '@glimmer/component';
 import { action } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
 import { service } from '@ember/service';
 import { task } from 'ember-concurrency';
-import IntlService from 'ember-intl/services/intl';
-import Store from '@ember-data/store';
 import { waitForPromise } from '@ember/test-waiters';
 import dayjs from 'dayjs';
+import type IntlService from 'ember-intl/services/intl';
+import type Store from '@ember-data/store';
 
 // eslint-disable-next-line ember/use-ember-data-rfc-395-imports
-import { DS } from 'ember-data';
+import type { DS } from 'ember-data';
 
 import parseError from 'irene/utils/parse-error';
-import RealtimeService from 'irene/services/realtime';
-import PartnerRegistrationRequestModel from 'irene/models/partner/registration-request';
+import type RealtimeService from 'irene/services/realtime';
+import type PartnerRegistrationRequestModel from 'irene/models/partner/registration-request';
 
 type PartnerRegistrationRequestResponseModel =
   DS.AdapterPopulatedRecordArray<PartnerRegistrationRequestModel> & {
@@ -39,25 +38,17 @@ export default class PartnerRegistrationRequestPendingListComponent extends Comp
     super(owner, args);
 
     this.fetchPartnerRegistrationRequest.perform(this.limit, this.offset);
-
-    this.realtime.addObserver(
-      'RegistrationRequestCounter',
-      this,
-      this.registrationRequestDidChange
-    );
   }
 
-  willDestroy() {
-    super.willDestroy();
-
-    this.realtime.removeObserver(
-      'RegistrationRequestCounter',
-      this,
-      this.registrationRequestDidChange
-    );
+  get reloadRegistrationRequestDependencies() {
+    return {
+      registrationRequestCounter: () =>
+        this.realtime.RegistrationRequestCounter,
+    };
   }
 
-  async registrationRequestDidChange() {
+  @action
+  reloadRegistrationRequest() {
     // After item removal if no items exist in the page then redirect to first page
     if (
       this.offset > 0 &&
@@ -66,7 +57,7 @@ export default class PartnerRegistrationRequestPendingListComponent extends Comp
       this.offset = 0;
     }
 
-    await this.fetchPartnerRegistrationRequest.perform(this.limit, this.offset);
+    this.fetchPartnerRegistrationRequest.perform(this.limit, this.offset);
   }
 
   get partnerRegistrationRequestList() {

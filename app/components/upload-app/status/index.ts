@@ -1,4 +1,3 @@
-/* eslint-disable ember/no-observers */
 /* eslint-disable ember/use-ember-data-rfc-395-imports */
 import DS from 'ember-data';
 import { tracked } from 'tracked-built-ins';
@@ -9,7 +8,6 @@ import Component from '@glimmer/component';
 import { action } from '@ember/object';
 import Store from '@ember-data/store';
 import { inject as service } from '@ember/service';
-import { addObserver, removeObserver } from '@ember/object/observers';
 import { task } from 'ember-concurrency';
 import { waitForPromise } from '@ember/test-waiters';
 import IntlService from 'ember-intl/services/intl';
@@ -50,16 +48,11 @@ export default class UploadAppStatusComponent extends Component {
   @tracked submissions: DS.AdapterPopulatedRecordArray<SubmissionModel> | null =
     null;
 
-  constructor(owner: unknown, args: object) {
-    super(owner, args);
-
-    this.initialize();
-  }
-
-  willDestroy() {
-    super.willDestroy();
-
-    this.removeSubmissionCounterObserver();
+  // Dependencies for the reloadSubmissions effect
+  get reloadSubmissionsDependencies() {
+    return {
+      submissionCounter: () => this.realtime.SubmissionCounter,
+    };
   }
 
   get submissionList() {
@@ -100,19 +93,19 @@ export default class UploadAppStatusComponent extends Component {
     return [
       {
         appStatus: 'running',
-        iconName: 'downloading',
+        iconName: 'downloading' as const,
         iconColor: 'info' as const,
         value: String(this.submissionNumbers.running).padStart(2, '0'),
       },
       {
         appStatus: 'completed',
-        iconName: 'download-done',
+        iconName: 'download-done' as const,
         iconColor: 'success' as const,
         value: String(this.submissionNumbers.completed).padStart(2, '0'),
       },
       {
         appStatus: 'failed',
-        iconName: 'error',
+        iconName: 'error' as const,
         iconColor: 'error' as const,
         value: String(this.submissionNumbers.failed).padStart(2, '0'),
       },
@@ -192,28 +185,8 @@ export default class UploadAppStatusComponent extends Component {
     this.uploadApp.closeSubsPopover();
   }
 
-  @action initialize() {
-    addObserver(
-      this.realtime,
-      'SubmissionCounter',
-      this,
-      this.observeSubmissionCounter
-    );
-
-    this.getSubmissions.perform();
-  }
-
-  @action removeSubmissionCounterObserver() {
-    removeObserver(
-      this.realtime,
-      'SubmissionCounter',
-      this,
-      this.observeSubmissionCounter
-    );
-  }
-
   @action
-  observeSubmissionCounter() {
+  reloadSubmissions() {
     this.getSubmissions.perform();
   }
 

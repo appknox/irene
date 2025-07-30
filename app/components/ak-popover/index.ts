@@ -1,15 +1,15 @@
-/* eslint-disable ember/no-observers */
 import Component from '@glimmer/component';
 import { action } from '@ember/object';
+
 import {
   createPopper,
   Placement,
   Modifier,
   Instance as PopperInstance,
 } from '@popperjs/core';
+
 import { inject as service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
-import { addObserver, removeObserver } from '@ember/object/observers';
 
 export interface AkPopoverSignature {
   Element: HTMLDivElement;
@@ -60,18 +60,12 @@ export default class PopoverComponent extends Component<AkPopoverSignature> {
   popper: PopperInstance | null = null;
   popperElement: HTMLElement | null = null;
 
+  // Dependencies for the toggleMountContent effect
+  toggleMountContentDependencies = {
+    anchorRef: () => this.args.anchorRef,
+  };
+
   @tracked mountContent = false;
-
-  constructor(owner: unknown, args: AkPopoverSignature['Args']) {
-    super(owner, args);
-
-    if (!this.mountOnOpen) {
-      this.mountContent = true;
-    }
-
-    // Mounts and unmounts the content based on the value of the anchor ref
-    addObserver(this.args, 'anchorRef', this, this.toggleMountContent);
-  }
 
   isEmpty(value: unknown) {
     return (
@@ -151,20 +145,19 @@ export default class PopoverComponent extends Component<AkPopoverSignature> {
    * Simply decides whether to show the content or not
    * based on subsequent states of the `anchorRef` after `AkPopover` is instantiated
    */
+  @action
   toggleMountContent() {
     if (this.anchorRef) {
       this.createPopperInstance();
 
       this.mountContent = true;
-    } else {
-      this.popper?.destroy();
+    } else if (this.popper) {
+      this.popper.destroy();
       this.popper = null;
 
-      if (this.unmountOnClose) {
-        this.mountContent = false;
-      } else {
-        this.mountContent = true;
-      }
+      this.mountContent = !this.unmountOnClose;
+    } else {
+      this.mountContent = !this.mountOnOpen;
     }
   }
 
@@ -205,8 +198,6 @@ export default class PopoverComponent extends Component<AkPopoverSignature> {
 
   willDestroy() {
     super.willDestroy();
-
-    removeObserver(this.args, 'anchorRef', this, this.toggleMountContent);
     this.handleWillDestroyCleanup();
   }
 }

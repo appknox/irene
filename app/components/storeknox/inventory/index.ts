@@ -94,7 +94,7 @@ export default class StoreknoxInventoryComponent extends Component {
 
   handleToggleTask = task(async (data: SkOrgSettingsToggleProps) => {
     try {
-      this.selectedSkOrg?.toggleEvent(data);
+      await this.selectedSkOrg?.toggleEvent(data);
 
       this.notify.success(this.intl.t('storeknox.statusToggleSuccessMessage'));
     } catch (error) {
