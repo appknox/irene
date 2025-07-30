@@ -1,3 +1,10 @@
+{{! Effect to reload the file list }}
+<UseEffect
+  @effect={{this.reloadFiles}}
+  @dependencies={{this.reloadFilesDependencies}}
+/>
+
+{{! Component Start }}
 <div local-class='file-list-root'>
   <FileCompare::Header
     @file1={{this.baseFile}}

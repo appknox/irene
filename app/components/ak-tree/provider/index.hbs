@@ -1,13 +1,18 @@
-{{yield
-  (hash
-    nodes=@treeData
-    expanded=@expanded
-    checked=@checked
-    disabled=@disabled
-    flatNodes=this.flatNodes
-    cascade=this.cascade
-    onCheck=this.onCheck
-    onExpand=this.onExpand
-    getFlatNode=this.getFlatNode
-  )
-}}
+<UseEffect
+  @effect={{this.initialize}}
+  @dependencies={{this.initializeDependencies}}
+>
+  {{yield
+    (hash
+      nodes=@treeData
+      expanded=@expanded
+      checked=@checked
+      disabled=@disabled
+      flatNodes=this.flatNodes
+      cascade=this.cascade
+      onCheck=this.onCheck
+      onExpand=this.onExpand
+      getFlatNode=this.getFlatNode
+    )
+  }}
+</UseEffect>

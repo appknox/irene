@@ -1,4 +1,3 @@
-/* eslint-disable ember/no-observers */
 // eslint-disable-next-line ember/use-ember-data-rfc-395-imports
 import DS from 'ember-data';
 
@@ -13,7 +12,6 @@ import IntlService from 'ember-intl/services/intl';
 import MeService from 'irene/services/me';
 import RealtimeService from 'irene/services/realtime';
 import ProjectModel from 'irene/models/project';
-import { addObserver, removeObserver } from '@ember/object/observers';
 import { PaginationProviderActionsArgs } from 'irene/components/ak-pagination-provider';
 import ProjectCollaboratorModel from 'irene/models/project-collaborator';
 import parseError from 'irene/utils/parse-error';
@@ -41,20 +39,11 @@ export default class ProjectSettingsGeneralSettingsCollaboratorsTableComponent e
   @tracked offset = 0;
   @tracked limit = 10;
 
-  constructor(
-    owner: unknown,
-    args: ProjectSettingsGeneralSettingsCollaboratorsTableSignature['Args']
-  ) {
-    super(owner, args);
-
-    addObserver(
-      this.realtime,
-      'ProjectCollaboratorCounter',
-      this,
-      this.reloadProjectCollaborators
-    );
-
-    this.getProjectCollaborators.perform();
+  get reloadProjectCollaboratorsDependencies() {
+    return {
+      projectCollaboratorCounter: () =>
+        this.realtime.ProjectCollaboratorCounter,
+    };
   }
 
   get projectCollaborators() {
@@ -121,17 +110,6 @@ export default class ProjectSettingsGeneralSettingsCollaboratorsTableComponent e
   @action
   reloadProjectCollaborators() {
     this.getProjectCollaborators.perform();
-  }
-
-  willDestroy(): void {
-    super.willDestroy();
-
-    removeObserver(
-      this.realtime,
-      'ProjectCollaboratorCounter',
-      this,
-      this.reloadProjectCollaborators
-    );
   }
 
   getProjectCollaborators = task(async () => {
