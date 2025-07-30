@@ -1,19 +1,19 @@
-/* eslint-disable ember/no-observers */
-// eslint-disable-next-line ember/use-ember-data-rfc-395-imports
-import DS from 'ember-data';
 import Component from '@glimmer/component';
 import { inject as service } from '@ember/service';
 import { action } from '@ember/object';
 import { task } from 'ember-concurrency';
 import { tracked } from '@glimmer/tracking';
-import IntlService from 'ember-intl/services/intl';
-import Store from '@ember-data/store';
-import RouterService from '@ember/routing/router-service';
-import { PaginationProviderActionsArgs } from '../ak-pagination-provider';
-import OrganizationModel from 'irene/models/organization';
-import OrganizationMemberModel from 'irene/models/organization-member';
-import { addObserver, removeObserver } from '@ember/object/observers';
-import RealtimeService from 'irene/services/realtime';
+import type IntlService from 'ember-intl/services/intl';
+import type Store from '@ember-data/store';
+import type RouterService from '@ember/routing/router-service';
+
+// eslint-disable-next-line ember/use-ember-data-rfc-395-imports
+import type DS from 'ember-data';
+
+import type { PaginationProviderActionsArgs } from 'irene/components/ak-pagination-provider';
+import type OrganizationModel from 'irene/models/organization';
+import type OrganizationMemberModel from 'irene/models/organization-member';
+import type RealtimeService from 'irene/services/realtime';
 
 type InvitationQueryResponse =
   DS.AdapterPopulatedRecordArray<OrganizationMemberModel> & {
@@ -69,6 +69,7 @@ export default class OrganizationInvitationListComponent extends Component<Organ
   @service('notifications') declare notify: NotificationService;
 
   @tracked inviteResponse: InvitationQueryResponse | null = null;
+  @tracked query = '';
 
   constructor(
     owner: unknown,
@@ -76,33 +77,13 @@ export default class OrganizationInvitationListComponent extends Component<Organ
   ) {
     super(owner, args);
 
-    this.fetchInvites.perform(this.limit, this.offset, '', false);
-
-    addObserver(
-      this.realtime,
-      'InvitationCounter',
-      this,
-      this.observeInvitationCounter
-    );
+    this.fetchInvites.perform();
   }
 
-  observeInvitationCounter() {
-    this.handleReloadInvites();
-  }
-
-  removeInvitationCounterObserver() {
-    removeObserver(
-      this.realtime,
-      'InvitationCounter',
-      this,
-      this.observeInvitationCounter
-    );
-  }
-
-  willDestroy() {
-    super.willDestroy();
-
-    this.removeInvitationCounterObserver();
+  get reloadInvitesDependencies() {
+    return {
+      invitationCounter: () => this.realtime.InvitationCounter,
+    };
   }
 
   get tPleaseTryAgain() {
@@ -149,6 +130,10 @@ export default class OrganizationInvitationListComponent extends Component<Organ
     );
   }
 
+  get setQueryParams() {
+    return Boolean(this.args.queryParams);
+  }
+
   get columns() {
     return (
       this.args.columns || [
@@ -180,19 +165,29 @@ export default class OrganizationInvitationListComponent extends Component<Organ
   }
 
   @action
-  handleNextPrevAction({ limit, offset }: PaginationProviderActionsArgs) {
-    const setQueryParams = Boolean(this.args.queryParams);
+  reloadInvites() {
+    this.fetchInvites.perform();
+  }
 
-    this.fetchInvites.perform(limit, offset, '', setQueryParams);
+  @action
+  handleNextPrevAction({ limit, offset }: PaginationProviderActionsArgs) {
+    if (this.setQueryParams) {
+      this.setRouteQueryParams(limit, offset);
+    }
+
+    this.fetchInvites.perform();
   }
 
   @action
   handleItemPerPageChange({ limit }: PaginationProviderActionsArgs) {
-    const setQueryParams = Boolean(this.args.queryParams);
+    if (this.setQueryParams) {
+      this.setRouteQueryParams(limit, 0);
+    }
 
-    this.fetchInvites.perform(limit, 0, '', setQueryParams);
+    this.fetchInvites.perform();
   }
 
+  @action
   setRouteQueryParams(limit = 10, offset = 0) {
     this.router.transitionTo({
       queryParams: {
@@ -202,48 +197,29 @@ export default class OrganizationInvitationListComponent extends Component<Organ
     });
   }
 
-  @action
-  handleReloadInvites() {
-    const setQueryParams = Boolean(this.args.queryParams);
+  fetchInvites = task({ drop: true }, async () => {
+    const q = this.extraQueryStrings.q ? this.extraQueryStrings.q : this.query;
 
-    this.fetchInvites.perform(this.limit, this.offset, '', setQueryParams);
-  }
+    try {
+      this.inviteResponse = await this.store.query(this.targetModel, {
+        limit: this.limit,
+        offset: this.offset,
+        ...this.extraQueryStrings,
+        q,
+      });
+    } catch (e) {
+      const err = e as AdapterError;
+      let errMsg = this.tPleaseTryAgain;
 
-  fetchInvites = task(
-    { drop: true },
-    async (
-      limit?: number,
-      offset?: number,
-      query = '',
-      setQueryParams = true
-    ) => {
-      if (setQueryParams) {
-        this.setRouteQueryParams(limit, offset);
+      if (err.errors && err.errors.length) {
+        errMsg = err.errors[0]?.detail || errMsg;
+      } else if (err.message) {
+        errMsg = err.message;
       }
 
-      const q = this.extraQueryStrings.q ? this.extraQueryStrings.q : query;
-
-      try {
-        this.inviteResponse = await this.store.query(this.targetModel, {
-          limit,
-          offset,
-          ...this.extraQueryStrings,
-          q,
-        });
-      } catch (e) {
-        const err = e as AdapterError;
-        let errMsg = this.tPleaseTryAgain;
-
-        if (err.errors && err.errors.length) {
-          errMsg = err.errors[0]?.detail || errMsg;
-        } else if (err.message) {
-          errMsg = err.message;
-        }
-
-        this.notify.error(errMsg);
-      }
+      this.notify.error(errMsg);
     }
-  );
+  });
 }
 
 declare module '@glint/environment-ember-loose/registry' {

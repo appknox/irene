@@ -59,6 +59,10 @@ module(
         return { ...app.toJSON(), app_metadata: app.app_metadata };
       });
 
+      this.server.get('v2/sk_app_versions/:id', (schema, req) => {
+        return schema.skAppVersions.find(req.params.id).toJSON();
+      });
+
       this.server.get('/v2/sk_app/:id/sk_app_version', (schema) => {
         const skAppVersions = schema.skAppVersions.all().models;
 

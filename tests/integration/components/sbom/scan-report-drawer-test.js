@@ -7,7 +7,6 @@ import { module, test } from 'qunit';
 
 import { SbomReportStatus } from 'irene/models/sbom-report';
 import Service from '@ember/service';
-import { tracked } from '@glimmer/tracking';
 
 class NotificationsStub extends Service {
   errorMsg = null;
@@ -25,10 +24,6 @@ class NotificationsStub extends Service {
   info(msg) {
     this.infoMsg = msg;
   }
-}
-
-class RealtimeStub extends Service {
-  @tracked SbomReportCounter = 0;
 }
 
 class WindowStub extends Service {
@@ -73,7 +68,6 @@ module('Integration | Component | sbom/scan-report-drawer', function (hooks) {
     });
 
     this.owner.register('service:notifications', NotificationsStub);
-    this.owner.register('service:realtime', RealtimeStub);
     this.owner.register('service:browser/window', WindowStub);
   });
 

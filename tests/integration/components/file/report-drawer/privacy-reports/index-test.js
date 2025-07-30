@@ -76,7 +76,6 @@ module(
       this.owner.register('service:browser/window', WindowStub);
 
       const store = this.owner.lookup('service:store');
-
       const window = this.owner.lookup('service:browser/window');
 
       window.localStorage.clear();

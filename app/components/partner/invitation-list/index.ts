@@ -1,4 +1,3 @@
-/* eslint-disable ember/no-observers */
 import Component from '@glimmer/component';
 import { action } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
@@ -38,33 +37,13 @@ export default class PartnerInvitationListComponent extends Component {
     super(owner, args);
 
     this.fetchPartnerRegistrationRequest.perform(this.limit, this.offset);
-
-    this.realtime.addObserver(
-      'RegistrationRequestCounter',
-      this,
-      this.registrationRequestDidChange
-    );
   }
 
-  willDestroy() {
-    super.willDestroy();
-
-    this.realtime.removeObserver(
-      'RegistrationRequestCounter',
-      this,
-      this.registrationRequestDidChange
-    );
-  }
-
-  async registrationRequestDidChange() {
-    if (
-      this.offset > 0 &&
-      this.partnerRegistrationRequestReponse?.length === 0
-    ) {
-      this.offset = 0;
-    }
-
-    await this.fetchPartnerRegistrationRequest.perform(this.limit, this.offset);
+  get reloadRegistrationRequestDependencies() {
+    return {
+      registrationRequestCounter: () =>
+        this.realtime.RegistrationRequestCounter,
+    };
   }
 
   get partnerRegistrationRequestList() {
@@ -109,6 +88,18 @@ export default class PartnerInvitationListComponent extends Component {
   @action
   onDelete(request: PartnerRegistrationRequestModel) {
     this.deleteInvite.perform(request);
+  }
+
+  @action
+  reloadRegistrationRequest() {
+    if (
+      this.offset > 0 &&
+      this.partnerRegistrationRequestReponse?.length === 0
+    ) {
+      this.offset = 0;
+    }
+
+    this.fetchPartnerRegistrationRequest.perform(this.limit, this.offset);
   }
 
   resendInvite = task(async (request: PartnerRegistrationRequestModel) => {

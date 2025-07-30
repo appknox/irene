@@ -1,9 +1,7 @@
-/* eslint-disable ember/no-observers */
 import Component from '@glimmer/component';
 import { service } from '@ember/service';
 import { waitForPromise } from '@ember/test-waiters';
 import { action } from '@ember/object';
-import { addObserver, removeObserver } from '@ember/object/observers';
 import { task } from 'ember-concurrency';
 import type IntlService from 'ember-intl/services/intl';
 
@@ -28,28 +26,13 @@ export default class FileReportDrawerPrivacyReportsItemComponent extends Compone
   @service('browser/window') declare window: Window;
   @service declare realtime: RealtimeService;
 
-  tPleaseTryAgain: string;
-
-  constructor(
-    owner: unknown,
-    args: FileReportDrawerPrivacyReportsItemSignature['Args']
-  ) {
-    super(owner, args);
-
-    this.tPleaseTryAgain = this.intl.t('pleaseTryAgain');
-
-    addObserver(
-      this.realtime,
-      'PrivacyReportCounter',
-      this,
-      this.observePrivacyReportCounter
-    );
+  // Dependencies for the reloadReports effect
+  get reloadReportsDependencies() {
+    return { privacyReportCounter: () => this.realtime.PrivacyReportCounter };
   }
 
-  willDestroy() {
-    super.willDestroy();
-
-    this.removePrivacyReportCounterObserver();
+  get tPleaseTryAgain() {
+    return this.intl.t('pleaseTryAgain');
   }
 
   get privacyReport() {
@@ -60,19 +43,6 @@ export default class FileReportDrawerPrivacyReportsItemComponent extends Compone
     return this.intl.t('privacyModule.downloadPdfSecondaryText', {
       password: this.privacyReport?.reportPassword || '',
     });
-  }
-
-  observePrivacyReportCounter() {
-    this.privacyReport?.reload();
-  }
-
-  removePrivacyReportCounterObserver() {
-    removeObserver(
-      this.realtime,
-      'PrivacyReportCounter',
-      this,
-      this.observePrivacyReportCounter
-    );
   }
 
   get isReportGenerating() {
@@ -96,6 +66,11 @@ export default class FileReportDrawerPrivacyReportsItemComponent extends Compone
   @action
   handleCopyError() {
     this.notify.error(this.tPleaseTryAgain);
+  }
+
+  @action
+  reloadReports() {
+    this.privacyReport?.reload();
   }
 
   handleDownloadReport = task(async () => {

@@ -1,9 +1,7 @@
-/* eslint-disable ember/no-observers */
 import Component from '@glimmer/component';
 import { action } from '@ember/object';
 import { service } from '@ember/service';
 import { task } from 'ember-concurrency';
-import { addObserver, removeObserver } from '@ember/object/observers';
 import { tracked } from '@glimmer/tracking';
 import { htmlSafe } from '@ember/template';
 import type Store from '@ember-data/store';
@@ -42,6 +40,7 @@ export default class StoreknoxInventoryDetailsUnscannedVersionTableActionsCompon
   @tracked showUploadInfoModal = false;
   @tracked versionFileIsAccessibleToUser = false;
   @tracked userCanAccessSubmission = false;
+  @tracked triggerReloadSkAppVersion = false;
 
   constructor(
     owner: unknown,
@@ -51,6 +50,13 @@ export default class StoreknoxInventoryDetailsUnscannedVersionTableActionsCompon
 
     this.fetchSkAppVersionFile.perform();
     this.resolveVersionSubmission.perform();
+  }
+
+  get reloadSkAppVersionDependencies() {
+    return {
+      submissionStatus: () => this.submissionStatus,
+      triggerReloadSkAppVersion: () => this.triggerReloadSkAppVersion,
+    };
   }
 
   get skAppVersion() {
@@ -237,6 +243,12 @@ export default class StoreknoxInventoryDetailsUnscannedVersionTableActionsCompon
     return this.isIOSApp || this.appIsArchived;
   }
 
+  @action reloadSkAppVersionOnSubmissionStatusChange() {
+    if (this.triggerReloadSkAppVersion || this.submission) {
+      this.reloadSkAppVersion();
+    }
+  }
+
   @action triggerInitiateUpload() {
     this.initiateUpload.perform();
   }
@@ -268,15 +280,6 @@ export default class StoreknoxInventoryDetailsUnscannedVersionTableActionsCompon
     await (await this.skAppVersion.get('skApp')).reload();
   });
 
-  @action trackSubmissionStatusChange() {
-    addObserver(
-      this.submission as SubmissionModel,
-      'status',
-      this,
-      this.reloadSkAppVersion
-    );
-  }
-
   initiateUpload = task(async () => {
     if (this.isIOSApp || this.appIsArchived) {
       return;
@@ -292,8 +295,8 @@ export default class StoreknoxInventoryDetailsUnscannedVersionTableActionsCompon
 
         this.userCanAccessSubmission = true;
         this.showAppUploadState = true;
+        this.triggerReloadSkAppVersion = true;
 
-        this.trackSubmissionStatusChange();
         this.closeUploadInfoModalIfOpen();
 
         return;
@@ -325,8 +328,7 @@ export default class StoreknoxInventoryDetailsUnscannedVersionTableActionsCompon
     try {
       this.submission = await submission;
       this.userCanAccessSubmission = true;
-
-      this.trackSubmissionStatusChange();
+      this.triggerReloadSkAppVersion = true;
     } catch (error) {
       const err = error as AdapterError;
       const userCannotAccessSubmission = err.errors?.[0]?.status === '404';
@@ -348,12 +350,4 @@ export default class StoreknoxInventoryDetailsUnscannedVersionTableActionsCompon
       this.versionFileIsAccessibleToUser = !userCannotAccessVersionFile;
     }
   });
-
-  willDestroy(): void {
-    super.willDestroy();
-
-    if (this.submission) {
-      removeObserver(this.submission, 'status', this, this.reloadSkAppVersion);
-    }
-  }
 }

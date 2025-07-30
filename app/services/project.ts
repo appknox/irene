@@ -1,15 +1,14 @@
-import Service from '@ember/service';
-import { inject as service } from '@ember/service';
+import Service, { service } from '@ember/service';
 import { task } from 'ember-concurrency';
-import Store from '@ember-data/store';
-import IntlService from 'ember-intl/services/intl';
-
-// eslint-disable-next-line ember/use-ember-data-rfc-395-imports
-import DS from 'ember-data';
-
-import ProjectModel from 'irene/models/project';
 import { tracked } from '@glimmer/tracking';
 import { action } from '@ember/object';
+import type Store from '@ember-data/store';
+import type IntlService from 'ember-intl/services/intl';
+
+// eslint-disable-next-line ember/use-ember-data-rfc-395-imports
+import type DS from 'ember-data';
+
+import type ProjectModel from 'irene/models/project';
 
 type ProjectQueryResponse = DS.AdapterPopulatedRecordArray<ProjectModel> & {
   meta?: { count: number };
@@ -95,18 +94,13 @@ export default class ProjectService extends Service {
         )) as ProjectQueryResponse;
       } catch (e) {
         const err = e as AdapterError;
-
-        let isRateLimitError = false;
         let errMsg = this.intl.t('pleaseTryAgain');
 
         const firstError = err?.errors?.[0];
+        const isRateLimitError = Number(firstError?.status) === 429;
 
-        if (firstError) {
-          isRateLimitError = Number(firstError.status) === 429;
-
-          if (firstError.detail) {
-            errMsg = firstError.detail;
-          }
+        if (firstError?.detail) {
+          errMsg = firstError.detail;
         }
 
         // Only show toast for non–rate-limit errors

@@ -92,9 +92,8 @@ declare module '@glint/environment-ember-loose/registry' {
 
     style: ModifierLike<{
       Args: {
-        Positional: [];
         Named: {
-          [key: string]: string | undefined;
+          [key: string]: string | undefined | unknown;
         };
       };
       Return: Array<string[]>;

@@ -32,9 +32,6 @@ module('Acceptance | account settings redirect', function (hooks) {
   hooks.beforeEach(async function () {
     await setupRequiredEndpoints(this.server);
 
-    this.owner.register('service:integration', IntegrationStub);
-    this.owner.register('service:websocket', WebsocketStub);
-
     this.server.get('/v2/mfa', () => {
       return {
         count: 0,
@@ -43,6 +40,9 @@ module('Acceptance | account settings redirect', function (hooks) {
         results: [],
       };
     });
+
+    this.owner.register('service:integration', IntegrationStub);
+    this.owner.register('service:websocket', WebsocketStub);
   });
 
   test('It redirects to authenticated.dashboard.account-settings route', async function (assert) {

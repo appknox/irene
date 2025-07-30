@@ -1,102 +1,107 @@
-{{#if @loading}}
-  <AkStack
-    data-test-privacyReport-loader
-    class='p-2'
-    @alignItems='center'
-    @justifyContent='center'
-  >
-    <AkLoader @size={{18}} />
-  </AkStack>
-{{else}}
-  <AkList::Item
-    data-test-privacyReport-reportlistItem
-    class='px-3 pt-3 pb-2'
-    as |li|
-  >
-    {{#if (or this.isReportGenerated this.isReportGenerating)}}
-      <li.leftIcon>
-        <AkSvg::PdfReport data-test-privacyReport-reportIcon />
-      </li.leftIcon>
+<UseEffect
+  @effect={{this.reloadReports}}
+  @dependencies={{this.reloadReportsDependencies}}
+>
+  {{#if @loading}}
+    <AkStack
+      data-test-privacyReport-loader
+      class='p-2'
+      @alignItems='center'
+      @justifyContent='center'
+    >
+      <AkLoader @size={{18}} />
+    </AkStack>
+  {{else}}
+    <AkList::Item
+      data-test-privacyReport-reportlistItem
+      class='px-3 pt-3 pb-2'
+      as |li|
+    >
+      {{#if (or this.isReportGenerated this.isReportGenerating)}}
+        <li.leftIcon>
+          <AkSvg::PdfReport data-test-privacyReport-reportIcon />
+        </li.leftIcon>
 
-      <AkStack @direction='column' @width='full' @spacing='0.5' class='pl-1'>
-        <AkTypography
-          data-test-privacyReport-reportPrimaryText
-          @variant='subtitle1'
-        >
-          {{t 'privacyModule.downloadPdfPrimaryText'}}
-        </AkTypography>
-
-        {{#if this.isReportGenerating}}
+        <AkStack @direction='column' @width='full' @spacing='0.5' class='pl-1'>
           <AkTypography
-            data-test-privacyReport-reportGeneratingText
-            @color='textSecondary'
+            data-test-privacyReport-reportPrimaryText
+            @variant='subtitle1'
           >
-            {{t 'generating'}}...
+            {{t 'privacyModule.downloadPdfPrimaryText'}}
           </AkTypography>
-        {{else}}
-          <AkStack @alignItems='center' @spacing='0.5'>
-            <AkTypography data-test-privacyReport-reportSecondaryText>
-              {{this.reportPasswordText}}
+
+          {{#if this.isReportGenerating}}
+            <AkTypography
+              data-test-privacyReport-reportGeneratingText
+              @color='textSecondary'
+            >
+              {{t 'generating'}}...
+            </AkTypography>
+          {{else}}
+            <AkStack @alignItems='center' @spacing='0.5'>
+              <AkTypography data-test-privacyReport-reportSecondaryText>
+                {{this.reportPasswordText}}
+              </AkTypography>
+
+              {{#if this.privacyReport.reportPassword}}
+                <AkClipboard
+                  @onSuccess={{this.handleCopySuccess}}
+                  @onError={{this.handleCopyError}}
+                  as |cb|
+                >
+                  <AkIconButton
+                    id={{cb.triggerId}}
+                    @size='small'
+                    data-clipboard-text={{this.privacyReport.reportPassword}}
+                    data-test-privacyReport-reportCopyBtn
+                  >
+                    <AkIcon @iconName='content-copy-outline' @color='primary' />
+                  </AkIconButton>
+                </AkClipboard>
+              {{/if}}
+            </AkStack>
+          {{/if}}
+        </AkStack>
+
+        <li.rightIcon>
+          {{#if this.isReportGenerating}}
+            <AkLoader
+              data-test-privacyReport-reportGeneratingLoader
+              @size={{18}}
+            />
+          {{else}}
+            <AkIconButton
+              {{on 'click' (perform this.handleDownloadReport)}}
+              disabled={{this.handleDownloadReport.isRunning}}
+              data-test-privacyReport-reportDownloadBtn
+            >
+              <AkIcon @iconName='download' />
+            </AkIconButton>
+          {{/if}}
+        </li.rightIcon>
+      {{else}}
+        <AkStack @direction='column' @spacing='2' @width='full'>
+          <AkStack
+            local-class='generate-container'
+            @direction='column'
+            @spacing='2'
+          >
+            <AkSvg::GenerateReport data-test-privacyReport-reportGenerateSvg />
+
+            <AkTypography data-test-privacyReport-reportGenerateDescription>
+              {{t 'privacyModule.generateReportDescription' htmlSafe=true}}
             </AkTypography>
 
-            {{#if this.privacyReport.reportPassword}}
-              <AkClipboard
-                @onSuccess={{this.handleCopySuccess}}
-                @onError={{this.handleCopyError}}
-                as |cb|
-              >
-                <AkIconButton
-                  id={{cb.triggerId}}
-                  @size='small'
-                  data-clipboard-text={{this.privacyReport.reportPassword}}
-                  data-test-privacyReport-reportCopyBtn
-                >
-                  <AkIcon @iconName='content-copy-outline' @color='primary' />
-                </AkIconButton>
-              </AkClipboard>
-            {{/if}}
+            <AkButton
+              {{on 'click' (perform this.handleGenerateReport)}}
+              @loading={{this.handleGenerateReport.isRunning}}
+              data-test-privacyReport-reportGenerateBtn
+            >
+              {{t 'generateReport'}}
+            </AkButton>
           </AkStack>
-        {{/if}}
-      </AkStack>
-
-      <li.rightIcon>
-        {{#if this.isReportGenerating}}
-          <AkLoader
-            data-test-privacyReport-reportGeneratingLoader
-            @size={{18}}
-          />
-        {{else}}
-          <AkIconButton
-            {{on 'click' (perform this.handleDownloadReport)}}
-            disabled={{this.handleDownloadReport.isRunning}}
-            data-test-privacyReport-reportDownloadBtn
-          >
-            <AkIcon @iconName='download' />
-          </AkIconButton>
-        {{/if}}
-      </li.rightIcon>
-    {{else}}
-      <AkStack @direction='column' @spacing='2' @width='full'>
-        <AkStack
-          local-class='generate-container'
-          @direction='column'
-          @spacing='2'
-        >
-          <AkSvg::GenerateReport data-test-privacyReport-reportGenerateSvg />
-
-          <AkTypography data-test-privacyReport-reportGenerateDescription>
-            {{t 'privacyModule.generateReportDescription' htmlSafe=true}}
-          </AkTypography>
-
-          <AkButton
-            {{on 'click' (perform this.handleGenerateReport)}}
-            @loading={{this.handleGenerateReport.isRunning}}
-            data-test-privacyReport-reportGenerateBtn
-          >
-            {{t 'generateReport'}}
-          </AkButton>
         </AkStack>
-      </AkStack>
-    {{/if}}
-  </AkList::Item>
-{{/if}}
+      {{/if}}
+    </AkList::Item>
+  {{/if}}
+</UseEffect>

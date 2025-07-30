@@ -1,3 +1,10 @@
+{{! Effect to notify user of status }}
+<UseEffect
+  @effect={{this.notifyUserOfStatus}}
+  @dependencies={{this.notifyUserOfStatusDependencies}}
+/>
+
+{{! Component Start }}
 <FileDetails::DynamicScan::DeviceWrapper
   @loadingScanStatus={{this.isFetchingDynamicScan}}
   @showStatusChip={{this.showStatusChip}}

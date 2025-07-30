@@ -1,24 +1,22 @@
-/* eslint-disable ember/no-observers */
 /* eslint-disable ember/use-ember-data-rfc-395-imports */
 import DS from 'ember-data';
-import { tracked } from 'tracked-built-ins';
+import Component from '@glimmer/component';
+import { action } from '@ember/object';
+import { service } from '@ember/service';
+import { task } from 'ember-concurrency';
+import { tracked } from '@glimmer/tracking';
+import { waitForPromise } from '@ember/test-waiters';
+import type Store from '@ember-data/store';
+import type IntlService from 'ember-intl/services/intl';
+
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
 
-import Component from '@glimmer/component';
-import { action } from '@ember/object';
-import Store from '@ember-data/store';
-import { inject as service } from '@ember/service';
-import { addObserver, removeObserver } from '@ember/object/observers';
-import { task } from 'ember-concurrency';
-import { waitForPromise } from '@ember/test-waiters';
-import IntlService from 'ember-intl/services/intl';
-
 import ENUMS from 'irene/enums';
 import parseError from 'irene/utils/parse-error';
-import RealtimeService from 'irene/services/realtime';
-import UploadAppService from 'irene/services/upload-app';
-import SubmissionModel from 'irene/models/submission';
+import type RealtimeService from 'irene/services/realtime';
+import type UploadAppService from 'irene/services/upload-app';
+import type SubmissionModel from 'irene/models/submission';
 
 dayjs.extend(relativeTime);
 
@@ -30,7 +28,7 @@ type SystemFileMetaData = {
 };
 
 export type SubmissionModelWithSystemFileData = SubmissionModel &
-  SystemFileMetaData['file'];
+  Omit<SystemFileMetaData, 'statusHumanized'>;
 
 const failedSubmissionStatus = [
   ENUMS.SUBMISSION_STATUS.DOWNLOAD_FAILED,
@@ -50,16 +48,11 @@ export default class UploadAppStatusComponent extends Component {
   @tracked submissions: DS.AdapterPopulatedRecordArray<SubmissionModel> | null =
     null;
 
-  constructor(owner: unknown, args: object) {
-    super(owner, args);
-
-    this.initialize();
-  }
-
-  willDestroy() {
-    super.willDestroy();
-
-    this.removeSubmissionCounterObserver();
+  // Dependencies for the reloadSubmissions effect
+  get reloadSubmissionsDependencies() {
+    return {
+      submissionCounter: () => this.realtime.SubmissionCounter,
+    };
   }
 
   get submissionList() {
@@ -192,28 +185,8 @@ export default class UploadAppStatusComponent extends Component {
     this.uploadApp.closeSubsPopover();
   }
 
-  @action initialize() {
-    addObserver(
-      this.realtime,
-      'SubmissionCounter',
-      this,
-      this.observeSubmissionCounter
-    );
-
-    this.getSubmissions.perform();
-  }
-
-  @action removeSubmissionCounterObserver() {
-    removeObserver(
-      this.realtime,
-      'SubmissionCounter',
-      this,
-      this.observeSubmissionCounter
-    );
-  }
-
   @action
-  observeSubmissionCounter() {
+  reloadSubmissions() {
     this.getSubmissions.perform();
   }
 
