@@ -49,10 +49,22 @@ jobs:
       fail-fast: false
       matrix:
         tests:
-          - type: Unit Tests
-            commandArgs: --file-path='/irene/tests/unit*.js' --split=3 --parallel=3 --load-balance
-          - type: Acceptance Tests
-            commandArgs: --file-path='/irene/tests/acceptance*.js' --split=3 --parallel=3 --load-balance
+          - type: Unit Tests - Part 1
+            commandArgs: --file-path='/irene/tests/unit*.js' --split=4 --partition=1 --parallel=4 --load-balance
+          - type: Unit Tests - Part 2
+            commandArgs: --file-path='/irene/tests/unit*.js' --split=4 --partition=2 --parallel=4 --load-balance
+          - type: Unit Tests - Part 3
+            commandArgs: --file-path='/irene/tests/unit*.js' --split=4 --partition=3 --parallel=4 --load-balance
+          - type: Unit Tests - Part 4
+            commandArgs: --file-path='/irene/tests/unit*.js' --split=4 --partition=4 --parallel=4 --load-balance
+          - type: Acceptance Tests - Part 1
+            commandArgs: --file-path='/irene/tests/acceptance*.js' --split=4 --partition=1 --parallel=4 --load-balance
+          - type: Acceptance Tests - Part 2
+            commandArgs: --file-path='/irene/tests/acceptance*.js' --split=4 --partition=2 --parallel=4 --load-balance
+          - type: Acceptance Tests - Part 3
+            commandArgs: --file-path='/irene/tests/acceptance*.js' --split=4 --partition=3 --parallel=4 --load-balance
+          - type: Acceptance Tests - Part 4
+            commandArgs: --file-path='/irene/tests/acceptance*.js' --split=4 --partition=4 --parallel=4 --load-balance
           - type: Integration Tests - Part 1
             commandArgs: --file-path='/irene/tests/integration*.js' --split=8 --partition=1 --parallel=12 --load-balance
           - type: Integration Tests - Part 2
