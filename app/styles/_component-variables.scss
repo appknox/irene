@@ -676,6 +676,12 @@ body {
     --neutral-grey-100
   );
 
+  // variables for organization/integrations/slack
+  --organization-integrations-slack-border-color: var(--border-color-1);
+  --organization-integrations-slack-border-radius: var(--border-radius);
+  --organization-integrations-slack-box-shadow: var(--box-shadow-4);
+  --organization-integrations-slack-background-main: var(--background-main);
+
   // variables for organization-name-header
   --organization-name-header-background-color: var(--background-main);
   --organization-name-header-border-color: var(--border-color-1);

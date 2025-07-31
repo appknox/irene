@@ -25,19 +25,12 @@ class NotificationsStub extends Service {
   }
 }
 
-class OrganizationMeStub extends Service {
-  org = {
-    is_owner: true,
-    is_admin: true,
-  };
-}
-
 // Get Analysis Risk
 const getAnalysisRisklabel = (risk) =>
   analysisRiskStatus([risk, ENUMS.ANALYSIS.COMPLETED, false]).label;
 
 module(
-  'Integration | Component | project-settings/integrations/splunk',
+  'Integration | Component | project-settings/integrations/slack',
   function (hooks) {
     setupRenderingTest(hooks);
     setupMirage(hooks);
@@ -47,22 +40,6 @@ module(
       // Server Mocks
       this.server.get('/v2/projects/:id', (schema, req) => {
         return schema.projects.find(req.params.id).toJSON();
-      });
-
-      this.server.createList('organization', 1);
-      await this.owner.lookup('service:organization').load();
-
-      this.owner.register('service:me', OrganizationMeStub);
-
-      const splunkIntegrationInfo = {
-        instance_url: 'sample-url2.com',
-        hec_token: 'abcd-1234',
-        api_token: 'ABCD-1234-EFGH',
-        vulnerability_index: 'index1',
-      };
-
-      this.server.get('/organizations/:id/splunk', () => {
-        return splunkIntegrationInfo;
       });
 
       // Services
@@ -75,6 +52,18 @@ module(
       const project = this.server.create('project');
       const normalizedProject = store.normalize('project', project.toJSON());
 
+      this.server.createList('organization', 1);
+      await this.owner.lookup('service:organization').load();
+
+      const slackIntegrationInfo = {
+        channel_id: 'C12345678',
+        api_token: 'xoxb-1234567890-0987654321-ABCDEF123456',
+      };
+
+      this.server.get('/organizations/:id/slack', () => {
+        return slackIntegrationInfo;
+      });
+
       this.setProperties({
         store,
         notifyService,
@@ -82,18 +71,18 @@ module(
       });
     });
 
-    test('it renders with no Splunk integration', async function (assert) {
-      this.server.get('/projects/:id/splunk', () => {
-        return new Response(400, {}, { detail: 'Splunk not integrated' });
+    test('it renders with no Slack integration', async function (assert) {
+      this.server.get('/projects/:id/slack', () => {
+        return new Response(400, {}, { detail: 'Slack not integrated' });
       });
 
       await render(
-        hbs`<ProjectSettings::Integrations::Splunk @project={{this.project}} />`
+        hbs`<ProjectSettings::Integrations::Slack @project={{this.project}} />`
       );
 
       assert
-        .dom('[data-test-org-integration-card-title="Splunk"]')
-        .hasText(t('splunk.title'));
+        .dom('[data-test-org-integration-card-title="Slack"]')
+        .hasText(t('slack.title'));
 
       assert.dom('[data-test-org-integration-card-logo]').exists();
 
@@ -109,12 +98,12 @@ module(
     });
 
     test('it opens and closes threshold config drawer', async function (assert) {
-      this.server.get('/projects/:id/splunk', () => {
+      this.server.get('/projects/:id/slack', () => {
         return new Response(400, {});
       });
 
       await render(
-        hbs`<ProjectSettings::Integrations::Splunk @project={{this.project}} />`
+        hbs`<ProjectSettings::Integrations::Slack @project={{this.project}} />`
       );
 
       assert
@@ -133,11 +122,11 @@ module(
 
       assert
         .dom('[data-test-prjSettings-integrations-configDrawer-title]')
-        .hasText(t('splunkIntegration'));
+        .hasText(t('slackIntegration'));
 
       assert
-        .dom('[data-test-prjSettings-integrations-splunk-configDrawer-note]')
-        .hasText(t('otherTemplates.selectSplunkRisk'));
+        .dom('[data-test-prjSettings-integrations-slack-configDrawer-note]')
+        .hasText(t('otherTemplates.selectSlackRisk'));
 
       assert
         .dom('[data-test-prjSettings-integrations-configDrawer-cancelBtn]')
@@ -163,22 +152,22 @@ module(
         ],
       ],
       async function (assert, [error, message]) {
-        this.server.get('/projects/:id/splunk', () => {
+        this.server.get('/projects/:id/slack', () => {
           return new Response(400, {});
         });
 
-        this.server.post('/projects/:id/splunk', () => {
+        this.server.post('/projects/:id/slack', () => {
           return new Response(400, {}, { ...error });
         });
 
         await render(
-          hbs`<ProjectSettings::Integrations::Splunk @project={{this.project}} />`
+          hbs`<ProjectSettings::Integrations::Slack @project={{this.project}} />`
         );
 
         await click('[data-test-org-integration-card-selectBtn]');
 
         assert
-          .dom(`[data-test-prjSettings-integrations-configDrawer-root]`)
+          .dom(`[data-test-prjSettings-integrations-configDrawer-root`)
           .exists();
 
         await click(
@@ -192,38 +181,38 @@ module(
     test('it saves the selected threshold when I select a valid threshold from the config drawer', async function (assert) {
       assert.expect(4);
 
-      this.server.get('/projects/:id/splunk', () => {
+      this.server.get('/projects/:id/slack', () => {
         return new Response(400, {});
       });
 
-      this.server.post('/projects/:id/splunk', (_, request) => {
+      this.server.post('/projects/:id/slack', (_, request) => {
         const requestBody = JSON.parse(request.requestBody);
 
-        // Create a Splunk Config for this request
-        const createdSplunkConfig = this.server.create(
-          'splunk-config',
+        // Create a Slack Config for this request
+        const createdSlackConfig = this.server.create(
+          'slack-config',
           requestBody
         );
 
-        this.set('createdSplunkConfig', createdSplunkConfig);
+        this.set('createdSlackConfig', createdSlackConfig);
 
         return new Response(201, {}, { id: request.params.id, ...requestBody });
       });
 
       await render(
-        hbs`<ProjectSettings::Integrations::Splunk @project={{this.project}} />`
+        hbs`<ProjectSettings::Integrations::Slack @project={{this.project}} />`
       );
 
       await click('[data-test-org-integration-card-selectBtn]');
 
       assert
         .dom(
-          '[data-test-prjSettings-integrations-splunk-configDrawer-thresholdTitle]'
+          '[data-test-prjSettings-integrations-slack-configDrawer-thresholdTitle]'
         )
         .hasText(t('threshold'));
 
       await clickTrigger(
-        '[data-test-prjSettings-integrations-splunk-configDrawer-thresholdList]'
+        '[data-test-prjSettings-integrations-slack-configDrawer-thresholdList]'
       );
 
       // Select second threshold in power select dropdown
@@ -238,75 +227,75 @@ module(
       await click('[data-test-org-integration-card-manageBtn]');
 
       // Created in the create request block
-      const createdSplunkConfig = this.createdSplunkConfig;
+      const createdSlackConfig = this.createdSlackConfig;
 
       assert
-        .dom('[data-test-prjSettings-integrations-splunk-riskHeaderText]')
+        .dom('[data-test-prjSettings-integrations-slack-riskHeaderText]')
         .hasText(t('threshold'));
 
       assert
-        .dom('[data-test-prjSettings-integrations-splunk-risk]')
-        .hasText(getAnalysisRisklabel(createdSplunkConfig.risk_threshold));
+        .dom('[data-test-prjSettings-integrations-slack-risk]')
+        .hasText(getAnalysisRisklabel(createdSlackConfig.risk_threshold));
 
-      assert.strictEqual(this.notifyService.successMsg, t('integratedSplunk'));
+      assert.strictEqual(this.notifyService.successMsg, t('slackIntegrated'));
     });
 
     test('it deletes selected risk threshold when delete trigger is clicked', async function (assert) {
       assert.expect(8);
 
-      const createdSplunkConfig = this.server.create('splunk-config');
+      const createdSlackConfig = this.server.create('slack-config');
 
-      this.server.get('/projects/:id/splunk', () => {
-        return new Response(201, {}, { ...createdSplunkConfig.toJSON() });
+      this.server.get('/projects/:id/slack', () => {
+        return new Response(201, {}, { ...createdSlackConfig.toJSON() });
       });
 
-      this.server.delete('/projects/:id/splunk', () => {
+      this.server.delete('/projects/:id/slack', () => {
         return new Response(200, {});
       });
 
       await render(
-        hbs`<ProjectSettings::Integrations::Splunk @project={{this.project}} />`
+        hbs`<ProjectSettings::Integrations::Slack @project={{this.project}} />`
       );
 
       await click('[data-test-org-integration-card-manageBtn]');
 
       assert
-        .dom('[data-test-prjSettings-integrations-splunk-riskHeaderText]')
+        .dom('[data-test-prjSettings-integrations-slack-riskHeaderText]')
         .hasText(t('threshold'));
 
       assert
-        .dom('[data-test-prjSettings-integrations-splunk-risk]')
-        .hasText(getAnalysisRisklabel(createdSplunkConfig.risk_threshold));
+        .dom('[data-test-prjSettings-integrations-slack-risk]')
+        .hasText(getAnalysisRisklabel(createdSlackConfig.risk_threshold));
 
       await click(
         '[data-test-prjSettings-integrations-configDrawer-deleteBtn]'
       );
 
       assert
-        .dom('[data-test-prjSettings-integrations-splunkProject-confirmDelete]')
-        .containsText(t('confirmBox.removeSplunk'));
+        .dom('[data-test-prjSettings-integrations-slackProject-confirmDelete]')
+        .containsText(t('confirmBox.removeSlack'));
 
       assert
         .dom(
-          '[data-test-prjSettings-integrations-splunkProject-confirmDeleteBtn]'
+          '[data-test-prjSettings-integrations-slackProject-confirmDeleteBtn]'
         )
         .containsText(t('yesDelete'));
 
       await click(
-        '[data-test-prjSettings-integrations-splunkProject-confirmDeleteBtn]'
+        '[data-test-prjSettings-integrations-slackProject-confirmDeleteBtn]'
       );
 
       assert.strictEqual(
         this.notifyService.successMsg,
-        t('splunk.riskThresholdRemoved')
+        t('slack.riskThresholdRemoved')
       );
 
       assert
-        .dom('[data-test-prjSettings-integrations-splunk-riskHeaderText]')
+        .dom('[data-test-prjSettings-integrations-slack-riskHeaderText]')
         .doesNotExist();
 
       assert
-        .dom('[data-test-prjSettings-integrations-splunk-risk]')
+        .dom('[data-test-prjSettings-integrations-slack-risk]')
         .doesNotExist();
 
       await click(
@@ -322,44 +311,44 @@ module(
     test('it edits the project when a new threshold is selected', async function (assert) {
       assert.expect(5);
 
-      const createdSplunkConfig = this.server.create('splunk-config', {
+      const createdSlackConfig = this.server.create('slack-config', {
         project: this.project.id,
         risk_threshold: ENUMS.RISK.HIGH,
       });
 
-      this.server.get('/projects/:id/splunk', () => {
-        return new Response(201, {}, { ...createdSplunkConfig.toJSON() });
+      this.server.get('/projects/:id/slack', () => {
+        return new Response(201, {}, { ...createdSlackConfig.toJSON() });
       });
 
-      this.server.post('/projects/:id/splunk', (schema, req) => {
+      this.server.post('/projects/:id/slack', (schema, req) => {
         const requestBody = JSON.parse(req.requestBody);
 
         this.set('requestBody', requestBody);
 
-        return schema.splunkConfigs
+        return schema.slackConfigs
           .where((prj) => prj.project === req.params.id)
           .models[0].update(requestBody)
           .toJSON();
       });
 
       await render(
-        hbs`<ProjectSettings::Integrations::Splunk @project={{this.project}} />`
+        hbs`<ProjectSettings::Integrations::Slack @project={{this.project}} />`
       );
 
       await click('[data-test-org-integration-card-manageBtn]');
 
       assert
-        .dom('[data-test-prjSettings-integrations-splunk-riskHeaderText]')
+        .dom('[data-test-prjSettings-integrations-slack-riskHeaderText]')
         .hasText(t('threshold'));
 
       assert
-        .dom('[data-test-prjSettings-integrations-splunk-risk]')
-        .hasText(getAnalysisRisklabel(createdSplunkConfig.risk_threshold));
+        .dom('[data-test-prjSettings-integrations-slack-risk]')
+        .hasText(getAnalysisRisklabel(createdSlackConfig.risk_threshold));
 
-      await click('[data-test-prjSettings-integrations-splunk-editBtn]');
+      await click('[data-test-prjSettings-integrations-slack-editBtn]');
 
       await clickTrigger(
-        '[data-test-prjSettings-integrations-splunk-configDrawer-thresholdList]'
+        '[data-test-prjSettings-integrations-slack-configDrawer-thresholdList]'
       );
 
       // Select first (LOW) threshold in power select dropdown
@@ -374,17 +363,17 @@ module(
 
       assert.strictEqual(
         this.notifyService.successMsg,
-        t('splunk.riskThresholdUpdated')
+        t('slack.riskThresholdUpdated')
       );
 
       await click('[data-test-org-integration-card-manageBtn]');
 
       assert
-        .dom('[data-test-prjSettings-integrations-splunk-riskHeaderText]')
+        .dom('[data-test-prjSettings-integrations-slack-riskHeaderText]')
         .hasText(t('threshold'));
 
       assert
-        .dom('[data-test-prjSettings-integrations-splunk-risk]')
+        .dom('[data-test-prjSettings-integrations-slack-risk]')
         .hasText(getAnalysisRisklabel(this.requestBody.risk_threshold));
     });
   }

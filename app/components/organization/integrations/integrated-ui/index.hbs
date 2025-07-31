@@ -1,59 +1,73 @@
 <AkStack
-  @spacing='2'
-  @direction='column'
+  @justifyContent='space-between'
   local-class='bordered-box'
   ...attributes
 >
-  <div local-class='integration-logo-container'>
-    {{#if @loading}}
-      <AkSkeleton @width='40px' @height='40px' />
-    {{else}}
-      <img
-        data-test-orgIntegrations-integratedUI-logo
-        src={{@imageSource}}
-        alt={{@imageAlt}}
-      />
-    {{/if}}
-  </div>
-
-  <AkStack
-    @alignItems='center'
-    @justifyContent='space-between'
-    local-class='integration-account-container'
-  >
-    <div class='mr-2'>
+  <AkStack @direction='column' @spacing='2'>
+    <div local-class='integration-logo-container'>
       {{#if @loading}}
-        <AkSkeleton @width='190px' @height='19px' />
-
-        <AkSkeleton @width='90px' @height='19px' class='mt-1' />
+        <AkSkeleton @width='40px' @height='40px' />
       {{else}}
-        <AkStack @direction='column' @spacing='1'>
-          <AkStack @direction='column' {{style gap='0.4em'}}>
-            <AkTypography @variant='subtitle2'>
-              {{t 'instanceURL'}}
-            </AkTypography>
-            <AkTypography
-              @color='textSecondary'
-              data-test-orgIntegrations-integratedUI-hostURL
-            >
-              {{@hostURL}}
-            </AkTypography>
-          </AkStack>
-
-          <AkStack @direction='column' {{style gap='0.4em'}}>
-            <AkTypography @variant='subtitle2'>
-              {{@propertyTitle}}
-            </AkTypography>
-
-            <AkTypography
-              @color='textSecondary'
-              data-test-orgIntegrations-integratedUI-property
-            >
-              {{@property}}
-            </AkTypography>
-          </AkStack>
-        </AkStack>
+        <img
+          data-test-orgIntegrations-integratedUI-logo
+          src={{@imageSource}}
+          alt={{@imageAlt}}
+        />
       {{/if}}
     </div>
+
+    <AkStack
+      @alignItems='center'
+      @justifyContent='space-between'
+      local-class='integration-account-container'
+    >
+      <div class='mr-2'>
+        {{#if @loading}}
+          <AkSkeleton @width='190px' @height='19px' />
+
+          <AkSkeleton @width='90px' @height='19px' class='mt-1' />
+        {{else}}
+          <AkStack @direction='column' @spacing='1'>
+            {{#if @hostURL}}
+              <AkStack @direction='column' {{style gap='0.4em'}}>
+                <AkTypography @variant='subtitle2'>
+                  {{t 'instanceURL'}}
+                </AkTypography>
+
+                <AkTypography
+                  @color='textSecondary'
+                  data-test-orgIntegrations-integratedUI-hostURL
+                >
+                  {{@hostURL}}
+                </AkTypography>
+              </AkStack>
+            {{/if}}
+
+            <AkStack @direction='column' {{style gap='0.4em'}}>
+              <AkTypography @variant='subtitle2'>
+                {{@propertyTitle}}
+              </AkTypography>
+
+              <AkTypography
+                @color='textSecondary'
+                data-test-orgIntegrations-integratedUI-property
+              >
+                {{@property}}
+              </AkTypography>
+            </AkStack>
+          </AkStack>
+        {{/if}}
+      </div>
+    </AkStack>
   </AkStack>
+
+  {{#if @showEditButton}}
+    <AkIconButton
+      data-test-orgIntegrations-integratedUI-slack-editBtn
+      @variant='outlined'
+      {{on 'click' this.onEditClick}}
+    >
+      <AkIcon @iconName='edit' />
+    </AkIconButton>
+  {{/if}}
 </AkStack>

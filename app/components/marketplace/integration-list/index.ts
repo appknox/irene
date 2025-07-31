@@ -34,10 +34,11 @@ export default class MarketplaceIntegrationListComponent extends Component {
         link: 'authenticated.dashboard.organization-settings.integrations',
       },
       {
-        title: this.intl.t('slack'),
-        description: this.intl.t('comingSoon'),
+        title: this.intl.t('slack.title'),
+        description:
+          this.intl.t('integrateAppknoxTo') + this.intl.t('slack.title'),
         logo: '../images/slack-icon.png',
-        link: '',
+        link: 'authenticated.dashboard.organization-settings.integrations',
       },
     ];
   }
