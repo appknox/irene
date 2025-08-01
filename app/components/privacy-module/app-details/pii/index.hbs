@@ -229,51 +229,54 @@
               />
             </AkStack>
 
-            {{!-- {{#if dataItem.urls}}
+            {{#if dataItem.url}}
               <AkStack
-                @width='full'
                 @direction='column'
                 @spacing='1'
-                local-class='pii-details-api-urls-section'
-                class='py-2 px-3'
+                local-class='pii-details-api-urls-section url-section-width'
+                class='py-2 px-3 mb-2 mx-3'
               >
-
                 <AkStack @spacing='1'>
                   <AkTypography
                     @fontWeight='bold'
                     {{style fontSize='0.857rem'}}
                   >
-                    API URL’s
+                    {{t 'privacyModule.piiApiUrl'}}
                   </AkTypography>
-
-                  <AkIcon @iconName='help' @size='small' />
                 </AkStack>
 
-                {{#each dataItem.urls as |url|}}
-                  <AkStack @alignItems='center' @spacing='1'>
-                    <AkTypography @underline='always'>{{url}}</AkTypography>
+                <AkStack @alignItems='center' @spacing='1' @width='full'>
+                  <AkTypography
+                    @tag='a'
+                    href={{dataItem.url}}
+                    target='_blank'
+                    @underline='always'
+                    @noWrap={{true}}
+                  >
+                    {{dataItem.url}}
+                  </AkTypography>
 
-                    <AkClipboard
-                      @onSuccess={{this.handleCopySuccess}}
-                      @onError={{this.handleCopyError}}
-                      as |ac|
+                  <AkClipboard
+                    @onSuccess={{this.handleCopySuccess}}
+                    @onError={{this.handleCopyError}}
+                    as |ac|
+                  >
+                    <AkIconButton
+                      data-clipboard-text={{dataItem.url}}
+                      id={{ac.triggerId}}
+                      @size='small'
                     >
-                      <AkIconButton
-                        data-clipboard-text={{url}}
-                        id={{ac.triggerId}}
+                      <AkIcon
+                        @iconName='content-copy'
                         @size='small'
-                      >
-                        <AkIcon
-                          @iconName='content-copy'
-                          @size='small'
-                          @color='textSecondary'
-                        />
-                      </AkIconButton>
-                    </AkClipboard>
-                  </AkStack>
-                {{/each}}
+                        @color='textSecondary'
+                        @variant='outlined'
+                      />
+                    </AkIconButton>
+                  </AkClipboard>
+                </AkStack>
               </AkStack>
-            {{/if}} --}}
+            {{/if}}
 
             <AkDivider />
           {{/each}}
@@ -299,6 +302,53 @@
             @variant='semi-filled'
           />
         </AkStack>
+
+        {{#if this.selectedPiiData.url}}
+          <AkStack
+            @width='full'
+            @direction='column'
+            @spacing='1'
+            local-class='pii-details-api-urls-section'
+            class='py-2 px-3'
+          >
+            <AkStack @spacing='1'>
+              <AkTypography @fontWeight='bold' {{style fontSize='0.857rem'}}>
+                {{t 'privacyModule.piiApiUrl'}}
+              </AkTypography>
+            </AkStack>
+
+            <AkStack @alignItems='center' @spacing='1' @width='full'>
+              <AkTypography
+                @tag='a'
+                href={{this.selectedPiiData.url}}
+                target='_blank'
+                @underline='always'
+                @noWrap={{true}}
+              >
+                {{this.selectedPiiData.url}}
+              </AkTypography>
+
+              <AkClipboard
+                @onSuccess={{this.handleCopySuccess}}
+                @onError={{this.handleCopyError}}
+                as |ac|
+              >
+                <AkIconButton
+                  data-clipboard-text={{this.selectedPiiData.url}}
+                  id={{ac.triggerId}}
+                  @size='small'
+                >
+                  <AkIcon
+                    @iconName='content-copy'
+                    @size='small'
+                    @color='textSecondary'
+                    @variant='outlined'
+                  />
+                </AkIconButton>
+              </AkClipboard>
+            </AkStack>
+          </AkStack>
+        {{/if}}
       {{/if}}
     </AkStack>
   </AkStack>
