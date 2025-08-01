@@ -1,6 +1,9 @@
 import Component from '@glimmer/component';
-import { inject as service } from '@ember/service';
-import IntlService from 'ember-intl/services/intl';
+import { service } from '@ember/service';
+import { htmlSafe } from '@ember/template';
+import type IntlService from 'ember-intl/services/intl';
+
+import constants from '../plugin-list/constants';
 
 export default class MarketplaceIntegrationListComponent extends Component {
   @service declare intl: IntlService;
@@ -39,6 +42,15 @@ export default class MarketplaceIntegrationListComponent extends Component {
           this.intl.t('integrateAppknoxTo') + this.intl.t('slack.title'),
         logo: '../images/slack-icon.png',
         link: 'authenticated.dashboard.organization-settings.integrations',
+      },
+      {
+        title: this.intl.t('armorcode'),
+        description: this.intl.t('viewIntegrationInstructions'),
+        logo: '../images/armorcode-icon.png',
+        link: '',
+        published: false,
+        modalHeading: this.intl.t('integrationSteps'),
+        instructions: htmlSafe(constants.armorcodeInstructions),
       },
     ];
   }

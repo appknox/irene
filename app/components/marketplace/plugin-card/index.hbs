@@ -30,7 +30,7 @@
 {{#if this.showInstructionsModal}}
   <AkModal
     @showHeader={{true}}
-    @headerTitle={{t 'integrateAppknoxToCICDPipeline'}}
+    @headerTitle={{this.modalHeading}}
     @onClose={{this.closeInstructionsModal}}
   >
     <div local-class='marketplace-modal-content-container'>
