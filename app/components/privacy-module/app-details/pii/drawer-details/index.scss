@@ -1,0 +1,18 @@
+.pii-details-drawer-content {
+  margin: 1.5em;
+  width: 640px;
+  border: 1px solid var(--privacy-module-pii-drawer-border-color);
+}
+
+.pii-multiple-data {
+  border: 1px solid var(--privacy-module-pii-drawer-border-color);
+}
+
+.pii-details-api-urls-section {
+  border: 1px solid var(--privacy-module-pii-drawer-border-color);
+  background-color: var(--privacy-module-pii-drawer-url-bg-color);
+
+  &.url-section-width {
+    width: calc(100% - 3em);
+  }
+}

@@ -1,0 +1,10 @@
+.unread-mark {
+  min-width: 10px;
+  height: 10px;
+  background-color: var(--privacy-module-unread-mark-background);
+  border-radius: 10px;
+
+  &.highlight {
+    background-color: var(--privacy-module-unread-mark-highlight-background);
+  }
+}

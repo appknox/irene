@@ -25,6 +25,7 @@ export interface AkTabsItemSignature {
     default: [];
     tabIcon: [];
     badge: [];
+    addon: [];
   };
 }
 

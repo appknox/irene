@@ -1,7 +1,10 @@
 <AkStack
   @direction='column'
   @width='full'
-  local-class='privacy-module-app-details-header'
+  local-class='privacy-module-app-details-header {{if
+    this.noteAvailable
+    "note-available"
+  }}'
   data-test-privacy-appDetails-header
 >
   <AkBreadcrumbs::AutoTrail class='pb-3' />
@@ -53,7 +56,26 @@
               @badgeCount={{item.badgeCount}}
               @indicatorVariant='shadow'
             >
-              {{item.label}}
+              <:addon>
+                {{#if item.isBeta}}
+                  <AkChip
+                    @variant='outlined'
+                    @size='small'
+                    @label={{t 'beta'}}
+                    local-class='beta-chip {{this.getChipClass
+                      item.activeRoutes
+                    }}'
+                  />
+                {{/if}}
+              </:addon>
+
+              <:default>
+                {{#if item.hasUpdate}}
+                  <PrivacyModule::UnreadMark @highlight={{true}} class='mr-1' />
+                {{/if}}
+
+                {{item.label}}
+              </:default>
             </Akt.tabItem>
           {{/each}}
         </AkTabs>

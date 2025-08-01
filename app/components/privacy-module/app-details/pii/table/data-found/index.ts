@@ -26,6 +26,10 @@ export default class PrivacyModuleAppDetailsPiiTableDataFoundComponent extends C
 
     return `+${number} more`;
   }
+
+  get highlight() {
+    return this.args.data.highlight;
+  }
 }
 
 declare module '@glint/environment-ember-loose/registry' {

@@ -60,6 +60,7 @@ module('Integration | Component | privacy/app-list', function (hooks) {
         previous: null,
         results: records.map((record) => ({
           ...record.attrs,
+          highlight: false,
           project: record.project?.id,
           latest_file: record.latest_file?.id,
         })),
@@ -134,6 +135,13 @@ module('Integration | Component | privacy/app-list', function (hooks) {
     assert
       .dom('[data-test-privacy-scanStatus]', policyAppContentRows[3])
       .hasAnyText();
+
+    assert
+      .dom(
+        '[data-test-privacy-module-unread-mark="read"]',
+        policyAppContentRows[1]
+      )
+      .exists();
   });
 
   test.each(
@@ -308,5 +316,38 @@ module('Integration | Component | privacy/app-list', function (hooks) {
       .dom('[data-test-privacyModule-status-desc]')
       .exists()
       .hasText(t('privacyModule.appListEmptyDescription'));
+  });
+
+  test('it shows unread when highlight true', async function (assert) {
+    this.server.get('/v2/privacy_project', (schema) => {
+      let projects = schema.privacyProjects.all().models;
+
+      return {
+        count: projects.length,
+        next: null,
+        previous: null,
+        results: projects.map((t) => ({
+          ...t.attrs,
+          highlight: true,
+          project: t.project?.id,
+          latest_file: t.latest_file?.id,
+        })),
+      };
+    });
+
+    await render(
+      hbs(`<PrivacyModule::AppList @queryParams={{this.queryParams}} />`)
+    );
+
+    const policyAppContentRows = findAll(
+      '[data-test-privacyModule-appListTable-row]'
+    );
+
+    assert
+      .dom(
+        '[data-test-privacy-module-unread-mark="unread"]',
+        policyAppContentRows[1]
+      )
+      .exists();
   });
 });

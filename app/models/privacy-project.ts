@@ -18,6 +18,9 @@ export default class PrivacyProjectModel extends Model {
   @attr('number')
   declare latestFilePrivacyAnalysisStatus: number;
 
+  @attr('boolean')
+  declare highlight: boolean;
+
   @attr('date')
   declare lastScannedOn: Date;
 

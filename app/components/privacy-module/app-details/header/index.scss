@@ -4,6 +4,10 @@
   top: -0.5em;
   z-index: 100;
   background-color: var(--privacy-module-app-details-header-bg-color);
+
+  &.note-available {
+    top: 34px;
+  }
 }
 
 .warning-error-wrapper {
@@ -12,5 +16,21 @@
 
   .warning-icon-wrapper {
     background-color: var(--privacy-module-app-details-header-warning-icon-bg);
+  }
+}
+
+.beta-chip {
+  margin-left: 0.7em;
+  height: 20px;
+
+  &.beta-chip-inactive {
+    background-color: var(--privacy-module-tabs-neutral-background);
+    color: var(--privacy-module-tabs-text-color-secondary);
+  }
+
+  &.beta-chip-active {
+    border-color: var(--privacy-module-tabs-beta-tag-bg);
+    background-color: var(--privacy-module-tabs-beta-tag-bg);
+    color: var(--privacy-module-tabs-beta-tag-color) !important;
   }
 }

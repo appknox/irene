@@ -1,7 +1,11 @@
 {{page-title (t 'appDetails')}}
 
-<PrivacyModule::AppDetails::Header @app={{@model.privacyProject}} />
+<PrivacyModule::AppDetails::Note />
 
-{{#if @model.scanCompleted}}
-  {{outlet}}
-{{/if}}
+<PageWrapper>
+  <PrivacyModule::AppDetails::Header @app={{@model.privacyProject}} />
+
+  {{#if @model.scanCompleted}}
+    {{outlet}}
+  {{/if}}
+</PageWrapper>

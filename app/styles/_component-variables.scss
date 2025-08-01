@@ -786,26 +786,52 @@ body {
   );
 
   // variables for sbom/scan-details/component-list/type-header
-  --sbom-scanDetails-componentList-typeHeader-background-color: var(--background-main);
+  --sbom-scanDetails-componentList-typeHeader-background-color: var(
+    --background-main
+  );
   --sbom-scanDetails-componentList-typeHeader-box-shadow: var(--box-shadow-7);
-  --sbom-scanDetails-componentList-typeHeader-border-radius: var(--box-shadow-7);
-  --sbom-scanDetails-componentList-typeHeader-filter-option-hover-background-color: var(--neutral-grey-200);
-  --sbom-scanDetails-componentList-typeHeader-filter-option-clear-filter-background-color: var(--neutral-grey-200);
-  --sbom-scanDetails-componentList-typeHeader-filter-header-background-color: var(--neutral-grey-100);
+  --sbom-scanDetails-componentList-typeHeader-border-radius: var(
+    --box-shadow-7
+  );
+  --sbom-scanDetails-componentList-typeHeader-filter-option-hover-background-color: var(
+    --neutral-grey-200
+  );
+  --sbom-scanDetails-componentList-typeHeader-filter-option-clear-filter-background-color: var(
+    --neutral-grey-200
+  );
+  --sbom-scanDetails-componentList-typeHeader-filter-header-background-color: var(
+    --neutral-grey-100
+  );
 
   // variables for sbom/scan-details/component-list/type-header
-  --sbom-scanDetails-componentList-dependencyTypeHeader-background-color: var(--background-main);
-  --sbom-scanDetails-componentList-dependencyTypeHeader-box-shadow: var(--box-shadow-7);
-  --sbom-scanDetails-componentList-dependencyTypeHeader-border-radius: var(--box-shadow-7);
-  --sbom-scanDetails-componentList-dependencyTypeHeader-filter-option-hover-background-color: var(--neutral-grey-200);
-  --sbom-scanDetails-componentList-dependencyTypeHeader-filter-option-clear-filter-background-color: var(--neutral-grey-200);
-  --sbom-scanDetails-componentList-dependencyTypeHeader-filter-header-background-color: var(--neutral-grey-100);
+  --sbom-scanDetails-componentList-dependencyTypeHeader-background-color: var(
+    --background-main
+  );
+  --sbom-scanDetails-componentList-dependencyTypeHeader-box-shadow: var(
+    --box-shadow-7
+  );
+  --sbom-scanDetails-componentList-dependencyTypeHeader-border-radius: var(
+    --box-shadow-7
+  );
+  --sbom-scanDetails-componentList-dependencyTypeHeader-filter-option-hover-background-color: var(
+    --neutral-grey-200
+  );
+  --sbom-scanDetails-componentList-dependencyTypeHeader-filter-option-clear-filter-background-color: var(
+    --neutral-grey-200
+  );
+  --sbom-scanDetails-componentList-dependencyTypeHeader-filter-header-background-color: var(
+    --neutral-grey-100
+  );
 
   // variables for sbom/scan-details/overview
   --sbom-scan-details-overview-border-radius: var(--border-radius);
   --sbom-scan-details-overview-border-color: var(--border-color-1);
-  --sbom-scan-details-overview-new-feature-background-color: var(--new-feature-ai-bg-color);
-  --sbom-scan-details-overview-new-feature-text-color: var(--new-feature-ai-color);
+  --sbom-scan-details-overview-new-feature-background-color: var(
+    --new-feature-ai-bg-color
+  );
+  --sbom-scan-details-overview-new-feature-text-color: var(
+    --new-feature-ai-color
+  );
 
   // variables for sbom/scan-details/skeleton-loader
   --sbom-scan-details-skeleton-loader-summary-border-radius: var(
@@ -2414,12 +2440,26 @@ body {
   --privacy-module-app-details-header-warning-bg-color: var(--background-main);
   --privacy-module-app-details-header-warning-border: var(--border-color-1);
   --privacy-module-app-details-header-warning-icon-bg: var(--error-light);
+  --privacy-module-tabs-neutral-background: var(--neutral-grey-200);
+  --privacy-module-tabs-text-color-secondary: var(--text-secondary);
+  --privacy-module-tabs-beta-tag-bg: var(--storeknox-beta-tag-bg);
+  --privacy-module-tabs-beta-tag-color: var(--storeknox-beta-tag-color);
+
+  //variables for privacy-module/app-details/note
+  --privacy-module-app-details-note-bg-color: var(--common-white);
+  --privacy-module-app-details-note-icon-color: var(--common-white);
+  --privacy-module-app-details-note-warning-color: var(--error-main);
+  --privacy-module-app-details-note-success-color: var(--success-main);
 
   //variables for privacy-module/app-details/pii
   --privacy-module-pii-border-color: var(--divider);
   --privacy-module-pii-bg-color: var(--common-white);
-  --privacy-module-pii-url-bg-color: var(--neutral-grey-100);
+  --privacy-module-pii-url-bg-color: var(--background-light);
   --privacy-module-pii-drawer-border-color: var(--neutral-grey-100);
+
+  //variables for privacy-module/app-details/pii/drawer-details
+  --privacy-module-pii-drawer-border-color: var(--divider);
+  --privacy-module-pii-drawer-url-bg-color: var(--background-light);
 
   //variables for privacy-module/app-details/trackers
   --privacy-module-trackers-row-bg-color: var(--background-main);
@@ -2456,6 +2496,10 @@ body {
 
   // variables for privacy-module/status
   --privacy-module-status-background: var(--background-main);
+
+  // variables for privacy-module/unread-mark
+  --privacy-module-unread-mark-background: var(--neutral-grey-200);
+  --privacy-module-unread-mark-highlight-background: var(--success-main);
 
   // variables for ai-reporting/generate-loader
   --ai-reporting-generate-loader-background-color: var(--background-main);
