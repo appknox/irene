@@ -1,0 +1,22 @@
+.note {
+  margin: -7px -7px 7px -7px;
+  background: var(--privacy-module-app-details-note-bg-color);
+  width: auto;
+  position: sticky;
+  top: -7px;
+  z-index: 100;
+
+  .icon-container {
+    display: flex;
+    padding: 10px 15px;
+    color: var(--privacy-module-app-details-note-icon-color);
+
+    &.warning-color {
+      background-color: var(--privacy-module-app-details-note-warning-color);
+    }
+
+    &.success-color {
+      background-color: var(--privacy-module-app-details-note-success-color);
+    }
+  }
+}
