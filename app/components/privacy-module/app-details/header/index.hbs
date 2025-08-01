@@ -1,7 +1,10 @@
 <AkStack
   @direction='column'
   @width='full'
-  local-class='privacy-module-app-details-header'
+  local-class='privacy-module-app-details-header {{if
+    this.noteAvailable
+    "note-available"
+  }}'
   data-test-privacy-appDetails-header
 >
   <AkBreadcrumbs::AutoTrail class='pb-3' />
@@ -53,6 +56,13 @@
               @badgeCount={{item.badgeCount}}
               @indicatorVariant='shadow'
             >
+              {{#if item.hasUpdate}}
+                <PrivacyModule::UnreadMark
+                  @highlight={{true}}
+                  @marginRight={{true}}
+                />
+              {{/if}}
+
               {{item.label}}
             </Akt.tabItem>
           {{/each}}

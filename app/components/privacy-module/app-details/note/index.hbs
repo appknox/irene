@@ -1,0 +1,21 @@
+{{#if this.banner}}
+  <AkStack
+    @justifyContent='space-between'
+    @alignItems='center'
+    local-class='note'
+  >
+    <AkStack @direction='row' @alignItems='center'>
+      <div local-class='icon-container {{this.banner.color}}'>
+        <AkIcon @iconName={{this.banner.icon}} />
+      </div>
+
+      <AkTypography class='ml-2'>
+        {{this.banner.message}}
+      </AkTypography>
+    </AkStack>
+
+    <AkIconButton @size='small' {{on 'click' this.banner.onClose}} class='mr-2'>
+      <AkIcon @iconName='close' />
+    </AkIconButton>
+  </AkStack>
+{{/if}}

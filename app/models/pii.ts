@@ -3,7 +3,7 @@ import Model, { attr } from '@ember-data/model';
 export interface PiiMetaData {
   value: string;
   source: string;
-  urls: string[];
+  url: string;
 }
 
 export default class PiiModel extends Model {
@@ -15,6 +15,9 @@ export default class PiiModel extends Model {
 
   @attr()
   declare piiData: PiiMetaData[];
+
+  @attr('boolean')
+  declare highlight: boolean;
 }
 
 declare module 'ember-data/types/registries/model' {
