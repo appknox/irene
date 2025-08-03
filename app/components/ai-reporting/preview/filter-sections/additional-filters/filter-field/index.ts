@@ -115,6 +115,7 @@ export default class AiReportingPreviewFilterSectionsAdditionalFiltersFilterFiel
       case ENUMS.AI_REPORTING_FIELD_TYPE.INTEGER:
       case ENUMS.AI_REPORTING_FIELD_TYPE.NUMBER:
       case ENUMS.AI_REPORTING_FIELD_TYPE.FLOAT:
+      case ENUMS.AI_REPORTING_FIELD_TYPE.LIST:
         return AI_REPORT_FILTER_TEXT_TYPE_COMPONENT;
 
       case ENUMS.AI_REPORTING_FIELD_TYPE.DATETIME:

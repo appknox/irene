@@ -129,19 +129,10 @@ export default class AiReportingPreview extends Component<AiReportingPreviewSign
   }
 
   @action
-  handleFilterDrawerApply(
-    allColumnsMap: Map<string, FilterColumn>,
-    additionalFilters: AdditionalFilter[] = []
-  ) {
-    this.allColumnsMap = allColumnsMap;
-    this.additionalFilters = additionalFilters;
-
-    this.previewReportRequest.perform(false, this.limit, 0);
-  }
-
-  @action
   handleFilterByColumnDrawerApply(allColumnsMap: Map<string, FilterColumn>) {
     this.allColumnsMap = allColumnsMap;
+
+    this.previewReportRequest.perform(false, this.limit, 0);
   }
 
   @action
@@ -227,7 +218,11 @@ export default class AiReportingPreview extends Component<AiReportingPreviewSign
         this.reportPreview = await reportRequest.previewReport(
           limit,
           offset,
-          this.additionalFilters
+          this.additionalFilters,
+          this.selectedColumns.map((column) => ({
+            field: column.field,
+            label: column.name,
+          }))
         );
 
         if (this.reportPreview?.data.length === 0) {

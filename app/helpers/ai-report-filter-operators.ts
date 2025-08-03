@@ -6,7 +6,7 @@ export function aiReportFilterOperators(params: [PreviewFilterField]) {
   const filter = params[0];
 
   // FIELD TYPES
-  const { DATETIME, INTEGER, FLOAT, NUMBER, STRING, BOOLEAN } =
+  const { DATETIME, INTEGER, FLOAT, NUMBER, STRING, BOOLEAN, LIST } =
     ENUMS.AI_REPORTING_FIELD_TYPE;
 
   // OPERATORS
@@ -26,6 +26,7 @@ export function aiReportFilterOperators(params: [PreviewFilterField]) {
     STARTSWITH,
     ENDSWITH,
     RANGE,
+    LIST_CONTAINS,
   } = ENUMS.AI_REPORTING_FILTER_OPERATOR;
 
   // FILTER DETAILS
@@ -59,6 +60,9 @@ export function aiReportFilterOperators(params: [PreviewFilterField]) {
 
     case DATETIME:
       return [...baseOperators, RANGE];
+
+    case LIST:
+      return [LIST_CONTAINS];
   }
 
   // Default to the base operators -> BOOLEAN

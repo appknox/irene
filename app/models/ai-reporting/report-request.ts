@@ -123,7 +123,8 @@ export default class AiReportingReportRequestModel extends Model {
   async previewReport(
     limit: number,
     offset: number,
-    additionalFilters?: AdditionalFilter[]
+    additionalFilters?: AdditionalFilter[],
+    columns?: { label: string; field: string }[]
   ) {
     const adapter = this.store.adapterFor('ai-reporting/report-request');
 
@@ -131,7 +132,8 @@ export default class AiReportingReportRequestModel extends Model {
       this.id,
       limit,
       offset,
-      additionalFilters
+      additionalFilters,
+      columns
     );
   }
 

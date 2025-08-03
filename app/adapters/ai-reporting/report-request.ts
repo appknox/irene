@@ -20,12 +20,14 @@ export default class AiReportingReportRequestAdapter extends CommonDRFAdapter {
     id: string,
     limit: number,
     offset: number,
-    additionalFilters?: AdditionalFilter[]
+    additionalFilters?: AdditionalFilter[],
+    columns?: { label: string; field: string }[]
   ) {
     const baseUrl = this.buildURL('ai-reporting/report-request', id);
 
     const data = {
       ...(additionalFilters ? { additional_filters: additionalFilters } : {}),
+      ...(columns ? { columns } : {}),
       limit,
       offset,
     };

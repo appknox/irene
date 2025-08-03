@@ -34,10 +34,11 @@ export default class AiReportingPreviewFilterSectionsAdditionalFiltersTextTypeCo
     return Array.isArray(value) ? value.join(',') : value;
   }
 
-  get isInOperator() {
+  get isInOrListContainsOperator() {
     return [
       ENUMS.AI_REPORTING_FILTER_OPERATOR.IN,
       ENUMS.AI_REPORTING_FILTER_OPERATOR.NOT_IN,
+      ENUMS.AI_REPORTING_FILTER_OPERATOR.LIST_CONTAINS,
     ].includes(this.args.operator);
   }
 
@@ -47,7 +48,9 @@ export default class AiReportingPreviewFilterSectionsAdditionalFiltersTextTypeCo
     this.value = value;
 
     const valueToUpdate =
-      this.isInOperator && value.length > 0 ? value.split(',') : value;
+      this.isInOrListContainsOperator && value.length > 0
+        ? value.split(',')
+        : value;
 
     this.args.onAddUpdateFilter(this.args.operator, valueToUpdate);
   }

@@ -340,6 +340,7 @@ const ENUMS = {
     FLOAT: 'float',
     DATETIME: 'datetime',
     BOOLEAN: 'boolean',
+    LIST: 'list',
   },
 
   AI_REPORTING_FILTER_OPERATOR: {
@@ -352,6 +353,7 @@ const ENUMS = {
     IN: 'in',
     NOT_IN: 'not_in',
     CONTAINS: 'contains',
+    LIST_CONTAINS: 'contains',
     ICONTAINS: 'icontains',
     STARTSWITH: 'startswith',
     ENDSWITH: 'endswith',
