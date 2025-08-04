@@ -1,0 +1,15 @@
+<AkStack
+  data-test-ssoSettings-warningBanner
+  class='pb-2'
+  @spacing='1'
+  @alignItems='center'
+  @width='full'
+>
+  <AkIcon @iconName='warning' @color='warn' />
+
+  <AkTypography data-test-ssoSettings-warningBannerText @variant='body2'>
+    {{@text}}
+  </AkTypography>
+</AkStack>
+
+<AkDivider @color='dark' class='mb-2' />
