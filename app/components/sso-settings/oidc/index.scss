@@ -1,0 +1,6 @@
+.bordered-box {
+  border: 1px solid var(--sso-settings-oidc-border-color);
+  border-radius: var(--sso-settings-oidc-border-radius);
+  box-sizing: border-box;
+  padding: 1em;
+}

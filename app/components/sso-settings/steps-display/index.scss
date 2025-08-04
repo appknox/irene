@@ -1,0 +1,50 @@
+.steps {
+  margin-bottom: 2em;
+}
+
+.step {
+  position: relative;
+  margin-bottom: 40px;
+}
+
+.step:last-child {
+  margin-bottom: 0;
+}
+
+.step-number {
+  position: absolute;
+  top: 0;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background-color: var(--sso-settings-steps-display-common-white);
+  border: 2px solid var(--sso-settings-steps-display-grey);
+  color: var(--sso-settings-steps-display-black);
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1;
+}
+
+.step-number::after {
+  content: "";
+  position: absolute;
+  top: 30px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 2px;
+  height: 32px;
+  background-color: var(--sso-settings-steps-display-grey);
+  z-index: 0;
+}
+
+.step:last-child .step-number::after {
+  display: none;
+}
+
+.step-text {
+  margin-left: 40px;
+  position: relative;
+  top: 6px;
+}
