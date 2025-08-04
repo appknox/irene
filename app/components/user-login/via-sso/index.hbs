@@ -24,6 +24,7 @@
       <AkButton
         @type='submit'
         @loading={{@showSSOSpinner}}
+        @disabled={{@showSSOSpinner}}
         {{autofocus}}
         data-test-user-login-via-sso-forced-button
       >
@@ -58,6 +59,7 @@
   <AkButton
     {{on 'click' @ssologin}}
     @loading={{@showSSOSpinner}}
+    @disabled={{@showSSOSpinner}}
     class='w-full'
     data-test-user-login-via-sso-not-forced-button
   >
