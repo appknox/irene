@@ -27,7 +27,7 @@ export default class OrganizationService extends Service {
     const aiFeatures = this.selected?.aiFeatures;
 
     if (!aiFeatures) {
-      return false;
+      return true;
     }
 
     return Object.keys(aiFeatures).every(
