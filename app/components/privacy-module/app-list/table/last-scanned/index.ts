@@ -13,6 +13,10 @@ export default class PrivacyModuleAppListTableLastScannedComponent extends Compo
 
     return dayjs(scannedOn).format('DD MMM YYYY');
   }
+
+  get highlight() {
+    return this.args.privacyProject?.highlight;
+  }
 }
 
 declare module '@glint/environment-ember-loose/registry' {

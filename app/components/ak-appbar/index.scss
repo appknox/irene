@@ -8,7 +8,7 @@
 }
 
 .ak-appbar-color-inherit {
-  background: var(--ak-appbar-inherit-background);
+  background: var(--ak-appbar-inherit-background) !important;
   color: var(--ak-appbar-inherit-background-text-color);
   border-bottom: var(--ak-appbar-inherit-border-bottom);
 
@@ -24,19 +24,19 @@
 }
 
 .ak-appbar-color-default {
-  background: var(--ak-appbar-default-background);
+  background: var(--ak-appbar-default-background) !important;
   color: var(--ak-appbar-default-background-text-color);
   border-bottom: var(--ak-appbar-default-border-bottom);
 }
 
 .ak-appbar-color-light {
-  background: var(--ak-appbar-light-background);
+  background: var(--ak-appbar-light-background) !important;
   color: var(--ak-appbar-light-background-text-color);
   border-bottom: var(--ak-appbar-light-border-bottom);
 }
 
 .ak-appbar-color-dark {
-  background: var(--ak-appbar-dark-background);
+  background: var(--ak-appbar-dark-background) !important;
   color: var(--ak-appbar-dark-background-text-color);
   border-bottom: var(--ak-appbar-dark-border-bottom);
 

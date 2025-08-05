@@ -82,7 +82,10 @@ module('Integration | Component | privacy/pii', function (hooks) {
         count: pii.length,
         next: null,
         previous: null,
-        results: pii.map((t) => t.attrs),
+        results: pii.map((t) => ({
+          ...t.attrs,
+          highlight: false,
+        })),
       };
     });
 
@@ -156,6 +159,12 @@ module('Integration | Component | privacy/pii', function (hooks) {
     const allPiiDataValue = findAll('[data-test-privacyModule-pii-data-value]');
 
     assert.dom(allPiiDataValue[0]).hasText(expectedData);
+
+    assert.dom('[data-test-privacy-module-unread-mark="read"]').exists();
+
+    assert
+      .dom('[data-test-privacy-module-unread-mark="unread"]')
+      .doesNotExist();
   });
 
   test('it opens drawer and shows data', async function (assert) {
@@ -169,12 +178,21 @@ module('Integration | Component | privacy/pii', function (hooks) {
 
     const expectedData = this.pii[0].pii_data[0].value;
 
+    const expectedSource = this.pii[0].pii_data[0].source;
+
+    const expectedSourceText =
+      expectedSource === 'BINARY' ? t('appBinary') : t('api');
+
     const allPiiCategory = findAll('[data-test-privacyModule-pii-category]');
 
     await click(allPiiCategory[0]);
 
     const allDataFound = findAll(
       '[data-test-privacyModule-pii-drawer-data-found]'
+    );
+
+    const allSources = findAll(
+      '[data-test-privacyModule-pii-drawer-source-chip]'
     );
 
     assert
@@ -194,6 +212,8 @@ module('Integration | Component | privacy/pii', function (hooks) {
       .hasText(t('privacyModule.piiDataFound'));
 
     assert.dom(allDataFound[0]).hasText(expectedData);
+
+    assert.dom(allSources[0]).hasText(expectedSourceText);
   });
 
   test('it shows data even when feature is toggle off', async function (assert) {
@@ -343,5 +363,52 @@ module('Integration | Component | privacy/pii', function (hooks) {
     assert
       .dom('[data-test-privacyModule-pii-reupload-desc]')
       .hasText(t('privacyModule.piiReupload'));
+  });
+
+  test('it shows unread marker and goes off once read', async function (assert) {
+    this.server.get('/v2/pii_request/:requestId/pii_data', (schema) => {
+      let pii = schema.piis.all().models;
+      const firstPii = pii[0];
+
+      return {
+        count: pii.length,
+        next: null,
+        previous: null,
+        results: [
+          {
+            ...firstPii.attrs,
+            highlight: true,
+          },
+        ],
+      };
+    });
+
+    this.server.post('/v2/pii_request/:requestId/pii_data/mark_seen', () => {
+      return new Response(204);
+    });
+
+    await render(
+      hbs(
+        `<PrivacyModule::AppDetails::Pii @queryParams={{this.queryParams}} @file={{this.file}}/>`
+      )
+    );
+
+    assert.dom('[data-test-privacy-module-unread-mark="unread"]').exists();
+
+    assert.dom('[data-test-privacy-module-unread-mark="read"]').doesNotExist();
+
+    await click('[data-test-privacyModule-pii-category]');
+
+    assert
+      .dom('[data-test-privacyModule-pii-drawer-header]')
+      .hasText(t('privacyModule.piiDetails'));
+
+    await click('[data-test-privacyModule-pii-drawer-close]');
+
+    assert.dom('[data-test-privacy-module-unread-mark="read"]').exists();
+
+    assert
+      .dom('[data-test-privacy-module-unread-mark="unread"]')
+      .doesNotExist();
   });
 });

@@ -15,6 +15,16 @@ export interface PrivacyModuleAppDetailsHeaderSignature {
   };
 }
 
+type TabItem = {
+  id: string;
+  label: string;
+  badgeCount: number;
+  hasBadge: boolean;
+  route: string;
+  activeRoutes: string;
+  hasUpdate?: boolean;
+};
+
 export default class PrivacyModuleAppDetailsHeaderComponent extends Component<PrivacyModuleAppDetailsHeaderSignature> {
   @service declare privacyModule: PrivacyModuleService;
   @service declare intl: IntlService;
@@ -99,7 +109,7 @@ export default class PrivacyModuleAppDetailsHeaderComponent extends Component<Pr
     return this.app.latestFile.get('id');
   }
 
-  get tabItems() {
+  get tabItems(): TabItem[] {
     return [
       {
         id: 'trackers',
@@ -127,8 +137,28 @@ export default class PrivacyModuleAppDetailsHeaderComponent extends Component<Pr
         hasBadge: this.privacyModule.piiDataAvailable,
         route: 'authenticated.dashboard.privacy-module.app-details.pii',
         activeRoutes: 'authenticated.dashboard.privacy-module.app-details.pii',
+        hasUpdate: this.showPiiUpdated,
       },
-    ].filter(Boolean);
+    ].filter(Boolean) as TabItem[];
+  }
+
+  get showCompleteApiScanNote() {
+    return this.privacyModule.showCompleteApiScanNote;
+  }
+
+  get showPiiUpdated() {
+    return this.privacyModule.showPiiUpdated;
+  }
+
+  get showPiiUpdatedNote() {
+    return this.privacyModule.showPiiUpdatedNote;
+  }
+
+  get noteAvailable() {
+    return (
+      this.showCompleteApiScanNote ||
+      (this.showPiiUpdated && this.showPiiUpdatedNote)
+    );
   }
 
   willDestroy(): void {
