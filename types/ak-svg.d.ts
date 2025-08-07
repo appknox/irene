@@ -92,6 +92,7 @@ export enum AkSvgComponentInvocationByNames {
 }
 
 export enum AkSvgComponentInvocationByPaths {
+  'har-report',
   'json-report',
   'pdf-report',
   'xlsx-icon',

@@ -1,0 +1,57 @@
+<AkStack @width='full' @direction='column'>
+  <AkStack
+    @width='full'
+    @alignItems='center'
+    @justifyContent='space-between'
+    @spacing='1'
+    class='p-2'
+  >
+    <AkTypography
+      @color='textSecondary'
+      data-test-fileDetails-apiScan-capturedApi-title
+    >
+      {{t 'capturedApiListTitle'}}
+    </AkTypography>
+
+    <AkStack @spacing='2' @alignItems='center' @justifyContent='center'>
+      <AkButton {{on 'click' this.handleDownloadCapturedApis}}>
+        Download Captured APIs
+      </AkButton>
+
+      <FileDetails::ApiScan::CapturedApis::ApiDomainFilters @file={{@file}} />
+    </AkStack>
+  </AkStack>
+
+  <AkStack
+    @alignItems='center'
+    @spacing='1'
+    local-class='select-all-captured-api-cta'
+    class='w-full px-2 py-1'
+  >
+    <AkCheckbox
+      @disabled={{@selectAllCapturedApis.isRunning}}
+      @checked={{@allAPIsSelected}}
+      @onChange={{@handleSelectAllCapturedApis}}
+      data-test-fileDetails-apiScan-selectAllCapturedApis-checkbox
+    />
+
+    <AkTypography
+      @fontWeight='bold'
+      data-test-fileDetails-apiScan-selectAllCapturedApis-text
+    >
+      {{t 'selectAll'}}
+    </AkTypography>
+
+    {{#if @selectAllCapturedApis.isRunning}}
+      <AkLoader @size={{13}} class='ml-1' />
+    {{/if}}
+  </AkStack>
+</AkStack>
+
+{{! Download Drawer }}
+{{#if this.showCapturedApisDownloadDrawer}}
+  <FileDetails::ApiScan::CapturedApis::ApisDownloadDrawer
+    @file={{@file}}
+    @onClose={{this.handleClose}}
+  />
+{{/if}}

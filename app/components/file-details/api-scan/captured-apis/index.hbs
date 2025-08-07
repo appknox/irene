@@ -24,38 +24,12 @@
       as |pgc|
     >
       <div class='mb-1'>
-        <AkTypography
-          @color='textSecondary'
-          local-class='captured-api-title'
-          data-test-fileDetails-apiScan-capturedApi-title
-        >
-          {{t 'capturedApiListTitle'}}
-        </AkTypography>
-
-        <AkStack
-          @alignItems='center'
-          @spacing='1'
-          local-class='select-all-captured-api-cta'
-          class='w-full px-2 py-1'
-        >
-          <AkCheckbox
-            @disabled={{this.selectAllCapturedApis.isRunning}}
-            @checked={{this.allAPIsSelected}}
-            @onChange={{this.handleSelectAllCapturedApis}}
-            data-test-fileDetails-apiScan-selectAllCapturedApis-checkbox
-          />
-
-          <AkTypography
-            @fontWeight='bold'
-            data-test-fileDetails-apiScan-selectAllCapturedApis-text
-          >
-            {{t 'selectAll'}}
-          </AkTypography>
-
-          {{#if this.selectAllCapturedApis.isRunning}}
-            <AkLoader @size={{13}} class='ml-1' />
-          {{/if}}
-        </AkStack>
+        <FileDetails::ApiScan::CapturedApis::Header
+          @allAPIsSelected={{this.allAPIsSelected}}
+          @selectAllCapturedApis={{this.selectAllCapturedApis}}
+          @handleSelectAllCapturedApis={{this.handleSelectAllCapturedApis}}
+          @file={{@file}}
+        />
 
         <AkStack @direction='column' @spacing='1.5'>
           {{#each pgc.currentPageResults as |ca|}}

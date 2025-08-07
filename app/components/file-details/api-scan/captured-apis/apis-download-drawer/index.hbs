@@ -1,0 +1,31 @@
+<AkDrawer
+  @open={{true}}
+  @onClose={{@onClose}}
+  @anchor='right'
+  data-test-fileDetails-apiScan-capturedApis-downloadDrawer
+  as |dr|
+>
+  <div {{style width='430px'}}>
+    <AkAppbar @justifyContent='space-between' as |ab|>
+      <AkTypography
+        data-test-fileDetails-apiScan-capturedApis-downloadDrawer-title
+        @color='inherit'
+        @variant='h5'
+      >
+        APIs Captured
+      </AkTypography>
+
+      <AkIconButton
+        data-test-fileDetails-apiScan-capturedApis-downloadDrawer-closeBtn
+        {{on 'click' dr.closeHandler}}
+        class={{ab.classes.defaultIconBtn}}
+      >
+        <AkIcon @iconName='close' />
+      </AkIconButton>
+    </AkAppbar>
+
+    <FileDetails::ApiScan::CapturedApis::ApisDownloadDrawer::ReportList
+      @file={{@file}}
+    />
+  </div>
+</AkDrawer>

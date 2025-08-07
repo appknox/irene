@@ -1,0 +1,24 @@
+<AkStack local-class='app-details-container' @direction='column' @spacing='1.5'>
+  <AkStack @spacing='1.5'>
+    <Sbom::AppLogo @sbomProject={{@sbomProject}} />
+    <Sbom::AppPlatform @sbomProject={{@sbomProject}} @bordered={{true}} />
+  </AkStack>
+
+  <AkStack @direction='column' @spacing='0.5'>
+    <AkTypography data-test-sbomReportDrawer-appName @variant='h5'>
+      {{this.appName}}
+    </AkTypography>
+
+    <AkTypography
+      data-test-sbomReportDrawer-appPackageName
+      @variant='h6'
+      @color='textSecondary'
+    >
+      {{this.appPackageName}}
+    </AkTypography>
+  </AkStack>
+
+  <AkTypography data-test-sbomReportDrawer-description>
+    {{t 'sbomModule.sbomDownloadReportDescription'}}
+  </AkTypography>
+</AkStack>

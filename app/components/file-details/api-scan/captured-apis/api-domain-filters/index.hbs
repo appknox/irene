@@ -1,0 +1,31 @@
+<div {{style minWidth='180px'}}>
+  <AkSelect
+    @dropdownClass={{this.dropDownClass}}
+    @triggerClass={{this.triggerClass}}
+    @options={{this.apiDomainFilters}}
+    @selected={{this.selectedAPIUrlDomain}}
+    @loadingMessage={{concat (t 'loading') '...'}}
+    @onChange={{this.onSelectAPIUrlDomainChange}}
+    @labelTypographyFontWeight='regular'
+    @selectedItemComponent='file-details/api-scan/captured-apis/api-domain-filters/filter-selected-item'
+    @afterOptionsComponent='file-details/api-scan/captured-apis/api-domain-filters/after-options'
+    @beforeOptionsComponent='file-details/api-scan/captured-apis/api-domain-filters/before-option'
+    @optionTitle='Domain Filters'
+    @horizontalPosition='right'
+    @extra={{this.extra}}
+    data-test-fileDetails-apiScan-capturedApi-domainFilterSelect
+    as |option|
+  >
+    <AkStack @width='full' @alignItems='center'>
+      <AkCheckbox
+        @readonly={{true}}
+        @checked={{this.isDomainFilterSelected option}}
+        @onClick={{fn this.onSelectAPIUrlDomainChange option}}
+      />
+
+      <AkTypography @noWrap={{true}}>
+        {{option}}
+      </AkTypography>
+    </AkStack>
+  </AkSelect>
+</div>

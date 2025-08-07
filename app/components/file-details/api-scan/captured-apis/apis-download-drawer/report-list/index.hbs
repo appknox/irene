@@ -1,0 +1,64 @@
+{{#if this.fetchGeneratedCapturedApisReportFiles.isRunning}}
+  <AkStack
+    data-test-fileDetails-apiScan-capturedApis-downloadDrawer-reportList-loader
+    class='p-2'
+    @alignItems='center'
+    @justifyContent='center'
+  >
+    <AkLoader @size={{18}} />
+  </AkStack>
+{{else if (not this.showReportList)}}
+  <AkStack @direction='column' @spacing='2' @width='full' class='p-2'>
+    <AkTypography
+      @variant='body2'
+      @fontWeight='medium'
+      data-test-fileDetails-apiScan-capturedApis-downloadDrawer-reportList-emptyTextTitle
+    >
+      Kindly generate the reports. Here you able to download different types
+      files avaliable.
+    </AkTypography>
+
+    <AkStack local-class='generate-container' @direction='column' @spacing='2'>
+      <AkSvg::GenerateReport
+        data-test-fileDetails-apiScan-capturedApis-downloadDrawer-reportList-item-generateSvg
+      />
+
+      <AkTypography
+        data-test-fileDetails-apiScan-capturedApis-downloadDrawer-reportList-item-generateDescription
+      >
+        Please click on the Generate button to generate the Captured APIs
+        report.
+      </AkTypography>
+
+      <AkButton
+        @loading={{this.generateReport.isRunning}}
+        {{on 'click' (perform this.generateReport 'har')}}
+        data-test-fileDetails-apiScan-capturedApis-downloadDrawer-reportList-item-generateBtn
+      >
+        Generate Files
+      </AkButton>
+    </AkStack>
+  </AkStack>
+{{else}}
+  <AkStack @width='full' @direction='column' @spacing='2' class='p-2'>
+    <AkTypography
+      @variant='body2'
+      @fontWeight='medium'
+      data-test-fileDetails-apiScan-capturedApis-downloadDrawer-reportList-title
+    >
+      Here you able to download different types files avaliable.
+    </AkTypography>
+
+    <AkList
+      class='w-full'
+      data-test-fileDetails-apiScan-capturedApis-downloadDrawer-reportList
+    >
+      {{#each this.reportDetails as |details|}}
+        <FileDetails::ApiScan::CapturedApis::ApisDownloadDrawer::ReportList::Item
+          @reportDetails={{details}}
+          @file={{@file}}
+        />
+      {{/each}}
+    </AkList>
+  </AkStack>
+{{/if}}
