@@ -24,7 +24,7 @@ const playStoreUrl =
 const APP_DETAILS = [
   { type: 'apk', fixture: 'MFVA.apk' },
   { type: 'aab', fixture: 'MFVA.aab' },
-  { type: 'ipa', fixture: 'DVIA' },
+  { type: 'ipa', fixture: 'DVIA.ipa' },
   { type: 'apk', url: playStoreUrl },
 ];
 
