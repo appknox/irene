@@ -5,6 +5,7 @@ import NetworkActions from '../support/Actions/common/NetworkActions';
 
 import { API_ROUTES } from '../support/api.routes';
 import { APPLICATION_ROUTES } from '../support/application.routes';
+import { type MirageFactoryDefProps } from '../support/Mirage';
 
 // Grouped test Actions
 const loginActions = new LoginActions();
@@ -224,46 +225,58 @@ describe('Organization Teams', () => {
     // Add project to team
     cy.findByText(cyTranslate('addProject')).click();
 
-    cy.wait('@projectList', NETWORK_WAIT_OPTS);
+    cy.wait('@projectList', NETWORK_WAIT_OPTS)
+      .its('response.body')
+      .its('results')
+      .then((data: Array<MirageFactoryDefProps['project']>) => {
+        // Select first project to reduce flakiness
+        cy.wrap(data[0] ?? null).as('selectedProject');
+      });
 
-    cy.findAllByTestId('addProjectList-row')
-      .filter(':contains(' + TEST_DATA.projectName + ')')
-      .should('exist')
-      .as('projectRow');
+    cy.get<MirageFactoryDefProps['project']>('@selectedProject').then(
+      (project) => {
+        cy.findAllByTestId('addProjectList-row')
+          .filter(':contains(' + project?.package_name + ')')
+          .should('exist')
+          .as('projectRow');
 
-    // Find the checkbox within this row and check it
-    cy.get('@projectRow').within(() => {
-      cy.get('[data-test-checkbox]').check().should('be.checked');
-    });
+        // Find the checkbox within this row and check it
+        cy.get('@projectRow').within(() => {
+          cy.get('[data-test-checkbox]').check().should('be.checked');
+        });
 
-    cy.get('[data-test-teamDetailAction-actionBtn]')
-      .contains(cyTranslate('addProject'))
-      .should('exist')
-      .click();
+        cy.get('[data-test-teamDetailAction-actionBtn]')
+          .contains(cyTranslate('addProject'))
+          .should('exist')
+          .click();
 
-    cy.wait('@teamProject', NETWORK_WAIT_OPTS).then((interception) => {
-      // Store `projectId` for cleanup
-      cy.wrap(interception.response?.body?.id).as('projectId');
-    });
+        cy.wait('@teamProject', NETWORK_WAIT_OPTS).then((interception) => {
+          // Store `projectId` for cleanup
+          cy.wrap(interception.response?.body?.id).as('projectId');
+        });
 
-    cy.wait('@organizationTeams', NETWORK_WAIT_OPTS).then((interception) => {
-      // Store `teamId` and `orgId` for cleanup
-      cy.wrap(interception.response?.body?.id).as('teamId');
+        cy.wait('@organizationTeams', NETWORK_WAIT_OPTS).then(
+          (interception) => {
+            // Store `teamId` and `orgId` for cleanup
+            cy.wrap(interception.response?.body?.id).as('teamId');
 
-      cy.wrap(interception.response?.body?.organization).as('orgId');
-    });
+            cy.wrap(interception.response?.body?.organization).as('orgId');
+          }
+        );
 
-    cy.findByText(cyTranslate('teamProjectAdded'), ELEMENT_WAIT_OPTS).should(
-      'exist'
+        cy.findByText(
+          cyTranslate('teamProjectAdded'),
+          ELEMENT_WAIT_OPTS
+        ).should('exist');
+
+        cy.get('[data-test-teamdetailaction-titlebtn]').click();
+
+        cy.get('tr', ELEMENT_WAIT_OPTS)
+          .filter(':contains(' + project?.package_name + ')')
+          .should('exist')
+          .as('addedProjectRow');
+      }
     );
-
-    cy.get('[data-test-teamdetailaction-titlebtn]').click();
-
-    // Remove project from team
-    cy.get('tr', ELEMENT_WAIT_OPTS)
-      .filter(':contains(' + TEST_DATA.projectName + ')')
-      .should('exist')
-      .as('addedProjectRow');
 
     cy.get('@addedProjectRow').within(() => {
       cy.get('[data-test-teamProjectList-actionBtn]').click();

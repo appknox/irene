@@ -24,7 +24,7 @@ const playStoreUrl =
 const APP_DETAILS = [
   { type: 'apk', fixture: 'MFVA.apk' },
   { type: 'aab', fixture: 'MFVA.aab' },
-  { type: 'ipa', fixture: 'DVIA' },
+  { type: 'ipa', fixture: 'DVIA.ipa' },
   { type: 'apk', url: playStoreUrl },
 ];
 
@@ -283,7 +283,8 @@ describe('Upload App', () => {
       cy.findByText(cyTranslate('startNewScan')).should('exist');
 
       // Initiate apk upload from fixture
-      cy.fixture('apps/MFVA.apk', null).as('apkApplication');
+      // Using `readFile` to avoid caching issues (https://github.com/cypress-io/cypress/discussions/29069)
+      cy.readFile('cypress/fixtures/apps/MFVA.apk', null).as('apkApplication');
 
       // Test APK file upload via system
       uploadAppActions.selectAppViaSystem('@apkApplication');
