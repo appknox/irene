@@ -1,0 +1,51 @@
+<AkStack
+  @bgColor='white'
+  @direction='column'
+  @alignItems='flex-start'
+  local-class='apis-captured-container'
+  class='p-4'
+>
+  <AkSvg::ApisCapturedIllustration
+    local-class={{if
+      this.noApisCaptured
+      'apis-captured-illustration--grayscale'
+    }}
+  />
+
+  <AkStack @direction='column' class='mt-3'>
+    <AkTypography @variant='h6' @fontWeight='bold'>
+      30 API's has been captured
+    </AkTypography>
+
+    <AkTypography
+      @variant='body1'
+      @gutterBottom={{true}}
+      @color='textSecondary'
+    >
+      The data in the file contains cumulative data of all the DAST scan done so
+      far.
+    </AkTypography>
+  </AkStack>
+
+  <AkButton
+    @color='primary'
+    class='mt-1'
+    {{on 'click' this.handleDownloadCapturedApis}}
+  >
+    <:leftIcon>
+      <AkIcon @iconName='description' @variant='outlined' />
+    </:leftIcon>
+
+    <:default>
+      Download APIs
+    </:default>
+  </AkButton>
+</AkStack>
+
+{{! Download Drawer }}
+{{#if this.showCapturedApisDownloadDrawer}}
+  <FileDetails::DynamicScan::Results::ApisDownloadDrawer
+    @file={{@file}}
+    @onClose={{this.handleClose}}
+  />
+{{/if}}

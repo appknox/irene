@@ -89,9 +89,11 @@ export enum AkSvgComponentInvocationByNames {
   ScvUnsupported,
   ScvNotStarted,
   ScvErrored,
+  ApisCapturedIllustration,
 }
 
 export enum AkSvgComponentInvocationByPaths {
+  'har-report',
   'json-report',
   'pdf-report',
   'xlsx-icon',

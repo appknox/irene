@@ -47,6 +47,10 @@ export default class FileDetailsApiScanCapturedApisComponent extends Component<F
   @tracked capturedApiResponse: CapturedApiQueryResponse | null = null;
   @tracked limit = 10;
   @tracked offset = 0;
+  @tracked domainFilters: string[] = [];
+  @tracked selectedAPIUrlDomain: string[] = [];
+
+  fileEndpoint = `${ENV.endpoints['files']}/${this.args.file.id}`;
 
   constructor(
     owner: unknown,
@@ -55,6 +59,7 @@ export default class FileDetailsApiScanCapturedApisComponent extends Component<F
     super(owner, args);
 
     this.getAllAPIsSelectedStatus.perform();
+    this.fetchAPIScanDomainfilters.perform();
     this.setSelectedApiCount.perform();
     this.fetchCapturedApis.perform(this.limit, this.offset);
   }
@@ -78,11 +83,7 @@ export default class FileDetailsApiScanCapturedApisComponent extends Component<F
   }
 
   get modAllSelectedAPIsEndpoint() {
-    return [
-      ENV.endpoints['files'],
-      this.args.file.id,
-      'toggle_captured_apis',
-    ].join('/');
+    return `${this.fileEndpoint}/toggle_captured_apis`;
   }
 
   setFooterComponentDetails() {
@@ -119,16 +120,23 @@ export default class FileDetailsApiScanCapturedApisComponent extends Component<F
     this.selectAllCapturedApis.perform(checked);
   }
 
-  getSelectedApis = task(async () => {
-    const url = [
-      ENV.endpoints['files'],
-      this.args.file.id,
-      'capturedapis',
-    ].join('/');
+  @action
+  handleDomainFilterChange(domainFilters: string[]) {
+    this.selectedAPIUrlDomain = domainFilters;
+  }
+
+  @action
+  onDomainFilterApply() {
+    this.selectAllCapturedApis.perform(this.allAPIsSelected);
+  }
+
+  getSelectedApis = task(async (domainFilters: string[] = []) => {
+    const url = `${this.fileEndpoint}/capturedapis`;
 
     const queryParams = new URLSearchParams({
       fileId: this.args.file.id,
       is_active: 'true',
+      domains: domainFilters.join(','),
     }).toString();
 
     const fullUrl = `${url}?${queryParams}`;
@@ -181,16 +189,18 @@ export default class FileDetailsApiScanCapturedApisComponent extends Component<F
 
     try {
       await this.ajax.put(this.modAllSelectedAPIsEndpoint, {
-        data: { is_active: is_active },
+        data: {
+          is_active: is_active,
+          domains: this.selectedAPIUrlDomain,
+        },
         namespace: ENV.namespace_v2,
       });
 
       await this.fetchCapturedApis.perform(this.limit, this.offset);
-      await this.getAllAPIsSelectedStatus.perform();
 
       this.setSelectedApiCount.perform();
     } catch (err) {
-      this.notify.error(parseError(err, this.intl.t('tPleaseTryAgain')));
+      this.notify.error(parseError(err, this.intl.t('pleaseTryAgain')));
     } finally {
       this.showAPIListLoadingState = true;
     }
@@ -200,15 +210,23 @@ export default class FileDetailsApiScanCapturedApisComponent extends Component<F
     try {
       const allAPIsSelected = await this.ajax.request<{ is_active: boolean }>(
         this.modAllSelectedAPIsEndpoint,
-        {
-          namespace: ENV.namespace_v2,
-        }
+        { namespace: ENV.namespace_v2 }
       );
 
       this.allAPIsSelected = allAPIsSelected.is_active;
     } catch (err) {
-      this.notify.error(parseError(err, this.intl.t('tPleaseTryAgain')));
+      this.notify.error(parseError(err, this.intl.t('pleaseTryAgain')));
     }
+  });
+
+  fetchAPIScanDomainfilters = task(async () => {
+    const filtersListURL = `${this.fileEndpoint}/capturedapis_domains`;
+
+    const res = (await this.ajax.request(filtersListURL, {
+      namespace: ENV.namespace_v2,
+    })) as { domain_filter_list: string[] };
+
+    this.domainFilters = res.domain_filter_list;
   });
 
   fetchCapturedApis = task(async (limit: number, offset: number) => {
@@ -217,6 +235,7 @@ export default class FileDetailsApiScanCapturedApisComponent extends Component<F
         limit,
         offset,
         fileId: this.args.file.id,
+        domains: this.selectedAPIUrlDomain.join(','),
       })) as CapturedApiQueryResponse;
 
       // update for total count

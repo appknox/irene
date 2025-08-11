@@ -1,0 +1,24 @@
+<AkStack
+  @spacing='1'
+  @alignItems='center'
+  class='py-1 px-2'
+  local-class='after-options-container'
+>
+  <AkButton
+    @disabled={{not this.hasSelectedItems}}
+    @color='primary'
+    {{on 'click' this.handleApplyFilters}}
+  >
+    {{t 'apply'}}
+  </AkButton>
+
+  {{#if this.hasSelectedItems}}
+    <AkButton
+      @color='secondary'
+      {{on 'click' this.handleClearAll}}
+      local-class='unselect-all-button'
+    >
+      Unselect All
+    </AkButton>
+  {{/if}}
+</AkStack>

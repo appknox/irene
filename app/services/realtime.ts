@@ -23,4 +23,5 @@ export default class RealtimeService extends Service {
   @tracked ReportCounter = 0;
   @tracked SbomReportCounter = 0;
   @tracked PrivacyReportCounter = 0;
+  @tracked CapturedApisReportCounter = 0;
 }
