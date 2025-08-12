@@ -20,6 +20,7 @@ import type ConfigurationService from 'irene/services/configuration';
 import type SkOrganizationService from 'irene/services/sk-organization';
 import type WebsocketService from 'irene/services/websocket';
 import type UserModel from 'irene/models/user';
+import type LoggerService from 'irene/services/logger';
 
 export default class AuthenticatedRoute extends Route {
   @service declare session: any;
@@ -35,6 +36,7 @@ export default class AuthenticatedRoute extends Route {
   @service('organization') declare org: OrganizationService;
   @service declare configuration: ConfigurationService;
   @service declare skOrganization: SkOrganizationService;
+  @service declare logger: LoggerService;
 
   @service declare router: RouterService;
   @service('browser/window') declare window: Window;
@@ -62,9 +64,15 @@ export default class AuthenticatedRoute extends Route {
     await all([
       this.store.findAll('Vulnerability'),
       this.org.load(),
-      this.skOrganization.load(),
       this.configuration.getDashboardConfig(),
     ]);
+
+    // Gracefully load sk organization if it's enabled
+    try {
+      await this.skOrganization.load();
+    } catch (error) {
+      this.logger.info('No Storeknox Organization found');
+    }
 
     return await this.store.findRecord('user', userId);
   }
