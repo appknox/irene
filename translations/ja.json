@@ -1964,7 +1964,7 @@
     "actionDisabledDueToLockPeriod": "Action Disabled - Due to lock period",
     "archiveLockPeriodMessage": "There will be 6 months of lock-period to unarchive the app again.  Are you sure you want to archive <strong>\"{appTitle}\"</strong> app?",
     "unarchiveLockPeriodMessage": "Are you sure you want to unarchive <strong>\"{appTitle}\"</strong>?",
-    "archiveLockPeriodNote": "Note - You won't be able to archive the app until {date}.",
+    "archiveLockPeriodNote": "Note - You won't be able to unarchive the app until {date}.",
     "unarchive": "Unarchive",
     "archive": "Archive",
     "cannotUploadForArchivedApps": "Cannot initiate upload for archived apps.",
