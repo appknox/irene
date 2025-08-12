@@ -89,7 +89,8 @@ module('Acceptance | breadcrumbs/storeknox-inventory', function (hooks) {
       3,
       'withApprovedStatus',
       {
-        store_monitoring_status: ENUMS.SK_APP_MONITORING_STATUS.SCANNED,
+        store_monitoring_status:
+          ENUMS.SK_APP_MONITORING_STATUS.NO_ACTION_NEEDED,
       }
     );
 

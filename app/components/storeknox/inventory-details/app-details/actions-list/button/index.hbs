@@ -3,6 +3,7 @@
   @disabled={{@disabled}}
   @color={{if @needsAction 'primary'}}
   local-class='action-button-root 
+  {{if this.isArchived "archived"}}
   {{if @needsAction "needs-action"}} 
   {{if @featureInProgress "feature-in-progress"}}'
   ...attributes

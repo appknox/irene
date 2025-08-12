@@ -92,6 +92,19 @@ export default class SkAppAdapter extends CommonDRFAdapter {
 
     return (await this.ajax(url, 'POST')) as InitiateUploadResponse;
   }
+
+  async toggleArchiveStatus(skApp: SkAppModel) {
+    const isArchived = skApp.appStatus === ENUMS.SK_APP_STATUS.ARCHIVED;
+    const url = this.buildURL().concat(`/${skApp.id}/update_app_status`);
+
+    const data = {
+      app_status: isArchived
+        ? ENUMS.SK_APP_STATUS.ACTIVE
+        : ENUMS.SK_APP_STATUS.ARCHIVED,
+    };
+
+    return await this.ajax(url, 'PUT', { data });
+  }
 }
 
 declare module 'ember-data/types/registries/adapter' {

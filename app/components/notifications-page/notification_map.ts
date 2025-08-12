@@ -33,6 +33,7 @@ import { NfSystmFileUploadSuccessContext } from './messages/nf-systm-file-upload
 import { NfAutomatedDastCompletedContext } from './messages/nf-automated-dast-completed/context';
 import { NfAutomatedDastErroredContext } from './messages/nf-automated-dast-errored/context';
 import { NfAutomatedDastInProgressContext } from './messages/nf-automated-dast-in-progress/context';
+import { NfSkSubexpContext } from './messages/nf-sk-subexp/context';
 
 export const NotificationMap = {
   ERROR: {
@@ -110,6 +111,10 @@ export const NotificationMap = {
   NF_SK_NEWVERSN: {
     component: 'notifications-page/messages/nf-sk-newversn' as const,
     context: NfSkNewversnContext,
+  },
+  NF_SK_SUBEXP: {
+    component: 'notifications-page/messages/nf-sk-subexp' as const,
+    context: NfSkSubexpContext,
   },
   NF_AM_NEWVERSN: {
     component: 'notifications-page/messages/nf-am-newversn' as const,

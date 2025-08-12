@@ -1,0 +1,74 @@
+<AkDrawer
+  @open={{@open}}
+  @onClose={{@onClose}}
+  @anchor='right'
+  data-test-storeknoxInventoryDetails-archiveDrawer
+  as |dr|
+>
+  <AkAppbar @justifyContent='space-between' as |ab|>
+    <AkTypography
+      @variant='h5'
+      @color='inherit'
+      data-test-storeknoxInventoryDetails-archiveDrawerHeading
+    >
+      {{t 'confirmation'}}
+    </AkTypography>
+
+    <AkIconButton
+      class={{ab.classes.defaultIconBtn}}
+      {{on 'click' dr.closeHandler}}
+      data-test-storeknoxInventoryDetails-archiveDrawerCloseBtn
+    >
+      <AkIcon @iconName='close' />
+    </AkIconButton>
+  </AkAppbar>
+
+  <div local-class='confirm-drawer-container'>
+    <AkStack @direction='column' {{style padding='1.1429em 1.5em'}}>
+      <AkTypography
+        {{style
+          marginBottom=(if
+            this.drawerMessages.lockPeriodNote '1.5em !important' '0em'
+          )
+        }}
+        data-test-storeknoxInventoryDetails-archiveDrawerMessage
+      >
+        {{this.drawerMessages.lockPeriodMessage}}
+      </AkTypography>
+
+      {{#if this.drawerMessages.lockPeriodNote}}
+        <AkTypography data-test-storeknoxInventoryDetails-archiveDrawerNote>
+          {{this.drawerMessages.lockPeriodNote}}
+        </AkTypography>
+      {{/if}}
+    </AkStack>
+
+    <AkDivider @color='dark' />
+
+    <AkStack
+      @alignItems='center'
+      @spacing='1.5'
+      local-class='confirm-action-container'
+      class='p-2'
+    >
+      <AkButton
+        @loading={{this.doArchiveApp.isRunning}}
+        {{on 'click' this.confirmArchiveApp}}
+        data-test-storeknoxInventoryDetails-archiveDrawerConfirmBtn
+      >
+        {{t 'yes'}},
+        {{this.drawerMessages.confirmButtonText}}
+      </AkButton>
+
+      <AkButton
+        @variant='outlined'
+        @color='neutral'
+        @disabled={{this.doArchiveApp.isRunning}}
+        {{on 'click' dr.closeHandler}}
+        data-test-storeknoxInventoryDetails-archiveDrawerCancelBtn
+      >
+        {{t 'cancel'}}
+      </AkButton>
+    </AkStack>
+  </div>
+</AkDrawer>

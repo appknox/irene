@@ -1,8 +1,10 @@
 import Component from '@glimmer/component';
+import type SkInventoryAppModel from 'irene/models/sk-inventory-app';
 
 interface StoreknoxInventoryDetailsAppDetailsActionsListButtonSignature {
   Element: HTMLElement;
   Args: {
+    skInventoryApp?: SkInventoryAppModel;
     needsAction?: boolean;
     featureInProgress?: boolean;
     disabled?: boolean;
@@ -11,7 +13,11 @@ interface StoreknoxInventoryDetailsAppDetailsActionsListButtonSignature {
   };
 }
 
-export default class StoreknoxInventoryDetailsAppDetailsActionsListButtonComponent extends Component<StoreknoxInventoryDetailsAppDetailsActionsListButtonSignature> {}
+export default class StoreknoxInventoryDetailsAppDetailsActionsListButtonComponent extends Component<StoreknoxInventoryDetailsAppDetailsActionsListButtonSignature> {
+  get isArchived() {
+    return this.args.skInventoryApp?.isArchived;
+  }
+}
 
 declare module '@glint/environment-ember-loose/registry' {
   export default interface Registry {

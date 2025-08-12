@@ -181,6 +181,10 @@ export default class StoreknoxInventoryDetailsUnscannedVersionTableActionsCompon
     return this.skApp.get('isIos');
   }
 
+  get appIsArchived() {
+    return this.skApp.get('isArchived');
+  }
+
   get isScanned() {
     return this.skAppVersion.file.get('id') !== null;
   }
@@ -229,6 +233,10 @@ export default class StoreknoxInventoryDetailsUnscannedVersionTableActionsCompon
     return dayjs(this.submission?.createdOn).format('Do MMM YYYY');
   }
 
+  get disableInitiateUploadBtn() {
+    return this.isIOSApp || this.appIsArchived;
+  }
+
   @action triggerInitiateUpload() {
     this.initiateUpload.perform();
   }
@@ -270,7 +278,7 @@ export default class StoreknoxInventoryDetailsUnscannedVersionTableActionsCompon
   }
 
   initiateUpload = task(async () => {
-    if (this.isIOSApp) {
+    if (this.isIOSApp || this.appIsArchived) {
       return;
     }
 

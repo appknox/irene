@@ -108,6 +108,10 @@ export enum AkSvgComponentInvocationByPaths {
   'sm-indicator',
   'vapt-indicator',
   'security-indicator',
+  'sox-monitoring-stats-icons/disabled',
+  'sox-monitoring-stats-icons/initializing',
+  'sox-monitoring-stats-icons/action-needed',
+  'sox-monitoring-stats-icons/no-action-needed',
 }
 
 type AkSvgComponent = ComponentLike<{

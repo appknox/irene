@@ -1,6 +1,6 @@
 <AkTooltip
   @placement='bottom'
-  @disabled={{or @loading this.appIsDisabled}}
+  @disabled={{this.disableTooltip}}
   @arrow={{true}}
   @color='light'
 >
@@ -18,8 +18,8 @@
         class='mt-1'
         data-test-storeknoxInventory-appListTable-monitoringStatusTooltipText
       >
-        <strong>{{this.tooltipMessage}}</strong>
-        {{t 'storeknox.haveBeenDetected'}}
+        {{this.tooltipMessage}}
+        {{this.tooltipSuffix}}
       </AkTypography>
     </div>
   </:tooltipContent>
@@ -31,23 +31,16 @@
 
         <AkSkeleton @variant='rounded' @height='19px' @width='100px' />
       {{else}}
-        <AkIcon
-          @iconName={{this.monitoringStatusIconDetails.name}}
-          @color={{this.monitoringStatusIconDetails.color}}
-          @size='small'
-          data-test-storeknoxInventory-appListTable-monitoringStatusIcon
-        />
+        {{#let (component this.iconDetails.icon) as |Icon|}}
+          <Icon
+            data-test-storeknoxInventory-appListTable-monitoringStatusIcon='{{this.iconDetails.key}}'
+          />
+        {{/let}}
 
         <AkTypography
           data-test-storeknoxInventory-appListTable-monitoringStatusText
         >
-          {{#if this.appIsDisabled}}
-            {{t 'disabled'}}
-          {{else if this.needsAction}}
-            {{t 'storeknox.needsAction'}}
-          {{else}}
-            {{t 'storeknox.noActionNeeded'}}
-          {{/if}}
+          {{this.statusText}}
         </AkTypography>
       {{/if}}
     </AkStack>

@@ -1,5 +1,5 @@
 <AkStack @direction='column' @spacing='2' @width='full'>
-  {{#if @skInventoryApp.monitoringStatusIsPending}}
+  {{#if @skInventoryApp.monitoringPendingOrDisabled}}
     <Storeknox::InventoryDetails::AppDetails::MonitoringPendingInfo
       @skInventoryApp={{@skInventoryApp}}
     />

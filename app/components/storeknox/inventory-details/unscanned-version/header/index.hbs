@@ -1,7 +1,8 @@
 <AkStack @direction='column' @width='full'>
   <AkTabs
     local-class='storeknox-inventory-details-unscanned-version-header-tabs
-    {{if this.skInventoryApp.appIsNotAvailableOnAppknox "not-appknox"}}'
+    {{if this.skInventoryApp.appIsNotAvailableOnAppknox "not-appknox"}}
+    {{if this.skInventoryApp.isArchived "archived"}}'
     as |Akt|
   >
     {{#each this.tabItems as |item|}}

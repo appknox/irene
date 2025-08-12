@@ -1,0 +1,44 @@
+.status-filter {
+  width: 13.5em;
+
+  background-color: var(
+    --storeknox-inventory-app-list-table-monitoring-status-header-background-color
+  );
+
+  box-shadow: var(
+    --storeknox-inventory-app-list-table-monitoring-status-header-box-shadow
+  );
+
+  border-radius: var(
+    --storeknox-inventory-app-list-table-monitoring-status-header-border-radius
+  );
+
+  .filter-option:hover {
+    background-color: var(
+      --storeknox-inventory-app-list-table-monitoring-status-header-filter-option-hover-background-color
+    );
+  }
+
+  .clear-filter-section {
+    background-color: var(
+      --storeknox-inventory-app-list-table-monitoring-status-header-filter-option-clear-filter-background-color
+    );
+  }
+
+  .filter-header {
+    background-color: var(
+      --storeknox-inventory-app-list-table-monitoring-status-header-filter-header-background-color
+    );
+
+    padding: 0.5em 1em;
+
+    .filter-header-text {
+      text-transform: uppercase;
+      font-size: 0.825rem !important;
+    }
+  }
+}
+
+.cursor-pointer {
+  cursor: pointer;
+}

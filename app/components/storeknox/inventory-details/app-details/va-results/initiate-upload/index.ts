@@ -140,6 +140,18 @@ export default class StoreknoxInventoryDetailsAppDetailsVaResultsInitiateUploadC
       ? htmlSafe(this.submissionErrorMsg)
       : this.intl.t('storeknox.initiateUploadMessages.uploadInitiatedDesc');
   }
+
+  get disableInitiateUploadBtn() {
+    return (
+      this.args.initiateUploadIsInProgress ||
+      this.skInventoryApp?.isArchived ||
+      this.skInventoryApp?.isIos
+    );
+  }
+
+  get hideTooltipMessage() {
+    return !(this.skInventoryApp?.isIos || this.skInventoryApp?.isArchived);
+  }
 }
 
 declare module '@glint/environment-ember-loose/registry' {

@@ -2,6 +2,9 @@ import Component from '@glimmer/component';
 import { service } from '@ember/service';
 import { task } from 'ember-concurrency';
 import { action } from '@ember/object';
+import { tracked } from '@glimmer/tracking';
+import { waitForPromise } from '@ember/test-waiters';
+import dayjs from 'dayjs';
 import type IntlService from 'ember-intl/services/intl';
 import type RouterService from '@ember/routing/router-service';
 import type Store from '@ember-data/store';
@@ -10,6 +13,7 @@ import parseError from 'irene/utils/parse-error';
 import type SkInventoryAppModel from 'irene/models/sk-inventory-app';
 import type OrganizationService from 'irene/services/organization';
 import type MeService from 'irene/services/me';
+import type SkOrganizationService from 'irene/services/sk-organization';
 
 interface StoreknoxInventoryDetailsHeaderSignature {
   Args: {
@@ -23,17 +27,40 @@ export default class StoreknoxInventoryDetailsHeaderComponent extends Component<
   @service declare router: RouterService;
   @service declare intl: IntlService;
   @service declare me: MeService;
+
+  @service('sk-organization') declare skOrg: SkOrganizationService;
   @service('notifications') declare notify: NotificationService;
+
+  @tracked isArchiveAppDrawerOpen = false;
+  @tracked openToggleMonitoringDrawer = false;
+  @tracked monitoringChecked = false;
+
+  constructor(
+    owner: unknown,
+    args: StoreknoxInventoryDetailsHeaderSignature['Args']
+  ) {
+    super(owner, args);
+
+    this.monitoringChecked = args.skInventoryApp?.monitoringEnabled;
+  }
 
   get skInventoryApp() {
     return this.args.skInventoryApp;
   }
 
-  get canToggleMonitoring() {
+  get appHasLicense() {
+    return this.skInventoryApp?.hasLicense;
+  }
+
+  get isOwnerOrAdmin() {
     const isOwner = this.me.org?.is_owner;
     const isAdmin = this.me.org?.is_admin;
 
     return isOwner || isAdmin;
+  }
+
+  get canToggleMonitoring() {
+    return this.isOwnerOrAdmin;
   }
 
   get routeLocalName() {
@@ -105,26 +132,102 @@ export default class StoreknoxInventoryDetailsHeaderComponent extends Component<
     );
   }
 
+  get disableMonitoringTooltipText() {
+    return this.intl.t('storeknox.cannotPerformStatusToggleText');
+  }
+
   get activeRouteTagProps() {
     return this.routeTagList.find((t) => t.id === this.activeRouteTagId);
   }
 
-  @action onMonitoringActionToggle(_: Event, checked?: boolean) {
-    if (this.canToggleMonitoring) {
-      this.toggleSkInventoryAppMonitoring.perform(!!checked);
-    }
+  get archiveDateStringFromNow() {
+    return dayjs().add(6, 'month').format('MMM D, YYYY');
   }
 
-  toggleSkInventoryAppMonitoring = task(async (checked: boolean) => {
+  get appTitle() {
+    return this.skInventoryApp?.appMetadata.title;
+  }
+
+  get disableArchiving() {
+    return (
+      this.skInventoryApp?.isArchived && !this.skInventoryApp?.canUnarchive
+    );
+  }
+
+  get showArchivedAppsInfoTagDivider() {
+    return (
+      !this.skInventoryApp.isArchived ||
+      (this.skInventoryApp.isArchived && this.activeRouteTagProps)
+    );
+  }
+
+  get showArchiveButton() {
+    return this.isOwnerOrAdmin;
+  }
+
+  @action openArchiveAppDrawer() {
+    this.isArchiveAppDrawerOpen = true;
+  }
+
+  @action closeArchiveAppDrawer() {
+    this.isArchiveAppDrawerOpen = false;
+  }
+
+  @action closeToggleMonitoringDrawer() {
+    this.openToggleMonitoringDrawer = false;
+  }
+
+  @action async onMonitoringActionToggle(_: Event, checked?: boolean) {
+    if (!this.canToggleMonitoring) {
+      return;
+    }
+
+    this.monitoringChecked = !!checked;
+
+    // Perform toggle without drawerconfirmation
+    if (
+      this.appHasLicense ||
+      this.skOrg.selectedSkOrgSub?.isTrial ||
+      this.skOrg.selectedSkOrgSub?.orgSubIsExpired
+    ) {
+      this.confirmMonitoringToggle();
+
+      return;
+    }
+
+    this.openToggleMonitoringDrawer = true;
+  }
+
+  @action cancelMonitoringToggle() {
+    this.monitoringChecked = !this.monitoringChecked;
+    this.openToggleMonitoringDrawer = false;
+  }
+
+  @action confirmMonitoringToggle() {
+    this.toggleSkInventoryAppMonitoring.perform();
+  }
+
+  toggleSkInventoryAppMonitoring = task(async () => {
     try {
-      await this.skInventoryApp?.toggleMonitoring(checked);
+      await waitForPromise(
+        this.skInventoryApp?.toggleMonitoring(this.monitoringChecked)
+      );
+
       await this.skInventoryApp?.reload();
 
       this.notify.success(
         this.intl.t('storeknox.monitoring') +
-          ` ${checked ? this.intl.t('enabled') : this.intl.t('disabled')}`
+          ` ${this.monitoringChecked ? this.intl.t('enabled') : this.intl.t('disabled')}`
       );
+
+      // Reload org sub to update the licenses remaining count
+      if (!this.appHasLicense) {
+        await this.skOrg.reloadOrgSub();
+      }
     } catch (error) {
+      this.monitoringChecked = !this.monitoringChecked;
+
+      this.skInventoryApp?.rollbackAttributes();
       this.notify.error(parseError(error));
     }
   });

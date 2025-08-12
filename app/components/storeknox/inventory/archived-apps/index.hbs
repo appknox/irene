@@ -1,0 +1,29 @@
+<AkBreadcrumbs::AutoTrail class='mt-2 mb-2' />
+
+<AkStack
+  @direction='row'
+  @alignItems='center'
+  @justifyContent='space-between'
+  local-class='storeknox-archived-apps-header-root'
+>
+  <AkStack @direction='column' @spacing='0.5'>
+    <AkTypography
+      @variant='subtitle1'
+      data-test-storeknoxInventory-archivedApps-headerText
+    >
+      {{t 'storeknox.archivedApps'}}
+    </AkTypography>
+
+    <AkTypography
+      @variant='body2'
+      @color='neutral'
+      data-test-storeknoxInventory-archivedApps-subTitleText
+    >
+      {{t 'storeknox.archivedAppsDescription'}}
+    </AkTypography>
+  </AkStack>
+</AkStack>
+
+<div local-class='storeknox-archived-apps-table-container'>
+  <Storeknox::Inventory::ArchivedApps::Table />
+</div>

@@ -10,7 +10,7 @@ export default Factory.extend({
   icon_url: () => faker.image.url(),
   package_name: () => faker.internet.domainWord(),
   title: () => faker.company.name(),
-  platform: () => faker.number.int({ min: 0, max: 4 }),
+  platform: () => faker.number.int({ min: 0, max: 1 }),
   dev_name: () => faker.name.fullName(),
   dev_email: () => faker.internet.email(),
   dev_website: () => faker.internet.url(),

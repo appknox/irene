@@ -42,7 +42,7 @@ export const compareInnerHTMLWithIntlTranslation = (
   const innerHTML =
     element?.innerHTML || find(selector.trim()).innerHTML.trim();
 
-  const assertMessage = `Element HTML: "${innerHTML}" <=====> Compared HTML: "${message}"`;
+  const assertMessage = `Element ${selector}: "${innerHTML}" <=====> Compared HTML: "${message}"`;
 
   if (doIncludesCheck) {
     assert.true(innerHTML.includes(message), assertMessage);

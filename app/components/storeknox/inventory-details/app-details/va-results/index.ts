@@ -62,6 +62,10 @@ export default class StoreknoxInventoryDetailsAppDetailsVaResultsComponent exten
     );
   }
 
+  get tCannotInitiateUpload() {
+    return this.intl.t('storeknox.initiateUploadMessages.cannotIntiateUpload');
+  }
+
   get showUploadProgressState() {
     return (
       this.uploadNotStarted ||
@@ -87,6 +91,12 @@ export default class StoreknoxInventoryDetailsAppDetailsVaResultsComponent exten
   }
 
   @action initiateAppUpload() {
+    if (this.skInventoryApp?.isArchived || this.skInventoryApp?.isIos) {
+      this.notify.error(this.tCannotInitiateUpload);
+
+      return;
+    }
+
     this.doInitiateAppUpload.perform();
   }
 
@@ -123,10 +133,7 @@ export default class StoreknoxInventoryDetailsAppDetailsVaResultsComponent exten
 
       // Reload submissions if another user has already initiated a reupload
       this.resolveSkAppSubmission.perform();
-
-      this.notify.error(
-        this.intl.t('storeknox.initiateUploadMessages.cannotIntiateUpload')
-      );
+      this.notify.error(this.tCannotInitiateUpload);
     } catch (err) {
       this.notify.error(parseError(err));
     }

@@ -147,6 +147,9 @@ export const AkIconVariant = [
   'auto-awesome',
   'reorder',
   // custom icons
+  'unarchive',
+  'license-outline-rounded',
+  // md icons
   'mdi:checkbox-marked',
   'mdi:checkbox-blank-outline',
   'mdi:radio-button-checked',
