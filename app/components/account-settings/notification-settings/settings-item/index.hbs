@@ -1,0 +1,72 @@
+<AkStack
+  @width='full'
+  @direction='row'
+  @alignItems='center'
+  @spacing='2'
+  ...attributes
+>
+  <AkStack
+    @direction='column'
+    @spacing='0.5'
+    @width='full'
+    data-test-accountSettings-notificationSettings-settingsItem-content
+  >
+    <AkTypography
+      @fontWeight='medium'
+      data-test-accountSettings-notificationSettings-settingsItem-title
+    >
+      {{@item.title}}
+    </AkTypography>
+
+    <AkTypography
+      @variant='body1'
+      @color='textSecondary'
+      data-test-accountSettings-notificationSettings-settingsItem-description
+    >
+      {{@item.description}}
+    </AkTypography>
+  </AkStack>
+
+  <AkStack
+    @alignItems='center'
+    @spacing='1'
+    data-test-accountSettings-notificationSettings-settingsItem-controls
+  >
+    {{#if this.isLoadingPreference}}
+      <AkLoader
+        @size={{16}}
+        data-test-accountSettings-notificationSettings-settingsItem-loader
+      />
+    {{/if}}
+
+    <AkTooltip
+      @arrow={{true}}
+      @disabled={{not @item.disable_toggling}}
+      data-test-accountSettings-notificationSettings-settingsItem-tooltip={{@item.id}}
+    >
+      <:tooltipContent>
+        <div
+          local-class='tooltip-content-container'
+          data-test-accountSettings-notificationSettings-settingsItem-tooltip
+        >
+          <AkTypography @variant='body1' @color='inherit'>
+            {{t
+              'accountNotifSettings.individualScanAllVaEnabledTooltipText'
+              htmlSafe=true
+            }}
+          </AkTypography>
+        </div>
+      </:tooltipContent>
+
+      <:default>
+        <AkToggle
+          @size='small'
+          @checked={{@item.enabled}}
+          @onChange={{this.toggleSetting}}
+          @disabled={{this.isDisabled}}
+          data-test-accountSettings-notificationSettings-settingsItem-toggle
+        />
+      </:default>
+    </AkTooltip>
+  </AkStack>
+</AkStack>
