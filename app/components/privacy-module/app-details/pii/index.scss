@@ -11,6 +11,10 @@
 .pii-details-api-urls-section {
   border: 1px solid var(--privacy-module-pii-border-color);
   background-color: var(--privacy-module-pii-url-bg-color);
+
+  &.url-section-width {
+    width: calc(100% - 3em);
+  }
 }
 
 .note-power-by-ai {

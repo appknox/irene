@@ -29,7 +29,6 @@ export default class PrivacyModuleAppDetailsPiiComponent extends Component<Priva
   @service declare intl: IntlService;
 
   @tracked selectedPii: PiiModel | null = null;
-  @tracked aiDrawerOpen = false;
   @tracked piiEnabled: boolean = false;
 
   constructor(
@@ -42,7 +41,8 @@ export default class PrivacyModuleAppDetailsPiiComponent extends Component<Priva
       this.limit,
       this.offset,
       this.fileId,
-      false
+      false,
+      true
     );
 
     this.fetchOrganizationAiFeatures.perform();
@@ -123,18 +123,14 @@ export default class PrivacyModuleAppDetailsPiiComponent extends Component<Priva
 
   @action openPiiDetailsDrawer({ rowValue }: any) {
     this.selectedPii = rowValue;
+
+    if (this.selectedPii?.highlight) {
+      this.markCategorySeen.perform();
+    }
   }
 
   @action closePiiDetailsDrawer() {
     this.selectedPii = null;
-  }
-
-  @action openAIDrawer() {
-    this.aiDrawerOpen = true;
-  }
-
-  @action closeAiDrawer() {
-    this.aiDrawerOpen = false;
   }
 
   get piiIsSelected() {
@@ -223,6 +219,23 @@ export default class PrivacyModuleAppDetailsPiiComponent extends Component<Priva
       );
 
       this.piiEnabled = aiFeatures.pii;
+    } catch (err) {
+      this.notify.error(parseError(err));
+    }
+  });
+
+  markCategorySeen = task(async () => {
+    try {
+      const adapter = this.store.adapterFor('pii');
+
+      if (this.selectedPii) {
+        adapter.markPiiTypeSeen(
+          this.privacyModule.selectedPiiId,
+          this.selectedPii.type
+        );
+
+        this.selectedPii.highlight = false;
+      }
     } catch (err) {
       this.notify.error(parseError(err));
     }

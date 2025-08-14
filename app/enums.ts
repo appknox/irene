@@ -403,6 +403,7 @@ const ENUMS = {
     PENDING: 1,
     SUCCESS: 2,
     FAILED: 3,
+    PARTIAL_SUCCESS: 4,
   },
 };
 
