@@ -1,13 +1,10 @@
-import { inject as service } from '@ember/service';
+import { service } from '@ember/service';
 import Component from '@glimmer/component';
-import { tracked } from '@glimmer/tracking';
-import { task } from 'ember-concurrency';
 import type IntlService from 'ember-intl/services/intl';
 import type Store from '@ember-data/store';
 
 import ENUMS from 'irene/enums';
 import { type ECOption } from 'irene/components/ak-chart';
-import type UnknownAnalysisStatusModel from 'irene/models/unknown-analysis-status';
 import type FileModel from 'irene/models/file';
 
 export interface FileChartSignature {
@@ -21,14 +18,6 @@ export interface FileChartSignature {
 export default class FileChartComponent extends Component<FileChartSignature> {
   @service declare intl: IntlService;
   @service declare store: Store;
-
-  @tracked unknownAnalysisStatus?: UnknownAnalysisStatusModel;
-
-  constructor(owner: unknown, args: FileChartSignature['Args']) {
-    super(owner, args);
-
-    this.fetchUnknownAnalysisStatus.perform();
-  }
 
   get severityLevelCounts() {
     const file = this.args.file;
@@ -62,7 +51,7 @@ export default class FileChartComponent extends Component<FileChartSignature> {
       },
     ];
 
-    if (this.unknownAnalysisStatus?.status) {
+    if (this.showUnknownAnalysis) {
       severityCountObjects.push({
         value: file?.get('countRiskUnknown'),
         name: this.intl.t('untested'),
@@ -127,14 +116,9 @@ export default class FileChartComponent extends Component<FileChartSignature> {
     return this.args.legendMaxWidth || 350;
   }
 
-  fetchUnknownAnalysisStatus = task(async () => {
-    this.unknownAnalysisStatus = await this.store.queryRecord(
-      'unknown-analysis-status',
-      {
-        id: this.args.file?.profile.get('id'),
-      }
-    );
-  });
+  get showUnknownAnalysis() {
+    return this.args.file?.get('project')?.get('showUnknownAnalysis');
+  }
 }
 
 declare module '@glint/environment-ember-loose/registry' {
