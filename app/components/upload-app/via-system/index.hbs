@@ -1,7 +1,5 @@
 {{#let
-  (file-queue
-    name=this.fileQueueName onFileAdded=(perform this.handleUploadApp)
-  )
+  (file-queue name=this.fileQueueName onFileAdded=this.onFileAdded)
   as |queue|
 }}
   <AkButton data-test-uploadApp-uploadBtn @tag='label'>
@@ -15,6 +13,7 @@
       data-test-uploadApp-input
       type='file'
       id='upload-app-input'
+      accept='.apk,.aab,.ipa'
       {{style display='none'}}
       {{queue.selectFile}}
     />
