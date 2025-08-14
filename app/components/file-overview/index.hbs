@@ -31,7 +31,7 @@
     local-class='file-overview-chart'
     data-test-fileOverview-severityCountChartAndValues
   >
-    {{#if this.profileId}}
+    {{#if @file}}
       <FileChart
         {{style maxWidth='145px' maxHeight='145px'}}
         @file={{@file}}
