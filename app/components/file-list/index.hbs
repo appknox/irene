@@ -139,7 +139,6 @@
           {{#each this.files as |file|}}
             <FileOverview
               @file={{file}}
-              @profileId={{file.profile.id}}
               @isSelectedFile={{or
                 (eq file.id this.fileToCompare.id)
                 (eq file.id this.baseFile.id)
