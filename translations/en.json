@@ -1015,7 +1015,8 @@
       "nf-automated-dast-completed": {
         "prefix": "Automated DAST for",
         "suffix": " of the <strong>{platform_display}</strong> app <strong>{package_name}</strong> is now completed successfully."
-      }
+      },
+      "nf-public-api-user-updated":"User <strong>{type}</strong> for <strong>{user_email}</strong> changed from <strong>{current}</strong> to <strong>{updated}</strong> by <strong>{changed_by}</strong>."
     },
     "namespaceMessage": {
       "approved": "{moderaterName} approved this namespace",

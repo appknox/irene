@@ -1,0 +1,13 @@
+<AkStack @direction='column' @spacing='1'>
+  <AkTypography data-test-nf-public-api-user-updated-primary-message>
+    {{t
+      'notificationModule.messages.nf-public-api-user-updated'
+      htmlSafe=true
+      type=@context.type
+      user_email=@context.user_email
+      current=@context.current
+      updated=@context.updated
+      changed_by=@context.changed_by
+    }}
+  </AkTypography>
+</AkStack>
