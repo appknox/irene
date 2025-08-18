@@ -5,6 +5,8 @@ import IntlService from 'ember-intl/services/intl';
 import { task } from 'ember-concurrency';
 import FileQueueService from 'ember-file-upload/services/file-queue';
 import { waitForPromise } from '@ember/test-waiters';
+import { action } from '@ember/object';
+import type { UploadFile } from 'ember-file-upload';
 
 import ENV from 'irene/config/environment';
 import triggerAnalytics from 'irene/utils/trigger-analytics';
@@ -23,6 +25,7 @@ export default class UploadAppViaSystemComponent extends Component {
   tFileUploadedSuccessfully: string;
 
   fileQueueName = 'uploadApp';
+  allowedExtensions = ['apk', 'aab', 'ipa'];
 
   constructor(owner: unknown, args: object) {
     super(owner, args);
@@ -30,6 +33,31 @@ export default class UploadAppViaSystemComponent extends Component {
     this.tErrorWhileFetching = this.intl.t('errorWhileFetching');
     this.tErrorWhileUploading = this.intl.t('errorWhileUploading');
     this.tFileUploadedSuccessfully = this.intl.t('fileUploadedSuccessfully');
+  }
+
+  @action validateFile(file: UploadFile) {
+    const fileName = file.name.toLowerCase();
+    const ext = fileName.split('.').pop();
+
+    if (!ext || !this.allowedExtensions.includes(ext)) {
+      this.notify.error(this.intl.t('invalidFileType'));
+
+      return false;
+    }
+
+    return true;
+  }
+
+  @action
+  onFileAdded(file: UploadFile) {
+    if (!this.validateFile(file)) {
+      const queue = this.fileQueue.find(this.fileQueueName);
+
+      queue?.remove(file);
+      return;
+    }
+
+    this.handleUploadApp.perform(file);
   }
 
   handleUploadApp = task(async (file) => {

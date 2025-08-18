@@ -646,6 +646,7 @@
   "integrationSteps": "Integration Steps",
   "invalidTokenError": "You seem to have landed on an invalid page.<br> Please contact",
   "invalidCredits": "Invalid Credits",
+  "invalidFileType": "Invalid file type. Allowed types are: APK, AAB, or IPA.",
   "invalidOTP": "Please enter a valid OTP",
   "invalidPassword": "パスワードが正しくありません",
   "invalidPasswordResetLink": "It looks like you clicked on an invalid password reset link.",
