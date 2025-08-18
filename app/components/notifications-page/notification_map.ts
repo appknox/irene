@@ -34,6 +34,7 @@ import { NfAutomatedDastCompletedContext } from './messages/nf-automated-dast-co
 import { NfAutomatedDastErroredContext } from './messages/nf-automated-dast-errored/context';
 import { NfAutomatedDastInProgressContext } from './messages/nf-automated-dast-in-progress/context';
 import { NfSkSubexpContext } from './messages/nf-sk-subexp/context';
+import { NfPublicApiUserUpdatedContext } from './messages/nf-public-api-user-updated/context';
 
 export const NotificationMap = {
   ERROR: {
@@ -186,6 +187,11 @@ export const NotificationMap = {
     component:
       'notifications-page/messages/nf-automated-dast-in-progress' as const,
     context: NfAutomatedDastInProgressContext,
+  },
+  NF_PUBLIC_API_USER_UPDATED: {
+    component:
+      'notifications-page/messages/nf-public-api-user-updated' as const,
+    context: NfPublicApiUserUpdatedContext,
   },
 } satisfies Record<string, { component: string; context: unknown }>;
 

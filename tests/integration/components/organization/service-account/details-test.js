@@ -82,7 +82,7 @@ const scopeDetails = () => [
             key: 'upload-app',
             scopeLabel: t('serviceAccountModule.scopes.upload-app.label'),
             scopeDescription: t(
-              'serviceAccountModule.scopes.upload-app.description'
+              'serviceAccountModule.scopes.upload-app.writeDescription'
             ),
             accessType: t('write'),
             scopeKey: 'scopePublicApiUploadApp',
