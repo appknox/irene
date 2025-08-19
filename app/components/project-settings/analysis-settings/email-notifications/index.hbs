@@ -1,0 +1,58 @@
+<AkStack @direction='column' @width='9/12'>
+  <AkTypography
+    data-test-projectSettings-analysisSettings-email-notifications-title
+    @variant='h5'
+    @gutterBottom={{true}}
+  >
+    {{t 'emailNotifications'}}
+  </AkTypography>
+
+  <AkTypography
+    @variant='body2'
+    @color='textSecondary'
+    data-test-projectSettings-analysisSettings-email-notifications-subtitle
+  >
+    {{t 'emailNotificationsDescription' htmlSafe=true}}
+  </AkTypography>
+
+  <AkStack
+    @width='full'
+    @alignItems='flex-end'
+    class='mt-2'
+    {{style maxWidth='400px'}}
+  >
+    <div class='w-8/12'>
+      <AkTextField
+        @labelTypographyColor='textPrimary'
+        @labelTypographyVariant='subtitle1'
+        @value={{this.changeset.email}}
+        @placeholder='example@mail.com'
+        @error={{if this.changeset.error.email true false}}
+        aria-label='email input'
+        data-test-projectSettings-analysisSettings-email-notifications-input
+      />
+    </div>
+
+    <AkButton
+      @disabled={{this.disableSaveEmailBtn}}
+      @loading={{this.addNewEmail.isRunning}}
+      {{on 'click' (perform this.addNewEmail)}}
+      class='mx-2'
+      data-test-projectSettings-analysisSettings-email-notifications-saveBtn
+    >
+      {{t 'addEmail'}}
+    </AkButton>
+  </AkStack>
+
+  <AkStack @spacing='1.5' @flexWrap='wrap' class='mt-2'>
+    {{#each this.emails as |email|}}
+      <AkChip
+        @variant='outlined'
+        @label={{email.email}}
+        @onDelete={{perform this.deleteEmail email}}
+        data-test-projectSettings-analysisSettings-email-notifications-item
+        data-test-projectSettings-analysisSettings-email-notifications-chip='{{email.email}}'
+      />
+    {{/each}}
+  </AkStack>
+</AkStack>
