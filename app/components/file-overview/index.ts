@@ -8,7 +8,6 @@ interface FileCompareFileOverviewSignature {
     isSelectedFile?: boolean;
     disableSelection?: boolean;
     onFileSelect?: (file: FileModel | null) => void;
-    profileId: string | number;
     hideCTAs?: boolean;
     hideOpenInNewTabIcon?: boolean;
     showMenuButton?: boolean;
@@ -20,7 +19,7 @@ interface FileCompareFileOverviewSignature {
 
 export default class FileCompareFileOverviewComponent extends Component<FileCompareFileOverviewSignature> {
   get profileId() {
-    return this.args.file?.profile.get('id');
+    return this.args.file?.profile.get('id') as string;
   }
 }
 

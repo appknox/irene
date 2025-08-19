@@ -23,7 +23,7 @@ interface TabItem {
 export interface FileDetailsDastHeaderSignature {
   Args: {
     file: FileModel;
-    profileId: number;
+    profileId: string | number;
   };
 }
 

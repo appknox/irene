@@ -8,7 +8,7 @@ import type DynamicScanService from 'irene/services/dynamic-scan';
 export interface FileDetailsDastManualSignature {
   Args: {
     file: FileModel;
-    profileId: number;
+    profileId: string | number;
   };
 }
 
@@ -31,7 +31,7 @@ export default class FileDetailsDastManual extends Component<FileDetailsDastManu
   }
 
   get profileId() {
-    return this.file.profile.get('id') as string;
+    return this.file.profile.get('id');
   }
 
   get dynamicScan() {

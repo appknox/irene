@@ -5,6 +5,12 @@ import {
   discoverEmberDataModels,
   applyEmberDataSerializers,
 } from 'ember-cli-mirage';
+import Inflector from 'ember-inflector';
+
+const inflector = Inflector.inflector;
+inflector.uncountable('sk-app-metadata');
+inflector.uncountable('api-scan-options');
+inflector.irregular('asvs', 'asvses');
 
 export default function makeServer(config) {
   let finalConfig = {
