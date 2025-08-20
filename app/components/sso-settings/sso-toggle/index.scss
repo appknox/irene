@@ -1,0 +1,14 @@
+.bordered-box {
+  border: 1px solid var(--sso-settings-sso-toggle-border-color);
+  border-radius: var(--sso-settings-sso-toggle-border-radius);
+  box-sizing: border-box;
+
+  .bordered-box-section {
+    padding: 1em;
+    box-sizing: border-box;
+
+    &:not(:last-child) {
+      border-bottom: 1px solid var(--sso-settings-sso-toggle-border-color);
+    }
+  }
+}

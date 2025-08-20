@@ -1,0 +1,21 @@
+<div data-test-ssoSettings-stepsDisplay local-class='steps'>
+  <AkTypography
+    data-test-ssoSettings-stepsDisplay-title
+    class='pb-2'
+    @variant='subtitle1'
+  >
+    {{@title}}
+  </AkTypography>
+
+  {{#each @steps as |step index|}}
+    <div data-test-ssoSettings-stepsDisplayStep local-class='step'>
+      <div local-class='step-number'>
+        {{add index 1}}
+      </div>
+
+      <AkTypography @variant='body1' local-class='step-text'>
+        {{step}}
+      </AkTypography>
+    </div>
+  {{/each}}
+</div>
