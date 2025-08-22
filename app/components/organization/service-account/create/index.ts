@@ -59,6 +59,14 @@ export default class ServiceAccountCreateComponent extends Component<ServiceAcco
         duplicateServiceAccount?.scopePublicApiProjectRead ?? false,
       scopePublicApiScanResultVa:
         duplicateServiceAccount?.scopePublicApiScanResultVa ?? false,
+      scopePublicApiUserWrite:
+        duplicateServiceAccount?.scopePublicApiUserWrite ?? false,
+      scopePublicApiUploadApp:
+        duplicateServiceAccount?.scopePublicApiUploadApp ?? false,
+      scopePublicApiTeamOperations:
+        duplicateServiceAccount?.scopePublicApiTeamOperations ?? false,
+      scopeAutoApproveNewNameSpaces:
+        duplicateServiceAccount?.scopeAutoApproveNewNameSpaces ?? false,
       serviceAccountType: ServiceAccountType.USER,
       allProjects: duplicateServiceAccount?.allProjects ?? true,
       ...(noExpiry ? { expiry: null } : {}),
