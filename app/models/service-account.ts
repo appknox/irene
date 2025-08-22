@@ -19,10 +19,22 @@ export default class ServiceAccountModel extends Model {
   declare scopePublicApiUserRead: boolean;
 
   @attr('boolean')
+  declare scopePublicApiUserWrite: boolean;
+
+  @attr('boolean')
   declare scopePublicApiProjectRead: boolean;
 
   @attr('boolean')
   declare scopePublicApiScanResultVa: boolean;
+
+  @attr('boolean')
+  declare scopeAutoApproveNewNameSpaces: boolean;
+
+  @attr('boolean')
+  declare scopePublicApiUploadApp: boolean;
+
+  @attr('boolean')
+  declare scopePublicApiTeamOperations: boolean;
 
   @attr('boolean')
   declare isExpired: boolean;
