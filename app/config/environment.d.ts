@@ -43,6 +43,7 @@ declare const config: {
   gReCaptcha: GReCAPTCHA;
   'ember-modal-dialog': object;
   product: number;
+  iconifyProviderName: string;
 };
 
 export interface App {
@@ -61,6 +62,7 @@ export interface ENVHandlerCONST {
 
 export interface Defaults {
   IRENE_API_HOST: string;
+  IRENE_ICON_API_HOST: string;
   IRENE_SHOW_LICENSE: boolean;
   IRENE_ENABLE_HOTJAR: boolean;
   IRENE_ENABLE_PENDO: boolean;
