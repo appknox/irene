@@ -8,11 +8,17 @@ runs:
         node-version: '20'
         cache: 'npm'
 
+    - name: Initialize submodules
+      shell: bash
+      run: git submodule update --init --recursive
+
     - name: Cache dependencies
       id: cacheStep
       uses: actions/cache@v4
       with:
-        path: node_modules
+        path: |
+          node_modules
+          iconify-api/node_modules
         key: ${{ runner.os }}-npm-${{ hashFiles('**/package-lock.json') }}
         restore-keys: |
           ${{ runner.os }}-npm-

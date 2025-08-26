@@ -15,6 +15,8 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
+        with:
+          submodules: recursive
 
       - name: Get docker tag
         run: echo "::set-output name=docker_tag::${GITHUB_REF##*/}_${{github.sha}}"

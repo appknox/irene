@@ -16,6 +16,7 @@
   "dependencies": {
     "express": "^4.21.2",
     "express-static-gzip": "^2.0.8",
+    "http-proxy-middleware": "^3.0.5",
     "morgan": "^1.10.0",
     "serve-static": "^1.16.2"
   },

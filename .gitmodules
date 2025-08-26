@@ -1,0 +1,3 @@
+[submodule "iconify-api"]
+	path = iconify-api
+	url = https://github.com/iconify/api.git

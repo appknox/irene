@@ -35,11 +35,13 @@ export default class AkIconComponent extends Component<AkIconSignature> {
       ? iconName.split(':')
       : ['material-symbols', iconName];
 
+    const iconPrefix = `@${CONSTANTS.ICONIFY_PROVIDER_NAME}:${pkg}:${icon}`;
+
     if (this.args.variant === 'outlined' && pkg === 'material-symbols') {
-      return `${pkg}:${icon}-outline`;
+      return `${iconPrefix}-outline`;
     }
 
-    return `@${CONSTANTS.ICONIFY_PROVIDER_NAME}:${pkg}:${icon}`;
+    return iconPrefix;
   }
 }
 
