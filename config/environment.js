@@ -6,6 +6,7 @@ const possibleENVS = [
   'IRENE_ENABLE_CSB',
   'IRENE_ENABLE_MARKETPLACE',
   'IRENE_ENABLE_ROLLBAR',
+  'IRENE_ICONIFY_API_HOST',
   'ENTERPRISE',
   'WHITELABEL_ENABLED',
   'WHITELABEL_NAME',
@@ -24,6 +25,7 @@ const ENVHandlerCONST = {
     IRENE_ENABLE_CSB: false,
     IRENE_ENABLE_MARKETPLACE: false,
     IRENE_ENABLE_ROLLBAR: false,
+    IRENE_ICONIFY_API_HOST: 'http://localhost:3000',
     ENTERPRISE: false,
     WHITELABEL_ENABLED: false,
     WHITELABEL_NAME: '',
@@ -141,6 +143,8 @@ module.exports = function (environment) {
   var host = handler.getEnv('IRENE_API_HOST');
   var isEnterprise = handler.getBoolean('ENTERPRISE');
   var showLicense = handler.getBoolean('IRENE_SHOW_LICENSE');
+  var iconifyApiHost = handler.getEnv('IRENE_ICONIFY_API_HOST');
+
   var ENV = {
     ENVHandlerCONST: ENVHandlerCONST,
     productVersions: {
@@ -220,6 +224,7 @@ module.exports = function (environment) {
     namespace: 'api',
     namespace_v2: 'api/v2',
     host: host,
+    iconifyApiHost: iconifyApiHost,
     'ember-cli-mirage': {
       enabled: false,
     },

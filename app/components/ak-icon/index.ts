@@ -1,4 +1,5 @@
 import Component from '@glimmer/component';
+import CONSTANTS from 'irene/utils/constants';
 import type { AkIconVariantType } from 'ak-icons';
 
 export type AkIconColorVariant =
@@ -38,7 +39,7 @@ export default class AkIconComponent extends Component<AkIconSignature> {
       return `${pkg}:${icon}-outline`;
     }
 
-    return `${pkg}:${icon}`;
+    return `@${CONSTANTS.ICONIFY_PROVIDER_NAME}:${pkg}:${icon}`;
   }
 }
 

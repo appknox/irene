@@ -2,6 +2,7 @@ const CONSTANTS = {
   ANDROID_STORE_URL_RE:
     /(http(s?):\/\/play.google.com\/store\/apps\/details\?id=([A-Za-z].*))|(market:\/\/[A-Za-z].*)/,
   WINDOWS_STORE_URL_RE: /microsoft.com(.*)store\/p\/(.*)\/(.*)/,
+  ICONIFY_PROVIDER_NAME: 'custom-iconify-api',
 };
 
 export const RISK_COLOR_CODE = {
