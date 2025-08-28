@@ -31,7 +31,7 @@ export interface TopNavSignature {
 
 interface ProfileMenuItem {
   label: string;
-  iconName: string;
+  iconName: 'account-circle' | 'mail' | 'logout';
   onClick?: () => void;
   color?: string;
   isLast?: boolean;

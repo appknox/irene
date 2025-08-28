@@ -55,12 +55,12 @@ export default class LicenseDetailComponent extends Component<LicenseDetailSigna
   get licenseSections() {
     return [
       {
-        icon: 'shape-line',
+        icon: 'shape-line' as const,
         title: this.intl.t('feature'),
         details: this.featuresDetails,
       },
       {
-        icon: 'calendar-month',
+        icon: 'calendar-month' as const,
         title: this.intl.t('validity'),
         details: [
           { label: this.intl.t('startDate'), value: this.startDate },
@@ -68,7 +68,7 @@ export default class LicenseDetailComponent extends Component<LicenseDetailSigna
         ],
       },
       {
-        icon: 'person',
+        icon: 'person' as const,
         title: this.intl.t('registration'),
         details: [
           {

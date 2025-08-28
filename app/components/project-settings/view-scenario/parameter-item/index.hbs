@@ -51,8 +51,7 @@
             data-test-projectSettings-parameterItem-valueTextField-secureTooltip
           >
             <AkIcon
-              @variant={{if @parameter.isSecure 'filled' 'outlined'}}
-              @iconName={{if @parameter.isSecure 'lock' 'lock-open'}}
+              @iconName={{if @parameter.isSecure 'lock' 'lock-open-outline'}}
               local-class='secure-icon {{if this.isEditing "show" "hide"}}'
               {{on 'click' this.showMaskParameterValueModal}}
               {{style

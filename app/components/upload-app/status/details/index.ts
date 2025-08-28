@@ -86,7 +86,7 @@ export default class UploadAppStatusDetailsComponent extends Component<UploadApp
       case ENUMS.SUBMISSION_STATUS.STORE_UPLOAD_FAILED:
         return {
           label: this.intl.t('failed'),
-          icon: 'error',
+          icon: 'error' as const,
           iconColor: 'error' as const,
           running: false,
           failed: true,
@@ -95,7 +95,7 @@ export default class UploadAppStatusDetailsComponent extends Component<UploadApp
       case ENUMS.SUBMISSION_STATUS.ANALYZING:
         return {
           label: this.intl.t('completed'),
-          icon: 'download-done',
+          icon: 'download-done' as const,
           iconColor: 'success' as const,
           running: false,
           failed: false,
@@ -104,7 +104,7 @@ export default class UploadAppStatusDetailsComponent extends Component<UploadApp
       default:
         return {
           label: this.intl.t('inProgress'),
-          icon: 'downloading',
+          icon: 'downloading' as const,
           iconColor: 'info' as const,
           running: true,
           failed: false,

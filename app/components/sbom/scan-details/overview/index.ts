@@ -23,28 +23,28 @@ export default class SbomScanDetailsOverviewComponent extends Component<SbomScan
   get scanSummary() {
     return [
       {
-        iconName: 'ph:diamonds-four',
+        iconName: 'ph:diamonds-four' as const,
         label: this.intl.t('sbomModule.totalComponents'),
         value: this.args.sbomScanSummary?.componentCount || 0,
       },
       {
-        iconName: 'hugeicons:ai-brain-04',
+        iconName: 'hugeicons:ai-brain-04' as const,
         label: this.intl.t('sbomModule.mlModel'),
         value: this.args.sbomScanSummary?.machineLearningModelCount || 0,
         newFeature: true,
       },
       {
-        iconName: 'solar:library-linear',
+        iconName: 'solar:library-linear' as const,
         label: this.intl.t('library'),
         value: this.args.sbomScanSummary?.libraryCount || 0,
       },
       {
-        iconName: 'mynaui:frame',
+        iconName: 'mynaui:frame' as const,
         label: this.intl.t('framework'),
         value: this.args.sbomScanSummary?.frameworkCount || 0,
       },
       {
-        iconName: 'draft',
+        iconName: 'draft-outline' as const,
         label: this.intl.t('file'),
         value: this.args.sbomScanSummary?.fileCount || 0,
         hideDivider: true,

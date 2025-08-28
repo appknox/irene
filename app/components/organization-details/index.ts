@@ -26,7 +26,7 @@ export default class OrganizationDetailsComponent extends Component {
         badgeCount: this.organization.selected?.namespacesCount,
         hasBadge: this.isAdmin,
         label: this.intl.t('namespaces'),
-        iconName: 'assignment',
+        iconName: 'assignment' as const,
       },
       {
         id: 'users',
@@ -35,7 +35,7 @@ export default class OrganizationDetailsComponent extends Component {
         badgeCount: this.organization.selected?.membersCount,
         hasBadge: true,
         label: this.intl.t('users'),
-        iconName: 'group',
+        iconName: 'group' as const,
       },
       {
         id: 'teams',
@@ -43,7 +43,7 @@ export default class OrganizationDetailsComponent extends Component {
         badgeCount: this.organization.selected?.teamsCount,
         hasBadge: this.isAdmin,
         label: this.intl.t('teams'),
-        iconName: 'groups',
+        iconName: 'groups' as const,
       },
     ];
   }

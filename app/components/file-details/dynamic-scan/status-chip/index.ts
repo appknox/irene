@@ -39,7 +39,7 @@ export default class DynamicScanStatusChipComponent extends Component<DynamicSca
       return {
         label: this.intl.t('errored'),
         color: 'error' as const,
-        icon: 'warning',
+        icon: 'warning' as const,
       };
     } else if (this.status === DsComputedStatus.IN_PROGRESS) {
       return {

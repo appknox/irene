@@ -100,19 +100,19 @@ export default class UploadAppStatusComponent extends Component {
     return [
       {
         appStatus: 'running',
-        iconName: 'downloading',
+        iconName: 'downloading' as const,
         iconColor: 'info' as const,
         value: String(this.submissionNumbers.running).padStart(2, '0'),
       },
       {
         appStatus: 'completed',
-        iconName: 'download-done',
+        iconName: 'download-done' as const,
         iconColor: 'success' as const,
         value: String(this.submissionNumbers.completed).padStart(2, '0'),
       },
       {
         appStatus: 'failed',
-        iconName: 'error',
+        iconName: 'error' as const,
         iconColor: 'error' as const,
         value: String(this.submissionNumbers.failed).padStart(2, '0'),
       },

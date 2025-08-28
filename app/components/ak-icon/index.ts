@@ -15,7 +15,6 @@ export type AkIconColorVariant =
 export interface AkIconSignature {
   Element: HTMLSpanElement;
   Args: {
-    variant?: 'filled' | 'outlined';
     iconName: AkIconVariantType;
     size?: 'medium' | 'small';
     color?: AkIconColorVariant;
@@ -33,10 +32,6 @@ export default class AkIconComponent extends Component<AkIconSignature> {
     const [pkg, icon] = iconName.includes(':')
       ? iconName.split(':')
       : ['material-symbols', iconName];
-
-    if (this.args.variant === 'outlined' && pkg === 'material-symbols') {
-      return `${pkg}:${icon}-outline`;
-    }
 
     return `${pkg}:${icon}`;
   }

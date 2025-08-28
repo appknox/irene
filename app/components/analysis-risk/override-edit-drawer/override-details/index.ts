@@ -1,17 +1,23 @@
 import Component from '@glimmer/component';
 import { action } from '@ember/object';
-import { inject as service } from '@ember/service';
-import IntlService from 'ember-intl/services/intl';
+import { service } from '@ember/service';
 import { isEmpty } from '@ember/utils';
 import dayjs from 'dayjs';
+import type IntlService from 'ember-intl/services/intl';
 
-import { AnalysisRiskDataModel, OverrideEditDrawerAppBarData } from '..';
-import { ActiveContentComponent } from '../content';
 import ENUMS from 'irene/enums';
+import { type ActiveContentComponent } from '../content';
+
+import {
+  type AnalysisRiskDataModel,
+  type OverrideEditDrawerAppBarData,
+} from '..';
+
+import type { AkIconVariantType } from 'ak-icons';
 
 type OverrideAuditDetail = {
   label: string;
-  icon: string;
+  icon: AkIconVariantType;
   value: string;
   renderValue?: boolean;
 };

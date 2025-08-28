@@ -22,7 +22,7 @@ export default class OrganizationServiceAccountSectionAccountOverviewAuditInfoCo
     return [
       {
         title: this.intl.t('createdOn').toUpperCase(),
-        iconName: 'check-circle',
+        iconName: 'check-circle' as const,
         iconColor: 'success' as const,
         value: dayjs(serviceAccount.createdOn).format('MMMM DD, YYYY, hh:mm'),
         valueColor: 'success' as const,
@@ -30,7 +30,7 @@ export default class OrganizationServiceAccountSectionAccountOverviewAuditInfoCo
       },
       {
         title: this.intl.t('createdBy').toUpperCase(),
-        iconName: 'info',
+        iconName: 'info' as const,
         iconClass: 'value-info-icon',
         loading: createdByUser.isPending,
         value: `${createdByUser.get('username')} (${createdByUser.get('email')})`,
@@ -41,7 +41,7 @@ export default class OrganizationServiceAccountSectionAccountOverviewAuditInfoCo
         ? [
             {
               title: this.intl.t('updatedOn').toUpperCase(),
-              iconName: 'check-circle',
+              iconName: 'check-circle' as const,
               iconColor: 'success' as const,
               value: dayjs(serviceAccount.updatedOn).format(
                 'MMMM DD, YYYY, hh:mm'
@@ -51,7 +51,7 @@ export default class OrganizationServiceAccountSectionAccountOverviewAuditInfoCo
             },
             {
               title: this.intl.t('updatedBy').toUpperCase(),
-              iconName: 'info',
+              iconName: 'info' as const,
               iconClass: 'value-info-icon',
               loading: updatedByUser?.isPending,
               value: `${updatedByUser?.get('username')} (${updatedByUser?.get('email')})`,

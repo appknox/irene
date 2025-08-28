@@ -190,11 +190,9 @@
                     {{on 'click' (fn this.scrollToParent node.parent.key)}}
                   >
                     <:default>{{t 'goToParent'}}</:default>
+
                     <:rightIcon>
-                      <AkIcon
-                        @iconName='supervisor-account'
-                        @variant='outlined'
-                      />
+                      <AkIcon @iconName='supervisor-account-outline' />
                     </:rightIcon>
                   </AkButton>
                 {{/if}}
