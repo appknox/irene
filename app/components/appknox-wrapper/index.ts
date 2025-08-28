@@ -109,8 +109,7 @@ export default class AppknoxWrapperComponent extends Component<AppknoxWrapperSig
       },
       this.showPrivacyDashboard && {
         label: this.intl.t('privacyModule.title'),
-        icon: 'shield',
-        iconVariant: 'outlined',
+        icon: 'shield-outline',
         route: 'authenticated.dashboard.privacy-module',
         currentWhen: 'authenticated.dashboard.privacy-module',
       },

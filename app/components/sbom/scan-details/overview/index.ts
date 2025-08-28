@@ -44,7 +44,7 @@ export default class SbomScanDetailsOverviewComponent extends Component<SbomScan
         value: this.args.sbomScanSummary?.frameworkCount || 0,
       },
       {
-        iconName: 'draft',
+        iconName: 'draft-outline',
         label: this.intl.t('file'),
         value: this.args.sbomScanSummary?.fileCount || 0,
         hideDivider: true,
