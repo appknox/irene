@@ -5,7 +5,6 @@ import { tracked } from '@glimmer/tracking';
 import IntlService from 'ember-intl/services/intl';
 import { isEmpty } from '@ember/utils';
 
-import { AkIconSignature } from 'irene/components/ak-icon';
 import SbomProjectModel from 'irene/models/sbom-project';
 import { SbomScanStatus } from 'irene/models/sbom-file';
 
@@ -19,7 +18,6 @@ export interface SbomProjectListActionSignature {
 type MenuItem = {
   label: string;
   icon: string;
-  iconVariant?: AkIconSignature['Args']['variant'];
   divider?: boolean;
   button?: boolean;
   link?: boolean;
