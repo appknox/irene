@@ -7,6 +7,7 @@ import type IntlService from 'ember-intl/services/intl';
 import parseError from 'irene/utils/parse-error';
 import ENV from 'irene/config/environment';
 import type IreneAjaxService from './ajax';
+import type MeService from './me';
 import type SkOrganizationModel from 'irene/models/sk-organization';
 import type SkOrganizationSubModel from 'irene/models/sk-organization-sub';
 
@@ -14,11 +15,16 @@ export default class SkOrganizationService extends Service {
   @service declare store: Store;
   @service declare ajax: IreneAjaxService;
   @service declare intl: IntlService;
+  @service declare me: MeService;
 
   @service('notifications') declare notify: NotificationService;
 
   @tracked selected: SkOrganizationModel | null = null;
   @tracked selectedSkOrgSub: SkOrganizationSubModel | null = null;
+
+  get isOwnerOrAdmin() {
+    return this.me.org?.is_admin || this.me.org?.is_owner;
+  }
 
   async fetchOrganization() {
     const skOrganizations = await this.store.findAll('sk-organization');
@@ -26,6 +32,11 @@ export default class SkOrganizationService extends Service {
 
     if (selectedSkOrg) {
       this.selected = selectedSkOrg;
+
+      // Only owner or admin has access to a sk organization sub
+      if (this.isOwnerOrAdmin) {
+        await this.fetchSkOrgSub();
+      }
     } else {
       this.notify.error(
         this.intl.t('storeknox.noSkOrgSupportMsg'),
@@ -56,7 +67,6 @@ export default class SkOrganizationService extends Service {
 
   async load() {
     await this.fetchOrganization();
-    await this.fetchSkOrgSub();
   }
 }
 
