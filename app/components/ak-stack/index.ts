@@ -50,7 +50,7 @@ export interface AkStackArgs {
   justifyContent?: AkStackJustifyContentValues;
   alignItems?: AkStackAlignItemsValues;
   flexWrap?: AkStackFlexWrapValues;
-  bgColor?: 'transparent' | 'white' | 'light';
+  bgColor?: 'white' | 'light';
 }
 
 export interface AkStackSignature {

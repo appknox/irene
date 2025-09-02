@@ -11,7 +11,7 @@
       ak-stack-alignitems-{{or @alignItems "flex-start"}}
       ak-stack-justifycontent-{{or @justifyContent "flex-start"}}
       ak-stack-flexwrap-{{or @flexWrap "nowrap"}}
-      ak-stack-bg-color-{{or @bgColor "transparent"}}
+      ak-stack-bg-color-{{@bgColor}}
     '
   >
     {{yield}}
