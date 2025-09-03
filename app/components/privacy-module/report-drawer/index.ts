@@ -9,6 +9,7 @@ import parseError from 'irene/utils/parse-error';
 import type FileModel from 'irene/models/file';
 import type ProjectModel from 'irene/models/project';
 import type PrivacyReportModel from 'irene/models/privacy-report';
+import type PrivacyModuleService from 'irene/services/privacy-module';
 
 export interface PrivacyModuleReportDrawerSignature {
   Args: {
@@ -24,6 +25,7 @@ export default class PrivacyModuleReportDrawerComponent extends Component<Privac
   @service declare intl: IntlService;
   @service declare store: Store;
   @service('notifications') declare notify: NotificationService;
+  @service declare privacyModule: PrivacyModuleService;
 
   @tracked privacyReport: PrivacyReportModel | null = null;
 
@@ -45,6 +47,10 @@ export default class PrivacyModuleReportDrawerComponent extends Component<Privac
       this.privacyReport = await this.store.queryRecord('privacy-report', {
         fileId: this.args.file?.id,
       });
+
+      const project = await this.privacyReport?.privacyProject;
+
+      this.privacyModule.showPiiUpdated = project.highlight;
     } catch (e) {
       this.notify.error(parseError(e, this.tPleaseTryAgain));
     }

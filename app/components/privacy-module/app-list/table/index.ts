@@ -83,7 +83,7 @@ export default class PrivacyModuleAppListTableComponent extends Component<Privac
       {
         name: this.intl.t('privacyModule.lastScannedOn'),
         component: 'privacy-module/app-list/table/last-scanned' as const,
-        textAlign: 'center',
+        textAlign: 'left',
         width: 100,
         isResizable: false,
         isReorderable: false,

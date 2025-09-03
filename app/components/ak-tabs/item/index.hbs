@@ -40,4 +40,8 @@
       {{/if}}
     </AkStack>
   {{/if}}
+
+  {{#if (has-block 'addon')}}
+    {{yield to='addon'}}
+  {{/if}}
 </AkList::Item>

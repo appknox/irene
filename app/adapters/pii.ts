@@ -6,23 +6,43 @@ export type PiiDataQuery = {
 };
 
 export default class PiiAdapter extends CommonDRFAdapter {
-  _buildNestedURL(
-    modelName: string | number,
-    fileId?: string,
-    piiExtractionId?: string
-  ) {
-    const filesURL = `${this.namespace_v2}/pii_request/${piiExtractionId}/pii_data`;
+  _buildNestedURL(modelName: string | number, piiExtractionId?: string) {
+    const piiDataURL = `${this.namespace_v2}/pii_request/${piiExtractionId}/pii_data`;
 
-    return this.buildURLFromBase(filesURL);
+    return this.buildURLFromBase(piiDataURL);
   }
 
   urlForQuery(query: PiiDataQuery, modelName: string | number) {
-    const { fileId, piiExtractionId } = query;
+    const { piiExtractionId } = query;
 
-    delete query.fileId;
     delete query.piiExtractionId;
 
-    return this._buildNestedURL(modelName, fileId, piiExtractionId);
+    return this._buildNestedURL(modelName, piiExtractionId);
+  }
+
+  markPiiTypeSeen(modelName: string, piiId: string, type: string) {
+    const baseURL = this._buildNestedURL('pii_data', piiId);
+
+    const url = `${baseURL}/mark_seen`;
+
+    return this.ajax(url, 'POST', {
+      contentType: 'application/json',
+      data: {
+        type,
+      },
+    }) as Promise<{ success: boolean }>;
+  }
+
+  markPiiSeen(fileId: string | null) {
+    const seenURL = `${this.namespace_v2}/privacy_project/mark_pii_scan_seen`;
+    const url = this.buildURLFromBase(seenURL);
+
+    return this.ajax(url, 'POST', {
+      contentType: 'application/json',
+      data: {
+        latest_file: fileId,
+      },
+    }) as Promise<{ success: boolean }>;
   }
 }
 

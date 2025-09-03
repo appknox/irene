@@ -29,7 +29,6 @@ export default class PrivacyModuleAppDetailsPiiComponent extends Component<Priva
   @service declare intl: IntlService;
 
   @tracked selectedPii: PiiModel | null = null;
-  @tracked aiDrawerOpen = false;
   @tracked piiEnabled: boolean = false;
 
   constructor(
@@ -42,7 +41,8 @@ export default class PrivacyModuleAppDetailsPiiComponent extends Component<Priva
       this.limit,
       this.offset,
       this.fileId,
-      false
+      false,
+      true
     );
 
     this.fetchOrganizationAiFeatures.perform();
@@ -123,34 +123,18 @@ export default class PrivacyModuleAppDetailsPiiComponent extends Component<Priva
 
   @action openPiiDetailsDrawer({ rowValue }: any) {
     this.selectedPii = rowValue;
+
+    if (this.selectedPii?.highlight) {
+      this.markCategorySeen.perform();
+    }
   }
 
   @action closePiiDetailsDrawer() {
     this.selectedPii = null;
   }
 
-  @action openAIDrawer() {
-    this.aiDrawerOpen = true;
-  }
-
-  @action closeAiDrawer() {
-    this.aiDrawerOpen = false;
-  }
-
   get piiIsSelected() {
     return !!this.selectedPii;
-  }
-
-  get selectedPiiData() {
-    return this.selectedPii?.piiData?.[0];
-  }
-
-  get multiplePiiDataLength() {
-    return this.selectedPii?.piiData?.length ?? 0;
-  }
-
-  get multiplePiiData() {
-    return this.multiplePiiDataLength > 1;
   }
 
   get piiDataAvailable() {
@@ -194,27 +178,6 @@ export default class PrivacyModuleAppDetailsPiiComponent extends Component<Priva
     ];
   }
 
-  @action
-  getSource(source?: string) {
-    if (source === 'BINARY') {
-      return this.intl.t('appBinary');
-    }
-
-    return this.intl.t('api');
-  }
-
-  @action
-  handleCopySuccess(event: ClipboardJS.Event) {
-    this.notify.info(this.intl.t('urlCopied'));
-
-    event.clearSelection();
-  }
-
-  @action
-  handleCopyError() {
-    this.notify.error(this.intl.t('somethingWentWrong'));
-  }
-
   fetchOrganizationAiFeatures = task(async () => {
     try {
       const aiFeatures = await this.store.queryRecord(
@@ -225,6 +188,21 @@ export default class PrivacyModuleAppDetailsPiiComponent extends Component<Priva
       this.piiEnabled = aiFeatures.pii;
     } catch (err) {
       this.notify.error(parseError(err));
+    }
+  });
+
+  markCategorySeen = task(async () => {
+    try {
+      if (this.selectedPii && this.privacyModule.selectedPiiId) {
+        await this.selectedPii.markPiiTypeSeen(
+          this.privacyModule.selectedPiiId,
+          this.selectedPii.type
+        );
+
+        this.selectedPii.highlight = false;
+      }
+    } catch (err) {
+      this.notify.error(parseError(err, this.intl.t('pleaseTryAgain')));
     }
   });
 }

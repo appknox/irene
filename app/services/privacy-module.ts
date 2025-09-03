@@ -44,6 +44,10 @@ export default class PrivacyModuleService extends Service {
   @tracked
   piiDataList?: DS.AdapterPopulatedRecordArray<PiiModel>;
   @tracked piiDataAvailable: boolean = false;
+  @tracked showCompleteApiScanNote: boolean = false;
+  @tracked showPiiUpdated: boolean = false;
+  @tracked selectedPiiId: string | null = null;
+  @tracked showPiiUpdatedNote: boolean = true;
 
   setRouteQueryParams(limit: string | number, offset: string | number) {
     this.router.transitionTo({
@@ -60,6 +64,10 @@ export default class PrivacyModuleService extends Service {
     this.dangerousPermissionCount = 0;
     this.piiDataCount = 0;
     this.piiDataAvailable = false;
+    this.showCompleteApiScanNote = false;
+    this.showPiiUpdated = false;
+    this.selectedPiiId = null;
+    this.showPiiUpdatedNote = true;
   }
 
   fetchTrackerData = task(
@@ -138,36 +146,58 @@ export default class PrivacyModuleService extends Service {
     return await this.store.queryRecord('dangerous-permission-request', {});
   });
 
-  fetchPiiData = task(async (limit, offset, fileId, setQueryParams = true) => {
-    if (setQueryParams) {
-      this.setRouteQueryParams(limit, offset);
-    }
-
-    try {
-      const pii = await this.getPiiRequest.perform(fileId);
-
-      if (pii.status === ENUMS.PM_PII_STATUS.SUCCESS) {
-        const queryParams = {
-          limit: limit,
-          offset: offset,
-          fileId: fileId,
-          piiExtractionId: pii.id,
-        };
-
-        const piiDataList = (await this.store.query(
-          'pii',
-          queryParams
-        )) as PiiModelArray;
-
-        this.piiDataList = piiDataList;
-        this.piiDataCount = piiDataList.meta.count;
-        this.piiDataAvailable = true;
+  fetchPiiData = task(
+    async (
+      limit,
+      offset,
+      fileId,
+      setQueryParams = true,
+      markPiiSeen = false
+    ) => {
+      if (setQueryParams) {
+        this.setRouteQueryParams(limit, offset);
       }
-    } catch (err) {
-      const error = err as AdapterError;
 
-      if (error.errors) {
-        const status = error.errors[0]?.status;
+      try {
+        const pii = await this.getPiiRequest.perform(fileId);
+
+        this.selectedPiiId = pii.id;
+
+        if (
+          pii.status === ENUMS.PM_PII_STATUS.SUCCESS ||
+          pii.status === ENUMS.PM_PII_STATUS.PARTIAL_SUCCESS
+        ) {
+          const queryParams = {
+            limit: limit,
+            offset: offset,
+            fileId: fileId,
+            piiExtractionId: pii.id,
+          };
+
+          const piiDataList = (await this.store.query(
+            'pii',
+            queryParams
+          )) as PiiModelArray;
+
+          this.piiDataList = piiDataList;
+          this.piiDataCount = piiDataList.meta.count;
+          this.piiDataAvailable = true;
+
+          if (pii.status === ENUMS.PM_PII_STATUS.PARTIAL_SUCCESS) {
+            this.showCompleteApiScanNote = true;
+          } else {
+            if (markPiiSeen && this.showPiiUpdated) {
+              const adapter = this.store.adapterFor('pii');
+
+              adapter.markPiiSeen(fileId);
+
+              this.showPiiUpdated = false;
+            }
+          }
+        }
+      } catch (err) {
+        const error = err as AdapterError;
+        const status = error.errors?.[0]?.status;
 
         if (status == 404) {
           this.piiDataAvailable = false;
@@ -176,7 +206,7 @@ export default class PrivacyModuleService extends Service {
         }
       }
     }
-  });
+  );
 
   getPiiRequest = task(async (fileId) => {
     const adapter = this.store.adapterFor('pii-request');

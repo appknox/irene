@@ -4,6 +4,8 @@
   border-radius: var(--powered-by-ai-chip-border-radius);
   border: 1px solid var(--powered-by-ai-chip-bg-color);
   color: var(--powered-by-ai-chip-color);
+  white-space: nowrap;
+  margin-left: 0.7em;
 
   .text {
     color: var(--powered-by-ai-chip-color);

@@ -1,8 +1,10 @@
 import Component from '@glimmer/component';
 import { tracked } from '@glimmer/tracking';
 import { service } from '@ember/service';
+import { action } from '@ember/object';
 import type Store from '@ember-data/store';
 import type IntlService from 'ember-intl/services/intl';
+import type RouterService from '@ember/routing/router-service';
 
 import ENUMS from 'irene/enums';
 import type PrivacyProjectModel from 'irene/models/privacy-project';
@@ -15,12 +17,24 @@ export interface PrivacyModuleAppDetailsHeaderSignature {
   };
 }
 
+type TabItem = {
+  id: string;
+  label: string;
+  badgeCount: number;
+  hasBadge: boolean;
+  route: string;
+  activeRoutes: string;
+  hasUpdate?: boolean;
+  isBeta?: boolean;
+};
+
 export default class PrivacyModuleAppDetailsHeaderComponent extends Component<PrivacyModuleAppDetailsHeaderSignature> {
   @service declare privacyModule: PrivacyModuleService;
   @service declare intl: IntlService;
   @service declare store: Store;
   @service('notifications') declare notify: NotificationService;
   @service declare organization: OrganizationService;
+  @service declare router: RouterService;
 
   @tracked anchorRef: HTMLElement | null = null;
   @tracked piiEnabled: boolean = false;
@@ -43,6 +57,13 @@ export default class PrivacyModuleAppDetailsHeaderComponent extends Component<Pr
     if (this.showPii) {
       this.privacyModule.fetchPiiData.perform(10, 0, this.fileId, false);
     }
+  }
+
+  @action
+  getChipClass(route: string) {
+    return this.router.currentRouteName === route
+      ? 'beta-chip-active'
+      : 'beta-chip-inactive';
   }
 
   get aiFeatures() {
@@ -99,7 +120,7 @@ export default class PrivacyModuleAppDetailsHeaderComponent extends Component<Pr
     return this.app.latestFile.get('id');
   }
 
-  get tabItems() {
+  get tabItems(): TabItem[] {
     return [
       {
         id: 'trackers',
@@ -127,8 +148,29 @@ export default class PrivacyModuleAppDetailsHeaderComponent extends Component<Pr
         hasBadge: this.privacyModule.piiDataAvailable,
         route: 'authenticated.dashboard.privacy-module.app-details.pii',
         activeRoutes: 'authenticated.dashboard.privacy-module.app-details.pii',
+        hasUpdate: this.showPiiUpdated,
+        isBeta: true,
       },
-    ].filter(Boolean);
+    ].filter(Boolean) as TabItem[];
+  }
+
+  get showCompleteApiScanNote() {
+    return this.privacyModule.showCompleteApiScanNote;
+  }
+
+  get showPiiUpdated() {
+    return this.privacyModule.showPiiUpdated;
+  }
+
+  get showPiiUpdatedNote() {
+    return this.privacyModule.showPiiUpdatedNote;
+  }
+
+  get noteAvailable() {
+    return (
+      this.showCompleteApiScanNote ||
+      (this.showPiiUpdated && this.showPiiUpdatedNote)
+    );
   }
 
   willDestroy(): void {
