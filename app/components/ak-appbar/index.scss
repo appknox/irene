@@ -8,9 +8,9 @@
 }
 
 .ak-appbar-color-inherit {
-  background: var(--ak-appbar-inherit-background) !important;
-  color: var(--ak-appbar-inherit-background-text-color) !important;
-  border-bottom: var(--ak-appbar-inherit-border-bottom) !important;
+  background: var(--ak-appbar-inherit-background);
+  color: var(--ak-appbar-inherit-background-text-color);
+  border-bottom: var(--ak-appbar-inherit-border-bottom);
 
   .ak-appbar-default-icon-button {
     :global(.ak-icon) {
@@ -24,21 +24,21 @@
 }
 
 .ak-appbar-color-default {
-  background: var(--ak-appbar-default-background) !important;
-  color: var(--ak-appbar-default-background-text-color) !important;
-  border-bottom: var(--ak-appbar-default-border-bottom) !important;
+  background: var(--ak-appbar-default-background);
+  color: var(--ak-appbar-default-background-text-color);
+  border-bottom: var(--ak-appbar-default-border-bottom);
 }
 
 .ak-appbar-color-light {
-  background: var(--ak-appbar-light-background) !important;
-  color: var(--ak-appbar-light-background-text-color) !important;
-  border-bottom: var(--ak-appbar-light-border-bottom) !important;
+  background: var(--ak-appbar-light-background);
+  color: var(--ak-appbar-light-background-text-color);
+  border-bottom: var(--ak-appbar-light-border-bottom);
 }
 
 .ak-appbar-color-dark {
-  background: var(--ak-appbar-dark-background) !important;
-  color: var(--ak-appbar-dark-background-text-color) !important;
-  border-bottom: var(--ak-appbar-dark-border-bottom) !important;
+  background: var(--ak-appbar-dark-background);
+  color: var(--ak-appbar-dark-background-text-color);
+  border-bottom: var(--ak-appbar-dark-border-bottom);
 
   .ak-appbar-default-icon-button {
     :global(.ak-icon) {

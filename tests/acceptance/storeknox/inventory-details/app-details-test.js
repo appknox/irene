@@ -88,11 +88,23 @@ module(
       const {
         organization,
         currentOrganizationMe,
+        currentOrganizationMember,
         currentSkOrganization,
         currentSkOrganizationSub,
       } = await setupRequiredEndpoints(this.server);
 
       organization.update({ features: { storeknox: true } });
+
+      // Stub organization me service
+      class OrganizationMeStub extends Service {
+        org = currentOrganizationMe;
+
+        async getMembership() {
+          return currentOrganizationMember;
+        }
+      }
+
+      this.owner.register('service:me', OrganizationMeStub);
 
       // Server mocks
       this.server.get('v2/sk_app_detail/:id', (schema, req) => {
@@ -542,12 +554,14 @@ module(
         const errMessage = 'failed to update monitoring status';
 
         // Models
-        if (is_member) {
-          this.currentOrganizationMe.update({
-            is_owner: false,
-            is_admin: false,
-          });
-        }
+        this.currentOrganizationMe.update(
+          is_member
+            ? {
+                is_owner: false,
+                is_admin: false,
+              }
+            : { is_owner: true, is_admin: true }
+        );
 
         this.currentSkOrganizationSub.update({
           is_trial,
