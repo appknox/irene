@@ -1446,6 +1446,17 @@ body {
   );
   --account-settings-security-mfa-primary-color: var(--primary-main);
 
+  // variables for account-settings/notification-settings
+  --account-settings-notification-settings-group-border-color: var(
+    --border-color-1
+  );
+
+  // variables for account-settings-page-content-wrapper-border-color
+  --account-settings-page-content-wrapper-border-color: var(--border-color-1);
+
+  // variables for account-settings-tabs-border-color
+  --account-settings-tabs-border-color: var(--border-color-1);
+
   // variables for project-settings/empty-list
   --project-settings-empty-list-border-radius: var(--border-radius);
   --project-settings-empty-list-border-color: var(--border-color-1);
