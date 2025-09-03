@@ -10,7 +10,7 @@ import parseError from 'irene/utils/parse-error';
 import type OrganizationService from 'irene/services/organization';
 import type OrganizationAiFeatureModel from 'irene/models/organization-ai-feature';
 
-type AiFeatureKey = 'reporting';
+type AiFeatureKey = 'pii' | 'reporting';
 
 export default class OrganizationAiPoweredFeaturesComponent extends Component {
   @service declare store: Store;
@@ -43,15 +43,26 @@ export default class OrganizationAiPoweredFeaturesComponent extends Component {
         label: this.intl.t('reporting'),
         description: this.intl.t('reportModule.settingsDesc'),
         header: this.intl.t('reportModule.settingsHeader'),
+        drawerInfo: this.reportDrawerInfo,
 
         isToggling:
-          this.featureToToggle === 'reporting' &&
-          this.toggleReporting.isRunning,
+          this.featureToToggle === 'reporting' && this.toggleFeature.isRunning,
+      },
+      {
+        featureKey: 'pii' as const,
+        isChecked: this.aiFeatures?.pii,
+        enabled: this.features?.pii,
+        label: this.intl.t('privacyModule.piiLabel'),
+        description: this.intl.t('privacyModule.piiDesc'),
+        header: this.intl.t('privacyModule.piiLabel'),
+        drawerInfo: this.piiDrawerInfo,
+
+        isToggling:
+          this.featureToToggle === 'pii' && this.toggleFeature.isRunning,
       },
     ];
   }
-
-  get drawerInfo() {
+  get reportDrawerInfo() {
     return [
       {
         title: this.intl.t('reportModule.aiDataAccess'),
@@ -75,6 +86,39 @@ export default class OrganizationAiPoweredFeaturesComponent extends Component {
     ];
   }
 
+  get drawerInfo() {
+    switch (this.featureToToggle) {
+      case 'pii':
+        return this.piiDrawerInfo;
+      case 'reporting':
+        return this.reportDrawerInfo;
+      default:
+        return null;
+    }
+  }
+
+  get piiDrawerInfo() {
+    return [
+      {
+        title: this.intl.t('privacyModule.piiAiDrawer.aiDataQ1'),
+        body: this.intl.t('privacyModule.piiAiDrawer.aiDataQ1Desc'),
+        marginTop: 'mt-2',
+      },
+      {
+        title: this.intl.t('privacyModule.piiAiDrawer.aiDataQ2'),
+        body: this.intl.t('privacyModule.piiAiDrawer.aiDataQ2Desc'),
+        marginTop: 'mt-2',
+      },
+      {
+        title: this.intl.t('privacyModule.piiAiDrawer.aiDataQ3'),
+        body: this.intl.t('privacyModule.piiAiDrawer.aiDataQ3Desc', {
+          htmlSafe: true,
+        }),
+        marginTop: 'mt-2',
+      },
+    ];
+  }
+
   @action openAIDrawer() {
     this.aiDrawerOpen = true;
   }
@@ -85,7 +129,7 @@ export default class OrganizationAiPoweredFeaturesComponent extends Component {
 
   @action confirmFeatureToggle() {
     if (this.featureToToggle) {
-      this.toggleReporting.perform(
+      this.toggleFeature.perform(
         this.featureToToggle,
         this.targettedToggle?.checked
       );
@@ -109,27 +153,25 @@ export default class OrganizationAiPoweredFeaturesComponent extends Component {
     };
   }
 
-  toggleReporting = task(
-    async (featureKey: AiFeatureKey, checked?: boolean) => {
-      const originalValue = this.aiFeatures?.get(featureKey);
+  toggleFeature = task(async (featureKey: AiFeatureKey, checked?: boolean) => {
+    const originalValue = this.aiFeatures?.get(featureKey);
 
-      try {
-        this.aiFeatures?.set(featureKey, !checked);
-        this.aiDrawerOpen = false;
+    try {
+      this.aiFeatures?.set(featureKey, !checked);
+      this.aiDrawerOpen = false;
 
-        await this.aiFeatures?.save();
-        await this.fetchOrganizationAiFeatures.perform();
+      await this.aiFeatures?.save();
+      await this.fetchOrganizationAiFeatures.perform();
 
-        this.notify.success(this.intl.t('statusUpdatedSuccessfully'));
-      } catch (err) {
-        // Restore the original value on error
-        this.aiDrawerOpen = false;
-        this.aiFeatures?.set(featureKey, originalValue);
+      this.notify.success(this.intl.t('statusUpdatedSuccessfully'));
+    } catch (err) {
+      // Restore the original value on error
+      this.aiDrawerOpen = false;
+      this.aiFeatures?.set(featureKey, originalValue);
 
-        this.notify.error(parseError(err));
-      }
+      this.notify.error(parseError(err));
     }
-  );
+  });
 
   fetchOrganizationAiFeatures = task(async () => {
     try {

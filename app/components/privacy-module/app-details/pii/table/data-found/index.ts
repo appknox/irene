@@ -1,12 +1,20 @@
 import Component from '@glimmer/component';
 
-export default class PrivacyModuleAppDetailsPiiTableDataFoundComponent extends Component {
+import type PiiModel from 'irene/models/pii';
+
+export interface PrivacyModuleAppDetailsPiiTableDataFoundSignature {
+  Args: {
+    data: PiiModel;
+  };
+}
+
+export default class PrivacyModuleAppDetailsPiiTableDataFoundComponent extends Component<PrivacyModuleAppDetailsPiiTableDataFoundSignature> {
   get dataFound() {
-    return this.args.data.dataFound;
+    return this.args.data.piiData;
   }
 
   get value() {
-    return this.dataFound[0].value;
+    return this.dataFound[0]?.value;
   }
 
   get showChip() {

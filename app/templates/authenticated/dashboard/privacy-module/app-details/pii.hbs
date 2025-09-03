@@ -1,3 +1,6 @@
 {{page-title (t 'privacyModule.pii')}}
 
-<PrivacyModule::AppDetails::Pii />
+<PrivacyModule::AppDetails::Pii
+  @queryParams={{@model.queryParams}}
+  @file={{@model.file}}
+/>
