@@ -1,0 +1,75 @@
+.analysis-section {
+  width: 100%;
+  background-color: var(--file-details-vulnerability-analysis-details-background-main);
+
+  &.analysis-overridded-passed {
+    background-color: var(--file-details-vulnerability-analysis-details-marked-passed-background-color);
+
+    .analysis-content-title {
+      background-color: var(--file-details-vulnerability-analysis-details-marked-passed-background-color);
+    }
+
+    .vulnerability-finding-container {
+      background-color: var(--file-details-vulnerability-analysis-details-marked-passed-code-background-color);
+
+      border: 1px solid var(--file-details-vulnerability-analysis-details-border-color);
+    }
+  }
+
+  .analysis-content-value {
+    max-width: 460px;
+  }
+
+  .analysis-content-title {
+    position: sticky;
+    top: calc(132px + 1.5em);
+    z-index: 1;
+    padding: 1em;
+    background-color: var(--file-details-vulnerability-analysis-details-background-main);
+    border: 1px solid var(--file-details-vulnerability-analysis-details-border-color);
+
+    h6 {
+      margin-bottom: 0em !important;
+    }
+  }
+
+  .analysis-content-container {
+    border-width: 0 1px 1px;
+    border-style: solid;
+    border-color: var(--file-details-vulnerability-analysis-details-border-color);
+  }
+}
+
+.ak-pagination-select {
+  height: 30px !important;
+}
+
+.ak-pagination-prev-button,
+.ak-pagination-next-button {
+  height: 30px;
+  background-color: var(--file-details-vulnerability-analysis-details-pagination-button-background-color);
+  min-width: unset;
+  padding-left: 0.143em;
+  padding-right: 0.857em;
+
+  &:hover,
+  &:disabled {
+    background-color: var(--file-details-vulnerability-analysis-details-pagination-button-background-color) !important;
+  }
+}
+
+.ak-pagination-next-button {
+  border-left: 1px solid var(--file-details-vulnerability-analysis-details-border-color-2);
+  border-radius: 0px !important;
+}
+
+.ak-pagination-prev-button {
+  border-right: 1px solid var(--file-details-vulnerability-analysis-details-border-color-2);
+  border-radius: 0px !important;
+}
+
+.counter-container {
+  border: 1px solid var(--file-details-vulnerability-analysis-details-border-color-2);
+  border-radius: var(--file-details-vulnerability-analysis-details-border-radius);
+  background-color: var(--file-details-vulnerability-analysis-details-code-background-color);
+}

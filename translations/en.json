@@ -1730,6 +1730,7 @@
       }
     }
   },
+  "screenshots": "Screenshots",
   "serviceNow": {
     "title": "ServiceNow",
     "enterInstanceURL": "Enter Instance URL",

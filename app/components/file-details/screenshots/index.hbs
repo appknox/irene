@@ -1,0 +1,91 @@
+<div
+  local-class='analysis-section {{if
+    @analysis.isOverriddenAsPassed
+    "analysis-overridded-passed"
+  }}'
+  class='mb-2'
+  data-test-analysisDetails-vulnerabilityContainer
+>
+  <AkPaginationProvider
+    @results={{this.screenshots}}
+    @onItemPerPageChange={{this.noop}}
+    @totalItems={{this.screenshots.length}}
+    @nextAction={{fn this.handlePrevNextClick 'next'}}
+    @prevAction={{fn this.handlePrevNextClick 'prev'}}
+    @itemPerPageOptions={{array 1}}
+    @defaultLimit={{this.limit}}
+    @offset={{this.offset}}
+    as |pgc|
+  >
+    <AkStack
+      @alignItems='center'
+      @justifyContent='space-between'
+      local-class='analysis-content-title'
+    >
+      <AkTypography
+        data-test-analysisDetails-vulnerabilityTitle
+        @variant='subtitle1'
+        @gutterBottom={{true}}
+      >
+        {{t 'screenshots'}}
+      </AkTypography>
+
+      {{#if (gt this.screenshots.length 1)}}
+        <AkStack @spacing='1.5' @alignItems='center'>
+          <AkStack
+            local-class='counter-container'
+            @spacing='3'
+            @alignItems='center'
+          >
+            <AkIconButton
+              data-test-screenshots-prev-button
+              disabled={{pgc.disablePrev}}
+              local-class='ak-pagination-prev-button'
+              {{on 'click' pgc.prevAction}}
+            >
+              <AkIcon
+                @iconName='arrow-left'
+                {{style fontSize='1.28rem !important'}}
+              />
+            </AkIconButton>
+
+            <AkStack @spacing='0.5' @alignItems='center'>
+              <AkTypography @variant='subtitle1'>
+                {{add this.currentIndex 1}}
+              </AkTypography>
+
+              <AkTypography @variant='body2'>
+                {{t 'outOf'}}
+              </AkTypography>
+
+              <AkTypography @variant='subtitle1'>
+                {{this.screenshots.length}}
+              </AkTypography>
+            </AkStack>
+
+            <AkIconButton
+              data-test-screenshots-next-button
+              disabled={{pgc.disableNext}}
+              local-class='ak-pagination-next-button'
+              {{on 'click' pgc.nextAction}}
+            >
+              <AkIcon
+                @iconName='arrow-right'
+                {{style fontSize='1.28rem !important'}}
+              />
+            </AkIconButton>
+          </AkStack>
+        </AkStack>
+      {{/if}}
+    </AkStack>
+
+    <AkStack
+      local-class='analysis-content analysis-content-container'
+      @alignItems='center'
+      @justifyContent='center'
+      class='p-2'
+    >
+      <img src={{pgc.currentPageResults}} />
+    </AkStack>
+  </AkPaginationProvider>
+</div>
