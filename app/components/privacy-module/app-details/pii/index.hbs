@@ -27,52 +27,28 @@
     </AkStack>
 
     {{#if this.piiDataAvailable}}
-      <AkPaginationProvider
-        @results={{this.piiDataList}}
-        @onItemPerPageChange={{this.handleItemPerPageChange}}
-        @totalItems={{this.piiDataCount}}
-        @nextAction={{this.handlePrevNextAction}}
-        @prevAction={{this.handlePrevNextAction}}
-        @itemPerPageOptions={{array 5 10 20}}
-        @defaultLimit={{this.limit}}
-        @offset={{this.offset}}
-        @resultDependencies={{this.resultDependencies}}
-        @onResultDependenciesChange={{this.handleResultDependenciesChange}}
-        as |pgc|
+      <AkTable
+        data-test-privacyModule-pii-list
+        @hoverable={{true}}
+        local-class='pii-table'
+        as |tb|
       >
-        <AkTable data-test-privacyModule-pii-list @hoverable={{true}} as |tb|>
-          <tb.head @columns={{this.columns}} />
-          <tb.body @rows={{pgc.currentPageResults}} as |b|>
-            <b.row
-              @onClick={{this.openPiiDetailsDrawer}}
-              local-class='app-monitoring-table-row'
-              {{style cursor='pointer'}}
-              as |r|
-            >
-              <r.cell>
-                {{#let (component r.columnValue.component) as |Component|}}
-                  <Component @data={{r.rowValue}} @id={{r.rowValue.id}} />
-                {{/let}}
-              </r.cell>
-            </b.row>
-          </tb.body>
-        </AkTable>
-
-        <AkPagination
-          @disableNext={{pgc.disableNext}}
-          @nextAction={{pgc.nextAction}}
-          @disablePrev={{pgc.disablePrev}}
-          @prevAction={{pgc.prevAction}}
-          @endItemIdx={{pgc.endItemIdx}}
-          @startItemIdx={{pgc.startItemIdx}}
-          @itemPerPageOptions={{pgc.itemPerPageOptions}}
-          @onItemPerPageChange={{pgc.onItemPerPageChange}}
-          @selectedOption={{pgc.selectedOption}}
-          @tableItemLabel={{t 'privacyModule.pii'}}
-          @perPageTranslation={{t 'recordPerPage'}}
-          @totalItems={{pgc.totalItems}}
-        />
-      </AkPaginationProvider>
+        <tb.head @columns={{this.columns}} />
+        <tb.body @rows={{this.piiDataList}} as |b|>
+          <b.row
+            @onClick={{this.openPiiDetailsDrawer}}
+            local-class='app-monitoring-table-row'
+            {{style cursor='pointer'}}
+            as |r|
+          >
+            <r.cell>
+              {{#let (component r.columnValue.component) as |Component|}}
+                <Component @data={{r.rowValue}} @id={{r.rowValue.id}} />
+              {{/let}}
+            </r.cell>
+          </b.row>
+        </tb.body>
+      </AkTable>
     {{else}}
       {{#if this.piiEnabled}}
         <AkStack

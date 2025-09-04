@@ -7,8 +7,6 @@ import type Store from '@ember-data/store';
 import type IntlService from 'ember-intl/services/intl';
 
 import parseError from 'irene/utils/parse-error';
-import type { PaginationProviderActionsArgs } from 'irene/components/ak-pagination-provider';
-import type { PrivacyModulePiiQueryParam } from 'irene/routes/authenticated/dashboard/privacy-module/app-details/pii';
 import type FileModel from 'irene/models/file';
 import type PrivacyModuleService from 'irene/services/privacy-module';
 import type PiiModel from 'irene/models/pii';
@@ -16,7 +14,6 @@ import type MeService from 'irene/services/me';
 
 export interface PrivacyModuleAppDetailsPiiSignature {
   Args: {
-    queryParams: PrivacyModulePiiQueryParam;
     file: FileModel;
   };
 }
@@ -37,23 +34,9 @@ export default class PrivacyModuleAppDetailsPiiComponent extends Component<Priva
   ) {
     super(owner, args);
 
-    this.privacyModule.fetchPiiData.perform(
-      this.limit,
-      this.offset,
-      this.fileId,
-      false,
-      true
-    );
+    this.privacyModule.fetchPiiData.perform(this.fileId, true);
 
     this.fetchOrganizationAiFeatures.perform();
-  }
-
-  get limit() {
-    return Number(this.args.queryParams.app_limit);
-  }
-
-  get offset() {
-    return Number(this.args.queryParams.app_offset);
   }
 
   get fileId() {
@@ -93,32 +76,6 @@ export default class PrivacyModuleAppDetailsPiiComponent extends Component<Priva
 
   get isOwner() {
     return this.me.org?.get('is_owner');
-  }
-
-  get resultDependencies() {
-    return [this.limit, this.offset];
-  }
-
-  @action handlePrevNextAction(args: PaginationProviderActionsArgs) {
-    const { limit, offset } = args;
-
-    this.privacyModule.fetchPiiData.perform(limit, offset, this.fileId);
-  }
-
-  @action handleItemPerPageChange(args: PaginationProviderActionsArgs) {
-    const { limit } = args;
-    const offset = 0;
-
-    this.privacyModule.fetchPiiData.perform(limit, offset, this.fileId);
-  }
-
-  @action handleResultDependenciesChange() {
-    this.privacyModule.fetchPiiData.perform(
-      this.limit,
-      this.offset,
-      this.fileId,
-      false
-    );
   }
 
   @action openPiiDetailsDrawer({ rowValue }: any) {
