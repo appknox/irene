@@ -55,7 +55,7 @@ export default class PrivacyModuleAppDetailsHeaderComponent extends Component<Pr
     );
 
     if (this.showPii) {
-      this.privacyModule.fetchPiiData.perform(10, 0, this.fileId, false);
+      this.privacyModule.fetchPiiData.perform(this.fileId);
     }
   }
 
