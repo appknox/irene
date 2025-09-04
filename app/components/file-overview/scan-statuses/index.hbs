@@ -12,8 +12,7 @@
         data-test-fileOverview-scanStatuses='{{status.name}}'
       >
         <AkIcon
-          @iconName={{if status.isDone 'check-circle' 'circle'}}
-          @variant={{if status.isDone 'filled' 'outlined'}}
+          @iconName={{if status.isDone 'check-circle' 'circle-outline'}}
           @color='success'
           local-class='file-overview-status-icon'
           data-test-fileOverview-scanStatus-icon
@@ -40,9 +39,12 @@
           />
         {{else}}
           <AkIcon
-            @iconName={{if @file.isManualRequested 'timer' 'circle'}}
+            @iconName={{if
+              @file.isManualRequested
+              'timer-outline'
+              'circle-outline'
+            }}
             @color='success'
-            @variant='outlined'
             local-class='file-overview-status-icon'
             data-test-fileOverview-manualScanStatus-requestedPendingIcon
           />

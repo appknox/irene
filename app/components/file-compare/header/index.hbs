@@ -44,7 +44,7 @@
         <AkDivider @direction='vertical' @height='26px' local-class='divider' />
 
         <AkStack @alignItems='center' @spacing='0.5'>
-          <AkIcon @variant='outlined' @iconName='text-snippet' />
+          <AkIcon @iconName='text-snippet-outline' />
 
           <AkTypography data-test-fileCompareHeader-projectOverview-packageName>
             {{or @project.packageName @file1.project.packageName}}
@@ -59,7 +59,7 @@
           />
 
           <AkStack @alignItems='center' @spacing='0.5'>
-            <AkIcon @variant='outlined' @iconName='folder' />
+            <AkIcon @iconName='folder-outline' />
 
             <AkTypography data-test-fileCompareHeader-projectOverview-projectID>
               {{t 'projectID'}}
