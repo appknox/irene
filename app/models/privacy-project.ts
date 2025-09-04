@@ -21,6 +21,9 @@ export default class PrivacyProjectModel extends Model {
   @attr('boolean')
   declare highlight: boolean;
 
+  @attr('boolean')
+  declare pii_highlight: boolean;
+
   @attr('date')
   declare lastScannedOn: Date;
 
