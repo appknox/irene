@@ -2,10 +2,10 @@ import Controller from '@ember/controller';
 import { service } from '@ember/service';
 
 import type IntlService from 'ember-intl/services/intl';
-import { type AkBreadcrumbsItemProps } from 'irene/services/ak-breadcrumbs';
-import { type FileDASTResultsModel } from 'irene/routes/authenticated/dashboard/file/dynamic-scan/results';
+import type { AkBreadcrumbsItemProps } from 'irene/services/ak-breadcrumbs';
+import type { FileDASTResultsModel } from 'irene/routes/authenticated/dashboard/file/dynamic-scan/results';
 
-export default class AuthenticatedDashboardFileDynamicScanResultsController extends Controller {
+export default class AuthenticatedDashboardFileDynamicScanResultsCapturedApisController extends Controller {
   @service declare intl: IntlService;
 
   declare model: FileDASTResultsModel;
@@ -14,14 +14,14 @@ export default class AuthenticatedDashboardFileDynamicScanResultsController exte
     const routeModels = [this.model.file.id];
 
     const crumb: AkBreadcrumbsItemProps = {
-      title: this.intl.t('dastTabs.dastResults'),
-      route: 'authenticated.dashboard.file.dynamic-scan.results.index',
+      title: 'Captured APIs',
+      route: 'authenticated.dashboard.file.dynamic-scan.results.apis-captured',
       models: routeModels,
       routeGroup: 'project/files',
 
       siblingRoutes: [
+        'authenticated.dashboard.file.dynamic-scan.results.index',
         'authenticated.dashboard.file.dynamic-scan.results.scan-coverage',
-        'authenticated.dashboard.file.dynamic-scan.results.apis-captured',
       ],
     };
 

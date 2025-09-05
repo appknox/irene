@@ -26,6 +26,7 @@ import ProfileModel from './profile';
 import SbomFileModel from './sbom-file';
 import SubmissionModel from './submission';
 import DynamicscanModel from './dynamicscan';
+import { FileCapiReportScanType } from './file-capi-report';
 
 const _getAnalysesCount = (
   analysis: SyncHasMany<AnalysisModel>,
@@ -151,6 +152,12 @@ export default class FileModel extends ModelBaseMixin {
     const adapter = this.store.adapterFor('file');
 
     return await adapter.getLastDynamicScan(fileId, mode, isScheduledScan);
+  }
+
+  async generateCapiReports(fileTypes: FileCapiReportScanType[]) {
+    const adapter = this.store.adapterFor('file');
+
+    return await adapter.generateCapiReports(this.id, fileTypes);
   }
 
   analysesSorting = ['computedRisk:desc'];

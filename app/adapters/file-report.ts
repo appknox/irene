@@ -7,6 +7,7 @@ import { FileReportScanType } from 'irene/models/file-report';
 
 interface FileReportQuery {
   fileId: string;
+  latest?: boolean;
 }
 
 enum REPORT_TYPE_ENDPOINT {

@@ -1,0 +1,48 @@
+<AkStack
+  @spacing='1'
+  @alignItems='center'
+  local-class='options-selected-root'
+  class='p-2 pr-3'
+>
+  {{#if this.hasSelectedItems}}
+    <AkStack @spacing='1' @alignItems='center'>
+      <AkStack
+        @alignItems='center'
+        @spacing='0.5'
+        {{style padding='0.42857em'}}
+        local-class='options-selected-container'
+      >
+        <AkIcon @iconName={{this.iconName}} @color='inherit' />
+
+        <AkTypography
+          @variant='body2'
+          @color='inherit'
+          local-class='options-selected-label'
+        >
+          {{this.selectedItem.length}}
+        </AkTypography>
+      </AkStack>
+
+      <AkTypography>
+        Options selected
+      </AkTypography>
+
+      <AkIconButton {{on 'click' this.handleClearAll}}>
+        <AkIcon
+          id='clear-all-domain-filter-button'
+          @iconName='close'
+          @size='small'
+          {{style fontSize='1.1429em !important'}}
+        />
+      </AkIconButton>
+    </AkStack>
+  {{else}}
+    <AkStack @spacing='1' @alignItems='center'>
+      <AkIcon @iconName={{this.iconName}} />
+
+      <AkTypography>
+        Domain Filters
+      </AkTypography>
+    </AkStack>
+  {{/if}}
+</AkStack>

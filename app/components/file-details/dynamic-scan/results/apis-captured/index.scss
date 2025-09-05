@@ -1,0 +1,8 @@
+.apis-captured-container {
+  border: 1px solid var(--border-color-1);
+  border-top: none;
+
+  .apis-captured-illustration--grayscale {
+    filter: grayscale(100%);
+  }
+}
