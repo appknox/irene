@@ -125,7 +125,12 @@ module('Acceptance | oidc login', function (hooks) {
     }
   };
 
-  const handleUserLoginFlow = async (assert, server, sso = false) => {
+  const handleUserLoginFlow = async (
+    assert,
+    server,
+    is_saml = false,
+    is_oidc = false
+  ) => {
     server.post(
       'v2/sso/check',
       () =>
@@ -133,9 +138,10 @@ module('Acceptance | oidc login', function (hooks) {
           200,
           {},
           {
-            is_sso: Boolean(sso),
-            is_sso_enforced: Boolean(sso),
+            is_saml: Boolean(is_saml),
+            is_sso_enforced: Boolean(is_saml),
             token: SSO_TOKEN,
+            is_oidc: Boolean(is_oidc),
           }
         )
     );
@@ -159,6 +165,20 @@ module('Acceptance | oidc login', function (hooks) {
         )
     );
 
+    // Mock OIDC SSO endpoint
+    server.post('/sso/oidc/authenticate', (_, req) => {
+      const data = JSON.parse(req.requestBody);
+
+      return new Response(
+        200,
+        {},
+        {
+          url: `https://accounts.google.com/o/oauth2/auth?client_id=${faker.string.alphanumeric(20)}&redirect_uri=${encodeURIComponent(data.redirect_uri)}&response_type=code&scope=openid%20email%20profile`,
+          username: data.username,
+        }
+      );
+    });
+
     server.post(
       '/login',
       () =>
@@ -178,6 +198,8 @@ module('Acceptance | oidc login', function (hooks) {
     );
 
     await click('[data-test-user-login-check-type-button]');
+
+    const sso = is_saml || is_oidc;
 
     if (sso) {
       assert
@@ -308,7 +330,7 @@ module('Acceptance | oidc login', function (hooks) {
         }
 
         if (loginBySSO) {
-          await handleUserLoginFlow(assert, this.server, true);
+          await handleUserLoginFlow(assert, this.server, true, 'google-test');
         }
 
         // Simulating redirect from authenticator since window is stubbed
@@ -339,6 +361,60 @@ module('Acceptance | oidc login', function (hooks) {
       );
     }
   );
+
+  test('oidc sso login flow', async function (assert) {
+    assert.expect(3);
+
+    this.server.post(
+      'v2/sso/check',
+      () =>
+        new Response(
+          200,
+          {},
+          {
+            is_saml: false,
+            is_sso_enforced: true,
+            token: SSO_TOKEN,
+            is_oidc: true,
+          }
+        )
+    );
+
+    this.server.post('/sso/oidc/authenticate', (_, req) => {
+      const data = JSON.parse(req.requestBody);
+
+      assert.strictEqual(
+        data.redirect_uri,
+        `${window.location.origin}/sso/oidc/redirect`
+      );
+
+      return new Response(
+        200,
+        {},
+        {
+          url: `https://accounts.google.com/o/oauth2/auth?client_id=test&redirect_uri=${encodeURIComponent(data.redirect_uri)}&response_type=code&scope=openid%20email%20profile`,
+          username: 'google-test',
+        }
+      );
+    });
+
+    await visit('/login');
+
+    await fillIn(
+      '[data-test-user-login-check-type-username-input]',
+      'testuser@example.com'
+    );
+
+    await click('[data-test-user-login-check-type-button]');
+
+    assert
+      .dom('[data-test-user-login-via-sso-forced-username-input]')
+      .hasValue('testuser@example.com');
+
+    assert.dom('[data-test-user-login-via-sso-forced-button]').isNotDisabled();
+
+    await click('[data-test-user-login-via-sso-forced-button]');
+  });
 
   test.each(
     'oidc login error scenarios',

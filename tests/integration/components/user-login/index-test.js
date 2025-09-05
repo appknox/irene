@@ -65,7 +65,7 @@ module('Integration | Component | user-login', function (hooks) {
         200,
         {},
         {
-          is_sso: false,
+          is_saml: false,
           is_sso_enforced: false,
           token: null,
         }
@@ -114,7 +114,7 @@ module('Integration | Component | user-login', function (hooks) {
         200,
         {},
         {
-          is_sso: false,
+          is_saml: false,
           is_sso_enforced: false,
           token: null,
         }
@@ -190,7 +190,7 @@ module('Integration | Component | user-login', function (hooks) {
         200,
         {},
         {
-          is_sso: false,
+          is_saml: false,
           is_sso_enforced: false,
           token: null,
         }
@@ -251,7 +251,7 @@ module('Integration | Component | user-login', function (hooks) {
         200,
         {},
         {
-          is_sso: false,
+          is_saml: false,
           is_sso_enforced: false,
           token: null,
         }
@@ -326,7 +326,7 @@ module('Integration | Component | user-login', function (hooks) {
         200,
         {},
         {
-          is_sso: false,
+          is_saml: false,
           is_sso_enforced: false,
           token: null,
         }
@@ -404,7 +404,7 @@ module('Integration | Component | user-login', function (hooks) {
         200,
         {},
         {
-          is_sso: true,
+          is_saml: true,
           is_sso_enforced: false,
           token: null,
         }
@@ -439,7 +439,7 @@ module('Integration | Component | user-login', function (hooks) {
         200,
         {},
         {
-          is_sso: true,
+          is_saml: true,
           is_sso_enforced: true,
           token: null,
         }

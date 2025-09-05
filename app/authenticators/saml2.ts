@@ -1,6 +1,6 @@
 import ENV from 'irene/config/environment';
 import BaseAuthenticator, { LoginSuccessDataProps, processData } from './base';
-import type { AjaxError } from 'irene/services/ajax';
+import parseError from 'irene/utils/parse-error';
 
 export default class Saml2Auth extends BaseAuthenticator {
   authenticate(ssotoken: string) {
@@ -16,12 +16,8 @@ export default class Saml2Auth extends BaseAuthenticator {
             data = processData(data);
             resolve(data);
           },
-          (error: AjaxError) => {
-            let msg = 'Login failed';
-
-            if (error.payload.message) {
-              msg = 'Login failed: ' + error.payload.message;
-            }
+          (error) => {
+            const msg = 'Login failed: ' + parseError(error);
 
             this.notify.error(msg);
             this.router.transitionTo('login');

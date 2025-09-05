@@ -1,0 +1,8 @@
+.bordered-box-section {
+  padding: 1em;
+  box-sizing: border-box;
+
+  &:not(:last-child) {
+    border-bottom: 1px solid var(--sso-settings-saml-border-color);
+  }
+}

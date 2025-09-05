@@ -50,7 +50,7 @@ describe('User Login', () => {
   });
 
   it('should throw an error if user credentials are invalid', () => {
-    const errorMessage = 'The credentials you entered is incorrect';
+    const errorMessage = 'The credentials you entered are incorrect';
 
     // Mocks Frontend and Server configs
     const { frontendConfigAlias } =

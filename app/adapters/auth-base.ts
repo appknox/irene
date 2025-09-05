@@ -43,10 +43,25 @@ const AuthenticationBase = (
       requestData?: object
     ) {
       if (status === 401) {
-        // Session is invalid, logout and redirect to login
+        // Safely extract message from payload
+        const message =
+          typeof payload === 'string'
+            ? payload
+            : (payload?.detail ?? payload?.message ?? '');
+
+        // Check if message is a string before calling toLowerCase
+        const messageStr =
+          typeof message === 'string' ? message.toLowerCase() : '';
+
+        const isInactive = messageStr.includes('inactive');
+        const redirectParam = isInactive
+          ? 'userInactive=true'
+          : 'sessionExpired=true';
+
+        this.window.location.replace(`/login?${redirectParam}`);
         this.session.invalidate();
-        this.window.location.replace('/login?sessionExpired=true');
-        return;
+
+        throw new Error('Authentication failed - redirecting to login');
       }
 
       return super.handleResponse(status, headers, payload, requestData);
