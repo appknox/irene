@@ -2,6 +2,7 @@
   width: fit-content;
   margin-top: 1em;
   padding: 0.5em 1em;
+  background-color: var(--sbom-scan-details-overview-background-color);
   border: 1px solid var(--sbom-scan-details-overview-border-color);
   border-radius: var(--sbom-scan-details-overview-border-radius);
 }

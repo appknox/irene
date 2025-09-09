@@ -51,7 +51,7 @@
         </AkTypography>
       </AkStack>
     {{else}}
-      <AkTable as |t|>
+      <AkTable local-class='organization-namespace-table-container' as |t|>
         <t.head data-test-namespace-thead @columns={{this.columns}} />
         <t.body @rows={{pgc.currentPageResults}} as |b|>
           <b.row data-test-namespace-row as |r|>

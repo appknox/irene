@@ -16,7 +16,10 @@ module(
       this.store = this.owner.lookup('service:store');
 
       const tags = [1, 2, 3, 4].map(() => this.server.create('tag').toJSON());
-      const project = this.server.create('project');
+      const project = this.server.create('project', {
+        show_unknown_analysis: true,
+      });
+
       const vulnerabilities = this.server.createList('vulnerability', 7);
       const analyses = vulnerabilities.map((v) =>
         this.server.create('analysis', { vulnerability: v.id }).toJSON()
@@ -48,14 +51,6 @@ module(
       this.setProperties({
         file: fileModel,
         profile: profileModel,
-      });
-
-      // Common server mocks
-      this.server.get('/profiles/:id/unknown_analysis_status', (_, req) => {
-        return {
-          id: req.params.id,
-          status: true,
-        };
       });
 
       this.server.get('/v2/projects/:id', (schema, req) => {
@@ -204,9 +199,9 @@ module(
       this.set('hideOpenInNewTabIcon', false);
 
       await render(
-        hbs`<FileOverview 
-            @hideCTAs={{this.hideCTAs}} 
-            @file={{this.file}} 
+        hbs`<FileOverview
+            @hideCTAs={{this.hideCTAs}}
+            @file={{this.file}}
             @profileId={{this.profile.id}}
             @hideOpenInNewTabIcon={{this.hideOpenInNewTabIcon}}
          />`
@@ -238,11 +233,11 @@ module(
       });
 
       await render(
-        hbs`<FileOverview 
-            @file={{this.file}} 
-            @profileId={{this.profile.id}} 
+        hbs`<FileOverview
+            @file={{this.file}}
+            @profileId={{this.profile.id}}
             @isSelectedFile={{eq this.file.id this.selectedFile.id}}
-            @onFileSelect={{this.onFileSelect}} 
+            @onFileSelect={{this.onFileSelect}}
           />`
       );
 

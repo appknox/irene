@@ -64,7 +64,6 @@ export default class HomePageComponent extends Component {
         route: 'authenticated.storeknox.inventory.app-list',
         indicatorSvg: 'ak-svg/sm-indicator',
         coverBackgroundImage: 'ak-svg/storeknox-bg-img',
-        isBeta: true,
       },
       this.showReporting && {
         title: this.intl.t('reportModule.title'),

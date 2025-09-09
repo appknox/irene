@@ -4,6 +4,7 @@
   box-sizing: border-box;
   border-radius: var(--organization-team-overview-border-radius);
   border: 1px solid var(--organization-team-overview-border-color);
+  background-color: var(--organization-team-overview-background);
   cursor: pointer;
 
   &:hover {

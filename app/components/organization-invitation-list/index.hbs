@@ -24,7 +24,11 @@
       </div>
     {{/if}}
 
-    <AkTable data-test-invitation-list as |t|>
+    <AkTable
+      local-class='organization-invitation-table-container'
+      data-test-invitation-list
+      as |t|
+    >
       <t.head data-test-invitation-list-thead @columns={{this.columns}} />
       <t.body @rows={{pgc.currentPageResults}} as |b|>
         <b.row

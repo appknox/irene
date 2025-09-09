@@ -2,8 +2,7 @@
 {{#if (or @empty @loading)}}
   <AkStack
     local-class='empty-loading-container
-    {{if @skeleton "skeleton"}}
-    {{if this.tree "" "list"}}'
+    {{if @skeleton "skeleton"}}'
     {{style height=(or @height '500px')}}
     @direction='column'
     @spacing='2.5'

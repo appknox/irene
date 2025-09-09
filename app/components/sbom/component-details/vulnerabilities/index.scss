@@ -21,6 +21,7 @@
   border: 1px solid
     var(--sbom-component-details-vulnerabilities-list-border-color-light);
   border-top: none;
+    background-color: var(--sbom-component-details-vulnerabilities-list-background-color);
 
   .vulnerability-detail-wrapper {
     width: 100%;

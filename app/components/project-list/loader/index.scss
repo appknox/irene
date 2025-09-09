@@ -1,6 +1,7 @@
 .loading {
   border: 1px solid var(--project-list-loader-border-color);
   border-radius: var(--project-list-loader-border-radius);
+  background-color: var(--project-list-loader-background-color);
   width: 100%;
   min-height: 35em;
 
