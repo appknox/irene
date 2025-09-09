@@ -619,14 +619,27 @@ body {
   --organization-mfa-alert-warn-text-color: var(--warn-dark);
   --organization-mfa-alert-warn-background: var(--warn-light);
 
-  // variables for sso-settings
-  --sso-settings-border-color: var(--border-color-1);
-  --sso-settings-border-radius: var(--border-radius);
-  --sso-settings-dropzone-active-shadow-color: var(--neutral-grey-200);
-  --sso-settings-file-upload-btn-color: var(--primary-main);
-  --sso-settings-textarea-color: var(--text-secondary);
-  --sso-settings-textarea-border-color: var(--border-color-1);
-  --sso-settings-textarea-border-radius: var(--border-radius);
+  // variables for sso-settings/oidc
+  --sso-settings-oidc-border-radius: var(--border-radius);
+  --sso-settings-oidc-border-color: var(--border-color-1);
+
+  // variables for sso-settings/saml
+  --sso-settings-saml-border-radius: var(--border-radius);
+  --sso-settings-saml-border-color: var(--border-color-1);
+  --sso-settings-saml-dropzone-active-shadow-color: var(--neutral-grey-200);
+  --sso-settings-saml-file-upload-btn-color: var(--primary-main);
+  --sso-settings-saml-textarea-color: var(--text-secondary);
+  --sso-settings-saml-textarea-border-color: var(--border-color-1);
+  --sso-settings-saml-textarea-border-radius: var(--border-radius);
+
+  // variables for sso-settings/sso-toggle
+  --sso-settings-sso-toggle-border-radius: var(--border-radius);
+  --sso-settings-sso-toggle-border-color: var(--border-color-1);
+
+  // variables for sso-settings/steps-display
+  --sso-settings-steps-display-common-white: var(--common-white);
+  --sso-settings-steps-display-grey: var(--neutral-grey-300);
+  --sso-settings-steps-display-black: var(--text-primary);
 
   // variables for organization-archive
   --organization-archive-border-color: var(--border-color-1);

@@ -28,8 +28,10 @@ function routes() {
   // NOTE v2 api namespace has to be grouped together
   this.post('/api/v2/sso/check', () => {
     return {
-      is_sso: false,
+      is_saml: false,
       is_sso_enforced: false,
+      token: '',
+      is_oidc: false,
     };
   });
 

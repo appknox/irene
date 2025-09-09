@@ -29,6 +29,7 @@ export default class LoginRoute extends Route {
 
   beforeModel(transition: Transition) {
     const sessionExpired = transition.to?.queryParams?.['sessionExpired'];
+    const userInactive = transition.to?.queryParams?.['userInactive'];
 
     if (sessionExpired) {
       this.notifications.info(this.intl.t('pleaseLoginAgain'), {
@@ -38,6 +39,15 @@ export default class LoginRoute extends Route {
       // Clean the query parameter from the URL
       const url = new URL(this.window.location.href);
       url.searchParams.delete('sessionExpired');
+      this.window.history.replaceState({}, '', url.toString());
+    } else if (userInactive) {
+      this.notifications.error(this.intl.t('loginFailed'), {
+        autoClear: true,
+      });
+
+      // Clean the query parameter from the URL
+      const url = new URL(this.window.location.href);
+      url.searchParams.delete('userInactive');
       this.window.history.replaceState({}, '', url.toString());
     }
   }

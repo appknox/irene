@@ -1,0 +1,143 @@
+<AkStack
+  @alignItems='center'
+  @justifyContent='space-between'
+  local-class='bordered-box-section'
+>
+  <AkStack @spacing='1'>
+    <AkIcon @color='textPrimary' @iconName='integration-instructions' />
+
+    <AkTypography data-test-ssoSettings-idpSubtitle @variant='subtitle1'>
+      {{t 'idpMetadata'}}
+    </AkTypography>
+  </AkStack>
+
+  {{#if (and @sso (not @sso.enabled))}}
+    <AkTooltip
+      @placement='top'
+      @arrow={{true}}
+      @title={{t 'idpMetadataDelete'}}
+    >
+      <AkIconButton
+        data-test-ssoSettings-idpDeleteBtn
+        @variant='outlined'
+        {{on 'click' @openDeleteIdpMetadataConfirm}}
+      >
+        <AkIcon @iconName='delete' />
+      </AkIconButton>
+    </AkTooltip>
+  {{/if}}
+</AkStack>
+
+<div local-class='bordered-box-section'>
+  <AkTypography data-test-ssoSettings-idpEntityIdLabel @variant='subtitle2'>
+    {{t 'entityID'}}
+  </AkTypography>
+
+  <AkTypography
+    data-test-ssoSettings-idpEntityIdValue
+    @variant='body2'
+    @color='textSecondary'
+  >
+    {{@idpMetadata.entityId}}
+  </AkTypography>
+
+  <AkTypography
+    data-test-ssoSettings-idpSsoUrlLabel
+    class='mt-2'
+    @variant='subtitle2'
+  >
+    {{t 'ssoServiceURL'}}
+  </AkTypography>
+
+  <AkTypography
+    data-test-ssoSettings-idpSsoUrlValue
+    @variant='body2'
+    @color='textSecondary'
+  >
+    {{@idpMetadata.ssoServiceUrl}}
+  </AkTypography>
+</div>
+
+<div local-class='bordered-box-section'>
+  <AkStack @spacing='1'>
+    <AkIcon @color='textPrimary' @iconName='verified' />
+
+    <AkTypography data-test-ssoSettings-idpCertSubtitle @variant='subtitle1'>
+      {{t 'certificate'}}
+    </AkTypography>
+  </AkStack>
+</div>
+
+<div local-class='bordered-box-section'>
+  <AkTypography data-test-ssoSettings-idpCertIssuerLabel @variant='subtitle2'>
+    {{t 'issuer'}}
+  </AkTypography>
+
+  <AkTypography
+    data-test-ssoSettings-idpCertIssuerValue
+    @variant='body2'
+    @color='textSecondary'
+  >
+    {{@idpMetadata.certificate.issuer}}
+  </AkTypography>
+
+  <AkTypography
+    data-test-ssoSettings-idpCertIssuedOnLabel
+    class='mt-2'
+    @variant='subtitle2'
+  >
+    {{t 'issuedOn'}}
+  </AkTypography>
+
+  <AkTypography
+    data-test-ssoSettings-idpCertIssuedOnValue
+    @variant='body2'
+    @color='textSecondary'
+  >
+    {{this.dateDisplayValue @idpMetadata.certificate.issued_on}}
+  </AkTypography>
+
+  <AkTypography
+    data-test-ssoSettings-idpCertExpiryLabel
+    class='mt-2'
+    @variant='subtitle2'
+  >
+    {{t 'expiry'}}
+  </AkTypography>
+
+  <AkTypography
+    data-test-ssoSettings-idpCertExpiryValue
+    @variant='body2'
+    @color='textSecondary'
+  >
+    {{this.dateDisplayValue @idpMetadata.certificate.expires_on}}
+  </AkTypography>
+
+  <AkTypography
+    data-test-ssoSettings-idpCertFPLabel
+    class='mt-2'
+    @variant='subtitle2'
+  >
+    {{t 'fingerprints'}}
+  </AkTypography>
+
+  <div data-test-ssoSettings-idpCertFPValue-SHA256>
+    <AkTypography @tag='span' @variant='subtitle2'>
+      {{t 'SHA256'}}
+    </AkTypography>
+
+    <AkTypography @tag='span' @variant='body2' @color='textSecondary'>
+      {{@idpMetadata.certificate.fingerprint_sha256}}
+    </AkTypography>
+  </div>
+
+  <div data-test-ssoSettings-idpCertFPValue-SHA1>
+    <AkTypography @tag='span' @variant='subtitle2'>
+      {{t 'SHA1'}}
+    </AkTypography>
+
+    <AkTypography @tag='span' @variant='body2' @color='textSecondary'>
+      {{@idpMetadata.certificate.fingerprint_sha1}}
+    </AkTypography>
+  </div>
+</div>

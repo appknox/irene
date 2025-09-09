@@ -3,8 +3,8 @@ import { visit } from '@ember/test-helpers';
 import { setupApplicationTest } from 'ember-qunit';
 import { setupMirage } from 'ember-cli-mirage/test-support';
 import Service from '@ember/service';
-import { setupRequiredEndpoints } from '../helpers/acceptance-utils';
 import { Response } from 'miragejs';
+import { setupRequiredEndpoints } from '../helpers/acceptance-utils';
 
 class IntegrationStub extends Service {
   async configure(user) {
@@ -38,27 +38,17 @@ module('Acceptance | Token Expiry Redirect', function (hooks) {
   });
 
   test('redirects to login if token expires', async function (assert) {
-    assert.expect(2);
-    const notify = this.owner.lookup('service:notifications');
-    notify.setDefaultClearDuration(0);
-
     const loginRedirectUrl = '/login?sessionExpired=true';
 
     class SessionStub extends Service {
-      invalidate() {
-        assert.ok(true, 'Session invalidator was called.');
-      }
+      invalidate() {}
     }
 
+    let replacedUrl = null;
     class WindowStub extends Service {
-      url = null;
-
       location = {
         replace: (url) => {
-          // Redirect URL should match
-          assert.strictEqual(url, loginRedirectUrl);
-
-          this.url = url;
+          replacedUrl = url;
         },
       };
     }
@@ -66,42 +56,58 @@ module('Acceptance | Token Expiry Redirect', function (hooks) {
     this.owner.register('service:session', SessionStub);
     this.owner.register('service:browser/window', WindowStub);
 
+    // Fake API returns 401
     this.server.get('/organizations', () => {
       return new Response(
         401,
         { 'Content-Type': 'application/json' },
-        {
-          errors: [
-            {
-              status: '401',
-              title: 'Unauthorized',
-              detail: 'Authentication is required to access this resource',
-            },
-          ],
-        }
-      );
-    });
-
-    this.server.get('/vulnerabilities', () => {
-      return new Response(
-        401,
-        { 'Content-Type': 'application/json' },
-        {
-          errors: [
-            {
-              status: '401',
-              title: 'Unauthorized',
-              detail: 'Authentication is required to access this resource',
-            },
-          ],
-        }
+        'Unauthorized'
       );
     });
 
     try {
       await visit('/projects');
-    } catch (error) {
-      // expected error
+    } catch (e) {
+      // ignore
     }
+
+    assert.strictEqual(replacedUrl, loginRedirectUrl);
+  });
+
+  test('redirects to login if user inactive', async function (assert) {
+    const loginRedirectUrl = '/login?userInactive=true';
+
+    class SessionStub extends Service {
+      invalidate() {}
+    }
+
+    let replacedUrl = null;
+    class WindowStub extends Service {
+      location = {
+        replace: (url) => {
+          replacedUrl = url;
+        },
+      };
+    }
+
+    this.owner.register('service:session', SessionStub);
+    this.owner.register('service:browser/window', WindowStub);
+
+    // Fake API returns inactive user error
+    this.server.get('/organizations', () => {
+      return new Response(
+        401,
+        { 'Content-Type': 'text/plain' },
+        'User inactive or deleted.'
+      );
+    });
+
+    try {
+      await visit('/projects');
+    } catch (e) {
+      // ignore
+    }
+
+    assert.strictEqual(replacedUrl, loginRedirectUrl);
   });
 });

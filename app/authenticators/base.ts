@@ -7,6 +7,7 @@ import RouterService from '@ember/routing/router-service';
 import ENV from 'irene/config/environment';
 import OidcService from 'irene/services/oidc';
 import FreshdeskService from 'irene/services/freshdesk';
+import { getB64Token } from 'irene/utils/b64-encode-unicode';
 import type IreneAjaxService from 'irene/services/ajax';
 
 export interface LoginSuccessDataProps {
@@ -19,16 +20,6 @@ export interface IreneLastTransitionInfoProps {
   sessionKey?: number;
   url: string;
 }
-
-const b64EncodeUnicode = (str: string) =>
-  btoa(
-    encodeURIComponent(str).replace(/%([0-9A-F]{2})/g, (match, p1: string) => {
-      return String.fromCharCode(Number(`0x${p1}`));
-    })
-  );
-
-const getB64Token = (userId: number, token: string) =>
-  b64EncodeUnicode(`${userId}:${token}`);
 
 export const processData = (data: LoginSuccessDataProps) => {
   data.b64token = getB64Token(data.user_id, data.token);
