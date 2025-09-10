@@ -54,6 +54,7 @@ export default class ProjectSettingsAnalysisSettingsToggleAnalysisComponent exte
 
     try {
       await this.ajax.put(url, { data });
+      await this.args.project?.reload();
       this.notify.success(tSavedPreferences);
 
       if (!this.isDestroyed) {

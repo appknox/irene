@@ -26,6 +26,9 @@ export default class ProjectModel extends ModelBaseMixin {
   @attr('boolean')
   declare isManualScanAvailable: boolean;
 
+  @attr('boolean')
+  declare showUnknownAnalysis: boolean;
+
   @attr('string')
   declare githubRepo: string;
 

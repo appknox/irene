@@ -19,8 +19,13 @@ module(
 
       const profile = this.server.create('profile', { id: '100' });
 
+      const project = this.server.create('project', {
+        id: '1',
+        activeProfileId: profile.id,
+      });
+
       const file = this.server.create('file', {
-        project: '1',
+        project: project.id,
         profile: profile.id,
       });
 
@@ -36,13 +41,13 @@ module(
       'it renders file-details/severity-level',
       [true, false],
       async function (assert, unknownAnalysisStatus) {
-        this.server.get('/profiles/:id/unknown_analysis_status', (_, req) => {
-          return { id: req.params.id, status: unknownAnalysisStatus };
+        this.server.get('/v2/projects/:id', (_, req) => {
+          return {
+            id: req.params.id,
+            active_profile_id: '100',
+            show_unknown_analysis: unknownAnalysisStatus,
+          };
         });
-
-        this.server.get('/profiles/:id', (schema, req) =>
-          schema.profiles.find(`${req.params.id}`)?.toJSON()
-        );
 
         await render(hbs`
             <FileDetails::SeverityLevel @file={{this.file}} />
