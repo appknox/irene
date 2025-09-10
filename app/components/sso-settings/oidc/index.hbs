@@ -1,0 +1,153 @@
+<AkTypography
+  data-test-ssoSettings-oidcDesc
+  @variant='body2'
+  @color='textSecondary'
+  class='pb-2'
+>
+  {{t 'oidcDesc'}}
+</AkTypography>
+
+<div class='mb-2' local-class='bordered-box'>
+  <AkStack @direction='column' class='p-2'>
+    <AkTypography data-test-ssoSettings-oidc-spTitle @variant='subtitle1'>
+      {{t 'serviceProvider'}}
+    </AkTypography>
+
+    <AkTypography @variant='body2' @color='textSecondary'>
+      {{t 'ssoSettings.oidc.redirectUrlDesc'}}
+    </AkTypography>
+  </AkStack>
+
+  <AkDivider @color='dark' />
+
+  <AkStack class='p-2'>
+    <AkTypography @variant='subtitle2' local-class='label-width'>
+      {{t 'ssoSettings.oidc.redirectUrl'}}
+    </AkTypography>
+
+    <AkTypography
+      data-test-ssoSettings-oidc-redirectUrl
+      @variant='body2'
+      @color='textPrimary'
+    >
+      {{this.redirectUrl}}
+    </AkTypography>
+  </AkStack>
+</div>
+
+{{#if this.hasProviders}}
+  <AkStack local-class='bordered-box' @direction='column'>
+    <AkStack
+      class='p-2'
+      @width='full'
+      @justifyContent='space-between'
+      @alignItems='center'
+    >
+      <AkTypography @variant='subtitle1'>
+        {{t 'ssoSettings.oidc.oidcProvider'}}
+      </AkTypography>
+
+      {{#if (and @sso (not @sso.enabled))}}
+        <AkIconButton
+          data-test-ssoSettings-oidcDeleteBtn
+          @variant='outlined'
+          disabled={{this.deleteProvider.isRunning}}
+          {{on 'click' this.openDeleteOidcConfirm}}
+        >
+          <AkIcon @iconName='delete' />
+        </AkIconButton>
+      {{/if}}
+    </AkStack>
+
+    <AkDivider @color='dark' />
+
+    <AkStack class='p-2'>
+      <AkStack>
+        <AkTypography @variant='subtitle2' local-class='label-width'>
+          {{t 'ssoSettings.oidc.discoveryURL'}}
+        </AkTypography>
+
+        <AkTypography data-test-ssoSettings-oidcDiscoveryUrl>
+          {{this.discoveryUrl}}
+        </AkTypography>
+      </AkStack>
+    </AkStack>
+  </AkStack>
+{{else}}
+  <div local-class='oidc-provider-form'>
+    <div class='p-2' local-class='bordered-box'>
+      <AkStack @spacing='2' @direction='column'>
+        <AkTypography
+          data-test-ssoSettings-oidcTitle
+          @variant='subtitle1'
+          class='mb-1'
+        >
+          {{t 'ssoSettings.oidc.addOidcProvider'}}
+        </AkTypography>
+
+        <AkTextField
+          data-test-ssoSettings-oidc-clientID
+          @label={{t 'ssoSettings.oidc.clientID'}}
+          @value={{this.changeset.client_id}}
+          @onInput={{fn (mut this.changeset.client_id)}}
+          @error={{this.changeset.error.client_id}}
+          @helperText={{this.changeset.error.client_id.validation}}
+          autocomplete='client-id'
+        />
+
+        <AkTextField
+          data-test-ssoSettings-oidc-clientSecret
+          @label={{t 'ssoSettings.oidc.clientSecret'}}
+          @type='password'
+          @value={{this.changeset.client_secret}}
+          @onInput={{fn (mut this.changeset.client_secret)}}
+          @error={{this.changeset.error.client_secret}}
+          @helperText={{this.changeset.error.client_secret.validation}}
+          autocomplete='one-time-code'
+        />
+
+        <AkTextField
+          data-test-ssoSettings-oidc-discoveryURL
+          @label={{t 'ssoSettings.oidc.discoveryURL'}}
+          @value={{this.changeset.discovery_url}}
+          @onInput={{fn (mut this.changeset.discovery_url)}}
+          @error={{this.changeset.error.discovery_url.validation}}
+          @helperText={{this.changeset.error.discovery_url.validation}}
+        />
+      </AkStack>
+
+      <AkStack @spacing='2' class='mt-2'>
+        <AkButton
+          data-test-ssoSettings-oidc-createProviderBtn
+          @disabled={{this.createProvider.isRunning}}
+          @loading={{this.createProvider.isRunning}}
+          {{on 'click' (perform this.createProvider)}}
+        >
+          {{t 'ssoSettings.oidc.createProvider'}}
+        </AkButton>
+
+        <AkButton
+          data-test-ssoSettings-oidc-resetBtn
+          @variant='outlined'
+          @color='neutral'
+          {{on 'click' this.resetForm}}
+        >
+          {{t 'reset'}}
+        </AkButton>
+      </AkStack>
+    </div>
+  </div>
+{{/if}}
+
+{{#if this.hasProviders}}
+  <SsoSettings::SsoToggle @organization={{@organization}} @user={{@user}} />
+{{/if}}
+
+<ConfirmBox
+  @isActive={{this.showDeleteOidcConfirm}}
+  @description={{t 'confirmBox.deleteOIDCConfig'}}
+  @delegate={{this}}
+  @confirmAction={{perform this.deleteProvider}}
+  @confirmText={{t 'delete'}}
+  @disabled={{this.deleteProvider.isRunning}}
+/>

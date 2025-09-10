@@ -1,26 +1,32 @@
-import { inject as service } from '@ember/service';
+import { service } from '@ember/service';
 import { action } from '@ember/object';
 import { task } from 'ember-concurrency';
-import Component from '@glimmer/component';
 import { tracked } from '@glimmer/tracking';
-import RouterService from '@ember/routing/router-service';
-import IntlService from 'ember-intl/services/intl';
+import Component from '@glimmer/component';
+import type RouterService from '@ember/routing/router-service';
+import type IntlService from 'ember-intl/services/intl';
 
 import ENV from 'irene/config/environment';
-import WhitelabelService from 'irene/services/whitelabel';
-import RegistrationService from 'irene/services/registration';
+import type WhitelabelService from 'irene/services/whitelabel';
+import type RegistrationService from 'irene/services/registration';
 import type IreneAjaxService from 'irene/services/ajax';
 
 type OtpError = { payload: { type: string; forced: string } };
 
 type SSOCheckData = {
-  is_sso: boolean;
+  is_saml: boolean;
   is_sso_enforced: boolean;
   token: string;
+  is_oidc: boolean;
 };
 
 type SSOSaml2Data = {
   url: string;
+};
+
+type SSOOidcData = {
+  url: string;
+  provider: string;
 };
 
 export default class UserLoginComponent extends Component {
@@ -40,8 +46,9 @@ export default class UserLoginComponent extends Component {
   @tracked username = '';
   @tracked password = '';
 
-  @tracked isSSOEnabled = false;
+  @tracked isSaml = false;
   @tracked isSSOEnforced = false;
+  @tracked isOidc = false;
 
   @tracked MFAEnabled = false;
   @tracked MFAIsEmail = false;
@@ -50,9 +57,11 @@ export default class UserLoginComponent extends Component {
 
   @tracked showCredError = false;
   @tracked showAccountLockError = false;
+  @tracked showSsoLoginSpinner = false;
 
   SSOCheckEndpoint = 'v2/sso/check';
   SSOAuthenticateEndpoint = 'sso/saml2';
+  SSOOidcAuthenticateEndpoint = 'sso/oidc/authenticate';
 
   get origin() {
     return this.window.location.origin;
@@ -65,12 +74,23 @@ export default class UserLoginComponent extends Component {
     return `${origin}${redirectURL}`;
   }
 
+  get oidcRedirectURL() {
+    const origin = this.origin;
+    const redirectURL = this.router.urlFor('sso.oidc.redirect');
+
+    return `${origin}${redirectURL}`;
+  }
+
   get showRegistrationLink() {
     return this.registration.shouldShowInLogin();
   }
 
   get registrationLink() {
     return this.registration.link;
+  }
+
+  get isSSOEnabled() {
+    return this.isOidc || this.isSaml;
   }
 
   verifySSOTask = task(async () => {
@@ -81,17 +101,19 @@ export default class UserLoginComponent extends Component {
         },
       });
 
-      this.isSSOEnabled = data.is_sso == true;
+      this.isSaml = data.is_saml == true;
       this.isSSOEnforced = data.is_sso_enforced == true;
       this.checkToken = data.token;
+      this.isOidc = data.is_oidc || false;
       this.isCheckDone = true;
     } catch (error) {
       this.logger.error(error);
 
       this.checkToken = '';
       this.isCheckDone = false;
-      this.isSSOEnabled = false;
+      this.isSaml = false;
       this.isSSOEnforced = false;
+      this.isOidc = false;
 
       this.notifications.error(
         this.intl.t('pleaseTryAgain'),
@@ -159,21 +181,78 @@ export default class UserLoginComponent extends Component {
     }
   });
 
-  ssologinTask = task(async () => {
-    const return_to = this.samlRedirectURL;
-    const token = this.checkToken;
-    const endpoint = this.SSOAuthenticateEndpoint;
-    const url = `${endpoint}?token=${token}&return_to=${return_to}`;
-
-    const data = await this.ajax.request<SSOSaml2Data>(url);
-
-    if (!data.url) {
-      this.logger.error('Invalid sso redirect call', data);
-
-      return;
+  ssologinTask = task({ drop: true }, async () => {
+    // Check if OIDC provider is available
+    if (this.isOidc) {
+      await this.oidcLoginTask.perform();
+    } else {
+      await this.samlLoginTask.perform();
     }
+  });
 
-    this.window.location.href = data.url;
+  samlLoginTask = task(async () => {
+    this.showSsoLoginSpinner = true;
+
+    try {
+      const return_to = this.samlRedirectURL;
+      const token = this.checkToken;
+      const endpoint = this.SSOAuthenticateEndpoint;
+      const url = `${endpoint}?token=${token}&return_to=${return_to}`;
+
+      const data = await this.ajax.request<SSOSaml2Data>(url);
+
+      this.showSsoLoginSpinner = false;
+
+      if (!data.url) {
+        this.logger.error('Invalid sso redirect call', data);
+
+        return;
+      }
+
+      this.window.location.href = data.url;
+    } catch (error) {
+      this.logger.error('SAML login failed', error);
+      this.showSsoLoginSpinner = false;
+
+      this.notifications?.error?.(
+        this.intl.t('pleaseTryAgain'),
+        ENV.notifications
+      );
+    }
+  });
+
+  oidcLoginTask = task(async () => {
+    this.showSsoLoginSpinner = true;
+
+    try {
+      const data = await this.ajax.post<SSOOidcData>(
+        this.SSOOidcAuthenticateEndpoint,
+        {
+          data: {
+            username: this.username,
+            redirect_uri: this.oidcRedirectURL,
+          },
+        }
+      );
+
+      this.showSsoLoginSpinner = false;
+
+      if (!data.url) {
+        this.logger.error('Invalid oidc redirect call', data);
+
+        return;
+      }
+
+      this.window.location.href = data.url;
+    } catch (error) {
+      this.logger.error('OIDC login failed', error);
+      this.showSsoLoginSpinner = false;
+
+      this.notifications.error(
+        this.intl.t('pleaseTryAgain'),
+        ENV.notifications
+      );
+    }
   });
 
   handleOTP(error: OtpError) {
@@ -209,14 +288,16 @@ export default class UserLoginComponent extends Component {
     this.password = '';
     this.isCheckDone = false;
     this.checkToken = '';
-    this.isSSOEnabled = false;
+    this.isSaml = false;
     this.isSSOEnforced = false;
+    this.isOidc = false;
     this.MFAEnabled = false;
     this.MFAIsEmail = false;
     this.MFAForced = false;
     this.MFAIsAuthApp = false;
     this.showCredError = false;
     this.showAccountLockError = false;
+    this.showSsoLoginSpinner = false;
   }
 
   @action
