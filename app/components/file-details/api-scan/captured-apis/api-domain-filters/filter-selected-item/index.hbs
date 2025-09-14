@@ -1,0 +1,64 @@
+<AkStack
+  @spacing='1'
+  @alignItems='center'
+  local-class='options-selected-root'
+  class='p-2 pr-3'
+  data-test-fileDetails-apiScan-capturedApi-domainFilterSelectedItem
+>
+  {{#if this.hasSelectedItems}}
+    <AkStack @spacing='1' @alignItems='center'>
+      <AkStack
+        @alignItems='center'
+        @spacing='0.5'
+        local-class='options-selected-container'
+      >
+        <AkIcon
+          @iconName={{this.iconName}}
+          @color='inherit'
+          data-test-fileDetails-apiScan-capturedApi-domainFilterSelectedItem-icon
+        />
+
+        <AkTypography
+          @variant='body2'
+          @color='inherit'
+          local-class='options-selected-label'
+          data-test-fileDetails-apiScan-capturedApi-domainFilterSelectedItem-count
+        >
+          {{this.selectedItem.length}}
+        </AkTypography>
+      </AkStack>
+
+      <AkTypography
+        data-test-fileDetails-apiScan-capturedApi-domainFilterSelectedItem-label
+      >
+        {{t 'apiScanModule.optionsSelected'}}
+      </AkTypography>
+
+      <AkIconButton
+        {{on 'click' this.handleClearAll}}
+        data-test-fileDetails-apiScan-capturedApi-domainFilterSelectedItem-clearAllBtn
+      >
+        <AkIcon
+          id='clear-all-domain-filter-button'
+          @iconName='close'
+          @size='small'
+          {{style fontSize='1.1429em !important'}}
+          data-test-fileDetails-apiScan-capturedApi-domainFilterSelectedItem-clearAllBtn-icon
+        />
+      </AkIconButton>
+    </AkStack>
+  {{else}}
+    <AkStack @spacing='1' @alignItems='center'>
+      <AkIcon
+        @iconName={{this.iconName}}
+        data-test-fileDetails-apiScan-capturedApi-domainFilterSelectedItem-emptyIcon
+      />
+
+      <AkTypography
+        data-test-fileDetails-apiScan-capturedApi-domainFilterSelectedItem-label
+      >
+        {{t 'apiScanModule.domainFilters'}}
+      </AkTypography>
+    </AkStack>
+  {{/if}}
+</AkStack>
