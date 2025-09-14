@@ -1078,6 +1078,33 @@ body {
     --error-main
   );
 
+  // variables for file-details/api-scan/captured-apis/api-domain-filters/after-options
+  --file-details-captured-apis-domain-filters-unselect-all-button-background-color: var(
+    --neutral-grey-100
+  );
+
+  --file-details-captured-apis-domain-filters-after-options-border-color: var(
+    --neutral-grey-300
+  );
+
+  // variables for file-details/api-scan/captured-apis/api-domain-filters/filter-selected-item
+  --file-details-api-scan-captured-apis-domain-filters-selected-options-background: var(
+    --neutral-grey-900
+  );
+
+  --file-details-api-scan-captured-apis-domain-filters-selected-options-color: var(
+    --common-white
+  );
+
+  // variables for file-details/api-scan/captured-apis/api-domain-filters
+  --file-details-api-scan-captured-apis-domain-filters-select-option-background: var(
+    --common-white
+  );
+
+  --file-details-api-scan-captured-apis-domain-filters-select-option-hover-background: var(
+    --hover-light-background
+  );
+
   // variables for file-details/insights-wrapper
   --file-details-insights-wrapper-border-color: var(--border-color-1);
   --file-details-insights-wrapper-background-color: var(--background-main);
@@ -2433,6 +2460,22 @@ body {
   // variables for file-details/dynamic-scan/results/scan-coverage/status
   --file-details-dynamic-scan-results-scan-coverage-status-box-shadow: var(
     --box-shadow-3
+  );
+
+  // variables for file-details/dynamic-scan/results/capis-report-drawer/generate-container
+  --file-details-dynamic-scan-results-capis-reports-drawer-generate-container-border-color: var(
+    --border-color-1
+  );
+  --file-details-dynamic-scan-results-capis-reports-drawer-generate-container-border-radius: var(
+    --border-radius
+  );
+  --file-details-dynamic-scan-results-capis-reports-drawer-report-gen-progress-indicator-bg: var(
+    --background-light
+  );
+
+  // variables for file-details/dynamic-scan/results/apis-captured
+  --file-details-dynamic-scan-results-apis-captured-border-color: var(
+    --border-color-1
   );
 
   // variables for page-not-found

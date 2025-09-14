@@ -1,0 +1,86 @@
+<AkList::Item class='px-3' @divider={{false}} ...attributes as |li|>
+  <li.leftIcon>
+    {{#let (component @reportDetails.iconComponent) as |Icon|}}
+      <Icon
+        data-test-fileDetailsDynamicScan-capis-reportList-reportItem-icon='{{@reportDetails.type}}'
+      />
+    {{/let}}
+  </li.leftIcon>
+
+  <AkStack @direction='column' @width='full' @spacing='0.5' class='pl-1'>
+    <AkTypography
+      data-test-fileDetailsDynamicScan-capis-reportList-reportItem-primaryText
+      @variant='subtitle1'
+    >
+      {{@reportDetails.primaryText}}
+    </AkTypography>
+
+    {{#if this.isReportGenerating}}
+      <AkTypography
+        @color='textSecondary'
+        data-test-fileDetailsDynamicScan-capis-reportList-reportItem-generatingText
+      >
+        {{t 'generating'}}...
+      </AkTypography>
+    {{else}}
+      <AkTypography
+        data-test-fileDetailsDynamicScan-capis-reportList-reportItem-secondaryText
+      >
+        {{@reportDetails.secondaryText}}
+      </AkTypography>
+    {{/if}}
+
+    {{#unless this.reportShouldBeRegenerated}}
+      <AkTypography
+        @variant='body2'
+        @color='textSecondary'
+        data-test-fileDetailsDynamicScan-capis-reportList-reportItem-generatedOnDateTime
+      >
+        {{@reportDetails.generatedOnDateTime}}
+      </AkTypography>
+    {{/unless}}
+  </AkStack>
+
+  <li.rightIcon>
+    <AkStack @alignItems='center'>
+      {{#if this.reportShouldBeRegenerated}}
+        <AkIconButton
+          disabled={{this.regenerateReport.isRunning}}
+          {{on 'click' (perform this.regenerateReport)}}
+          data-test-fileDetailsDynamicScan-capis-reportList-reportItem-regenerateBtn
+        >
+          <AkIcon
+            @iconName='replay'
+            data-test-fileDetailsDynamicScan-capis-reportList-reportItem-regenerateBtn-icon
+          />
+        </AkIconButton>
+
+        <AkDivider @direction='vertical' @height='23px' class='mx-1' />
+      {{/if}}
+
+      <AkIconButton
+        disabled={{this.disableReportDownload}}
+        {{on 'click' (perform this.handleDownloadReport)}}
+        data-test-fileDetailsDynamicScan-capis-reportList-reportItem-downloadBtn
+      >
+        <AkIcon
+          @size='medium'
+          @iconName='download'
+          data-test-fileDetailsDynamicScan-capis-reportList-reportItem-downloadBtn-icon
+        />
+      </AkIconButton>
+    </AkStack>
+  </li.rightIcon>
+</AkList::Item>
+
+{{#if (or @reportDetails.isOutdated @reportDetails.reportGenerationFailed)}}
+  <AkTypography
+    @variant='body2'
+    class='px-3 mt-2'
+    data-test-fileDetailsDynamicScan-capis-reportList-reportItem-regenerateText={{@reportDetails.type}}
+  >
+    {{this.reportRegenerateText @reportDetails}}
+  </AkTypography>
+{{/if}}
+
+<AkDivider class='my-2' />

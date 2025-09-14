@@ -21,6 +21,7 @@ export default class AuthenticatedDashboardFileDynamicScanResultsController exte
 
       siblingRoutes: [
         'authenticated.dashboard.file.dynamic-scan.results.scan-coverage',
+        'authenticated.dashboard.file.dynamic-scan.results.apis-captured',
       ],
     };
 

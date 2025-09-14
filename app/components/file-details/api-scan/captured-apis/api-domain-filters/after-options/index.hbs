@@ -1,0 +1,26 @@
+<AkStack
+  @spacing='1'
+  @alignItems='center'
+  class='py-1 px-2'
+  local-class='after-options-container'
+  data-test-fileDetails-apiScan-capturedApi-domainFilterApplyFilters-afterOptions
+>
+  <AkButton
+    @color='primary'
+    {{on 'click' this.handleApplyFilters}}
+    data-test-fileDetails-apiScan-capturedApi-domainFilterApplyFilters-applyBtn
+  >
+    {{t 'apply'}}
+  </AkButton>
+
+  {{#if this.hasSelectedItems}}
+    <AkButton
+      @color='secondary'
+      local-class='unselect-all-button'
+      {{on 'click' this.handleClearAll}}
+      data-test-fileDetails-apiScan-capturedApi-domainFilterUnselectAll-unselectAllBtn
+    >
+      {{t 'unselectAll'}}
+    </AkButton>
+  {{/if}}
+</AkStack>

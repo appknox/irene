@@ -1,0 +1,33 @@
+.filter-input-dropdown {
+  min-width: 280px !important;
+
+  :global(.ember-power-select-option) {
+    background-color: var(
+      --file-details-api-scan-captured-apis-domain-filters-select-option-background
+    ) !important;
+
+    padding: 0.5em 1em !important;
+    border: none !important;
+
+    &[aria-current='true'] {
+      background-color: var(
+        --file-details-api-scan-captured-apis-domain-filters-select-option-hover-background
+      ) !important;
+    }
+  }
+
+  :global(.ak-icon),
+  :global(.ak-domain-filter-checkbox) {
+    font-size: 1.2857em !important;
+    width: 18px !important;
+    height: 18px !important;
+  }
+}
+
+.filter-trigger {
+  height: 40px !important;
+
+  :global(.ember-power-select-status-icon) {
+    right: 12px;
+  }
+}

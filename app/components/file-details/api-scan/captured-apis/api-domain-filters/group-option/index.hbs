@@ -1,0 +1,74 @@
+<AkStack
+  @direction='column'
+  @width='full'
+  class='px-1'
+  data-test-fileDetails-apiScan-capturedApi-domainFilterGroup={{@group.groupName}}
+>
+  <AkStack @width='full' @alignItems='center' @spacing='0.5'>
+    <AkTypography
+      @fontWeight='medium'
+      @tag='span'
+      @color='textSecondary'
+      class='ml-1'
+      {{style fontSize='0.857rem' marginBottom='0.5em !important'}}
+      data-test-fileDetails-apiScan-capturedApi-domainFilterGroupOption-groupName
+    >
+      {{@group.groupName}}
+    </AkTypography>
+
+    {{#if this.isProjectProfileFilters}}
+      <AkLink
+        @route='authenticated.dashboard.project.settings'
+        @model={{this.fileProjectId}}
+        target='_blank'
+        rel='noopener noreferrer'
+        data-test-fileDetails-apiScan-capturedApi-domainFilterGroupOption-openPrjSettingsLink
+      >
+        <AkIcon
+          id='open-prj-settings-icon'
+          @size='small'
+          @color='primary'
+          @iconName='open-in-new'
+          data-test-fileDetails-apiScan-capturedApi-domainFilterGroupOption-openPrjSettingsLink-icon
+        />
+      </AkLink>
+    {{/if}}
+  </AkStack>
+
+  <AkStack @direction='column' @width='full'>
+    {{#each @group.options as |option|}}
+      <AkStack
+        @width='full'
+        @alignItems='center'
+        data-test-fileDetails-apiScan-capturedApi-domainFilterGroupOption-item={{option}}
+      >
+        <AkCheckbox
+          @checked={{this.isDomainFilterSelected option}}
+          @onClick={{fn this.onSelectAPIUrlDomainChange option}}
+          data-test-fileDetails-apiScan-capturedApi-domainFilterGroupOption-checkbox={{option}}
+        />
+
+        <AkTypography
+          @noWrap={{true}}
+          data-test-fileDetails-apiScan-capturedApi-domainFilterGroupOption-label={{option}}
+        >
+          {{option}}
+        </AkTypography>
+      </AkStack>
+
+    {{else}}
+      <AkTypography
+        @color='textSecondary'
+        @variant='body2'
+        @noWrap={{true}}
+        class='mx-2'
+        {{style fontStyle='italic'}}
+        data-test-fileDetails-apiScan-capturedApi-domainFilterGroupOption-noDomainFilterResults
+      >
+        {{this.noDomainFilterResultsText}}
+      </AkTypography>
+    {{/each}}
+  </AkStack>
+</AkStack>
+
+<AkDivider class='my-1' />

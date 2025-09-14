@@ -102,25 +102,13 @@ export default class FileReportDrawerVaReportsComponent extends Component<FileRe
     return this.generateReport.isRunning;
   }
 
-  get isDynamicScanRunning() {
-    const automated = this.file.lastAutomatedDynamicScan;
-    const manual = this.file.lastManualDynamicScan;
-
-    return (
-      automated?.get('isStartingOrShuttingInProgress') ||
-      automated?.get('isReadyOrRunning') ||
-      manual?.get('isStartingOrShuttingInProgress') ||
-      manual?.get('isReadyOrRunning')
-    );
-  }
-
   get enableGenerateBtn() {
     return (
       ((this.canGenerateReport &&
         this.file.isStaticDone &&
         !this.isReportGenerating) ||
         this.latestReportIsGenerated ||
-        !this.isDynamicScanRunning ||
+        !this.file.isDynamicScanRunning ||
         !this.file.isRunningApiScan) &&
       !this.latestReportIsGenerating
     );

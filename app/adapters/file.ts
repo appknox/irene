@@ -1,6 +1,16 @@
 import CommonDRFAdapter from './commondrf';
 import type DynamicscanModel from 'irene/models/dynamicscan';
 
+import FileCapiReportModel, {
+  type FileCapiReportScanType,
+} from 'irene/models/file-capi-report';
+
+export interface FileCapiReportsResponse {
+  message: string;
+  reports: FileCapiReportModel[];
+  formats_requested: FileCapiReportScanType[];
+}
+
 interface ProjectFilesQuery {
   projectId: string;
 }
@@ -45,6 +55,19 @@ export default class File extends CommonDRFAdapter {
     }
 
     return null;
+  }
+
+  async generateCapiReports(
+    fileId: string,
+    fileTypes: FileCapiReportScanType[]
+  ) {
+    const baseURL = this._buildURL('file', fileId);
+    const url = `${baseURL}/capi_reports`;
+
+    return this.ajax(url, 'POST', {
+      data: { formats: fileTypes },
+      headers: this.headers,
+    }) as Promise<FileCapiReportsResponse>;
   }
 }
 

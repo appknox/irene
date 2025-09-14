@@ -44,6 +44,14 @@ export default class FileDetailsDynamicScanResultsHeader extends Component<FileD
         route:
           'authenticated.dashboard.file.dynamic-scan.results.scan-coverage',
       },
+      {
+        id: 'apis-captured',
+        label: this.intl.t('capturedApiTitle'),
+        hasBadge: false,
+        models: [this.file.id],
+        route:
+          'authenticated.dashboard.file.dynamic-scan.results.apis-captured',
+      },
     ];
   }
 }

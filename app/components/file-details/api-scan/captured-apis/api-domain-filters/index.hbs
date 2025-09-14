@@ -1,0 +1,21 @@
+<div {{style minWidth='180px'}}>
+  <AkSelect
+    @disabled={{@isLoadingCapturedApis}}
+    @closeOnSelect={{false}}
+    @registerAPI={{this.registerAPI}}
+    @dropdownClass={{this.dropDownClass}}
+    @triggerClass={{this.triggerClass}}
+    @options={{this.options}}
+    @selected={{@selectedAPIUrlDomain}}
+    @onOpen={{this.onOpen}}
+    @onClose={{this.onClose}}
+    @onChange={{this.onSelectAPIUrlDomainChange}}
+    @labelTypographyFontWeight='regular'
+    @selectedItemComponent='file-details/api-scan/captured-apis/api-domain-filters/filter-selected-item'
+    @afterOptionsComponent='file-details/api-scan/captured-apis/api-domain-filters/after-options'
+    @groupComponent='file-details/api-scan/captured-apis/api-domain-filters/group-option'
+    @horizontalPosition='right'
+    @extra={{this.selectElementExtras}}
+    data-test-fileDetails-apiScan-capturedApi-domainFilterSelect
+  />
+</div>

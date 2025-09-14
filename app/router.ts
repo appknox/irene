@@ -232,6 +232,7 @@ Router.map(function () {
             this.route('results', function () {
               this.route('index', { path: '/' });
               this.route('scan-coverage');
+              this.route('apis-captured');
             });
           });
         });
