@@ -1,0 +1,141 @@
+<AkDrawer
+  @open={{true}}
+  @onClose={{@closeDrawer}}
+  @anchor='right'
+  data-test-fileDetails-apiScan-capturedApis-downloadDrawer
+  as |dr|
+>
+  <div {{style width='450px'}}>
+    <AkAppbar @justifyContent='space-between' as |ab|>
+      <AkTypography
+        data-test-fileDetails-apiScan-capturedApis-downloadDrawer-title
+        @color='inherit'
+        @variant='h5'
+      >
+        {{t 'apiScanModule.capisReportDownload'}}
+      </AkTypography>
+
+      <AkIconButton
+        data-test-fileDetails-apiScan-capturedApis-downloadDrawer-closeBtn
+        {{on 'click' dr.closeHandler}}
+        class={{ab.classes.defaultIconBtn}}
+      >
+        <AkIcon @iconName='close' />
+      </AkIconButton>
+    </AkAppbar>
+
+    <div
+      local-class='capi-reports-drawer'
+      data-test-fileDetailsDynamicScan-capis-reportsDrawer
+    >
+      <AkTypography
+        @variant='body2'
+        @fontWeight='medium'
+        class='pb-2 px-3 pt-3'
+        data-test-fileDetailsDynamicScan-capis-reportsDrawer-title
+      >
+        {{#if this.hasReports}}
+          {{t 'apiScanModule.capisReportDownloadPostDownloadDesc'}}
+        {{else}}
+          {{t 'apiScanModule.capisReportDownloadPreDownloadDesc'}}
+        {{/if}}
+      </AkTypography>
+
+      {{#if this.getLatestReports.isRunning}}
+        <AkStack
+          @alignItems='center'
+          @justifyContent='center'
+          @spacing='1'
+          class='p-2'
+          data-test-fileDetailsDynamicScan-capis-reportsLoader
+        >
+          <AkLoader @size={{18}} />
+        </AkStack>
+      {{else}}
+
+        {{#if this.showGenerateFilesCTA}}
+          <div class='px-3'>
+            <AkStack
+              local-class='generate-container'
+              @direction='column'
+              @spacing='2'
+              data-test-fileDetailsDynamicScan-capis-generateReportCTA
+            >
+              <AkSvg::GenerateReport
+                data-test-fileDetailsDynamicScan-capis-generateReportCTA-vector
+              />
+
+              <AkTypography
+                data-test-fileDetailsDynamicScan-capis-generateReportCTA-directiveText
+              >
+                {{t 'apiScanModule.capiGenerateInstruction'}}
+              </AkTypography>
+
+              <AkButton
+                @disabled={{this.disableGenerateBtn}}
+                @loading={{this.latestReportIsGenerating}}
+                {{on 'click' (perform this.generateReport)}}
+                data-test-fileDetailsDynamicScan-capis-generateReportCTA-btn
+              >
+                {{this.btnLabel}}
+              </AkButton>
+            </AkStack>
+          </div>
+        {{/if}}
+
+        {{#if this.hasReports}}
+          {{#if this.latestReportIsGenerating}}
+            <AkStack
+              @alignItems='center'
+              @justifyContent='space-between'
+              @spacing='1.5'
+              @width='full'
+              local-class='report-gen-progress-indicator'
+              class='px-3 py-2'
+              data-test-fileDetailsDynamicScan-capis-generateReportProgress-container
+            >
+              <AkStack @direction='column' @spacing='1' @width='10/12'>
+                <AkTypography
+                  @fontWeight='medium'
+                  data-test-fileDetailsDynamicScan-capis-generateReportProgress-text
+                >
+                  {{t 'apiScanModule.generatingCapisReportFiles'}}
+                </AkTypography>
+
+                <AkLoader::Linear
+                  @variant='determinate'
+                  @progress={{this.latestReportsProgress}}
+                  data-test-fileDetailsDynamicScan-capis-generateReportProgress-loader
+                />
+              </AkStack>
+
+              <AkTypography
+                @variant='h6'
+                @fontWeight='medium'
+                data-test-fileDetailsDynamicScan-capis-generateReportProgress-percent
+              >
+                {{this.latestReportsProgress}}%
+              </AkTypography>
+            </AkStack>
+          {{/if}}
+
+          <AkList
+            {{style padding='0px'}}
+            data-test-fileDetailsDynamicScan-capis-reportList
+          >
+            {{#each this.reportDetails as |details|}}
+              <FileDetails::DynamicScan::Results::CapisReportDrawer::ReportItem
+                @file={{@file}}
+                @reportDetails={{details}}
+                @capiReport={{details.capiReport}}
+                @updateLatestReport={{this.updateLatestReport}}
+                data-test-fileDetailsDynamicScan-capis-reportList-reportItem
+                data-test-fileDetailsDynamicScan-capis-reportList-Item='{{details.type}}'
+              />
+            {{/each}}
+          </AkList>
+        {{/if}}
+      {{/if}}
+    </div>
+  </div>
+</AkDrawer>

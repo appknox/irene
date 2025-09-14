@@ -12,6 +12,10 @@ export interface FileDetailsApiScanCapturedApiOverviewSignature {
 }
 
 export default class FileDetailsApiScanCapturedApiOverviewComponent extends Component<FileDetailsApiScanCapturedApiOverviewSignature> {
+  get disableToggleApi() {
+    return this.args.disableToggleApi || this.handleToggleApi.isRunning;
+  }
+
   handleToggleApi = task(async () => {
     await this.args.toggleApi();
   });
