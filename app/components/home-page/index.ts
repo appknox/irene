@@ -55,6 +55,7 @@ export default class HomePageComponent extends Component {
         route: 'authenticated.dashboard.projects',
         indicatorSvg: 'ak-svg/vapt-indicator',
         coverBackgroundImage: 'ak-svg/appknox-bg-img',
+        pendoContainerId: 'ak-pendo-version-container',
       },
       this.isStoreknoxEnabled && {
         title: this.isWhitelabel
@@ -64,6 +65,7 @@ export default class HomePageComponent extends Component {
         route: 'authenticated.storeknox.inventory.app-list',
         indicatorSvg: 'ak-svg/sm-indicator',
         coverBackgroundImage: 'ak-svg/storeknox-bg-img',
+        pendoContainerId: 'sk-pendo-version-container',
       },
       this.showReporting && {
         title: this.intl.t('reportModule.title'),
