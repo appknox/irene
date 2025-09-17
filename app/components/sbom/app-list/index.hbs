@@ -51,7 +51,12 @@
         </:emptyText>
 
         <:default>
-          <AkTable @hoverable={{true}} data-test-sbomApp-table as |t|>
+          <AkTable
+            local-class='sbom-app-table'
+            @hoverable={{true}}
+            data-test-sbomApp-table
+            as |t|
+          >
             <t.head data-test-sbomApp-thead @columns={{this.columns}} />
             <t.body @rows={{pgc.currentPageResults}} as |b|>
               <b.row

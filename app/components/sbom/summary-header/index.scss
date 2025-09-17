@@ -1,6 +1,7 @@
 .summary-header-root {
   border-radius: var(--sbom-summary-header-border-radius);
   border: 1px solid var(--sbom-summary-header-border-color);
+  background-color: var(--sbom-summary-header-background-color);
   box-sizing: border-box;
 
   .summary-header-container,

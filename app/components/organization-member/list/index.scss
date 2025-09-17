@@ -1,14 +1,16 @@
 .search-input {
   width: 21.42em;
+  background-color: var(--organization-member-list-container-background);
 }
 
 .no-result-container {
   height: 300px;
+  background: var(--organization-member-list-container-background);
 }
 
 .loading-container {
   width: 100%;
-  background: var(--organization-member-list-loading-container-background);
+  background: var(--organization-member-list-container-background);
   border: 1px solid var(--organization-member-list-loading-container-border);
   border-radius: var(
     --organization-member-list-loading-container-border-radius
@@ -18,4 +20,8 @@
   .loading-text {
     font-style: italic;
   }
+}
+
+.organization-member-table-container {
+  background-color: var(--organization-member-list-container-background);
 }

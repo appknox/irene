@@ -44,7 +44,12 @@
       </:emptyText>
 
       <:default>
-        <AkTable @hoverable={{true}} data-test-sbomComponent-table as |t|>
+        <AkTable
+          local-class='sbom-component-list-table'
+          @hoverable={{true}}
+          data-test-sbomComponent-table
+          as |t|
+        >
           <t.head
             @columns={{this.columns}}
             data-test-sbomComponent-thead

@@ -534,17 +534,22 @@ body {
   );
 
   // variables for organization-namespace
-  --organization-namespace-loading-container-background: var(
-    --background-light
+  --organization-namespace-container-background: var(
+    --common-white
   );
   --organization-namespace-loading-container-border: var(--border-color-1);
   --organization-namespace-loading-container-border-radius: var(
     --border-radius
   );
 
+  // variables for organization-invitation-list
+  --organization-invitation-list-container-background: var(
+    --common-white
+  );
+
   // variables for organization-member/list
-  --organization-member-list-loading-container-background: var(
-    --background-light
+  --organization-member-list-container-background: var(
+    --common-white
   );
   --organization-member-list-loading-container-border: var(--border-color-1);
   --organization-member-list-loading-container-border-radius: var(
@@ -564,7 +569,7 @@ body {
   --organization-member-list-add-to-team-border-color: var(--border-color-1);
 
   // variables for organization-team
-  --organization-team-loading-container-background: var(--background-light);
+  --organization-team-container-background: var(--common-white);
   --organization-team-loading-container-border: var(--border-color-1);
   --organization-team-loading-container-border-radius: var(--border-radius);
 
@@ -579,6 +584,7 @@ body {
   // variables for organization-team/overview
   --organization-team-overview-border-radius: var(--border-radius);
   --organization-team-overview-border-color: var(--border-color-1);
+  --organization-team-overview-background: var(--common-white);
   --organization-team-overview-hover-background: var(--hover-light-background);
 
   // variables for organization-team/details/active-action
@@ -763,6 +769,9 @@ body {
   --file-report-dr-privacy-reports-border-radius: var(--border-radius);
 
   // variables for sbom/app-list
+  --sbom-app-list-background-color: var(--common-white);
+
+  // variables for sbom/app-list/header
   --sbom-app-list-header-background-color: var(--common-white);
   --sbom-app-list-header-border-color: var(--neutral-white-100);
   --sbom-app-list-header-border-radius: var(--border-radius);
@@ -790,13 +799,18 @@ body {
   // variables for sbom/empty-loading-view
   --sbom-empty-loading-view-border-radius: var(--border-radius);
   --sbom-empty-loading-view-border-color: var(--border-color-1);
+  --sbom-empty-loading-view-background-color: var(--common-white);
 
   // variables for sbom/scan-details
   --sbom-scan-details-link-border-radius: var(--border-radius);
   --sbom-scan-details-border-color: var(--border-color-1);
-  --sbom-scan-details-background-color: var(
+  --sbom-scan-details-active-background-color: var(
     --side-menu-active-background-light
   );
+  --sbom-scan-details-background-color: var(--common-white);
+
+  // variables for sbom/scan-details/component-list
+  --sbom-scan-details-component-list-background-color: var(--common-white);
 
   // variables for sbom/scan-details/component-list/type-header
   --sbom-scanDetails-componentList-typeHeader-background-color: var(
@@ -837,6 +851,7 @@ body {
   );
 
   // variables for sbom/scan-details/overview
+  --sbom-scan-details-overview-background-color: var(--common-white);
   --sbom-scan-details-overview-border-radius: var(--border-radius);
   --sbom-scan-details-overview-border-color: var(--border-color-1);
   --sbom-scan-details-overview-new-feature-background-color: var(
@@ -847,6 +862,9 @@ body {
   );
 
   // variables for sbom/scan-details/skeleton-loader
+  --sbom-scan-details-skeleton-loader-summary-background-color: var(
+    --common-white
+  );
   --sbom-scan-details-skeleton-loader-summary-border-radius: var(
     --border-radius
   );
@@ -863,6 +881,9 @@ body {
   );
   --sbom-component-details-vulnerabilities-list-border-color-light: var(
     --ak-table-border-light
+  );
+  --sbom-component-details-vulnerabilities-list-background-color: var(
+    --common-white
   );
 
   // variables for sbom/component-details/vulnerabilities/detail-wrapper
@@ -906,17 +927,22 @@ body {
   );
 
   // variables for sbom/summary-header
+  --sbom-summary-header-background-color: var(--common-white);
   --sbom-summary-header-border-radius: var(--border-radius);
   --sbom-summary-header-border-color: var(--border-color-1);
 
   // variables for sbom/component-details
   --sbom-component-details-border-radius: var(--border-radius);
   --sbom-component-details-border-color: var(--border-color-1);
+  --sbom-component-details-background-color: var(--common-white);
 
   // variables for sbom/component-details/overview
   --sbom-component-details-overview-border-color: var(--border-color-1);
   --sbom-component-details-overview-border-radius: var(--border-radius);
   --sbom-component-details-overview-background-color: var(--neutral-grey-100);
+  --sbom-component-details-overview-section-background-color: var(
+    --common-white
+  );
 
   //variables for sbom/scan-details/component-tree
   --sbom-scan-details-component-tree-border-color: var(--border-color-1);
@@ -1632,6 +1658,7 @@ body {
   // variables for project-list/loader
   --project-list-loader-border-color: var(--neutral-white-100);
   --project-list-loader-border-radius: var(--border-radius);
+  --project-list-loader-background-color: var(--common-white);
 
   // variables for project-list/header
   --project-list-header-background-color: var(--common-white);
@@ -2422,6 +2449,7 @@ body {
   --home-page-button-background-color: var(--background-main);
 
   // variables for home-page/product-card
+  --home-page-product-card-background-color: var(--common-white);
   --home-page-product-card-border-radius: var(--border-radius);
   --home-page-product-card-border-color: var(--border-color-1);
   --home-page-product-card-beta-tag-bg: var(--storeknox-beta-tag-bg);
