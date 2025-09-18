@@ -95,6 +95,7 @@ Router.map(function () {
         this.route('general');
         this.route('security');
         this.route('developersettings');
+        this.route('notification-settings');
       });
 
       this.route('billing');
@@ -246,6 +247,7 @@ Router.map(function () {
           this.route('general');
           this.route('security');
           this.route('developersettings');
+          this.route('notification-settings');
         });
 
         this.route('app-monitoring', { path: '/store-monitoring' });

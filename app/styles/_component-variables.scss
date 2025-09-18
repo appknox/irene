@@ -534,23 +534,17 @@ body {
   );
 
   // variables for organization-namespace
-  --organization-namespace-container-background: var(
-    --common-white
-  );
+  --organization-namespace-container-background: var(--common-white);
   --organization-namespace-loading-container-border: var(--border-color-1);
   --organization-namespace-loading-container-border-radius: var(
     --border-radius
   );
 
   // variables for organization-invitation-list
-  --organization-invitation-list-container-background: var(
-    --common-white
-  );
+  --organization-invitation-list-container-background: var(--common-white);
 
   // variables for organization-member/list
-  --organization-member-list-container-background: var(
-    --common-white
-  );
+  --organization-member-list-container-background: var(--common-white);
   --organization-member-list-loading-container-border: var(--border-color-1);
   --organization-member-list-loading-container-border-radius: var(
     --border-radius
@@ -1484,6 +1478,17 @@ body {
     --success-light
   );
   --account-settings-security-mfa-primary-color: var(--primary-main);
+
+  // variables for account-settings/notification-settings
+  --account-settings-notification-settings-group-border-color: var(
+    --border-color-1
+  );
+
+  // variables for account-settings-page-content-wrapper-border-color
+  --account-settings-page-content-wrapper-border-color: var(--border-color-1);
+
+  // variables for account-settings-tabs-border-color
+  --account-settings-tabs-border-color: var(--border-color-1);
 
   // variables for project-settings/empty-list
   --project-settings-empty-list-border-radius: var(--border-radius);
