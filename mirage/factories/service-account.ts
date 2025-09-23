@@ -7,6 +7,10 @@ export default Base.extend({
   scope_public_api_user_read: faker.datatype.boolean(),
   scope_public_api_project_read: faker.datatype.boolean(),
   scope_public_api_scan_result_va: faker.datatype.boolean(),
+  scope_auto_approve_new_name_spaces: faker.datatype.boolean(),
+  scope_public_api_upload_app: faker.datatype.boolean(),
+  scope_public_api_team_operations: faker.datatype.boolean(),
+  scope_public_api_user_write: faker.datatype.boolean(),
   is_expired: false,
   secret_access_key: 'ak_sa_***************',
 
