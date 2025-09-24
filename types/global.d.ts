@@ -83,7 +83,7 @@ declare module '@glint/environment-ember-loose/registry' {
 
     or: HelperLike<{
       Args: {
-        Positional: PrimitiveTypes[];
+        Positional: unknown[];
       };
       Return: unknown;
     }>;
@@ -119,7 +119,7 @@ declare module '@glint/environment-ember-loose/registry' {
       Args: {
         Positional: [];
         Named: {
-          [key: string]: string | undefined;
+          [key: string]: unknown;
         };
       };
       Return: Array<string[]>;

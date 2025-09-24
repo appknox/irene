@@ -74,6 +74,7 @@ module('Integration | Component | file-details/key-insights', function (hooks) {
     });
 
     this.setProperties({
+      project,
       file: store.push(store.normalize('file', files[fileCount - 1].toJSON())),
       store,
     });
@@ -88,8 +89,13 @@ module('Integration | Component | file-details/key-insights', function (hooks) {
     async function (assert, unknownAnalysisStatus) {
       assert.expect(unknownAnalysisStatus ? 13 : 11);
 
-      this.server.get('/profiles/:id/unknown_analysis_status', (_, req) => {
-        return { id: req.params.id, status: unknownAnalysisStatus };
+      this.server.db.projects.update({
+        id: this.project.id,
+        show_unknown_analysis: unknownAnalysisStatus,
+      });
+
+      this.server.get('/v2/projects/:id', (schema, req) => {
+        return schema.projects.find(req.params.id).toJSON();
       });
 
       this.server.get('/profiles/:id', (schema, req) =>

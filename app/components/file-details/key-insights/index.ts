@@ -1,18 +1,15 @@
-import { inject as service } from '@ember/service';
+import { service } from '@ember/service';
 import Component from '@glimmer/component';
-import { task } from 'ember-concurrency';
-import IntlService from 'ember-intl/services/intl';
-import Store from '@ember-data/store';
-import { tracked } from '@glimmer/tracking';
 import dayjs from 'dayjs';
-
-import FileModel from 'irene/models/file';
-import UnknownAnalysisStatusModel from 'irene/models/unknown-analysis-status';
 
 import {
   compareFiles,
   getFileComparisonCategories,
 } from 'irene/utils/compare-files';
+
+import type IntlService from 'ember-intl/services/intl';
+import type Store from '@ember-data/store';
+import type FileModel from 'irene/models/file';
 
 export interface FileDetailsKeyInsightsSignature {
   Args: {
@@ -27,16 +24,12 @@ export default class FileDetailsKeyInsightsComponent extends Component<FileDetai
   @service declare store: Store;
   @service('notifications') declare notify: NotificationService;
 
-  @tracked unknownAnalysisStatus?: UnknownAnalysisStatusModel;
-
-  constructor(owner: unknown, args: FileDetailsKeyInsightsSignature['Args']) {
-    super(owner, args);
-
-    this.fetchUnknownAnalysisStatus.perform();
-  }
-
   get currentFile() {
     return this.args.file;
+  }
+
+  get showUnknownAnalysis() {
+    return this.currentFile.project.get('showUnknownAnalysis');
   }
 
   get hasComparison() {
@@ -65,7 +58,7 @@ export default class FileDetailsKeyInsightsComponent extends Component<FileDetai
         label: this.intl.t('fileCompare.resolvedIssues'),
         value: this.comparison?.resolved.length,
       },
-      this.unknownAnalysisStatus?.status && {
+      this.showUnknownAnalysis && {
         label: this.intl.t('fileCompare.untestedIssues'),
         value: this.comparison?.untested.length,
       },
@@ -83,15 +76,6 @@ export default class FileDetailsKeyInsightsComponent extends Component<FileDetai
         )
       : null;
   }
-
-  fetchUnknownAnalysisStatus = task(async () => {
-    this.unknownAnalysisStatus = await this.store.queryRecord(
-      'unknown-analysis-status',
-      {
-        id: this.args.file.profile.get('id'),
-      }
-    );
-  });
 }
 
 declare module '@glint/environment-ember-loose/registry' {

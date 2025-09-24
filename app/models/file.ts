@@ -26,9 +26,10 @@ import ProfileModel from './profile';
 import SbomFileModel from './sbom-file';
 import SubmissionModel from './submission';
 import DynamicscanModel from './dynamicscan';
+import FileAnalysisModel from './file-analysis';
 
 const _getAnalysesCount = (
-  analysis: SyncHasMany<AnalysisModel>,
+  analysis: SyncHasMany<FileAnalysisModel>,
   risk: number
 ) => {
   return analysis.filter((analysis) => analysis.computedRisk === risk).length;
@@ -42,9 +43,6 @@ export default class FileModel extends ModelBaseMixin {
   declare uuid: string;
 
   @attr('string')
-  declare deviceToken: string;
-
-  @attr('string')
   declare version: string;
 
   @attr('string')
@@ -54,12 +52,6 @@ export default class FileModel extends ModelBaseMixin {
   declare iconUrl: string;
 
   @attr('string')
-  declare md5hash: string;
-
-  @attr('string')
-  declare sha1hash: string;
-
-  @attr('string')
   declare name: string;
 
   @attr('string')
@@ -67,9 +59,6 @@ export default class FileModel extends ModelBaseMixin {
 
   @attr('string')
   declare supportedCpuArchitectures: string;
-
-  @attr('string')
-  declare supportedDeviceTypes: string;
 
   @attr('string')
   declare report: string;
@@ -120,7 +109,7 @@ export default class FileModel extends ModelBaseMixin {
   declare reports: AsyncHasMany<FileReportModel>;
 
   @hasMany('analysis', { inverse: 'file', async: false })
-  declare analyses: SyncHasMany<AnalysisModel>;
+  declare analyses: SyncHasMany<FileAnalysisModel>;
 
   @belongsTo('project', { inverse: 'files', async: true })
   declare project: AsyncBelongsTo<ProjectModel>;
