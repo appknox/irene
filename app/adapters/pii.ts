@@ -33,16 +33,11 @@ export default class PiiAdapter extends CommonDRFAdapter {
     }) as Promise<{ success: boolean }>;
   }
 
-  markPiiSeen(fileId: string | null) {
-    const seenURL = `${this.namespace_v2}/privacy_project/mark_pii_scan_seen`;
+  markPiiSeen(privacyProjectId: string) {
+    const seenURL = `${this.namespace_v2}/privacy_project/${privacyProjectId}/mark_seen`;
     const url = this.buildURLFromBase(seenURL);
 
-    return this.ajax(url, 'POST', {
-      contentType: 'application/json',
-      data: {
-        latest_file: fileId,
-      },
-    }) as Promise<{ success: boolean }>;
+    return this.ajax(url, 'POST') as Promise<{ success: boolean }>;
   }
 }
 

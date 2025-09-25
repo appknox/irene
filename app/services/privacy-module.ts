@@ -24,10 +24,6 @@ type DangerousPermissionModelArray =
     meta: { count: number };
   };
 
-type PiiModelArray = DS.AdapterPopulatedRecordArray<PiiModel> & {
-  meta: { count: number };
-};
-
 export default class PrivacyModuleService extends Service {
   @service declare store: Store;
   @service declare router: RouterService;
@@ -42,7 +38,7 @@ export default class PrivacyModuleService extends Service {
   @tracked dangerousPermissionCount: number = 0;
   @tracked piiDataCount: number = 0;
   @tracked
-  piiDataList?: DS.AdapterPopulatedRecordArray<PiiModel>;
+  piiDataList: PiiModel[] = [];
   @tracked piiDataAvailable: boolean = false;
   @tracked showCompleteApiScanNote: boolean = false;
   @tracked showPiiUpdated: boolean = false;
@@ -146,67 +142,64 @@ export default class PrivacyModuleService extends Service {
     return await this.store.queryRecord('dangerous-permission-request', {});
   });
 
-  fetchPiiData = task(
-    async (
-      limit,
-      offset,
-      fileId,
-      setQueryParams = true,
-      markPiiSeen = false
-    ) => {
-      if (setQueryParams) {
-        this.setRouteQueryParams(limit, offset);
-      }
+  fetchPiiData = task(async (fileId, markPiiSeen = false) => {
+    try {
+      const pii = await this.getPiiRequest.perform(fileId);
 
-      try {
-        const pii = await this.getPiiRequest.perform(fileId);
+      this.selectedPiiId = pii.id;
 
-        this.selectedPiiId = pii.id;
+      if (
+        pii.status === ENUMS.PM_PII_STATUS.SUCCESS ||
+        pii.status === ENUMS.PM_PII_STATUS.PARTIAL_SUCCESS
+      ) {
+        const queryParams = {
+          fileId: fileId,
+          piiExtractionId: pii.id,
+        };
 
-        if (
-          pii.status === ENUMS.PM_PII_STATUS.SUCCESS ||
-          pii.status === ENUMS.PM_PII_STATUS.PARTIAL_SUCCESS
-        ) {
-          const queryParams = {
-            limit: limit,
-            offset: offset,
-            fileId: fileId,
-            piiExtractionId: pii.id,
-          };
+        const piiData = await this.store.query('pii', queryParams);
 
-          const piiDataList = (await this.store.query(
-            'pii',
-            queryParams
-          )) as PiiModelArray;
+        const piiDataList = piiData.slice() as PiiModel[];
 
-          this.piiDataList = piiDataList;
-          this.piiDataCount = piiDataList.meta.count;
-          this.piiDataAvailable = true;
+        this.piiDataList = piiDataList;
+        this.piiDataCount = piiDataList.length;
+        this.piiDataAvailable = true;
 
-          if (pii.status === ENUMS.PM_PII_STATUS.PARTIAL_SUCCESS) {
-            this.showCompleteApiScanNote = true;
-          } else {
-            if (markPiiSeen && this.showPiiUpdated) {
-              const adapter = this.store.adapterFor('pii');
+        if (pii.status === ENUMS.PM_PII_STATUS.PARTIAL_SUCCESS) {
+          this.showCompleteApiScanNote = true;
+        } else {
+          const privacyProjectId =
+            this.router.currentRoute?.parent?.params['app_id'];
 
-              adapter.markPiiSeen(fileId);
+          if (markPiiSeen && this.showPiiUpdated && privacyProjectId) {
+            const adapter = this.store.adapterFor('pii');
 
-              this.showPiiUpdated = false;
-            }
+            adapter.markPiiSeen(privacyProjectId);
+
+            this.showPiiUpdated = false;
+
+            const privacyProject = await this.store.findRecord(
+              'privacy-project',
+              privacyProjectId
+            );
+
+            privacyProject.set('pii_highlight', false);
+
+            await privacyProject.save();
           }
         }
-      } catch (err) {
-        const error = err as AdapterError;
-        const status = error.errors?.[0]?.status;
+      }
+    } catch (err) {
+      const error = err as AdapterError;
+      const status = error.errors?.[0]?.status;
 
-        if (status == 404) {
-          this.piiDataAvailable = false;
-        } else {
-          this.notify.error(parseError(error, this.intl.t('pleaseTryAgain')));
-        }
+      if (status == 404) {
+        this.piiDataAvailable = false;
+      } else {
+        this.notify.error(parseError(error, this.intl.t('pleaseTryAgain')));
       }
     }
-  );
+  });
 
   getPiiRequest = task(async (fileId) => {
     const adapter = this.store.adapterFor('pii-request');
