@@ -1,5 +1,5 @@
 import Service from '@ember/service';
-import { inject as service } from '@ember/service';
+import { service } from '@ember/service';
 import Store from '@ember-data/store';
 import { tracked } from '@glimmer/tracking';
 
@@ -9,6 +9,7 @@ export default class MeService extends Service {
   @service declare store: Store;
 
   @tracked organizationMe?: OrganizationMeModel;
+  private _organizationMePromise?: Promise<OrganizationMeModel>;
 
   constructor(properties?: object) {
     super(properties);
@@ -17,11 +18,16 @@ export default class MeService extends Service {
   }
 
   async fetchOrganizationMe() {
-    this.organizationMe = await this.queryOrganizationMe;
-  }
+    if (this._organizationMePromise != undefined) {
+      this._organizationMePromise = this.store
+        .queryRecord('organization-me', {})
+        .then((org) => {
+          this.organizationMe = org;
+          return org;
+        });
+    }
 
-  get queryOrganizationMe() {
-    return this.store.queryRecord('organization-me', {});
+    return this._organizationMePromise;
   }
 
   get org() {
@@ -29,15 +35,14 @@ export default class MeService extends Service {
   }
 
   async getMembership() {
-    const org = await this.queryOrganizationMe;
-    const userId = org.id;
+    const org = await this.fetchOrganizationMe();
 
-    return this.store.findRecord('organization-member', userId);
+    return this.store.findRecord('organization-member', org.id);
   }
 
   async user() {
-    const org = await this.queryOrganizationMe;
-    const userId = org.id;
-    return this.store.findRecord('user', userId);
+    const org = await this.fetchOrganizationMe();
+
+    return this.store.findRecord('user', org.id);
   }
 }
