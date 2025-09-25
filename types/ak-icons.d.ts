@@ -146,6 +146,8 @@ export const AkIconVariant = [
   'network-intel-node',
   'auto-awesome',
   'reorder',
+  'replay',
+  'autorenew',
   // custom icons
   'unarchive',
   'license-outline-rounded',

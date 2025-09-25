@@ -1,0 +1,12 @@
+.options-selected-container {
+  height: 22px;
+  border-radius: 0.8571em;
+
+  background-color: var(
+    --file-details-api-scan-captured-apis-domain-filters-selected-options-background
+  );
+
+  color: var(
+    --file-details-api-scan-captured-apis-domain-filters-selected-options-color
+  );
+}
