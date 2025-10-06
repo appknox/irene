@@ -1,0 +1,61 @@
+<AkStack
+  @width='full'
+  @justifyContent='space-between'
+  data-test-projectList-scanStatuses
+>
+  <AkStack @spacing='1'>
+    {{#each this.scanStatuses as |status|}}
+      <AkStack
+        @alignItems='center'
+        @spacing='0.5'
+        data-test-projectList-scanStatuses='{{status.name}}'
+      >
+        <AkIcon
+          @iconName={{if status.isDone 'check-circle' 'circle-outline'}}
+          @color='success'
+          local-class='file-overview-status-icon'
+          data-test-projectList-scanStatus-icon
+        />
+
+        <AkTypography @variant='body2' data-test-projectList-scanStatus-name>
+          {{status.name}}
+        </AkTypography>
+      </AkStack>
+    {{/each}}
+
+    {{#unless this.isManualScanDisabled}}
+      <AkStack
+        @alignItems='center'
+        @spacing='0.5'
+        data-test-projectList-manualScanStatus
+      >
+        {{#if this.isManualDone}}
+          <AkIcon
+            @iconName='check-circle'
+            @color='success'
+            local-class='file-overview-status-icon'
+            data-test-projectList-manualScanStatus-doneIcon
+          />
+        {{else}}
+          <AkIcon
+            @iconName={{if
+              this.isManualRequested
+              'timer-outline'
+              'circle-outline'
+            }}
+            @color='success'
+            local-class='file-overview-status-icon'
+            data-test-projectList-manualScanStatus-requestedPendingIcon
+          />
+        {{/if}}
+
+        <AkTypography
+          @variant='body2'
+          data-test-projectList-manualScanStatus-name
+        >
+          {{t 'pt'}}
+        </AkTypography>
+      </AkStack>
+    {{/unless}}
+  </AkStack>
+</AkStack>

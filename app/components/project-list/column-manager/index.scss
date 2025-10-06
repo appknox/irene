@@ -1,0 +1,22 @@
+.reorder-icon {
+  cursor: grab;
+}
+
+.column-item.drag-over {
+  border-bottom: 1px solid var(--project-list-column-manager-filter-sections-columns-drag-border-color);
+}
+
+.column-list {
+  padding: 1em;
+  min-width: 450px;
+  height: 100%;
+}
+
+.column-manager-container {
+  height: 100%;
+}
+
+.filter-drawer-footer {
+  background-color: var(--project-list-column-manager-filter-sections-columns-bg-color);
+  box-shadow: var(--project-list-column-manager-filter-sections-columns-box-shadow);
+}
