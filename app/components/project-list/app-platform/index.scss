@@ -1,0 +1,19 @@
+.app-platform-icon-container {
+  width: 40px;
+  height: 40px;
+  padding: 0.25em;
+  box-sizing: border-box;
+}
+
+.app-platform-icon-apple {
+  color: var(--project-list-app-platform-color-ios);
+}
+
+.app-platform-icon-android {
+  color: var(--project-list-app-platform-color-android);
+}
+
+.app-platform-icon {
+  font-size: 1.5rem;
+  vertical-align: unset;
+}
