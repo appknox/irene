@@ -31,6 +31,7 @@ export default class ProjectService extends Service {
 
   @tracked projectQueryResponse: ProjectQueryResponse | null = null;
   @tracked isProjectReponseFiltered = false;
+  @tracked viewType: 'card' | 'list' = 'card';
 
   @action
   setProjectResponseFiltered(
@@ -40,6 +41,11 @@ export default class ProjectService extends Service {
       ([key, value]) =>
         value === DEFAULT_PROJECT_QUERY_PARAMS[key as keyof typeof params]
     );
+  }
+
+  @action
+  setViewType(viewType: 'card' | 'list') {
+    this.viewType = viewType;
   }
 
   fetchProjects = task(

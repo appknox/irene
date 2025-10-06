@@ -105,6 +105,7 @@
   "appknoxDesc": "Assess your mobile applications for vulnerabilities",
   "appList": "App List",
   "apply": "Apply",
+  "appName": "App Name",
   "appOrS": "アプリ",
   "appSwitcher": "App Switcher",
   "appiumFileUploadedSuccessfully": "File Uploaded Successfully",
@@ -1299,6 +1300,10 @@
   "projectCount": "Projects count",
   "projectID": "Project ID",
   "projectLevel": "Project Level",
+  "projectList": {
+    "selectColumns": "Select Columns",
+    "manageColumns": "Manage Columns"
+  },
   "projectName": "プロジェクト名",
   "projectRemoved": "プロジェクトが削除されました",
   "projectTeamAdded": "Added team to project",
@@ -1335,6 +1340,7 @@
   "proxySettingsTitle": "API Proxy",
   "proxyTurned": "Proxy turned ",
   "proxyWarning": "Please check if you have enabled proxy",
+  "pt": "PT",
   "publicApi": "Public Api",
   "quarterly": "３か月",
   "read": "Read",
