@@ -146,10 +146,10 @@ export const AkIconVariant = [
   'network-intel-node',
   'auto-awesome',
   'reorder',
-  // custom icons
+  'add-column-right-outline-rounded',
   'unarchive',
   'license-outline-rounded',
-  // md icons
+  // custom icons
   'mdi:checkbox-marked',
   'mdi:checkbox-blank-outline',
   'mdi:radio-button-checked',
