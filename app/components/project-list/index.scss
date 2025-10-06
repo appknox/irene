@@ -17,3 +17,27 @@
   border: 1px solid var(--project-list-border-color);
   border-radius: var(--project-list-border-radius);
 }
+
+.project-table {
+  background-color: var(--project-list-background-color);
+  width: 100%;
+  height: 100%;
+
+  table {
+    table-layout: auto;
+
+    thead tr th,
+    tbody tr td {
+      width: auto !important;
+      max-width: 400px !important;
+    }
+
+    tbody tr td {
+      background-color: var(--project-list-background-color);
+    }
+
+    tbody tr:hover td {
+      background-color: var(--project-list-background-color-hover);
+    }
+  }
+}

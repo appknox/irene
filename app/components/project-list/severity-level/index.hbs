@@ -1,0 +1,72 @@
+<AkStack @spacing='1'>
+  {{#each this.severityLevelCounts as |slc|}}
+    <AkTooltip @arrow={{true}} @title={{slc.name}} @placement='bottom'>
+      <AkStack
+        @width='full'
+        @justifyContent='space-between'
+        @spacing='1'
+        local-class='severity-level-tag'
+      >
+        <AkStack
+          @width='full'
+          @alignItems='center'
+          data-test-fileChart-severityCountGroup='{{slc.name}}'
+        >
+          <div
+            local-class='severity-indicator severity-{{slc.severityType}}'
+            data-test-fileChartSeverityLevel-severityCountIndicator
+          />
+          {{#if this.isLoadingFileRisk}}
+            <AkSkeleton
+              class='ml-1'
+              @variant='rounded'
+              @width='16px'
+              @height='18px'
+            />
+          {{else}}
+            <AkTypography
+              data-test-fileChartSeverityLevel-severityCountValue
+              @variant='subtitle1'
+              @align='right'
+              class='pl-1'
+            >
+              {{slc.value}}
+            </AkTypography>
+          {{/if}}
+
+          {{#if slc.hasOverridenPassedRisks}}
+            <AkTooltip
+              @arrow={{true}}
+              @placement='bottom'
+              data-test-fileChartSeverityLevel-ignoreVulnerabilityIcon-tooltip
+            >
+              <:tooltipContent>
+                <AkStack
+                  @direction='column'
+                  local-class='tooltip-content-container'
+                  data-test-fileChartSeverityLevel-ignoreVulnerabilityIcon-tooltipContent
+                >
+                  <AkTypography @color='inherit' @variant='body2'>
+                    {{t
+                      'ignoreVulnerabilityFileChartMessage'
+                      overridenPassedRiskCount=this.overridenPassedRiskCount
+                    }}
+                  </AkTypography>
+                </AkStack>
+              </:tooltipContent>
+
+              <:default>
+                <AkIcon
+                  @iconName='ic:outline-drive-file-rename-outline'
+                  @color='secondary'
+                  data-test-fileChartSeverityLevel-ignoreVulnerabilityIcon
+                  data-test-cy='fileChartSeverityLevel-ignoreVulnerabilityIcon'
+                />
+              </:default>
+            </AkTooltip>
+          {{/if}}
+        </AkStack>
+      </AkStack>
+    </AkTooltip>
+  {{/each}}
+</AkStack>

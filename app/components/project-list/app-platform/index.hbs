@@ -1,0 +1,15 @@
+{{#if this.platformIconClass}}
+  <AkStack
+    ...attributes
+    data-test-appPlatform-container
+    local-class='app-platform-icon-container'
+    @justifyContent='center'
+    @alignItems='center'
+  >
+    <AkIcon
+      data-test-appPlatform-icon
+      @iconName={{this.platformIconName}}
+      local-class='app-platform-icon-{{this.platformIconClass}}'
+    />
+  </AkStack>
+{{/if}}

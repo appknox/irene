@@ -1697,8 +1697,21 @@ body {
 
   // variables for project-list
   --project-list-background-color: var(--common-white);
+  --project-list-background-color-hover: var(--neutral-white-100);
   --project-list-border-color: var(--neutral-white-100);
   --project-list-border-radius: var(--border-radius);
+
+  // variables for project-list/app-platform
+  --project-list-app-platform-color-ios: var(--ios);
+  --project-list-app-platform-color-android: var(--android);
+
+  // variables for project-list/column-manager
+  --project-list-column-manager-sections-columns-drag-border-color: var(--primary-main);
+  --project-list-column-manager-sections-columns-bg-color: var(--background-main);
+  --project-list-column-manager-sections-columns-box-shadow: var(--box-shadow-4);
+
+  // variables for project-list/tags
+  --project-list-tags-background-grey: var(--neutral-grey-100);
 
   // variables for project-list/loader
   --project-list-loader-border-color: var(--neutral-white-100);
@@ -1716,6 +1729,23 @@ body {
   );
   --project-list-header-clear-filter-color: var(--neutral-grey-600);
   --project-list-header-clear-filter-hover-color: var(--primary-main);
+  --project-list-header-button-border-color: var(--border-color-1);
+  --project-list-header-active-background-color: var(--side-menu-active-background-light);
+
+  // variables for project-list/severity-level
+  --project-list-severity-level-tag-border-color: var(--border-color-1);
+  --project-list-severity-level-color-critical: var(--severity-critical);
+  --project-list-severity-level-color-high: var(--severity-high);
+  --project-list-severity-level-color-medium: var(--severity-medium);
+  --project-list-severity-level-color-low: var(--severity-low);
+  --project-list-severity-level-color-passed: var(--severity-passed);
+  --project-list-severity-level-color-untested: var(--severity-untested);
+  --project-list-severity-level-color-none: var(--severity-none);
+
+  // variables for project-list/column-manager
+  --project-list-column-manager-filter-sections-columns-box-shadow: var(--box-shadow-4);
+  --project-list-column-manager-filter-sections-columns-drag-border-color: var(--primary-main);
+  --project-list-column-manager-filter-sections-columns-bg-color: var(--background-main);
 
   // variables for project-overview
   --project-overview-card-hover-shadow: var(--box-shadow-7);

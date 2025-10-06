@@ -7,6 +7,8 @@ import type Store from '@ember-data/store';
 import type IntlService from 'ember-intl/services/intl';
 
 import type OrganizationService from 'irene/services/organization';
+import type ProjectService from 'irene/services/project';
+import type { FilterColumn } from 'irene/components/project-list/table-columns';
 import ENUMS from 'irene/enums';
 import styles from './index.scss';
 
@@ -30,16 +32,19 @@ interface ProjectListHeaderArgs {
   query: string;
   platform: number;
   sortKey: string;
-  onQueryChange(event: Event): void;
-  handleClear(): void;
-  filterPlatform(platform: PlatformObject): void;
-  onSelectTeam(team: Team): void;
-  sortProjects(selected: SortingKeyObject): void;
+  onQueryChange: (event: Event) => void;
+  handleClear: () => void;
+  filterPlatform: (platform: PlatformObject) => void;
+  onSelectTeam: (team: Team) => void;
+  sortProjects: (selected: SortingKeyObject) => void;
+  onColumnsUpdate: (columnsMap: Map<string, FilterColumn>) => void;
+  onOpenColumnManager: () => void;
 }
 
 export default class ProjectListHeaderComponent extends Component<ProjectListHeaderArgs> {
   @service declare intl: IntlService;
   @service declare organization: OrganizationService;
+  @service('project') declare projectService: ProjectService;
   @service declare store: Store;
 
   tDateUpdated: string;
@@ -151,6 +156,26 @@ export default class ProjectListHeaderComponent extends Component<ProjectListHea
     return styles['clear-filter-icon'];
   }
 
+  get viewType() {
+    return this.projectService.viewType;
+  }
+
+  get isCardView() {
+    return this.viewType === 'card';
+  }
+
+  get isListView() {
+    return this.viewType === 'list';
+  }
+
+  @action handleCardViewClick() {
+    this.projectService.setViewType('card');
+  }
+
+  @action handleListViewClick() {
+    this.projectService.setViewType('list');
+  }
+
   @action onSortProjectsChange(selected: SortingKeyObject) {
     this.selectedSortKey = selected;
 
@@ -160,6 +185,10 @@ export default class ProjectListHeaderComponent extends Component<ProjectListHea
   @action filterPlatformChange(platform: PlatformObject) {
     this.selectedPlatform = platform;
     this.args.filterPlatform(platform);
+  }
+
+  @action handleOpenColumnManager() {
+    this.args.onOpenColumnManager?.();
   }
 
   @action

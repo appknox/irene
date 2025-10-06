@@ -1,17 +1,25 @@
 import { action } from '@ember/object';
-import { inject as service } from '@ember/service';
+import { service } from '@ember/service';
 import Component from '@glimmer/component';
 import { tracked } from '@glimmer/tracking';
 import { isEmpty } from '@ember/utils';
-import IntlService from 'ember-intl/services/intl';
-import OrganizationService from 'irene/services/organization';
-import Store from '@ember-data/store';
+import type IntlService from 'ember-intl/services/intl';
+import type Store from '@ember-data/store';
+import type RouterService from '@ember/routing/router-service';
 
 import { INPUT } from 'irene/utils/constants';
+import {
+  DEFAULT_PROJECT_COLUMNS,
+  type FilterColumn,
+} from 'irene/components/project-list/table-columns';
 
-import ProjectService, {
-  DEFAULT_PROJECT_QUERY_PARAMS,
-} from 'irene/services/project';
+import type ProjectService from 'irene/services/project';
+import type OrganizationService from 'irene/services/organization';
+import type LoggerService from 'irene/services/logger';
+import { DEFAULT_PROJECT_QUERY_PARAMS } from 'irene/services/project';
+import type ProjectModel from 'irene/models/project';
+
+const COLUMN_PREFERENCES_KEY = 'projectListColumnPreferences';
 
 interface Team {
   name: string;
@@ -33,6 +41,8 @@ export default class ProjectListComponent extends Component {
   @service declare organization: OrganizationService;
   @service declare store: Store;
   @service('project') declare projectService: ProjectService;
+  @service declare router: RouterService;
+  @service declare logger: LoggerService;
 
   @tracked limit = DEFAULT_PROJECT_QUERY_PARAMS.limit;
   @tracked offset = DEFAULT_PROJECT_QUERY_PARAMS.offset;
@@ -40,9 +50,13 @@ export default class ProjectListComponent extends Component {
   @tracked sortKey = DEFAULT_PROJECT_QUERY_PARAMS.sortKey;
   @tracked platform = DEFAULT_PROJECT_QUERY_PARAMS.platform;
   @tracked team = DEFAULT_PROJECT_QUERY_PARAMS.team;
+  @tracked allColumnsMap: Map<string, FilterColumn>;
+  @tracked showColumnManager = false;
 
   constructor(owner: unknown, args: object) {
     super(owner, args);
+
+    this.allColumnsMap = this.loadColumnPreferences();
 
     this.projectService.fetchProjects.perform();
   }
@@ -84,6 +98,85 @@ export default class ProjectListComponent extends Component {
     return this.showProjectResults && !this.isLoading;
   }
 
+  get viewType() {
+    return this.projectService.viewType;
+  }
+
+  get isCardView() {
+    return this.viewType === 'card';
+  }
+
+  get isListView() {
+    return this.viewType === 'list';
+  }
+
+  get selectedColumns() {
+    return Array.from(this.allColumnsMap.values())
+      .filter((column) => column.selected)
+      .sort((a, b) => a.order - b.order);
+  }
+
+  get columns() {
+    return this.selectedColumns.map((column) => {
+      // Get the translated column name
+      const translatedName = this.intl.t(column.name);
+
+      // Map the column configuration based on the field
+      const baseColumn = {
+        name: translatedName,
+        valuePath: column.field,
+        component: this.getColumnComponent(column.field),
+        width: column?.width,
+        minWidth: column?.minWidth,
+        isFixed: column?.isFixed,
+        isHideable: column?.isHideable,
+        default: column?.default,
+      };
+
+      return baseColumn;
+    });
+  }
+
+  @action
+  initializeColumns(
+    columns: Omit<FilterColumn, 'order' | 'defaultOrder'>[]
+  ): Map<string, FilterColumn> {
+    const columnMap = new Map<string, FilterColumn>();
+
+    columns.forEach((col, index) => {
+      columnMap.set(col.field, {
+        ...col,
+        order: index,
+        defaultOrder: index,
+      });
+    });
+
+    return columnMap;
+  }
+
+  @action
+  handleProjectRowClick(project: ProjectModel) {
+    this.router.transitionTo(
+      'authenticated.dashboard.file',
+      project.lastFile?.id
+    );
+  }
+
+  @action
+  toggleColumn(field: string) {
+    const column = this.allColumnsMap.get(field);
+
+    if (column) {
+      this.allColumnsMap.set(field, {
+        ...column,
+        selected: !column.selected,
+      });
+      // Trigger reactivity
+      this.allColumnsMap = new Map(this.allColumnsMap);
+      this.saveColumnPreferences();
+    }
+  }
+
   @action
   handlePrevNextAction({ limit, offset }: { limit: number; offset: number }) {
     this.limit = limit;
@@ -112,6 +205,23 @@ export default class ProjectListComponent extends Component {
       this.platform,
       this.team
     );
+  }
+
+  @action
+  openColumnManager() {
+    this.showColumnManager = true;
+  }
+
+  @action
+  closeColumnManager() {
+    this.showColumnManager = false;
+  }
+
+  @action
+  handleColumnsUpdate(columnsMap: Map<string, FilterColumn>) {
+    this.allColumnsMap = new Map(columnsMap);
+    this.saveColumnPreferences();
+    this.closeColumnManager();
   }
 
   @action sortProjects(selected: SortingKeyObject) {
@@ -184,6 +294,76 @@ export default class ProjectListComponent extends Component {
         this.team
       );
     }
+  }
+
+  getColumnComponent(field: string): string | undefined {
+    const componentMap: Record<string, string> = {
+      platform: 'project-list/app-platform',
+      name: 'project-list/app-name',
+      severityLevel: 'project-list/severity-level',
+      scanStatus: 'project-list/scan-statuses',
+      tags: 'project-list/tags',
+      action: 'project-list/action',
+    };
+
+    return componentMap[field];
+  }
+
+  loadColumnPreferences() {
+    const defaultColumnsMap = this.initializeColumns(DEFAULT_PROJECT_COLUMNS);
+
+    try {
+      const saved = localStorage.getItem(COLUMN_PREFERENCES_KEY);
+      const preferences = JSON.parse(saved || '{}');
+
+      if (Object.keys(preferences).length < 1) {
+        return defaultColumnsMap;
+      }
+
+      // Get default columns as the base
+      const map = new Map<string, FilterColumn>();
+
+      // Iterate through default columns and merge with saved preferences
+      defaultColumnsMap.forEach((defaultColumn, field) => {
+        const savedPref = preferences[field];
+
+        const computedColData = savedPref
+          ? {
+              ...defaultColumn,
+              selected: savedPref.selected ?? defaultColumn.selected,
+              order: savedPref.order ?? defaultColumn.order,
+              width: savedPref.width ?? defaultColumn.width,
+              minWidth: savedPref.minWidth ?? defaultColumn.minWidth,
+            }
+          : defaultColumn;
+
+        map.set(field, computedColData);
+      });
+
+      return map;
+    } catch (error) {
+      this.logger.error('Failed to load column preferences:', error);
+      localStorage.removeItem(COLUMN_PREFERENCES_KEY);
+
+      return defaultColumnsMap;
+    }
+  }
+
+  saveColumnPreferences() {
+    const preferences = Array.from(this.allColumnsMap.entries()).reduce(
+      (acc, [field, column]) => ({
+        ...acc,
+        [field]: {
+          selected: column.selected,
+          order: column.order,
+          width: column.width,
+          minWidth: column.minWidth,
+        },
+      }),
+      {}
+    );
+
+    localStorage.setItem(COLUMN_PREFERENCES_KEY, JSON.stringify(preferences));
   }
 }
 

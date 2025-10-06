@@ -1,0 +1,45 @@
+<AkIconButton
+  @size='small'
+  disabled={{not this.iconUrl}}
+  {{on 'click' this.handleFileMoreMenuOpen}}
+>
+  <AkIcon @iconName='more-vert' />
+</AkIconButton>
+
+<AkMenu
+  @anchorRef={{this.fileMoreMenuRef}}
+  @arrow={{true}}
+  @onClose={{this.handleFileMoreMenuClose}}
+  as |akm|
+>
+  {{#each this.fileMoreMenuList as |it|}}
+    {{#if it.group}}
+      <AkList::Item @noGutters={{true}} local-class='card-more-menu-item-group'>
+        <AkTypography
+          {{style fontSize='0.857rem'}}
+          @fontWeight='bold'
+          @tag='span'
+        >
+          {{it.group}}
+        </AkTypography>
+      </AkList::Item>
+    {{/if}}
+
+    <akm.listItem
+      data-test-fileDetailsSummary-moreMenuItem
+      local-class='card-more-menu-item'
+      @link={{true}}
+      @button={{false}}
+      @route={{it.route}}
+      @model={{it.routeModel}}
+      @divider={{unless it.hideDivider true}}
+      as |li|
+    >
+      <li.leftIcon>
+        <AkIcon @iconName={{it.iconName}} @color='textPrimary' />
+      </li.leftIcon>
+
+      <li.text @primaryText={{it.label}} />
+    </akm.listItem>
+  {{/each}}
+</AkMenu>
