@@ -1227,6 +1227,7 @@
     "categories": "Categories",
     "codeSignature": "Code Signature",
     "completeApiScanNote": "In the PII Tab, partial PII data has been found based on App Binary. To get the full PII data, complete your API Scan.",
+    "completeDastScanNote": "In the Geo Location Tab, partial Geo Location data has been found based on App Binary. To get the full Geo Location data, complete your DAST Scan.",
     "contactMessage": "<strong>Thanks for showing interest in Privacy Shield. Our team will get back to you.</strong>",
     "dangerPerms": "Dangerous Permissions",
     "dangerPermsDetected": "Review the list of dangerous permissions below and remove any that aren’t essential to reduce your app’s attack surface.",
@@ -1249,6 +1250,7 @@
       "pii": "<strong>PII</strong> - Uncover PII leaks both in the app binary and over the network calls. (Upcoming feature)",
       "geoLoc": "<strong>Geo Location</strong> - Identify if your app is accessing servers located in countries/regions perceived to be dangerous (Upcoming feature)"
     },
+    "geoUpdatedNote": "Geo Locatoion may have been updated based on the completion of DAST Scan.",
     "generateReportDescription": "Report is not available yet. Please click on the Generate button to access the <strong>Privacy Shield report.</strong>",
     "inProgressDescription": "Please visit this page after sometime to view the results.",
     "inProgressHeading": "Privacy Analysis is in progress.",

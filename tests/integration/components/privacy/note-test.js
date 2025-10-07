@@ -30,7 +30,7 @@ class OrganizationStub extends Service {
 class StubPrivacyModuleService extends Service {
   showCompleteApiScanNote = false;
   showPiiUpdated = false;
-  showPiiUpdatedNote = false;
+  showNote = false;
 }
 
 module('Integration | Component | privacy/note', function (hooks) {
@@ -67,7 +67,7 @@ module('Integration | Component | privacy/note', function (hooks) {
   test('it renders pii updated note', async function (assert) {
     const service = this.owner.lookup('service:privacy-module');
     service.showPiiUpdated = true;
-    service.showPiiUpdatedNote = true;
+    service.showNote = true;
 
     await render(hbs`<PrivacyModule::AppDetails::Note />`);
 

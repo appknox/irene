@@ -1,0 +1,66 @@
+{{#if this.hasMessages}}
+  <AkStack
+    @justifyContent='space-between'
+    @alignItems='center'
+    local-class='note'
+    data-test-notification-banner
+  >
+    <AkStack @direction='row' @alignItems='center'>
+      <div local-class='icon-container {{this.currentMessage.color}}'>
+        <AkIcon @iconName={{this.currentMessage.icon}} />
+        {{! blocks }}
+      </div>
+
+      <AkTypography class='ml-2' data-test-notification-banner-message>
+        {{this.currentMessage.message}}
+      </AkTypography>
+    </AkStack>
+
+    <AkStack @direction='row' @alignItems='center'>
+
+      {{#if this.showNextPrev}}
+        {{! Previous }}
+        <AkIconButton
+          @size='small'
+          @variant='outlined'
+          {{on 'click' this.showPrevMessage}}
+          disabled={{this.isFirstMessage}}
+          data-test-notification-banner-prev
+        >
+          <AkIcon @iconName='arrow-left' />
+        </AkIconButton>
+
+        <AkStack local-class='message-number-indicator'>
+          <AkTypography @fontWeight='medium'>
+            {{this.currentMessageNumber}}
+            /
+            {{this.totalMessages}}
+          </AkTypography>
+        </AkStack>
+
+        {{! Next }}
+        <AkIconButton
+          @size='small'
+          @variant='outlined'
+          {{on 'click' this.showNextMessage}}
+          disabled={{this.isLastMessage}}
+          data-test-notification-banner-next
+        >
+          <AkIcon @iconName='arrow-right' />
+        </AkIconButton>
+
+        <div local-class='verticle-divider'></div>
+      {{/if}}
+
+      {{! Close }}
+      <AkIconButton
+        @size='small'
+        class='mr-2'
+        {{on 'click' @onClose}}
+        data-test-notification-banner-close
+      >
+        <AkIcon @iconName='close' />
+      </AkIconButton>
+    </AkStack>
+  </AkStack>
+{{/if}}
