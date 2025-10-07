@@ -317,6 +317,12 @@ body {
   --ak-checkbox-tree-secondary-background: var(--background-light);
   --ak-checkbox-tree-secondary-border-color: var(--border-color-1);
 
+  //variables for ak-notification-banner
+  --ak-notification-banner-bg-color: var(--common-white);
+  --ak-notification-banner-icon-color: var(--common-white);
+  --ak-notification-banner-warning-color: var(--error-main);
+  --ak-notification-banner-success-color: var(--success-main);
+
   // variables for ak-appbar
   &.theme-light {
     --ak-appbar-inherit-background: var(--background-light);
