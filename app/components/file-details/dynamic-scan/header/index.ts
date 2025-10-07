@@ -7,6 +7,7 @@ import type RouterService from '@ember/routing/router-service';
 import type FileModel from 'irene/models/file';
 import type ConfigurationService from 'irene/services/configuration';
 import type DynamicScanService from 'irene/services/dynamic-scan';
+import type OrganizationService from 'irene/services/organization';
 import { DsComputedStatus } from 'irene/models/dynamicscan';
 
 interface TabItem {
@@ -33,6 +34,7 @@ export interface FileDetailsDastHeaderSignature {
 export default class FileDetailsDastHeader extends Component<FileDetailsDastHeaderSignature> {
   @service declare intl: IntlService;
   @service declare router: RouterService;
+  @service declare organization: OrganizationService;
   @service declare configuration: ConfigurationService;
   @service('dynamic-scan') declare dsService: DynamicScanService;
 
@@ -81,19 +83,20 @@ export default class FileDetailsDastHeader extends Component<FileDetailsDastHead
           this.dsManualScan?.get('computedStatus')
         ),
       },
-      !this.orgIsAnEnterprise && {
-        id: 'automated-dast',
-        label: this.intl.t('dastTabs.automatedDAST'),
-        route: 'authenticated.dashboard.file.dynamic-scan.automated',
-        activeRoutes: 'authenticated.dashboard.file.dynamic-scan.automated',
-        isActive:
-          this.currentRoute ===
-          'authenticated.dashboard.file.dynamic-scan.automated',
-        inProgress: this.isAutomatedScanRunning,
-        iconDetails: this.getScanStatusIconData(
-          this.dsAutomatedScan?.get('computedStatus')
-        ),
-      },
+      !this.orgIsAnEnterprise &&
+        !this.organization.hideUpsellUIStatus.dynamicScanAutomation && {
+          id: 'automated-dast',
+          label: this.intl.t('dastTabs.automatedDAST'),
+          route: 'authenticated.dashboard.file.dynamic-scan.automated',
+          activeRoutes: 'authenticated.dashboard.file.dynamic-scan.automated',
+          isActive:
+            this.currentRoute ===
+            'authenticated.dashboard.file.dynamic-scan.automated',
+          inProgress: this.isAutomatedScanRunning,
+          iconDetails: this.getScanStatusIconData(
+            this.dsAutomatedScan?.get('computedStatus')
+          ),
+        },
       this.dsService.showScheduledScan && {
         id: 'scheduled-automated-dast',
         label: this.intl.t('dastTabs.scheduledAutomatedDAST'),

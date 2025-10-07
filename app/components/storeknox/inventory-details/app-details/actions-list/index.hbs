@@ -53,15 +53,17 @@
     @alignItems='center'
   >
     {{#each this.actionsList as |action|}}
-      <AkLink @route={{action.route}} @model={{this.skInventoryApp.id}}>
-        <Storeknox::InventoryDetails::AppDetails::ActionsList::Button
-          @needsAction={{action.needsAction}}
-          @featureInProgress={{action.featureInProgress}}
-          @label={{action.label}}
-          @skInventoryApp={{this.skInventoryApp}}
-          data-test-storeknoxInventoryDetails-actionBtn='{{action.id}}'
-        />
-      </AkLink>
+      {{#unless action.hideAction}}
+        <AkLink @route={{action.route}} @model={{this.skInventoryApp.id}}>
+          <Storeknox::InventoryDetails::AppDetails::ActionsList::Button
+            @needsAction={{action.needsAction}}
+            @featureInProgress={{action.featureInProgress}}
+            @label={{action.label}}
+            @skInventoryApp={{this.skInventoryApp}}
+            data-test-storeknoxInventoryDetails-actionBtn='{{action.id}}'
+          />
+        </AkLink>
+      {{/unless}}
     {{/each}}
   </Storeknox::InventoryDetails::SectionInfo>
 </AkStack>

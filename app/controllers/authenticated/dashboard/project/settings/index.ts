@@ -11,7 +11,13 @@ export default class AuthenticatedDashboardProjectSettingsIndexController extend
   declare model: ProjectModel;
 
   get breadcrumbs(): AkBreadcrumbsItemProps {
-    return {
+    const parentCrumb: AkBreadcrumbsItemProps['parentCrumb'] = {
+      title: this.intl.t('allProjects'),
+      route: 'authenticated.dashboard.projects',
+      routeGroup: 'project/files',
+    };
+
+    const crumb: AkBreadcrumbsItemProps = {
       title: `${this.intl.t('settings')} (${this.model?.packageName})`,
       route: 'authenticated.dashboard.project.settings.index',
       models: [this.model?.id],
@@ -23,11 +29,12 @@ export default class AuthenticatedDashboardProjectSettingsIndexController extend
         'authenticated.dashboard.project.settings.dast-automation',
       ],
 
-      parentCrumb: {
-        title: this.intl.t('allProjects'),
-        route: 'authenticated.dashboard.projects',
-        routeGroup: 'project/files',
-      },
+      parentCrumb,
+    };
+
+    return {
+      ...crumb,
+      fallbackCrumbs: [parentCrumb, crumb],
     };
   }
 }

@@ -33,6 +33,9 @@ export default class OrganizationModel extends Model {
   declare billingHidden: boolean;
 
   @attr('boolean')
+  declare hideUpsellFeatures: boolean;
+
+  @attr('boolean')
   declare isTrial: boolean;
 
   @attr('boolean')

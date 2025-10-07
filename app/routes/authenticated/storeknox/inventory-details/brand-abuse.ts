@@ -1,10 +1,13 @@
 import { service } from '@ember/service';
-import AkBreadcrumbsRoute from 'irene/utils/ak-breadcrumbs-route';
 import type RouterService from '@ember/routing/router-service';
+
+import AkBreadcrumbsRoute from 'irene/utils/ak-breadcrumbs-route';
 import type SkInventoryAppModel from 'irene/models/sk-inventory-app';
+import type OrganizationService from 'irene/services/organization';
 
 export default class AuthenticatedStoreknoxInventoryDetailsBrandAbuseRoute extends AkBreadcrumbsRoute {
   @service declare router: RouterService;
+  @service declare organization: OrganizationService;
 
   get skInventoryApp() {
     return this.modelFor(
@@ -16,7 +19,9 @@ export default class AuthenticatedStoreknoxInventoryDetailsBrandAbuseRoute exten
     // Redirect user to details page if app status is being initialized or disabled
     if (
       this.skInventoryApp.appIsInInitializingState ||
-      this.skInventoryApp.appIsInDisabledState
+      this.skInventoryApp.appIsInDisabledState ||
+      !this.organization.selected?.features.storeknox ||
+      this.organization.hideUpsellUI
     ) {
       this.router.transitionTo(
         'authenticated.storeknox.inventory-details.index',

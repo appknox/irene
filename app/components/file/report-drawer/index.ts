@@ -4,6 +4,7 @@ import type IntlService from 'ember-intl/services/intl';
 
 import type FileModel from 'irene/models/file';
 import type ConfigurationService from 'irene/services/configuration';
+import type OrganizationService from 'irene/services/organization';
 
 interface FileReportDrawerSignature {
   Args: {
@@ -16,6 +17,7 @@ interface FileReportDrawerSignature {
 export default class FileReportDrawerComponent extends Component<FileReportDrawerSignature> {
   @service declare intl: IntlService;
   @service declare configuration: ConfigurationService;
+  @service declare organization: OrganizationService;
 
   get orgIsAnEnterprise() {
     return this.configuration.serverData.enterprise;
@@ -30,15 +32,20 @@ export default class FileReportDrawerComponent extends Component<FileReportDrawe
       },
       {
         id: 'privacy-module-reports',
-        hideGroup: this.orgIsAnEnterprise,
         title: this.intl.t('fileReport.privacyReport'),
         contentComponent: 'file/report-drawer/privacy-reports' as const,
+
+        hideGroup:
+          this.orgIsAnEnterprise ||
+          this.organization.hideUpsellUIStatus.privacyModule,
       },
       {
         id: 'sbom-reports',
-        hideGroup: this.orgIsAnEnterprise,
         title: this.intl.t('fileReport.sbomReports'),
         contentComponent: 'file/report-drawer/sbom-reports' as const,
+
+        hideGroup:
+          this.orgIsAnEnterprise || this.organization.hideUpsellUIStatus.sbom,
       },
     ];
   }

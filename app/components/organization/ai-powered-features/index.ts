@@ -12,6 +12,24 @@ import type OrganizationAiFeatureModel from 'irene/models/organization-ai-featur
 
 type AiFeatureKey = 'pii' | 'reporting';
 
+type AiFeatureDrawerInfo = {
+  title: string;
+  marginTop: string;
+  contentList?: string[];
+  body?: string;
+};
+
+export interface AiFeature {
+  featureKey: AiFeatureKey;
+  isChecked: boolean;
+  enabled: boolean;
+  label: string;
+  description: string;
+  header: string;
+  isToggling: boolean;
+  drawerInfo: Array<AiFeatureDrawerInfo> | null;
+}
+
 export default class OrganizationAiPoweredFeaturesComponent extends Component {
   @service declare store: Store;
   @service declare organization: OrganizationService;
@@ -36,7 +54,7 @@ export default class OrganizationAiPoweredFeaturesComponent extends Component {
 
   get aiFeaturesList() {
     return [
-      {
+      !this.organization.hideUpsellUIStatus.aiReporting && {
         featureKey: 'reporting' as const,
         isChecked: this.aiFeatures?.reporting,
         enabled: this.features?.reporting,
@@ -48,7 +66,7 @@ export default class OrganizationAiPoweredFeaturesComponent extends Component {
         isToggling:
           this.featureToToggle === 'reporting' && this.toggleFeature.isRunning,
       },
-      {
+      !this.organization.hideUpsellUIStatus.aiPii && {
         featureKey: 'pii' as const,
         isChecked: this.aiFeatures?.pii,
         enabled: this.features?.pii,
@@ -60,8 +78,9 @@ export default class OrganizationAiPoweredFeaturesComponent extends Component {
         isToggling:
           this.featureToToggle === 'pii' && this.toggleFeature.isRunning,
       },
-    ];
+    ].filter(Boolean) as Array<AiFeature>;
   }
+
   get reportDrawerInfo() {
     return [
       {
