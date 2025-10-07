@@ -22,7 +22,10 @@ export default class PrivacyProjectModel extends Model {
   declare highlight: boolean;
 
   @attr('boolean')
-  declare pii_highlight: boolean;
+  declare piiHighlight: boolean;
+
+  @attr('boolean')
+  declare geoHighlight: boolean;
 
   @attr('date')
   declare lastScannedOn: Date;

@@ -20,6 +20,7 @@ export default class AuthenticatedDashboardPrivacyModuleAppDetailsDangerPermsCon
       siblingRoutes: [
         'authenticated.dashboard.privacy-module.app-details.index',
         'authenticated.dashboard.privacy-module.app-details.pii',
+        'authenticated.dashboard.privacy-module.app-details.geo-location',
       ],
 
       parentCrumb: {
