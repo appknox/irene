@@ -15,6 +15,30 @@ export default class OrganizationService extends Service {
   @tracked selected: OrganizationModel | null = null;
   @tracked isSecurityEnabled = false;
 
+  get orgFeatures() {
+    return this.selected?.features;
+  }
+
+  get orgAiFeatures() {
+    return this.selected?.aiFeatures;
+  }
+
+  get hideUpsellUI() {
+    return this.selected?.hideUpsellFeatures;
+  }
+
+  get hideUpsellUIStatus() {
+    return {
+      privacyModule: !this.orgFeatures?.privacy && this.hideUpsellUI,
+      sbom: !this.orgFeatures?.sbom && this.hideUpsellUI,
+      aiReporting: !this.orgAiFeatures?.reporting && this.hideUpsellUI,
+      aiPii: !this.orgAiFeatures?.pii && this.hideUpsellUI,
+
+      dynamicScanAutomation:
+        !this.orgFeatures?.dynamicscan_automation && this.hideUpsellUI,
+    };
+  }
+
   get selectedOrgProjectsCount() {
     if (this.selected) {
       return this.selected.projectsCount;

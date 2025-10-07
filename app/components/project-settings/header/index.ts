@@ -4,6 +4,7 @@ import type IntlService from 'ember-intl/services/intl';
 
 import type ProjectModel from 'irene/models/project';
 import type ConfigurationService from 'irene/services/configuration';
+import type OrganizationService from 'irene/services/organization';
 
 interface ProjectSettingsHeaderSignature {
   Args: {
@@ -20,6 +21,7 @@ interface TabItem {
 
 export default class ProjectSettingsHeaderComponent extends Component<ProjectSettingsHeaderSignature> {
   @service declare intl: IntlService;
+  @service declare organization: OrganizationService;
   @service declare configuration: ConfigurationService;
 
   get project() {
@@ -47,11 +49,12 @@ export default class ProjectSettingsHeaderComponent extends Component<ProjectSet
         route: 'authenticated.dashboard.project.settings.integrations',
         label: this.intl.t('integration'),
       },
-      !this.orgIsAnEnterprise && {
-        id: this.intl.t('dastAutomation.title'),
-        route: 'authenticated.dashboard.project.settings.dast-automation',
-        label: this.intl.t('dastAutomation.title'),
-      },
+      !this.orgIsAnEnterprise &&
+        !this.organization.hideUpsellUIStatus.dynamicScanAutomation && {
+          id: this.intl.t('dastAutomation.title'),
+          route: 'authenticated.dashboard.project.settings.dast-automation',
+          label: this.intl.t('dastAutomation.title'),
+        },
     ].filter(Boolean) as TabItem[];
   }
 }

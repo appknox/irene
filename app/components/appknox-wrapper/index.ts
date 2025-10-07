@@ -89,11 +89,16 @@ export default class AppknoxWrapperComponent extends Component<AppknoxWrapperSig
   }
 
   get showSbomDashboard() {
-    return !this.configuration.serverData.enterprise;
+    return (
+      !this.orgIsAnEnterprise && !this.organization.hideUpsellUIStatus.sbom
+    );
   }
 
   get showPrivacyDashboard() {
-    return !this.orgIsAnEnterprise;
+    return (
+      !this.orgIsAnEnterprise &&
+      !this.organization.hideUpsellUIStatus.privacyModule
+    );
   }
 
   get menuItems() {

@@ -13,7 +13,7 @@ interface PoweredByAiDrawerSignature {
   Args: {
     aiDrawerOpen: boolean;
     onClose: () => void;
-    info?: PoweredByAiDrawerInfo[];
+    info?: PoweredByAiDrawerInfo[] | null;
     showButtons?: boolean;
     buttonText?: string;
     onButtonClick?: () => void;

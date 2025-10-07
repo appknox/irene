@@ -7,9 +7,13 @@ export default class AuthenticatedDashboardSbomRoute extends Route {
   @service declare organization: OrganizationService;
   @service declare router: RouterService;
 
-  model() {
-    const isSbomEnabled = this.organization.selected?.features?.sbom;
+  beforeModel() {
+    if (this.organization.hideUpsellUIStatus.sbom) {
+      this.router.transitionTo('authenticated.dashboard.projects');
+    }
+  }
 
-    return { isSbomEnabled };
+  model() {
+    return { isSbomEnabled: !!this.organization.selected?.features?.sbom };
   }
 }
