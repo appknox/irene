@@ -54,6 +54,8 @@ export default class PrivacyModuleAppDetailsHeaderComponent extends Component<Pr
       false
     );
 
+    this.privacyModule.fetchGeoLocationData.perform(this.fileId);
+
     if (this.showPii) {
       this.privacyModule.fetchPiiData.perform(this.fileId);
     }
@@ -151,6 +153,17 @@ export default class PrivacyModuleAppDetailsHeaderComponent extends Component<Pr
         hasUpdate: this.showPiiUpdated,
         isBeta: true,
       },
+      {
+        id: 'geo-location',
+        label: 'Geo Location',
+        badgeCount: this.privacyModule.geoLocationDataCount,
+        hasBadge: true,
+        route:
+          'authenticated.dashboard.privacy-module.app-details.geo-location',
+        activeRoutes:
+          'authenticated.dashboard.privacy-module.app-details.geo-location',
+        hasUpdate: this.showGeoUpdated,
+      },
     ].filter(Boolean) as TabItem[];
   }
 
@@ -160,6 +173,10 @@ export default class PrivacyModuleAppDetailsHeaderComponent extends Component<Pr
 
   get showPiiUpdated() {
     return this.privacyModule.showPiiUpdated;
+  }
+
+  get showGeoUpdated() {
+    return this.privacyModule.showGeoUpdated;
   }
 
   get showPiiUpdatedNote() {
