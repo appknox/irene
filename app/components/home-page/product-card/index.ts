@@ -2,6 +2,8 @@ import Component from '@glimmer/component';
 import { service } from '@ember/service';
 import type IntlService from 'ember-intl/services/intl';
 
+import type IntegrationService from 'irene/services/integration';
+
 export interface ProductCardDetails {
   title: string;
   description: string;
@@ -9,6 +11,7 @@ export interface ProductCardDetails {
   route: string;
   isBeta?: boolean;
   openInNewTab?: boolean;
+  pendoContainerId?: string;
 
   coverBackgroundImage:
     | 'ak-svg/storeknox-bg-img'
@@ -33,9 +36,15 @@ export interface ProductCardComponentSignature {
 
 export default class ProductCardComponent extends Component<ProductCardComponentSignature> {
   @service declare intl: IntlService;
+  @service('browser/window') declare window: Window;
+  @service declare integration: IntegrationService;
 
   get route() {
     return this.args.route;
+  }
+
+  get enablePendo() {
+    return this.integration?.isPendoEnabled?.();
   }
 }
 
