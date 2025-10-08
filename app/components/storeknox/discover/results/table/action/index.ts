@@ -39,7 +39,9 @@ export default class StoreknoxDiscoverResultsTableActionComponent extends Compon
 
     return {
       className: isApproved ? 'already-exist-icon' : 'requested-icon',
-      iconName: isApproved ? 'inventory-2' : 'schedule-send',
+      iconName: isApproved
+        ? ('inventory-2' as const)
+        : ('schedule-send' as const),
       tooltipText: this.intl.t(
         isApproved
           ? 'storeknox.appAlreadyExists'

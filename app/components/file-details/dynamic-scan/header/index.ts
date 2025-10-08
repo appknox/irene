@@ -14,7 +14,10 @@ interface TabItem {
   label: string;
   route: string;
   activeRoutes: string;
-  iconDetails?: { icon: string; color: 'success' | 'warn' } | null;
+  iconDetails?: {
+    icon: 'check-circle' | 'warning' | 'block';
+    color: 'success' | 'warn';
+  } | null;
   inProgress?: boolean;
   count?: number;
   isActive?: boolean;
@@ -116,15 +119,15 @@ export default class FileDetailsDastHeader extends Component<FileDetailsDastHead
   @action
   getScanStatusIconData(status: DsComputedStatus | undefined) {
     if (status === DsComputedStatus.COMPLETED) {
-      return { icon: 'check-circle', color: 'success' as const };
+      return { icon: 'check-circle' as const, color: 'success' as const };
     }
 
     if (status === DsComputedStatus.ERROR) {
-      return { icon: 'warning', color: 'error' as const };
+      return { icon: 'warning' as const, color: 'error' as const };
     }
 
     if (status === DsComputedStatus.CANCELLED) {
-      return { icon: 'block', color: 'error' as const };
+      return { icon: 'block' as const, color: 'error' as const };
     }
 
     return null;

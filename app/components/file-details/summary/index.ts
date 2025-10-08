@@ -21,7 +21,7 @@ interface FileMoreMenuItem {
   group?: string;
   query?: Record<string, unknown>;
   label: string;
-  iconName: string;
+  iconName: 'settings' | 'compare-arrows' | 'apps';
   route: string;
   routeModel: string | undefined;
   hideDivider?: boolean;

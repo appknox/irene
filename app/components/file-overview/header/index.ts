@@ -21,7 +21,7 @@ interface FileOverviewHeaderSignature {
 interface FileMoreMenuItem {
   group?: string;
   label: string;
-  iconName: string;
+  iconName: 'compare-arrows' | 'apps' | 'settings';
   route: string;
   routeModel: string | undefined;
   hideDivider?: boolean;

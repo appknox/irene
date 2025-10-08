@@ -41,7 +41,7 @@ export default class DynamicScanActionComponent extends Component<DynamicScanAct
   get dynamicScanActionButton() {
     if (this.args.dynamicScan?.get('isStarting')) {
       return {
-        icon: 'close',
+        icon: 'close' as const,
         text: this.intl.t('cancelScan'),
         testId: 'cancelBtn',
         variant: 'outlined' as const,
@@ -54,7 +54,7 @@ export default class DynamicScanActionComponent extends Component<DynamicScanAct
 
     if (this.args.dynamicScan?.get('isReadyOrRunning')) {
       return {
-        icon: 'stop-circle',
+        icon: 'stop-circle' as const,
         text: this.intl.t('stop'),
         testId: 'stopBtn',
         loading: this.dynamicShutdown.isRunning,
@@ -67,7 +67,7 @@ export default class DynamicScanActionComponent extends Component<DynamicScanAct
       this.args.dynamicScan?.get('isStatusError')
     ) {
       return {
-        icon: 'refresh',
+        icon: 'refresh' as const,
         text: this.args.dynamicScanText,
         testId: 'restartBtn',
         onClick: this.openDynamicScanDrawer,
@@ -75,7 +75,7 @@ export default class DynamicScanActionComponent extends Component<DynamicScanAct
     }
 
     return {
-      icon: 'play-arrow',
+      icon: 'play-arrow' as const,
       text: this.args.dynamicScanText,
       testId: 'startBtn',
       onClick: this.openDynamicScanDrawer,

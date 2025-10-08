@@ -22,7 +22,7 @@ export default class OrganizationServiceAccountListExpiryOnComponent extends Com
       label: noExpiry
         ? this.intl.t('noExpiry')
         : dayjs(serviceAccount.expiry).format('DD MMM YYYY'),
-      icon: noExpiry ? 'warning' : 'event',
+      icon: noExpiry ? ('warning' as const) : ('event' as const),
       color: noExpiry ? ('warn' as const) : ('default' as const),
     };
   }

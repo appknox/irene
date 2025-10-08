@@ -3,7 +3,6 @@ import { service } from '@ember/service';
 import { action } from '@ember/object';
 import type IntlService from 'ember-intl/services/intl';
 
-import type { AkIconSignature } from '../ak-icon';
 import type MeService from 'irene/services/me';
 import type OrganizationService from 'irene/services/organization';
 import type IntegrationService from 'irene/services/integration';
@@ -41,7 +40,6 @@ export interface SideNavSignature {
 export interface MenuItem {
   label: string;
   icon?: string;
-  iconVariant: AkIconSignature['Args']['variant'];
   route?: string;
   query?: Record<string, string | number>;
   currentWhen?: string;
@@ -51,7 +49,7 @@ export interface MenuItem {
 
 export interface LowerMenuItem {
   title: string;
-  icon: string;
+  icon: 'keyboard-tab' | 'info' | 'chat-bubble';
   divider?: boolean;
   onClick: () => void;
   enablePendo?: boolean;

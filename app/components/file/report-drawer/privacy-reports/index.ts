@@ -75,7 +75,7 @@ export default class FileReportDrawerPrivacyReportsComponent extends Component<F
         return {
           label: 'chipStatus.failed',
           color: 'primary' as AkChipColor,
-          icon: 'warning',
+          icon: 'warning' as const,
           text: this.intl.t('privacyModule.failedNote'),
         };
 
@@ -83,7 +83,7 @@ export default class FileReportDrawerPrivacyReportsComponent extends Component<F
         return {
           label: 'chipStatus.inProgress',
           color: 'warn' as AkChipColor,
-          icon: 'mdi:progress-clock',
+          icon: 'mdi:progress-clock' as const,
           text: this.intl.t('privacyModule.inProgressMessageReport'),
         };
 
