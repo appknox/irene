@@ -26,6 +26,7 @@ import ProfileModel from './profile';
 import SbomFileModel from './sbom-file';
 import SubmissionModel from './submission';
 import DynamicscanModel from './dynamicscan';
+import type { FileCapiReportScanType } from './file-capi-report';
 
 const _getAnalysesCount = (
   analysis: SyncHasMany<AnalysisModel>,
@@ -151,6 +152,12 @@ export default class FileModel extends ModelBaseMixin {
     const adapter = this.store.adapterFor('file');
 
     return await adapter.getLastDynamicScan(fileId, mode, isScheduledScan);
+  }
+
+  async generateCapiReports(fileTypes: FileCapiReportScanType[]) {
+    const adapter = this.store.adapterFor('file');
+
+    return adapter.generateCapiReports(this.id, fileTypes);
   }
 
   analysesSorting = ['computedRisk:desc'];
@@ -288,6 +295,18 @@ export default class FileModel extends ModelBaseMixin {
         },
       ],
     };
+  }
+
+  get isDynamicScanRunning() {
+    const automated = this.lastAutomatedDynamicScan;
+    const manual = this.lastManualDynamicScan;
+
+    return (
+      automated?.get('isStartingOrShuttingInProgress') ||
+      automated?.get('isReadyOrRunning') ||
+      manual?.get('isStartingOrShuttingInProgress') ||
+      manual?.get('isReadyOrRunning')
+    );
   }
 
   get screenCoverageSupported() {

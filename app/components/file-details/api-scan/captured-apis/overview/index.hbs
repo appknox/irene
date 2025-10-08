@@ -1,12 +1,13 @@
 <AkStack
-  data-test-fileDetails-apiScan-capturedApi-endpointContainer
   @spacing='1'
   @tag='label'
+  data-test-fileDetails-apiScan-capturedApi-endpointContainer
+  data-test-fileDetails-apiScan-capturedApi-endpointContainer-item='{{@capturedApi.id}}'
 >
   <AkCheckbox
     @checked={{@capturedApi.isActive}}
     @onChange={{perform this.handleToggleApi}}
-    @disabled={{or @disableToggleApi this.handleToggleApi.isRunning}}
+    @disabled={{this.disableToggleApi}}
     data-test-fileDetails-apiScan-capturedApi-endpointSelectCheckbox
   />
 
