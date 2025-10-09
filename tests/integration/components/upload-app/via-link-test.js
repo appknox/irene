@@ -78,12 +78,6 @@ module('Integration | Component | upload-app/via-link', function (hooks) {
       .hasText('https://play.google.com/store/apps/details?id={package_name}');
 
     assert
-      .dom('[data-test-uploadAppViaLinkModal-appstoreValidUrl]')
-      .hasText(
-        'https://apps.apple.com/{country_code}/app/{app_slug}/id{app_id}'
-      );
-
-    assert
       .dom('[data-test-uploadAppViaLinkModal-confirmBtn]')
       .isDisabled()
       .hasText(t('upload'));
@@ -92,22 +86,16 @@ module('Integration | Component | upload-app/via-link', function (hooks) {
   test.each(
     'test upload app via link validation',
     [
-      [
-        'test',
-        'Only valid Google Play Store or Apple App Store URLs are accepted',
-      ],
-      [
-        'https://example.com',
-        'Only valid Google Play Store or Apple App Store URLs are accepted',
-      ],
+      ['test', 'Only Google PlayStore URLs are accepted'],
+      ['https://example.com', 'Only Google PlayStore URLs are accepted'],
       [
         'https://play.google.com/store/apps/details',
         'Playstore url should be valid, the expected format is : https://play.google.com/store/apps/details?id={package_name}',
       ],
-      [
-        'https://apps.apple.com/in/app/example/i',
-        'App Store URL should be valid. Expected format: https://apps.apple.com/{country_code}/app/{app_slug}/id{app_id}',
-      ],
+      // [
+      //   'https://apps.apple.com/in/app/example/i',
+      //   'Appstore url should be valid, the expected format is : https://apps.apple.com/{country_code}/app/{app_slug}/id{app_id}',
+      // ],
     ],
     async function (assert, [storeUrl, errorMessage]) {
       await render(hbs`<UploadApp::ViaLink />`);

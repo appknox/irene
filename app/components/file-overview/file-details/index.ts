@@ -1,7 +1,5 @@
 import Component from '@glimmer/component';
-import { action } from '@ember/object';
-
-import type FileModel from 'irene/models/file';
+import FileModel from 'irene/models/file';
 
 interface FileOverviewFileDetailsSignature {
   Element: HTMLElement;
@@ -17,11 +15,6 @@ export default class FileOverviewFileDetailsComponent extends Component<FileOver
 
   get platformIconClass() {
     return this.args.file?.project.get('platformIconClass');
-  }
-
-  @action
-  stopPropagation(event: Event) {
-    event.stopPropagation();
   }
 }
 
