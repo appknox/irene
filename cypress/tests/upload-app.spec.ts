@@ -297,12 +297,12 @@ describe('Upload App', () => {
 
         uploadAppActions.openUploadAppModal();
 
-        cy.findByText(cyTranslate('viaSystem')).should('exist');
-        cy.findByText(cyTranslate('uploadStatus')).should('exist');
-
         cy.findByText(new RegExp(cyTranslate('uploading'), 'i')).should(
           'exist'
         );
+
+        cy.findByText(cyTranslate('viaSystem')).should('exist');
+        cy.findByText(cyTranslate('uploadStatus')).should('exist');
       });
 
       // Wait for upload completion
