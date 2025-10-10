@@ -3,5 +3,7 @@
 {{#if @model.isPrivacyEnabled}}
   {{outlet}}
 {{else}}
-  <PrivacyModule::Upselling />
+  <PageWrapper>
+    <PrivacyModule::Upselling />
+  </PageWrapper>
 {{/if}}

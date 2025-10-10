@@ -1,7 +1,20 @@
 import AkBreadcrumbsRoute from 'irene/utils/ak-breadcrumbs-route';
+import { service } from '@ember/service';
 import type SkInventoryAppModel from 'irene/models/sk-inventory-app';
+import type OrganizationService from 'irene/services/organization';
 
 export default class AuthenticatedStoreknoxInventoryDetailsBrandAbuseRoute extends AkBreadcrumbsRoute {
+  @service declare organization: OrganizationService;
+
+  beforeModel() {
+    if (
+      !this.organization.selected?.features.storeknox ||
+      this.organization.hideUpsellUI
+    ) {
+      this.router.transitionTo('authenticated.storeknox.inventory-details');
+    }
+  }
+
   model() {
     return this.modelFor(
       'authenticated.storeknox.inventory-details'
