@@ -184,11 +184,14 @@ export default class StoreknoxInventoryDetailsHeaderComponent extends Component<
 
     this.monitoringChecked = !!checked;
 
-    // Perform toggle without drawerconfirmation
+    // Perform toggle without drawer confirmation
     if (
       this.appHasLicense ||
       this.skOrg.selectedSkOrgSub?.isTrial ||
-      this.skOrg.selectedSkOrgSub?.orgSubIsExpired
+      this.skOrg.selectedSkOrgSub?.orgSubIsExpired ||
+      // should allow to toggle off if app is already monitored but has no license
+      // however, toggling back on would require a license to be allocated
+      (this.skInventoryApp.monitoringEnabled && !this.appHasLicense)
     ) {
       this.confirmMonitoringToggle();
 

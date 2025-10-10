@@ -1,7 +1,7 @@
 import { module, test } from 'qunit';
 import { setupRenderingTest } from 'ember-qunit';
 import { setupMirage } from 'ember-cli-mirage/test-support';
-import { render, findAll, click } from '@ember/test-helpers';
+import { render, findAll, click, find } from '@ember/test-helpers';
 import { setupIntl, t } from 'ember-intl/test-support';
 import { hbs } from 'ember-cli-htmlbars';
 import Service from '@ember/service';
@@ -148,17 +148,21 @@ module('Integration | Component | privacy/pii', function (hooks) {
       )
     );
 
-    const expectedCategory = this.pii[0].type;
+    const piiCategory = this.pii[0].type;
 
-    const allPiiCategory = findAll('[data-test-privacyModule-pii-category]');
+    const tableRow = find(
+      `[data-test-privacyModule-pii-table-row="${piiCategory}"]`
+    );
 
-    assert.dom(allPiiCategory[0]).hasText(expectedCategory);
+    assert
+      .dom('[data-test-privacyModule-pii-category]', tableRow)
+      .hasText(piiCategory);
 
     const expectedData = this.pii[0].pii_data[0].value;
 
-    const allPiiDataValue = findAll('[data-test-privacyModule-pii-data-value]');
-
-    assert.dom(allPiiDataValue[0]).hasText(expectedData);
+    assert
+      .dom('[data-test-privacyModule-pii-data-value]', tableRow)
+      .hasText(expectedData);
 
     assert.dom('[data-test-privacy-module-unread-mark="read"]').exists();
 

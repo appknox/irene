@@ -479,12 +479,17 @@ module(
       'it toggles monitoring status',
       [
         // Turn toggle off. App with license.
-        // NOTE: Turn off is only possible if sk_app has a license already.
-        // This is because by default every app is in a turned off state until toggled on
-        // and the only way to turn on is to assign a license
+        // NOTE: Turn off is only possible if sk_app has a license already or if app has monitoring on by default.
+
+        // Turn toggle off. App with license.
         { turn_on: false, sk_app_has_license: true },
         { turn_on: false, sk_app_has_license: true, fail: true },
         { turn_on: false, sk_app_has_license: true, is_trial: true },
+
+        // Turn toggle off. App without license.
+        { turn_on: false, sk_app_has_license: false, fail: true },
+        { turn_on: false, sk_app_has_license: false, fail: false },
+        { turn_on: false, sk_app_has_license: false, is_trial: true },
 
         // Turn toggle on. App with expired subscription
         {
@@ -493,6 +498,7 @@ module(
           with_expired_license: true,
         },
 
+        // Turn toggle off. App with expired subscription
         {
           turn_on: false,
           sk_app_has_license: true,
@@ -516,7 +522,7 @@ module(
         // Should turn on whether org has licences remaining or not
         { turn_on: true, sk_app_has_license: false, is_trial: true },
 
-        // For non owners
+        // For non owners or admins
         // Can not toggle switch whether org is trial or not. Or whether license is available or not
         { turn_on: true, sk_app_has_license: true, is_member: true },
         { turn_on: true, sk_app_has_license: false, is_member: true },
@@ -669,11 +675,16 @@ module(
 
         await click(statusToggleSelector);
 
-        // Drawer
-        // Toggling happens on drawer if app does not have license
+        // Show Drawer to confirm toggle action
+        // Toggling happens on drawer if app does not have license and you're trying to turn it on
         // Should not be shown if trial sk organization because they can toggle normally whether with license or not
         // Drawer should also not show if org sub is expired
-        if (!sk_app_has_license && !is_trial && !with_expired_license) {
+        if (
+          !sk_app_has_license &&
+          turn_on &&
+          !is_trial &&
+          !with_expired_license
+        ) {
           assert
             .dom('[data-test-storeknoxInventoryDetails-toggleMonitoringDrawer]')
             .exists();

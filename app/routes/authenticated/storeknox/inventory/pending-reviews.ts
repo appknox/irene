@@ -4,7 +4,7 @@ import type RouterService from '@ember/routing/router-service';
 import AkBreadcrumbsRoute from 'irene/utils/ak-breadcrumbs-route';
 import type MeService from 'irene/services/me';
 import type SkPendingReviewService from 'irene/services/sk-pending-review';
-import type SkInventoryAppService from 'irene/services/sk-inventory-apps';
+import type SkAppsService from 'irene/services/sk-apps';
 
 export interface StoreknoxInventoryPendingReviewsQueryParam {
   app_limit: number;
@@ -15,9 +15,7 @@ export default class AuthenticatedStoreknoxInventoryPendingReviewsRoute extends 
   @service declare me: MeService;
   @service declare router: RouterService;
   @service declare skPendingReview: SkPendingReviewService;
-
-  @service('sk-inventory-apps')
-  declare skInventoryAppsService: SkInventoryAppService;
+  @service('sk-apps') declare skAppsService: SkAppsService;
 
   queryParams = {
     app_limit: {
@@ -45,6 +43,6 @@ export default class AuthenticatedStoreknoxInventoryPendingReviewsRoute extends 
       .reload();
 
     // To get inventory list count in tabs when page is visited for the first time
-    this.skInventoryAppsService.reload();
+    this.skAppsService.reload();
   }
 }

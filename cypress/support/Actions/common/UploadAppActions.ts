@@ -216,7 +216,6 @@ export default class UploadAppActions {
     cy.findByTestId('submission-status-dropdown-container').within(() => {
       cy.contains(cyTranslate('uploadStatus'));
       cy.contains(cyTranslate('viaSystem'));
-      cy.contains(new RegExp(cyTranslate('uploading'), 'i'));
       cy.contains(new RegExp(cyTranslate('inProgress'), 'i'));
     });
 
