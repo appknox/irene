@@ -59,8 +59,6 @@ export default class AuthenticatedRoute extends Route {
   }
 
   async model() {
-    const userId = this.session.data.authenticated.user_id;
-
     await all([
       this.store.findAll('Vulnerability'),
       this.org.load(),
@@ -74,7 +72,7 @@ export default class AuthenticatedRoute extends Route {
       this.logger.info('No Storeknox Organization found');
     }
 
-    return await this.store.findRecord('user', userId);
+    return await this.me.user();
   }
 
   async afterModel(user: UserModel) {
