@@ -10,7 +10,7 @@ import type MeService from 'irene/services/me';
 import type { StoreknoxCommonTableColumnsData } from 'irene/components/storeknox/table-columns';
 import type { PaginationProviderActionsArgs } from 'irene/components/ak-pagination-provider';
 import type SkInventoryAppModel from 'irene/models/sk-inventory-app';
-import type SkInventoryAppService from 'irene/services/sk-inventory-apps';
+import type SkAppsService from 'irene/services/sk-apps';
 
 type StoreknoxInventoryTableDataItem = StoreknoxCommonTableColumnsData & {
   app: SkInventoryAppModel;
@@ -22,16 +22,14 @@ export default class StoreknoxInventoryAppListTableComponent extends Component {
   @service declare me: MeService;
   @service declare store: Store;
   @service('notifications') declare notify: NotificationService;
-
-  @service('sk-inventory-apps')
-  declare skInventoryAppsService: SkInventoryAppService;
+  @service('sk-apps') declare skAppsService: SkAppsService;
 
   get isFetchingTableData() {
-    return this.skInventoryAppsService.isFetchingSkInventoryApps;
+    return this.skAppsService.isFetchingSkInventoryApps;
   }
 
   get monitoringStatusFilter() {
-    return this.skInventoryAppsService.monitoringStatusFilter;
+    return this.skAppsService.monitoringStatusFilter;
   }
 
   get filterApplied() {
@@ -87,7 +85,7 @@ export default class StoreknoxInventoryAppListTableComponent extends Component {
   }
 
   get totalAppsCount() {
-    return this.skInventoryAppsService.skInventoryAppsCount;
+    return this.skAppsService.skAppsCount;
   }
 
   get hasNoApps() {
@@ -99,7 +97,7 @@ export default class StoreknoxInventoryAppListTableComponent extends Component {
       return this.mockLoadingData;
     }
 
-    return (this.skInventoryAppsService.skInventoryApps?.map((app) => {
+    return (this.skAppsService.skApps?.map((app) => {
       const { appMetadata } = app;
 
       return {
@@ -125,7 +123,7 @@ export default class StoreknoxInventoryAppListTableComponent extends Component {
   @action onStatusChange(status: number) {
     this.router.transitionTo({
       queryParams: {
-        app_limit: this.skInventoryAppsService.limit,
+        app_limit: this.skAppsService.limit,
         app_offset: 0,
         monitoring_status: status,
       },

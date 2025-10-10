@@ -1,10 +1,11 @@
-import { visit, click } from '@ember/test-helpers';
+import { visit, click, currentURL } from '@ember/test-helpers';
 import { module, test } from 'qunit';
 import { setupApplicationTest } from 'ember-qunit';
 import { setupMirage } from 'ember-cli-mirage/test-support';
 import { t } from 'ember-intl/test-support';
 import dayjs from 'dayjs';
 import { setupRequiredEndpoints } from 'irene/tests/helpers/acceptance-utils';
+import ENUMS from 'irene/enums';
 
 module(
   'Acceptance | storeknox/inventory-details/unscanned-versions',
@@ -79,6 +80,7 @@ module(
         {
           core_project: core_project.id,
           core_project_latest_version: file.id,
+          store_monitoring_status: ENUMS.SK_APP_MONITORING_STATUS.ACTION_NEEDED,
         }
       );
 
@@ -247,5 +249,42 @@ module(
         )
         .hasClass(new RegExp(monitoringEnabled ? 'success' : 'error'));
     });
+
+    test.each(
+      'it should redirect to details page if app status is being initialized or disabled',
+      ['withInitializingStatus', 'withDisabledStatus'],
+      async function (assert, appStatus) {
+        const file = this.server.create('file');
+        const core_project = this.server.create('project');
+
+        // Models
+        const inventoryApp = this.server.create('sk-inventory-app', appStatus, {
+          core_project: core_project.id,
+          core_project_latest_version: file.id,
+        });
+
+        const inventoryAppRecord = this.normalizeSKInventoryApp(inventoryApp);
+
+        // Server Mocks
+        this.server.get('/v2/sk_app/:id/sk_app_version', () => {
+          return {
+            count: 0,
+            next: null,
+            previous: null,
+            results: [],
+          };
+        });
+
+        await visit(
+          `/dashboard/storeknox/inventory-details/${inventoryAppRecord.id}/unscanned-version`
+        );
+
+        //  Redirect to details page
+        assert.strictEqual(
+          currentURL(),
+          `/dashboard/storeknox/inventory-details/${inventoryAppRecord.id}`
+        );
+      }
+    );
   }
 );

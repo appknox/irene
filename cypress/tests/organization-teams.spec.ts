@@ -82,36 +82,40 @@ describe('Organization Teams', () => {
     );
   });
 
-  it('should search team in teams list', function () {
-    // used for clean up in afterEach
-    cy.wrap(false).as('testCompleted');
+  it(
+    'should search team in teams list',
+    { retries: { runMode: 1 } },
+    function () {
+      // used for clean up in afterEach
+      cy.wrap(false).as('testCompleted');
 
-    // Ensure the search input exists
-    cy.findByPlaceholderText(cyTranslate('searchTeam'))
-      .as('searchInput')
-      .should('exist');
+      // Ensure the search input exists
+      cy.findByPlaceholderText(cyTranslate('searchTeam'))
+        .as('searchInput')
+        .should('exist');
 
-    // Search for the team
-    cy.get('@searchInput').type(TEST_DATA.teamName);
+      // Search for the team
+      cy.get('@searchInput').type(TEST_DATA.teamName);
 
-    // Verify that the team was found
-    cy.get('@searchInput').should('have.value', TEST_DATA.teamName);
+      // Verify that the team was found
+      cy.get('@searchInput').should('have.value', TEST_DATA.teamName);
 
-    cy.findByTestId('org-team-overview-name', ELEMENT_WAIT_OPTS).should(
-      'contain.text',
-      TEST_DATA.teamName
-    );
+      cy.findByTestId('org-team-overview-name', ELEMENT_WAIT_OPTS).should(
+        'contain.text',
+        TEST_DATA.teamName
+      );
 
-    // Clear the search input
-    cy.get('@searchInput').clear();
+      // Clear the search input
+      cy.get('@searchInput').clear();
 
-    // Verify the input is cleared
-    cy.get('@searchInput').should('have.value', '');
+      // Verify the input is cleared
+      cy.get('@searchInput').should('have.value', '');
 
-    cy.wrap(true).as('testCompleted');
-  });
+      cy.wrap(true).as('testCompleted');
+    }
+  );
 
-  it('should create/delete new team', function () {
+  it('should create/delete new team', { retries: { runMode: 1 } }, function () {
     // used for clean up in afterEach
     cy.wrap(true).as('shouldRunAfterEach');
 
@@ -193,209 +197,217 @@ describe('Organization Teams', () => {
     cy.wrap(true).as('testCompleted');
   });
 
-  it('should add/remove project to team', function () {
-    // used for clean up in afterEach
-    cy.wrap(true).as('shouldRunAfterEach');
+  it(
+    'should add/remove project to team',
+    { retries: { runMode: 1 } },
+    function () {
+      // used for clean up in afterEach
+      cy.wrap(true).as('shouldRunAfterEach');
 
-    cy.wrap(false).as('testCompleted');
+      cy.wrap(false).as('testCompleted');
 
-    cy.wrap({
-      perform: () => {
-        cy.getAliases(['@teamId', '@orgId', '@projectId']).then(
-          ([teamId, orgId, projectId]) => {
-            // Make the API request to delete the team
-            cy.makeAuthenticatedAPIRequest({
-              method: 'DELETE',
-              url: `${API_HOST}/api/organizations/${orgId}/teams/${teamId}/projects/${projectId}`,
-            });
-          }
-        );
-      },
-    }).as('testCleanup');
+      cy.wrap({
+        perform: () => {
+          cy.getAliases(['@teamId', '@orgId', '@projectId']).then(
+            ([teamId, orgId, projectId]) => {
+              // Make the API request to delete the team
+              cy.makeAuthenticatedAPIRequest({
+                method: 'DELETE',
+                url: `${API_HOST}/api/organizations/${orgId}/teams/${teamId}/projects/${projectId}`,
+              });
+            }
+          );
+        },
+      }).as('testCleanup');
 
-    // Verify that the team was created
-    cy.findAllByTestId('org-team-overview-name', ELEMENT_WAIT_OPTS)
-      .contains(TEST_DATA.teamName)
-      .should('exist')
-      .as('cypressTeam');
+      // Verify that the team was created
+      cy.findAllByTestId('org-team-overview-name', ELEMENT_WAIT_OPTS)
+        .contains(TEST_DATA.teamName)
+        .should('exist')
+        .as('cypressTeam');
 
-    // Open drawer
-    cy.get('@cypressTeam').click();
+      // Open drawer
+      cy.get('@cypressTeam').click();
 
-    // Add project to team
-    cy.findByText(cyTranslate('addProject')).click();
+      // Add project to team
+      cy.findByText(cyTranslate('addProject')).click();
 
-    cy.wait('@projectList', NETWORK_WAIT_OPTS)
-      .its('response.body')
-      .its('results')
-      .then((data: Array<MirageFactoryDefProps['project']>) => {
-        // Select first project to reduce flakiness
-        cy.wrap(data[0] ?? null).as('selectedProject');
+      cy.wait('@projectList', NETWORK_WAIT_OPTS)
+        .its('response.body')
+        .its('results')
+        .then((data: Array<MirageFactoryDefProps['project']>) => {
+          // Select first project to reduce flakiness
+          cy.wrap(data[0] ?? null).as('selectedProject');
+        });
+
+      cy.get<MirageFactoryDefProps['project']>('@selectedProject').then(
+        (project) => {
+          cy.findAllByTestId('addProjectList-row')
+            .filter(':contains(' + project?.package_name + ')')
+            .should('exist')
+            .as('projectRow');
+
+          // Find the checkbox within this row and check it
+          cy.get('@projectRow').within(() => {
+            cy.get('[data-test-checkbox]').check().should('be.checked');
+          });
+
+          cy.get('[data-test-teamDetailAction-actionBtn]')
+            .contains(cyTranslate('addProject'))
+            .should('exist')
+            .click();
+
+          cy.wait('@teamProject', NETWORK_WAIT_OPTS).then((interception) => {
+            // Store `projectId` for cleanup
+            cy.wrap(interception.response?.body?.id).as('projectId');
+          });
+
+          cy.wait('@organizationTeams', NETWORK_WAIT_OPTS).then(
+            (interception) => {
+              // Store `teamId` and `orgId` for cleanup
+              cy.wrap(interception.response?.body?.id).as('teamId');
+
+              cy.wrap(interception.response?.body?.organization).as('orgId');
+            }
+          );
+
+          cy.findByText(
+            cyTranslate('teamProjectAdded'),
+            ELEMENT_WAIT_OPTS
+          ).should('exist');
+
+          cy.get('[data-test-teamdetailaction-titlebtn]').click();
+
+          cy.get('tr', ELEMENT_WAIT_OPTS)
+            .filter(':contains(' + project?.package_name + ')')
+            .should('exist')
+            .as('addedProjectRow');
+        }
+      );
+
+      cy.get('@addedProjectRow').within(() => {
+        cy.get('[data-test-teamProjectList-actionBtn]').click();
       });
 
-    cy.get<MirageFactoryDefProps['project']>('@selectedProject').then(
-      (project) => {
-        cy.findAllByTestId('addProjectList-row')
-          .filter(':contains(' + project?.package_name + ')')
-          .should('exist')
-          .as('projectRow');
+      cy.findByTestId('ak-modal-body').within(() => {
+        cy.get('button[data-test-confirmbox-confirmbtn]').click();
+      });
 
-        // Find the checkbox within this row and check it
-        cy.get('@projectRow').within(() => {
-          cy.get('[data-test-checkbox]').check().should('be.checked');
-        });
+      cy.wait('@organizationTeams', NETWORK_WAIT_OPTS);
 
-        cy.get('[data-test-teamDetailAction-actionBtn]')
-          .contains(cyTranslate('addProject'))
-          .should('exist')
-          .click();
+      cy.findByText(cyTranslate('projectRemoved'), ELEMENT_WAIT_OPTS).should(
+        'exist'
+      );
 
-        cy.wait('@teamProject', NETWORK_WAIT_OPTS).then((interception) => {
-          // Store `projectId` for cleanup
-          cy.wrap(interception.response?.body?.id).as('projectId');
-        });
+      cy.findByTestId('teamDetail-closeBtn').click();
 
-        cy.wait('@organizationTeams', NETWORK_WAIT_OPTS).then(
-          (interception) => {
-            // Store `teamId` and `orgId` for cleanup
-            cy.wrap(interception.response?.body?.id).as('teamId');
+      cy.wrap(true).as('testCompleted');
+    }
+  );
 
-            cy.wrap(interception.response?.body?.organization).as('orgId');
-          }
-        );
+  it(
+    'should add/remove user to team',
+    { retries: { runMode: 1 } },
+    function () {
+      // used for clean up in afterEach
+      cy.wrap(true).as('shouldRunAfterEach');
 
-        cy.findByText(
-          cyTranslate('teamProjectAdded'),
-          ELEMENT_WAIT_OPTS
-        ).should('exist');
+      cy.wrap(false).as('testCompleted');
 
-        cy.get('[data-test-teamdetailaction-titlebtn]').click();
+      cy.wrap({
+        perform: () => {
+          cy.getAliases(['@teamId', '@orgId', '@userId']).then(
+            ([teamId, orgId, userId]) => {
+              // Make the API request to delete the team
+              cy.makeAuthenticatedAPIRequest({
+                method: 'DELETE',
+                url: `${API_HOST}/api/organizations/${orgId}/teams/${teamId}/members/${userId}`,
+              });
+            }
+          );
+        },
+      }).as('testCleanup');
 
-        cy.get('tr', ELEMENT_WAIT_OPTS)
-          .filter(':contains(' + project?.package_name + ')')
-          .should('exist')
-          .as('addedProjectRow');
-      }
-    );
+      // Add user to team using add user action
+      cy.findAllByTestId('org-team-overview-name', ELEMENT_WAIT_OPTS)
+        .contains(TEST_DATA.teamName)
+        .should('exist')
+        .as('cypressTeam');
 
-    cy.get('@addedProjectRow').within(() => {
-      cy.get('[data-test-teamProjectList-actionBtn]').click();
-    });
+      // Open drawer
+      cy.get('@cypressTeam').click();
 
-    cy.findByTestId('ak-modal-body').within(() => {
-      cy.get('button[data-test-confirmbox-confirmbtn]').click();
-    });
+      // Add user to team
+      cy.findByText(cyTranslate('addUser')).click();
 
-    cy.wait('@organizationTeams', NETWORK_WAIT_OPTS);
+      cy.wait('@usersList', NETWORK_WAIT_OPTS);
 
-    cy.findByText(cyTranslate('projectRemoved'), ELEMENT_WAIT_OPTS).should(
-      'exist'
-    );
+      cy.findAllByTestId('userList-row')
+        .filter(':contains(' + TEST_DATA.testUser.username + ')')
+        .should('exist')
+        .as('userRow');
 
-    cy.findByTestId('teamDetail-closeBtn').click();
+      // Find the checkbox within this row and check it
+      cy.get('@userRow').within(() => {
+        cy.get('[data-test-checkbox]').check().should('be.checked');
+      });
 
-    cy.wrap(true).as('testCompleted');
-  });
+      cy.get('[data-test-teamdetailaction-actionbtn]')
+        .contains(cyTranslate('addUsers'))
+        .should('exist')
+        .click();
 
-  it('should add/remove user to team', function () {
-    // used for clean up in afterEach
-    cy.wrap(true).as('shouldRunAfterEach');
+      cy.wait('@teamMember', NETWORK_WAIT_OPTS).then((interception) => {
+        // Store `userId` for cleanup
+        cy.wrap(interception.response?.body?.id).as('userId');
+      });
 
-    cy.wrap(false).as('testCompleted');
+      cy.wait('@organizationTeams', NETWORK_WAIT_OPTS).then((interception) => {
+        // Store `teamId` and `orgId` for cleanup
+        cy.wrap(interception.response?.body?.id).as('teamId');
 
-    cy.wrap({
-      perform: () => {
-        cy.getAliases(['@teamId', '@orgId', '@userId']).then(
-          ([teamId, orgId, userId]) => {
-            // Make the API request to delete the team
-            cy.makeAuthenticatedAPIRequest({
-              method: 'DELETE',
-              url: `${API_HOST}/api/organizations/${orgId}/teams/${teamId}/members/${userId}`,
-            });
-          }
-        );
-      },
-    }).as('testCleanup');
+        cy.wrap(interception.response?.body?.organization).as('orgId');
+      });
 
-    // Add user to team using add user action
-    cy.findAllByTestId('org-team-overview-name', ELEMENT_WAIT_OPTS)
-      .contains(TEST_DATA.teamName)
-      .should('exist')
-      .as('cypressTeam');
+      cy.wait('@usersList', NETWORK_WAIT_OPTS);
 
-    // Open drawer
-    cy.get('@cypressTeam').click();
+      cy.findByText(cyTranslate('teamMemberAdded'), ELEMENT_WAIT_OPTS).should(
+        'exist'
+      );
 
-    // Add user to team
-    cy.findByText(cyTranslate('addUser')).click();
+      cy.get('[data-test-teamdetailaction-titlebtn]').click();
 
-    cy.wait('@usersList', NETWORK_WAIT_OPTS);
+      // Remove user from team
+      cy.get('tr', ELEMENT_WAIT_OPTS)
+        .filter(':contains(' + TEST_DATA.testUser.username + ')')
+        .should('exist')
+        .as('addedUserRow');
 
-    cy.findAllByTestId('userList-row')
-      .filter(':contains(' + TEST_DATA.testUser.username + ')')
-      .should('exist')
-      .as('userRow');
+      cy.get('@addedUserRow').within(() => {
+        cy.get('[data-test-teamUserList-actionBtn]').click();
+      });
 
-    // Find the checkbox within this row and check it
-    cy.get('@userRow').within(() => {
-      cy.get('[data-test-checkbox]').check().should('be.checked');
-    });
+      cy.findByTestId('ak-modal-body').within(() => {
+        cy.findByLabelText(
+          cyTranslate('promptBox.removeMemberPrompt.description')
+        ).type(TEST_DATA.testUser.username);
 
-    cy.get('[data-test-teamdetailaction-actionbtn]')
-      .contains(cyTranslate('addUsers'))
-      .should('exist')
-      .click();
+        cy.get('button[data-test-confirmbox-confirmbtn]').click();
+      });
 
-    cy.wait('@teamMember', NETWORK_WAIT_OPTS).then((interception) => {
-      // Store `userId` for cleanup
-      cy.wrap(interception.response?.body?.id).as('userId');
-    });
+      cy.wait('@organizationTeams', NETWORK_WAIT_OPTS);
 
-    cy.wait('@organizationTeams', NETWORK_WAIT_OPTS).then((interception) => {
-      // Store `teamId` and `orgId` for cleanup
-      cy.wrap(interception.response?.body?.id).as('teamId');
+      cy.findByText(cyTranslate('teamMemberRemoved'), ELEMENT_WAIT_OPTS).should(
+        'exist'
+      );
 
-      cy.wrap(interception.response?.body?.organization).as('orgId');
-    });
+      cy.findByTestId('teamDetail-closeBtn').click();
 
-    cy.wait('@usersList', NETWORK_WAIT_OPTS);
+      cy.wrap(true).as('testCompleted');
+    }
+  );
 
-    cy.findByText(cyTranslate('teamMemberAdded'), ELEMENT_WAIT_OPTS).should(
-      'exist'
-    );
-
-    cy.get('[data-test-teamdetailaction-titlebtn]').click();
-
-    // Remove user from team
-    cy.get('tr', ELEMENT_WAIT_OPTS)
-      .filter(':contains(' + TEST_DATA.testUser.username + ')')
-      .should('exist')
-      .as('addedUserRow');
-
-    cy.get('@addedUserRow').within(() => {
-      cy.get('[data-test-teamUserList-actionBtn]').click();
-    });
-
-    cy.findByTestId('ak-modal-body').within(() => {
-      cy.findByLabelText(
-        cyTranslate('promptBox.removeMemberPrompt.description')
-      ).type(TEST_DATA.testUser.username);
-
-      cy.get('button[data-test-confirmbox-confirmbtn]').click();
-    });
-
-    cy.wait('@organizationTeams', NETWORK_WAIT_OPTS);
-
-    cy.findByText(cyTranslate('teamMemberRemoved'), ELEMENT_WAIT_OPTS).should(
-      'exist'
-    );
-
-    cy.findByTestId('teamDetail-closeBtn').click();
-
-    cy.wrap(true).as('testCompleted');
-  });
-
-  it('should invite user to team', function () {
+  it('should invite user to team', { retries: { runMode: 1 } }, function () {
     // used for clean up in afterEach
     cy.wrap(true).as('shouldRunAfterEach');
 

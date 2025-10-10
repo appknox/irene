@@ -2,7 +2,7 @@ import AkBreadcrumbsRoute from 'irene/utils/ak-breadcrumbs-route';
 import { service } from '@ember/service';
 
 import type SkPendingReviewService from 'irene/services/sk-pending-review';
-import type SkInventoryAppService from 'irene/services/sk-inventory-apps';
+import type SkAppsService from 'irene/services/sk-apps';
 
 export interface StoreknoxInventoryAppListQueryParams {
   app_limit: number;
@@ -12,9 +12,7 @@ export interface StoreknoxInventoryAppListQueryParams {
 
 export default class AuthenticatedStoreknoxInventoryAppListRoute extends AkBreadcrumbsRoute {
   @service declare skPendingReview: SkPendingReviewService;
-
-  @service('sk-inventory-apps')
-  declare skInventoryAppsService: SkInventoryAppService;
+  @service('sk-apps') declare skAppsService: SkAppsService;
 
   queryParams = {
     app_limit: {
@@ -31,7 +29,7 @@ export default class AuthenticatedStoreknoxInventoryAppListRoute extends AkBread
   async model(params: Partial<StoreknoxInventoryAppListQueryParams>) {
     const { app_limit, app_offset, monitoring_status } = params;
 
-    this.skInventoryAppsService
+    this.skAppsService
       .setQueryParams({
         limit: app_limit,
         offset: app_offset,

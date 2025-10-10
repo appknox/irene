@@ -39,6 +39,7 @@
             @onClick={{this.openPiiDetailsDrawer}}
             local-class='app-monitoring-table-row'
             {{style cursor='pointer'}}
+            data-test-privacyModule-pii-table-row='{{b.rowValue.id}}'
             as |r|
           >
             <r.cell>

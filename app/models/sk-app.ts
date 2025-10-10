@@ -186,6 +186,28 @@ export default class SkAppModel extends Model {
 
     return await adapter.toggleArchiveStatus(this);
   }
+
+  get needsAction() {
+    return (
+      this.storeMonitoringStatus ===
+      ENUMS.SK_APP_MONITORING_STATUS.ACTION_NEEDED
+    );
+  }
+
+  get noActionNeeded() {
+    return (
+      this.storeMonitoringStatus ===
+      ENUMS.SK_APP_MONITORING_STATUS.NO_ACTION_NEEDED
+    );
+  }
+
+  get appIsInDisabledState() {
+    return !this.monitoringEnabled && !this.needsAction && !this.noActionNeeded;
+  }
+
+  get appIsInInitializingState() {
+    return this.monitoringEnabled && this.monitoringStatusIsPending;
+  }
 }
 
 declare module 'ember-data/types/registries/model' {
