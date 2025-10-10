@@ -66,6 +66,19 @@ export default Factory.extend({
     app_status: ENUMS.SK_APP_STATUS.ACTIVE,
   }),
 
+  withDisabledStatus: trait({
+    approval_status: ENUMS.SK_APPROVAL_STATUS.APPROVED,
+    monitoring_enabled: false,
+    store_monitoring_status: ENUMS.SK_APP_MONITORING_STATUS.DISABLED,
+  }),
+
+  withInitializingStatus: trait({
+    approval_status: ENUMS.SK_APPROVAL_STATUS.APPROVED,
+    app_status: ENUMS.SK_APP_STATUS.ACTIVE,
+    monitoring_enabled: true,
+    store_monitoring_status: ENUMS.SK_APP_MONITORING_STATUS.INITIALIZING,
+  }),
+
   withArchivedStatus: trait({
     approval_status: ENUMS.SK_APPROVAL_STATUS.APPROVED,
     app_status: ENUMS.SK_APP_STATUS.ARCHIVED,

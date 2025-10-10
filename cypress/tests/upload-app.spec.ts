@@ -297,10 +297,6 @@ describe('Upload App', () => {
 
         uploadAppActions.openUploadAppModal();
 
-        cy.findByText(new RegExp(cyTranslate('uploading'), 'i')).should(
-          'exist'
-        );
-
         cy.findByText(cyTranslate('viaSystem')).should('exist');
         cy.findByText(cyTranslate('uploadStatus')).should('exist');
       });

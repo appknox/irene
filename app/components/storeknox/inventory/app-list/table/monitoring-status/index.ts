@@ -1,14 +1,12 @@
 import Component from '@glimmer/component';
 import { service } from '@ember/service';
 import type IntlService from 'ember-intl/services/intl';
-
-import ENUMS from 'irene/enums';
-import type SkInventoryAppModel from 'irene/models/sk-inventory-app';
+import type SkAppModel from 'irene/models/sk-app';
 
 export interface StoreknoxInventoryAppListTableMonitoringStatusSignature {
   Element: HTMLElement;
   Args: {
-    app?: SkInventoryAppModel;
+    app?: SkAppModel;
     loading: boolean;
   };
 }
@@ -20,46 +18,22 @@ export default class StoreknoxInventoryAppListTableMonitoringStatusComponent ext
     return this.args.app;
   }
 
-  get needsAction() {
-    return (
-      this.app?.storeMonitoringStatus ===
-      ENUMS.SK_APP_MONITORING_STATUS.ACTION_NEEDED
-    );
-  }
-
-  get noActionNeeded() {
-    return (
-      this.app?.storeMonitoringStatus ===
-      ENUMS.SK_APP_MONITORING_STATUS.NO_ACTION_NEEDED
-    );
-  }
-
-  get appIsDisabled() {
-    return (
-      !this.app?.monitoringEnabled && !this.needsAction && !this.noActionNeeded
-    );
-  }
-
-  get appIsInitializing() {
-    return this.app?.monitoringEnabled && this.app?.monitoringStatusIsPending;
-  }
-
   get disableTooltip() {
     return this.args.loading;
   }
 
   get tooltipMessage() {
-    if (this.needsAction) {
+    if (this.app?.needsAction) {
       return this.intl.t('storeknox.actionsNeededMsg', {
         htmlSafe: true,
       });
     }
 
-    if (this.appIsInitializing) {
+    if (this.app?.appIsInInitializingState) {
       return this.intl.t('storeknox.initializingMsg');
     }
 
-    if (this.appIsDisabled) {
+    if (this.app?.appIsInDisabledState) {
       return this.intl.t('storeknox.disabledMsg');
     }
 
@@ -69,7 +43,7 @@ export default class StoreknoxInventoryAppListTableMonitoringStatusComponent ext
   }
 
   get tooltipSuffix() {
-    if (this.appIsInitializing || this.appIsDisabled) {
+    if (this.app?.appIsInInitializingState || this.app?.appIsInDisabledState) {
       return '';
     }
 
@@ -77,21 +51,21 @@ export default class StoreknoxInventoryAppListTableMonitoringStatusComponent ext
   }
 
   get iconDetails() {
-    if (this.needsAction) {
+    if (this.app?.needsAction) {
       return {
         icon: 'ak-svg/sox-monitoring-stats-icons/action-needed' as const,
         key: 'action-needed',
       };
     }
 
-    if (this.appIsInitializing) {
+    if (this.app?.appIsInInitializingState) {
       return {
         icon: 'ak-svg/sox-monitoring-stats-icons/initializing' as const,
         key: 'initializing',
       };
     }
 
-    if (this.appIsDisabled) {
+    if (this.app?.appIsInDisabledState) {
       return {
         icon: 'ak-svg/sox-monitoring-stats-icons/disabled' as const,
         key: 'disabled',
@@ -105,15 +79,15 @@ export default class StoreknoxInventoryAppListTableMonitoringStatusComponent ext
   }
 
   get statusText() {
-    if (this.needsAction) {
+    if (this.app?.needsAction) {
       return this.intl.t('storeknox.needsAction');
     }
 
-    if (this.appIsInitializing) {
+    if (this.app?.appIsInInitializingState) {
       return this.intl.t('storeknox.beingInitialized');
     }
 
-    if (this.appIsDisabled) {
+    if (this.app?.appIsInDisabledState) {
       return this.intl.t('disabled');
     }
 

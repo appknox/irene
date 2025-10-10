@@ -1,4 +1,4 @@
-import { visit, click } from '@ember/test-helpers';
+import { visit, click, currentURL } from '@ember/test-helpers';
 import { module, test } from 'qunit';
 import { setupApplicationTest } from 'ember-qunit';
 import { setupMirage } from 'ember-cli-mirage/test-support';
@@ -6,6 +6,7 @@ import { t } from 'ember-intl/test-support';
 import Service from '@ember/service';
 
 import { setupRequiredEndpoints } from 'irene/tests/helpers/acceptance-utils';
+import ENUMS from 'irene/enums';
 
 // Notification Service
 class NotificationsStub extends Service {
@@ -98,6 +99,8 @@ module(
           {
             core_project: available_on_appknox ? core_project.id : null,
             core_project_latest_version: available_on_appknox ? file.id : null,
+            store_monitoring_status:
+              ENUMS.SK_APP_MONITORING_STATUS.NO_ACTION_NEEDED,
           }
         );
 
@@ -201,6 +204,43 @@ module(
             '[data-test-storeknoxInventoryDetails-featureUnavailable-headerDescription]'
           )
           .hasText(t('storeknox.brandAbuseFeatureUnavailableSubText'));
+      }
+    );
+
+    test.each(
+      'it should redirect to details page if app status is being initialized or disabled',
+      ['withInitializingStatus', 'withDisabledStatus'],
+      async function (assert, appStatus) {
+        const file = this.server.create('file');
+        const core_project = this.server.create('project');
+
+        // Models
+        const inventoryApp = this.server.create('sk-inventory-app', appStatus, {
+          core_project: core_project.id,
+          core_project_latest_version: file.id,
+        });
+
+        const inventoryAppRecord = this.normalizeSKInventoryApp(inventoryApp);
+
+        // Server Mocks
+        this.server.get('/v2/sk_app/:id/sk_app_version', () => {
+          return {
+            count: 0,
+            next: null,
+            previous: null,
+            results: [],
+          };
+        });
+
+        await visit(
+          `/dashboard/storeknox/inventory-details/${inventoryAppRecord.id}/brand-abuse`
+        );
+
+        //  Redirect to details page
+        assert.strictEqual(
+          currentURL(),
+          `/dashboard/storeknox/inventory-details/${inventoryAppRecord.id}`
+        );
       }
     );
   }

@@ -10,7 +10,7 @@ import parseError from 'irene/utils/parse-error';
 import type { SkOrgSettingsToggleProps } from 'irene/adapters/sk-organization';
 import type SkPendingReviewService from 'irene/services/sk-pending-review';
 import type MeService from 'irene/services/me';
-import type SkInventoryAppService from 'irene/services/sk-inventory-apps';
+import type SkAppsService from 'irene/services/sk-apps';
 import type SkOrganizationService from 'irene/services/sk-organization';
 
 interface TabItem {
@@ -29,9 +29,7 @@ export default class StoreknoxInventoryComponent extends Component {
 
   @service('notifications') declare notify: NotificationService;
   @service('sk-organization') declare skOrgService: SkOrganizationService;
-
-  @service('sk-inventory-apps')
-  declare skInventoryAppsService: SkInventoryAppService;
+  @service('sk-apps') declare skAppsService: SkAppsService;
 
   @tracked showWelcomeModal = false;
   @tracked showSettingsDrawer = false;
@@ -50,8 +48,8 @@ export default class StoreknoxInventoryComponent extends Component {
         id: 'app-inventory',
         route: 'authenticated.storeknox.inventory.app-list',
         label: this.intl.t('storeknox.appInventory'),
-        hasBadge: this.skInventoryAppsService.skInventoryAppsCount > 0,
-        badgeCount: this.skInventoryAppsService.skInventoryAppsCount,
+        hasBadge: this.skAppsService.skAppsCount > 0,
+        badgeCount: this.skAppsService.skAppsCount,
       },
       this.isOwner && {
         id: 'pending-review',
