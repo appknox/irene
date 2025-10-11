@@ -1,33 +1,24 @@
-import Model, {
-  AsyncBelongsTo,
-  AsyncHasMany,
-  attr,
-  belongsTo,
-  hasMany,
-} from '@ember-data/model';
-
-import { inject as service } from '@ember/service';
+import { AsyncHasMany, attr, hasMany } from '@ember-data/model';
+import { service } from '@ember/service';
 import { isEmpty } from '@ember/utils';
 import Inflector from 'ember-inflector';
-import IntlService from 'ember-intl/services/intl';
+import type IntlService from 'ember-intl/services/intl';
+
 import ENUMS from 'irene/enums';
-import AsvsModel from './asvs';
-import AttachmentModel from './attachment';
-import CweModel from './cwe';
-import FileModel from './file';
-import GdprModel from './gdpr';
-import HipaaModel from './hipaa';
-import MstgModel from './mstg';
-import OwaspModel from './owasp';
-import OwaspMobile2024Model from './owaspmobile2024';
-import PcidssModel from './pcidss';
-import MasvsModel from './masvs';
-import VulnerabilityModel from './vulnerability';
-import OwaspApi2023Model from './owaspapi2023';
-import Nistsp800171Model from './nistsp800171';
-import Nistsp80053Model from './nistsp80053';
-import SamaModel from './sama';
-import Pcidss4Model from './pcidss4';
+import FileAnalysisModel from './file-analysis';
+import type AsvsModel from './asvs';
+import type AttachmentModel from './attachment';
+import type CweModel from './cwe';
+import type GdprModel from './gdpr';
+import type HipaaModel from './hipaa';
+import type MstgModel from './mstg';
+import type PcidssModel from './pcidss';
+import type MasvsModel from './masvs';
+import type OwaspApi2023Model from './owaspapi2023';
+import type Nistsp800171Model from './nistsp800171';
+import type Nistsp80053Model from './nistsp80053';
+import type SamaModel from './sama';
+import type Pcidss4Model from './pcidss4';
 
 const inflector = Inflector.inflector;
 inflector.irregular('asvs', 'asvses');
@@ -42,17 +33,11 @@ export interface Finding {
   description: string;
 }
 
-export default class AnalysisModel extends Model {
+export default class AnalysisModel extends FileAnalysisModel {
   @service declare intl: IntlService;
 
   @attr
   declare findings: Finding[];
-
-  @attr('number')
-  declare risk: number;
-
-  @attr('number')
-  declare status: number;
 
   @attr('number')
   declare cvssBase: number;
@@ -65,9 +50,6 @@ export default class AnalysisModel extends Model {
 
   @attr
   declare cvssMetricsHumanized: CvssMetricHumanized[];
-
-  @attr('number')
-  declare computedRisk: number;
 
   @attr('number', { defaultValue: null })
   declare overriddenRisk: number | null;
@@ -89,12 +71,6 @@ export default class AnalysisModel extends Model {
 
   @hasMany('attachment', { async: true, inverse: null })
   declare attachments: AsyncHasMany<AttachmentModel>;
-
-  @hasMany('owasp', { async: true, inverse: null })
-  declare owasp: AsyncHasMany<OwaspModel>;
-
-  @hasMany('owaspmobile2024', { async: true, inverse: null })
-  declare owaspmobile2024: AsyncHasMany<OwaspMobile2024Model>;
 
   @hasMany('owaspapi2023', { async: true, inverse: null })
   declare owaspapi2023: AsyncHasMany<OwaspApi2023Model>;
@@ -131,15 +107,6 @@ export default class AnalysisModel extends Model {
 
   @hasMany('sama', { async: true, inverse: null })
   declare sama: AsyncHasMany<SamaModel>;
-
-  @belongsTo('vulnerability', { async: true, inverse: null })
-  declare vulnerability: AsyncBelongsTo<VulnerabilityModel>;
-
-  @belongsTo('file', { inverse: 'analyses', async: true })
-  declare file: AsyncBelongsTo<FileModel>;
-
-  @attr('date')
-  declare updatedOn: Date;
 
   get tLow() {
     return this.intl.t('low');
@@ -179,16 +146,6 @@ export default class AnalysisModel extends Model {
     }
   }
 
-  hasType(type: number) {
-    const types = this.vulnerability.get('types');
-
-    if (isEmpty(types)) {
-      return false;
-    }
-
-    return types?.includes(type);
-  }
-
   iconClass(risk: number | null) {
     switch (risk) {
       case ENUMS.RISK.UNKNOWN:
@@ -211,37 +168,6 @@ export default class AnalysisModel extends Model {
 
   get isOverriddenRisk() {
     return !isEmpty(this.overriddenRisk);
-  }
-
-  /**
-   * Risk was overridden and not passed by system
-   * This is used to show overridden icon
-   */
-  get isNonPassedRiskOverridden() {
-    return this.isOverriddenRisk && !this.isRiskPassedBySystem;
-  }
-
-  get isRiskPassedBySystem() {
-    return this.risk === ENUMS.RISK.NONE;
-  }
-
-  get isScanning() {
-    const risk = this.computedRisk;
-    return risk === ENUMS.RISK.UNKNOWN;
-  }
-
-  get isRisky() {
-    const risk = this.computedRisk;
-    return ![ENUMS.RISK.NONE, ENUMS.RISK.UNKNOWN].includes(risk);
-  }
-
-  /**
-   * Risk was overridden as Passed and not passed by system
-   */
-  get isOverriddenAsPassed() {
-    return (
-      this.overriddenRisk === ENUMS.RISK.NONE && !this.isRiskPassedBySystem
-    );
   }
 
   get riskIconClass() {
@@ -283,10 +209,6 @@ export default class AnalysisModel extends Model {
 
   get showSama() {
     return this.file.get('profile')?.get('reportPreference')?.show_sama?.value;
-  }
-
-  get vulnerabilityTypes() {
-    return this.vulnerability.get('types');
   }
 }
 

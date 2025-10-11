@@ -105,7 +105,6 @@ export interface MirageFactoryDefProps {
   file: IncludeBaseFactoryProps<
     typeof FILE_FACTORY_DEF & {
       project: number;
-      executable_name: string;
       analyses: Array<AnalysisModelFactoryDef>;
     }
   >;
