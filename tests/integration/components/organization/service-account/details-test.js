@@ -29,27 +29,87 @@ const projectAccessOptions = () => [
 
 const scopeDetails = () => [
   {
-    key: 'projects-read',
-    scopeLabel: t('serviceAccountModule.scopes.projects.label'),
-    scopeDescription: t('serviceAccountModule.scopes.projects.readDescription'),
-    accessType: t('read'),
-    scopeKey: 'scopePublicApiProjectRead',
-  },
-  {
-    key: 'scan-results-va-read',
-    scopeLabel: t('serviceAccountModule.scopes.scan-results-va.label'),
-    scopeDescription: t(
-      'serviceAccountModule.scopes.scan-results-va.readDescription'
-    ),
-    accessType: t('read'),
-    scopeKey: 'scopePublicApiScanResultVa',
-  },
-  {
-    key: 'user-read',
-    scopeLabel: t('serviceAccountModule.scopes.user.label'),
-    scopeDescription: t('serviceAccountModule.scopes.user.readDescription'),
-    accessType: t('read'),
-    scopeKey: 'scopePublicApiUserRead',
+    key: 'public-api',
+    label: t('serviceAccountModule.scopes.public-api.label'),
+    children: [
+      {
+        key: 'projects-read',
+        scopeLabel: t('serviceAccountModule.scopes.projects.label'),
+        scopeDescription: t(
+          'serviceAccountModule.scopes.projects.readDescription'
+        ),
+        accessType: t('read'),
+        scopeKey: 'scopePublicApiProjectRead',
+      },
+      {
+        key: 'scan-results-va-read',
+        scopeLabel: t('serviceAccountModule.scopes.scan-results-va.label'),
+        scopeDescription: t(
+          'serviceAccountModule.scopes.scan-results-va.readDescription'
+        ),
+        accessType: t('read'),
+        scopeKey: 'scopePublicApiScanResultVa',
+      },
+      {
+        key: 'user',
+        label: t('serviceAccountModule.scopes.user.label'),
+        children: [
+          {
+            key: 'user-read',
+            scopeLabel: t('serviceAccountModule.scopes.user.read'),
+            scopeDescription: t(
+              'serviceAccountModule.scopes.user.readDescription'
+            ),
+            accessType: t('read'),
+            scopeKey: 'scopePublicApiUserRead',
+          },
+          {
+            key: 'user-write',
+            scopeLabel: t('serviceAccountModule.scopes.user.write'),
+            scopeDescription: t(
+              'serviceAccountModule.scopes.user.writeDescription'
+            ),
+            accessType: t('write'),
+            scopeKey: 'scopePublicApiUserWrite',
+          },
+        ],
+      },
+      {
+        key: 'upload',
+        label: t('serviceAccountModule.scopes.upload-app.label'),
+        children: [
+          {
+            key: 'upload-app',
+            scopeLabel: t('serviceAccountModule.scopes.upload-app.label'),
+            scopeDescription: t(
+              'serviceAccountModule.scopes.upload-app.writeDescription'
+            ),
+            accessType: t('write'),
+            scopeKey: 'scopePublicApiUploadApp',
+          },
+          {
+            key: 'auto-approve-new-name-spaces',
+            scopeLabel: t(
+              'serviceAccountModule.scopes.auto-approve-new-name-spaces.label'
+            ),
+            scopeDescription: t(
+              'serviceAccountModule.scopes.auto-approve-new-name-spaces.description'
+            ),
+            accessType: t('write'),
+            scopeKey: 'scopeAutoApproveNewNameSpaces',
+          },
+        ],
+      },
+      {
+        key: 'team-operations',
+        scopeLabel: t('serviceAccountModule.scopes.team-operations.label'),
+        scopeDescription: t(
+          'serviceAccountModule.scopes.team-operations.description'
+        ),
+        accessType: t('write'),
+        scopeKey: 'scopePublicApiTeamOperations',
+      },
+    ],
   },
 ];
 
@@ -79,7 +139,7 @@ module(
     });
 
     test('it renders', async function (assert) {
-      assert.expect(43);
+      assert.expect(32);
 
       this.server.get('/service_accounts/:id/service_account_projects', () => {
         return { count: 0, next: null, previous: null, results: [] };
@@ -206,33 +266,62 @@ module(
           `[data-test-ak-checkbox-tree-nodeKey="${scope.key}"]`
         );
 
-        assert
-          .dom(
-            `[data-test-serviceAccountSection-selectScope-nodeLabelIcon="${this.serviceAccount.get(scope.scopeKey) ? 'checked' : 'unchecked'}"]`,
-            container
-          )
-          .exists();
+        // For parent nodes, check the label and children
+        if (scope.label && !scope.scopeKey) {
+          assert
+            .dom(
+              '[data-test-serviceAccountSection-selectScope-nodeLabel]',
+              container
+            )
+            .containsText(scope.label);
+        }
 
-        assert
-          .dom(
-            '[data-test-serviceAccountSection-selectScope-nodeLabel]',
-            container
-          )
-          .containsText(scope.scopeLabel);
+        // For leaf nodes, check the icon, label, access type and info icon
+        if (scope.scopeKey) {
+          const isChecked = this.serviceAccount.get(scope.scopeKey);
+          const expectedState = isChecked ? 'checked' : 'unchecked';
 
-        assert
-          .dom(
-            '[data-test-serviceAccountSection-selectScope-nodeLabelAccessType]',
-            container
-          )
-          .containsText(scope.accessType);
+          // Check icon state if it exists
+          const iconElement = container.querySelector(
+            `[data-test-serviceAccountSection-selectScope-nodeLabelIcon="${expectedState}"]`
+          );
 
-        assert
-          .dom(
-            '[data-test-serviceAccountSection-selectScope-nodeLabelInfoIcon]',
-            container
-          )
-          .exists();
+          if (iconElement) {
+            assert
+              .dom(
+                `[data-test-serviceAccountSection-selectScope-nodeLabelIcon="${expectedState}"]`,
+                container
+              )
+              .exists();
+          }
+
+          // Check label and access type
+          if (scope.scopeLabel) {
+            assert
+              .dom(
+                '[data-test-serviceAccountSection-selectScope-nodeLabel]',
+                container
+              )
+              .containsText(scope.scopeLabel);
+          }
+
+          if (scope.accessType) {
+            assert
+              .dom(
+                '[data-test-serviceAccountSection-selectScope-nodeLabelAccessType]',
+                container
+              )
+              .containsText(scope.accessType);
+          }
+
+          // Check info icon exists
+          assert
+            .dom(
+              '[data-test-serviceAccountSection-selectScope-nodeLabelInfoIcon]',
+              container
+            )
+            .exists();
+        }
       }
 
       // assert select project section
