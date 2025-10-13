@@ -1,14 +1,13 @@
 import { action } from '@ember/object';
-import { inject as service } from '@ember/service';
+import { service } from '@ember/service';
 import Component from '@glimmer/component';
 import { tracked } from '@glimmer/tracking';
 import { task } from 'ember-concurrency';
-import IntlService from 'ember-intl/services/intl';
+import type Store from '@ember-data/store';
+import type IntlService from 'ember-intl/services/intl';
 
-import OrganizationService from 'irene/services/organization';
-import Store from '@ember-data/store';
+import type OrganizationService from 'irene/services/organization';
 import ENUMS from 'irene/enums';
-import ProjectService from 'irene/services/project';
 import styles from './index.scss';
 
 interface Team {
@@ -42,7 +41,6 @@ export default class ProjectListHeaderComponent extends Component<ProjectListHea
   @service declare intl: IntlService;
   @service declare organization: OrganizationService;
   @service declare store: Store;
-  @service('project') declare projectService: ProjectService;
 
   tDateUpdated: string;
   tDateCreated: string;
@@ -86,8 +84,6 @@ export default class ProjectListHeaderComponent extends Component<ProjectListHea
       key: '-last_file_created_on',
       text: `${this.tDateUpdated} ${this.tMostRecent}`,
     };
-
-    this.projectService.fetchProjects.perform();
   }
 
   get showClearFilter() {
