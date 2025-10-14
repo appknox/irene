@@ -78,7 +78,7 @@ export default class PrivacyModuleAppDetailsPiiComponent extends Component<Priva
     return this.me.org?.get('is_owner');
   }
 
-  @action openPiiDetailsDrawer({ rowValue }: any) {
+  @action openPiiDetailsDrawer({ rowValue }: { rowValue: PiiModel }) {
     this.selectedPii = rowValue;
 
     if (this.selectedPii?.highlight) {

@@ -9,24 +9,23 @@ import type { DS } from 'ember-data';
 
 import ENV from 'irene/config/environment';
 import ENUMS from 'irene/enums';
-import type SkInventoryAppModel from 'irene/models/sk-app';
+import type SkAppModel from 'irene/models/sk-app';
 
-type SkInventoryAppModelArray =
-  DS.AdapterPopulatedRecordArray<SkInventoryAppModel> & {
-    meta: { count: number };
-  };
+type SkAppModelArray = DS.AdapterPopulatedRecordArray<SkAppModel> & {
+  meta: { count: number };
+};
 
-export default class SkInventoryAppService extends Service {
+export default class SkAppsService extends Service {
   @service declare store: Store;
   @service('notifications') declare notify: NotificationService;
 
   @tracked
-  skInventoryApps?: DS.AdapterPopulatedRecordArray<SkInventoryAppModel>;
+  skApps?: DS.AdapterPopulatedRecordArray<SkAppModel>;
 
   @tracked limit = 10;
   @tracked offset = 0;
   @tracked monitoringStatusFilter = -1;
-  @tracked skInventoryAppsCount = 0;
+  @tracked skAppsCount = 0;
 
   get isFetchingSkInventoryApps() {
     return this.fetch.isRunning;
@@ -61,13 +60,13 @@ export default class SkInventoryAppService extends Service {
     };
 
     try {
-      const skInventoryApps = (await this.store.query(
+      const skApps = (await this.store.query(
         'sk-app',
         queryParams
-      )) as SkInventoryAppModelArray;
+      )) as SkAppModelArray;
 
-      this.skInventoryApps = skInventoryApps;
-      this.skInventoryAppsCount = skInventoryApps.meta.count;
+      this.skApps = skApps;
+      this.skAppsCount = skApps.meta.count;
     } catch (error) {
       this.notify.error(
         'Failed to load Inventory Apps Data. Check your network and try again.',

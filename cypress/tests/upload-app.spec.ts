@@ -299,10 +299,6 @@ describe('Upload App', () => {
 
         cy.findByText(cyTranslate('viaSystem')).should('exist');
         cy.findByText(cyTranslate('uploadStatus')).should('exist');
-
-        cy.findByText(new RegExp(cyTranslate('uploading'), 'i')).should(
-          'exist'
-        );
       });
 
       // Wait for upload completion

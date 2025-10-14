@@ -131,7 +131,7 @@ describe('User Login', () => {
       resDataOverride: {
         results: mirageServer
           .createRecordList('project', 1)
-          .map((prj) => ({ ...prj, file: file.id })),
+          .map((prj) => ({ ...prj.attrs })),
       },
     });
 

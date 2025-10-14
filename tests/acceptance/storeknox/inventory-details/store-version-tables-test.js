@@ -133,6 +133,8 @@ module(
           {
             core_project: core_project.id,
             core_project_latest_version: core_prj_latest_file.id,
+            store_monitoring_status:
+              ENUMS.SK_APP_MONITORING_STATUS.ACTION_NEEDED,
           }
         );
 
@@ -309,6 +311,8 @@ module(
           {
             core_project: core_project.id,
             core_project_latest_version: core_prj_latest_file.id,
+            store_monitoring_status:
+              ENUMS.SK_APP_MONITORING_STATUS.NO_ACTION_NEEDED,
             app_metadata: this.server.create('sk-app-metadata', { platform }),
           }
         );
@@ -660,6 +664,9 @@ module(
             core_project: core_project.id,
             core_project_latest_version: core_prj_latest_file.id,
 
+            store_monitoring_status:
+              ENUMS.SK_APP_MONITORING_STATUS.ACTION_NEEDED,
+
             app_metadata: this.server.create('sk-app-metadata', {
               platform: ENUMS.PLATFORM.ANDROID,
             }),
@@ -814,6 +821,9 @@ module(
         {
           core_project: core_project.id,
           core_project_latest_version: core_prj_latest_file.id,
+
+          store_monitoring_status:
+            ENUMS.SK_APP_MONITORING_STATUS.NO_ACTION_NEEDED,
 
           app_metadata: this.server.create('sk-app-metadata', {
             platform: ENUMS.PLATFORM.ANDROID,

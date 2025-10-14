@@ -61,7 +61,10 @@
 
         <AkTypography
           data-test-uploadAppStatusDetails-appPackageName
+          title={{@submission.appData.package_name}}
+          @noWrap={{true}}
           @variant='body1'
+          {{style maxWidth='315px'}}
         >
           {{@submission.appData.package_name}}
         </AkTypography>
