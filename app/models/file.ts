@@ -105,9 +105,6 @@ export default class FileModel extends ModelBaseMixin {
   declare isDynamicDone: boolean;
 
   @attr('boolean')
-  declare canGenerateReport: boolean;
-
-  @attr('boolean')
   declare canRunAutomatedDynamicscan: boolean;
 
   @attr('number')
@@ -128,14 +125,8 @@ export default class FileModel extends ModelBaseMixin {
   @belongsTo('profile', { inverse: 'files', async: true })
   declare profile: AsyncBelongsTo<ProfileModel>;
 
-  @belongsTo('sbom-file', { inverse: 'file', async: true })
-  declare sbFile: AsyncBelongsTo<SbomFileModel>;
-
   @belongsTo('submission', { async: true, inverse: null })
   declare submission: AsyncBelongsTo<SubmissionModel>;
-
-  @belongsTo('file', { inverse: null, async: true })
-  declare previousFile: AsyncBelongsTo<FileModel>;
 
   @belongsTo('dynamicscan', { async: true, inverse: null })
   declare lastAutomatedDynamicScan: AsyncBelongsTo<DynamicscanModel> | null;
@@ -151,6 +142,24 @@ export default class FileModel extends ModelBaseMixin {
     const adapter = this.store.adapterFor('file');
 
     return await adapter.getLastDynamicScan(fileId, mode, isScheduledScan);
+  }
+
+  async fetchPreviousFile() {
+    const adapter = this.store.adapterFor('file');
+
+    return await adapter.fetchPreviousFile(this.id);
+  }
+
+  async getGenerateReportStatus() {
+    const adapter = this.store.adapterFor('file');
+
+    return await adapter.getGenerateReportStatus(this.id);
+  }
+
+  async getSbomFile() {
+    const adapter = this.store.adapterFor('file');
+
+    return await adapter.getSbomFile(this.id);
   }
 
   analysesSorting = ['computedRisk:desc'];

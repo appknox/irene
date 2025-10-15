@@ -54,6 +54,7 @@ export default class FileReportDrawerVaReportsComponent extends Component<FileRe
   @service declare realtime: RealtimeService;
 
   @tracked reports: FileReportQueryResponse | null = null;
+  @tracked canGenerateReport = false;
 
   modelName = 'file-report' as const;
 
@@ -68,10 +69,6 @@ export default class FileReportDrawerVaReportsComponent extends Component<FileRe
 
   get file() {
     return this.args.file;
-  }
-
-  get canGenerateReport() {
-    return this.file.canGenerateReport;
   }
 
   get hasReports() {
@@ -224,6 +221,7 @@ export default class FileReportDrawerVaReportsComponent extends Component<FileRe
     );
 
     this.getReports.perform();
+    this.getCanGenerateReportStatus.perform();
   }
 
   @action removeReportCounterObserver() {
@@ -247,6 +245,15 @@ export default class FileReportDrawerVaReportsComponent extends Component<FileRe
       this.notify.success(this.intl.t('reportIsGettingGenerated'));
     } catch (error) {
       this.notify.error(parseError(error, this.intl.t('reportGenerateError')));
+    }
+  });
+
+  getCanGenerateReportStatus = task(async () => {
+    try {
+      const status = await this.file.getGenerateReportStatus();
+      this.canGenerateReport = status.can_generate_report;
+    } catch (error) {
+      this.notify.error(parseError(error));
     }
   });
 

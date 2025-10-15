@@ -6,7 +6,7 @@
   </div>
 
   <div class='px-3 py-2'>
-    {{#if this.currentFile.previousFile.isPending}}
+    {{#if this.getFilePreviousFile.isRunning}}
       <AkStack
         {{style height='100px'}}
         @alignItems='center'
