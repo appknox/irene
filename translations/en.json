@@ -1053,7 +1053,8 @@
       "nf-automated-dast-completed": {
         "prefix": "Automated DAST for",
         "suffix": " of the <strong>{platform_display}</strong> app <strong>{package_name}</strong> is now completed successfully."
-      }
+      },
+      "nf-public-api-user-updated":"User <strong>{type}</strong> for <strong>{user_email}</strong> changed from <strong>{current}</strong> to <strong>{updated}</strong> by <strong>{changed_by}</strong>."
     },
     "namespaceMessage": {
       "approved": "{moderaterName} approved this namespace",
@@ -1760,7 +1761,22 @@
       },
       "user": {
         "label": "Users",
-        "readDescription": "Read access for listing members of this organization"
+        "read": "User Read",
+        "write": "User Write",
+        "readDescription": "Read access for listing members of this organization",
+        "writeDescription": "Write access for creating, updating and deleting members of this organization"
+      },
+      "upload-app": {
+        "label": "Upload App",
+        "writeDescription": "Access for uploading apps to this organization"
+      },
+      "team-operations": {
+        "label": "Team Operations",
+        "description": "Read and Write access for listing, creating, updating and deleting all teams of this organization"
+      },
+      "auto-approve-new-name-spaces": {
+        "label": "Auto Approve New Namespaces",
+        "writeDescription": "Write access for auto approving new namespaces in this organization"
       }
     }
   },
@@ -2231,6 +2247,7 @@
   "week": "Week",
   "welcome": "Welcome ",
   "worsened": "Worsened",
+  "write": "Write",
   "xmlMetadata": "XML Metadata",
   "xmlError": "Please enter a valid XML file",
   "year": "Year",

@@ -76,12 +76,57 @@ const scopeDetails = [
     accessType: 'read',
     scopeKey: 'scopePublicApiScanResultVa',
   },
+  // User parent node
   {
-    key: 'user-read',
-    scopeLabel: 'serviceAccountModule.scopes.user.label',
-    scopeDescription: 'serviceAccountModule.scopes.user.readDescription',
-    accessType: 'read',
-    scopeKey: 'scopePublicApiUserRead',
+    key: 'user',
+    label: 'serviceAccountModule.scopes.user.label',
+    children: [
+      {
+        key: 'user-read',
+        scopeLabel: 'serviceAccountModule.scopes.user.read',
+        scopeDescription: 'serviceAccountModule.scopes.user.readDescription',
+        accessType: 'read',
+        scopeKey: 'scopePublicApiUserRead',
+      },
+      {
+        key: 'user-write',
+        scopeLabel: 'serviceAccountModule.scopes.user.write',
+        scopeDescription: 'serviceAccountModule.scopes.user.writeDescription',
+        accessType: 'write',
+        scopeKey: 'scopePublicApiUserWrite',
+      },
+    ],
+  },
+  {
+    key: 'upload',
+    label: 'serviceAccountModule.scopes.upload-app.label',
+    children: [
+      {
+        key: 'upload-app',
+        scopeLabel: 'serviceAccountModule.scopes.upload-app.label',
+        scopeDescription:
+          'serviceAccountModule.scopes.upload-app.writeDescription',
+        accessType: 'write',
+        scopeKey: 'scopePublicApiUploadApp',
+      },
+      {
+        key: 'auto-approve-new-name-spaces',
+        scopeLabel:
+          'serviceAccountModule.scopes.auto-approve-new-name-spaces.label',
+        scopeDescription:
+          'serviceAccountModule.scopes.auto-approve-new-name-spaces.writeDescription',
+        accessType: 'write',
+        scopeKey: 'scopeAutoApproveNewNameSpaces',
+      },
+    ],
+  },
+  {
+    key: 'team-operations',
+    scopeLabel: 'serviceAccountModule.scopes.team-operations.label',
+    scopeDescription:
+      'serviceAccountModule.scopes.team-operations.writeDescription',
+    accessType: 'write',
+    scopeKey: 'scopePublicApiTeamOperations',
   },
 ];
 
@@ -306,128 +351,130 @@ module('Acceptance | Create service account', function (hooks) {
 
       assert.dom('[data-test-ak-checkbox-tree-nodeCheckbox]').exists();
 
-      const parentContainer = find(
-        `[data-test-ak-checkbox-tree-nodeKey="public-api"]`
-      );
+      const assertScopeNode = (node, container) => {
+        if (node.scopeLabel) {
+          // This is a leaf node with a scope
+          assert
+            .dom(
+              container.querySelector(
+                '[data-test-serviceAccountSection-selectScope-nodeLabel]'
+              )
+            )
+            .containsText(t(node.scopeLabel));
 
-      assert
-        .dom(
-          '[data-test-serviceAccountSection-selectScope-nodeLabel]',
-          parentContainer
-        )
-        .containsText(t('serviceAccountModule.scopes.public-api.label'));
+          if (duplicate) {
+            assert
+              .dom(
+                container.querySelector(
+                  '[data-test-ak-checkbox-tree-nodeCheckbox]'
+                )
+              )
+              [
+                this.serviceAccount[underscore(node.scopeKey)]
+                  ? 'isChecked'
+                  : 'isNotChecked'
+              ]();
+          } else {
+            assert
+              .dom(
+                container.querySelector(
+                  '[data-test-ak-checkbox-tree-nodeCheckbox]'
+                )
+              )
+              .isNotChecked();
+          }
+        } else if (node.label) {
+          // This is a parent node
+          assert
+            .dom(
+              container.querySelector(
+                '[data-test-serviceAccountSection-selectScope-nodeLabel]'
+              )
+            )
+            .containsText(t(node.label));
+        }
+
+        // Process children if they exist
+        if (node.children) {
+          node.children.forEach((child) => {
+            const childContainer = container.parentElement.querySelector(
+              `[data-test-ak-checkbox-tree-nodeKey="${child.key}"]`
+            );
+            if (childContainer) {
+              assertScopeNode(child, childContainer);
+            }
+          });
+        }
+      };
 
       for (const scope of scopeDetails) {
         const container = find(
           `[data-test-ak-checkbox-tree-nodeKey="${scope.key}"]`
         );
 
-        if (duplicate) {
-          assert
-            .dom('[data-test-ak-checkbox-tree-nodeCheckbox]', container)
-            [
-              this.serviceAccount[underscore(scope.scopeKey)]
-                ? 'isChecked'
-                : 'isNotChecked'
-            ]();
-        } else {
-          assert
-            .dom('[data-test-ak-checkbox-tree-nodeCheckbox]', container)
-            .isNotChecked();
+        if (container) {
+          assertScopeNode(scope, container);
         }
+      }
 
-        assert
-          .dom(
-            '[data-test-serviceAccountSection-selectScope-nodeLabel]',
-            container
-          )
-          .containsText(t(scope.scopeLabel));
+      // assert selected project
+      assert.dom(sectionHeadings[3]).hasText(t('selectProject'));
 
-        assert
-          .dom(
-            '[data-test-serviceAccountSection-selectScope-nodeLabelAccessType]',
-            container
-          )
-          .containsText(t(scope.accessType));
+      assert
+        .dom('[data-test-serviceAccountSection-selectProject-actionBtn]')
+        .doesNotExist();
 
+      assert
+        .dom(
+          '[data-test-serviceAccountSection-selectProject-projectAccessSelect] [data-test-form-label]'
+        )
+        .hasText(t('serviceAccountModule.projectAccess'));
+
+      assert
+        .dom(
+          '[data-test-serviceAccountSection-selectProject-projectAccessInfoIcon]'
+        )
+        .doesNotExist();
+
+      const selectedProjectAccess = projectAccessOptions.find((opt) =>
+        opt.value === duplicate ? this.serviceAccount.all_projects : true
+      );
+
+      assert
+        .dom(
+          `[data-test-serviceAccountSection-selectProject-projectAccessSelect] .${classes.trigger}`
+        )
+        .hasText(t(selectedProjectAccess?.label));
+
+      if (duplicate) {
         assert
-          .dom(
-            '[data-test-serviceAccountSection-selectScope-nodeLabelInfoIcon]',
-            container
-          )
+          .dom('[data-test-serviceAccountSection-selectProjectList-container]')
           .exists();
 
         assert
+          .dom('[data-test-serviceAccountSection-selectProjectList-emptySvg]')
+          .exists();
+
+        assert
+          .dom('[data-test-serviceAccountSection-selectProjectList-emptyTitle]')
+          .hasText(t('serviceAccountModule.emptyProjectListTitle'));
+
+        assert
           .dom(
-            '[data-test-serviceAccountSection-selectScope-nodeLabelInfoText]'
+            '[data-test-serviceAccountSection-selectProjectList-emptyDescription]'
           )
+          .hasText(t('serviceAccountModule.emptyProjectListDescription'));
+
+        assert
+          .dom(
+            '[data-test-serviceAccountSection-selectProjectList-emptyAddProjectBtn]'
+          )
+          .isNotDisabled()
+          .hasText(t('addProject'));
+      } else {
+        assert
+          .dom('[data-test-serviceAccountSection-selectProjectList-container]')
           .doesNotExist();
-
-        // assert selected project
-        assert.dom(sectionHeadings[3]).hasText(t('selectProject'));
-
-        assert
-          .dom('[data-test-serviceAccountSection-selectProject-actionBtn]')
-          .doesNotExist();
-
-        assert
-          .dom(
-            '[data-test-serviceAccountSection-selectProject-projectAccessSelect] [data-test-form-label]'
-          )
-          .hasText(t('serviceAccountModule.projectAccess'));
-
-        assert
-          .dom(
-            '[data-test-serviceAccountSection-selectProject-projectAccessInfoIcon]'
-          )
-          .doesNotExist();
-
-        const selectedProjectAccess = projectAccessOptions.find((opt) =>
-          opt.value === duplicate ? this.serviceAccount.all_projects : true
-        );
-
-        assert
-          .dom(
-            `[data-test-serviceAccountSection-selectProject-projectAccessSelect] .${classes.trigger}`
-          )
-          .hasText(t(selectedProjectAccess?.label));
-
-        if (duplicate) {
-          assert
-            .dom(
-              '[data-test-serviceAccountSection-selectProjectList-container]'
-            )
-            .exists();
-
-          assert
-            .dom('[data-test-serviceAccountSection-selectProjectList-emptySvg]')
-            .exists();
-
-          assert
-            .dom(
-              '[data-test-serviceAccountSection-selectProjectList-emptyTitle]'
-            )
-            .hasText(t('serviceAccountModule.emptyProjectListTitle'));
-
-          assert
-            .dom(
-              '[data-test-serviceAccountSection-selectProjectList-emptyDescription]'
-            )
-            .hasText(t('serviceAccountModule.emptyProjectListDescription'));
-
-          assert
-            .dom(
-              '[data-test-serviceAccountSection-selectProjectList-emptyAddProjectBtn]'
-            )
-            .isNotDisabled()
-            .hasText(t('addProject'));
-        } else {
-          assert
-            .dom(
-              '[data-test-serviceAccountSection-selectProjectList-container]'
-            )
-            .doesNotExist();
-        }
       }
     }
   );
@@ -436,7 +483,7 @@ module('Acceptance | Create service account', function (hooks) {
     'it creates service account',
     [{ duplicate: false }, { duplicate: true }],
     async function (assert, { duplicate }) {
-      assert.expect(duplicate ? 40 : 30);
+      assert.expect(duplicate ? 45 : 35);
 
       // feature is enabled
       this.organization.update({
@@ -735,38 +782,84 @@ module('Acceptance | Create service account', function (hooks) {
         );
 
       // assert scopes section
+      const assertScopeNode = (node, container) => {
+        if (node.scopeLabel) {
+          // This is a leaf node with a scope
+          assert
+            .dom(
+              container.querySelector(
+                '[data-test-serviceAccountSection-selectScope-nodeLabel]'
+              )
+            )
+            .containsText(t(node.scopeLabel));
+
+          assert
+            .dom(
+              container.querySelector(
+                `[data-test-serviceAccountSection-selectScope-nodeLabelIcon="${
+                  this.createdServiceAccount[underscore(node.scopeKey)]
+                    ? 'checked'
+                    : 'unchecked'
+                }"]`
+              )
+            )
+            .exists();
+
+          assert
+            .dom(
+              container.querySelector(
+                '[data-test-serviceAccountSection-selectScope-nodeLabel]'
+              )
+            )
+            .containsText(t(node.scopeLabel));
+
+          assert
+            .dom(
+              container.querySelector(
+                '[data-test-serviceAccountSection-selectScope-nodeLabelAccessType]'
+              )
+            )
+            .containsText(t(node.accessType));
+
+          assert
+            .dom(
+              container.querySelector(
+                '[data-test-serviceAccountSection-selectScope-nodeLabelInfoIcon]'
+              )
+            )
+            .exists();
+        } else if (node.label) {
+          // This is a parent node
+          assert
+            .dom(
+              container.querySelector(
+                '[data-test-serviceAccountSection-selectScope-nodeLabel]'
+              )
+            )
+            .containsText(t(node.label));
+        }
+
+        // Process children if they exist
+        if (node.children) {
+          node.children.forEach((child) => {
+            const childContainer = container.parentElement.querySelector(
+              `[data-test-ak-checkbox-tree-nodeKey="${child.key}"]`
+            );
+            if (childContainer) {
+              assertScopeNode(child, childContainer);
+            }
+          });
+        }
+      };
+
       for (const scope of scopeDetails) {
         const container = find(
           `[data-test-ak-checkbox-tree-nodeKey="${scope.key}"]`
         );
 
-        assert
-          .dom(
-            `[data-test-serviceAccountSection-selectScope-nodeLabelIcon="${this.createdServiceAccount[underscore(scope.scopeKey)] ? 'checked' : 'unchecked'}"]`,
-            container
-          )
-          .exists();
-
-        assert
-          .dom(
-            '[data-test-serviceAccountSection-selectScope-nodeLabel]',
-            container
-          )
-          .containsText(t(scope.scopeLabel));
-
-        assert
-          .dom(
-            '[data-test-serviceAccountSection-selectScope-nodeLabelAccessType]',
-            container
-          )
-          .containsText(t(scope.accessType));
-
-        assert
-          .dom(
-            '[data-test-serviceAccountSection-selectScope-nodeLabelInfoIcon]',
-            container
-          )
-          .exists();
+        if (container) {
+          assertScopeNode(scope, container);
+        }
       }
 
       // assert select project section
