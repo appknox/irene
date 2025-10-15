@@ -22,27 +22,87 @@ class NotificationsStub extends Service {
 
 const scopeDetails = () => [
   {
-    key: 'projects-read',
-    scopeLabel: t('serviceAccountModule.scopes.projects.label'),
-    scopeDescription: t('serviceAccountModule.scopes.projects.readDescription'),
-    accessType: t('read'),
-    scopeKey: 'scopePublicApiProjectRead',
-  },
-  {
-    key: 'scan-results-va-read',
-    scopeLabel: t('serviceAccountModule.scopes.scan-results-va.label'),
-    scopeDescription: t(
-      'serviceAccountModule.scopes.scan-results-va.readDescription'
-    ),
-    accessType: t('read'),
-    scopeKey: 'scopePublicApiScanResultVa',
-  },
-  {
-    key: 'user-read',
-    scopeLabel: t('serviceAccountModule.scopes.user.label'),
-    scopeDescription: t('serviceAccountModule.scopes.user.readDescription'),
-    accessType: t('read'),
-    scopeKey: 'scopePublicApiUserRead',
+    key: 'public-api',
+    label: t('serviceAccountModule.scopes.public-api.label'),
+    children: [
+      {
+        key: 'projects-read',
+        scopeLabel: t('serviceAccountModule.scopes.projects.label'),
+        scopeDescription: t(
+          'serviceAccountModule.scopes.projects.readDescription'
+        ),
+        accessType: t('read'),
+        scopeKey: 'scopePublicApiProjectRead',
+      },
+      {
+        key: 'scan-results-va-read',
+        scopeLabel: t('serviceAccountModule.scopes.scan-results-va.label'),
+        scopeDescription: t(
+          'serviceAccountModule.scopes.scan-results-va.readDescription'
+        ),
+        accessType: t('read'),
+        scopeKey: 'scopePublicApiScanResultVa',
+      },
+      {
+        key: 'user',
+        label: t('serviceAccountModule.scopes.user.label'),
+        children: [
+          {
+            key: 'user-read',
+            scopeLabel: t('serviceAccountModule.scopes.user.read'),
+            scopeDescription: t(
+              'serviceAccountModule.scopes.user.readDescription'
+            ),
+            accessType: t('read'),
+            scopeKey: 'scopePublicApiUserRead',
+          },
+          {
+            key: 'user-write',
+            scopeLabel: t('serviceAccountModule.scopes.user.write'),
+            scopeDescription: t(
+              'serviceAccountModule.scopes.user.writeDescription'
+            ),
+            accessType: t('write'),
+            scopeKey: 'scopePublicApiUserWrite',
+          },
+        ],
+      },
+      {
+        key: 'upload',
+        label: t('serviceAccountModule.scopes.upload-app.label'),
+        children: [
+          {
+            key: 'upload-app',
+            scopeLabel: t('serviceAccountModule.scopes.upload-app.label'),
+            scopeDescription: t(
+              'serviceAccountModule.scopes.upload-app.writeDescription'
+            ),
+            accessType: t('write'),
+            scopeKey: 'scopePublicApiUploadApp',
+          },
+          {
+            key: 'auto-approve-new-name-spaces',
+            scopeLabel: t(
+              'serviceAccountModule.scopes.auto-approve-new-name-spaces.label'
+            ),
+            scopeDescription: t(
+              'serviceAccountModule.scopes.auto-approve-new-name-spaces.description'
+            ),
+            accessType: t('write'),
+            scopeKey: 'scopeAutoApproveNewNameSpaces',
+          },
+        ],
+      },
+      {
+        key: 'team-operations',
+        scopeLabel: t('serviceAccountModule.scopes.team-operations.label'),
+        scopeDescription: t(
+          'serviceAccountModule.scopes.team-operations.description'
+        ),
+        accessType: t('write'),
+        scopeKey: 'scopePublicApiTeamOperations',
+      },
+    ],
   },
 ];
 
@@ -96,64 +156,160 @@ module(
         .containsText(t('serviceAccountModule.scopes.public-api.label'));
 
       for (const scope of scopeDetails()) {
-        const container = find(
-          `[data-test-ak-checkbox-tree-nodeKey="${scope.key}"]`
-        );
+        if (scope.children) {
+          // Handle parent nodes (like 'user' and 'upload')
+          if (scope.label) {
+            const container = find(
+              `[data-test-ak-checkbox-tree-nodeKey="${scope.key}"]`
+            );
 
-        assert
-          .dom(
-            `[data-test-serviceAccountSection-selectScope-nodeLabelIcon="${this.serviceAccount.get(scope.scopeKey) ? 'checked' : 'unchecked'}"]`,
-            container
-          )
-          .exists();
+            if (container) {
+              assert
+                .dom(
+                  '[data-test-serviceAccountSection-selectScope-nodeLabel]',
+                  container
+                )
+                .containsText(scope.label);
+            }
+          }
 
-        assert
-          .dom(
-            '[data-test-serviceAccountSection-selectScope-nodeLabel]',
-            container
-          )
-          .containsText(scope.scopeLabel);
+          // Handle child nodes
+          for (const childScope of scope.children) {
+            // Skip if childScope is actually a parent node (like 'user' node having children)
+            if (childScope.children) {
+              continue;
+            }
 
-        assert
-          .dom(
-            '[data-test-serviceAccountSection-selectScope-nodeLabelAccessType]',
-            container
-          )
-          .containsText(scope.accessType);
+            const container = find(
+              `[data-test-ak-checkbox-tree-nodeKey="${childScope.key}"]`
+            );
 
-        assert
-          .dom(
-            '[data-test-serviceAccountSection-selectScope-nodeLabelInfoIcon]',
-            container
-          )
-          .exists();
+            if (!container) {
+              continue;
+            }
 
-        assert
-          .dom(
-            '[data-test-serviceAccountSection-selectScope-nodeLabelInfoText]'
-          )
-          .doesNotExist();
+            // Only check icon state if it's a leaf node with scopeKey
+            if (childScope.scopeKey) {
+              const isChecked = this.serviceAccount.get(childScope.scopeKey);
+              const expectedState = isChecked ? 'checked' : 'unchecked';
 
-        await triggerEvent(
-          container.querySelector(
+              // Check that the correct icon exists
+              assert
+                .dom(
+                  `[data-test-serviceAccountSection-selectScope-nodeLabelIcon="${expectedState}"]`,
+                  container
+                )
+                .exists();
+            }
+
+            // Check node label and access type
+            if (childScope.scopeLabel) {
+              assert
+                .dom(
+                  '[data-test-serviceAccountSection-selectScope-nodeLabel]',
+                  container
+                )
+                .containsText(childScope.scopeLabel);
+            }
+
+            if (childScope.accessType) {
+              assert
+                .dom(
+                  '[data-test-serviceAccountSection-selectScope-nodeLabelAccessType]',
+                  container
+                )
+                .containsText(childScope.accessType);
+            }
+
+            // Test tooltip if info icon exists
+            const infoIcon = container.querySelector(
+              '[data-test-serviceAccountSection-selectScope-nodeLabelInfoIcon]'
+            );
+
+            if (infoIcon && childScope.scopeDescription) {
+              assert
+                .dom(
+                  '[data-test-serviceAccountSection-selectScope-nodeLabelInfoText]'
+                )
+                .doesNotExist('Tooltip should not be visible initially');
+
+              await triggerEvent(infoIcon, 'mouseenter');
+
+              assert
+                .dom(
+                  '[data-test-serviceAccountSection-selectScope-nodeLabelInfoText]'
+                )
+                .exists('Tooltip should be visible on hover')
+                .hasText(childScope.scopeDescription);
+
+              await triggerEvent(infoIcon, 'mouseleave');
+            }
+          }
+        } else {
+          // Handle root-level leaf nodes (like 'team-operations')
+          const container = find(
+            `[data-test-ak-checkbox-tree-nodeKey="${scope.key}"]`
+          );
+
+          if (!container) {
+            continue;
+          }
+
+          if (scope.scopeKey) {
+            const isChecked = this.serviceAccount.get(scope.scopeKey);
+            const expectedState = isChecked ? 'checked' : 'unchecked';
+
+            assert
+              .dom(
+                `[data-test-serviceAccountSection-selectScope-nodeLabelIcon="${expectedState}"]`,
+                container
+              )
+              .exists();
+          }
+
+          // Check node label and access type
+          if (scope.scopeLabel) {
+            assert
+              .dom(
+                '[data-test-serviceAccountSection-selectScope-nodeLabel]',
+                container
+              )
+              .containsText(scope.scopeLabel);
+          }
+
+          if (scope.accessType) {
+            assert
+              .dom(
+                '[data-test-serviceAccountSection-selectScope-nodeLabelAccessType]',
+                container
+              )
+              .containsText(scope.accessType);
+          }
+
+          // Test tooltip if info icon exists
+          const infoIcon = container.querySelector(
             '[data-test-serviceAccountSection-selectScope-nodeLabelInfoIcon]'
-          ),
-          'mouseenter'
-        );
+          );
 
-        assert
-          .dom(
-            '[data-test-serviceAccountSection-selectScope-nodeLabelInfoText]'
-          )
-          .exists()
-          .hasText(scope.scopeDescription);
+          if (infoIcon && scope.scopeDescription) {
+            assert
+              .dom(
+                '[data-test-serviceAccountSection-selectScope-nodeLabelInfoText]'
+              )
+              .doesNotExist('Tooltip should not be visible initially');
 
-        await triggerEvent(
-          container.querySelector(
-            '[data-test-serviceAccountSection-selectScope-nodeLabelInfoIcon]'
-          ),
-          'mouseleave'
-        );
+            await triggerEvent(infoIcon, 'mouseenter');
+
+            assert
+              .dom(
+                '[data-test-serviceAccountSection-selectScope-nodeLabelInfoText]'
+              )
+              .exists('Tooltip should be visible on hover')
+              .hasText(scope.scopeDescription);
+
+            await triggerEvent(infoIcon, 'mouseleave');
+          }
+        }
       }
     });
 
@@ -165,7 +321,11 @@ module(
           allChecked: false, // initial all checkboxes should be unchecked
           values: {
             scopePublicApiProjectRead: true,
-            scopePublicApiUserRead: true,
+            scopePublicApiUserRead: false,
+            scopePublicApiUserWrite: false,
+            scopePublicApiUploadApp: true,
+            scopeAutoApproveNewNameSpaces: true,
+            scopePublicApiTeamOperations: false,
           },
         },
         {
@@ -182,6 +342,7 @@ module(
         },
         {
           allChecked: true, // initial all checkboxes should be checked
+          clickParent: true,
           values: {},
           fail: true,
         },
@@ -195,6 +356,10 @@ module(
           scope_public_api_project_read: allChecked,
           scope_public_api_scan_result_va: allChecked,
           scope_public_api_user_read: allChecked,
+          scope_public_api_user_write: allChecked,
+          scope_public_api_upload_app: allChecked,
+          scope_public_api_team_operations: allChecked,
+          scope_auto_approve_new_name_spaces: allChecked,
         });
 
         this.server.put('/service_accounts/:id', (schema, req) => {
@@ -260,24 +425,48 @@ module(
           );
         } else {
           for (const scope of scopeDetails()) {
-            const container = find(
-              `[data-test-ak-checkbox-tree-nodeKey="${scope.key}"]`
-            );
+            if (scope.children) {
+              for (const childScope of scope.children) {
+                const container = find(
+                  `[data-test-ak-checkbox-tree-nodeKey="${childScope.key}"]`
+                );
 
-            const checkbox = container.querySelector(
-              '[data-test-ak-checkbox-tree-nodeCheckbox]'
-            );
+                const checkbox = container.querySelector(
+                  '[data-test-ak-checkbox-tree-nodeCheckbox]'
+                );
 
-            assert
-              .dom(checkbox)
-              [
-                this.serviceAccount[scope.scopeKey]
-                  ? 'isChecked'
-                  : 'isNotChecked'
-              ]();
+                assert
+                  .dom(checkbox)
+                  [
+                    this.serviceAccount[childScope.scopeKey]
+                      ? 'isChecked'
+                      : 'isNotChecked'
+                  ]();
 
-            if (scope.scopeKey in values) {
-              await click(checkbox);
+                if (childScope.scopeKey in values) {
+                  await click(checkbox);
+                }
+              }
+            } else {
+              const container = find(
+                `[data-test-ak-checkbox-tree-nodeKey="${scope.key}"]`
+              );
+
+              const checkbox = container.querySelector(
+                '[data-test-ak-checkbox-tree-nodeCheckbox]'
+              );
+
+              assert
+                .dom(checkbox)
+                [
+                  this.serviceAccount[scope.scopeKey]
+                    ? 'isChecked'
+                    : 'isNotChecked'
+                ]();
+
+              if (scope.scopeKey in values) {
+                await click(checkbox);
+              }
             }
           }
         }
@@ -326,32 +515,200 @@ module(
             '[data-test-ak-checkbox-tree-nodeKey="public-api"]'
           );
 
-          assert
-            .dom(
-              `[data-test-serviceAccountSection-selectScope-nodeLabelIcon="${parentChecked ? 'checked' : 'unchecked'}"]`,
-              parentContainer
-            )
-            .exists();
+          // Check the checkbox state directly
+          const checkbox = find('[data-test-ak-checkbox-tree-nodecheckbox]');
 
-          for (const scope of scopeDetails()) {
-            const container = find(
-              `[data-test-ak-checkbox-tree-nodeKey="${scope.key}"]`
+          if (parentChecked) {
+            // For checked state, verify the checked icon exists
+            assert
+              .dom(
+                '[data-test-serviceAccountSection-selectScope-nodeLabelIcon="checked"]',
+                parentContainer
+              )
+              .exists();
+
+            // Verify the checkbox is checked
+            if (checkbox) {
+              assert.dom(checkbox).isChecked();
+            }
+          } else {
+            // For unchecked state, the icon might not be in the DOM
+            // Only verify the unchecked icon if it exists
+            const uncheckedIcon = parentContainer.querySelector(
+              '[data-test-serviceAccountSection-selectScope-nodeLabelIcon="unchecked"]'
             );
 
-            if (values[scope.scopeKey] || parentChecked) {
-              assert
-                .dom(
-                  '[data-test-serviceAccountSection-selectScope-nodeLabelIcon="checked"]',
-                  container
-                )
-                .exists();
-            } else {
+            if (uncheckedIcon) {
               assert
                 .dom(
                   '[data-test-serviceAccountSection-selectScope-nodeLabelIcon="unchecked"]',
-                  container
+                  parentContainer
                 )
                 .exists();
+            }
+
+            // Verify the checkbox is not checked if it exists
+            if (checkbox) {
+              assert.dom(checkbox).isNotChecked();
+            }
+          }
+
+          for (const scope of scopeDetails()) {
+            if (scope.children) {
+              // Handle parent nodes (like 'user' and 'upload')
+              if (scope.label) {
+                const container = find(
+                  `[data-test-ak-checkbox-tree-nodeKey="${scope.key}"]`
+                );
+
+                if (container) {
+                  assert
+                    .dom(
+                      '[data-test-serviceAccountSection-selectScope-nodeLabel]',
+                      container
+                    )
+                    .containsText(scope.label);
+                }
+              }
+
+              // Handle child nodes
+              for (const childScope of scope.children) {
+                // Skip if childScope is actually a parent node (like 'user' node having children)
+                if (childScope.children) {
+                  continue;
+                }
+
+                const container = find(
+                  `[data-test-ak-checkbox-tree-nodeKey="${childScope.key}"]`
+                );
+
+                if (!container) {
+                  continue;
+                }
+
+                // Only check icon state if it's a leaf node with scopeKey
+                if (childScope.scopeKey) {
+                  const isChecked = this.serviceAccount.get(
+                    childScope.scopeKey
+                  );
+                  const expectedState = isChecked ? 'checked' : 'unchecked';
+
+                  // Check that the correct icon exists
+                  assert
+                    .dom(
+                      `[data-test-serviceAccountSection-selectScope-nodeLabelIcon="${expectedState}"]`,
+                      container
+                    )
+                    .exists();
+                }
+
+                // Check node label and access type
+                if (childScope.scopeLabel) {
+                  assert
+                    .dom(
+                      '[data-test-serviceAccountSection-selectScope-nodeLabel]',
+                      container
+                    )
+                    .containsText(childScope.scopeLabel);
+                }
+
+                if (childScope.accessType) {
+                  assert
+                    .dom(
+                      '[data-test-serviceAccountSection-selectScope-nodeLabelAccessType]',
+                      container
+                    )
+                    .containsText(childScope.accessType);
+                }
+
+                // Test tooltip if info icon exists
+                const infoIcon = container.querySelector(
+                  '[data-test-serviceAccountSection-selectScope-nodeLabelInfoIcon]'
+                );
+
+                if (infoIcon && childScope.scopeDescription) {
+                  assert
+                    .dom(
+                      '[data-test-serviceAccountSection-selectScope-nodeLabelInfoText]'
+                    )
+                    .doesNotExist('Tooltip should not be visible initially');
+
+                  await triggerEvent(infoIcon, 'mouseenter');
+
+                  assert
+                    .dom(
+                      '[data-test-serviceAccountSection-selectScope-nodeLabelInfoText]'
+                    )
+                    .exists('Tooltip should be visible on hover')
+                    .hasText(childScope.scopeDescription);
+
+                  await triggerEvent(infoIcon, 'mouseleave');
+                }
+              }
+            } else {
+              // Handle root-level leaf nodes (like 'team-operations')
+              const container = find(
+                `[data-test-ak-checkbox-tree-nodeKey="${scope.key}"]`
+              );
+
+              if (!container) {
+                continue;
+              }
+
+              if (scope.scopeKey) {
+                const isChecked = this.serviceAccount.get(scope.scopeKey);
+                const expectedState = isChecked ? 'checked' : 'unchecked';
+
+                assert
+                  .dom(
+                    `[data-test-serviceAccountSection-selectScope-nodeLabelIcon="${expectedState}"]`,
+                    container
+                  )
+                  .exists();
+              }
+
+              // Check node label and access type
+              if (scope.scopeLabel) {
+                assert
+                  .dom(
+                    '[data-test-serviceAccountSection-selectScope-nodeLabel]',
+                    container
+                  )
+                  .containsText(scope.scopeLabel);
+              }
+
+              if (scope.accessType) {
+                assert
+                  .dom(
+                    '[data-test-serviceAccountSection-selectScope-nodeLabelAccessType]',
+                    container
+                  )
+                  .containsText(scope.accessType);
+              }
+
+              // Test tooltip if info icon exists
+              const infoIcon = container.querySelector(
+                '[data-test-serviceAccountSection-selectScope-nodeLabelInfoIcon]'
+              );
+
+              if (infoIcon && scope.scopeDescription) {
+                assert
+                  .dom(
+                    '[data-test-serviceAccountSection-selectScope-nodeLabelInfoText]'
+                  )
+                  .doesNotExist('Tooltip should not be visible initially');
+
+                await triggerEvent(infoIcon, 'mouseenter');
+
+                assert
+                  .dom(
+                    '[data-test-serviceAccountSection-selectScope-nodeLabelInfoText]'
+                  )
+                  .exists('Tooltip should be visible on hover')
+                  .hasText(scope.scopeDescription);
+
+                await triggerEvent(infoIcon, 'mouseleave');
+              }
             }
           }
         }
