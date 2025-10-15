@@ -46,7 +46,7 @@
 
   <FileDetails::ScanActions::ScanOverview
     @file={{@file}}
-    @vulnerabilityCount={{if @file.isApiDone @file.apiVulnerabilityCount null}}
+    @vulnerabilityCount={{if @file.isApiDone @vulnerabilityCount null}}
     data-test-fileDetails-scanActions-scanOverview-apiScanRoot
   />
 </AkStack>

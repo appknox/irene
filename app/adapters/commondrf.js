@@ -6,6 +6,7 @@ export default class CommonDRFAdapter extends DRFAuthenticationBase {
   host = ENV.host;
   namespace = ENV.namespace;
   namespace_v2 = ENV.namespace_v2;
+  namespace_v3 = ENV.namespace_v3;
   addTrailingSlashes = false;
 
   @service organization;

@@ -21,7 +21,7 @@
             @indicatorVariant='shadow'
             @buttonVariant={{true}}
             @isActive={{true}}
-            @hasBadge={{if @file.staticVulnerabilityCount true false}}
+            @hasBadge={{if this.staticVulnerabilityCount true false}}
           >
             <:badge>
               <AkStack @alignItems='center'>
@@ -34,7 +34,7 @@
                   @tag='span'
                   @fontWeight='bold'
                 >
-                  {{@file.staticVulnerabilityCount}}
+                  {{this.staticVulnerabilityCount}}
                 </AkTypography>
               </AkStack>
             </:badge>
@@ -91,7 +91,6 @@
       @columns={{this.columns}}
       @sorts={{this.sorts}}
       @updateAnalysesSorts={{this.updateSorts}}
-      @pageReferrer='sast'
     />
   </AkStack>
 

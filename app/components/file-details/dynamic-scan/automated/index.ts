@@ -11,6 +11,7 @@ import parseError from 'irene/utils/parse-error';
 import type FileModel from 'irene/models/file';
 import type DsAutomationPreferenceModel from 'irene/models/ds-automation-preference';
 import type OrganizationService from 'irene/services/organization';
+import DynamicscanModel from 'irene/models/dynamicscan';
 
 export interface FileDetailsDastAutomatedSignature {
   Args: {
@@ -27,11 +28,13 @@ export default class FileDetailsDastAutomated extends Component<FileDetailsDastA
   @service('notifications') declare notify: NotificationService;
 
   @tracked automationPreference: DsAutomationPreferenceModel | null = null;
+  @tracked lastAutomatedDynamicScan: DynamicscanModel | null = null;
 
   constructor(owner: unknown, args: FileDetailsDastAutomatedSignature['Args']) {
     super(owner, args);
 
     this.getDsAutomationPreference.perform();
+    this.getLastAutomatedDynamicScan.perform();
   }
 
   get file() {
@@ -42,12 +45,8 @@ export default class FileDetailsDastAutomated extends Component<FileDetailsDastA
     return this.file.profile.get('id') as string;
   }
 
-  get dynamicScan() {
-    return this.file.lastAutomatedDynamicScan;
-  }
-
   get isFetchingDynamicScan() {
-    return this.file.lastAutomatedDynamicScan?.isPending;
+    return this.getLastAutomatedDynamicScan.isRunning;
   }
 
   get dynamicscanAutomationFeatureAvailable() {
@@ -71,6 +70,15 @@ export default class FileDetailsDastAutomated extends Component<FileDetailsDastA
         'ds-automation-preference',
         {}
       );
+    } catch (error) {
+      this.notify.error(parseError(error, this.intl.t('pleaseTryAgain')));
+    }
+  });
+
+  getLastAutomatedDynamicScan = task(async () => {
+    try {
+      this.lastAutomatedDynamicScan =
+        await this.file.getFileLastAutomatedDynamicScan();
     } catch (error) {
       this.notify.error(parseError(error, this.intl.t('pleaseTryAgain')));
     }

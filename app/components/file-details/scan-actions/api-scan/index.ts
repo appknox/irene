@@ -5,6 +5,7 @@ import FileModel from 'irene/models/file';
 export interface FileDetailsScanActionsApiScanSignature {
   Args: {
     file: FileModel;
+    vulnerabilityCount: number;
   };
 }
 

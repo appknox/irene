@@ -2,7 +2,6 @@ import Service, { service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
 import { task } from 'ember-concurrency';
 import { action } from '@ember/object';
-import { AsyncBelongsTo } from '@ember-data/model';
 import type IntlService from 'ember-intl/services/intl';
 import type Store from '@ember-data/store';
 
@@ -63,9 +62,7 @@ export default class DynamicScanService extends Service {
    * @returns True if the dynamic scan is not started, completed, ready, running, or in an error state, false otherwise.
    */
   @action
-  checkAndStopStatusPoll(
-    dynamicScan?: AsyncBelongsTo<DynamicscanModel> | null
-  ) {
+  checkAndStopStatusPoll(dynamicScan?: DynamicscanModel | null) {
     const isCompleted = dynamicScan?.get('isCompleted');
     const isReadyOrRunning = dynamicScan?.get('isReadyOrRunning');
     const isStatusError = dynamicScan?.get('isStatusError');
@@ -106,14 +103,14 @@ export default class DynamicScanService extends Service {
       try {
         // Reload the file to get the latest dynamic scan
         const rFile = await file?.reload();
+        let dsScan: DynamicscanModel | null | undefined = null;
 
         // Reload the last manual and automated dynamic scans
-        await (await rFile?.get('lastManualDynamicScan'))?.reload();
-        await (await rFile?.get('lastAutomatedDynamicScan'))?.reload();
-
-        const dynamicScan = isAutomatedScan
-          ? rFile?.get('lastAutomatedDynamicScan')
-          : rFile?.get('lastManualDynamicScan');
+        if (isAutomatedScan) {
+          dsScan = await rFile?.getFileLastAutomatedDynamicScan();
+        } else {
+          dsScan = await rFile?.getFileLastManualDynamicScan();
+        }
 
         // Stop polling if not stopped after 8 checks
         if (attempt === 60) {
@@ -126,7 +123,7 @@ export default class DynamicScanService extends Service {
         attempt++;
 
         // Stop polling if the file dynamic scan is ready, running, cancelled, or in an error state
-        if (this.checkAndStopStatusPoll(dynamicScan)) {
+        if (this.checkAndStopStatusPoll(dsScan)) {
           stopPoll();
         }
       } catch {
@@ -172,9 +169,9 @@ export default class DynamicScanService extends Service {
       const file = this.store.peekRecord('file', fileId);
 
       if (mode === ENUMS.DYNAMIC_MODE.MANUAL) {
-        existingModel = file?.get('lastManualDynamicScan')?.content;
+        existingModel = await file?.getFileLastManualDynamicScan();
       } else if (mode === ENUMS.DYNAMIC_MODE.AUTOMATED) {
-        existingModel = file?.get('lastAutomatedDynamicScan')?.content;
+        existingModel = await file?.getFileLastAutomatedDynamicScan();
       }
 
       // Update manual scan if conditions are met

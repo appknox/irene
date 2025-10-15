@@ -7,7 +7,10 @@ import type RouterService from '@ember/routing/router-service';
 import type FileModel from 'irene/models/file';
 import type ConfigurationService from 'irene/services/configuration';
 import type DynamicScanService from 'irene/services/dynamic-scan';
-import { DsComputedStatus } from 'irene/models/dynamicscan';
+import DynamicscanModel, { DsComputedStatus } from 'irene/models/dynamicscan';
+import { tracked } from '@glimmer/tracking';
+import { task } from 'ember-concurrency';
+import parseError from 'irene/utils/parse-error';
 
 interface TabItem {
   id: string;
@@ -34,7 +37,17 @@ export default class FileDetailsDastHeader extends Component<FileDetailsDastHead
   @service declare intl: IntlService;
   @service declare router: RouterService;
   @service declare configuration: ConfigurationService;
+  @service('notifications') declare notify: NotificationService;
   @service('dynamic-scan') declare dsService: DynamicScanService;
+
+  @tracked lastAutomatedDynamicScan: DynamicscanModel | null = null;
+  @tracked lastManualDynamicScan: DynamicscanModel | null = null;
+
+  constructor(owner: unknown, args: FileDetailsDastHeaderSignature['Args']) {
+    super(owner, args);
+
+    this.getLastDynamicScans.perform();
+  }
 
   get file() {
     return this.args.file;
@@ -49,11 +62,11 @@ export default class FileDetailsDastHeader extends Component<FileDetailsDastHead
   }
 
   get dsAutomatedScan() {
-    return this.file.lastAutomatedDynamicScan;
+    return this.lastAutomatedDynamicScan;
   }
 
   get dsManualScan() {
-    return this.file.lastManualDynamicScan;
+    return this.lastManualDynamicScan;
   }
 
   get isAutomatedScanRunning() {
@@ -132,6 +145,18 @@ export default class FileDetailsDastHeader extends Component<FileDetailsDastHead
 
     return null;
   }
+
+  getLastDynamicScans = task(async () => {
+    try {
+      this.lastAutomatedDynamicScan =
+        await this.file.getFileLastAutomatedDynamicScan();
+
+      this.lastManualDynamicScan =
+        await this.file.getFileLastManualDynamicScan();
+    } catch (error) {
+      this.notify.error(parseError(error, this.intl.t('pleaseTryAgain')));
+    }
+  });
 }
 
 declare module '@glint/environment-ember-loose/registry' {

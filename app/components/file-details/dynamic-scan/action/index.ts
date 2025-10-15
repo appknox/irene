@@ -3,7 +3,6 @@ import { inject as service } from '@ember/service';
 import { task } from 'ember-concurrency';
 import { action } from '@ember/object';
 import type IntlService from 'ember-intl/services/intl';
-import type { AsyncBelongsTo } from '@ember-data/model';
 
 import ENV from 'irene/config/environment';
 import parseError from 'irene/utils/parse-error';
@@ -20,7 +19,7 @@ export interface DynamicScanActionSignature {
     file: FileModel;
     dynamicScanText: string;
     isAutomatedScan?: boolean;
-    dynamicScan: AsyncBelongsTo<DynamicscanModel> | null;
+    dynamicScan: DynamicscanModel | null;
   };
 }
 

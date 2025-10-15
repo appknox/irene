@@ -28,11 +28,13 @@ export default class FileDetailsKeyInsightsComponent extends Component<FileDetai
   @service('notifications') declare notify: NotificationService;
 
   @tracked unknownAnalysisStatus?: UnknownAnalysisStatusModel;
+  @tracked previousFile?: FileModel | null = null;
 
   constructor(owner: unknown, args: FileDetailsKeyInsightsSignature['Args']) {
     super(owner, args);
 
     this.fetchUnknownAnalysisStatus.perform();
+    this.getFilePreviousFile.perform();
   }
 
   get currentFile() {
@@ -41,10 +43,6 @@ export default class FileDetailsKeyInsightsComponent extends Component<FileDetai
 
   get hasComparison() {
     return this.comparison !== null;
-  }
-
-  get previousFile() {
-    return this.currentFile.get('previousFile').content;
   }
 
   get compareRouteModel() {
@@ -91,6 +89,10 @@ export default class FileDetailsKeyInsightsComponent extends Component<FileDetai
         id: this.args.file.profile.get('id'),
       }
     );
+  });
+
+  getFilePreviousFile = task(async () => {
+    this.previousFile = await this.args.file.fetchPreviousFile();
   });
 }
 

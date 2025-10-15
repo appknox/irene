@@ -11,10 +11,12 @@ import ENV from 'irene/config/environment';
 import type FileModel from 'irene/models/file';
 import type IreneAjaxService from 'irene/services/ajax';
 import type { AjaxError } from 'irene/services/ajax';
+import AnalysisModel from 'irene/models/analysis';
 
 export interface FileDetailsStaticScanSignature {
   Args: {
     file: FileModel;
+    fileAnalyses: AnalysisModel[];
   };
 }
 
@@ -59,10 +61,6 @@ export default class FileDetailsStaticScan extends Component<FileDetailsStaticSc
     return this.args.file;
   }
 
-  get analyses() {
-    return this.file.analyses;
-  }
-
   get tabItems() {
     return [
       {
@@ -76,6 +74,10 @@ export default class FileDetailsStaticScan extends Component<FileDetailsStaticSc
 
   get isRescanDisabled() {
     return !this.file.isStaticCompleted || !this.file.isActive;
+  }
+
+  get fileAnalyses() {
+    return this.args.fileAnalyses;
   }
 
   @action
@@ -114,6 +116,12 @@ export default class FileDetailsStaticScan extends Component<FileDetailsStaticSc
       this.notify.error((error as AjaxError).payload.detail);
     }
   });
+
+  get staticVulnerabilityCount() {
+    return this.fileAnalyses.filter(
+      (it) => it.hasType(ENUMS.VULNERABILITY_TYPE.STATIC) && it.isRisky
+    ).length;
+  }
 }
 
 declare module '@glint/environment-ember-loose/registry' {

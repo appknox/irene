@@ -1,10 +1,7 @@
-/* eslint-disable ember/no-observers */
 import Component from '@glimmer/component';
 import dayjs from 'dayjs';
 import { inject as service } from '@ember/service';
 import IntlService from 'ember-intl/services/intl';
-import { addObserver, removeObserver } from '@ember/object/observers';
-import { action } from '@ember/object';
 import RouterService from '@ember/routing/router-service';
 import { helper } from '@ember/component/helper';
 import relativeTime from 'dayjs/plugin/relativeTime';
@@ -38,40 +35,6 @@ export default class UploadAppStatusDetailsComponent extends Component<UploadApp
 
     if (this.args.submission.id) {
       this.uploadApp.submissionSet.add(this.args.submission.id);
-    }
-
-    addObserver(this.args.submission, 'status', this, this.refreshProjectList);
-  }
-
-  willDestroy() {
-    super.willDestroy();
-
-    this.removeSubmissionStatusObserver();
-  }
-
-  @action removeSubmissionStatusObserver() {
-    removeObserver(
-      this.args.submission,
-      'status',
-      this,
-      this.refreshProjectList
-    );
-  }
-
-  @action
-  refreshProjectList() {
-    const submissionCompleted =
-      this.args.submission.status === ENUMS.SUBMISSION_STATUS.ANALYZING;
-
-    const isProjectsRoute =
-      this.router.currentRouteName === 'authenticated.dashboard.projects';
-
-    const hasDefaultFilters = this.projectService.isProjectReponseFiltered;
-
-    // check for submission completed & projects route & is in default state
-    if (submissionCompleted && isProjectsRoute && !hasDefaultFilters) {
-      // this will update project list
-      this.projectService.fetchProjects.perform();
     }
   }
 

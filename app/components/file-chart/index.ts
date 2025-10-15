@@ -24,27 +24,27 @@ export default class FileChartComponent extends Component<FileChartSignature> {
 
     const severityCountObjects = [
       {
-        value: file?.get('countRiskCritical'),
+        value: file?.riskCountCritical,
         name: this.intl.t('critical'),
         severityType: 'critical',
       },
       {
-        value: file?.get('countRiskHigh'),
+        value: file?.riskCountHigh,
         name: this.intl.t('high'),
         severityType: 'high',
       },
       {
-        value: file?.get('countRiskMedium'),
+        value: file?.riskCountMedium,
         name: this.intl.t('medium'),
         severityType: 'medium',
       },
       {
-        value: file?.get('countRiskLow'),
+        value: file?.riskCountLow,
         name: this.intl.t('low'),
         severityType: 'low',
       },
       {
-        value: file?.get('countRiskNone'),
+        value: file?.riskCountPassed,
         name: this.intl.t('passed'),
         severityType: 'passed',
         hasOverridenPassedRisks: this.hasOverridenPassedRisks,
@@ -53,7 +53,7 @@ export default class FileChartComponent extends Component<FileChartSignature> {
 
     if (this.showUnknownAnalysis) {
       severityCountObjects.push({
-        value: file?.get('countRiskUnknown'),
+        value: file?.riskCountUnknown,
         name: this.intl.t('untested'),
         severityType: 'none',
       });
@@ -63,17 +63,7 @@ export default class FileChartComponent extends Component<FileChartSignature> {
   }
 
   get overridenPassedRiskCount() {
-    return (
-      this.args.file
-        ?.get('analyses')
-        .reduce(
-          (count, a) =>
-            a.isOverriddenAsPassed && a.status === ENUMS.ANALYSIS.COMPLETED
-              ? count + 1
-              : count,
-          0
-        ) || 0
-    );
+    return this.args.file?.get('overriddenPassedRiskCount') || 0;
   }
 
   get hasOverridenPassedRisks() {

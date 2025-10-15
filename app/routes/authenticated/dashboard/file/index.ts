@@ -15,6 +15,7 @@ export default class AuthenticatedFileIndexRoute extends ScrollToTop(
     };
 
     const file = await this.store.findRecord('file', fileid);
+    await file.loadAllAnalyses();
 
     return {
       file,

@@ -17,13 +17,16 @@
       @loadingScanStatus={{this.isFetchingDynamicScan}}
       @showStatusChip={{true}}
       @showActionButton={{not
-        (or this.dynamicScan.isReadyOrRunning this.dynamicScan.isShuttingDown)
+        (or
+          this.lastAutomatedDynamicScan.isReadyOrRunning
+          this.lastAutomatedDynamicScan.isShuttingDown
+        )
       }}
     >
       <:statusChip>
         <FileDetails::DynamicScan::StatusChip
-          @status={{this.dynamicScan.computedStatus}}
-          @statusText={{this.dynamicScan.statusText}}
+          @status={{this.lastAutomatedDynamicScan.computedStatus}}
+          @statusText={{this.lastAutomatedDynamicScan.statusText}}
         />
       </:statusChip>
 
@@ -32,7 +35,7 @@
           @file={{@file}}
           @dynamicScanText={{t 'dastTabs.automatedDAST'}}
           @isAutomatedScan={{true}}
-          @dynamicScan={{this.dynamicScan}}
+          @dynamicScan={{this.lastAutomatedDynamicScan}}
           @openActionDrawer={{dw.openActionDrawer}}
         />
       </:actionButton>
@@ -56,7 +59,7 @@
         <VncViewer
           @file={{@file}}
           @profileId={{@profileId}}
-          @dynamicScan={{this.dynamicScan}}
+          @dynamicScan={{this.lastAutomatedDynamicScan}}
           @isAutomated={{true}}
         />
       </:default>

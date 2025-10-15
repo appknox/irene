@@ -219,6 +219,7 @@ module.exports = function (environment) {
     deviceFarmPassword: '1234',
     namespace: 'api',
     namespace_v2: 'api/v2',
+    namespace_v3: 'api/v3',
     host: host,
     'ember-cli-mirage': {
       enabled: false,

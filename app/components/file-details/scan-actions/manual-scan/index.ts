@@ -8,6 +8,7 @@ import ENUMS from 'irene/enums';
 export interface FileDetailsScanActionsManualScanSignature {
   Args: {
     file: FileModel;
+    vulnerabilityCount: number;
   };
 }
 

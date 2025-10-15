@@ -13,7 +13,7 @@ import type DevicefarmService from 'irene/services/devicefarm';
 export interface VncViewerSignature {
   Args: {
     file: FileModel;
-    dynamicScan: AsyncBelongsTo<DynamicscanModel> | null;
+    dynamicScan: DynamicscanModel | null;
     profileId?: number;
     isAutomated?: boolean;
   };
