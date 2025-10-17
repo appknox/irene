@@ -148,4 +148,29 @@ module('Integration | Component | file/report-drawer', function (hooks) {
       .dom(`[data-test-fileReportDrawer-groupItem="sbom-reports"]`)
       .doesNotExist();
   });
+
+  test('it hides sbom & privacy reports if feature is not procured and "hide_upsell_features" is true', async function (assert) {
+    await this.server.create('organization', {
+      hide_upsell_features: true,
+      features: { sbom: false, privacy: false },
+    });
+
+    await this.owner.lookup('service:organization').load();
+
+    await render(
+      hbs`<File::ReportDrawer @file={{this.file}} @open={{true}} @onClose={{this.onClose}} />`
+    );
+
+    const reportGroups = findAll('[data-test-fileReportDrawer-group]');
+
+    assert.strictEqual(
+      reportGroups.length,
+      1,
+      'renders the correct number of file report groups'
+    );
+
+    assert
+      .dom(`[data-test-fileReportDrawer-groupItem="sbom-reports"]`)
+      .doesNotExist();
+  });
 });

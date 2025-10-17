@@ -8,7 +8,7 @@ interface PoweredByAiChipSignature {
   Element: HTMLElement;
   Args: {
     clickable: boolean;
-    drawerInfo?: PoweredByAiDrawerInfo[];
+    drawerInfo?: PoweredByAiDrawerInfo[] | null;
   };
 }
 

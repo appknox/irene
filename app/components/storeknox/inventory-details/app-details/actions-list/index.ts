@@ -5,6 +5,7 @@ import type IntlService from 'ember-intl/services/intl';
 
 import ENUMS from 'irene/enums';
 import type SkInventoryAppModel from 'irene/models/sk-inventory-app';
+import type OrganizationService from 'irene/services/organization';
 
 interface StoreknoxInventoryDetailsAppDetailsActionsListSignature {
   Args: {
@@ -14,6 +15,7 @@ interface StoreknoxInventoryDetailsAppDetailsActionsListSignature {
 
 export default class StoreknoxInventoryDetailsAppDetailsActionsListComponent extends Component<StoreknoxInventoryDetailsAppDetailsActionsListSignature> {
   @service declare intl: IntlService;
+  @service declare organization: OrganizationService;
 
   get skInventoryApp() {
     return this.args.skInventoryApp;
@@ -25,6 +27,7 @@ export default class StoreknoxInventoryDetailsAppDetailsActionsListComponent ext
         id: 'unscanned-version',
         label: this.intl.t('storeknox.unscannedVersion'),
         route: 'authenticated.storeknox.inventory-details.unscanned-version',
+        hideAction: false,
         needsAction:
           this.skInventoryApp?.storeMonitoringStatus ===
           ENUMS.SK_APP_MONITORING_STATUS.ACTION_NEEDED,
@@ -34,12 +37,14 @@ export default class StoreknoxInventoryDetailsAppDetailsActionsListComponent ext
         label: this.intl.t('storeknox.brandAbuse'),
         featureInProgress: true,
         route: 'authenticated.storeknox.inventory-details.brand-abuse',
+        hideAction: this.organization.hideUpsellUI,
       },
       {
         id: 'malware-detected',
         label: this.intl.t('storeknox.malwareDetected'),
         featureInProgress: true,
         route: 'authenticated.storeknox.inventory-details.malware-detected',
+        hideAction: this.organization.hideUpsellUI,
       },
     ];
   }

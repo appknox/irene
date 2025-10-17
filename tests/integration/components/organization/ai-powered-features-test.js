@@ -108,6 +108,79 @@ module(
     });
 
     test.each(
+      'it hides/shows ai features when hideUpsellUI is true and feature is not enabled',
+      [
+        {
+          key: 'reporting',
+          value: false,
+          otherFeatures: { pii: true },
+          hideUpsellUI: true,
+        },
+        {
+          key: 'pii',
+          value: false,
+          otherFeatures: { reporting: true },
+          hideUpsellUI: true,
+        },
+        {
+          key: 'reporting',
+          value: false,
+          otherFeatures: { pii: true },
+          hideUpsellUI: false,
+        },
+        {
+          key: 'pii',
+          value: false,
+          otherFeatures: { reporting: true },
+          hideUpsellUI: false,
+        },
+      ],
+      async function (assert, testData) {
+        this.organizationService.selected.set(
+          'hideUpsellFeatures',
+          testData.hideUpsellUI
+        );
+
+        this.organizationService.selected.set('aiFeatures', {
+          [testData.key]: testData.value,
+          ...testData.otherFeatures,
+        });
+
+        await render(hbs`<Organization::AiPoweredFeatures />`);
+
+        if (testData.hideUpsellUI) {
+          // Disable feature should not be rendered
+          assert
+            .dom(
+              `[data-test-organzation-aiPoweredFeatures-featureBody=${testData.key}]`
+            )
+            .doesNotExist();
+
+          // Enable feature should be rendered
+          Object.keys(testData.otherFeatures).forEach((key) => {
+            assert
+              .dom(
+                `[data-test-organzation-aiPoweredFeatures-featureBody=${key}]`
+              )
+              .exists();
+          });
+        } else {
+          // All features should be rendered whether procured or not
+          Object.keys({
+            [testData.key]: testData.value,
+            ...testData.otherFeatures,
+          }).forEach((key) => {
+            assert
+              .dom(
+                `[data-test-organzation-aiPoweredFeatures-featureBody=${key}]`
+              )
+              .exists();
+          });
+        }
+      }
+    );
+
+    test.each(
       'it toggles a feature',
       [true, false],
       async function (assert, isEnabled) {
