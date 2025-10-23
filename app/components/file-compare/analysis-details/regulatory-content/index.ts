@@ -6,7 +6,7 @@ export interface FileCompareAnalysisDetailsRegulatoryContentSignature<
   T extends object,
 > {
   Args: {
-    contents: T[];
+    contents: T[] | undefined;
     hasMoreDetails?: boolean;
   };
   Blocks: {
