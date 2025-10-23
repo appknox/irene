@@ -14,8 +14,8 @@
     @nextAction={{this.goToPage}}
     @prevAction={{this.goToPage}}
     @itemPerPageOptions={{array 10 25 50}}
-    @defaultLimit={{this.skInventoryAppsService.limit}}
-    @offset={{this.skInventoryAppsService.offset}}
+    @defaultLimit={{this.skAppsService.limit}}
+    @offset={{this.skAppsService.offset}}
     as |pgc|
   >
     <AkTable @hoverable={{not this.disableRowClick}} as |tb|>
