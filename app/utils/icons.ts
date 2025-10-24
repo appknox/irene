@@ -164,6 +164,8 @@ export const MaterialSymbolsSet = [
   'indeterminate-check-box',
   'supervisor-account',
   'supervisor-account-outline',
+  'add-column-right-outline-rounded',
+  'cards-sharp',
 ] as const;
 
 export const MdiIconsSet = [
