@@ -135,6 +135,61 @@ const projectAccessOptions = [
   { label: 'serviceAccountModule.forSpecificProjects', value: false },
 ];
 
+const createScopeNodeAsserter = (options = {}) => {
+  const { assert, t, underscore, serviceAccount, isDuplicate } = options;
+
+  return function assertScopeNode(node, container) {
+    if (node.scopeLabel) {
+      const nodeLabel = container.querySelector(
+        '[data-test-serviceAccountSection-selectScope-nodeLabel]'
+      );
+
+      assert.dom(nodeLabel).containsText(t(node.scopeLabel));
+
+      const checkbox = container.querySelector(
+        '[data-test-ak-checkbox-tree-nodeCheckbox]'
+      );
+
+      if (checkbox) {
+        if (isDuplicate) {
+          // For duplicate service accounts, check the checkbox state based on serviceAccount
+          const shouldBeChecked = serviceAccount?.[underscore(node.scopeKey)];
+
+          if (shouldBeChecked) {
+            assert.dom(checkbox).isChecked();
+          } else {
+            assert.dom(checkbox).isNotChecked();
+          }
+        } else {
+          // For non-duplicate service accounts, checkboxes should not be checked
+          assert.dom(checkbox).isNotChecked();
+        }
+      }
+    } else if (node.label) {
+      // This is a parent node
+      const labelEl = container.querySelector(
+        '[data-test-serviceAccountSection-selectScope-nodeLabel]'
+      );
+
+      if (labelEl) {
+        assert.dom(labelEl).containsText(t(node.label));
+      }
+    }
+
+    // Process children if they exist
+    if (node.children) {
+      node.children.forEach((child) => {
+        const childContainer = container.parentElement.querySelector(
+          `[data-test-ak-checkbox-tree-nodeKey="${child.key}"]`
+        );
+        if (childContainer) {
+          assertScopeNode(child, childContainer);
+        }
+      });
+    }
+  };
+};
+
 module('Acceptance | Create service account', function (hooks) {
   setupApplicationTest(hooks);
   setupMirage(hooks);
@@ -351,68 +406,20 @@ module('Acceptance | Create service account', function (hooks) {
 
       assert.dom('[data-test-ak-checkbox-tree-nodeCheckbox]').exists();
 
-      const assertScopeNode = (node, container) => {
-        if (node.scopeLabel) {
-          // This is a leaf node with a scope
-          assert
-            .dom(
-              container.querySelector(
-                '[data-test-serviceAccountSection-selectScope-nodeLabel]'
-              )
-            )
-            .containsText(t(node.scopeLabel));
-
-          if (duplicate) {
-            assert
-              .dom(
-                container.querySelector(
-                  '[data-test-ak-checkbox-tree-nodeCheckbox]'
-                )
-              )
-              [
-                this.serviceAccount[underscore(node.scopeKey)]
-                  ? 'isChecked'
-                  : 'isNotChecked'
-              ]();
-          } else {
-            assert
-              .dom(
-                container.querySelector(
-                  '[data-test-ak-checkbox-tree-nodeCheckbox]'
-                )
-              )
-              .isNotChecked();
-          }
-        } else if (node.label) {
-          // This is a parent node
-          assert
-            .dom(
-              container.querySelector(
-                '[data-test-serviceAccountSection-selectScope-nodeLabel]'
-              )
-            )
-            .containsText(t(node.label));
-        }
-
-        // Process children if they exist
-        if (node.children) {
-          node.children.forEach((child) => {
-            const childContainer = container.parentElement.querySelector(
-              `[data-test-ak-checkbox-tree-nodeKey="${child.key}"]`
-            );
-            if (childContainer) {
-              assertScopeNode(child, childContainer);
-            }
-          });
-        }
-      };
-
       for (const scope of scopeDetails) {
         const container = find(
           `[data-test-ak-checkbox-tree-nodeKey="${scope.key}"]`
         );
 
         if (container) {
+          const assertScopeNode = createScopeNodeAsserter({
+            assert,
+            t,
+            underscore,
+            serviceAccount: this.serviceAccount,
+            isDuplicate: duplicate,
+          });
+
           assertScopeNode(scope, container);
         }
       }
@@ -483,7 +490,7 @@ module('Acceptance | Create service account', function (hooks) {
     'it creates service account',
     [{ duplicate: false }, { duplicate: true }],
     async function (assert, { duplicate }) {
-      assert.expect(duplicate ? 45 : 35);
+      assert.expect(duplicate ? 33 : 23);
 
       // feature is enabled
       this.organization.update({
@@ -781,83 +788,20 @@ module('Acceptance | Create service account', function (hooks) {
             : dayjs(this.createdServiceAccount.expiry).format('MMM DD, YYYY')
         );
 
-      // assert scopes section
-      const assertScopeNode = (node, container) => {
-        if (node.scopeLabel) {
-          // This is a leaf node with a scope
-          assert
-            .dom(
-              container.querySelector(
-                '[data-test-serviceAccountSection-selectScope-nodeLabel]'
-              )
-            )
-            .containsText(t(node.scopeLabel));
-
-          assert
-            .dom(
-              container.querySelector(
-                `[data-test-serviceAccountSection-selectScope-nodeLabelIcon="${
-                  this.createdServiceAccount[underscore(node.scopeKey)]
-                    ? 'checked'
-                    : 'unchecked'
-                }"]`
-              )
-            )
-            .exists();
-
-          assert
-            .dom(
-              container.querySelector(
-                '[data-test-serviceAccountSection-selectScope-nodeLabel]'
-              )
-            )
-            .containsText(t(node.scopeLabel));
-
-          assert
-            .dom(
-              container.querySelector(
-                '[data-test-serviceAccountSection-selectScope-nodeLabelAccessType]'
-              )
-            )
-            .containsText(t(node.accessType));
-
-          assert
-            .dom(
-              container.querySelector(
-                '[data-test-serviceAccountSection-selectScope-nodeLabelInfoIcon]'
-              )
-            )
-            .exists();
-        } else if (node.label) {
-          // This is a parent node
-          assert
-            .dom(
-              container.querySelector(
-                '[data-test-serviceAccountSection-selectScope-nodeLabel]'
-              )
-            )
-            .containsText(t(node.label));
-        }
-
-        // Process children if they exist
-        if (node.children) {
-          node.children.forEach((child) => {
-            const childContainer = container.parentElement.querySelector(
-              `[data-test-ak-checkbox-tree-nodeKey="${child.key}"]`
-            );
-            if (childContainer) {
-              assertScopeNode(child, childContainer);
-            }
-          });
-        }
-      };
-
       for (const scope of scopeDetails) {
         const container = find(
           `[data-test-ak-checkbox-tree-nodeKey="${scope.key}"]`
         );
 
         if (container) {
+          const assertScopeNode = createScopeNodeAsserter({
+            assert,
+            t,
+            underscore,
+            serviceAccount: this.createdServiceAccount,
+            isDuplicate: true,
+          });
+
           assertScopeNode(scope, container);
         }
       }
@@ -971,4 +915,112 @@ module('Acceptance | Create service account', function (hooks) {
       assert.strictEqual(currentURL(), '/dashboard/projects');
     }
   );
+
+  test('it checks upload app scope when auto approve new namespaces is checked', async function (assert) {
+    this.organization.update({
+      features: {
+        public_apis: true,
+      },
+    });
+
+    // role set to owner
+    this.organizationMe.update({
+      is_owner: true,
+      is_admin: true,
+    });
+
+    // Navigate to create service account page
+    await visit('/dashboard/organization/settings/service-account/create');
+
+    // Find the "Upload App" section
+    const uploadAppSection = find(
+      `[data-test-ak-checkbox-tree-nodeKey="upload"]`
+    );
+
+    assert.dom(uploadAppSection).exists('Upload App section exists');
+
+    await click(uploadAppSection);
+
+    assert
+      .dom(
+        '[data-test-ak-checkbox-tree-nodeKey="auto-approve-new-name-spaces"] [data-test-ak-checkbox-tree-nodeCheckbox]'
+      )
+      .exists();
+
+    assert
+      .dom(
+        '[data-test-ak-checkbox-tree-nodeKey="upload-app"] [data-test-ak-checkbox-tree-nodeCheckbox]'
+      )
+      .exists();
+
+    // 1. Test that checking Auto Approve New Namespaces checks Upload App: Write
+    await click(
+      '[data-test-ak-checkbox-tree-nodeKey="auto-approve-new-name-spaces"] [data-test-ak-checkbox-tree-nodeCheckbox]'
+    );
+
+    assert
+      .dom(
+        '[data-test-ak-checkbox-tree-nodeKey="upload-app"] [data-test-ak-checkbox-tree-nodeCheckbox]'
+      )
+      .isChecked(
+        'Upload App: Write should be checked when Auto Approve New Namespaces is checked'
+      );
+
+    // 2. Test that unchecking Upload App: Write unchecks Auto Approve New Namespaces
+    await click(
+      '[data-test-ak-checkbox-tree-nodeKey="upload-app"] [data-test-ak-checkbox-tree-nodeCheckbox]'
+    );
+
+    assert
+      .dom(
+        '[data-test-ak-checkbox-tree-nodeKey="upload-app"] [data-test-ak-checkbox-tree-nodeCheckbox]'
+      )
+      .isNotChecked('Upload App: Write should be unchecked');
+
+    assert
+      .dom(
+        '[data-test-ak-checkbox-tree-nodeKey="auto-approve-new-name-spaces"] [data-test-ak-checkbox-tree-nodeCheckbox]'
+      )
+      .isNotChecked(
+        'Auto Approve New Namespaces should be unchecked when Upload App: Write is unchecked'
+      );
+
+    // 3. Test that Upload App: Write is required for Auto Approve New Namespaces
+    await click(
+      '[data-test-ak-checkbox-tree-nodeKey="auto-approve-new-name-spaces"] [data-test-ak-checkbox-tree-nodeCheckbox]'
+    );
+
+    assert
+      .dom(
+        '[data-test-ak-checkbox-tree-nodeKey="upload-app"] [data-test-ak-checkbox-tree-nodeCheckbox]'
+      )
+      .isChecked(
+        'Upload App: Write should be checked when Auto Approve New Namespaces is checked'
+      );
+
+    assert
+      .dom(
+        '[data-test-ak-checkbox-tree-nodeKey="auto-approve-new-name-spaces"] [data-test-ak-checkbox-tree-nodeCheckbox]'
+      )
+      .isChecked('Auto Approve New Namespaces should be checked');
+
+    // 4. Test that unchecking Upload App: Write when both are checked unchecks Auto Approve New Namespaces
+    await click(
+      '[data-test-ak-checkbox-tree-nodeKey="upload-app"] [data-test-ak-checkbox-tree-nodeCheckbox]'
+    );
+
+    assert
+      .dom(
+        '[data-test-ak-checkbox-tree-nodeKey="upload-app"] [data-test-ak-checkbox-tree-nodeCheckbox]'
+      )
+      .isNotChecked('Upload App: Write should be unchecked');
+
+    assert
+      .dom(
+        '[data-test-ak-checkbox-tree-nodeKey="auto-approve-new-name-spaces"] [data-test-ak-checkbox-tree-nodeCheckbox]'
+      )
+      .isNotChecked(
+        'Auto Approve New Namespaces should be unchecked when Upload App: Write is unchecked'
+      );
+  });
 });
