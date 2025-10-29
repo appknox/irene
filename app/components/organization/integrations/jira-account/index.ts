@@ -66,6 +66,9 @@ export default class OrganizationIntegrationsJiraAccountComponent extends Compon
   @tracked showRevokeJIRAConfirmBox = false;
   @tracked integrationDrawerIsOpen = false;
 
+  @tracked jiraType: 'cloud' | 'dataCenter' = 'cloud';
+  @tracked isJiraDataCenter = false;
+
   constructor(
     owner: unknown,
     args: OrganizationIntegrationsJiraAccountSignature['Args']
@@ -115,6 +118,12 @@ export default class OrganizationIntegrationsJiraAccountComponent extends Compon
     return this.isJIRAConnected || this.isLoadingJIRAIntegrationInfo;
   }
 
+  get passwordLabel() {
+    return this.isJiraDataCenter
+      ? this.intl.t('accessToken')
+      : this.intl.t('apiKey');
+  }
+
   @action
   openDrawer() {
     this.integrationDrawerIsOpen = true;
@@ -123,6 +132,19 @@ export default class OrganizationIntegrationsJiraAccountComponent extends Compon
   @action
   closeDrawer() {
     this.integrationDrawerIsOpen = false;
+  }
+
+  @action
+  handleJiraTypeChange(event: Event) {
+    const target = event.target as HTMLInputElement;
+
+    this.jiraType = target.value as typeof this.jiraType;
+
+    if (this.jiraType === 'dataCenter') {
+      this.isJiraDataCenter = true;
+    } else {
+      this.isJiraDataCenter = false;
+    }
   }
 
   confirmCallback() {
@@ -163,6 +185,14 @@ export default class OrganizationIntegrationsJiraAccountComponent extends Compon
     await changeset.validate();
 
     if (!changeset.isValid) {
+      if (!this.changeset.password || this.changeset.password.trim() === '') {
+        this.notify.error(
+          `${this.passwordLabel} ${this.intl.t('canNotBeEmpty')}`
+        );
+
+        return;
+      }
+
       if (changeset.errors && changeset.errors[0].validation) {
         this.notify.error(changeset.errors[0].validation, ENV.notifications);
       }
@@ -174,6 +204,7 @@ export default class OrganizationIntegrationsJiraAccountComponent extends Compon
       host: changeset.host.trim(),
       username: changeset.username.trim(),
       password: changeset.password,
+      is_data_center: this.isJiraDataCenter,
     };
 
     try {

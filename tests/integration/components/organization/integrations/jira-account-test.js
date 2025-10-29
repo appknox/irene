@@ -68,6 +68,10 @@ module(
         .dom('[data-test-orgIntegrations-configDrawer-title]')
         .hasText(t('jiraIntegration'));
 
+      assert.dom('[data-test-jiraAccount-jiraType-cloud]').isChecked();
+
+      assert.dom('[data-test-jiraAccount-jiraType-dataCenter]').isNotChecked();
+
       assert
         .dom('[data-test-jiraAccount-hostInput]')
         .isNotDisabled()
@@ -144,6 +148,7 @@ module(
 
       await click('[data-test-org-integration-card-manageBtn]');
 
+      assert.dom('[data-test-jiraAccount-jiraType-cloud]').doesNotExist();
       assert.dom('[data-test-jiraAccount-hostInput]').doesNotExist();
       assert.dom('[data-test-jiraAccount-usernameInput]').doesNotExist();
       assert.dom('[data-test-jiraAccount-apiKeyInput]').doesNotExist();
@@ -363,7 +368,8 @@ module(
     test.each(
       'it should integrate jira-account',
       [
-        { fail: false },
+        { fail: false, dataCenter: false },
+        { fail: false, dataCenter: true },
         { fail: true, errorMsg: () => t('pleaseTryAgain') },
         {
           fail: true,
@@ -381,7 +387,7 @@ module(
           errorMsg: () => t('tInValidCredentials'),
         },
       ],
-      async function (assert, { fail, error, errorMsg }) {
+      async function (assert, { fail, error, errorMsg, dataCenter }) {
         const jiraIntegrationProps = {
           host: 'https://appknox.atlassian.net/',
           username: 'appknox',
@@ -414,6 +420,20 @@ module(
           .hasText(t('connect'));
 
         await click('[data-test-org-integration-card-connectBtn]');
+
+        if (dataCenter) {
+          assert.dom('[data-test-jiraAccount-jiraType-cloud]').isChecked();
+
+          assert
+            .dom('[data-test-jiraAccount-jiraType-dataCenter]')
+            .isNotChecked();
+
+          await click('[data-test-jiraAccount-jiraType-dataCenter]');
+
+          assert.dom('[data-test-jiraAccount-jiraType-cloud]').isNotChecked();
+
+          assert.dom('[data-test-jiraAccount-jiraType-dataCenter]').isChecked();
+        }
 
         assert
           .dom('[data-test-jiraAccount-hostInput]')
@@ -506,5 +526,65 @@ module(
         }
       }
     );
+
+    test('it shows error messages for empty fields', async function (assert) {
+      this.server.get('/organizations/:id/integrate_jira', () => {
+        return new Response(404);
+      });
+
+      const jiraIntegrationProps = {
+        host: 'https://appknox.atlassian.net/',
+        username: 'appknox',
+      };
+
+      await render(hbs`<Organization::Integrations::JiraAccount />`);
+
+      assert
+        .dom('[data-test-org-integration-card-title="JIRA"]')
+        .hasText(t('jira'));
+
+      assert
+        .dom('[data-test-org-integration-card-description="JIRA"]')
+        .hasText(t('jiraIntegrationDesc'));
+
+      assert
+        .dom('[data-test-org-integration-card-connectBtn]')
+        .isNotDisabled()
+        .hasText(t('connect'));
+
+      await click('[data-test-org-integration-card-connectBtn]');
+
+      assert
+        .dom('[data-test-orgIntegrations-configDrawer-title]')
+        .hasText(t('jiraIntegration'));
+
+      await fillIn(
+        '[data-test-jiraAccount-hostInput]',
+        jiraIntegrationProps.host
+      );
+
+      await fillIn(
+        '[data-test-jiraAccount-usernameInput]',
+        jiraIntegrationProps.username
+      );
+
+      await click('[data-test-orgIntegrations-configDrawer-integrateBtn]');
+
+      const notify = this.owner.lookup('service:notifications');
+
+      assert.strictEqual(
+        notify.errorMsg,
+        `${t('apiKey')} ${t('canNotBeEmpty')}`
+      );
+
+      await click('[data-test-jiraAccount-jiraType-dataCenter]');
+
+      await click('[data-test-orgIntegrations-configDrawer-integrateBtn]');
+
+      assert.strictEqual(
+        notify.errorMsg,
+        `${t('accessToken')} ${t('canNotBeEmpty')}`
+      );
+    });
   }
 );
