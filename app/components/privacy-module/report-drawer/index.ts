@@ -50,7 +50,9 @@ export default class PrivacyModuleReportDrawerComponent extends Component<Privac
 
       const project = await this.privacyReport?.privacyProject;
 
-      this.privacyModule.showPiiUpdated = project.highlight;
+      this.privacyModule.showPiiUpdated = project.piiHighlight;
+
+      this.privacyModule.showGeoUpdated = project.geoHighlight;
     } catch (e) {
       this.notify.error(parseError(e, this.tPleaseTryAgain));
     }
