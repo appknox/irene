@@ -1220,6 +1220,15 @@ body {
   );
   --file-details-manual-scan-results-background-main: var(--background-main);
 
+  // variables for file-details/screenshots
+  --file-details-screenshots-border-radius: var(--border-radius);
+  --file-details-screenshots-background-color: var(--neutral-grey-100);
+  --file-details-screenshots-background-main: var(--background-main);
+  --file-details-screenshots-border-color-1: var(--border-color-1);
+  --file-details-screenshots-border-color-2: var(--border-color-2);
+  --file-details-screenshots-bg-color-white: var(--common-white);
+  --file-details-screenshots-background-disabled: var(--neutral-grey-50);
+
   // variables for file-details/vulnerability-analysis/header
   --file-details-vulnerability-analysis-header-border-color: var(
     --border-color-1
