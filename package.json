@@ -13,7 +13,7 @@
   "scripts": {
     "build": "ember build --environment=production",
     "build:test": "ember build --environment=test",
-    "build:icons": "tsx ./scripts/build-icons.mjs",
+    "build:icons": "tsx ./scripts/build-icons.mjs || node ./scripts/build-icons.mjs",
     "lint": "concurrently \"npm:lint:*(!fix)\" --names \"lint:\"",
     "lint:css": "stylelint \"**/*.{css,scss}\" --allow-empty-input",
     "lint:css:fix": "concurrently \"npm:lint:css -- --fix\"",
