@@ -59,6 +59,12 @@ module('Acceptance | file details', function (hooks) {
       this.server.create('analysis', { id, vulnerability: v.id }).toJSON()
     );
 
+    analyses.map(async (analysis) => {
+      await this.server.create('detailed-analysis', {
+        id: analysis.id,
+      });
+    });
+
     const profile = this.server.create('profile', { id: '1' });
 
     const project = this.server.create('project', {
@@ -221,6 +227,10 @@ module('Acceptance | file details', function (hooks) {
   test('test analysis row click to navigate to analysis page', async function (assert) {
     this.server.get('/v2/analyses/:id', (schema, req) => {
       return schema.analyses.find(`${req.params.id}`)?.toJSON();
+    });
+
+    this.server.get('/v2/analyses/:id/detailed-analysis', (schema, req) => {
+      return schema.detailedAnalyses.find(`${req.params.id}`)?.toJSON();
     });
 
     await visit('/dashboard/file/1');
