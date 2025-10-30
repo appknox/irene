@@ -42,14 +42,18 @@
 
         </AkStack>
 
-        <AkTypography
-          data-test-fileChartSeverityLevel-severityCountValue
-          @variant='subtitle1'
-          @align='right'
-          class='pl-2'
-        >
-          {{slc.value}}
-        </AkTypography>
+        {{#if this.fetchFileRisk.isRunning}}
+          <AkSkeleton @width='22px' @height='19px' @variant='rectangular' />
+        {{else}}
+          <AkTypography
+            data-test-fileChartSeverityLevel-severityCountValue
+            @variant='subtitle1'
+            @align='right'
+            class='pl-2'
+          >
+            {{slc.value}}
+          </AkTypography>
+        {{/if}}
       </AkStack>
 
       {{#if slc.hasOverridenPassedRisks}}

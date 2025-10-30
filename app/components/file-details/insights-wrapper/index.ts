@@ -5,10 +5,12 @@ import { inject as service } from '@ember/service';
 import IntlService from 'ember-intl/services/intl';
 
 import FileModel from 'irene/models/file';
+import AnalysisModel from 'irene/models/analysis';
 
 export interface FileDetailsInsightsWrapperSignature {
   Args: {
     file: FileModel;
+    fileAnalyses: AnalysisModel[];
   };
 }
 

@@ -86,7 +86,7 @@ module('Unit | Utility | compare-files', function (hooks) {
     ],
     async function (assert, [file1ComputedRisk, file2ComputedRisk]) {
       const files = this.createFiles([file1ComputedRisk, file2ComputedRisk]);
-      const comparisons = compareFiles(files[0], files[1]);
+      const comparisons = compareFileAnalyses(files[0], files[1]);
       const categories = getFileComparisonCategories(comparisons);
 
       assert.strictEqual(categories.resolved.length, comparisons.length);
@@ -109,7 +109,7 @@ module('Unit | Utility | compare-files', function (hooks) {
     ],
     async function (assert, [file1ComputedRisk, file2ComputedRisk]) {
       const files = this.createFiles([file1ComputedRisk, file2ComputedRisk]);
-      const comparisons = compareFiles(files[0], files[1]);
+      const comparisons = compareFileAnalyses(files[0], files[1]);
       const categories = getFileComparisonCategories(comparisons);
 
       assert.strictEqual(categories.newRisks.length, comparisons.length);
@@ -128,7 +128,7 @@ module('Unit | Utility | compare-files', function (hooks) {
     ],
     async function (assert, [file1ComputedRisk, file2ComputedRisk]) {
       const files = this.createFiles([file1ComputedRisk, file2ComputedRisk]);
-      const comparisons = compareFiles(files[0], files[1]);
+      const comparisons = compareFileAnalyses(files[0], files[1]);
       const categories = getFileComparisonCategories(comparisons);
 
       assert.strictEqual(categories.untested.length, comparisons.length);
@@ -147,7 +147,7 @@ module('Unit | Utility | compare-files', function (hooks) {
     ],
     async function (assert, [file1ComputedRisk, file2ComputedRisk]) {
       const files = this.createFiles([file1ComputedRisk, file2ComputedRisk]);
-      const comparisons = compareFiles(files[0], files[1]);
+      const comparisons = compareFileAnalyses(files[0], files[1]);
       const categories = getFileComparisonCategories(comparisons);
 
       assert.strictEqual(categories.recurring.length, comparisons.length);

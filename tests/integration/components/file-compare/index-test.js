@@ -111,7 +111,7 @@ module('Integration | Component | file-compare', function (hooks) {
   test('it renders', async function (assert) {
     await render(
       hbs`<FileCompare
-          @file1={{this.file1}} 
+          @file1={{this.file1}}
           @file2={{this.file2}}
           @unknownAnalysisStatus={{this.unknownAnalysisStatus}}
         />`
@@ -142,7 +142,7 @@ module('Integration | Component | file-compare', function (hooks) {
       .exists();
 
     // Tabs test
-    const comparisons = compareFiles(this.file1, this.file2);
+    const comparisons = compareFileAnalyses(this.file1, this.file2);
     const fileCompareCategories = getFileComparisonCategories(comparisons);
 
     const tabs = [
@@ -195,7 +195,7 @@ module('Integration | Component | file-compare', function (hooks) {
 
     await render(
       hbs`<FileCompare
-          @file1={{this.file1}} 
+          @file1={{this.file1}}
           @file2={{this.file2}}
           @unknownAnalysisStatus={{this.unknownAnalysisStatus}}
         />`
@@ -209,7 +209,7 @@ module('Integration | Component | file-compare', function (hooks) {
   test('it toggles file overview header on show more or show less icon click', async function (assert) {
     await render(
       hbs`<FileCompare
-          @file1={{this.file1}} 
+          @file1={{this.file1}}
           @file2={{this.file2}}
         />`
     );

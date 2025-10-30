@@ -1,6 +1,7 @@
 import Controller from '@ember/controller';
 import { service } from '@ember/service';
 import type IntlService from 'ember-intl/services/intl';
+import type AnalysisModel from 'irene/models/analysis';
 
 import type FileModel from 'irene/models/file';
 import { type AkBreadcrumbsItemProps } from 'irene/services/ak-breadcrumbs';
@@ -8,7 +9,11 @@ import { type AkBreadcrumbsItemProps } from 'irene/services/ak-breadcrumbs';
 export default class AuthenticatedDashboardFile extends Controller {
   @service declare intl: IntlService;
 
-  declare model: { file: FileModel; profileId: number };
+  declare model: {
+    file: FileModel;
+    profileId: number;
+    fileAnalyses: AnalysisModel[];
+  };
 
   get breadcrumbs(): AkBreadcrumbsItemProps {
     return {
