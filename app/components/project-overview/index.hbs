@@ -1,17 +1,15 @@
-{{#let (or this.project.lastFileId.content null) as |lastFile|}}
-  <LinkTo
-    @route='authenticated.dashboard.file'
-    @model={{lastFile.id}}
-    local-class='project-card'
-    data-test-project-overview-container
-    data-test-project-overview-card='{{lastFile.id}}'
-  >
-    <FileOverview
-      ...attributes
-      @file={{lastFile}}
-      @profileId={{this.project.activeProfileId}}
-      @hideCTAs={{true}}
-      @showMenuButton={{true}}
-    />
-  </LinkTo>
-{{/let}}
+<LinkTo
+  @route='authenticated.dashboard.file'
+  @model={{this.project.lastFile.id}}
+  local-class='project-card'
+  data-test-project-overview-container
+  data-test-project-overview-card='{{this.project.lastFile.id}}'
+>
+  <FileOverview
+    ...attributes
+    @file={{this.project.lastFile}}
+    @profileId={{this.project.activeProfileId}}
+    @hideCTAs={{true}}
+    @showMenuButton={{true}}
+  />
+</LinkTo>

@@ -32,11 +32,7 @@
 
   <FileDetails::ScanActions::ScanOverview
     @file={{@file}}
-    @vulnerabilityCount={{if
-      @file.isManualDone
-      @file.manualVulnerabilityCount
-      null
-    }}
+    @vulnerabilityCount={{if @file.isManualDone @vulnerabilityCount null}}
     data-test-fileDetails-scanActions-scanOverview-manualScanRoot
   />
 </AkStack>

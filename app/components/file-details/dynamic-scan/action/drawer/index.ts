@@ -25,6 +25,7 @@ export interface FileDetailsDynamicScanActionDrawerSignature {
     onClose: () => void;
     file: FileModel;
     isAutomatedScan?: boolean;
+    reloadLatestDsScan?: () => void;
   };
 }
 
@@ -161,6 +162,7 @@ export default class FileDetailsDynamicScanActionDrawerComponent extends Compone
       });
 
       await this.file.reload();
+      this.args.reloadLatestDsScan?.();
 
       this.args.onClose();
 

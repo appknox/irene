@@ -108,6 +108,10 @@ export default class WebsocketService extends Service {
     socket.on('counter', this.onCounter, this);
     socket.on('notification', this.onNotification, this);
 
+    // File websocket notifications
+    socket.on('model_created', this.onModelNotification, this);
+    socket.on('model_updated', this.onModelNotification, this);
+
     socket.on('close', (event) => {
       this.logger.warning('socket close called. Trying to reconnect', event);
 
@@ -121,6 +125,22 @@ export default class WebsocketService extends Service {
     this.connectedSocket?.emit('subscribe', {
       room: this.currentSocketID,
     });
+  }
+
+  /**
+   * Handle model creation and update websocket notifications
+   * This will push the model to the store without triggering any queries
+   * @param data - The data object containing the file ID and type
+   * @returns void
+   */
+  onModelNotification(data: { model_name: string; data: object }) {
+    if (!data || !data.model_name || !data.data) {
+      this.logger.error(`invalid data for "onModelNotification"`);
+    }
+
+    // Push the model directly to the store
+    const normalized = this.store.normalize(data.model_name, data.data);
+    this.store.push(normalized);
   }
 
   onObject(data: { id?: string; type?: string } = {}) {

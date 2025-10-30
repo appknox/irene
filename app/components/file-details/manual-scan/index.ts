@@ -13,6 +13,7 @@ import type ManualscanModel from 'irene/models/manualscan';
 import type OrganizationService from 'irene/services/organization';
 import type IreneAjaxService from 'irene/services/ajax';
 import type { AjaxError } from 'irene/services/ajax';
+import FileRiskModel from 'irene/models/file-risk';
 
 export interface FileDetailsManualScanSignature {
   Args: {
@@ -31,11 +32,13 @@ export default class FileDetailsManualScanComponent extends Component<FileDetail
   @service('notifications') declare notify: NotificationService;
 
   @tracked manualscan: ManualscanModel | null = null;
+  @tracked fileRisk: FileRiskModel | null = null;
 
   constructor(owner: unknown, args: FileDetailsManualScanSignature['Args']) {
     super(owner, args);
 
     this.fetchManualScan.perform();
+    this.fetchFileRisk.perform();
   }
 
   get tabItems() {
@@ -51,7 +54,7 @@ export default class FileDetailsManualScanComponent extends Component<FileDetail
         hidden: !this.args.file.isManualDone,
         label: this.intl.t('manualScanResults'),
         hasBadge: true,
-        badgeCount: this.args.file.manualVulnerabilityCount,
+        badgeCount: this.fileRisk?.get('riskCountByScanType')?.manual,
         route: 'authenticated.dashboard.file.manual-scan.results',
         currentWhen: 'authenticated.dashboard.file.manual-scan.results',
       },
@@ -168,6 +171,10 @@ export default class FileDetailsManualScanComponent extends Component<FileDetail
       const e = error as AjaxError;
       this.notify.error(e.payload.error);
     }
+  });
+
+  fetchFileRisk = task(async () => {
+    this.fileRisk = await this.args.file.fetchFileRisk();
   });
 }
 

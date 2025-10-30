@@ -7,6 +7,7 @@ export default class CommonDRFAdapter extends RESTAdapter {
   host: string;
   namespace: string;
   namespace_v2: string;
+  namespace_v3: string;
   addTrailingSlashes: boolean;
 
   @service declare organization: OrganizationService;

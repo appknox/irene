@@ -10,15 +10,13 @@ type ProjectQueryParamOption = Record<string, string | number> & {
 
 export default class ProjectAdapter extends CommonDRFAdapter {
   _buildURL(modelName: string | number, id?: string | number) {
-    const baseurl = `${this.namespace_v2}/projects`;
+    const baseurl = `${this.namespace_v3}/projects`;
 
     if (id) {
       return this.buildURLFromBase(`${baseurl}/${encodeURIComponent(id)}`);
     }
 
-    return this.buildURLFromBase(
-      `${this.namespace}/organizations/${this.organization?.selected?.id}/projects`
-    );
+    return this.buildURLFromBase(baseurl);
   }
 
   urlForQuery<k extends string | number>(

@@ -1,4 +1,4 @@
-import { inject as service } from '@ember/service';
+import { service } from '@ember/service';
 import Component from '@glimmer/component';
 import { task } from 'ember-concurrency';
 import IntlService from 'ember-intl/services/intl';
@@ -8,15 +8,18 @@ import dayjs from 'dayjs';
 
 import FileModel from 'irene/models/file';
 import UnknownAnalysisStatusModel from 'irene/models/unknown-analysis-status';
+import AnalysisModel from 'irene/models/analysis';
 
 import {
-  compareFiles,
+  compareFileAnalyses,
   getFileComparisonCategories,
 } from 'irene/utils/compare-files';
+import parseError from 'irene/utils/parse-error';
 
 export interface FileDetailsKeyInsightsSignature {
   Args: {
     file: FileModel;
+    fileAnalyses: AnalysisModel[];
   };
 }
 
@@ -28,11 +31,14 @@ export default class FileDetailsKeyInsightsComponent extends Component<FileDetai
   @service('notifications') declare notify: NotificationService;
 
   @tracked unknownAnalysisStatus?: UnknownAnalysisStatusModel;
+  @tracked previousFileAnalyses: AnalysisModel[] = [];
+  @tracked previousFile?: FileModel | null = null;
 
   constructor(owner: unknown, args: FileDetailsKeyInsightsSignature['Args']) {
     super(owner, args);
 
     this.fetchUnknownAnalysisStatus.perform();
+    this.getPreviousFile.perform();
   }
 
   get currentFile() {
@@ -41,10 +47,6 @@ export default class FileDetailsKeyInsightsComponent extends Component<FileDetai
 
   get hasComparison() {
     return this.comparison !== null;
-  }
-
-  get previousFile() {
-    return this.currentFile.get('previousFile').content;
   }
 
   get compareRouteModel() {
@@ -79,7 +81,7 @@ export default class FileDetailsKeyInsightsComponent extends Component<FileDetai
   get comparison() {
     return this.previousFile
       ? getFileComparisonCategories(
-          compareFiles(this.currentFile, this.previousFile)
+          compareFileAnalyses(this.args.fileAnalyses, this.previousFileAnalyses)
         )
       : null;
   }
@@ -91,6 +93,23 @@ export default class FileDetailsKeyInsightsComponent extends Component<FileDetai
         id: this.args.file.profile.get('id'),
       }
     );
+  });
+
+  getPreviousFile = task(async () => {
+    try {
+      const previousFile = await this.args.file.fetchPreviousFile();
+      this.previousFile = previousFile;
+
+      if (previousFile) {
+        const previousFileAnalyses = await this.store.query('analysis', {
+          fileId: previousFile.id,
+        });
+
+        this.previousFileAnalyses = previousFileAnalyses.slice();
+      }
+    } catch (error) {
+      this.notify.error(parseError(error, this.intl.t('pleaseTryAgain')));
+    }
   });
 }
 

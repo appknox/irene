@@ -5,6 +5,9 @@ import type IntlService from 'ember-intl/services/intl';
 
 import type SkInventoryAppModel from 'irene/models/sk-inventory-app';
 import type FileModel from 'irene/models/file';
+import { tracked } from 'tracked-built-ins';
+import FileRiskModel from 'irene/models/file-risk';
+import { task } from 'ember-concurrency';
 
 interface StoreknoxInventoryDetailsAppDetailsVaResultsLatestFileResultsSignature {
   Args: {
@@ -15,6 +18,17 @@ interface StoreknoxInventoryDetailsAppDetailsVaResultsLatestFileResultsSignature
 
 export default class StoreknoxInventoryDetailsAppDetailsVaResultsLatestFileResultsComponent extends Component<StoreknoxInventoryDetailsAppDetailsVaResultsLatestFileResultsSignature> {
   @service declare intl: IntlService;
+
+  @tracked corePrjLatestVersionRisk: FileRiskModel | null = null;
+
+  constructor(
+    owner: unknown,
+    args: StoreknoxInventoryDetailsAppDetailsVaResultsLatestFileResultsSignature['Args']
+  ) {
+    super(owner, args);
+
+    this.fetchFileRisk.perform();
+  }
 
   get coreProjectLatestVersion() {
     return this.args.coreProjectLatestVersion;
@@ -27,12 +41,12 @@ export default class StoreknoxInventoryDetailsAppDetailsVaResultsLatestFileResul
   // Latest file related to project on Appknox
   get vaResultsRiskInfo() {
     return {
-      critical: this.coreProjectLatestVersion?.get('countRiskCritical'),
-      high: this.coreProjectLatestVersion?.get('countRiskHigh'),
-      medium: this.coreProjectLatestVersion?.get('countRiskMedium'),
-      low: this.coreProjectLatestVersion?.get('countRiskLow'),
-      passed: this.coreProjectLatestVersion?.get('countRiskNone'),
-      untested: this.coreProjectLatestVersion?.get('countRiskUnknown'),
+      critical: this.corePrjLatestVersionRisk?.get('riskCountCritical'),
+      high: this.corePrjLatestVersionRisk?.get('riskCountHigh'),
+      medium: this.corePrjLatestVersionRisk?.get('riskCountMedium'),
+      low: this.corePrjLatestVersionRisk?.get('riskCountLow'),
+      passed: this.corePrjLatestVersionRisk?.get('riskCountPassed'),
+      untested: this.corePrjLatestVersionRisk?.get('riskCountUnknown'),
     };
   }
 
@@ -60,6 +74,13 @@ export default class StoreknoxInventoryDetailsAppDetailsVaResultsLatestFileResul
       },
     ];
   }
+
+  fetchFileRisk = task(async () => {
+    if (this.coreProjectLatestVersion) {
+      this.corePrjLatestVersionRisk =
+        await this.coreProjectLatestVersion.fetchFileRisk();
+    }
+  });
 }
 
 declare module '@glint/environment-ember-loose/registry' {

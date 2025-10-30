@@ -2,6 +2,7 @@ import Controller from '@ember/controller';
 import { service } from '@ember/service';
 
 import type IntlService from 'ember-intl/services/intl';
+import AnalysisModel from 'irene/models/analysis';
 import type FileModel from 'irene/models/file';
 import type VulnerabilityModel from 'irene/models/vulnerability';
 import type { AkBreadcrumbsItemProps } from 'irene/services/ak-breadcrumbs';
@@ -13,6 +14,8 @@ export default class AuthenticatedDashboardFileVulCompare extends Controller {
     file1: FileModel;
     file2: FileModel;
     vulnerability: VulnerabilityModel;
+    file1Analyses: AnalysisModel[];
+    file2Analyses: AnalysisModel[];
   };
 
   get breadcrumbs(): AkBreadcrumbsItemProps {

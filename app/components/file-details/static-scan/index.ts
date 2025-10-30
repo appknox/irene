@@ -11,6 +11,9 @@ import ENV from 'irene/config/environment';
 import type FileModel from 'irene/models/file';
 import type IreneAjaxService from 'irene/services/ajax';
 import type { AjaxError } from 'irene/services/ajax';
+import type AnalysisModel from 'irene/models/analysis';
+import type FileRiskModel from 'irene/models/file-risk';
+import Store from '@ember-data/store';
 
 export interface FileDetailsStaticScanSignature {
   Args: {
@@ -20,14 +23,24 @@ export interface FileDetailsStaticScanSignature {
 
 export default class FileDetailsStaticScan extends Component<FileDetailsStaticScanSignature> {
   @service declare intl: IntlService;
+  @service declare store: Store;
   @service('notifications') declare notify: NotificationService;
   @service declare ajax: IreneAjaxService;
 
+  @tracked fileAnalyses: AnalysisModel[] = [];
+  @tracked fileRisk: FileRiskModel | null = null;
   @tracked showRescanModal = false;
 
   @tracked sorts: EmberTableSort[] = [
     { isAscending: false, valuePath: 'computedRisk' },
   ];
+
+  constructor(owner: unknown, args: FileDetailsStaticScanSignature['Args']) {
+    super(owner, args);
+
+    this.fetchFileAnalyses.perform();
+    this.fetchFileRisk.perform();
+  }
 
   get tRescanInitiated() {
     return this.intl.t('rescanInitiated');
@@ -57,10 +70,6 @@ export default class FileDetailsStaticScan extends Component<FileDetailsStaticSc
 
   get file() {
     return this.args.file;
-  }
-
-  get analyses() {
-    return this.file.analyses;
   }
 
   get tabItems() {
@@ -113,6 +122,22 @@ export default class FileDetailsStaticScan extends Component<FileDetailsStaticSc
     } catch (error) {
       this.notify.error((error as AjaxError).payload.detail);
     }
+  });
+
+  get staticVulnerabilityCount() {
+    return this.fileRisk?.get('riskCountByScanType')?.static;
+  }
+
+  fetchFileAnalyses = task(async () => {
+    const analyses = await this.store.query('analysis', {
+      fileId: this.args.file.id,
+    });
+
+    this.fileAnalyses = analyses.slice();
+  });
+
+  fetchFileRisk = task(async () => {
+    this.fileRisk = await this.args.file.fetchFileRisk();
   });
 }
 

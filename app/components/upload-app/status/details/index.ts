@@ -1,18 +1,19 @@
 /* eslint-disable ember/no-observers */
 import Component from '@glimmer/component';
-import dayjs from 'dayjs';
-import { inject as service } from '@ember/service';
-import IntlService from 'ember-intl/services/intl';
 import { addObserver, removeObserver } from '@ember/object/observers';
 import { action } from '@ember/object';
-import RouterService from '@ember/routing/router-service';
 import { helper } from '@ember/component/helper';
+import { service } from '@ember/service';
+import dayjs from 'dayjs';
+import type IntlService from 'ember-intl/services/intl';
+import type RouterService from '@ember/routing/router-service';
+
 import relativeTime from 'dayjs/plugin/relativeTime';
 
-import { SubmissionModelWithSystemFileData } from '../index';
 import ENUMS from 'irene/enums';
-import ProjectService from 'irene/services/project';
-import UploadAppService from 'irene/services/upload-app';
+import type { SubmissionModelWithSystemFileData } from '../index';
+import type ProjectService from 'irene/services/project';
+import type UploadAppService from 'irene/services/upload-app';
 
 dayjs.extend(relativeTime);
 

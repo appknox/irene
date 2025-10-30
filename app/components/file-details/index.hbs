@@ -9,7 +9,10 @@
 
     <FileDetails::ScanActions @file={{@file}} />
 
-    <FileDetails::InsightsWrapper @file={{@file}} />
+    <FileDetails::InsightsWrapper
+      @file={{@file}}
+      @fileAnalyses={{this.fileAnalyses}}
+    />
   </AkStack>
 
   <FileDetails::VulnerabilityAnalysis @file={{@file}} />

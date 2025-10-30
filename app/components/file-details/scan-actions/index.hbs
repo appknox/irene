@@ -5,22 +5,34 @@
   data-test-fileDetailScanActions-scan-type-cards
 >
   <div local-class='scan-status-card'>
-    <FileDetails::ScanActions::StaticScan @file={{@file}} />
+    <FileDetails::ScanActions::StaticScan
+      @file={{@file}}
+      @vulnerabilityCount={{this.riskCountByScanType.static}}
+    />
   </div>
 
   <div local-class='scan-status-card' data-test-cy='dynamicScan-infoContainer'>
-    <FileDetails::ScanActions::DynamicScan @file={{@file}} />
+    <FileDetails::ScanActions::DynamicScan
+      @file={{@file}}
+      @vulnerabilityCount={{this.riskCountByScanType.dynamic}}
+    />
   </div>
 
   {{#if this.isAPIScanEnabled}}
     <div local-class='scan-status-card'>
-      <FileDetails::ScanActions::ApiScan @file={{@file}} />
+      <FileDetails::ScanActions::ApiScan
+        @file={{@file}}
+        @vulnerabilityCount={{this.riskCountByScanType.api}}
+      />
     </div>
   {{/if}}
 
   {{#unless this.isManualScanDisabled}}
     <div local-class='scan-status-card'>
-      <FileDetails::ScanActions::ManualScan @file={{@file}} />
+      <FileDetails::ScanActions::ManualScan
+        @file={{@file}}
+        @vulnerabilityCount={{this.riskCountByScanType.manual}}
+      />
     </div>
   {{/unless}}
 </AkStack>

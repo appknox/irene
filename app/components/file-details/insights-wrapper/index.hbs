@@ -13,6 +13,6 @@
   </AkTabs>
 
   {{#let (component this.activeTabComponent) as |Component|}}
-    <Component @file={{@file}} />
+    <Component @file={{@file}} @fileAnalyses={{@fileAnalyses}} />
   {{/let}}
 </div>

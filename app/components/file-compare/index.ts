@@ -12,15 +12,19 @@ import AkBreadcrumbsService from 'irene/services/ak-breadcrumbs';
 import { scrollDashboardMainContainerTo } from 'irene/utils/scroll-to-top';
 
 import {
-  compareFiles,
+  compareFileAnalyses,
   getFileComparisonCategories,
 } from 'irene/utils/compare-files';
+
+import AnalysisModel from 'irene/models/analysis';
 
 interface FileCompareSignature {
   Args: {
     file1: FileModel | null;
     file2: FileModel | null;
-    unknownAnalysisStatus: UnknownAnalysisStatusModel | null;
+    unknownAnalysisStatus?: UnknownAnalysisStatusModel | null;
+    file1Analyses: AnalysisModel[];
+    file2Analyses: AnalysisModel[];
   };
 }
 
@@ -45,7 +49,10 @@ export default class FileCompareComponent extends Component<FileCompareSignature
   }
 
   get comparisons() {
-    return compareFiles(this.file1, this.file2);
+    return compareFileAnalyses(
+      this.args.file1Analyses,
+      this.args.file2Analyses
+    );
   }
 
   get tabItems() {
