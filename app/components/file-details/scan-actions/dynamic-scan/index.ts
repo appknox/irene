@@ -4,11 +4,15 @@ import { action } from '@ember/object';
 import type IntlService from 'ember-intl/services/intl';
 
 import type FileModel from 'irene/models/file';
-import { DsComputedStatus } from 'irene/models/dynamicscan';
+import DynamicscanModel, { DsComputedStatus } from 'irene/models/dynamicscan';
+import { tracked } from '@glimmer/tracking';
+import { task } from 'ember-concurrency';
+import parseError from 'irene/utils/parse-error';
 
 export interface FileDetailsScanActionsDynamicScanSignature {
   Args: {
     file: FileModel;
+    vulnerabilityCount: number | null;
   };
 }
 
@@ -16,12 +20,16 @@ export default class FileDetailsScanActionsDynamicScanComponent extends Componen
   @service declare intl: IntlService;
   @service('notifications') declare notify: NotificationService;
 
-  get automatedDynamicScan() {
-    return this.args.file.lastAutomatedDynamicScan;
-  }
+  @tracked automatedDynamicScan: DynamicscanModel | null = null;
+  @tracked manualDynamicScan: DynamicscanModel | null = null;
 
-  get manualDynamicScan() {
-    return this.args.file.lastManualDynamicScan;
+  constructor(
+    owner: unknown,
+    args: FileDetailsScanActionsDynamicScanSignature['Args']
+  ) {
+    super(owner, args);
+
+    this.loadLastDynamicScans.perform();
   }
 
   get status() {
@@ -39,6 +47,10 @@ export default class FileDetailsScanActionsDynamicScanComponent extends Componen
     }
 
     return singleStatus || DsComputedStatus.NOT_STARTED;
+  }
+
+  get isDynamicScanLoading() {
+    return this.loadLastDynamicScans.isRunning;
   }
 
   @action
@@ -76,6 +88,18 @@ export default class FileDetailsScanActionsDynamicScanComponent extends Componen
 
     return DsComputedStatus.NOT_STARTED;
   }
+
+  loadLastDynamicScans = task(async () => {
+    try {
+      this.automatedDynamicScan =
+        await this.args.file.getFileLastAutomatedDynamicScan();
+
+      this.manualDynamicScan =
+        await this.args.file.getFileLastManualDynamicScan();
+    } catch (error) {
+      this.notify.error(parseError(error, this.intl.t('pleaseTryAgain')));
+    }
+  });
 }
 
 declare module '@glint/environment-ember-loose/registry' {

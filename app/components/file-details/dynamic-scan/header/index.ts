@@ -8,7 +8,11 @@ import type FileModel from 'irene/models/file';
 import type ConfigurationService from 'irene/services/configuration';
 import type DynamicScanService from 'irene/services/dynamic-scan';
 import type OrganizationService from 'irene/services/organization';
-import { DsComputedStatus } from 'irene/models/dynamicscan';
+import DynamicscanModel, { DsComputedStatus } from 'irene/models/dynamicscan';
+import { tracked } from '@glimmer/tracking';
+import { task } from 'ember-concurrency';
+import parseError from 'irene/utils/parse-error';
+import FileRiskModel from 'irene/models/file-risk';
 
 interface TabItem {
   id: string;
@@ -36,14 +40,22 @@ export default class FileDetailsDastHeader extends Component<FileDetailsDastHead
   @service declare router: RouterService;
   @service declare organization: OrganizationService;
   @service declare configuration: ConfigurationService;
+  @service('notifications') declare notify: NotificationService;
   @service('dynamic-scan') declare dsService: DynamicScanService;
+
+  @tracked fileRisk: FileRiskModel | null = null;
+  @tracked lastAutomatedDynamicScan: DynamicscanModel | null = null;
+  @tracked lastManualDynamicScan: DynamicscanModel | null = null;
+
+  constructor(owner: unknown, args: FileDetailsDastHeaderSignature['Args']) {
+    super(owner, args);
+
+    this.getLastDynamicScans.perform();
+    this.fetchFileRisk.perform();
+  }
 
   get file() {
     return this.args.file;
-  }
-
-  get analyses() {
-    return this.file.analyses;
   }
 
   get currentRoute() {
@@ -51,11 +63,11 @@ export default class FileDetailsDastHeader extends Component<FileDetailsDastHead
   }
 
   get dsAutomatedScan() {
-    return this.file.lastAutomatedDynamicScan;
+    return this.lastAutomatedDynamicScan;
   }
 
   get dsManualScan() {
-    return this.file.lastManualDynamicScan;
+    return this.lastManualDynamicScan;
   }
 
   get isAutomatedScanRunning() {
@@ -109,7 +121,7 @@ export default class FileDetailsDastHeader extends Component<FileDetailsDastHead
         label: this.intl.t('dastTabs.dastResults'),
         route: 'authenticated.dashboard.file.dynamic-scan.results',
         activeRoutes: 'authenticated.dashboard.file.dynamic-scan.results',
-        count: this.args.file.dynamicVulnerabilityCount,
+        count: this.fileRisk?.get('riskCountByScanType')?.dynamic,
       },
     ].filter(Boolean) as TabItem[];
   }
@@ -135,6 +147,24 @@ export default class FileDetailsDastHeader extends Component<FileDetailsDastHead
 
     return null;
   }
+
+  getLastDynamicScans = task(async () => {
+    try {
+      this.lastAutomatedDynamicScan =
+        await this.file.getFileLastAutomatedDynamicScan();
+
+      this.lastManualDynamicScan =
+        await this.file.getFileLastManualDynamicScan();
+    } catch (error) {
+      this.notify.error(parseError(error, this.intl.t('pleaseTryAgain')));
+    }
+  });
+
+  fetchFileRisk = task(async () => {
+    if (this.args.file) {
+      this.fileRisk = await this.args.file.fetchFileRisk();
+    }
+  });
 }
 
 declare module '@glint/environment-ember-loose/registry' {

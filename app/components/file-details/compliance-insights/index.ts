@@ -11,10 +11,12 @@ import ENUMS from 'irene/enums';
 import { ECOption } from 'irene/components/ak-chart';
 import OwaspModel from 'irene/models/owasp';
 import OwaspMobile2024Model from 'irene/models/owaspmobile2024';
+import AnalysisModel from 'irene/models/analysis';
 
 export interface FileDetailsComplianceInsightsSignature {
   Args: {
     file: FileModel;
+    fileAnalyses: AnalysisModel[];
   };
 }
 
@@ -43,7 +45,7 @@ export default class FileDetailsComplianceInsightsComponent extends Component<Fi
   }
 
   get analyses() {
-    return this.args.file.analyses;
+    return this.args.fileAnalyses;
   }
 
   get tooltipLabels(): Record<string, string> {
@@ -101,7 +103,7 @@ export default class FileDetailsComplianceInsightsComponent extends Component<Fi
     const owaspsIds: string[] = [];
     const owaspmobile2024s: string[] = [];
 
-    for (const analysis of this.analyses.slice()) {
+    for (const analysis of this.analyses) {
       const analysisRisk = analysis?.get('risk');
 
       const owasp2024 = await analysis?.get('owaspmobile2024');

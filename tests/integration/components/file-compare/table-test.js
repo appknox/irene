@@ -135,7 +135,7 @@ module('Integration | Component | file-compare/table', function (hooks) {
       this.comparisonFilterKey = comparisonFilterKey;
 
       // Gets all comparison data for category
-      const comparisons = compareFiles(file1, file2);
+      const comparisons = compareFileAnalyses(file1, file2);
       const compareCategories = getFileComparisonCategories(comparisons, true);
       this.filteredComparisons = compareCategories[this.comparisonFilterKey];
 
@@ -207,7 +207,7 @@ module('Integration | Component | file-compare/table', function (hooks) {
     this.comparisonFilterKey = 'newRisks';
 
     // Gets all comparison data for category
-    const comparisons = compareFiles(file1, file2);
+    const comparisons = compareFileAnalyses(file1, file2);
     const compareCategories = getFileComparisonCategories(comparisons, true);
     this.filteredComparisons = compareCategories[this.comparisonFilterKey];
 
