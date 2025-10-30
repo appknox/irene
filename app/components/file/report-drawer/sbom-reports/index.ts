@@ -83,7 +83,7 @@ export default class FileReportDrawerSbomReportsComponent extends Component<File
   }
 
   getSbomFile = task(async () => {
-    const sbFile = await this.file.sbFile;
+    const sbFile = await this.file.getSbomFile();
     this.sbomFile = sbFile;
   });
 }

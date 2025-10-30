@@ -126,7 +126,7 @@ module('Integration | Component | file-details/key-insights', function (hooks) {
       });
 
       const comparison = getFileComparisonCategories(
-        compareFiles(this.file, previousFile)
+        compareFileAnalyses(this.file, previousFile)
       );
 
       const keyInsights = [

@@ -65,8 +65,8 @@ export default class ProjectModel extends ModelBaseMixin {
   @belongsTo('organization', { inverse: null, async: true })
   declare organization: AsyncBelongsTo<OrganizationModel>;
 
-  @belongsTo('file', { async: true, inverse: null })
-  declare lastFileId: AsyncBelongsTo<FileModel>;
+  @belongsTo('file', { async: false, inverse: null })
+  declare lastFileId: FileModel;
 
   @alias('lastFileId')
   declare lastFile: ComputedProperty<FileModel>;

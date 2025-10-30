@@ -23,7 +23,7 @@ export type FileComparisonCategories = Record<
   FileComparisonItem[]
 >;
 
-type CompareFile = FileModel | null;
+type CompareFileAnalyses = AnalysisModel[] | null;
 
 // Sort order for file risks
 const sortPriorityMap = {
@@ -60,25 +60,22 @@ const sortByFileAnalyses = (
 /**
  * Function to compute comparison data between two file analyses
  *
- * @param {CompareFile} file1
- * @param {CompareFile} file2
+ * @param {CompareFileAnalyses} analyses1
+ * @param {CompareFileAnalyses} analyses2
  * @return FileComparisonItem[]
  */
 
-const compareFiles = (
-  file1: CompareFile,
-  file2: CompareFile
+const compareFileAnalyses = (
+  analyses1: CompareFileAnalyses,
+  analyses2: CompareFileAnalyses
 ): FileComparisonItem[] => {
   const comparisons: Array<FileComparisonItem | undefined> = [];
 
-  const file1Analyses = file1?.analyses;
-  const file2Analyses = file2?.analyses;
-
-  if (!file1Analyses || !file2Analyses) {
+  if (!analyses1 || !analyses2) {
     return [];
   }
 
-  file1Analyses.forEach(function (analysis) {
+  analyses1.forEach(function (analysis) {
     const vulnerability = analysis.vulnerability;
     const vulnerability_id = parseInt(String(vulnerability.get('id')));
 
@@ -93,7 +90,7 @@ const compareFiles = (
     comparisons[vulnerability_id] = comparison;
   });
 
-  file2Analyses.forEach(function (analysis) {
+  analyses2.forEach(function (analysis) {
     const vulnerability = analysis.vulnerability;
     const vulnerability_id = parseInt(String(vulnerability.get('id')));
 
@@ -227,4 +224,8 @@ const getComputedRiskCategory = (
   return { recurring, untested };
 };
 
-export { compareFiles, getFileComparisonCategories, getComputedRiskCategory };
+export {
+  compareFileAnalyses,
+  getFileComparisonCategories,
+  getComputedRiskCategory,
+};

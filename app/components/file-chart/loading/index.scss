@@ -1,0 +1,12 @@
+// TODO: change css variable names
+
+.box-section-root {
+  width: 100%;
+  border: 1px solid var(--file-details-skeleton-loader-border-color);
+  background-color: var(--file-details-skeleton-loader-background-color);
+  box-sizing: border-box;
+
+  .box-section-header {
+    padding: 0.75em 1.5em;
+  }
+}
