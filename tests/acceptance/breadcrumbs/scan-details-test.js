@@ -61,6 +61,13 @@ module('Acceptance | breadcrumbs/scan-details', function (hooks) {
 
     const store = this.owner.lookup('service:store');
 
+    this.server.get('/v2/analyses/:id/detailed-analysis', (schema, request) => {
+      return {
+        id: request.params.id,
+        screenshots: [],
+      };
+    });
+
     organization.update({
       features: {
         dynamicscan_automation: true,

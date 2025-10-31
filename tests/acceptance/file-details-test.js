@@ -223,6 +223,13 @@ module('Acceptance | file details', function (hooks) {
       return schema.analyses.find(`${req.params.id}`)?.toJSON();
     });
 
+    this.server.get('/v2/analyses/:id/detailed-analysis', (schema, request) => {
+      return {
+        id: request.params.id,
+        screenshots: [],
+      };
+    });
+
     await visit('/dashboard/file/1');
 
     assert
