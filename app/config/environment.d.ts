@@ -26,6 +26,8 @@ declare const config: {
   enablePendo: boolean;
   enableCSB: boolean;
   enableMarketplace: boolean;
+  posthogApiKey: string;
+  posthogApiHost: string;
   emberRollbarClient: EmberRollbarClient;
   notifications: Notifications;
   deviceFarmPassword: string;
@@ -67,6 +69,8 @@ export interface Defaults {
   IRENE_ENABLE_CSB: boolean;
   IRENE_ENABLE_MARKETPLACE: boolean;
   IRENE_ENABLE_ROLLBAR: boolean;
+  IRENE_POSTHOG_API_KEY: string;
+  IRENE_POSTHOG_API_HOST: string;
   ENTERPRISE: boolean;
   WHITELABEL_ENABLED: boolean;
   WHITELABEL_NAME: string;

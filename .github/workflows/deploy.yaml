@@ -31,3 +31,5 @@ jobs:
           IRENE_ENABLE_PENDO: 'True'
           IRENE_ENABLE_ROLLBAR: 'True'
           ROLLBAR_ACCESS_TOKEN: 'f1d76383c2d346a3aeedc21823f18c76'
+          IRENE_POSTHOG_API_KEY: ${{ secrets.POSTHOG_API_KEY }}
+          IRENE_POSTHOG_API_HOST: ${{ secrets.POSTHOG_API_HOST }}
