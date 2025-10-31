@@ -67,6 +67,30 @@
 
         {{else}}
           <form local-class='form' class='p-2'>
+            <AkRadio::Group
+              class='mb-2'
+              @groupDirection='row'
+              @value={{this.jiraType}}
+              @onChange={{this.handleJiraTypeChange}}
+              as |ctx|
+            >
+              <AkFormControlLabel @label={{t 'jiraCloud'}}>
+                <AkRadio
+                  data-test-jiraAccount-jiraType-cloud
+                  @radioCtx={{ctx}}
+                  @value='cloud'
+                />
+              </AkFormControlLabel>
+
+              <AkFormControlLabel class='ml-3' @label={{t 'jiraDataCenter'}}>
+                <AkRadio
+                  data-test-jiraAccount-jiraType-dataCenter
+                  @radioCtx={{ctx}}
+                  @value='dataCenter'
+                />
+              </AkFormControlLabel>
+            </AkRadio::Group>
+
             <AkStack @direction='column' @spacing='2'>
               <AkTextField
                 data-test-jiraAccount-hostInput
@@ -90,8 +114,8 @@
 
               <AkTextField
                 data-test-jiraAccount-apiKeyInput
-                @placeholder={{concat 'Enter ' (t 'apiKey')}}
-                @label={{t 'apiKey'}}
+                @placeholder={{concat 'Enter ' this.passwordLabel}}
+                @label={{this.passwordLabel}}
                 @labelTypographyVariant='subtitle2'
                 @labelTypographyColor='textPrimary'
                 @type='password'
