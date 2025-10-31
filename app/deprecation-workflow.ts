@@ -11,11 +11,11 @@ setupDeprecationWorkflow({
       matchId: 'warp-drive.ember-inflector',
     },
     {
-      handler: 'silence',
+      handler: 'throw',
       matchId: 'ember-data:deprecate-non-strict-types',
     },
     {
-      handler: 'silence',
+      handler: 'throw',
       matchId: 'ember-data:deprecate-non-strict-id',
     },
     {
