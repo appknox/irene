@@ -56,7 +56,7 @@ export default class ProjectSettingsDastAutomationAutomationSettingsComponent ex
   getDsAutomationPreference = task(async () => {
     try {
       const adapter = this.store.adapterFor('ds-automation-preference');
-      adapter.setNestedUrlNamespace(this.profileId as string);
+      adapter.setNestedUrlNamespace(String(this.profileId));
 
       this.automationPreference = await this.store.queryRecord(
         'ds-automation-preference',
@@ -72,7 +72,7 @@ export default class ProjectSettingsDastAutomationAutomationSettingsComponent ex
       this.automationPreference?.set('dynamicScanAutomationEnabled', enabled);
 
       const adapter = this.store.adapterFor('ds-automation-preference');
-      adapter.setNestedUrlNamespace(this.profileId as string);
+      adapter.setNestedUrlNamespace(String(this.profileId));
 
       await this.automationPreference?.save();
 

@@ -108,7 +108,7 @@ export default class ProjectSettingsAnalysisSettingsReportPreferenceComponent ex
     async (dynamicScan: boolean, apiScan: boolean, manualScan: boolean) => {
       const profile = this.store.peekRecord(
         'profile',
-        Number(this.profile?.id)
+        String(this.profile?.id)
       );
 
       await profile?.saveReportPreference({
@@ -121,7 +121,7 @@ export default class ProjectSettingsAnalysisSettingsReportPreferenceComponent ex
 
   getProfileTask = task(async () => {
     const profileId = this.project?.activeProfileId;
-    this.profile = await this.store.findRecord('profile', Number(profileId));
+    this.profile = await this.store.findRecord('profile', String(profileId));
   });
 }
 

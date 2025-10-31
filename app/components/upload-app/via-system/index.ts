@@ -69,7 +69,7 @@ export default class UploadAppViaSystemComponent extends Component {
       this.uploadApp.updateSystemFileQueue(queue);
 
       const uploadItem = await waitForPromise(
-        this.store.queryRecord('uploadApp', {})
+        this.store.queryRecord('upload-app', {})
       );
 
       await waitForPromise(
