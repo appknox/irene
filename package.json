@@ -225,14 +225,14 @@
     }
   },
   "engines": {
-    "node": ">=20"
+    "node": ">=24"
   },
   "ember": {
     "edition": "octane"
   },
   "volta": {
-    "node": "20.18.0",
-    "npm": "10.8.2"
+    "node": ">=24.11.0",
+    "npm": ">=11.6.1"
   },
   "ember-addon": {
     "paths": [
