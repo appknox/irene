@@ -29,6 +29,7 @@
       data-test-ssoSettings-oidc-redirectUrl
       @variant='body2'
       @color='textPrimary'
+      class='posthog-sensitive'
     >
       {{this.redirectUrl}}
     </AkTypography>
@@ -67,7 +68,10 @@
           {{t 'ssoSettings.oidc.discoveryURL'}}
         </AkTypography>
 
-        <AkTypography data-test-ssoSettings-oidcDiscoveryUrl>
+        <AkTypography
+          class='posthog-sensitive'
+          data-test-ssoSettings-oidcDiscoveryUrl
+        >
           {{this.discoveryUrl}}
         </AkTypography>
       </AkStack>

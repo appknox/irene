@@ -56,7 +56,11 @@
                 />
               {{/let}}
             {{else}}
-              <AkTypography title={{value}} @noWrap={{true}}>
+              <AkTypography
+                class='posthog-sensitive'
+                title={{value}}
+                @noWrap={{true}}
+              >
                 {{value}}
               </AkTypography>
             {{/if}}

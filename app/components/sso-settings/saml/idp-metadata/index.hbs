@@ -35,6 +35,7 @@
 
   <AkTypography
     data-test-ssoSettings-idpEntityIdValue
+    class='posthog-sensitive'
     @variant='body2'
     @color='textSecondary'
   >
@@ -51,6 +52,7 @@
 
   <AkTypography
     data-test-ssoSettings-idpSsoUrlValue
+    class='posthog-sensitive'
     @variant='body2'
     @color='textSecondary'
   >
@@ -75,6 +77,7 @@
 
   <AkTypography
     data-test-ssoSettings-idpCertIssuerValue
+    class='posthog-sensitive'
     @variant='body2'
     @color='textSecondary'
   >
@@ -91,6 +94,7 @@
 
   <AkTypography
     data-test-ssoSettings-idpCertIssuedOnValue
+    class='posthog-sensitive'
     @variant='body2'
     @color='textSecondary'
   >
@@ -126,7 +130,12 @@
       {{t 'SHA256'}}
     </AkTypography>
 
-    <AkTypography @tag='span' @variant='body2' @color='textSecondary'>
+    <AkTypography
+      class='posthog-sensitive'
+      @tag='span'
+      @variant='body2'
+      @color='textSecondary'
+    >
       {{@idpMetadata.certificate.fingerprint_sha256}}
     </AkTypography>
   </div>
@@ -136,7 +145,12 @@
       {{t 'SHA1'}}
     </AkTypography>
 
-    <AkTypography @tag='span' @variant='body2' @color='textSecondary'>
+    <AkTypography
+      class='posthog-sensitive'
+      @tag='span'
+      @variant='body2'
+      @color='textSecondary'
+    >
       {{@idpMetadata.certificate.fingerprint_sha1}}
     </AkTypography>
   </div>
