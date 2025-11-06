@@ -10,6 +10,10 @@ import type RouterService from '@ember/routing/router-service';
 
 import { CSBMap } from 'irene/router';
 import ENV from 'irene/config/environment';
+import {
+  registerPostHogOrganization,
+  unregisterPostHog,
+} from 'irene/utils/posthog';
 import triggerAnalytics from 'irene/utils/trigger-analytics';
 import type MeService from 'irene/services/me';
 import type DatetimeService from 'irene/services/datetime';
@@ -110,6 +114,8 @@ export default class AuthenticatedRoute extends Route {
     this.datetime.setLocale(user.lang);
 
     await this.websocket.configure(user);
+
+    registerPostHogOrganization(user, this.org.selected);
   }
 
   async configureRollBar(user: UserModel) {
@@ -160,6 +166,7 @@ export default class AuthenticatedRoute extends Route {
   @action
   invalidateSession() {
     triggerAnalytics('logout', {} as CsbAnalyticsData);
+    unregisterPostHog();
 
     this.session.invalidate();
   }

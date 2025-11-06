@@ -26,7 +26,10 @@
       </AkTypography>
     {{else}}
       <AkStack @alignItems='center' @spacing='0.5'>
-        <AkTypography data-test-vaReportListItem-secondaryText>
+        <AkTypography
+          class='posthog-sensitive'
+          data-test-vaReportListItem-secondaryText
+        >
           {{@reportDetails.secondaryText}}
         </AkTypography>
 
