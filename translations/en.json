@@ -2177,7 +2177,7 @@
     "linkPastePlaceholder": "Paste the link here...",
     "viaLink": "Via Link",
     "supportedStores": "Supported Store",
-    "stores": "Google Play Store",
+    "stores": "Google Play Store, Apple App Store",
     "linkUploadPopupHeader": "Upload using a link",
     "linkInputLabel": "Add a link",
     "validURLFormatTitle": "Valid URL Format :"
