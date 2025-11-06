@@ -7,6 +7,8 @@ import type Store from '@ember-data/store';
 import type IntlService from 'ember-intl/services/intl';
 
 import type OrganizationService from 'irene/services/organization';
+import type ProjectService from 'irene/services/project';
+import type { FilterColumn } from 'irene/utils/table-columns';
 import ENUMS from 'irene/enums';
 import styles from './index.scss';
 
@@ -30,16 +32,21 @@ interface ProjectListHeaderArgs {
   query: string;
   platform: number;
   sortKey: string;
-  onQueryChange(event: Event): void;
-  handleClear(): void;
-  filterPlatform(platform: PlatformObject): void;
-  onSelectTeam(team: Team): void;
-  sortProjects(selected: SortingKeyObject): void;
+  onQueryChange: (event: Event) => void;
+  handleClear: () => void;
+  filterPlatform: (platform: PlatformObject) => void;
+  onSelectTeam: (team: Team) => void;
+  sortProjects: (selected: SortingKeyObject) => void;
+  onColumnsUpdate: (columnsMap: Map<string, FilterColumn>) => void;
+  isCardView: boolean;
+  onOpenColumnManager: () => void;
+  disableColumnManager: boolean;
 }
 
 export default class ProjectListHeaderComponent extends Component<ProjectListHeaderArgs> {
   @service declare intl: IntlService;
   @service declare organization: OrganizationService;
+  @service('project') declare projectService: ProjectService;
   @service declare store: Store;
 
   tDateUpdated: string;
@@ -70,6 +77,7 @@ export default class ProjectListHeaderComponent extends Component<ProjectListHea
   };
 
   @tracked selectedTeamName = 'All';
+  @tracked showColumnManager = false;
 
   constructor(owner: unknown, args: ProjectListHeaderArgs) {
     super(owner, args);
@@ -91,6 +99,16 @@ export default class ProjectListHeaderComponent extends Component<ProjectListHea
       this.selectedTeam.name !== this.defaultTeam.name ||
       this.selectedPlatform.value !== -1
     );
+  }
+
+  get disableClearFilter() {
+    return (
+      this.selectedTeam.name === 'All' && this.selectedPlatform.value === -1
+    );
+  }
+
+  get disableColumnManager() {
+    return this.args.isCardView;
   }
 
   get sortingKeyObjects() {
@@ -151,6 +169,26 @@ export default class ProjectListHeaderComponent extends Component<ProjectListHea
     return styles['clear-filter-icon'];
   }
 
+  get viewType() {
+    return this.projectService.viewType;
+  }
+
+  get isCardView() {
+    return this.viewType === 'card';
+  }
+
+  get isListView() {
+    return this.viewType === 'list';
+  }
+
+  @action handleCardViewClick() {
+    this.projectService.setViewType('card');
+  }
+
+  @action handleListViewClick() {
+    this.projectService.setViewType('list');
+  }
+
   @action onSortProjectsChange(selected: SortingKeyObject) {
     this.selectedSortKey = selected;
 
@@ -162,9 +200,22 @@ export default class ProjectListHeaderComponent extends Component<ProjectListHea
     this.args.filterPlatform(platform);
   }
 
+  @action handleOpenColumnManager() {
+    this.args.onOpenColumnManager?.();
+  }
+
   @action
   clearSearchInput() {
     this.args.handleClear();
+  }
+
+  @action
+  handleClear() {
+    this.selectedTeam = { name: 'All' };
+    this.selectedTeamName = 'All';
+    this.selectedPlatform = { key: 'All', value: -1 };
+    this.args.onSelectTeam({ name: 'All' });
+    this.args.filterPlatform({ key: 'All', value: -1 });
   }
 
   @action clearFilters() {
