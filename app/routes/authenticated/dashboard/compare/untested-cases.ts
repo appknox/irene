@@ -34,7 +34,7 @@ export default class AuthenticatedDashboardCompareUntestedCasesRoute extends AkB
     const unknownAnalysisStatus = await this.store.queryRecord(
       'unknown-analysis-status',
       {
-        id: file1?.profile.get('id'),
+        id: String(file1?.profile.get('id')),
       }
     );
 

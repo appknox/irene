@@ -65,7 +65,7 @@ export default class UploadAppViaLinkComponent extends Component {
     }
 
     try {
-      const uploadAppUrl = this.store.createRecord('uploadAppUrl', {
+      const uploadAppUrl = this.store.createRecord('upload-app-url', {
         url: this.changeset.url,
       });
 

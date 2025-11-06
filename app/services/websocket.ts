@@ -1,5 +1,5 @@
 import { inject as service } from '@ember/service';
-import { singularize } from 'ember-inflector';
+import { singularize } from '@ember-data/request-utils/string';
 import Service from '@ember/service';
 import { task } from 'ember-concurrency';
 import { debounceTask } from 'ember-lifeline';
