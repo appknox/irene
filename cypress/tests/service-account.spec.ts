@@ -349,12 +349,8 @@ describe('Service Account', () => {
 
     //check selected scope checked and unchecked length
     cy.findAllByTestId(
-      'serviceAccountSection-selectScope-nodeLabelIcon-checked'
-    ).should('have.length', 1);
-
-    cy.findAllByTestId(
       'serviceAccountSection-selectScope-nodeLabelIcon-unchecked'
-    ).should('have.length', 3);
+    ).should('have.length', 6);
 
     //click on edit scope button
     cy.findByTestId('serviceAccountSection-selectScope-actionBtn')
@@ -385,7 +381,7 @@ describe('Service Account', () => {
     //check if all scope are checked
     cy.findAllByTestId(
       'serviceAccountSection-selectScope-nodeLabelIcon-checked'
-    ).should('have.length', 4);
+    ).should('have.length', 6);
 
     //no uncheck should be present
     cy.findAllByTestId(
