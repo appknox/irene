@@ -21,6 +21,7 @@ import type SkOrganizationService from 'irene/services/sk-organization';
 import type WebsocketService from 'irene/services/websocket';
 import type UserModel from 'irene/models/user';
 import type LoggerService from 'irene/services/logger';
+import type AnalyticsService from 'irene/services/analytics';
 
 export default class AuthenticatedRoute extends Route {
   @service declare session: any;
@@ -37,6 +38,7 @@ export default class AuthenticatedRoute extends Route {
   @service declare configuration: ConfigurationService;
   @service declare skOrganization: SkOrganizationService;
   @service declare logger: LoggerService;
+  @service declare analytics: AnalyticsService;
 
   @service declare router: RouterService;
   @service('browser/window') declare window: Window;
@@ -101,6 +103,9 @@ export default class AuthenticatedRoute extends Route {
     await this.configureRollBar(user);
     await this.configurePendo(user);
 
+    // NEW: Configure analytics (PostHog, CSB, etc.)
+    await this.configureAnalytics(user);
+
     this.trial.set('isTrial', user.isTrial);
 
     this.notify.setDefaultAutoClear(ENV.notifications.autoClear);
@@ -147,6 +152,41 @@ export default class AuthenticatedRoute extends Route {
     }
   }
 
+  /**
+   * Configure analytics providers (PostHog, CSB, etc.)
+   * Identifies user and starts session replay
+   */
+  async configureAnalytics(user: UserModel) {
+    try {
+      const membership = await this.me.getMembership();
+
+      // Identify user in all analytics providers
+      await this.analytics.identify(user.id, {
+        email: user.email,
+        username: user.username,
+        name: user.username,
+        role: membership.roleDisplay,
+        organization_id: this.org.selected?.id,
+        organization_name: this.org.selected?.name,
+        account_domain: user.email.split('@')[1],
+        // Super properties (attached to all events)
+        plan_type: (this.org.selected as any)?.subscription?.plan?.name,
+        is_trial: user.isTrial,
+        is_enterprise: ENV.isEnterprise,
+        is_whitelabel: ENV.whitelabel?.enabled || false,
+      });
+
+      // Start PostHog session replay if provider is active
+      if (this.analytics.isProviderActive('posthog')) {
+        this.analytics.startSessionReplay();
+      }
+    } catch (error) {
+      // Don't let analytics errors break the app
+      // eslint-disable-next-line no-console
+      console.error('[Analytics] Configuration failed:', error);
+    }
+  }
+
   @action
   willTransition(transition: Transition) {
     const currentRoute = transition.to?.name as keyof typeof CSBMap;
@@ -157,9 +197,39 @@ export default class AuthenticatedRoute extends Route {
     }
   }
 
+  /**
+   * Track page views after route transitions
+   * Called automatically after each route change
+   */
+  @action
+  didTransition() {
+    super.didTransition();
+
+    try {
+      const routeName = this.router.currentRouteName;
+      const routeURL = this.router.currentURL;
+
+      // Track pageview in PostHog and other providers
+      this.analytics.page(routeName, {
+        url: routeURL,
+        title: document.title,
+        referrer: document.referrer,
+      });
+    } catch (error) {
+      // Don't let analytics errors break navigation
+      // eslint-disable-next-line no-console
+      console.error('[Analytics] Pageview tracking failed:', error);
+    }
+
+    return true;
+  }
+
   @action
   invalidateSession() {
     triggerAnalytics('logout', {} as CsbAnalyticsData);
+
+    // Reset analytics (clear user identity)
+    this.analytics.reset();
 
     this.session.invalidate();
   }

@@ -2,7 +2,6 @@ import ENV from 'irene/config/environment';
 import installPendo from 'irene/utils/install-pendo';
 import installHotjar from 'irene/utils/install-hotjar';
 import customerSuccessBox from 'irene/utils/customer-success-box';
-import initializePostHog from 'irene/utils/posthog';
 
 /**
  * Class to handle environment variables
@@ -206,7 +205,7 @@ const initialize = (application) => {
   installPendo();
   installHotjar();
   customerSuccessBox();
-  initializePostHog();
+  // NOTE: PostHog is now initialized by the analytics service, not here
 
   // Register ENV
   if (ENV.environment !== 'test') {
