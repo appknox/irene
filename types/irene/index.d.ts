@@ -64,11 +64,41 @@ declare global {
 
   interface PendoInstance {
     getActiveGuides: () => PendoGuide[];
+    initialize?: (config: {
+      visitor: { id: string; email?: string };
+      account: { id?: string };
+    }) => void;
   }
 
   interface PendoGuide {
     show: () => Promise<boolean>;
     launchMethod: 'auto-badge';
+  }
+
+  // PostHog Types
+  interface PostHogConfig {
+    api_host?: string;
+    ui_host?: string;
+    person_profiles?: string;
+    capture_pageview?: boolean;
+    capture_pageleave?: boolean;
+    enable_recording_console_log?: boolean;
+    session_recording?: {
+      recordCrossOriginIframes?: boolean;
+      maskAllInputs?: boolean;
+      maskTextSelector?: string;
+    };
+  }
+
+  interface PostHogInstance {
+    init(apiKey: string, config?: PostHogConfig): void;
+    identify(userId: string, properties?: Record<string, any>): void;
+    capture(event: string, properties?: Record<string, any>): void;
+    reset(): void;
+    startSessionRecording(): void;
+    stopSessionRecording(): void;
+    getFeatureFlag(key: string): boolean | string | undefined;
+    isFeatureEnabled(key: string): boolean;
   }
 
   interface Window {
@@ -93,6 +123,7 @@ declare global {
       };
     };
     pendo: PendoInstance;
+    posthog?: PostHogInstance;
     CRISP_WEBSITE_ID: string;
     fwSettings: { widget_id: string };
     fcSettings: object;
