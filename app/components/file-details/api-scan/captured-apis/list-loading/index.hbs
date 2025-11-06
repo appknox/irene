@@ -1,0 +1,17 @@
+<AkStack @bgColor='white' @direction='column' @spacing='1.5' class='mb-1 pb-2'>
+  {{#each (array 1 2 3 4 5 6 7 8 9 10) as |item|}}
+    <AkDivider />
+
+    <div id='list-loading-{{item}}' class='px-2'>
+      <AkStack @alignItems='center' @spacing='1' @tag='label'>
+        <AkSkeleton @variant='rectangular' @width='21px' @height='21px' />
+
+        <AkStack @alignItems='center' @spacing='1.5'>
+          <AkSkeleton @variant='rounded' @width='34px' @height='22px' />
+
+          <AkSkeleton @variant='rectangular' @width='320px' @height='19px' />
+        </AkStack>
+      </AkStack>
+    </div>
+  {{/each}}
+</AkStack>

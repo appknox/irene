@@ -23,6 +23,7 @@ export default class AuthenticatedDashboardFileDynamicScanManualController exten
         'authenticated.dashboard.file.dynamic-scan.results',
         'authenticated.dashboard.file.dynamic-scan.results.index',
         'authenticated.dashboard.file.dynamic-scan.results.scan-coverage',
+        'authenticated.dashboard.file.dynamic-scan.results.apis-captured',
         'authenticated.dashboard.file.dynamic-scan.automated',
         'authenticated.dashboard.file.dynamic-scan.scheduled-automated',
       ],
