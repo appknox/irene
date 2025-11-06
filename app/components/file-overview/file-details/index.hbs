@@ -58,6 +58,7 @@
           href={{@file.submission.url}}
           rel='noopener noreferrer'
           local-class='store-logo-container'
+          {{on 'click' this.stopPropagation}}
         >
           {{#if @file.submission.isIos}}
             <AkSvg::AppstoreLogo local-class='appstore-logo-vector' />
