@@ -199,6 +199,7 @@ export interface ProductVersions {
 export interface Whitelabel {
   theme: string;
   enabled: boolean;
+  name: string;
 }
 
 export default config;
