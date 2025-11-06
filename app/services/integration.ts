@@ -40,4 +40,9 @@ export default class IntegrationService extends Service {
   isPendoEnabled() {
     return !!ENV.enablePendo;
   }
+
+  // Customer Success Box (CSB)
+  isCSBEnabled() {
+    return !!ENV.enableCSB;
+  }
 }

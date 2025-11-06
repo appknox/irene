@@ -8,6 +8,7 @@ const possibleENVS = [
   'IRENE_ENABLE_ROLLBAR',
   'IRENE_POSTHOG_API_KEY',
   'IRENE_POSTHOG_API_HOST',
+  'IRENE_POSTHOG_UI_HOST',
   'ENTERPRISE',
   'WHITELABEL_ENABLED',
   'WHITELABEL_NAME',
@@ -28,6 +29,7 @@ const ENVHandlerCONST = {
     IRENE_ENABLE_ROLLBAR: false,
     IRENE_POSTHOG_API_KEY: '',
     IRENE_POSTHOG_API_HOST: '',
+    IRENE_POSTHOG_UI_HOST: 'https://app.posthog.com',
     ENTERPRISE: false,
     WHITELABEL_ENABLED: false,
     WHITELABEL_NAME: '',
@@ -214,6 +216,7 @@ module.exports = function (environment) {
     enableMarketplace: handler.getValueForPlugin('IRENE_ENABLE_MARKETPLACE'),
     posthogApiKey: handler.getEnv('IRENE_POSTHOG_API_KEY'),
     posthogApiHost: handler.getEnv('IRENE_POSTHOG_API_HOST'),
+    posthogUiHost: handler.getEnv('IRENE_POSTHOG_UI_HOST'),
     emberRollbarClient: {
       enabled: handler.getValueForPlugin('IRENE_ENABLE_ROLLBAR'),
     },

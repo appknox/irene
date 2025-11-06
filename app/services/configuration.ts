@@ -27,7 +27,11 @@ type IntegrationData = {
   hotjar_key: string;
   pendo_key: string;
   csb_key: string;
+  csb_host?: string;
   rollbar_key: string;
+  posthog_key?: string;
+  posthog_host?: string;
+  posthog_ui_host?: string;
   freshdesk_configuration: {
     widget_id: string;
   };
@@ -108,8 +112,12 @@ export default class ConfigurationService extends Service {
       widget_id: '',
     },
     csb_key: '',
+    csb_host: '',
     hotjar_key: '',
     pendo_key: '',
+    posthog_key: '',
+    posthog_host: '',
+    posthog_ui_host: '',
     rollbar_key: '',
   };
 
@@ -142,8 +150,13 @@ export default class ConfigurationService extends Service {
       this.imageData.logo_on_lightbg ||= data.images.logo_on_lightbg;
 
       this.integrationData.csb_key ||= data.integrations.csb_key;
+      this.integrationData.csb_host ||= data.integrations.csb_host;
       this.integrationData.hotjar_key ||= data.integrations.hotjar_key;
       this.integrationData.pendo_key ||= data.integrations.pendo_key;
+      this.integrationData.posthog_key ||= data.integrations.posthog_key;
+      this.integrationData.posthog_host ||= data.integrations.posthog_host;
+      this.integrationData.posthog_ui_host ||=
+        data.integrations.posthog_ui_host;
       this.integrationData.rollbar_key ||= data.integrations.rollbar_key;
       this.integrationData.freshchat_key ||= data.integrations.freshchat_key;
 
