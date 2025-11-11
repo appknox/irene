@@ -1,8 +1,8 @@
 import { module, test } from 'qunit';
 import { setupRenderingTest } from 'ember-qunit';
 import { setupMirage } from 'ember-cli-mirage/test-support';
-import { render, waitUntil, click } from '@ember/test-helpers';
-import { setupIntl } from 'ember-intl/test-support';
+import { render, click, waitUntil } from '@ember/test-helpers';
+import { setupIntl, t } from 'ember-intl/test-support';
 import { hbs } from 'ember-cli-htmlbars';
 import Service from '@ember/service';
 
@@ -45,7 +45,7 @@ module('Integration | Component | privacy/geo-location', function (hooks) {
     });
 
     // Tracker Request Model
-    this.server.create('geo-location', {
+    const geoLocationData = this.server.create('geo-location', {
       countryCode: 'IN',
       country_name: 'India',
       is_high_risk_region: false,
@@ -62,26 +62,20 @@ module('Integration | Component | privacy/geo-location', function (hooks) {
 
     // Server Mocks
     this.server.get('/v2/files/:id', (schema, req) => {
-      const data = schema.files.find(`${req.params.id}`)?.toJSON();
-
-      return { ...data };
+      return schema.files.find(`${req.params.id}`)?.toJSON();
     });
 
     this.server.get('/v2/files/:id/geo_request', () => {
       return { id: 2, file: 1, status: 2 };
     });
 
-    let geoData;
-
     this.server.get('/v2/geo_request/:requestId/geo_data', (schema) => {
-      geoData = schema.geoLocations.all().models.map((m) => m.attrs);
-
-      return geoData;
+      return schema.geoLocations.all().models;
     });
 
     this.setProperties({
-      geoData,
       file,
+      geoLocationData,
     });
   });
 
@@ -103,16 +97,7 @@ module('Integration | Component | privacy/geo-location', function (hooks) {
     );
 
     // Wait until __chart__ is attached
-    await new Promise((resolve) => {
-      const checkChart = () => {
-        if (chartEl.__chart__) {
-          resolve();
-        } else {
-          setTimeout(checkChart, 50);
-        }
-      };
-      checkChart();
-    });
+    await waitUntil(() => chartEl.__chart__);
 
     const chart = chartEl.__chart__;
 
@@ -141,15 +126,15 @@ module('Integration | Component | privacy/geo-location', function (hooks) {
 
     assert
       .dom('[data-test-privacy-geo-location-drawer-header]')
-      .hasText('Server Locations Details');
+      .hasText(t('privacyModule.serverLocationDetails'));
 
     assert
       .dom('[data-test-privacy-geo-location-drawer-country-name]')
-      .hasText('India');
+      .hasText(this.geoLocationData.country_name);
 
     assert
       .dom('[data-test-privacy-geo-location-drawer-host-number]')
-      .hasText('1');
+      .hasText(String(this.geoLocationData.hostUrls.length));
 
     assert
       .dom('[data-test-privacy-geo-location-drawer-host-container]')

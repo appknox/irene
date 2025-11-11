@@ -1,6 +1,6 @@
 import Model, { attr } from '@ember-data/model';
 
-interface HostUrl {
+export interface HostUrl {
   ip: string;
   cidr: string;
   domain: string;

@@ -31,23 +31,23 @@ export default class PrivacyModuleService extends Service {
   @service declare intl: IntlService;
   @service('notifications') declare notify: NotificationService;
 
-  @tracked trackerDataCount: number = 0;
   @tracked
   trackerDataList?: DS.AdapterPopulatedRecordArray<TrackersModel>;
+
   @tracked
   dangerousPermissionList?: DS.AdapterPopulatedRecordArray<DangerousPermissionModel>;
+
+  @tracked trackerDataCount: number = 0;
   @tracked dangerousPermissionCount: number = 0;
   @tracked piiDataCount: number = 0;
-  @tracked
-  piiDataList: PiiModel[] = [];
+  @tracked piiDataList: PiiModel[] = [];
   @tracked piiDataAvailable: boolean = false;
   @tracked showCompleteApiScanNote: boolean = false;
   @tracked showPiiUpdated: boolean = false;
   @tracked selectedPiiId: string | null = null;
   @tracked showNote: boolean = true;
   @tracked geoLocationDataCount: number = 0;
-  @tracked
-  geoLocationDataList: GeoLocationModel[] = [];
+  @tracked geoLocationDataList: GeoLocationModel[] = [];
   @tracked showGeoUpdated: boolean = false;
   @tracked showCompleteDastScanNote: boolean = false;
   @tracked geoDataAvailable: boolean = false;
@@ -170,7 +170,6 @@ export default class PrivacyModuleService extends Service {
         };
 
         const piiData = await this.store.query('pii', queryParams);
-
         const piiDataList = piiData.slice() as PiiModel[];
 
         this.piiDataList = piiDataList;
