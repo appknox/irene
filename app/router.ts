@@ -1,5 +1,4 @@
 import EmberRouter from '@ember/routing/router';
-import ENV from 'irene/config/environment';
 import config from './config/environment';
 
 type RouterLocationType = 'history' | 'hash' | 'none' | 'auto';
@@ -386,20 +385,3 @@ Router.map(function () {
 
   this.route('old-status', { path: 'status' });
 });
-
-export const CSBMap = {
-  'authenticated.dashboard.analytics': ENV.csb['navigateToAnalytics'],
-  'authenticated.dashboard.projects': ENV.csb['navigateToProjects'],
-  'authenticated.dashboard.file': ENV.csb['clickProjectCard'],
-  'authenticated.dashboard.settings': ENV.csb['navigateToSettings'],
-  'authenticated.dashboard.project.files': ENV.csb['navigateToAllScans'],
-  'authenticated.dashboard.choose': ENV.csb['naigateToCompareScans'],
-  'authenticated.dashboard.organization.namespaces':
-    ENV.csb['navigateToOrganization'],
-  'authenticated.dashboard.organization-settings':
-    ENV.csb['navigateToOrgSettings'],
-  'authenticated.dashboard.marketplace': ENV.csb['navigateToMarketPlace'],
-  'authenticated.dashboard.account-settings.index':
-    ENV.csb['navigateToAccountSettings'],
-  'authenticated.dashboard.billing': ENV.csb['navigateToBilling'],
-};

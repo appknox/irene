@@ -1,9 +1,7 @@
 import Component from '@glimmer/component';
-import { inject as service } from '@ember/service';
+import { service } from '@ember/service';
 import { task } from 'ember-concurrency';
-import RouterService from '@ember/routing/router-service';
 import { tracked } from '@glimmer/tracking';
-import IntlService from 'ember-intl/services/intl';
 import lookupValidator from 'ember-changeset-validations';
 import { BufferedChangeset } from 'ember-changeset/types';
 import {
@@ -11,11 +9,13 @@ import {
   validateConfirmation,
 } from 'ember-changeset-validations/validators';
 import { Changeset } from 'ember-changeset';
+import type RouterService from '@ember/routing/router-service';
+import type IntlService from 'ember-intl/services/intl';
 
 import ENV from 'irene/config/environment';
-import triggerAnalytics from 'irene/utils/trigger-analytics';
 import type IreneAjaxService from 'irene/services/ajax';
 import type { AjaxError } from 'irene/services/ajax';
+import type AnalyticsService from 'irene/services/analytics';
 
 type ChangesetBufferProps = BufferedChangeset & {
   old_password: string;
@@ -35,6 +35,7 @@ export default class AccountSettingsSecurityPasswordChangeComponent extends Comp
   @service('rollbar') declare logger: any;
   @service declare router: RouterService;
   @service('notifications') declare notify: NotificationService;
+  @service declare analytics: AnalyticsService;
 
   @tracked changeset: ChangesetBufferProps | null = null;
 
@@ -69,10 +70,12 @@ export default class AccountSettingsSecurityPasswordChangeComponent extends Comp
         data,
       });
 
-      triggerAnalytics(
-        'feature',
-        ENV.csb['changePassword'] as CsbAnalyticsFeatureData
-      );
+      this.analytics.track({
+        name: 'account_security',
+        properties: {
+          feature: 'change_password',
+        },
+      });
 
       this.router.transitionTo('login');
 

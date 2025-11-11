@@ -483,8 +483,6 @@ module('Integration | Component | user-login', function (hooks) {
           },
           integrations: {
             crisp_key: '',
-            csb_key: '',
-            hotjar_key: '',
             pendo_key: '',
             rollbar_key: '',
           },
@@ -531,8 +529,6 @@ module('Integration | Component | user-login', function (hooks) {
           },
           integrations: {
             crisp_key: '',
-            csb_key: '',
-            hotjar_key: '',
             pendo_key: '',
             rollbar_key: '',
           },
@@ -576,8 +572,6 @@ module('Integration | Component | user-login', function (hooks) {
           },
           integrations: {
             crisp_key: '',
-            csb_key: '',
-            hotjar_key: '',
             pendo_key: '',
             rollbar_key: '',
           },
@@ -621,8 +615,6 @@ module('Integration | Component | user-login', function (hooks) {
           },
           integrations: {
             crisp_key: '',
-            csb_key: '',
-            hotjar_key: '',
             pendo_key: '',
             rollbar_key: '',
           },
