@@ -1,12 +1,11 @@
 import Component from '@glimmer/component';
-import { inject as service } from '@ember/service';
+import { service } from '@ember/service';
 import { task } from 'ember-concurrency';
 import { action } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
 import { isEmpty } from '@ember/utils';
 
 import ENV from 'irene/config/environment';
-import triggerAnalytics from 'irene/utils/trigger-analytics';
 import ENUMS from 'irene/enums';
 import parseError from 'irene/utils/parse-error';
 
@@ -18,6 +17,7 @@ import type FileModel from 'irene/models/file';
 import type AvailableManualDeviceModel from 'irene/models/available-manual-device';
 import type IreneAjaxService from 'irene/services/ajax';
 import type DynamicScanService from 'irene/services/dynamic-scan';
+import type AnalyticsService from 'irene/services/analytics';
 
 export interface FileDetailsDynamicScanActionDrawerSignature {
   Args: {
@@ -32,6 +32,7 @@ export default class FileDetailsDynamicScanActionDrawerComponent extends Compone
   @service declare intl: IntlService;
   @service declare ajax: IreneAjaxService;
   @service declare store: Store;
+  @service declare analytics: AnalyticsService;
   @service('dynamic-scan') declare dynamicScanService: DynamicScanService;
   @service('notifications') declare notify: NotificationService;
 
@@ -112,10 +113,18 @@ export default class FileDetailsDynamicScanActionDrawerComponent extends Compone
 
   @action
   runDynamicScan() {
-    triggerAnalytics(
-      'feature',
-      ENV.csb['runDynamicScan'] as CsbAnalyticsFeatureData
-    );
+    this.analytics.track({
+      name: 'dynamic_scan_management',
+      properties: {
+        feature: 'start_dynamic_scan',
+        fileId: this.file.id,
+        projectId: this.file.project?.get('id'),
+        scanMode: this.args.isAutomatedScan
+          ? ENUMS.DYNAMIC_MODE.AUTOMATED
+          : ENUMS.DYNAMIC_MODE.MANUAL,
+        apiCaptureEnabled: this.isApiCaptureEnabled,
+      },
+    });
 
     this.startDynamicScan.perform();
   }

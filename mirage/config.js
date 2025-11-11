@@ -59,8 +59,6 @@ function routes() {
       },
       integrations: {
         crisp_key: '',
-        csb_key: '',
-        hotjar_key: '',
         pendo_key: '',
         rollbar_key: '',
       },
