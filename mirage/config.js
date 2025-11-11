@@ -23,6 +23,9 @@ export default function makeServer(config) {
 
 function routes() {
   this.passthrough('/write-coverage');
+  this.passthrough('/world.json');
+  this.passthrough('/world.json.bin');
+
   this.urlPrefix = config.host;
 
   // NOTE v2 api namespace has to be grouped together
