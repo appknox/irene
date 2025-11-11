@@ -18,6 +18,7 @@ import { type FileReportScanType } from 'irene/models/file-report';
 import type FileReportModel from 'irene/models/file-report';
 import type FileModel from 'irene/models/file';
 import type RealtimeService from 'irene/services/realtime';
+import type AnalyticsService from 'irene/services/analytics';
 
 type FileReportQueryResponse =
   DS.AdapterPopulatedRecordArray<FileReportModel> & {
@@ -52,6 +53,7 @@ export default class FileReportDrawerVaReportsComponent extends Component<FileRe
   @service declare intl: IntlService;
   @service('notifications') declare notify: NotificationService;
   @service declare realtime: RealtimeService;
+  @service declare analytics: AnalyticsService;
 
   @tracked reports: FileReportQueryResponse | null = null;
 
@@ -233,6 +235,13 @@ export default class FileReportDrawerVaReportsComponent extends Component<FileRe
       await this.getReports.perform();
 
       this.notify.success(this.intl.t('reportIsGettingGenerated'));
+
+      this.analytics.track({
+        name: 'report_generation_triggered',
+        properties: {
+          feature: 'va_report_generation',
+        },
+      });
     } catch (error) {
       this.notify.error(parseError(error, this.intl.t('reportGenerateError')));
     }

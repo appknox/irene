@@ -1,5 +1,4 @@
 import { inject as service } from '@ember/service';
-import { isEmpty } from '@ember/utils';
 import Route from '@ember/routing/route';
 import { action } from '@ember/object';
 import { all } from 'rsvp';
@@ -8,13 +7,8 @@ import type Store from '@ember-data/store';
 import type IntlService from 'ember-intl/services/intl';
 import type RouterService from '@ember/routing/router-service';
 
-import { CSBMap } from 'irene/router';
 import ENV from 'irene/config/environment';
-import {
-  registerPostHogOrganization,
-  unregisterPostHog,
-} from 'irene/utils/posthog';
-import triggerAnalytics from 'irene/utils/trigger-analytics';
+import type AnalyticsService from 'irene/services/analytics';
 import type MeService from 'irene/services/me';
 import type DatetimeService from 'irene/services/datetime';
 import type TrialService from 'irene/services/trial';
@@ -41,6 +35,7 @@ export default class AuthenticatedRoute extends Route {
   @service declare configuration: ConfigurationService;
   @service declare skOrganization: SkOrganizationService;
   @service declare logger: LoggerService;
+  @service declare analytics: AnalyticsService;
 
   @service declare router: RouterService;
   @service('browser/window') declare window: Window;
@@ -98,7 +93,10 @@ export default class AuthenticatedRoute extends Route {
       accountName: company,
     };
 
-    triggerAnalytics('login', data as CsbAnalyticsLoginData);
+    this.analytics.track({
+      name: 'login',
+      properties: data,
+    });
 
     await this.integration.configure(user);
 
@@ -115,7 +113,7 @@ export default class AuthenticatedRoute extends Route {
 
     await this.websocket.configure(user);
 
-    registerPostHogOrganization(user, this.org.selected);
+    this.analytics.registerPostHogOrganization(user, this.org.selected);
   }
 
   async configureRollBar(user: UserModel) {
@@ -155,20 +153,39 @@ export default class AuthenticatedRoute extends Route {
 
   @action
   willTransition(transition: Transition) {
-    const currentRoute = transition.to?.name as keyof typeof CSBMap;
-    const csbDict = CSBMap[currentRoute];
+    try {
+      const routeName =
+        transition.to?.name || transition.to?.localName || 'unknown';
+      const params = transition?.to?.params || {};
+      const queryParams = transition?.to?.queryParams ?? {};
 
-    if (!isEmpty(csbDict)) {
-      triggerAnalytics('feature', csbDict as CsbAnalyticsFeatureData);
+      this.analytics.page(routeName, {
+        routeName,
+        params,
+        queryParams,
+      });
+    } catch (err) {
+      console.warn('analytics: failed to track route transition', err);
     }
   }
 
+  /**
+   * Track logout, unregister analytics, then invalidate session.
+   */
   @action
   invalidateSession() {
-    triggerAnalytics('logout', {} as CsbAnalyticsData);
-    unregisterPostHog();
+    try {
+      this.analytics.track({
+        name: 'logout',
+        properties: {},
+      });
 
-    this.session.invalidate();
+      this.analytics.unregister();
+    } catch (err) {
+      console.warn('analytics: failed to unregister', err);
+    }
+
+    this.session?.invalidate?.();
   }
 
   @action saveTransitionedURL() {

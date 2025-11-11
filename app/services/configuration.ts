@@ -24,9 +24,7 @@ type ImageData = {
 
 type IntegrationData = {
   freshchat_key: string;
-  hotjar_key: string;
   pendo_key: string;
-  csb_key: string;
   rollbar_key: string;
   freshdesk_configuration: {
     widget_id: string;
@@ -107,8 +105,6 @@ export default class ConfigurationService extends Service {
     freshdesk_configuration: {
       widget_id: '',
     },
-    csb_key: '',
-    hotjar_key: '',
     pendo_key: '',
     rollbar_key: '',
   };
@@ -141,8 +137,6 @@ export default class ConfigurationService extends Service {
       this.imageData.logo_on_darkbg ||= data.images.logo_on_darkbg;
       this.imageData.logo_on_lightbg ||= data.images.logo_on_lightbg;
 
-      this.integrationData.csb_key ||= data.integrations.csb_key;
-      this.integrationData.hotjar_key ||= data.integrations.hotjar_key;
       this.integrationData.pendo_key ||= data.integrations.pendo_key;
       this.integrationData.rollbar_key ||= data.integrations.rollbar_key;
       this.integrationData.freshchat_key ||= data.integrations.freshchat_key;
