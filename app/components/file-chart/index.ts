@@ -1,14 +1,15 @@
+import Component from '@glimmer/component';
 import { service } from '@ember/service';
 import { tracked } from 'tracked-built-ins';
 import { task } from 'ember-concurrency';
-import Component from '@glimmer/component';
+import { waitForPromise } from '@ember/test-waiters';
 import type IntlService from 'ember-intl/services/intl';
 import type Store from '@ember-data/store';
 
-import parseError from 'irene/utils/parse-error';
 import { type ECOption } from 'irene/components/ak-chart';
 import type FileModel from 'irene/models/file';
 import type FileRiskModel from 'irene/models/file-risk';
+import type LoggerService from 'irene/services/logger';
 
 export interface FileChartSignature {
   Element: HTMLElement;
@@ -21,6 +22,7 @@ export interface FileChartSignature {
 export default class FileChartComponent extends Component<FileChartSignature> {
   @service declare intl: IntlService;
   @service declare store: Store;
+  @service declare logger: LoggerService;
   @service('notifications') declare notify: NotificationService;
 
   @tracked fileRisk: FileRiskModel | null = null;
@@ -123,10 +125,13 @@ export default class FileChartComponent extends Component<FileChartSignature> {
   fetchFileRisk = task(async () => {
     try {
       if (this.args.file) {
-        this.fileRisk = await this.args.file.fetchFileRisk();
+        this.fileRisk = await waitForPromise(this.args.file.fetchFileRisk());
       }
     } catch (error) {
-      this.notify.error(parseError(error, this.intl.t('pleaseTryAgain')));
+      this.logger.error(
+        `Failed to fetch file risk for file - ${this.args.file?.id}`,
+        error
+      );
     }
   });
 }

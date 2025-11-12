@@ -1,10 +1,11 @@
 import Store from '@ember-data/store';
 import Component from '@glimmer/component';
-import type FileModel from 'irene/models/file';
 import { service } from '@ember/service';
 import { task } from 'ember-concurrency';
-import AnalysisModel from 'irene/models/analysis';
 import { tracked } from 'tracked-built-ins';
+
+import type AnalysisModel from 'irene/models/analysis';
+import type FileModel from 'irene/models/file';
 
 export interface FileDetailsSignature {
   Args: { file: FileModel };

@@ -17,7 +17,7 @@ module('Integration | Component | sbom/scan-details', function (hooks) {
     const store = this.owner.lookup('service:store');
 
     const file = this.server.create('file', 1);
-    const project = this.server.create('project', 1, { last_file_id: file.id });
+    const project = this.server.create('project', 1, { last_file: file });
     const sbomScanSummary = this.server.create('sbom-scan-summary', 1);
 
     this.server.createList('sbom-component', 10);
@@ -59,11 +59,11 @@ module('Integration | Component | sbom/scan-details', function (hooks) {
     });
 
     // Server mock
-    this.server.get('/v2/projects/:id', (schema, req) => {
+    this.server.get('/v3/projects/:id', (schema, req) => {
       return schema.projects.find(`${req.params.id}`)?.toJSON();
     });
 
-    this.server.get('/v2/files/:id', (schema, req) => {
+    this.server.get('/v3/files/:id', (schema, req) => {
       return schema.files.find(`${req.params.id}`)?.toJSON();
     });
   });

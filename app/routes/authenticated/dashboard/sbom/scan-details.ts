@@ -60,8 +60,8 @@ export default class AuthenticatedDashboardSbomScanDetailsRoute extends AkBreadc
     });
 
     const sbomPrj = await sbomProject.get('project');
-    const projectLastFile = await sbomPrj.get('lastFileId');
-    const projectLastFileName = projectLastFile.name;
+    const projectLastFile = sbomPrj.get('lastFile');
+    const projectLastFileName = projectLastFile?.name;
 
     return {
       projectLastFileName,

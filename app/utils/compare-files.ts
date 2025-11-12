@@ -1,13 +1,10 @@
-// eslint-disable-next-line ember/use-ember-data-rfc-395-imports
-import DS from 'ember-data';
-
-import AnalysisModel from 'irene/models/analysis';
-import FileModel from 'irene/models/file';
-import VulnerabilityModel from 'irene/models/vulnerability';
+import { AsyncBelongsTo } from '@ember-data/model';
 import ENUMS from 'irene/enums';
+import type AnalysisModel from 'irene/models/analysis';
+import type VulnerabilityModel from 'irene/models/vulnerability';
 
 export type FileComparisonItem = {
-  vulnerability?: DS.AsyncBelongsTo<VulnerabilityModel>;
+  vulnerability?: AsyncBelongsTo<VulnerabilityModel>;
   analysis1?: AnalysisModel;
   analysis2?: AnalysisModel;
 };

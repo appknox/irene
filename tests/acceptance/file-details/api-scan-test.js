@@ -8,7 +8,6 @@ import {
 } from '@ember/test-helpers';
 
 import { setupMirage } from 'ember-cli-mirage/test-support';
-import { setupRequiredEndpoints } from '../../helpers/acceptance-utils';
 import { setupApplicationTest } from 'ember-qunit';
 import { module, test } from 'qunit';
 import Service from '@ember/service';
@@ -18,6 +17,8 @@ import { faker } from '@faker-js/faker';
 
 import ENUMS from 'irene/enums';
 import { analysisRiskStatus } from 'irene/helpers/analysis-risk-status';
+import { setupFileModelEndpoints } from 'irene/tests/helpers/file-model-utils';
+import { setupRequiredEndpoints } from 'irene/tests/helpers/acceptance-utils';
 
 class IntegrationStub extends Service {
   async configure(user) {
@@ -65,10 +66,7 @@ module('Acceptance | file-details/api-scan', function (hooks) {
 
   hooks.beforeEach(async function () {
     const { vulnerabilities } = await setupRequiredEndpoints(this.server);
-
-    const analyses = vulnerabilities.map((v, id) =>
-      this.server.create('analysis', { id, vulnerability: v.id }).toJSON()
-    );
+    await setupFileModelEndpoints(this.server);
 
     const profile = this.server.create('profile', { id: '1' });
 
@@ -83,8 +81,12 @@ module('Acceptance | file-details/api-scan', function (hooks) {
       is_active: true,
       project: project.id,
       profile: profile.id,
-      analyses,
     });
+
+    // Create analyses
+    vulnerabilities.map((v, id) =>
+      this.server.create('analysis', { id, vulnerability: v.id, file: file.id })
+    );
 
     const capturedApis = [
       ...this.server.createList('capturedapi', 3, { is_active: false }),
@@ -103,11 +105,11 @@ module('Acceptance | file-details/api-scan', function (hooks) {
     this.owner.register('service:websocket', WebsocketStub);
 
     // server api interception
-    this.server.get('/v2/files/:id', (schema, req) => {
+    this.server.get('/v3/files/:id', (schema, req) => {
       return schema.files.find(`${req.params.id}`)?.toJSON();
     });
 
-    this.server.get('/v2/projects/:id', (schema, req) => {
+    this.server.get('/v3/projects/:id', (schema, req) => {
       return schema.projects.find(`${req.params.id}`)?.toJSON();
     });
 
@@ -180,7 +182,7 @@ module('Acceptance | file-details/api-scan', function (hooks) {
   });
 
   test('it renders api scan with captured api count greater than 0', async function (assert) {
-    this.server.get('/v2/files/1/capturedapis', (schema, req) => {
+    this.server.get('/v2/files/:id/capturedapis', (schema, req) => {
       const results = req.queryParams.is_active
         ? schema.db.capturedapis.where({ is_active: true })
         : schema.capturedapis.all().models;

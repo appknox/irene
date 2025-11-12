@@ -1,9 +1,9 @@
-import { inject as service } from '@ember/service';
 import Component from '@glimmer/component';
+import { service } from '@ember/service';
 import { tracked } from 'tracked-built-ins';
 import { task } from 'ember-concurrency';
 
-import FileModel from 'irene/models/file';
+import type FileModel from 'irene/models/file';
 import type OrganizationService from 'irene/services/organization';
 import type FileRiskModel from 'irene/models/file-risk';
 

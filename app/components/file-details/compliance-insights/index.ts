@@ -1,17 +1,17 @@
 import Component from '@glimmer/component';
-import { inject as service } from '@ember/service';
-import Store from '@ember-data/store';
+import { service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
 import { task } from 'ember-concurrency';
-import Owner from '@ember/owner';
-import ArrayProxy from '@ember/array/proxy';
+import type Owner from '@ember/owner';
+import type ArrayProxy from '@ember/array/proxy';
+import type Store from '@ember-data/store';
 
-import FileModel from 'irene/models/file';
 import ENUMS from 'irene/enums';
-import { ECOption } from 'irene/components/ak-chart';
-import OwaspModel from 'irene/models/owasp';
-import OwaspMobile2024Model from 'irene/models/owaspmobile2024';
-import AnalysisModel from 'irene/models/analysis';
+import type { ECOption } from 'irene/components/ak-chart';
+import type FileModel from 'irene/models/file';
+import type OwaspModel from 'irene/models/owasp';
+import type OwaspMobile2024Model from 'irene/models/owaspmobile2024';
+import type AnalysisModel from 'irene/models/analysis';
 
 export interface FileDetailsComplianceInsightsSignature {
   Args: {

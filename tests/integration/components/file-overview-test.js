@@ -4,6 +4,7 @@ import { setupMirage } from 'ember-cli-mirage/test-support';
 import { setupRenderingTest } from 'ember-qunit';
 import { hbs } from 'ember-cli-htmlbars';
 import { click, find, render, triggerEvent } from '@ember/test-helpers';
+import { setupFileModelEndpoints } from 'irene/tests/helpers/file-model-utils';
 
 module(
   'Integration | Component | file-compare/file-overview',
@@ -13,6 +14,8 @@ module(
     setupMirage(hooks);
 
     hooks.beforeEach(async function () {
+      const { file_risk_info } = setupFileModelEndpoints(this.server);
+
       this.store = this.owner.lookup('service:store');
 
       const tags = [1, 2, 3, 4].map(() => this.server.create('tag').toJSON());
@@ -21,9 +24,6 @@ module(
       });
 
       const vulnerabilities = this.server.createList('vulnerability', 7);
-      const analyses = vulnerabilities.map((v) =>
-        this.server.create('analysis', { vulnerability: v.id }).toJSON()
-      );
 
       // Profile Model
       const profile = this.server.create('profile');
@@ -42,18 +42,23 @@ module(
         ...file.toJSON(),
         project: project.id,
         profile: profile.id,
-        analyses,
         tags,
       });
+
+      vulnerabilities.map((v) =>
+        this.server.create('analysis', { vulnerability: v.id, file: file.id })
+      );
+
       const fileModel = this.store.push(normalizedFile);
 
       // Common test props
       this.setProperties({
         file: fileModel,
         profile: profileModel,
+        file_risk_info,
       });
 
-      this.server.get('/v2/projects/:id', (schema, req) => {
+      this.server.get('/v3/projects/:id', (schema, req) => {
         return schema.projects.find(req.params.id).toJSON();
       });
     });
@@ -125,32 +130,32 @@ module(
       // Chart legend data was formulated from the file severity level counts
       const severityValues = [
         {
-          value: this.file.countRiskCritical,
+          value: this.file_risk_info.risk_count_critical,
           name: t('critical'),
           severityType: 'critical',
         },
         {
-          value: this.file.countRiskHigh,
+          value: this.file_risk_info.risk_count_high,
           name: t('high'),
           severityType: 'high',
         },
         {
-          value: this.file.countRiskMedium,
+          value: this.file_risk_info.risk_count_medium,
           name: t('medium'),
           severityType: 'medium',
         },
         {
-          value: this.file.countRiskLow,
+          value: this.file_risk_info.risk_count_low,
           name: t('low'),
           severityType: 'low',
         },
         {
-          value: this.file.countRiskNone,
+          value: this.file_risk_info.risk_count_passed,
           name: t('passed'),
           severityType: 'passed',
         },
         {
-          value: this.file.countRiskUnknown,
+          value: this.file_risk_info.risk_count_unknown,
           name: t('untested'),
           severityType: 'none',
         },
@@ -281,7 +286,7 @@ module(
     });
 
     test('it tests the various scan status states', async function (assert) {
-      this.server.get('/v2/projects/:id', (schema, req) => {
+      this.server.get('/v3/projects/:id', (schema, req) => {
         const project = schema.projects.find(req.params.id).toJSON();
         project.is_manual_scan_available = true;
 

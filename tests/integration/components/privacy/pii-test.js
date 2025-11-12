@@ -61,7 +61,7 @@ module('Integration | Component | privacy/pii', function (hooks) {
     const pii = this.server.createList('pii', 5);
 
     // Server Mocks
-    this.server.get('/v2/files/:id', (schema, req) => {
+    this.server.get('/v3/files/:id', (schema, req) => {
       const data = schema.files.find(`${req.params.id}`)?.toJSON();
 
       return { ...data };

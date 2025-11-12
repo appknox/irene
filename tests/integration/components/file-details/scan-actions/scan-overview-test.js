@@ -5,6 +5,7 @@ import { setupIntl, t } from 'ember-intl/test-support';
 import { setupRenderingTest } from 'ember-qunit';
 import { module, test } from 'qunit';
 import ENUMS from 'irene/enums';
+import { setupFileModelEndpoints } from 'irene/tests/helpers/file-model-utils';
 
 module(
   'Integration | Component | file-details/scan-actions/scan-overview',
@@ -14,6 +15,8 @@ module(
     setupIntl(hooks, 'en');
 
     hooks.beforeEach(async function () {
+      setupFileModelEndpoints(this.server);
+
       this.server.createList('organization', 1);
 
       const store = this.owner.lookup('service:store');
@@ -22,7 +25,7 @@ module(
         project: '1',
       });
 
-      this.server.create('project', { file: file.id, id: '1' });
+      this.server.create('project', { last_file: file, id: '1' });
 
       this.setProperties({
         file: store.push(store.normalize('file', file.toJSON())),
@@ -91,8 +94,8 @@ module(
       );
 
       // Server mocks
-      this.server.get('/v2/files/:id/screen_coverage', (schema, req) => {
-        return schema.scanCoverages.find(`${req.params.id}`)?.toJSON();
+      this.server.get('/v2/files/:id/screen_coverage', (schema) => {
+        return schema.scanCoverages.find(`${scan_coverage.id}`)?.toJSON();
       });
 
       await render(hbs`

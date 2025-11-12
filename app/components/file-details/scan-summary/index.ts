@@ -1,12 +1,11 @@
 import Component from '@glimmer/component';
-import AnalysisModel from 'irene/models/analysis';
-import FileModel from 'irene/models/file';
+import type AnalysisModel from 'irene/models/analysis';
+import type FileModel from 'irene/models/file';
 
 export interface FileDetailsScanSummarySignature {
   Args: {
     file: FileModel;
     fileAnalyses: AnalysisModel[];
-    previousFileAnalyses: AnalysisModel[];
   };
 }
 

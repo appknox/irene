@@ -1,12 +1,13 @@
 import { module, test } from 'qunit';
 import { currentURL, click, visit, findAll } from '@ember/test-helpers';
-import { setupRequiredEndpoints } from '../helpers/acceptance-utils';
+import { setupRequiredEndpoints } from 'irene/tests/helpers/acceptance-utils';
 import { setupApplicationTest } from 'ember-qunit';
 import { setupMirage } from 'ember-cli-mirage/test-support';
 import { t } from 'ember-intl/test-support';
 import Service from '@ember/service';
 
 import { serializer } from 'irene/tests/test-utils';
+import { setupFileModelEndpoints } from '../helpers/file-model-utils';
 
 class IntegrationStub extends Service {
   async configure(user) {
@@ -51,13 +52,11 @@ module('Acceptance | file details', function (hooks) {
       this.server
     );
 
+    setupFileModelEndpoints(this.server);
+
     this.owner.register('service:integration', IntegrationStub);
     this.owner.register('service:websocket', WebsocketStub);
     this.owner.register('service:poll', PollServiceStub);
-
-    const analyses = vulnerabilities.map((v, id) =>
-      this.server.create('analysis', { id, vulnerability: v.id }).toJSON()
-    );
 
     const profile = this.server.create('profile', { id: '1' });
 
@@ -69,8 +68,13 @@ module('Acceptance | file details', function (hooks) {
     const file = this.server.create('file', {
       is_static_done: true,
       project: project.id,
-      analyses,
     });
+
+    const analyses = vulnerabilities.map((v, id) =>
+      this.server
+        .create('analysis', { id, vulnerability: v.id, file: file.id })
+        .toJSON()
+    );
 
     this.server.createList('unknown-analysis-status', 3, {
       status: true,
@@ -81,17 +85,17 @@ module('Acceptance | file details', function (hooks) {
       schema.organizationMes.find(`${req.params.id}`)?.toJSON()
     );
 
-    this.server.get('organizations/:id/projects', (schema) => {
+    this.server.get('/v3/projects', (schema) => {
       const results = schema.projects.all().models;
 
       return { count: results.length, next: null, previous: null, results };
     });
 
-    this.server.get('/v2/files/:id', (schema, req) => {
+    this.server.get('/v3/files/:id', (schema, req) => {
       return schema.files.find(`${req.params.id}`)?.toJSON();
     });
 
-    this.server.get('/v2/projects/:id', (schema, req) => {
+    this.server.get('/v3/projects/:id', (schema, req) => {
       return schema.projects.find(req.params.id).toJSON();
     });
 
@@ -137,6 +141,7 @@ module('Acceptance | file details', function (hooks) {
       file,
       profile,
       organization,
+      analyses,
     });
   });
 
@@ -153,7 +158,7 @@ module('Acceptance | file details', function (hooks) {
     const latestFile = this.server.create('file');
 
     // project that has a latest file of id 2
-    this.project.update({ last_file_id: latestFile.id });
+    this.project.update({ last_file: latestFile });
 
     // Updates file with id of 1 with project that has a latest file of id 2
     latestFile.update({ is_static_done: true, project: this.project.id });
@@ -187,7 +192,7 @@ module('Acceptance | file details', function (hooks) {
     });
 
     // Current file in route has an fileid of 1
-    await visit('/dashboard/file/1');
+    await visit(`/dashboard/file/${this.file.id}`);
 
     assert.dom('[data-test-fileReportBtn]').exists();
 
@@ -223,7 +228,7 @@ module('Acceptance | file details', function (hooks) {
       return schema.analyses.find(`${req.params.id}`)?.toJSON();
     });
 
-    await visit('/dashboard/file/1');
+    await visit(`/dashboard/file/${this.file.id}`);
 
     assert
       .dom('[data-test-vulnerability-analysis-title]')
@@ -233,7 +238,7 @@ module('Acceptance | file details', function (hooks) {
 
     await click(rows[1]);
 
-    const analyses = this.file.analyses
+    const analyses = this.analyses
       .toArray()
       .sort((a, b) => b.computed_risk - a.computed_risk); // sort by computedRisk:desc
 
@@ -244,7 +249,7 @@ module('Acceptance | file details', function (hooks) {
   });
 
   test('test sast view details click to navigate to static scan page', async function (assert) {
-    await visit('/dashboard/file/1');
+    await visit(`/dashboard/file/${this.file.id}`);
 
     await click('[data-test-fileDetailScanActions-staticScanViewDetails]');
 
@@ -255,7 +260,7 @@ module('Acceptance | file details', function (hooks) {
   });
 
   test('test dast view details click to navigate to dynamic scan page', async function (assert) {
-    await visit('/dashboard/file/1');
+    await visit(`/dashboard/file/${this.file.id}`);
 
     await click('[data-test-fileDetailScanActions-dynamicScanViewDetails]');
 
@@ -274,7 +279,7 @@ module('Acceptance | file details', function (hooks) {
       return { count: results.length, previous: null, next: null, results };
     });
 
-    await visit('/dashboard/file/1');
+    await visit(`/dashboard/file/${this.file.id}`);
 
     await click('[data-test-fileDetailScanActions-apiScanViewDetails]');
 
@@ -285,7 +290,7 @@ module('Acceptance | file details', function (hooks) {
   });
 
   test('test manual view details click to navigate to manual scan page', async function (assert) {
-    await visit('/dashboard/file/1');
+    await visit(`/dashboard/file/${this.file.id}`);
 
     await click('[data-test-fileDetailScanActions-manualScanViewDetails]');
 

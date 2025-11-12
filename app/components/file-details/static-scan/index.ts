@@ -1,10 +1,11 @@
 import Component from '@glimmer/component';
 import { tracked } from '@glimmer/tracking';
-import { inject as service } from '@ember/service';
+import { service } from '@ember/service';
 import { action } from '@ember/object';
 import { task } from 'ember-concurrency';
 import type IntlService from 'ember-intl/services/intl';
 import type { EmberTableSort } from 'ember-table';
+import type Store from '@ember-data/store';
 
 import ENUMS from 'irene/enums';
 import ENV from 'irene/config/environment';
@@ -13,7 +14,6 @@ import type IreneAjaxService from 'irene/services/ajax';
 import type { AjaxError } from 'irene/services/ajax';
 import type AnalysisModel from 'irene/models/analysis';
 import type FileRiskModel from 'irene/models/file-risk';
-import Store from '@ember-data/store';
 
 export interface FileDetailsStaticScanSignature {
   Args: {

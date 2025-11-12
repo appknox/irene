@@ -20,7 +20,7 @@ module(
       const file = this.server.create('file', 1);
 
       const project = this.server.create('project', 1, {
-        last_file_id: file.id,
+        last_file: file,
       });
 
       const sbomScanSummary = this.server.create('sbom-scan-summary', 1);

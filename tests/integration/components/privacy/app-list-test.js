@@ -41,7 +41,7 @@ module('Integration | Component | privacy/app-list', function (hooks) {
     const files = this.server.createList('file', 5);
 
     const projects = files.map((file) =>
-      this.server.create('project', { last_file_id: file.id })
+      this.server.create('project', { last_file: file })
     );
 
     const privacyProjects = projects.map((project, idx) =>
@@ -67,11 +67,11 @@ module('Integration | Component | privacy/app-list', function (hooks) {
       };
     });
 
-    this.server.get('/v2/projects/:id', (schema, req) => {
+    this.server.get('/v3/projects/:id', (schema, req) => {
       return schema.projects.find(`${req.params.id}`)?.toJSON();
     });
 
-    this.server.get('/v2/files/:id', (schema, req) => {
+    this.server.get('/v3/files/:id', (schema, req) => {
       return schema.files.find(`${req.params.id}`)?.toJSON();
     });
 

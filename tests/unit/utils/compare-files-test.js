@@ -1,17 +1,22 @@
-import {
-  compareFiles,
-  getFileComparisonCategories,
-} from 'irene/utils/compare-files';
 import { setupMirage } from 'ember-cli-mirage/test-support';
 import { setupTest } from 'ember-qunit';
 import { module, test } from 'qunit';
+
 import ENUMS from 'irene/enums';
+import { setupFileModelEndpoints } from 'irene/tests/helpers/file-model-utils';
+
+import {
+  compareFileAnalyses,
+  getFileComparisonCategories,
+} from 'irene/utils/compare-files';
 
 module('Unit | Utility | compare-files', function (hooks) {
   setupTest(hooks);
   setupMirage(hooks);
 
   hooks.beforeEach(async function () {
+    setupFileModelEndpoints(this.server);
+
     const store = this.owner.lookup('service:store');
 
     // create vulnerabilities and push to store
@@ -31,40 +36,41 @@ module('Unit | Utility | compare-files', function (hooks) {
     );
 
     // Creates two files with varying computed risks for the analyses
-    // computedRisks = [Risk1, Risk2] mapped to [file1, file2] during creation
+    // computedRisks = [Risk1, Risk2] mapped to [file1Analyses, file2Analyses] during creation
     const createFiles = (computedRisks) =>
       Array.from(new Array(2)).map((_, idx) => {
-        const analyses = vulnerabilities.map((v) =>
-          this.server.create('analysis', {
-            vulnerability: v.id,
-            status: ENUMS.ANALYSIS_STATUS.COMPLETED,
-            computed_risk: computedRisks[idx],
-          })
-        );
-
         const file = this.server.create('file', {
           id: idx + 1,
         });
 
         const fileModel = store.push(store.normalize('file', file.toJSON()));
-        fileModel.analyses = analyses.map((a) =>
+
+        let analyses = vulnerabilities.map((v) =>
+          this.server.create('analysis', {
+            vulnerability: v.id,
+            file: file.id,
+            status: ENUMS.ANALYSIS_STATUS.COMPLETED,
+            computed_risk: computedRisks[idx],
+          })
+        );
+
+        analyses = analyses.map((a) =>
           store.push(store.normalize('analysis', a.toJSON()))
         );
 
-        return fileModel;
+        return [fileModel, analyses];
       });
 
     // Asserts the analyses in the compare results and the files
-    const assertAnalyses = (comparisons, assert, files) =>
+    const assertAnalyses = (comparisons, assert, filesAnalyses) =>
       comparisons.forEach((comparison, idx) => {
         const analysis1 = comparison.analysis1;
         const analysis2 = comparison.analysis2;
 
-        const analysis1ComputedRisk =
-          files[0].analyses.objectAt(idx).computedRisk;
+        const [file1Analyses, file2Analyses] = filesAnalyses;
 
-        const analysis2ComputedRisk =
-          files[1].analyses.objectAt(idx).computedRisk;
+        const analysis1ComputedRisk = file1Analyses.objectAt(idx).computedRisk;
+        const analysis2ComputedRisk = file2Analyses.objectAt(idx).computedRisk;
 
         assert.strictEqual(analysis1ComputedRisk, analysis1.computedRisk);
         assert.strictEqual(analysis2ComputedRisk, analysis2.computedRisk);
@@ -85,12 +91,19 @@ module('Unit | Utility | compare-files', function (hooks) {
       [ENUMS.RISK.NONE, undefined],
     ],
     async function (assert, [file1ComputedRisk, file2ComputedRisk]) {
-      const files = this.createFiles([file1ComputedRisk, file2ComputedRisk]);
-      const comparisons = compareFileAnalyses(files[0], files[1]);
+      const filesInfo = this.createFiles([
+        file1ComputedRisk,
+        file2ComputedRisk,
+      ]);
+
+      const [, file1Analyses] = filesInfo[0];
+      const [, file2Analyses] = filesInfo[1];
+
+      const comparisons = compareFileAnalyses(file1Analyses, file2Analyses);
       const categories = getFileComparisonCategories(comparisons);
 
       assert.strictEqual(categories.resolved.length, comparisons.length);
-      this.assertAnalyses(comparisons, assert, files);
+      this.assertAnalyses(comparisons, assert, [file1Analyses, file2Analyses]);
     }
   );
 
@@ -108,12 +121,19 @@ module('Unit | Utility | compare-files', function (hooks) {
       [ENUMS.RISK.HIGH, undefined],
     ],
     async function (assert, [file1ComputedRisk, file2ComputedRisk]) {
-      const files = this.createFiles([file1ComputedRisk, file2ComputedRisk]);
-      const comparisons = compareFileAnalyses(files[0], files[1]);
+      const filesInfo = this.createFiles([
+        file1ComputedRisk,
+        file2ComputedRisk,
+      ]);
+
+      const [, file1Analyses] = filesInfo[0];
+      const [, file2Analyses] = filesInfo[1];
+
+      const comparisons = compareFileAnalyses(file1Analyses, file2Analyses);
       const categories = getFileComparisonCategories(comparisons);
 
       assert.strictEqual(categories.newRisks.length, comparisons.length);
-      this.assertAnalyses(comparisons, assert, files);
+      this.assertAnalyses(comparisons, assert, [file1Analyses, file2Analyses]);
     }
   );
 
@@ -127,12 +147,19 @@ module('Unit | Utility | compare-files', function (hooks) {
       [ENUMS.RISK.UNKNOWN, undefined],
     ],
     async function (assert, [file1ComputedRisk, file2ComputedRisk]) {
-      const files = this.createFiles([file1ComputedRisk, file2ComputedRisk]);
-      const comparisons = compareFileAnalyses(files[0], files[1]);
+      const filesInfo = this.createFiles([
+        file1ComputedRisk,
+        file2ComputedRisk,
+      ]);
+
+      const [, file1Analyses] = filesInfo[0];
+      const [, file2Analyses] = filesInfo[1];
+
+      const comparisons = compareFileAnalyses(file1Analyses, file2Analyses);
       const categories = getFileComparisonCategories(comparisons);
 
       assert.strictEqual(categories.untested.length, comparisons.length);
-      this.assertAnalyses(comparisons, assert, files);
+      this.assertAnalyses(comparisons, assert, [file1Analyses, file2Analyses]);
     }
   );
 
@@ -146,12 +173,19 @@ module('Unit | Utility | compare-files', function (hooks) {
       [ENUMS.RISK.CRITICAL, ENUMS.RISK.MEDIUM],
     ],
     async function (assert, [file1ComputedRisk, file2ComputedRisk]) {
-      const files = this.createFiles([file1ComputedRisk, file2ComputedRisk]);
-      const comparisons = compareFileAnalyses(files[0], files[1]);
+      const filesInfo = this.createFiles([
+        file1ComputedRisk,
+        file2ComputedRisk,
+      ]);
+
+      const [, file1Analyses] = filesInfo[0];
+      const [, file2Analyses] = filesInfo[1];
+
+      const comparisons = compareFileAnalyses(file1Analyses, file2Analyses);
       const categories = getFileComparisonCategories(comparisons);
 
       assert.strictEqual(categories.recurring.length, comparisons.length);
-      this.assertAnalyses(comparisons, assert, files);
+      this.assertAnalyses(comparisons, assert, [file1Analyses, file2Analyses]);
     }
   );
 });

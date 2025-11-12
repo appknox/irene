@@ -2,13 +2,13 @@ import Component from '@glimmer/component';
 import { action } from '@ember/object';
 import { service } from '@ember/service';
 import { tracked } from 'tracked-built-ins';
+import { waitForPromise } from '@ember/test-waiters';
+import { task } from 'ember-concurrency';
+import type IntlService from 'ember-intl/services/intl';
+
 import type FileModel from 'irene/models/file';
 import type DynamicScanService from 'irene/services/dynamic-scan';
-
-import { task } from 'ember-concurrency';
-import parseError from 'irene/utils/parse-error';
-import IntlService from 'ember-intl/services/intl';
-import DynamicscanModel from 'irene/models/dynamicscan';
+import type DynamicscanModel from 'irene/models/dynamicscan';
 
 export interface FileDetailsDastManualSignature {
   Args: {
@@ -72,12 +72,9 @@ export default class FileDetailsDastManual extends Component<FileDetailsDastManu
   }
 
   getLastDynamicScans = task(async () => {
-    try {
-      this.lastManualDynamicScan =
-        await this.file.getFileLastManualDynamicScan();
-    } catch (error) {
-      this.notify.error(parseError(error, this.intl.t('pleaseTryAgain')));
-    }
+    this.lastManualDynamicScan = await waitForPromise(
+      this.file.getFileLastManualDynamicScan()
+    );
   });
 }
 

@@ -54,7 +54,7 @@ module(
 
       const project = this.server.create('project', {
         id: '1',
-        file: file.id,
+        last_file: file,
         active_profile_id: profile.id,
       });
 

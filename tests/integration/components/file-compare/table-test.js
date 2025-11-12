@@ -8,8 +8,9 @@ import { faker } from '@faker-js/faker';
 
 import ENUMS from 'irene/enums';
 import { analysisRiskStatus } from 'irene/helpers/analysis-risk-status';
+
 import {
-  compareFiles,
+  compareFileAnalyses,
   getFileComparisonCategories,
 } from 'irene/utils/compare-files';
 
@@ -34,8 +35,13 @@ module('Integration | Component | file-compare/table', function (hooks) {
     this.server.create('profile');
 
     // Creates an analyses and maps a vulnerability to it
-    const createAnalyses = (vulnerability, analysisStatus, computedRisk) => {
-      const analysis = this.server.create('analysis');
+    const createAnalyses = (
+      file,
+      vulnerability,
+      analysisStatus,
+      computedRisk
+    ) => {
+      const analysis = this.server.create('analysis', { file: file.id });
 
       const normalizedAnalysis = this.store.normalize('analysis', {
         ...analysis.toJSON(),
@@ -86,7 +92,7 @@ module('Integration | Component | file-compare/table', function (hooks) {
       };
     });
 
-    this.server.get('/v2/projects/:id', (schema, req) => {
+    this.server.get('/v3/projects/:id', (schema, req) => {
       return schema.projects.find(req.params.id).toJSON();
     });
   });
@@ -118,24 +124,21 @@ module('Integration | Component | file-compare/table', function (hooks) {
         file2ComputedRisk,
       ]
     ) {
-      const file1Analyses = this.vulnerabilities.map((v) =>
-        this.createAnalyses(v, analysisStatus, file1ComputedRisk)
-      );
-
-      const file2Analyses = this.vulnerabilities.map((v) =>
-        this.createAnalyses(v, analysisStatus, file2ComputedRisk)
-      );
-
       const file1 = this.files[0];
       const file2 = this.files[1];
 
-      file1.set('analyses', file1Analyses);
-      file2.set('analyses', file2Analyses);
+      const file1Analyses = this.vulnerabilities.map((v) =>
+        this.createAnalyses(file1, v, analysisStatus, file1ComputedRisk)
+      );
+
+      const file2Analyses = this.vulnerabilities.map((v) =>
+        this.createAnalyses(file2, v, analysisStatus, file2ComputedRisk)
+      );
 
       this.comparisonFilterKey = comparisonFilterKey;
 
       // Gets all comparison data for category
-      const comparisons = compareFileAnalyses(file1, file2);
+      const comparisons = compareFileAnalyses(file1Analyses, file2Analyses);
       const compareCategories = getFileComparisonCategories(comparisons, true);
       this.filteredComparisons = compareCategories[this.comparisonFilterKey];
 
@@ -168,6 +171,7 @@ module('Integration | Component | file-compare/table', function (hooks) {
 
       // Sanity check for first row
       const risk = this.filteredComparisons[0];
+
       const file1AnalysisDetails = analysisRiskStatus([
         risk.analysis1.computedRisk,
         risk.analysis1.status,
@@ -190,24 +194,21 @@ module('Integration | Component | file-compare/table', function (hooks) {
   );
 
   test('it shows a nonexistent test case icon in the new risks tab', async function (assert) {
-    const file1Analyses = this.vulnerabilities.map((v) =>
-      this.createAnalyses(v, ENUMS.ANALYSIS.COMPLETED, ENUMS.RISK.HIGH)
-    );
-
-    const file2Analyses = this.vulnerabilities.map(() =>
-      this.createAnalyses(null, ENUMS.ANALYSIS.COMPLETED)
-    );
-
     const file1 = this.files[0];
     const file2 = this.files[1];
 
-    file1.set('analyses', file1Analyses);
-    file2.set('analyses', file2Analyses);
+    const file1Analyses = this.vulnerabilities.map((v) =>
+      this.createAnalyses(file1, v, ENUMS.ANALYSIS.COMPLETED, ENUMS.RISK.HIGH)
+    );
+
+    const file2Analyses = this.vulnerabilities.map(() =>
+      this.createAnalyses(file2, null, ENUMS.ANALYSIS.COMPLETED)
+    );
 
     this.comparisonFilterKey = 'newRisks';
 
     // Gets all comparison data for category
-    const comparisons = compareFileAnalyses(file1, file2);
+    const comparisons = compareFileAnalyses(file1Analyses, file2Analyses);
     const compareCategories = getFileComparisonCategories(comparisons, true);
     this.filteredComparisons = compareCategories[this.comparisonFilterKey];
 
