@@ -1,22 +1,38 @@
-import { inject as service } from '@ember/service';
-import { singularize } from 'ember-inflector';
 import Service from '@ember/service';
+import { service } from '@ember/service';
+import { singularize } from 'ember-inflector';
 import { task } from 'ember-concurrency';
 import { debounceTask } from 'ember-lifeline';
 import type Store from '@ember-data/store';
 
 import ENUMS from 'irene/enums';
 import ENV from 'irene/config/environment';
-import type ConfigurationService from './configuration';
-import type RealtimeService from './realtime';
-import type AkNotificationsService from './ak-notifications';
+import type AnalysisOverviewModel from 'irene/models/analysis-overview';
 import type UserModel from 'irene/models/user';
-import type IreneAjaxService from './ajax';
-import type SkNotificationsService from './sk-notifications';
+import type ConfigurationService from './configuration';
+import type RealtimeService from 'irene/services/realtime';
+import type AkNotificationsService from 'irene/services/ak-notifications';
+import type IreneAjaxService from 'irene/services/ajax';
+import type SkNotificationsService from 'irene/services/sk-notifications';
+import type LoggerService from 'irene/services/logger';
+import type EventBusService from './event-bus';
+
+interface SocketIOService {
+  socketFor(host: string, opts: { path: string }): SocketInstance;
+  closeSocketFor(host: string): void;
+}
+
+type SocketInstanceHandler<T = unknown> = (data?: T) => void;
+
+type SocketInstanceEventHandler = <T = unknown>(
+  event: string,
+  handler: SocketInstanceHandler<T>,
+  target?: object
+) => void;
 
 export interface SocketInstance {
-  on: (event: string, handler: (args: any) => void, target?: object) => void;
-  off: (event: string, handler: (args: any) => void, target?: object) => void;
+  on: SocketInstanceEventHandler;
+  off: SocketInstanceEventHandler;
   emit: (event: string, data: unknown) => void;
   reconnect: () => void;
   close: () => void;
@@ -31,13 +47,14 @@ type ModelNameIdMapper = Record<string, { modelName: string; id: string }>;
 export default class WebsocketService extends Service {
   @service declare store: Store;
   @service declare configuration: ConfigurationService;
-  @service declare logger: any;
+  @service declare logger: LoggerService;
   @service declare realtime: RealtimeService;
   @service declare notifications: NotificationService;
   @service declare akNotifications: AkNotificationsService;
   @service declare skNotifications: SkNotificationsService;
   @service declare ajax: IreneAjaxService;
-  @service('socket-io') socketIOService: any;
+  @service declare eventBus: EventBusService;
+  @service('socket-io') declare socketIOService: SocketIOService;
 
   connectionPath = '/websocket';
 
@@ -47,17 +64,7 @@ export default class WebsocketService extends Service {
   modelNameIdMapper: ModelNameIdMapper = {};
 
   getHost() {
-    const hostFromConfig = this.configuration.serverData.websocket;
-
-    if (hostFromConfig) {
-      return hostFromConfig;
-    }
-
-    if (this.ajax.host) {
-      return this.ajax.host;
-    }
-
-    return '/';
+    return this.configuration.serverData.websocket || this.ajax.host || '/';
   }
 
   getSocketInstance(): SocketInstance {
@@ -71,23 +78,15 @@ export default class WebsocketService extends Service {
   }
 
   closeSocketConnection() {
-    const host = this.getHost();
-
-    this.socketIOService.closeSocketFor(host);
+    this.socketIOService.closeSocketFor(this.getHost());
   }
 
   async configure(user: UserModel) {
-    if (!user) {
+    if (!user?.socketId) {
       return;
     }
 
-    const socketId = user.socketId;
-
-    if (!socketId) {
-      return;
-    }
-
-    this.currentSocketID = socketId;
+    this.currentSocketID = user.socketId;
     this.currentUser = user;
 
     await this.connect();
@@ -108,15 +107,39 @@ export default class WebsocketService extends Service {
     socket.on('counter', this.onCounter, this);
     socket.on('notification', this.onNotification, this);
 
-    // File websocket notifications
-    socket.on('model_created', this.onModelNotification, this);
+    // Push messages directly to the store
+    socket.on('model_created', this.onModelCreatedNotification, this);
     socket.on('model_updated', this.onModelNotification, this);
 
     socket.on('close', (event) => {
-      this.logger.warning('socket close called. Trying to reconnect', event);
-
+      this.logger.warn('socket close called. Trying to reconnect', event);
       socket.reconnect();
     });
+  }
+
+  private validateData<T extends object>(
+    data: T | undefined,
+    requiredKeys: (keyof T)[],
+    eventName: string
+  ): data is NonNullable<T> {
+    if (!data) {
+      this.logger.error(`invalid data for ${eventName}`);
+
+      return false;
+    }
+
+    const hasAllKeys = requiredKeys.every(
+      (key) => (data as T)[key] !== undefined
+    );
+
+    if (!hasAllKeys) {
+      this.logger.error(
+        `invalid data for ${eventName} ${JSON.stringify(data)}`
+      );
+      return false;
+    }
+
+    return true;
   }
 
   onConnect() {
@@ -133,118 +156,109 @@ export default class WebsocketService extends Service {
    * @param data - The data object containing the file ID and type
    * @returns void
    */
-  onModelNotification(data: { model_name: string; data: object }) {
-    if (!data || !data.model_name || !data.data) {
-      this.logger.error(`invalid data for "onModelNotification"`);
+  onModelNotification(data?: { model_name: string; data: object }) {
+    if (
+      !this.validateData(data, ['model_name', 'data'], 'onModelNotification')
+    ) {
+      return;
     }
 
     // Push the model directly to the store
     const normalized = this.store.normalize(data.model_name, data.data);
-    this.store.push(normalized);
+    const model = this.store.push(normalized);
+
+    // SPECIAL CASE: Update "analysis-overview" model (subset of analysis model)
+    if (data.model_name?.toLowerCase() === 'analysis') {
+      const normalized = this.store.normalize('analysis-overview', data.data);
+      const model = this.store.push(normalized) as AnalysisOverviewModel;
+
+      // Trigger event to directly add an analysis to appropriate file in the scan details page
+      // when an analysis is ongoing
+      this.eventBus.trigger('ws:analysis-overview:update', model);
+    }
+
+    return model;
   }
 
-  onObject(data: { id?: string; type?: string } = {}) {
-    if (!data) {
-      this.logger.error(`invalid data for onObject`);
+  /**
+   * Handle model creation and update websocket notifications
+   * This will push the model to the store without triggering any queries
+   * @param data - The data object containing the file ID and type
+   * @returns void
+   */
+  onModelCreatedNotification(data?: { model_name: string; data: object }) {
+    const model = this.onModelNotification(data);
 
+    // Whenever we receive this notification for newly created dynamic scan
+    // We increment the counter for the dynamic scan to reload the last automated dynamic scan
+    // in the dynamic scan header component
+    // REFER: app/components/file-details/dynamic-scan/header/index.ts (LINE: 61)
+    if (model && data?.model_name === 'dynamicscan') {
+      this.realtime.incrementProperty('FileAutoDynamicScanReloadCounter');
+    }
+  }
+
+  onObject(data?: { id: string; type: string }) {
+    if (!this.validateData(data, ['id', 'type'], 'onObject')) {
       return;
     }
 
-    if (!data.id || !data.type) {
-      this.logger.error(`invalid data for onObject ${JSON.stringify(data)}`);
-
-      return;
-    }
-
-    const objectID = data.id;
-    const objectType = data.type;
-
-    const modelName = singularize(objectType);
-
-    this.enqueuePullModel.perform(modelName, objectID);
+    const modelName = singularize(data.type);
+    this.enqueuePullModel.perform(modelName, data.id);
   }
 
-  onNewObject(...args: { id?: string; type?: string }[]) {
+  onNewObject(...args: ({ id: string; type: string } | undefined)[]) {
     return this.onObject(...args);
   }
 
   onNotification(data?: { unread_count: number; product: number }) {
-    if (!data) {
-      this.logger.error(`invalid data for onNotification`);
-
-      return;
-    }
-
-    if (!('unread_count' in data)) {
-      this.logger.error(
-        `invalid data for onNotification ${JSON.stringify(data)}`
-      );
-
+    if (
+      !this.validateData(data, ['unread_count', 'product'], 'onNotification')
+    ) {
       return;
     }
 
     const updateData = { unReadCount: data.unread_count };
 
-    if (data.product === ENUMS.NOTIF_PRODUCT.APPKNOX) {
-      this.akNotifications.realtimeUpdate(updateData);
-    }
+    const notificationServices = {
+      [ENUMS.NOTIF_PRODUCT.APPKNOX]: this.akNotifications,
+      [ENUMS.NOTIF_PRODUCT.STOREKNOX]: this.skNotifications,
+    };
 
-    if (data.product === ENUMS.NOTIF_PRODUCT.STOREKNOX) {
-      this.skNotifications.realtimeUpdate(updateData);
-    }
+    notificationServices[data.product]?.realtimeUpdate(updateData);
   }
 
-  onMessage(data?: { message?: string; notifyType?: number }) {
-    if (!data) {
-      this.logger.error(`invalid data for onMessage`);
+  private routeNotification(message: string, notifyType: number) {
+    const notificationConfig = ENV.notifications;
+    const errorConfig = { autoClear: false };
 
+    const notificationMap = {
+      [ENUMS.NOTIFY.INFO]: () =>
+        this.notifications.info(message, notificationConfig),
+      [ENUMS.NOTIFY.SUCCESS]: () =>
+        this.notifications.success(message, notificationConfig),
+      [ENUMS.NOTIFY.WARNING]: () =>
+        this.notifications.warning(message, notificationConfig),
+      [ENUMS.NOTIFY.ALERT]: () =>
+        this.notifications.alert(message, notificationConfig),
+      [ENUMS.NOTIFY.ERROR]: () =>
+        this.notifications.error(message, errorConfig),
+    };
+
+    notificationMap[notifyType]?.();
+  }
+
+  onMessage(data?: { message: string; notifyType: number }) {
+    if (!this.validateData(data, ['message', 'notifyType'], 'onMessage')) {
       return;
     }
 
-    if (!data.message || !data.notifyType) {
-      this.logger.error(`invalid data for onMessage ${JSON.stringify(data)}`);
-
-      return;
-    }
-
-    const message = data.message;
-    const notifyType = data.notifyType;
-
-    if (notifyType === ENUMS.NOTIFY.INFO) {
-      this.notifications.info(message, ENV.notifications);
-    }
-
-    if (notifyType === ENUMS.NOTIFY.SUCCESS) {
-      this.notifications.success(message, ENV.notifications);
-    }
-
-    if (notifyType === ENUMS.NOTIFY.WARNING) {
-      this.notifications.warning(message, ENV.notifications);
-    }
-
-    if (notifyType === ENUMS.NOTIFY.ALERT) {
-      this.notifications.alert(message, ENV.notifications);
-    }
-
-    if (notifyType === ENUMS.NOTIFY.ERROR) {
-      this.notifications.error(message, {
-        autoClear: false,
-      });
-    }
-
-    this.logger.debug(`${notifyType}: ${message}`);
+    this.routeNotification(data.message, data.notifyType);
+    this.logger.debug(`${data.notifyType}: ${data.message}`);
   }
 
   onCounter(data?: { type?: string }) {
-    if (!data) {
-      this.logger.error(`invalid data for onCounter`);
-
-      return;
-    }
-
-    if (!data.type) {
-      this.logger.error(`invalid data for onCounter ${JSON.stringify(data)}`);
-
+    if (!this.validateData(data, ['type'], 'onCounter')) {
       return;
     }
 

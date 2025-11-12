@@ -66,7 +66,7 @@ module('Integration | Component | file/report-drawer', function (hooks) {
       return { count: 0, next: null, previous: null, result: [] };
     });
 
-    this.server.get('/v2/files/:id', (schema, req) =>
+    this.server.get('/v3/files/:id', (schema, req) =>
       schema.files.find(req.params.id)?.toJSON()
     );
 

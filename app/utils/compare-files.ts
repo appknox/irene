@@ -1,15 +1,12 @@
-// eslint-disable-next-line ember/use-ember-data-rfc-395-imports
-import DS from 'ember-data';
-
-import AnalysisModel from 'irene/models/analysis';
-import FileModel from 'irene/models/file';
-import VulnerabilityModel from 'irene/models/vulnerability';
+import { AsyncBelongsTo } from '@ember-data/model';
 import ENUMS from 'irene/enums';
+import AnalysisOverviewModel from 'irene/models/analysis-overview';
+import type VulnerabilityModel from 'irene/models/vulnerability';
 
 export type FileComparisonItem = {
-  vulnerability?: DS.AsyncBelongsTo<VulnerabilityModel>;
-  analysis1?: AnalysisModel;
-  analysis2?: AnalysisModel;
+  vulnerability?: AsyncBelongsTo<VulnerabilityModel>;
+  analysis1?: AnalysisOverviewModel;
+  analysis2?: AnalysisOverviewModel;
 };
 
 export type FileCompareFilterKey =
@@ -23,7 +20,7 @@ export type FileComparisonCategories = Record<
   FileComparisonItem[]
 >;
 
-type CompareFileAnalyses = AnalysisModel[] | null;
+type CompareFileAnalyses = AnalysisOverviewModel[] | null;
 
 // Sort order for file risks
 const sortPriorityMap = {
@@ -41,8 +38,8 @@ const sortPriorityMap = {
  * @param {AnalysisModel | undefined} analysis2
  */
 const sortByFileAnalyses = (
-  analysis1?: AnalysisModel,
-  analysis2?: AnalysisModel
+  analysis1?: AnalysisOverviewModel,
+  analysis2?: AnalysisOverviewModel
 ) => {
   const analysis1ComputedRisk = Number(analysis1?.computedRisk);
   const analysis2ComputedRisk = Number(analysis2?.computedRisk);

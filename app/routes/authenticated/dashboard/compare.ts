@@ -1,27 +1,22 @@
 import Route from '@ember/routing/route';
 import { debug } from '@ember/debug';
-import { inject as service } from '@ember/service';
-import Store from '@ember-data/store';
+import { service } from '@ember/service';
+import type Store from '@ember-data/store';
 
-import FileModel from 'irene/models/file';
-import {
-  FileCompareFilterKey,
-  FileComparisonItem,
-} from 'irene/utils/compare-files';
-import UnknownAnalysisStatusModel from 'irene/models/unknown-analysis-status';
-import AnalysisModel from 'irene/models/analysis';
+import { type FileCompareFilterKey } from 'irene/utils/compare-files';
+import type FileModel from 'irene/models/file';
+import type AnalysisOverviewModel from 'irene/models/analysis-overview';
 
 export interface CompareRouteModel {
   file: FileModel;
-  unknownAnalysisStatus?: UnknownAnalysisStatusModel | null;
+  unknownAnalysisStatus: boolean;
   fileOld: FileModel;
-  file1Analyses: AnalysisModel[];
-  file2Analyses: AnalysisModel[];
+  file1Analyses: AnalysisOverviewModel[];
+  file2Analyses: AnalysisOverviewModel[];
 }
 
 export interface CompareChildrenRoutesModel {
   comparisonFilterKey: FileCompareFilterKey;
-  filteredComparisons: FileComparisonItem[];
   files: [file1: FileModel | null, file2: FileModel | null];
 }
 
@@ -41,27 +36,20 @@ export default class AuthenticatedDashboardCompareRoute extends Route {
     const file1 = await this.store.findRecord('file', String(file1Id));
     const file2 = await this.store.findRecord('file', String(file2Id));
 
-    const file1Analyses = await this.store.query('analysis', {
+    const file1Analyses = await this.store.query('analysis-overview', {
       fileId: file1?.id,
     });
 
-    const file2Analyses = await this.store.query('analysis', {
+    const file2Analyses = await this.store.query('analysis-overview', {
       fileId: file2?.id,
     });
-
-    const unknownAnalysisStatus = await this.store.queryRecord(
-      'unknown-analysis-status',
-      {
-        id: file1?.profile.get('id'),
-      }
-    );
 
     return {
       file: file1,
       fileOld: file2,
       file1Analyses: file1Analyses.slice(),
       file2Analyses: file2Analyses.slice(),
-      unknownAnalysisStatus,
+      unknownAnalysisStatus: Boolean(file1?.project.get('showUnknownAnalysis')),
     };
   }
 }

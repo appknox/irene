@@ -8,7 +8,7 @@ import type { AkBreadcrumbsItemProps } from 'irene/services/ak-breadcrumbs';
 export default class AuthenticatedDashboardCompareIndexController extends Controller {
   @service declare intl: IntlService;
 
-  declare model: CompareChildrenRoutesModel | undefined;
+  declare model: CompareChildrenRoutesModel;
 
   get breadcrumbs(): AkBreadcrumbsItemProps {
     const [file1, file2] = this.model?.files || [];

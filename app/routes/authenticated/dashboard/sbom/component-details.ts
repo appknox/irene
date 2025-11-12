@@ -43,7 +43,7 @@ export default class AuthenticatedSbomComponentDetailsRoute extends ScrollToTop(
     const sbomFile = await this.store.findRecord('sbom-file', sbFileId);
     const sbomProject = await sbomFile?.get('sbProject');
     const sbomPrj = await sbomProject.get('project');
-    const projectLastFile = await sbomPrj.get('lastFileId');
+    const projectLastFile = await sbomPrj.get('lastFile');
 
     return {
       sbomComponent,

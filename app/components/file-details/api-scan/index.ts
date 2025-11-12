@@ -1,12 +1,12 @@
 import { service } from '@ember/service';
 import Component from '@glimmer/component';
 import { task } from 'ember-concurrency';
+import { tracked } from 'tracked-built-ins';
 import type IntlService from 'ember-intl/services/intl';
 
 import type FileModel from 'irene/models/file';
-import FileRiskModel from 'irene/models/file-risk';
+import type FileRiskModel from 'irene/models/file-risk';
 import type ApiScanService from 'irene/services/api-scan';
-import { tracked } from 'tracked-built-ins';
 
 export interface FileDetailsApiScanSignature {
   Args: {

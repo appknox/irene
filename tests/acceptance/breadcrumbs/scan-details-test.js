@@ -7,10 +7,13 @@ import { t } from 'ember-intl/test-support';
 
 import ENUMS from 'irene/enums';
 import { setupRequiredEndpoints } from 'irene/tests/helpers/acceptance-utils';
+
 import {
   assertBreadcrumbsUI,
   navigateBackWithBreadcrumb,
 } from 'irene/tests/helpers/breadcrumbs-utils';
+
+import { setupFileModelEndpoints } from 'irene/tests/helpers/file-model-utils';
 
 class IntegrationStub extends Service {
   async configure(user) {
@@ -58,6 +61,7 @@ module('Acceptance | breadcrumbs/scan-details', function (hooks) {
 
   hooks.beforeEach(async function () {
     const { organization } = await setupRequiredEndpoints(this.server);
+    await setupFileModelEndpoints(this.server);
 
     const store = this.owner.lookup('service:store');
 
@@ -68,8 +72,13 @@ module('Acceptance | breadcrumbs/scan-details', function (hooks) {
     });
 
     // Creates an analyses and maps a vulnerability to it
-    const createAnalyses = (vulnerability, analysisStatus, computedRisk) => {
-      const analysis = this.server.create('analysis');
+    const createAnalyses = (
+      file,
+      vulnerability,
+      analysisStatus,
+      computedRisk
+    ) => {
+      const analysis = this.server.create('analysis', { file: file.id });
 
       const normalizedAnalysis = store.normalize('analysis', {
         ...analysis.toJSON(),
@@ -157,11 +166,11 @@ module('Acceptance | breadcrumbs/scan-details', function (hooks) {
       };
     });
 
-    this.server.get('/v2/files/:id', (schema, req) => {
+    this.server.get('/v3/files/:id', (schema, req) => {
       return schema.files.find(`${req.params.id}`)?.toJSON();
     });
 
-    this.server.get('/v2/projects/:id', (schema, req) => {
+    this.server.get('/v3/projects/:id', (schema, req) => {
       return schema.projects.find(`${req.params.id}`)?.toJSON();
     });
 
@@ -216,19 +225,16 @@ module('Acceptance | breadcrumbs/scan-details', function (hooks) {
       }
     );
 
-    const file1Analyses = vulnerabilities.map((v) =>
-      createAnalyses(v, ENUMS.ANALYSIS.COMPLETED, ENUMS.RISK.HIGH)
-    );
-
-    const file2Analyses = vulnerabilities.map(() =>
-      createAnalyses(null, ENUMS.ANALYSIS.COMPLETED)
-    );
-
     const file1 = fileModels[0];
     const file2 = fileModels[1];
 
-    file1.set('analyses', file1Analyses);
-    file2.set('analyses', file2Analyses);
+    vulnerabilities.map((v) =>
+      createAnalyses(file1, v, ENUMS.ANALYSIS.COMPLETED, ENUMS.RISK.HIGH)
+    );
+
+    vulnerabilities.map(() =>
+      createAnalyses(file2, null, ENUMS.ANALYSIS.COMPLETED, ENUMS.RISK.HIGH)
+    );
 
     this.setProperties({
       file: targetFile,
@@ -592,7 +598,9 @@ module('Acceptance | breadcrumbs/scan-details', function (hooks) {
       assert
     );
 
-    const rows = findAll('[data-test-filecomparetable-comparisonrow]');
+    await waitFor('[data-test-fileCompareTable-comparisonRow]');
+
+    const rows = findAll('[data-test-fileCompareTable-comparisonRow]');
 
     await click(rows[1]);
 

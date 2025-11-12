@@ -1,25 +1,25 @@
-import { service } from '@ember/service';
 import Component from '@glimmer/component';
+import { service } from '@ember/service';
 import { task } from 'ember-concurrency';
-import IntlService from 'ember-intl/services/intl';
-import Store from '@ember-data/store';
 import { tracked } from '@glimmer/tracking';
 import dayjs from 'dayjs';
-
-import FileModel from 'irene/models/file';
-import UnknownAnalysisStatusModel from 'irene/models/unknown-analysis-status';
-import AnalysisModel from 'irene/models/analysis';
+import type IntlService from 'ember-intl/services/intl';
+import type Store from '@ember-data/store';
 
 import {
   compareFileAnalyses,
   getFileComparisonCategories,
 } from 'irene/utils/compare-files';
-import parseError from 'irene/utils/parse-error';
+
+import type FileModel from 'irene/models/file';
+import type UnknownAnalysisStatusModel from 'irene/models/unknown-analysis-status';
+import type AnalysisOverviewModel from 'irene/models/analysis-overview';
 
 export interface FileDetailsKeyInsightsSignature {
   Args: {
     file: FileModel;
-    fileAnalyses: AnalysisModel[];
+    fileAnalyses: AnalysisOverviewModel[];
+    isFetchingFileAnalyses: boolean;
   };
 }
 
@@ -31,14 +31,14 @@ export default class FileDetailsKeyInsightsComponent extends Component<FileDetai
   @service('notifications') declare notify: NotificationService;
 
   @tracked unknownAnalysisStatus?: UnknownAnalysisStatusModel;
-  @tracked previousFileAnalyses: AnalysisModel[] = [];
+  @tracked previousFileAnalyses: AnalysisOverviewModel[] = [];
   @tracked previousFile?: FileModel | null = null;
 
   constructor(owner: unknown, args: FileDetailsKeyInsightsSignature['Args']) {
     super(owner, args);
 
     this.fetchUnknownAnalysisStatus.perform();
-    this.getPreviousFile.perform();
+    this.getPreviousFileAndAnalyses.perform();
   }
 
   get currentFile() {
@@ -51,6 +51,13 @@ export default class FileDetailsKeyInsightsComponent extends Component<FileDetai
 
   get compareRouteModel() {
     return `${this.currentFile.id}...${this.previousFile?.id}`;
+  }
+
+  get isLoadingAnalysesData() {
+    return (
+      this.args.isFetchingFileAnalyses ||
+      this.getPreviousFileAndAnalyses.isRunning
+    );
   }
 
   get keyInsights() {
@@ -95,20 +102,16 @@ export default class FileDetailsKeyInsightsComponent extends Component<FileDetai
     );
   });
 
-  getPreviousFile = task(async () => {
-    try {
-      const previousFile = await this.args.file.fetchPreviousFile();
-      this.previousFile = previousFile;
+  getPreviousFileAndAnalyses = task(async () => {
+    const previousFile = await this.args.file.fetchPreviousFile();
+    this.previousFile = previousFile;
 
-      if (previousFile) {
-        const previousFileAnalyses = await this.store.query('analysis', {
-          fileId: previousFile.id,
-        });
+    if (previousFile) {
+      const previousFileAnalyses = await this.store.query('analysis-overview', {
+        fileId: previousFile.id,
+      });
 
-        this.previousFileAnalyses = previousFileAnalyses.slice();
-      }
-    } catch (error) {
-      this.notify.error(parseError(error, this.intl.t('pleaseTryAgain')));
+      this.previousFileAnalyses = previousFileAnalyses.slice();
     }
   });
 }

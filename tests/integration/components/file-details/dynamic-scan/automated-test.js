@@ -17,6 +17,7 @@ import { faker } from '@faker-js/faker';
 import ENUMS from 'irene/enums';
 import { deviceType } from 'irene/helpers/device-type';
 import { dsAutomatedDevicePref } from 'irene/helpers/ds-automated-device-pref';
+import { setupFileModelEndpoints } from 'irene/tests/helpers/file-model-utils';
 
 module(
   'Integration | Component | file-details/dynamic-scan/automated',
@@ -27,6 +28,8 @@ module(
     setupBrowserFakes(hooks, { window: true, localStorage: true });
 
     hooks.beforeEach(async function () {
+      setupFileModelEndpoints(this.server);
+
       const store = this.owner.lookup('service:store');
       const dsService = this.owner.lookup('service:dynamic-scan');
 
@@ -50,7 +53,7 @@ module(
       });
 
       const project = this.server.create('project', {
-        file: file.id,
+        last_file: file,
         id: '1',
         active_profile_id: profile.id,
       });
@@ -113,9 +116,9 @@ module(
       this.dsService.fetchLatestScans(this.file);
 
       await render(hbs`
-        <FileDetails::DynamicScan::Automated 
-          @file={{this.file}} 
-          @profileId={{this.file.project.activeProfileId}} 
+        <FileDetails::DynamicScan::Automated
+          @file={{this.file}}
+          @profileId={{this.file.project.activeProfileId}}
         />
       `);
 
@@ -204,8 +207,8 @@ module(
       });
 
       await render(hbs`
-        <FileDetails::DynamicScan::Automated 
-          @file={{this.file}} 
+        <FileDetails::DynamicScan::Automated
+          @file={{this.file}}
           @profileId={{this.file.project.activeProfileId}}
         />
       `);
@@ -318,6 +321,7 @@ module(
           '/v2/projects/:projectId/scan_parameter_groups',
           function (schema) {
             const results = schema.scanParameterGroups.all().models;
+
             return {
               count: results.length,
               next: null,
@@ -331,9 +335,9 @@ module(
         this.dsService.fetchLatestScans(this.file);
 
         await render(hbs`
-          <FileDetails::DynamicScan::Automated 
-            @file={{this.file}} 
-            @profileId={{this.file.project.activeProfileId}} 
+          <FileDetails::DynamicScan::Automated
+            @file={{this.file}}
+            @profileId={{this.file.project.activeProfileId}}
           />
         `);
 

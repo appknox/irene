@@ -1,8 +1,10 @@
 import { module, test } from 'qunit';
 import { currentURL, click, visit } from '@ember/test-helpers';
 import { setupApplicationTest } from 'ember-qunit';
-import { setupRequiredEndpoints } from '../helpers/acceptance-utils';
+import { setupRequiredEndpoints } from 'irene/tests/helpers/acceptance-utils';
+import { setupFileModelEndpoints } from 'irene/tests/helpers/file-model-utils';
 import { setupMirage } from 'ember-cli-mirage/test-support';
+import { t } from 'ember-intl/test-support';
 import Service from '@ember/service';
 
 class IntegrationStub extends Service {
@@ -32,6 +34,8 @@ module('Acceptance | file compare', function (hooks) {
   hooks.beforeEach(async function () {
     await setupRequiredEndpoints(this.server);
 
+    setupFileModelEndpoints(this.server);
+
     const project = this.server.create('project');
     const profile = this.server.create('profile');
 
@@ -50,8 +54,8 @@ module('Acceptance | file compare', function (hooks) {
       schema.organizationMes.find(`${req.params.id}`)?.toJSON()
     );
 
-    this.server.get('/projects/:id/files', (schema) => {
-      const files = schema.files.all().models;
+    this.server.get('/projects/:id/files', (schema, req) => {
+      const files = schema.files.where({ project: req.params.id }).models;
 
       return {
         count: files.length,
@@ -61,15 +65,12 @@ module('Acceptance | file compare', function (hooks) {
       };
     });
 
-    this.server.get('/v2/files/:id', (schema, req) => {
+    this.server.get('/v3/files/:id', (schema, req) => {
       return schema.files.find(`${req.params.id}`)?.toJSON();
     });
 
-    this.server.get('/v2/projects/:id', (schema, req) => {
-      return {
-        ...schema.projects.find(req.params.id).toJSON(),
-        last_file_id: files[files.length - 1].id,
-      };
+    this.server.get('/v3/projects/:id', (schema, req) => {
+      return schema.projects.find(req.params.id).toJSON();
     });
 
     this.server.get('/profiles/:id', (schema, req) =>
@@ -108,7 +109,7 @@ module('Acceptance | file compare', function (hooks) {
     assert
       .dom('[data-test-fileCompare-compareListHeader-compareBtn]')
       .exists()
-      .hasText('Compare');
+      .hasText(t('compare'));
 
     await click('[data-test-fileCompare-compareListHeader-compareBtn]');
 
@@ -119,7 +120,7 @@ module('Acceptance | file compare', function (hooks) {
   });
 
   test('it compares two selected files', async function (assert) {
-    await visit(`/dashboard/project/${this.fileOld?.id}/files`);
+    await visit(`/dashboard/project/${this.project?.id}/files`);
 
     const [baseFile, compareFile] = this.fileRecords;
 
@@ -146,7 +147,7 @@ module('Acceptance | file compare', function (hooks) {
 
     notify.setDefaultClearDuration(0);
 
-    await visit(`/dashboard/project/${this.fileOld?.id}/files`);
+    await visit(`/dashboard/project/${this.project?.id}/files`);
 
     this.server.create('profile', { id: '1' });
 
@@ -203,12 +204,12 @@ module('Acceptance | file compare', function (hooks) {
 
     assert.strictEqual(
       currentURL(),
-      `/dashboard/project/${this.fileOld?.id}/settings`
+      `/dashboard/project/${this.project?.id}/settings`
     );
   });
 
   test('it redirects to all uploads page if user navigates to compare page from all uploads route', async function (assert) {
-    await visit(`/dashboard/project/${this.fileOld?.id}/files`);
+    await visit(`/dashboard/project/${this.project.id}/files`);
 
     const [baseFile, compareFile] = this.fileRecords;
 
@@ -235,7 +236,7 @@ module('Acceptance | file compare', function (hooks) {
 
     assert.strictEqual(
       currentURL(),
-      `/dashboard/project/${baseFile?.id}/files`
+      `/dashboard/project/${this.project.id}/files`
     );
   });
 

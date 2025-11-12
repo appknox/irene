@@ -8,19 +8,19 @@ import {
   SyncHasMany,
 } from '@ember-data/model';
 
-import { inject as service } from '@ember/service';
-import IntlService from 'ember-intl/services/intl';
-import Store from '@ember-data/store';
+import { service } from '@ember/service';
+import type IntlService from 'ember-intl/services/intl';
+import type Store from '@ember-data/store';
 
-import ENUMS from 'irene/enums';
 import { ModelBaseMixin } from 'irene/mixins/base-model';
-
-import ProjectModel from './project';
-import TagModel from './tag';
-import FileReportModel from './file-report';
-import AnalysisModel from './analysis';
-import ProfileModel from './profile';
-import SubmissionModel from './submission';
+import ENUMS from 'irene/enums';
+import { FileCapiReportScanType } from './file-capi-report';
+import type ProjectModel from './project';
+import type TagModel from './tag';
+import type FileReportModel from './file-report';
+import type ProfileModel from './profile';
+import type SubmissionModel from './submission';
+import type AnalysisOverviewModel from './analysis-overview';
 
 export default class FileModel extends ModelBaseMixin {
   analysesSorting = ['computedRisk:desc'];
@@ -98,28 +98,7 @@ export default class FileModel extends ModelBaseMixin {
   declare canRunAutomatedDynamicscan: boolean;
 
   @attr('number')
-  declare riskCountCritical: number;
-
-  @attr('number')
-  declare riskCountHigh: number;
-
-  @attr('number')
-  declare riskCountLow: number;
-
-  @attr('number')
-  declare riskCountMedium: number;
-
-  @attr('number')
-  declare riskCountPassed: number;
-
-  @attr('number')
-  declare riskCountUnknown: number;
-
-  @attr('number')
   declare devFramework: number;
-
-  @attr('number', { defaultValue: 0 })
-  declare overriddenPassedRiskCount: number;
 
   @hasMany('tag', { async: false, inverse: null })
   declare tags: SyncHasMany<TagModel>;
@@ -136,8 +115,8 @@ export default class FileModel extends ModelBaseMixin {
   @belongsTo('submission', { async: true, inverse: null })
   declare submission: AsyncBelongsTo<SubmissionModel>;
 
-  @hasMany('analysis', { async: false, inverse: 'file' })
-  declare analyses: SyncHasMany<AnalysisModel>;
+  @hasMany('analysis-overview', { async: false, inverse: 'file' })
+  declare analyses: SyncHasMany<AnalysisOverviewModel>;
 
   scanProgressClass(type?: boolean) {
     if (type === true) {
@@ -208,12 +187,6 @@ export default class FileModel extends ModelBaseMixin {
     return await adapter.getSbomFile(this.id);
   }
 
-  async loadAllAnalyses() {
-    const adapter = this.store.adapterFor('file');
-
-    return await adapter.loadAllAnalyses(this.id);
-  }
-
   async getFileLastManualDynamicScan() {
     const adapter = this.store.adapterFor('file');
 
@@ -230,6 +203,12 @@ export default class FileModel extends ModelBaseMixin {
     const adapter = this.store.adapterFor('file');
 
     return await adapter.fetchFileRisk(this.id);
+  }
+
+  async generateCapiReports(fileTypes: FileCapiReportScanType[]) {
+    const adapter = this.store.adapterFor('file');
+
+    return await adapter.generateCapiReports(this.id, fileTypes);
   }
 }
 

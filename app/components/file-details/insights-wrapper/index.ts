@@ -1,16 +1,16 @@
 import Component from '@glimmer/component';
 import { tracked } from '@glimmer/tracking';
 import { action } from '@ember/object';
-import { inject as service } from '@ember/service';
-import IntlService from 'ember-intl/services/intl';
+import { service } from '@ember/service';
+import type IntlService from 'ember-intl/services/intl';
 
-import FileModel from 'irene/models/file';
-import AnalysisModel from 'irene/models/analysis';
+import type FileModel from 'irene/models/file';
+import type AnalysisOverviewModel from 'irene/models/analysis-overview';
 
 export interface FileDetailsInsightsWrapperSignature {
   Args: {
     file: FileModel;
-    fileAnalyses: AnalysisModel[];
+    fileAnalyses: AnalysisOverviewModel[];
   };
 }
 
@@ -39,8 +39,8 @@ export default class FileDetailsInsightsWrapperComponent extends Component<FileD
   }
 
   @action
-  handleTabClick(id: string) {
-    this.selectedTab = id;
+  handleTabClick(id: string | number) {
+    this.selectedTab = id as string;
   }
 }
 

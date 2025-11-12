@@ -38,7 +38,7 @@ module('Acceptance | projects redirect', function (hooks) {
 
     const project = this.server.create('project', {
       id: 1,
-      last_file_id: file.id,
+      last_file: file,
     });
 
     const analyses = vulnerabilities.map((v, id) =>
@@ -82,7 +82,7 @@ module('Acceptance | projects redirect', function (hooks) {
     this.owner.register('service:integration', IntegrationStub);
     this.owner.register('service:websocket', WebsocketStub);
 
-    this.server.get('/v2/projects/:id', (schema, req) => {
+    this.server.get('/v3/projects/:id', (schema, req) => {
       return schema.projects.find(req.params.id).toJSON();
     });
 
@@ -183,7 +183,7 @@ module('Acceptance | projects redirect', function (hooks) {
       () => new Response(404, {}, { detail: 'JIRA not integrated' })
     );
 
-    this.server.get('/v2/files/:id', (schema, req) => {
+    this.server.get('/v3/files/:id', (schema, req) => {
       return schema.files.find(`${req.params.id}`)?.toJSON();
     });
 

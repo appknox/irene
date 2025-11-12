@@ -8,7 +8,6 @@ import {
 } from '@ember/test-helpers';
 
 import { setupMirage } from 'ember-cli-mirage/test-support';
-import { setupRequiredEndpoints } from '../../helpers/acceptance-utils';
 import { setupApplicationTest } from 'ember-qunit';
 import { module, test } from 'qunit';
 import Service from '@ember/service';
@@ -20,8 +19,10 @@ import { faker } from '@faker-js/faker';
 import ENUMS from 'irene/enums';
 import { appEnvironment } from 'irene/helpers/app-environment';
 import { appAction } from 'irene/helpers/app-action';
-import styles from 'irene/components/ak-select/index.scss';
 import { analysisRiskStatus } from 'irene/helpers/analysis-risk-status';
+import { setupFileModelEndpoints } from 'irene/tests/helpers/file-model-utils';
+import { setupRequiredEndpoints } from 'irene/tests/helpers/acceptance-utils';
+import styles from 'irene/components/ak-select/index.scss';
 
 const classes = {
   dropdown: styles['ak-select-dropdown'],
@@ -78,9 +79,7 @@ module('Acceptance | file-details/manual-scan', function (hooks) {
       this.server
     );
 
-    const analyses = vulnerabilities.map((v, id) =>
-      this.server.create('analysis', { id, vulnerability: v.id }).toJSON()
-    );
+    const { file_risk_info } = setupFileModelEndpoints(this.server);
 
     const profile = this.server.create('profile', { id: '1' });
 
@@ -96,8 +95,12 @@ module('Acceptance | file-details/manual-scan', function (hooks) {
       is_active: true,
       project: project.id,
       profile: profile.id,
-      analyses,
     });
+
+    // Create analyses
+    vulnerabilities.map((v, id) =>
+      this.server.create('analysis', { id, vulnerability: v.id, file: file.id })
+    );
 
     const manualscan = this.server.create('manualscan', { id: file.id });
 
@@ -113,11 +116,11 @@ module('Acceptance | file-details/manual-scan', function (hooks) {
     this.owner.register('service:websocket', WebsocketStub);
 
     // server api interception
-    this.server.get('/v2/files/:id', (schema, req) => {
+    this.server.get('/v3/files/:id', (schema, req) => {
       return schema.files.find(`${req.params.id}`)?.toJSON();
     });
 
-    this.server.get('/v2/projects/:id', (schema, req) => {
+    this.server.get('/v3/projects/:id', (schema, req) => {
       return schema.projects.find(`${req.params.id}`)?.toJSON();
     });
 
@@ -126,6 +129,7 @@ module('Acceptance | file-details/manual-scan', function (hooks) {
       manualscan,
       organization,
       store: this.owner.lookup('service:store'),
+      file_risk_info,
     });
   });
 
@@ -769,8 +773,6 @@ module('Acceptance | file-details/manual-scan', function (hooks) {
 
     await visit(`/dashboard/file/${this.file.id}/manual-scan`);
 
-    const file = this.store.peekRecord('file', this.file.id);
-
     const tabLink = (id) =>
       `[data-test-fileDetails-manualScan-tabs="${id}-tab"] a`;
 
@@ -783,7 +785,9 @@ module('Acceptance | file-details/manual-scan', function (hooks) {
 
     assert
       .dom(tabLink('manual-results'))
-      .hasText(`${t('manualScanResults')} ${file.manualVulnerabilityCount}`)
+      .hasText(
+        `${t('manualScanResults')} ${this.file_risk_info.risk_count_by_scan_type.manual}`
+      )
       .hasClass(/active-shadow/);
 
     assert.strictEqual(

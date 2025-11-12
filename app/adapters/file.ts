@@ -2,8 +2,7 @@ import CommonDRFAdapter from './commondrf';
 import type DynamicscanModel from 'irene/models/dynamicscan';
 import type FileModel from 'irene/models/file';
 import type SbomFileModel from 'irene/models/sbom-file';
-import AnalysisModel from 'irene/models/analysis';
-import FileRiskModel from 'irene/models/file-risk';
+import type FileRiskModel from 'irene/models/file-risk';
 
 import FileCapiReportModel, {
   type FileCapiReportScanType,
@@ -18,18 +17,6 @@ export interface FileCapiReportsResponse {
 interface ProjectFilesQuery {
   projectId: string;
 }
-
-type GetAllAnalysesResponse = Array<{
-  id: number;
-  file: number;
-  risk: number;
-  computed_risk: number;
-  status: number;
-  overridden_risk: number | null;
-  vulnerability: number;
-  created_on: string;
-  updated_on: string;
-}>;
 
 export default class FileAdapter extends CommonDRFAdapter {
   _buildURL(_: string | number, id: string | number) {
@@ -48,10 +35,11 @@ export default class FileAdapter extends CommonDRFAdapter {
 
   _pushDirectlyToStore<T>(
     res: { [key: string]: string },
-    modelName: string,
-    primaryKey: string = 'id'
+    modelName: string
   ): T | null {
-    if (res?.[primaryKey]) {
+    const modelId = res?.['id'];
+
+    if (modelId) {
       const normalized = this.store.normalize(modelName, res);
 
       return this.store.push(normalized) as T;
@@ -145,54 +133,13 @@ export default class FileAdapter extends CommonDRFAdapter {
     const url = `${this._buildURL('file', fileId)}/risk`;
     const res = await this.ajax(url, 'GET');
 
-    return this._pushDirectlyToStore<FileRiskModel>(res, 'file-risk', 'file');
-  }
+    if (res?.file) {
+      const normalized = this.store.normalize('file-risk', res);
 
-  async loadAllAnalyses(fileId: string) {
-    const url = `${this._buildURL('file', fileId)}/analyses`;
-    const res = (await this.ajax(url, 'GET')) as GetAllAnalysesResponse;
+      return this.store.push(normalized) as FileRiskModel;
+    }
 
-    // Push the analyses to the store and map relation ships
-    const normalizedData = res.map((analysis) => ({
-      id: String(analysis.id),
-      type: 'analysis',
-      attributes: {
-        risk: analysis.risk,
-        computedRisk: analysis.computed_risk,
-        status: analysis.status,
-        overriddenRisk: analysis.overridden_risk,
-        createdOn: new Date(analysis.created_on),
-        updatedOn: new Date(analysis.updated_on),
-      },
-      relationships: {
-        file: { data: { id: String(analysis.file), type: 'file' } },
-
-        vulnerability: {
-          data: { id: String(analysis.vulnerability), type: 'vulnerability' },
-        },
-      },
-    }));
-
-    const analyses = this.store.push({
-      data: normalizedData,
-    }) as AnalysisModel[];
-
-    this.store.push({
-      data: {
-        id: fileId,
-        type: 'file',
-        relationships: {
-          analyses: {
-            data: res.map((analysis) => ({
-              id: String(analysis.id),
-              type: 'analysis',
-            })),
-          },
-        },
-      },
-    });
-
-    return analyses;
+    return null;
   }
 }
 
