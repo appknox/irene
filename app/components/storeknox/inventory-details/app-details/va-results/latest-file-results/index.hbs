@@ -30,12 +30,16 @@
               </AkTypography>
             </AkStack>
 
-            <AkTypography
-              @fontWeight='bold'
-              data-test-storeknoxInventoryDetails-latestVAResultsSummary-categoryResultCount
-            >
-              {{get this.vaResultsRiskInfo resultCat}}
-            </AkTypography>
+            {{#if this.fetchFileRisk.isRunning}}
+              <AkSkeleton @width='22px' @height='19px' @variant='rectangular' />
+            {{else}}
+              <AkTypography
+                @fontWeight='bold'
+                data-test-storeknoxInventoryDetails-latestVAResultsSummary-categoryResultCount
+              >
+                {{get this.vaResultsRiskInfo resultCat}}
+              </AkTypography>
+            {{/if}}
           </AkStack>
         {{/each}}
       </AkStack>

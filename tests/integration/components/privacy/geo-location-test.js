@@ -62,7 +62,7 @@ module('Integration | Component | privacy/geo-location', function (hooks) {
     });
 
     // Server Mocks
-    this.server.get('/v2/files/:id', (schema, req) => {
+    this.server.get('/v3/files/:id', (schema, req) => {
       return schema.files.find(`${req.params.id}`)?.toJSON();
     });
 

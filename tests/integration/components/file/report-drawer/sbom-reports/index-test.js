@@ -5,8 +5,10 @@ import { setupMirage } from 'ember-cli-mirage/test-support';
 import { find, findAll, render, waitFor, waitUntil } from '@ember/test-helpers';
 import { hbs } from 'ember-cli-htmlbars';
 import Service from '@ember/service';
-import { SbomReportStatus } from 'irene/models/sbom-report';
 import { setupBrowserFakes } from 'ember-browser-services/test-support';
+
+import { SbomReportStatus } from 'irene/models/sbom-report';
+import { setupFileModelEndpoints } from 'irene/tests/helpers/file-model-utils';
 
 class OrganizationStub extends Service {
   selected = {
@@ -26,24 +28,18 @@ module(
     setupBrowserFakes(hooks, { window: true, localStorage: true });
 
     hooks.beforeEach(async function () {
+      setupFileModelEndpoints(this.server);
+
       this.owner.register('service:organization', OrganizationStub);
 
       const store = this.owner.lookup('service:store');
-
       const window = this.owner.lookup('service:browser/window');
 
       window.localStorage.clear();
 
-      const createFile = (sbomId) => {
-        if (!sbomId && sbomId !== null) {
-          sbomId = this.server.create('sbom-file').id;
-        }
-
+      const createFile = () => {
         const file = this.server.create('file');
-        const fileNormalized = store.normalize('file', {
-          ...file.toJSON(),
-          sb_file: sbomId,
-        });
+        const fileNormalized = store.normalize('file', file.toJSON());
 
         return store.push(fileNormalized);
       };
@@ -146,6 +142,10 @@ module(
         { timing: 500 }
       );
 
+      this.server.get('/v2/files/:id/sb_file', (schema) => {
+        return schema.sbomFiles.find(`${sbomFile.id}`)?.toJSON();
+      });
+
       render(
         hbs`<File::ReportDrawer::SbomReports @file={{this.file}} @closeDrawer={{this.onClose}}  />`
       );
@@ -226,7 +226,7 @@ module(
         .dom('[data-test-fileReportDrawer-sbomReports-sbomFileLink]')
         .exists()
         .hasText(t('fileReport.viewSbomDetails'))
-        .hasAttribute('href', new RegExp(this.file.sbFile.get('id')));
+        .hasAttribute('href', new RegExp(sbomFile.id));
     });
 
     test('it renders sbom pdf report if generated', async function (assert) {
@@ -238,11 +238,19 @@ module(
         sb_project: sbomProject.id,
       });
 
+      const sbomFileModel = this.store.push(
+        this.store.normalize('sbom-file', sbomFile.toJSON())
+      );
+
       this.file = this.createFile(sbomFile.id);
 
       const sbomReport = this.server.create('sbom-report', {
         pdf_progress: 100,
         pdf_status: SbomReportStatus.COMPLETED,
+      });
+
+      this.server.get('/v2/files/:id/sb_file', (schema) => {
+        return schema.sbomFiles.find(`${sbomFile.id}`)?.toJSON();
       });
 
       await render(
@@ -281,9 +289,7 @@ module(
         .hasAttribute(
           'href',
           new RegExp(
-            `\\b(?:${this.file.sbFile.get('id')}|${this.file.sbFile
-              .get('sbProject')
-              .get('id')})\\b`
+            `\\b(?:${sbomFileModel.id}|${sbomFileModel.sbProject.get('id')})\\b`
           )
         );
     });
@@ -297,7 +303,15 @@ module(
         sb_project: sbomProject.id,
       });
 
+      const sbomFileModel = this.store.push(
+        this.store.normalize('sbom-file', sbomFile.toJSON())
+      );
+
       this.file = this.createFile(sbomFile.id);
+
+      this.server.get('/v2/files/:id/sb_file', (schema) => {
+        return schema.sbomFiles.find(`${sbomFile.id}`)?.toJSON();
+      });
 
       await render(
         hbs`<File::ReportDrawer::SbomReports @file={{this.file}} @closeDrawer={{this.onClose}}  />`
@@ -316,11 +330,15 @@ module(
         .dom('[data-test-fileReportDrawer-sbomReports-sbomFileLink]')
         .exists()
         .hasText(t('fileReport.viewSbomDetails'))
-        .hasAttribute('href', new RegExp(this.file.sbFile.get('id')));
+        .hasAttribute('href', new RegExp(sbomFileModel.id));
     });
 
     test('it renders empty state if no sbom file is found', async function (assert) {
       this.file = this.createFile(null);
+
+      this.server.get('/v2/files/:id/sb_file', () => {
+        return null;
+      });
 
       await render(
         hbs`<File::ReportDrawer::SbomReports @file={{this.file}} @closeDrawer={{this.onClose}}  />`

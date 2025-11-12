@@ -19,7 +19,7 @@ module('Integration | Component | file-list', function (hooks) {
       };
     });
 
-    this.server.get('/projects/:id/files', (schema) => {
+    this.server.get('/v3/projects/:id/files', (schema) => {
       const files = schema.files.all().models;
 
       return {
@@ -30,7 +30,7 @@ module('Integration | Component | file-list', function (hooks) {
       };
     });
 
-    this.server.get('/v2/projects/:id', (schema, req) => {
+    this.server.get('/v3/projects/:id', (schema, req) => {
       return schema.projects.find(req.params.id).toJSON();
     });
 
@@ -102,7 +102,7 @@ module('Integration | Component | file-list', function (hooks) {
 
   test('it renders loading state and files', async function (assert) {
     this.server.get(
-      '/projects/:id/files',
+      '/v3/projects/:id/files',
       (schema) => {
         const files = schema.files.all().models;
 

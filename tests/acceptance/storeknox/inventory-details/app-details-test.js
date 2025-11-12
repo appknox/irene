@@ -15,10 +15,11 @@ import { Response } from 'miragejs';
 import Service from '@ember/service';
 import dayjs from 'dayjs';
 
-import { setupRequiredEndpoints } from 'irene/tests/helpers/acceptance-utils';
-import { compareInnerHTMLWithIntlTranslation } from 'irene/tests/test-utils';
 import ENV from 'irene/config/environment';
 import ENUMS from 'irene/enums';
+import { setupRequiredEndpoints } from 'irene/tests/helpers/acceptance-utils';
+import { compareInnerHTMLWithIntlTranslation } from 'irene/tests/test-utils';
+import { setupFileModelEndpoints } from 'irene/tests/helpers/file-model-utils';
 
 // Notification Service
 class NotificationsStub extends Service {
@@ -93,6 +94,8 @@ module(
         currentSkOrganizationSub,
       } = await setupRequiredEndpoints(this.server);
 
+      const { file_risk_info } = setupFileModelEndpoints(this.server);
+
       organization.update({ features: { storeknox: true } });
 
       // Stub organization me service
@@ -124,11 +127,11 @@ module(
         }
       );
 
-      this.server.get('/v2/files/:id', (schema, req) => {
+      this.server.get('/v3/files/:id', (schema, req) => {
         return schema.files.find(`${req.params.id}`)?.toJSON();
       });
 
-      this.server.get('/v2/projects/:id', (schema, req) => {
+      this.server.get('/v3/projects/:id', (schema, req) => {
         return schema.projects.find(`${req.params.id}`)?.toJSON();
       });
 
@@ -159,6 +162,7 @@ module(
         createArchivedApp,
         currentSkOrganization,
         currentSkOrganizationSub,
+        file_risk_info,
       });
     });
 
@@ -169,24 +173,28 @@ module(
      */
 
     // Checks the result info in the latest va results section of an SkApp
-    const doVaResultsChecks = (assert, coreProjectLatestVersion) => {
+    const doVaResultsChecks = async (
+      assert,
+      coreProjectLatestVersion,
+      file_risk_info
+    ) => {
       assert
         .dom('[data-test-storeknoxInventoryDetails-latestVAResultsSummary]')
         .hasText(t('summary'));
 
       // Check VA Results Risk Summary
       const vaResultsRiskInfo = {
-        critical: coreProjectLatestVersion.get('countRiskCritical'),
-        high: coreProjectLatestVersion.get('countRiskHigh'),
-        medium: coreProjectLatestVersion.get('countRiskMedium'),
-        low: coreProjectLatestVersion.get('countRiskLow'),
-        passed: coreProjectLatestVersion.get('countRiskNone'),
-        untested: coreProjectLatestVersion.get('countRiskUnknown'),
+        critical: file_risk_info.risk_count_critical,
+        high: file_risk_info.risk_count_high,
+        medium: file_risk_info.risk_count_medium,
+        low: file_risk_info.risk_count_low,
+        passed: file_risk_info.risk_count_passed,
+        untested: file_risk_info.risk_count_unknown,
       };
 
       const vaResultsRiskInfoCategories = Object.keys(vaResultsRiskInfo);
 
-      vaResultsRiskInfoCategories.forEach((category) => {
+      for (const category of vaResultsRiskInfoCategories) {
         const resultCatElement = find(
           `[data-test-storeknoxInventoryDetails-latestVAResultsSummary='${category}']`
         );
@@ -200,13 +208,19 @@ module(
           )
           .hasText(t(category));
 
+        await waitUntil(() =>
+          resultCatElement?.querySelector(
+            '[data-test-storeknoxInventoryDetails-latestVAResultsSummary-categoryResultCount]'
+          )
+        );
+
         assert
           .dom(
             '[data-test-storeknoxInventoryDetails-latestVAResultsSummary-categoryResultCount]',
             resultCatElement
           )
           .hasText(String(vaResultsRiskInfo[category]));
-      });
+      }
 
       // File ID
       assert
@@ -914,7 +928,7 @@ module(
       const inventoryAppRecord = this.normalizeSKInventoryApp(inventoryApp);
 
       // Server mocks
-      this.server.get('/v2/files/:id', (schema, req) => {
+      this.server.get('/v3/files/:id', (schema, req) => {
         return {
           ...schema.files.find(`${req.params.id}`)?.toJSON(),
           analyses,
@@ -931,9 +945,10 @@ module(
         )
         .hasText(t('storeknox.latestVAResults'));
 
-      doVaResultsChecks(
+      await doVaResultsChecks(
         assert,
-        inventoryAppRecord.get('coreProjectLatestVersion')
+        inventoryAppRecord.get('coreProjectLatestVersion'),
+        this.file_risk_info
       );
     });
 
@@ -957,7 +972,7 @@ module(
       );
 
       // Server mocks
-      this.server.get('/v2/files/:id', () => new Response(404), 404);
+      this.server.get('/v3/files/:id', () => new Response(404), 404);
 
       // Test Start
       await visit(`/dashboard/storeknox/inventory-details/${inventoryApp.id}`);
@@ -1342,12 +1357,6 @@ module(
       assert.expect(25);
 
       // Models
-      const vulnerabilities = this.server.createList('vulnerability', 7);
-
-      const analyses = vulnerabilities.map((v) =>
-        this.server.create('analysis', { vulnerability: v.id }).toJSON()
-      );
-
       const file = this.server.create('file');
       const core_project = this.server.create('project');
 
@@ -1393,11 +1402,8 @@ module(
       });
 
       // Server mocks
-      this.server.get('/v2/files/:id', (schema, req) => {
-        return {
-          ...schema.files.find(`${req.params.id}`)?.toJSON(),
-          analyses,
-        };
+      this.server.get('/v3/files/:id', (schema, req) => {
+        return schema.files.find(`${req.params.id}`)?.toJSON();
       });
 
       this.server.get('v2/sk_app_detail/:id', (schema, req) => {
@@ -1452,9 +1458,10 @@ module(
         { timeout: 1500 }
       );
 
-      doVaResultsChecks(
+      await doVaResultsChecks(
         assert,
-        inventoryAppRecord.get('coreProjectLatestVersion')
+        inventoryAppRecord.get('coreProjectLatestVersion'),
+        this.file_risk_info
       );
     });
 

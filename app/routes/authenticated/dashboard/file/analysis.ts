@@ -9,6 +9,8 @@ export default class AuthenticatedFileAnalysisRoute extends ScrollToTop(
   @service declare store: Store;
 
   model(params: { analysis_id: string }) {
-    return this.store.findRecord('analysis', params.analysis_id);
+    return this.store.findRecord('analysis', params.analysis_id, {
+      reload: true,
+    });
   }
 }

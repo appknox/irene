@@ -1,14 +1,11 @@
-import Store from '@ember-data/store';
+import Component from '@glimmer/component';
 import { action } from '@ember/object';
 import { service } from '@ember/service';
-import Component from '@glimmer/component';
 import { tracked } from '@glimmer/tracking';
-import { task } from 'ember-concurrency';
 import type IntlService from 'ember-intl/services/intl';
 import type { EmberTableSort } from 'ember-table';
 
 import ENUMS from 'irene/enums';
-import type AnalysisModel from 'irene/models/analysis';
 import type FileModel from 'irene/models/file';
 
 export interface FileDetailsManualScanResultsSignature {
@@ -19,22 +16,11 @@ export interface FileDetailsManualScanResultsSignature {
 
 export default class FileDetailsManualScanResultsComponent extends Component<FileDetailsManualScanResultsSignature> {
   @service declare intl: IntlService;
-  @service declare store: Store;
 
   @tracked filterVulnerabilityType: string | number =
     ENUMS.VULNERABILITY_TYPE.MANUAL;
 
   @tracked sorts = [{ isAscending: false, valuePath: 'computedRisk' }];
-  @tracked fileAnalyses: AnalysisModel[] = [];
-
-  constructor(
-    owner: unknown,
-    args: FileDetailsManualScanResultsSignature['Args']
-  ) {
-    super(owner, args);
-
-    this.fetchFileAnalyses.perform();
-  }
 
   get tabItems() {
     return [
@@ -69,14 +55,6 @@ export default class FileDetailsManualScanResultsComponent extends Component<Fil
   updateAnalysesSorts(sorts: EmberTableSort[]) {
     this.sorts = sorts;
   }
-
-  fetchFileAnalyses = task(async () => {
-    const analyses = await this.store.query('analysis', {
-      fileId: this.args.file.id,
-    });
-
-    this.fileAnalyses = analyses.slice();
-  });
 }
 
 declare module '@glint/environment-ember-loose/registry' {

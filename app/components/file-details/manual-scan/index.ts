@@ -13,7 +13,7 @@ import type ManualscanModel from 'irene/models/manualscan';
 import type OrganizationService from 'irene/services/organization';
 import type IreneAjaxService from 'irene/services/ajax';
 import type { AjaxError } from 'irene/services/ajax';
-import FileRiskModel from 'irene/models/file-risk';
+import type FileRiskModel from 'irene/models/file-risk';
 
 export interface FileDetailsManualScanSignature {
   Args: {

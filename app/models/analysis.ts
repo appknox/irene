@@ -135,7 +135,7 @@ export default class AnalysisModel extends Model {
   @belongsTo('vulnerability', { async: true, inverse: null })
   declare vulnerability: AsyncBelongsTo<VulnerabilityModel>;
 
-  @belongsTo('file', { inverse: 'analyses', async: true })
+  @belongsTo('file', { inverse: null, async: true })
   declare file: AsyncBelongsTo<FileModel>;
 
   @attr('date')

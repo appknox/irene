@@ -8,7 +8,6 @@ import {
 } from '@ember/test-helpers';
 
 import { setupMirage } from 'ember-cli-mirage/test-support';
-import { setupRequiredEndpoints } from '../../helpers/acceptance-utils';
 import { setupApplicationTest } from 'ember-qunit';
 import { module, test } from 'qunit';
 import Service from '@ember/service';
@@ -19,6 +18,8 @@ import { Response } from 'miragejs';
 import ENUMS from 'irene/enums';
 import WebsocketService from 'irene/services/websocket';
 import { analysisRiskStatus } from 'irene/helpers/analysis-risk-status';
+import { setupFileModelEndpoints } from 'irene/tests/helpers/file-model-utils';
+import { setupRequiredEndpoints } from 'irene/tests/helpers/acceptance-utils';
 
 const commondynamicScanStatusTextList = [
   {
@@ -217,15 +218,15 @@ module('Acceptance | file-details/dynamic-scan', function (hooks) {
       this.server
     );
 
+    setupFileModelEndpoints(this.server);
+
     organization.update({
       features: {
         dynamicscan_automation: true,
       },
     });
 
-    const analyses = vulnerabilities.map((v, id) =>
-      this.server.create('analysis', { id, vulnerability: v.id }).toJSON()
-    );
+    const store = this.owner.lookup('service:store');
 
     const project = this.server.create('project');
     const profile = this.server.create('profile', { id: '1' });
@@ -238,8 +239,23 @@ module('Acceptance | file-details/dynamic-scan', function (hooks) {
       profile: profile.id,
       last_automated_dynamic_scan: null,
       last_manual_dynamic_scan: null,
-      analyses,
     });
+
+    // Create analyses
+    const analyses = vulnerabilities.map((v, id) =>
+      store.push(
+        store.normalize(
+          'analysis',
+          this.server
+            .create('analysis', {
+              id,
+              vulnerability: v.id,
+              file: file.id,
+            })
+            .toJSON()
+        )
+      )
+    );
 
     // service stubs
     this.owner.register('service:notifications', NotificationsStub);
@@ -256,12 +272,16 @@ module('Acceptance | file-details/dynamic-scan', function (hooks) {
       enterprise: false,
     }));
 
-    this.server.get('/v2/files/:id', (schema, req) => {
+    this.server.get('/v3/files/:id', (schema, req) => {
       return schema.files.find(`${req.params.id}`)?.toJSON();
     });
 
-    this.server.get('/v2/projects/:id', (schema, req) => {
+    this.server.get('/v3/projects/:id', (schema, req) => {
       return schema.projects.find(`${req.params.id}`)?.toJSON();
+    });
+
+    this.server.get('/v2/projects/:id/scan_parameter_groups', (schema) => {
+      return schema.scanParameterGroups.all().models;
     });
 
     this.server.get('/profiles/:id', (schema, req) =>
@@ -276,14 +296,13 @@ module('Acceptance | file-details/dynamic-scan', function (hooks) {
       return { id: req.params.id, dynamic_scan_automation_enabled: true };
     });
 
-    const store = this.owner.lookup('service:store');
-
     this.setProperties({
       organization,
       file,
       profile,
       project,
       store,
+      analyses,
     });
   });
 
@@ -324,11 +343,16 @@ module('Acceptance | file-details/dynamic-scan', function (hooks) {
         ended_on: null,
       });
 
-      this.file.update({
-        last_manual_dynamic_scan:
-          mode === ENUMS.DYNAMIC_MODE.MANUAL ? id : null,
-        last_automated_dynamic_scan:
-          mode === ENUMS.DYNAMIC_MODE.AUTOMATED ? id : null,
+      this.server.get('/v3/files/:id/last_manual_dynamic_scan', (schema) => {
+        return mode === ENUMS.DYNAMIC_MODE.MANUAL
+          ? schema.dynamicscans.find(id)?.toJSON()
+          : null;
+      });
+
+      this.server.get('/v3/files/:id/last_automated_dynamic_scan', (schema) => {
+        return mode === ENUMS.DYNAMIC_MODE.AUTOMATED
+          ? schema.dynamicscans.find(id)?.toJSON()
+          : null;
       });
 
       const isManualMode = mode === ENUMS.DYNAMIC_MODE.MANUAL;
@@ -574,14 +598,30 @@ module('Acceptance | file-details/dynamic-scan', function (hooks) {
         // create and set dynamicscan data reference
         this.dynamicscan = createDynamicscan();
 
-        this.file.update({
-          last_manual_dynamic_scan:
-            mode === 'manual' ? this.dynamicscan.id : null,
-          last_automated_dynamic_scan:
-            mode === 'automated' ? this.dynamicscan.id : null,
+        const websocket = this.owner.lookup('service:websocket');
+
+        // Model Created Notification for dynamic scan
+        //  Used to trigger the reload of the last automated dynamic scan in the dynamic scan header component
+        // REFER: app/services/websocket.ts (LINE: 197)
+        // REFER: app/components/file-details/dynamic-scan/header/index.ts (LINE: 61)
+        websocket.onModelCreatedNotification({
+          model_name: 'dynamicscan',
+          data: this.dynamicscan.toJSON(),
         });
 
         return this.dynamicscan.toJSON();
+      });
+
+      this.server.get('/v3/files/:id/last_manual_dynamic_scan', (schema) => {
+        return mode === 'manual' && this.dynamicscan
+          ? schema.dynamicscans.find(this.dynamicscan.id)?.toJSON()
+          : null;
+      });
+
+      this.server.get('/v3/files/:id/last_automated_dynamic_scan', (schema) => {
+        return mode === 'automated' && this.dynamicscan
+          ? schema.dynamicscans.find(this.dynamicscan.id)?.toJSON()
+          : null;
       });
 
       this.server.delete('/v2/dynamicscans/:id', () => {
@@ -836,20 +876,13 @@ module('Acceptance | file-details/dynamic-scan', function (hooks) {
     ) {
       assert.expect(assertions);
 
-      const createDynamicscan = () => {
-        const scan = this.server.create('dynamicscan', {
+      const createDynamicscan = () =>
+        this.server.create('dynamicscan', {
           file: this.file.id,
           mode: ENUMS.DYNAMIC_MODE.AUTOMATED,
           status: ENUMS.DYNAMIC_SCAN_STATUS.NOT_STARTED,
           ended_on: null,
         });
-
-        this.file.update({
-          last_automated_dynamic_scan: scan.id,
-        });
-
-        return scan;
-      };
 
       this.server.get('/v2/files/:id/dynamicscans', (schema, req) => {
         const { limit, mode, engine, group_status } = req.queryParams || {};
@@ -888,6 +921,12 @@ module('Acceptance | file-details/dynamic-scan', function (hooks) {
         this.dynamicscan = createDynamicscan();
 
         return this.dynamicscan.toJSON();
+      });
+
+      this.server.get('/v3/files/:id/last_automated_dynamic_scan', (schema) => {
+        return this.dynamicscan?.id
+          ? schema.dynamicscans.find(this.dynamicscan?.id)?.toJSON()
+          : null;
       });
 
       this.server.delete('/v2/dynamicscans/:id', () => {
@@ -1214,9 +1253,7 @@ module('Acceptance | file-details/dynamic-scan', function (hooks) {
 
     const rows = findAll('[data-test-vulnerability-analysis-row]');
 
-    const file = this.store.peekRecord('file', this.file.id);
-
-    const dynamicAnalyses = file.analyses.filter((a) =>
+    const dynamicAnalyses = this.analyses.filter((a) =>
       a.hasType(ENUMS.VULNERABILITY_TYPE.DYNAMIC)
     );
 

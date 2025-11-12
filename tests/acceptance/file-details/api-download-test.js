@@ -4,6 +4,7 @@ import { setupApplicationTest } from 'ember-qunit';
 import { module, test } from 'qunit';
 import { setupIntl, t } from 'ember-intl/test-support';
 import { setupRequiredEndpoints } from 'irene/tests/helpers/acceptance-utils';
+import { setupFileModelEndpoints } from 'irene/tests/helpers/file-model-utils';
 
 module('Acceptance | file-details/api-download', function (hooks) {
   setupApplicationTest(hooks);
@@ -15,6 +16,7 @@ module('Acceptance | file-details/api-download', function (hooks) {
     const store = this.owner.lookup('service:store');
 
     const { organization } = await setupRequiredEndpoints(this.server);
+    setupFileModelEndpoints(this.server);
 
     // Models
     const profile = this.server.create('profile');
@@ -36,11 +38,11 @@ module('Acceptance | file-details/api-download', function (hooks) {
     this.server.get('/v2/server_configuration', () => ({}));
     this.server.get('/v2/dashboard_configuration', () => ({}));
 
-    this.server.get('/v2/files/:id', (schema, req) => {
+    this.server.get('/v3/files/:id', (schema, req) => {
       return schema.files.find(`${req.params.id}`)?.toJSON();
     });
 
-    this.server.get('/v2/projects/:id', (schema, req) => {
+    this.server.get('/v3/projects/:id', (schema, req) => {
       return schema.projects.find(`${req.params.id}`)?.toJSON();
     });
 

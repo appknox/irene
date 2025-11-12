@@ -6,6 +6,7 @@ import { setupRenderingTest } from 'ember-qunit';
 import { module, test } from 'qunit';
 
 import ENUMS from 'irene/enums';
+import { setupFileModelEndpoints } from 'irene/tests/helpers/file-model-utils';
 
 module(
   'Integration | Component | file-details/scan-actions/api-scan',
@@ -15,6 +16,8 @@ module(
     setupIntl(hooks, 'en');
 
     hooks.beforeEach(async function () {
+      const { file_risk_info } = setupFileModelEndpoints(this.server);
+
       this.server.createList('organization', 1);
 
       const store = this.owner.lookup('service:store');
@@ -27,7 +30,7 @@ module(
       });
 
       this.server.create('project', {
-        file: file.id,
+        last_file: file,
         id: '1',
         platform: ENUMS.PLATFORM.ANDROID,
       });
@@ -35,6 +38,7 @@ module(
       this.setProperties({
         file: store.push(store.normalize('file', file.toJSON())),
         store,
+        file_risk_info,
       });
 
       await this.owner.lookup('service:organization').load();
@@ -51,7 +55,7 @@ module(
       // make sure file is active
       this.file.isActive = true;
 
-      this.server.get('/v2/projects/:id', (schema, req) => {
+      this.server.get('/v3/projects/:id', (schema, req) => {
         return {
           ...schema.projects.find(`${req.params.id}`)?.toJSON(),
           platform: ENUMS.PLATFORM.ANDROID, // enables api scan
@@ -59,7 +63,7 @@ module(
       });
 
       await render(hbs`
-          <FileDetails::ScanActions @file={{this.file}} />
+          <FileDetails::ScanActions @file={{this.file}} @vulnerabilityCount={{this.file_risk_info.risk_count_by_scan_type.api}} />
       `);
 
       assert.dom('[data-test-fileDetailScanActions-scan-type-cards]').exists();
@@ -95,12 +99,15 @@ module(
         // make sure file is active
         this.file.isActive = true;
 
-        this.server.get('/v2/projects/:id', (schema, req) => {
+        this.server.get('/v3/projects/:id', (schema, req) => {
           return schema.projects.find(`${req.params.id}`)?.toJSON();
         });
 
         await render(hbs`
-            <FileDetails::ScanActions::ApiScan @file={{this.file}} />
+          <FileDetails::ScanActions::ApiScan
+            @file={{this.file}}
+            @vulnerabilityCount={{this.file_risk_info.risk_count_by_scan_type.api}}
+          />
         `);
 
         if (this.file.isRunningApiScan) {
@@ -119,7 +126,7 @@ module(
 
         // Scan overview section
         const vulnerabilityCount = this.file.isApiDone
-          ? String(this.file.apiVulnerabilityCount)
+          ? String(this.file_risk_info.risk_count_by_scan_type.api)
           : '-';
 
         const scanOverviewSection = find(

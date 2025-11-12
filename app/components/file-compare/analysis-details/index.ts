@@ -1,24 +1,36 @@
 import Component from '@glimmer/component';
-import { inject as service } from '@ember/service';
+import { service } from '@ember/service';
 import { htmlSafe } from '@ember/template';
+import { task } from 'ember-concurrency';
+import { tracked } from 'tracked-built-ins';
+import type Store from '@ember-data/store';
 import type IntlService from 'ember-intl/services/intl';
 
 import ENUMS from 'irene/enums';
+import type AnalysisOverviewModel from 'irene/models/analysis-overview';
 import type AnalysisModel from 'irene/models/analysis';
 
 export interface FileCompareAnalysisDetailsSignature {
   Element: HTMLElement;
   Args: {
-    analysis?: AnalysisModel;
+    analysis?: AnalysisOverviewModel;
     analysisStatus: string;
   };
 }
 
 export default class FileCompareAnalysisDetailsComponent extends Component<FileCompareAnalysisDetailsSignature> {
   @service declare intl: IntlService;
+  @service declare store: Store;
 
-  get analysis() {
-    return this.args.analysis || null;
+  @tracked analysis: AnalysisModel | null = null;
+
+  constructor(
+    owner: object,
+    args: FileCompareAnalysisDetailsSignature['Args']
+  ) {
+    super(owner, args);
+
+    this.reloadAnalysis.perform();
   }
 
   get isMarkedAsPassed() {
@@ -56,6 +68,18 @@ export default class FileCompareAnalysisDetailsComponent extends Component<FileC
   get nonCompliantCodeExample() {
     return htmlSafe(this.vulnerability?.get?.('nonCompliant') || '');
   }
+
+  reloadAnalysis = task(async () => {
+    if (!this.args.analysis?.id) {
+      return;
+    }
+
+    this.analysis = await this.store.findRecord(
+      'analysis',
+      String(this.args.analysis.id),
+      { reload: true }
+    );
+  });
 }
 
 declare module '@glint/environment-ember-loose/registry' {

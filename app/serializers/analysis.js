@@ -1,4 +1,3 @@
-/* eslint-disable prettier/prettier */
 import DRFSerializer from './drf';
 import { EmbeddedRecordsMixin } from '@ember-data/serializer/rest';
 

@@ -5,8 +5,9 @@ import { setupMirage } from 'ember-cli-mirage/test-support';
 import { t } from 'ember-intl/test-support';
 import Service from '@ember/service';
 
-import { setupRequiredEndpoints } from 'irene/tests/helpers/acceptance-utils';
 import ENUMS from 'irene/enums';
+import { setupRequiredEndpoints } from 'irene/tests/helpers/acceptance-utils';
+import { setupFileModelEndpoints } from 'irene/tests/helpers/file-model-utils';
 
 // Notification Service
 class NotificationsStub extends Service {
@@ -34,10 +35,10 @@ module(
       const { organization, currentOrganizationMe } =
         await setupRequiredEndpoints(this.server);
 
+      setupFileModelEndpoints(this.server);
+
       organization.update({
-        features: {
-          storeknox: true,
-        },
+        features: { storeknox: true },
       });
 
       // Server mocks
@@ -58,11 +59,11 @@ module(
         };
       });
 
-      this.server.get('/v2/files/:id', (schema, req) => {
+      this.server.get('/v3/files/:id', (schema, req) => {
         return schema.files.find(`${req.params.id}`)?.toJSON();
       });
 
-      this.server.get('/v2/projects/:id', (schema, req) => {
+      this.server.get('/v3/projects/:id', (schema, req) => {
         return schema.projects.find(`${req.params.id}`)?.toJSON();
       });
 

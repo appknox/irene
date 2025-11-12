@@ -1,4 +1,4 @@
-/* eslint-disable ember/no-computed-properties-in-native-classes, ember/no-mixins */
+/* eslint-disable ember/no-mixins */
 import {
   AsyncBelongsTo,
   AsyncHasMany,
@@ -7,7 +7,6 @@ import {
   hasMany,
 } from '@ember-data/model';
 
-import ComputedProperty, { alias } from '@ember/object/computed';
 import { isEmpty } from '@ember/utils';
 import ENUMS from 'irene/enums';
 import { ModelBaseMixin } from 'irene/mixins/base-model';
@@ -66,10 +65,7 @@ export default class ProjectModel extends ModelBaseMixin {
   declare organization: AsyncBelongsTo<OrganizationModel>;
 
   @belongsTo('file', { async: false, inverse: null })
-  declare lastFileId: FileModel;
-
-  @alias('lastFileId')
-  declare lastFile: ComputedProperty<FileModel>;
+  declare lastFile: FileModel;
 
   @hasMany('file', { inverse: 'project', async: true })
   declare files: AsyncHasMany<FileModel>;

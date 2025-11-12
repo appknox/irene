@@ -2,6 +2,7 @@ import { module, test } from 'qunit';
 import { visit, currentURL } from '@ember/test-helpers';
 import { setupApplicationTest } from 'ember-qunit';
 import { setupRequiredEndpoints } from 'irene/tests/helpers/acceptance-utils';
+import { setupFileModelEndpoints } from 'irene/tests/helpers/file-model-utils';
 import { setupMirage } from 'ember-cli-mirage/test-support';
 
 module('Acceptance | hide-upsell-features', function (hooks) {
@@ -56,6 +57,7 @@ module('Acceptance | hide-upsell-features', function (hooks) {
       { feature, featureState = false, redirectRoute, route, models_info }
     ) {
       const { organization } = await setupRequiredEndpoints(this.server);
+      setupFileModelEndpoints(this.server);
 
       // Hide upsell feature UIs and toggle feature off
       organization.update({
@@ -73,11 +75,11 @@ module('Acceptance | hide-upsell-features', function (hooks) {
         return { enterprise: false };
       });
 
-      this.server.get('/v2/projects/:id', (schema, req) => {
+      this.server.get('/v3/projects/:id', (schema, req) => {
         return schema.projects.find(`${req.params.id}`)?.toJSON();
       });
 
-      this.server.get('/v2/files/:id', (schema, req) => {
+      this.server.get('/v3/files/:id', (schema, req) => {
         return schema.files.find(`${req.params.id}`)?.toJSON();
       });
 

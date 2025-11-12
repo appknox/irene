@@ -179,7 +179,11 @@ export default class SystemStatusComponent extends Component {
     await timeout(1000);
   });
 
-  onWebsocketHealthCheck(data: SocketHealthMessage) {
+  onWebsocketHealthCheck(data?: SocketHealthMessage) {
+    if (!data) {
+      return;
+    }
+
     this.isWebsocketWorking =
       ENV.environment === 'test'
         ? JSON.parse(`${data}`).is_healthy

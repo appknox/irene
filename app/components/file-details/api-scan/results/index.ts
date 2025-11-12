@@ -1,33 +1,26 @@
+import Component from '@glimmer/component';
 import { action } from '@ember/object';
 import { service } from '@ember/service';
-import Component from '@glimmer/component';
 import { tracked } from '@glimmer/tracking';
-import { task } from 'ember-concurrency';
 import type { EmberTableSort } from 'ember-table';
 import type IntlService from 'ember-intl/services/intl';
 
 import ENUMS from 'irene/enums';
-import type AnalysisModel from 'irene/models/analysis';
 import type FileModel from 'irene/models/file';
 import type ApiScanService from 'irene/services/api-scan';
-import Store from '@ember-data/store';
 
 export interface FileDetailsApiScanResultsSignature {
-  Args: {
-    file: FileModel;
-  };
+  Args: { file: FileModel };
 }
 
 export default class FileDetailsApiScanResultsComponent extends Component<FileDetailsApiScanResultsSignature> {
   @service declare intl: IntlService;
   @service declare apiScan: ApiScanService;
-  @service declare store: Store;
 
   @tracked filterVulnerabilityType: string | number =
     ENUMS.VULNERABILITY_TYPE.API;
 
   @tracked sorts = [{ isAscending: false, valuePath: 'computedRisk' }];
-  @tracked fileAnalyses: AnalysisModel[] = [];
 
   constructor(
     owner: unknown,
@@ -36,7 +29,6 @@ export default class FileDetailsApiScanResultsComponent extends Component<FileDe
     super(owner, args);
 
     this.apiScan.setFooterComponent(null, {});
-    this.fetchFileAnalyses.perform();
   }
 
   get tabItems() {
@@ -72,14 +64,6 @@ export default class FileDetailsApiScanResultsComponent extends Component<FileDe
   updateAnalysesSorts(sorts: EmberTableSort[]) {
     this.sorts = sorts;
   }
-
-  fetchFileAnalyses = task(async () => {
-    const analyses = await this.store.query('analysis', {
-      fileId: this.args.file.id,
-    });
-
-    this.fileAnalyses = analyses.slice();
-  });
 }
 
 declare module '@glint/environment-ember-loose/registry' {

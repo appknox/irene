@@ -5,6 +5,7 @@ import { hbs } from 'ember-cli-htmlbars';
 import { setupIntl, t } from 'ember-intl/test-support';
 import { setupMirage } from 'ember-cli-mirage/test-support';
 import Service from '@ember/service';
+import { setupFileModelEndpoints } from 'irene/tests/helpers/file-model-utils';
 
 class RealtimeStub extends Service {
   ReportCounter = 0;
@@ -49,6 +50,8 @@ module('Integration | Component | file/report-drawer', function (hooks) {
   setupIntl(hooks, 'en');
 
   hooks.beforeEach(async function () {
+    setupFileModelEndpoints(this.server);
+
     this.owner.register('service:realtime', RealtimeStub);
     this.owner.register('service:notifications', NotificationsStub);
 
@@ -66,7 +69,7 @@ module('Integration | Component | file/report-drawer', function (hooks) {
       return { count: 0, next: null, previous: null, result: [] };
     });
 
-    this.server.get('/v2/files/:id', (schema, req) =>
+    this.server.get('/v3/files/:id', (schema, req) =>
       schema.files.find(req.params.id)?.toJSON()
     );
 

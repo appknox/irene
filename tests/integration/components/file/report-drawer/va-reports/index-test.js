@@ -4,9 +4,11 @@ import { click, render, waitFor, findAll } from '@ember/test-helpers';
 import { hbs } from 'ember-cli-htmlbars';
 import { setupIntl, t } from 'ember-intl/test-support';
 import { setupMirage } from 'ember-cli-mirage/test-support';
-import { serializer } from 'irene/tests/test-utils';
 import { Response } from 'miragejs';
 import Service from '@ember/service';
+
+import { serializer } from 'irene/tests/test-utils';
+import { setupFileModelEndpoints } from 'irene/tests/helpers/file-model-utils';
 
 class NotificationsStub extends Service {
   errorMsg = null;
@@ -29,6 +31,8 @@ module(
     setupIntl(hooks, 'en');
 
     hooks.beforeEach(async function () {
+      setupFileModelEndpoints(this.server);
+
       this.owner.register('service:notifications', NotificationsStub);
 
       const store = this.owner.lookup('service:store');
@@ -49,7 +53,7 @@ module(
 
       this.set('file', store.push(store.normalize('file', file.toJSON())));
 
-      this.server.get('/v2/files/:id', () => {
+      this.server.get('/v3/files/:id', () => {
         return { id: file.id, ...file.toJSON() };
       });
     });
@@ -103,7 +107,7 @@ module(
         serializer(schema.fileReports.all(), true)
       );
 
-      this.server.get('/v2/files/:id', (schema, req) => {
+      this.server.get('/v3/files/:id', (schema, req) => {
         const file = schema.files.find(`${req.params.id}`)?.toJSON();
 
         if (this.hasGeneratedReport) {
@@ -200,7 +204,7 @@ module(
         serializer(schema.fileReports.all(), true)
       );
 
-      this.server.get('/v2/files/:id', (schema, req) => {
+      this.server.get('/v3/files/:id', (schema, req) => {
         const file = schema.files.find(`${req.params.id}`)?.toJSON();
 
         if (this.hasGeneratedReport) {
@@ -296,8 +300,11 @@ module(
         serializer(schema.fileReports.all(), true)
       );
 
-      this.file.canGenerateReport = false;
       this.file.isStaticDone = true;
+
+      this.server.get('/v3/files/:id/can_generate_report', () => {
+        return { can_generate_report: false };
+      });
 
       await render(hbs`<File::ReportDrawer::VaReports @file={{this.file}} />`);
 

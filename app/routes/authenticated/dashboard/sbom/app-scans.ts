@@ -41,7 +41,7 @@ export default class AuthenticatedDashboardSbomAppScansRoute extends AkBreadcrum
     );
 
     const sbomPrj = await sbomProject.get('project');
-    const projectLastFile = await sbomPrj.get('lastFileId');
+    const projectLastFile = await sbomPrj.get('lastFile');
 
     return {
       sbomProject,

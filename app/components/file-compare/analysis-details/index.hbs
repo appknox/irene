@@ -1,164 +1,195 @@
-<AkStack
-  ...attributes
-  @direction='column'
-  local-class='
+{{#if this.reloadAnalysis.isRunning}}
+  <AkStack
+    @width='6/12'
+    @direction='column'
+    @alignItems='center'
+    local-class='file-compare-vulnerability-details-skeleton-container'
+  >
+    {{#each (array 1 2 3 4) as |item|}}
+      {{#unless (eq item 1)}}
+        <AkDivider @color='dark' />
+      {{/unless}}
+
+      <AkStack
+        @width='full'
+        @alignItems='center'
+        class='p-3'
+        {{style gap='100px'}}
+      >
+        <AkSkeleton @width='84px' @height='19px' @variant='rectangular' />
+        <AkSkeleton @width='90px' @height='28px' @variant='rectangular' />
+      </AkStack>
+    {{/each}}
+  </AkStack>
+
+{{else}}
+  <AkStack
+    ...attributes
+    @direction='column'
+    local-class='
     analysis-details-root
     {{if this.isMarkedAsPassed "marked-passed"}}'
->
-  <AkStack
-    @width='full'
-    class='p-3'
-    data-test-fileCompare-analysisDetails-severityDetails
   >
-    <AkTypography @variant='h6' local-class='analysis-content-title'>
-      {{t 'severity'}}
-    </AkTypography>
-
-    <AnalysisRisk::Tag
-      @computedRisk={{@analysis.computedRisk}}
-      @status={{@analysis.status}}
-      @isOverridden={{@analysis.isNonPassedRiskOverridden}}
-      @overriddenRisk={{@analysis.overriddenRisk}}
-      @originalRisk={{@analysis.risk}}
-    />
-  </AkStack>
-
-  <AkDivider @color='dark' />
-
-  <AkStack
-    @width='full'
-    class='p-3'
-    data-test-fileCompare-analysisDetails-analysisStatus
-  >
-    <AkTypography @variant='h6' local-class='analysis-content-title'>
-      {{t 'status'}}
-    </AkTypography>
-
-    <AkTypography local-class='analysis-content-value'>
-      {{@analysisStatus}}
-    </AkTypography>
-  </AkStack>
-
-  <AkDivider @color='dark' />
-
-  <AkStack @width='full' class='p-3'>
-    <AkTypography
-      @variant='h6'
-      local-class='analysis-content-title'
-      title='{{t "cvssExpansion"}}'
-      data-test-fileCompare-analysisDetails-typeOfScan
+    <AkStack
+      @width='full'
+      class='p-3'
+      data-test-fileCompare-analysisDetails-severityDetails
     >
-      {{t 'typeOfScan'}}
-    </AkTypography>
+      <AkTypography @variant='h6' local-class='analysis-content-title'>
+        {{t 'severity'}}
+      </AkTypography>
 
-    {{#if @analysis}}
-      <FileDetails::TypeOfScan @analysis={{@analysis}} />
-    {{/if}}
-
-  </AkStack>
-
-  <AkDivider @color='dark' />
-
-  <AkStack @direction='column' @width='full' class='p-3'>
-    <AkTypography
-      data-test-analysisDetails-descriptionLabel
-      @variant='h6'
-      @gutterBottom={{true}}
-    >
-      {{t 'description'}}
-    </AkTypography>
-
-    <AkTypography
-      local-class='analysis-static-content'
-      data-test-analysisDetails-descriptionValue
-    >
-      {{this.vulnerabilityDescription}}
-    </AkTypography>
-  </AkStack>
-
-  {{#if (or this.isMarkedAsPassedOrRisky @analysis.attachments)}}
-    <AkDivider @color='dark' />
-
-    <AkStack @width='full' @direction='column' class='p-3'>
-      {{#if this.isMarkedAsPassedOrRisky}}
-        <AkTypography @variant='h6' @gutterBottom={{true}}>
-          {{t 'vulnerability'}}
-        </AkTypography>
-
-        {{#each @analysis.findings as |finding|}}
-          <AkTypography local-class='analysis-content-value'>
-            {{finding.title}}
-          </AkTypography>
-
-          <div local-class='vulnerability-finding-container'>
-            <pre local-class='vulnerability-finding-description'>
-              {{finding.description}}
-            </pre>
-          </div>
-        {{/each}}
-      {{/if}}
+      <AnalysisRisk::Tag
+        @computedRisk={{this.analysis.computedRisk}}
+        @status={{this.analysis.status}}
+        @isOverridden={{this.analysis.isNonPassedRiskOverridden}}
+        @overriddenRisk={{this.analysis.overriddenRisk}}
+        @originalRisk={{this.analysis.risk}}
+      />
     </AkStack>
 
-    {{#if @analysis.attachments}}
-      <AkStack @width='full' @direction='column' @spacing='1' class='px-3 pb-3'>
-        <AkTypography @variant='h6' @gutterBottom={{true}}>
-          {{t 'attachments'}}
-        </AkTypography>
-
-        {{#each @analysis.attachments as |attachment|}}
-          <AttachmentDetail @attachment={{attachment}} />
-        {{/each}}
-      </AkStack>
-    {{/if}}
-  {{/if}}
-
-  {{#if (and (eq @analysis.cvssVersion 3) @analysis.cvssVector)}}
     <AkDivider @color='dark' />
 
-    <AkStack data-test-analysisDetails-regulatory='cvssv3' class='p-3'>
+    <AkStack
+      @width='full'
+      class='p-3'
+      data-test-fileCompare-analysisDetails-analysisStatus
+    >
+      <AkTypography @variant='h6' local-class='analysis-content-title'>
+        {{t 'status'}}
+      </AkTypography>
+
+      <AkTypography local-class='analysis-content-value'>
+        {{@analysisStatus}}
+      </AkTypography>
+    </AkStack>
+
+    <AkDivider @color='dark' />
+
+    <AkStack @width='full' class='p-3'>
       <AkTypography
         @variant='h6'
         local-class='analysis-content-title'
         title='{{t "cvssExpansion"}}'
-        data-test-analysisDetails-regulatoryLabel
+        data-test-fileCompare-analysisDetails-typeOfScan
       >
-        {{t 'cvssV3'}}
+        {{t 'typeOfScan'}}
       </AkTypography>
 
-      <AkTypography
-        local-class='analysis-content-value'
-        data-test-analysisDetails-regulatoryValue
-      >
-        {{@analysis.cvssBase}}
-      </AkTypography>
+      {{#if @analysis}}
+        <FileDetails::TypeOfScan @analysis={{@analysis}} />
+      {{/if}}
+
     </AkStack>
 
     <AkDivider @color='dark' />
 
-    <div data-test-analysisDetails-regulatory='cvssv3metrics' class='p-3'>
+    <AkStack @direction='column' @width='full' class='p-3'>
       <AkTypography
+        data-test-analysisDetails-descriptionLabel
         @variant='h6'
         @gutterBottom={{true}}
-        data-test-analysisDetails-regulatoryLabel
       >
-        {{t 'cvssMetrics'}}
+        {{t 'description'}}
       </AkTypography>
 
-      <FileCompare::AnalysisDetails::RegulatoryContent
-        @contents={{@analysis.cvssMetricsHumanized}}
+      <AkTypography
+        local-class='analysis-static-content'
+        data-test-analysisDetails-descriptionValue
       >
-        <:label as |metric|>
-          <AkTypography>
-            {{metric.key}}
-          </AkTypography>
-        </:label>
+        {{this.vulnerabilityDescription}}
+      </AkTypography>
+    </AkStack>
 
-        <:value as |metric|>
-          <AkTypography>
-            {{metric.value}}
+    {{#if (or this.isMarkedAsPassedOrRisky this.analysis.attachments)}}
+      <AkDivider @color='dark' />
+
+      <AkStack @width='full' @direction='column' class='p-3'>
+        {{#if this.isMarkedAsPassedOrRisky}}
+          <AkTypography @variant='h6' @gutterBottom={{true}}>
+            {{t 'vulnerability'}}
           </AkTypography>
-        </:value>
-      </FileCompare::AnalysisDetails::RegulatoryContent>
-    </div>
-  {{/if}}
-</AkStack>
+
+          {{#each this.analysis.findings as |finding|}}
+            <AkTypography local-class='analysis-content-value'>
+              {{finding.title}}
+            </AkTypography>
+
+            <div local-class='vulnerability-finding-container'>
+              <pre local-class='vulnerability-finding-description'>
+                {{finding.description}}
+              </pre>
+            </div>
+          {{/each}}
+        {{/if}}
+      </AkStack>
+
+      {{#if this.analysis.attachments}}
+        <AkStack
+          @width='full'
+          @direction='column'
+          @spacing='1'
+          class='px-3 pb-3'
+        >
+          <AkTypography @variant='h6' @gutterBottom={{true}}>
+            {{t 'attachments'}}
+          </AkTypography>
+
+          {{#each this.analysis.attachments as |attachment|}}
+            <AttachmentDetail @attachment={{attachment}} />
+          {{/each}}
+        </AkStack>
+      {{/if}}
+    {{/if}}
+
+    {{#if (and (eq this.analysis.cvssVersion 3) this.analysis.cvssVector)}}
+      <AkDivider @color='dark' />
+
+      <AkStack data-test-analysisDetails-regulatory='cvssv3' class='p-3'>
+        <AkTypography
+          @variant='h6'
+          local-class='analysis-content-title'
+          title='{{t "cvssExpansion"}}'
+          data-test-analysisDetails-regulatoryLabel
+        >
+          {{t 'cvssV3'}}
+        </AkTypography>
+
+        <AkTypography
+          local-class='analysis-content-value'
+          data-test-analysisDetails-regulatoryValue
+        >
+          {{this.analysis.cvssBase}}
+        </AkTypography>
+      </AkStack>
+
+      <AkDivider @color='dark' />
+
+      <div data-test-analysisDetails-regulatory='cvssv3metrics' class='p-3'>
+        <AkTypography
+          @variant='h6'
+          @gutterBottom={{true}}
+          data-test-analysisDetails-regulatoryLabel
+        >
+          {{t 'cvssMetrics'}}
+        </AkTypography>
+
+        <FileCompare::AnalysisDetails::RegulatoryContent
+          @contents={{this.analysis.cvssMetricsHumanized}}
+        >
+          <:label as |metric|>
+            <AkTypography>
+              {{metric.key}}
+            </AkTypography>
+          </:label>
+
+          <:value as |metric|>
+            <AkTypography>
+              {{metric.value}}
+            </AkTypography>
+          </:value>
+        </FileCompare::AnalysisDetails::RegulatoryContent>
+      </div>
+    {{/if}}
+  </AkStack>
+{{/if}}

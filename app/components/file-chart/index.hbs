@@ -1,10 +1,22 @@
-<AkChart
-  @width='100%'
-  @height='200px'
-  @option={{this.option}}
-  ...attributes
-  data-test-fileChartSeverityLevel-chart
-/>
+{{#if this.isFetchingFileRisk}}
+  <AkStack
+    @alignItems='center'
+    @justifyContent='center'
+    local-class='loading-circle-container {{if this.isLargeChartSize "large"}}'
+  >
+    <div
+      local-class='hollow-circular-loader {{if this.isLargeChartSize "large"}}'
+    ></div>
+  </AkStack>
+{{else}}
+  <AkChart
+    @width='100%'
+    @height='200px'
+    @option={{this.option}}
+    ...attributes
+    data-test-fileChartSeverityLevel-chart
+  />
+{{/if}}
 
 <AkStack
   {{style maxWidth=(concat this.legendMaxWidth 'px') flex='1'}}
@@ -39,7 +51,6 @@
           <AkTypography data-test-fileChartSeverityLevel-severityCountName>
             {{slc.name}}
           </AkTypography>
-
         </AkStack>
 
         {{#if this.fetchFileRisk.isRunning}}

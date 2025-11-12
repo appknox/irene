@@ -44,11 +44,11 @@ module(
         }
       );
 
-      this.server.get('/v2/projects/:id', (schema, req) => {
+      this.server.get('/v3/projects/:id', (schema, req) => {
         return schema.projects.find(req.params.id).toJSON();
       });
 
-      this.server.get('/v2/files/:id', (schema, req) => {
+      this.server.get('/v3/files/:id', (schema, req) => {
         return schema.files.find(`${req.params.id}`)?.toJSON();
       });
 
@@ -64,7 +64,7 @@ module(
       const file = this.server.create('file', 1);
       const project = this.server.create('project', {
         id: 1,
-        last_file_id: file.id,
+        last_file: file,
       });
 
       const normalizedProject = store.normalize('project', {

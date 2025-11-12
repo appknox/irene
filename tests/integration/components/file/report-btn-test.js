@@ -4,6 +4,7 @@ import { setupMirage } from 'ember-cli-mirage/test-support';
 import { setupIntl, t } from 'ember-intl/test-support';
 import { setupRenderingTest } from 'ember-qunit';
 import { module, test } from 'qunit';
+import { setupFileModelEndpoints } from 'irene/tests/helpers/file-model-utils';
 
 module('Integration | Component | file/report-btn', function (hooks) {
   setupRenderingTest(hooks);
@@ -11,6 +12,8 @@ module('Integration | Component | file/report-btn', function (hooks) {
   setupIntl(hooks, 'en');
 
   hooks.beforeEach(async function () {
+    setupFileModelEndpoints(this.server);
+
     const store = this.owner.lookup('service:store');
 
     const file = this.server.create('file');
@@ -20,7 +23,7 @@ module('Integration | Component | file/report-btn', function (hooks) {
       file: store.push(fileNormalized),
     });
 
-    this.server.get('/v2/files/:id', (schema, req) =>
+    this.server.get('/v3/files/:id', (schema, req) =>
       schema.files.find(req.params.id)?.toJSON()
     );
 

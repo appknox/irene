@@ -92,7 +92,7 @@ module(
 
       const project = this.server.create('project', {
         id: 1,
-        last_file_id: file.id,
+        last_file: file,
       });
 
       this.setProperties({
@@ -111,13 +111,13 @@ module(
       this.owner.register('service:websocket', WebsocketStub);
 
       // Server Mocks
-      this.server.get('/v2/files/:id', (schema, req) => {
+      this.server.get('/v3/files/:id', (schema, req) => {
         const data = schema.files.find(`${req.params.id}`)?.toJSON();
 
         return { ...data, project: project.id };
       });
 
-      this.server.get('/v2/projects/:id', (schema, req) => {
+      this.server.get('/v3/projects/:id', (schema, req) => {
         return schema.projects.find(req.params.id).toJSON();
       });
 
