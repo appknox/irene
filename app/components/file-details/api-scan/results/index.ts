@@ -3,6 +3,7 @@ import { service } from '@ember/service';
 import Component from '@glimmer/component';
 import { tracked } from '@glimmer/tracking';
 import { task } from 'ember-concurrency';
+import type Store from '@ember-data/store';
 import type { EmberTableSort } from 'ember-table';
 import type IntlService from 'ember-intl/services/intl';
 
@@ -10,7 +11,6 @@ import ENUMS from 'irene/enums';
 import type AnalysisModel from 'irene/models/analysis';
 import type FileModel from 'irene/models/file';
 import type ApiScanService from 'irene/services/api-scan';
-import Store from '@ember-data/store';
 
 export interface FileDetailsApiScanResultsSignature {
   Args: {

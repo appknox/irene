@@ -9,6 +9,7 @@ import { task } from 'ember-concurrency';
 import parseError from 'irene/utils/parse-error';
 import IntlService from 'ember-intl/services/intl';
 import DynamicscanModel from 'irene/models/dynamicscan';
+import { waitForPromise } from '@ember/test-waiters';
 
 export interface FileDetailsDastManualSignature {
   Args: {
@@ -73,8 +74,9 @@ export default class FileDetailsDastManual extends Component<FileDetailsDastManu
 
   getLastDynamicScans = task(async () => {
     try {
-      this.lastManualDynamicScan =
-        await this.file.getFileLastManualDynamicScan();
+      this.lastManualDynamicScan = await waitForPromise(
+        this.file.getFileLastManualDynamicScan()
+      );
     } catch (error) {
       this.notify.error(parseError(error, this.intl.t('pleaseTryAgain')));
     }

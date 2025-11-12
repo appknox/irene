@@ -8,6 +8,7 @@ import DynamicscanModel, { DsComputedStatus } from 'irene/models/dynamicscan';
 import { tracked } from '@glimmer/tracking';
 import { task } from 'ember-concurrency';
 import parseError from 'irene/utils/parse-error';
+import { waitForPromise } from '@ember/test-waiters';
 
 export interface FileDetailsScanActionsDynamicScanSignature {
   Args: {
@@ -91,11 +92,13 @@ export default class FileDetailsScanActionsDynamicScanComponent extends Componen
 
   loadLastDynamicScans = task(async () => {
     try {
-      this.automatedDynamicScan =
-        await this.args.file.getFileLastAutomatedDynamicScan();
+      this.automatedDynamicScan = await waitForPromise(
+        this.args.file.getFileLastAutomatedDynamicScan()
+      );
 
-      this.manualDynamicScan =
-        await this.args.file.getFileLastManualDynamicScan();
+      this.manualDynamicScan = await waitForPromise(
+        this.args.file.getFileLastManualDynamicScan()
+      );
     } catch (error) {
       this.notify.error(parseError(error, this.intl.t('pleaseTryAgain')));
     }

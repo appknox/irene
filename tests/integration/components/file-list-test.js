@@ -30,7 +30,7 @@ module('Integration | Component | file-list', function (hooks) {
       };
     });
 
-    this.server.get('/v2/projects/:id', (schema, req) => {
+    this.server.get('/v3/projects/:id', (schema, req) => {
       return schema.projects.find(req.params.id).toJSON();
     });
 

@@ -546,13 +546,13 @@ module('Acceptance | Create service account', function (hooks) {
         }
       );
 
-      this.server.get('/organizations/:id/projects', () => {
+      this.server.get('/v3/projects', () => {
         const results = createExcludedProjects();
 
         return { count: results.length, next: null, previous: null, results };
       });
 
-      this.server.get('/v2/projects/:id', (schema, req) => {
+      this.server.get('/v3/projects/:id', (schema, req) => {
         return schema.projects.find(req.params.id).toJSON();
       });
 

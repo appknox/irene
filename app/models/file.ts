@@ -212,12 +212,6 @@ export default class FileModel extends ModelBaseMixin {
     return await adapter.getSbomFile(this.id);
   }
 
-  async loadAllAnalyses() {
-    const adapter = this.store.adapterFor('file');
-
-    return await adapter.loadAllAnalyses(this.id);
-  }
-
   async getFileLastManualDynamicScan() {
     const adapter = this.store.adapterFor('file');
 

@@ -124,7 +124,7 @@ module('Integration | Component | organization-team/details', function (hooks) {
         return schema.organizationUsers.find(req.params.userId)?.toJSON();
       });
 
-      this.server.get('/v2/projects/:id', (schema, req) => {
+      this.server.get('/v3/projects/:id', (schema, req) => {
         return schema.projects.find(`${req.params.id}`)?.toJSON();
       });
 
@@ -348,7 +348,7 @@ module('Integration | Component | organization-team/details', function (hooks) {
         return schema.organizationUsers.find(req.params.userId)?.toJSON();
       });
 
-      this.server.get('/v2/projects/:id', (schema, req) => {
+      this.server.get('/v3/projects/:id', (schema, req) => {
         return schema.projects.find(`${req.params.id}`)?.toJSON();
       });
 
@@ -453,7 +453,7 @@ module('Integration | Component | organization-team/details', function (hooks) {
       return { count: results.length, next: null, previous: null, results };
     });
 
-    this.server.get('/v2/projects/:id', (schema, req) => {
+    this.server.get('/v3/projects/:id', (schema, req) => {
       return schema.projects.find(`${req.params.id}`)?.toJSON();
     });
 
@@ -547,7 +547,7 @@ module('Integration | Component | organization-team/details', function (hooks) {
       return schema.organizationUsers.find(req.params.userId)?.toJSON();
     });
 
-    this.server.get('/v2/projects/:id', (schema, req) => {
+    this.server.get('/v3/projects/:id', (schema, req) => {
       return schema.projects.find(`${req.params.id}`)?.toJSON();
     });
 
@@ -635,7 +635,7 @@ module('Integration | Component | organization-team/details', function (hooks) {
       return schema.organizationUsers.find(req.params.userId)?.toJSON();
     });
 
-    this.server.get('/v2/projects/:id', (schema, req) => {
+    this.server.get('/v3/projects/:id', (schema, req) => {
       return schema.projects.find(`${req.params.id}`)?.toJSON();
     });
 
@@ -707,7 +707,7 @@ module('Integration | Component | organization-team/details', function (hooks) {
       return schema.organizationUsers.find(req.params.userId)?.toJSON();
     });
 
-    this.server.get('/v2/projects/:id', (schema, req) => {
+    this.server.get('/v3/projects/:id', (schema, req) => {
       return schema.projects.find(`${req.params.id}`)?.toJSON();
     });
 
@@ -760,7 +760,7 @@ module('Integration | Component | organization-team/details', function (hooks) {
         return schema.organizationUsers.find(req.params.userId)?.toJSON();
       });
 
-      this.server.get('/v2/projects/:id', (schema, req) => {
+      this.server.get('/v3/projects/:id', (schema, req) => {
         return schema.projects.find(`${req.params.id}`)?.toJSON();
       });
 
@@ -871,7 +871,7 @@ module('Integration | Component | organization-team/details', function (hooks) {
         return schema.organizationUsers.find(req.params.userId)?.toJSON();
       });
 
-      this.server.get('/v2/projects/:id', (schema, req) => {
+      this.server.get('/v3/projects/:id', (schema, req) => {
         return schema.projects.find(`${req.params.id}`)?.toJSON();
       });
 

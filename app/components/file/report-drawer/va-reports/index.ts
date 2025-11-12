@@ -254,7 +254,7 @@ export default class FileReportDrawerVaReportsComponent extends Component<FileRe
 
   getCanGenerateReportStatus = task(async () => {
     try {
-      const status = await this.file.getGenerateReportStatus();
+      const status = await waitForPromise(this.file.getGenerateReportStatus());
       this.canGenerateReport = status.can_generate_report;
     } catch (error) {
       this.notify.error(parseError(error));
@@ -282,11 +282,13 @@ export default class FileReportDrawerVaReportsComponent extends Component<FileRe
 
   getFileLatestDynamicScans = task(async () => {
     try {
-      this.lastAutomatedDynamicScan =
-        await this.file.getFileLastAutomatedDynamicScan();
+      this.lastAutomatedDynamicScan = await waitForPromise(
+        this.file.getFileLastAutomatedDynamicScan()
+      );
 
-      this.lastManualDynamicScan =
-        await this.file.getFileLastManualDynamicScan();
+      this.lastManualDynamicScan = await waitForPromise(
+        this.file.getFileLastManualDynamicScan()
+      );
     } catch (error) {
       this.notify.error(parseError(error, this.intl.t('pleaseTryAgain')));
     }

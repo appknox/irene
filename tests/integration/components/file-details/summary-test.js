@@ -38,7 +38,7 @@ module('Integration | Component | file-details/summary', function (hooks) {
       tags: tags.map((tag) => tag.toJSON()),
     });
 
-    this.server.create('project', { file: file.id, id: '1' });
+    this.server.create('project', { last_file: file, id: '1' });
 
     const pushedFile = store.push(store.normalize('file', file.toJSON()));
 
@@ -55,7 +55,7 @@ module('Integration | Component | file-details/summary', function (hooks) {
   test('it renders file-details/summary', async function (assert) {
     this.file.isStaticDone = true;
 
-    this.server.get('/v2/projects/:id', (schema, req) => {
+    this.server.get('/v3/projects/:id', (schema, req) => {
       return schema.projects.find(`${req.params.id}`)?.toJSON();
     });
 
@@ -92,7 +92,7 @@ module('Integration | Component | file-details/summary', function (hooks) {
   });
 
   test('it should toggle show more for file overview', async function (assert) {
-    this.server.get('/v2/projects/:id', (schema, req) => {
+    this.server.get('/v3/projects/:id', (schema, req) => {
       return schema.projects.find(`${req.params.id}`)?.toJSON();
     });
 
@@ -155,7 +155,7 @@ module('Integration | Component | file-details/summary', function (hooks) {
   });
 
   test('it should render file more menu', async function (assert) {
-    this.server.get('/v2/projects/:id', (schema, req) => {
+    this.server.get('/v3/projects/:id', (schema, req) => {
       return schema.projects.find(`${req.params.id}`)?.toJSON();
     });
 
@@ -197,11 +197,11 @@ module('Integration | Component | file-details/summary', function (hooks) {
   });
 
   test.each('test add tag', [false, true], async function (assert, fail) {
-    this.server.get('/v2/projects/:id', (schema, req) => {
+    this.server.get('/v3/projects/:id', (schema, req) => {
       return schema.projects.find(`${req.params.id}`)?.toJSON();
     });
 
-    this.server.get('/v2/files/:id', (schema, req) => {
+    this.server.get('/v3/files/:id', (schema, req) => {
       return schema.files.find(`${req.params.id}`)?.toJSON();
     });
 
@@ -317,11 +317,11 @@ module('Integration | Component | file-details/summary', function (hooks) {
   });
 
   test.each('test delete tag', [false, true], async function (assert, fail) {
-    this.server.get('/v2/projects/:id', (schema, req) => {
+    this.server.get('/v3/projects/:id', (schema, req) => {
       return schema.projects.find(`${req.params.id}`)?.toJSON();
     });
 
-    this.server.get('/v2/files/:id', (schema, req) => {
+    this.server.get('/v3/files/:id', (schema, req) => {
       return schema.files.find(`${req.params.id}`)?.toJSON();
     });
 
@@ -389,7 +389,7 @@ module('Integration | Component | file-details/summary', function (hooks) {
   test('it renders inactive file icon', async function (assert) {
     this.file.isActive = false;
 
-    this.server.get('/v2/projects/:id', (schema, req) => {
+    this.server.get('/v3/projects/:id', (schema, req) => {
       return schema.projects.find(`${req.params.id}`)?.toJSON();
     });
 

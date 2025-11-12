@@ -25,7 +25,7 @@ module(
 
       const file = this.server.create('file', 1);
       const project = this.server.create('project', 1, {
-        last_file_id: file.id,
+        last_file: file,
       });
       const sbomScanSummary = this.server.create('sbom-scan-summary', 1);
 
@@ -146,9 +146,9 @@ module(
       );
 
       await render(hbs`
-        <Sbom::ScanDetails::ComponentTree 
-          @sbomProject={{this.sbomProject}} 
-          @sbomFile={{this.sbomFile}} 
+        <Sbom::ScanDetails::ComponentTree
+          @sbomProject={{this.sbomProject}}
+          @sbomFile={{this.sbomFile}}
           @packageName={{this.packageName}}
           @updateExpandedNodes={{this.updateExpandedNodes}}
           @expandedNodes={{this.expandedNodes}}
@@ -205,9 +205,9 @@ module(
       });
 
       await render(hbs`
-        <Sbom::ScanDetails::ComponentTree 
-          @sbomProject={{this.sbomProject}} 
-          @sbomFile={{this.sbomFile}} 
+        <Sbom::ScanDetails::ComponentTree
+          @sbomProject={{this.sbomProject}}
+          @sbomFile={{this.sbomFile}}
           @packageName={{this.packageName}}
           @updateExpandedNodes={{this.updateExpandedNodes}}
           @expandedNodes={{this.expandedNodes}}
@@ -246,9 +246,9 @@ module(
         });
 
         await render(hbs`
-          <Sbom::ScanDetails::ComponentTree 
-            @sbomProject={{this.sbomProject}} 
-            @sbomFile={{this.sbomFile}} 
+          <Sbom::ScanDetails::ComponentTree
+            @sbomProject={{this.sbomProject}}
+            @sbomFile={{this.sbomFile}}
             @packageName={{this.packageName}}
             @updateExpandedNodes={{this.updateExpandedNodes}}
             @expandedNodes={{this.expandedNodes}}
@@ -295,9 +295,9 @@ module(
         });
 
         await render(hbs`
-          <Sbom::ScanDetails::ComponentTree 
-            @sbomProject={{this.sbomProject}} 
-            @sbomFile={{this.sbomFile}} 
+          <Sbom::ScanDetails::ComponentTree
+            @sbomProject={{this.sbomProject}}
+            @sbomFile={{this.sbomFile}}
             @packageName={{this.packageName}}
             @updateExpandedNodes={{this.updateExpandedNodes}}
             @expandedNodes={{this.expandedNodes}}

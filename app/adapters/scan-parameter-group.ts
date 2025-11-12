@@ -30,7 +30,14 @@ export default class ScanParameterGroupAdapter extends commondrf {
   ) {
     const projectAdapter = this.store.adapterFor('project');
     const projectURL = projectAdapter._buildURL('project', projectId);
-    const scanParameterGroupURL = `${projectURL}/scan_parameter_groups`;
+
+    let scanParameterGroupURL = `${projectURL}/scan_parameter_groups`;
+
+    // TODO: Update to use the namespace_v3 when the API has support for it
+    scanParameterGroupURL = scanParameterGroupURL.replace(
+      this.namespace_v3,
+      this.namespace_v2
+    );
 
     if (id) {
       return `${scanParameterGroupURL}/${encodeURIComponent(id)}`;

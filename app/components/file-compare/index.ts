@@ -1,22 +1,21 @@
-import { inject as service } from '@ember/service';
-import { action } from '@ember/object';
 import Component from '@glimmer/component';
-import IntlService from 'ember-intl/services/intl';
-import Store from '@ember-data/store';
-import RouterService from '@ember/routing/router-service';
+import { service } from '@ember/service';
+import { action } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
-
-import FileModel from 'irene/models/file';
-import UnknownAnalysisStatusModel from 'irene/models/unknown-analysis-status';
-import AkBreadcrumbsService from 'irene/services/ak-breadcrumbs';
-import { scrollDashboardMainContainerTo } from 'irene/utils/scroll-to-top';
+import type IntlService from 'ember-intl/services/intl';
+import type Store from '@ember-data/store';
+import type RouterService from '@ember/routing/router-service';
 
 import {
   compareFileAnalyses,
   getFileComparisonCategories,
 } from 'irene/utils/compare-files';
 
-import AnalysisModel from 'irene/models/analysis';
+import { scrollDashboardMainContainerTo } from 'irene/utils/scroll-to-top';
+import type AkBreadcrumbsService from 'irene/services/ak-breadcrumbs';
+import type FileModel from 'irene/models/file';
+import type UnknownAnalysisStatusModel from 'irene/models/unknown-analysis-status';
+import type AnalysisModel from 'irene/models/analysis';
 
 interface FileCompareSignature {
   Args: {

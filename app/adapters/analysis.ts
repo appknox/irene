@@ -15,7 +15,7 @@ export default class AnalysisAdapter extends commondrf {
   }
 
   _buildNestedURL(modelName: string | number, fileId: string | number) {
-    const baseURL = `${this.namespace_v2}/files/${fileId}/analyses`;
+    const baseURL = `${this.namespace_v3}/files/${fileId}/analyses`;
 
     return this.buildURLFromBase(baseURL);
   }

@@ -8,6 +8,7 @@ import RouterService from '@ember/routing/router-service';
 import SbomFileModel, { SbomScanStatus } from 'irene/models/sbom-file';
 import OrganizationService from 'irene/services/organization';
 import FileModel from 'irene/models/file';
+import { waitForPromise } from '@ember/test-waiters';
 
 export interface FileReportDrawerSbomReportsSignature {
   Args: {
@@ -83,7 +84,7 @@ export default class FileReportDrawerSbomReportsComponent extends Component<File
   }
 
   getSbomFile = task(async () => {
-    const sbFile = await this.file.getSbomFile();
+    const sbFile = await waitForPromise(this.file.getSbomFile());
     this.sbomFile = sbFile;
   });
 }

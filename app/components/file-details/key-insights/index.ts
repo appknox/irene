@@ -38,7 +38,7 @@ export default class FileDetailsKeyInsightsComponent extends Component<FileDetai
     super(owner, args);
 
     this.fetchUnknownAnalysisStatus.perform();
-    this.getPreviousFile.perform();
+    this.getPreviousFileAndAnalyses.perform();
   }
 
   get currentFile() {
@@ -95,7 +95,7 @@ export default class FileDetailsKeyInsightsComponent extends Component<FileDetai
     );
   });
 
-  getPreviousFile = task(async () => {
+  getPreviousFileAndAnalyses = task(async () => {
     try {
       const previousFile = await this.args.file.fetchPreviousFile();
       this.previousFile = previousFile;

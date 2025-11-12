@@ -1,13 +1,14 @@
-import { service } from '@ember/service';
 import Component from '@glimmer/component';
 import dayjs from 'dayjs';
+import { service } from '@ember/service';
+import { waitForPromise } from '@ember/test-waiters';
+import { tracked } from 'tracked-built-ins';
+import { task } from 'ember-concurrency';
 import type IntlService from 'ember-intl/services/intl';
 
+import type FileRiskModel from 'irene/models/file-risk';
 import type SkInventoryAppModel from 'irene/models/sk-inventory-app';
 import type FileModel from 'irene/models/file';
-import { tracked } from 'tracked-built-ins';
-import FileRiskModel from 'irene/models/file-risk';
-import { task } from 'ember-concurrency';
 
 interface StoreknoxInventoryDetailsAppDetailsVaResultsLatestFileResultsSignature {
   Args: {
@@ -77,8 +78,9 @@ export default class StoreknoxInventoryDetailsAppDetailsVaResultsLatestFileResul
 
   fetchFileRisk = task(async () => {
     if (this.coreProjectLatestVersion) {
-      this.corePrjLatestVersionRisk =
-        await this.coreProjectLatestVersion.fetchFileRisk();
+      this.corePrjLatestVersionRisk = await waitForPromise(
+        this.coreProjectLatestVersion.fetchFileRisk()
+      );
     }
   });
 }

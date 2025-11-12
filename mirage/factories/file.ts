@@ -1,7 +1,6 @@
 import { faker } from '@faker-js/faker';
 import Base from './base';
 
-import { RISK_COLOR_CODE } from 'irene/utils/constants';
 import ENUMS from 'irene/enums';
 
 export const FILE_FACTORY_DEF = {
@@ -18,21 +17,6 @@ export const FILE_FACTORY_DEF = {
   is_dynamic_done: faker.datatype.boolean(),
   is_manual_done: faker.datatype.boolean(),
   is_api_done: faker.datatype.boolean(),
-  can_generate_report: faker.datatype.boolean(),
-
-  risk_count_critical: () => faker.number.int(20),
-  risk_count_high: () => faker.number.int(20),
-  risk_count_low: () => faker.number.int(20),
-  risk_count_medium: () => faker.number.int(20),
-  risk_count_passed: () => faker.number.int(20),
-  risk_count_unknown: () => faker.number.int(20),
-
-  countRiskCritical: faker.number.int(20),
-  countRiskHigh: faker.number.int(20),
-  countRiskMedium: faker.number.int(20),
-  countRiskLow: faker.number.int(20),
-  countRiskNone: faker.number.int(20),
-  countRiskUnknown: faker.number.int(20),
 
   version() {
     return faker.number.int();
