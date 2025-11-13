@@ -1,9 +1,15 @@
 import Component from '@glimmer/component';
 import { action } from '@ember/object';
 import { service } from '@ember/service';
-
+import { tracked } from 'tracked-built-ins';
 import type FileModel from 'irene/models/file';
 import type DynamicScanService from 'irene/services/dynamic-scan';
+
+import { task } from 'ember-concurrency';
+import parseError from 'irene/utils/parse-error';
+import IntlService from 'ember-intl/services/intl';
+import DynamicscanModel from 'irene/models/dynamicscan';
+import { waitForPromise } from '@ember/test-waiters';
 
 export interface FileDetailsDastManualSignature {
   Args: {
@@ -14,6 +20,10 @@ export interface FileDetailsDastManualSignature {
 
 export default class FileDetailsDastManual extends Component<FileDetailsDastManualSignature> {
   @service('dynamic-scan') declare dsService: DynamicScanService;
+  @service declare intl: IntlService;
+  @service('notifications') declare notify: NotificationService;
+
+  @tracked lastManualDynamicScan: DynamicscanModel | null = null;
 
   constructor(owner: unknown, args: FileDetailsDastManualSignature['Args']) {
     super(owner, args);
@@ -24,6 +34,8 @@ export default class FileDetailsDastManual extends Component<FileDetailsDastManu
       file: this.file,
       isAutomatedScan: false,
     });
+
+    this.getLastDynamicScans.perform();
   }
 
   get file() {
@@ -35,11 +47,11 @@ export default class FileDetailsDastManual extends Component<FileDetailsDastManu
   }
 
   get dynamicScan() {
-    return this.file.lastManualDynamicScan;
+    return this.lastManualDynamicScan;
   }
 
   get isFetchingDynamicScan() {
-    return this.file.lastManualDynamicScan?.isPending;
+    return this.getLastDynamicScans.isRunning;
   }
 
   get showStatusChip() {
@@ -54,6 +66,21 @@ export default class FileDetailsDastManual extends Component<FileDetailsDastManu
   handleScanShutdown(closeFullscreen: () => void) {
     closeFullscreen();
   }
+
+  @action
+  reloadLastManualDynamicScan() {
+    this.getLastDynamicScans.perform();
+  }
+
+  getLastDynamicScans = task(async () => {
+    try {
+      this.lastManualDynamicScan = await waitForPromise(
+        this.file.getFileLastManualDynamicScan()
+      );
+    } catch (error) {
+      this.notify.error(parseError(error, this.intl.t('pleaseTryAgain')));
+    }
+  });
 }
 
 declare module '@glint/environment-ember-loose/registry' {

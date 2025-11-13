@@ -2,12 +2,15 @@ import { module, test } from 'qunit';
 import { setupTest } from 'ember-qunit';
 import { setupMirage } from 'ember-cli-mirage/test-support';
 import ENUMS from 'irene/enums';
+import { setupFileModelEndpoints } from 'irene/tests/helpers/file-model-utils';
 
 module('Unit | Service | dynamic-scan', function (hooks) {
   setupTest(hooks);
   setupMirage(hooks);
 
   hooks.beforeEach(function () {
+    setupFileModelEndpoints(this.server);
+
     this.store = this.owner.lookup('service:store');
 
     // Helper function to push a model to store
@@ -26,7 +29,7 @@ module('Unit | Service | dynamic-scan', function (hooks) {
   test('checkScanInProgressAndUpdate handles manual scan mode', async function (assert) {
     const service = this.owner.lookup('service:dynamic-scan');
 
-    const oldDynamicscan = this.pushToStore(
+    this.pushToStore(
       'dynamicscan',
       this.server.create('dynamicscan', {
         id: '9',
@@ -39,8 +42,6 @@ module('Unit | Service | dynamic-scan', function (hooks) {
       'file',
       this.server.create('file', {
         id: '100',
-        last_manual_dynamic_scan: oldDynamicscan.id,
-        last_automated_dynamic_scan: null,
       })
     );
 
@@ -70,7 +71,7 @@ module('Unit | Service | dynamic-scan', function (hooks) {
   test('checkScanInProgressAndUpdate handles automated scan mode', async function (assert) {
     const service = this.owner.lookup('service:dynamic-scan');
 
-    const oldDynamicscan = this.pushToStore(
+    this.pushToStore(
       'dynamicscan',
       this.server.create('dynamicscan', {
         id: '9',
@@ -83,8 +84,6 @@ module('Unit | Service | dynamic-scan', function (hooks) {
       'file',
       this.server.create('file', {
         id: '100',
-        last_manual_dynamic_scan: null,
-        last_automated_dynamic_scan: oldDynamicscan.id,
       })
     );
 
@@ -127,7 +126,6 @@ module('Unit | Service | dynamic-scan', function (hooks) {
       'file',
       this.server.create('file', {
         id: '100',
-        last_manual_dynamic_scan: dynamicScan.id,
       })
     );
 

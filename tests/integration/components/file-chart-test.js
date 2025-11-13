@@ -6,6 +6,7 @@ import { render, triggerEvent } from '@ember/test-helpers';
 import { hbs } from 'ember-cli-htmlbars';
 
 import ENUMS from 'irene/enums';
+import { setupFileModelEndpoints } from 'irene/tests/helpers/file-model-utils';
 
 // default status = completed
 // default overridden_risk = null
@@ -40,6 +41,8 @@ module('Integration | Component | file-chart', function (hooks) {
   setupMirage(hooks);
 
   hooks.beforeEach(async function () {
+    const { file_risk_info } = setupFileModelEndpoints(this.server);
+
     // Server mocks
     this.server.get('/profiles/:id/unknown_analysis_status', (_, req) => {
       return {
@@ -56,11 +59,14 @@ module('Integration | Component | file-chart', function (hooks) {
       RISK_VALUES.length
     );
 
+    const file = this.server.create('file');
+
     const analyses = vulnerabilities.map((v, idx) => {
       const { risk, overridden_risk, status } = RISK_VALUES[idx];
 
       return this.server
         .create('analysis', {
+          file: file.id,
           vulnerability: v.id,
           status: status ?? ENUMS.ANALYSIS.COMPLETED,
           risk,
@@ -69,29 +75,22 @@ module('Integration | Component | file-chart', function (hooks) {
         .toJSON();
     });
 
-    const file = this.server.create('file', {
-      analyses,
-    });
-
-    const normalizedFile = this.store.normalize('file', {
-      ...file.toJSON(),
-      analyses,
-    });
-
+    const normalizedFile = this.store.normalize('file', file.toJSON());
     const fileModel = this.store.push(normalizedFile);
 
     this.setProperties({
       file: fileModel,
       analyses,
+      file_risk_info,
     });
   });
 
   test('it displays marked as passed icon if file analyses contains atleast one passed overriden risk', async function (assert) {
     await render(hbs`
-      <FileChart       
+      <FileChart
         {{style maxWidth='350px'}}
         @file={{this.file}}
-        @legendMaxWidth={{350}} 
+        @legendMaxWidth={{350}}
       />
     `);
 
@@ -105,13 +104,7 @@ module('Integration | Component | file-chart', function (hooks) {
       'mouseenter'
     );
 
-    const passedRiskCount = this.file.analyses.reduce(
-      (count, a) =>
-        a.isOverriddenAsPassed && a.status === ENUMS.ANALYSIS.COMPLETED
-          ? count + 1
-          : count,
-      0
-    );
+    const passedRiskCount = this.file_risk_info.overridden_passed_risk_count;
 
     assert
       .dom(

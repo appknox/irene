@@ -12,7 +12,7 @@ module('Integration | Component | file-compare/header', function (hooks) {
 
   hooks.beforeEach(async function () {
     // Server Mocks
-    this.server.get('/v2/projects/:id', (schema, req) => {
+    this.server.get('/v3/projects/:id', (schema, req) => {
       return schema.projects.find(req.params.id).toJSON();
     });
 
@@ -38,9 +38,9 @@ module('Integration | Component | file-compare/header', function (hooks) {
 
   test('it renders', async function (assert) {
     await render(
-      hbs`<FileCompare::Header 
-          @file1={{this.file1}} 
-          @file2={{this.file2}} 
+      hbs`<FileCompare::Header
+          @file1={{this.file1}}
+          @file2={{this.file2}}
         />`
     );
 
@@ -96,9 +96,9 @@ module('Integration | Component | file-compare/header', function (hooks) {
 
   test('it shows settings redirect button and project details in overview if project exists', async function (assert) {
     await render(
-      hbs`<FileCompare::Header 
-          @file1={{this.file1}} 
-          @file2={{this.file2}} 
+      hbs`<FileCompare::Header
+          @file1={{this.file1}}
+          @file2={{this.file2}}
           @project={{this.project}}
         />`
     );
@@ -131,9 +131,9 @@ module('Integration | Component | file-compare/header', function (hooks) {
     this.set('expandFilesOverview', false);
 
     await render(
-      hbs`<FileCompare::Header 
-          @file1={{this.file1}} 
-          @file2={{this.file2}} 
+      hbs`<FileCompare::Header
+          @file1={{this.file1}}
+          @file2={{this.file2}}
           @project={{this.project}}
           @expandFilesOverview={{this.expandFilesOverview}}
         />`
@@ -151,10 +151,10 @@ module('Integration | Component | file-compare/header', function (hooks) {
   test('it yielded header replaces default header content if block is provided', async function (assert) {
     await render(
       hbs`
-        <FileCompare::Header 
-          @file1={{this.file1}} 
+        <FileCompare::Header
+          @file1={{this.file1}}
           @file2={{this.file2}}
-        > 
+        >
           <:header>
             <div data-test-yielded-customHeader>
               breadcrumbs
@@ -173,10 +173,10 @@ module('Integration | Component | file-compare/header', function (hooks) {
   test('it renders yielded blocks if provided', async function (assert) {
     await render(
       hbs`
-        <FileCompare::Header 
-          @file1={{this.file1}} 
+        <FileCompare::Header
+          @file1={{this.file1}}
           @file2={{this.file2}}
-        > 
+        >
           <:breadcrumbs>
             <div data-test-yielded-breadcrumbs>
               breadcrumbs
@@ -194,7 +194,7 @@ module('Integration | Component | file-compare/header', function (hooks) {
               file2Content
             </div>
           </:file2Content>
-        
+
           <:headerCTA>
             <div data-test-yielded-headerCTA>
               headerCTA

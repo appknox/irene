@@ -4,6 +4,7 @@ import { setupMirage } from 'ember-cli-mirage/test-support';
 import { setupIntl } from 'ember-intl/test-support';
 import { setupRenderingTest } from 'ember-qunit';
 import { module, test } from 'qunit';
+import { setupFileModelEndpoints } from 'irene/tests/helpers/file-model-utils';
 
 module('Integration | Component | file-details/scan-actions', function (hooks) {
   setupRenderingTest(hooks);
@@ -11,6 +12,7 @@ module('Integration | Component | file-details/scan-actions', function (hooks) {
   setupIntl(hooks, 'en');
 
   hooks.beforeEach(async function () {
+    setupFileModelEndpoints(this.server);
     this.server.createList('organization', 1);
 
     const store = this.owner.lookup('service:store');
@@ -19,7 +21,7 @@ module('Integration | Component | file-details/scan-actions', function (hooks) {
       project: '1',
     });
 
-    this.server.create('project', { file: file.id, id: '1' });
+    this.server.create('project', { last_file: file, id: '1' });
 
     this.setProperties({
       file: store.push(store.normalize('file', file.toJSON())),
@@ -33,7 +35,7 @@ module('Integration | Component | file-details/scan-actions', function (hooks) {
       return { id: req.params.id };
     });
 
-    this.server.get('/v2/projects/:id', (schema, req) => {
+    this.server.get('/v3/projects/:id', (schema, req) => {
       return schema.projects.find(`${req.params.id}`)?.toJSON();
     });
 

@@ -14,12 +14,13 @@ import { setupRenderingTest } from 'ember-qunit';
 import { module, test } from 'qunit';
 import Service from '@ember/service';
 import { faker } from '@faker-js/faker';
+import dayjs from 'dayjs';
 
 import ENUMS from 'irene/enums';
 import { deviceType } from 'irene/helpers/device-type';
 import { dsManualDevicePref } from 'irene/helpers/ds-manual-device-pref';
 import styles from 'irene/components/ak-select/index.scss';
-import dayjs from 'dayjs';
+import { setupFileModelEndpoints } from 'irene/tests/helpers/file-model-utils';
 
 const classes = {
   dropdown: styles['ak-select-dropdown'],
@@ -48,6 +49,8 @@ module(
     setupIntl(hooks, 'en');
 
     hooks.beforeEach(async function () {
+      setupFileModelEndpoints(this.server);
+
       const store = this.owner.lookup('service:store');
       const dsService = this.owner.lookup('service:dynamic-scan');
 
@@ -62,7 +65,7 @@ module(
       });
 
       const project = this.server.create('project', {
-        last_file_id: file.id,
+        last_file: file,
         id: '1',
       });
 
@@ -86,11 +89,11 @@ module(
         return schema.dynamicscans.find(`${req.params.id}`)?.toJSON();
       });
 
-      this.server.get('/v2/projects/:id', (schema, req) => {
+      this.server.get('/v3/projects/:id', (schema, req) => {
         return schema.projects.find(`${req.params.id}`)?.toJSON();
       });
 
-      this.server.get('/v2/files/:id', (schema, req) => {
+      this.server.get('/v3/files/:id', (schema, req) => {
         return schema.files.find(`${req.params.id}`)?.toJSON();
       });
 
@@ -614,7 +617,6 @@ module(
             this.server
               .create('file', {
                 id: '10',
-                last_manual_dynamic_scan: dynamicscan.id,
                 is_active: true,
               })
               .toJSON()
@@ -623,6 +625,10 @@ module(
 
         this.server.get('/v2/dynamicscans/:id', (schema, req) => {
           return schema.dynamicscans.find(`${req.params.id}`).toJSON();
+        });
+
+        this.server.get('/v3/files/:id/last_manual_dynamic_scan', (schema) => {
+          return schema.dynamicscans.find(dynamicscan.id).toJSON();
         });
 
         this.server.put('/v2/dynamicscans/:id/extend', (schema, req) => {

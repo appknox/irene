@@ -25,6 +25,7 @@ export interface FileDetailsDynamicScanActionDrawerSignature {
     onClose: () => void;
     file: FileModel;
     isAutomatedScan?: boolean;
+    reloadLatestDsScan?: () => void;
   };
 }
 
@@ -160,10 +161,8 @@ export default class FileDetailsDynamicScanActionDrawerComponent extends Compone
         data,
       });
 
-      await this.file.reload();
-
+      this.args.reloadLatestDsScan?.();
       this.args.onClose();
-
       this.notify.success(this.tStartingScan);
 
       // Poll the dynamic scan status if the project org is different from the selected org
