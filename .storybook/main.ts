@@ -1,6 +1,6 @@
-import type { EmberStoryBookConfig } from '@storybook/ember';
+import type { StorybookConfig } from '@storybook/ember';
 
-const config: EmberStoryBookConfig = {
+const config: StorybookConfig = {
   staticDirs: ['../dist'],
   stories: ['../app/components/**/*.stories.js'],
 

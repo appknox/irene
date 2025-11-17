@@ -2520,7 +2520,13 @@ body {
   --privacy-module-geo-location-text-color: var(--text-primary);
   --privacy-module-geo-location-text-fw-bold: var(--font-weight-bold);
   --privacy-module-geo-location-text-fw-medium: var(--font-weight-medium);
-  --privacy-module-geo-location-box-shadow: var(--geolocation-map-area-box-shadow);
+  --privacy-module-geo-location-box-shadow: var(
+    --geolocation-map-area-box-shadow
+  );
+  --privacy-module-geo-location-area-color: var(--geolocation-map-area-color);
+  --privacy-module-geo-location-area-border-color: var(--neutral-grey-800);
+  --privacy-module-geo-location-area-background-color: var(--neutral-grey-100);
+  --privacy-module-geo-location-area-error-color: var(--error-main);
 
   //variables for privacy-module/app-details/pii/drawer-details
   --privacy-module-pii-drawer-border-color: var(--divider);

@@ -35,6 +35,7 @@ module('Integration | Component | privacy/geo-location', function (hooks) {
   hooks.beforeEach(async function () {
     this.owner.register('service:organization', OrganizationStub);
     this.owner.register('service:notifications', NotificationsStub);
+    this.owner.lookup('service:browser/document');
 
     const profile = this.server.create('profile');
 
@@ -138,7 +139,7 @@ module('Integration | Component | privacy/geo-location', function (hooks) {
 
     assert
       .dom('[data-test-privacy-geo-location-drawer-host-container]')
-      .exists();
+      .containsText(this.geoLocationData.hostUrls[0].source_location[0]);
 
     assert.dom('[data-test-privacy-geo-location-drawer-close-button]').exists();
 

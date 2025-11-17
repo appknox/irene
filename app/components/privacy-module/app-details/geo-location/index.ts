@@ -48,12 +48,6 @@ const WORLD_ICON_SVG = `
   </svg>
 `;
 
-declare global {
-  interface Window {
-    QUnit?: unknown;
-  }
-}
-
 export default class PrivacyModuleAppDetailsGeoLocationComponent extends Component<PrivacyModuleAppDetailsGeoLocationSignature> {
   @service declare privacyModule: PrivacyModuleService;
   @service declare router: RouterService;
@@ -130,11 +124,11 @@ export default class PrivacyModuleAppDetailsGeoLocationComponent extends Compone
     const data = this.geoLocationData ?? [];
 
     return data.map((d) => {
-      const areaColor = d.isHighRiskRegion
-        ? getComputedStyle(document.body).getPropertyValue(`--error-main`)
-        : getComputedStyle(document.body).getPropertyValue(
-            `--geolocation-map-area-color`
-          );
+      const areaColorProperty = d.isHighRiskRegion
+        ? '--privacy-module-geo-location-area-error-color'
+        : '--privacy-module-geo-location-area-color';
+
+      const areaColor = this.getPropertyValue(areaColorProperty);
 
       return {
         name: d.countryCode,
@@ -191,18 +185,19 @@ export default class PrivacyModuleAppDetailsGeoLocationComponent extends Compone
       left: 0,
       right: 0,
       itemStyle: {
-        areaColor: getComputedStyle(document.body).getPropertyValue(
-          `--geolocation-map-area-base-color`
+        areaColor: this.getPropertyValue(
+          '--privacy-module-geo-location-area-background-color'
         ),
-        borderColor: getComputedStyle(document.body).getPropertyValue(
-          `--geolocation-map-area-border-color`
+
+        borderColor: this.getPropertyValue(
+          '--privacy-module-geo-location-area-border-color'
         ),
         borderWidth: 0.2,
       },
       emphasis: {
         itemStyle: {
-          areaColor: getComputedStyle(document.body).getPropertyValue(
-            `--geolocation-map-area-base-color`
+          areaColor: this.getPropertyValue(
+            '--privacy-module-geo-location-area-background-color'
           ),
         },
         label: { show: false },
@@ -242,7 +237,8 @@ export default class PrivacyModuleAppDetailsGeoLocationComponent extends Compone
   }
 
   private setupChartEventHandlers(element: ChartElement): void {
-    if (this.window.QUnit) {
+    // This is necessary for testing
+    if (this.window?.QUnit) {
       element.__chart__ = this.chart;
       element.__component__ = this;
     }
@@ -290,7 +286,11 @@ export default class PrivacyModuleAppDetailsGeoLocationComponent extends Compone
 
   private setupResizeHandler(): void {
     this.resizeHandler = () => this.chart?.resize();
-    this.window.addEventListener('resize', this.resizeHandler);
+    this.window?.addEventListener('resize', this.resizeHandler);
+  }
+
+  private getPropertyValue(property: string): string {
+    return getComputedStyle(document.body).getPropertyValue(property);
   }
 
   @action

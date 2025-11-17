@@ -15,6 +15,7 @@ import type TrackersModel from 'irene/models/trackers';
 import type DangerousPermissionModel from 'irene/models/dangerous-permission';
 import type PiiModel from 'irene/models/pii';
 import type GeoLocationModel from 'irene/models/geo-location';
+import type PiiRequestModel from 'irene/models/pii-request';
 
 type TrackersModelArray = DS.AdapterPopulatedRecordArray<TrackersModel> & {
   meta: { count: number };
@@ -51,6 +52,7 @@ export default class PrivacyModuleService extends Service {
   @tracked showGeoUpdated: boolean = false;
   @tracked showCompleteDastScanNote: boolean = false;
   @tracked geoDataAvailable: boolean = false;
+  @tracked pii: PiiRequestModel | null = null;
 
   setRouteQueryParams(limit: string | number, offset: string | number) {
     this.router.transitionTo({
@@ -159,6 +161,7 @@ export default class PrivacyModuleService extends Service {
       const pii = await this.getPiiRequest.perform(fileId);
 
       this.selectedPiiId = pii.id;
+      this.pii = pii;
 
       if (
         pii.status === ENUMS.PM_PII_STATUS.SUCCESS ||
@@ -241,7 +244,8 @@ export default class PrivacyModuleService extends Service {
 
           if (
             geoLocation.status === ENUMS.PM_PII_STATUS.PARTIAL_SUCCESS &&
-            this.piiDataAvailable
+            this.pii?.status !== ENUMS.PM_PII_STATUS.PENDING &&
+            this.pii?.status !== ENUMS.PM_PII_STATUS.FAILED
           ) {
             this.showCompleteDastScanNote = true;
           } else {

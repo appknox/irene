@@ -21,10 +21,9 @@ jobs:
         run: npm run build-storybook
 
       - name: Publish to Cloudflare Pages
-        uses: cloudflare/pages-action@1
+        uses: cloudflare/wrangler-action@v3
         with:
           apiToken: ${{ secrets.CLOUDFLARE_PAGES_EDIT_API_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-          projectName: irenestorybook
-          directory: storybook-static
+          command: pages deploy storybook-static --project-name=irenestorybook
           gitHubToken: ${{ secrets.GITHUB_TOKEN }}
