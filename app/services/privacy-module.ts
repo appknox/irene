@@ -14,6 +14,7 @@ import parseError from 'irene/utils/parse-error';
 import type TrackersModel from 'irene/models/trackers';
 import type DangerousPermissionModel from 'irene/models/dangerous-permission';
 import type PiiModel from 'irene/models/pii';
+import type GeoLocationModel from 'irene/models/geo-location';
 
 type TrackersModelArray = DS.AdapterPopulatedRecordArray<TrackersModel> & {
   meta: { count: number };
@@ -30,20 +31,26 @@ export default class PrivacyModuleService extends Service {
   @service declare intl: IntlService;
   @service('notifications') declare notify: NotificationService;
 
-  @tracked trackerDataCount: number = 0;
   @tracked
   trackerDataList?: DS.AdapterPopulatedRecordArray<TrackersModel>;
+
   @tracked
   dangerousPermissionList?: DS.AdapterPopulatedRecordArray<DangerousPermissionModel>;
+
+  @tracked trackerDataCount: number = 0;
   @tracked dangerousPermissionCount: number = 0;
   @tracked piiDataCount: number = 0;
-  @tracked
-  piiDataList: PiiModel[] = [];
+  @tracked piiDataList: PiiModel[] = [];
   @tracked piiDataAvailable: boolean = false;
   @tracked showCompleteApiScanNote: boolean = false;
   @tracked showPiiUpdated: boolean = false;
   @tracked selectedPiiId: string | null = null;
-  @tracked showPiiUpdatedNote: boolean = true;
+  @tracked showNote: boolean = true;
+  @tracked geoLocationDataCount: number = 0;
+  @tracked geoLocationDataList: GeoLocationModel[] = [];
+  @tracked showGeoUpdated: boolean = false;
+  @tracked showCompleteDastScanNote: boolean = false;
+  @tracked geoDataAvailable: boolean = false;
 
   setRouteQueryParams(limit: string | number, offset: string | number) {
     this.router.transitionTo({
@@ -59,11 +66,16 @@ export default class PrivacyModuleService extends Service {
     this.trackerDataCount = 0;
     this.dangerousPermissionCount = 0;
     this.piiDataCount = 0;
+    this.geoLocationDataCount = 0;
     this.piiDataAvailable = false;
     this.showCompleteApiScanNote = false;
     this.showPiiUpdated = false;
     this.selectedPiiId = null;
-    this.showPiiUpdatedNote = true;
+    this.showNote = true;
+    this.geoLocationDataList = [];
+    this.showCompleteDastScanNote = false;
+    this.showGeoUpdated = false;
+    this.geoDataAvailable = false;
   }
 
   fetchTrackerData = task(
@@ -142,7 +154,7 @@ export default class PrivacyModuleService extends Service {
     return await this.store.queryRecord('dangerous-permission-request', {});
   });
 
-  fetchPiiData = task(async (fileId, markPiiSeen = false) => {
+  fetchPiiData = task(async (fileId, privacyProjectId, markPiiSeen = false) => {
     try {
       const pii = await this.getPiiRequest.perform(fileId);
 
@@ -158,7 +170,6 @@ export default class PrivacyModuleService extends Service {
         };
 
         const piiData = await this.store.query('pii', queryParams);
-
         const piiDataList = piiData.slice() as PiiModel[];
 
         this.piiDataList = piiDataList;
@@ -168,13 +179,8 @@ export default class PrivacyModuleService extends Service {
         if (pii.status === ENUMS.PM_PII_STATUS.PARTIAL_SUCCESS) {
           this.showCompleteApiScanNote = true;
         } else {
-          const privacyProjectId =
-            this.router.currentRoute?.parent?.params['app_id'];
-
           if (markPiiSeen && this.showPiiUpdated && privacyProjectId) {
             const adapter = this.store.adapterFor('pii');
-
-            adapter.markPiiSeen(privacyProjectId);
 
             this.showPiiUpdated = false;
 
@@ -183,9 +189,13 @@ export default class PrivacyModuleService extends Service {
               privacyProjectId
             );
 
-            privacyProject.set('pii_highlight', false);
+            privacyProject.set('piiHighlight', false);
 
             await privacyProject.save();
+
+            if (!privacyProject.geoHighlight) {
+              adapter.markPrivacySeen(privacyProjectId);
+            }
           }
         }
       }
@@ -206,5 +216,75 @@ export default class PrivacyModuleService extends Service {
     adapter.setNestedUrlNamespace(String(fileId));
 
     return await this.store.queryRecord('pii-request', {});
+  });
+
+  fetchGeoLocationData = task(
+    async (fileId, privacyProjectId, markSeen = false) => {
+      try {
+        const geoLocation = await this.getGeoLocationRequest.perform(fileId);
+
+        if (
+          geoLocation.status === ENUMS.PM_PII_STATUS.SUCCESS ||
+          geoLocation.status === ENUMS.PM_PII_STATUS.PARTIAL_SUCCESS
+        ) {
+          const queryParams = {
+            geoLocationId: geoLocation.id,
+          };
+
+          const geoLocationDataList = (
+            await this.store.query('geo-location', queryParams)
+          ).toArray() as GeoLocationModel[];
+
+          this.geoLocationDataList = geoLocationDataList;
+          this.geoLocationDataCount = geoLocationDataList.length;
+          this.geoDataAvailable = true;
+
+          if (
+            geoLocation.status === ENUMS.PM_PII_STATUS.PARTIAL_SUCCESS &&
+            this.piiDataAvailable
+          ) {
+            this.showCompleteDastScanNote = true;
+          } else {
+            if (markSeen && this.showGeoUpdated && privacyProjectId) {
+              const adapter = this.store.adapterFor('pii');
+
+              this.showGeoUpdated = false;
+
+              const privacyProject = await this.store.findRecord(
+                'privacy-project',
+                privacyProjectId
+              );
+
+              privacyProject.set('geoHighlight', false);
+
+              await privacyProject.save();
+
+              if (!privacyProject.piiHighlight) {
+                adapter.markPrivacySeen(privacyProjectId);
+              }
+            }
+          }
+        }
+      } catch (err) {
+        const error = err as AdapterError;
+
+        if (error.errors) {
+          const status = error.errors[0]?.status;
+
+          if (status == 404) {
+            this.geoDataAvailable = false;
+          } else {
+            this.notify.error(parseError(error, this.intl.t('pleaseTryAgain')));
+          }
+        }
+      }
+    }
+  );
+
+  getGeoLocationRequest = task(async (fileId) => {
+    const adapter = this.store.adapterFor('geo-request');
+    adapter.setNestedUrlNamespace(String(fileId));
+
+    return await this.store.queryRecord('geo-request', {});
   });
 }

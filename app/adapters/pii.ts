@@ -33,7 +33,7 @@ export default class PiiAdapter extends CommonDRFAdapter {
     }) as Promise<{ success: boolean }>;
   }
 
-  markPiiSeen(privacyProjectId: string) {
+  markPrivacySeen(privacyProjectId: string) {
     const seenURL = `${this.namespace_v2}/privacy_project/${privacyProjectId}/mark_seen`;
     const url = this.buildURLFromBase(seenURL);
 

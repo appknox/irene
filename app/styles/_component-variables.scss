@@ -317,6 +317,15 @@ body {
   --ak-checkbox-tree-secondary-background: var(--background-light);
   --ak-checkbox-tree-secondary-border-color: var(--border-color-1);
 
+  //variables for ak-notification-banner
+  --ak-notification-banner-bg-color: var(--common-white);
+  --ak-notification-banner-icon-color: var(--common-white);
+  --ak-notification-banner-warning-color: var(--error-main);
+  --ak-notification-banner-success-color: var(--success-main);
+  --ak-notification-banner-border-color: var(--border-color-1);
+  --ak-notification-banner-divider-color: var(--border-color-2);
+  --ak-notification-banner-border-radius: var(--border-radius);
+
   // variables for ak-appbar
   &.theme-light {
     --ak-appbar-inherit-background: var(--background-light);
@@ -2502,6 +2511,16 @@ body {
   --privacy-module-pii-bg-color: var(--common-white);
   --privacy-module-pii-url-bg-color: var(--background-light);
   --privacy-module-pii-drawer-border-color: var(--neutral-grey-100);
+
+  //variables for privacy-module/app-details/geo-location
+  --privacy-module-geo-location-map-bg-color: var(--common-white);
+  --privacy-module-geo-location-map-border-color: var(--divider);
+  --privacy-module-geo-location-map-border-radius: var(--border-radius);
+  --privacy-module-geo-location-accordion-border-color: var(--border-color-1);
+  --privacy-module-geo-location-text-color: var(--text-primary);
+  --privacy-module-geo-location-text-fw-bold: var(--font-weight-bold);
+  --privacy-module-geo-location-text-fw-medium: var(--font-weight-medium);
+  --privacy-module-geo-location-box-shadow: var(--geolocation-map-area-box-shadow);
 
   //variables for privacy-module/app-details/pii/drawer-details
   --privacy-module-pii-drawer-border-color: var(--divider);

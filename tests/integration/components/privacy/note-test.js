@@ -30,7 +30,9 @@ class OrganizationStub extends Service {
 class StubPrivacyModuleService extends Service {
   showCompleteApiScanNote = false;
   showPiiUpdated = false;
-  showPiiUpdatedNote = false;
+  showNote = false;
+  showCompleteDastScanNote = false;
+  showGeoUpdated = false;
 }
 
 module('Integration | Component | privacy/note', function (hooks) {
@@ -46,42 +48,94 @@ module('Integration | Component | privacy/note', function (hooks) {
 
   test('it renders complete API scan note', async function (assert) {
     const service = this.owner.lookup('service:privacy-module');
+    service.showNote = true;
     service.showCompleteApiScanNote = true;
 
     await render(hbs`<PrivacyModule::AppDetails::Note />`);
 
-    assert.dom('[data-test-privacy-module-app-details-note]').exists();
+    assert.dom('[data-test-ak-notification-banner]').exists();
 
     assert
-      .dom('[data-test-privacy-module-app-details-note-message]')
+      .dom('[data-test-ak-notification-banner-message]')
       .hasText(t('privacyModule.completeApiScanNote'));
 
-    await click('[data-test-privacy-module-app-details-note-close]');
+    await click('[data-test-ak-notification-banner-close]');
 
-    assert.false(
-      service.showCompleteApiScanNote,
-      'Hides banner after clicking close'
-    );
+    assert.false(service.showNote, 'Hides banner after clicking close');
   });
 
   test('it renders pii updated note', async function (assert) {
     const service = this.owner.lookup('service:privacy-module');
     service.showPiiUpdated = true;
-    service.showPiiUpdatedNote = true;
+    service.showNote = true;
 
     await render(hbs`<PrivacyModule::AppDetails::Note />`);
 
-    assert.dom('[data-test-privacy-module-app-details-note]').exists();
+    assert.dom('[data-test-ak-notification-banner]').exists();
 
     assert
-      .dom('[data-test-privacy-module-app-details-note-message]')
+      .dom('[data-test-ak-notification-banner-message]')
       .hasText(t('privacyModule.piiUpdatedNote'));
 
-    await click('[data-test-privacy-module-app-details-note-close]');
+    await click('[data-test-ak-notification-banner-close]');
 
-    assert.false(
-      service.showCompleteApiScanNote,
-      'Hides banner after clicking close'
-    );
+    assert.false(service.showNote, 'Hides banner after clicking close');
+  });
+
+  test('it renders complete DAST scan note', async function (assert) {
+    const service = this.owner.lookup('service:privacy-module');
+    service.showNote = true;
+    service.showCompleteDastScanNote = true;
+
+    await render(hbs`<PrivacyModule::AppDetails::Note />`);
+
+    assert.dom('[data-test-ak-notification-banner]').exists();
+
+    assert
+      .dom('[data-test-ak-notification-banner-message]')
+      .hasText(t('privacyModule.completeDastScanNote'));
+
+    await click('[data-test-ak-notification-banner-close]');
+
+    assert.false(service.showNote, 'Hides banner after clicking close');
+  });
+
+  test('it renders geo location updated note', async function (assert) {
+    const service = this.owner.lookup('service:privacy-module');
+    service.showGeoUpdated = true;
+    service.showNote = true;
+
+    await render(hbs`<PrivacyModule::AppDetails::Note />`);
+
+    assert.dom('[data-test-ak-notification-banner]').exists();
+
+    assert
+      .dom('[data-test-ak-notification-banner-message]')
+      .hasText(t('privacyModule.geoUpdatedNote'));
+
+    await click('[data-test-ak-notification-banner-close]');
+
+    assert.false(service.showNote, 'Hides banner after clicking close');
+  });
+
+  test('it renders multiple message', async function (assert) {
+    const service = this.owner.lookup('service:privacy-module');
+    service.showCompleteDastScanNote = true;
+    service.showCompleteApiScanNote = true;
+    service.showNote = true;
+
+    await render(hbs`<PrivacyModule::AppDetails::Note />`);
+
+    assert.dom('[data-test-ak-notification-banner]').exists();
+
+    assert
+      .dom('[data-test-ak-notification-banner-message]')
+      .hasText(t('privacyModule.completeApiScanNote'));
+
+    await click('[data-test-ak-notification-banner-next]');
+
+    assert
+      .dom('[data-test-ak-notification-banner-message]')
+      .hasText(t('privacyModule.completeDastScanNote'));
   });
 });

@@ -5,6 +5,7 @@ import { tracked } from '@glimmer/tracking';
 import { task } from 'ember-concurrency';
 import type Store from '@ember-data/store';
 import type IntlService from 'ember-intl/services/intl';
+import type RouterService from '@ember/routing/router-service';
 
 import parseError from 'irene/utils/parse-error';
 import type FileModel from 'irene/models/file';
@@ -24,6 +25,7 @@ export default class PrivacyModuleAppDetailsPiiComponent extends Component<Priva
   @service declare privacyModule: PrivacyModuleService;
   @service declare me: MeService;
   @service declare intl: IntlService;
+  @service declare router: RouterService;
 
   @tracked selectedPii: PiiModel | null = null;
   @tracked piiEnabled: boolean = false;
@@ -34,7 +36,11 @@ export default class PrivacyModuleAppDetailsPiiComponent extends Component<Priva
   ) {
     super(owner, args);
 
-    this.privacyModule.fetchPiiData.perform(this.fileId, true);
+    this.privacyModule.fetchPiiData.perform(
+      this.fileId,
+      this.privacyProjectID,
+      true
+    );
 
     this.fetchOrganizationAiFeatures.perform();
   }
@@ -68,6 +74,10 @@ export default class PrivacyModuleAppDetailsPiiComponent extends Component<Priva
 
   get piiDataCount() {
     return this.privacyModule.piiDataCount;
+  }
+
+  get privacyProjectID() {
+    return this.router.currentRoute?.parent?.params['app_id'];
   }
 
   get justifyContentValue() {

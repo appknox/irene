@@ -1,0 +1,72 @@
+{{#if this.hasMessages}}
+  <AkStack
+    @justifyContent='space-between'
+    @alignItems='center'
+    local-class='note'
+    {{did-update this.handleMessagesChange @messages}}
+    data-test-ak-notification-banner
+  >
+    <AkStack @direction='row' @alignItems='center'>
+      {{#if (has-block 'iconContainer')}}
+        {{yield to='iconContainer'}}
+      {{else}}
+        <div local-class='icon-container {{this.currentMessage.color}}'>
+          <AkIcon @iconName={{this.currentMessage.icon}} />
+        </div>
+      {{/if}}
+
+      <AkTypography class='ml-2' data-test-ak-notification-banner-message>
+        {{this.currentMessage.message}}
+      </AkTypography>
+    </AkStack>
+
+    <AkStack @direction='row' @alignItems='center'>
+      {{#if this.showNextPrev}}
+        {{! Previous }}
+        <AkIconButton
+          @size='small'
+          @variant='outlined'
+          {{on 'click' this.showPrevMessage}}
+          disabled={{this.isFirstMessage}}
+          data-test-ak-notification-banner-prev
+        >
+          <AkIcon @iconName='arrow-left' />
+        </AkIconButton>
+
+        <AkStack local-class='message-number-indicator'>
+          <AkTypography @fontWeight='medium'>
+            {{this.currentMessageNumber}}
+            /
+            {{this.totalMessages}}
+          </AkTypography>
+        </AkStack>
+
+        {{! Next }}
+        <AkIconButton
+          @size='small'
+          @variant='outlined'
+          {{on 'click' this.showNextMessage}}
+          disabled={{this.isLastMessage}}
+          data-test-ak-notification-banner-next
+        >
+          <AkIcon @iconName='arrow-right' />
+        </AkIconButton>
+
+        <div local-class='vertical-divider'></div>
+      {{/if}}
+
+      {{#if (has-block 'actionButton')}}
+        {{yield to='actionButton'}}
+      {{else}}
+        <AkIconButton
+          @size='small'
+          class='mr-2'
+          {{on 'click' @onClose}}
+          data-test-ak-notification-banner-close
+        >
+          <AkIcon @iconName='close' />
+        </AkIconButton>
+      {{/if}}
+    </AkStack>
+  </AkStack>
+{{/if}}
