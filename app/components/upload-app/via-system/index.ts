@@ -89,13 +89,17 @@ export default class UploadAppViaSystemComponent extends Component {
       this.uploadApp.updateSystemFileQueue(queue);
       this.notify.success(this.tFileUploadedSuccessfully);
     } catch (e) {
+      const error = e as AdapterError;
       const err = this.tErrorWhileUploading;
 
       this.notify.error(err);
-
       this.rollbar.critical(err, e);
-      queue?.remove(file); // since queue won't flush for failed uploads
 
+      if (error.errors?.[0]?.status === '429') {
+        this.uploadApp.showAndStartRateLimitErrorCountdown(60);
+      }
+
+      queue?.remove(file); // since queue won't flush for failed uploads
       this.uploadApp.updateSystemFileQueue(queue);
     }
   });
