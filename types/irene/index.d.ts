@@ -233,6 +233,10 @@ declare global {
         Exclude<T, Primitive | readonly any[]>,
         Exclude<U, Primitive | readonly any[]>
       >;
+
+  interface Window {
+    QUnit?: unknown;
+  }
 }
 
 export {};

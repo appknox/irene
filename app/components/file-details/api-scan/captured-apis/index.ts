@@ -110,6 +110,7 @@ export default class FileDetailsApiScanCapturedApisComponent extends Component<F
   @action
   handleItemPerPageChange({ limit }: PaginationProviderActionsArgs) {
     this.offset = 0;
+    this.limit = limit;
 
     this.fetchCapturedApis.perform(limit, this.offset);
   }

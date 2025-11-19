@@ -4,6 +4,7 @@ import { action } from '@ember/object';
 import type IntlService from 'ember-intl/services/intl';
 
 import type PrivacyModuleService from 'irene/services/privacy-module';
+import type { AkNotificationBannerMessage } from 'irene/components/ak-notification-banner';
 
 export default class PrivacyModuleAppDetailsNoteComponent extends Component {
   @service declare privacyModule: PrivacyModuleService;
@@ -17,40 +18,59 @@ export default class PrivacyModuleAppDetailsNoteComponent extends Component {
     return this.privacyModule.showPiiUpdated;
   }
 
-  get showPiiUpdatedNote() {
-    return this.privacyModule.showPiiUpdatedNote;
+  get showGeoUpdated() {
+    return this.privacyModule.showGeoUpdated;
   }
 
-  get banner() {
+  get showNote() {
+    return this.privacyModule.showNote;
+  }
+
+  get showCompleteDastScanNote() {
+    return this.privacyModule.showCompleteDastScanNote;
+  }
+
+  get messages() {
+    const list: AkNotificationBannerMessage[] = [];
+
     if (this.showCompleteApiScanNote) {
-      return {
-        icon: 'warning' as const,
+      list.push({
+        icon: 'warning',
         color: 'warning-color',
         message: this.intl.t('privacyModule.completeApiScanNote'),
-        onClose: this.closeCompleteApiNote,
-      };
+      });
     }
 
-    if (this.showPiiUpdated && this.showPiiUpdatedNote) {
-      return {
-        icon: 'check-circle' as const,
+    if (this.showCompleteDastScanNote) {
+      list.push({
+        icon: 'warning',
+        color: 'warning-color',
+        message: this.intl.t('privacyModule.completeDastScanNote'),
+      });
+    }
+
+    if (this.showPiiUpdated) {
+      list.push({
+        icon: 'check-circle',
         color: 'success-color',
         message: this.intl.t('privacyModule.piiUpdatedNote'),
-        onClose: this.closePiiUpdatedNote,
-      };
+      });
     }
 
-    return null;
+    if (this.showGeoUpdated) {
+      list.push({
+        icon: 'check-circle',
+        color: 'success-color',
+        message: this.intl.t('privacyModule.geoUpdatedNote'),
+      });
+    }
+
+    return list;
   }
 
   @action
-  closeCompleteApiNote() {
-    this.privacyModule.showCompleteApiScanNote = false;
-  }
-
-  @action
-  closePiiUpdatedNote() {
-    this.privacyModule.showPiiUpdatedNote = false;
+  closeBanner() {
+    this.privacyModule.showNote = false;
   }
 }
 

@@ -81,6 +81,25 @@ module.exports = function (defaults) {
             buffer: require.resolve('buffer/'),
           },
         },
+
+        optimization: {
+          splitChunks: {
+            chunks: 'all',
+            maxSize: 20000000, // 20 MB
+            cacheGroups: {
+              echarts: {
+                test: /[\\/]node_modules[\\/]echarts/,
+                name: 'echarts',
+                enforce: true,
+              },
+              fakerJs: {
+                test: /[\\/]node_modules[\\/]@faker-js[\\/]/,
+                name: 'faker-js',
+                enforce: true,
+              },
+            },
+          },
+        },
       },
     },
   });

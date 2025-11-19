@@ -186,6 +186,7 @@ Router.map(function () {
             this.route('index', { path: '/trackers' });
             this.route('pii');
             this.route('danger-perms');
+            this.route('geo-location', { path: '/server-locations' });
           });
         });
 

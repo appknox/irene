@@ -1,0 +1,120 @@
+.map-container {
+  height: 35vw;
+  padding: 2.857em;
+}
+
+.map-body {
+  background-color: var(--privacy-module-geo-location-map-bg-color);
+}
+
+.map-header {
+  border-bottom: 1px solid var(--privacy-module-geo-location-map-border-color);
+  padding: 1.14em;
+}
+
+.drawer-body {
+  padding: 0 1.428em;
+  width: 642px;
+
+  .country-name {
+    margin: 1.285em 0;
+
+    .details-number {
+      margin-left: 0.285em;
+      border: 1px solid var(--privacy-module-geo-location-map-border-color);
+      border-radius: var(--privacy-module-geo-location-map-border-radius);
+      padding: 0.285em;
+      gap: 0.214em;
+      align-items: center;
+
+      .globe-icon {
+        font-size: 1.071rem !important;
+      }
+
+      .number {
+        font-size: 0.857rem;
+        font-weight: var(--privacy-module-geo-location-text-fw-bold);
+      }
+    }
+  }
+
+  .accordion-container {
+    .accordion {
+      border: 1px solid
+        var(--privacy-module-geo-location-accordion-border-color);
+      margin-bottom: 1.428em;
+    }
+
+    .accordion-header {
+      padding: 0.857em 0.714em 0.857em 1.428em;
+      border-bottom: 0px;
+      background-color: var(--privacy-module-geo-location-map-border-color);
+    }
+
+    .accordion-body {
+      padding: 1.428em;
+      gap: 1.07em;
+
+      .wrap-text {
+        overflow-wrap: anywhere;
+      }
+    }
+  }
+}
+
+.empty-container {
+  padding-top: 4em;
+  padding-bottom: 4em;
+  background-color: var(--privacy-module-geo-location-map-bg-color);
+  border-top: 1px solid var(--privacy-module-geo-location-map-border-color);
+
+  .header {
+    margin-top: 1.25em;
+  }
+
+  .body-text {
+    text-align: center;
+    max-width: 500px;
+  }
+}
+
+.country-tooltip {
+  z-index: 1000 !important;
+  box-shadow: var(--privacy-module-geo-location-box-shadow) !important;
+  border-color: transparent !important;
+  width: 172px;
+  color: var(--privacy-module-geo-location-text-color) !important;
+  padding: 0 !important;
+  border-width: 0px !important;
+}
+
+.tooltip-body {
+  padding: 0.57em !important;
+}
+
+.tooltip-footer {
+  padding: 0.57em;
+  background-color: var(--privacy-module-geo-location-map-border-color);
+}
+
+.tooltip-know-more {
+  font-size: 1rem !important;
+  font-weight: var(--privacy-module-geo-location-text-fw-medium);
+  color: var(--privacy-module-geo-location-text-color);
+  cursor: pointer;
+  text-decoration: underline;
+}
+.tooltip-country-name {
+  font-size: 1rem;
+}
+
+.tooltip-number-icon {
+  display: flex;
+  gap: 0.357em;
+  align-items: center;
+}
+
+.tooltip-number {
+  font-size: 0.928rem;
+  font-weight: var(--privacy-module-geo-location-text-fw-bold);
+}

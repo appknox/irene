@@ -54,8 +54,13 @@ export default class PrivacyModuleAppDetailsHeaderComponent extends Component<Pr
       false
     );
 
+    this.privacyModule.fetchGeoLocationData.perform(
+      this.fileId,
+      this.args.app.id
+    );
+
     if (this.showPii) {
-      this.privacyModule.fetchPiiData.perform(this.fileId);
+      this.privacyModule.fetchPiiData.perform(this.fileId, this.args.app.id);
     }
   }
 
@@ -141,6 +146,17 @@ export default class PrivacyModuleAppDetailsHeaderComponent extends Component<Pr
         activeRoutes:
           'authenticated.dashboard.privacy-module.app-details.danger-perms',
       },
+      {
+        id: 'geo-location',
+        label: this.intl.t('privacyModule.serverLocation'),
+        badgeCount: this.privacyModule.geoLocationDataCount,
+        hasBadge: this.privacyModule.geoDataAvailable,
+        route:
+          'authenticated.dashboard.privacy-module.app-details.geo-location',
+        activeRoutes:
+          'authenticated.dashboard.privacy-module.app-details.geo-location',
+        hasUpdate: this.showGeoUpdated,
+      },
       this.showPii && {
         id: 'pii',
         label: this.intl.t('privacyModule.pii'),
@@ -158,18 +174,29 @@ export default class PrivacyModuleAppDetailsHeaderComponent extends Component<Pr
     return this.privacyModule.showCompleteApiScanNote;
   }
 
+  get showCompleteDastScanNote() {
+    return this.privacyModule.showCompleteDastScanNote;
+  }
+
   get showPiiUpdated() {
     return this.privacyModule.showPiiUpdated;
   }
 
-  get showPiiUpdatedNote() {
-    return this.privacyModule.showPiiUpdatedNote;
+  get showGeoUpdated() {
+    return this.privacyModule.showGeoUpdated;
+  }
+
+  get showNote() {
+    return this.privacyModule.showNote;
   }
 
   get noteAvailable() {
     return (
-      this.showCompleteApiScanNote ||
-      (this.showPiiUpdated && this.showPiiUpdatedNote)
+      (this.showCompleteApiScanNote ||
+        this.showPiiUpdated ||
+        this.showCompleteDastScanNote ||
+        this.showGeoUpdated) &&
+      this.showNote
     );
   }
 

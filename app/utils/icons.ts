@@ -164,6 +164,7 @@ export const MaterialSymbolsSet = [
   'indeterminate-check-box',
   'supervisor-account',
   'supervisor-account-outline',
+  'language',
 ] as const;
 
 export const MdiIconsSet = [
