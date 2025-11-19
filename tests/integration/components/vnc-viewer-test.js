@@ -24,7 +24,7 @@ module('Integration | Component | vnc-viewer', function (hooks) {
     });
 
     this.server.create('project', {
-      file: file.id,
+      last_file: file,
       id: '1',
       active_profile_id: profile.id,
     });
@@ -59,7 +59,7 @@ module('Integration | Component | vnc-viewer', function (hooks) {
         this.store.normalize('dynamicscan', dynamicscan.toJSON())
       );
 
-      this.server.get('/v2/projects/:id', (schema, req) => {
+      this.server.get('/v3/projects/:id', (schema, req) => {
         return {
           ...schema.projects.find(`${req.params.id}`)?.toJSON(),
           platform,
@@ -133,7 +133,7 @@ module('Integration | Component | vnc-viewer', function (hooks) {
         this.store.normalize('dynamicscan', dynamicscan.toJSON())
       );
 
-      this.server.get('/v2/projects/:id', (schema, req) => {
+      this.server.get('/v3/projects/:id', (schema, req) => {
         return {
           ...schema.projects.find(`${req.params.id}`)?.toJSON(),
           platform,

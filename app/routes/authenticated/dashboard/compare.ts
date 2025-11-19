@@ -9,11 +9,14 @@ import {
   FileComparisonItem,
 } from 'irene/utils/compare-files';
 import UnknownAnalysisStatusModel from 'irene/models/unknown-analysis-status';
+import AnalysisModel from 'irene/models/analysis';
 
 export interface CompareRouteModel {
   file: FileModel;
   unknownAnalysisStatus?: UnknownAnalysisStatusModel | null;
   fileOld: FileModel;
+  file1Analyses: AnalysisModel[];
+  file2Analyses: AnalysisModel[];
 }
 
 export interface CompareChildrenRoutesModel {
@@ -38,6 +41,14 @@ export default class AuthenticatedDashboardCompareRoute extends Route {
     const file1 = await this.store.findRecord('file', String(file1Id));
     const file2 = await this.store.findRecord('file', String(file2Id));
 
+    const file1Analyses = await this.store.query('analysis', {
+      fileId: file1?.id,
+    });
+
+    const file2Analyses = await this.store.query('analysis', {
+      fileId: file2?.id,
+    });
+
     const unknownAnalysisStatus = await this.store.queryRecord(
       'unknown-analysis-status',
       {
@@ -48,6 +59,8 @@ export default class AuthenticatedDashboardCompareRoute extends Route {
     return {
       file: file1,
       fileOld: file2,
+      file1Analyses: file1Analyses.slice(),
+      file2Analyses: file2Analyses.slice(),
       unknownAnalysisStatus,
     };
   }

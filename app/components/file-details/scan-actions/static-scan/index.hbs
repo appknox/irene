@@ -39,11 +39,7 @@
 
   <FileDetails::ScanActions::ScanOverview
     @file={{@file}}
-    @vulnerabilityCount={{if
-      @file.isStaticCompleted
-      @file.staticVulnerabilityCount
-      null
-    }}
+    @vulnerabilityCount={{if @file.isStaticCompleted @vulnerabilityCount null}}
     data-test-fileDetails-scanActions-scanOverview-staticScanRoot
   />
 </AkStack>

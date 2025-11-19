@@ -2,6 +2,7 @@ import commondrf from './commondrf';
 
 interface AnalysisQuery {
   fileId: string | number;
+  limit?: number;
 }
 
 export default class AnalysisAdapter extends commondrf {
@@ -14,13 +15,18 @@ export default class AnalysisAdapter extends commondrf {
   }
 
   _buildNestedURL(modelName: string | number, fileId: string | number) {
-    const baseURL = `${this.namespace_v2}/files/${fileId}/analyses`;
+    const baseURL = `${this.namespace_v3}/files/${fileId}/analyses`;
 
     return this.buildURLFromBase(baseURL);
   }
 
   urlForQuery(query: AnalysisQuery, modelName: string | number) {
-    return this._buildNestedURL(modelName, query.fileId);
+    // TODO: Remove magic number 300 when UI is updated to use pagination
+    const DEFAULT_LIMIT = 200;
+    const { fileId, limit = DEFAULT_LIMIT } = query;
+    const url = this._buildNestedURL(modelName, fileId);
+
+    return `${url}?limit=${limit}`;
   }
 }
 

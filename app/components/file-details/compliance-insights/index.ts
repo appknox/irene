@@ -1,20 +1,22 @@
 import Component from '@glimmer/component';
-import { inject as service } from '@ember/service';
-import Store from '@ember-data/store';
+import { service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
 import { task } from 'ember-concurrency';
-import Owner from '@ember/owner';
-import ArrayProxy from '@ember/array/proxy';
+import type Owner from '@ember/owner';
+import type ArrayProxy from '@ember/array/proxy';
+import type Store from '@ember-data/store';
 
-import FileModel from 'irene/models/file';
 import ENUMS from 'irene/enums';
-import { ECOption } from 'irene/components/ak-chart';
-import OwaspModel from 'irene/models/owasp';
-import OwaspMobile2024Model from 'irene/models/owaspmobile2024';
+import type { ECOption } from 'irene/components/ak-chart';
+import type FileModel from 'irene/models/file';
+import type OwaspModel from 'irene/models/owasp';
+import type OwaspMobile2024Model from 'irene/models/owaspmobile2024';
+import type AnalysisModel from 'irene/models/analysis';
 
 export interface FileDetailsComplianceInsightsSignature {
   Args: {
     file: FileModel;
+    fileAnalyses: AnalysisModel[];
   };
 }
 
@@ -43,7 +45,7 @@ export default class FileDetailsComplianceInsightsComponent extends Component<Fi
   }
 
   get analyses() {
-    return this.args.file.analyses;
+    return this.args.fileAnalyses;
   }
 
   get tooltipLabels(): Record<string, string> {
@@ -101,7 +103,7 @@ export default class FileDetailsComplianceInsightsComponent extends Component<Fi
     const owaspsIds: string[] = [];
     const owaspmobile2024s: string[] = [];
 
-    for (const analysis of this.analyses.slice()) {
+    for (const analysis of this.analyses) {
       const analysisRisk = analysis?.get('risk');
 
       const owasp2024 = await analysis?.get('owaspmobile2024');

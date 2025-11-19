@@ -6,6 +6,7 @@ import { setupRenderingTest } from 'ember-qunit';
 import { module, test } from 'qunit';
 
 import ENUMS from 'irene/enums';
+import { setupFileModelEndpoints } from 'irene/tests/helpers/file-model-utils';
 
 module(
   'Integration | Component | file-details/scan-actions/dynamic-scan',
@@ -15,6 +16,7 @@ module(
     setupIntl(hooks, 'en');
 
     hooks.beforeEach(async function () {
+      const { file_risk_info } = setupFileModelEndpoints(this.server);
       this.server.createList('organization', 1);
 
       const store = this.owner.lookup('service:store');
@@ -26,7 +28,7 @@ module(
         is_active: true,
       });
 
-      this.server.create('project', { file: file.id, id: '1' });
+      this.server.create('project', { last_file: file, id: '1' });
 
       // set properties
       this.setProperties({
@@ -36,12 +38,16 @@ module(
 
       await this.owner.lookup('service:organization').load();
 
+      this.setProperties({
+        file_risk_info,
+      });
+
       // server mocks
       this.server.get('/v2/dynamicscans/:id', (schema, req) => {
         return schema.dynamicscans.find(`${req.params.id}`)?.toJSON();
       });
 
-      this.server.get('/v2/files/:id', (schema, req) => {
+      this.server.get('/v3/files/:id', (schema, req) => {
         return schema.files.find(`${req.params.id}`)?.toJSON();
       });
     });
@@ -51,12 +57,15 @@ module(
         return { id: req.params.id };
       });
 
-      this.server.get('/v2/projects/:id', (schema, req) => {
+      this.server.get('/v3/projects/:id', (schema, req) => {
         return schema.projects.find(`${req.params.id}`)?.toJSON();
       });
 
       await render(hbs`
-        <FileDetails::ScanActions::DynamicScan @file={{this.file}} />
+        <FileDetails::ScanActions::DynamicScan
+          @file={{this.file}}
+          @vulnerabilityCount={{this.file_risk_info.risk_count_by_scan_type.dynamic}}
+        />
       `);
 
       assert
@@ -230,14 +239,7 @@ module(
         this.file = this.store.push(
           this.store.normalize(
             'file',
-            this.server
-              .create('file', {
-                id: '10',
-                last_manual_dynamic_scan: this.dsManualScan?.id ?? null,
-                last_automated_dynamic_scan: this.dsAutomatedScan?.id ?? null,
-                is_active: true,
-              })
-              .toJSON()
+            this.server.create('file', { id: '10', is_active: true }).toJSON()
           )
         );
 
@@ -258,9 +260,33 @@ module(
             : null;
         });
 
+        // File Last Automated Dynamic Scan
+        this.server.get(
+          '/v3/files/:id/last_automated_dynamic_scan',
+          (schema) => {
+            if (automatedStatus) {
+              return schema.dynamicscans
+                .find(this.dsAutomatedScan?.id)
+                ?.toJSON();
+            }
+
+            return null;
+          }
+        );
+
+        // File Last Manual Dynamic Scan
+        this.server.get('/v3/files/:id/last_manual_dynamic_scan', (schema) => {
+          if (manualStatus) {
+            return schema.dynamicscans.find(this.dsManualScan?.id)?.toJSON();
+          }
+
+          return null;
+        });
+
         await render(hbs`
           <FileDetails::ScanActions::DynamicScan
             @file={{this.file}}
+            @vulnerabilityCount={{this.file_risk_info.risk_count_by_scan_type.dynamic}}
           />
         `);
 
@@ -271,7 +297,7 @@ module(
 
         // Scan overview section
         const vulnerabilityCount = this.file.isDynamicDone
-          ? String(this.file.dynamicVulnerabilityCount)
+          ? String(this.file_risk_info.risk_count_by_scan_type.dynamic)
           : '-';
 
         const scanOverviewSection = find(

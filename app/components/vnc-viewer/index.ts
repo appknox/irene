@@ -2,7 +2,6 @@ import Component from '@glimmer/component';
 import { inject as service } from '@ember/service';
 import type Store from '@ember-data/store';
 import type IntlService from 'ember-intl/services/intl';
-import type { AsyncBelongsTo } from '@ember-data/model';
 
 import ENUMS from 'irene/enums';
 import ENV from 'irene/config/environment';
@@ -13,7 +12,7 @@ import type DevicefarmService from 'irene/services/devicefarm';
 export interface VncViewerSignature {
   Args: {
     file: FileModel;
-    dynamicScan: AsyncBelongsTo<DynamicscanModel> | null;
+    dynamicScan: DynamicscanModel | null;
     profileId?: number;
     isAutomated?: boolean;
   };

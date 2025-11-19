@@ -6,6 +6,7 @@ import { setupRenderingTest } from 'ember-qunit';
 import { module, test } from 'qunit';
 
 import ENUMS from 'irene/enums';
+import { setupFileModelEndpoints } from 'irene/tests/helpers/file-model-utils';
 
 module(
   'Integration | Component | file-details/scan-actions/manual-scan',
@@ -15,6 +16,7 @@ module(
     setupIntl(hooks, 'en');
 
     hooks.beforeEach(async function () {
+      const { file_risk_info } = setupFileModelEndpoints(this.server);
       this.server.createList('organization', 1);
 
       const store = this.owner.lookup('service:store');
@@ -26,13 +28,14 @@ module(
         profile: profile.id,
       });
 
-      this.server.create('project', { file: file.id, id: '1' });
+      this.server.create('project', { last_file: file, id: '1' });
 
       const manualscan = this.server.create('manualscan', { id: file.id });
 
       this.setProperties({
         file: store.push(store.normalize('file', file.toJSON())),
         manualscan,
+        file_risk_info,
       });
 
       await this.owner.lookup('service:organization').load();
@@ -47,7 +50,7 @@ module(
       // make sure file is active
       this.file.isActive = true;
 
-      this.server.get('/v2/projects/:id', (schema, req) => {
+      this.server.get('/v3/projects/:id', (schema, req) => {
         return {
           ...schema.projects.find(`${req.params.id}`)?.toJSON(),
           is_manual_scan_available: true,
@@ -59,7 +62,10 @@ module(
       });
 
       await render(hbs`
-          <FileDetails::ScanActions @file={{this.file}} />
+        <FileDetails::ScanActions
+          @file={{this.file}}
+          @vulnerabilityCount={{this.file_risk_info.risk_count_by_scan_type.manual}}
+        />
       `);
 
       assert.dom('[data-test-fileDetailScanActions-scan-type-cards]').exists();
@@ -94,7 +100,10 @@ module(
         });
 
         await render(hbs`
-            <FileDetails::ScanActions::ManualScan @file={{this.file}} />
+          <FileDetails::ScanActions::ManualScan
+            @file={{this.file}}
+            @vulnerabilityCount={{this.file_risk_info.risk_count_by_scan_type.manual}}
+          />
         `);
 
         if (this.file.manual === ENUMS.MANUAL.ASSESSING) {
@@ -113,7 +122,7 @@ module(
 
         // Scan overview section
         const vulnerabilityCount = this.file.isManualDone
-          ? String(this.file.manualVulnerabilityCount)
+          ? String(this.file_risk_info.risk_count_by_scan_type.manual)
           : '-';
 
         const scanOverviewSection = find(

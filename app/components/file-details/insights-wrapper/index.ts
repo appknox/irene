@@ -1,14 +1,16 @@
 import Component from '@glimmer/component';
 import { tracked } from '@glimmer/tracking';
 import { action } from '@ember/object';
-import { inject as service } from '@ember/service';
-import IntlService from 'ember-intl/services/intl';
+import { service } from '@ember/service';
+import type IntlService from 'ember-intl/services/intl';
 
-import FileModel from 'irene/models/file';
+import type FileModel from 'irene/models/file';
+import type AnalysisModel from 'irene/models/analysis';
 
 export interface FileDetailsInsightsWrapperSignature {
   Args: {
     file: FileModel;
+    fileAnalyses: AnalysisModel[];
   };
 }
 

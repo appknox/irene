@@ -163,13 +163,9 @@ export default class FileDetailsDynamicScanDrawerAutomatedDastComponent extends 
   });
 
   fetchProjectScenarios = task(async () => {
-    try {
-      this.projectScenarios = (await this.store.query('scan-parameter-group', {
-        projectId: this.args.file.project?.get('id'),
-      })) as ProjectScenariosArrayResponse;
-    } catch (error) {
-      this.notify.error(parseError(error));
-    }
+    this.projectScenarios = (await this.store.query('scan-parameter-group', {
+      projectId: this.args.file.project?.get('id'),
+    })) as ProjectScenariosArrayResponse;
   });
 
   fetchProxySetting = task(async () => {

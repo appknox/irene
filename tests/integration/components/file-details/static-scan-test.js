@@ -5,6 +5,7 @@ import { setupIntl, t } from 'ember-intl/test-support';
 import { setupRenderingTest } from 'ember-qunit';
 import { module, test } from 'qunit';
 import Service from '@ember/service';
+import { setupFileModelEndpoints } from 'irene/tests/helpers/file-model-utils';
 
 class NotificationsStub extends Service {
   errorMsg = null;
@@ -30,6 +31,8 @@ module('Integration | Component | file-details/static-scan', function (hooks) {
   setupIntl(hooks, 'en');
 
   hooks.beforeEach(async function () {
+    setupFileModelEndpoints(this.server);
+
     this.server.createList('organization', 1);
 
     const store = this.owner.lookup('service:store');
@@ -38,7 +41,7 @@ module('Integration | Component | file-details/static-scan', function (hooks) {
       project: '1',
     });
 
-    this.server.create('project', { file: file.id, id: '1' });
+    this.server.create('project', { last_file: file, id: '1' });
 
     this.setProperties({
       file: store.push(store.normalize('file', file.toJSON())),
@@ -50,7 +53,7 @@ module('Integration | Component | file-details/static-scan', function (hooks) {
   });
 
   test('it renders', async function (assert) {
-    this.server.get('/v2/projects/:id', (schema, req) => {
+    this.server.get('/v3/projects/:id', (schema, req) => {
       return schema.projects.find(`${req.params.id}`)?.toJSON();
     });
 
@@ -92,7 +95,7 @@ module('Integration | Component | file-details/static-scan', function (hooks) {
       this.file.isActive = true;
       this.file.isStaticDone = isStaticDone;
 
-      this.server.get('/v2/projects/:id', (schema, req) => {
+      this.server.get('/v3/projects/:id', (schema, req) => {
         return schema.projects.find(`${req.params.id}`)?.toJSON();
       });
 
@@ -138,7 +141,7 @@ module('Integration | Component | file-details/static-scan', function (hooks) {
     this.file.isActive = false;
     this.file.isStaticDone = true;
 
-    this.server.get('/v2/projects/:id', (schema, req) => {
+    this.server.get('/v3/projects/:id', (schema, req) => {
       return schema.projects.find(`${req.params.id}`)?.toJSON();
     });
 
