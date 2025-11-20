@@ -1,0 +1,10 @@
+.apis-captured-container {
+  border: 1px solid
+    var(--file-details-dynamic-scan-results-apis-captured-border-color);
+
+  border-top: none;
+
+  .apis-captured-illustration--grayscale {
+    filter: grayscale(100%);
+  }
+}

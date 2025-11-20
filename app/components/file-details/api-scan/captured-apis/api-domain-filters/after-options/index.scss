@@ -1,0 +1,11 @@
+.after-options-container {
+  padding: 0.7142em 1.1429em !important;
+  border-top: 1px solid
+    var(--file-details-captured-apis-domain-filters-after-options-border-color) !important;
+
+  .unselect-all-button {
+    background-color: var(
+      --file-details-captured-apis-domain-filters-unselect-all-button-background-color
+    ) !important;
+  }
+}

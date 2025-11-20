@@ -8,15 +8,17 @@ import {
 } from '@ember/test-helpers';
 
 import { setupMirage } from 'ember-cli-mirage/test-support';
-import { setupRequiredEndpoints } from '../../helpers/acceptance-utils';
 import { setupApplicationTest } from 'ember-qunit';
 import { module, test } from 'qunit';
 import Service from '@ember/service';
 import { Response } from 'miragejs';
 import { t } from 'ember-intl/test-support';
 import { faker } from '@faker-js/faker';
+import { clickTrigger } from 'ember-power-select/test-support/helpers';
 
 import ENUMS from 'irene/enums';
+import { assertAkSelectTriggerExists } from 'irene/tests/helpers/mirage-utils';
+import { setupRequiredEndpoints } from 'irene/tests/helpers/acceptance-utils';
 import { analysisRiskStatus } from 'irene/helpers/analysis-risk-status';
 
 class IntegrationStub extends Service {
@@ -112,6 +114,7 @@ module('Acceptance | file-details/api-scan', function (hooks) {
     });
 
     this.setProperties({
+      project,
       file,
       capturedApis,
       store: this.owner.lookup('service:store'),
@@ -292,6 +295,7 @@ module('Acceptance | file-details/api-scan', function (hooks) {
       assert
         .dom('[data-test-fileDetails-apiScan-breadcrumbContainer]')
         .exists();
+
       assert.dom('[data-test-fileDetailsSummary-root]').exists();
 
       assert
@@ -343,6 +347,385 @@ module('Acceptance | file-details/api-scan', function (hooks) {
           assert.dom(endpointSelector, endpoint).isNotDisabled().isChecked();
         }
       });
+    }
+  );
+
+  // Check domain filter selected item
+  const checkDomainFilterSelectedItem = (assert, selectedItemCount = 0) => {
+    if (selectedItemCount === 0) {
+      assert
+        .dom(
+          '[data-test-fileDetails-apiScan-capturedApi-domainFilterSelectedItem]'
+        )
+        .exists();
+
+      assert
+        .dom(
+          '[data-test-fileDetails-apiScan-capturedApi-domainFilterSelectedItem-emptyIcon]'
+        )
+        .exists();
+
+      assert
+        .dom(
+          '[data-test-fileDetails-apiScan-capturedApi-domainFilterSelectedItem-label]'
+        )
+        .hasText(t('apiScanModule.domainFilters'));
+    } else {
+      assert
+        .dom(
+          '[data-test-fileDetails-apiScan-capturedApi-domainFilterSelectedItem-emptyIcon]'
+        )
+        .doesNotExist();
+
+      assert
+        .dom(
+          '[data-test-fileDetails-apiScan-capturedApi-domainFilterSelectedItem-icon]'
+        )
+        .exists();
+
+      assert
+        .dom(
+          '[data-test-fileDetails-apiScan-capturedApi-domainFilterSelectedItem-count]'
+        )
+        .hasText(String(selectedItemCount));
+
+      assert
+        .dom(
+          '[data-test-fileDetails-apiScan-capturedApi-domainFilterSelectedItem-label]'
+        )
+        .hasText(t('apiScanModule.optionsSelected'));
+
+      assert
+        .dom(
+          '[data-test-fileDetails-apiScan-capturedApi-domainFilterSelectedItem-clearAllBtn]'
+        )
+        .exists();
+
+      assert
+        .dom(
+          '[data-test-fileDetails-apiScan-capturedApi-domainFilterSelectedItem-clearAllBtn-icon]'
+        )
+        .exists();
+    }
+  };
+
+  // Select api domain filters
+  const selectApiDomainFilters = async (assert, options) => {
+    for (const option of options) {
+      const checkboxSelector = `[data-test-fileDetails-apiScan-capturedApi-domainFilterGroupOption-checkbox="${option}"]`;
+
+      await click(checkboxSelector);
+      assert.dom(checkboxSelector).isChecked();
+    }
+  };
+
+  // Confirm api endpoints are rendered
+  const confirmApiEndpointsAreRendered = (
+    assert,
+    expectedCount,
+    capturedApis = [],
+    selectedAll = false
+  ) => {
+    const apiEndpoints = findAll(
+      '[data-test-fileDetails-apiScan-capturedApi-endpointContainer]'
+    );
+
+    assert.strictEqual(apiEndpoints.length, expectedCount);
+
+    // Sanity check for captured api endpoints
+    capturedApis.forEach((capturedApi) => {
+      const capturedApiElement = find(
+        `[data-test-fileDetails-apiScan-capturedApi-endpointContainer-item="${capturedApi.id}"]`
+      );
+
+      assert
+        .dom(capturedApiElement)
+        .containsText(capturedApi.request.method)
+        .containsText(capturedApi.request.host);
+
+      // Checked state should retain overall select all state
+      const capturedApiSelectCheckbox =
+        '[data-test-fileDetails-apiScan-capturedApi-endpointSelectCheckbox]';
+
+      if (selectedAll) {
+        assert.dom(capturedApiSelectCheckbox, capturedApiElement).isChecked();
+      } else {
+        assert
+          .dom(capturedApiSelectCheckbox, capturedApiElement)
+          .isNotChecked();
+      }
+    });
+  };
+
+  test.each(
+    'it applies api domain filters to captured api list',
+    [true, false],
+    async function (assert, selectAllByDefault) {
+      assert.expect(107);
+
+      // Return unchecked toggle states for all API endpoints
+      this.server.db.capturedapis.update({ is_active: selectAllByDefault });
+
+      // Test Constants
+      const autoGeneratedApiFilters = this.server.db.capturedapis.map(
+        (capi) => capi.request.host
+      );
+
+      const testPrjLevelDomains = ['test.example.com', 'another.example.org'];
+
+      // Server Mocks
+      this.server.get('/v2/files/:id/capturedapis_domains', () => {
+        return {
+          project_profile_api_filters: testPrjLevelDomains,
+          auto_generated_api_filters: autoGeneratedApiFilters,
+        };
+      });
+
+      this.server.get('/v2/files/:id/toggle_captured_apis', () => {
+        return { is_active: selectAllByDefault };
+      });
+
+      this.server.put('/v2/files/:id/toggle_captured_apis', (schema, req) => {
+        const { is_active } = JSON.parse(req.requestBody);
+        const results = schema.capturedapis.all().models;
+
+        results.forEach((api) => api.update({ is_active }));
+
+        return { count: results.length, previous: null, next: null, results };
+      });
+
+      this.server.get('/v2/files/:id/capturedapis', (schema, req) => {
+        const domains = req.queryParams.domains.split(',').filter(Boolean);
+        const hasDomains = domains.length > 0;
+        const is_active = req.queryParams.is_active;
+
+        let results = schema.capturedapis
+          .all()
+          .models.filter((api) =>
+            hasDomains ? domains.includes(api.request.host) : true
+          );
+
+        // Return only active api endpoints
+        if (is_active) {
+          results = results.filter((api) => api.is_active);
+        }
+
+        return { count: results.length, previous: null, next: null, results };
+      });
+
+      // Test Start
+      await visit(`/dashboard/file/${this.file.id}/api-scan`);
+
+      // Selector Attributes
+      const clearAllBtn =
+        '[data-test-fileDetails-apiScan-capturedApi-domainFilterSelectedItem-clearAllBtn]';
+
+      const unselectAllBtn =
+        '[data-test-fileDetails-apiScan-capturedApi-domainFilterUnselectAll-unselectAllBtn]';
+
+      const applyFiltersBtn =
+        '[data-test-fileDetails-apiScan-capturedApi-domainFilterApplyFilters-applyBtn]';
+
+      const domainFilterSelectTrigger =
+        '[data-test-fileDetails-apiScan-capturedApi-domainFilterSelect]';
+
+      // Confirm api endpoints are rendered
+      confirmApiEndpointsAreRendered(
+        assert,
+        this.capturedApis.length,
+        this.capturedApis,
+        selectAllByDefault
+      );
+
+      assert.dom('[data-test-fileDetails-apiScan-footerContainer]').exists();
+
+      assert.dom('[data-test-fileDetails-apiScan-footerDesc]').hasText(
+        t('capturedApiSelectedTotalCount', {
+          selectedCount: selectAllByDefault ? this.capturedApis.length : 0,
+          totalCount: this.capturedApis.length,
+        })
+      );
+
+      // Ensure domain filter select trigger exists
+      assertAkSelectTriggerExists(assert, domainFilterSelectTrigger);
+      await clickTrigger(domainFilterSelectTrigger);
+
+      // Check that the domain filter selected item is empty
+      checkDomainFilterSelectedItem(assert, 0);
+
+      // Popover should contain project and auto generated api domain filters
+      const expectedDomainFilterGroups = [
+        {
+          id: 'project-profile-filters',
+          groupName: t('apiScanModule.projectProfileFilters'),
+          options: testPrjLevelDomains,
+        },
+        {
+          id: 'auto-generated-filters',
+          groupName: t('apiScanModule.autoGeneratedFilters'),
+          options: autoGeneratedApiFilters,
+        },
+      ];
+
+      expectedDomainFilterGroups.forEach((group) => {
+        assert
+          .dom(
+            `[data-test-fileDetails-apiScan-capturedApi-domainFilterGroup="${group.groupName}"]`
+          )
+          .exists();
+
+        // Project List external settings icon should exist
+        if (group.id === 'project-profile-filters') {
+          assert
+            .dom(
+              '[data-test-fileDetails-apiScan-capturedApi-domainFilterGroupOption-openPrjSettingsLink]'
+            )
+            .hasAttribute(
+              'href',
+              `/dashboard/project/${this.project.id}/settings`
+            );
+
+          assert
+            .dom(
+              '[data-test-fileDetails-apiScan-capturedApi-domainFilterGroupOption-openPrjSettingsLink-icon]'
+            )
+            .exists();
+        }
+
+        // Check that all options are not checked
+        group.options.forEach((option) => {
+          assert
+            .dom(
+              `[data-test-fileDetails-apiScan-capturedApi-domainFilterGroupOption-checkbox="${option}"]`
+            )
+            .isNotChecked();
+
+          assert
+            .dom(
+              `[data-test-fileDetails-apiScan-capturedApi-domainFilterGroupOption-label="${option}"]`
+            )
+            .hasText(option);
+        });
+      });
+
+      // Apply first group option from  project profile filters
+      const projectProfileFilterOption =
+        expectedDomainFilterGroups[0].options[0];
+
+      await selectApiDomainFilters(assert, [projectProfileFilterOption]);
+
+      assert
+        .dom(
+          `[data-test-fileDetails-apiScan-capturedApi-domainFilterGroupOption-checkbox="${projectProfileFilterOption}"]`
+        )
+        .isChecked();
+
+      assert.dom(unselectAllBtn).exists();
+      assert.dom(applyFiltersBtn).isNotDisabled();
+
+      await click(applyFiltersBtn);
+
+      // Expected selected domain count should be 1
+      checkDomainFilterSelectedItem(assert, 1);
+
+      // Expected result should be empty
+      assert
+        .dom(
+          '[data-test-fileDetails-apiScan-capturedApisDomainFilter-emptySvg]'
+        )
+        .exists();
+
+      assert
+        .dom(
+          '[data-test-fileDetails-apiScan-capturedApisDomainFilter-emptyTitle]'
+        )
+        .hasText(t('apiScanModule.noApiFound'));
+
+      assert
+        .dom(
+          '[data-test-fileDetails-apiScan-capturedApisDomainFilter-emptyDescription]'
+        )
+        .hasText(t('apiScanModule.noApiFoundDesc'));
+
+      assert
+        .dom('[data-test-fileDetails-apiScan-footerContainer]')
+        .doesNotExist();
+
+      // Clear filter selection of domain filters
+      await click(clearAllBtn);
+
+      assert.dom('[data-test-fileDetails-apiScan-footerContainer]').exists();
+
+      assert.dom('[data-test-fileDetails-apiScan-footerDesc]').hasText(
+        t('capturedApiSelectedTotalCount', {
+          selectedCount: selectAllByDefault ? this.capturedApis.length : 0,
+          totalCount: this.capturedApis.length,
+        })
+      );
+
+      assert
+        .dom(
+          '[data-test-fileDetails-apiScan-capturedApi-domainFilterSelectedItem-emptyIcon]'
+        )
+        .exists();
+
+      // Open domain filter select
+      await clickTrigger(domainFilterSelectTrigger);
+
+      // Apply first two options from auto generated filters
+      const autoGeneratedFilterOptions =
+        expectedDomainFilterGroups[1].options.slice(0, 2);
+
+      await selectApiDomainFilters(assert, autoGeneratedFilterOptions);
+
+      assert.dom(unselectAllBtn).exists();
+      assert.dom(applyFiltersBtn).isNotDisabled();
+
+      await click(applyFiltersBtn);
+
+      // Expected selected domain count should be 2
+      checkDomainFilterSelectedItem(assert, 2);
+
+      // Expected result should be two api endpoints
+      const filteredApis = this.capturedApis.filter((it) =>
+        autoGeneratedFilterOptions.includes(it.request.host)
+      );
+
+      confirmApiEndpointsAreRendered(
+        assert,
+        filteredApis.length,
+        filteredApis,
+        selectAllByDefault
+      );
+
+      assert.dom('[data-test-fileDetails-apiScan-footerContainer]').exists();
+
+      assert.dom('[data-test-fileDetails-apiScan-footerDesc]').hasText(
+        t('capturedApiSelectedTotalCount', {
+          selectedCount: selectAllByDefault ? filteredApis.length : 0,
+          totalCount: filteredApis.length,
+        })
+      );
+
+      // Unselect all domain filters
+      // Should revert list to all api endpoints
+      await clickTrigger(domainFilterSelectTrigger);
+      await click(unselectAllBtn);
+
+      // Expected selected domain count should be 0
+      checkDomainFilterSelectedItem(assert, 0);
+
+      // Expected result should be complete api endpoints
+      confirmApiEndpointsAreRendered(assert, this.capturedApis.length);
+
+      assert.dom('[data-test-fileDetails-apiScan-footerContainer]').exists();
+
+      assert.dom('[data-test-fileDetails-apiScan-footerDesc]').hasText(
+        t('capturedApiSelectedTotalCount', {
+          selectedCount: selectAllByDefault ? this.capturedApis.length : 0,
+          totalCount: this.capturedApis.length,
+        })
+      );
     }
   );
 

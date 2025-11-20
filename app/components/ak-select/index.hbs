@@ -53,6 +53,11 @@
             @beforeOptionsComponent
             (component 'ak-select/before-option')
           }}
+          @groupComponent={{@groupComponent}}
+          @closeOnSelect={{@closeOnSelect}}
+          @afterOptionsComponent={{@afterOptionsComponent}}
+          @allowClear={{@allowClear}}
+          @registerAPI={{@registerAPI}}
           data-test-power-select
           as |option|
         >

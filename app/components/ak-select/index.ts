@@ -8,8 +8,13 @@ import type {
   Select,
 } from 'ember-power-select/components/power-select';
 
+import type {
+  TypographyColors,
+  TypographyFontWeight,
+  TypographyVariant,
+} from '../ak-typography';
+
 import styles from './index.scss';
-import type { TypographyColors, TypographyVariant } from '../ak-typography';
 
 type AkSelectLabelTypographyVariant = TypographyVariant;
 type AkSelectLabelTypographyColor = TypographyColors;
@@ -29,6 +34,7 @@ interface AkSelectNamedArgs<O> extends PowerSelectArgs {
   loadingMessage?: string;
   labelTypographyVariant?: AkSelectLabelTypographyVariant;
   labelTypographyColor?: AkSelectLabelTypographyColor;
+  labelTypographyFontWeight?: TypographyFontWeight;
   verticalPosition?: 'above' | 'below' | 'auto';
   options: O[];
   searchPlaceholder?: string;
@@ -73,7 +79,7 @@ export default class AkSelectComponent<O> extends Component<
     // Reposition the dropdown to make sure it's properly aligned
     runTask(this, () => select.actions.reposition());
 
-    this.args.onOpen?.(select, event);
+    return this.args.onOpen?.(select, event);
   }
 }
 

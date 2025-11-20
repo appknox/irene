@@ -21,6 +21,7 @@ export default class AuthenticatedDashboardFileDynamicScanResultsScanCoverageCon
 
       siblingRoutes: [
         'authenticated.dashboard.file.dynamic-scan.results.index',
+        'authenticated.dashboard.file.dynamic-scan.results.apis-captured',
       ],
     };
 

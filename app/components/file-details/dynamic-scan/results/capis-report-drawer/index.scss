@@ -1,0 +1,28 @@
+.capi-reports-drawer {
+  .generate-container {
+    width: 100%;
+    padding: 1.5em;
+
+    border: 1px solid
+      var(
+        --file-details-dynamic-scan-results-capis-reports-drawer-generate-container-border-color
+      );
+
+    border-radius: var(
+      --file-details-dynamic-scan-results-capis-reports-drawer-generate-container-border-radius
+    );
+  }
+
+  .report-gen-progress-indicator {
+    background-color: var(
+      --file-details-dynamic-scan-results-capis-reports-drawer-report-gen-progress-indicator-bg
+    );
+  }
+}
+
+.tooltip-content-container {
+  width: 320px;
+  padding: 0.5em;
+  box-sizing: border-box;
+  white-space: normal;
+}

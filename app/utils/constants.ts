@@ -32,6 +32,7 @@ export const REPORT = {
     PDF: 'pdf',
     EXCEL: 'xlsx',
     JSON: 'json',
+    HAR: 'har',
   },
 };
 
