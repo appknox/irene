@@ -165,6 +165,7 @@ export const MaterialSymbolsSet = [
   'supervisor-account',
   'supervisor-account-outline',
   'language',
+  'replay',
 ] as const;
 
 export const MdiIconsSet = [
