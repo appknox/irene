@@ -62,7 +62,7 @@ export default class SkDiscoverySearchResultService extends Service {
 
   getSearchIdForQuery = task(async (searchQuery = '') => {
     try {
-      const discoveryQuery = this.store.createRecord('skDiscovery', {
+      const discoveryQuery = this.store.createRecord('sk-discovery', {
         queryStr: searchQuery,
       });
 

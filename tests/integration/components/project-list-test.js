@@ -92,7 +92,7 @@ module('Integration | Component | project list', function (hooks) {
 
   test('It renders the team list when the team select dropdown is clicked', async function (assert) {
     const projects = this.server.createList('project', 2);
-    const teams = this.server.createList('team', 2);
+    const teams = this.server.createList('organization-team', 2);
 
     this.server.get('/organizations/:id/projects', (schema) => {
       const results = schema.projects.all().models;
@@ -105,7 +105,7 @@ module('Integration | Component | project list', function (hooks) {
     });
 
     this.server.get('/organizations/:id/teams', (schema) => {
-      const results = schema.teams.all().models;
+      const results = schema.organizationTeams.all().models;
 
       return { count: results.length, next: null, previous: null, results };
     });
@@ -144,7 +144,7 @@ module('Integration | Component | project list', function (hooks) {
 
   test('It renders the correct project list when a team is selected', async function (assert) {
     const projects = this.server.createList('project', 4);
-    this.server.createList('team', 4);
+    this.server.createList('organization-team', 4);
 
     this.server.get('/organizations/:id/projects', (schema, request) => {
       const team = request.queryParams.team;
@@ -161,7 +161,7 @@ module('Integration | Component | project list', function (hooks) {
     });
 
     this.server.get('/organizations/:id/teams', (schema) => {
-      const results = schema.teams.all().models;
+      const results = schema.organizationTeams.all().models;
 
       return { count: results.length, next: null, previous: null, results };
     });
