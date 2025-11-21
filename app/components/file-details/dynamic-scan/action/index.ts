@@ -7,7 +7,6 @@ import type { AsyncBelongsTo } from '@ember-data/model';
 
 import ENV from 'irene/config/environment';
 import parseError from 'irene/utils/parse-error';
-import triggerAnalytics from 'irene/utils/trigger-analytics';
 import type FileModel from 'irene/models/file';
 import type DynamicscanModel from 'irene/models/dynamicscan';
 import type IreneAjaxService from 'irene/services/ajax';
@@ -84,11 +83,6 @@ export default class DynamicScanActionComponent extends Component<DynamicScanAct
 
   @action
   openDynamicScanDrawer() {
-    triggerAnalytics(
-      'feature',
-      ENV.csb['dynamicScanBtnClick'] as CsbAnalyticsFeatureData
-    );
-
     this.args.openActionDrawer?.();
   }
 

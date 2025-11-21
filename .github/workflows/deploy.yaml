@@ -26,7 +26,6 @@ jobs:
           AWS_REGION: ${{ secrets.AWS_REGION }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           ENVIRONMENT: 'production'
-          IRENE_ENABLE_HOTJAR: 'True'
           IRENE_ENABLE_MARKETPLACE: 'True'
           IRENE_ENABLE_PENDO: 'True'
           IRENE_ENABLE_ROLLBAR: 'True'
