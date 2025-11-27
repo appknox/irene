@@ -880,7 +880,7 @@ module('Acceptance | file-details/api-scan', function (hooks) {
         };
       });
 
-      this.server.post('/v2/files/:id/start_apiscan', () =>
+      this.server.post('/v2/files/:id/start_apiscan_v2', () =>
         fail
           ? new Response(501, {}, { detail: 'API run failed to start' })
           : new Response(201)

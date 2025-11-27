@@ -329,7 +329,7 @@ module.exports = function (environment) {
       scancount: 'scancount',
       recentIssues: 'recent_issues',
       tags: 'tags',
-      capturedApiScanStart: 'start_apiscan',
+      capturedApiScanStart: 'start_apiscan_v2',
       amAppVersions: 'v2/am_app_versions',
       userVaNotificationPref: 'nf_email_notification_preference',
     },
