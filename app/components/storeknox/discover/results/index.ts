@@ -31,8 +31,6 @@ export default class StoreknoxDiscoverResultsComponent extends Component {
     event.preventDefault();
 
     if (this.searchQuery.length > 1) {
-      this.skDiscoverySearchResult.setQueryData({ searchId: '' });
-
       this.router.transitionTo({
         queryParams: {
           app_offset: 0,
@@ -40,6 +38,8 @@ export default class StoreknoxDiscoverResultsComponent extends Component {
           app_search_id: null,
         },
       });
+
+      // this.skDiscoverySearchResult.setQueryData({ searchId: '' });
     } else {
       this.notify.error(this.intl.t('storeknox.errorSearchCharacter'));
     }
