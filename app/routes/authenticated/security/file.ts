@@ -6,8 +6,6 @@ export default class AuthenticatedSecurityFileRoute extends AkBreadcrumbsRoute {
   @service declare store: Store;
 
   async model(params: { fileid: string }) {
-    await this.store.findAll('vulnerability');
-
     return this.store.findRecord('security/file', params.fileid);
   }
 }

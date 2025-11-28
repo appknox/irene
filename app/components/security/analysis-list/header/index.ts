@@ -54,7 +54,7 @@ export default class SecurityAnalysisListHeaderComponent extends Component<Secur
   ) {
     super(owner, args);
 
-    this.getVulnerabilities.perform();
+    this.getVulnerabilities();
   }
 
   get file() {
@@ -105,6 +105,13 @@ export default class SecurityAnalysisListHeaderComponent extends Component<Secur
     this.doAddAnalysis.perform();
   }
 
+  @action
+  getVulnerabilities() {
+    this.vulnerabilitiesResponse = this.store.peekAll(
+      'vulnerability'
+    ) as VulnerabilityQueryResponse;
+  }
+
   confirmPurge = task(async () => {
     const url = `${ENV.endpoints['files']}/${this.fileId}/${ENV.endpoints['purgeAPIAnalyses']}`;
 
@@ -147,18 +154,6 @@ export default class SecurityAnalysisListHeaderComponent extends Component<Secur
 
       this.notify.error(parseError(err, this.tPleaseTryAgain));
     }
-  });
-
-  getVulnerabilities = task(async () => {
-    const vulnerabilities = (await this.store.query('vulnerability', {
-      projectId: this.projectId,
-      limit: 0,
-    })) as VulnerabilityQueryResponse;
-
-    this.vulnerabilitiesResponse = (await this.store.query('vulnerability', {
-      projectId: this.projectId,
-      limit: vulnerabilities?.meta?.count || 0,
-    })) as VulnerabilityQueryResponse;
   });
 }
 
