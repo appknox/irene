@@ -7,10 +7,12 @@ import type UserAuthService from 'irene/services/user-auth';
 import type WhitelabelService from 'irene/services/whitelabel';
 import type { ProductCardDetails } from './product-card';
 import type ConfigurationService from 'irene/services/configuration';
+import type MeService from 'irene/services/me';
 
 export default class HomePageComponent extends Component {
   @service declare intl: IntlService;
   @service declare organization: OrganizationService;
+  @service declare me: MeService;
   @service declare userAuth: UserAuthService;
   @service declare session: any;
   @service declare whitelabel: WhitelabelService;
@@ -86,7 +88,7 @@ export default class HomePageComponent extends Component {
   }
 
   get isSecurityEnabled() {
-    return this.organization.isSecurityEnabled;
+    return this.me.org?.has_security_permission;
   }
 }
 

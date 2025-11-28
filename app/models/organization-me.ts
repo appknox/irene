@@ -16,6 +16,9 @@ export default class OrganizationMeModel extends Model {
 
   @attr('boolean')
   declare can_access_partner_dashboard: boolean;
+
+  @attr('boolean')
+  declare has_security_permission: boolean;
 }
 
 declare module 'ember-data/types/registries/model' {
