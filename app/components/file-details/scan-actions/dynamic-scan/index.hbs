@@ -13,7 +13,7 @@
       {{t 'dynamicScan'}}
     </AkTypography>
 
-    {{#if @file.isDynamicScanLoading}}
+    {{#if this.isDynamicScanLoading}}
       <AkSkeleton @width='80px' />
     {{else}}
       <FileDetails::DynamicScan::StatusChip
@@ -26,11 +26,7 @@
   <FileDetails::ScanActions::ScanOverview
     @file={{@file}}
     @isDynamicScanAction={{true}}
-    @vulnerabilityCount={{if
-      @file.isDynamicDone
-      @file.dynamicVulnerabilityCount
-      null
-    }}
+    @vulnerabilityCount={{if @file.isDynamicDone @vulnerabilityCount null}}
     data-test-fileDetails-scanActions-scanOverview-dynamicScanRoot
   />
 </AkStack>

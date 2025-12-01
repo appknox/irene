@@ -1,9 +1,5 @@
 import commondrf from './commondrf';
 
-interface AnalysisQuery {
-  fileId: string | number;
-}
-
 export default class AnalysisAdapter extends commondrf {
   _buildURL(modelName: string | number, id: string | number) {
     if (id) {
@@ -11,16 +7,6 @@ export default class AnalysisAdapter extends commondrf {
 
       return this.buildURLFromBase(`${baseurl}/${encodeURIComponent(id)}`);
     }
-  }
-
-  _buildNestedURL(modelName: string | number, fileId: string | number) {
-    const baseURL = `${this.namespace_v2}/files/${fileId}/analyses`;
-
-    return this.buildURLFromBase(baseURL);
-  }
-
-  urlForQuery(query: AnalysisQuery, modelName: string | number) {
-    return this._buildNestedURL(modelName, query.fileId);
   }
 }
 

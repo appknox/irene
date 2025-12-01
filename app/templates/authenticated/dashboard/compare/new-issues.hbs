@@ -1,7 +1,17 @@
 {{page-title (t 'fileCompare.newIssues')}}
 
-<FileCompare::Table
+<FileCompare::Table::AnalysesProvider
   @comparisonFilterKey={{@model.comparisonFilterKey}}
-  @filteredComparisons={{@model.filteredComparisons}}
   @files={{@model.files}}
-/>
+  as |tableCtx|
+>
+  {{#if tableCtx.isLoadingAnalyses}}
+    <FileCompare::Loader @loadingText='{{t "loading"}}...' />
+  {{else}}
+    <FileCompare::Table
+      @comparisonFilterKey={{@model.comparisonFilterKey}}
+      @files={{@model.files}}
+      @filteredComparisons={{tableCtx.filteredComparisons}}
+    />
+  {{/if}}
+</FileCompare::Table::AnalysesProvider>

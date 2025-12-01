@@ -50,7 +50,7 @@ module('Integration | Component | sbom/scan-report-drawer', function (hooks) {
     const store = this.owner.lookup('service:store');
 
     const file = this.server.create('file');
-    const project = this.server.create('project', { last_file_id: file.id });
+    const project = this.server.create('project', { last_file: file });
 
     const sbomProject = this.server.create('sbom-project', {
       project: project.id,

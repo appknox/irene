@@ -77,7 +77,7 @@ module('Acceptance | sbom', function (hooks) {
 
     const projects = files.map((file, i) =>
       this.server.create('project', {
-        last_file_id: file.id,
+        last_file: file,
         platform: i === 2 ? 0 : faker.helpers.arrayElement([0, 1]),
       })
     );
@@ -118,11 +118,11 @@ module('Acceptance | sbom', function (hooks) {
       return schema.sbomFiles.find(`${req.params.id}`)?.toJSON();
     });
 
-    this.server.get('/v2/projects/:id', (schema, req) => {
+    this.server.get('/v3/projects/:id', (schema, req) => {
       return schema.projects.find(`${req.params.id}`)?.toJSON();
     });
 
-    this.server.get('/v2/files/:id', (schema, req) => {
+    this.server.get('/v3/files/:id', (schema, req) => {
       return schema.files.find(`${req.params.id}`)?.toJSON();
     });
 

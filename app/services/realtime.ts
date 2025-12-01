@@ -23,4 +23,8 @@ export default class RealtimeService extends Service {
   @tracked ReportCounter = 0;
   @tracked SbomReportCounter = 0;
   @tracked PrivacyReportCounter = 0;
+
+  // Client-side counters
+  // "FileAutoDynamicScanReloadCounter" is used to trigger a reload of the file's last automated dynamic scan in the dynamic scan header component
+  @tracked FileAutoDynamicScanReloadCounter = 0;
 }

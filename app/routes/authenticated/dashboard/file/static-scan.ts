@@ -16,8 +16,6 @@ export default class AuthenticatedFileStaticScanRoute extends ScrollToTop(
 
     const file = await this.store.findRecord('file', fileid);
 
-    return {
-      file,
-    };
+    return { file };
   }
 }

@@ -4,6 +4,7 @@ import { setupMirage } from 'ember-cli-mirage/test-support';
 import { setupIntl, t } from 'ember-intl/test-support';
 import { setupRenderingTest } from 'ember-qunit';
 import { module, test } from 'qunit';
+import { setupFileModelEndpoints } from 'irene/tests/helpers/file-model-utils';
 
 module(
   'Integration | Component | file-details/severity-level',
@@ -13,6 +14,8 @@ module(
     setupIntl(hooks, 'en');
 
     hooks.beforeEach(async function () {
+      const { file_risk_info } = setupFileModelEndpoints(this.server);
+
       this.server.createList('organization', 1);
 
       const store = this.owner.lookup('service:store');
@@ -32,6 +35,7 @@ module(
       this.setProperties({
         file: store.push(store.normalize('file', file.toJSON())),
         store,
+        file_risk_info,
       });
 
       await this.owner.lookup('service:organization').load();
@@ -41,7 +45,7 @@ module(
       'it renders file-details/severity-level',
       [true, false],
       async function (assert, unknownAnalysisStatus) {
-        this.server.get('/v2/projects/:id', (_, req) => {
+        this.server.get('/v3/projects/:id', (_, req) => {
           return {
             id: req.params.id,
             active_profile_id: '100',
@@ -59,32 +63,32 @@ module(
 
         const severityValues = [
           {
-            value: this.file.countRiskCritical,
+            value: this.file_risk_info.risk_count_critical,
             name: t('critical'),
             severityType: 'critical',
           },
           {
-            value: this.file.countRiskHigh,
+            value: this.file_risk_info.risk_count_high,
             name: t('high'),
             severityType: 'high',
           },
           {
-            value: this.file.countRiskMedium,
+            value: this.file_risk_info.risk_count_medium,
             name: t('medium'),
             severityType: 'medium',
           },
           {
-            value: this.file.countRiskLow,
+            value: this.file_risk_info.risk_count_low,
             name: t('low'),
             severityType: 'low',
           },
           {
-            value: this.file.countRiskNone,
+            value: this.file_risk_info.risk_count_passed,
             name: t('passed'),
             severityType: 'passed',
           },
           unknownAnalysisStatus && {
-            value: this.file.countRiskUnknown,
+            value: this.file_risk_info.risk_count_unknown,
             name: t('untested'),
             severityType: 'none',
           },

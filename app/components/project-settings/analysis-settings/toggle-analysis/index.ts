@@ -1,15 +1,15 @@
 import Component from '@glimmer/component';
-import { inject as service } from '@ember/service';
+import { service } from '@ember/service';
 import { action } from '@ember/object';
-import { tracked } from '@glimmer/tracking';
-import ENV from 'irene/config/environment';
-import ProjectModel from 'irene/models/project';
-import IntlService from 'ember-intl/services/intl';
-import Store from '@ember-data/store';
-import UnknownAnalysisStatusModel from 'irene/models/unknown-analysis-status';
 import { task } from 'ember-concurrency';
+import { tracked } from 'tracked-built-ins';
+import type Store from '@ember-data/store';
+import type IntlService from 'ember-intl/services/intl';
+
 import parseError from 'irene/utils/parse-error';
+import ENV from 'irene/config/environment';
 import type IreneAjaxService from 'irene/services/ajax';
+import type ProjectModel from 'irene/models/project';
 
 interface ProjectSettingsAnalysisSettingsToggleAnalysisSignature {
   Args: {
@@ -23,7 +23,7 @@ export default class ProjectSettingsAnalysisSettingsToggleAnalysisComponent exte
   @service('notifications') declare notify: NotificationService;
   @service declare store: Store;
 
-  @tracked unknownAnalysisStatus?: UnknownAnalysisStatusModel | null = null;
+  @tracked unknownAnalysisStatus: boolean;
 
   constructor(
     owner: unknown,
@@ -31,18 +31,10 @@ export default class ProjectSettingsAnalysisSettingsToggleAnalysisComponent exte
   ) {
     super(owner, args);
 
-    this.fetchUnknownAnalysisStatus.perform();
-  }
-
-  fetchUnknownAnalysisStatus = task(async () => {
-    const profileId = this.args.project?.activeProfileId;
-    this.unknownAnalysisStatus = await this.store.queryRecord(
-      'unknown-analysis-status',
-      {
-        id: profileId,
-      }
+    this.unknownAnalysisStatus = !!this.args.project?.get(
+      'showUnknownAnalysis'
     );
-  });
+  }
 
   toggleUnknownAnalysis = task(async (event: Event) => {
     const target = event.target as HTMLInputElement;
@@ -59,7 +51,7 @@ export default class ProjectSettingsAnalysisSettingsToggleAnalysisComponent exte
 
       if (!this.isDestroyed) {
         if (this.unknownAnalysisStatus) {
-          this.unknownAnalysisStatus.status = isChecked;
+          this.unknownAnalysisStatus = isChecked;
         }
       }
     } catch (error) {

@@ -21,7 +21,7 @@
             @indicatorVariant='shadow'
             @buttonVariant={{true}}
             @isActive={{true}}
-            @hasBadge={{if @file.staticVulnerabilityCount true false}}
+            @hasBadge={{if this.staticVulnerabilityCount true false}}
           >
             <:badge>
               <AkStack @alignItems='center'>
@@ -34,7 +34,7 @@
                   @tag='span'
                   @fontWeight='bold'
                 >
-                  {{@file.staticVulnerabilityCount}}
+                  {{this.staticVulnerabilityCount}}
                 </AkTypography>
               </AkStack>
             </:badge>
@@ -85,14 +85,17 @@
       </AkTypography>
     </AkStack>
 
-    <FileDetails::VulnerabilityAnalysis::Table
-      @file={{@file}}
-      @filterVulnerabilityType={{this.filterBy}}
-      @columns={{this.columns}}
-      @sorts={{this.sorts}}
-      @updateAnalysesSorts={{this.updateSorts}}
-      @pageReferrer='sast'
-    />
+    <FileDetails::AnalysesProvider @file={{@file}} as |apctx|>
+      <FileDetails::VulnerabilityAnalysis::Table
+        @file={{@file}}
+        @filterVulnerabilityType={{this.filterBy}}
+        @columns={{this.columns}}
+        @sorts={{this.sorts}}
+        @updateAnalysesSorts={{this.updateSorts}}
+        @fileAnalyses={{apctx.analyses}}
+        @loadingFileAnalyses={{apctx.isFetchingAnalyses}}
+      />
+    </FileDetails::AnalysesProvider>
   </AkStack>
 
   {{#if @file.isStaticCompleted}}

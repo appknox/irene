@@ -1,4 +1,4 @@
-import { inject as service } from '@ember/service';
+import { service } from '@ember/service';
 import Store from '@ember-data/store';
 
 import AkBreadcrumbsRoute from 'irene/utils/ak-breadcrumbs-route';
@@ -7,11 +7,6 @@ import {
   CompareChildrenRoutesModel,
   CompareRouteQueryParams,
 } from 'irene/routes/authenticated/dashboard/compare';
-
-import {
-  compareFiles,
-  getFileComparisonCategories,
-} from 'irene/utils/compare-files';
 
 import RouterService from '@ember/routing/router-service';
 
@@ -30,28 +25,17 @@ export default class AuthenticatedDashboardCompareUntestedCasesRoute extends AkB
 
     const file1 = this.store.peekRecord('file', String(file1Id));
     const file2 = this.store.peekRecord('file', String(file2Id));
+    const unknownAnalysisStatus = file1?.project.get('showUnknownAnalysis');
 
-    const unknownAnalysisStatus = await this.store.queryRecord(
-      'unknown-analysis-status',
-      {
-        id: file1?.profile.get('id'),
-      }
-    );
-
-    if (!unknownAnalysisStatus.status) {
+    if (!unknownAnalysisStatus) {
       this.router.transitionTo(
         'authenticated.dashboard.compare',
         `${file1Id}...${file2Id}`
       );
     }
 
-    const compareCategories = getFileComparisonCategories(
-      compareFiles(file1, file2)
-    );
-
     return {
       comparisonFilterKey: 'untested',
-      filteredComparisons: compareCategories['untested'],
       files: [file1, file2],
     };
   }

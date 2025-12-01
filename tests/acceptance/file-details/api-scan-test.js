@@ -20,6 +20,7 @@ import ENUMS from 'irene/enums';
 import { assertAkSelectTriggerExists } from 'irene/tests/helpers/mirage-utils';
 import { setupRequiredEndpoints } from 'irene/tests/helpers/acceptance-utils';
 import { analysisRiskStatus } from 'irene/helpers/analysis-risk-status';
+import { setupFileModelEndpoints } from 'irene/tests/helpers/file-model-utils';
 
 class IntegrationStub extends Service {
   async configure(user) {
@@ -67,11 +68,9 @@ module('Acceptance | file-details/api-scan', function (hooks) {
 
   hooks.beforeEach(async function () {
     const { vulnerabilities } = await setupRequiredEndpoints(this.server);
+    setupFileModelEndpoints(this.server);
 
-    const analyses = vulnerabilities.map((v, id) =>
-      this.server.create('analysis', { id, vulnerability: v.id }).toJSON()
-    );
-
+    const store = this.owner.lookup('service:store');
     const profile = this.server.create('profile', { id: '1' });
 
     const project = this.server.create('project', {
@@ -85,8 +84,23 @@ module('Acceptance | file-details/api-scan', function (hooks) {
       is_active: true,
       project: project.id,
       profile: profile.id,
-      analyses,
     });
+
+    // Create analyses
+    const analyses = vulnerabilities.map((v, id) =>
+      store.push(
+        store.normalize(
+          'analysis',
+          this.server
+            .create('analysis', {
+              id,
+              vulnerability: v.id,
+              file: file.id,
+            })
+            .toJSON()
+        )
+      )
+    );
 
     const capturedApis = [
       ...this.server.createList('capturedapi', 3, { is_active: false }),
@@ -105,11 +119,11 @@ module('Acceptance | file-details/api-scan', function (hooks) {
     this.owner.register('service:websocket', WebsocketStub);
 
     // server api interception
-    this.server.get('/v2/files/:id', (schema, req) => {
+    this.server.get('/v3/files/:id', (schema, req) => {
       return schema.files.find(`${req.params.id}`)?.toJSON();
     });
 
-    this.server.get('/v2/projects/:id', (schema, req) => {
+    this.server.get('/v3/projects/:id', (schema, req) => {
       return schema.projects.find(`${req.params.id}`)?.toJSON();
     });
 
@@ -117,7 +131,8 @@ module('Acceptance | file-details/api-scan', function (hooks) {
       project,
       file,
       capturedApis,
-      store: this.owner.lookup('service:store'),
+      analyses,
+      store,
     });
   });
 
@@ -183,7 +198,7 @@ module('Acceptance | file-details/api-scan', function (hooks) {
   });
 
   test('it renders api scan with captured api count greater than 0', async function (assert) {
-    this.server.get('/v2/files/1/capturedapis', (schema, req) => {
+    this.server.get('/v2/files/:id/capturedapis', (schema, req) => {
       const results = req.queryParams.is_active
         ? schema.db.capturedapis.where({ is_active: true })
         : schema.capturedapis.all().models;
@@ -1141,9 +1156,7 @@ module('Acceptance | file-details/api-scan', function (hooks) {
 
     const rows = findAll('[data-test-vulnerability-analysis-row]');
 
-    const file = this.store.peekRecord('file', this.file.id);
-
-    const apiAnalyses = file.analyses.filter((a) =>
+    const apiAnalyses = this.analyses.filter((a) =>
       a.hasType(ENUMS.VULNERABILITY_TYPE.API)
     );
 

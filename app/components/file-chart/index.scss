@@ -28,6 +28,31 @@
   background-color: var(--file-chart-severity-level-color-none);
 }
 
+.severity-empty {
+  background-color: var(--file-chart-severity-level-color-empty);
+}
+
+.loading-circle-container {
+  &.large {
+    width: 100%;
+    max-width: 350px;
+  }
+
+  .hollow-circular-loader {
+    width: 145px;
+    height: 145px;
+    border-radius: 50%;
+    border: 26px solid var(--file-chart-severity-level-color-empty);
+    box-sizing: border-box;
+  }
+
+  .hollow-circular-loader.large {
+    width: 200px;
+    height: 200px;
+    border: 32px solid var(--file-chart-severity-level-color-empty);
+  }
+}
+
 .tooltip-content-container {
   width: 320px;
   padding: 0.5em;

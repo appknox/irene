@@ -40,7 +40,7 @@ module(
       });
 
       this.server.create('project', {
-        last_file_id: file.id,
+        last_file: file,
         id: '1',
       });
 
@@ -49,7 +49,7 @@ module(
         return schema.profiles.find(`${req.params.id}`).toJSON();
       });
 
-      this.server.get('/v2/projects/:id', (schema, req) => {
+      this.server.get('/v3/projects/:id', (schema, req) => {
         return schema.projects.find(`${req.params.id}`).toJSON();
       });
 

@@ -1,10 +1,10 @@
 import Component from '@glimmer/component';
-
 import FileModel from 'irene/models/file';
 
 export interface FileDetailsScanActionsStaticScanSignature {
   Args: {
     file: FileModel;
+    vulnerabilityCount: number | null;
   };
 }
 

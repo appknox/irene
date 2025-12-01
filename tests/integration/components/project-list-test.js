@@ -11,6 +11,7 @@ import { selectChoose } from 'ember-power-select/test-support';
 import { setupRenderingTest } from 'ember-qunit';
 import { module, test } from 'qunit';
 import { faker } from '@faker-js/faker';
+import { setupFileModelEndpoints } from 'irene/tests/helpers/file-model-utils';
 
 class OrganizationStub extends Service {
   selected = {
@@ -27,6 +28,8 @@ module('Integration | Component | project list', function (hooks) {
   setupIntl(hooks, 'en');
 
   hooks.beforeEach(async function () {
+    setupFileModelEndpoints(this.server);
+
     const store = this.owner.lookup('service:store');
     const projectService = this.owner.lookup('service:project');
 
@@ -39,7 +42,7 @@ module('Integration | Component | project list', function (hooks) {
   });
 
   test('It renders successfully with no projects', async function (assert) {
-    this.server.get('/organizations/:id/projects', () => {
+    this.server.get('/v3/projects/', () => {
       const results = [];
 
       return { count: results.length, next: null, previous: null, results };
@@ -63,7 +66,7 @@ module('Integration | Component | project list', function (hooks) {
   test('It renders successfully with at least one project', async function (assert) {
     const projects = this.server.createList('project', 8);
 
-    this.server.get('/organizations/:id/projects', (schema) => {
+    this.server.get('/v3/projects', (schema) => {
       const results = schema.projects.all().models;
 
       return { count: results.length, next: null, previous: null, results };
@@ -94,7 +97,7 @@ module('Integration | Component | project list', function (hooks) {
     const projects = this.server.createList('project', 2);
     const teams = this.server.createList('team', 2);
 
-    this.server.get('/organizations/:id/projects', (schema) => {
+    this.server.get('/v3/projects', (schema) => {
       const results = schema.projects.all().models;
 
       return { count: results.length, next: null, previous: null, results };
@@ -146,7 +149,7 @@ module('Integration | Component | project list', function (hooks) {
     const projects = this.server.createList('project', 4);
     this.server.createList('team', 4);
 
-    this.server.get('/organizations/:id/projects', (schema, request) => {
+    this.server.get('/v3/projects', (schema, request) => {
       const team = request.queryParams.team;
 
       const results = team
@@ -224,7 +227,7 @@ module('Integration | Component | project list', function (hooks) {
     async function (assert, [sortLabel, index]) {
       const projects = this.server.createList('project', 4);
 
-      this.server.get('/organizations/:id/projects', (schema) => {
+      this.server.get('/v3/projects', (schema) => {
         const results = schema.projects.all().models;
 
         return { count: results.length, next: null, previous: null, results };
@@ -269,7 +272,7 @@ module('Integration | Component | project list', function (hooks) {
       url: 'Duplicate Project',
     });
 
-    this.server.get('/organizations/:id/projects', (schema, req) => {
+    this.server.get('/v3/projects', (schema, req) => {
       this.set('searchQuery', req.queryParams.q);
 
       const results = req.queryParams.q
@@ -324,7 +327,7 @@ module('Integration | Component | project list', function (hooks) {
       });
     });
 
-    this.server.get('/organizations/:id/projects', (schema, req) => {
+    this.server.get('/v3/projects', (schema, req) => {
       const platform = req.queryParams.platform;
 
       this.set('platform', platform);
@@ -420,7 +423,7 @@ module('Integration | Component | project list', function (hooks) {
       });
     });
 
-    this.server.get('/organizations/:id/projects', (schema, req) => {
+    this.server.get('/v3/projects', (schema, req) => {
       const platform = req.queryParams.platform;
 
       this.set('platform', platform);

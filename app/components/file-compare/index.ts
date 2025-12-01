@@ -1,26 +1,29 @@
-import { inject as service } from '@ember/service';
-import { action } from '@ember/object';
 import Component from '@glimmer/component';
-import IntlService from 'ember-intl/services/intl';
-import Store from '@ember-data/store';
-import RouterService from '@ember/routing/router-service';
+import { service } from '@ember/service';
+import { action } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
-
-import FileModel from 'irene/models/file';
-import UnknownAnalysisStatusModel from 'irene/models/unknown-analysis-status';
-import AkBreadcrumbsService from 'irene/services/ak-breadcrumbs';
-import { scrollDashboardMainContainerTo } from 'irene/utils/scroll-to-top';
+import type IntlService from 'ember-intl/services/intl';
+import type Store from '@ember-data/store';
+import type RouterService from '@ember/routing/router-service';
 
 import {
-  compareFiles,
+  compareFileAnalyses,
   getFileComparisonCategories,
 } from 'irene/utils/compare-files';
+
+import { scrollDashboardMainContainerTo } from 'irene/utils/scroll-to-top';
+import type AkBreadcrumbsService from 'irene/services/ak-breadcrumbs';
+import type FileModel from 'irene/models/file';
+import type AnalysisOverviewModel from 'irene/models/analysis-overview';
+import type EventBusService from 'irene/services/event-bus';
 
 interface FileCompareSignature {
   Args: {
     file1: FileModel | null;
     file2: FileModel | null;
-    unknownAnalysisStatus: UnknownAnalysisStatusModel | null;
+    unknownAnalysisStatus: boolean;
+    file1Analyses: AnalysisOverviewModel[];
+    file2Analyses: AnalysisOverviewModel[];
   };
 }
 
@@ -28,9 +31,27 @@ export default class FileCompareComponent extends Component<FileCompareSignature
   @service declare intl: IntlService;
   @service declare store: Store;
   @service declare router: RouterService;
+  @service declare eventBus: EventBusService;
   @service('ak-breadcrumbs') declare breadcrumbsService: AkBreadcrumbsService;
 
+  @tracked file1Analyses: AnalysisOverviewModel[] = [];
+  @tracked file2Analyses: AnalysisOverviewModel[] = [];
+
   @tracked expandFilesOverview = false;
+
+  constructor(owner: unknown, args: FileCompareSignature['Args']) {
+    super(owner, args);
+
+    this.file1Analyses = this.args.file1Analyses;
+    this.file2Analyses = this.args.file2Analyses;
+
+    // Handle websocket analysis messages
+    this.eventBus.on(
+      'ws:analysis-overview:update',
+      this,
+      this.handleAnalysisUpdate
+    );
+  }
 
   get file1() {
     return this.args.file1;
@@ -40,12 +61,8 @@ export default class FileCompareComponent extends Component<FileCompareSignature
     return this.args.file2;
   }
 
-  get unknownAnalysisStatus() {
-    return this.args.unknownAnalysisStatus;
-  }
-
   get comparisons() {
-    return compareFiles(this.file1, this.file2);
+    return compareFileAnalyses(this.file1Analyses, this.file2Analyses);
   }
 
   get tabItems() {
@@ -70,7 +87,7 @@ export default class FileCompareComponent extends Component<FileCompareSignature
         label: this.intl.t('fileCompare.resolvedIssues'),
         badgeCount: fileCompareCategories.resolved.length,
       },
-      this.unknownAnalysisStatus?.status
+      this.args.unknownAnalysisStatus
         ? {
             id: 'untested-cases',
             route: 'authenticated.dashboard.compare.untested-cases',
@@ -109,6 +126,41 @@ export default class FileCompareComponent extends Component<FileCompareSignature
     this.expandFilesOverview = !this.expandFilesOverview;
 
     scrollDashboardMainContainerTo({ top: 0, behavior: 'smooth' });
+  }
+
+  @action
+  handleAnalysisUpdate(aom: AnalysisOverviewModel) {
+    const aomFileId = aom.file.get('id');
+    const fileIdsAndAnalyses = [this.file1?.id, this.file2?.id];
+
+    const targetedFileIdx = fileIdsAndAnalyses.findIndex(
+      (id) => String(aomFileId) === String(id)
+    );
+
+    // Return if newly created analysis is not for this file
+    if (targetedFileIdx === -1) {
+      return;
+    }
+
+    const isFile1 = targetedFileIdx === 0;
+    const analyses = isFile1 ? this.file1Analyses : this.file2Analyses;
+    const analysisExistsInFile = analyses.find((a) => a.id === aom.id);
+
+    // Update analyses list any time a new analysis is created or updated
+    if (!analysisExistsInFile) {
+      this[isFile1 ? 'file1Analyses' : 'file2Analyses'] = [...analyses, aom];
+    }
+  }
+
+  willDestroy(): void {
+    super.willDestroy();
+
+    // Handle websocket analysis messages
+    this.eventBus.off(
+      'ws:analysis-overview:update',
+      this,
+      this.handleAnalysisUpdate
+    );
   }
 }
 

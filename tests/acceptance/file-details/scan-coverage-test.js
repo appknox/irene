@@ -8,6 +8,7 @@ import { setupIntl, t } from 'ember-intl/test-support';
 
 import ENUMS from 'irene/enums';
 import { setupRequiredEndpoints } from 'irene/tests/helpers/acceptance-utils';
+import { setupFileModelEndpoints } from 'irene/tests/helpers/file-model-utils';
 
 module('Acceptance | file-details/scan-coverage', function (hooks) {
   setupApplicationTest(hooks);
@@ -20,6 +21,7 @@ module('Acceptance | file-details/scan-coverage', function (hooks) {
 
     // Models
     const { organization } = await setupRequiredEndpoints(this.server);
+    setupFileModelEndpoints(this.server);
 
     organization.update({
       features: {
@@ -39,7 +41,7 @@ module('Acceptance | file-details/scan-coverage', function (hooks) {
     });
 
     const project = this.server.create('project', {
-      file: file.id,
+      last_file: file,
       id: '1',
       active_profile_id: profile.id,
     });
@@ -48,11 +50,11 @@ module('Acceptance | file-details/scan-coverage', function (hooks) {
     this.server.get('/v2/server_configuration', () => ({}));
     this.server.get('/v2/dashboard_configuration', () => ({}));
 
-    this.server.get('/v2/files/:id', (schema, req) => {
+    this.server.get('/v3/files/:id', (schema, req) => {
       return schema.files.find(`${req.params.id}`)?.toJSON();
     });
 
-    this.server.get('/v2/projects/:id', (schema, req) => {
+    this.server.get('/v3/projects/:id', (schema, req) => {
       return schema.projects.find(`${req.params.id}`)?.toJSON();
     });
 

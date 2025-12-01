@@ -42,7 +42,7 @@ module('Integration | Component | sbom/app-list', function (hooks) {
     const files = this.server.createList('file', 5);
 
     const projects = files.map((file) =>
-      this.server.create('project', { last_file_id: file.id })
+      this.server.create('project', { last_file: file })
     );
 
     const sbomFiles = this.server.createList('sbom-file', 5);
@@ -100,11 +100,11 @@ module('Integration | Component | sbom/app-list', function (hooks) {
         return scan;
       });
 
-      this.server.get('/v2/projects/:id', (schema, req) => {
+      this.server.get('/v3/projects/:id', (schema, req) => {
         return schema.projects.find(`${req.params.id}`)?.toJSON();
       });
 
-      this.server.get('/v2/files/:id', (schema, req) => {
+      this.server.get('/v3/files/:id', (schema, req) => {
         return schema.files.find(`${req.params.id}`)?.toJSON();
       });
 
@@ -202,11 +202,11 @@ module('Integration | Component | sbom/app-list', function (hooks) {
       return schema.sbomFiles.find(`${req.params.id}`)?.toJSON();
     });
 
-    this.server.get('/v2/projects/:id', (schema, req) => {
+    this.server.get('/v3/projects/:id', (schema, req) => {
       return schema.projects.find(`${req.params.id}`)?.toJSON();
     });
 
-    this.server.get('/v2/files/:id', (schema, req) => {
+    this.server.get('/v3/files/:id', (schema, req) => {
       return schema.files.find(`${req.params.id}`)?.toJSON();
     });
 
@@ -287,11 +287,11 @@ module('Integration | Component | sbom/app-list', function (hooks) {
       return scan;
     });
 
-    this.server.get('/v2/projects/:id', (schema, req) => {
+    this.server.get('/v3/projects/:id', (schema, req) => {
       return schema.projects.find(`${req.params.id}`)?.toJSON();
     });
 
-    this.server.get('/v2/files/:id', (schema, req) => {
+    this.server.get('/v3/files/:id', (schema, req) => {
       return schema.files.find(`${req.params.id}`)?.toJSON();
     });
 

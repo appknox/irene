@@ -15,7 +15,7 @@ export enum SbomScanStatus {
 export default class SbomFileModel extends Model {
   @service declare intl: IntlService;
 
-  @belongsTo('file', { async: true, inverse: 'sbFile' })
+  @belongsTo('file', { async: true, inverse: null })
   declare file: AsyncBelongsTo<FileModel>;
 
   @belongsTo('sbom-project', { async: true, inverse: null })

@@ -1,18 +1,16 @@
+import Component from '@glimmer/component';
 import { action } from '@ember/object';
 import { service } from '@ember/service';
-import Component from '@glimmer/component';
 import { tracked } from '@glimmer/tracking';
-import type IntlService from 'ember-intl/services/intl';
 import type { EmberTableSort } from 'ember-table';
+import type IntlService from 'ember-intl/services/intl';
 
 import ENUMS from 'irene/enums';
 import type FileModel from 'irene/models/file';
-import ApiScanService from 'irene/services/api-scan';
+import type ApiScanService from 'irene/services/api-scan';
 
 export interface FileDetailsApiScanResultsSignature {
-  Args: {
-    file: FileModel;
-  };
+  Args: { file: FileModel };
 }
 
 export default class FileDetailsApiScanResultsComponent extends Component<FileDetailsApiScanResultsSignature> {

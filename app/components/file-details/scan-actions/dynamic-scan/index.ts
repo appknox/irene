@@ -1,27 +1,38 @@
 import Component from '@glimmer/component';
-import { inject as service } from '@ember/service';
+import { service } from '@ember/service';
 import { action } from '@ember/object';
+import { waitForPromise } from '@ember/test-waiters';
+import { tracked } from '@glimmer/tracking';
+import { task } from 'ember-concurrency';
 import type IntlService from 'ember-intl/services/intl';
 
+import DynamicscanModel, { DsComputedStatus } from 'irene/models/dynamicscan';
 import type FileModel from 'irene/models/file';
-import { DsComputedStatus } from 'irene/models/dynamicscan';
+import type LoggerService from 'irene/services/logger';
 
 export interface FileDetailsScanActionsDynamicScanSignature {
   Args: {
     file: FileModel;
+    vulnerabilityCount: number | null;
   };
 }
 
 export default class FileDetailsScanActionsDynamicScanComponent extends Component<FileDetailsScanActionsDynamicScanSignature> {
   @service declare intl: IntlService;
   @service('notifications') declare notify: NotificationService;
+  @service declare logger: LoggerService;
 
-  get automatedDynamicScan() {
-    return this.args.file.lastAutomatedDynamicScan;
-  }
+  @tracked automatedDynamicScan: DynamicscanModel | null = null;
+  @tracked manualDynamicScan: DynamicscanModel | null = null;
 
-  get manualDynamicScan() {
-    return this.args.file.lastManualDynamicScan;
+  constructor(
+    owner: unknown,
+    args: FileDetailsScanActionsDynamicScanSignature['Args']
+  ) {
+    super(owner, args);
+
+    this.loadLastManualDynamicScans.perform();
+    this.loadLastAutoDynamicScans.perform();
   }
 
   get status() {
@@ -39,6 +50,13 @@ export default class FileDetailsScanActionsDynamicScanComponent extends Componen
     }
 
     return singleStatus || DsComputedStatus.NOT_STARTED;
+  }
+
+  get isDynamicScanLoading() {
+    return (
+      this.loadLastAutoDynamicScans.isRunning ||
+      this.loadLastManualDynamicScans.isRunning
+    );
   }
 
   @action
@@ -76,6 +94,18 @@ export default class FileDetailsScanActionsDynamicScanComponent extends Componen
 
     return DsComputedStatus.NOT_STARTED;
   }
+
+  loadLastAutoDynamicScans = task(async () => {
+    this.automatedDynamicScan = await waitForPromise(
+      this.args.file.getFileLastAutomatedDynamicScan()
+    );
+  });
+
+  loadLastManualDynamicScans = task(async () => {
+    this.manualDynamicScan = await waitForPromise(
+      this.args.file.getFileLastManualDynamicScan()
+    );
+  });
 }
 
 declare module '@glint/environment-ember-loose/registry' {

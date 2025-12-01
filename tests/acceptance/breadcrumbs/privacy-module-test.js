@@ -7,6 +7,7 @@ import { module, test } from 'qunit';
 
 import { assertBreadcrumbsUI } from 'irene/tests/helpers/breadcrumbs-utils';
 import { setupRequiredEndpoints } from 'irene/tests/helpers/acceptance-utils';
+import { setupFileModelEndpoints } from 'irene/tests/helpers/file-model-utils';
 
 class IntegrationStub extends Service {
   async configure(user) {
@@ -59,6 +60,7 @@ module('Acceptance | breadcrumbs/privacy-module', function (hooks) {
     this.owner.register('service:websocket', WebsocketStub);
 
     const { organization } = await setupRequiredEndpoints(this.server);
+    setupFileModelEndpoints(this.server);
 
     organization.update({
       features: {
@@ -69,7 +71,7 @@ module('Acceptance | breadcrumbs/privacy-module', function (hooks) {
     const files = this.server.createList('file', 5);
 
     const projects = files.map((file) =>
-      this.server.create('project', { last_file_id: file.id })
+      this.server.create('project', { last_file: file })
     );
 
     projects.map((project, idx) =>
@@ -95,11 +97,11 @@ module('Acceptance | breadcrumbs/privacy-module', function (hooks) {
       };
     });
 
-    this.server.get('/v2/projects/:id', (schema, req) => {
+    this.server.get('/v3/projects/:id', (schema, req) => {
       return schema.projects.find(`${req.params.id}`)?.toJSON();
     });
 
-    this.server.get('/v2/files/:id', (schema, req) => {
+    this.server.get('/v3/files/:id', (schema, req) => {
       return schema.files.find(`${req.params.id}`)?.toJSON();
     });
 

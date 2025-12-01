@@ -21,12 +21,16 @@
       {{t 'modalCard.manual.resultsDescription'}}
     </AkTypography>
 
-    <FileDetails::VulnerabilityAnalysis::Table
-      @file={{@file}}
-      @columns={{this.columns}}
-      @filterVulnerabilityType={{this.filterVulnerabilityType}}
-      @sorts={{this.sorts}}
-      @updateAnalysesSorts={{this.updateAnalysesSorts}}
-    />
+    <FileDetails::AnalysesProvider @file={{@file}} as |apctx|>
+      <FileDetails::VulnerabilityAnalysis::Table
+        @file={{@file}}
+        @columns={{this.columns}}
+        @filterVulnerabilityType={{this.filterVulnerabilityType}}
+        @sorts={{this.sorts}}
+        @updateAnalysesSorts={{this.updateAnalysesSorts}}
+        @fileAnalyses={{apctx.analyses}}
+        @loadingFileAnalyses={{apctx.isFetchingAnalyses}}
+      />
+    </FileDetails::AnalysesProvider>
   </div>
 </div>

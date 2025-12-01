@@ -18,6 +18,7 @@ import { type FileReportScanType } from 'irene/models/file-report';
 import type FileReportModel from 'irene/models/file-report';
 import type FileModel from 'irene/models/file';
 import type RealtimeService from 'irene/services/realtime';
+import type DynamicscanModel from 'irene/models/dynamicscan';
 
 type FileReportQueryResponse =
   DS.AdapterPopulatedRecordArray<FileReportModel> & {
@@ -54,6 +55,9 @@ export default class FileReportDrawerVaReportsComponent extends Component<FileRe
   @service declare realtime: RealtimeService;
 
   @tracked reports: FileReportQueryResponse | null = null;
+  @tracked canGenerateReport = false;
+  @tracked lastManualDynamicScan: DynamicscanModel | null = null;
+  @tracked lastAutomatedDynamicScan: DynamicscanModel | null = null;
 
   modelName = 'file-report' as const;
 
@@ -68,10 +72,6 @@ export default class FileReportDrawerVaReportsComponent extends Component<FileRe
 
   get file() {
     return this.args.file;
-  }
-
-  get canGenerateReport() {
-    return this.file.canGenerateReport;
   }
 
   get hasReports() {
@@ -102,13 +102,25 @@ export default class FileReportDrawerVaReportsComponent extends Component<FileRe
     return this.generateReport.isRunning;
   }
 
+  get isDynamicScanRunning() {
+    const automated = this.lastAutomatedDynamicScan;
+    const manual = this.lastManualDynamicScan;
+
+    return (
+      automated?.get('isStartingOrShuttingInProgress') ||
+      automated?.get('isReadyOrRunning') ||
+      manual?.get('isStartingOrShuttingInProgress') ||
+      manual?.get('isReadyOrRunning')
+    );
+  }
+
   get enableGenerateBtn() {
     return (
       ((this.canGenerateReport &&
         this.file.isStaticDone &&
         !this.isReportGenerating) ||
         this.latestReportIsGenerated ||
-        !this.file.isDynamicScanRunning ||
+        !this.isDynamicScanRunning ||
         !this.file.isRunningApiScan) &&
       !this.latestReportIsGenerating
     );
@@ -212,6 +224,9 @@ export default class FileReportDrawerVaReportsComponent extends Component<FileRe
     );
 
     this.getReports.perform();
+    this.getCanGenerateReportStatus.perform();
+    this.getFileLatestAutoDynamicScans.perform();
+    this.getFileLatestManualDynamicScans.perform();
   }
 
   @action removeReportCounterObserver() {
@@ -238,6 +253,11 @@ export default class FileReportDrawerVaReportsComponent extends Component<FileRe
     }
   });
 
+  getCanGenerateReportStatus = task(async () => {
+    const status = await waitForPromise(this.file.getGenerateReportStatus());
+    this.canGenerateReport = status.can_generate_report;
+  });
+
   getReports = task(async () => {
     const query = {
       fileId: this.fileId,
@@ -255,6 +275,18 @@ export default class FileReportDrawerVaReportsComponent extends Component<FileRe
       this.notify.error(parseError(err));
       this.reports = null;
     }
+  });
+
+  getFileLatestAutoDynamicScans = task(async () => {
+    this.lastAutomatedDynamicScan = await waitForPromise(
+      this.file.getFileLastAutomatedDynamicScan()
+    );
+  });
+
+  getFileLatestManualDynamicScans = task(async () => {
+    this.lastManualDynamicScan = await waitForPromise(
+      this.file.getFileLastManualDynamicScan()
+    );
   });
 }
 

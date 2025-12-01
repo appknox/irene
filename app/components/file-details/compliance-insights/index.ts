@@ -1,20 +1,28 @@
 import Component from '@glimmer/component';
-import { inject as service } from '@ember/service';
-import Store from '@ember-data/store';
+import { service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
 import { task } from 'ember-concurrency';
-import Owner from '@ember/owner';
-import ArrayProxy from '@ember/array/proxy';
+import type Owner from '@ember/owner';
+import type ArrayProxy from '@ember/array/proxy';
+import type Store from '@ember-data/store';
 
-import FileModel from 'irene/models/file';
+import type {
+  CallbackDataParams,
+  TopLevelFormatterParams,
+} from 'echarts/types/dist/shared';
+
 import ENUMS from 'irene/enums';
-import { ECOption } from 'irene/components/ak-chart';
-import OwaspModel from 'irene/models/owasp';
-import OwaspMobile2024Model from 'irene/models/owaspmobile2024';
+import type { ECOption } from 'irene/components/ak-chart';
+import type FileModel from 'irene/models/file';
+import type OwaspModel from 'irene/models/owasp';
+import type OwaspMobile2024Model from 'irene/models/owaspmobile2024';
+import type AnalysisOverviewModel from 'irene/models/analysis-overview';
 
 export interface FileDetailsComplianceInsightsSignature {
   Args: {
     file: FileModel;
+    fileAnalyses: AnalysisOverviewModel[];
+    isFetchingAnalyses: boolean;
   };
 }
 
@@ -43,7 +51,7 @@ export default class FileDetailsComplianceInsightsComponent extends Component<Fi
   }
 
   get analyses() {
-    return this.args.file.analyses;
+    return this.args.fileAnalyses;
   }
 
   get tooltipLabels(): Record<string, string> {
@@ -101,11 +109,21 @@ export default class FileDetailsComplianceInsightsComponent extends Component<Fi
     const owaspsIds: string[] = [];
     const owaspmobile2024s: string[] = [];
 
-    for (const analysis of this.analyses.slice()) {
-      const analysisRisk = analysis?.get('risk');
+    const analysesOwaspDataRes = await this.store.query('analysis-owasp', {
+      fileId: this.args.file.id,
+    });
 
-      const owasp2024 = await analysis?.get('owaspmobile2024');
-      const owasps = await analysis?.get('owasp');
+    const analysesOwaspData = analysesOwaspDataRes.slice();
+
+    for (const aOwaspData of analysesOwaspData) {
+      const analysis = this.store.peekRecord(
+        'analysis-overview',
+        aOwaspData.id
+      );
+
+      const analysisRisk = analysis?.get('risk');
+      const owasp2024 = await aOwaspData?.get('owaspmobile2024');
+      const owasps = await aOwaspData?.get('owasp');
 
       if (this.analysisRisks.includes(analysisRisk as number)) {
         owasp2024?.map((it) => owaspmobile2024s.push(it.id));
@@ -154,13 +172,15 @@ export default class FileDetailsComplianceInsightsComponent extends Component<Fi
       },
       tooltip: {
         show: true,
-        formatter: (params: any) => {
+        formatter: (params: TopLevelFormatterParams) => {
+          const paramsData = params as CallbackDataParams;
+
           const label: string =
             this.tooltipLabels[
-              params.name as keyof typeof this.tooltipLabels
+              paramsData.name as keyof typeof this.tooltipLabels
             ] || 'unknown';
 
-          return `${label} <br/> ${params.name}: ${params.value}`;
+          return `${label} <br/> ${paramsData.name}: ${paramsData.value}`;
         },
       },
       xAxis: {

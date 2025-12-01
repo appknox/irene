@@ -1,4 +1,4 @@
-/* eslint-disable ember/no-computed-properties-in-native-classes, ember/no-mixins */
+/* eslint-disable ember/no-mixins */
 import {
   AsyncBelongsTo,
   AsyncHasMany,
@@ -8,32 +8,18 @@ import {
   SyncHasMany,
 } from '@ember-data/model';
 
-import ComputedProperty, { sort } from '@ember/object/computed';
-import { computed } from '@ember/object';
-import { inject as service } from '@ember/service';
-import IntlService from 'ember-intl/services/intl';
-import Store from '@ember-data/store';
+import { service } from '@ember/service';
+import type IntlService from 'ember-intl/services/intl';
+import type Store from '@ember-data/store';
 
-import ENUMS from 'irene/enums';
 import { ModelBaseMixin } from 'irene/mixins/base-model';
-import { RISK_COLOR_CODE } from 'irene/utils/constants';
-
-import ProjectModel from './project';
-import TagModel from './tag';
-import FileReportModel from './file-report';
-import AnalysisModel from './analysis';
-import ProfileModel from './profile';
-import SbomFileModel from './sbom-file';
-import SubmissionModel from './submission';
-import DynamicscanModel from './dynamicscan';
-import type { FileCapiReportScanType } from './file-capi-report';
-
-const _getAnalysesCount = (
-  analysis: SyncHasMany<AnalysisModel>,
-  risk: number
-) => {
-  return analysis.filter((analysis) => analysis.computedRisk === risk).length;
-};
+import ENUMS from 'irene/enums';
+import { FileCapiReportScanType } from './file-capi-report';
+import type ProjectModel from './project';
+import type TagModel from './tag';
+import type FileReportModel from './file-report';
+import type ProfileModel from './profile';
+import type SubmissionModel from './submission';
 
 export default class FileModel extends ModelBaseMixin {
   @service declare intl: IntlService;
@@ -106,9 +92,6 @@ export default class FileModel extends ModelBaseMixin {
   declare isDynamicDone: boolean;
 
   @attr('boolean')
-  declare canGenerateReport: boolean;
-
-  @attr('boolean')
   declare canRunAutomatedDynamicscan: boolean;
 
   @attr('number')
@@ -120,47 +103,14 @@ export default class FileModel extends ModelBaseMixin {
   @hasMany('file-report', { async: true, inverse: null })
   declare reports: AsyncHasMany<FileReportModel>;
 
-  @hasMany('analysis', { inverse: 'file', async: false })
-  declare analyses: SyncHasMany<AnalysisModel>;
-
   @belongsTo('project', { inverse: 'files', async: true })
   declare project: AsyncBelongsTo<ProjectModel>;
 
   @belongsTo('profile', { inverse: 'files', async: true })
   declare profile: AsyncBelongsTo<ProfileModel>;
 
-  @belongsTo('sbom-file', { inverse: 'file', async: true })
-  declare sbFile: AsyncBelongsTo<SbomFileModel>;
-
   @belongsTo('submission', { async: true, inverse: null })
   declare submission: AsyncBelongsTo<SubmissionModel>;
-
-  @belongsTo('file', { inverse: null, async: true })
-  declare previousFile: AsyncBelongsTo<FileModel>;
-
-  @belongsTo('dynamicscan', { async: true, inverse: null })
-  declare lastAutomatedDynamicScan: AsyncBelongsTo<DynamicscanModel> | null;
-
-  @belongsTo('dynamicscan', { async: true, inverse: null })
-  declare lastManualDynamicScan: AsyncBelongsTo<DynamicscanModel> | null;
-
-  async getLastDynamicScan(
-    fileId: string,
-    mode: number,
-    isScheduledScan = false
-  ) {
-    const adapter = this.store.adapterFor('file');
-
-    return await adapter.getLastDynamicScan(fileId, mode, isScheduledScan);
-  }
-
-  async generateCapiReports(fileTypes: FileCapiReportScanType[]) {
-    const adapter = this.store.adapterFor('file');
-
-    return adapter.generateCapiReports(this.id, fileTypes);
-  }
-
-  analysesSorting = ['computedRisk:desc'];
 
   scanProgressClass(type?: boolean) {
     if (type === true) {
@@ -168,13 +118,6 @@ export default class FileModel extends ModelBaseMixin {
     }
 
     return false;
-  }
-
-  get isDynamicScanLoading() {
-    return (
-      this.lastAutomatedDynamicScan?.isPending ||
-      this.lastManualDynamicScan?.isPending
-    );
   }
 
   get isManualRequested() {
@@ -203,116 +146,63 @@ export default class FileModel extends ModelBaseMixin {
     return this.versionCode;
   }
 
-  @sort<AnalysisModel>('analyses', 'analysesSorting')
-  declare sortedAnalyses: ComputedProperty<AnalysisModel[]>;
-
-  @computed('analyses.@each.computedRisk')
-  get countRiskCritical() {
-    const analyses = this.analyses;
-    return _getAnalysesCount(analyses, ENUMS.RISK.CRITICAL);
-  }
-
-  @computed('analyses.@each.computedRisk')
-  get countRiskHigh() {
-    const analyses = this.analyses;
-    return _getAnalysesCount(analyses, ENUMS.RISK.HIGH);
-  }
-
-  @computed('analyses.@each.computedRisk')
-  get countRiskMedium() {
-    const analyses = this.analyses;
-    return _getAnalysesCount(analyses, ENUMS.RISK.MEDIUM);
-  }
-
-  @computed('analyses.@each.computedRisk')
-  get countRiskLow() {
-    const analyses = this.analyses;
-    return _getAnalysesCount(analyses, ENUMS.RISK.LOW);
-  }
-
-  @computed('analyses.@each.computedRisk')
-  get countRiskNone() {
-    const analyses = this.analyses;
-    return _getAnalysesCount(analyses, ENUMS.RISK.NONE);
-  }
-
-  @computed('analyses.@each.computedRisk')
-  get countRiskUnknown() {
-    const analyses = this.analyses;
-    return _getAnalysesCount(analyses, ENUMS.RISK.UNKNOWN);
-  }
-
-  @computed('analyses.@each.computedRisk')
-  get staticVulnerabilityCount() {
-    return this.analyses.filter(
-      (it) => it.hasType(ENUMS.VULNERABILITY_TYPE.STATIC) && it.isRisky
-    ).length;
-  }
-
-  @computed('analyses.@each.computedRisk')
-  get dynamicVulnerabilityCount() {
-    return this.analyses.filter(
-      (it) => it.hasType(ENUMS.VULNERABILITY_TYPE.DYNAMIC) && it.isRisky
-    ).length;
-  }
-
-  @computed('analyses.@each.computedRisk')
-  get apiVulnerabilityCount() {
-    return this.analyses.filter(
-      (it) => it.hasType(ENUMS.VULNERABILITY_TYPE.API) && it.isRisky
-    ).length;
-  }
-
-  @computed('analyses.@each.computedRisk')
-  get manualVulnerabilityCount() {
-    return this.analyses.filter(
-      (it) => it.hasType(ENUMS.VULNERABILITY_TYPE.MANUAL) && it.isRisky
-    ).length;
-  }
-
-  get doughnutData() {
-    return {
-      labels: ['CRITICAL', 'HIGH', 'MEDIUM', 'LOW', 'PASSED', 'UNKNOWN'],
-      datasets: [
-        {
-          label: 'Risks',
-          data: [
-            this.countRiskCritical,
-            this.countRiskHigh,
-            this.countRiskMedium,
-            this.countRiskLow,
-            this.countRiskNone,
-            this.countRiskUnknown,
-          ],
-          backgroundColor: [
-            RISK_COLOR_CODE.CRITICAL,
-            RISK_COLOR_CODE.DANGER,
-            RISK_COLOR_CODE.WARNING,
-            RISK_COLOR_CODE.INFO,
-            RISK_COLOR_CODE.SUCCESS,
-            RISK_COLOR_CODE.DEFAULT,
-          ],
-        },
-      ],
-    };
-  }
-
-  get isDynamicScanRunning() {
-    const automated = this.lastAutomatedDynamicScan;
-    const manual = this.lastManualDynamicScan;
-
-    return (
-      automated?.get('isStartingOrShuttingInProgress') ||
-      automated?.get('isReadyOrRunning') ||
-      manual?.get('isStartingOrShuttingInProgress') ||
-      manual?.get('isReadyOrRunning')
-    );
-  }
-
   get screenCoverageSupported() {
     return [ENUMS.FILE_DEV_FRAMEWORK.ANDROID_NATIVE].includes(
       this.devFramework
     );
+  }
+
+  // Utility methods
+  async getLastDynamicScan(
+    fileId: string,
+    mode: number,
+    isScheduledScan = false
+  ) {
+    const adapter = this.store.adapterFor('file');
+
+    return await adapter.getLastDynamicScan(fileId, mode, isScheduledScan);
+  }
+
+  async fetchPreviousFile() {
+    const adapter = this.store.adapterFor('file');
+
+    return await adapter.fetchPreviousFile(this.id);
+  }
+
+  async getGenerateReportStatus() {
+    const adapter = this.store.adapterFor('file');
+
+    return await adapter.getGenerateReportStatus(this.id);
+  }
+
+  async getSbomFile() {
+    const adapter = this.store.adapterFor('file');
+
+    return await adapter.getSbomFile(this.id);
+  }
+
+  async getFileLastManualDynamicScan() {
+    const adapter = this.store.adapterFor('file');
+
+    return await adapter.getFileLastManualDynamicScan(this.id);
+  }
+
+  async getFileLastAutomatedDynamicScan() {
+    const adapter = this.store.adapterFor('file');
+
+    return await adapter.getFileLastAutomatedDynamicScan(this.id);
+  }
+
+  async fetchFileRisk() {
+    const adapter = this.store.adapterFor('file');
+
+    return await adapter.fetchFileRisk(this.id);
+  }
+
+  async generateCapiReports(fileTypes: FileCapiReportScanType[]) {
+    const adapter = this.store.adapterFor('file');
+
+    return await adapter.generateCapiReports(this.id, fileTypes);
   }
 }
 

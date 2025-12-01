@@ -35,7 +35,7 @@ module(
       const file = this.server.create('file', 1);
       const project = this.server.create('project', {
         id: 1,
-        last_file_id: file.id,
+        last_file: file,
       });
 
       const normalizedProject = store.normalize('project', {

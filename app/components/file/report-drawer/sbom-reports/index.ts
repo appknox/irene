@@ -1,13 +1,14 @@
 import Component from '@glimmer/component';
 import { task } from 'ember-concurrency';
-import { inject as service } from '@ember/service';
+import { service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
 import { action } from '@ember/object';
-import RouterService from '@ember/routing/router-service';
+import { waitForPromise } from '@ember/test-waiters';
+import type RouterService from '@ember/routing/router-service';
 
 import SbomFileModel, { SbomScanStatus } from 'irene/models/sbom-file';
-import OrganizationService from 'irene/services/organization';
-import FileModel from 'irene/models/file';
+import type OrganizationService from 'irene/services/organization';
+import type FileModel from 'irene/models/file';
 
 export interface FileReportDrawerSbomReportsSignature {
   Args: {
@@ -83,7 +84,7 @@ export default class FileReportDrawerSbomReportsComponent extends Component<File
   }
 
   getSbomFile = task(async () => {
-    const sbFile = await this.file.sbFile;
+    const sbFile = await waitForPromise(this.file.getSbomFile());
     this.sbomFile = sbFile;
   });
 }

@@ -1,50 +1,71 @@
-import { service } from '@ember/service';
 import Component from '@glimmer/component';
+import { service } from '@ember/service';
+import { tracked } from 'tracked-built-ins';
+import { task } from 'ember-concurrency';
+import { waitForPromise } from '@ember/test-waiters';
 import type IntlService from 'ember-intl/services/intl';
 import type Store from '@ember-data/store';
 
-import ENUMS from 'irene/enums';
 import { type ECOption } from 'irene/components/ak-chart';
 import type FileModel from 'irene/models/file';
+import type FileRiskModel from 'irene/models/file-risk';
+import type LoggerService from 'irene/services/logger';
 
 export interface FileChartSignature {
   Element: HTMLElement;
   Args: {
     file: FileModel | null;
     legendMaxWidth?: string | number;
+    size?: 'small' | 'large';
   };
 }
 
 export default class FileChartComponent extends Component<FileChartSignature> {
   @service declare intl: IntlService;
   @service declare store: Store;
+  @service declare logger: LoggerService;
+  @service('notifications') declare notify: NotificationService;
+
+  @tracked fileRisk: FileRiskModel | null = null;
+
+  constructor(owner: unknown, args: FileChartSignature['Args']) {
+    super(owner, args);
+
+    this.fetchFileRisk.perform();
+  }
+
+  get isLargeChartSize() {
+    return this.args.size === 'large';
+  }
+
+  get isFetchingFileRisk() {
+    return this.fetchFileRisk.isRunning;
+  }
 
   get severityLevelCounts() {
-    const file = this.args.file;
-
     const severityCountObjects = [
       {
-        value: file?.get('countRiskCritical'),
+        value: this.fileRisk?.get('riskCountCritical'),
         name: this.intl.t('critical'),
         severityType: 'critical',
       },
       {
-        value: file?.get('countRiskHigh'),
+        value: this.fileRisk?.get('riskCountHigh'),
         name: this.intl.t('high'),
         severityType: 'high',
       },
       {
-        value: file?.get('countRiskMedium'),
+        value: this.fileRisk?.get('riskCountMedium'),
         name: this.intl.t('medium'),
         severityType: 'medium',
       },
       {
-        value: file?.get('countRiskLow'),
+        value: this.fileRisk?.get('riskCountLow'),
         name: this.intl.t('low'),
         severityType: 'low',
       },
       {
-        value: file?.get('countRiskNone'),
+        value: this.fileRisk?.get('riskCountPassed'),
         name: this.intl.t('passed'),
         severityType: 'passed',
         hasOverridenPassedRisks: this.hasOverridenPassedRisks,
@@ -53,7 +74,7 @@ export default class FileChartComponent extends Component<FileChartSignature> {
 
     if (this.showUnknownAnalysis) {
       severityCountObjects.push({
-        value: file?.get('countRiskUnknown'),
+        value: this.fileRisk?.get('riskCountUnknown'),
         name: this.intl.t('untested'),
         severityType: 'none',
       });
@@ -63,17 +84,7 @@ export default class FileChartComponent extends Component<FileChartSignature> {
   }
 
   get overridenPassedRiskCount() {
-    return (
-      this.args.file
-        ?.get('analyses')
-        .reduce(
-          (count, a) =>
-            a.isOverriddenAsPassed && a.status === ENUMS.ANALYSIS.COMPLETED
-              ? count + 1
-              : count,
-          0
-        ) || 0
-    );
+    return this.fileRisk?.get('overriddenPassedRiskCount') || 0;
   }
 
   get hasOverridenPassedRisks() {
@@ -96,17 +107,18 @@ export default class FileChartComponent extends Component<FileChartSignature> {
         {
           type: 'pie',
           radius: ['65%', '100%'],
-          label: {
-            show: false,
-          },
-          color: this.severityLevelCounts.map((slc) =>
-            getComputedStyle(document.body).getPropertyValue(
-              `--file-chart-severity-level-color-${slc.severityType}`
-            )
-          ),
+          label: { show: false },
+          color: this.severityLevelCounts.map((slc) => {
+            const colorVar =
+              this.totalRiskCount === 0 ? 'empty' : slc.severityType;
+
+            return getComputedStyle(document.body).getPropertyValue(
+              `--file-chart-severity-level-color-${colorVar}`
+            );
+          }),
           emphasis: { scale: false },
           // if zero sum then show empty circle
-          data: this.totalRiskCount > 0 ? this.severityLevelCounts : [],
+          data: this.severityLevelCounts,
         },
       ],
     };
@@ -119,6 +131,19 @@ export default class FileChartComponent extends Component<FileChartSignature> {
   get showUnknownAnalysis() {
     return this.args.file?.get('project')?.get('showUnknownAnalysis');
   }
+
+  fetchFileRisk = task(async () => {
+    try {
+      if (this.args.file) {
+        this.fileRisk = await waitForPromise(this.args.file.fetchFileRisk());
+      }
+    } catch (error) {
+      this.logger.error(
+        `Failed to fetch file risk for file - ${this.args.file?.id}`,
+        error
+      );
+    }
+  });
 }
 
 declare module '@glint/environment-ember-loose/registry' {

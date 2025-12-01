@@ -1,22 +1,25 @@
-import { inject as service } from '@ember/service';
 import Component from '@glimmer/component';
+import { service } from '@ember/service';
 import { task } from 'ember-concurrency';
-import IntlService from 'ember-intl/services/intl';
-import Store from '@ember-data/store';
 import { tracked } from '@glimmer/tracking';
+import { waitForPromise } from '@ember/test-waiters';
 import dayjs from 'dayjs';
-
-import FileModel from 'irene/models/file';
-import UnknownAnalysisStatusModel from 'irene/models/unknown-analysis-status';
+import type IntlService from 'ember-intl/services/intl';
+import type Store from '@ember-data/store';
 
 import {
-  compareFiles,
+  compareFileAnalyses,
   getFileComparisonCategories,
 } from 'irene/utils/compare-files';
+
+import type FileModel from 'irene/models/file';
+import type AnalysisOverviewModel from 'irene/models/analysis-overview';
 
 export interface FileDetailsKeyInsightsSignature {
   Args: {
     file: FileModel;
+    fileAnalyses: AnalysisOverviewModel[];
+    isFetchingFileAnalyses: boolean;
   };
 }
 
@@ -27,12 +30,13 @@ export default class FileDetailsKeyInsightsComponent extends Component<FileDetai
   @service declare store: Store;
   @service('notifications') declare notify: NotificationService;
 
-  @tracked unknownAnalysisStatus?: UnknownAnalysisStatusModel;
+  @tracked previousFileAnalyses: AnalysisOverviewModel[] = [];
+  @tracked previousFile?: FileModel | null = null;
 
   constructor(owner: unknown, args: FileDetailsKeyInsightsSignature['Args']) {
     super(owner, args);
 
-    this.fetchUnknownAnalysisStatus.perform();
+    this.getPreviousFileAndAnalyses.perform();
   }
 
   get currentFile() {
@@ -43,12 +47,19 @@ export default class FileDetailsKeyInsightsComponent extends Component<FileDetai
     return this.comparison !== null;
   }
 
-  get previousFile() {
-    return this.currentFile.get('previousFile').content;
-  }
-
   get compareRouteModel() {
     return `${this.currentFile.id}...${this.previousFile?.id}`;
+  }
+
+  get isLoadingAnalysesData() {
+    return (
+      this.args.isFetchingFileAnalyses ||
+      this.getPreviousFileAndAnalyses.isRunning
+    );
+  }
+
+  get unknownAnalysisStatus() {
+    return this.args.file.project.get('showUnknownAnalysis');
   }
 
   get keyInsights() {
@@ -65,7 +76,7 @@ export default class FileDetailsKeyInsightsComponent extends Component<FileDetai
         label: this.intl.t('fileCompare.resolvedIssues'),
         value: this.comparison?.resolved.length,
       },
-      this.unknownAnalysisStatus?.status && {
+      this.unknownAnalysisStatus && {
         label: this.intl.t('fileCompare.untestedIssues'),
         value: this.comparison?.untested.length,
       },
@@ -79,18 +90,27 @@ export default class FileDetailsKeyInsightsComponent extends Component<FileDetai
   get comparison() {
     return this.previousFile
       ? getFileComparisonCategories(
-          compareFiles(this.currentFile, this.previousFile)
+          compareFileAnalyses(this.args.fileAnalyses, this.previousFileAnalyses)
         )
       : null;
   }
 
-  fetchUnknownAnalysisStatus = task(async () => {
-    this.unknownAnalysisStatus = await this.store.queryRecord(
-      'unknown-analysis-status',
-      {
-        id: this.args.file.profile.get('id'),
-      }
+  getPreviousFileAndAnalyses = task(async () => {
+    const previousFile = await waitForPromise(
+      this.args.file.fetchPreviousFile()
     );
+
+    this.previousFile = previousFile;
+
+    if (previousFile) {
+      const previousFileAnalyses = await waitForPromise(
+        this.store.query('analysis-overview', {
+          fileId: previousFile.id,
+        })
+      );
+
+      this.previousFileAnalyses = previousFileAnalyses.slice();
+    }
   });
 }
 

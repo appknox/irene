@@ -1,18 +1,24 @@
 <div local-class='bordered-box'>
-  <AkTabs local-class='tabs-container' as |akt|>
-    {{#each this.tabItems as |item|}}
-      <akt.tabItem
-        @id={{item.id}}
-        @buttonVariant={{true}}
-        @onTabClick={{this.handleTabClick}}
-        @isActive={{eq item.id this.selectedTab}}
-      >
-        {{item.label}}
-      </akt.tabItem>
-    {{/each}}
-  </AkTabs>
+  <FileDetails::AnalysesProvider @file={{@file}} as |apctx|>
+    <AkTabs local-class='tabs-container' as |akt|>
+      {{#each this.tabItems as |item|}}
+        <akt.tabItem
+          @id={{item.id}}
+          @buttonVariant={{true}}
+          @onTabClick={{this.handleTabClick}}
+          @isActive={{eq item.id this.selectedTab}}
+        >
+          {{item.label}}
+        </akt.tabItem>
+      {{/each}}
+    </AkTabs>
 
-  {{#let (component this.activeTabComponent) as |Component|}}
-    <Component @file={{@file}} />
-  {{/let}}
+    {{#let (component this.activeTabComponent) as |Component|}}
+      <Component
+        @file={{@file}}
+        @fileAnalyses={{apctx.analyses}}
+        @isFetchingAnalyses={{apctx.isFetchingAnalyses}}
+      />
+    {{/let}}
+  </FileDetails::AnalysesProvider>
 </div>
