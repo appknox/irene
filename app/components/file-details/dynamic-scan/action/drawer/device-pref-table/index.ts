@@ -233,7 +233,13 @@ export default class FileDetailsDynamicScanDrawerDevicePrefTableComponent extend
           { ...queryParams, platform_version_min: this.args.file.minOsVersion }
         )) as AvailableManualDeviceQueryResponse;
       } catch (error) {
-        this.notify.error(this.intl.t('errorFetchingAvailableDevices'));
+        const err = error as AdapterError;
+        const errorStatus = err.errors?.[0]?.status;
+        const isRateLimitError = Number(errorStatus) === 429;
+
+        if (!isRateLimitError) {
+          this.notify.error(this.intl.t('errorFetchingAvailableDevices'));
+        }
       }
     }
   );

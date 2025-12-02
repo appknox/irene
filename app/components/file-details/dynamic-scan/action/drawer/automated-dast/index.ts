@@ -176,7 +176,13 @@ export default class FileDetailsDynamicScanDrawerAutomatedDastComponent extends 
         this.proxy = await this.store.findRecord('proxy-setting', profileId);
       }
     } catch (error) {
-      this.notify.error(parseError(error));
+      const err = error as AdapterError;
+      const errorStatus = err.errors?.[0]?.status;
+      const isRateLimitError = Number(errorStatus) === 429;
+
+      if (!isRateLimitError) {
+        this.notify.error(parseError(error));
+      }
     }
   });
 }

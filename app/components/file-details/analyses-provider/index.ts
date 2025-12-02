@@ -8,6 +8,7 @@ import type Store from '@ember-data/store';
 import type FileModel from 'irene/models/file';
 import type AnalysisOverviewModel from 'irene/models/analysis-overview';
 import type EventBusService from 'irene/services/event-bus';
+import type LoggerService from 'irene/services/logger';
 
 export interface FileDetailsAnalysesProviderContext {
   analyses: AnalysisOverviewModel[];
@@ -24,6 +25,7 @@ interface FileDetailsAnalysesProviderComponentSignature {
 export default class FileDetailsAnalysesProviderComponent extends Component<FileDetailsAnalysesProviderComponentSignature> {
   @service declare store: Store;
   @service declare eventBus: EventBusService;
+  @service declare logger: LoggerService;
 
   @tracked analyses: AnalysisOverviewModel[] = [];
 
@@ -63,11 +65,24 @@ export default class FileDetailsAnalysesProviderComponent extends Component<File
   }
 
   fetchFileAnalyses = task(async () => {
-    const analyses = await this.store.query('analysis-overview', {
-      fileId: this.file.id,
-    });
+    try {
+      const analyses = await this.store.query('analysis-overview', {
+        fileId: this.file.id,
+      });
 
-    this.analyses = analyses.slice();
+      this.analyses = analyses.slice();
+    } catch (error) {
+      const err = error as AdapterError;
+      const errorStatus = err.errors?.[0]?.status;
+      const isRateLimitError = Number(errorStatus) === 429;
+
+      if (!isRateLimitError) {
+        this.logger.error(
+          `Failed to fetch analyses for file - ${this.file.id}`,
+          error
+        );
+      }
+    }
   });
 
   willDestroy(): void {
