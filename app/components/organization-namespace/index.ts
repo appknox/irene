@@ -157,7 +157,7 @@ export default class OrganizationNamespaceComponent extends Component<Organizati
       this.notify.success(this.intl.t('namespaceRejected'));
 
       this.analytics.track({
-        name: 'organization_namespace_management',
+        name: 'organization_namespace_event',
         properties: {
           feature: 'reject_namespace',
           namespaceId: namespace?.id,

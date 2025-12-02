@@ -79,7 +79,7 @@ export default class OrganizationBillingSubscriptionComponent extends Component<
       }
 
       this.analytics.track({
-        name: 'subscription_cancelled',
+        name: 'org_subscription',
         properties: {
           feature: 'subscription_cancellation',
         },

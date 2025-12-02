@@ -204,16 +204,17 @@ export default class OrganizationIntegrationsSlackComponent extends Component<Or
     try {
       await this.ajax.post(this.baseURL, { data });
       const d = await this.redirectAPI.perform();
-      this.window.location.href = d.url;
-
-      await this.checkSlackIntegration.perform();
 
       this.analytics.track({
         name: 'organization_integrations',
         properties: {
-          feature: 'slack_integration_completed',
+          feature: 'slack_integration_initiated',
         },
       });
+
+      this.window.location.href = d.url;
+
+      await this.checkSlackIntegration.perform();
     } catch (err) {
       this.notify.error(this.tPleaseTryAgain);
     }

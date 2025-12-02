@@ -162,7 +162,7 @@ export default class FileDetailsDynamicScanActionDrawerComponent extends Compone
       this.notify.success(this.tStartingScan);
 
       this.analytics.track({
-        name: 'dynamic_scan_management',
+        name: 'dynamic_scan_action',
         properties: {
           feature: 'start_dynamic_scan',
           fileId: this.file.id,

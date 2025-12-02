@@ -32,7 +32,6 @@ const ChangeValidator = {
 export default class AccountSettingsSecurityPasswordChangeComponent extends Component {
   @service declare intl: IntlService;
   @service declare ajax: IreneAjaxService;
-  @service('rollbar') declare logger: any;
   @service declare router: RouterService;
   @service('notifications') declare notify: NotificationService;
   @service declare analytics: AnalyticsService;
@@ -92,7 +91,11 @@ export default class AccountSettingsSecurityPasswordChangeComponent extends Comp
       }
 
       this.notify.error(this.intl.t('tSomethingWentWrong'));
-      this.logger.error('Change password error', errors);
+
+      this.analytics.trackError(err, {
+        screen: 'password_change',
+        feature: 'change_password_flow',
+      });
 
       throw errors;
     }

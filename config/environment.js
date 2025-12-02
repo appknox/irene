@@ -3,7 +3,6 @@ const possibleENVS = [
   'IRENE_SHOW_LICENSE',
   'IRENE_ENABLE_PENDO',
   'IRENE_ENABLE_MARKETPLACE',
-  'IRENE_ENABLE_ROLLBAR',
   'IRENE_POSTHOG_API_KEY',
   'IRENE_POSTHOG_API_HOST',
   'ENTERPRISE',
@@ -21,7 +20,6 @@ const ENVHandlerCONST = {
     IRENE_SHOW_LICENSE: false,
     IRENE_ENABLE_PENDO: false,
     IRENE_ENABLE_MARKETPLACE: false,
-    IRENE_ENABLE_ROLLBAR: false,
     IRENE_POSTHOG_API_KEY: '',
     IRENE_POSTHOG_API_HOST: '',
     ENTERPRISE: false,
@@ -208,9 +206,6 @@ module.exports = function (environment) {
     enableMarketplace: handler.getValueForPlugin('IRENE_ENABLE_MARKETPLACE'),
     posthogApiKey: handler.getEnv('IRENE_POSTHOG_API_KEY'),
     posthogApiHost: handler.getEnv('IRENE_POSTHOG_API_HOST'),
-    emberRollbarClient: {
-      enabled: handler.getValueForPlugin('IRENE_ENABLE_ROLLBAR'),
-    },
 
     notifications: {
       autoClear: true,
@@ -375,7 +370,6 @@ module.exports = function (environment) {
   }
 
   if (environment === 'production') {
-    ENV.emberRollbarClient.accessToken = '4381303f93734918966ff4e1b028cee5';
     ENV['ember-cli-mirage'] = {
       enabled: false,
     };

@@ -26,7 +26,6 @@ declare const config: {
   enableMarketplace: boolean;
   posthogApiKey: string;
   posthogApiHost: string;
-  emberRollbarClient: EmberRollbarClient;
   notifications: Notifications;
   deviceFarmPassword: string;
   namespace: string;
@@ -63,7 +62,6 @@ export interface Defaults {
   IRENE_SHOW_LICENSE: boolean;
   IRENE_ENABLE_PENDO: boolean;
   IRENE_ENABLE_MARKETPLACE: boolean;
-  IRENE_ENABLE_ROLLBAR: boolean;
   IRENE_POSTHOG_API_KEY: string;
   IRENE_POSTHOG_API_HOST: string;
   ENTERPRISE: boolean;
@@ -74,7 +72,6 @@ export interface Defaults {
 }
 
 export interface ProcessENV {
-  IRENE_ENABLE_ROLLBAR: string;
   IRENE_ENABLE_PENDO: string;
   IRENE_ENABLE_MARKETPLACE: string;
 }
@@ -118,10 +115,6 @@ export interface EmberSimpleAuth {
 
 export interface EmberWebsockets {
   socketIO: boolean;
-}
-
-export interface EmberRollbarClient {
-  enabled: boolean;
 }
 
 export interface EmblemOptions {

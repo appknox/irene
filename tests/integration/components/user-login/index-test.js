@@ -484,7 +484,6 @@ module('Integration | Component | user-login', function (hooks) {
           integrations: {
             crisp_key: '',
             pendo_key: '',
-            rollbar_key: '',
           },
           name: '',
           registration_enabled: false,
@@ -530,7 +529,6 @@ module('Integration | Component | user-login', function (hooks) {
           integrations: {
             crisp_key: '',
             pendo_key: '',
-            rollbar_key: '',
           },
           name: '',
           registration_enabled: true,
@@ -573,7 +571,6 @@ module('Integration | Component | user-login', function (hooks) {
           integrations: {
             crisp_key: '',
             pendo_key: '',
-            rollbar_key: '',
           },
           name: '',
           registration_enabled: false,
@@ -616,7 +613,6 @@ module('Integration | Component | user-login', function (hooks) {
           integrations: {
             crisp_key: '',
             pendo_key: '',
-            rollbar_key: '',
           },
           name: '',
           registration_enabled: true,

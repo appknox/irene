@@ -191,10 +191,6 @@ const initialize = (application) => {
 
   ENV.enablePendo = handler.getValueForPlugin('IRENE_ENABLE_PENDO');
   ENV.enableMarketplace = handler.getValueForPlugin('IRENE_ENABLE_MARKETPLACE');
-  ENV.emberRollbarClient = {
-    enabled: handler.getValueForPlugin('IRENE_ENABLE_ROLLBAR'),
-  };
-
   ENV.posthogApiKey = handler.getEnv('IRENE_POSTHOG_API_KEY');
   ENV.posthogApiHost = handler.getEnv('IRENE_POSTHOG_API_HOST');
 

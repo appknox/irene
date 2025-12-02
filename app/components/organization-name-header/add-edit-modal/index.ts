@@ -62,7 +62,7 @@ export default class OrganizationNameAddEditModal extends Component<Organization
     const existingName = org.name;
 
     try {
-      await org.set('name', this.newOrUpdatedOrgName);
+      org.set('name', this.newOrUpdatedOrgName);
       await org.save();
 
       this.showSuccessMessage = true;
@@ -81,7 +81,7 @@ export default class OrganizationNameAddEditModal extends Component<Organization
 
       let errMsg = this.intl.t('pleaseTryAgain');
 
-      if (err.errors && err.errors.length) {
+      if (err.errors?.length) {
         errMsg = err.errors[0]?.detail || errMsg;
       } else if (err.message) {
         errMsg = err.message;

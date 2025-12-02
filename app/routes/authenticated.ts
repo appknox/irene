@@ -8,6 +8,7 @@ import type IntlService from 'ember-intl/services/intl';
 import type RouterService from '@ember/routing/router-service';
 
 import ENV from 'irene/config/environment';
+import type { SessionService } from 'irene/adapters/auth-base';
 import type AnalyticsService from 'irene/services/analytics';
 import type MeService from 'irene/services/me';
 import type DatetimeService from 'irene/services/datetime';
@@ -21,12 +22,11 @@ import type UserModel from 'irene/models/user';
 import type LoggerService from 'irene/services/logger';
 
 export default class AuthenticatedRoute extends Route {
-  @service declare session: any;
+  @service declare session: SessionService;
   @service declare intl: IntlService;
   @service declare me: MeService;
   @service declare datetime: DatetimeService;
   @service declare trial: TrialService;
-  @service declare rollbar: any;
   @service declare websocket: WebsocketService;
   @service declare integration: IntegrationService;
   @service declare store: Store;
@@ -100,7 +100,6 @@ export default class AuthenticatedRoute extends Route {
 
     await this.integration.configure(user);
 
-    await this.configureRollBar(user);
     await this.configurePendo(user);
 
     this.trial.set('isTrial', user.isTrial);
@@ -116,23 +115,6 @@ export default class AuthenticatedRoute extends Route {
     this.analytics.registerPostHogOrganization(user, this.org.selected);
   }
 
-  async configureRollBar(user: UserModel) {
-    try {
-      this.rollbar.notifier.configure({
-        payload: {
-          person: {
-            id: user.id,
-            username: user.username,
-            email: user.email,
-          },
-        },
-      });
-    } catch (e) {
-      // eslint-disable-next-line no-console
-      console.log(e);
-    }
-  }
-
   async configurePendo(user: UserModel) {
     try {
       // @ts-expect-error global pendo
@@ -146,8 +128,7 @@ export default class AuthenticatedRoute extends Route {
         },
       });
     } catch (e) {
-      // eslint-disable-next-line no-console
-      console.log(e);
+      this.logger.info('Pendo configure failed', e);
     }
   }
 
@@ -165,7 +146,7 @@ export default class AuthenticatedRoute extends Route {
         queryParams,
       });
     } catch (err) {
-      console.warn('analytics: failed to track route transition', err);
+      this.logger.warn('Analytics: failed to track route transition', err);
     }
   }
 

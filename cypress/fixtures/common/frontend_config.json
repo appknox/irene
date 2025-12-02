@@ -7,7 +7,6 @@
   "integrations": {
     "crisp_key": "806bf0a8-c022-4a1f-ae9b-ecb859c001b4",
     "pendo_key": "",
-    "rollbar_key": "",
     "freshdesk_configuration": {
       "widget_id": ""
     }

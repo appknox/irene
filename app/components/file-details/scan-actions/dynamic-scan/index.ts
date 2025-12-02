@@ -8,7 +8,6 @@ import type IntlService from 'ember-intl/services/intl';
 
 import DynamicscanModel, { DsComputedStatus } from 'irene/models/dynamicscan';
 import type FileModel from 'irene/models/file';
-import type LoggerService from 'irene/services/logger';
 
 export interface FileDetailsScanActionsDynamicScanSignature {
   Args: {
@@ -20,7 +19,6 @@ export interface FileDetailsScanActionsDynamicScanSignature {
 export default class FileDetailsScanActionsDynamicScanComponent extends Component<FileDetailsScanActionsDynamicScanSignature> {
   @service declare intl: IntlService;
   @service('notifications') declare notify: NotificationService;
-  @service declare logger: LoggerService;
 
   @tracked automatedDynamicScan: DynamicscanModel | null = null;
   @tracked manualDynamicScan: DynamicscanModel | null = null;

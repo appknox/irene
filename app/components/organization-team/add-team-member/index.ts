@@ -14,7 +14,7 @@ import type OrganizationTeamModel from 'irene/models/organization-team';
 import type OrganizationUserModel from 'irene/models/organization-user';
 import type RealtimeService from 'irene/services/realtime';
 import type AnalyticsService from 'irene/services/analytics';
-import { ActionContentType } from '../details/active-action';
+import type { ActionContentType } from '../details/active-action';
 
 export interface OrganizationTeamAddTeamMemberComponentSignature {
   Args: {

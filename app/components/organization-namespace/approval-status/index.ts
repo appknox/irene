@@ -41,7 +41,7 @@ export default class OrganizationNamespaceApprovalStatus extends Component<Organ
       this.notify.success(this.intl.t('namespaceApproved'));
 
       this.analytics.track({
-        name: 'organization_namespace_management',
+        name: 'organization_namespace_event',
         properties: {
           feature: 'approve_namespace',
           namespaceId: ns.id,

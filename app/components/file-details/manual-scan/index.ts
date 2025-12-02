@@ -159,7 +159,7 @@ export default class FileDetailsManualScanComponent extends Component<FileDetail
       });
 
       this.analytics.track({
-        name: 'manual_scan_request',
+        name: 'manual_scan_action',
         properties: {
           feature: 'manual_scan_requested',
           fileId: this.args.file.id,

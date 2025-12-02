@@ -1,46 +1,27 @@
-import Service from '@ember/service';
+import Service, { service } from '@ember/service';
 import posthog from 'posthog-js';
-import ENV from 'irene/config/environment';
+
+import { ensurePosthogInit, isPosthogEnabled } from 'irene/utils/posthog';
+import type { SessionService } from 'irene/adapters/auth-base';
 import type OrganizationModel from 'irene/models/organization';
 import type UserModel from 'irene/models/user';
+import type LoggerService from 'irene/services/logger';
 
 export type AnalyticsEvent = {
   name: string;
-  properties?: Record<string, any>;
+  properties?: Record<string, unknown>;
   userId?: string | null;
-  context?: Record<string, any>;
+  context?: Record<string, unknown>;
   timestamp?: Date;
 };
 
 type AnalyticsProvider = {
-  identify?(userId: string, traits?: Record<string, any>): void;
-  track?(eventName: string, properties?: Record<string, any>): void;
-  page?(name?: string, properties?: Record<string, any>): void;
+  isEnabled?(): boolean;
+  identify?(userId: string, traits?: Record<string, unknown>): void;
+  track?(eventName: string, properties?: Record<string, unknown>): void;
+  page?(name?: string, properties?: Record<string, unknown>): void;
   flush?(): Promise<void>;
-};
-
-/**
- * Check if analytics (PostHog) is enabled via environment config.
- */
-const isEnabled = () => {
-  return Boolean(ENV.posthogApiKey && ENV.posthogApiHost);
-};
-
-/**
- * Ensures PostHog is initialized with proper masking and configuration.
- */
-const ensureInit = () => {
-  if (!isEnabled()) {
-    return;
-  }
-
-  posthog.init(ENV.posthogApiKey, {
-    api_host: ENV.posthogApiHost,
-    person_profiles: 'always',
-    session_recording: {
-      maskTextSelector: '.posthog-sensitive',
-    },
-  });
+  unregister?(): void;
 };
 
 /**
@@ -49,29 +30,36 @@ const ensureInit = () => {
  * Acts as the orchestrator for all analytics events and integrations.
  */
 export default class AnalyticsService extends Service {
-  private providers: AnalyticsProvider[] = [];
-  private isInitialized = false;
+  @service declare logger: LoggerService;
+  @service declare session: SessionService;
+
+  private readonly providers: AnalyticsProvider[] = [];
+  private isPosthogInitialized = false;
 
   /**
    * Initializes PostHog and any other analytics providers.
    */
   initializePosthog() {
-    if (this.isInitialized) {
+    if (this.isPosthogInitialized) {
       return;
     }
 
-    ensureInit();
+    ensurePosthogInit();
 
-    if (isEnabled()) {
+    if (isPosthogEnabled()) {
       this.registerProvider({
         identify: (userId, traits) => posthog.identify(userId, traits),
         track: (eventName, props) => posthog.capture(eventName, props),
         page: (name, props) => posthog.capture('$pageview', { name, ...props }),
         flush: async () => posthog.reset(),
+        unregister: () => {
+          posthog.stopSessionRecording();
+          posthog.reset();
+        },
       });
     }
 
-    this.isInitialized = true;
+    this.isPosthogInitialized = true;
   }
 
   /**
@@ -88,42 +76,35 @@ export default class AnalyticsService extends Service {
     user: UserModel,
     organization: OrganizationModel | null
   ) {
-    if (!isEnabled()) {
+    if (!isPosthogEnabled() || posthog._isIdentified?.()) {
       return;
     }
 
     try {
-      if (posthog._isIdentified?.()) {
-        return;
-      } else if (user?.id && organization?.id) {
-        posthog.identify(user.id, {
-          email: user?.email,
-          username: user?.username,
-          org_id: organization?.id,
-          org_name: organization?.name,
-        });
-      }
+      posthog.identify(user.id, {
+        email: user?.email,
+        username: user?.username,
+        org_id: organization?.id,
+        org_name: organization?.name,
+      });
     } catch (e) {
-      console.warn('PostHog register failed', e);
+      this.logger.error('PostHog register failed', e);
     }
   }
 
   /**
-   * Clear user and session data (same as unregisterPostHog).
+   * Clear user and session data .
    */
   unregister() {
-    if (!isEnabled()) {
-      return;
+    for (const provider of this.providers) {
+      provider.unregister?.();
     }
-
-    posthog.stopSessionRecording();
-    posthog.reset();
   }
 
   /**
    * Identify a user across all analytics systems.
    */
-  identify(userId: string, traits?: Record<string, any>) {
+  identify(userId: string, traits?: Record<string, unknown>) {
     for (const provider of this.providers) {
       provider.identify?.(userId, traits);
     }
@@ -133,7 +114,11 @@ export default class AnalyticsService extends Service {
    * Track a custom event.
    */
   track(event: AnalyticsEvent) {
-    const { name, properties = {}, userId } = event;
+    const {
+      name,
+      properties = {},
+      userId = this.session.data.authenticated.user_id,
+    } = event;
 
     for (const provider of this.providers) {
       provider.track?.(name, {
@@ -148,10 +133,25 @@ export default class AnalyticsService extends Service {
   /**
    * Track a page view or route transition.
    */
-  page(name: string, properties?: Record<string, any>) {
+  page(name: string, properties?: Record<string, unknown>) {
     for (const provider of this.providers) {
       provider.page?.(name, properties);
     }
+  }
+
+  /**
+   * Track an error event with normalized data.
+   */
+  trackError(error: unknown, context?: Record<string, unknown>) {
+    const userId = this.session.data.authenticated.user_id;
+
+    const properties = {
+      userId,
+      context,
+      timestamp: new Date().toISOString(),
+    };
+
+    posthog.captureException(error, properties);
   }
 
   /**

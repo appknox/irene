@@ -14,7 +14,6 @@ import UploadAppService from 'irene/services/upload-app';
 export default class UploadAppViaSystemComponent extends Component {
   @service declare store: Store;
   @service declare intl: IntlService;
-  @service declare rollbar: any;
   @service('notifications') declare notify: NotificationService;
   @service declare uploadApp: UploadAppService;
   @service declare fileQueue: FileQueueService;
@@ -100,7 +99,11 @@ export default class UploadAppViaSystemComponent extends Component {
 
       this.notify.error(err);
 
-      this.rollbar.critical(err, e);
+      this.analytics.trackError(err, {
+        screen: 'upload_app_via_system',
+        feature: 'file_upload_via_system_flow',
+      });
+
       queue?.remove(file); // since queue won't flush for failed uploads
 
       this.uploadApp.updateSystemFileQueue(queue);
