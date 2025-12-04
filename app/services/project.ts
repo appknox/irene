@@ -31,6 +31,19 @@ export default class ProjectService extends Service {
 
   @tracked projectQueryResponse: ProjectQueryResponse | null = null;
   @tracked isProjectReponseFiltered = false;
+  @tracked viewType: 'card' | 'list' = 'card';
+
+  constructor(properties?: object) {
+    super(properties);
+
+    const savedViewType = localStorage.getItem('projectViewType') as
+      | 'card'
+      | 'list';
+
+    if (savedViewType) {
+      this.viewType = savedViewType;
+    }
+  }
 
   @action
   setProjectResponseFiltered(
@@ -40,6 +53,12 @@ export default class ProjectService extends Service {
       ([key, value]) =>
         value === DEFAULT_PROJECT_QUERY_PARAMS[key as keyof typeof params]
     );
+  }
+
+  @action
+  setViewType(viewType: 'card' | 'list') {
+    this.viewType = viewType;
+    localStorage.setItem('projectViewType', viewType);
   }
 
   fetchProjects = task(

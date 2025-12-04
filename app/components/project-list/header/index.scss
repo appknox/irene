@@ -1,5 +1,9 @@
-.search-input-conntainer-width {
-  width: 200px;
+.left-container-width {
+  .search-container-width {
+    width: 200px;
+  }
+
+  width: 280px;
 }
 
 .search-package-name-input {
@@ -82,4 +86,27 @@
   :global(.ember-power-select-options) {
     padding: 0 !important;
   }
+}
+
+.switch-button {
+  border-color: var(--project-list-header-button-border-color) !important;
+
+  &.active {
+    background-color: var(--project-list-header-active-background-color);
+  }
+
+  &.list {
+    border-top-left-radius: 0px;
+    border-bottom-left-radius: 0px;
+  }
+
+  &.card {
+    border-right: 0px !important;
+    border-top-right-radius: 0px;
+    border-bottom-right-radius: 0px;
+  }
+}
+
+.column-manager-button {
+  border-color: var(--project-list-header-button-border-color) !important;
 }
