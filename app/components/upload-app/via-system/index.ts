@@ -8,17 +8,16 @@ import { waitForPromise } from '@ember/test-waiters';
 import { action } from '@ember/object';
 import type { UploadFile } from 'ember-file-upload';
 
-import ENV from 'irene/config/environment';
-import triggerAnalytics from 'irene/utils/trigger-analytics';
+import AnalyticsService from 'irene/services/analytics';
 import UploadAppService from 'irene/services/upload-app';
 
 export default class UploadAppViaSystemComponent extends Component {
   @service declare store: Store;
   @service declare intl: IntlService;
-  @service declare rollbar: any;
   @service('notifications') declare notify: NotificationService;
   @service declare uploadApp: UploadAppService;
   @service declare fileQueue: FileQueueService;
+  @service declare analytics: AnalyticsService;
 
   tErrorWhileFetching: string;
   tErrorWhileUploading: string;
@@ -81,10 +80,17 @@ export default class UploadAppViaSystemComponent extends Component {
 
       await waitForPromise(uploadItem.save());
 
-      triggerAnalytics(
-        'feature',
-        ENV.csb['applicationUpload'] as CsbAnalyticsFeatureData
-      );
+      this.analytics.track({
+        name: 'feature',
+        properties: {
+          feature: 'file_upload_via_system',
+          fileId: uploadItem.fileId,
+          fileName: uploadItem.fileName,
+          fileUrl: uploadItem.fileUrl,
+          fileExt: uploadItem.fileExt,
+          fileSize: uploadItem.fileSize,
+        },
+      });
 
       this.uploadApp.updateSystemFileQueue(queue);
       this.notify.success(this.tFileUploadedSuccessfully);
@@ -93,7 +99,11 @@ export default class UploadAppViaSystemComponent extends Component {
 
       this.notify.error(err);
 
-      this.rollbar.critical(err, e);
+      this.analytics.trackError(err, {
+        screen: 'upload_app_via_system',
+        feature: 'file_upload_via_system_flow',
+      });
+
       queue?.remove(file); // since queue won't flush for failed uploads
 
       this.uploadApp.updateSystemFileQueue(queue);

@@ -19,10 +19,7 @@ declare namespace IreneAPIResponses {
 
   export interface Integrations {
     crisp_key: string;
-    hotjar_key: string;
     pendo_key: string;
-    csb_key: string;
-    rollbar_key: string;
     freshdesk_configuration: FreshdeskConfiguration;
   }
 

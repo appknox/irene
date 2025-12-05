@@ -1,18 +1,18 @@
 import Component from '@glimmer/component';
 import { task } from 'ember-concurrency';
-import { inject as service } from '@ember/service';
+import { service } from '@ember/service';
 import lookupValidator from 'ember-changeset-validations';
 import { validatePresence } from 'ember-changeset-validations/validators';
 import { tracked } from '@glimmer/tracking';
-import IntlService from 'ember-intl/services/intl';
 import { Changeset } from 'ember-changeset';
 import { Owner } from '@ember/test-helpers/build-owner';
 import { BufferedChangeset } from 'ember-changeset/types';
+import type IntlService from 'ember-intl/services/intl';
 
 import ENV from 'irene/config/environment';
-import LoggerService from 'irene/services/logger';
 import type IreneAjaxService from 'irene/services/ajax';
 import type { AjaxError } from 'irene/services/ajax';
+import type AnalyticsService from 'irene/services/analytics';
 
 const ResetValidator = {
   username: [validatePresence(true)],
@@ -25,8 +25,8 @@ type ChangesetBufferProps = BufferedChangeset & {
 export default class UserLoginRecoverPasswordComponent extends Component {
   @service declare ajax: IreneAjaxService;
   @service('notifications') declare notify: NotificationService;
-  @service('rollbar') declare logger: LoggerService;
   @service declare intl: IntlService;
+  @service declare analytics: AnalyticsService;
 
   @tracked mailSent = false;
   @tracked changeset: ChangesetBufferProps | null = null;
@@ -82,7 +82,11 @@ export default class UserLoginRecoverPasswordComponent extends Component {
       }
 
       this.notify.error(this.tSomethingWentWrong);
-      this.logger.error('Reset password error', errors);
+
+      this.analytics.trackError(err, {
+        screen: 'recover_password',
+        feature: 'recover_password_flow',
+      });
     }
   });
 }

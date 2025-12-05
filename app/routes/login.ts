@@ -5,9 +5,10 @@ import type Transition from '@ember/routing/transition';
 import type IntlService from 'ember-intl/services/intl';
 
 import ENV from 'irene/config/environment';
+import type { SessionService } from 'irene/adapters/auth-base';
 
 export default class LoginRoute extends Route {
-  @service declare session: any;
+  @service declare session: SessionService;
   @service declare router: RouterService;
   @service declare notifications: NotificationService;
   @service declare intl: IntlService;

@@ -22,13 +22,10 @@ declare const config: {
   locationType: string;
   modulePrefix: string;
   environment: string;
-  enableHotjar: boolean;
   enablePendo: boolean;
-  enableCSB: boolean;
   enableMarketplace: boolean;
   posthogApiKey: string;
   posthogApiHost: string;
-  emberRollbarClient: EmberRollbarClient;
   notifications: Notifications;
   deviceFarmPassword: string;
   namespace: string;
@@ -40,7 +37,6 @@ declare const config: {
   APP: App;
   'ember-simple-auth': EmberSimpleAuth;
   endpoints: { [key: string]: string };
-  csb: { [key: string]: Csb };
   whitelabel: Whitelabel;
   gReCaptcha: GReCAPTCHA;
   'ember-modal-dialog': object;
@@ -64,11 +60,8 @@ export interface ENVHandlerCONST {
 export interface Defaults {
   IRENE_API_HOST: string;
   IRENE_SHOW_LICENSE: boolean;
-  IRENE_ENABLE_HOTJAR: boolean;
   IRENE_ENABLE_PENDO: boolean;
-  IRENE_ENABLE_CSB: boolean;
   IRENE_ENABLE_MARKETPLACE: boolean;
-  IRENE_ENABLE_ROLLBAR: boolean;
   IRENE_POSTHOG_API_KEY: string;
   IRENE_POSTHOG_API_HOST: string;
   ENTERPRISE: boolean;
@@ -79,9 +72,7 @@ export interface Defaults {
 }
 
 export interface ProcessENV {
-  IRENE_ENABLE_ROLLBAR: string;
   IRENE_ENABLE_PENDO: string;
-  IRENE_ENABLE_HOTJAR: string;
   IRENE_ENABLE_MARKETPLACE: string;
 }
 
@@ -91,12 +82,6 @@ export interface EmberENV {
   _DEFAULT_ASYNC_OBSERVERS: boolean;
   _JQUERY_INTEGRATION: boolean;
   _TEMPLATE_ONLY_GLIMMER_COMPONENTS: boolean;
-}
-
-export interface Csb {
-  feature: string;
-  module: Module;
-  product: Product;
 }
 
 export enum Module {
@@ -130,10 +115,6 @@ export interface EmberSimpleAuth {
 
 export interface EmberWebsockets {
   socketIO: boolean;
-}
-
-export interface EmberRollbarClient {
-  enabled: boolean;
 }
 
 export interface EmblemOptions {
