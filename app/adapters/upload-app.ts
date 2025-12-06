@@ -3,6 +3,7 @@ import commondrf from './commondrf';
 import { underscore } from '@ember/string';
 // eslint-disable-next-line ember/use-ember-data-rfc-395-imports
 import ModelRegistry from 'ember-data/types/registries/model';
+import AdapterError from '@ember-data/adapter/error';
 
 export default class UploadAppAdapter extends commondrf {
   pathForType(type: keyof ModelRegistry) {
@@ -39,6 +40,31 @@ export default class UploadAppAdapter extends commondrf {
     return this.ajax(url, 'POST', {
       data: data,
     });
+  }
+
+  handleResponse(
+    status: number,
+    headers: Record<string, unknown>,
+    payload: Record<string, unknown>,
+    requestData: Record<string, unknown>
+  ) {
+    // Intercept 429 rate limit
+    if (status === 429) {
+      return new AdapterError([
+        {
+          status,
+          title: 'Rate Limit Exceeded',
+          detail: payload?.['detail'] ?? 'Too many requests',
+          code: payload?.['code'] ?? 'RATE_LIMIT_EXCEEDED',
+          meta: {
+            lock_time: payload?.['lock_time'],
+          },
+        },
+      ] as any);
+    }
+
+    // otherwise fall back to original behavior
+    return super.handleResponse(status, headers, payload, requestData);
   }
 }
 

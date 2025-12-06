@@ -3,6 +3,8 @@ import { tracked } from '@glimmer/tracking';
 
 import fetch from 'fetch';
 import ENV from 'irene/config/environment';
+import type RateLimitService from 'irene/services/rate-limit';
+import type LoggerService from 'irene/services/logger';
 
 /**
  * Extended request options that include additional properties beyond the standard RequestInit
@@ -142,6 +144,8 @@ export function buildMultipartFormData(
 
 export default class IreneAjaxService extends Service {
   @service declare session: any;
+  @service declare rateLimit: RateLimitService;
+  @service declare logger: LoggerService;
   @tracked headers?: Record<string, string>;
 
   host: string = ENV.host || window.location.origin;
@@ -284,10 +288,36 @@ export default class IreneAjaxService extends Service {
     delete (fetchOptions as RequestOptions).namespace;
 
     const response = await fetch(finalUrl, fetchOptions);
+    const requestData = { url: finalUrl };
 
-    if (!response.ok) {
-      const parsedResponse = await this.parseResponseText(response);
+    // For rate limiting, we need to parse the response text first
+    if (response.status === 429) {
+      try {
+        const responseText = await response.clone().text();
+        let parsedBody: Record<string, unknown>;
 
+        try {
+          parsedBody = responseText ? JSON.parse(responseText) : {};
+        } catch (e) {
+          parsedBody = { message: responseText };
+        }
+
+        // Include response headers in the data
+        response.headers.forEach((value, key) => {
+          parsedBody[key] = value;
+        });
+
+        // Handle rate limiting with the parsed response body
+        this.rateLimit.handleResponse(this, parsedBody, requestData);
+      } catch (e) {
+        this.logger.error('Error handling rate limit response:', e);
+      }
+    }
+
+    // Parse the response for normal processing
+    const parsedResponse = await this.parseResponseText(response);
+
+    if (!response.ok && response.status !== 429) {
       const errorResponse = {
         ...response,
         ...(typeof parsedResponse === 'object'
@@ -299,7 +329,7 @@ export default class IreneAjaxService extends Service {
       throw errorResponse;
     }
 
-    return (await this.parseResponseText(response)) as T;
+    return parsedResponse as T;
   }
 
   /**
@@ -381,5 +411,10 @@ export default class IreneAjaxService extends Service {
    */
   delete<T>(url: string, options: RequestOptions = {}): Promise<T> {
     return this.makeRequest<T>(url, { ...options, method: 'DELETE' });
+  }
+
+  willDestroy() {
+    super.willDestroy();
+    this.rateLimit.clearCountdown(this);
   }
 }

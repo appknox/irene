@@ -155,7 +155,16 @@ export default class FileCompareCompareListComponent extends Component<FileCompa
 
         this.files = files;
       } catch (err) {
-        this.notify.error(parseError(err));
+        const error = err as AdapterError;
+        const status = Number(error?.errors?.[0]?.status);
+
+        const isRateLimit = status === 429;
+
+        if (isRateLimit) {
+          return;
+        }
+
+        this.notify.error(parseError(error));
         this.files = null;
       }
     }

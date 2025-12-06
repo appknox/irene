@@ -79,7 +79,13 @@ export default class DsPreferenceProviderComponent extends Component<DsPreferenc
         {}
       );
     } catch (error) {
-      this.notify.error(this.intl.t('errorFetchingDsManualDevicePref'));
+      const err = error as AdapterError;
+      const errorStatus = err.errors?.[0]?.status;
+      const isRateLimitError = Number(errorStatus) === 429;
+
+      if (!isRateLimitError) {
+        this.notify.error(this.intl.t('errorFetchingDsManualDevicePref'));
+      }
     }
   });
 
@@ -93,7 +99,13 @@ export default class DsPreferenceProviderComponent extends Component<DsPreferenc
         {}
       );
     } catch (error) {
-      this.notify.error(this.intl.t('errorFetchingDsAutomatedDevicePref'));
+      const err = error as AdapterError;
+      const errorStatus = err.errors?.[0]?.status;
+      const isRateLimitError = Number(errorStatus) === 429;
+
+      if (!isRateLimitError) {
+        this.notify.error(this.intl.t('errorFetchingDsAutomatedDevicePref'));
+      }
     }
   });
 
