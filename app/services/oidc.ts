@@ -1,10 +1,11 @@
-import Service, { inject as service } from '@ember/service';
-import RouterService from '@ember/routing/router-service';
+import Service, { service } from '@ember/service';
 import { task } from 'ember-concurrency';
-import IntlService from 'ember-intl/services/intl';
+import type RouterService from '@ember/routing/router-service';
+import type IntlService from 'ember-intl/services/intl';
 
 import type IreneAjaxService from 'irene/services/ajax';
 import type { AjaxError } from 'irene/services/ajax';
+import type { SessionService } from 'irene/adapters/auth-base';
 
 interface OidcResponse {
   valid: boolean;
@@ -34,7 +35,7 @@ export interface OidcAuthorizationResponse {
 
 export default class OidcService extends Service {
   @service declare ajax: IreneAjaxService;
-  @service declare session: any;
+  @service declare session: SessionService;
   @service declare intl: IntlService;
   @service declare router: RouterService;
   @service('browser/window') declare window: Window;

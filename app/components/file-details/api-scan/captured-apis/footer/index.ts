@@ -6,10 +6,10 @@ import { task } from 'ember-concurrency';
 import type IntlService from 'ember-intl/services/intl';
 
 import ENV from 'irene/config/environment';
-import triggerAnalytics from 'irene/utils/trigger-analytics';
 import parseError from 'irene/utils/parse-error';
 import type FileModel from 'irene/models/file';
 import type IreneAjaxService from 'irene/services/ajax';
+import type AnalyticsService from 'irene/services/analytics';
 
 export interface FileDetailsApiScanCapturedApisFooterSignature {
   Args: {
@@ -21,6 +21,7 @@ export interface FileDetailsApiScanCapturedApisFooterSignature {
 export default class FileDetailsApiScanCapturedApisFooterComponent extends Component<FileDetailsApiScanCapturedApisFooterSignature> {
   @service declare ajax: IreneAjaxService;
   @service declare intl: IntlService;
+  @service declare analytics: AnalyticsService;
   @service('notifications') declare notify: NotificationService;
 
   @tracked openStartApiScanDrawer = false;
@@ -63,10 +64,14 @@ export default class FileDetailsApiScanCapturedApisFooterComponent extends Compo
       // close drawer
       drCloseHandler();
 
-      triggerAnalytics(
-        'feature',
-        ENV.csb['runAPIScan'] as CsbAnalyticsFeatureData
-      );
+      this.analytics.track({
+        name: 'API_SCAN_START_EVENT',
+        properties: {
+          feature: 'start_api_scan',
+          fileId: this.args.file.id,
+          projectId: this.projectId,
+        },
+      });
     } catch (e) {
       this.notify.error(parseError(e, this.intl.t('pleaseTryAgain')));
     }

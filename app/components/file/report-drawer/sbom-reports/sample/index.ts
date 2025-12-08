@@ -11,6 +11,7 @@ import { waitForPromise } from '@ember/test-waiters';
 import SbomReportModel, { SbomReportType } from 'irene/models/sbom-report';
 import parseError from 'irene/utils/parse-error';
 import type IreneAjaxService from 'irene/services/ajax';
+import type AnalyticsService from 'irene/services/analytics';
 
 type SbomScanReportQueryResponse =
   DS.AdapterPopulatedRecordArray<SbomReportModel> & {
@@ -21,6 +22,7 @@ export default class FileReportDrawerSbomReportsSampleComponent extends Componen
   @service declare ajax: IreneAjaxService;
   @service declare store: Store;
   @service declare intl: IntlService;
+  @service declare analytics: AnalyticsService;
   @service('notifications') declare notify: NotificationService;
   @service('browser/window') declare window: Window;
 
@@ -66,6 +68,13 @@ export default class FileReportDrawerSbomReportsSampleComponent extends Componen
       this.window.localStorage.setItem('sbomRequest', 'true');
 
       this.hasContactedSupport = true;
+
+      this.analytics.track({
+        name: 'FEATURE_REQUEST_EVENT',
+        properties: {
+          feature: 'sbom',
+        },
+      });
     } catch (err) {
       this.notify.error(parseError(err, this.tPleaseTryAgain));
     }

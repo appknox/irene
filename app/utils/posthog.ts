@@ -1,14 +1,18 @@
 import posthog from 'posthog-js';
 import ENV from 'irene/config/environment';
-import type OrganizationModel from 'irene/models/organization';
-import type UserModel from 'irene/models/user';
 
-const isEnabled = () => {
+/**
+ * Check if analytics (PostHog) is enabled via environment config.
+ */
+export const isPosthogEnabled = () => {
   return Boolean(ENV.posthogApiKey && ENV.posthogApiHost);
 };
 
-const ensureInit = () => {
-  if (!isEnabled()) {
+/**
+ * Ensures PostHog is initialized with proper masking and configuration.
+ */
+export const ensurePosthogInit = () => {
+  if (!isPosthogEnabled()) {
     return;
   }
 
@@ -20,42 +24,3 @@ const ensureInit = () => {
     },
   });
 };
-
-export const initializePostHog = () => {
-  ensureInit();
-};
-
-export const registerPostHogOrganization = (
-  user: UserModel,
-  organization: OrganizationModel | null
-) => {
-  if (!isEnabled()) {
-    return;
-  }
-
-  try {
-    if (posthog._isIdentified()) {
-      return;
-    } else if (user?.id && organization?.id) {
-      posthog.identify(user.id, {
-        email: user?.email,
-        username: user?.username,
-        org_id: organization?.id,
-        org_name: organization?.name,
-      });
-    }
-  } catch (e) {
-    console.warn('posthog register failed', e);
-  }
-};
-
-export const unregisterPostHog = () => {
-  if (!isEnabled()) {
-    return;
-  }
-
-  posthog.stopSessionRecording();
-  posthog.reset();
-};
-
-export default initializePostHog;

@@ -1,19 +1,18 @@
 import Component from '@glimmer/component';
-import { inject as service } from '@ember/service';
+import { service } from '@ember/service';
 import { task } from 'ember-concurrency';
 import { tracked } from '@glimmer/tracking';
-import Store from '@ember-data/store';
 import { action } from '@ember/object';
-import IntlService from 'ember-intl/services/intl';
 import { waitForPromise } from '@ember/test-waiters';
+import type Store from '@ember-data/store';
+import type IntlService from 'ember-intl/services/intl';
 
-import ENV from 'irene/config/environment';
-import MeService from 'irene/services/me';
-import RealtimeService from 'irene/services/realtime';
-import ProjectModel from 'irene/models/project';
-import triggerAnalytics from 'irene/utils/trigger-analytics';
 import parseError from 'irene/utils/parse-error';
-import ProjectCollaboratorModel from 'irene/models/project-collaborator';
+import type MeService from 'irene/services/me';
+import type RealtimeService from 'irene/services/realtime';
+import type AnalyticsService from 'irene/services/analytics';
+import type ProjectModel from 'irene/models/project';
+import type ProjectCollaboratorModel from 'irene/models/project-collaborator';
 
 interface ProjectSettingsGeneralSettingsCollaboratorsTableActionSignature {
   Args: {
@@ -29,6 +28,7 @@ export default class ProjectSettingsGeneralSettingsCollaboratorsTableActionCompo
   @service('notifications') declare notify: NotificationService;
   @service declare realtime: RealtimeService;
   @service declare intl: IntlService;
+  @service declare analytics: AnalyticsService;
 
   @tracked showRemoveCollaboratorConfirm = false;
 
@@ -72,10 +72,14 @@ export default class ProjectSettingsGeneralSettingsCollaboratorsTableActionCompo
 
       this.notify.success(this.tCollaboratorRemoved);
 
-      triggerAnalytics(
-        'feature',
-        ENV.csb['projectCollaboratorRemove'] as CsbAnalyticsData
-      );
+      this.analytics.track({
+        name: 'PROJECT_COLLABORATOR_EVENT',
+        properties: {
+          feature: 'remove_collaborator',
+          collaboratorId: this.collaborator?.id,
+          projectId: this.project?.id,
+        },
+      });
 
       this.showRemoveCollaboratorConfirm = false;
       this.args.reloadCollaborators();

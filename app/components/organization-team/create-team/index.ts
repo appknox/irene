@@ -1,15 +1,15 @@
 import Component from '@glimmer/component';
-import { inject as service } from '@ember/service';
+import { service } from '@ember/service';
+import { tracked } from '@glimmer/tracking';
 import { isEmpty } from '@ember/utils';
 import { action } from '@ember/object';
 import { task } from 'ember-concurrency';
-import ENV from 'irene/config/environment';
-import triggerAnalytics from 'irene/utils/trigger-analytics';
-import { tracked } from '@glimmer/tracking';
-import Store from '@ember-data/store';
-import IntlService from 'ember-intl/services/intl';
-import RealtimeService from 'irene/services/realtime';
-import OrganizationModel from 'irene/models/organization';
+import type Store from '@ember-data/store';
+import type IntlService from 'ember-intl/services/intl';
+
+import type RealtimeService from 'irene/services/realtime';
+import type AnalyticsService from 'irene/services/analytics';
+import type OrganizationModel from 'irene/models/organization';
 
 export interface OrganizationTeamCreateTeamComponentSignature {
   Args: {
@@ -23,6 +23,7 @@ export default class OrganizationTeamCreateTeam extends Component<OrganizationTe
   @service declare intl: IntlService;
   @service declare realtime: RealtimeService;
   @service declare store: Store;
+  @service declare analytics: AnalyticsService;
   @service('notifications') declare notify: NotificationService;
 
   @tracked teamName = '';
@@ -69,10 +70,14 @@ export default class OrganizationTeamCreateTeam extends Component<OrganizationTe
       this.teamName = '';
       this.isCreatingTeam = false;
 
-      triggerAnalytics(
-        'feature',
-        ENV.csb['createTeam'] as CsbAnalyticsFeatureData
-      );
+      this.analytics.track({
+        name: 'ORGANIZATION_TEAM_EVENT',
+        properties: {
+          feature: 'create_team',
+          teamId: t.id,
+          teamName: t.name,
+        },
+      });
     } catch (e) {
       const err = e as AdapterError;
       let errMsg = this.intl.t('pleaseTryAgain');

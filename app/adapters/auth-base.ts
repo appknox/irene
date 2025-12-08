@@ -4,15 +4,37 @@ import ENV from 'irene/config/environment';
 
 // @ts-expect-error no types
 import DRFAdapter from 'ember-django-adapter/adapters/drf';
+import Transition from '@ember/routing/transition';
 
-interface SessionService {
-  data: {
-    authenticated: {
-      b64token: string;
-    };
+export type RouteOrCallback = string | (() => void);
+
+type InternalSessionMock<Data> = {
+  isAuthenticated: boolean;
+  data: Data;
+  store: unknown;
+  attemptedTransition: null;
+
+  authenticate: (authenticator: string, ...args: unknown[]) => void;
+  invalidate: (...args: unknown[]) => void;
+  prohibitAuthentication: (routeOrCallback: RouteOrCallback) => boolean;
+  restore: () => Promise<void>;
+
+  requireAuthentication: (
+    transition: Transition,
+    routeOrCallback: RouteOrCallback
+  ) => boolean;
+
+  setup(): Promise<void>;
+};
+
+export type SessionService = InternalSessionMock<{
+  authenticated: {
+    b64token: string;
+    authenticator: string;
+    token: string;
+    user_id: number;
   };
-  invalidate: () => Promise<void>;
-}
+}>;
 
 const AuthenticationBase = (
   Superclass: typeof JSONAPIAdapter | typeof DRFAdapter

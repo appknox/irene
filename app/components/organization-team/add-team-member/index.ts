@@ -1,20 +1,20 @@
 import Component from '@glimmer/component';
 import { tracked } from '@glimmer/tracking';
-import { inject as service } from '@ember/service';
+import { service } from '@ember/service';
 import { task } from 'ember-concurrency';
 import { action } from '@ember/object';
 import { debounceTask } from 'ember-lifeline';
 // eslint-disable-next-line ember/use-ember-data-rfc-395-imports
 import DS from 'ember-data';
-import Store from '@ember-data/store';
-import IntlService from 'ember-intl/services/intl';
-import RealtimeService from 'irene/services/realtime';
-import ENV from 'irene/config/environment';
-import triggerAnalytics from 'irene/utils/trigger-analytics';
-import OrganizationTeamModel from 'irene/models/organization-team';
-import OrganizationUserModel from 'irene/models/organization-user';
-import { ActionContentType } from '../details/active-action';
 import { waitForPromise } from '@ember/test-waiters';
+import type Store from '@ember-data/store';
+import type IntlService from 'ember-intl/services/intl';
+
+import type OrganizationTeamModel from 'irene/models/organization-team';
+import type OrganizationUserModel from 'irene/models/organization-user';
+import type RealtimeService from 'irene/services/realtime';
+import type AnalyticsService from 'irene/services/analytics';
+import type { ActionContentType } from '../details/active-action';
 
 export interface OrganizationTeamAddTeamMemberComponentSignature {
   Args: {
@@ -38,6 +38,7 @@ export default class OrganizationTeamAddTeamMemberComponent extends Component<Or
   @service declare intl: IntlService;
   @service declare realtime: RealtimeService;
   @service declare store: Store;
+  @service declare analytics: AnalyticsService;
   @service('notifications') declare notify: NotificationService;
 
   @tracked searchQuery = '';
@@ -153,10 +154,15 @@ export default class OrganizationTeamAddTeamMemberComponent extends Component<Or
       this.searchQuery = '';
       this.selectedMembers = {};
 
-      triggerAnalytics(
-        'feature',
-        ENV.csb['addTeamMember'] as CsbAnalyticsFeatureData
-      );
+      this.analytics.track({
+        name: 'ORGANIZATION_TEAM_EVENT',
+        properties: {
+          feature: 'add_team_member',
+          members: selectedMembers.map((member) => member.id).join(','),
+          teamId: this.args.team.id,
+          teamName: this.args.team.name,
+        },
+      });
     }
 
     // reload team to update member count

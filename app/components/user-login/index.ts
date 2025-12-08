@@ -10,6 +10,8 @@ import ENV from 'irene/config/environment';
 import type WhitelabelService from 'irene/services/whitelabel';
 import type RegistrationService from 'irene/services/registration';
 import type IreneAjaxService from 'irene/services/ajax';
+import type { SessionService } from 'irene/adapters/auth-base';
+import type LoggerService from 'irene/services/logger';
 
 type OtpError = { payload: { type: string; forced: string } };
 
@@ -32,11 +34,11 @@ type SSOOidcData = {
 export default class UserLoginComponent extends Component {
   @service declare router: RouterService;
   @service declare intl: IntlService;
-  @service declare session: any;
+  @service declare session: SessionService;
   @service declare whitelabel: WhitelabelService;
   @service declare ajax: IreneAjaxService;
   @service declare notifications: NotificationService;
-  @service declare logger: any;
+  @service declare logger: LoggerService;
   @service declare registration: RegistrationService;
   @service('browser/window') declare window: Window;
 

@@ -1,8 +1,5 @@
 import ENV from 'irene/config/environment';
 import installPendo from 'irene/utils/install-pendo';
-import installHotjar from 'irene/utils/install-hotjar';
-import customerSuccessBox from 'irene/utils/customer-success-box';
-import initializePostHog from 'irene/utils/posthog';
 
 /**
  * Class to handle environment variables
@@ -192,21 +189,12 @@ const initialize = (application) => {
     };
   }
 
-  ENV.enableHotjar = handler.getValueForPlugin('IRENE_ENABLE_HOTJAR');
   ENV.enablePendo = handler.getValueForPlugin('IRENE_ENABLE_PENDO');
-  ENV.enableCSB = handler.getValueForPlugin('IRENE_ENABLE_CSB');
   ENV.enableMarketplace = handler.getValueForPlugin('IRENE_ENABLE_MARKETPLACE');
-  ENV.emberRollbarClient = {
-    enabled: handler.getValueForPlugin('IRENE_ENABLE_ROLLBAR'),
-  };
-
   ENV.posthogApiKey = handler.getEnv('IRENE_POSTHOG_API_KEY');
   ENV.posthogApiHost = handler.getEnv('IRENE_POSTHOG_API_HOST');
 
   installPendo();
-  installHotjar();
-  customerSuccessBox();
-  initializePostHog();
 
   // Register ENV
   if (ENV.environment !== 'test') {

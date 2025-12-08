@@ -1,6 +1,6 @@
 import Component from '@glimmer/component';
 import { tracked } from '@glimmer/tracking';
-import { inject as service } from '@ember/service';
+import { service } from '@ember/service';
 import ENV from 'irene/config/environment';
 import { task } from 'ember-concurrency';
 
@@ -13,10 +13,11 @@ import {
   validateConfirmation,
 } from 'ember-changeset-validations/validators';
 
-import IntlService from 'ember-intl/services/intl';
-import RouterService from '@ember/routing/router-service';
+import type IntlService from 'ember-intl/services/intl';
+import type RouterService from '@ember/routing/router-service';
 import type IreneAjaxService from 'irene/services/ajax';
 import type { AjaxError } from 'irene/services/ajax';
+import type AnalyticsService from 'irene/services/analytics';
 
 interface UserLoginResetPasswordComponentSignature {
   Args: {
@@ -38,7 +39,7 @@ export default class UserLoginResetPasswordComponent extends Component<UserLogin
   @service declare intl: IntlService;
   @service declare ajax: IreneAjaxService;
   @service declare router: RouterService;
-  @service('rollbar') declare logger: any;
+  @service declare analytics: AnalyticsService;
   @service('notifications') declare notify: NotificationService;
 
   @tracked isVerified = false;
@@ -135,7 +136,10 @@ export default class UserLoginResetPasswordComponent extends Component<UserLogin
 
       this.notify.error(this.intl.t('somethingWentWrong'));
 
-      this.logger.error('Reset password error', errors);
+      this.analytics.trackError(err, {
+        screen: 'reset_password',
+        feature: 'reset_password_flow',
+      });
     }
   });
 }

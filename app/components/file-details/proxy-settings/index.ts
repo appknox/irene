@@ -1,14 +1,13 @@
 import Component from '@glimmer/component';
-import { inject as service } from '@ember/service';
+import { service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
 import { task } from 'ember-concurrency';
 import type IntlService from 'ember-intl/services/intl';
 import type Store from '@ember-data/store';
 import type { AsyncBelongsTo } from '@ember-data/model';
 
-import ENV from 'irene/config/environment';
 import parseError from 'irene/utils/parse-error';
-import triggerAnalytics from 'irene/utils/trigger-analytics';
+import type AnalyticsService from 'irene/services/analytics';
 import type ProxySettingModel from 'irene/models/proxy-setting';
 import type ProfileModel from 'irene/models/profile';
 import type ProjectModel from 'irene/models/project';
@@ -22,6 +21,7 @@ export interface FileDetailsProxySettingsSignature {
 
 export default class FileDetailsProxySettingsComponent extends Component<FileDetailsProxySettingsSignature> {
   @service declare intl: IntlService;
+  @service declare analytics: AnalyticsService;
   @service('notifications') declare notify: NotificationService;
   @service declare store: Store;
 
@@ -60,17 +60,14 @@ export default class FileDetailsProxySettingsComponent extends Component<FileDet
         `${this.intl.t('proxyTurned')} ${statusText.toUpperCase()}`
       );
 
-      if (enabled) {
-        triggerAnalytics(
-          'feature',
-          ENV.csb['enableProxy'] as CsbAnalyticsFeatureData
-        );
-      } else {
-        triggerAnalytics(
-          'feature',
-          ENV.csb['disableProxy'] as CsbAnalyticsFeatureData
-        );
-      }
+      this.analytics.track({
+        name: 'PROXY_SETTINGS_CHANGE_EVENT',
+        properties: {
+          feature: enabled ? 'enable_proxy' : 'disable_proxy',
+          project_id: this.projectId,
+          action: enabled ? 'enabled' : 'disabled',
+        },
+      });
     } catch (error) {
       this.proxy?.rollbackAttributes();
 

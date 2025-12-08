@@ -1,8 +1,9 @@
-import Service, { inject as service } from '@ember/service';
+import Service, { service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
 
 import fetch from 'fetch';
 import ENV from 'irene/config/environment';
+import type { SessionService } from 'irene/adapters/auth-base';
 
 /**
  * Extended request options that include additional properties beyond the standard RequestInit
@@ -141,7 +142,7 @@ export function buildMultipartFormData(
 }
 
 export default class IreneAjaxService extends Service {
-  @service declare session: any;
+  @service declare session: SessionService;
   @tracked headers?: Record<string, string>;
 
   host: string = ENV.host || window.location.origin;

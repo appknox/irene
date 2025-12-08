@@ -1,16 +1,18 @@
 import Model, { type AsyncBelongsTo, attr, belongsTo } from '@ember-data/model';
 import { isEmpty } from '@ember/utils';
 import dayjs from 'dayjs';
-import triggerAnalytics from 'irene/utils/trigger-analytics';
+import { service } from '@ember/service';
 
 import ENUMS from 'irene/enums';
-import ENV from 'irene/config/environment';
+import type AnalyticsService from 'irene/services/analytics';
 import type FileModel from './file';
 
 export type FileCapiReportScanType = 'json' | 'har';
 export type FileCapiReportModelName = 'file-capi-report';
 
 export default class FileCapiReportModel extends Model {
+  @service declare analytics: AnalyticsService;
+
   @attr('date')
   declare generatedOn: Date;
 
@@ -68,8 +70,12 @@ export default class FileCapiReportModel extends Model {
   }
 
   downloadReport() {
-    const analyticsData = ENV.csb['reportDownload'] as CsbAnalyticsFeatureData;
-    triggerAnalytics('feature', analyticsData);
+    this.analytics.track({
+      name: 'CAPI_REPORT_DOWNLOAD_EVENT',
+      properties: {
+        feature: 'captured_api_report',
+      },
+    });
 
     const adapter = this.store.adapterFor('file-capi-report');
 

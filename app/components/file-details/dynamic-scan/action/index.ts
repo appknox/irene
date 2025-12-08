@@ -6,11 +6,11 @@ import type IntlService from 'ember-intl/services/intl';
 
 import ENV from 'irene/config/environment';
 import parseError from 'irene/utils/parse-error';
-import triggerAnalytics from 'irene/utils/trigger-analytics';
 import type FileModel from 'irene/models/file';
 import type DynamicscanModel from 'irene/models/dynamicscan';
 import type IreneAjaxService from 'irene/services/ajax';
 import type DynamicScanService from 'irene/services/dynamic-scan';
+import type AnalyticsService from 'irene/services/analytics';
 
 export interface DynamicScanActionSignature {
   Args: {
@@ -26,6 +26,7 @@ export interface DynamicScanActionSignature {
 export default class DynamicScanActionComponent extends Component<DynamicScanActionSignature> {
   @service declare intl: IntlService;
   @service declare ajax: IreneAjaxService;
+  @service declare analytics: AnalyticsService;
   @service('notifications') declare notify: NotificationService;
   @service('dynamic-scan') declare dsService: DynamicScanService;
 
@@ -83,10 +84,14 @@ export default class DynamicScanActionComponent extends Component<DynamicScanAct
 
   @action
   openDynamicScanDrawer() {
-    triggerAnalytics(
-      'feature',
-      ENV.csb['dynamicScanBtnClick'] as CsbAnalyticsFeatureData
-    );
+    this.analytics.track({
+      name: 'DYNAMIC_SCAN_START_EVENT',
+      properties: {
+        feature: 'dynamic_scan_drawer_opened',
+        file_id: this.file.get('id'),
+        file_name: this.file.get('name'),
+      },
+    });
 
     this.args.openActionDrawer?.();
   }

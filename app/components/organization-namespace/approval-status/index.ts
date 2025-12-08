@@ -1,14 +1,14 @@
 import Component from '@glimmer/component';
-import { inject as service } from '@ember/service';
+import { service } from '@ember/service';
 import { task } from 'ember-concurrency';
-import ENV from 'irene/config/environment';
-import triggerAnalytics from 'irene/utils/trigger-analytics';
 import { tracked } from '@glimmer/tracking';
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
-import IntlService from 'ember-intl/services/intl';
-import MeService from 'irene/services/me';
-import OrganizationNamespaceModel from 'irene/models/organization-namespace';
+import type IntlService from 'ember-intl/services/intl';
+
+import type MeService from 'irene/services/me';
+import type AnalyticsService from 'irene/services/analytics';
+import type OrganizationNamespaceModel from 'irene/models/organization-namespace';
 
 dayjs.extend(relativeTime);
 
@@ -23,6 +23,7 @@ export interface OrganizationNamespaceApprovalStatusSignature {
 export default class OrganizationNamespaceApprovalStatus extends Component<OrganizationNamespaceApprovalStatusSignature> {
   @service declare intl: IntlService;
   @service declare me: MeService;
+  @service declare analytics: AnalyticsService;
   @service('notifications') declare notify: NotificationService;
 
   @tracked isApprovingNamespace = false;
@@ -39,10 +40,13 @@ export default class OrganizationNamespaceApprovalStatus extends Component<Organ
 
       this.notify.success(this.intl.t('namespaceApproved'));
 
-      triggerAnalytics(
-        'feature',
-        ENV.csb['namespaceAdded'] as CsbAnalyticsFeatureData
-      );
+      this.analytics.track({
+        name: 'ORGANIZATION_NAMESPACE_EVENT',
+        properties: {
+          feature: 'approve_namespace',
+          namespaceId: ns.id,
+        },
+      });
 
       this.isApprovingNamespace = false;
     } catch (e) {

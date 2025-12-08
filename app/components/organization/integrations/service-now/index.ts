@@ -12,10 +12,10 @@ import serviceNowValidation from './validator';
 import ENUMS from 'irene/enums';
 import parseError from 'irene/utils/parse-error';
 import ENV from 'irene/config/environment';
-import triggerAnalytics from 'irene/utils/trigger-analytics';
 import type IreneAjaxService from 'irene/services/ajax';
 import type OrganizationService from 'irene/services/organization';
 import type UserModel from 'irene/models/user';
+import type AnalyticsService from 'irene/services/analytics';
 import type { AjaxError } from 'irene/services/ajax';
 
 type ServiceNowIntegrationFields = {
@@ -53,6 +53,7 @@ export default class OrganizationIntegrationsServiceNowComponent extends Compone
   @service declare intl: IntlService;
   @service declare ajax: IreneAjaxService;
   @service declare organization: OrganizationService;
+  @service declare analytics: AnalyticsService;
   @service('notifications') declare notify: NotificationService;
 
   tPleaseTryAgain: string;
@@ -224,10 +225,12 @@ export default class OrganizationIntegrationsServiceNowComponent extends Compone
 
       this.notify.success(this.tServiceNowIntegrated);
 
-      triggerAnalytics(
-        'feature',
-        ENV.csb['integrateServiceNow'] as CsbAnalyticsFeatureData
-      );
+      this.analytics.track({
+        name: 'INTEGRATION_INITIATED_EVENT',
+        properties: {
+          feature: 'service_now_integration_completed',
+        },
+      });
     } catch (err) {
       const error = err as AdapterError;
       const errorKeys = Object.keys(error.payload);

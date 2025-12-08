@@ -8,8 +8,6 @@ import Service from '@ember/service';
 import { setupMirage } from 'ember-cli-mirage/test-support';
 import { Response } from 'miragejs';
 
-class LoggerStub extends Service {}
-
 class NotificationStub extends Service {}
 
 module(
@@ -20,7 +18,6 @@ module(
     setupIntl(hooks, 'en');
 
     hooks.beforeEach(async function () {
-      this.owner.register('service:rollbar', LoggerStub);
       this.owner.register('service:notifications', NotificationStub);
     });
 

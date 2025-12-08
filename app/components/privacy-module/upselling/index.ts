@@ -8,10 +8,12 @@ import type IntlService from 'ember-intl/services/intl';
 
 import parseError from 'irene/utils/parse-error';
 import type IreneAjaxService from 'irene/services/ajax';
+import type AnalyticsService from 'irene/services/analytics';
 
 export default class PrivacyModuleUpsellingComponent extends Component {
   @service declare intl: IntlService;
   @service declare ajax: IreneAjaxService;
+  @service declare analytics: AnalyticsService;
   @service('notifications') declare notify: NotificationService;
   @service('browser/window') declare window: Window;
 
@@ -54,6 +56,13 @@ export default class PrivacyModuleUpsellingComponent extends Component {
       await waitForPromise(this.ajax.post(this.CONTACT_SUPPORT_ENDPOINT));
 
       this.window.localStorage.setItem('privacyRequest', 'true');
+
+      this.analytics.track({
+        name: 'FEATURE_REQUEST_EVENT',
+        properties: {
+          feature: 'privacy_module',
+        },
+      });
 
       this.hasContactedSupport = true;
     } catch (err) {

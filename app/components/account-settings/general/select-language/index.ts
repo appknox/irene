@@ -8,9 +8,10 @@ import type Store from '@ember-data/store';
 
 import ENV from 'irene/config/environment';
 import parseError from 'irene/utils/parse-error';
+import { buildURLEncodedFormData, type AjaxError } from 'irene/services/ajax';
 import type DatetimeService from 'irene/services/datetime';
 import type IreneAjaxService from 'irene/services/ajax';
-import { buildURLEncodedFormData, type AjaxError } from 'irene/services/ajax';
+import type { SessionService } from 'irene/adapters/auth-base';
 
 const localeStrings = {
   en: 'English',
@@ -23,7 +24,7 @@ export default class AccountSettingsGeneralSelectLanguageComponent extends Compo
   @service declare intl: IntlService;
   @service declare ajax: IreneAjaxService;
   @service declare datetime: DatetimeService;
-  @service declare session: any;
+  @service declare session: SessionService;
   @service declare store: Store;
   @service('notifications') declare notify: NotificationService;
 

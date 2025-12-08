@@ -1,18 +1,18 @@
 import Component from '@glimmer/component';
-import { inject as service } from '@ember/service';
+import { tracked } from '@glimmer/tracking';
+import { service } from '@ember/service';
 import { action } from '@ember/object';
 import { capitalize } from '@ember/string';
 import { task } from 'ember-concurrency';
-import ENV from 'irene/config/environment';
-import triggerAnalytics from 'irene/utils/trigger-analytics';
-import { tracked } from '@glimmer/tracking';
+import { waitForPromise } from '@ember/test-waiters';
 import IntlService from 'ember-intl/services/intl';
 import Store from '@ember-data/store';
-import RealtimeService from 'irene/services/realtime';
-import MeService from 'irene/services/me';
-import OrganizationTeamProjectModel from 'irene/models/organization-team-project';
-import OrganizationTeamModel from 'irene/models/organization-team';
-import { waitForPromise } from '@ember/test-waiters';
+
+import type RealtimeService from 'irene/services/realtime';
+import type MeService from 'irene/services/me';
+import type AnalyticsService from 'irene/services/analytics';
+import type OrganizationTeamProjectModel from 'irene/models/organization-team-project';
+import type OrganizationTeamModel from 'irene/models/organization-team';
 
 export interface OrganizationProjectOverviewComponentSignature {
   Args: {
@@ -29,6 +29,7 @@ export default class OrganizationProjectOverview extends Component<OrganizationP
   @service('notifications') declare notify: NotificationService;
   @service declare me: MeService;
   @service declare realtime: RealtimeService;
+  @service declare analytics: AnalyticsService;
 
   @tracked showRemoveProjectConfirm = false;
   @tracked isRemovingProject = false;
@@ -59,10 +60,14 @@ export default class OrganizationProjectOverview extends Component<OrganizationP
 
       this.notify.success(this.intl.t('projectRemoved'));
 
-      triggerAnalytics(
-        'feature',
-        ENV.csb['teamProjectRemove'] as CsbAnalyticsFeatureData
-      );
+      this.analytics.track({
+        name: 'ORGANIZATION_TEAM_EVENT',
+        properties: {
+          feature: 'remove_project_from_team',
+          teamId: team.id,
+          projectId: prj.id,
+        },
+      });
 
       this.showRemoveProjectConfirm = false;
       this.isRemovingProject = false;

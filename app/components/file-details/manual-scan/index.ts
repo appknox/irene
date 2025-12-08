@@ -6,12 +6,12 @@ import { isEmpty } from '@ember/utils';
 import type Store from '@ember-data/store';
 import type IntlService from 'ember-intl/services/intl';
 
-import triggerAnalytics from 'irene/utils/trigger-analytics';
 import ENV from 'irene/config/environment';
 import type FileModel from 'irene/models/file';
 import type ManualscanModel from 'irene/models/manualscan';
 import type OrganizationService from 'irene/services/organization';
 import type IreneAjaxService from 'irene/services/ajax';
+import type AnalyticsService from 'irene/services/analytics';
 import type { AjaxError } from 'irene/services/ajax';
 import type FileRiskModel from 'irene/models/file-risk';
 
@@ -29,6 +29,7 @@ export default class FileDetailsManualScanComponent extends Component<FileDetail
   @service declare ajax: IreneAjaxService;
   @service declare organization: OrganizationService;
   @service declare store: Store;
+  @service declare analytics: AnalyticsService;
   @service('notifications') declare notify: NotificationService;
 
   @tracked manualscan: ManualscanModel | null = null;
@@ -157,10 +158,14 @@ export default class FileDetailsManualScanComponent extends Component<FileDetail
         data: JSON.stringify(data),
       });
 
-      triggerAnalytics(
-        'feature',
-        ENV.csb['requestManualScan'] as CsbAnalyticsFeatureData
-      );
+      this.analytics.track({
+        name: 'MANUAL_SCAN_REQUESTED_EVENT',
+        properties: {
+          feature: 'manual_scan_requested',
+          fileId: this.args.file.id,
+          projectId: this.args.file.project?.get('id'),
+        },
+      });
 
       this.notify.info(tManualRequested);
 

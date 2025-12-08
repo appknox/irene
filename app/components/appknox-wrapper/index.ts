@@ -11,6 +11,7 @@ import type MeService from 'irene/services/me';
 import type IntegrationService from 'irene/services/integration';
 import type OrganizationService from 'irene/services/organization';
 import type ConfigurationService from 'irene/services/configuration';
+import type { SessionService } from 'irene/adapters/auth-base';
 import type { MenuItem } from '../side-nav';
 
 export interface AppknoxWrapperSignature {
@@ -24,7 +25,7 @@ export interface AppknoxWrapperSignature {
 }
 
 export default class AppknoxWrapperComponent extends Component<AppknoxWrapperSignature> {
-  @service declare session: any;
+  @service declare session: SessionService;
   @service declare me: MeService;
   @service declare intl: IntlService;
   @service declare router: RouterService;

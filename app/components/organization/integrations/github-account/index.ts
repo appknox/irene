@@ -5,10 +5,9 @@ import { action } from '@ember/object';
 import { task } from 'ember-concurrency';
 import type IntlService from 'ember-intl/services/intl';
 
-import triggerAnalytics from 'irene/utils/trigger-analytics';
-import ENV from 'irene/config/environment';
 import type IreneAjaxService from 'irene/services/ajax';
 import type OrganizationService from 'irene/services/organization';
+import type AnalyticsService from 'irene/services/analytics';
 import type { AjaxError } from 'irene/services/ajax';
 import type UserModel from 'irene/models/user';
 
@@ -36,6 +35,7 @@ export interface OrganizationIntegrationsGithubAccountSignature {
 export default class OrganizationIntegrationsGithubAccountComponent extends Component<OrganizationIntegrationsGithubAccountSignature> {
   @service declare intl: IntlService;
   @service declare ajax: IreneAjaxService;
+  @service declare analytics: AnalyticsService;
   @service('notifications') declare notify: NotificationService;
   @service declare organization: OrganizationService;
 
@@ -100,10 +100,12 @@ export default class OrganizationIntegrationsGithubAccountComponent extends Comp
 
   integrateGithub = task(async () => {
     try {
-      triggerAnalytics(
-        'feature',
-        ENV.csb['integrateGithub'] as CsbAnalyticsFeatureData
-      );
+      this.analytics.track({
+        name: 'INTEGRATION_INITIATED_EVENT',
+        properties: {
+          feature: 'github_integration_initiated',
+        },
+      });
 
       const data = await this.redirectAPI.perform();
 

@@ -1,17 +1,17 @@
+// eslint-disable-next-line ember/use-ember-data-rfc-395-imports
+import DS from 'ember-data';
 import Component from '@glimmer/component';
-import { inject as service } from '@ember/service';
+import { service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
 import { action } from '@ember/object';
 import { task } from 'ember-concurrency';
-import IntlService from 'ember-intl/services/intl';
-import Store from '@ember-data/store';
-import RouterService from '@ember/routing/router-service';
-import MeService from 'irene/services/me';
-import ENV from 'irene/config/environment';
-import triggerAnalytics from 'irene/utils/trigger-analytics';
-import OrganizationNamespaceModel from 'irene/models/organization-namespace';
-// eslint-disable-next-line ember/use-ember-data-rfc-395-imports
-import DS from 'ember-data';
+import type IntlService from 'ember-intl/services/intl';
+import type Store from '@ember-data/store';
+import type RouterService from '@ember/routing/router-service';
+
+import type MeService from 'irene/services/me';
+import type OrganizationNamespaceModel from 'irene/models/organization-namespace';
+import type AnalyticsService from 'irene/services/analytics';
 
 export interface OrganizationNamespaceQueryParams {
   namespaceLimit: number;
@@ -38,6 +38,7 @@ export default class OrganizationNamespaceComponent extends Component<Organizati
   @service('notifications') declare notify: NotificationService;
   @service declare store: Store;
   @service declare router: RouterService;
+  @service declare analytics: AnalyticsService;
 
   @tracked showRejectNamespaceConfirm = false;
   @tracked selectedNamespace: OrganizationNamespaceModel | null = null;
@@ -154,10 +155,14 @@ export default class OrganizationNamespaceComponent extends Component<Organizati
       await namespace?.save();
 
       this.notify.success(this.intl.t('namespaceRejected'));
-      triggerAnalytics(
-        'feature',
-        ENV.csb['namespaceRejected'] as CsbAnalyticsFeatureData
-      );
+
+      this.analytics.track({
+        name: 'ORGANIZATION_NAMESPACE_EVENT',
+        properties: {
+          feature: 'reject_namespace',
+          namespaceId: namespace?.id,
+        },
+      });
 
       this.showRejectNamespaceConfirm = false;
     } catch (e) {

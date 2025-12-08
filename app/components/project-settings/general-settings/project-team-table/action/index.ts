@@ -1,19 +1,18 @@
 import Component from '@glimmer/component';
-import { inject as service } from '@ember/service';
+import { service } from '@ember/service';
 import { task } from 'ember-concurrency';
 import { tracked } from '@glimmer/tracking';
-import Store from '@ember-data/store';
 import { action } from '@ember/object';
-import IntlService from 'ember-intl/services/intl';
 import { waitForPromise } from '@ember/test-waiters';
+import type Store from '@ember-data/store';
+import type IntlService from 'ember-intl/services/intl';
 
-import ENV from 'irene/config/environment';
-import ProjectTeamModel from 'irene/models/project-team';
-import MeService from 'irene/services/me';
-import RealtimeService from 'irene/services/realtime';
-import ProjectModel from 'irene/models/project';
-import triggerAnalytics from 'irene/utils/trigger-analytics';
 import parseError from 'irene/utils/parse-error';
+import type ProjectTeamModel from 'irene/models/project-team';
+import type MeService from 'irene/services/me';
+import type RealtimeService from 'irene/services/realtime';
+import type ProjectModel from 'irene/models/project';
+import type AnalyticsService from 'irene/services/analytics';
 
 interface ProjectSettingsGeneralSettingsProjectTeamTableActionSignature {
   Args: {
@@ -29,6 +28,7 @@ export default class ProjectSettingsGeneralSettingsProjectTeamTableActionCompone
   @service('notifications') declare notify: NotificationService;
   @service declare realtime: RealtimeService;
   @service declare intl: IntlService;
+  @service declare analytics: AnalyticsService;
 
   @tracked showRemoveTeamConfirm = false;
 
@@ -79,10 +79,14 @@ export default class ProjectSettingsGeneralSettingsProjectTeamTableActionCompone
       this.store.unloadRecord(this.team as ProjectTeamModel);
 
       this.notify.success(this.tTeamRemoved);
-      triggerAnalytics(
-        'feature',
-        ENV.csb['projectTeamRemove'] as CsbAnalyticsData
-      );
+      this.analytics.track({
+        name: 'PROJECT_TEAM_EVENT',
+        properties: {
+          feature: 'remove_team',
+          teamId: this.team?.id,
+          projectId: this.project?.id,
+        },
+      });
 
       this.showRemoveTeamConfirm = false;
 

@@ -7,6 +7,7 @@ import ENV from 'irene/config/environment';
 import parseError from 'irene/utils/parse-error';
 import { getB64Token } from 'irene/utils/b64-encode-unicode';
 import type IreneAjaxService from 'irene/services/ajax';
+import type { SessionService } from 'irene/adapters/auth-base';
 
 interface OidcSsoCallbackParams {
   code?: string;
@@ -29,7 +30,7 @@ interface OidcSsoCallbackResponse {
 }
 
 export default class SsoOidcRedirectRoute extends Route {
-  @service declare session: any;
+  @service declare session: SessionService;
   @service declare router: RouterService;
   @service declare ajax: IreneAjaxService;
   @service declare intl: IntlService;
