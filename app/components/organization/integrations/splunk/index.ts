@@ -11,9 +11,9 @@ import type IntlService from 'ember-intl/services/intl';
 import splunkValidation from './validator';
 import parseError from 'irene/utils/parse-error';
 import ENV from 'irene/config/environment';
-import triggerAnalytics from 'irene/utils/trigger-analytics';
 import type IreneAjaxService from 'irene/services/ajax';
 import type OrganizationService from 'irene/services/organization';
+import type AnalyticsService from 'irene/services/analytics';
 import type UserModel from 'irene/models/user';
 import type { AjaxError } from 'irene/services/ajax';
 
@@ -65,6 +65,7 @@ export default class OrganizationIntegrationsSplunkComponent extends Component<O
   @service declare intl: IntlService;
   @service declare ajax: IreneAjaxService;
   @service declare organization: OrganizationService;
+  @service declare analytics: AnalyticsService;
   @service('notifications') declare notify: NotificationService;
 
   tPleaseTryAgain: string;
@@ -276,10 +277,12 @@ export default class OrganizationIntegrationsSplunkComponent extends Component<O
   async completeIntegration() {
     await this.integrateSplunk.perform(this.changeset);
 
-    triggerAnalytics(
-      'feature',
-      ENV.csb['integrateSplunk'] as CsbAnalyticsFeatureData
-    );
+    this.analytics.track({
+      name: 'INTEGRATION_INITIATED_EVENT',
+      properties: {
+        feature: 'splunk_integration_completed',
+      },
+    });
 
     this.isSplunkIntegrated = true;
     this.checkSplunkIntegration.perform();

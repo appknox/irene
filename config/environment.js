@@ -1,11 +1,8 @@
 const possibleENVS = [
   'IRENE_API_HOST',
   'IRENE_SHOW_LICENSE',
-  'IRENE_ENABLE_HOTJAR',
   'IRENE_ENABLE_PENDO',
-  'IRENE_ENABLE_CSB',
   'IRENE_ENABLE_MARKETPLACE',
-  'IRENE_ENABLE_ROLLBAR',
   'IRENE_POSTHOG_API_KEY',
   'IRENE_POSTHOG_API_HOST',
   'ENTERPRISE',
@@ -21,11 +18,8 @@ const ENVHandlerCONST = {
   defaults: {
     IRENE_API_HOST: 'https://api.appknox.com',
     IRENE_SHOW_LICENSE: false,
-    IRENE_ENABLE_HOTJAR: false,
     IRENE_ENABLE_PENDO: false,
-    IRENE_ENABLE_CSB: false,
     IRENE_ENABLE_MARKETPLACE: false,
-    IRENE_ENABLE_ROLLBAR: false,
     IRENE_POSTHOG_API_KEY: '',
     IRENE_POSTHOG_API_HOST: '',
     ENTERPRISE: false,
@@ -208,15 +202,10 @@ module.exports = function (environment) {
     locationType: 'history',
     modulePrefix: 'irene',
     environment: environment,
-    enableHotjar: handler.getValueForPlugin('IRENE_ENABLE_HOTJAR'),
     enablePendo: handler.getValueForPlugin('IRENE_ENABLE_PENDO'),
-    enableCSB: handler.getValueForPlugin('IRENE_ENABLE_CSB'),
     enableMarketplace: handler.getValueForPlugin('IRENE_ENABLE_MARKETPLACE'),
     posthogApiKey: handler.getEnv('IRENE_POSTHOG_API_KEY'),
     posthogApiHost: handler.getEnv('IRENE_POSTHOG_API_HOST'),
-    emberRollbarClient: {
-      enabled: handler.getValueForPlugin('IRENE_ENABLE_ROLLBAR'),
-    },
 
     notifications: {
       autoClear: true,
@@ -344,223 +333,6 @@ module.exports = function (environment) {
       amAppVersions: 'v2/am_app_versions',
       userVaNotificationPref: 'nf_email_notification_preference',
     },
-    csb: {
-      userLoggedIn: {
-        feature: 'Log In',
-        module: 'Navigation',
-        product: 'Appknox',
-      },
-      clickProjectCard: {
-        feature: 'Project Card',
-        module: 'Projects',
-        product: 'Appknox',
-      },
-      reportDownload: {
-        feature: 'Report Download',
-        module: 'Security',
-        product: 'Appknox',
-      },
-      dynamicScanBtnClick: {
-        feature: 'Dynamic Scan Button',
-        module: 'Security',
-        product: 'Appknox',
-      },
-      runDynamicScan: {
-        feature: 'Dynamic Scan Run',
-        module: 'Security',
-        product: 'Appknox',
-      },
-      apiScanBtnClick: {
-        feature: 'API Scan Button',
-        module: 'Security',
-        product: 'Appknox',
-      },
-      runAPIScan: {
-        feature: 'API Scan Run',
-        module: 'Security',
-        product: 'Appknox',
-      },
-      manualScanBtnClick: {
-        feature: 'Manual Scan Button',
-        module: 'Security',
-        product: 'Appknox',
-      },
-      requestManualScan: {
-        feature: 'Manual Scan Request',
-        module: 'Security',
-        product: 'Appknox',
-      },
-      editAnalysis: {
-        feature: 'Edit Analysis',
-        module: 'Security',
-        product: 'Appknox',
-      },
-      addAPIEndpoints: {
-        feature: 'Add API Endpoints',
-        module: 'Security',
-        product: 'Appknox',
-      },
-      navigateToSettings: {
-        feature: 'Project Settings',
-        module: 'Setup',
-        product: 'Appknox',
-      },
-      navigateToAllScans: {
-        feature: 'All Scans',
-        module: 'Security',
-        product: 'Appknox',
-      },
-      naigateToCompareScans: {
-        feature: 'Compare Scans',
-        module: 'Security',
-        product: 'Appknox',
-      },
-      navigateToProjects: {
-        feature: 'Projects',
-        module: 'Navigation',
-        product: 'Appknox',
-      },
-      navigateToAnalytics: {
-        feature: 'Analytics',
-        module: 'Navigation',
-        product: 'Appknox',
-      },
-      navigateToOrganization: {
-        feature: 'Organization',
-        module: 'Navigation',
-        product: 'Appknox',
-      },
-      navigateToOrgSettings: {
-        feature: 'Organization Settings',
-        module: 'Organization',
-        product: 'Appknox',
-      },
-      navigateToAccountSettings: {
-        feature: 'Account Settings',
-        module: 'Navigation',
-        product: 'Appknox',
-      },
-      navigateToMarketPlace: {
-        feature: 'Marketplace',
-        module: 'Navigation',
-        product: 'Appknox',
-      },
-      navigateToBilling: {
-        feature: 'Billing',
-        module: 'Navigation',
-        product: 'Appknox',
-      },
-      createTeam: {
-        feature: 'Create Team',
-        module: 'Security',
-        product: 'Appknox',
-      },
-      namespaceAdded: {
-        feature: 'Namespace Add',
-        module: 'Security',
-        product: 'Appknox',
-      },
-      namespaceRejected: {
-        feature: 'Namespace Reject',
-        module: 'Security',
-        product: 'Appknox',
-      },
-      applicationUpload: {
-        feature: 'Application Upload',
-        module: 'Security',
-        product: 'Appknox',
-      },
-      integrateGithub: {
-        feature: 'Integrate Github',
-        module: 'Report',
-        product: 'Appknox',
-      },
-      integrateJIRA: {
-        feature: 'Integrate JIRA',
-        module: 'Report',
-        product: 'Appknox',
-      },
-      integrateServiceNow: {
-        feature: 'Integrate ServiceNow',
-        module: 'Report',
-        product: 'Appknox',
-      },
-      integrateSplunk: {
-        feature: 'Integrate Splunk',
-        module: 'Report',
-        product: 'Appknox',
-      },
-      integrateSlack: {
-        feature: 'Integrate Slack',
-        module: 'Report',
-        product: 'Appknox',
-      },
-      changePassword: {
-        feature: 'Change Password',
-        module: 'Setup',
-        product: 'Appknox',
-      },
-      inviteResend: {
-        feature: 'Invitation Resend',
-        module: 'Security',
-        product: 'Appknox',
-      },
-      inviteDelete: {
-        feature: 'Invitation Delete',
-        module: 'Security',
-        product: 'Appknox',
-      },
-      teamProjectAdd: {
-        feature: 'Add Team Project',
-        module: 'Security',
-        product: 'Appknox',
-      },
-      teamProjectRemove: {
-        feature: 'Remove Team Project',
-        module: 'Security',
-        product: 'Appknox',
-      },
-      updateOrgName: {
-        feature: 'Update Organization Name',
-        module: 'Setup',
-        product: 'Appknox',
-      },
-      addTeamMember: {
-        feature: 'Add Team Member',
-        module: 'Security',
-        product: 'Appknox',
-      },
-      inviteMember: {
-        feature: 'Invite Member',
-        module: 'Security',
-        product: 'Appknox',
-      },
-      projectCollaboratorRemove: {
-        feature: 'Remove Project Collaborator',
-        module: 'Security',
-        product: 'Appknox',
-      },
-      projectTeamRemove: {
-        feature: 'Remove Project Team',
-        module: 'Security',
-        product: 'Appknox',
-      },
-      enableProxy: {
-        feature: 'Enable Proxy',
-        module: 'Setup',
-        product: 'Appknox',
-      },
-      disableProxy: {
-        feature: 'Disable Proxy',
-        module: 'Setup',
-        product: 'Appknox',
-      },
-      changeProxySettings: {
-        feature: 'Change Proxy Settings',
-        module: 'Setup',
-        product: 'Appknox',
-      },
-    },
     whitelabel: {
       theme: 'dark',
       enabled: handler.getBoolean('WHITELABEL_ENABLED'),
@@ -598,7 +370,6 @@ module.exports = function (environment) {
   }
 
   if (environment === 'production') {
-    ENV.emberRollbarClient.accessToken = '4381303f93734918966ff4e1b028cee5';
     ENV['ember-cli-mirage'] = {
       enabled: false,
     };

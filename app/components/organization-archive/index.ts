@@ -11,6 +11,7 @@ import type Store from '@ember-data/store';
 import { OrganizationArchiveType } from 'irene/models/organization-archive';
 import type OrganizationService from 'irene/services/organization';
 import type RealtimeService from 'irene/services/realtime';
+import type AnalyticsService from 'irene/services/analytics';
 import type { CalendarOnSelectFunc, RangeDateObject } from '../ak-date-picker';
 
 export interface ArchiveListRef {
@@ -28,6 +29,7 @@ export default class OrganizationArchiveComponent extends Component {
   @service declare organization: OrganizationService;
   @service declare store: Store;
   @service declare realtime: RealtimeService;
+  @service declare analytics: AnalyticsService;
   @service('notifications') declare notify: NotificationService;
 
   @tracked startDate: Date | null = null;
@@ -155,6 +157,13 @@ export default class OrganizationArchiveComponent extends Component {
       this.realtime.incrementProperty('OrganizationArchiveCounter');
 
       this.notify.success(this.intl.t('organizationArchiveSuccess'));
+
+      this.analytics.track({
+        name: 'ORGANIZATION_ARCHIVE_EVENT',
+        properties: {
+          feature: 'organization_archive_excel',
+        },
+      });
     } catch (err) {
       this.notify.error(this.intl.t('organizationArchiveFailed'));
     }

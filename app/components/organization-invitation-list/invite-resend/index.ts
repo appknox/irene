@@ -1,15 +1,14 @@
 import Component from '@glimmer/component';
 import { tracked } from '@glimmer/tracking';
-import { inject as service } from '@ember/service';
+import { service } from '@ember/service';
 import { action } from '@ember/object';
 import { task } from 'ember-concurrency';
-import IntlService from 'ember-intl/services/intl';
 import { waitForPromise } from '@ember/test-waiters';
+import type IntlService from 'ember-intl/services/intl';
 
-import ENV from 'irene/config/environment';
-import triggerAnalytics from 'irene/utils/trigger-analytics';
-import OrganizationInvitationModel from 'irene/models/organization-invitation';
-import OrganizationTeamInvitationModel from 'irene/models/organization-team-invitation';
+import type OrganizationInvitationModel from 'irene/models/organization-invitation';
+import type OrganizationTeamInvitationModel from 'irene/models/organization-team-invitation';
+import type AnalyticsService from 'irene/services/analytics';
 
 interface OrganizationInvitationListInviteResendSignature {
   Args: {
@@ -22,6 +21,7 @@ interface OrganizationInvitationListInviteResendSignature {
 
 export default class OrganizationInvitationListInviteResend extends Component<OrganizationInvitationListInviteResendSignature> {
   @service declare intl: IntlService;
+  @service declare analytics: AnalyticsService;
   @service('notifications') declare notify: NotificationService;
 
   @tracked isResendingInvitation = false;
@@ -42,10 +42,14 @@ export default class OrganizationInvitationListInviteResend extends Component<Or
       await waitForPromise(invite.resend());
 
       this.notify.success(this.intl.t('invitationReSent'));
-      triggerAnalytics(
-        'feature',
-        ENV.csb['inviteResend'] as CsbAnalyticsFeatureData
-      );
+
+      this.analytics.track({
+        name: 'ORGANIZATION_INVITE_EVENT',
+        properties: {
+          feature: 'resend_invitation',
+          invitationId: invite.id,
+        },
+      });
 
       this.showResendInvitationConfirmBox = false;
       this.isResendingInvitation = false;

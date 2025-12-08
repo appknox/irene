@@ -9,6 +9,7 @@ import ENV from 'irene/config/environment';
 import type SubscriptionModel from 'irene/models/subscription';
 import type IreneAjaxService from 'irene/services/ajax';
 import type { AjaxError } from 'irene/services/ajax';
+import type AnalyticsService from 'irene/services/analytics';
 
 interface OrganizationBillingSubscriptionSignature {
   Args: {
@@ -19,6 +20,7 @@ interface OrganizationBillingSubscriptionSignature {
 export default class OrganizationBillingSubscriptionComponent extends Component<OrganizationBillingSubscriptionSignature> {
   @service declare intl: IntlService;
   @service declare ajax: IreneAjaxService;
+  @service declare analytics: AnalyticsService;
   @service('notifications') declare notify: NotificationService;
 
   @tracked showCancelSubscriptionConfirmBox = false;
@@ -75,6 +77,13 @@ export default class OrganizationBillingSubscriptionComponent extends Component<
 
         this.closeCancelSubscriptionConfirmBox();
       }
+
+      this.analytics.track({
+        name: 'ORG_SUBSCRIPTION_CANCEL_EVENT',
+        properties: {
+          feature: 'subscription_cancellation',
+        },
+      });
     } catch (err) {
       const error = err as AjaxError;
 

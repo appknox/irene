@@ -1,10 +1,10 @@
 import Component from '@glimmer/component';
 import { tracked } from '@glimmer/tracking';
 import { action } from '@ember/object';
-import { inject as service } from '@ember/service';
-import IntlService from 'ember-intl/services/intl';
+import { service } from '@ember/service';
 import { task } from 'ember-concurrency';
-import Store from '@ember-data/store';
+import type IntlService from 'ember-intl/services/intl';
+import type Store from '@ember-data/store';
 
 import lookupValidator from 'ember-changeset-validations';
 import { Changeset } from 'ember-changeset';
@@ -12,10 +12,11 @@ import { BufferedChangeset } from 'ember-changeset/types';
 import { validatePresence } from 'ember-changeset-validations/validators';
 import { waitForPromise } from '@ember/test-waiters';
 
-import { validateStoreDomain, validateStorePathname } from './validator';
 import parseError from 'irene/utils/parse-error';
-import UploadAppService from 'irene/services/upload-app';
-import UploadAppUrlModel from 'irene/models/upload-app-url';
+import { validateStoreDomain, validateStorePathname } from './validator';
+import type AnalyticsService from 'irene/services/analytics';
+import type UploadAppService from 'irene/services/upload-app';
+import type UploadAppUrlModel from 'irene/models/upload-app-url';
 
 type ChangesetBufferProps = BufferedChangeset & {
   url: string;
@@ -29,6 +30,7 @@ export default class UploadAppViaLinkComponent extends Component {
   @service declare store: Store;
   @service declare intl: IntlService;
   @service declare uploadApp: UploadAppService;
+  @service declare analytics: AnalyticsService;
   @service('notifications') declare notify: NotificationService;
 
   @tracked showLinkUploadModal = false;
@@ -74,6 +76,15 @@ export default class UploadAppViaLinkComponent extends Component {
       )) as UploadAppUrlModel;
 
       this.uploadApp.submissionSet.add(uploadedApp.id);
+
+      this.analytics.track({
+        name: 'UPLOAD_APP_EVENT',
+        properties: {
+          feature: 'file_upload_via_link',
+          fileId: uploadedApp.id,
+          fileUrl: uploadedApp.url,
+        },
+      });
 
       this.closeLinkUploadModal();
       this.uploadApp.openSubsPopover();

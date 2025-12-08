@@ -1,14 +1,16 @@
 import Component from '@glimmer/component';
-import { inject as service } from '@ember/service';
+import { service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
 import { action } from '@ember/object';
 import { task } from 'ember-concurrency';
-import MeService from 'irene/services/me';
-import IntlService from 'ember-intl/services/intl';
-import OrganizationTeamModel from 'irene/models/organization-team';
-import OrganizationModel from 'irene/models/organization';
-import { ActiveActionDetailsType } from '../active-action';
 import { waitForPromise } from '@ember/test-waiters';
+import type IntlService from 'ember-intl/services/intl';
+
+import type OrganizationTeamModel from 'irene/models/organization-team';
+import type OrganizationModel from 'irene/models/organization';
+import type MeService from 'irene/services/me';
+import type AnalyticsService from 'irene/services/analytics';
+import { ActiveActionDetailsType } from '../active-action';
 
 export interface OrganizationTeamDetailsTeamInfoComponentSignature {
   Args: {
@@ -23,6 +25,7 @@ export interface OrganizationTeamDetailsTeamInfoComponentSignature {
 export default class OrganizationTeamDetailsTeamInfo extends Component<OrganizationTeamDetailsTeamInfoComponentSignature> {
   @service declare intl: IntlService;
   @service declare me: MeService;
+  @service declare analytics: AnalyticsService;
   @service('notifications') declare notify: NotificationService;
 
   @tracked showTeamDeleteConfirm = false;
@@ -61,6 +64,15 @@ export default class OrganizationTeamDetailsTeamInfo extends Component<Organizat
       this.notify.success(
         `${this.args.team.name} ${this.intl.t('teamDeleted')}`
       );
+
+      this.analytics.track({
+        name: 'ORGANIZATION_TEAM_EVENT',
+        properties: {
+          action: 'team_deleted',
+          team_id: t.id,
+          team_name: t.name,
+        },
+      });
 
       // reload organization to update team count
       await waitForPromise(this.args.organization.reload());

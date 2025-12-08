@@ -12,7 +12,6 @@ export default class HomePageComponent extends Component {
   @service declare intl: IntlService;
   @service declare organization: OrganizationService;
   @service declare userAuth: UserAuthService;
-  @service declare session: any;
   @service declare whitelabel: WhitelabelService;
   @service declare configuration: ConfigurationService;
 

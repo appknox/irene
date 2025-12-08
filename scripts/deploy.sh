@@ -21,11 +21,5 @@ then
   set +o allexport
 fi
 
-curl https://api.rollbar.com/api/1/deploy/ \
-  -F access_token=$ROLLBAR_ACCESS_TOKEN \
-  -F environment=$ENVIRONMENT \
-  -F revision=$REVISION \
-  -F local_username=$LOCAL_USERNAME
-
 
 # Also Slack post from here

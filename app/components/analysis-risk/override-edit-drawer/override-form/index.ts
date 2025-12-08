@@ -1,9 +1,9 @@
-import { action } from '@ember/object';
-import { inject as service } from '@ember/service';
 import Component from '@glimmer/component';
+import { action } from '@ember/object';
+import { service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
 import { task } from 'ember-concurrency';
-import IntlService from 'ember-intl/services/intl';
+import type IntlService from 'ember-intl/services/intl';
 
 import { BufferedChangeset } from 'ember-changeset/types';
 import { validatePresence } from 'ember-changeset-validations/validators';
@@ -11,13 +11,12 @@ import lookupValidator from 'ember-changeset-validations';
 import { Changeset } from 'ember-changeset';
 
 import ENUMS from 'irene/enums';
-import ENV from 'irene/config/environment';
 import { riskText } from 'irene/helpers/risk-text';
-import triggerAnalytics from 'irene/utils/trigger-analytics';
 import { AnalysisRiskDataModel, OverrideEditDrawerAppBarData } from '..';
 import { ActiveContentComponent } from '../content';
 import parseError from 'irene/utils/parse-error';
-import AnalysisModel from 'irene/models/analysis';
+import type AnalysisModel from 'irene/models/analysis';
+import type AnalyticsService from 'irene/services/analytics';
 
 type ChangesetBufferProps = BufferedChangeset & {
   risk: number;
@@ -45,6 +44,7 @@ type RiskOverrideCriteria = { label: string; value: string };
 
 export default class AnalysisRiskOverrideEditDrawerOverrideFormComponent extends Component<AnalysisRiskOverrideEditDrawerOverrideFormSignature> {
   @service declare intl: IntlService;
+  @service declare analytics: AnalyticsService;
   @service('notifications') declare notify: NotificationService;
 
   @tracked showOverrideSuccess = false;
@@ -259,10 +259,17 @@ export default class AnalysisRiskOverrideEditDrawerOverrideFormComponent extends
         all
       );
 
-      triggerAnalytics(
-        'feature',
-        ENV.csb['editAnalysis'] as CsbAnalyticsFeatureData
-      );
+      this.analytics.track({
+        name: 'RISK_OVERRIDE_EVENT',
+        properties: {
+          feature: this.isEditingExistingOverride
+            ? 'edit_risk_override'
+            : 'create_risk_override',
+          analysisId: this.dataModel.model.id,
+          overriddenRisk: riskOverride,
+          overrideCriteria: this.changeset?.criteria,
+        },
+      });
 
       if (!this.isDestroyed) {
         this.handleOverrideSuccess();

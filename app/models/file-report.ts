@@ -1,13 +1,16 @@
-import Model, { attr } from '@ember-data/model';
-import { isEmpty } from '@ember/utils';
-import triggerAnalytics from 'irene/utils/trigger-analytics';
-import ENV from 'irene/config/environment';
 import dayjs from 'dayjs';
+import Model, { attr } from '@ember-data/model';
+import { service } from '@ember/service';
+import { isEmpty } from '@ember/utils';
+
+import type AnalyticsService from 'irene/services/analytics';
 
 export type FileReportScanType = 'pdf' | 'xlsx' | 'csv';
 export type FileReportModelName = 'file-report';
 
 export default class FileReportModel extends Model {
+  @service declare analytics: AnalyticsService;
+
   @attr('date')
   declare generatedOn: Date;
 
@@ -48,8 +51,16 @@ export default class FileReportModel extends Model {
   }
 
   getReportByType(type: FileReportScanType) {
-    const analyticsData = ENV.csb['reportDownload'] as CsbAnalyticsFeatureData;
-    triggerAnalytics('feature', analyticsData);
+    const analyticsData = {
+      fileReportId: this.id,
+      fileId: this.fileId,
+      reportType: type,
+    };
+
+    this.analytics.track({
+      name: 'FILE_REPORT_DOWNLOAD_EVENT',
+      properties: analyticsData,
+    });
 
     const adapter = this.store.adapterFor('file-report');
 

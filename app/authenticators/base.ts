@@ -1,7 +1,7 @@
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
 import Base from 'ember-simple-auth/authenticators/base';
-import { inject as service } from '@ember/service';
+import { service } from '@ember/service';
 import RouterService from '@ember/routing/router-service';
 
 import ENV from 'irene/config/environment';
@@ -9,6 +9,7 @@ import OidcService from 'irene/services/oidc';
 import FreshdeskService from 'irene/services/freshdesk';
 import { getB64Token } from 'irene/utils/b64-encode-unicode';
 import type IreneAjaxService from 'irene/services/ajax';
+import type { SessionService } from 'irene/adapters/auth-base';
 
 export interface LoginSuccessDataProps {
   token: string;
@@ -28,7 +29,7 @@ export const processData = (data: LoginSuccessDataProps) => {
 
 export default class BaseAuthenticator extends Base {
   @service declare ajax: IreneAjaxService;
-  @service declare session: any;
+  @service declare session: SessionService;
   @service declare router: RouterService;
   @service('notifications') declare notify: NotificationService;
   @service('browser/window') declare window: Window;

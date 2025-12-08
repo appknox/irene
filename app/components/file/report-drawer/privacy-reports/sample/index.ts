@@ -9,11 +9,13 @@ import type IntlService from 'ember-intl/services/intl';
 import parseError from 'irene/utils/parse-error';
 import type PrivacyReportModel from 'irene/models/privacy-report';
 import type IreneAjaxService from 'irene/services/ajax';
+import type AnalyticsService from 'irene/services/analytics';
 
 export default class FileReportDrawerPrivacyReportsSampleComponent extends Component {
   @service declare ajax: IreneAjaxService;
   @service declare store: Store;
   @service declare intl: IntlService;
+  @service declare analytics: AnalyticsService;
   @service('notifications') declare notify: NotificationService;
   @service('browser/window') declare window: Window;
 
@@ -43,6 +45,13 @@ export default class FileReportDrawerPrivacyReportsSampleComponent extends Compo
       this.window.localStorage.setItem('privacyRequest', 'true');
 
       this.hasContactedSupport = true;
+
+      this.analytics.track({
+        name: 'FEATURE_REQUEST_EVENT',
+        properties: {
+          feature: 'privacy_module',
+        },
+      });
     } catch (err) {
       this.notify.error(parseError(err, this.tPleaseTryAgain));
     }

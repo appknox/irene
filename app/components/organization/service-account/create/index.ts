@@ -12,6 +12,7 @@ import type Store from '@ember-data/store';
 
 import type ServiceAccountModel from 'irene/models/service-account';
 import type ServiceAccountService from 'irene/services/service-account';
+import type AnalyticsService from 'irene/services/analytics';
 import { ServiceAccountType } from 'irene/models/service-account';
 import parseError from 'irene/utils/parse-error';
 
@@ -25,6 +26,7 @@ export default class ServiceAccountCreateComponent extends Component<ServiceAcco
   @service declare intl: IntlService;
   @service declare store: Store;
   @service declare router: RouterService;
+  @service declare analytics: AnalyticsService;
   @service('notifications') declare notify: NotificationService;
 
   @service('service-account')
@@ -100,6 +102,14 @@ export default class ServiceAccountCreateComponent extends Component<ServiceAcco
       );
 
       this.notify.success(this.intl.t('serviceAccountModule.createSuccessMsg'));
+
+      this.analytics.track({
+        name: 'SERVICE_ACCOUNT_CREATE_EVENT',
+        properties: {
+          feature: 'service_account_created',
+          serviceAccountId: serviceAccount.id,
+        },
+      });
     } catch (error) {
       this.notify.error(parseError(error, this.intl.t('pleaseTryAgain')));
     }

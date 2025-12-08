@@ -1,5 +1,4 @@
-import { inject as service } from '@ember/service';
-import { isEmpty } from '@ember/utils';
+import { service } from '@ember/service';
 import Route from '@ember/routing/route';
 import { action } from '@ember/object';
 import { all } from 'rsvp';
@@ -8,13 +7,9 @@ import type Store from '@ember-data/store';
 import type IntlService from 'ember-intl/services/intl';
 import type RouterService from '@ember/routing/router-service';
 
-import { CSBMap } from 'irene/router';
 import ENV from 'irene/config/environment';
-import {
-  registerPostHogOrganization,
-  unregisterPostHog,
-} from 'irene/utils/posthog';
-import triggerAnalytics from 'irene/utils/trigger-analytics';
+import type { SessionService } from 'irene/adapters/auth-base';
+import type AnalyticsService from 'irene/services/analytics';
 import type MeService from 'irene/services/me';
 import type DatetimeService from 'irene/services/datetime';
 import type TrialService from 'irene/services/trial';
@@ -27,12 +22,11 @@ import type UserModel from 'irene/models/user';
 import type LoggerService from 'irene/services/logger';
 
 export default class AuthenticatedRoute extends Route {
-  @service declare session: any;
+  @service declare session: SessionService;
   @service declare intl: IntlService;
   @service declare me: MeService;
   @service declare datetime: DatetimeService;
   @service declare trial: TrialService;
-  @service declare rollbar: any;
   @service declare websocket: WebsocketService;
   @service declare integration: IntegrationService;
   @service declare store: Store;
@@ -41,6 +35,7 @@ export default class AuthenticatedRoute extends Route {
   @service declare configuration: ConfigurationService;
   @service declare skOrganization: SkOrganizationService;
   @service declare logger: LoggerService;
+  @service declare analytics: AnalyticsService;
 
   @service declare router: RouterService;
   @service('browser/window') declare window: Window;
@@ -49,6 +44,10 @@ export default class AuthenticatedRoute extends Route {
     super(properties);
 
     this.monitorLastTransition();
+  }
+
+  get authenticatedUserId() {
+    return this.session.data.authenticated.user_id;
   }
 
   beforeModel(transition: Transition) {
@@ -63,7 +62,7 @@ export default class AuthenticatedRoute extends Route {
   }
 
   async model() {
-    const userId = this.session.data.authenticated.user_id;
+    const userId = this.authenticatedUserId;
 
     await all([
       this.store.findAll('Vulnerability'),
@@ -88,21 +87,8 @@ export default class AuthenticatedRoute extends Route {
 
     const membership = await this.me.getMembership();
 
-    const data = {
-      userId: user.id,
-      userName: user.username,
-      userEmail: user.email,
-      userRole: membership.roleDisplay,
-      lastLoggedIn: membership.lastLoggedIn,
-      accountId: this.org.selected?.id,
-      accountName: company,
-    };
-
-    triggerAnalytics('login', data as CsbAnalyticsLoginData);
-
     await this.integration.configure(user);
 
-    await this.configureRollBar(user);
     await this.configurePendo(user);
 
     this.trial.set('isTrial', user.isTrial);
@@ -115,24 +101,20 @@ export default class AuthenticatedRoute extends Route {
 
     await this.websocket.configure(user);
 
-    registerPostHogOrganization(user, this.org.selected);
-  }
+    this.analytics.registerPostHogOrganization(user, this.org.selected);
 
-  async configureRollBar(user: UserModel) {
-    try {
-      this.rollbar.notifier.configure({
-        payload: {
-          person: {
-            id: user.id,
-            username: user.username,
-            email: user.email,
-          },
-        },
-      });
-    } catch (e) {
-      // eslint-disable-next-line no-console
-      console.log(e);
-    }
+    this.analytics.track({
+      name: 'LOGIN_EVENT',
+      properties: {
+        userId: user.id,
+        userName: user.username,
+        userEmail: user.email,
+        userRole: membership.roleDisplay,
+        lastLoggedIn: membership.lastLoggedIn,
+        accountId: this.org.selected?.id,
+        accountName: company,
+      },
+    });
   }
 
   async configurePendo(user: UserModel) {
@@ -148,27 +130,46 @@ export default class AuthenticatedRoute extends Route {
         },
       });
     } catch (e) {
-      // eslint-disable-next-line no-console
-      console.log(e);
+      this.logger.info('Pendo configure failed', e);
     }
   }
 
   @action
   willTransition(transition: Transition) {
-    const currentRoute = transition.to?.name as keyof typeof CSBMap;
-    const csbDict = CSBMap[currentRoute];
+    try {
+      const routeName =
+        transition.to?.name || transition.to?.localName || 'unknown';
 
-    if (!isEmpty(csbDict)) {
-      triggerAnalytics('feature', csbDict as CsbAnalyticsFeatureData);
+      const params = transition?.to?.params || {};
+      const queryParams = transition?.to?.queryParams ?? {};
+
+      this.analytics.page(routeName, {
+        routeName,
+        params,
+        queryParams,
+      });
+    } catch (err) {
+      this.logger.warn('Analytics: failed to track route transition', err);
     }
   }
 
+  /**
+   * Track logout, unregister analytics, then invalidate session.
+   */
   @action
   invalidateSession() {
-    triggerAnalytics('logout', {} as CsbAnalyticsData);
-    unregisterPostHog();
+    try {
+      this.analytics.track({
+        name: 'LOGOUT_EVENT',
+        properties: {},
+      });
 
-    this.session.invalidate();
+      this.analytics.unregister();
+    } catch (err) {
+      this.logger.warn('analytics: failed to unregister', err);
+    }
+
+    this.session?.invalidate?.();
   }
 
   @action saveTransitionedURL() {
@@ -183,7 +184,7 @@ export default class AuthenticatedRoute extends Route {
      * in the event that the logged in account is switched.
      */
     if (this.session.isAuthenticated) {
-      const sessionKey = this.session.data.authenticated.user_id as number;
+      const sessionKey = this.authenticatedUserId;
       transitionData = { ...transitionData, sessionKey };
     }
 

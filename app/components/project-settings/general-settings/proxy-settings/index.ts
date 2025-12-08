@@ -1,20 +1,20 @@
 import Component from '@glimmer/component';
-import { inject as service } from '@ember/service';
+import { service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
 import { task, waitForProperty } from 'ember-concurrency';
 
 import lookupValidator from 'ember-changeset-validations';
 import Changeset from 'ember-changeset';
 import { BufferedChangeset } from 'ember-changeset/types';
-import Store from '@ember-data/store';
-import IntlService from 'ember-intl/services/intl';
+import type Store from '@ember-data/store';
+import type IntlService from 'ember-intl/services/intl';
 
 import ENV from 'irene/config/environment';
-import ProxySettingValidation from 'irene/validations/proxy-settings';
-import triggerAnalytics from 'irene/utils/trigger-analytics';
-import ProfileModel from 'irene/models/profile';
-import ProxySettingModel from 'irene/models/proxy-setting';
 import parseError from 'irene/utils/parse-error';
+import ProxySettingValidation from 'irene/validations/proxy-settings';
+import type ProfileModel from 'irene/models/profile';
+import type ProxySettingModel from 'irene/models/proxy-setting';
+import type AnalyticsService from 'irene/services/analytics';
 
 type ChangesetBufferProps = Partial<BufferedChangeset> & ProxySettingModel;
 
@@ -28,6 +28,7 @@ export default class ProjectSettingsGeneralSettingsProxySettingsComponent extend
   @service('notifications') declare notify: NotificationService;
   @service declare store: Store;
   @service declare intl: IntlService;
+  @service declare analytics: AnalyticsService;
 
   @tracked currentProxy: ProxySettingModel | null = null;
   @tracked changeset: ChangesetBufferProps | null = null;
@@ -142,10 +143,12 @@ export default class ProjectSettingsGeneralSettingsProxySettingsComponent extend
       if (status) {
         this.notify.success(this.tProxySettingsSaved);
 
-        triggerAnalytics(
-          'feature',
-          ENV.csb['changeProxySettings'] as CsbAnalyticsData
-        );
+        this.analytics.track({
+          name: 'PROXY_SETTINGS_CHANGE_EVENT',
+          properties: {
+            feature: 'save_proxy_settings',
+          },
+        });
       }
     } catch (e) {
       this.notify.error(parseError(e));
@@ -166,17 +169,13 @@ export default class ProjectSettingsGeneralSettingsProxySettingsComponent extend
       if (status) {
         this.notify.info(this.tProxyTurned + statusText.toUpperCase());
 
-        if (checked) {
-          triggerAnalytics(
-            'feature',
-            ENV.csb['enableProxy'] as CsbAnalyticsData
-          );
-        } else {
-          triggerAnalytics(
-            'feature',
-            ENV.csb['disableProxy'] as CsbAnalyticsData
-          );
-        }
+        this.analytics.track({
+          name: 'PROXY_SETTINGS_CHANGE_EVENT',
+          properties: {
+            feature: checked ? 'enable_proxy' : 'disable_proxy',
+            status: checked,
+          },
+        });
       } else if (checked) {
         this.notify.error(String(changeset?.errors?.[0]?.validation?.[0]));
       }

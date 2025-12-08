@@ -1,6 +1,7 @@
 import Route from '@ember/routing/route';
 import RouterService from '@ember/routing/router-service';
-import { inject as service } from '@ember/service';
+import { service } from '@ember/service';
+import type { SessionService } from 'irene/adapters/auth-base';
 
 import ENV from 'irene/config/environment';
 import config from 'irene/config/environment';
@@ -11,7 +12,7 @@ interface Saml2RedirectParams {
 }
 
 export default class Saml2RedirectRoute extends Route {
-  @service declare session: any;
+  @service declare session: SessionService;
   @service declare router: RouterService;
   @service('notifications') declare notify: NotificationService;
 

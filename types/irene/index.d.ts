@@ -1,6 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import Ember from 'ember';
-import { Csb, Module, Product } from 'irene/config/environment';
 
 declare global {
   // Prevents ESLint from "fixing" this via its auto-fix to turn it into a type
@@ -26,41 +25,6 @@ declare global {
   type UnknownFnType = (...args: unknown[]) => void;
 
   type IreneProductVariants = 'appknox' | 'storeknox';
-
-  // Types for the CSB Analytics
-  interface CsbAnalytics {
-    logout: () => void;
-    login: (userId: string, accountId: string) => void;
-    identify: (
-      userId: string,
-      identification: CsbAnalyticsUserIdentificationObject
-    ) => void;
-    feature: (feature: string, module: Module, product: Product) => void;
-  }
-
-  type CsbAnalyticsType = 'feature' | 'login' | 'logout';
-
-  type CsbAnalyticsUserIdentificationObject = {
-    custom_username: string;
-    email: string;
-    account_id: string;
-    custom_Organization: string;
-    custom_role: string;
-    first_name: string;
-  };
-
-  type CsbAnalyticsFeatureData = Csb;
-
-  type CsbAnalyticsLoginData = {
-    userName: string;
-    userEmail: string;
-    accountId: string;
-    accountName: string;
-    userRole: string;
-    userId: string;
-  };
-
-  type CsbAnalyticsData = CsbAnalyticsFeatureData | CsbAnalyticsLoginData;
 
   interface PendoInstance {
     getActiveGuides: () => PendoGuide[];
@@ -97,7 +61,6 @@ declare global {
     fwSettings: { widget_id: string };
     fcSettings: object;
     fcWidgetMessengerConfig: object;
-    analytics?: CsbAnalytics;
     grecaptcha?: { execute: (options: { action: string }) => Promise<string> };
   }
 

@@ -15,8 +15,10 @@ import type {
   SocketHealthMessage,
   SocketInstance,
 } from 'irene/services/websocket';
+
 import type IreneAjaxService from 'irene/services/ajax';
 import type { AjaxError } from 'irene/services/ajax';
+import type { SessionService } from 'irene/adapters/auth-base';
 
 type StatusResponse = {
   data: {
@@ -28,7 +30,7 @@ export default class SystemStatusComponent extends Component {
   @service declare devicefarm: DevicefarmService;
   @service declare websocket: WebsocketService;
   @service declare ajax: IreneAjaxService;
-  @service declare session: any;
+  @service declare session: SessionService;
   @service declare store: Store;
   @service declare intl: IntlService;
 

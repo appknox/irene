@@ -21,10 +21,6 @@ class NotificationsStub extends Service {
   }
 }
 
-class RollbarStub extends Service {
-  critical() {}
-}
-
 module('Integration | Component | upload-app/via-system', function (hooks) {
   setupRenderingTest(hooks);
   setupMirage(hooks);
@@ -36,7 +32,6 @@ module('Integration | Component | upload-app/via-system', function (hooks) {
     await this.owner.lookup('service:organization').load();
 
     this.owner.register('service:notifications', NotificationsStub);
-    this.owner.register('service:rollbar', RollbarStub);
 
     const organization = this.owner.lookup('service:organization');
     const uploadApp = this.server.create('uploadApp').toJSON();

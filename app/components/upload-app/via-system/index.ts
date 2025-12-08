@@ -1,24 +1,24 @@
-import { inject as service } from '@ember/service';
+import { service } from '@ember/service';
 import Component from '@glimmer/component';
-import Store from '@ember-data/store';
-import IntlService from 'ember-intl/services/intl';
 import { task } from 'ember-concurrency';
-import FileQueueService from 'ember-file-upload/services/file-queue';
 import { waitForPromise } from '@ember/test-waiters';
 import { action } from '@ember/object';
+import type Store from '@ember-data/store';
+import type IntlService from 'ember-intl/services/intl';
+import type FileQueueService from 'ember-file-upload/services/file-queue';
 import type { UploadFile } from 'ember-file-upload';
 
-import ENV from 'irene/config/environment';
-import triggerAnalytics from 'irene/utils/trigger-analytics';
-import UploadAppService from 'irene/services/upload-app';
+import type AnalyticsService from 'irene/services/analytics';
+import type UploadAppService from 'irene/services/upload-app';
+import type UploadAppModel from 'irene/models/upload-app';
 
 export default class UploadAppViaSystemComponent extends Component {
   @service declare store: Store;
   @service declare intl: IntlService;
-  @service declare rollbar: any;
   @service('notifications') declare notify: NotificationService;
   @service declare uploadApp: UploadAppService;
   @service declare fileQueue: FileQueueService;
+  @service declare analytics: AnalyticsService;
 
   tErrorWhileFetching: string;
   tErrorWhileUploading: string;
@@ -68,9 +68,9 @@ export default class UploadAppViaSystemComponent extends Component {
     try {
       this.uploadApp.updateSystemFileQueue(queue);
 
-      const uploadItem = await waitForPromise(
+      const uploadItem = (await waitForPromise(
         this.store.queryRecord('uploadApp', {})
-      );
+      )) as UploadAppModel;
 
       await waitForPromise(
         file.uploadBinary(uploadItem.url, {
@@ -81,10 +81,15 @@ export default class UploadAppViaSystemComponent extends Component {
 
       await waitForPromise(uploadItem.save());
 
-      triggerAnalytics(
-        'feature',
-        ENV.csb['applicationUpload'] as CsbAnalyticsFeatureData
-      );
+      this.analytics.track({
+        name: 'UPLOAD_APP_EVENT',
+        properties: {
+          feature: 'file_upload_via_system',
+          fileKey: uploadItem.fileKey,
+          fileUrl: uploadItem.url,
+          fileKeySigned: uploadItem.fileKeySigned,
+        },
+      });
 
       this.uploadApp.updateSystemFileQueue(queue);
       this.notify.success(this.tFileUploadedSuccessfully);
@@ -93,7 +98,11 @@ export default class UploadAppViaSystemComponent extends Component {
 
       this.notify.error(err);
 
-      this.rollbar.critical(err, e);
+      this.analytics.trackError(e, {
+        screen: 'upload_app_via_system',
+        feature: 'file_upload_via_system_flow',
+      });
+
       queue?.remove(file); // since queue won't flush for failed uploads
 
       this.uploadApp.updateSystemFileQueue(queue);

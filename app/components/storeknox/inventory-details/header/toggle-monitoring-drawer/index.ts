@@ -12,6 +12,7 @@ import type IntlService from 'ember-intl/services/intl';
 import type SkInventoryAppModel from 'irene/models/sk-inventory-app';
 import type SkOrganizationService from 'irene/services/sk-organization';
 import type IreneAjaxService from 'irene/services/ajax';
+import type AnalyticsService from 'irene/services/analytics';
 
 export interface StoreknoxInventoryDetailsHeaderToggleMonitoringDrawerSignature {
   Args: {
@@ -26,6 +27,7 @@ export interface StoreknoxInventoryDetailsHeaderToggleMonitoringDrawerSignature 
 export default class StoreknoxInventoryDetailsHeaderToggleMonitoringDrawerComponent extends Component<StoreknoxInventoryDetailsHeaderToggleMonitoringDrawerSignature> {
   @service declare intl: IntlService;
   @service declare ajax: IreneAjaxService;
+  @service declare analytics: AnalyticsService;
   @service('browser/window') declare window: Window;
   @service('sk-organization') declare skOrg: SkOrganizationService;
   @service('notifications') declare notify: NotificationService;
@@ -105,6 +107,13 @@ export default class StoreknoxInventoryDetailsHeaderToggleMonitoringDrawerCompon
   contactSupport = task(async () => {
     try {
       await waitForPromise(this.ajax.post(this.CONTACT_SUPPORT_ENDPOINT));
+
+      this.analytics.track({
+        name: 'FEATURE_REQUEST_EVENT',
+        properties: {
+          feature: 'storeknox_credit',
+        },
+      });
 
       this.window.localStorage.setItem(this.CREDIT_REQUEST_KEY, 'true');
       this.hasContactedSupport = true;

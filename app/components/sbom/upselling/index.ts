@@ -8,10 +8,12 @@ import type IntlService from 'ember-intl/services/intl';
 
 import parseError from 'irene/utils/parse-error';
 import type IreneAjaxService from 'irene/services/ajax';
+import type AnalyticsService from 'irene/services/analytics';
 
 export default class SbomUpsellingComponent extends Component {
   @service declare intl: IntlService;
   @service declare ajax: IreneAjaxService;
+  @service declare analytics: AnalyticsService;
   @service('notifications') declare notify: NotificationService;
   @service('browser/window') declare window: Window;
 
@@ -48,6 +50,13 @@ export default class SbomUpsellingComponent extends Component {
       this.window.localStorage.setItem('sbomRequest', 'true');
 
       this.hasContactedSupport = true;
+
+      this.analytics.track({
+        name: 'FEATURE_REQUEST_EVENT',
+        properties: {
+          feature: 'sbom',
+        },
+      });
     } catch (err) {
       this.notify.error(parseError(err, this.intl.t('pleaseTryAgain')));
     }

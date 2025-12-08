@@ -14,6 +14,7 @@ import type Saml2IdPMetadataModel from 'irene/models/saml2-idp-metadata';
 import type UserModel from 'irene/models/user';
 import type OrganizationModel from 'irene/models/organization';
 import type OrganizationSsoModel from 'irene/models/organization-sso';
+import type AnalyticsService from 'irene/services/analytics';
 
 interface SpMetadata {
   entity_id: string;
@@ -37,6 +38,7 @@ export default class SsoSettingsSamlComponent extends Component<SsoSettingsSamlS
   @service declare intl: IntlService;
   @service declare ajax: IreneAjaxService;
   @service declare store: Store;
+  @service declare analytics: AnalyticsService;
   @service('notifications') declare notify: NotificationService;
 
   @tracked showDeleteIdpMetadataConfirm = false;
@@ -146,6 +148,13 @@ export default class SsoSettingsSamlComponent extends Component<SsoSettingsSamlS
       this.idpMetadataXml = '';
       this.notify.success(this.intl.t('ssoSettings.saml.successMessage'));
       this.args.refreshSsoData();
+
+      this.analytics.track({
+        name: 'SSO_SAML_EVENT',
+        properties: {
+          feature: 'saml_idp_metadata_uploaded',
+        },
+      });
     } catch (err) {
       this.notify.error(parseError(err, this.tPleaseTryAgain));
     }
@@ -162,6 +171,13 @@ export default class SsoSettingsSamlComponent extends Component<SsoSettingsSamlS
       this.notify.success(this.intl.t('ssoSettings.saml.deletedIdp'));
       this.showDeleteIdpMetadataConfirm = false;
       this.args.refreshSsoData();
+
+      this.analytics.track({
+        name: 'SSO_SAML_EVENT',
+        properties: {
+          feature: 'saml_idp_metadata_deleted',
+        },
+      });
     } catch (err) {
       this.showDeleteIdpMetadataConfirm = false;
       this.notify.error(parseError(err, this.tPleaseTryAgain));

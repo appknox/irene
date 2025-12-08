@@ -10,9 +10,9 @@ import type IntlService from 'ember-intl/services/intl';
 
 import slackValidation from './validator';
 import ENV from 'irene/config/environment';
-import triggerAnalytics from 'irene/utils/trigger-analytics';
 import type IreneAjaxService from 'irene/services/ajax';
 import type OrganizationService from 'irene/services/organization';
+import type AnalyticsService from 'irene/services/analytics';
 import type UserModel from 'irene/models/user';
 import type { AjaxError } from 'irene/services/ajax';
 
@@ -44,6 +44,7 @@ export default class OrganizationIntegrationsSlackComponent extends Component<Or
   @service declare intl: IntlService;
   @service declare ajax: IreneAjaxService;
   @service declare organization: OrganizationService;
+  @service declare analytics: AnalyticsService;
   @service('notifications') declare notify: NotificationService;
   @service('browser/window') declare window: Window;
 
@@ -200,14 +201,17 @@ export default class OrganizationIntegrationsSlackComponent extends Component<Or
       channel_id: changeset.channelId,
     };
 
-    triggerAnalytics(
-      'feature',
-      ENV.csb['integrateSlack'] as CsbAnalyticsFeatureData
-    );
-
     try {
       await this.ajax.post(this.baseURL, { data });
       const d = await this.redirectAPI.perform();
+
+      this.analytics.track({
+        name: 'INTEGRATION_INITIATED_EVENT',
+        properties: {
+          feature: 'slack_integration_initiated',
+        },
+      });
+
       this.window.location.href = d.url;
 
       await this.checkSlackIntegration.perform();

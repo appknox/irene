@@ -1,17 +1,17 @@
 import Component from '@glimmer/component';
-import { inject as service } from '@ember/service';
+import { task } from 'ember-concurrency';
+import { service } from '@ember/service';
 import { isEmpty } from '@ember/utils';
-import Store from '@ember-data/store';
-import IntlService from 'ember-intl/services/intl';
+import { action } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
+import type Store from '@ember-data/store';
+import type IntlService from 'ember-intl/services/intl';
 
 import ENV from 'irene/config/environment';
-import triggerAnalytics from 'irene/utils/trigger-analytics';
 import ApiScanOptionsModel from 'irene/models/api-scan-options';
-import { task } from 'ember-concurrency';
-import { action } from '@ember/object';
 import type IreneAjaxService from 'irene/services/ajax';
 import type { AjaxError } from 'irene/services/ajax';
+import type AnalyticsService from 'irene/services/analytics';
 
 const isRegexFailed = function (url: string) {
   const reg =
@@ -33,6 +33,7 @@ export default class ApiFilterComponent extends Component<ApiFilterSignature> {
   @service declare intl: IntlService;
   @service declare ajax: IreneAjaxService;
   @service declare store: Store;
+  @service declare analytics: AnalyticsService;
   @service('notifications') declare notify: NotificationService;
 
   @tracked newUrlFilter = '';
@@ -108,11 +109,6 @@ export default class ApiFilterComponent extends Component<ApiFilterSignature> {
         ds_api_capture_filters: this.updatedURLFilters,
       };
 
-      triggerAnalytics(
-        'feature',
-        ENV.csb['addAPIEndpoints'] as CsbAnalyticsFeatureData
-      );
-
       await this.ajax.put(url, { data });
 
       this.notify.success(this.intl.t('urlUpdated'));
@@ -124,6 +120,15 @@ export default class ApiFilterComponent extends Component<ApiFilterSignature> {
 
         this.newUrlFilter = '';
       }
+
+      this.analytics.track({
+        name: 'API_URL_FILTER_UPDATE_EVENT',
+        properties: {
+          feature: 'update_api_url_filters',
+          profileId: this.args.profileId,
+          urlFilters: this.updatedURLFilters.join(','),
+        },
+      });
     } catch (error) {
       if (!this.isDestroyed) {
         this.notify.error((error as AjaxError).payload.message);

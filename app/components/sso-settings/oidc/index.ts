@@ -21,6 +21,7 @@ import type UserModel from 'irene/models/user';
 import type OrganizationModel from 'irene/models/organization';
 import type OidcProviderModel from 'irene/models/oidc-provider';
 import type OrganizationSsoModel from 'irene/models/organization-sso';
+import type AnalyticsService from 'irene/services/analytics';
 
 type OIDCChangeset = {
   client_id: string;
@@ -52,6 +53,7 @@ export default class SsoSettingsOidcComponent extends Component<SsoSettingsOidcS
   @service declare intl: IntlService;
   @service declare ajax: IreneAjaxService;
   @service declare store: Store;
+  @service declare analytics: AnalyticsService;
   @service('browser/window') declare window: Window;
   @service('notifications') declare notify: NotificationService;
 
@@ -128,6 +130,13 @@ export default class SsoSettingsOidcComponent extends Component<SsoSettingsOidcS
       this.notify.success(this.intl.t('ssoSettings.oidc.successMessage'));
       this.args.refreshSsoData();
       this.changeset.rollback();
+
+      this.analytics.track({
+        name: 'SSO_OIDC_EVENT',
+        properties: {
+          feature: 'oidc_sso_provider_created',
+        },
+      });
     } catch (err) {
       const error = err as AdapterError;
 
@@ -153,6 +162,13 @@ export default class SsoSettingsOidcComponent extends Component<SsoSettingsOidcS
       this.args.deleteProvider();
       this.notify.success(this.tRemovedSSOSuccessfully);
       this.showDeleteOidcConfirm = false;
+
+      this.analytics.track({
+        name: 'SSO_OIDC_EVENT',
+        properties: {
+          feature: 'oidc_sso_provider_deleted',
+        },
+      });
     } catch (error) {
       this.notify.error(parseError(error, this.intl.t('somethingWentWrong')));
       this.showDeleteOidcConfirm = false;

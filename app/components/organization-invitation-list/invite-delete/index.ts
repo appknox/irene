@@ -3,12 +3,11 @@ import { inject as service } from '@ember/service';
 import { action } from '@ember/object';
 import { task } from 'ember-concurrency';
 import { tracked } from '@glimmer/tracking';
-import IntlService from 'ember-intl/services/intl';
+import type IntlService from 'ember-intl/services/intl';
 
-import ENV from 'irene/config/environment';
-import triggerAnalytics from 'irene/utils/trigger-analytics';
-import OrganizationInvitationModel from 'irene/models/organization-invitation';
-import OrganizationTeamInvitationModel from 'irene/models/organization-team-invitation';
+import type AnalyticsService from 'irene/services/analytics';
+import type OrganizationInvitationModel from 'irene/models/organization-invitation';
+import type OrganizationTeamInvitationModel from 'irene/models/organization-team-invitation';
 
 interface OrganizationMemberInvitationListInviteDeleteSignature {
   Args: {
@@ -21,6 +20,7 @@ interface OrganizationMemberInvitationListInviteDeleteSignature {
 
 export default class OrganizationMemberInvitationListInviteDelete extends Component<OrganizationMemberInvitationListInviteDeleteSignature> {
   @service declare intl: IntlService;
+  @service declare analytics: AnalyticsService;
   @service('notifications') declare notify: NotificationService;
 
   @tracked isDeletingInvitation = false;
@@ -45,10 +45,14 @@ export default class OrganizationMemberInvitationListInviteDelete extends Compon
 
       this.args.reloadInvites();
 
-      triggerAnalytics(
-        'feature',
-        ENV.csb['inviteDelete'] as CsbAnalyticsFeatureData
-      );
+      this.analytics.track({
+        name: 'ORGANIZATION_INVITE_EVENT',
+        properties: {
+          feature: 'delete_invitation',
+          invitationId: invite.id,
+        },
+      });
+
       this.showDeleteInvitationConfirmBox = false;
       this.isDeletingInvitation = false;
     } catch (e) {

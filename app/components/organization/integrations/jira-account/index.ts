@@ -9,10 +9,10 @@ import type { BufferedChangeset } from 'ember-changeset/types';
 import type IntlService from 'ember-intl/services/intl';
 
 import ENV from 'irene/config/environment';
-import triggerAnalytics from 'irene/utils/trigger-analytics';
 import JIRAValidation from 'irene/validations/jiraintegrate';
 import type IreneAjaxService from 'irene/services/ajax';
 import type OrganizationService from 'irene/services/organization';
+import type AnalyticsService from 'irene/services/analytics';
 import type UserModel from 'irene/models/user';
 import type { AjaxError } from 'irene/services/ajax';
 
@@ -42,6 +42,7 @@ export default class OrganizationIntegrationsJiraAccountComponent extends Compon
   @service declare intl: IntlService;
   @service declare ajax: IreneAjaxService;
   @service declare organization: OrganizationService;
+  @service declare analytics: AnalyticsService;
   @service('notifications') declare notify: NotificationService;
 
   user: null = null;
@@ -214,10 +215,12 @@ export default class OrganizationIntegrationsJiraAccountComponent extends Compon
 
       this.notify.success(this.tJiraIntegrated);
 
-      triggerAnalytics(
-        'feature',
-        ENV.csb['integrateJIRA'] as CsbAnalyticsFeatureData
-      );
+      this.analytics.track({
+        name: 'INTEGRATION_INITIATED_EVENT',
+        properties: {
+          feature: 'jira_integration_completed',
+        },
+      });
     } catch (err) {
       const error = err as AjaxError;
 

@@ -7,12 +7,13 @@ import lookupValidator from 'ember-changeset-validations';
 import { Changeset } from 'ember-changeset';
 
 import ENV from 'irene/config/environment';
-import InviteOnlyRegisterValidation from '../../../validations/register-invite';
-import LoggerService from 'irene/services/logger';
-import { ChangesetBufferProps } from '../form';
-import IntlService from 'ember-intl/services/intl';
+import InviteOnlyRegisterValidation from 'irene/validations/register-invite';
+import type IntlService from 'ember-intl/services/intl';
+import type LoggerService from 'irene/services/logger';
+import type { SessionService } from 'irene/adapters/auth-base';
 import type IreneAjaxService from 'irene/services/ajax';
 import type { AjaxError } from 'irene/services/ajax';
+import type { ChangesetBufferProps } from '../form';
 
 interface ViaPartnerInviteSignature {
   Args: {
@@ -34,7 +35,7 @@ interface RegistrationData {
 }
 
 export default class ViaPartnerInviteComponent extends Component<ViaPartnerInviteSignature> {
-  @service declare session: any;
+  @service declare session: SessionService;
   @service declare ajax: IreneAjaxService;
   @service declare logger: LoggerService;
   @service('notifications') declare notify: NotificationService;

@@ -1,16 +1,17 @@
 import Service from '@ember/service';
-import { inject as service } from '@ember/service';
+import { service } from '@ember/service';
 
 import ENV from 'irene/config/environment';
-import ConfigurationService from './configuration';
-import type IreneAjaxService from './ajax';
+import type ConfigurationService from 'irene/services/configuration';
+import type IreneAjaxService from 'irene/services/ajax';
+import type { SessionService } from 'irene/adapters/auth-base';
 
 type DevicefarmPingResponse = {
   ping: string;
 };
 
 export default class DevicefarmService extends Service {
-  @service declare session: any;
+  @service declare session: SessionService;
   @service declare ajax: IreneAjaxService;
   @service declare configuration: ConfigurationService;
 

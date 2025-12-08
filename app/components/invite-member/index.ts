@@ -1,17 +1,16 @@
 import Component from '@glimmer/component';
 import { tracked } from '@glimmer/tracking';
-import { inject as service } from '@ember/service';
+import { service } from '@ember/service';
 import { task } from 'ember-concurrency';
 import { action } from '@ember/object';
-import IntlService from 'ember-intl/services/intl';
-import Store from '@ember-data/store';
+import type IntlService from 'ember-intl/services/intl';
+import type Store from '@ember-data/store';
 import { waitForPromise } from '@ember/test-waiters';
 
-import triggerAnalytics from 'irene/utils/trigger-analytics';
 import parseEmails from 'irene/utils/parse-emails';
-import ENV from 'irene/config/environment';
-import RealtimeService from 'irene/services/realtime';
-import OrganizationTeamModel from 'irene/models/organization-team';
+import type RealtimeService from 'irene/services/realtime';
+import type OrganizationTeamModel from 'irene/models/organization-team';
+import type AnalyticsService from 'irene/services/analytics';
 
 interface InviteMemberSignature {
   Args: {
@@ -34,6 +33,7 @@ export default class InviteMemberComponent extends Component<InviteMemberSignatu
   @service declare intl: IntlService;
   @service declare realtime: RealtimeService;
   @service declare store: Store;
+  @service declare analytics: AnalyticsService;
   @service('notifications') declare notify: NotificationService;
 
   @tracked emailsFromText = '';
@@ -102,10 +102,14 @@ export default class InviteMemberComponent extends Component<InviteMemberSignatu
       this.emailsFromText = '';
       this.isInvitingMember = false;
 
-      triggerAnalytics(
-        'feature',
-        ENV.csb['inviteMember'] as CsbAnalyticsFeatureData
-      );
+      this.analytics.track({
+        name: 'ORGANIZATION_INVITE_EVENT',
+        properties: {
+          feature: 'invite_member',
+          teamId: this.args.team?.id,
+          emailCount: emails.length,
+        },
+      });
     } catch (e) {
       const err = e as AdapterError;
       let errMsg = this.intl.t('pleaseTryAgain');
