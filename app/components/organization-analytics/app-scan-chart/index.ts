@@ -113,7 +113,9 @@ export default class OrganizationAnalyticsAppScanChartComponent extends Componen
     try {
       const appScan = (await this.ajax.request(url)) as IAppScan;
 
-      this.createAppScanChart(appScan, startDate.toDate(), endDate.toDate());
+      if (appScan?.results?.length > 0) {
+        this.createAppScanChart(appScan, startDate.toDate(), endDate.toDate());
+      }
     } catch (error) {
       this.notify.error(parseError(error));
     }

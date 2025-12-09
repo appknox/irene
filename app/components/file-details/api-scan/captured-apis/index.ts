@@ -207,7 +207,10 @@ export default class FileDetailsApiScanCapturedApisComponent extends Component<F
   fetchAndSetSelectedApiCount = task(async () => {
     try {
       const selectedApis = await this.getSelectedApis.perform();
-      this.selectedCount = selectedApis.count;
+
+      if (selectedApis) {
+        this.selectedCount = selectedApis.count;
+      }
 
       this.setFooterComponentDetails();
     } catch (error) {

@@ -76,15 +76,24 @@ export default class ProjectService extends Service {
         )) as ProjectQueryResponse;
       } catch (e) {
         const err = e as AdapterError;
+
+        let isRateLimitError = false;
         let errMsg = this.intl.t('pleaseTryAgain');
 
-        if (err.errors && err.errors.length) {
-          errMsg = err.errors[0]?.detail || errMsg;
-        } else if (err.message) {
-          errMsg = err.message;
+        const firstError = err?.errors?.[0];
+
+        if (firstError) {
+          isRateLimitError = Number(firstError.status) === 429;
+
+          if (firstError.detail) {
+            errMsg = firstError.detail;
+          }
         }
 
-        this.notify.error(errMsg);
+        // Only show toast for non–rate-limit errors
+        if (!isRateLimitError) {
+          this.notify.error(errMsg);
+        }
       }
     }
   );

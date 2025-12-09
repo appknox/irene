@@ -35,7 +35,8 @@ export type AnalyticsEvent = {
     | 'SSO_SAML_EVENT'
     | 'UPLOAD_APP_EVENT'
     | 'FILE_REPORT_DOWNLOAD_EVENT'
-    | 'CAPI_REPORT_DOWNLOAD_EVENT';
+    | 'CAPI_REPORT_DOWNLOAD_EVENT'
+    | 'RATE_LIMIT_ERROR_EVENT';
 
   properties?: Record<string, unknown>;
   userId?: number | null;

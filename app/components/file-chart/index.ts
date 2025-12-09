@@ -138,10 +138,17 @@ export default class FileChartComponent extends Component<FileChartSignature> {
         this.fileRisk = await waitForPromise(this.args.file.fetchFileRisk());
       }
     } catch (error) {
-      this.logger.error(
-        `Failed to fetch file risk for file - ${this.args.file?.id}`,
-        error
-      );
+      const err = error as AdapterError;
+
+      const errorStatus = err.errors?.[0]?.status;
+      const isRateLimitError = Number(errorStatus) === 429;
+
+      if (!isRateLimitError) {
+        this.logger.error(
+          `Failed to fetch file risk for file - ${this.args.file?.id}`,
+          error
+        );
+      }
     }
   });
 }
