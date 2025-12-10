@@ -1,6 +1,7 @@
+import { service } from '@ember/service';
+import { DRFAuthenticationBase } from 'irene/adapters/auth-base';
 import ENV from 'irene/config/environment';
-import { inject as service } from '@ember/service';
-import { DRFAuthenticationBase } from './auth-base';
+import type OrganizationService from 'irene/services/organization';
 
 export default class CommonDRFAdapter extends DRFAuthenticationBase {
   host = ENV.host;
@@ -9,10 +10,11 @@ export default class CommonDRFAdapter extends DRFAuthenticationBase {
   namespace_v3 = ENV.namespace_v3;
   addTrailingSlashes = false;
 
-  @service organization;
+  @service declare organization: OrganizationService;
 
-  buildURLFromBase(resource_url) {
+  buildURLFromBase(resource_url: string) {
     const hostURLstr = this.host;
+
     try {
       const hostURL = new URL(hostURLstr);
 
@@ -28,5 +30,11 @@ export default class CommonDRFAdapter extends DRFAuthenticationBase {
 
       throw e;
     }
+  }
+}
+
+declare module '@glint/environment-ember-loose/registry' {
+  export default interface Registry {
+    commondrf: typeof CommonDRFAdapter;
   }
 }
