@@ -34,7 +34,13 @@ export default class UploadAppAdapter extends commondrf {
     serializer.serializeIntoHash(data, type, snapshot);
 
     const id = snapshot.id;
-    const url = this.buildURL(type.modelName, id, snapshot, 'updateRecord');
+
+    const url = this.buildURL(
+      type.modelName as string,
+      id,
+      snapshot,
+      'updateRecord'
+    );
 
     return this.ajax(url, 'POST', {
       data: data,

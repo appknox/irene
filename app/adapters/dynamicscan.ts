@@ -11,7 +11,7 @@ export default class DynamicscanAdapter extends commondrf {
 
   handleResponse(
     status: number,
-    headers: object,
+    headers: Record<string, string>,
     payload: object,
     requestData: object
   ) {

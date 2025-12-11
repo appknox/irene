@@ -2,8 +2,12 @@ import { service } from '@ember/service';
 import { DRFAuthenticationBase } from 'irene/adapters/auth-base';
 import ENV from 'irene/config/environment';
 import type OrganizationService from 'irene/services/organization';
+import type RESTAdapter from '@ember-data/adapter/rest';
+import type Store from '@ember-data/store';
 
 export default class CommonDRFAdapter extends DRFAuthenticationBase {
+  declare ajax: RESTAdapter['ajax'];
+
   host = ENV.host;
   namespace = ENV.namespace;
   namespace_v2 = ENV.namespace_v2;
@@ -11,6 +15,7 @@ export default class CommonDRFAdapter extends DRFAuthenticationBase {
   addTrailingSlashes = false;
 
   @service declare organization: OrganizationService;
+  @service declare store: Store;
 
   buildURLFromBase(resource_url: string) {
     const hostURLstr = this.host;
