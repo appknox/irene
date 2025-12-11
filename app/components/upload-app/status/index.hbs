@@ -24,7 +24,7 @@
   {{/if}}
 </AkStack>
 
-{{#if this.hasSubmissions}}
+{{#if (or this.hasSubmissions this.uploadApp.showRateLimitError)}}
   <AkPopover
     data-test-cy='upload-app-submissions-popover'
     @arrow={{true}}
@@ -75,6 +75,18 @@
         </AkStack>
       </AkStack>
       <AkDivider />
+
+      {{#if this.uploadApp.showRateLimitError}}
+        <AkStack @width='full' class='p-2' @justifyContent='center'>
+          <AkTypography @color='error'>
+            {{t
+              'tooManyRequests'
+              time=this.uploadApp.rateLimitRemainingTime
+              htmlSafe=true
+            }}
+          </AkTypography>
+        </AkStack>
+      {{/if}}
 
       <AkStack
         @width='full'

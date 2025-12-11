@@ -69,7 +69,7 @@ export default class UploadAppViaSystemComponent extends Component {
       this.uploadApp.updateSystemFileQueue(queue);
 
       const uploadItem = (await waitForPromise(
-        this.store.queryRecord('uploadApp', {})
+        this.store.queryRecord('upload-app', {})
       )) as UploadAppModel;
 
       await waitForPromise(
@@ -94,18 +94,28 @@ export default class UploadAppViaSystemComponent extends Component {
       this.uploadApp.updateSystemFileQueue(queue);
       this.notify.success(this.tFileUploadedSuccessfully);
     } catch (e) {
-      const err = this.tErrorWhileUploading;
+      const error = e as AdapterError;
+      const firstErr = error.errors?.[0];
+      const errorDetail = firstErr?.detail;
+      const errorStatus = Number(firstErr?.status);
 
-      this.notify.error(err);
+      if (errorStatus === 429 && errorDetail) {
+        // Extract error detail message containing retry time
+        const parsed = JSON.parse(errorDetail);
+        const lockTime = parsed.lock_time;
+
+        this.uploadApp.showAndStartRateLimitErrorCountdown(lockTime);
+      } else {
+        this.notify.error(this.tErrorWhileUploading);
+      }
+
+      queue?.remove(file); // since queue won't flush for failed uploads
+      this.uploadApp.updateSystemFileQueue(queue);
 
       this.analytics.trackError(e, {
         screen: 'upload_app_via_system',
         feature: 'file_upload_via_system_flow',
       });
-
-      queue?.remove(file); // since queue won't flush for failed uploads
-
-      this.uploadApp.updateSystemFileQueue(queue);
     }
   });
 }

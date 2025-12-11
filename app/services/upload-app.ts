@@ -1,7 +1,9 @@
 import { action } from '@ember/object';
-import Service from '@ember/service';
 import { tracked } from '@glimmer/tracking';
-import { Queue } from 'ember-file-upload/queue';
+import Service from '@ember/service';
+import type { Queue } from 'ember-file-upload/queue';
+
+import RLM, { type RateLimitState } from 'irene/utils/rate-limit';
 
 export default class UploadAppService extends Service {
   @tracked submissionSet = new Set<string>();
@@ -10,6 +12,45 @@ export default class UploadAppService extends Service {
   @tracked systemFileQueue: Queue | null = null;
   @tracked keepPopoverOpen = false;
 
+  // Rate limit
+  @tracked rateLimitState: RateLimitState = RLM.createState();
+  @tracked showRateLimitError = false;
+
+  get rateLimitRemainingTime(): number {
+    return this.rateLimitState.remainingTime;
+  }
+
+  get rateLimitFormattedTime() {
+    return RLM.formatTime(this.rateLimitState.remainingTime);
+  }
+
+  @action
+  showAndStartRateLimitErrorCountdown(remainingTime: number) {
+    this.showRateLimitError = true;
+
+    const retryTime = Math.ceil(remainingTime);
+
+    const newState = RLM.startCountdown(this, this.rateLimitState, retryTime, {
+      onUpdate: (state) => (this.rateLimitState = state),
+      onComplete: (state) => {
+        this.rateLimitState = state;
+        this.clearRateLimitError();
+      },
+    });
+
+    this.rateLimitState = newState;
+  }
+
+  @action
+  clearRateLimitError() {
+    this.showRateLimitError = false;
+
+    const clearedState = RLM.clearCountdown(this, this.rateLimitState);
+
+    this.rateLimitState = clearedState;
+  }
+
+  @action
   updateSystemFileQueue(queue: Queue | null) {
     this.systemFileQueue = queue;
   }
@@ -44,5 +85,10 @@ export default class UploadAppService extends Service {
 
     // Duplicate is required to open popover when the anchorRef context isn't available in calling component
     this.dupAnchorRef = element;
+  }
+
+  willDestroy(): void {
+    super.willDestroy();
+    this.clearRateLimitError();
   }
 }

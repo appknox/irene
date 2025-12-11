@@ -103,6 +103,8 @@ declare global {
       options?: Omit<NotificationOption, 'message' | 'type'>
     ) => void;
 
+    clearAll: () => NotificationService;
+
     setDefaultAutoClear: (value: boolean) => void;
   }
 

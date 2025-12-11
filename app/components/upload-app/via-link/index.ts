@@ -88,7 +88,20 @@ export default class UploadAppViaLinkComponent extends Component {
 
       this.closeLinkUploadModal();
       this.uploadApp.openSubsPopover();
-    } catch (error) {
+    } catch (e) {
+      const error = e as AdapterError;
+      const firstErr = error.errors?.[0];
+      const errorDetail = firstErr?.detail;
+      const errorStatus = Number(firstErr?.status);
+
+      if (errorStatus === 429 && errorDetail) {
+        // Extract error detail message containing retry time
+        const parsed = JSON.parse(errorDetail);
+        const lockTime = parsed.lock_time;
+
+        this.uploadApp.showAndStartRateLimitErrorCountdown(lockTime);
+      }
+
       this.notify.error(parseError(error, this.intl.t('pleaseTryAgain')));
     }
   });
