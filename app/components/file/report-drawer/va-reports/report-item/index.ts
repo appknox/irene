@@ -3,7 +3,7 @@ import { inject as service } from '@ember/service';
 import { task } from 'ember-concurrency';
 import IntlService from 'ember-intl/services/intl';
 import { action } from '@ember/object';
-import Store from '@ember-data/store';
+import Store from 'ember-data/store';
 import { waitForPromise } from '@ember/test-waiters';
 
 import ClipboardJS from 'clipboard/src/clipboard';

@@ -7,7 +7,7 @@ import { tracked } from '@glimmer/tracking';
 import { task } from 'ember-concurrency';
 // eslint-disable-next-line ember/use-ember-data-rfc-395-imports
 import type { DS } from 'ember-data';
-import type Store from '@ember-data/store';
+import type Store from 'ember-data/store';
 
 import type { StoreknoxDiscoveryRequestedQueryParam } from 'irene/routes/authenticated/storeknox/discover/requested';
 import type SkRequestedAppModel from 'irene/models/sk-requested-app';

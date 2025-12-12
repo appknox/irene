@@ -4,7 +4,7 @@ import { service } from '@ember/service';
 import { task } from 'ember-concurrency';
 import { action } from '@ember/object';
 import type IntlService from 'ember-intl/services/intl';
-import type Store from '@ember-data/store';
+import type Store from 'ember-data/store';
 import { waitForPromise } from '@ember/test-waiters';
 
 import parseEmails from 'irene/utils/parse-emails';

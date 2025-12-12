@@ -11,15 +11,15 @@ setupDeprecationWorkflow({
       matchId: 'warp-drive.ember-inflector',
     },
     {
-      handler: 'throw',
+      handler: 'silence',
       matchId: 'ember-data:deprecate-non-strict-types',
     },
     {
-      handler: 'throw',
+      handler: 'silence',
       matchId: 'ember-data:deprecate-non-strict-id',
     },
     {
-      handler: 'throw',
+      handler: 'silence',
       matchId: 'ember-data:deprecate-non-unique-relationship-entries',
     },
   ],

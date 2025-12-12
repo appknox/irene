@@ -7,7 +7,7 @@ import { task } from 'ember-concurrency';
 
 // eslint-disable-next-line ember/use-ember-data-rfc-395-imports
 import { DS } from 'ember-data';
-import Store from '@ember-data/store';
+import Store from 'ember-data/store';
 import { PaginationProviderActionsArgs } from 'irene/components/ak-pagination-provider';
 import parseError from 'irene/utils/parse-error';
 

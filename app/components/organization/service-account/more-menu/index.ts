@@ -4,7 +4,7 @@ import { tracked } from '@glimmer/tracking';
 import Component from '@glimmer/component';
 import { task } from 'ember-concurrency';
 import type IntlService from 'ember-intl/services/intl';
-import type Store from '@ember-data/store';
+import type Store from 'ember-data/store';
 
 import parseError from 'irene/utils/parse-error';
 import type ServiceAccountModel from 'irene/models/service-account';

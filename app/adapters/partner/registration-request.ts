@@ -1,5 +1,6 @@
 /* eslint-disable ember/use-ember-data-rfc-395-imports */
-import Store, { Snapshot } from '@ember-data/store';
+import Store from 'ember-data/store';
+import { Snapshot } from '@ember-data/store';
 import commondrf from '../commondrf';
 
 type regRequestBody = {

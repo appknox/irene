@@ -5,7 +5,7 @@ import { tracked } from '@glimmer/tracking';
 import { inject as service } from '@ember/service';
 import { task } from 'ember-concurrency';
 import IntlService from 'ember-intl/services/intl';
-import Store from '@ember-data/store';
+import Store from 'ember-data/store';
 import { action } from '@ember/object';
 import { debounceTask } from 'ember-lifeline';
 

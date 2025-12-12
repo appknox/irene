@@ -9,7 +9,7 @@ import ENUMS from 'irene/enums';
 import parseError from 'irene/utils/parse-error';
 
 import type IntlService from 'ember-intl/services/intl';
-import type Store from '@ember-data/store';
+import type Store from 'ember-data/store';
 import type SecurityFileModel from 'irene/models/security/file';
 import type IreneAjaxService from 'irene/services/ajax';
 

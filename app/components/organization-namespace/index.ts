@@ -6,7 +6,7 @@ import { tracked } from '@glimmer/tracking';
 import { action } from '@ember/object';
 import { task } from 'ember-concurrency';
 import type IntlService from 'ember-intl/services/intl';
-import type Store from '@ember-data/store';
+import type Store from 'ember-data/store';
 import type RouterService from '@ember/routing/router-service';
 
 import type MeService from 'irene/services/me';

@@ -4,7 +4,7 @@ import { action } from '@ember/object';
 import { service } from '@ember/service';
 import { task } from 'ember-concurrency';
 import type IntlService from 'ember-intl/services/intl';
-import type Store from '@ember-data/store';
+import type Store from 'ember-data/store';
 
 import lookupValidator from 'ember-changeset-validations';
 import { Changeset } from 'ember-changeset';

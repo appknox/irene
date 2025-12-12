@@ -5,7 +5,7 @@ import { task } from 'ember-concurrency';
 import { service } from '@ember/service';
 import type IntlService from 'ember-intl/services/intl';
 import type RouterService from '@ember/routing/router-service';
-import type Store from '@ember-data/store';
+import type Store from 'ember-data/store';
 
 import parseError from 'irene/utils/parse-error';
 import type FileModel from 'irene/models/file';

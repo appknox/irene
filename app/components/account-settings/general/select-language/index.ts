@@ -4,7 +4,7 @@ import { task } from 'ember-concurrency';
 import { action } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
 import type IntlService from 'ember-intl/services/intl';
-import type Store from '@ember-data/store';
+import type Store from 'ember-data/store';
 
 import ENV from 'irene/config/environment';
 import parseError from 'irene/utils/parse-error';

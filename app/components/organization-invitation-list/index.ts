@@ -7,7 +7,7 @@ import { action } from '@ember/object';
 import { task } from 'ember-concurrency';
 import { tracked } from '@glimmer/tracking';
 import IntlService from 'ember-intl/services/intl';
-import Store from '@ember-data/store';
+import Store from 'ember-data/store';
 import RouterService from '@ember/routing/router-service';
 import { PaginationProviderActionsArgs } from '../ak-pagination-provider';
 import OrganizationModel from 'irene/models/organization';

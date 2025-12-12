@@ -6,7 +6,7 @@ import { action } from '@ember/object';
 import Changeset from 'ember-changeset';
 import lookupValidator from 'ember-changeset-validations';
 import type { BufferedChangeset } from 'ember-changeset/types';
-import type Store from '@ember-data/store';
+import type Store from 'ember-data/store';
 import type IntlService from 'ember-intl/services/intl';
 
 import FileCleanup from 'irene/validations/file-cleanup';

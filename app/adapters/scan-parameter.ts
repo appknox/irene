@@ -3,7 +3,8 @@ import commondrf from './commondrf';
 import { ModelSchema } from 'ember-data';
 import ModelRegistry from 'ember-data/types/registries/model';
 import { underscore } from '@ember/string';
-import Store, { Snapshot } from '@ember-data/store';
+import Store from 'ember-data/store';
+import { Snapshot } from '@ember-data/store';
 import ScanParameterModel from 'irene/models/scan-parameter';
 
 interface ScanParameterQuery {

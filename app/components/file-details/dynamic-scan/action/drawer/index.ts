@@ -10,7 +10,7 @@ import ENUMS from 'irene/enums';
 import parseError from 'irene/utils/parse-error';
 
 import type IntlService from 'ember-intl/services/intl';
-import type Store from '@ember-data/store';
+import type Store from 'ember-data/store';
 
 import type { DsPreferenceContext } from 'irene/components/ds-preference-provider';
 import type FileModel from 'irene/models/file';

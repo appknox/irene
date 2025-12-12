@@ -3,7 +3,7 @@ import Route from '@ember/routing/route';
 import { action } from '@ember/object';
 import { all } from 'rsvp';
 import type Transition from '@ember/routing/transition';
-import type Store from '@ember-data/store';
+import type Store from 'ember-data/store';
 import type IntlService from 'ember-intl/services/intl';
 import type RouterService from '@ember/routing/router-service';
 

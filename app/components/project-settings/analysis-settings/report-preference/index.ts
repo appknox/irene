@@ -3,7 +3,7 @@ import { inject as service } from '@ember/service';
 import Component from '@glimmer/component';
 import { tracked } from '@glimmer/tracking';
 import { task } from 'ember-concurrency';
-import Store from '@ember-data/store';
+import Store from 'ember-data/store';
 import IntlService from 'ember-intl/services/intl';
 import { waitForPromise } from '@ember/test-waiters';
 import ProjectModel from 'irene/models/project';

@@ -4,7 +4,7 @@ import { tracked } from '@glimmer/tracking';
 import { task } from 'ember-concurrency';
 import type Owner from '@ember/owner';
 import type ArrayProxy from '@ember/array/proxy';
-import type Store from '@ember-data/store';
+import type Store from 'ember-data/store';
 
 import type {
   CallbackDataParams,

@@ -5,7 +5,7 @@ import { tracked } from '@glimmer/tracking';
 import { isEmpty } from '@ember/utils';
 import IntlService from 'ember-intl/services/intl';
 import OrganizationService from 'irene/services/organization';
-import Store from '@ember-data/store';
+import Store from 'ember-data/store';
 
 import { INPUT } from 'irene/utils/constants';
 

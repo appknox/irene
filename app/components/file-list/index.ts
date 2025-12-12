@@ -5,7 +5,7 @@ import DS from 'ember-data';
 import Component from '@glimmer/component';
 import { tracked } from '@glimmer/tracking';
 import { task } from 'ember-concurrency';
-import Store from '@ember-data/store';
+import Store from 'ember-data/store';
 import { inject as service } from '@ember/service';
 import { action } from '@ember/object';
 import { addObserver, removeObserver } from '@ember/object/observers';
