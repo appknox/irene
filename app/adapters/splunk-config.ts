@@ -1,6 +1,7 @@
 /* eslint-disable ember/use-ember-data-rfc-395-imports */
 import CommondrfNestedAdapter from './commondrf-nested';
-import Store, { type Snapshot } from '@ember-data/store';
+import Store from 'ember-data/store';
+import { type Snapshot } from '@ember-data/store';
 import type { ModelSchema } from 'ember-data';
 import type ModelRegistry from 'ember-data/types/registries/model';
 import type SplunkConfigModel from 'irene/models/splunk-config';

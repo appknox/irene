@@ -1,7 +1,7 @@
 import Route from '@ember/routing/route';
 import { debug } from '@ember/debug';
 import { service } from '@ember/service';
-import type Store from '@ember-data/store';
+import type Store from 'ember-data/store';
 
 import { type FileCompareFilterKey } from 'irene/utils/compare-files';
 import type FileModel from 'irene/models/file';

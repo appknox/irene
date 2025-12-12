@@ -5,7 +5,7 @@ import { debounceTask } from 'ember-lifeline';
 import { task } from 'ember-concurrency';
 import { tracked } from '@glimmer/tracking';
 import IntlService from 'ember-intl/services/intl';
-import Store from '@ember-data/store';
+import Store from 'ember-data/store';
 import RouterService from '@ember/routing/router-service';
 import MeService from 'irene/services/me';
 import OrganizationModel from 'irene/models/organization';

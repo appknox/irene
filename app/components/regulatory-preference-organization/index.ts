@@ -4,7 +4,7 @@ import { task } from 'ember-concurrency';
 import { tracked } from '@glimmer/tracking';
 import { waitForPromise } from '@ember/test-waiters';
 import type IntlService from 'ember-intl/services/intl';
-import type Store from '@ember-data/store';
+import type Store from 'ember-data/store';
 
 import type OrganizationPreferenceModel from 'irene/models/organization-preference';
 import parseError from 'irene/utils/parse-error';

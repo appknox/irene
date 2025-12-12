@@ -6,7 +6,7 @@ import { task } from 'ember-concurrency';
 import { addObserver, removeObserver } from '@ember/object/observers';
 import { tracked } from '@glimmer/tracking';
 import { htmlSafe } from '@ember/template';
-import type Store from '@ember-data/store';
+import type Store from 'ember-data/store';
 import type IntlService from 'ember-intl/services/intl';
 
 import dayjs from 'dayjs';

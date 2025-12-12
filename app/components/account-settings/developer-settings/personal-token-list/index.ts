@@ -2,7 +2,7 @@ import Component from '@glimmer/component';
 import { inject as service } from '@ember/service';
 import { isEmpty } from '@ember/utils';
 import ENV from 'irene/config/environment';
-import Store from '@ember-data/store';
+import Store from 'ember-data/store';
 import IntlService from 'ember-intl/services/intl';
 import { tracked } from '@glimmer/tracking';
 import { task } from 'ember-concurrency';

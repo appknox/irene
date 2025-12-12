@@ -4,7 +4,7 @@ import { tracked } from 'tracked-built-ins';
 import { task } from 'ember-concurrency';
 import { waitForPromise } from '@ember/test-waiters';
 import type IntlService from 'ember-intl/services/intl';
-import type Store from '@ember-data/store';
+import type Store from 'ember-data/store';
 
 import { type ECOption } from 'irene/components/ak-chart';
 import type FileModel from 'irene/models/file';

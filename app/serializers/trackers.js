@@ -5,7 +5,7 @@ export default DRFSerializer.extend({
     return {
       data: payload.results.map((item) => {
         return {
-          id: item.id,
+          id: String(item.id),
           type: 'trackers',
           attributes: item,
         };

@@ -3,7 +3,7 @@ import { inject as service } from '@ember/service';
 import Component from '@glimmer/component';
 import { tracked } from '@glimmer/tracking';
 import { task } from 'ember-concurrency';
-import Store from '@ember-data/store';
+import Store from 'ember-data/store';
 import IntlService from 'ember-intl/services/intl';
 import { waitForPromise } from '@ember/test-waiters';
 import ProjectModel from 'irene/models/project';
@@ -108,7 +108,7 @@ export default class ProjectSettingsAnalysisSettingsReportPreferenceComponent ex
     async (dynamicScan: boolean, apiScan: boolean, manualScan: boolean) => {
       const profile = this.store.peekRecord(
         'profile',
-        Number(this.profile?.id)
+        String(this.profile?.id)
       );
 
       await profile?.saveReportPreference({
@@ -121,7 +121,7 @@ export default class ProjectSettingsAnalysisSettingsReportPreferenceComponent ex
 
   getProfileTask = task(async () => {
     const profileId = this.project?.activeProfileId;
-    this.profile = await this.store.findRecord('profile', Number(profileId));
+    this.profile = await this.store.findRecord('profile', String(profileId));
   });
 }
 

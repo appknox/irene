@@ -1,4 +1,4 @@
-import Store from '@ember-data/store';
+import Store from 'ember-data/store';
 import RouterService from '@ember/routing/router-service';
 import { inject as service } from '@ember/service';
 import { debug } from '@ember/debug';

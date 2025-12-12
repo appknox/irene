@@ -6,7 +6,7 @@ import { debounceTask } from 'ember-lifeline';
 import { tracked } from '@glimmer/tracking';
 import IntlService from 'ember-intl/services/intl';
 import MeService from 'irene/services/me';
-import Store from '@ember-data/store';
+import Store from 'ember-data/store';
 import { AsyncHasMany } from '@ember-data/model';
 import { waitForPromise } from '@ember/test-waiters';
 

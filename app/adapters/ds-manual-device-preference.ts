@@ -7,7 +7,7 @@ export default class DsManualDevicePreferenceAdapter extends CommondrfNestedAdap
     );
   }
 
-  setNestedUrlNamespace(profileId: string | number) {
+  setNestedUrlNamespace(profileId: string) {
     this.namespace = `${this.namespace_v2}/profiles/${profileId}`;
   }
 }

@@ -8,7 +8,7 @@ import { addObserver, removeObserver } from '@ember/object/observers';
 
 // eslint-disable-next-line ember/use-ember-data-rfc-395-imports
 import { DS } from 'ember-data';
-import Store from '@ember-data/store';
+import Store from 'ember-data/store';
 import parseError from 'irene/utils/parse-error';
 
 import SbomFileModel from 'irene/models/sbom-file';

@@ -1,6 +1,6 @@
 import Component from '@glimmer/component';
 import { service } from '@ember/service';
-import type Store from '@ember-data/store';
+import type Store from 'ember-data/store';
 
 import { COUNTRY_NAMES_MAP } from 'irene/utils/constants';
 import type SkAppVersionModel from 'irene/models/sk-app-version';

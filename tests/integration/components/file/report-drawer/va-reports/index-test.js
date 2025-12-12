@@ -38,12 +38,12 @@ module(
       const store = this.owner.lookup('service:store');
 
       const project = store.createRecord('project', {
-        id: 1,
+        id: '1',
         uuid: '1-123-33-1-12345',
       });
 
       const file = this.server.create('file', {
-        id: 1,
+        id: '1',
         project: project.id,
         is_api_done: false,
         is_static_done: true,

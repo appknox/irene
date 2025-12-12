@@ -9,7 +9,7 @@ import ENV from 'irene/config/environment';
 import ENUMS from 'irene/enums';
 import parseError from 'irene/utils/parse-error';
 
-import type Store from '@ember-data/store';
+import type Store from 'ember-data/store';
 import type IntlService from 'ember-intl/services/intl';
 import type RouterService from '@ember/routing/router-service';
 import type SecurityAnalysisModel from 'irene/models/security/analysis';

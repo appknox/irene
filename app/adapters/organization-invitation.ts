@@ -1,4 +1,4 @@
-import Store from '@ember-data/store';
+import Store from 'ember-data/store';
 import commondrf from './commondrf';
 import OrganizationInvitationModel from 'irene/models/organization-invitation';
 

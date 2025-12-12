@@ -13,7 +13,7 @@ import ENV from 'irene/config/environment';
 import parseError from 'irene/utils/parse-error';
 
 import type IntlService from 'ember-intl/services/intl';
-import type Store from '@ember-data/store';
+import type Store from 'ember-data/store';
 import type { Owner } from '@ember/test-helpers/build-owner';
 
 import type SecurityFileModel from 'irene/models/security/file';
