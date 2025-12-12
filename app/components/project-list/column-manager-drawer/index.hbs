@@ -1,0 +1,32 @@
+<AkDrawer
+  @open={{@open}}
+  @onClose={{this.handleClose}}
+  @anchor='right'
+  data-test-projectList-columnManagerDrawer
+  as |dr|
+>
+  <AkAppbar @justifyContent='space-between' as |ab|>
+    <AkTypography
+      @variant='h5'
+      @color='inherit'
+      data-test-projectList-columnManagerDrawer-title
+    >
+      {{t 'projectList.manageColumns'}}
+    </AkTypography>
+
+    <AkIconButton
+      class={{ab.classes.defaultIconBtn}}
+      {{on 'click' dr.closeHandler}}
+      data-test-projectList-columnManagerDrawer-close-btn
+    >
+      <AkIcon @iconName='close' />
+    </AkIconButton>
+  </AkAppbar>
+
+  <ProjectList::ColumnManager
+    @allColumnsMap={{this.allColumnsMap}}
+    @onApply={{this.applyAndClose}}
+    @onColumnsChange={{this.handleColumnsChange}}
+    @onCancel={{this.handleClose}}
+  />
+</AkDrawer>

@@ -1,0 +1,127 @@
+<AkStack
+  local-class='column-manager-container'
+  @direction='column'
+  @spacing={{2}}
+  @width='full'
+>
+  <AkStack
+    @justifyContent='space-between'
+    @alignItems='center'
+    @width='full'
+    class='px-3 pt-2'
+  >
+    <AkTypography @variant='body1' @fontWeight='medium'>
+      {{t 'projectList.selectColumns'}}
+    </AkTypography>
+
+    <AkChip
+      @variant='semi-filled'
+      @color='success'
+      @label={{this.label}}
+      @size='small'
+      {{style height='24px'}}
+    />
+  </AkStack>
+
+  <AkFormControlLabel
+    @label={{t 'selectAll'}}
+    class='px-3'
+    data-test-projectList-columnManager-selectAllLabel
+  >
+    <AkCheckbox
+      @checked={{this.allColumnsSelected}}
+      @onChange={{this.toggleAllColumns}}
+      data-test-projectList-columnManager-selectAll
+    />
+  </AkFormControlLabel>
+
+  <AkDivider />
+
+  <AkStack
+    @direction='column'
+    @spacing={{2}}
+    @width='full'
+    local-class='column-list'
+    data-test-projectList-columnManager-columnList
+  >
+    {{#each this.allColumns as |column|}}
+      {{#if column.isFixed}}
+        <AkStack
+          @width='full'
+          @justifyContent='space-between'
+          local-class={{this.getColumnClass column}}
+          data-test-projectList-columnManager-columnItem
+        >
+          <AkFormControlLabel
+            @label={{t column.name}}
+            data-test-projectList-columnManager-columnCheckbox
+          >
+            <AkCheckbox @checked={{true}} @disabled={{true}} />
+          </AkFormControlLabel>
+        </AkStack>
+      {{else}}
+        <AkStack
+          local-class={{this.getColumnClass column}}
+          draggable='true'
+          @width='full'
+          @justifyContent='space-between'
+          {{on 'dragstart' (fn this.handleColumnDragStart column)}}
+          {{on 'dragover' (fn this.handleColumnDragOver column)}}
+          {{on 'dragleave' (fn this.handleColumnDragLeave column)}}
+          {{on 'drop' (fn this.handleColumnDrop column)}}
+          {{on 'dragend' this.handleColumnDragEnd}}
+          data-test-projectList-columnManager-columnItem
+        >
+          <AkFormControlLabel
+            @label={{t column.name}}
+            data-test-projectList-columnManager-columnLabel={{column.field}}
+          >
+            <AkCheckbox
+              data-test-projectList-columnManager-columnCheckbox={{column.field}}
+              @checked={{column.selected}}
+              @onChange={{fn this.toggleColumn column}}
+              @disabled={{not column.isHideable}}
+            />
+          </AkFormControlLabel>
+
+          <AkIcon
+            @iconName='reorder'
+            @color='textSecondary'
+            local-class='reorder-icon'
+            data-test-projectList-columnManager-dragHandle
+          />
+        </AkStack>
+      {{/if}}
+    {{/each}}
+  </AkStack>
+
+  <AkDivider class='my-1' />
+
+  <AkStack
+    @justifyContent='space-between'
+    @alignItems='center'
+    @width='full'
+    class='px-3 pb-2'
+  >
+    <AkButton
+      @variant='outlined'
+      @color='neutral'
+      @disabled={{this.disableReset}}
+      local-class='filter-drawer-footer'
+      {{on 'click' this.resetColumns}}
+      data-test-projectList-columnManager-reset
+    >
+      {{t 'resetToDefault'}}
+    </AkButton>
+
+    <AkButton
+      @variant='filled'
+      @color='primary'
+      @disabled={{this.disableApply}}
+      {{on 'click' this.applyChanges}}
+      data-test-projectList-columnManager-apply
+    >
+      {{t 'apply'}}
+    </AkButton>
+  </AkStack>
+</AkStack>
