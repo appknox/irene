@@ -120,25 +120,5 @@ declare module '@glint/environment-ember-loose/registry' {
       };
       Return: void;
     }>;
-
-    ConfirmBox: ComponentLike<{
-      Args: {
-        title?: string | null;
-        confirmText?: string;
-        cancelText?: string;
-        key?: string;
-        delegate?: { confirmCallback?: ((key?: string) => void) | undefined };
-        isActive?: boolean;
-        disabled?: boolean;
-        confirmAction?: () => void;
-        cancelAction?: () => void;
-        blurOverlay?: boolean;
-        description?: string;
-      };
-      Blocks: {
-        default: [];
-        content: [];
-      };
-    }>;
   }
 }

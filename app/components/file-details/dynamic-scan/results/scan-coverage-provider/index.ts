@@ -43,7 +43,7 @@ export default class FileDetailsDynamicScanResultsScanCoverageProvider extends C
   getScreenCoverage = task(async () => {
     try {
       const fileAdapter = this.store.adapterFor('file');
-      let url = `${fileAdapter.buildURL('file', this.args.file.id)}/screen_coverage`;
+      let url = `${fileAdapter._buildURL('file', this.args.file.id)}/screen_coverage`;
 
       // TODO: remove this when the API has support for the namespace_v3
       url = url.replace(fileAdapter.namespace_v3, fileAdapter.namespace_v2);

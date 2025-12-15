@@ -2,7 +2,7 @@
 import DS from 'ember-data';
 
 import Component from '@glimmer/component';
-import { inject as service } from '@ember/service';
+import { service } from '@ember/service';
 import { tracked } from 'tracked-built-ins';
 import { action } from '@ember/object';
 import { task } from 'ember-concurrency';
@@ -95,6 +95,10 @@ export default class SecurityAnalysisListHeaderComponent extends Component<Secur
 
   @action openPurgeAPIAnalysisConfirmBox() {
     this.showPurgeAPIAnalysisConfirmBox = true;
+  }
+
+  @action closePurgeAPIAnalysisConfirmBox() {
+    this.showPurgeAPIAnalysisConfirmBox = false;
   }
 
   @action confirmPurgeAPIAnalysisConfirmBox() {

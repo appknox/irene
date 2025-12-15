@@ -1,9 +1,5 @@
 {{#unless this.isHideSettings}}
-  <AkTypography
-    @variant='h5'
-    class='pb-2'
-    {{did-insert (perform this.loadCleanupPref)}}
-  >
+  <AkTypography @variant='h5' class='pb-2' data-test-fileCleanup-title>
     {{t 'storageManagement'}}
   </AkTypography>
 
@@ -11,15 +7,16 @@
     <AkToggle
       @id='auto-cleanup'
       @onChange={{fn this.onChangePref this.changeset 'checkbox'}}
-      @checked={{get this.changeset 'isEnabled'}}
+      @checked={{this.changeset.isEnabled}}
+      data-test-fileCleanup-toggle
     />
 
     <AkStack @direction='column'>
-      <AkTypography @variant='h5'>
+      <AkTypography @variant='h5' data-test-fileCleanup-autoCleanupTitle>
         {{t 'fileCleanup.autoCleanup'}}
       </AkTypography>
 
-      <AkTypography @variant='body2'>
+      <AkTypography @variant='body2' data-test-fileCleanup-description>
         {{t 'fileCleanup.description'}}
       </AkTypography>
 
@@ -27,16 +24,21 @@
         <AkStack @spacing='2' @width='8/12' class='my-2'>
           <AkTextField
             @label={{t 'fileCleanup.activeCount'}}
-            @value={{mut (get this.changeset 'filesToKeep')}}
+            @value={{this.changeset.filesToKeep}}
             @type='number'
-            @min={{2}}
-            @max={{50}}
+            min={{2}}
+            max={{50}}
             @id='active-file-limit'
-            @disabled={{unless this.changeset.isEnabled 'disabled'}}
-            @error={{this.changeset.error.filesToKeep}}
+            @disabled={{unless this.changeset.isEnabled true}}
+            @error={{if this.changeset.error.filesToKeep true false}}
+            data-test-fileCleanup-filesToKeepInput
           >
             <:helperText>
-              <AkTypography @variant='body2' @color='error'>
+              <AkTypography
+                @variant='body2'
+                @color='error'
+                data-test-fileCleanup-filesToKeepError
+              >
                 {{this.changeset.error.filesToKeep.validation}}
               </AkTypography>
             </:helperText>
@@ -45,29 +47,38 @@
           <AkIconButton
             local-class='save-input'
             @variant='outlined'
-            @disabled={{if this.changeset.error.filesToKeep 'disabled'}}
-            {{on 'click' (fn this.onChangePref this.changeset)}}
+            disabled={{if this.changeset.error.filesToKeep true}}
+            {{on 'click' (fn this.onChangePref this.changeset 'submit')}}
+            data-test-fileCleanup-saveBtn
           >
             <AkIcon @iconName='done' />
           </AkIconButton>
         </AkStack>
 
         <AkStack @direction='row' @alignItems='center' @spacing='2'>
-          <AkTypography @variant='body2'>
+          <AkTypography
+            @variant='body2'
+            data-test-fileCleanup-lastActivityLabel
+          >
             {{t 'fileCleanup.lastActivity'}}:
           </AkTypography>
 
-          <AkTypography @variant='body2'>
+          <AkTypography @variant='body2' data-test-fileCleanup-lastActivityDate>
             {{day-js date=this.changeset.lastCleanedAt format='DD MMM YYYY'}}
           </AkTypography>
 
-          <AkButton @variant='outlined' {{on 'click' this.onViewAllCleanup}}>
+          <AkButton
+            @variant='outlined'
+            {{on 'click' this.onViewAllCleanup}}
+            data-test-fileCleanup-viewListBtn
+          >
             {{t 'fileCleanup.viewList'}}
           </AkButton>
 
           <AkButton
-            @disabled={{unless this.changeset.isEnabled 'disabled'}}
+            @disabled={{unless this.changeset.isEnabled true}}
             {{on 'click' this.onTriggerCleanup}}
+            data-test-fileCleanup-runBtn
           >
             {{t 'fileCleanup.run'}}
           </AkButton>
@@ -75,8 +86,9 @@
       {{/if}}
     </AkStack>
   </AkStack>
+
   {{! Added divider since it's render by self context check }}
-  <AkDivider class='my-2' />
+  <AkDivider class='my-2' data-test-fileCleanup-divider />
 {{/unless}}
 
 {{#if this.isShowAllCleanup}}
@@ -84,6 +96,7 @@
     @onClose={{this.onCloseModal}}
     @showHeader={{true}}
     @headerTitle={{t 'fileCleanup.listTitle'}}
+    data-test-fileCleanup-modal
   >
     <Modals::OrgFileCleanupList />
   </AkModal>
