@@ -35,11 +35,9 @@ export default class StoreknoxDiscoverResultsComponent extends Component {
         queryParams: {
           app_offset: 0,
           app_query: this.searchQuery,
-          app_search_id: null,
+          app_search_id: '',
         },
       });
-
-      // this.skDiscoverySearchResult.setQueryData({ searchId: '' });
     } else {
       this.notify.error(this.intl.t('storeknox.errorSearchCharacter'));
     }

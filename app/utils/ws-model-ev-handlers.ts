@@ -3,7 +3,7 @@ import type EventBusService from 'irene/services/event-bus';
 import type RealtimeService from 'irene/services/realtime';
 import type AnalysisOverviewModel from 'irene/models/analysis-overview';
 import type DynamicscanModel from 'irene/models/dynamicscan';
-import SubmissionModel from 'irene/models/submission';
+import type SubmissionModel from 'irene/models/submission';
 
 /**Base class for model event handlers*/
 export abstract class WsModelEventHandler<T = unknown> {

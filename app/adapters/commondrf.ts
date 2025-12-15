@@ -1,9 +1,10 @@
 import { service } from '@ember/service';
-import { DRFAuthenticationBase } from 'irene/adapters/auth-base';
-import ENV from 'irene/config/environment';
-import type OrganizationService from 'irene/services/organization';
 import type RESTAdapter from '@ember-data/adapter/rest';
 import type Store from '@ember-data/store';
+
+import ENV from 'irene/config/environment';
+import { DRFAuthenticationBase } from 'irene/adapters/auth-base';
+import type OrganizationService from 'irene/services/organization';
 
 export default class CommonDRFAdapter extends DRFAuthenticationBase {
   declare ajax: RESTAdapter['ajax'];
