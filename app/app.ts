@@ -1,9 +1,11 @@
-import ENUMS from 'irene/enums';
-import config from 'irene/config/environment';
+import { registerDateLibrary } from 'ember-power-calendar';
 import Application from '@ember/application';
 import Resolver from 'ember-resolver';
 import loadInitializers from 'ember-load-initializers';
-import { registerDateLibrary } from 'ember-power-calendar';
+import type { DateLibrary } from 'ember-power-calendar/utils';
+
+import config from 'irene/config/environment';
+import ENUMS from 'irene/enums';
 import DateUtils from 'irene/utils/power-calendar-dayjs';
 
 config.isDevknox = 'secure.devknox.io' === location.hostname;
@@ -17,11 +19,12 @@ if (config.isAppknox) {
   config.product = ENUMS.PRODUCT.DEVKNOX;
 }
 
-registerDateLibrary(DateUtils);
+registerDateLibrary(DateUtils as unknown as DateLibrary);
 
 export default class App extends Application {
   modulePrefix = config.modulePrefix;
   podModulePrefix = config.podModulePrefix;
+
   Resolver = Resolver;
 }
 
