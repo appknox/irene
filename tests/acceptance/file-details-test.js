@@ -76,6 +76,12 @@ module('Acceptance | file details', function (hooks) {
         .toJSON()
     );
 
+    analyses.map(async (analysis) => {
+      await this.server.create('detailed-analysis', {
+        id: analysis.id,
+      });
+    });
+
     this.server.createList('unknown-analysis-status', 3, {
       status: true,
     });
@@ -230,6 +236,10 @@ module('Acceptance | file details', function (hooks) {
     });
 
     await visit(`/dashboard/file/${this.file.id}`);
+
+    this.server.get('/v2/analyses/:id/detailed-analysis', (schema, req) => {
+      return schema.detailedAnalyses.find(`${req.params.id}`)?.toJSON();
+    });
 
     assert
       .dom('[data-test-vulnerability-analysis-title]')
