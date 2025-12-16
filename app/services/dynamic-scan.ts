@@ -144,40 +144,4 @@ export default class DynamicScanService extends Service {
       this.notify.error(parseError(e, this.intl.t('pleaseTryAgain')));
     }
   });
-
-  /**
-   * Checks and updates the scan status for a specific file based on an incoming dynamic scan model.
-   *
-   * @description
-   * This method handles updating the scan status for a file in two modes:
-   * - Manual scan (ENUMS.DYNAMIC_MODE.MANUAL)
-   * - Automated scan (ENUMS.DYNAMIC_MODE.AUTOMATED)
-   *
-   * It performs the following key actions:
-   * 1. Retrieves the current file record from the store
-   * 2. Checks the existing scan model based on the specified mode
-   * 3. Reloads the file if the incoming scan ID differs from the existing scan ID
-   *
-   * @param id - The unique identifier of the incoming scan
-   * @param fileId - The identifier of the file being scanned
-   * @param mode - The scan mode (manual or automated) from ENUMS.DYNAMIC_MODE
-   */
-  checkScanInProgressAndUpdate = task(
-    async (id: string, fileId: string, mode: number) => {
-      let existingModel: DynamicscanModel | null | undefined;
-
-      const file = this.store.peekRecord('file', fileId);
-
-      if (mode === ENUMS.DYNAMIC_MODE.MANUAL) {
-        existingModel = await file?.getFileLastManualDynamicScan();
-      } else if (mode === ENUMS.DYNAMIC_MODE.AUTOMATED) {
-        existingModel = await file?.getFileLastAutomatedDynamicScan();
-      }
-
-      // Update manual scan if conditions are met
-      if (id !== existingModel?.id) {
-        file?.reload?.();
-      }
-    }
-  );
 }

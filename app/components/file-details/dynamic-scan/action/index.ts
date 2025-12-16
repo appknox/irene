@@ -111,8 +111,6 @@ export default class DynamicScanActionComponent extends Component<DynamicScanAct
       });
 
       this.args.onScanShutdown?.();
-
-      await this.file.reload();
     } catch (error) {
       this.notify.error(parseError(error, this.intl.t('pleaseTryAgain')));
     }
