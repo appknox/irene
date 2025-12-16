@@ -61,7 +61,7 @@ module('Acceptance | breadcrumbs/scan-details', function (hooks) {
 
   hooks.beforeEach(async function () {
     const { organization } = await setupRequiredEndpoints(this.server);
-    setupFileModelEndpoints(this.server);
+    const { previous_file } = setupFileModelEndpoints(this.server);
 
     const store = this.owner.lookup('service:store');
 
@@ -121,7 +121,10 @@ module('Acceptance | breadcrumbs/scan-details', function (hooks) {
       return vulnerability;
     });
 
-    const files = this.server.createList('file', 5);
+    const files = this.server.createList('file', 5, {
+      project: project.id,
+      profile: profile.id,
+    });
 
     const fileModels = files.map((file) => {
       const normalizedFile = store.normalize('file', {
@@ -130,11 +133,15 @@ module('Acceptance | breadcrumbs/scan-details', function (hooks) {
         is_dynamic_done: true,
         is_api_done: true,
         is_active: true,
-        project: project.id,
-        profile: profile.id,
       });
 
       return store.push(normalizedFile);
+    });
+
+    // Update previous file to be in the same project as the files
+    previous_file.update({
+      project: project.id,
+      profile: profile.id,
     });
 
     this.server.create('ds-automation-preference', {

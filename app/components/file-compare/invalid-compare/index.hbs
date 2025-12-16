@@ -1,0 +1,31 @@
+<AkStack
+  @bgColor='white'
+  @width='full'
+  @direction='column'
+  @alignItems='center'
+  @justifyContent='center'
+  @spacing='3'
+  local-class='file-compare-invalid-file-comparison-error-root'
+  class='py-6'
+  data-test-fileCompare-invalid-compare
+>
+  <AkSvg::NoAccessImage data-test-fileCompare-invalid-compare-image />
+
+  <AkStack @direction='column' @alignItems='center' {{style gap='0.7143em'}}>
+    <AkTypography
+      @variant='h6'
+      @align='center'
+      data-test-fileCompare-invalid-compare-title
+    >
+      {{t 'fileCompare.invalidCompareWarning'}}
+    </AkTypography>
+
+    <AkTypography
+      @align='center'
+      {{style maxWidth='450px'}}
+      data-test-fileCompare-invalid-compare-subtext
+    >
+      {{this.invalidCompareText}}
+    </AkTypography>
+  </AkStack>
+</AkStack>

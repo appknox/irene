@@ -24,8 +24,16 @@ interface FileCompareSignature {
     unknownAnalysisStatus: boolean;
     file1Analyses: AnalysisOverviewModel[];
     file2Analyses: AnalysisOverviewModel[];
+    isInvalidCompare?: boolean;
   };
 }
+
+type FileCompareTabItem = {
+  id: string;
+  route: string;
+  label: string;
+  badgeCount?: number;
+};
 
 export default class FileCompareComponent extends Component<FileCompareSignature> {
   @service declare intl: IntlService;
@@ -65,6 +73,14 @@ export default class FileCompareComponent extends Component<FileCompareSignature
     return compareFileAnalyses(this.file1Analyses, this.file2Analyses);
   }
 
+  get isInvalidCompare() {
+    return Boolean(this.args.isInvalidCompare);
+  }
+
+  get isSameFile() {
+    return Boolean(this.file1?.get('id') === this.file2?.get('id'));
+  }
+
   get tabItems() {
     const fileCompareCategories = getFileComparisonCategories(this.comparisons);
 
@@ -95,7 +111,7 @@ export default class FileCompareComponent extends Component<FileCompareSignature
             badgeCount: fileCompareCategories.untested.length,
           }
         : null,
-    ].filter(Boolean);
+    ].filter(Boolean) as FileCompareTabItem[];
   }
 
   get isAllUploadsBreadcrumb() {
@@ -123,6 +139,11 @@ export default class FileCompareComponent extends Component<FileCompareSignature
 
   @action
   handleExpandFilesOverview() {
+    // Do not allow expanding files overview if the files are of different projects
+    if (this.isInvalidCompare) {
+      return;
+    }
+
     this.expandFilesOverview = !this.expandFilesOverview;
 
     scrollDashboardMainContainerTo({ top: 0, behavior: 'smooth' });

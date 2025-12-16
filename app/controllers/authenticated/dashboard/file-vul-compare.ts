@@ -3,20 +3,12 @@ import { service } from '@ember/service';
 import type IntlService from 'ember-intl/services/intl';
 
 import type { AkBreadcrumbsItemProps } from 'irene/services/ak-breadcrumbs';
-import type AnalysisModel from 'irene/models/analysis';
-import type FileModel from 'irene/models/file';
-import type VulnerabilityModel from 'irene/models/vulnerability';
+import type { FileVulCompareRouteModel } from 'irene/routes/authenticated/dashboard/file-vul-compare';
 
 export default class AuthenticatedDashboardFileVulCompare extends Controller {
   @service declare intl: IntlService;
 
-  declare model: {
-    file1: FileModel;
-    file2: FileModel;
-    vulnerability: VulnerabilityModel;
-    file1Analyses: AnalysisModel[];
-    file2Analyses: AnalysisModel[];
-  };
+  declare model: FileVulCompareRouteModel;
 
   get breadcrumbs(): AkBreadcrumbsItemProps {
     const { file1, file2, vulnerability } = this.model;
@@ -50,9 +42,10 @@ export default class AuthenticatedDashboardFileVulCompare extends Controller {
           models: [file1?.id],
         },
         {
+          title: this.intl.t('fileCompare.recurringIssues'),
           route: 'authenticated.dashboard.compare.index',
-          title: this.intl.t('compare'),
-          models: [filesModel],
+          models: [`${file1?.id}...${file2?.id}`],
+          routeGroup: 'project/files',
         },
         {
           route: 'authenticated.dashboard.file-vul-compare',

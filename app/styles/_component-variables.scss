@@ -1432,6 +1432,9 @@ body {
   --file-compare-header-file-icon-border-radius: var(--border-radius);
   --file-compare-header-info-box-shadow: var(--box-shadow-6);
 
+  // variables for file-compare/invalid-compare
+  --file-compare-invalid-compare-border-color: var(--neutral-grey-300);
+
   // variables for file-compare/skeleton-loader
   --file-compare-skeleton-loader-background-color: var(--common-white);
   --file-compare-skeleton-loader-border-color: var(--neutral-grey-300);

@@ -33,8 +33,7 @@ module('Acceptance | file compare', function (hooks) {
 
   hooks.beforeEach(async function () {
     await setupRequiredEndpoints(this.server);
-
-    setupFileModelEndpoints(this.server);
+    const { previous_file } = setupFileModelEndpoints(this.server);
 
     const project = this.server.create('project');
     const profile = this.server.create('profile');
@@ -45,9 +44,9 @@ module('Acceptance | file compare', function (hooks) {
       profile: profile.id,
     });
 
-    // Unknown Analysis Status
-    this.server.createList('unknown-analysis-status', 3, {
-      status: true,
+    previous_file.update({
+      project: project.id,
+      profile: profile.id,
     });
 
     this.server.get('/organizations/:id', (schema, req) =>
@@ -71,17 +70,6 @@ module('Acceptance | file compare', function (hooks) {
 
     this.server.get('/v3/projects/:id', (schema, req) => {
       return schema.projects.find(req.params.id).toJSON();
-    });
-
-    this.server.get('/profiles/:id', (schema, req) =>
-      schema.profiles.find(`${req.params.id}`)?.toJSON()
-    );
-
-    this.server.get('/profiles/:id/unknown_analysis_status', (_, req) => {
-      return {
-        id: req.params.id,
-        status: true,
-      };
     });
 
     this.owner.register('service:integration', IntegrationStub);
@@ -251,4 +239,162 @@ module('Acceptance | file compare', function (hooks) {
 
     assert.strictEqual(currentURL(), `/dashboard/choose/${baseFile?.id}`);
   });
+
+  test.each(
+    'it compares two files of different projects',
+    [
+      (file1Id, file2Id) => `/dashboard/compare/${file1Id}...${file2Id}`,
+
+      (file1Id, file2Id) =>
+        `/dashboard/compare/${file1Id}...${file2Id}/new-issues`,
+
+      (file1Id, file2Id) =>
+        `/dashboard/compare/${file1Id}...${file2Id}/untested-cases`,
+
+      (file1Id, file2Id) =>
+        `/dashboard/compare/${file1Id}...${file2Id}/resolved-test-cases`,
+    ],
+    async function (assert, routeFn) {
+      const project = this.server.create('project', {
+        id: '10000',
+      });
+
+      const non_project_file = this.server.create('file', {
+        project: project.id,
+      });
+
+      const [baseFile] = this.fileRecords;
+      this.project.update({ show_unknown_analysis: true });
+
+      // Since route models use peekRecord, we need to push the records to the store
+      const store = this.owner.lookup('service:store');
+      store.push(store.normalize('project', this.project.toJSON()));
+
+      // Visit the route
+      await visit(routeFn(baseFile?.id, non_project_file?.id));
+
+      assert.strictEqual(
+        currentURL(),
+        routeFn(baseFile?.id, non_project_file?.id)
+      );
+
+      assert.dom('[data-test-fileCompare-invalid-compare]').exists();
+      assert.dom('[data-test-fileCompare-invalid-compare-image]').exists();
+
+      assert
+        .dom('[data-test-fileCompare-invalid-compare-title]')
+        .hasText(t('fileCompare.invalidCompareWarning'));
+
+      assert
+        .dom('[data-test-fileCompare-invalid-compare-subtext]')
+        .hasText(t('fileCompare.differentProjectsWarningSubText'));
+
+      assert
+        .dom('[data-test-fileCompare-header-showFilesOverview-icon]')
+        .isDisabled();
+
+      assert.dom('[data-test-fileCompare-tabs-container]').doesNotExist();
+    }
+  );
+
+  test.each(
+    'it shows invalid compare component in compare page if files are the same',
+    [
+      (file1Id, file2Id) => `/dashboard/compare/${file1Id}...${file2Id}`,
+
+      (file1Id, file2Id) =>
+        `/dashboard/compare/${file1Id}...${file2Id}/new-issues`,
+
+      (file1Id, file2Id) =>
+        `/dashboard/compare/${file1Id}...${file2Id}/untested-cases`,
+
+      (file1Id, file2Id) =>
+        `/dashboard/compare/${file1Id}...${file2Id}/resolved-test-cases`,
+    ],
+    async function (assert, routeFn) {
+      const [baseFile] = this.fileRecords;
+      const compareFile = baseFile;
+      this.project.update({ show_unknown_analysis: true });
+
+      // Since route models use peekRecord, we need to push the records to the store
+      const store = this.owner.lookup('service:store');
+      store.push(store.normalize('project', this.project.toJSON()));
+
+      // Visit the route
+      await visit(routeFn(baseFile?.id, compareFile?.id));
+
+      assert.strictEqual(currentURL(), routeFn(baseFile?.id, compareFile?.id));
+
+      assert.dom('[data-test-fileCompare-invalid-compare]').exists();
+      assert.dom('[data-test-fileCompare-invalid-compare-image]').exists();
+
+      assert
+        .dom('[data-test-fileCompare-invalid-compare-title]')
+        .hasText(t('fileCompare.invalidCompareWarning'));
+
+      assert
+        .dom('[data-test-fileCompare-invalid-compare-subtext]')
+        .hasText(t('fileCompare.sameFilesWarningSubText'));
+
+      assert
+        .dom('[data-test-fileCompare-header-showFilesOverview-icon]')
+        .isDisabled();
+
+      assert.dom('[data-test-fileCompare-tabs-container]').doesNotExist();
+    }
+  );
+
+  test.each(
+    'it shows invalid compare component in vulnerability details page if files are of different projects or are the same file',
+    [true, false],
+    async function (assert, isSameFile) {
+      const project = this.server.create('project', { id: '10000' });
+      const [baseFile] = this.fileRecords;
+
+      const non_project_file = this.server.create('file', {
+        project: project.id,
+      });
+
+      const compareFile = isSameFile ? baseFile : non_project_file;
+
+      this.server.create('vulnerability', {
+        id: '3',
+      });
+
+      await visit(
+        `/dashboard/file-vul-compare/${baseFile?.id}...${compareFile?.id}/3`
+      );
+
+      assert.dom('[data-test-fileCompare-invalid-compare]').exists();
+      assert.dom('[data-test-fileCompare-invalid-compare-image]').exists();
+
+      assert
+        .dom('[data-test-fileCompare-invalid-compare-title]')
+        .hasText(t('fileCompare.invalidCompareWarning'));
+
+      assert
+        .dom('[data-test-fileCompare-invalid-compare-subtext]')
+        .hasText(
+          isSameFile
+            ? t('fileCompare.sameFilesWarningSubText')
+            : t('fileCompare.differentProjectsWarningSubText')
+        );
+
+      assert
+        .dom('[data-test-fileCompare-expandFilesOverview-btn]')
+        .isDisabled();
+
+      assert
+        .dom('[data-test-fileCompare-vulnerabilityDetails-file1ID]')
+        .hasText(baseFile?.id);
+
+      assert
+        .dom('[data-test-fileCompare-vulnerabilityDetails-file2ID]')
+        .hasText(compareFile?.id);
+
+      assert
+        .dom('[data-test-fileCompare-vulnerabilityDetails-root]')
+        .doesNotExist();
+    }
+  );
 });
