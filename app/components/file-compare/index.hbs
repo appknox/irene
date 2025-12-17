@@ -54,6 +54,7 @@
   <:headerCTA>
     <AkStack @alignItems='center' @spacing='2'>
       <AkIconButton
+        disabled={{this.isInvalidCompare}}
         {{on 'click' this.handleExpandFilesOverview}}
         data-test-fileCompare-header-showFilesOverview-icon
       >
@@ -71,19 +72,28 @@
   </:headerCTA>
 </FileCompare::Header>
 
-<div local-class='file-compare-tabs' class='pb-3'>
-  <AkTabs class='w-full' as |Akt|>
-    {{#each this.tabItems as |item|}}
-      <Akt.tabItem
-        @id={{item.id}}
-        @hasBadge={{true}}
-        @badgeCount={{item.badgeCount}}
-        @route={{item.route}}
-        @model={{concat @file1.id '...' @file2.id}}
-        data-test-file-compare-tabs='{{item.id}}-tab'
-      >
-        {{item.label}}
-      </Akt.tabItem>
-    {{/each}}
-  </AkTabs>
-</div>
+{{#if this.isInvalidCompare}}
+  <FileCompare::InvalidCompare @isSameFile={{this.isSameFile}} />
+
+{{else}}
+  <div
+    local-class='file-compare-tabs'
+    class='pb-3'
+    data-test-fileCompare-tabs-container
+  >
+    <AkTabs class='w-full' as |Akt|>
+      {{#each this.tabItems as |item|}}
+        <Akt.tabItem
+          @id={{item.id}}
+          @hasBadge={{true}}
+          @badgeCount={{item.badgeCount}}
+          @route={{item.route}}
+          @model={{concat @file1.id '...' @file2.id}}
+          data-test-file-compare-tabs='{{item.id}}-tab'
+        >
+          {{item.label}}
+        </Akt.tabItem>
+      {{/each}}
+    </AkTabs>
+  </div>
+{{/if}}
