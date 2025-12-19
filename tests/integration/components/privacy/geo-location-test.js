@@ -47,10 +47,10 @@ module('Integration | Component | privacy/geo-location', function (hooks) {
 
     // Tracker Request Model
     const geoLocationData = this.server.create('geo-location', {
-      countryCode: 'IN',
+      country_code: 'IN',
       country_name: 'India',
       is_high_risk_region: false,
-      hostUrls: [
+      host_urls: [
         {
           ip: '192.0.2.1',
           cidr: '192.0.2.0/24',
@@ -135,11 +135,11 @@ module('Integration | Component | privacy/geo-location', function (hooks) {
 
     assert
       .dom('[data-test-privacy-geo-location-drawer-host-number]')
-      .hasText(String(this.geoLocationData.hostUrls.length));
+      .hasText(String(this.geoLocationData.host_urls.length));
 
     assert
       .dom('[data-test-privacy-geo-location-drawer-host-container]')
-      .containsText(this.geoLocationData.hostUrls[0].source_location[0]);
+      .containsText(this.geoLocationData.host_urls[0].source_location[0]);
 
     assert.dom('[data-test-privacy-geo-location-drawer-close-button]').exists();
 

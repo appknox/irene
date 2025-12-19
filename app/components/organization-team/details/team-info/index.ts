@@ -44,6 +44,12 @@ export default class OrganizationTeamDetailsTeamInfo extends Component<Organizat
     this.showTeamDeleteConfirm = true;
   }
 
+  /* Close team delete confirmation */
+  @action
+  closeTeamDeleteConfirm() {
+    this.showTeamDeleteConfirm = false;
+  }
+
   /* Delete team */
   deleteTeam = task(async () => {
     try {
