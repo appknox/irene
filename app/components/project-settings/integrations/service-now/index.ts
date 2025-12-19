@@ -145,7 +145,7 @@ export default class ProjectSettingsIntegrationsServiceNowComponent extends Comp
         return;
       }
 
-      if (errorDetail?.includes('Not Found')) {
+      if (errorDetail?.includes('Not Found (404)')) {
         this.noIntegration = true;
         this.noAccess = true;
 

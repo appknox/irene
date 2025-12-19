@@ -1,5 +1,5 @@
 import Component from '@glimmer/component';
-import { service } from '@ember/service';
+import { inject as service } from '@ember/service';
 import { action } from '@ember/object';
 import { capitalize } from '@ember/string';
 import { task } from 'ember-concurrency';
@@ -38,12 +38,6 @@ export default class OrganizationTeamMemberListUserAction extends Component<Orga
   @action
   openRemoveMemberPrompt() {
     this.showRemoveMemberPrompt = true;
-  }
-
-  /* Close remove-member prompt */
-  @action
-  closeRemoveMemberPrompt() {
-    this.showRemoveMemberPrompt = false;
   }
 
   /* Remove member */

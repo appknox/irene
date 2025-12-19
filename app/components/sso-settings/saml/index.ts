@@ -95,11 +95,6 @@ export default class SsoSettingsSamlComponent extends Component<SsoSettingsSamlS
     this.showDeleteIdpMetadataConfirm = true;
   }
 
-  @action
-  closeDeleteIdpMetadataConfirm() {
-    this.showDeleteIdpMetadataConfirm = false;
-  }
-
   // Fetch SP Metadata
   SPMetadata = task({ restartable: true }, async () => {
     const spMetadata = await this.ajax.request<SpMetadata>(

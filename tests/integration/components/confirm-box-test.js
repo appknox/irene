@@ -78,9 +78,9 @@ module('Integration | Component | confirm-box', function (hooks) {
     await render(hbs`
         <button data-test-button type="button" {{on 'click' this.handleOpen}}>Open modal</button>
 
-        <ConfirmBox
-            @isActive={{this.open}}
-            @title={{this.title}}
+        <ConfirmBox 
+            @isActive={{this.open}} 
+            @title={{this.title}} 
             @description={{this.description}}
             @confirmText={{this.confirmText}}
             @cancelText={{this.cancelText}} />
@@ -106,6 +106,41 @@ module('Integration | Component | confirm-box', function (hooks) {
       .hasText(this.cancelText);
   });
 
+  test('test confirm-box cancel without cancelAction', async function (assert) {
+    this.setProperties({
+      open: false,
+      handleOpen: () => {
+        this.set('open', true);
+      },
+    });
+
+    await render(hbs`
+        <button data-test-button type="button" {{on 'click' this.handleOpen}}>Open modal</button>
+
+        <ConfirmBox @isActive={{this.open}} />
+    `);
+
+    await click('[data-test-button]');
+
+    assert.dom('[data-test-ak-modal-header]').exists().hasText(t('confirm'));
+    assert.dom('[data-test-confirmbox-description]').doesNotExist();
+
+    assert.dom('[data-test-confirmbox-confirmBtn]').exists().hasText(t('ok'));
+
+    assert
+      .dom('[data-test-confirmbox-cancelBtn]')
+      .exists()
+      .hasText(t('cancel'));
+
+    await click('[data-test-confirmbox-confirmBtn]');
+
+    await click('[data-test-confirmbox-cancelBtn]');
+
+    assert.dom('[data-test-ak-modal-header]').doesNotExist();
+    assert.dom('[data-test-confirmbox-confirmBtn]').doesNotExist();
+    assert.dom('[data-test-confirmbox-cancelBtn]').doesNotExist();
+  });
+
   test('test confirm-box cancel with confirmAction & cancelAction', async function (assert) {
     this.setProperties({
       open: false,
@@ -119,7 +154,6 @@ module('Integration | Component | confirm-box', function (hooks) {
       },
       handleCancel: () => {
         this.set('cancelCalled', true);
-        this.set('open', false);
       },
     });
 

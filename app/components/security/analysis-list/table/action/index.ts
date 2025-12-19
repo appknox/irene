@@ -52,10 +52,6 @@ export default class SecurityAnalysisListTableActionComponent extends Component<
     this.showMarkPassedConfirmBox = false;
   }
 
-  @action closeMarkPassedConfirmBox() {
-    this.showMarkPassedConfirmBox = false;
-  }
-
   @action openMarkPassedConfirmBox() {
     this.showMarkPassedConfirmBox = true;
   }

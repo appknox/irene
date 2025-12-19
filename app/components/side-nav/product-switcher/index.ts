@@ -8,7 +8,6 @@ import styles from './index.scss';
 import type ConfigurationService from 'irene/services/configuration';
 import type WhitelabelService from 'irene/services/whitelabel';
 import type OrganizationService from 'irene/services/organization';
-import type MeService from 'irene/services/me';
 
 interface SwitcherMenuItem {
   id: string;
@@ -39,7 +38,6 @@ export default class SideNavProductSwitcherComponent extends Component<SideNavPr
   @service declare configuration: ConfigurationService;
   @service declare whitelabel: WhitelabelService;
   @service declare organization: OrganizationService;
-  @service declare me: MeService;
 
   @tracked anchorRef: HTMLElement | null = null;
 
@@ -66,7 +64,7 @@ export default class SideNavProductSwitcherComponent extends Component<SideNavPr
   }
 
   get isSecurityEnabled() {
-    return this.me.org?.has_security_permission;
+    return this.organization.isSecurityEnabled;
   }
 
   get showReporting() {

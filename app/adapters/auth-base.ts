@@ -1,7 +1,9 @@
 import { service } from '@ember/service';
+
+// @ts-expect-error no types
 import DRFAdapter from 'ember-django-adapter/adapters/drf';
+import Transition from '@ember/routing/transition';
 import JSONAPIAdapter from '@ember-data/adapter/json-api';
-import type Transition from '@ember/routing/transition';
 
 import ENV from 'irene/config/environment';
 import RLM from 'irene/utils/rate-limit';
@@ -37,11 +39,9 @@ export type SessionService = InternalSessionMock<{
   };
 }>;
 
-const AuthenticationBase = <
-  T extends typeof JSONAPIAdapter | typeof DRFAdapter,
->(
-  Superclass: T
-): T =>
+const AuthenticationBase = (
+  Superclass: typeof JSONAPIAdapter | typeof DRFAdapter
+) =>
   class extends Superclass {
     declare session: SessionService;
     declare window: Window;
@@ -112,17 +112,15 @@ const AuthenticationBase = <
     }
   };
 
-export class JSONAPIAuthenticationBase extends AuthenticationBase<
-  typeof JSONAPIAdapter
->(JSONAPIAdapter) {
+export class JSONAPIAuthenticationBase extends AuthenticationBase(
+  JSONAPIAdapter
+) {
   @service declare session: SessionService;
   @service('browser/window') declare window: Window;
   @service declare rateLimit: RateLimitService;
 }
 
-export class DRFAuthenticationBase extends AuthenticationBase<
-  typeof DRFAdapter
->(DRFAdapter) {
+export class DRFAuthenticationBase extends AuthenticationBase(DRFAdapter) {
   @service declare session: SessionService;
   @service('browser/window') declare window: Window;
   @service declare rateLimit: RateLimitService;

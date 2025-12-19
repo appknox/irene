@@ -40,12 +40,7 @@ export default class AuthenticatedStoreknoxDiscoverResultRoute extends Route {
         searchQuery: app_query,
       });
 
-    // if no search id and query, fetch search id first then reload route
-    if (!app_search_id && app_query) {
-      this.skDiscoverySearchResult.fetchSearchIdForQuery(app_query);
-    }
-
-    if (app_query && app_search_id) {
+    if (app_query) {
       this.skDiscoverySearchResult.fetchDiscoveryResults();
     }
   }

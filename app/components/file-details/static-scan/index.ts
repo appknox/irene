@@ -88,11 +88,6 @@ export default class FileDetailsStaticScan extends Component<FileDetailsStaticSc
   }
 
   @action
-  closeRescanModal() {
-    this.showRescanModal = false;
-  }
-
-  @action
   updateSorts(sorts: EmberTableSort[]) {
     this.sorts = sorts;
   }

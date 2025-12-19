@@ -105,7 +105,7 @@
     <ConfirmBox
       @isActive={{this.showTeamDeleteConfirm}}
       @confirmText={{t 'deleteTeam'}}
-      @cancelAction={{this.closeTeamDeleteConfirm}}
+      @delegate={{this}}
       @confirmAction={{perform this.deleteTeam}}
       @disabled={{this.deleteTeam.isRunning}}
       @justifyActionContent='flex-end'

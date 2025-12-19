@@ -1,9 +1,6 @@
-// eslint-disable-next-line ember/use-ember-data-rfc-395-imports
-import { ModelSchema } from 'ember-data';
-import Store, { type Snapshot } from '@ember-data/store';
-
-import CommonDRFAdapter from 'irene/adapters/commondrf';
-import { type PartnerRegistrationRequestModelName } from 'irene/models/partner/registration-request';
+/* eslint-disable ember/use-ember-data-rfc-395-imports */
+import Store, { Snapshot } from '@ember-data/store';
+import commondrf from '../commondrf';
 
 type regRequestBody = {
   email?: string;
@@ -14,7 +11,7 @@ type regRequestBody = {
   };
 };
 
-export default class RegistrationRequestAdapter extends CommonDRFAdapter {
+export default class RegistrationRequestAdapter extends commondrf {
   _buildURL(modelName: string | number, id: string | number) {
     const baseurl = this.buildURLFromBase(
       `${this.namespace_v2}/partners/${this.organization.selected?.id}/registration_requests`
@@ -29,7 +26,7 @@ export default class RegistrationRequestAdapter extends CommonDRFAdapter {
 
   async patch(
     id: string | number,
-    modelName: string,
+    modelName: string | number,
     data: { approval_status: string }
   ) {
     const url = this.buildURL(modelName, id);
@@ -38,7 +35,7 @@ export default class RegistrationRequestAdapter extends CommonDRFAdapter {
     return this.store.findRecord(modelName, id);
   }
 
-  async resend(id: string | number, modelName: string) {
+  async resend(id: string | number, modelName: string | number) {
     const url = `${this.buildURL(modelName, id)}/resend`;
 
     return await this.ajax(url, 'POST', {});
@@ -49,20 +46,19 @@ export default class RegistrationRequestAdapter extends CommonDRFAdapter {
     modelClass: { modelName: string | number },
     snapshot: Snapshot
   ) {
-    const modelName =
-      modelClass.modelName as PartnerRegistrationRequestModelName;
-
-    const url = this.buildURL(modelName, null, snapshot, 'createRecord');
-
-    // ref https://github.com/emberjs/data/blob/c421bb41e727de30de717f01b3c24c7cdcef0b8a/packages/adapter/addon/-private/utils/serialize-into-hash.js#L2
-    const serializer = store.serializerFor(modelName);
-    const body: regRequestBody = {};
-
-    serializer.serializeIntoHash(
-      body,
-      modelClass as ModelSchema<PartnerRegistrationRequestModelName>,
-      snapshot
+    const url = this.buildURL(
+      modelClass.modelName,
+      null,
+      snapshot,
+      'createRecord'
     );
+    // ref https://github.com/emberjs/data/blob/c421bb41e727de30de717f01b3c24c7cdcef0b8a/packages/adapter/addon/-private/utils/serialize-into-hash.js#L2
+    // @ts-expect-error to be fixed
+    const serializer = store.serializerFor(modelClass.modelName);
+
+    const body: regRequestBody = {};
+    // @ts-expect-error to be fixed
+    serializer.serializeIntoHash(body, modelClass, snapshot);
 
     return this.ajax(url, 'POST', {
       data: {

@@ -6,6 +6,7 @@ import { setupApplicationTest } from 'ember-qunit';
 import Service from '@ember/service';
 import { setupBrowserFakes } from 'ember-browser-services/test-support';
 import { t } from 'ember-intl/test-support';
+import { Response } from 'miragejs';
 
 import { setupRequiredEndpoints } from '../helpers/acceptance-utils';
 
@@ -35,8 +36,7 @@ module('Acceptance | side nav test', function (hooks) {
   setupBrowserFakes(hooks, { window: true });
 
   hooks.beforeEach(async function () {
-    const { organization, currentOrganizationMe } =
-      await setupRequiredEndpoints(this.server);
+    const { organization } = await setupRequiredEndpoints(this.server);
 
     this.owner.register('service:integration', IntegrationStub);
     this.owner.register('service:websocket', WebsocketStub);
@@ -66,7 +66,6 @@ module('Acceptance | side nav test', function (hooks) {
     this.setProperties({
       organization,
       menuItems,
-      currentOrganizationMe,
     });
   });
 
@@ -177,8 +176,8 @@ module('Acceptance | side nav test', function (hooks) {
       { storeknox: false, security: false },
     ],
     async function (assert, products) {
-      this.currentOrganizationMe.update({
-        has_security_permission: products.security,
+      this.server.get('/hudson-api/projects', () => {
+        return products.security ? new Response(200) : new Response(404);
       });
 
       this.organization.update({

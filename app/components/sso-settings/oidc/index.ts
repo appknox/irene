@@ -107,11 +107,6 @@ export default class SsoSettingsOidcComponent extends Component<SsoSettingsOidcS
     this.showDeleteOidcConfirm = true;
   }
 
-  @action
-  closeDeleteOidcConfirm() {
-    this.showDeleteOidcConfirm = false;
-  }
-
   createProvider = task({ drop: true }, async () => {
     await this.changeset?.validate();
 

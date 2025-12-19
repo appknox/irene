@@ -65,7 +65,7 @@ export default class AuthenticatedRoute extends Route {
     const userId = this.authenticatedUserId;
 
     await all([
-      this.store.findAll('vulnerability'),
+      this.store.findAll('Vulnerability'),
       this.org.load(),
       this.configuration.getDashboardConfig(),
     ]);
