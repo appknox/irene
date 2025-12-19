@@ -9,7 +9,18 @@
     @filterPlatform={{this.filterPlatform}}
     @onSelectTeam={{this.onSelectTeam}}
     @sortProjects={{this.sortProjects}}
+    @onColumnsUpdate={{this.handleColumnsUpdate}}
+    @onOpenColumnManager={{this.openColumnManager}}
   />
+
+  {{#unless this.isCardView}}
+    <ProjectList::ColumnManagerDrawer
+      @open={{this.showColumnManager}}
+      @allColumnsMap={{this.allColumnsMap}}
+      @onClose={{this.closeColumnManager}}
+      @onApply={{this.handleColumnsUpdate}}
+    />
+  {{/unless}}
 
   {{#if this.hasProjects}}
     <div>
@@ -32,14 +43,60 @@
           @offset={{this.offset}}
           as |pgc|
         >
-          <div local-class='project-grid'>
-            {{#each pgc.currentPageResults as |project|}}
-              <ProjectOverview
-                data-test-cy='project-overview-{{project.lastFile.id}}'
-                @project={{project}}
-              />
-            {{/each}}
-          </div>
+          {{#if this.isCardView}}
+            <div local-class='project-grid'>
+              {{#each pgc.currentPageResults as |project|}}
+                <ProjectOverview
+                  data-test-cy='project-overview-{{project.lastFile.id}}'
+                  @project={{project}}
+                />
+              {{/each}}
+            </div>
+          {{else}}
+            <AkStack @width='full' {{style overflowX='auto'}}>
+              <AkTable
+                local-class='project-table'
+                @dense={{true}}
+                @hoverable={{true}}
+                data-test-project-list-table
+                as |t|
+              >
+                <t.head
+                  @columns={{this.columns}}
+                  @scrollIndicators='horizontal'
+                  data-test-project-list-column-header
+                />
+
+                <t.body @rows={{pgc.currentPageResults}} as |b|>
+                  <b.row
+                    {{style cursor='pointer'}}
+                    @onClick={{fn this.handleProjectRowClick b.rowValue}}
+                    data-test-project-list-table-row
+                    as |r|
+                  >
+                    <r.cell as |value|>
+                      {{#if r.columnValue.component}}
+                        {{#let
+                          (component r.columnValue.component)
+                          as |Component|
+                        }}
+                          <Component @project={{r.rowValue}} />
+                        {{/let}}
+                      {{else}}
+                        <AkTypography
+                          data-test-project-list-table-row-value
+                          @noWrap={{true}}
+                          title={{value}}
+                        >
+                          {{value}}
+                        </AkTypography>
+                      {{/if}}
+                    </r.cell>
+                  </b.row>
+                </t.body>
+              </AkTable>
+            </AkStack>
+          {{/if}}
 
           {{#if this.showPagination}}
             <AkPagination

@@ -1,6 +1,13 @@
 import Service from '@ember/service';
 import { isEmpty } from '@ember/utils';
-import { fillIn, findAll, render, click, waitFor } from '@ember/test-helpers';
+import {
+  fillIn,
+  findAll,
+  render,
+  click,
+  waitFor,
+  find,
+} from '@ember/test-helpers';
 import { hbs } from 'ember-cli-htmlbars';
 import { setupMirage } from 'ember-cli-mirage/test-support';
 import { setupIntl, t } from 'ember-intl/test-support';
@@ -32,6 +39,8 @@ module('Integration | Component | project list', function (hooks) {
 
     const store = this.owner.lookup('service:store');
     const projectService = this.owner.lookup('service:project');
+
+    projectService.setViewType('card');
 
     this.setProperties({
       projectService,
@@ -72,10 +81,6 @@ module('Integration | Component | project list', function (hooks) {
       return { count: results.length, next: null, previous: null, results };
     });
 
-    this.server.get('/profiles/:id/unknown_analysis_status', (schema, req) => {
-      return { id: req.params.id, status: faker.datatype.boolean() };
-    });
-
     await render(hbs`<ProjectList />`);
 
     assert
@@ -101,10 +106,6 @@ module('Integration | Component | project list', function (hooks) {
       const results = schema.projects.all().models;
 
       return { count: results.length, next: null, previous: null, results };
-    });
-
-    this.server.get('/profiles/:id/unknown_analysis_status', (schema, req) => {
-      return { id: req.params.id, status: faker.datatype.boolean() };
     });
 
     this.server.get('/organizations/:id/teams', (schema) => {
@@ -157,10 +158,6 @@ module('Integration | Component | project list', function (hooks) {
         : schema.projects.all().models;
 
       return { count: results.length, next: null, previous: null, results };
-    });
-
-    this.server.get('/profiles/:id/unknown_analysis_status', (schema, req) => {
-      return { id: req.params.id, status: faker.datatype.boolean() };
     });
 
     this.server.get('/organizations/:id/teams', (schema) => {
@@ -233,13 +230,6 @@ module('Integration | Component | project list', function (hooks) {
         return { count: results.length, next: null, previous: null, results };
       });
 
-      this.server.get(
-        '/profiles/:id/unknown_analysis_status',
-        (schema, req) => {
-          return { id: req.params.id, status: faker.datatype.boolean() };
-        }
-      );
-
       await render(hbs`<ProjectList />`);
 
       let projectContainerList = findAll(
@@ -282,10 +272,6 @@ module('Integration | Component | project list', function (hooks) {
         : schema.projects.all().models;
 
       return { count: results.length, next: null, previous: null, results };
-    });
-
-    this.server.get('/profiles/:id/unknown_analysis_status', (schema, req) => {
-      return { id: req.params.id, status: faker.datatype.boolean() };
     });
 
     await render(hbs`<ProjectList />`);
@@ -339,10 +325,6 @@ module('Integration | Component | project list', function (hooks) {
           : schema.projects.all().models;
 
       return { count: results.length, next: null, previous: null, results };
-    });
-
-    this.server.get('/profiles/:id/unknown_analysis_status', (schema, req) => {
-      return { id: req.params.id, status: faker.datatype.boolean() };
     });
 
     await render(hbs`<ProjectList />`);
@@ -437,10 +419,6 @@ module('Integration | Component | project list', function (hooks) {
       return { count: results.length, next: null, previous: null, results };
     });
 
-    this.server.get('/profiles/:id/unknown_analysis_status', (schema, req) => {
-      return { id: req.params.id, status: faker.datatype.boolean() };
-    });
-
     await render(hbs`<ProjectList />`);
 
     assert.dom('[data-test-project-list-header-clear-filter]').doesNotExist();
@@ -492,5 +470,218 @@ module('Integration | Component | project list', function (hooks) {
     await selectChoose('.select-team-class', '.ember-power-select-option', 0);
 
     assert.dom('[data-test-project-list-header-clear-filter]').exists();
+  });
+
+  test('It switches between card and list views', async function (assert) {
+    this.server.createList('project', 3);
+
+    this.server.get('/v3/projects', (schema) => {
+      const results = schema.projects.all().models;
+
+      return { count: results.length, next: null, previous: null, results };
+    });
+
+    await render(hbs`<ProjectList />`);
+
+    // Initially should be in card view (default)
+    assert
+      .dom('[data-test-project-overview-container]')
+      .exists({ count: 3 }, 'Shows 3 project cards in card view');
+
+    assert
+      .dom('[data-test-project-list-table]')
+      .doesNotExist('Table view is not shown initially');
+
+    await click('[data-test-project-list-header-list-view-btn]');
+
+    assert
+      .dom('[data-test-project-overview-container]')
+      .doesNotExist('Card view is hidden after switching to list view');
+
+    assert
+      .dom('[data-test-project-list-table]')
+      .exists('Table view is shown after clicking list view button');
+
+    assert
+      .dom('[data-test-project-list-table-row]')
+      .exists({ count: 3 }, 'Shows 3 project rows in table view');
+
+    await click('[data-test-project-list-header-card-view-btn]');
+
+    assert
+      .dom('[data-test-project-overview-container]')
+      .exists(
+        { count: 3 },
+        'Shows 3 project cards after switching back to card view'
+      );
+    assert
+      .dom('[data-test-project-list-table]')
+      .doesNotExist('Table view is hidden after switching back to card view');
+  });
+
+  test('It manages columns in list view', async function (assert) {
+    this.server.createList('project', 2);
+
+    this.server.get('/v3/projects', (schema) => {
+      const results = schema.projects.all().models;
+
+      return { count: results.length, next: null, previous: null, results };
+    });
+
+    await render(hbs`<ProjectList />`);
+
+    // Switch to list view and open column manager
+    await click('[data-test-project-list-header-list-view-btn]');
+    await click('[data-test-projectList-header-columnManagerBtn]');
+
+    // Find a hideable column that is currently selected
+    const hideableColumns = [
+      'packageName',
+      'lastFile.version',
+      'lastFile.versionCode',
+      'severityLevel',
+      'scanStatus',
+      'lastFile.createdOnDateTime',
+      'tags',
+    ];
+
+    let columnToToggle;
+
+    for (const field of hideableColumns) {
+      const checkbox = find(
+        `[data-test-projectList-columnManager-columnCheckbox="${field}"]`
+      );
+
+      if (checkbox && checkbox.checked) {
+        columnToToggle = field;
+        break;
+      }
+    }
+
+    assert.ok(columnToToggle, 'Found a hideable column that is selected');
+
+    // Uncheck the column
+    await click(
+      `[data-test-projectList-columnManager-columnCheckbox="${columnToToggle}"]`
+    );
+
+    await click('[data-test-projectList-columnManager-apply]');
+
+    // Get columns after hiding one
+    const headerAfterHide = find('[data-test-project-list-column-header]');
+
+    const visibleColumnsAfterHide = Array.from(
+      headerAfterHide.querySelectorAll('th')
+    )
+      .map((th) => th.textContent.trim())
+      .filter(Boolean);
+
+    // Verify the column is hidden
+    assert.notOk(
+      visibleColumnsAfterHide.some((col) => col.includes(t(columnToToggle))),
+      `"${t(columnToToggle)}" column should be hidden`
+    );
+
+    // Reopen column manager and re-enable the column
+    await click('[data-test-projectList-header-columnManagerBtn]');
+
+    // Find the checkbox again after re-opening
+    const updatedCheckbox = find(
+      `[data-test-projectList-columnManager-columnCheckbox="${columnToToggle}"]`
+    );
+
+    assert.ok(
+      updatedCheckbox,
+      'Should find the column checkbox after re-opening'
+    );
+
+    await click(updatedCheckbox);
+    await click('[data-test-projectList-columnManager-apply]');
+
+    // Get columns after re-enabling
+    const headerAfterReenable = find('[data-test-project-list-column-header]');
+    const visibleColumnsAfterReenable = Array.from(
+      headerAfterReenable.querySelectorAll('th')
+    )
+      .map((th) => th.textContent.trim())
+      .filter(Boolean);
+
+    // Verify the column is visible again
+    assert.ok(
+      visibleColumnsAfterReenable.some((col) =>
+        col.includes(t(columnToToggle))
+      ),
+      `"${t(columnToToggle)}" column should be visible again`
+    );
+  });
+
+  test('It resets columns to default when reset button is clicked', async function (assert) {
+    assert.expect(9);
+
+    this.server.createList('project', 2);
+
+    this.server.get('/v3/projects', (schema) => {
+      const results = schema.projects.all().models;
+
+      return { count: results.length, next: null, previous: null, results };
+    });
+
+    await render(hbs`<ProjectList />`);
+
+    // Switch to list view and open column manager
+    await click('[data-test-project-list-header-list-view-btn]');
+    await click('[data-test-projectList-header-columnManagerBtn]');
+
+    // Get the initial state of columns
+    const initialHeader = find('[data-test-project-list-column-header]');
+
+    const initialColumns = Array.from(initialHeader.querySelectorAll('th'))
+      .map((th) => th.textContent.trim())
+      .filter(Boolean);
+
+    // Hide a column
+    const columnToHide = 'packageName';
+
+    await click(
+      `[data-test-projectList-columnManager-columnCheckbox="${columnToHide}"]`
+    );
+
+    await click('[data-test-projectList-columnManager-apply]');
+
+    // Get visible columns after hiding one
+    const headerAfterHide = find('[data-test-project-list-column-header]');
+    const visibleColumnsAfterHide = Array.from(
+      headerAfterHide.querySelectorAll('th')
+    )
+      .map((th) => th.textContent.trim())
+      .filter(Boolean);
+
+    // Verify the column is hidden
+    assert.notOk(
+      visibleColumnsAfterHide.some((col) => col.includes(columnToHide)),
+      `"${columnToHide}" column should be hidden`
+    );
+
+    // Reopen column manager and click reset
+    await click('[data-test-projectList-header-columnManagerBtn]');
+    await click('[data-test-projectList-columnManager-reset]');
+    await click('[data-test-projectList-columnManager-apply]');
+
+    // Get visible columns after reset
+    const headerAfterReset = find('[data-test-project-list-column-header]');
+    const visibleColumnsAfterReset = Array.from(
+      headerAfterReset.querySelectorAll('th')
+    )
+      .map((th) => th.textContent.trim())
+      .filter(Boolean);
+
+    // Verify all default columns are visible again
+    initialColumns.forEach((columnName, index) => {
+      assert.strictEqual(
+        visibleColumnsAfterReset[index],
+        columnName,
+        `Column "${columnName}" should be visible at position ${index}`
+      );
+    });
   });
 });

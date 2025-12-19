@@ -1,0 +1,45 @@
+.severity-indicator {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+}
+
+.severity-level-tag {
+  border: 1px solid var(--project-list-severity-level-tag-border-color);
+  border-radius: 1em;
+  padding: 0.2em 0.5em;
+  min-width: 3.5em;
+  align-items: center;
+  justify-content: center;
+}
+
+.tooltip-content-container {
+  width: 280px;
+  padding: 0.5em;
+  box-sizing: border-box;
+  white-space: normal;
+}
+
+.severity-critical {
+  background-color: var(--project-list-severity-level-color-critical);
+}
+
+.severity-high {
+  background-color: var(--project-list-severity-level-color-high);
+}
+
+.severity-medium {
+  background-color: var(--project-list-severity-level-color-medium);
+}
+
+.severity-low {
+  background-color: var(--project-list-severity-level-color-low);
+}
+
+.severity-passed {
+  background-color: var(--project-list-severity-level-color-passed);
+}
+
+.severity-none {
+  background-color: var(--project-list-severity-level-color-none);
+}

@@ -1,0 +1,14 @@
+.card-more-menu-item-group {
+  padding: 0 0.5em;
+  padding-bottom: 0.5em;
+
+  &:not(:first-child) {
+    padding-top: 0.5em;
+  }
+}
+
+.card-more-menu-item {
+  a {
+    padding: 0.5em !important;
+  }
+}

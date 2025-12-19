@@ -1,0 +1,33 @@
+<AkStack
+  @width='full'
+  @direction='row'
+  @justifyContent='left'
+  @alignItems='center'
+  @spacing='1.5'
+  local-class='text-nowrap'
+>
+  <AkStack
+    @direction='row'
+    @alignItems='center'
+    @width='fit-content'
+    @spacing='1'
+    local-class='file-tags-container'
+    data-test-projectList-tags
+  >
+    {{#if this.hasTags}}
+      {{#each this.tags as |tag|}}
+        <AkChip
+          @label={{tag.name}}
+          @variant='outlined'
+          local-class='card-chips'
+          {{style height='26px'}}
+          data-test-projectList-tag='{{tag.name}}'
+        />
+      {{/each}}
+    {{else}}
+      <AkTypography @variant='body2' data-test-projectList-tags-empty>
+        {{t 'fileCompare.noTagsMessage'}}
+      </AkTypography>
+    {{/if}}
+  </AkStack>
+</AkStack>
