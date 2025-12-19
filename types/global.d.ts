@@ -8,6 +8,12 @@ import type EmberTableRegistry from 'ember-table/template-registry';
 import type EmberIntlRegistry from 'ember-intl/template-registry';
 import type EmberFileUploadRegistry from 'ember-file-upload/template-registry';
 import type AkSvgRegistry from 'ak-svg';
+import type OrHelper from 'ember-truth-helpers/helpers/or';
+import type gtHelper from 'ember-truth-helpers/helpers/gt';
+import type notEqHelper from 'ember-truth-helpers/helpers/not-eq';
+import type andHelper from 'ember-truth-helpers/helpers/and';
+import type notHelper from 'ember-truth-helpers/helpers/not';
+import type eqHelper from 'ember-truth-helpers/helpers/eq';
 
 // Types for compiled templates
 declare module 'irene/templates/*' {
@@ -64,43 +70,12 @@ declare module '@glint/environment-ember-loose/registry' {
       Return: string;
     }>;
 
-    eq: HelperLike<{
-      Args: {
-        Positional: [
-          string | number | undefined | null | boolean,
-          string | number | undefined | null | boolean,
-        ];
-      };
-      Return: boolean;
-    }>;
-
-    gt: HelperLike<{
-      Args: {
-        Positional: PrimitiveTypes[];
-      };
-      Return: boolean;
-    }>;
-
-    or: HelperLike<{
-      Args: {
-        Positional: PrimitiveTypes[];
-      };
-      Return: unknown;
-    }>;
-
-    and: HelperLike<{
-      Args: {
-        Positional: PrimitiveTypes[];
-      };
-      Return: unknown;
-    }>;
-
-    not: HelperLike<{
-      Args: {
-        Positional: [unknown];
-      };
-      Return: boolean;
-    }>;
+    eq: typeof eqHelper;
+    'not-eq': typeof notEqHelper;
+    gt: typeof gtHelper;
+    or: typeof OrHelper;
+    and: typeof andHelper;
+    not: typeof notHelper;
 
     'page-title': HelperLike<{
       Args: {
