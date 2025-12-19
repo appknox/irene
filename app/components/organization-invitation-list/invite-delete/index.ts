@@ -1,5 +1,5 @@
 import Component from '@glimmer/component';
-import { service } from '@ember/service';
+import { inject as service } from '@ember/service';
 import { action } from '@ember/object';
 import { task } from 'ember-concurrency';
 import { tracked } from '@glimmer/tracking';
@@ -30,12 +30,6 @@ export default class OrganizationMemberInvitationListInviteDelete extends Compon
   @action
   openDeleteInvitationConfirmBox() {
     this.showDeleteInvitationConfirmBox = true;
-  }
-
-  /* Close delete-invitation confirmation */
-  @action
-  closeDeleteInvitationConfirmBox() {
-    this.showDeleteInvitationConfirmBox = false;
   }
 
   /* Delete invitation */

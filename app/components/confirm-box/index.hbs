@@ -1,7 +1,7 @@
-{{#if @isActive}}
+{{#if this.isActive}}
   <AkModal
     @showHeader={{true}}
-    @headerTitle={{this.headerTitle}}
+    @headerTitle={{or @title (t 'confirm')}}
     @disableClose={{@disabled}}
     @onClose={{perform this.clearModal}}
     @blurOverlay={{@blurOverlay}}
@@ -17,7 +17,7 @@
 
       <AkStack
         @alignItems='center'
-        @justifyContent={{this.justifyActionContent}}
+        @justifyContent={{or @justifyActionContent 'center'}}
         @spacing='2'
         @width='full'
         class='mt-3'
@@ -27,7 +27,7 @@
           @loading={{@disabled}}
           {{on 'click' (perform this.sendCallback)}}
         >
-          {{this.confirmText}}
+          {{or @confirmText (t 'ok')}}
         </AkButton>
 
         <AkButton
@@ -37,7 +37,7 @@
           @disabled={{@disabled}}
           {{on 'click' (perform this.clearModal)}}
         >
-          {{this.cancelText}}
+          {{or @cancelText (t 'cancel')}}
         </AkButton>
       </AkStack>
     </AkStack>

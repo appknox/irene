@@ -99,13 +99,9 @@ export default class ProjectSettingsIntegrationsSplunkComponent extends Componen
     );
   }
 
-  @action
-  async fetchSplunkIntegrationProps() {
-    await this.fetchSplunkConfig.perform();
-
-    if (!this.noIntegration) {
-      this.checkSplunkIntegration.perform();
-    }
+  @action fetchSplunkIntegrationProps() {
+    this.fetchSplunkConfig.perform();
+    this.checkSplunkIntegration.perform();
   }
 
   @action openDeleteSplunkConfigConfirmBox() {
@@ -172,7 +168,7 @@ export default class ProjectSettingsIntegrationsSplunkComponent extends Componen
         return;
       }
 
-      if (errorDetail?.includes('Not Found')) {
+      if (errorDetail?.includes('Not Found (404)')) {
         this.noIntegration = true;
         this.noAccess = true;
 

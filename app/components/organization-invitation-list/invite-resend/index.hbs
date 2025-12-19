@@ -10,7 +10,7 @@
 <ConfirmBox
   @isActive={{this.showResendInvitationConfirmBox}}
   @description={{t 'confirmBox.resendInvitation'}}
-  @cancelAction={{this.closeResendInvitationConfirmBox}}
+  @delegate={{this}}
   @confirmAction={{perform this.confirmResend}}
   @disabled={{this.isResendingInvitation}}
   @confirmText={{t 'resend'}}

@@ -31,11 +31,13 @@ export default class StoreknoxDiscoverResultsComponent extends Component {
     event.preventDefault();
 
     if (this.searchQuery.length > 1) {
+      this.skDiscoverySearchResult.setQueryData({ searchId: '' });
+
       this.router.transitionTo({
         queryParams: {
           app_offset: 0,
           app_query: this.searchQuery,
-          app_search_id: '',
+          app_search_id: null,
         },
       });
     } else {

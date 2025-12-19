@@ -56,6 +56,12 @@ export default class UserModel extends Model {
   @attr('number')
   declare projectCount: number;
 
+  @attr('boolean')
+  declare hasGithubToken: boolean;
+
+  @attr('boolean')
+  declare hasJiraToken: boolean;
+
   @attr('string')
   declare socketId: string;
 
@@ -64,6 +70,9 @@ export default class UserModel extends Model {
 
   @attr('number')
   declare scansLeft: number;
+
+  @attr('string')
+  declare githubRedirectUrl: string;
 
   @attr('boolean')
   declare billingHidden: boolean;
@@ -83,12 +92,19 @@ export default class UserModel extends Model {
   @attr('boolean')
   declare canDisableMfa: boolean;
 
+  isSecurity = true; // FIXME:
+
   get translations() {
     return {
       tProject: this.intl.t('project'),
       tProjects: this.intl.t('projects'),
       tNoProject: this.intl.t('noProject'),
     };
+  }
+
+  @computed('isSecurity')
+  get isNotSecurity() {
+    return !this.isSecurity;
   }
 
   @computed('mfaSecret', 'email')

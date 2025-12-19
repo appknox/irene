@@ -34,15 +34,12 @@ module('Acceptance | home page', function (hooks) {
   setupMirage(hooks);
 
   hooks.beforeEach(async function () {
-    const { organization, currentOrganizationMe } =
-      await setupRequiredEndpoints(this.server);
-
-    currentOrganizationMe.update({
-      has_security_permission: true,
-    });
+    const { organization } = await setupRequiredEndpoints(this.server);
 
     organization.update({
-      features: { storeknox: true },
+      features: {
+        storeknox: true,
+      },
     });
 
     // Services
@@ -52,14 +49,8 @@ module('Acceptance | home page', function (hooks) {
     // Models
     this.server.create('sk-organization');
 
-    // Server Mocks
-    this.server.get('/v3/projects', () => {
-      return { count: 0, next: null, previous: null, results: [] };
-    });
-
     this.setProperties({
       organization,
-      currentOrganizationMe,
     });
   });
 
@@ -173,10 +164,6 @@ module('Acceptance | home page', function (hooks) {
       },
     });
 
-    this.currentOrganizationMe.update({
-      has_security_permission: false,
-    });
-
     this.server.get('/hudson-api/projects', () => {
       return new Response(404);
     });
@@ -200,8 +187,8 @@ module('Acceptance | home page', function (hooks) {
       { storeknox: false, security: true },
     ],
     async function (assert, products) {
-      this.currentOrganizationMe.update({
-        has_security_permission: products.security,
+      this.server.get('/hudson-api/projects', () => {
+        return products.security ? new Response(200) : new Response(404);
       });
 
       this.organization.update({

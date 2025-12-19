@@ -98,13 +98,9 @@ export default class ProjectSettingsIntegrationsSlackComponent extends Component
     );
   }
 
-  @action
-  async fetchSlackIntegrationProps() {
-    await this.checkSlackIntegration.perform();
-
-    if (!this.noIntegration) {
-      this.fetchSlackConfig.perform();
-    }
+  @action fetchSlackIntegrationProps() {
+    this.fetchSlackConfig.perform();
+    this.checkSlackIntegration.perform();
   }
 
   @action openDeleteSlackConfigConfirmBox() {
@@ -171,7 +167,7 @@ export default class ProjectSettingsIntegrationsSlackComponent extends Component
         return;
       }
 
-      if (errorDetail?.includes('Not Found')) {
+      if (errorDetail?.includes('Not Found (404)')) {
         this.noIntegration = true;
         this.noAccess = true;
 

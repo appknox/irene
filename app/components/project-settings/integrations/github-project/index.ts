@@ -138,12 +138,9 @@ export default class ProjectSettingsIntegrationsGithubProjectComponent extends C
   }
 
   @action
-  async fetchdata() {
-    await this.setCurrentGithubRepo.perform();
-
-    if (!this.noIntegration) {
-      this.fetchGithubRepos.perform();
-    }
+  fetchdata() {
+    this.setCurrentGithubRepo.perform();
+    this.fetchGithubRepos.perform();
   }
 
   @action
@@ -208,7 +205,6 @@ export default class ProjectSettingsIntegrationsGithubProjectComponent extends C
 
       if (errorDetail === 'Github not integrated') {
         this.currentGithubRepo = null;
-        this.noIntegration = true;
 
         return;
       }

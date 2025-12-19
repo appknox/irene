@@ -7,6 +7,7 @@ import type Store from '@ember-data/store';
 
 import ENUMS from 'irene/enums';
 import ENV from 'irene/config/environment';
+import type AnalysisOverviewModel from 'irene/models/analysis-overview';
 import type UserModel from 'irene/models/user';
 import type ConfigurationService from './configuration';
 import type RealtimeService from 'irene/services/realtime';
@@ -14,13 +15,7 @@ import type AkNotificationsService from 'irene/services/ak-notifications';
 import type IreneAjaxService from 'irene/services/ajax';
 import type SkNotificationsService from 'irene/services/sk-notifications';
 import type LoggerService from 'irene/services/logger';
-import type EventBusService from 'irene/services/event-bus';
-
-import {
-  AnalysisEventHandler,
-  DynamicScanEventHandler,
-  WsModelEventHandler,
-} from 'irene/utils/ws-model-ev-handlers';
+import type EventBusService from './event-bus';
 
 interface SocketIOService {
   socketFor(host: string, opts: { path: string }): SocketInstance;
@@ -68,8 +63,6 @@ export default class WebsocketService extends Service {
   connectedSocket: SocketInstance | null = null;
   modelNameIdMapper: ModelNameIdMapper = {};
 
-  private handlers: Map<string, WsModelEventHandler> = new Map();
-
   getHost() {
     return this.configuration.serverData.websocket || this.ajax.host || '/';
   }
@@ -86,10 +79,6 @@ export default class WebsocketService extends Service {
 
   closeSocketConnection() {
     this.socketIOService.closeSocketFor(this.getHost());
-  }
-
-  private registerHandler(handler: WsModelEventHandler) {
-    this.handlers.set(handler.modelName, handler);
   }
 
   async configure(user: UserModel) {
@@ -154,20 +143,9 @@ export default class WebsocketService extends Service {
 
   onConnect() {
     this.logger.debug('Connecting to room: ' + this.currentSocketID);
-    this.connectedSocket?.emit('subscribe', { room: this.currentSocketID });
 
-    // Register handlers to dispatch events via event bus
-    const handlers = [
-      new AnalysisEventHandler(this.store, this.eventBus, this.realtime),
-      new DynamicScanEventHandler(this.store, this.eventBus, this.realtime),
-    ];
-
-    handlers.forEach((handler) => {
-      this.registerHandler(handler);
-
-      this.logger.debug(
-        `Registered ${handler.modelName} handler to websocket service`
-      );
+    this.connectedSocket?.emit('subscribe', {
+      room: this.currentSocketID,
     });
   }
 
@@ -177,10 +155,7 @@ export default class WebsocketService extends Service {
    * @param data - The data object containing the file ID and type
    * @returns void
    */
-  onModelNotification(
-    data?: { model_name: string; data: object },
-    isCreated = false
-  ) {
+  onModelNotification(data?: { model_name: string; data: object }) {
     if (
       !this.validateData(data, ['model_name', 'data'], 'onModelNotification')
     ) {
@@ -191,9 +166,14 @@ export default class WebsocketService extends Service {
     const normalized = this.store.normalize(data.model_name, data.data);
     const model = this.store.push(normalized);
 
-    // Broadcast the update to the appropriate handler
-    if (!isCreated) {
-      this.handlers.get(data.model_name)?.onUpdate?.(data.data, model);
+    // SPECIAL CASE: Update "analysis-overview" model (subset of analysis model)
+    if (data.model_name?.toLowerCase() === 'analysis') {
+      const normalized = this.store.normalize('analysis-overview', data.data);
+      const model = this.store.push(normalized) as AnalysisOverviewModel;
+
+      // Trigger event to directly add an analysis to appropriate file in the scan details page
+      // when an analysis is ongoing
+      this.eventBus.trigger('ws:analysis-overview:update', model);
     }
 
     return model;
@@ -206,10 +186,14 @@ export default class WebsocketService extends Service {
    * @returns void
    */
   onModelCreatedNotification(data?: { model_name: string; data: object }) {
-    const model = this.onModelNotification(data, true);
+    const model = this.onModelNotification(data);
 
-    if (data?.model_name && data?.data) {
-      this.handlers.get(data.model_name)?.onCreate?.(data.data, model);
+    // Whenever we receive this notification for newly created dynamic scan
+    // We increment the counter for the dynamic scan to reload the last automated dynamic scan
+    // in the dynamic scan header component
+    // REFER: app/components/file-details/dynamic-scan/header/index.ts (LINE: 61)
+    if (model && data?.model_name === 'dynamicscan') {
+      this.realtime.incrementProperty('FileAutoDynamicScanReloadCounter');
     }
   }
 

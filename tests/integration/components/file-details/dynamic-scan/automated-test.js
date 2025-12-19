@@ -40,9 +40,6 @@ module(
         },
       });
 
-      // Create organization me
-      this.server.create('organization-me', { id: organization.id });
-
       // Create file
       const profile = this.server.create('profile', {
         id: '100',
@@ -93,10 +90,6 @@ module(
           dynamic_scan_automation_enabled: true,
         };
       });
-
-      this.server.get('/organizations/:id/me', (schema, req) =>
-        schema.organizationMes.find(`${req.params.id}`)?.toJSON()
-      );
 
       // Set properties
       this.setProperties({

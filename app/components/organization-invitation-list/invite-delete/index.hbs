@@ -1,3 +1,4 @@
+{{! @glint-nocheck: perform }}
 <AkIconButton
   data-test-invitation-delete-btn
   data-test-cy='invite-delete-btn'
@@ -11,7 +12,7 @@
 <ConfirmBox
   @isActive={{this.showDeleteInvitationConfirmBox}}
   @description={{t 'confirmBox.deleteInvitation'}}
-  @cancelAction={{this.closeDeleteInvitationConfirmBox}}
+  @delegate={{this}}
   @confirmAction={{perform this.confirmDelete}}
   @disabled={{this.isDeletingInvitation}}
   @confirmText={{t 'delete'}}

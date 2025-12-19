@@ -44,12 +44,6 @@ export default class OrganizationProjectOverview extends Component<OrganizationP
     this.showRemoveProjectConfirm = true;
   }
 
-  /* Close remove-project confirmation */
-  @action
-  closeRemoveProjectConfirm() {
-    this.showRemoveProjectConfirm = false;
-  }
-
   /* Remove project action */
   removeProject = task(async () => {
     try {

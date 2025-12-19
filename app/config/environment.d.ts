@@ -5,7 +5,6 @@
 declare const config: {
   ENVHandlerCONST: ENVHandlerCONST;
   productVersions: ProductVersions;
-  podModulePrefix: string;
   version: number;
   isDevknox: boolean;
   isAppknox: boolean;
@@ -31,7 +30,6 @@ declare const config: {
   deviceFarmPassword: string;
   namespace: string;
   namespace_v2: string;
-  namespace_v3: string;
   host: string;
   'ember-cli-mirage': EmberCLIMirage;
   emblemOptions: EmblemOptions;

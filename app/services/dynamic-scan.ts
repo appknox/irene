@@ -11,14 +11,12 @@ import type FileModel from 'irene/models/file';
 import type DynamicscanModel from 'irene/models/dynamicscan';
 import type OrganizationService from './organization';
 import type PollService from './poll';
-import type MeService from './me';
 
 export default class DynamicScanService extends Service {
   @service declare intl: IntlService;
   @service declare store: Store;
   @service declare organization: OrganizationService;
   @service declare poll: PollService;
-  @service declare me: MeService;
   @service('notifications') declare notify: NotificationService;
   @service('browser/window') declare window: Window;
 
@@ -26,13 +24,9 @@ export default class DynamicScanService extends Service {
 
   get isSuperUserAndAutomationEnabled() {
     return (
-      this.isSecurityEnabled &&
+      this.organization.isSecurityEnabled &&
       this.organization.selected?.features?.dynamicscan_automation
     );
-  }
-
-  get isSecurityEnabled() {
-    return this.me.org?.has_security_permission;
   }
 
   get showScheduledScan() {

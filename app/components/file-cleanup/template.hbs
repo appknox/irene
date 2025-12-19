@@ -1,0 +1,90 @@
+{{#unless this.isHideSettings}}
+  <AkTypography
+    @variant='h5'
+    class='pb-2'
+    {{did-insert (perform this.loadCleanupPref)}}
+  >
+    {{t 'storageManagement'}}
+  </AkTypography>
+
+  <AkStack @direction='row' @spacing='2'>
+    <AkToggle
+      @id='auto-cleanup'
+      @onChange={{fn this.onChangePref this.changeset 'checkbox'}}
+      @checked={{get this.changeset 'isEnabled'}}
+    />
+
+    <AkStack @direction='column'>
+      <AkTypography @variant='h5'>
+        {{t 'fileCleanup.autoCleanup'}}
+      </AkTypography>
+
+      <AkTypography @variant='body2'>
+        {{t 'fileCleanup.description'}}
+      </AkTypography>
+
+      {{#if this.changeset.isEnabled}}
+        <AkStack @spacing='2' @width='8/12' class='my-2'>
+          <AkTextField
+            @label={{t 'fileCleanup.activeCount'}}
+            @value={{mut (get this.changeset 'filesToKeep')}}
+            @type='number'
+            @min={{2}}
+            @max={{50}}
+            @id='active-file-limit'
+            @disabled={{unless this.changeset.isEnabled 'disabled'}}
+            @error={{this.changeset.error.filesToKeep}}
+          >
+            <:helperText>
+              <AkTypography @variant='body2' @color='error'>
+                {{this.changeset.error.filesToKeep.validation}}
+              </AkTypography>
+            </:helperText>
+          </AkTextField>
+
+          <AkIconButton
+            local-class='save-input'
+            @variant='outlined'
+            @disabled={{if this.changeset.error.filesToKeep 'disabled'}}
+            {{on 'click' (fn this.onChangePref this.changeset)}}
+          >
+            <AkIcon @iconName='done' />
+          </AkIconButton>
+        </AkStack>
+
+        <AkStack @direction='row' @alignItems='center' @spacing='2'>
+          <AkTypography @variant='body2'>
+            {{t 'fileCleanup.lastActivity'}}:
+          </AkTypography>
+
+          <AkTypography @variant='body2'>
+            {{day-js date=this.changeset.lastCleanedAt format='DD MMM YYYY'}}
+          </AkTypography>
+
+          <AkButton @variant='outlined' {{on 'click' this.onViewAllCleanup}}>
+            {{t 'fileCleanup.viewList'}}
+          </AkButton>
+
+          <AkButton
+            @disabled={{unless this.changeset.isEnabled 'disabled'}}
+            {{on 'click' this.onTriggerCleanup}}
+          >
+            {{t 'fileCleanup.run'}}
+          </AkButton>
+        </AkStack>
+      {{/if}}
+    </AkStack>
+  </AkStack>
+  {{! Added divider since it's render by self context check }}
+  <AkDivider class='my-2' />
+{{/unless}}
+
+{{#if this.isShowAllCleanup}}
+  <AkModal
+    @onClose={{this.onCloseModal}}
+    @showHeader={{true}}
+    @headerTitle={{t 'fileCleanup.listTitle'}}
+  >
+    <Modals::OrgFileCleanupList />
+  </AkModal>
+{{/if}}
