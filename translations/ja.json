@@ -1228,6 +1228,7 @@
   "personalAccessTokenCreate": "トークンの生成",
   "personalAccessTokenDesc": "Tokens you have generated that can be used to access the API",
   "personalAccessTokens": "作成されました ->　作成日",
+  "personalTokenNameDuplicate": "Duplicate token name, please choose a different name",
   "personalTokenGenerated": "パーソナルアクセストークンが生成されました",
   "personalTokenKey": "トークン",
   "personalTokenRevoke": "無効にする",
