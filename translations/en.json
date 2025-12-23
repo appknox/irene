@@ -1228,6 +1228,7 @@
   "personalAccessTokenCreate": "Generate token",
   "personalAccessTokenDesc": "Tokens you have generated that can be used to access the API",
   "personalAccessTokens": "Personal access tokens",
+  "personalTokenNameDuplicate": "Duplicate token name, please choose a different name",
   "personalTokenGenerated": "Personal access token generated successfully.",
   "personalTokenKey": "Token",
   "personalTokenRevoke": "Revoke",

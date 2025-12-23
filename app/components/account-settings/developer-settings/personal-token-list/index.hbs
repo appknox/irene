@@ -17,13 +17,18 @@
     <AkStack @width='full' @alignItems='center' @spacing='1.5'>
       <div {{style flex='1'}}>
         <AkTextField
+          data-test-developerSettingsPersonalToken-input
           id='personal-token-input'
           placeholder={{t 'name'}}
           @value={{this.tokenName}}
         />
       </div>
 
-      <AkButton @loading={{this.generateToken.isRunning}} @type='submit'>
+      <AkButton
+        data-test-developerSettingsPersonalToken-submitBtn
+        @loading={{this.generateToken.isRunning}}
+        @type='submit'
+      >
         <:leftIcon>
           <AkIcon @iconName='add' />
         </:leftIcon>
