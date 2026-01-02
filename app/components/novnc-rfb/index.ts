@@ -1,8 +1,6 @@
 import { action } from '@ember/object';
 import Component from '@glimmer/component';
 import { tracked } from '@glimmer/tracking';
-// @ts-expect-error no types
-import RFB from '@novnc/novnc/lib/rfb';
 
 export interface NovncRfbSignature {
   Args: {
@@ -15,37 +13,49 @@ export default class NovncRfbComponent extends Component<NovncRfbSignature> {
   @tracked rfb: any = null;
 
   @action
-  onDidInsertElement(element: HTMLDivElement) {
-    this.rfb = new RFB(element, this.args.deviceFarmURL, {
-      credentials: {
-        password: this.args.deviceFarmPassword,
-      },
-    });
+  async onDidInsertElement(element: HTMLDivElement) {
+    try {
+      // 1. Dynamically import the module and await it (resolves Top-Level Await)
+      // @ts-expect-error no types
+      const module = await import('@novnc/novnc');
+      const RFB = module.default;
 
-    this.rfb.addEventListener('connect', () => {
-      const sizing_element = element;
+      // 2. Ensure we have a URL
+      if (!this.args.deviceFarmURL) {
+        console.error('No VNC URL provided');
+        return;
+      }
 
-      this.rfb.scaleViewport = true;
+      // 3. Instantiate RFB inside the async block
+      this.rfb = new RFB(element, this.args.deviceFarmURL, {
+        credentials: {
+          password: this.args.deviceFarmPassword,
+        },
+      });
 
-      this.rfb._display.autoscale(
-        sizing_element.offsetWidth,
-        sizing_element.offsetHeight
-      );
-    });
+      // 4. Setup listeners
+      this.rfb.addEventListener('connect', () => {
+        this.rfb.scaleViewport = true;
+
+        // Use the display's autoscale feature
+        if (this.rfb._display) {
+          this.rfb._display.autoscale(
+            element.offsetWidth,
+            element.offsetHeight
+          );
+        }
+      });
+    } catch (e) {
+      console.error('Failed to load or initialize noVNC:', e);
+    }
   }
 
   @action
   onWillDestroyElement() {
-    this.rfb?.removeEventListener('connect', () => {
-      this.rfb?.disconnect();
-
+    if (this.rfb) {
+      // Disconnect and cleanup
+      this.rfb.disconnect();
       this.rfb = null;
-    });
-  }
-}
-
-declare module '@glint/environment-ember-loose/registry' {
-  export default interface Registry {
-    NovncRfb: typeof NovncRfbComponent;
+    }
   }
 }
