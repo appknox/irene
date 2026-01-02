@@ -1,5 +1,5 @@
 // @ts-expect-error no type defs
-import SwaggerUI from 'swagger-ui';
+import { SwaggerUIBundle, SwaggerUIStandalonePreset } from 'swagger-ui-dist';
 import Component from '@glimmer/component';
 import { action } from '@ember/object';
 
@@ -16,10 +16,10 @@ export default class PublicApiDocsApiEndpointsComponent extends Component<Public
   initializeAPIEndpoints(element: HTMLDivElement) {
     const servers = this.args.data.servers;
 
-    SwaggerUI({
+    SwaggerUIBundle({
       spec: { ...this.args.data, info: {}, servers },
       domNode: element,
-      presets: [SwaggerUI.presets.apis, SwaggerUI.SwaggerUIStandalonePreset],
+      presets: [SwaggerUIBundle['presets'].apis, SwaggerUIStandalonePreset],
     });
   }
 }
