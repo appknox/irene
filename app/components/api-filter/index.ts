@@ -4,7 +4,7 @@ import { service } from '@ember/service';
 import { isEmpty } from '@ember/utils';
 import { action } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
-import type Store from '@ember-data/store';
+import type Store from 'ember-data/store';
 import type IntlService from 'ember-intl/services/intl';
 
 import ENV from 'irene/config/environment';
@@ -21,7 +21,7 @@ const isRegexFailed = function (url: string) {
 
 export interface ApiFilterSignature {
   Args: {
-    profileId?: string | number;
+    profileId?: string;
     hideDescriptionText?: boolean;
   };
   Blocks: {

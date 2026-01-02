@@ -7,7 +7,7 @@ import { waitForPromise } from '@ember/test-waiters';
 import dayjs from 'dayjs';
 import type IntlService from 'ember-intl/services/intl';
 import type RouterService from '@ember/routing/router-service';
-import type Store from '@ember-data/store';
+import type Store from 'ember-data/store';
 
 import parseError from 'irene/utils/parse-error';
 import type SkInventoryAppModel from 'irene/models/sk-inventory-app';

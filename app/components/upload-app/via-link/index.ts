@@ -4,7 +4,7 @@ import { action } from '@ember/object';
 import { service } from '@ember/service';
 import { task } from 'ember-concurrency';
 import type IntlService from 'ember-intl/services/intl';
-import type Store from '@ember-data/store';
+import type Store from 'ember-data/store';
 
 import lookupValidator from 'ember-changeset-validations';
 import { Changeset } from 'ember-changeset';
@@ -67,7 +67,7 @@ export default class UploadAppViaLinkComponent extends Component {
     }
 
     try {
-      const uploadAppUrl = this.store.createRecord('uploadAppUrl', {
+      const uploadAppUrl = this.store.createRecord('upload-app-url', {
         url: this.changeset.url,
       });
 

@@ -3,7 +3,7 @@ import { service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
 import { task } from 'ember-concurrency';
 import { action } from '@ember/object';
-import type Store from '@ember-data/store';
+import type Store from 'ember-data/store';
 
 import type FileModel from 'irene/models/file';
 import type AnalysisOverviewModel from 'irene/models/analysis-overview';

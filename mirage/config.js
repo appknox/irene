@@ -5,6 +5,12 @@ import {
   discoverEmberDataModels,
   applyEmberDataSerializers,
 } from 'ember-cli-mirage';
+import Inflector from 'ember-inflector';
+
+const inflector = Inflector.inflector;
+inflector.uncountable('sk-app-metadata');
+inflector.uncountable('api-scan-options');
+inflector.irregular('asvs', 'asvses');
 
 export default function makeServer(config) {
   let finalConfig = {
@@ -619,9 +625,10 @@ function routes() {
   });
 
   this.get('/organizations/:id/me', function (schema, req) {
-    const currentUser = schema.currentUsers.findBy({
-      organizationId: req.params.id,
-    });
+    const currentUser = schema.currentUsers
+      .all()
+      .models.find((user) => user.organizationId === req.params.id);
+
     const me = schema.organizationMes.find(currentUser.id);
     return this.serialize(me).organizationMe;
   });

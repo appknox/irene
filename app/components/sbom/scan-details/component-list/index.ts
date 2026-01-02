@@ -3,7 +3,7 @@ import { inject as service } from '@ember/service';
 import Component from '@glimmer/component';
 import type IntlService from 'ember-intl/services/intl';
 
-import type Store from '@ember-data/store';
+import type Store from 'ember-data/store';
 import type RouterService from '@ember/routing/router-service';
 
 import type { PaginationProviderActionsArgs } from 'irene/components/ak-pagination-provider';

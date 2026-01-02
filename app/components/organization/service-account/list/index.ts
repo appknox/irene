@@ -4,7 +4,7 @@ import Component from '@glimmer/component';
 import { task } from 'ember-concurrency';
 import { tracked } from '@glimmer/tracking';
 import type IntlService from 'ember-intl/services/intl';
-import type Store from '@ember-data/store';
+import type Store from 'ember-data/store';
 import type RouterService from '@ember/routing/router-service';
 
 // eslint-disable-next-line ember/use-ember-data-rfc-395-imports

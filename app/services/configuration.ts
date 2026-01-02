@@ -1,6 +1,6 @@
 import { service } from '@ember/service';
 import Service from '@ember/service';
-import Store from '@ember-data/store';
+import Store from 'ember-data/store';
 
 import LoggerService from './logger';
 import IreneAjaxService from './ajax';

@@ -8,7 +8,7 @@ import { Changeset } from 'ember-changeset';
 import { action } from '@ember/object';
 import lookupValidator from 'ember-changeset-validations';
 import type { BufferedChangeset } from 'ember-changeset/types';
-import type Store from '@ember-data/store';
+import type Store from 'ember-data/store';
 import type IntlService from 'ember-intl/services/intl';
 
 import parseError from 'irene/utils/parse-error';

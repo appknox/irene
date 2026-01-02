@@ -88,7 +88,7 @@ module('Acceptance | security/project-search-list', function (hooks) {
       return { count: results.length, next: null, previous: null, results };
     });
 
-    this.server.get('hudson-api/v3/projects/:id/files', () => {
+    this.server.get('/hudson-api/projects/:id/files', () => {
       return { count: 0, next: null, previous: null, results: [] };
     });
 
@@ -100,8 +100,9 @@ module('Acceptance | security/project-search-list', function (hooks) {
       '[data-test-project-search-list-view-file-btn]'
     );
 
+    // Listed in decending order 5->4->3->2->1, so 3rd index is 2nd project
     await click(viewFileBtn[3]);
 
-    assert.strictEqual(currentURL(), `/security/${this.projects[3].id}/files`);
+    assert.strictEqual(currentURL(), `/security/${this.projects[1].id}/files`);
   });
 });

@@ -29,6 +29,12 @@ class WebsocketStub extends Service {
   closeSocketConnection() {}
 }
 
+class DeviceFarmStub extends Service {
+  async ping() {
+    return { ping: 'pong' };
+  }
+}
+
 module('Integration | Component | system-status', function (hooks) {
   setupRenderingTest(hooks);
   setupMirage(hooks);
@@ -164,6 +170,8 @@ module('Integration | Component | system-status', function (hooks) {
 
       const mockServer = new Server(configuration.serverData.websocket);
 
+      this.owner.register('service:devicefarm', DeviceFarmStub);
+
       this.server.get('/users/:id', (schema, req) => {
         return schema.users.find(req.params.id);
       });
@@ -173,6 +181,32 @@ module('Integration | Component | system-status', function (hooks) {
           'websocket_health_check',
           JSON.stringify({ is_healthy: !fail })
         );
+      });
+
+      this.server.get('/status', () => {
+        return fail
+          ? new Response(403)
+          : new Response(
+              200,
+              {},
+              {
+                data: {
+                  storage: 'some_amazon_aws_storage_url.com',
+                },
+              }
+            );
+      });
+
+      this.server.get('https://devicefarm.app.com/devicefarm/ping', () => {
+        return fail
+          ? new Response(404)
+          : new Response(200, {}, { ping: 'pong' });
+      });
+
+      this.server.get('/ping', () => {
+        return fail
+          ? new Response(404)
+          : new Response(200, {}, { ping: 'pong' });
       });
 
       await render(hbs`<SystemStatus />`);

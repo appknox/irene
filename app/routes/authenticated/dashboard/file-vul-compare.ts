@@ -1,7 +1,7 @@
 import { service } from '@ember/service';
 import { debug } from '@ember/debug';
 import { action } from '@ember/object';
-import type Store from '@ember-data/store';
+import type Store from 'ember-data/store';
 import type RouterService from '@ember/routing/router-service';
 
 import AkBreadcrumbsRoute from 'irene/utils/ak-breadcrumbs-route';

@@ -2,7 +2,7 @@ import Component from '@glimmer/component';
 import { tracked } from '@glimmer/tracking';
 import { service } from '@ember/service';
 import { action } from '@ember/object';
-import type Store from '@ember-data/store';
+import type Store from 'ember-data/store';
 
 import type PrivacyModuleService from 'irene/services/privacy-module';
 import type TrackersModel from 'irene/models/trackers';

@@ -4,7 +4,7 @@ import { action } from '@ember/object';
 import { service } from '@ember/service';
 
 import type RouterService from '@ember/routing/router-service';
-import type Store from '@ember-data/store';
+import type Store from 'ember-data/store';
 import type IntlService from 'ember-intl/services/intl';
 import type SkDiscoverySearchResultService from 'irene/services/sk-discovery-search-result';
 

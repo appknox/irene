@@ -1,9 +1,9 @@
 import Service from '@ember/service';
 import { service } from '@ember/service';
-import { singularize } from 'ember-inflector';
+import { singularize } from '@ember-data/request-utils/string';
 import { task } from 'ember-concurrency';
 import { debounceTask } from 'ember-lifeline';
-import type Store from '@ember-data/store';
+import type Store from 'ember-data/store';
 
 import ENUMS from 'irene/enums';
 import ENV from 'irene/config/environment';

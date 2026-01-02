@@ -5,7 +5,7 @@ import { action } from '@ember/object';
 import { inject as service } from '@ember/service';
 import { runTask } from 'ember-lifeline';
 import { EmberRunTimer } from '@ember/runloop/types';
-import type Store from '@ember-data/store';
+import type Store from 'ember-data/store';
 import type { AsyncBelongsTo } from '@ember-data/model';
 
 import { Duration } from 'dayjs/plugin/duration';

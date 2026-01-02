@@ -92,12 +92,12 @@ module('Acceptance | DRF: CRUD Success', function (hooks) {
     const posts = await this.store.findAll('post');
 
     assert.ok(posts);
-    assert.strictEqual(posts.get('length'), 3);
+    assert.strictEqual(posts.length, 3);
 
-    const post = posts.objectAt(2);
+    const post = posts[2];
 
-    assert.strictEqual(post.get('postTitle'), 'post title 3');
-    assert.strictEqual(post.get('body'), 'post body 3');
+    assert.strictEqual(post.postTitle, 'post title 3');
+    assert.strictEqual(post.body, 'post body 3');
   });
 
   test('Retrieve single record with findRecord', async function (assert) {
@@ -121,7 +121,7 @@ module('Acceptance | DRF: CRUD Success', function (hooks) {
     });
     assert.ok(posts);
 
-    const post = posts.objectAt(0);
+    const post = posts[0];
     assert.strictEqual(post.get('postTitle'), 'post title 2');
     assert.strictEqual(post.get('body'), 'post body 2');
   });

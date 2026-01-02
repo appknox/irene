@@ -1,6 +1,6 @@
 import AkBreadcrumbsRoute from 'irene/utils/ak-breadcrumbs-route';
 import { service } from '@ember/service';
-import type Store from '@ember-data/store';
+import type Store from 'ember-data/store';
 import type RouterService from '@ember/routing/router-service';
 
 import type AiReportingReportRequestModel from 'irene/models/ai-reporting/report-request';

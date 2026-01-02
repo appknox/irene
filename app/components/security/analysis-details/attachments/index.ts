@@ -9,7 +9,7 @@ import parseError from 'irene/utils/parse-error';
 
 import { type UploadFile } from 'ember-file-upload';
 import type IntlService from 'ember-intl/services/intl';
-import type Store from '@ember-data/store';
+import type Store from 'ember-data/store';
 import type SecurityAnalysisModel from 'irene/models/security/analysis';
 import type IreneAjaxService from 'irene/services/ajax';
 

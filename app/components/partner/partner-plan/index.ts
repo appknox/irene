@@ -4,7 +4,7 @@ import { service } from '@ember/service';
 import { action } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
 
-import type Store from '@ember-data/store';
+import type Store from 'ember-data/store';
 import type PartnerPlanModel from 'irene/models/partner/plan';
 import type PartnerService from 'irene/services/partner';
 

@@ -240,7 +240,7 @@ module('Acceptance | file details', function (hooks) {
     await click(rows[1]);
 
     const analyses = this.analyses
-      .toArray()
+      .slice()
       .sort((a, b) => b.computed_risk - a.computed_risk); // sort by computedRisk:desc
 
     assert.strictEqual(

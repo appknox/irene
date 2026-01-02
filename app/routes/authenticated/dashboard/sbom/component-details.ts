@@ -1,6 +1,6 @@
 import type RouterService from '@ember/routing/router-service';
 import type Transition from '@ember/routing/transition';
-import type Store from '@ember-data/store';
+import type Store from 'ember-data/store';
 import { service } from '@ember/service';
 
 import type SbomComponentModel from 'irene/models/sbom-component';

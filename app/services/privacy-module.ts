@@ -2,7 +2,7 @@ import Service from '@ember/service';
 import { tracked } from '@glimmer/tracking';
 import { task } from 'ember-concurrency';
 import { service } from '@ember/service';
-import type Store from '@ember-data/store';
+import type Store from 'ember-data/store';
 import type RouterService from '@ember/routing/router-service';
 import type IntlService from 'ember-intl/services/intl';
 
@@ -236,7 +236,7 @@ export default class PrivacyModuleService extends Service {
 
           const geoLocationDataList = (
             await this.store.query('geo-location', queryParams)
-          ).toArray() as GeoLocationModel[];
+          ).slice() as GeoLocationModel[];
 
           this.geoLocationDataList = geoLocationDataList;
           this.geoLocationDataCount = geoLocationDataList.length;

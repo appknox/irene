@@ -8,6 +8,10 @@ import type IntlService from 'ember-intl/services/intl';
 import type FileModel from 'irene/models/file';
 import styles from './index.scss';
 
+import GroupOptionComponent from './group-option';
+import FilterSelectedItemComponent from './filter-selected-item';
+import AfterOptionsComponent from './after-options';
+
 export interface FileDetailsApiScanCapturedApisApiDomainFiltersExtra {
   file: FileModel;
   beforeOptionLabel: string;
@@ -39,6 +43,10 @@ export default class FileDetailsApiScanCapturedApisApiDomainFiltersComponent ext
   @tracked closeDrawer = false;
   @tracked selectInstance: Select | null = null;
   @tracked currentSelectedAPIUrlDomain: string[] = [];
+
+  GroupOptionComponent = GroupOptionComponent;
+  FilterSelectedItemComponent = FilterSelectedItemComponent;
+  AfterOptionsComponent = AfterOptionsComponent;
 
   constructor(
     owner: unknown,

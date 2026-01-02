@@ -6,7 +6,7 @@ import { task } from 'ember-concurrency';
 
 import ENUMS from 'irene/enums';
 import type IntlService from 'ember-intl/services/intl';
-import type Store from '@ember-data/store';
+import type Store from 'ember-data/store';
 import type ProjectModel from 'irene/models/project';
 import type AvailableAutomatedDeviceModel from 'irene/models/available-automated-device';
 import type { DsPreferenceContext } from 'irene/components/ds-preference-provider';
@@ -52,7 +52,7 @@ export default class ProjectSettingsDastAutomationAutomationSettingsDevicePrefer
       (it) => it.platformVersion
     );
 
-    return ['', ...platformVersions.uniq()];
+    return ['', ...new Set(platformVersions)];
   }
 
   get isIOSApp() {
