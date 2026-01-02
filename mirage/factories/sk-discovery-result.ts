@@ -21,7 +21,7 @@ export default Factory.extend({
   latest_upload_date: () => faker.date.past(),
   rating: () => faker.number.int({ min: 0, max: 5 }),
   rating_count: () => faker.number.int(),
-  screenshots: () => Array.from({ length: 8 }, () => faker.image.imageUrl()),
+  screenshots: () => Array.from({ length: 8 }, () => faker.image.url()),
   version: () => faker.string.numeric(),
   doc_created_on: () => faker.date.recent(),
   doc_updated_on: () => faker.date.recent(),

@@ -6,7 +6,7 @@ import { inject as service } from '@ember/service';
 import Component from '@glimmer/component';
 import { tracked } from '@glimmer/tracking';
 import { task } from 'ember-concurrency';
-import Store from '@ember-data/store';
+import Store from 'ember-data/store';
 import { action } from '@ember/object';
 import RouterService from '@ember/routing/router-service';
 
@@ -37,7 +37,6 @@ export default class SecurityFileSearchListComponent extends Component<SecurityF
   @service declare router: RouterService;
 
   @tracked securityFilesQuery: SecurityFilesQueryResponse | null = null;
-  sortProperties = ['-id'];
 
   constructor(owner: unknown, args: SecurityFileSearchListSignature['Args']) {
     super(owner, args);
@@ -56,7 +55,9 @@ export default class SecurityFileSearchListComponent extends Component<SecurityF
   }
 
   get sortedSecurityFiles() {
-    return this.securityFilesQuery?.slice()?.sortBy(...this.sortProperties);
+    return this.securityFilesQuery
+      ?.slice()
+      ?.sort((a, b) => Number(a.id) - Number(b.id));
   }
 
   get totalFiles() {

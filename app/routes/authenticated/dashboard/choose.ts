@@ -1,7 +1,7 @@
 import { inject as service } from '@ember/service';
 import AkBreadcrumbsRoute from 'irene/utils/ak-breadcrumbs-route';
 import { ScrollToTop } from 'irene/utils/scroll-to-top';
-import type Store from '@ember-data/store';
+import type Store from 'ember-data/store';
 import type FileModel from 'irene/models/file';
 
 export interface ChooseFilesQueryParams {

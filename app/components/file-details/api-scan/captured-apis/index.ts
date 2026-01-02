@@ -4,7 +4,7 @@ import { action } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
 import { task } from 'ember-concurrency';
 import { runTask } from 'ember-lifeline';
-import type Store from '@ember-data/store';
+import type Store from 'ember-data/store';
 import type IntlService from 'ember-intl/services/intl';
 
 // eslint-disable-next-line ember/use-ember-data-rfc-395-imports
@@ -71,7 +71,7 @@ export default class FileDetailsApiScanCapturedApisComponent extends Component<F
   }
 
   get capturedApiList() {
-    return this.capturedApiResponse?.toArray() || [];
+    return this.capturedApiResponse?.slice() || [];
   }
 
   get selectedDomainsStr() {

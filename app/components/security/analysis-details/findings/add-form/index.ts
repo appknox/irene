@@ -4,7 +4,7 @@ import { inject as service } from '@ember/service';
 import { isEmpty } from '@ember/utils';
 import { tracked } from '@glimmer/tracking';
 
-import type Store from '@ember-data/store';
+import type Store from 'ember-data/store';
 
 import SecurityAnalysisModel, {
   type SecurityAnalysisFinding,

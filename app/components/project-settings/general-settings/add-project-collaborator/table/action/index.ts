@@ -2,7 +2,7 @@ import { inject as service } from '@ember/service';
 import Component from '@glimmer/component';
 import { task } from 'ember-concurrency';
 import IntlService from 'ember-intl/services/intl';
-import Store from '@ember-data/store';
+import Store from 'ember-data/store';
 
 import ProjectModel from 'irene/models/project';
 import RealtimeService from 'irene/services/realtime';

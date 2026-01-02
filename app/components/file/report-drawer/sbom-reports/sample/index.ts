@@ -5,7 +5,7 @@ import { tracked } from '@glimmer/tracking';
 import { inject as service } from '@ember/service';
 import IntlService from 'ember-intl/services/intl';
 import { task } from 'ember-concurrency';
-import Store from '@ember-data/store';
+import Store from 'ember-data/store';
 import { waitForPromise } from '@ember/test-waiters';
 
 import SbomReportModel, { SbomReportType } from 'irene/models/sbom-report';

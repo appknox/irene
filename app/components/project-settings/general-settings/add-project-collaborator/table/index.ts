@@ -5,12 +5,13 @@ import { tracked } from '@glimmer/tracking';
 import { inject as service } from '@ember/service';
 import { task } from 'ember-concurrency';
 import IntlService from 'ember-intl/services/intl';
-import Store from '@ember-data/store';
+import Store from 'ember-data/store';
 import { action } from '@ember/object';
 import ProjectModel from 'irene/models/project';
 import { debounceTask } from 'ember-lifeline';
 import OrganizationMemberModel from 'irene/models/organization-member';
 import parseError from 'irene/utils/parse-error';
+import dayjs from 'dayjs';
 
 interface LimitOffset {
   limit: number;
@@ -67,7 +68,13 @@ export default class ProjectSettingsGeneralSettingsAddProjectCollaboratorTableCo
   }
 
   get orgMembers() {
-    return this.orgMemberRecordResponse?.slice().sortBy('created:desc') || [];
+    return (
+      this.orgMemberRecordResponse
+        ?.slice()
+        .sort(
+          (a, b) => dayjs(b.createdOn).valueOf() - dayjs(a.createdOn).valueOf()
+        ) || []
+    );
   }
 
   get hasNoOrgMembers() {

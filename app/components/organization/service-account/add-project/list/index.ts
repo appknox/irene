@@ -8,7 +8,7 @@ import { waitForPromise } from '@ember/test-waiters';
 
 // eslint-disable-next-line ember/use-ember-data-rfc-395-imports
 import type DS from 'ember-data';
-import type Store from '@ember-data/store';
+import type Store from 'ember-data/store';
 import type IntlService from 'ember-intl/services/intl';
 
 import type ServiceAccountModel from 'irene/models/service-account';

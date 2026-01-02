@@ -1,7 +1,7 @@
 import Route from '@ember/routing/route';
 import { service } from '@ember/service';
 import { action } from '@ember/object';
-import Store from '@ember-data/store';
+import Store from 'ember-data/store';
 import RouterService from '@ember/routing/router-service';
 
 import OrganizationService from 'irene/services/organization';

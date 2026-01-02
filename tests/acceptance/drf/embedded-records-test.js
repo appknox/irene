@@ -116,19 +116,22 @@ module('Acceptance | DRF: Embedded Records', function (hooks) {
     const post = await this.store.findRecord('embedded-comments-post', 1);
 
     assert.ok(post);
-    assert.strictEqual(post.get('postTitle'), 'post title 1');
-    assert.strictEqual(post.get('body'), 'post body 1');
+    assert.strictEqual(post.postTitle, 'post title 1');
+    assert.strictEqual(post.body, 'post body 1');
 
-    const comments = await post.get('comments');
+    const comments = post.comments;
 
     assert.ok(comments);
-    assert.strictEqual(comments.get('length'), 3);
-    assert.ok(comments.objectAt(0));
-    assert.strictEqual(comments.objectAt(0).get('body'), 'comment body 2');
-    assert.ok(comments.objectAt(1));
-    assert.strictEqual(comments.objectAt(1).get('body'), 'comment body 3');
-    assert.ok(comments.objectAt(2));
-    assert.strictEqual(comments.objectAt(2).get('body'), 'comment body 4');
+    assert.strictEqual(comments.length, 3);
+
+    assert.ok(comments[0]);
+    assert.strictEqual(comments[0].body, 'comment body 2');
+
+    assert.ok(comments[1]);
+    assert.strictEqual(comments[1].body, 'comment body 3');
+
+    assert.ok(comments[2]);
+    assert.strictEqual(comments[2].body, 'comment body 4');
 
     assert.strictEqual(this.server.pretender.handledRequests.length, 1);
   });

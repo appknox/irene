@@ -8,7 +8,7 @@ import MeService from 'irene/services/me';
 import IntlService from 'ember-intl/services/intl';
 import RouterService from '@ember/routing/router-service';
 import OrganizationService from 'irene/services/organization';
-import Store from '@ember-data/store';
+import Store from 'ember-data/store';
 import OrganizationTeamModel from 'irene/models/organization-team';
 // eslint-disable-next-line ember/use-ember-data-rfc-395-imports
 import DS from 'ember-data';

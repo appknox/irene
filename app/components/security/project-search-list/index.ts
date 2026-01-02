@@ -6,7 +6,7 @@ import { inject as service } from '@ember/service';
 import Component from '@glimmer/component';
 import { tracked } from '@glimmer/tracking';
 import { task } from 'ember-concurrency';
-import Store from '@ember-data/store';
+import Store from 'ember-data/store';
 import { action } from '@ember/object';
 import RouterService from '@ember/routing/router-service';
 import { debounceTask } from 'ember-lifeline';
@@ -38,8 +38,6 @@ export default class SecurityProjectSearchListComponent extends Component<Securi
 
   @tracked securityProjectsQuery: SecurityProjectQueryResponse | null = null;
 
-  sortProperties = ['-id'];
-
   constructor(
     owner: unknown,
     args: SecurityProjectSearchListSignature['Args']
@@ -60,7 +58,9 @@ export default class SecurityProjectSearchListComponent extends Component<Securi
   }
 
   get sortedSecurityProjects() {
-    return this.securityProjectsQuery?.slice()?.sortBy(...this.sortProperties);
+    return this.securityProjectsQuery
+      ?.slice()
+      ?.sort((a, b) => Number(b.id) - Number(a.id));
   }
 
   get totalProjects() {
