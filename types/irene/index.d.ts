@@ -1,11 +1,12 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import Ember from 'ember';
 
 declare global {
+  // Array prototype extensions are deprecated in Ember 6.0
+  // Removed: interface Array<T> extends Ember.ArrayPrototypeExtensions<T> {}
+  // See: https://deprecations.emberjs.com/id/deprecate-array-prototype-extensions/
+
   // Prevents ESLint from "fixing" this via its auto-fix to turn it into a type
   // alias (e.g. after running any Ember CLI generator)
-  // eslint-disable-next-line @typescript-eslint/no-empty-interface
-  interface Array<T> extends Ember.ArrayPrototypeExtensions<T> {}
   // interface Function extends Ember.FunctionPrototypeExtensions {}
 
   // Restrict an integer value to a certain range

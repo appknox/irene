@@ -5,7 +5,7 @@ import { service } from '@ember/service';
 import { task } from 'ember-concurrency';
 import { tracked } from 'tracked-built-ins';
 import { addObserver, removeObserver } from '@ember/object/observers';
-import type Store from '@ember-data/store';
+import type Store from 'ember-data/store';
 import type IntlService from 'ember-intl/services/intl';
 
 import ENUMS from 'irene/enums';

@@ -1,6 +1,6 @@
 import Component from '@glimmer/component';
 import { inject as service } from '@ember/service';
-import type Store from '@ember-data/store';
+import type Store from 'ember-data/store';
 import type IntlService from 'ember-intl/services/intl';
 
 import ENUMS from 'irene/enums';

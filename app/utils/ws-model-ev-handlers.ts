@@ -1,4 +1,4 @@
-import type Store from '@ember-data/store';
+import type Store from 'ember-data/store';
 import type EventBusService from 'irene/services/event-bus';
 import type RealtimeService from 'irene/services/realtime';
 import type AnalysisOverviewModel from 'irene/models/analysis-overview';

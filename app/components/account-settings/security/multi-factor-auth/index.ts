@@ -4,7 +4,7 @@ import { tracked } from '@glimmer/tracking';
 import { task } from 'ember-concurrency';
 import { service } from '@ember/service';
 import { action } from '@ember/object';
-import type Store from '@ember-data/store';
+import type Store from 'ember-data/store';
 
 import ENUMS from 'irene/enums';
 import type UserModel from 'irene/models/user';

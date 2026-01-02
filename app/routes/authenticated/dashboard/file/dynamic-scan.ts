@@ -1,6 +1,6 @@
 import Route from '@ember/routing/route';
 import { service } from '@ember/service';
-import type Store from '@ember-data/store';
+import type Store from 'ember-data/store';
 
 import { ScrollToTop } from 'irene/utils/scroll-to-top';
 import type OrganizationService from 'irene/services/organization';

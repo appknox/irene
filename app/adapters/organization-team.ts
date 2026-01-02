@@ -1,5 +1,5 @@
 import commondrf from './commondrf';
-import Store from '@ember-data/store';
+import Store from 'ember-data/store';
 
 import OrganizationTeamModel, {
   AddMemberData,

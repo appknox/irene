@@ -1,7 +1,7 @@
 import Route from '@ember/routing/route';
 import { inject as service } from '@ember/service';
 import { ScrollToTop } from 'irene/utils/scroll-to-top';
-import Store from '@ember-data/store';
+import Store from 'ember-data/store';
 import RouterService from '@ember/routing/router-service';
 import Transition from '@ember/routing/transition';
 

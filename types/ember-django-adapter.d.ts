@@ -6,7 +6,7 @@
 declare module 'ember-django-adapter/adapters/drf' {
   import RESTAdapter from '@ember-data/adapter/rest';
   import type { Snapshot } from '@ember-data/store/-private';
-  import type Store from '@ember-data/store';
+  import type Store from 'ember-data/store';
   import type ModelRegistry from 'ember-data/types/registries/model';
 
   /**

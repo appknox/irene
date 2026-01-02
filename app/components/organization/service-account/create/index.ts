@@ -8,7 +8,7 @@ import { waitForPromise } from '@ember/test-waiters';
 import type { BufferedChangeset } from 'ember-changeset/types';
 import type RouterService from '@ember/routing/router-service';
 import type IntlService from 'ember-intl/services/intl';
-import type Store from '@ember-data/store';
+import type Store from 'ember-data/store';
 
 import type ServiceAccountModel from 'irene/models/service-account';
 import type ServiceAccountService from 'irene/services/service-account';

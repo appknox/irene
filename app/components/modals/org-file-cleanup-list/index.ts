@@ -4,7 +4,7 @@ import { tracked } from '@glimmer/tracking';
 import { inject as service } from '@ember/service';
 import { task } from 'ember-concurrency';
 import IntlService from 'ember-intl/services/intl';
-import Store from '@ember-data/store';
+import Store from 'ember-data/store';
 
 // eslint-disable-next-line ember/use-ember-data-rfc-395-imports
 import { DS } from 'ember-data';
@@ -35,7 +35,7 @@ export default class OrgFileCleanupListComponent extends Component {
   }
 
   get organizationCleanupList() {
-    return this.organizationCleanupReponse?.toArray() || [];
+    return this.organizationCleanupReponse?.slice() || [];
   }
 
   get totalOrganizationCleanupCount() {

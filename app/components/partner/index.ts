@@ -47,7 +47,9 @@ export default class PartnerComponent extends Component<PartnerComponentSignatur
   }
 
   setDefaultTab() {
-    const loadedTab = this.tabs.findBy('link', this.router.currentRouteName);
+    const loadedTab = this.tabs.find(
+      (tab) => tab.link === this.router.currentRouteName
+    );
 
     if (loadedTab) {
       this.switchTab(loadedTab.id);

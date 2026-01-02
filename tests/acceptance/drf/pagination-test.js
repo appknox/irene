@@ -117,16 +117,15 @@ module('Acceptance | DRF: Pagination', function (hooks) {
     const response = await this.store.query('post', { page: 1 });
 
     assert.ok(response);
-
-    assert.strictEqual(response.get('length'), 4);
+    assert.strictEqual(response.length, 4);
 
     // Test the camelCase and non-camelCase fields of a paginated result.
-    const post = response.objectAt(1);
+    const post = response[1];
 
-    assert.strictEqual(post.get('postTitle'), 'post title 2');
-    assert.strictEqual(post.get('body'), 'post body 2');
+    assert.strictEqual(post.postTitle, 'post title 2');
+    assert.strictEqual(post.body, 'post body 2');
 
-    const metadata = response.get('meta');
+    const metadata = response.meta;
 
     assert.strictEqual(metadata.count, 6);
     assert.strictEqual(metadata.next, 2);
@@ -148,7 +147,7 @@ module('Acceptance | DRF: Pagination', function (hooks) {
 
     assert.ok(response);
 
-    const metadata = response.get('meta');
+    const metadata = response.meta;
 
     assert.strictEqual(metadata.count, 6);
     assert.strictEqual(metadata.next, 2);
@@ -159,9 +158,9 @@ module('Acceptance | DRF: Pagination', function (hooks) {
     const response = await this.store.query('post', { page: 2 });
 
     assert.ok(response);
-    assert.strictEqual(response.get('length'), 2);
+    assert.strictEqual(response.length, 2);
 
-    const metadata = response.get('meta');
+    const metadata = response.meta;
 
     assert.strictEqual(metadata.count, 6);
     assert.strictEqual(metadata.next, null);
@@ -172,9 +171,9 @@ module('Acceptance | DRF: Pagination', function (hooks) {
     const response = await this.store.query('post', { page: 2, page_size: 2 });
 
     assert.ok(response);
-    assert.strictEqual(response.get('length'), 2);
+    assert.strictEqual(response.length, 2);
 
-    const metadata = response.get('meta');
+    const metadata = response.meta;
 
     assert.strictEqual(metadata.count, 6);
     assert.strictEqual(metadata.previous, 1);

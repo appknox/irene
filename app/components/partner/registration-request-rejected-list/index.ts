@@ -5,7 +5,7 @@ import { tracked } from '@glimmer/tracking';
 import { service } from '@ember/service';
 import { task } from 'ember-concurrency';
 import IntlService from 'ember-intl/services/intl';
-import Store from '@ember-data/store';
+import Store from 'ember-data/store';
 import dayjs from 'dayjs';
 
 // eslint-disable-next-line ember/use-ember-data-rfc-395-imports

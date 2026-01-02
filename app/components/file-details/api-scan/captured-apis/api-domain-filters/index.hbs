@@ -11,9 +11,9 @@
     @onClose={{this.onClose}}
     @onChange={{this.onSelectAPIUrlDomainChange}}
     @labelTypographyFontWeight='regular'
-    @selectedItemComponent='file-details/api-scan/captured-apis/api-domain-filters/filter-selected-item'
-    @afterOptionsComponent='file-details/api-scan/captured-apis/api-domain-filters/after-options'
-    @groupComponent='file-details/api-scan/captured-apis/api-domain-filters/group-option'
+    @selectedItemComponent={{this.FilterSelectedItemComponent}}
+    @afterOptionsComponent={{this.AfterOptionsComponent}}
+    @groupComponent={{this.GroupOptionComponent}}
     @horizontalPosition='right'
     @extra={{this.selectElementExtras}}
     data-test-fileDetails-apiScan-capturedApi-domainFilterSelect

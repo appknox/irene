@@ -3,7 +3,7 @@ import { service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
 import { task } from 'ember-concurrency';
 import type IntlService from 'ember-intl/services/intl';
-import type Store from '@ember-data/store';
+import type Store from 'ember-data/store';
 import type { AsyncBelongsTo } from '@ember-data/model';
 
 import parseError from 'irene/utils/parse-error';

@@ -7,7 +7,7 @@ import relativeTime from 'dayjs/plugin/relativeTime';
 
 import Component from '@glimmer/component';
 import { action } from '@ember/object';
-import Store from '@ember-data/store';
+import Store from 'ember-data/store';
 import { inject as service } from '@ember/service';
 import { addObserver, removeObserver } from '@ember/object/observers';
 import { task } from 'ember-concurrency';

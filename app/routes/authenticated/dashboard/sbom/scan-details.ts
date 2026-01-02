@@ -1,5 +1,5 @@
 import { service } from '@ember/service';
-import type Store from '@ember-data/store';
+import type Store from 'ember-data/store';
 
 import AkBreadcrumbsRoute from 'irene/utils/ak-breadcrumbs-route';
 import type SbomScanDetailsService from 'irene/services/sbom-scan-details';

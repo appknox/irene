@@ -4,7 +4,7 @@ import { task } from 'ember-concurrency';
 
 import ProjectModel from 'irene/models/project';
 import ProjectCollaboratorModel from 'irene/models/project-collaborator';
-import Store from '@ember-data/store';
+import Store from 'ember-data/store';
 import { tracked } from '@glimmer/tracking';
 import OrganizationUserModel from 'irene/models/organization-user';
 

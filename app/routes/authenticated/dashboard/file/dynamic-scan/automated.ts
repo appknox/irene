@@ -1,5 +1,5 @@
 import { inject as service } from '@ember/service';
-import type Store from '@ember-data/store';
+import type Store from 'ember-data/store';
 import type RouterService from '@ember/routing/router-service';
 
 import { ScrollToTop } from 'irene/utils/scroll-to-top';

@@ -12,7 +12,7 @@ import { action } from '@ember/object';
 import { Changeset } from 'ember-changeset';
 import { waitForPromise } from '@ember/test-waiters';
 import lookupValidator from 'ember-changeset-validations';
-import type Store from '@ember-data/store';
+import type Store from 'ember-data/store';
 import type IntlService from 'ember-intl/services/intl';
 
 import parseError from 'irene/utils/parse-error';

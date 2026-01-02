@@ -100,12 +100,12 @@ module('Acceptance | DRF: Relationship Links', function (hooks) {
     const related_comments = await post.get('comments');
 
     assert.ok(related_comments);
-    assert.strictEqual(related_comments.get('length'), 3);
-    assert.ok(related_comments.objectAt(0));
-    assert.strictEqual(related_comments.objectAt(0).id, `${comments[0].id}`);
-    assert.ok(related_comments.objectAt(1));
-    assert.strictEqual(related_comments.objectAt(1).id, `${comments[2].id}`);
-    assert.ok(related_comments.objectAt(2));
-    assert.strictEqual(related_comments.objectAt(2).id, `${comments[3].id}`);
+    assert.strictEqual(related_comments.length, 3);
+    assert.ok(related_comments[0]);
+    assert.strictEqual(related_comments[0].id, `${comments[0].id}`);
+    assert.ok(related_comments[1]);
+    assert.strictEqual(related_comments[1].id, `${comments[2].id}`);
+    assert.ok(related_comments[2]);
+    assert.strictEqual(related_comments[2].id, `${comments[3].id}`);
   });
 });

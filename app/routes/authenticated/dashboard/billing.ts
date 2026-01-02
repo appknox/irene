@@ -1,6 +1,6 @@
 import Route from '@ember/routing/route';
 import { inject as service } from '@ember/service';
-import Store from '@ember-data/store';
+import Store from 'ember-data/store';
 
 import ENV from 'irene/config/environment';
 import OrganizationService from 'irene/services/organization';

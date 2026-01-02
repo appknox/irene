@@ -2,7 +2,7 @@ import Component from '@glimmer/component';
 import { inject as service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
 import { task } from 'ember-concurrency';
-import type Store from '@ember-data/store';
+import type Store from 'ember-data/store';
 import type IntlService from 'ember-intl/services/intl';
 
 import parseError from 'irene/utils/parse-error';
@@ -56,7 +56,7 @@ export default class ProjectSettingsDastAutomationAutomationSettingsComponent ex
   getDsAutomationPreference = task(async () => {
     try {
       const adapter = this.store.adapterFor('ds-automation-preference');
-      adapter.setNestedUrlNamespace(this.profileId as string);
+      adapter.setNestedUrlNamespace(String(this.profileId));
 
       this.automationPreference = await this.store.queryRecord(
         'ds-automation-preference',
@@ -72,7 +72,7 @@ export default class ProjectSettingsDastAutomationAutomationSettingsComponent ex
       this.automationPreference?.set('dynamicScanAutomationEnabled', enabled);
 
       const adapter = this.store.adapterFor('ds-automation-preference');
-      adapter.setNestedUrlNamespace(this.profileId as string);
+      adapter.setNestedUrlNamespace(String(this.profileId));
 
       await this.automationPreference?.save();
 

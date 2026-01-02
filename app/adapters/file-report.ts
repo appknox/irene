@@ -1,7 +1,8 @@
 /* eslint-disable ember/use-ember-data-rfc-395-imports */
 import { ModelSchema } from 'ember-data';
 import commondrf from './commondrf';
-import Store, { Snapshot } from '@ember-data/store';
+import Store from 'ember-data/store';
+import { Snapshot } from '@ember-data/store';
 import ModelRegistry from 'ember-data/types/registries/model';
 import { FileReportScanType } from 'irene/models/file-report';
 

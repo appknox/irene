@@ -1,8 +1,9 @@
-/* eslint-disable ember/use-ember-data-rfc-395-imports */
-import { underscore } from '@ember/string';
 import ModelRegistry from 'ember-data/types/registries/model';
+import { underscore } from '@ember/string';
+
+// eslint-disable-next-line ember/use-ember-data-rfc-395-imports
 import type { ModelSchema } from 'ember-data';
-import type Store from '@ember-data/store';
+import type Store from 'ember-data/store';
 import type { Snapshot } from '@ember-data/store';
 
 import commondrf from './commondrf';

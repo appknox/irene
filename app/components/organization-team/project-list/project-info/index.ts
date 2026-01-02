@@ -1,6 +1,6 @@
 import Component from '@glimmer/component';
 import { inject as service } from '@ember/service';
-import Store from '@ember-data/store';
+import Store from 'ember-data/store';
 import { tracked } from '@glimmer/tracking';
 import { task } from 'ember-concurrency';
 

@@ -10,6 +10,7 @@ import {
 import { hbs } from 'ember-cli-htmlbars';
 import { setupMirage } from 'ember-cli-mirage/test-support';
 import { setupIntl, t } from 'ember-intl/test-support';
+import dayjs from 'dayjs';
 
 module(
   'Integration | Component | project-settings/general-settings/add-project-team',
@@ -127,11 +128,12 @@ module(
 
       assert.strictEqual(projectTeams.length, this.orgTeamModels.length);
 
+      const expectedTeams = [...this.orgTeamModels].sort(
+        (a, b) => dayjs(b.created_on).valueOf() - dayjs(a.created_on).valueOf()
+      );
+
       projectTeams.forEach((team, idx) => {
-        assert
-          .dom(team)
-          .exists()
-          .containsText(`${this.orgTeamModels[idx].name}`);
+        assert.dom(team).containsText(expectedTeams[idx].name);
       });
     });
 

@@ -6,7 +6,7 @@ import { capitalize } from '@ember/string';
 import { task } from 'ember-concurrency';
 import { waitForPromise } from '@ember/test-waiters';
 import IntlService from 'ember-intl/services/intl';
-import Store from '@ember-data/store';
+import Store from 'ember-data/store';
 
 import type RealtimeService from 'irene/services/realtime';
 import type MeService from 'irene/services/me';

@@ -4,7 +4,7 @@ import { action } from '@ember/object';
 import { task } from 'ember-concurrency';
 import { debounceTask } from 'ember-lifeline';
 import { tracked } from '@glimmer/tracking';
-import Store from '@ember-data/store';
+import Store from 'ember-data/store';
 import IntlService from 'ember-intl/services/intl';
 import MeService from 'irene/services/me';
 import OrganizationTeamModel from 'irene/models/organization-team';

@@ -7,7 +7,7 @@ import type IntlService from 'ember-intl/services/intl';
 
 // eslint-disable-next-line ember/use-ember-data-rfc-395-imports
 import type DS from 'ember-data';
-import type Store from '@ember-data/store';
+import type Store from 'ember-data/store';
 
 import type SubscriptionModel from 'irene/models/subscription';
 import type PlanModel from 'irene/models/plan';
@@ -24,8 +24,6 @@ export default class OrganizationBillingComponent extends Component {
   @tracked subscriptions: SubscriptionsResponse | null = null;
   @tracked plans: PlansResponse | null = null;
   @tracked paymentDuration = ENUMS.PAYMENT_DURATION.MONTHLY;
-
-  sortPlanProperties = ['id'];
 
   constructor(owner: unknown, args: object) {
     super(owner, args);
@@ -64,7 +62,12 @@ export default class OrganizationBillingComponent extends Component {
   }
 
   get sortedPlans() {
-    return this.plans?.slice().sortBy(...this.sortPlanProperties);
+    return this.plans?.slice().sort((a, b) => {
+      const idA = Number(a.id);
+      const idB = Number(b.id);
+
+      return idA - idB; // ascending order
+    });
   }
 
   get durations() {

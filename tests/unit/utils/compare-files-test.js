@@ -69,8 +69,8 @@ module('Unit | Utility | compare-files', function (hooks) {
 
         const [file1Analyses, file2Analyses] = filesAnalyses;
 
-        const analysis1ComputedRisk = file1Analyses.objectAt(idx).computedRisk;
-        const analysis2ComputedRisk = file2Analyses.objectAt(idx).computedRisk;
+        const analysis1ComputedRisk = file1Analyses[idx].computedRisk;
+        const analysis2ComputedRisk = file2Analyses[idx].computedRisk;
 
         assert.strictEqual(analysis1ComputedRisk, analysis1.computedRisk);
         assert.strictEqual(analysis2ComputedRisk, analysis2.computedRisk);

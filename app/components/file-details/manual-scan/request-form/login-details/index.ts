@@ -105,9 +105,7 @@ export default class FileDetailsManualScanRequestFormLoginDetailsComponent exten
       password: this.password,
     };
 
-    userRoles.addObject(userRole);
-
-    this.args.manualscan?.set('userRoles', userRoles);
+    this.args.manualscan?.set('userRoles', [...userRoles, userRole]);
 
     this.notify.success(tRoleAdded);
 

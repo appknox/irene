@@ -1,6 +1,6 @@
 import { service } from '@ember/service';
 import AkBreadcrumbsRoute from 'irene/utils/ak-breadcrumbs-route';
-import type Store from '@ember-data/store';
+import type Store from 'ember-data/store';
 
 export interface SbomAppScanQueryParam {
   scan_limit: string;

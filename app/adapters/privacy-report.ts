@@ -1,5 +1,6 @@
 import CommonDRFAdapter from './commondrf';
-import Store, { Snapshot } from '@ember-data/store';
+import Store from 'ember-data/store';
+import { Snapshot } from '@ember-data/store';
 import ModelRegistry from 'ember-data/types/registries/model';
 
 export interface PrivacyReportDownloadDetails {

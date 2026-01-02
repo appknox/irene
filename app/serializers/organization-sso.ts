@@ -1,5 +1,5 @@
 import DRFSerializer from 'ember-django-adapter/serializers/drf';
-import type Store from '@ember-data/store';
+import type Store from 'ember-data/store';
 import type OrganizationSsoModel from 'irene/models/organization-sso';
 
 export default class OrganizationSsoSerializer extends DRFSerializer {

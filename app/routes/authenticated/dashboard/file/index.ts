@@ -1,5 +1,5 @@
 import { service } from '@ember/service';
-import type Store from '@ember-data/store';
+import type Store from 'ember-data/store';
 
 import { ScrollToTop } from 'irene/utils/scroll-to-top';
 import AkBreadcrumbsRoute from 'irene/utils/ak-breadcrumbs-route';

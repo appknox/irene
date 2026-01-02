@@ -1,6 +1,7 @@
 // eslint-disable-next-line ember/use-ember-data-rfc-395-imports
 import { ModelSchema } from 'ember-data';
-import Store, { type Snapshot } from '@ember-data/store';
+import Store from 'ember-data/store';
+import { Snapshot } from '@ember-data/store';
 
 import CommonDRFAdapter from 'irene/adapters/commondrf';
 import { type PartnerRegistrationRequestModelName } from 'irene/models/partner/registration-request';

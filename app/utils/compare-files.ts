@@ -102,11 +102,11 @@ const compareFileAnalyses = (
     comparisons[vulnerability_id] = comparison;
   });
 
-  comparisons
+  const sortedComparisons = comparisons
     .sort((a, b) => sortByFileAnalyses(a?.analysis2, b?.analysis2))
-    .removeObject(undefined);
+    .filter((item) => item !== undefined);
 
-  return comparisons as FileComparisonItem[];
+  return sortedComparisons as FileComparisonItem[];
 };
 
 /**

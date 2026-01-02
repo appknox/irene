@@ -42,7 +42,7 @@ export default class FileDetailsDastManual extends Component<FileDetailsDastManu
   }
 
   get profileId() {
-    return this.file.profile.get('id') as string;
+    return this.file.profile.get('id');
   }
 
   get dynamicScan() {

@@ -6,7 +6,7 @@ import Component from '@glimmer/component';
 import { inject as service } from '@ember/service';
 import { task } from 'ember-concurrency';
 import { tracked } from '@glimmer/tracking';
-import Store from '@ember-data/store';
+import Store from 'ember-data/store';
 import { action } from '@ember/object';
 import IntlService from 'ember-intl/services/intl';
 import { waitForPromise } from '@ember/test-waiters';
@@ -58,7 +58,7 @@ export default class ProjectSettingsGeneralSettingsProjectTeamTableComponent ext
   }
 
   get projectTeamList() {
-    return this.projectTeamListResponse?.slice().sortBy('created:desc') || [];
+    return this.projectTeamListResponse?.slice() || [];
   }
 
   get hasNoProjectTeams() {

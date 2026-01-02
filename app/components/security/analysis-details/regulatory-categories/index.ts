@@ -8,7 +8,7 @@ import ENUMS from 'irene/enums';
 import parseError from 'irene/utils/parse-error';
 
 import type ArrayProxy from '@ember/array/proxy';
-import type Store from '@ember-data/store';
+import type Store from 'ember-data/store';
 import type SecurityAnalysisModel from 'irene/models/security/analysis';
 import type OwaspModel from 'irene/models/owasp';
 import type OwaspMobile2024Model from 'irene/models/owaspmobile2024';

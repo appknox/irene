@@ -3,7 +3,7 @@ import { tracked } from '@glimmer/tracking';
 import { service } from '@ember/service';
 import { task } from 'ember-concurrency';
 
-import type Store from '@ember-data/store';
+import type Store from 'ember-data/store';
 import type PartnerService from 'irene/services/partner';
 import type PartnerclientPlanModel from 'irene/models/partner/partnerclient-plan';
 

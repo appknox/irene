@@ -5,7 +5,7 @@ import { task } from 'ember-concurrency';
 import { waitForPromise } from '@ember/test-waiters';
 
 import type FileModel from 'irene/models/file';
-import type Store from '@ember-data/store';
+import type Store from 'ember-data/store';
 import type IreneAjaxService from 'irene/services/ajax';
 import type ScanCoverageModel from 'irene/models/scan-coverage';
 

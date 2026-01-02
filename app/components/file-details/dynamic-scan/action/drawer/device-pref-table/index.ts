@@ -4,7 +4,7 @@ import { tracked } from 'tracked-built-ins';
 import { inject as service } from '@ember/service';
 import { task } from 'ember-concurrency';
 import type IntlService from 'ember-intl/services/intl';
-import type Store from '@ember-data/store';
+import type Store from 'ember-data/store';
 
 // eslint-disable-next-line ember/use-ember-data-rfc-395-imports
 import type DS from 'ember-data';

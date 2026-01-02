@@ -1,5 +1,5 @@
 import DRFSerializer from 'ember-django-adapter/serializers/drf';
-import type Store from '@ember-data/store';
+import type Store from 'ember-data/store';
 import type TeamProjectModel from 'irene/models/team-project';
 
 interface TeamProjectPayload {
