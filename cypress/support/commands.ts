@@ -72,3 +72,48 @@ Cypress.Commands.add(
       });
   }
 );
+
+// =======================
+// 🔴 WS INTERCEPT COMMAND
+// =======================
+
+Cypress.Commands.add('interceptWsMessage', (predicate, options = {}) => {
+  const timeout = options.timeout ?? 120000;
+
+  return cy.window().then((win: any) => {
+    return cy.then({ timeout }, () => {
+      return new Cypress.Promise<void>((resolve, reject) => {
+        const start = Date.now();
+
+        const interval = setInterval(() => {
+          const messages = win.__wsMessages as unknown[];
+
+          if (Array.isArray(messages)) {
+            for (const raw of messages) {
+              if (typeof raw === 'string' && raw.startsWith('42')) {
+                try {
+                  const [event, payload] = JSON.parse(raw.slice(2));
+
+                  if (predicate(event, payload, raw)) {
+                    clearInterval(interval);
+                    resolve();
+                    return;
+                  }
+                } catch {
+                  // ignore malformed frames
+                }
+              }
+            }
+          }
+
+          if (Date.now() - start > timeout) {
+            clearInterval(interval);
+            reject(new Error('Timed out waiting for matching WS message'));
+          }
+        }, 300);
+      });
+    });
+  });
+});
+
+export {};
