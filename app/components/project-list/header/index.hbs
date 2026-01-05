@@ -89,6 +89,33 @@
               />
             </AkIconButton>
           </AkTooltip>
+
+          {{#unless this.isCardView}}
+            <AkDivider
+              class='mx-1'
+              @direction='vertical'
+              @height='30px'
+              @color='dark'
+            />
+
+            <AkTooltip
+              @title={{t 'projectList.manageColumns'}}
+              @placement='bottom'
+              @arrow={{true}}
+            >
+              <AkIconButton
+                data-test-projectList-header-columnManagerBtn
+                @variant='outlined'
+                {{on 'click' this.handleOpenColumnManager}}
+                local-class='column-manager-button'
+              >
+                <AkIcon
+                  @color='primary'
+                  @iconName='add-column-right-outline-rounded'
+                />
+              </AkIconButton>
+            </AkTooltip>
+          {{/unless}}
         </AkStack>
       </AkStack>
     {{/if}}
@@ -223,26 +250,6 @@
             {{sortingKeyObject.text}}
           </AkStack>
         </AkSelect>
-
-        {{#unless this.isCardView}}
-          <AkTooltip
-            @title={{t 'projectList.manageColumns'}}
-            @placement='bottom'
-            @arrow={{true}}
-          >
-            <AkIconButton
-              data-test-projectList-header-columnManagerBtn
-              @variant='outlined'
-              {{on 'click' this.handleOpenColumnManager}}
-              local-class='column-manager-button'
-            >
-              <AkIcon
-                @color='primary'
-                @iconName='add-column-right-outline-rounded'
-              />
-            </AkIconButton>
-          </AkTooltip>
-        {{/unless}}
       </AkStack>
     </AkStack>
   {{/if}}

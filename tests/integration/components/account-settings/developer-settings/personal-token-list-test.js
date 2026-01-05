@@ -169,6 +169,16 @@ module(
       assert
         .dom('[data-test-developerSettingsPersonalToken-row]')
         .exists({ count: 2 });
+
+      tokens.forEach((token, index) => {
+        const rowSelector = `[data-test-developerSettingsPersonalToken-row]:nth-of-type(${
+          index + 1
+        })`;
+
+        assert
+          .dom(`${rowSelector} [data-test-developerSettingsPersonalToken-cell]`)
+          .hasText(token.name);
+      });
     });
 
     test('it allows copying a token', async function (assert) {
