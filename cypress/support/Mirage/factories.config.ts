@@ -3,6 +3,9 @@ import { FactoryDefinition } from 'miragejs/-types';
 import { BASE_FACTORY_DEF } from 'irene/mirage/factories/base';
 import FileFactory, { FILE_FACTORY_DEF } from 'irene/mirage/factories/file';
 import User, { USER_FACTORY_DEF } from 'irene/mirage/factories/user';
+import FileRiskFactory, {
+  FILE_RISK_FACTORY_DEF,
+} from 'irene/mirage/factories/file-risk';
 
 import AnalysisFactory, {
   ANALYSIS_FACTORY_DEF,
@@ -78,6 +81,7 @@ export interface MirageFactoryDefProps {
   'sbom-file': FlattenFactoryMethods<typeof SBOM_FILE_FACTORY_DEF>;
   'sbom-project': FlattenFactoryMethods<typeof SBOM_PROJECT_FACTORY_DEF>;
   'available-manual-device': FlattenFactoryMethods<typeof DEVICE_FACTORY_DEF>;
+  'file-risk': FlattenFactoryMethods<typeof FILE_RISK_FACTORY_DEF>;
 
   submission: FlattenFactoryMethods<
     typeof SUBMISSION_FACTORY_DEF & {
@@ -131,6 +135,7 @@ const MIRAGE_FACTORIES: Record<
   'sbom-file': SbomFileFactory,
   'sbom-project': SbomProjectFactory,
   'available-manual-device': DeviceFactory,
+  'file-risk': FileRiskFactory,
 };
 
 export { MIRAGE_FACTORIES };
