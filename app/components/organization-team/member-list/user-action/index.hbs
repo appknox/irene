@@ -9,7 +9,7 @@
 <ConfirmBox
   @isActive={{this.showRemoveMemberPrompt}}
   @confirmText={{this.confirmText}}
-  @delegate={{this}}
+  @cancelAction={{this.closeRemoveMemberPrompt}}
   @confirmAction={{perform this.removeMember}}
   @disabled={{this.isRemovingMember}}
   @justifyActionContent='flex-end'

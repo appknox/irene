@@ -149,7 +149,7 @@ export default class SideNavComponent extends Component<SideNavSignature> {
   }
 
   get isSecurityEnabled() {
-    return this.organization.isSecurityEnabled;
+    return this.me.org?.has_security_permission;
   }
 
   get enableChatSupport() {

@@ -1,5 +1,5 @@
 import Component from '@glimmer/component';
-import { inject as service } from '@ember/service';
+import { service } from '@ember/service';
 import { action } from '@ember/object';
 import { task } from 'ember-concurrency';
 import { tracked } from '@glimmer/tracking';
@@ -19,21 +19,19 @@ export default class OrganizationMemberListMemberAction extends Component<Organi
   @service declare me: MeService;
   @service('notifications') declare notify: NotificationService;
 
-  @tracked modaltitle: string | null = null;
   @tracked showEditModal = false;
   @tracked moreBtnAnchorRef: HTMLElement | null = null;
 
   @action
   editMemberSetting() {
     this.handleMoreBtnMenuClose();
-
-    if (this.args.member.member.get('isActive')) {
-      this.modaltitle = this.intl.t('userDeactivateTitle');
-    } else {
-      this.modaltitle = this.intl.t('userActivateTitle');
-    }
-
     this.showEditModal = true;
+  }
+
+  get modalTitle() {
+    return this.args.member.member.get('isActive')
+      ? this.intl.t('userDeactivateTitle')
+      : this.intl.t('userActivateTitle');
   }
 
   @action

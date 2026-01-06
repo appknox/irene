@@ -1,13 +1,14 @@
-import RouterService from '@ember/routing/router-service';
-import { inject as service } from '@ember/service';
 import Service from '@ember/service';
+import { service } from '@ember/service';
+import type RouterService from '@ember/routing/router-service';
 
-import ConfigurationService from './configuration';
+import type ConfigurationService from './configuration';
+import type LoggerService from './logger';
 
 export default class RegistrationService extends Service {
   @service declare configuration: ConfigurationService;
   @service declare router: RouterService;
-  @service declare logger: any;
+  @service declare logger: LoggerService;
 
   externalURLRegex = /^https?:\/\//i;
 

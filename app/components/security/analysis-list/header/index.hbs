@@ -107,6 +107,7 @@
 
 <ConfirmBox
   @isActive={{this.showPurgeAPIAnalysisConfirmBox}}
+  @cancelAction={{this.closePurgeAPIAnalysisConfirmBox}}
   @title='Are you sure of Purging API Analyses'
   @confirmAction={{this.confirmPurgeAPIAnalysisConfirmBox}}
   @disabled={{this.confirmPurge.isRunning}}
