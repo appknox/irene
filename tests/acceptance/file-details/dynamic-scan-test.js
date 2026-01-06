@@ -214,11 +214,14 @@ module('Acceptance | file-details/dynamic-scan', function (hooks) {
   setupMirage(hooks);
 
   hooks.beforeEach(async function () {
-    const { vulnerabilities, organization } = await setupRequiredEndpoints(
-      this.server
-    );
+    const { vulnerabilities, organization, currentOrganizationMe } =
+      await setupRequiredEndpoints(this.server);
 
     setupFileModelEndpoints(this.server);
+
+    currentOrganizationMe.update({
+      has_security_permission: true,
+    });
 
     organization.update({
       features: {
@@ -599,6 +602,9 @@ module('Acceptance | file-details/dynamic-scan', function (hooks) {
         this.dynamicscan = createDynamicscan();
 
         const websocket = this.owner.lookup('service:websocket');
+
+        // Call connect to register the handlers
+        websocket.onConnect();
 
         // Model Created Notification for dynamic scan
         //  Used to trigger the reload of the last automated dynamic scan in the dynamic scan header component

@@ -138,9 +138,13 @@ export default class ProjectSettingsIntegrationsJiraProjectComponent extends Com
     );
   }
 
-  @action initializeJIRARepo() {
-    this.fetchJIRAProjects.perform();
-    this.setCurrentJiraRepo.perform();
+  @action
+  async initializeJIRARepo() {
+    await this.setCurrentJiraRepo.perform();
+
+    if (!this.noIntegration) {
+      this.fetchJIRAProjects.perform();
+    }
   }
 
   @action openDeleteJIRAConfirmBox() {

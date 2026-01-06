@@ -30,5 +30,6 @@
     (risk-text this.analysis.risk)
     ')'
   }}
-  @delegate={{this}}
+  @cancelAction={{this.closeMarkPassedConfirmBox}}
+  @confirmAction={{this.confirmCallback}}
 />

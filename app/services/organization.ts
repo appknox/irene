@@ -13,7 +13,6 @@ export default class OrganizationService extends Service {
   @service declare ajax: IreneAjaxService;
 
   @tracked selected: OrganizationModel | null = null;
-  @tracked isSecurityEnabled = false;
 
   get orgFeatures() {
     return this.selected?.features;
@@ -59,16 +58,6 @@ export default class OrganizationService extends Service {
     );
   }
 
-  async setSecurityDashboardEnabled() {
-    try {
-      await this.ajax.request('projects', { namespace: 'api/hudson-api' });
-
-      this.isSecurityEnabled = true;
-    } catch (error) {
-      this.isSecurityEnabled = false;
-    }
-  }
-
   async fetchOrganization() {
     const organizations = await this.store.findAll('organization');
     const selectedOrg = organizations.slice()[0];
@@ -83,11 +72,7 @@ export default class OrganizationService extends Service {
     }
   }
 
-  /**
-   * Loads Organization and check if security dashboard is enabled
-   */
   async load() {
     await this.fetchOrganization();
-    await this.setSecurityDashboardEnabled();
   }
 }

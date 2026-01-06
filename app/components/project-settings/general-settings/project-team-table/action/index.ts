@@ -57,6 +57,12 @@ export default class ProjectSettingsGeneralSettingsProjectTeamTableActionCompone
     this.showRemoveTeamConfirm = true;
   }
 
+  /* Close remove-team confirmation */
+  @action
+  closeRemoveTeamConfirm() {
+    this.showRemoveTeamConfirm = false;
+  }
+
   /* Remove team action */
   @action removeTeamProxy() {
     this.removeTeam.perform();
