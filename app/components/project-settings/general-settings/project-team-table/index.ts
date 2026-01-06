@@ -1,4 +1,3 @@
-/* eslint-disable ember/no-observers */
 // eslint-disable-next-line ember/use-ember-data-rfc-395-imports
 import DS from 'ember-data';
 
@@ -15,7 +14,6 @@ import ProjectTeamModel from 'irene/models/project-team';
 import MeService from 'irene/services/me';
 import RealtimeService from 'irene/services/realtime';
 import ProjectModel from 'irene/models/project';
-import { addObserver, removeObserver } from '@ember/object/observers';
 import { PaginationProviderActionsArgs } from 'irene/components/ak-pagination-provider';
 import parseError from 'irene/utils/parse-error';
 
@@ -41,20 +39,10 @@ export default class ProjectSettingsGeneralSettingsProjectTeamTableComponent ext
   @tracked offset = 0;
   @tracked limit = 10;
 
-  constructor(
-    owner: unknown,
-    args: ProjectSettingsGeneralSettingsProjectTeamTableSignature['Args']
-  ) {
-    super(owner, args);
-
-    addObserver(
-      this.realtime,
-      'ProjectTeamCounter',
-      this,
-      this.reloadProjectTeamList
-    );
-
-    this.getProjectTeamList.perform();
+  get reloadProjectTeamListDependencies() {
+    return {
+      projectTeamCounter: () => this.realtime.ProjectTeamCounter,
+    };
   }
 
   get projectTeamList() {
@@ -118,17 +106,6 @@ export default class ProjectSettingsGeneralSettingsProjectTeamTableComponent ext
   @action
   reloadProjectTeamList() {
     this.getProjectTeamList.perform();
-  }
-
-  willDestroy(): void {
-    super.willDestroy();
-
-    removeObserver(
-      this.realtime,
-      'ProjectTeamCounter',
-      this,
-      this.reloadProjectTeamList
-    );
   }
 
   @action reloadTeamList() {

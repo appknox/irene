@@ -1,6 +1,11 @@
-{{!@glint-nocheck: perform, will-destroy}}
+{{! Effect List }}
+<UseEffect
+  @effect={{this.reloadReports}}
+  @dependencies={{this.reloadReportsDependencies}}
+/>
+
+{{! Component Start }}
 <div
-  {{will-destroy this.removeReportCounterObserver}}
   local-class='file-report-va-reports-drawer'
   data-test-fileReportDrawer-vaReports
 >
@@ -64,7 +69,6 @@
             <AkLoader::Linear
               @variant='determinate'
               @progress={{this.latestReport.progress}}
-              @hideLabel={{true}}
               data-test-vaReports-generateReportProgress-loader
             />
           </AkStack>

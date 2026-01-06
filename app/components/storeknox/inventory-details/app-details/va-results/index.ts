@@ -1,10 +1,8 @@
-/* eslint-disable ember/no-observers */
 import Component from '@glimmer/component';
 import { action } from '@ember/object';
 import { service } from '@ember/service';
 import { task } from 'ember-concurrency';
 import { tracked } from 'tracked-built-ins';
-import { addObserver, removeObserver } from '@ember/object/observers';
 import type Store from '@ember-data/store';
 import type IntlService from 'ember-intl/services/intl';
 
@@ -29,6 +27,7 @@ export default class StoreknoxInventoryDetailsAppDetailsVaResultsComponent exten
   @tracked coreProjectLatestVersion?: FileModel | null = null;
   @tracked coreProjectLatestVersionInaccessible = false;
   @tracked userCanAccessSubmission = false;
+  @tracked triggerReloadSkInventoryApp = false;
 
   constructor(
     owner: unknown,
@@ -38,6 +37,13 @@ export default class StoreknoxInventoryDetailsAppDetailsVaResultsComponent exten
 
     this.fetchCoreProjectLatestVersion.perform();
     this.resolveSkAppSubmission.perform();
+  }
+
+  get reloadSkInventoryAppDependencies() {
+    return {
+      submissionStatus: () => this.submission?.status,
+      triggerReloadSkInventoryApp: () => this.triggerReloadSkInventoryApp,
+    };
   }
 
   get skInventoryApp() {
@@ -81,13 +87,10 @@ export default class StoreknoxInventoryDetailsAppDetailsVaResultsComponent exten
     );
   }
 
-  @action trackSubmissionStatusChange() {
-    addObserver(
-      this.submission as SubmissionModel,
-      'status',
-      this,
-      this.reloadSkInventoryApp
-    );
+  @action reloadSkInventoryAppOnSubmissionStatusChange() {
+    if (this.triggerReloadSkInventoryApp || this.submission) {
+      this.reloadSkInventoryApp.perform();
+    }
   }
 
   @action initiateAppUpload() {
@@ -100,19 +103,19 @@ export default class StoreknoxInventoryDetailsAppDetailsVaResultsComponent exten
     this.doInitiateAppUpload.perform();
   }
 
-  async reloadSkInventoryApp() {
+  reloadSkInventoryApp = task(async () => {
     const skInventoryApp = await this.skInventoryApp?.reload();
 
     await this.fetchCoreProjectLatestVersion.perform();
 
     return skInventoryApp;
-  }
+  });
 
   doInitiateAppUpload = task(async () => {
     try {
       // Reload necessary in scenarios when another user has already started an upload
       // but current user UI is still showing upload UI
-      const skInventoryApp = await this.reloadSkInventoryApp();
+      const skInventoryApp = await this.reloadSkInventoryApp.perform();
 
       if (skInventoryApp?.canInitiateUpload) {
         const res = await this.skInventoryApp?.initiateAppUpload();
@@ -123,10 +126,10 @@ export default class StoreknoxInventoryDetailsAppDetailsVaResultsComponent exten
         this.submission = submission;
         this.userCanAccessSubmission = true;
 
-        await this.reloadSkInventoryApp();
+        await this.reloadSkInventoryApp.perform();
 
         // Listen for submission changes after a successful upload to update UI accordingly
-        this.trackSubmissionStatusChange();
+        this.triggerReloadSkInventoryApp = true;
 
         return;
       }
@@ -150,8 +153,7 @@ export default class StoreknoxInventoryDetailsAppDetailsVaResultsComponent exten
     try {
       this.submission = await submission;
       this.userCanAccessSubmission = true;
-
-      this.trackSubmissionStatusChange();
+      this.triggerReloadSkInventoryApp = true;
     } catch (error) {
       const err = error as AdapterError;
       const userCannotAccessSubmission = err.errors?.[0]?.status === '404';
@@ -171,19 +173,6 @@ export default class StoreknoxInventoryDetailsAppDetailsVaResultsComponent exten
         (err as AdapterError)?.errors?.[0]?.status === '404';
     }
   });
-
-  willDestroy(): void {
-    super.willDestroy();
-
-    if (this.submission) {
-      removeObserver(
-        this.submission as SubmissionModel,
-        'status',
-        this,
-        this.reloadSkInventoryApp
-      );
-    }
-  }
 }
 
 declare module '@glint/environment-ember-loose/registry' {

@@ -1,6 +1,12 @@
-<div
-  {{style width=(or @width '600px') height=(or @height '400px')}}
-  ...attributes
-  {{did-insert this.initialiseEChart}}
-  {{will-destroy this.disposeEChartInstance}}
-/>
+<UseEffect
+  @context={{this}}
+  @effect={{this.handleOptionChange}}
+  @dependencies={{this.chartEffectDependencies}}
+>
+  <div
+    {{style width=(or @width '600px') height=(or @height '400px')}}
+    ...attributes
+    {{did-insert this.initialiseEChart}}
+    {{will-destroy this.disposeEChartInstance}}
+  />
+</UseEffect>

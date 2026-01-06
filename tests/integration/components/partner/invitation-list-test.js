@@ -12,10 +12,6 @@ class OrganizationStub extends Service {
   };
 }
 
-class RealtimeStub extends Service {
-  RegistrationRequestCounter = 0;
-}
-
 function registrationRequestSerializer(data, many = false) {
   if (many === true) {
     return {
@@ -59,7 +55,6 @@ module('Integration | Component | partner/invitation-list', function (hooks) {
 
   hooks.beforeEach(function () {
     this.owner.register('service:organization', OrganizationStub);
-    this.owner.register('service:realtime', RealtimeStub);
   });
 
   test('it should add new entry in invitations list on successful client invite', async function (assert) {

@@ -1,3 +1,8 @@
+<UseEffect
+  @effect={{this.reloadSubmissions}}
+  @dependencies={{this.reloadSubmissionsDependencies}}
+/>
+
 <AkStack @spacing='1.5' @alignItems='center'>
   {{#if this.hasSubmissions}}
     <div local-class='divider'></div>

@@ -1,9 +1,7 @@
-/* eslint-disable ember/no-observers */
 import Component from '@glimmer/component';
 import { tracked } from '@glimmer/tracking';
 import { task } from 'ember-concurrency';
 import { inject as service } from '@ember/service';
-import { addObserver, removeObserver } from '@ember/object/observers';
 import { action } from '@ember/object';
 import { waitForPromise } from '@ember/test-waiters';
 
@@ -70,6 +68,12 @@ export default class FileReportDrawerVaReportsComponent extends Component<FileRe
     super(owner, args);
 
     this.initializeDrawer();
+  }
+
+  get reloadReportsDependencies() {
+    return {
+      reportCounter: () => this.realtime.ReportCounter,
+    };
   }
 
   get file() {
@@ -213,31 +217,15 @@ export default class FileReportDrawerVaReportsComponent extends Component<FileRe
 
   // Actions
   @action
-  observeReportCounter() {
+  reloadReports() {
     this.getReports.perform();
   }
 
   @action initializeDrawer() {
-    addObserver(
-      this.realtime,
-      'ReportCounter',
-      this,
-      this.observeReportCounter
-    );
-
     this.getReports.perform();
     this.getCanGenerateReportStatus.perform();
     this.getFileLatestAutoDynamicScans.perform();
     this.getFileLatestManualDynamicScans.perform();
-  }
-
-  @action removeReportCounterObserver() {
-    removeObserver(
-      this.realtime,
-      'ReportCounter',
-      this,
-      this.observeReportCounter
-    );
   }
 
   generateReport = task(async () => {

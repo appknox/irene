@@ -1,13 +1,11 @@
-/* eslint-disable ember/no-observers */
 import Component from '@glimmer/component';
-import { addObserver, removeObserver } from '@ember/object/observers';
 import { action } from '@ember/object';
 import { helper } from '@ember/component/helper';
 import { service } from '@ember/service';
-import dayjs from 'dayjs';
 import type IntlService from 'ember-intl/services/intl';
 import type RouterService from '@ember/routing/router-service';
 
+import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
 
 import ENUMS from 'irene/enums';
@@ -40,23 +38,12 @@ export default class UploadAppStatusDetailsComponent extends Component<UploadApp
     if (this.args.submission.id) {
       this.uploadApp.submissionSet.add(this.args.submission.id);
     }
-
-    addObserver(this.args.submission, 'status', this, this.refreshProjectList);
   }
 
-  willDestroy() {
-    super.willDestroy();
-
-    this.removeSubmissionStatusObserver();
-  }
-
-  @action removeSubmissionStatusObserver() {
-    removeObserver(
-      this.args.submission,
-      'status',
-      this,
-      this.refreshProjectList
-    );
+  get refreshProjectListDependencies() {
+    return {
+      submissionStatus: () => this.args.submission.status,
+    };
   }
 
   @action
@@ -69,9 +56,7 @@ export default class UploadAppStatusDetailsComponent extends Component<UploadApp
 
     const hasDefaultFilters = this.projectService.isProjectReponseFiltered;
 
-    // check for submission completed & projects route & is in default state
     if (submissionCompleted && isProjectsRoute && !hasDefaultFilters) {
-      // this will update project list
       this.projectService.fetchProjects.perform();
     }
   }

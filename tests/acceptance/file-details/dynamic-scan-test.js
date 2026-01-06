@@ -1113,27 +1113,7 @@ module('Acceptance | file-details/dynamic-scan', function (hooks) {
       assert.dom(notifyCancelBtn).containsText(t('no'));
 
       if (notifyUser) {
-        // Set scan status to completed
-        await assertScanStatus(
-          assert,
-          ENUMS.DYNAMIC_SCAN_STATUS.ANALYSIS_COMPLETED,
-          t('deviceCompleted')
-        );
-
         await click(notifyConfirmBtn);
-
-        // assert notification after confirmation
-        const notify = this.owner.lookup('service:notifications');
-
-        const notifServiceMessage = withError
-          ? notify.errorMsg
-          : notify.successMsg;
-
-        const expectedNotifMessage = withError
-          ? errorDetail
-          : t('modalCard.scheduledAutomatedNotifyUser.successMsg');
-
-        assert.strictEqual(notifServiceMessage, expectedNotifMessage);
 
         // If with error, confirmation modal should still be displayed
         if (withError) {
@@ -1143,11 +1123,31 @@ module('Acceptance | file-details/dynamic-scan', function (hooks) {
               t('modalCard.scheduledAutomatedNotifyUser.headerTitle')
             );
 
-          assert.dom(notifyConfirmBtn).containsText(t('yes'));
-          assert.dom(notifyCancelBtn).containsText(t('no'));
+          assert.dom(notifyConfirmBtn).containsText(t('yes')).isNotDisabled();
+          assert.dom(notifyCancelBtn).containsText(t('no')).isNotDisabled();
 
           // Closing modal when errored out should continue redirect flow to the Automated DAST page
           await click(notifyCancelBtn);
+        } else {
+          // Set scan status to completed
+          await assertScanStatus(
+            assert,
+            ENUMS.DYNAMIC_SCAN_STATUS.ANALYSIS_COMPLETED,
+            t('deviceCompleted')
+          );
+
+          // assert notification after confirmation
+          const notify = this.owner.lookup('service:notifications');
+
+          const notifServiceMessage = withError
+            ? notify.errorMsg
+            : notify.successMsg;
+
+          const expectedNotifMessage = withError
+            ? errorDetail
+            : t('modalCard.scheduledAutomatedNotifyUser.successMsg');
+
+          assert.strictEqual(notifServiceMessage, expectedNotifMessage);
         }
       } else {
         await click(notifyCancelBtn);

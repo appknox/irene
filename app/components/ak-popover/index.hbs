@@ -1,41 +1,52 @@
-{{! @glint-nocheck : did-insert, will-destroy, or}}
-{{#if this.mountContent}}
-  <EmberWormhole @to='ak-component-wormhole' @renderInPlace={{@renderInPlace}}>
-    <div
-      role='presentation'
-      ...attributes
-      data-test-ak-popover-root
-      local-class='ak-popover-root {{unless @anchorRef "hide"}}'
+{{! Effects }}
+<UseEffect
+  @context={{this}}
+  @effect={{this.toggleMountContent}}
+  @dependencies={{this.toggleMountContentDependencies}}
+>
+
+  {{! Component Start }}
+  {{#if this.mountContent}}
+    <EmberWormhole
+      @to='ak-component-wormhole'
+      @renderInPlace={{@renderInPlace}}
     >
-      {{#if @hasBackdrop}}
-        <div
-          data-test-ak-popover-backdrop
-          role='button'
-          aria-hidden='true'
-          local-class='backdrop-root'
-          {{on 'click' this.handleBackdropClick}}
-        />
-      {{/if}}
-
       <div
-        data-test-ak-popover-container
-        class='ak-popover {{@containerClass}}'
-        local-class='ak-popover-container'
-        {{did-insert this.elementInserted}}
-        {{will-destroy this.handleWillDestroyCleanup}}
+        role='presentation'
+        ...attributes
+        data-test-ak-popover-root
+        local-class='ak-popover-root {{unless @anchorRef "hide"}}'
       >
-        {{yield}}
-
-        {{#if @arrow}}
-          <span
-            data-popper-arrow
-            class='{{@arrowClass}}'
-            local-class='
-              ak-popover-arrow 
-              ak-popover-arrow-color-{{or @arrowColor "light"}}'
-          ></span>
+        {{#if @hasBackdrop}}
+          <div
+            data-test-ak-popover-backdrop
+            role='button'
+            aria-hidden='true'
+            local-class='backdrop-root'
+            {{on 'click' this.handleBackdropClick}}
+          />
         {{/if}}
+
+        <div
+          data-test-ak-popover-container
+          class='ak-popover {{@containerClass}}'
+          local-class='ak-popover-container'
+          {{did-insert this.elementInserted}}
+          {{will-destroy this.handleWillDestroyCleanup}}
+        >
+          {{yield}}
+
+          {{#if @arrow}}
+            <span
+              data-popper-arrow
+              class='{{@arrowClass}}'
+              local-class='
+              ak-popover-arrow
+              ak-popover-arrow-color-{{or @arrowColor "light"}}'
+            ></span>
+          {{/if}}
+        </div>
       </div>
-    </div>
-  </EmberWormhole>
-{{/if}}
+    </EmberWormhole>
+  {{/if}}
+</UseEffect>
