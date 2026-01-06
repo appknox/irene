@@ -73,9 +73,10 @@
 
   <ConfirmBox
     @isActive={{this.showRemoveURLConfirmBox}}
+    @cancelAction={{this.closeRemoveURLConfirmBox}}
+    @confirmAction={{this.confirmCallback}}
     @description={{t 'confirmBox.removeURL'}}
     @confirmText={{t 'yes'}}
-    @delegate={{this}}
     @disabled={{this.saveApiUrlFilter.isRunning}}
     @blurOverlay={{true}}
   />

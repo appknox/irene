@@ -17,9 +17,6 @@ import OrganizationModel from './organization';
 
 export default class ProjectModel extends ModelBaseMixin {
   @attr('string')
-  declare name: string;
-
-  @attr('string')
   declare packageName: string;
 
   @attr('boolean')
@@ -29,18 +26,6 @@ export default class ProjectModel extends ModelBaseMixin {
   declare showUnknownAnalysis: boolean;
 
   @attr('string')
-  declare githubRepo: string;
-
-  @attr('string')
-  declare jiraProject: string;
-
-  @attr('string')
-  declare testUser: string;
-
-  @attr('string')
-  declare testPassword: string;
-
-  @attr('string')
   declare url: string;
 
   @attr('number')
@@ -48,9 +33,6 @@ export default class ProjectModel extends ModelBaseMixin {
 
   @attr('number')
   declare platform: number;
-
-  @attr('number')
-  declare source: number;
 
   @attr('number')
   declare fileCount: number;

@@ -5,8 +5,8 @@ import { faker } from '@faker-js/faker';
 export default Factory.extend({
   id: (i) => i + 100 + 1,
   is_high_risk_region: () => faker.datatype.boolean(),
-  country_name: () => faker.address.country(),
-  countryCode: () => faker.address.countryCode(),
+  country_name: () => faker.location.country(),
+  countryCode: () => faker.location.countryCode(),
   hostUrls: () => [
     {
       ip: faker.internet.ip(),

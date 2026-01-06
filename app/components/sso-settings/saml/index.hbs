@@ -265,7 +265,7 @@
 <ConfirmBox
   @isActive={{this.showDeleteIdpMetadataConfirm}}
   @description={{t 'confirmBox.deleteIdpConfig'}}
-  @delegate={{this}}
+  @cancelAction={{this.closeDeleteIdpMetadataConfirm}}
   @confirmAction={{perform this.deleteIdpConfig}}
   @confirmText={{t 'delete'}}
   @disabled={{this.deleteIdpConfig.isRunning}}

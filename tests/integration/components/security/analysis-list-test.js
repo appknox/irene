@@ -514,6 +514,14 @@ module('Integration | Component | security/analysis-list', function (hooks) {
         name: 'New Vulnability Name',
       });
 
+      // Push the new vulnerability to the store
+      this.store.push(
+        this.store.normalize(
+          'vulnerability',
+          serializeForJsonApi(newVulnerability.toJSON(), 'vulnerabilities').data
+        )
+      );
+
       this.server.post('/hudson-api/analyses', (schema, req) => {
         const newAnalysisDetails = JSON.parse(req.requestBody);
         let newAnalysis = null;
@@ -536,12 +544,8 @@ module('Integration | Component | security/analysis-list', function (hooks) {
           fail ? 400 : 200,
           {},
           fail
-            ? {
-                analysis: ['Error adding analysis'],
-              }
-            : {
-                ...newAnalysis.toJSON(),
-              }
+            ? { analysis: ['Error adding analysis'] }
+            : { ...newAnalysis.toJSON() }
         );
       });
 

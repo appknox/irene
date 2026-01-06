@@ -33,6 +33,12 @@ export default class OrganizationInvitationListInviteResend extends Component<Or
     this.showResendInvitationConfirmBox = true;
   }
 
+  /* Close resend-invitation confirmation */
+  @action
+  closeResendInvitationConfirmBox() {
+    this.showResendInvitationConfirmBox = false;
+  }
+
   /* Resend invitation */
   confirmResend = task(async () => {
     try {

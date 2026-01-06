@@ -9,6 +9,7 @@
 
 <ConfirmBox
   @isActive={{this.showRemoveTeamConfirm}}
+  @cancelAction={{this.closeRemoveTeamConfirm}}
   @description={{t 'confirmBox.removeProjectTeam'}}
   @confirmAction={{this.removeTeamProxy}}
   @disabled={{this.removeTeam.isRunning}}
