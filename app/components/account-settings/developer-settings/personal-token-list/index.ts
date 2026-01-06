@@ -94,8 +94,12 @@ export default class AccountSettingsDeveloperSettingsPersonaltokenListComponent 
 
       this.notify.success(tTokenCreated);
     } catch (error) {
-      if (!this.isDestroyed) {
-        this.notify.error((error as AjaxError).payload.message);
+      const firstError = (error as AjaxError).payload?.errors?.[0];
+
+      if (firstError?.code === 'unique') {
+        this.notify.error(this.intl.t('personalTokenNameDuplicate'));
+      } else {
+        this.notify.error(firstError?.detail);
       }
     }
   });
