@@ -201,7 +201,19 @@ describe('Dynamic Scan', () => {
         // do file page assertions
         cy.get<MirageFactoryDefProps['file']>('@currentFile').then((file) => {
           // sanity check
-          dynamicScanActions.doFilePageSanityCheck(file, app);
+
+          const riskUrl = `/api/v3/files/${file.id}/risk`;
+
+          cy.intercept('GET', riskUrl).as('fileRisk');
+
+          cy.wait('@fileRisk').then((riskIntercept) => {
+            const risk = riskIntercept.response?.body;
+
+            // ✅ Pass risk to your sanity check
+            dynamicScanActions.doFilePageSanityCheck(file, app, risk);
+          });
+
+          // dynamicScanActions.doFilePageSanityCheck(file, app);
 
           // intercept device preference route to check & change options
           cy.intercept(API_ROUTES.dsManualDevicePreference.route).as(
