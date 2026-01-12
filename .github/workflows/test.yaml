@@ -99,7 +99,15 @@ jobs:
 
       - name: Run ${{ matrix.tests.type }}
         run: |
-          npm run test:ember -- ${{matrix.tests.commandArgs}} --path=dist --wmmf
+          COVERAGE=true npm run test:ember -- ${{matrix.tests.commandArgs}} --path=dist --wmmf
+
+      - name: Upload Coverage
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: coverage-${{ strategy.job-index }}
+          path: coverage/
+          retention-days: 1
 
       - name: Job Summary
         if: always()
@@ -108,3 +116,61 @@ jobs:
           echo "| --- | --- | --- | --- | --- | --- |" >> $GITHUB_STEP_SUMMARY
 
           cat module-metadata-*.json | jq -r '.modules[] | "\(.moduleName | gsub("\\|"; "\\\\|")) | \(.total) | \(.passed) | \(.failed) | \(.skipped) | \(.duration) "' >> $GITHUB_STEP_SUMMARY
+
+  coverage:
+    name: Upload Coverage Report
+    needs: [test]
+    if: always()
+    runs-on: [ubuntu-latest]
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+
+      - name: Install nyc for coverage merging
+        run: npm install -g nyc
+
+      - name: Download all coverage artifacts
+        uses: actions/download-artifact@v4
+        with:
+          pattern: coverage-*
+          path: coverage-artifacts
+
+      - name: Merge coverage reports
+        run: |
+          mkdir -p coverage
+          # Merge all coverage reports using nyc
+          nyc merge coverage-artifacts coverage/coverage.json
+          # Generate lcov report from merged coverage
+          nyc report --reporter=lcov --reporter=text --reporter=json-summary --temp-dir=coverage --report-dir=coverage
+
+      - name: Display coverage summary
+        run: |
+          if [ -f coverage/coverage-summary.json ]; then
+            echo "## Coverage Summary" >> $GITHUB_STEP_SUMMARY
+            echo "" >> $GITHUB_STEP_SUMMARY
+            node -e "
+              const fs = require('fs');
+              const coverage = JSON.parse(fs.readFileSync('coverage/coverage-summary.json', 'utf8'));
+              const total = coverage.total;
+              console.log('| Metric | Coverage | Covered | Total |');
+              console.log('| --- | --- | --- | --- |');
+              console.log(\`| Statements | \${total.statements.pct}% | \${total.statements.covered} | \${total.statements.total} |\`);
+              console.log(\`| Branches | \${total.branches.pct}% | \${total.branches.covered} | \${total.branches.total} |\`);
+              console.log(\`| Functions | \${total.functions.pct}% | \${total.functions.covered} | \${total.functions.total} |\`);
+              console.log(\`| Lines | \${total.lines.pct}% | \${total.lines.covered} | \${total.lines.total} |\`);
+            " >> $GITHUB_STEP_SUMMARY
+          fi
+
+      # - name: Upload coverage to Codecov
+      #   uses: codecov/codecov-action@v5
+      #   with:
+      #     files: ./coverage/lcov.info
+      #     flags: unittests
+      #     name: ember-tests
+      #     fail_ci_if_error: false
+      #     token: ${{ secrets.CODECOV_TOKEN }}
+      #     verbose: true

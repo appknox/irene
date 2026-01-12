@@ -27,6 +27,8 @@
     "startprod": "cross-env IRENE_API_HOST=https://api.appknox.com ember server",
     "test": "concurrently \"npm:lint\" \"npm:test:*\" --names \"lint,test:\"",
     "test:ember": "ember exam",
+    "test:coverage": "COVERAGE=true npm run test:ember",
+    "coverage:report": "open coverage/lcov-report/index.html",
     "cypress:open": "cypress open",
     "cypress:run": "cypress run --browser chrome",
     "deploy": "ember deploy production --verbose=true --activate=true --show-progress=true",
