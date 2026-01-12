@@ -2,7 +2,7 @@
 import DS from 'ember-data';
 
 import Component from '@glimmer/component';
-import { inject as service } from '@ember/service';
+import { service } from '@ember/service';
 import { tracked } from 'tracked-built-ins';
 import { action } from '@ember/object';
 import { task } from 'ember-concurrency';
@@ -54,7 +54,7 @@ export default class SecurityAnalysisListHeaderComponent extends Component<Secur
   ) {
     super(owner, args);
 
-    this.getVulnerabilities.perform();
+    this.getVulnerabilities();
   }
 
   get file() {
@@ -97,12 +97,23 @@ export default class SecurityAnalysisListHeaderComponent extends Component<Secur
     this.showPurgeAPIAnalysisConfirmBox = true;
   }
 
+  @action closePurgeAPIAnalysisConfirmBox() {
+    this.showPurgeAPIAnalysisConfirmBox = false;
+  }
+
   @action confirmPurgeAPIAnalysisConfirmBox() {
     this.confirmPurge.perform();
   }
 
   @action addAnalysis() {
     this.doAddAnalysis.perform();
+  }
+
+  @action
+  getVulnerabilities() {
+    this.vulnerabilitiesResponse = this.store.peekAll(
+      'vulnerability'
+    ) as VulnerabilityQueryResponse;
   }
 
   confirmPurge = task(async () => {
@@ -147,18 +158,6 @@ export default class SecurityAnalysisListHeaderComponent extends Component<Secur
 
       this.notify.error(parseError(err, this.tPleaseTryAgain));
     }
-  });
-
-  getVulnerabilities = task(async () => {
-    const vulnerabilities = (await this.store.query('vulnerability', {
-      projectId: this.projectId,
-      limit: 0,
-    })) as VulnerabilityQueryResponse;
-
-    this.vulnerabilitiesResponse = (await this.store.query('vulnerability', {
-      projectId: this.projectId,
-      limit: vulnerabilities?.meta?.count || 0,
-    })) as VulnerabilityQueryResponse;
   });
 }
 

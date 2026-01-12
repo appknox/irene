@@ -150,7 +150,7 @@
 <ConfirmBox
   @isActive={{this.showDeleteOidcConfirm}}
   @description={{t 'confirmBox.deleteOIDCConfig'}}
-  @delegate={{this}}
+  @cancelAction={{this.closeDeleteOidcConfirm}}
   @confirmAction={{perform this.deleteProvider}}
   @confirmText={{t 'delete'}}
   @disabled={{this.deleteProvider.isRunning}}

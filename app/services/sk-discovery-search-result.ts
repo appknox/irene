@@ -39,7 +39,10 @@ export default class SkDiscoverySearchResultService extends Service {
   @tracked skDiscoverySearchResultsCount = 0;
 
   get isFetchingSkDiscoverySearchResults() {
-    return this.doFetchDiscoveryResults.isRunning;
+    return (
+      this.doFetchDiscoveryResults.isRunning ||
+      this.getSearchIdForQuery.isRunning
+    );
   }
 
   setLimitOffset({ limit = 10, offset = 0 }) {
@@ -58,6 +61,10 @@ export default class SkDiscoverySearchResultService extends Service {
 
   async fetchDiscoveryResults() {
     await this.doFetchDiscoveryResults.perform();
+  }
+
+  async fetchSearchIdForQuery(searchQuery = '') {
+    await this.getSearchIdForQuery.perform(searchQuery);
   }
 
   getSearchIdForQuery = task(async (searchQuery = '') => {
@@ -81,10 +88,6 @@ export default class SkDiscoverySearchResultService extends Service {
 
   doFetchDiscoveryResults = task(async () => {
     this.showDiscoveryResults = true;
-
-    if (!this.searchId && this.searchQuery) {
-      await this.getSearchIdForQuery.perform(this.searchQuery);
-    }
 
     try {
       const discoveryResultData = (await this.store.query(

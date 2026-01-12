@@ -56,6 +56,11 @@ export default class ProjectSettingsGeneralSettingsCollaboratorsTableActionCompo
     this.showRemoveCollaboratorConfirm = true;
   }
 
+  @action
+  closeRemoveCollaboratorConfirm() {
+    this.showRemoveCollaboratorConfirm = false;
+  }
+
   @action removeProjectCollaborator() {
     this.removeCollaborator.perform();
   }

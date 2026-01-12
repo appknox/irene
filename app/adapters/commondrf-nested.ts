@@ -1,12 +1,11 @@
-import CommonDRFAdapter from './commondrf';
 import { underscore } from '@ember/string';
-import type ModelRegistry from 'ember-data/types/registries/model';
+import CommonDRFAdapter from './commondrf';
 
 export default class CommondrfNestedAdapter extends CommonDRFAdapter {
   namespace = '';
-  pathTypeName: keyof ModelRegistry | null = null;
+  pathTypeName: string | null = null;
 
-  pathForType(type: keyof ModelRegistry) {
+  pathForType(type: string) {
     return underscore(super.pathForType(this.pathTypeName || type));
   }
 
