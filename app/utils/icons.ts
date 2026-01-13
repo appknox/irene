@@ -196,3 +196,5 @@ export const PhIconsSet = ['diamonds-four'] as const;
 export const MynauiIconsSet = ['frame'] as const;
 
 export const SolarIconsSet = ['library-linear'] as const;
+
+export const IconoirIconsSet = ['screenshot'] as const;
