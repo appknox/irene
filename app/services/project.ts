@@ -8,10 +8,15 @@ import IntlService from 'ember-intl/services/intl';
 import DS from 'ember-data';
 
 import ProjectModel from 'irene/models/project';
+import FileRiskModel from 'irene/models/file-risk';
 import { tracked } from '@glimmer/tracking';
 import { action } from '@ember/object';
 
 type ProjectQueryResponse = DS.AdapterPopulatedRecordArray<ProjectModel> & {
+  meta?: { count: number };
+};
+
+type RiskQueryResponse = DS.AdapterPopulatedRecordArray<FileRiskModel> & {
   meta?: { count: number };
 };
 
@@ -30,8 +35,10 @@ export default class ProjectService extends Service {
   @service declare store: Store;
 
   @tracked projectQueryResponse: ProjectQueryResponse | null = null;
+  @tracked riskQueryResponse: RiskQueryResponse | null = null;
   @tracked isProjectReponseFiltered = false;
   @tracked viewType: 'card' | 'list' = 'card';
+  @tracked risksByFileId: Map<string, FileRiskModel> = new Map();
 
   constructor(properties?: object) {
     super(properties);
@@ -93,6 +100,8 @@ export default class ProjectService extends Service {
           'project',
           queryParams
         )) as ProjectQueryResponse;
+
+        await this.fetchRisks.perform(queryParams);
       } catch (e) {
         const err = e as AdapterError;
 
@@ -112,6 +121,39 @@ export default class ProjectService extends Service {
         // Only show toast for non–rate-limit errors
         if (!isRateLimitError) {
           this.notify.error(errMsg);
+        }
+      }
+    }
+  );
+
+  fetchRisks = task(
+    { keepLatest: true },
+    async (queryParams: Record<string, string | number>) => {
+      try {
+        this.riskQueryResponse = (await this.store.query(
+          'file-risk',
+          queryParams
+        )) as RiskQueryResponse;
+
+        this.risksByFileId.clear();
+
+        this.riskQueryResponse.forEach((risk) => {
+          const fileId = risk.id;
+
+          if (fileId) {
+            this.risksByFileId.set(String(fileId), risk);
+          }
+        });
+      } catch (e) {
+        const err = e as AdapterError;
+
+        const firstError = err?.errors?.[0];
+        const isRateLimitError = firstError
+          ? Number(firstError.status) === 429
+          : false;
+
+        if (!isRateLimitError) {
+          console.error('Failed to fetch risks in bulk:', err);
         }
       }
     }

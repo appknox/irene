@@ -1,5 +1,7 @@
+import Store from '@ember-data/store';
+import { service } from '@ember/service';
 import Component from '@glimmer/component';
-import FileModel from 'irene/models/file';
+import type FileModel from 'irene/models/file';
 
 export interface FileDetailsSeverityLevelSignature {
   Args: {
@@ -7,7 +9,20 @@ export interface FileDetailsSeverityLevelSignature {
   };
 }
 
-export default class FileDetailsSeverityLevelComponent extends Component<FileDetailsSeverityLevelSignature> {}
+export default class FileDetailsSeverityLevelComponent extends Component<FileDetailsSeverityLevelSignature> {
+  @service declare store: Store;
+
+  get fileRisk() {
+    const fileId = this.args.file?.id;
+
+    if (!fileId) {
+      return null;
+    }
+
+    // Peek the store for the already-loaded risk
+    return this.store.peekRecord('file-risk', String(fileId));
+  }
+}
 
 declare module '@glint/environment-ember-loose/registry' {
   export default interface Registry {

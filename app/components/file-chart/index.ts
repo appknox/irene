@@ -2,7 +2,6 @@ import Component from '@glimmer/component';
 import { service } from '@ember/service';
 import { tracked } from 'tracked-built-ins';
 import { task } from 'ember-concurrency';
-import { waitForPromise } from '@ember/test-waiters';
 import type IntlService from 'ember-intl/services/intl';
 import type Store from '@ember-data/store';
 
@@ -133,10 +132,24 @@ export default class FileChartComponent extends Component<FileChartSignature> {
   }
 
   fetchFileRisk = task(async () => {
+    if (!this.args.file) {
+      return;
+    }
+
+    const fileId = String(this.args.file.id);
+
     try {
-      if (this.args.file) {
-        this.fileRisk = await waitForPromise(this.args.file.fetchFileRisk());
+      // Check if it's in the store (to avoid duplicate requests)
+      const existingRisk = this.store.peekRecord('file-risk', fileId);
+
+      if (existingRisk) {
+        this.fileRisk = existingRisk;
+
+        return;
       }
+
+      // Fetch from API - this will use /files/{id}/risk endpoint
+      this.fileRisk = await this.store.findRecord('file-risk', fileId);
     } catch (error) {
       const err = error as AdapterError;
 

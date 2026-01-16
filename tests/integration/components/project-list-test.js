@@ -57,6 +57,12 @@ module('Integration | Component | project list', function (hooks) {
       return { count: results.length, next: null, previous: null, results };
     });
 
+    this.server.get('/v3/risk', () => {
+      const results = [];
+
+      return { count: results.length, next: null, previous: null, results };
+    });
+
     await render(hbs`<ProjectList />`);
 
     assert
@@ -77,6 +83,12 @@ module('Integration | Component | project list', function (hooks) {
 
     this.server.get('/v3/projects', (schema) => {
       const results = schema.projects.all().models;
+
+      return { count: results.length, next: null, previous: null, results };
+    });
+
+    this.server.get('/v3/risk', (schema) => {
+      const results = schema.fileRisks.all().models;
 
       return { count: results.length, next: null, previous: null, results };
     });
@@ -104,6 +116,12 @@ module('Integration | Component | project list', function (hooks) {
 
     this.server.get('/v3/projects', (schema) => {
       const results = schema.projects.all().models;
+
+      return { count: results.length, next: null, previous: null, results };
+    });
+
+    this.server.get('/v3/risk', (schema) => {
+      const results = schema.fileRisks.all().models;
 
       return { count: results.length, next: null, previous: null, results };
     });
@@ -156,6 +174,12 @@ module('Integration | Component | project list', function (hooks) {
       const results = team
         ? schema.projects.all().models.slice(0, team === '1' ? 1 : 2) // simulate team filter
         : schema.projects.all().models;
+
+      return { count: results.length, next: null, previous: null, results };
+    });
+
+    this.server.get('/v3/risk', (schema) => {
+      const results = schema.fileRisks.all().models;
 
       return { count: results.length, next: null, previous: null, results };
     });
@@ -228,6 +252,17 @@ module('Integration | Component | project list', function (hooks) {
         const results = schema.projects.all().models;
 
         return { count: results.length, next: null, previous: null, results };
+      });
+
+      this.server.get('/v3/risk', (schema) => {
+        const results = schema.fileRisks.all().models;
+
+        return {
+          count: results.length,
+          next: null,
+          previous: null,
+          results,
+        };
       });
 
       await render(hbs`<ProjectList />`);
@@ -313,6 +348,22 @@ module('Integration | Component | project list', function (hooks) {
       });
     });
 
+    const files = [];
+    projects.forEach((project, index) => {
+      const fileId = 200 + index + 1;
+
+      const file = this.server.create('file', {
+        projectId: project.id,
+        id: fileId,
+      });
+      files.push(file);
+
+      this.server.create('file-risk', {
+        file: fileId,
+        id: fileId,
+      });
+    });
+
     this.server.get('/v3/projects', (schema, req) => {
       const platform = req.queryParams.platform;
 
@@ -327,6 +378,60 @@ module('Integration | Component | project list', function (hooks) {
       return { count: results.length, next: null, previous: null, results };
     });
 
+    this.server.get('/v3/risk', (schema, req) => {
+      const platform = req.queryParams.platform;
+
+      this.set('platform', platform);
+
+      let results = schema.fileRisks.all().models;
+
+      // Only return risks that map to an existing project's file.
+      // `setupFileModelEndpoints` creates a standalone file-risk which would otherwise
+      // inflate the risk count for "All" filters.
+      results = results.filter((fileRisk) => {
+        const fileId = String(fileRisk.id);
+        const file = schema.db.files.find(fileId);
+
+        if (!file || !file.projectId) {
+          return false;
+        }
+
+        const project = schema.db.projects.find(String(file.projectId));
+        return Boolean(project);
+      });
+
+      if (!isEmpty(platform) && parseInt(platform) !== -1) {
+        const platformFilter = parseInt(platform);
+        results = results.filter((fileRisk) => {
+          // file-risk uses file ID as primary key (from serializer primaryKey = 'file')
+          // So fileRisk.id is the file ID
+          const fileId = String(fileRisk.id);
+          if (!fileId) {
+            return false;
+          }
+
+          const file = schema.db.files.find(fileId);
+          if (!file || !file.projectId) {
+            return false;
+          }
+
+          const project = schema.db.projects.find(String(file.projectId));
+          if (!project) {
+            return false;
+          }
+
+          return project.platform === platformFilter;
+        });
+      }
+
+      return {
+        count: results.length,
+        next: null,
+        previous: null,
+        results: results.map((r) => r.toJSON()),
+      };
+    });
+
     await render(hbs`<ProjectList />`);
 
     let projectContainerList = findAll(
@@ -337,6 +442,12 @@ module('Integration | Component | project list', function (hooks) {
       projectContainerList.length,
       projects.length,
       'Contains correct number of project overview cards.'
+    );
+
+    assert.strictEqual(
+      this.projectService.riskQueryResponse.length,
+      projects.length,
+      'Risk list contains one risk per project for default platform filter.'
     );
 
     await waitFor('[data-test-select-platform-container]', { timeout: 1000 });
@@ -359,6 +470,12 @@ module('Integration | Component | project list', function (hooks) {
       projects.filter((p) => p.platform === 0).length,
       projectContainerList.length,
       'Project list items all have platform values matching "0".'
+    );
+
+    assert.strictEqual(
+      this.projectService.riskQueryResponse.length,
+      projects.filter((p) => p.platform === 0).length,
+      'Risk list contains one risk per project for platform 0.'
     );
 
     // Selecting a platform value equal to 1 from the plaform filter options
@@ -394,6 +511,12 @@ module('Integration | Component | project list', function (hooks) {
       projects.length,
       projectContainerList.length,
       'Project list defaults to complete list when platform value is "-1".'
+    );
+
+    assert.strictEqual(
+      this.projectService.riskQueryResponse.length,
+      projects.length,
+      'Risk list contains one risk per project when platform filter is cleared.'
     );
   });
 
