@@ -1693,6 +1693,7 @@
   "scanStartedBy": "Scan Started by",
   "scanSummary": "Scan Summary",
   "scanTriggeredAutomatically": "Scan triggered automatically on app upload.",
+  "scanType": "Scan Type",
   "scanTypes": "Scan Types",
   "scanning": "Scanning",
   "scansLeft": " Scan Left",

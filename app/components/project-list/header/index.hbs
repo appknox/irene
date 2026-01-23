@@ -1,249 +1,289 @@
-<AkStack
-  @width='full'
-  @direction='column'
-  local-class='header-home-page'
-  class='mb-4'
->
-  <AkStack
-    @width='full'
-    @justifyContent='space-between'
-    @alignItems='center'
-    local-class='header-home-page-title'
-  >
-    <AkStack @direction='column' @spacing='0.5'>
-      <AkTypography @variant='h5'>{{t 'allProjects'}}</AkTypography>
+<AkStack @direction='column' class='mb-2'>
+  <AkStack @width='full' @direction='column' local-class='header-home-page'>
+    <AkStack
+      @width='full'
+      @justifyContent='space-between'
+      @alignItems='center'
+      local-class='header-home-page-title'
+    >
+      <AkStack @direction='column' @spacing='0.5'>
+        <AkTypography @variant='h5'>{{t 'allProjects'}}</AkTypography>
 
-      <AkTypography @variant='body2'>
-        {{t 'allProjectsDescription'}}
-      </AkTypography>
+        <AkTypography @variant='body2'>
+          {{t 'allProjectsDescription'}}
+        </AkTypography>
+      </AkStack>
+
+      {{#if @hasProjects}}
+        <AkStack
+          @alignItems='center'
+          @justifyContent='space-between'
+          local-class='left-container-width'
+        >
+          <div local-class='search-container-width'>
+            <AkTextField
+              @placeholder={{t 'searchQuery'}}
+              @value={{@query}}
+              {{on 'input' this.onSearchQueryChange}}
+              local-class='search-package-name-input'
+              data-test-search-query-input
+            >
+              <:leftAdornment>
+                <AkIcon @iconName='search' @color='textSecondary' />
+              </:leftAdornment>
+
+              <:rightAdornment>
+                {{#if @query}}
+                  <AkIconButton
+                    @size='small'
+                    {{on 'click' this.clearSearchInput}}
+                  >
+                    <AkIcon @iconName='close' @color='textSecondary' />
+                  </AkIconButton>
+                {{/if}}
+              </:rightAdornment>
+            </AkTextField>
+          </div>
+
+          <AkStack>
+            <AkTooltip
+              @title={{t 'cardView'}}
+              @placement='bottom'
+              @arrow={{true}}
+            >
+              <AkIconButton
+                local-class='switch-button card {{if this.isCardView "active"}}'
+                @variant='outlined'
+                @size='medium'
+                {{on 'click' this.handleCardViewClick}}
+                data-test-project-list-header-card-view-btn
+              >
+                <AkIcon
+                  @color={{if this.isCardView 'primary'}}
+                  @iconName='cards-sharp'
+                />
+              </AkIconButton>
+            </AkTooltip>
+
+            <AkTooltip
+              @title={{t 'listView'}}
+              @placement='bottom'
+              @arrow={{true}}
+            >
+              <AkIconButton
+                local-class='switch-button list {{unless
+                  this.isCardView
+                  "active"
+                }}'
+                @variant='outlined'
+                {{on 'click' this.handleListViewClick}}
+                data-test-project-list-header-list-view-btn
+              >
+                <AkIcon
+                  @color={{unless this.isCardView 'primary'}}
+                  @iconName='format-list-bulleted'
+                />
+              </AkIconButton>
+            </AkTooltip>
+          </AkStack>
+        </AkStack>
+      {{/if}}
     </AkStack>
 
     {{#if @hasProjects}}
+      <AkDivider @color='dark' />
+
       <AkStack
         @alignItems='center'
         @justifyContent='space-between'
-        local-class='left-container-width'
+        @width='full'
+        local-class='header-home-page-sorting-filter'
       >
-        <div local-class='search-container-width'>
-          <AkTextField
-            @placeholder={{t 'searchQuery'}}
-            @value={{@query}}
-            {{on 'input' this.onSearchQueryChange}}
-            local-class='search-package-name-input'
-            data-test-search-query-input
+        <AkStack @alignItems='center'>
+          <AkSelect
+            @onChange={{this.filterPlatformChange}}
+            @options={{this.platformObjects}}
+            @selected={{this.selectedPlatform}}
+            @verticalPosition='auto'
+            @triggerClass={{this.triggerClass}}
+            @dropdownClass={{this.dropDownClass}}
+            @optionTitle={{t 'platform'}}
+            @extra={{hash
+              selectedItem=this.selectedPlatform.key
+              showLabel=true
+              iconName='filter-list'
+            }}
+            @selectedItemComponent={{component
+              'project-list/filter-selected-item'
+            }}
+            {{style width='auto'}}
+            class='select-platform-class'
+            data-test-select-platform-container
+            as |platformObject|
           >
-            <:leftAdornment>
-              <AkIcon @iconName='search' @color='textSecondary' />
-            </:leftAdornment>
+            <AkStack @spacing='1' @alignItems='center'>
+              <AkRadio @checked={{eq @platform platformObject.value}} />
 
-            <:rightAdornment>
-              {{#if @query}}
-                <AkIconButton
-                  @size='small'
-                  {{on 'click' this.clearSearchInput}}
-                >
-                  <AkIcon @iconName='close' @color='textSecondary' />
-                </AkIconButton>
-              {{/if}}
-            </:rightAdornment>
-          </AkTextField>
-        </div>
+              {{platformObject.key}}
+            </AkStack>
+          </AkSelect>
 
-        <AkStack>
-          <AkTooltip
-            @title={{t 'cardView'}}
-            @placement='bottom'
-            @arrow={{true}}
+          <AkSelect
+            @triggerClass={{this.triggerClass}}
+            @dropdownClass={{this.dropDownClass}}
+            @renderInPlace={{true}}
+            @searchPlaceholder={{t 'searchTeamByName'}}
+            @search={{this.searchTeams}}
+            @searchEnabled={{true}}
+            @options={{this.teams}}
+            @selected={{this.selectedTeam}}
+            @loadingMessage={{t 'loadingTeam'}}
+            @onChange={{this.onSelectTeamChange}}
+            @onOpen={{this.onOpenTFilter}}
+            @tagName='div'
+            @optionTitle={{t 'team'}}
+            @extra={{hash
+              selectedItem=this.selectedTeamName
+              showLabel=true
+              iconName='filter-list'
+            }}
+            @selectedItemComponent={{component
+              'project-list/filter-selected-item'
+            }}
+            class='select-team-class'
+            local-class='select-team-class'
+            data-test-select-team-container
+            as |team|
           >
-            <AkIconButton
-              local-class='switch-button card {{if this.isCardView "active"}}'
-              @variant='outlined'
-              @size='medium'
-              {{on 'click' this.handleCardViewClick}}
-              data-test-project-list-header-card-view-btn
+            <AkStack @spacing='1' @alignItems='center'>
+              <AkRadio @checked={{eq this.selectedTeamName team.name}} />
+
+              {{team.name}}
+            </AkStack>
+          </AkSelect>
+
+          <AkSelect
+            @onChange={{this.filterScanTypeChange}}
+            @options={{this.scanTypeObjects}}
+            @selected={{this.selectedScanType}}
+            @verticalPosition='auto'
+            @triggerClass={{this.triggerClass}}
+            @dropdownClass={{this.dropDownClass}}
+            @optionTitle={{t 'scanType'}}
+            @extra={{hash
+              selectedItem=this.selectedScanType.key
+              showLabel=true
+              iconName='filter-list'
+            }}
+            @selectedItemComponent={{component
+              'project-list/filter-selected-item'
+            }}
+            {{style width='auto'}}
+            class='select-scan-type-class'
+            local-class='select-scan-type-class'
+            data-test-select-scan-type-container
+            as |scanTypeObject|
+          >
+            <AkStack @spacing='1' @alignItems='center'>
+              <AkRadio @checked={{eq @scanType scanTypeObject.value}} />
+
+              {{scanTypeObject.key}}
+            </AkStack>
+          </AkSelect>
+        </AkStack>
+
+        <AkStack @spacing='2' @alignItems='center'>
+          <AkSelect
+            @onChange={{this.onSortProjectsChange}}
+            @options={{this.sortingKeyObjects}}
+            @selected={{this.selectedSortKey}}
+            @verticalPosition='below'
+            @triggerClass={{this.triggerClass}}
+            @dropdownClass={{this.dropDownClass}}
+            @optionTitle={{t 'sortBy'}}
+            @extra={{hash
+              selectedItem=this.selectedSortKey.text
+              showLabel=false
+              iconName='sort'
+            }}
+            @selectedItemComponent={{component
+              'project-list/filter-selected-item'
+            }}
+            {{style width='auto'}}
+            class='select-sort-class'
+            data-test-project-sort-property
+            as |sortingKeyObject|
+          >
+            <AkStack @spacing='1' @alignItems='center'>
+              <AkRadio @checked={{eq @sortKey sortingKeyObject.key}} />
+
+              {{sortingKeyObject.text}}
+            </AkStack>
+          </AkSelect>
+
+          {{#unless this.isCardView}}
+            <AkTooltip
+              @title={{t 'projectList.manageColumns'}}
+              @placement='bottom'
+              @arrow={{true}}
             >
-              <AkIcon
-                @color={{if this.isCardView 'primary'}}
-                @iconName='cards-sharp'
-              />
-            </AkIconButton>
-          </AkTooltip>
-
-          <AkTooltip
-            @title={{t 'listView'}}
-            @placement='bottom'
-            @arrow={{true}}
-          >
-            <AkIconButton
-              local-class='switch-button list {{unless
-                this.isCardView
-                "active"
-              }}'
-              @variant='outlined'
-              {{on 'click' this.handleListViewClick}}
-              data-test-project-list-header-list-view-btn
-            >
-              <AkIcon
-                @color={{unless this.isCardView 'primary'}}
-                @iconName='format-list-bulleted'
-              />
-            </AkIconButton>
-          </AkTooltip>
+              <AkIconButton
+                data-test-projectList-header-columnManagerBtn
+                @variant='outlined'
+                {{on 'click' this.handleOpenColumnManager}}
+                local-class='column-manager-button'
+              >
+                <AkIcon
+                  @color='primary'
+                  @iconName='add-column-right-outline-rounded'
+                />
+              </AkIconButton>
+            </AkTooltip>
+          {{/unless}}
         </AkStack>
       </AkStack>
     {{/if}}
   </AkStack>
 
-  {{#if @hasProjects}}
-    <AkDivider @color='dark' />
-
+  {{#if this.showClearFilter}}
     <AkStack
-      @alignItems='center'
-      @justifyContent='space-between'
       @width='full'
-      local-class='header-home-page-sorting-filter'
+      @alignItems='center'
+      local-class='clear-filter-section'
     >
-      <AkStack @alignItems='center'>
-        <AkSelect
-          @onChange={{this.filterPlatformChange}}
-          @options={{this.platformObjects}}
-          @selected={{this.selectedPlatform}}
-          @verticalPosition='auto'
-          @triggerClass={{this.triggerClass}}
-          @dropdownClass={{this.dropDownClass}}
-          @optionTitle={{t 'platform'}}
-          @extra={{hash
-            selectedItem=this.selectedPlatform.key
-            showLabel=true
-            iconName='filter-list'
-          }}
-          @selectedItemComponent={{component
-            'project-list/filter-selected-item'
-          }}
-          {{style width='auto'}}
-          class='select-platform-class'
-          data-test-select-platform-container
-          as |platformObject|
-        >
-          <AkStack @spacing='1' @alignItems='center'>
-            <AkRadio @checked={{eq @platform platformObject.value}} />
+      <AkTypography>Showing results of &nbsp;</AkTypography>
 
-            {{platformObject.key}}
-          </AkStack>
-        </AkSelect>
+      <AkTypography @fontWeight='bold'>{{this.totalProjectCount}}
+        out of
+        {{this.overallProjectCount}}
+        files</AkTypography>
 
-        <AkSelect
-          @triggerClass={{this.triggerClass}}
-          @dropdownClass={{this.dropDownClass}}
-          @renderInPlace={{true}}
-          @searchPlaceholder={{t 'searchTeamByName'}}
-          @search={{this.searchTeams}}
-          @searchEnabled={{true}}
-          @options={{this.teams}}
-          @selected={{this.selectedTeam}}
-          @loadingMessage={{t 'loadingTeam'}}
-          @onChange={{this.onSelectTeamChange}}
-          @onOpen={{this.onOpenTFilter}}
-          @tagName='div'
-          @optionTitle={{t 'team'}}
-          @extra={{hash
-            selectedItem=this.selectedTeamName
-            showLabel=true
-            iconName='filter-list'
-          }}
-          @selectedItemComponent={{component
-            'project-list/filter-selected-item'
-          }}
-          class='select-team-class'
-          local-class='select-team-class'
-          data-test-select-team-container
-          as |team|
-        >
-          <AkStack @spacing='1' @alignItems='center'>
-            <AkRadio @checked={{eq this.selectedTeamName team.name}} />
+      <AkDivider
+        local-class='divider'
+        @direction='vertical'
+        @color='dark'
+        @height='20px'
+      />
 
-            {{team.name}}
-          </AkStack>
-        </AkSelect>
+      <AkButton
+        @color='textSecondary'
+        @underline='none'
+        @variant='text'
+        @leftIconClass={{this.clearFilterIconClass}}
+        {{on 'click' this.clearFilters}}
+        local-class='clear-filter'
+        data-test-project-list-header-clear-filter
+      >
+        <:leftIcon>
+          <AkIcon @iconName='close' @size='small' />
+        </:leftIcon>
 
-        {{#if this.showClearFilter}}
-          <AkDivider
-            local-class='divider'
-            @direction='vertical'
-            @color='dark'
-            @height='32px'
-          />
-
-          <AkButton
-            @color='textSecondary'
-            @underline='none'
-            @leftIconClass={{this.clearFilterIconClass}}
-            {{on 'click' this.clearFilters}}
-            local-class='clear-filter'
-            data-test-project-list-header-clear-filter
-          >
-            <:leftIcon>
-              <AkIcon @iconName='close' @size='small' />
-            </:leftIcon>
-
-            <:default>
-              <AkTypography local-class='clear-filter-label'>
-                {{t 'clearFilter'}}
-              </AkTypography>
-            </:default>
-          </AkButton>
-        {{/if}}
-      </AkStack>
-
-      <AkStack @spacing='2' @alignItems='center'>
-        <AkSelect
-          @onChange={{this.onSortProjectsChange}}
-          @options={{this.sortingKeyObjects}}
-          @selected={{this.selectedSortKey}}
-          @verticalPosition='below'
-          @triggerClass={{this.triggerClass}}
-          @dropdownClass={{this.dropDownClass}}
-          @optionTitle={{t 'sortBy'}}
-          @extra={{hash
-            selectedItem=this.selectedSortKey.text
-            showLabel=false
-            iconName='sort'
-          }}
-          @selectedItemComponent={{component
-            'project-list/filter-selected-item'
-          }}
-          {{style width='auto'}}
-          class='select-sort-class'
-          data-test-project-sort-property
-          as |sortingKeyObject|
-        >
-          <AkStack @spacing='1' @alignItems='center'>
-            <AkRadio @checked={{eq @sortKey sortingKeyObject.key}} />
-
-            {{sortingKeyObject.text}}
-          </AkStack>
-        </AkSelect>
-
-        {{#unless this.isCardView}}
-          <AkTooltip
-            @title={{t 'projectList.manageColumns'}}
-            @placement='bottom'
-            @arrow={{true}}
-          >
-            <AkIconButton
-              data-test-projectList-header-columnManagerBtn
-              @variant='outlined'
-              {{on 'click' this.handleOpenColumnManager}}
-              local-class='column-manager-button'
-            >
-              <AkIcon
-                @color='primary'
-                @iconName='add-column-right-outline-rounded'
-              />
-            </AkIconButton>
-          </AkTooltip>
-        {{/unless}}
-      </AkStack>
+        <:default>
+          <AkTypography local-class='clear-filter-label'>
+            {{t 'clearFilter'}}
+          </AkTypography>
+        </:default>
+      </AkButton>
     </AkStack>
   {{/if}}
 </AkStack>

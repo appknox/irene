@@ -2,6 +2,9 @@
   <FileCompare::Header
     @file1={{this.baseFile}}
     @project={{@project}}
+    @selectedScanType={{this.selectedScanType}}
+    @scanTypeValue={{this.scanTypeValue}}
+    @filterScanTypeChange={{this.filterScanTypeChange}}
     data-test-fileList-projectOverview-container
   >
     <:breadcrumbs>
@@ -104,18 +107,62 @@
     </:header>
 
     <:headerCTA>
-      {{#if (or this.baseFile this.fileToCompare)}}
-        <AkButton
-          @disabled={{this.disableCompareBtn}}
-          {{style minWidth='100px'}}
-          {{on 'click' this.onCompareBtnClick}}
-          data-test-fileList-projectOverview-header-compareBtn
-        >
-          {{t 'compare'}}
-        </AkButton>
-      {{/if}}
+      <AkStack @alignItems='center'>
+        {{#if (or this.baseFile this.fileToCompare)}}
+          <AkButton
+            @disabled={{this.disableCompareBtn}}
+            {{style minWidth='100px'}}
+            {{on 'click' this.onCompareBtnClick}}
+            data-test-fileList-projectOverview-header-compareBtn
+          >
+            {{t 'compare'}}
+          </AkButton>
+        {{/if}}
+      </AkStack>
     </:headerCTA>
   </FileCompare::Header>
+
+  {{#if this.showClearFilter}}
+    <AkStack
+      @width='full'
+      @alignItems='center'
+      local-class='clear-filter-section'
+    >
+      <AkTypography>Showing results of &nbsp;</AkTypography>
+
+      <AkTypography @fontWeight='bold'>{{this.totalFilesCount}}
+        out of
+        {{this.overallFilesCount}}
+        files</AkTypography>
+
+      <AkDivider
+        local-class='divider'
+        @direction='vertical'
+        @color='dark'
+        @height='20px'
+      />
+
+      <AkButton
+        @color='textSecondary'
+        @underline='none'
+        @variant='text'
+        @leftIconClass={{this.clearFilterIconClass}}
+        {{on 'click' this.clearFilters}}
+        local-class='clear-filter'
+        data-test-project-list-header-clear-filter
+      >
+        <:leftIcon>
+          <AkIcon @iconName='close' @size='small' />
+        </:leftIcon>
+
+        <:default>
+          <AkTypography local-class='clear-filter-label'>
+            {{t 'clearFilter'}}
+          </AkTypography>
+        </:default>
+      </AkButton>
+    </AkStack>
+  {{/if}}
 
   <div local-class='file-list-wrapper' data-test-fileList-wrapper>
     <AkPaginationProvider
@@ -134,6 +181,23 @@
           @loadingText='{{t "loading"}}...'
           data-test-fileList-loadingContainer
         />
+      {{else if this.hasNoProjects}}
+        <AkStack
+          local-class='no-project-container'
+          @alignItems='center'
+          @justifyContent='center'
+          @direction='column'
+        >
+          <AkSvg::ProjectListEmpty />
+
+          <AkTypography @variant='h4' @fontWeight='bold' class='pt-3 pb-1'>
+            {{t 'noResultsFound'}}
+          </AkTypography>
+
+          <AkTypography @variant='h5' @fontWeight='regular' @align='center'>
+            Kindly reset / clear the filter for better results
+          </AkTypography>
+        </AkStack>
       {{else if this.hasFiles}}
         <div local-class='file-list-container'>
           {{#each this.files as |file|}}

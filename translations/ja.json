@@ -1693,6 +1693,7 @@
   "scanStartedBy": "Scan Started by",
   "scanSummary": "Scan Summary",
   "scanTriggeredAutomatically": "Scan triggered automatically on app upload.",
+  "scanType": "Scan Type",
   "scanTypes": "Scan Types",
   "scanning": "診断中",
   "scansLeft": "未実施の診断",

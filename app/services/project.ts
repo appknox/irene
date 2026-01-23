@@ -22,6 +22,7 @@ export const DEFAULT_PROJECT_QUERY_PARAMS = {
   sortKey: '-last_file_created_on',
   platform: -1,
   team: '',
+  scanType: -1,
 };
 
 export default class ProjectService extends Service {
@@ -32,6 +33,7 @@ export default class ProjectService extends Service {
   @tracked projectQueryResponse: ProjectQueryResponse | null = null;
   @tracked isProjectReponseFiltered = false;
   @tracked viewType: 'card' | 'list' = 'card';
+  @tracked overallProjectCount: number = 0;
 
   constructor(properties?: object) {
     super(properties);
@@ -69,7 +71,8 @@ export default class ProjectService extends Service {
       query: string = DEFAULT_PROJECT_QUERY_PARAMS.query,
       sortKey: string = DEFAULT_PROJECT_QUERY_PARAMS.sortKey,
       platform: number = DEFAULT_PROJECT_QUERY_PARAMS.platform,
-      team: string = DEFAULT_PROJECT_QUERY_PARAMS.team
+      team: string = DEFAULT_PROJECT_QUERY_PARAMS.team,
+      scanType: number = DEFAULT_PROJECT_QUERY_PARAMS.scanType
     ) => {
       this.setProjectResponseFiltered({
         offset,
@@ -77,7 +80,14 @@ export default class ProjectService extends Service {
         sortKey,
         platform,
         team,
+        scanType,
       });
+
+      const isDefaultFilters =
+        query === DEFAULT_PROJECT_QUERY_PARAMS.query &&
+        team === DEFAULT_PROJECT_QUERY_PARAMS.team &&
+        platform === DEFAULT_PROJECT_QUERY_PARAMS.platform &&
+        scanType === DEFAULT_PROJECT_QUERY_PARAMS.scanType;
 
       const queryParams = {
         limit,
@@ -86,6 +96,9 @@ export default class ProjectService extends Service {
         sorting: sortKey,
         ...(platform !== null && platform !== -1 ? { platform } : {}),
         ...(team ? { team } : {}),
+        ...(scanType !== null && scanType !== -1
+          ? { scan_type: scanType }
+          : {}),
       };
 
       try {
@@ -93,6 +106,11 @@ export default class ProjectService extends Service {
           'project',
           queryParams
         )) as ProjectQueryResponse;
+
+        if (isDefaultFilters) {
+          this.overallProjectCount =
+            this.projectQueryResponse?.meta?.count || 0;
+        }
       } catch (e) {
         const err = e as AdapterError;
 
