@@ -14,7 +14,10 @@ import type MeService from 'irene/services/me';
 import type IreneAjaxService from 'irene/services/ajax';
 
 export type SwaggerUIDataProps = Partial<
-  Record<'components' | 'paths' | 'openapi' | 'info', string | object>
+  Record<
+    'components' | 'paths' | 'openapi' | 'info' | 'servers',
+    string | object
+  >
 >;
 
 export default class PublicApiDocsComponent extends Component {
