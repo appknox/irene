@@ -2,7 +2,7 @@ import Service, { service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
 import { action } from '@ember/object';
 import { task, type TaskForAsyncTaskFunction } from 'ember-concurrency';
-import type Store from '@ember-data/store';
+import type Store from 'ember-data/store';
 
 // eslint-disable-next-line ember/use-ember-data-rfc-395-imports
 import { type DS } from 'ember-data';

@@ -12,7 +12,7 @@ module('Unit | Model | file', function (hooks) {
 
   test('it passes', function (assert) {
     const file = this.owner.lookup('service:store').createRecord('file', {
-      id: 1,
+      id: '1',
     });
 
     assert.equal(file.get('isManualRequested'), true, 'Manual Requested');

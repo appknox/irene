@@ -23,11 +23,4 @@ export default Factory.extend({
   projects_count() {
     return faker.number.int();
   },
-
-  members() {
-    const id = this.id as number;
-    const organization = this.organization as number;
-
-    return `https://api.appknox.com/api/organizations/${organization}/teams/${id}/members`;
-  },
 });

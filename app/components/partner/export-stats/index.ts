@@ -4,7 +4,7 @@ import { action } from '@ember/object';
 import { service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
 import { task } from 'ember-concurrency';
-import type Store from '@ember-data/store';
+import type Store from 'ember-data/store';
 
 import parseError from 'irene/utils/parse-error';
 
@@ -90,8 +90,8 @@ export default class PartnerExportStatsComponent extends Component<PartnerExport
   }
 
   fetchDownloadUrl = task(async () => {
-    const startDate = this.dateRange.objectAt(0);
-    const endDate = this.dateRange.objectAt(1);
+    const startDate = this.dateRange[0];
+    const endDate = this.dateRange[1];
 
     try {
       if (startDate && endDate) {

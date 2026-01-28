@@ -3,7 +3,7 @@ import { service } from '@ember/service';
 import { htmlSafe } from '@ember/template';
 import { task } from 'ember-concurrency';
 import { tracked } from 'tracked-built-ins';
-import type Store from '@ember-data/store';
+import type Store from 'ember-data/store';
 import type IntlService from 'ember-intl/services/intl';
 
 import ENUMS from 'irene/enums';

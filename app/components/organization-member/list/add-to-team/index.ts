@@ -4,7 +4,7 @@ import { tracked } from '@glimmer/tracking';
 import { inject as service } from '@ember/service';
 import { task } from 'ember-concurrency';
 import { debounceTask } from 'ember-lifeline';
-import Store from '@ember-data/store';
+import Store from 'ember-data/store';
 import IntlService from 'ember-intl/services/intl';
 // eslint-disable-next-line ember/use-ember-data-rfc-395-imports
 import DS from 'ember-data';

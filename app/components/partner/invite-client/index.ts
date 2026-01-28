@@ -7,7 +7,7 @@ import { action } from '@ember/object';
 import { task } from 'ember-concurrency';
 import type { BufferedChangeset } from 'ember-changeset/types';
 import type IntlService from 'ember-intl/services/intl';
-import type Store from '@ember-data/store';
+import type Store from 'ember-data/store';
 
 import PartnerInviteClientValidator from './validator';
 import type RealtimeService from 'irene/services/realtime';

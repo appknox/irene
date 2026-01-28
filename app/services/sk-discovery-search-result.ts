@@ -1,7 +1,7 @@
 import Service, { service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
 import { task } from 'ember-concurrency';
-import type Store from '@ember-data/store';
+import type Store from 'ember-data/store';
 import type RouterService from '@ember/routing/router-service';
 
 // eslint-disable-next-line ember/use-ember-data-rfc-395-imports
@@ -69,7 +69,7 @@ export default class SkDiscoverySearchResultService extends Service {
 
   getSearchIdForQuery = task(async (searchQuery = '') => {
     try {
-      const discoveryQuery = this.store.createRecord('skDiscovery', {
+      const discoveryQuery = this.store.createRecord('sk-discovery', {
         queryStr: searchQuery,
       });
 

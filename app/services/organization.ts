@@ -1,7 +1,7 @@
 import Service from '@ember/service';
 import { inject as service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
-import type Store from '@ember-data/store';
+import type Store from 'ember-data/store';
 
 import ENV from 'irene/config/environment';
 import type OrganizationModel from 'irene/models/organization';

@@ -4,7 +4,7 @@ import { inject as service } from '@ember/service';
 import { action } from '@ember/object';
 import { debounceTask } from 'ember-lifeline';
 import { tracked } from '@glimmer/tracking';
-import Store from '@ember-data/store';
+import Store from 'ember-data/store';
 import IntlService from 'ember-intl/services/intl';
 import RealtimeService from 'irene/services/realtime';
 import OrganizationTeamModel from 'irene/models/organization-team';

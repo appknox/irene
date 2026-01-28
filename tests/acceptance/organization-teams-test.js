@@ -87,9 +87,11 @@ module('Acceptance | organization teams', function (hooks) {
       const server = this.server;
 
       this.server.get('/organizations/:id/teams', (schema) => {
-        const results = schema.organizationTeams
-          .all()
-          .models.sortBy('created_on');
+        const results = schema.organizationTeams.all().models.sort((a, b) => {
+          return (
+            new Date(b.created_on).getTime() - new Date(a.created_on).getTime()
+          );
+        });
 
         return { count: results.length, next: null, previous: null, results };
       });
@@ -100,7 +102,7 @@ module('Acceptance | organization teams', function (hooks) {
           : server
               .create('organization-team', {
                 name: JSON.parse(req.requestBody).name,
-                created_on: Date(),
+                created_on: new Date().toISOString(),
               })
               .toJSON();
       });

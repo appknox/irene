@@ -86,9 +86,9 @@ module('Acceptance | DRF: Relationships', function (hooks) {
     const comments = await post.get('comments');
 
     assert.ok(comments);
-    assert.strictEqual(comments.get('length'), 3);
-    assert.ok(comments.objectAt(0));
-    assert.ok(comments.objectAt(1));
-    assert.ok(comments.objectAt(2));
+    assert.strictEqual(comments.length, 3);
+    assert.ok(comments[0]);
+    assert.ok(comments[1]);
+    assert.ok(comments[2]);
   });
 });

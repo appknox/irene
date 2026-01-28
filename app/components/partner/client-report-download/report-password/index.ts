@@ -7,7 +7,7 @@ import ClipboardJS from 'clipboard/src/clipboard';
 
 import type IntlService from 'ember-intl/services/intl';
 import type PartnerService from 'irene/services/partner';
-import type Store from '@ember-data/store';
+import type Store from 'ember-data/store';
 import type PartnerPartnerclientReportUnlockkeyModel from 'irene/models/partner/partnerclient-report-unlockkey';
 
 interface PartnerClientReportDownloadReportPasswordComponentSignature {

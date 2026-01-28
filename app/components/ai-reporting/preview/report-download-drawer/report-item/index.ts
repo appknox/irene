@@ -2,7 +2,7 @@ import Component from '@glimmer/component';
 import { service } from '@ember/service';
 import { action } from '@ember/object';
 import type IntlService from 'ember-intl/services/intl';
-import type Store from '@ember-data/store';
+import type Store from 'ember-data/store';
 
 import type ReportRequestModel from 'irene/models/ai-reporting/report-request';
 import type { AiReportDetails, AiReportType } from '..';

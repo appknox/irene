@@ -1,4 +1,4 @@
-import Store from '@ember-data/store';
+import Store from 'ember-data/store';
 import { service } from '@ember/service';
 
 import ENUMS from 'irene/enums';

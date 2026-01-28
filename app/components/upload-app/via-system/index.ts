@@ -3,7 +3,7 @@ import Component from '@glimmer/component';
 import { task } from 'ember-concurrency';
 import { waitForPromise } from '@ember/test-waiters';
 import { action } from '@ember/object';
-import type Store from '@ember-data/store';
+import type Store from 'ember-data/store';
 import type IntlService from 'ember-intl/services/intl';
 import type FileQueueService from 'ember-file-upload/services/file-queue';
 import type { UploadFile } from 'ember-file-upload';

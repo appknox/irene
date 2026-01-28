@@ -4,7 +4,7 @@ import IntlService from 'ember-intl/services/intl';
 import { tracked } from '@glimmer/tracking';
 import { action } from '@ember/object';
 import { task } from 'ember-concurrency';
-import Store from '@ember-data/store';
+import Store from 'ember-data/store';
 import RouterService from '@ember/routing/router-service';
 import { waitForPromise } from '@ember/test-waiters';
 

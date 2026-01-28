@@ -5,7 +5,7 @@ import { task } from 'ember-concurrency';
 import { tracked } from '@glimmer/tracking';
 import type RouterService from '@ember/routing/router-service';
 import type IntlService from 'ember-intl/services/intl';
-import type Store from '@ember-data/store';
+import type Store from 'ember-data/store';
 
 import { ReportRequestStatus } from 'irene/models/ai-reporting/report-request';
 import parseError from 'irene/utils/parse-error';

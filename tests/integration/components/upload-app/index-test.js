@@ -76,7 +76,7 @@ module('Integration | Component | upload-app', function (hooks) {
     const server = this.server;
 
     this.server.get('/organizations/:id/upload_app', () => {
-      const uploadApp = server.create('uploadApp').toJSON();
+      const uploadApp = server.create('upload-app').toJSON();
 
       return uploadApp;
     });
@@ -84,7 +84,7 @@ module('Integration | Component | upload-app', function (hooks) {
     this.server.post('/organizations/:id/upload_app', (schema, req) => {
       const data = JSON.parse(req.requestBody);
 
-      return schema.create('uploadApp', data).toJSON();
+      return schema.create('upload-app', data).toJSON();
     });
 
     this.server.put(

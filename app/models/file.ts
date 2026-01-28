@@ -10,7 +10,7 @@ import {
 
 import { service } from '@ember/service';
 import type IntlService from 'ember-intl/services/intl';
-import type Store from '@ember-data/store';
+import type Store from 'ember-data/store';
 
 import { ModelBaseMixin } from 'irene/mixins/base-model';
 import ENUMS from 'irene/enums';

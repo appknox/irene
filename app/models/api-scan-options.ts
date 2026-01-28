@@ -1,9 +1,8 @@
-import Inflector from 'ember-inflector';
 import { isEmpty } from '@ember/utils';
 import Model, { attr } from '@ember-data/model';
+import { uncountable } from '@ember-data/request-utils/string';
 
-const inflector = Inflector.inflector;
-inflector.irregular('api-scan-options', 'api-scan-options');
+uncountable('api-scan-options');
 
 export default class ApiScanOptionsModel extends Model {
   @attr

@@ -1,6 +1,6 @@
 import { service } from '@ember/service';
 import Route from '@ember/routing/route';
-import type Store from '@ember-data/store';
+import type Store from 'ember-data/store';
 
 import type SbomComponentModel from 'irene/models/sbom-component';
 import type SbomProjectModel from 'irene/models/sbom-project';

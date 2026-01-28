@@ -9,7 +9,7 @@ import advancedFormat from 'dayjs/plugin/advancedFormat';
 import weekday from 'dayjs/plugin/weekday';
 import weekOfYear from 'dayjs/plugin/weekOfYear';
 
-import type Store from '@ember-data/store';
+import type Store from 'ember-data/store';
 import type IntlService from 'ember-intl/services/intl';
 
 import type OrganizationService from 'irene/services/organization';
@@ -78,7 +78,7 @@ export default class PartnerClientUploadsStatChartComponent extends Component<Pa
     dayjs.extend(weekOfYear);
     dayjs.extend(weekday);
 
-    this.currentTimeline = this.timelinePlaceholders.objectAt(0);
+    this.currentTimeline = this.timelinePlaceholders[0];
 
     this.loadChart.perform();
   }
@@ -121,11 +121,11 @@ export default class PartnerClientUploadsStatChartComponent extends Component<Pa
   }
 
   get startDate() {
-    return this.dateRange.objectAt(0);
+    return this.dateRange[0];
   }
 
   get endDate() {
-    return this.dateRange.objectAt(1);
+    return this.dateRange[1];
   }
 
   get selectedDateRange() {

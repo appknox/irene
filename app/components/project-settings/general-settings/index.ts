@@ -3,7 +3,7 @@ import { inject as service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
 import { task } from 'ember-concurrency';
 import { waitForPromise } from '@ember/test-waiters';
-import type Store from '@ember-data/store';
+import type Store from 'ember-data/store';
 
 import type ProjectModel from 'irene/models/project';
 import type ProfileModel from 'irene/models/profile';

@@ -1,7 +1,7 @@
 import Component from '@glimmer/component';
 import { tracked } from '@glimmer/tracking';
 import { inject as service } from '@ember/service';
-import Store from '@ember-data/store';
+import Store from 'ember-data/store';
 import { task } from 'ember-concurrency';
 
 import MeService from 'irene/services/me';

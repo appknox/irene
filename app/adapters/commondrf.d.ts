@@ -1,6 +1,6 @@
 import { inject as service } from '@ember/service';
 import RESTAdapter from '@ember-data/adapter/rest';
-import Store from '@ember-data/store';
+import Store from 'ember-data/store';
 import OrganizationService from 'irene/services/organization';
 
 export default class CommonDRFAdapter extends RESTAdapter {

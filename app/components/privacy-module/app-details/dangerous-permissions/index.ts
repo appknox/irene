@@ -1,7 +1,7 @@
 import Component from '@glimmer/component';
 import { service } from '@ember/service';
 import { action } from '@ember/object';
-import type Store from '@ember-data/store';
+import type Store from 'ember-data/store';
 
 import type { PrivacyModuleDangerPermissionsQueryParam } from 'irene/routes/authenticated/dashboard/privacy-module/app-details/danger-perms';
 import type { PaginationProviderActionsArgs } from 'irene/components/ak-pagination-provider';

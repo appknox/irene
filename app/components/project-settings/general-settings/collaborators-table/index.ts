@@ -6,7 +6,7 @@ import Component from '@glimmer/component';
 import { inject as service } from '@ember/service';
 import { task } from 'ember-concurrency';
 import { tracked } from '@glimmer/tracking';
-import Store from '@ember-data/store';
+import Store from 'ember-data/store';
 import { action } from '@ember/object';
 import IntlService from 'ember-intl/services/intl';
 
@@ -58,9 +58,7 @@ export default class ProjectSettingsGeneralSettingsCollaboratorsTableComponent e
   }
 
   get projectCollaborators() {
-    return (
-      this.projectCollaboratorsResponse?.slice().sortBy('created:desc') || []
-    );
+    return this.projectCollaboratorsResponse?.slice() || [];
   }
 
   get hasNoProjectCollaborators() {

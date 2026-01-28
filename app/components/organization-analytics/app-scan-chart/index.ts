@@ -125,7 +125,11 @@ export default class OrganizationAnalyticsAppScanChartComponent extends Componen
     // clear previous chart data to maintain data integrity
     this.chartInstance?.clear();
 
-    const sortedAppScan = appScan.results.sortBy('created_on_date');
+    const sortedAppScan = appScan.results.sort(
+      (a, b) =>
+        dayjs(a.created_on_date).valueOf() - dayjs(b.created_on_date).valueOf()
+    );
+
     const monthDiff = Math.abs(dayjs(startDate).diff(dayjs(endDate), 'month'));
 
     let series: BarSeriesOption[] = [];

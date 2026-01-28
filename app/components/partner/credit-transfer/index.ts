@@ -4,7 +4,7 @@ import { task } from 'ember-concurrency';
 import { service } from '@ember/service';
 import { action } from '@ember/object';
 import { isEmpty } from '@ember/utils';
-import type Store from '@ember-data/store';
+import type Store from 'ember-data/store';
 import type IntlService from 'ember-intl/services/intl';
 
 import type IreneAjaxService from 'irene/services/ajax';

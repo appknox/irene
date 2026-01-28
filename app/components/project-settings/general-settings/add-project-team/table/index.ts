@@ -5,13 +5,14 @@ import { tracked } from '@glimmer/tracking';
 import { inject as service } from '@ember/service';
 import { task } from 'ember-concurrency';
 import IntlService from 'ember-intl/services/intl';
-import Store from '@ember-data/store';
+import Store from 'ember-data/store';
 import { action } from '@ember/object';
 import { debounceTask } from 'ember-lifeline';
 
 import OrganizationTeamModel from 'irene/models/organization-team';
 import ProjectModel from 'irene/models/project';
 import parseError from 'irene/utils/parse-error';
+import dayjs from 'dayjs';
 
 interface LimitOffset {
   limit: number;
@@ -68,7 +69,13 @@ export default class ProjectSettingsGeneralSettingsAddProjectTeamTableComponent 
   }
 
   get organizationTeams() {
-    return this.orgTeamRecordResponse?.slice().sortBy('created:desc') || [];
+    return (
+      this.orgTeamRecordResponse
+        ?.slice()
+        .sort(
+          (a, b) => dayjs(b.createdOn).valueOf() - dayjs(a.createdOn).valueOf()
+        ) || []
+    );
   }
 
   get hasNoOrgTeams() {

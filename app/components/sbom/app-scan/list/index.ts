@@ -7,7 +7,7 @@ import { action } from '@ember/object';
 
 // eslint-disable-next-line ember/use-ember-data-rfc-395-imports
 import { DS } from 'ember-data';
-import Store from '@ember-data/store';
+import Store from 'ember-data/store';
 import RouterService from '@ember/routing/router-service';
 
 import { PaginationProviderActionsArgs } from 'irene/components/ak-pagination-provider';

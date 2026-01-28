@@ -1,6 +1,6 @@
 import { service } from '@ember/service';
 import type RESTAdapter from '@ember-data/adapter/rest';
-import type Store from '@ember-data/store';
+import type Store from 'ember-data/store';
 
 import ENV from 'irene/config/environment';
 import { DRFAuthenticationBase } from 'irene/adapters/auth-base';

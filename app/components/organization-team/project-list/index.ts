@@ -7,7 +7,7 @@ import { task } from 'ember-concurrency';
 import { tracked } from '@glimmer/tracking';
 import IntlService from 'ember-intl/services/intl';
 import MeService from 'irene/services/me';
-import Store from '@ember-data/store';
+import Store from 'ember-data/store';
 // eslint-disable-next-line ember/use-ember-data-rfc-395-imports
 import DS from 'ember-data';
 import OrganizationTeamModel from 'irene/models/organization-team';

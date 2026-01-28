@@ -221,14 +221,14 @@ module('Acceptance | storeknox/discovery/results', function (hooks) {
         // Create results whose titles include search query
         Array.from({ length: 3 }, () =>
           this.server.create('sk-discovery-result', {
-            title: `${searchText} ${faker.random.word()}`,
+            title: `${searchText} ${faker.word.sample()}`,
           })
         );
 
         // Create results whose titles do not include search query
         Array.from({ length: 2 }, () =>
           this.server.create('sk-discovery-result', {
-            title: faker.random.word(),
+            title: faker.word.sample(),
           })
         );
 
@@ -377,7 +377,7 @@ module('Acceptance | storeknox/discovery/results', function (hooks) {
         // Create results whose titles which have search query
         Array.from({ length: 1 }, () =>
           this.server.create('sk-discovery-result', {
-            title: `${searchText} ${faker.random.word()}`,
+            title: `${searchText} ${faker.word.sample()}`,
           })
         );
 
@@ -492,7 +492,7 @@ module('Acceptance | storeknox/discovery/results', function (hooks) {
     // Create results whose titles include search query
     const resultList = Array.from({ length: 3 }, () =>
       this.server.create('sk-discovery-result', {
-        title: `${searchText} ${faker.random.word()}`,
+        title: `${searchText} ${faker.word.sample()}`,
       })
     );
 
@@ -653,7 +653,7 @@ module('Acceptance | storeknox/discovery/results', function (hooks) {
       // Create results whose titles which have search query
       Array.from({ length: 1 }, () =>
         this.server.create('sk-discovery-result', {
-          title: `${searchText} ${faker.random.word()}`,
+          title: `${searchText} ${faker.word.sample()}`,
         })
       );
 
