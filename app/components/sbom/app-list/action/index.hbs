@@ -2,6 +2,7 @@
   data-test-sbomApp-actionBtn
   {{on 'click' this.handleOpenMenu}}
   disabled={{this.hasNoSbomScan}}
+  data-test-cy="sbomApp-actionBtn"
 >
   <AkIcon @iconName='more-vert' />
 </AkIconButton>
@@ -16,6 +17,7 @@
     {{#unless it.hidden}}
       <akm.listItem
         data-test-sbomApp-actionMenuItem
+        data-test-cy="sbomapp-actionmenuitem"
         @button={{it.button}}
         @link={{it.link}}
         @route={{it.route}}
