@@ -111,7 +111,7 @@ export default class DynamicScanActions {
     ).within(() => {
       // assert risk counts
       cy.findAllByText(file.risk_count_high).should('exist');
-      cy.findAllByText(file.risk_count_medium).should('exist');
+      cy.findAllByText(file.risk_coun t_medium).should('exist');
       cy.findAllByText(file.risk_count_low).should('exist');
       cy.findAllByText(file.risk_count_critical).should('exist');
       cy.findAllByText(file.risk_count_passed).should('exist');

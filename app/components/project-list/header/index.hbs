@@ -150,10 +150,14 @@
           {{style width='auto'}}
           class='select-platform-class'
           data-test-select-platform-container
+          data-test-cy='sbom-platform-filter'
           as |platformObject|
         >
           <AkStack @spacing='1' @alignItems='center'>
-            <AkRadio @checked={{eq @platform platformObject.value}} />
+            <AkRadio
+              @checked={{eq @platform platformObject.value}}
+              data-test-sbom-platform-radio='{{platformObject.key}}'
+            />
 
             {{platformObject.key}}
           </AkStack>

@@ -21,7 +21,8 @@ Cypress.on('uncaught:exception', () => {
   return false;
 });
 
-describe('User Login', () => {
+describe('User Login', () => 
+  {
   beforeEach(() => {
     networkActions.hideNetworkLogsFor({ ...API_ROUTES.websockets });
   });
