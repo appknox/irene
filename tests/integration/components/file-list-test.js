@@ -4,6 +4,8 @@ import { click, findAll, render, waitFor } from '@ember/test-helpers';
 import { hbs } from 'ember-cli-htmlbars';
 import { setupIntl, t } from 'ember-intl/test-support';
 import { setupMirage } from 'ember-cli-mirage/test-support';
+import { clickTrigger } from 'ember-power-select/test-support/helpers';
+import { selectChoose } from 'ember-power-select/test-support';
 
 module('Integration | Component | file-list', function (hooks) {
   setupRenderingTest(hooks);
@@ -48,7 +50,12 @@ module('Integration | Component | file-list', function (hooks) {
     );
 
     // File Models
-    const files = this.server.createList('file', 3);
+    const files = Array.from({ length: 3 }).map((_, i) => {
+      return this.server.create('file', {
+        is_api_done: i === 0,
+      });
+    });
+
     const fileRecords = files.map((file) => {
       const normalizedFile = store.normalize('file', {
         ...file.toJSON(),
@@ -303,5 +310,69 @@ module('Integration | Component | file-list', function (hooks) {
       .dom(`${otherFileSelector} [data-test-fileOverview-selectCheckBox]`)
       .exists()
       .doesNotHaveAttribute('disabled');
+  });
+
+  test('It filters files list when scan type value changes and also clears filter', async function (assert) {
+    this.server.get('/v3/projects/:id/files', (schema, req) => {
+      const scanType = req.queryParams.scan_type;
+
+      this.set('scanType', scanType);
+
+      const scanTypeInt = parseInt(scanType);
+
+      const files = schema.files.all().models;
+
+      const results =
+        scanTypeInt === 2 ? files.filter((p) => p.is_api_done) : files;
+
+      return { count: results.length, next: null, previous: null, results };
+    });
+
+    await render(
+      hbs`<FileList @project={{this.project}} @queryParams={{this.queryParams}} />`
+    );
+
+    let fileContainerList = findAll('[data-test-fileList-fileOverview-item]');
+
+    assert.strictEqual(
+      fileContainerList.length,
+      this.fileRecords.length,
+      'Contains correct number of file overview cards.'
+    );
+
+    await waitFor('[data-test-select-scan-type-container]', { timeout: 1000 });
+
+    await clickTrigger('[data-test-select-scan-type-container]');
+
+    await waitFor('.ember-power-select-option', { timeout: 1000 });
+
+    await selectChoose(
+      '.select-scan-type-class',
+      '.ember-power-select-option',
+      3
+    );
+
+    assert.strictEqual(this.scanType, '2');
+
+    fileContainerList = findAll('[data-test-fileList-fileOverview-item]');
+
+    assert.strictEqual(
+      fileContainerList.length,
+      1,
+      'File list items all have scan type value matching Api Scan.'
+    );
+
+    assert.dom('[data-test-fileList-header-clear-filter]').exists();
+
+    // Clear Filter
+    await click('[data-test-fileList-header-clear-filter]');
+
+    fileContainerList = findAll('[data-test-fileList-fileOverview-item]');
+
+    assert.strictEqual(
+      fileContainerList.length,
+      this.fileRecords.length,
+      'File list defaults to complete list when scan type value is all.'
+    );
   });
 });

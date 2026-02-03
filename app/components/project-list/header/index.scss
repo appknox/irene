@@ -28,6 +28,10 @@
   padding-left: 0.714em;
 }
 
+.select-scan-type-class {
+  padding-left: 0.714em;
+}
+
 .filter-input {
   border-color: var(--project-list-header-filter-border-color) !important;
   padding: 0px 8px !important;
@@ -44,7 +48,7 @@
 }
 
 .divider {
-  margin-left: 0.714em;
+  margin: 0 0.714em;
 }
 
 .clear-filter-label {
@@ -109,4 +113,9 @@
 
 .column-manager-button {
   border-color: var(--project-list-header-button-border-color) !important;
+}
+
+.clear-filter-section {
+  padding: 0.57em 1.285em;
+  border-bottom: 1px solid var(--project-list-header-clear-filter-border-color);
 }

@@ -5,7 +5,7 @@ import DS from 'ember-data';
 import Component from '@glimmer/component';
 import { tracked } from '@glimmer/tracking';
 import { task } from 'ember-concurrency';
-import Store from 'ember-data/store';
+import Store from '@ember-data/store';
 import { inject as service } from '@ember/service';
 import { action } from '@ember/object';
 import { addObserver, removeObserver } from '@ember/object/observers';
@@ -18,6 +18,7 @@ import { PaginationProviderActionsArgs } from 'irene/components/ak-pagination-pr
 import RealtimeService from 'irene/services/realtime';
 import parseError from 'irene/utils/parse-error';
 import { ProjectFilesQueryParams } from 'irene/routes/authenticated/dashboard/project/files';
+import styles from './index.scss';
 
 type FilesQueryResponse = DS.AdapterPopulatedRecordArray<FileModel> & {
   meta: { count: number };
@@ -30,6 +31,11 @@ interface FileListSignature {
   };
 }
 
+interface ScanTypeObject {
+  key: string;
+  value: number;
+}
+
 export default class FileListComponent extends Component<FileListSignature> {
   @service declare store: Store;
   @service declare router: RouterService;
@@ -40,6 +46,14 @@ export default class FileListComponent extends Component<FileListSignature> {
   @tracked filesResponse: FilesQueryResponse | null = null;
   @tracked baseFile: FileModel | null = null;
   @tracked fileToCompare: FileModel | null = null;
+  @tracked overallFilesCount: number = 0;
+
+  @tracked selectedScanType = {
+    key: 'All',
+    value: -1,
+  };
+
+  @tracked scanTypeValue = -1;
 
   constructor(owner: unknown, args: FileListSignature['Args']) {
     super(owner, args);
@@ -48,7 +62,7 @@ export default class FileListComponent extends Component<FileListSignature> {
 
     const { files_limit, files_offset } = args.queryParams;
 
-    this.getFiles.perform(files_limit, files_offset, false);
+    this.getFiles.perform(files_limit, files_offset, this.scanTypeValue, false);
   }
 
   get limit() {
@@ -72,7 +86,9 @@ export default class FileListComponent extends Component<FileListSignature> {
   }
 
   get sortedFiles() {
-    return this.filesResponse?.slice();
+    const sortProperties = ['createdOn:desc'];
+
+    return this.filesResponse?.slice().sortBy(...sortProperties);
   }
 
   get hasFiles() {
@@ -83,9 +99,21 @@ export default class FileListComponent extends Component<FileListSignature> {
     return !this.baseFile || !this.fileToCompare;
   }
 
+  get clearFilterIconClass() {
+    return styles['clear-filter-icon'];
+  }
+
+  get showClearFilter() {
+    return this.selectedScanType.value !== -1;
+  }
+
+  get hasNoProjects() {
+    return this.totalFilesCount === 0;
+  }
+
   // Reloads the files list whenever the file counter changes
   observeFileCounter() {
-    this.getFiles.perform(this.limit, this.offset);
+    this.getFiles.perform(this.limit, this.offset, this.scanTypeValue);
   }
 
   removeFileCounterObserver() {
@@ -101,14 +129,14 @@ export default class FileListComponent extends Component<FileListSignature> {
   @action goToPage(args: PaginationProviderActionsArgs) {
     const { limit, offset } = args;
 
-    this.getFiles.perform(limit, offset);
+    this.getFiles.perform(limit, offset, this.scanTypeValue);
   }
 
   @action onItemPerPageChange(args: PaginationProviderActionsArgs) {
     const { limit } = args;
     const offset = 0;
 
-    this.getFiles.perform(limit, offset);
+    this.getFiles.perform(limit, offset, this.scanTypeValue);
   }
 
   @action onCompareBtnClick() {
@@ -150,6 +178,25 @@ export default class FileListComponent extends Component<FileListSignature> {
     this.fileToCompare = null;
   }
 
+  @action filterScanTypeChange(scanType: ScanTypeObject) {
+    this.handleFile1Delete();
+
+    this.handleFile2Delete();
+
+    this.selectedScanType = scanType;
+
+    this.scanTypeValue = this.selectedScanType.value;
+
+    this.getFiles.perform(this.limit, this.offset, this.scanTypeValue, false);
+  }
+
+  @action clearFilters() {
+    this.filterScanTypeChange({
+      key: 'All',
+      value: -1,
+    });
+  }
+
   setRouteQueryParams(limit: string | number, offset: string | number) {
     this.router.transitionTo({
       queryParams: {
@@ -163,6 +210,7 @@ export default class FileListComponent extends Component<FileListSignature> {
     async (
       limit: string | number,
       offset: string | number,
+      scanType: number,
       setQueryParams = true
     ) => {
       if (setQueryParams) {
@@ -173,6 +221,9 @@ export default class FileListComponent extends Component<FileListSignature> {
         projectId: this.project?.get('id'),
         limit: limit,
         offset: offset,
+        ...(scanType !== null && scanType !== -1
+          ? { scan_type: scanType }
+          : {}),
       };
 
       try {
@@ -182,6 +233,10 @@ export default class FileListComponent extends Component<FileListSignature> {
         )) as FilesQueryResponse;
 
         this.filesResponse = files;
+
+        if (scanType === -1) {
+          this.overallFilesCount = this.filesResponse?.meta.count;
+        }
       } catch (err) {
         const error = err as AdapterError;
         const status = Number(error?.errors?.[0]?.status);
