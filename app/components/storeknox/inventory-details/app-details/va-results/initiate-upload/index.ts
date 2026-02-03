@@ -143,14 +143,12 @@ export default class StoreknoxInventoryDetailsAppDetailsVaResultsInitiateUploadC
 
   get disableInitiateUploadBtn() {
     return (
-      this.args.initiateUploadIsInProgress ||
-      this.skInventoryApp?.isArchived ||
-      this.skInventoryApp?.isIos
+      this.args.initiateUploadIsInProgress || this.skInventoryApp?.isArchived
     );
   }
 
   get hideTooltipMessage() {
-    return !(this.skInventoryApp?.isIos || this.skInventoryApp?.isArchived);
+    return !this.skInventoryApp?.isArchived;
   }
 }
 

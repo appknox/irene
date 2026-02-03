@@ -234,7 +234,7 @@ export default class StoreknoxInventoryDetailsUnscannedVersionTableActionsCompon
   }
 
   get disableInitiateUploadBtn() {
-    return this.isIOSApp || this.appIsArchived;
+    return this.appIsArchived;
   }
 
   @action triggerInitiateUpload() {
@@ -278,7 +278,7 @@ export default class StoreknoxInventoryDetailsUnscannedVersionTableActionsCompon
   }
 
   initiateUpload = task(async () => {
-    if (this.isIOSApp || this.appIsArchived) {
+    if (this.appIsArchived) {
       return;
     }
 

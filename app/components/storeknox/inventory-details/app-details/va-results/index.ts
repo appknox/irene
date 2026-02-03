@@ -91,7 +91,7 @@ export default class StoreknoxInventoryDetailsAppDetailsVaResultsComponent exten
   }
 
   @action initiateAppUpload() {
-    if (this.skInventoryApp?.isArchived || this.skInventoryApp?.isIos) {
+    if (this.skInventoryApp?.isArchived) {
       this.notify.error(this.tCannotInitiateUpload);
 
       return;
