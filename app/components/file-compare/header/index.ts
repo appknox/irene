@@ -4,8 +4,10 @@ import Component from '@glimmer/component';
 import RouterService from '@ember/routing/router-service';
 import IntlService from 'ember-intl/services/intl';
 
-import FileModel from 'irene/models/file';
-import ProjectModel from 'irene/models/project';
+import styles from './index.scss';
+import ENUMS from 'irene/enums';
+import type FileModel from 'irene/models/file';
+import type ProjectModel from 'irene/models/project';
 
 interface FileCompareHeaderSignature {
   Element: HTMLElement;
@@ -14,6 +16,9 @@ interface FileCompareHeaderSignature {
     file2?: FileModel | null;
     project?: ProjectModel | null;
     expandFilesOverview?: boolean;
+    selectedScanType?: ScanTypeObject;
+    scanTypeValue?: number;
+    filterScanTypeChange?: (scanType: ScanTypeObject) => void;
   };
   Blocks: {
     default: [];
@@ -23,6 +28,11 @@ interface FileCompareHeaderSignature {
     header: [];
     headerCTA: [];
   };
+}
+
+interface ScanTypeObject {
+  key: string;
+  value: number;
 }
 
 export default class FileCompareHeaderComponent extends Component<FileCompareHeaderSignature> {
@@ -44,11 +54,53 @@ export default class FileCompareHeaderComponent extends Component<FileCompareHea
     );
   }
 
+  get isManualScanAvailable() {
+    return this.args.project?.get('isManualScanAvailable');
+  }
+
+  get scanTypeObjects() {
+    return [
+      {
+        key: this.intl.t('all'),
+        value: -1,
+      },
+      {
+        key: this.intl.t('static'),
+        value: ENUMS.SCAN_TYPE_FILTER.STATIC_SCAN,
+      },
+      {
+        key: this.intl.t('dynamic'),
+        value: ENUMS.SCAN_TYPE_FILTER.DYNAMIC_SCAN,
+      },
+      {
+        key: this.intl.t('api'),
+        value: ENUMS.SCAN_TYPE_FILTER.API_SCAN,
+      },
+      this.isManualScanAvailable && {
+        key: this.intl.t('manual'),
+        value: ENUMS.SCAN_TYPE_FILTER.MANUAL_SCAN,
+      },
+    ].filter(Boolean) as ScanTypeObject[];
+  }
+
+  get dropDownClass() {
+    return styles['filter-input-dropdown'];
+  }
+
+  get triggerClass() {
+    return styles['filter-input'];
+  }
+
   @action goToSettings() {
     this.router.transitionTo(
       'authenticated.dashboard.project.settings',
       String(this.args.project?.get('id'))
     );
+  }
+
+  @action
+  changeFilter(scanType: ScanTypeObject) {
+    this.args.filterScanTypeChange?.(scanType);
   }
 }
 
