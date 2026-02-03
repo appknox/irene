@@ -2,12 +2,15 @@
   <AkStack
     ...attributes
     data-test-appPlatform-container
+    data-test-cy="app-platform"
+    data-platform="{{this.platformIconClass}}"
     local-class='app-platform-icon-container {{if @bordered "bordered"}}'
     @justifyContent='center'
     @alignItems='center'
   >
     <AkIcon
       data-test-appPlatform-icon
+      
       @iconName={{this.platformIconName}}
       local-class='app-platform-icon-{{this.platformIconClass}}'
     />

@@ -1,8 +1,14 @@
-<AkStack @direction='column' data-test-fileScanSummary-container>
+<AkStack
+ @direction='column' 
+data-test-fileScanSummary-container
+data-test-cy="sbom-metadata-container">
   {{#each this.fileSummary as |fs|}}
     <AkStack
       class='py-1'
       data-test-sbomScanDetails-fileSummaryGroup='{{fs.label}}'
+      data-test-cy="sbomscandetails-filesummarygroup"
+      data-label="{{fs.label}}"
+      
     >
       <AkTypography
         {{style width='180px'}}
@@ -32,6 +38,7 @@
           <AkTypography
             @variant='h6'
             data-test-sbomScanDetails-fileSummaryGroup-value
+            data-test-cy="sbom-metadata-value"
           >
             {{fs.value}}
           </AkTypography>

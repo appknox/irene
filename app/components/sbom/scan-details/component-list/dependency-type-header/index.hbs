@@ -12,6 +12,7 @@
       local-class='cursor-pointer'
       {{on 'click' this.handleClick}}
       data-test-sbom-scanDetails-dependencyTypeHeader-icon
+      data-test-cy="dependency-type-filter-icon"
     />
 
     <AkTypography
@@ -30,6 +31,7 @@
   @closeHandler={{this.handleOptionsClose}}
   @clickOutsideToClose={{true}}
   data-test-sbom-scanDetails-dependencyTypeHeader-popover
+  data-test-cy="dependency-type-filter-popover"
 >
   <AkStack @direction='column' local-class='status-filter'>
     <AkStack @width='full' local-class='filter-header'>
@@ -55,6 +57,7 @@
           <AkRadio
             @checked={{eq this.selectedDependencyType types.value}}
             data-test-sbom-scanDetails-dependencyTypeHeader-radio={{types.key}}
+             data-test-cy="dependency-type-filter-radio-{{types.key}}"
           />
 
           <AkTypography
@@ -72,6 +75,7 @@
         local-class='clear-filter-section'
         @width='full'
         data-test-sbom-scanDetails-dependencyTypeHeader-clearFilter
+        data-test-cy="dependency-type-clear-filter"
       >
         <AkTypography
           @underline='always'

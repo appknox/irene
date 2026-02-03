@@ -35,12 +35,17 @@
             @alignItems='center'
             @spacing='1'
           >
-            <AkTypography data-test-sbomApp-emptyTextTitle @variant='h5'>
+            <AkTypography
+              data-test-sbomApp-emptyTextTitle
+              @variant='h5'
+              data-test-cy='emptyTextTitle'
+            >
               {{t 'sbomModule.sbomAppEmptyText.title'}}
             </AkTypography>
 
             <AkTypography
               data-test-sbomApp-emptyTextDescription
+              data-test-cy='sbomApp-emptyTextDescription'
               {{style width='600px'}}
               @color='textSecondary'
               @align='center'
@@ -55,6 +60,7 @@
             local-class='sbom-app-table'
             @hoverable={{true}}
             data-test-sbomApp-table
+            data-test-cy='sbomApp-table'
             as |t|
           >
             <t.head data-test-sbomApp-thead @columns={{this.columns}} />
