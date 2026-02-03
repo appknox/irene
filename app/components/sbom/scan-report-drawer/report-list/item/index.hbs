@@ -23,6 +23,7 @@
       {{#if this.isReportGenerating}}
         <AkTypography
           data-test-sbomReportList-reportGeneratingText
+          data-test-cy='sbomReportList-reportSecondaryText'
           @color='textSecondary'
         >
           {{t 'generating'}}...
@@ -31,6 +32,7 @@
         <AkStack @alignItems='center' @spacing='0.5'>
           <AkTypography data-test-sbomReportList-reportSecondaryText>
             {{@reportDetails.secondaryText}}
+
           </AkTypography>
 
           {{#if @reportDetails.copyText}}
@@ -64,6 +66,7 @@
           {{on 'click' (perform this.handleDownloadReport @reportDetails.type)}}
           disabled={{this.handleDownloadReport.isRunning}}
           data-test-sbomReportList-reportDownloadBtn
+          data-test-cy='sbomreportlist-reportdownloadbtn'
         >
           <AkIcon @iconName='download' />
         </AkIconButton>
@@ -93,6 +96,7 @@
           {{on 'click' (perform this.handleGenerateReport @reportDetails.type)}}
           @loading={{this.handleGenerateReport.isRunning}}
           data-test-sbomReportList-reportGenerateBtn
+          data-test-cy='sbomReportList-reportGenerateBtn'
         >
           {{t 'generateReport'}}
         </AkButton>
