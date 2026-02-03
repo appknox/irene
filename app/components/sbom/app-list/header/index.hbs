@@ -27,6 +27,7 @@
         {{on 'input' this.onSearchQueryChange}}
         local-class='search-package-name-input'
         data-test-sbomApp-searchInput
+        data-test-cy="sbomApp-searchInput"
       >
         <:leftAdornment>
           <AkIcon @iconName='search' @color='textSecondary' />
@@ -64,7 +65,10 @@
       {{style width='auto'}}
       class='select-platform-class'
       data-test-select-platform-container
+      
+
       as |platformObject|
+      
     >
       <AkStack @spacing='1' @alignItems='center'>
         <AkRadio
