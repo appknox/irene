@@ -4,8 +4,10 @@ import Component from '@glimmer/component';
 import RouterService from '@ember/routing/router-service';
 import IntlService from 'ember-intl/services/intl';
 
-import FileModel from 'irene/models/file';
-import ProjectModel from 'irene/models/project';
+import styles from './index.scss';
+import ENUMS from 'irene/enums';
+import type FileModel from 'irene/models/file';
+import type ProjectModel from 'irene/models/project';
 
 interface FileCompareHeaderSignature {
   Element: HTMLElement;
@@ -14,6 +16,9 @@ interface FileCompareHeaderSignature {
     file2?: FileModel | null;
     project?: ProjectModel | null;
     expandFilesOverview?: boolean;
+    selectedScanType?: ScanTypeObject;
+    scanTypeValue?: number;
+    filterScanTypeChange?: (scanType: ScanTypeObject) => void;
   };
   Blocks: {
     default: [];
@@ -23,6 +28,11 @@ interface FileCompareHeaderSignature {
     header: [];
     headerCTA: [];
   };
+}
+
+interface ScanTypeObject {
+  key: string;
+  value: number;
 }
 
 export default class FileCompareHeaderComponent extends Component<FileCompareHeaderSignature> {
@@ -44,11 +54,45 @@ export default class FileCompareHeaderComponent extends Component<FileCompareHea
     );
   }
 
+  get scanTypeObjects(): ScanTypeObject[] {
+    return [
+      {
+        key: 'All',
+        value: -1,
+      },
+      {
+        key: 'SAST',
+        value: ENUMS.SCAN_TYPE.STATIC_SCAN,
+      },
+      {
+        key: 'DAST',
+        value: ENUMS.SCAN_TYPE.DYNAMIC_SCAN,
+      },
+      {
+        key: 'API Scan',
+        value: ENUMS.SCAN_TYPE.API_SCAN,
+      },
+    ];
+  }
+
+  get dropDownClass() {
+    return styles['filter-input-dropdown'];
+  }
+
+  get triggerClass() {
+    return styles['filter-input'];
+  }
+
   @action goToSettings() {
     this.router.transitionTo(
       'authenticated.dashboard.project.settings',
       String(this.args.project?.get('id'))
     );
+  }
+
+  @action
+  changeFilter(scanType: ScanTypeObject) {
+    this.args.filterScanTypeChange?.(scanType);
   }
 }
 

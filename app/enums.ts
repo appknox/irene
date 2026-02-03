@@ -414,6 +414,12 @@ const ENUMS = {
     FAILED: 3,
     PARTIAL_SUCCESS: 4,
   },
+
+  SCAN_TYPE: {
+    STATIC_SCAN: 0,
+    DYNAMIC_SCAN: 1,
+    API_SCAN: 2,
+  },
 };
 
 export const ENUMS_DISPLAY = {

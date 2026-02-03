@@ -3,7 +3,7 @@ import { service } from '@ember/service';
 import Component from '@glimmer/component';
 import { tracked } from '@glimmer/tracking';
 import { task } from 'ember-concurrency';
-import type Store from 'ember-data/store';
+import type Store from '@ember-data/store';
 import type IntlService from 'ember-intl/services/intl';
 
 import type OrganizationService from 'irene/services/organization';
@@ -27,14 +27,21 @@ interface PlatformObject {
   value: number;
 }
 
+interface ScanTypeObject {
+  key: string;
+  value: number;
+}
+
 interface ProjectListHeaderArgs {
   hasProjects: boolean;
   query: string;
   platform: number;
+  scanType: number;
   sortKey: string;
   onQueryChange: (event: Event) => void;
   handleClear: () => void;
   filterPlatform: (platform: PlatformObject) => void;
+  filterScanType: (scanType: ScanTypeObject) => void;
   onSelectTeam: (team: Team) => void;
   sortProjects: (selected: SortingKeyObject) => void;
   onColumnsUpdate: (columnsMap: Map<string, FilterColumn>) => void;
@@ -68,6 +75,11 @@ export default class ProjectListHeaderComponent extends Component<ProjectListHea
     value: -1,
   };
 
+  @tracked selectedScanType = {
+    key: 'All',
+    value: -1,
+  };
+
   @tracked selectedSortKey: SortingKeyObject;
 
   @tracked selectedTeam = {
@@ -94,7 +106,8 @@ export default class ProjectListHeaderComponent extends Component<ProjectListHea
   get showClearFilter() {
     return (
       this.selectedTeam.name !== this.defaultTeam.name ||
-      this.selectedPlatform.value !== -1
+      this.selectedPlatform.value !== -1 ||
+      this.selectedScanType.value !== -1
     );
   }
 
@@ -144,6 +157,27 @@ export default class ProjectListHeaderComponent extends Component<ProjectListHea
     ];
   }
 
+  get scanTypeObjects(): ScanTypeObject[] {
+    return [
+      {
+        key: 'All',
+        value: -1,
+      },
+      {
+        key: 'SAST',
+        value: ENUMS.SCAN_TYPE.STATIC_SCAN,
+      },
+      {
+        key: 'DAST',
+        value: ENUMS.SCAN_TYPE.DYNAMIC_SCAN,
+      },
+      {
+        key: 'API Scan',
+        value: ENUMS.SCAN_TYPE.API_SCAN,
+      },
+    ];
+  }
+
   get dropDownClass() {
     return styles['filter-input-dropdown'];
   }
@@ -158,6 +192,14 @@ export default class ProjectListHeaderComponent extends Component<ProjectListHea
 
   get viewType() {
     return this.projectService.viewType;
+  }
+
+  get totalProjectCount() {
+    return this.projectService.projectQueryResponse?.meta?.count || 0;
+  }
+
+  get overallProjectCount() {
+    return this.projectService.overallProjectCount;
   }
 
   get isCardView() {
@@ -187,6 +229,11 @@ export default class ProjectListHeaderComponent extends Component<ProjectListHea
     this.args.filterPlatform(platform);
   }
 
+  @action filterScanTypeChange(scanType: ScanTypeObject) {
+    this.selectedScanType = scanType;
+    this.args.filterScanType(scanType);
+  }
+
   @action handleOpenColumnManager() {
     this.args.onOpenColumnManager?.();
   }
@@ -200,6 +247,11 @@ export default class ProjectListHeaderComponent extends Component<ProjectListHea
     this.onSelectTeamChange(this.defaultTeam);
 
     this.filterPlatformChange({
+      key: 'All',
+      value: -1,
+    });
+
+    this.filterScanTypeChange({
       key: 'All',
       value: -1,
     });

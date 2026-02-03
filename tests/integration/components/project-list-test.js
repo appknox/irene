@@ -397,6 +397,86 @@ module('Integration | Component | project list', function (hooks) {
     );
   });
 
+  test('It filters project list when scan type value changes', async function (assert) {
+    // Creating project list with atleast 1 item having scan type value of api scan
+    const projects = Array.from(new Array(8)).map((_, i) => {
+      const lastFile = this.server.create('file', {
+        is_api_done: i === 0 ? true : faker.datatype.boolean(),
+      });
+
+      return this.server.create('project', {
+        last_file: lastFile,
+      });
+    });
+
+    this.server.get('/v3/projects', (schema, req) => {
+      const scanType = req.queryParams.scan_type;
+
+      this.set('scanType', scanType);
+
+      const scanTypeInt = parseInt(scanType);
+
+      const allProjects = schema.projects.all().models;
+
+      const results =
+        scanTypeInt === 2
+          ? allProjects.filter((p) => p.last_file.is_api_done)
+          : allProjects;
+
+      return { count: results.length, next: null, previous: null, results };
+    });
+
+    await render(hbs`<ProjectList />`);
+
+    let projectContainerList = findAll(
+      '[data-test-project-overview-container]'
+    );
+
+    assert.strictEqual(
+      projectContainerList.length,
+      projects.length,
+      'Contains correct number of project overview cards.'
+    );
+
+    await waitFor('[data-test-select-scan-type-container]', { timeout: 1000 });
+
+    await clickTrigger('[data-test-select-scan-type-container]');
+
+    await waitFor('.ember-power-select-option', { timeout: 1000 });
+
+    await selectChoose(
+      '.select-scan-type-class',
+      '.ember-power-select-option',
+      3
+    );
+
+    assert.strictEqual(this.scanType, '2');
+
+    projectContainerList = findAll('[data-test-project-overview-container]');
+
+    assert.strictEqual(
+      projects.filter((p) => p.last_file.is_api_done === true).length,
+      projectContainerList.length,
+      'Project list items all have scan type values matching Api Scan.'
+    );
+
+    // Selecting a scan type value equal to -1 from the plaform filter options
+    // This should return the entire project list
+    await selectChoose(
+      '.select-scan-type-class',
+      '.ember-power-select-option',
+      0
+    );
+
+    projectContainerList = findAll('[data-test-project-overview-container]');
+
+    assert.strictEqual(
+      projects.length,
+      projectContainerList.length,
+      'Project list defaults to complete list when scan type value is all.'
+    );
+  });
+
   test('It clears filter after filter is applied', async function (assert) {
     // Creating project list with atleast 1 item having platform value of 0
     const projects = Array.from(new Array(8)).map((_, i) => {
