@@ -15,7 +15,7 @@ const injectSupportWidget = (widgetId: string) => {
         // eslint-disable-next-line prefer-rest-params
         n.q.push(arguments);
       };
-      (n.q = []), (window.FreshworksWidget = n);
+      ((n.q = []), (window.FreshworksWidget = n));
     }
   })();
 
