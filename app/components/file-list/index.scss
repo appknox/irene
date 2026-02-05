@@ -23,3 +23,34 @@
     gap: 1.4286em;
   }
 }
+
+.clear-filter-section {
+  padding: 0.57em 1.285em;
+  border-bottom: 1px solid var(--file-list-selected-clear-filter-section-border);
+}
+
+.clear-filter-icon {
+  margin-right: 0.2em;
+  color: var(--file-list-selected-clear-filter-color) !important;
+}
+
+.clear-filter-label {
+  font-size: 0.857rem !important;
+  text-decoration: underline;
+  color: var(--file-list-selected-clear-filter-color) !important;
+}
+
+.clear-filter {
+  box-shadow: none;
+
+  &:hover {
+    .clear-filter-icon,
+    .clear-filter-label {
+      color: var(--file-list-selected-clear-filter-hover-color) !important;
+    }
+  }
+}
+
+.divider {
+  margin: 0 0.714em;
+}

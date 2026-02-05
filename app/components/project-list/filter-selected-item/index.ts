@@ -20,6 +20,14 @@ export default class ProjectListFilterSelectedItemComponent extends Component<Pr
   get iconName() {
     return this.args.extra?.['iconName'];
   }
+
+  get fontSize() {
+    return this.args.extra?.['fontSize'] || 'small';
+  }
+
+  get labelClass() {
+    return `trigger-label-${this.fontSize}`;
+  }
 }
 
 declare module '@glint/environment-ember-loose/registry' {

@@ -4,7 +4,7 @@ import Component from '@glimmer/component';
 import { tracked } from '@glimmer/tracking';
 import { isEmpty } from '@ember/utils';
 import type IntlService from 'ember-intl/services/intl';
-import type Store from 'ember-data/store';
+import type Store from '@ember-data/store';
 import type RouterService from '@ember/routing/router-service';
 
 import { INPUT } from 'irene/utils/constants';
@@ -36,6 +36,11 @@ interface PlatformObject {
   value: number;
 }
 
+interface ScanTypeObject {
+  key: string;
+  value: number;
+}
+
 export default class ProjectListComponent extends Component {
   @service declare intl: IntlService;
   @service declare organization: OrganizationService;
@@ -49,6 +54,7 @@ export default class ProjectListComponent extends Component {
   @tracked query = DEFAULT_PROJECT_QUERY_PARAMS.query;
   @tracked sortKey = DEFAULT_PROJECT_QUERY_PARAMS.sortKey;
   @tracked platform = DEFAULT_PROJECT_QUERY_PARAMS.platform;
+  @tracked scanType = DEFAULT_PROJECT_QUERY_PARAMS.scanType;
   @tracked team = DEFAULT_PROJECT_QUERY_PARAMS.team;
   @tracked allColumnsMap: Map<string, FilterColumn>;
   @tracked showColumnManager = false;
@@ -188,7 +194,8 @@ export default class ProjectListComponent extends Component {
       this.query,
       this.sortKey,
       this.platform,
-      this.team
+      this.team,
+      this.scanType
     );
   }
 
@@ -203,7 +210,8 @@ export default class ProjectListComponent extends Component {
       this.query,
       this.sortKey,
       this.platform,
-      this.team
+      this.team,
+      this.scanType
     );
   }
 
@@ -234,7 +242,8 @@ export default class ProjectListComponent extends Component {
       this.query,
       this.sortKey,
       this.platform,
-      this.team
+      this.team,
+      this.scanType
     );
   }
 
@@ -248,7 +257,23 @@ export default class ProjectListComponent extends Component {
       this.query,
       this.sortKey,
       this.platform,
-      this.team
+      this.team,
+      this.scanType
+    );
+  }
+
+  @action filterScanType(scanType: ScanTypeObject) {
+    this.scanType = scanType.value;
+    this.offset = 0;
+
+    this.projectService.fetchProjects.perform(
+      this.limit,
+      0,
+      this.query,
+      this.sortKey,
+      this.platform,
+      this.team,
+      this.scanType
     );
   }
 
@@ -262,7 +287,8 @@ export default class ProjectListComponent extends Component {
       this.query,
       this.sortKey,
       this.platform,
-      this.team
+      this.team,
+      this.scanType
     );
   }
 
@@ -275,7 +301,8 @@ export default class ProjectListComponent extends Component {
       this.query,
       this.sortKey,
       this.platform,
-      this.team
+      this.team,
+      this.scanType
     );
   }
 
@@ -291,7 +318,8 @@ export default class ProjectListComponent extends Component {
         this.query,
         this.sortKey,
         this.platform,
-        this.team
+        this.team,
+        this.scanType
       );
     }
   }
