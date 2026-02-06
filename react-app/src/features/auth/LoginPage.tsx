@@ -9,6 +9,7 @@ import { AkTypography } from '@components/ak-typography';
 import { AkLoader, AkLoaderLinear } from '@components/ak-loader';
 import { AkStack } from '@components/ak-stack';
 import { AkDivider } from '@components/ak-divider';
+import { AkLink } from '@components/ak-link';
 import './LoginPage.scss';
 
 export function LoginPage() {
@@ -650,10 +651,120 @@ export function LoginPage() {
           </AkStack>
         </section>
 
+        {/* AkLink Component Showcase */}
+        <section className="component-section">
+          <h2 className="section-title">AkLink Component</h2>
+
+          {/* Default Links */}
+          <AkStack direction="column" spacing={3} className="typography-group">
+            <h3 className="group-title">Link Colors</h3>
+            <AkStack direction="column" spacing={2}>
+              <AkLink href="#" color="textPrimary">
+                Text Primary Link
+              </AkLink>
+              <AkLink href="#" color="textSecondary">
+                Text Secondary Link
+              </AkLink>
+              <AkLink href="#" color="primary">
+                Primary Link
+              </AkLink>
+              <AkLink href="#" color="secondary">
+                Secondary Link
+              </AkLink>
+              <AkLink href="#" color="success">
+                Success Link
+              </AkLink>
+              <AkLink href="#" color="error">
+                Error Link
+              </AkLink>
+              <AkLink href="#" color="warn">
+                Warning Link
+              </AkLink>
+              <AkLink href="#" color="info">
+                Info Link
+              </AkLink>
+              <AkLink href="#" color="inherit">
+                Inherit Link
+              </AkLink>
+            </AkStack>
+          </AkStack>
+
+          {/* Underline Variants */}
+          <AkStack direction="column" spacing={3} className="typography-group">
+            <h3 className="group-title">Underline Styles</h3>
+            <AkStack direction="column" spacing={2}>
+              <AkLink href="#" underline="hover">
+                Hover Underline (Default)
+              </AkLink>
+              <AkLink href="#" underline="always">
+                Always Underlined
+              </AkLink>
+              <AkLink href="#" underline="none">
+                No Underline
+              </AkLink>
+            </AkStack>
+          </AkStack>
+
+          {/* With Icons */}
+          <AkStack direction="column" spacing={3} className="typography-group">
+            <h3 className="group-title">Links with Icons</h3>
+            <AkStack direction="column" spacing={2}>
+              <AkLink href="#" color="primary" leftIcon={<span>←</span>}>
+                Back
+              </AkLink>
+              <AkLink href="#" color="primary" rightIcon={<span>→</span>}>
+                Next
+              </AkLink>
+              <AkLink
+                href="#"
+                color="primary"
+                leftIcon={<span>🔗</span>}
+                rightIcon={<span>↗</span>}
+              >
+                External Link
+              </AkLink>
+            </AkStack>
+          </AkStack>
+
+          {/* Typography Variants */}
+          <AkStack direction="column" spacing={3} className="typography-group">
+            <h3 className="group-title">Typography Variants</h3>
+            <AkStack direction="column" spacing={2}>
+              <AkLink href="#" typographyVariant="h6" fontWeight="bold">
+                Heading 6 Bold Link
+              </AkLink>
+              <AkLink href="#" typographyVariant="body1">
+                Body 1 Link
+              </AkLink>
+              <AkLink href="#" typographyVariant="body2" fontWeight="medium">
+                Body 2 Medium Link
+              </AkLink>
+              <AkLink href="#" typographyVariant="body3">
+                Body 3 Link
+              </AkLink>
+            </AkStack>
+          </AkStack>
+
+          {/* States */}
+          <AkStack direction="column" spacing={3} className="typography-group">
+            <h3 className="group-title">Link States</h3>
+            <AkStack direction="column" spacing={2}>
+              <AkLink href="#">Normal Link</AkLink>
+              <AkLink href="#" disabled>
+                Disabled Link
+              </AkLink>
+              <AkLink href="#" noWrap>
+                Very long link text that should not wrap to the next line and
+                will be truncated with overflow
+              </AkLink>
+            </AkStack>
+          </AkStack>
+        </section>
+
         <footer className="login-footer">
           <p>
             Component Status: ✓ AkButton | ✓ AkTypography | ✓ AkLoader | ✓
-            AkLoaderLinear | ✓ AkStack | ✓ AkDivider
+            AkLoaderLinear | ✓ AkStack | ✓ AkDivider | ✓ AkLink
           </p>
           <p>Next: More components will be added one by one for review</p>
         </footer>
