@@ -184,7 +184,7 @@ module(
     test.each(
       'it renders the different initiate upload states',
       [
-        // SCENARIO 1: When upload has not been initiated
+        // SCENARIO 1: When upload has not been initiated (Android)
         {
           canInitiateUpload: true,
           canAccessSubmission: true,
@@ -192,7 +192,7 @@ module(
           platform: ENUMS.PLATFORM.ANDROID,
         },
 
-        // SCENARIO 2: When upload has not been initiated
+        // SCENARIO 2: When upload has not been initiated (iOS)
         {
           canInitiateUpload: true,
           canAccessSubmission: true,
@@ -359,11 +359,13 @@ module(
         // Check upload actions
         const storeVersionRow = storeVersionRows[0];
 
-        // SCENARIO 1: Upload has not been initiated for all user roles
-        const scenario_1 =
+        // SCENARIO 1 & 2: Upload has not been initiated for all user roles (both Android and iOS)
+        const scenario_1_or_2 =
           !hasSubmission &&
           canInitiateUpload &&
-          platform === ENUMS.PLATFORM.ANDROID;
+          !isArchived &&
+          (platform === ENUMS.PLATFORM.ANDROID ||
+            platform === ENUMS.PLATFORM.IOS);
 
         // SCENARIO 7: When Upload fails and current user is not the initiator for all user roles
         const scenario_7 =
@@ -372,7 +374,7 @@ module(
           hasSubmission &&
           canInitiateUpload;
 
-        if (scenario_1 || scenario_7) {
+        if (scenario_1_or_2 || scenario_7) {
           assert
             .dom(
               '[data-test-skAppVersionTable-initiateUploadBtnIcon]',
@@ -396,15 +398,8 @@ module(
             .hasText(t('beta'));
         }
 
-        // SCENARIO 2: Upload has not been initiated for all user roles but app is iOS
         // SCENARIO 9: Disabled upload button if app is archived
-
-        const scenario_2 =
-          !hasSubmission &&
-          canInitiateUpload &&
-          platform === ENUMS.PLATFORM.IOS;
-
-        if (scenario_2 || isArchived) {
+        if (isArchived) {
           assert
             .dom(
               '[data-test-skAppVersionTable-initiateUploadBtnIcon]',
@@ -433,14 +428,9 @@ module(
 
           await triggerEvent(initiateUploadBtnTooltip, 'mouseenter');
 
-          // Only the tooltip text is different for archived apps
           assert
             .dom('[data-test-skAppVersionTable-initiateUploadBtn-tooltipText]')
-            .hasText(
-              isArchived
-                ? t('storeknox.cannotUploadForArchivedApps')
-                : t('storeknox.initiateUploadComingSoon')
-            );
+            .hasText(t('storeknox.cannotUploadForArchivedApps'));
         }
 
         // SCENARIO 3: When Upload is in progress and current user is the initiator
