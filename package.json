@@ -213,6 +213,7 @@
     "cypress": "^13.6.3",
     "echarts": "^5.4.2",
     "ember-data-resources": "^5.3.2",
+    "ember-lifeline": "^7.0.0",
     "ember-websockets": "^10.2.1",
     "iconify-icon": "^2.3.0",
     "posthog-js": "^1.284.0",
