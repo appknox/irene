@@ -12,8 +12,16 @@ import {
   type MouseEvent,
   type JSX,
 } from 'react';
+
 import { cva } from 'class-variance-authority';
+
 import { AkLoader } from '@components/ak-loader';
+import {
+  AkTypography,
+  type TypographyVariant,
+  type TypographyFontWeight,
+} from '@components/ak-typography';
+
 import './index.scss';
 
 type ButtonColors =
@@ -150,6 +158,10 @@ interface BaseAkButtonProps {
   leftIconClass?: string;
   /** CSS class for right icon wrapper */
   rightIconClass?: string;
+  /** Typography variant for text buttons */
+  typographyVariant?: TypographyVariant;
+  /** Typography font weight for text buttons */
+  typographyFontWeight?: TypographyFontWeight;
   /** Children */
   children?: ReactNode;
   /** Click handler */
@@ -176,6 +188,8 @@ export const AkButton = forwardRef<HTMLButtonElement, AkButtonProps>(
       rightIcon,
       leftIconClass,
       rightIconClass,
+      typographyVariant,
+      typographyFontWeight,
       children,
       className,
       ...props
@@ -212,6 +226,7 @@ export const AkButton = forwardRef<HTMLButtonElement, AkButtonProps>(
             <AkLoader size={13} />
           </div>
         )}
+
         {!showLoading && leftIcon && (
           <div
             className={`ak-button-left-icon ${leftIconClass || ''}`}
@@ -220,13 +235,23 @@ export const AkButton = forwardRef<HTMLButtonElement, AkButtonProps>(
             {leftIcon}
           </div>
         )}
+
         {isTextVariant ? (
-          <span className="ak-button-text" data-test-ak-button-text>
+          <AkTypography
+            data-test-ak-button-text
+            className="ak-button-text"
+            tag="span"
+            variant={typographyVariant}
+            fontWeight={typographyFontWeight}
+            color={color}
+            underline={underline}
+          >
             {children}
-          </span>
+          </AkTypography>
         ) : (
           children
         )}
+
         {!showLoading && rightIcon && (
           <div
             className={`ak-button-right-icon ${rightIconClass || ''}`}

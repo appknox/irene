@@ -98,6 +98,17 @@ export function LoginPage() {
               <AkButton variant="text" color="primary" underline="none">
                 No Underline
               </AkButton>
+              <AkButton variant="text" color="primary" underline="always">
+                Always Underline
+              </AkButton>
+              <AkButton
+                variant="text"
+                color="primary"
+                typographyVariant="h6"
+                typographyFontWeight="bold"
+              >
+                Custom Typography
+              </AkButton>
             </AkStack>
           </AkStack>
 
@@ -118,6 +129,33 @@ export function LoginPage() {
                 onClick={handleClick}
               >
                 {loading ? 'Loading...' : 'Click to Load'}
+              </AkButton>
+            </AkStack>
+          </AkStack>
+
+          {/* Loading States */}
+          <AkStack direction="column" spacing={3} className="button-group">
+            <h3 className="group-title">Loading States</h3>
+            <AkStack spacing={2} flexWrap="wrap" className="buttons-row">
+              <AkButton variant="filled" color="primary" loading={true}>
+                Loading Button
+              </AkButton>
+              <AkButton
+                variant="filled"
+                color="primary"
+                loading={true}
+                leftIcon={<span>📝</span>}
+                rightIcon={<span>▼</span>}
+              >
+                Loading With Icons (Icons Hidden)
+              </AkButton>
+              <AkButton
+                variant="filled"
+                color="secondary"
+                loading={loading}
+                onClick={handleClick}
+              >
+                Toggle Loading
               </AkButton>
             </AkStack>
           </AkStack>
@@ -203,19 +241,19 @@ export function LoginPage() {
               </AkTypography>
 
               <AkTypography variant="body1" gutterBottom>
-                Lorem Ipsum is simply dummy text of the printing and
-                typesetting industry. Lorem Ipsum has been the industry's
-                standard dummy text ever since the 1500s.
+                Lorem Ipsum is simply dummy text of the printing and typesetting
+                industry. Lorem Ipsum has been the industry's standard dummy
+                text ever since the 1500s.
               </AkTypography>
               <AkTypography variant="body2" gutterBottom>
-                Lorem Ipsum is simply dummy text of the printing and
-                typesetting industry. Lorem Ipsum has been the industry's
-                standard dummy text ever since the 1500s.
+                Lorem Ipsum is simply dummy text of the printing and typesetting
+                industry. Lorem Ipsum has been the industry's standard dummy
+                text ever since the 1500s.
               </AkTypography>
               <AkTypography variant="body3" gutterBottom>
-                Lorem Ipsum is simply dummy text of the printing and
-                typesetting industry. Lorem Ipsum has been the industry's
-                standard dummy text ever since the 1500s.
+                Lorem Ipsum is simply dummy text of the printing and typesetting
+                industry. Lorem Ipsum has been the industry's standard dummy
+                text ever since the 1500s.
               </AkTypography>
             </AkStack>
           </AkStack>
@@ -523,7 +561,7 @@ export function LoginPage() {
             <AkStack direction="column" spacing={2}>
               <AkLoaderLinear
                 variant="determinate"
-                height={4}
+                height={8}
                 progress={22.5}
                 color="primary"
               >
@@ -531,7 +569,7 @@ export function LoginPage() {
               </AkLoaderLinear>
               <AkLoaderLinear
                 variant="determinate"
-                height={4}
+                height={8}
                 progress={50}
                 color="success"
               >
@@ -539,7 +577,7 @@ export function LoginPage() {
               </AkLoaderLinear>
               <AkLoaderLinear
                 variant="determinate"
-                height={4}
+                height={8}
                 progress={75}
                 color="info"
               >
