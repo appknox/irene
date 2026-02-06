@@ -1,0 +1,224 @@
+// Direction
+.ak-stack-direction-row,
+.ak-stack-direction-row-reverse {
+  display: flex;
+}
+
+.ak-stack-direction-column,
+.ak-stack-direction-column-reverse {
+  display: flex;
+  flex-direction: column;
+}
+
+.ak-stack-direction-row-reverse {
+  flex-direction: row-reverse;
+}
+
+.ak-stack-direction-column-reverse {
+  flex-direction: column-reverse;
+}
+
+// Root
+.ak-stack-root {
+  display: flex;
+}
+
+// Align items
+.ak-stack-align-items-flex-start {
+  align-items: flex-start;
+}
+
+.ak-stack-align-items-center {
+  align-items: center;
+}
+
+.ak-stack-align-items-flex-end {
+  align-items: flex-end;
+}
+
+.ak-stack-align-items-stretch {
+  align-items: stretch;
+}
+
+// Justify content
+.ak-stack-justifycontent-start {
+  justify-content: start;
+}
+
+.ak-stack-justifycontent-flex-start {
+  justify-content: flex-start;
+}
+
+.ak-stack-justifycontent-center {
+  justify-content: center;
+}
+
+.ak-stack-justifycontent-stretch {
+  justify-content: stretch;
+}
+
+.ak-stack-justifycontent-normal {
+  justify-content: normal;
+}
+
+.ak-stack-justifycontent-space-between {
+  justify-content: space-between;
+}
+
+.ak-stack-justifycontent-space-around {
+  justify-content: space-around;
+}
+
+.ak-stack-justifycontent-space-evenly {
+  justify-content: space-evenly;
+}
+
+.ak-stack-justifycontent-flex-end {
+  justify-content: flex-end;
+}
+
+.ak-stack-justifycontent-right {
+  justify-content: right;
+}
+
+.ak-stack-justifycontent-left {
+  justify-content: left;
+}
+
+.ak-stack-justifycontent-end {
+  justify-content: end;
+}
+
+// Wrap
+.ak-stack-flexwrap-nowrap {
+  flex-wrap: nowrap;
+}
+
+.ak-stack-flexwrap-wrap {
+  flex-wrap: wrap;
+}
+
+.ak-stack-flexwrap-wrap-reverse {
+  flex-wrap: wrap-reverse;
+}
+
+// Spacing
+.ak-stack-spacing-0 {
+  gap: 0em;
+}
+
+.ak-stack-spacing-1\/2 {
+  gap: 0.25em;
+}
+
+.ak-stack-spacing-1 {
+  gap: 0.5em;
+}
+
+.ak-stack-spacing-1-5,
+.ak-stack-spacing-3\/2 {
+  gap: 0.75em;
+}
+
+.ak-stack-spacing-2 {
+  gap: 1em;
+}
+
+.ak-stack-spacing-5\/2 {
+  gap: 1.25em;
+}
+
+.ak-stack-spacing-3 {
+  gap: 1.5em;
+}
+
+.ak-stack-spacing-7\/2 {
+  gap: 1.75em;
+}
+
+.ak-stack-spacing-4 {
+  gap: 2em;
+}
+
+.ak-stack-spacing-9\/2 {
+  gap: 2.25em;
+}
+
+.ak-stack-spacing-5 {
+  gap: 2.5em;
+}
+
+.ak-stack-spacing-11\/2 {
+  gap: 2.75em;
+}
+
+.ak-stack-spacing-6 {
+  gap: 3em;
+}
+
+// Width
+.ak-stack-width-1\/12 {
+  width: 8.33333%;
+}
+
+.ak-stack-width-2\/12 {
+  width: 16.66667%;
+}
+
+.ak-stack-width-3\/12 {
+  width: 25%;
+}
+
+.ak-stack-width-4\/12 {
+  width: 33.33333%;
+}
+
+.ak-stack-width-5\/12 {
+  width: 41.66667%;
+}
+
+.ak-stack-width-6\/12 {
+  width: 50%;
+}
+
+.ak-stack-width-7\/12 {
+  width: 58.33333%;
+}
+
+.ak-stack-width-8\/12 {
+  width: 66.66667%;
+}
+
+.ak-stack-width-9\/12 {
+  width: 75%;
+}
+
+.ak-stack-width-10\/12 {
+  width: 83.33333%;
+}
+
+.ak-stack-width-11\/12 {
+  width: 91.66667%;
+}
+
+.ak-stack-width-12\/12,
+.ak-stack-width-full {
+  width: 100%;
+}
+
+.ak-stack-width-fit-content {
+  width: fit-content;
+}
+
+.ak-stack-width-auto {
+  width: auto;
+}
+
+// Background color
+.ak-stack-bg-color-white {
+  background-color: var(--background-main);
+}
+
+.ak-stack-bg-color-light {
+  background-color: var(--background-light);
+}
