@@ -1,0 +1,77 @@
+/**
+ * Login Page Styles
+ */
+
+.login-page {
+  width: 100%;
+  min-height: 100vh;
+  background-color: #fafafa;
+  padding: 2rem;
+}
+
+.login-container {
+  width: 100%;
+  background: #ffffff;
+  border-radius: 2px;
+  box-shadow: 4px 4px 10px 0px rgba(0, 0, 0, 0.15);
+  padding: 3rem;
+}
+
+.login-title {
+  font-size: 2rem;
+  font-weight: 700;
+  color: #171717;
+  margin: 0 0 0.5rem 0;
+  text-align: center;
+}
+
+.login-subtitle {
+  font-size: 1rem;
+  color: #7b7b7b;
+  margin: 0 0 3rem 0;
+  text-align: center;
+}
+
+.component-section {
+  margin-bottom: 2rem;
+}
+
+.section-title {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: #171717;
+  margin: 0 0 1.5rem 0;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid #e9e9e9;
+}
+
+.button-group {
+  margin-bottom: 2rem;
+}
+
+.group-title {
+  font-size: 1rem;
+  font-weight: 600;
+  color: #171717;
+  margin: 0 0 1rem 0;
+}
+
+.buttons-row {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.login-footer {
+  margin-top: 3rem;
+  padding-top: 2rem;
+  border-top: 1px solid #e9e9e9;
+  text-align: center;
+  color: #7b7b7b;
+  font-size: 0.875rem;
+
+  p {
+    margin: 0.5rem 0;
+  }
+}
