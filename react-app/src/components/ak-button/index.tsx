@@ -13,6 +13,7 @@ import {
   type JSX,
 } from 'react';
 import { cva } from 'class-variance-authority';
+import { AkLoader } from '@components/ak-loader';
 import './index.scss';
 
 type ButtonColors =
@@ -208,34 +209,7 @@ export const AkButton = forwardRef<HTMLButtonElement, AkButtonProps>(
       <Tag {...(buttonProps as Record<string, unknown>)}>
         {showLoading && (
           <div className="ak-button-loader" data-test-ak-button-loader>
-            {/* Loading indicator - to be implemented with AkLoader */}
-            <svg
-              width="13"
-              height="13"
-              viewBox="0 0 13 13"
-              className="ak-loader-circle"
-            >
-              <circle
-                cx="6.5"
-                cy="6.5"
-                r="5"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2"
-                strokeDasharray="31.4"
-                strokeDashoffset="0"
-                className="ak-loader-circle-indicator"
-              >
-                <animateTransform
-                  attributeName="transform"
-                  type="rotate"
-                  from="0 6.5 6.5"
-                  to="360 6.5 6.5"
-                  dur="1s"
-                  repeatCount="indefinite"
-                />
-              </circle>
-            </svg>
+            <AkLoader size={13} />
           </div>
         )}
         {!showLoading && leftIcon && (

@@ -73,6 +73,20 @@
   gap: 0.5rem;
 }
 
+.loader-row {
+  display: flex;
+  gap: 2rem;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.loader-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+}
+
 .login-footer {
   margin-top: 3rem;
   padding-top: 2rem;
