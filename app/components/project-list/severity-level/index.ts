@@ -1,13 +1,10 @@
 import { service } from '@ember/service';
 import Component from '@glimmer/component';
-import { tracked } from 'tracked-built-ins';
-import { task } from 'ember-concurrency';
-import { waitForPromise } from '@ember/test-waiters';
 import type IntlService from 'ember-intl/services/intl';
 
 import type LoggerService from 'irene/services/logger';
 import type ProjectModel from 'irene/models/project';
-import type FileRiskModel from 'irene/models/file-risk';
+import type ProjectService from 'irene/services/project';
 
 interface ProjectListSeverityLevelSignature {
   Element: HTMLElement;
@@ -19,17 +16,18 @@ interface ProjectListSeverityLevelSignature {
 export default class ProjectListSeverityLevelComponent extends Component<ProjectListSeverityLevelSignature> {
   @service declare intl: IntlService;
   @service declare logger: LoggerService;
-
-  @tracked fileRisk: FileRiskModel | null = null;
-
-  constructor(owner: unknown, args: ProjectListSeverityLevelSignature['Args']) {
-    super(owner, args);
-
-    this.fetchFileRisk.perform();
-  }
+  @service declare project: ProjectService;
 
   get file() {
     return this.args.project.get('lastFile');
+  }
+
+  get fileRisk() {
+    if (!this.file) {
+      return null;
+    }
+
+    return this.project.risksByFileId.get(this.file.id);
   }
 
   get showUnknownAnalysis() {
@@ -45,7 +43,7 @@ export default class ProjectListSeverityLevelComponent extends Component<Project
   }
 
   get isLoadingFileRisk() {
-    return this.fetchFileRisk.isRunning;
+    return this.project.fetchRisks.isRunning;
   }
 
   get severityLevelCounts() {
@@ -88,19 +86,6 @@ export default class ProjectListSeverityLevelComponent extends Component<Project
 
     return severityCountObjects;
   }
-
-  fetchFileRisk = task(async () => {
-    try {
-      if (this.file) {
-        this.fileRisk = await waitForPromise(this.file.fetchFileRisk());
-      }
-    } catch (error) {
-      this.logger.error(
-        `Failed to fetch file risk for file - ${this.file?.id}`,
-        error
-      );
-    }
-  });
 }
 
 declare module '@glint/environment-ember-loose/registry' {
