@@ -171,7 +171,7 @@ export default class AppknoxWrapperComponent extends Component<AppknoxWrapperSig
       },
       this.showSubscription && {
         label: this.intl.t('subscription'),
-        icon: 'calendar-today',
+        icon: 'file-certificate-outline',
         route: 'authenticated.dashboard.subscription',
       },
       this.showPartnerDashboard && {

@@ -181,6 +181,7 @@ export const MdiIconsSet = [
   'report-problem',
   'wand',
   'progress-clock',
+  'file-certificate-outline',
 ] as const;
 
 export const HugeIconsSet = ['api', 'ai-brain-04'] as const;
