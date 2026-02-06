@@ -1,0 +1,13 @@
+{{page-title (t 'subscription')}}
+
+<PageWrapper>
+  {{#if @model.subscriptionInfo}}
+    <SubscriptionPage @subscriptionInfo={{@model.subscriptionInfo}} />
+  {{else}}
+    <AkStack @direction='column' @alignItems='center' @spacing='2'>
+      <AkTypography @variant='h6'>
+        {{t 'subscriptionNotAvailable'}}
+      </AkTypography>
+    </AkStack>
+  {{/if}}
+</PageWrapper>

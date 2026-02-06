@@ -1,0 +1,25 @@
+<AkStack @justifyContent='space-between' local-class='subscription-page-header'>
+  <AkTypography @variant='h5'>{{t 'subscriptionDetails'}}</AkTypography>
+</AkStack>
+
+{{#each this.subscriptionSections as |section|}}
+  <AkStack @direction='column' @spacing='1' local-class='subscription-page-body'>
+    <AkIcon @iconName={{section.icon}} @size='small' />
+
+    <AkTypography @variant='subtitle1' @gutterBottom={{true}}>
+      {{section.title}}
+    </AkTypography>
+
+    {{#each section.details as |detail|}}
+      <AkStack @width='full'>
+        <AkTypography @color='textSecondary' local-class='key-width'>
+          {{detail.label}}
+        </AkTypography>
+
+        <AkTypography @variant='h6'>{{detail.value}}</AkTypography>
+      </AkStack>
+    {{/each}}
+  </AkStack>
+
+  <AkDivider />
+{{/each}}
