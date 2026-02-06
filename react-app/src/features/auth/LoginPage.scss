@@ -63,6 +63,16 @@
   align-items: center;
 }
 
+.typography-group {
+  margin-bottom: 2rem;
+}
+
+.typography-row {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
 .login-footer {
   margin-top: 3rem;
   padding-top: 2rem;

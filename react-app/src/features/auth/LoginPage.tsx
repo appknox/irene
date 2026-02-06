@@ -5,6 +5,7 @@
 
 import { useState } from 'react';
 import { AkButton } from '@components/ak-button';
+import { AkTypography } from '@components/ak-typography';
 import './LoginPage.scss';
 
 export function LoginPage() {
@@ -160,8 +161,153 @@ export function LoginPage() {
           </div>
         </section>
 
+        {/* AkTypography Component Showcase */}
+        <section className="component-section">
+          <h2 className="section-title">AkTypography Component</h2>
+
+          {/* All Variants */}
+          <div className="typography-group">
+            <h3 className="group-title">All Variants</h3>
+            <AkTypography variant="h1" gutterBottom>
+              This is heading 1
+            </AkTypography>
+            <AkTypography variant="h2" gutterBottom>
+              This is heading 2
+            </AkTypography>
+            <AkTypography variant="h3" gutterBottom>
+              This is heading 3
+            </AkTypography>
+            <AkTypography variant="h4" gutterBottom>
+              This is heading 4
+            </AkTypography>
+            <AkTypography variant="h5" gutterBottom>
+              This is heading 5
+            </AkTypography>
+            <AkTypography variant="h6" gutterBottom>
+              This is heading 6
+            </AkTypography>
+
+            <AkTypography variant="subtitle1" gutterBottom>
+              This is subtitle 1
+            </AkTypography>
+            <AkTypography variant="subtitle2" gutterBottom>
+              This is subtitle 2
+            </AkTypography>
+
+            <AkTypography variant="body1" gutterBottom>
+              Lorem Ipsum is simply dummy text of the printing and typesetting
+              industry. Lorem Ipsum has been the industry's standard dummy text
+              ever since the 1500s.
+            </AkTypography>
+            <AkTypography variant="body2" gutterBottom>
+              Lorem Ipsum is simply dummy text of the printing and typesetting
+              industry. Lorem Ipsum has been the industry's standard dummy text
+              ever since the 1500s.
+            </AkTypography>
+            <AkTypography variant="body3" gutterBottom>
+              Lorem Ipsum is simply dummy text of the printing and typesetting
+              industry. Lorem Ipsum has been the industry's standard dummy text
+              ever since the 1500s.
+            </AkTypography>
+          </div>
+
+          {/* Colors */}
+          <div className="typography-group">
+            <h3 className="group-title">Colors</h3>
+            <div className="typography-row">
+              <AkTypography color="textPrimary" gutterBottom>
+                Text Primary
+              </AkTypography>
+              <AkTypography color="textSecondary" gutterBottom>
+                Text Secondary
+              </AkTypography>
+              <AkTypography color="primary" gutterBottom>
+                Primary Color
+              </AkTypography>
+              <AkTypography color="secondary" gutterBottom>
+                Secondary Color
+              </AkTypography>
+              <AkTypography color="success" gutterBottom>
+                Success Color
+              </AkTypography>
+              <AkTypography color="error" gutterBottom>
+                Error Color
+              </AkTypography>
+              <AkTypography color="warn" gutterBottom>
+                Warning Color
+              </AkTypography>
+              <AkTypography color="info" gutterBottom>
+                Info Color
+              </AkTypography>
+            </div>
+          </div>
+
+          {/* Font Weights */}
+          <div className="typography-group">
+            <h3 className="group-title">Font Weights</h3>
+            <div className="typography-row">
+              <AkTypography fontWeight="light" gutterBottom>
+                Light Weight
+              </AkTypography>
+              <AkTypography fontWeight="regular" gutterBottom>
+                Regular Weight
+              </AkTypography>
+              <AkTypography fontWeight="medium" gutterBottom>
+                Medium Weight
+              </AkTypography>
+              <AkTypography fontWeight="bold" gutterBottom>
+                Bold Weight
+              </AkTypography>
+            </div>
+          </div>
+
+          {/* Truncated Text */}
+          <div className="typography-group">
+            <h3 className="group-title">Truncated Text (noWrap)</h3>
+            <AkTypography color="textSecondary" gutterBottom>
+              Big line
+            </AkTypography>
+            <AkTypography variant="body1" noWrap>
+              Lorem Ipsum is simply dummy text of the printing and typesetting
+              industry. Lorem Ipsum has been the industry's standard dummy text
+              ever since the 1500s, when an unknown printer took a galley of
+              type and scrambled it to make a type specimen book.
+            </AkTypography>
+          </div>
+
+          {/* Text Alignment */}
+          <div className="typography-group">
+            <h3 className="group-title">Text Alignment</h3>
+            <AkTypography align="left" gutterBottom>
+              Left Aligned Text
+            </AkTypography>
+            <AkTypography align="center" gutterBottom>
+              Center Aligned Text
+            </AkTypography>
+            <AkTypography align="right" gutterBottom>
+              Right Aligned Text
+            </AkTypography>
+          </div>
+
+          {/* Underline */}
+          <div className="typography-group">
+            <h3 className="group-title">Underline Styles</h3>
+            <div className="typography-row">
+              <AkTypography underline="none" gutterBottom>
+                No Underline
+              </AkTypography>
+              <AkTypography underline="always" gutterBottom>
+                Always Underlined
+              </AkTypography>
+              <AkTypography underline="hover" gutterBottom>
+                Underline on Hover
+              </AkTypography>
+            </div>
+          </div>
+        </section>
+
         <footer className="login-footer">
-          <p>Component Status: ✓ AkButton implemented</p>
+          <p>Component Status: ✓ AkButton | ✓ AkTypography</p>
           <p>Next: More components will be added one by one for review</p>
         </footer>
       </div>
