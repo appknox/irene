@@ -20,7 +20,7 @@ export default defineConfig({
     },
   },
   server: {
-    port: 5173,
+    port: 4200,
     proxy: {
       // Proxy API requests to Django backend during development
       '/api': {
