@@ -29,7 +29,7 @@ export class SessionManager {
     try {
       const data = localStorage.getItem(SESSION_STORAGE_KEY);
       if (!data) return null;
-      
+
       return JSON.parse(data) as SessionData;
     } catch (error) {
       console.error('Error reading session:', error);
@@ -79,7 +79,7 @@ export class SessionManager {
    */
   subscribe(callback: (session: SessionData | null) => void): () => void {
     this.listeners.add(callback);
-    
+
     // Return unsubscribe function
     return () => {
       this.listeners.delete(callback);

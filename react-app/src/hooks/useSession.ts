@@ -7,10 +7,10 @@ import { sessionManager } from '@lib/auth';
 import type { SessionData } from '@lib/auth';
 
 export function useSession() {
-  const [session, setSession] = useState<SessionData | null>(() => 
+  const [session, setSession] = useState<SessionData | null>(() =>
     sessionManager.getSession()
   );
-  const [isAuthenticated, setIsAuthenticated] = useState(() => 
+  const [isAuthenticated, setIsAuthenticated] = useState(() =>
     sessionManager.isAuthenticated()
   );
 
@@ -25,12 +25,9 @@ export function useSession() {
     return unsubscribe;
   }, []);
 
-  const login = useCallback(
-    (data: Omit<SessionData, 'timestamp'>) => {
-      sessionManager.setSession(data);
-    },
-    []
-  );
+  const login = useCallback((data: Omit<SessionData, 'timestamp'>) => {
+    sessionManager.setSession(data);
+  }, []);
 
   const logout = useCallback(() => {
     sessionManager.clearSession();

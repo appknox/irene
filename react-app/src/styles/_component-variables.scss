@@ -1706,9 +1706,15 @@ body {
   --project-list-app-platform-color-android: var(--android);
 
   // variables for project-list/column-manager
-  --project-list-column-manager-sections-columns-drag-border-color: var(--primary-main);
-  --project-list-column-manager-sections-columns-bg-color: var(--background-main);
-  --project-list-column-manager-sections-columns-box-shadow: var(--box-shadow-4);
+  --project-list-column-manager-sections-columns-drag-border-color: var(
+    --primary-main
+  );
+  --project-list-column-manager-sections-columns-bg-color: var(
+    --background-main
+  );
+  --project-list-column-manager-sections-columns-box-shadow: var(
+    --box-shadow-4
+  );
 
   // variables for project-list/tags
   --project-list-tags-background-grey: var(--neutral-grey-100);
@@ -1730,7 +1736,9 @@ body {
   --project-list-header-clear-filter-color: var(--neutral-grey-600);
   --project-list-header-clear-filter-hover-color: var(--primary-main);
   --project-list-header-button-border-color: var(--border-color-1);
-  --project-list-header-active-background-color: var(--side-menu-active-background-light);
+  --project-list-header-active-background-color: var(
+    --side-menu-active-background-light
+  );
 
   // variables for project-list/severity-level
   --project-list-severity-level-tag-border-color: var(--border-color-1);
@@ -1743,9 +1751,15 @@ body {
   --project-list-severity-level-color-none: var(--severity-none);
 
   // variables for project-list/column-manager
-  --project-list-column-manager-filter-sections-columns-box-shadow: var(--box-shadow-4);
-  --project-list-column-manager-filter-sections-columns-drag-border-color: var(--primary-main);
-  --project-list-column-manager-filter-sections-columns-bg-color: var(--background-main);
+  --project-list-column-manager-filter-sections-columns-box-shadow: var(
+    --box-shadow-4
+  );
+  --project-list-column-manager-filter-sections-columns-drag-border-color: var(
+    --primary-main
+  );
+  --project-list-column-manager-filter-sections-columns-bg-color: var(
+    --background-main
+  );
 
   // variables for project-overview
   --project-overview-card-hover-shadow: var(--box-shadow-7);

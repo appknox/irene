@@ -4,11 +4,7 @@
  */
 
 import axios from 'axios';
-import type {
-  AxiosInstance,
-  AxiosRequestConfig,
-  AxiosError,
-} from 'axios';
+import type { AxiosInstance, AxiosRequestConfig, AxiosError } from 'axios';
 import { sessionManager } from '../auth/session';
 import type { APIError } from '../../types/api';
 
@@ -45,11 +41,11 @@ export class APIClient {
     this.client.interceptors.request.use(
       (config) => {
         const session = sessionManager.getSession();
-        
+
         if (session?.b64token) {
           config.headers.Authorization = `Basic ${session.b64token}`;
         }
-        
+
         return config;
       },
       (error) => {
@@ -64,7 +60,7 @@ export class APIClient {
         // Handle 401 Unauthorized
         if (error.response?.status === 401) {
           sessionManager.clearSession();
-          
+
           if (this.config.onUnauthorized) {
             this.config.onUnauthorized();
           } else {
@@ -79,7 +75,7 @@ export class APIClient {
             error.response.headers['retry-after'] || '60',
             10
           );
-          
+
           if (this.config.onRateLimit) {
             this.config.onRateLimit(retryAfter);
           }
