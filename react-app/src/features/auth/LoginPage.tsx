@@ -8,6 +8,7 @@ import { AkButton } from '@components/ak-button';
 import { AkTypography } from '@components/ak-typography';
 import { AkLoader, AkLoaderLinear } from '@components/ak-loader';
 import { AkStack } from '@components/ak-stack';
+import { AkDivider } from '@components/ak-divider';
 import './LoginPage.scss';
 
 export function LoginPage() {
@@ -597,10 +598,62 @@ export function LoginPage() {
           </AkStack>
         </section>
 
+        {/* AkDivider Component Showcase */}
+        <section className="component-section">
+          <h2 className="section-title">AkDivider Component</h2>
+
+          {/* Horizontal Dividers */}
+          <AkStack direction="column" spacing={3} className="typography-group">
+            <h3 className="group-title">Horizontal Dividers</h3>
+            <AkStack direction="column" spacing={2}>
+              <AkTypography variant="body2">Full Width (Light)</AkTypography>
+              <AkDivider variant="fullWidth" color="light" />
+
+              <AkTypography variant="body2">Full Width (Dark)</AkTypography>
+              <AkDivider variant="fullWidth" color="dark" />
+
+              <AkTypography variant="body2">Middle (Light)</AkTypography>
+              <AkDivider variant="middle" color="light" />
+
+              <AkTypography variant="body2">Middle (Dark)</AkTypography>
+              <AkDivider variant="middle" color="dark" />
+
+              <AkTypography variant="body2">Custom Width (50%)</AkTypography>
+              <AkDivider width="50%" />
+            </AkStack>
+          </AkStack>
+
+          {/* Vertical Dividers */}
+          <AkStack direction="column" spacing={3} className="typography-group">
+            <h3 className="group-title">Vertical Dividers</h3>
+            <AkStack spacing={2} alignItems="center" style={{ height: '100px' }}>
+              <AkTypography variant="body2">Item 1</AkTypography>
+              <AkDivider direction="vertical" variant="fullWidth" />
+              <AkTypography variant="body2">Item 2</AkTypography>
+              <AkDivider direction="vertical" variant="middle" />
+              <AkTypography variant="body2">Item 3</AkTypography>
+              <AkDivider direction="vertical" color="dark" />
+              <AkTypography variant="body2">Item 4</AkTypography>
+            </AkStack>
+          </AkStack>
+
+          {/* With Content */}
+          <AkStack direction="column" spacing={3} className="typography-group">
+            <h3 className="group-title">Dividers in Context</h3>
+            <AkStack direction="column" spacing={2}>
+              <AkTypography variant="body1">Section 1 Content</AkTypography>
+              <AkDivider />
+              <AkTypography variant="body1">Section 2 Content</AkTypography>
+              <AkDivider color="dark" />
+              <AkTypography variant="body1">Section 3 Content</AkTypography>
+            </AkStack>
+          </AkStack>
+        </section>
+
         <footer className="login-footer">
           <p>
             Component Status: ✓ AkButton | ✓ AkTypography | ✓ AkLoader | ✓
-            AkLoaderLinear | ✓ AkStack
+            AkLoaderLinear | ✓ AkStack | ✓ AkDivider
           </p>
           <p>Next: More components will be added one by one for review</p>
         </footer>
