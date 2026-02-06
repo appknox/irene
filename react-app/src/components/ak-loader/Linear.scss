@@ -1,0 +1,92 @@
+.ak-loader-linear-root {
+  width: 100%;
+  min-width: 100px;
+  position: relative;
+  overflow: hidden;
+  display: block;
+  border-radius: 100px; // Fixed border radius value for all loader heights
+  background-color: var(--ak-loader-linear-root-bg-color);
+
+  .ak-loader-linear-indicator,
+  .indeterminate-indicator-bar--1,
+  .indeterminate-indicator-bar--2 {
+    bottom: 0px;
+    top: 0px;
+
+    &.ak-loader-linear-color-primary {
+      background-color: var(--ak-loader-stroke-primary-main);
+    }
+
+    &.ak-loader-linear-color-secondary {
+      background-color: var(--ak-loader-stroke-secondary);
+    }
+
+    &.ak-loader-linear-color-info {
+      background-color: var(--ak-loader-stroke-info-main);
+    }
+
+    &.ak-loader-linear-color-info-dark {
+      background-color: var(--ak-loader-stroke-info-dark);
+    }
+
+    &.ak-loader-linear-color-success {
+      background-color: var(--ak-loader-stroke-success-main);
+    }
+
+    &.ak-loader-linear-color-warn {
+      background-color: var(--ak-loader-stroke-warn-main);
+    }
+
+    &.ak-loader-linear-color-warn-dark {
+      background-color: var(--ak-loader-stroke-warn-dark);
+    }
+
+    &.ak-loader-linear-color-error {
+      background-color: var(--ak-loader-stroke-error-main);
+    }
+  }
+
+  .ak-loader-linear-indicator {
+    width: 100%;
+    position: absolute;
+    transition: transform 0.4s linear 0s;
+    left: -100%;
+    transform-origin: left center;
+  }
+
+  .indeterminate-indicator-bar--1,
+  .indeterminate-indicator-bar--2 {
+    width: auto;
+    position: absolute;
+    left: 0px;
+    transition: transform 0.2s linear 0s;
+    transform-origin: left center;
+    animation: 2.1s cubic-bezier(0.165, 0.84, 0.44, 1) 1.15s infinite normal
+      none running linear-loader;
+  }
+
+  .indeterminate-indicator-bar--1 {
+    animation-delay: 0s;
+  }
+}
+
+.ak-loader-linear-label {
+  white-space: nowrap;
+}
+
+@keyframes linear-loader {
+  0% {
+    left: -200%;
+    right: 100%;
+  }
+
+  60% {
+    left: 107%;
+    right: -8%;
+  }
+
+  100% {
+    left: 107%;
+    right: -8%;
+  }
+}
