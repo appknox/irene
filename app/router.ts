@@ -244,6 +244,8 @@ Router.map(function () {
 
         this.route('billing');
 
+        this.route('subscription');
+
         this.route('account-settings', { path: '/settings' }, function () {
           this.route('general');
           this.route('security');
