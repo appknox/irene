@@ -1,0 +1,187 @@
+// Position utils
+.position-relative {
+  position: relative;
+}
+
+.position-absolute {
+  position: absolute;
+}
+
+.position-sticky {
+  position: sticky;
+}
+
+.position-fixed {
+  position: fixed;
+}
+
+.position-static {
+  position: static;
+}
+
+// flex utils
+.flex-row {
+  display: flex;
+  box-sizing: border-box;
+}
+
+.flex-column {
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
+}
+
+.flex-justify-start {
+  justify-content: flex-start;
+}
+
+.flex-justify-end {
+  justify-content: flex-end;
+}
+
+.flex-justify-center {
+  justify-content: center;
+}
+
+.flex-justify-space-between {
+  justify-content: space-between;
+}
+
+.flex-justify-space-around {
+  justify-content: space-around;
+}
+
+.flex-align-start {
+  align-items: flex-start;
+}
+
+.flex-align-end {
+  align-items: flex-end;
+}
+
+.flex-align-center {
+  align-items: center;
+}
+
+.flex-align-space-between {
+  align-items: space-between;
+}
+
+.flex-align-space-around {
+  align-items: space-around;
+}
+
+.flex-wrap {
+  flex-wrap: wrap;
+}
+
+@for $i from 1 to 4 {
+  $gap: $i * 0.5;
+
+  .flex-row-gap-#{$i} {
+    margin: #{-1 * $gap}em 0 0 #{-1 * $gap}em;
+
+    & > * {
+      margin: #{$gap}em 0 0 #{$gap}em;
+    }
+  }
+}
+
+/* 
+========== spacing utils ========== 
+spacing utils has padding and margin utility classes
+it ranges from 0 - 8 and mutliplication factor is 0.5em
+*/
+@for $i from 0 to 8 {
+  $space: $i * 0.5;
+
+  // paddding utils
+  .p-#{$i} {
+    padding: #{$space}em;
+  }
+
+  .py-#{$i} {
+    padding-top: #{$space}em;
+    padding-bottom: #{$space}em;
+  }
+
+  .px-#{$i} {
+    padding-left: #{$space}em;
+    padding-right: #{$space}em;
+  }
+
+  .pt-#{$i} {
+    padding-top: #{$space}em;
+  }
+
+  .pb-#{$i} {
+    padding-bottom: #{$space}em;
+  }
+
+  .pl-#{$i} {
+    padding-left: #{$space}em;
+  }
+
+  .pr-#{$i} {
+    padding-right: #{$space}em;
+  }
+
+  // margin utils
+  .m-#{$i} {
+    margin: #{$space}em;
+  }
+
+  .my-#{$i} {
+    margin-top: #{$space}em;
+    margin-bottom: #{$space}em;
+  }
+
+  .mx-#{$i} {
+    margin-left: #{$space}em;
+    margin-right: #{$space}em;
+  }
+
+  .mt-#{$i} {
+    margin-top: #{$space}em;
+  }
+
+  .mb-#{$i} {
+    margin-bottom: #{$space}em;
+  }
+
+  .ml-#{$i} {
+    margin-left: #{$space}em;
+  }
+
+  .mr-#{$i} {
+    margin-right: #{$space}em;
+  }
+}
+
+.mx-auto {
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/*
+===================== width util =====================
+Examples:
+------------------
+| class  | value |
+------------------
+| w-1/12 | 8.33% |
+| w-3/12 | 25%   |
+| w-6/12 | 50%   |
+| w-9/12 | 75%   |
+------------------
+*/
+
+@for $i from 1 to 12 {
+  .w-#{$i}\/12 {
+    width: calc($i / 12) * 100%;
+  }
+}
+
+.w-full {
+  width: 100%;
+}

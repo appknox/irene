@@ -1,0 +1,324 @@
+// Swagger UI General
+.swagger-ui {
+  & * {
+    font-family: var(--font-family) !important;
+  }
+
+  .wrapper {
+    padding-left: 0em !important;
+    padding-right: 0em !important;
+
+    section {
+      padding: 0em !important;
+    }
+  }
+
+  // Heading section
+  .info {
+    margin: 0em !important;
+
+    .main {
+      margin-bottom: 0.5em !important;
+
+      .title {
+        display: flex;
+        color: var(--text-primary) !important;
+        font-weight: var(--font-weight-bold) !important;
+        font-size: 1.714rem !important;
+
+        span {
+          display: flex;
+          align-items: center;
+          margin-left: 0.3em !important;
+
+          small {
+            top: unset;
+            border-radius: 0.2857em;
+
+            &:not(.version-stamp) {
+              border: 1px solid var(--border-color-1);
+              background-color: var(--neutral-grey-100);
+
+              .version {
+                color: var(--text-primary) !important;
+              }
+            }
+
+            &.version-stamp {
+              background-color: var(--success-main);
+              color: var(--common-white);
+            }
+          }
+        }
+      }
+    }
+
+    .description {
+      & * {
+        line-height: 1.42857;
+      }
+
+      h3 {
+        font-size: 1.143em !important;
+        font-weight: 600 !important;
+        margin-bottom: 0.6em !important;
+      }
+
+      h5 {
+        font-size: 1em !important;
+        text-decoration: underline;
+        font-weight: 600;
+        margin-bottom: 0.5em !important;
+      }
+
+      .renderedMarkdown {
+        br {
+          display: none;
+        }
+
+        ul {
+          list-style: disc;
+          padding-left: 1em;
+          margin-bottom: 0.8em;
+        }
+
+        li,
+        p,
+        td {
+          color: var(--text-secondary) !important;
+          font-weight: var(--font-weight-regular) !important;
+          font-size: 1em !important;
+
+          a {
+            color: var(--primary-main) !important;
+            text-decoration: underline;
+          }
+        }
+      }
+    }
+  }
+
+  pre code,
+  .highlight-code > .microlight code,
+  .opblock-body pre.microlight {
+    background: #333333 !important;
+    color: var(--common-white) !important;
+
+    &,
+    * {
+      font-family: Consolas, monaco, monospace !important;
+    }
+  }
+
+  table thead tr td,
+  table thead tr th {
+    font-size: 1em !important;
+    padding: 0.8571em !important;
+  }
+
+  table tbody tr td {
+    padding-left: 0.8571em !important;
+    padding-right: 0.8571em !important;
+  }
+
+  .btn,
+  .btn.authorize,
+  .auth-btn-wrapper .btn,
+  .btn.try-out__btn.cancel,
+  .btn.execute {
+    border: 1px solid !important;
+    padding: 0.4em 0.7em !important;
+    line-height: 24px !important; // This was global value for button setting it here for uniformity across elements
+    min-width: 80px !important;
+    height: auto !important;
+    border-radius: var(--border-radius) !important;
+
+    span {
+      padding: 0px 10px 0 0 !important;
+    }
+
+    svg {
+      fill: var(--success-main) !important;
+      width: 15px !important;
+    }
+  }
+
+  .btn {
+    border: 1px solid var(--neutral-grey-400) !important;
+    color: var(--text-primary) !important;
+  }
+
+  .btn.authorize {
+    border-color: var(--success-main) !important;
+    color: var(--success-main) !important;
+  }
+
+  .auth-btn-wrapper .btn-done,
+  .btn.try-out__btn.cancel {
+    border-color: var(--primary-main) !important;
+    color: var(--primary-main) !important;
+  }
+
+  .opblock-tag {
+    color: var(--text-primary) !important;
+    border-color: var(--border-color-1) !important;
+    font-size: 1.2em !important;
+    margin: 0 0 1em !important;
+    font-weight: 600 !important;
+    padding: 0.3em !important;
+  }
+
+  .expand-operation svg,
+  .opblock-summary svg {
+    width: 15px !important;
+    height: 15px !important;
+  }
+
+  .execute-wrapper,
+  .opblock-body .btn-group {
+    display: flex;
+    align-items: center;
+    gap: 1em;
+    padding: 1.42857em !important;
+
+    .btn.execute {
+      background-color: var(--info-main) !important;
+      border-color: var(--info-main) !important;
+      color: var(--common-white) !important;
+    }
+
+    button {
+      width: fit-content !important;
+      flex: unset !important;
+    }
+  }
+}
+
+// Swagger UI Description
+.swagger-ui-description {
+  h3 {
+    margin: unset;
+  }
+
+  .information-container {
+    padding: 0em !important;
+
+    .block {
+      padding: 0em !important;
+    }
+
+    .info {
+      margin: 1.5em 0;
+
+      .title .version {
+        background: unset;
+      }
+    }
+  }
+
+  .wrapper:not(.information-container) {
+    display: none;
+  }
+}
+
+// API Endpoint Tab Overrides
+.swagger-ui-apis-container {
+  width: 100%;
+
+  .swagger-ui {
+    .models,
+    .information-container {
+      display: none;
+    }
+
+    .dialog-ux .modal-ux-content {
+      padding: 0em;
+    }
+
+    .scheme-container {
+      box-shadow: none !important;
+      margin: 0px !important;
+      padding: 0px !important;
+
+      .schemes {
+        padding-top: 1.5em !important;
+        padding-bottom: 1em;
+      }
+
+      .schemes-server-container {
+        .servers-title {
+          font-size: 1rem;
+          font-weight: var(--font-weight-medium);
+          padding: 0 0.5em;
+        }
+
+        .servers {
+          padding: 0.5em;
+        }
+      }
+    }
+
+    .auth-container div h6,
+    .auth-container .wrapper p,
+    .auth-container .wrapper label {
+      font-size: 1em;
+    }
+
+    .auth-container div h6 {
+      font-weight: 600;
+      color: var(--success-main);
+    }
+
+    .auth-btn-wrapper {
+      padding-top: 1.4286em !important;
+      margin-top: 1.5em !important;
+      border-top: 1px solid var(--border-color-1);
+      justify-content: flex-end;
+      align-items: center;
+      gap: 1em;
+    }
+
+    #api_key_value {
+      border-radius: 0em !important;
+      padding: 6px 10px !important;
+    }
+  }
+}
+
+// Schema Tab Style Overrides
+.swagger-ui-schemas-container {
+  width: 100%;
+
+  .wrapper:not(:last-of-type),
+  .scheme-container,
+  .information-container {
+    display: none !important;
+  }
+
+  .models.is-open h4 {
+    display: none;
+  }
+
+  section.models {
+    border: none !important;
+  }
+
+  section.models .model-container {
+    margin-left: 0em !important;
+    margin-right: 0em !important;
+    background: var(--neutral-grey-100) !important;
+  }
+
+  .model button[aria-expanded='true'] {
+    margin-bottom: 1em !important;
+  }
+
+  table,
+  table:hover tr {
+    background: transparent !important;
+
+    td {
+      border-color: var(--background-light);
+    }
+  }
+}

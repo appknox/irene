@@ -1,0 +1,2859 @@
+// variables for ak-components
+body {
+  // variables for ak-appbar
+  --ak-appbar-default-background: var(--background-main);
+  --ak-appbar-default-border-bottom: 1px solid var(--border-color-1);
+  --ak-appbar-default-background-text-color: var(--text-primary);
+  --ak-appbar-light-background: var(--background-light);
+  --ak-appbar-light-border-bottom: 1px solid var(--border-color-1);
+  --ak-appbar-light-background-text-color: var(--text-primary);
+  --ak-appbar-dark-background: var(--background-dark);
+  --ak-appbar-dark-border-bottom: none;
+  --ak-appbar-dark-background-text-color: var(--common-white);
+  --ak-appbar-dark-hover-background: var(--hover-dark-background);
+  --ak-appbar-zIndex: var(--zIndex-appbar);
+
+  // variables for ak-icon
+  --ak-icon-color-primary: var(--primary-main);
+  --ak-icon-color-secondary: var(--secondary-main);
+  --ak-icon-color-text-primary: var(--text-primary);
+  --ak-icon-color-text-secondary: var(--text-secondary);
+  --ak-icon-color-error: var(--error-main);
+  --ak-icon-color-success: var(--success-main);
+  --ak-icon-color-warn: var(--warn-main);
+  --ak-icon-color-info: var(--info-main);
+
+  // variables for ak-loader
+  --ak-loader-stroke-primary-main: var(--primary-main);
+  --ak-loader-stroke-secondary: var(--secondary-main);
+  --ak-loader-stroke-info-main: var(--info-main);
+  --ak-loader-stroke-info-dark: var(--info-dark);
+  --ak-loader-stroke-success-main: var(--success-main);
+  --ak-loader-stroke-warn-main: var(--warn-main);
+  --ak-loader-stroke-warn-dark: var(--warn-dark);
+  --ak-loader-stroke-error-main: var(--error-main);
+  --ak-loader-track-color-primary-light: var(--primary-light);
+  --ak-loader-track-color-secondary-light: var(--neutral-grey-200);
+  --ak-loader-track-color-info-light: var(--info-light);
+  --ak-loader-track-color-success-light: var(--success-light);
+  --ak-loader-track-color-warn-light: var(--warn-light);
+  --ak-loader-track-color-error-light: var(--error-light);
+  --ak-loader-linear-root-bg-color: var(--neutral-grey-200);
+
+  // variables for ak-popover
+  --ak-popover-arrow-background-light: var(--background-main);
+  --ak-popover-arrow-border-light: var(--border-color-1);
+  --ak-popover-arrow-background-dark: var(--background-dark);
+  --ak-popover-zIndex: var(--zIndex-tooltip);
+
+  // variables for ak-popover
+  --ak-tooltip-border-radius: var(--border-radius);
+  --ak-tooltip-font-weight-regular: var(--font-weight-regular);
+  --ak-tooltip-font-family: var(--font-family);
+  --ak-tooltip-box-shadow-2: var(--box-shadow-2);
+  --ak-tooltip-background-light: var(--background-main);
+  --ak-tooltip-background-dark: var(--background-dark);
+  --ak-tooltip-color-on-light: var(--text-primary);
+  --ak-tooltip-color-on-dark: var(--common-white);
+  --ak-tooltip-border-light: var(--border-color-1);
+  --ak-tooltip-zIndex: var(--zIndex-tooltip);
+
+  // variables for ak-toggle
+  --ak-toggle-slider-background-color: var(--background-main);
+  --ak-toggle-checked-background-color: var(--success-main);
+  --ak-toggle-unchecked-background-color: var(--neutral-grey-300);
+
+  // variables for ak-divider
+  --ak-divider-color-light: var(--divider);
+  --ak-divider-color-dark: var(--divider-dark);
+
+  // variables for ak-link
+  --ak-link-color-text-disabled: var(--text-disabled);
+  --ak-link-color-primary: var(--primary-main);
+  --ak-link-color-secondary: var(--secondary-main);
+  --ak-link-color-text-primary: var(--text-primary);
+  --ak-link-color-text-secondary: var(--text-secondary);
+  --ak-link-color-error: var(--error-main);
+  --ak-link-color-success: var(--success-main);
+  --ak-link-color-warn: var(--warn-main);
+  --ak-link-color-info: var(--info-main);
+
+  // variables for ak-icon-button
+  --ak-icon-button-color-text-disabled: var(--text-disabled);
+  --ak-icon-button-color-text-primary: var(--text-primary);
+  --ak-icon-button-border-radius: var(--border-radius);
+  --ak-icon-button-border-color-default: var(--border-color-2);
+  --ak-icon-button-border-color-primary: var(--primary-main);
+  --ak-icon-button-border-color-secondary: var(--secondary-main);
+  --ak-icon-button-hover-background: var(--hover-light-background);
+
+  // variables for ak-list
+  --ak-list-item-color-text-disabled: var(--text-disabled);
+  --ak-list-item-hover-background: var(--hover-light-background);
+  --ak-list-item-selected-background: var(--primary-light);
+  --ak-list-item-color-text-primary: var(--text-primary);
+
+  // variables for ak-menu
+  --ak-menu-background: var(--background-main);
+  --ak-menu-border-radius: var(--border-radius);
+  --ak-menu-box-shadow: var(--box-shadow-2);
+  --ak-menu-border-color: var(--border-color-1);
+  --ak-menu-z-index: var(--zIndex-tooltip);
+
+  // variables for ak-select
+  --ak-select-form-helper-color: var(--text-secondary);
+  --ak-select-error-color: var(--error-main);
+  --ak-select-dropdown-background: var(--background-main);
+  --ak-select-dropdown-border-radius: var(--border-radius);
+  --ak-select-dropdown-box-shadow: var(--box-shadow-2);
+  --ak-select-dropdown-border-color: var(--border-color-1);
+  --ak-select-dropdown-zIndex: var(--zIndex-tooltip);
+  --ak-select-option-color-text-primary: var(--text-primary);
+  --ak-select-option-hover-background: var(--hover-light-background);
+  --ak-select-option-selected-background: var(--primary-light);
+  --ak-select-option-divider-color: var(--divider);
+  --ak-select-trigger-color-text-primary: var(--text-primary);
+  --ak-select-trigger-border-radius: var(--border-radius);
+  --ak-select-trigger-border-color: var(--border-color-2);
+  --ak-select-trigger-disabled-color: var(--text-secondary);
+  --ak-select-trigger-disabled-background: var(--disabled-background-textfield);
+  --ak-select-trigger-arrow-color: var(--text-primary);
+  --ak-select-multiple-chip-background-color: var(--neutral-grey-200);
+  --ak-select-multiple-chip-border-radius: var(--border-radius);
+
+  // variables for ak-select/before-option
+  --ak-select-before-option-border-color: var(--neutral-grey-100);
+
+  // variables for ak-modal
+  --ak-modal-zIndex: var(--zIndex-modal);
+  --ak-modal-backdrop-overlay-background: var(--backdrop-overlay-background);
+  --ak-modal-border-radius: var(--border-radius);
+
+  // variables for ak-table
+  --ak-table-font-weight-regular: var(--font-weight-regular);
+  --ak-table-font-weight-medium: var(--font-weight-medium);
+  --ak-table-font-family: var(--font-family);
+  --ak-table-color-text-primary: var(--text-primary);
+  --ak-table-header-background-neutral: var(--neutral-grey-100);
+  --ak-table-header-border-neutral: var(--border-color-1);
+  --ak-table-border-light: var(--divider);
+  --ak-table-border-dark: var(--divider-dark);
+  --ak-table-hover-background: var(--hover-light-background);
+
+  // variables for ak-checkbox
+  --ak-checkbox-color-checked: var(--success-main);
+  --ak-checkbox-color-indeterminate: var(--success-main);
+  --ak-checkbox-color-text-disabled: var(--text-disabled);
+  --ak-checkbox-hover-background: var(--hover-light-background);
+
+  // variables for ak-button
+  --ak-button-font-family: var(--font-family);
+  --ak-button-border-radius: var(--border-radius);
+  --ak-button-color-primary: var(--primary-main);
+  --ak-button-filled-primary-hover-background: var(--primary-dark);
+  --ak-button-color-primary-contrast-text: var(--primary-contrast-text);
+  --ak-button-color-secondary: var(--secondary-main);
+  --ak-button-color-text-primary: var(--text-primary);
+  --ak-button-color-text-secondary: var(--text-secondary);
+  --ak-button-color-error: var(--error-main);
+  --ak-button-color-success: var(--success-main);
+  --ak-button-color-warn: var(--warn-main);
+  --ak-button-color-info: var(--info-main);
+  --ak-button-color-neutral: var(--neutral-grey-400);
+  --ak-button-color-text-disabled: var(--text-disabled);
+  --ak-button-disabled-background: var(--disabled-background-button);
+
+  // variables for ak-chip
+  --ak-chip-font-family: var(--font-family);
+  --ak-chip-border-radius: var(--border-radius);
+  --ak-chip-color-text-primary: var(--text-primary);
+  --ak-chip-delete-btn-hover-background: var(--hover-light-background);
+
+  --ak-chip-color-filled-default-background: var(--neutral-grey-100);
+  --ak-chip-color-filled-default-contrast-text: var(--text-primary);
+  --ak-chip-color-filled-primary-background: var(--primary-main);
+  --ak-chip-color-filled-primary-contrast-text: var(--common-white);
+  --ak-chip-color-filled-secondary-background: var(--secondary-main);
+  --ak-chip-color-filled-secondary-contrast-text: var(--common-white);
+  --ak-chip-color-filled-success-background: var(--success-main);
+  --ak-chip-color-filled-success-contrast-text: var(--common-white);
+  --ak-chip-color-filled-error-background: var(--error-main);
+  --ak-chip-color-filled-error-contrast-text: var(--common-white);
+  --ak-chip-color-filled-warn-background: var(--warn-main);
+  --ak-chip-color-filled-warn-contrast-text: var(--common-white);
+  --ak-chip-color-filled-info-background: var(--info-main);
+  --ak-chip-color-filled-info-contrast-text: var(--common-white);
+
+  --ak-chip-color-semi-filled-default-background: var(--neutral-grey-200);
+  --ak-chip-color-semi-filled-default-contrast-text: var(--neutral-grey-700);
+  --ak-chip-color-semi-filled-primary-background: var(--primary-light);
+  --ak-chip-color-semi-filled-primary-contrast-text: var(--primary-dark);
+  --ak-chip-color-semi-filled-secondary-background: var(--neutral-grey-200);
+  --ak-chip-color-semi-filled-secondary-contrast-text: var(--secondary-main);
+  --ak-chip-color-semi-filled-success-background: var(--success-light);
+  --ak-chip-color-semi-filled-success-contrast-text: var(--success-main);
+  --ak-chip-color-semi-filled-error-background: var(--error-light);
+  --ak-chip-color-semi-filled-error-contrast-text: var(--error-main);
+  --ak-chip-color-semi-filled-warn-background: var(--warn-light);
+  --ak-chip-color-semi-filled-warn-contrast-text: var(--warn-dark);
+  --ak-chip-color-semi-filled-info-background: var(--info-light);
+  --ak-chip-color-semi-filled-info-contrast-text: var(--info-dark);
+
+  --ak-chip-color-outlined-default: var(--border-color-1);
+  --ak-chip-color-outlined-primary: var(--primary-main);
+  --ak-chip-color-outlined-secondary: var(--secondary-main);
+  --ak-chip-color-outlined-success: var(--success-main);
+  --ak-chip-color-outlined-error: var(--error-main);
+  --ak-chip-color-outlined-warn: var(--warn-main);
+  --ak-chip-color-outlined-info: var(--info-main);
+
+  --ak-chip-color-semi-filled-outlined-default-background: var(
+    --neutral-grey-100
+  );
+  --ak-chip-color-semi-filled-outlined-default-contrast-text: var(
+    --text-primary
+  );
+  --ak-chip-color-semi-filled-outlined-default-border-color: var(
+    --neutral-grey-200
+  );
+  --ak-chip-color-semi-filled-outlined-default-contrast-border: var(
+    --border-color-1
+  );
+  --ak-chip-color-semi-filled-outlined-primary-background: var(--primary-light);
+  --ak-chip-color-semi-filled-outlined-primary-contrast-text: var(
+    --primary-dark
+  );
+  --ak-chip-color-semi-filled-outlined-secondary-background: var(
+    --neutral-grey-200
+  );
+  --ak-chip-color-semi-filled-outlined-secondary-contrast-text: var(
+    --secondary-main
+  );
+  --ak-chip-color-semi-filled-outlined-success-background: var(--success-light);
+  --ak-chip-color-semi-filled-outlined-success-contrast-text: var(
+    --success-main
+  );
+  --ak-chip-color-semi-filled-outlined-error-background: var(--error-light);
+  --ak-chip-color-semi-filled-outlined-error-contrast-text: var(--error-main);
+  --ak-chip-color-semi-filled-outlined-warn-background: var(--warn-light);
+  --ak-chip-color-semi-filled-outlined-warn-contrast-text: var(--warn-dark);
+  --ak-chip-color-semi-filled-outlined-info-background: var(--info-light);
+  --ak-chip-color-semi-filled-outlined-info-contrast-text: var(--info-dark);
+
+  // variables for ak-autocomplete
+  --ak-autocomplete-x-btn-zIndex: var(--zIndex-tooltip);
+  --ak-autocomplete-background: var(--background-main);
+  --ak-autocomplete-border-radius: var(--border-radius);
+  --ak-autocomplete-box-shadow: var(--box-shadow-2);
+  --ak-autocomplete-border-color: var(--border-color-1);
+
+  // variables for ak-drawer
+  --ak-drawer-backdrop-overlay-background: var(--backdrop-overlay-background);
+  --ak-drawer-background: var(--background-main);
+  --ak-drawer-color-text-primary: var(--text-primary);
+  --ak-drawer-zIndex: var(--zIndex-drawer);
+
+  // variables for ak-radio
+  --ak-radio-hover-background: var(--hover-light-background);
+  --ak-radio-color-text-disabled: var(--text-disabled);
+  --ak-radio-color-success-main: var(--success-main);
+
+  // variables for ak-date-picker
+  --ak-date-picker-background: var(--background-main);
+  --ak-date-picker-border-color: var(--border-color-1);
+  --ak-date-picker-day-border-color: var(--common-white);
+  --ak-date-picker-border-radius: var(--border-radius);
+  --ak-date-picker-box-shadow: var(--box-shadow-2);
+  --ak-date-picker-day-btn-hover-background: var(--hover-light-background);
+  --ak-date-picker-color-text-primary: var(--text-primary);
+  --ak-date-picker-color-text-secondary: var(--text-secondary);
+  --ak-date-picker-color-text-disabled: var(--text-disabled);
+  --ak-date-picker-color-primary: var(--primary-main);
+  --ak-date-picker-color-primary-light: var(--primary-light);
+  --ak-date-picker-color-primary-contrast-text: var(--primary-contrast-text);
+  --ak-date-picker-font-family: var(--font-family);
+  --ak-date-picker-font-weight-regular: var(--font-weight-regular);
+  --ak-date-picker-font-weight-medium: var(--font-weight-medium);
+
+  // variables for ak-pagination
+  --ak-pagination-background: var(--neutral-grey-100);
+  --ak-pagination-border-radius: var(--border-radius);
+  --ak-pagination-divider-background: var(--divider-dark);
+  --ak-pagination-button-background: var(--common-white);
+
+  // variables for ak-tabs
+  --ak-tabs-font-family: var(--font-family);
+  --ak-tabs-border-color: var(--border-color-1);
+  --ak-tabs-color-primary: var(--primary-main);
+  --ak-tabs-color-primary-light: var(--primary-light);
+  --ak-tabs-text-color-secondary: var(--text-secondary);
+  --ak-tabs-text-color-primary: var(--text-primary);
+  --ak-tabs-font-weight-bold: var(--font-weight-bold);
+  --ak-tabs-font-weight-regular: var(--font-weight-regular);
+  --ak-tabs-border-radius: var(--border-radius);
+  --ak-tabs-neutral-background: var(--neutral-grey-200);
+  --ak-tabs-active-box-shadow: var(--box-shadow-4);
+  --ak-tabs-background-main: var(--background-main);
+
+  // variables for ak-breadcrumbs-auto-trail
+  --ak-breadcrumbs-auto-trail-color-text-primary: var(--text-primary);
+  --ak-breadcrumbs-auto-trail-color-text-secondary: var(--neutral-grey-500);
+  --ak-breadcrumbs-auto-trail-font-weight-medium: var(--font-weight-medium);
+
+  // variables for ak-accordion
+  --ak-accordion-summary-secondary-background: var(--background-light);
+  --ak-accordion-summary-secondary-border-color: var(--border-color-1);
+  --ak-accordion-summary-primary-background: var(--primary-main-10);
+  --ak-accordion-summary-primary-border-color: var(--primary-main-10);
+  --ak-accordion-summary-light-background: var(--background-main);
+  --ak-accordion-summary-light-box-shadow: var(--box-shadow-12);
+
+  // variables for ak-skeleton
+  --ak-skeleton-linear-gradient-color-1: var(--neutral-grey-100);
+  --ak-skeleton-linear-gradient-color-2: var(--neutral-grey-200);
+
+  // variables for ak-checkbox-tree
+  --ak-checkbox-tree-secondary-background-white: var(--background-main);
+  --ak-checkbox-tree-secondary-background: var(--background-light);
+  --ak-checkbox-tree-secondary-border-color: var(--border-color-1);
+
+  //variables for ak-notification-banner
+  --ak-notification-banner-bg-color: var(--common-white);
+  --ak-notification-banner-icon-color: var(--common-white);
+  --ak-notification-banner-warning-color: var(--error-main);
+  --ak-notification-banner-success-color: var(--success-main);
+  --ak-notification-banner-border-color: var(--border-color-1);
+  --ak-notification-banner-divider-color: var(--border-color-2);
+  --ak-notification-banner-border-radius: var(--border-radius);
+
+  // variables for ak-appbar
+  &.theme-light {
+    --ak-appbar-inherit-background: var(--background-light);
+    --ak-appbar-inherit-border-bottom: 1px solid var(--border-color-1);
+    --ak-appbar-inherit-background-text-color: var(--text-primary);
+    --ak-appbar-inherit-hover-background: var(--hover-light-background);
+    --ak-appbar-box-shadow: var(--box-shadow-light);
+  }
+
+  &.theme-dark {
+    --ak-appbar-inherit-background: var(--background-dark);
+    --ak-appbar-inherit-border-bottom: none;
+    --ak-appbar-inherit-background-text-color: var(--common-white);
+    --ak-appbar-inherit-hover-background: var(--hover-dark-background);
+    --ak-appbar-box-shadow: var(--box-shadow-dark);
+  }
+}
+
+// variables for security dashboard
+body {
+  // variables for home-page/security-dashboard-nav
+  --security-dashboard-nav-bg-color: var(--background-main);
+
+  // variables for security/download-app
+  --security-download-app-container-border-color: var(--neutral-grey-200);
+  --security-download-app-container-box-shadow: var(--box-shadow-3);
+  --security-download-app-container-border-radius: var(--border-radius);
+
+  // variables for security/purge-api-analysis
+  --security-purge-api-analysis-container-border-color: var(--neutral-grey-200);
+  --security-purge-api-analysis-container-box-shadow: var(--box-shadow-3);
+  --security-purge-api-analysis-container-border-radius: var(--border-radius);
+
+  // variables for security/project-search-list/header
+  --security-project-search-list-header-border-color: var(--neutral-white-100);
+  --security-project-search-list-header-border-radius: var(--border-radius);
+
+  // variables for security/project-search-list/empty-loading-view
+  --security-project-empty-loading-view-border-radius: var(--border-radius);
+  --security-project-empty-loading-view-border-color: var(--border-color-1);
+
+  // variables for security/file-search-list/header
+  --security-file-search-list-header-border-color: var(--neutral-white-100);
+  --security-file-search-list-header-border-radius: var(--border-radius);
+
+  // variables for security/file-search-list/empty-loading-view
+  --security-file-empty-loading-view-border-radius: var(--border-radius);
+  --security-file-empty-loading-view-border-color: var(--border-color-1);
+
+  // variables for security/analysis-list/index
+  --security-analysis-list-filter-option-background-color: var(--common-white);
+  --security-analysis-list-filter-border-color: var(--neutral-grey-200);
+  --security-analysis-list-filter-hover-border-color: var(--neutral-grey-400);
+  --security-analysis-list-filter-option-hover-background: var(
+    --hover-light-background
+  );
+  --security-analysis-list-divider-background-color: var(--neutral-grey-200);
+  --security-analysis-list-clear-filter-color: var(--neutral-grey-600);
+  --security-analysis-list-clear-filter-hover-color: var(--primary-main);
+
+  // variables for security/analysis-list/header
+  --security-analysis-list-header-background-color: var(--common-white);
+  --security-analysis-list-header-border-color: var(--neutral-white-100);
+  --security-analysis-list-header-border-radius: var(--border-radius);
+
+  // variables for security/analysis-list/table/index
+  --security-analysis-list-table-border-radius: var(--border-radius);
+  --security-analysis-list-table-border-color: var(--neutral-white-100);
+
+  // variables for security/file-detail-actions
+  --security-file-details-actions-background-color: var(--background-main);
+  --security-file-details-actions-border-color: var(--border-color-1);
+
+  // variables for security/analysis-details/index
+  --security-analysis-details-background-color: var(--background-main);
+  --security-analysis-details-border-color: var(--border-color-1);
+
+  // variables for security/analysis-details/header
+  --security-analysis-details-header-background-color: var(--background-main);
+  --security-analysis-details-header-border-color: var(--border-color-1);
+  --security-analysis-details-header-marked-as-passed-background-color: var(
+    --success-main
+  );
+  --security-analysis-details-header-marked-as-passed-border-color: var(
+    --success-main
+  );
+  --security-analysis-details-header-marked-as-passed-color: var(
+    --common-white
+  );
+
+  // variables for security/analysis-details/cvss-metrics
+  --security-analysis-details-cvss-metrics-white-color: var(--common-white);
+  --security-analysis-details-cvss-metrics-risk-medium-color: var(
+    --severity-medium
+  );
+  --security-analysis-details-cvss-metrics-risk-low-color: var(--severity-low);
+  --security-analysis-details-cvss-metrics-risk-high-color: var(
+    --severity-high
+  );
+  --security-analysis-details-cvss-metrics-risk-critical-color: var(
+    --severity-critical
+  );
+  --security-analysis-details-cvss-metrics-risk-passed-color: var(
+    --severity-passed
+  );
+  --security-analysis-details-cvss-metrics-risk-error-color: var(
+    --primary-main
+  );
+  --security-analysis-details-cvss-metrics-progress-color: var(
+    --severity-untested
+  );
+  --security-analysis-details-cvss-metrics-progress-border-color: var(
+    --primary-main-10
+  );
+
+  // variables for security/analysis-details/footer
+  --security-analysis-details-footer-white-background-color: var(
+    --common-white
+  );
+  --security-analysis-details-footer-cta-border-color: var(--neutral-grey-300);
+  --security-analysis-details-footer-cta-box-shadow: var(--box-shadow-6);
+
+  // variables for security/analysis-details/attachments
+  --security-analysis-details-attachments-list-box-shadow: var(--box-shadow-7);
+  --security-analysis-details-attachments-list-border-radius: var(
+    --border-radius
+  );
+  --security-analysis-details-attachments-list-border-color: var(
+    --border-color-1
+  );
+  --security-analysis-details-attachments-type-background-color: var(
+    --text-default
+  );
+  --security-analysis-details-attachments-type-text-color: var(--common-white);
+
+  // variables for security/analysis-details/finding/add-form
+  --security-analysis-details-finding-add-form-note-background-color: var(
+    --neutral-grey-200
+  );
+  --security-analysis-details-finding-add-form-note-border-radius: var(
+    --border-radius
+  );
+  --security-analysis-details-finding-add-form-textarea-border-color: var(
+    --border-color-1
+  );
+  --security-analysis-details-finding-add-form-textarea-border-radius: var(
+    --border-radius
+  );
+  --security-analysis-details-finding-add-form-textarea-color: var(
+    --text-primary
+  );
+
+  // variables for security/analysis-details/findings/table/title
+  --security-analysis-details-findings-table-title-textarea-border-color: var(
+    --border-color-1
+  );
+  --security-analysis-details-findings-table-title-textarea-border-radius: var(
+    --border-radius
+  );
+  --security-analysis-details-findings-table-title-textarea-color: var(
+    --text-primary
+  );
+
+  // variables for security/analysis-details/findings/table/description
+  --security-analysis-details-findings-table-description-textarea-border-color: var(
+    --border-color-1
+  );
+  --security-analysis-details-findings-table-description-textarea-border-radius: var(
+    --border-radius
+  );
+  --security-analysis-details-findings-table-description-textarea-color: var(
+    --text-primary
+  );
+}
+
+// variables for app dashboard
+body {
+  // variables for app-upload/via-link
+  --app-upload-via-link-button-stack-shadow: var(--box-shadow-4);
+  --app-upload-via-link-url-format-bullet-color: var(--text-primary);
+
+  // variables for app-upload/via-link/preview
+  --app-upload-via-link-preview-background-color: var(--background-light);
+  --app-upload-via-link-preview-border-color: var(--neutral-grey-100);
+  --app-upload-via-link-preview-footer-background-color: var(
+    --neutral-grey-100
+  );
+
+  //variables for side-nav
+  --side-nav-inherit-background: var(--background-main);
+  --side-nav-inherit-background-text-color: var(--text-primary);
+  --side-nav-inherit-hover-background: var(--hover-light-background);
+  --side-nav-item-badge-background: var(--neutral-grey-200);
+  --side-nav-item-badge-text-color: var(--text-primary);
+  --side-nav-item-active-background: var(--side-menu-active-background-light);
+  --side-nav-box-shadow: var(--box-shadow-light);
+  --side-nav-border: 1px solid var(--border-color-1);
+  --side-nav-font-weight-medium: var(--font-weight-medium);
+  --side-nav-text-primary: var(--primary-main);
+  --side-nav-item-active-badge-background: var(--primary-main);
+  --side-nav-item-active-badge-text-color: var(--primary-contrast-text);
+  --side-nav-item-active-border-color: var(--primary-main);
+  --side-nav-zIndex: calc(var(--zIndex-appbar) + 1);
+
+  //variables for side-nav/product-switcher
+  --side-nav-product-switcher-modal-item-hover-background: var(
+    --neutral-grey-100
+  );
+  --side-nav-product-switcher-modal-title-background: var(--neutral-grey-100);
+  --side-nav-product-switcher-border: 1px solid var(--border-color-1);
+  --side-nav-product-switcher-bg-main: var(--background-main);
+  --side-nav-product-switcher-box-shadow: var(--box-shadow-light);
+  --side-nav-product-switcher-item-hover-background: var(
+    --hover-light-background
+  );
+
+  // variables for organization-namespace
+  --organization-namespace-container-background: var(--common-white);
+  --organization-namespace-loading-container-border: var(--border-color-1);
+  --organization-namespace-loading-container-border-radius: var(
+    --border-radius
+  );
+
+  // variables for organization-invitation-list
+  --organization-invitation-list-container-background: var(--common-white);
+
+  // variables for organization-member/list
+  --organization-member-list-container-background: var(--common-white);
+  --organization-member-list-loading-container-border: var(--border-color-1);
+  --organization-member-list-loading-container-border-radius: var(
+    --border-radius
+  );
+
+  // variables for organization-member/list/member-details
+  --organization-member-list-member-details-border-radius: var(--border-radius);
+  --organization-member-list-member-details-border-color: var(--border-color-1);
+  --organization-member-list-member-details-divider-color: var(
+    --neutral-grey-200
+  );
+  --organization-member-list-member-details-box-shadow: var(--box-shadow-3);
+
+  // variables for organization-member/list/add-to-team
+  --organization-member-list-add-to-team-border-radius: var(--border-radius);
+  --organization-member-list-add-to-team-border-color: var(--border-color-1);
+
+  // variables for organization-team
+  --organization-team-container-background: var(--common-white);
+  --organization-team-loading-container-border: var(--border-color-1);
+  --organization-team-loading-container-border-radius: var(--border-radius);
+
+  // variables for organization-team/add-team-member
+  --add-team-member-loading-container-border-radius: var(--border-radius);
+  --add-team-member-loading-container-border-color: var(--border-color-1);
+
+  // variables for organization-team/add-team-project
+  --add-team-project-loading-container-border-radius: var(--border-radius);
+  --add-team-project-loading-container-border-color: var(--border-color-1);
+
+  // variables for organization-team/overview
+  --organization-team-overview-border-radius: var(--border-radius);
+  --organization-team-overview-border-color: var(--border-color-1);
+  --organization-team-overview-background: var(--common-white);
+  --organization-team-overview-hover-background: var(--hover-light-background);
+
+  // variables for organization-team/details/active-action
+  --organization-team-details-active-action-footer-shadow: var(--box-shadow-4);
+
+  // variables for organization-team/details/team-info
+  --organization-team-details-team-info-summary-shadow: var(--box-shadow-3);
+
+  // variables for organization-team/invitation-list
+  --organization-team-invitation-list-loading-container-border-radius: var(
+    --border-radius
+  );
+  --organization-team-invitation-list-loading-container-border-color: var(
+    --border-color-1
+  );
+
+  // variables for organization-team/member-list
+  --organization-team-member-list-loading-container-border-radius: var(
+    --border-radius
+  );
+  --organization-team-member-list-loading-container-border-color: var(
+    --border-color-1
+  );
+
+  // variables for organization-team/project-list
+  --organization-team-project-list-loading-container-border-radius: var(
+    --border-radius
+  );
+  --organization-team-project-list-loading-container-border-color: var(
+    --border-color-1
+  );
+
+  // variables for organization-mfa
+  --organization-mfa-border-radius: var(--border-radius);
+  --organization-mfa-alert-error-border-color: var(--error-main);
+  --organization-mfa-alert-error-background: var(--error-light);
+  --organization-mfa-alert-warn-border-color: var(--warn-dark);
+  --organization-mfa-alert-warn-text-color: var(--warn-dark);
+  --organization-mfa-alert-warn-background: var(--warn-light);
+
+  // variables for sso-settings/oidc
+  --sso-settings-oidc-border-radius: var(--border-radius);
+  --sso-settings-oidc-border-color: var(--border-color-1);
+
+  // variables for sso-settings/saml
+  --sso-settings-saml-border-radius: var(--border-radius);
+  --sso-settings-saml-border-color: var(--border-color-1);
+  --sso-settings-saml-dropzone-active-shadow-color: var(--neutral-grey-200);
+  --sso-settings-saml-file-upload-btn-color: var(--primary-main);
+  --sso-settings-saml-textarea-color: var(--text-secondary);
+  --sso-settings-saml-textarea-border-color: var(--border-color-1);
+  --sso-settings-saml-textarea-border-radius: var(--border-radius);
+
+  // variables for sso-settings/sso-toggle
+  --sso-settings-sso-toggle-border-radius: var(--border-radius);
+  --sso-settings-sso-toggle-border-color: var(--border-color-1);
+
+  // variables for sso-settings/steps-display
+  --sso-settings-steps-display-common-white: var(--common-white);
+  --sso-settings-steps-display-grey: var(--neutral-grey-300);
+  --sso-settings-steps-display-black: var(--text-primary);
+
+  // variables for organization-archive
+  --organization-archive-border-color: var(--border-color-1);
+  --organization-archive-border-radius: var(--border-radius);
+
+  // variables for organization-archive/list
+  --organization-archive-list-expired-background: var(--neutral-grey-50);
+  --organization-archive-list-bordered-container-border-radius: var(
+    --border-radius
+  );
+  --organization-archive-list-bordered-container-border-color: var(
+    --border-color-1
+  );
+
+  // variables for organization/integrations/integrated-ui
+  --organization-integrations-integrated-ui-border-radius: var(--border-radius);
+  --organization-integrations-integrated-ui-border-color: var(--border-color-1);
+
+  // variables for organization/integrations/card
+  --organization-integrations-card-border-radius: var(--border-radius);
+  --organization-integrations-card-border-color: var(--border-color-1);
+  --organization-integrations-card-text-color: var(--text-primary);
+
+  // variables for organization/integrations/github
+  --organization-integrations-github-border-radius: var(--border-radius);
+  --organization-integrations-github-border-color: var(--border-color-1);
+  --organization-integrations-github-box-shadow: var(--box-shadow-4);
+  --organization-integrations-github-background-main: var(--background-main);
+
+  // variables for organization/integrations/jira
+  --organization-integrations-jira-border-radius: var(--border-radius);
+  --organization-integrations-jira-border-color: var(--border-color-1);
+  --organization-integrations-jira-box-shadow: var(--box-shadow-4);
+  --organization-integrations-jira-background-main: var(--background-main);
+
+  // variables for organization/integrations/serviceNow
+  --organization-integrations-serviceNow-border-radius: var(--border-radius);
+  --organization-integrations-serviceNow-border-color: var(--border-color-1);
+  --organization-integrations-serviceNow-box-shadow: var(--box-shadow-4);
+  --organization-integrations-serviceNow-background-main: var(
+    --background-main
+  );
+
+  // variables for organization/integrations/splunk
+  --organization-integrations-splunk-border-radius: var(--border-radius);
+  --organization-integrations-splunk-border-color: var(--border-color-1);
+  --organization-integrations-splunk-box-shadow: var(--box-shadow-4);
+  --organization-integrations-splunk-background-main: var(--background-main);
+  --organization-integrations-splunk-background-neutral: var(
+    --neutral-grey-100
+  );
+
+  // variables for organization/integrations/slack
+  --organization-integrations-slack-border-color: var(--border-color-1);
+  --organization-integrations-slack-border-radius: var(--border-radius);
+  --organization-integrations-slack-box-shadow: var(--box-shadow-4);
+  --organization-integrations-slack-background-main: var(--background-main);
+
+  // variables for organization-name-header
+  --organization-name-header-background-color: var(--background-main);
+  --organization-name-header-border-color: var(--border-color-1);
+  --organization-name-header-border-radius: var(--border-radius);
+  --organization-name-color-primary-light: var(--primary-light);
+  --organization-name-color-text-disabled: var(--text-disabled);
+  --organization-name-add-btn-disabled-background: var(--neutral-white-100);
+
+  // variables for organization-details
+  --organization-details-color-primary: var(--primary-main);
+  --organization-details-color-primary-light: var(--primary-light);
+  --organization-details-color-text-primary: var(--text-primary);
+  --organization-details-color-text-secondary: var(--text-secondary);
+  --organization-details-border-color: var(--border-color-1);
+  --organization-details-border-radius: var(--border-radius);
+  --organization-details-neutral-background: var(--neutral-grey-200);
+  --organization-details-font-weight-regular: var(--font-weight-regular);
+  --organization-details-font-weight-bold: var(--font-weight-bold);
+
+  //variables for notifications
+  --notification-bell-icon-dot-background-color: var(--primary-main);
+  --notification-bell-icon-dot-border-color: var(--neutral-grey-700);
+  --notification-bell-icon-color: var(--background-main);
+
+  --notification-unread-count-color-primary: var(--primary-main);
+  --notification-unread-count-background-color: var(--primary-main-10);
+  --notification-unread-text-primary-color: var(--text-primary);
+  --notification-divider-border-color: var(--common-black);
+  --notification-message-hover-background-color: var(--neutral-grey-50);
+  --notification-message-read-unread-dot-background-color: var(
+    --secondary-main
+  );
+  --notification-message-read-unread-ring-border-color: var(
+    --notification-message-read-unread-dot-background-color
+  );
+  --notification-message-time-color: var(--neutral-grey-400);
+  --notification-message-color-text-primary: var(--text-primary);
+  --notification-dropdown-border-color: var(--neutral-grey-100);
+  --notification-dropdown-arrow-border-color: var(--neutral-grey-200);
+
+  //variables for notifications-dropdown
+  --notifications-dropdown-background-color: var(--background-main);
+  --notifications-dropdown-border-color: var(--border-color-1);
+  --notifications-dropdown-box-shadow: var(--box-shadow-9);
+
+  //variables for app-logo
+  --app-logo-border-radius: var(--border-radius);
+  --app-logo-border-color: var(--neutral-grey-100);
+
+  // variables for file/report-drawer/va-reports
+  --file-report-dr-va-reports-border-radius: var(--border-radius);
+  --file-report-dr-va-reports-border-color: var(--border-color-1);
+  --file-report-dr-va-reports-gen-progress-indicator-bg: var(
+    --background-light
+  );
+
+  // variables for file/report-drawer/sbom-reports
+  --file-report-dr-sbom-reports-border-color: var(--neutral-grey-200);
+  --file-report-dr-sbom-reports-border-radius: var(--border-radius);
+
+  // variables for file/report-drawer/privacy-reports
+  --file-report-dr-privacy-reports-border-color: var(--border-color-1);
+  --file-report-dr-privacy-reports-border-radius: var(--border-radius);
+
+  // variables for sbom/app-list
+  --sbom-app-list-background-color: var(--common-white);
+
+  // variables for sbom/app-list/header
+  --sbom-app-list-header-background-color: var(--common-white);
+  --sbom-app-list-header-border-color: var(--neutral-white-100);
+  --sbom-app-list-header-border-radius: var(--border-radius);
+  --sbom-app-list-header-filter-border-color: var(--neutral-grey-200);
+  --sbom-app-list-header-filter-hover-border-color: var(--neutral-grey-400);
+  --sbom-app-list-header-filter-option-hover-background: var(
+    --hover-light-background
+  );
+  --sbom-app-list-header-clear-filter-color: var(--neutral-grey-600);
+  --sbom-app-list-header-clear-filter-hover-color: var(--primary-main);
+
+  // variables for sbom/app-platform
+  --sbom-app-platform-border-radius: var(--border-radius);
+  --sbom-app-platform-border-color: var(--neutral-grey-100);
+  --sbom-app-platform-color-ios: var(--ios);
+  --sbom-app-platform-color-android: var(--android);
+
+  // variables for sbom/scan-report-drawer
+  --sbom-scan-report-dr-border-radius: var(--border-radius);
+  --sbom-scan-report-dr-border-color: var(--border-color-1);
+
+  // variables for sbom/scan-report-drawer/app-details
+  --sbom-scan-report-dr-app-details-box-shadow: var(--box-shadow-3);
+
+  // variables for sbom/empty-loading-view
+  --sbom-empty-loading-view-border-radius: var(--border-radius);
+  --sbom-empty-loading-view-border-color: var(--border-color-1);
+  --sbom-empty-loading-view-background-color: var(--common-white);
+
+  // variables for sbom/scan-details
+  --sbom-scan-details-link-border-radius: var(--border-radius);
+  --sbom-scan-details-border-color: var(--border-color-1);
+  --sbom-scan-details-active-background-color: var(
+    --side-menu-active-background-light
+  );
+  --sbom-scan-details-background-color: var(--common-white);
+
+  // variables for sbom/scan-details/component-list
+  --sbom-scan-details-component-list-background-color: var(--common-white);
+
+  // variables for sbom/scan-details/component-list/type-header
+  --sbom-scanDetails-componentList-typeHeader-background-color: var(
+    --background-main
+  );
+  --sbom-scanDetails-componentList-typeHeader-box-shadow: var(--box-shadow-7);
+  --sbom-scanDetails-componentList-typeHeader-border-radius: var(
+    --box-shadow-7
+  );
+  --sbom-scanDetails-componentList-typeHeader-filter-option-hover-background-color: var(
+    --neutral-grey-200
+  );
+  --sbom-scanDetails-componentList-typeHeader-filter-option-clear-filter-background-color: var(
+    --neutral-grey-200
+  );
+  --sbom-scanDetails-componentList-typeHeader-filter-header-background-color: var(
+    --neutral-grey-100
+  );
+
+  // variables for sbom/scan-details/component-list/type-header
+  --sbom-scanDetails-componentList-dependencyTypeHeader-background-color: var(
+    --background-main
+  );
+  --sbom-scanDetails-componentList-dependencyTypeHeader-box-shadow: var(
+    --box-shadow-7
+  );
+  --sbom-scanDetails-componentList-dependencyTypeHeader-border-radius: var(
+    --box-shadow-7
+  );
+  --sbom-scanDetails-componentList-dependencyTypeHeader-filter-option-hover-background-color: var(
+    --neutral-grey-200
+  );
+  --sbom-scanDetails-componentList-dependencyTypeHeader-filter-option-clear-filter-background-color: var(
+    --neutral-grey-200
+  );
+  --sbom-scanDetails-componentList-dependencyTypeHeader-filter-header-background-color: var(
+    --neutral-grey-100
+  );
+
+  // variables for sbom/scan-details/overview
+  --sbom-scan-details-overview-background-color: var(--common-white);
+  --sbom-scan-details-overview-border-radius: var(--border-radius);
+  --sbom-scan-details-overview-border-color: var(--border-color-1);
+  --sbom-scan-details-overview-new-feature-background-color: var(
+    --new-feature-ai-bg-color
+  );
+  --sbom-scan-details-overview-new-feature-text-color: var(
+    --new-feature-ai-color
+  );
+
+  // variables for sbom/scan-details/skeleton-loader
+  --sbom-scan-details-skeleton-loader-summary-background-color: var(
+    --common-white
+  );
+  --sbom-scan-details-skeleton-loader-summary-border-radius: var(
+    --border-radius
+  );
+  --sbom-scan-details-skeleton-loader-summary-border-color: var(
+    --border-color-1
+  );
+
+  // variables for sbom/component-details/vulnerabilities
+  --sbom-component-details-vulnerabilities-list-header-background-color: var(
+    --ak-table-header-background-neutral
+  );
+  --sbom-component-details-vulnerabilities-list-header-border-color-dark: var(
+    --ak-table-border-dark
+  );
+  --sbom-component-details-vulnerabilities-list-border-color-light: var(
+    --ak-table-border-light
+  );
+  --sbom-component-details-vulnerabilities-list-background-color: var(
+    --common-white
+  );
+
+  // variables for sbom/component-details/vulnerabilities/detail-wrapper
+  --sbom-component-details-vulnerabilities-detail-wrapper-background-color-main: var(
+    --background-main
+  );
+  --sbom-component-details-vulnerabilities-detail-wrapper-background-color-light: var(
+    --background-light
+  );
+  --sbom-component-details-vulnerabilities-detail-wrapper-border-color: var(
+    --border-color-1
+  );
+  --sbom-component-details-vulnerabilities-detail-wrapper-border-radius: var(
+    --border-radius
+  );
+
+  // variables for sbom/component-details/vulnerabilities/severity
+  --sbom-component-details-vulnerabilities-severity-critical: var(
+    --severity-critical
+  );
+  --sbom-component-details-vulnerabilities-severity-high: var(--severity-high);
+  --sbom-component-details-vulnerabilities-severity-medium: var(
+    --severity-medium
+  );
+  --sbom-component-details-vulnerabilities-severity-low: var(--severity-low);
+  --sbom-component-details-vulnerabilities-severity-info: var(--severity-info);
+  --sbom-component-details-vulnerabilities-severity-none: var(--severity-none);
+  --sbom-component-details-vulnerabilities-severity-unknown: var(
+    --severity-unknown
+  );
+  --sbom-component-details-vulnerabilities-severity-chip-text-color: var(
+    --common-white
+  );
+
+  // variables for sbom/component-details/skeleton-loader
+  --sbom-component-details-skeleton-loader-summary-border-radius: var(
+    --border-radius
+  );
+  --sbom-component-details-skeleton-loader-summary-border-color: var(
+    --border-color-1
+  );
+
+  // variables for sbom/summary-header
+  --sbom-summary-header-background-color: var(--common-white);
+  --sbom-summary-header-border-radius: var(--border-radius);
+  --sbom-summary-header-border-color: var(--border-color-1);
+
+  // variables for sbom/component-details
+  --sbom-component-details-border-radius: var(--border-radius);
+  --sbom-component-details-border-color: var(--border-color-1);
+  --sbom-component-details-background-color: var(--common-white);
+
+  // variables for sbom/component-details/overview
+  --sbom-component-details-overview-border-color: var(--border-color-1);
+  --sbom-component-details-overview-border-radius: var(--border-radius);
+  --sbom-component-details-overview-background-color: var(--neutral-grey-100);
+  --sbom-component-details-overview-section-background-color: var(
+    --common-white
+  );
+
+  //variables for sbom/scan-details/component-tree
+  --sbom-scan-details-component-tree-border-color: var(--border-color-1);
+  --sbom-scan-details-component-tree-border-radius: var(--border-radius);
+  --sbom-scan-details-component-tree-background-color: var(--background-main);
+  --sbom-scan-details-component-tree-header-background-color: var(
+    --neutral-grey-100
+  );
+  --sbom-scan-details-component-tree-highlighted-background-color: var(
+    --common-black
+  );
+  --sbom-scan-details-component-tree-highlighted-text-color: var(
+    --common-white
+  );
+
+  // variables for analysis-risk/tag
+  // variables for analysis-risk/text
+  --analysis-risk-font-family: var(--font-family);
+  --analysis-risk-border-radius: var(--border-radius);
+  --analysis-risk-text-color: var(--common-white);
+  --analysis-risk-color-critical: var(--severity-critical);
+  --analysis-risk-color-high: var(--severity-high);
+  --analysis-risk-color-medium: var(--severity-medium);
+  --analysis-risk-color-low: var(--severity-low);
+  --analysis-risk-color-passed: var(--severity-passed);
+  --analysis-risk-color-none: var(--severity-none);
+  --analysis-risk-color-waiting: var(--neutral-grey-500);
+
+  // analysis-risk/override-edit-drawer/content
+  --analysis-risk-override-edit-drawer-content-border-color: var(
+    --border-color-1
+  );
+  --analysis-risk-override-edit-drawer-content-border-radius: var(
+    --border-radius
+  );
+
+  // analysis-risk/override-edit-drawer/divider
+  --analysis-risk-override-edit-drawer-divider-color: var(--border-color-1);
+  --analysis-risk-override-edit-drawer-divider-label-background-color: var(
+    --neutral-grey-100
+  );
+
+  // analysis-risk/override-edit-drawer/override-details
+  --analysis-risk-override-edit-drawer-override-details-border-color: var(
+    --border-color-1
+  );
+  --analysis-risk-override-edit-drawer-override-details-border-radius: var(
+    --border-radius
+  );
+
+  // analysis-risk/override-edit-drawer/override-form
+  --analysis-risk-override-edit-drawer-override-form-textarea-border-color: var(
+    --border-color-1
+  );
+  --analysis-risk-override-edit-drawer-override-form-textarea-color: var(
+    --text-primary
+  );
+  --analysis-risk-override-edit-drawer-override-form-error-color: var(
+    --error-main
+  );
+  --analysis-risk-override-edit-drawer-override-form-border-radius: var(
+    --border-radius
+  );
+  --analysis-risk-override-edit-drawer-override-form-severity-container-border-color: var(
+    --border-color-2
+  );
+
+  // variables for file-details
+  --file-details-background-color: var(--background-light);
+
+  // variables for file-details/severity-level
+  --file-details-severity-level-border-color: var(--border-color-1);
+
+  // variables for file-details/api-scan
+  --file-details-api-scan-background-color: var(--background-light);
+  --file-details-api-scan-footer-background-color: var(--background-main);
+  --file-details-api-scan-footer-border-color: var(--border-color-1);
+  --file-details-api-scan-footer-border-radius: var(--border-radius);
+  --file-details-api-scan-footer-box-shadow: var(--box-shadow-3);
+
+  // variables for file-details/api-scan/captured-apis
+  --file-details-api-scan-captured-apis-border-radius: var(--border-radius);
+  --file-details-api-scan-captured-apis-card-box-shadow: var(--box-shadow-3);
+  --file-details-api-scan-captured-apis-card-background: var(--background-main);
+  --file-details-api-scan-captured-apis-select-all-background: var(
+    --neutral-grey-100
+  );
+  --file-details-api-scan-captured-apis-container-background: var(
+    --background-main
+  );
+
+  // variables for file-details/api-scan/progress-status
+  --file-details-api-scan-progress-status-border-radius: var(--border-radius);
+  --file-details-api-scan-progress-status-card-box-shadow: var(--box-shadow-3);
+  --file-details-api-scan-progress-status-card-background: var(
+    --background-main
+  );
+  --file-details-api-scan-progress-status-indicator-background: var(
+    --success-main
+  );
+  --file-details-api-scan-progress-status-text-primary: var(--text-primary);
+  --file-details-api-scan-progress-status-font-weight-medium: var(
+    --font-weight-medium
+  );
+
+  // variables for file-details/api-scan/results
+  --file-details-api-scan-results-tabs-container-background: var(
+    --background-light
+  );
+  --file-details-api-scan-results-container-background: var(--background-main);
+
+  // variables for file-details/api-scan/captured-apis/footer
+  --file-details-api-scan-captured-apis-footer-background-main: var(
+    --background-main
+  );
+  --file-details-api-scan-captured-apis-footer-box-shadow: var(--box-shadow-4);
+  --file-details-api-scan-captured-apis-footer-border-radius: var(
+    --border-radius
+  );
+  --file-details-api-scan-captured-apis-footer-border-color: var(
+    --border-color-1
+  );
+  --file-details-api-scan-captured-apis-footer-alert-background-color: var(
+    --error-light
+  );
+  --file-details-api-scan-captured-apis-footer-alert-text-color: var(
+    --error-main
+  );
+  --file-details-api-scan-captured-apis-footer-alert-border-color: var(
+    --error-main
+  );
+
+  // variables for file-details/api-scan/captured-apis/api-domain-filters/after-options
+  --file-details-captured-apis-domain-filters-unselect-all-button-background-color: var(
+    --neutral-grey-100
+  );
+
+  --file-details-captured-apis-domain-filters-after-options-border-color: var(
+    --neutral-grey-300
+  );
+
+  // variables for file-details/api-scan/captured-apis/api-domain-filters/filter-selected-item
+  --file-details-api-scan-captured-apis-domain-filters-selected-options-background: var(
+    --neutral-grey-900
+  );
+
+  --file-details-api-scan-captured-apis-domain-filters-selected-options-color: var(
+    --common-white
+  );
+
+  // variables for file-details/api-scan/captured-apis/api-domain-filters
+  --file-details-api-scan-captured-apis-domain-filters-select-option-background: var(
+    --common-white
+  );
+
+  --file-details-api-scan-captured-apis-domain-filters-select-option-hover-background: var(
+    --hover-light-background
+  );
+
+  // variables for file-details/insights-wrapper
+  --file-details-insights-wrapper-border-color: var(--border-color-1);
+  --file-details-insights-wrapper-background-color: var(--background-main);
+
+  // variables for file-details/skeleton-loader
+  --file-details-skeleton-loader-border-color: var(--border-color-1);
+  --file-details-skeleton-loader-background-color: var(--background-main);
+
+  // variables for file-details/key-insights
+  --file-details-key-insights-border-color: var(--border-color-1);
+  --file-details-key-insights-border-radius: var(--border-radius);
+  --file-details-key-insights-link-btn-background-color: var(--primary-main);
+  --file-details-key-insights-link-btn-contrast-text-color: var(
+    --primary-contrast-text
+  );
+  --file-details-key-insights-link-btn-hover-color: var(--primary-dark);
+
+  // variables for file-details/summary
+  --file-details-summary-background-color: var(--background-main);
+  --file-details-summary-border-color: var(--border-color-1);
+  --file-details-summary-store-logo-container-background-color: var(
+    --common-white
+  );
+  --file-details-summary-store-logo-container-border-color: var(
+    --neutral-grey-200
+  );
+  --file-details-summary-header-box-shadow: var(--box-shadow-3);
+
+  // variables for file-details/summary/app-platform
+  --file-details-summary-app-platform-color-ios: var(--ios);
+  --file-details-summary-app-platform-color-android: var(--android);
+
+  // variables for file-details/scan-actions
+  --file-details-scan-actions-border-color: var(--neutral-grey-200);
+  --file-details-scan-actions-background-color: var(--common-white);
+
+  // variables for file-details/scan-actions/api-scan
+  --file-details-scan-actions-api-scan-border-radius: var(--border-radius);
+  --file-details-scan-actions-api-scan-alert-background-color: var(
+    --error-light
+  );
+  --file-details-scan-actions-api-scan-alert-text-color: var(--error-main);
+  --file-details-scan-actions-api-scan-alert-border-color: var(--error-main);
+  --file-details-scan-actions-api-scan-border-color: var(--neutral-grey-200);
+  --file-details-scan-actions-api-scan-loader-color: var(--success-main);
+  --file-details-scan-actions-api-scan-loader-track-color: var(--success-light);
+
+  // variables for file-details/scan-actions/static-scan
+  --file-details-scan-actions-static-scan-border-radius: var(--border-radius);
+  --file-details-scan-actions-static-scan-border-color: var(--neutral-grey-200);
+  --file-details-scan-actions-static-scan-loader-color: var(--success-main);
+  --file-details-scan-actions-static-scan-loader-track-color: var(
+    --success-light
+  );
+
+  // variables for file-details/vulnerability-analysis/header
+  --file-details-vulnerability-analysis-header-border-color: var(
+    --border-color-1
+  );
+
+  // variables for file-details/manual-scan
+  --file-details-manual-scan-background-color: var(--background-light);
+  --file-details-manual-scan-footer-background-color: var(--background-main);
+  --file-details-manual-scan-footer-border-color: var(--border-color-1);
+  --file-details-manual-scan-footer-border-radius: var(--border-radius);
+  --file-details-manual-scan-footer-box-shadow: var(--box-shadow-3);
+
+  // variables for file-details/manual-scan/progress-status
+  --file-details-manual-scan-progress-status-border-radius: var(
+    --border-radius
+  );
+  --file-details-manual-scan-progress-status-card-box-shadow: var(
+    --box-shadow-3
+  );
+  --file-details-manual-scan-progress-status-card-background: var(
+    --background-main
+  );
+  --file-details-manual-scan-progress-status-text-primary: var(--text-primary);
+  --file-details-manual-scan-progress-status-font-weight-medium: var(
+    --font-weight-medium
+  );
+
+  // variables for file-details/manual-scan/request-access
+  --file-details-manual-scan-request-access-border-radius: var(--border-radius);
+  --file-details-manual-scan-request-access-card-box-shadow: var(
+    --box-shadow-3
+  );
+  --file-details-manual-scan-request-access-card-background: var(
+    --background-main
+  );
+
+  // variables for file-details/manual-scan/request-form
+  --file-details-manual-scan-request-form-border-radius: var(--border-radius);
+  --file-details-manual-scan-request-form-border-color: var(--border-color-1);
+  --file-details-manual-scan-request-form-background-color: var(
+    --background-main
+  );
+
+  // variables for file-details/manual-scan/request-form/additional-comments
+  --file-details-manual-scan-request-form-additional-comments-textarea-border-color: var(
+    --border-color-1
+  );
+  --file-details-manual-scan-request-form-additional-comments-textarea-color: var(
+    --text-primary
+  );
+  --file-details-manual-scan-request-form-additional-comments-textarea-border-radius: var(
+    --border-radius
+  );
+
+  // variables for file-details/manual-scan/results
+  --file-details-manual-scan-results-tab-container-background: var(
+    --background-light
+  );
+  --file-details-manual-scan-results-background-main: var(--background-main);
+
+  // variables for file-details/vulnerability-analysis/header
+  --file-details-vulnerability-analysis-header-border-color: var(
+    --border-color-1
+  );
+  --file-details-vulnerability-analysis-header-background-color: var(
+    --background-main
+  );
+
+  // variables for file-details/vulnerability-analysis/table
+  --file-details-vulnerability-analysis-table-border-color: var(
+    --border-color-1
+  );
+  --file-details-vulnerability-analysis-table-background-color: var(
+    --background-main
+  );
+
+  // variables for file-details/vulnerability-analysis-details
+  --file-details-vulnerability-analysis-details-background-main: var(
+    --background-main
+  );
+  --file-details-vulnerability-analysis-details-marked-passed-background-color: var(
+    --neutral-grey-100
+  );
+  --file-details-vulnerability-analysis-details-background-light: var(
+    --background-light
+  );
+  --file-details-vulnerability-analysis-details-header-box-shadow: var(
+    --box-shadow-5
+  );
+  --file-details-vulnerability-analysis-details-zIndex: var(--zIndex-appbar);
+  --file-details-vulnerability-analysis-details-code-background-color: var(
+    --neutral-grey-100
+  );
+  --file-details-vulnerability-analysis-details-code-text-color: var(
+    --text-primary
+  );
+  --file-details-vulnerability-analysis-details-marked-passed-code-background-color: var(
+    --neutral-grey-50
+  );
+  --file-details-vulnerability-analysis-details-color-primary: var(
+    --primary-main
+  );
+  --file-details-vulnerability-analysis-details-border-radius: var(
+    --border-radius
+  );
+  --file-details-vulnerability-analysis-details-divider-color: var(
+    --divider-dark
+  );
+  --file-details-vulnerability-analysis-details-border-color: var(
+    --border-color-1
+  );
+  --file-details-vulnerability-analysis-details-border-color-2: var(
+    --border-color-2
+  );
+
+  // variables for file-details/vulnerability-analysis-details/findings/vulnerable-api
+  --file-details-vulnerability-analysis-details-findings-vulnerable-api-color-primary: var(
+    --primary-main
+  );
+  --file-details-vulnerability-analysis-details-findings-vulnerable-api-border-radius: var(
+    --border-radius
+  );
+  --file-details-vulnerability-analysis-details-findings-vulnerable-api-code-background-color: var(
+    --neutral-grey-100
+  );
+  --file-details-vulnerability-analysis-details-findings-vulnerable-api-marked-passed-code-background-color: var(
+    --neutral-grey-50
+  );
+  --file-details-vulnerability-analysis-details-findings-vulnerable-api-border-color: var(
+    --border-color-1
+  );
+
+  // variables for file-details/vulnerability-analysis-details/findings/custom-vulnerabilities
+  --file-details-vulnerability-analysis-details-findings-custom-vulnerabilities-background-main: var(
+    --background-main
+  );
+  --file-details-vulnerability-analysis-details-findings-custom-vulnerabilities-color-primary: var(
+    --primary-main
+  );
+  --file-details-vulnerability-analysis-details-findings-custom-vulnerabilities-border-radius: var(
+    --border-radius
+  );
+  --file-details-vulnerability-analysis-details-findings-custom-vulnerabilities-code-background-color: var(
+    --neutral-grey-100
+  );
+  --file-details-vulnerability-analysis-details-findings-custom-vulnerabilities-divider-color: var(
+    --divider-dark
+  );
+  --file-details-vulnerability-analysis-details-findings-custom-vulnerabilities-code-background-color: var(
+    --neutral-grey-100
+  );
+  --file-details-vulnerability-analysis-details-findings-custom-vulnerabilities-code-text-color: var(
+    --text-primary
+  );
+  --file-details-vulnerability-analysis-details-findings-custom-vulnerabilities-marked-passed-code-background-color: var(
+    --neutral-grey-50
+  );
+  --file-details-vulnerability-analysis-details-findings-custom-vulnerabilities-marked-passed-background-color: var(
+    --neutral-grey-100
+  );
+  --file-details-vulnerability-analysis-details-findings-custom-vulnerabilities-border-color: var(
+    --border-color-1
+  );
+
+  // variables for file-details/vulnerability-analysis-details/findings/code-box
+  --file-details-vulnerability-analysis-details-findings-code-box-divider-color: var(
+    --divider-dark
+  );
+  --file-details-vulnerability-analysis-details-findings-code-box-background-main: var(
+    --background-main
+  );
+  --file-details-vulnerability-analysis-details-findings-code-box-code-background-color: var(
+    --neutral-grey-100
+  );
+  --file-details-vulnerability-analysis-details-findings-code-box-border-radius: var(
+    --border-radius
+  );
+  --file-details-vulnerability-analysis-details-findings-code-box-color-primary: var(
+    --primary-main
+  );
+  --file-details-vulnerability-analysis-details-findings-code-box-header-background-color: var(
+    --neutral-grey-200
+  );
+  --file-details-vulnerability-analysis-details-findings-code-box-marked-passed-code-background-color: var(
+    --neutral-grey-50
+  );
+  --file-details-vulnerability-analysis-details-findings-code-box-border-color: var(
+    --border-color-1
+  );
+
+  // variables for file-details/vulnerability-analysis-details/edit-analysis-button
+  --file-details-vulnerability-analysis-details-edit-analysis-button-divider-color: var(
+    --neutral-grey-300
+  );
+
+  // variables for file-details/vulnerability-analysis-details/edit-analysis-button/reset-confirm
+  --file-details-vulnerability-analysis-details-edit-analysis-reset-confirm-background-main: var(
+    --background-main
+  );
+  --file-details-vulnerability-analysis-details-edit-analysis-reset-confirm-border-radius: var(
+    --border-radius
+  );
+  --file-details-vulnerability-analysis-details-edit-analysis-reset-confirm-action-box-shadow: var(
+    --box-shadow-4
+  );
+  --file-details-vulnerability-analysis-details-edit-analysis-reset-confirm-note-background-color: var(
+    --neutral-grey-100
+  );
+  --file-details-vulnerability-analysis-details-header-background-color: var(
+    --neutral-grey-200
+  );
+  --file-details-vulnerability-analysis-details-pagination-button-background-color: var(
+    --common-white
+  );
+
+  // variables for file-details/proxy-settings
+  --file-details-proxy-settings-neutral-color: var(--neutral-grey-300);
+
+  // variables for vnc-viewer
+  --vnc-viewer-modal-zIndex: var(--zIndex-drawer);
+  --vnc-viewer-modal-backdrop-overlay-background: var(
+    --backdrop-overlay-background
+  );
+  --vnc-viewer-modal-background: var(--background-main);
+  --vnc-viewer-modal-text-color: var(--text-primary);
+  --vnc-viewer-note-border-radius: var(--border-radius);
+  --vnc-viewer-note-background: var(--secondary-main);
+  --vnc-viewer-note-text-color: var(--common-white);
+  --vnc-viewer-info-border-color: var(--neutral-grey-300);
+  --vnc-viewer-info-background: var(--neutral-grey-100);
+
+  // variables for file-list
+  --file-list-selected-file-chip-color: var(--text-primary);
+  --file-list-selected-file-chip-background: var(--primary-main-10);
+
+  // variables for file-compare/index
+  --file-compare-tabs-background-color: var(--common-white);
+
+  // variables for file-compare/loader
+  --file-compare-loader-border-color: var(--neutral-white-100);
+  --file-compare-loader-border-radius: var(--border-radius);
+
+  // variables for file-compare/empty
+  --file-compare-empty-background-light: var(--background-light);
+
+  // variables for file-compare/table
+  --file-compare-table-background-light: var(--background-light);
+
+  // variables for file-compare/analysis-details
+  --file-compare-analysis-details-border-color: var(--border-color-1);
+  --file-compare-analysis-details-marked-passed-bg-color: var(
+    --neutral-grey-100
+  );
+  --file-compare-analysis-details-marked-passed-vuln-finding-bg-color: var(
+    --neutral-grey-50
+  );
+  --file-compare-analysis-details-findings-code-background-color: var(
+    --neutral-grey-100
+  );
+  --file-compare-analysis-details-findings-border-radius: var(--border-radius);
+  --file-compare-analysis-details-findings-color-primary: var(--primary-main);
+
+  // variables for file-compare/header
+  --file-compare-header-background-light: var(--background-light);
+  --file-compare-header-white-background-color: var(--common-white);
+  --file-compare-header-divider-background-color: var(--border-color-2);
+  --file-compare-header-dark-border-color: var(--neutral-grey-300);
+  --file-compare-header-files-overview-border-color: var(--neutral-grey-200);
+  --file-compare-header-file-icon-border-color: var(--neutral-grey-100);
+  --file-compare-header-file-icon-border-radius: var(--border-radius);
+  --file-compare-header-info-box-shadow: var(--box-shadow-6);
+
+  // variables for file-compare/invalid-compare
+  --file-compare-invalid-compare-border-color: var(--neutral-grey-300);
+
+  // variables for file-compare/skeleton-loader
+  --file-compare-skeleton-loader-background-color: var(--common-white);
+  --file-compare-skeleton-loader-border-color: var(--neutral-grey-300);
+  --file-compare-skeleton-loader-box-shadow: var(--box-shadow-6);
+
+  // variables for file-compare/vulnerability-details
+  --file-compare-vulnerability-details-white-background: var(--common-white);
+  --file-compare-vulnerability-details-border-color: var(--neutral-grey-200);
+  --file-compare-vulnerability-details-header-wrapper-background-color: var(
+    --common-white
+  );
+
+  // variables for file-compare/compare-list/skeleton-loader
+  --file-compare-list-skeleton-loader-border-color: var(--border-color-1);
+  --file-compare-list-skeleton-loader-background-color: var(--background-main);
+  --file-compare-list-skeleton-loader-breadcrumbs-seperator-color: var(
+    --neutral-grey-500
+  );
+
+  // variables for user-login
+  --user-login-footer-background-color: var(--neutral-grey-100);
+
+  // variables for user-login/via-username-password
+  --user-login-via-username-password-link-color: var(--neutral-grey-700);
+  --user-login-via-username-password-contact-support-color: var(
+    --secondary-main
+  );
+
+  // variables for user-login/perform-mfa
+  --user-login-via-username-password-link-color: var(--neutral-grey-700);
+  --user-login-perform-mfa-contact-support-color: var(--secondary-main);
+
+  // variables for user-login/recover-password
+  --user-login-recover-password-footer-background-color: var(
+    --neutral-grey-100
+  );
+  --user-login-recover-password-retry-text-color: var(--neutral-grey-700);
+
+  // variables for user-login/reset-password
+  --user-login-reset-password-footer-background-color: var(--neutral-grey-100);
+
+  // variables for user-login/root-container
+  --user-login-root-container-border-color: var(--neutral-grey-200);
+  --user-login-root-container-box-shadow: var(--box-shadow-3);
+  --user-login-root-container-border-radius: var(--border-radius);
+
+  // variables for file-chart
+  --file-chart-severity-level-color-critical: var(--severity-critical);
+  --file-chart-severity-level-color-high: var(--severity-high);
+  --file-chart-severity-level-color-medium: var(--severity-medium);
+  --file-chart-severity-level-color-low: var(--severity-low);
+  --file-chart-severity-level-color-passed: var(--severity-passed);
+  --file-chart-severity-level-color-untested: var(--severity-untested);
+  --file-chart-severity-level-color-none: var(--severity-none);
+  --file-chart-severity-level-color-empty: var(--severity-empty);
+
+  // variables for file-overview
+  --file-overview-border-radius: var(--border-radius);
+  --file-overview-background-white: var(--common-white);
+  --file-overview-background-grey: var(--neutral-grey-100);
+  --file-overview-border-color-light: var(--neutral-grey-100);
+  --file-overview-open-in-new-icon-background-color: var(
+    --hover-light-background
+  );
+  --file-overview-border-color-dark: var(--border-color-1);
+  --file-overview-store-logo-container-background-color: var(
+    --neutral-grey-200
+  );
+
+  // variables for account-settings/security
+  --account-settings-security-mfa-border-color: var(--border-color-1);
+  --account-settings-security-mfa-info-box-bg: var(--neutral-grey-100);
+  --account-settings-security-mfa-alert-warn-border-color: var(--warn-dark);
+  --account-settings-security-mfa-alert-warn-text-color: var(--warn-dark);
+  --account-settings-security-mfa-alert-warn-background: var(--warn-light);
+  --account-settings-security-mfa-alert-success-border-color: var(
+    --success-main
+  );
+  --account-settings-security-mfa-alert-success-text-color: var(--success-main);
+  --account-settings-security-mfa-alert-success-background: var(
+    --success-light
+  );
+  --account-settings-security-mfa-primary-color: var(--primary-main);
+
+  // variables for account-settings/notification-settings
+  --account-settings-notification-settings-group-border-color: var(
+    --border-color-1
+  );
+
+  // variables for account-settings-page-content-wrapper-border-color
+  --account-settings-page-content-wrapper-border-color: var(--border-color-1);
+
+  // variables for account-settings-tabs-border-color
+  --account-settings-tabs-border-color: var(--border-color-1);
+
+  // variables for project-settings/empty-list
+  --project-settings-empty-list-border-radius: var(--border-radius);
+  --project-settings-empty-list-border-color: var(--border-color-1);
+
+  // variables for project-settings/empty-list
+  --project-settings-loading-container-background: var(--background-light);
+  --project-settings-loading-container-border: var(--border-color-1);
+  --project-settings-loading-container-border-radius: var(--border-radius);
+
+  // variables for project-settings/header
+  --project-settings-header-background-color: var(--background-light);
+  --project-settings-header-border-color: var(--border-color-1);
+  --project-settings-header-border-radius: var(--border-radius);
+  --project-settings-header-info-text-color: var(--neutral-grey-500);
+  --project-settings-header-tabs-box-shadow: var(--box-shadow-6);
+  --project-settings-header-project-details-box-shadow: var(--box-shadow-8);
+
+  // variables for project-settings/dast-automation
+  --project-settings-dast-automation-root-border-color: var(--border-color-1);
+  --project-settings-dast-automation-root-background-color: var(
+    --background-main
+  );
+
+  // variables for project-settings/dast-automation/automation-settings
+  --project-settings-dast-automation-automation-settings-border-radius: var(
+    --border-radius
+  );
+  --project-settings-dast-automation-automation-settings-border-color: var(
+    --border-color-1
+  );
+
+  // variables for project-settings/dast-automation/automation-settings/scenario
+  --project-settings-dast-automation-automation-settings-scenario-textfield-bg: var(
+    --neutral-grey-100
+  );
+  --project-settings-dast-automation-automation-settings-scenario-form-footer-box-shadow: var(
+    --box-shadow-4
+  );
+
+  // variables for project-settings/dast-automation/automation-settings/device-preferences
+  --project-settings-dast-automation-automation-settings-device-preferences-border-color: var(
+    --border-color-1
+  );
+
+  // variables for project-settings/general-settings
+  --project-settings-general-settings-root-border-color: var(--border-color-1);
+  --project-settings-general-settings-root-background-color: var(
+    --background-main
+  );
+
+  // variables for project-settings/integrations
+  --project-settings-integrations-root-border-color: var(--border-color-1);
+  --project-settings-integrations-root-background-color: var(--background-main);
+
+  // variables for project-settings/integrations/github-project
+  --project-settings-integrations-github-project-background-color: var(
+    --neutral-grey-200
+  );
+
+  // variables for project-settings/integrations/config-drawer
+  --project-settings-integrations-config-drawer-background-main: var(
+    --background-main
+  );
+
+  --project-settings-integrations-config-drawer-box-shadow: var(--box-shadow-4);
+
+  --project-settings-integrations-config-drawer-border-color: var(
+    --border-color-1
+  );
+
+  --project-settings-integrations-config-drawer-footer-border-radius: var(
+    --border-radius
+  );
+
+  // variables for project-settings/analysis-settings
+  --project-settings-analysis-settings-background-color: var(--background-main);
+  --project-settings-analysis-settings-border-color: var(--neutral-grey-200);
+  --project-settings-analysis-settings-border-radius: var(--border-radius);
+
+  // variables for project-settings/analysis-settings/vulnerability-list
+  --project-settings-analysis-settings-vulnerability-list-border-color: var(
+    --neutral-grey-200
+  );
+  --project-settings-analysis-settings-vulnerability-list-background-color: var(
+    --neutral-grey-100
+  );
+  --project-settings-analysis-settings-vulnerability-list-border-color-warning: var(
+    --error-main
+  );
+  --project-settings-analysis-settings-vulnerability-list-background-color-warning: var(
+    --primary-light
+  );
+  --project-settings-analysis-settings-vulnerability-list-border-radius: var(
+    --border-radius
+  );
+
+  // variables for project-settings/analysis-settings/vulnerability-list/reset-confirm
+  --project-settings-analysis-settings-vulnerability-list-reset-confirm-background-main: var(
+    --background-main
+  );
+  --project-settings-analysis-settings-vulnerability-list-reset-confirm-action-box-shadow: var(
+    --box-shadow-4
+  );
+
+  // variables for project-settings/view-scenario
+  --project-settings-view-scenario-background-white: var(--background-main);
+  --project-settings-view-scenario-background-dark: var(--neutral-grey-100);
+  --project-settings-view-scenario-modal-footer-box-shadow: var(--box-shadow-4);
+  --project-settings-view-scenario-border-light: var(--border-color-1);
+  --project-settings-view-scenario-header-border-color: var(--border-color-1);
+  --project-settings-view-scenario-header-border-radius: var(--border-radius);
+  --project-settings-view-scenario-header-scenario-details-box-shadow: var(
+    --box-shadow-8
+  );
+
+  // variables for project-settings/view-scenario/parameter-item
+  --project-settings-view-scenario-parameter-item-border-color: var(
+    --neutral-grey-100
+  );
+  --project-settings-view-scenario-parameter-text-field-background: var(
+    --neutral-grey-100
+  );
+
+  // variables for tri-state-checkbox
+  --tri-state-checkbox-overridden-bg: var(--success-light);
+  --tri-state-checkbox-border-color: var(--success-main);
+  --tri-state-reset-icon-bg: var(--common-white);
+
+  // variables for organization-analytics
+  --organization-analytics-background-color: var(--background-main);
+  --organization-analytics-border-radius: var(--border-radius);
+  --organization-analytics-box-shadow: var(--box-shadow-2);
+  --organization-analytics-border-color: var(--border-color-1);
+  --organization-analytics-background-color-grey: var(--neutral-grey-200);
+
+  // variables for organization-analytics/app-scan-chart
+  --organization-analytics-app-scan-chart-border-color: var(--border-color-1);
+  --organization-analytics-app-scan-chart-border-radius: var(--border-radius);
+
+  // variables for organization-analytics/recent-issues
+  --organization-analytics-recent-issues-background-color: var(
+    --neutral-grey-200
+  );
+  --organization-analytics-recent-issues-box-shadow: var(--box-shadow-2);
+  --organization-analytics-recent-issues-border-radius: var(--border-radius);
+  --organization-analytics-recent-issues-border-color: var(--border-color-1);
+
+  // variables for app-upload/status/details
+  --app-upload-status-details-footer-background-color: var(--background-light);
+  --app-upload-status-details-footer-border-color: var(--neutral-grey-100);
+  --app-upload-status-details-image-border-color: var(--neutral-grey-100);
+  --app-upload-status-details-loader-background-color: var(--success-main);
+
+  // variables for app-upload/status
+  --app-upload-status-arrow-border-color: var(--neutral-grey-200);
+  --app-upload-status-dropdown-background-color: var(--common-white);
+  --app-upload-status-dropdown-border-color: var(--neutral-white-100);
+  --app-upload-status-dropdown-box-shadow: var(--box-shadow-9);
+  --app-upload-status-green-loader-color: var(--success-main);
+  --app-upload-status-green-loader-track-color: var(--success-light);
+
+  // variables for file-overview
+  --file-overview-store-logo-container-background-color: var(--common-white);
+  --file-overview-store-logo-container-border-color: var(--neutral-grey-200);
+
+  // variables for project-list
+  --project-list-background-color: var(--common-white);
+  --project-list-background-color-hover: var(--neutral-white-100);
+  --project-list-border-color: var(--neutral-white-100);
+  --project-list-border-radius: var(--border-radius);
+
+  // variables for project-list/app-platform
+  --project-list-app-platform-color-ios: var(--ios);
+  --project-list-app-platform-color-android: var(--android);
+
+  // variables for project-list/column-manager
+  --project-list-column-manager-sections-columns-drag-border-color: var(--primary-main);
+  --project-list-column-manager-sections-columns-bg-color: var(--background-main);
+  --project-list-column-manager-sections-columns-box-shadow: var(--box-shadow-4);
+
+  // variables for project-list/tags
+  --project-list-tags-background-grey: var(--neutral-grey-100);
+
+  // variables for project-list/loader
+  --project-list-loader-border-color: var(--neutral-white-100);
+  --project-list-loader-border-radius: var(--border-radius);
+  --project-list-loader-background-color: var(--common-white);
+
+  // variables for project-list/header
+  --project-list-header-background-color: var(--common-white);
+  --project-list-header-border-color: var(--neutral-white-100);
+  --project-list-header-border-radius: var(--border-radius);
+  --project-list-header-filter-border-color: var(--neutral-grey-200);
+  --project-list-header-filter-hover-border-color: var(--neutral-grey-400);
+  --project-list-header-filter-option-hover-background: var(
+    --hover-light-background
+  );
+  --project-list-header-clear-filter-color: var(--neutral-grey-600);
+  --project-list-header-clear-filter-hover-color: var(--primary-main);
+  --project-list-header-button-border-color: var(--border-color-1);
+  --project-list-header-active-background-color: var(--side-menu-active-background-light);
+
+  // variables for project-list/severity-level
+  --project-list-severity-level-tag-border-color: var(--border-color-1);
+  --project-list-severity-level-color-critical: var(--severity-critical);
+  --project-list-severity-level-color-high: var(--severity-high);
+  --project-list-severity-level-color-medium: var(--severity-medium);
+  --project-list-severity-level-color-low: var(--severity-low);
+  --project-list-severity-level-color-passed: var(--severity-passed);
+  --project-list-severity-level-color-untested: var(--severity-untested);
+  --project-list-severity-level-color-none: var(--severity-none);
+
+  // variables for project-list/column-manager
+  --project-list-column-manager-filter-sections-columns-box-shadow: var(--box-shadow-4);
+  --project-list-column-manager-filter-sections-columns-drag-border-color: var(--primary-main);
+  --project-list-column-manager-filter-sections-columns-bg-color: var(--background-main);
+
+  // variables for project-overview
+  --project-overview-card-hover-shadow: var(--box-shadow-7);
+
+  // variables for oidc-authorize
+  --oidc-authorize-card-border-color: var(--border-color-1);
+  --oidc-authorize-container-background-color: var(--background-light);
+  --oidc-authorize-border-color: var(--border-color-1);
+  --oidc-authorize-card-background-color: var(--background-main);
+  --oidc-authorize-card-box-shadow: var(--box-shadow-7);
+  --oidc-authorize-icon-color-success: var(--success-main);
+
+  // variables for user-registration/form
+  --user-registration-form-background-color: var(--background-light);
+  --user-registration-form-container-background-color: var(--background-main);
+  --user-registration-form-container-border-color: var(--border-color-1);
+  --user-registration-form-container-border-radius: var(--border-radius);
+  --user-registration-form-disabled-background-color: var(--neutral-grey-100);
+  --user-registration-form-border-color: var(--border-color-1);
+  --user-registration-form-text-primary: var(--text-primary);
+  --user-registration-form-primary-color: var(--primary-main);
+  --user-registration-form-container-box-shadow: var(--box-shadow-2);
+  --user-registration-form-login-link-background-color: var(--neutral-grey-100);
+  --user-registration-form-login-link-box-shadow: var(--box-shadow-10);
+
+  // variables for user-registration/register-confirm
+  --user-registration-register-confirm-background-color: var(
+    --background-light
+  );
+  --user-registration-register-confirm-logo-container-border-color: var(
+    --border-color-1
+  );
+  --user-registration-register-confirm-container-box-shadow: var(
+    --box-shadow-2
+  );
+  --user-registration-register-confirm-container-background-color: var(
+    --background-main
+  );
+  --user-registration-register-confirm-container-border-radius: var(
+    --border-radius
+  );
+  --user-registration-register-confirm-login-link-background-color: var(
+    --neutral-grey-100
+  );
+  --user-registration-register-confirm-login-link-box-shadow: var(
+    --box-shadow-10
+  );
+
+  // variables for register-oidc-error
+  --register-oidc-error-container-background-color: var(--background-light);
+  --register-oidc-error-card-background-color: var(--background-main);
+  --register-oidc-error-card-border-radius: var(--border-radius);
+  --register-oidc-error-border-color: var(--border-color-1);
+  --register-oidc-error-error-card-box-shadow: var(--box-shadow-2);
+
+  // variables for appknox-wrapper
+  --appknox-wrapper-text-primary: var(--primary-main);
+  --appknox-wrapper-border-color: var(--border-color-1);
+
+  // variables for marketplace
+  --marketplace-sub-header-description-text-color: var(--text-secondary);
+
+  // variables for marketplace/plugin-card
+  --marketplace-plugin-card-text-color: var(--text-secondary);
+  --marketplace-plugin-card-border-color: var(--border-color-1);
+  --marketplace-plugin-card-primary-color: var(--primary-main);
+
+  // variables for marketplace/integration-card
+  --marketplace-integration-card-text-color: var(--text-secondary);
+  --marketplace-integration-card-border-color: var(--border-color-1);
+
+  // variables for storeknox/inventory/app-list/table/monitoring-status-header
+  --storeknox-inventory-app-list-table-monitoring-status-header-background-color: var(
+    --background-main
+  );
+
+  --storeknox-inventory-app-list-table-monitoring-status-header-box-shadow: var(
+    --box-shadow-7
+  );
+
+  --storeknox-inventory-app-list-table-monitoring-status-header-border-radius: var(
+    --border-radius
+  );
+
+  --storeknox-inventory-app-list-table-monitoring-status-header-filter-option-hover-background-color: var(
+    --neutral-grey-200
+  );
+
+  --storeknox-inventory-app-list-table-monitoring-status-header-filter-option-clear-filter-background-color: var(
+    --neutral-grey-200
+  );
+
+  --storeknox-inventory-app-list-table-monitoring-status-header-filter-header-background-color: var(
+    --neutral-grey-100
+  );
+
+  // variables for storeknox/inventory/pending-review/table/availability-header
+  --storeknox-inventory-pending-review-table-availability-header-info-icon-color: var(
+    --neutral-grey-400
+  );
+  --storeknox-inventory-pending-review-table-availability-filter-background-color: var(
+    --background-main
+  );
+  --storeknox-inventory-pending-review-table-availability-filter-box-shadow: var(
+    --box-shadow-7
+  );
+  --storeknox-inventory-pending-review-table-availability-filter-option-hover-background-color: var(
+    --neutral-grey-200
+  );
+  --storeknox-inventory-pending-review-table-availability-filter-option-clear-filter-background-color: var(
+    --neutral-grey-200
+  );
+  --storeknox-inventory-pending-review-table-availability-filter-border-radius: var(
+    --box-shadow-7
+  );
+
+  // variables for storeknox/inventory/pending-review/table/found-by
+  --storeknox-inventory-pending-review-table-requested-by-info-icon-color: var(
+    --neutral-grey-300
+  );
+  --storeknox-inventory-pending-review-table-requested-by-header-text-color: var(
+    --text-secondary
+  );
+
+  // variables for storeknox/inventory/pending-review/table/found-by-header
+  --storeknox-inventory-pending-review-table-requested-by-filter-background-color: var(
+    --background-main
+  );
+  --storeknox-inventory-pending-review-table-requested-by-filter-box-shadow: var(
+    --box-shadow-7
+  );
+  --storeknox-inventory-pending-review-table-requested-by-filter-option-hover-background-color: var(
+    --neutral-grey-200
+  );
+  --storeknox-inventory-pending-review-table-requested-by-filter-option-clear-filter-background-color: var(
+    --neutral-grey-200
+  );
+  --storeknox-inventory-pending-review-table-requested-by-filter-border-radius: var(
+    --border-radius
+  );
+
+  // variables for storeknox/inventory/pending-review/table/status
+  --storeknox-inventory-pending-review-table-status-info-icon-color: var(
+    --neutral-grey-300
+  );
+
+  // variables for storeknox/inventory/pending-review
+  --storeknox-inventory-pending-review-header-border-color: var(
+    --neutral-grey-200
+  );
+  --storeknox-inventory-pending-review-header-bg-color: var(--common-white);
+  --storeknox-inventory-pending-review-approve-button-color: var(
+    --success-main
+  );
+  --storeknox-inventory-pending-review-reject-button-color: var(--error-main);
+
+  // variables for storeknox/discover/requested-apps/table
+  --storeknox-discover-requested-apps-table-row-color: var(--common-white);
+  --storeknox-discover-requested-apps-table-row-border-color: var(
+    --neutral-grey-100
+  );
+
+  // variables for storeknox/discover/requested-apps/status
+  --storeknox-discover-requested-apps-status-info-icon-color: var(
+    --neutral-grey-300
+  );
+
+  // variables for storeknox/discover/results/table
+  --storeknox-discover-results-table-row-color: var(--common-white);
+  --storeknox-discover-results-table-row-border-color: var(--neutral-grey-100);
+
+  // variables for storeknox/discover/results/table/action
+  --storeknox-discover-results-table-action-requested-icon-color: var(
+    --warn-dark
+  );
+  --storeknox-discover-results-table-action-requested-icon-bgcolor: var(
+    --warn-light
+  );
+  --storeknox-discover-results-table-action-already-exist-icon-color: var(
+    --success-main
+  );
+  --storeknox-discover-results-table-action-already-exist-icon-bgcolor: var(
+    --success-light
+  );
+  --storeknox-discover-results-table-action-border-radius: var(--border-radius);
+
+  // variables for storeknox/discover/results
+  --storeknox-discover-results-bg-color: var(--common-white);
+  --storeknox-discover-results-border-color: var(--border-color-1);
+  --storeknox-discover-results-icon-bg-color: var(--warn-light);
+  --storeknox-discover-results-icon-color: var(--warn-dark);
+
+  // variables for storeknox/discover/results/empty
+  --storeknox-discover-results-empty-bg-color: var(--common-white);
+
+  // variables for storeknox/discover/results/table
+  --storeknox-discover-results-table-header-border-color: var(
+    --neutral-grey-200
+  );
+  --storeknox-discover-results-table-header-bg-color: var(--common-white);
+
+  // variables for storeknox/discover
+  --storeknox-discover-header-border-color: var(--neutral-grey-200);
+  --storeknox-discover-header-background-color: var(--common-white);
+  --storeknox-discover-header-description-color: var(--neutral-grey-500);
+
+  // variables for storeknox/inventory/pending-review/table
+  --storeknox-inventory-pending-review-table-row-color: var(--common-white);
+  --storeknox-inventory-pending-review-table-row-border-color: var(
+    --neutral-grey-100
+  );
+
+  // variables for storeknox/review-logs
+  --storeknox-review-logs-header-background-color: var(--common-white);
+  --storeknox-review-logs-header-border-color: var(--neutral-grey-200);
+  --storeknox-review-logs-header-description-color: var(--neutral-grey-500);
+
+  // variables for storeknox/table-columns/store-header
+  --storeknox-table-columns-store-header-filter-background-color: var(
+    --background-main
+  );
+  --storeknox-table-columns-store-header-filter-box-shadow: var(--box-shadow-7);
+  --storeknox-table-columns-store-header-filter-option-hover-bgcolor: var(
+    --neutral-grey-200
+  );
+  --storeknox-table-columns-store-header-filter-option-clear-filter-bgcolor: var(
+    --neutral-grey-200
+  );
+  --storeknox-table-columns-store-header-filter-border-radius: var(
+    --border-radius
+  );
+
+  // variables for file-details/file-not-found
+  --file-details-file-not-found-background-color: var(--background-main);
+
+  // variables for storeknox/inventory
+  --storeknox-inventory-header-background-color: var(--background-main);
+  --storeknox-inventory-header-border-color: var(--neutral-grey-200);
+
+  // variables for storeknox/inventory/app-list
+  --storeknox-inventory-app-list-table-bg-color: var(--background-main);
+
+  // variables for storeknox/inventory/app-list/table
+  --storeknox-inventory-app-list-table-empty-color: var(--common-white);
+  --storeknox-inventory-app-list-table-empty-border-color: var(
+    --neutral-grey-100
+  );
+
+  // variables for storeknox/inventory-details/app-details/actions-list/button
+  --storeknox-inventory-details-app-details-action-list-last-monitored-bg-color: var(
+    --neutral-grey-100
+  );
+
+  // variables for storeknox/inventory-details/app-details/actions-list/button
+  --storeknox-inventory-details-app-details-action-button-box-shadow: var(
+    --box-shadow-11
+  );
+
+  --storeknox-inventory-details-app-details-action-button-no-action-color: var(
+    --success-main
+  );
+
+  --storeknox-inventory-details-app-details-action-button-no-action-bg: var(
+    --storeknox-no-action-button-bg-color
+  );
+
+  --storeknox-inventory-details-app-details-action-button-needs-action-color: var(
+    --primary-main
+  );
+
+  --storeknox-inventory-details-app-details-action-button-needs-action-bg: var(
+    --storeknox-needs-action-button-bg-color
+  );
+
+  --storeknox-inventory-details-app-details-action-button-feature-in-progress-color: var(
+    --new-feature-ai-color
+  );
+
+  --storeknox-inventory-details-app-details-action-button-feature-in-progress-bg-color: var(
+    --new-feature-ai-bg-color
+  );
+
+  --storeknox-inventory-details-app-details-action-button-archived-color: var(
+    --common-black
+  );
+
+  --storeknox-inventory-details-app-details-action-button-archived-border-color: var(
+    --common-black
+  );
+
+  --storeknox-inventory-details-app-details-action-button-archived-bg-color: var(
+    --neutral-grey-200
+  );
+
+  // variables for storeknox/inventory-details/app-details/va-results
+  --storeknox-inventory-details-app-details-va-results-risk-color-critical: var(
+    --severity-critical
+  );
+
+  --storeknox-inventory-details-app-details-va-results-risk-color-high: var(
+    --severity-high
+  );
+
+  --storeknox-inventory-details-app-details-va-results-risk-color-medium: var(
+    --severity-medium
+  );
+
+  --storeknox-inventory-details-app-details-va-results-risk-color-low: var(
+    --severity-low
+  );
+
+  --storeknox-inventory-details-app-details-va-results-risk-color-passed: var(
+    --severity-passed
+  );
+
+  --storeknox-inventory-details-app-details-va-results-risk-color-untested: var(
+    --severity-untested
+  );
+
+  // variables for storeknox/inventory-details/feature-unavailable
+  --storeknox-inventory-details-feature-unavailable-bg-color: var(
+    --background-main
+  );
+
+  // variables for storeknox/inventory-details/header
+  --storeknox-inventory-details-header-app-logo-border-color: var(
+    --neutral-grey-100
+  );
+
+  --storeknox-inventory-details-header-background-color: var(
+    --background-light
+  );
+
+  --storeknox-inventory-details-header-license-icon-container-background-color: var(
+    --neutral-grey-100
+  );
+
+  // variables for storeknox/inventory-details/section-header
+  --storeknox-inventory-details-section-header-root-border-color: var(
+    --border-color-1
+  );
+
+  --storeknox-inventory-details-section-header-default-bg-color: var(
+    --neutral-grey-100
+  );
+
+  --storeknox-inventory-details-section-header-white-bg-color: var(
+    --background-main
+  );
+
+  // variables for storeknox/inventory-details/section-info
+  --storeknox-inventory-details-section-info-root-bg-color: var(
+    --background-main
+  );
+
+  --storeknox-inventory-details-section-info-root-border-color: var(
+    --border-color-1
+  );
+
+  // variables for storeknox/inventory-details/unscanned-version/header
+  --storeknox-inventory-details-unscanned-version-header-tabs-bg-color: var(
+    --background-light
+  );
+
+  --storeknox-inventory-details-unscanned-version-header-summary-status-font-weight: var(
+    --font-weight-medium
+  );
+
+  --storeknox-inventory-details-unscanned-version-status-chip-font-weight: var(
+    --font-weight-medium
+  );
+
+  // variables for storeknox/inventory-details/unscanned-version/table
+  --storeknox-inventory-details-unscanned-version-table-root-bg-color: var(
+    --background-main
+  );
+  --storeknox-inventory-details-unscanned-version-table-beta-tag-bg: var(
+    --storeknox-beta-tag-bg
+  );
+  --storeknox-inventory-details-unscanned-version-table-beta-tag-color: var(
+    --storeknox-beta-tag-color
+  );
+
+  // variables for storeknox/inventory-details/unscanned-version/table-loading
+  --storeknox-inventory-details-unscanned-version-table-loading-border-radius: var(
+    --border-radius
+  );
+
+  // variables for storeknox/product-icon
+  --storeknox-product-icon-border-color: var(--border-color-1);
+  --storeknox-product-icon-info-tray-bg-color: var(--background-main);
+  --storeknox-product-icon-product-info-tray-box-shadow: var(--box-shadow-1);
+  --storeknox-product-icon-store-link-container-bg-color: var(
+    --neutral-grey-100
+  );
+
+  // variables for storeknox/upselling-ui
+  --storeknox-upselling-ui-border-color: var(--border-color-1);
+
+  --storeknox-upselling-ui-background-color: var(
+    --storeknox-upselling-ui-bg-color
+  );
+
+  // variables for storeknox/inventory/archived-apps
+  --storeknox-inventory-archived-apps-table-bg-color: var(--background-main);
+
+  // variables for storeknox/inventory/archived-apps/table
+  --storeknox-inventory-archived-apps-table-empty-color: var(--common-white);
+  --storeknox-inventory-archived-apps-table-empty-border-color: var(
+    --neutral-grey-100
+  );
+
+  // variables for storeknox/inventory/archived-apps/header
+  --storeknox-inventory-archived-apps-header-background-color: var(
+    --background-main
+  );
+
+  --storeknox-inventory-archived-apps-header-border-color: var(
+    --neutral-grey-200
+  );
+
+  // variables for storeknox/inventory-details/archived-banner
+  --storeknox-inventory-details-archived-banner-bg-color: var(
+    --background-main
+  );
+  --storeknox-inventory-details-archived-banner-icon-color: var(--common-white);
+  --storeknox-inventory-details-archived-banner-icon-bg-color: var(
+    --error-main
+  );
+
+  // variables for storeknox/inventory-details/header/archive-drawer
+  --storeknox-inventory-details-header-archive-drawer-border-color: var(
+    --border-color-1
+  );
+
+  --storeknox-inventory-details-header-archive-drawer-border-radius: var(
+    --border-radius
+  );
+
+  --storeknox-inventory-details-header-archive-drawer-background-main: var(
+    --background-main
+  );
+
+  --storeknox-inventory-details-header-archive-drawer-action-box-shadow: var(
+    --box-shadow-4
+  );
+
+  // variables for storeknox/inventory-details/header/toggle-monitoring-drawer
+  --storeknox-inventory-details-header-toggle-monitoring-drawer-border-color: var(
+    --border-color-1
+  );
+
+  --storeknox-inventory-details-header-toggle-monitoring-drawer-border-radius: var(
+    --border-radius
+  );
+
+  --storeknox-inventory-details-header-toggle-monitoring-drawer-background-main: var(
+    --background-main
+  );
+
+  --storeknox-inventory-details-header-toggle-monitoring-drawer-action-box-shadow: var(
+    --box-shadow-4
+  );
+
+  // variables for page-wrapper
+  --page-wrapper-background-color: var(--background-light);
+
+  // variables for dynamicscan-automation-upselling-feature
+  --dynamicscan-automation-upselling-feature-box-shadow: var(--box-shadow-7);
+  --dynamicscan-automation-upselling-feature-text-color: var(
+    --neutral-grey-800
+  );
+
+  // variables for app-platform-icon
+  --app-platform-icon-color-ios: var(--ios);
+  --app-platform-icon-color-android: var(--android);
+
+  // variables for organization/service-account/add-project/list
+  --organization-service-account-add-project-list-border-radius: var(
+    --border-radius
+  );
+  --organization-service-account-add-project-list-border-color: var(
+    --border-color-1
+  );
+  --organization-service-account-add-project-list-footer-background-main: var(
+    --background-main
+  );
+  --organization-service-account-add-project-list-footer-box-shadow: var(
+    --box-shadow-4
+  );
+
+  // variables for organization/service-account/confirm-drawer
+  --organization-service-account-confirm-drawer-action-box-shadow: var(
+    --box-shadow-4
+  );
+  --organization-service-account-confirm-drawer-background-main: var(
+    --background-main
+  );
+  --organization-service-account-confirm-drawer-border-color: var(
+    --border-color-1
+  );
+  --organization-service-account-confirm-drawer-border-radius: var(
+    --border-radius
+  );
+
+  // variables for organization/service-account/create
+  --organization-service-account-create-background-color: var(
+    --background-light
+  );
+  --organization-service-account-create-header-background-main: var(
+    --background-main
+  );
+  --organization-service-account-create-border-color: var(--border-color-1);
+  --organization-service-account-create-border-radius: var(--border-radius);
+
+  // variables for organization/service-account/details
+  --organization-service-account-details-background-color: var(
+    --background-light
+  );
+  --organization-service-account-details-header-background-main: var(
+    --background-main
+  );
+  --organization-service-account-details-border-color: var(--border-color-1);
+  --organization-service-account-details-border-radius: var(--border-radius);
+
+  // variables for organization/service-account/list
+  --organization-service-account-list-background-main: var(--background-main);
+  --organization-service-account-list-border-color: var(--border-color-1);
+  --organization-service-account-list-divider-color: var(--neutral-grey-300);
+
+  // variables for organization/service-account/list/action
+  --organization-service-account-list-action-divider-color: var(
+    --neutral-grey-300
+  );
+
+  // variables for organization/service-account/section/access-token
+  --organization-service-account-section-access-token-background-color: var(
+    --neutral-grey-100
+  );
+  --organization-service-account-section-access-token-border-color: var(
+    --border-color-1
+  );
+
+  // variables for organization/service-account/section/account-overview
+  --organization-service-account-section-account-overview-border-color: var(
+    --border-color-2
+  );
+  --organization-service-account-section-account-overview-textarea-color: var(
+    --text-primary
+  );
+  --organization-service-account-section-account-overview-border-radius: var(
+    --border-radius
+  );
+  --organization-service-account-section-account-overview-error-main: var(
+    --error-main
+  );
+
+  // variables for organization/service-account/section/account-overview/audit-info
+  --organization-service-account-section-account-overview-audit-info-icon-color: var(
+    --neutral-grey-300
+  );
+
+  // variables for organization/service-account/section/card
+  --organization-service-account-section-card-border-color: var(
+    --border-color-1
+  );
+  --organization-service-account-section-card-border-radius: var(
+    --border-radius
+  );
+  --organization-service-account-section-card-header-background-color: var(
+    --neutral-grey-100
+  );
+  --organization-service-account-section-card-header-text-color: var(
+    --text-primary
+  );
+  --organization-service-account-section-card-header-color-primary: var(
+    --primary-main
+  );
+  --organization-service-account-section-card-header-background-color-light: var(
+    --primary-light
+  );
+  --organization-service-account-section-card-header-background-main: var(
+    --background-main
+  );
+  --organization-service-account-section-card-header-box-shadow: var(
+    --box-shadow-4
+  );
+
+  // variables for organization/service-account/section/select-project
+  --organization-service-account-section-select-project-font-weight: var(
+    --font-weight-medium
+  );
+
+  // variables for organization/service-account/section/select-project/list
+  --organization-service-account-section-select-project-list-background-color: var(
+    --background-main
+  );
+  --organization-service-account-section-select-project-list-header-background-color: var(
+    --neutral-grey-100
+  );
+  --organization-service-account-section-select-project-list-border-radius: var(
+    --border-radius
+  );
+  --organization-service-account-section-select-project-list-border-color: var(
+    --border-color-1
+  );
+
+  // variables for organization/service-account/section/select-scope
+  --organization-service-account-section-select-scope-icon-color: var(
+    --neutral-grey-300
+  );
+
+  // variables for organization/settings
+  --organization-settings-container-background-color: var(--background-main);
+
+  // variables for organization/settings/integrations
+  --organization-settings-integrations-background-color: var(--background-main);
+
+  // variables for organization/settings/skeleton-loader
+  --organization-settings-skeleton-loader-background-color: var(
+    --background-main
+  );
+  --organization-settings-skeleton-loader-sso-border-color: var(
+    --border-color-1
+  );
+  --organization-settings-skeleton-loader-sso-border-radius: var(
+    --border-radius
+  );
+
+  // variables for organization/settings-wrapper
+  --organization-settings-wrapper-background-color: var(--background-light);
+
+  // variables for organization/ai-powered-features
+  --organization-ai-powered-features-bg-color: var(--common-white);
+  --organization-ai-powered-features-border-color: var(--border-color-1);
+
+  // variables for public-api-docs/index
+  --public-api-docs-tabs-background-color: var(--common-white);
+
+  // variables for organization-billing/plan
+  --organization-billing-plan-primary-main: var(--primary-main);
+  --organization-billing-plan-common-white: var(--common-white);
+  --organization-billing-plan-success-main: var(--success-main);
+  --organization-billing-plan-card-border-color: var(--border-color-1);
+  --organization-billing-plan-card-border-radius: var(--border-radius);
+  --organization-billing-plan-card-box-shadow: var(--box-shadow-7);
+  --organization-billing-plan-card-text-secondary-color: var(--text-secondary);
+  --organization-billing-plan-plan-quantity-container-border-color: var(
+    --border-color-2
+  );
+
+  // variables for license-detail
+  --license-detail-border-color: var(--border-color-1);
+  --license-detail-background-color: var(--background-main);
+
+  // variables for file-details/dynamic-scan/header
+  --file-details-dynamic-scan-header-background-color: var(--background-light);
+
+  // variables for file-details/dynamic-scan/device-wrapper
+  --file-details-dynamic-scan-device-wrapper-border-color: var(
+    --border-color-1
+  );
+  --file-details-dynamic-scan-device-wrapper-background-main: var(
+    --background-main
+  );
+
+  // variables for file-details/dynamic-scan/automated
+  --file-details-dynamic-scan-automated-border-color: var(--border-color-1);
+  --file-details-dynamic-scan-automated-background-main: var(--background-main);
+  --file-details-dynamic-scan-automated-border-radius: var(--border-radius);
+  --file-details-dynamic-scan-automated-card-box-shadow: var(--box-shadow-3);
+
+  // variables for file-details/dynamic-scan/results
+  --file-details-dynamic-scan-results-border-color: var(--border-color-1);
+  --file-details-dynamic-scan-results-background-color: var(--background-light);
+  --file-details-dynamic-scan-results-background-main: var(--background-main);
+
+  // variables for file-details/dynamic-scan/drawer
+  --file-details-dynamic-scan-drawer-capability-chip-border-color: var(
+    --neutral-grey-200
+  );
+  --file-details-dynamic-scan-drawer-device-list-filter-border-color: var(
+    --neutral-grey-200
+  );
+  --file-details-dynamic-scan-drawer-device-list-filter-hover-border-color: var(
+    --neutral-grey-400
+  );
+  --file-details-dynamic-scan-drawer-proxy-settings-neutral-color: var(
+    --neutral-grey-300
+  );
+  --file-details-dynamic-scan-drawer-border-color: var(--border-color-1);
+  --file-details-dynamic-scan-drawer-background-light: var(--background-light);
+  --file-details-dynamic-scan-drawer-background-main: var(--background-main);
+  --file-details-dynamic-scan-drawer-cta-box-shadow: var(--box-shadow-4);
+
+  // variables for file-details/dynamic-scan/action/expiry
+  --file-details-dynamic-scan-action-expiry-extend-btn-background: var(
+    --neutral-grey-500
+  );
+  --file-details-dynamic-scan-action-expiry-extend-btn-icon-color: var(
+    --common-white
+  );
+  --file-details-dynamic-scan-action-expiry-container-background-color: var(
+    --neutral-grey-100
+  );
+
+  // variables for file-details/dynamic-scan/results/header
+  --file-details-dynamic-scan-results-header-background-color: var(
+    --background-main
+  );
+
+  --file-details-dynamic-scan-results-header-border-color: var(
+    --border-color-1
+  );
+
+  // variables for file-details/dynamic-scan/results/scan-coverage
+  --file-details-dynamic-scan-results-scan-coverage-container-border-color: var(
+    --border-color-1
+  );
+
+  // variables for file-details/dynamic-scan/results/coverage-table/status-header
+  --file-details-dynamic-scan-results-coverage-table-status-header-background-color: var(
+    --background-main
+  );
+
+  --file-details-dynamic-scan-results-coverage-table-status-header-box-shadow: var(
+    --box-shadow-7
+  );
+
+  --file-details-dynamic-scan-results-coverage-table-status-header-border-radius: var(
+    --box-shadow-7
+  );
+
+  --file-details-dynamic-scan-results-coverage-table-status-header-filter-option-hover-background-color: var(
+    --neutral-grey-200
+  );
+
+  --file-details-dynamic-scan-results-coverage-table-status-header-filter-option-clear-filter-background-color: var(
+    --neutral-grey-200
+  );
+
+  --file-details-dynamic-scan-results-coverage-table-status-header-filter-header-background-color: var(
+    --neutral-grey-100
+  );
+
+  // variables for file-details/dynamic-scan/results/scan-coverage/status
+  --file-details-dynamic-scan-results-scan-coverage-status-box-shadow: var(
+    --box-shadow-3
+  );
+
+  // variables for file-details/dynamic-scan/results/capis-report-drawer/generate-container
+  --file-details-dynamic-scan-results-capis-reports-drawer-generate-container-border-color: var(
+    --border-color-1
+  );
+  --file-details-dynamic-scan-results-capis-reports-drawer-generate-container-border-radius: var(
+    --border-radius
+  );
+  --file-details-dynamic-scan-results-capis-reports-drawer-report-gen-progress-indicator-bg: var(
+    --background-light
+  );
+
+  // variables for file-details/dynamic-scan/results/apis-captured
+  --file-details-dynamic-scan-results-apis-captured-border-color: var(
+    --border-color-1
+  );
+
+  // variables for page-not-found
+  --page-not-found-container-background-color: var(--background-light);
+  --page-not-found-card-background-color: var(--background-main);
+  --page-not-found-card-border-color: var(--border-color-1);
+  --page-not-found-card-border-radius: var(--border-radius);
+  --page-not-found-card-box-shadow: var(--box-shadow-2);
+  --page-not-found-border-color: var(--border-color-1);
+
+  // variables for file-details/static-scan
+  --file-details-static-scan-border-color: var(--border-color-1);
+  --file-details-static-scan-background-color: var(--background-light);
+  --file-details-static-scan-background-main: var(--background-main);
+  --file-details-static-scan-primary-light: var(--primary-light);
+  --file-details-static-scan-text-primary: var(--text-primary);
+
+  // variables for file-details/scan-actions/scan-overview
+  --file-details-scan-actions-scan-overview-border-color: var(--border-color-1);
+
+  // variables for system-status
+  --system-status-root-container-border-color: var(--neutral-grey-200);
+  --system-status-root-container-box-shadow: var(--box-shadow-3);
+  --system-status-root-container-border-radius: var(--border-radius);
+
+  // variables for home-page
+  --home-page-background-color: var(--background-light);
+  --home-page-button-background-color: var(--background-main);
+
+  // variables for home-page/product-card
+  --home-page-product-card-background-color: var(--common-white);
+  --home-page-product-card-border-radius: var(--border-radius);
+  --home-page-product-card-border-color: var(--border-color-1);
+  --home-page-product-card-beta-tag-bg: var(--storeknox-beta-tag-bg);
+  --home-page-product-card-beta-tag-color: var(--storeknox-beta-tag-color);
+
+  // variables for upselling-module
+  --upselling-module-background-color: var(--background-main);
+  --upselling-module-box-shadow-6: var(--box-shadow-6);
+  --upselling-module-box-shadow-4: var(--box-shadow-4);
+
+  //variables for privacy-module/app-list/header
+  --privacy-module-applist-header-background-color: var(--common-white);
+  --privacy-module-applist-header-border-color: var(--border-color-1);
+
+  //variables for privacy-module/app-list/table/platform
+  --privacy-module-applist-table-platform-android-color: var(--android);
+  --privacy-module-applist-table-platform-ios-color: var(--ios);
+
+  //variables for privacy-module/app-list/table
+  --privacy-module-applist-table-bg-color: var(--background-main);
+
+  //variables for privacy-module/app-list/table/action
+  --privacy-module-applist-table-action-hover-bg-color: var(
+    --hover-light-background
+  );
+
+  //variables for privacy-module/app-details/header
+  --privacy-module-app-details-header-bg-color: var(--background-light);
+  --privacy-module-app-details-header-warning-bg-color: var(--background-main);
+  --privacy-module-app-details-header-warning-border: var(--border-color-1);
+  --privacy-module-app-details-header-warning-icon-bg: var(--error-light);
+  --privacy-module-tabs-neutral-background: var(--neutral-grey-200);
+  --privacy-module-tabs-text-color-secondary: var(--text-secondary);
+  --privacy-module-tabs-beta-tag-bg: var(--storeknox-beta-tag-bg);
+  --privacy-module-tabs-beta-tag-color: var(--storeknox-beta-tag-color);
+
+  //variables for privacy-module/app-details/note
+  --privacy-module-app-details-note-bg-color: var(--common-white);
+  --privacy-module-app-details-note-icon-color: var(--common-white);
+  --privacy-module-app-details-note-warning-color: var(--error-main);
+  --privacy-module-app-details-note-success-color: var(--success-main);
+
+  //variables for privacy-module/app-details/pii
+  --privacy-module-pii-border-color: var(--divider);
+  --privacy-module-pii-bg-color: var(--common-white);
+  --privacy-module-pii-url-bg-color: var(--background-light);
+  --privacy-module-pii-drawer-border-color: var(--neutral-grey-100);
+
+  //variables for privacy-module/app-details/geo-location
+  --privacy-module-geo-location-map-bg-color: var(--common-white);
+  --privacy-module-geo-location-map-border-color: var(--divider);
+  --privacy-module-geo-location-map-border-radius: var(--border-radius);
+  --privacy-module-geo-location-accordion-border-color: var(--border-color-1);
+  --privacy-module-geo-location-text-color: var(--text-primary);
+  --privacy-module-geo-location-text-fw-bold: var(--font-weight-bold);
+  --privacy-module-geo-location-text-fw-medium: var(--font-weight-medium);
+  --privacy-module-geo-location-box-shadow: var(
+    --geolocation-map-area-box-shadow
+  );
+  --privacy-module-geo-location-area-color: var(--geolocation-map-area-color);
+  --privacy-module-geo-location-area-border-color: var(--neutral-grey-800);
+  --privacy-module-geo-location-area-background-color: var(--neutral-grey-100);
+  --privacy-module-geo-location-area-error-color: var(--error-main);
+
+  //variables for privacy-module/app-details/pii/drawer-details
+  --privacy-module-pii-drawer-border-color: var(--divider);
+  --privacy-module-pii-drawer-url-bg-color: var(--background-light);
+
+  //variables for privacy-module/app-details/trackers
+  --privacy-module-trackers-row-bg-color: var(--background-main);
+  --privacy-module-trackers-row-bg-color-hover: var(--neutral-grey-50);
+  --privacy-module-trackers-drawer-border-color: var(--neutral-grey-100);
+  --privacy-module-trackers-tag-color: var(--text-primary);
+
+  //variables for privacy-module/app-details/dangerous-permssion
+  --privacy-module-danger-perms-bg-color: var(--background-main);
+
+  // variables for privacy-module/app-details/header/summary
+  --privacy-module-app-summary-background-color: var(--background-main);
+  --privacy-module-app-summary-border-color: var(--border-color-1);
+  --privacy-module-app-summary-store-logo-container-bg-color: var(
+    --common-white
+  );
+  --privacy-module-app-summary-store-logo-container-border-color: var(
+    --neutral-grey-200
+  );
+  --privacy-module-app-summary-header-box-shadow: var(--box-shadow-3);
+  --privacy-module-app-summary-header-file-id-text: var(--primary-main);
+
+  // variables for privacy-module/app-platform
+  --privacy-module-app-platform-border-radius: var(--border-radius);
+  --privacy-module-app-platform-border-color: var(--neutral-grey-100);
+  --privacy-module-app-platform-color-ios: var(--ios);
+  --privacy-module-app-platform-color-android: var(--android);
+
+  // variables for privacy-module/report-drawer/app-details
+  --privacy-module-report-dr-app-details-box-shadow: var(--box-shadow-3);
+
+  // variables for privacy-module/app-details/header
+  --privacy-module-app-details-header-background: var(--background-main);
+
+  // variables for privacy-module/status
+  --privacy-module-status-background: var(--background-main);
+
+  // variables for privacy-module/unread-mark
+  --privacy-module-unread-mark-background: var(--neutral-grey-200);
+  --privacy-module-unread-mark-highlight-background: var(--success-main);
+
+  // variables for ai-reporting/generate-loader
+  --ai-reporting-generate-loader-background-color: var(--background-main);
+  --ai-reporting-generate-loader-border-radius: var(--border-radius);
+
+  // variables for ai-reporting/preview
+  --ai-reporting-preview-border-radius: var(--border-radius);
+  --ai-reporting-preview-background-color: var(--background-main);
+  --ai-reporting-preview-custom-button-color: var(--text-primary);
+  --ai-reporting-preview-note-border-color: var(--neutral-grey-200);
+  --ai-reporting-preview-note-bg-color: var(--neutral-grey-100);
+
+  // variables for ai-reporting/preview/filter-sections/columns
+  --ai-reporting-preview-filter-sections-columns-header-border-color: var(
+    --neutral-grey-100
+  );
+  --ai-reporting-preview-filter-sections-columns-reorder-icon-color: var(
+    --neutral-grey-300
+  );
+  --ai-reporting-preview-filter-sections-columns-drag-border-color: var(
+    --primary-main
+  );
+  --ai-reporting-preview-filter-sections-columns-bg-color: var(
+    --background-main
+  );
+  --ai-reporting-preview-filter-sections-columns-box-shadow: var(
+    --box-shadow-4
+  );
+
+  // variables for ai-reporting/turn-on-settings
+  --ai-reporting-turn-on-settings-bg-color: var(--common-white);
+  --ai-reporting-turn-on-settings-box-shadow: var(--box-shadow-7);
+  --ai-reporting-turn-on-settings-footer-box-shadow: var(--box-shadow-4);
+
+  // variables for ai-reporting/preview/filter-by-column-drawer
+  --ai-reporting-preview-filter-by-column-drawer-footer-background-color: var(
+    --background-main
+  );
+
+  --ai-reporting-preview-filter-by-column-drawer-footer-box-shadow: var(
+    --box-shadow-4
+  );
+
+  // variables for ai-reporting/preview/advance-filter-drawer
+  --ai-reporting-preview-advance-filter-drawer-background-main: var(
+    --background-main
+  );
+
+  --ai-reporting-preview-advance-filter-drawer-border-color: var(
+    --border-color-1
+  );
+
+  --ai-reporting-preview-advance-filter-drawer-cta-box-shadow: var(
+    --box-shadow-4
+  );
+
+  // variables for ai-reporting/preview/report-download-drawer
+  --ai-reporting-preview-report-download-drawer-background-main: var(
+    --background-main
+  );
+
+  --ai-reporting-preview-report-download-drawer-border-color: var(
+    --border-color-1
+  );
+
+  --ai-reporting-preview-report-download-drawer-cta-box-shadow: var(
+    --box-shadow-4
+  );
+
+  // variables for ai-reporting/preview/filter-sections/additional-filters/date-type
+  --ai-reporting-preview-filter-sections-date-type-date-picker-border-color: var(
+    --border-color-2
+  );
+
+  --ai-reporting-preview-filter-sections-date-type-date-picker-border-radius: var(
+    --border-radius-2
+  );
+
+  --ai-reporting-preview-filter-sections-date-type-date-picker-error-border-color: var(
+    --error-main
+  );
+
+  // variables for ai-reporting/preview/filter-sections/additional-filters/filter-field
+  --ai-reporting-preview-filter-sections-filter-field-border-color: var(
+    --border-color-1
+  );
+
+  --ai-reporting-preview-filter-sections-filter-field-border-radius: var(
+    --border-radius
+  );
+
+  --ai-reporting-preview-filter-sections-filter-field-background-main: var(
+    --background-main
+  );
+
+  // variables for ai-reporting/preview/filter-sections/filter-group
+  --ai-reporting-preview-filter-sections-filter-group-border-color: var(
+    --border-color-1
+  );
+
+  --ai-reporting-preview-filter-sections-filter-group-border-radius: var(
+    --border-radius
+  );
+
+  --ai-reporting-preview-filter-sections-filter-group-background-main: var(
+    --background-main
+  );
+
+  --ai-reporting-preview-filter-sections-filter-group-background-light: var(
+    --background-light
+  );
+
+  --ai-reporting-preview-filter-sections-filter-group-add-new-condition-btn-background-color: var(
+    --ai-reporting-preview-custom-button-bg-color
+  );
+
+  --ai-reporting-preview-filter-sections-filter-group-add-new-condition-btn-border-color: var(
+    --ai-reporting-preview-custom-button-bg-color
+  );
+
+  --ai-reporting-preview-filter-sections-filter-group-add-new-condition-btn-color: var(
+    --primary-main
+  );
+
+  --ai-reporting-preview-filter-sections-filter-group-empty-filter-group-border-color: var(
+    --border-color-1
+  );
+
+  --ai-reporting-preview-filter-sections-filter-group-empty-filter-group-border-radius: var(
+    --border-radius
+  );
+
+  // variables for ai-reporting/preview/filter-sections/filter-group/item
+  --ai-reporting-preview-filter-sections-filter-group-item-background-color: var(
+    --background-light
+  );
+
+  --ai-reporting-preview-filter-sections-filter-group-item-line-border-color: var(
+    --neutral-grey-300
+  );
+
+  --ai-reporting-preview-filter-sections-filter-group-item-base-filter-indicator-background-color: var(
+    --neutral-grey-200
+  );
+
+  // variables for powered-by-ai/chip
+  --powered-by-ai-chip-border-radius: var(--border-radius);
+  --powered-by-ai-chip-color: var(--common-white);
+
+  // variables for powered-by-ai/drawer
+  --powered-by-ai-chip-border-color: var(--border-color-1);
+  --powered-by-ai-chip-footer-box-shadow: var(--box-shadow-4);
+
+  &.theme-light {
+    //variables for appknox-wrapper
+    --appknox-wrapper-text-color: var(--text-primary);
+
+    // variables for top-nav/onboarding-guide
+    --top-nav-onboarding-guide-list-border-color: var(--border-color-1);
+
+    //variables for top-nav
+    --top-nav-background-color: var(--background-main);
+    --top-nav-text-color: var(--text-primary);
+    --top-nav-security-dashboard-btn-color: var(--secondary-main);
+
+    //variables for side-nav
+    --side-nav-inherit-background: var(--background-main);
+    --side-nav-inherit-background-text-color: var(--text-primary);
+    --side-nav-inherit-hover-background: var(--hover-light-background);
+    --side-nav-item-badge-background: var(--neutral-grey-200);
+    --side-nav-item-badge-text-color: var(--text-primary);
+    --side-nav-item-active-background: var(--side-menu-active-background-light);
+    --side-nav-box-shadow: var(--box-shadow-light);
+    --side-nav-border: 1px solid var(--border-color-1);
+
+    //variables for app-upload/via-link
+    --app-upload-via-link-button-color: var(--text-primary);
+
+    //variables for notifications
+    --notification-bell-icon-dot-border-color: var(--background-main);
+    --notification-bell-icon-color: var(--text-primary);
+  }
+
+  &.theme-dark {
+    //variables for appknox-wrapper
+    --appknox-wrapper-text-color: var(--secondary-contrast-text);
+
+    // variables for top-nav/onboarding-guide
+    --top-nav-onboarding-guide-list-border-color: var(--border-color-1);
+
+    //variables for top-nav
+    --top-nav-background-color: var(--secondary-main);
+    --top-nav-text-color: var(--secondary-contrast-text);
+    --top-nav-security-dashboard-btn-color: var(--secondary-contrast-text);
+
+    //variables for side-nav
+    --side-nav-inherit-background: var(--background-dark);
+    --side-nav-inherit-background-text-color: var(--common-white);
+    --side-nav-inherit-hover-background: var(--hover-dark-background);
+    --side-nav-item-badge-background: var(--neutral-grey-900);
+    --side-nav-item-badge-text-color: var(--secondary-contrast-text);
+    --side-nav-item-active-background: var(--side-menu-active-background-dark);
+    --side-nav-box-shadow: var(--box-shadow-dark);
+    --side-nav-border: none;
+
+    // variables for app-upload/via-link
+    --app-upload-via-link-button-color: var(--common-white);
+  }
+}

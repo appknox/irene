@@ -1,0 +1,21 @@
+/**
+ * Main Styles Entry Point
+ * Migrated from Ember app/styles/app.scss
+ */
+
+// Variables and theme
+@use 'theme';
+@use 'component-variables';
+
+// Reset and base
+@use 'reset';
+
+// Global styles
+@use 'global-styles';
+
+// Utilities
+@use 'utils';
+@use 'devices';
+@use 'freshdesk';
+@use 'public-api';
+@use 'marketplace-plugin-list';

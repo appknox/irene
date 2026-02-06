@@ -1,0 +1,160 @@
+//---------- Theme variables--------------//
+// Note: going forward only these variables should be used
+// and any other existing variable should be replaced by these
+:root {
+  --common-black: #000000;
+  --common-white: #ffffff;
+
+  --background-main: #ffffff;
+  --background-dark: #424651;
+  --background-light: #fafafa;
+
+  --primary-main: #ff4d3f;
+  --primary-dark: #e23123;
+  --primary-light: rgba(254, 77, 63, 0.2);
+  --primary-contrast-text: #ffffff;
+
+  --primary-main-10: rgba(254, 77, 63, 0.1);
+
+  --secondary-main: #424651;
+  --secondary-contrast-text: #ffffff;
+
+  --success-main: #2db421;
+  // --success-dark -
+  --success-light: #e9f5ed;
+
+  --error-main: #d72f2f;
+  // --error-dark -
+  --error-light: #ffd1d4;
+
+  --warn-main: #ffd52e;
+  --warn-dark: #a5872d;
+  --warn-light: #fff7d7;
+
+  --info-main: #087edb;
+  --info-dark: #0052cc;
+  --info-light: #deebff;
+
+  --neutral-grey-50: #fcfcfc;
+  --neutral-grey-100: #f5f5f5;
+  --neutral-grey-200: #e9e9e9;
+  --neutral-grey-300: #d9d9d9;
+  --neutral-grey-400: #c4c4c4;
+  --neutral-grey-500: #9d9d9d;
+  --neutral-grey-600: #7b7b7b;
+  --neutral-grey-700: #555555;
+  --neutral-grey-800: #434343;
+  --neutral-grey-900: #262626;
+
+  --text-primary: #171717;
+  --text-secondary: #7b7b7b;
+  --text-disabled: #c4c4c4;
+
+  --divider: #f5f5f5;
+  --divider-dark: #e9e9e9;
+
+  --border-radius: 2px;
+
+  --border-color-1: #e9e9e9;
+  --border-color-2: #c4c4c4;
+
+  --box-shadow-1: 4px 4px 8px 0px rgba(0, 0, 0, 0.1);
+  --box-shadow-2: 4px 4px 10px 0px rgba(0, 0, 0, 0.15);
+  --box-shadow-3: 4px 4px 15px rgba(0, 0, 0, 0.04);
+  --box-shadow-4: 0px -4px 8px 4px rgba(0, 0, 0, 0.03);
+  --box-shadow-5: 3px 4px 6px rgba(216, 216, 216, 0.25);
+  --box-shadow-6: 0px 5px 14px 0px rgba(64, 64, 64, 0.05);
+  --box-shadow-7: 0px 2px 6px 0px rgba(64, 64, 64, 0.15);
+  --box-shadow-8: -5px 0px 9px 0px rgba(64, 64, 64, 0.03);
+  --box-shadow-9: 0 5px 20px 0px rgba(0, 0, 0, 0.1);
+  --box-shadow-10: 5px 0px 10px 0px rgba(0, 0, 0, 0.05);
+  --box-shadow-11: inset 0 0 0 0.5px;
+  --box-shadow-12: 1px 0px 0px 0px #f8f8f8 inset,
+    -1px 0px 0px 0px #f8f8f8 inset, 0px 1px 0px 0px #f8f8f8 inset,
+    -1px -1px 0px 0px #f8f8f8 inset;
+
+  --hover-dark-background: rgba(255, 255, 255, 0.15);
+  --hover-light-background: rgba(0, 0, 0, 0.04);
+
+  --backdrop-overlay-background: rgba(0, 0, 0, 0.42);
+
+  --disabled-background-textfield: #f5f5f5;
+  --disabled-background-button: #c4c4c4;
+
+  --html-font-size: 14px;
+  --font-family: 'Open Sans', sans-serif;
+  --font-weight-light: 300;
+  --font-weight-regular: 400;
+  --font-weight-medium: 600;
+  --font-weight-bold: 700;
+
+  --zIndex-appbar: 1100;
+  --zIndex-drawer: 1200;
+  --zIndex-modal: 1300;
+  --zIndex-snackbar: 1400;
+  --zIndex-tooltip: 1500;
+
+  // special case variable for side-nav
+  --side-menu-active-background-dark: #303339;
+  --side-menu-active-background-light: rgba(254, 77, 63, 0.1);
+
+  // special case variable for app-bar & side-nav
+  --box-shadow-dark: 1px 0px 8px -1px rgba(0, 0, 0, 0.3);
+  --box-shadow-light: 4px 4px 20px rgba(222, 222, 222, 0.25);
+
+  // special case variable for severity
+  --severity-critical: #d72f2f;
+  --severity-high: #f98746;
+  --severity-medium: #fad34a;
+  --severity-low: #46cef9;
+  --severity-info: #2141b4;
+  --severity-passed: #2db421;
+  --severity-none: #a0a0a0;
+  --severity-untested: #a0a0a0;
+  --severity-unknown: #202020;
+  --severity-empty: #d3d3d3;
+
+  // special case variable for android and ios
+  --android: #33a852;
+  --ios: #8d9096;
+
+  // special case variable for project-settings/general-settings/dynamicscan-automation-settings/upselling-feature
+  --upselling-feature-footer-bg-color: #f7f3ff;
+  --upselling-feature-footer-color: #3e0e8c;
+
+  // special case variable for upselling module
+  --upselling-module-gradient: #350b6c;
+  --upselling-module-gradient-light: #6715d2;
+
+  // special case variable for new feature ai
+  --new-feature-ai-color: #3e0e8c;
+  --new-feature-ai-bg-color: #f7f3ff;
+
+  // special case variable for storeknox
+  --storeknox-needs-action-button-bg-color: #fff5f5;
+  --storeknox-no-action-button-bg-color: #f6fff7;
+  --storeknox-beta-tag-bg: #d9e6ff;
+  --storeknox-beta-tag-color: #034bd6;
+  --storeknox-upselling-ui-bg-color: #fe4d3f0d;
+
+  // special case variable for privacy-module/trackers
+  --privacy-module-trackers-tag-bg-color: #edf2ff;
+
+  // special case variable for ai-reporting/preview
+  --ai-reporting-preview-custom-button-bg-color: #fe4d3f1a;
+  --ai-reporting-preview-custom-button-border-color: #fe4d3f;
+
+  // special case variable for powered-by-ai/chip
+  --powered-by-ai-chip-bg-color: #14badc;
+  --powered-by-ai-chip-hover-border-color: #139ab5;
+
+  // special case variable for geolocation map
+  --geolocation-map-area-color: #98ccff;
+  --geolocation-map-area-box-shadow: 0px 1.88px 15.06px 0px
+    rgba(75, 85, 110, 0.2);
+}
+
+// TODO: need to remove this so do not use it
+body {
+  --neutral-white-100: #f1f1f1;
+}
