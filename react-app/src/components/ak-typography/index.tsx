@@ -4,11 +4,8 @@
  * Reference: app/components/ak-typography/
  */
 
-import {
-  type ReactNode,
-  type HTMLAttributes,
-  type ElementType,
-} from 'react';
+import { type ReactNode, type HTMLAttributes, type ElementType } from 'react';
+
 import { cva } from 'class-variance-authority';
 import './index.scss';
 
@@ -153,11 +150,7 @@ export function AkTypography({
   });
 
   return (
-    <Tag
-      data-test-ak-typography
-      className={typographyClassName}
-      {...props}
-    >
+    <Tag data-test-ak-typography className={typographyClassName} {...props}>
       {children}
     </Tag>
   );
