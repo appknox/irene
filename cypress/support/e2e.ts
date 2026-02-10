@@ -1,3 +1,40 @@
+// =======================
+// GLOBAL WS HOOK
+// =======================
+Cypress.on('window:before:load', (win) => {
+  // Buffer all WS messages
+  (win as unknown as { __wsMessages: unknown[] }).__wsMessages = [];
+
+  const OriginalWebSocket = win.WebSocket;
+
+  const WebSocketProxy = function (
+    this: WebSocket,
+    url: string | URL,
+    protocols?: string | string[]
+  ): WebSocket {
+    const ws = protocols
+      ? new OriginalWebSocket(url, protocols)
+      : new OriginalWebSocket(url);
+
+    ws.addEventListener('message', (event: MessageEvent) => {
+      (win as unknown as { __wsMessages: unknown[] }).__wsMessages.push(
+        event.data
+      );
+    });
+
+    return ws;
+  } as unknown as typeof WebSocket;
+
+  Object.setPrototypeOf(WebSocketProxy, OriginalWebSocket);
+  WebSocketProxy.prototype = OriginalWebSocket.prototype;
+
+  win.WebSocket = WebSocketProxy;
+});
+
+// =======================
+// END WS HOOK
+// =======================
+
 // ***********************************************************
 // This example support/e2e.ts is processed and
 // loaded automatically before your test files.

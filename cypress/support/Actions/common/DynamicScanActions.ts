@@ -32,6 +32,7 @@ export const DYNAMIC_SCAN_STOP_BTN_ALIAS = 'stopDynamicScanBtn';
 
 type ProjectResponseModel = MirageFactoryDefProps['project'];
 type FileResponseModel = MirageFactoryDefProps['file'];
+type FileRiskModel = MirageFactoryDefProps['file-risk'];
 
 export default class DynamicScanActions {
   /**
@@ -78,8 +79,13 @@ export default class DynamicScanActions {
    * For doing sanity check of file page
    * @param {FileResponseModel} file file response object
    * @param {AppInformation} appInfo application details object
+   * @param {FileRiskModel} risk risk details object
    */
-  doFilePageSanityCheck(file: FileResponseModel, appInfo: AppInformation) {
+  doFilePageSanityCheck(
+    file: FileResponseModel,
+    appInfo: AppInformation,
+    risk: FileRiskModel
+  ) {
     // check file and app info
     cy.findByAltText(`${file.name} - logo`, DEFAULT_ASSERT_OPTS).should(
       'exist'
@@ -110,11 +116,11 @@ export default class DynamicScanActions {
       DEFAULT_ASSERT_OPTS
     ).within(() => {
       // assert risk counts
-      cy.findAllByText(file.risk_count_high).should('exist');
-      cy.findAllByText(file.risk_count_medium).should('exist');
-      cy.findAllByText(file.risk_count_low).should('exist');
-      cy.findAllByText(file.risk_count_critical).should('exist');
-      cy.findAllByText(file.risk_count_passed).should('exist');
+      cy.findAllByText(risk.risk_count_high).should('exist');
+      cy.findAllByText(risk.risk_count_medium).should('exist');
+      cy.findAllByText(risk.risk_count_low).should('exist');
+      cy.findAllByText(risk.risk_count_critical).should('exist');
+      cy.findAllByText(risk.risk_count_passed).should('exist');
     });
   }
 

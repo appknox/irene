@@ -80,7 +80,7 @@ describe('Service Account', () => {
 
     // Network interceptions
     cy.intercept(API_ROUTES.serviceAccountList.route).as('serviceAccountList');
-    cy.intercept(API_ROUTES.projectList.route).as('orgProjectList');
+    cy.intercept(API_ROUTES.v3ProjectList.route).as('v3ProjectList');
 
     // Intercept the DELETE request for service accounts
     cy.intercept('DELETE', API_ROUTES.serviceAccount.route).as(
@@ -184,7 +184,7 @@ describe('Service Account', () => {
         cy.get('@SAProjectAddButton').should('have.attr', 'disabled');
 
         //wait fot search result to appear
-        cy.wait('@orgProjectList', NETWORK_WAIT_OPTS);
+        cy.wait('@v3ProjectList', NETWORK_WAIT_OPTS);
 
         //search of particular project
         cy.findByPlaceholderText(cyTranslate('searchProject')).type(
@@ -192,7 +192,7 @@ describe('Service Account', () => {
         );
 
         //wait fot search result to appear
-        cy.wait('@orgProjectList', NETWORK_WAIT_OPTS);
+        cy.wait('@v3ProjectList', NETWORK_WAIT_OPTS);
 
         cy.findByTestId('serviceAccountAddProjectList-thead').should('exist');
 

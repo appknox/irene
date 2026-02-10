@@ -3,6 +3,9 @@ import { FactoryDefinition } from 'miragejs/-types';
 import { BASE_FACTORY_DEF } from 'irene/mirage/factories/base';
 import FileFactory, { FILE_FACTORY_DEF } from 'irene/mirage/factories/file';
 import User, { USER_FACTORY_DEF } from 'irene/mirage/factories/user';
+import FileRiskFactory, {
+  FILE_RISK_FACTORY_DEF,
+} from 'irene/mirage/factories/file-risk';
 
 import AnalysisFactory, {
   ANALYSIS_FACTORY_DEF,
@@ -49,17 +52,17 @@ import DeviceFactory, {
 } from 'irene/mirage/factories/device';
 
 // Extract factory method return values from a factory definition
-type FlattenFactoryMethods<T> = {
+export type FlattenFactoryMethods<T> = {
   [K in keyof T]: T[K] extends (n: number) => infer V ? V : T[K];
 };
 
 /**
  * Represents api responses for each model type
  */
-type IncludeBaseFactoryProps<T> = FlattenFactoryMethods<T> &
+export type IncludeBaseFactoryProps<T> = FlattenFactoryMethods<T> &
   FlattenFactoryMethods<typeof BASE_FACTORY_DEF>;
 
-type AnalysisModelFactoryDef = FlattenFactoryMethods<
+export type AnalysisModelFactoryDef = FlattenFactoryMethods<
   typeof ANALYSIS_FACTORY_DEF & {
     id: number;
     vulnerability: number;
@@ -68,6 +71,7 @@ type AnalysisModelFactoryDef = FlattenFactoryMethods<
     overridden_risk: number;
     overridden_risk_comment: string;
     override_criteria: string;
+    file: number;
   }
 >;
 
@@ -78,6 +82,7 @@ export interface MirageFactoryDefProps {
   'sbom-file': FlattenFactoryMethods<typeof SBOM_FILE_FACTORY_DEF>;
   'sbom-project': FlattenFactoryMethods<typeof SBOM_PROJECT_FACTORY_DEF>;
   'available-manual-device': FlattenFactoryMethods<typeof DEVICE_FACTORY_DEF>;
+  'file-risk': FlattenFactoryMethods<typeof FILE_RISK_FACTORY_DEF>;
 
   submission: FlattenFactoryMethods<
     typeof SUBMISSION_FACTORY_DEF & {
@@ -91,7 +96,7 @@ export interface MirageFactoryDefProps {
 
   // Contains base factory props
   project: IncludeBaseFactoryProps<typeof PROJECT_FACTORY_DEF> & {
-    last_file: number;
+    last_file: IncludeBaseFactoryProps<typeof FILE_FACTORY_DEF>;
   };
 
   vulnerability: IncludeBaseFactoryProps<typeof VULNERABLITY_FACTORY_DEF>;
@@ -131,6 +136,7 @@ const MIRAGE_FACTORIES: Record<
   'sbom-file': SbomFileFactory,
   'sbom-project': SbomProjectFactory,
   'available-manual-device': DeviceFactory,
+  'file-risk': FileRiskFactory,
 };
 
 export { MIRAGE_FACTORIES };

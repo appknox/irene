@@ -41,6 +41,10 @@ export const API_ROUTES = {
     route: '/api/submissions*',
     alias: 'submissionList',
   },
+  v3ProjectList: {
+    route: '/api/v3/projects*',
+    alias: 'projectList',
+  },
   projectList: {
     route: '/api/organizations/*/projects*',
     alias: 'projectList',
@@ -63,7 +67,8 @@ export const API_ROUTES = {
   },
 
   // Single Record routes
-  file: { route: '/api/v2/files', alias: 'file' },
+  file: { route: '/api/v3/files', alias: 'file' },
+  fileRisk: { route: '/api/v3/files/*/risk', alias: 'fileRisk' },
   sbom: { route: '/api/v2/sb_files', alias: 'sbomFile' },
   unknownAnalysisStatus: {
     route: '/api/profiles/*/unknown_analysis_status*',
@@ -154,7 +159,7 @@ export const API_ROUTES = {
     alias: 'inviteTeam',
   },
   dynamicscan: {
-    route: '/api/v2/dynamicscans/*',
+    route: '/api/v3/files/*/last_manual_dynamic_scan',
     alias: 'dynamicscan',
   },
 } as const;

@@ -150,7 +150,10 @@ export default class UploadAppActions {
     );
   }
 
-  checkStaticScanInfo(file: MirageFactoryDefProps['file']) {
+  checkStaticScanInfo(
+    file: MirageFactoryDefProps['file'],
+    risk: MirageFactoryDefProps['file-risk']
+  ) {
     cy.findByTestId('staticScan-infoContainer', { timeout: 30000 }).then(
       (el) => {
         const assertOpts = { container: el, timeout: 30000 };
@@ -164,11 +167,11 @@ export default class UploadAppActions {
           // Check for severity count if static scan is completed
           cy.findByTestId('fileChart-severityLevelCounts').within(() => {
             // If static scan is complete counts are stable
-            cy.findAllByText(file.risk_count_high).should('exist');
-            cy.findAllByText(file.risk_count_medium).should('exist');
-            cy.findAllByText(file.risk_count_low).should('exist');
-            cy.findAllByText(file.risk_count_critical).should('exist');
-            cy.findAllByText(file.risk_count_passed).should('exist');
+            cy.findAllByText(risk.risk_count_high).should('exist');
+            cy.findAllByText(risk.risk_count_medium).should('exist');
+            cy.findAllByText(risk.risk_count_low).should('exist');
+            cy.findAllByText(risk.risk_count_critical).should('exist');
+            cy.findAllByText(risk.risk_count_passed).should('exist');
           });
         } else {
           const staticScanProgress = file.static_scan_progress;
@@ -183,24 +186,12 @@ export default class UploadAppActions {
             ).should('exist');
 
             // Check for completed/incomplete static scan tag in VA Details list
-            cy.findAllByLabelText(`${cyTranslate('static')} scan tag tooltip`, {
-              timeout: 30000,
-            })
+            cy.findAllByLabelText(
+              `${cyTranslate('static')} scan tag tooltip; scan status: ${cyTranslate('scanNotCompleted')}`,
+              { timeout: 10000 }
+            )
               .first()
-              .should('exist')
-              .then((scanTag) => {
-                if (scanTag) {
-                  const tagMsg = file.is_static_done
-                    ? cyTranslate('scanCompleted')
-                    : cyTranslate('scanNotCompleted');
-
-                  cy.wrap(scanTag).trigger('mouseenter');
-
-                  cy.findByText(`${cyTranslate('static')} ${tagMsg}`, {
-                    timeout: 30000,
-                  });
-                }
-              });
+              .should('exist');
           }
         }
       }

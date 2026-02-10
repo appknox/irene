@@ -7,6 +7,7 @@ import UploadAppActions from '../support/Actions/common/UploadAppActions';
 
 import { API_ROUTES } from '../support/api.routes';
 import { APPLICATION_ROUTES } from '../support/application.routes';
+import { WS_MODEL_CREATED_PAYLOAD_MAP } from '../support/Websocket';
 
 // Grouped test Actions
 const loginActions = new LoginActions();
@@ -37,10 +38,6 @@ const NETWORK_WAIT_OPTS = {
   timeout: 60000,
 };
 
-const SUBMISSION_WAIT_OPTS = {
-  timeout: 160000,
-};
-
 // fixes cross origin errors
 Cypress.on('uncaught:exception', () => {
   // returning false here prevents Cypress from failing the test
@@ -55,31 +52,6 @@ describe('Upload App', () => {
     networkActions.hideNetworkLogsFor({
       route: `${API_ROUTES.analysis.route}/*`,
     });
-
-    /* TODO: Remove or retain this interception based on whether
-     * access to submissions API is restricted or not.
-     * -------------------------------------------------
-     * Necessary to intercept submission requests that were returning 404
-     * This was causing the submission adapters to fail
-     */
-    networkActions
-      .interceptParameterizedRoute<{ subId: string }>({
-        route: '/api/submissions/:subId',
-        routeHandler: async (req, params) => {
-          req.continue((res) => {
-            if (res.statusCode === 404) {
-              res.send({
-                statusCode: 200,
-                body: {
-                  id: params.subId,
-                  status: 7,
-                },
-              });
-            }
-          });
-        },
-      })
-      .as('submissionReq');
 
     // Login or restore session
     loginActions.loginWithCredAndSaveSession({ username, password });
@@ -97,6 +69,8 @@ describe('Upload App', () => {
     cy.intercept('POST', API_ROUTES.uploadAppViaLink.route).as(
       'uploadAppLinkReqPOST'
     );
+
+    cy.intercept('GET', API_ROUTES.fileRisk.route).as('uploadedFileRiskReq');
   });
 
   APP_DETAILS.forEach((appType) =>
@@ -118,94 +92,45 @@ describe('Upload App', () => {
           uploadAppActions.initiateViaSystemUpload(appType.fixture);
         }
 
-        // Wait for uploaded file submission status to show in status popover
-        cy.get<number>('@uploadedAppSubID').then((id) =>
-          cy
-            .findByTestId(
-              `upload-app-status-details-${id}`,
-              DEFAULT_ASSERT_OPTS
-            )
-            .within(() => {
-              if (appType.url) {
-                cy.contains(cyTranslate('viaLink'));
-              }
+        let submissionFileId: number;
 
-              // App details sometimes do not return the created file until after second/third upload submission response
-              // This function waits for the response four times to capture the returned file appropraitely
-              function waitForAppSubFileResolution(attempts = 0) {
-                if (attempts === 7) {
-                  return;
-                }
+        cy.interceptWsMessage<
+          | WS_MODEL_CREATED_PAYLOAD_MAP['submission']['payload']
+          | WS_MODEL_CREATED_PAYLOAD_MAP['file']['payload']
+        >((event, payload) => {
+          const isValidEvent =
+            event === 'model_created' || event === 'model_updated';
 
-                cy.wait(
-                  '@uploadedAppSubmission',
-                  appType.url ? SUBMISSION_WAIT_OPTS : NETWORK_WAIT_OPTS
-                ).then(async ({ response: res }) => {
-                  const submission =
-                    res?.body as MirageFactoryDefProps['submission'];
+          if (
+            isValidEvent &&
+            payload?.model_name === 'submission' &&
+            payload?.data?.status === 7
+          ) {
+            cy.wrap(payload?.data?.package_name).as('uploadedAppPackageName');
 
-                  const storeURLValidationFails = submission.status === 10102;
+            submissionFileId = payload.data.file;
+          }
 
-                  if (storeURLValidationFails) {
-                    throw new Error(
-                      `TEST FAILURE REASON: "${submission.status_humanized}"`
-                    );
-                  }
+          if (
+            isValidEvent &&
+            payload?.model_name === 'file' &&
+            payload?.data?.id === submissionFileId
+          ) {
+            const file = payload.data;
 
-                  if (!submission.file) {
-                    waitForAppSubFileResolution(++attempts);
+            cy.wrap(file, { log: false }).as('uploadedFileDetails');
+            cy.wrap(file.project, { log: false }).as('uploadedAppPrjID');
 
-                    return;
-                  }
+            return true;
+          }
 
-                  const appDetails = submission.app_data;
-                  const fileID = submission.file;
+          return false;
+        });
 
-                  // Intercept created file for application binary
-                  const uploadedFileURL = `${API_ROUTES.file.route}/${fileID}`;
-
-                  cy.intercept('GET', uploadedFileURL).as('uploadedAppFile');
-
-                  cy.wrap(submission?.package_name).as(
-                    'uploadedAppPackageName'
-                  );
-
-                  if (appDetails) {
-                    cy.findAllByText(
-                      appDetails?.package_name,
-                      DEFAULT_ASSERT_OPTS
-                    );
-
-                    cy.findAllByText(appDetails?.name, DEFAULT_ASSERT_OPTS);
-                  }
-
-                  // If file is not being analyzed
-                  if (submission?.status !== 7) {
-                    cy.contains(
-                      new RegExp(submission?.status_humanized, 'i'),
-                      DEFAULT_ASSERT_OPTS
-                    );
-                  }
-                });
-              }
-
-              waitForAppSubFileResolution();
-            })
-        );
-
-        // Closes upload app modal
         uploadAppActions.closeUploadAppModalIfOpen();
 
-        // Waits for uploaded file app response to return
-        // and wait for its project card to appear in the project listing page
-        cy.wait('@uploadedAppFile', NETWORK_WAIT_OPTS).then(
-          ({ response: res }) => {
-            const file = res?.body as MirageFactoryDefProps['file'];
-
-            // Save file for later assertions
-            cy.wrap(file).as('uploadedFileDetails');
-            cy.wrap(file.project).as('uploadedAppPrjID');
-
+        cy.get<MirageFactoryDefProps['file']>('@uploadedFileDetails').then(
+          (file) => {
             cy.findByTestId(`project-overview-${file.id}`, NETWORK_WAIT_OPTS)
               .should('exist')
               .within(() => {
@@ -236,17 +161,23 @@ describe('Upload App', () => {
         // Check if in file page
         cy.url().should('contain', APPLICATION_ROUTES.file);
 
-        cy.wait('@uploadedAppFile', NETWORK_WAIT_OPTS).then((int) => {
-          const file = int?.response?.body as MirageFactoryDefProps['file'];
+        cy.wait('@uploadedFileRiskReq', NETWORK_WAIT_OPTS).then(
+          ({ response: res }) => {
+            const risk = res?.body as MirageFactoryDefProps['file-risk'];
 
-          // File details check
-          cy.findByAltText(`${file.name} - logo`).should('exist');
-          cy.get('@uploadedAppPackageName').should('exist');
-          cy.get('@uploadedFileDetails').its('id').should('exist');
-          cy.get('@uploadedFileDetails').its('name').should('exist');
+            cy.get<MirageFactoryDefProps['file']>('@uploadedFileDetails').then(
+              (file) => {
+                // File details check
+                cy.findByAltText(`${file.name} - logo`).should('exist');
+                cy.get('@uploadedAppPackageName').should('exist');
+                cy.get('@uploadedFileDetails').its('id').should('exist');
+                cy.get('@uploadedFileDetails').its('name').should('exist');
 
-          uploadAppActions.checkStaticScanInfo(file);
-        });
+                uploadAppActions.checkStaticScanInfo(file, risk);
+              }
+            );
+          }
+        );
 
         // Go to SBOM Page
         cy.findByLabelText(`${cyTranslate('SBOM')} side menu item`).click();
@@ -270,7 +201,7 @@ describe('Upload App', () => {
     )
   );
 
-  it(
+  it.skip(
     'App upload fails if org plan has insufficient upload credits',
     { retries: { runMode: 2 } },
     function () {

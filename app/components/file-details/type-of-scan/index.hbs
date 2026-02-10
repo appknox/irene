@@ -5,27 +5,30 @@
   @spacing='1'
 >
   {{#each this.tags as |tag|}}
-    <AkTooltip
-      aria-label={{concat (t tag.text) ' scan tag tooltip'}}
-      @arrow={{true}}
-      @placement={{or @tooltipPlacement 'top'}}
-      @color='dark'
-      @title='{{t tag.text}} {{t
-        (if tag.status "scanCompleted" "scanNotCompleted")
-      }}'
-    >
-      <AkChip
-        {{style height=(if this.isSizeMedium '26px')}}
-        @variant='semi-filled'
-        @size='small'
-        @label={{t tag.text}}
-        @color={{if tag.status 'success' 'error'}}
-        data-test-vulnerability-analysis-scanTypeTag
+    {{#let
+      (t tag.text) (t (if tag.status 'scanCompleted' 'scanNotCompleted'))
+      as |text status|
+    }}
+      <AkTooltip
+        aria-label={{concat text ' scan tag tooltip;' ' scan status: ' status}}
+        @arrow={{true}}
+        @placement={{or @tooltipPlacement 'top'}}
+        @color='dark'
+        @title='{{text}} {{status}}'
       >
-        <:icon>
-          <AkIcon @iconName={{if tag.status 'check-circle' 'cancel'}} />
-        </:icon>
-      </AkChip>
-    </AkTooltip>
+        <AkChip
+          {{style height=(if this.isSizeMedium '26px')}}
+          @variant='semi-filled'
+          @size='small'
+          @label={{t tag.text}}
+          @color={{if tag.status 'success' 'error'}}
+          data-test-vulnerability-analysis-scanTypeTag
+        >
+          <:icon>
+            <AkIcon @iconName={{if tag.status 'check-circle' 'cancel'}} />
+          </:icon>
+        </AkChip>
+      </AkTooltip>
+    {{/let}}
   {{/each}}
 </AkStack>

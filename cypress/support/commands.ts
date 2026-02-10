@@ -72,3 +72,101 @@ Cypress.Commands.add(
       });
   }
 );
+
+// =======================
+// 🔴 WS INTERCEPT COMMAND
+// =======================
+Cypress.Commands.add(
+  'interceptWsMessage',
+  <T = unknown>(
+    predicate: (
+      event: 'model_created' | 'model_updated',
+      payload: T,
+      raw: string
+    ) => boolean,
+    options: { timeout?: number } = {}
+  ) => {
+    const timeout = options.timeout ?? 120000;
+
+    return cy.window().then((win) => {
+      return cy.then({ timeout }, () => {
+        return new Cypress.Promise<void>((resolve, reject) => {
+          const messages = (
+            win as unknown as Cypress.AUTWindow & { __wsMessages: unknown[] }
+          ).__wsMessages;
+
+          const parseAndCheck = (raw: unknown): boolean => {
+            if (typeof raw === 'string' && raw.startsWith('42')) {
+              try {
+                const [event, payload] = JSON.parse(raw.slice(2)) as [
+                  'model_created' | 'model_updated',
+                  T,
+                ];
+                return predicate(event, payload, raw);
+              } catch {
+                // ignore malformed frames
+              }
+            }
+            return false;
+          };
+
+          // Check existing messages first
+          if (Array.isArray(messages)) {
+            for (const raw of messages) {
+              if (parseAndCheck(raw)) {
+                resolve();
+                return;
+              }
+            }
+          }
+
+          // Set up timeout
+          const timeoutId = setTimeout(() => {
+            cleanup();
+            reject(new Error('Timed out waiting for matching WS message'));
+          }, timeout);
+
+          // Patch array methods to detect new messages
+          const originalPush = messages.push.bind(messages);
+          const originalUnshift = messages.unshift.bind(messages);
+
+          // Cleanup timeout and reset array methods
+          const cleanup = () => {
+            clearTimeout(timeoutId);
+
+            messages.push = originalPush;
+            messages.unshift = originalUnshift;
+          };
+
+          // OnNew Message Callback
+          const onNewMessage = (raw: unknown) => {
+            if (parseAndCheck(raw)) {
+              cleanup();
+              resolve();
+
+              return true;
+            }
+
+            return false;
+          };
+
+          // Patch push method to detect new messages
+          messages.push = function (...items: unknown[]) {
+            const result = originalPush(...items);
+            items.some(onNewMessage);
+
+            return result;
+          };
+
+          // Patch unshift method to detect new messages
+          messages.unshift = function (...items: unknown[]) {
+            const result = originalUnshift(...items);
+            items.some(onNewMessage);
+
+            return result;
+          };
+        });
+      });
+    });
+  }
+);
