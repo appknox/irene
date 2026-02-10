@@ -102,7 +102,7 @@ const APP_TYPE_DETAILS = [
     errorThreshold: 0.2,
     packageName: 'com.appknox.dvia',
     interactions: DVIA_INTERACTIONS,
-    preferredDeviceModels: ['N71mAP-2HWILEQ'],
+    preferredDeviceModels: ['D201AP-X6KIFVI'],
 
     performInteraction: (
       interactions: AppInteraction[],
@@ -121,8 +121,6 @@ Cypress.on('uncaught:exception', () => {
 
 describe('Dynamic Scan', () => {
   beforeEach(() => {
-    cy.viewport(1450, 1650);
-
     // Hide websocket and analyses logs
     networkActions.hideNetworkLogsFor({ ...API_ROUTES.websockets });
 

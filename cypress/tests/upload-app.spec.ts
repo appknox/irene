@@ -7,6 +7,7 @@ import UploadAppActions from '../support/Actions/common/UploadAppActions';
 
 import { API_ROUTES } from '../support/api.routes';
 import { APPLICATION_ROUTES } from '../support/application.routes';
+import { WS_MODEL_CREATED_PAYLOAD_MAP } from '../support/Websocket';
 
 // Grouped test Actions
 const loginActions = new LoginActions();
@@ -68,6 +69,8 @@ describe('Upload App', () => {
     cy.intercept('POST', API_ROUTES.uploadAppViaLink.route).as(
       'uploadAppLinkReqPOST'
     );
+
+    cy.intercept('GET', API_ROUTES.fileRisk.route).as('uploadedFileRiskReq');
   });
 
   APP_DETAILS.forEach((appType) =>
@@ -91,9 +94,15 @@ describe('Upload App', () => {
 
         let submissionFileId: number;
 
-        cy.interceptWsMessage((event, payload) => {
+        cy.interceptWsMessage<
+          | WS_MODEL_CREATED_PAYLOAD_MAP['submission']['payload']
+          | WS_MODEL_CREATED_PAYLOAD_MAP['file']['payload']
+        >((event, payload) => {
+          const isValidEvent =
+            event === 'model_created' || event === 'model_updated';
+
           if (
-            (event === 'model_created' || event === 'model_updated') &&
+            isValidEvent &&
             payload?.model_name === 'submission' &&
             payload?.data?.status === 7
           ) {
@@ -103,10 +112,11 @@ describe('Upload App', () => {
           }
 
           if (
+            isValidEvent &&
             payload?.model_name === 'file' &&
             payload?.data?.id === submissionFileId
           ) {
-            const file = payload.data as MirageFactoryDefProps['file'];
+            const file = payload.data;
 
             cy.wrap(file, { log: false }).as('uploadedFileDetails');
             cy.wrap(file.project, { log: false }).as('uploadedAppPrjID');
@@ -151,15 +161,21 @@ describe('Upload App', () => {
         // Check if in file page
         cy.url().should('contain', APPLICATION_ROUTES.file);
 
-        cy.get<MirageFactoryDefProps['file']>('@uploadedFileDetails').then(
-          (file) => {
-            // File details check
-            cy.findByAltText(`${file.name} - logo`).should('exist');
-            cy.get('@uploadedAppPackageName').should('exist');
-            cy.get('@uploadedFileDetails').its('id').should('exist');
-            cy.get('@uploadedFileDetails').its('name').should('exist');
+        cy.wait('@uploadedFileRiskReq', NETWORK_WAIT_OPTS).then(
+          ({ response: res }) => {
+            const risk = res?.body as MirageFactoryDefProps['file-risk'];
 
-            uploadAppActions.checkStaticScanInfo(file);
+            cy.get<MirageFactoryDefProps['file']>('@uploadedFileDetails').then(
+              (file) => {
+                // File details check
+                cy.findByAltText(`${file.name} - logo`).should('exist');
+                cy.get('@uploadedAppPackageName').should('exist');
+                cy.get('@uploadedFileDetails').its('id').should('exist');
+                cy.get('@uploadedFileDetails').its('name').should('exist');
+
+                uploadAppActions.checkStaticScanInfo(file, risk);
+              }
+            );
           }
         );
 

@@ -68,6 +68,7 @@ export const API_ROUTES = {
 
   // Single Record routes
   file: { route: '/api/v3/files', alias: 'file' },
+  fileRisk: { route: '/api/v3/files/*/risk', alias: 'fileRisk' },
   sbom: { route: '/api/v2/sb_files', alias: 'sbomFile' },
   unknownAnalysisStatus: {
     route: '/api/profiles/*/unknown_analysis_status*',

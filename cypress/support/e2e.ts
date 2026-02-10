@@ -3,7 +3,7 @@
 // =======================
 Cypress.on('window:before:load', (win) => {
   // Buffer all WS messages
-  (win as any).__wsMessages = [];
+  (win as unknown as { __wsMessages: unknown[] }).__wsMessages = [];
 
   const OriginalWebSocket = win.WebSocket;
 
@@ -17,7 +17,9 @@ Cypress.on('window:before:load', (win) => {
       : new OriginalWebSocket(url);
 
     ws.addEventListener('message', (event: MessageEvent) => {
-      (win as any).__wsMessages.push(event.data);
+      (win as unknown as { __wsMessages: unknown[] }).__wsMessages.push(
+        event.data
+      );
     });
 
     return ws;
@@ -28,6 +30,7 @@ Cypress.on('window:before:load', (win) => {
 
   win.WebSocket = WebSocketProxy;
 });
+
 // =======================
 // END WS HOOK
 // =======================
