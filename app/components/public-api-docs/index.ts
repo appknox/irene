@@ -1,5 +1,5 @@
 // @ts-expect-error no type defs
-import SwaggerUI from 'swagger-ui';
+import { SwaggerUIBundle, SwaggerUIStandalonePreset } from 'swagger-ui-dist';
 
 import Component from '@glimmer/component';
 import { service } from '@ember/service';
@@ -69,10 +69,10 @@ export default class PublicApiDocsComponent extends Component {
   @action
   intializeSwaggerUI(element: HTMLDivElement) {
     try {
-      SwaggerUI({
+      SwaggerUIBundle({
         spec: { ...this.data, paths: {}, components: {} },
         domNode: element,
-        presets: [SwaggerUI.presets.apis, SwaggerUI.SwaggerUIStandalonePreset],
+        presets: [SwaggerUIBundle['presets'].apis, SwaggerUIStandalonePreset],
       });
     } catch (error) {
       this.notify.error(parseError(error, this.intl.t('pleaseTryAgain')));
