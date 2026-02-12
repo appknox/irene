@@ -1,0 +1,35 @@
+<div local-class='subscription-page-container'>
+  <div
+    local-class='subscription-page-header'
+    data-test-subscription-page-header
+  >
+    <AkTypography @variant='h5' @fontWeight='bold'>
+      {{t 'subscriptionDetails'}}
+    </AkTypography>
+
+    <AkTypography
+      @color='textSecondary'
+      local-class='subscription-page-subtitle'
+      data-test-subscription-page-subtitle
+    >
+      {{t 'subscriptionDetailsSubtitle'}}
+    </AkTypography>
+  </div>
+
+  <div local-class='subscription-page-body'>
+    {{#each this.subscriptionItems as |item|}}
+      <div
+        local-class='subscription-item'
+        data-test-subscription-item={{item.label}}
+      >
+        <AkTypography @variant='subtitle1' @fontWeight='medium'>
+          {{item.label}}
+        </AkTypography>
+
+        <AkTypography @color='textSecondary'>
+          {{item.value}}
+        </AkTypography>
+      </div>
+    {{/each}}
+  </div>
+</div>

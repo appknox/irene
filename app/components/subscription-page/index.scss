@@ -1,0 +1,27 @@
+.subscription-page-container {
+  border: 1px solid var(--subscription-border-color);
+  border-radius: 4px;
+  background-color: var(--subscription-background-color);
+  margin: 1.5em;
+}
+
+.subscription-page-header {
+  padding: 1.5em 1.5em 1em 1.5em;
+  border-bottom: 1px solid var(--subscription-border-color);
+}
+
+.subscription-page-subtitle {
+  margin-top: 0.25em;
+}
+
+.subscription-page-body {
+  padding: 1.5em;
+}
+
+.subscription-item {
+  margin-bottom: 1.5em;
+
+  &:last-child {
+    margin-bottom: 0;
+  }
+}

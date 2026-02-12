@@ -81,6 +81,13 @@ export default class AppknoxWrapperComponent extends Component<AppknoxWrapperSig
     return orgShowBilling && isOwner;
   }
 
+  get showSubscription() {
+    const orgShowSubscription = this.organization?.selected?.showSubscription;
+    const isOwner = this.me.org?.is_owner;
+
+    return orgShowSubscription && isOwner && !this.showBilling;
+  }
+
   get showPartnerDashboard() {
     return this.me.org?.can_access_partner_dashboard;
   }
@@ -160,6 +167,11 @@ export default class AppknoxWrapperComponent extends Component<AppknoxWrapperSig
         label: this.intl.t('billing'),
         icon: 'credit-card-outline',
         route: 'authenticated.dashboard.billing',
+      },
+      this.showSubscription && {
+        label: this.intl.t('subscription'),
+        icon: 'mdi:file-certificate-outline',
+        route: 'authenticated.dashboard.subscription',
       },
       this.showPartnerDashboard && {
         label: this.intl.t('clients'),

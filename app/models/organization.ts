@@ -68,6 +68,9 @@ export default class OrganizationModel extends Model {
   @attr()
   declare aiFeatures: AiFeatures;
 
+  @attr('boolean')
+  declare showSubscription: boolean;
+
   get showBilling() {
     return !this.billingHidden;
   }
