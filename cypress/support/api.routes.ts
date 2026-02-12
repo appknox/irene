@@ -33,6 +33,10 @@ export const API_ROUTES = {
     route: '/api/v2/sb_projects*',
     alias: 'sbomProjectList',
   },
+  sbomFileSummary: {
+    route: '/api/v2/sb_projects/*/sb_files/*/summary*',
+    alias: 'sbomFileSummary',
+  },
   organizationList: {
     route: '/api/organizations*',
     alias: 'availableOrgsList',
