@@ -1,9 +1,21 @@
-import { TimeoutError } from 'cypress/types/bluebird';
-import { first } from 'cypress/types/lodash';
-import cyTranslate from '../../translations';
+import { MirageFactoryDefProps } from '../../Mirage';
+import cyTranslate from '../../../support/translations';
 
-export class SbomPage {
-  //========================Platform Filter===============================================
+// Assertion Timeout Overrides
+export const DEFAULT_ASSERT_OPTS = {
+  timeout: 10000,
+};
+
+export const NETWORK_WAIT_OPTS = {
+  timeout: 60000,
+};
+
+export default class SbomPageActions {
+  /**
+   * @name platformFilterTrigger
+   * @description Triggers the platform filter dropdown
+   * @returns void
+   */
 
   platformFilterTrigger() {
     cy.get('.ember-basic-dropdown-trigger');
@@ -13,59 +25,84 @@ export class SbomPage {
     return cy.get(`[data-test-sbom-platform-radio="${platform}"]`);
   }
 
-  appTableRows() {
-    return cy.findByTestId('sbomApp-table').find('tbody tr').as('sbom-appRows');
+  /**
+   * @name getAppTableRows
+   * @description Gets the app table rows
+   * @returns Cypress.Chainable<JQuery<HTMLElement>>
+   */
+  getAppTableRows() {
+    return cy
+      .findAllByTestId(/^sbomApp-row-/, DEFAULT_ASSERT_OPTS)
+      .as('sbomAppRows');
+  }
+
+  /**
+   * @name checkAndWaitForAppLoadingView
+   * @description Checks and waits for the app loading view to be loaded
+   * @returns void
+   */
+  checkAndWaitForAppLoadingView() {
+    cy.findByTestId('sbomApp-emptyLoadingView-loading').should('exist');
+
+    cy.findByTestId(
+      'sbomApp-emptyLoadingView-loading',
+      DEFAULT_ASSERT_OPTS
+    ).should('not.exist');
   }
 
   appPlatformIcon(row: Cypress.Chainable<JQuery<HTMLElement>>) {
     return row.findByTestId('app-platform');
   }
 
-  //========================Platform Actions=============================================================
+  /**
+   * @name openPlatformFilter
+   * @description Opens the platform filter dropdown
+   * @returns void
+   */
   openPlatformFilter() {
-    cy.get('.ember-basic-dropdown-trigger').first().click({ force: true });
-    cy.get('ul[role="listbox"]', { timeout: 5000 }).should('be.visible');
+    cy.findByTestId('sbom-platform-filterSelect')
+      .findByRole('combobox')
+      .should('exist')
+      .click({ force: true });
   }
 
-  selectPlatform(platform: 'iOS' | 'Android' | 'All') {
-    cy.get('ul[role="listbox"]').as('platformOptions');
-
-    cy.get('@platformOptions')
-      .contains('li', platform)
+  /**
+   * @name selectPlatform
+   * @description Selects the platform from the platform filter dropdown
+   * @param platform - The platform to select
+   * @returns void
+   */
+  selectPlatform(platform: string) {
+    return cy
+      .findByRole('option', { name: platform })
       .should('be.visible')
       .click({ force: true });
+  }
 
-    cy.get('body').click(0, 0);
-  }
-  // ========================Platform Validations=============================================================
-  validateOnlyIOSApps() {
-    this.appTableRows()
+  /**
+   * @name validateSbomAppRowsByPlatform
+   * @description Validates the app table rows by platform
+   * @param platform - The platform to validate
+   * @returns void
+   */
+  validateSbomAppRowsByPlatform(platform: 'android' | 'apple') {
+    return this.getAppTableRows()
       .should('have.length.greaterThan', 0)
       .each((row) => {
-        cy.wrap(row)
-          .findByTestId('app-platform')
-          .should('have.attr', 'data-platform', 'apple');
-      });
-  }
-  validateOnlyAndroidApps() {
-    this.appTableRows()
-      .should('have.length.greaterThan', 0)
-      .each((row) => {
-        cy.wrap(row)
-          .findByTestId('app-platform')
-          .should('have.attr', 'data-platform', 'android');
+        cy.wrap(row).within(() => {
+          cy.findByTestId(`app-platform-${platform}`).should('exist');
+        });
       });
   }
 
   // SELECTORS
+  /**
+   * @name appTable
+   * @description Gets the app table
+   * @returns Cypress.Chainable<JQuery<HTMLElement>>
+   */
   appTable() {
     return cy.findByTestId('sbomApp-table');
-  }
-
-  overviewField(label: string) {
-    return cy
-      .findAllByTestId('sbom-overview-item')
-      .filter(`[data-label="${label}"]`);
   }
 
   toggleBtn() {
@@ -118,28 +155,54 @@ export class SbomPage {
     return cy.findByTestId('dependency-type-clear-filter');
   }
 
-  // ACTIONS
-
-  selectReportRow(appName: string) {
-    this.appTable().contains(appName).should('be.visible').click();
+  /**
+   * @name selectAppFromTableRow
+   * @description Selects the app from the table row
+   * @param appName - The app name to select
+   * @returns void
+   */
+  selectAppFromTableRow(appName: string) {
+    this.getAppTableRows()
+      .contains(new RegExp(appName, 'i'))
+      .first()
+      .click({ force: true });
   }
 
-  validateOverviewDynamic() {
-    const fields = [
-      'Total Components',
-      'ML Model',
-      'Library',
-      'Framework',
-      'File',
-    ];
+  /**
+   * @name validateOverviewDynamic
+   * @description Validates the overview dynamic fields in SBOM Component Details Page
+   * @returns void
+   */
+  validateOComponentDetailsOverviewCounts(sbomFileSummaryAlias: string) {
+    cy.wait(sbomFileSummaryAlias, NETWORK_WAIT_OPTS)
+      .its('response.body')
+      .as('componentCount');
 
-    fields.forEach((field) => {
-      this.overviewField(field)
-        .should('be.visible')
-        .findByTestId('sbom-overview-value')
-        .invoke('text')
-        .should('not.be.empty');
-    });
+    cy.get<MirageFactoryDefProps['sbom-scan-summary']>('@componentCount').then(
+      (componentCount) => {
+        const {
+          component_count,
+          machine_learning_model_count,
+          framework_count,
+          library_count,
+          file_count,
+        } = componentCount;
+
+        const fields = {
+          [cyTranslate('sbomModule.totalComponents')]: component_count,
+          [cyTranslate('sbomModule.mlModel')]: machine_learning_model_count,
+          [cyTranslate('library')]: library_count,
+          [cyTranslate('framework')]: framework_count,
+          [cyTranslate('file')]: file_count,
+        };
+
+        Object.keys(fields).forEach((key) => {
+          cy.findByTestId(`sbom-overview-item-${key}`)
+            .should('be.visible')
+            .should('contain', fields[key]);
+        });
+      }
+    );
   }
 
   validateMetadataDynamic() {

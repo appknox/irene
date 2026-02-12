@@ -34,6 +34,7 @@
             @direction='column'
             @alignItems='center'
             @spacing='1'
+            data-test-cy='sbomApp-emptyTextContainer'
           >
             <AkTypography
               data-test-sbomApp-emptyTextTitle
@@ -45,7 +46,6 @@
 
             <AkTypography
               data-test-sbomApp-emptyTextDescription
-              data-test-cy='sbomApp-emptyTextDescription'
               {{style width='600px'}}
               @color='textSecondary'
               @align='center'
@@ -58,9 +58,9 @@
         <:default>
           <AkTable
             local-class='sbom-app-table'
+            data-test-cy='sbomApp-table'
             @hoverable={{true}}
             data-test-sbomApp-table
-            data-test-cy='sbomApp-table'
             as |t|
           >
             <t.head data-test-sbomApp-thead @columns={{this.columns}} />
