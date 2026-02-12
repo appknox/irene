@@ -51,6 +51,10 @@ import DeviceFactory, {
   DEVICE_FACTORY_DEF,
 } from 'irene/mirage/factories/device';
 
+import SbomScanSummaryFactory, {
+  SBOM_SCAN_SUMMARY_FACTORY_DEF,
+} from 'irene/mirage/factories/sbom-scan-summary';
+
 // Extract factory method return values from a factory definition
 export type FlattenFactoryMethods<T> = {
   [K in keyof T]: T[K] extends (n: number) => infer V ? V : T[K];
@@ -83,6 +87,10 @@ export interface MirageFactoryDefProps {
   'sbom-project': FlattenFactoryMethods<typeof SBOM_PROJECT_FACTORY_DEF>;
   'available-manual-device': FlattenFactoryMethods<typeof DEVICE_FACTORY_DEF>;
   'file-risk': FlattenFactoryMethods<typeof FILE_RISK_FACTORY_DEF>;
+
+  'sbom-scan-summary': FlattenFactoryMethods<
+    typeof SBOM_SCAN_SUMMARY_FACTORY_DEF
+  >;
 
   submission: FlattenFactoryMethods<
     typeof SUBMISSION_FACTORY_DEF & {
@@ -137,6 +145,7 @@ const MIRAGE_FACTORIES: Record<
   'sbom-project': SbomProjectFactory,
   'available-manual-device': DeviceFactory,
   'file-risk': FileRiskFactory,
+  'sbom-scan-summary': SbomScanSummaryFactory,
 };
 
 export { MIRAGE_FACTORIES };

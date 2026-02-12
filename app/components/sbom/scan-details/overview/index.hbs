@@ -9,15 +9,14 @@
 <AkStack
   local-class='overview-container'
   data-test-sbomScanDetails-overview-container
-  data-test-cy="sbomScanDetails-overview-container"
+  data-test-cy='sbomScanDetails-overview-container'
 >
   {{#each this.scanSummary as |ss|}}
     <AkStack
       @alignItems='center'
       data-test-sbomScanDetails-overview-scanSummary='{{ss.label}}'
-      data-test-cy="sbom-overview-item"
-      data-label="{{ss.label}}"
-     
+      data-test-cy='sbom-overview-item-{{ss.label}}'
+      data-label='{{ss.label}}'
     >
       <AkStack @spacing='1' @alignItems='center'>
         <AkIcon
@@ -36,7 +35,6 @@
       <AkTypography
         @variant='h6'
         data-test-sbomScanDetails-overview-scanSummary-value
-        data-test-cy="sbom-overview-value"
       >
         {{ss.value}}
       </AkTypography>
