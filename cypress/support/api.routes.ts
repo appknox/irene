@@ -37,6 +37,16 @@ export const API_ROUTES = {
     route: '/api/v2/sb_projects/*/sb_files/*/summary*',
     alias: 'sbomFileSummary',
   },
+
+  sbomFileComponents: {
+    route: '/api/v2/sb_files/*/sb_file_components*',
+    alias: 'sbomFileComponents',
+  },
+
+  sbomComponent: {
+    route: '/api/v2/sb_file_component/*',
+    alias: 'sbomComponent',
+  },
   organizationList: {
     route: '/api/organizations*',
     alias: 'availableOrgsList',

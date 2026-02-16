@@ -1,16 +1,16 @@
-<AkStack 
-  @width='full' 
-  @alignItems='center' 
+<AkStack
+  @width='full'
+  @alignItems='center'
   @justifyContent='flex-start'
-  data-test-cy="component-type-filter"
- >
- 
+  data-test-cy='component-type-filter'
+>
+
   <AkStack
     @width='full'
     @spacing='0.5'
     @alignItems='center'
     data-test-sbom-scanDetails-componentTypeHeader-container
-    data-test-cy="component-type-filter-trigger"
+    data-test-cy='component-type-filter-trigger'
     {{style width='180px'}}
   >
     <AkIcon
@@ -19,7 +19,6 @@
       local-class='cursor-pointer'
       {{on 'click' this.handleClick}}
       data-test-sbom-scanDetails-componentTypeHeader-icon
-        data-test-cy="component-type-filter-icon"
     />
 
     <AkTypography
@@ -38,8 +37,6 @@
   @closeHandler={{this.handleOptionsClose}}
   @clickOutsideToClose={{true}}
   data-test-sbom-scanDetails-componentTypeHeader-popover
-  data-test-cy="component-type-filter-popover"
-
 >
   <AkStack @direction='column' local-class='type-filter'>
     <AkStack @width='full' local-class='filter-header'>
@@ -60,16 +57,14 @@
         class='py-1 pl-2'
         {{on 'click' (fn this.selectComponentType types.value)}}
         data-test-sbom-scanDetails-componentTypeHeader-option
-        data-test-cy="component-type-filter-option"
-        data-value="{{types.value}}"
-
+        data-test-cy='component-type-filter-option'
+        data-value='{{types.value}}'
       >
         <AkStack @alignItems='center' @spacing='1'>
           <AkRadio
             @checked={{eq this.selectedComponentType types.value}}
             data-test-sbom-scanDetails-componentTypeHeader-radio={{types.key}}
-            data-test-cy="component-type-filter-radio-{{types.value}}"
-
+            data-test-cy='component-type-filter-radio-{{types.value}}'
           />
 
           <AkTypography
@@ -87,8 +82,6 @@
         local-class='clear-filter-section'
         @width='full'
         data-test-sbom-scanDetails-componentTypeHeader-clearFilter
-        data-test-cy="component-type-clear-filter"
-
       >
         <AkTypography
           @underline='always'
