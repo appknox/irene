@@ -5,6 +5,7 @@ import { APPLICATION_ROUTES } from '../support/application.routes';
 import SbomPageActions from '../support/Actions/common/SbomPageActions';
 import UploadAppActions from '../support/Actions/common/UploadAppActions';
 import cyTranslate from '../support/translations';
+import { MirageFactoryDefProps } from '../support/Mirage/factories.config';
 
 const loginActions = new LoginActions();
 const networkActions = new NetworkActions();
@@ -45,7 +46,7 @@ describe('SBOM Page', () => {
     cy.findByText(cyTranslate('sbomModule.sbomAppDescription')).should('exist');
   });
 
-  describe.skip('Platform Dropdown Filtering', () => {
+  describe('Platform Dropdown Filtering', () => {
     beforeEach(() => {
       sbomPageActions.openPlatformFilter();
     });
@@ -61,7 +62,7 @@ describe('SBOM Page', () => {
     });
   });
 
-  describe.skip('Search Functionality', () => {
+  describe('Search Functionality', () => {
     beforeEach(() => {
       // Assert search input exists, is visible, and has the correct placeholder
       cy.findByTestId('sbomApp-searchInput')
@@ -152,7 +153,7 @@ describe('SBOM Page', () => {
     });
   });
 
-  describe.skip('SBOM Report Flow', () => {
+  describe('SBOM Report Flow', () => {
     beforeEach(() => {
       cy.intercept('GET', API_ROUTES.uploadApp.route).as('uploadAppReq');
       cy.intercept('POST', API_ROUTES.uploadApp.route).as('uploadAppReqPOST');
@@ -167,13 +168,13 @@ describe('SBOM Page', () => {
       uploadAppActions.initiateViaSystemUpload('MFVA.apk');
       cy.wait(30000); //wait for SBOM report generation
 
-      sbomPageActions.openActionMenu(0);
+      sbomPageActions.openActionMenu();
       sbomPageActions.selectAction('Past SBOM Analyses');
 
       sbomPageActions.validatePastSbomAnalysesPage();
 
-      sbomPageActions.openViewReport(0);
-      sbomPageActions.generateReportIfRequired();
+      sbomPageActions.openViewReport();
+      sbomPageActions.generateReport();
       sbomPageActions.validateReportGenerated();
     });
   });
@@ -182,6 +183,9 @@ describe('SBOM Page', () => {
     it('opens SBOM detail page and validates overview + metadata', () => {
       // Intercept SBOM file summary API call
       cy.intercept(API_ROUTES.sbomFileSummary.route).as('sbomFileSummary');
+      cy.intercept(API_ROUTES.sbomFileComponents.route).as(
+        'sbomFileComponents'
+      );
 
       // Search for a particular app
       cy.findByTestId('sbomApp-searchInput').as('searchInput');
@@ -193,18 +197,17 @@ describe('SBOM Page', () => {
       sbomPageActions.validateOComponentDetailsOverviewCounts(
         '@sbomFileSummary'
       );
-
       // TODO: Continue with the rest of the test
-      sbomPageActions.validateMetadataDynamic();
-
+      sbomPageActions.validateMetadataDynamic('@sbomFileComponents');
       //default tree view
       sbomPageActions.validateDefaultTreeView();
-
       //  Switch to List View
       sbomPageActions.switchToListViewAndValidate();
 
-      // ===== Component Type Filter (List View) =====
-
+      /**
+       * Component Type Filter (List View)
+       * Iterate through component types, select filter, validate results, and clear filter for each type
+       */
       const componentTypes = ['Library', 'Framework', 'File', 'ML Model'];
 
       componentTypes.forEach((type) => {
@@ -212,13 +215,14 @@ describe('SBOM Page', () => {
         sbomPageActions.selectComponentType(type);
         cy.get('body').click(0, 0);
 
-        // sbomPageActions.validateFilteredByComponentTypeOrEmpty(type);
-        sbomPageActions.validateFilteredListOrEmptyState();
+        sbomPageActions.validateComponentTypeFilteredRows(type);
 
         sbomPageActions.openComponentTypeFilter();
         sbomPageActions.clearComponentTypeFilterOnly();
       });
-      // ===== Dependency Type Filter (List View) =====
+      /**
+       * Dependency Type Filter (List View)
+       */
       const dependencyTypes = ['Direct', 'Transitive'];
 
       dependencyTypes.forEach((type) => {
@@ -226,27 +230,25 @@ describe('SBOM Page', () => {
         sbomPageActions.selectDependencyType(type);
         cy.get('body').click(0, 0);
 
-        sbomPageActions.validateFilteredListOrEmptyState();
+        sbomPageActions.validateDependencyTypeFilteredRows(type);
 
         sbomPageActions.openDependencyTypeFilter();
         sbomPageActions.clearDependencyTypeFilterOnly();
       });
 
-      //   Switch back to Tree View
+      //Switch back to Tree View
       sbomPageActions.switchBackToTreeView();
-
       cy.get('[data-test-component-tree-nodelabel]').should(
         'have.length.greaterThan',
         0
       );
-
       //  Expand a tree node
       sbomPageActions.expandTreeNodeAndValidate();
 
-      // Open a component
+      // Open first component and validate details page
+
       sbomPageActions.openFirstComponent();
 
-      // Validate Component Details page
       sbomPageActions.validateComponentDetailsPage();
 
       // Navigate back using breadcrumb
@@ -257,122 +259,55 @@ describe('SBOM Page', () => {
     });
   });
 
-  describe.skip('SBOM Page - Pagination Tests', () => {
+  describe('SBOM Page - Pagination Tests', () => {
     const paginationLabel = '[data-test-page-range]';
     const nextBtn = '[data-test-pagination-next-btn]';
     const prevBtn = '[data-test-pagination-prev-btn]';
-    const rowSelector = 'sbomApp-table';
-
+    const table = () => cy.findByTestId('sbomApp-table');
+    const firstRow = () => table().find('tbody tr').first();
     beforeEach(() => {
       networkActions.hideNetworkLogsFor({ ...API_ROUTES.websockets });
       cy.intercept(API_ROUTES.check.route).as('checkUserRoute');
       cy.intercept(API_ROUTES.userInfo.route).as('userInfoRoute');
       cy.intercept(API_ROUTES.sbomProjectList.route).as('sbomProjectList');
       cy.intercept(API_ROUTES.submissionList.route).as('submissionList');
-
       loginActions.loginWithCredAndSaveSession({ username, password });
       cy.visit(APPLICATION_ROUTES.sbom);
-
       cy.wait('@sbomProjectList', { timeout: 40000 });
-
       cy.contains('SBOM', { timeout: 10000 }).should('exist');
     });
-
-    describe.skip('Navigation - Next/Previous', () => {
+    describe('Navigation - Next/Previous', () => {
       it('should navigate to next page and verify data changed', () => {
+        firstRow().invoke('text').as('initialRow');
+        cy.get(nextBtn).should('not.be.disabled').click();
+        table().should('have.length.greaterThan', 0);
         cy.get(paginationLabel)
           .invoke('text')
-          .then(() => {
-            cy.findByTestId(rowSelector)
-              .find('tbody tr')
-              .first()
-              .invoke('text', { timeout: 30000 })
-              .then((initialRowData) => {
-                cy.get(nextBtn).should('not.be.disabled').click();
-
-                cy.findByTestId(rowSelector, { timeout: 30000 }).should(
-                  'have.length.greaterThan',
-                  0
-                );
-
-                cy.get(paginationLabel)
-                  .invoke('text')
-                  .then((text) => {
-                    const normalized = text.replace(/\s+/g, ' ').trim();
-                    expect(normalized).to.match(/\d+-\d+ of \d+/);
-                  });
-
-                cy.findByTestId(rowSelector)
-                  .find('tbody tr')
-                  .first()
-                  .invoke('text')
-                  .should('not.equal', initialRowData);
-
-                cy.get(prevBtn).should('not.be.disabled').click();
-              });
+          .should((text) => {
+            const normalized = text.replace(/\s+/g, ' ').trim();
+            expect(normalized).to.match(/\d+-\d+ of \d+/);
           });
+        firstRow().invoke('text').should('not.equal', cy.get('@initialRow'));
+        cy.get(prevBtn).should('not.be.disabled').click();
       });
-
       it('should disable Previous button on first page', () => {
         cy.get(prevBtn).should('be.disabled');
       });
     });
-
-    describe.skip('Button States', () => {
+    describe('Button States', () => {
       it('should enable/disable buttons correctly during navigation', () => {
         cy.get(prevBtn).should('be.disabled');
-        cy.get(nextBtn).should('not.be.disabled');
-
-        // Go to Page 2
-        cy.get(nextBtn).click();
-        cy.findByTestId(rowSelector, { timeout: 30000 }).should(
-          'have.length.greaterThan',
-          0
-        );
-
-        // Wait for pagination label to change (confirms Page 2)
-        cy.get(paginationLabel).invoke('text').as('page2Label');
-
-        cy.get(prevBtn).should('not.be.disabled').click();
-
-        //  WAIT for page to actually change
-        cy.get(paginationLabel)
-          .invoke('text')
-          .should('not.equal', cy.get('@page2Label')); // Wait until label changes
-
-        cy.findByTestId(rowSelector, { timeout: 30000 }).should(
-          'have.length.greaterThan',
-          0
-        );
+        cy.get(nextBtn).should('not.be.disabled').click();
+        table().should('have.length.greaterThan', 0);
+        cy.get(prevBtn).should('not.be.disabled');
       });
     });
-
-    describe.skip('Row Count & Data', () => {
-      it('should maintain consistent row count per page', () => {
-        cy.findByTestId(rowSelector).then(() => {
-          cy.get(nextBtn).click();
-
-          cy.findByTestId(rowSelector, { timeout: 30000 }).should(
-            'have.length.greaterThan',
-            0
-          );
-
-          cy.findByTestId(rowSelector).should('have.length.greaterThan', 0);
-        });
-      });
-    });
-
-    describe.skip('URL State', () => {
+    describe('URL State', () => {
       it('should update URL when changing pages', () => {
-        cy.url().then((page1Url) => {
-          cy.get(nextBtn).click();
-          cy.findByTestId(rowSelector, { timeout: 30000 }).should(
-            'have.length.greaterThan',
-            0
-          );
-
-          cy.url().should('not.equal', page1Url);
-        });
+        cy.url().as('page1Url');
+        cy.get(nextBtn).click();
+        table().should('have.length.greaterThan', 0);
+        cy.url().should('not.equal', cy.get('@page1Url'));
       });
     });
   });
