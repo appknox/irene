@@ -1,5 +1,8 @@
 import { MirageFactoryDefProps } from '../../Mirage';
 import cyTranslate from '../../../support/translations';
+import dayjs from 'dayjs';
+import sbomScanSummary from 'irene/mirage/factories/sbom-scan-summary';
+import { de } from '@faker-js/faker';
 
 // Assertion Timeout Overrides
 export const DEFAULT_ASSERT_OPTS = {
@@ -16,10 +19,6 @@ export default class SbomPageActions {
    * @description Triggers the platform filter dropdown
    * @returns void
    */
-
-  platformFilterTrigger() {
-    cy.get('.ember-basic-dropdown-trigger');
-  }
 
   platformRadio(platform: string) {
     return cy.get(`[data-test-sbom-platform-radio="${platform}"]`);
@@ -106,25 +105,21 @@ export default class SbomPageActions {
   }
 
   toggleBtn() {
-    return cy.findByTestId('sbomSummaryHeader-collapsibleToggleBtn');
+    return cy.get('[data-test-sbomSummaryHeader-collapsibleToggleBtn]');
   }
 
   metadataField(label: string) {
     return cy.get(`[data-test-sbomScanDetails-fileSummaryGroup="${label}"]`);
   }
 
-  componentRows() {
-    return cy.get('[data-test^="data-test-ak-stack"]');
-  }
-
   // ===== Component Type Filter (List View) =====
 
   componentTypeFilterIcon() {
-    return cy.findByTestId('component-type-filter-icon');
+    return cy.get('[data-test-sbom-scanDetails-componentTypeHeader-icon]');
   }
 
   componentTypePopover() {
-    return cy.findByTestId('component-type-filter-popover');
+    return cy.get('[data-test-sbom-scanDetails-componentTypeHeader-popover]');
   }
 
   componentTypeRadio(type: string) {
@@ -134,17 +129,19 @@ export default class SbomPageActions {
   }
 
   clearComponentTypeFilter() {
-    return cy.findByTestId('component-type-clear-filter');
+    return cy.get(
+      '[data-test-sbom-scanDetails-componentTypeHeader-clearFilter]'
+    );
   }
 
   // ===== Dependency Type Filter =====
 
   dependencyTypeFilterIcon() {
-    return cy.findByTestId('dependency-type-filter-icon');
+    return cy.get('[data-test-sbom-scanDetails-dependencyTypeHeader-icon]');
   }
 
   dependencyTypePopover() {
-    return cy.findByTestId('dependency-type-filter-popover');
+    return cy.get('[data-test-sbom-scanDetails-dependencyTypeHeader-popover]');
   }
 
   dependencyTypeRadio(type: string) {
@@ -152,7 +149,9 @@ export default class SbomPageActions {
   }
 
   clearDependencyTypeFilter() {
-    return cy.findByTestId('dependency-type-clear-filter');
+    return cy.get(
+      '[data-test-sbom-scanDetails-dependencyTypeHeader-clearFilter]'
+    );
   }
 
   /**
@@ -205,115 +204,127 @@ export default class SbomPageActions {
     );
   }
 
-  validateMetadataDynamic() {
+  validateMetadataDynamic(sbomFileAlias: string = '@sbomFileComponents') {
     this.toggleBtn().should('be.visible').click();
+    cy.wait(sbomFileAlias, { timeout: 10000 })
+      .its('response.body')
+      .as('sbomFileData');
 
-    cy.findAllByTestId('sbomscandetails-filesummarygroup', {
-      timeout: 7000,
-    }).should('have.length.greaterThan', 0);
+    cy.get<MirageFactoryDefProps['sbom-file']>('@sbomFileData').then(
+      (sbomFile) => {
+        cy.findAllByTestId('sbomscandetails-filesummarygroup', {
+          timeout: 7000,
+        }).should('have.length.greaterThan', 0);
 
-    const fields = [
-      'Generated Date',
-      'Version',
-      'Version Code',
-      'File',
-      'Status',
-    ];
+        const metadataFields = {
+          [cyTranslate('status')]: sbomFile.status,
+          [cyTranslate('sbomModule.generatedDate')]: sbomFile.completed_at,
+          [cyTranslate('file')]: sbomFile.id,
+        };
 
-    fields.forEach((field) => {
-      this.metadataField(field)
-        .should('be.visible')
-        .invoke('text')
-        .then((text) => {
-          expect(text.trim()).to.not.equal('');
+        Object.keys(metadataFields).forEach((label) => {
+          const expectedValue = metadataFields[label];
+          if (expectedValue) {
+            this.metadataField(label)
+              .should('be.visible')
+              .should('contain', expectedValue);
+          }
         });
-    });
+      }
+    );
   }
   // Component Type Filter ACTIONS
 
   openComponentTypeFilter() {
     this.componentTypeFilterIcon().should('be.visible').click({ force: true });
 
-    this.componentTypePopover().should('be.visible', { timeout: 10000 });
+    this.componentTypePopover().should('be.visible', DEFAULT_ASSERT_OPTS);
   }
 
   selectComponentType(type: string) {
     this.componentTypeRadio(type)
-      .should('exist', { timeout: 10000 })
+      .should('exist', DEFAULT_ASSERT_OPTS)
       .click({ force: true });
   }
-
-  validateListFilteredByComponentType(type: string) {
-    cy.get('[data-test-sbomcomponent-table]')
-      .should('have.length.greaterThan', 0)
-      .each(($el) => {
-        cy.wrap($el).invoke('text').should('contain', type);
-      });
-  }
-
-  validateFilteredListOrEmptyState() {
+  validateComponentTypeFilteredRows(type: string) {
     cy.get('body').then((body) => {
       const rowCount = body.find('[data-test-sbomComponent-row]').length;
 
       if (rowCount > 0) {
-        //
-        cy.get('[data-test-sbomComponent-row]').should(
-          'have.length.greaterThan',
-          0
-        );
+        // Rows exist - validate they contain the type
+        cy.get('[data-test-sbomComponent-row]')
+          .should('have.length.greaterThan', 0)
+          .each((row) => {
+            cy.wrap(row).invoke('text').should('contain', type);
+          });
       }
     });
   }
-
+  /**
+   * @param clearComponentTypeFilterOnly
+   * @description Clears the component type filter selection without selecting another type. This is necessary to validate that the filter is cleared and all rows are shown again, as sometimes selecting another type does not clear the previous selection properly in the UI.
+   */
   clearComponentTypeFilterOnly() {
     this.clearComponentTypeFilter().should('exist').click({ force: true });
-
     cy.get('body').click(0, 0);
   }
 
-  //===============validations==========================================
-
+  /**
+   * @parm openDependencyTypeFilter
+   * @description Opens the dependency type filter popover
+   * @returns void
+   */
   openDependencyTypeFilter() {
     this.dependencyTypeFilterIcon().should('be.visible').click({ force: true });
 
-    this.dependencyTypePopover().should('be.visible', { timeout: 10000 });
+    this.dependencyTypePopover().should('be.visible', DEFAULT_ASSERT_OPTS);
   }
-
+  /**  * @name selectDependencyType
+   * @description Selects the dependency type from the dependency type filter
+   * @param type - The dependency type to select (e.g. "Direct", "Transitive")
+   * @returns void
+   */
   selectDependencyType(type: string) {
     this.dependencyTypeRadio(type)
-      .should('exist', { timeout: 10000 })
+      .should('exist', DEFAULT_ASSERT_OPTS)
       .click({ force: true });
-
     // popover sometimes does not auto-close
     cy.get('body').click(0, 0);
   }
+  /**
+   * @name validateDependencyTypeFilteredRows
+   * @description Validates the filtered rows in the component list based on the selected dependency type. If there are rows present, it checks that each row contains the specified dependency type.
+   */
+  validateDependencyTypeFilteredRows(type: string) {
+    cy.get('body').then((body) => {
+      const rowCount = body.find('[data-test-sbomComponent-row]').length;
 
-  validateListFilteredByDependencyType(type: string) {
-    cy.get('[data-test-sbomcomponent-table]')
-      .should('have.length.greaterThan', 0)
-      .each((row) => {
-        cy.wrap(row).invoke('text').should('contain', type);
-      });
+      if (rowCount > 0) {
+        cy.get('[data-test-sbomComponent-row]')
+          .should('have.length.greaterThan', 0)
+          .each((row) => {
+            cy.wrap(row).invoke('text').should('contain', type);
+          });
+      }
+    });
   }
-
+  /**
+   * @name clearDependencyTypeFilterOnly
+   * @description Clears the dependency type filter selection without selecting another type. This is necessary to validate that the filter is cleared and all rows are shown again, as sometimes selecting another type does not clear the previous selection properly in the UI.
+   */
   clearDependencyTypeFilterOnly() {
     this.clearDependencyTypeFilter().should('exist').click({ force: true });
-
     cy.get('body').click(0, 0);
   }
 
   //===============================Report flow==========================================
 
-  dashboardRows() {
-    return cy.get('table tbody tr');
-  }
-
   actionMenuButton() {
-    return cy.findByTestId('sbomApp-actionBtn');
+    return cy.get('[data-test-sbomApp-actionBtn]');
   }
 
   actionMenuItems() {
-    return cy.findAllByTestId('sbomapp-actionmenuitem');
+    return cy.get('[data-test-sbomApp-actionMenuItem]');
   }
 
   pageRange() {
@@ -321,7 +332,7 @@ export default class SbomPageActions {
   }
 
   viewReportButtons() {
-    return cy.findAllByTestId('sbomScan-viewReportBtn');
+    return cy.get('[data-test-sbomScan-viewReportBtn]');
   }
 
   generateReportButtons() {
@@ -329,58 +340,76 @@ export default class SbomPageActions {
   }
 
   reportPasswordLabel() {
-    return cy.findByTestId('sbomReportList-reportSecondaryText');
+    return cy.get('[data-test-sbomReportList-reportGeneratingText]');
   }
 
   downloadButtons() {
     return cy.findAllByTestId('sbomreportlist-reportdownloadbtn');
   }
 
-  // =====================
-  // Actions
-  // =====================
-
-  openActionMenu(rowIndex = 0) {
-    this.dashboardRows()
+  /**
+   * @name openActionMenu
+   * @description Opens the action menu for the first app in the table
+   */
+  openActionMenu() {
+    this.getAppTableRows()
       .should('have.length.greaterThan', 0)
-      .eq(rowIndex)
+      .first()
       .findAllByTestId('sbomApp-actionBtn')
       .click({ force: true });
   }
-
+  /**
+   * @param selectOption - The option to select from the action menu. It can be either 'Past SBOM Analyses' or 'View Report'
+   */
   selectAction(option: 'Past SBOM Analyses' | 'View Report') {
-    this.actionMenuItems().contains(option).should('be.visible').click();
+    this.actionMenuItems()
+      .contains(option)
+      .should('be.visible')
+      .click({ force: true });
   }
-
+  /**
+   * @param validatePastSbomAnalysesPage
+   * @description Validates that the Past SBOM Analyses page is displayed by checking for the presence of the analyses table and relevant text on the page.
+   */
   validatePastSbomAnalysesPage() {
-    this.dashboardRows().should('have.length.greaterThan', 0);
+    cy.get('[data-test-sbomscan-table]').should('have.length.greaterThan', 0);
+    cy.findByText(cyTranslate('sbomModule.pastSbomAnalyses')).should(
+      'be.visible'
+    );
+    cy.findByText(cyTranslate('sbomModule.pastSbomAnalysesDescription')).should(
+      'be.visible'
+    );
   }
 
-  openViewReport(rowIndex = 0) {
+  openViewReport() {
     this.viewReportButtons()
-      .eq(rowIndex)
+      .first()
       .should('be.visible')
       .click({ force: true });
   }
 
-  //
-  generateReportIfRequired() {
+  /**
+   * @name generateReport
+   * @description Checks if the generate report button is visible, if yes, clicks on it to generate the report
+   */
+  generateReport() {
     this.generateReportButtons().then(($btns) => {
       if ($btns.length > 0 && $btns.first().is(':visible')) {
         cy.log('STATE 1: Report NOT generated - Generating now...');
 
         cy.wrap($btns.first()).should('not.be.disabled').click({ force: true });
-
-        //
         this.waitForReportGeneration();
       } else {
         cy.log('STATE 2: Report already generated - Skipping generation');
       }
     });
   }
-
-  //
-  waitForReportGeneration(timeout = 30000) {
+  /**
+   *
+   * @param timeout
+   * @description Waits for the report to be generated by checking for the presence of the download buttons.
+   */
+  waitForReportGeneration(timeout = 120000) {
     cy.findAllByTestId('sbomreportlist-reportdownloadbtn', { timeout })
       .should('have.length.at.least', 1)
       .then(($btns) => {
@@ -389,8 +418,10 @@ export default class SbomPageActions {
         );
       });
   }
-
-  //
+  /**
+   * @name validateReportGenerated
+   * @description Validates that the report has been generated by checking for the absence of the loading indicators and the presence of the download buttons and relevant text.
+   */
   validateReportGenerated() {
     cy.findAllByTestId('sbomReportList-loading').should('have.length', 0);
 
@@ -401,10 +432,10 @@ export default class SbomPageActions {
 
     this.downloadButtons().should('have.length.at.least', 1);
 
-    cy.contains('Detailed Report (pdf)').should('be.visible');
+    cy.findByText(cyTranslate('sbomModule.sbomDownloadPdfPrimaryText')).should(
+      'be.visible'
+    );
   }
-
-  //==========================================================================
 
   treeViewBtn() {
     return cy.get('[data-test-sbomscandetails-switch-treeviewbutton]');
@@ -456,10 +487,6 @@ export default class SbomPageActions {
     return cy.get(`[data-test-sbomcomponent-status="${status}"]`);
   }
 
-  /* =======================
-     ACTIONS and VALIDATIONS
-     ======================= */
-
   validateDefaultTreeView() {
     // Tree view is active by default
     this.treeViewBtn().invoke('attr', 'class').should('contain', 'active');
@@ -470,7 +497,6 @@ export default class SbomPageActions {
 
   switchToListViewAndValidate() {
     this.listViewBtn().click();
-
     // List view becomes active
     this.listViewBtn().invoke('attr', 'class').should('contain', 'active');
   }

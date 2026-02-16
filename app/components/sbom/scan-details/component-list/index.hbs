@@ -28,10 +28,13 @@
           @alignItems='center'
           @spacing='1'
         >
-          <AkTypography data-test-sbomComponent-emptyTextTitle @variant='h5'
-          data-test-cy="emptytitle">
+          <AkTypography
+            data-test-sbomComponent-emptyTextTitle
+            @variant='h5'
+            data-test-cy='emptytitle'
+          >
             {{t 'sbomModule.componentListEmptyText.title'}}
-            
+
           </AkTypography>
 
           <AkTypography
@@ -107,10 +110,13 @@
           >
             <AkSvg::NoResult data-test-sbomComponent-emptySvg />
 
-            <AkTypography data-test-sbomComponent-emptyTextTitle @variant='h5'
-            data-test-cy="sbomComponent-emptyTextTitle">
+            <AkTypography
+              data-test-sbomComponent-emptyTextTitle
+              @variant='h5'
+              data-test-cy='sbomComponent-emptyTextTitle'
+            >
               {{this.tNoComponentsFound}}
-              
+
             </AkTypography>
 
             <AkTypography
