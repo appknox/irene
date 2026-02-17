@@ -80,25 +80,56 @@
       </AkStack>
 
       {{#if @project}}
-        <AkButton
-          @variant='outlined'
-          @color='neutral'
-          class='pr-2'
-          {{on 'click' this.goToSettings}}
-          data-test-fileCompareHeader-projectOverview-settingsBtn
-        >
-          <:leftIcon>
-            <AkIcon
-              @iconName='settings'
-              @color='secondary'
-              data-test-fileCompareHeader-projectOverview-settingsBtn-icon
-            />
-          </:leftIcon>
+        <AkStack @alignItems='center'>
+          <AkSelect
+            @onChange={{this.changeFilter}}
+            @options={{this.scanTypeObjects}}
+            @selected={{@selectedScanType}}
+            @verticalPosition='auto'
+            @triggerClass={{this.triggerClass}}
+            @dropdownClass={{this.dropDownClass}}
+            @optionTitle={{t 'scanType'}}
+            @extra={{hash
+              selectedItem=@selectedScanType.key
+              showLabel=true
+              iconName='filter-list'
+              fontSize='medium'
+            }}
+            @selectedItemComponent={{component
+              'project-list/filter-selected-item'
+            }}
+            {{style width='auto'}}
+            class='select-scan-type-class pl-1'
+            data-test-select-scan-type-container
+            as |scanTypeObject|
+          >
+            <AkStack @spacing='1' @alignItems='center'>
+              <AkRadio @checked={{eq @scanTypeValue scanTypeObject.value}} />
 
-          <:default>
-            {{t 'settings'}}
-          </:default>
-        </AkButton>
+              {{scanTypeObject.key}}
+            </AkStack>
+          </AkSelect>
+
+          <AkButton
+            @variant='outlined'
+            @color='neutral'
+            class='pr-2'
+            {{on 'click' this.goToSettings}}
+            data-test-fileCompareHeader-projectOverview-settingsBtn
+          >
+            <:leftIcon>
+              <AkIcon
+                @iconName='settings'
+                @color='secondary'
+                data-test-fileCompareHeader-projectOverview-settingsBtn-icon
+              />
+            </:leftIcon>
+
+            <:default>
+              {{t 'settings'}}
+            </:default>
+          </AkButton>
+        </AkStack>
       {{/if}}
     </AkStack>
 

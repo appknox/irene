@@ -1394,6 +1394,9 @@ body {
   // variables for file-list
   --file-list-selected-file-chip-color: var(--text-primary);
   --file-list-selected-file-chip-background: var(--primary-main-10);
+  --file-list-selected-clear-filter-section-border: var(--neutral-grey-300);
+  --file-list-selected-clear-filter-color: var(--neutral-grey-600);
+  --file-list-selected-clear-filter-hover-color: var(--primary-main);
 
   // variables for file-compare/index
   --file-compare-tabs-background-color: var(--common-white);
@@ -1431,6 +1434,10 @@ body {
   --file-compare-header-file-icon-border-color: var(--neutral-grey-100);
   --file-compare-header-file-icon-border-radius: var(--border-radius);
   --file-compare-header-info-box-shadow: var(--box-shadow-6);
+  --file-compare-header-filter-hover-border-color: var(--neutral-grey-400);
+  --file-compare-header-filter-option-hover-background: var(
+    --hover-light-background
+  );
 
   // variables for file-compare/invalid-compare
   --file-compare-invalid-compare-border-color: var(--neutral-grey-300);
@@ -1735,6 +1742,7 @@ body {
   );
   --project-list-header-clear-filter-color: var(--neutral-grey-600);
   --project-list-header-clear-filter-hover-color: var(--primary-main);
+  --project-list-header-clear-filter-border-color: var(--neutral-grey-300);
   --project-list-header-button-border-color: var(--border-color-1);
   --project-list-header-active-background-color: var(
     --side-menu-active-background-light

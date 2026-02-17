@@ -4,14 +4,14 @@
     <AkIcon @iconName={{this.iconName}} @size='small' @color='primary' />
 
     {{#if this.showLabel}}
-      <AkTypography local-class='trigger-label'>
+      <AkTypography local-class='{{this.labelClass}}'>
         {{this.optionTitle}}
         -
       </AkTypography>
     {{/if}}
   </AkStack>
 
-  <AkTypography @fontWeight='medium' local-class='trigger-label'>
+  <AkTypography @fontWeight='medium' local-class='{{this.labelClass}}'>
     {{this.selectedItem}}
   </AkTypography>
 </AkStack>

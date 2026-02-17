@@ -4,6 +4,8 @@ import { click, findAll, render, waitFor } from '@ember/test-helpers';
 import { hbs } from 'ember-cli-htmlbars';
 import { setupIntl, t } from 'ember-intl/test-support';
 import { setupMirage } from 'ember-cli-mirage/test-support';
+import { clickTrigger } from 'ember-power-select/test-support/helpers';
+import { selectChoose } from 'ember-power-select/test-support';
 
 module('Integration | Component | file-list', function (hooks) {
   setupRenderingTest(hooks);
@@ -37,7 +39,10 @@ module('Integration | Component | file-list', function (hooks) {
     // Store service
     const store = this.owner.lookup('service:store');
 
-    const project = this.server.create('project');
+    const project = this.server.create('project', {
+      is_manual_scan_available: true,
+    });
+
     const normalizedProject = store.normalize('project', project.toJSON());
     const projectRecord = store.push(normalizedProject);
 
@@ -48,7 +53,15 @@ module('Integration | Component | file-list', function (hooks) {
     );
 
     // File Models
-    const files = this.server.createList('file', 3);
+    const files = Array.from({ length: 3 }).map((_, i) => {
+      return this.server.create('file', {
+        is_api_done: i === 0,
+        is_static_done: i === 1,
+        is_dynamic_done: i === 0,
+        is_manual_done: i === 1,
+      });
+    });
+
     const fileRecords = files.map((file) => {
       const normalizedFile = store.normalize('file', {
         ...file.toJSON(),
@@ -304,4 +317,97 @@ module('Integration | Component | file-list', function (hooks) {
       .exists()
       .doesNotHaveAttribute('disabled');
   });
+
+  test.each(
+    'It filters files list when scan type value changes and also clears filter',
+    [
+      {
+        flag: 'is_static_done',
+        scanTypeValue: 0,
+        selectOption: 1,
+      },
+      {
+        flag: 'is_dynamic_done',
+        scanTypeValue: 1,
+        selectOption: 2,
+      },
+      {
+        flag: 'is_api_done',
+        scanTypeValue: 2,
+        selectOption: 3,
+      },
+      {
+        flag: 'is_manual_done',
+        scanTypeValue: 3,
+        selectOption: 4,
+      },
+    ],
+    async function (assert, obj) {
+      this.server.get('/v3/projects/:id/files', (schema, req) => {
+        const scanType = req.queryParams.scan_type;
+
+        this.set('scanType', scanType);
+
+        const scanTypeInt = parseInt(scanType);
+
+        const files = schema.files.all().models;
+
+        const results =
+          scanTypeInt === obj.scanTypeValue
+            ? files.filter((p) => p[obj.flag])
+            : files;
+
+        return { count: results.length, next: null, previous: null, results };
+      });
+
+      await render(
+        hbs`<FileList @project={{this.project}} @queryParams={{this.queryParams}} />`
+      );
+
+      let fileContainerList = findAll('[data-test-fileList-fileOverview-item]');
+
+      assert.strictEqual(
+        fileContainerList.length,
+        this.fileRecords.length,
+        'Contains correct number of file overview cards.'
+      );
+
+      await waitFor('[data-test-select-scan-type-container]', {
+        timeout: 1000,
+      });
+
+      await clickTrigger('[data-test-select-scan-type-container]');
+
+      await waitFor('.ember-power-select-option', { timeout: 1000 });
+
+      await selectChoose(
+        '.select-scan-type-class',
+        '.ember-power-select-option',
+        obj.selectOption
+      );
+
+      assert.strictEqual(this.scanType, String(obj.scanTypeValue));
+
+      fileContainerList = findAll('[data-test-fileList-fileOverview-item]');
+
+      assert.strictEqual(
+        fileContainerList.length,
+        1,
+        'File list items all have scan type value matching particular Scan.'
+      );
+
+      assert.dom('[data-test-fileList-header-clear-filter]').exists();
+
+      // Clear Filter
+      await click('[data-test-fileList-header-clear-filter]');
+
+      fileContainerList = findAll('[data-test-fileList-fileOverview-item]');
+
+      assert.strictEqual(
+        fileContainerList.length,
+        this.fileRecords.length,
+        'File list defaults to complete list when scan type value is all.'
+      );
+    }
+  );
 });
