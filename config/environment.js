@@ -142,7 +142,7 @@ module.exports = function (environment) {
   var ENV = {
     ENVHandlerCONST: ENVHandlerCONST,
     productVersions: {
-      appknox: '25.12',
+      appknox: '26.2',
       storeknox: '25.8',
     },
     version: Date.now(),
