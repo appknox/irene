@@ -8,6 +8,10 @@ runs:
         node-version: '24'
         cache: 'npm'
 
+    - name: Install npm v10
+      shell: bash
+      run: npm install -g npm@10
+
     - name: Cache dependencies
       id: cacheStep
       uses: actions/cache@v4
