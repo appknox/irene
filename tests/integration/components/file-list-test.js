@@ -7,12 +7,25 @@ import { setupMirage } from 'ember-cli-mirage/test-support';
 import { clickTrigger } from 'ember-power-select/test-support/helpers';
 import { selectChoose } from 'ember-power-select/test-support';
 
+import Service from '@ember/service';
+
+class RouterStub extends Service {
+  currentRouteName = 'authenticated.dashboard.project.files';
+
+  transitionTo(routeNameOrQueryParams) {
+    this.currentRouteName = routeNameOrQueryParams;
+  }
+}
+
 module('Integration | Component | file-list', function (hooks) {
   setupRenderingTest(hooks);
   setupIntl(hooks, 'en');
   setupMirage(hooks);
 
   hooks.beforeEach(async function () {
+    this.owner.unregister('service:router');
+    this.owner.register('service:router', RouterStub);
+
     // Server mocks
     this.server.get('/profiles/:id/unknown_analysis_status', (_, req) => {
       return {
