@@ -100,7 +100,7 @@ export default class FileListComponent extends Component<FileListSignature> {
   }
 
   get showClearFilter() {
-    return this.selectedScanType.value !== -1;
+    return this.selectedScanType.value !== -1 && !this.getFiles.isRunning;
   }
 
   get hasNoFiles() {
@@ -183,7 +183,7 @@ export default class FileListComponent extends Component<FileListSignature> {
 
     this.scanTypeValue = this.selectedScanType.value;
 
-    this.getFiles.perform(this.limit, 0, this.scanTypeValue, false);
+    this.getFiles.perform(this.limit, 0, this.scanTypeValue);
   }
 
   @action clearFilters() {

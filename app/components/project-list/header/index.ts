@@ -94,9 +94,10 @@ export default class ProjectListHeaderComponent extends Component<ProjectListHea
 
   get showClearFilter() {
     return (
-      this.selectedTeam.name !== this.defaultTeam.name ||
-      this.selectedPlatform.value !== -1 ||
-      this.selectedScanType.value !== -1
+      !this.projectService.fetchProjects.isRunning &&
+      (this.selectedTeam.name !== this.defaultTeam.name ||
+        this.selectedPlatform.value !== -1 ||
+        this.selectedScanType.value !== -1)
     );
   }
 
