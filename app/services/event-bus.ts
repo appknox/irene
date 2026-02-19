@@ -1,7 +1,8 @@
 import Service from '@ember/service';
 import Evented from '@ember/object/evented';
-import type AnalysisOverviewModel from 'irene/models/analysis-overview';
 import type { EmberMethod } from 'ember/-private/type-utils';
+import type AnalysisOverviewModel from 'irene/models/analysis-overview';
+import type DynamicscanModel from 'irene/models/dynamicscan';
 
 /**
  * Maps event names to their parameter types.
@@ -10,6 +11,7 @@ import type { EmberMethod } from 'ember/-private/type-utils';
 export interface EventBusEventMap {
   /** Triggered when a new message for websocket message for analysis-overview is received */
   'ws:analysis-overview:update': [analysis: AnalysisOverviewModel];
+  'ws:dynamicscan:update': [dynamicscan: DynamicscanModel];
 }
 
 type EventBusSupportedEventNames = keyof EventBusEventMap;

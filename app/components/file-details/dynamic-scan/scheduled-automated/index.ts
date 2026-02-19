@@ -1,18 +1,18 @@
-/* eslint-disable ember/no-observers */
 import Component from '@glimmer/component';
-import { inject as service } from '@ember/service';
+import { service } from '@ember/service';
 import { action } from '@ember/object';
 import { tracked } from 'tracked-built-ins';
 import { task } from 'ember-concurrency';
-import { addObserver, removeObserver } from '@ember/object/observers';
 import type RouterService from '@ember/routing/router-service';
 import type IntlService from 'ember-intl/services/intl';
 
 import parseError from 'irene/utils/parse-error';
+import ENUMS from 'irene/enums';
 import type DynamicScanService from 'irene/services/dynamic-scan';
 import type FileModel from 'irene/models/file';
 import type IreneAjaxService from 'irene/services/ajax';
 import type DynamicscanModel from 'irene/models/dynamicscan';
+import type EventBusService from 'irene/services/event-bus';
 
 export interface FileDetailsDynamicScanScheduledAutomatedSignature {
   Args: {
@@ -25,6 +25,7 @@ export default class FileDetailsDynamicScanScheduledAutomatedComponent extends C
   @service declare router: RouterService;
   @service declare ajax: IreneAjaxService;
   @service declare intl: IntlService;
+  @service declare eventBus: EventBusService;
   @service('notifications') declare notify: NotificationService;
   @service('dynamic-scan') declare dsService: DynamicScanService;
 
@@ -40,11 +41,17 @@ export default class FileDetailsDynamicScanScheduledAutomatedComponent extends C
       file: this.args.file,
       isAutomatedScan: true,
     });
+
+    // Handle websocket dynamic scan messages
+    this.eventBus.on(
+      'ws:dynamicscan:update',
+      this,
+      this.handleDynamicScanUpdate
+    );
   }
 
-  @tracked notifyUserOfCompletionOrError = false;
-  @tracked isPerformingNotifyAction = false;
   @tracked showNotifyUserModal = false;
+  @tracked scanIsAlreadyCompleted = false;
 
   get dynamicScan() {
     return this.dsService.scheduledScan;
@@ -71,18 +78,54 @@ export default class FileDetailsDynamicScanScheduledAutomatedComponent extends C
   }
 
   get disableNotifUserModalActions() {
-    return this.doNotifyUserOfStatus.isRunning || this.isPerformingNotifyAction;
+    return this.doNotifyUserOfStatus.isRunning;
   }
 
   // cannot start from here in scheduled automated
   handleScanStart() {}
 
+  // handle the scan shutdown will no longer be needed as the websocket event will handle it
+  handleScanShutdown() {}
+
   @action closeShowNotifyUserModal() {
     this.showNotifyUserModal = false;
   }
 
-  @action handleScanShutdown() {
+  @action handleShowNotifyUserModal() {
     this.showNotifyUserModal = true;
+  }
+
+  /**
+   * We use the websocket event to handle the scan shutdown because
+   * the onScanShutdown action is never called from the FileDetails::DynamicScan::Action component
+   * as the "onScanShutdown" action logic is never reached due to the component being removed as the websocket
+   * receives the dynamic scan shutting down event immediately after the action button is clicked.
+   */
+  @action handleDynamicScanUpdate(dynamicscan: DynamicscanModel) {
+    // Only handle the update if the dynamic scan id matches the current dynamic scan
+    if (dynamicscan.id !== this.dynamicScan?.id) {
+      return;
+    }
+
+    // First completion status received
+    // This is to fix the problem of the scan status going from completed to shutting down
+    //  and back again
+    if (dynamicscan.isCompleted) {
+      this.scanIsAlreadyCompleted = true;
+    }
+
+    // Set the scan status to completed if we have received a completed status originally
+    if (this.scanIsAlreadyCompleted) {
+      this.dynamicScan?.set(
+        'status',
+        ENUMS.DYNAMIC_SCAN_STATUS.ANALYSIS_COMPLETED
+      );
+    }
+
+    // Handle the show notify user modal logic
+    if (dynamicscan.isCompleted) {
+      this.handleShowNotifyUserModal();
+    }
   }
 
   @action confirmNotifyUserOfCompletion(confirmation: boolean) {
@@ -92,32 +135,11 @@ export default class FileDetailsDynamicScanScheduledAutomatedComponent extends C
       return;
     }
 
-    // Proceed with notification flow
-    this.isPerformingNotifyAction = true;
-
-    // If scan is not yet completed
-    if (!this.dynamicScanCompleted) {
-      this.notifyUserOfCompletionOrError = true; // To remove observer if registered
-
-      addObserver(
-        this.dynamicScan as DynamicscanModel,
-        'status',
-        this,
-        this.notifyUserOfStatus
-      );
-    } else {
-      this.doNotifyUserOfStatus.perform();
-    }
-  }
-
-  @action notifyUserOfStatus() {
-    if (this.dynamicScanCompleted) {
-      this.doNotifyUserOfStatus.perform();
-    }
+    // Notify user of completion since this function is only called when the scan is completed
+    this.doNotifyUserOfStatus.perform();
   }
 
   @action async completeScanShutdown() {
-    this.isPerformingNotifyAction = false;
     this.showNotifyUserModal = false;
 
     this.router.transitionTo(
@@ -142,8 +164,6 @@ export default class FileDetailsDynamicScanScheduledAutomatedComponent extends C
         this.intl.t('modalCard.scheduledAutomatedNotifyUser.successMsg')
       );
     } catch (error) {
-      this.isPerformingNotifyAction = false;
-
       const errorMsg = parseError(
         error,
         this.intl.t('modalCard.scheduledAutomatedNotifyUser.errorMsg')
@@ -156,16 +176,11 @@ export default class FileDetailsDynamicScanScheduledAutomatedComponent extends C
   willDestroy() {
     super.willDestroy();
 
-    if (this.notifyUserOfCompletionOrError) {
-      removeObserver(
-        this.dynamicScan as DynamicscanModel,
-        'status',
-        this,
-        this.notifyUserOfStatus
-      );
-
-      this.notifyUserOfCompletionOrError = false;
-    }
+    this.eventBus.off(
+      'ws:dynamicscan:update',
+      this,
+      this.handleDynamicScanUpdate
+    );
   }
 }
 

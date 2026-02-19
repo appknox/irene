@@ -911,6 +911,7 @@ module('Acceptance | file-details/dynamic-scan', function (hooks) {
         };
       });
 
+      // Server Mocks
       this.server.create('ds-automated-device-preference', {
         id: this.profile.id,
       });
@@ -937,7 +938,21 @@ module('Acceptance | file-details/dynamic-scan', function (hooks) {
 
       this.server.delete('/v2/dynamicscans/:id', () => {
         this.dynamicscan.update({
-          status: ENUMS.DYNAMIC_SCAN_STATUS.STOP_SCAN_REQUESTED,
+          status: ENUMS.DYNAMIC_SCAN_STATUS.SHUTTING_DOWN,
+        });
+
+        // trigger completed websocket event
+        // simulate completed dynamic scan
+        const websocket = this.owner.lookup('service:websocket');
+
+        websocket.onConnect();
+
+        websocket.onModelNotification({
+          model_name: 'dynamicscan',
+          data: {
+            ...this.dynamicscan.toJSON(),
+            status: ENUMS.DYNAMIC_SCAN_STATUS.ANALYSIS_COMPLETED,
+          },
         });
 
         return new Response(204);
@@ -1110,6 +1125,8 @@ module('Acceptance | file-details/dynamic-scan', function (hooks) {
 
       const notifyCancelBtn =
         '[data-test-fileDetailsDynamicScan-scheduledAutomated-notifyUserModal-cancelBtn]';
+
+      await waitUntil(() => find(notifyUserModalHeader));
 
       assert
         .dom(notifyUserModalHeader)
