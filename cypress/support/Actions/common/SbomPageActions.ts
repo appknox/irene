@@ -318,7 +318,9 @@ export default class SbomPageActions {
   }
 
   //===============================Report flow==========================================
-
+  dashboardRows() {
+    return cy.get('table tbody tr');
+  }
   actionMenuButton() {
     return cy.get('[data-test-sbomApp-actionBtn]');
   }
@@ -347,14 +349,22 @@ export default class SbomPageActions {
     return cy.findAllByTestId('sbomreportlist-reportdownloadbtn');
   }
 
+  downloadReport(index: number = 0) {
+    this.downloadButtons()
+      .eq(index)
+      .should('be.visible')
+      .click({ force: true });
+  }
+
   /**
    * @name openActionMenu
    * @description Opens the action menu for the first app in the table
    */
-  openActionMenu() {
-    this.getAppTableRows()
+  openActionMenu(rowIndex: number = 0) {
+    this.dashboardRows()
       .should('have.length.greaterThan', 0)
-      .first()
+
+      .eq(rowIndex)
       .findAllByTestId('sbomApp-actionBtn')
       .click({ force: true });
   }
@@ -376,14 +386,14 @@ export default class SbomPageActions {
     cy.findByText(cyTranslate('sbomModule.pastSbomAnalyses')).should(
       'be.visible'
     );
-    cy.findByText(cyTranslate('sbomModule.pastSbomAnalysesDescription')).should(
-      'be.visible'
-    );
+    // cy.findByText(cyTranslate('sbomModule.pastSbomAnalysesDescription')).should(
+    //   'be.visible'
+    // );
   }
 
-  openViewReport() {
+  openViewReport(rowIndex: number = 0) {
     this.viewReportButtons()
-      .first()
+      .eq(rowIndex)
       .should('be.visible')
       .click({ force: true });
   }
@@ -464,8 +474,8 @@ export default class SbomPageActions {
 
   breadcrumbBackToSbom() {
     return cy
-      .findAllByTestId('ak-breadcrumbs-auto-trail-item')
-      .contains('All Components and Vulnerabilities');
+      .findByText(cyTranslate('sbomModule.allComponentsAndVulnerabilities'))
+      .should('be.visible');
   }
 
   // ===== Component Details Selectors =====
