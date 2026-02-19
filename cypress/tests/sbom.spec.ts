@@ -46,7 +46,7 @@ describe('SBOM Page', () => {
     cy.findByText(cyTranslate('sbomModule.sbomAppDescription')).should('exist');
   });
 
-  describe.skip('Platform Dropdown Filtering', () => {
+  describe('Platform Dropdown Filtering', () => {
     beforeEach(() => {
       sbomPageActions.openPlatformFilter();
     });
@@ -62,7 +62,7 @@ describe('SBOM Page', () => {
     });
   });
 
-  describe.skip('Search Functionality', () => {
+  describe('Search Functionality', () => {
     beforeEach(() => {
       // Assert search input exists, is visible, and has the correct placeholder
       cy.findByTestId('sbomApp-searchInput')
@@ -203,7 +203,7 @@ describe('SBOM Page', () => {
     });
   });
 
-  describe.skip('SBOM Report Detail Page', () => {
+  describe('SBOM Report Detail Page', () => {
     it('opens SBOM detail page and validates overview + metadata', () => {
       // Intercept SBOM file summary API call
       cy.intercept(API_ROUTES.sbomFileSummary.route).as('sbomFileSummary');
@@ -283,7 +283,7 @@ describe('SBOM Page', () => {
     });
   });
 
-  describe.skip('SBOM Page - Pagination Tests', () => {
+  describe('SBOM Page - Pagination Tests', () => {
     const paginationLabel = '[data-test-page-range]';
     const nextBtn = '[data-test-pagination-next-btn]';
     const prevBtn = '[data-test-pagination-prev-btn]';
