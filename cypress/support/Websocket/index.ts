@@ -22,4 +22,17 @@ export type WS_MODEL_UPDATED_PAYLOAD_MAP = {
       data: MirageFactoryDefProps['file-risk'];
     };
   };
+  submission: {
+    payload: {
+      model_name: 'submission';
+      data: MirageFactoryDefProps['submission'];
+    };
+  };
+
+  file: {
+    payload: {
+      model_name: 'file';
+      data: MirageFactoryDefProps['file'];
+    };
+  };
 };
