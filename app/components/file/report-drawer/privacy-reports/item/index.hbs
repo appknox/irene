@@ -10,30 +10,48 @@
 {{else}}
   <AkList::Item
     data-test-privacyReport-reportlistItem
-    class='px-3 pt-3 pb-2'
+    class='px-3 pt-3 pb-2 flex-column'
     as |li|
   >
-    {{#if (or this.isReportGenerated this.isReportGenerating)}}
-      <li.leftIcon>
-        <AkSvg::PdfReport data-test-privacyReport-reportIcon />
-      </li.leftIcon>
-
-      <AkStack @direction='column' @width='full' @spacing='0.5' class='pl-1'>
-        <AkTypography
-          data-test-privacyReport-reportPrimaryText
-          @variant='subtitle1'
+    {{#if this.showGenerateReport}}
+      <AkStack @direction='column' @spacing='2' @width='full' class='mb-3'>
+        <AkStack
+          local-class='generate-container'
+          @direction='column'
+          @spacing='2'
         >
-          {{t 'privacyModule.downloadPdfPrimaryText'}}
-        </AkTypography>
+          <AkSvg::GenerateReport data-test-privacyReport-reportGenerateSvg />
 
-        {{#if this.isReportGenerating}}
-          <AkTypography
-            data-test-privacyReport-reportGeneratingText
-            @color='textSecondary'
-          >
-            {{t 'generating'}}...
+          <AkTypography data-test-privacyReport-reportGenerateDescription>
+            {{t 'privacyModule.generateReportDescription' htmlSafe=true}}
           </AkTypography>
-        {{else}}
+
+          <AkButton
+            {{on 'click' (perform this.handleGenerateReport)}}
+            @loading={{this.isGenerateButtonLoading}}
+            @disabled={{this.isGenerateButtonLoading}}
+            data-test-privacyReport-reportGenerateBtn
+          >
+            {{this.generateButtonLabel}}
+          </AkButton>
+        </AkStack>
+      </AkStack>
+    {{/if}}
+
+    {{#if this.isReportGenerated}}
+      <AkStack @alignItems='center' @width='full'>
+        <li.leftIcon>
+          <AkSvg::PdfReport data-test-privacyReport-reportIcon />
+        </li.leftIcon>
+
+        <AkStack @direction='column' @width='full' @spacing='0.5' class='pl-1'>
+          <AkTypography
+            data-test-privacyReport-reportPrimaryText
+            @variant='subtitle1'
+          >
+            {{t 'privacyModule.downloadPdfPrimaryText'}}
+          </AkTypography>
+
           <AkStack @alignItems='center' @spacing='0.5'>
             <AkTypography data-test-privacyReport-reportSecondaryText>
               {{this.reportPasswordText}}
@@ -56,16 +74,9 @@
               </AkClipboard>
             {{/if}}
           </AkStack>
-        {{/if}}
-      </AkStack>
+        </AkStack>
 
-      <li.rightIcon>
-        {{#if this.isReportGenerating}}
-          <AkLoader
-            data-test-privacyReport-reportGeneratingLoader
-            @size={{18}}
-          />
-        {{else}}
+        <li.rightIcon>
           <AkIconButton
             {{on 'click' (perform this.handleDownloadReport)}}
             disabled={{this.handleDownloadReport.isRunning}}
@@ -73,29 +84,7 @@
           >
             <AkIcon @iconName='download' />
           </AkIconButton>
-        {{/if}}
-      </li.rightIcon>
-    {{else}}
-      <AkStack @direction='column' @spacing='2' @width='full'>
-        <AkStack
-          local-class='generate-container'
-          @direction='column'
-          @spacing='2'
-        >
-          <AkSvg::GenerateReport data-test-privacyReport-reportGenerateSvg />
-
-          <AkTypography data-test-privacyReport-reportGenerateDescription>
-            {{t 'privacyModule.generateReportDescription' htmlSafe=true}}
-          </AkTypography>
-
-          <AkButton
-            {{on 'click' (perform this.handleGenerateReport)}}
-            @loading={{this.handleGenerateReport.isRunning}}
-            data-test-privacyReport-reportGenerateBtn
-          >
-            {{t 'generateReport'}}
-          </AkButton>
-        </AkStack>
+        </li.rightIcon>
       </AkStack>
     {{/if}}
   </AkList::Item>

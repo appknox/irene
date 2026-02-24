@@ -9,16 +9,10 @@
     />
   {{else}}
     <AkStack
-      @justifyContent={{this.justifyContentValue}}
+      @justifyContent='right'
       @alignItems='center'
       local-class='note-power-by-ai'
     >
-      {{#if this.piiDataAvailable}}
-        <AkTypography data-test-privacyModule-pii-piiDetectedTxt>
-          {{t 'privacyModule.piiDetected' htmlSafe=true}}
-        </AkTypography>
-      {{/if}}
-
       <PoweredByAi::Chip
         @clickable={{true}}
         @drawerInfo={{this.drawerInfo}}

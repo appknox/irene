@@ -1,0 +1,106 @@
+<AkDrawer
+  @open={{@open}}
+  @onClose={{@onClose}}
+  @anchor='right'
+  data-test-privacy-geo-location-map-drawer
+  as |dr|
+>
+  <AkAppbar
+    @justifyContent='space-between'
+    @position='sticky'
+    class='px-3'
+    as |ab|
+  >
+    <AkTypography
+      @color='inherit'
+      @variant='h5'
+      data-test-privacy-geo-location-drawer-header
+    >
+      {{t 'privacyModule.serverLocationDetails'}}
+    </AkTypography>
+
+    <AkIconButton
+      {{on 'click' dr.closeHandler}}
+      class={{ab.classes.defaultIconBtn}}
+      data-test-privacy-geo-location-drawer-close-button
+    >
+      <AkIcon @iconName='close' />
+    </AkIconButton>
+  </AkAppbar>
+
+  <AkStack @direction='column' local-class='drawer-body'>
+    {{#if @selectedCountry.isHighRiskRegion}}
+      <AkStack
+        @alignItems='center'
+        @spacing='1'
+        local-class='drawer-note-section'
+      >
+        <AkStack @alignItems='center' local-class='warning-high'>
+          <AkIcon @iconName='warning' @color='inherit' />
+
+          <AkTypography @color='inherit'>{{t 'high'}}</AkTypography>
+        </AkStack>
+
+        <AkTypography>{{t 'privacyModule.followingDomainsFound'}}</AkTypography>
+      </AkStack>
+    {{/if}}
+
+    <AkStack @alignItems='center' local-class='country-name'>
+      <AkTypography
+        @variant='h5'
+        data-test-privacy-geo-location-drawer-country-name
+      >
+        {{@selectedCountry.countryName}}
+      </AkTypography>
+
+      <AkStack @alignItems='center' local-class='details-number'>
+        <AkIcon @iconName='language' local-class='globe-icon' />
+
+        <AkTypography
+          local-class='number'
+          data-test-privacy-geo-location-drawer-host-number
+        >
+          {{@selectedCountry.hostLength}}
+        </AkTypography>
+      </AkStack>
+    </AkStack>
+
+    <AkStack
+      @width='full'
+      @direction='column'
+      data-test-privacy-geo-location-drawer-host-container
+    >
+      <AkStack
+        @width='full'
+        @direction='column'
+        local-class='accordion-container'
+      >
+        {{#each @selectedCountry.hosts as |host|}}
+          <AkStack @direction='column' @width='full' local-class='accordion'>
+            <AkStack
+              @width='full'
+              @justifyContent='space-between'
+              local-class='accordion-header'
+            >
+              <AkTypography @variant='h5' @fontWeight='medium'>
+                {{host.domain}}
+              </AkTypography>
+            </AkStack>
+
+            <AkStack @direction='column' local-class='accordion-body'>
+              <AkStack @direction='column' @spacing='0.5'>
+                <AkTypography @color='textSecondary'>
+                  {{t 'source'}}
+                </AkTypography>
+
+                <AkTypography @fontWeight='medium' local-class='wrap-text'>
+                  {{host.source}}
+                </AkTypography>
+              </AkStack>
+            </AkStack>
+          </AkStack>
+        {{/each}}
+      </AkStack>
+    </AkStack>
+  </AkStack>
+</AkDrawer>

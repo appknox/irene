@@ -4,11 +4,13 @@ import { tracked } from '@glimmer/tracking';
 import { service } from '@ember/service';
 import * as echarts from 'echarts';
 import type RouterService from '@ember/routing/router-service';
+import type IntlService from 'ember-intl/services/intl';
 
 import styles from './index.scss';
 import type FileModel from 'irene/models/file';
 import type PrivacyModuleService from 'irene/services/privacy-module';
 import type { HostUrl } from 'irene/models/geo-location';
+import type GeoLocationModel from 'irene/models/geo-location';
 
 export interface PrivacyModuleAppDetailsGeoLocationSignature {
   Args: {
@@ -16,13 +18,14 @@ export interface PrivacyModuleAppDetailsGeoLocationSignature {
   };
 }
 
-interface GeoMapData {
+export interface GeoMapData {
   name: string;
   countryName: string;
   hostLength: number;
-  hosts: (HostUrl & { firstSourceLocation: string })[];
-  itemStyle: { areaColor: string };
-  emphasis: { itemStyle: { areaColor: string } };
+  hosts: (HostUrl & { source: string })[];
+  isHighRiskRegion: boolean;
+  itemStyle?: { areaColor: string };
+  emphasis?: { itemStyle: { areaColor: string } };
 }
 
 interface TooltipFormatterParams {
@@ -52,12 +55,14 @@ export default class PrivacyModuleAppDetailsGeoLocationComponent extends Compone
   @service declare privacyModule: PrivacyModuleService;
   @service declare router: RouterService;
   @service('browser/window') declare window: Window;
+  @service declare intl: IntlService;
 
   windowRef: Window | null = null;
   chart: echarts.ECharts | null = null;
   resizeHandler: (() => void) | null = null;
 
   @tracked selectedCountry: GeoMapData | null = null;
+  @tracked isMapView: boolean = true;
 
   constructor(
     owner: unknown,
@@ -70,6 +75,32 @@ export default class PrivacyModuleAppDetailsGeoLocationComponent extends Compone
       this.privacyProjectID,
       true
     );
+  }
+
+  get columns() {
+    return [
+      {
+        name: this.intl.t('country'),
+        valuePath: 'countryName',
+        width: 350,
+        isResizable: false,
+        isReorderable: false,
+      },
+      {
+        name: this.intl.t('privacyModule.risk'),
+        component: 'privacy-module/app-details/geo-location/risk',
+        textAlign: 'center',
+        isResizable: false,
+        isReorderable: false,
+      },
+      {
+        name: this.intl.t('privacyModule.noOfDomains'),
+        component: 'privacy-module/app-details/geo-location/domain-numbers',
+        textAlign: 'right',
+        isResizable: false,
+        isReorderable: false,
+      },
+    ];
   }
 
   get fileId() {
@@ -98,6 +129,26 @@ export default class PrivacyModuleAppDetailsGeoLocationComponent extends Compone
 
   get countryIsSelected() {
     return !!this.selectedCountry;
+  }
+
+  @action handleViewClick(value: boolean) {
+    this.isMapView = value;
+  }
+
+  @action handleRowClick({ rowValue }: { rowValue: GeoLocationModel }) {
+    const selectedObj = {
+      name: rowValue.countryCode,
+      countryName: rowValue.countryName,
+      hostLength: rowValue.hostUrls?.length || 0,
+      hosts:
+        rowValue.hostUrls?.map((host) => ({
+          ...host,
+          source: JSON.stringify(host.source_location) || '',
+        })) || [],
+      isHighRiskRegion: rowValue.isHighRiskRegion,
+    };
+
+    this.openCountryInfoDrawer(selectedObj);
   }
 
   @action
@@ -137,8 +188,9 @@ export default class PrivacyModuleAppDetailsGeoLocationComponent extends Compone
         hosts:
           d.hostUrls?.map((host) => ({
             ...host,
-            firstSourceLocation: host.source_location[0] || '',
+            source: JSON.stringify(host.source_location) || '',
           })) || [],
+        isHighRiskRegion: d.isHighRiskRegion,
         itemStyle: { areaColor },
         emphasis: { itemStyle: { areaColor } },
       };

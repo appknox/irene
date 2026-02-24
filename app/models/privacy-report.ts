@@ -22,6 +22,9 @@ export default class PrivacyReportModel extends Model {
   @attr('date')
   declare generatedOn: Date | null;
 
+  @attr('boolean')
+  declare refreshAvailable: boolean;
+
   @attr('number')
   declare privacyAnalysisStatus: number;
 
