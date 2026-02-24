@@ -98,7 +98,6 @@ export default class LoginActions {
           ).should('not.exist'); // Username/Email field
 
           cy.findByLabelText('login-next-button').should('not.exist'); // User check buttons
-
           // Validate presence of access token in localStorage.
           cy.window()
             .its('localStorage')

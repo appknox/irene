@@ -48,3 +48,11 @@ cypress.env.json
 /cypress/downloads/
 /cypress/snapshots/actual
 /cypress/snapshots/diff
+
+# Playwright
+node_modules/
+/test-results/
+/playwright-report/
+/blob-report/
+/playwright/.cache/
+/playwright/.auth/
