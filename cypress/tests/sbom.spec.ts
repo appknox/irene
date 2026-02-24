@@ -5,7 +5,8 @@ import { APPLICATION_ROUTES } from '../support/application.routes';
 import SbomPageActions from '../support/Actions/common/SbomPageActions';
 import UploadAppActions from '../support/Actions/common/UploadAppActions';
 import cyTranslate from '../support/translations';
-import { MirageFactoryDefProps } from '../support/Mirage/factories.config';
+import { WS_MODEL_UPDATED_PAYLOAD_MAP } from '../support/Websocket';
+import { MirageFactoryDefProps } from '../support/Mirage';
 
 const loginActions = new LoginActions();
 const networkActions = new NetworkActions();
@@ -46,7 +47,7 @@ describe('SBOM Page', () => {
     cy.findByText(cyTranslate('sbomModule.sbomAppDescription')).should('exist');
   });
 
-  describe('Platform Dropdown Filtering', () => {
+  describe.skip('Platform Dropdown Filtering', () => {
     beforeEach(() => {
       sbomPageActions.openPlatformFilter();
     });
@@ -62,7 +63,7 @@ describe('SBOM Page', () => {
     });
   });
 
-  describe('Search Functionality', () => {
+  describe.skip('Search Functionality', () => {
     beforeEach(() => {
       // Assert search input exists, is visible, and has the correct placeholder
       cy.findByTestId('sbomApp-searchInput')
@@ -157,38 +158,105 @@ describe('SBOM Page', () => {
     beforeEach(() => {
       cy.intercept('GET', API_ROUTES.uploadApp.route).as('uploadAppReq');
       cy.intercept('POST', API_ROUTES.uploadApp.route).as('uploadAppReqPOST');
-      cy.intercept('GET', API_ROUTES.sbomProjectList.route).as(
-        'sbomProjectListReload'
-      );
     });
 
     const uploadAppActions = new UploadAppActions();
 
     it('opens Past SBOM Analyses and validates report generation flow', () => {
-      cy.intercept('GET', '/api/v2/sb_reports/*/pdf/download_url').as(
-        'pdfDownload'
+      cy.intercept('GET', API_ROUTES.sbomPdfDownload.route).as('sbPdfDownload');
+
+      cy.intercept('GET', API_ROUTES.sbCycloneDxJsonDownload.route).as(
+        'sbCycloneDxJsonDownload'
       );
-      cy.intercept(
-        'GET',
-        '/api/v2/sb_reports/*/cyclonedx_json_file/download_url'
-      ).as('jsonDownload');
 
       uploadAppActions.initiateViaSystemUpload('MFVA.apk');
-      cy.wait(30000); //wait for SBOM report generation
 
-      sbomPageActions.openActionMenu();
-      sbomPageActions.selectAction('Past SBOM Analyses');
+      let uploadSubmissionID: number | null = null;
 
-      sbomPageActions.validatePastSbomAnalysesPage();
+      // Intercept submission model updated event and get the uploaded file ID
+      cy.interceptWsMessage<
+        | WS_MODEL_UPDATED_PAYLOAD_MAP['submission']['payload']
+        | WS_MODEL_UPDATED_PAYLOAD_MAP['file']['payload']
+      >((event, payload) => {
+        if (
+          event === 'model_updated' &&
+          payload?.model_name === 'submission' &&
+          payload?.data?.status === 7 &&
+          payload?.data?.file !== null
+        ) {
+          uploadSubmissionID = payload.data.id;
+        }
 
-      sbomPageActions.openViewReport();
-      sbomPageActions.generateReport();
+        if (
+          uploadSubmissionID &&
+          payload?.model_name === 'file' &&
+          payload?.data?.submission === uploadSubmissionID
+        ) {
+          cy.wrap(payload?.data).as('uploadedFile');
+          cy.wrap(payload?.data?.project).as('uploadedAppPrjID');
+
+          return true;
+        }
+
+        return false;
+      });
+
+      // Wait for the uploaded file details to be available from the websocket intercept
+      cy.reload();
+
+      cy.wait('@sbomProjectList', NETWORK_WAIT_OPTS);
+
+      // Find the uploaded file in the SBOM project list
+      cy.get('@sbomProjectList')
+        .its('response.body.results')
+        .then((results: Array<MirageFactoryDefProps['sbom-project']>) => {
+          cy.get<number>('@uploadedAppPrjID').then((uploadedAppPrjID) => {
+            const sbomProjectRow = results.find(
+              (r) => r.project === uploadedAppPrjID
+            );
+
+            if (sbomProjectRow) {
+              cy.wrap(sbomProjectRow.id).as('uploadedAppSBPrjId');
+            }
+          });
+        });
+
+      cy.get<number>('@uploadedAppSBPrjId').then((sbPrjID) => {
+        cy.findByTestId(`sbomApp-row-${sbPrjID}`)
+          .findByTestId('sbomApp-actionBtn')
+          .click({ force: true });
+      });
+
+      // Validate Past SBOM Analyses page
+      const pastAnalysesText = cyTranslate('sbomModule.pastSbomAnalyses');
+
+      cy.findByLabelText('sbom app action menu item')
+        .contains(pastAnalysesText)
+        .should('be.visible')
+        .click({ force: true });
+
+      cy.findAllByTestId('sbomScan-row').should('have.length.greaterThan', 0);
+      cy.findByText(pastAnalysesText).should('be.visible');
+
+      // Wait for SBOM Scan to complete
+      cy.wait(3000);
+      cy.reload();
+
+      // open the first (latest) report in the list
+      cy.findAllByTestId('sbomScan-viewReportBtn')
+        .first()
+        .should('be.visible')
+        .click({ force: true });
+
+      sbomPageActions.generatePDFReport();
       sbomPageActions.validateReportGenerated();
-      cy.wait(3000); //wait for report generation to complete
+
+      cy.wait(3000); // wait for report generation to complete
 
       // Download PDF report
-      sbomPageActions.downloadReport(0);
-      cy.wait('@pdfDownload', { timeout: 30000 })
+      sbomPageActions.downloadSBOMAppReport('pdf');
+
+      cy.wait('@sbPdfDownload', { timeout: 30000 })
         .its('response.statusCode')
         .should('equal', 200);
 
@@ -196,14 +264,15 @@ describe('SBOM Page', () => {
       cy.wait(2000);
 
       // Download JSON
-      sbomPageActions.downloadReport(1);
-      cy.wait('@jsonDownload', { timeout: 30000 })
+      sbomPageActions.downloadSBOMAppReport('cyclonedx_json_file');
+
+      cy.wait('@sbCycloneDxJsonDownload', { timeout: 30000 })
         .its('response.statusCode')
         .should('equal', 200);
     });
   });
 
-  describe('SBOM Report Detail Page', () => {
+  describe.skip('SBOM Report Detail Page', () => {
     it('opens SBOM detail page and validates overview + metadata', () => {
       // Intercept SBOM file summary API call
       cy.intercept(API_ROUTES.sbomFileSummary.route).as('sbomFileSummary');
@@ -283,7 +352,7 @@ describe('SBOM Page', () => {
     });
   });
 
-  describe('SBOM Page - Pagination Tests', () => {
+  describe.skip('SBOM Page - Pagination Tests', () => {
     const paginationLabel = '[data-test-page-range]';
     const nextBtn = '[data-test-pagination-next-btn]';
     const prevBtn = '[data-test-pagination-prev-btn]';

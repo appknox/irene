@@ -65,7 +65,7 @@
           {{on 'click' (perform this.handleDownloadReport @reportDetails.type)}}
           disabled={{this.handleDownloadReport.isRunning}}
           data-test-sbomReportList-reportDownloadBtn
-          data-test-cy='sbomreportlist-reportdownloadbtn'
+          data-test-cy='sbomReportList-reportDownloadBtn-{{@reportDetails.type}}'
         >
           <AkIcon @iconName='download' />
         </AkIconButton>
