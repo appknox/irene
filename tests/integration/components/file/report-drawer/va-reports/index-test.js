@@ -375,5 +375,107 @@ module(
 
       assert.strictEqual(notifyService.errorMsg, t('reportGenerateError'));
     });
+
+    test('it renders the interim report in the report list when visible to customer', async function (assert) {
+      this.server.createList('file-report', 2, { progress: 100 });
+
+      this.server.get('v2/files/:fileId/reports', (schema) =>
+        serializer(schema.fileReports.all(), true)
+      );
+
+      this.server.get('/v3/files/:id/can_generate_report', () => ({
+        can_generate_report: false,
+      }));
+
+      const interimReportPassword = 'DUMMY_INTERIM_PASSWORD-123'; //NOSONAR
+      const interimReportGeneratedBy = 'admin@example.com';
+      const interimReportCreatedOn = new Date().toISOString();
+
+      this.server.get('/hudson-api/files/:fileId/interim-reports/', () => ({
+        id: 1,
+        pdf_progress: 100,
+        pdf_status: 2,
+        report_password: interimReportPassword,
+        generated_by: interimReportGeneratedBy,
+        created_on: interimReportCreatedOn,
+        interim_analysis_status: 1,
+        is_visible_to_customer: true,
+        language: 'en',
+      }));
+
+      this.file.isStaticDone = true;
+
+      await render(hbs`<File::ReportDrawer::VaReports @file={{this.file}} />`);
+
+      await waitFor('[data-test-vaReports-reportList]', { timeout: 500 });
+
+      const reportItems = findAll(
+        '[data-test-vaReports-reportList-reportItem]'
+      );
+
+      // pdf, xlsx, csv (current), pdf (previous), pdf (interim)
+      assert.strictEqual(
+        reportItems.length,
+        5,
+        'renders current, summary, previous, and interim report'
+      );
+
+      const interimReportItem = reportItems.find((el) =>
+        el.textContent.includes(
+          t('fileReport.interimReport', { reportType: 'pdf' })
+        )
+      );
+
+      assert.ok(interimReportItem, 'interim report item is rendered');
+    });
+
+    test('it hides the interim report when not visible to customer', async function (assert) {
+      this.server.createList('file-report', 2, { progress: 100 });
+
+      this.server.get('v2/files/:fileId/reports', (schema) =>
+        serializer(schema.fileReports.all(), true)
+      );
+
+      this.server.get('/v3/files/:id/can_generate_report', () => ({
+        can_generate_report: false,
+      }));
+
+      this.server.get('/hudson-api/files/:fileId/interim-reports/', () => ({
+        id: 1,
+        pdf_progress: 100,
+        pdf_status: 2,
+        report_password: 'DUMMY_INTERIM_PASSWORD', //NOSONAR
+        generated_by: 'admin@example.com',
+        created_on: new Date().toISOString(),
+        interim_analysis_status: 1,
+        is_visible_to_customer: false,
+        language: 'en',
+      }));
+
+      this.file.isStaticDone = true;
+
+      await render(hbs`<File::ReportDrawer::VaReports @file={{this.file}} />`);
+
+      await waitFor('[data-test-vaReports-reportList]', { timeout: 500 });
+
+      const reportItems = findAll(
+        '[data-test-vaReports-reportList-reportItem]'
+      );
+
+      // Only pdf, xlsx, csv (current), pdf (previous) - no interim when hidden
+      assert.strictEqual(
+        reportItems.length,
+        4,
+        'interim report is hidden when not visible to customer'
+      );
+
+      const hasInterimReport = reportItems.some((el) =>
+        el.textContent.includes(
+          t('fileReport.interimReport', { reportType: 'pdf' })
+        )
+      );
+
+      assert.false(hasInterimReport, 'interim report is not rendered');
+    });
   }
 );

@@ -1,13 +1,11 @@
 import commondrf from '../commondrf';
 
 export default class SecurityAnalysisAdapter extends commondrf {
-  namespace = 'api/hudson-api';
-
   _buildURL(modelName: string | number, id: string | number) {
     if (id) {
-      return this.buildURLFromBase(`${this.namespace}/analyses/${id}`);
+      return this.buildURLFromBase(`${this.hudson_namespace}/analyses/${id}`);
     } else {
-      return this.buildURLFromBase(`${this.namespace}/analyses`);
+      return this.buildURLFromBase(`${this.hudson_namespace}/analyses`);
     }
   }
 }

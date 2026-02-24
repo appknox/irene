@@ -12,6 +12,7 @@ import type DS from 'ember-data';
 import type Store from 'ember-data/store';
 import type IntlService from 'ember-intl/services/intl';
 
+import dayjs from 'dayjs';
 import parseError from 'irene/utils/parse-error';
 import { REPORT } from 'irene/utils/constants';
 import { type FileReportScanType } from 'irene/models/file-report';
@@ -19,6 +20,7 @@ import type FileReportModel from 'irene/models/file-report';
 import type FileModel from 'irene/models/file';
 import type RealtimeService from 'irene/services/realtime';
 import type DynamicscanModel from 'irene/models/dynamicscan';
+import type InterimReportModel from 'irene/models/interim-report';
 import type AnalyticsService from 'irene/services/analytics';
 
 type FileReportQueryResponse =
@@ -40,6 +42,8 @@ export interface FileReportDetails {
   copyText?: string;
   hideReport?: boolean;
   generatedOnDateTime?: string;
+  generatedBy?: string;
+  reportId?: string;
 }
 
 export interface FileReportDrawerVaReportsSignature {
@@ -60,6 +64,7 @@ export default class FileReportDrawerVaReportsComponent extends Component<FileRe
   @tracked canGenerateReport = false;
   @tracked lastManualDynamicScan: DynamicscanModel | null = null;
   @tracked lastAutomatedDynamicScan: DynamicscanModel | null = null;
+  @tracked interimReportData: InterimReportModel | null = null;
 
   modelName = 'file-report' as const;
 
@@ -77,7 +82,7 @@ export default class FileReportDrawerVaReportsComponent extends Component<FileRe
   }
 
   get hasReports() {
-    return Number(this.reports?.length) > 0;
+    return Number(this.reports?.length) > 0 || this.interimReportData;
   }
 
   get latestReport() {
@@ -86,6 +91,10 @@ export default class FileReportDrawerVaReportsComponent extends Component<FileRe
 
   get previousReport() {
     return this.reports?.slice()?.[1];
+  }
+
+  get interimReport() {
+    return this.interimReportData;
   }
 
   get latestReportIsGenerating() {
@@ -152,6 +161,10 @@ export default class FileReportDrawerVaReportsComponent extends Component<FileRe
     return this.file.project.get('pdfPassword');
   }
 
+  get interimReportPassword() {
+    return this.interimReportData?.reportPassword ?? '';
+  }
+
   get reportDetails(): FileReportDetails[] {
     const xlsxPrimaryText = this.intl.t('fileReport.summaryReport', {
       reportType: 'xlsx',
@@ -208,6 +221,27 @@ export default class FileReportDrawerVaReportsComponent extends Component<FileRe
         iconComponent: 'ak-svg/pdf-report' as const,
         generatedOnDateTime: this.previousReport?.generatedOnDateTime,
       },
+      {
+        fileReport: null,
+        type: 'pdf' as const,
+        primaryText: `${this.intl.t('fileReport.interimReport', {
+          reportType: 'pdf',
+        })}`,
+        secondaryText: this.interimReportPassword
+          ? this.intl.t('fileReport.reportPassword', {
+              password: this.interimReportPassword,
+            })
+          : '',
+        hideReport:
+          !this.interimReport || !this.interimReport.isVisibleToCustomer,
+        copyText: this.interimReportPassword,
+        iconComponent: 'ak-svg/pdf-report' as const,
+        generatedOnDateTime: this.interimReport?.createdOn
+          ? dayjs(this.interimReport.createdOn).format('D MMMM YYYY h:mm A')
+          : '',
+        generatedBy: this.interimReport?.generatedBy,
+        reportId: this.interimReport?.id,
+      },
     ];
   }
 
@@ -229,6 +263,7 @@ export default class FileReportDrawerVaReportsComponent extends Component<FileRe
     this.getCanGenerateReportStatus.perform();
     this.getFileLatestAutoDynamicScans.perform();
     this.getFileLatestManualDynamicScans.perform();
+    this.getInterimReportData.perform();
   }
 
   @action removeReportCounterObserver() {
@@ -296,6 +331,18 @@ export default class FileReportDrawerVaReportsComponent extends Component<FileRe
     this.lastManualDynamicScan = await waitForPromise(
       this.file.getFileLastManualDynamicScan()
     );
+  });
+
+  getInterimReportData = task(async () => {
+    try {
+      this.interimReportData = await waitForPromise(
+        this.store.queryRecord('interim-report', {
+          fileId: this.fileId,
+        })
+      );
+    } catch {
+      this.interimReportData = null;
+    }
   });
 }
 

@@ -5,8 +5,6 @@ import { ModelSchema } from 'ember-data';
 import ModelRegistry from 'ember-data/types/registries/model';
 
 export default class SecurityFileAdapter extends commondrf {
-  namespace = 'api/hudson-api';
-
   query<K extends keyof ModelRegistry>(
     store: Store,
     type: ModelSchema<K>,
@@ -17,7 +15,7 @@ export default class SecurityFileAdapter extends commondrf {
     }
   ) {
     const url = this.buildURLFromBase(
-      `${this.namespace}/projects/${q.projectId}/files?limit=${q.limit}&offset=${q.offset}`
+      `${this.hudson_namespace}/projects/${q.projectId}/files?limit=${q.limit}&offset=${q.offset}`
     );
 
     return this.ajax(url, 'GET');
@@ -25,7 +23,7 @@ export default class SecurityFileAdapter extends commondrf {
 
   _buildURL(modelName: string | number, id: string | number) {
     if (id) {
-      return this.buildURLFromBase(`${this.namespace}/files/${id}`);
+      return this.buildURLFromBase(`${this.hudson_namespace}/files/${id}`);
     }
   }
 }

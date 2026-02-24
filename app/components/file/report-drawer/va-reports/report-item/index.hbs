@@ -13,9 +13,31 @@
 
   <AkStack @direction='column' @width='full' @spacing='0.5' class='pl-1'>
 
-    <AkTypography @variant='subtitle1' data-test-vaReportListItem-primaryText>
-      {{@reportDetails.primaryText}}
-    </AkTypography>
+    <AkStack @spacing='0.5'>
+      <AkTypography @variant='subtitle1' data-test-vaReportListItem-primaryText>
+        {{@reportDetails.primaryText}}
+      </AkTypography>
+
+      {{#if @reportDetails.generatedBy}}
+        <AkTooltip @arrow={{true}} @placement='bottom'>
+          <:default>
+            <AkIcon @iconName='info' @color='textSecondary' />
+          </:default>
+
+          <:tooltipContent>
+            <AkTypography @color='inherit'>
+              {{t 'generatedOn'}}
+              {{@reportDetails.generatedOnDateTime}}
+            </AkTypography>
+
+            <AkTypography @color='inherit'>
+              {{t 'generatedBy'}}
+              {{@reportDetails.generatedBy}}
+            </AkTypography>
+          </:tooltipContent>
+        </AkTooltip>
+      {{/if}}
+    </AkStack>
 
     {{#if this.showGeneratingText}}
       <AkTypography
