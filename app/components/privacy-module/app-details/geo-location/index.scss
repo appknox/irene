@@ -12,56 +12,6 @@
   padding: 1.14em;
 }
 
-.drawer-body {
-  padding: 0 1.428em;
-  width: 642px;
-
-  .country-name {
-    margin: 1.285em 0;
-
-    .details-number {
-      margin-left: 0.285em;
-      border: 1px solid var(--privacy-module-geo-location-map-border-color);
-      border-radius: var(--privacy-module-geo-location-map-border-radius);
-      padding: 0.285em;
-      gap: 0.214em;
-      align-items: center;
-
-      .globe-icon {
-        font-size: 1.071rem !important;
-      }
-
-      .number {
-        font-size: 0.857rem;
-        font-weight: var(--privacy-module-geo-location-text-fw-bold);
-      }
-    }
-  }
-
-  .accordion-container {
-    .accordion {
-      border: 1px solid
-        var(--privacy-module-geo-location-accordion-border-color);
-      margin-bottom: 1.428em;
-    }
-
-    .accordion-header {
-      padding: 0.857em 0.714em 0.857em 1.428em;
-      border-bottom: 0px;
-      background-color: var(--privacy-module-geo-location-map-border-color);
-    }
-
-    .accordion-body {
-      padding: 1.428em;
-      gap: 1.07em;
-
-      .wrap-text {
-        overflow-wrap: anywhere;
-      }
-    }
-  }
-}
-
 .empty-container {
   padding-top: 4em;
   padding-bottom: 4em;
@@ -104,6 +54,7 @@
   cursor: pointer;
   text-decoration: underline;
 }
+
 .tooltip-country-name {
   font-size: 1rem;
 }
@@ -117,4 +68,32 @@
 .tooltip-number {
   font-size: 0.928rem;
   font-weight: var(--privacy-module-geo-location-text-fw-bold);
+}
+
+.switch-button {
+  border-color: var(
+    --privacy-module-geo-location-accordion-border-color
+  ) !important;
+
+  &.active {
+    background-color: var(
+      --privacy-module-geo-location-header-active-background-color
+    );
+  }
+
+  &.table {
+    border-top-left-radius: 0px;
+    border-bottom-left-radius: 0px;
+  }
+
+  &.map {
+    border-right: 0px !important;
+    border-top-right-radius: 0px;
+    border-bottom-right-radius: 0px;
+  }
+}
+
+.table-row:hover {
+  cursor: pointer;
+  background-color: var(--privacy-module-geo-location-table-hover-color);
 }

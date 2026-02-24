@@ -80,10 +80,6 @@ export default class PrivacyModuleAppDetailsPiiComponent extends Component<Priva
     return this.router.currentRoute?.parent?.params['app_id'];
   }
 
-  get justifyContentValue() {
-    return this.piiDataAvailable ? 'space-between' : 'right';
-  }
-
   get isOwner() {
     return this.me.org?.get('is_owner');
   }

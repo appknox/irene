@@ -2578,6 +2578,16 @@ body {
   //variables for privacy-module/app-list/header
   --privacy-module-applist-header-background-color: var(--common-white);
   --privacy-module-applist-header-border-color: var(--border-color-1);
+  --privacy-module-applist-header-filter-border-color: var(--neutral-grey-200);
+  --privacy-module-applist-header-filter-hover-border-color: var(
+    --neutral-grey-400
+  );
+  --privacy-module-applist-header-filter-option-hover-background: var(
+    --hover-light-background
+  );
+  --privacy-module-applist-header-clear-filter-color: var(--neutral-grey-600);
+  --privacy-module-applist-header-clear-filter-hover-color: var(--primary-main);
+  --privacy-module-applist-header-border-radius: var(--border-radius);
 
   //variables for privacy-module/app-list/table/platform
   --privacy-module-applist-table-platform-android-color: var(--android);
@@ -2628,6 +2638,11 @@ body {
   --privacy-module-geo-location-area-border-color: var(--neutral-grey-800);
   --privacy-module-geo-location-area-background-color: var(--neutral-grey-100);
   --privacy-module-geo-location-area-error-color: var(--error-main);
+  --privacy-module-geo-location-header-active-background-color: var(
+    --side-menu-active-background-light
+  );
+  --privacy-module-geo-location-table-hover-color: var(--background-light);
+  --privacy-module-geo-location-drawer-shadow: var(--box-shadow-6);
 
   //variables for privacy-module/app-details/pii/drawer-details
   --privacy-module-pii-drawer-border-color: var(--divider);
@@ -2672,6 +2687,16 @@ body {
   // variables for privacy-module/unread-mark
   --privacy-module-unread-mark-background: var(--neutral-grey-200);
   --privacy-module-unread-mark-highlight-background: var(--success-main);
+
+  // variables for privacy-module/settings/pii
+  --privacy-module-settings-pii-background: var(--common-white);
+  --privacy-module-settings-pii-footer-box-shadow: var(--box-shadow-4);
+
+  // variables for privacy-module/settings/server-location
+  --privacy-module-settings-server-location-background: var(--common-white);
+  --privacy-module-settings-server-location-footer-box-shadow: var(
+    --box-shadow-4
+  );
 
   // variables for ai-reporting/generate-loader
   --ai-reporting-generate-loader-background-color: var(--background-main);

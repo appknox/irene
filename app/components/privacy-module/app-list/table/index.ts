@@ -2,24 +2,14 @@ import Component from '@glimmer/component';
 import { action } from '@ember/object';
 import { service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
-import { task } from 'ember-concurrency';
-import type Store from 'ember-data/store';
 import type RouterService from '@ember/routing/router-service';
 import type IntlService from 'ember-intl/services/intl';
 
-// eslint-disable-next-line ember/use-ember-data-rfc-395-imports
-import type { DS } from 'ember-data';
-
-import parseError from 'irene/utils/parse-error';
 import type { PrivacyModuleAppListQueryParam } from 'irene/routes/authenticated/dashboard/privacy-module/index';
 import type FileModel from 'irene/models/file';
 import type PrivacyProjectModel from 'irene/models/privacy-project';
 import type { PaginationProviderActionsArgs } from 'irene/components/ak-pagination-provider';
-
-type PrivacyProjectQueryResponse =
-  DS.AdapterPopulatedRecordArray<PrivacyProjectModel> & {
-    meta: { count: number };
-  };
+import type PrivacyModuleService from 'irene/services/privacy-module';
 
 export interface PrivacyModuleAppListTableSignature {
   Args: {
@@ -30,13 +20,10 @@ export interface PrivacyModuleAppListTableSignature {
 export default class PrivacyModuleAppListTableComponent extends Component<PrivacyModuleAppListTableSignature> {
   @service declare intl: IntlService;
   @service declare router: RouterService;
-  @service declare store: Store;
   @service('notifications') declare notify: NotificationService;
+  @service declare privacyModule: PrivacyModuleService;
 
-  @tracked privacyProjectQueryResponse: PrivacyProjectQueryResponse | null =
-    null;
   @tracked selectedFile: FileModel | null = null;
-  @tracked showNoScanAlert = false;
 
   // translation variables
   tPleaseTryAgain: string;
@@ -49,9 +36,15 @@ export default class PrivacyModuleAppListTableComponent extends Component<Privac
 
     this.tPleaseTryAgain = this.intl.t('pleaseTryAgain');
 
-    const { app_limit, app_offset } = args.queryParams;
+    const { app_limit, app_offset, app_query, app_platform } = args.queryParams;
 
-    this.fetchPrivacyProjects.perform(app_limit, app_offset, false);
+    this.privacyModule.fetchPrivacyProjects.perform(
+      app_limit,
+      app_offset,
+      app_query,
+      app_platform,
+      false
+    );
   }
 
   get limit() {
@@ -60,6 +53,14 @@ export default class PrivacyModuleAppListTableComponent extends Component<Privac
 
   get offset() {
     return Number(this.args.queryParams.app_offset);
+  }
+
+  get query() {
+    return this.args.queryParams.app_query;
+  }
+
+  get platform() {
+    return this.args.queryParams.app_platform;
   }
 
   get columns() {
@@ -134,27 +135,62 @@ export default class PrivacyModuleAppListTableComponent extends Component<Privac
 
   @action
   handlePrevNextAction({ limit, offset }: PaginationProviderActionsArgs) {
-    this.fetchPrivacyProjects.perform(limit, offset);
+    this.privacyModule.fetchPrivacyProjects.perform(
+      limit,
+      offset,
+      this.query,
+      this.platform
+    );
   }
 
   @action
   handleItemPerPageChange({ limit }: PaginationProviderActionsArgs) {
-    this.fetchPrivacyProjects.perform(limit, 0);
+    this.privacyModule.fetchPrivacyProjects.perform(
+      limit,
+      0,
+      this.query,
+      this.platform
+    );
+  }
+
+  get normalizedPlatform(): number {
+    return Number(this.args.queryParams.app_platform ?? -1);
+  }
+
+  get normalizedQuery(): string {
+    return this.args.queryParams.app_query ?? '';
+  }
+
+  get isFilterApplied() {
+    return this.normalizedQuery !== '' || this.normalizedPlatform !== -1;
+  }
+
+  get noResultFound() {
+    return (
+      this.totalPrivacyProjectCount === 0 &&
+      !this.privacyModule.fetchPrivacyProjects.isRunning &&
+      this.isFilterApplied
+    );
   }
 
   get isPrivacyListEmpty() {
     return (
       this.totalPrivacyProjectCount === 0 &&
-      !this.fetchPrivacyProjects.isRunning
+      !this.privacyModule.fetchPrivacyProjects.isRunning &&
+      !this.isFilterApplied
     );
   }
 
+  get isFetchPrivacyRunning() {
+    return this.privacyModule.fetchPrivacyProjects.isRunning;
+  }
+
   get totalPrivacyProjectCount() {
-    return this.privacyProjectQueryResponse?.meta?.count || 0;
+    return this.privacyModule.privacyProjectQueryResponse?.meta?.count || 0;
   }
 
   get privacyProjectList() {
-    return this.privacyProjectQueryResponse?.slice() || [];
+    return this.privacyModule.privacyProjectQueryResponse?.slice() || [];
   }
 
   get resultDependencies() {
@@ -162,42 +198,14 @@ export default class PrivacyModuleAppListTableComponent extends Component<Privac
   }
 
   @action handleResultDependenciesChange() {
-    this.fetchPrivacyProjects.perform(this.limit, this.offset, false);
+    this.privacyModule.fetchPrivacyProjects.perform(
+      this.limit,
+      this.offset,
+      this.query,
+      this.platform,
+      false
+    );
   }
-
-  setRouteQueryParams(limit: string | number, offset: string | number) {
-    this.router.transitionTo({
-      queryParams: {
-        app_limit: limit,
-        app_offset: offset,
-      },
-    });
-  }
-
-  fetchPrivacyProjects = task(
-    { drop: true },
-    async (
-      limit: string | number,
-      offset: string | number,
-      setQueryParams = true
-    ) => {
-      if (setQueryParams) {
-        this.setRouteQueryParams(limit, offset);
-      }
-
-      try {
-        this.privacyProjectQueryResponse = (await this.store.query(
-          'privacy-project',
-          {
-            limit,
-            offset,
-          }
-        )) as PrivacyProjectQueryResponse;
-      } catch (e) {
-        this.notify.error(parseError(e, this.tPleaseTryAgain));
-      }
-    }
-  );
 }
 
 declare module '@glint/environment-ember-loose/registry' {

@@ -19,8 +19,14 @@
         @svgComponent='ak-svg/privacy-upload'
         data-test-privacyModule-loadingSvg
       />
+    {{else if this.noResultFound}}
+      <PrivacyModule::Status
+        @heading={{t 'noResultsFound'}}
+        @description={{t 'tryAdjustingFilter'}}
+        @svgComponent='ak-svg/project-list-empty'
+      />
     {{else}}
-      {{#if this.fetchPrivacyProjects.isRunning}}
+      {{#if this.isFetchPrivacyRunning}}
         <AkTable::Loading />
       {{else}}
         <AkTable

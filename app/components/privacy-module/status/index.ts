@@ -8,7 +8,8 @@ interface PrivacyModuleStatusSignature {
     svgComponent:
       | 'ak-svg/privacy-not-found'
       | 'ak-svg/privacy-upload'
-      | 'ak-svg/privacy-in-progress';
+      | 'ak-svg/privacy-in-progress'
+      | 'ak-svg/project-list-empty';
   };
 }
 

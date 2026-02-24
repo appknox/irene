@@ -33,6 +33,8 @@ class StubPrivacyModuleService extends Service {
   showNote = false;
   showCompleteDastScanNote = false;
   showGeoUpdated = false;
+  showPiiParametersChangedNote = false;
+  showGeoParametersChangedNote = false;
 }
 
 module('Integration | Component | privacy/note', function (hooks) {
@@ -112,6 +114,42 @@ module('Integration | Component | privacy/note', function (hooks) {
     assert
       .dom('[data-test-ak-notification-banner-message]')
       .hasText(t('privacyModule.geoUpdatedNote'));
+
+    await click('[data-test-ak-notification-banner-close]');
+
+    assert.false(service.showNote, 'Hides banner after clicking close');
+  });
+
+  test('it renders pii parameters changed note', async function (assert) {
+    const service = this.owner.lookup('service:privacy-module');
+    service.showPiiParametersChangedNote = true;
+    service.showNote = true;
+
+    await render(hbs`<PrivacyModule::AppDetails::Note />`);
+
+    assert.dom('[data-test-ak-notification-banner]').exists();
+
+    assert
+      .dom('[data-test-ak-notification-banner-message]')
+      .hasText(t('privacyModule.checkPii'));
+
+    await click('[data-test-ak-notification-banner-close]');
+
+    assert.false(service.showNote, 'Hides banner after clicking close');
+  });
+
+  test('it renders geo parameters changed note', async function (assert) {
+    const service = this.owner.lookup('service:privacy-module');
+    service.showGeoParametersChangedNote = true;
+    service.showNote = true;
+
+    await render(hbs`<PrivacyModule::AppDetails::Note />`);
+
+    assert.dom('[data-test-ak-notification-banner]').exists();
+
+    assert
+      .dom('[data-test-ak-notification-banner-message]')
+      .hasText(t('privacyModule.checkServerLocation'));
 
     await click('[data-test-ak-notification-banner-close]');
 

@@ -69,44 +69,54 @@
             />
           </AkStack>
 
-          {{#if dataItem.url}}
-            <AkStack
-              @direction='column'
-              @spacing='1'
-              local-class='pii-details-api-urls-section url-section-width'
-              class='py-2 px-3 mb-2 mx-3'
-            >
-              <AkStack @spacing='1'>
-                <AkTypography @fontWeight='bold' {{style fontSize='0.857rem'}}>
-                  {{t 'privacyModule.piiApiUrl'}}
-                </AkTypography>
-              </AkStack>
-
-              <AkStack @alignItems='center' @spacing='1' @width='full'>
-                <AkTypography @noWrap={{true}}>
-                  {{dataItem.url}}
-                </AkTypography>
-
-                <AkClipboard
-                  @onSuccess={{this.handleCopySuccess}}
-                  @onError={{this.handleCopyError}}
-                  as |ac|
-                >
-                  <AkIconButton
-                    data-clipboard-text={{dataItem.url}}
-                    id={{ac.triggerId}}
-                    @size='small'
+          {{#let (this.getSourceInfo dataItem) as |info|}}
+            {{#if info}}
+              <AkStack
+                @direction='column'
+                @spacing='1'
+                local-class='pii-details-api-urls-section url-section-width'
+                class='py-2 px-3 mb-2 mx-3'
+              >
+                <AkStack @spacing='1'>
+                  <AkTypography
+                    @fontWeight='bold'
+                    {{style fontSize='0.857rem'}}
                   >
-                    <AkIcon
-                      @iconName='content-copy-outline'
+                    {{info.title}}
+                  </AkTypography>
+                </AkStack>
+
+                <AkStack
+                  @alignItems='center'
+                  @spacing='1'
+                  @width='full'
+                  @justifyContent={{info.justify}}
+                >
+                  <AkTypography @noWrap={{info.noWrap}}>
+                    {{info.value}}
+                  </AkTypography>
+
+                  <AkClipboard
+                    @onSuccess={{this.handleCopySuccess}}
+                    @onError={{this.handleCopyError}}
+                    as |ac|
+                  >
+                    <AkIconButton
+                      data-clipboard-text={{info.value}}
+                      id={{ac.triggerId}}
                       @size='small'
-                      @color='textSecondary'
-                    />
-                  </AkIconButton>
-                </AkClipboard>
+                    >
+                      <AkIcon
+                        @iconName='content-copy-outline'
+                        @size='small'
+                        @color='textSecondary'
+                      />
+                    </AkIconButton>
+                  </AkClipboard>
+                </AkStack>
               </AkStack>
-            </AkStack>
-          {{/if}}
+            {{/if}}
+          {{/let}}
 
           <AkDivider />
         {{/each}}
@@ -134,45 +144,52 @@
         />
       </AkStack>
 
-      {{#if this.selectedPiiData.url}}
-        <AkStack
-          @width='full'
-          @direction='column'
-          @spacing='1'
-          local-class='pii-details-api-urls-section'
-          class='py-2 px-3'
-        >
-          <AkStack @spacing='1'>
-            <AkTypography @fontWeight='bold' {{style fontSize='0.857rem'}}>
-              {{t 'privacyModule.piiApiUrl'}}
-            </AkTypography>
-          </AkStack>
+      {{#let (this.getSourceInfo this.selectedPiiData) as |info|}}
+        {{#if info}}
+          <AkStack
+            @width='full'
+            @direction='column'
+            @spacing='1'
+            local-class='pii-details-api-urls-section'
+            class='py-2 px-3'
+          >
+            <AkStack @spacing='1'>
+              <AkTypography @fontWeight='bold' {{style fontSize='0.857rem'}}>
+                {{info.title}}
+              </AkTypography>
+            </AkStack>
 
-          <AkStack @alignItems='center' @spacing='1' @width='full'>
-            <AkTypography @noWrap={{true}}>
-              {{this.selectedPiiData.url}}
-            </AkTypography>
-
-            <AkClipboard
-              @onSuccess={{this.handleCopySuccess}}
-              @onError={{this.handleCopyError}}
-              as |ac|
+            <AkStack
+              @alignItems='center'
+              @spacing='1'
+              @width='full'
+              @justifyContent={{info.justify}}
             >
-              <AkIconButton
-                data-clipboard-text={{this.selectedPiiData.url}}
-                id={{ac.triggerId}}
-                @size='small'
+              <AkTypography @noWrap={{info.noWrap}}>
+                {{info.value}}
+              </AkTypography>
+
+              <AkClipboard
+                @onSuccess={{this.handleCopySuccess}}
+                @onError={{this.handleCopyError}}
+                as |ac|
               >
-                <AkIcon
-                  @iconName='content-copy-outline'
+                <AkIconButton
+                  data-clipboard-text={{info.value}}
+                  id={{ac.triggerId}}
                   @size='small'
-                  @color='textSecondary'
-                />
-              </AkIconButton>
-            </AkClipboard>
+                >
+                  <AkIcon
+                    @iconName='content-copy-outline'
+                    @size='small'
+                    @color='textSecondary'
+                  />
+                </AkIconButton>
+              </AkClipboard>
+            </AkStack>
           </AkStack>
-        </AkStack>
-      {{/if}}
+        {{/if}}
+      {{/let}}
     {{/if}}
   </AkStack>
 </AkStack>
