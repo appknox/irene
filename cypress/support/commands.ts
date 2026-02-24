@@ -28,7 +28,6 @@
 //
 
 import '@testing-library/cypress/add-commands';
-import { should } from 'chai'; // For type definitions only
 
 Cypress.Commands.add(
   'getAliases',

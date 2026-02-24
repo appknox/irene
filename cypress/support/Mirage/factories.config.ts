@@ -95,6 +95,7 @@ export interface MirageFactoryDefProps {
   submission: FlattenFactoryMethods<
     typeof SUBMISSION_FACTORY_DEF & {
       file: number;
+      id: number;
     }
   >;
 
@@ -117,6 +118,7 @@ export interface MirageFactoryDefProps {
 
   file: IncludeBaseFactoryProps<
     typeof FILE_FACTORY_DEF & {
+      submission: number;
       project: number;
       executable_name: string;
       analyses: Array<AnalysisModelFactoryDef>;
