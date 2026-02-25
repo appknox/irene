@@ -7,6 +7,7 @@ import UploadAppActions from '../support/Actions/common/UploadAppActions';
 import cyTranslate from '../support/translations';
 import { WS_MODEL_UPDATED_PAYLOAD_MAP } from '../support/Websocket';
 import { MirageFactoryDefProps } from '../support/Mirage';
+import { time } from 'echarts';
 
 const loginActions = new LoginActions();
 const networkActions = new NetworkActions();
@@ -240,8 +241,6 @@ describe('SBOM Page', () => {
 
       // Wait for SBOM Scan to complete
       cy.wait(3000);
-      cy.reload();
-
       // open the first (latest) report in the list
       cy.findAllByTestId('sbomScan-viewReportBtn')
         .first()
