@@ -8,6 +8,7 @@ dotenv.config({
 
 export default defineConfig({
   testDir: './playwright',
+
   use: {
     baseURL: process.env.BASE_URL,
     viewport: { width: 1450, height: 1650 },
