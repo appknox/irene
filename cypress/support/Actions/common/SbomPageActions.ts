@@ -402,7 +402,8 @@ export default class SbomPageActions {
 
   breadcrumbBackToSbom() {
     return cy
-      .findByText(cyTranslate('sbomModule.allComponentsAndVulnerabilities'))
+      .findByText(/All Components and Vulnerabilities.*MFVA/i)
+
       .should('be.visible');
   }
 
