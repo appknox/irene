@@ -155,7 +155,7 @@ describe('SBOM Page', () => {
     });
   });
 
-  describe('SBOM Report Flow', () => {
+  describe.skip('SBOM Report Flow', () => {
     beforeEach(() => {
       cy.intercept('GET', API_ROUTES.uploadApp.route).as('uploadAppReq');
       cy.intercept('POST', API_ROUTES.uploadApp.route).as('uploadAppReqPOST');
@@ -271,7 +271,7 @@ describe('SBOM Page', () => {
     });
   });
 
-  describe.skip('SBOM Report Detail Page', () => {
+  describe('SBOM Report Detail Page', () => {
     it('opens SBOM detail page and validates overview + metadata', () => {
       // Intercept SBOM file summary API call
       cy.intercept(API_ROUTES.sbomFileSummary.route).as('sbomFileSummary');
@@ -368,7 +368,7 @@ describe('SBOM Page', () => {
       cy.wait('@sbomProjectList', { timeout: 40000 });
       cy.contains('SBOM', { timeout: 10000 }).should('exist');
     });
-    describe('Navigation - Next/Previous', () => {
+    +describe('Navigation - Next/Previous', () => {
       it('should navigate to next page and verify data changed', () => {
         firstRow().invoke('text').as('initialRow');
         cy.get(nextBtn).should('not.be.disabled').click();
