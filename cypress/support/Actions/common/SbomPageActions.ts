@@ -101,56 +101,6 @@ export default class SbomPageActions {
     return cy.findByTestId('sbomApp-table');
   }
 
-  toggleBtn() {
-    return cy.get('[data-test-sbomSummaryHeader-collapsibleToggleBtn]');
-  }
-
-  metadataField(label: string) {
-    return cy.get(`[data-test-sbomScanDetails-fileSummaryGroup="${label}"]`);
-  }
-
-  // ===== Component Type Filter (List View) =====
-
-  componentTypeFilterIcon() {
-    return cy.get('[data-test-sbom-scanDetails-componentTypeHeader-icon]');
-  }
-
-  componentTypePopover() {
-    return cy.get('[data-test-sbom-scanDetails-componentTypeHeader-popover]');
-  }
-
-  componentTypeRadio(type: string) {
-    return cy.get(
-      `[data-test-sbom-scanDetails-componentTypeHeader-radio="${type}"]`
-    );
-  }
-
-  clearComponentTypeFilter() {
-    return cy.get(
-      '[data-test-sbom-scanDetails-componentTypeHeader-clearFilter]'
-    );
-  }
-
-  // ===== Dependency Type Filter =====
-
-  dependencyTypeFilterIcon() {
-    return cy.get('[data-test-sbom-scanDetails-dependencyTypeHeader-icon]');
-  }
-
-  dependencyTypePopover() {
-    return cy.get('[data-test-sbom-scanDetails-dependencyTypeHeader-popover]');
-  }
-
-  dependencyTypeRadio(type: string) {
-    return cy.findByTestId(`dependency-type-filter-radio-${type}`);
-  }
-
-  clearDependencyTypeFilter() {
-    return cy.get(
-      '[data-test-sbom-scanDetails-dependencyTypeHeader-clearFilter]'
-    );
-  }
-
   /**
    * @name selectAppFromTableRow
    * @description Selects the app from the table row
@@ -162,157 +112,6 @@ export default class SbomPageActions {
       .contains(new RegExp(appName, 'i'))
       .first()
       .click({ force: true });
-  }
-
-  /**
-   * @name validateOverviewDynamic
-   * @description Validates the overview dynamic fields in SBOM Component Details Page
-   * @returns void
-   */
-  validateOComponentDetailsOverviewCounts(sbomFileSummaryAlias: string) {
-    cy.wait(sbomFileSummaryAlias, NETWORK_WAIT_OPTS)
-      .its('response.body')
-      .as('componentCount');
-
-    cy.get<MirageFactoryDefProps['sbom-scan-summary']>('@componentCount').then(
-      (componentCount) => {
-        const {
-          component_count,
-          machine_learning_model_count,
-          framework_count,
-          library_count,
-          file_count,
-        } = componentCount;
-
-        const fields = {
-          [cyTranslate('sbomModule.totalComponents')]: component_count,
-          [cyTranslate('sbomModule.mlModel')]: machine_learning_model_count,
-          [cyTranslate('library')]: library_count,
-          [cyTranslate('framework')]: framework_count,
-          [cyTranslate('file')]: file_count,
-        };
-
-        Object.keys(fields).forEach((key) => {
-          cy.findByTestId(`sbom-overview-item-${key}`)
-            .should('be.visible')
-            .should('contain', fields[key]);
-        });
-      }
-    );
-  }
-
-  validateMetadataDynamic(sbomFileAlias: string = '@sbomFileComponents') {
-    this.toggleBtn().should('be.visible').click();
-    cy.wait(sbomFileAlias, { timeout: 10000 })
-      .its('response.body')
-      .as('sbomFileData');
-
-    cy.get<MirageFactoryDefProps['sbom-file']>('@sbomFileData').then(
-      (sbomFile) => {
-        cy.findAllByTestId('sbomscandetails-filesummarygroup', {
-          timeout: 7000,
-        }).should('have.length.greaterThan', 0);
-
-        const metadataFields = {
-          [cyTranslate('status')]: sbomFile.status,
-          [cyTranslate('sbomModule.generatedDate')]: sbomFile.completed_at,
-          [cyTranslate('file')]: sbomFile.id,
-        };
-
-        Object.keys(metadataFields).forEach((label) => {
-          const expectedValue = metadataFields[label];
-          if (expectedValue) {
-            this.metadataField(label)
-              .should('be.visible')
-              .should('contain', expectedValue);
-          }
-        });
-      }
-    );
-  }
-  // Component Type Filter ACTIONS
-
-  openComponentTypeFilter() {
-    this.componentTypeFilterIcon().should('be.visible').click({ force: true });
-
-    this.componentTypePopover().should('be.visible', DEFAULT_ASSERT_OPTS);
-  }
-
-  selectComponentType(type: string) {
-    this.componentTypeRadio(type)
-      .should('exist', DEFAULT_ASSERT_OPTS)
-      .click({ force: true });
-  }
-  validateComponentTypeFilteredRows(type: string) {
-    cy.get('body').then((body) => {
-      const rowCount = body.find('[data-test-sbomComponent-row]').length;
-
-      if (rowCount > 0) {
-        // Rows exist - validate they contain the type
-        cy.get('[data-test-sbomComponent-row]')
-          .should('have.length.greaterThan', 0)
-          .each((row) => {
-            cy.wrap(row).invoke('text').should('contain', type);
-          });
-      }
-    });
-  }
-  /**
-   * @param clearComponentTypeFilterOnly
-   * @description Clears the component type filter selection without selecting another type. This is necessary to validate that the filter is cleared and all rows are shown again, as sometimes selecting another type does not clear the previous selection properly in the UI.
-   */
-  clearComponentTypeFilterOnly() {
-    this.clearComponentTypeFilter().should('exist').click({ force: true });
-    cy.get('body').click(0, 0);
-  }
-
-  /**
-   * @parm openDependencyTypeFilter
-   * @description Opens the dependency type filter popover
-   * @returns void
-   */
-  openDependencyTypeFilter() {
-    this.dependencyTypeFilterIcon().should('be.visible').click({ force: true });
-
-    this.dependencyTypePopover().should('be.visible', DEFAULT_ASSERT_OPTS);
-  }
-  /**  * @name selectDependencyType
-   * @description Selects the dependency type from the dependency type filter
-   * @param type - The dependency type to select (e.g. "Direct", "Transitive")
-   * @returns void
-   */
-  selectDependencyType(type: string) {
-    this.dependencyTypeRadio(type)
-      .should('exist', DEFAULT_ASSERT_OPTS)
-      .click({ force: true });
-    // popover sometimes does not auto-close
-    cy.get('body').click(0, 0);
-  }
-
-  /**
-   * @name validateDependencyTypeFilteredRows
-   * @description Validates the filtered rows in the component list based on the selected dependency type. If there are rows present, it checks that each row contains the specified dependency type.
-   */
-  validateDependencyTypeFilteredRows(type: string) {
-    cy.get('body').then((body) => {
-      const rowCount = body.find('[data-test-sbomComponent-row]').length;
-
-      if (rowCount > 0) {
-        cy.get('[data-test-sbomComponent-row]')
-          .should('have.length.greaterThan', 0)
-          .each((row) => {
-            cy.wrap(row).invoke('text').should('contain', type);
-          });
-      }
-    });
-  }
-  /**
-   * @name clearDependencyTypeFilterOnly
-   * @description Clears the dependency type filter selection without selecting another type. This is necessary to validate that the filter is cleared and all rows are shown again, as sometimes selecting another type does not clear the previous selection properly in the UI.
-   */
-  clearDependencyTypeFilterOnly() {
-    this.clearDependencyTypeFilter().should('exist').click({ force: true });
-    cy.get('body').click(0, 0);
   }
 
   dashboardRows() {
@@ -375,35 +174,9 @@ export default class SbomPageActions {
     );
   }
 
-  treeViewBtn() {
-    return cy.get('[data-test-sbomscandetails-switch-treeviewbutton]');
-  }
-
-  listViewBtn() {
-    return cy.get('[data-test-sbomscandetails-switch-listviewbutton]');
-  }
-
-  expandNodeIcon() {
-    return cy.get('[data-test-component-tree-nodeexpandicon]').first();
-  }
-
-  collapseAllBtn() {
-    return cy.get('[data-test-sbomscandetails-collapseallbutton]');
-  }
-
-  componentLinks() {
-    return cy.get('[data-test-component-tree-nodelabel]');
-  }
-
-  // ===== Breadcrumb Selectors =====
-  breadcrumbContainer() {
-    return cy.get('[data-test-ak-breadcrumbs-auto-trail-container]');
-  }
-
   breadcrumbBackToSbom() {
     return cy
       .findByText(/All Components and Vulnerabilities.*MFVA/i)
-
       .should('be.visible');
   }
 
@@ -414,16 +187,6 @@ export default class SbomPageActions {
 
   componentVulnTab() {
     return cy.get('[data-test-sbomcomponentdetails-tab="vulnerabilities"]');
-  }
-
-  componentSummary(label: string) {
-    return cy.get(
-      `[data-test-sbomscandetails-componentdetails-summary="${label}"]`
-    );
-  }
-
-  componentStatus(status: string) {
-    return cy.get(`[data-test-sbomcomponent-status="${status}"]`);
   }
 
   validateDefaultTreeView() {
@@ -480,5 +243,277 @@ export default class SbomPageActions {
     this.breadcrumbContainer().should('be.visible');
     this.breadcrumbBackToSbom().click();
     this.treeViewBtn().should('be.visible');
+  }
+
+  // ===== SBOM Detail Page — Selectors =====
+
+  toggleBtn() {
+    return cy.get('[data-test-sbomSummaryHeader-collapsibleToggleBtn]');
+  }
+
+  metadataField(label: string) {
+    return cy.get(`[data-test-sbomScanDetails-fileSummaryGroup="${label}"]`);
+  }
+
+  treeViewBtn() {
+    return cy.get('[data-test-sbomScanDetails-switch-treeViewButton]');
+  }
+
+  listViewBtn() {
+    return cy.get('[data-test-sbomScanDetails-switch-listViewButton]');
+  }
+
+  expandNodeIcon() {
+    return cy.get('[data-test-component-tree-nodeexpandicon]').first();
+  }
+
+  collapseAllBtn() {
+    return cy.get('[data-test-sbomScanDetails-collapseAllButton]');
+  }
+
+  componentLinks() {
+    return cy.get('[data-test-component-tree-nodelabel]');
+  }
+
+  breadcrumbContainer() {
+    return cy.get('[data-test-ak-breadcrumbs-auto-trail-container]');
+  }
+
+  componentTypeFilterIcon() {
+    return cy.get('[data-test-sbom-scanDetails-componentTypeHeader-icon]');
+  }
+
+  componentTypePopover() {
+    return cy.get('[data-test-sbom-scanDetails-componentTypeHeader-popover]');
+  }
+
+  componentTypeRadio(type: string) {
+    return cy.get(
+      `[data-test-sbom-scanDetails-componentTypeHeader-radio="${type}"]`
+    );
+  }
+
+  clearComponentTypeFilter() {
+    return cy.get(
+      '[data-test-sbom-scanDetails-componentTypeHeader-clearFilter]'
+    );
+  }
+
+  dependencyTypeFilterIcon() {
+    return cy.get('[data-test-sbom-scanDetails-dependencyTypeHeader-icon]');
+  }
+
+  dependencyTypePopover() {
+    return cy.get('[data-test-sbom-scanDetails-dependencyTypeHeader-popover]');
+  }
+
+  dependencyTypeRadio(type: string) {
+    return cy.findByTestId(`dependency-type-filter-radio-${type}`);
+  }
+
+  clearDependencyTypeFilter() {
+    return cy.get(
+      '[data-test-sbom-scanDetails-dependencyTypeHeader-clearFilter]'
+    );
+  }
+
+  /**
+   * @name componentDetailsTab
+   * @description Gets the component details tab by tab id
+   * @param tabId - The tab id ('overview' or 'vulnerabilities')
+   * @returns Cypress.Chainable<JQuery<HTMLElement>>
+   */
+  componentDetailsTab(tabId: 'overview' | 'vulnerabilities') {
+    return cy.get(`[data-test-sbomComponentDetails-tab="${tabId}"]`);
+  }
+
+  componentSummary(label: string) {
+    return cy.get(
+      `[data-test-sbomscandetails-componentdetails-summary="${label}"]`
+    );
+  }
+
+  /**
+   * HBS: data-test-sbomComponent-status='{{status.label}}'
+   */
+  componentStatus(status: string) {
+    return cy.get(`[data-test-sbomComponent-status="${status}"]`);
+  }
+
+  // ===== SBOM Detail Page — Actions =====
+
+  /**
+   * @name navigateToSbomDetailPage
+   * @description Navigates to the SBOM detail page by clicking on the app with the specified package name in the app table.
+   * @param packageName - The package name of the app to navigate to
+   */
+  navigateToSbomDetailPage(packageName: string) {
+    this.getAppTableRows()
+      .contains(new RegExp(packageName, 'i'))
+      .should('be.visible')
+      .click({ force: true });
+  }
+
+  /**
+   * @name validateOComponentDetailsOverviewCounts
+   * @description Validates overview counts using real values from sbomFileSummary API response
+   */
+  validateOComponentDetailsOverviewCounts(sbomFileSummaryAlias: string) {
+    cy.get(sbomFileSummaryAlias)
+      .its('response.body')
+      .then((componentCount) => {
+        const {
+          component_count,
+          machine_learning_model_count,
+          framework_count,
+          library_count,
+          file_count,
+        } = componentCount;
+
+        const fields = {
+          [cyTranslate('sbomModule.totalComponents')]: component_count,
+          [cyTranslate('sbomModule.mlModel')]: machine_learning_model_count,
+          [cyTranslate('library')]: library_count,
+          [cyTranslate('framework')]: framework_count,
+          [cyTranslate('file')]: file_count,
+        };
+
+        Object.keys(fields).forEach((key) => {
+          cy.findByTestId(`sbom-overview-item-${key}`)
+            .should('be.visible')
+            .should('contain', fields[key]);
+        });
+      });
+  }
+
+  /**
+   * @name validateMetadataDynamic
+   * @description Validates metadata fields using real values from sbomFileComponents API response
+   */
+  validateMetadataDynamic(sbomFileAlias: string = '@sbomFileComponents') {
+    this.toggleBtn().should('be.visible').click();
+
+    cy.wait(sbomFileAlias, { timeout: 10000 })
+      .its('response.body')
+      .as('sbomFileData');
+
+    cy.get<MirageFactoryDefProps['sbom-file']>('@sbomFileData').then(
+      (sbomFile) => {
+        cy.findAllByTestId('sbomscandetails-filesummarygroup', {
+          timeout: 7000,
+        }).should('have.length.greaterThan', 0);
+
+        const metadataFields = {
+          [cyTranslate('status')]: sbomFile.status,
+          [cyTranslate('sbomModule.generatedDate')]: sbomFile.completed_at,
+          [cyTranslate('file')]: sbomFile.id,
+        };
+
+        Object.keys(metadataFields).forEach((label) => {
+          const expectedValue = metadataFields[label];
+
+          if (expectedValue) {
+            this.metadataField(label)
+              .should('be.visible')
+              .should('contain', expectedValue);
+          }
+        });
+      }
+    );
+  }
+
+  /**
+   * @name openComponentTypeFilter
+   */
+  openComponentTypeFilter() {
+    this.componentTypeFilterIcon().should('be.visible').click({ force: true });
+
+    this.componentTypePopover().should('be.visible', DEFAULT_ASSERT_OPTS);
+  }
+
+  /**
+   * @name selectComponentType
+   */
+  selectComponentType(type: string) {
+    this.componentTypeRadio(type)
+      .should('exist', DEFAULT_ASSERT_OPTS)
+      .click({ force: true });
+  }
+
+  /**
+   * @name validateComponentTypeFilteredRows
+   * @description Validates filtered rows contain the selected component type.
+   * Gracefully handles empty results — some types may have no components.
+   */
+  validateComponentTypeFilteredRows(type: string) {
+    cy.get('body').then((body) => {
+      const rowCount = body.find('[data-test-sbomComponent-row]').length;
+
+      if (rowCount > 0) {
+        cy.get('[data-test-sbomComponent-row]')
+          .should('have.length.greaterThan', 0)
+          .each((row) => {
+            cy.wrap(row).invoke('text').should('contain', type);
+          });
+      }
+    });
+  }
+
+  /**
+   * @name clearComponentTypeFilterOnly
+   * @description Clears component type filter without selecting another type
+   */
+  clearComponentTypeFilterOnly() {
+    this.clearComponentTypeFilter().should('exist').click({ force: true });
+    cy.get('body').click(0, 0);
+  }
+
+  /**
+   * @name openDependencyTypeFilter
+   * @description Opens the dependency type filter popover
+   */
+  openDependencyTypeFilter() {
+    this.dependencyTypeFilterIcon().should('be.visible').click({ force: true });
+
+    this.dependencyTypePopover().should('be.visible', DEFAULT_ASSERT_OPTS);
+  }
+
+  /**
+   * @name selectDependencyType
+   */
+  selectDependencyType(type: string) {
+    this.dependencyTypeRadio(type)
+      .should('exist', DEFAULT_ASSERT_OPTS)
+      .click({ force: true });
+
+    cy.get('body').click(0, 0);
+  }
+
+  /**
+   * @name validateDependencyTypeFilteredRows
+   * @description Validates filtered rows contain the selected dependency type.
+   * Gracefully handles empty results — some types may have no components.
+   */
+  validateDependencyTypeFilteredRows(type: string) {
+    cy.get('body').then((body) => {
+      const rowCount = body.find('[data-test-sbomComponent-row]').length;
+
+      if (rowCount > 0) {
+        cy.get('[data-test-sbomComponent-row]')
+          .should('have.length.greaterThan', 0)
+          .each((row) => {
+            cy.wrap(row).invoke('text').should('contain', type);
+          });
+      }
+    });
+  }
+
+  /**
+   * @name clearDependencyTypeFilterOnly
+   * @description Clears dependency type filter without selecting another type
+   */
+  clearDependencyTypeFilterOnly() {
+    this.clearDependencyTypeFilter().should('exist').click({ force: true });
+    cy.get('body').click(0, 0);
   }
 }
