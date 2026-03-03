@@ -358,6 +358,12 @@ Router.map(function () {
 
         this.route('review-logs', { path: '/discover/review-logs' });
         this.route('archived-apps', { path: '/inventory/archived-apps' });
+
+        this.route('fake-apps', function () {
+          this.route('index', { path: '/' });
+          this.route('details', { path: '/:id' });
+        });
+
         this.route('notifications');
       });
 

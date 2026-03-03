@@ -1,0 +1,152 @@
+<AkDrawer
+  @open={{@open}}
+  @onClose={{this.handleClose}}
+  @anchor='right'
+  data-test-storeknoxFakeApps-ignoreDrawer
+  as |dr|
+>
+  <div>
+    <AkAppbar @justifyContent='space-between' class='px-3' as |ab|>
+      <AkTypography
+        data-test-storeknoxFakeApps-ignoreDrawer-title
+        @color='inherit'
+        @variant='h5'
+      >
+        {{this.drawerTitle}}
+      </AkTypography>
+
+      <AkIconButton
+        data-test-storeknoxFakeApps-ignoreDrawer-closeBtn
+        {{on 'click' dr.closeHandler}}
+        class={{ab.classes.defaultIconBtn}}
+      >
+        <AkIcon @iconName='close' />
+      </AkIconButton>
+    </AkAppbar>
+
+    <div local-class='ignore-drawer-content'>
+      {{#if this.isAlreadyIgnored}}
+        <AkStack @width='full' @direction='column'>
+          <AkStack
+            width='full'
+            @direction='column'
+            @alignItems='flex-start'
+            @spacing='1.5'
+            class='p-3'
+          >
+            {{#each this.ignoreDetails as |detail|}}
+              <AkStack @direction='row' @alignItems='flex-start' @spacing='1'>
+                <AkTypography
+                  @color='textSecondary'
+                  local-class='ignore-drawer-label {{if
+                    this.isAlreadyAddedToInventory
+                    "added-to-inventory"
+                  }}'
+                >
+                  {{detail.label}}
+                </AkTypography>
+
+                <AkTypography @fontWeight='medium'>
+                  {{detail.value}}
+                </AkTypography>
+              </AkStack>
+            {{/each}}
+          </AkStack>
+
+          {{#if this.isAlreadyAddedToInventory}}
+            <AkDivider @color='dark' />
+
+            <AkStack
+              @width='full'
+              @alignItems='center'
+              @spacing='1.5'
+              class='p-3'
+              local-class='ignore-drawer-action-container'
+            >
+              <AkButton
+                data-test-storeknoxFakeApps-ignoreDrawer-viewInInventoryBtn
+                @variant='outlined'
+                @color='neutral'
+                {{on 'click' dr.closeHandler}}
+              >
+                {{t 'storeknox.viewInInventory'}}
+              </AkButton>
+            </AkStack>
+          {{/if}}
+        </AkStack>
+      {{else}}
+        <AkStack @width='full' @direction='column' @spacing='2.5' class='p-3'>
+          <AkTypography data-test-storeknoxFakeApps-ignoreDrawer-prompt>
+            {{t
+              'storeknox.ignoreConfirmationPrompt'
+              appName=@fakeApp.title
+              htmlSafe=true
+            }}
+          </AkTypography>
+
+          <AkStack @width='full' @direction='column' @spacing='1'>
+            <AkTypography
+              @variant='h6'
+              @color='textSecondary'
+              @tag='label'
+              {{style fontSize='0.857rem'}}
+              data-test-storeknoxFakeApps-ignoreDrawer-reasonLabel
+            >
+              {{t 'reason'}}
+            </AkTypography>
+
+            <Textarea
+              data-test-storeknoxFakeApps-ignoreDrawer-reasonInput
+              rows='6'
+              aria-label='Reason to ignore'
+              placeholder='{{t "storeknox.ignoreReasonPlaceholder"}}'
+              @value={{this.changeset.reason}}
+              {{on 'input' this.updateReason}}
+              local-class='
+                textarea-input
+                {{if (get this.changeset.error "reason") "textarea-error"}}'
+            />
+
+            {{#if (get this.changeset.error 'reason')}}
+              <AkTypography
+                data-test-storeknoxFakeApps-ignoreDrawer-reasonError
+                @color='error'
+                {{style fontSize='0.857rem'}}
+              >
+                {{t 'storeknox.ignoreReasonRequired'}}
+              </AkTypography>
+            {{/if}}
+          </AkStack>
+        </AkStack>
+
+        <AkDivider @color='dark' />
+
+        <AkStack
+          @width='full'
+          @alignItems='center'
+          @spacing='1.5'
+          class='p-3'
+          local-class='ignore-drawer-action-container'
+        >
+          <AkButton
+            data-test-storeknoxFakeApps-ignoreDrawer-confirmBtn
+            @variant='filled'
+            @disabled={{not this.isReasonValid}}
+            {{on 'click' this.handleConfirmIgnore}}
+          >
+            {{t 'storeknox.yesIgnore'}}
+          </AkButton>
+
+          <AkButton
+            data-test-storeknoxFakeApps-ignoreDrawer-cancelBtn
+            @variant='outlined'
+            @color='neutral'
+            {{on 'click' dr.closeHandler}}
+          >
+            {{t 'cancel'}}
+          </AkButton>
+        </AkStack>
+      {{/if}}
+    </div>
+  </div>
+</AkDrawer>

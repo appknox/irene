@@ -8,6 +8,7 @@ import {
   PhIconsSet,
   MynauiIconsSet,
   SolarIconsSet,
+  FluentIconsSet,
 } from 'irene/utils/icons';
 
 type MaterialSymbolsIcon = (typeof MaterialSymbolsSet)[number];
@@ -19,6 +20,7 @@ type BxIcon = (typeof BxIconsSet)[number];
 type PhIcon = (typeof PhIconsSet)[number];
 type MynauiIcon = (typeof MynauiIconsSet)[number];
 type SolarIcon = (typeof SolarIconsSet)[number];
+type FluentIcon = (typeof FluentIconsSet)[number];
 
 export const AkIconsSet = [
   ...MaterialSymbolsSet,
@@ -30,6 +32,7 @@ export const AkIconsSet = [
   ...PhIconsSet,
   ...MynauiIconsSet,
   ...SolarIconsSet,
+  ...FluentIconsSet,
 ] as const;
 
 export type AkIconVariantType =
@@ -41,6 +44,7 @@ export type AkIconVariantType =
   | `ph:${PhIcon}`
   | `mynaui:${MynauiIcon}`
   | `solar:${SolarIcon}`
+  | `fluent:${FluentIcon}`
   | MaterialSymbolsIcon;
 
 // Export the icon types for reference
@@ -54,4 +58,5 @@ export type {
   PhIcon,
   MynauiIcon,
   SolarIcon,
+  FluentIcon,
 };

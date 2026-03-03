@@ -1,0 +1,46 @@
+.ignore-drawer-content {
+  width: 650px;
+  border: 1px solid
+    var(--analysis-risk-override-edit-drawer-content-border-color);
+  border-radius: var(
+    --analysis-risk-override-edit-drawer-content-border-radius
+  );
+  margin: 1.5em;
+
+  .ignore-drawer-label {
+    min-width: 160px;
+
+    &.added-to-inventory {
+      min-width: 250px;
+    }
+  }
+
+  .ignore-drawer-action-container {
+    box-shadow: 0px -1px 10px 0px rgba(0, 0, 0, 0.05);
+  }
+
+  .textarea-input {
+    border: 1px solid
+      var(
+        --analysis-risk-override-edit-drawer-override-form-textarea-border-color
+      );
+    border-radius: var(
+      --analysis-risk-override-edit-drawer-override-form-border-radius
+    );
+    color: var(
+      --analysis-risk-override-edit-drawer-override-form-textarea-color
+    );
+    display: inline-flex;
+    justify-content: flex-start;
+    align-items: center;
+    padding: 0.75em;
+    max-width: 100%;
+    width: 100%;
+
+    &.textarea-error {
+      border-color: var(
+        --analysis-risk-override-edit-drawer-override-form-error-color
+      );
+    }
+  }
+}

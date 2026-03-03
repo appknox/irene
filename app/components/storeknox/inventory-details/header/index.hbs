@@ -63,25 +63,42 @@
             data-test-storeknoxInventoryDetails-appLogoImage
           />
 
-          <AkTypography
-            @variant='h5'
-            @fontWeight='bold'
-            @gutterBottom={{true}}
-            class='mt-1'
-            data-test-storeknoxInventoryDetails-headerAppTitle
-          >
-            {{@skInventoryApp.appMetadata.title}}
-          </AkTypography>
+          <AkStack @spacing='0.75' @direction='column' @alignItems='flex-start'>
+            <AkButton
+              @tag='a'
+              @variant='text'
+              @color='textPrimary'
+              @underline='always'
+              href={{@skInventoryApp.appMetadata.url}}
+              target='_blank'
+              rel='noopener noreferrer'
+              class='mt-1'
+            >
+              <AkTypography
+                @variant='h5'
+                @fontWeight='bold'
+                data-test-storeknoxInventoryDetails-headerAppTitle
+              >
+                {{@skInventoryApp.appMetadata.title}}
+              </AkTypography>
+            </AkButton>
 
-          <AkTypography
-            @color='neutral'
-            @gutterBottom={{true}}
-            data-test-storeknoxInventoryDetails-headerAppPackageName
-          >
-            {{@skInventoryApp.appMetadata.packageName}}
-          </AkTypography>
+            <AkTypography
+              @color='textPrimary'
+              data-test-storeknoxInventoryDetails-headerAppPackageName
+            >
+              {{@skInventoryApp.appMetadata.packageName}}
+            </AkTypography>
 
-          <AkStack @spacing='1'>
+            <AkTypography
+              @color='textSecondary'
+              data-test-storeknoxInventoryDetails-headerAppDeveloperName
+            >
+              {{@skInventoryApp.appMetadata.devName}}
+            </AkTypography>
+          </AkStack>
+
+          <AkStack @spacing='1' class='mt-1'>
             <Storeknox::ProductIcon @notClickable={{true}} @product='android'>
               <AppPlatformIcon
                 @platform={{if this.skInventoryApp.isAndroid 'android' 'apple'}}

@@ -1,0 +1,224 @@
+<div
+  local-class='fake-apps-details-root {{if this.isFakeAppIgnored "is-ignored"}}'
+  class='w-full mb-3 pt-2'
+>
+  <AkBreadcrumbs::AutoTrail
+    class='pb-3'
+    data-test-storeknoxInventoryDetails-breadcrumbContainer
+  />
+
+  {{#unless this.isFakeAppIgnored}}
+    <AkStack
+      @bgColor='white'
+      @width='full'
+      @direction='column'
+      @spacing='1'
+      local-class='fake-app-title-container'
+    >
+      <AkStack
+        @width='full'
+        @spacing='1'
+        @alignItems='center'
+        class='py-2 px-3'
+      >
+        <div local-class='title-indicator'></div>
+
+        <AkTypography @fontWeight='bold'>Brand Abuse</AkTypography>
+      </AkStack>
+    </AkStack>
+  {{/unless}}
+
+  <AkStack
+    @bgColor='white'
+    @width='full'
+    @justifyContent='space-between'
+    @spacing='1'
+    local-class='fake-apps-details-header-app-info-container'
+    class='p-3'
+  >
+    <AkStack @direction='column'>
+      <img
+        local-class='app-info-logo'
+        src={{@fakeApp.original_app_icon_url}}
+        alt={{@fakeApp.title}}
+        data-test-storeknoxInventoryDetails-appLogoImage
+      />
+
+      <AkStack @spacing='0.75' @direction='column' @alignItems='flex-start'>
+        <AkButton
+          @tag='a'
+          @variant='text'
+          @color='textPrimary'
+          @underline='always'
+          href={{@fakeApp.app_url}}
+          target='_blank'
+          rel='noopener noreferrer'
+          class='mt-1'
+        >
+          <AkTypography
+            @variant='h5'
+            @fontWeight='bold'
+            data-test-storeknoxInventoryDetails-headerAppTitle
+          >
+            {{@fakeApp.title}}
+          </AkTypography>
+        </AkButton>
+
+        <AkTypography
+          @color='textPrimary'
+          data-test-storeknoxInventoryDetails-headerAppPackageName
+        >
+          {{@fakeApp.package_name}}
+        </AkTypography>
+
+        <AkTypography
+          @color='textSecondary'
+          data-test-storeknoxInventoryDetails-headerAppDeveloperName
+        >
+          {{@fakeApp.dev_name}}
+        </AkTypography>
+      </AkStack>
+
+      <AkStack @spacing='1' class='mt-1'>
+        <Storeknox::ProductIcon @notClickable={{true}} @product='android'>
+          <AppPlatformIcon
+            @platform={{if @fakeApp.store.platform_display 'android' 'apple'}}
+            data-test-storeknoxInventoryDetails-headerPlatformIcon
+          />
+        </Storeknox::ProductIcon>
+
+        <Storeknox::ProductIcon
+          @product={{if @fakeApp.store.platform_display 'android' 'ios'}}
+          @storeLink={{@fakeApp.app_url}}
+        >
+          {{#if (eq @fakeApp.store.platform_display 'android')}}
+            <AkSvg::PlaystoreLogo
+              {{style width='16px'}}
+              data-test-storeknoxInventoryDetails-playStoreLogo
+            />
+
+          {{else}}
+            <AkSvg::AppstoreLogo
+              {{style width='16px'}}
+              data-test-storeknoxInventoryDetails-appStoreLogo
+            />
+          {{/if}}
+        </Storeknox::ProductIcon>
+      </AkStack>
+
+    </AkStack>
+
+    <AkStack
+      @alignItems='center'
+      @justifyContent='flex-end'
+      @spacing='1.5'
+      {{style alignSelf='flex-end'}}
+    >
+      {{#if this.isFakeAppIgnored}}
+        <AkButton {{on 'click' this.openIgnoreDrawer}}>
+          {{t 'viewDetails'}}
+        </AkButton>
+
+      {{else}}
+        <AkButton>
+          {{t 'downloadReport'}}
+        </AkButton>
+
+        <AkButton
+          @variant='outlined'
+          @color='neutral'
+          {{on 'click' this.openIgnoreDrawer}}
+          data-test-storeknoxFakeApps-ignoreAppBtn
+        >
+          {{t 'storeknox.ignoreApp'}}
+        </AkButton>
+
+        <AkButton
+          @variant='outlined'
+          @color='neutral'
+          {{on 'click' this.openIgnoreDrawer}}
+          data-test-storeknoxFakeApps-ignoreAddToInventoryBtn
+        >
+          {{t 'storeknox.ignoreAddToInventory'}}
+        </AkButton>
+      {{/if}}
+    </AkStack>
+  </AkStack>
+</div>
+
+<AkStack @width='full' @spacing='2' @alignItems='stretch'>
+  <AkStack
+    @bgColor='white'
+    @direction='column'
+    local-class='findings-card-container {{if
+      this.isFakeAppIgnored
+      "is-ignored"
+    }}'
+    {{style width='70%'}}
+  >
+    <Storeknox::FakeApps::FindingsCard
+      @isDefaultFinding={{true}}
+      @description={{@fakeApp.ai_classification_justification}}
+      @score={{@fakeApp.ai_confidence}}
+      @title='Overall Score'
+      @isIgnored={{this.isFakeAppIgnored}}
+    />
+
+    <Storeknox::FakeApps::FindingsCard
+      @description={{@fakeApp.ai_scores.LogoSimilarityRule_justification}}
+      @score={{@fakeApp.ai_scores.LogoSimilarityRule}}
+      @title='Logo Similarity'
+    />
+
+    <AkDivider @color='dark' local-class='findings-card-divider' />
+
+    <Storeknox::FakeApps::FindingsCard
+      @description={{@fakeApp.ai_scores.TitleBrandAbuseRule_justification}}
+      @score={{@fakeApp.ai_scores.TitleBrandAbuseRule}}
+      @title='Title Brand Abuse'
+    />
+
+    <AkDivider @color='dark' local-class='findings-card-divider' />
+
+    <Storeknox::FakeApps::FindingsCard
+      @description={{@fakeApp.ai_scores.PackageSimilarityRule_justification}}
+      @score={{@fakeApp.ai_scores.PackageSimilarityRule}}
+      @title='Package Similarity'
+    />
+
+    <AkDivider @color='dark' local-class='findings-card-divider' />
+
+    <Storeknox::FakeApps::FindingsCard
+      @description={{@fakeApp.ai_scores.SemanticSimilarityRule_justification}}
+      @score={{@fakeApp.ai_scores.SemanticSimilarityRule}}
+      @title='Semantic Similarity'
+    />
+
+    <AkDivider @color='dark' local-class='findings-card-divider' />
+
+    <Storeknox::FakeApps::FindingsCard
+      @description={{@fakeApp.ai_scores.DeveloperConsistencyRule_justification}}
+      @score={{@fakeApp.ai_scores.DeveloperConsistencyRule}}
+      @title='Developer Consistency'
+    />
+
+    <AkDivider @color='dark' local-class='findings-card-divider' />
+
+    <Storeknox::FakeApps::FindingsCard
+      @description={{@fakeApp.ai_scores.AppFunctionalitySimilarityRule_justification}}
+      @score={{@fakeApp.ai_scores.AppFunctionalitySimilarityRule}}
+      @title='App Functionality Similarity'
+    />
+  </AkStack>
+
+  <Storeknox::FakeApps::OriginalAppInfo
+    @isIgnored={{this.isFakeAppIgnored}}
+    @fakeApp={{@fakeApp}}
+  />
+</AkStack>
+
+<Storeknox::FakeApps::IgnoreDrawer
+  @fakeApp={{@fakeApp}}
+  @open={{this.showIgnoreDrawer}}
+  @onClose={{this.closeIgnoreDrawer}}
+/>
