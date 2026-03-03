@@ -1,0 +1,63 @@
+{{#if this.isFakeAppIgnored}}
+  <AkStack
+    @width='full'
+    local-class='fake-apps-ignored-banner-root'
+    data-test-storeknoxFakeApps-ignoredBanner
+  >
+    <AkStack
+      @width='full'
+      @direction='row'
+      @alignItems='center'
+      local-class='fake-apps-ignored-banner-container'
+    >
+      <AkStack
+        @alignItems='center'
+        @justifyContent='center'
+        local-class='fake-apps-ignored-banner-icon'
+      >
+        <AkIcon
+          @iconName='warning'
+          @color='inherit'
+          data-test-storeknoxFakeApps-ignoredBanner-icon
+        />
+      </AkStack>
+
+      {{#if this.isFakeAppIgnored}}
+        {{#if this.isAddedToInventory}}
+          <AkStack @alignItems='center'>
+            <AkTypography
+              local-class='fake-apps-ignored-banner-text'
+              data-test-storeknoxFakeApps-ignoredBanner-text
+            >
+              Note - This app has been Ignored & Add to Inventory on
+              <strong>{{this.ignoredOnString}}</strong>.
+            </AkTypography>
+
+            <div local-class='view-in-inventory-button-container'>
+              <AkButton @variant='text' @color='neutral' @underline='none'>
+                <:rightIcon>
+                  <AkIcon @iconName='arrow-right-alt' />
+                </:rightIcon>
+
+                <:default>
+                  <AkTypography @fontWeight='medium'>
+                    {{t 'storeknox.viewInInventory'}}
+                  </AkTypography>
+                </:default>
+              </AkButton>
+            </div>
+          </AkStack>
+
+        {{else}}
+          <AkTypography
+            local-class='fake-apps-ignored-banner-text'
+            data-test-storeknoxFakeApps-ignoredBanner-text
+          >
+            Note - This app has been Added to Inventory on
+            <strong>{{this.ignoredOnString}}</strong>
+          </AkTypography>
+        {{/if}}
+      {{/if}}
+    </AkStack>
+  </AkStack>
+{{/if}}

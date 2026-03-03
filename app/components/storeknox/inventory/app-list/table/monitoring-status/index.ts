@@ -22,7 +22,21 @@ export default class StoreknoxInventoryAppListTableMonitoringStatusComponent ext
     return this.args.loading;
   }
 
+  get showFakeAppsWarning() {
+    return this.app?.hasFakeApps;
+  }
+
   get tooltipMessage() {
+    if (this.showFakeAppsWarning && this.app?.needsAction) {
+      return this.intl.t('storeknox.fakeAppsDetectedAndNeedsActionMsg', {
+        htmlSafe: true,
+      });
+    }
+
+    if (this.showFakeAppsWarning) {
+      return this.intl.t('storeknox.fakeAppsDetectedMsg', { htmlSafe: true });
+    }
+
     if (this.app?.needsAction) {
       return this.intl.t('storeknox.actionsNeededMsg', {
         htmlSafe: true,

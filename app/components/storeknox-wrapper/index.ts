@@ -57,6 +57,12 @@ export default class StoreknoxWrapperComponent extends Component<StoreknoxWrappe
         currentWhen:
           'authenticated.storeknox.discover.result authenticated.storeknox.discover.requested',
       },
+      {
+        label: this.intl.t('storeknox.fakeAppsTitle'),
+        icon: 'find-replace',
+        route: 'authenticated.storeknox.fake-apps',
+        currentWhen: 'authenticated.storeknox.fake-apps',
+      },
     ] as MenuItem[];
   }
 

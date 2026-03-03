@@ -1,0 +1,44 @@
+<AkStack
+  @width='full'
+  @direction='column'
+  local-class='findings-card-root
+  {{if @isDefaultFinding "is-default"}} {{if @isIgnored "is-ignored"}}'
+  class='p-3'
+  @spacing='1.5'
+>
+  {{#if @isDefaultFinding}}
+    <PoweredByAi::Chip
+      @clickable={{false}}
+      @chipText='Findings'
+      class='m-0'
+      data-test-storeknoxFakeApps-poweredByAiChip
+    />
+  {{/if}}
+
+  <AkStack @width='full' @direction='row' @justifyContent='space-between'>
+    <AkStack
+      @width='full'
+      @direction='column'
+      @alignItems='flex-start'
+      {{style maxWidth='620px'}}
+    >
+      <AkTypography @gutterBottom={{true}} @fontWeight='bold'>
+        {{@title}}
+      </AkTypography>
+
+      <AkTypography>
+        {{@description}}
+      </AkTypography>
+    </AkStack>
+
+    <AkTypography
+      @variant='h2'
+      @fontWeight={{if @isDefaultFinding 'bold' 'regular'}}
+      local-class='score
+      {{if @isDefaultFinding "is-default"}} {{if @isIgnored "is-ignored"}}'
+      {{style alignSelf='flex-end'}}
+    >
+      {{this.scorePercentage}}
+    </AkTypography>
+  </AkStack>
+</AkStack>

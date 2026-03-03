@@ -10,6 +10,7 @@ import { icons as BxIcons } from '@iconify-json/bx';
 import { icons as PhIcons } from '@iconify-json/ph';
 import { icons as MynauiIcons } from '@iconify-json/mynaui';
 import { icons as SolarIcons } from '@iconify-json/solar';
+import { icons as FluentIcons } from '@iconify-json/fluent';
 
 import {
   MaterialSymbolsSet,
@@ -21,6 +22,7 @@ import {
   PhIconsSet,
   MynauiIconsSet,
   SolarIconsSet,
+  FluentIconsSet,
 } from '../app/utils/icons.ts';
 
 // Load all icon sets
@@ -36,6 +38,7 @@ const bxCollection = getIcons(BxIcons, BxIconsSet);
 const phCollection = getIcons(PhIcons, PhIconsSet);
 const mynauiCollection = getIcons(MynauiIcons, MynauiIconsSet);
 const solarCollection = getIcons(SolarIcons, SolarIconsSet);
+const fluentCollection = getIcons(FluentIcons, FluentIconsSet);
 
 // Merge everything into one big object
 const output = {
@@ -48,6 +51,7 @@ const output = {
   phCollection,
   mynauiCollection,
   solarCollection,
+  fluentCollection,
 };
 
 // Write output JSON

@@ -1,0 +1,54 @@
+<AkStack
+  @direction='row'
+  @alignItems='center'
+  @justifyContent='space-between'
+  local-class='header-storeknox-fake-apps-page'
+>
+  <AkStack @direction='column' @spacing='0.5'>
+    <AkTypography
+      @variant='subtitle1'
+      data-test-storeknoxInventory-inventoryHeaderText
+    >
+      {{t 'storeknox.fakeAppsTitle'}}
+    </AkTypography>
+
+    <AkTypography
+      @variant='body2'
+      @color='neutral'
+      data-test-storeknoxInventory-inventoryDescriptionText
+    >
+      This page lists all the fake apps and suspected brand abuse detected in
+      your organization applications.
+    </AkTypography>
+  </AkStack>
+
+  <AkStack @alignItems='center' @justifyContent='center' @spacing='1.5'>
+    <AkTextField
+      @placeholder={{t 'searchQuery'}}
+      @value={{this.searchQuery}}
+      {{on 'input' this.onSearchQueryChange}}
+      local-class='search-package-name-input'
+      data-test-search-query-input
+    >
+      <:leftAdornment>
+        <AkIcon @iconName='search' @color='textSecondary' />
+      </:leftAdornment>
+
+      <:rightAdornment>
+        {{#if this.searchQuery}}
+          <AkIconButton @size='small' {{on 'click' this.clearSearchInput}}>
+            <AkIcon @iconName='close' @color='textSecondary' />
+          </AkIconButton>
+        {{/if}}
+      </:rightAdornment>
+    </AkTextField>
+
+    <PoweredByAi::Chip
+      @clickable={{false}}
+      class='ml-2'
+      data-test-storeknoxFakeApps-poweredByAiChip
+    />
+  </AkStack>
+</AkStack>
+
+<Storeknox::FakeApps::ItemCard />

@@ -1,0 +1,17 @@
+.findings-card-root {
+  &.is-default {
+    background-color: #e6f9ff;
+  }
+
+  &.is-ignored {
+    background-color: #f1f1f1;
+  }
+
+  .score.is-default {
+    color: #f43f5e;
+  }
+
+  .score.is-ignored {
+    color: var(--common-black);
+  }
+}
