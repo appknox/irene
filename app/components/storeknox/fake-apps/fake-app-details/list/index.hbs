@@ -1,0 +1,58 @@
+<AkPaginationProvider
+  @results={{this.skFakeApps}}
+  @onItemPerPageChange={{this.onItemPerPageChange}}
+  @totalItems={{this.totalCount}}
+  @nextAction={{this.goToPage}}
+  @prevAction={{this.goToPage}}
+  @itemPerPageOptions={{array 10 25 50}}
+  @defaultLimit={{this.limit}}
+  @offset={{this.offset}}
+  as |pgc|
+>
+  {{#if this.isFetchingData}}
+    <AkStack @justifyContent='center' @alignItems='center' class='p-4'>
+      <AkLoader data-test-storeknoxFakeAppDetailsList-loading />
+    </AkStack>
+
+  {{else if this.hasNoResults}}
+    <AkStack
+      @direction='column'
+      @alignItems='center'
+      class='p-4'
+      data-test-storeknoxFakeAppDetailsList-empty
+    >
+      <AkTypography @variant='h6'>
+        {{t 'noResultsFound'}}
+      </AkTypography>
+    </AkStack>
+
+  {{else}}
+    <AkStack
+      @direction='column'
+      @spacing='3'
+      data-test-storeknoxFakeAppDetailsList-results
+    >
+      {{#each this.fakeAppsWithFindings as |item|}}
+        <Storeknox::FakeApps::FindingDetailCard
+          @finding={{item.finding}}
+          data-test-storeknoxFakeAppDetailsList-card='{{item.skFakeApp.id}}'
+        />
+      {{/each}}
+    </AkStack>
+
+    <AkPagination
+      @disableNext={{pgc.disableNext}}
+      @nextAction={{pgc.nextAction}}
+      @disablePrev={{pgc.disablePrev}}
+      @prevAction={{pgc.prevAction}}
+      @endItemIdx={{pgc.endItemIdx}}
+      @startItemIdx={{pgc.startItemIdx}}
+      @itemPerPageOptions={{pgc.itemPerPageOptions}}
+      @onItemPerPageChange={{pgc.onItemPerPageChange}}
+      @selectedOption={{pgc.selectedOption}}
+      @tableItemLabel={{t 'apps'}}
+      @perPageTranslation={{t 'recordPerPage'}}
+      @totalItems={{pgc.totalItems}}
+    />
+  {{/if}}
+</AkPaginationProvider>

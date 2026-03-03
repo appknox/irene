@@ -1968,12 +1968,13 @@
   "storageManagement": "Storage Management",
   "storeknox": {
     "fakeAppsTitle": "Suspected Brand Abuse/Fake App",
-    "ignoreConfirmationPrompt": "Are you sure you want to ignore the <strong>{appName}</strong> app? Please share your reason.",
-    "ignoreReasonPlaceholder": "Enter the reason to ignore...",
-    "yesIgnore": "Yes, Ignore",
     "yesIgnoreAndAddToInventory": "Yes, Ignore & Add to Inventory",
     "fakeAppIgnored": "偽のアプリは正常に無視されました",
     "fakeAppIgnoredAndAddedToInventory": "偽のアプリが正常に無視され、インベントリに追加されました",
+    "fakeAppDetails": "Fake App Details",
+    "ignoreConfirmationPrompt": "Are you sure you want to ignore the <strong>{appName}</strong> app? Please share your reason.",
+    "ignoreReasonPlaceholder": "Enter the reason to ignore...",
+    "yesIgnore": "Yes, Ignore",
     "ignoredDetails": "Ignored Details",
     "ignoredOn": "Ignored on",
     "ignoredBy": "Ignored by",
@@ -2157,7 +2158,27 @@
     "noLicensesAvailable": "Your organization has <strong>{availableLicenses, plural, =0 {0 license} =1 {1 license} other {# licenses}}</strong> available for monitoring. Kindly purchase more licenses to initiate monitoring for this app.",
     "creditRequestSuccess": "Your request to purchase more licenses has been sent to our team. You will be contacted shortly.",
     "noAppMatchesYourCurrentFilter": "No applications match the selected filters. Please try another query.",
-    "noSkOrgSupportMsg": "Storeknox organization not found. Please contact support."
+    "noSkOrgSupportMsg": "Storeknox organization not found. Please contact support.",
+    "fakeApps": {
+      "ignore": "Ignore",
+      "ignored": "Ignored",
+      "ignoreAndAddToInventory": "Ignore & Add to Inventory",
+      "fakeApp": "Fake App",
+      "findingDetailCard": {
+        "findings": "Findings",
+        "overallScore": "Overall Score",
+        "overallScoreInfo": "Similarity score based on semantic, package, logo, and developer analysis",
+        "semantic": "Semantic",
+        "package": "Package",
+        "logo": "Logo",
+        "developer": "Developer",
+        "appName": "App Name",
+        "namespace": "Namespace",
+        "platform": "Platform",
+        "store": "Store",
+        "viewMore": "View More"
+      }
+    }
   },
   "storeLowercase": "store",
   "submit": "Submit",

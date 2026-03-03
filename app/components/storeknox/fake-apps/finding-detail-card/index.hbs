@@ -1,0 +1,188 @@
+<div
+  local-class='finding-detail-card {{if @finding.isIgnored "ignored"}}'
+  data-test-storeknoxFakeAppsFindingDetailCard-root
+>
+  {{! Card Header }}
+  <AkStack @justifyContent='space-between' @alignItems='center' class='mb-3'>
+    <div local-class='findings-badge'>
+      <AkIcon @iconName='hugeicons:ai-brain-04' @size='small' />
+
+      <AkTypography local-class='findings-badge-text' @variant='body2'>
+        {{t 'storeknox.fakeApps.findingDetailCard.findings'}}
+      </AkTypography>
+    </div>
+
+    <AkIconButton
+      {{on 'click' this.handleOpenMenu}}
+      data-test-storeknoxFakeAppsFindingDetailCard-menuBtn
+    >
+      <AkIcon @iconName='more-vert' />
+    </AkIconButton>
+  </AkStack>
+
+  {{! Score Section }}
+  <AkStack @alignItems='flex-end' @spacing='6' class='mb-3'>
+    <AkStack @direction='column' @spacing='1'>
+      <AkStack @spacing='0.5' @alignItems='center'>
+        <AkTypography @color='primary' @variant='body2' @fontWeight='medium'>
+          {{t 'storeknox.fakeApps.findingDetailCard.overallScore'}}
+        </AkTypography>
+
+        <AkTooltip
+          @title={{t 'storeknox.fakeApps.findingDetailCard.overallScoreInfo'}}
+          @arrow={{true}}
+        >
+          <AkIcon @iconName='info' @size='small' @color='textSecondary' />
+        </AkTooltip>
+      </AkStack>
+
+      <AkTypography
+        @variant='h3'
+        @color='primary'
+        @fontWeight='bold'
+        data-test-storeknoxFakeAppsFindingDetailCard-overallScore
+      >
+        {{@finding.overallScore}}%
+      </AkTypography>
+    </AkStack>
+
+    {{#each this.scoreItems as |item|}}
+      <AkStack @direction='column' @spacing='0.5'>
+        <AkTypography @color='textSecondary' @variant='body2'>
+          {{item.label}}
+        </AkTypography>
+
+        <AkTypography
+          @variant='h4'
+          @fontWeight='regular'
+          data-test-storeknoxFakeAppsFindingDetailCard-score='{{item.id}}'
+        >
+          {{item.value}}%
+        </AkTypography>
+      </AkStack>
+    {{/each}}
+  </AkStack>
+
+  <AkDivider @color='dark' />
+
+  {{! App Detail Section }}
+  <AkStack @direction='column' @spacing='2' class='mt-3'>
+    <AkStack @alignItems='center' @spacing='3'>
+      <AkTypography @color='textSecondary' local-class='detail-label'>
+        {{t 'storeknox.fakeApps.findingDetailCard.logo'}}
+      </AkTypography>
+
+      {{#if @finding.appLogoUrl}}
+        <img
+          local-class='app-logo'
+          src={{@finding.appLogoUrl}}
+          alt={{@finding.appName}}
+          data-test-storeknoxFakeAppsFindingDetailCard-appLogo
+        />
+      {{else}}
+        <div local-class='app-logo-placeholder' />
+      {{/if}}
+    </AkStack>
+
+    <AkStack @alignItems='center' @spacing='3'>
+      <AkTypography @color='textSecondary' local-class='detail-label'>
+        {{t 'storeknox.fakeApps.findingDetailCard.appName'}}
+      </AkTypography>
+
+      <AkTypography
+        @fontWeight='bold'
+        data-test-storeknoxFakeAppsFindingDetailCard-appName
+      >
+        {{@finding.appName}}
+      </AkTypography>
+    </AkStack>
+
+    <AkStack @alignItems='center' @spacing='3'>
+      <AkTypography @color='textSecondary' local-class='detail-label'>
+        {{t 'storeknox.fakeApps.findingDetailCard.namespace'}}
+      </AkTypography>
+
+      <AkTypography data-test-storeknoxFakeAppsFindingDetailCard-namespace>
+        {{@finding.namespace}}
+      </AkTypography>
+    </AkStack>
+
+    <AkStack @alignItems='center' @spacing='3'>
+      <AkTypography @color='textSecondary' local-class='detail-label'>
+        {{t 'storeknox.fakeApps.findingDetailCard.platform'}}
+      </AkTypography>
+
+      <AppPlatformIcon
+        @platform={{if @finding.isAndroid 'android' 'apple'}}
+        data-test-storeknoxFakeAppsFindingDetailCard-platformIcon
+      />
+    </AkStack>
+
+    <AkStack @alignItems='center' @spacing='3'>
+      <AkTypography @color='textSecondary' local-class='detail-label'>
+        {{t 'storeknox.fakeApps.findingDetailCard.store'}}
+      </AkTypography>
+
+      {{#if @finding.isAndroid}}
+        <AkSvg::PlaystoreLogo
+          {{style width='16px'}}
+          data-test-storeknoxFakeAppsFindingDetailCard-playstoreLogo
+        />
+      {{else}}
+        <AkSvg::AppstoreLogo
+          {{style width='16px'}}
+          data-test-storeknoxFakeAppsFindingDetailCard-appstoreLogo
+        />
+      {{/if}}
+    </AkStack>
+
+    <AkStack
+      @alignItems='center'
+      @justifyContent='space-between'
+      @spacing='3'
+      @width='full'
+    >
+      <AkStack @alignItems='center' @spacing='3'>
+        <AkTypography @color='textSecondary' local-class='detail-label'>
+          {{t 'storeknox.fakeApps.findingDetailCard.developer'}}
+        </AkTypography>
+
+        <AkTypography
+          @fontWeight='bold'
+          data-test-storeknoxFakeAppsFindingDetailCard-developer
+        >
+          {{@finding.developer}}
+        </AkTypography>
+      </AkStack>
+
+      {{#if @onViewMore}}
+        <AkButton
+          @variant='filled'
+          {{on 'click' @onViewMore}}
+          data-test-storeknoxFakeAppsFindingDetailCard-viewMoreBtn
+        >
+          <:default>
+            {{t 'viewMore'}}
+          </:default>
+
+          <:rightIcon>
+            <AkIcon @iconName='chevron-right' />
+          </:rightIcon>
+        </AkButton>
+      {{/if}}
+    </AkStack>
+  </AkStack>
+
+  <AkMenu
+    @anchorRef={{this.anchorRef}}
+    @arrow={{true}}
+    @onClose={{this.handleCloseMenu}}
+    as |akm|
+  >
+    {{#each this.menuItems as |item|}}
+      <akm.listItem @divider={{item.divider}} @onClick={{item.onClick}} as |li|>
+        <li.text @primaryText={{item.label}} />
+      </akm.listItem>
+    {{/each}}
+  </AkMenu>
+</div>
