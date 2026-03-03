@@ -48,7 +48,7 @@ describe('SBOM Page', () => {
     cy.findByText(cyTranslate('sbomModule.sbomAppDescription')).should('exist');
   });
 
-  describe.skip('Platform Dropdown Filtering', () => {
+  describe('Platform Dropdown Filtering', () => {
     beforeEach(() => {
       sbomPageActions.openPlatformFilter();
     });
@@ -64,7 +64,7 @@ describe('SBOM Page', () => {
     });
   });
 
-  describe.skip('Search Functionality', () => {
+  describe('Search Functionality', () => {
     beforeEach(() => {
       // Assert search input exists, is visible, and has the correct placeholder
       cy.findByTestId('sbomApp-searchInput')
@@ -155,7 +155,7 @@ describe('SBOM Page', () => {
     });
   });
 
-  describe.skip('SBOM Report Flow', () => {
+  describe('SBOM Report Flow', () => {
     beforeEach(() => {
       cy.intercept('GET', API_ROUTES.uploadApp.route).as('uploadAppReq');
       cy.intercept('POST', API_ROUTES.uploadApp.route).as('uploadAppReqPOST');
@@ -272,134 +272,249 @@ describe('SBOM Page', () => {
   });
 
   describe('SBOM Report Detail Page', () => {
-    it('opens SBOM detail page and validates overview + metadata', () => {
-      // Intercept SBOM file summary API call
+    beforeEach(() => {
       cy.intercept(API_ROUTES.sbomFileSummary.route).as('sbomFileSummary');
       cy.intercept(API_ROUTES.sbomFileComponents.route).as(
         'sbomFileComponents'
       );
+      cy.intercept(API_ROUTES.sbomComponent.route).as('sbomComponent');
 
-      // Search for a particular app
-      cy.findByTestId('sbomApp-searchInput').as('searchInput');
-      cy.get('@searchInput').type(SBOM_MFVA_APP_SEARCH_QUERY);
+      sbomPageActions.navigateToSbomDetailPage(SBOM_MFVA_APP_SEARCH_QUERY);
 
-      sbomPageActions.checkAndWaitForAppLoadingView();
-      sbomPageActions.selectAppFromTableRow(SBOM_MFVA_APP_SEARCH_QUERY);
+      cy.wait('@sbomFileSummary', NETWORK_WAIT_OPTS);
+    });
 
+    it('validates overview counts from API response', () => {
       sbomPageActions.validateOComponentDetailsOverviewCounts(
         '@sbomFileSummary'
       );
-      // TODO: Continue with the rest of the test
+    });
+
+    it('validates metadata section from API response', () => {
       sbomPageActions.validateMetadataDynamic('@sbomFileComponents');
-      //default tree view
-      sbomPageActions.validateDefaultTreeView();
-      //  Switch to List View
-      sbomPageActions.switchToListViewAndValidate();
+    });
 
-      /**
-       * Component Type Filter (List View)
-       * Iterate through component types, select filter, validate results, and clear filter for each type
-       */
-      const componentTypes = ['Library', 'Framework', 'File', 'ML Model'];
+    it('validates default tree view state on page load', () => {
+      // Tree nodes are rendered
+      sbomPageActions.componentLinks().should('have.length.greaterThan', 0);
 
-      componentTypes.forEach((type) => {
-        sbomPageActions.openComponentTypeFilter();
-        sbomPageActions.selectComponentType(type);
-        cy.get('body').click(0, 0);
+      // collapse all button is visible but disabled on initial load since all nodes are already collapsed
+      sbomPageActions.collapseAllBtn().should('be.disabled');
+    });
 
-        sbomPageActions.validateComponentTypeFilteredRows(type);
-
-        sbomPageActions.openComponentTypeFilter();
-        sbomPageActions.clearComponentTypeFilterOnly();
-      });
-      /**
-       * Dependency Type Filter (List View)
-       */
-      const dependencyTypes = ['Direct', 'Transitive'];
-
-      dependencyTypes.forEach((type) => {
-        sbomPageActions.openDependencyTypeFilter();
-        sbomPageActions.selectDependencyType(type);
-        cy.get('body').click(0, 0);
-
-        sbomPageActions.validateDependencyTypeFilteredRows(type);
-
-        sbomPageActions.openDependencyTypeFilter();
-        sbomPageActions.clearDependencyTypeFilterOnly();
+    describe('List View - Filters', () => {
+      beforeEach(() => {
+        // Switch to list view and wait for component data
+        sbomPageActions.listViewBtn().click();
+        cy.wait('@sbomFileComponents', NETWORK_WAIT_OPTS);
       });
 
-      //Switch back to Tree View
-      sbomPageActions.switchBackToTreeView();
-      cy.get('[data-test-component-tree-nodelabel]').should(
-        'have.length.greaterThan',
-        0
-      );
-      //  Expand a tree node
-      sbomPageActions.expandTreeNodeAndValidate();
+      it('filters rows by each component type', () => {
+        const componentTypes = ['Library', 'Framework', 'File', 'ML Model'];
 
-      // Open first component and validate details page
+        componentTypes.forEach((type) => {
+          sbomPageActions.openComponentTypeFilter();
+          sbomPageActions.selectComponentType(type);
+          cy.get('body').click(0, 0);
 
-      sbomPageActions.openFirstComponent();
+          sbomPageActions.validateComponentTypeFilteredRows(type);
 
-      sbomPageActions.validateComponentDetailsPage();
+          sbomPageActions.openComponentTypeFilter();
+          sbomPageActions.clearComponentTypeFilterOnly();
+        });
+      });
 
-      // Navigate back using breadcrumb
-      sbomPageActions.navigateBackToSbomFromBreadcrumb();
+      it('filters rows by each dependency type', () => {
+        const dependencyTypes = ['Direct', 'Transitive'];
 
-      // Collapse all nodes
-      sbomPageActions.collapseAllAndValidate();
+        dependencyTypes.forEach((type) => {
+          sbomPageActions.openDependencyTypeFilter();
+          sbomPageActions.selectDependencyType(type);
+          cy.get('body').click(0, 0);
+
+          sbomPageActions.validateDependencyTypeFilteredRows(type);
+
+          sbomPageActions.openDependencyTypeFilter();
+          sbomPageActions.clearDependencyTypeFilterOnly();
+        });
+      });
+    });
+
+    describe('Tree View - Expand & Component Details', () => {
+      it('expands a tree node and enables collapse all, then collapses all', () => {
+        sbomPageActions.expandNodeIcon().should('be.visible').click();
+
+        //Node expanded — collapse all should now be enabled
+        sbomPageActions.collapseAllBtn().should('not.be.disabled');
+
+        sbomPageActions.collapseAllBtn().click({ force: true });
+
+        // All collapsed — back to disabled
+        sbomPageActions.collapseAllBtn().should('be.disabled');
+      });
+
+      it('opens component details, validates tabs and dynamic status, navigates back via breadcrumb', () => {
+        sbomPageActions.expandNodeIcon().should('be.visible').click();
+        sbomPageActions.componentLinks().first().click({ force: true });
+
+        // Wait for component API before asserting
+        cy.wait('@sbomComponent', NETWORK_WAIT_OPTS);
+
+        // Tabs visible
+        // HBS: data-test-sbomComponentDetails-tab='{{item.id}}'
+        sbomPageActions
+          .componentDetailsTab('overview')
+          .should('be.visible', { timeout: 10000 });
+
+        sbomPageActions
+          .componentDetailsTab('vulnerabilities')
+          .should('be.visible');
+
+        // Summary fields visible
+        sbomPageActions.componentSummary('Component Type').should('be.visible');
+        sbomPageActions
+          .componentSummary('Dependency Type')
+          .should('be.visible');
+        sbomPageActions.componentSummary('Status').should('be.visible');
+
+        sbomPageActions.componentStatus('SECURE').should('exist');
+
+        // Navigate back via breadcrumb
+        sbomPageActions
+          .breadcrumbContainer()
+          .should('be.visible')
+          .contains(/All Components and Vulnerabilities/i)
+          .click();
+        //Back on detail page — tree view button confirms correct page
+        sbomPageActions.treeViewBtn().should('be.visible');
+      });
     });
   });
 
-  describe.skip('SBOM Page - Pagination Tests', () => {
-    const paginationLabel = '[data-test-page-range]';
+  describe('SBOM Page - Pagination Tests', () => {
     const nextBtn = '[data-test-pagination-next-btn]';
     const prevBtn = '[data-test-pagination-prev-btn]';
-    const table = () => cy.findByTestId('sbomApp-table');
-    const firstRow = () => table().find('tbody tr').first();
-    beforeEach(() => {
-      networkActions.hideNetworkLogsFor({ ...API_ROUTES.websockets });
-      cy.intercept(API_ROUTES.check.route).as('checkUserRoute');
-      cy.intercept(API_ROUTES.userInfo.route).as('userInfoRoute');
-      cy.intercept(API_ROUTES.sbomProjectList.route).as('sbomProjectList');
-      cy.intercept(API_ROUTES.submissionList.route).as('submissionList');
-      loginActions.loginWithCredAndSaveSession({ username, password });
-      cy.visit(APPLICATION_ROUTES.sbom);
-      cy.wait('@sbomProjectList', { timeout: 40000 });
-      cy.contains('SBOM', { timeout: 10000 }).should('exist');
-    });
-    +describe('Navigation - Next/Previous', () => {
+    const firstRow = () => cy.get('[data-test-sbomApp-row]').first();
+
+    describe('Navigation - Next/Previous', () => {
       it('should navigate to next page and verify data changed', () => {
-        firstRow().invoke('text').as('initialRow');
+        firstRow().invoke('text').as('initialFirstRow');
+
         cy.get(nextBtn).should('not.be.disabled').click();
-        table().should('have.length.greaterThan', 0);
-        cy.get(paginationLabel)
-          .invoke('text')
-          .should((text) => {
-            const normalized = text.replace(/\s+/g, ' ').trim();
-            expect(normalized).to.match(/\d+-\d+ of \d+/);
+        cy.wait('@sbomProjectList', NETWORK_WAIT_OPTS);
+
+        cy.get('[data-test-sbomApp-row]').should('have.length.greaterThan', 0);
+
+        //Validated against real API count + confirmed Apps' label from response is rendered in the page range text
+        cy.get('@sbomProjectList')
+          .its('response.body.count')
+          .then((totalCount) => {
+            cy.get('[data-test-page-range]')
+              .should('exist')
+              .invoke('text')
+              .should((text) => {
+                const normalized = text.replace(/\s+/g, ' ').trim();
+                expect(normalized).to.match(/^\d+-\d+/);
+                expect(normalized).to.include(`of ${totalCount} Apps`);
+              });
           });
-        firstRow().invoke('text').should('not.equal', cy.get('@initialRow'));
-        cy.get(prevBtn).should('not.be.disabled').click();
+
+        // Verify that the first row's text has changed, indicating new data is loaded
+        firstRow()
+          .invoke('text')
+          .then((newFirstRow) => {
+            cy.get('@initialFirstRow').should('not.equal', newFirstRow);
+          });
+
+        cy.get(prevBtn).should('not.be.disabled');
       });
+
       it('should disable Previous button on first page', () => {
         cy.get(prevBtn).should('be.disabled');
+        cy.get(nextBtn).should('not.be.disabled');
       });
     });
+
     describe('Button States', () => {
       it('should enable/disable buttons correctly during navigation', () => {
         cy.get(prevBtn).should('be.disabled');
+
         cy.get(nextBtn).should('not.be.disabled').click();
-        table().should('have.length.greaterThan', 0);
+        cy.wait('@sbomProjectList', NETWORK_WAIT_OPTS);
+
+        cy.get('[data-test-sbomApp-row]').should('have.length.greaterThan', 0);
+
         cy.get(prevBtn).should('not.be.disabled');
       });
     });
+
+    describe('Items Per Page', () => {
+      it('should update rows and URL when items per page is changed to 25', () => {
+        cy.get('[data-test-pagination-select]').click();
+        cy.findByRole('option', { name: '25' }).click();
+
+        cy.wait('@sbomProjectList', NETWORK_WAIT_OPTS);
+
+        cy.url().should('include', 'app_limit=25');
+
+        cy.get('[data-test-sbomApp-row]').should('have.length.greaterThan', 0);
+
+        cy.get('@sbomProjectList')
+          .its('response.body.count')
+          .then((totalCount) => {
+            const expectedEnd = Math.min(25, totalCount);
+
+            cy.get('[data-test-page-range]')
+              .should('exist')
+              .invoke('text')
+              .should((text) => {
+                const normalized = text.replace(/\s+/g, ' ').trim();
+                expect(normalized).to.match(new RegExp(`^1-${expectedEnd}`));
+                expect(normalized).to.include(`of ${totalCount} Apps`);
+              });
+          });
+      });
+
+      it('should update rows and URL when items per page is changed to 50', () => {
+        cy.get('[data-test-pagination-select]').click();
+        cy.findByRole('option', { name: '50' }).click();
+
+        cy.wait('@sbomProjectList', NETWORK_WAIT_OPTS);
+
+        cy.url().should('include', 'app_limit=50');
+
+        cy.get('[data-test-sbomApp-row]').should('have.length.greaterThan', 0);
+
+        cy.get('@sbomProjectList')
+          .its('response.body.count')
+          .then((totalCount) => {
+            const expectedEnd = Math.min(50, totalCount);
+
+            cy.get('[data-test-page-range]')
+              .should('exist')
+              .invoke('text')
+              .should((text) => {
+                const normalized = text.replace(/\s+/g, ' ').trim();
+                expect(normalized).to.match(new RegExp(`^1-${expectedEnd}`));
+                expect(normalized).to.include(`of ${totalCount} Apps`);
+              });
+          });
+      });
+    });
+
     describe('URL State', () => {
       it('should update URL when changing pages', () => {
-        cy.url().as('page1Url');
-        cy.get(nextBtn).click();
-        table().should('have.length.greaterThan', 0);
-        cy.url().should('not.equal', cy.get('@page1Url'));
+        cy.url().then((page1Url) => {
+          cy.get(nextBtn).click();
+          cy.wait('@sbomProjectList', NETWORK_WAIT_OPTS);
+
+          cy.url().should('not.equal', page1Url);
+
+          cy.get('[data-test-sbomApp-row]').should(
+            'have.length.greaterThan',
+            0
+          );
+        });
       });
     });
   });
