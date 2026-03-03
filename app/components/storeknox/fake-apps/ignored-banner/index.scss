@@ -1,0 +1,40 @@
+.fake-apps-ignored-banner-root {
+  position: sticky;
+  top: 0em;
+  z-index: 100;
+
+  .fake-apps-ignored-banner-container {
+    position: absolute;
+    top: -0.5em;
+    left: 0em;
+    right: 0em;
+    margin-left: -0.5em;
+    margin-right: -0.5em;
+    width: calc(100% + 1em);
+    height: 44px;
+    background-color: var(
+      --storeknox-inventory-details-archived-banner-bg-color
+    );
+
+    filter: drop-shadow(0px 4px 20px rgba(64, 64, 64, 0.15));
+  }
+
+  .fake-apps-ignored-banner-icon {
+    width: 53px;
+    height: 100%;
+    color: var(--storeknox-inventory-details-archived-banner-icon-color);
+    background-color: var(
+      --storeknox-inventory-details-archived-banner-icon-bg-color
+    );
+  }
+
+  .fake-apps-ignored-banner-text {
+    padding: 0.7857em;
+  }
+
+  .view-in-inventory-button-container {
+    background-color: #e9e9e9;
+    border-radius: var(--border-radius);
+    padding: 0em 0.5714em;
+  }
+}

@@ -27,6 +27,7 @@ export interface AkBreadcrumbsItemProps {
     | 'organization'
     | 'storeknox/inventory'
     | 'storeknox/discovery'
+    | 'storeknox/fake-apps'
     | 'privacy-module'
     | 'ai-reporting';
 

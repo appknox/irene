@@ -1,0 +1,186 @@
+<AkStack @bgColor='white' local-class='original-app-details-wrapper'>
+  <AkStack
+    @width='full'
+    @direction='column'
+    @spacing='1'
+    local-class='original-app-details-container {{if @isIgnored "is-ignored"}}'
+    {{style maxWidth='440px'}}
+  >
+    <AkStack @width='full' @spacing='1' @alignItems='center' class='py-2 px-3'>
+      <div local-class='original-app-details-header-indicator'></div>
+
+      <AkTypography @fontWeight='bold'>Original App Details</AkTypography>
+    </AkStack>
+
+    <AkDivider @color='dark' />
+
+    <AkStack @width='full' @spacing='2.5' @direction='column' class='py-2 px-3'>
+      <AkStack
+        @direction='row'
+        @alignItems='center'
+        @spacing='1'
+        @justifyContent='flex-start'
+      >
+        <AkTypography
+          @color='textSecondary'
+          local-class='original-app-details-label-text'
+        >
+          Logo
+        </AkTypography>
+
+        <img
+          local-class='app-info-logo'
+          src={{@fakeApp.original_app_icon_url}}
+          alt={{@fakeApp.title}}
+          data-test-storeknoxInventoryDetails-appLogoImage
+        />
+      </AkStack>
+
+      <AkStack
+        @direction='row'
+        @alignItems='center'
+        @spacing='1'
+        @justifyContent='flex-start'
+      >
+        <AkTypography
+          @color='textSecondary'
+          local-class='original-app-details-label-text'
+        >
+          App Name
+        </AkTypography>
+
+        <AkButton
+          @tag='a'
+          @variant='text'
+          @color='textPrimary'
+          @underline='always'
+          href={{@fakeApp.app_url}}
+          target='_blank'
+          rel='noopener noreferrer'
+          class='mt-1'
+        >
+          <AkTypography
+            @fontWeight='medium'
+            data-test-storeknoxInventoryDetails-headerAppTitle
+          >
+            {{@fakeApp.title}}
+          </AkTypography>
+        </AkButton>
+      </AkStack>
+
+      <AkStack
+        @direction='row'
+        @alignItems='center'
+        @spacing='1'
+        @justifyContent='flex-start'
+      >
+        <AkTypography
+          @color='textSecondary'
+          local-class='original-app-details-label-text'
+        >
+          Namespace
+        </AkTypography>
+
+        <AkTypography
+          @fontWeight='medium'
+          @noWrap={{true}}
+          title={{@fakeApp.package_name}}
+          {{style maxWidth='240px'}}
+          data-test-storeknoxInventoryDetails-headerAppPackageName
+        >
+          {{@fakeApp.package_name}}
+        </AkTypography>
+      </AkStack>
+
+      <AkStack
+        @direction='row'
+        @alignItems='center'
+        @spacing='1'
+        @justifyContent='flex-start'
+      >
+        <AkTypography
+          @color='textSecondary'
+          local-class='original-app-details-label-text'
+        >
+          Platform
+        </AkTypography>
+
+        <AppPlatformIcon
+          @platform={{if @fakeApp.store.platform_display 'android' 'apple'}}
+          data-test-storeknoxInventoryDetails-headerPlatformIcon
+        />
+      </AkStack>
+
+      <AkStack
+        @direction='row'
+        @alignItems='center'
+        @spacing='1'
+        @justifyContent='flex-start'
+      >
+        <AkTypography
+          @color='textSecondary'
+          local-class='original-app-details-label-text'
+        >
+          Store
+        </AkTypography>
+
+        {{#if (eq @fakeApp.store.platform_display 'android')}}
+          <AkSvg::PlaystoreLogo
+            {{style width='16px'}}
+            data-test-storeknoxInventoryDetails-playStoreLogo
+          />
+
+        {{else}}
+          <AkSvg::AppstoreLogo
+            {{style width='16px'}}
+            data-test-storeknoxInventoryDetails-appStoreLogo
+          />
+        {{/if}}
+      </AkStack>
+
+      <AkStack
+        @direction='row'
+        @alignItems='center'
+        @spacing='1'
+        @justifyContent='flex-start'
+      >
+        <AkTypography
+          @color='textSecondary'
+          local-class='original-app-details-label-text'
+        >
+          Developer
+        </AkTypography>
+
+        <AkTypography
+          @fontWeight='medium'
+          data-test-storeknoxInventoryDetails-headerAppDeveloperName
+        >
+          {{@fakeApp.dev_name}}
+        </AkTypography>
+      </AkStack>
+
+      <AkStack
+        @direction='row'
+        @alignItems='center'
+        @spacing='1'
+        @justifyContent='flex-start'
+      >
+        <AkTypography
+          @color='textSecondary'
+          local-class='original-app-details-label-text'
+        >
+          Last Monitoring Date
+        </AkTypography>
+
+        <AkTypography
+          @fontWeight='medium'
+          @color='textPrimary'
+          data-test-storeknoxInventoryDetails-headerAppDeveloperName
+        >
+          05, Feb 2025
+        </AkTypography>
+      </AkStack>
+
+    </AkStack>
+  </AkStack>
+</AkStack>

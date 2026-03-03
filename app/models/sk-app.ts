@@ -46,6 +46,9 @@ export default class SkAppModel extends Model {
   @attr('boolean')
   declare monitoringEnabled: boolean;
 
+  @attr('boolean', { defaultValue: true })
+  declare hasFakeApps: boolean;
+
   @attr('number')
   declare storeMonitoringStatus: number;
 

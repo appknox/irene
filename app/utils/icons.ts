@@ -168,6 +168,7 @@ export const MaterialSymbolsSet = [
   'replay',
   'add-column-right-outline-rounded',
   'cards-sharp',
+  'arrow-right-alt',
 ] as const;
 
 export const MdiIconsSet = [
@@ -197,3 +198,5 @@ export const PhIconsSet = ['diamonds-four'] as const;
 export const MynauiIconsSet = ['frame'] as const;
 
 export const SolarIconsSet = ['library-linear'] as const;
+
+export const FluentIconsSet = ['app-recent-24-regular'] as const;
