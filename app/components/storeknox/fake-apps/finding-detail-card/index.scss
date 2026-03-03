@@ -1,0 +1,48 @@
+.finding-detail-card {
+  background-color: var(--storeknox-fake-apps-finding-detail-card-bg-color);
+  border: 1px solid var(--storeknox-fake-apps-finding-detail-card-border-color);
+  border-radius: var(--storeknox-fake-apps-finding-detail-card-border-radius);
+  padding: 1rem;
+  width: 100%;
+
+  &.ignored {
+    background-color: var(
+      --storeknox-fake-apps-finding-detail-card-ignored-bg-color
+    );
+  }
+}
+
+.findings-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  background-color: var(
+    --storeknox-fake-apps-finding-detail-card-badge-bg-color
+  );
+  color: #ffffff;
+  padding: 0.25rem 0.75rem;
+  border-radius: 4px;
+
+  .findings-badge-text {
+    color: var(--storeknox-fake-apps-finding-detail-card-badge-text-color);
+  }
+}
+
+.detail-label {
+  min-width: 100px;
+}
+
+.app-logo {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  object-fit: contain;
+  border: 1px solid var(--storeknox-fake-apps-finding-detail-card-border-color);
+}
+
+.app-logo-placeholder {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background-color: #1e90ff;
+}
