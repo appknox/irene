@@ -14,6 +14,7 @@ import { Changeset } from 'ember-changeset';
 
 import parseError from 'irene/utils/parse-error';
 import type SkFakeAppModel from 'irene/models/sk-fake-app';
+import type SkFakeAppsListService from 'irene/services/sk-fake-apps-list';
 
 type IgnoreDrawerChangeset = BufferedChangeset & { reason: string };
 
@@ -23,10 +24,9 @@ const ChangeValidator = {
 
 export interface StoreknoxFakeAppsIgnoreDrawerSignature {
   Args: {
-    isFromFakeAppList?: boolean;
     fakeApp: SkFakeAppModel;
     open: boolean;
-    onClose: (reloadFakeApps?: boolean) => void;
+    onClose: () => void;
     addToInventory?: boolean;
   };
 }
@@ -34,6 +34,8 @@ export interface StoreknoxFakeAppsIgnoreDrawerSignature {
 export default class StoreknoxFakeAppsIgnoreDrawerComponent extends Component<StoreknoxFakeAppsIgnoreDrawerSignature> {
   @service declare intl: IntlService;
   @service('notifications') declare notify: NotificationService;
+  @service('sk-fake-apps-list')
+  declare skFakeAppsListService: SkFakeAppsListService;
 
   @tracked changeset: IgnoreDrawerChangeset | null = null;
 
@@ -129,7 +131,7 @@ export default class StoreknoxFakeAppsIgnoreDrawerComponent extends Component<St
   handleClose() {
     this.changeset?.rollback();
 
-    this.args.onClose(this.args.isFromFakeAppList);
+    this.args.onClose();
   }
 
   ignoreTask = task(async () => {
@@ -156,7 +158,8 @@ export default class StoreknoxFakeAppsIgnoreDrawerComponent extends Component<St
 
       this.changeset?.rollback();
 
-      this.args.onClose(this.args.isFromFakeAppList);
+      this.skFakeAppsListService.reload();
+      this.args.onClose();
     } catch (error) {
       this.notify.error(parseError(error));
     }

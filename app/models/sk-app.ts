@@ -70,6 +70,9 @@ export default class SkAppModel extends Model {
   @attr('date')
   declare unarchiveAvailableOn: Date;
 
+  @attr('date')
+  declare lastFakeDetectionOn: Date;
+
   @attr('string')
   declare archivedBy: string;
 
@@ -88,14 +91,11 @@ export default class SkAppModel extends Model {
   @attr()
   declare fakeAppCounts: FakeAppCounts;
 
-  @attr('date')
-  declare lastFakeDetectionOn: Date;
+  @attr()
+  declare availability: AvailabilityData;
 
   @belongsTo('sk-app-metadata', { async: false, inverse: null })
   declare appMetadata: SkAppMetadataModel;
-
-  @attr()
-  declare availability: AvailabilityData;
 
   @belongsTo('organization-user', { async: true, inverse: null })
   declare addedBy: AsyncBelongsTo<OrganizationUserModel>;

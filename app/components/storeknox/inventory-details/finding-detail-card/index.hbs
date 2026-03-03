@@ -3,14 +3,13 @@
   data-test-storeknoxFakeAppsFindingDetailCard-root
 >
   {{! Card Header }}
-  <AkStack @justifyContent='space-between' @alignItems='center' class='mb-3'>
-    <div local-class='findings-badge'>
-      <AkIcon @iconName='hugeicons:ai-brain-04' @size='small' />
-
-      <AkTypography local-class='findings-badge-text' @variant='body2'>
-        {{t 'storeknox.fakeApps.findingDetailCard.findings'}}
-      </AkTypography>
-    </div>
+  <AkStack @justifyContent='space-between' @alignItems='center' class='mb-2'>
+    <PoweredByAi::Chip
+      @clickable={{false}}
+      @chipText={{t 'storeknox.fakeApps.findingDetailCard.findings'}}
+      class='m-0'
+      data-test-storeknoxFakeApps-poweredByAiChip
+    />
 
     {{#unless this.fakeAppIsIgnored}}
       <AkIconButton
@@ -31,7 +30,10 @@
         </AkTypography>
 
         <AkTooltip
-          @title={{t 'storeknox.fakeApps.findingDetailCard.overallScoreInfo'}}
+          @title={{t
+            'storeknox.fakeApps.findingDetailCard.overallScoreInfo'
+            htmlSafe=true
+          }}
           @arrow={{true}}
         >
           <AkIcon @iconName='info' @size='small' @color='textSecondary' />
@@ -201,6 +203,5 @@
     @open={{this.showIgnoreDrawer}}
     @onClose={{this.closeIgnoreDrawer}}
     @addToInventory={{this.addToInventory}}
-    @isFromFakeAppList={{true}}
   />
 </div>

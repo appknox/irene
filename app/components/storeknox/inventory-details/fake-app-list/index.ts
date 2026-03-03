@@ -2,6 +2,7 @@ import { service } from '@ember/service';
 import Component from '@glimmer/component';
 import type IntlService from 'ember-intl/services/intl';
 import type SkInventoryAppModel from 'irene/models/sk-inventory-app';
+import type SkFakeAppsListService from 'irene/services/sk-fake-apps-list';
 
 export interface StoreknoxInventoryDetailsFakeAppListSignature {
   Element: HTMLElement;
@@ -12,13 +13,18 @@ export interface StoreknoxInventoryDetailsFakeAppListSignature {
 
 export default class StoreknoxInventoryDetailsFakeAppListComponent extends Component<StoreknoxInventoryDetailsFakeAppListSignature> {
   @service declare intl: IntlService;
+  @service('sk-fake-apps-list')
+  declare skFakeAppsListService: SkFakeAppsListService;
 
   get isInitializing() {
     return this.args.skInventoryApp?.fakeAppDetectionIsInitializing;
   }
 
   get fakeAppCounts() {
-    return this.args.skInventoryApp?.fakeAppCounts;
+    return (
+      this.skFakeAppsListService.fakeAppCounts ??
+      this.args.skInventoryApp?.fakeAppCounts
+    );
   }
 
   get allCountsZero() {
@@ -41,6 +47,7 @@ export default class StoreknoxInventoryDetailsFakeAppListComponent extends Compo
         models: [this.args.skInventoryApp?.id],
         label: this.intl.t('storeknox.brandAbuse'),
         count: this.fakeAppCounts?.brand_abuse,
+        iconClass: 'brand-abuse',
       },
       {
         id: 'fake-app',
@@ -49,6 +56,7 @@ export default class StoreknoxInventoryDetailsFakeAppListComponent extends Compo
         models: [this.args.skInventoryApp?.id],
         label: this.intl.t('storeknox.fakeApps.fakeApp'),
         count: this.fakeAppCounts?.fake_app,
+        iconClass: 'fake-app',
       },
       {
         id: 'ignored',

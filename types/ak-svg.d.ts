@@ -91,6 +91,7 @@ export enum AkSvgComponentInvocationByNames {
   ScvErrored,
   ApisCapturedIllustration,
   FakeAppInProgress,
+  FakeAppsSuccessState,
 }
 
 export enum AkSvgComponentInvocationByPaths {
@@ -119,6 +120,7 @@ export enum AkSvgComponentInvocationByPaths {
   'project-list-empty',
   'scan-completed',
   'fake-app-in-progress',
+  'fake-apps-success-state',
 }
 
 type AkSvgComponent = ComponentLike<{

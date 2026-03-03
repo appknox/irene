@@ -6,10 +6,12 @@ import type RouterService from '@ember/routing/router-service';
 
 import type SkAppsService from 'irene/services/sk-apps';
 import type { PaginationProviderActionsArgs } from 'irene/components/ak-pagination-provider';
+import type IntlService from 'ember-intl/services/intl';
 
 export default class StoreknoxFakeAppsComponent extends Component {
   @service('sk-apps') declare skAppsService: SkAppsService;
   @service declare router: RouterService;
+  @service declare intl: IntlService;
 
   @tracked searchQuery = '';
 
@@ -53,6 +55,31 @@ export default class StoreknoxFakeAppsComponent extends Component {
 
   get offset() {
     return this.skAppsService.offset;
+  }
+
+  get aiDrawerInfo() {
+    //TODO: Update this content once recieved the final content from the design team
+    return [
+      {
+        title: this.intl.t('reportModule.aiDataAccess'),
+        body: this.intl.t('reportModule.aiDataAccessDescription'),
+        marginTop: 'mt-2',
+      },
+      {
+        title: this.intl.t('reportModule.aiDataUsage'),
+        body: this.intl.t('reportModule.aiDataUsageDescription'),
+        marginTop: 'mt-2',
+      },
+      {
+        title: this.intl.t('reportModule.aiDataProtection'),
+        contentList: [
+          this.intl.t('reportModule.aiDataProtectionList.item1'),
+          this.intl.t('reportModule.aiDataProtectionList.item2'),
+          this.intl.t('reportModule.aiDataProtectionList.item3'),
+        ],
+        marginTop: 'mt-2',
+      },
+    ];
   }
 
   @action

@@ -6,6 +6,7 @@ import type IntlService from 'ember-intl/services/intl';
 
 import type SkInventoryAppModel from 'irene/models/sk-inventory-app';
 import type SkFakeAppModel from 'irene/models/sk-fake-app';
+import type SkFakeAppsListService from 'irene/services/sk-fake-apps-list';
 
 export interface FindingDetail {
   id?: string;
@@ -28,12 +29,13 @@ export interface StoreknoxInventoryDetailsFindingDetailCardSignature {
     finding: FindingDetail;
     fakeApp: SkFakeAppModel;
     skInventoryApp: SkInventoryAppModel;
-    reloadFakeApps: () => void;
   };
 }
 
 export default class StoreknoxInventoryDetailsFindingDetailCardComponent extends Component<StoreknoxInventoryDetailsFindingDetailCardSignature> {
   @service declare intl: IntlService;
+  @service('sk-fake-apps-list')
+  declare skFakeAppsListService: SkFakeAppsListService;
 
   @tracked anchorRef: HTMLElement | null = null;
   @tracked showIgnoreDrawer = false;
@@ -91,13 +93,7 @@ export default class StoreknoxInventoryDetailsFindingDetailCardComponent extends
   }
 
   @action
-  closeIgnoreDrawer(reloadFakeApps?: boolean) {
-    debugger;
-
-    if (reloadFakeApps) {
-      this.args.reloadFakeApps();
-    }
-
+  closeIgnoreDrawer() {
     this.showIgnoreDrawer = false;
   }
 
