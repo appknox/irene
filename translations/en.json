@@ -2178,7 +2178,7 @@
       "findingDetailCard": {
         "findings": "Findings",
         "overallScore": "Overall Score",
-        "overallScoreInfo": "Similarity score based on semantic, package, logo, and developer analysis",
+        "overallScoreInfo": "Similarity score based on semantic, package, logo,<br/> and developer analysis",
         "semantic": "Semantic",
         "package": "Package",
         "logo": "Logo",
