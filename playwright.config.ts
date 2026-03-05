@@ -34,7 +34,8 @@ export default defineConfig({
   use: {
     baseURL: process.env.BASE_URL,
     viewport: { width: 1450, height: 1650 },
-    storageState: '.auth/user.json',
+    testIdAttribute: 'data-test-cy', // Use the same data attribute for test selectors as in Cypress for consistency
+    storageState: '.auth/user.json', // Store auth state in a separate file to avoid conflicts with any other storage needs
     trace: 'on-first-retry',
     screenshot: 'only-on-failure',
     video: 'retain-on-failure',

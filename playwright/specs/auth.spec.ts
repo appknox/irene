@@ -1,6 +1,8 @@
 import { test, expect } from '@playwright/test';
 import { APPLICATION_ROUTES } from '../support/application.routes';
 import pwTranslate from '../support/translations';
+import { API_ROUTES } from '../support/api.routes';
+import NetworkActions from '../Actions/network.actions';
 
 test('dashboard loads when already authenticated', async ({ page }) => {
   await page.goto('/dashboard/home');
@@ -51,6 +53,47 @@ test('valid login via UI redirects to dashboard', async ({ browser }) => {
   await context.close();
 });
 
+test('should show error message on failed login', async ({ browser }) => {
+  const context = await browser.newContext({
+    storageState: { cookies: [], origins: [] },
+  });
+
+  const page = await context.newPage();
+  const networkActions = new NetworkActions(page);
+
+  await networkActions.mockNetworkReq({
+    method: 'POST',
+    route: API_ROUTES.login.route,
+    status: 401,
+    dataOverride: {
+      message: 'The credentials you entered are incorrect',
+      attempt_left: '4',
+      failure_limit: '5',
+    },
+  });
+
+  await page.goto(APPLICATION_ROUTES.login);
+
+  await page
+    .getByPlaceholder(pwTranslate('usernameEmailIdTextPlaceholder'))
+    .fill(process.env.TEST_USERNAME!);
+
+  await page.getByRole('button', { name: 'Next' }).click();
+
+  await page
+    .getByPlaceholder(pwTranslate('passwordPlaceholder'))
+    .fill('wrong_password');
+
+  await page.getByRole('button', { name: /login/i }).click();
+
+  await expect(
+    page.getByText(pwTranslate('credentialsIncorrect'))
+  ).toBeVisible();
+
+  await networkActions.clearAll();
+  await context.close();
+});
+
 test('dashboard shows main UI elements', async ({ page }) => {
   await page.goto('/dashboard/projects');
 
@@ -68,7 +111,7 @@ test('reset button is disabled when email is empty', async ({ browser }) => {
 
   const page = await context.newPage();
 
-  await page.goto('/recover');
+  await page.goto(APPLICATION_ROUTES.recover);
 
   const resetButton = page.getByRole('button', {
     name: pwTranslate('resetPassword'),
@@ -86,7 +129,7 @@ test('reset button enables when email is entered', async ({ browser }) => {
 
   const page = await context.newPage();
 
-  await page.goto('/recover');
+  await page.goto(APPLICATION_ROUTES.recover);
 
   const input = page.getByPlaceholder(
     pwTranslate('usernameEmailIdTextPlaceholder')
@@ -111,14 +154,14 @@ test('forgot password API returns 204 and shows confirmation message', async ({
 
   const page = await context.newPage();
 
-  await page.goto('/recover');
+  await page.goto(APPLICATION_ROUTES.recover);
 
   await page
     .getByPlaceholder(pwTranslate('usernameEmailIdTextPlaceholder'))
     .fill('randomletters123@test.com');
 
   const responsePromise = page.waitForResponse((res) =>
-    res.url().includes('/api/v2/forgot_password')
+    res.url().includes(API_ROUTES.forgotPassword.route)
   );
 
   await page

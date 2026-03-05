@@ -1,5 +1,6 @@
 export const APPLICATION_ROUTES = {
   login: '/login',
+  recover: '/recover',
   projects: '/projects',
   file: '/dashboard/file',
   sbom: '/dashboard/sbom/apps',

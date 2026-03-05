@@ -1,3 +1,5 @@
+import { alias } from '@ember/object/computed';
+
 export const API_ROUTES = {
   // General
   check: {
@@ -27,6 +29,11 @@ export const API_ROUTES = {
 
   // Auth
   login: { route: '/api/login' },
+
+  forgotPassword: {
+    route: '/api/v2/forgot_password',
+    alias: 'forgotPassword',
+  },
 
   // Listing Routes
   sbomProjectList: {
