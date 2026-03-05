@@ -13,6 +13,12 @@ export interface AvailabilityData {
   appknox: boolean;
 }
 
+export interface FakeAppCounts {
+  brand_abuse: number;
+  fake_app: number;
+  ignored: number;
+}
+
 export default class SkAppModel extends Model {
   @service declare intl: IntlService;
 
@@ -40,6 +46,9 @@ export default class SkAppModel extends Model {
   @attr('boolean')
   declare monitoringEnabled: boolean;
 
+  @attr('boolean')
+  declare hasFakeApps: boolean;
+
   @attr('number')
   declare storeMonitoringStatus: number;
 
@@ -64,17 +73,35 @@ export default class SkAppModel extends Model {
   @attr('date')
   declare unarchiveAvailableOn: Date;
 
+  @attr('date')
+  declare lastFakeDetectionOn: Date;
+
   @attr('string')
   declare archivedBy: string;
 
   @attr('number')
   declare licenseAllocated: number;
 
-  @belongsTo('sk-app-metadata', { async: false, inverse: null })
-  declare appMetadata: SkAppMetadataModel;
+  @attr('number')
+  declare fakeAppDetectionStatus: number;
+
+  @attr('string')
+  declare fakeAppDetectionStatusDisplay: string;
+
+  @attr()
+  declare fakeAppCounts: FakeAppCounts;
 
   @attr()
   declare availability: AvailabilityData;
+
+  @attr('boolean')
+  declare hasStoreMonitoringData: boolean;
+
+  @attr('boolean')
+  declare hasFakeAppDetectionData: boolean;
+
+  @belongsTo('sk-app-metadata', { async: false, inverse: null })
+  declare appMetadata: SkAppMetadataModel;
 
   @belongsTo('organization-user', { async: true, inverse: null })
   declare addedBy: AsyncBelongsTo<OrganizationUserModel>;
@@ -124,17 +151,23 @@ export default class SkAppModel extends Model {
     return !!(this.appMetadata.get('platform') === ENUMS.PLATFORM.IOS);
   }
 
-  get monitoringStatusIsPending() {
+  get storeMonitoringStatusIsPending() {
     return (
       this.storeMonitoringStatus === ENUMS.SK_APP_MONITORING_STATUS.INITIALIZING
     );
   }
 
-  get monitoringPendingOrDisabled() {
-    return [
-      ENUMS.SK_APP_MONITORING_STATUS.INITIALIZING,
-      ENUMS.SK_APP_MONITORING_STATUS.DISABLED,
-    ].includes(this.storeMonitoringStatus);
+  get storeMonitoringStatusIsDisabled() {
+    return (
+      this.storeMonitoringStatus === ENUMS.SK_APP_MONITORING_STATUS.DISABLED
+    );
+  }
+
+  get storeMonitoringPendingOrDisabled() {
+    return (
+      this.storeMonitoringStatusIsPending ||
+      this.storeMonitoringStatusIsDisabled
+    );
   }
 
   get isArchived() {
@@ -155,6 +188,111 @@ export default class SkAppModel extends Model {
 
   get hasLicense() {
     return this.licenseAllocated > 0;
+  }
+
+  get storeMonitoringStatusIsActionNeeded() {
+    return (
+      this.storeMonitoringStatus ===
+      ENUMS.SK_APP_MONITORING_STATUS.ACTION_NEEDED
+    );
+  }
+
+  get storeMonitoringStatusIsNoActionNeeded() {
+    return (
+      this.storeMonitoringStatus ===
+      ENUMS.SK_APP_MONITORING_STATUS.NO_ACTION_NEEDED
+    );
+  }
+
+  get fakeAppDetectionIsDisabled() {
+    return (
+      this.fakeAppDetectionStatus ===
+      ENUMS.SK_FAKE_APP_DETECTION_STATUS.DISABLED
+    );
+  }
+
+  get fakeAppDetectionIsInitializing() {
+    return (
+      this.fakeAppDetectionStatus ===
+      ENUMS.SK_FAKE_APP_DETECTION_STATUS.INITIALIZING
+    );
+  }
+
+  get fakeAppDetectionIsNoResults() {
+    return (
+      this.fakeAppDetectionStatus ===
+      ENUMS.SK_FAKE_APP_DETECTION_STATUS.NO_RESULTS
+    );
+  }
+
+  get fakeAppDetectionHasResults() {
+    return (
+      this.fakeAppDetectionStatus ===
+      ENUMS.SK_FAKE_APP_DETECTION_STATUS.HAS_RESULTS
+    );
+  }
+
+  get needsAction() {
+    return (
+      this.monitoringEnabled &&
+      (this.storeMonitoringStatusIsActionNeeded ||
+        this.fakeAppDetectionHasResults)
+    );
+  }
+
+  get noActionNeeded() {
+    return (
+      this.monitoringEnabled &&
+      this.storeMonitoringStatusIsNoActionNeeded &&
+      this.fakeAppDetectionIsNoResults
+    );
+  }
+
+  get appIsInInitializingState() {
+    return (
+      this.monitoringEnabled &&
+      (this.storeMonitoringStatusIsPending ||
+        this.fakeAppDetectionIsInitializing)
+    );
+  }
+
+  get appMonitoringIsInDisabledState() {
+    return !this.monitoringEnabled;
+  }
+
+  get totalFakeApps() {
+    return this.fakeAppCounts.brand_abuse + this.fakeAppCounts.fake_app;
+  }
+
+  get brandAbuseFakeAppPercentage() {
+    return (this.fakeAppCounts.brand_abuse / this.totalFakeApps) * 100;
+  }
+
+  get fakeAppsFakeAppPercentage() {
+    return (this.fakeAppCounts.fake_app / this.totalFakeApps) * 100;
+  }
+
+  get allFakeAppsCountsAreZero() {
+    return (
+      !this.fakeAppCounts ||
+      (this.fakeAppCounts.brand_abuse === 0 &&
+        this.fakeAppCounts.fake_app === 0 &&
+        this.fakeAppCounts.ignored === 0)
+    );
+  }
+
+  get showFakeAppsList() {
+    return (
+      !this.fakeAppDetectionIsInitializing && !this.allFakeAppsCountsAreZero
+    );
+  }
+
+  get monitoringIsDisabledWithNoResults() {
+    return (
+      !this.monitoringEnabled &&
+      !this.hasFakeAppDetectionData &&
+      !this.hasStoreMonitoringData
+    );
   }
 
   async approveApp(id: string) {
@@ -185,28 +323,6 @@ export default class SkAppModel extends Model {
     const adapter = this.store.adapterFor('sk-app');
 
     return await adapter.toggleArchiveStatus(this);
-  }
-
-  get needsAction() {
-    return (
-      this.storeMonitoringStatus ===
-      ENUMS.SK_APP_MONITORING_STATUS.ACTION_NEEDED
-    );
-  }
-
-  get noActionNeeded() {
-    return (
-      this.storeMonitoringStatus ===
-      ENUMS.SK_APP_MONITORING_STATUS.NO_ACTION_NEEDED
-    );
-  }
-
-  get appIsInDisabledState() {
-    return !this.monitoringEnabled && !this.needsAction && !this.noActionNeeded;
-  }
-
-  get appIsInInitializingState() {
-    return this.monitoringEnabled && this.monitoringStatusIsPending;
   }
 }
 

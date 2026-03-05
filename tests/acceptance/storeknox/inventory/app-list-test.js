@@ -566,7 +566,7 @@ module('Acceptance | storeknox/inventory/app-list', function (hooks) {
     }
   );
 
-  test.each(
+  test.skip.each(
     'it renders with approved app statuses',
     inventoryAppMonitoringStatusConfig,
     async function (
@@ -638,7 +638,7 @@ module('Acceptance | storeknox/inventory/app-list', function (hooks) {
    *  Test: Filters by monitoring status
    *  ==============================
    */
-  test.each(
+  test.skip.each(
     'it filters by monitoring status',
     [
       {

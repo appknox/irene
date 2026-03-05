@@ -15,6 +15,7 @@ export interface Features {
   storeknox: boolean;
   privacy: boolean;
   upload_via_url: boolean;
+  fake_app_detection: boolean;
 }
 
 export interface AiFeatures {

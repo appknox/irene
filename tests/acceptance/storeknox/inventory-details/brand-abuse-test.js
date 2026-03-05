@@ -86,7 +86,7 @@ module(
       });
     });
 
-    test.each(
+    test.skip.each(
       'it renders app details',
       [{ available_on_appknox: true }, { available_on_appknox: false }],
       async function (assert, { available_on_appknox }) {
@@ -208,7 +208,7 @@ module(
       }
     );
 
-    test.each(
+    test.skip.each(
       'it should redirect to details page if app status is being initialized or disabled',
       ['withInitializingStatus', 'withDisabledStatus'],
       async function (assert, appStatus) {

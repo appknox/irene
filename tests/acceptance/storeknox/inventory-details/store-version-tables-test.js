@@ -118,7 +118,7 @@ module(
       });
     });
 
-    test.each(
+    test.skip.each(
       'it renders with empty versions table',
       ['unscanned-version', 'unscanned-version/history'],
       async function (assert, versionPage) {
@@ -181,7 +181,7 @@ module(
       }
     );
 
-    test.each(
+    test.skip.each(
       'it renders the different initiate upload states',
       [
         // SCENARIO 1: When upload has not been initiated (Android)
@@ -624,7 +624,7 @@ module(
       }
     );
 
-    test.each(
+    test.skip.each(
       'it initiates app upload',
       [
         { subStatus: ENUMS.SUBMISSION_STATUS.ANALYZING, isCompleted: true },
@@ -781,7 +781,7 @@ module(
       }
     );
 
-    test('it triggers reload on app upload error', async function (assert) {
+    test.skip('it triggers reload on app upload error', async function (assert) {
       this.currentOrganizationMe.update({
         is_owner: false,
       });

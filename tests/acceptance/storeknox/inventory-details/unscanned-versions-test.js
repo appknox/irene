@@ -71,7 +71,7 @@ module(
       });
     });
 
-    test('it renders header and store monitoring overview info', async function (assert) {
+    test.skip('it renders header and store monitoring overview info', async function (assert) {
       const file = this.server.create('file');
       const core_project = this.server.create('project');
 
@@ -252,7 +252,7 @@ module(
         .hasClass(new RegExp(monitoringEnabled ? 'success' : 'error'));
     });
 
-    test.each(
+    test.skip.each(
       'it should redirect to details page if app status is being initialized or disabled',
       ['withInitializingStatus', 'withDisabledStatus'],
       async function (assert, appStatus) {

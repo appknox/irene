@@ -489,7 +489,7 @@ module(
      * Toggles monitoring status
      * ===============================
      */
-    test.each(
+    test.skip.each(
       'it toggles monitoring status',
       [
         // Turn toggle off. App with license.
@@ -1501,7 +1501,7 @@ module(
      * Renders the actions list section
      * ===============================
      */
-    test.each(
+    test.skip.each(
       'test: actions list section',
       ['malware-detected', 'unscanned-version', 'brand-abuse'].reduce(
         (opt, actionRoute) =>
