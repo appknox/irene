@@ -26,9 +26,14 @@ export default class SkAppsService extends Service {
   @tracked offset = 0;
   @tracked monitoringStatusFilter = -1;
   @tracked skAppsCount = 0;
+  @tracked fakeAppDetectionEnabled = false;
 
   get isFetchingSkInventoryApps() {
     return this.fetch.isRunning;
+  }
+
+  get isFetchingSkFakeApps() {
+    return this.fetchFakeApps.isRunning;
   }
 
   @action
@@ -36,10 +41,12 @@ export default class SkAppsService extends Service {
     limit = this.limit,
     offset = this.offset,
     monitoringStatusFilter = this.monitoringStatusFilter,
+    fakeAppDetectionEnabled = this.fakeAppDetectionEnabled,
   }) {
     this.limit = limit;
     this.offset = offset;
     this.monitoringStatusFilter = monitoringStatusFilter;
+    this.fakeAppDetectionEnabled = fakeAppDetectionEnabled;
 
     return this;
   }
@@ -48,14 +55,23 @@ export default class SkAppsService extends Service {
     await this.fetch.perform();
   }
 
+  fetchFakeApps = task({ keepLatest: true }, async () => {
+    this.fetch.perform();
+  });
+
   fetch = task({ keepLatest: true }, async () => {
     const queryParams = {
       limit: this.limit,
       offset: this.offset,
       approval_status: ENUMS.SK_APPROVAL_STATUS.APPROVED,
       app_status: ENUMS.SK_APP_STATUS.ACTIVE,
+
       ...(this.monitoringStatusFilter !== -1 && {
         monitoring_status: this.monitoringStatusFilter,
+      }),
+
+      ...(this.fakeAppDetectionEnabled && {
+        fake_app_detection_enabled: this.fakeAppDetectionEnabled,
       }),
     };
 

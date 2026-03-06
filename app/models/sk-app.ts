@@ -14,8 +14,8 @@ export interface AvailabilityData {
 }
 
 export interface FakeAppCounts {
-  brandAbuse: number;
-  fakeApp: number;
+  brand_abuse: number;
+  fake_app: number;
   ignored: number;
 }
 
@@ -256,6 +256,19 @@ export default class SkAppModel extends Model {
       this.fakeAppDetectionStatus ===
       ENUMS.SK_FAKE_APP_DETECTION_STATUS.HAS_RESULTS
     );
+  }
+
+  get totalFakeApps() {
+    console.log(this.fakeAppCounts);
+    return this.fakeAppCounts.brand_abuse + this.fakeAppCounts.fake_app;
+  }
+
+  get brandAbuseFakeAppPercentage() {
+    return (this.fakeAppCounts.brand_abuse / this.totalFakeApps) * 100;
+  }
+
+  get fakeAppsFakeAppPercentage() {
+    return (this.fakeAppCounts.fake_app / this.totalFakeApps) * 100;
   }
 }
 

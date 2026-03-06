@@ -2,6 +2,7 @@ import Model, { attr, belongsTo, type AsyncBelongsTo } from '@ember-data/model';
 
 import ENUMS from 'irene/enums';
 import type SkAppModel from './sk-app';
+import SkInventoryAppModel from './sk-inventory-app';
 
 export interface SkFakeAppStoreData {
   id: number;
@@ -9,7 +10,7 @@ export interface SkFakeAppStoreData {
   identifier: string;
   icon: string;
   platform: number;
-  platformDisplay: string;
+  platformDisplay: 'android' | 'apple';
 }
 
 export interface SkFakeAppAiScores {
@@ -20,7 +21,12 @@ export interface SkFakeAppAiScores {
   SemanticSimilarityRule?: number;
   DeveloperConsistencyRule?: number;
   AppFunctionalitySimilarityRule?: number;
-  [key: string]: number | string | undefined;
+  LogoSimilarityRule_justification?: string;
+  TitleBrandAbuseRule_justification?: string;
+  PackageSimilarityRule_justification?: string;
+  SemanticSimilarityRule_justification?: string;
+  DeveloperConsistencyRule_justification?: string;
+  AppFunctionalitySimilarityRule_justification?: string;
 }
 
 export interface SkFakeAppSimilarityScores {
@@ -57,8 +63,8 @@ export interface SkFakeAppClassification {
 }
 
 export default class SkFakeAppModel extends Model {
-  @belongsTo('sk-app', { async: true, inverse: null })
-  declare skApp: AsyncBelongsTo<SkAppModel>;
+  @belongsTo('sk-inventory-app', { async: true, inverse: null })
+  declare skApp: AsyncBelongsTo<SkInventoryAppModel>;
 
   @attr('string')
   declare hooperDetectionUlid: string;
@@ -121,10 +127,10 @@ export default class SkFakeAppModel extends Model {
   declare ruleBreakdown: Record<string, unknown>;
 
   @attr('string')
-  declare reviewedBy: string;
+  declare reviewedBy: string | null;
 
   @attr('date')
-  declare reviewedOn: Date;
+  declare reviewedOn: Date | null;
 
   @attr('string')
   declare ignoreReason: string;
@@ -165,10 +171,10 @@ export default class SkFakeAppModel extends Model {
     return await adapter.ignore(this, ignoreReason);
   }
 
-  async addToInventory(ignoreReason: string) {
+  async ignoreAndAddToInventory(ignoreReason: string) {
     const adapter = this.store.adapterFor('sk-fake-app');
 
-    return await adapter.addToInventory(this, ignoreReason);
+    return await adapter.ignoreAndAddToInventory(this, ignoreReason);
   }
 }
 

@@ -361,7 +361,7 @@ Router.map(function () {
 
         this.route('fake-apps', function () {
           this.route('index', { path: '/' });
-          this.route('details', { path: '/:id' });
+          this.route('details', { path: '/:sk_app_id/detail/:id' });
         });
 
         this.route('notifications');

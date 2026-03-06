@@ -1,11 +1,18 @@
 import Component from '@glimmer/component';
-import type { StoreknoxFakeAppsDetailsModel } from 'irene/routes/authenticated/storeknox/fake-apps/details';
+import dayjs from 'dayjs';
+import type SkInventoryAppModel from 'irene/models/sk-inventory-app';
 
 export interface StoreknoxFakeAppsOriginalAppInfoSignature {
-  Args: { isIgnored: boolean; fakeApp: StoreknoxFakeAppsDetailsModel };
+  Args: { isIgnored: boolean; skInventoryApp: SkInventoryAppModel };
 }
 
-export default class StoreknoxFakeAppsOriginalAppInfoComponent extends Component<StoreknoxFakeAppsOriginalAppInfoSignature> {}
+export default class StoreknoxFakeAppsOriginalAppInfoComponent extends Component<StoreknoxFakeAppsOriginalAppInfoSignature> {
+  get lastMonitoredOn() {
+    return dayjs(this.args.skInventoryApp?.lastMonitoredOn).format(
+      'MMM DD, YYYY'
+    );
+  }
+}
 
 declare module '@glint/environment-ember-loose/registry' {
   export default interface Registry {

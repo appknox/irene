@@ -4,6 +4,7 @@ import type SkFakeAppModel from 'irene/models/sk-fake-app';
 
 export type SkFakeAppQuery = {
   sk_app_id?: string | number;
+  id?: string | number;
   [key: string]: unknown;
 };
 
@@ -48,6 +49,23 @@ export default class SkFakeAppAdapter extends CommonDRFAdapter {
     return super.urlForQuery(query, modelName);
   }
 
+  urlForQueryRecord<K extends string | number>(
+    query: SkFakeAppQuery,
+    modelName: K
+  ) {
+    if (query.sk_app_id) {
+      const skAppId = query.sk_app_id;
+      const id = query.id;
+
+      delete query.sk_app_id;
+      delete query.id;
+
+      return this._buildNestedURL(skAppId, id);
+    }
+
+    return super.urlForQueryRecord(query, modelName);
+  }
+
   async ignore(
     skFakeApp: SkFakeAppModel,
     ignoreReason: string
@@ -64,7 +82,7 @@ export default class SkFakeAppAdapter extends CommonDRFAdapter {
     return this.store.push(normalized) as SkFakeAppModel;
   }
 
-  async addToInventory(
+  async ignoreAndAddToInventory(
     skFakeApp: SkFakeAppModel,
     ignoreReason: string
   ): Promise<SkFakeAppModel> {

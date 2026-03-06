@@ -34,17 +34,25 @@
             </AkTypography>
 
             <div local-class='view-in-inventory-button-container'>
-              <AkButton @variant='text' @color='neutral' @underline='none'>
+              <AkLink
+                @route='authenticated.storeknox.inventory-details'
+                @model={{this.fakeApp.skApp.id}}
+                @color='secondary'
+                @underline='none'
+                @fontWeight='medium'
+                @typographyVariant='body2'
+              >
                 <:rightIcon>
-                  <AkIcon @iconName='arrow-right-alt' />
+                  <AkIcon
+                    @iconName='arrow-right-alt'
+                    {{style fontSize='1rem !important'}}
+                  />
                 </:rightIcon>
 
                 <:default>
-                  <AkTypography @fontWeight='medium'>
-                    {{t 'storeknox.viewInInventory'}}
-                  </AkTypography>
+                  {{t 'storeknox.viewInInventory'}}
                 </:default>
-              </AkButton>
+              </AkLink>
             </div>
           </AkStack>
 
