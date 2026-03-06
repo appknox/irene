@@ -51,4 +51,43 @@
   </AkStack>
 </AkStack>
 
-<Storeknox::FakeApps::ItemCard />
+<AkPaginationProvider
+  @results={{this.skFakeApps}}
+  @onItemPerPageChange={{this.onItemPerPageChange}}
+  @totalItems={{this.totalAppsCount}}
+  @nextAction={{this.goToPage}}
+  @prevAction={{this.goToPage}}
+  @itemPerPageOptions={{array 10 25 50}}
+  @defaultLimit={{this.skAppsService.limit}}
+  @offset={{this.skAppsService.offset}}
+  as |pgc|
+>
+  <div local-class='fake-apps-grid'>
+    {{#each pgc.currentPageResults as |skFakeApp|}}
+      <Storeknox::FakeApps::ItemCard @skFakeApp={{skFakeApp}} />
+    {{/each}}
+  </div>
+
+  {{#if this.showEmptyState}}
+    <Storeknox::Inventory::AppList::Table::Empty
+      @subText={{t 'storeknox.noAppMatchesYourCurrentFilter'}}
+    />
+  {{/if}}
+
+  {{#unless this.hidePagination}}
+    <AkPagination
+      @disableNext={{pgc.disableNext}}
+      @nextAction={{pgc.nextAction}}
+      @disablePrev={{pgc.disablePrev}}
+      @prevAction={{pgc.prevAction}}
+      @endItemIdx={{pgc.endItemIdx}}
+      @startItemIdx={{pgc.startItemIdx}}
+      @itemPerPageOptions={{pgc.itemPerPageOptions}}
+      @onItemPerPageChange={{pgc.onItemPerPageChange}}
+      @selectedOption={{pgc.selectedOption}}
+      @tableItemLabel={{t 'apps'}}
+      @perPageTranslation={{t 'recordPerPage'}}
+      @totalItems={{pgc.totalItems}}
+    />
+  {{/unless}}
+</AkPaginationProvider>

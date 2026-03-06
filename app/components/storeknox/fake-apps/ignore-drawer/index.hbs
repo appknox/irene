@@ -63,14 +63,19 @@
               class='p-3'
               local-class='ignore-drawer-action-container'
             >
-              <AkButton
-                data-test-storeknoxFakeApps-ignoreDrawer-viewInInventoryBtn
-                @variant='outlined'
-                @color='neutral'
-                {{on 'click' dr.closeHandler}}
+
+              <AkLink
+                @route='authenticated.storeknox.inventory-details'
+                @model={{@fakeApp.skApp.id}}
               >
-                {{t 'storeknox.viewInInventory'}}
-              </AkButton>
+                <AkButton
+                  data-test-storeknoxFakeApps-ignoreDrawer-viewInInventoryBtn
+                  @variant='outlined'
+                  @color='neutral'
+                >
+                  {{t 'storeknox.viewInInventory'}}
+                </AkButton>
+              </AkLink>
             </AkStack>
           {{/if}}
         </AkStack>
@@ -132,9 +137,14 @@
             data-test-storeknoxFakeApps-ignoreDrawer-confirmBtn
             @variant='filled'
             @disabled={{not this.isReasonValid}}
+            @loading={{this.ignoreTask.isRunning}}
             {{on 'click' this.handleConfirmIgnore}}
           >
-            {{t 'storeknox.yesIgnore'}}
+            {{if
+              @addToInventory
+              (t 'storeknox.yesIgnoreAndAddToInventory')
+              (t 'storeknox.yesIgnore')
+            }}
           </AkButton>
 
           <AkButton

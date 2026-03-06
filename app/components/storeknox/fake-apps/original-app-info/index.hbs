@@ -30,8 +30,8 @@
 
         <img
           local-class='app-info-logo'
-          src={{@fakeApp.original_app_icon_url}}
-          alt={{@fakeApp.title}}
+          src={{@skInventoryApp.appMetadata.iconUrl}}
+          alt={{@skInventoryApp.appMetadata.title}}
           data-test-storeknoxInventoryDetails-appLogoImage
         />
       </AkStack>
@@ -54,7 +54,7 @@
           @variant='text'
           @color='textPrimary'
           @underline='always'
-          href={{@fakeApp.app_url}}
+          href={{@skInventoryApp.appMetadata.url}}
           target='_blank'
           rel='noopener noreferrer'
           class='mt-1'
@@ -63,7 +63,7 @@
             @fontWeight='medium'
             data-test-storeknoxInventoryDetails-headerAppTitle
           >
-            {{@fakeApp.title}}
+            {{@skInventoryApp.appMetadata.title}}
           </AkTypography>
         </AkButton>
       </AkStack>
@@ -84,11 +84,11 @@
         <AkTypography
           @fontWeight='medium'
           @noWrap={{true}}
-          title={{@fakeApp.package_name}}
+          title={{@skInventoryApp.appMetadata.packageName}}
           {{style maxWidth='240px'}}
           data-test-storeknoxInventoryDetails-headerAppPackageName
         >
-          {{@fakeApp.package_name}}
+          {{@skInventoryApp.appMetadata.packageName}}
         </AkTypography>
       </AkStack>
 
@@ -106,7 +106,7 @@
         </AkTypography>
 
         <AppPlatformIcon
-          @platform={{if @fakeApp.store.platform_display 'android' 'apple'}}
+          @platform={{if @skInventoryApp.isAndroid 'android' 'apple'}}
           data-test-storeknoxInventoryDetails-headerPlatformIcon
         />
       </AkStack>
@@ -124,7 +124,7 @@
           Store
         </AkTypography>
 
-        {{#if (eq @fakeApp.store.platform_display 'android')}}
+        {{#if @skInventoryApp.isAndroid}}
           <AkSvg::PlaystoreLogo
             {{style width='16px'}}
             data-test-storeknoxInventoryDetails-playStoreLogo
@@ -155,7 +155,7 @@
           @fontWeight='medium'
           data-test-storeknoxInventoryDetails-headerAppDeveloperName
         >
-          {{@fakeApp.dev_name}}
+          {{@skInventoryApp.appMetadata.devName}}
         </AkTypography>
       </AkStack>
 
@@ -177,10 +177,9 @@
           @color='textPrimary'
           data-test-storeknoxInventoryDetails-headerAppDeveloperName
         >
-          05, Feb 2025
+          {{this.lastMonitoredOn}}
         </AkTypography>
       </AkStack>
-
     </AkStack>
   </AkStack>
 </AkStack>

@@ -3,6 +3,8 @@ import { action } from '@ember/object';
 import { service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
 import dayjs from 'dayjs';
+import { task } from 'ember-concurrency';
+import { waitForPromise } from '@ember/test-waiters';
 import type IntlService from 'ember-intl/services/intl';
 
 import { BufferedChangeset } from 'ember-changeset/types';
@@ -10,7 +12,8 @@ import { validatePresence } from 'ember-changeset-validations/validators';
 import lookupValidator from 'ember-changeset-validations';
 import { Changeset } from 'ember-changeset';
 
-import type { StoreknoxFakeAppsDetailsModel } from 'irene/routes/authenticated/storeknox/fake-apps/details';
+import parseError from 'irene/utils/parse-error';
+import type SkFakeAppModel from 'irene/models/sk-fake-app';
 
 type IgnoreDrawerChangeset = BufferedChangeset & { reason: string };
 
@@ -20,14 +23,16 @@ const ChangeValidator = {
 
 export interface StoreknoxFakeAppsIgnoreDrawerSignature {
   Args: {
-    fakeApp: StoreknoxFakeAppsDetailsModel;
+    fakeApp: SkFakeAppModel;
     open: boolean;
     onClose: () => void;
+    addToInventory?: boolean;
   };
 }
 
 export default class StoreknoxFakeAppsIgnoreDrawerComponent extends Component<StoreknoxFakeAppsIgnoreDrawerSignature> {
   @service declare intl: IntlService;
+  @service('notifications') declare notify: NotificationService;
 
   @tracked changeset: IgnoreDrawerChangeset | null = null;
 
@@ -50,15 +55,15 @@ export default class StoreknoxFakeAppsIgnoreDrawerComponent extends Component<St
   }
 
   get isAlreadyIgnored(): boolean {
-    return Boolean(this.args.fakeApp?.reviewed_by);
+    return Boolean(this.args.fakeApp?.reviewedBy);
   }
 
   get isAlreadyAddedToInventory(): boolean {
-    return Boolean(this.args.fakeApp?.added_to_inventory_app);
+    return this.args.fakeApp?.isAddedToInventory;
   }
 
   get formattedIgnoredOn(): string {
-    const reviewedOn = this.args.fakeApp?.reviewed_on;
+    const reviewedOn = this.args.fakeApp?.reviewedOn;
 
     if (!reviewedOn) {
       return '';
@@ -81,11 +86,11 @@ export default class StoreknoxFakeAppsIgnoreDrawerComponent extends Component<St
           ? this.intl.t('storeknox.ignoredAndAddedToInventoryBy')
           : this.intl.t('storeknox.ignoredBy'),
 
-        value: this.args.fakeApp?.reviewed_by,
+        value: this.args.fakeApp?.reviewedBy,
       },
       {
         label: this.intl.t('reason'),
-        value: this.args.fakeApp?.ignore_reason,
+        value: this.args.fakeApp?.ignoreReason,
       },
     ];
   }
@@ -101,16 +106,8 @@ export default class StoreknoxFakeAppsIgnoreDrawerComponent extends Component<St
   }
 
   @action
-  async handleConfirmIgnore() {
-    await this.changeset?.validate();
-
-    if (this.changeset?.isInvalid) {
-      return;
-    }
-
-    // Will be wired to API when coupled with fake app details
-    this.changeset?.rollback();
-    this.args.onClose();
+  handleConfirmIgnore() {
+    this.ignoreTask.perform();
   }
 
   @action
@@ -118,6 +115,35 @@ export default class StoreknoxFakeAppsIgnoreDrawerComponent extends Component<St
     this.changeset?.rollback();
     this.args.onClose();
   }
+
+  ignoreTask = task(async () => {
+    await this.changeset?.validate();
+
+    if (this.changeset?.isInvalid) {
+      return;
+    }
+
+    try {
+      const reason = String(this.changeset?.reason);
+
+      if (this.args.addToInventory) {
+        await waitForPromise(this.args.fakeApp.ignoreAndAddToInventory(reason));
+      } else {
+        await waitForPromise(this.args.fakeApp.ignore(reason));
+      }
+
+      this.notify.success(
+        this.args.addToInventory
+          ? this.intl.t('storeknox.fakeAppIgnoredAndAddedToInventory')
+          : this.intl.t('storeknox.fakeAppIgnored')
+      );
+
+      this.changeset?.rollback();
+      this.args.onClose();
+    } catch (error) {
+      this.notify.error(parseError(error));
+    }
+  });
 }
 
 declare module '@glint/environment-ember-loose/registry' {

@@ -1,11 +1,9 @@
 import Component from '@glimmer/component';
 import dayjs from 'dayjs';
-import type { StoreknoxFakeAppsDetailsModel } from 'irene/routes/authenticated/storeknox/fake-apps/details';
+import type SkFakeAppModel from 'irene/models/sk-fake-app';
 
 interface StoreknoxFakeAppsIgnoredBannerSignature {
-  Args: {
-    fakeApp: StoreknoxFakeAppsDetailsModel;
-  };
+  Args: { fakeApp: SkFakeAppModel | null };
 }
 
 export default class StoreknoxFakeAppsIgnoredBannerComponent extends Component<StoreknoxFakeAppsIgnoredBannerSignature> {
@@ -14,19 +12,19 @@ export default class StoreknoxFakeAppsIgnoredBannerComponent extends Component<S
   }
 
   get isAddedToInventory() {
-    return Boolean(this.fakeApp?.added_to_inventory_app);
+    return Boolean(this.fakeApp?.addedToInventoryApp);
   }
 
   get isFakeAppIgnored() {
-    return Boolean(this.fakeApp?.reviewed_by);
+    return Boolean(this.fakeApp?.reviewedBy);
   }
 
   get ignoredOnString() {
-    return dayjs(this.fakeApp?.reviewed_on).format('MMM DD, YYYY');
+    return dayjs(this.fakeApp?.reviewedOn).format('MMM DD, YYYY');
   }
 
   get ignoredByString() {
-    return this.fakeApp?.reviewed_by;
+    return this.fakeApp?.reviewedBy ?? '';
   }
 }
 

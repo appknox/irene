@@ -3,6 +3,7 @@
   @width='full'
   @direction='column'
   local-class='fake-apps-item-card-root'
+  {{on 'click' this.openFakeAppDetails}}
 >
   <AkStack
     @width='full'
@@ -13,8 +14,8 @@
     <AkStack @width='full' @alignItems='center' @spacing='2'>
       <img
         local-class='app-info-logo'
-        src={{this.exampleData.appDetails.iconUrl}}
-        alt={{this.exampleData.appDetails.name}}
+        src={{this.skFakeApp.appMetadata.iconUrl}}
+        alt={{this.skFakeApp.title}}
         data-test-storeknoxFakeApps-itemCardAppLogoImage
       />
 
@@ -24,39 +25,40 @@
           @variant='text'
           @color='textPrimary'
           @underline='always'
-          href={{this.exampleData.appDetails.url}}
+          href={{this.skFakeApp.appMetadata.url}}
           target='_blank'
           rel='noopener noreferrer'
-          class='mt-1'
+          {{style justifyContent='flex-start'}}
         >
           <AkTypography
             @variant='h5'
             @fontWeight='bold'
+            {{style maxWidth='100%' textAlign='left'}}
             data-test-storeknoxInventoryDetails-headerAppTitle
           >
-            {{this.exampleData.appDetails.name}}
+            {{this.skFakeApp.appMetadata.title}}
           </AkTypography>
         </AkButton>
 
         <AkTypography
           @color='textPrimary'
           @noWrap={{true}}
-          title={{this.exampleData.appDetails.packageId}}
+          title={{this.skFakeApp.appMetadata.packageName}}
           {{style maxWidth='240px'}}
           data-test-storeknoxInventoryDetails-headerAppPackageName
         >
-          {{this.exampleData.appDetails.packageId}}
+          {{this.skFakeApp.appMetadata.packageName}}
         </AkTypography>
 
         <AkTypography
           @color='textSecondary'
           @noWrap={{true}}
           {{style maxWidth='240px'}}
-          title={{this.exampleData.appDetails.publisher}}
+          title={{this.skFakeApp.appMetadata.devName}}
           data-test-storeknoxFakeApps-itemCardAppDeveloperName
         >
           {{t 'by'}}
-          {{this.exampleData.appDetails.publisher}}
+          {{this.skFakeApp.appMetadata.devName}}
         </AkTypography>
       </AkStack>
     </AkStack>
@@ -69,7 +71,7 @@
       {{style alignSelf='flex-end' justifySelf='flex-end'}}
     >
 
-      {{#if (eq this.exampleData.appDetails.platform 'android')}}
+      {{#if this.skFakeApp.isAndroid}}
         <AkSvg::PlaystoreLogo
           {{style width='16px' height='16px'}}
           data-test-storeknoxFakeApps-itemCardPlayStoreLogo
@@ -100,7 +102,7 @@
     />
 
     <AkTypography @variant='h2' @fontWeight='bold'>
-      {{this.exampleData.summary.suspectedAppsCount}}
+      {{this.skFakeApp.totalFakeApps}}
     </AkTypography>
 
     <AkTypography @color='textSecondary'>
@@ -133,20 +135,20 @@
         <AkTypography>Brand Abuse</AkTypography>
 
         <AkTypography @tag='span' @fontWeight='bold'>
-          {{this.exampleData.breakdown.brandAbuse.count}}
+          {{this.skFakeApp.fakeAppCounts.brand_abuse}}
 
           <AkTypography @tag='span' @color='textSecondary'>
             {{t 'outOf'}}
           </AkTypography>
 
-          {{this.exampleData.breakdown.brandAbuse.total}}
+          {{this.skFakeApp.totalFakeApps}}
         </AkTypography>
       </AkStack>
 
       <AkLoader::Linear
         @height={{12}}
         @variant='determinate'
-        @progress={{this.exampleData.breakdown.brandAbuse.percentage}}
+        @progress={{this.skFakeApp.brandAbuseFakeAppPercentage}}
         local-class='brand-abuse-count-progress'
       />
     </AkStack>
@@ -168,20 +170,20 @@
         <AkTypography>Fake App</AkTypography>
 
         <AkTypography @tag='span' @fontWeight='bold'>
-          {{this.exampleData.breakdown.fakeApp.count}}
+          {{this.skFakeApp.fakeAppCounts.fake_app}}
 
           <AkTypography @tag='span' @color='textSecondary'>
             {{t 'outOf'}}
           </AkTypography>
 
-          {{this.exampleData.breakdown.fakeApp.total}}
+          {{this.skFakeApp.totalFakeApps}}
         </AkTypography>
       </AkStack>
 
       <AkLoader::Linear
         @height={{12}}
         @variant='determinate'
-        @progress={{this.exampleData.breakdown.fakeApp.percentage}}
+        @progress={{this.skFakeApp.fakeAppsFakeAppPercentage}}
         local-class='fake-app-count-progress'
       />
     </AkStack>
@@ -200,7 +202,7 @@
       </AkTypography>
 
       <AkTypography @fontWeight='bold'>
-        {{this.exampleData.lastMonitoringDate}}
+        {{this.lastMonitoringDate}}
       </AkTypography>
     </AkStack>
   </AkStack>

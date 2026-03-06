@@ -1,3 +1,10 @@
+.fake-apps-grid {
+  display: grid;
+  justify-items: stretch;
+  grid-template-columns: repeat(auto-fill, minmax(430px, 1fr));
+  gap: 1.5em;
+}
+
 .header-storeknox-fake-apps-page {
   background-color: var(--storeknox-inventory-header-background-color);
   margin: 0.714em 0;
