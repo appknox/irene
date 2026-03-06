@@ -99,7 +99,9 @@
           </AkStack>
 
           <AkStack @spacing='1' class='mt-1'>
-            <Storeknox::ProductIcon @notClickable={{true}} @product='android'>
+            <Storeknox::ProductIcon
+              @product={{if this.skInventoryApp.isAndroid 'android' 'ios'}}
+            >
               <AppPlatformIcon
                 @platform={{if this.skInventoryApp.isAndroid 'android' 'apple'}}
                 data-test-storeknoxInventoryDetails-headerPlatformIcon
@@ -107,8 +109,7 @@
             </Storeknox::ProductIcon>
 
             <Storeknox::ProductIcon
-              @product={{if this.skInventoryApp.isAndroid 'android' 'ios'}}
-              @storeLink={{@skInventoryApp.appMetadata.url}}
+              @product={{if @skInventoryApp.isAndroid 'android' 'ios'}}
             >
               {{#if this.skInventoryApp.isAndroid}}
                 <AkSvg::PlaystoreLogo
@@ -123,17 +124,6 @@
                 />
               {{/if}}
             </Storeknox::ProductIcon>
-
-            {{! TODO: Uncomment when feature is fully ready }}
-            {{!-- {{#unless this.skInventoryApp.appIsNotAvailableOnAppknox}}
-              <Storeknox::ProductIcon @product='vapt'>
-                <AkSvg::AoxIcon data-test-storeknoxInventoryDetails-vaptLogo />
-              </Storeknox::ProductIcon>
-            {{/unless}} --}}
-
-            {{! <Storeknox::ProductIcon @product='sm'>
-              <AkSvg::SoxIcon />
-            </Storeknox::ProductIcon> }}
           </AkStack>
         </AkStack>
 

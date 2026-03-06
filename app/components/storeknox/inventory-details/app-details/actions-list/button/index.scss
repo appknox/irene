@@ -13,6 +13,10 @@
     --storeknox-inventory-details-app-details-action-button-no-action-color
   ) !important;
 
+  &:disabled {
+    cursor: not-allowed;
+  }
+
   &:focus,
   &:hover {
     box-shadow: var(
@@ -92,6 +96,17 @@
         var(
           --storeknox-inventory-details-app-details-action-button-feature-in-progress-color
         );
+    }
+  }
+
+  &.status-initializing {
+    color: var(--common-black) !important;
+    border-color: var(--neutral-grey-600) !important;
+    background-color: var(--common-white) !important;
+
+    &:focus,
+    &:hover {
+      box-shadow: 4px 4px 15px 0px #00000008;
     }
   }
 }

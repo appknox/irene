@@ -21,9 +21,13 @@
         @alignItems='center'
         class='py-2 px-3'
       >
-        <div local-class='title-indicator'></div>
+        <div
+          local-class='title-indicator
+          {{if this.isBrandAbuseAndFakeApp "brand-abuse"}}
+          '
+        ></div>
 
-        <AkTypography @fontWeight='bold'>Brand Abuse</AkTypography>
+        <AkTypography @fontWeight='bold'>{{this.headerTitle}}</AkTypography>
       </AkStack>
     </AkStack>
   {{/unless}}
@@ -80,18 +84,15 @@
       </AkStack>
 
       <AkStack @spacing='1' class='mt-1'>
-        <Storeknox::ProductIcon @notClickable={{true}} @product='android'>
+        <Storeknox::ProductIcon @product={{if this.isAndroid 'android' 'ios'}}>
           <AppPlatformIcon
-            @platform={{if @fakeApp.skStore.platformDisplay 'android' 'apple'}}
+            @platform={{if this.isAndroid 'android' 'apple'}}
             data-test-storeknoxInventoryDetails-headerPlatformIcon
           />
         </Storeknox::ProductIcon>
 
-        <Storeknox::ProductIcon
-          @product={{if @fakeApp.skStore.platformDisplay 'android' 'ios'}}
-          @storeLink={{@fakeApp.appUrl}}
-        >
-          {{#if (eq @fakeApp.skStore.platformDisplay 'android')}}
+        <Storeknox::ProductIcon @product={{if this.isAndroid 'android' 'ios'}}>
+          {{#if this.isAndroid}}
             <AkSvg::PlaystoreLogo
               {{style width='16px'}}
               data-test-storeknoxInventoryDetails-playStoreLogo

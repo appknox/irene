@@ -95,6 +95,20 @@ export default class StoreknoxFakeAppsIgnoreDrawerComponent extends Component<St
     ];
   }
 
+  get ignoreConfirmationPrompt() {
+    const templateData = {
+      appName: this.args.fakeApp.title,
+      htmlSafe: true,
+    };
+
+    return this.args.addToInventory
+      ? this.intl.t(
+          'storeknox.ignoreConfirmationPromptAndAddToInventory',
+          templateData
+        )
+      : this.intl.t('storeknox.ignoreConfirmationPrompt', templateData);
+  }
+
   @action
   updateReason(event: Event) {
     const target = event.target as HTMLTextAreaElement;

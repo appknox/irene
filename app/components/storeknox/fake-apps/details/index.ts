@@ -7,6 +7,7 @@ import type Store from 'ember-data/store';
 
 import type SkFakeAppModel from 'irene/models/sk-fake-app';
 import type SkInventoryAppModel from 'irene/models/sk-inventory-app';
+import IntlService from 'ember-intl/services/intl';
 
 export interface StoreknoxFakeAppsDetailsSignature {
   Args: { fakeApp: SkFakeAppModel };
@@ -14,6 +15,7 @@ export interface StoreknoxFakeAppsDetailsSignature {
 
 export default class StoreknoxFakeAppsDetailsComponent extends Component<StoreknoxFakeAppsDetailsSignature> {
   @service declare store: Store;
+  @service declare intl: IntlService;
 
   @tracked showIgnoreDrawer = false;
   @tracked addToInventory = false;
@@ -27,6 +29,28 @@ export default class StoreknoxFakeAppsDetailsComponent extends Component<Storekn
 
   get isFakeAppIgnored(): boolean {
     return Boolean(this.args.fakeApp?.reviewedBy);
+  }
+
+  get isAndroid(): boolean {
+    return (
+      this.args.fakeApp?.skStore?.platformDisplay?.toLowerCase() === 'android'
+    );
+  }
+
+  get isBrandAbuseAndFakeApp(): boolean {
+    return this.args.fakeApp?.aiClassificationLabel === 'brand_abuse';
+  }
+
+  get isFakeApp(): boolean {
+    return this.args.fakeApp?.aiClassificationLabel === 'fake_app';
+  }
+
+  get headerTitle() {
+    return this.intl.t(
+      this.isBrandAbuseAndFakeApp
+        ? 'storeknox.brandAbuse'
+        : 'storeknox.fakeApps.fakeApp'
+    );
   }
 
   @action

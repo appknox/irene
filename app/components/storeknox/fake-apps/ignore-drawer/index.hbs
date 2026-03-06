@@ -82,11 +82,19 @@
       {{else}}
         <AkStack @width='full' @direction='column' @spacing='2.5' class='p-3'>
           <AkTypography data-test-storeknoxFakeApps-ignoreDrawer-prompt>
-            {{t
-              'storeknox.ignoreConfirmationPrompt'
-              appName=@fakeApp.title
-              htmlSafe=true
-            }}
+            {{#if @addToInventory}}
+              {{t
+                'storeknox.ignoreConfirmationPromptAndAddToInventory'
+                appName=@fakeApp.title
+                htmlSafe=true
+              }}
+            {{else}}
+              {{t
+                'storeknox.ignoreConfirmationPrompt'
+                appName=@fakeApp.title
+                htmlSafe=true
+              }}
+            {{/if}}
           </AkTypography>
 
           <AkStack @width='full' @direction='column' @spacing='1'>
