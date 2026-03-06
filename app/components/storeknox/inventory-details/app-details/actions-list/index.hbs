@@ -54,12 +54,18 @@
   >
     {{#each this.actionsList as |action|}}
       {{#unless action.hideAction}}
-        <AkLink @route={{action.route}} @model={{this.skInventoryApp.id}}>
+        <AkLink
+          @disabled={{action.disabled}}
+          @route={{action.route}}
+          @model={{this.skInventoryApp.id}}
+        >
           <Storeknox::InventoryDetails::AppDetails::ActionsList::Button
             @needsAction={{action.needsAction}}
             @featureInProgress={{action.featureInProgress}}
             @label={{action.label}}
             @skInventoryApp={{this.skInventoryApp}}
+            @statusIsInitializing={{action.statusIsInitializing}}
+            @disabled={{action.disabled}}
             data-test-storeknoxInventoryDetails-actionBtn='{{action.id}}'
           />
         </AkLink>

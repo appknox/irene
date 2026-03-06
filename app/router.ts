@@ -353,21 +353,22 @@ Router.map(function () {
             this.route('unscanned-version', function () {
               this.route('history');
             });
+
+            this.route('fake-app-list', function () {
+              this.route('ignored');
+              this.route('fake-apps');
+              this.route('index', { path: '/' });
+            });
           }
         );
 
+        this.route('fake-app-details', {
+          path: '/inventory-details/:sk_app_id/fake-app-details/:fake_app_id',
+        });
+
         this.route('review-logs', { path: '/discover/review-logs' });
         this.route('archived-apps', { path: '/inventory/archived-apps' });
-
-        this.route('fake-apps', function () {
-          this.route('index', { path: '/' });
-          this.route('details', { path: '/:sk_app_id/detail/:id' });
-
-          this.route('fake-app-details', { path: '/:id' }, function () {
-            this.route('ignored');
-            this.route('fake-app');
-          });
-        });
+        this.route('fake-apps');
 
         this.route('notifications');
       });

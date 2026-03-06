@@ -1973,6 +1973,7 @@
     "fakeAppIgnoredAndAddedToInventory": "Fake app has been ignored and added to inventory successfully",
     "fakeAppDetails": "Fake App Details",
     "ignoreConfirmationPrompt": "Are you sure you want to ignore the <strong>{appName}</strong> app? Please share your reason.",
+    "ignoreConfirmationPromptAndAddToInventory": "Are you sure you want to ignore <strong>{appName}</strong> and add to app inventory?",
     "ignoreReasonPlaceholder": "Enter the reason to ignore...",
     "yesIgnore": "Yes, Ignore",
     "ignoredDetails": "Ignored Details",

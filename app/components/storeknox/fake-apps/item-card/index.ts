@@ -24,12 +24,9 @@ export default class StoreknoxFakeAppsItemCardComponent extends Component<Storek
 
   @action
   openFakeAppDetails() {
-    // TODO: Remove once merged with Avi's changes
-    // Should lead to storeknox.inventory.details.fake-apps route
     this.router.transitionTo(
-      'authenticated.storeknox.fake-apps.details',
-      1,
-      126
+      'authenticated.storeknox.inventory-details.fake-app-list.index',
+      this.skFakeApp.id
     );
   }
 }

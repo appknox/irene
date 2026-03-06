@@ -17,8 +17,12 @@
     .title-indicator {
       width: 14px;
       height: 14px;
-      background-color: #114db5;
+      background-color: #b11146;
       border-radius: var(--border-radius);
+
+      &.brand-abuse {
+        background-color: #114db5;
+      }
     }
   }
 

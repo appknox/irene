@@ -46,9 +46,6 @@ export default class SkAppModel extends Model {
   @attr('boolean')
   declare monitoringEnabled: boolean;
 
-  @attr('boolean', { defaultValue: true })
-  declare hasFakeApps: boolean;
-
   @attr('number')
   declare storeMonitoringStatus: number;
 
@@ -259,7 +256,6 @@ export default class SkAppModel extends Model {
   }
 
   get totalFakeApps() {
-    console.log(this.fakeAppCounts);
     return this.fakeAppCounts.brand_abuse + this.fakeAppCounts.fake_app;
   }
 

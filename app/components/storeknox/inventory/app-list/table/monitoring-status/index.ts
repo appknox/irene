@@ -23,7 +23,7 @@ export default class StoreknoxInventoryAppListTableMonitoringStatusComponent ext
   }
 
   get showFakeAppsWarning() {
-    return this.app?.hasFakeApps;
+    return this.app?.fakeAppDetectionHasResults;
   }
 
   get tooltipMessage() {

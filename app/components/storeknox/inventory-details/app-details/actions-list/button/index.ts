@@ -7,6 +7,7 @@ interface StoreknoxInventoryDetailsAppDetailsActionsListButtonSignature {
     skInventoryApp?: SkInventoryAppModel;
     needsAction?: boolean;
     featureInProgress?: boolean;
+    statusIsInitializing?: boolean;
     disabled?: boolean;
     label: string;
     hideRightIcon?: boolean;

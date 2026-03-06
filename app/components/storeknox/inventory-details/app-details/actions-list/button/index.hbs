@@ -2,15 +2,16 @@
   @variant='outlined'
   @disabled={{@disabled}}
   @color={{if @needsAction 'primary'}}
-  local-class='action-button-root 
+  local-class='action-button-root
   {{if this.isArchived "archived"}}
-  {{if @needsAction "needs-action"}} 
-  {{if @featureInProgress "feature-in-progress"}}'
+  {{if @needsAction "needs-action"}}
+  {{if @featureInProgress "feature-in-progress"}}
+  {{if @statusIsInitializing "status-initializing"}}'
   ...attributes
 >
   <:leftIcon>
     <AkIcon
-      @iconName={{if @featureInProgress 'auto-fix-high' 'report'}}
+      @iconName={{if @featureInProgress 'auto-fix-high' 'info'}}
       @color='inherit'
       data-test-storeknoxInventoryDetails-actionBtn-leftIcon
     />
@@ -22,12 +23,19 @@
 
   <:rightIcon>
     {{#unless @hideRightIcon}}
-      <AkIcon
-        @iconName='arrow-outward'
-        @color='textPrimary'
-        {{style fontSize='1.2857em !important'}}
-        data-test-storeknoxInventoryDetails-actionBtn-rightIcon
-      />
+      {{#if @statusIsInitializing}}
+        <AkLoader
+          @size={{16}}
+          data-test-storeknoxInventoryDetails-actionBtn-rightIconLoader
+        />
+      {{else}}
+        <AkIcon
+          @iconName='arrow-outward'
+          @color='textPrimary'
+          {{style fontSize='1.2857em !important'}}
+          data-test-storeknoxInventoryDetails-actionBtn-rightIcon
+        />
+      {{/if}}
     {{/unless}}
   </:rightIcon>
 </AkButton>

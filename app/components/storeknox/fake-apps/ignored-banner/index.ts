@@ -12,7 +12,7 @@ export default class StoreknoxFakeAppsIgnoredBannerComponent extends Component<S
   }
 
   get isAddedToInventory() {
-    return Boolean(this.fakeApp?.addedToInventoryApp);
+    return Boolean(this.fakeApp?.addedToInventoryApp?.get('id'));
   }
 
   get isFakeAppIgnored() {

@@ -62,6 +62,8 @@ export interface SkFakeAppClassification {
   aiClassificationJustification?: string;
 }
 
+export type SkFakeAppClassificationLabel = 'fake_app' | 'brand_abuse';
+
 export default class SkFakeAppModel extends Model {
   @belongsTo('sk-inventory-app', { async: true, inverse: null })
   declare skApp: AsyncBelongsTo<SkInventoryAppModel>;
@@ -112,7 +114,7 @@ export default class SkFakeAppModel extends Model {
   declare aiConfidence: number;
 
   @attr('string')
-  declare aiClassificationLabel: string;
+  declare aiClassificationLabel: SkFakeAppClassificationLabel;
 
   @attr()
   declare aiClassification: SkFakeAppClassification;

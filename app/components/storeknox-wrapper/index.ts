@@ -58,11 +58,11 @@ export default class StoreknoxWrapperComponent extends Component<StoreknoxWrappe
           'authenticated.storeknox.discover.result authenticated.storeknox.discover.requested',
       },
       {
-        label: this.intl.t('fakeApps'),
+        label: this.intl.t('storeknox.fakeAppsTitle'),
         icon: 'warning',
         route: 'authenticated.storeknox.fake-apps',
         currentWhen:
-          'authenticated.storeknox.fake-apps.index authenticated.storeknox.fake-apps.fake-app-details',
+          'authenticated.storeknox.fake-apps authenticated.storeknox.inventory-details.fake-app-list authenticated.storeknox.inventory-details.fake-app-list.fake-apps authenticated.storeknox.inventory-details.fake-app-list.ignored',
       },
     ] as MenuItem[];
   }
