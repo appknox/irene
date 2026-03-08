@@ -4,6 +4,7 @@ import { tracked } from '@glimmer/tracking';
 import { service } from '@ember/service';
 import { task } from 'ember-concurrency';
 import type Store from 'ember-data/store';
+
 // eslint-disable-next-line ember/use-ember-data-rfc-395-imports
 import type { DS } from 'ember-data';
 
@@ -19,6 +20,12 @@ type SkFakeAppResponse = DS.AdapterPopulatedRecordArray<SkFakeAppModel> & {
 
 export interface StoreknoxInventoryDetailsFakeAppListListSignature {
   Args: {
+    emptyIllustration?:
+      | 'ak-svg/no-pending-items'
+      | 'ak-svg/project-list-empty'
+      | 'ak-svg/scan-completed';
+
+    emptyTitle?: string;
     skInventoryApp: SkInventoryAppModel;
     appsQueryStatus?: 'pending' | 'ignored';
     appsQueryClassification?: 'brand_abuse' | 'fake_app';
@@ -46,12 +53,14 @@ export default class StoreknoxInventoryDetailsFakeAppListListComponent extends C
   @action goToPage({ limit, offset }: PaginationProviderActionsArgs) {
     this.limit = limit;
     this.offset = offset;
+
     this.fetchFakeApps.perform();
   }
 
   @action onItemPerPageChange({ limit }: PaginationProviderActionsArgs) {
     this.limit = limit;
     this.offset = 0;
+
     this.fetchFakeApps.perform();
   }
 
@@ -91,6 +100,11 @@ export default class StoreknoxInventoryDetailsFakeAppListListComponent extends C
       isIgnored: skFakeApp.isIgnored || skFakeApp.isAddedToInventory,
     };
   }
+
+  reloadFakeApps = task(async () => {
+    await this.args.skInventoryApp.reload();
+    await this.fetchFakeApps.perform();
+  });
 
   fetchFakeApps = task(async () => {
     const skAppId = this.args.skInventoryApp?.id;

@@ -10,20 +10,37 @@
   as |pgc|
 >
   {{#if this.isFetchingData}}
-    <AkStack @justifyContent='center' @alignItems='center' class='p-4'>
-      <AkLoader data-test-storeknoxFakeAppDetailsList-loading />
-    </AkStack>
+    <ProjectList::Loader
+      @loadingText='{{t "loading"}}...'
+      data-test-storeknoxFakeAppDetailsList-loading
+    />
 
   {{else if this.hasNoResults}}
     <AkStack
-      @direction='column'
       @alignItems='center'
-      class='p-4'
+      @justifyContent='center'
+      @direction='column'
+      @spacing='1'
+      class='py-7 px-4'
+      local-class='status-container'
       data-test-storeknoxFakeAppDetailsList-empty
     >
-      <AkTypography @variant='h6'>
-        {{t 'noResultsFound'}}
-      </AkTypography>
+      {{#if @emptyIllustration}}
+        {{#let (component @emptyIllustration) as |EmptyIllustration|}}
+          <EmptyIllustration />
+        {{/let}}
+      {{/if}}
+
+      {{#if @emptyTitle}}
+        <AkTypography @variant='h5' class='mt-4'>
+          {{@emptyTitle}}
+        </AkTypography>
+
+        <AkTypography @align='center' {{style maxWidth='600px'}}>
+          We were unable to detect fake apps for this application at this time.
+          If we find any subsequent fake apps, this page will be updated.
+        </AkTypography>
+      {{/if}}
     </AkStack>
 
   {{else}}
@@ -35,7 +52,9 @@
       {{#each this.fakeAppsWithFindings as |item|}}
         <Storeknox::InventoryDetails::FindingDetailCard
           @finding={{item.finding}}
+          @fakeApp={{item.skFakeApp}}
           @skInventoryApp={{@skInventoryApp}}
+          @reloadFakeApps={{perform this.reloadFakeApps}}
           data-test-storeknoxFakeAppDetailsList-card='{{item.skFakeApp.id}}'
         />
       {{/each}}

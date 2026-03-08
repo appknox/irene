@@ -6,6 +6,7 @@ import { ScrollToTop } from 'irene/utils/scroll-to-top';
 
 export interface StoreknoxInventoryDetailsFakeAppListRouteModel {
   skInventoryApp: SkInventoryAppModel;
+  showFakeAppsList: boolean;
 }
 
 export default class AuthenticatedStoreknoxInventoryDetailsFakeAppDetailsRoute extends ScrollToTop(
@@ -23,6 +24,10 @@ export default class AuthenticatedStoreknoxInventoryDetailsFakeAppDetailsRoute e
       parentParams.id
     );
 
-    return { skInventoryApp };
+    const showFakeAppsList =
+      !skInventoryApp?.fakeAppDetectionIsInitializing &&
+      !skInventoryApp?.allFakeAppsCountsAreZero;
+
+    return { skInventoryApp, showFakeAppsList };
   }
 }

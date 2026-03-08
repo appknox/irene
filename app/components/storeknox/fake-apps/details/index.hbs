@@ -58,6 +58,7 @@
           target='_blank'
           rel='noopener noreferrer'
           class='mt-1'
+          {{style justifyContent='flex-start'}}
         >
           <AkTypography
             @variant='h5'
@@ -121,7 +122,7 @@
         </AkButton>
 
       {{else}}
-        <AkButton>
+        <AkButton @disabled={{true}}>
           {{t 'downloadReport'}}
         </AkButton>
 

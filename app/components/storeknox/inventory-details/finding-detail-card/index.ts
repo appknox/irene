@@ -5,6 +5,7 @@ import { tracked } from '@glimmer/tracking';
 import type IntlService from 'ember-intl/services/intl';
 
 import type SkInventoryAppModel from 'irene/models/sk-inventory-app';
+import type SkFakeAppModel from 'irene/models/sk-fake-app';
 
 export interface FindingDetail {
   id?: string;
@@ -23,15 +24,24 @@ export interface FindingDetail {
 
 export interface StoreknoxInventoryDetailsFindingDetailCardSignature {
   Element: HTMLDivElement;
-  Args: { finding: FindingDetail; skInventoryApp: SkInventoryAppModel };
+  Args: {
+    finding: FindingDetail;
+    fakeApp: SkFakeAppModel;
+    skInventoryApp: SkInventoryAppModel;
+    reloadFakeApps: () => void;
+  };
 }
 
 export default class StoreknoxInventoryDetailsFindingDetailCardComponent extends Component<StoreknoxInventoryDetailsFindingDetailCardSignature> {
   @service declare intl: IntlService;
 
   @tracked anchorRef: HTMLElement | null = null;
+  @tracked showIgnoreDrawer = false;
+  @tracked addToInventory = false;
 
-  noop() {}
+  get fakeAppIsIgnored() {
+    return this.args.fakeApp.isIgnored;
+  }
 
   get scoreItems() {
     return [
@@ -62,14 +72,33 @@ export default class StoreknoxInventoryDetailsFindingDetailCardComponent extends
     return [
       {
         label: this.intl.t('storeknox.fakeApps.ignore'),
-        onClick: this.noop,
+        onClick: () => this.openIgnoreDrawer(false),
         divider: true,
       },
       {
         label: this.intl.t('storeknox.fakeApps.ignoreAndAddToInventory'),
-        onClick: this.noop,
+        onClick: () => this.openIgnoreDrawer(true),
       },
     ];
+  }
+
+  @action
+  openIgnoreDrawer(addToInventory = false) {
+    this.showIgnoreDrawer = true;
+    this.addToInventory = addToInventory;
+
+    this.handleCloseMenu();
+  }
+
+  @action
+  closeIgnoreDrawer(reloadFakeApps?: boolean) {
+    debugger;
+
+    if (reloadFakeApps) {
+      this.args.reloadFakeApps();
+    }
+
+    this.showIgnoreDrawer = false;
   }
 
   @action

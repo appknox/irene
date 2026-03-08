@@ -148,7 +148,10 @@ export default class SkFakeAppModel extends Model {
   }
 
   get isIgnored() {
-    return this.status === ENUMS.SK_FAKE_APP_STATUS.IGNORED;
+    return [
+      ENUMS.SK_FAKE_APP_STATUS.IGNORED,
+      ENUMS.SK_FAKE_APP_STATUS.ADDED_TO_INVENTORY,
+    ].includes(this.status);
   }
 
   get isAddedToInventory() {

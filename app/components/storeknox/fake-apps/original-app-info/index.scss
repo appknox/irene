@@ -1,4 +1,6 @@
 .original-app-details-wrapper {
+  width: 100%;
+  max-width: 400px;
   align-self: stretch;
   border: 1px solid
     var(--storeknox-inventory-details-section-info-root-border-color);
