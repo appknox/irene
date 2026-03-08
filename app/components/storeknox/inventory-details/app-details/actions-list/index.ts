@@ -3,7 +3,6 @@ import { service } from '@ember/service';
 import dayjs from 'dayjs';
 import type IntlService from 'ember-intl/services/intl';
 
-import ENUMS from 'irene/enums';
 import type SkInventoryAppModel from 'irene/models/sk-inventory-app';
 import type OrganizationService from 'irene/services/organization';
 
@@ -33,14 +32,8 @@ export default class StoreknoxInventoryDetailsAppDetailsActionsListComponent ext
         route: 'authenticated.storeknox.inventory-details.unscanned-version',
         hideAction: false,
         disabled: this.skInventoryApp?.monitoringPendingOrDisabled,
-
-        needsAction:
-          this.storeMonitoringStatus ===
-          ENUMS.SK_APP_MONITORING_STATUS.ACTION_NEEDED,
-
-        statusIsInitializing:
-          this.storeMonitoringStatus ===
-          ENUMS.SK_APP_MONITORING_STATUS.INITIALIZING,
+        needsAction: this.skInventoryApp?.needsAction,
+        statusIsInitializing: this.skInventoryApp?.monitoringIsPending,
       },
       {
         id: 'brand-abuse',

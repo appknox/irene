@@ -90,6 +90,7 @@ export enum AkSvgComponentInvocationByNames {
   ScvNotStarted,
   ScvErrored,
   ApisCapturedIllustration,
+  FakeAppInProgress,
 }
 
 export enum AkSvgComponentInvocationByPaths {
@@ -114,6 +115,10 @@ export enum AkSvgComponentInvocationByPaths {
   'sox-monitoring-stats-icons/initializing',
   'sox-monitoring-stats-icons/action-needed',
   'sox-monitoring-stats-icons/no-action-needed',
+  'no-pending-items',
+  'project-list-empty',
+  'scan-completed',
+  'fake-app-in-progress',
 }
 
 type AkSvgComponent = ComponentLike<{

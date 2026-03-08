@@ -12,17 +12,19 @@
       </AkTypography>
     </div>
 
-    <AkIconButton
-      {{on 'click' this.handleOpenMenu}}
-      data-test-storeknoxFakeAppsFindingDetailCard-menuBtn
-    >
-      <AkIcon @iconName='more-vert' />
-    </AkIconButton>
+    {{#unless this.fakeAppIsIgnored}}
+      <AkIconButton
+        {{on 'click' this.handleOpenMenu}}
+        data-test-storeknoxFakeAppsFindingDetailCard-menuBtn
+      >
+        <AkIcon @iconName='more-vert' />
+      </AkIconButton>
+    {{/unless}}
   </AkStack>
 
   {{! Score Section }}
-  <AkStack @alignItems='flex-end' @spacing='6' class='mb-3'>
-    <AkStack @direction='column' @spacing='1'>
+  <AkStack @alignItems='flex-end' class='mb-3'>
+    <AkStack @direction='column' @spacing='1' {{style minWidth='170px'}}>
       <AkStack @spacing='0.5' @alignItems='center'>
         <AkTypography @color='primary' @variant='body2' @fontWeight='medium'>
           {{t 'storeknox.fakeApps.findingDetailCard.overallScore'}}
@@ -46,28 +48,30 @@
       </AkTypography>
     </AkStack>
 
-    {{#each this.scoreItems as |item|}}
-      <AkStack @direction='column' @spacing='0.5'>
-        <AkTypography @color='textSecondary' @variant='body2'>
-          {{item.label}}
-        </AkTypography>
+    <AkStack @alignItems='center' @spacing='6'>
+      {{#each this.scoreItems as |item|}}
+        <AkStack @direction='column' @spacing='0.5'>
+          <AkTypography @color='textSecondary' @variant='body2'>
+            {{item.label}}
+          </AkTypography>
 
-        <AkTypography
-          @variant='h4'
-          @fontWeight='regular'
-          data-test-storeknoxFakeAppsFindingDetailCard-score='{{item.id}}'
-        >
-          {{item.value}}%
-        </AkTypography>
-      </AkStack>
-    {{/each}}
+          <AkTypography
+            @variant='h4'
+            @fontWeight='regular'
+            data-test-storeknoxFakeAppsFindingDetailCard-score='{{item.id}}'
+          >
+            {{item.value}}%
+          </AkTypography>
+        </AkStack>
+      {{/each}}
+    </AkStack>
   </AkStack>
 
   <AkDivider @color='dark' />
 
   {{! App Detail Section }}
   <AkStack @direction='column' @spacing='2' class='mt-3'>
-    <AkStack @alignItems='center' @spacing='3'>
+    <AkStack @alignItems='center'>
       <AkTypography @color='textSecondary' local-class='detail-label'>
         {{t 'storeknox.fakeApps.findingDetailCard.logo'}}
       </AkTypography>
@@ -84,7 +88,7 @@
       {{/if}}
     </AkStack>
 
-    <AkStack @alignItems='center' @spacing='3'>
+    <AkStack @alignItems='center'>
       <AkTypography @color='textSecondary' local-class='detail-label'>
         {{t 'storeknox.fakeApps.findingDetailCard.appName'}}
       </AkTypography>
@@ -97,7 +101,7 @@
       </AkTypography>
     </AkStack>
 
-    <AkStack @alignItems='center' @spacing='3'>
+    <AkStack @alignItems='center'>
       <AkTypography @color='textSecondary' local-class='detail-label'>
         {{t 'storeknox.fakeApps.findingDetailCard.namespace'}}
       </AkTypography>
@@ -107,7 +111,7 @@
       </AkTypography>
     </AkStack>
 
-    <AkStack @alignItems='center' @spacing='3'>
+    <AkStack @alignItems='center'>
       <AkTypography @color='textSecondary' local-class='detail-label'>
         {{t 'storeknox.fakeApps.findingDetailCard.platform'}}
       </AkTypography>
@@ -118,7 +122,7 @@
       />
     </AkStack>
 
-    <AkStack @alignItems='center' @spacing='3'>
+    <AkStack @alignItems='center'>
       <AkTypography @color='textSecondary' local-class='detail-label'>
         {{t 'storeknox.fakeApps.findingDetailCard.store'}}
       </AkTypography>
@@ -142,7 +146,7 @@
       @spacing='3'
       @width='full'
     >
-      <AkStack @alignItems='center' @spacing='3'>
+      <AkStack @alignItems='center'>
         <AkTypography @color='textSecondary' local-class='detail-label'>
           {{t 'storeknox.fakeApps.findingDetailCard.developer'}}
         </AkTypography>
@@ -190,4 +194,13 @@
       </akm.listItem>
     {{/each}}
   </AkMenu>
+
+  {{! Add ignore drawer }}
+  <Storeknox::FakeApps::IgnoreDrawer
+    @fakeApp={{@fakeApp}}
+    @open={{this.showIgnoreDrawer}}
+    @onClose={{this.closeIgnoreDrawer}}
+    @addToInventory={{this.addToInventory}}
+    @isFromFakeAppList={{true}}
+  />
 </div>

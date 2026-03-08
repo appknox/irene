@@ -148,11 +148,20 @@ export default class SkAppModel extends Model {
     );
   }
 
+  get monitoringIsDisabled() {
+    return (
+      this.storeMonitoringStatus === ENUMS.SK_APP_MONITORING_STATUS.DISABLED
+    );
+  }
+
+  get monitoringIsPending() {
+    return (
+      this.storeMonitoringStatus === ENUMS.SK_APP_MONITORING_STATUS.INITIALIZING
+    );
+  }
+
   get monitoringPendingOrDisabled() {
-    return [
-      ENUMS.SK_APP_MONITORING_STATUS.INITIALIZING,
-      ENUMS.SK_APP_MONITORING_STATUS.DISABLED,
-    ].includes(this.storeMonitoringStatus);
+    return this.monitoringIsPending || this.monitoringIsDisabled;
   }
 
   get isArchived() {
@@ -265,6 +274,15 @@ export default class SkAppModel extends Model {
 
   get fakeAppsFakeAppPercentage() {
     return (this.fakeAppCounts.fake_app / this.totalFakeApps) * 100;
+  }
+
+  get allFakeAppsCountsAreZero() {
+    return (
+      !this.fakeAppCounts ||
+      (this.fakeAppCounts.brand_abuse === 0 &&
+        this.fakeAppCounts.fake_app === 0 &&
+        this.fakeAppCounts.ignored === 0)
+    );
   }
 }
 

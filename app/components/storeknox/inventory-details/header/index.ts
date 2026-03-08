@@ -48,6 +48,12 @@ export default class StoreknoxInventoryDetailsHeaderComponent extends Component<
     return this.args.skInventoryApp;
   }
 
+  get lastFakeAppDetectionDate() {
+    return dayjs(this.skInventoryApp?.lastFakeAppDetectionOn).format(
+      'MMM DD, YYYY'
+    );
+  }
+
   get appHasLicense() {
     return this.skInventoryApp?.hasLicense;
   }
@@ -79,9 +85,13 @@ export default class StoreknoxInventoryDetailsHeaderComponent extends Component<
     return this.routeLocalName.includes('unscanned-version');
   }
 
+  get isFakeAppListRoute() {
+    return this.routeLocalName.includes('fake-app-list');
+  }
+
   get activeRouteTagId() {
-    if (this.isBrandAbuseRoute) {
-      return 'brand-abuse';
+    if (this.isFakeAppListRoute) {
+      return 'fake-app-list';
     } else if (this.isMalwareDetectedRoute) {
       return 'malware-detected';
     } else if (this.isUnscannedVersionRoute) {
@@ -108,11 +118,12 @@ export default class StoreknoxInventoryDetailsHeaderComponent extends Component<
         models: [skInventoryAppId],
       },
       {
-        id: 'brand-abuse',
-        disabled: false,
-        label: this.intl.t('storeknox.brandAbuse'),
-        featureInProgress: true,
-        route: 'authenticated.storeknox.inventory-details.brand-abuse',
+        id: 'fake-app-list',
+        hideTag: !this.skInventoryApp?.fakeAppDetectionHasResults,
+        disabled: this.skInventoryApp?.fakeAppDetectionIsDisabled,
+        label: this.intl.t('storeknox.fakeAppsTitle'),
+        needsAction: this.skInventoryApp?.fakeAppDetectionHasResults,
+        route: 'authenticated.storeknox.inventory-details.fake-app-list',
         models: [skInventoryAppId],
       },
       {

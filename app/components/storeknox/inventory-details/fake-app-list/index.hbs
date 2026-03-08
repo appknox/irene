@@ -3,20 +3,65 @@
   {{if @skInventoryApp.isArchived "archived"}}
   '
 >
-  <AkTabs as |Akt|>
-    {{#each this.tabItems as |item|}}
-      <Akt.tabItem
-        @id={{item.id}}
-        @hasBadge={{true}}
-        @badgeCount={{item.count}}
-        @route={{item.route}}
-        @model={{@skInventoryApp.id}}
-        @currentWhen={{item.route}}
-        @indicatorVariant='shadow'
-        data-test-storeknoxFakeAppsFakeAppDetails-fakeApp-tab='{{item.id}}'
-      >
-        {{item.label}}
-      </Akt.tabItem>
-    {{/each}}
-  </AkTabs>
+  {{#if this.isInitializing}}
+    <AkStack
+      @alignItems='center'
+      @justifyContent='center'
+      @direction='column'
+      @spacing='1'
+      class='py-7 px-4'
+      local-class='status-container'
+      data-test-storeknoxFakeAppDetails-initializingState
+    >
+      <AkSvg::FakeAppInProgress />
+
+      <AkTypography @variant='h5' class='mt-4'>
+        {{t 'storeknox.fakeApps.detectionInProgress'}}
+      </AkTypography>
+
+      <AkTypography @align='center'>
+        {{t 'storeknox.fakeApps.detectionInProgressDescription'}}
+      </AkTypography>
+    </AkStack>
+
+  {{else if this.showSuccessState}}
+    <AkStack
+      @alignItems='center'
+      @justifyContent='center'
+      @direction='column'
+      @spacing='1'
+      class='py-7 px-4'
+      local-class='status-container'
+      data-test-storeknoxFakeAppDetails-successState
+    >
+      <AkSvg::ScanCompleted />
+
+      <AkTypography @variant='h5' class='mt-4'>
+        {{t 'storeknox.fakeApps.noSuspectedApps'}}
+      </AkTypography>
+
+      <AkTypography @align='center' {{style maxWidth='550px'}}>
+        We were unable to detect any fake apps for this application at this
+        time. If we find any subsequent fake apps, this page will be updated.
+      </AkTypography>
+    </AkStack>
+
+  {{else if this.showTabs}}
+    <AkTabs as |Akt|>
+      {{#each this.tabItems as |item|}}
+        <Akt.tabItem
+          @id={{item.id}}
+          @hasBadge={{true}}
+          @badgeCount={{item.count}}
+          @route={{item.route}}
+          @model={{@skInventoryApp.id}}
+          @currentWhen={{item.route}}
+          @indicatorVariant='shadow'
+          data-test-storeknoxFakeAppsFakeAppDetails-fakeApp-tab='{{item.id}}'
+        >
+          {{item.label}}
+        </Akt.tabItem>
+      {{/each}}
+    </AkTabs>
+  {{/if}}
 </div>

@@ -40,3 +40,11 @@
   box-sizing: border-box;
   white-space: normal;
 }
+
+.last-monitored-date {
+  background-color: var(
+    --storeknox-inventory-details-app-details-action-list-last-monitored-bg-color
+  );
+
+  padding: 0.2143em 0.4286em;
+}

@@ -10,8 +10,8 @@ interface StoreknoxInventoryDetailsAppDetailsSignature {
 export default class StoreknoxInventoryDetailsAppDetailsComponent extends Component<StoreknoxInventoryDetailsAppDetailsSignature> {
   get showMonitoringPendingInfo() {
     return (
-      this.args.skInventoryApp.fakeAppDetectionIsInitializing &&
-      this.args.skInventoryApp.monitoringPendingOrDisabled
+      !this.args.skInventoryApp.needsAction &&
+      !this.args.skInventoryApp.fakeAppDetectionHasResults
     );
   }
 }

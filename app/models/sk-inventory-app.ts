@@ -19,6 +19,9 @@ export default class SkInventoryAppModel extends SkAppModel {
   @attr('date')
   declare lastMonitoredOn: Date;
 
+  @attr('date')
+  declare lastFakeAppDetectionOn: Date;
+
   @belongsTo('project', { async: true, inverse: null })
   declare coreProject: AsyncBelongsTo<ProjectModel> | null;
 

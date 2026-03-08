@@ -10,14 +10,19 @@ export default class AuthenticatedStoreknoxInventoryDetailsFakeAppListFakeAppsCo
 
   declare model: StoreknoxInventoryDetailsFakeAppListRouteModel;
 
+  get skInventoryApp() {
+    return this.model.skInventoryApp;
+  }
+
   get breadcrumbs(): AkBreadcrumbsItemProps {
     const id = this.model.skInventoryApp?.id;
     const pkg = this.model.skInventoryApp?.appMetadata?.packageName;
+    const models = [id];
 
     const crumb: AkBreadcrumbsItemProps = {
       title: this.intl.t('storeknox.fakeApps.fakeApp'),
       routeGroup: 'storeknox/inventory',
-      models: [id],
+      models,
       route:
         'authenticated.storeknox.inventory-details.fake-app-list.fake-apps',
     };
@@ -25,7 +30,7 @@ export default class AuthenticatedStoreknoxInventoryDetailsFakeAppListFakeAppsCo
     const parentCrumb: AkBreadcrumbsItemProps['parentCrumb'] = {
       title: `${this.intl.t('storeknox.inventoryDetails')} (${pkg})`,
       route: 'authenticated.storeknox.inventory-details.index',
-      models: [id],
+      models,
       routeGroup: 'storeknox/inventory',
     };
 
@@ -38,7 +43,7 @@ export default class AuthenticatedStoreknoxInventoryDetailsFakeAppListFakeAppsCo
       ],
       fallbackCrumbs: [
         {
-          title: this.intl.t('storeknox.fakeAppsTitle'),
+          title: this.intl.t('storeknox.appInventory'),
           routeGroup: 'storeknox/inventory',
           route: 'authenticated.storeknox.inventory.app-list',
         },

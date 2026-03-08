@@ -1,6 +1,10 @@
 {{page-title (t 'storeknox.fakeApps.ignored')}}
 
-<Storeknox::InventoryDetails::FakeAppList::List
-  @skInventoryApp={{@model.skInventoryApp}}
-  @appsQueryStatus='ignored'
-/>
+{{#if @model.showFakeAppsList}}
+  <Storeknox::InventoryDetails::FakeAppList::List
+    @skInventoryApp={{@model.skInventoryApp}}
+    @appsQueryStatus='ignored'
+    @emptyTitle={{t 'storeknox.fakeApps.noIgnoredApps'}}
+    @emptyIllustration='ak-svg/project-list-empty'
+  />
+{{/if}}

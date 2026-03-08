@@ -13,16 +13,34 @@ export interface StoreknoxInventoryDetailsFakeAppListSignature {
 export default class StoreknoxInventoryDetailsFakeAppListComponent extends Component<StoreknoxInventoryDetailsFakeAppListSignature> {
   @service declare intl: IntlService;
 
-  get tabItems() {
-    const counts = this.args.skInventoryApp?.fakeAppCounts;
+  get isInitializing() {
+    return this.args.skInventoryApp?.fakeAppDetectionIsInitializing;
+  }
 
+  get fakeAppCounts() {
+    return this.args.skInventoryApp?.fakeAppCounts;
+  }
+
+  get allCountsZero() {
+    return this.args.skInventoryApp?.allFakeAppsCountsAreZero;
+  }
+
+  get showSuccessState() {
+    return !this.isInitializing && this.allCountsZero;
+  }
+
+  get showTabs() {
+    return !this.isInitializing && !this.allCountsZero;
+  }
+
+  get tabItems() {
     return [
       {
         id: 'brand-abuse',
         route: 'authenticated.storeknox.inventory-details.fake-app-list.index',
         models: [this.args.skInventoryApp?.id],
         label: this.intl.t('storeknox.brandAbuse'),
-        count: counts?.brand_abuse,
+        count: this.fakeAppCounts?.brand_abuse,
       },
       {
         id: 'fake-app',
@@ -30,7 +48,7 @@ export default class StoreknoxInventoryDetailsFakeAppListComponent extends Compo
           'authenticated.storeknox.inventory-details.fake-app-list.fake-apps',
         models: [this.args.skInventoryApp?.id],
         label: this.intl.t('storeknox.fakeApps.fakeApp'),
-        count: counts?.fake_app,
+        count: this.fakeAppCounts?.fake_app,
       },
       {
         id: 'ignored',
@@ -38,7 +56,7 @@ export default class StoreknoxInventoryDetailsFakeAppListComponent extends Compo
           'authenticated.storeknox.inventory-details.fake-app-list.ignored',
         models: [this.args.skInventoryApp?.id],
         label: this.intl.t('storeknox.fakeApps.ignored'),
-        count: counts?.ignored,
+        count: this.fakeAppCounts?.ignored,
       },
     ];
   }

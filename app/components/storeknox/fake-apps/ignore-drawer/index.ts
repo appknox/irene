@@ -23,9 +23,10 @@ const ChangeValidator = {
 
 export interface StoreknoxFakeAppsIgnoreDrawerSignature {
   Args: {
+    isFromFakeAppList?: boolean;
     fakeApp: SkFakeAppModel;
     open: boolean;
-    onClose: () => void;
+    onClose: (reloadFakeApps?: boolean) => void;
     addToInventory?: boolean;
   };
 }
@@ -127,7 +128,8 @@ export default class StoreknoxFakeAppsIgnoreDrawerComponent extends Component<St
   @action
   handleClose() {
     this.changeset?.rollback();
-    this.args.onClose();
+
+    this.args.onClose(this.args.isFromFakeAppList);
   }
 
   ignoreTask = task(async () => {
@@ -153,7 +155,8 @@ export default class StoreknoxFakeAppsIgnoreDrawerComponent extends Component<St
       );
 
       this.changeset?.rollback();
-      this.args.onClose();
+
+      this.args.onClose(this.args.isFromFakeAppList);
     } catch (error) {
       this.notify.error(parseError(error));
     }
