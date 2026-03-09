@@ -49,7 +49,7 @@ export default class StoreknoxInventoryDetailsHeaderComponent extends Component<
   }
 
   get lastFakeAppDetectionDate() {
-    return dayjs(this.skInventoryApp?.lastFakeAppDetectionOn).format(
+    return dayjs(this.skInventoryApp?.lastFakeDetectionOn).format(
       'MMM DD, YYYY'
     );
   }
@@ -231,7 +231,7 @@ export default class StoreknoxInventoryDetailsHeaderComponent extends Component<
 
       this.notify.success(
         this.intl.t('storeknox.monitoring') +
-          ` ${this.monitoringChecked ? this.intl.t('enabled') : this.intl.t('disabled')}`
+        ` ${this.monitoringChecked ? this.intl.t('enabled') : this.intl.t('disabled')}`
       );
 
       // Reload org sub to update the licenses remaining count

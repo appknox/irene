@@ -5,7 +5,6 @@ import type SkAppsService from 'irene/services/sk-apps';
 export interface StoreknoxFakeAppsQueryParams {
   app_limit: number;
   app_offset: number;
-  fake_app_detection_enabled: boolean;
 }
 
 export default class AuthenticatedStoreknoxFakeAppsRoute extends AkBreadcrumbsRoute {
@@ -18,19 +17,16 @@ export default class AuthenticatedStoreknoxFakeAppsRoute extends AkBreadcrumbsRo
     app_offset: {
       refreshModel: true,
     },
-    fake_app_detection_enabled: {
-      refreshModel: true,
-    },
   };
 
   async model(params: Partial<StoreknoxFakeAppsQueryParams>) {
-    const { app_limit, app_offset, fake_app_detection_enabled } = params;
+    const { app_limit, app_offset } = params;
 
     this.skAppsService
       .setQueryParams({
         limit: app_limit,
         offset: app_offset,
-        fakeAppDetectionEnabled: fake_app_detection_enabled,
+        fakeAppDetectionEnabled: true,
       })
       .fetchFakeApps.perform();
   }
