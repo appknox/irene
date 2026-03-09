@@ -18,8 +18,7 @@ export default class StoreknoxFakeAppsItemCardComponent extends Component<Storek
   }
 
   get lastMonitoringDate() {
-    // TODO: Update when API returns the last monitored date
-    return dayjs(this.skFakeApp.updatedOn).format('MMM DD, YYYY');
+    return dayjs(this.skFakeApp.lastFakeDetectionOn).format('MMM DD, YYYY');
   }
 
   @action

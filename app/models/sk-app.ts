@@ -88,6 +88,9 @@ export default class SkAppModel extends Model {
   @attr()
   declare fakeAppCounts: FakeAppCounts;
 
+  @attr('date')
+  declare lastFakeDetectionOn: Date;
+
   @belongsTo('sk-app-metadata', { async: false, inverse: null })
   declare appMetadata: SkAppMetadataModel;
 
@@ -282,6 +285,13 @@ export default class SkAppModel extends Model {
       (this.fakeAppCounts.brand_abuse === 0 &&
         this.fakeAppCounts.fake_app === 0 &&
         this.fakeAppCounts.ignored === 0)
+    );
+  }
+
+  get containsUnscannedVersion() {
+    return (
+      this.storeMonitoringStatus ===
+      ENUMS.SK_APP_MONITORING_STATUS.ACTION_NEEDED
     );
   }
 }
