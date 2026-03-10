@@ -4,7 +4,7 @@ import { action } from '@ember/object';
 
 export interface AkNotificationBannerMessage {
   icon: string;
-  color: 'warning-color' | 'success-color';
+  color: 'warning-color' | 'success-color' | 'error-color';
   message: string;
 }
 

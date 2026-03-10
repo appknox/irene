@@ -320,7 +320,9 @@ body {
   //variables for ak-notification-banner
   --ak-notification-banner-bg-color: var(--common-white);
   --ak-notification-banner-icon-color: var(--common-white);
-  --ak-notification-banner-warning-color: var(--error-main);
+  --ak-notification-banner-icon-black-color: var(--common-black);
+  --ak-notification-banner-warning-color: var(--warn-main);
+  --ak-notification-banner-error-color: var(--error-main);
   --ak-notification-banner-success-color: var(--success-main);
   --ak-notification-banner-border-color: var(--border-color-1);
   --ak-notification-banner-divider-color: var(--border-color-2);

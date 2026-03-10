@@ -34,6 +34,7 @@ export interface AkAutocompleteSignature<T> {
     filterKey?: keyof T;
     filterFn?(item: T | string): boolean;
     setInputValueFn?(item: T | string): string;
+    onSelect?(item: T | string): void;
   };
   Blocks: {
     default: [option: T | string];
@@ -158,7 +159,12 @@ export default class AkAutocompleteComponent<T> extends Component<
   onOptionClick(item: T | string) {
     const inputValue = this.getInputValueFromOption(item);
 
-    this.args.onChange(inputValue, null);
+    if (this.args.onSelect) {
+      this.args.onSelect(item);
+    } else {
+      this.args.onChange(inputValue, null);
+    }
+
     this.handleOptionsClose();
   }
 }

@@ -340,4 +340,53 @@ module('Integration | Component | ak-autocomplete', function (hooks) {
 
     assert.dom('[data-test-text-input]').hasValue('');
   });
+
+  test('it calls on select when option is clicked', async function (assert) {
+    this.setProperties({
+      options: [
+        { label: 'username' },
+        { label: 'password' },
+        { label: 'email' },
+      ],
+      searchQuery: '',
+      filterKey: 'label',
+      onChange: (searchValue) => {
+        this.set('searchQuery', searchValue);
+      },
+      onSelect: () => {
+        this.set('searchQuery', '');
+      },
+    });
+
+    await render(hbs`
+      <AkAutocomplete
+        @options={{this.options}}
+        @searchQuery={{this.searchQuery}}
+        @onChange={{this.onChange}}
+        @filterKey={{this.filterKey}}
+        @onSelect={{this.onSelect}}
+        as |ac|
+      >
+        <AkTypography>{{ac.label}}</AkTypography>
+      </AkAutocomplete>
+    `);
+
+    assert.dom('[data-test-ak-autocomplete-text-field]').exists();
+
+    await click('[data-test-ak-autocomplete-text-field]');
+
+    assert.dom('[data-test-ak-autocomplete]').exists();
+    assert.dom('[data-test-ak-autocomplete-item]').exists({ count: 3 });
+
+    this.set('searchQuery', 'pass');
+
+    assert.dom('[data-test-ak-autocomplete-item]').exists({ count: 1 });
+    assert.dom('[data-test-ak-autocomplete-item]').hasText('password');
+
+    await click('[data-test-ak-autocomplete-item]');
+
+    assert.dom('[data-test-ak-autocomplete]').doesNotExist();
+
+    assert.dom('[data-test-text-input]').hasValue('');
+  });
 });
