@@ -2234,6 +2234,15 @@ body {
     --box-shadow-4
   );
 
+  // variables for storeknox/inventory-details/finding-detail-card
+  --storeknox-inventory-details-finding-detail-card-bg-color: var(--background-main);
+  --storeknox-inventory-details-finding-detail-card-border-color: var(--border-color-1);
+  --storeknox-inventory-details-finding-detail-card-border-radius: var(--border-radius);
+  --storeknox-inventory-details-finding-detail-card-ignored-bg-color: var(--neutral-grey-100);
+  --storeknox-inventory-details-finding-detail-card-badge-bg-color: var(--powered-by-ai-chip-bg-color);
+  --storeknox-inventory-details-finding-detail-card-badge-text-color: var(--common-white);
+  --storeknox-inventory-details-finding-detail-card-app-logo-placeholder-bg: var(--storeknox-app-logo-placeholder-bg);
+
   // variables for storeknox/fake-apps/finding-detail-card
   --storeknox-fake-apps-finding-detail-card-bg-color: var(--background-main);
   --storeknox-fake-apps-finding-detail-card-border-color: var(--border-color-1);

@@ -1,13 +1,38 @@
 .finding-detail-card {
-  background-color: var(--storeknox-fake-apps-finding-detail-card-bg-color);
-  border: 1px solid var(--storeknox-fake-apps-finding-detail-card-border-color);
-  border-radius: var(--storeknox-fake-apps-finding-detail-card-border-radius);
-  padding: 1rem;
+  background-color: var(
+    --storeknox-inventory-details-finding-detail-card-bg-color
+  );
+  border: 1px solid
+    var(--storeknox-inventory-details-finding-detail-card-border-color);
+  border-radius: var(
+    --storeknox-inventory-details-finding-detail-card-border-radius
+  );
+  padding: 1em;
   width: 100%;
 
   &.ignored {
     background-color: var(
-      --storeknox-fake-apps-finding-detail-card-ignored-bg-color
+      --storeknox-inventory-details-finding-detail-card-ignored-bg-color
+    );
+  }
+}
+
+.findings-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25em;
+  background-color: var(
+    --storeknox-inventory-details-finding-detail-card-badge-bg-color
+  );
+  color: var(
+    --storeknox-inventory-details-finding-detail-card-badge-text-color
+  );
+  padding: 0.25em 0.75em;
+  border-radius: 4px;
+
+  .findings-badge-text {
+    color: var(
+      --storeknox-inventory-details-finding-detail-card-badge-text-color
     );
   }
 }
@@ -21,12 +46,15 @@
   height: 24px;
   border-radius: 50%;
   object-fit: contain;
-  border: 1px solid var(--storeknox-fake-apps-finding-detail-card-border-color);
+  border: 1px solid
+    var(--storeknox-inventory-details-finding-detail-card-border-color);
 }
 
 .app-logo-placeholder {
   width: 24px;
   height: 24px;
   border-radius: 50%;
-  background-color: #1e90ff;
+  background-color: var(
+    --storeknox-inventory-details-finding-detail-card-app-logo-placeholder-bg
+  );
 }
