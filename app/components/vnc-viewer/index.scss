@@ -1,3 +1,21 @@
+.ios-device-frame {
+  display: inline-block;
+  position: relative;
+  background: #1a1a1a;
+  border-radius: 24px;
+  padding: 8px;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.3);
+}
+
+.ios-device-screen {
+  width: 375px;
+  height: 812px;
+  border-radius: 18px;
+  overflow: hidden;
+  background: #000;
+  position: relative;
+}
+
 .automated-scan-vnc-note {
   background-color: var(--vnc-viewer-note-background);
   color: var(--vnc-viewer-note-text-color);

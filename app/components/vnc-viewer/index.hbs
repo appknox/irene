@@ -58,60 +58,77 @@
     {{/if}}
   {{/if}}
 
-  <div data-test-vncViewer-device class='marvel-device {{this.deviceType}}'>
-    {{#if this.isTablet}}
-      <div data-test-vncViewer-deviceTopBar class='top-bar' />
-      <div data-test-vncViewer-deviceSleep class='sleep' />
-      <div data-test-vncViewer-deviceVolume class='volume' />
-    {{/if}}
-
-    <div data-test-vncViewer-deviceCamera class='camera' />
-
-    {{#if this.isIOSDevice}}
-      {{#if this.isTablet}}
-        <div data-test-vncViewer-deviceSpeaker class='speaker' />
-      {{/if}}
-    {{/if}}
-
-    <div data-test-vncViewer-deviceScreen class='screen'>
-      {{#if this.isAutomated}}
-        {{#if
-          (or
-            @dynamicScan.isStartingOrShuttingInProgress
-            @dynamicScan.isReadyOrRunning
-          )
-        }}
-          <AkStack
-            data-test-vncViewer-automatedNote
-            local-class='automated-scan-vnc-note'
-          >
-            <AkTypography @color='inherit'>
-              <strong>{{t 'note'}}</strong>
-              -
-              {{t
-                (if
-                  @dynamicScan.isInqueue
-                  'automatedScanQueuedVncNote'
-                  'automatedScanRunningVncNote'
-                )
-              }}
-            </AkTypography>
-          </AkStack>
+  {{#if this.isIOSDevice}}
+    <div data-test-vncViewer-device local-class='ios-device-frame'>
+      <div data-test-vncViewer-deviceScreen local-class='ios-device-screen'>
+        {{#if this.isAutomated}}
+          {{#if
+            (or
+              @dynamicScan.isStartingOrShuttingInProgress
+              @dynamicScan.isReadyOrRunning
+            )
+          }}
+            <AkStack
+              data-test-vncViewer-automatedNote
+              local-class='automated-scan-vnc-note'
+            >
+              <AkTypography @color='inherit'>
+                <strong>{{t 'note'}}</strong>
+                -
+                {{t
+                  (if
+                    @dynamicScan.isInqueue
+                    'automatedScanQueuedVncNote'
+                    'automatedScanRunningVncNote'
+                  )
+                }}
+              </AkTypography>
+            </AkStack>
+          {{/if}}
+        {{else if @dynamicScan.isReady}}
+          <NovncRfb
+            @deviceFarmURL={{this.deviceFarmURL}}
+          />
         {{/if}}
-      {{else if @dynamicScan.isReady}}
-        <NovncRfb
-          @deviceFarmURL={{this.deviceFarmURL}}
-          @deviceFarmPassword={{this.deviceFarmPassword}}
-        />
-      {{/if}}
+      </div>
     </div>
+  {{else}}
+    <div data-test-vncViewer-device class='marvel-device {{this.deviceType}}'>
+      <div data-test-vncViewer-deviceCamera class='camera' />
 
-    {{#if this.isIOSDevice}}
+      <div data-test-vncViewer-deviceScreen class='screen'>
+        {{#if this.isAutomated}}
+          {{#if
+            (or
+              @dynamicScan.isStartingOrShuttingInProgress
+              @dynamicScan.isReadyOrRunning
+            )
+          }}
+            <AkStack
+              data-test-vncViewer-automatedNote
+              local-class='automated-scan-vnc-note'
+            >
+              <AkTypography @color='inherit'>
+                <strong>{{t 'note'}}</strong>
+                -
+                {{t
+                  (if
+                    @dynamicScan.isInqueue
+                    'automatedScanQueuedVncNote'
+                    'automatedScanRunningVncNote'
+                  )
+                }}
+              </AkTypography>
+            </AkStack>
+          {{/if}}
+        {{else if @dynamicScan.isReady}}
+          <NovncRfb
+            @deviceFarmURL={{this.deviceFarmURL}}
+          />
+        {{/if}}
+      </div>
+
       <div data-test-vncViewer-deviceHome class='home' />
-
-      {{#if this.isTablet}}
-        <div data-test-vncViewer-deviceBottomBar class='bottom-bar' />
-      {{/if}}
-    {{/if}}
-  </div>
+    </div>
+  {{/if}}
 </AkStack>

@@ -4,7 +4,6 @@ import type Store from 'ember-data/store';
 import type IntlService from 'ember-intl/services/intl';
 
 import ENUMS from 'irene/enums';
-import ENV from 'irene/config/environment';
 import type FileModel from 'irene/models/file';
 import type DynamicscanModel from 'irene/models/dynamicscan';
 import type DevicefarmService from 'irene/services/devicefarm';
@@ -25,8 +24,6 @@ export default class VncViewerComponent extends Component<VncViewerSignature> {
   @service declare intl: IntlService;
   @service declare store: Store;
   @service declare devicefarm: DevicefarmService;
-
-  deviceFarmPassword = ENV.deviceFarmPassword;
 
   get deviceFarmURL() {
     const token = this.args.dynamicScan?.get('moriartyDynamicscanToken');

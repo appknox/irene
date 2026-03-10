@@ -66,7 +66,6 @@ export default class DevicefarmService extends Service {
     const devicefarmURL = new URL(tokenizedPath, this.urlbase);
 
     devicefarmURL.protocol = devicefarmURL.protocol.replace('http', 'ws');
-
     return devicefarmURL.href;
   }
 }
