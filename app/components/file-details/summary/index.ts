@@ -1,15 +1,11 @@
 import { action } from '@ember/object';
-import { inject as service } from '@ember/service';
+import { service } from '@ember/service';
 import { capitalize } from '@ember/string';
 import Component from '@glimmer/component';
 import { tracked } from '@glimmer/tracking';
-import dayjs from 'dayjs';
-import relativeTime from 'dayjs/plugin/relativeTime';
-import IntlService from 'ember-intl/services/intl';
+import type IntlService from 'ember-intl/services/intl';
 
-import FileModel from 'irene/models/file';
-
-dayjs.extend(relativeTime);
+import type FileModel from 'irene/models/file';
 
 export interface FileDetailsSummarySignature {
   Args: {
@@ -74,7 +70,7 @@ export default class FileDetailsSummaryComponent extends Component<FileDetailsSu
       },
       {
         label: this.intl.t('uploadedOn'),
-        value: dayjs(this.args.file.createdOn).fromNow(),
+        value: this.args.file.createdOnDateTime,
       },
     ];
   }

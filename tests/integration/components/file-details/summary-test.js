@@ -8,7 +8,6 @@ import { capitalize } from '@ember/string';
 
 import { Response } from 'miragejs';
 import Service from '@ember/service';
-import dayjs from 'dayjs';
 
 class NotificationsStub extends Service {
   errorMsg = null;
@@ -108,7 +107,7 @@ module('Integration | Component | file-details/summary', function (hooks) {
       },
       {
         label: t('uploadedOn'),
-        value: dayjs(this.file.createdOn).fromNow(),
+        value: this.file.createdOnDateTime,
       },
     ];
 
