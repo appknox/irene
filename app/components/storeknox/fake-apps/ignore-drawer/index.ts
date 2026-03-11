@@ -4,7 +4,6 @@ import { service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
 import dayjs from 'dayjs';
 import { task } from 'ember-concurrency';
-import { waitForPromise } from '@ember/test-waiters';
 import type IntlService from 'ember-intl/services/intl';
 
 import { BufferedChangeset } from 'ember-changeset/types';
@@ -51,21 +50,25 @@ export default class StoreknoxFakeAppsIgnoreDrawerComponent extends Component<St
     ) as IgnoreDrawerChangeset;
   }
 
-  get drawerTitle(): string {
+  get relatedSkAppId() {
+    return this.args.fakeApp?.skApp.get('id');
+  }
+
+  get drawerTitle() {
     return this.isAlreadyIgnored
       ? this.intl.t('storeknox.ignoredDetails')
       : this.intl.t('confirmation');
   }
 
-  get isAlreadyIgnored(): boolean {
+  get isAlreadyIgnored() {
     return Boolean(this.args.fakeApp?.reviewedBy);
   }
 
-  get isAlreadyAddedToInventory(): boolean {
+  get isAlreadyAddedToInventory() {
     return this.args.fakeApp?.isAddedToInventory;
   }
 
-  get formattedIgnoredOn(): string {
+  get formattedIgnoredOn() {
     const reviewedOn = this.args.fakeApp?.reviewedOn;
 
     if (!reviewedOn) {
@@ -73,6 +76,24 @@ export default class StoreknoxFakeAppsIgnoreDrawerComponent extends Component<St
     }
 
     return dayjs(reviewedOn).format('MMMM D, YYYY');
+  }
+
+  get ignoreConfirmationPrompt() {
+    const templateData = {
+      appName: this.args.fakeApp.title,
+      htmlSafe: true,
+    };
+
+    return this.args.addToInventory
+      ? this.intl.t(
+          'storeknox.ignoreConfirmationPromptAndAddToInventory',
+          templateData
+        )
+      : this.intl.t('storeknox.ignoreConfirmationPrompt', templateData);
+  }
+
+  get isIgnoreReasonValid() {
+    return Boolean(this.changeset?.reason?.trim().length);
   }
 
   get ignoreDetails() {
@@ -98,33 +119,10 @@ export default class StoreknoxFakeAppsIgnoreDrawerComponent extends Component<St
     ];
   }
 
-  get ignoreConfirmationPrompt() {
-    const templateData = {
-      appName: this.args.fakeApp.title,
-      htmlSafe: true,
-    };
-
-    return this.args.addToInventory
-      ? this.intl.t(
-          'storeknox.ignoreConfirmationPromptAndAddToInventory',
-          templateData
-        )
-      : this.intl.t('storeknox.ignoreConfirmationPrompt', templateData);
-  }
-
   @action
   updateReason(event: Event) {
     const target = event.target as HTMLTextAreaElement;
     this.changeset?.set('reason', target?.value ?? '');
-  }
-
-  get isReasonValid(): boolean {
-    return Boolean(this.changeset?.reason?.trim().length);
-  }
-
-  @action
-  handleConfirmIgnore() {
-    this.ignoreTask.perform();
   }
 
   @action
@@ -145,10 +143,12 @@ export default class StoreknoxFakeAppsIgnoreDrawerComponent extends Component<St
       const reason = String(this.changeset?.reason);
 
       if (this.args.addToInventory) {
-        await waitForPromise(this.args.fakeApp.ignoreAndAddToInventory(reason));
+        await this.args.fakeApp?.ignoreAndAddToInventory(reason);
       } else {
-        await waitForPromise(this.args.fakeApp.ignore(reason));
+        await this.args.fakeApp?.ignore(reason);
       }
+
+      this.skFakeAppsListService.reload();
 
       this.notify.success(
         this.args.addToInventory
@@ -156,10 +156,9 @@ export default class StoreknoxFakeAppsIgnoreDrawerComponent extends Component<St
           : this.intl.t('storeknox.fakeAppIgnored')
       );
 
-      this.changeset?.rollback();
-
-      this.skFakeAppsListService.reload();
       this.args.onClose();
+
+      this.changeset?.rollback();
     } catch (error) {
       this.notify.error(parseError(error));
     }

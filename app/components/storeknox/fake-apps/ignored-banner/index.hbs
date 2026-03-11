@@ -29,7 +29,9 @@
               local-class='fake-apps-ignored-banner-text'
               data-test-storeknoxFakeApps-ignoredBanner-text
             >
-              Note - This app has been Ignored & Add to Inventory on
+              {{t
+                'storeknox.fakeApps.ignoredBannerIgnoredAndAddedToInventory'
+              }}
               <strong>{{this.ignoredOnString}}</strong>.
             </AkTypography>
 
@@ -61,7 +63,7 @@
             local-class='fake-apps-ignored-banner-text'
             data-test-storeknoxFakeApps-ignoredBanner-text
           >
-            Note - This app has been Added to Inventory on
+            {{t 'storeknox.fakeApps.ignoredBannerAddedToInventory'}}
             <strong>{{this.ignoredOnString}}</strong>
           </AkTypography>
         {{/if}}

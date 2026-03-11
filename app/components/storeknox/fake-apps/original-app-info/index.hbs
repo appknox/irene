@@ -4,12 +4,11 @@
     @direction='column'
     @spacing='1'
     local-class='original-app-details-container {{if @isIgnored "is-ignored"}}'
-    {{style maxWidth='440px'}}
   >
     <AkStack @width='full' @spacing='1' @alignItems='center' class='py-2 px-3'>
       <div local-class='original-app-details-header-indicator'></div>
 
-      <AkTypography @fontWeight='bold'>Original App Details</AkTypography>
+      <AkTypography @fontWeight='bold'>{{t 'storeknox.fakeApps.originalAppDetails'}}</AkTypography>
     </AkStack>
 
     <AkDivider @color='dark' />
@@ -25,7 +24,7 @@
           @color='textSecondary'
           local-class='original-app-details-label-text'
         >
-          Logo
+          {{t 'storeknox.fakeApps.logo'}}
         </AkTypography>
 
         <img
@@ -46,7 +45,7 @@
           @color='textSecondary'
           local-class='original-app-details-label-text'
         >
-          App Name
+          {{t 'appName'}}
         </AkTypography>
 
         <AkButton
@@ -79,7 +78,7 @@
           @color='textSecondary'
           local-class='original-app-details-label-text'
         >
-          Namespace
+          {{t 'namespace'}}
         </AkTypography>
 
         <AkTypography
@@ -103,7 +102,7 @@
           @color='textSecondary'
           local-class='original-app-details-label-text'
         >
-          Platform
+          {{t 'platform'}}
         </AkTypography>
 
         <AppPlatformIcon
@@ -122,7 +121,7 @@
           @color='textSecondary'
           local-class='original-app-details-label-text'
         >
-          Store
+          {{t 'storeknox.store'}}
         </AkTypography>
 
         {{#if @skInventoryApp.isAndroid}}
@@ -149,7 +148,7 @@
           @color='textSecondary'
           local-class='original-app-details-label-text'
         >
-          Developer
+          {{t 'storeknox.developer'}}
         </AkTypography>
 
         <AkTypography
@@ -170,7 +169,7 @@
           @color='textSecondary'
           local-class='original-app-details-label-text'
         >
-          Last Monitoring Date
+          {{t 'storeknox.lastMonitoringDate'}}
         </AkTypography>
 
         <AkTypography

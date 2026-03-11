@@ -39,7 +39,7 @@ export default class StoreknoxInventoryDetailsAppDetailsActionsListComponent ext
         id: 'brand-abuse',
         label: this.intl.t('storeknox.fakeAppsTitle'),
         hideAction: false,
-        route: 'authenticated.storeknox.inventory-details.fake-app-list',
+        route: 'authenticated.storeknox.fake-apps.fake-app-list.index',
         models: [this.skInventoryApp?.id],
         needsAction: this.skInventoryApp?.fakeAppDetectionHasResults,
         disabled: this.skInventoryApp?.fakeAppDetectionIsInitializing,

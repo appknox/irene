@@ -1,23 +1,35 @@
 import { service } from '@ember/service';
 import type Store from 'ember-data/store';
-import type SkInventoryAppModel from 'irene/models/sk-inventory-app';
-import AkBreadcrumbsRoute from 'irene/utils/ak-breadcrumbs-route';
-import { ScrollToTop } from 'irene/utils/scroll-to-top';
 
-interface FakeAppDetailsRouteModel {
+import { ScrollToTop } from 'irene/utils/scroll-to-top';
+import AkBreadcrumbsRoute from 'irene/utils/ak-breadcrumbs-route';
+import type SkInventoryAppModel from 'irene/models/sk-inventory-app';
+import type SkFakeAppModel from 'irene/models/sk-fake-app';
+
+export interface StoreknoxFakeAppDetailsRouteModel {
+  fakeApp: SkFakeAppModel;
   skInventoryApp: SkInventoryAppModel;
 }
 
-export default class AuthenticatedStoreknoxFakeAppsFakeAppDetailsRoute extends ScrollToTop(
+export default class AuthenticatedStoreknoxFakeAppDetailsRoute extends ScrollToTop(
   AkBreadcrumbsRoute
 ) {
   @service declare store: Store;
 
-  async model(params: { id: string }): Promise<FakeAppDetailsRouteModel> {
+  async model(params: {
+    sk_app: string;
+    app_id: string;
+  }): Promise<StoreknoxFakeAppDetailsRouteModel> {
     const skInventoryApp = await this.store.findRecord(
       'sk-inventory-app',
-      params.id
+      params.sk_app
     );
-    return { skInventoryApp };
+
+    const fakeApp = await this.store.queryRecord('sk-fake-app', {
+      id: params.app_id,
+      sk_app_id: skInventoryApp.id,
+    });
+
+    return { skInventoryApp, fakeApp };
   }
 }

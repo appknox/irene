@@ -17,8 +17,7 @@
       @color='neutral'
       data-test-storeknoxInventory-inventoryDescriptionText
     >
-      This page lists all the fake apps and suspected brand abuse detected in
-      your organization applications.
+      {{t 'storeknox.fakeApps.listingPageDescription'}}
     </AkTypography>
   </AkStack>
 
@@ -52,6 +51,7 @@
   </AkStack>
 </AkStack>
 
+{{! Fake Apps List }}
 <AkPaginationProvider
   @results={{this.skFakeApps}}
   @onItemPerPageChange={{this.onItemPerPageChange}}
@@ -63,17 +63,25 @@
   @offset={{this.skAppsService.offset}}
   as |pgc|
 >
-  <div local-class='fake-apps-grid'>
-    {{#each pgc.currentPageResults as |skFakeApp|}}
-      <Storeknox::FakeApps::ItemCard @skFakeApp={{skFakeApp}} />
-    {{/each}}
-  </div>
-
   {{#if this.showEmptyState}}
     <Storeknox::Inventory::AppList::Table::Empty
       @subText={{t 'storeknox.noAppMatchesYourCurrentFilter'}}
     />
   {{/if}}
+
+  <div local-class='fake-apps-grid'>
+    {{#if this.isFetchingTableData}}
+      {{#each (array 1 2 3 4 5 6) as |index|}}
+        <Storeknox::FakeApps::ListItemCard::Skeleton id='skeleton-{{index}}' />
+      {{/each}}
+
+    {{else}}
+
+      {{#each pgc.currentPageResults as |skApp|}}
+        <Storeknox::FakeApps::ListItemCard @skApp={{skApp}} />
+      {{/each}}
+    {{/if}}
+  </div>
 
   {{#unless this.hidePagination}}
     <AkPagination

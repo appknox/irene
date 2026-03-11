@@ -123,7 +123,7 @@ export default class StoreknoxInventoryDetailsHeaderComponent extends Component<
         disabled: this.skInventoryApp?.fakeAppDetectionIsDisabled,
         label: this.intl.t('storeknox.fakeAppsTitle'),
         needsAction: this.skInventoryApp?.fakeAppDetectionHasResults,
-        route: 'authenticated.storeknox.inventory-details.fake-app-list',
+        route: 'authenticated.storeknox.fake-apps.fake-app-details',
         models: [skInventoryAppId],
       },
       {
@@ -231,7 +231,7 @@ export default class StoreknoxInventoryDetailsHeaderComponent extends Component<
 
       this.notify.success(
         this.intl.t('storeknox.monitoring') +
-        ` ${this.monitoringChecked ? this.intl.t('enabled') : this.intl.t('disabled')}`
+          ` ${this.monitoringChecked ? this.intl.t('enabled') : this.intl.t('disabled')}`
       );
 
       // Reload org sub to update the licenses remaining count

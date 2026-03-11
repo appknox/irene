@@ -1,0 +1,156 @@
+<div
+  local-class='fake-apps-details-root {{if this.isFakeAppIgnored "is-ignored"}}'
+  class='w-full mb-3 pt-2'
+>
+  <AkBreadcrumbs::AutoTrail
+    class='pb-3'
+    data-test-storeknoxInventoryDetails-breadcrumbContainer
+  />
+
+  {{#unless this.isFakeAppIgnored}}
+    <AkStack
+      @bgColor='white'
+      @width='full'
+      @direction='column'
+      @spacing='1'
+      local-class='fake-app-title-container'
+    >
+      <AkStack
+        @width='full'
+        @spacing='1'
+        @alignItems='center'
+        class='py-2 px-3'
+      >
+        <div
+          local-class='title-indicator
+          {{if this.isBrandAbuseFakeApp "brand-abuse"}}
+          '
+        ></div>
+
+        <AkTypography @fontWeight='bold'>{{this.headerTitle}}</AkTypography>
+      </AkStack>
+    </AkStack>
+  {{/unless}}
+
+  <AkStack
+    @bgColor='white'
+    @width='full'
+    @justifyContent='space-between'
+    @spacing='1'
+    local-class='fake-apps-details-header-app-info-container'
+    class='p-3'
+  >
+    <AkStack @direction='column'>
+      <img
+        local-class='app-info-logo'
+        src={{@fakeApp.fakeAppIconUrl}}
+        alt={{@fakeApp.title}}
+        data-test-storeknoxInventoryDetails-appLogoImage
+      />
+
+      <AkStack @spacing='0.75' @direction='column' @alignItems='flex-start'>
+        <AkButton
+          @tag='a'
+          @variant='text'
+          @color='textPrimary'
+          @underline='always'
+          href={{@fakeApp.appUrl}}
+          target='_blank'
+          rel='noopener noreferrer'
+          class='mt-1'
+          {{style justifyContent='flex-start'}}
+        >
+          <AkTypography
+            @variant='h5'
+            @fontWeight='bold'
+            data-test-storeknoxInventoryDetails-headerAppTitle
+          >
+            {{@fakeApp.title}}
+          </AkTypography>
+        </AkButton>
+
+        <AkTypography
+          @color='textPrimary'
+          data-test-storeknoxInventoryDetails-headerAppPackageName
+        >
+          {{@fakeApp.packageName}}
+        </AkTypography>
+
+        <AkTypography
+          @color='textSecondary'
+          data-test-storeknoxInventoryDetails-headerAppDeveloperName
+        >
+          {{@fakeApp.devName}}
+        </AkTypography>
+      </AkStack>
+
+      <AkStack @spacing='1' class='mt-1'>
+        <Storeknox::ProductIcon @product={{if this.isAndroid 'android' 'ios'}}>
+          <AppPlatformIcon
+            @platform={{if this.isAndroid 'android' 'apple'}}
+            data-test-storeknoxInventoryDetails-headerPlatformIcon
+          />
+        </Storeknox::ProductIcon>
+
+        <Storeknox::ProductIcon @product={{if this.isAndroid 'android' 'ios'}}>
+          {{#if this.isAndroid}}
+            <AkSvg::PlaystoreLogo
+              {{style width='16px'}}
+              data-test-storeknoxInventoryDetails-playStoreLogo
+            />
+
+          {{else}}
+            <AkSvg::AppstoreLogo
+              {{style width='16px'}}
+              data-test-storeknoxInventoryDetails-appStoreLogo
+            />
+          {{/if}}
+        </Storeknox::ProductIcon>
+      </AkStack>
+
+    </AkStack>
+
+    <AkStack
+      @alignItems='center'
+      @justifyContent='flex-end'
+      @spacing='1.5'
+      {{style alignSelf='flex-end'}}
+    >
+      {{#if this.isFakeAppIgnored}}
+        <AkButton {{on 'click' (fn this.openIgnoreDrawer false)}}>
+          {{t 'viewDetails'}}
+        </AkButton>
+
+      {{else}}
+        <AkButton @disabled={{true}}>
+          {{t 'downloadReport'}}
+        </AkButton>
+
+        <AkButton
+          @variant='outlined'
+          @color='neutral'
+          {{on 'click' (fn this.openIgnoreDrawer false)}}
+          data-test-storeknoxFakeApps-ignoreAppBtn
+        >
+          {{t 'storeknox.ignoreApp'}}
+        </AkButton>
+
+        <AkButton
+          @variant='outlined'
+          @color='neutral'
+          {{on 'click' (fn this.openIgnoreDrawer true)}}
+          data-test-storeknoxFakeApps-ignoreAddToInventoryBtn
+        >
+          {{t 'storeknox.ignoreAddToInventory'}}
+        </AkButton>
+      {{/if}}
+    </AkStack>
+  </AkStack>
+</div>
+
+<Storeknox::FakeApps::IgnoreDrawer
+  @fakeApp={{@fakeApp}}
+  @open={{this.showIgnoreDrawer}}
+  @onClose={{this.closeIgnoreDrawer}}
+  @addToInventory={{this.addToInventory}}
+/>

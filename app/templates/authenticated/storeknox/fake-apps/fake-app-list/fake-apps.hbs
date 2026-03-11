@@ -1,0 +1,11 @@
+{{page-title (t 'storeknox.fakeApps.fakeApp')}}
+
+{{#if @model.showFakeAppsList}}
+  <Storeknox::FakeApps::FakeAppList::List
+    @skInventoryApp={{@model.skInventoryApp}}
+    @appsQueryStatus='pending'
+    @appsQueryClassification='fake_app'
+    @emptyTitle={{t 'storeknox.fakeApps.noFakeAppsFound'}}
+    @emptyIllustration='ak-svg/no-pending-items'
+  />
+{{/if}}

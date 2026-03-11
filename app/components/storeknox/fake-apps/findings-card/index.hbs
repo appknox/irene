@@ -1,10 +1,10 @@
 <AkStack
   @width='full'
   @direction='column'
+  @spacing='1.5'
   local-class='findings-card-root
   {{if @isDefaultFinding "is-default"}} {{if @isIgnored "is-ignored"}}'
   class='p-3'
-  @spacing='1.5'
 >
   {{#if @isDefaultFinding}}
     <PoweredByAi::Chip

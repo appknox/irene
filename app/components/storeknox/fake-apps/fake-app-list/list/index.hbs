@@ -1,0 +1,87 @@
+<AkPaginationProvider
+  @results={{this.skFakeApps}}
+  @onItemPerPageChange={{this.onItemPerPageChange}}
+  @totalItems={{this.totalCount}}
+  @nextAction={{this.goToPage}}
+  @prevAction={{this.goToPage}}
+  @itemPerPageOptions={{array 10 25 50}}
+  @defaultLimit={{this.limit}}
+  @offset={{this.offset}}
+  as |pgc|
+>
+
+  {{#if this.hasNoResults}}
+    <AkStack
+      @alignItems='center'
+      @justifyContent='center'
+      @direction='column'
+      @spacing='1'
+      class='py-7 px-4'
+      local-class='status-container'
+      data-test-storeknoxFakeAppDetailsList-empty
+    >
+      {{#if @emptyIllustration}}
+        {{#let (component @emptyIllustration) as |EmptyIllustration|}}
+          <EmptyIllustration />
+        {{/let}}
+      {{/if}}
+
+      {{#if @emptyTitle}}
+        <AkTypography @variant='h5' class='mt-4'>
+          {{@emptyTitle}}
+        </AkTypography>
+
+        <AkTypography @align='center' {{style maxWidth='600px'}}>
+          We were unable to detect fake apps for this application at this time.
+          If we find any subsequent fake apps, this page will be updated.
+        </AkTypography>
+      {{/if}}
+    </AkStack>
+
+  {{else}}
+    {{#if this.isFetchingData}}
+      <AkStack
+        @direction='column'
+        @spacing='3'
+        data-test-storeknoxFakeAppDetailsList-loading
+      >
+        {{#each (array 1 2 3) as |index|}}
+          <Storeknox::FakeApps::FindingDetailCard::Skeleton
+            id='skeleton-{{index}}'
+          />
+        {{/each}}
+      </AkStack>
+
+    {{else}}
+      <AkStack
+        @direction='column'
+        @spacing='3'
+        data-test-storeknoxFakeAppDetailsList-results
+      >
+        {{#each this.fakeAppsWithFindings as |item|}}
+          <Storeknox::FakeApps::FindingDetailCard
+            @finding={{item.finding}}
+            @fakeApp={{item.skFakeApp}}
+            @skInventoryApp={{@skInventoryApp}}
+            data-test-storeknoxFakeAppDetailsList-card='{{item.skFakeApp.id}}'
+          />
+        {{/each}}
+      </AkStack>
+
+      <AkPagination
+        @disableNext={{pgc.disableNext}}
+        @nextAction={{pgc.nextAction}}
+        @disablePrev={{pgc.disablePrev}}
+        @prevAction={{pgc.prevAction}}
+        @endItemIdx={{pgc.endItemIdx}}
+        @startItemIdx={{pgc.startItemIdx}}
+        @itemPerPageOptions={{pgc.itemPerPageOptions}}
+        @onItemPerPageChange={{pgc.onItemPerPageChange}}
+        @selectedOption={{pgc.selectedOption}}
+        @tableItemLabel={{t 'apps'}}
+        @perPageTranslation={{t 'recordPerPage'}}
+        @totalItems={{pgc.totalItems}}
+      />
+    {{/if}}
+  {{/if}}
+</AkPaginationProvider>
