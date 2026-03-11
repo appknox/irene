@@ -7,7 +7,7 @@
   <AkStack @direction='column' @spacing='0.5'>
     <AkTypography
       @variant='subtitle1'
-      data-test-storeknoxInventory-inventoryHeaderText
+      data-test-storeknoxFakeApps-headerText
     >
       {{t 'storeknox.fakeAppsTitle'}}
     </AkTypography>
@@ -15,7 +15,7 @@
     <AkTypography
       @variant='body2'
       @color='neutral'
-      data-test-storeknoxInventory-inventoryDescriptionText
+      data-test-storeknoxFakeApps-descriptionText
     >
       {{t 'storeknox.fakeApps.listingPageDescription'}}
     </AkTypography>
@@ -27,7 +27,7 @@
       @value={{this.searchQuery}}
       {{on 'input' this.onSearchQueryChange}}
       local-class='search-package-name-input'
-      data-test-search-query-input
+      data-test-storeknoxFakeApps-searchInput
     >
       <:leftAdornment>
         <AkIcon @iconName='search' @color='textSecondary' />

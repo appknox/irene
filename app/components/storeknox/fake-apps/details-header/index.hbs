@@ -4,7 +4,7 @@
 >
   <AkBreadcrumbs::AutoTrail
     class='pb-3'
-    data-test-storeknoxInventoryDetails-breadcrumbContainer
+    data-test-storeknoxFakeAppsDetailsHeader-breadcrumb
   />
 
   {{#unless this.isFakeAppIgnored}}
@@ -45,7 +45,7 @@
         local-class='app-info-logo'
         src={{@fakeApp.fakeAppIconUrl}}
         alt={{@fakeApp.title}}
-        data-test-storeknoxInventoryDetails-appLogoImage
+        data-test-storeknoxFakeAppsDetailsHeader-appLogo
       />
 
       <AkStack @spacing='0.75' @direction='column' @alignItems='flex-start'>
@@ -63,7 +63,7 @@
           <AkTypography
             @variant='h5'
             @fontWeight='bold'
-            data-test-storeknoxInventoryDetails-headerAppTitle
+            data-test-storeknoxFakeAppsDetailsHeader-appTitle
           >
             {{@fakeApp.title}}
           </AkTypography>
@@ -71,14 +71,14 @@
 
         <AkTypography
           @color='textPrimary'
-          data-test-storeknoxInventoryDetails-headerAppPackageName
+          data-test-storeknoxFakeAppsDetailsHeader-packageName
         >
           {{@fakeApp.packageName}}
         </AkTypography>
 
         <AkTypography
           @color='textSecondary'
-          data-test-storeknoxInventoryDetails-headerAppDeveloperName
+          data-test-storeknoxFakeAppsDetailsHeader-developerName
         >
           {{@fakeApp.devName}}
         </AkTypography>
@@ -88,7 +88,7 @@
         <Storeknox::ProductIcon @product={{if this.isAndroid 'android' 'ios'}}>
           <AppPlatformIcon
             @platform={{if this.isAndroid 'android' 'apple'}}
-            data-test-storeknoxInventoryDetails-headerPlatformIcon
+            data-test-storeknoxFakeAppsDetailsHeader-platformIcon
           />
         </Storeknox::ProductIcon>
 
@@ -96,13 +96,13 @@
           {{#if this.isAndroid}}
             <AkSvg::PlaystoreLogo
               {{style width='16px'}}
-              data-test-storeknoxInventoryDetails-playStoreLogo
+              data-test-storeknoxFakeAppsDetailsHeader-playStoreLogo
             />
 
           {{else}}
             <AkSvg::AppstoreLogo
               {{style width='16px'}}
-              data-test-storeknoxInventoryDetails-appStoreLogo
+              data-test-storeknoxFakeAppsDetailsHeader-appStoreLogo
             />
           {{/if}}
         </Storeknox::ProductIcon>
@@ -130,7 +130,7 @@
           @variant='outlined'
           @color='neutral'
           {{on 'click' (fn this.openIgnoreDrawer false)}}
-          data-test-storeknoxFakeApps-ignoreAppBtn
+          data-test-storeknoxFakeAppsDetailsHeader-ignoreAppBtn
         >
           {{t 'storeknox.ignoreApp'}}
         </AkButton>
@@ -139,7 +139,7 @@
           @variant='outlined'
           @color='neutral'
           {{on 'click' (fn this.openIgnoreDrawer true)}}
-          data-test-storeknoxFakeApps-ignoreAddToInventoryBtn
+          data-test-storeknoxFakeAppsDetailsHeader-ignoreAddToInventoryBtn
         >
           {{t 'storeknox.ignoreAddToInventory'}}
         </AkButton>

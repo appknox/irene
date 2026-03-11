@@ -11,7 +11,7 @@
       @spacing='1'
       class='py-7 px-4'
       local-class='status-container'
-      data-test-storeknoxFakeAppDetails-initializingState
+      data-test-storeknoxFakeAppsFakeAppList-initializingState
     >
       <AkSvg::FakeAppInProgress />
 
@@ -32,7 +32,7 @@
       @spacing='1'
       class='py-7 px-4'
       local-class='status-container'
-      data-test-storeknoxFakeAppDetails-successState
+      data-test-storeknoxFakeAppsFakeAppList-successState
     >
       <AkSvg::FakeAppsSuccessState />
 
@@ -57,7 +57,7 @@
           @model={{@skInventoryApp.id}}
           @currentWhen={{item.route}}
           @indicatorVariant='shadow'
-          data-test-storeknoxFakeAppsFakeAppDetails-fakeApp-tab='{{item.id}}'
+          data-test-storeknoxFakeAppsFakeAppList-tab='{{item.id}}'
         >
           <:tabIcon>
             {{#if item.iconClass}}

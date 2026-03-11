@@ -7,6 +7,7 @@ export interface StoreknoxFakeAppsFindingsCardSignature {
     score?: number;
     description?: string;
     isIgnored?: boolean;
+    isSemanticFinding?: boolean;
   };
 }
 

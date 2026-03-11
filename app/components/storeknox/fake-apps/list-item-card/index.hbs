@@ -16,7 +16,7 @@
         local-class='app-info-logo'
         src={{this.skApp.appMetadata.iconUrl}}
         alt={{this.skApp.title}}
-        data-test-storeknoxFakeApps-itemCardAppLogoImage
+        data-test-storeknoxFakeAppsListItemCard-appLogo
       />
 
       <AkStack @spacing='0.75' @direction='column' @alignItems='flex-start'>
@@ -34,7 +34,7 @@
             @variant='h5'
             @fontWeight='bold'
             {{style maxWidth='100%' textAlign='left'}}
-            data-test-storeknoxInventoryDetails-headerAppTitle
+            data-test-storeknoxFakeAppsListItemCard-appTitle
           >
             {{this.skApp.appMetadata.title}}
           </AkTypography>
@@ -45,7 +45,7 @@
           @noWrap={{true}}
           title={{this.skApp.appMetadata.packageName}}
           {{style maxWidth='240px'}}
-          data-test-storeknoxInventoryDetails-headerAppPackageName
+          data-test-storeknoxFakeAppsListItemCard-packageName
         >
           {{this.skApp.appMetadata.packageName}}
         </AkTypography>
@@ -55,7 +55,7 @@
           @noWrap={{true}}
           {{style maxWidth='240px'}}
           title={{this.skApp.appMetadata.devName}}
-          data-test-storeknoxFakeApps-itemCardAppDeveloperName
+          data-test-storeknoxFakeAppsListItemCard-developerName
         >
           {{t 'by'}}
           {{this.skApp.appMetadata.devName}}
@@ -74,13 +74,13 @@
       {{#if this.skApp.isAndroid}}
         <AkSvg::PlaystoreLogo
           {{style width='16px' height='16px'}}
-          data-test-storeknoxFakeApps-itemCardPlayStoreLogo
+          data-test-storeknoxFakeAppsListItemCard-playStoreLogo
         />
 
       {{else}}
         <AkSvg::AppstoreLogo
           {{style width='16px' height='16px'}}
-          data-test-storeknoxFakeApps-itemCardAppStoreLogo
+          data-test-storeknoxFakeAppsListItemCard-appStoreLogo
         />
       {{/if}}
     </AkStack>

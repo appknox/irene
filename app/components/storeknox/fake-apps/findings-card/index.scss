@@ -15,3 +15,10 @@
     color: var(--common-black);
   }
 }
+
+.tooltip-content-container {
+  width: 340px;
+  padding: 0.5em;
+  box-sizing: border-box;
+  white-space: normal;
+}

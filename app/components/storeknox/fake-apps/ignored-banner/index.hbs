@@ -2,7 +2,7 @@
   <AkStack
     @width='full'
     local-class='fake-apps-ignored-banner-root'
-    data-test-storeknoxFakeApps-ignoredBanner
+    data-test-storeknoxFakeAppsIgnoredBanner-root
   >
     <AkStack
       @width='full'
@@ -18,7 +18,7 @@
         <AkIcon
           @iconName='warning'
           @color='inherit'
-          data-test-storeknoxFakeApps-ignoredBanner-icon
+          data-test-storeknoxFakeAppsIgnoredBanner-icon
         />
       </AkStack>
 
@@ -27,7 +27,7 @@
           <AkStack @alignItems='center'>
             <AkTypography
               local-class='fake-apps-ignored-banner-text'
-              data-test-storeknoxFakeApps-ignoredBanner-text
+              data-test-storeknoxFakeAppsIgnoredBanner-text
             >
               {{t
                 'storeknox.fakeApps.ignoredBannerIgnoredAndAddedToInventory'
@@ -61,7 +61,7 @@
         {{else}}
           <AkTypography
             local-class='fake-apps-ignored-banner-text'
-            data-test-storeknoxFakeApps-ignoredBanner-text
+            data-test-storeknoxFakeAppsIgnoredBanner-text
           >
             {{t 'storeknox.fakeApps.ignoredBannerAddedToInventory'}}
             <strong>{{this.ignoredOnString}}</strong>

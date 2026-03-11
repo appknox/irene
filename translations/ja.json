@@ -2184,6 +2184,7 @@
       "findings": "Findings",
       "overallScore": "Overall Score",
       "overallScoreInfo": "Similarity score based on semantic, package, logo,<br/> and developer analysis",
+      "semanticSimilarityInfo": "Semantic score reflects similarity based on combined textual data (title, description, metadata), excluding logo and functionality.",
       "semantic": "Semantic",
       "logo": "Logo"
     }

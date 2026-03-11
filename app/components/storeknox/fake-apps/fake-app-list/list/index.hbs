@@ -18,7 +18,7 @@
       @spacing='1'
       class='py-7 px-4'
       local-class='status-container'
-      data-test-storeknoxFakeAppDetailsList-empty
+      data-test-storeknoxFakeAppsFakeAppListList-empty
     >
       {{#if @emptyIllustration}}
         {{#let (component @emptyIllustration) as |EmptyIllustration|}}
@@ -43,7 +43,7 @@
       <AkStack
         @direction='column'
         @spacing='3'
-        data-test-storeknoxFakeAppDetailsList-loading
+        data-test-storeknoxFakeAppsFakeAppListList-loading
       >
         {{#each (array 1 2 3) as |index|}}
           <Storeknox::FakeApps::FindingDetailCard::Skeleton
@@ -56,14 +56,14 @@
       <AkStack
         @direction='column'
         @spacing='3'
-        data-test-storeknoxFakeAppDetailsList-results
+        data-test-storeknoxFakeAppsFakeAppListList-results
       >
         {{#each this.fakeAppsWithFindings as |item|}}
           <Storeknox::FakeApps::FindingDetailCard
             @finding={{item.finding}}
             @fakeApp={{item.skFakeApp}}
             @skInventoryApp={{@skInventoryApp}}
-            data-test-storeknoxFakeAppDetailsList-card='{{item.skFakeApp.id}}'
+            data-test-storeknoxFakeAppsFakeAppListList-card='{{item.skFakeApp.id}}'
           />
         {{/each}}
       </AkStack>

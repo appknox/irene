@@ -58,6 +58,7 @@ export default class StoreknoxFakeAppsDetailsComponent extends Component<Storekn
         title: 'Semantic Similarity',
         score: this.fakeAppAIScores.SemanticSimilarityRule,
         description: this.fakeAppAIScores.SemanticSimilarityRule_justification,
+        isSemanticFinding: true,
       },
       {
         title: 'Logo Similarity',

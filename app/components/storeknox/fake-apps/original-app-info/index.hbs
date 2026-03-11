@@ -31,7 +31,7 @@
           local-class='app-info-logo'
           src={{@skInventoryApp.appMetadata.iconUrl}}
           alt={{@skInventoryApp.appMetadata.title}}
-          data-test-storeknoxInventoryDetails-appLogoImage
+          data-test-storeknoxFakeAppsOriginalAppInfo-appLogo
         />
       </AkStack>
 
@@ -61,7 +61,7 @@
         >
           <AkTypography
             @fontWeight='medium'
-            data-test-storeknoxInventoryDetails-headerAppTitle
+            data-test-storeknoxFakeAppsOriginalAppInfo-appTitle
           >
             {{@skInventoryApp.appMetadata.title}}
           </AkTypography>
@@ -86,7 +86,7 @@
           @noWrap={{true}}
           title={{@skInventoryApp.appMetadata.packageName}}
           {{style maxWidth='240px'}}
-          data-test-storeknoxInventoryDetails-headerAppPackageName
+          data-test-storeknoxFakeAppsOriginalAppInfo-packageName
         >
           {{@skInventoryApp.appMetadata.packageName}}
         </AkTypography>
@@ -107,7 +107,7 @@
 
         <AppPlatformIcon
           @platform={{if @skInventoryApp.isAndroid 'android' 'apple'}}
-          data-test-storeknoxInventoryDetails-headerPlatformIcon
+          data-test-storeknoxFakeAppsOriginalAppInfo-platformIcon
         />
       </AkStack>
 
@@ -127,13 +127,13 @@
         {{#if @skInventoryApp.isAndroid}}
           <AkSvg::PlaystoreLogo
             {{style width='16px'}}
-            data-test-storeknoxInventoryDetails-playStoreLogo
+            data-test-storeknoxFakeAppsOriginalAppInfo-playStoreLogo
           />
 
         {{else}}
           <AkSvg::AppstoreLogo
             {{style width='16px'}}
-            data-test-storeknoxInventoryDetails-appStoreLogo
+            data-test-storeknoxFakeAppsOriginalAppInfo-appStoreLogo
           />
         {{/if}}
       </AkStack>
@@ -153,7 +153,7 @@
 
         <AkTypography
           @fontWeight='medium'
-          data-test-storeknoxInventoryDetails-headerAppDeveloperName
+          data-test-storeknoxFakeAppsOriginalAppInfo-developerName
         >
           {{@skInventoryApp.appMetadata.devName}}
         </AkTypography>
@@ -175,7 +175,7 @@
         <AkTypography
           @fontWeight='medium'
           @color='textPrimary'
-          data-test-storeknoxInventoryDetails-headerAppDeveloperName
+          data-test-storeknoxFakeAppsOriginalAppInfo-developerName
         >
           {{this.lastMonitoredOn}}
         </AkTypography>

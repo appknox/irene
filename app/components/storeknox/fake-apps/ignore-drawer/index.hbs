@@ -2,13 +2,13 @@
   @open={{@open}}
   @onClose={{this.handleClose}}
   @anchor='right'
-  data-test-storeknoxFakeApps-ignoreDrawer
+  data-test-storeknoxFakeAppsIgnoreDrawer-root
   as |dr|
 >
   <div>
     <AkAppbar @justifyContent='space-between' class='px-3' as |ab|>
       <AkTypography
-        data-test-storeknoxFakeApps-ignoreDrawer-title
+        data-test-storeknoxFakeAppsIgnoreDrawer-title
         @color='inherit'
         @variant='h5'
       >
@@ -16,7 +16,7 @@
       </AkTypography>
 
       <AkIconButton
-        data-test-storeknoxFakeApps-ignoreDrawer-closeBtn
+        data-test-storeknoxFakeAppsIgnoreDrawer-closeBtn
         {{on 'click' dr.closeHandler}}
         class={{ab.classes.defaultIconBtn}}
       >
@@ -69,7 +69,7 @@
                 @model={{this.relatedSkAppId}}
               >
                 <AkButton
-                  data-test-storeknoxFakeApps-ignoreDrawer-viewInInventoryBtn
+                  data-test-storeknoxFakeAppsIgnoreDrawer-viewInInventoryBtn
                   @variant='outlined'
                   @color='neutral'
                 >
@@ -81,7 +81,7 @@
         </AkStack>
       {{else}}
         <AkStack @width='full' @direction='column' @spacing='2.5' class='p-3'>
-          <AkTypography data-test-storeknoxFakeApps-ignoreDrawer-prompt>
+          <AkTypography data-test-storeknoxFakeAppsIgnoreDrawer-prompt>
             {{this.ignoreConfirmationPrompt}}
           </AkTypography>
 
@@ -91,13 +91,13 @@
               @color='textSecondary'
               @tag='label'
               {{style fontSize='0.857rem'}}
-              data-test-storeknoxFakeApps-ignoreDrawer-reasonLabel
+              data-test-storeknoxFakeAppsIgnoreDrawer-reasonLabel
             >
               {{t 'reason'}}
             </AkTypography>
 
             <Textarea
-              data-test-storeknoxFakeApps-ignoreDrawer-reasonInput
+              data-test-storeknoxFakeAppsIgnoreDrawer-reasonInput
               rows='6'
               aria-label='Reason to ignore'
               placeholder='{{t "storeknox.ignoreReasonPlaceholder"}}'
@@ -110,7 +110,7 @@
 
             {{#if (get this.changeset.error 'reason')}}
               <AkTypography
-                data-test-storeknoxFakeApps-ignoreDrawer-reasonError
+                data-test-storeknoxFakeAppsIgnoreDrawer-reasonError
                 @color='error'
                 {{style fontSize='0.857rem'}}
               >
@@ -130,7 +130,7 @@
           local-class='ignore-drawer-action-container'
         >
           <AkButton
-            data-test-storeknoxFakeApps-ignoreDrawer-confirmBtn
+            data-test-storeknoxFakeAppsIgnoreDrawer-confirmBtn
             @variant='filled'
             @disabled={{not this.isIgnoreReasonValid}}
             @loading={{this.ignoreTask.isRunning}}
@@ -144,7 +144,7 @@
           </AkButton>
 
           <AkButton
-            data-test-storeknoxFakeApps-ignoreDrawer-cancelBtn
+            data-test-storeknoxFakeAppsIgnoreDrawer-cancelBtn
             @variant='outlined'
             @color='neutral'
             {{on 'click' dr.closeHandler}}

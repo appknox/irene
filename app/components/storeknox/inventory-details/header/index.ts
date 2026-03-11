@@ -18,6 +18,12 @@ import type SkOrganizationService from 'irene/services/sk-organization';
 interface StoreknoxInventoryDetailsHeaderSignature {
   Args: {
     skInventoryApp: SkInventoryAppModel;
+    hideUploadToAppknoxBanner?: boolean;
+    hideLicenseIcon?: boolean;
+  };
+
+  Blocks: {
+    actionItems: [];
   };
 }
 

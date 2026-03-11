@@ -11,20 +11,43 @@
       @clickable={{false}}
       @chipText='Findings'
       class='m-0'
-      data-test-storeknoxFakeApps-poweredByAiChip
+      data-test-storeknoxFakeAppsFindingsCard-poweredByAiChip
     />
   {{/if}}
 
-  <AkStack @width='full' @direction='row' @justifyContent='space-between'>
+  <AkStack
+    @width='full'
+    @direction='row'
+    @justifyContent='space-between'
+    @spacing='1'
+  >
     <AkStack
       @width='full'
       @direction='column'
       @alignItems='flex-start'
       {{style maxWidth='620px'}}
     >
-      <AkTypography @gutterBottom={{true}} @fontWeight='bold'>
-        {{@title}}
-      </AkTypography>
+      <AkStack @spacing='1' @alignItems='center' {{style marginBottom='0.5em'}}>
+        <AkTypography @fontWeight='bold'>
+          {{@title}}
+        </AkTypography>
+
+        {{#if @isSemanticFinding}}
+          <AkTooltip @placement='right' @arrow={{true}}>
+            <:tooltipContent>
+              <div local-class='tooltip-content-container'>
+                <AkTypography @variant='body1' @color='inherit'>
+                  {{t 'storeknox.fakeApps.semanticSimilarityInfo'}}
+                </AkTypography>
+              </div>
+            </:tooltipContent>
+
+            <:default>
+              <AkIcon @iconName='info' @size='small' @color='textSecondary' />
+            </:default>
+          </AkTooltip>
+        {{/if}}
+      </AkStack>
 
       <AkTypography>
         {{@description}}
