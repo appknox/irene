@@ -1,6 +1,8 @@
 .findings-card-container {
   &.is-ignored {
-    background-color: #f1f1f1 !important;
+    background-color: var(
+      --storeknox-fake-apps-details-background-color
+    ) !important;
   }
 }
 

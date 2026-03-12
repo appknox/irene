@@ -1,10 +1,12 @@
 .findings-card-root {
   &.is-default {
-    background-color: #e6f9ff;
+    background-color: var(--storeknox-fake-apps-findings-card-background);
   }
 
   &.is-ignored {
-    background-color: #f1f1f1;
+    background-color: var(
+      --storeknox-fake-apps-findings-card-ignored-background
+    );
   }
 
   .score.is-default {
@@ -12,7 +14,7 @@
   }
 
   .score.is-ignored {
-    color: var(--common-black);
+    color: var(--storeknox-fake-apps-findings-card-ignored-text);
   }
 }
 

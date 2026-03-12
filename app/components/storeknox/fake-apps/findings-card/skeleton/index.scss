@@ -1,5 +1,5 @@
 .findings-card-root {
   &.is-default {
-    background-color: #e6f9ff;
+    background-color: var(--storeknox-fake-apps-findings-card-background);
   }
 }

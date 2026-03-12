@@ -9,7 +9,6 @@
   @offset={{this.offset}}
   as |pgc|
 >
-
   {{#if this.hasNoResults}}
     <AkStack
       @alignItems='center'
@@ -30,11 +29,6 @@
         <AkTypography @variant='h5' class='mt-4'>
           {{@emptyTitle}}
         </AkTypography>
-
-        <AkTypography @align='center' {{style maxWidth='600px'}}>
-          We were unable to detect fake apps for this application at this time.
-          If we find any subsequent fake apps, this page will be updated.
-        </AkTypography>
       {{/if}}
     </AkStack>
 
@@ -53,6 +47,14 @@
       </AkStack>
 
     {{else}}
+      {{#if @infoText}}
+        <AkStack local-class='info-text' class='p-2'>
+          <AkTypography>
+            {{@infoText}}
+          </AkTypography>
+        </AkStack>
+      {{/if}}
+
       <AkStack
         @direction='column'
         @spacing='3'

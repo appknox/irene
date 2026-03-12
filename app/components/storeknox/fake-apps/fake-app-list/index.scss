@@ -2,16 +2,18 @@
   position: sticky;
   z-index: 10;
   top: 254px;
-  background-color: var(--storeknox-inventory-details-header-background-color);
+  background-color: var(--storeknox-fake-apps-fake-apps-list-background-light);
 
   &.archived {
     top: 342px;
   }
 
   .status-container {
-    background-color: var(--sbom-scan-details-background-color);
-    border: 1px solid var(--sbom-scan-details-border-color);
-    border-radius: var(--sbom-scan-details-link-border-radius);
+    background-color: var(
+      --storeknox-fake-apps-fake-apps-list-background-color
+    );
+    border: 1px solid var(--storeknox-fake-apps-fake-apps-list-border-color);
+    border-radius: var(--storeknox-fake-apps-fake-apps-list-border-radius);
     height: 400px;
   }
 }
@@ -23,9 +25,9 @@
 }
 
 .brand-abuse {
-  background-color: var(--brand-abuse-highlight-color);
+  background-color: var(--storeknox-fake-apps-fake-app-list-brand-abuse-color);
 }
 
 .fake-app {
-  background-color: var(--fake-app-highlight-color);
+  background-color: var(--storeknox-fake-apps-fake-app-list-fake-app-color);
 }

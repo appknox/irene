@@ -2234,26 +2234,20 @@ body {
     --box-shadow-4
   );
 
-  // variables for storeknox/inventory-details/finding-detail-card
-  --storeknox-inventory-details-finding-detail-card-bg-color: var(
-    --background-main
-  );
-  --storeknox-inventory-details-finding-detail-card-border-color: var(
-    --border-color-1
-  );
-  --storeknox-inventory-details-finding-detail-card-border-radius: var(
-    --border-radius
-  );
-  --storeknox-inventory-details-finding-detail-card-ignored-bg-color: var(
+  // variables for storeknox/fake-apps/finding-detail-card
+  --storeknox-fake-apps-finding-detail-card-bg-color: var(--background-main);
+  --storeknox-fake-apps-finding-detail-card-border-color: var(--border-color-1);
+  --storeknox-fake-apps-finding-detail-card-border-radius: var(--border-radius);
+  --storeknox-fake-apps-finding-detail-card-ignored-bg-color: var(
     --neutral-grey-100
   );
-  --storeknox-inventory-details-finding-detail-card-badge-bg-color: var(
+  --storeknox-fake-apps-finding-detail-card-badge-bg-color: var(
     --powered-by-ai-chip-bg-color
   );
-  --storeknox-inventory-details-finding-detail-card-badge-text-color: var(
+  --storeknox-fake-apps-finding-detail-card-badge-text-color: var(
     --common-white
   );
-  --storeknox-inventory-details-finding-detail-card-app-logo-placeholder-bg: var(
+  --storeknox-fake-apps-finding-detail-card-app-logo-placeholder-bg: var(
     --storeknox-app-logo-placeholder-bg
   );
 
@@ -2265,6 +2259,37 @@ body {
   --storeknox-fake-apps-finding-detail-card-ignored-bg-color: var(
     --neutral-grey-100
   );
+
+  // variables for storeknox/fake-apps/fake-app-list
+  --storeknox-fake-apps-fake-apps-list-background-color: var(--common-white);
+  --storeknox-fake-apps-fake-apps-list-background-light: var(
+    --background-light
+  );
+  --storeknox-fake-apps-fake-apps-list-border-color: var(--border-color-1);
+  --storeknox-fake-apps-fake-apps-list-border-radius: var(--border-radius);
+  --storeknox-fake-apps-fake-app-list-brand-abuse-color: var(
+    --brand-abuse-highlight-color
+  );
+  --storeknox-fake-apps-fake-app-list-fake-app-color: var(
+    --fake-app-highlight-color
+  );
+
+  // variables for storeknox/fake-apps/fake-app-list/header
+  --storeknox-fake-apps-fake-apps-list-header-date-bg-color: var(
+    --neutral-grey-100
+  );
+
+  // variables for storeknox/fake-apps/details
+  --storeknox-fake-apps-details-background-color: var(--neutral-white-100);
+
+  // variables for storeknox/fake-apps/findings-card
+  --storeknox-fake-apps-findings-card-ignored-background: var(
+    --neutral-white-100
+  );
+  --storeknox-fake-apps-findings-card-background: var(
+    --storeknox-fake-apps-background-color
+  );
+  --storeknox-fake-apps-findings-card-ignored-text: var(--common-black);
 
   // variables for page-wrapper
   --page-wrapper-background-color: var(--background-light);

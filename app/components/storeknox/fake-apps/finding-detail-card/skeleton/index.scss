@@ -1,12 +1,7 @@
 .finding-detail-card {
-  background-color: var(
-    --storeknox-inventory-details-finding-detail-card-bg-color
-  );
-  border: 1px solid
-    var(--storeknox-inventory-details-finding-detail-card-border-color);
-  border-radius: var(
-    --storeknox-inventory-details-finding-detail-card-border-radius
-  );
+  background-color: var(--storeknox-fake-apps-finding-detail-card-bg-color);
+  border: 1px solid var(--storeknox-fake-apps-finding-detail-card-border-color);
+  border-radius: var(--storeknox-fake-apps-finding-detail-card-border-radius);
   padding: 1.5em;
   width: 100%;
 }

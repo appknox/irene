@@ -2186,7 +2186,10 @@
       "overallScoreInfo": "Similarity score based on semantic, package, logo,<br/> and developer analysis",
       "semanticSimilarityInfo": "Semantic score reflects similarity based on combined textual data (title, description, metadata), excluding logo and functionality.",
       "semantic": "Semantic",
-      "logo": "Logo"
+      "logo": "Logo",
+      "brandAbuseInfo": "The results below represent the suspected instances of brand abuse.",
+      "fakeAppsInfo": "The results below represent suspected instances of fake/cloned applications.",
+      "ignoredInfo": "The applications listed below have been marked as ignored and are excluded from active monitoring."
     }
   },
   "storeLowercase": "store",
