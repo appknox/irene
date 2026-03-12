@@ -1,0 +1,19 @@
+<nav class='freestyle-nav' aria-label='Component navigation'>
+  <div class='freestyle-nav-header'>
+    <h2 class='freestyle-nav-title'>Irene Components</h2>
+  </div>
+  <ul class='freestyle-nav-list'>
+    {{#each this.components as |comp|}}
+      <li class='freestyle-nav-item'>
+        <LinkTo
+          @route='freestyle.component'
+          @model={{comp.id}}
+          class='freestyle-nav-link'
+          activeClass='freestyle-nav-link--active'
+        >
+          {{comp.label}}
+        </LinkTo>
+      </li>
+    {{/each}}
+  </ul>
+</nav>

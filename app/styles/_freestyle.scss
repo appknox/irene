@@ -1,0 +1,98 @@
+// Freestyle component library layout
+// Hide ember-freestyle header (we use our own sidebar)
+.FreestyleGuide-header,
+.FreestyleGuide-cta,
+.FreestyleGuide-nav,
+.FreestyleGuide-aside {
+  display: none !important;
+}
+
+
+.freestyle-layout {
+  display: flex;
+  min-height: 100vh;
+  background: #fafafa;
+}
+
+.freestyle-sidebar {
+  width: 260px;
+  min-width: 260px;
+  background: #fff;
+  border-right: 1px solid #e0e0e0;
+  overflow-y: auto;
+  position: sticky;
+  top: 0;
+  height: 100vh;
+}
+
+.freestyle-main {
+  flex: 1;
+  overflow-y: auto;
+  padding: 24px;
+}
+
+.freestyle-content {
+  max-width: 900px;
+}
+
+.freestyle-section-name,
+.FreestyleSection-name {
+  font-size: 1.25rem;
+  font-weight: 600;
+  margin: 0 0 1rem 0;
+  color: #1a1a1a;
+}
+
+.FreestyleUsage-title,
+.freestyle-usage-title {
+  font-size: 0.875rem;
+  font-weight: 500;
+  margin: 0.5rem 0;
+  color: #424242;
+}
+
+.FreestyleUsage-rendered {
+  margin-bottom: 1.5rem;
+}
+
+.freestyle-nav-header {
+  padding: 20px 16px;
+  border-bottom: 1px solid #e0e0e0;
+}
+
+.freestyle-nav-title {
+  margin: 0;
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: #1a1a1a;
+}
+
+.freestyle-nav-list {
+  list-style: none;
+  margin: 0;
+  padding: 12px 0;
+}
+
+.freestyle-nav-item {
+  margin: 0;
+}
+
+.freestyle-nav-link {
+  display: block;
+  padding: 10px 20px;
+  color: #424242;
+  text-decoration: none;
+  font-size: 0.9375rem;
+  transition: background 0.15s, color 0.15s;
+
+  &:hover {
+    background: #f5f5f5;
+    color: #1a1a1a;
+  }
+
+  &--active {
+    background: #e3f2fd;
+    color: #1976d2;
+    font-weight: 500;
+  }
+}
