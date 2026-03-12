@@ -200,3 +200,5 @@ export const MynauiIconsSet = ['frame'] as const;
 export const SolarIconsSet = ['library-linear'] as const;
 
 export const FluentIconsSet = ['app-recent-24-regular'] as const;
+
+export const StreamlinePlumpIconsSet = ['threat-phone'] as const;

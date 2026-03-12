@@ -59,7 +59,7 @@ export default class StoreknoxWrapperComponent extends Component<StoreknoxWrappe
       },
       {
         label: this.intl.t('storeknox.fakeAppsTitle'),
-        icon: 'warning',
+        icon: 'streamline-plump:threat-phone',
         route: 'authenticated.storeknox.fake-apps',
         currentWhen: 'authenticated.storeknox.fake-apps',
       },
