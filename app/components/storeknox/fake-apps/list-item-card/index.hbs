@@ -101,7 +101,11 @@
       {{style fontSize='34px !important'}}
     />
 
-    <AkTypography @variant='h2' @fontWeight='bold'>
+    <AkTypography
+      @variant='h2'
+      @fontWeight='bold'
+      data-test-storeknoxFakeAppsListItemCard-totalFakeApps
+    >
       {{this.skApp.totalFakeApps}}
     </AkTypography>
 
@@ -131,6 +135,7 @@
         @alignItems='center'
         @justifyContent='space-between'
         @width='full'
+        data-test-storeknoxFakeAppsListItemCard-brandAbuseRow
       >
         <AkTypography>{{t 'storeknox.brandAbuse'}}</AkTypography>
 
@@ -166,6 +171,7 @@
         @alignItems='center'
         @justifyContent='space-between'
         @width='full'
+        data-test-storeknoxFakeAppsListItemCard-fakeAppRow
       >
         <AkTypography>{{t 'storeknox.fakeApps.fakeApp'}}</AkTypography>
 
@@ -201,7 +207,10 @@
         {{t 'storeknox.lastMonitoringDate'}}
       </AkTypography>
 
-      <AkTypography @fontWeight='bold'>
+      <AkTypography
+        @fontWeight='bold'
+        data-test-storeknoxFakeAppsListItemCard-lastMonitoringDate
+      >
         {{this.lastMonitoringDate}}
       </AkTypography>
     </AkStack>

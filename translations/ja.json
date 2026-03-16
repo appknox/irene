@@ -2189,7 +2189,17 @@
       "logo": "Logo",
       "brandAbuseInfo": "The results below represent the suspected instances of brand abuse.",
       "fakeAppsInfo": "The results below represent suspected instances of fake/cloned applications.",
-      "ignoredInfo": "The applications listed below have been marked as ignored and are excluded from active monitoring."
+      "ignoredInfo": "The applications listed below have been marked as ignored and are excluded from active monitoring.",
+      "aiDataAccess": "What data does the AI access?",
+      "aiDataAccessDescription": "The AI analyzes metadata and structural signals of publicly available apps which are listed on the stores and some metadata of the apps in your inventory, to detect instances of suspected fake apps or brand-impersonations .  It does not access user devices, personal user data, or runtime activity. It only evaluates application-level metadata required for security analysis.",
+      "aiDataUsage": "How is your data used?",
+      "aiDataUsageDescription": "The data from publicly available apps and some metadata of the apps in your inventory is processed by our AI analysis engine to evaluate whether an application legitimately belongs to an organization or may be impersonating a known brand.",
+      "aiDataProtection": "How is your data protected from security threats?",
+      "aiDataProtectionList": {
+        "item1": "The AI only processes sanitized application metadata, and does not have any access to sensitive information.",
+        "item2": "All requests pass through a controlled analysis layer.",
+        "item3": "The system operates with restricted context and predefined analysis rules, preventing unauthorized access to any internal logic or unrelated data."
+      }
     }
   },
   "storeLowercase": "store",

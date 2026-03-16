@@ -1,6 +1,6 @@
 <div
   local-class='finding-detail-card {{if @finding.isIgnored "ignored"}}'
-  data-test-storeknoxFakeAppsFindingDetailCard-root
+  ...attributes
 >
   {{! Card Header }}
   <AkStack @justifyContent='space-between' @alignItems='center' class='mb-2'>
@@ -35,10 +35,7 @@
         </AkTypography>
 
         <AkTooltip
-          @title={{t
-            'storeknox.fakeApps.overallScoreInfo'
-            htmlSafe=true
-          }}
+          @title={{t 'storeknox.fakeApps.overallScoreInfo' htmlSafe=true}}
           @arrow={{true}}
         >
           <AkIcon @iconName='info' @size='small' @color='textSecondary' />

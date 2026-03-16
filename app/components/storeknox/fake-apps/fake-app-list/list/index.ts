@@ -16,6 +16,7 @@ export interface StoreknoxFakeAppsFakeAppListListSignature {
       | 'ak-svg/scan-completed';
 
     emptyTitle?: string;
+    infoText?: string;
     skInventoryApp: SkInventoryAppModel;
     appsQueryStatus?: 'pending' | 'ignored';
     appsQueryClassification?: 'brand_abuse' | 'fake_app';

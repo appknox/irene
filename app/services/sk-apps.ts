@@ -27,6 +27,7 @@ export default class SkAppsService extends Service {
   @tracked monitoringStatusFilter = -1;
   @tracked skAppsCount = 0;
   @tracked fakeAppDetectionEnabled = false;
+  @tracked searchQuery = '';
 
   get isFetchingSkInventoryApps() {
     return this.fetch.isRunning;
@@ -73,6 +74,8 @@ export default class SkAppsService extends Service {
       ...(this.fakeAppDetectionEnabled && {
         fake_app_detection_enabled: this.fakeAppDetectionEnabled,
       }),
+
+      ...(this.searchQuery && { q: this.searchQuery }),
     };
 
     try {

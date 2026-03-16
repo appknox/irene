@@ -3,6 +3,7 @@ import { action } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
 import { service } from '@ember/service';
 import type RouterService from '@ember/routing/router-service';
+import { debounceTask } from 'ember-lifeline';
 
 import type SkAppsService from 'irene/services/sk-apps';
 import type { PaginationProviderActionsArgs } from 'irene/components/ak-pagination-provider';
@@ -18,11 +19,20 @@ export default class StoreknoxFakeAppsComponent extends Component {
   @action
   onSearchQueryChange(event: Event) {
     this.searchQuery = (event.target as HTMLInputElement).value;
+
+    debounceTask(this, 'setSearchQuery', this.searchQuery, 500);
+  }
+
+  setSearchQuery(query: string) {
+    this.skAppsService.searchQuery = query;
+    this.skAppsService.fetchFakeApps.perform();
   }
 
   @action
   clearSearchInput() {
     this.searchQuery = '';
+    this.skAppsService.searchQuery = '';
+    this.skAppsService.fetchFakeApps.perform();
   }
 
   get skFakeApps() {
@@ -58,24 +68,23 @@ export default class StoreknoxFakeAppsComponent extends Component {
   }
 
   get aiDrawerInfo() {
-    //TODO: Update this content once recieved the final content from the design team
     return [
       {
-        title: this.intl.t('reportModule.aiDataAccess'),
-        body: this.intl.t('reportModule.aiDataAccessDescription'),
+        title: this.intl.t('storeknox.fakeApps.aiDataAccess'),
+        body: this.intl.t('storeknox.fakeApps.aiDataAccessDescription'),
         marginTop: 'mt-2',
       },
       {
-        title: this.intl.t('reportModule.aiDataUsage'),
-        body: this.intl.t('reportModule.aiDataUsageDescription'),
+        title: this.intl.t('storeknox.fakeApps.aiDataUsage'),
+        body: this.intl.t('storeknox.fakeApps.aiDataUsageDescription'),
         marginTop: 'mt-2',
       },
       {
-        title: this.intl.t('reportModule.aiDataProtection'),
+        title: this.intl.t('storeknox.fakeApps.aiDataProtection'),
         contentList: [
-          this.intl.t('reportModule.aiDataProtectionList.item1'),
-          this.intl.t('reportModule.aiDataProtectionList.item2'),
-          this.intl.t('reportModule.aiDataProtectionList.item3'),
+          this.intl.t('storeknox.fakeApps.aiDataProtectionList.item1'),
+          this.intl.t('storeknox.fakeApps.aiDataProtectionList.item2'),
+          this.intl.t('storeknox.fakeApps.aiDataProtectionList.item3'),
         ],
         marginTop: 'mt-2',
       },

@@ -35,7 +35,11 @@
 
       <:rightAdornment>
         {{#if this.searchQuery}}
-          <AkIconButton @size='small' {{on 'click' this.clearSearchInput}}>
+          <AkIconButton
+            @size='small'
+            {{on 'click' this.clearSearchInput}}
+            data-test-storeknoxFakeApps-clearSearchBtn
+          >
             <AkIcon @iconName='close' @color='textSecondary' />
           </AkIconButton>
         {{/if}}
