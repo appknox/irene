@@ -5,6 +5,7 @@
   local-class='findings-card-root
   {{if @isDefaultFinding "is-default"}} {{if @isIgnored "is-ignored"}}'
   class='p-3'
+  data-test-storeknoxFakeAppsFindingsCard-root
 >
   {{#if @isDefaultFinding}}
     <PoweredByAi::Chip
@@ -28,7 +29,7 @@
       {{style maxWidth='620px'}}
     >
       <AkStack @spacing='1' @alignItems='center' {{style marginBottom='0.5em'}}>
-        <AkTypography @fontWeight='bold'>
+        <AkTypography @fontWeight='bold' data-test-storeknoxFakeAppsFindingsCard-title>
           {{@title}}
         </AkTypography>
 
@@ -49,7 +50,7 @@
         {{/if}}
       </AkStack>
 
-      <AkTypography>
+      <AkTypography data-test-storeknoxFakeAppsFindingsCard-description>
         {{@description}}
       </AkTypography>
     </AkStack>
@@ -60,6 +61,7 @@
       local-class='score
       {{if @isDefaultFinding "is-default"}} {{if @isIgnored "is-ignored"}}'
       {{style alignSelf='flex-end'}}
+      data-test-storeknoxFakeAppsFindingsCard-score
     >
       {{this.scorePercentage}}
     </AkTypography>

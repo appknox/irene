@@ -27,7 +27,10 @@
           '
         ></div>
 
-        <AkTypography @fontWeight='bold'>{{this.headerTitle}}</AkTypography>
+        <AkTypography
+          @fontWeight='bold'
+          data-test-storeknoxFakeAppsDetailsHeader-headerTitle
+        >{{this.headerTitle}}</AkTypography>
       </AkStack>
     </AkStack>
   {{/unless}}
