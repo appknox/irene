@@ -42,6 +42,11 @@ export interface Finding {
   description: string;
 }
 
+export interface CopilotFinding {
+  scan_type: string;
+  url: string;
+}
+
 export default class AnalysisModel extends Model {
   @service declare intl: IntlService;
 
@@ -137,6 +142,9 @@ export default class AnalysisModel extends Model {
 
   @belongsTo('file', { inverse: null, async: true })
   declare file: AsyncBelongsTo<FileModel>;
+
+  @attr
+  declare copilotFindings: CopilotFinding[];
 
   @attr('date')
   declare updatedOn: Date;
