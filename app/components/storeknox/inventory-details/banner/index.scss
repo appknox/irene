@@ -1,9 +1,9 @@
-.fake-apps-ignored-banner-root {
+.app-inventory-banner-root {
   position: sticky;
   top: 0em;
   z-index: 100;
 
-  .fake-apps-ignored-banner-container {
+  .app-inventory-banner-container {
     position: absolute;
     top: -0.5em;
     left: 0em;
@@ -17,21 +17,14 @@
     filter: drop-shadow(0px 4px 20px rgba(64, 64, 64, 0.15));
   }
 
-  .fake-apps-ignored-banner-icon {
+  .app-inventory-banner-icon {
     width: 53px;
     height: 100%;
     color: var(--storeknox-inventory-details-banner-icon-color);
     background-color: var(--storeknox-inventory-details-banner-icon-bg-color);
   }
 
-  .fake-apps-ignored-banner-text {
+  .app-inventory-banner-text {
     padding: 0.7857em;
-  }
-
-  .view-in-inventory-button-container {
-    background-color: #e9e9e9;
-    border-radius: var(--border-radius);
-    padding: 0.42857em 0.5714em;
-    padding-top: 0.2857em;
   }
 }

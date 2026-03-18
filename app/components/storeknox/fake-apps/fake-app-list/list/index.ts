@@ -16,6 +16,7 @@ export interface StoreknoxFakeAppsFakeAppListListSignature {
       | 'ak-svg/scan-completed';
 
     emptyTitle?: string;
+    emptyDescription?: string;
     infoText?: string;
     skInventoryApp: SkInventoryAppModel;
     appsQueryStatus?: 'pending' | 'ignored';
@@ -100,7 +101,7 @@ export default class StoreknoxFakeAppsFakeAppListListComponent extends Component
 
     return {
       id: String(skFakeApp.id),
-      overallScore: Math.round((skFakeApp.confidenceScore ?? 0) * 100),
+      overallScore: Math.round((scores?.final ?? 0) * 100),
       semanticScore: Math.round((scores?.SemanticSimilarityRule ?? 0) * 100),
       packageScore: Math.round((scores?.PackageSimilarityRule ?? 0) * 100),
       logoScore: Math.round((scores?.LogoSimilarityRule ?? 0) * 100),

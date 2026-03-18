@@ -22,27 +22,10 @@
           data-test-storeknoxInventoryDetails-actionListHeaderText
         >
           {{t 'storeknox.actionNeeded'}}
-          ({{this.actionableItemsCount}})
+          {{#if this.showActionableItemsCount}}
+            ({{this.actionableItemsCount}})
+          {{/if}}
         </AkTypography>
-
-        <AkTooltip
-          @title={{t 'storeknox.lastMonitoredDate'}}
-          @color='light'
-          @arrow={{true}}
-          data-test-storeknoxInventoryDetails-lastMonitoredDateTooltip
-        >
-          <AkStack @spacing='0.5' local-class='last-monitored-date'>
-            <AkIcon
-              @iconName='event'
-              @color='textPrimary'
-              data-test-storeknoxInventoryDetails-lastMonitoredDateIcon
-            />
-
-            <AkTypography data-test-storeknoxInventoryDetails-lastMonitoredDate>
-              {{this.lastMonitoredDate}}
-            </AkTypography>
-          </AkStack>
-        </AkTooltip>
       </AkStack>
     </:default>
   </Storeknox::InventoryDetails::SectionHeader>
@@ -55,7 +38,7 @@
     {{#each this.actionsList as |action|}}
       {{#unless action.hideAction}}
         <AkLink
-          @disabled={{action.disabled}}
+          @disabled={{action.disableActionButton}}
           @route={{action.route}}
           @model={{this.skInventoryApp.id}}
         >
@@ -65,7 +48,8 @@
             @label={{action.label}}
             @skInventoryApp={{this.skInventoryApp}}
             @statusIsInitializing={{action.statusIsInitializing}}
-            @disabled={{action.disabled}}
+            @disabled={{action.disableActionButton}}
+            @showDisabledState={{action.showDisabledState}}
             data-test-storeknoxInventoryDetails-actionBtn='{{action.id}}'
           />
         </AkLink>

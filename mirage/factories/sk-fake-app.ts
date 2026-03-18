@@ -1,6 +1,5 @@
 import { Factory } from 'miragejs';
 import { faker } from '@faker-js/faker';
-import ENUMS from 'irene/enums';
 
 export default Factory.extend({
   title: () => faker.company.name(),
@@ -15,39 +14,74 @@ export default Factory.extend({
     faker.helpers.arrayElement(['brand_abuse', 'fake_app']),
 
   ai_scores: () => ({
+    final: faker.number.float({
+      min: 0,
+      max: 1,
+      precision: 0.01,
+    }),
+
     SemanticSimilarityRule: faker.number.float({
       min: 0,
       max: 1,
       precision: 0.01,
     }),
-    PackageSimilarityRule: faker.number.float({
-      min: 0,
-      max: 1,
-      precision: 0.01,
-    }),
+
+    SemanticSimilarityRule_justification: faker.lorem.sentence(),
+
     LogoSimilarityRule: faker.number.float({
       min: 0,
       max: 1,
       precision: 0.01,
     }),
+
+    LogoSimilarityRule_justification: faker.lorem.sentence(),
+
+    TitleBrandAbuseRule: faker.number.float({
+      min: 0,
+      max: 1,
+      precision: 0.01,
+    }),
+
+    TitleBrandAbuseRule_justification: faker.lorem.sentence(),
+
+    PackageSimilarityRule: faker.number.float({
+      min: 0,
+      max: 1,
+      precision: 0.01,
+    }),
+
+    PackageSimilarityRule_justification: faker.lorem.sentence(),
+
     DeveloperConsistencyRule: faker.number.float({
       min: 0,
       max: 1,
       precision: 0.01,
     }),
+
+    DeveloperConsistencyRule_justification: faker.lorem.sentence(),
+
+    AppFunctionalitySimilarityRule: faker.number.float({
+      min: 0,
+      max: 1,
+      precision: 0.01,
+    }),
+
+    AppFunctionalitySimilarityRule_justification: faker.lorem.sentence(),
   }),
 
-  store: () => ({
+  sk_store: () => ({
     id: faker.number.int(),
-    name: 'Google Play',
-    identifier: 'com.android.vending',
-    icon: faker.image.imageUrl(),
-    platform: ENUMS.PLATFORM.ANDROID,
-    platform_display: 'android',
+    name: faker.company.name(),
+    identifier: faker.internet.domainName(),
+    icon: faker.image.url(),
+    platform: faker.number.int({ min: 0, max: 1 }),
+    platformDisplay: faker.helpers.arrayElement(['android', 'apple']),
   }),
 
   status: () => 0,
-  reviewed_by: () => null,
+  reviewed_by: () => faker.internet.email(),
+  reviewed_on: () => faker.date.past().toISOString(),
+  ignore_reason: () => faker.lorem.sentence(),
   is_ignored: () => false,
   is_added_to_inventory: () => false,
   created_on: () => faker.date.past().toISOString(),

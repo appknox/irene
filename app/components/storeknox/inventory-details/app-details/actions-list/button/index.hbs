@@ -4,6 +4,7 @@
   @color={{if @needsAction 'primary'}}
   local-class='action-button-root
   {{if this.isArchived "archived"}}
+  {{if @showDisabledState "disabled-state"}}
   {{if @needsAction "needs-action"}}
   {{if @featureInProgress "feature-in-progress"}}
   {{if @statusIsInitializing "status-initializing"}}'
@@ -11,19 +12,22 @@
 >
   <:leftIcon>
     <AkIcon
-      @iconName={{if @featureInProgress 'auto-fix-high' 'info'}}
+      @iconName={{this.leftIconName}}
       @color='inherit'
+      local-class='button-icon'
       data-test-storeknoxInventoryDetails-actionBtn-leftIcon
     />
   </:leftIcon>
 
   <:default>
-    {{@label}}
+    <AkTypography @color='inherit' @fontWeight='medium'>
+      {{@label}}
+    </AkTypography>
   </:default>
 
   <:rightIcon>
     {{#unless @hideRightIcon}}
-      {{#if @statusIsInitializing}}
+      {{#if this.showLoadingState}}
         <AkLoader
           @size={{16}}
           data-test-storeknoxInventoryDetails-actionBtn-rightIconLoader
@@ -32,7 +36,7 @@
         <AkIcon
           @iconName='arrow-outward'
           @color='textPrimary'
-          {{style fontSize='1.2857em !important'}}
+          local-class='button-icon'
           data-test-storeknoxInventoryDetails-actionBtn-rightIcon
         />
       {{/if}}

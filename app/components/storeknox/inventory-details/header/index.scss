@@ -19,7 +19,8 @@
     }
   }
 
-  &.archived {
+  &.archived,
+  &.monitoring-disabled {
     top: calc(-0.5em + 44px);
     margin-bottom: calc(1.5em + 1.4286em) !important;
   }

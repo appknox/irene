@@ -2,6 +2,7 @@
   local-class='
     app-inventory-header-root
     {{if @skInventoryApp.isArchived "archived"}}
+    {{unless @skInventoryApp.monitoringEnabled "monitoring-disabled"}}
   '
   class='w-full mb-3 pt-2'
 >
@@ -156,38 +157,6 @@
                   data-test-storeknoxInventoryDetails-pageInfoTag
                 />
               {{/unless}}
-
-              {{#if this.isFakeAppListRoute}}
-                {{#unless this.activeRouteTagProps.hideTag}}
-                  <AkDivider
-                    @direction='vertical'
-                    @color='dark'
-                    @height='32px'
-                    class='mx-1'
-                  />
-                {{/unless}}
-
-                <AkTooltip
-                  @title={{t 'storeknox.lastFakeAppDetectionDate'}}
-                  @color='light'
-                  @arrow={{true}}
-                  data-test-storeknoxInventoryDetails-lastMonitoredDateTooltip
-                >
-                  <AkStack @spacing='0.5' local-class='last-monitored-date'>
-                    <AkIcon
-                      @iconName='event'
-                      @color='textPrimary'
-                      data-test-storeknoxInventoryDetails-lastMonitoredDateIcon
-                    />
-
-                    <AkTypography
-                      data-test-storeknoxInventoryDetails-lastMonitoredDate
-                    >
-                      {{this.lastFakeAppDetectionDate}}
-                    </AkTypography>
-                  </AkStack>
-                </AkTooltip>
-              {{/if}}
 
             {{else if (not this.skInventoryApp.isArchived)}}
               <AkStack

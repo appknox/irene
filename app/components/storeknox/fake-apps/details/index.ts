@@ -7,6 +7,15 @@ import type Store from 'ember-data/store';
 import type SkFakeAppModel from 'irene/models/sk-fake-app';
 import type SkInventoryAppModel from 'irene/models/sk-inventory-app';
 
+type FakeAppFindingScoreData = {
+  title: string;
+  score: number;
+  description: string;
+  isDefaultFinding?: boolean;
+  isSemanticFinding?: boolean;
+  isIgnored?: boolean;
+};
+
 export interface StoreknoxFakeAppsDetailsSignature {
   Args: { fakeApp: SkFakeAppModel; skInventoryApp: SkInventoryAppModel };
 }
@@ -48,47 +57,47 @@ export default class StoreknoxFakeAppsDetailsComponent extends Component<Storekn
   get fakeAppFindingsCategoryData() {
     return [
       {
-        title: 'Overall Score',
-        score: this.args.fakeApp.aiConfidence,
+        title: this.intl.t('storeknox.fakeApps.overallScore'),
+        score: this.fakeAppAIScores.final,
         description: this.args.fakeApp.aiClassificationJustification,
         isDefaultFinding: true,
         isIgnored: this.isFakeAppIgnored,
       },
-      {
-        title: 'Semantic Similarity',
+      this.fakeAppAIScores.SemanticSimilarityRule && {
+        title: this.intl.t('storeknox.fakeApps.semanticSimilarity'),
         score: this.fakeAppAIScores.SemanticSimilarityRule,
         description: this.fakeAppAIScores.SemanticSimilarityRule_justification,
         isSemanticFinding: true,
       },
-      {
-        title: 'Logo Similarity',
+      this.fakeAppAIScores.LogoSimilarityRule && {
+        title: this.intl.t('storeknox.fakeApps.logoSimilarity'),
         score: this.fakeAppAIScores.LogoSimilarityRule,
         description: this.fakeAppAIScores.LogoSimilarityRule_justification,
       },
-      {
-        title: 'Title Brand Abuse',
+      this.fakeAppAIScores.TitleBrandAbuseRule && {
+        title: this.intl.t('storeknox.fakeApps.titleBrandAbuse'),
         score: this.fakeAppAIScores.TitleBrandAbuseRule,
         description: this.fakeAppAIScores.TitleBrandAbuseRule_justification,
       },
-      {
-        title: 'Package Similarity',
+      this.fakeAppAIScores.PackageSimilarityRule && {
+        title: this.intl.t('storeknox.fakeApps.packageSimilarity'),
         score: this.fakeAppAIScores.PackageSimilarityRule,
         description: this.fakeAppAIScores.PackageSimilarityRule_justification,
       },
 
-      {
-        title: 'Developer Consistency',
+      this.fakeAppAIScores.DeveloperConsistencyRule && {
+        title: this.intl.t('storeknox.fakeApps.developerConsistency'),
         score: this.fakeAppAIScores.DeveloperConsistencyRule,
         description:
           this.fakeAppAIScores.DeveloperConsistencyRule_justification,
       },
-      {
-        title: 'App Functionality Similarity',
+      this.fakeAppAIScores.AppFunctionalitySimilarityRule && {
+        title: this.intl.t('storeknox.fakeApps.appFunctionalitySimilarity'),
         score: this.fakeAppAIScores.AppFunctionalitySimilarityRule,
         description:
           this.fakeAppAIScores.AppFunctionalitySimilarityRule_justification,
       },
-    ];
+    ].filter(Boolean) as FakeAppFindingScoreData[];
   }
 }
 

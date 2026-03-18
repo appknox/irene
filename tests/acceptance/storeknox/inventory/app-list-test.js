@@ -26,17 +26,19 @@ class NotificationsStub extends Service {
   setDefaultAutoClear() {}
 }
 
-// NOT_FOUND: 0,
-// NO_ACTION_NEEDED: 1,
-// DISABLED: 2,
-// INITIALIZING: 3,
-// ACTION_NEEDED: 4,
-
 // Filter Enums and Monitoring Status Enums
 const MONITORING_STATUSES = {
-  UNSCANNED: ENUMS.SK_APP_MONITORING_STATUS.ACTION_NEEDED,
-  SCANNED: ENUMS.SK_APP_MONITORING_STATUS.NO_ACTION_NEEDED,
-  PENDING: ENUMS.SK_APP_MONITORING_STATUS.INITIALIZING,
+  ACTION_NEEDED: ENUMS.SK_APP_MONITORING_STATUS.ACTION_NEEDED,
+  NO_ACTION_NEEDED: ENUMS.SK_APP_MONITORING_STATUS.NO_ACTION_NEEDED,
+  INITIALIZING: ENUMS.SK_APP_MONITORING_STATUS.INITIALIZING,
+  DISABLED: ENUMS.SK_APP_MONITORING_STATUS.DISABLED,
+};
+
+const FAKE_APP_DETECTION_STATUSES = {
+  DISABLED: ENUMS.SK_FAKE_APP_DETECTION_STATUS.DISABLED,
+  INITIALIZING: ENUMS.SK_FAKE_APP_DETECTION_STATUS.INITIALIZING,
+  NO_RESULTS: ENUMS.SK_FAKE_APP_DETECTION_STATUS.NO_RESULTS,
+  HAS_RESULTS: ENUMS.SK_FAKE_APP_DETECTION_STATUS.HAS_RESULTS,
 };
 
 const MONITORING_STATUS_FILTERS = {
@@ -49,28 +51,107 @@ const MONITORING_STATUS_FILTERS = {
 
 // App Config for different monitoring statuses
 const inventoryAppMonitoringStatusConfig = [
+  // Action needed
   {
-    store_monitoring_status: MONITORING_STATUSES.UNSCANNED,
+    store_monitoring_status: MONITORING_STATUSES.ACTION_NEEDED,
+    fake_app_detection_status: FAKE_APP_DETECTION_STATUSES.HAS_RESULTS,
     icon_key: 'action-needed',
     monitoring_enabled: true,
     status_text: () => t('storeknox.needsAction'),
     tooltip: {
-      message: () => t('storeknox.actionsNeededMsg'),
+      message: () =>
+        t('storeknox.unscannedVersionsAndFakeAppsDetectedTitle', {
+          htmlSafe: true,
+        }),
       subtext: () => t('storeknox.haveBeenDetected'),
     },
   },
   {
-    store_monitoring_status: MONITORING_STATUSES.SCANNED,
+    store_monitoring_status: MONITORING_STATUSES.ACTION_NEEDED,
+    fake_app_detection_status: FAKE_APP_DETECTION_STATUSES.INITIALIZING,
+    icon_key: 'action-needed',
+    monitoring_enabled: true,
+    status_text: () => t('storeknox.needsAction'),
+    tooltip: {
+      message: () => t('storeknox.unscannedVersionsTitle', { htmlSafe: true }),
+      subtext: () => t('storeknox.haveBeenDetected'),
+    },
+  },
+  {
+    store_monitoring_status: MONITORING_STATUSES.ACTION_NEEDED,
+    fake_app_detection_status: FAKE_APP_DETECTION_STATUSES.NO_RESULTS,
+    icon_key: 'action-needed',
+    monitoring_enabled: true,
+    status_text: () => t('storeknox.needsAction'),
+    tooltip: {
+      message: () => t('storeknox.unscannedVersionsTitle', { htmlSafe: true }),
+      subtext: () => t('storeknox.haveBeenDetected'),
+    },
+  },
+  {
+    store_monitoring_status: MONITORING_STATUSES.ACTION_NEEDED,
+    fake_app_detection_status: FAKE_APP_DETECTION_STATUSES.DISABLED,
+    icon_key: 'action-needed',
+    monitoring_enabled: true,
+    status_text: () => t('storeknox.needsAction'),
+    tooltip: {
+      message: () => t('storeknox.unscannedVersionsTitle', { htmlSafe: true }),
+      subtext: () => t('storeknox.haveBeenDetected'),
+    },
+  },
+  {
+    store_monitoring_status: MONITORING_STATUSES.NO_ACTION_NEEDED,
+    fake_app_detection_status: FAKE_APP_DETECTION_STATUSES.HAS_RESULTS,
+    icon_key: 'action-needed',
+    monitoring_enabled: true,
+    status_text: () => t('storeknox.needsAction'),
+    tooltip: {
+      message: () => t('storeknox.fakeAppsDetectedTitle', { htmlSafe: true }),
+      subtext: () => t('storeknox.haveBeenDetected'),
+    },
+  },
+  {
+    store_monitoring_status: MONITORING_STATUSES.INITIALIZING,
+    fake_app_detection_status: FAKE_APP_DETECTION_STATUSES.HAS_RESULTS,
+    icon_key: 'action-needed',
+    monitoring_enabled: true,
+    status_text: () => t('storeknox.needsAction'),
+    tooltip: {
+      message: () => t('storeknox.fakeAppsDetectedTitle', { htmlSafe: true }),
+      subtext: () => t('storeknox.haveBeenDetected'),
+    },
+  },
+  {
+    store_monitoring_status: MONITORING_STATUSES.DISABLED,
+    fake_app_detection_status: FAKE_APP_DETECTION_STATUSES.HAS_RESULTS,
+    icon_key: 'action-needed',
+    monitoring_enabled: true,
+    status_text: () => t('storeknox.needsAction'),
+    tooltip: {
+      message: () => t('storeknox.fakeAppsDetectedTitle', { htmlSafe: true }),
+      subtext: () => t('storeknox.haveBeenDetected'),
+    },
+  },
+
+  // No action needed
+  {
+    store_monitoring_status: MONITORING_STATUSES.NO_ACTION_NEEDED,
+    fake_app_detection_status: FAKE_APP_DETECTION_STATUSES.NO_RESULTS,
     icon_key: 'no-action-needed',
     monitoring_enabled: true,
     status_text: () => t('storeknox.noActionNeeded'),
     tooltip: {
-      message: () => t('storeknox.noActionsNeededMsg'),
-      subtext: () => t('storeknox.haveBeenDetected'),
+      message: () =>
+        t('storeknox.noUnscannedVersionsOrFakeAppsDetectedMsg', {
+          htmlSafe: true,
+        }),
     },
   },
+
+  // Initializing
   {
-    store_monitoring_status: MONITORING_STATUSES.PENDING,
+    store_monitoring_status: MONITORING_STATUSES.INITIALIZING,
+    fake_app_detection_status: FAKE_APP_DETECTION_STATUSES.INITIALIZING,
     icon_key: 'initializing',
     monitoring_enabled: true,
     status_text: () => t('storeknox.beingInitialized'),
@@ -78,8 +159,41 @@ const inventoryAppMonitoringStatusConfig = [
       message: () => t('storeknox.initializingMsg'),
     },
   },
+
+  // Disabled
   {
-    store_monitoring_status: MONITORING_STATUSES.PENDING,
+    store_monitoring_status: MONITORING_STATUSES.DISABLED,
+    fake_app_detection_status: FAKE_APP_DETECTION_STATUSES.DISABLED,
+    icon_key: 'disabled',
+    monitoring_enabled: false,
+    status_text: () => t('disabled'),
+    tooltip: {
+      message: () => t('storeknox.disabledMsg'),
+    },
+  },
+  {
+    store_monitoring_status: MONITORING_STATUSES.INITIALIZING,
+    fake_app_detection_status: FAKE_APP_DETECTION_STATUSES.INITIALIZING,
+    icon_key: 'disabled',
+    monitoring_enabled: false,
+    status_text: () => t('disabled'),
+    tooltip: {
+      message: () => t('storeknox.disabledMsg'),
+    },
+  },
+  {
+    store_monitoring_status: MONITORING_STATUSES.ACTION_NEEDED,
+    fake_app_detection_status: FAKE_APP_DETECTION_STATUSES.HAS_RESULTS,
+    icon_key: 'disabled',
+    monitoring_enabled: false,
+    status_text: () => t('disabled'),
+    tooltip: {
+      message: () => t('storeknox.disabledMsg'),
+    },
+  },
+  {
+    store_monitoring_status: MONITORING_STATUSES.NO_ACTION_NEEDED,
+    fake_app_detection_status: FAKE_APP_DETECTION_STATUSES.NO_RESULTS,
     icon_key: 'disabled',
     monitoring_enabled: false,
     status_text: () => t('disabled'),
@@ -148,37 +262,63 @@ module('Acceptance | storeknox/inventory/app-list', function (hooks) {
   };
 
   /**
-   * Filters the inventory apps by monitoring status
+   * Makeshift filter for the inventory apps by monitoring status
    * @param {Object} a - The inventory app object
    * @param {number} filterValue - The filter value
    */
   const filterAppsByMonitoringStatus = (a, filterValue) => {
-    const { store_monitoring_status, monitoring_enabled } = a;
-
-    const isPending = store_monitoring_status === MONITORING_STATUSES.PENDING;
+    const {
+      store_monitoring_status,
+      fake_app_detection_status,
+      monitoring_enabled,
+    } = a;
 
     // No filter applied
     if (filterValue === -1) {
       return true;
     }
 
-    // Action needed filter applied
-    if (filterValue === MONITORING_STATUS_FILTERS.ACTION_NEEDED) {
-      return store_monitoring_status === MONITORING_STATUSES.UNSCANNED;
-    }
-
     // Disabled filter applied
     if (filterValue === MONITORING_STATUS_FILTERS.DISABLED) {
-      return isPending && monitoring_enabled === false;
+      return monitoring_enabled === false;
+    }
+
+    // Action needed filter applied
+    if (filterValue === MONITORING_STATUS_FILTERS.ACTION_NEEDED) {
+      return Boolean(
+        monitoring_enabled &&
+          (store_monitoring_status === MONITORING_STATUSES.ACTION_NEEDED ||
+            fake_app_detection_status ===
+              FAKE_APP_DETECTION_STATUSES.HAS_RESULTS)
+      );
     }
 
     // Initializing filter applied
     if (filterValue === MONITORING_STATUS_FILTERS.INITIALIZING) {
-      return isPending && monitoring_enabled === true;
+      return (
+        monitoring_enabled &&
+        ((store_monitoring_status === MONITORING_STATUSES.INITIALIZING &&
+          [
+            FAKE_APP_DETECTION_STATUSES.INITIALIZING,
+            FAKE_APP_DETECTION_STATUSES.DISABLED,
+            FAKE_APP_DETECTION_STATUSES.NO_RESULTS,
+          ].includes(fake_app_detection_status)) ||
+          (fake_app_detection_status ===
+            FAKE_APP_DETECTION_STATUSES.INITIALIZING &&
+            [
+              MONITORING_STATUSES.DISABLED,
+              MONITORING_STATUSES.NO_ACTION_NEEDED,
+              MONITORING_STATUSES.INITIALIZING,
+            ].includes(store_monitoring_status)))
+      );
     }
 
     // No action needed filter applied
-    return store_monitoring_status === MONITORING_STATUSES.SCANNED;
+    return (
+      monitoring_enabled &&
+      store_monitoring_status === MONITORING_STATUSES.NO_ACTION_NEEDED &&
+      fake_app_detection_status === FAKE_APP_DETECTION_STATUSES.NO_RESULTS
+    );
   };
 
   /**
@@ -245,7 +385,7 @@ module('Acceptance | storeknox/inventory/app-list', function (hooks) {
       .hasText(status_text());
 
     // Check for monitoring status tooltip
-    const monitoringStatusIconElement = find(iconElement);
+    const monitoringStatusIconElement = appElement.querySelector(iconElement);
     const tooltipContentSelector = '[data-test-ak-tooltip-content]';
 
     const statusTooltipContentSelector =
@@ -573,6 +713,7 @@ module('Acceptance | storeknox/inventory/app-list', function (hooks) {
       assert,
       {
         store_monitoring_status,
+        fake_app_detection_status,
         icon_key,
         monitoring_enabled,
         status_text,
@@ -582,7 +723,11 @@ module('Acceptance | storeknox/inventory/app-list', function (hooks) {
       const inventoryApp = this.server.create(
         'sk-inventory-app',
         'withApprovedStatus',
-        { store_monitoring_status, monitoring_enabled }
+        {
+          store_monitoring_status,
+          fake_app_detection_status,
+          monitoring_enabled,
+        }
       );
 
       // Server mocks
@@ -644,7 +789,7 @@ module('Acceptance | storeknox/inventory/app-list', function (hooks) {
       {
         key: () => t('disabled'),
         filterValue: MONITORING_STATUS_FILTERS.DISABLED,
-        assertCount: 40,
+        assertCount: 112,
       },
       {
         key: () => t('storeknox.beingInitialized'),
@@ -654,17 +799,17 @@ module('Acceptance | storeknox/inventory/app-list', function (hooks) {
       {
         key: () => t('storeknox.needsAction'),
         filterValue: MONITORING_STATUS_FILTERS.ACTION_NEEDED,
-        assertCount: 42,
+        assertCount: 198,
       },
       {
         key: () => t('storeknox.noActionNeeded'),
         filterValue: MONITORING_STATUS_FILTERS.NO_ACTION_NEEDED,
-        assertCount: 42,
+        assertCount: 40,
       },
       {
         key: () => t('all'),
         filterValue: MONITORING_STATUS_FILTERS.ALL,
-        assertCount: 116,
+        assertCount: 342,
       },
     ],
     async function (assert, { key, filterValue, assertCount }) {
@@ -676,9 +821,14 @@ module('Acceptance | storeknox/inventory/app-list', function (hooks) {
       );
 
       const inventoryApps = appsToCreate.map(
-        ({ store_monitoring_status, monitoring_enabled }) =>
-          this.server.create('sk-inventory-app', 'withApprovedStatus', {
+        ({
+          store_monitoring_status,
+          monitoring_enabled,
+          fake_app_detection_status,
+        }) =>
+          this.server.create('sk-app', 'withApprovedStatus', {
             store_monitoring_status,
+            fake_app_detection_status,
             monitoring_enabled,
           })
       );
@@ -694,7 +844,7 @@ module('Acceptance | storeknox/inventory/app-list', function (hooks) {
 
         const filterValue = Number(monitoring_status ?? -1);
 
-        const inventoryApps = schema.skInventoryApps
+        const inventoryApps = schema.skApps
           .where(
             (a) =>
               a.app_status === Number(app_status) &&
@@ -707,15 +857,15 @@ module('Acceptance | storeknox/inventory/app-list', function (hooks) {
 
             // Sort map for monitoring statuses
             const sortMap = {
-              [MONITORING_STATUSES.UNSCANNED]: 0,
-              [MONITORING_STATUSES.PENDING]: 1,
-              [MONITORING_STATUSES.SCANNED]: 2,
+              [MONITORING_STATUSES.ACTION_NEEDED]: 0,
+              [MONITORING_STATUSES.INITIALIZING]: 1,
+              [MONITORING_STATUSES.NO_ACTION_NEEDED]: 2,
             };
 
             // Sort pending apps by monitoring enabled status
             if (
-              aStatus === MONITORING_STATUSES.PENDING &&
-              bStatus === MONITORING_STATUSES.PENDING
+              aStatus === MONITORING_STATUSES.INITIALIZING &&
+              bStatus === MONITORING_STATUSES.INITIALIZING
             ) {
               return a.monitoring_enabled ? -1 : 1;
             }
@@ -821,15 +971,19 @@ module('Acceptance | storeknox/inventory/app-list', function (hooks) {
         assert.ok(expectedApp, `Ensure rendered app with id ${appId} is valid`);
 
         // Status info for the expected app
-        const { icon_key, status_text, tooltip } = appsToCreate.find(
-          (a) =>
-            a.store_monitoring_status === expectedApp.store_monitoring_status &&
-            a.monitoring_enabled === expectedApp.monitoring_enabled
-        );
+        const { icon_key, status_text, tooltip } =
+          inventoryAppMonitoringStatusConfig.find(
+            (a) =>
+              a.store_monitoring_status ===
+                expectedApp.store_monitoring_status &&
+              a.fake_app_detection_status ===
+                expectedApp.fake_app_detection_status &&
+              a.monitoring_enabled === expectedApp.monitoring_enabled
+          );
 
         await confirmRenderedAppData(assert, app, expectedApp.app_metadata, {
           icon_key,
-          status_text,
+          status_text: key() !== t('all') ? key : status_text,
           status_tooltip_info: tooltip,
         });
       }

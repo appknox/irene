@@ -30,6 +30,12 @@
           {{@emptyTitle}}
         </AkTypography>
       {{/if}}
+
+      {{#if @emptyDescription}}
+        <AkTypography @align='center' {{style maxWidth='600px'}}>
+          {{@emptyDescription}}
+        </AkTypography>
+      {{/if}}
     </AkStack>
 
   {{else}}

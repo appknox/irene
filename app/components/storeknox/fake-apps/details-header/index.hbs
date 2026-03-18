@@ -30,7 +30,9 @@
         <AkTypography
           @fontWeight='bold'
           data-test-storeknoxFakeAppsDetailsHeader-headerTitle
-        >{{this.headerTitle}}</AkTypography>
+        >
+          {{this.headerTitle}}
+        </AkTypography>
       </AkStack>
     </AkStack>
   {{/unless}}
@@ -110,7 +112,6 @@
           {{/if}}
         </Storeknox::ProductIcon>
       </AkStack>
-
     </AkStack>
 
     <AkStack
@@ -120,7 +121,10 @@
       {{style alignSelf='flex-end'}}
     >
       {{#if this.isFakeAppIgnored}}
-        <AkButton {{on 'click' (fn this.openIgnoreDrawer false)}}>
+        <AkButton
+          {{on 'click' (fn this.openIgnoreDrawer false)}}
+          data-test-storeknoxFakeAppsDetailsHeader-viewDetailsBtn
+        >
           {{t 'viewDetails'}}
         </AkButton>
 

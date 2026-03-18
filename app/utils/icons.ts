@@ -169,6 +169,7 @@ export const MaterialSymbolsSet = [
   'add-column-right-outline-rounded',
   'cards-sharp',
   'arrow-right-alt',
+  'history',
 ] as const;
 
 export const MdiIconsSet = [

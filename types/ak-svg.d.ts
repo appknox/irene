@@ -73,7 +73,6 @@ export enum AkSvgComponentInvocationByNames {
   InfoIndicator,
   NoPendingItems,
   WelcomeToStoreknox,
-  SoxBrandAbuseFeatureAbsence,
   SoxMalwareFeatureAbsence,
   SoxUnscannedDetailsTableEmpty,
   SoxUnscannedHistoryTableEmpty,

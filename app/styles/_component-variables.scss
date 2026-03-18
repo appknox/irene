@@ -2191,14 +2191,10 @@ body {
     --neutral-grey-200
   );
 
-  // variables for storeknox/inventory-details/archived-banner
-  --storeknox-inventory-details-archived-banner-bg-color: var(
-    --background-main
-  );
-  --storeknox-inventory-details-archived-banner-icon-color: var(--common-white);
-  --storeknox-inventory-details-archived-banner-icon-bg-color: var(
-    --error-main
-  );
+  // variables for storeknox/inventory-details/banner
+  --storeknox-inventory-details-banner-bg-color: var(--background-main);
+  --storeknox-inventory-details-banner-icon-color: var(--common-white);
+  --storeknox-inventory-details-banner-icon-bg-color: var(--error-main);
 
   // variables for storeknox/inventory-details/header/archive-drawer
   --storeknox-inventory-details-header-archive-drawer-border-color: var(
@@ -2289,7 +2285,10 @@ body {
   --storeknox-fake-apps-findings-card-background: var(
     --storeknox-fake-apps-background-color
   );
-  --storeknox-fake-apps-findings-card-ignored-text: var(--common-black);
+
+  --storeknox-fake-apps-findings-card-overall-score-color: var(
+    --storeknox-fake-app-overall-score-color
+  );
 
   // variables for page-wrapper
   --page-wrapper-background-color: var(--background-light);

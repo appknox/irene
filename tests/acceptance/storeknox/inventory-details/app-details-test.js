@@ -5,6 +5,7 @@ import {
   waitFor,
   triggerEvent,
   waitUntil,
+  currentURL,
 } from '@ember/test-helpers';
 
 import { module, test } from 'qunit';
@@ -78,6 +79,249 @@ class WindowStub extends Service {
     },
   };
 }
+/**
+ * ===============================
+ * TEST HELPERS
+ * ===============================
+ */
+
+// Checks the result info in the latest va results section of an SkApp
+const doVaResultsChecks = async (
+  assert,
+  coreProjectLatestVersion,
+  file_risk_info
+) => {
+  assert
+    .dom('[data-test-storeknoxInventoryDetails-latestVAResultsSummary]')
+    .hasText(t('summary'));
+
+  // Check VA Results Risk Summary
+  const vaResultsRiskInfo = {
+    critical: file_risk_info.risk_count_critical,
+    high: file_risk_info.risk_count_high,
+    medium: file_risk_info.risk_count_medium,
+    low: file_risk_info.risk_count_low,
+    passed: file_risk_info.risk_count_passed,
+    untested: file_risk_info.risk_count_unknown,
+  };
+
+  const vaResultsRiskInfoCategories = Object.keys(vaResultsRiskInfo);
+
+  for (const category of vaResultsRiskInfoCategories) {
+    const resultCatElement = find(
+      `[data-test-storeknoxInventoryDetails-latestVAResultsSummary='${category}']`
+    );
+
+    assert.dom(resultCatElement);
+
+    assert
+      .dom(
+        '[data-test-storeknoxInventoryDetails-latestVAResultsSummary-categoryTitle]',
+        resultCatElement
+      )
+      .hasText(t(category));
+
+    await waitUntil(() =>
+      resultCatElement?.querySelector(
+        '[data-test-storeknoxInventoryDetails-latestVAResultsSummary-categoryResultCount]'
+      )
+    );
+
+    assert
+      .dom(
+        '[data-test-storeknoxInventoryDetails-latestVAResultsSummary-categoryResultCount]',
+        resultCatElement
+      )
+      .hasText(String(vaResultsRiskInfo[category]));
+  }
+
+  // File ID
+  assert
+    .dom('[data-test-storeknoxInventoryDetails-latestVAResultsFileId]')
+    .hasText(t('fileID'));
+
+  assert
+    .dom('[data-test-storeknoxInventoryDetails-latestVAResultsFileIdLink]')
+    .hasText(coreProjectLatestVersion.id);
+
+  // Other VA Results data
+  const vaResultsData = [
+    {
+      title: t('version'),
+      value: coreProjectLatestVersion?.get('version'),
+    },
+    {
+      title: t('versionCodeTitleCase'),
+      value: coreProjectLatestVersion?.get('versionCode'),
+    },
+    {
+      title: t('storeknox.lastScannedDate'),
+      value: dayjs(coreProjectLatestVersion?.get('createdOn')).format(
+        'DD MMM YYYY'
+      ),
+    },
+  ];
+
+  vaResultsData.forEach((info) => {
+    const resultCatElement = find(
+      `[data-test-storeknoxInventoryDetails-latestVAResultsInfo='${info.title}']`
+    );
+
+    assert.dom(resultCatElement);
+
+    assert
+      .dom(
+        '[data-test-storeknoxInventoryDetails-latestVAResultsInfoTitle]',
+        resultCatElement
+      )
+      .hasText(info.title);
+
+    assert
+      .dom(
+        '[data-test-storeknoxInventoryDetails-latestVAResultsInfoValue]',
+        resultCatElement
+      )
+      .hasText(info.value);
+  });
+};
+
+// Check for monitoring results pending info
+const assertMonitoringDisabledInfo = async (assert) => {
+  const monitoringOffIllustration =
+    '[data-test-storeknoxInventoryDetails-monitoringDisabledWithNoResultsIllustration]';
+
+  await waitFor(monitoringOffIllustration);
+
+  assert.dom(monitoringOffIllustration).exists();
+
+  assert
+    .dom(
+      '[data-test-storeknoxInventoryDetails-monitoringDisabledWithNoResultsHeaderText]'
+    )
+    .hasText(t('storeknox.enableMonitoringForApp'));
+
+  assert
+    .dom(
+      '[data-test-storeknoxInventoryDetails-monitoringDisabledWithNoResultsOff]'
+    )
+    .hasText(t('storeknox.monitoringDisabledWithNoResults'));
+};
+
+const assertMonitoringPendingInfoWithMonitoringOff = async (assert) => {
+  // Check for monitoring results pending info when monitoring status is off
+  const monitoringOnIllustration =
+    '[data-test-storeknoxInventoryDetails-monitoringResultsPendingIllustration]';
+
+  await waitFor(monitoringOnIllustration);
+
+  assert.dom(monitoringOnIllustration).exists();
+
+  assert
+    .dom('[data-test-storeknoxInventoryDetails-monitoringResultsPendingText]')
+    .hasText(t('storeknox.monitoringResultsPending'));
+};
+
+const STATUS_TOGGLE =
+  '[data-test-storeknoxInventoryDetails-monitoringStatusToggle] [data-test-toggle-input]';
+
+// Creates the inventoryApp + server mocks required by every monitoring toggle test.
+// Returns { inventoryApp }.
+const setupMonitoringToggle = (
+  context,
+  {
+    turn_on,
+    sk_app_has_license,
+    is_member = false,
+    is_trial = false,
+    org_sub_licenses_remaining = 0,
+    with_expired_license = false,
+    fail = false,
+    errMessage = 'failed to update monitoring status',
+  }
+) => {
+  const turnOff = !turn_on;
+  const now = dayjs();
+
+  context.currentOrganizationMe.update(
+    is_member
+      ? { is_owner: false, is_admin: false }
+      : { is_owner: true, is_admin: true }
+  );
+
+  context.currentSkOrganizationSub.update({
+    is_trial,
+    licenses_remaining: org_sub_licenses_remaining,
+    end_date: with_expired_license
+      ? now.subtract(1, 'd').toDate()
+      : now.add(1, 'd').toDate(),
+  });
+
+  const inventoryApp = context.server.create(
+    'sk-inventory-app',
+    'withApprovedStatus',
+    {
+      monitoring_enabled: turnOff,
+      license_allocated: sk_app_has_license ? 1 : 0,
+      store_monitoring_status: turnOff
+        ? ENUMS.SK_APP_MONITORING_STATUS.INITIALIZING
+        : ENUMS.SK_APP_MONITORING_STATUS.DISABLED,
+      fake_app_detection_status: turnOff
+        ? ENUMS.SK_FAKE_APP_DETECTION_STATUS.INITIALIZING
+        : ENUMS.SK_FAKE_APP_DETECTION_STATUS.DISABLED,
+    }
+  );
+
+  context.server.get('/v2/sk_organization/:id/sk_subscription', (schema, req) =>
+    schema.skOrganizationSubs.find(req.params.id).toJSON()
+  );
+
+  context.server.put(
+    '/v2/sk_app/:id/update_monitoring_enabled_status',
+    (schema, req) => {
+      if (fail) {
+        return new Response(501, {}, { detail: errMessage });
+      }
+
+      const { monitoring_enabled } = JSON.parse(req.requestBody);
+
+      const app = schema.skInventoryApps.find(req.params.id).update({
+        monitoring_enabled,
+        store_monitoring_status: turnOff
+          ? ENUMS.SK_APP_MONITORING_STATUS.DISABLED
+          : ENUMS.SK_APP_MONITORING_STATUS.INITIALIZING,
+        fake_app_detection_status: turnOff
+          ? ENUMS.SK_FAKE_APP_DETECTION_STATUS.DISABLED
+          : ENUMS.SK_FAKE_APP_DETECTION_STATUS.INITIALIZING,
+      });
+
+      return {
+        ...app.toJSON(),
+        app_metadata: app.app_metadata,
+        monitoring_enabled,
+      };
+    }
+  );
+
+  return { inventoryApp };
+};
+
+// Asserts the toggle is OFF and the "monitoring disabled" empty state is shown.
+const assertMonitoringToggleOff = async (assert) => {
+  assert.dom(STATUS_TOGGLE).isNotChecked();
+  await assertMonitoringDisabledInfo(assert);
+};
+
+// Asserts the toggle is ON and the "results pending" empty state is shown.
+const assertMonitoringToggleOn = async (assert) => {
+  assert.dom(STATUS_TOGGLE).isChecked();
+  await assertMonitoringPendingInfoWithMonitoringOff(assert);
+};
+
+/**
+ * ===============================
+ * TEST STARTING POINT
+ * ===============================
+ */
 
 module(
   'Acceptance | storeknox/inventory-details/app-details',
@@ -148,10 +392,11 @@ module(
         );
 
       // Creates an archived app
-      const createArchivedApp = () => {
+      const createArchivedApp = (propertyOverrides = {}) => {
         return this.server.create('sk-inventory-app', 'withArchivedStatus', {
           archived_on: dayjs().subtract(6, 'months').toDate(),
           unarchive_available_on: dayjs().subtract(5, 'months').toDate(),
+          ...propertyOverrides,
         });
       };
 
@@ -165,156 +410,6 @@ module(
         file_risk_info,
       });
     });
-
-    /**
-     * ===============================
-     * TEST HELPERS
-     * ===============================
-     */
-
-    // Checks the result info in the latest va results section of an SkApp
-    const doVaResultsChecks = async (
-      assert,
-      coreProjectLatestVersion,
-      file_risk_info
-    ) => {
-      assert
-        .dom('[data-test-storeknoxInventoryDetails-latestVAResultsSummary]')
-        .hasText(t('summary'));
-
-      // Check VA Results Risk Summary
-      const vaResultsRiskInfo = {
-        critical: file_risk_info.risk_count_critical,
-        high: file_risk_info.risk_count_high,
-        medium: file_risk_info.risk_count_medium,
-        low: file_risk_info.risk_count_low,
-        passed: file_risk_info.risk_count_passed,
-        untested: file_risk_info.risk_count_unknown,
-      };
-
-      const vaResultsRiskInfoCategories = Object.keys(vaResultsRiskInfo);
-
-      for (const category of vaResultsRiskInfoCategories) {
-        const resultCatElement = find(
-          `[data-test-storeknoxInventoryDetails-latestVAResultsSummary='${category}']`
-        );
-
-        assert.dom(resultCatElement);
-
-        assert
-          .dom(
-            '[data-test-storeknoxInventoryDetails-latestVAResultsSummary-categoryTitle]',
-            resultCatElement
-          )
-          .hasText(t(category));
-
-        await waitUntil(() =>
-          resultCatElement?.querySelector(
-            '[data-test-storeknoxInventoryDetails-latestVAResultsSummary-categoryResultCount]'
-          )
-        );
-
-        assert
-          .dom(
-            '[data-test-storeknoxInventoryDetails-latestVAResultsSummary-categoryResultCount]',
-            resultCatElement
-          )
-          .hasText(String(vaResultsRiskInfo[category]));
-      }
-
-      // File ID
-      assert
-        .dom('[data-test-storeknoxInventoryDetails-latestVAResultsFileId]')
-        .hasText(t('fileID'));
-
-      assert
-        .dom('[data-test-storeknoxInventoryDetails-latestVAResultsFileIdLink]')
-        .hasText(coreProjectLatestVersion.id);
-
-      // Other VA Results data
-      const vaResultsData = [
-        {
-          title: t('version'),
-          value: coreProjectLatestVersion?.get('version'),
-        },
-        {
-          title: t('versionCodeTitleCase'),
-          value: coreProjectLatestVersion?.get('versionCode'),
-        },
-        {
-          title: t('storeknox.lastScannedDate'),
-          value: dayjs(coreProjectLatestVersion?.get('createdOn')).format(
-            'DD MMM YYYY'
-          ),
-        },
-      ];
-
-      vaResultsData.forEach((info) => {
-        const resultCatElement = find(
-          `[data-test-storeknoxInventoryDetails-latestVAResultsInfo='${info.title}']`
-        );
-
-        assert.dom(resultCatElement);
-
-        assert
-          .dom(
-            '[data-test-storeknoxInventoryDetails-latestVAResultsInfoTitle]',
-            resultCatElement
-          )
-          .hasText(info.title);
-
-        assert
-          .dom(
-            '[data-test-storeknoxInventoryDetails-latestVAResultsInfoValue]',
-            resultCatElement
-          )
-          .hasText(info.value);
-      });
-    };
-
-    // Check for monitoring results pending info
-    const assertMonitoringPendingInfo = async (assert) => {
-      const monitoringOffIllustration =
-        '[data-test-storeknoxInventoryDetails-monitoringResultsPendingWithMonitoringOffIllustration]';
-
-      await waitFor(monitoringOffIllustration);
-
-      assert.dom(monitoringOffIllustration).exists();
-
-      assert
-        .dom(
-          '[data-test-storeknoxInventoryDetails-monitoringResultsPendingOffHeaderText]'
-        )
-        .hasText(t('storeknox.enableMonitoringForApp'));
-
-      assert
-        .dom(
-          '[data-test-storeknoxInventoryDetails-monitoringResultsPendingOff]'
-        )
-        .hasText(t('storeknox.monitoringResultsPendingWithMonitoringOff'));
-    };
-
-    const assertMonitoringPendingInfoWithMonitoringOff = async (assert) => {
-      // Check for monitoring results pending info when monitoring status is off
-      const monitoringOnIllustration =
-        '[data-test-storeknoxInventoryDetails-monitoringResultsPendingIllustration]';
-
-      await waitFor(monitoringOnIllustration);
-
-      assert.dom(monitoringOnIllustration).exists();
-
-      assert
-        .dom(
-          '[data-test-storeknoxInventoryDetails-monitoringResultsPendingText]'
-        )
-        .hasText(t('storeknox.monitoringResultsPending'));
-    };
-
-    /**
-     * ===============================
-     * TEST STARTING POINT
-     * ===============================
-     */
 
     /**
      * ===============================
@@ -391,31 +486,6 @@ module(
 
         assert.dom(storeLogoSelector).exists();
 
-        await click(storeLogoSelector);
-
-        assert
-          .dom('[data-test-storeknox-productInfoCaptionText]')
-          .hasText(t('infoCapitalCase'));
-
-        const productTitle = inventoryAppRecord.isAndroid
-          ? t('storeknox.playStore')
-          : t('storeknox.appStore');
-
-        assert
-          .dom('[data-test-storeknox-productInfo-appIsPartOfText]')
-          .containsText(t('storeknox.appIsPartOf'))
-          .containsText(productTitle);
-
-        assert
-          .dom('[data-test-storeknox-productInfo-appStoreLink]')
-          .hasAttribute('href', inventoryAppRecord.appMetadata.url);
-
-        assert
-          .dom('[data-test-storeknox-productInfo-appStoreLinkBtn]')
-          .hasText(t('storeknox.checkOn') + ` ${productTitle}`);
-
-        await click(storeLogoSelector);
-
         // Page Info tag
 
         const licenseAllocatedIcon =
@@ -485,307 +555,273 @@ module(
     );
 
     /**
-     * ===============================
-     * Toggles monitoring status
-     * ===============================
+     * =============================================
+     * MEMBERS CANNOT TOGGLE
+     * =============================================
      */
     test.each(
-      'it toggles monitoring status',
-      [
-        // Turn toggle off. App with license.
-        // NOTE: Turn off is only possible if sk_app has a license already or if app has monitoring on by default.
-
-        // Turn toggle off. App with license.
-        { turn_on: false, sk_app_has_license: true },
-        { turn_on: false, sk_app_has_license: true, fail: true },
-        { turn_on: false, sk_app_has_license: true, is_trial: true },
-
-        // Turn toggle off. App without license.
-        { turn_on: false, sk_app_has_license: false, fail: true },
-        { turn_on: false, sk_app_has_license: false, fail: false },
-        { turn_on: false, sk_app_has_license: false, is_trial: true },
-
-        // Turn toggle on. App with expired subscription
-        {
-          turn_on: true,
-          sk_app_has_license: false,
-          with_expired_license: true,
-        },
-
-        // Turn toggle off. App with expired subscription
-        {
-          turn_on: false,
-          sk_app_has_license: true,
-          with_expired_license: true,
-        },
-
-        // Turn toggle on. App with license
-        { turn_on: true, sk_app_has_license: true },
-        { turn_on: true, sk_app_has_license: true, fail: true },
-
-        // Turn toggle on
-        // App is without license but org has available licenses
-        {
-          turn_on: true,
-          sk_app_has_license: false,
-          org_sub_licenses_remaining: 1,
-        },
-
-        // Turn toggle on
-        // App without license and org is trial
-        // Should turn on whether org has licences remaining or not
-        { turn_on: true, sk_app_has_license: false, is_trial: true },
-
-        // For non owners or admins
-        // Can not toggle switch whether org is trial or not. Or whether license is available or not
-        { turn_on: true, sk_app_has_license: true, is_member: true },
-        { turn_on: true, sk_app_has_license: false, is_member: true },
-
-        {
-          turn_on: false,
-          sk_app_has_license: true,
-          is_member: true,
-          is_trial: true,
-        },
-
-        {
-          turn_on: true,
-          sk_app_has_license: false,
-          is_member: true,
-          is_trial: true,
-        },
-      ],
-      async function (
-        assert,
-        {
+      'members cannot toggle monitoring status',
+      [{ turn_on: true }, { turn_on: false }],
+      async function (assert, { turn_on }) {
+        const { inventoryApp } = setupMonitoringToggle(this, {
           turn_on,
-          sk_app_has_license,
-          is_member,
-          is_trial,
-          org_sub_licenses_remaining = 0,
-          with_expired_license = false,
-          fail = false,
-        }
-      ) {
-        const turnOff = !turn_on;
-        const currDate = dayjs(new Date());
-        const availableLicenses = org_sub_licenses_remaining;
-        const noLicensesAvailable = availableLicenses === 0;
-        const errMessage = 'failed to update monitoring status';
-
-        // Models
-        this.currentOrganizationMe.update(
-          is_member
-            ? {
-                is_owner: false,
-                is_admin: false,
-              }
-            : { is_owner: true, is_admin: true }
-        );
-
-        this.currentSkOrganizationSub.update({
-          is_trial,
-          licenses_remaining: org_sub_licenses_remaining,
-          end_date: with_expired_license
-            ? currDate.subtract(1, 'd').toDate()
-            : currDate.add(1, 'd').toDate(),
+          sk_app_has_license: true,
+          is_member: true,
         });
-
-        const inventoryApp = this.server.create(
-          'sk-inventory-app',
-          'withApprovedStatus',
-          {
-            monitoring_enabled: turnOff,
-            license_allocated: sk_app_has_license ? 1 : 0,
-
-            // Required to test the pending state illustration and text
-            store_monitoring_status: turnOff
-              ? ENUMS.SK_APP_MONITORING_STATUS.DISABLED
-              : ENUMS.SK_APP_MONITORING_STATUS.INITIALIZING,
-          }
-        );
-
-        // Server mocks
-        this.server.get(
-          '/v2/sk_organization/:id/sk_subscription',
-          (schema, req) => {
-            return schema.skOrganizationSubs.find(req.params.id).toJSON();
-          }
-        );
-
-        this.server.put(
-          '/v2/sk_app/:id/update_monitoring_enabled_status',
-          (schema, req) => {
-            // Failure
-            if (fail) {
-              return new Response(501, {}, { detail: errMessage });
-            }
-
-            // Happy path
-            const { monitoring_enabled } = JSON.parse(req.requestBody);
-
-            const app = schema.skInventoryApps.find(req.params.id).update({
-              monitoring_enabled,
-            });
-
-            if (turn_on) {
-              assert.true(monitoring_enabled);
-            } else {
-              assert.false(monitoring_enabled);
-            }
-
-            return {
-              ...app.toJSON(),
-              app_metadata: app.app_metadata,
-              monitoring_enabled,
-            };
-          }
-        );
 
         await visit(
           `/dashboard/storeknox/inventory-details/${inventoryApp.id}`
         );
 
+        if (turn_on) {
+          assert.dom(STATUS_TOGGLE).isNotChecked().isDisabled();
+        } else {
+          assert.dom(STATUS_TOGGLE).isChecked().isDisabled();
+        }
+
+        const tooltip = find(
+          '[data-test-storeknoxInventoryDetails-monitoringStatusToggleTooltip]'
+        );
+
+        await triggerEvent(tooltip, 'mouseenter');
+
         assert
-          .dom('[data-test-storeknoxInventoryDetails-breadcrumbContainer]')
+          .dom('[data-test-ak-tooltip-content]')
+          .containsText(t('storeknox.cannotPerformStatusToggleText'));
+
+        await triggerEvent(tooltip, 'mouseleave');
+      }
+    );
+
+    /**
+     * =============================================
+     * TOGGLE SUCCESS (with license — no drawer)
+     * =============================================
+     */
+    test.each(
+      'it toggles monitoring status successfully when app has a license',
+      [{ turn_on: true }, { turn_on: false }],
+      async function (assert, { turn_on }) {
+        const { inventoryApp } = setupMonitoringToggle(this, {
+          turn_on,
+          sk_app_has_license: true,
+        });
+
+        await visit(
+          `/dashboard/storeknox/inventory-details/${inventoryApp.id}`
+        );
+
+        // Assert initial state
+        if (turn_on) {
+          await assertMonitoringToggleOff(assert);
+        } else {
+          await assertMonitoringToggleOn(assert);
+        }
+
+        await click(STATUS_TOGGLE);
+
+        // Assert inverted state
+        if (turn_on) {
+          await assertMonitoringToggleOn(assert);
+        } else {
+          await assertMonitoringToggleOff(assert);
+        }
+      }
+    );
+
+    /**
+     * =============================================
+     * TOGGLE FAILURE — shows error notification
+     * =============================================
+     */
+    test.each(
+      'it retains monitoring state and shows an error notification when toggle fails',
+      [
+        { turn_on: true, sk_app_has_license: true },
+        { turn_on: false, sk_app_has_license: true },
+      ],
+      async function (assert, { turn_on, sk_app_has_license }) {
+        const errMessage = 'failed to update monitoring status';
+
+        const { inventoryApp } = setupMonitoringToggle(this, {
+          turn_on,
+          sk_app_has_license,
+          fail: true,
+          errMessage,
+        });
+
+        await visit(
+          `/dashboard/storeknox/inventory-details/${inventoryApp.id}`
+        );
+
+        await click(STATUS_TOGGLE);
+
+        // State must be unchanged
+        if (turn_on) {
+          await assertMonitoringToggleOff(assert);
+        } else {
+          await assertMonitoringToggleOn(assert);
+        }
+
+        const notifService = this.owner.lookup('service:notifications');
+        assert.strictEqual(notifService.errorMsg, errMessage);
+      }
+    );
+
+    /**
+     * =============================================
+     * LICENSE ALLOCATION DRAWER
+     * Shown only when: turn_on + no license + not trial + sub not expired
+     * =============================================
+     */
+    test.each(
+      'it shows the license allocation drawer when turning on without a license',
+      [
+        // Has available licenses → confirm allocates one
+        { org_sub_licenses_remaining: 1 },
+        // No licenses available → confirm redirects to contact support
+        { org_sub_licenses_remaining: 0 },
+      ],
+      async function (assert, { org_sub_licenses_remaining }) {
+        const availableLicenses = org_sub_licenses_remaining;
+        const noLicensesAvailable = availableLicenses === 0;
+
+        const { inventoryApp } = setupMonitoringToggle(this, {
+          turn_on: true,
+          sk_app_has_license: false,
+          is_trial: false,
+          org_sub_licenses_remaining,
+        });
+
+        await visit(
+          `/dashboard/storeknox/inventory-details/${inventoryApp.id}`
+        );
+        await assertMonitoringToggleOff(assert);
+
+        await click(STATUS_TOGGLE);
+
+        assert
+          .dom('[data-test-storeknoxInventoryDetails-toggleMonitoringDrawer]')
           .exists();
 
-        const statusToggleSelector =
-          '[data-test-storeknoxInventoryDetails-monitoringStatusToggle] [data-test-toggle-input]';
+        assert
+          .dom(
+            '[data-test-storeknoxInventoryDetails-toggleMonitoringDrawerHeading]'
+          )
+          .hasText(t('confirmation'));
 
-        // Toggling cannot be performed by members
-        if (is_member) {
-          if (turn_on) {
-            assert.dom(statusToggleSelector).isNotChecked().isDisabled();
-          } else {
-            assert.dom(statusToggleSelector).isChecked().isDisabled();
-          }
+        const { message, confirmButtonText, cancelButtonText } =
+          noLicensesAvailable
+            ? {
+                message: t('storeknox.noLicensesAvailable', {
+                  htmlSafe: true,
+                  availableLicenses,
+                }),
+                confirmButtonText: t('contactSupport'),
+                cancelButtonText: t('close'),
+              }
+            : {
+                message: t('storeknox.licenseAllocationNote', {
+                  htmlSafe: true,
+                  availableLicenses,
+                }),
+                confirmButtonText: `${t('yes')}, ${t('turnOn')}`,
+                cancelButtonText: t('cancel'),
+              };
 
-          const monitoringStatusToggleTooltip = find(
-            '[data-test-storeknoxInventoryDetails-monitoringStatusToggleTooltip]'
-          );
+        compareInnerHTMLWithIntlTranslation(assert, {
+          selector:
+            '[data-test-storeknoxInventoryDetails-toggleMonitoringDrawerMessage]',
+          message,
+          doIncludesCheck: true,
+        });
 
-          await triggerEvent(monitoringStatusToggleTooltip, 'mouseenter');
+        compareInnerHTMLWithIntlTranslation(assert, {
+          selector:
+            '[data-test-storeknoxInventoryDetails-toggleMonitoringDrawerConfirmBtn]',
+          message: confirmButtonText,
+          doIncludesCheck: true,
+        });
 
-          const tooltipContentElement = find('[data-test-ak-tooltip-content]');
+        compareInnerHTMLWithIntlTranslation(assert, {
+          selector:
+            '[data-test-storeknoxInventoryDetails-toggleMonitoringDrawerCancelBtn]',
+          message: cancelButtonText,
+          doIncludesCheck: true,
+        });
 
-          assert
-            .dom(tooltipContentElement)
-            .containsText(t('storeknox.cannotPerformStatusToggleText'));
-
-          await triggerEvent(monitoringStatusToggleTooltip, 'mouseleave');
-
-          return;
-        }
-
-        // For non member roles
-        if (turn_on) {
-          assert.dom(statusToggleSelector).isNotChecked();
-          await assertMonitoringPendingInfo(assert);
-        } else {
-          assert.dom(statusToggleSelector).isChecked();
-          await assertMonitoringPendingInfoWithMonitoringOff(assert);
-        }
-
-        await click(statusToggleSelector);
-
-        // Show Drawer to confirm toggle action
-        // Toggling happens on drawer if app does not have license and you're trying to turn it on
-        // Should not be shown if trial sk organization because they can toggle normally whether with license or not
-        // Drawer should also not show if org sub is expired
-        if (
-          !sk_app_has_license &&
-          turn_on &&
-          !is_trial &&
-          !with_expired_license
-        ) {
-          assert
-            .dom('[data-test-storeknoxInventoryDetails-toggleMonitoringDrawer]')
-            .exists();
-
-          assert
-            .dom(
-              '[data-test-storeknoxInventoryDetails-toggleMonitoringDrawerHeading]'
-            )
-            .hasText(t('confirmation'));
-
-          // Drawer messages
-          const { message, confirmButtonText, cancelButtonText } =
-            noLicensesAvailable
-              ? {
-                  message: t('storeknox.noLicensesAvailable', {
-                    htmlSafe: true,
-                    availableLicenses,
-                  }),
-
-                  confirmButtonText: t('contactSupport'),
-                  cancelButtonText: t('close'),
-                }
-              : {
-                  message: t('storeknox.licenseAllocationNote', {
-                    htmlSafe: true,
-                    availableLicenses,
-                  }),
-
-                  confirmButtonText: `${t('yes')}, ${t('turnOn')}`,
-                  cancelButtonText: t('cancel'),
-                };
-
-          // Check drawer messages
-          compareInnerHTMLWithIntlTranslation(assert, {
-            selector:
-              '[data-test-storeknoxInventoryDetails-toggleMonitoringDrawerMessage]',
-            message,
-            doIncludesCheck: true,
-          });
-
-          compareInnerHTMLWithIntlTranslation(assert, {
-            selector:
-              '[data-test-storeknoxInventoryDetails-toggleMonitoringDrawerConfirmBtn]',
-            message: confirmButtonText,
-            doIncludesCheck: true,
-          });
-
-          compareInnerHTMLWithIntlTranslation(assert, {
-            selector:
-              '[data-test-storeknoxInventoryDetails-toggleMonitoringDrawerCancelBtn]',
-            message: cancelButtonText,
-            doIncludesCheck: true,
-          });
-
+        // Confirm — in the "has licenses" case, toggle should complete
+        if (!noLicensesAvailable) {
           await click(
             '[data-test-storeknoxInventoryDetails-toggleMonitoringDrawerConfirmBtn]'
           );
+          await assertMonitoringToggleOn(assert);
         }
+      }
+    );
 
-        if (!fail) {
-          // Toggle states should be inverted
-          if (turn_on) {
-            assert.dom(statusToggleSelector).isChecked();
+    /**
+     * =============================================
+     * TRIAL ORG — no drawer, toggles freely
+     * =============================================
+     */
+    test.each(
+      'trial org can toggle monitoring without the license drawer',
+      [{ turn_on: true }, { turn_on: false }],
+      async function (assert, { turn_on }) {
+        const { inventoryApp } = setupMonitoringToggle(this, {
+          turn_on,
+          sk_app_has_license: false,
+          is_trial: true,
+        });
 
-            await assertMonitoringPendingInfoWithMonitoringOff(assert);
-          } else {
-            assert.dom(statusToggleSelector).isNotChecked();
+        await visit(
+          `/dashboard/storeknox/inventory-details/${inventoryApp.id}`
+        );
 
-            await assertMonitoringPendingInfo(assert);
-          }
+        await click(STATUS_TOGGLE);
+
+        // Drawer must not appear
+        assert
+          .dom('[data-test-storeknoxInventoryDetails-toggleMonitoringDrawer]')
+          .doesNotExist();
+
+        // Toggle should have flipped
+        if (turn_on) {
+          await assertMonitoringToggleOn(assert);
         } else {
-          // Toggle states should be retained
-          if (turn_on) {
-            assert.dom(statusToggleSelector).isNotChecked();
-
-            await assertMonitoringPendingInfo(assert);
-          } else {
-            assert.dom(statusToggleSelector).isChecked();
-
-            await assertMonitoringPendingInfoWithMonitoringOff(assert);
-          }
-
-          // Check notification message
-          const notifService = this.owner.lookup('service:notifications');
-
-          assert.strictEqual(notifService.errorMsg, errMessage);
+          await assertMonitoringToggleOff(assert);
         }
+      }
+    );
+
+    /**
+     * =============================================
+     * EXPIRED SUBSCRIPTION — no drawer regardless of license state
+     * =============================================
+     */
+    test.each(
+      'expired subscription skips the license drawer',
+      [
+        { turn_on: true, sk_app_has_license: false },
+        { turn_on: false, sk_app_has_license: true },
+      ],
+      async function (assert, { turn_on, sk_app_has_license }) {
+        const { inventoryApp } = setupMonitoringToggle(this, {
+          turn_on,
+          sk_app_has_license,
+          with_expired_license: true,
+        });
+
+        await visit(
+          `/dashboard/storeknox/inventory-details/${inventoryApp.id}`
+        );
+
+        await click(STATUS_TOGGLE);
+
+        assert
+          .dom('[data-test-storeknoxInventoryDetails-toggleMonitoringDrawer]')
+          .doesNotExist();
       }
     );
 
@@ -1322,9 +1358,7 @@ module(
         // SCENARIO 8: Disabled upload button if app is archived
         if (isArchived) {
           // Assert the archived banner is shown
-          assert
-            .dom('[data-test-storeknoxInventory-archivedApps-banner]')
-            .exists();
+          assert.dom('[data-test-storeknoxInventoryDetails-banner]').exists();
 
           assert
             .dom('[data-test-storeknoxInventoryDetails-initiateUploadBtn]')
@@ -1471,16 +1505,32 @@ module(
 
       if (action.featureInProgress) {
         assert.dom(actionElement).hasClass(/feature-in-progress/);
-      } else if (action.needsAction) {
-        assert
-          .dom(actionElement)
-          .doesNotHaveClass(/feature-in-progress/)
-          .hasClass(/needs-action/);
       } else {
-        assert
-          .dom(actionElement)
-          .doesNotHaveClass(/feature-in-progress/)
-          .doesNotHaveClass(/needs-action/);
+        assert.dom(actionElement).doesNotHaveClass(/feature-in-progress/);
+      }
+
+      if (action.showDisabledState) {
+        assert.dom(actionElement).hasClass(/disabled-state/);
+      } else {
+        assert.dom(actionElement).doesNotHaveClass(/disabled-state/);
+      }
+
+      if (action.needsAction) {
+        assert.dom(actionElement).hasClass(/needs-action/);
+      } else {
+        assert.dom(actionElement).doesNotHaveClass(/needs-action/);
+      }
+
+      if (action.statusIsInitializing) {
+        assert.dom(actionElement).hasClass(/status-initializing/);
+      } else {
+        assert.dom(actionElement).doesNotHaveClass(/status-initializing/);
+      }
+
+      if (action.featureInProgress) {
+        assert.dom(actionElement).hasClass(/feature-in-progress/);
+      } else {
+        assert.dom(actionElement).doesNotHaveClass(/feature-in-progress/);
       }
 
       assert
@@ -1488,12 +1538,7 @@ module(
           '[data-test-storeknoxInventoryDetails-actionBtn-leftIcon]',
           actionElement
         )
-        .hasAttribute(
-          'icon',
-          action.featureInProgress
-            ? 'material-symbols:auto-fix-high'
-            : 'material-symbols:report'
-        );
+        .hasAttribute('icon', 'material-symbols:info');
     };
 
     /**
@@ -1506,6 +1551,7 @@ module(
       ['malware-detected', 'unscanned-version', 'brand-abuse'].reduce(
         (opt, actionRoute) =>
           opt.concat([
+            // Monitoring Statuses
             {
               store_monitoring_status:
                 ENUMS.SK_APP_MONITORING_STATUS.ACTION_NEEDED,
@@ -1516,15 +1562,53 @@ module(
                 ENUMS.SK_APP_MONITORING_STATUS.NO_ACTION_NEEDED,
               actionRoute,
             },
+            {
+              store_monitoring_status:
+                ENUMS.SK_APP_MONITORING_STATUS.INITIALIZING,
+              actionRoute,
+            },
+            {
+              store_monitoring_status: ENUMS.SK_APP_MONITORING_STATUS.DISABLED,
+              actionRoute,
+            },
+
+            // Fake App Detection Statuses
+            {
+              fake_app_detection_status:
+                ENUMS.SK_FAKE_APP_DETECTION_STATUS.INITIALIZING,
+              actionRoute,
+            },
+            {
+              fake_app_detection_status:
+                ENUMS.SK_FAKE_APP_DETECTION_STATUS.DISABLED,
+              actionRoute,
+            },
+            {
+              fake_app_detection_status:
+                ENUMS.SK_FAKE_APP_DETECTION_STATUS.HAS_RESULTS,
+              actionRoute,
+            },
+            {
+              fake_app_detection_status:
+                ENUMS.SK_FAKE_APP_DETECTION_STATUS.NO_RESULTS,
+              actionRoute,
+            },
           ]),
         []
       ),
-      async function (assert, { store_monitoring_status, actionRoute }) {
+      async function (
+        assert,
+        { store_monitoring_status, actionRoute, fake_app_detection_status }
+      ) {
         // Models
         const inventoryApp = this.server.create(
           'sk-inventory-app',
           'withApprovedStatus',
-          { store_monitoring_status }
+          {
+            monitoring_enabled: true,
+            store_monitoring_status,
+            fake_app_detection_status,
+          }
         );
 
         const inventoryAppRecord = this.normalizeSKInventoryApp(inventoryApp);
@@ -1534,47 +1618,33 @@ module(
           `/dashboard/storeknox/inventory-details/${inventoryAppRecord.id}`
         );
 
-        // Last monitored date
-        assert
-          .dom('[data-test-storeknoxInventoryDetails-lastMonitoredDateIcon]')
-          .exists();
-
-        assert
-          .dom('[data-test-storeknoxInventoryDetails-lastMonitoredDate]')
-          .hasText(
-            dayjs(inventoryAppRecord.get('lastMonitoredOn')).format(
-              'MMM DD, YYYY'
-            )
-          );
-
-        // Check for needs action tooltip
-        const tooltipContentSelector = '[data-test-ak-tooltip-content]';
-
-        const lastMonitoredDateTooltipElement = find(
-          '[data-test-storeknoxInventoryDetails-lastMonitoredDateTooltip]'
-        );
-
-        await triggerEvent(lastMonitoredDateTooltipElement, 'mouseenter');
-
-        assert
-          .dom(tooltipContentSelector)
-          .containsText(t('storeknox.lastMonitoredDate'));
-
-        await triggerEvent(lastMonitoredDateTooltipElement, 'mouseleave');
-
         // Current Actions list
         const actionsList = [
           {
             id: 'unscanned-version',
             label: t('storeknox.unscannedVersion'),
-            needsAction:
-              inventoryAppRecord.storeMonitoringStatus ===
-              ENUMS.SK_APP_MONITORING_STATUS.ACTION_NEEDED,
+            hideAction: false,
+            needsAction: inventoryAppRecord.storeMonitoringStatusIsActionNeeded,
+            showDisabledState: !inventoryAppRecord.monitoringEnabled,
+            disableActionButton:
+              inventoryAppRecord.storeMonitoringPendingOrDisabled,
+
+            statusIsInitializing:
+              inventoryAppRecord.storeMonitoringStatusIsPending,
           },
           {
             id: 'brand-abuse',
-            label: t('storeknox.brandAbuse'),
-            featureInProgress: true,
+            label: t('storeknox.fakeAppsTitle'),
+            hideAction: false,
+            models: [inventoryAppRecord.id],
+            needsAction: inventoryAppRecord.fakeAppDetectionHasResults,
+            showDisabledState: !inventoryAppRecord.monitoringEnabled,
+
+            disableActionButton:
+              inventoryAppRecord.fakeAppDetectionIsInitializing,
+
+            statusIsInitializing:
+              inventoryAppRecord.fakeAppDetectionIsInitializing,
           },
           {
             id: 'malware-detected',
@@ -1585,7 +1655,8 @@ module(
 
         // No. of items requiring action
         const needsActionCount = actionsList.reduce(
-          (count, action) => (action.needsAction ? count + 1 : count),
+          (count, action) =>
+            action.needsAction && !action.showDisabledState ? count + 1 : count,
           0
         );
 
@@ -1597,7 +1668,7 @@ module(
         assert
           .dom('[data-test-storeknoxInventoryDetails-actionListHeaderText]')
           .containsText(t('storeknox.actionNeeded'))
-          .containsText(needsActionCount);
+          .containsText(needsActionCount ? String(needsActionCount) : '');
 
         actionsList.forEach((action) => {
           const actionElement = find(
@@ -1606,35 +1677,58 @@ module(
 
           assertActionBtnFeatures(assert, action, actionElement);
 
-          assert
-            .dom(
-              '[data-test-storeknoxInventoryDetails-actionBtn-rightIcon]',
-              actionElement
-            )
-            .exists();
+          if (action.statusIsInitializing && !action.showDisabledState) {
+            assert
+              .dom(
+                '[data-test-storeknoxInventoryDetails-actionBtn-rightIconLoader]',
+                actionElement
+              )
+              .exists();
+          } else {
+            assert
+              .dom(
+                '[data-test-storeknoxInventoryDetails-actionBtn-rightIcon]',
+                actionElement
+              )
+              .hasAttribute('icon', 'material-symbols:arrow-outward');
+          }
         });
 
         // Check if the respective page info tag have the same status as in the actions list
         const actionBtnToClick = actionsList.find((a) => a.id === actionRoute);
+        const isBrandAbuseActionBtn = actionBtnToClick.id === 'brand-abuse';
 
-        await click(
-          `[data-test-storeknoxInventoryDetails-actionBtn='${actionBtnToClick.id}']`
-        );
+        const isMalwareDetectedActionBtn =
+          actionBtnToClick.id === 'malware-detected';
 
-        const actionBtnElement = find(
-          '[data-test-storeknoxInventoryDetails-pageInfoTag]'
-        );
+        const canVisitMalwareDetectedPage =
+          !inventoryAppRecord.appMonitoringIsInDisabledState;
 
-        assert.dom(actionBtnElement).isDisabled();
+        if (
+          (!isBrandAbuseActionBtn && !actionBtnToClick.disableActionButton) ||
+          (isMalwareDetectedActionBtn && canVisitMalwareDetectedPage)
+        ) {
+          await click(
+            `[data-test-storeknoxInventoryDetails-actionBtn='${actionBtnToClick.id}']`
+          );
 
-        assertActionBtnFeatures(assert, actionBtnToClick, actionBtnElement);
+          assert.true(currentURL().includes(actionBtnToClick.id));
 
-        assert
-          .dom(
-            '[data-test-storeknoxInventoryDetails-actionBtn-rightIcon]',
-            actionBtnElement
-          )
-          .doesNotExist();
+          const actionBtnElement = find(
+            '[data-test-storeknoxInventoryDetails-pageInfoTag]'
+          );
+
+          assert.dom(actionBtnElement).isDisabled();
+
+          assertActionBtnFeatures(assert, actionBtnToClick, actionBtnElement);
+
+          assert
+            .dom(
+              '[data-test-storeknoxInventoryDetails-actionBtn-rightIcon]',
+              actionBtnElement
+            )
+            .doesNotExist();
+        }
       }
     );
 
@@ -1650,17 +1744,15 @@ module(
 
       await visit(`/dashboard/storeknox/inventory-details/${archivedApp.id}`);
 
-      assert.dom('[data-test-storeknoxInventory-archivedApps-banner]').exists();
+      assert.dom('[data-test-storeknoxInventoryDetails-banner]').exists();
 
-      assert
-        .dom('[data-test-storeknoxInventory-archivedApps-bannerIcon]')
-        .exists();
+      assert.dom('[data-test-storeknoxInventoryDetails-bannerIcon]').exists();
 
       const formatDate = (date) => dayjs(date).format('MMM DD, YYYY');
 
       compareInnerHTMLWithIntlTranslation(assert, {
-        selector: '[data-test-storeknoxInventory-archivedApps-bannerText]',
-        message: t('storeknox.archivedBanner', {
+        selector: '[data-test-storeknoxInventoryDetails-bannerText]',
+        message: t('storeknox.archivedBannerMessage', {
           archivedDate: formatDate(archivedApp.archived_on),
           unarchiveDate: formatDate(archivedApp.unarchive_available_on),
         }),
@@ -1677,8 +1769,10 @@ module(
       [{ doArchiveApp: false }, { doArchiveApp: true }],
       async function (assert, { doArchiveApp }) {
         const archivedApp = doArchiveApp
-          ? this.server.create('sk-inventory-app', 'withApprovedStatus')
-          : this.createArchivedApp();
+          ? this.server.create('sk-inventory-app', 'withApprovedStatus', {
+              monitoring_enabled: true,
+            })
+          : this.createArchivedApp({ monitoring_enabled: true });
 
         // Server Mocks
         this.server.put('/v2/sk_app/:id/update_app_status', (schema, req) => {
@@ -1703,7 +1797,7 @@ module(
 
         // Archive App Banner
         const archiveAppBannerSelector =
-          '[data-test-storeknoxInventory-archivedApps-banner]';
+          '[data-test-storeknoxInventoryDetails-banner]';
 
         if (doArchiveApp) {
           assert.dom(archiveAppBannerSelector).doesNotExist();
@@ -1835,7 +1929,7 @@ module(
       await visit(`/dashboard/storeknox/inventory-details/${archivedApp.id}`);
 
       // Archive App Banner
-      assert.dom('[data-test-storeknoxInventory-archivedApps-banner]').exists();
+      assert.dom('[data-test-storeknoxInventoryDetails-banner]').exists();
 
       assert
         .dom('[data-test-storeknoxInventoryDetails-archiveButton]')

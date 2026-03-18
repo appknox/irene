@@ -119,7 +119,7 @@ export default class StoreknoxInventoryDetailsHeaderComponent extends Component<
         id: 'unscanned-version',
         disabled: false,
         label: this.intl.t('storeknox.unscannedVersion'),
-        needsAction: this.skInventoryApp?.containsUnscannedVersion,
+        needsAction: this.skInventoryApp?.storeMonitoringStatusIsActionNeeded,
         route: 'authenticated.storeknox.inventory-details.unscanned-version',
         models: [skInventoryAppId],
       },

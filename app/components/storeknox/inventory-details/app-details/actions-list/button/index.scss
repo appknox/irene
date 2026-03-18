@@ -27,52 +27,8 @@
       );
   }
 
-  &.archived:not(.feature-in-progress) {
-    color: var(
-      --storeknox-inventory-details-app-details-action-button-archived-color
-    ) !important;
-
-    border-color: var(
-      --storeknox-inventory-details-app-details-action-button-archived-border-color
-    ) !important;
-
-    background-color: var(
-      --storeknox-inventory-details-app-details-action-button-archived-bg-color
-    );
-
-    &:focus,
-    &:hover {
-      box-shadow: var(
-          --storeknox-inventory-details-app-details-action-button-box-shadow
-        )
-        var(
-          --storeknox-inventory-details-app-details-action-button-archived-color
-        );
-    }
-  }
-
-  &.needs-action:not(.archived) {
-    color: var(
-      --storeknox-inventory-details-app-details-action-button-needs-action-color
-    ) !important;
-
-    border-color: var(
-      --storeknox-inventory-details-app-details-action-button-needs-action-color
-    ) !important;
-
-    background-color: var(
-      --storeknox-inventory-details-app-details-action-button-needs-action-bg
-    );
-
-    &:focus,
-    &:hover {
-      box-shadow: var(
-          --storeknox-inventory-details-app-details-action-button-box-shadow
-        )
-        var(
-          --storeknox-inventory-details-app-details-action-button-needs-action-color
-        );
-    }
+  .button-icon {
+    font-size: 1.14286em !important;
   }
 
   &.feature-in-progress {
@@ -107,6 +63,68 @@
     &:focus,
     &:hover {
       box-shadow: 4px 4px 15px 0px #00000008;
+    }
+  }
+
+  &.needs-action:not(.archived) {
+    color: var(
+      --storeknox-inventory-details-app-details-action-button-needs-action-color
+    ) !important;
+
+    border-color: var(
+      --storeknox-inventory-details-app-details-action-button-needs-action-color
+    ) !important;
+
+    background-color: var(
+      --storeknox-inventory-details-app-details-action-button-needs-action-bg
+    );
+
+    &:focus,
+    &:hover {
+      box-shadow: var(
+          --storeknox-inventory-details-app-details-action-button-box-shadow
+        )
+        var(
+          --storeknox-inventory-details-app-details-action-button-needs-action-color
+        );
+    }
+  }
+
+  &.disabled-state:not(.feature-in-progress) {
+    background-color: var(--neutral-grey-200) !important;
+    border-color: var(--neutral-grey-200) !important;
+
+    color: var(
+      --storeknox-inventory-details-app-details-action-button-archived-color
+    ) !important;
+
+    &:focus,
+    &:hover {
+      box-shadow: none;
+    }
+  }
+
+  &.archived:not(.feature-in-progress) {
+    color: var(
+      --storeknox-inventory-details-app-details-action-button-archived-color
+    ) !important;
+
+    border-color: var(
+      --storeknox-inventory-details-app-details-action-button-archived-border-color
+    ) !important;
+
+    background-color: var(
+      --storeknox-inventory-details-app-details-action-button-archived-bg-color
+    );
+
+    &:focus,
+    &:hover {
+      box-shadow: var(
+          --storeknox-inventory-details-app-details-action-button-box-shadow
+        )
+        var(
+          --storeknox-inventory-details-app-details-action-button-archived-color
+        );
     }
   }
 }

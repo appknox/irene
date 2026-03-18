@@ -6,6 +6,7 @@
   {{if @isDefaultFinding "is-default"}} {{if @isIgnored "is-ignored"}}'
   class='p-3'
   data-test-storeknoxFakeAppsFindingsCard-root
+  data-test-storeknoxFakeAppsFindingsCard-title={{@title}}
 >
   {{#if @isDefaultFinding}}
     <PoweredByAi::Chip
@@ -29,7 +30,10 @@
       {{style maxWidth='620px'}}
     >
       <AkStack @spacing='1' @alignItems='center' {{style marginBottom='0.5em'}}>
-        <AkTypography @fontWeight='bold' data-test-storeknoxFakeAppsFindingsCard-title>
+        <AkTypography
+          @fontWeight='bold'
+          data-test-storeknoxFakeAppsFindingsCard-title
+        >
           {{@title}}
         </AkTypography>
 

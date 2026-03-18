@@ -8,10 +8,21 @@ interface StoreknoxInventoryDetailsAppDetailsSignature {
 }
 
 export default class StoreknoxInventoryDetailsAppDetailsComponent extends Component<StoreknoxInventoryDetailsAppDetailsSignature> {
+  get skInventoryApp() {
+    return this.args.skInventoryApp;
+  }
+
   get showMonitoringPendingInfo() {
     return (
-      !this.args.skInventoryApp.needsAction &&
-      !this.args.skInventoryApp.fakeAppDetectionHasResults
+      this.skInventoryApp?.fakeAppDetectionIsInitializing &&
+      this.skInventoryApp?.storeMonitoringStatusIsPending
+    );
+  }
+
+  get showMonitoringPendingOrDisabledInfo() {
+    return (
+      this.showMonitoringPendingInfo ||
+      this.skInventoryApp.monitoringIsDisabledWithNoResults
     );
   }
 }

@@ -1,4 +1,4 @@
-import { visit, click } from '@ember/test-helpers';
+import { visit, click, currentURL } from '@ember/test-helpers';
 import { setupMirage } from 'ember-cli-mirage/test-support';
 import { setupApplicationTest } from 'ember-qunit';
 import { module, test } from 'qunit';
@@ -89,8 +89,12 @@ module('Acceptance | breadcrumbs/storeknox-inventory', function (hooks) {
       3,
       'withApprovedStatus',
       {
+        monitoring_enabled: true,
         store_monitoring_status:
           ENUMS.SK_APP_MONITORING_STATUS.NO_ACTION_NEEDED,
+
+        fake_app_detection_status:
+          ENUMS.SK_FAKE_APP_DETECTION_STATUS.NO_RESULTS,
       }
     );
 
@@ -155,6 +159,7 @@ module('Acceptance | breadcrumbs/storeknox-inventory', function (hooks) {
       assert
     );
 
+    // Navigate to unscanned version
     await click(
       '[data-test-storeknoxinventorydetails-actionbtn="unscanned-version"]'
     );
@@ -170,21 +175,7 @@ module('Acceptance | breadcrumbs/storeknox-inventory', function (hooks) {
 
     await navigateBackWithBreadcrumb();
 
-    await click(
-      '[data-test-storeknoxinventorydetails-actionbtn="brand-abuse"]'
-    );
-
-    assertBreadcrumbsUI(
-      [
-        t('storeknox.appInventory'),
-        `${t('storeknox.inventoryDetails')} (${packageName})`,
-        t('storeknox.brandAbuse'),
-      ],
-      assert
-    );
-
-    await navigateBackWithBreadcrumb();
-
+    // Navigate to malware detected
     await click(
       '[data-test-storeknoxinventorydetails-actionbtn="malware-detected"]'
     );
@@ -196,6 +187,23 @@ module('Acceptance | breadcrumbs/storeknox-inventory', function (hooks) {
         t('storeknox.malwareDetected'),
       ],
       assert
+    );
+
+    await navigateBackWithBreadcrumb();
+
+    // Navigate to brand abuse
+    await click(
+      '[data-test-storeknoxinventorydetails-actionbtn="brand-abuse"]'
+    );
+
+    assertBreadcrumbsUI(
+      [t('storeknox.fakeAppsTitle'), `${packageName}`],
+      assert
+    );
+
+    assert.strictEqual(
+      currentURL(),
+      `/dashboard/storeknox/fake-apps/${this.inventoryApps[0].id}`
     );
   });
 });

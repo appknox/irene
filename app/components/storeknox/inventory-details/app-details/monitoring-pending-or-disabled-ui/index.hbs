@@ -22,7 +22,7 @@
 
   {{else}}
     <AkSvg::SoxMonitoringResultsPendingWithMonitoringOff
-      data-test-storeknoxInventoryDetails-monitoringResultsPendingWithMonitoringOffIllustration
+      data-test-storeknoxInventoryDetails-monitoringDisabledWithNoResultsIllustration
     />
 
     <AkStack
@@ -34,16 +34,16 @@
       <AkTypography
         @variant='h5'
         @align='center'
-        data-test-storeknoxInventoryDetails-monitoringResultsPendingOffHeaderText
+        data-test-storeknoxInventoryDetails-monitoringDisabledWithNoResultsHeaderText
       >
         {{t 'storeknox.enableMonitoringForApp'}}
       </AkTypography>
 
       <AkTypography
         @align='center'
-        data-test-storeknoxInventoryDetails-monitoringResultsPendingOff
+        data-test-storeknoxInventoryDetails-monitoringDisabledWithNoResultsOff
       >
-        {{t 'storeknox.monitoringResultsPendingWithMonitoringOff'}}
+        {{t 'storeknox.monitoringDisabledWithNoResults'}}
       </AkTypography>
     </AkStack>
   {{/if}}

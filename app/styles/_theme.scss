@@ -156,10 +156,12 @@
   // special case variable for brand abuse and fake apps
   --brand-abuse-highlight-color: #114db5;
   --fake-app-highlight-color: #b11146;
+  --ignored-app-highlight-color: #114db5;
 
   // special case variable for storeknox/fake-apps
   --storeknox-app-logo-placeholder-bg: #1e90ff;
   --storeknox-fake-apps-background-color: #e6f9ff;
+  --storeknox-fake-app-overall-score-color: #f43f5e;
 }
 
 // TODO: need to remove this so do not use it

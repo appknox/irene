@@ -148,26 +148,23 @@ export default class SkAppModel extends Model {
     return !!(this.appMetadata.get('platform') === ENUMS.PLATFORM.IOS);
   }
 
-  get monitoringStatusIsPending() {
+  get storeMonitoringStatusIsPending() {
     return (
       this.storeMonitoringStatus === ENUMS.SK_APP_MONITORING_STATUS.INITIALIZING
     );
   }
 
-  get monitoringIsDisabled() {
+  get storeMonitoringStatusIsDisabled() {
     return (
       this.storeMonitoringStatus === ENUMS.SK_APP_MONITORING_STATUS.DISABLED
     );
   }
 
-  get monitoringIsPending() {
+  get storeMonitoringPendingOrDisabled() {
     return (
-      this.storeMonitoringStatus === ENUMS.SK_APP_MONITORING_STATUS.INITIALIZING
+      this.storeMonitoringStatusIsPending ||
+      this.storeMonitoringStatusIsDisabled
     );
-  }
-
-  get monitoringPendingOrDisabled() {
-    return this.monitoringIsPending || this.monitoringIsDisabled;
   }
 
   get isArchived() {
@@ -190,56 +187,18 @@ export default class SkAppModel extends Model {
     return this.licenseAllocated > 0;
   }
 
-  async approveApp(id: string) {
-    const adapter = this.store.adapterFor('sk-app');
-
-    return await adapter.approveApp(id);
-  }
-
-  async rejectApp(id: string) {
-    const adapter = this.store.adapterFor('sk-app');
-
-    return await adapter.rejectApp(id);
-  }
-
-  async toggleMonitoring(checked: boolean) {
-    const adapter = this.store.adapterFor('sk-app');
-
-    return await adapter.toggleMonitoring(this.id, checked);
-  }
-
-  async initiateAppUpload() {
-    const adapter = this.store.adapterFor('sk-app');
-
-    return await adapter.initiateAppUpload(this.id);
-  }
-
-  async toggleArchiveStatus() {
-    const adapter = this.store.adapterFor('sk-app');
-
-    return await adapter.toggleArchiveStatus(this);
-  }
-
-  get needsAction() {
+  get storeMonitoringStatusIsActionNeeded() {
     return (
       this.storeMonitoringStatus ===
       ENUMS.SK_APP_MONITORING_STATUS.ACTION_NEEDED
     );
   }
 
-  get noActionNeeded() {
+  get storeMonitoringStatusIsNoActionNeeded() {
     return (
       this.storeMonitoringStatus ===
       ENUMS.SK_APP_MONITORING_STATUS.NO_ACTION_NEEDED
     );
-  }
-
-  get appIsInDisabledState() {
-    return !this.monitoringEnabled && !this.needsAction && !this.noActionNeeded;
-  }
-
-  get appIsInInitializingState() {
-    return this.monitoringEnabled && this.monitoringStatusIsPending;
   }
 
   get fakeAppDetectionIsDisabled() {
@@ -270,6 +229,34 @@ export default class SkAppModel extends Model {
     );
   }
 
+  get needsAction() {
+    return (
+      this.monitoringEnabled &&
+      (this.storeMonitoringStatusIsActionNeeded ||
+        this.fakeAppDetectionHasResults)
+    );
+  }
+
+  get noActionNeeded() {
+    return (
+      this.monitoringEnabled &&
+      this.storeMonitoringStatusIsNoActionNeeded &&
+      this.fakeAppDetectionIsNoResults
+    );
+  }
+
+  get appIsInInitializingState() {
+    return (
+      this.monitoringEnabled &&
+      (this.storeMonitoringStatusIsPending ||
+        this.fakeAppDetectionIsInitializing)
+    );
+  }
+
+  get appMonitoringIsInDisabledState() {
+    return !this.monitoringEnabled;
+  }
+
   get totalFakeApps() {
     return this.fakeAppCounts.brand_abuse + this.fakeAppCounts.fake_app;
   }
@@ -291,11 +278,42 @@ export default class SkAppModel extends Model {
     );
   }
 
-  get containsUnscannedVersion() {
+  get monitoringIsDisabledWithNoResults() {
     return (
-      this.storeMonitoringStatus ===
-      ENUMS.SK_APP_MONITORING_STATUS.ACTION_NEEDED
+      !this.monitoringEnabled &&
+      (!this.fakeAppDetectionHasResults ||
+        !this.storeMonitoringStatusIsActionNeeded)
     );
+  }
+
+  async approveApp(id: string) {
+    const adapter = this.store.adapterFor('sk-app');
+
+    return await adapter.approveApp(id);
+  }
+
+  async rejectApp(id: string) {
+    const adapter = this.store.adapterFor('sk-app');
+
+    return await adapter.rejectApp(id);
+  }
+
+  async toggleMonitoring(checked: boolean) {
+    const adapter = this.store.adapterFor('sk-app');
+
+    return await adapter.toggleMonitoring(this.id, checked);
+  }
+
+  async initiateAppUpload() {
+    const adapter = this.store.adapterFor('sk-app');
+
+    return await adapter.initiateAppUpload(this.id);
+  }
+
+  async toggleArchiveStatus() {
+    const adapter = this.store.adapterFor('sk-app');
+
+    return await adapter.toggleArchiveStatus(this);
   }
 }
 

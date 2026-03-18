@@ -315,6 +315,7 @@ module('Integration | Component | storeknox/fake-apps', function (hooks) {
 
     assert.dom(sectionTitles[0]).hasText(t('storeknox.fakeApps.aiDataAccess'));
     assert.dom(sectionTitles[1]).hasText(t('storeknox.fakeApps.aiDataUsage'));
+
     assert
       .dom(sectionTitles[2])
       .hasText(t('storeknox.fakeApps.aiDataProtection'));

@@ -24,6 +24,14 @@ export default class StoreknoxInventoryDetailsAppDetailsActionsListComponent ext
     return this.skInventoryApp?.storeMonitoringStatus;
   }
 
+  get monitoringEnabled() {
+    return this.skInventoryApp?.monitoringEnabled;
+  }
+
+  get showActionableItemsCount() {
+    return this.actionableItemsCount > 0 && this.monitoringEnabled;
+  }
+
   get actionsList() {
     return [
       {
@@ -31,9 +39,14 @@ export default class StoreknoxInventoryDetailsAppDetailsActionsListComponent ext
         label: this.intl.t('storeknox.unscannedVersion'),
         route: 'authenticated.storeknox.inventory-details.unscanned-version',
         hideAction: false,
-        disabled: this.skInventoryApp?.monitoringPendingOrDisabled,
-        needsAction: this.skInventoryApp?.needsAction,
-        statusIsInitializing: this.skInventoryApp?.monitoringIsPending,
+        needsAction: this.skInventoryApp?.storeMonitoringStatusIsActionNeeded,
+        showDisabledState: !this.monitoringEnabled,
+
+        disableActionButton:
+          this.skInventoryApp?.storeMonitoringPendingOrDisabled,
+
+        statusIsInitializing:
+          this.skInventoryApp?.storeMonitoringStatusIsPending,
       },
       {
         id: 'brand-abuse',
@@ -42,7 +55,10 @@ export default class StoreknoxInventoryDetailsAppDetailsActionsListComponent ext
         route: 'authenticated.storeknox.fake-apps.fake-app-list.index',
         models: [this.skInventoryApp?.id],
         needsAction: this.skInventoryApp?.fakeAppDetectionHasResults,
-        disabled: this.skInventoryApp?.fakeAppDetectionIsInitializing,
+        showDisabledState: !this.monitoringEnabled,
+
+        disableActionButton:
+          this.skInventoryApp?.fakeAppDetectionIsInitializing,
 
         statusIsInitializing:
           this.skInventoryApp?.fakeAppDetectionIsInitializing,
@@ -59,7 +75,8 @@ export default class StoreknoxInventoryDetailsAppDetailsActionsListComponent ext
 
   get actionableItemsCount() {
     return this.actionsList.reduce(
-      (count, action) => (action.needsAction ? count + 1 : count),
+      (count, action) =>
+        action.needsAction && !action.showDisabledState ? count + 1 : count,
       0
     );
   }

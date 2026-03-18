@@ -42,11 +42,15 @@
                     this.isAlreadyAddedToInventory
                     "added-to-inventory"
                   }}'
+                  data-test-storeknoxFakeAppsIgnoreDrawer-detailLabel
                 >
                   {{detail.label}}
                 </AkTypography>
 
-                <AkTypography @fontWeight='medium'>
+                <AkTypography
+                  @fontWeight='medium'
+                  data-test-storeknoxFakeAppsIgnoreDrawer-detailValue
+                >
                   {{detail.value}}
                 </AkTypography>
               </AkStack>

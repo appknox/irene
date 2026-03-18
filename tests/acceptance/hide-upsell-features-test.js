@@ -40,9 +40,9 @@ module('Acceptance | hide-upsell-features', function (hooks) {
       },
       {
         feature: 'storeknox',
-        // For brand abuse and malware detected, the upsell features would always be visible even if storeknox is enabled
+        // For malware detected, the upsell features would always be visible even if storeknox is enabled
         featureState: true,
-        route: '/dashboard/storeknox/inventory-details/1/brand-abuse',
+        route: '/dashboard/storeknox/inventory-details/1/malware-detected',
         redirectRoute: '/dashboard/storeknox/inventory-details/1',
         models_info: [
           { id: 1, name: 'sk-inventory-app' },

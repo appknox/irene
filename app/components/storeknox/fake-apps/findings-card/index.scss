@@ -10,7 +10,7 @@
   }
 
   .score.is-default {
-    color: #f43f5e;
+    color: var(--storeknox-fake-apps-findings-card-overall-score-color);
   }
 
   .score.is-ignored {
