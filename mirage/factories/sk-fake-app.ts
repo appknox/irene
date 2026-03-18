@@ -69,6 +69,27 @@ export default Factory.extend({
     AppFunctionalitySimilarityRule_justification: faker.lorem.sentence(),
   }),
 
+  ai_score_levels: () => ({
+    LogoSimilarityRule: faker.helpers.arrayElement(['LOW', 'MEDIUM', 'HIGH']),
+    TitleBrandAbuseRule: faker.helpers.arrayElement(['LOW', 'MEDIUM', 'HIGH']),
+    PackageSimilarityRule: faker.helpers.arrayElement(['LOW', 'MEDIUM', 'HIGH']),
+    SemanticSimilarityRule: faker.helpers.arrayElement([
+      'LOW',
+      'MEDIUM',
+      'HIGH',
+    ]),
+    DeveloperConsistencyRule: faker.helpers.arrayElement([
+      'LOW',
+      'MEDIUM',
+      'HIGH',
+    ]),
+    AppFunctionalitySimilarityRule: faker.helpers.arrayElement([
+      'LOW',
+      'MEDIUM',
+      'HIGH',
+    ]),
+  }),
+
   sk_store: () => ({
     id: faker.number.int(),
     name: faker.company.name(),

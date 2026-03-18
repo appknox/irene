@@ -12,6 +12,14 @@
       var(--storeknox-inventory-details-header-app-logo-border-color);
   }
 
+  .app-info-logo-placeholder {
+    border-radius: 50%;
+    width: 58px;
+    height: 58px;
+    background-color: var(--storeknox-fake-apps-finding-detail-card-ignored-bg-color);
+    border: 1px solid var(--storeknox-inventory-details-header-app-logo-border-color);
+  }
+
   .app-info-container {
     padding: 1.1429em 1.7143em;
   }

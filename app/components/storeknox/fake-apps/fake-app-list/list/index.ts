@@ -98,14 +98,15 @@ export default class StoreknoxFakeAppsFakeAppListListComponent extends Component
 
   _buildFinding(skFakeApp: SkFakeAppModel): FindingDetail {
     const scores = skFakeApp.aiScores;
+    const scoreLevels = skFakeApp.aiScoreLevels;
 
     return {
       id: String(skFakeApp.id),
       overallScore: Math.round((scores?.final ?? 0) * 100),
-      semanticScore: Math.round((scores?.SemanticSimilarityRule ?? 0) * 100),
-      packageScore: Math.round((scores?.PackageSimilarityRule ?? 0) * 100),
-      logoScore: Math.round((scores?.LogoSimilarityRule ?? 0) * 100),
-      developerScore: Math.round((scores?.DeveloperConsistencyRule ?? 0) * 100),
+      semanticScore: scoreLevels?.SemanticSimilarityRule,
+      packageScore: scoreLevels?.PackageSimilarityRule,
+      logoScore: scoreLevels?.LogoSimilarityRule,
+      developerScore: scoreLevels?.DeveloperConsistencyRule,
       appLogoUrl: skFakeApp.fakeAppIconUrl,
       appName: skFakeApp.title,
       namespace: skFakeApp.packageName,

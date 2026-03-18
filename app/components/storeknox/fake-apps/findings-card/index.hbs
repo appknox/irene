@@ -60,14 +60,14 @@
     </AkStack>
 
     <AkTypography
-      @variant='h2'
+      @variant='h4'
       @fontWeight={{if @isDefaultFinding 'bold' 'regular'}}
       local-class='score
       {{if @isDefaultFinding "is-default"}} {{if @isIgnored "is-ignored"}}'
       {{style alignSelf='flex-end'}}
       data-test-storeknoxFakeAppsFindingsCard-score
     >
-      {{this.scorePercentage}}
+      {{this.score}}
     </AkTypography>
   </AkStack>
 </AkStack>

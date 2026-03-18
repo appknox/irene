@@ -44,7 +44,6 @@
   width: 24px;
   height: 24px;
   border-radius: 50%;
-  background-color: var(
-    --storeknox-fake-apps-finding-detail-card-app-logo-placeholder-bg
-  );
+  background-color: var(--storeknox-fake-apps-finding-detail-card-ignored-bg-color);
+  border: 1px solid var(--storeknox-fake-apps-finding-detail-card-border-color);
 }

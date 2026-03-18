@@ -1,10 +1,11 @@
+import { capitalize } from '@ember/string';
 import Component from '@glimmer/component';
 
 export interface StoreknoxFakeAppsFindingsCardSignature {
   Args: {
     title?: string;
     isDefaultFinding?: boolean;
-    score?: number;
+    score?: number | string;
     description?: string;
     isIgnored?: boolean;
     isSemanticFinding?: boolean;
@@ -12,8 +13,14 @@ export interface StoreknoxFakeAppsFindingsCardSignature {
 }
 
 export default class StoreknoxFakeAppsFindingsCardComponent extends Component<StoreknoxFakeAppsFindingsCardSignature> {
-  get scorePercentage() {
-    return this.args.score ? `${(this.args.score * 100).toFixed(0)}%` : '0%';
+  get score() {
+    if (typeof this.args.score === 'string') {
+      return capitalize(this.args.score.toLowerCase());
+    } else if (typeof this.args.score === 'number') {
+      return this.args.score ? `${(this.args.score * 100).toFixed(0)}%` : '0%';
+    } else {
+      return '-';
+    }
   }
 }
 

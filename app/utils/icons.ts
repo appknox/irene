@@ -186,7 +186,7 @@ export const MdiIconsSet = [
   'file-certificate-outline',
 ] as const;
 
-export const HugeIconsSet = ['api', 'ai-brain-04'] as const;
+export const HugeIconsSet = ['api', 'ai-brain-04', 'image-03'] as const;
 
 export const FaBrandsIconsSet = ['apple'] as const;
 

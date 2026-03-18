@@ -64,7 +64,7 @@
             @fontWeight='regular'
             data-test-storeknoxFakeAppsFindingDetailCard-score='{{item.id}}'
           >
-            {{item.value}}%
+            {{item.value}}
           </AkTypography>
         </AkStack>
       {{/each}}
@@ -88,7 +88,17 @@
           data-test-storeknoxFakeAppsFindingDetailCard-appLogo
         />
       {{else}}
-        <div local-class='app-logo-placeholder' />
+        <AkStack
+          @alignItems='center'
+          @justifyContent='center'
+          local-class='app-logo-placeholder'
+        >
+          <AkIcon
+            @iconName='hugeicons:image-03'
+            @size='small'
+            @color='textSecondary'
+          />
+        </AkStack>
       {{/if}}
     </AkStack>
 

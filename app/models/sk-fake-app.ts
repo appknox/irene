@@ -29,6 +29,15 @@ export interface SkFakeAppAiScores {
   AppFunctionalitySimilarityRule_justification?: string;
 }
 
+export interface SkFakeAppAiScoreLevels {
+  LogoSimilarityRule: 'LOW' | 'MEDIUM' | 'HIGH';
+  TitleBrandAbuseRule: 'LOW' | 'MEDIUM' | 'HIGH';
+  PackageSimilarityRule: 'LOW' | 'MEDIUM' | 'HIGH';
+  SemanticSimilarityRule: 'LOW' | 'MEDIUM' | 'HIGH';
+  DeveloperConsistencyRule: 'LOW' | 'MEDIUM' | 'HIGH';
+  AppFunctionalitySimilarityRule: 'LOW' | 'MEDIUM' | 'HIGH';
+}
+
 export interface SkFakeAppSimilarityScores {
   final: number;
   LogoSimilarityRule?: number;
@@ -103,6 +112,9 @@ export default class SkFakeAppModel extends Model {
 
   @attr()
   declare aiScores: SkFakeAppAiScores;
+
+  @attr()
+  declare aiScoreLevels: SkFakeAppAiScoreLevels;
 
   @attr()
   declare similarityScores: SkFakeAppSimilarityScores;

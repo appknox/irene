@@ -7,14 +7,15 @@ import type IntlService from 'ember-intl/services/intl';
 import type SkInventoryAppModel from 'irene/models/sk-inventory-app';
 import type SkFakeAppModel from 'irene/models/sk-fake-app';
 import type SkFakeAppsListService from 'irene/services/sk-fake-apps-list';
+import { capitalize } from '@ember/string';
 
 export interface FindingDetail {
   id?: string;
   overallScore?: number;
-  semanticScore?: number;
-  packageScore?: number;
-  logoScore?: number;
-  developerScore?: number;
+  semanticScore?: string;
+  packageScore?: string;
+  logoScore?: string;
+  developerScore?: string;
   appLogoUrl?: string;
   appName?: string;
   namespace?: string;
@@ -51,22 +52,28 @@ export default class StoreknoxFakeAppsFindingDetailCardComponent extends Compone
       {
         id: 'semantic',
         label: this.intl.t('storeknox.fakeApps.semantic'),
-        value: this.args.finding.semanticScore,
+        value: capitalize(
+          (this.args.finding.semanticScore || '-').toLowerCase()
+        ),
       },
       {
         id: 'package',
         label: this.intl.t('package'),
-        value: this.args.finding.packageScore,
+        value: capitalize(
+          (this.args.finding.packageScore || '-').toLowerCase()
+        ),
       },
       {
         id: 'logo',
         label: this.intl.t('storeknox.fakeApps.logo'),
-        value: this.args.finding.logoScore,
+        value: capitalize((this.args.finding.logoScore || '-').toLowerCase()),
       },
       {
         id: 'developer',
         label: this.intl.t('storeknox.developer'),
-        value: this.args.finding.developerScore,
+        value: capitalize(
+          (this.args.finding.developerScore || '-').toLowerCase()
+        ),
       },
     ];
   }

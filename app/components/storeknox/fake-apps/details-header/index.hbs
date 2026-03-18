@@ -46,12 +46,21 @@
     class='p-3'
   >
     <AkStack @direction='column'>
-      <img
-        local-class='app-info-logo'
-        src={{@fakeApp.fakeAppIconUrl}}
-        alt={{@fakeApp.title}}
-        data-test-storeknoxFakeAppsDetailsHeader-appLogo
-      />
+      {{#if @fakeApp.fakeAppIconUrl}}
+        <img
+          local-class='app-info-logo'
+          src={{@fakeApp.fakeAppIconUrl}}
+          data-test-storeknoxFakeAppsDetailsHeader-appLogo
+        />
+      {{else}}
+        <AkStack
+          @alignItems='center'
+          @justifyContent='center'
+          local-class='app-info-logo-placeholder'
+        >
+          <AkIcon @iconName='hugeicons:image-03' @color='textSecondary' />
+        </AkStack>
+      {{/if}}
 
       <AkStack @spacing='0.75' @direction='column' @alignItems='flex-start'>
         <AkButton
