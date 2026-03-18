@@ -1,0 +1,42 @@
+import Component from '@glimmer/component';
+import { inject as service } from '@ember/service';
+import type RouterService from '@ember/routing/router-service';
+import { action } from '@ember/object';
+
+export interface DocsLayoutSignature {
+  Blocks: {
+    default: [];
+  };
+}
+
+export default class DocsLayoutComponent extends Component<DocsLayoutSignature> {
+  @service router!: RouterService;
+
+  scrollContainerRef: HTMLDivElement | null = null;
+
+  constructor(owner: unknown, args: object) {
+    super(owner, args);
+    this.router.on('routeDidChange', this.scrollToTop);
+  }
+
+  willDestroy() {
+    super.willDestroy();
+    this.router.off('routeDidChange', this.scrollToTop);
+  }
+
+  @action
+  scrollToTop() {
+    this.scrollContainerRef?.scrollTo(0, 0);
+  }
+
+  @action
+  setScrollContainerRef(element: HTMLDivElement) {
+    this.scrollContainerRef = element;
+  }
+}
+
+declare module '@glint/environment-ember-loose/registry' {
+  export default interface Registry {
+    DocsLayout: typeof DocsLayoutComponent;
+  }
+}

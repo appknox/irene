@@ -1,0 +1,87 @@
+<div local-class='docs-layout'>
+  <aside local-class='docs-sidebar'>
+    <nav local-class='docs-sidebar-nav'>
+      <DocfyOutput @scope='docs' as |node|>
+        {{! Top-level pages }}
+        {{#each node.pages as |page|}}
+          <div local-class='docs-nav-item'>
+            <DocfyLink
+              @to={{page.url}}
+              @activeClass='active'
+              local-class='docs-nav-link docs-nav-link--top'
+            >
+              {{page.title}}
+            </DocfyLink>
+          </div>
+        {{/each}}
+
+        {{! Nested sections (e.g. Components) }}
+        {{#each node.children as |child|}}
+          <div local-class='docs-nav-section'>
+            <div local-class='docs-nav-section-label'>
+              {{child.label}}
+            </div>
+            {{#each child.pages as |page|}}
+              <div local-class='docs-nav-item'>
+                <DocfyLink
+                  @to={{page.url}}
+                  @activeClass='active'
+                  local-class='docs-nav-link docs-nav-link--nested'
+                >
+                  {{page.title}}
+                </DocfyLink>
+              </div>
+            {{/each}}
+
+            {{! Sub-sections (e.g. components/ak-button under components) }}
+            {{#each child.children as |subChild|}}
+              <div local-class='docs-nav-subsection'>
+                <div local-class='docs-nav-subsection-label'>
+                  {{subChild.label}}
+                </div>
+                {{#each subChild.pages as |page|}}
+                  <div local-class='docs-nav-item'>
+                    <DocfyLink
+                      @to={{page.url}}
+                      @activeClass='active'
+                      local-class='docs-nav-link docs-nav-link--deep'
+                    >
+                      {{page.title}}
+                    </DocfyLink>
+                  </div>
+                {{/each}}
+              </div>
+            {{/each}}
+          </div>
+        {{/each}}
+      </DocfyOutput>
+    </nav>
+  </aside>
+
+  <div local-class='docs-content' {{did-insert this.setScrollContainerRef}}>
+    <main local-class='docs-content-inner'>
+      <div local-class='docs-prose'>
+        {{yield}}
+      </div>
+
+      <DocfyPreviousAndNextPage as |previous next|>
+        <div local-class='docs-page-nav'>
+          {{#if previous}}
+            <DocfyLink @to={{previous.url}} local-class='docs-prev-link'>
+              ←
+              {{previous.title}}
+            </DocfyLink>
+          {{else}}
+            <span></span>
+          {{/if}}
+          {{#if next}}
+            <DocfyLink @to={{next.url}} local-class='docs-next-link'>
+              {{next.title}}
+              →
+            </DocfyLink>
+          {{/if}}
+        </div>
+      </DocfyPreviousAndNextPage>
+    </main>
+  </div>
+</div>
