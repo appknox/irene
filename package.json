@@ -38,6 +38,7 @@
     "netlify:deploy": "netlify deploy --dir dist"
   },
   "devDependencies": {
+    "@docfy/ember-cli": "^0.11.0",
     "@appknox/ember-pace": "^1.0.1",
     "@babel/core": "^7.26.0",
     "@babel/eslint-parser": "^7.25.9",
@@ -112,7 +113,7 @@
     "ember-browser-services": "^4.0.4",
     "ember-changeset": "^4.1.2",
     "ember-changeset-validations": "^4.1.1",
-    "ember-cli": "~6.0.0",
+    "ember-cli": "~6.7.0",
     "ember-cli-app-version": "^7.0.0",
     "ember-cli-autoprefixer": "^2.0.0",
     "ember-cli-babel": "^8.2.0",
@@ -164,7 +165,7 @@
     "ember-qunit": "^8.1.1",
     "ember-resolver": "^12.0.1",
     "ember-simple-auth": "^6.1.0",
-    "ember-source": "~6.0.0",
+    "ember-source": "~6.7.0",
     "ember-table": "^5.0.6",
     "ember-template-lint": "^6.0.0",
     "ember-test-selectors": "^6.0.0",
@@ -197,8 +198,9 @@
     "webpack": "^5.96.1"
   },
   "dependencies": {
+    "@docfy/ember": "^0.11.0",
     "@formatjs/intl": "^2.10.1",
-    "@novnc/novnc": "1.4.0",
+    "@novnc/novnc": "1.5.0",
     "@popperjs/core": "^2.11.6",
     "clipboard": "^2.0.6",
     "cypress": "^13.6.3",
@@ -214,7 +216,7 @@
   },
   "overrides": {
     "@storybook/ember": {
-      "ember-source": "~5.12.0"
+      "ember-source": "~6.7.0"
     }
   },
   "engines": {
