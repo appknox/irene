@@ -21,8 +21,8 @@ export default class RequestWrapper {
   async init(): Promise<void> {
     await this.client.init();
 
-    const { b64token } = await TokenManager.getTokens();
-    this.client.setToken(b64token);
+    const { token, user_id } = await TokenManager.getTokens();
+    this.client.setToken(token, user_id);
   }
 
   /**

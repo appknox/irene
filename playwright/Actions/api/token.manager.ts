@@ -3,7 +3,7 @@ import { API_ROUTES } from '../../support/api.routes';
 
 export interface AuthTokens {
   token: string;
-  b64token: string;
+  user_id: number;
 }
 
 export default class TokenManager {
@@ -12,10 +12,9 @@ export default class TokenManager {
   /**
    * Login and get tokens from real QA backend
    * Stores tokens for reuse across all API tests
-   * Returns cached tokens if already fetched once, otherwise performs login request
+   * Returns cached tokens if already fetched once
    */
   static async getTokens(): Promise<AuthTokens> {
-    // Return cached tokens if available
     if (this.tokens) return this.tokens;
 
     const context = await request.newContext({
@@ -34,10 +33,9 @@ export default class TokenManager {
     }
 
     const body = await response.json();
-
     this.tokens = {
       token: body.token,
-      b64token: body.b64token,
+      user_id: body.user_id,
     };
 
     await context.dispose();
@@ -47,7 +45,6 @@ export default class TokenManager {
 
   /**
    * Clear cached tokens
-   * Call if you need fresh login
    */
   static clearTokens(): void {
     this.tokens = null;

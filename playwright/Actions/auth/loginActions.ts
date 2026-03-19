@@ -1,6 +1,6 @@
-// import { Page, expect } from '@playwright/test';
-import cyTranslate from '../../../cypress/support/translations';
 import { Page, expect } from '@playwright/test';
+import pwTranslate from '../../support/translations';
+
 export default class LoginActions {
   constructor(private page: Page) {}
 
@@ -8,7 +8,7 @@ export default class LoginActions {
     await this.page.goto('/login');
 
     await this.page
-      .getByPlaceholder(cyTranslate('usernameEmailIdTextPlaceholder'))
+      .getByPlaceholder(pwTranslate('usernameEmailIdTextPlaceholder'))
       .fill(username);
 
     const nextButton = this.page.getByRole('button', { name: 'Next' });
@@ -16,12 +16,14 @@ export default class LoginActions {
     await nextButton.click();
 
     const passwordInput = this.page.getByPlaceholder(
-      cyTranslate('passwordPlaceholder')
+      pwTranslate('passwordPlaceholder')
     );
     await expect(passwordInput).toBeVisible();
     await passwordInput.fill(password);
 
-    const loginButton = this.page.getByRole('button', { name: 'Login' });
+    const loginButton = this.page.locator(
+      'button[aria-label="login-submit-button"]'
+    );
     await expect(loginButton).toBeEnabled();
     await loginButton.click();
 

@@ -4,15 +4,12 @@ export default class ApiClient {
   private context!: APIRequestContext;
   private baseURL: string;
   private token: string | null = null;
+  private userId: string | number | null = null;
 
   constructor() {
     this.baseURL = process.env.BASE_URL!;
   }
 
-  /**
-   * Initialize API context
-   * Call in beforeAll
-   */
   async init(): Promise<void> {
     this.context = await request.newContext({
       baseURL: this.baseURL,
@@ -22,70 +19,44 @@ export default class ApiClient {
     });
   }
 
-  /**
-   * Set auth token for all subsequent requests
-   * Call after successful login to set token for API calls
-   */
-  setToken(token: string): void {
+  setToken(token: string, userId: string | number): void {
     this.token = token;
+    this.userId = userId;
   }
 
-  /**
-   * Get auth headers
-   */
   private getAuthHeaders(): Record<string, string> {
     if (!this.token) return {};
+    const b64 = Buffer.from(`${this.userId}:${this.token}`).toString('base64');
     return {
-      Authorization: `Basic ${this.token}`,
+      Authorization: `Basic ${b64}`,
     };
   }
-
-  /**
-   * GET request
-   */
   async get(endpoint: string) {
-    const response = await this.context.get(endpoint, {
+    return this.context.get(endpoint, {
       headers: this.getAuthHeaders(),
     });
-    return response;
   }
 
-  /**
-   * POST request
-   */
   async post(endpoint: string, body?: object) {
-    const response = await this.context.post(endpoint, {
+    return this.context.post(endpoint, {
       headers: this.getAuthHeaders(),
-      data: body,
+      ...(body && Object.keys(body).length > 0 ? { data: body } : {}), // ← only send data if body has content
     });
-    return response;
   }
 
-  /**
-   * PUT request
-   */
   async put(endpoint: string, body?: object) {
-    const response = await this.context.put(endpoint, {
+    return this.context.put(endpoint, {
       headers: this.getAuthHeaders(),
       data: body,
     });
-    return response;
   }
 
-  /**
-   * DELETE request
-   */
   async delete(endpoint: string) {
-    const response = await this.context.delete(endpoint, {
+    return this.context.delete(endpoint, {
       headers: this.getAuthHeaders(),
     });
-    return response;
   }
 
-  /**
-   * Dispose context after tests
-   * Call in afterAll
-   */
   async dispose(): Promise<void> {
     await this.context.dispose();
   }
