@@ -12,6 +12,8 @@ export interface TestState {
   privacyReportId: number;
   sbFileId: number;
   sbReportId: number;
+  analysisId: number;
+  vulnerabilityId: number;
 }
 
 const state: TestState = JSON.parse(fs.readFileSync(statePath, 'utf-8'));

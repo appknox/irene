@@ -171,6 +171,10 @@ export const API_ROUTES = {
     route: '/api/v3/files/*/analyses',
     alias: 'fileAnalyses',
   },
+  analysisById: {
+    route: '/api/v2/analyses/*',
+    alias: 'analysisById',
+  },
   userInfo: {
     route: '/api/users/**',
     alias: 'userInfo',

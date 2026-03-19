@@ -166,6 +166,38 @@ async function globalSetup() {
   }
 
   /**
+   * 8. Get analysisId
+   * With the static scan complete, we can now get the analysisId for our file, which we will need for some of our tests that require an existing analysis. 
+   We make a request to the file analyses endpoint with our fileId to get the list of analyses for that file, and we extract the ID of the first analysis in the list. 
+   This analysisId will be saved in our state file along with the other IDs for use in our tests.
+   */
+
+  const analysisResponse = await wrapper.get({
+    endpoint: `${resolveRoute(API_ROUTES.fileAnalyses.route, fileId)}?limit=10`,
+  });
+  const analysisBody = await analysisResponse.json();
+
+  const riskyAnalysis = analysisBody.results.find(
+    (a: Record<string, unknown>) => (a.computed_risk as number) > 0
+  );
+
+  const analysisId = riskyAnalysis.id as number;
+  const vulnerabilityId = riskyAnalysis.vulnerability as number;
+  console.log(
+    `[Setup] analysisId: ${analysisId}, vulnerabilityId: ${vulnerabilityId}`
+  );
+  // const analysisResponse = await wrapper.get({
+  //   endpoint: `${resolveRoute(API_ROUTES.fileAnalyses.route, fileId)}?limit=1`,
+  // });
+  // const analysisBody = await analysisResponse.json();
+  // const analysisId = analysisBody.results[0].id as number;
+  // const vulnerabilityId = analysisBody.results[0].vulnerability as number;
+  // console.log(
+  //   `[Setup] analysisId: ${analysisId}, vulnerabilityId: ${vulnerabilityId}`
+  // );
+  // console.log(`[Setup] analysisId: ${analysisId}`);
+
+  /**
  * 8. Generate report
  * With the file uploaded and static scan complete, we can now generate a report for our file. We make a POST request to the reports endpoint with our fileId, 
  which tells the backend to start generating a report for that file. 
@@ -223,7 +255,7 @@ async function globalSetup() {
   //   const privacyBody = await privacyResponse.json();
 
   //   if (privacyBody.privacy_analysis_status === '2') {
-  //     console.log('[Setup] Privacy shield analysis complete ✅');
+  //     console.log('[Setup] Privacy shield analysis complete');
   //     break;
   //   }
 
@@ -321,6 +353,8 @@ async function globalSetup() {
     privacyReportId,
     sbFileId,
     sbReportId,
+    analysisId,
+    vulnerabilityId,
   };
   fs.writeFileSync(STATE_FILE, JSON.stringify(state, null, 2));
   console.log(`[Setup] State saved to ${STATE_FILE}`);
