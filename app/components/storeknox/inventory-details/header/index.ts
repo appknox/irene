@@ -40,6 +40,7 @@ export default class StoreknoxInventoryDetailsHeaderComponent extends Component<
   @tracked isArchiveAppDrawerOpen = false;
   @tracked openToggleMonitoringDrawer = false;
   @tracked monitoringChecked = false;
+  @tracked showFallback = false;
 
   constructor(
     owner: unknown,
@@ -180,6 +181,11 @@ export default class StoreknoxInventoryDetailsHeaderComponent extends Component<
 
   get showArchiveButton() {
     return this.isOwnerOrAdmin;
+  }
+
+  @action
+  handleImageError() {
+    this.showFallback = true;
   }
 
   @action openArchiveAppDrawer() {

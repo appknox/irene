@@ -457,7 +457,7 @@ module(
         .dom('[data-test-storeknoxFakeAppsFindingsCard-poweredByAiChip]')
         .exists({ count: 1 });
 
-      // Cards order: Overall, Semantic, Logo, TitleBrandAbuse, Package, DeveloperConsistency, AppFunctionality
+      // Cards order: Overall first, then level cards sorted HIGH → MEDIUM → LOW
       const expectedCards = [
         {
           title: t('storeknox.fakeApps.overallScore'),
@@ -546,7 +546,8 @@ module(
         />
       `);
 
-      // Cards order: Overall, Semantic, Logo, TitleBrandAbuse, Package, DeveloperConsistency, AppFunctionality
+      // Cards order: Overall first, then sorted by numeric aiScore descending
+      // Semantic=0.7 (HIGH), Logo=0.6 (MEDIUM), TitleBrandAbuse=0.5 (LOW)
       const scores = this.skFakeAppRecord.aiScores;
       const scoreLevels = this.skFakeAppRecord.aiScoreLevels;
 
@@ -558,17 +559,17 @@ module(
         },
         {
           title: t('storeknox.fakeApps.semanticSimilarity'),
-          score: capitalizeLevel(scoreLevels.SemanticSimilarityRule),
+          score: capitalizeLevel(scoreLevels.SemanticSimilarityRule), // HIGH
           description: scores.SemanticSimilarityRule_justification,
         },
         {
           title: t('storeknox.fakeApps.logoSimilarity'),
-          score: capitalizeLevel(scoreLevels.LogoSimilarityRule),
+          score: capitalizeLevel(scoreLevels.LogoSimilarityRule), // MEDIUM
           description: scores.LogoSimilarityRule_justification,
         },
         {
           title: t('storeknox.fakeApps.titleBrandAbuse'),
-          score: capitalizeLevel(scoreLevels.TitleBrandAbuseRule),
+          score: capitalizeLevel(scoreLevels.TitleBrandAbuseRule), // LOW
           description: scores.TitleBrandAbuseRule_justification,
         },
         {
@@ -601,7 +602,7 @@ module(
         .dom('[data-test-storeknoxFakeAppsFindingsCard-poweredByAiChip]')
         .exists({ count: 1 });
 
-      // Cards
+      // Cards: content
       expectedCards.forEach((cardInfo) => {
         const cardTitleSelector = `[data-test-storeknoxFakeAppsFindingsCard-title="${cardInfo.title}"]`;
 
@@ -626,6 +627,42 @@ module(
           .dom('[data-test-storeknoxFakeAppsFindingsCard-description]', card)
           .containsText(description, `Card "${title}" description`);
       });
+
+      // Sort order: Overall first, then descending by numeric aiScore (0.7 → 0.6 → 0.5)
+      const renderedCards = document.querySelectorAll(
+        '[data-test-storeknoxFakeAppsFindingsCard-root]'
+      );
+
+      assert
+        .dom(
+          '[data-test-storeknoxFakeAppsFindingsCard-score]',
+          renderedCards[0]
+        )
+        .containsText(
+          calculateScorePercentage(scores.final),
+          'Overall card is first'
+        );
+
+      assert
+        .dom(
+          '[data-test-storeknoxFakeAppsFindingsCard-score]',
+          renderedCards[1]
+        )
+        .containsText('High', 'Highest numeric score (0.7) card is second');
+
+      assert
+        .dom(
+          '[data-test-storeknoxFakeAppsFindingsCard-score]',
+          renderedCards[2]
+        )
+        .containsText('Medium', 'Middle numeric score (0.6) card is third');
+
+      assert
+        .dom(
+          '[data-test-storeknoxFakeAppsFindingsCard-score]',
+          renderedCards[3]
+        )
+        .containsText('Low', 'Lowest numeric score (0.5) card is fourth');
     });
 
     // --- FindingsCard: ignored state ---
@@ -673,8 +710,7 @@ module(
       assert
         .dom('[data-test-storeknoxFakeAppsOriginalAppInfo-appLogo]')
         .exists()
-        .hasAttribute('src', this.appMetadata.icon_url)
-        .hasAttribute('alt', this.appMetadata.title);
+        .hasAttribute('src', this.appMetadata.icon_url);
 
       assert
         .dom('[data-test-storeknoxFakeAppsOriginalAppInfo-appTitle]')

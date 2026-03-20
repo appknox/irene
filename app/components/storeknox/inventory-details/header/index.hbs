@@ -67,7 +67,19 @@
             src={{@skInventoryApp.appMetadata.iconUrl}}
             alt={{@skInventoryApp.appMetadata.title}}
             data-test-storeknoxInventoryDetails-appLogoImage
+            hidden={{this.showFallback}}
+            {{on 'error' this.handleImageError}}
           />
+
+          {{#if this.showFallback}}
+            <AkStack
+              @alignItems='center'
+              @justifyContent='center'
+              local-class='app-info-logo-placeholder'
+            >
+              <AkIcon @iconName='hugeicons:image-03' @color='textSecondary' />
+            </AkStack>
+          {{/if}}
 
           <AkStack @spacing='0.75' @direction='column' @alignItems='flex-start'>
             <AkButton

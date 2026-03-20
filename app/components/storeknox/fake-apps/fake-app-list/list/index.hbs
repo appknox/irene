@@ -1,5 +1,5 @@
 <AkPaginationProvider
-  @results={{this.skFakeApps}}
+  @results={{this.tableData}}
   @onItemPerPageChange={{this.onItemPerPageChange}}
   @totalItems={{this.totalCount}}
   @nextAction={{this.goToPage}}
@@ -39,43 +39,47 @@
     </AkStack>
 
   {{else}}
-    {{#if this.isFetchingData}}
-      <AkStack
-        @direction='column'
-        @spacing='3'
-        data-test-storeknoxFakeAppsFakeAppListList-loading
-      >
-        {{#each (array 1 2 3) as |index|}}
-          <Storeknox::FakeApps::FindingDetailCard::Skeleton
-            id='skeleton-{{index}}'
-          />
-        {{/each}}
+    {{#if @infoText}}
+      <AkStack local-class='info-text' class='p-2'>
+        <AkTypography>
+          {{@infoText}}
+        </AkTypography>
       </AkStack>
+    {{/if}}
 
-    {{else}}
-      {{#if @infoText}}
-        <AkStack local-class='info-text' class='p-2'>
-          <AkTypography>
-            {{@infoText}}
-          </AkTypography>
-        </AkStack>
-      {{/if}}
+    <AkTable @hoverable={{true}} as |tb|>
+      <tb.head @columns={{this.columns}} as |h|>
+        <h.row as |r|>
+          <r.cell
+            data-test-storeknoxFakeAppsFakeAppListList-th-cell
+            as |column|
+          >
+            {{column.name}}
+          </r.cell>
+        </h.row>
+      </tb.head>
 
-      <AkStack
-        @direction='column'
-        @spacing='3'
+      <tb.body
+        local-class='table-body'
+        @rows={{pgc.currentPageResults}}
         data-test-storeknoxFakeAppsFakeAppListList-results
+        as |b|
       >
-        {{#each this.fakeAppsWithFindings as |item|}}
-          <Storeknox::FakeApps::FindingDetailCard
-            @finding={{item.finding}}
-            @fakeApp={{item.skFakeApp}}
-            @skInventoryApp={{@skInventoryApp}}
-            data-test-storeknoxFakeAppsFakeAppListList-card='{{item.skFakeApp.id}}'
-          />
-        {{/each}}
-      </AkStack>
+        <b.row
+          @onClick={{this.onRowClick}}
+          data-test-storeknoxFakeAppsFakeAppListList-row
+          as |r|
+        >
+          <r.cell>
+            {{#let (component r.columnValue.cellComponent) as |Cell|}}
+              <Cell @loading={{this.isFetchingData}} @data={{r.rowValue}} />
+            {{/let}}
+          </r.cell>
+        </b.row>
+      </tb.body>
+    </AkTable>
 
+    {{#unless this.isFetchingData}}
       <AkPagination
         @disableNext={{pgc.disableNext}}
         @nextAction={{pgc.nextAction}}
@@ -90,6 +94,6 @@
         @perPageTranslation={{t 'recordPerPage'}}
         @totalItems={{pgc.totalItems}}
       />
-    {{/if}}
+    {{/unless}}
   {{/if}}
 </AkPaginationProvider>

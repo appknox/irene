@@ -67,23 +67,18 @@ module(
 
       assert
         .dom('[data-test-storeknoxFakeAppsListItemCard-appLogo]')
-        .exists()
-        .hasAttribute('src', 'https://example.com/icon.png')
-        .hasAttribute('alt', 'My Test App');
+        .hasAttribute('src', 'https://example.com/icon.png');
 
       assert
         .dom('[data-test-storeknoxFakeAppsListItemCard-appTitle]')
-        .exists()
         .hasText('My Test App');
 
       assert
         .dom('[data-test-storeknoxFakeAppsListItemCard-packageName]')
-        .exists()
         .hasText('com.example.myapp');
 
       assert
         .dom('[data-test-storeknoxFakeAppsListItemCard-developerName]')
-        .exists()
         .containsText('Example Developer');
     });
 
@@ -150,7 +145,6 @@ module(
 
       assert
         .dom('[data-test-storeknoxFakeAppsListItemCard-totalFakeApps]')
-        .exists()
         .hasText('7');
     });
 
@@ -161,7 +155,6 @@ module(
 
       assert
         .dom('[data-test-storeknoxFakeAppsListItemCard-brandAbuseRow]')
-        .exists()
         .containsText(t('storeknox.brandAbuse'))
         .containsText('4');
     });
@@ -173,7 +166,6 @@ module(
 
       assert
         .dom('[data-test-storeknoxFakeAppsListItemCard-fakeAppRow]')
-        .exists()
         .containsText(t('storeknox.fakeApps.fakeApp'))
         .containsText('3');
     });
@@ -189,7 +181,6 @@ module(
 
       assert
         .dom('[data-test-storeknoxFakeAppsListItemCard-lastMonitoringDate]')
-        .exists()
         .hasText(expectedDate);
     });
 

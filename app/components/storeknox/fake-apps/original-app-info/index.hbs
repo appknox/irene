@@ -8,7 +8,9 @@
     <AkStack @width='full' @spacing='1' @alignItems='center' class='py-2 px-3'>
       <div local-class='original-app-details-header-indicator'></div>
 
-      <AkTypography @fontWeight='bold'>{{t 'storeknox.fakeApps.originalAppDetails'}}</AkTypography>
+      <AkTypography @fontWeight='bold'>{{t
+          'storeknox.fakeApps.originalAppDetails'
+        }}</AkTypography>
     </AkStack>
 
     <AkDivider @color='dark' />
@@ -30,9 +32,20 @@
         <img
           local-class='app-info-logo'
           src={{@skInventoryApp.appMetadata.iconUrl}}
-          alt={{@skInventoryApp.appMetadata.title}}
           data-test-storeknoxFakeAppsOriginalAppInfo-appLogo
+          hidden={{this.showFallback}}
+          {{on 'error' this.handleImageError}}
         />
+
+        {{#if this.showFallback}}
+          <AkStack
+            @alignItems='center'
+            @justifyContent='center'
+            local-class='app-info-logo-placeholder'
+          >
+            <AkIcon @iconName='hugeicons:image-03' @color='textSecondary' />
+          </AkStack>
+        {{/if}}
       </AkStack>
 
       <AkStack
@@ -85,7 +98,7 @@
           @fontWeight='medium'
           @noWrap={{true}}
           title={{@skInventoryApp.appMetadata.packageName}}
-          {{style maxWidth='240px'}}
+          {{style maxWidth='200px'}}
           data-test-storeknoxFakeAppsOriginalAppInfo-packageName
         >
           {{@skInventoryApp.appMetadata.packageName}}

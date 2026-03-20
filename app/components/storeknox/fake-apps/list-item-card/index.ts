@@ -1,4 +1,5 @@
 import Component from '@glimmer/component';
+import { tracked } from '@glimmer/tracking';
 import dayjs from 'dayjs';
 import { action } from '@ember/object';
 import { service } from '@ember/service';
@@ -12,6 +13,7 @@ interface StoreknoxFakeAppsListItemCardSignature {
 
 export default class StoreknoxFakeAppsListItemCardComponent extends Component<StoreknoxFakeAppsListItemCardSignature> {
   @service declare router: RouterService;
+  @tracked showFallback = false;
 
   get skApp() {
     return this.args.skApp;
@@ -19,6 +21,11 @@ export default class StoreknoxFakeAppsListItemCardComponent extends Component<St
 
   get lastMonitoringDate() {
     return dayjs(this.skApp.lastFakeDetectionOn).format('MMM DD, YYYY');
+  }
+
+  @action
+  handleImageError() {
+    this.showFallback = true;
   }
 
   @action

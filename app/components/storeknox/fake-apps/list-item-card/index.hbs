@@ -12,11 +12,20 @@
     local-class='app-info-container'
   >
     <AkStack @width='full' @alignItems='center' @spacing='2'>
-      {{#if this.skApp.appMetadata.iconUrl}}
+      {{#if this.showFallback}}
+        <AkStack
+          @alignItems='center'
+          @justifyContent='center'
+          local-class='app-info-logo-placeholder'
+        >
+          <AkIcon @iconName='hugeicons:image-03' @color='textSecondary' />
+        </AkStack>
+      {{else if this.skApp.appMetadata.iconUrl}}
         <img
           local-class='app-info-logo'
           src={{this.skApp.appMetadata.iconUrl}}
           data-test-storeknoxFakeAppsListItemCard-appLogo
+          {{on 'error' this.handleImageError}}
         />
       {{else}}
         <AkStack

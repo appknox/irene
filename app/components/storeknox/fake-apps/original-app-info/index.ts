@@ -1,6 +1,8 @@
+import { action } from '@ember/object';
 import Component from '@glimmer/component';
 import dayjs from 'dayjs';
 import type SkInventoryAppModel from 'irene/models/sk-inventory-app';
+import { tracked } from 'tracked-built-ins';
 
 export interface StoreknoxFakeAppsOriginalAppInfoSignature {
   Args: {
@@ -10,10 +12,17 @@ export interface StoreknoxFakeAppsOriginalAppInfoSignature {
 }
 
 export default class StoreknoxFakeAppsOriginalAppInfoComponent extends Component<StoreknoxFakeAppsOriginalAppInfoSignature> {
+  @tracked showFallback = false;
+
   get lastMonitoredOn() {
     return dayjs(this.args.skInventoryApp?.lastFakeDetectionOn).format(
       'MMM DD, YYYY'
     );
+  }
+
+  @action
+  handleImageError() {
+    this.showFallback = true;
   }
 }
 

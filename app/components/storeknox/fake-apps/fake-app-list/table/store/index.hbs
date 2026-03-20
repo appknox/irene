@@ -1,0 +1,13 @@
+{{#if @loading}}
+  <AkSkeleton @width='24px' @height='24px' @variant='circular' />
+{{else if @data.isAndroid}}
+  <AkSvg::PlaystoreLogo
+    {{style width='20px'}}
+    data-test-storeknoxFakeAppListTable-playstoreLogo
+  />
+{{else}}
+  <AkSvg::AppstoreLogo
+    {{style width='20px'}}
+    data-test-storeknoxFakeAppListTable-appstoreLogo
+  />
+{{/if}}

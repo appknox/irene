@@ -46,11 +46,20 @@
     class='p-3'
   >
     <AkStack @direction='column'>
-      {{#if @fakeApp.fakeAppIconUrl}}
+      {{#if this.showFallback}}
+        <AkStack
+          @alignItems='center'
+          @justifyContent='center'
+          local-class='app-info-logo-placeholder'
+        >
+          <AkIcon @iconName='hugeicons:image-03' @color='textSecondary' />
+        </AkStack>
+      {{else if @fakeApp.fakeAppIconUrl}}
         <img
           local-class='app-info-logo'
           src={{@fakeApp.fakeAppIconUrl}}
           data-test-storeknoxFakeAppsDetailsHeader-appLogo
+          {{on 'error' this.handleImageError}}
         />
       {{else}}
         <AkStack

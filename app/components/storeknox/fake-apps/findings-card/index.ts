@@ -19,7 +19,7 @@ export default class StoreknoxFakeAppsFindingsCardComponent extends Component<St
     } else if (typeof this.args.score === 'number') {
       return this.args.score ? `${(this.args.score * 100).toFixed(0)}%` : '0%';
     } else {
-      return '-';
+      return undefined;
     }
   }
 }

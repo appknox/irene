@@ -18,6 +18,7 @@ export default class StoreknoxFakeAppsDetailsHeaderComponent extends Component<S
 
   @tracked addToInventory = false;
   @tracked showIgnoreDrawer = false;
+  @tracked showFallback = false;
 
   get isFakeAppIgnored() {
     return this.args.isFakeAppIgnored;
@@ -41,6 +42,11 @@ export default class StoreknoxFakeAppsDetailsHeaderComponent extends Component<S
         ? 'storeknox.brandAbuse'
         : 'storeknox.fakeApps.fakeApp'
     );
+  }
+
+  @action
+  handleImageError() {
+    this.showFallback = true;
   }
 
   @action

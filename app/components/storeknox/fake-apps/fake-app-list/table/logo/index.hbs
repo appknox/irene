@@ -1,0 +1,22 @@
+{{#if @loading}}
+  <AkSkeleton @width='32px' @height='32px' @variant='circular' />
+{{else}}
+  <img
+    key={{@data.appLogoUrl}}
+    src={{@data.appLogoUrl}}
+    data-test-storeknoxFakeAppListTable-logo
+    hidden={{(or this.noSrc this.showFallback)}}
+    local-class='app-info-logo'
+    {{on 'error' this.handleImageError}}
+  />
+
+  {{#if (or this.noSrc this.showFallback)}}
+    <AkStack
+      @alignItems='center'
+      @justifyContent='center'
+      local-class='app-info-logo-placeholder'
+    >
+      <AkIcon @iconName='hugeicons:image-03' @color='textSecondary' />
+    </AkStack>
+  {{/if}}
+{{/if}}
