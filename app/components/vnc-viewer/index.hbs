@@ -75,12 +75,7 @@
 
     <div data-test-vncViewer-deviceScreen class='screen'>
       {{#if this.isAutomated}}
-        {{#if
-          (or
-            @dynamicScan.isStartingOrShuttingInProgress
-            @dynamicScan.isReadyOrRunning
-          )
-        }}
+        {{#if @dynamicScan.isStartingOrShuttingInProgress}}
           <AkStack
             data-test-vncViewer-automatedNote
             local-class='automated-scan-vnc-note'
@@ -97,8 +92,13 @@
               }}
             </AkTypography>
           </AkStack>
+        {{else if @dynamicScan.isReadyOrRunning}}
+          <NovncRfb
+            @deviceFarmURL={{this.deviceFarmURL}}
+            @deviceFarmPassword={{this.deviceFarmPassword}}
+          />
         {{/if}}
-      {{else if @dynamicScan.isReady}}
+      {{else if @dynamicScan.isReadyOrRunning}}
         <NovncRfb
           @deviceFarmURL={{this.deviceFarmURL}}
           @deviceFarmPassword={{this.deviceFarmPassword}}
