@@ -1,0 +1,15 @@
+<AkButton
+  @variant='outlined'
+  @disabled={{this.triggerValidation.isRunning}}
+  @loading={{this.triggerValidation.isRunning}}
+  {{on 'click' (perform this.triggerValidation)}}
+  data-test-fileCopilotValidationBtn
+>
+  <:leftIcon>
+    <AkIcon @iconName='play-arrow' data-test-fileCopilotValidationBtn-icon />
+  </:leftIcon>
+
+  <:default>
+    Trigger Validation
+  </:default>
+</AkButton>

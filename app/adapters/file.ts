@@ -132,6 +132,14 @@ export default class FileAdapter extends CommonDRFAdapter {
     return this._pushDirectlyToStore<SbomFileModel>(res, 'sbom-file');
   }
 
+  async triggerCopilotValidation(fileId: string) {
+    const url = this.buildURLFromBase('api/copilot/trigger-file/');
+
+    return this.ajax(url, 'POST', {
+      data: { file_id: fileId },
+    });
+  }
+
   async fetchFileRisk(fileId: string) {
     const url = `${this._buildURL('file', fileId)}/risk`;
     const res = await this.ajax(url, 'GET');

@@ -42,9 +42,40 @@ export interface Finding {
   description: string;
 }
 
+export interface ValidationData {
+  verdict: string;
+  is_valid: boolean;
+  confidence: number;
+  confidence_label: string;
+  reasoning: string;
+  finding_summary: string;
+  evidence: string[];
+  recommendation: string;
+}
+
+export interface PocStep {
+  step_number: number;
+  title: string;
+  command: string | null;
+  expected_result: string;
+}
+
+export interface PocData {
+  poc_title: string;
+  verification_steps: PocStep[];
+}
+
+export interface RemediationData {
+  remediation: string;
+}
+
 export interface CopilotFinding {
   scan_type: string;
-  url: string;
+  title: string;
+  description: string;
+  validation?: ValidationData;
+  poc?: PocData;
+  remediation?: RemediationData;
 }
 
 export default class AnalysisModel extends Model {
