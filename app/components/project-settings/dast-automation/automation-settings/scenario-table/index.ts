@@ -13,6 +13,7 @@ export interface ProjectSettingsDastAutomationAutomationScenarioTableSignature {
     scenarioList: ScanParameterGroupModel[];
     loadingScenarioList: boolean;
     reloadScenarioList(): void;
+    onEditScenario(scenario: ScanParameterGroupModel): void;
   };
 }
 
@@ -33,6 +34,12 @@ export default class ProjectSettingsDastAutomationAutomationScenarioTableCompone
         cellComponent:
           'project-settings/dast-automation/automation-settings/scenario-table/status',
         width: 100,
+        textAlign: 'right',
+      },
+      {
+        cellComponent:
+          'project-settings/dast-automation/automation-settings/scenario-table/edit',
+        width: 72,
         textAlign: 'right',
       },
     ];

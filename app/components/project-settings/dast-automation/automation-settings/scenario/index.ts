@@ -36,6 +36,7 @@ export default class ProjectSettingsDastAutomationAutomationSettingsScenarioComp
   @tracked scenarioName = '';
   @tracked scenarioDescription = '';
   @tracked scenarioStatus = false;
+  @tracked editingScenario: ScanParameterGroupModel | null = null;
   @tracked projectScenarios: ProjectScenariosArrayResponse | null = null;
 
   namespace = ENV.namespace_v2;
@@ -57,6 +58,20 @@ export default class ProjectSettingsDastAutomationAutomationSettingsScenarioComp
     return !this.scenarioName;
   }
 
+  get isEditMode() {
+    return !!this.editingScenario;
+  }
+
+  get scenarioModalTitle() {
+    return this.isEditMode
+      ? `${this.intl.t('edit')} ${this.intl.t('scenario')}`
+      : this.intl.t('dastAutomation.addScenario');
+  }
+
+  get scenarioModalConfirmCta() {
+    return this.isEditMode ? this.intl.t('save') : this.intl.t('add');
+  }
+
   get scenarioList() {
     return this.projectScenarios?.slice() || [];
   }
@@ -66,11 +81,19 @@ export default class ProjectSettingsDastAutomationAutomationSettingsScenarioComp
   }
 
   @action createScenario() {
-    this.addScenarioToProject.perform();
+    if (this.isEditMode) {
+      this.editScenarioInProject.perform();
+    } else {
+      this.addScenarioToProject.perform();
+    }
   }
 
   @action closeAddScenarioModal() {
     this.showAddScenarioModal = false;
+    this.editingScenario = null;
+    this.scenarioName = '';
+    this.scenarioDescription = '';
+    this.scenarioStatus = false;
   }
 
   @action toggleScenarioStatus(_: Event, checked?: boolean) {
@@ -78,6 +101,18 @@ export default class ProjectSettingsDastAutomationAutomationSettingsScenarioComp
   }
 
   @action openAddScenarioModal() {
+    this.editingScenario = null;
+    this.scenarioName = '';
+    this.scenarioDescription = '';
+    this.scenarioStatus = false;
+    this.showAddScenarioModal = true;
+  }
+
+  @action openEditScenarioModal(scenario: ScanParameterGroupModel) {
+    this.editingScenario = scenario;
+    this.scenarioName = scenario.name || '';
+    this.scenarioDescription = scenario.description || '';
+    this.scenarioStatus = !!scenario.isActive;
     this.showAddScenarioModal = true;
   }
 
@@ -129,6 +164,39 @@ export default class ProjectSettingsDastAutomationAutomationSettingsScenarioComp
         return;
       }
 
+      this.notify.error(parseError(error));
+    }
+  });
+
+  editScenarioInProject = task(async () => {
+    if (!this.scenarioName || !this.editingScenario) {
+      this.notify.error(this.intl.t('dastAutomation.enterScenarioName'));
+
+      return;
+    }
+
+    const scenario = this.editingScenario;
+    const prevScenarioData = {
+      name: scenario.name,
+      description: scenario.description,
+      isActive: scenario.isActive,
+    };
+
+    try {
+      scenario.setProperties({
+        name: this.scenarioName,
+        description: this.scenarioDescription,
+        isActive: this.scenarioStatus,
+      });
+
+      const adapterOptions = { projectId: this.args.project?.id };
+      await waitForPromise(scenario.save({ adapterOptions }));
+
+      this.notify.success(this.intl.t('save'));
+      this.closeAddScenarioModal();
+      this.reloadProjectScenarios();
+    } catch (error) {
+      scenario.setProperties(prevScenarioData);
       this.notify.error(parseError(error));
     }
   });

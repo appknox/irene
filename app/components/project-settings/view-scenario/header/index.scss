@@ -13,3 +13,9 @@
 .scenario-delete-footer-container {
   box-shadow: var(--project-settings-view-scenario-modal-footer-box-shadow);
 }
+
+.scenario-description-textarea {
+  width: 100%;
+  min-height: 96px;
+  resize: vertical;
+}

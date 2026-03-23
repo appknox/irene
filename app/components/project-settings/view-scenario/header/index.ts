@@ -23,6 +23,10 @@ export default class ProjectSettingsViewScenarioHeaderComponent extends Componen
   @service('notifications') declare notify: NotificationService;
 
   @tracked showDeleteScenarioModal = false;
+  @tracked showEditScenarioModal = false;
+  @tracked scenarioName = '';
+  @tracked scenarioDescription = '';
+  @tracked scenarioStatus = false;
 
   get scenario() {
     return this.args.scenario;
@@ -30,6 +34,37 @@ export default class ProjectSettingsViewScenarioHeaderComponent extends Componen
 
   get isNotDefaultScenario() {
     return !this.scenario.isDefault;
+  }
+
+  get disableScenarioSaveBtn() {
+    return !this.scenarioName;
+  }
+
+  @action openEditScenarioModal() {
+    this.scenarioName = this.scenario.name || '';
+    this.scenarioDescription = this.scenario.description || '';
+    this.scenarioStatus = !!this.scenario.isActive;
+    this.showEditScenarioModal = true;
+  }
+
+  @action closeEditScenarioModal() {
+    this.showEditScenarioModal = false;
+  }
+
+  @action handleScenarioNameChange(event: Event) {
+    this.scenarioName = (event.target as HTMLInputElement).value;
+  }
+
+  @action handleScenarioDescriptionChange(event: Event) {
+    this.scenarioDescription = (event.target as HTMLInputElement).value;
+  }
+
+  @action toggleScenarioStatus(_: Event, checked?: boolean) {
+    this.scenarioStatus = !!checked;
+  }
+
+  @action saveEditedScenario() {
+    this.updateProjectScenario.perform();
   }
 
   @action handleDeleteScenario() {
@@ -43,6 +78,37 @@ export default class ProjectSettingsViewScenarioHeaderComponent extends Componen
   @action deleteScenario() {
     this.deleteProjectScenario.perform();
   }
+
+  updateProjectScenario = task(async () => {
+    if (!this.scenarioName) {
+      this.notify.error(this.intl.t('dastAutomation.enterScenarioName'));
+
+      return;
+    }
+
+    const prevScenarioData = {
+      name: this.scenario.name,
+      description: this.scenario.description,
+      isActive: this.scenario.isActive,
+    };
+
+    try {
+      this.scenario.setProperties({
+        name: this.scenarioName,
+        description: this.scenarioDescription,
+        isActive: this.scenarioStatus,
+      });
+
+      const adapterOptions = { projectId: this.args.project?.id };
+      await this.scenario.save({ adapterOptions });
+
+      this.notify.success(this.intl.t('save'));
+      this.closeEditScenarioModal();
+    } catch (error) {
+      this.scenario.setProperties(prevScenarioData);
+      this.notify.error(parseError(error, this.intl.t('tSomethingWentWrong')));
+    }
+  });
 
   deleteProjectScenario = task(async () => {
     try {

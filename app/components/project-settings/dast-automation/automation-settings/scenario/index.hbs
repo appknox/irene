@@ -29,6 +29,7 @@
       @scenarioList={{this.scenarioList}}
       @loadingScenarioList={{this.fetchProjectScenarios.isRunning}}
       @reloadScenarioList={{this.reloadProjectScenarios}}
+      @onEditScenario={{this.openEditScenarioModal}}
     />
   </AkStack>
 
@@ -50,7 +51,7 @@
 
 {{#if this.showAddScenarioModal}}
   <AkModal
-    @headerTitle='{{t "dastAutomation.addScenario"}}'
+    @headerTitle={{this.scenarioModalTitle}}
     @onClose={{this.closeAddScenarioModal}}
     @onClickOverlay={{this.closeAddScenarioModal}}
     @showHeader={{true}}
@@ -143,7 +144,7 @@
         <AkButton
           @variant='outlined'
           @color='neutral'
-          @disabled={{this.addScenarioToProject.isRunning}}
+          @disabled={{or this.addScenarioToProject.isRunning this.editScenarioInProject.isRunning}}
           {{on 'click' this.closeAddScenarioModal}}
           data-test-projectSettings-dastAutomationSettings-scenarioAddModal-cancelBtn
         >
@@ -153,11 +154,11 @@
         <AkButton
           @disabled={{this.disableScenarioAddBtn}}
           @variant='filled'
-          @loading={{this.addScenarioToProject.isRunning}}
+          @loading={{or this.addScenarioToProject.isRunning this.editScenarioInProject.isRunning}}
           {{on 'click' this.createScenario}}
           data-test-projectSettings-dastAutomationSettings-scenarioAddModal-confirmBtn
         >
-          {{t 'add'}}
+          {{this.scenarioModalConfirmCta}}
         </AkButton>
       </AkStack>
     </:footer>

@@ -40,6 +40,30 @@
       @direction='column'
       @spacing='1.5'
       @width='full'
+      data-test-projectSettings-viewScenarioHeader-scenarioDescription
+    >
+      <AkTypography
+        @variant='body1'
+        @color='textSecondary'
+        @fontWeight='medium'
+      >
+        {{t 'description'}}
+      </AkTypography>
+
+      <AkTypography
+        @variant='body1'
+        @color='textPrimary'
+        @fontWeight='medium'
+        @noWrap={{true}}
+      >
+        {{or @scenario.description '-'}}
+      </AkTypography>
+    </AkStack>
+
+    <AkStack
+      @direction='column'
+      @spacing='1.5'
+      @width='full'
       data-test-projectSettings-viewScenarioHeader-scenarioStatus
     >
       <AkTypography
@@ -57,21 +81,145 @@
     </AkStack>
   </AkStack>
 
-  <AkTooltip
-    @disabled={{this.isNotDefaultScenario}}
-    @arrow={{true}}
-    @title={{t 'dastAutomation.deleteDefaultScenarioInfo'}}
-    data-test-projectSettings-viewScenarioHeader-deleteDefaultScenarioInfo-tooltip
-  >
+  <AkStack @alignItems='center' @spacing='1'>
     <AkIconButton
-      disabled={{@scenario.isDefault}}
-      {{on 'click' this.handleDeleteScenario}}
-      data-test-projectSettings-viewScenarioHeader-deleteScenarioModalTrigger
+      {{on 'click' this.openEditScenarioModal}}
+      data-test-projectSettings-viewScenarioHeader-editScenarioModalTrigger
     >
-      <AkIcon @iconName='delete' />
+      <AkIcon @iconName='edit' />
     </AkIconButton>
-  </AkTooltip>
+
+    <AkTooltip
+      @disabled={{this.isNotDefaultScenario}}
+      @arrow={{true}}
+      @title={{t 'dastAutomation.deleteDefaultScenarioInfo'}}
+      data-test-projectSettings-viewScenarioHeader-deleteDefaultScenarioInfo-tooltip
+    >
+      <AkIconButton
+        disabled={{@scenario.isDefault}}
+        {{on 'click' this.handleDeleteScenario}}
+        data-test-projectSettings-viewScenarioHeader-deleteScenarioModalTrigger
+      >
+        <AkIcon @iconName='delete' />
+      </AkIconButton>
+    </AkTooltip>
+  </AkStack>
 </AkStack>
+
+{{#if this.showEditScenarioModal}}
+  <AkModal
+    @headerTitle='{{t "edit"}} {{t "scenario"}}'
+    @onClose={{this.closeEditScenarioModal}}
+    @onClickOverlay={{this.closeEditScenarioModal}}
+    @disableClose={{this.updateProjectScenario.isRunning}}
+    @showHeader={{true}}
+    @noGutter={{true}}
+  >
+    <:default>
+      <AkStack
+        @direction='column'
+        @spacing='2'
+        class='p-3 pr-6'
+        {{style minWidth='420px'}}
+      >
+        <AkStack @width='full' @spacing='4' @alignItems='center'>
+          <AkTypography
+            for='scenario'
+            @fontWeight='regular'
+            @color='neutral'
+            @tag='label'
+            {{style minWidth='75px'}}
+            data-test-projectSettings-viewScenario-editScenarioModal-scenarioNameTextfieldTitle
+          >
+            {{t 'scenario'}}
+          </AkTypography>
+
+          <AkTextField
+            @id='scenario'
+            @value={{this.scenarioName}}
+            @placeholder={{t 'dastAutomation.enterScenarioName'}}
+            {{on 'input' this.handleScenarioNameChange}}
+            data-test-projectSettings-viewScenario-editScenarioModal-scenarioNameTextfield
+          />
+        </AkStack>
+
+        <AkStack @width='full' @spacing='4' @alignItems='flex-start'>
+          <AkTypography
+            for='description'
+            @fontWeight='regular'
+            @color='neutral'
+            @tag='label'
+            {{style minWidth='75px'}}
+            data-test-projectSettings-viewScenario-editScenarioModal-scenarioDescriptionTextfieldTitle
+          >
+            {{t 'description'}}
+          </AkTypography>
+
+          <Textarea
+            id='description'
+            @value={{this.scenarioDescription}}
+            @placeholder={{t 'description'}}
+            rows='4'
+            local-class='scenario-description-textarea'
+            {{on 'input' this.handleScenarioDescriptionChange}}
+            data-test-projectSettings-viewScenario-editScenarioModal-scenarioDescriptionTextfield
+          />
+        </AkStack>
+
+        <AkStack @spacing='4' @alignItems='center'>
+          <AkTypography
+            @fontWeight='regular'
+            @color='neutral'
+            {{style minWidth='75px'}}
+            data-test-projectSettings-viewScenario-editScenarioModal-scenarioStatusTitle
+          >
+            {{t 'status'}}
+          </AkTypography>
+
+          <AkToggle
+            @checked={{this.scenarioStatus}}
+            @size='small'
+            @onChange={{this.toggleScenarioStatus}}
+            {{style margin='0'}}
+            data-test-projectSettings-viewScenario-editScenarioModal-scenarioStatusToggle
+          />
+        </AkStack>
+      </AkStack>
+    </:default>
+
+    <:footer>
+      <AkDivider />
+
+      <AkStack
+        @justifyContent='flex-start'
+        @alignItems='center'
+        @spacing='1.5'
+        local-class='scenario-delete-footer-container'
+        class='px-3 py-2'
+      >
+        <AkButton
+          @variant='outlined'
+          @color='neutral'
+          @disabled={{this.updateProjectScenario.isRunning}}
+          {{on 'click' this.closeEditScenarioModal}}
+          data-test-projectSettings-viewScenario-editScenarioModal-cancelBtn
+        >
+          {{t 'cancel'}}
+        </AkButton>
+
+        <AkButton
+          @disabled={{this.disableScenarioSaveBtn}}
+          @loading={{this.updateProjectScenario.isRunning}}
+          @variant='filled'
+          {{on 'click' this.saveEditedScenario}}
+          data-test-projectSettings-viewScenario-editScenarioModal-confirmBtn
+        >
+          {{t 'save'}}
+        </AkButton>
+      </AkStack>
+    </:footer>
+  </AkModal>
+{{/if}}
 
 {{#if this.showDeleteScenarioModal}}
   <AkModal
