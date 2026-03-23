@@ -9,6 +9,7 @@ import type { DS } from 'ember-data';
 
 import ENV from 'irene/config/environment';
 import ENUMS from 'irene/enums';
+import parseError from 'irene/utils/parse-error';
 import type SkAppModel from 'irene/models/sk-app';
 
 type SkAppModelArray = DS.AdapterPopulatedRecordArray<SkAppModel> & {
@@ -26,7 +27,6 @@ export default class SkAppsService extends Service {
   @tracked offset = 0;
   @tracked monitoringStatusFilter = -1;
   @tracked skAppsCount = 0;
-  @tracked fakeAppDetectionEnabled = false;
   @tracked searchQuery = '';
 
   get isFetchingSkInventoryApps() {
@@ -42,12 +42,10 @@ export default class SkAppsService extends Service {
     limit = this.limit,
     offset = this.offset,
     monitoringStatusFilter = this.monitoringStatusFilter,
-    fakeAppDetectionEnabled = this.fakeAppDetectionEnabled,
   }) {
     this.limit = limit;
     this.offset = offset;
     this.monitoringStatusFilter = monitoringStatusFilter;
-    this.fakeAppDetectionEnabled = fakeAppDetectionEnabled;
 
     return this;
   }
@@ -57,7 +55,29 @@ export default class SkAppsService extends Service {
   }
 
   fetchFakeApps = task({ keepLatest: true }, async () => {
-    this.fetch.perform();
+    const queryParams = {
+      limit: this.limit,
+      offset: this.offset,
+
+      ...(this.monitoringStatusFilter !== -1 && {
+        monitoring_status: this.monitoringStatusFilter,
+      }),
+
+      ...(this.searchQuery && { q: this.searchQuery }),
+    };
+
+    try {
+      const skApps = (await this.store.query(
+        'sk-fake-app-inventory',
+        queryParams
+      )) as SkAppModelArray;
+
+      this.skApps = skApps;
+      this.skAppsCount = skApps.meta.count;
+    } catch (error) {
+      const err = parseError(error);
+      this.notify.error(err);
+    }
   });
 
   fetch = task({ keepLatest: true }, async () => {
@@ -69,10 +89,6 @@ export default class SkAppsService extends Service {
 
       ...(this.monitoringStatusFilter !== -1 && {
         monitoring_status: this.monitoringStatusFilter,
-      }),
-
-      ...(this.fakeAppDetectionEnabled && {
-        fake_app_detection_enabled: this.fakeAppDetectionEnabled,
       }),
 
       ...(this.searchQuery && { q: this.searchQuery }),

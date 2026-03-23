@@ -34,7 +34,6 @@ export default class AuthenticatedStoreknoxInventoryAppListRoute extends AkBread
         limit: app_limit,
         offset: app_offset,
         monitoringStatusFilter: monitoring_status,
-        fakeAppDetectionEnabled: false,
       })
       .reload();
 

@@ -27,7 +27,6 @@ export default class AuthenticatedStoreknoxFakeAppsIndexRoute extends Route {
       .setQueryParams({
         limit: app_limit,
         offset: app_offset,
-        fakeAppDetectionEnabled: true,
       })
       .fetchFakeApps.perform();
 

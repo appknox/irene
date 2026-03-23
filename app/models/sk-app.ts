@@ -82,9 +82,6 @@ export default class SkAppModel extends Model {
   @attr('number')
   declare licenseAllocated: number;
 
-  @attr('boolean')
-  declare fakeAppDetectionEnabled: boolean;
-
   @attr('number')
   declare fakeAppDetectionStatus: number;
 
