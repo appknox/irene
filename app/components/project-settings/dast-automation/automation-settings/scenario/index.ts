@@ -34,6 +34,7 @@ export default class ProjectSettingsDastAutomationAutomationSettingsScenarioComp
 
   @tracked showAddScenarioModal = false;
   @tracked scenarioName = '';
+  @tracked scenarioDescription = '';
   @tracked scenarioStatus = false;
   @tracked projectScenarios: ProjectScenariosArrayResponse | null = null;
 
@@ -85,6 +86,11 @@ export default class ProjectSettingsDastAutomationAutomationSettingsScenarioComp
     this.scenarioName = (event.target as HTMLInputElement).value;
   }
 
+  @action
+  handleScenarioDescriptionChange(event: Event) {
+    this.scenarioDescription = (event.target as HTMLInputElement).value;
+  }
+
   addScenarioToProject = task(async () => {
     if (!this.scenarioName) {
       this.notify.error(this.intl.t('dastAutomation.enterScenarioName'));
@@ -95,7 +101,7 @@ export default class ProjectSettingsDastAutomationAutomationSettingsScenarioComp
     try {
       const scenario = this.store.createRecord('scan-parameter-group', {
         name: this.scenarioName,
-        description: '',
+        description: this.scenarioDescription,
       });
 
       const adapterOptions = { projectId: this.args.project?.id };
@@ -109,6 +115,7 @@ export default class ProjectSettingsDastAutomationAutomationSettingsScenarioComp
       this.notify.success(this.intl.t('dastAutomation.scenarioAdded'));
 
       this.scenarioName = '';
+      this.scenarioDescription = '';
       this.scenarioStatus = false;
 
       this.closeAddScenarioModal();

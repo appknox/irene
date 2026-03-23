@@ -9,3 +9,12 @@
     --project-settings-dast-automation-automation-settings-scenario-form-footer-box-shadow
   );
 }
+
+.scenario-description-textarea {
+  width: 100%;
+  min-height: 96px;
+  resize: vertical;
+  background-color: var(
+    --project-settings-dast-automation-automation-settings-scenario-textfield-bg
+  );
+}

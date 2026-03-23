@@ -86,6 +86,29 @@
           />
         </AkStack>
 
+        <AkStack @width='full' @spacing='4' @alignItems='flex-start'>
+          <AkTypography
+            for='description'
+            @fontWeight='regular'
+            @color='neutral'
+            @tag='label'
+            {{style minWidth='75px'}}
+            data-test-projectSettings-dastAutomationSettings-scenarioAddModal-scenarioDescriptionTextfieldTitle
+          >
+            {{t 'description'}}
+          </AkTypography>
+
+          <Textarea
+            id='description'
+            @value={{this.scenarioDescription}}
+            @placeholder={{t 'description'}}
+            rows='4'
+            local-class='scenario-description-textarea'
+            {{on 'input' this.handleScenarioDescriptionChange}}
+            data-test-projectSettings-dastAutomationSettings-scenarioAddModal-scenarioDescriptionTextfield
+          />
+        </AkStack>
+
         <AkStack @spacing='4' @alignItems='center'>
           <AkTypography
             @fontWeight='regular'
