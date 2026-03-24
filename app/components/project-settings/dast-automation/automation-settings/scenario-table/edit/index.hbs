@@ -1,0 +1,10 @@
+<AkStack @alignItems='center' @justifyContent='flex-end' class='pr-2'>
+  <AkIconButton
+    @size='small'
+    title='{{t "edit"}}'
+    {{on 'click' this.handleEditClick}}
+    data-test-projectSettings-dastAutomationSettings-scenarioTable-editBtn
+  >
+    <AkIcon @iconName='edit' />
+  </AkIconButton>
+</AkStack>
