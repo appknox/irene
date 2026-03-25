@@ -1,0 +1,22 @@
+.settings-pii-footer {
+  position: sticky;
+  bottom: 1.428em;
+  background-color: var(--privacy-module-settings-pii-background);
+  box-shadow: var(--privacy-module-settings-pii-footer-box-shadow);
+  padding: 1em 1.5em;
+  gap: 0.714em;
+}
+
+.settings-pii-body {
+  height: calc(100vh - 200px);
+  overflow: auto;
+  padding: 1.142em;
+}
+
+.divider {
+  margin: 1em 0 !important;
+}
+
+.type-item {
+  margin-left: -0.57em;
+}

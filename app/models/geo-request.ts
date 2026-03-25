@@ -9,6 +9,9 @@ export default class GeoRequestModel extends Model {
 
   @attr('date')
   declare updatedAt: Date;
+
+  @attr('boolean')
+  declare settingsOutdated: boolean;
 }
 
 declare module 'ember-data/types/registries/model' {

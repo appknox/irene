@@ -190,12 +190,22 @@ export default class PrivacyModuleAppDetailsHeaderComponent extends Component<Pr
     return this.privacyModule.showNote;
   }
 
+  get showPiiParametersChangedNote() {
+    return this.privacyModule.showPiiParametersChangedNote;
+  }
+
+  get showGeoParametersChangedNote() {
+    return this.privacyModule.showGeoParametersChangedNote;
+  }
+
   get noteAvailable() {
     return (
       (this.showCompleteApiScanNote ||
         this.showPiiUpdated ||
         this.showCompleteDastScanNote ||
-        this.showGeoUpdated) &&
+        this.showGeoUpdated ||
+        this.showPiiParametersChangedNote ||
+        this.showGeoParametersChangedNote) &&
       this.showNote
     );
   }

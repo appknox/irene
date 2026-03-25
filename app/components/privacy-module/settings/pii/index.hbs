@@ -1,0 +1,128 @@
+<AkStack @direction='column' @justifyContent='space-between' @width='full'>
+  <AkStack @width='full' @direction='column' local-class='settings-pii-body'>
+    <AkStack @width='full' @direction='column'>
+      <AkStack
+        @width='full'
+        @alignItems='center'
+        @justifyContent='space-between'
+      >
+        <AkTypography
+          @variant='h6'
+          data-test-privacy-settings-pii-toggle-header
+        >
+          {{t 'privacyModule.piiVisibility'}}
+        </AkTypography>
+
+        <AkToggle
+          @checked={{this.piiVisible}}
+          @onChange={{this.togglePiiVisible}}
+          @size='small'
+          data-test-privacy-settings-pii-toggle
+        />
+      </AkStack>
+
+      <AkTypography @variant='body2' @color='textSecondary'>
+        {{t 'privacyModule.piiVisibilityDesc'}}
+      </AkTypography>
+    </AkStack>
+
+    <AkDivider @color='dark' local-class='divider' />
+
+    <AkStack @width='full' @direction='column'>
+      <AkTypography
+        @variant='h6'
+        class='mb-1'
+        data-test-privacy-settings-pii-regex-header
+      >
+        {{t 'privacyModule.addPiiPattern'}}
+      </AkTypography>
+
+      <AkTypography @variant='body2' @color='textSecondary'>
+        {{t 'privacyModule.enterPattern'}}
+      </AkTypography>
+
+      <AkTypography @variant='body2' @color='textSecondary'>
+        {{t 'privacyModule.exampleRegex'}}
+      </AkTypography>
+
+      <AkStack @alignItems='center' @width='full'>
+        <AkTextField
+          @formControlClass='my-2'
+          @placeholder={{t 'privacyModule.enterPatternPlaceholder'}}
+          @value={{this.newRegex}}
+          data-test-privacy-settings-pii-regex-input
+        />
+
+        <AkButton
+          {{on 'click' this.addRegex}}
+          class='ml-2'
+          data-test-privacy-settings-add-regex-button
+        >
+          {{t 'add'}}
+        </AkButton>
+      </AkStack>
+
+      <AkStack @spacing='2' {{style flexWrap='wrap'}}>
+        {{#each this.customRegexList as |regex idx|}}
+          <AkChip
+            @variant='outlined'
+            @label={{regex}}
+            @onDelete={{fn this.handleRegexDelete idx}}
+            data-test-privacy-settings-pii-regex-chip={{idx}}
+          />
+        {{/each}}
+      </AkStack>
+    </AkStack>
+
+    <AkDivider @color='dark' local-class='divider' />
+
+    <AkStack @width='full' @direction='column'>
+      <AkTypography
+        @variant='h6'
+        class='mb-1'
+        data-test-privacy-settings-pii-types-header
+      >
+        {{t 'privacyModule.defaultPiiDetected'}}
+      </AkTypography>
+
+      {{#each this.piiSettingsList as |item|}}
+        <AkStack @alignItems='center' local-class='type-item'>
+          <AkCheckbox
+            @checked={{item.value}}
+            @onChange={{fn this.togglePiiItem item.settings_parameter}}
+            data-test-privacy-settings-pii-checkbox={{item.settings_parameter}}
+          />
+
+          <AkTypography>{{item.label}}</AkTypography>
+        </AkStack>
+      {{/each}}
+    </AkStack>
+  </AkStack>
+
+  <AkStack @width='full' local-class='settings-pii-footer'>
+    {{#if this.saveSettings.isRunning}}
+      <AkLoader
+        @size={{18}}
+        class='mt-1'
+        data-test-privacy-settings-save-loader
+      />
+    {{else}}
+      <AkButton
+        {{on 'click' (perform this.saveSettings)}}
+        @disabled={{this.disableSaveButton}}
+        data-test-privacy-settings-save-button
+      >
+        {{t 'save'}}
+      </AkButton>
+
+      <AkButton
+        @variant='outlined'
+        @color='neutral'
+        {{on 'click' this.handleCancel}}
+        data-test-privacy-settings-cancel-button
+      >
+        {{t 'cancel'}}
+      </AkButton>
+    {{/if}}
+  </AkStack>
+</AkStack>

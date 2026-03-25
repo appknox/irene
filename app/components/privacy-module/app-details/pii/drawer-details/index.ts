@@ -4,11 +4,19 @@ import Component from '@glimmer/component';
 import type IntlService from 'ember-intl/services/intl';
 
 import type PiiModel from 'irene/models/pii';
+import type { PiiMetaData } from 'irene/models/pii';
 
 export interface PrivacyModuleAppDetailsPiiDrawerDetailsComponentSignature {
   Args: {
     selectedPii: PiiModel | null;
   };
+}
+
+interface SourceInfo {
+  value: string;
+  title: string;
+  justify: 'flex-start' | 'space-between';
+  noWrap: boolean;
 }
 
 type SourceType = 'BINARY' | 'API';
@@ -34,6 +42,36 @@ export default class PrivacyModuleAppDetailsPiiDrawerDetailsComponent extends Co
   }
 
   @action
+  getSourceInfo(dataItem?: PiiMetaData): SourceInfo | null {
+    if (!dataItem) {
+      return null;
+    }
+
+    const url = dataItem?.url;
+    const textSource = dataItem?.text_source;
+
+    if (textSource) {
+      return {
+        value: textSource,
+        title: this.intl.t('source'),
+        justify: 'space-between',
+        noWrap: false,
+      };
+    }
+
+    if (url) {
+      return {
+        value: url,
+        title: this.intl.t('privacyModule.piiApiUrl'),
+        justify: 'flex-start',
+        noWrap: true,
+      };
+    }
+
+    return null;
+  }
+
+  @action
   getSource(source?: SourceType) {
     if (source === 'BINARY') {
       return this.intl.t('appBinary');
@@ -44,7 +82,7 @@ export default class PrivacyModuleAppDetailsPiiDrawerDetailsComponent extends Co
 
   @action
   handleCopySuccess(event: ClipboardJS.Event) {
-    this.notify.info(this.intl.t('urlCopied'));
+    this.notify.info(this.intl.t('copiedToClipboard'));
 
     event.clearSelection();
   }

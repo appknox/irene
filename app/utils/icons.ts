@@ -168,6 +168,7 @@ export const MaterialSymbolsSet = [
   'replay',
   'add-column-right-outline-rounded',
   'cards-sharp',
+  'distance',
 ] as const;
 
 export const MdiIconsSet = [

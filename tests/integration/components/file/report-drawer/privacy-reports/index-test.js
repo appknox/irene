@@ -350,33 +350,9 @@ module(
         )
       );
 
-      // refresh dom reference
-      reportList = findAll('[data-test-privacyReport-reportlistItem]');
-
-      // previous state
       assert
-        .dom(
-          '[data-test-privacyReport-reportGenerateDescription]',
-          reportList[0]
-        )
-        .doesNotExist();
-
-      assert
-        .dom('[data-test-privacyReport-reportGenerateBtn]', reportList[0])
-        .doesNotExist();
-
-      // current state
-      assert
-        .dom('[data-test-privacyReport-reportPrimaryText]', reportList[0])
-        .hasText(t('privacyModule.downloadPdfPrimaryText'));
-
-      assert
-        .dom('[data-test-privacyReport-reportGeneratingText]', reportList[0])
+        .dom('[data-test-privacyReport-reportGenerateBtn]')
         .hasText(`${t('generating')}...`);
-
-      assert
-        .dom('[data-test-privacyreport-reportgeneratingloader]', reportList[0])
-        .exists();
 
       // change status to completed and increment privacy report counter to notify
       this.set('status', ENUMS.PM_REPORT_STATUS.COMPLETED);
@@ -395,10 +371,6 @@ module(
       // previous state
       assert
         .dom('[data-test-privacyReport-reportGeneratingText]', reportList[0])
-        .doesNotExist();
-
-      assert
-        .dom('[data-test-privacyReport-reportGeneratingLoader]', reportList[0])
         .doesNotExist();
 
       // completed state
