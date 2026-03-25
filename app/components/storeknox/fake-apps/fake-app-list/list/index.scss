@@ -15,3 +15,15 @@
 .table-body {
   background-color: var(--storeknox-fake-apps-fake-apps-list-background-color);
 }
+
+:global(.ember-table .ember-table-overflow) {
+  max-height: calc(100vh - 500px);
+  overflow: auto;
+  max-width: 100%;
+}
+
+.ember-table .ember-table-header {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}

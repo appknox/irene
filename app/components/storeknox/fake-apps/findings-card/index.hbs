@@ -42,21 +42,19 @@
             {{@title}}
           </AkTypography>
 
-          {{#if @isSemanticFinding}}
-            <AkTooltip @placement='right' @arrow={{true}}>
-              <:tooltipContent>
-                <div local-class='tooltip-content-container'>
-                  <AkTypography @variant='body1' @color='inherit'>
-                    {{t 'storeknox.fakeApps.semanticSimilarityInfo'}}
-                  </AkTypography>
-                </div>
-              </:tooltipContent>
+          <AkTooltip @placement='right' @arrow={{true}}>
+            <:tooltipContent>
+              <div local-class='tooltip-content-container'>
+                <AkTypography @variant='body1' @color='inherit'>
+                  {{@info}}
+                </AkTypography>
+              </div>
+            </:tooltipContent>
 
-              <:default>
-                <AkIcon @iconName='info' @size='small' @color='textSecondary' />
-              </:default>
-            </AkTooltip>
-          {{/if}}
+            <:default>
+              <AkIcon @iconName='info' @size='small' @color='textSecondary' />
+            </:default>
+          </AkTooltip>
         </AkStack>
 
         <AkTypography data-test-storeknoxFakeAppsFindingsCard-description>

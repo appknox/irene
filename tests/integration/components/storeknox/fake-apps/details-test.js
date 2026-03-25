@@ -465,32 +465,32 @@ module(
           description: aiClassificationJustification,
         },
         {
-          title: t('storeknox.fakeApps.semanticSimilarity'),
+          title: t('storeknox.fakeApps.brandAnalysis'),
           score: capitalizeLevel(scoreLevels.SemanticSimilarityRule),
           description: scores.SemanticSimilarityRule_justification,
         },
         {
-          title: t('storeknox.fakeApps.logoSimilarity'),
+          title: t('storeknox.fakeApps.logoAnalysis'),
           score: capitalizeLevel(scoreLevels.LogoSimilarityRule),
           description: scores.LogoSimilarityRule_justification,
         },
         {
-          title: t('storeknox.fakeApps.titleBrandAbuse'),
+          title: t('storeknox.fakeApps.appNameAnalysis'),
           score: capitalizeLevel(scoreLevels.TitleBrandAbuseRule),
           description: scores.TitleBrandAbuseRule_justification,
         },
         {
-          title: t('storeknox.fakeApps.packageSimilarity'),
+          title: t('storeknox.fakeApps.packageAnalysis'),
           score: capitalizeLevel(scoreLevels.PackageSimilarityRule),
           description: scores.PackageSimilarityRule_justification,
         },
         {
-          title: t('storeknox.fakeApps.developerConsistency'),
+          title: t('storeknox.fakeApps.publisherAnalysis'),
           score: capitalizeLevel(scoreLevels.DeveloperConsistencyRule),
           description: scores.DeveloperConsistencyRule_justification,
         },
         {
-          title: t('storeknox.fakeApps.appFunctionalitySimilarity'),
+          title: t('storeknox.fakeApps.functionalAnalysis'),
           score: capitalizeLevel(scoreLevels.AppFunctionalitySimilarityRule),
           description: scores.AppFunctionalitySimilarityRule_justification,
         },
@@ -558,34 +558,34 @@ module(
           description: this.skFakeAppRecord.aiClassificationJustification,
         },
         {
-          title: t('storeknox.fakeApps.semanticSimilarity'),
+          title: t('storeknox.fakeApps.brandAnalysis'),
           score: capitalizeLevel(scoreLevels.SemanticSimilarityRule), // HIGH
           description: scores.SemanticSimilarityRule_justification,
         },
         {
-          title: t('storeknox.fakeApps.logoSimilarity'),
+          title: t('storeknox.fakeApps.logoAnalysis'),
           score: capitalizeLevel(scoreLevels.LogoSimilarityRule), // MEDIUM
           description: scores.LogoSimilarityRule_justification,
         },
         {
-          title: t('storeknox.fakeApps.titleBrandAbuse'),
+          title: t('storeknox.fakeApps.appNameAnalysis'),
           score: capitalizeLevel(scoreLevels.TitleBrandAbuseRule), // LOW
           description: scores.TitleBrandAbuseRule_justification,
         },
         {
-          title: t('storeknox.fakeApps.packageSimilarity'),
+          title: t('storeknox.fakeApps.packageAnalysis'),
           score: capitalizeLevel(scoreLevels.PackageSimilarityRule),
           description: scores.PackageSimilarityRule_justification,
           doesNotExist: true,
         },
         {
-          title: t('storeknox.fakeApps.developerConsistency'),
+          title: t('storeknox.fakeApps.publisherAnalysis'),
           score: capitalizeLevel(scoreLevels.DeveloperConsistencyRule),
           description: scores.DeveloperConsistencyRule_justification,
           doesNotExist: true,
         },
         {
-          title: t('storeknox.fakeApps.appFunctionalitySimilarity'),
+          title: t('storeknox.fakeApps.functionalAnalysis'),
           score: capitalizeLevel(scoreLevels.AppFunctionalitySimilarityRule),
           description: scores.AppFunctionalitySimilarityRule_justification,
           doesNotExist: true,

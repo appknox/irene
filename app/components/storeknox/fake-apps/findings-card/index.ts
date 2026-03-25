@@ -4,11 +4,11 @@ import Component from '@glimmer/component';
 export interface StoreknoxFakeAppsFindingsCardSignature {
   Args: {
     title?: string;
+    info?: string;
     isDefaultFinding?: boolean;
     score?: number | string;
     description?: string;
     isIgnored?: boolean;
-    isSemanticFinding?: boolean;
   };
 }
 
