@@ -61,6 +61,14 @@
       Visit Dashboard
     </AkButton>
 
+    <AkButton
+      @variant='outlined'
+      {{on 'click' this.openInterimReportDrawer}}
+      data-test-securityFileDetailsActions-interimReportBtn
+    >
+      Interim Report
+    </AkButton>
+
     <Security::AnalysisReportBtn @file={{this.file}} />
   </AkStack>
 </AkStack>
@@ -158,3 +166,11 @@
     </AkStack>
   {{/if}}
 </AkStack>
+
+{{#if this.interimReportDrawerOpen}}
+  <Security::InterimReportDrawer
+    @file={{@file}}
+    @open={{this.interimReportDrawerOpen}}
+    @onClose={{this.closeInterimReportDrawer}}
+  />
+{{/if}}

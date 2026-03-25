@@ -13,6 +13,7 @@ export default class CommonDRFAdapter extends DRFAuthenticationBase {
   namespace = ENV.namespace;
   namespace_v2 = ENV.namespace_v2;
   namespace_v3 = ENV.namespace_v3;
+  hudson_namespace = ENV.hudson_namespace;
   addTrailingSlashes = false;
 
   @service declare organization: OrganizationService;

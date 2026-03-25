@@ -89,8 +89,33 @@ export default class FileReportDrawerVaReportsReportItemComponent extends Compon
     this.getReportByType.perform();
   }
 
+  @action
+  downloadInterimReport() {
+    const adapter = this.store.adapterFor('interim-report');
+
+    if (this.args.reportDetails.reportId) {
+      return adapter.fetchDownloadReportDetails(
+        this.args.reportDetails.reportId
+      );
+    } else {
+      this.notify.error(this.intl.t('downloadUrlNotFound'));
+    }
+  }
+
   getReportByType = task(async () => {
     try {
+      if (this.args.reportDetails.reportId) {
+        const data = await waitForPromise(this.downloadInterimReport());
+
+        if (data?.url) {
+          this.window.open(data.url, '_blank');
+        } else {
+          this.notify.error(this.intl.t('downloadUrlNotFound'));
+        }
+
+        return;
+      }
+
       let report;
 
       if (this.fileReport) {

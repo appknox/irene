@@ -32,6 +32,7 @@ declare const config: {
   namespace: string;
   namespace_v2: string;
   namespace_v3: string;
+  hudson_namespace: string;
   host: string;
   'ember-cli-mirage': EmberCLIMirage;
   emblemOptions: EmblemOptions;

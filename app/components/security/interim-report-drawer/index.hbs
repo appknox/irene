@@ -1,0 +1,132 @@
+<div>
+  <AkDrawer
+    @open={{@open}}
+    @onClose={{this.handleClose}}
+    @anchor='right'
+    data-test-securityInterimReportDrawer
+    as |dr|
+  >
+    <AkAppbar @justifyContent='space-between' as |ab|>
+      <AkTypography
+        @variant='h5'
+        @color='inherit'
+        data-test-securityInterimReportDrawer-title
+      >
+        Interim Report
+      </AkTypography>
+
+      <AkIconButton
+        class={{ab.classes.defaultIconBtn}}
+        {{on 'click' dr.closeHandler}}
+        data-test-securityInterimReportDrawer-close-btn
+      >
+        <AkIcon @iconName='close' />
+      </AkIconButton>
+    </AkAppbar>
+
+    <AkStack @direction='column' @spacing='2' @width='full'>
+      {{#if this.fetchInterimReport.isRunning}}
+        <AkStack
+          @alignItems='center'
+          @justifyContent='center'
+          @spacing='1.5'
+          class='px-3 py-4'
+          {{style minWidth='400px'}}
+        >
+          <AkLoader @size={{13}} />
+
+          <AkTypography @variant='body2' @color='textSecondary'>
+            Loading report...
+          </AkTypography>
+        </AkStack>
+
+      {{else if this.isInterimReportGenerating}}
+        <AkStack
+          @alignItems='center'
+          @justifyContent='space-between'
+          @spacing='1.5'
+          class='px-3 py-2'
+          {{style width='400px'}}
+          data-test-securityInterimReportDrawer-generateInterimReportProgress-container
+        >
+          <AkStack @direction='column' @spacing='1' @width='full'>
+            <AkTypography
+              @fontWeight='medium'
+              data-test-securityInterimReportDrawer-generateInterimReportProgress-text
+            >
+              Generating Report...
+            </AkTypography>
+
+            <AkLoader::Linear
+              @variant='determinate'
+              @progress={{this.interimReport.pdfProgress}}
+              data-test-securityInterimReportDrawer-generateInterimReportProgress-loader
+            />
+          </AkStack>
+
+          <AkTypography
+            @variant='h6'
+            @fontWeight='medium'
+            data-test-securityInterimReportDrawer-generateInterimReportProgress-percent
+          >
+            {{this.interimReport.pdfProgress}}%
+          </AkTypography>
+        </AkStack>
+
+      {{else if this.isInterimReportGenerated}}
+        <AkAccordion::Group
+          @defaultOpen={{array 'interim-report'}}
+          @openMultiple={{true}}
+          as |actx|
+        >
+          {{#each this.reportGroupList as |group|}}
+            <AkAccordion
+              @id={{group.id}}
+              @accordionCtx={{actx}}
+              @summaryText={{group.title}}
+              data-test-security-interimReportDrawer-group
+              data-test-security-interimReportDrawer-groupItem='{{group.id}}'
+            >
+              <:content>
+                {{#let (component group.contentComponent) as |GroupContent|}}
+                  <AkList {{style padding='0px'}}>
+                    <GroupContent
+                      @reportDetails={{this.reportDetails}}
+                      @regenerateReportTaskIsRunning={{this.generateInterimReportTask.isRunning}}
+                      @regenerateReport={{this.generateInterimReport}}
+                    />
+                  </AkList>
+                {{/let}}
+              </:content>
+            </AkAccordion>
+          {{/each}}
+        </AkAccordion::Group>
+      {{else}}
+        <AkStack
+          @direction='column'
+          @spacing='2'
+          class='px-3 py-2'
+          data-test-securityInterimReportDrawer-generateInterimReport-CTA
+        >
+          <AkSvg::GenerateReport
+            data-test-securityInterimReportDrawer-generateInterimReportCTA-vector
+          />
+
+          <AkTypography
+            data-test-securityInterimReportDrawer-generateInterimReportCTA-directiveText
+          >
+            Generate an interim report for the first time for this file.
+          </AkTypography>
+
+          <AkButton
+            @loading={{this.generateInterimReportTask.isRunning}}
+            {{on 'click' this.generateInterimReport}}
+            data-test-securityInterimReportDrawer-generateInterimReportCTA-btn
+          >
+            Generate Report
+          </AkButton>
+        </AkStack>
+      {{/if}}
+    </AkStack>
+  </AkDrawer>
+</div>

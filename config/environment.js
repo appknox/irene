@@ -215,6 +215,7 @@ module.exports = function (environment) {
     namespace: 'api',
     namespace_v2: 'api/v2',
     namespace_v3: 'api/v3',
+    hudson_namespace: 'api/hudson-api',
     host: host,
     'ember-cli-mirage': {
       enabled: false,

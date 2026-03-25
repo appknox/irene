@@ -65,9 +65,9 @@ module(
       });
 
       await render(hbs`
-        <File::ReportDrawer::VaReports::ReportItem   
+        <File::ReportDrawer::VaReports::ReportItem
           @reportDetails={{this.reportDetails}}
-          @fileReport={{this.fileReport}} 
+          @fileReport={{this.fileReport}}
         />
       `);
 
@@ -124,9 +124,9 @@ module(
       });
 
       await render(hbs`
-        <File::ReportDrawer::VaReports::ReportItem   
+        <File::ReportDrawer::VaReports::ReportItem
           @reportDetails={{this.reportDetails}}
-          @fileReport={{this.fileReport}} 
+          @fileReport={{this.fileReport}}
         />
       `);
 
@@ -170,9 +170,9 @@ module(
       });
 
       await render(hbs`
-        <File::ReportDrawer::VaReports::ReportItem   
+        <File::ReportDrawer::VaReports::ReportItem
           @reportDetails={{this.reportDetails}}
-          @fileReport={{this.fileReport}} 
+          @fileReport={{this.fileReport}}
         />
       `);
 
@@ -214,9 +214,9 @@ module(
         });
 
         await render(hbs`
-        <File::ReportDrawer::VaReports::ReportItem   
+        <File::ReportDrawer::VaReports::ReportItem
           @reportDetails={{this.reportDetails}}
-          @fileReport={{this.fileReport}} 
+          @fileReport={{this.fileReport}}
         />
       `);
 
@@ -255,13 +255,127 @@ module(
       });
 
       await render(hbs`
-        <File::ReportDrawer::VaReports::ReportItem   
+        <File::ReportDrawer::VaReports::ReportItem
           @reportDetails={{this.reportDetails}}
-          @fileReport={{this.fileReport}} 
+          @fileReport={{this.fileReport}}
         />
       `);
 
       assert.dom('[data-test-fileVaReports-reportListItem]').exists();
+
+      assert
+        .dom('[data-test-vaReportListItem-reportDownloadBtn]')
+        .isNotDisabled();
+
+      await click('[data-test-vaReportListItem-reportDownloadBtn]');
+
+      const notifyService = this.owner.lookup('service:notifications');
+
+      assert.strictEqual(notifyService.errorMsg, t('downloadUrlNotFound'));
+    });
+
+    test('it shows download button for interim report when reportId is present', async function (assert) {
+      const downloadUrl = 'https://example.com/interim-report.pdf';
+
+      this.server.get(
+        '/hudson-api/interim-reports/:id/pdf/download_url',
+        () => ({ url: downloadUrl })
+      );
+
+      this.set('reportDetails', {
+        fileReport: null,
+        type: 'pdf',
+        primaryText: t('fileReport.interimReport', { reportType: 'pdf' }),
+        secondaryText: `Password: DUMMY_INTERIM_PASSWORD`, //NOSONAR
+        iconComponent: 'ak-svg/pdf-report',
+        copyText: 'DUMMY_INTERIM_PASSWORD', //NOSONAR
+        generatedOnDateTime: '1 January 2025 10:00 AM',
+        generatedBy: 'admin@example.com',
+        reportId: '1',
+      });
+
+      await render(hbs`
+        <File::ReportDrawer::VaReports::ReportItem
+          @reportDetails={{this.reportDetails}}
+          @fileReport={{null}}
+        />
+      `);
+
+      assert.dom('[data-test-fileVaReports-reportListItem]').exists();
+
+      assert
+        .dom('[data-test-vaReportListItem-reportDownloadBtn]')
+        .isNotDisabled();
+    });
+
+    test('it downloads interim report successfully', async function (assert) {
+      const downloadUrl = 'https://example.com/interim-report.pdf';
+
+      this.server.get(
+        '/hudson-api/interim-reports/:id/pdf/download_url',
+        () => ({ url: downloadUrl })
+      );
+
+      this.set('reportDetails', {
+        fileReport: null,
+        type: 'pdf',
+        primaryText: t('fileReport.interimReport', { reportType: 'pdf' }),
+        secondaryText: `Password: DUMMY_INTERIM_PASSWORD`, //NOSONAR
+        iconComponent: 'ak-svg/pdf-report',
+        copyText: 'DUMMY_INTERIM_PASSWORD', //NOSONAR
+        generatedOnDateTime: '1 January 2025 10:00 AM',
+        generatedBy: 'admin@example.com',
+        reportId: '1',
+      });
+
+      await render(hbs`
+        <File::ReportDrawer::VaReports::ReportItem
+          @reportDetails={{this.reportDetails}}
+          @fileReport={{null}}
+        />
+      `);
+
+      assert
+        .dom('[data-test-vaReportListItem-reportDownloadBtn]')
+        .isNotDisabled();
+
+      await click('[data-test-vaReportListItem-reportDownloadBtn]');
+
+      const window = this.owner.lookup('service:browser/window');
+
+      assert.strictEqual(
+        window.url,
+        downloadUrl,
+        'opens the interim report download url'
+      );
+
+      assert.strictEqual(window.target, '_blank');
+    });
+
+    test('it displays an error notification if interim report download url is not found', async function (assert) {
+      this.server.get(
+        '/hudson-api/interim-reports/:id/pdf/download_url',
+        () => ({ url: null })
+      );
+
+      this.set('reportDetails', {
+        fileReport: null,
+        type: 'pdf',
+        primaryText: t('fileReport.interimReport', { reportType: 'pdf' }),
+        secondaryText: `Password: DUMMY_INTERIM_PASSWORD`, //NOSONAR
+        iconComponent: 'ak-svg/pdf-report',
+        copyText: 'DUMMY_INTERIM_PASSWORD', //NOSONAR
+        generatedOnDateTime: '1 January 2025 10:00 AM',
+        generatedBy: 'admin@example.com',
+        reportId: '1',
+      });
+
+      await render(hbs`
+        <File::ReportDrawer::VaReports::ReportItem
+          @reportDetails={{this.reportDetails}}
+          @fileReport={{null}}
+        />
+      `);
 
       assert
         .dom('[data-test-vaReportListItem-reportDownloadBtn]')
