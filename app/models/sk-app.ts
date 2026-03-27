@@ -13,6 +13,12 @@ export interface AvailabilityData {
   appknox: boolean;
 }
 
+export interface FakeAppCounts {
+  brandAbuse: number;
+  fakeApp: number;
+  ignored: number;
+}
+
 export default class SkAppModel extends Model {
   @service declare intl: IntlService;
 
@@ -69,6 +75,18 @@ export default class SkAppModel extends Model {
 
   @attr('number')
   declare licenseAllocated: number;
+
+  @attr('boolean')
+  declare fakeAppDetectionEnabled: boolean;
+
+  @attr('number')
+  declare fakeAppDetectionStatus: number;
+
+  @attr('string')
+  declare fakeAppDetectionStatusDisplay: string;
+
+  @attr()
+  declare fakeAppCounts: FakeAppCounts;
 
   @belongsTo('sk-app-metadata', { async: false, inverse: null })
   declare appMetadata: SkAppMetadataModel;
@@ -207,6 +225,34 @@ export default class SkAppModel extends Model {
 
   get appIsInInitializingState() {
     return this.monitoringEnabled && this.monitoringStatusIsPending;
+  }
+
+  get fakeAppDetectionIsDisabled() {
+    return (
+      this.fakeAppDetectionStatus ===
+      ENUMS.SK_FAKE_APP_DETECTION_STATUS.DISABLED
+    );
+  }
+
+  get fakeAppDetectionIsInitializing() {
+    return (
+      this.fakeAppDetectionStatus ===
+      ENUMS.SK_FAKE_APP_DETECTION_STATUS.INITIALIZING
+    );
+  }
+
+  get fakeAppDetectionIsNoResults() {
+    return (
+      this.fakeAppDetectionStatus ===
+      ENUMS.SK_FAKE_APP_DETECTION_STATUS.NO_RESULTS
+    );
+  }
+
+  get fakeAppDetectionHasResults() {
+    return (
+      this.fakeAppDetectionStatus ===
+      ENUMS.SK_FAKE_APP_DETECTION_STATUS.HAS_RESULTS
+    );
   }
 }
 
