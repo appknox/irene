@@ -62,7 +62,9 @@ export class DynamicScanEventHandler extends WsModelEventHandler<DynamicscanMode
     this.incrementFileAutoDynamicScanReloadCounter();
   }
 
-  onUpdate() {}
+  onUpdate(_wsData: object, model: DynamicscanModel) {
+    this.eventBus.trigger('ws:dynamicscan:update', model);
+  }
 }
 
 /** Handler for submission model events*/
