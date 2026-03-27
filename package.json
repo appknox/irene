@@ -202,7 +202,7 @@
     "tracked-built-ins": "^3.3.0",
     "tsx": "^4.20.6",
     "typescript": "^5.2.2",
-    "webpack": "^5.95.0"
+    "webpack": "^5.104.1"
   },
   "dependencies": {
     "@formatjs/intl": "^2.10.1",
