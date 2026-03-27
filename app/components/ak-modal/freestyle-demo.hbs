@@ -1,0 +1,23 @@
+<AkButton {{on 'click' this.handleOpenModal}}>Open Modal</AkButton>
+
+{{#if this.showModal}}
+  <AkModal
+    @showHeader={{true}}
+    @headerTitle='Greetings'
+    @disableClose={{false}}
+    @disableOverlayClick={{false}}
+    @blurOverlay={{false}}
+    @onClose={{this.handleClose}}
+    @onClickOverlay={{this.handleClose}}
+  >
+    <div class='flex-column flex-align-center flex-justify-center'>
+      <AkTypography>Hey there, I am inside a modal</AkTypography>
+      <div class='flex-row flex-align-center flex-justify-center mt-3'>
+        <AkButton {{on 'click' this.handleClose}}>OK</AkButton>
+        <AkButton class='ml-2' @variant='outlined' @color='neutral' {{on 'click' this.handleClose}}>
+          Cancel
+        </AkButton>
+      </div>
+    </div>
+  </AkModal>
+{{/if}}

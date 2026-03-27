@@ -1,0 +1,37 @@
+<FreestyleSection @name='Icon Button'>
+  <FreestyleUsage @slug='ak-icon-button-default' @title='Default'>
+    <AkTypography @color='textSecondary' @gutterBottom={{true}}>Experiment with me</AkTypography>
+    <AkIconButton @type='button' @size='medium' disabled={{false}}>
+      <AkIcon @color='' @iconName='close' />
+    </AkIconButton>
+    <AkIconButton @type='button' @variant='outlined' @size='medium' disabled={{false}}>
+      <AkIcon @color='' @iconName='refresh' />
+    </AkIconButton>
+  </FreestyleUsage>
+
+  <FreestyleUsage @slug='ak-icon-button-variants' @title='Variants'>
+    <AkIconButton><AkIcon @iconName='delete' /></AkIconButton>
+    <AkIconButton @variant='outlined'><AkIcon @iconName='refresh' /></AkIconButton>
+  </FreestyleUsage>
+
+  <FreestyleUsage @slug='ak-icon-button-sizes' @title='Sizes'>
+    <AkIconButton @size='small'><AkIcon @iconName='delete' /></AkIconButton>
+    <AkIconButton><AkIcon @iconName='delete' /></AkIconButton>
+    <AkIconButton @variant='outlined' @size='small'><AkIcon @iconName='delete' /></AkIconButton>
+    <AkIconButton @variant='outlined'><AkIcon @iconName='delete' /></AkIconButton>
+  </FreestyleUsage>
+
+  <FreestyleUsage @slug='ak-icon-button-disabled' @title='Disabled'>
+    <AkIconButton disabled={{true}}><AkIcon @iconName='delete' /></AkIconButton>
+    <AkIconButton disabled={{true}} @variant='outlined'><AkIcon @iconName='refresh' /></AkIconButton>
+  </FreestyleUsage>
+
+  <FreestyleUsage @slug='ak-icon-button-colors' @title='Colors'>
+    <AkIconButton><AkIcon @iconName='refresh' /></AkIconButton>
+    <AkIconButton><AkIcon @color='success' @iconName='done' /></AkIconButton>
+    <AkIconButton><AkIcon @color='error' @iconName='delete' /></AkIconButton>
+    <AkIconButton @variant='outlined'><AkIcon @iconName='refresh' /></AkIconButton>
+    <AkIconButton @variant='outlined'><AkIcon @color='success' @iconName='done' /></AkIconButton>
+    <AkIconButton @variant='outlined' @color='danger'><AkIcon @color='error' @iconName='delete' /></AkIconButton>
+  </FreestyleUsage>
+</FreestyleSection>

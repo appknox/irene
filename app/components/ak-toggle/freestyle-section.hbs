@@ -1,0 +1,29 @@
+<FreestyleSection @name='Toggle'>
+  <FreestyleUsage @slug='ak-toggle-basic' @title='Basic' @source='<AkToggle
+  @checked=\{{this.checked}}
+  @size="small"
+  @disabled=\{{false}}
+  @readonly=\{{false}}
+  @onChange=\{{this.handleChange}}
+/>'>
+    <AkToggle::FreestyleDemo />
+  </FreestyleUsage>
+
+  <FreestyleUsage @slug='ak-toggle-label' @title='With Label' @source='<AkFormControlLabel @label="Check me" @disabled=\{{false}} as |fcl|>
+  <AkToggle
+    @checked=\{{this.checkedLabel}}
+    @size="small"
+    @disabled=\{{fcl.disabled}}
+    @readonly=\{{false}}
+    @onChange=\{{this.handleLabelChange}}
+  />
+</AkFormControlLabel>'>
+    <AkToggle::FreestyleDemo @variant='label' />
+  </FreestyleUsage>
+
+  <FreestyleUsage @slug='ak-toggle-sizes' @title='Sizes' @source='<AkToggle @checked=\{{this.checkedSmall}} @size="small" @onChange=\{{fn this.handleSizeChange "small"}} />
+<AkToggle @checked=\{{this.checkedMedium}} @size="medium" @onChange=\{{fn this.handleSizeChange "medium"}} />
+<AkToggle @checked=\{{this.checkedLarge}} @size="large" @onChange=\{{fn this.handleSizeChange "large"}} />'>
+    <AkToggle::FreestyleDemo @variant='sizes' />
+  </FreestyleUsage>
+</FreestyleSection>

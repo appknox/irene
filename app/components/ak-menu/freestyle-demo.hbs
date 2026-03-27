@@ -1,0 +1,16 @@
+<AkTypography @color='textSecondary' @gutterBottom={{true}}>Experiment with me</AkTypography>
+
+<AkIconButton @variant='outlined' {{on 'click' this.handleMoreClick}}>
+  <AkIcon @iconName='more-vert' />
+</AkIconButton>
+
+<AkMenu @arrow={{false}} @anchorRef={{this.anchorRef}} @onClose={{this.handleClose}} as |akm|>
+  {{#each this.menuData as |data|}}
+    <akm.listItem @onClick={{this.handleClose}} @divider={{data.divider}} as |li|>
+      <li.leftIcon>
+        <AkIcon @size='small' @iconName={{data.icon}} />
+      </li.leftIcon>
+      <li.text @primaryText={{data.label}} />
+    </akm.listItem>
+  {{/each}}
+</AkMenu>
