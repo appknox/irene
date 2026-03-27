@@ -46,7 +46,7 @@ export default class SkAppModel extends Model {
   @attr('boolean')
   declare monitoringEnabled: boolean;
 
-  @attr('boolean', { defaultValue: true })
+  @attr('boolean')
   declare hasFakeApps: boolean;
 
   @attr('number')
@@ -93,6 +93,12 @@ export default class SkAppModel extends Model {
 
   @attr()
   declare availability: AvailabilityData;
+
+  @attr('boolean')
+  declare hasStoreMonitoringData: boolean;
+
+  @attr('boolean')
+  declare hasFakeAppDetectionData: boolean;
 
   @belongsTo('sk-app-metadata', { async: false, inverse: null })
   declare appMetadata: SkAppMetadataModel;
@@ -278,8 +284,8 @@ export default class SkAppModel extends Model {
   get monitoringIsDisabledWithNoResults() {
     return (
       !this.monitoringEnabled &&
-      (!this.fakeAppDetectionHasResults ||
-        !this.storeMonitoringStatusIsActionNeeded)
+      !this.hasFakeAppDetectionData &&
+      !this.hasStoreMonitoringData
     );
   }
 

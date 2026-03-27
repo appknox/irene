@@ -5,10 +5,7 @@
   local-class='header-storeknox-fake-apps-page'
 >
   <AkStack @direction='column' @spacing='0.5'>
-    <AkTypography
-      @variant='subtitle1'
-      data-test-storeknoxFakeApps-headerText
-    >
+    <AkTypography @variant='subtitle1' data-test-storeknoxFakeApps-headerText>
       {{t 'storeknox.fakeAppsTitle'}}
     </AkTypography>
 
@@ -62,7 +59,7 @@
   @totalItems={{this.totalAppsCount}}
   @nextAction={{this.goToPage}}
   @prevAction={{this.goToPage}}
-  @itemPerPageOptions={{array 10 25 50}}
+  @itemPerPageOptions={{array 12 24 48}}
   @defaultLimit={{this.skAppsService.limit}}
   @offset={{this.skAppsService.offset}}
   as |pgc|

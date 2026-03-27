@@ -33,19 +33,19 @@ export default class StoreknoxInventoryAppListTableMonitoringStatusHeaderCompone
       { key: this.intl.t('all'), value: -1 },
       {
         key: this.intl.t('storeknox.needsAction'),
-        value: ENUMS.SK_APP_MONITORING_STATUS.ACTION_NEEDED,
+        value: ENUMS.SK_APP_MONITORING_STATUS_FILTER.ACTION_NEEDED,
       },
       {
         key: this.intl.t('storeknox.beingInitialized'),
-        value: ENUMS.SK_APP_MONITORING_STATUS.INITIALIZING,
+        value: ENUMS.SK_APP_MONITORING_STATUS_FILTER.INITIALIZING,
       },
       {
         key: this.intl.t('disabled'),
-        value: ENUMS.SK_APP_MONITORING_STATUS.DISABLED,
+        value: ENUMS.SK_APP_MONITORING_STATUS_FILTER.DISABLED,
       },
       {
         key: this.intl.t('storeknox.noActionNeeded'),
-        value: ENUMS.SK_APP_MONITORING_STATUS.NO_ACTION_NEEDED,
+        value: ENUMS.SK_APP_MONITORING_STATUS_FILTER.NO_ACTION_NEEDED,
       },
     ];
   }

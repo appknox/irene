@@ -44,7 +44,7 @@ export default class StoreknoxFakeAppsComponent extends Component {
   }
 
   get isFetchingTableData() {
-    return this.skAppsService.isFetchingSkInventoryApps;
+    return this.skAppsService.isFetchingSkFakeApps;
   }
 
   get showEmptyState() {

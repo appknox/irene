@@ -1,29 +1,37 @@
-.status-container {
-  background-color: var(--storeknox-fake-apps-fake-apps-list-background-color);
-  border: 1px solid var(--storeknox-fake-apps-fake-apps-list-border-color);
-  border-radius: var(--storeknox-fake-apps-fake-apps-list-border-radius);
-  height: 300px;
-}
+.fake-apps-list-root {
+  .status-container {
+    background-color: var(
+      --storeknox-fake-apps-fake-apps-list-background-color
+    );
+    border: 1px solid var(--storeknox-fake-apps-fake-apps-list-border-color);
+    border-radius: var(--storeknox-fake-apps-fake-apps-list-border-radius);
+    height: 300px;
+  }
 
-.info-text {
-  background-color: var(--storeknox-fake-apps-fake-apps-list-background-color);
-  border-color: var(--storeknox-fake-apps-fake-apps-list-border-color);
-  border-width: 0px 1px;
-  border-style: solid;
-}
+  .info-text {
+    background-color: var(
+      --storeknox-fake-apps-fake-apps-list-background-color
+    );
+    border-color: var(--storeknox-fake-apps-fake-apps-list-border-color);
+    border-width: 0px 1px;
+    border-style: solid;
+  }
 
-.table-body {
-  background-color: var(--storeknox-fake-apps-fake-apps-list-background-color);
-}
+  .table-body {
+    background-color: var(
+      --storeknox-fake-apps-fake-apps-list-background-color
+    );
+  }
 
-:global(.ember-table .ember-table-overflow) {
-  max-height: calc(100vh - 500px);
-  overflow: auto;
-  max-width: 100%;
-}
+  .ember-table .ember-table-header {
+    position: sticky;
+    top: 0;
+    z-index: 10;
+  }
 
-.ember-table .ember-table-header {
-  position: sticky;
-  top: 0;
-  z-index: 10;
+  :global(.ember-table .ember-table-overflow) {
+    max-height: calc(100vh - 520px);
+    overflow: auto;
+    max-width: 100%;
+  }
 }

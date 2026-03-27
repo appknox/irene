@@ -33,6 +33,10 @@ export default Factory.extend({
   fake_app_detection_status: () =>
     faker.helpers.arrayElement(ENUMS.SK_FAKE_APP_DETECTION_STATUS.BASE_VALUES),
 
+  has_store_monitoring_data: () => faker.datatype.boolean(),
+
+  has_fake_app_detection_data: () => faker.datatype.boolean(),
+
   app_status_display() {
     const app_status = this.app_status as number;
 

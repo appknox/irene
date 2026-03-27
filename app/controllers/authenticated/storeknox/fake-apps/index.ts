@@ -7,6 +7,9 @@ import type { AkBreadcrumbsItemProps } from 'irene/services/ak-breadcrumbs';
 export default class AuthenticatedStoreknoxFakeAppsIndexController extends Controller {
   @service declare intl: IntlService;
 
+  app_limit = 12;
+  app_offset = 0;
+
   get breadcrumbs(): AkBreadcrumbsItemProps {
     return {
       title: this.intl.t('storeknox.fakeAppsTitle'),

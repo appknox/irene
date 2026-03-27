@@ -33,6 +33,9 @@ export default class StoreknoxInventoryDetailsAppDetailsActionsListComponent ext
   }
 
   get actionsList() {
+    const { storeMonitoringStatusIsPending, fakeAppDetectionIsInitializing } =
+      this.skInventoryApp || {};
+
     return [
       {
         id: 'unscanned-version',
@@ -41,12 +44,12 @@ export default class StoreknoxInventoryDetailsAppDetailsActionsListComponent ext
         hideAction: false,
         needsAction: this.skInventoryApp?.storeMonitoringStatusIsActionNeeded,
         showDisabledState: !this.monitoringEnabled,
+        statusIsInitializing: storeMonitoringStatusIsPending,
 
         disableActionButton:
-          this.skInventoryApp?.storeMonitoringPendingOrDisabled,
-
-        statusIsInitializing:
-          this.skInventoryApp?.storeMonitoringStatusIsPending,
+          storeMonitoringStatusIsPending ||
+          (!this.monitoringEnabled &&
+            !this.skInventoryApp?.hasStoreMonitoringData),
       },
       {
         id: 'brand-abuse',
@@ -56,12 +59,12 @@ export default class StoreknoxInventoryDetailsAppDetailsActionsListComponent ext
         models: [this.skInventoryApp?.id],
         needsAction: this.skInventoryApp?.fakeAppDetectionHasResults,
         showDisabledState: !this.monitoringEnabled,
+        statusIsInitializing: fakeAppDetectionIsInitializing,
 
         disableActionButton:
-          this.skInventoryApp?.fakeAppDetectionIsInitializing,
-
-        statusIsInitializing:
-          this.skInventoryApp?.fakeAppDetectionIsInitializing,
+          fakeAppDetectionIsInitializing ||
+          (!this.monitoringEnabled &&
+            !this.skInventoryApp?.hasFakeAppDetectionData),
       },
       {
         id: 'malware-detected',
