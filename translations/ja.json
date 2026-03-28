@@ -1840,6 +1840,7 @@
       }
     }
   },
+  "screenshots": "Screenshots",
   "serviceNow": {
     "title": "ServiceNow",
     "enterInstanceURL": "Enter Instance URL",
@@ -2300,6 +2301,7 @@
   "viewOrEdit": "View or Edit",
   "viewReport": "View Report",
   "viewResults": "View Results",
+  "viewScreenshot": "View Screenshot",
   "viewStoreLink": "View Store Link",
   "vnc": "VNC",
   "vpn": "VPN",
