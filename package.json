@@ -31,10 +31,6 @@
     "cypress:run": "cypress run --browser chrome",
     "deploy": "ember deploy production --verbose=true --activate=true --show-progress=true",
     "deploy:server": "ember deploy server",
-    "storybook": "storybook dev -p 6006",
-    "storybook-dev": "concurrently \"npm:start\" \"npm:storybook\" --names \"dev-server,storybook\"",
-    "prebuild-storybook": "ember build",
-    "build-storybook": "storybook build",
     "netlify:deploy": "netlify deploy --dir dist"
   },
   "devDependencies": {
@@ -42,7 +38,6 @@
     "@babel/core": "^7.25.2",
     "@babel/eslint-parser": "^7.25.1",
     "@babel/plugin-proposal-decorators": "^7.24.7",
-    "@chromatic-com/storybook": "^1.6.1",
     "@cypress/grep": "^4.0.1",
     "@ember/jquery": "^1.1.0",
     "@ember/optional-features": "^2.1.0",
@@ -69,15 +64,6 @@
     "@iconify-json/solar": "^1.2.4",
     "@iconify-json/streamline-plump": "^1.2.0",
     "@iconify/utils": "^3.0.1",
-    "@storybook/addon-actions": "8.4.6",
-    "@storybook/addon-docs": "8.4.6",
-    "@storybook/addon-essentials": "8.4.6",
-    "@storybook/addon-links": "8.4.6",
-    "@storybook/blocks": "8.4.6",
-    "@storybook/builder-webpack5": "8.4.6",
-    "@storybook/ember": "8.4.6",
-    "@storybook/ember-cli-storybook": "^0.6.1",
-    "@storybook/manager-webpack5": "6.5.16",
     "@testing-library/cypress": "^10.0.1",
     "@tsconfig/ember": "^3.0.4",
     "@types/ember": "^4.0.11",
@@ -197,7 +183,6 @@
     "qunit-dom": "^3.2.1",
     "sass": "^1.77.8",
     "semver": "^7.7.1",
-    "storybook": "8.4.6",
     "stream-browserify": "^3.0.0",
     "stylelint": "^15.11.0",
     "stylelint-config-standard": "^34.0.0",
@@ -211,7 +196,6 @@
     "@formatjs/intl": "^2.10.1",
     "@novnc/novnc": "^1.5.0",
     "@popperjs/core": "^2.11.6",
-    "@storybook/types": "^8.4.6",
     "clipboard": "^2.0.6",
     "cypress": "^13.6.3",
     "echarts": "^5.4.2",
@@ -221,11 +205,6 @@
     "posthog-js": "^1.284.0",
     "qrious": "^4.0.2",
     "swagger-ui": "^5.30.3"
-  },
-  "overrides": {
-    "@storybook/ember": {
-      "ember-source": "~5.12.0"
-    }
   },
   "engines": {
     "node": ">=24"
