@@ -48,12 +48,11 @@ export interface AkTreeProviderSignatureArgs<N extends AkTreeNodeProps> {
   onExpand: AkTreeProviderCheckExpandFuncType;
 }
 
-export interface AkTreeProviderDefaultBlockProps<
-  N extends AkTreeNodeProps,
-> extends Omit<
-  AkTreeProviderSignatureArgs<N>,
-  'treeData' | 'onCheck' | 'onExpand'
-> {
+export interface AkTreeProviderDefaultBlockProps<N extends AkTreeNodeProps>
+  extends Omit<
+    AkTreeProviderSignatureArgs<N>,
+    'treeData' | 'onCheck' | 'onExpand'
+  > {
   nodes: Array<N>;
   flatNodes: AkTreeProviderFlatNodes;
   getFlatNode(key?: string): AkTreeNodeFlattenedProps | undefined;
