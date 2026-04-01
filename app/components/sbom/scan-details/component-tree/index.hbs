@@ -12,11 +12,7 @@
 
   <:emptyText>
     <AkStack class='mt-2' @direction='column' @alignItems='center' @spacing='1'>
-      <AkTypography
-        data-test-sbomComponent-emptyTextTitle
-        @variant='h5'
-        data-test-cy='sbomComponent-emptyTextTitle'
-      >
+      <AkTypography data-test-sbomComponent-emptyTextTitle @variant='h5'>
         {{t 'sbomModule.componentListEmptyText.title'}}
       </AkTypography>
 
@@ -109,7 +105,7 @@
                   {{else}}
                     <AkIcon
                       data-test-component-tree-nodeExpandIcon
-                      {{! data-test-cy="component-tree-node-expand-icon" }}
+                      data-test-cy='component-tree-node-expand-icon'
                       @iconName='add-box'
                     />
                   {{/if}}
@@ -137,7 +133,7 @@
                 }}'
                 @underline='hover'
                 data-test-component-tree-nodeLabel
-                data-test-cy='tree-node-label'
+                data-test-cy='component-tree-node-label'
               >
                 {{node.label}}
               </AkTypography>

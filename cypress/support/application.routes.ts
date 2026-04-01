@@ -7,5 +7,4 @@ export const APPLICATION_ROUTES = {
   register: '/register',
   organizationUsers: '/dashboard/organization/users',
   organizationTeams: '/dashboard/organization/teams',
-  
 } as const;
