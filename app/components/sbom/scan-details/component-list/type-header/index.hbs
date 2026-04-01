@@ -19,6 +19,7 @@
       local-class='cursor-pointer'
       {{on 'click' this.handleClick}}
       data-test-sbom-scanDetails-componentTypeHeader-icon
+      data-test-cy='sbom-component-type-filter-icon'
     />
 
     <AkTypography
@@ -37,6 +38,7 @@
   @closeHandler={{this.handleOptionsClose}}
   @clickOutsideToClose={{true}}
   data-test-sbom-scanDetails-componentTypeHeader-popover
+  data-test-cy='sbom-component-type-filter-popover'
 >
   <AkStack @direction='column' local-class='type-filter'>
     <AkStack @width='full' local-class='filter-header'>
@@ -58,13 +60,12 @@
         {{on 'click' (fn this.selectComponentType types.value)}}
         data-test-sbom-scanDetails-componentTypeHeader-option
         data-test-cy='component-type-filter-option'
-        data-value='{{types.value}}'
       >
         <AkStack @alignItems='center' @spacing='1'>
           <AkRadio
             @checked={{eq this.selectedComponentType types.value}}
             data-test-sbom-scanDetails-componentTypeHeader-radio={{types.key}}
-            data-test-cy='component-type-filter-radio-{{types.value}}'
+            data-test-cy='sbom-component-type-filter-radio-{{types.key}}'
           />
 
           <AkTypography
@@ -82,6 +83,7 @@
         local-class='clear-filter-section'
         @width='full'
         data-test-sbom-scanDetails-componentTypeHeader-clearFilter
+        data-test-cy='sbom-component-type-clear-filter'
       >
         <AkTypography
           @underline='always'

@@ -19,6 +19,7 @@
       {{#if (has-block 'collapsibleContent')}}
         <AkIconButton
           data-test-sbomSummaryHeader-collapsibleToggleBtn
+          data-test-cy='sbom-summary-header-collapsible-toggle-btn'
           {{on 'click' this.handleToggleCollapsibleContent}}
         >
           <AkIcon

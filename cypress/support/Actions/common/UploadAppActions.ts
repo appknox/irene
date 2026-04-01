@@ -110,7 +110,7 @@ export default class UploadAppActions {
           cy.wrap(sbomProject).as('uploadedAppSBPrj');
 
           if (sbomPrjFileID) {
-            const sbFileURL = `${API_ROUTES.sbomFile.route}/${sbomPrjFileID}`;
+            const sbFileURL = `${API_ROUTES.sbomFileBase.route}/${sbomPrjFileID}`;
 
             cy.intercept(sbFileURL).as('uploadedAppSBFileReq');
           }

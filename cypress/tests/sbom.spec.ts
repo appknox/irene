@@ -7,7 +7,6 @@ import UploadAppActions from '../support/Actions/common/UploadAppActions';
 import cyTranslate from '../support/translations';
 import { WS_MODEL_UPDATED_PAYLOAD_MAP } from '../support/Websocket';
 import { MirageFactoryDefProps } from '../support/Mirage';
-import { time } from 'echarts';
 
 const loginActions = new LoginActions();
 const networkActions = new NetworkActions();
@@ -117,10 +116,7 @@ describe('SBOM Page', () => {
 
       // Check if new app table rows are greater than initial app table rows
       cy.get('@initialAppTableRows').then((initialAppTableRows) => {
-        cy.get('@newAppTableRows').should(
-          'be.greaterThan',
-          initialAppTableRows
-        );
+        cy.get('@newAppTableRows').should('be.gte', initialAppTableRows);
       });
 
       // Check network request count is greater than initial app table rows
@@ -240,17 +236,35 @@ describe('SBOM Page', () => {
       cy.findByText(pastAnalysesText).should('be.visible');
 
       // Wait for SBOM Scan to complete
-      cy.wait(3000);
+      cy.wait(5000);
+
       // open the first (latest) report in the list
-      cy.findAllByTestId('sbomScan-viewReportBtn')
+      cy.findAllByTestId('sbomScan-viewReportBtn', { timeout: 10000 })
         .first()
         .should('be.visible')
         .click({ force: true });
 
-      sbomPageActions.generatePDFReport();
-      sbomPageActions.validateReportGenerated();
+      cy.findAllByTestId('sbomReportList-reportGenerateBtn')
+        .should('not.be.disabled')
+        .click({ force: true });
 
-      cy.wait(3000); // wait for report generation to complete
+      cy.findByText(
+        cyTranslate('fileReport.detailedReport', { reportType: 'pdf' }),
+        NETWORK_WAIT_OPTS
+      ).should('be.visible');
+
+      cy.findByText(
+        cyTranslate('sbomModule.sbomDownloadPdfPrimaryText')
+      ).should('be.visible');
+
+      // Validate report is generated successfully
+      cy.findByTestId('sbomReportList-loading').should('not.exist');
+      cy.findByTestId('sbomReportList-reportGenerateBtn').should('not.exist');
+
+      cy.findAllByTestId(/sbomReportList-reportDownloadBtn/).should(
+        'have.length.at.least',
+        2
+      );
 
       // Download PDF report
       sbomPageActions.downloadSBOMAppReport('pdf');
@@ -258,9 +272,6 @@ describe('SBOM Page', () => {
       cy.wait('@sbPdfDownload', { timeout: 30000 })
         .its('response.statusCode')
         .should('equal', 200);
-
-      // Wait before second click
-      cy.wait(2000);
 
       // Download JSON
       sbomPageActions.downloadSBOMAppReport('cyclonedx_json_file');
@@ -274,9 +285,11 @@ describe('SBOM Page', () => {
   describe('SBOM Report Detail Page', () => {
     beforeEach(() => {
       cy.intercept(API_ROUTES.sbomFileSummary.route).as('sbomFileSummary');
+
       cy.intercept(API_ROUTES.sbomFileComponents.route).as(
         'sbomFileComponents'
       );
+
       cy.intercept(API_ROUTES.sbomComponent.route).as('sbomComponent');
 
       sbomPageActions.navigateToSbomDetailPage(SBOM_MFVA_APP_SEARCH_QUERY);
@@ -305,35 +318,40 @@ describe('SBOM Page', () => {
     describe('List View - Filters', () => {
       beforeEach(() => {
         // Switch to list view and wait for component data
-        sbomPageActions.listViewBtn().click();
+        cy.findByTestId('sbom-scan-details-list-view-btn').click();
         cy.wait('@sbomFileComponents', NETWORK_WAIT_OPTS);
       });
 
       it('filters rows by each component type', () => {
-        const componentTypes = ['Library', 'Framework', 'File', 'ML Model'];
+        const componentTypes = [
+          cyTranslate('library'),
+          cyTranslate('framework'),
+          cyTranslate('file'),
+          cyTranslate('sbomModule.mlModel'),
+        ];
 
         componentTypes.forEach((type) => {
           sbomPageActions.openComponentTypeFilter();
           sbomPageActions.selectComponentType(type);
+
           cy.get('body').click(0, 0);
 
-          sbomPageActions.validateComponentTypeFilteredRows(type);
-
+          sbomPageActions.validateFilteredSBOMComponentRows(type);
           sbomPageActions.openComponentTypeFilter();
           sbomPageActions.clearComponentTypeFilterOnly();
         });
       });
 
       it('filters rows by each dependency type', () => {
-        const dependencyTypes = ['Direct', 'Transitive'];
+        const dependencyTypes = ['Direct', 'Transitive'] as const;
 
         dependencyTypes.forEach((type) => {
           sbomPageActions.openDependencyTypeFilter();
           sbomPageActions.selectDependencyType(type);
+
           cy.get('body').click(0, 0);
 
-          sbomPageActions.validateDependencyTypeFilteredRows(type);
-
+          sbomPageActions.validateFilteredSBOMComponentRows(type);
           sbomPageActions.openDependencyTypeFilter();
           sbomPageActions.clearDependencyTypeFilterOnly();
         });
@@ -344,9 +362,8 @@ describe('SBOM Page', () => {
       it('expands a tree node and enables collapse all, then collapses all', () => {
         sbomPageActions.expandNodeIcon().should('be.visible').click();
 
-        //Node expanded — collapse all should now be enabled
+        // Node expanded — collapse all should now be enabled
         sbomPageActions.collapseAllBtn().should('not.be.disabled');
-
         sbomPageActions.collapseAllBtn().click({ force: true });
 
         // All collapsed — back to disabled
@@ -362,55 +379,63 @@ describe('SBOM Page', () => {
 
         // Tabs visible
         // HBS: data-test-sbomComponentDetails-tab='{{item.id}}'
-        sbomPageActions
-          .componentDetailsTab('overview')
-          .should('be.visible', { timeout: 10000 });
-
-        sbomPageActions
-          .componentDetailsTab('vulnerabilities')
-          .should('be.visible');
+        (['overview', 'vulnerabilities'] as const).forEach((tabId) => {
+          sbomPageActions.componentDetailsTab(tabId).should('be.visible');
+        });
 
         // Summary fields visible
-        sbomPageActions.componentSummary('Component Type').should('be.visible');
-        sbomPageActions
-          .componentSummary('Dependency Type')
-          .should('be.visible');
-        sbomPageActions.componentSummary('Status').should('be.visible');
+        const summaryFieldLabels = [
+          'sbomModule.componentType',
+          'dependencyType',
+          'status',
+        ] as const;
 
-        sbomPageActions.componentStatus('SECURE').should('exist');
+        summaryFieldLabels.forEach((tabId) => {
+          sbomPageActions
+            .componentSummary(cyTranslate(tabId))
+            .should('be.visible');
+        });
+
+        sbomPageActions
+          .componentStatus(cyTranslate('chipStatus.secure'))
+          .should('exist');
 
         // Navigate back via breadcrumb
-        sbomPageActions
-          .breadcrumbContainer()
+        cy.findByText(
+          new RegExp(
+            cyTranslate('sbomModule.allComponentsAndVulnerabilities'),
+            'i'
+          )
+        )
           .should('be.visible')
-          .contains(/All Components and Vulnerabilities/i)
           .click();
-        //Back on detail page — tree view button confirms correct page
-        sbomPageActions.treeViewBtn().should('be.visible');
+
+        // Back on detail page — tree view button confirms correct page
+        cy.findByTestId('sbom-scan-details-tree-view-btn').should('be.visible');
       });
     });
   });
 
   describe('SBOM Page - Pagination Tests', () => {
-    const nextBtn = '[data-test-pagination-next-btn]';
-    const prevBtn = '[data-test-pagination-prev-btn]';
-    const firstRow = () => cy.get('[data-test-sbomApp-row]').first();
+    beforeEach(() => {
+      cy.findByLabelText('pagination previous button').as('prevBtn');
+      cy.findByLabelText('pagination next button').as('nextBtn');
+
+      sbomPageActions.getAppTableRows().first().as('firstRow');
+    });
 
     describe('Navigation - Next/Previous', () => {
       it('should navigate to next page and verify data changed', () => {
-        firstRow().invoke('text').as('initialFirstRow');
-
-        cy.get(nextBtn).should('not.be.disabled').click();
+        cy.get('@firstRow').invoke('text').as('initialFirstRow');
+        cy.get('@nextBtn').should('not.be.disabled').click();
         cy.wait('@sbomProjectList', NETWORK_WAIT_OPTS);
 
-        cy.get('[data-test-sbomApp-row]').should('have.length.greaterThan', 0);
+        sbomPageActions.getAppTableRows().should('have.length.greaterThan', 0);
 
-        //Validated against real API count + confirmed Apps' label from response is rendered in the page range text
         cy.get('@sbomProjectList')
           .its('response.body.count')
           .then((totalCount) => {
-            cy.get('[data-test-page-range]')
-              .should('exist')
+            cy.findByLabelText('pagination page range')
               .invoke('text')
               .should((text) => {
                 const normalized = text.replace(/\s+/g, ' ').trim();
@@ -419,101 +444,78 @@ describe('SBOM Page', () => {
               });
           });
 
-        // Verify that the first row's text has changed, indicating new data is loaded
-        firstRow()
+        cy.get('@firstRow')
           .invoke('text')
           .then((newFirstRow) => {
             cy.get('@initialFirstRow').should('not.equal', newFirstRow);
           });
 
-        cy.get(prevBtn).should('not.be.disabled');
+        cy.get('@prevBtn').should('not.be.disabled');
       });
 
       it('should disable Previous button on first page', () => {
-        cy.get(prevBtn).should('be.disabled');
-        cy.get(nextBtn).should('not.be.disabled');
+        cy.get('@prevBtn').should('be.disabled');
       });
     });
 
     describe('Button States', () => {
       it('should enable/disable buttons correctly during navigation', () => {
-        cy.get(prevBtn).should('be.disabled');
+        cy.get('@prevBtn').should('be.disabled');
+        cy.get('@nextBtn').should('not.be.disabled').click();
 
-        cy.get(nextBtn).should('not.be.disabled').click();
         cy.wait('@sbomProjectList', NETWORK_WAIT_OPTS);
 
-        cy.get('[data-test-sbomApp-row]').should('have.length.greaterThan', 0);
+        sbomPageActions.getAppTableRows().should('have.length.greaterThan', 0);
 
-        cy.get(prevBtn).should('not.be.disabled');
+        cy.get('@prevBtn').should('not.be.disabled');
       });
     });
 
-    describe('Items Per Page', () => {
-      it('should update rows and URL when items per page is changed to 25', () => {
-        cy.get('[data-test-pagination-select]').click();
-        cy.findByRole('option', { name: '25' }).click();
+    [25, 50].forEach((itemsPerPage) => {
+      describe('Items Per Page', () => {
+        it(`should update rows and URL when items per page is changed to ${itemsPerPage}`, () => {
+          cy.findByLabelText('pagination item per page options').click();
+          cy.findByRole('option', { name: `${itemsPerPage}` }).click();
 
-        cy.wait('@sbomProjectList', NETWORK_WAIT_OPTS);
+          cy.wait('@sbomProjectList', NETWORK_WAIT_OPTS);
 
-        cy.url().should('include', 'app_limit=25');
+          cy.url().should('include', `app_limit=${itemsPerPage}`);
 
-        cy.get('[data-test-sbomApp-row]').should('have.length.greaterThan', 0);
+          sbomPageActions
+            .getAppTableRows()
+            .should('have.length.greaterThan', 0);
 
-        cy.get('@sbomProjectList')
-          .its('response.body.count')
-          .then((totalCount) => {
-            const expectedEnd = Math.min(25, totalCount);
+          cy.get('@sbomProjectList')
+            .its('response.body.count')
+            .then((totalCount) => {
+              const expectedEnd = Math.min(itemsPerPage, totalCount);
 
-            cy.get('[data-test-page-range]')
-              .should('exist')
-              .invoke('text')
-              .should((text) => {
-                const normalized = text.replace(/\s+/g, ' ').trim();
-                expect(normalized).to.match(new RegExp(`^1-${expectedEnd}`));
-                expect(normalized).to.include(`of ${totalCount} Apps`);
-              });
-          });
-      });
+              cy.findByLabelText('pagination page range')
+                .should('exist')
+                .invoke('text')
+                .should((text) => {
+                  const normalized = text.replace(/\s+/g, ' ').trim();
 
-      it('should update rows and URL when items per page is changed to 50', () => {
-        cy.get('[data-test-pagination-select]').click();
-        cy.findByRole('option', { name: '50' }).click();
-
-        cy.wait('@sbomProjectList', NETWORK_WAIT_OPTS);
-
-        cy.url().should('include', 'app_limit=50');
-
-        cy.get('[data-test-sbomApp-row]').should('have.length.greaterThan', 0);
-
-        cy.get('@sbomProjectList')
-          .its('response.body.count')
-          .then((totalCount) => {
-            const expectedEnd = Math.min(50, totalCount);
-
-            cy.get('[data-test-page-range]')
-              .should('exist')
-              .invoke('text')
-              .should((text) => {
-                const normalized = text.replace(/\s+/g, ' ').trim();
-                expect(normalized).to.match(new RegExp(`^1-${expectedEnd}`));
-                expect(normalized).to.include(`of ${totalCount} Apps`);
-              });
-          });
+                  expect(normalized).to.match(new RegExp(`^1-${expectedEnd}`));
+                  expect(normalized).to.include(`of ${totalCount} Apps`);
+                });
+            });
+        });
       });
     });
 
     describe('URL State', () => {
       it('should update URL when changing pages', () => {
         cy.url().then((page1Url) => {
-          cy.get(nextBtn).click();
+          cy.get('@nextBtn').click();
+
           cy.wait('@sbomProjectList', NETWORK_WAIT_OPTS);
 
           cy.url().should('not.equal', page1Url);
 
-          cy.get('[data-test-sbomApp-row]').should(
-            'have.length.greaterThan',
-            0
-          );
+          sbomPageActions
+            .getAppTableRows()
+            .should('have.length.greaterThan', 0);
         });
       });
     });

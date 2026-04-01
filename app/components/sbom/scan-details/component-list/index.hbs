@@ -28,13 +28,8 @@
           @alignItems='center'
           @spacing='1'
         >
-          <AkTypography
-            data-test-sbomComponent-emptyTextTitle
-            @variant='h5'
-            data-test-cy='emptytitle'
-          >
+          <AkTypography data-test-sbomComponent-emptyTextTitle @variant='h5'>
             {{t 'sbomModule.componentListEmptyText.title'}}
-
           </AkTypography>
 
           <AkTypography
@@ -83,6 +78,7 @@
               {{style cursor='pointer'}}
               @onClick={{this.handleComponentClick}}
               data-test-sbomComponent-row
+              data-test-cy='sbom-component-row'
               as |r|
             >
               <r.cell data-test-sbomComponent-cell as |value|>
@@ -110,13 +106,8 @@
           >
             <AkSvg::NoResult data-test-sbomComponent-emptySvg />
 
-            <AkTypography
-              data-test-sbomComponent-emptyTextTitle
-              @variant='h5'
-              data-test-cy='sbomComponent-emptyTextTitle'
-            >
+            <AkTypography data-test-sbomComponent-emptyTextTitle @variant='h5'>
               {{this.tNoComponentsFound}}
-
             </AkTypography>
 
             <AkTypography
