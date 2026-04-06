@@ -35,7 +35,14 @@
     "storybook-dev": "concurrently \"npm:start\" \"npm:storybook\" --names \"dev-server,storybook\"",
     "prebuild-storybook": "ember build",
     "build-storybook": "storybook build",
-    "netlify:deploy": "netlify deploy --dir dist"
+    "netlify:deploy": "netlify deploy --dir dist",
+    "playwright:qa": "cross-env TEST_ENV=qa npx playwright test",
+    "playwright:prod": "cross-env TEST_ENV=prod npx playwright test",
+    "playwright:report": "npx allure generate allure-results --clean -o allure-report && npx allure open allure-report",
+    "playwright:qa:api": "cross-env TEST_ENV=qa npx playwright test --project=api",
+    "playwright:qa:ui": "cross-env TEST_ENV=qa npx playwright test --project=ui",
+    "playwright:prod:api": "cross-env TEST_ENV=prod npx playwright test --project=api",
+    "playwright:prod:ui": "cross-env TEST_ENV=prod npx playwright test --project=ui"
   },
   "devDependencies": {
     "@appknox/ember-pace": "^1.0.1",

@@ -16,7 +16,6 @@ test.describe('Report API', () => {
   });
 
   test.afterAll(async () => {
-    TokenManager.clearTokens();
     await wrapper.dispose();
   });
 
@@ -150,116 +149,128 @@ test.describe('Report API', () => {
     });
   });
 
-test.describe.serial('Privacy Report', () => {
-  test.beforeAll(async () => {
-    if (!wrapper) {
-      wrapper = new RequestWrapper();
-      await wrapper.init();
-    }
-  });
-  test('POST privacy report — generate PDF', async () => {
-    await allure.epic('Reports');
-    await allure.feature('Privacy Shield Report');
-    await allure.story('User generates privacy report PDF');
-    await allure.severity('critical');
-    await allure.owner('Pranav');
-    await allure.tags('report', 'privacy', 'smoke');
-
-    const response = await allure.step('POST generate privacy PDF', async () => {
-      return await wrapper.post({
-        endpoint: resolveRoute(
-          API_ROUTES.privacyReportGenerate.route,
-          state.privacyReportId
-        ),
-      });
-    });
-
-    await allure.step('Validate success response', async () => {
-      const body = await ResponseValidator.validate(response, { status: 201 });
-      expect(body.success as boolean).toBe(true);
-    });
-  });
-
-  test('GET privacy report status — pdf_status is generated', async () => {
-    await allure.epic('Reports');
-    await allure.feature('Privacy Shield Report');
-    await allure.story('Privacy report PDF generation completes');
-    await allure.severity('critical');
-    await allure.owner('Pranav');
-    await allure.tags('report', 'privacy', 'regression');
-
-    let body: Record<string, unknown> = {};
-    const startTime = Date.now();
-    const TIMEOUT = 300000; // 5 minutes
-
-    await allure.step('Poll until pdf_status > 0', async () => {
-      while (true) {
-        const response = await wrapper.get({
-          endpoint: resolveRoute(
-            API_ROUTES.privacyReportById.route,
-            state.privacyReportId
-          ),
-        });
-        body = await response.json();
-
-        if ((body.pdf_status as number) === 4) break;
-
-        if (Date.now() - startTime > TIMEOUT) {
-          throw new Error('Privacy report PDF timed out after 5 minutes');
-        }
-
-        console.log('[Test] Privacy PDF not ready yet... waiting 10s');
-        await new Promise((r) => setTimeout(r, 10000));
+  test.describe('Privacy Report', () => {
+    test.beforeAll(async () => {
+      if (!wrapper) {
+        wrapper = new RequestWrapper();
+        await wrapper.init();
       }
     });
 
-    await allure.step('Validate privacy report schema', async () => {
-      SchemaValidator.validate(body, {
-        id: { type: 'number', required: true },
-        file: { type: 'number', required: true },
-        language: { type: 'string', required: true },
-        pdf_status: { type: 'number', required: true },
-        pdf_progress: { type: 'number', required: true },
-        report_password: { type: 'string', required: true },
-      });
-    });
-
-    await allure.step('Verify pdf_status is greater than 0', async () => {
-      expect(body.pdf_status as number).toBe(4);
-    });
-  });
-
-  test('GET privacy report download URL — returns S3 URL', async () => {
-    await allure.epic('Reports');
-    await allure.feature('Privacy Shield Report');
-    await allure.story('User downloads privacy report PDF');
-    await allure.severity('critical');
-    await allure.owner('Pranav');
-    await allure.tags('report', 'privacy', 'smoke');
-
-    const response = await allure.step(
-      'GET privacy report download URL',
-      async () => {
-        return await wrapper.get({
-          endpoint: resolveRoute(
-            API_ROUTES.privacyReportDownload.route,
-            state.privacyReportId
-          ),
-        });
-      }
+    test.skip(
+      !state.features.privacy,
+      'PRIVACY SHEILD NOT ENABLED ON THIS ENVIRONMENT'
     );
+    test('POST privacy report — generate PDF', async () => {
+      await allure.epic('Reports');
+      await allure.feature('Privacy Shield Report');
+      await allure.story('User generates privacy report PDF');
+      await allure.severity('critical');
+      await allure.owner('Pranav');
+      await allure.tags('report', 'privacy', 'smoke');
 
-    const body = await allure.step('Validate status 200 and URL', async () => {
-      return await ResponseValidator.validate(response, {
-        status: 200,
-        requiredFields: ['url'],
+      const response = await allure.step(
+        'POST generate privacy PDF',
+        async () => {
+          return await wrapper.post({
+            endpoint: resolveRoute(
+              API_ROUTES.privacyReportGenerate.route,
+              state.privacyReportId
+            ),
+          });
+        }
+      );
+
+      await allure.step('Validate success response', async () => {
+        const body = await ResponseValidator.validate(response, {
+          status: 201,
+        });
+        expect(body.success as boolean).toBe(true);
       });
     });
 
-    await allure.step('Verify S3 URL', async () => {
-      expect(body.url as string).toContain('s3.amazonaws.com');
+    test('GET privacy report status — pdf_status is generated', async () => {
+      await allure.epic('Reports');
+      await allure.feature('Privacy Shield Report');
+      await allure.story('Privacy report PDF generation completes');
+      await allure.severity('critical');
+      await allure.owner('Pranav');
+      await allure.tags('report', 'privacy', 'regression');
+
+      let body: Record<string, unknown> = {};
+      const startTime = Date.now();
+      const TIMEOUT = 300000; // 5 minutes
+
+      await allure.step('Poll until pdf_status > 0', async () => {
+        while (true) {
+          const response = await wrapper.get({
+            endpoint: resolveRoute(
+              API_ROUTES.privacyReportById.route,
+              state.privacyReportId
+            ),
+          });
+          body = await response.json();
+
+          if ((body.pdf_status as number) === 4) break;
+
+          if (Date.now() - startTime > TIMEOUT) {
+            throw new Error('Privacy report PDF timed out after 5 minutes');
+          }
+
+          console.log('[Test] Privacy PDF not ready yet... waiting 10s');
+          await new Promise((r) => setTimeout(r, 10000));
+        }
+      });
+
+      await allure.step('Validate privacy report schema', async () => {
+        SchemaValidator.validate(body, {
+          id: { type: 'number', required: true },
+          file: { type: 'number', required: true },
+          language: { type: 'string', required: true },
+          pdf_status: { type: 'number', required: true },
+          pdf_progress: { type: 'number', required: true },
+          report_password: { type: 'string', required: true },
+        });
+      });
+
+      await allure.step('Verify pdf_status is greater than 0', async () => {
+        expect(body.pdf_status as number).toBe(4);
+      });
+    });
+
+    test('GET privacy report download URL — returns S3 URL', async () => {
+      await allure.epic('Reports');
+      await allure.feature('Privacy Shield Report');
+      await allure.story('User downloads privacy report PDF');
+      await allure.severity('critical');
+      await allure.owner('Pranav');
+      await allure.tags('report', 'privacy', 'smoke');
+
+      const response = await allure.step(
+        'GET privacy report download URL',
+        async () => {
+          return await wrapper.get({
+            endpoint: resolveRoute(
+              API_ROUTES.privacyReportDownload.route,
+              state.privacyReportId
+            ),
+          });
+        }
+      );
+
+      const body = await allure.step(
+        'Validate status 200 and URL',
+        async () => {
+          return await ResponseValidator.validate(response, {
+            status: 200,
+            requiredFields: ['url'],
+          });
+        }
+      );
+
+      await allure.step('Verify S3 URL', async () => {
+        expect(body.url as string).toContain('s3.amazonaws.com');
+      });
     });
   });
-});
-
 });

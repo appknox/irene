@@ -192,17 +192,51 @@ export const API_ROUTES = {
     route: '/api/submissions',
     alias: 'submission',
   },
+  // dsManualDevicePreference: {
+  //   route: '/api/v2/profiles/*/ds_manual_device_preference',
+  //   alias: 'dsManualDevicePreference',
+  // },
+  // availableManualDevices: {
+  //   route: '/api/v2/projects/*/available_manual_devices*',
+  //   alias: 'availableManualDevices',
+  // },
+  editAnalysisRisk: {
+    route: '/api/files/*/vulnerability_preferences/*/risk',
+    alias: 'editAnalysisRisk',
+  },
+
+  fileTags: {
+    route: '/api/v2/files/*/tags',
+    alias: 'fileTags',
+  },
+  fileTagById: {
+    route: '/api/v2/files/*/tags/*',
+    alias: 'fileTagById',
+  },
+
   dsManualDevicePreference: {
     route: '/api/v2/profiles/*/ds_manual_device_preference',
     alias: 'dsManualDevicePreference',
   },
   availableManualDevices: {
-    route: '/api/v2/projects/*/available_manual_devices*',
+    route: '/api/v2/projects/*/available_manual_devices',
     alias: 'availableManualDevices',
   },
-  editAnalysisRisk: {
-    route: '/api/files/*/vulnerability_preferences/*/risk',
-    alias: 'editAnalysisRisk',
+  apiScanOptions: {
+    route: '/api/profiles/*/api_scan_options',
+    alias: 'apiScanOptions',
+  },
+  dynamicScans: {
+    route: '/api/v2/files/*/dynamicscans',
+    alias: 'dynamicScans',
+  },
+  dynamicScanById: {
+    route: '/api/v2/dynamicscans/*',
+    alias: 'dynamicScanById',
+  },
+  lastManualDynamicScan: {
+    route: '/api/v3/files/*/last_manual_dynamic_scan',
+    alias: 'lastManualDynamicScan',
   },
   serviceAccount: {
     route: '/api/service_accounts/*',

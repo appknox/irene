@@ -70,7 +70,7 @@ export default class RequestWrapper {
   async delete(opts: RequestOptions): Promise<APIResponse> {
     console.log(`[DELETE] ${opts.endpoint}`);
 
-    const response = await this.client.delete(opts.endpoint);
+    const response = await this.client.delete(opts.endpoint, opts.body);
 
     console.log(`[DELETE] ${opts.endpoint} → ${response.status()}`);
 

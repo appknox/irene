@@ -14,6 +14,14 @@ export interface TestState {
   sbReportId: number;
   analysisId: number;
   vulnerabilityId: number;
+  profileId: number;
+  features: {
+    privacy: boolean;
+    sbom: boolean;
+    manualscan: boolean;
+    dynamicscan_automation: boolean;
+    upload_via_url: boolean;
+  };
 }
 
 const state: TestState = JSON.parse(fs.readFileSync(statePath, 'utf-8'));

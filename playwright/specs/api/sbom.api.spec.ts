@@ -15,6 +15,8 @@ test.describe('SBOM API', () => {
     await wrapper.init();
   });
 
+  test.skip(!state.features.sbom, 'SBOM NOT ENABLED ON THIS ENVIROMENT');
+
   test.afterAll(async () => {
     TokenManager.clearTokens();
     await wrapper.dispose();

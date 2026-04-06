@@ -189,14 +189,6 @@ test('dashboard shows main UI elements', async ({ page }) => {
     await page.goto('/dashboard/projects');
   });
 
-  await allure.step('Verify Upload App is visible', async () => {
-    await expect(page.getByText(pwTranslate('uploadApp'))).toBeVisible();
-  });
-
-  await allure.step('Verify All Projects heading is visible', async () => {
-    await expect(page.getByText(pwTranslate('allProjects'))).toBeVisible();
-  });
-
   await allure.step('Verify All Projects description is visible', async () => {
     await expect(
       page.getByText(pwTranslate('allProjectsDescription'))

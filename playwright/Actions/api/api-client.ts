@@ -51,9 +51,10 @@ export default class ApiClient {
     });
   }
 
-  async delete(endpoint: string) {
+  async delete(endpoint: string, body?: object) {
     return this.context.delete(endpoint, {
       headers: this.getAuthHeaders(),
+      data: body,
     });
   }
 

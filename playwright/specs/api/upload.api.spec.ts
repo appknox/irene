@@ -11,7 +11,7 @@ import state from '../../support/test-state';
 
 let wrapper: RequestWrapper;
 
-test.describe.skip('Upload API', () => {
+test.describe.serial('Upload API', () => {
   test.beforeAll(async () => {
     wrapper = new RequestWrapper();
     await wrapper.init();
