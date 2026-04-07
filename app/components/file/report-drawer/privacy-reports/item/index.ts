@@ -86,6 +86,24 @@ export default class FileReportDrawerPrivacyReportsItemComponent extends Compone
     return this.privacyReport?.pdfStatus === ENUMS.PM_REPORT_STATUS.COMPLETED;
   }
 
+  get showGenerateReport() {
+    return (
+      this.privacyReport?.refreshAvailable ||
+      this.isReportGenerating ||
+      !this.isReportGenerated
+    );
+  }
+
+  get isGenerateButtonLoading() {
+    return this.handleGenerateReport.isRunning || this.isReportGenerating;
+  }
+
+  get generateButtonLabel() {
+    return this.isGenerateButtonLoading
+      ? `${this.intl.t('generating')}...`
+      : this.intl.t('generateReport');
+  }
+
   @action
   handleCopySuccess(event: ClipboardJS.Event) {
     this.notify.info(this.intl.t('passwordCopied'));

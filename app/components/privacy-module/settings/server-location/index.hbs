@@ -1,0 +1,94 @@
+<AkStack @direction='column' @justifyContent='space-between' @width='full'>
+  <AkStack @width='full' @direction='column' local-class='settings-pii-body'>
+    <AkStack @width='full' @direction='column'>
+      <AkTypography
+        @variant='h6'
+        class='mb-1'
+        data-test-privacy-settings-server-location-additional
+      >
+        {{t 'privacyModule.additionalCountries'}}
+      </AkTypography>
+
+      <AkAutocomplete
+        @options={{this.countryOptions}}
+        @searchQuery={{this.searchQuery}}
+        @onChange={{this.handleChange}}
+        @filterKey='label'
+        @onSelect={{this.handleSelect}}
+        @formControlClass='my-2'
+        @placeholder={{t 'privacyModule.searchCountries'}}
+        data-test-privacy-settings-server-location-additional-input
+        as |item|
+      >
+        <AkTypography>{{item.label}}</AkTypography>
+      </AkAutocomplete>
+
+      <AkStack @spacing='2' {{style flexWrap='wrap'}}>
+        {{#each this.customCountriesList as |country idx|}}
+          <AkChip
+            data-test-country-chip='{{idx}}'
+            @variant='outlined'
+            @label={{or (get this.allCountryMap country) country}}
+            @onDelete={{fn this.handleCountryDelete idx}}
+            data-test-privacy-settings-server-location-regex-chip={{idx}}
+          />
+        {{/each}}
+      </AkStack>
+    </AkStack>
+
+    <AkDivider @color='dark' local-class='divider' />
+
+    <AkStack @width='full' @direction='column'>
+      <AkTypography
+        @variant='h6'
+        class='mb-1'
+        data-test-privacy-settings-server-location-default
+      >
+        {{t 'privacyModule.defaultHighRisk'}}
+      </AkTypography>
+
+      {{#each this.defaultCountriesList as |item|}}
+        <AkStack @alignItems='center' local-class='type-item'>
+          <AkCheckbox
+            @checked={{item.value}}
+            @onChange={{fn this.toggleGeoItem item.settings_parameter}}
+            data-test-privacy-settings-server-location-checkbox={{item.settings_parameter}}
+          />
+
+          <AkTypography
+            data-test-privacy-settings-server-location-checkbox-text
+          >
+            {{item.countryName}}
+          </AkTypography>
+        </AkStack>
+      {{/each}}
+    </AkStack>
+  </AkStack>
+
+  <AkStack @width='full' local-class='settings-pii-footer'>
+    {{#if this.saveSettings.isRunning}}
+      <AkLoader
+        @size={{18}}
+        class='mt-1'
+        data-test-privacy-settings-save-loader
+      />
+    {{else}}
+      <AkButton
+        {{on 'click' (perform this.saveSettings)}}
+        @disabled={{this.disableSaveButton}}
+        data-test-privacy-settings-save-button
+      >
+        {{t 'save'}}
+      </AkButton>
+
+      <AkButton
+        @variant='outlined'
+        @color='neutral'
+        {{on 'click' this.handleCancel}}
+        data-test-privacy-settings-cancel-button
+      >
+        {{t 'cancel'}}
+      </AkButton>
+    {{/if}}
+  </AkStack>
+</AkStack>

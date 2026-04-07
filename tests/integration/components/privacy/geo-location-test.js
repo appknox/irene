@@ -1,7 +1,7 @@
 import { module, test } from 'qunit';
 import { setupRenderingTest } from 'ember-qunit';
 import { setupMirage } from 'ember-cli-mirage/test-support';
-import { render, click, waitUntil } from '@ember/test-helpers';
+import { render, click, waitUntil, findAll } from '@ember/test-helpers';
 import { setupIntl, t } from 'ember-intl/test-support';
 import { hbs } from 'ember-cli-htmlbars';
 import Service from '@ember/service';
@@ -86,9 +86,35 @@ module('Integration | Component | privacy/geo-location', function (hooks) {
     );
 
     assert.dom('[data-test-privacy-geo-location-map]').exists();
+
+    assert.dom('[data-test-privacy-geo-location-table]').doesNotExist();
+
+    assert.dom('[data-test-privacy-module-geo-map-view-button]').exists();
+
+    assert.dom('[data-test-privacy-module-geo-table-view-button]').exists();
   });
 
-  test('it has complete flow', async function (assert) {
+  test('it switches from map to table', async function (assert) {
+    await render(
+      hbs(`<PrivacyModule::AppDetails::GeoLocation @file={{this.file}}/>`)
+    );
+
+    assert.dom('[data-test-privacy-geo-location-map]').exists();
+
+    await click('[data-test-privacy-module-geo-table-view-button]');
+
+    assert.dom('[data-test-privacy-geo-location-map]').doesNotExist();
+
+    assert.dom('[data-test-privacy-geo-location-table]').exists();
+
+    await click('[data-test-privacy-module-geo-map-view-button]');
+
+    assert.dom('[data-test-privacy-geo-location-map]').exists();
+
+    assert.dom('[data-test-privacy-geo-location-table]').doesNotExist();
+  });
+
+  test('it has complete map flow', async function (assert) {
     await render(
       hbs(`<PrivacyModule::AppDetails::GeoLocation @file={{this.file}}/>`)
     );
@@ -118,6 +144,58 @@ module('Integration | Component | privacy/geo-location', function (hooks) {
       () =>
         !!document.querySelector('[data-test-privacy-geo-location-map-drawer]')
     );
+
+    assert
+      .dom('[data-test-privacy-geo-location-map-drawer]')
+      .exists('Drawer opened after selecting India');
+
+    assert.dom('[data-test-privacy-geo-location-drawer-header]').exists();
+
+    assert
+      .dom('[data-test-privacy-geo-location-drawer-header]')
+      .hasText(t('privacyModule.serverLocationDetails'));
+
+    assert
+      .dom('[data-test-privacy-geo-location-drawer-country-name]')
+      .hasText(this.geoLocationData.country_name);
+
+    assert
+      .dom('[data-test-privacy-geo-location-drawer-host-number]')
+      .hasText(String(this.geoLocationData.hostUrls.length));
+
+    assert
+      .dom('[data-test-privacy-geo-location-drawer-host-container]')
+      .containsText(this.geoLocationData.hostUrls[0].source_location[0]);
+
+    assert.dom('[data-test-privacy-geo-location-drawer-close-button]').exists();
+
+    await click('[data-test-privacy-geo-location-drawer-close-button]');
+
+    assert.dom('[data-test-privacy-geo-location-map-drawer]').doesNotExist();
+  });
+
+  test('it has complete table view flow', async function (assert) {
+    await render(
+      hbs(`<PrivacyModule::AppDetails::GeoLocation @file={{this.file}}/>`)
+    );
+
+    await click('[data-test-privacy-module-geo-table-view-button]');
+
+    const geoLocationTableHeader = findAll(
+      '[data-test-privacy-geo-location-thead] th'
+    );
+
+    assert.dom(geoLocationTableHeader[0]).hasText(t('country'));
+    assert.dom(geoLocationTableHeader[1]).hasText(t('privacyModule.risk'));
+    assert
+      .dom(geoLocationTableHeader[2])
+      .hasText(t('privacyModule.noOfDomains'));
+
+    const geoLocationTableRows = findAll(
+      '[data-test-privacy-geo-location-trow]'
+    );
+
+    await click(geoLocationTableRows[0]);
 
     assert
       .dom('[data-test-privacy-geo-location-map-drawer]')

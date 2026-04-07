@@ -30,13 +30,37 @@ export default class PrivacyModuleAppDetailsNoteComponent extends Component {
     return this.privacyModule.showCompleteDastScanNote;
   }
 
+  get showPiiParametersChangedNote() {
+    return this.privacyModule.showPiiParametersChangedNote;
+  }
+
+  get showGeoParametersChangedNote() {
+    return this.privacyModule.showGeoParametersChangedNote;
+  }
+
   get messages() {
     const list: AkNotificationBannerMessage[] = [];
+
+    if (this.showGeoParametersChangedNote) {
+      list.push({
+        icon: 'error',
+        color: 'warning-color',
+        message: this.intl.t('privacyModule.checkServerLocation'),
+      });
+    }
+
+    if (this.showPiiParametersChangedNote) {
+      list.push({
+        icon: 'error',
+        color: 'warning-color',
+        message: this.intl.t('privacyModule.checkPii'),
+      });
+    }
 
     if (this.showCompleteApiScanNote) {
       list.push({
         icon: 'warning',
-        color: 'warning-color',
+        color: 'error-color',
         message: this.intl.t('privacyModule.completeApiScanNote'),
       });
     }
@@ -44,7 +68,7 @@ export default class PrivacyModuleAppDetailsNoteComponent extends Component {
     if (this.showCompleteDastScanNote) {
       list.push({
         icon: 'warning',
-        color: 'warning-color',
+        color: 'error-color',
         message: this.intl.t('privacyModule.completeDastScanNote'),
       });
     }

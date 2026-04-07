@@ -16,6 +16,12 @@ import type DangerousPermissionModel from 'irene/models/dangerous-permission';
 import type PiiModel from 'irene/models/pii';
 import type GeoLocationModel from 'irene/models/geo-location';
 import type PiiRequestModel from 'irene/models/pii-request';
+import type PrivacyProjectModel from 'irene/models/privacy-project';
+
+type PrivacyProjectQueryResponse =
+  DS.AdapterPopulatedRecordArray<PrivacyProjectModel> & {
+    meta: { count: number };
+  };
 
 type TrackersModelArray = DS.AdapterPopulatedRecordArray<TrackersModel> & {
   meta: { count: number };
@@ -25,6 +31,13 @@ type DangerousPermissionModelArray =
   DS.AdapterPopulatedRecordArray<DangerousPermissionModel> & {
     meta: { count: number };
   };
+
+export type PrivacySettingsUpdatePayload = {
+  mask_pii?: boolean;
+  pii_custom_regex?: string[];
+  geo_custom_countries?: string[];
+  [key: string]: boolean | string[] | undefined;
+};
 
 export default class PrivacyModuleService extends Service {
   @service declare store: Store;
@@ -44,6 +57,8 @@ export default class PrivacyModuleService extends Service {
   @tracked piiDataList: PiiModel[] = [];
   @tracked piiDataAvailable: boolean = false;
   @tracked showCompleteApiScanNote: boolean = false;
+  @tracked showPiiParametersChangedNote: boolean = false;
+  @tracked showGeoParametersChangedNote: boolean = false;
   @tracked showPiiUpdated: boolean = false;
   @tracked selectedPiiId: string | null = null;
   @tracked showNote: boolean = true;
@@ -53,12 +68,25 @@ export default class PrivacyModuleService extends Service {
   @tracked showCompleteDastScanNote: boolean = false;
   @tracked geoDataAvailable: boolean = false;
   @tracked pii: PiiRequestModel | null = null;
+  @tracked privacyProjectQueryResponse: PrivacyProjectQueryResponse | null =
+    null;
+  @tracked updatedSettings: PrivacySettingsUpdatePayload = {};
 
-  setRouteQueryParams(limit: string | number, offset: string | number) {
+  setRouteQueryParams(
+    limit: string | number,
+    offset: string | number,
+    query?: string,
+    platform?: string | number
+  ) {
+    const searchQueryParam = query || null;
+    const platformQuery = Number(platform) >= 0 ? platform : null;
+
     this.router.transitionTo({
       queryParams: {
         app_limit: limit,
         app_offset: offset,
+        app_query: searchQueryParam,
+        app_platform: platformQuery,
       },
     });
   }
@@ -78,7 +106,41 @@ export default class PrivacyModuleService extends Service {
     this.showCompleteDastScanNote = false;
     this.showGeoUpdated = false;
     this.geoDataAvailable = false;
+    this.showPiiParametersChangedNote = false;
+    this.showGeoParametersChangedNote = false;
+    this.updatedSettings = {};
   }
+
+  fetchPrivacyProjects = task(
+    { drop: true },
+    async (
+      limit: string | number,
+      offset: string | number,
+      query: string,
+      platform: string | number,
+      setQueryParams = true
+    ) => {
+      if (setQueryParams) {
+        this.setRouteQueryParams(limit, offset, query, platform);
+      }
+
+      try {
+        this.privacyProjectQueryResponse = (await this.store.query(
+          'privacy-project',
+          {
+            limit,
+            offset,
+            package_name: query,
+            ...(platform !== null && Number(platform) !== -1
+              ? { platform }
+              : {}),
+          }
+        )) as PrivacyProjectQueryResponse;
+      } catch (e) {
+        this.notify.error(parseError(e, this.intl.t('pleaseTryAgain')));
+      }
+    }
+  );
 
   fetchTrackerData = task(
     async (limit, offset, fileId, setQueryParams = true) => {
@@ -179,6 +241,8 @@ export default class PrivacyModuleService extends Service {
         this.piiDataCount = piiDataList.length;
         this.piiDataAvailable = true;
 
+        this.showPiiParametersChangedNote = pii.settingsOutdated;
+
         if (pii.status === ENUMS.PM_PII_STATUS.PARTIAL_SUCCESS) {
           this.showCompleteApiScanNote = true;
         } else {
@@ -241,6 +305,8 @@ export default class PrivacyModuleService extends Service {
           this.geoLocationDataList = geoLocationDataList;
           this.geoLocationDataCount = geoLocationDataList.length;
           this.geoDataAvailable = true;
+
+          this.showGeoParametersChangedNote = geoLocation.settingsOutdated;
 
           if (
             geoLocation.status === ENUMS.PM_PII_STATUS.PARTIAL_SUCCESS &&

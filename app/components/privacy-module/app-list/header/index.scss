@@ -6,3 +6,103 @@
     padding: 1em 1.285em;
   }
 }
+
+.filter-input {
+  border-color: var(
+    --privacy-module-applist-header-filter-border-color
+  ) !important;
+  padding: 0 0.57em !important;
+
+  :global(.ember-power-select-status-icon) {
+    display: none;
+  }
+
+  &:hover {
+    border-color: var(
+      --privacy-module-applist-header-filter-hover-border-color
+    ) !important;
+  }
+}
+
+.filter-input-dropdown {
+  min-width: max-content !important;
+
+  :global(.ember-power-select-option) {
+    background-color: var(
+      --privacy-module-applist-header-background-color
+    ) !important;
+    padding: 0.5em 0.75em !important;
+
+    &[aria-current='true'] {
+      background-color: var(
+        --privacy-module-applist-header-filter-option-hover-background
+      ) !important;
+    }
+  }
+
+  :global(.ember-power-select-options) {
+    padding: 0 !important;
+  }
+}
+
+.settings-icon {
+  border: 1px solid
+    var(--privacy-module-applist-header-filter-hover-border-color);
+  padding: 0.4em;
+  cursor: pointer;
+  border-radius: var(--privacy-module-applist-header-border-radius);
+}
+
+.tabs-container {
+  width: 100%;
+}
+
+.settings-body {
+  margin: 1.428em 1.142em;
+  border: 1px solid var(--privacy-module-applist-header-filter-border-color);
+
+  &.hide {
+    display: none;
+  }
+}
+
+.search-package-name-input {
+  font-size: 0.857rem !important;
+}
+
+.header-sorting-filter {
+  padding: 0.785em 1.285em;
+}
+
+.clear-filter-label {
+  font-size: 0.857rem !important;
+  text-decoration: underline;
+  color: var(--privacy-module-applist-header-clear-filter-color) !important;
+}
+
+.clear-filter-icon {
+  margin-right: 0.2em;
+  color: var(--privacy-module-applist-header-clear-filter-color) !important;
+}
+
+.clear-filter:hover {
+  box-shadow: none;
+
+  &:hover {
+    .clear-filter-icon,
+    .clear-filter-label {
+      color: var(
+        --privacy-module-applist-header-clear-filter-hover-color
+      ) !important;
+    }
+  }
+}
+
+.divider {
+  margin-left: 0.714em;
+}
+
+.confirmation-body {
+  margin: 1.428em 1.142em;
+  border: 1px solid var(--privacy-module-applist-header-filter-border-color);
+}

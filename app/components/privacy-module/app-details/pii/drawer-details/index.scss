@@ -16,3 +16,7 @@
     width: calc(100% - 3em);
   }
 }
+
+.wrap-text {
+  overflow-wrap: anywhere;
+}

@@ -25,5 +25,171 @@
         {{t 'privacyModule.description'}}
       </AkTypography>
     </AkStack>
+
+    <AkStack>
+      <div {{style width='200px'}}>
+        <AkTextField
+          @placeholder={{t 'searchQuery'}}
+          @value={{this.searchQuery}}
+          {{on 'input' this.onSearchQueryChange}}
+          local-class='search-package-name-input'
+          data-test-privacyModule-appListHeader-searchQueryInput
+        >
+          <:leftAdornment>
+            <AkIcon @iconName='search' @color='textSecondary' />
+          </:leftAdornment>
+
+          <:rightAdornment>
+            {{#if this.searchQuery}}
+              <AkIconButton
+                @size='small'
+                {{on 'click' this.handleClear}}
+                data-test-privacyModule-appListHeader-clearButton
+              >
+                <AkIcon @iconName='close' @color='textSecondary' />
+              </AkIconButton>
+            {{/if}}
+          </:rightAdornment>
+        </AkTextField>
+      </div>
+
+      {{#if this.isOwner}}
+        <AkIcon
+          {{on 'click' this.handleSettingsDrawerOpen}}
+          @size='small'
+          @iconName='settings'
+          local-class='settings-icon'
+          class='ml-1'
+          data-test-privacyModule-appListHeader-settingsIcon
+        />
+      {{/if}}
+    </AkStack>
   </AkStack>
+
+  <AkDivider @color='dark' />
+
+  <AkStack @alignItems='center' local-class='header-sorting-filter'>
+    <AkSelect
+      @onChange={{this.filterPlatformChange}}
+      @options={{this.platformObjects}}
+      @selected={{this.selectedPlatform}}
+      @verticalPosition='auto'
+      @triggerClass={{this.triggerClass}}
+      @dropdownClass={{this.dropDownClass}}
+      @optionTitle={{t 'platform'}}
+      @extra={{hash
+        selectedItem=this.selectedPlatform.key
+        showLabel=true
+        iconName='filter-list'
+      }}
+      @selectedItemComponent={{component 'sbom/app-list/filter-selected-item'}}
+      {{style width='auto'}}
+      class='select-platform-class'
+      data-test-privacyModule-appListHeader-select-platform-container
+      as |platformObject|
+    >
+      <AkStack @spacing='1' @alignItems='center'>
+        <AkRadio
+          @checked={{eq this.selectedPlatform.value platformObject.value}}
+        />
+
+        {{platformObject.key}}
+      </AkStack>
+    </AkSelect>
+
+    {{#if this.showClearFilter}}
+      <AkDivider
+        @direction='vertical'
+        @color='dark'
+        @height='32px'
+        local-class='divider'
+      />
+
+      <AkButton
+        @color='textSecondary'
+        @underline='none'
+        @leftIconClass={{this.clearFilterIconClass}}
+        {{on 'click' this.clearFilters}}
+        local-class='clear-filter'
+      >
+        <:leftIcon>
+          <AkIcon @iconName='close' @size='small' />
+        </:leftIcon>
+
+        <:default>
+          <AkTypography local-class='clear-filter-label'>
+            {{t 'clearFilter'}}
+          </AkTypography>
+        </:default>
+      </AkButton>
+    {{/if}}
+  </AkStack>
+
+  <AkDrawer
+    @open={{this.openPrivacySettingsDrawer}}
+    @onClose={{this.handleSettingsDrawerClose}}
+    @anchor='right'
+    as |dr|
+  >
+    <div {{style width='520px'}}>
+      <AkAppbar @justifyContent='space-between' as |ab|>
+        <AkTypography @color='inherit' @variant='h5'>
+          {{this.drawerTitle}}
+        </AkTypography>
+
+        <AkIconButton
+          {{on 'click' dr.closeHandler}}
+          class={{ab.classes.defaultIconBtn}}
+        >
+          <AkIcon @iconName='close' />
+        </AkIconButton>
+      </AkAppbar>
+
+      {{#if this.showConfirmation}}
+        <AkStack @direction='column' local-class='confirmation-body'>
+          <AkTypography class='p-3'>
+            {{this.confirmationTitle}}
+          </AkTypography>
+
+          <AkDivider @color='dark' />
+
+          <AkStack @spacing='1' class='px-3 py-2'>
+            <AkButton {{on 'click' this.cancelTabSwitch}}>
+              {{t 'noGoBack'}}
+            </AkButton>
+
+            <AkButton
+              @variant='outlined'
+              @color='neutral'
+              {{on 'click' this.confirmTabSwitch}}
+            >
+              {{t 'yesContinue'}}
+            </AkButton>
+          </AkStack>
+        </AkStack>
+      {{/if}}
+
+      <AkStack
+        local-class='settings-body {{if this.showConfirmation "hide"}}'
+        @direction='column'
+      >
+        <AkTabs local-class='tabs-container' as |Akt|>
+          {{#each this.tabItems as |item|}}
+            <Akt.tabItem
+              @id={{item.id}}
+              @buttonVariant={{true}}
+              @onTabClick={{this.handleTabClick}}
+              @isActive={{eq item.id this.selectedTab}}
+            >
+              {{item.label}}
+            </Akt.tabItem>
+          {{/each}}
+        </AkTabs>
+
+        {{#let (component this.activeTabComponent) as |Component|}}
+          <Component />
+        {{/let}}
+      </AkStack>
+    </div>
+  </AkDrawer>
 </AkStack>

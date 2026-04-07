@@ -2,10 +2,13 @@ import Model, { attr } from '@ember-data/model';
 
 export type PiiModelName = 'pii';
 
+type SourceType = 'BINARY' | 'API';
+
 export interface PiiMetaData {
   value: string;
-  source: string;
+  source: SourceType;
   url: string;
+  text_source: string;
 }
 
 export default class PiiModel extends Model {

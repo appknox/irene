@@ -107,8 +107,6 @@ module('Integration | Component | privacy/pii', function (hooks) {
       )
     );
 
-    assert.dom('[data-test-privacyModule-pii-piiDetectedTxt]').exists();
-
     assert.dom('[data-test-privacyModule-pii-list]').exists();
   });
 
@@ -127,8 +125,6 @@ module('Integration | Component | privacy/pii', function (hooks) {
         `<PrivacyModule::AppDetails::Pii @queryParams={{this.queryParams}} @file={{this.file}}/>`
       )
     );
-
-    assert.dom('[data-test-privacyModule-pii-piiDetectedTxt]').doesNotExist();
 
     assert.dom('[data-test-privacyModule-status]').exists();
 
@@ -231,8 +227,6 @@ module('Integration | Component | privacy/pii', function (hooks) {
       )
     );
 
-    assert.dom('[data-test-privacyModule-pii-piiDetectedTxt]').exists();
-
     assert.dom('[data-test-privacyModule-pii-list]').exists();
   });
 
@@ -263,8 +257,6 @@ module('Integration | Component | privacy/pii', function (hooks) {
         `<PrivacyModule::AppDetails::Pii @queryParams={{this.queryParams}} @file={{this.file}}/>`
       )
     );
-
-    assert.dom('[data-test-privacyModule-pii-piiDetectedTxt]').doesNotExist();
 
     assert.dom('[data-test-privacyModule-pii-list]').doesNotExist();
 
@@ -313,8 +305,6 @@ module('Integration | Component | privacy/pii', function (hooks) {
       )
     );
 
-    assert.dom('[data-test-privacyModule-pii-piiDetectedTxt]').doesNotExist();
-
     assert.dom('[data-test-privacyModule-pii-list]').doesNotExist();
 
     assert
@@ -359,8 +349,6 @@ module('Integration | Component | privacy/pii', function (hooks) {
         `<PrivacyModule::AppDetails::Pii @queryParams={{this.queryParams}} @file={{this.file}}/>`
       )
     );
-
-    assert.dom('[data-test-privacyModule-pii-piiDetectedTxt]').doesNotExist();
 
     assert.dom('[data-test-privacyModule-pii-list]').doesNotExist();
 

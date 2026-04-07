@@ -15,110 +15,114 @@
     </AkStack>
   {{else}}
     <AkStack @direction='column' local-class='map-body'>
-      <div local-class='map-header'>
-        <AkTypography>
-          {{t 'privacyModule.serverLocationDesc'}}
-        </AkTypography>
-      </div>
-
-      <div
-        {{did-insert this.setupChart}}
-        local-class='map-container'
-        class='w-full'
-        data-test-privacy-geo-location-map
+      <AkStack
+        @justifyContent='space-between'
+        @alignItems='center'
+        @spacing='1'
+        @width='full'
+        local-class='map-header'
       >
-      </div>
+        <div>
+          <AkTypography @tag='span'>
+            {{t 'privacyModule.serverLocationDescPart1'}}
+          </AkTypography>
+
+          {{! We will be adding Drawer in later release }}
+          <AkTypography @tag='span'>
+            {{t 'privacyModule.serverLocationDescHighRisk'}}
+          </AkTypography>
+
+          <AkTypography @tag='span'>
+            {{t 'privacyModule.serverLocationDescPart2'}}
+          </AkTypography>
+        </div>
+
+        <AkStack>
+          <AkTooltip
+            @title={{t 'privacyModule.mapView'}}
+            @placement='bottom'
+            @arrow={{true}}
+          >
+            <AkIconButton
+              local-class='switch-button map {{if this.isMapView "active"}}'
+              @variant='outlined'
+              @size='medium'
+              {{on 'click' (fn this.handleViewClick true)}}
+              data-test-privacy-module-geo-map-view-button
+            >
+              <AkIcon
+                @color={{if this.isMapView 'primary'}}
+                @iconName='distance'
+              />
+            </AkIconButton>
+          </AkTooltip>
+
+          <AkTooltip
+            @title={{t 'privacyModule.tableView'}}
+            @placement='bottom'
+            @arrow={{true}}
+          >
+            <AkIconButton
+              local-class='switch-button table {{unless
+                this.isMapView
+                "active"
+              }}'
+              @variant='outlined'
+              {{on 'click' (fn this.handleViewClick false)}}
+              data-test-privacy-module-geo-table-view-button
+            >
+              <AkIcon
+                @color={{unless this.isMapView 'primary'}}
+                @iconName='format-list-bulleted'
+              />
+            </AkIconButton>
+          </AkTooltip>
+        </AkStack>
+      </AkStack>
+
+      {{#if this.isMapView}}
+        <div
+          {{did-insert this.setupChart}}
+          local-class='map-container'
+          class='w-full'
+          data-test-privacy-geo-location-map
+        >
+        </div>
+      {{else}}
+        <AkTable @dense={{true}} data-test-privacy-geo-location-table as |t|>
+          <t.head
+            @columns={{this.columns}}
+            data-test-privacy-geo-location-thead
+          />
+
+          <t.body @rows={{this.geoLocationData}} as |b|>
+            <b.row
+              @onClick={{this.handleRowClick}}
+              local-class='table-row'
+              data-test-privacy-geo-location-trow
+              as |r|
+            >
+              <r.cell as |value|>
+                {{#if r.columnValue.component}}
+                  {{#let (component r.columnValue.component) as |Component|}}
+                    <Component @geoLocation={{r.rowValue}} />
+                  {{/let}}
+                {{else}}
+                  <AkTypography title={{value}} @noWrap={{true}}>
+                    {{value}}
+                  </AkTypography>
+                {{/if}}
+              </r.cell>
+            </b.row>
+          </t.body>
+        </AkTable>
+      {{/if}}
     </AkStack>
   {{/if}}
 {{/if}}
 
-<AkDrawer
+<PrivacyModule::AppDetails::GeoLocation::DetailsDrawer
   @open={{this.countryIsSelected}}
   @onClose={{this.closeCountryInfoDrawer}}
-  @anchor='right'
-  data-test-privacy-geo-location-map-drawer
-  as |dr|
->
-  <AkAppbar
-    @justifyContent='space-between'
-    @position='sticky'
-    class='px-3'
-    as |ab|
-  >
-    <AkTypography
-      @color='inherit'
-      @variant='h5'
-      data-test-privacy-geo-location-drawer-header
-    >
-      {{t 'privacyModule.serverLocationDetails'}}
-    </AkTypography>
-
-    <AkIconButton
-      {{on 'click' dr.closeHandler}}
-      class={{ab.classes.defaultIconBtn}}
-      data-test-privacy-geo-location-drawer-close-button
-    >
-      <AkIcon @iconName='close' />
-    </AkIconButton>
-  </AkAppbar>
-
-  <AkStack @direction='column' local-class='drawer-body'>
-    <AkStack @alignItems='center' local-class='country-name'>
-      <AkTypography
-        @variant='h5'
-        data-test-privacy-geo-location-drawer-country-name
-      >
-        {{this.selectedCountry.countryName}}
-      </AkTypography>
-
-      <AkStack @alignItems='center' local-class='details-number'>
-        <AkIcon @iconName='language' local-class='globe-icon' />
-
-        <AkTypography
-          local-class='number'
-          data-test-privacy-geo-location-drawer-host-number
-        >
-          {{this.selectedCountry.hostLength}}
-        </AkTypography>
-      </AkStack>
-    </AkStack>
-
-    <AkStack
-      @width='full'
-      @direction='column'
-      data-test-privacy-geo-location-drawer-host-container
-    >
-      <AkStack
-        @width='full'
-        @direction='column'
-        local-class='accordion-container'
-      >
-        {{#each this.selectedCountry.hosts as |host|}}
-          <AkStack @direction='column' @width='full' local-class='accordion'>
-            <AkStack
-              @width='full'
-              @justifyContent='space-between'
-              local-class='accordion-header'
-            >
-              <AkTypography @variant='h5' @fontWeight='medium'>
-                {{host.domain}}
-              </AkTypography>
-            </AkStack>
-
-            <AkStack @direction='column' local-class='accordion-body'>
-              <AkStack @direction='column' @spacing='0.5'>
-                <AkTypography @color='textSecondary'>
-                  {{t 'source'}}
-                </AkTypography>
-
-                <AkTypography @fontWeight='medium' local-class='wrap-text'>
-                  {{host.firstSourceLocation}}
-                </AkTypography>
-              </AkStack>
-            </AkStack>
-          </AkStack>
-        {{/each}}
-      </AkStack>
-    </AkStack>
-  </AkStack>
-</AkDrawer>
+  @selectedCountry={{this.selectedCountry}}
+/>

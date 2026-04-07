@@ -7,6 +7,8 @@ import type MeService from 'irene/services/me';
 export interface PrivacyModuleAppListQueryParam {
   app_limit: number;
   app_offset: number;
+  app_query: string;
+  app_platform: string;
 }
 
 export default class AuthenticatedDashboardPrivacyModuleAppListRoute extends AkBreadcrumbsRoute {
@@ -20,13 +22,24 @@ export default class AuthenticatedDashboardPrivacyModuleAppListRoute extends AkB
     app_offset: {
       refreshModel: true,
     },
+    app_query: {
+      refreshModel: true,
+    },
+    app_platform: {
+      refreshModel: true,
+    },
   };
 
   model(params: Partial<PrivacyModuleAppListQueryParam>) {
-    const { app_limit = '10', app_offset = '0' } = params;
+    const {
+      app_limit = '10',
+      app_offset = '0',
+      app_query = '',
+      app_platform = '-1',
+    } = params;
 
     return {
-      queryParams: { app_limit, app_offset },
+      queryParams: { app_limit, app_offset, app_query, app_platform },
     };
   }
 }
