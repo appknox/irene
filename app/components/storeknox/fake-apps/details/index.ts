@@ -87,21 +87,21 @@ export default class StoreknoxFakeAppsDetailsComponent extends Component<Storekn
           score: this.fakeAppAIScoreLevels.LogoSimilarityRule,
           description: this.fakeAppAIScores.LogoSimilarityRule_justification,
         },
-        this.fakeAppAIScores.TitleBrandAbuseRule && {
+        {
           numericScore: this.fakeAppAIScores.TitleBrandAbuseRule,
           title: this.intl.t('storeknox.fakeApps.appNameAnalysis'),
           info: this.intl.t('storeknox.fakeApps.appNameAnalysisInfo'),
           score: this.fakeAppAIScoreLevels.TitleBrandAbuseRule,
           description: this.fakeAppAIScores.TitleBrandAbuseRule_justification,
         },
-        this.fakeAppAIScores.PackageSimilarityRule && {
+        {
           numericScore: this.fakeAppAIScores.PackageSimilarityRule,
           title: this.intl.t('storeknox.fakeApps.packageAnalysis'),
           info: this.intl.t('storeknox.fakeApps.packageAnalysisInfo'),
           score: this.fakeAppAIScoreLevels.PackageSimilarityRule,
           description: this.fakeAppAIScores.PackageSimilarityRule_justification,
         },
-        this.fakeAppAIScores.DeveloperConsistencyRule && {
+        {
           numericScore: this.fakeAppAIScores.DeveloperConsistencyRule,
           title: this.intl.t('storeknox.fakeApps.publisherAnalysis'),
           info: this.intl.t('storeknox.fakeApps.publisherAnalysisInfo'),
@@ -109,7 +109,7 @@ export default class StoreknoxFakeAppsDetailsComponent extends Component<Storekn
           description:
             this.fakeAppAIScores.DeveloperConsistencyRule_justification,
         },
-        this.fakeAppAIScores.AppFunctionalitySimilarityRule && {
+        {
           numericScore: this.fakeAppAIScores.AppFunctionalitySimilarityRule,
           title: this.intl.t('storeknox.fakeApps.functionalAnalysis'),
           info: this.intl.t('storeknox.fakeApps.functionalAnalysisInfo'),
