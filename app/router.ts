@@ -9,6 +9,9 @@ export default class Router extends EmberRouter {
 }
 
 Router.map(function () {
+  this.route('freestyle', function () {
+    this.route('component', { path: '/:component_id' });
+  });
   this.route('login');
 
   this.route('saml2', function () {

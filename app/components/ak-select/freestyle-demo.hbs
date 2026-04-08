@@ -1,0 +1,18 @@
+<div class='m-2 w-4/12'>
+  <AkSelect
+    @onChange={{this.handleSelectChange}}
+    @options={{this.selectItems}}
+    @selected={{this.selectedValue}}
+    @renderInPlace={{true}}
+    @label='Experiment with me'
+    @placeholder='Select'
+    @helperText=''
+    @disabled={{false}}
+    @required={{false}}
+    @error={{false}}
+    @multiple={{@multiple}}
+    as |aks|
+  >
+    {{aks.label}}
+  </AkSelect>
+</div>
