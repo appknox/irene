@@ -1,0 +1,27 @@
+.fake-apps-details-root {
+  position: sticky;
+  z-index: 10;
+  top: -0.5em;
+  background-color: var(--storeknox-fake-apps-details-header-skeleton-background-color);
+
+  .fake-app-title-container {
+    border: 1px solid
+      var(--storeknox-fake-apps-details-header-skeleton-title-container-border-color);
+    border-bottom: none;
+  }
+
+  .fake-apps-details-header-app-info-container {
+    background-color: var(
+      --storeknox-fake-apps-details-header-skeleton-app-info-bg-color
+    );
+
+    border: 1px solid
+      var(--storeknox-fake-apps-details-header-skeleton-title-container-border-color);
+  }
+
+  .app-info-logo {
+    border-radius: 100%;
+    width: 58px;
+    height: 58px;
+  }
+}

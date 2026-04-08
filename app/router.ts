@@ -356,8 +356,21 @@ Router.map(function () {
           }
         );
 
+        this.route('fake-apps', function () {
+          this.route('index', { path: '/' });
+
+          this.route('fake-app-list', { path: '/:sk_app' }, function () {
+            this.route('index', { path: '/' });
+            this.route('fake-apps');
+            this.route('ignored');
+          });
+
+          this.route('fake-app-details', { path: '/:sk_app/details/:app_id' });
+        });
+
         this.route('review-logs', { path: '/discover/review-logs' });
         this.route('archived-apps', { path: '/inventory/archived-apps' });
+
         this.route('notifications');
       });
 

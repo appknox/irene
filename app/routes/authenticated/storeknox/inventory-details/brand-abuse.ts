@@ -16,13 +16,8 @@ export default class AuthenticatedStoreknoxInventoryDetailsBrandAbuseRoute exten
   }
 
   beforeModel() {
-    // Redirect user to details page if app status is being initialized or disabled
-    if (
-      this.skInventoryApp.appIsInInitializingState ||
-      this.skInventoryApp.appIsInDisabledState ||
-      !this.organization.selected?.features.storeknox ||
-      this.organization.hideUpsellUI
-    ) {
+    // Redirect user to details page if feature is not enabled or if the user is on a plan that doesn't allow brand abuse insights
+    if (this.organization.hideUpsellUI) {
       this.router.transitionTo(
         'authenticated.storeknox.inventory-details.index',
         this.skInventoryApp.id

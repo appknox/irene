@@ -1,0 +1,71 @@
+{{#if this.isFakeAppIgnored}}
+  <AkStack
+    @width='full'
+    local-class='fake-apps-ignored-banner-root'
+    data-test-storeknoxFakeAppsIgnoredBanner-root
+  >
+    <AkStack
+      @width='full'
+      @direction='row'
+      @alignItems='center'
+      local-class='fake-apps-ignored-banner-container'
+    >
+      <AkStack
+        @alignItems='center'
+        @justifyContent='center'
+        local-class='fake-apps-ignored-banner-icon'
+      >
+        <AkIcon
+          @iconName='warning'
+          @color='inherit'
+          data-test-storeknoxFakeAppsIgnoredBanner-icon
+        />
+      </AkStack>
+
+      {{#if this.isFakeAppIgnored}}
+        {{#if this.isAddedToInventory}}
+          <AkStack @alignItems='center'>
+            <AkTypography
+              local-class='fake-apps-ignored-banner-text'
+              data-test-storeknoxFakeAppsIgnoredBanner-text
+            >
+              {{t 'storeknox.fakeApps.ignoredBannerIgnoredAndAddedToInventory'}}
+              <strong>{{this.ignoredOnString}}</strong>.
+            </AkTypography>
+
+            <div local-class='view-in-inventory-button-container'>
+              <AkLink
+                @route='authenticated.storeknox.inventory-details'
+                @model={{this.fakeApp.addedToInventoryApp.id}}
+                @color='secondary'
+                @underline='none'
+                @fontWeight='medium'
+                @typographyVariant='body2'
+                data-test-storeknoxFakeAppsIgnoredBanner-inventoryLink
+              >
+                <:rightIcon>
+                  <AkIcon
+                    @iconName='arrow-right-alt'
+                    {{style fontSize='1rem !important'}}
+                  />
+                </:rightIcon>
+
+                <:default>
+                  {{t 'storeknox.viewInInventory'}}
+                </:default>
+              </AkLink>
+            </div>
+          </AkStack>
+        {{else}}
+          <AkTypography
+            local-class='fake-apps-ignored-banner-text'
+            data-test-storeknoxFakeAppsIgnoredBanner-text
+          >
+            {{t 'storeknox.fakeApps.ignoredBannerAddedToInventory'}}
+            <strong>{{this.ignoredOnString}}</strong>
+          </AkTypography>
+        {{/if}}
+      {{/if}}
+    </AkStack>
+  </AkStack>
+{{/if}}

@@ -7,15 +7,29 @@ interface StoreknoxInventoryDetailsAppDetailsActionsListButtonSignature {
     skInventoryApp?: SkInventoryAppModel;
     needsAction?: boolean;
     featureInProgress?: boolean;
+    statusIsInitializing?: boolean;
     disabled?: boolean;
     label: string;
     hideRightIcon?: boolean;
+    showDisabledState?: boolean;
   };
 }
 
 export default class StoreknoxInventoryDetailsAppDetailsActionsListButtonComponent extends Component<StoreknoxInventoryDetailsAppDetailsActionsListButtonSignature> {
   get isArchived() {
     return this.args.skInventoryApp?.isArchived;
+  }
+
+  get leftIconName() {
+    if (this.args.showDisabledState && !this.args.featureInProgress) {
+      return 'history';
+    }
+
+    return 'info';
+  }
+
+  get showLoadingState() {
+    return this.args.statusIsInitializing && !this.args.showDisabledState;
   }
 }
 

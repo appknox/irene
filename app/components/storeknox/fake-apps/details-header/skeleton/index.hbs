@@ -1,0 +1,90 @@
+<div
+  local-class='fake-apps-details-root'
+  class='w-full mb-3 pt-2'
+  ...attributes
+>
+  {{! Breadcrumbs }}
+  <div {{style height='38px'}} class='pb-3'>
+    <AkSkeleton @width='250px' @height='16px' @variant='rounded' />
+  </div>
+
+  {{! Title Container }}
+  <AkStack
+    @bgColor='white'
+    @width='full'
+    @direction='column'
+    @spacing='1'
+    local-class='fake-app-title-container'
+  >
+    <AkStack @width='full' @spacing='1' @alignItems='center' class='py-2 px-3'>
+      {{! Title Indicator }}
+      <AkSkeleton @width='14px' @height='14px' @variant='rounded' />
+
+      {{! Header Title }}
+      <AkSkeleton @width='100px' @height='1.25rem' @variant='rounded' />
+    </AkStack>
+  </AkStack>
+
+  {{! App Info Container }}
+  <AkStack
+    @bgColor='white'
+    @width='full'
+    @justifyContent='space-between'
+    @spacing='1'
+    local-class='fake-apps-details-header-app-info-container'
+    class='p-3'
+  >
+    <AkStack @direction='column'>
+      {{! App Logo }}
+      <AkSkeleton
+        @width='58px'
+        @height='58px'
+        @variant='circular'
+        local-class='app-info-logo'
+      />
+
+      <AkStack @spacing='0.75' @direction='column' @alignItems='flex-start'>
+        {{! App Title }}
+        <AkSkeleton
+          @width='200px'
+          @height='1.5rem'
+          @variant='rounded'
+          class='mt-1'
+        />
+
+        {{! Package Name }}
+        <AkSkeleton @width='220px' @height='1rem' @variant='rounded' />
+
+        {{! Developer Name }}
+        <AkSkeleton @width='180px' @height='1rem' @variant='rounded' />
+      </AkStack>
+
+      {{! Platform and Store Icons }}
+      <AkStack @spacing='1' class='mt-1'>
+        {{! Platform Icon }}
+        <AkSkeleton @width='32px' @height='32px' @variant='circular' />
+
+        {{! Store Icon }}
+        <AkSkeleton @width='32px' @height='32px' @variant='circular' />
+      </AkStack>
+
+    </AkStack>
+
+    {{! Action Buttons }}
+    <AkStack
+      @alignItems='center'
+      @justifyContent='flex-end'
+      @spacing='1.5'
+      {{style alignSelf='flex-end'}}
+    >
+      {{! Download Report Button }}
+      <AkSkeleton @width='140px' @height='36px' @variant='rounded' />
+
+      {{! Ignore App Button }}
+      <AkSkeleton @width='110px' @height='36px' @variant='rounded' />
+
+      {{! Ignore and Add to Inventory Button }}
+      <AkSkeleton @width='180px' @height='36px' @variant='rounded' />
+    </AkStack>
+  </AkStack>
+</div>

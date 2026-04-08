@@ -1,0 +1,110 @@
+<AkStack
+  @direction='row'
+  @alignItems='center'
+  @justifyContent='space-between'
+  local-class='header-storeknox-fake-apps-page'
+>
+  <AkStack @direction='column' @spacing='0.5'>
+    <AkStack @direction='row' @alignItems='center' @spacing='1.5'>
+      <AkTypography @variant='subtitle1' data-test-storeknoxFakeApps-headerText>
+        {{t 'storeknox.fakeAppsTitle'}}
+      </AkTypography>
+
+      <AkChip
+        local-class='beta-chip'
+        @variant='outlined'
+        @size='small'
+        @label={{t 'beta'}}
+      />
+    </AkStack>
+
+    <AkTypography
+      @variant='body2'
+      @color='neutral'
+      data-test-storeknoxFakeApps-descriptionText
+    >
+      {{t 'storeknox.fakeApps.listingPageDescription'}}
+    </AkTypography>
+  </AkStack>
+
+  <AkStack @alignItems='center' @justifyContent='center' @spacing='1.5'>
+    <AkTextField
+      @placeholder={{t 'searchQuery'}}
+      @value={{this.searchQuery}}
+      {{on 'input' this.onSearchQueryChange}}
+      local-class='search-package-name-input'
+      data-test-storeknoxFakeApps-searchInput
+    >
+      <:leftAdornment>
+        <AkIcon @iconName='search' @color='textSecondary' />
+      </:leftAdornment>
+
+      <:rightAdornment>
+        {{#if this.searchQuery}}
+          <AkIconButton
+            @size='small'
+            {{on 'click' this.clearSearchInput}}
+            data-test-storeknoxFakeApps-clearSearchBtn
+          >
+            <AkIcon @iconName='close' @color='textSecondary' />
+          </AkIconButton>
+        {{/if}}
+      </:rightAdornment>
+    </AkTextField>
+
+    <PoweredByAi::Chip
+      @clickable={{true}}
+      @drawerInfo={{this.aiDrawerInfo}}
+      class='ml-2'
+      data-test-storeknoxFakeApps-poweredByAiChip
+    />
+  </AkStack>
+</AkStack>
+
+{{! Fake Apps List }}
+<AkPaginationProvider
+  @results={{this.skFakeApps}}
+  @onItemPerPageChange={{this.onItemPerPageChange}}
+  @totalItems={{this.totalAppsCount}}
+  @nextAction={{this.goToPage}}
+  @prevAction={{this.goToPage}}
+  @itemPerPageOptions={{array 12 24 48}}
+  @defaultLimit={{this.skApps.limit}}
+  @offset={{this.skApps.offset}}
+  as |pgc|
+>
+  {{#if this.showEmptyState}}
+    <Storeknox::Inventory::AppList::Table::Empty
+      @subText={{t 'storeknox.noAppMatchesYourCurrentFilter'}}
+    />
+  {{/if}}
+
+  <div local-class='fake-apps-grid'>
+    {{#if this.isFetchingTableData}}
+      {{#each (array 1 2 3 4 5 6) as |index|}}
+        <Storeknox::FakeApps::ListItemCard::Skeleton id='skeleton-{{index}}' />
+      {{/each}}
+    {{else}}
+      {{#each pgc.currentPageResults as |skApp|}}
+        <Storeknox::FakeApps::ListItemCard @skFakeApp={{skApp}} />
+      {{/each}}
+    {{/if}}
+  </div>
+
+  {{#unless this.hidePagination}}
+    <AkPagination
+      @disableNext={{pgc.disableNext}}
+      @nextAction={{pgc.nextAction}}
+      @disablePrev={{pgc.disablePrev}}
+      @prevAction={{pgc.prevAction}}
+      @endItemIdx={{pgc.endItemIdx}}
+      @startItemIdx={{pgc.startItemIdx}}
+      @itemPerPageOptions={{pgc.itemPerPageOptions}}
+      @onItemPerPageChange={{pgc.onItemPerPageChange}}
+      @selectedOption={{pgc.selectedOption}}
+      @tableItemLabel={{t 'apps'}}
+      @perPageTranslation={{t 'recordPerPage'}}
+      @totalItems={{pgc.totalItems}}
+    />
+  {{/unless}}
+</AkPaginationProvider>
