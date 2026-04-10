@@ -76,26 +76,78 @@
     <div data-test-vncViewer-deviceScreen class='screen'>
       {{#if this.isByodScan}}
         {{#if @dynamicScan.isInstalling}}
-          <AkStack
-            data-test-vncViewer-byodDownload
-            local-class='byod-install-note'
-            @direction='column'
-            @alignItems='center'
-            @spacing='1'
-          >
-            <AkTypography @color='inherit' @variant='subtitle2'>
-              {{t 'cyodInstallApp'}}
-            </AkTypography>
-            {{#if this.byodDownloadUrl}}
-              <AkLink
-                data-test-vncViewer-byodDownloadLink
-                @href={{this.byodDownloadUrl}}
-                @target='_blank'
-              >
-                {{if this.byodIsIos (t 'cyodInstallIos') (t 'cyodDownloadApk')}}
-              </AkLink>
-            {{/if}}
-          </AkStack>
+          {{#if this.isWebusbCyod}}
+            {{! WebUSB CYOD — auto-install in browser }}
+            <AkStack
+              data-test-vncViewer-webusbInstall
+              local-class='byod-install-note'
+              @direction='column'
+              @alignItems='center'
+              @spacing='1'
+            >
+              {{#if this.webusbInstallIsRunning}}
+                <AkTypography @color='inherit' @variant='subtitle2'>
+                  {{#if (eq this.webusbInstallStage 'downloading')}}
+                    {{t 'cyodAutoInstallDownloading'}} ({{this.webusbInstallPercent}}%)
+                  {{else if (eq this.webusbInstallStage 'pushing')}}
+                    {{t 'cyodAutoInstallPushing'}} ({{this.webusbInstallPercent}}%)
+                  {{else if (eq this.webusbInstallStage 'installing')}}
+                    {{t 'cyodAutoInstalling'}}
+                  {{else}}
+                    {{t 'cyodAutoInstallDone'}}
+                  {{/if}}
+                </AkTypography>
+              {{else if this.webusbAdb}}
+                <AkTypography @color='inherit' @variant='subtitle2'>
+                  {{t 'cyodAutoInstallReady'}}
+                </AkTypography>
+                <AkButton
+                  data-test-vncViewer-webusbInstallBtn
+                  @variant='contained'
+                  @size='small'
+                  {{on 'click' (perform this.autoInstallViaWebUsb)}}
+                >
+                  {{t 'cyodAutoInstallStart'}}
+                </AkButton>
+              {{else}}
+                {{! No ADB session — fall back to manual download }}
+                <AkTypography @color='inherit' @variant='subtitle2'>
+                  {{t 'cyodInstallApp'}}
+                </AkTypography>
+                {{#if this.byodDownloadUrl}}
+                  <AkLink
+                    data-test-vncViewer-byodDownloadLink
+                    @href={{this.byodDownloadUrl}}
+                    @target='_blank'
+                  >
+                    {{t 'cyodDownloadApk'}}
+                  </AkLink>
+                {{/if}}
+              {{/if}}
+            </AkStack>
+          {{else}}
+            {{! Non-WebUSB BYOD — manual download }}
+            <AkStack
+              data-test-vncViewer-byodDownload
+              local-class='byod-install-note'
+              @direction='column'
+              @alignItems='center'
+              @spacing='1'
+            >
+              <AkTypography @color='inherit' @variant='subtitle2'>
+                {{t 'cyodInstallApp'}}
+              </AkTypography>
+              {{#if this.byodDownloadUrl}}
+                <AkLink
+                  data-test-vncViewer-byodDownloadLink
+                  @href={{this.byodDownloadUrl}}
+                  @target='_blank'
+                >
+                  {{if this.byodIsIos (t 'cyodInstallIos') (t 'cyodDownloadApk')}}
+                </AkLink>
+              {{/if}}
+            </AkStack>
+          {{/if}}
         {{else if @dynamicScan.isReady}}
           <AkStack
             data-test-vncViewer-byodReady

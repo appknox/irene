@@ -18,6 +18,7 @@ import type IntlService from 'ember-intl/services/intl';
 import ENUMS from 'irene/enums';
 import type DevicefarmService from 'irene/services/devicefarm';
 import type IreneAjaxService from 'irene/services/ajax';
+import type CyodAdbSessionService from 'irene/services/cyod-adb-session';
 
 const KNOXOPS_AGENT_PORT = 17392;
 const WEBUSB_REGISTER_PATH = '/devicefarm/v2/devices/webusb-register/';
@@ -41,6 +42,7 @@ export default class CyodDeviceRegistrationComponent extends Component<CyodDevic
   @service declare devicefarm: DevicefarmService;
   @service declare ajax: IreneAjaxService;
   @service('notifications') declare notify: NotificationService;
+  @service('cyod-adb-session') declare cyodAdbSession: CyodAdbSessionService;
 
   @tracked detectedSerial: string | null = null;
   @tracked detectedModel: string | null = null;
@@ -135,7 +137,9 @@ export default class CyodDeviceRegistrationComponent extends Component<CyodDevic
       this.detectedOsVersion = osVersion;
       this.detectedArch = arch;
 
-      adb.dispose();
+      // Keep the ADB connection alive for auto-install once the scan starts.
+      // CyodAdbSessionService will dispose it after 10 min or on scan stop.
+      this.cyodAdbSession.store(serial, adb);
 
       await this._postRegistration(
         serial,

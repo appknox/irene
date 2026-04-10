@@ -1,5 +1,7 @@
 import Component from '@glimmer/component';
 import { inject as service } from '@ember/service';
+import { tracked } from '@glimmer/tracking';
+import { task } from 'ember-concurrency';
 import type Store from 'ember-data/store';
 import type IntlService from 'ember-intl/services/intl';
 
@@ -8,9 +10,11 @@ import ENV from 'irene/config/environment';
 import type FileModel from 'irene/models/file';
 import type DynamicscanModel from 'irene/models/dynamicscan';
 import type DevicefarmService from 'irene/services/devicefarm';
+import type CyodAdbSessionService from 'irene/services/cyod-adb-session';
 
 const VNC_MODE_NONE = ENUMS.DEVICE_VNC_MODE?.NONE ?? 0;
 const VNC_MODE_SCRCPY = ENUMS.DEVICE_VNC_MODE?.SCRCPY ?? 2;
+const REGISTRATION_SOURCE_WEBUSB = 2;
 
 export interface VncViewerSignature {
   Args: {
@@ -28,6 +32,11 @@ export default class VncViewerComponent extends Component<VncViewerSignature> {
   @service declare intl: IntlService;
   @service declare store: Store;
   @service declare devicefarm: DevicefarmService;
+  @service('cyod-adb-session') declare cyodAdbSession: CyodAdbSessionService;
+  @service('notifications') declare notify: NotificationService;
+
+  @tracked webusbInstallStage: string | null = null;
+  @tracked webusbInstallPercent = 0;
 
   deviceFarmPassword = ENV.deviceFarmPassword;
 
@@ -110,6 +119,63 @@ export default class VncViewerComponent extends Component<VncViewerSignature> {
 
     return !!deviceUsed?.ios_itms_url;
   }
+
+  // WebUSB CYOD — user registered their device via WebUSB; auto-install in browser
+  get isWebusbCyod() {
+    const deviceUsed = this.args.dynamicScan?.get('deviceUsed');
+
+    return (
+      !!deviceUsed?.android_download_url &&
+      deviceUsed?.registration_source === REGISTRATION_SOURCE_WEBUSB &&
+      !!deviceUsed?.device_identifier
+    );
+  }
+
+  get webusbAdb() {
+    const identifier = this.args.dynamicScan
+      ?.get('deviceUsed')
+      ?.device_identifier;
+    return identifier ? this.cyodAdbSession.get(identifier) : null;
+  }
+
+  get webusbInstallIsRunning() {
+    return this.autoInstallViaWebUsb.isRunning;
+  }
+
+  autoInstallViaWebUsb = task(async () => {
+    const adb = this.webusbAdb;
+    const downloadUrl = this.byodDownloadUrl;
+    const packageName = this.args.dynamicScan?.get('packageName');
+
+    if (!adb || !downloadUrl || !packageName) {
+      return;
+    }
+
+    try {
+      const { installApkViaWebUsb } = await import(
+        'irene/utils/webusb-adb-install'
+      );
+
+      await installApkViaWebUsb(adb, downloadUrl, packageName, {
+        onProgress: (progress) => {
+          this.webusbInstallStage = progress.stage;
+          if ('percent' in progress) {
+            this.webusbInstallPercent = progress.percent;
+          }
+        },
+      });
+
+      const { launchAppViaWebUsb } = await import(
+        'irene/utils/webusb-adb-install'
+      );
+      await launchAppViaWebUsb(adb, packageName);
+
+      this.webusbInstallStage = 'done';
+    } catch (err) {
+      this.notify.error(this.intl.t('cyodAutoInstallFailed'));
+      throw err;
+    }
+  });
 
   // Proxy CYOD — Mercer is streaming; use cyod-viewer instead of noVNC
   get isScrcpyScan() {
