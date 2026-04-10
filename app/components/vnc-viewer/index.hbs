@@ -98,8 +98,9 @@
             </AkTypography>
           </AkStack>
         {{/if}}
-      {{else if @dynamicScan.isReady}}
+      {{else if @dynamicScan.isReadyOrRunning}}
         <NovncRfb
+          @allowInteraction={{@dynamicScan.isReady}}
           @deviceFarmURL={{this.deviceFarmURL}}
           @deviceFarmPassword={{this.deviceFarmPassword}}
         />

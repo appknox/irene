@@ -64,7 +64,7 @@ export default class FileAdapter extends CommonDRFAdapter {
 
     // Add scheduled scan filters
     if (isScheduledScan) {
-      url = url.concat('&engine=2&group_status=running');
+      url = url.concat('&engine=1&engine=2&group_status=running');
     }
 
     const res = await this.ajax(url, 'GET');

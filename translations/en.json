@@ -958,6 +958,9 @@
       "errorMsg": "Failed to trigger notification for customer.",
       "successMsg": "Customer will be notified of this completion.",
       "headerTitle": "Do you also want to notify the customer of the successful completion of DAST?"
+    },
+    "scheduledAutomatedStopConfirm": {
+      "headerTitle": "Are you sure you want to stop the scan?"
     }
   },
   "month": "Month",

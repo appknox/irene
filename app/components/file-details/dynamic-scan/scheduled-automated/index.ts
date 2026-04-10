@@ -45,6 +45,8 @@ export default class FileDetailsDynamicScanScheduledAutomatedComponent extends C
   @tracked notifyUserOfCompletionOrError = false;
   @tracked isPerformingNotifyAction = false;
   @tracked showNotifyUserModal = false;
+  @tracked showStopConfirmModal = false;
+  @tracked pendingShutdown: (() => void) | null = null;
 
   get dynamicScan() {
     return this.dsService.scheduledScan;
@@ -83,6 +85,22 @@ export default class FileDetailsDynamicScanScheduledAutomatedComponent extends C
 
   @action handleScanShutdown() {
     this.showNotifyUserModal = true;
+  }
+
+  @action requestStop(doShutdown: () => void) {
+    this.pendingShutdown = doShutdown;
+    this.showStopConfirmModal = true;
+  }
+
+  @action closeStopConfirmModal() {
+    this.showStopConfirmModal = false;
+    this.pendingShutdown = null;
+  }
+
+  @action confirmStop() {
+    this.showStopConfirmModal = false;
+    this.pendingShutdown?.();
+    this.pendingShutdown = null;
   }
 
   @action confirmNotifyUserOfCompletion(confirmation: boolean) {

@@ -51,11 +51,11 @@ const commondynamicScanStatusTextList = [
     text: () => t('deviceBooting'),
   },
   {
-    status: ENUMS.DYNAMIC_SCAN_STATUS.DOWNLOADING_AUTO_SCRIPT,
+    status: ENUMS.DYNAMIC_SCAN_STATUS.DOWNLOADING_AUTOPILOT_SCRIPT,
     text: () => t('deviceBooting'),
   },
   {
-    status: ENUMS.DYNAMIC_SCAN_STATUS.CONFIGURING_AUTO_INTERACTION,
+    status: ENUMS.DYNAMIC_SCAN_STATUS.CONFIGURING_AUTOPILOT,
     text: () => t('deviceBooting'),
   },
   {
@@ -115,11 +115,11 @@ const manualDynamicScanStatusTextList = [
 
 const autoDynamicScanStatusTextList = [
   {
-    status: ENUMS.DYNAMIC_SCAN_STATUS.INITIATING_AUTO_INTERACTION,
+    status: ENUMS.DYNAMIC_SCAN_STATUS.AUTOPILOT_RUNNING,
     text: () => t('running'),
   },
   {
-    status: ENUMS.DYNAMIC_SCAN_STATUS.AUTO_INTERACTION_COMPLETED,
+    status: ENUMS.DYNAMIC_SCAN_STATUS.AUTOPILOT_COMPLETED,
     text: () => t('running'),
   },
 ];
@@ -513,6 +513,14 @@ module('Acceptance | file-details/dynamic-scan', function (hooks) {
             .dom('[data-test-vncViewer-scanTriggeredAutomaticallyText]')
             .exists()
             .hasText(t('scanTriggeredAutomatically'));
+        }
+
+        if (
+          dynamicscan.isStartingOrShuttingInProgress ||
+          dynamicscan.isReadyOrRunning
+        ) {
+          // automatedNote is shown for all active states (starting, shutting down, ready, running)
+          assert.dom('[data-test-vncViewer-automatedNote]').exists();
 
           if (dynamicscan.isInqueue) {
             assert
@@ -546,7 +554,7 @@ module('Acceptance | file-details/dynamic-scan', function (hooks) {
       {
         mode: 'automated',
         // cancelInBetween: false, For now stop while running is not supported
-        expectedAssertions: 43,
+        expectedAssertions: 44,
         startedBy: true,
       },
       {
@@ -820,7 +828,7 @@ module('Acceptance | file-details/dynamic-scan', function (hooks) {
           assert,
           mode === 'manual'
             ? ENUMS.DYNAMIC_SCAN_STATUS.READY_FOR_INTERACTION
-            : ENUMS.DYNAMIC_SCAN_STATUS.INITIATING_AUTO_INTERACTION,
+            : ENUMS.DYNAMIC_SCAN_STATUS.AUTOPILOT_RUNNING,
           mode === 'manual' ? null : t('running'),
           mode === 'manual' ? 'stopBtn' : null
         );
@@ -828,9 +836,9 @@ module('Acceptance | file-details/dynamic-scan', function (hooks) {
         if (mode === 'automated') {
           assert.dom('[data-test-vncViewer-scanTriggeredNote]').exists();
 
-          assert
-            .dom('[data-test-vncViewer-automatedNote]')
-            .hasText(`${t('note')} - ${t('automatedScanRunningVncNote')}`);
+          // AUTOPILOT_RUNNING shows the automated note in the automated tab (not VNC)
+          assert.dom('[data-test-vncViewer-automatedNote]').exists();
+          assert.dom('[data-test-NovncRfb-canvasContainer]').doesNotExist();
         } else {
           assert.dom('[data-test-vncViewer-manualScanNote]').doesNotExist();
           assert.dom('[data-test-fileDetails-dynamicScan-expiry]').exists();
@@ -867,13 +875,13 @@ module('Acceptance | file-details/dynamic-scan', function (hooks) {
   test.each(
     'dynamic scan scheduled automated flow',
     [
-      { notifyUser: true, assertions: 42 },
-      { notifyUser: false, assertions: 43 },
+      { notifyUser: true, assertions: 45 },
+      { notifyUser: false, assertions: 46 },
       {
         notifyUser: true,
         withError: true,
         errorDetail: 'This scan has already been notified to the user.',
-        assertions: 45,
+        assertions: 48,
       },
     ],
     async function (
@@ -1100,6 +1108,16 @@ module('Acceptance | file-details/dynamic-scan', function (hooks) {
 
       // Stop scan
       await click('[data-test-fileDetails-dynamicScanAction="stopBtn"]');
+
+      // Stop confirmation assertions
+      assert
+        .dom('[data-test-confirmbox-description]')
+        .containsText(t('modalCard.scheduledAutomatedStopConfirm.headerTitle'));
+
+      assert.dom('[data-test-confirmbox-confirmBtn]').containsText(t('yes'));
+      assert.dom('[data-test-confirmbox-cancelBtn]').containsText(t('no'));
+
+      await click('[data-test-confirmbox-confirmBtn]');
 
       // Notify User Assertions
       const notifyUserModalHeader =
