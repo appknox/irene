@@ -74,7 +74,43 @@
     {{/if}}
 
     <div data-test-vncViewer-deviceScreen class='screen'>
-      {{#if this.isAutomated}}
+      {{#if this.isByodScan}}
+        {{#if @dynamicScan.isInstalling}}
+          <AkStack
+            data-test-vncViewer-byodDownload
+            local-class='byod-install-note'
+            @direction='column'
+            @alignItems='center'
+            @spacing='1'
+          >
+            <AkTypography @color='inherit' @variant='subtitle2'>
+              {{t 'cyodInstallApp'}}
+            </AkTypography>
+            {{#if this.byodDownloadUrl}}
+              <AkLink
+                data-test-vncViewer-byodDownloadLink
+                @href={{this.byodDownloadUrl}}
+                @target='_blank'
+              >
+                {{if this.byodIsIos (t 'cyodInstallIos') (t 'cyodDownloadApk')}}
+              </AkLink>
+            {{/if}}
+          </AkStack>
+        {{else if @dynamicScan.isReady}}
+          <AkStack
+            data-test-vncViewer-byodReady
+            local-class='byod-ready-note'
+            @direction='column'
+            @alignItems='center'
+            @spacing='1'
+          >
+            <AkIcon @iconName='smartphone' @color='inherit' />
+            <AkTypography @color='inherit' @variant='subtitle2'>
+              {{t 'cyodInteractOnDevice'}}
+            </AkTypography>
+          </AkStack>
+        {{/if}}
+      {{else if this.isAutomated}}
         {{#if
           (or
             @dynamicScan.isStartingOrShuttingInProgress
@@ -99,10 +135,21 @@
           </AkStack>
         {{/if}}
       {{else if @dynamicScan.isReady}}
-        <NovncRfb
-          @deviceFarmURL={{this.deviceFarmURL}}
-          @deviceFarmPassword={{this.deviceFarmPassword}}
-        />
+        {{#if this.isScrcpyScan}}
+          {{! Proxy CYOD — Mercer streaming via scrcpy/go-ios }}
+          <CyodViewer
+            data-test-vncViewer-cyodViewer
+            @scanToken={{this.scrcpyScanToken}}
+            @platform={{@file.project.platform}}
+            @authToken={{this.deviceFarmPassword}}
+          />
+        {{else}}
+          {{! Farm device — existing noVNC }}
+          <NovncRfb
+            @deviceFarmURL={{this.deviceFarmURL}}
+            @deviceFarmPassword={{this.deviceFarmPassword}}
+          />
+        {{/if}}
       {{/if}}
     </div>
 

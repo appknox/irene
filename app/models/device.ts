@@ -22,7 +22,12 @@ export type RawDeviceType = {
   has_persistent_apps: boolean;
   persistent_apps: unknown[];
   has_vnc: boolean;
+  vnc_mode: number;
+  registration_source: number;
   extra_capabilities: string;
+  // BYOD scans: no real device — only one of these is set
+  ios_itms_url?: string;
+  android_download_url?: string;
 };
 
 export default class DeviceModel extends Model {
@@ -88,6 +93,12 @@ export default class DeviceModel extends Model {
 
   @attr('boolean')
   declare hasVnc: boolean;
+
+  @attr('number')
+  declare vncMode: number;
+
+  @attr('number')
+  declare registrationSource: number;
 
   @attr('string')
   declare extraCapabilities: string;

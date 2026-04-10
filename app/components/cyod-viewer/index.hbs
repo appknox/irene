@@ -1,0 +1,38 @@
+<div
+  data-test-cyodViewer
+  local-class='cyod-viewer-root'
+  ...attributes
+>
+  {{#if this.errorMessage}}
+    <AkStack
+      data-test-cyodViewer-error
+      @direction='column'
+      @alignItems='center'
+      @spacing='1'
+    >
+      <AkIcon @iconName='warning' @color='warn' />
+      <AkTypography @color='textSecondary'>{{this.errorMessage}}</AkTypography>
+    </AkStack>
+  {{else}}
+    {{#unless this.isConnected}}
+      <AkStack
+        data-test-cyodViewer-connecting
+        @direction='column'
+        @alignItems='center'
+        @spacing='1'
+      >
+        <AkCircularProgress @size={{24}} />
+        <AkTypography @color='textSecondary'>{{t 'cyodDetectingDevice'}}</AkTypography>
+      </AkStack>
+    {{/unless}}
+
+    <canvas
+      data-test-cyodViewer-canvas
+      local-class='cyod-canvas {{if this.isConnected "" "hidden"}}'
+      {{this.setupCanvas}}
+      {{on 'pointerdown' this.handlePointerDown}}
+      {{on 'pointermove' this.handlePointerMove}}
+      {{on 'pointerup' this.handlePointerUp}}
+    />
+  {{/if}}
+</div>

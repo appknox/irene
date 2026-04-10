@@ -141,6 +141,18 @@ const ENUMS = {
     SPECIFIC_DEVICE: 1,
   },
 
+  DEVICE_VNC_MODE: {
+    NONE: 0,
+    VNC: 1,
+    SCRCPY: 2,
+  },
+
+  DEVICE_REGISTRATION_SOURCE: {
+    FARM: 0,
+    PROXY: 1,
+    WEBUSB: 2,
+  },
+
   DS_AUTOMATED_DEVICE_SELECTION: {
     ANY_DEVICE: 0,
     FILTER_CRITERIA: 1,

@@ -209,6 +209,8 @@
     "@novnc/novnc": "^1.5.0",
     "@popperjs/core": "^2.11.6",
     "@storybook/types": "^8.4.6",
+    "@yume-chan/adb": "^2.6.0",
+    "@yume-chan/adb-backend-webusb": "^0.0.19",
     "clipboard": "^2.0.6",
     "cypress": "^13.6.3",
     "echarts": "^5.4.2",

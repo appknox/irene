@@ -9,6 +9,9 @@ import type FileModel from 'irene/models/file';
 import type DynamicscanModel from 'irene/models/dynamicscan';
 import type DevicefarmService from 'irene/services/devicefarm';
 
+const VNC_MODE_NONE = ENUMS.DEVICE_VNC_MODE?.NONE ?? 0;
+const VNC_MODE_SCRCPY = ENUMS.DEVICE_VNC_MODE?.SCRCPY ?? 2;
+
 export interface VncViewerSignature {
   Args: {
     file: FileModel;
@@ -83,6 +86,40 @@ export default class VncViewerComponent extends Component<VncViewerSignature> {
 
   get startedBy() {
     return this.dynamicScan?.get('startedByUser')?.get('username');
+  }
+
+  // CYOD / BYOD — no VNC, user interacts on their own device
+  get isByodScan() {
+    const deviceUsed = this.args.dynamicScan?.get('deviceUsed');
+
+    return (
+      deviceUsed?.vnc_mode === VNC_MODE_NONE ||
+      !!deviceUsed?.ios_itms_url ||
+      !!deviceUsed?.android_download_url
+    );
+  }
+
+  get byodDownloadUrl() {
+    const deviceUsed = this.args.dynamicScan?.get('deviceUsed');
+
+    return deviceUsed?.android_download_url ?? deviceUsed?.ios_itms_url ?? null;
+  }
+
+  get byodIsIos() {
+    const deviceUsed = this.args.dynamicScan?.get('deviceUsed');
+
+    return !!deviceUsed?.ios_itms_url;
+  }
+
+  // Proxy CYOD — Mercer is streaming; use cyod-viewer instead of noVNC
+  get isScrcpyScan() {
+    const deviceUsed = this.args.dynamicScan?.get('deviceUsed');
+
+    return deviceUsed?.vnc_mode === VNC_MODE_SCRCPY;
+  }
+
+  get scrcpyScanToken() {
+    return this.args.dynamicScan?.get('moriartyDynamicscanToken') ?? null;
   }
 }
 
