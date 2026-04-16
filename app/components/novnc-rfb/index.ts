@@ -8,6 +8,7 @@ export interface NovncRfbSignature {
   Args: {
     deviceFarmURL: string | null;
     deviceFarmPassword: string;
+    allowInteraction?: boolean;
   };
 }
 
@@ -21,6 +22,8 @@ export default class NovncRfbComponent extends Component<NovncRfbSignature> {
         password: this.args.deviceFarmPassword,
       },
     });
+
+    this.rfb.viewOnly = !this.args.allowInteraction;
 
     this.rfb.addEventListener('connect', () => {
       const sizing_element = element;

@@ -16,6 +16,7 @@
       @file={{@file}}
       @dynamicScanText={{t 'modalCard.dynamicScan.title'}}
       @onScanShutdown={{this.handleScanShutdown}}
+      @onBeforeShutdown={{this.requestStop}}
       @dynamicScan={{this.dynamicScan}}
     />
   </:actionButton>
@@ -39,6 +40,16 @@
     </VncViewer>
   </:default>
 </FileDetails::DynamicScan::DeviceWrapper>
+
+<ConfirmBox
+  @isActive={{this.showStopConfirmModal}}
+  @title={{t 'confirmation'}}
+  @description={{t 'modalCard.scheduledAutomatedStopConfirm.headerTitle'}}
+  @confirmText={{t 'yes'}}
+  @cancelText={{t 'no'}}
+  @confirmAction={{this.confirmStop}}
+  @cancelAction={{this.closeStopConfirmModal}}
+/>
 
 {{#if this.showNotifyUserModal}}
   <AkModal
