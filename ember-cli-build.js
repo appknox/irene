@@ -66,6 +66,9 @@ module.exports = function (defaults) {
     autoImport: {
       webpack: {
         // extra webpack configuration goes here
+        experiments: {
+          topLevelAwait: true,
+        },
         node: {
           global: true,
         },
