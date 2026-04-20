@@ -35,7 +35,14 @@
     "storybook-dev": "concurrently \"npm:start\" \"npm:storybook\" --names \"dev-server,storybook\"",
     "prebuild-storybook": "ember build",
     "build-storybook": "storybook build",
-    "netlify:deploy": "netlify deploy --dir dist"
+    "netlify:deploy": "netlify deploy --dir dist",
+    "playwright:qa": "cross-env TEST_ENV=qa npx playwright test",
+    "playwright:prod": "cross-env TEST_ENV=prod npx playwright test",
+    "playwright:report": "npx allure generate allure-results --clean -o allure-report && npx allure open allure-report",
+    "playwright:qa:api": "cross-env TEST_ENV=qa npx playwright test --project=api",
+    "playwright:qa:ui": "cross-env TEST_ENV=qa npx playwright test --project=ui",
+    "playwright:prod:api": "cross-env TEST_ENV=prod npx playwright test --project=api",
+    "playwright:prod:ui": "cross-env TEST_ENV=prod npx playwright test --project=ui"
   },
   "devDependencies": {
     "@appknox/ember-pace": "^1.0.1",
@@ -67,6 +74,7 @@
     "@iconify-json/ph": "^1.2.2",
     "@iconify-json/solar": "^1.2.4",
     "@iconify/utils": "^3.0.1",
+    "@playwright/test": "^1.58.2",
     "@storybook/addon-actions": "8.4.6",
     "@storybook/addon-docs": "8.4.6",
     "@storybook/addon-essentials": "8.4.6",
@@ -78,6 +86,7 @@
     "@storybook/manager-webpack5": "6.5.16",
     "@testing-library/cypress": "^10.0.1",
     "@tsconfig/ember": "^3.0.4",
+    "@types/dotenv": "^6.1.1",
     "@types/ember": "^4.0.11",
     "@types/ember__application": "^4.0.11",
     "@types/ember__array": "^4.0.10",
@@ -106,10 +115,13 @@
     "@types/ember-qunit": "^6.1.1",
     "@types/ember-resolver": "^9.0.0",
     "@types/jquery": "^3.5.25",
+    "@types/node": "^25.3.0",
     "@types/qunit": "^2.19.10",
     "@types/rsvp": "^4.0.9",
     "@typescript-eslint/eslint-plugin": "^7.0.2",
     "@typescript-eslint/parser": "^7.0.2",
+    "allure-commandline": "^2.37.0",
+    "allure-playwright": "^3.6.0",
     "broccoli-asset-rev": "^3.0.0",
     "buffer": "^6.0.3",
     "concurrently": "^8.2.2",
@@ -210,6 +222,7 @@
     "@novnc/novnc": "^1.5.0",
     "@popperjs/core": "^2.11.6",
     "@storybook/types": "^8.4.6",
+    "@types/uuid": "^10.0.0",
     "clipboard": "^2.0.6",
     "cypress": "^13.6.3",
     "echarts": "^5.4.2",
@@ -218,7 +231,8 @@
     "iconify-icon": "^2.3.0",
     "posthog-js": "^1.284.0",
     "qrious": "^4.0.2",
-    "swagger-ui": "^5.30.3"
+    "swagger-ui": "^5.30.3",
+    "uuid": "^13.0.0"
   },
   "overrides": {
     "@storybook/ember": {
