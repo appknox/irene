@@ -105,6 +105,7 @@
                   {{else}}
                     <AkIcon
                       data-test-component-tree-nodeExpandIcon
+                      data-test-cy='component-tree-node-expand-icon'
                       @iconName='add-box'
                     />
                   {{/if}}
@@ -132,6 +133,7 @@
                 }}'
                 @underline='hover'
                 data-test-component-tree-nodeLabel
+                data-test-cy='component-tree-node-label'
               >
                 {{node.label}}
               </AkTypography>

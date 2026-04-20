@@ -2,6 +2,7 @@
   {{#each this.componentStatus as |status|}}
     <AkChip
       data-test-sbomComponent-status='{{status.label}}'
+      data-test-cy='sbom-component-status-{{status.label}}'
       @variant='semi-filled'
       @color={{status.color}}
       @label={{status.label}}
