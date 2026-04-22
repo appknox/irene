@@ -1,0 +1,14 @@
+<AkStack
+  @direction='column'
+  @alignItems='flex-start'
+  local-class='root'
+  data-test-store-release-readiness-assessment-policy-cell={{@data.id}}
+>
+  <AkTypography @variant='body2' local-class='category'>
+    {{this.categoryLabel}}
+  </AkTypography>
+
+  <AkTypography @variant='body2' local-class='title'>
+    {{this.titleLabel}}
+  </AkTypography>
+</AkStack>

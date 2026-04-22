@@ -1,0 +1,188 @@
+<div
+  local-class='release-card'
+  data-test-store-release-readiness-card
+  data-test-store-release-readiness-card-id={{@item.id}}
+>
+  <AkStack @direction='column' @spacing='0' @width='full'>
+    <AkStack
+      @direction='row'
+      @justifyContent='space-between'
+      @alignItems='center'
+      @width='full'
+      local-class='card-header'
+    >
+      <AkChip
+        @variant='semi-filled'
+        @color='default'
+        @size='small'
+        @label={{this.rejectionRiskChipLabel}}
+        local-class={{this.riskChipClass}}
+        data-test-store-release-readiness-risk-chip
+      >
+        <:icon>
+          {{#if (eq @item.verdict 4)}}
+            <AkIcon
+              @iconName='content-paste-search'
+              @size='small'
+              data-test-store-release-readiness-risk-chip-icon
+            />
+          {{else if (eq @item.verdict 0)}}
+            <AkSvg::HighRiskTower
+              data-test-store-release-readiness-risk-chip-icon
+            />
+          {{else if (eq @item.verdict 1)}}
+            <AkSvg::MediumRiskTower
+              data-test-store-release-readiness-risk-chip-icon
+            />
+          {{else if (eq @item.verdict 2)}}
+            <AkSvg::LowRiskTower
+              data-test-store-release-readiness-risk-chip-icon
+            />
+          {{/if}}
+        </:icon>
+      </AkChip>
+
+      <AkStack
+        @direction='row'
+        @alignItems='center'
+        @spacing='0.5'
+        data-test-store-release-readiness-header-status
+      >
+        {{#if this.isHeaderInProgress}}
+          <AkLoader
+            @size={{16}}
+            @color='error'
+            data-test-store-release-readiness-header-loader
+          />
+        {{else}}
+          <AkIcon
+            @iconName={{this.headerStatusIconName}}
+            @color={{this.headerStatusIconColor}}
+            @size='small'
+          />
+        {{/if}}
+        <AkTypography @variant='body2'>
+          {{this.headerStatusLabel}}
+        </AkTypography>
+      </AkStack>
+    </AkStack>
+
+    <AkStack
+      @direction='column'
+      @alignItems='flex-start'
+      @spacing='0'
+      @width='full'
+      local-class='card-body'
+    >
+      <AppLogo
+        @src={{@item.iconUrl}}
+        @alt={{@item.fileName}}
+        @size='medium'
+        @rounded={{true}}
+        data-test-store-release-readiness-app-logo
+      />
+
+      <AkStack
+        @direction='column'
+        @spacing='0'
+        @width='full'
+        local-class='app-name-block'
+        data-test-store-release-readiness-app-name
+      >
+        <AkTypography
+          @variant='subtitle1'
+          @fontWeight='medium'
+          local-class='app-name'
+        >
+          {{@item.fileName}}
+        </AkTypography>
+      </AkStack>
+
+      <AkStack
+        @direction='row'
+        @justifyContent='space-between'
+        @alignItems='center'
+        @width='full'
+        local-class='package-date-row'
+        data-test-store-release-readiness-package-date-row
+      >
+        <AkTypography
+          @variant='body2'
+          @color='textSecondary'
+          local-class='package-name'
+          data-test-store-release-readiness-package-name
+        >
+          {{@item.packageName}}
+        </AkTypography>
+
+        <AkStack
+          @direction='row'
+          @alignItems='center'
+          @spacing='0.5'
+          data-test-store-release-readiness-package-date-meta
+        >
+          <div
+            local-class='meta-pill meta-pill--icon'
+            data-test-store-release-readiness-platform-box
+          >
+            <AppPlatformIcon
+              data-test-store-release-readiness-platform-icon
+              @platform={{this.appPlatformIcon}}
+              @size='small'
+            />
+          </div>
+
+          <div
+            local-class='meta-pill'
+            data-test-store-release-readiness-release-date
+          >
+            <AkStack @direction='row' @alignItems='center' @spacing='0.5'>
+              <AkIcon
+                @iconName='event'
+                @size='small'
+                local-class='meta-pill-date-icon'
+              />
+              <AkTypography @variant='body2' local-class='meta-pill-date-text'>
+                {{this.formattedReleaseDate}}
+              </AkTypography>
+            </AkStack>
+          </div>
+        </AkStack>
+      </AkStack>
+
+      <AkDivider
+        @color='dark'
+        local-class='summary-divider'
+        data-test-store-release-readiness-summary-divider
+      />
+
+      <AkTypography
+        @fontWeight='medium'
+        local-class='summary-heading'
+        data-test-store-release-readiness-summary-heading
+      >
+        {{t 'storeReleaseReadinessModule.summarySectionHeading'}}
+      </AkTypography>
+
+      <div local-class='summary-progress-wrap'>
+        <StoreReleaseReadiness::ReleaseCard::SummaryProgressBar
+          @failed={{@item.failedCount}}
+          @passed={{@item.passedCount}}
+          @untested={{@item.untestedCount}}
+          @isLoading={{this.summaryProgressLoading}}
+        />
+      </div>
+
+      <StoreReleaseReadiness::ReleaseCard::SummaryStatusList
+        @failed={{@item.failedCount}}
+        @blocker={{@item.blockerCount}}
+        @warning={{@item.warningCount}}
+        @passed={{@item.passedCount}}
+        @untested={{@item.untestedCount}}
+        @passedValueLoading={{this.summaryRowSpinners}}
+        @untestedValueLoading={{this.summaryRowSpinners}}
+      />
+
+    </AkStack>
+  </AkStack>
+</div>

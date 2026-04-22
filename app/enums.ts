@@ -421,6 +421,20 @@ const ENUMS = {
     API_SCAN: 2,
     MANUAL_SCAN: 3,
   },
+
+  STORE_RELEASE_SCAN_STATUS: {
+    NOT_STARTED: 0,
+    IN_PROGRESS: 1,
+    PARTIAL: 2,
+    COMPLETED: 3,
+    FAILED: 4,
+  },
+
+  STORE_RELEASE_VERDICT: {
+    HIGH_REJECTION_RISK: 0,
+    MODERATE_REJECTION_RISK: 1,
+    LOW_REJECTION_RISK: 2,
+  },
 };
 
 export const ENUMS_DISPLAY = {

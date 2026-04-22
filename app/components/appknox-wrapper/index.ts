@@ -133,6 +133,13 @@ export default class AppknoxWrapperComponent extends Component<AppknoxWrapperSig
         query: { app_offset: 0 },
         currentWhen: 'authenticated.dashboard.sbom',
       },
+      {
+        label: this.intl.t('storeReleaseReadiness'),
+        icon: 'fact-check',
+        route: 'authenticated.dashboard.store-release-readiness',
+        currentWhen:
+          'authenticated.dashboard.store-release-readiness authenticated.dashboard.store-release-readiness.index authenticated.dashboard.store-release-readiness.scan-results authenticated.dashboard.store-release-readiness.finding',
+      },
       this.isShowAnalytics && {
         label: this.intl.t('analytics'),
         icon: 'graphic-eq',

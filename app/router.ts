@@ -255,6 +255,17 @@ Router.map(function () {
 
         this.route('app-monitoring', { path: '/store-monitoring' });
 
+        this.route('store-release-readiness', function () {
+          this.route('index', { path: '/' });
+          this.route('scan-results', { path: '/scan-results/:release_id' });
+          this.route('finding', {
+            path: '/scan-results/:release_id/findings/:finding_id',
+          });
+          this.route('scan-results-policy', {
+            path: '/scan-results/:release_id/policy/:policy_id',
+          });
+        });
+
         this.route('marketplace');
 
         this.route('analytics');

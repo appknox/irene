@@ -1,0 +1,67 @@
+{{#if @data}}
+  <div
+    local-class='root'
+    data-test-store-release-readiness-assessment-status-cell={{@data.id}}
+  >
+    {{#if (eq @data.status 'failed')}}
+      {{#if (or (eq @data.severity 0) (eq @data.severity 1))}}
+        <span
+          local-class='chip severity-chip'
+          data-test-store-release-readiness-assessment-severity={{@data.id}}
+        >
+          <AkIcon
+            @iconName={{if (eq @data.severity 0) 'block' 'error'}}
+            @size='small'
+            local-class='severity-icon'
+          />
+          <AkTypography @variant='body2' local-class='chip-label severity-label'>
+            {{if
+              (eq @data.severity 0)
+              (t 'storeReleaseReadinessModule.summaryBlocker')
+              (t 'storeReleaseReadinessModule.summaryWarning')
+            }}
+          </AkTypography>
+        </span>
+      {{/if}}
+
+      <span
+        local-class='chip'
+        data-test-store-release-readiness-assessment-status='failed'
+      >
+        <span
+          local-class='status-dot status-dot-failed'
+          aria-hidden='true'
+        ></span>
+        <AkTypography @variant='body2' local-class='chip-label'>
+          {{t 'failed'}}
+        </AkTypography>
+      </span>
+    {{else if (eq @data.status 'passed')}}
+      <span
+        local-class='chip'
+        data-test-store-release-readiness-assessment-status='passed'
+      >
+        <span
+          local-class='status-dot status-dot-passed'
+          aria-hidden='true'
+        ></span>
+        <AkTypography @variant='body2' local-class='chip-label'>
+          {{t 'passed'}}
+        </AkTypography>
+      </span>
+    {{else}}
+      <span
+        local-class='chip'
+        data-test-store-release-readiness-assessment-status='untested'
+      >
+        <span
+          local-class='status-dot status-dot-untested'
+          aria-hidden='true'
+        ></span>
+        <AkTypography @variant='body2' local-class='chip-label'>
+          {{t 'untested'}}
+        </AkTypography>
+      </span>
+    {{/if}}
+  </div>
+{{/if}}

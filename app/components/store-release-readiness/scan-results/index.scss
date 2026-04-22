@@ -1,0 +1,23 @@
+.scan-results-root {
+  width: 100%;
+}
+
+.scan-results-assessment-box {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 29px;
+  border: 1px solid var(--neutral-white-100, #e9e9e9);
+  border-radius: var(--border-radius, 4px);
+  background-color: var(--common-white, #fff);
+}
+
+.scan-results-assessment-title {
+  font-size: 14px !important;
+  font-weight: 700 !important;
+  line-height: 1.4;
+}
+
+.scan-results-assessment-table {
+  width: 100%;
+  background-color: white;
+}

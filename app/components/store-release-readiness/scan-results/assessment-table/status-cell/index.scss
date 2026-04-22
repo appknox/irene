@@ -1,0 +1,59 @@
+.root {
+  width: 100%;
+  box-sizing: border-box;
+  display: flex;
+  justify-content: flex-end;
+  gap: 6px;
+}
+
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 2.5px 6px;
+  border-radius: 4px;
+  border: 1px solid #e9e9e9;
+  background-color: #fff;
+  box-sizing: border-box;
+}
+
+.chip-label {
+  font-size: 12px !important;
+  font-weight: 600 !important;
+  line-height: 1.25;
+  white-space: nowrap;
+}
+
+.severity-chip {
+  border-color: #e9e9e9;
+  background-color: #fff;
+}
+
+.severity-icon {
+  font-size: 13px;
+  color: #ff2151;
+}
+
+.severity-label {
+  color: #ff2151;
+}
+
+.status-dot {
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.status-dot-failed {
+  background-color: #ff2151;
+}
+
+.status-dot-passed {
+  background-color: #10b981;
+}
+
+.status-dot-untested {
+  background-color: #d9d9d9;
+}
