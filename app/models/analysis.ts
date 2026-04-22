@@ -76,6 +76,7 @@ export interface CopilotFinding {
   validation?: ValidationData;
   poc?: PocData;
   remediation?: RemediationData;
+  developer_prompt?: string;
 }
 
 export default class AnalysisModel extends Model {
