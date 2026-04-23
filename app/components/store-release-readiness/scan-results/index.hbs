@@ -1,0 +1,63 @@
+{{#if this.cardData}}
+  {{page-title (concat this.cardData.appName ' — ' (t 'scanResults'))}}
+{{/if}}
+
+<AkStack
+  @direction='column'
+  @width='full'
+  local-class='scan-results-root'
+  data-test-store-release-readiness-scan-results
+>
+  <AkBreadcrumbs::AutoTrail class='mb-3' />
+
+  {{#if this.loadScan.isRunning}}
+    <StoreReleaseReadiness::ScanResults::SkeletonLoader />
+  {{else if this.cardData}}
+    <StoreReleaseReadiness::ScanResults::FileSummary
+      @item={{this.cardData}}
+      class='mb-4'
+    />
+
+    <StoreReleaseReadiness::ScanResults::Details
+      @item={{this.cardData}}
+      class='mb-4'
+    />
+
+    <div
+      local-class='scan-results-assessment-box'
+      data-test-store-release-readiness-scan-results-assessment
+    >
+      <AkTypography
+        @variant='subtitle2'
+        @fontWeight='bold'
+        local-class='scan-results-assessment-title'
+        data-test-store-release-readiness-scan-results-assessment-heading
+      >
+        {{t 'storeReleaseReadinessModule.assessmentResults'}}
+      </AkTypography>
+    </div>
+
+    <AkTable
+      @hoverable={{true}}
+      local-class='scan-results-assessment-table'
+      data-test-store-release-readiness-scan-results-assessment-table
+      as |tb|
+    >
+      <tb.head @columns={{this.assessmentColumns}} />
+      <tb.body @rows={{this.assessmentRows}} as |b|>
+        <b.row
+          {{style cursor='pointer'}}
+          @onClick={{this.handleAssessmentRowClick}}
+          data-test-store-release-readiness-scan-results-assessment-row={{b.rowValue.id}}
+          as |r|
+        >
+          <r.cell>
+            {{#let (component r.columnValue.component) as |Cell|}}
+              <Cell @data={{r.rowValue}} />
+            {{/let}}
+          </r.cell>
+        </b.row>
+      </tb.body>
+    </AkTable>
+  {{/if}}
+</AkStack>

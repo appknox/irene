@@ -1,0 +1,94 @@
+<div local-class='edit-analysis-content'>
+  {{#unless @isOverridden}}
+    <AkTypography class='px-3 pt-2'>
+      Are you sure you want to ignore the below checklist?
+    </AkTypography>
+  {{/unless}}
+
+  <AkStack @justifyContent='space-between' @alignItems='center' class='p-3'>
+    <AkStack @direction='column' @spacing='0.5'>
+      <AkTypography
+        @color='textSecondary'
+        @fontWeight='medium'
+        @tag='h6'
+        {{style fontSize='0.857rem' textTransform='uppercase'}}
+        data-test-analysisrisk-overrideeditdrawer-vulnerabilitynamelabel
+        data-test-store-release-readiness-policy-details-category
+      >
+        {{@category}}
+      </AkTypography>
+
+      <AkTypography
+        @variant='subtitle1'
+        data-test-analysisrisk-overrideeditdrawer-vulnerabilityname
+      >
+        {{@title}}
+      </AkTypography>
+    </AkStack>
+
+    <div data-test-analysisrisk-overrideeditdrawer-vulnerabilityrisktag>
+      <StoreReleaseReadiness::ScanResults::AssessmentTable::StatusCell
+        @data={{@statusData}}
+        @showOverriddenEditIcon={{false}}
+        data-test-store-release-readiness-assessment-status-cell
+      />
+    </div>
+  </AkStack>
+
+  <div class='pb-2 px-3'>
+    <AkStack @direction='column' @spacing='1'>
+      <AkTypography
+        @variant='h6'
+        @color='textSecondary'
+        @tag='label'
+        {{style fontSize='0.857rem'}}
+        data-test-analysisrisk-overrideeditdrawer-overrideform-commentlabel
+      >
+        {{t 'reason'}}
+      </AkTypography>
+
+      {{#if @isOverridden}}
+        <AkTypography
+          local-class='textarea-input reason-readonly'
+          data-test-analysisrisk-overrideeditdrawer-overrideform-commentinput
+        >
+          {{if @overrideComment @overrideComment '—'}}
+        </AkTypography>
+      {{else}}
+        <Textarea
+          data-test-analysisrisk-overrideeditdrawer-overrideform-commentinput
+          rows='6'
+          aria-label='Override Reason'
+          placeholder='Lorem ipsum dolor sit amet, consectetur adipiscing elit.'
+          local-class='textarea-input'
+          @value={{this.commentInput}}
+          {{on 'input' this.onCommentInput}}
+        />
+      {{/if}}
+    </AkStack>
+  </div>
+
+  {{#unless @isOverridden}}
+    <AkDivider @color='dark' />
+
+    <AkStack class='px-3 py-2' @alignItems='center' @spacing='2'>
+      <AkButton
+        data-test-analysisrisk-overrideeditdrawer-overrideform-savebtn
+        @disabled={{this.isSaveDisabled}}
+        @loading={{this.isSaving}}
+        {{on 'click' this.saveOverrideComment}}
+      >
+        {{t 'save'}}
+      </AkButton>
+
+      <AkButton
+        data-test-analysisrisk-overrideeditdrawer-overrideform-cancelbtn
+        @variant='outlined'
+        @color='neutral'
+        {{on 'click' @onClose}}
+      >
+        {{t 'cancel'}}
+      </AkButton>
+    </AkStack>
+  {{/unless}}
+</div>

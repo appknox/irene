@@ -1,9 +1,12 @@
 import Component from '@glimmer/component';
 
+export type AppPlatformIconSize = 'small' | 'medium';
+
 export interface AppPlatformIconSignature {
   Element: HTMLSpanElement;
   Args: {
     platform: 'android' | 'apple';
+    size?: AppPlatformIconSize;
   };
 }
 
