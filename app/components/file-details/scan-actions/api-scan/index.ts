@@ -1,11 +1,13 @@
 import Component from '@glimmer/component';
 
 import FileModel from 'irene/models/file';
+import type { CopilotScanStatus } from 'irene/adapters/file';
 
 export interface FileDetailsScanActionsApiScanSignature {
   Args: {
     file: FileModel;
     vulnerabilityCount: number | null;
+    copilotStatus?: CopilotScanStatus;
   };
 }
 

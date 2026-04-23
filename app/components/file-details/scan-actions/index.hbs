@@ -8,6 +8,7 @@
     <FileDetails::ScanActions::StaticScan
       @file={{@file}}
       @vulnerabilityCount={{this.riskCountByScanType.static}}
+      @copilotStatus={{this.copilotStatusByScanType.static}}
     />
   </div>
 
@@ -15,6 +16,7 @@
     <FileDetails::ScanActions::DynamicScan
       @file={{@file}}
       @vulnerabilityCount={{this.riskCountByScanType.dynamic}}
+      @copilotStatus={{this.dynamicCopilotStatus}}
     />
   </div>
 
@@ -23,6 +25,7 @@
       <FileDetails::ScanActions::ApiScan
         @file={{@file}}
         @vulnerabilityCount={{this.riskCountByScanType.api}}
+        @copilotStatus={{this.copilotStatusByScanType.api}}
       />
     </div>
   {{/if}}

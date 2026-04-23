@@ -29,6 +29,10 @@
     @vulnerabilityCount={{if @file.isDynamicDone @vulnerabilityCount null}}
     data-test-fileDetails-scanActions-scanOverview-dynamicScanRoot
   />
+
+  {{#if @copilotStatus}}
+    <FileDetails::ScanActions::KnoxiqStatus @copilotStatus={{@copilotStatus}} />
+  {{/if}}
 </AkStack>
 
 <AkDivider @color='dark' />

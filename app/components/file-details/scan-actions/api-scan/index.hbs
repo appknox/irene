@@ -49,6 +49,10 @@
     @vulnerabilityCount={{if @file.isApiDone @vulnerabilityCount null}}
     data-test-fileDetails-scanActions-scanOverview-apiScanRoot
   />
+
+  {{#if @copilotStatus}}
+    <FileDetails::ScanActions::KnoxiqStatus @copilotStatus={{@copilotStatus}} />
+  {{/if}}
 </AkStack>
 
 <AkDivider @color='dark' />

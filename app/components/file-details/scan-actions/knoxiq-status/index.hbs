@@ -1,0 +1,51 @@
+<AkStack
+  @alignItems='center'
+  @spacing='1'
+  class='px-2 pb-2'
+  data-test-knoxiqStatus-root
+>
+  <AkTypography @color='textSecondary' @variant='caption' @fontWeight='medium'>
+    KnoxIQ:
+  </AkTypography>
+
+  {{#if this.isCompleted}}
+    <AkChip
+      @label={{if this.totalTasks (concat 'Analyzed (' this.totalTasks '/' this.totalTasks ')') 'Analyzed'}}
+      @color='success'
+      @variant='semi-filled'
+      @size='small'
+      data-test-knoxiqStatus-analyzed
+    />
+  {{else if this.isRunning}}
+    <AkStack @alignItems='center' @spacing='0.5'>
+      <AkLoader @size={{10}} />
+
+      <AkTypography
+        @color='textSecondary'
+        @variant='caption'
+        data-test-knoxiqStatus-processing
+      >
+        Processing
+        {{#if this.totalTasks}}
+          ({{this.completedTasks}}/{{this.totalTasks}})
+        {{/if}}
+      </AkTypography>
+    </AkStack>
+  {{else if this.isPending}}
+    <AkChip
+      @label='Queued'
+      @color='warn'
+      @variant='semi-filled'
+      @size='small'
+      data-test-knoxiqStatus-queued
+    />
+  {{else if this.isFailed}}
+    <AkChip
+      @label='Failed'
+      @color='error'
+      @variant='semi-filled'
+      @size='small'
+      data-test-knoxiqStatus-failed
+    />
+  {{/if}}
+</AkStack>

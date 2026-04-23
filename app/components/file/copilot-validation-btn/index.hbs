@@ -1,7 +1,7 @@
 <AkButton
   @variant='outlined'
-  @disabled={{this.triggerValidation.isRunning}}
-  @loading={{this.triggerValidation.isRunning}}
+  @disabled={{this.isTriggerDisabled}}
+  @loading={{or this.triggerValidation.isRunning this.isValidationInProgress}}
   {{on 'click' (perform this.triggerValidation)}}
   data-test-fileCopilotValidationBtn
 >
@@ -10,6 +10,10 @@
   </:leftIcon>
 
   <:default>
-    Trigger Validation
+    {{#if this.isValidationInProgress}}
+      KnoxIQ Running...
+    {{else}}
+      Run KnoxIQ
+    {{/if}}
   </:default>
 </AkButton>

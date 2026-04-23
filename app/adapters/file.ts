@@ -4,6 +4,18 @@ import type FileModel from 'irene/models/file';
 import type SbomFileModel from 'irene/models/sbom-file';
 import type FileRiskModel from 'irene/models/file-risk';
 
+export interface CopilotScanStatus {
+  scan_type: string;
+  scan_id: number;
+  status: 'pending' | 'running' | 'completed' | 'failed';
+  total_tasks: number;
+  completed_tasks: number;
+}
+
+export interface CopilotFileStatusResponse {
+  scan_statuses: CopilotScanStatus[];
+}
+
 import FileCapiReportModel, {
   type FileCapiReportScanType,
 } from 'irene/models/file-capi-report';
@@ -138,6 +150,12 @@ export default class FileAdapter extends CommonDRFAdapter {
     return this.ajax(url, 'POST', {
       data: { file_id: fileId },
     });
+  }
+
+  async fetchCopilotStatus(fileId: string): Promise<CopilotFileStatusResponse> {
+    const url = this.buildURLFromBase('api/copilot/file-status/');
+
+    return this.ajax(url, 'GET', { data: { file_id: fileId } });
   }
 
   async fetchFileRisk(fileId: string) {
