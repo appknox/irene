@@ -1,6 +1,6 @@
 <AkStack @direction='column' @spacing='2' @width='full'>
-  {{#if @skInventoryApp.monitoringPendingOrDisabled}}
-    <Storeknox::InventoryDetails::AppDetails::MonitoringPendingInfo
+  {{#if this.showMonitoringPendingOrDisabledInfo}}
+    <Storeknox::InventoryDetails::AppDetails::MonitoringPendingOrDisabledUi
       @skInventoryApp={{@skInventoryApp}}
     />
 

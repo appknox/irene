@@ -72,6 +72,9 @@
   --box-shadow-12: 1px 0px 0px 0px #f8f8f8 inset,
     -1px 0px 0px 0px #f8f8f8 inset, 0px 1px 0px 0px #f8f8f8 inset,
     -1px -1px 0px 0px #f8f8f8 inset;
+  --box-shadow-13: 0px -1px 10px 0px rgba(0, 0, 0, 0.05);
+  --box-shadow-14: 4px 4px 15px 0px rgba(0, 0, 0, 0.031);
+  --box-shadow-15: 0px 2px 4px -1px rgba(0, 0, 0, 0.06);
 
   --hover-dark-background: rgba(255, 255, 255, 0.15);
   --hover-light-background: rgba(0, 0, 0, 0.04);
@@ -152,6 +155,18 @@
   --geolocation-map-area-color: #98ccff;
   --geolocation-map-area-box-shadow: 0px 1.88px 15.06px 0px
     rgba(75, 85, 110, 0.2);
+
+  // special case variable for brand abuse and fake apps
+  --brand-abuse-highlight-color: #114db5;
+  --fake-app-highlight-color: #b11146;
+  --brand-abuse-light-highlight-color: #e1ecff;
+  --fake-app-light-highlight-color: #ffe8ef;
+  --fake-apps-list-item-card-box-shadow: 0px 2px 4px -1px #0000000f;
+
+  // special case variable for storeknox/fake-apps
+  --storeknox-app-logo-placeholder-bg: #1e90ff;
+  --storeknox-fake-apps-background-color: #e6f9ff;
+  --storeknox-fake-app-overall-score-color: #f43f5e;
 }
 
 // TODO: need to remove this so do not use it

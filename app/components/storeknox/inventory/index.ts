@@ -34,6 +34,13 @@ export default class StoreknoxInventoryComponent extends Component {
   @tracked showWelcomeModal = false;
   @tracked showSettingsDrawer = false;
 
+  constructor(owner: unknown, args: object) {
+    super(owner, args);
+
+    // To fetch the counts for badges on tabs
+    this.skPendingReview.reload();
+  }
+
   get isOwner() {
     return !!this.me.org?.is_owner;
   }

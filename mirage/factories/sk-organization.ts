@@ -10,8 +10,9 @@ export default Base.extend({
   autodiscovery_onboarding_done: faker.datatype.boolean(),
 
   sk_features: () => ({
-    inventory: () => faker.datatype.boolean(),
-    drift_detection: () => faker.datatype.boolean(),
-    fake_app_detection: () => faker.datatype.boolean(),
+    inventory: faker.datatype.boolean(),
+    drift_detection: faker.datatype.boolean(),
+    fake_app_detection: faker.datatype.boolean(),
+    use_ai_validation: faker.datatype.boolean(),
   }),
 });

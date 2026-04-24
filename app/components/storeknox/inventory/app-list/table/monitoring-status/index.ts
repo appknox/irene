@@ -1,7 +1,9 @@
 import Component from '@glimmer/component';
 import { service } from '@ember/service';
 import type IntlService from 'ember-intl/services/intl';
+
 import type SkAppModel from 'irene/models/sk-app';
+import type SkOrganizationService from 'irene/services/sk-organization';
 
 export interface StoreknoxInventoryAppListTableMonitoringStatusSignature {
   Element: HTMLElement;
@@ -13,6 +15,13 @@ export interface StoreknoxInventoryAppListTableMonitoringStatusSignature {
 
 export default class StoreknoxInventoryAppListTableMonitoringStatusComponent extends Component<StoreknoxInventoryAppListTableMonitoringStatusSignature> {
   @service declare intl: IntlService;
+  @service declare skOrganization: SkOrganizationService;
+
+  private htmlSafe = { htmlSafe: true };
+
+  get orgHasFakeAppDetectionFeature() {
+    return this.skOrganization.selected?.skFeatures.fake_app_detection;
+  }
 
   get app() {
     return this.args.app;
@@ -22,53 +31,118 @@ export default class StoreknoxInventoryAppListTableMonitoringStatusComponent ext
     return this.args.loading;
   }
 
-  get tooltipMessage() {
-    if (this.app?.needsAction) {
-      return this.intl.t('storeknox.actionsNeededMsg', {
-        htmlSafe: true,
-      });
-    }
+  get showFakeAppsWarning() {
+    return this.app?.fakeAppDetectionHasResults;
+  }
 
-    if (this.app?.appIsInInitializingState) {
+  get showUnscannedVersionsWarning() {
+    return this.app?.storeMonitoringStatusIsActionNeeded;
+  }
+
+  get showStoreMonitoringStatusNoActionNeeded() {
+    return this.app?.storeMonitoringStatusIsNoActionNeeded;
+  }
+
+  get initializingTooltipMessage() {
+    const app = this.app;
+
+    const bothInitializing =
+      app?.fakeAppDetectionIsInitializing &&
+      app?.storeMonitoringStatusIsPending;
+
+    if (bothInitializing) {
       return this.intl.t('storeknox.initializingMsg');
     }
 
-    if (this.app?.appIsInDisabledState) {
+    if (
+      app?.fakeAppDetectionIsInitializing &&
+      !app?.storeMonitoringStatusIsDisabled
+    ) {
+      return this.intl.t('storeknox.initializingMsgFakeApp', this.htmlSafe);
+    }
+
+    if (
+      app?.storeMonitoringStatusIsPending &&
+      !app?.fakeAppDetectionIsDisabled
+    ) {
+      return this.intl.t(
+        'storeknox.initializingMsgStoreMonitoring',
+        this.htmlSafe
+      );
+    }
+
+    return this.intl.t('storeknox.initializingMsg');
+  }
+
+  get tooltipMessage() {
+    const app = this.app;
+
+    if (app?.appMonitoringIsInDisabledState) {
       return this.intl.t('storeknox.disabledMsg');
     }
 
-    return this.intl.t('storeknox.noActionsNeededMsg', {
-      htmlSafe: true,
-    });
+    if (this.showUnscannedVersionsWarning && this.showFakeAppsWarning) {
+      return this.intl.t(
+        'storeknox.unscannedVersionsAndFakeAppsDetectedTitle',
+        this.htmlSafe
+      );
+    }
+
+    if (this.showFakeAppsWarning) {
+      return this.intl.t('storeknox.fakeAppsDetectedTitle', this.htmlSafe);
+    }
+
+    if (this.showUnscannedVersionsWarning) {
+      return this.intl.t('storeknox.unscannedVersionsTitle', this.htmlSafe);
+    }
+
+    if (app?.appIsInInitializingState) {
+      return this.initializingTooltipMessage;
+    }
+
+    if (!this.orgHasFakeAppDetectionFeature) {
+      return this.intl.t('storeknox.noUnscannedVersions', this.htmlSafe);
+    }
+
+    return this.intl.t(
+      'storeknox.noUnscannedVersionsOrFakeAppsDetectedMsg',
+      this.htmlSafe
+    );
   }
 
   get tooltipSuffix() {
-    if (this.app?.appIsInInitializingState || this.app?.appIsInDisabledState) {
-      return '';
+    if (
+      this.showStoreMonitoringStatusNoActionNeeded ||
+      this.showUnscannedVersionsWarning ||
+      this.showFakeAppsWarning
+    ) {
+      return this.intl.t('storeknox.haveBeenDetected');
     }
 
-    return this.intl.t('storeknox.haveBeenDetected');
+    return '';
   }
 
   get iconDetails() {
-    if (this.app?.needsAction) {
+    const app = this.app;
+
+    if (app?.appMonitoringIsInDisabledState) {
+      return {
+        icon: 'ak-svg/sox-monitoring-stats-icons/disabled' as const,
+        key: 'disabled',
+      };
+    }
+
+    if (app?.needsAction) {
       return {
         icon: 'ak-svg/sox-monitoring-stats-icons/action-needed' as const,
         key: 'action-needed',
       };
     }
 
-    if (this.app?.appIsInInitializingState) {
+    if (app?.appIsInInitializingState) {
       return {
         icon: 'ak-svg/sox-monitoring-stats-icons/initializing' as const,
         key: 'initializing',
-      };
-    }
-
-    if (this.app?.appIsInDisabledState) {
-      return {
-        icon: 'ak-svg/sox-monitoring-stats-icons/disabled' as const,
-        key: 'disabled',
       };
     }
 
@@ -79,15 +153,17 @@ export default class StoreknoxInventoryAppListTableMonitoringStatusComponent ext
   }
 
   get statusText() {
-    if (this.app?.needsAction) {
+    const app = this.app;
+
+    if (app?.needsAction) {
       return this.intl.t('storeknox.needsAction');
     }
 
-    if (this.app?.appIsInInitializingState) {
+    if (app?.appIsInInitializingState) {
       return this.intl.t('storeknox.beingInitialized');
     }
 
-    if (this.app?.appIsInDisabledState) {
+    if (app?.appMonitoringIsInDisabledState) {
       return this.intl.t('disabled');
     }
 

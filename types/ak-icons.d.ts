@@ -9,6 +9,8 @@ import {
   MynauiIconsSet,
   SolarIconsSet,
   IconoirIconsSet,
+  FluentIconsSet,
+  StreamlinePlumpIconsSet,
 } from 'irene/utils/icons';
 
 type MaterialSymbolsIcon = (typeof MaterialSymbolsSet)[number];
@@ -21,6 +23,8 @@ type PhIcon = (typeof PhIconsSet)[number];
 type MynauiIcon = (typeof MynauiIconsSet)[number];
 type SolarIcon = (typeof SolarIconsSet)[number];
 type IconoirIcon = (typeof IconoirIconsSet)[number];
+type FluentIcon = (typeof FluentIconsSet)[number];
+type StreamlinePlumpIcon = (typeof StreamlinePlumpIconsSet)[number];
 
 export const AkIconsSet = [
   ...MaterialSymbolsSet,
@@ -33,6 +37,8 @@ export const AkIconsSet = [
   ...MynauiIconsSet,
   ...SolarIconsSet,
   ...IconoirIconsSet,
+  ...FluentIconsSet,
+  ...StreamlinePlumpIconsSet,
 ] as const;
 
 export type AkIconVariantType =
@@ -45,6 +51,8 @@ export type AkIconVariantType =
   | `mynaui:${MynauiIcon}`
   | `solar:${SolarIcon}`
   | `iconoir:${IconoirIcon}`
+  | `fluent:${FluentIcon}`
+  | `streamline-plump:${StreamlinePlumpIcon}`
   | MaterialSymbolsIcon;
 
 // Export the icon types for reference
@@ -59,4 +67,6 @@ export type {
   MynauiIcon,
   SolarIcon,
   IconoirIcon,
+  FluentIcon,
+  StreamlinePlumpIcon,
 };

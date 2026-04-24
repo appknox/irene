@@ -9,7 +9,7 @@
       <AkIcon @iconName='network-intel-node' local-class='icon' />
 
       <AkTypography local-class='text'>
-        {{t 'poweredByAi' htmlSafe=true}}
+        {{this.chipText}}
       </AkTypography>
     </AkStack>
   {{else}}
@@ -17,7 +17,7 @@
       <AkIcon @iconName='network-intel-node' local-class='icon' />
 
       <AkTypography local-class='text'>
-        {{t 'poweredByAi' htmlSafe=true}}
+        {{this.chipText}}
       </AkTypography>
     </AkStack>
   {{/if}}

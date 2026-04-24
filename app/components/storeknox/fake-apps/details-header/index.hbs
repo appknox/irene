@@ -1,0 +1,205 @@
+<div
+  local-class='fake-apps-details-root {{if this.isFakeAppIgnored "is-ignored"}}'
+  class='w-full mb-3 pt-2'
+>
+  <AkBreadcrumbs::AutoTrail
+    class='pb-3'
+    data-test-storeknoxFakeAppsDetailsHeader-breadcrumb
+  />
+
+  {{#unless this.isFakeAppIgnored}}
+    <AkStack
+      @bgColor='white'
+      @width='full'
+      @direction='column'
+      @spacing='1'
+      local-class='fake-app-title-container'
+    >
+      <AkStack
+        @width='full'
+        @spacing='1'
+        @alignItems='center'
+        class='py-2 px-3'
+      >
+        <div
+          local-class='title-indicator
+          {{if this.isBrandAbuseFakeApp "brand-abuse"}}
+          '
+        ></div>
+
+        <AkTypography
+          @fontWeight='bold'
+          data-test-storeknoxFakeAppsDetailsHeader-headerTitle
+        >
+          {{this.headerTitle}}
+        </AkTypography>
+      </AkStack>
+    </AkStack>
+  {{/unless}}
+
+  <AkStack
+    @bgColor='white'
+    @width='full'
+    @justifyContent='space-between'
+    @spacing='1'
+    local-class='fake-apps-details-header-app-info-container'
+    class='p-3'
+  >
+    <AkStack @direction='column'>
+      {{#if this.showFallback}}
+        <AkStack
+          @alignItems='center'
+          @justifyContent='center'
+          local-class='app-info-logo-placeholder'
+        >
+          <AkIcon @iconName='hugeicons:image-03' @color='textSecondary' />
+        </AkStack>
+      {{else if @fakeApp.fakeAppIconUrl}}
+        <img
+          alt={{@fakeApp.title}}
+          src={{@fakeApp.fakeAppIconUrl}}
+          local-class='app-info-logo'
+          data-test-storeknoxFakeAppsDetailsHeader-appLogo
+          {{on 'error' this.handleImageError}}
+        />
+      {{else}}
+        <AkStack
+          @alignItems='center'
+          @justifyContent='center'
+          local-class='app-info-logo-placeholder'
+        >
+          <AkIcon @iconName='hugeicons:image-03' @color='textSecondary' />
+        </AkStack>
+      {{/if}}
+
+      <AkStack
+        @width='full'
+        @spacing='0.75'
+        @direction='column'
+        @alignItems='flex-start'
+      >
+        <AkButton
+          @tag='a'
+          @variant='text'
+          @color='textPrimary'
+          @underline='always'
+          href={{@fakeApp.appUrl}}
+          target='_blank'
+          rel='noopener noreferrer'
+          class='mt-1'
+          {{style justifyContent='flex-start'}}
+        >
+          <AkTypography
+            @noWrap={{true}}
+            @variant='h5'
+            @fontWeight='bold'
+            title={{@fakeApp.title}}
+            data-test-storeknoxFakeAppsDetailsHeader-appTitle
+            {{style maxWidth='650px'}}
+          >
+            {{@fakeApp.title}}
+          </AkTypography>
+        </AkButton>
+
+        <AkTypography
+          @color='textPrimary'
+          data-test-storeknoxFakeAppsDetailsHeader-packageName
+        >
+          {{@fakeApp.packageName}}
+        </AkTypography>
+
+        <AkTypography
+          @color='textSecondary'
+          data-test-storeknoxFakeAppsDetailsHeader-developerName
+        >
+          {{@fakeApp.devName}}
+        </AkTypography>
+      </AkStack>
+
+      <AkStack @spacing='1' class='mt-1'>
+        <Storeknox::ProductIcon>
+          <AppPlatformIcon
+            @platform={{if this.isAndroid 'android' 'apple'}}
+            data-test-storeknoxFakeAppsDetailsHeader-platformIcon
+          />
+        </Storeknox::ProductIcon>
+
+        <Storeknox::ProductIcon>
+          {{#if @fakeApp.isApkModyStore}}
+            <img
+              alt={{@fakeApp.skStore.name}}
+              src='/images/apkmody-icon.png'
+              {{style width='28px' height='28px'}}
+              data-test-storeknoxFakeAppsDetailsHeader-apkModyIcon
+            />
+          {{else}}
+            {{#let (component this.storeIconComponent) as |StoreIcon|}}
+              <StoreIcon
+                {{style width='16px' height='16px'}}
+                data-test-storeknoxFakeAppsDetailsHeader-storeIcon='{{@fakeApp.skStore.identifier}}'
+              />
+            {{/let}}
+          {{/if}}
+        </Storeknox::ProductIcon>
+      </AkStack>
+    </AkStack>
+
+    <AkStack
+      @alignItems='center'
+      @justifyContent='flex-end'
+      @spacing='1.5'
+      {{style alignSelf='flex-end' minWidth='500px'}}
+    >
+      {{#if this.isFakeAppIgnored}}
+        <AkButton
+          {{on 'click' (fn this.openIgnoreDrawer false)}}
+          data-test-storeknoxFakeAppsDetailsHeader-viewDetailsBtn
+        >
+          {{t 'viewDetails'}}
+        </AkButton>
+
+      {{else}}
+        {{! Ignoring the download report button for now as the report is not
+        ready yet. Will enable it once it's ready. }}
+        {{!-- <AkButton @disabled={{true}}>
+          {{t 'downloadReport'}}
+        </AkButton> --}}
+
+        <AkButton
+          @variant='outlined'
+          @color='neutral'
+          {{on 'click' (fn this.openIgnoreDrawer false)}}
+          data-test-storeknoxFakeAppsDetailsHeader-ignoreAppBtn
+        >
+          {{t 'storeknox.ignoreApp'}}
+        </AkButton>
+
+        <AkTooltip
+          @arrow={{true}}
+          @placement='top'
+          @disabled={{not this.isApkModyOrAptoideStore}}
+          @title={{t
+            'storeknox.fakeApps.cannotIgnoreNonAppStoreAndPlayStoreApps'
+          }}
+        >
+          <AkButton
+            @variant='outlined'
+            @color='neutral'
+            @disabled={{this.isApkModyOrAptoideStore}}
+            {{on 'click' (fn this.openIgnoreDrawer true)}}
+            data-test-storeknoxFakeAppsDetailsHeader-ignoreAddToInventoryBtn
+          >
+            {{t 'storeknox.ignoreAddToInventory'}}
+          </AkButton>
+        </AkTooltip>
+      {{/if}}
+    </AkStack>
+  </AkStack>
+</div>
+
+<Storeknox::FakeApps::IgnoreDrawer
+  @fakeApp={{@fakeApp}}
+  @open={{this.showIgnoreDrawer}}
+  @onClose={{this.closeIgnoreDrawer}}
+  @addToInventory={{this.addToInventory}}
+/>

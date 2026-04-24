@@ -73,7 +73,6 @@ export enum AkSvgComponentInvocationByNames {
   InfoIndicator,
   NoPendingItems,
   WelcomeToStoreknox,
-  SoxBrandAbuseFeatureAbsence,
   SoxMalwareFeatureAbsence,
   SoxUnscannedDetailsTableEmpty,
   SoxUnscannedHistoryTableEmpty,
@@ -90,6 +89,10 @@ export enum AkSvgComponentInvocationByNames {
   ScvNotStarted,
   ScvErrored,
   ApisCapturedIllustration,
+  FakeAppInProgress,
+  FakeAppsSuccessState,
+  SoxBrandAbuseFeatureAbsence,
+  ApptoideIcon,
 }
 
 export enum AkSvgComponentInvocationByPaths {
@@ -114,6 +117,14 @@ export enum AkSvgComponentInvocationByPaths {
   'sox-monitoring-stats-icons/initializing',
   'sox-monitoring-stats-icons/action-needed',
   'sox-monitoring-stats-icons/no-action-needed',
+  'no-pending-items',
+  'project-list-empty',
+  'scan-completed',
+  'fake-app-in-progress',
+  'fake-apps-success-state',
+  'apptoide-icon',
+  'playstore-logo',
+  'appstore-logo',
 }
 
 type AkSvgComponent = ComponentLike<{

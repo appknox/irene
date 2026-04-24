@@ -4,11 +4,12 @@ import { service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
 import type IntlService from 'ember-intl/services/intl';
 
+import ENV from 'irene/config/environment';
 import type { MenuItem } from '../side-nav';
 import type UserModel from 'irene/models/user';
 import type ConfigurationService from 'irene/services/configuration';
 import type WhitelabelService from 'irene/services/whitelabel';
-import ENV from 'irene/config/environment';
+import type SkOrganizationService from 'irene/services/sk-organization';
 
 export interface StoreknoxWrapperComponentSignature {
   Args: {
@@ -24,6 +25,7 @@ export default class StoreknoxWrapperComponent extends Component<StoreknoxWrappe
   @service declare intl: IntlService;
   @service declare configuration: ConfigurationService;
   @service declare whitelabel: WhitelabelService;
+  @service declare skOrganization: SkOrganizationService;
 
   @tracked isSidebarCollapsed: boolean;
   @tracked showOnboardingGuide = false;
@@ -57,6 +59,16 @@ export default class StoreknoxWrapperComponent extends Component<StoreknoxWrappe
         currentWhen:
           'authenticated.storeknox.discover.result authenticated.storeknox.discover.requested',
       },
+      ...(this.skOrganization.selected?.skFeatures.fake_app_detection
+        ? [
+            {
+              label: this.intl.t('storeknox.fakeAppsTitle'),
+              icon: 'streamline-plump:threat-phone',
+              route: 'authenticated.storeknox.fake-apps',
+              currentWhen: 'authenticated.storeknox.fake-apps',
+            },
+          ]
+        : []),
     ] as MenuItem[];
   }
 

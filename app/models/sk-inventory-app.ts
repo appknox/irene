@@ -1,6 +1,5 @@
 import { AsyncBelongsTo, attr, belongsTo } from '@ember-data/model';
 
-import ENUMS from 'irene/enums';
 import SkAppModel from './sk-app';
 import type ProjectModel from './project';
 import type FileModel from './file';
@@ -30,13 +29,6 @@ export default class SkInventoryAppModel extends SkAppModel {
 
   get appIsNotAvailableOnAppknox() {
     return !this.coreProject?.get('id');
-  }
-
-  get containsUnscannedVersion() {
-    return (
-      this.storeMonitoringStatus ===
-      ENUMS.SK_APP_MONITORING_STATUS.ACTION_NEEDED
-    );
   }
 }
 

@@ -1,0 +1,33 @@
+.fake-app-list-root {
+  position: sticky;
+  z-index: 10;
+  top: 254px;
+  background-color: var(--storeknox-fake-apps-fake-apps-list-background-light);
+
+  &.archived {
+    top: 322px;
+  }
+
+  .status-container {
+    background-color: var(
+      --storeknox-fake-apps-fake-apps-list-background-color
+    );
+    border: 1px solid var(--storeknox-fake-apps-fake-apps-list-border-color);
+    border-radius: var(--storeknox-fake-apps-fake-apps-list-border-radius);
+    height: 400px;
+  }
+}
+
+.tab-icon {
+  height: 14px;
+  width: 14px;
+  border-radius: 3px;
+}
+
+.brand-abuse {
+  background-color: var(--storeknox-fake-apps-fake-app-list-brand-abuse-color);
+}
+
+.fake-app {
+  background-color: var(--storeknox-fake-apps-fake-app-list-fake-app-color);
+}

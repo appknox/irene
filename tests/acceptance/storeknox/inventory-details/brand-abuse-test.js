@@ -1,4 +1,4 @@
-import { visit, click, currentURL } from '@ember/test-helpers';
+import { visit, currentURL } from '@ember/test-helpers';
 import { module, test } from 'qunit';
 import { setupApplicationTest } from 'ember-qunit';
 import { setupMirage } from 'ember-cli-mirage/test-support';
@@ -32,13 +32,16 @@ module(
     setupMirage(hooks);
 
     hooks.beforeEach(async function () {
-      const { organization, currentOrganizationMe } =
+      const { organization, currentOrganizationMe, currentSkOrganization } =
         await setupRequiredEndpoints(this.server);
 
       setupFileModelEndpoints(this.server);
 
-      organization.update({
-        features: { storeknox: true },
+      organization.update({ features: { storeknox: true } });
+
+      // Update sk organization features
+      currentSkOrganization.update({
+        sk_features: { fake_app_detection: false },
       });
 
       // Server mocks
@@ -80,7 +83,9 @@ module(
         );
 
       this.setProperties({
+        organization,
         currentOrganizationMe,
+        currentSkOrganization,
         store,
         normalizeSKInventoryApp,
       });
@@ -152,31 +157,6 @@ module(
 
         assert.dom(storeLogoSelector).exists();
 
-        await click(storeLogoSelector);
-
-        assert
-          .dom('[data-test-storeknox-productInfoCaptionText]')
-          .hasText(t('infoCapitalCase'));
-
-        const productTitle = inventoryAppRecord.isAndroid
-          ? t('storeknox.playStore')
-          : t('storeknox.appStore');
-
-        assert
-          .dom('[data-test-storeknox-productInfo-appIsPartOfText]')
-          .containsText(t('storeknox.appIsPartOf'))
-          .containsText(productTitle);
-
-        assert
-          .dom('[data-test-storeknox-productInfo-appStoreLink]')
-          .hasAttribute('href', inventoryAppRecord.appMetadata.url);
-
-        assert
-          .dom('[data-test-storeknox-productInfo-appStoreLinkBtn]')
-          .hasText(t('storeknox.checkOn') + ` ${productTitle}`);
-
-        await click(storeLogoSelector);
-
         // Page Info tag
         assert
           .dom('[data-test-storeknoxInventoryDetails-pageInfoTag]')
@@ -208,41 +188,45 @@ module(
       }
     );
 
-    test.each(
-      'it should redirect to details page if app status is being initialized or disabled',
-      ['withInitializingStatus', 'withDisabledStatus'],
-      async function (assert, appStatus) {
-        const file = this.server.create('file');
-        const core_project = this.server.create('project');
+    test('it should redirect to details page if hide upsell UI is enabled', async function (assert) {
+      this.organization.update({
+        hide_upsell_features: true,
+      });
 
-        // Models
-        const inventoryApp = this.server.create('sk-inventory-app', appStatus, {
+      const file = this.server.create('file');
+      const core_project = this.server.create('project');
+
+      // Models
+      const inventoryApp = this.server.create(
+        'sk-inventory-app',
+        'withApprovedStatus',
+        {
           core_project: core_project.id,
           core_project_latest_version: file.id,
-        });
+        }
+      );
 
-        const inventoryAppRecord = this.normalizeSKInventoryApp(inventoryApp);
+      const inventoryAppRecord = this.normalizeSKInventoryApp(inventoryApp);
 
-        // Server Mocks
-        this.server.get('/v2/sk_app/:id/sk_app_version', () => {
-          return {
-            count: 0,
-            next: null,
-            previous: null,
-            results: [],
-          };
-        });
+      // Server Mocks
+      this.server.get('/v2/sk_app/:id/sk_app_version', () => {
+        return {
+          count: 0,
+          next: null,
+          previous: null,
+          results: [],
+        };
+      });
 
-        await visit(
-          `/dashboard/storeknox/inventory-details/${inventoryAppRecord.id}/brand-abuse`
-        );
+      await visit(
+        `/dashboard/storeknox/inventory-details/${inventoryAppRecord.id}/brand-abuse`
+      );
 
-        //  Redirect to details page
-        assert.strictEqual(
-          currentURL(),
-          `/dashboard/storeknox/inventory-details/${inventoryAppRecord.id}`
-        );
-      }
-    );
+      //  Redirect to details page
+      assert.strictEqual(
+        currentURL(),
+        `/dashboard/storeknox/inventory-details/${inventoryAppRecord.id}`
+      );
+    });
   }
 );

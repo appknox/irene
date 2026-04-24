@@ -1,0 +1,30 @@
+{{#if @loading}}
+  <AkSkeleton @width='24px' @height='24px' @variant='circular' />
+{{else}}
+  <AkIconButton
+    {{on 'click' this.handleOpenMenu}}
+    data-test-storeknoxFakeAppListTable-actionBtn='{{@data.id}}'
+  >
+    <AkIcon @iconName='more-vert' />
+  </AkIconButton>
+
+  <AkMenu
+    @anchorRef={{this.anchorRef}}
+    @arrow={{true}}
+    @onClose={{this.handleCloseMenu}}
+    as |akm|
+  >
+    {{#each this.menuItems as |item|}}
+      <akm.listItem @divider={{item.divider}} @onClick={{item.onClick}} as |li|>
+        <li.text @primaryText={{item.label}} />
+      </akm.listItem>
+    {{/each}}
+  </AkMenu>
+
+  <Storeknox::FakeApps::IgnoreDrawer
+    @fakeApp={{@data.skFakeApp}}
+    @open={{this.showIgnoreDrawer}}
+    @onClose={{this.closeIgnoreDrawer}}
+    @addToInventory={{this.addToInventory}}
+  />
+{{/if}}

@@ -1,0 +1,75 @@
+.fake-apps-details-root {
+  position: sticky;
+  z-index: 10;
+  top: -0.5em;
+  background-color: var(--storeknox-fake-apps-details-header-background-color);
+
+  &.is-ignored {
+    top: calc(-0.5em + 44px);
+    margin-bottom: calc(1.5em + 1.4286em) !important;
+  }
+
+  .fake-app-title-container {
+    border: 1px solid
+      var(--storeknox-fake-apps-details-header-title-container-border-color);
+    border-bottom: none;
+
+    .title-indicator {
+      width: 14px;
+      height: 14px;
+      background-color: var(
+        --storeknox-fake-apps-details-header-title-indicator-color
+      );
+      border-radius: var(
+        --storeknox-fake-apps-details-header-title-indicator-border-radius
+      );
+
+      &.brand-abuse {
+        background-color: var(
+          --storeknox-fake-apps-details-header-title-indicator-brand-abuse-color
+        );
+      }
+    }
+  }
+
+  .fake-apps-details-header-app-info-container {
+    background-color: var(--storeknox-fake-apps-details-header-app-info-bg-color);
+
+    border: 1px solid
+      var(--storeknox-fake-apps-details-header-title-container-border-color);
+  }
+
+  .app-info-logo {
+    border-radius: 100%;
+    object-fit: contain;
+    width: 58px;
+    height: 58px;
+    border: 1px solid
+      var(--storeknox-fake-apps-details-header-app-logo-border-color);
+  }
+
+  .app-info-logo-placeholder {
+    border-radius: 50%;
+    width: 58px;
+    height: 58px;
+    background-color: var(
+      --storeknox-fake-apps-details-header-logo-placeholder-bg-color
+    );
+    border: 1px solid
+      var(--storeknox-fake-apps-details-header-app-logo-border-color);
+  }
+
+  .app-info-container {
+    padding: 1.1429em 1.7143em;
+  }
+
+  .store-logo-container {
+    min-height: 32px;
+    min-width: 32px;
+    width: 32px;
+    height: 32px;
+    border-radius: 100%;
+    border: 1px solid
+      var(--storeknox-fake-apps-details-header-store-logo-border-color);
+  }
+}
