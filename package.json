@@ -220,7 +220,7 @@
     "iconify-icon": "^2.3.0",
     "posthog-js": "^1.284.0",
     "qrious": "^4.0.2",
-    "swagger-ui": "^5.30.3"
+    "swagger-ui": "^5.32.1"
   },
   "overrides": {
     "@storybook/ember": {
