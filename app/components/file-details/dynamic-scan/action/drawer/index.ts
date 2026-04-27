@@ -8,6 +8,10 @@ import { isEmpty } from '@ember/utils';
 import ENV from 'irene/config/environment';
 import ENUMS from 'irene/enums';
 import parseError from 'irene/utils/parse-error';
+import {
+  getDynamicScanDeviceVersionQuery,
+  isAvailableManualDeviceAllowedForFile,
+} from 'irene/utils/dynamic-scan-device-version-query';
 
 import type IntlService from 'ember-intl/services/intl';
 import type Store from 'ember-data/store';
@@ -39,6 +43,7 @@ export default class FileDetailsDynamicScanActionDrawerComponent extends Compone
 
   @tracked isApiCaptureEnabled = false;
   @tracked availableManualDevices: AvailableManualDeviceModel[] = [];
+  @tracked selectedAvailableManualDeviceIdentifier: string | null = null;
 
   constructor(
     owner: unknown,
@@ -80,6 +85,13 @@ export default class FileDetailsDynamicScanActionDrawerComponent extends Compone
     );
   }
 
+  get selectedManualDeviceIsFromAvailableDeviceTable() {
+    return (
+      this.selectedAvailableManualDeviceIdentifier ===
+      this.dsManualDeviceIdentifier
+    );
+  }
+
   get enableStartDynamicScanBtn() {
     const { isAutomatedScan, dpContext } = this.args;
 
@@ -96,11 +108,17 @@ export default class FileDetailsDynamicScanActionDrawerComponent extends Compone
         dsManualDeviceSelection === anyDeviceSelection ||
         (specificDeviceSelection === dsManualDeviceSelection &&
           !isEmpty(this.dsManualDeviceIdentifier) &&
-          this.selectedManualDeviceIsInAvailableDeviceList)
+          (this.selectedManualDeviceIsInAvailableDeviceList ||
+            this.selectedManualDeviceIsFromAvailableDeviceTable))
       );
     }
 
     return true;
+  }
+
+  @action
+  handleSelectedManualDeviceAvailable(deviceIdentifier: string) {
+    this.selectedAvailableManualDeviceIdentifier = deviceIdentifier;
   }
 
   @action
@@ -122,10 +140,14 @@ export default class FileDetailsDynamicScanActionDrawerComponent extends Compone
       );
 
       const devices = await this.store.query('available-manual-device', {
-        platform_version_min: this.args.file.minOsVersion,
+        ...getDynamicScanDeviceVersionQuery(this.args.file),
       });
 
-      this.availableManualDevices = devices.slice();
+      this.availableManualDevices = devices
+        .slice()
+        .filter((device) =>
+          isAvailableManualDeviceAllowedForFile(this.args.file, device)
+        );
     } catch (error) {
       const err = error as AdapterError;
       const errorStatus = err.errors?.[0]?.status;

@@ -11,6 +11,10 @@ import type DS from 'ember-data';
 
 import styles from './index.scss';
 import ENUMS from 'irene/enums';
+import {
+  getDynamicScanDeviceVersionQuery,
+  isAvailableManualDeviceAllowedForFile,
+} from 'irene/utils/dynamic-scan-device-version-query';
 import { type PaginationProviderActionsArgs } from 'irene/components/ak-pagination-provider';
 import type { DsPreferenceContext } from 'irene/components/ds-preference-provider';
 import type FileModel from 'irene/models/file';
@@ -33,7 +37,6 @@ export interface AvailableManualDeviceQueryParams {
   has_pin_lock?: boolean;
   is_reserved?: boolean;
   platform_version_min?: string;
-  platform_version_max?: string;
 }
 
 type AvailableManualDeviceFilterOption = {
@@ -50,6 +53,7 @@ export interface FileDetailsDynamicScanDrawerDevicePrefTableSignature {
   Args: {
     dpContext: DsPreferenceContext;
     file: FileModel;
+    onSelectedManualDeviceAvailable(deviceIdentifier: string): void;
   };
 }
 
@@ -149,7 +153,13 @@ export default class FileDetailsDynamicScanDrawerDevicePrefTableComponent extend
   }
 
   get availableManualDevices() {
-    return this.availableDevicesResponse?.slice() || [];
+    return (
+      this.availableDevicesResponse
+        ?.slice()
+        .filter((device) =>
+          isAvailableManualDeviceAllowedForFile(this.args.file, device)
+        ) || []
+    );
   }
 
   get hasNoAvailableManualDevice() {
@@ -157,7 +167,7 @@ export default class FileDetailsDynamicScanDrawerDevicePrefTableComponent extend
   }
 
   get totalAvailableManualDevicesCount() {
-    return this.availableDevicesResponse?.meta?.count || 0;
+    return this.availableManualDevices.length;
   }
 
   get showEmptyDeviceListContent() {
@@ -184,6 +194,8 @@ export default class FileDetailsDynamicScanDrawerDevicePrefTableComponent extend
       ENUMS.DS_MANUAL_DEVICE_SELECTION.SPECIFIC_DEVICE;
 
     preference.dsManualDeviceIdentifier = device.deviceIdentifier;
+
+    this.args.onSelectedManualDeviceAvailable(device.deviceIdentifier);
 
     this.dpContext.updateDsManualDevicePref(preference);
   }
@@ -230,8 +242,23 @@ export default class FileDetailsDynamicScanDrawerDevicePrefTableComponent extend
 
         this.availableDevicesResponse = (await this.store.query(
           'available-manual-device',
-          { ...queryParams, platform_version_min: this.args.file.minOsVersion }
+          {
+            ...queryParams,
+            ...getDynamicScanDeviceVersionQuery(this.args.file),
+          }
         )) as AvailableManualDeviceQueryResponse;
+
+        const selectedDeviceIdentifier =
+          this.devicePreference?.dsManualDeviceIdentifier;
+
+        const selectedDeviceIsAvailableInResponse =
+          this.availableManualDevices.some(
+            (device) => device.deviceIdentifier === selectedDeviceIdentifier
+          );
+
+        if (selectedDeviceIdentifier && selectedDeviceIsAvailableInResponse) {
+          this.args.onSelectedManualDeviceAvailable(selectedDeviceIdentifier);
+        }
       } catch (error) {
         const err = error as AdapterError;
         const errorStatus = err.errors?.[0]?.status;

@@ -13,6 +13,7 @@ export interface FileDetailsDynamicScanDrawerManualDastSignature {
     dpContext: DsPreferenceContext;
     isApiCaptureEnabled: boolean;
     onApiCaptureChange(event: Event, checked?: boolean): void;
+    onSelectedManualDeviceAvailable(deviceIdentifier: string): void;
   };
 }
 
