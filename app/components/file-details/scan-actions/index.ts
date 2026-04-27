@@ -87,7 +87,7 @@ export default class FileDetailsScanActionsComponent extends Component<FileDetai
   }
 
   get dynamicCopilotStatus(): CopilotScanStatus | undefined {
-    const candidates = ['dast_manual', 'dast_automated', 'dynamic']
+    const candidates = ['dast_manual', 'dast_automated', 'dast']
       .map((t) => this.copilotStatusByScanType[t])
       .filter(Boolean) as CopilotScanStatus[];
 
