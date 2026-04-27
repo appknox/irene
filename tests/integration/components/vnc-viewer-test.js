@@ -6,6 +6,10 @@ import { setupIntl } from 'ember-intl/test-support';
 import { module, test } from 'qunit';
 
 import ENUMS from 'irene/enums';
+import {
+  requiresVncPassword,
+  supportsModernIOSDeviceFrame,
+} from 'irene/components/vnc-viewer';
 
 module('Integration | Component | vnc-viewer', function (hooks) {
   setupRenderingTest(hooks);
@@ -34,6 +38,18 @@ module('Integration | Component | vnc-viewer', function (hooks) {
       activeProfileId: profile.id,
       store,
     });
+  });
+
+  test('it requires vnc password for device platform versions below 17', function (assert) {
+    assert.true(requiresVncPassword('16'));
+    assert.true(requiresVncPassword('16.7.10'));
+    assert.true(requiresVncPassword('Android 13'));
+    assert.false(requiresVncPassword('17'));
+    assert.false(requiresVncPassword('17.0.1'));
+    assert.false(requiresVncPassword(null));
+    assert.false(supportsModernIOSDeviceFrame('16.7.10'));
+    assert.true(supportsModernIOSDeviceFrame('17'));
+    assert.false(supportsModernIOSDeviceFrame(null));
   });
 
   test.each(
@@ -74,20 +90,22 @@ module('Integration | Component | vnc-viewer', function (hooks) {
         assert.dom('[data-test-vncViewer-device]').hasClass(val);
       });
 
-      ['TopBar', 'Sleep', 'Volume'].forEach((it) => {
-        assert.dom(`[data-test-vncViewer-device${it}]`).doesNotExist();
-      });
-
       assert.dom('[data-test-vncViewer-deviceCamera]').exists();
       assert.dom('[data-test-vncViewer-deviceScreen]').hasClass('screen');
 
       if (platform === ENUMS.PLATFORM.IOS) {
         assert.dom('[data-test-vncViewer-deviceHome]').exists();
-
-        ['Speaker', 'BottomBar'].forEach((it) => {
-          assert.dom(`[data-test-vncViewer-device${it}]`).doesNotExist();
-        });
+      } else {
+        assert.dom('[data-test-vncViewer-deviceHome]').doesNotExist();
       }
+
+      ['TopBar', 'Sleep', 'Volume'].forEach((it) => {
+        assert.dom(`[data-test-vncViewer-device${it}]`).doesNotExist();
+      });
+
+      ['Speaker', 'BottomBar'].forEach((it) => {
+        assert.dom(`[data-test-vncViewer-device${it}]`).doesNotExist();
+      });
     }
   );
 
@@ -98,12 +116,14 @@ module('Integration | Component | vnc-viewer', function (hooks) {
         platform: ENUMS.PLATFORM.IOS,
         isTablet: true,
         deviceClass: 'ipad black',
+        platformVersion: '16.7.10',
       },
       {
         platform: ENUMS.PLATFORM.IOS,
         isTablet: true,
         deviceClass: 'iphone5s black', // since device might not be allocated so show default
         status: ENUMS.DYNAMIC_SCAN_STATUS.IN_QUEUE,
+        platformVersion: '16.7.10',
       },
       {
         platform: ENUMS.PLATFORM.ANDROID,
@@ -114,12 +134,23 @@ module('Integration | Component | vnc-viewer', function (hooks) {
         platform: ENUMS.PLATFORM.IOS,
         isTablet: false,
         deviceClass: 'iphone5s black',
+        platformVersion: '16.7.10',
+      },
+      {
+        platform: ENUMS.PLATFORM.IOS,
+        isTablet: false,
+        deviceClass: 'iphone5s black',
+        platformVersion: '18.0',
       },
     ],
-    async function (assert, { platform, isTablet, deviceClass, status }) {
+    async function (
+      assert,
+      { platform, isTablet, deviceClass, platformVersion, status }
+    ) {
       const deviceUsed = this.server.create('device', {
         is_tablet: isTablet,
         platform,
+        platform_version: platformVersion,
       });
 
       const dynamicscan = this.server.create('dynamicscan', {
@@ -151,31 +182,60 @@ module('Integration | Component | vnc-viewer', function (hooks) {
         this.dynamicscan.isHooking ||
         this.dynamicscan.isReadyOrRunning;
 
-      deviceClass.split(' ').forEach((val) => {
-        assert.dom('[data-test-vncViewer-device]').hasClass(val);
-      });
+      const usesModernIOSDeviceFrame =
+        platform === ENUMS.PLATFORM.IOS &&
+        supportsModernIOSDeviceFrame(platformVersion);
+
+      if (usesModernIOSDeviceFrame) {
+        assert
+          .dom('[data-test-vncViewer-device]')
+          .doesNotHaveClass('marvel-device');
+        assert.dom('[data-test-vncViewer-deviceScreen]').exists();
+        assert.dom('[data-test-vncViewer-deviceCamera]').doesNotExist();
+        assert.dom('[data-test-vncViewer-deviceHome]').doesNotExist();
+      } else {
+        deviceClass.split(' ').forEach((val) => {
+          assert.dom('[data-test-vncViewer-device]').hasClass(val);
+        });
+
+        assert.dom('[data-test-vncViewer-deviceCamera]').exists();
+        assert.dom('[data-test-vncViewer-deviceScreen]').hasClass('screen');
+
+        if (platform === ENUMS.PLATFORM.IOS) {
+          assert.dom('[data-test-vncViewer-deviceHome]').exists();
+        } else {
+          assert.dom('[data-test-vncViewer-deviceHome]').doesNotExist();
+        }
+      }
 
       ['TopBar', 'Sleep', 'Volume'].forEach((it) => {
-        if (isScanInProgress && isTablet) {
+        if (!usesModernIOSDeviceFrame && isScanInProgress && isTablet) {
           assert.dom(`[data-test-vncViewer-device${it}]`).exists();
         } else {
           assert.dom(`[data-test-vncViewer-device${it}]`).doesNotExist();
         }
       });
 
-      assert.dom('[data-test-vncViewer-deviceCamera]').exists();
-      assert.dom('[data-test-vncViewer-deviceScreen]').hasClass('screen');
+      ['Speaker', 'BottomBar'].forEach((it) => {
+        if (
+          platform === ENUMS.PLATFORM.IOS &&
+          !usesModernIOSDeviceFrame &&
+          isScanInProgress &&
+          isTablet
+        ) {
+          assert.dom(`[data-test-vncViewer-device${it}]`).exists();
+        } else {
+          assert.dom(`[data-test-vncViewer-device${it}]`).doesNotExist();
+        }
+      });
 
-      if (platform === ENUMS.PLATFORM.IOS) {
-        assert.dom('[data-test-vncViewer-deviceHome]').exists();
-
-        ['Speaker', 'BottomBar'].forEach((it) => {
-          if (isScanInProgress && isTablet) {
-            assert.dom(`[data-test-vncViewer-device${it}]`).exists();
-          } else {
-            assert.dom(`[data-test-vncViewer-device${it}]`).doesNotExist();
-          }
-        });
+      if (this.dynamicscan.isReadyOrRunning) {
+        assert
+          .dom('[data-test-NovncRfb-canvasContainer]')
+          .hasAttribute(
+            'data-contain-canvas',
+            usesModernIOSDeviceFrame ? 'true' : 'false'
+          );
       }
     }
   );

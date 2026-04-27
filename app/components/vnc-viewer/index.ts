@@ -8,6 +8,25 @@ import ENV from 'irene/config/environment';
 import type FileModel from 'irene/models/file';
 import type DynamicscanModel from 'irene/models/dynamicscan';
 import type DevicefarmService from 'irene/services/devicefarm';
+import { getPlatformMajorVersion } from 'irene/utils/platform-version';
+
+const VNC_PASSWORD_AUTH_VERSION_CUTOFF = 17;
+
+export function requiresVncPassword(platformVersion?: string | null) {
+  const majorVersion = getPlatformMajorVersion(platformVersion);
+
+  return majorVersion !== null
+    ? majorVersion < VNC_PASSWORD_AUTH_VERSION_CUTOFF
+    : false;
+}
+
+export function supportsModernIOSDeviceFrame(platformVersion?: string | null) {
+  const majorVersion = getPlatformMajorVersion(platformVersion);
+
+  return majorVersion !== null
+    ? majorVersion >= VNC_PASSWORD_AUTH_VERSION_CUTOFF
+    : false;
+}
 
 export interface VncViewerSignature {
   Args: {
@@ -26,8 +45,6 @@ export default class VncViewerComponent extends Component<VncViewerSignature> {
   @service declare store: Store;
   @service declare devicefarm: DevicefarmService;
 
-  deviceFarmPassword = ENV.deviceFarmPassword;
-
   get deviceFarmURL() {
     const token = this.args.dynamicScan?.get('moriartyDynamicscanToken');
 
@@ -40,6 +57,12 @@ export default class VncViewerComponent extends Component<VncViewerSignature> {
 
   get deviceUsed() {
     return this.args.dynamicScan?.get('deviceUsed');
+  }
+
+  get deviceFarmPassword() {
+    return requiresVncPassword(this.deviceUsed?.platform_version)
+      ? ENV.deviceFarmPassword
+      : null;
   }
 
   get deviceType() {
@@ -75,6 +98,13 @@ export default class VncViewerComponent extends Component<VncViewerSignature> {
     const platform = this.args.file.project.get('platform');
 
     return platform === ENUMS.PLATFORM.IOS;
+  }
+
+  get usesModernIOSDeviceFrame() {
+    return (
+      this.isIOSDevice &&
+      supportsModernIOSDeviceFrame(this.deviceUsed?.platform_version)
+    );
   }
 
   get dynamicScan() {
