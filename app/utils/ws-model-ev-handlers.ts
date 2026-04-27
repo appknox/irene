@@ -50,9 +50,9 @@ export class DynamicScanEventHandler extends WsModelEventHandler<DynamicscanMode
   }
 
   private incrementFileAutoDynamicScanReloadCounter() {
-    // Whenever we receive this notification for newly created dynamic scan
-    // We increment the counter for the dynamic scan to reload the last automated dynamic scan
-    // in the dynamic scan header component
+    // Whenever we receive this notification for a dynamic scan
+    // We increment the counter for the dynamic scan to reload the latest dynamic scan
+    // in dynamic scan page components
     // REFER: app/components/file-details/dynamic-scan/header/index.ts (LINE: 61)
     this.realtime.incrementProperty('FileAutoDynamicScanReloadCounter');
   }
@@ -62,7 +62,9 @@ export class DynamicScanEventHandler extends WsModelEventHandler<DynamicscanMode
     this.incrementFileAutoDynamicScanReloadCounter();
   }
 
-  onUpdate() {}
+  onUpdate() {
+    this.incrementFileAutoDynamicScanReloadCounter();
+  }
 }
 
 /** Handler for submission model events*/

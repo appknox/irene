@@ -1,5 +1,6 @@
 import Component from '@glimmer/component';
 import { action } from '@ember/object';
+import { addObserver, removeObserver } from '@ember/object/observers';
 import { service } from '@ember/service';
 import { tracked } from 'tracked-built-ins';
 import { waitForPromise } from '@ember/test-waiters';
@@ -9,6 +10,7 @@ import type IntlService from 'ember-intl/services/intl';
 import type FileModel from 'irene/models/file';
 import type DynamicScanService from 'irene/services/dynamic-scan';
 import type DynamicscanModel from 'irene/models/dynamicscan';
+import type RealtimeService from 'irene/services/realtime';
 
 export interface FileDetailsDastManualSignature {
   Args: {
@@ -21,6 +23,7 @@ export default class FileDetailsDastManual extends Component<FileDetailsDastManu
   @service('dynamic-scan') declare dsService: DynamicScanService;
   @service declare intl: IntlService;
   @service('notifications') declare notify: NotificationService;
+  @service declare realtime: RealtimeService;
 
   @tracked lastManualDynamicScan: DynamicscanModel | null = null;
 
@@ -35,6 +38,14 @@ export default class FileDetailsDastManual extends Component<FileDetailsDastManu
     });
 
     this.getLastDynamicScans.perform();
+
+    // eslint-disable-next-line ember/no-observers
+    addObserver(
+      this.realtime,
+      'FileAutoDynamicScanReloadCounter',
+      this,
+      this.reloadLastManualDynamicScan
+    );
   }
 
   get file() {
@@ -71,11 +82,22 @@ export default class FileDetailsDastManual extends Component<FileDetailsDastManu
     this.getLastDynamicScans.perform();
   }
 
-  getLastDynamicScans = task(async () => {
+  getLastDynamicScans = task({ restartable: true }, async () => {
     this.lastManualDynamicScan = await waitForPromise(
       this.file.getFileLastManualDynamicScan()
     );
   });
+
+  willDestroy(): void {
+    super.willDestroy();
+
+    removeObserver(
+      this.realtime,
+      'FileAutoDynamicScanReloadCounter',
+      this,
+      this.reloadLastManualDynamicScan
+    );
+  }
 }
 
 declare module '@glint/environment-ember-loose/registry' {

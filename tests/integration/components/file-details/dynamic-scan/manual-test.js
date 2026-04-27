@@ -3,6 +3,7 @@ import {
   find,
   findAll,
   render,
+  settled,
   triggerEvent,
 } from '@ember/test-helpers';
 
@@ -485,6 +486,40 @@ module(
       // Verify final selection
       assert.dom(deviceSelectRadioSelector, deviceElemList[1]).isChecked();
     });
+
+    test(
+      'it reloads the active manual scan from realtime updates',
+      async function (assert) {
+        await render(hbs`
+          <FileDetails::DynamicScan::Manual @file={{this.file}} @dynamicScanText={{this.dynamicScanText}} />
+        `);
+
+        assert
+          .dom('[data-test-fileDetails-dynamicScanAction="startBtn"]')
+          .exists();
+
+        this.server.create('dynamicscan', {
+          file: this.file.id,
+          mode: ENUMS.DYNAMIC_MODE.MANUAL,
+          status: ENUMS.DYNAMIC_SCAN_STATUS.IN_QUEUE,
+          ended_on: null,
+        });
+
+        const realtime = this.owner.lookup('service:realtime');
+
+        realtime.incrementProperty('FileAutoDynamicScanReloadCounter');
+
+        await settled();
+
+        assert
+          .dom('[data-test-fileDetails-dynamicScanAction="cancelBtn"]')
+          .exists();
+
+        assert
+          .dom('[data-test-fileDetails-dynamicScanAction="startBtn"]')
+          .doesNotExist();
+      }
+    );
 
     test.each(
       'it filters devices in device preferences table',

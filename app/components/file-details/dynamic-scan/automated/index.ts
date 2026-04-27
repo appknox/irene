@@ -1,6 +1,7 @@
 import Component from '@glimmer/component';
 import { tracked } from '@glimmer/tracking';
 import { action } from '@ember/object';
+import { addObserver, removeObserver } from '@ember/object/observers';
 import { task } from 'ember-concurrency';
 import { service } from '@ember/service';
 import type IntlService from 'ember-intl/services/intl';
@@ -13,6 +14,7 @@ import type DsAutomationPreferenceModel from 'irene/models/ds-automation-prefere
 import type OrganizationService from 'irene/services/organization';
 import type DynamicscanModel from 'irene/models/dynamicscan';
 import type LoggerService from 'irene/services/logger';
+import type RealtimeService from 'irene/services/realtime';
 
 export interface FileDetailsDastAutomatedSignature {
   Args: {
@@ -28,6 +30,7 @@ export default class FileDetailsDastAutomated extends Component<FileDetailsDastA
   @service declare organization: OrganizationService;
   @service('notifications') declare notify: NotificationService;
   @service declare logger: LoggerService;
+  @service declare realtime: RealtimeService;
 
   @tracked automationPreference: DsAutomationPreferenceModel | null = null;
   @tracked lastAutomatedDynamicScan: DynamicscanModel | null = null;
@@ -37,6 +40,14 @@ export default class FileDetailsDastAutomated extends Component<FileDetailsDastA
 
     this.getDsAutomationPreference.perform();
     this.getLastAutomatedDynamicScan.perform();
+
+    // eslint-disable-next-line ember/no-observers
+    addObserver(
+      this.realtime,
+      'FileAutoDynamicScanReloadCounter',
+      this,
+      this.reloadLastAutomatedDynamicScan
+    );
   }
 
   get file() {
@@ -82,7 +93,7 @@ export default class FileDetailsDastAutomated extends Component<FileDetailsDastA
     this.getLastAutomatedDynamicScan.perform();
   }
 
-  getLastAutomatedDynamicScan = task(async () => {
+  getLastAutomatedDynamicScan = task({ restartable: true }, async () => {
     try {
       this.lastAutomatedDynamicScan =
         await this.file.getFileLastAutomatedDynamicScan();
@@ -90,6 +101,17 @@ export default class FileDetailsDastAutomated extends Component<FileDetailsDastA
       this.logger.error(parseError(error, this.intl.t('pleaseTryAgain')));
     }
   });
+
+  willDestroy(): void {
+    super.willDestroy();
+
+    removeObserver(
+      this.realtime,
+      'FileAutoDynamicScanReloadCounter',
+      this,
+      this.reloadLastAutomatedDynamicScan
+    );
+  }
 }
 
 declare module '@glint/environment-ember-loose/registry' {

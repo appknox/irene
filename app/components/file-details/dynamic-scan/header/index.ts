@@ -55,12 +55,12 @@ export default class FileDetailsDastHeader extends Component<FileDetailsDastHead
     this.fetchDynamicScans.perform();
     this.fetchFileRisk.perform();
 
-    // This observer is used to reload the last automated dynamic scan when the FileAutoDynamicScanReloadCounter is incremented
+    // This observer is used to reload the latest dynamic scans when the FileAutoDynamicScanReloadCounter is incremented
     // REFER: app/services/websocket.ts (LINE: 197)
     // The workflow is =>
-    // AUTO DYNAMIC SCAN STARTED -> NEW DYNAMIC SCAN CREATED ->
+    // DYNAMIC SCAN STARTED/UPDATED ->
     // "model_created" notification is sent by backend -> FileAutoDynamicScanReloadCounter is incremented on the client from the ws service
-    // -> reloadLastDynamicScans is called -> lastAutomatedDynamicScan is reloaded through this observer
+    // -> reloadLastDynamicScans is called -> latest scans are reloaded through this observer
 
     // eslint-disable-next-line ember/no-observers
     addObserver(
