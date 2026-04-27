@@ -24,6 +24,7 @@
     "lint:js:fix": "eslint . --fix",
     "start": "cross-env IRENE_API_HOST=http://localhost:8000 ember server",
     "startstaging": "cross-env IRENE_API_HOST=https://api.appknox.io ember server",
+    "startcopilot": "cross-env IRENE_API_HOST=/ ember server --proxy https://sherlockcopilot.staging.do.appknox.io",
     "startprod": "cross-env IRENE_API_HOST=https://api.appknox.com ember server",
     "test": "concurrently \"npm:lint\" \"npm:test:*\" --names \"lint,test:\"",
     "test:ember": "ember exam",
@@ -215,6 +216,7 @@
     "ember-data-resources": "^5.3.2",
     "ember-websockets": "^10.2.1",
     "iconify-icon": "^2.3.0",
+    "marked": "^18.0.2",
     "posthog-js": "^1.284.0",
     "qrious": "^4.0.2",
     "swagger-ui": "^5.30.3"

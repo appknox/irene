@@ -12,7 +12,6 @@ import type PollService from 'irene/services/poll';
 import parseError from 'irene/utils/parse-error';
 
 const POLL_INTERVAL_MS = 5000;
-const IN_PROGRESS_STATUSES = new Set(['pending', 'running']);
 
 export interface FileCopilotValidationBtnSignature {
   Args: {
@@ -42,15 +41,11 @@ export default class FileCopilotValidationBtn extends Component<FileCopilotValid
     this.stopStatusPoll?.();
   }
 
-  get isValidationInProgress() {
-    return this.copilotStatuses.some((s) => IN_PROGRESS_STATUSES.has(s.status));
-  }
-
   get isTriggerDisabled() {
     return (
       this.triggerValidation.isRunning ||
       this.fetchStatus.isRunning ||
-      this.isValidationInProgress
+      this.copilotStatuses.length > 0
     );
   }
 
@@ -59,6 +54,10 @@ export default class FileCopilotValidationBtn extends Component<FileCopilotValid
       const adapter = this.store.adapterFor('file') as FileAdapter;
       const resp = await adapter.fetchCopilotStatus(String(this.args.file.id));
       this.copilotStatuses = resp.scan_statuses ?? [];
+
+      if (this.copilotStatuses.length === 0) {
+        this.stopStatusPoll?.();
+      }
     } catch {
       // non-fatal — poll will retry
     }
@@ -79,6 +78,7 @@ export default class FileCopilotValidationBtn extends Component<FileCopilotValid
       await adapter.triggerCopilotValidation(String(this.args.file.id));
 
       this.notify.success('Copilot validation triggered successfully');
+      this.startStatusPolling();
     } catch (error) {
       this.notify.error(parseError(error));
     }

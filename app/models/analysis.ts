@@ -67,6 +67,8 @@ export interface PocData {
 
 export interface RemediationData {
   remediation: string;
+  steps: string[];
+  code_examples: string[];
 }
 
 export interface CopilotFinding {
