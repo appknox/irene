@@ -1,0 +1,229 @@
+{{#if this.cardData}}
+  {{page-title (concat this.cardData.appName ' — ' (t 'scanResults'))}}
+{{/if}}
+
+<AkStack
+  @direction='column'
+  @width='full'
+  local-class='scan-results-root'
+  data-test-store-release-readiness-scan-results
+>
+  <AkBreadcrumbs::AutoTrail class='mb-3' />
+
+  {{#if this.loadScan.isRunning}}
+    <StoreReleaseReadiness::ScanResults::SkeletonLoader />
+  {{else if this.cardData}}
+    <StoreReleaseReadiness::ScanResults::FileSummary
+      @item={{this.cardData}}
+      class='mb-4'
+    />
+
+    <StoreReleaseReadiness::ScanResults::Details
+      @item={{this.cardData}}
+      class='mb-4'
+    />
+
+    <div
+      local-class='scan-results-assessment-box'
+      data-test-store-release-readiness-scan-results-assessment
+    >
+      <AkStack
+        @alignItems='center'
+        @justifyContent='space-between'
+        local-class='scan-results-assessment-header'
+      >
+        <AkTypography
+          @variant='subtitle2'
+          @fontWeight='bold'
+          local-class='scan-results-assessment-title'
+          data-test-store-release-readiness-scan-results-assessment-heading
+        >
+          {{t 'storeReleaseReadinessModule.assessmentResults'}}
+        </AkTypography>
+
+        <AkStack
+          @direction='row'
+          @spacing='2'
+          @alignItems='center'
+          local-class='assessment-filters-row'
+        >
+          {{#if this.categoryFilterOptions.length}}
+            <div
+              data-test-select-category-filter-container
+              local-class='assessment-status-filter-shell'
+            >
+              <AkSelect
+                @multiple={{true}}
+                @closeOnSelect={{false}}
+                @onChange={{this.onCategoryFilterChange}}
+                @options={{this.categoryFilterOptions}}
+                @selected={{this.selectedCategoryLabels}}
+                @verticalPosition='auto'
+                @renderInPlace={{true}}
+                @searchEnabled={{true}}
+                @searchFieldPosition='before-options'
+                @search={{this.searchCategories}}
+                @searchPlaceholder={{t
+                  'storeReleaseReadinessModule.searchCategories'
+                }}
+                @triggerClass={{this.classes.assessmentStatusFilterTrigger}}
+                @dropdownClass={{this.classes.categoryFilterDropdown}}
+                @triggerComponent={{component 'ak-multi-select'}}
+                @optionTitle={{t 'storeReleaseReadinessModule.categoryFilter'}}
+                @extra={{hash
+                  filterLabel=(t 'storeReleaseReadinessModule.categoryFilter')
+                  iconName='filter-list'
+                  fontSize='medium'
+                }}
+                {{style width='auto'}}
+                class='select-assessment-status-class pl-1'
+                local-class='select-assessment-status-class'
+                data-test-store-release-readiness-category-filter
+                as |option|
+              >
+                <AkStack
+                  @direction='row'
+                  @alignItems='center'
+                  @spacing='1'
+                  @width='full'
+                  local-class='assessment-filter-option-row'
+                >
+                  <div local-class='category-filter-option-checkbox'>
+                    <AkCheckbox
+                      @checked={{this.isCategoryOptionSelected option}}
+                      @readonly={{true}}
+                    />
+                  </div>
+
+                  <span local-class='assessment-filter-option-label-text'>
+                    {{option}}
+                  </span>
+                </AkStack>
+              </AkSelect>
+            </div>
+          {{/if}}
+
+          <div
+            data-test-select-scan-type-container
+            local-class='assessment-status-filter-shell'
+          >
+            <AkSelect
+              @onChange={{this.onAssessmentPolicyFilterChange}}
+              @options={{this.assessmentPolicyFilterOptionObjects}}
+              @selected={{this.selectedAssessmentPolicyFilterObject}}
+              @verticalPosition='auto'
+              @triggerClass={{this.classes.assessmentStatusFilterTrigger}}
+              @dropdownClass={{this.classes.assessmentStatusFilterDropdown}}
+              @optionTitle={{t 'status'}}
+              @extra={{hash
+                selectedItem=this.selectedAssessmentPolicyFilterObject.key
+                showLabel=true
+                iconName='filter-list'
+                fontSize='medium'
+              }}
+              @selectedItemComponent={{component
+                'project-list/filter-selected-item'
+              }}
+              {{style width='auto'}}
+              class='select-assessment-status-class pl-1'
+              local-class='select-assessment-status-class'
+              data-test-vulnerability-analysis-filterselect
+              as |option|
+            >
+              <AkStack
+                @direction='row'
+                @alignItems='center'
+                @justifyContent='space-between'
+                @width='full'
+                @spacing='2'
+                local-class='assessment-filter-option-row'
+              >
+                <AkStack
+                  @spacing='1'
+                  @alignItems='center'
+                  local-class='assessment-filter-option-label'
+                >
+                  <AkRadio
+                    @checked={{eq this.assessmentPolicyFilter option.value}}
+                  />
+
+                  <span local-class='assessment-filter-option-label-text'>
+                    {{option.key}}
+                  </span>
+                </AkStack>
+
+                {{#if (eq option.value 'failed')}}
+                  <span
+                    aria-hidden='true'
+                    local-class='assessment-filter-status-dot assessment-filter-status-dot-failed'
+                  ></span>
+                {{else if (eq option.value 'passed')}}
+                  <span
+                    aria-hidden='true'
+                    local-class='assessment-filter-status-dot assessment-filter-status-dot-passed'
+                  ></span>
+                {{else if (eq option.value 'untested')}}
+                  <span
+                    aria-hidden='true'
+                    local-class='assessment-filter-status-dot assessment-filter-status-dot-untested'
+                  ></span>
+                {{else}}
+                  <span
+                    local-class='assessment-filter-status-dot-spacer'
+                  ></span>
+                {{/if}}
+              </AkStack>
+            </AkSelect>
+          </div>
+        </AkStack>
+      </AkStack>
+    </div>
+
+    {{#if this.showAssessmentFilteredEmpty}}
+      <AkStack
+        @direction='column'
+        @alignItems='center'
+        @justifyContent='center'
+        local-class='assessment-filtered-empty'
+        data-test-store-release-readiness-scan-results-assessment-filtered-empty
+      >
+        <AkSvg::NoResult
+          local-class='assessment-filtered-empty-svg'
+          data-test-store-release-readiness-scan-results-assessment-filtered-empty-svg
+        />
+
+        <AkTypography
+          @variant='h5'
+          @fontWeight='medium'
+          local-class='assessment-filtered-empty-text'
+          data-test-store-release-readiness-scan-results-assessment-filtered-empty-message
+        >
+          {{t 'storeReleaseReadinessModule.assessmentTryAdjustingFilters'}}
+        </AkTypography>
+      </AkStack>
+    {{else}}
+      <AkTable
+        @hoverable={{true}}
+        local-class='scan-results-assessment-table'
+        data-test-store-release-readiness-scan-results-assessment-table
+        as |tb|
+      >
+        <tb.head @columns={{this.assessmentColumns}} />
+        <tb.body @rows={{this.filteredAssessmentRows}} as |b|>
+          <b.row
+            {{style cursor='pointer'}}
+            @onClick={{this.handleAssessmentRowClick}}
+            data-test-store-release-readiness-scan-results-assessment-row={{b.rowValue.id}}
+            as |r|
+          >
+            <r.cell>
+              {{#let (component r.columnValue.component) as |Cell|}}
+                <Cell @data={{r.rowValue}} />
+              {{/let}}
+            </r.cell>
+          </b.row>
+        </tb.body>
+      </AkTable>
+    {{/if}}
+  {{/if}}
+</AkStack>

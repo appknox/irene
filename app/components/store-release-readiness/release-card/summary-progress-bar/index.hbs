@@ -1,0 +1,15 @@
+<div
+  local-class='summary-progress-bar'
+  role='img'
+  aria-label={{this.ariaLabel}}
+  data-test-store-release-readiness-summary-progress-bar
+>
+  {{#each this.segments as |seg|}}
+    <div
+      local-class='segment'
+      data-segment={{seg.kind}}
+      data-test-store-release-readiness-progress-segment={{seg.kind}}
+      {{style width=(concat seg.pct '%')}}
+    />
+  {{/each}}
+</div>

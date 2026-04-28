@@ -11,6 +11,7 @@ export interface Features {
   partner_dashboard: boolean;
   sso: boolean;
   sbom: boolean;
+  store_release_readiness: boolean;
   public_apis: boolean;
   storeknox: boolean;
   privacy: boolean;

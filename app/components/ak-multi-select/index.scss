@@ -1,0 +1,48 @@
+.ak-multi-select-root {
+  display: flex;
+  align-items: center;
+  box-sizing: border-box;
+  width: 100%;
+  min-width: 0;
+  max-width: 100%;
+  padding: 0 0.285em;
+  margin: 0;
+  min-height: 1.85em;
+}
+
+.ak-multi-select-item {
+  display: flex;
+  flex: 1;
+  min-width: 0;
+  max-width: 100%;
+  background: none !important;
+  border: none !important;
+  padding: 0 !important;
+  margin: 0 !important;
+}
+
+.ak-multi-select-summary-inner {
+  flex: 1;
+  min-width: 0;
+  max-width: 100%;
+}
+
+.ak-multi-select-summary-prefix {
+  flex-shrink: 0;
+}
+
+.ak-multi-select-summary-selection {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.trigger-label-small {
+  font-size: 0.857rem !important;
+}
+
+.trigger-label-medium {
+  font-size: 1rem !important;
+}

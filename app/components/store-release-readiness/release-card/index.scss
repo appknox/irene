@@ -1,0 +1,103 @@
+.release-card {
+  background-color: var(--common-white);
+  border: 1px solid #e9e9e9;
+  border-radius: var(--border-radius);
+  height: 100%;
+  box-sizing: border-box;
+  overflow: hidden;
+}
+
+.card-header {
+  background-color: #f7f8fc;
+  padding: 16px;
+}
+
+.rish-chip {
+  font-weight: 600 !important;
+}
+
+/* Risk chip: custom palette */
+.risk-chip-high {
+  background-color: #fee2e2 !important;
+  color: #991b1b !important;
+}
+
+.risk-chip-medium {
+  background-color: #ffedd5 !important;
+  color: #92400e !important;
+}
+
+.risk-chip-low {
+  background-color: #dbeafe !important;
+  color: #1e40af !important;
+}
+
+.risk-chip-pending {
+  background-color: #e1e1e1 !important;
+  color: #171717 !important;
+}
+
+.card-body {
+  padding: 11px 16px 16px;
+  box-sizing: border-box;
+}
+
+.app-name-block {
+  margin-top: 12px;
+}
+
+.app-name {
+  word-break: break-word;
+}
+
+.package-name {
+  color: var(--neutral-grey-800);
+}
+
+.meta-pill {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+  background-color: #fafafa;
+  border: 1px solid #e9e9e9;
+  border-radius: 2px;
+  height: 22px;
+  padding: 0 6px;
+}
+
+.meta-pill--icon {
+  width: 22px;
+  height: 22px;
+  min-width: 22px;
+  min-height: 22px;
+  padding: 0;
+  flex-shrink: 0;
+}
+
+.meta-pill-date-icon {
+  color: #171717;
+}
+
+.meta-pill-date-text {
+  color: #171717;
+}
+
+.summary-divider {
+  margin-top: 16px;
+  margin-bottom: 8px;
+  width: 100%;
+}
+
+.summary-heading {
+  letter-spacing: 0.04em;
+}
+
+.summary-progress-wrap {
+  margin-top: 8px;
+  width: 100%;
+}
+
+.card-metadata-row {
+  margin-top: 0.5em;
+}

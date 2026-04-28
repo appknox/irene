@@ -1,0 +1,203 @@
+<AkStack
+  @direction='column'
+  @width='full'
+  local-class='scan-results-details-card'
+  class='mb-4'
+  data-test-store-release-readiness-scan-results-details
+>
+  <AkStack
+    @direction='row'
+    @justifyContent='space-between'
+    @alignItems='flex-start'
+    @width='full'
+    local-class='scan-results-details-row'
+  >
+    <AkStack
+      @direction='column'
+      @spacing='1'
+      @alignItems='flex-start'
+      local-class='scan-results-details-left'
+      data-test-store-release-readiness-scan-results-details-main
+    >
+      <AkTypography
+        @variant='subtitle1'
+        local-class='scan-results-details-title'
+        data-test-store-release-readiness-scan-results-details-heading
+      >
+        {{t 'scanResults'}}
+      </AkTypography>
+
+      <AkTypography
+        @variant='body2'
+        local-class='scan-results-details-body'
+        data-test-store-release-readiness-scan-results-details-description
+      >
+        {{t 'storeReleaseReadinessModule.scanResultsDescription'}}
+      </AkTypography>
+
+      <div
+        local-class='scan-results-details-progress'
+        data-test-store-release-readiness-scan-results-details-progress
+      >
+        <StoreReleaseReadiness::ReleaseCard::SummaryProgressBar
+          @failed={{@item.summaryFailed}}
+          @passed={{@item.summaryPassed}}
+          @untested={{@item.summaryUntested}}
+          @isLoading={{@item.summaryLoading}}
+        />
+      </div>
+    </AkStack>
+
+    <AkStack
+      @direction='column'
+      @alignItems='center'
+      @spacing='0.5'
+      local-class='scan-results-details-risk-block'
+      data-test-store-release-readiness-scan-results-details-risk
+    >
+      {{#if (eq @item.riskProfile 'high')}}
+        <AkSvg::HighRiskTowerBig
+          data-test-store-release-readiness-scan-results-details-risk-svg
+        />
+      {{else if (eq @item.riskProfile 'medium')}}
+        <AkSvg::MediumRiskTowerBig
+          data-test-store-release-readiness-scan-results-details-risk-svg
+        />
+      {{else if (eq @item.riskProfile 'low')}}
+        <AkSvg::LowRiskTowerBig
+          data-test-store-release-readiness-scan-results-details-risk-svg
+        />
+      {{else}}
+        <AkIcon
+          @iconName='content-paste-search'
+          @size='medium'
+          {{style color=this.rejectionRiskColor}}
+          data-test-store-release-readiness-scan-results-details-risk-pending-icon
+        />
+      {{/if}}
+
+      <AkTypography
+        @variant='body2'
+        @color='inherit'
+        local-class='scan-results-details-risk'
+        {{style fontSize='12px' fontWeight='600' color=this.rejectionRiskColor}}
+        data-test-store-release-readiness-scan-results-details-risk-label
+      >
+        {{this.rejectionRiskLabel}}
+      </AkTypography>
+    </AkStack>
+  </AkStack>
+
+  <AkDivider @color='dark' local-class='scan-results-details-divider' />
+
+  <AkStack
+    @direction='row'
+    @alignItems='center'
+    @flexWrap='wrap'
+    @width='full'
+    local-class='scan-results-details-counts'
+    data-test-store-release-readiness-scan-results-details-counts
+  >
+    <AkStack
+      @direction='row'
+      @alignItems='center'
+      @spacing='0.5'
+      local-class='scan-results-details-count-segment'
+      data-test-store-release-readiness-scan-results-details-failed
+    >
+      <span
+        local-class='status-dot status-dot-failed'
+        aria-hidden='true'
+      ></span>
+      <AkTypography @variant='body2' @fontWeight='bold' class='mr-3'>
+        {{t 'failed'}}
+      </AkTypography>
+
+      <AkTypography @variant='body2' @fontWeight='bold'>
+        {{this.failedPadded}}
+      </AkTypography>
+    </AkStack>
+
+    <AkStack
+      @direction='row'
+      @alignItems='center'
+      @spacing='0.5'
+      local-class='scan-results-details-count-segment'
+      data-test-store-release-readiness-scan-results-details-blocker
+    >
+      <AkIcon @iconName='block' @color='error' @size='small' />
+      <AkTypography @variant='body2' @color='textSecondary' class='mr-3'>
+        {{t 'storeReleaseReadinessModule.summaryBlocker'}}
+      </AkTypography>
+      <AkTypography @variant='body2' @color='textSecondary'>
+        {{this.blockerPadded}}
+      </AkTypography>
+    </AkStack>
+
+    <AkStack
+      @direction='row'
+      @alignItems='center'
+      @spacing='0.5'
+      local-class='scan-results-details-count-segment'
+      data-test-store-release-readiness-scan-results-details-warning
+    >
+      <AkIcon @iconName='warning' @color='error' @size='small' />
+      <AkTypography @variant='body2' @color='textSecondary' class='mr-3'>
+        {{t 'storeReleaseReadinessModule.summaryWarning'}}
+      </AkTypography>
+      <AkTypography @variant='body2' @color='textSecondary'>
+        {{this.warningPadded}}
+      </AkTypography>
+    </AkStack>
+
+    <AkDivider @color='dark' @direction='vertical' @height='26px' />
+
+    <AkStack
+      @direction='row'
+      @alignItems='center'
+      @spacing='0.5'
+      local-class='scan-results-details-count-segment'
+      data-test-store-release-readiness-scan-results-details-untested
+    >
+      <span
+        local-class='status-dot status-dot-untested'
+        aria-hidden='true'
+      ></span>
+      <AkTypography @variant='body2' @fontWeight='bold' class='mr-3'>
+        {{t 'untested'}}
+      </AkTypography>
+      {{#if this.summaryUntestedRowLoading}}
+        <AkLoader @size={{16}} @color='error' />
+      {{else}}
+        <AkTypography @variant='body2' @fontWeight='bold'>
+          {{this.untestedPadded}}
+        </AkTypography>
+      {{/if}}
+    </AkStack>
+
+    <AkDivider @color='dark' @direction='vertical' @height='26px' />
+
+    <AkStack
+      @direction='row'
+      @alignItems='center'
+      @spacing='0.5'
+      local-class='scan-results-details-count-segment'
+      data-test-store-release-readiness-scan-results-details-passed
+    >
+      <span
+        local-class='status-dot status-dot-passed'
+        aria-hidden='true'
+      ></span>
+      <AkTypography @variant='body2' @fontWeight='bold' class='mr-3'>
+        {{t 'passed'}}
+      </AkTypography>
+      {{#if this.summaryPassedRowLoading}}
+        <AkLoader @size={{16}} @color='error' />
+      {{else}}
+        <AkTypography @variant='body2' @fontWeight='bold'>
+          {{this.passedPadded}}
+        </AkTypography>
+      {{/if}}
+    </AkStack>
+  </AkStack>
+</AkStack>

@@ -1,0 +1,39 @@
+.release-card-grid {
+  display: grid;
+  justify-items: stretch;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 1.5em;
+}
+
+.release-card-link {
+  display: block;
+  color: inherit;
+  text-decoration: none;
+  border-radius: inherit;
+
+  &:focus-visible {
+    outline: 2px solid var(--ak-focus-ring-color, var(--primary-main));
+    outline-offset: 2px;
+  }
+
+  &:hover {
+    cursor: pointer;
+    box-shadow: var(--box-shadow-7);
+  }
+}
+
+.loading {
+  border: 1px solid var(--project-list-loader-border-color);
+  border-radius: var(--project-list-loader-border-radius);
+  background-color: var(--project-list-loader-background-color);
+  min-height: 35em;
+
+  .loading-state-vector {
+    margin-bottom: 1.5625em;
+  }
+
+  .loading-text {
+    text-align: center;
+    max-width: 302px;
+  }
+}

@@ -1,0 +1,141 @@
+<AkStack
+  @width='full'
+  @direction='column'
+  local-class='header-sbom-page'
+  class='mb-2'
+>
+  <AkStack
+    @width='full'
+    @justifyContent='space-between'
+    @alignItems='center'
+    local-class='header-sbom-page-title'
+  >
+    <AkStack @direction='column' @spacing='0.5'>
+      <AkTypography @variant='h5' data-test-store-release-readiness-title>
+        {{t 'storeReleaseReadinessModule.pageTitle'}}
+      </AkTypography>
+
+      <AkTypography
+        @variant='body2'
+        data-test-store-release-readiness-description
+      >
+        {{t 'storeReleaseReadinessModule.pageDescription'}}
+      </AkTypography>
+    </AkStack>
+
+    <div local-class='search-input-container-width'>
+      <AkTextField
+        @placeholder={{t 'searchQuery'}}
+        @value={{@packageNameSearchQuery}}
+        {{on 'input' this.onSearchQueryChange}}
+        local-class='search-package-name-input'
+        data-test-store-release-readiness-search-input
+      >
+        <:leftAdornment>
+          <AkIcon @iconName='search' @color='textSecondary' />
+        </:leftAdornment>
+
+        <:rightAdornment>
+          {{#if @packageNameSearchQuery}}
+            <AkIconButton @size='small' {{on 'click' this.clearSearchInput}}>
+              <AkIcon @iconName='close' @color='textSecondary' />
+            </AkIconButton>
+          {{/if}}
+        </:rightAdornment>
+      </AkTextField>
+    </div>
+  </AkStack>
+
+  <AkDivider @color='dark' />
+
+  <AkStack
+    @alignItems='center'
+    @spacing='1'
+    local-class='header-sbom-page-sorting-filter'
+  >
+
+    <AkSelect
+      @onChange={{this.filterPlatformChange}}
+      @options={{this.platformObjects}}
+      @selected={{this.selectedPlatform}}
+      @verticalPosition='auto'
+      @triggerClass={{this.triggerClass}}
+      @dropdownClass={{this.dropDownClass}}
+      @optionTitle={{t 'platform'}}
+      @extra={{hash
+        selectedItem=this.selectedPlatform.key
+        showLabel=true
+        iconName='filter-list'
+      }}
+      @selectedItemComponent={{component 'sbom/app-list/filter-selected-item'}}
+      {{style width='auto'}}
+      class='select-platform-class'
+      data-test-store-release-readiness-platform-select
+      as |platformObject|
+    >
+      <AkStack @spacing='1' @alignItems='center'>
+        <AkRadio
+          @checked={{eq this.selectedPlatform.value platformObject.value}}
+        />
+
+        {{platformObject.key}}
+      </AkStack>
+    </AkSelect>
+
+    <AkSelect
+      @onChange={{this.filterRejectionRiskChange}}
+      @options={{this.rejectionRiskObjects}}
+      @selected={{this.selectedRejectionRisk}}
+      @verticalPosition='auto'
+      @triggerClass={{this.triggerClass}}
+      @dropdownClass={{this.dropDownClass}}
+      @optionTitle={{t 'storeReleaseReadinessModule.rejectionRisk'}}
+      @extra={{hash
+        selectedItem=this.selectedRejectionRisk.key
+        showLabel=true
+        iconName='filter-list'
+      }}
+      @selectedItemComponent={{component 'sbom/app-list/filter-selected-item'}}
+      {{style width='auto'}}
+      class='select-platform-class'
+      data-test-store-release-readiness-rejection-risk-select
+      as |riskObject|
+    >
+      <AkStack @spacing='1' @alignItems='center'>
+        <AkRadio
+          @checked={{eq this.selectedRejectionRisk.value riskObject.value}}
+        />
+
+        {{riskObject.key}}
+      </AkStack>
+    </AkSelect>
+
+    {{#if this.showClearFilter}}
+      <AkDivider
+        @direction='vertical'
+        @color='dark'
+        @height='32px'
+        local-class='divider'
+      />
+
+      <AkButton
+        @color='textSecondary'
+        @underline='none'
+        @leftIconClass={{this.clearFilterIconClass}}
+        {{on 'click' this.clearFilters}}
+        local-class='clear-filter'
+        data-test-store-release-readiness-clear-filter
+      >
+        <:leftIcon>
+          <AkIcon @iconName='close' @size='small' />
+        </:leftIcon>
+
+        <:default>
+          <AkTypography local-class='clear-filter-label'>
+            {{t 'clearFilter'}}
+          </AkTypography>
+        </:default>
+      </AkButton>
+    {{/if}}
+  </AkStack>
+</AkStack>

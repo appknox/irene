@@ -1,0 +1,39 @@
+<AkDrawer
+  @open={{@open}}
+  @onClose={{@onClose}}
+  @anchor='right'
+  data-test-store-release-readiness-report-drawer
+  as |dr|
+>
+  <div
+    {{did-insert this.syncReportOnOpen}}
+    {{did-update this.syncReportOnOpen @open}}
+    {{style width='420px'}}
+  >
+    <AkAppbar @justifyContent='space-between' as |ab|>
+      <AkTypography @variant='h5' @color='inherit'>
+        {{t 'downloadReport'}}
+      </AkTypography>
+
+      <AkIconButton
+        class={{ab.classes.defaultIconBtn}}
+        {{on 'click' dr.closeHandler}}
+        data-test-store-release-readiness-report-drawer-close
+      >
+        <AkIcon @iconName='close' />
+      </AkIconButton>
+    </AkAppbar>
+
+    <AkTypography class='px-3 py-2'>
+      {{t 'storeReleaseReadinessModule.downloadReportDescription'}}
+    </AkTypography>
+
+    <AkDivider />
+
+    <StoreReleaseReadiness::ScanResults::ReportDrawer::Item
+      @report={{this.report}}
+      @loading={{this.initialLoading}}
+      @onGenerate={{this.handleReportGenerationStarted}}
+    />
+  </div>
+</AkDrawer>

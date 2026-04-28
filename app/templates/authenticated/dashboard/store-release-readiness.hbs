@@ -1,0 +1,9 @@
+{{page-title (t 'storeReleaseReadiness')}}
+
+<PageWrapper>
+  {{#if @model.isStoreReleaseReadinessEnabled}}
+    {{outlet}}
+  {{else}}
+    <StoreReleaseReadiness::Upselling />
+  {{/if}}
+</PageWrapper>
