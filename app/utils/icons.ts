@@ -15,6 +15,7 @@ export const MaterialSymbolsSet = [
   'refresh',
   'arrow-left',
   'arrow-right',
+  'arrow-right-alt',
   'folder',
   'folder-outline',
   'graphic-eq',
@@ -85,6 +86,7 @@ export const MaterialSymbolsSet = [
   'menu',
   'sync-alt',
   'home',
+  'hourglass-top',
   'android',
   'windows',
   'mobile',
@@ -102,6 +104,7 @@ export const MaterialSymbolsSet = [
   'arrow-forward',
   'calendar-month',
   'content-paste',
+  'content-paste-search',
   'email',
   'send',
   'chevron-left',
@@ -168,6 +171,7 @@ export const MaterialSymbolsSet = [
   'replay',
   'add-column-right-outline-rounded',
   'cards-sharp',
+  'list-alt-check',
 ] as const;
 
 export const MdiIconsSet = [

@@ -36,6 +36,7 @@ interface AkSelectNamedArgs<O> extends PowerSelectArgs {
   labelTypographyColor?: AkSelectLabelTypographyColor;
   labelTypographyFontWeight?: TypographyFontWeight;
   verticalPosition?: 'above' | 'below' | 'auto';
+  searchFieldPosition?: 'before-options' | 'trigger';
   options: O[];
   searchPlaceholder?: string;
   searchEnabled?: boolean;

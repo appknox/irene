@@ -1,0 +1,43 @@
+<ul
+  class='ember-power-select-multiple-options'
+  local-class='ak-multi-select-root'
+  ...attributes
+>
+  <li
+    class='ember-power-select-multiple-option'
+    local-class='ak-multi-select-item'
+  >
+    <AkStack
+      @spacing='0.5'
+      @alignItems='center'
+      @width='full'
+      local-class='ak-multi-select-summary-inner'
+    >
+      <AkStack
+        @spacing='1'
+        @alignItems='center'
+        local-class='ak-multi-select-summary-prefix'
+      >
+        <AkIcon @iconName={{this.iconName}} @size='small' @color='primary' />
+
+        <AkTypography local-class='{{this.labelClass}}'>
+          {{this.filterLabel}}
+        </AkTypography>
+      </AkStack>
+
+      {{#if this.selectedLabels.length}}
+        <AkTypography local-class='{{this.labelClass}}'>
+          -
+        </AkTypography>
+
+        <AkTypography
+          @fontWeight='medium'
+          local-class='ak-multi-select-summary-selection {{this.labelClass}}'
+        >
+          {{this.selectionSummary}}
+        </AkTypography>
+      {{/if}}
+    </AkStack>
+  </li>
+</ul>
+<span class='ember-power-select-status-icon'></span>

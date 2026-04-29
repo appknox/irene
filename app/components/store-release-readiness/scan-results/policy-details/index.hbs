@@ -1,0 +1,302 @@
+<div
+  local-class='policy-details-root'
+  data-test-store-release-readiness-policy-details
+>
+  <header
+    data-test-store-release-readiness-policy-details-header
+    local-class='policy-details-header'
+  >
+    <div local-class='policy-details-header-root'>
+      <div local-class='policy-details-header-container'>
+        <AkBreadcrumbs::AutoTrail
+          class='mb-4'
+          data-test-store-release-readiness-policy-details-breadcrumbs
+        />
+
+        <AkStack
+          data-test-store-release-readiness-policy-details-summary
+          @alignItems='center'
+          @spacing='2'
+        >
+          <AkStack
+            @direction='column'
+            @spacing='0.5'
+            local-class='summary-container'
+          >
+            <AkTypography
+              data-test-store-release-readiness-policy-details-category
+              @variant='body2'
+              local-class='category-chip'
+            >
+              {{this.categoryLabel}}
+            </AkTypography>
+
+            <AkTypography
+              data-test-store-release-readiness-policy-details-title
+              {{style maxWidth='400px'}}
+              @variant='h5'
+            >
+              {{this.titleLabel}}
+            </AkTypography>
+          </AkStack>
+
+          <AkStack
+            @alignItems='flex-end'
+            @spacing='2'
+            @justifyContent='flex-end'
+          >
+            <StoreReleaseReadiness::ScanResults::AssessmentTable::StatusCell
+              @data={{this.statusData}}
+              @showOverriddenEditIcon={{false}}
+            />
+
+            {{#if this.showFailedEditChip}}
+              <AkStack
+                @alignItems='center'
+                @justifyContent='center'
+                local-class='status-action-chip'
+                {{on 'click' this.openConfirmationDrawer}}
+                data-test-store-release-readiness-policy-details-failed-edit-chip
+              >
+                <AkIcon @iconName='edit' @size='small' />
+              </AkStack>
+            {{/if}}
+
+            {{#if this.showOverrideDescriptionChip}}
+              <AkStack
+                @alignItems='center'
+                @justifyContent='center'
+                local-class='status-action-chip'
+                {{on 'click' this.openIgnoredDrawer}}
+                data-test-store-release-readiness-policy-details-override-description-chip
+              >
+                <AkIcon @iconName='description' @size='small' />
+              </AkStack>
+            {{/if}}
+          </AkStack>
+        </AkStack>
+      </div>
+    </div>
+  </header>
+
+  <div local-class='policy-details-body-container'>
+    <AkStack local-class='policy-section' @direction='column' class='mb-2'>
+      <div local-class='policy-content-title-container'>
+        <AkTypography
+          data-test-store-release-readiness-policy-details-violation-heading
+          @variant='subtitle1'
+        >
+          {{t 'storeReleaseReadinessModule.policyDetailViolationDetails'}}
+        </AkTypography>
+      </div>
+
+      <AkStack local-class='policy-content-container'>
+        <AkTypography
+          data-test-store-release-readiness-policy-details-violation
+          class='p-3'
+        >
+          {{this.violationDetailText}}
+        </AkTypography>
+      </AkStack>
+    </AkStack>
+
+    <AkStack local-class='policy-section' @direction='column' class='mb-2'>
+      <div local-class='policy-content-title-container'>
+        <AkTypography
+          data-test-store-release-readiness-policy-details-policy-reference-heading
+          @variant='subtitle1'
+        >
+          {{t 'storeReleaseReadinessModule.policyDetailPolicyReference'}}
+        </AkTypography>
+      </div>
+
+      <AkStack local-class='policy-content-container'>
+        <a
+          href={{@finding.guidelineReference}}
+          target='_blank'
+          rel='noopener noreferrer'
+          class='p-3'
+          data-test-store-release-readiness-policy-details-policy-reference
+        >
+          <AkTypography @color='primary' @underline='always' @tag='span'>
+            {{@finding.guidelineReference}}
+          </AkTypography>
+        </a>
+
+      </AkStack>
+    </AkStack>
+
+    {{#if (or this.showFailedEditChip this.showOverrideDescriptionChip)}}
+      <AkStack local-class='policy-section' @direction='column' class='mb-2'>
+        <div local-class='policy-content-title-container'>
+          <AkTypography
+            data-test-store-release-readiness-policy-details-explanation-heading
+            @variant='subtitle1'
+          >
+            {{t 'storeReleaseReadinessModule.policyDetailExplanation'}}
+          </AkTypography>
+        </div>
+
+        <div local-class='policy-content-container' class='p-3'>
+          <div
+            local-class='policy-explanation-table'
+            data-test-store-release-readiness-policy-details-explanation-table
+            role='table'
+            aria-label={{t
+              'storeReleaseReadinessModule.policyDetailExplanation'
+            }}
+          >
+            {{#each this.explanationRows as |row idx|}}
+              <div
+                local-class='policy-explanation-row'
+                role='row'
+                data-test-store-release-readiness-policy-details-explanation-row={{idx}}
+              >
+                <div
+                  local-class='policy-explanation-label'
+                  role='rowheader'
+                  data-test-store-release-readiness-policy-details-explanation-label
+                >
+                  <AkTypography @variant='body2' @fontWeight='bold'>
+                    {{row.label}}
+                  </AkTypography>
+                </div>
+                <div
+                  local-class='policy-explanation-value'
+                  role='cell'
+                  data-test-store-release-readiness-policy-details-explanation-value
+                >
+                  <AkTypography
+                    @variant='body2'
+                    local-class='policy-plain-text'
+                  >
+                    {{row.value}}
+                  </AkTypography>
+                </div>
+              </div>
+            {{/each}}
+          </div>
+        </div>
+      </AkStack>
+
+      <AkStack local-class='policy-section' @direction='column'>
+        <div local-class='policy-content-title-container'>
+          <AkTypography
+            data-test-store-release-readiness-policy-details-remediation-heading
+            @variant='subtitle1'
+          >
+            {{t 'storeReleaseReadinessModule.policyDetailRemediation'}}
+          </AkTypography>
+        </div>
+
+        <AkStack
+          @direction='column'
+          @spacing='1'
+          local-class='policy-content-container'
+          class='p-3'
+        >
+          <AkStack @direction='column' @spacing='1'>
+            {{#if this.remediationSteps.length}}
+              {{#each this.remediationSteps as |step idx|}}
+                <AkTypography
+                  data-test-store-release-readiness-policy-details-remediation-step
+                >
+                  {{add idx 1}}.
+                  {{step}}
+                </AkTypography>
+              {{/each}}
+            {{else}}
+              <AkTypography
+                data-test-store-release-readiness-policy-details-remediation-empty
+              >
+                —
+              </AkTypography>
+            {{/if}}
+          </AkStack>
+        </AkStack>
+      </AkStack>
+
+    {{else}}
+      <AkStack local-class='policy-section' @direction='column' class='mb-2'>
+        <div local-class='policy-content-title-container'>
+          <AkTypography
+            data-test-store-release-readiness-policy-details-explanation-heading
+            @variant='subtitle1'
+          >
+            {{t 'storeReleaseReadinessModule.policyDetailExplanation'}}
+          </AkTypography>
+        </div>
+
+        <AkStack local-class='policy-content-container' class='p-3'>
+          <AkTypography>
+            {{@finding.explanation}}
+          </AkTypography>
+        </AkStack>
+      </AkStack>
+    {{/if}}
+  </div>
+</div>
+
+<AkDrawer
+  @open={{this.showIgnoredDrawer}}
+  @onClose={{this.closeIgnoredDrawer}}
+  @anchor='right'
+  class='policy-details-wide-drawer'
+  data-test-store-release-readiness-policy-details-ignored-drawer
+  as |dr|
+>
+  <AkAppbar @justifyContent='space-between' as |ab|>
+    <AkTypography @variant='h5' @color='inherit'>
+      Ignored
+    </AkTypography>
+
+    <AkIconButton
+      class={{ab.classes.defaultIconBtn}}
+      {{on 'click' dr.closeHandler}}
+    >
+      <AkIcon @iconName='close' />
+    </AkIconButton>
+  </AkAppbar>
+
+  <StoreReleaseReadiness::ScanResults::PolicyDetails::OverrideDrawerContent
+    @onClose={{dr.closeHandler}}
+    @category={{this.categoryLabel}}
+    @title={{this.titleLabel}}
+    @statusData={{this.statusData}}
+    @isOverridden={{true}}
+    @finding={{@finding}}
+    @overrideComment={{@finding.overrideComment}}
+  />
+</AkDrawer>
+
+<AkDrawer
+  @open={{this.showConfirmationDrawer}}
+  @onClose={{this.closeConfirmationDrawer}}
+  @anchor='right'
+  class='policy-details-wide-drawer'
+  data-test-store-release-readiness-policy-details-confirmation-drawer
+  as |dr|
+>
+  <AkAppbar @justifyContent='space-between' as |ab|>
+    <AkTypography @variant='h5' @color='inherit'>
+      Confirmation
+    </AkTypography>
+
+    <AkIconButton
+      class={{ab.classes.defaultIconBtn}}
+      {{on 'click' dr.closeHandler}}
+    >
+      <AkIcon @iconName='close' />
+    </AkIconButton>
+  </AkAppbar>
+
+  <StoreReleaseReadiness::ScanResults::PolicyDetails::OverrideDrawerContent
+    @onClose={{dr.closeHandler}}
+    @category={{this.categoryLabel}}
+    @title={{this.titleLabel}}
+    @statusData={{this.statusData}}
+    @isOverridden={{false}}
+    @finding={{@finding}}
+    @overrideComment={{@finding.overrideComment}}
+  />
+</AkDrawer>

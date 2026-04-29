@@ -1,0 +1,125 @@
+<AkStack
+  @direction='column'
+  @width='full'
+  @spacing='2'
+  local-class='skeleton-root'
+  data-test-store-release-readiness-scan-results-skeleton
+>
+  {{! File summary card }}
+  <div local-class='panel' class='mb-4'>
+    <AkStack
+      class='p-2'
+      @alignItems='center'
+      @justifyContent='space-between'
+    >
+      <AkStack @alignItems='center' @spacing='1.5'>
+        <AppLogo @loading={{true}} />
+
+        <AkStack @direction='column' @spacing='0.5'>
+          <AkSkeleton @width='180px' @height='16px' />
+
+          <AkSkeleton @width='115px' @height='16px' />
+        </AkStack>
+      </AkStack>
+    </AkStack>
+
+    <AkDivider @color='dark' />
+
+    <div class='px-2 py-2'>
+      <AkStack
+        @direction='row'
+        @alignItems='center'
+        @justifyContent='space-between'
+        @width='full'
+      >
+        <AkStack @direction='row' @alignItems='center' @spacing='1'>
+          <AkSkeleton @width='115px' @height='16px' />
+
+          <AkDivider @direction='vertical' @height='26px' class='mx-1' />
+
+          <AkSkeleton @width='25px' @height='16px' />
+        </AkStack>
+
+        <AkSkeleton @width='100px' @height='16px' />
+      </AkStack>
+    </div>
+  </div>
+
+  {{! Scan results details card }}
+  <div local-class='panel' class='mb-4'>
+    <AkStack class='p-3' @direction='row' @justifyContent='space-between' @width='full'>
+      <AkStack @direction='column' @spacing='1' @width='full' {{style maxWidth='70%'}}>
+        <AkSkeleton @width='140px' @height='20px' />
+
+        <AkSkeleton @width='100%' @height='14px' />
+
+        <AkSkeleton @width='92%' @height='14px' />
+
+        <AkSkeleton @width='100%' @height='8px' {{style marginTop='8px'}} />
+      </AkStack>
+
+      <AkStack @direction='column' @alignItems='center' @spacing='0.5'>
+        <AkSkeleton @width='72px' @height='88px' @variant='rectangular' />
+
+        <AkSkeleton @width='96px' @height='14px' />
+      </AkStack>
+    </AkStack>
+
+    <AkDivider @color='dark' />
+
+    <AkStack
+      class='p-3'
+      @direction='row'
+      @alignItems='center'
+      @flexWrap='wrap'
+      @spacing='1'
+      @width='full'
+    >
+      {{#each (array 1 2 3 4) as |_idx|}}
+        <AkStack @direction='row' @alignItems='center' @spacing='0.5'>
+          <AkSkeleton @width='8px' @height='8px' @variant='circular' />
+
+          <AkSkeleton @width='72px' @height='14px' />
+        </AkStack>
+      {{/each}}
+    </AkStack>
+  </div>
+
+  {{! Assessment heading + table }}
+  <AkStack @direction='column' @spacing='0' @width='full'>
+    <div local-class='assessment-panel'>
+      <AkSkeleton @width='200px' @height='18px' />
+    </div>
+
+    <div local-class='panel'>
+      <AkStack
+        @direction='row'
+        @justifyContent='space-between'
+        @alignItems='center'
+        local-class='table-header'
+      >
+        <AkSkeleton @width='220px' @height='14px' />
+
+        <AkSkeleton @width='72px' @height='14px' />
+      </AkStack>
+
+      {{#each (array 1 2 3 4 5) as |rowIdx|}}
+        <AkStack
+          @direction='row'
+          @justifyContent='space-between'
+          @alignItems='center'
+          local-class='table-row'
+          data-test-store-release-readiness-scan-results-skeleton-row={{rowIdx}}
+        >
+          <AkStack @direction='column' @spacing='0.5' {{style maxWidth='70%'}}>
+            <AkSkeleton @width='160px' @height='12px' />
+
+            <AkSkeleton @width='260px' @height='14px' />
+          </AkStack>
+
+          <AkSkeleton @width='88px' @height='24px' @variant='rectangular' />
+        </AkStack>
+      {{/each}}
+    </div>
+  </AkStack>
+</AkStack>

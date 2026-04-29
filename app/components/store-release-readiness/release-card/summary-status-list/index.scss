@@ -1,0 +1,44 @@
+.summary-status-list {
+  width: 100%;
+  margin-top: 12px;
+  box-sizing: border-box;
+}
+
+.status-section {
+  width: 100%;
+}
+
+.status-row {
+  width: 100%;
+
+  &.status-row-nested {
+    margin-top: 10px;
+    padding-left: 1.125rem;
+    box-sizing: border-box;
+  }
+}
+
+.status-dot {
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.status-dot-failed {
+  background-color: #ff2151;
+}
+
+.status-dot-passed {
+  background-color: #10b981;
+}
+
+.status-dot-untested {
+  background-color: #d9d9d9;
+}
+
+.status-divider {
+  margin: 12px 0;
+  width: 100%;
+}

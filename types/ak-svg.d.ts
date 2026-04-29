@@ -90,6 +90,15 @@ export enum AkSvgComponentInvocationByNames {
   ScvNotStarted,
   ScvErrored,
   ApisCapturedIllustration,
+  HighRiskTower,
+  LowRiskTower,
+  MediumRiskTower,
+  HighRiskTowerBig,
+  LowRiskTowerBig,
+  MediumRiskTowerBig,
+  NotStartedTower,
+  StoreReleaseReadinessScanFailed,
+  StoreRealeaseReadinessUpselling,
 }
 
 export enum AkSvgComponentInvocationByPaths {
