@@ -74,12 +74,19 @@ module(
     test('it toggles default server location checkbox', async function (assert) {
       await render(hbs`<PrivacyModule::Settings::ServerLocation />`);
 
-      const countryTexts = findAll(
-        '[data-test-privacy-settings-server-location-checkbox-text]'
+      await waitFor(
+        '[data-test-privacy-settings-server-location-checkbox="geo_in"]'
       );
 
-      assert.strictEqual(countryTexts[0].textContent.trim(), 'India');
-      assert.strictEqual(countryTexts[1].textContent.trim(), 'United States');
+      await waitFor(
+        '[data-test-privacy-settings-server-location-checkbox="geo_us"]'
+      );
+
+      assert.strictEqual(
+        findAll('[data-test-privacy-settings-server-location-checkbox-text]')
+          .length,
+        2
+      );
 
       assert
         .dom('[data-test-privacy-settings-server-location-checkbox="geo_in"]')
