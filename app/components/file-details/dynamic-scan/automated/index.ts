@@ -13,6 +13,7 @@ import type DsAutomationPreferenceModel from 'irene/models/ds-automation-prefere
 import type OrganizationService from 'irene/services/organization';
 import type DynamicscanModel from 'irene/models/dynamicscan';
 import type LoggerService from 'irene/services/logger';
+import type EventBusService from 'irene/services/event-bus';
 
 export interface FileDetailsDastAutomatedSignature {
   Args: {
@@ -28,6 +29,7 @@ export default class FileDetailsDastAutomated extends Component<FileDetailsDastA
   @service declare organization: OrganizationService;
   @service('notifications') declare notify: NotificationService;
   @service declare logger: LoggerService;
+  @service declare eventBus: EventBusService;
 
   @tracked automationPreference: DsAutomationPreferenceModel | null = null;
   @tracked lastAutomatedDynamicScan: DynamicscanModel | null = null;
@@ -37,6 +39,12 @@ export default class FileDetailsDastAutomated extends Component<FileDetailsDastA
 
     this.getDsAutomationPreference.perform();
     this.getLastAutomatedDynamicScan.perform();
+
+    this.eventBus.on(
+      'ws:dynamicscan:update',
+      this,
+      this.handleDynamicScanUpdate
+    );
   }
 
   get file() {
@@ -82,7 +90,14 @@ export default class FileDetailsDastAutomated extends Component<FileDetailsDastA
     this.getLastAutomatedDynamicScan.perform();
   }
 
-  getLastAutomatedDynamicScan = task(async () => {
+  @action
+  handleDynamicScanUpdate(dynamicscan: DynamicscanModel) {
+    if (String(dynamicscan.file.get('id')) === String(this.file.id)) {
+      this.getLastAutomatedDynamicScan.perform();
+    }
+  }
+
+  getLastAutomatedDynamicScan = task({ restartable: true }, async () => {
     try {
       this.lastAutomatedDynamicScan =
         await this.file.getFileLastAutomatedDynamicScan();
@@ -90,6 +105,16 @@ export default class FileDetailsDastAutomated extends Component<FileDetailsDastA
       this.logger.error(parseError(error, this.intl.t('pleaseTryAgain')));
     }
   });
+
+  willDestroy(): void {
+    super.willDestroy();
+
+    this.eventBus.off(
+      'ws:dynamicscan:update',
+      this,
+      this.handleDynamicScanUpdate
+    );
+  }
 }
 
 declare module '@glint/environment-ember-loose/registry' {

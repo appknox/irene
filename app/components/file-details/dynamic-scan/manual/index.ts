@@ -9,6 +9,7 @@ import type IntlService from 'ember-intl/services/intl';
 import type FileModel from 'irene/models/file';
 import type DynamicScanService from 'irene/services/dynamic-scan';
 import type DynamicscanModel from 'irene/models/dynamicscan';
+import type EventBusService from 'irene/services/event-bus';
 
 export interface FileDetailsDastManualSignature {
   Args: {
@@ -21,6 +22,7 @@ export default class FileDetailsDastManual extends Component<FileDetailsDastManu
   @service('dynamic-scan') declare dsService: DynamicScanService;
   @service declare intl: IntlService;
   @service('notifications') declare notify: NotificationService;
+  @service declare eventBus: EventBusService;
 
   @tracked lastManualDynamicScan: DynamicscanModel | null = null;
 
@@ -35,6 +37,12 @@ export default class FileDetailsDastManual extends Component<FileDetailsDastManu
     });
 
     this.getLastDynamicScans.perform();
+
+    this.eventBus.on(
+      'ws:dynamicscan:update',
+      this,
+      this.handleDynamicScanUpdate
+    );
   }
 
   get file() {
@@ -71,11 +79,28 @@ export default class FileDetailsDastManual extends Component<FileDetailsDastManu
     this.getLastDynamicScans.perform();
   }
 
-  getLastDynamicScans = task(async () => {
+  @action
+  handleDynamicScanUpdate(dynamicscan: DynamicscanModel) {
+    if (String(dynamicscan.file.get('id')) === String(this.file.id)) {
+      this.getLastDynamicScans.perform();
+    }
+  }
+
+  getLastDynamicScans = task({ restartable: true }, async () => {
     this.lastManualDynamicScan = await waitForPromise(
       this.file.getFileLastManualDynamicScan()
     );
   });
+
+  willDestroy(): void {
+    super.willDestroy();
+
+    this.eventBus.off(
+      'ws:dynamicscan:update',
+      this,
+      this.handleDynamicScanUpdate
+    );
+  }
 }
 
 declare module '@glint/environment-ember-loose/registry' {

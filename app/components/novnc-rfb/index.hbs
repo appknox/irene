@@ -1,6 +1,7 @@
 <div
   data-test-NovncRfb-canvasContainer
   data-test-cy='NovncRfb-canvasContainer'
+  data-contain-canvas={{if @containCanvas 'true' 'false'}}
   local-class='novnc-rfb'
   {{did-insert this.onDidInsertElement}}
   {{will-destroy this.onWillDestroyElement}}
