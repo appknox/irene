@@ -169,15 +169,37 @@ module('Integration | Component | storeknox/fake-apps', function (hooks) {
 
     await render(hbs`<Storeknox::FakeApps />`);
 
-    assert
-      .dom('[data-test-storeknoxInventory-appListTable-tableEmpty]')
-      .exists();
+    assert.dom('[data-test-storeknoxFakeAppsEmptyList]').exists();
 
     assert
-      .dom(
-        '[data-test-storeknoxInventory-appListTable-tableEmptyHeaderDescription]'
-      )
-      .hasText(t('storeknox.noAppMatchesYourCurrentFilter'));
+      .dom('[data-test-storeknoxFakeAppsEmptyListHeaderText]')
+      .hasText(t('storeknox.noSuspectedBrandAbuseFakeAppsFound'));
+
+    assert
+      .dom('[data-test-storeknoxFakeAppsEmptyListDescription]')
+      .hasText(t('storeknox.noSuspectedBrandAbuseFakeAppsFoundDescription'));
+  });
+
+  test('it shows the empty state with search-specific description when no apps match a search query', async function (assert) {
+    this.skAppsService.skFakeApps = [];
+    this.skAppsService.skFakeAppsCount = 0;
+    this.skAppsService.isFetchingSkFakeApps = false;
+
+    await render(hbs`<Storeknox::FakeApps />`);
+
+    await fillIn('[data-test-storeknoxFakeApps-searchInput]', 'whatsapp');
+
+    assert.dom('[data-test-storeknoxFakeAppsEmptyList]').exists();
+
+    assert
+      .dom('[data-test-storeknoxFakeAppsEmptyListHeaderText]')
+      .hasText(t('storeknox.noSuspectedBrandAbuseFakeAppsFound'));
+
+    assert
+      .dom('[data-test-storeknoxFakeAppsEmptyListDescription]')
+      .hasText(
+        t('storeknox.noSuspectedBrandAbuseFakeAppsFoundDescriptionWithSearch')
+      );
   });
 
   test('it hides pagination when in loading state', async function (assert) {

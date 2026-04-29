@@ -1,0 +1,26 @@
+<AkStack
+  @direction='column'
+  @alignItems='center'
+  local-class='empty-container'
+  data-test-storeknoxFakeAppsEmptyList
+>
+  <AkSvg::ProjectListEmpty data-test-storeknoxFakeAppsEmptyListIllustration />
+
+  <AkTypography
+    @variant='h5'
+    @gutterBottom={{true}}
+    local-class='header'
+    data-test-storeknoxFakeAppsEmptyListHeaderText
+  >
+    {{t 'storeknox.noSuspectedBrandAbuseFakeAppsFound'}}
+  </AkTypography>
+
+  {{#if @subText}}
+    <AkTypography
+      local-class='body-text'
+      data-test-storeknoxFakeAppsEmptyListDescription
+    >
+      {{@subText}}
+    </AkTypography>
+  {{/if}}
+</AkStack>
