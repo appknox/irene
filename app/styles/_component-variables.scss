@@ -2325,6 +2325,10 @@ body {
     --neutral-grey-100
   );
 
+  // variables for storeknox/fake-apps/empty-list
+  --storeknox-fake-apps-empty-list-border-color: var(--neutral-grey-100);
+  --storeknox-fake-apps-empty-list-background-color: var(--common-white);
+
   // variables for storeknox/fake-apps/fake-app-list
   --storeknox-fake-apps-fake-apps-list-background-color: var(--common-white);
   --storeknox-fake-apps-fake-apps-list-background-light: var(

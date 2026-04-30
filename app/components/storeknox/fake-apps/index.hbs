@@ -74,9 +74,7 @@
   as |pgc|
 >
   {{#if this.showEmptyState}}
-    <Storeknox::Inventory::AppList::Table::Empty
-      @subText={{t 'storeknox.noAppMatchesYourCurrentFilter'}}
-    />
+    <Storeknox::FakeApps::EmptyList @subText={{this.emptyStateSubText}} />
   {{/if}}
 
   <div local-class='fake-apps-grid'>

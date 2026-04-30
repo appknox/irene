@@ -16,30 +16,6 @@ export default class StoreknoxFakeAppsComponent extends Component {
 
   @tracked searchQuery = '';
 
-  @action
-  onSearchQueryChange(event: Event) {
-    this.searchQuery = (event.target as HTMLInputElement).value;
-
-    debounceTask(this, 'setSearchQuery', this.searchQuery, 500);
-  }
-
-  setSearchQuery(query: string) {
-    this.skApps.searchQuery = query;
-    this.skApps.fetchFakeApps.perform();
-  }
-
-  @action
-  clearSearchInput() {
-    this.searchQuery = '';
-    this.skApps.searchQuery = '';
-    this.skApps.fetchFakeApps.perform();
-  }
-
-  willDestroy() {
-    super.willDestroy();
-    this.skApps.searchQuery = '';
-  }
-
   get skFakeApps() {
     return this.skApps.skFakeApps;
   }
@@ -50,6 +26,24 @@ export default class StoreknoxFakeAppsComponent extends Component {
 
   get isFetchingTableData() {
     return this.skApps.isFetchingSkFakeApps;
+  }
+
+  get hasFilters() {
+    return this.searchQuery.length > 0;
+  }
+
+  get showNoAppsWithoutFilters() {
+    return (
+      this.totalAppsCount === 0 && !this.hasFilters && !this.isFetchingTableData
+    );
+  }
+
+  get emptyStateSubText() {
+    return this.hasFilters
+      ? this.intl.t(
+          'storeknox.noSuspectedBrandAbuseFakeAppsFoundDescriptionWithSearch'
+        )
+      : this.intl.t('storeknox.noSuspectedBrandAbuseFakeAppsFoundDescription');
   }
 
   get showEmptyState() {
@@ -96,6 +90,25 @@ export default class StoreknoxFakeAppsComponent extends Component {
     ];
   }
 
+  setSearchQuery(query: string) {
+    this.skApps.searchQuery = query;
+    this.skApps.fetchFakeApps.perform();
+  }
+
+  @action
+  onSearchQueryChange(event: Event) {
+    this.searchQuery = (event.target as HTMLInputElement).value;
+
+    debounceTask(this, 'setSearchQuery', this.searchQuery, 500);
+  }
+
+  @action
+  clearSearchInput() {
+    this.searchQuery = '';
+    this.skApps.searchQuery = '';
+    this.skApps.fetchFakeApps.perform();
+  }
+
   @action
   onItemPerPageChange(args: PaginationProviderActionsArgs) {
     this.router.transitionTo({
@@ -114,6 +127,11 @@ export default class StoreknoxFakeAppsComponent extends Component {
         app_offset: offset,
       },
     });
+  }
+
+  willDestroy() {
+    super.willDestroy();
+    this.skApps.searchQuery = '';
   }
 }
 
