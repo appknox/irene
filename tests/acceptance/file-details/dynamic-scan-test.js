@@ -3,6 +3,7 @@ import {
   currentURL,
   find,
   findAll,
+  settled,
   visit,
   waitUntil,
 } from '@ember/test-helpers';
@@ -166,6 +167,7 @@ class NotificationsStub extends Service {
 
 // helper function to create a dynamic scan status helper
 function createDynamicScanStatusHelper(owner, dynamicscan) {
+  const store = owner.lookup('service:store');
   const websocket = owner.lookup('service:websocket');
 
   return async function assertScanStatus(
@@ -177,16 +179,31 @@ function createDynamicScanStatusHelper(owner, dynamicscan) {
     // Update server status
     dynamicscan.update({ status });
 
-    // Simulate websocket message
-    websocket.onObject({ id: dynamicscan.id, type: 'dynamicscan' });
+    websocket.onConnect();
 
-    // Wait for status text to update
+    websocket.onModelNotification({
+      model_name: 'dynamicscan',
+      data: dynamicscan.toJSON(),
+    });
+
+    await settled();
+
     await waitUntil(() => {
+      const storeScan = store.peekRecord('dynamicscan', String(dynamicscan.id));
       const statusEl = find('[data-test-fileDetails-dynamicScan-statusChip]');
+      const actionEl = expectedAction
+        ? find(`[data-test-fileDetails-dynamicScanAction="${expectedAction}"]`)
+        : null;
 
-      return expectedStatusText
+      const statusMatches = expectedStatusText
         ? statusEl?.textContent.includes(expectedStatusText)
         : !statusEl;
+
+      return (
+        storeScan?.status === status &&
+        statusMatches &&
+        (!expectedAction || !actionEl?.disabled)
+      );
     });
 
     // Assert status chip text

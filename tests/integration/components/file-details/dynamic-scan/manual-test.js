@@ -3,6 +3,7 @@ import {
   find,
   findAll,
   render,
+  settled,
   triggerEvent,
 } from '@ember/test-helpers';
 
@@ -60,6 +61,7 @@ module(
         project: '1',
         profile: profile.id,
         is_active: true,
+        min_os_version: '15.0',
         last_automated_dynamic_scan: null,
         last_manual_dynamic_scan: null,
       });
@@ -67,6 +69,7 @@ module(
       const project = this.server.create('project', {
         last_file: file,
         id: '1',
+        platform: ENUMS.PLATFORM.IOS,
       });
 
       const availableDevices = this.server.createList(
@@ -484,6 +487,318 @@ module(
 
       // Verify final selection
       assert.dom(deviceSelectRadioSelector, deviceElemList[1]).isChecked();
+    });
+
+    test('it enables start after selecting a visible available specific device', async function (assert) {
+      this.devicePreference.update({
+        ds_manual_device_selection: ENUMS.DS_MANUAL_DEVICE_SELECTION.ANY_DEVICE,
+        ds_manual_device_identifier: '',
+      });
+
+      this.server.get(
+        '/v2/profiles/:id/ds_manual_device_preference',
+        (schema, req) => {
+          return schema.dsManualDevicePreferences
+            .find(`${req.params.id}`)
+            ?.toJSON();
+        }
+      );
+
+      this.server.put(
+        '/v2/profiles/:id/ds_manual_device_preference',
+        (schema, req) => {
+          return schema.db.dsManualDevicePreferences.update(
+            req.params.id,
+            JSON.parse(req.requestBody)
+          );
+        }
+      );
+
+      this.server.get(
+        '/v2/projects/:id/available_manual_devices',
+        (schema, req) => {
+          const hasTablePagination = 'limit' in req.queryParams;
+          const results = hasTablePagination
+            ? schema.availableManualDevices.all().models
+            : [];
+
+          return { count: results.length, next: null, previous: null, results };
+        }
+      );
+
+      this.server.get('/profiles/:id', (schema, req) =>
+        schema.profiles.find(`${req.params.id}`)?.toJSON()
+      );
+
+      this.server.get('/profiles/:id/api_scan_options', (_, req) => {
+        return { ds_api_capture_filters: [], id: req.params.id };
+      });
+
+      this.server.get('/profiles/:id/proxy_settings', (_, req) => {
+        return { id: req.params.id, host: '', port: '', enabled: false };
+      });
+
+      await render(hbs`
+        <FileDetails::DynamicScan::Manual @file={{this.file}} @dynamicScanText={{this.dynamicScanText}} />
+      `);
+
+      await click('[data-test-fileDetails-dynamicScanAction="startBtn"]');
+
+      await selectChoose(
+        `[data-test-fileDetails-dynamicScanDrawer-manualDast-devicePrefSelect] .${classes.trigger}`,
+        t(
+          dsManualDevicePref([ENUMS.DS_MANUAL_DEVICE_SELECTION.SPECIFIC_DEVICE])
+        )
+      );
+
+      assert
+        .dom('[data-test-fileDetails-dynamicScanDrawer-startBtn]')
+        .isDisabled();
+
+      const deviceElemList = findAll(
+        '[data-test-fileDetails-dynamicScanDrawer-devicePrefTable-row]'
+      );
+
+      assert.strictEqual(deviceElemList.length, this.availableDevices.length);
+
+      const deviceSelectRadioSelector =
+        '[data-test-fileDetails-dynamicScanDrawer-devicePrefTable-deviceSelectRadioInput]';
+
+      await click(deviceElemList[0].querySelector(deviceSelectRadioSelector));
+
+      assert
+        .dom('[data-test-fileDetails-dynamicScanDrawer-startBtn]')
+        .isNotDisabled();
+    });
+
+    test.each(
+      'it sends the right platform_version range based on the app minOsVersion',
+      [
+        {
+          minOsVersion: '15.0',
+          expectedMin: '15.0',
+          expectedMax: '16.99.99',
+          expectedDeviceIdentifiers: ['IOS166DEVICE', 'IOS16DEVICE'],
+          excludedDeviceIdentifiers: ['IOS14DEVICE', 'IOS17DEVICE'],
+        },
+        {
+          minOsVersion: '16.7',
+          expectedMin: '16.7',
+          expectedMax: '16.99.99',
+          expectedDeviceIdentifiers: ['IOS16DEVICE'],
+          excludedDeviceIdentifiers: [
+            'IOS14DEVICE',
+            'IOS166DEVICE',
+            'IOS17DEVICE',
+          ],
+        },
+        {
+          minOsVersion: '17.0',
+          expectedMin: '17.0',
+          expectedMax: undefined,
+          expectedDeviceIdentifiers: ['IOS17DEVICE'],
+          excludedDeviceIdentifiers: [
+            'IOS14DEVICE',
+            'IOS166DEVICE',
+            'IOS16DEVICE',
+          ],
+        },
+      ],
+      async function (
+        assert,
+        {
+          minOsVersion,
+          expectedMin,
+          expectedMax,
+          expectedDeviceIdentifiers,
+          excludedDeviceIdentifiers,
+        }
+      ) {
+        this.file.set('minOsVersion', minOsVersion);
+
+        const tooOldDevice = this.server.create('available-manual-device', {
+          device_identifier: 'IOS14DEVICE',
+          platform_version: '14.8',
+          platform: ENUMS.PLATFORM.IOS,
+        });
+
+        const oldLegacyDevice = this.server.create('available-manual-device', {
+          device_identifier: 'IOS166DEVICE',
+          platform_version: '16.6',
+          platform: ENUMS.PLATFORM.IOS,
+        });
+
+        const legacyDevice = this.server.create('available-manual-device', {
+          device_identifier: 'IOS16DEVICE',
+          platform_version: '16.7.10',
+          platform: ENUMS.PLATFORM.IOS,
+        });
+
+        const modernDevice = this.server.create('available-manual-device', {
+          device_identifier: 'IOS17DEVICE',
+          platform_version: '17.0',
+          platform: ENUMS.PLATFORM.IOS,
+        });
+
+        const allDevices = [
+          tooOldDevice,
+          oldLegacyDevice,
+          legacyDevice,
+          modernDevice,
+        ];
+
+        let drawerQueryParams;
+        let tableQueryParams;
+
+        this.server.get(
+          '/v2/profiles/:id/ds_manual_device_preference',
+          (schema, req) => {
+            return schema.dsManualDevicePreferences
+              .find(`${req.params.id}`)
+              ?.toJSON();
+          }
+        );
+
+        // Mimic moriarty2's padded-version range filter so the mock
+        // honors platform_version_min/max the same way prod does.
+        const padVersion = (v) =>
+          (v ?? '')
+            .split(' ', 1)[0]
+            .split('.')
+            .map((part) => part.padStart(11, '0'))
+            .join('.');
+
+        this.server.get(
+          '/v2/projects/:id/available_manual_devices',
+          (schema, req) => {
+            if ('limit' in req.queryParams) {
+              tableQueryParams = req.queryParams;
+            } else {
+              drawerQueryParams = req.queryParams;
+            }
+
+            const min = req.queryParams.platform_version_min;
+            const max = req.queryParams.platform_version_max;
+
+            const results = allDevices.filter((device) => {
+              const padded = padVersion(device.platform_version);
+
+              if (min && padded < padVersion(min)) {
+                return false;
+              }
+
+              if (max && padded > padVersion(max)) {
+                return false;
+              }
+
+              return true;
+            });
+
+            return {
+              count: results.length,
+              next: null,
+              previous: null,
+              results,
+            };
+          }
+        );
+
+        this.server.get('/profiles/:id', (schema, req) =>
+          schema.profiles.find(`${req.params.id}`)?.toJSON()
+        );
+
+        this.server.get('/profiles/:id/api_scan_options', (_, req) => {
+          return { ds_api_capture_filters: [], id: req.params.id };
+        });
+
+        this.server.get('/profiles/:id/proxy_settings', (_, req) => {
+          return { id: req.params.id, host: '', port: '', enabled: false };
+        });
+
+        await render(hbs`
+          <FileDetails::DynamicScan::Manual @file={{this.file}} @dynamicScanText={{this.dynamicScanText}} />
+        `);
+
+        await click('[data-test-fileDetails-dynamicScanAction="startBtn"]');
+
+        assert.ok(drawerQueryParams, 'drawer query params should be captured');
+        assert.ok(tableQueryParams, 'table query params should be captured');
+
+        assert.strictEqual(
+          drawerQueryParams?.platform_version_min,
+          expectedMin
+        );
+        assert.strictEqual(tableQueryParams?.platform_version_min, expectedMin);
+
+        assert.strictEqual(
+          drawerQueryParams?.platform_version_max,
+          expectedMax
+        );
+        assert.strictEqual(tableQueryParams?.platform_version_max, expectedMax);
+
+        const deviceElemList = findAll(
+          '[data-test-fileDetails-dynamicScanDrawer-devicePrefTable-row]'
+        );
+
+        const renderedDeviceText = deviceElemList
+          .map((element) => element.textContent)
+          .join(' ');
+
+        assert.strictEqual(
+          deviceElemList.length,
+          expectedDeviceIdentifiers.length
+        );
+
+        expectedDeviceIdentifiers.forEach((identifier) => {
+          assert.true(
+            renderedDeviceText.includes(identifier),
+            `${identifier} should be visible`
+          );
+        });
+
+        excludedDeviceIdentifiers.forEach((identifier) => {
+          assert.false(
+            renderedDeviceText.includes(identifier),
+            `${identifier} should not be visible`
+          );
+        });
+      }
+    );
+
+    test('it reloads the active manual scan from realtime updates', async function (assert) {
+      await render(hbs`
+        <FileDetails::DynamicScan::Manual @file={{this.file}} @dynamicScanText={{this.dynamicScanText}} />
+      `);
+
+      assert
+        .dom('[data-test-fileDetails-dynamicScanAction="startBtn"]')
+        .exists();
+
+      const queuedScan = this.server.create('dynamicscan', {
+        file: this.file.id,
+        mode: ENUMS.DYNAMIC_MODE.MANUAL,
+        status: ENUMS.DYNAMIC_SCAN_STATUS.IN_QUEUE,
+        ended_on: null,
+      });
+
+      const store = this.owner.lookup('service:store');
+      const eventBus = this.owner.lookup('service:event-bus');
+
+      const dynamicscan = store.push(
+        store.normalize('dynamicscan', queuedScan.toJSON())
+      );
+
+      eventBus.trigger('ws:dynamicscan:update', dynamicscan);
+
+      await settled();
+
+      assert
+        .dom('[data-test-fileDetails-dynamicScanAction="cancelBtn"]')
+        .exists();
+
+      assert
+        .dom('[data-test-fileDetails-dynamicScanAction="startBtn"]')
+        .doesNotExist();
     });
 
     test.each(

@@ -7,43 +7,76 @@ import RFB from '@novnc/novnc/lib/rfb';
 export interface NovncRfbSignature {
   Args: {
     deviceFarmURL: string | null;
-    deviceFarmPassword: string;
+    deviceFarmPassword?: string | null;
     allowInteraction?: boolean;
+    containCanvas?: boolean;
   };
 }
 
 export default class NovncRfbComponent extends Component<NovncRfbSignature> {
   @tracked rfb: any = null;
+  connectHandler: ((ev: CustomEvent) => void) | null = null;
 
   @action
   onDidInsertElement(element: HTMLDivElement) {
-    this.rfb = new RFB(element, this.args.deviceFarmURL, {
-      credentials: {
-        password: this.args.deviceFarmPassword,
-      },
+    const url = this.args.deviceFarmURL;
+
+    if (!url) {
+      return;
+    }
+
+    try {
+      const password = this.args.deviceFarmPassword;
+      const options = password ? { credentials: { password } } : undefined;
+
+      this.rfb = new RFB(element, url, options);
+    } catch {
+      return;
+    }
+
+    const rfb = this.rfb;
+
+    if (!rfb) {
+      return;
+    }
+
+    rfb.viewOnly = !this.args.allowInteraction;
+
+    // One-shot: scale the viewport once the handshake completes, then
+    // self-remove. Tracked on the instance so willDestroy can also remove
+    // it if teardown beats the handshake.
+    const connectHandler = (this.connectHandler = () => {
+      rfb.removeEventListener('connect', connectHandler);
+
+      rfb.scaleViewport = true;
+      rfb._display.autoscale(element.offsetWidth, element.offsetHeight);
     });
 
-    this.rfb.viewOnly = !this.args.allowInteraction;
-
-    this.rfb.addEventListener('connect', () => {
-      const sizing_element = element;
-
-      this.rfb.scaleViewport = true;
-
-      this.rfb._display.autoscale(
-        sizing_element.offsetWidth,
-        sizing_element.offsetHeight
-      );
-    });
+    rfb.addEventListener('connect', connectHandler);
   }
 
   @action
   onWillDestroyElement() {
-    this.rfb?.removeEventListener('connect', () => {
-      this.rfb?.disconnect();
+    if (!this.rfb) {
+      return;
+    }
 
-      this.rfb = null;
-    });
+    // RFB.disconnect() only tears down its internal socket listeners; it
+    // does not clear listeners registered via addEventListener. Remove
+    // ours explicitly so the handler cannot fire against a destroyed
+    // element if the handshake completes mid-teardown.
+    if (this.connectHandler) {
+      this.rfb.removeEventListener('connect', this.connectHandler);
+    }
+
+    try {
+      this.rfb.disconnect();
+    } catch {
+      // already disconnected
+    }
+
+    this.rfb = null;
+    this.connectHandler = null;
   }
 }
 
