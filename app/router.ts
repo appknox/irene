@@ -1,5 +1,6 @@
 import EmberRouter from '@ember/routing/router';
 import config from './config/environment';
+import { addDocfyRoutes } from '@docfy/ember';
 
 type RouterLocationType = 'history' | 'hash' | 'none' | 'auto';
 
@@ -9,6 +10,8 @@ export default class Router extends EmberRouter {
 }
 
 Router.map(function () {
+  addDocfyRoutes(this);
+
   this.route('login');
 
   this.route('saml2', function () {
