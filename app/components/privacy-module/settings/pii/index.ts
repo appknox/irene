@@ -152,18 +152,24 @@ export default class PrivacyModuleSettingsPiiComponent extends Component {
       this.customRegexList = this.piiSettings?.customRegex ?? [];
       this.piiVisible = !this.piiSettings.maskPii;
 
-      this.piiSettingsList = this.piiSettings.piiSettings.map((item) => {
-        const camelKey = item.settings_parameter
-          .replace(/^pii_/, '')
-          .replace(/_([a-z])/g, (_, c) => c.toUpperCase());
+      this.piiSettingsList = this.piiSettings.piiSettings
+        .map((item) => {
+          const camelKey = item.settings_parameter
+            .replace(/^pii_/, '')
+            .replace(/_([a-z])/g, (_, c) => c.toUpperCase());
 
-        return {
-          ...item,
-          label:
-            this.intl.t(`privacyModule.piiTypes.${camelKey}`) ||
-            item.settings_parameter,
-        };
-      });
+          return {
+            ...item,
+            label:
+              this.intl.t(`privacyModule.piiTypes.${camelKey}`) ||
+              item.settings_parameter,
+          };
+        })
+        .sort((a, b) => {
+          const aIsGlobal = a.label?.startsWith('Global') ? 0 : 1;
+          const bIsGlobal = b.label?.startsWith('Global') ? 0 : 1;
+          return aIsGlobal - bIsGlobal;
+        });
 
       this.syncOriginalState();
     } catch (err) {

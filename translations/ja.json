@@ -1384,7 +1384,10 @@
       "inGstin": "India GST Identification Number",
       "fiPersonalIdentityCode": "Finland Personal Identity Code",
       "krRrn": "Korea Resident Registration Number",
-      "thTnin": "Thailand National ID Number"
+      "thTnin": "Thailand National ID Number",
+      "secretKeys": "Secret Keys",
+      "url": "Global URL",
+      "organization": "Global Organization Name"
     },
     "piiVisibility": "PII Visibility",
     "piiVisibilityDesc": "This toggle controls the display of PII details found. If enabled, the PII data found will be persistently displayed in the UI and in the downloadable PDF report.",
