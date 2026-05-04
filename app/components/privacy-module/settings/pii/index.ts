@@ -13,6 +13,7 @@ import type PrivacyModuleService from 'irene/services/privacy-module';
 interface PiiSettingItem {
   value: boolean;
   settings_parameter: string;
+  resolvedKey?: string;
   label?: string;
 }
 
@@ -44,14 +45,14 @@ export default class PrivacyModuleSettingsPiiComponent extends Component {
   }
 
   @action
-  togglePiiVisible(event: Event, checked?: boolean) {
+  togglePiiVisible(_event: Event, checked?: boolean) {
     this.piiVisible = checked ?? false;
 
     this.toggleSetting('mask_pii', !this.piiVisible);
   }
 
   @action
-  togglePiiItem(key: string, event: Event, checked?: boolean) {
+  togglePiiItem(key: string, _event: Event, checked?: boolean) {
     this.toggleSetting(key, checked);
   }
 
@@ -158,16 +159,22 @@ export default class PrivacyModuleSettingsPiiComponent extends Component {
             .replace(/^pii_/, '')
             .replace(/_([a-z])/g, (_, c) => c.toUpperCase());
 
+          const globalKey = `global${camelKey.charAt(0).toUpperCase()}${camelKey.slice(1)}`;
+          const resolvedKey = this.intl.exists(`privacyModule.piiTypes.${globalKey}`)
+            ? globalKey
+            : camelKey;
+
           return {
             ...item,
+            resolvedKey,
             label:
-              this.intl.t(`privacyModule.piiTypes.${camelKey}`) ||
+              this.intl.t(`privacyModule.piiTypes.${resolvedKey}`) ||
               item.settings_parameter,
           };
         })
         .sort((a, b) => {
-          const aIsGlobal = a.label?.startsWith('Global') ? 0 : 1;
-          const bIsGlobal = b.label?.startsWith('Global') ? 0 : 1;
+          const aIsGlobal = a.resolvedKey.startsWith('global') ? 0 : 1;
+          const bIsGlobal = b.resolvedKey.startsWith('global') ? 0 : 1;
           return aIsGlobal - bIsGlobal;
         });
 
