@@ -160,7 +160,9 @@ export default class PrivacyModuleSettingsPiiComponent extends Component {
             .replace(/_([a-z])/g, (_, c) => c.toUpperCase());
 
           const globalKey = `global${camelKey.charAt(0).toUpperCase()}${camelKey.slice(1)}`;
-          const resolvedKey = this.intl.exists(`privacyModule.piiTypes.${globalKey}`)
+          const resolvedKey = this.intl.exists(
+            `privacyModule.piiTypes.${globalKey}`
+          )
             ? globalKey
             : camelKey;
 
