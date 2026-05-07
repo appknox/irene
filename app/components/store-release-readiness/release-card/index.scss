@@ -1,0 +1,117 @@
+.release-card {
+  background-color: var(
+    --store-release-readiness-release-card-background-color
+  );
+  border: 1px solid var(--store-release-readiness-release-card-border-color);
+  border-radius: var(--store-release-readiness-release-card-border-radius);
+  height: 100%;
+  box-sizing: border-box;
+  overflow: hidden;
+}
+
+.card-header {
+  background-color: var(
+    --store-release-readiness-release-card-header-background-color
+  );
+  padding: 1.142em;
+}
+
+.risk-chip-high {
+  background-color: var(--store-release-readiness-high-chip-bg) !important;
+  color: var(--store-release-readiness-high-chip-color) !important;
+}
+
+.risk-chip-medium {
+  background-color: var(--store-release-readiness-medium-chip-bg) !important;
+  color: var(--store-release-readiness-medium-chip-color) !important;
+}
+
+.risk-chip-low {
+  background-color: var(--store-release-readiness-low-chip-bg) !important;
+  color: var(--store-release-readiness-low-chip-color) !important;
+}
+
+.risk-chip-pending {
+  background-color: var(--store-release-readiness-pending-chip-bg) !important;
+  color: var(--store-release-readiness-pending-chip-color) !important;
+}
+
+.card-body {
+  padding: 0.785em 1.142em 1.142em;
+  box-sizing: border-box;
+}
+
+.app-name-block {
+  margin-top: 0.857em;
+}
+
+.app-name {
+  word-break: break-word;
+}
+
+.package-date-row {
+  min-width: 0;
+}
+
+.package-name-wrap {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+}
+
+.package-name {
+  display: block;
+  width: 100%;
+  color: var(--store-release-readiness-package-name-color);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.meta-data {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+  background-color: var(--store-release-readiness-meta-data-background-color);
+  border: 1px solid var(--store-release-readiness-meta-data-border-color);
+  border-radius: var(--store-release-readiness-release-card-border-radius);
+  height: 1.571em;
+  padding: 0 0.571em;
+}
+
+.meta-data-icon {
+  width: 22px;
+  height: 22px;
+  min-width: 22px;
+  min-height: 22px;
+  padding: 0;
+  flex-shrink: 0;
+}
+
+.meta-data-date-icon {
+  color: var(--store-release-readiness-meta-data-color);
+}
+
+.meta-pill-date-text {
+  color: var(--store-release-readiness-meta-data-color);
+}
+
+.summary-divider {
+  margin-top: 1.142em;
+  margin-bottom: 0.571em;
+  width: 100%;
+}
+
+.summary-heading {
+  letter-spacing: 0.04em;
+}
+
+.summary-progress-wrap {
+  margin-top: 0.571em;
+  width: 100%;
+}
+
+.card-metadata-row {
+  margin-top: 0.5em;
+}

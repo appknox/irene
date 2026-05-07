@@ -235,6 +235,29 @@
   --knoxiq-validated-findings-steps-to-reproduce-step-header-background: #f8fafc;
   --knoxiq-validated-findings-steps-to-reproduce-step-badge-background: #fef3c7;
   --knoxiq-validated-findings-steps-to-reproduce-accent: #d97706;
+
+  //special case variable for store-release-readiness
+  --srr-header-background-color: #f7f8fc;
+  --srr-high-chip-bg: #fee2e2;
+  --srr-high-chip-color: #991b1b;
+  --srr-medium-chip-bg: #ffedd5;
+  --srr-medium-chip-color: #92400e;
+  --srr-low-chip-bg: #dbeafe;
+  --srr-low-chip-color: #1e40af;
+  --srr-pending-chip-bg: #e1e1e1;
+  --srr-failed-color: #ff2151;
+  --srr-passed-color: #10b981;
+  --srr-untested-color: #d9d9d9;
+  --srr-high-color: #d72f2f;
+  --srr-medium-color: #92400e;
+  --srr-low-color: #1e40af;
+  --srr-loading-bg-color: repeating-linear-gradient(
+    -45deg,
+    #ffffff,
+    #ffffff 5px,
+    #e8e8e8 5px,
+    #e8e8e8 10px
+  );
 }
 
 // TODO: need to remove this so do not use it

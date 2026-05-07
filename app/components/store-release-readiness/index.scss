@@ -1,0 +1,34 @@
+.release-card-grid {
+  display: grid;
+  justify-items: stretch;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 1.5em;
+}
+
+.release-card-link {
+  display: block;
+  color: inherit;
+  text-decoration: none;
+  border-radius: inherit;
+
+  &:hover {
+    cursor: pointer;
+    box-shadow: var(--store-release-readiness-card-box-shadow);
+  }
+}
+
+.loading {
+  border: 1px solid var(--store-release-readiness-loader-border-color);
+  border-radius: var(--store-release-readiness-loader-border-radius);
+  background-color: var(--store-release-readiness-loader-background-color);
+  min-height: 35em;
+
+  .loading-state-vector {
+    margin-bottom: 1.5625em;
+  }
+
+  .loading-text {
+    text-align: center;
+    max-width: 302px;
+  }
+}

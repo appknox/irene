@@ -65,6 +65,10 @@ const menuItems = ({
     },
     privacy && { label: t('privacyModule.title'), icon: 'shield-outline' },
     sbom && { label: t('SBOM'), icon: 'receipt-long' },
+    {
+      label: t('storeReleaseReadiness.title'),
+      icon: 'list-alt-check',
+    },
     analytics && { label: t('analytics'), icon: 'graphic-eq' },
     { label: t('organization'), icon: 'group' },
     publicApis && { label: t('apiDocumentation') },

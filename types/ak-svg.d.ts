@@ -93,6 +93,15 @@ export enum AkSvgComponentInvocationByNames {
   FakeAppsSuccessState,
   SoxBrandAbuseFeatureAbsence,
   ApptoideIcon,
+  HighRiskTower,
+  LowRiskTower,
+  MediumRiskTower,
+  HighRiskTowerBig,
+  LowRiskTowerBig,
+  MediumRiskTowerBig,
+  NotStartedTower,
+  StoreReleaseReadinessScanFailed,
+  StoreRealeaseReadinessUpselling,
 }
 
 export enum AkSvgComponentInvocationByPaths {
@@ -125,6 +134,13 @@ export enum AkSvgComponentInvocationByPaths {
   'apptoide-icon',
   'playstore-logo',
   'appstore-logo',
+  'high-risk-tower-big',
+  'medium-risk-tower-big',
+  'low-risk-tower-big',
+  'not-started-tower',
+  'high-risk-tower',
+  'medium-risk-tower',
+  'low-risk-tower',
 }
 
 type AkSvgComponent = ComponentLike<{

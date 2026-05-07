@@ -1,0 +1,86 @@
+{{#if @loading}}
+  <AkStack
+    class='p-2'
+    @alignItems='center'
+    @justifyContent='center'
+    data-test-store-release-readiness-report-loader
+  >
+    <AkLoader @size={{18}} />
+  </AkStack>
+{{else}}
+  <AkList::Item local-class='report-item-root' class='px-3 pt-3 pb-2' as |li|>
+    {{#if this.showGenerateReport}}
+      <AkStack @direction='column' @spacing='2' @width='full'>
+        <AkStack
+          local-class='generate-container'
+          @direction='column'
+          @spacing='2'
+          @alignItems='flex-start'
+        >
+          <AkSvg::GenerateReport />
+
+          <AkTypography>
+            {{t
+              'storeReleaseReadiness.generateReportDescription'
+              htmlSafe=true
+            }}
+          </AkTypography>
+
+          <AkButton
+            {{on 'click' (perform this.handleGenerateReport)}}
+            @loading={{this.isReportGenerating}}
+            data-test-store-release-readiness-report-generate-button
+          >
+            {{if this.isReportGenerating (t 'generating') (t 'generateReport')}}
+          </AkButton>
+        </AkStack>
+      </AkStack>
+    {{/if}}
+
+    {{#if this.isReportGenerated}}
+      <AkStack @alignItems='center' @width='full'>
+        <li.leftIcon>
+          <AkSvg::PdfReport />
+        </li.leftIcon>
+
+        <AkStack @direction='column' @width='full' @spacing='0.5' class='pl-1'>
+          <AkTypography @variant='subtitle1'>
+            {{t 'storeReleaseReadiness.downloadPdfPrimaryText'}}
+          </AkTypography>
+
+          <AkStack @alignItems='center' @spacing='0.5'>
+            <AkTypography>
+              {{this.reportPasswordText}}
+            </AkTypography>
+
+            {{#if this.report.reportPassword}}
+              <AkClipboard
+                @onSuccess={{this.handleCopySuccess}}
+                @onError={{this.handleCopyError}}
+                as |cb|
+              >
+                <AkIconButton
+                  id={{cb.triggerId}}
+                  @size='small'
+                  data-clipboard-text={{this.report.reportPassword}}
+                >
+                  <AkIcon @iconName='content-copy-outline' @color='primary' />
+                </AkIconButton>
+              </AkClipboard>
+            {{/if}}
+          </AkStack>
+        </AkStack>
+
+        <li.rightIcon>
+          <AkIconButton
+            {{on 'click' (perform this.handleDownloadReport)}}
+            disabled={{this.handleDownloadReport.isRunning}}
+            data-test-store-release-readiness-report-download-button
+          >
+            <AkIcon @iconName='download' />
+          </AkIconButton>
+        </li.rightIcon>
+      </AkStack>
+    {{/if}}
+  </AkList::Item>
+{{/if}}
