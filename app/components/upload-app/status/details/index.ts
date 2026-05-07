@@ -13,6 +13,7 @@ import relativeTime from 'dayjs/plugin/relativeTime';
 import ENUMS from 'irene/enums';
 import type { SubmissionModelWithSystemFileData } from '../index';
 import type ProjectService from 'irene/services/project';
+import type StoreReleaseReadinessListService from 'irene/services/store-release-readiness-list';
 import type UploadAppService from 'irene/services/upload-app';
 
 dayjs.extend(relativeTime);
@@ -29,6 +30,8 @@ export default class UploadAppStatusDetailsComponent extends Component<UploadApp
   @service declare router: RouterService;
   @service declare uploadApp: UploadAppService;
   @service('project') declare projectService: ProjectService;
+  @service('store-release-readiness-list')
+  declare storeReleaseReadinessList: StoreReleaseReadinessListService;
 
   normalizeFileProgress = helper(([value]: [number]) => {
     return Math.round(value / 1.25);
@@ -73,6 +76,21 @@ export default class UploadAppStatusDetailsComponent extends Component<UploadApp
     if (submissionCompleted && isProjectsRoute && !hasDefaultFilters) {
       // this will update project list
       this.projectService.fetchProjects.perform();
+    }
+
+    const isStoreReleaseReadinessIndexRoute =
+      this.router.currentRouteName ===
+      'authenticated.dashboard.store-release-readiness.index';
+
+    const hasNonDefaultStoreReadinessFilters =
+      this.storeReleaseReadinessList.isScanListResponseFiltered;
+
+    if (
+      submissionCompleted &&
+      isStoreReleaseReadinessIndexRoute &&
+      !hasNonDefaultStoreReadinessFilters
+    ) {
+      this.storeReleaseReadinessList.refreshAfterUpload();
     }
   }
 
