@@ -72,7 +72,7 @@ export interface RemediationData {
 }
 
 export interface CopilotFinding {
-  scan_type: string;
+  scan_type?: string;
   title: string;
   description: string;
   validation?: ValidationData;
