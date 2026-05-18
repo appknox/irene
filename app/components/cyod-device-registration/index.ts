@@ -82,14 +82,14 @@ export default class CyodDeviceRegistrationComponent extends Component<CyodDevic
 
     try {
       // Dynamically import to avoid SSR/test issues
-      const { AdbDaemonWebUsbDeviceManager } = await import(
+      const { AdbWebUsbBackendManager } = await import(
         '@yume-chan/adb-backend-webusb'
       );
       const { Adb, AdbDaemonTransport } = await import('@yume-chan/adb');
 
       // Prompt user to select a USB device
       const usbDevice =
-        await AdbDaemonWebUsbDeviceManager.BROWSER.requestDevice();
+        await AdbWebUsbBackendManager.BROWSER?.requestDevice();
 
       if (!usbDevice) {
         return;
@@ -98,18 +98,18 @@ export default class CyodDeviceRegistrationComponent extends Component<CyodDevic
       // Open the ADB connection
       const transport = await AdbDaemonTransport.authenticate({
         serial: usbDevice.serial,
-        connection: usbDevice,
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        connection: (await usbDevice.connect()) as any,
         credentialStore: {
-          // Generate a throwaway key for POC — production should persist this
+          // Generate a throwaway RSA key (POC — production should persist this)
           generateKey: async () => {
-            const { AdbSubprocessNoneProtocol } = await import('@yume-chan/adb');
-            void AdbSubprocessNoneProtocol; // side-effect import
-
-            return crypto.subtle.generateKey(
+            const keyPair = await crypto.subtle.generateKey(
               { name: 'RSASSA-PKCS1-v1_5', modulusLength: 2048, publicExponent: new Uint8Array([1, 0, 1]), hash: 'SHA-1' },
               true,
               ['sign', 'verify']
             );
+            const pkcs8 = await crypto.subtle.exportKey('pkcs8', keyPair.privateKey);
+            return { buffer: new Uint8Array(pkcs8) };
           },
           iterateKeys: async function* () { /* no stored keys */ },
         },
@@ -120,16 +120,16 @@ export default class CyodDeviceRegistrationComponent extends Component<CyodDevic
       // Read device properties
       const serial = usbDevice.serial;
       const model = (
-        await adb.subprocess.spawnAndWaitLegacy(['getprop', 'ro.product.model'])
+        await adb.subprocess.noneProtocol.spawnWaitText(['getprop', 'ro.product.model'])
       ).trim();
       const osVersion = (
-        await adb.subprocess.spawnAndWaitLegacy([
+        await adb.subprocess.noneProtocol.spawnWaitText([
           'getprop',
           'ro.build.version.release',
         ])
       ).trim();
       const arch = (
-        await adb.subprocess.spawnAndWaitLegacy(['getprop', 'ro.product.cpu.abi'])
+        await adb.subprocess.noneProtocol.spawnWaitText(['getprop', 'ro.product.cpu.abi'])
       ).trim();
 
       this.detectedSerial = serial;

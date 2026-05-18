@@ -148,6 +148,14 @@
               {{/if}}
             </AkStack>
           {{/if}}
+        {{else if this.isScrcpyScan}}
+          {{! Render outside isReady to avoid destroy/recreate on model poll }}
+          <CyodViewer
+            data-test-vncViewer-cyodViewer
+            @scanToken={{this.scrcpyScanToken}}
+            @platform={{this.filePlatform}}
+            @authToken={{this.deviceFarmPassword}}
+          />
         {{else if @dynamicScan.isReady}}
           <AkStack
             data-test-vncViewer-byodReady
@@ -186,22 +194,21 @@
             </AkTypography>
           </AkStack>
         {{/if}}
+      {{else if this.isScrcpyScan}}
+        {{! Proxy CYOD — Mercer streaming via scrcpy/go-ios }}
+        {{! Render outside isReady guard to avoid destroy/recreate on model poll }}
+        <CyodViewer
+          data-test-vncViewer-cyodViewer
+          @scanToken={{this.scrcpyScanToken}}
+          @platform={{this.filePlatform}}
+          @authToken={{this.deviceFarmPassword}}
+        />
       {{else if @dynamicScan.isReady}}
-        {{#if this.isScrcpyScan}}
-          {{! Proxy CYOD — Mercer streaming via scrcpy/go-ios }}
-          <CyodViewer
-            data-test-vncViewer-cyodViewer
-            @scanToken={{this.scrcpyScanToken}}
-            @platform={{@file.project.platform}}
-            @authToken={{this.deviceFarmPassword}}
-          />
-        {{else}}
-          {{! Farm device — existing noVNC }}
-          <NovncRfb
-            @deviceFarmURL={{this.deviceFarmURL}}
-            @deviceFarmPassword={{this.deviceFarmPassword}}
-          />
-        {{/if}}
+        {{! Farm device — existing noVNC }}
+        <NovncRfb
+          @deviceFarmURL={{this.deviceFarmURL}}
+          @deviceFarmPassword={{this.deviceFarmPassword}}
+        />
       {{/if}}
     </div>
 

@@ -6,6 +6,10 @@ import { setupIntl } from 'ember-intl/test-support';
 import { module, test } from 'qunit';
 
 import ENUMS from 'irene/enums';
+import {
+  PROXY_CYOD_DEVICE_USED,
+  REMOTE_CYOD_DEVICE_USED,
+} from 'irene/mirage/factories/dynamicscan';
 
 module('Integration | Component | vnc-viewer', function (hooks) {
   setupRenderingTest(hooks);
@@ -179,4 +183,149 @@ module('Integration | Component | vnc-viewer', function (hooks) {
       }
     }
   );
+});
+
+module('Integration | Component | vnc-viewer | CYOD scans', function (hooks) {
+  setupRenderingTest(hooks);
+  setupIntl(hooks, 'en');
+  setupMirage(hooks);
+
+  hooks.beforeEach(async function () {
+    const store = this.owner.lookup('service:store');
+
+    const profile = this.server.create('profile', { id: '100' });
+
+    const file = this.server.create('file', {
+      project: '1',
+      profile: profile.id,
+      is_active: true,
+    });
+
+    this.server.create('project', {
+      last_file: file,
+      id: '1',
+      active_profile_id: profile.id,
+    });
+
+    this.setProperties({
+      file: store.push(store.normalize('file', file.toJSON())),
+      activeProfileId: profile.id,
+      store,
+    });
+
+    window.WebSocket = class {
+      constructor() {}
+      addEventListener() {}
+      removeEventListener() {}
+      close() {}
+    };
+  });
+
+  test('PROXY_CYOD + INSTALLING shows download link', async function (assert) {
+    const dynamicscan = this.server.create('dynamicscan', {
+      file: this.file.id,
+      status: ENUMS.DYNAMIC_SCAN_STATUS.INSTALLING,
+      ended_on: null,
+      device_used: PROXY_CYOD_DEVICE_USED,
+    });
+
+    this.dynamicscan = this.store.push(
+      this.store.normalize('dynamicscan', dynamicscan.toJSON())
+    );
+
+    this.server.get('/v3/projects/:id', (schema, req) => {
+      return {
+        ...schema.projects.find(`${req.params.id}`)?.toJSON(),
+        platform: ENUMS.PLATFORM.ANDROID,
+      };
+    });
+
+    await render(hbs`
+      <VncViewer @file={{this.file}} @profileId={{this.activeProfileId}} @dynamicScan={{this.dynamicscan}} />
+    `);
+
+    assert.dom('[data-test-vncViewer-byodDownload]').exists();
+    assert.dom('[data-test-vncViewer-byodDownloadLink]').exists();
+  });
+
+  test('PROXY_CYOD + READY shows CyodViewer', async function (assert) {
+    const dynamicscan = this.server.create('dynamicscan', {
+      file: this.file.id,
+      status: ENUMS.DYNAMIC_SCAN_STATUS.READY_FOR_INTERACTION,
+      ended_on: null,
+      device_used: PROXY_CYOD_DEVICE_USED,
+    });
+
+    this.dynamicscan = this.store.push(
+      this.store.normalize('dynamicscan', dynamicscan.toJSON())
+    );
+
+    this.server.get('/v3/projects/:id', (schema, req) => {
+      return {
+        ...schema.projects.find(`${req.params.id}`)?.toJSON(),
+        platform: ENUMS.PLATFORM.ANDROID,
+      };
+    });
+
+    await render(hbs`
+      <VncViewer @file={{this.file}} @profileId={{this.activeProfileId}} @dynamicScan={{this.dynamicscan}} />
+    `);
+
+    assert.dom('[data-test-vncViewer-cyodViewer]').exists();
+    assert.dom('[data-test-vncViewer-byodReady]').doesNotExist();
+  });
+
+  test('REMOTE_CYOD + INSTALLING shows iOS install link', async function (assert) {
+    const dynamicscan = this.server.create('dynamicscan', {
+      file: this.file.id,
+      status: ENUMS.DYNAMIC_SCAN_STATUS.INSTALLING,
+      ended_on: null,
+      device_used: REMOTE_CYOD_DEVICE_USED,
+    });
+
+    this.dynamicscan = this.store.push(
+      this.store.normalize('dynamicscan', dynamicscan.toJSON())
+    );
+
+    this.server.get('/v3/projects/:id', (schema, req) => {
+      return {
+        ...schema.projects.find(`${req.params.id}`)?.toJSON(),
+        platform: ENUMS.PLATFORM.IOS,
+      };
+    });
+
+    await render(hbs`
+      <VncViewer @file={{this.file}} @profileId={{this.activeProfileId}} @dynamicScan={{this.dynamicscan}} />
+    `);
+
+    assert.dom('[data-test-vncViewer-byodDownload]').exists();
+    assert.dom('[data-test-vncViewer-byodDownloadLink]').exists();
+  });
+
+  test('REMOTE_CYOD + READY shows interact on device', async function (assert) {
+    const dynamicscan = this.server.create('dynamicscan', {
+      file: this.file.id,
+      status: ENUMS.DYNAMIC_SCAN_STATUS.READY_FOR_INTERACTION,
+      ended_on: null,
+      device_used: REMOTE_CYOD_DEVICE_USED,
+    });
+
+    this.dynamicscan = this.store.push(
+      this.store.normalize('dynamicscan', dynamicscan.toJSON())
+    );
+
+    this.server.get('/v3/projects/:id', (schema, req) => {
+      return {
+        ...schema.projects.find(`${req.params.id}`)?.toJSON(),
+        platform: ENUMS.PLATFORM.IOS,
+      };
+    });
+
+    await render(hbs`
+      <VncViewer @file={{this.file}} @profileId={{this.activeProfileId}} @dynamicScan={{this.dynamicscan}} />
+    `);
+
+    assert.dom('[data-test-vncViewer-byodReady]').exists();
+    assert.dom('[data-test-vncViewer-cyodViewer]').doesNotExist();
+  });
 });

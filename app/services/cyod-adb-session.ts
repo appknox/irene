@@ -12,22 +12,21 @@ import Service from '@ember/service';
 const TTL_MS = 10 * 60 * 1000; // 10 minutes
 
 type AdbLike = {
-  dispose(): void;
+  close(): void;
   subprocess: {
-    spawnAndWaitLegacy(args: string[]): Promise<string>;
+    noneProtocol: {
+      spawnWaitText(args: string[]): Promise<string>;
+    };
   };
-  sync(): Promise<AdbSyncLike>;
-};
-
-type AdbSyncLike = {
-  write(
-    path: string,
-    data: ReadableStream<Uint8Array> | Uint8Array,
-    mode?: number,
-    mtime?: number
-  ): Promise<void>;
-  [Symbol.asyncDispose]?: () => Promise<void>;
-  dispose?(): Promise<void>;
+  sync(): Promise<{
+    write(options: {
+      filename: string;
+      file: ReadableStream<Uint8Array>;
+      permission?: number;
+      mtime?: number;
+    }): Promise<void>;
+    dispose(): Promise<void>;
+  }>;
 };
 
 type SessionEntry = {
@@ -54,7 +53,7 @@ export default class CyodAdbSessionService extends Service {
   }
 
   /** Retrieve the stored ADB connection for a serial (if still alive). */
-  get(serial: string): AdbLike | null {
+  lookup(serial: string): AdbLike | null {
     const entry = this._sessions.get(serial);
     if (!entry) return null;
 
@@ -85,9 +84,9 @@ export default class CyodAdbSessionService extends Service {
 
     clearTimeout(entry.timer);
     try {
-      entry.adb.dispose();
+      entry.adb.close();
     } catch {
-      // ignore dispose errors
+      // ignore close errors
     }
     this._sessions.delete(serial);
   }

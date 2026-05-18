@@ -8,17 +8,18 @@
 
 type AdbLike = {
   subprocess: {
-    spawnAndWaitLegacy(args: string[]): Promise<string>;
+    noneProtocol: {
+      spawnWaitText(args: string[]): Promise<string>;
+    };
   };
   sync(): Promise<{
-    write(
-      path: string,
-      data: ReadableStream<Uint8Array> | Uint8Array,
-      mode?: number,
-      mtime?: number
-    ): Promise<void>;
-    [Symbol.asyncDispose]?: () => Promise<void>;
-    dispose?(): Promise<void>;
+    write(options: {
+      filename: string;
+      file: ReadableStream<Uint8Array>;
+      permission?: number;
+      mtime?: number;
+    }): Promise<void>;
+    dispose(): Promise<void>;
   }>;
 };
 
@@ -64,26 +65,30 @@ export async function installApkViaWebUsb(
   // 2. Push APK to device via ADB sync
   const sync = await adb.sync();
   try {
-    await sync.write(TMP_APK_PATH, apkBytes);
+    await sync.write({
+      filename: TMP_APK_PATH,
+      file: new ReadableStream({
+        start(controller) {
+          controller.enqueue(apkBytes);
+          controller.close();
+        },
+      }),
+    });
   } finally {
-    if (sync[Symbol.asyncDispose]) {
-      await sync[Symbol.asyncDispose]?.();
-    } else if (sync.dispose) {
-      await sync.dispose();
-    }
+    await sync.dispose();
   }
 
   onProgress?.({ stage: 'installing' });
 
   // 3. First uninstall any existing version (different cert = update blocked)
   try {
-    await adb.subprocess.spawnAndWaitLegacy(['pm', 'uninstall', packageName]);
+    await adb.subprocess.noneProtocol.spawnWaitText(['pm', 'uninstall', packageName]);
   } catch {
     // Not installed — ignore
   }
 
   // 4. Install
-  const installOutput = await adb.subprocess.spawnAndWaitLegacy([
+  const installOutput = await adb.subprocess.noneProtocol.spawnWaitText([
     'pm', 'install', '-r', '-t', TMP_APK_PATH,
   ]);
 
@@ -93,7 +98,7 @@ export async function installApkViaWebUsb(
 
   // 5. Clean up temp file
   try {
-    await adb.subprocess.spawnAndWaitLegacy(['rm', '-f', TMP_APK_PATH]);
+    await adb.subprocess.noneProtocol.spawnWaitText(['rm', '-f', TMP_APK_PATH]);
   } catch {
     // Non-fatal
   }
@@ -107,7 +112,7 @@ export async function uninstallApkViaWebUsb(
   packageName: string
 ): Promise<void> {
   try {
-    await adb.subprocess.spawnAndWaitLegacy(['pm', 'uninstall', packageName]);
+    await adb.subprocess.noneProtocol.spawnWaitText(['pm', 'uninstall', packageName]);
   } catch {
     // Not installed — ignore
   }
@@ -118,7 +123,7 @@ export async function launchAppViaWebUsb(
   adb: AdbLike,
   packageName: string
 ): Promise<void> {
-  await adb.subprocess.spawnAndWaitLegacy([
+  await adb.subprocess.noneProtocol.spawnWaitText([
     'monkey', '-p', packageName, '-c', 'android.intent.category.LAUNCHER', '1',
   ]);
 }

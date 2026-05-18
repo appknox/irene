@@ -28,6 +28,9 @@ export type RawDeviceType = {
   // BYOD scans: no real device — only one of these is set
   ios_itms_url?: string;
   android_download_url?: string;
+  // CYOD fields
+  scan_source?: 'FARM' | 'PROXY_CYOD' | 'REMOTE_CYOD';
+  bundle_id?: string;
 };
 
 export default class DeviceModel extends Model {

@@ -8,6 +8,7 @@ import type IntlService from 'ember-intl/services/intl';
 import ENUMS from 'irene/enums';
 import ENV from 'irene/config/environment';
 import type FileModel from 'irene/models/file';
+import type ProjectModel from 'irene/models/project';
 import type DynamicscanModel from 'irene/models/dynamicscan';
 import type DevicefarmService from 'irene/services/devicefarm';
 import type CyodAdbSessionService from 'irene/services/cyod-adb-session';
@@ -40,6 +41,13 @@ export default class VncViewerComponent extends Component<VncViewerSignature> {
 
   deviceFarmPassword = ENV.deviceFarmPassword;
 
+  // Use .belongsTo().value() to get the already-loaded project synchronously
+  // without triggering getBelongsTo proxy creation (which causes scheduleRevalidate during render)
+  get filePlatform(): number {
+    const project = this.args.file.belongsTo('project').value() as ProjectModel | null;
+    return project?.platform ?? 0;
+  }
+
   get deviceFarmURL() {
     const token = this.args.dynamicScan?.get('moriartyDynamicscanToken');
 
@@ -55,7 +63,7 @@ export default class VncViewerComponent extends Component<VncViewerSignature> {
   }
 
   get deviceType() {
-    const platform = this.args.file.project.get('platform');
+    const platform = this.filePlatform;
 
     if (platform === ENUMS.PLATFORM.ANDROID) {
       return 'nexus5';
@@ -84,9 +92,7 @@ export default class VncViewerComponent extends Component<VncViewerSignature> {
   }
 
   get isIOSDevice() {
-    const platform = this.args.file.project.get('platform');
-
-    return platform === ENUMS.PLATFORM.IOS;
+    return this.filePlatform === ENUMS.PLATFORM.IOS;
   }
 
   get dynamicScan() {
@@ -135,7 +141,7 @@ export default class VncViewerComponent extends Component<VncViewerSignature> {
     const identifier = this.args.dynamicScan
       ?.get('deviceUsed')
       ?.device_identifier;
-    return identifier ? this.cyodAdbSession.get(identifier) : null;
+    return identifier ? this.cyodAdbSession.lookup(identifier) : null;
   }
 
   get webusbInstallIsRunning() {
