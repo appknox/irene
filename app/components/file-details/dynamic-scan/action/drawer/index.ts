@@ -89,8 +89,22 @@ export default class FileDetailsDynamicScanActionDrawerComponent extends Compone
     );
   }
 
+  get isDastBlockedByBackend() {
+    return this.args.file.canStartDast === false;
+  }
+
+  get startDynamicScanDisabledReason() {
+    return this.isDastBlockedByBackend
+      ? (this.args.file.dastBlockedMessage ?? '')
+      : '';
+  }
+
   get enableStartDynamicScanBtn() {
     const { isAutomatedScan, dpContext } = this.args;
+
+    if (this.isDastBlockedByBackend) {
+      return false;
+    }
 
     if (!isAutomatedScan) {
       const anyDeviceSelection = ENUMS.DS_MANUAL_DEVICE_SELECTION.ANY_DEVICE;
