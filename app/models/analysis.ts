@@ -71,6 +71,33 @@ export interface RemediationData {
   code_examples: string[];
 }
 
+export interface ExploitabilitySignals {
+  public_exploit_exists: boolean;
+  remote_exploitation: boolean;
+  no_authentication_required: boolean;
+  minimal_user_interaction: boolean;
+  requires_chaining: boolean;
+  local_exploitation_only: boolean;
+  obscure_or_environment_specific: boolean;
+}
+
+export interface ExploitabilityAnalysisData {
+  summary: string;
+  evidence: string[];
+}
+
+export interface ExploitabilityData {
+  score: number;
+  exploitability_likelihood: string;
+  signals: ExploitabilitySignals;
+  signal_reasoning: Record<string, string>;
+  exploitability_analysis: ExploitabilityAnalysisData;
+  attack_scenario: string[];
+  references: string[];
+  ai_model_used: string;
+  ai_fallback_used: boolean;
+}
+
 export interface CopilotFinding {
   scan_type?: string;
   title: string;
@@ -79,6 +106,7 @@ export interface CopilotFinding {
   poc?: PocData;
   remediation?: RemediationData;
   developer_prompt?: string;
+  exploitability?: ExploitabilityData;
 }
 
 export default class AnalysisModel extends Model {
