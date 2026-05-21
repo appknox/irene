@@ -10,7 +10,7 @@
 
   {{#if this.isCompleted}}
     <AkChip
-      @label={{if this.totalTasks (concat 'Analyzed (' this.totalTasks '/' this.totalTasks ')') 'Analyzed'}}
+      @label='Analyzed'
       @color='success'
       @variant='semi-filled'
       @size='small'
@@ -26,9 +26,6 @@
         data-test-knoxiqStatus-processing
       >
         Processing
-        {{#if this.totalTasks}}
-          ({{this.completedTasks}}/{{this.totalTasks}})
-        {{/if}}
       </AkTypography>
     </AkStack>
   {{else if this.isPending}}

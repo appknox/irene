@@ -9,16 +9,21 @@ import type OrganizationService from 'irene/services/organization';
 import type FileRiskModel from 'irene/models/file-risk';
 import type PollService from 'irene/services/poll';
 import type FileAdapter from 'irene/adapters/file';
-import type { CopilotScanStatus } from 'irene/adapters/file';
+import {
+  KNOXIQ_SCAN_STATUS,
+  KNOXIQ_SCAN_TYPE,
+  type KnoxIQScanStatusEntry,
+  type KnoxIQFileStatusResponse,
+} from 'irene/adapters/file';
 
 const POLL_INTERVAL_MS = 5000;
-const TERMINAL_STATUSES = new Set(['completed', 'failed']);
-const STATUS_PRIORITY: Record<string, number> = {
-  running: 3,
-  pending: 2,
-  failed: 1,
-  completed: 0,
-};
+
+const VISIBLE_STATUSES = new Set<number>([
+  KNOXIQ_SCAN_STATUS.PENDING,
+  KNOXIQ_SCAN_STATUS.RUNNING,
+  KNOXIQ_SCAN_STATUS.COMPLETED,
+  KNOXIQ_SCAN_STATUS.ERRORED,
+]);
 
 export interface FileDetailsScanActionsSignature {
   Args: {
@@ -32,7 +37,7 @@ export default class FileDetailsScanActionsComponent extends Component<FileDetai
   @service declare poll: PollService;
 
   @tracked fileRisk: FileRiskModel | null = null;
-  @tracked copilotStatuses: CopilotScanStatus[] = [];
+  @tracked knoxiqStatusResponse: KnoxIQFileStatusResponse = {};
 
   private stopCopilotPoll?: () => void;
 
@@ -68,36 +73,26 @@ export default class FileDetailsScanActionsComponent extends Component<FileDetai
     );
   }
 
-  get copilotStatusByScanType(): Record<string, CopilotScanStatus | undefined> {
-    const map: Record<string, CopilotScanStatus> = {};
-
-    for (const s of this.copilotStatuses) {
-      const existing = map[s.scan_type];
-      const priority = STATUS_PRIORITY[s.status] ?? -1;
-      const existingPriority = existing
-        ? (STATUS_PRIORITY[existing.status] ?? -1)
-        : -1;
-
-      if (!existing || priority > existingPriority) {
-        map[s.scan_type] = s;
-      }
-    }
-
-    return map;
+  private _visibleEntry(
+    entry: KnoxIQScanStatusEntry | undefined
+  ): KnoxIQScanStatusEntry | undefined {
+    return entry && VISIBLE_STATUSES.has(entry.status) ? entry : undefined;
   }
 
-  get dynamicCopilotStatus(): CopilotScanStatus | undefined {
-    const candidates = ['dast_manual', 'dast_automated', 'dast']
-      .map((t) => this.copilotStatusByScanType[t])
-      .filter(Boolean) as CopilotScanStatus[];
+  get copilotStatusByScanType(): Record<
+    string,
+    KnoxIQScanStatusEntry | undefined
+  > {
+    return {
+      sast: this._visibleEntry(this.knoxiqStatusResponse[KNOXIQ_SCAN_TYPE.SAST]),
+      api: this._visibleEntry(this.knoxiqStatusResponse[KNOXIQ_SCAN_TYPE.API]),
+    };
+  }
 
-    if (!candidates.length) return undefined;
-
-    return candidates.reduce((best, current) => {
-      const bestPriority = STATUS_PRIORITY[best.status] ?? -1;
-      const currentPriority = STATUS_PRIORITY[current.status] ?? -1;
-      return currentPriority > bestPriority ? current : best;
-    });
+  get dynamicCopilotStatus(): KnoxIQScanStatusEntry | undefined {
+    return this._visibleEntry(
+      this.knoxiqStatusResponse[KNOXIQ_SCAN_TYPE.DAST]
+    );
   }
 
   startCopilotPolling() {
@@ -111,15 +106,17 @@ export default class FileDetailsScanActionsComponent extends Component<FileDetai
   fetchCopilotStatus = task(async () => {
     try {
       const adapter = this.store.adapterFor('file') as FileAdapter;
-      const resp = await adapter.fetchCopilotStatus(String(this.args.file.id));
+      this.knoxiqStatusResponse = await adapter.fetchKnoxIQStatus(
+        String(this.args.file.id)
+      );
 
-      this.copilotStatuses = resp.scan_statuses ?? [];
+      const hasActive = Object.values(this.knoxiqStatusResponse).some(
+        (s) =>
+          s.status === KNOXIQ_SCAN_STATUS.PENDING ||
+          s.status === KNOXIQ_SCAN_STATUS.RUNNING
+      );
 
-      const allTerminal =
-        this.copilotStatuses.length > 0 &&
-        this.copilotStatuses.every((s) => TERMINAL_STATUSES.has(s.status));
-
-      if (allTerminal) {
+      if (!hasActive) {
         this.stopCopilotPoll?.();
       }
     } catch {

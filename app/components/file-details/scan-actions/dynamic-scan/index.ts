@@ -8,13 +8,13 @@ import type IntlService from 'ember-intl/services/intl';
 
 import DynamicscanModel, { DsComputedStatus } from 'irene/models/dynamicscan';
 import type FileModel from 'irene/models/file';
-import type { CopilotScanStatus } from 'irene/adapters/file';
+import type { KnoxIQScanStatusEntry } from 'irene/adapters/file';
 
 export interface FileDetailsScanActionsDynamicScanSignature {
   Args: {
     file: FileModel;
     vulnerabilityCount: number | null;
-    copilotStatus?: CopilotScanStatus;
+    copilotStatus?: KnoxIQScanStatusEntry;
   };
 }
 

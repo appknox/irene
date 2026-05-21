@@ -7,7 +7,10 @@ import type IntlService from 'ember-intl/services/intl';
 
 import type FileModel from 'irene/models/file';
 import type FileAdapter from 'irene/adapters/file';
-import type { CopilotScanStatus } from 'irene/adapters/file';
+import {
+  KNOXIQ_SCAN_STATUS,
+  type KnoxIQFileStatusResponse,
+} from 'irene/adapters/file';
 import type PollService from 'irene/services/poll';
 import parseError from 'irene/utils/parse-error';
 
@@ -25,13 +28,12 @@ export default class FileCopilotValidationBtn extends Component<FileCopilotValid
   @service declare intl: IntlService;
   @service declare poll: PollService;
 
-  @tracked copilotStatuses: CopilotScanStatus[] = [];
+  @tracked knoxiqStatuses: KnoxIQFileStatusResponse = {};
 
   private stopStatusPoll?: () => void;
 
   constructor(owner: unknown, args: FileCopilotValidationBtnSignature['Args']) {
     super(owner, args);
-    // Fetch immediately so the button state is correct before the first poll fires
     this.fetchStatus.perform();
     this.startStatusPolling();
   }
@@ -45,17 +47,28 @@ export default class FileCopilotValidationBtn extends Component<FileCopilotValid
     return (
       this.triggerValidation.isRunning ||
       this.fetchStatus.isRunning ||
-      this.copilotStatuses.length > 0
+      Object.values(this.knoxiqStatuses).some(
+        (s) =>
+          s.status === KNOXIQ_SCAN_STATUS.PENDING ||
+          s.status === KNOXIQ_SCAN_STATUS.RUNNING
+      )
     );
   }
 
   fetchStatus = task(async () => {
     try {
       const adapter = this.store.adapterFor('file') as FileAdapter;
-      const resp = await adapter.fetchCopilotStatus(String(this.args.file.id));
-      this.copilotStatuses = resp.scan_statuses ?? [];
+      this.knoxiqStatuses = await adapter.fetchKnoxIQStatus(
+        String(this.args.file.id)
+      );
 
-      if (this.copilotStatuses.length === 0) {
+      const hasActive = Object.values(this.knoxiqStatuses).some(
+        (s) =>
+          s.status === KNOXIQ_SCAN_STATUS.PENDING ||
+          s.status === KNOXIQ_SCAN_STATUS.RUNNING
+      );
+
+      if (!hasActive) {
         this.stopStatusPoll?.();
       }
     } catch {
@@ -74,10 +87,8 @@ export default class FileCopilotValidationBtn extends Component<FileCopilotValid
   triggerValidation = task(async () => {
     try {
       const adapter = this.store.adapterFor('file') as FileAdapter;
-
-      await adapter.triggerCopilotValidation(String(this.args.file.id));
-
-      this.notify.success('Copilot validation triggered successfully');
+      await adapter.triggerKnoxIQScan(String(this.args.file.id));
+      this.notify.success('KnoxIQ scan triggered successfully');
       this.startStatusPolling();
     } catch (error) {
       this.notify.error(parseError(error));

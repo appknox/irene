@@ -4,16 +4,30 @@ import type FileModel from 'irene/models/file';
 import type SbomFileModel from 'irene/models/sbom-file';
 import type FileRiskModel from 'irene/models/file-risk';
 
-export interface CopilotScanStatus {
-  scan_type: string;
-  scan_id: number;
-  status: 'pending' | 'running' | 'completed' | 'failed';
-  total_tasks: number;
-  completed_tasks: number;
+export const KNOXIQ_SCAN_STATUS = {
+  LEGACY: -1,
+  DISABLED: 0,
+  NOT_TRIGGERED: 1,
+  PENDING: 2,
+  RUNNING: 3,
+  COMPLETED: 4,
+  ERRORED: 5,
+} as const;
+
+// ScanType integer keys as returned by the status endpoint
+export const KNOXIQ_SCAN_TYPE = {
+  SAST: '1',
+  DAST: '2',
+  API: '3',
+} as const;
+
+export interface KnoxIQScanStatusEntry {
+  scan_id: number | null;
+  status: number;
 }
 
-export interface CopilotFileStatusResponse {
-  scan_statuses: CopilotScanStatus[];
+export interface KnoxIQFileStatusResponse {
+  [scanType: string]: KnoxIQScanStatusEntry;
 }
 
 import FileCapiReportModel, {
@@ -144,18 +158,16 @@ export default class FileAdapter extends CommonDRFAdapter {
     return this._pushDirectlyToStore<SbomFileModel>(res, 'sbom-file');
   }
 
-  async triggerCopilotValidation(fileId: string) {
-    const url = this.buildURLFromBase('api/copilot/trigger-file/');
-
-    return this.ajax(url, 'POST', {
-      data: { file_id: fileId },
-    });
+  async triggerKnoxIQScan(fileId: string) {
+    const url = this.buildURLFromBase(`api/knoxiq/file/${fileId}/knoxiq_scan/`);
+    return this.ajax(url, 'POST');
   }
 
-  async fetchCopilotStatus(fileId: string): Promise<CopilotFileStatusResponse> {
-    const url = this.buildURLFromBase('api/copilot/file-status/');
-
-    return this.ajax(url, 'GET', { data: { file_id: fileId } });
+  async fetchKnoxIQStatus(fileId: string): Promise<KnoxIQFileStatusResponse> {
+    const url = this.buildURLFromBase(
+      `api/knoxiq/file/${fileId}/knoxiq_scan/status/`
+    );
+    return this.ajax(url, 'GET');
   }
 
   async fetchFileRisk(fileId: string) {

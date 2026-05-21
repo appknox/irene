@@ -1,9 +1,9 @@
 import Component from '@glimmer/component';
-import type { CopilotScanStatus } from 'irene/adapters/file';
+import { KNOXIQ_SCAN_STATUS, type KnoxIQScanStatusEntry } from 'irene/adapters/file';
 
 export interface FileDetailsScanActionsKnoxiqStatusSignature {
   Args: {
-    copilotStatus: CopilotScanStatus;
+    copilotStatus: KnoxIQScanStatusEntry;
   };
 }
 
@@ -12,28 +12,20 @@ export default class FileDetailsScanActionsKnoxiqStatusComponent extends Compone
     return this.args.copilotStatus.status;
   }
 
-  get completedTasks() {
-    return this.args.copilotStatus.completed_tasks;
-  }
-
-  get totalTasks() {
-    return this.args.copilotStatus.total_tasks;
-  }
-
   get isRunning() {
-    return this.status === 'running';
+    return this.status === KNOXIQ_SCAN_STATUS.RUNNING;
   }
 
   get isPending() {
-    return this.status === 'pending';
+    return this.status === KNOXIQ_SCAN_STATUS.PENDING;
   }
 
   get isCompleted() {
-    return this.status === 'completed';
+    return this.status === KNOXIQ_SCAN_STATUS.COMPLETED;
   }
 
   get isFailed() {
-    return this.status === 'failed';
+    return this.status === KNOXIQ_SCAN_STATUS.ERRORED;
   }
 }
 
