@@ -36,6 +36,7 @@ const installFreshChat = (
   window.fcSettings = {
     host,
     token: freshchatKey,
+    widgetUuid: '9f127e80-8b14-4961-93e5-f58b20bccaa7',
     onInit: function () {
       window.fcWidget.user.get(function (resp) {
         const status = resp && resp.status;
