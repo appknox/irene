@@ -22,6 +22,12 @@
 
   <AkDivider class='my-3' @color='dark' />
 
+  {{#if this.me.org.is_owner}}
+    <Organization::DeviceRegistration />
+
+    <AkDivider class='my-3' @color='dark' />
+  {{/if}}
+
   <OrganizationArchive />
 
   <AkDivider class='my-3' @color='dark' />

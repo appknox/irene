@@ -1,9 +1,9 @@
 /**
  * CyodViewer — browser-side screen viewer for Proxy CYOD scans.
  *
- * Connects to moriarty's ScrcpyBrowserConsumer WebSocket and renders:
- *   Android: H.264 stream via WebCodecs VideoDecoder → canvas
- *   iOS:     MJPEG stream (raw JPEG frames) → drawImage on canvas
+ * Connects to moriarty's ScrcpyBrowserConsumer WebSocket and renders an
+ * H.264 stream via WebCodecs VideoDecoder → canvas. Both Android (scrcpy) and
+ * iOS (AVFoundation/qvh capture) deliver the same Annex-B H.264 framing.
  *
  * Touch events on the canvas are sent back as JSON:
  *   { type: "touch", action: "down"|"up"|"move", x: 0..1, y: 0..1 }
@@ -22,7 +22,6 @@ import { tracked } from '@glimmer/tracking';
 import { modifier } from 'ember-modifier';
 import type IntlService from 'ember-intl/services/intl';
 
-import ENUMS from 'irene/enums';
 import type DevicefarmService from 'irene/services/devicefarm';
 
 const SCRCPY_WS_PATH = '/devicefarm/ws/scrcpy/';
@@ -50,10 +49,6 @@ export default class CyodViewerComponent extends Component<CyodViewerSignature> 
   private isPointerDown = false;
   private _spsBuffer: Uint8Array | null = null;
   private _hasReceivedKeyFrame = false;
-
-  get isAndroid() {
-    return this.args.platform === ENUMS.PLATFORM.ANDROID;
-  }
 
   get wsUrl() {
     const base = this.devicefarm.urlbase.replace(/^http/, 'ws');
@@ -114,9 +109,7 @@ export default class CyodViewerComponent extends Component<CyodViewerSignature> 
     this.ws.onopen = () => {
       if (this.isDestroyed || this.isDestroying) return;
       this.isConnected = true;
-      if (this.isAndroid) {
-        this._initH264Decoder();
-      }
+      this._initH264Decoder();
     };
 
     this.ws.onclose = () => {
@@ -133,12 +126,7 @@ export default class CyodViewerComponent extends Component<CyodViewerSignature> 
 
     this.ws.onmessage = (event: MessageEvent) => {
       if (event.data instanceof ArrayBuffer) {
-        const bytes = new Uint8Array(event.data);
-        if (this.isAndroid) {
-          this._decodeH264Frame(bytes);
-        } else {
-          this._renderJpegFrame(bytes);
-        }
+        this._decodeH264Frame(new Uint8Array(event.data));
       }
     };
   }
@@ -263,22 +251,6 @@ export default class CyodViewerComponent extends Component<CyodViewerSignature> 
     } catch (err) {
       console.error('[CyodViewer] decode() threw:', err);
     }
-  }
-
-  private _renderJpegFrame(bytes: Uint8Array) {
-    if (!this.ctx || !this.canvas) return;
-    const blob = new Blob([bytes], { type: 'image/jpeg' });
-    const url = URL.createObjectURL(blob);
-    const img = new Image();
-    img.onload = () => {
-      if (this.canvas && this.ctx) {
-        this.canvas.width = img.naturalWidth;
-        this.canvas.height = img.naturalHeight;
-        this.ctx.drawImage(img, 0, 0);
-      }
-      URL.revokeObjectURL(url);
-    };
-    img.src = url;
   }
 
   private _cleanupDecoder() {

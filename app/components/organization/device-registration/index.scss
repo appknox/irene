@@ -1,0 +1,13 @@
+.device-registration-container {
+  width: 100%;
+}
+
+.connect-command {
+  font-family: monospace;
+  word-break: break-all;
+  padding: 8px 12px;
+  border: 1px solid var(--border-default, #d8dde4);
+  border-radius: 4px;
+  background: var(--background-light, #f6f8fa);
+  flex-grow: 1;
+}
