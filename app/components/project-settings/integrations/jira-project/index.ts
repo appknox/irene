@@ -77,7 +77,7 @@ export default class ProjectSettingsIntegrationsJiraProjectComponent extends Com
   }
 
   get tFetchJIRAProjectFailed() {
-    return this.intl.t('fetchProjectFailed');
+    return this.intl.t('fetchJiraProjectFailed');
   }
 
   get tInvalidRepo() {
