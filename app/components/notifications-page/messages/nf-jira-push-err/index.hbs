@@ -1,0 +1,27 @@
+<AkStack @direction='column' @spacing='1'>
+  <AkTypography data-test-nf-jira-push-err-primary-message>
+    {{t
+      'notificationModule.messages.nf-jira-push-err'
+      htmlSafe=true
+      file_id=@context.file_id
+      package_name=@context.package_name
+    }}
+  </AkTypography>
+
+  <div local-class='error-container'>
+    <AkStack @alignItems='center' @spacing='0.5'>
+      <AkIcon @color='error' @iconName='warning' @size='small' />
+
+      <AkTypography
+        data-test-nf-jira-push-err-error-label
+        @variant='subtitle2'
+      >
+        {{t 'errorMessage'}}
+      </AkTypography>
+    </AkStack>
+
+    <AkTypography data-test-nf-jira-push-err-error-value local-class='error-value' class='mt-1'>
+      {{@context.error_message}}
+    </AkTypography>
+  </div>
+</AkStack>
