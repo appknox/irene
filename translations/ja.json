@@ -1102,7 +1102,7 @@
         "suffix": " of the <strong>{platform_display}</strong> app <strong>{package_name}</strong> is now completed successfully."
       },
       "nf-public-api-user-updated": "User <strong>{type}</strong> for <strong>{user_email}</strong> changed from <strong>{current}</strong> to <strong>{updated}</strong> by <strong>{changed_by}</strong>.",
-      "nf-jira-push-err": "Jira push <strong>failed</strong> for file <strong>{file_id}</strong> ({package_name}). Please check your Jira integration configuration."
+      "nf-jira-push-err": "ファイル<strong>{file_id}</strong>（{package_name}）のJiraへのプッシュが<strong>失敗</strong>しました。Jira連携の設定をご確認ください。"
     },
     "namespaceMessage": {
       "approved": "{moderaterName} approved this namespace",
