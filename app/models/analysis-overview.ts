@@ -21,6 +21,9 @@ export default class AnalysisOverviewModel extends Model {
   @attr('number')
   declare activeCvssVersion: number;
 
+  @attr('number')
+  declare exploitabilityLikelihood: number;
+
   @attr('number', { defaultValue: null })
   declare overriddenRisk: number | null;
 

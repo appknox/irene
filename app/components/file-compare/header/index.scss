@@ -51,7 +51,7 @@
   padding: 1.4286em;
   border: 1px solid var(--file-compare-header-files-overview-border-color);
   border-top: none;
-  background-color: var(--file-compare-header-white-background-color);
+  background-color: var(--file-compare-header-background-light);
   display: grid;
   justify-items: stretch;
   grid-template-columns: repeat(auto-fill, minmax(475px, 1fr));

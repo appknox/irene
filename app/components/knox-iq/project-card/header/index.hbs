@@ -1,0 +1,143 @@
+<AkStack
+  @width='full'
+  @tag='header'
+  @alignItems='center'
+  @justifyContent='space-between'
+  local-class='project-card-header'
+  data-test-knoxiq-project-card-header
+>
+  <AkStack @spacing='1' @alignItems='center' {{style width='65%'}}>
+    <AppLogo
+      @src={{@file.iconUrl}}
+      @loading={{if @file.iconUrl false true}}
+      @size='medium'
+      @rounded={{true}}
+      @role='none'
+      @padding={{false}}
+      @border={{false}}
+    />
+
+    <AkStack @direction='column' {{style width='inherit'}}>
+      <AkTypography @variant='h5' data-test-knoxiq-project-card-fileName>
+        {{@file.name}}
+      </AkTypography>
+
+      <AkTypography
+        @variant='body1'
+        @noWrap={{true}}
+        title={{this.packageName}}
+        {{style maxWidth='100%'}}
+        data-test-knoxiq-project-card-packageName
+      >
+        {{this.packageName}}
+      </AkTypography>
+    </AkStack>
+  </AkStack>
+
+  <AkStack @alignItems='center' @justifyContent='flex-end' @spacing='1'>
+    {{#if @showRunKnoxIq}}
+      <AkButton
+        local-class='run-knoxiq-button'
+        {{on 'click' this.handleRunKnoxIq}}
+        data-test-knoxiq-project-card-runKnoxIqBtn
+      >
+        <:leftIcon>
+          <AkIcon @iconName='auto-awesome' @size='small' />
+        </:leftIcon>
+
+        <:default>
+          {{t 'knoxIq.runKnoxIq'}}
+        </:default>
+      </AkButton>
+    {{/if}}
+
+    {{#if @showMenuButton}}
+      <AkIconButton
+        @size='small'
+        disabled={{if @file.iconUrl false true}}
+        {{on 'click' this.handleFileMoreMenuOpen}}
+        data-test-knoxiq-project-card-moreMenuBtn
+      >
+        <AkIcon @iconName='more-vert' />
+      </AkIconButton>
+    {{/if}}
+
+    {{#if @showOpenInNewTab}}
+      <AkTooltip @title='{{t "openInNewTab"}}' @arrow={{true}} @placement='top'>
+        <AkLink
+          @route='authenticated.dashboard.file'
+          @underline='none'
+          @model={{@file.id}}
+          @fontWeight='bold'
+          target='_blank'
+          rel='noopener noreferrer'
+          {{on 'click' this.handleOpenInNewTab}}
+          data-test-knoxiq-project-card-openInNewTabLink
+        >
+          <AkIcon
+            @iconName='open-in-new'
+            data-test-knoxiq-project-card-openInNewTabIcon
+          />
+        </AkLink>
+      </AkTooltip>
+    {{/if}}
+
+    {{#if @showCheckbox}}
+      <AkTooltip
+        @disabled={{not @disableCheckbox}}
+        @arrow={{true}}
+        @placement='bottom'
+      >
+        <:tooltipContent>
+          {{t 'fileCompare.nonLegacyCardCompareDisabled' htmlSafe=true}}
+        </:tooltipContent>
+
+        <:default>
+          <AkCheckbox
+            @checked={{@isSelectedFile}}
+            @disabled={{@disableCheckbox}}
+            @onChange={{this.handleFileSelect}}
+            data-test-knoxiq-project-card-selectCheckbox
+          />
+        </:default>
+      </AkTooltip>
+    {{/if}}
+  </AkStack>
+</AkStack>
+
+<AkMenu
+  @anchorRef={{this.fileMoreMenuRef}}
+  @onClose={{this.handleFileMoreMenuClose}}
+  @arrow={{true}}
+  as |akm|
+>
+  {{#each this.fileMoreMenuList as |it|}}
+    {{#if it.group}}
+      <AkList::Item @noGutters={{true}} local-class='card-more-menu-item-group'>
+        <AkTypography
+          {{style fontSize='0.857rem'}}
+          @fontWeight='bold'
+          @tag='span'
+        >
+          {{it.group}}
+        </AkTypography>
+      </AkList::Item>
+    {{/if}}
+
+    <akm.listItem
+      local-class='card-more-menu-item'
+      @link={{true}}
+      @button={{false}}
+      @route={{it.route}}
+      @model={{it.routeModel}}
+      @divider={{unless it.hideDivider true}}
+      as |li|
+    >
+      <li.leftIcon>
+        <AkIcon @iconName={{it.iconName}} />
+      </li.leftIcon>
+
+      <li.text @primaryText={{it.label}} />
+    </akm.listItem>
+  {{/each}}
+</AkMenu>

@@ -1,0 +1,72 @@
+<AkStack
+  ...attributes
+  @direction='column'
+  local-class='project-card'
+  data-test-knoxiq-project-card
+>
+  <div
+    local-class='project-card-accent'
+    {{style backgroundColor=this.accentCssColor}}
+  >
+  </div>
+
+  <KnoxIq::ProjectCard::Header
+    @file={{@file}}
+    @project={{this.project}}
+    @isSelectedFile={{@isSelectedFile}}
+    @showCheckbox={{@showCheckbox}}
+    @isLegacy={{this.isLegacy}}
+    @disableCheckbox={{or (not this.isLegacy) @disableCheckbox}}
+    @onFileSelect={{@onFileSelect}}
+    @showMenuButton={{@showMenuButton}}
+    @showRunKnoxIq={{this.shouldShowRunKnoxIq}}
+    @onRunKnoxIq={{this.runKnoxiqScan}}
+    @showOpenInNewTab={{@showOpenInNewTab}}
+  />
+
+  <KnoxIq::ProjectCard::FileDetails @file={{@file}} @project={{this.project}} />
+
+  <KnoxIq::ProjectCard::ScanStatuses
+    @file={{@file}}
+    @project={{this.project}}
+  />
+
+  {{#if this.isLegacy}}
+    <AkStack
+      {{style height='100%'}}
+      @width='full'
+      @alignItems='center'
+      @justifyContent='center'
+    >
+      <AkStack
+        {{style minHeight='312px'}}
+        @width='full'
+        @alignItems='center'
+        @justifyContent='space-around'
+        class='p-3'
+      >
+        {{#if @file}}
+          <FileChart
+            {{style maxWidth='145px' maxHeight='145px'}}
+            @file={{@file}}
+            @legendMaxWidth={{200}}
+          />
+        {{else}}
+          <AkSkeleton @width='100%' @height='200px' @variant='rectangular' />
+        {{/if}}
+      </AkStack>
+    </AkStack>
+  {{else}}
+    <AkStack @width='full' @direction='column' @spacing='3' class='p-3'>
+      <KnoxIq::ProjectCard::ExploitabilitySection
+        @fileExploitability={{this.fileExploitability}}
+        @isFetching={{this.fetchFileExploitability.isRunning}}
+      />
+
+      <KnoxIq::ProjectCard::SeveritySection
+        @file={{@file}}
+        @project={{this.project}}
+      />
+    </AkStack>
+  {{/if}}
+</AkStack>

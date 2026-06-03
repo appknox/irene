@@ -5,6 +5,7 @@ import Component from '@glimmer/component';
 import { tracked } from '@glimmer/tracking';
 import type IntlService from 'ember-intl/services/intl';
 
+import ENUMS from 'irene/enums';
 import type FileModel from 'irene/models/file';
 
 export interface FileDetailsSummarySignature {
@@ -33,17 +34,22 @@ export default class FileDetailsSummaryComponent extends Component<FileDetailsSu
     return this.args.file.project.get('packageName');
   }
 
+  get isLegacy() {
+    return this.args.file.knoxiqStatus === ENUMS.KNOXIQ_SCAN_STATUS.LEGACY;
+  }
+
   get fileMoreMenuList() {
     const hasMultipleFiles = this.args.file.project.get('hasMultipleFiles');
 
     return [
-      hasMultipleFiles && {
-        group: this.intl.t('fileLevel'),
-        label: this.intl.t('compare'),
-        iconName: 'compare-arrows',
-        route: 'authenticated.dashboard.choose',
-        routeModel: this.args.file.id,
-      },
+      this.isLegacy &&
+        hasMultipleFiles && {
+          group: this.intl.t('fileLevel'),
+          label: this.intl.t('compare'),
+          iconName: 'compare-arrows',
+          route: 'authenticated.dashboard.choose',
+          routeModel: this.args.file.id,
+        },
       hasMultipleFiles && {
         group: this.intl.t('projectLevel'),
         label: this.intl.t('allUploads'),

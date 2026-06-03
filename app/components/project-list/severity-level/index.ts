@@ -8,6 +8,7 @@ import type IntlService from 'ember-intl/services/intl';
 import type LoggerService from 'irene/services/logger';
 import type ProjectModel from 'irene/models/project';
 import type FileRiskModel from 'irene/models/file-risk';
+import type FileExploitabilityModel from 'irene/models/file-exploitability';
 
 interface ProjectListSeverityLevelSignature {
   Element: HTMLElement;
@@ -21,11 +22,13 @@ export default class ProjectListSeverityLevelComponent extends Component<Project
   @service declare logger: LoggerService;
 
   @tracked fileRisk: FileRiskModel | null = null;
+  @tracked fileExploitability: FileExploitabilityModel | null = null;
 
   constructor(owner: unknown, args: ProjectListSeverityLevelSignature['Args']) {
     super(owner, args);
 
     this.fetchFileRisk.perform();
+    this.fetchFileExploitability.perform();
   }
 
   get file() {
@@ -97,6 +100,21 @@ export default class ProjectListSeverityLevelComponent extends Component<Project
     } catch (error) {
       this.logger.error(
         `Failed to fetch file risk for file - ${this.file?.id}`,
+        error
+      );
+    }
+  });
+
+  fetchFileExploitability = task(async () => {
+    try {
+      if (this.file) {
+        this.fileExploitability = await waitForPromise(
+          this.file.fetchFileExploitability()
+        );
+      }
+    } catch (error) {
+      this.logger.error(
+        `Failed to fetch file exploitability for file - ${this.file?.id}`,
         error
       );
     }

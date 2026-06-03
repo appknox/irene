@@ -1,23 +1,24 @@
 /* eslint-disable ember/no-observers */
 // eslint-disable-next-line ember/use-ember-data-rfc-395-imports
-import DS from 'ember-data';
+import type DS from 'ember-data';
 
 import Component from '@glimmer/component';
 import { tracked } from '@glimmer/tracking';
 import { task } from 'ember-concurrency';
-import Store from '@ember-data/store';
-import { inject as service } from '@ember/service';
+import { service } from '@ember/service';
 import { action } from '@ember/object';
 import { addObserver, removeObserver } from '@ember/object/observers';
-import RouterService from '@ember/routing/router-service';
-import IntlService from 'ember-intl/services/intl';
+import type Store from '@ember-data/store';
+import type RouterService from '@ember/routing/router-service';
+import type IntlService from 'ember-intl/services/intl';
 
-import ProjectModel from 'irene/models/project';
-import FileModel from 'irene/models/file';
-import { PaginationProviderActionsArgs } from 'irene/components/ak-pagination-provider';
-import RealtimeService from 'irene/services/realtime';
+import type ProjectModel from 'irene/models/project';
+import type FileModel from 'irene/models/file';
+import type OrganizationService from 'irene/services/organization';
+import type RealtimeService from 'irene/services/realtime';
+import type { PaginationProviderActionsArgs } from 'irene/components/ak-pagination-provider';
+import type { ProjectFilesQueryParams } from 'irene/routes/authenticated/dashboard/project/files';
 import parseError from 'irene/utils/parse-error';
-import { ProjectFilesQueryParams } from 'irene/routes/authenticated/dashboard/project/files';
 import styles from './index.scss';
 
 type FilesQueryResponse = DS.AdapterPopulatedRecordArray<FileModel> & {
@@ -42,6 +43,7 @@ export default class FileListComponent extends Component<FileListSignature> {
   @service declare intl: IntlService;
   @service declare realtime: RealtimeService;
   @service('notifications') declare notify: NotificationService;
+  @service declare organization: OrganizationService;
 
   @tracked filesResponse: FilesQueryResponse | null = null;
   @tracked baseFile: FileModel | null = null;
@@ -105,6 +107,10 @@ export default class FileListComponent extends Component<FileListSignature> {
 
   get hasNoFiles() {
     return this.totalFilesCount === 0;
+  }
+
+  get isKnoxIqEnabled() {
+    return this.organization.selected?.aiFeatures?.knoxiq;
   }
 
   // Reloads the files list whenever the file counter changes

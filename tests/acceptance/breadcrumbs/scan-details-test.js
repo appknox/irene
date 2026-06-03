@@ -10,6 +10,7 @@ import { setupRequiredEndpoints } from 'irene/tests/helpers/acceptance-utils';
 
 import {
   assertBreadcrumbsUI,
+  clickFileDetailsSummaryMenuItem,
   navigateBackWithBreadcrumb,
 } from 'irene/tests/helpers/breadcrumbs-utils';
 
@@ -142,6 +143,7 @@ module('Acceptance | breadcrumbs/scan-details', function (hooks) {
     const files = this.server.createList('file', 5, {
       project: project.id,
       profile: profile.id,
+      knoxiq_status: ENUMS.KNOXIQ_SCAN_STATUS.LEGACY,
     });
 
     const fileModels = files.map((file) => {
@@ -151,10 +153,15 @@ module('Acceptance | breadcrumbs/scan-details', function (hooks) {
         is_dynamic_done: true,
         is_api_done: true,
         is_active: true,
+        knoxiq_status: ENUMS.KNOXIQ_SCAN_STATUS.LEGACY,
       });
 
       return store.push(normalizedFile);
     });
+
+    this.server.get('/organizations/:id/ai_features', () => ({
+      knoxiq: false,
+    }));
 
     // Update previous file to be in the same project as the files
     previous_file.update({
@@ -258,6 +265,7 @@ module('Acceptance | breadcrumbs/scan-details', function (hooks) {
 
     this.setProperties({
       file: file1,
+      compareFile: file2,
       project,
     });
 
@@ -265,17 +273,9 @@ module('Acceptance | breadcrumbs/scan-details', function (hooks) {
   });
 
   test('it checks compare page breadcrumbs', async function (assert) {
-    assert.expect(6);
+    assert.expect(4);
 
-    assert.dom('[data-test-fileDetailsSummary-moreMenuBtn]').exists();
-
-    await click('[data-test-fileDetailsSummary-moreMenuBtn]');
-
-    assert.dom('[data-test-ak-list-item-link]').exists();
-
-    const menuItems = findAll('[data-test-ak-list-item-link]');
-
-    await click(menuItems[0].querySelector('a'));
+    await clickFileDetailsSummaryMenuItem(t('compare'));
 
     assertBreadcrumbsUI(
       [t('allProjects'), t('scanDetails'), t('fileCompare.fileSelection')],
@@ -284,17 +284,9 @@ module('Acceptance | breadcrumbs/scan-details', function (hooks) {
   });
 
   test('it checks all upload page breadcrumbs', async function (assert) {
-    assert.expect(12);
+    assert.expect(10);
 
-    assert.dom('[data-test-fileDetailsSummary-moreMenuBtn]').exists();
-
-    await click('[data-test-fileDetailsSummary-moreMenuBtn]');
-
-    assert.dom('[data-test-ak-list-item-link]').exists();
-
-    const menuItems = findAll('[data-test-ak-list-item-link]');
-
-    await click(menuItems[1].querySelector('a'));
+    await clickFileDetailsSummaryMenuItem(t('allUploads'));
 
     assertBreadcrumbsUI(
       [t('allProjects'), t('scanDetails'), t('allUploads')],
@@ -319,17 +311,9 @@ module('Acceptance | breadcrumbs/scan-details', function (hooks) {
   });
 
   test('it checks settings page breadcrumbs', async function (assert) {
-    assert.expect(18);
+    assert.expect(16);
 
-    assert.dom('[data-test-fileDetailsSummary-moreMenuBtn]').exists();
-
-    await click('[data-test-fileDetailsSummary-moreMenuBtn]');
-
-    assert.dom('[data-test-ak-list-item-link]').exists();
-
-    const menuItems = findAll('[data-test-ak-list-item-link]');
-
-    await click(menuItems[2].querySelector('a'));
+    await clickFileDetailsSummaryMenuItem(t('settings'));
 
     assertBreadcrumbsUI(
       [
@@ -573,28 +557,22 @@ module('Acceptance | breadcrumbs/scan-details', function (hooks) {
   });
 
   test('it checks compare page breadcrumbs in detail', async function (assert) {
-    assert.expect(37);
+    assert.expect(35);
 
-    assert.dom('[data-test-fileDetailsSummary-moreMenuBtn]').exists();
-
-    await click('[data-test-fileDetailsSummary-moreMenuBtn]');
-
-    assert.dom('[data-test-ak-list-item-link]').exists();
-
-    const menuItems = findAll('[data-test-ak-list-item-link]');
-
-    await click(menuItems[0].querySelector('a'));
+    await clickFileDetailsSummaryMenuItem(t('compare'));
 
     assertBreadcrumbsUI(
       [t('allProjects'), t('scanDetails'), t('fileCompare.fileSelection')],
       assert
     );
 
-    const selectCheckboxes = findAll('[data-test-fileoverview-selectcheckbox]');
+    const compareFileSelector = `[data-test-fileCompare-compareList-fileOverview='${this.compareFile.id}']`;
 
-    await click(selectCheckboxes[0]);
+    await click(
+      `${compareFileSelector} [data-test-fileOverview-selectCheckBox]`
+    );
 
-    await click('[data-test-filecompare-comparelistheader-comparebtn]');
+    await click('[data-test-fileCompare-compareListHeader-compareBtn]');
 
     assertBreadcrumbsUI(
       [

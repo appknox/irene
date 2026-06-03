@@ -1,0 +1,64 @@
+<AkStack @width='full' @direction='column' class='px-4'>
+  <AkStack
+    @width='full'
+    @justifyContent='space-between'
+    local-class='scan-statuses-row'
+    data-test-knoxiq-project-card-scanStatuses
+  >
+    <AkStack @spacing='1' @flexWrap='wrap'>
+      {{#each this.scanStatuses as |status|}}
+        <AkChip
+          @size='small'
+          @variant='semi-filled'
+          @color={{if status.isDone 'success' 'default'}}
+          @label={{status.name}}
+          @fontWeight='medium'
+          local-class='status-chip'
+          data-test-knoxiq-project-card-scanStatus='{{status.name}}'
+        >
+          <:icon>
+            <AkIcon
+              @iconName={{if status.isDone 'check-circle' 'circle-outline'}}
+              data-test-knoxiq-project-card-scanStatus-icon
+            />
+          </:icon>
+        </AkChip>
+      {{/each}}
+
+      {{#unless this.isManualScanDisabled}}
+        <AkChip
+          @size='small'
+          @variant='semi-filled'
+          @color={{if @file.isManualDone 'success' 'default'}}
+          @label={{t 'manual'}}
+          @fontWeight='medium'
+          local-class='status-chip'
+          data-test-knoxiq-project-card-manualScanStatus
+        >
+          <:icon>
+            <AkIcon
+              @iconName={{if
+                @file.isManualDone
+                'check-circle'
+                (if @file.isManualRequested 'timer-outline' 'circle-outline')
+              }}
+              data-test-knoxiq-project-card-manualScanStatus-icon
+            />
+          </:icon>
+        </AkChip>
+      {{/unless}}
+    </AkStack>
+
+    <AkTooltip
+      @placement='bottom'
+      @arrow={{true}}
+      @title='{{this.file.createdOnDateTime}}'
+    >
+      <AkIcon
+        @iconName='mdi:calendar-month-outline'
+        @color='textPrimary'
+        data-test-knoxiq-project-card-createdOnIcon
+      />
+    </AkTooltip>
+  </AkStack>
+</AkStack>

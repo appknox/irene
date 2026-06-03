@@ -8,16 +8,47 @@
   <AkStack @direction='column' @spacing='2.5'>
     <FileDetails::Summary @file={{@file}} />
 
-    <FileDetails::ScanActions @file={{@file}} />
+    {{#unless @file.isKnoxiqAutomated}}
+      {{#if this.knoxiqStatusCardConfig}}
+        <KnoxIq::StatusCard
+          @title={{this.knoxiqStatusCardConfig.title}}
+          @subtitle={{this.knoxiqStatusCardConfig.subtitle}}
+          @state={{this.knoxiqStatusCardConfig.state}}
+          @onRunKnoxiq={{this.runKnoxiqScan}}
+        />
+      {{/if}}
+    {{/unless}}
 
-    <FileDetails::InsightsWrapper
+    <FileDetails::ScanActions
+      @file={{@file}}
+      @isKnoxiqEnabled={{this.isKnoxiqEnabled}}
+      @knoxiqStatuses={{this.knoxiqScanStatuses}}
+    />
+
+    {{#if this.showKnoxiqFileDetails}}
+      <KnoxIq::ScanSummary
+        @file={{@file}}
+        @hasAnyKnoxiqScanCompleted={{this.hasAnyKnoxiqScanCompleted}}
+      />
+    {{else}}
+      <FileDetails::InsightsWrapper
+        @file={{@file}}
+        @fileAnalysesListContext={{@fileAnalysesListContext}}
+      />
+    {{/if}}
+
+  </AkStack>
+
+  {{#if this.hasAnyKnoxiqScanCompleted}}
+    <KnoxIq::VulnerabilityAnalysis
+      @file={{@file}}
+      @hasAnyKnoxiqScanCompleted={{this.hasAnyKnoxiqScanCompleted}}
+    />
+  {{else}}
+    <FileDetails::VulnerabilityAnalysis
       @file={{@file}}
       @fileAnalysesListContext={{@fileAnalysesListContext}}
     />
-  </AkStack>
+  {{/if}}
 
-  <FileDetails::VulnerabilityAnalysis
-    @file={{@file}}
-    @fileAnalysesListContext={{@fileAnalysesListContext}}
-  />
 </div>

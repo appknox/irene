@@ -76,6 +76,12 @@ export default class FileModel extends ModelBaseMixin {
   @attr('number')
   declare apiScanStatus: number;
 
+  @attr('number')
+  declare knoxiqStatus: number;
+
+  @attr('boolean')
+  declare isKnoxiqAutomated: boolean;
+
   @attr('boolean')
   declare isActive: boolean;
 
@@ -199,10 +205,22 @@ export default class FileModel extends ModelBaseMixin {
     return await adapter.fetchFileRisk(this.id);
   }
 
+  async fetchFileExploitability() {
+    const adapter = this.store.adapterFor('file');
+
+    return await adapter.fetchFileExploitability(this.id);
+  }
+
   async generateCapiReports(fileTypes: FileCapiReportScanType[]) {
     const adapter = this.store.adapterFor('file');
 
     return await adapter.generateCapiReports(this.id, fileTypes);
+  }
+
+  async triggerKnoxiqScan() {
+    const adapter = this.store.adapterFor('knoxiq-scan');
+
+    return await adapter.triggerScan(this.id);
   }
 }
 

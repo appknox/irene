@@ -1,4 +1,5 @@
 import ENUMS from 'irene/enums';
+import { setupKnoxiqMirageEndpoints } from 'irene/tests/helpers/knoxiq-test-utils';
 
 export function setupFileModelEndpoints(server) {
   const previous_file = server.create('file', { id: 10000 });
@@ -60,4 +61,11 @@ export function setupFileModelEndpoints(server) {
     file_risk_info,
     previous_file,
   };
+}
+
+export function setupKnoxiqFileModelEndpoints(server) {
+  const fileEndpoints = setupFileModelEndpoints(server);
+  setupKnoxiqMirageEndpoints(server);
+
+  return fileEndpoints;
 }

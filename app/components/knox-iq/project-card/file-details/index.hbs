@@ -1,0 +1,79 @@
+{{!@glint-nocheck}}
+
+<AkStack @width='full' @direction='column' class='px-4'>
+  <AkStack
+    @width='full'
+    @justifyContent='space-between'
+    local-class='file-details-row'
+    data-test-knoxiq-project-card-fileIdRow
+  >
+    <AkStack @spacing='0.5' @alignItems='center'>
+      <AkTypography
+        @variant='body1'
+        @color='textSecondary'
+        data-test-knoxiq-project-card-fileIdLabel
+      >
+        {{t 'fileID'}}
+        -
+      </AkTypography>
+
+      <AkTypography @variant='h6' data-test-knoxiq-project-card-fileId>
+        {{@file.id}}
+      </AkTypography>
+    </AkStack>
+
+    <AppPlatformIcon
+      data-test-knoxiq-project-card-platformIcon
+      @platform={{@file.project.platformIconClass}}
+    />
+  </AkStack>
+
+  <AkDivider @color='dark' />
+
+  <AkStack
+    @width='full'
+    @justifyContent='space-between'
+    local-class='file-details-row'
+    data-test-knoxiq-project-card-versionRow
+  >
+    <AkStack @spacing='0.5' data-test-knoxiq-project-card-version>
+      {{#if this.hasVersion}}
+        <AkTypography @variant='body1' @color='textSecondary'>
+          {{t 'version'}}
+          -
+        </AkTypography>
+
+        <AkTooltip
+          @title='{{t "version"}} - {{@file.version}}'
+          @arrow={{true}}
+          {{style maxWidth='50px'}}
+        >
+          <AkTypography @variant='h6' @noWrap={{true}}>
+            {{@file.version}}
+          </AkTypography>
+        </AkTooltip>
+      {{else}}
+        <AkSkeleton @width='100px' @height='20px' @variant='rectangular' />
+      {{/if}}
+    </AkStack>
+
+    <AkStack @spacing='0.5' data-test-knoxiq-project-card-versionCode>
+      {{#if @file.versionCode}}
+        <AkTypography @variant='body1' @color='textSecondary'>
+          {{t 'versionCodeTitleCase'}}
+          -
+        </AkTypography>
+
+        <AkTooltip
+          @title='{{t "versionCodeTitleCase"}} - {{@file.versionCode}}'
+          @arrow={{true}}
+          {{style maxWidth='50px'}}
+        >
+          <AkTypography @variant='h6' @noWrap={{true}}>
+            {{@file.versionCode}}
+          </AkTypography>
+        </AkTooltip>
+      {{/if}}
+    </AkStack>
+  </AkStack>
+</AkStack>

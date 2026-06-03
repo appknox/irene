@@ -1,5 +1,13 @@
 <div local-class='settings-analysis-container'>
   <div class='py-2 px-3'>
+    <ProjectSettings::AnalysisSettings::KnoxiqPreference
+      @project={{this.project}}
+    />
+  </div>
+
+  <AkDivider @color='dark' />
+
+  <div class='py-2 px-3'>
     <ProjectSettings::AnalysisSettings::ToggleAnalysis
       @project={{this.project}}
     />

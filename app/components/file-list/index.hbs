@@ -100,7 +100,11 @@
             @variant='body2'
             data-test-fileList-projectOverview-header-noSelectedFileText
           >
-            {{t 'fileList.selectFilesHeaderText'}}
+            {{#if this.isKnoxIqEnabled}}
+              {{t 'fileList.selectFilesHeaderTextLegacy' htmlSafe=true}}
+            {{else}}
+              {{t 'fileList.selectFilesHeaderText' htmlSafe=true}}
+            {{/if}}
           </AkTypography>
         {{/if}}
       </AkStack>
@@ -202,13 +206,13 @@
       {{else if this.hasFiles}}
         <div local-class='file-list-container'>
           {{#each this.files as |file|}}
-            <FileOverview
+            <AppFileCard
               @file={{file}}
               @isSelectedFile={{or
                 (eq file.id this.fileToCompare.id)
                 (eq file.id this.baseFile.id)
               }}
-              @disableSelection={{and
+              @disableCheckbox={{and
                 (not this.disableCompareBtn)
                 (and
                   (not-eq file.id this.fileToCompare.id)
@@ -216,7 +220,8 @@
                 )
               }}
               @onFileSelect={{this.handleFileSelect}}
-              {{style maxWidth='unset'}}
+              @showCheckbox={{true}}
+              @showMenuButton={{false}}
               data-test-fileList-fileOverview-item
               data-test-fileList-fileOverview='{{file.id}}'
             />

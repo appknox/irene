@@ -221,6 +221,7 @@ Router.map(function () {
           });
 
           this.route('analysis', { path: '/analysis/:analysis_id' });
+          this.route('knox-analysis', { path: '/knox-analysis/:analysis_id' });
 
           this.route('static-scan');
 

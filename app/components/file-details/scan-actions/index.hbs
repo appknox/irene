@@ -4,22 +4,29 @@
   @flexWrap='wrap'
   data-test-fileDetailScanActions-scan-type-cards
 >
-  <div local-class='scan-status-card'>
+  <div local-class='scan-status-card {{if @isKnoxiqEnabled "knoxiq"}}'>
     <FileDetails::ScanActions::StaticScan
       @file={{@file}}
       @vulnerabilityCount={{this.riskCountByScanType.static}}
+      @isKnoxiqEnabled={{@isKnoxiqEnabled}}
+      @knoxiqStatuses={{@knoxiqStatuses}}
     />
   </div>
 
-  <div local-class='scan-status-card' data-test-cy='dynamicScan-infoContainer'>
+  <div
+    local-class='scan-status-card {{if @isKnoxiqEnabled "knoxiq"}}'
+    data-test-cy='dynamicScan-infoContainer'
+  >
     <FileDetails::ScanActions::DynamicScan
       @file={{@file}}
       @vulnerabilityCount={{this.riskCountByScanType.dynamic}}
+      @isKnoxiqEnabled={{@isKnoxiqEnabled}}
+      @knoxiqStatuses={{@knoxiqStatuses}}
     />
   </div>
 
   {{#if this.isAPIScanEnabled}}
-    <div local-class='scan-status-card'>
+    <div local-class='scan-status-card {{if @isKnoxiqEnabled "knoxiq"}}'>
       <FileDetails::ScanActions::ApiScan
         @file={{@file}}
         @vulnerabilityCount={{this.riskCountByScanType.api}}
@@ -28,7 +35,7 @@
   {{/if}}
 
   {{#unless this.isManualScanDisabled}}
-    <div local-class='scan-status-card'>
+    <div local-class='scan-status-card {{if @isKnoxiqEnabled "knoxiq"}}'>
       <FileDetails::ScanActions::ManualScan
         @file={{@file}}
         @vulnerabilityCount={{this.riskCountByScanType.manual}}

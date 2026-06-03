@@ -1,0 +1,303 @@
+<AkStack
+  @direction='column'
+  @width='full'
+  local-class='scan-summary-root'
+  data-test-knoxiq-scan-summary
+>
+  <div local-class='scan-summary-accent {{this.scanSummaryAccentClass}}'></div>
+
+  <AkStack
+    @direction='row'
+    @width='full'
+    @alignItems='center'
+    @justifyContent='space-between'
+    local-class='scan-summary-header'
+  >
+    <AkStack @direction='row' @spacing='1' @alignItems='center'>
+      <AkIcon
+        @iconName='majesticons:pulse'
+        @color='primary'
+        data-test-knoxiq-scan-summary-icon
+      />
+
+      <AkTypography @variant='subtitle1' data-test-knoxiq-scan-summary-title>
+        {{t 'scanSummary'}}
+      </AkTypography>
+    </AkStack>
+
+    {{#if this.compareRouteModel}}
+      <AkLink
+        @route='authenticated.dashboard.compare'
+        @model={{this.compareRouteModel}}
+        @color='primary'
+        @underline='always'
+        data-test-knoxiq-scan-summary-key-insights-link
+      >
+        <:default>
+          {{t 'keyInsights'}}
+        </:default>
+
+        <:rightIcon>
+          <AkIcon @iconName='arrow-outward' />
+        </:rightIcon>
+      </AkLink>
+    {{/if}}
+  </AkStack>
+
+  <AkStack
+    @direction='row'
+    @width='full'
+    @spacing='6'
+    @alignItems='flex-start'
+    local-class='scan-summary-body'
+    data-test-knoxiq-scan-summary-body
+  >
+    <AkStack
+      @direction='column'
+      @width='6/12'
+      @spacing='2'
+      local-class='scan-summary-column scan-summary-exploitability'
+      data-test-knoxiq-scan-summary-exploitability
+    >
+      <AkStack @direction='row' @spacing='0.5' @alignItems='center'>
+        <AkTypography
+          @variant='subtitle1'
+          @fontWeight='bold'
+          data-test-knoxiq-scan-summary-exploitability-title
+        >
+          {{t 'knoxIq.exploitabilityLikelihood'}}
+        </AkTypography>
+
+        <AkTooltip
+          @arrow={{true}}
+          @placement='right'
+          data-test-knoxiq-scan-summary-exploitability-tooltip
+        >
+          <:tooltipContent>
+            <AkStack @direction='column' class='p-1' local-class='exploitability-tooltip-content'>
+              <AkTypography @color='inherit' @variant='body2'>
+                {{t 'knoxIq.exploitabilityLikelihoodTooltip'}}
+              </AkTypography>
+            </AkStack>
+          </:tooltipContent>
+
+          <:default>
+            <AkIcon
+              @iconName='error'
+              @size='small'
+              @color='textSecondary'
+              data-test-knoxiq-scan-summary-exploitability-tooltip-icon
+            />
+          </:default>
+        </AkTooltip>
+      </AkStack>
+
+      <AkStack
+        @direction='row'
+        @width='full'
+        @alignItems='stretch'
+        local-class='scan-summary-exploitability-counts'
+      >
+        {{#if this.isFetchingFileExploitability}}
+          <AkSkeleton @width='100%' @height='80px' @variant='rectangular' />
+        {{else}}
+          <AkStack
+            @direction='column'
+            @spacing='1.5'
+            @alignItems='center'
+            @width='full'
+            data-test-knoxiq-scan-summary-exploitability-high
+          >
+            <AkTypography @variant='subtitle2'>
+              {{t 'high'}}
+            </AkTypography>
+
+            <AkTypography @variant='h6' @fontWeight='bold'>
+              {{this.displayHigh}}
+            </AkTypography>
+
+            <KnoxIq::ExploitabilityLevelIcon @level='high' />
+          </AkStack>
+
+          <AkDivider
+            @direction='vertical'
+            @color='light'
+            local-class='scan-summary-exploitability-divider'
+          />
+
+          <AkStack
+            @direction='column'
+            @spacing='1.5'
+            @alignItems='center'
+            @width='full'
+            data-test-knoxiq-scan-summary-exploitability-medium
+          >
+            <AkTypography @variant='subtitle2'>
+              {{t 'medium'}}
+            </AkTypography>
+
+            <AkTypography @variant='h6' @fontWeight='bold'>
+              {{this.displayMedium}}
+            </AkTypography>
+
+            <KnoxIq::ExploitabilityLevelIcon @level='medium' />
+          </AkStack>
+
+          <AkDivider
+            @direction='vertical'
+            @color='light'
+            local-class='scan-summary-exploitability-divider'
+          />
+
+          <AkStack
+            @direction='column'
+            @spacing='1.5'
+            @alignItems='center'
+            @width='full'
+            data-test-knoxiq-scan-summary-exploitability-low
+          >
+            <AkTypography @variant='subtitle2'>
+              {{t 'low'}}
+            </AkTypography>
+
+            <AkTypography @variant='h6' @fontWeight='bold'>
+              {{this.displayLow}}
+            </AkTypography>
+
+            <KnoxIq::ExploitabilityLevelIcon @level='low' />
+          </AkStack>
+        {{/if}}
+      </AkStack>
+    </AkStack>
+
+    <AkStack
+      @direction='column'
+      @width='6/12'
+      @spacing='2'
+      local-class='scan-summary-column scan-summary-severity'
+      data-test-knoxiq-scan-summary-severity
+    >
+      <AkTypography
+        @variant='subtitle1'
+        @fontWeight='bold'
+        data-test-knoxiq-scan-summary-severity-title
+      >
+        {{t 'severityLevel'}}
+      </AkTypography>
+
+      <AkStack
+        @direction='column'
+        @spacing='3.5'
+        @width='full'
+        local-class='scan-summary-severity-content'
+      >
+        {{#if this.isFetchingFileRisk}}
+          <AkSkeleton @width='100%' @height='12px' @variant='rectangular' />
+        {{else}}
+          <AkProgressBar
+            @segments={{this.severitySegments}}
+            @height='12px'
+            data-test-knoxiq-scan-summary-severity-progress-bar
+          />
+        {{/if}}
+
+        <AkStack
+          @direction='row'
+          @width='full'
+          local-class='scan-summary-severity-counts'
+          data-test-knoxiq-scan-summary-severity-counts
+        >
+          {{#each this.severityColumns as |column index|}}
+            <AkStack
+              @direction='column'
+              @spacing='1.5'
+              @alignItems='flex-start'
+              @width='full'
+              local-class='scan-summary-severity-count-column'
+              data-test-knoxiq-scan-summary-severity-column={{index}}
+            >
+              <AkStack
+                @direction='row'
+                @spacing='1'
+                @alignItems='center'
+                @justifyContent='flex-start'
+                local-class='scan-summary-severity-count-item'
+                data-test-knoxiq-scan-summary-severity-count={{column.top.key}}
+              >
+                <span
+                  local-class='severity-dot'
+                  {{style background=column.top.color}}
+                  data-test-knoxiq-scan-summary-severity-dot={{column.top.key}}
+                />
+
+                <AkTypography @variant='subtitle2'>
+                  {{column.top.label}}
+                  -
+                  {{this.formatCount column.top.count}}
+                </AkTypography>
+              </AkStack>
+
+              <AkStack
+                @direction='row'
+                @spacing='1'
+                @alignItems='center'
+                @justifyContent='flex-start'
+                local-class='scan-summary-severity-count-item'
+                data-test-knoxiq-scan-summary-severity-count={{column.bottom.key}}
+              >
+                <span
+                  local-class='severity-dot'
+                  {{style background=column.bottom.color}}
+                  data-test-knoxiq-scan-summary-severity-dot={{column.bottom.key}}
+                />
+
+                <AkTypography @variant='subtitle2'>
+                  {{column.bottom.label}}
+                  -
+                  {{this.formatCount column.bottom.count}}
+                </AkTypography>
+
+                {{#if
+                  (and
+                    (eq column.bottom.key 'passed') this.hasOverridenPassedRisks
+                  )
+                }}
+                  <AkTooltip
+                    @arrow={{true}}
+                    @placement='left'
+                    data-test-knoxiq-scan-summary-passed-edit-icon-tooltip
+                  >
+                    <:tooltipContent>
+                      <AkStack
+                        @direction='column'
+                        class='p-1'
+                        local-class='passed-edit-icon-tooltip-content'
+                        data-test-knoxiq-scan-summary-passed-edit-icon-tooltip-content
+                      >
+                        <AkTypography @color='inherit' @variant='body2'>
+                          {{t
+                            'ignoreVulnerabilityFileChartMessage'
+                            overridenPassedRiskCount=this.overridenPassedRiskCount
+                          }}
+                        </AkTypography>
+                      </AkStack>
+                    </:tooltipContent>
+
+                    <:default>
+                      <AkIcon
+                        @iconName='edit'
+                        @size='small'
+                        @color='textSecondary'
+                        data-test-knoxiq-scan-summary-passed-edit-icon
+                      />
+                    </:default>
+                  </AkTooltip>
+                {{/if}}
+              </AkStack>
+            </AkStack>
+          {{/each}}
+        </AkStack>
+      </AkStack>
+    </AkStack>
+  </AkStack>
+</AkStack>

@@ -15,7 +15,12 @@
     </div>
   {{/if}}
 
-  <AkTypography local-class='ak-chip-label' @tag='span' @color='inherit'>
+  <AkTypography
+    local-class='ak-chip-label'
+    @tag='span'
+    @color='inherit'
+    @fontWeight={{this.fontWeight}}
+  >
     {{@label}}
   </AkTypography>
 
