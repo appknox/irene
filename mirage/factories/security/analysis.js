@@ -5,41 +5,81 @@ import ENUMS from 'irene/enums';
 export default Factory.extend({
   analiser_version: 1,
   cvss_version: 3,
+  active_cvss_version: 3,
   cvss_base() {
     return faker.number.float({ min: 1.0, max: 9.9, fractionDigits: 1 });
   },
   cvss_vector: 'CVSS:3.0/AV:N/AC:L/PR:N/UI:N/S:C/C:H/I:H/A:H',
 
   attack_vector() {
-    return faker.helpers.arrayElement(ENUMS.ATTACK_VECTOR.BASE_VALUES);
+    return faker.helpers.arrayElement(ENUMS.CVSS_V3_ATTACK_VECTOR.BASE_VALUES);
   },
 
   attack_complexity() {
-    return faker.helpers.arrayElement(ENUMS.ATTACK_COMPLEXITY.BASE_VALUES);
+    return faker.helpers.arrayElement(
+      ENUMS.CVSS_V3_ATTACK_COMPLEXITY.BASE_VALUES
+    );
   },
 
   privileges_required() {
-    return faker.helpers.arrayElement(ENUMS.PRIVILEGES_REQUIRED.BASE_VALUES);
+    return faker.helpers.arrayElement(
+      ENUMS.CVSS_V3_PRIVILEGES_REQUIRED.BASE_VALUES
+    );
   },
 
   user_interaction() {
-    return faker.helpers.arrayElement(ENUMS.USER_INTERACTION.BASE_VALUES);
+    return faker.helpers.arrayElement(
+      ENUMS.CVSS_V3_USER_INTERACTION.BASE_VALUES
+    );
   },
 
   scope() {
-    return faker.helpers.arrayElement(ENUMS.SCOPE.BASE_VALUES);
+    return faker.helpers.arrayElement(ENUMS.CVSS_V3_SCOPE.BASE_VALUES);
   },
 
   confidentiality_impact() {
-    return faker.helpers.arrayElement(ENUMS.CONFIDENTIALITY_IMPACT.BASE_VALUES);
+    return faker.helpers.arrayElement(
+      ENUMS.CVSS_V3_CONFIDENTIALITY_IMPACT.BASE_VALUES
+    );
   },
 
   integrity_impact() {
-    return faker.helpers.arrayElement(ENUMS.INTEGRITY_IMPACT.BASE_VALUES);
+    return faker.helpers.arrayElement(
+      ENUMS.CVSS_V3_INTEGRITY_IMPACT.BASE_VALUES
+    );
   },
 
   availability_impact() {
-    return faker.helpers.arrayElement(ENUMS.AVAILABILITY_IMPACT.BASE_VALUES);
+    return faker.helpers.arrayElement(
+      ENUMS.CVSS_V3_AVAILABILITY_IMPACT.BASE_VALUES
+    );
+  },
+
+  cvss_metrics() {
+    return {
+      attack_vector: faker.helpers.arrayElement(
+        ENUMS.CVSS_V3_ATTACK_VECTOR.BASE_VALUES
+      ),
+      attack_complexity: faker.helpers.arrayElement(
+        ENUMS.CVSS_V3_ATTACK_COMPLEXITY.BASE_VALUES
+      ),
+      privileges_required: faker.helpers.arrayElement(
+        ENUMS.CVSS_V3_PRIVILEGES_REQUIRED.BASE_VALUES
+      ),
+      user_interaction: faker.helpers.arrayElement(
+        ENUMS.CVSS_V3_USER_INTERACTION.BASE_VALUES
+      ),
+      scope: faker.helpers.arrayElement(ENUMS.CVSS_V3_SCOPE.BASE_VALUES),
+      confidentiality_impact: faker.helpers.arrayElement(
+        ENUMS.CVSS_V3_CONFIDENTIALITY_IMPACT.BASE_VALUES
+      ),
+      integrity_impact: faker.helpers.arrayElement(
+        ENUMS.CVSS_V3_INTEGRITY_IMPACT.BASE_VALUES
+      ),
+      availability_impact: faker.helpers.arrayElement(
+        ENUMS.CVSS_V3_AVAILABILITY_IMPACT.BASE_VALUES
+      ),
+    };
   },
 
   risk() {

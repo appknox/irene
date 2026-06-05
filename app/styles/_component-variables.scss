@@ -442,6 +442,15 @@ body {
   --security-analysis-details-cvss-metrics-progress-border-color: var(
     --primary-main-10
   );
+  --security-analysis-details-cvss-metrics-legacy-cvss-banner-background-color: var(
+    --error-light
+  );
+  --security-analysis-details-cvss-metrics-legacy-cvss-info-background-color: var(
+    --background-main
+  );
+  --security-analysis-details-cvss-metrics-legacy-cvss-info-border-color: var(
+    --border-color-1
+  );
 
   // variables for security/analysis-details/footer
   --security-analysis-details-footer-white-background-color: var(

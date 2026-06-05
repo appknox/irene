@@ -1,8 +1,12 @@
 import Component from '@glimmer/component';
 import type FileModel from 'irene/models/file';
+import type { FileDetailsAnalysesProviderContext } from './analyses-provider';
 
 export interface FileDetailsSignature {
-  Args: { file: FileModel };
+  Args: {
+    file: FileModel;
+    fileAnalysesListContext: FileDetailsAnalysesProviderContext;
+  };
 }
 
 export default class FileDetailsComponent extends Component<FileDetailsSignature> {}

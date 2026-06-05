@@ -11,7 +11,10 @@ import { irregular } from '@ember-data/request-utils/string';
 import { inject as service } from '@ember/service';
 import { isEmpty } from '@ember/utils';
 import IntlService from 'ember-intl/services/intl';
+
 import ENUMS from 'irene/enums';
+import { riskClass } from 'irene/helpers/risk-class';
+
 import AsvsModel from './asvs';
 import AttachmentModel from './attachment';
 import CweModel from './cwe';
@@ -35,6 +38,14 @@ irregular('asvs', 'asvses');
 export interface CvssMetricHumanized {
   key: string;
   value: string;
+}
+
+export interface LegacyCvss {
+  version: number;
+  vector: string;
+  base: number;
+  risk: number;
+  metrics_humanized: CvssMetricHumanized[];
 }
 
 export interface Finding {
@@ -62,6 +73,12 @@ export default class AnalysisModel extends Model {
 
   @attr('number')
   declare cvssVersion: number;
+
+  @attr('number')
+  declare activeCvssVersion: number;
+
+  @attr
+  declare legacyCvss: LegacyCvss | null;
 
   @attr
   declare cvssMetricsHumanized: CvssMetricHumanized[];
@@ -161,22 +178,7 @@ export default class AnalysisModel extends Model {
   }
 
   labelClass(risk: number | null) {
-    const cls = 'tag';
-
-    switch (risk) {
-      case ENUMS.RISK.UNKNOWN:
-        return `${cls} is-progress`;
-      case ENUMS.RISK.NONE:
-        return `${cls} is-success`;
-      case ENUMS.RISK.LOW:
-        return `${cls} is-info`;
-      case ENUMS.RISK.MEDIUM:
-        return `${cls} is-warning`;
-      case ENUMS.RISK.HIGH:
-        return `${cls} is-danger`;
-      case ENUMS.RISK.CRITICAL:
-        return `${cls} is-critical`;
-    }
+    return `tag ${riskClass([risk])}`;
   }
 
   hasType(type: number) {
@@ -205,12 +207,12 @@ export default class AnalysisModel extends Model {
     }
   }
 
-  get hasCvssBase() {
-    return this.cvssVersion === 3;
-  }
-
   get isOverriddenRisk() {
     return !isEmpty(this.overriddenRisk);
+  }
+
+  get isLegacyCvss() {
+    return this.activeCvssVersion !== this.cvssVersion;
   }
 
   /**

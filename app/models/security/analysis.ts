@@ -9,6 +9,8 @@ import { isEmpty } from '@ember/utils';
 import { irregular } from '@ember-data/request-utils/string';
 
 import ENUMS from 'irene/enums';
+import { riskClass } from 'irene/helpers/risk-class';
+export type { RiskLabelClass as SecurityAnalysisRiskLabelClass } from 'irene/helpers/risk-class';
 import SecurityFileModel from './file';
 import OwaspModel from '../owasp';
 import OwaspMobile2024Model from '../owaspmobile2024';
@@ -35,33 +37,34 @@ export interface SecurityAnalysisFinding {
   description: string;
 }
 
+export interface CvssV3Metrics {
+  attack_vector: string | number;
+  attack_complexity: string | number;
+  privileges_required: string | number;
+  user_interaction: string | number;
+  scope: string | number;
+  confidentiality_impact: string | number;
+  integrity_impact: string | number;
+  availability_impact: string | number;
+}
+
+export interface CvssV4Metrics {
+  attack_vector: string | number;
+  attack_complexity: string | number;
+  attack_requirements: string | number;
+  privileges_required: string | number;
+  user_interaction: string | number;
+  vuln_confidentiality: string | number;
+  vuln_integrity: string | number;
+  vuln_availability: string | number;
+  subsequent_confidentiality: string | number;
+  subsequent_integrity: string | number;
+  subsequent_availability: string | number;
+}
+
 export default class SecurityAnalysisModel extends Model {
   @attr
   declare findings: SecurityAnalysisFinding[];
-
-  @attr
-  declare attackVector: 'N' | 'A' | 'L' | 'P' | number;
-
-  @attr
-  declare attackComplexity: 'L' | 'H' | number;
-
-  @attr
-  declare privilegesRequired: 'N' | 'L' | 'H' | number;
-
-  @attr
-  declare userInteraction: 'R' | 'N' | number;
-
-  @attr
-  declare scope: 'C' | 'U' | number;
-
-  @attr
-  declare confidentialityImpact: 'N' | 'L' | 'H' | number;
-
-  @attr
-  declare integrityImpact: 'N' | 'L' | 'H' | number;
-
-  @attr
-  declare availabilityImpact: 'N' | 'L' | 'H' | number;
 
   @attr('number')
   declare risk: number;
@@ -69,11 +72,32 @@ export default class SecurityAnalysisModel extends Model {
   @attr('number')
   declare status: number;
 
-  @attr('string')
-  declare cvssBase: string | number;
+  @attr('number')
+  declare cvssBase: number;
 
   @attr('string') declare cvssVector: string;
-  @attr('string') declare cvssVersion: string;
+  @attr('number') declare cvssVersion: number;
+
+  @attr('number')
+  declare activeCvssVersion: number | null;
+
+  @attr()
+  declare cvssMetrics: CvssV3Metrics | CvssV4Metrics | null;
+
+  @attr('number')
+  declare legacyCvssBase: number;
+
+  @attr('string')
+  declare legacyCvssVector: string;
+
+  @attr('number')
+  declare legacyCvssVersion: number | null;
+
+  @attr('number')
+  declare legacyCvssRisk: number;
+
+  @attr()
+  declare legacyCvssMetrics: CvssV3Metrics | CvssV4Metrics | null;
   @attr('number') declare analiserVersion: number;
 
   @attr('number', { defaultValue: null }) declare overriddenRisk: number;
@@ -142,25 +166,7 @@ export default class SecurityAnalysisModel extends Model {
   }
 
   labelClass(risk: number) {
-    switch (risk) {
-      case ENUMS.RISK.UNKNOWN:
-        return 'is-progress';
-
-      case ENUMS.RISK.NONE:
-        return 'is-success';
-
-      case ENUMS.RISK.LOW:
-        return 'is-info';
-
-      case ENUMS.RISK.MEDIUM:
-        return 'is-warning';
-
-      case ENUMS.RISK.HIGH:
-        return 'is-danger';
-
-      case ENUMS.RISK.CRITICAL:
-        return 'is-critical';
-    }
+    return riskClass([risk]);
   }
 
   hasType(type: number) {
