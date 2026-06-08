@@ -26,7 +26,7 @@ export default class AppFileCardComponent extends Component<AppFileCardSignature
   @service declare organization: OrganizationService;
 
   get isKnoxIqEnabled() {
-    return this.organization.selected?.aiFeatures?.knoxiq;
+    return this.organization.isKnoxIqEnabled;
   }
 }
 

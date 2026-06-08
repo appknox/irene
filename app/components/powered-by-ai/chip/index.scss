@@ -23,4 +23,19 @@
       border: 1px solid var(--powered-by-ai-chip-hover-border-color);
     }
   }
+
+  &.outlined {
+    background-color: transparent;
+    border-color: var(--powered-by-ai-chip-bg-color);
+    color: var(--powered-by-ai-chip-bg-color);
+
+    .text {
+      color: var(--powered-by-ai-chip-bg-color);
+    }
+
+    &.clickable:hover {
+      background-color: transparent;
+      border-color: var(--powered-by-ai-chip-hover-border-color);
+    }
+  }
 }

@@ -86,18 +86,15 @@ export default class FileDetailsComponent extends Component<FileDetailsSignature
   }
 
   get isKnoxiqEnabled() {
-    if (this.args.file.knoxiqStatus === ENUMS.KNOXIQ_SCAN_STATUS.LEGACY) {
+    if (this.args.file.isLegacyKnoxIQScan) {
       return false;
     }
 
-    return Boolean(this.organization.selected?.aiFeatures?.knoxiq);
+    return this.organization.isKnoxIqEnabled;
   }
 
   get knoxiqScanRecord() {
-    return (
-      this.knoxiqScan ??
-      this.store.peekRecord('knoxiq-scan', String(this.args.file.id))
-    );
+    return this.knoxiqScan;
   }
 
   get knoxiqScanStatuses(): KnoxiqScanStatusByType {
@@ -134,8 +131,8 @@ export default class FileDetailsComponent extends Component<FileDetailsSignature
   }
 
   get hasAnyKnoxiqScanCompleted() {
-    return Object.values(this.knoxiqScanStatuses).some(
-      (status) => status === ENUMS.KNOXIQ_SCAN_STATUS.COMPLETED
+    return Object.values(this.knoxiqScanStatuses).includes(
+      ENUMS.KNOXIQ_SCAN_STATUS.COMPLETED
     );
   }
 
@@ -149,6 +146,7 @@ export default class FileDetailsComponent extends Component<FileDetailsSignature
 
   get knoxiqStatusCardConfig(): KnoxiqStatusCardConfig | null {
     if (
+      this.args.file.isKnoxiqAutomated ||
       !this.isKnoxiqEnabled ||
       !this.fetchKnoxiqFileScans.isIdle ||
       !this.hasKnoxiqScanStatusLoaded
@@ -158,7 +156,7 @@ export default class FileDetailsComponent extends Component<FileDetailsSignature
 
     const sastStatus = this.sastKnoxiqStatus;
     const dastStatus = this.dastKnoxiqStatus;
-    const { NOT_TRIGGERED, PENDING, RUNNING, COMPLETED, ERRORED } =
+    const { DISABLED, NOT_TRIGGERED, PENDING, RUNNING, COMPLETED, ERRORED } =
       ENUMS.KNOXIQ_SCAN_STATUS;
 
     if (sastStatus === ERRORED || dastStatus === ERRORED) {
@@ -180,7 +178,10 @@ export default class FileDetailsComponent extends Component<FileDetailsSignature
       return this.buildKnoxiqStatusCard(KNOXIQ_STATUS_CARDS.ready);
     }
 
-    if (sastStatus === COMPLETED && dastStatus === NOT_TRIGGERED) {
+    if (
+      sastStatus === COMPLETED &&
+      (dastStatus === NOT_TRIGGERED || dastStatus === DISABLED)
+    ) {
       const isDastDone =
         this.args.file.isManualDone || this.args.file.isDynamicDone;
 

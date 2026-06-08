@@ -1,6 +1,6 @@
 .static-scan-accent {
   width: 100%;
-  height: 5px;
+  height: 4px;
   flex-shrink: 0;
 }
 
@@ -41,6 +41,8 @@
 }
 
 .view-details-icon {
+  justify-content: left;
+
   :global(.ak-icon) {
     font-size: 1.5rem !important;
   }

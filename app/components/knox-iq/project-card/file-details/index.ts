@@ -13,7 +13,7 @@ interface KnoxIqProjectCardFileDetailsSignature {
 
 export default class KnoxIqProjectCardFileDetailsComponent extends Component<KnoxIqProjectCardFileDetailsSignature> {
   get hasVersion() {
-    return typeof this.args.file?.version !== 'undefined';
+    return this.args.file?.version !== undefined;
   }
 
   get platformIconClass() {

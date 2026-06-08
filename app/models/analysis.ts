@@ -217,10 +217,6 @@ export default class AnalysisModel extends Model {
     }
   }
 
-  get hasCvssBase() {
-    return this.cvssVersion === 3;
-  }
-
   get isOverriddenRisk() {
     return !isEmpty(this.overriddenRisk);
   }

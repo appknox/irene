@@ -81,8 +81,7 @@ export default class OrganizationAiPoweredFeaturesComponent extends Component {
         isToggling:
           this.featureToToggle === 'pii' && this.toggleFeature.isRunning,
       },
-      // !this.organization.hideUpsellUIStatus.aiKnoxiq && {
-      {
+      !this.organization.hideUpsellUIStatus.aiKnoxiq && {
         featureKey: 'autoExecuteKnoxiqOnCicdUpload' as const,
         isChecked: Boolean(this.aiFeatures?.autoExecuteKnoxiqOnCicdUpload),
         enabled: this.features?.knoxiq,
@@ -130,20 +129,10 @@ export default class OrganizationAiPoweredFeaturesComponent extends Component {
       case 'reporting':
         return this.reportDrawerInfo;
       case 'autoExecuteKnoxiqOnCicdUpload':
-        return this.knoxIqDrawerInfo;
+        return [];
       default:
         return null;
     }
-  }
-
-  get knoxIqDrawerInfo() {
-    return [
-      {
-        title: this.intl.t('knoxIq.orgSettingsDrawer.title'),
-        body: this.intl.t('knoxIq.orgSettingsDrawer.body'),
-        marginTop: 'mt-2',
-      },
-    ];
   }
 
   get piiDrawerInfo() {

@@ -5,12 +5,13 @@ import Component from '@glimmer/component';
 import { tracked } from '@glimmer/tracking';
 import type IntlService from 'ember-intl/services/intl';
 
-import ENUMS from 'irene/enums';
 import type FileModel from 'irene/models/file';
+import type { PoweredByAiDrawerInfo } from 'irene/components/powered-by-ai/drawer';
 
 export interface FileDetailsSummarySignature {
   Args: {
     file: FileModel;
+    showPoweredByAiChip?: boolean;
   };
 }
 
@@ -35,7 +36,41 @@ export default class FileDetailsSummaryComponent extends Component<FileDetailsSu
   }
 
   get isLegacy() {
-    return this.args.file.knoxiqStatus === ENUMS.KNOXIQ_SCAN_STATUS.LEGACY;
+    return this.args.file.isLegacyKnoxIQScan;
+  }
+
+  get knoxIqDrawerInfo(): PoweredByAiDrawerInfo[] {
+    return [
+      {
+        title: this.intl.t('knoxIq.fileDetailsDrawer.q1Title'),
+        body: this.intl.t('knoxIq.fileDetailsDrawer.q1Body'),
+        marginTop: 'mt-2',
+      },
+      {
+        title: this.intl.t('knoxIq.fileDetailsDrawer.q2Title'),
+        body: this.intl.t('knoxIq.fileDetailsDrawer.q2Body'),
+        contentList: [
+          this.intl.t('knoxIq.fileDetailsDrawer.q2List1'),
+          this.intl.t('knoxIq.fileDetailsDrawer.q2List2'),
+          this.intl.t('knoxIq.fileDetailsDrawer.q2List3'),
+          this.intl.t('knoxIq.fileDetailsDrawer.q2List4'),
+          this.intl.t('knoxIq.fileDetailsDrawer.q2List5'),
+          this.intl.t('knoxIq.fileDetailsDrawer.q2List6'),
+        ],
+        marginTop: 'mt-3',
+      },
+      {
+        title: this.intl.t('knoxIq.fileDetailsDrawer.q3Title'),
+        body: this.intl.t('knoxIq.fileDetailsDrawer.q3Body'),
+        contentList: [
+          this.intl.t('knoxIq.fileDetailsDrawer.q3List1'),
+          this.intl.t('knoxIq.fileDetailsDrawer.q3List2'),
+          this.intl.t('knoxIq.fileDetailsDrawer.q3List3'),
+          this.intl.t('knoxIq.fileDetailsDrawer.q3List4'),
+        ],
+        marginTop: 'mt-3',
+      },
+    ];
   }
 
   get fileMoreMenuList() {

@@ -39,15 +39,15 @@ module(
         dast: ENUMS.KNOXIQ_SCAN_STATUS.RUNNING,
       });
 
-      await this.owner.lookup('service:organization').load();
-    });
-
-    test('it renders KnoxIQ status chips when knoxiq is enabled', async function (assert) {
       this.server.get('/manualscans/:id', () => ({ id: '1' }));
       this.server.get('/v3/projects/:id', (schema, req) => {
         return schema.projects.find(`${req.params.id}`)?.toJSON();
       });
 
+      await this.owner.lookup('service:organization').load();
+    });
+
+    test('it renders KnoxIQ status chips when knoxiq is enabled', async function (assert) {
       await render(hbs`
         <FileDetails::ScanActions
           @file={{this.file}}
@@ -63,6 +63,60 @@ module(
       assert.dom('[data-test-fileDetailScanActions-dynamicScanTitle]').exists();
 
       assert.dom().containsText(t('completed'));
+    });
+
+    test('it renders the running chip for in-progress KnoxIQ scans', async function (assert) {
+      this.knoxiqStatuses = knoxiqScanStatuses({
+        sast: ENUMS.KNOXIQ_SCAN_STATUS.RUNNING,
+        dast: ENUMS.KNOXIQ_SCAN_STATUS.RUNNING,
+      });
+
+      await render(hbs`
+        <FileDetails::ScanActions
+          @file={{this.file}}
+          @isKnoxiqEnabled={{true}}
+          @knoxiqStatuses={{this.knoxiqStatuses}}
+        />
+      `);
+
+      assert.dom().containsText(t('knoxIq.statusChip.running'));
+      assert.dom().doesNotContainText(t('knoxIq.statusChip.failed'));
+    });
+
+    test('it renders the failed chip when a KnoxIQ scan errors', async function (assert) {
+      this.knoxiqStatuses = knoxiqScanStatuses({
+        sast: ENUMS.KNOXIQ_SCAN_STATUS.ERRORED,
+        dast: ENUMS.KNOXIQ_SCAN_STATUS.ERRORED,
+      });
+
+      await render(hbs`
+        <FileDetails::ScanActions
+          @file={{this.file}}
+          @isKnoxiqEnabled={{true}}
+          @knoxiqStatuses={{this.knoxiqStatuses}}
+        />
+      `);
+
+      assert.dom().containsText(t('knoxIq.statusChip.failed'));
+      assert.dom().doesNotContainText(t('knoxIq.statusChip.running'));
+    });
+
+    test('it does not render KnoxIQ status chips when scan is not automated', async function (assert) {
+      this.file.isKnoxiqAutomated = false;
+
+      await render(hbs`
+        <FileDetails::ScanActions
+          @file={{this.file}}
+          @isKnoxiqEnabled={{true}}
+          @knoxiqStatuses={{this.knoxiqStatuses}}
+        />
+      `);
+
+      assert
+        .dom('[data-test-fileDetailScanActions-staticScanCompletedStatus]')
+        .exists();
+      assert.dom().doesNotContainText(t('knoxIq.statusChip.running'));
+      assert.dom().doesNotContainText(t('knoxIq.statusChip.failed'));
     });
   }
 );

@@ -22,6 +22,10 @@ export default class OrganizationService extends Service {
     return this.selected?.aiFeatures;
   }
 
+  get isKnoxIqEnabled() {
+    return this.orgAiFeatures?.knoxiq;
+  }
+
   get hideUpsellUI() {
     return this.selected?.hideUpsellFeatures;
   }

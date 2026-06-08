@@ -6,18 +6,19 @@
   />
 
   <AkStack @direction='column' @spacing='2.5'>
-    <FileDetails::Summary @file={{@file}} />
+    <FileDetails::Summary
+      @file={{@file}}
+      @showPoweredByAiChip={{this.isKnoxiqEnabled}}
+    />
 
-    {{#unless @file.isKnoxiqAutomated}}
-      {{#if this.knoxiqStatusCardConfig}}
-        <KnoxIq::StatusCard
-          @title={{this.knoxiqStatusCardConfig.title}}
-          @subtitle={{this.knoxiqStatusCardConfig.subtitle}}
-          @state={{this.knoxiqStatusCardConfig.state}}
-          @onRunKnoxiq={{this.runKnoxiqScan}}
-        />
-      {{/if}}
-    {{/unless}}
+    {{#if this.knoxiqStatusCardConfig}}
+      <KnoxIq::StatusCard
+        @title={{this.knoxiqStatusCardConfig.title}}
+        @subtitle={{this.knoxiqStatusCardConfig.subtitle}}
+        @state={{this.knoxiqStatusCardConfig.state}}
+        @onRunKnoxiq={{this.runKnoxiqScan}}
+      />
+    {{/if}}
 
     <FileDetails::ScanActions
       @file={{@file}}
@@ -43,6 +44,7 @@
     <KnoxIq::VulnerabilityAnalysis
       @file={{@file}}
       @hasAnyKnoxiqScanCompleted={{this.hasAnyKnoxiqScanCompleted}}
+      @fileAnalysesListContext={{@fileAnalysesListContext}}
     />
   {{else}}
     <FileDetails::VulnerabilityAnalysis

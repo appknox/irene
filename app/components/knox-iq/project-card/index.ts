@@ -6,7 +6,6 @@ import { task } from 'ember-concurrency';
 import { waitForPromise } from '@ember/test-waiters';
 import type Store from 'ember-data/store';
 
-import ENUMS from 'irene/enums';
 import parseError from 'irene/utils/parse-error';
 import type FileModel from 'irene/models/file';
 import type ProjectModel from 'irene/models/project';
@@ -14,10 +13,10 @@ import type FileExploitabilityModel from 'irene/models/file-exploitability';
 
 export type KnoxIqProjectCardAccent = 'pending' | 'done' | 'legacy';
 
-const ACCENT_COLOR_MAP: Record<KnoxIqProjectCardAccent, string> = {
-  pending: 'var(--knoxiq-card-accent-pending)',
-  done: 'var(--knoxiq-card-accent-completed)',
-  legacy: 'var(--knoxiq-card-accent-legacy)',
+const ACCENT_CSS_VAR_MAP: Record<KnoxIqProjectCardAccent, string> = {
+  pending: '--knoxiq-card-accent-pending',
+  done: '--knoxiq-card-accent-completed',
+  legacy: '--knoxiq-card-accent-legacy',
 };
 
 interface KnoxIqProjectCardSignature {
@@ -47,12 +46,8 @@ export default class KnoxIqProjectCardComponent extends Component<KnoxIqProjectC
     this.fetchFileExploitability.perform();
   }
 
-  get knoxiqStatus() {
-    return this.args.file?.knoxiqStatus;
-  }
-
   get project() {
-    const projectId = this.args.file?.belongsTo('project').id();
+    const projectId = this.args.file?.project?.get('id');
 
     return projectId
       ? (this.store.peekRecord('project', projectId) as ProjectModel | null)
@@ -75,13 +70,11 @@ export default class KnoxIqProjectCardComponent extends Component<KnoxIqProjectC
   }
 
   get derivedAccentColor(): KnoxIqProjectCardAccent {
-    const status = this.knoxiqStatus;
-
-    if (status == null || status === ENUMS.KNOXIQ_SCAN_STATUS.LEGACY) {
+    if (this.args.file == null || this.args.file.isLegacyKnoxIQScan) {
       return 'legacy';
     }
 
-    if (status === ENUMS.KNOXIQ_SCAN_STATUS.COMPLETED) {
+    if (this.args.file?.isCompletedKnoxIQScan) {
       return 'done';
     }
 
@@ -93,22 +86,13 @@ export default class KnoxIqProjectCardComponent extends Component<KnoxIqProjectC
   }
 
   get accentCssColor() {
-    return ACCENT_COLOR_MAP[this.resolvedAccentColor];
+    return getComputedStyle(document.body).getPropertyValue(
+      ACCENT_CSS_VAR_MAP[this.resolvedAccentColor]
+    );
   }
 
   get isLegacy() {
-    if (this.resolvedAccentColor === 'legacy') {
-      return true;
-    }
-
-    const status = this.knoxiqStatus;
-    const { NOT_TRIGGERED, DISABLED } = ENUMS.KNOXIQ_SCAN_STATUS;
-
-    // Treat as legacy when there's no exploitability data yet
-    return (
-      (status === NOT_TRIGGERED || status === DISABLED) &&
-      !this.hasExploitabilityData
-    );
+    return this.args.file?.isLegacyKnoxIQScan ?? false;
   }
 
   get shouldShowRunKnoxIq() {
@@ -116,14 +100,13 @@ export default class KnoxIqProjectCardComponent extends Component<KnoxIqProjectC
       return this.args.showRunKnoxIq;
     }
 
-    const status = this.knoxiqStatus;
-    const isErrored = status === ENUMS.KNOXIQ_SCAN_STATUS.ERRORED;
+    const isErrored = this.args.file?.isErroredKnoxIQScan ?? false;
 
     if (this.args.file?.isKnoxiqAutomated) {
       return isErrored;
     }
 
-    return isErrored || status === ENUMS.KNOXIQ_SCAN_STATUS.NOT_TRIGGERED;
+    return isErrored || (this.args.file?.isNotTriggeredKnoxIQScan ?? false);
   }
 
   @action

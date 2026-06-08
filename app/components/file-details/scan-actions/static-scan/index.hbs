@@ -1,10 +1,14 @@
 <AkStack
   @direction='column'
   @width='full'
-  local-class='static-scan-root {{if @isKnoxiqEnabled "static-scan-knoxiq"}}'
+  @justifyContent='space-between'
+  {{style flex='1'}}
 >
   {{#if @isKnoxiqEnabled}}
-    <div local-class='static-scan-accent {{this.staticScanAccentClass}}'></div>
+    <div
+      local-class='static-scan-accent {{this.staticScanAccentClass}}'
+      data-test-fileDetailScanActions-staticScan-accent
+    ></div>
   {{/if}}
 
   <AkStack

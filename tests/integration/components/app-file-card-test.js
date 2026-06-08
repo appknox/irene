@@ -1,4 +1,4 @@
-import { click, find, render, waitFor } from '@ember/test-helpers';
+import { click, render, waitFor } from '@ember/test-helpers';
 import { hbs } from 'ember-cli-htmlbars';
 import { setupMirage } from 'ember-cli-mirage/test-support';
 import { setupIntl, t } from 'ember-intl/test-support';
@@ -10,26 +10,9 @@ import { setupFileModelEndpoints } from 'irene/tests/helpers/file-model-utils';
 import {
   disableKnoxiqForTests,
   enableKnoxiqForTests,
-  KNOXIQ_CARD_ACCENT_CSS_VAR,
   setupFileExploitabilityMirageEndpoint,
   setupKnoxiqMirageEndpoints,
 } from 'irene/tests/helpers/knoxiq-test-utils';
-
-const KNOXIQ_ACCENT_STATUS_CASES = [
-  [ENUMS.KNOXIQ_SCAN_STATUS.LEGACY, 'legacy'],
-  [ENUMS.KNOXIQ_SCAN_STATUS.COMPLETED, 'done'],
-  [ENUMS.KNOXIQ_SCAN_STATUS.RUNNING, 'pending'],
-  [ENUMS.KNOXIQ_SCAN_STATUS.PENDING, 'pending'],
-];
-
-function cardAccentUsesColor(accent) {
-  const card = find('[data-test-knoxiq-project-card]');
-  const accentBar = card?.querySelector(':scope > div');
-
-  return accentBar
-    ?.getAttribute('style')
-    ?.includes(KNOXIQ_CARD_ACCENT_CSS_VAR[accent]);
-}
 
 module('Integration | Component | app-file-card', function (hooks) {
   setupRenderingTest(hooks);
@@ -107,29 +90,6 @@ module('Integration | Component | app-file-card', function (hooks) {
         .hasText(this.file.name);
     });
 
-    test.each(
-      'it applies card accent color from KnoxIQ scan status',
-      KNOXIQ_ACCENT_STATUS_CASES,
-      async function (assert, [knoxiqStatus, accent]) {
-        this.file.knoxiqStatus = knoxiqStatus;
-
-        setupFileExploitabilityMirageEndpoint(this.server, {
-          exploitability_count_high: 0,
-          exploitability_count_medium: 0,
-          exploitability_count_low: 0,
-          exploitability_count_passed: 0,
-          exploitability_count_unknown: 0,
-        });
-
-        await render(hbs`<AppFileCard @file={{this.file}} />`);
-
-        assert.ok(
-          cardAccentUsesColor(accent),
-          `accent bar uses ${accent} color`
-        );
-      }
-    );
-
     test('it renders legacy card layout without exploitability section', async function (assert) {
       this.file.knoxiqStatus = ENUMS.KNOXIQ_SCAN_STATUS.LEGACY;
 
@@ -192,11 +152,9 @@ module('Integration | Component | app-file-card', function (hooks) {
       assert
         .dom('[data-test-knoxiq-project-card-exploitability-low]')
         .includesText(String(lowCount).padStart(2, '0'));
-
-      assert.ok(cardAccentUsesColor('done'));
     });
 
-    test('it shows FileChart for not-triggered files without exploitability data', async function (assert) {
+    test('it shows exploitability section with zero counts for not-triggered files', async function (assert) {
       this.file.knoxiqStatus = ENUMS.KNOXIQ_SCAN_STATUS.NOT_TRIGGERED;
 
       setupFileExploitabilityMirageEndpoint(this.server, {
@@ -209,14 +167,15 @@ module('Integration | Component | app-file-card', function (hooks) {
 
       await render(hbs`<AppFileCard @file={{this.file}} />`);
 
-      await waitFor('[data-test-fileChartSeverityLevel-chart]', {
+      await waitFor('[data-test-knoxiq-project-card-exploitabilitySection]', {
         timeout: 5000,
       });
 
       assert
         .dom('[data-test-knoxiq-project-card-exploitabilitySection]')
-        .doesNotExist();
-      assert.ok(cardAccentUsesColor('pending'));
+        .exists();
+
+      assert.dom('[data-test-fileChartSeverityLevel-chart]').doesNotExist();
     });
 
     test('it shows Run KnoxIQ button and triggers scan on click', async function (assert) {

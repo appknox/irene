@@ -13,14 +13,13 @@
   flex: 1;
   margin: 0;
   color: var(--knoxiq-code-block-content-color);
-  font-family: 'DM Mono', monospace;
+  font-family: var(--knox-iq-code-block-font-family);
   font-size: 0.875rem;
   line-height: 1.5;
-  white-space: pre-wrap;
-  word-break: break-all;
   overflow-y: auto;
   background: transparent;
   max-height: 250px;
+  scrollbar-width: none;
 }
 
 .copy-button {

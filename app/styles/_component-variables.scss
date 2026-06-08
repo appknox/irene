@@ -1144,6 +1144,9 @@ body {
     --neutral-grey-200
   );
   --file-details-summary-header-box-shadow: var(--box-shadow-3);
+  --file-details-summary-powered-by-ai-chip-accent-color: var(
+    --powered-by-ai-chip-accent-color
+  );
 
   // variables for file-details/summary/app-platform
   --file-details-summary-app-platform-color-ios: var(--ios);
@@ -1562,7 +1565,7 @@ body {
   );
 
   // variables for ak-progress-bar
-  --ak-progress-bar-border-radius: 100px;
+  --ak-progress-bar-border-radius: var(--border-radius-capsule);
 
   // variables for account-settings/security
   --account-settings-security-mfa-border-color: var(--border-color-1);
@@ -3153,6 +3156,7 @@ body {
   // variables for powered-by-ai/chip
   --powered-by-ai-chip-border-radius: var(--border-radius);
   --powered-by-ai-chip-color: var(--common-white);
+  --powered-by-ai-chip-accent-color: var(--powered-by-ai-chip-bg-color);
 
   // variables for powered-by-ai/drawer
   --powered-by-ai-chip-border-color: var(--border-color-1);
@@ -3170,6 +3174,7 @@ body {
   --knox-iq-code-block-border-radius: var(--border-radius-8);
   --knox-iq-code-block-color: var(--common-white);
   --knox-iq-code-block-copy-button-radius: var(--border-radius-6);
+  --knox-iq-code-block-font-family: var(--font-family-mono);
 
   // variables for knox-iq/vulnerability-analysis
   --knoxiq-vulnerability-analysis-border-radius: var(--border-radius-8);
@@ -3183,7 +3188,9 @@ body {
 
   // variables for knox-iq/vulnerability-analysis/table
   --knoxiq-vulnerability-analysis-table-border-color: var(--border-color-1);
-  --knoxiq-vulnerability-analysis-table-background-color: var(--background-main);
+  --knoxiq-vulnerability-analysis-table-background-color: var(
+    --background-main
+  );
 
   // variables for knox-iq/scan-summary
   --knoxiq-scan-summary-root-radius: var(--border-radius-12);
@@ -3233,10 +3240,44 @@ body {
     --neutral-grey-300
   );
 
+  // variables for knox-iq/vulnerability-analysis-details
+  --knoxiq-vulnerability-analysis-details-background-main: var(
+    --background-main
+  );
+  --knoxiq-vulnerability-analysis-details-background-light: var(
+    --background-light
+  );
+  --knoxiq-vulnerability-analysis-details-header-box-shadow: var(
+    --box-shadow-5
+  );
+  --knoxiq-vulnerability-analysis-details-zIndex: var(--zIndex-appbar);
+  --knoxiq-vulnerability-analysis-details-divider-color: var(--divider-dark);
+  --knoxiq-vulnerability-analysis-details-border-color: var(--border-color-1);
+  --knoxiq-vulnerability-analysis-details-border-radius: var(--border-radius);
+  --knoxiq-vulnerability-analysis-details-color-primary: var(--primary-main);
+  --knoxiq-vulnerability-analysis-details-code-background-color: var(
+    --neutral-grey-100
+  );
+  --knoxiq-vulnerability-analysis-details-code-text-color: var(--text-primary);
+  --knoxiq-vulnerability-analysis-details-marked-passed-background-color: var(
+    --neutral-grey-100
+  );
+  --knoxiq-vulnerability-analysis-details-marked-passed-code-background-color: var(
+    --neutral-grey-50
+  );
+  --knoxiq-vulnerability-analysis-details-status-chip-border-radius: var(
+    --border-radius-capsule
+  );
+
   // variables for knox-iq/vulnerability-analysis-details/score-metrics
   --knoxiq-score-metrics-border-radius: var(--border-radius-8);
   --knoxiq-score-metrics-expand-icon: var(--neutral-grey-100);
   --knoxiq-score-metrics-expand-icon-radius: var(--border-radius-4);
+  --knoxiq-score-metrics-background-main: var(--background-main);
+  --knoxiq-score-metrics-divider-color: var(--divider-dark);
+  --knoxiq-score-metrics-marked-passed-background-color: var(
+    --neutral-grey-100
+  );
 
   // variables for knox-iq/vulnerability-analysis-details/validated-findings/exploitability-analysis
   --knoxiq-validated-findings-exploitability-analysis-card-background-color: var(
@@ -3307,16 +3348,25 @@ body {
 
   // variables for knox-iq/vulnerability-analysis-details/validated-findings
   --knoxiq-validated-findings-border-radius: var(--border-radius-8);
+  --knoxiq-validated-findings-background-main: var(--background-main);
+  --knoxiq-validated-findings-divider-color: var(--divider-dark);
+  --knoxiq-validated-findings-marked-passed-background-color: var(
+    --neutral-grey-100
+  );
 
   // variables for knox-iq/vulnerability-analysis-details/validated-findings/remediation
   --knoxiq-validated-findings-remediation-card-background-color: var(
     --background-main
   );
-  --knoxiq-validated-findings-remediation-card-border-color: var(--divider-dark);
+  --knoxiq-validated-findings-remediation-card-border-color: var(
+    --divider-dark
+  );
   --knoxiq-validated-findings-remediation-card-border-radius: var(
     --border-radius-8
   );
-  --knoxiq-validated-findings-remediation-step-border-color: var(--divider-dark);
+  --knoxiq-validated-findings-remediation-step-border-color: var(
+    --divider-dark
+  );
   --knoxiq-validated-findings-remediation-icon-color: var(
     --knoxiq-validated-findings-remediation-icon
   );
@@ -3358,6 +3408,20 @@ body {
     --knoxiq-validated-findings-finding-nav-select-border
   );
   --knoxiq-validated-findings-finding-nav-border-radius: var(--border-radius-8);
+
+  // variables for knox-iq/vulnerability-analysis-details/edit-analysis-button/reset-confirm
+  --knoxiq-vulnerability-analysis-details-edit-analysis-reset-confirm-background-main: var(
+    --background-main
+  );
+  --knoxiq-vulnerability-analysis-details-edit-analysis-reset-confirm-border-radius: var(
+    --border-radius
+  );
+  --knoxiq-vulnerability-analysis-details-edit-analysis-reset-confirm-action-box-shadow: var(
+    --box-shadow-4
+  );
+  --knoxiq-vulnerability-analysis-details-edit-analysis-reset-confirm-note-background-color: var(
+    --neutral-grey-100
+  );
 
   &.theme-light {
     //variables for appknox-wrapper

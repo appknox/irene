@@ -4,6 +4,7 @@ import { service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
 import type IntlService from 'ember-intl/services/intl';
 
+import styles from './index.scss';
 import type FileModel from 'irene/models/file';
 import type ProjectModel from 'irene/models/project';
 
@@ -102,6 +103,10 @@ export default class KnoxIqProjectCardHeaderComponent extends Component<KnoxIqPr
         hideDivider: true,
       },
     ].filter(Boolean) as FileMoreMenuItem[];
+  }
+
+  get openInNewTabLinkClass() {
+    return styles['open-in-new-tab-link-class'];
   }
 }
 

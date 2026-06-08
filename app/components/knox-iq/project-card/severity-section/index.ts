@@ -1,4 +1,5 @@
 import Component from '@glimmer/component';
+import { action } from '@ember/object';
 import { service } from '@ember/service';
 import { tracked } from 'tracked-built-ins';
 import { task } from 'ember-concurrency';
@@ -56,35 +57,35 @@ export default class KnoxIqProjectCardSeveritySectionComponent extends Component
         key: 'critical',
         label: this.intl.t('critical'),
         count: this.fileRisk?.riskCountCritical ?? 0,
-        color: 'var(--severity-critical)',
+        color: this.getCssVar('--severity-critical'),
         hasOverridenPassedRisks: false,
       },
       {
         key: 'high',
         label: this.intl.t('high'),
         count: this.fileRisk?.riskCountHigh ?? 0,
-        color: 'var(--severity-high)',
+        color: this.getCssVar('--severity-high'),
         hasOverridenPassedRisks: false,
       },
       {
         key: 'medium',
         label: this.intl.t('medium'),
         count: this.fileRisk?.riskCountMedium ?? 0,
-        color: 'var(--severity-medium)',
+        color: this.getCssVar('--severity-medium'),
         hasOverridenPassedRisks: false,
       },
       {
         key: 'low',
         label: this.intl.t('low'),
         count: this.fileRisk?.riskCountLow ?? 0,
-        color: 'var(--severity-low)',
+        color: this.getCssVar('--severity-low'),
         hasOverridenPassedRisks: false,
       },
       {
         key: 'passed',
         label: this.intl.t('passed'),
         count: this.fileRisk?.riskCountPassed ?? 0,
-        color: 'var(--severity-passed)',
+        color: this.getCssVar('--severity-passed'),
         hasOverridenPassedRisks: this.hasOverridenPassedRisks,
       },
     ];
@@ -94,7 +95,7 @@ export default class KnoxIqProjectCardSeveritySectionComponent extends Component
         key: 'unknown',
         label: this.intl.t('untested'),
         count: this.fileRisk?.riskCountUnknown ?? 0,
-        color: 'var(--severity-none)',
+        color: this.getCssVar('--severity-none'),
         hasOverridenPassedRisks: false,
       });
     }
@@ -110,10 +111,17 @@ export default class KnoxIqProjectCardSeveritySectionComponent extends Component
     }));
   }
 
+  @action
+  getCssVar(name: string) {
+    return getComputedStyle(document.body).getPropertyValue(name);
+  }
+
+  @action
   formatCount(value: number) {
     return value === 0 ? '0' : String(value).padStart(2, '0');
   }
 
+  @action
   noop() {}
 
   fetchFileRisk = task(async () => {

@@ -4,6 +4,8 @@
   min-width: 240px;
   max-width: 360px;
   flex: 1;
+  display: flex;
+  flex-direction: column;
 
   &.knoxiq {
     border-radius: var(--file-details-scan-actions-knoxiq-border-radius);

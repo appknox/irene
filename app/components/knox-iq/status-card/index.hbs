@@ -2,8 +2,9 @@
   @width='full'
   @justifyContent='space-between'
   @alignItems='center'
-  local-class='status-card {{if (eq @state "inactive") "inactive"}} {{if (eq @state "failed") "failed"}}'
+  local-class='status-card {{@state}}'
   data-test-knoxiq-status-card
+  {{did-update this.resetIsRunning @state}}
 >
   <AkStack @direction='row' @spacing='1.5' @alignItems='center'>
     <div
@@ -45,7 +46,8 @@
   {{else}}
     <AkButton
       @disabled={{eq @state 'inactive'}}
-      local-class='run-knoxiq-button'
+      @loading={{this.isRunning}}
+      local-class='run-knoxiq-button {{if this.isRunning "knoxiq-button-loading"}}'
       {{on 'click' this.handleRunKnoxiqClick}}
       data-test-knoxiq-status-card-runBtn
     >

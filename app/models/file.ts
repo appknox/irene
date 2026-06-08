@@ -158,6 +158,34 @@ export default class FileModel extends ModelBaseMixin {
     );
   }
 
+  get isLegacyKnoxIQScan() {
+    return this.knoxiqStatus === ENUMS.KNOXIQ_SCAN_STATUS.LEGACY;
+  }
+
+  get isDisabledKnoxIQScan() {
+    return this.knoxiqStatus === ENUMS.KNOXIQ_SCAN_STATUS.DISABLED;
+  }
+
+  get isNotTriggeredKnoxIQScan() {
+    return this.knoxiqStatus === ENUMS.KNOXIQ_SCAN_STATUS.NOT_TRIGGERED;
+  }
+
+  get isPendingKnoxIQScan() {
+    return this.knoxiqStatus === ENUMS.KNOXIQ_SCAN_STATUS.PENDING;
+  }
+
+  get isRunningKnoxIQScan() {
+    return this.knoxiqStatus === ENUMS.KNOXIQ_SCAN_STATUS.RUNNING;
+  }
+
+  get isCompletedKnoxIQScan() {
+    return this.knoxiqStatus === ENUMS.KNOXIQ_SCAN_STATUS.COMPLETED;
+  }
+
+  get isErroredKnoxIQScan() {
+    return this.knoxiqStatus === ENUMS.KNOXIQ_SCAN_STATUS.ERRORED;
+  }
+
   // Utility methods
   async getLastDynamicScan(
     fileId: string,

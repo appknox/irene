@@ -62,26 +62,6 @@
       </AkIconButton>
     {{/if}}
 
-    {{#if @showOpenInNewTab}}
-      <AkTooltip @title='{{t "openInNewTab"}}' @arrow={{true}} @placement='top'>
-        <AkLink
-          @route='authenticated.dashboard.file'
-          @underline='none'
-          @model={{@file.id}}
-          @fontWeight='bold'
-          target='_blank'
-          rel='noopener noreferrer'
-          {{on 'click' this.handleOpenInNewTab}}
-          data-test-knoxiq-project-card-openInNewTabLink
-        >
-          <AkIcon
-            @iconName='open-in-new'
-            data-test-knoxiq-project-card-openInNewTabIcon
-          />
-        </AkLink>
-      </AkTooltip>
-    {{/if}}
-
     {{#if @showCheckbox}}
       <AkTooltip
         @disabled={{not @disableCheckbox}}
@@ -100,6 +80,27 @@
             data-test-knoxiq-project-card-selectCheckbox
           />
         </:default>
+      </AkTooltip>
+    {{/if}}
+
+    {{#if @showOpenInNewTab}}
+      <AkTooltip @title='{{t "openInNewTab"}}' @arrow={{true}} @placement='top'>
+        <AkLink
+          @route='authenticated.dashboard.file'
+          @underline='none'
+          @model={{@file.id}}
+          @fontWeight='bold'
+          @linkTextClass={{this.openInNewTabLinkClass}}
+          target='_blank'
+          rel='noopener noreferrer'
+          {{on 'click' this.handleOpenInNewTab}}
+          data-test-knoxiq-project-card-openInNewTabLink
+        >
+          <AkIcon
+            @iconName='open-in-new'
+            data-test-knoxiq-project-card-openInNewTabIcon
+          />
+        </AkLink>
       </AkTooltip>
     {{/if}}
   </AkStack>

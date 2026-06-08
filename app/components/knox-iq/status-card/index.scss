@@ -70,8 +70,8 @@
     background-color: var(--knoxiq-status-card-hover-button-color);
   }
 
-  &:disabled {
-    opacity: 20%;
-    background-color: var(--knoxiq-status-card-inactive-button-color);
+  &:disabled, .knoxiq-button-loading {
+    opacity: 20% !important;
+    background-color: var(--knoxiq-status-card-inactive-button-color) !important;
   }
 }

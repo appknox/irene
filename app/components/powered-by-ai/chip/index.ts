@@ -11,7 +11,11 @@ interface PoweredByAiChipSignature {
   Args: {
     chipText?: string;
     clickable: boolean;
+    variant?: 'filled' | 'outlined';
     drawerInfo?: PoweredByAiDrawerInfo[] | null;
+  };
+  Blocks: {
+    content: [];
   };
 }
 

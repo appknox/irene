@@ -110,7 +110,7 @@ export default class FileListComponent extends Component<FileListSignature> {
   }
 
   get isKnoxIqEnabled() {
-    return this.organization.selected?.aiFeatures?.knoxiq;
+    return this.organization.isKnoxIqEnabled;
   }
 
   // Reloads the files list whenever the file counter changes
