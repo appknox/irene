@@ -629,4 +629,35 @@ module('Integration | Component | security/analysis-list', function (hooks) {
       }
     }
   );
+
+  test('it shows an error notification instead of the confirm modal when marking a legacy CVSS analysis as passed', async function (assert) {
+    const selectedAnalysis = this.secAnalyses[0];
+
+    // Make the analysis a legacy CVSS scenario (cvss_version !== active_cvss_version)
+    selectedAnalysis.set('cvssVersion', 3);
+    selectedAnalysis.set('activeCvssVersion', 4);
+
+    await render(hbs`<Security::AnalysisList @file={{this.secFileModel}} />`);
+
+    const selectedAnalysisElement = find(
+      `[data-test-securityAnalysisListTable-rowId='${selectedAnalysis.id}']`
+    );
+
+    await click(
+      selectedAnalysisElement?.querySelector(
+        '[data-test-securityAnalysisListTable-markAsPassedIconBtn]'
+      )
+    );
+
+    assert
+      .dom('[data-test-ak-modal-header]')
+      .doesNotExist('Confirm modal is not shown for legacy CVSS analysis');
+
+    const notify = this.owner.lookup('service:notifications');
+
+    assert.strictEqual(
+      notify.errorMsg,
+      'You cannot mark an analysis with legacy CVSS as passed. Please update the CVSS version in the analysis details page to the latest version (CVSS v4) and try again.'
+    );
+  });
 });

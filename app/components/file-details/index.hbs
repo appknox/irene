@@ -1,4 +1,5 @@
 <div local-class='file-details-root'>
+
   <AkBreadcrumbs::AutoTrail
     class='mt-2 mb-3'
     data-test-fileDetails-breadcrumbContainer
@@ -9,8 +10,14 @@
 
     <FileDetails::ScanActions @file={{@file}} />
 
-    <FileDetails::InsightsWrapper @file={{@file}} />
+    <FileDetails::InsightsWrapper
+      @file={{@file}}
+      @fileAnalysesListContext={{@fileAnalysesListContext}}
+    />
   </AkStack>
 
-  <FileDetails::VulnerabilityAnalysis @file={{@file}} />
+  <FileDetails::VulnerabilityAnalysis
+    @file={{@file}}
+    @fileAnalysesListContext={{@fileAnalysesListContext}}
+  />
 </div>

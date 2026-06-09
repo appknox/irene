@@ -15,6 +15,12 @@ export default class AnalysisOverviewModel extends Model {
   @attr('number')
   declare computedRisk: number;
 
+  @attr('number')
+  declare cvssVersion: number;
+
+  @attr('number')
+  declare activeCvssVersion: number;
+
   @attr('number', { defaultValue: null })
   declare overriddenRisk: number | null;
 

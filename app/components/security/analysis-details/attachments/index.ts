@@ -16,7 +16,7 @@ import type IreneAjaxService from 'irene/services/ajax';
 export interface SecurityAnalysisDetailsAttachmentsComponentSignature {
   Args: {
     analysis: SecurityAnalysisModel | null;
-    updateAnalysis(): Promise<void>;
+    updateAnalysis(): Promise<unknown>;
   };
 }
 
