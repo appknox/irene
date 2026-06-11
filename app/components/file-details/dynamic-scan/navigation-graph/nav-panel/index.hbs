@@ -1,0 +1,73 @@
+<nav
+  data-test-fileDetails-dynamicScan-navigationGraph-toolbar
+  local-class='floating-toolbar'
+  aria-label={{t 'navigationGraph.graphControls'}}
+  ...attributes
+>
+  <AkStack
+    @alignItems='center'
+    @justifyContent='space-between'
+    local-class='floating-toolbar-brand'
+  >
+    <AkTypography @variant='h5'>
+      {{t 'navigationGraph.title'}}
+    </AkTypography>
+
+    <AkTypography @variant='body2' @color='textSecondary'>
+      {{@variantCount}}
+      {{t 'navigationGraph.variants'}}
+      ·
+      {{@transitionCount}}
+      {{t 'navigationGraph.transitions'}}
+    </AkTypography>
+  </AkStack>
+
+  <AkStack @alignItems='center' @spacing='1'>
+    <AkTypography @variant='body2' @color='textSecondary' @noWrap={{true}}>
+      {{t 'navigationGraph.arrangeAs'}}
+    </AkTypography>
+
+    <AkSelect
+      data-test-fileDetails-dynamicScan-navigationGraph-layoutSelect
+      @options={{@layoutOptions}}
+      @selected={{@selectedLayoutOption}}
+      @onChange={{@onLayoutChange}}
+      local-class='layout-select'
+      as |aks|
+    >
+      {{aks.label}}
+    </AkSelect>
+  </AkStack>
+
+  <AkDivider
+    @color='dark'
+    {{style marginTop='16px' marginBottom='16px'}}
+    data-test-fileDetails-dynamicScan-navigationGraph-toolbarDivider
+  />
+
+  <AkStack @alignItems='center' @spacing='2.5' role='note'>
+    <AkStack @alignItems='center' @spacing='0.5'>
+      <kbd local-class='hint-kbd'>{{t 'navigationGraph.click'}}</kbd>
+
+      <AkTypography @variant='body2' @color='textSecondary'>
+        {{t 'navigationGraph.detail'}}
+      </AkTypography>
+    </AkStack>
+
+    <AkStack @alignItems='center' @spacing='0.5'>
+      <kbd local-class='hint-kbd'>{{t 'navigationGraph.doubleClick'}}</kbd>
+
+      <AkTypography @variant='body2' @color='textSecondary'>
+        {{t 'navigationGraph.focus'}}
+      </AkTypography>
+    </AkStack>
+
+    <AkStack @alignItems='center' @spacing='0.5'>
+      <kbd local-class='hint-kbd'>{{t 'navigationGraph.esc'}}</kbd>
+
+      <AkTypography @variant='body2' @color='textSecondary'>
+        {{t 'close'}}
+      </AkTypography>
+    </AkStack>
+  </AkStack>
+</nav>
