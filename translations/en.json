@@ -524,7 +524,7 @@
   "feature": "Feature",
   "features": "Features",
   "fetchGitHubRepoFailed": "Something went wrong when trying to fetch repo list",
-  "fetchProjectFailed": "Something went wrong when trying to fetch projects list",
+  "fetchJiraProjectFailed": "Unable to fetch Jira projects. Please check your Jira URL and credentials.",
   "file": "File",
   "fileAnalysisDetails": {
     "currentFileResetOrRemoveOverrideConfirmTitle": "Do you want to reset the override for the current file alone or remove it completely ?",
@@ -1121,7 +1121,8 @@
         "prefix": "Automated DAST for",
         "suffix": " of the <strong>{platform_display}</strong> app <strong>{package_name}</strong> is now completed successfully."
       },
-      "nf-public-api-user-updated": "User <strong>{type}</strong> for <strong>{user_email}</strong> changed from <strong>{current}</strong> to <strong>{updated}</strong> by <strong>{changed_by}</strong>."
+      "nf-public-api-user-updated": "User <strong>{type}</strong> for <strong>{user_email}</strong> changed from <strong>{current}</strong> to <strong>{updated}</strong> by <strong>{changed_by}</strong>.",
+      "nf-jira-push-err": "Jira push <strong>failed</strong> for file <strong>{file_id}</strong> ({package_name}). Please check your Jira integration configuration."
     },
     "namespaceMessage": {
       "approved": "{moderaterName} approved this namespace",

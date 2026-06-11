@@ -3129,6 +3129,9 @@ body {
   --subscription-background-color: var(--common-white);
   --subscription-border-color: var(--border-color-1);
 
+  // variables for notifications-page/messages/nf-jira-push-err
+  --notifications-page-messages-nf-jira-push-err-error-container-border-color: var(--neutral-grey-100);
+
   &.theme-light {
     //variables for appknox-wrapper
     --appknox-wrapper-text-color: var(--text-primary);
