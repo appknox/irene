@@ -245,6 +245,10 @@ Router.map(function () {
           });
         });
 
+        this.route('ds-navigation-graph', {
+          path: '/dynamic-scan/:dynamicscan_id/navigation-graph',
+        });
+
         this.route('choose', {
           path: '/choose/:fileid',
         });

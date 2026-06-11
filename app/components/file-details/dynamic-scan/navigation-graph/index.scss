@@ -1,0 +1,75 @@
+.navigation-graph-root {
+  position: relative;
+  overflow: hidden;
+  background-color: var(--background-main);
+  background-image: radial-gradient(
+    circle,
+    var(--neutral-grey-300) 1px,
+    transparent 1.5px
+  );
+  background-size: 24px 24px;
+}
+
+.breadcrumbs-container {
+  width: fit-content;
+  padding: 10px;
+  border-radius: 8px;
+  border: 1px solid var(--neutral-grey-200);
+  background: var(--background-main);
+  box-shadow: 0 5px 5px 0 rgba(64, 64, 64, 0.1);
+  margin-bottom: 2.857em;
+}
+
+// Height excludes the top nav, breadcrumbs row and the floating toolbar
+// zone so fitted graph content centers in the visible area above it
+.graph-canvas-wrapper {
+  position: relative;
+  width: 100%;
+  height: calc(100vh - 320px);
+  background-color: transparent;
+}
+
+.drawer-content {
+  width: 480px;
+  max-width: 90vw;
+}
+
+.drawer-body {
+  padding: 24px;
+}
+
+// Screenshot and nav buttons share the same width so the
+// buttons align with the image edges
+.screenshot-container,
+.drawer-nav {
+  width: 282px;
+}
+
+.screenshot-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.drawer-screenshot {
+  display: block;
+  width: 282px;
+  height: 630px;
+  object-fit: contain;
+  border: 1px solid var(--neutral-grey-300);
+}
+
+.drawer-screenshot-placeholder,
+.loading-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 630px;
+  background: var(--neutral-grey-100);
+  border-radius: 4px;
+}
+
+.display-none {
+  display: none;
+}
