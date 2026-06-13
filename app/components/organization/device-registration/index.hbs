@@ -28,168 +28,37 @@
     @onClose={{this.handleClose}}
   >
     <AkStack @direction='column' @spacing='2' class='pa-3'>
-      {{#if this.loadDevices.isRunning}}
-        <AkStack @spacing='1' @alignItems='center'>
-          <AkLoader @size={{16}} />
-          <AkTypography @variant='body2' @color='textSecondary'>
-            {{t 'loading'}}
+      {{! Registered devices }}
+      <AkStack @direction='column' @spacing='1'>
+        <AkStack
+          @spacing='1'
+          @alignItems='center'
+          @justifyContent='space-between'
+        >
+          <AkTypography
+            @variant='subtitle1'
+            data-test-orgDeviceRegistration-devicesTitle
+          >
+            {{t 'orgDeviceRegistrationYourDevices'}}
           </AkTypography>
+          <AkIconButton
+            data-test-orgDeviceRegistration-refreshBtn
+            @size='small'
+            {{on 'click' this.handleRefresh}}
+          >
+            <AkIcon @iconName='mdi:refresh' @color='primary' />
+          </AkIconButton>
         </AkStack>
 
-      {{else if this.showRegisterFlow}}
-        {{#if this.registered}}
-          {{! Enroll success — show the run command }}
+        {{#if this.loadDevices.isRunning}}
           <AkStack @spacing='1' @alignItems='center'>
-            <AkIcon @iconName='check-circle' @color='success' />
-            <AkTypography
-              data-test-orgDeviceRegistration-success
-              @variant='subtitle1'
-            >
-              {{t 'orgDeviceRegistrationSuccess'}}
+            <AkLoader @size={{16}} />
+            <AkTypography @variant='body2' @color='textSecondary'>
+              {{t 'loading'}}
             </AkTypography>
           </AkStack>
 
-          {{#if this.runCommand}}
-            <AkTypography @color='textSecondary' @variant='body2'>
-              {{t 'orgDeviceRegistrationRunLabel'}}
-            </AkTypography>
-            <AkStack @spacing='1' @alignItems='center'>
-              <AkTypography
-                data-test-orgDeviceRegistration-runCommand
-                local-class='connect-command'
-                @variant='body2'
-              >
-                {{this.runCommand}}
-              </AkTypography>
-              <AkClipboard @onSuccess={{this.handleCopySuccess}} as |ac|>
-                <AkIconButton
-                  data-clipboard-text={{this.runCommand}}
-                  id={{ac.triggerId}}
-                  @size='small'
-                >
-                  <AkIcon @iconName='content-copy-outline' @color='primary' />
-                </AkIconButton>
-              </AkClipboard>
-            </AkStack>
-          {{else}}
-            <AkTypography @variant='body3' @color='textSecondary'>
-              {{t 'orgDeviceRegistrationNoKey'}}
-            </AkTypography>
-          {{/if}}
-
-          <AkStack @spacing='1'>
-            <AkButton
-              data-test-orgDeviceRegistration-registerAnotherBtn
-              @variant='outlined'
-              {{on 'click' this.handleRegisterNew}}
-            >
-              {{t 'orgDeviceRegistrationRegisterAnother'}}
-            </AkButton>
-            <AkButton @variant='filled' {{on 'click' this.handleClose}}>
-              {{t 'orgDeviceRegistrationDone'}}
-            </AkButton>
-          </AkStack>
-
-        {{else if this.tokenResult}}
-          {{! Enroll command shown — waiting for the device to register }}
-          <AkTypography @color='textSecondary' @variant='body2'>
-            {{t 'orgDeviceRegistrationCommandLabel'}}
-          </AkTypography>
-          <AkStack @spacing='1' @alignItems='center'>
-            <AkTypography
-              data-test-orgDeviceRegistration-command
-              local-class='connect-command'
-              @variant='body2'
-            >
-              {{this.connectCommand}}
-            </AkTypography>
-            <AkClipboard @onSuccess={{this.handleCopySuccess}} as |ac|>
-              <AkIconButton
-                data-test-orgDeviceRegistration-copyBtn
-                data-clipboard-text={{this.connectCommand}}
-                id={{ac.triggerId}}
-                @size='small'
-              >
-                <AkIcon @iconName='content-copy-outline' @color='primary' />
-              </AkIconButton>
-            </AkClipboard>
-          </AkStack>
-          <AkTypography @variant='body3' @color='textSecondary'>
-            {{t 'orgDeviceRegistrationExpiresHint'}}
-          </AkTypography>
-
-          <AkDivider @color='light' />
-
-          {{#if this.waitTimedOut}}
-            <AkStack @spacing='1' @alignItems='center'>
-              <AkIcon @iconName='info' @color='textSecondary' />
-              <AkTypography @variant='body2' @color='textSecondary'>
-                {{t 'orgDeviceRegistrationWaitTimedOut'}}
-              </AkTypography>
-            </AkStack>
-            <div>
-              <AkButton
-                @variant='outlined'
-                {{on 'click' this.handleRegisterNew}}
-              >
-                {{t 'orgDeviceRegistrationRegisterAnother'}}
-              </AkButton>
-            </div>
-          {{else}}
-            <AkStack
-              data-test-orgDeviceRegistration-waiting
-              @spacing='1'
-              @alignItems='center'
-            >
-              <AkLoader @size={{16}} />
-              <AkTypography @variant='body2' @color='textSecondary'>
-                {{t 'orgDeviceRegistrationWaiting'}}
-              </AkTypography>
-            </AkStack>
-          {{/if}}
-
-        {{else}}
-          {{! Pick platform + generate }}
-          <AkTypography @variant='body2'>{{t 'platform'}}</AkTypography>
-          <AkStack @spacing='1'>
-            <AkButton
-              data-test-orgDeviceRegistration-androidBtn
-              @variant={{if this.isAndroidSelected 'filled' 'outlined'}}
-              {{on 'click' this.selectAndroid}}
-            >
-              Android
-            </AkButton>
-            <AkButton
-              data-test-orgDeviceRegistration-iosBtn
-              @variant={{if this.isIosSelected 'filled' 'outlined'}}
-              {{on 'click' this.selectIos}}
-            >
-              iOS
-            </AkButton>
-          </AkStack>
-          <AkStack @spacing='1'>
-            <AkButton
-              data-test-orgDeviceRegistration-generateBtn
-              @loading={{this.generateToken.isRunning}}
-              {{on 'click' this.handleGenerate}}
-            >
-              {{t 'orgDeviceRegistrationGenerate'}}
-            </AkButton>
-            {{#if this.hasDevices}}
-              <AkButton @variant='text' {{on 'click' this.handleBackToDevices}}>
-                {{t 'orgDeviceRegistrationBack'}}
-              </AkButton>
-            {{/if}}
-          </AkStack>
-        {{/if}}
-
-      {{else}}
-        {{! Registered devices list + run command }}
-        <AkTypography @variant='subtitle1' data-test-orgDeviceRegistration-devicesTitle>
-          {{t 'orgDeviceRegistrationYourDevices'}}
-        </AkTypography>
-
-        <AkStack @direction='column' @spacing='1'>
+        {{else if this.hasDevices}}
           {{#each this.registeredDevices as |device|}}
             <AkStack
               data-test-orgDeviceRegistration-device
@@ -220,48 +89,54 @@
               </AkTypography>
             </AkStack>
           {{/each}}
-        </AkStack>
 
-        <AkDivider @color='light' />
-
-        {{#if this.runCommand}}
-          <AkTypography @color='textSecondary' @variant='body2'>
-            {{t 'orgDeviceRegistrationRunLabel'}}
-          </AkTypography>
-          <AkStack @spacing='1' @alignItems='center'>
-            <AkTypography
-              data-test-orgDeviceRegistration-runCommand
-              local-class='connect-command'
-              @variant='body2'
-            >
-              {{this.runCommand}}
-            </AkTypography>
-            <AkClipboard @onSuccess={{this.handleCopySuccess}} as |ac|>
-              <AkIconButton
-                data-clipboard-text={{this.runCommand}}
-                id={{ac.triggerId}}
-                @size='small'
-              >
-                <AkIcon @iconName='content-copy-outline' @color='primary' />
-              </AkIconButton>
-            </AkClipboard>
-          </AkStack>
         {{else}}
-          <AkTypography @variant='body3' @color='textSecondary'>
-            {{t 'orgDeviceRegistrationNoKey'}}
+          <AkTypography
+            data-test-orgDeviceRegistration-empty
+            @variant='body2'
+            @color='textSecondary'
+          >
+            {{t 'orgDeviceRegistrationNoDevices'}}
           </AkTypography>
         {{/if}}
+      </AkStack>
 
-        <div>
-          <AkButton
-            data-test-orgDeviceRegistration-registerNewBtn
-            @variant='filled'
-            {{on 'click' this.handleRegisterNew}}
+      <AkDivider @color='light' />
+
+      {{! Mercer setup instructions }}
+      <AkTypography @variant='subtitle1'>
+        {{t 'orgDeviceRegistrationSetupTitle'}}
+      </AkTypography>
+      <AkTypography @color='textSecondary' @variant='body2'>
+        {{t 'orgDeviceRegistrationSetupDesc'}}
+      </AkTypography>
+
+      <AkStack @spacing='1' @alignItems='flex-start'>
+        <pre
+          data-test-orgDeviceRegistration-commands
+          local-class='connect-command command-block'
+        >{{this.setupCommands}}</pre>
+        <AkClipboard @onSuccess={{this.handleCopySuccess}} as |ac|>
+          <AkIconButton
+            data-test-orgDeviceRegistration-copyBtn
+            data-clipboard-text={{this.setupCommands}}
+            id={{ac.triggerId}}
+            @size='small'
           >
-            {{t 'orgDeviceRegistrationRegisterNew'}}
-          </AkButton>
-        </div>
-      {{/if}}
+            <AkIcon @iconName='content-copy-outline' @color='primary' />
+          </AkIconButton>
+        </AkClipboard>
+      </AkStack>
+
+      <AkTypography @variant='body3' @color='textSecondary'>
+        {{t 'orgDeviceRegistrationTokenHint'}}
+      </AkTypography>
+
+      <AkStack @spacing='1' @justifyContent='flex-end'>
+        <AkButton @variant='filled' {{on 'click' this.handleClose}}>
+          {{t 'orgDeviceRegistrationDone'}}
+        </AkButton>
+      </AkStack>
     </AkStack>
   </AkModal>
 {{/if}}
