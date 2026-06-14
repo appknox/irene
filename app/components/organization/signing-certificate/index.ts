@@ -1,0 +1,188 @@
+/**
+ * Organization iOS Signing Certificate (CYOD/BYOD dynamic scanning)
+ *
+ * Upload / view / delete the customer iOS signing identity (.p12 + provisioning
+ * profile) used to re-sign an app for dynamic scanning. When configured, scans
+ * on the org's devices are signed with this identity instead of the built-in
+ * wildcard profile. The secret material is never returned by the API — only the
+ * parsed metadata (team id, expiry, enrolled UDIDs).
+ */
+import Component from '@glimmer/component';
+import { action } from '@ember/object';
+import { service } from '@ember/service';
+import { tracked } from '@glimmer/tracking';
+import { task } from 'ember-concurrency';
+import type IntlService from 'ember-intl/services/intl';
+
+import ENUMS from 'irene/enums';
+import type IreneAjaxService from 'irene/services/ajax';
+import type OrganizationService from 'irene/services/organization';
+import type ProjectModel from 'irene/models/project';
+import parseError from 'irene/utils/parse-error';
+
+type CertInfo = {
+  id?: number;
+  name?: string;
+  bundle_id?: string;
+  team_id?: string;
+  provisions_all_devices?: boolean;
+  provisioned_udids?: string[];
+  expires_at?: string | null;
+  is_expired?: boolean;
+};
+
+export interface OrganizationSigningCertificateSignature {
+  Element: HTMLDivElement;
+  Args: {
+    // When set, the cert is project-scoped (overrides the org cert for this
+    // project's iOS scans). When absent, it is organization-scoped.
+    project?: ProjectModel;
+  };
+}
+
+export default class OrganizationSigningCertificateComponent extends Component<OrganizationSigningCertificateSignature> {
+  @service declare intl: IntlService;
+  @service declare ajax: IreneAjaxService;
+  @service declare organization: OrganizationService;
+  @service('notifications') declare notify: NotificationService;
+
+  @tracked showModal = false;
+  @tracked cert: CertInfo | null = null;
+
+  @tracked certName = '';
+  @tracked bundleId = '';
+  @tracked password = '';
+  @tracked p12File: File | null = null;
+  @tracked profileFile: File | null = null;
+
+  get url() {
+    const orgId = this.organization.selected?.id;
+
+    if (this.args.project) {
+      return `/api/organizations/${orgId}/projects/${this.args.project.id}/signing-certificate/`;
+    }
+
+    return `/api/organizations/${orgId}/signing-certificate/`;
+  }
+
+  get isProjectScope() {
+    return !!this.args.project;
+  }
+
+  // iOS signing certs only apply to iOS scans — hide the project-scoped UI for
+  // non-iOS projects. Org scope is always shown (gated to owners by the parent).
+  get visible() {
+    return (
+      !this.args.project ||
+      this.args.project.platform === ENUMS.PLATFORM.IOS
+    );
+  }
+
+  get hasCert() {
+    return !!(this.cert && this.cert.team_id);
+  }
+
+  @action
+  handleOpen() {
+    this.showModal = true;
+    this.loadCert.perform();
+  }
+
+  @action
+  handleClose() {
+    this.resetForm();
+    this.showModal = false;
+  }
+
+  @action
+  setName(event: Event) {
+    this.certName = (event.target as HTMLInputElement).value;
+  }
+
+  @action
+  setBundleId(event: Event) {
+    this.bundleId = (event.target as HTMLInputElement).value;
+  }
+
+  @action
+  setPassword(event: Event) {
+    this.password = (event.target as HTMLInputElement).value;
+  }
+
+  @action
+  setP12(event: Event) {
+    this.p12File = (event.target as HTMLInputElement).files?.[0] ?? null;
+  }
+
+  @action
+  setProfile(event: Event) {
+    this.profileFile = (event.target as HTMLInputElement).files?.[0] ?? null;
+  }
+
+  resetForm() {
+    this.certName = '';
+    this.bundleId = '';
+    this.password = '';
+    this.p12File = null;
+    this.profileFile = null;
+  }
+
+  loadCert = task(async () => {
+    const orgId = this.organization.selected?.id;
+
+    if (!orgId) {
+      this.cert = null;
+      return;
+    }
+
+    try {
+      const res = await this.ajax.request<CertInfo>(this.url);
+      this.cert = res && (res.team_id || res.id) ? res : null;
+    } catch (e) {
+      this.cert = null;
+    }
+  });
+
+  upload = task({ restartable: true }, async (event: Event) => {
+    event.preventDefault();
+
+    if (!this.p12File || !this.profileFile) {
+      this.notify.error(this.intl.t('orgSigningCertMissingFiles'));
+      return;
+    }
+
+    try {
+      const formData = new FormData();
+      formData.append('p12', this.p12File);
+      formData.append('password', this.password);
+      formData.append('mobileprovision', this.profileFile);
+      formData.append('name', this.certName);
+      formData.append('bundle_id', this.bundleId.trim());
+
+      await this.ajax.post(this.url, { data: formData, contentType: null });
+
+      this.notify.success(this.intl.t('orgSigningCertUploadSuccess'));
+      this.resetForm();
+      await this.loadCert.perform();
+    } catch (err) {
+      this.notify.error(parseError(err, this.intl.t('pleaseTryAgain')));
+    }
+  });
+
+  deleteCert = task({ restartable: true }, async () => {
+    try {
+      await this.ajax.delete(this.url);
+      this.notify.success(this.intl.t('orgSigningCertDeleted'));
+      this.cert = null;
+    } catch (err) {
+      this.notify.error(parseError(err, this.intl.t('pleaseTryAgain')));
+    }
+  });
+}
+
+declare module '@glint/environment-ember-loose/registry' {
+  export default interface Registry {
+    'Organization::SigningCertificate': typeof OrganizationSigningCertificateComponent;
+    'organization/signing-certificate': typeof OrganizationSigningCertificateComponent;
+  }
+}

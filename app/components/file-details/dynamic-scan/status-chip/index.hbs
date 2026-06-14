@@ -33,3 +33,13 @@
     ...attributes
   />
 {{/if}}
+
+{{#if this.errorMessageToShow}}
+  <AkTypography
+    data-test-fileDetails-dynamicScan-statusChip-error
+    @variant='body3'
+    @color='error'
+  >
+    {{this.errorMessageToShow}}
+  </AkTypography>
+{{/if}}
