@@ -1,0 +1,77 @@
+.status-card {
+  border: 2px solid var(--knoxiq-status-card-border-color);
+  border-radius: var(--knoxiq-status-card-border-radius);
+  background-color: var(--knoxiq-status-card-bg-color);
+  padding: 1.142em;
+
+  &.inactive {
+    background-color: var(--knoxiq-status-card-inactive-bg-color) !important;
+  }
+
+  &.failed {
+    background-color: var(--knoxiq-status-card-failed-bg-color);
+  }
+}
+
+.status-card-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+
+  :global(.ak-icon) {
+    color: inherit;
+  }
+}
+
+.status-card-icon-running,
+.status-card-icon-completed {
+  color: var(--knoxiq-status-card-completed-color);
+}
+
+.status-card-icon-active {
+  color: var(--knoxiq-status-card-active-color);
+  background-color: var(--knoxiq-status-card-active-bg-color);
+  padding: 0.571em;
+  border-radius: var(--knoxiq-status-card-icon-border-radius);
+}
+
+.status-card-icon-failed {
+  background-color: var(--knoxiq-status-card-failed-color);
+  border-radius: var(--knoxiq-status-card-icon-border-radius);
+  padding: 0.571em;
+}
+
+.status-card-icon-failed-circle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--knoxiq-status-card-failed-bg-color);
+
+  :global(.ak-icon) {
+    color: inherit;
+  }
+}
+
+.status-card-icon-inactive {
+  color: var(--knoxiq-status-card-inactive-bg-color);
+  background-color: var(--knoxiq-status-card-inactive-button-color);
+  padding: 0.571em;
+  border-radius: var(--knoxiq-status-card-icon-border-radius);
+}
+
+.run-knoxiq-button {
+  border-radius: var(--knoxiq-status-card-icon-border-radius);
+  background-color: var(--knoxiq-status-card-button-color);
+  white-space: nowrap;
+
+  &:hover,
+  &:focus {
+    background-color: var(--knoxiq-status-card-hover-button-color);
+  }
+
+  &:disabled, .knoxiq-button-loading {
+    opacity: 20% !important;
+    background-color: var(--knoxiq-status-card-inactive-button-color) !important;
+  }
+}

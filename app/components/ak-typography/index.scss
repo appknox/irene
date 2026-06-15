@@ -149,6 +149,12 @@
   white-space: nowrap;
 }
 
+.break-word {
+  min-width: 0;
+  max-width: 100%;
+  overflow-wrap: anywhere;
+}
+
 .ak-typography-underline-none {
   text-decoration: none;
 }

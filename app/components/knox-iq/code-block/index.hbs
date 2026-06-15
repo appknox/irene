@@ -1,0 +1,27 @@
+<div local-class='code-block' ...attributes>
+  <pre
+    id={{this.copyTargetId}}
+    local-class='code-content'
+    {{style maxHeight=@maxHeight overflowY=(if @maxHeight 'auto' undefined)}}
+  >
+    {{@code}}
+  </pre>
+
+  <AkClipboard @onSuccess={{this.handleCopySuccess}} as |ac|>
+    <AkButton
+      id={{ac.triggerId}}
+      data-clipboard-target='#{{this.copyTargetId}}'
+      local-class='copy-button'
+      @variant='outlined'
+      @color='neutral'
+    >
+      <:leftIcon>
+        <AkIcon @iconName='content-copy-outline' />
+      </:leftIcon>
+
+      <:default>
+        {{if this.copied (t 'copied') (t 'copy')}}
+      </:default>
+    </AkButton>
+  </AkClipboard>
+</div>

@@ -10,7 +10,7 @@ import parseError from 'irene/utils/parse-error';
 import type OrganizationService from 'irene/services/organization';
 import type OrganizationAiFeatureModel from 'irene/models/organization-ai-feature';
 
-type AiFeatureKey = 'pii' | 'reporting';
+type AiFeatureKey = 'pii' | 'reporting' | 'autoExecuteKnoxiqOnCicdUpload';
 
 type AiFeatureDrawerInfo = {
   title: string;
@@ -23,6 +23,7 @@ export interface AiFeature {
   featureKey: AiFeatureKey;
   isChecked: boolean;
   enabled: boolean;
+  clickable: boolean;
   label: string;
   description: string;
   header: string;
@@ -62,6 +63,7 @@ export default class OrganizationAiPoweredFeaturesComponent extends Component {
         description: this.intl.t('reportModule.settingsDesc'),
         header: this.intl.t('reportModule.settingsHeader'),
         drawerInfo: this.reportDrawerInfo,
+        clickable: true,
 
         isToggling:
           this.featureToToggle === 'reporting' && this.toggleFeature.isRunning,
@@ -74,9 +76,24 @@ export default class OrganizationAiPoweredFeaturesComponent extends Component {
         description: this.intl.t('privacyModule.piiDesc'),
         header: this.intl.t('privacyModule.piiLabel'),
         drawerInfo: this.piiDrawerInfo,
+        clickable: true,
 
         isToggling:
           this.featureToToggle === 'pii' && this.toggleFeature.isRunning,
+      },
+      !this.organization.hideUpsellUIStatus.aiKnoxiq && {
+        featureKey: 'autoExecuteKnoxiqOnCicdUpload' as const,
+        isChecked: Boolean(this.aiFeatures?.autoExecuteKnoxiqOnCicdUpload),
+        enabled: this.features?.knoxiq,
+        label: this.intl.t('knoxIq.title'),
+        description: this.intl.t('knoxIq.orgSettingsDesc'),
+        header: this.intl.t('knoxIq.title'),
+        drawerInfo: null,
+        clickable: false,
+
+        isToggling:
+          this.featureToToggle === 'autoExecuteKnoxiqOnCicdUpload' &&
+          this.toggleFeature.isRunning,
       },
     ].filter(Boolean) as Array<AiFeature>;
   }
@@ -111,6 +128,8 @@ export default class OrganizationAiPoweredFeaturesComponent extends Component {
         return this.piiDrawerInfo;
       case 'reporting':
         return this.reportDrawerInfo;
+      case 'autoExecuteKnoxiqOnCicdUpload':
+        return [];
       default:
         return null;
     }
@@ -158,9 +177,18 @@ export default class OrganizationAiPoweredFeaturesComponent extends Component {
   @action toggleAiFeature(featureKey: AiFeatureKey) {
     return (event: Event) => {
       this.targettedToggle = event.target as HTMLInputElement;
+      this.featureToToggle = featureKey;
+
+      const feature = this.aiFeaturesList.find(
+        (f) => f.featureKey === featureKey
+      );
+
+      if (!feature?.clickable) {
+        this.toggleFeature.perform(featureKey, !this.targettedToggle.checked);
+        return;
+      }
 
       this.targettedToggle.checked = !this.targettedToggle.checked;
-      this.featureToToggle = featureKey;
 
       if (this.targettedToggle.checked) {
         this.drawerButtonLabel = this.intl.t('yesTurnOff');

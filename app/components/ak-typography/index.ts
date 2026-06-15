@@ -39,6 +39,7 @@ export interface AkTypographySignature {
     gutterBottom?: boolean;
     align?: 'inherit' | 'left' | 'right' | 'center' | 'justify';
     noWrap?: boolean;
+    breakWord?: boolean;
     underline?: 'none' | 'always' | 'hover';
   };
   Blocks: { default: [] };

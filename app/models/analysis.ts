@@ -32,6 +32,7 @@ import Nistsp800171Model from './nistsp800171';
 import Nistsp80053Model from './nistsp80053';
 import SamaModel from './sama';
 import Pcidss4Model from './pcidss4';
+import { KnoxiqValidatedFindingExploitability } from './knoxiq-validated-finding';
 
 irregular('asvs', 'asvses');
 
@@ -154,6 +155,15 @@ export default class AnalysisModel extends Model {
 
   @belongsTo('file', { inverse: null, async: true })
   declare file: AsyncBelongsTo<FileModel>;
+
+  @attr('number')
+  declare exploitabilityScore: number;
+
+  @attr('number')
+  declare exploitabilityLikelihood: number;
+
+  @attr()
+  declare exploitability: KnoxiqValidatedFindingExploitability;
 
   @attr('date')
   declare updatedOn: Date;

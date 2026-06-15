@@ -31,6 +31,14 @@
   src: url('/fonts/SourceCodePro-Regular.ttf') format('truetype');
 }
 
+@font-face {
+  font-family: 'DM Mono';
+  font-weight: 400;
+  font-style: normal;
+  src: url('/fonts/DMMono-Regular.woff2') format('woff2'),
+    url('/fonts/DMMono-Regular.ttf') format('truetype');
+}
+
 // hide pendo img icon
 img._pendo-image._pendo-badge-image {
   visibility: hidden;

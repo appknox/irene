@@ -21,6 +21,7 @@ export interface Features {
 export interface AiFeatures {
   reporting: boolean;
   pii: boolean;
+  knoxiq: boolean;
 }
 
 export default class OrganizationModel extends Model {
@@ -71,6 +72,9 @@ export default class OrganizationModel extends Model {
 
   @attr('boolean')
   declare showSubscription: boolean;
+
+  @attr('boolean')
+  declare knoxiqAutomatedTrigger: boolean;
 
   get showBilling() {
     return !this.billingHidden;

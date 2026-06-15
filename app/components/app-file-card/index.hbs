@@ -1,0 +1,25 @@
+{{#if this.isKnoxIqEnabled}}
+  <KnoxIq::ProjectCard
+    ...attributes
+    @file={{@file}}
+    @isSelectedFile={{@isSelectedFile}}
+    @onFileSelect={{@onFileSelect}}
+    @showCheckbox={{@showCheckbox}}
+    @disableCheckbox={{@disableCheckbox}}
+    @showMenuButton={{@showMenuButton}}
+    @showOpenInNewTab={{@showOpenInNewTab}}
+    @accentColor={{@accentColor}}
+    @showRunKnoxIq={{@showRunKnoxIq}}
+  />
+{{else}}
+  <FileOverview
+    ...attributes
+    @file={{@file}}
+    @isSelectedFile={{@isSelectedFile}}
+    @onFileSelect={{@onFileSelect}}
+    @disableSelection={{@disableCheckbox}}
+    @showMenuButton={{@showMenuButton}}
+    @hideOpenInNewTabIcon={{@hideOpenInNewTabIcon}}
+    @hideCTAs={{@hideCTAs}}
+  />
+{{/if}}

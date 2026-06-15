@@ -14,9 +14,13 @@ interface PoweredByAiDrawerSignature {
     aiDrawerOpen: boolean;
     onClose: () => void;
     info?: PoweredByAiDrawerInfo[] | null;
+    variant?: 'filled' | 'outlined';
     showButtons?: boolean;
     buttonText?: string;
     onButtonClick?: () => void;
+  };
+  Blocks: {
+    content: [];
   };
 }
 

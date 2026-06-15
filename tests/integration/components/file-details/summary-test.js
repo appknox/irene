@@ -6,6 +6,7 @@ import { setupRenderingTest } from 'ember-qunit';
 import { module, test } from 'qunit';
 import { capitalize } from '@ember/string';
 
+import ENUMS from 'irene/enums';
 import { Response } from 'miragejs';
 import Service from '@ember/service';
 
@@ -158,6 +159,9 @@ module('Integration | Component | file-details/summary', function (hooks) {
       return schema.projects.find(`${req.params.id}`)?.toJSON();
     });
 
+    // Compare menu item is shown only for legacy KnoxIQ files
+    this.file.knoxiqStatus = ENUMS.KNOXIQ_SCAN_STATUS.LEGACY;
+
     await render(hbs`
         <FileDetails::Summary @file={{this.file}} />
     `);
@@ -172,7 +176,7 @@ module('Integration | Component | file-details/summary', function (hooks) {
 
     let menuItems = findAll('[data-test-fileDetailsSummary-moreMenuItem]');
 
-    // project file count is more than 1
+    // legacy file + project file count > 1
     assert.strictEqual(menuItems.length, 3);
 
     assert.dom(menuItems[0]).hasText(t('compare'));

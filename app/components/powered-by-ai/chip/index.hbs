@@ -2,7 +2,7 @@
   {{#if @clickable}}
     <AkStack
       @alignItems='center'
-      local-class='powered-by-chip clickable'
+      local-class='powered-by-chip clickable {{if (eq @variant "outlined") "outlined"}}'
       {{on 'click' this.openAIDrawer}}
       ...attributes
     >
@@ -13,7 +13,11 @@
       </AkTypography>
     </AkStack>
   {{else}}
-    <AkStack @alignItems='center' local-class='powered-by-chip' ...attributes>
+    <AkStack
+      @alignItems='center'
+      local-class='powered-by-chip {{if (eq @variant "outlined") "outlined"}}'
+      ...attributes
+    >
       <AkIcon @iconName='network-intel-node' local-class='icon' />
 
       <AkTypography local-class='text'>
@@ -26,5 +30,10 @@
     @aiDrawerOpen={{this.aiDrawerOpen}}
     @onClose={{this.closeAiDrawer}}
     @info={{@drawerInfo}}
-  />
+    @variant={{@variant}}
+  >
+    <:content>
+      {{yield to='content'}}
+    </:content>
+  </PoweredByAi::Drawer>
 </AkStack>

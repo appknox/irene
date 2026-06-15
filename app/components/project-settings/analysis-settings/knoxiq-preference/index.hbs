@@ -1,0 +1,41 @@
+<AkTypography
+  @variant='h5'
+  @color='textPrimary'
+  @gutterBottom={{true}}
+  data-test-projectSetting-analysisSettings-knoxIQPreference-label
+>
+  {{t 'knoxIq.title'}}
+</AkTypography>
+
+<AkTypography
+  class='mt-1'
+  @variant='body2'
+  @color='textSecondary'
+  data-test-projectSetting-analysisSettings-knoxIQPreference-desc
+>
+  {{t 'knoxIq.knoxIQPreferenceDesc'}}
+</AkTypography>
+
+<AkRadio::Group
+  class='mt-1'
+  @groupDirection='column'
+  @value={{this.knoxIqPreference}}
+  @onChange={{this.handleKnoxIqPreferenceChange}}
+  as |ctx|
+>
+  <AkFormControlLabel @label={{t 'automated'}}>
+    <AkRadio
+      data-test-projectSettings-analysisSettings-knoxIQPreference-automatedRadio
+      @radioCtx={{ctx}}
+      @value='automated'
+    />
+  </AkFormControlLabel>
+
+  <AkFormControlLabel @label={{t 'manual'}}>
+    <AkRadio
+      data-test-projectSettings-analysisSettings-knoxIQPreference-manualRadio
+      @radioCtx={{ctx}}
+      @value='manual'
+    />
+  </AkFormControlLabel>
+</AkRadio::Group>

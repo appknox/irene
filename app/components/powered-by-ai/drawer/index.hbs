@@ -24,7 +24,15 @@
   </AkAppbar>
 
   <AkStack @direction='column' local-class='ai-drawer-body'>
-    <PoweredByAi::Chip @clickable={{false}} data-test-poweredByAi-drawer-chip />
+    <PoweredByAi::Chip
+      @clickable={{false}}
+      @variant={{@variant}}
+      data-test-poweredByAi-drawer-chip
+    />
+
+    {{#if (has-block 'content')}}
+      {{yield to='content'}}
+    {{/if}}
 
     {{#each @info as |section|}}
       <AkTypography
@@ -36,9 +44,19 @@
         {{section.title}}
       </AkTypography>
 
+      {{#if section.body}}
+        <AkTypography
+          @variant='body2'
+          data-test-poweredByAi-drawer-section-body
+        >
+          {{section.body}}
+        </AkTypography>
+      {{/if}}
+
       {{#if section.contentList}}
         <ul
           local-class='ai-drawer-body-list'
+          class={{if section.body 'mt-1'}}
           data-test-poweredByAi-drawer-section-list
         >
           {{#each section.contentList as |content|}}
@@ -47,13 +65,6 @@
             </li>
           {{/each}}
         </ul>
-      {{else}}
-        <AkTypography
-          @variant='body2'
-          data-test-poweredByAi-drawer-section-body
-        >
-          {{section.body}}
-        </AkTypography>
       {{/if}}
     {{/each}}
   </AkStack>

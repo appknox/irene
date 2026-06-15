@@ -1,0 +1,61 @@
+<AkStack
+  @direction='column'
+  @width='full'
+  local-class='scan-summary-root'
+  data-test-knoxiq-scan-summary
+>
+  <div
+    local-class='scan-summary-accent {{this.scanSummaryAccentClass}}'
+    data-test-knoxiq-scan-summary-accent
+  ></div>
+
+  <AkStack
+    @direction='row'
+    @width='full'
+    @alignItems='center'
+    @justifyContent='space-between'
+    local-class='scan-summary-header'
+  >
+    <AkStack @direction='row' @spacing='1' @alignItems='center'>
+      <AkIcon
+        @iconName='majesticons:pulse'
+        data-test-knoxiq-scan-summary-icon
+      />
+
+      <AkTypography @variant='subtitle1' data-test-knoxiq-scan-summary-title>
+        {{t 'scanSummary'}}
+      </AkTypography>
+    </AkStack>
+
+    {{#if this.compareRouteModel}}
+      <AkLink
+        @route='authenticated.dashboard.compare'
+        @model={{this.compareRouteModel}}
+        @color='primary'
+        @underline='always'
+        data-test-knoxiq-scan-summary-key-insights-link
+      >
+        <:default>
+          {{t 'keyInsights'}}
+        </:default>
+
+        <:rightIcon>
+          <AkIcon @iconName='arrow-outward' />
+        </:rightIcon>
+      </AkLink>
+    {{/if}}
+  </AkStack>
+
+  <AkStack
+    @direction='row'
+    @width='full'
+    @spacing='6'
+    @alignItems='flex-start'
+    local-class='scan-summary-body'
+    data-test-knoxiq-scan-summary-body
+  >
+    <KnoxIq::ScanSummary::Exploitability @file={{@file}} />
+
+    <KnoxIq::ScanSummary::Severity @file={{@file}} />
+  </AkStack>
+</AkStack>

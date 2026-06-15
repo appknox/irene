@@ -6,10 +6,13 @@ import { task } from 'ember-concurrency';
 import type FileModel from 'irene/models/file';
 import type OrganizationService from 'irene/services/organization';
 import type FileRiskModel from 'irene/models/file-risk';
+import type { KnoxiqScanStatusByType } from 'irene/components/file-details';
 
 export interface FileDetailsScanActionsSignature {
   Args: {
     file: FileModel;
+    isKnoxiqEnabled?: boolean;
+    knoxiqStatuses?: KnoxiqScanStatusByType;
   };
 }
 

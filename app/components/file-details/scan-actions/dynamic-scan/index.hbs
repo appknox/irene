@@ -1,4 +1,14 @@
-<AkStack @direction='column' @width='full'>
+<AkStack
+  @direction='column'
+  @width='full'
+  @justifyContent='space-between'
+  {{style flex='1'}}
+>
+  {{#if @isKnoxiqEnabled}}
+    <div local-class='dynamic-scan-accent {{this.dynamicScanAccentClass}}'>
+    </div>
+  {{/if}}
+
   <AkStack
     @width='full'
     @justifyContent='space-between'
@@ -15,6 +25,15 @@
 
     {{#if this.isDynamicScanLoading}}
       <AkSkeleton @width='80px' />
+    {{else if @file.isDynamicDone}}
+      {{#if this.showKnoxiqStatusChip}}
+        <KnoxIq::StatusChip @state={{this.knoxiqStatusChipState}} />
+      {{else}}
+        <FileDetails::DynamicScan::StatusChip
+          @status={{this.status}}
+          data-test-fileDetailScanActions-dynamicScanStatus
+        />
+      {{/if}}
     {{else}}
       <FileDetails::DynamicScan::StatusChip
         @status={{this.status}}

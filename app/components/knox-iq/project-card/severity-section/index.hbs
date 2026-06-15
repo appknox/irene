@@ -1,0 +1,66 @@
+<AkStack
+  @direction='column'
+  @spacing='2'
+  @width='full'
+  class='px-2'
+  data-test-knoxiq-project-card-severitySection
+>
+  <AkTypography @variant='subtitle1' @fontWeight='bold'>
+    {{t 'severityLevel'}}
+  </AkTypography>
+
+  {{#if this.isFetchingFileRisk}}
+    <AkSkeleton @width='100%' @height='12px' @variant='rectangular' />
+  {{else}}
+    <AkProgressBar
+      @segments={{this.severitySegments}}
+      @height='12px'
+      data-test-knoxiq-project-card-severityProgressBar
+    />
+  {{/if}}
+
+  <AkStack
+    @spacing='2'
+    @flexWrap='wrap'
+    data-test-knoxiq-project-card-severityCounts
+  >
+    {{#each this.severityItems as |item|}}
+      <AkChip
+        @variant='outlined'
+        @label={{this.formatCount item.count}}
+        @onDelete={{if item.hasOverridenPassedRisks this.noop}}
+        local-class='severity-chip'
+        data-test-knoxiq-project-card-severityCount='{{item.key}}'
+      >
+        <:icon>
+          <span
+            local-class='severity-dot'
+            {{style background=item.color}}
+            data-test-knoxiq-project-card-severityDot='{{item.key}}'
+          />
+        </:icon>
+
+        <:deleteIcon>
+          <AkTooltip @arrow={{true}} @placement='bottom'>
+            <:tooltipContent>
+              <AkTypography @color='inherit' @variant='body2'>
+                {{t
+                  'ignoreVulnerabilityFileChartMessage'
+                  overridenPassedRiskCount=this.overridenPassedRiskCount
+                }}
+              </AkTypography>
+            </:tooltipContent>
+
+            <:default>
+              <AkIcon
+                @iconName='ic:outline-drive-file-rename-outline'
+                @color='secondary'
+                data-test-knoxiq-project-card-overriddenPassedIcon
+              />
+            </:default>
+          </AkTooltip>
+        </:deleteIcon>
+      </AkChip>
+    {{/each}}
+  </AkStack>
+</AkStack>

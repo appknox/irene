@@ -4,6 +4,7 @@ import { setupMirage } from 'ember-cli-mirage/test-support';
 import { setupIntl, t } from 'ember-intl/test-support';
 import { setupRenderingTest } from 'ember-qunit';
 import { module, test } from 'qunit';
+import ENUMS from 'irene/enums';
 import { setupFileModelEndpoints } from 'irene/tests/helpers/file-model-utils';
 
 const staticScanStatus = {
@@ -36,6 +37,106 @@ module(
       });
 
       await this.owner.lookup('service:organization').load();
+    });
+
+    module('KnoxIQ states', function (nestedHooks) {
+      nestedHooks.beforeEach(function () {
+        this.server.get('/manualscans/:id', (schema, req) => {
+          return { id: req.params.id };
+        });
+
+        this.server.get('/v3/projects/:id', (schema, req) => {
+          return schema.projects.find(`${req.params.id}`)?.toJSON();
+        });
+      });
+
+      test('automated: shows KnoxIQ status chip instead of legacy completed chip', async function (assert) {
+        this.file.isKnoxiqAutomated = true;
+        this.file.isStaticDone = true;
+
+        this.knoxiqStatuses = {
+          [ENUMS.KNOXIQ_SCAN_TYPE.SAST]: ENUMS.KNOXIQ_SCAN_STATUS.COMPLETED,
+          [ENUMS.KNOXIQ_SCAN_TYPE.DAST_MANUAL]:
+            ENUMS.KNOXIQ_SCAN_STATUS.NOT_TRIGGERED,
+        };
+
+        await render(hbs`
+          <FileDetails::ScanActions::StaticScan
+            @file={{this.file}}
+            @isKnoxiqEnabled={{true}}
+            @knoxiqStatuses={{this.knoxiqStatuses}}
+            @vulnerabilityCount={{0}}
+          />
+        `);
+
+        assert
+          .dom('[data-test-fileDetailScanActions-staticScanCompletedStatus]')
+          .doesNotExist(
+            'legacy chip must not appear when KnoxIQ status chip is shown'
+          );
+
+        assert.dom().containsText(t('completed'));
+      });
+
+      test('manual (SAST running): legacy completed chip shown with a pending accent', async function (assert) {
+        this.file.isKnoxiqAutomated = false;
+        this.file.isStaticDone = true;
+
+        const knoxiqStatuses = {
+          [ENUMS.KNOXIQ_SCAN_TYPE.SAST]: ENUMS.KNOXIQ_SCAN_STATUS.RUNNING,
+        };
+
+        this.set('knoxiqStatuses', knoxiqStatuses);
+
+        await render(hbs`
+          <FileDetails::ScanActions::StaticScan
+            @file={{this.file}}
+            @isKnoxiqEnabled={{true}}
+            @knoxiqStatuses={{this.knoxiqStatuses}}
+            @vulnerabilityCount={{0}}
+          />
+        `);
+
+        assert
+          .dom('[data-test-fileDetailScanActions-staticScanCompletedStatus]')
+          .hasText(t('completed'));
+
+        const accentDiv = find(
+          '[data-test-fileDetailScanActions-staticScan-accent]'
+        );
+
+        assert.ok(accentDiv.className.includes('pending'));
+      });
+
+      test('manual (SAST completed): legacy completed chip shown with a done accent', async function (assert) {
+        this.file.isKnoxiqAutomated = false;
+        this.file.isStaticDone = true;
+
+        const knoxiqStatuses = {
+          [ENUMS.KNOXIQ_SCAN_TYPE.SAST]: ENUMS.KNOXIQ_SCAN_STATUS.COMPLETED,
+        };
+
+        this.set('knoxiqStatuses', knoxiqStatuses);
+
+        await render(hbs`
+          <FileDetails::ScanActions::StaticScan
+            @file={{this.file}}
+            @isKnoxiqEnabled={{true}}
+            @knoxiqStatuses={{this.knoxiqStatuses}}
+            @vulnerabilityCount={{0}}
+          />
+        `);
+
+        assert
+          .dom('[data-test-fileDetailScanActions-staticScanCompletedStatus]')
+          .hasText(t('completed'));
+
+        const accentDiv = find(
+          '[data-test-fileDetailScanActions-staticScan-accent]'
+        );
+
+        assert.ok(accentDiv.className.includes('done'));
+      });
     });
 
     test.each(

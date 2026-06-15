@@ -3,6 +3,8 @@ import { tracked } from '@glimmer/tracking';
 import { service } from '@ember/service';
 import { action } from '@ember/object';
 import { task } from 'ember-concurrency';
+import { waitForPromise } from '@ember/test-waiters';
+import type Store from 'ember-data/store';
 import type IntlService from 'ember-intl/services/intl';
 import type { EmberTableSort } from 'ember-table';
 
@@ -12,6 +14,7 @@ import type FileModel from 'irene/models/file';
 import type IreneAjaxService from 'irene/services/ajax';
 import type { AjaxError } from 'irene/services/ajax';
 import type FileRiskModel from 'irene/models/file-risk';
+import type KnoxiqScanModel from 'irene/models/knoxiq-scan';
 
 export interface FileDetailsStaticScanSignature {
   Args: {
@@ -21,10 +24,12 @@ export interface FileDetailsStaticScanSignature {
 
 export default class FileDetailsStaticScan extends Component<FileDetailsStaticScanSignature> {
   @service declare intl: IntlService;
+  @service declare store: Store;
   @service declare ajax: IreneAjaxService;
   @service('notifications') declare notify: NotificationService;
 
   @tracked fileRisk: FileRiskModel | null = null;
+  @tracked knoxiqScan: KnoxiqScanModel | null = null;
   @tracked showRescanModal = false;
 
   @tracked sorts: EmberTableSort[] = [
@@ -35,6 +40,7 @@ export default class FileDetailsStaticScan extends Component<FileDetailsStaticSc
     super(owner, args);
 
     this.fetchFileRisk.perform();
+    this.fetchKnoxiqScan.perform();
   }
 
   get tRescanInitiated() {
@@ -80,6 +86,10 @@ export default class FileDetailsStaticScan extends Component<FileDetailsStaticSc
 
   get isRescanDisabled() {
     return !this.file.isStaticCompleted || !this.file.isActive;
+  }
+
+  get useKnoxiqVulnerabilityTable() {
+    return this.knoxiqScan?.sastStatus === ENUMS.KNOXIQ_SCAN_STATUS.COMPLETED;
   }
 
   @action
@@ -130,6 +140,19 @@ export default class FileDetailsStaticScan extends Component<FileDetailsStaticSc
 
   fetchFileRisk = task(async () => {
     this.fileRisk = await this.args.file.fetchFileRisk();
+  });
+
+  fetchKnoxiqScan = task(async () => {
+    try {
+      this.knoxiqScan = await waitForPromise(
+        this.store.queryRecord('knoxiq-scan', {
+          id: this.args.file.id,
+          fileId: this.args.file.id,
+        })
+      );
+    } catch {
+      this.knoxiqScan = null;
+    }
   });
 }
 

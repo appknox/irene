@@ -16,6 +16,7 @@ interface AkChipSignature {
     button?: boolean;
     onDelete?: (event: MouseEvent) => void;
     label?: string;
+    fontWeight?: 'regular' | 'medium' | 'light' | 'bold';
     variant?: 'filled' | 'semi-filled' | 'outlined' | 'semi-filled-outlined';
     color?: AkChipColor;
     size?: 'medium' | 'small';
@@ -48,6 +49,10 @@ export default class AkChipComponent extends Component<AkChipSignature> {
 
   get isSizeSmall() {
     return this.size === 'small';
+  }
+
+  get fontWeight() {
+    return this.args.fontWeight || 'regular';
   }
 
   get isVariantOutlined() {
