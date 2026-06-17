@@ -1,0 +1,7 @@
+{{!-- Override: Always show section content - bypass addon filtering --}}
+<div class='FreestyleSection FreestyleSection--showing' ...attributes>
+  {{#if @name}}
+    <h2 class='FreestyleSection-name'>{{@name}}</h2>
+  {{/if}}
+  {{yield (hash subsection=(component 'freestyle-subsection' section=@name))}}
+</div>

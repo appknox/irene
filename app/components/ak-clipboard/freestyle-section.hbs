@@ -1,0 +1,19 @@
+<FreestyleSection @name='Clipboard'>
+  <FreestyleUsage @slug='ak-clipboard-default' @title='Default'>
+    <AkTypography @color='textSecondary' @gutterBottom={{true}}>Experiment with me</AkTypography>
+    <AkClipboard as |cb|>
+      <AkButton data-clipboard-text='I am copied!' id={{cb.triggerId}}>
+        Copy Me
+      </AkButton>
+    </AkClipboard>
+  </FreestyleUsage>
+
+  <FreestyleUsage @slug='ak-clipboard-with-target' @title='With Target'>
+    <AkTextField id='copy-input' @value='I will be copied!' />
+    <AkClipboard as |cb|>
+      <AkButton class='mt-2' data-clipboard-target='#copy-input' id={{cb.triggerId}}>
+        Copy Input text
+      </AkButton>
+    </AkClipboard>
+  </FreestyleUsage>
+</FreestyleSection>

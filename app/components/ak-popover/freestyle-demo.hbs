@@ -1,0 +1,20 @@
+<AkTypography @color='textSecondary' @gutterBottom={{true}}>Experiment with me</AkTypography>
+
+<AkIconButton @variant='outlined' {{on 'click' this.handleMoreClick}}>
+  <AkIcon @iconName='more-vert' />
+</AkIconButton>
+
+<AkPopover
+  @renderInPlace={{true}}
+  @placement='auto'
+  @anchorRef={{this.anchorRef}}
+  @arrow={{false}}
+  @hasBackdrop={{true}}
+  @onBackdropClick={{this.handleClose}}
+  @clickOutsideToClose={{true}}
+  @closeHandler={{this.handleClose}}
+>
+  <div class='p-2' {{style width='max-content' background='#fff' border='1px solid #e9e9e9' boxShadow='4px 4px 10px 0px rgba(0,0,0,0.15)'}}>
+    <AkTypography>I am inside a popover</AkTypography>
+  </div>
+</AkPopover>
