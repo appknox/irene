@@ -1,0 +1,20 @@
+.notes-list {
+  margin: 0;
+  padding-left: 1.25em;
+
+  li {
+    margin-bottom: 0.5em;
+
+    &:last-child {
+      margin-bottom: 0;
+    }
+  }
+
+  code {
+    padding: 0 0.25em;
+    background: var(--neutral-grey-100);
+    border-radius: 2px;
+    font-family: monospace;
+    font-size: 0.92857em;
+  }
+}

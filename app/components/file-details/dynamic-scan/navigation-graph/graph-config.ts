@@ -27,9 +27,11 @@ export const DOUBLE_TAP_WINDOW_MS = 320;
 export const RESIZE_DEBOUNCE_MS = 150;
 export const GRAPH_FIT_PADDING = 64;
 
-// The zoom level the graph settles at after rendering, layout changes
-// and resizes. Users can still zoom in/out manually from here.
-export const DEFAULT_GRAPH_ZOOM = 0.75;
+// Pan animation when the drawer opens / prev-next changes the selection
+export const NODE_CENTER_ANIMATION_MS = 280;
+
+// Fallback if the drawer DOM cannot be measured for some reason
+export const NODE_DRAWER_WIDTH_FALLBACK = 480;
 
 // Hard bounds for all zooming — user gestures, fits and animations alike
 export const MIN_GRAPH_ZOOM = 0.1;
@@ -79,6 +81,7 @@ export const GRAPH_STYLES = [
       'background-clip': 'node',
       'background-opacity': 1,
       'background-color': GRAPH_COLORS.surfaceAlt,
+      'text-background-color': GRAPH_COLORS.surfaceAlt,
     },
   },
   {

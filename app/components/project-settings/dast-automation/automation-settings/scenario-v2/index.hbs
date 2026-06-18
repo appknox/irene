@@ -1,0 +1,143 @@
+<AkStack
+  @direction='column'
+  @justifyContent='space-between'
+  @spacing='2'
+  @width='full'
+  data-test-projectSettings-dastAutomationSettings-scenariosV2-root
+>
+  <AkStack
+    @direction='row'
+    @justifyContent='space-between'
+    @spacing='1'
+    @width='full'
+  >
+    <AkStack
+      @direction='column'
+      {{style maxWidth='700px'}}
+      data-test-projectSettings-dastAutomationSettings-scenariosV2HeaderText
+    >
+      <AkTypography @fontWeight='bold' @gutterBottom={{true}}>
+        {{t 'dastAutomation.automationScenarios'}}
+        - Super User Only
+      </AkTypography>
+
+      <AkTypography
+        @variant='body2'
+        @color='textSecondary'
+        @gutterBottom={{true}}
+        data-test-projectSettings-dastAutomationSettings-scenariosV2HeaderListDesc
+      >
+        {{t 'dastAutomation.scenarioListDesc'}}
+      </AkTypography>
+    </AkStack>
+
+    <AkButton
+      @variant='outlined'
+      {{on 'click' this.openAddScenarioModal}}
+      {{style minWidth='110px'}}
+      data-test-projectSettings-dastAutomationSettings-scenarioV2AddBtn
+    >
+      <:default>{{t 'dastAutomation.addScenario'}}</:default>
+    </AkButton>
+  </AkStack>
+
+  <ProjectSettings::DastAutomation::AutomationSettings::ScenarioTableV2
+    @project={{@project}}
+    @scenarioList={{this.scenarioList}}
+    @loadingScenarioList={{this.fetchProjectScenarios.isRunning}}
+    @reloadScenarioList={{this.reloadProjectScenarios}}
+  />
+</AkStack>
+
+{{#if this.showAddScenarioModal}}
+  <AkModal
+    @headerTitle='{{t "dastAutomation.addScenario"}}'
+    @onClose={{this.closeAddScenarioModal}}
+    @onClickOverlay={{this.closeAddScenarioModal}}
+    @showHeader={{true}}
+    @noGutter={{true}}
+  >
+    <:default>
+      <AkStack
+        @direction='column'
+        @spacing='2'
+        local-class='scenario-name-form-control'
+        class='p-3 pr-6'
+        {{style minWidth='420px'}}
+      >
+        <AkStack @width='full' @spacing='4' @alignItems='center'>
+          <AkTypography
+            for='scenario'
+            @fontWeight='regular'
+            @color='neutral'
+            @tag='label'
+            {{style minWidth='75px'}}
+            data-test-projectSettings-dastAutomationSettings-scenarioV2AddModal-scenarioNameTextfieldTitle
+          >
+            {{t 'scenario'}}
+          </AkTypography>
+
+          <AkTextField
+            @id='scenario'
+            @formControlClass={{this.scenarioNameFormControlClass}}
+            @value={{this.scenarioName}}
+            @placeholder={{t 'dastAutomation.enterScenarioName'}}
+            {{on 'input' this.handleScenarioNameChange}}
+            data-test-projectSettings-dastAutomationSettings-scenarioV2AddModal-scenarioNameTextfield
+          />
+        </AkStack>
+
+        <AkStack @spacing='4' @alignItems='center'>
+          <AkTypography
+            @fontWeight='regular'
+            @color='neutral'
+            {{style minWidth='75px'}}
+            data-test-projectSettings-dastAutomationSettings-scenarioV2AddModal-scenarioStatusTitle
+          >
+            {{t 'status'}}
+          </AkTypography>
+
+          <AkToggle
+            @checked={{this.scenarioStatus}}
+            @size='small'
+            @onChange={{this.toggleScenarioStatus}}
+            {{style margin='0'}}
+            data-test-projectSettings-dastAutomationSettings-scenarioV2AddModal-scenarioStatusToggle
+          />
+        </AkStack>
+      </AkStack>
+    </:default>
+
+    <:footer>
+      <AkDivider />
+
+      <AkStack
+        @justifyContent='flex-start'
+        @alignItems='center'
+        @spacing='1.5'
+        local-class='scenario-form-footer-container'
+        class='px-3 py-2'
+      >
+        <AkButton
+          @variant='outlined'
+          @color='neutral'
+          @disabled={{this.addScenarioToProject.isRunning}}
+          {{on 'click' this.closeAddScenarioModal}}
+          data-test-projectSettings-dastAutomationSettings-scenarioV2AddModal-cancelBtn
+        >
+          {{t 'cancel'}}
+        </AkButton>
+
+        <AkButton
+          @disabled={{this.disableScenarioAddBtn}}
+          @variant='filled'
+          @loading={{this.addScenarioToProject.isRunning}}
+          {{on 'click' this.createScenario}}
+          data-test-projectSettings-dastAutomationSettings-scenarioV2AddModal-confirmBtn
+        >
+          {{t 'add'}}
+        </AkButton>
+      </AkStack>
+    </:footer>
+  </AkModal>
+{{/if}}

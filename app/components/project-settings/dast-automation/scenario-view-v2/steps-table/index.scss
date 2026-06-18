@@ -1,0 +1,88 @@
+.steps-table-root {
+  width: 100%;
+  background: var(--background-main);
+  border: 1px solid var(--neutral-grey-200);
+  box-shadow: -5px 0 9px 0 rgba(64, 64, 64, 0.03);
+}
+
+// Read-only sample mode: disabled buttons should look enabled. Click is
+// already blocked by the `disabled` attribute, this is visual-only.
+.steps-table-root.is-readonly {
+  .dashed-add-button:disabled,
+  .dashed-add-button:global(.ak-button-disabled) {
+    opacity: 1;
+    cursor: default;
+  }
+
+  :global(.ak-button-root):disabled,
+  :global(.ak-button-root[disabled]) {
+    opacity: 1;
+    cursor: default;
+  }
+
+  :global(.ak-button-root):disabled :global(.ak-icon),
+  :global(.ak-button-root[disabled]) :global(.ak-icon),
+  :global(.ak-button-root):disabled :global(.ak-icon-root),
+  :global(.ak-button-root[disabled]) :global(.ak-icon-root) {
+    color: var(--primary-main);
+    opacity: 1;
+  }
+
+  .edit-role-name-btn-readonly :global(.ak-icon-root),
+  .edit-role-name-btn-readonly :global(.ak-icon) {
+    color: var(--primary-main);
+  }
+}
+
+.steps-table {
+  width: 100%;
+  border: 1px solid #f8f8f8;
+}
+
+.empty-steps-container {
+  padding: 32px 0;
+}
+
+.table-header {
+  display: grid;
+  grid-template-columns: 32px 48px 220px 1fr 1fr;
+  gap: 2em;
+  align-items: center;
+  height: 40px;
+  padding: 0 76px 0 12px;
+  border-radius: 2px 2px 0 0;
+
+  // Tabular-Header-Color / Shades-of-Black-10 (#F5F5F5)
+  border: 1px solid var(--neutral-grey-100);
+  background: var(--neutral-grey-100);
+}
+
+.dashed-add-button {
+  height: 30px;
+  min-width: 90px;
+  border-radius: 4px;
+  border: 1px dashed var(--primary-main);
+
+  // Tone_Orange_05
+  background: rgba(254, 77, 63, 0.05);
+  color: var(--primary-main);
+  font-size: 0.92857rem;
+  cursor: pointer;
+
+  // AkButton resets border on hover/focus — preserve the dashed style
+  &:hover,
+  &:focus {
+    border: 1px dashed var(--primary-main) !important;
+    background: rgba(254, 77, 63, 0.05);
+    box-shadow: none;
+  }
+
+  // AkButton switches disabled border/color to neutral — keep primary
+  &:disabled,
+  &:global(.ak-button-disabled) {
+    opacity: 0.5;
+    cursor: not-allowed;
+    border-color: var(--primary-main) !important;
+    color: var(--primary-main) !important;
+  }
+}

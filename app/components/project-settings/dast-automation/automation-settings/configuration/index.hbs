@@ -1,0 +1,59 @@
+<AkStack
+  @direction='column'
+  @width='full'
+  local-class='configuration-root'
+  data-test-projectSettings-dastAutomationSettings-configuration-root
+>
+  {{! Header }}
+  <AkTypography
+    @variant='h5'
+    @fontWeight='bold'
+    class='pb-2'
+    data-test-projectSettings-dastAutomationSettings-configurationHeader
+  >
+    {{t 'configuration'}}
+  </AkTypography>
+
+  {{! Enable Automation toggle row }}
+  <AkStack
+    @width='full'
+    @justifyContent='space-between'
+    @alignItems='center'
+    class='mb-3'
+  >
+    <AkStack @width='9/12' @direction='column' @spacing='1'>
+      <AkTypography
+        @fontWeight='bold'
+        data-test-projectSettings-dastAutomationSettings-dynamicscanAutomationToggleLabel
+      >
+        {{t 'enableAutomation'}}
+      </AkTypography>
+
+      <AkTypography
+        @variant='body2'
+        @color='textSecondary'
+        {{style maxWidth='700px'}}
+        data-test-projectSettings-dastAutomationSettings-headerInfoDescNote
+      >
+        {{t 'dynScanAutoSchedNote'}}
+      </AkTypography>
+    </AkStack>
+
+    <AkToggle
+      @size='small'
+      @disabled={{this.toggleDsAutomationPreference.isRunning}}
+      @checked={{this.automationPreference.dynamicScanAutomationEnabled}}
+      @onChange={{perform this.toggleDsAutomationPreference}}
+      data-test-projectSettings-dastAutomationSettings-dynamicscanAutomationToggle
+    />
+  </AkStack>
+
+  <AkDivider @color='dark' />
+
+  {{! Scan window row }}
+  <div class='my-3'>
+    <ProjectSettings::DastAutomation::AutomationSettings::ScanWindow
+      @profileId={{@profileId}}
+    />
+  </div>
+</AkStack>

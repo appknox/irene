@@ -17,7 +17,7 @@ export interface AkTextFieldSignature {
     labelTypographyColor?: LabelTypographyColor;
     required?: boolean;
     type?: string;
-    value?: string;
+    value?: string | null;
     placeholder?: string;
     autofocus?: boolean;
     disabled?: boolean;

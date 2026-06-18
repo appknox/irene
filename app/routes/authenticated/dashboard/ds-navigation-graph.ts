@@ -18,6 +18,7 @@ export default class AuthenticatedDashboardDsNavigationGraphRoute extends Scroll
   @service declare store: Store;
 
   async model(params: {
+    fileid: string;
     dynamicscan_id: string;
   }): Promise<DsNavigationGraphRouteModel> {
     const adapter = this.store.adapterFor('ds-navigation-graph');
@@ -28,12 +29,7 @@ export default class AuthenticatedDashboardDsNavigationGraphRoute extends Scroll
       {}
     );
 
-    const dynamicscan = await this.store.findRecord(
-      'dynamicscan',
-      params.dynamicscan_id
-    );
-
-    const file = await dynamicscan.file;
+    const file = await this.store.findRecord('file', params.fileid);
 
     return {
       navigationGraph,

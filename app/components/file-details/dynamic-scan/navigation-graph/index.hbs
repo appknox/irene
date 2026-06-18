@@ -26,7 +26,11 @@
       @anchor='right'
       as |dr|
     >
-      <div local-class='drawer-content'>
+      <div
+        local-class='drawer-content'
+        {{did-insert this.registerDrawerContent}}
+        {{will-destroy this.unregisterDrawerContent}}
+      >
         <AkAppbar @justifyContent='space-between' as |ab|>
           <AkTypography
             data-test-fileDetails-dynamicScan-navigationGraph-drawerTitle

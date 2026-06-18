@@ -16,12 +16,12 @@ export default class AuthenticatedDashboardDsNavigationGraphController extends C
     const crumb: AkBreadcrumbsItemProps = {
       title: this.intl.t('navigationGraph.title'),
       route: 'authenticated.dashboard.ds-navigation-graph',
-      models: [this.model?.dynamicscanId],
+      models: [this.model?.file?.id, this.model?.dynamicscanId],
       routeGroup: 'project/files',
     };
 
     const dastCrumb: AkBreadcrumbsItemProps['parentCrumb'] = {
-      title: this.intl.t('dast'),
+      title: this.intl.t('dastTabs.automatedDAST'),
       route: 'authenticated.dashboard.file.dynamic-scan.automated',
       models: fileRouteModels,
       routeGroup: 'project/files',

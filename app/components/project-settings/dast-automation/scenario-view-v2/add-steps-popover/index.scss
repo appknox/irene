@@ -1,0 +1,22 @@
+.popover-action-list {
+  min-width: 220px;
+  padding: 8px 0;
+  background: var(--background-main);
+  border: 1px solid var(--neutral-grey-100);
+  box-shadow: var(--box-shadow-3);
+}
+
+.popover-action-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  padding: 10px 16px;
+  border: 0;
+  background: transparent;
+  cursor: pointer;
+
+  &:hover {
+    background: var(--hover-light-background);
+  }
+}

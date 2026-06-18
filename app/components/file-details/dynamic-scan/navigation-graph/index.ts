@@ -12,10 +12,10 @@ import {
   GRAPH_LAYOUT_OPTIONS,
   DOUBLE_TAP_WINDOW_MS,
   RESIZE_DEBOUNCE_MS,
-  GRAPH_FIT_PADDING,
-  DEFAULT_GRAPH_ZOOM,
   MIN_GRAPH_ZOOM,
   MAX_GRAPH_ZOOM,
+  NODE_CENTER_ANIMATION_MS,
+  NODE_DRAWER_WIDTH_FALLBACK,
   GRAPH_STYLES,
   buildGraphElements,
   buildGraphLayoutOptions,
@@ -46,6 +46,14 @@ export default class FileDetailsDynamicScanNavigationGraphComponent extends Comp
   lastNodeTapId: string | null = null;
 
   resizeTimer: ReturnType<typeof setTimeout> | null = null;
+
+  // Pan + zoom snapshot taken just before the drawer opens so we can
+  // restore the exact pre-drawer view when it closes.
+  viewBeforeDrawer: { pan: cytoscape.Position; zoom: number } | null = null;
+
+  // Drawer panel ref captured by `{{did-insert}}` so we can measure its width
+  // without scanning the DOM.
+  drawerContentEl: HTMLElement | null = null;
 
   layoutOptions = GRAPH_LAYOUT_OPTIONS;
 
@@ -120,35 +128,91 @@ export default class FileDetailsDynamicScanNavigationGraphComponent extends Comp
     return node?.title?.trim() || '—';
   }
 
-  get targetGraphZoom() {
-    const cy = this.cy;
-
-    if (!cy || this.selectedLayout !== 'breadthfirst') {
-      return DEFAULT_GRAPH_ZOOM;
-    }
-
-    const boundingBox = cy.elements().boundingBox();
-
-    if (!boundingBox.w || !boundingBox.h) {
-      return DEFAULT_GRAPH_ZOOM;
-    }
-
-    const fitZoom = Math.min(
-      (cy.width() - 2 * GRAPH_FIT_PADDING) / boundingBox.w,
-      (cy.height() - 2 * GRAPH_FIT_PADDING) / boundingBox.h
-    );
-
-    return Math.min(fitZoom, DEFAULT_GRAPH_ZOOM);
-  }
-
   @action
   selectNodeAtIndex(index: number | null) {
-    if (index !== null) {
+    const drawerWasOpen = this.selectedNodeIndex !== null;
+    const drawerWillOpen = index !== null;
+
+    // Drawer opening from a closed state: snapshot the current pan + zoom
+    // so we can restore the exact pre-drawer view on close.
+    if (!drawerWasOpen && drawerWillOpen && this.cy) {
+      const pan = this.cy.pan();
+
+      this.viewBeforeDrawer = {
+        pan: { x: pan.x, y: pan.y },
+        zoom: this.cy.zoom(),
+      };
+    }
+
+    if (drawerWillOpen) {
       this.imageLoading = true;
     }
 
     this.selectedNodeIndex = index;
     this.syncActiveNode();
+
+    if (drawerWillOpen) {
+      // Wait one frame so the drawer is in the DOM before we measure it.
+      this.window.requestAnimationFrame(() =>
+        this.centerSelectedNodeOnCanvas()
+      );
+    } else if (drawerWasOpen) {
+      this.restoreViewBeforeDrawer();
+    }
+  }
+
+  // Animates the canvas back to the pan + zoom captured before the drawer opened.
+  @action
+  restoreViewBeforeDrawer() {
+    const cy = this.cy;
+    const snapshot = this.viewBeforeDrawer;
+
+    if (!cy || !snapshot) {
+      return;
+    }
+
+    cy.animate({
+      pan: snapshot.pan,
+      zoom: snapshot.zoom,
+      duration: NODE_CENTER_ANIMATION_MS,
+    });
+
+    this.viewBeforeDrawer = null;
+  }
+
+  // Pans the canvas so the selected node sits at the center of the area
+  // not covered by the detail drawer.
+  @action
+  centerSelectedNodeOnCanvas() {
+    const cy = this.cy;
+    const node = this.selectedNode;
+
+    if (!cy || !node) {
+      return;
+    }
+
+    const targetNode = cy.getElementById(node.id);
+
+    if (targetNode.empty()) {
+      return;
+    }
+
+    const drawerWidth =
+      this.drawerContentEl?.getBoundingClientRect().width ??
+      NODE_DRAWER_WIDTH_FALLBACK;
+
+    const zoom = cy.zoom();
+    const pos = targetNode.position();
+    const cw = cy.width();
+    const ch = cy.height();
+
+    cy.animate({
+      pan: {
+        x: (cw - drawerWidth) / 2 - pos.x * zoom,
+        y: ch / 2 - pos.y * zoom,
+      },
+      duration: NODE_CENTER_ANIMATION_MS,
+    });
   }
 
   @action
@@ -183,6 +247,16 @@ export default class FileDetailsDynamicScanNavigationGraphComponent extends Comp
   // ------------------------------------------------------------------
   // Graph lifecycle and events
   // ------------------------------------------------------------------
+
+  @action
+  registerDrawerContent(element: HTMLElement) {
+    this.drawerContentEl = element;
+  }
+
+  @action
+  unregisterDrawerContent() {
+    this.drawerContentEl = null;
+  }
 
   @action initializeGraph(element: HTMLElement) {
     this.cy = cytoscape({
@@ -279,16 +353,12 @@ export default class FileDetailsDynamicScanNavigationGraphComponent extends Comp
       return;
     }
 
-    const zoom = this.targetGraphZoom;
-
     if (animate) {
       cy.animate({
-        zoom,
         center: { eles: cy.elements() },
         duration: 200,
       });
     } else {
-      cy.zoom(zoom);
       cy.center();
     }
   }

@@ -26,42 +26,14 @@
   </AkStack>
 
   {{#if @featureAvailable}}
-    <div local-class='dynamicscan-automation-settings-container'>
-      <AkStack class='py-2 px-3' @width='full' @justifyContent='space-between'>
-        <AkStack @width='9/12' @direction='column' @spacing='1'>
-          <AkTypography
-            @fontWeight='bold'
-            data-test-projectSettings-dastAutomationSettings-dynamicscanAutomationToggleLabel
-          >
-            {{t 'enableAutomation'}}
-          </AkTypography>
+    <AkStack @direction='column' @width='full'>
+      <ProjectSettings::DastAutomation::AutomationSettings::Configuration
+        @profileId={{@profileId}}
+      />
 
-          <AkTypography
-            {{style maxWidth='700px'}}
-            @variant='body2'
-            data-test-projectSettings-dastAutomationSettings-headerInfoDescNote
-          >
-            {{t 'dynScanAutoSchedNote'}}
-          </AkTypography>
-        </AkStack>
+      <AkDivider @color='dark' />
 
-        <AkToggle
-          @size='small'
-          @disabled={{this.toggleDsAutomationPreference.isRunning}}
-          @checked={{this.automationPreference.dynamicScanAutomationEnabled}}
-          @onChange={{perform this.toggleDsAutomationPreference}}
-          data-test-projectSettings-dastAutomationSettings-dynamicscanAutomationToggle
-        />
-      </AkStack>
-
-      <div class='my-2 px-3'>
-        <ProjectSettings::DastAutomation::AutomationSettings::Scenario
-          @project={{@project}}
-          @profileId={{@profileId}}
-        />
-      </div>
-
-      <AkStack @width='9/12' class='p-3'>
+      <AkStack @width='9/12' class='py-3'>
         <DsPreferenceProvider
           @profileId={{@profileId}}
           @file={{@project.lastFile}}
@@ -73,7 +45,27 @@
           />
         </DsPreferenceProvider>
       </AkStack>
-    </div>
+
+      <AkDivider @color='dark' />
+
+      <AkStack @width='9/12' class='my-3'>
+        <ProjectSettings::DastAutomation::AutomationSettings::Scenario
+          @project={{@project}}
+          @profileId={{@profileId}}
+        />
+      </AkStack>
+
+      {{#if this.isSuperUser}}
+        <AkDivider @color='dark' />
+
+        <AkStack @width='9/12' class='my-3'>
+          <ProjectSettings::DastAutomation::AutomationSettings::ScenarioV2
+            @project={{@project}}
+            @profileId={{@profileId}}
+          />
+        </AkStack>
+      {{/if}}
+    </AkStack>
   {{else}}
     <DynamicscanAutomationUpsellingFeature />
   {{/if}}

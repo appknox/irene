@@ -1,0 +1,10 @@
+.scenario-edit-footer-container {
+  box-shadow: var(--project-settings-view-scenario-modal-footer-box-shadow);
+}
+
+.scenario-name-form-control {
+  min-width: 420px;
+  background-color: var(
+    --project-settings-dast-automation-automation-settings-scenario-textfield-bg
+  );
+}
