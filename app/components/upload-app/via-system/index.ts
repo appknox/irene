@@ -93,6 +93,8 @@ export default class UploadAppViaSystemComponent extends Component {
 
       this.uploadApp.updateSystemFileQueue(queue);
       this.notify.success(this.tFileUploadedSuccessfully);
+
+      queue?.remove(file);
     } catch (e) {
       const error = e as AdapterError;
       const firstErr = error.errors?.[0];
