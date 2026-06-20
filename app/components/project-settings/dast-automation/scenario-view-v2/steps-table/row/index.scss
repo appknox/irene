@@ -1,0 +1,197 @@
+.step-row {
+  position: relative;
+  display: grid;
+  grid-template-columns: 32px 48px 220px 1fr 1fr;
+  align-items: center;
+  gap: 2em;
+  min-height: 50px;
+  padding: 0 76px 0 12px;
+  border-top: 1px solid #f8f8f8;
+  border-bottom: 1px solid #f8f8f8;
+  background: var(--background-main);
+
+  &:hover {
+    cursor: pointer;
+    background: var(--neutral-grey-100);
+    box-shadow:
+      1px 0 0 0 #f8f8f8 inset,
+      -1px 0 0 0 #f8f8f8 inset,
+      0 1px 0 0 #f8f8f8 inset,
+      -1px -1px 0 0 #f8f8f8 inset;
+
+    .row-hover-actions {
+      display: flex;
+    }
+  }
+
+  .row-hover-actions {
+    display: none;
+    position: absolute;
+    right: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+  }
+
+  // Compact field hover state
+  &:hover .compact-field {
+    background: var(--background-main);
+  }
+
+  // Subtle drag states
+  &.is-dragging {
+    opacity: 0.4;
+  }
+
+  // Drag over state
+  &.is-drag-over {
+    border-top: 2px solid var(--primary-main);
+  }
+
+  .compact-field {
+    padding-top: 0;
+    padding-bottom: 0;
+    height: 30px;
+    box-sizing: border-box;
+
+    & + :global(.ak-text-input-outlined) {
+      border: 1px solid var(--neutral-grey-100);
+    }
+
+    &::placeholder {
+      color: var(--neutral-grey-400);
+    }
+  }
+
+  .action-select-wrapper {
+    position: relative;
+    width: 100%;
+  }
+
+  .action-select,
+  .value-select {
+    width: 100%;
+  }
+
+  .unit-select {
+    width: 120px;
+    flex-shrink: 0;
+
+    &.is-readonly {
+      width: 50%;
+    }
+  }
+
+  // Drag handle
+  .drag-handle {
+    display: inline-flex;
+    align-items: center;
+    cursor: grab;
+
+    &:active {
+      cursor: grabbing;
+    }
+  }
+
+  // Read-only sample mode: one row is "active" — gets the hover styling and
+  // exposes its action buttons (non-clickable, demo only).
+  &.is-readonly.is-sample-active {
+    background: var(--neutral-grey-100);
+    box-shadow:
+      1px 0 0 0 #f8f8f8 inset,
+      -1px 0 0 0 #f8f8f8 inset,
+      0 1px 0 0 #f8f8f8 inset,
+      -1px -1px 0 0 #f8f8f8 inset;
+
+    .row-hover-actions {
+      display: flex;
+    }
+  }
+
+  // Drag handle is non-interactive in read-only mode.
+  .drag-handle.is-readonly {
+    cursor: default;
+
+    &:active {
+      cursor: default;
+    }
+  }
+
+  // Read-only mode (View Sample drawer): suppress hover affordances and make
+  // disabled inputs/selects render as if enabled so the table matches the
+  // main editing view visually.
+  &.is-readonly {
+    &:not(.is-sample-active):hover {
+      cursor: default;
+      background: var(--background-main);
+      box-shadow: none;
+    }
+
+    &:hover .compact-field {
+      background: inherit;
+    }
+
+    :global(input):disabled,
+    :global(input):disabled:hover,
+    :global(input[disabled]),
+    :global(input[disabled]):hover {
+      cursor: default;
+      color: var(--text-primary) !important;
+      -webkit-text-fill-color: var(--text-primary) !important;
+      opacity: 1;
+      background: var(--background-main);
+      border: 1px solid var(--neutral-grey-100);
+    }
+
+    :global(input):disabled ~ :global(.ak-text-input-outlined),
+    :global(input[disabled]) ~ :global(.ak-text-input-outlined) {
+      background-color: var(--background-main);
+      border-color: 1px solid var(--neutral-grey-100);
+    }
+
+    :global(.ember-power-select-trigger[aria-disabled='true']),
+    :global(.ember-power-select-trigger[aria-disabled='true']):hover,
+    :global(.ember-power-select-trigger.ember-power-select-trigger--disabled),
+    :global(
+        .ember-power-select-trigger.ember-power-select-trigger--disabled
+      ):hover {
+      cursor: default;
+      color: inherit;
+      opacity: 1;
+      background: var(--background-main);
+    }
+  }
+}
+
+.action-option-icon {
+  min-width: 1.14286em;
+  min-height: 1.14286em;
+  font-size: 1em !important;
+}
+
+.steps-table-compact-trigger {
+  height: 30px !important;
+  border: 1px solid var(--neutral-grey-100) !important;
+
+  & :global(.ember-power-select-placeholder) {
+    color: #c4c4c4;
+  }
+}
+
+.steps-table-enter-input-trigger {
+  :global(.ember-power-select-status-icon) {
+    display: none;
+  }
+}
+
+.enter-input-info-icon-container {
+  position: absolute;
+  right: 8px;
+  top: 50%;
+  transform: translateY(-50%);
+  height: 16px;
+}
+
+.enter-input-info-icon {
+  font-size: 1em !important;
+  color: var(--neutral-grey-300);
+}

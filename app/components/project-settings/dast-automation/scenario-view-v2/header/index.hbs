@@ -1,0 +1,93 @@
+<AkStack
+  @tag='header'
+  @alignItems='center'
+  @justifyContent='space-between'
+  @width='full'
+  local-class='view-scenario-header-root'
+  class='p-2 px-3'
+  data-test-projectSettings-viewScenario-header-root
+>
+  <AkStack @alignItems='center' @justifyContent='flex-start' @spacing='6'>
+    <AkStack
+      @direction='column'
+      @spacing='1'
+      data-test-projectSettings-viewScenarioHeader-scenarioName
+    >
+      <AkTypography
+        @variant='body1'
+        @color='textSecondary'
+        @fontWeight='medium'
+      >
+        {{t 'scenario'}}
+      </AkTypography>
+
+      <AkTypography
+        @variant='body1'
+        @color='textPrimary'
+        @fontWeight='medium'
+        @noWrap={{true}}
+      >
+        {{@scenarioDetail.name}}
+      </AkTypography>
+    </AkStack>
+
+    <AkStack
+      @direction='column'
+      @spacing='1.5'
+      @width='full'
+      data-test-projectSettings-viewScenarioHeader-scenarioStatus
+    >
+      <AkTypography
+        @variant='body1'
+        @color='textSecondary'
+        @fontWeight='medium'
+      >
+        {{t 'status'}}
+      </AkTypography>
+
+      <ProjectSettings::DastScenarioV2Toggle
+        @project={{@project}}
+        @scenario={{@scenarioDetail}}
+      />
+    </AkStack>
+  </AkStack>
+
+  <AkStack @alignItems='center'>
+    {{#if this.isNotDefaultScenario}}
+      <ProjectSettings::DastAutomation::ScenarioViewV2::EditScenario
+        @scenario={{@scenarioDetail}}
+        @project={{@project}}
+      />
+
+      <AkDivider
+        @color='dark'
+        @direction='vertical'
+        @height='1.42857em'
+        {{style marginLeft='0.7857em' marginRight='0.7857em'}}
+        data-test-projectSettings-viewScenarioHeader-iconDivider
+      />
+
+      <ProjectSettings::DastAutomation::ScenarioViewV2::DeleteScenario
+        @scenarioDetail={{@scenarioDetail}}
+        @project={{@project}}
+      />
+    {{else}}
+      <ProjectSettings::DastAutomation::ScenarioViewV2::LoginScenarioSample
+        @scenarioDetail={{@scenarioDetail}}
+      />
+
+      <AkDivider
+        @color='dark'
+        @direction='vertical'
+        @height='1.42857em'
+        {{style marginLeft='0.7857em' marginRight='0.7857em'}}
+        data-test-projectSettings-viewScenarioHeader-iconDivider
+      />
+
+      <ProjectSettings::DastAutomation::ScenarioViewV2::EditScenario
+        @scenario={{@scenarioDetail}}
+        @project={{@project}}
+      />
+    {{/if}}
+  </AkStack>
+</AkStack>

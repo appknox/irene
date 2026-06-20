@@ -1,0 +1,33 @@
+<AkStack
+  local-class='input-error-wrapper {{if @errorMessage "has-error"}}'
+  ...attributes
+>
+  {{yield}}
+
+  {{#if @errorMessage}}
+    <AkStack
+      @alignItems='center'
+      local-class='input-error-icon'
+      data-test-dastAutomationScenario-stepsTable-inputError
+    >
+      <AkTooltip @placement='top' @arrow={{true}} @renderInPlace={{true}}>
+        <:tooltipContent>
+          <AkStack
+            @justifyContent='center'
+            @alignItems='center'
+            local-class='tooltip-content-container'
+            data-test-dastAutomationScenario-stepsTable-inputErrorTooltipContent
+          >
+            <AkTypography @variant='body2' @align='center' @color='inherit'>
+              {{@errorMessage}}
+            </AkTypography>
+          </AkStack>
+        </:tooltipContent>
+
+        <:default>
+          <AkIcon @iconName='error' @size='small' @color='error' />
+        </:default>
+      </AkTooltip>
+    </AkStack>
+  {{/if}}
+</AkStack>

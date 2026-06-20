@@ -1,0 +1,32 @@
+.input-error-wrapper {
+  position: relative;
+  width: 100%;
+}
+
+.input-error-wrapper.has-error :global(.ak-text-input-outlined),
+.input-error-wrapper.has-error :global(.ember-power-select-trigger) {
+  border-radius: 2px !important;
+  border: 1px solid var(--error-main) !important;
+  background: rgba(215, 47, 47, 0.05) !important;
+}
+
+.input-error-wrapper.has-error :global(.ember-power-select-status-icon) {
+  display: none;
+}
+
+.input-error-icon {
+  position: absolute;
+  right: 8px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--error-main);
+  height: 16px;
+}
+
+.tooltip-content-container {
+  min-width: 180px;
+  padding: 0.35em;
+  width: fit-content;
+  box-sizing: border-box;
+  white-space: normal;
+}

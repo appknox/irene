@@ -1,0 +1,37 @@
+.header {
+  background: var(--background-main);
+  border: 1px solid var(--border-color-1);
+  border-radius: 4px;
+}
+
+.steps-table-root {
+  background: var(--background-main);
+  border: 1px solid var(--border-color-1);
+  box-shadow: -5px 0 9px 0 rgba(64, 64, 64, 0.03);
+}
+
+.steps-table {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5em;
+  width: 100%;
+}
+
+.steps-table-header,
+.steps-table-row {
+  display: grid;
+  grid-template-columns: 24px 60px 200px 260px 260px;
+  align-items: center;
+  column-gap: 0.85em;
+  padding: 0.43em 0;
+}
+
+.steps-table-header {
+  border-bottom: 1px solid var(--border-color-1);
+}
+
+.footer {
+  border: 1px solid var(--border-color-1);
+  background: var(--background-main);
+  box-shadow: -5px 0 9px 0 rgba(64, 64, 64, 0.03);
+}
