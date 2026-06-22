@@ -168,6 +168,9 @@ export default class AnalysisModel extends Model {
   @attr('date')
   declare updatedOn: Date;
 
+  @attr('boolean')
+  declare isKnoxiqAllFp: boolean;
+
   get tLow() {
     return this.intl.t('low');
   }

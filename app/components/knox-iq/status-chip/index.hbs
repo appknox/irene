@@ -1,7 +1,11 @@
 {{#if (eq @state 'failed')}}
   <AkTooltip @arrow={{true}} @placement='top'>
     <:tooltipContent>
-      <AkStack @direction='column' class='p-1' local-class='failed-tooltip-content'>
+      <AkStack
+        @direction='column'
+        class='p-1'
+        local-class='failed-tooltip-content'
+      >
         <AkTypography @color='inherit' @variant='body2'>
           {{t 'knoxIq.statusCard.failedSubtitle'}}
         </AkTypography>
@@ -9,7 +13,12 @@
     </:tooltipContent>
 
     <:default>
-      <AkStack @spacing='1' @alignItems='center' local-class='chip-container failed-chip'>
+      <AkStack
+        @spacing='1'
+        @alignItems='center'
+        local-class='chip-container failed-chip'
+        data-test-knoxiq-status-chip-failed
+      >
         <AkTypography @variant='body2' @color='inherit' @fontWeight='medium'>
           {{t 'knoxIq.statusChip.failed'}}
         </AkTypography>
@@ -31,7 +40,11 @@
 {{else}}
   <AkTooltip @arrow={{true}} @placement='top'>
     <:tooltipContent>
-      <AkStack @direction='column' class='p-1' local-class='running-tooltip-content'>
+      <AkStack
+        @direction='column'
+        class='p-1'
+        local-class='running-tooltip-content'
+      >
         <AkTypography @color='inherit' @variant='body2'>
           {{t 'knoxIq.statusChip.runningTooltip'}}
         </AkTypography>
