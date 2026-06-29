@@ -14,8 +14,6 @@
     <AkIcon @iconName='delete' @size='small' />
   </AkIconButton>
 {{else}}
-
-  {{! Main Scenario editing mode }}
   {{#if @isMasking}}
     <AkLoader @size={{12}} />
 
@@ -39,7 +37,7 @@
   {{/if}}
 
   <AkTooltip
-    @title='Roles must have at least one step'
+    @title={{this.disableDeleteTooltipText}}
     @placement='top'
     @arrow={{true}}
     @disabled={{not @disableDelete}}

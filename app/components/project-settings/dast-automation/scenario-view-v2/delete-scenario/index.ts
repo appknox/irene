@@ -41,10 +41,12 @@ export default class ProjectSettingsDastAutomationScenarioViewV2DeleteScenarioCo
   }
 
   deleteProjectScenario = task(async () => {
-    try {
-      const adapterOptions = { projectId: this.args.project?.id };
+    const projectId = this.args.project?.id;
 
-      await this.scenarioDetail.destroyRecord({ adapterOptions });
+    try {
+      await this.scenarioDetail.destroyRecord({
+        adapterOptions: { projectId },
+      });
 
       this.notify.success(
         this.intl.t('dastAutomation.scenarioDeleted', {
@@ -52,9 +54,9 @@ export default class ProjectSettingsDastAutomationScenarioViewV2DeleteScenarioCo
         })
       );
 
-      this.router.transitionTo(
-        'authenticated.dashboard.project.settings',
-        String(this.args.project?.id)
+      this.router.replaceWith(
+        'authenticated.dashboard.project.settings.dast-automation',
+        String(projectId)
       );
     } catch (err) {
       this.notify.error(parseError(err, this.intl.t('tSomethingWentWrong')));

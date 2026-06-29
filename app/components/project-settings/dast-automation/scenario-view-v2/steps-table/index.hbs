@@ -64,6 +64,7 @@
       <AkIconButton
         @size='small'
         disabled={{@isReadOnly}}
+        local-class='{{if @isReadOnly "delete-role-btn-readonly"}}'
         {{on 'click' this.openDeleteRoleConfirmBox}}
         data-test-dastAutomationScenario-stepsTable-deleteRoleBtn
       >

@@ -171,6 +171,7 @@ export default class ProjectSettingsDastAutomationScenarioViewV2Component extend
   ) {
     if (!role) {
       this.allSteps = updatedSteps;
+
       return;
     }
 
@@ -200,7 +201,7 @@ export default class ProjectSettingsDastAutomationScenarioViewV2Component extend
       order: roleStepCount + 1,
       action: config.action,
       identifier: '',
-      value: '',
+      value: config.defaultValue ?? '',
       isSecure: false,
       scenario: this.args.scenarioDetail,
     });
@@ -431,6 +432,26 @@ export default class ProjectSettingsDastAutomationScenarioViewV2Component extend
     }
   }
 
+  private extractStepMessages(detail: unknown): string[] {
+    if (!detail || typeof detail !== 'object') {
+      return [];
+    }
+
+    return Object.values(detail)
+      .map((value) => (Array.isArray(value) ? value[0] : value))
+      .filter((value) => typeof value === 'string' && value.length > 0);
+  }
+
+  getFirstBulkStepCreationError(err: AdapterError): string | null {
+    const errors = err.errors ?? [];
+
+    return (
+      errors
+        .flatMap((error) => this.extractStepMessages(error.detail))
+        .slice(0, 1)[0] ?? null
+    );
+  }
+
   saveScenario = task(async () => {
     const projectId = this.args.project?.id;
 
@@ -457,7 +478,13 @@ export default class ProjectSettingsDastAutomationScenarioViewV2Component extend
 
       this.notify.success(this.intl.t('dastAutomation.scenarioUpdated'));
     } catch (err) {
-      this.notify.error(parseError(err, this.intl.t('tSomethingWentWrong')));
+      const error = err as AdapterError;
+
+      const message =
+        this.getFirstBulkStepCreationError(error) ??
+        parseError(error, this.intl.t('tSomethingWentWrong'));
+
+      this.notify.error(message);
     }
   });
 

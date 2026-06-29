@@ -1,5 +1,5 @@
 import Component from '@glimmer/component';
-
+import type ScenarioDetailModel from 'irene/models/scenario-detail';
 import type ScenarioStepModel from 'irene/models/scenario-step';
 
 interface ProjectSettingsDastAutomationScenarioViewV2StepsTableRowActionsSignature {
@@ -13,6 +13,7 @@ interface ProjectSettingsDastAutomationScenarioViewV2StepsTableRowActionsSignatu
     maskingDisabled?: boolean;
     onToggleSecure: (step: ScenarioStepModel) => void;
     onDelete: (step: ScenarioStepModel) => void;
+    scenarioDetail: ScenarioDetailModel;
   };
 }
 
@@ -37,6 +38,14 @@ export default class ProjectSettingsDastAutomationScenarioViewV2StepsTableRowAct
     }
 
     return 'Cannot secure non-input field';
+  }
+
+  get disableDeleteTooltipText() {
+    if (this.args.scenarioDetail.isOtherType) {
+      return 'You must have at least one step in a scenario';
+    }
+
+    return 'Roles must have at least one step';
   }
 }
 

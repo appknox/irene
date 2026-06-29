@@ -43,6 +43,7 @@ export interface StepActionConfig {
   valueKind: StepValueKind;
   valuePlaceholder: StepPlaceholderKey;
   unitOptions?: string[];
+  defaultValue?: string;
 }
 
 export interface DirectionOption {
@@ -63,6 +64,7 @@ export const STEP_ACTION_CONFIGS: StepActionConfig[] = [
     icon: 'touch-app',
     valueKind: 'count',
     valuePlaceholder: 'dastAutomation.stepPlaceholders.count',
+    defaultValue: '1',
   },
   {
     action: ScenarioStepAction.SELECT,
@@ -84,6 +86,7 @@ export const STEP_ACTION_CONFIGS: StepActionConfig[] = [
     icon: 'verified',
     valueKind: 'boolean',
     valuePlaceholder: 'dastAutomation.stepPlaceholders.select',
+    defaultValue: 'true',
   },
   {
     action: ScenarioStepAction.WAIT,
@@ -92,6 +95,7 @@ export const STEP_ACTION_CONFIGS: StepActionConfig[] = [
     valueKind: 'duration',
     valuePlaceholder: 'dastAutomation.stepPlaceholders.count',
     unitOptions: ['seconds'],
+    defaultValue: '1',
   },
   {
     action: ScenarioStepAction.LONG_PRESS,
@@ -100,6 +104,7 @@ export const STEP_ACTION_CONFIGS: StepActionConfig[] = [
     valueKind: 'duration',
     valuePlaceholder: 'dastAutomation.stepPlaceholders.count',
     unitOptions: ['milliseconds'],
+    defaultValue: '1000',
   },
   {
     action: ScenarioStepAction.SWIPE,
@@ -107,14 +112,16 @@ export const STEP_ACTION_CONFIGS: StepActionConfig[] = [
     icon: 'swipe',
     valueKind: 'direction',
     valuePlaceholder: 'dastAutomation.stepPlaceholders.select',
+    defaultValue: 'up',
   },
-  {
-    action: ScenarioStepAction.DRAG,
-    label: 'dastAutomation.stepActions.drag',
-    icon: 'drag-pan',
-    valueKind: 'direction',
-    valuePlaceholder: 'dastAutomation.stepPlaceholders.select',
-  },
+  // Temporarily disabled until the drag step value format is finalized.
+  // {
+  //   action: ScenarioStepAction.DRAG,
+  //   label: 'dastAutomation.stepActions.drag',
+  //   icon: 'drag-pan',
+  //   valueKind: 'direction',
+  //   valuePlaceholder: 'dastAutomation.stepPlaceholders.select',
+  // },
 ];
 
 // ─── Option Constants ────────────────────────────────────────────────────────

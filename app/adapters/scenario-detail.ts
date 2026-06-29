@@ -146,6 +146,21 @@ export default class ScenarioDetailAdapter extends commondrf {
     return super.urlForFindRecord(id, modelName, snapshot);
   }
 
+  urlForDeleteRecord<K extends keyof ModelRegistry>(
+    id: string,
+    _modelName: K,
+    snapshot: Snapshot<K>
+  ) {
+    const { projectId } =
+      snapshot.adapterOptions as ScenarioDetailReloadOptions;
+
+    if (projectId) {
+      return this._buildNestedURL(projectId, id);
+    }
+
+    return super.urlForDeleteRecord(id, _modelName, snapshot);
+  }
+
   // ── Push helpers ─────────────────────────────────────────────────────────
 
   private pushScenarioDetail(response: ScenarioDetailResponse) {
@@ -158,7 +173,7 @@ export default class ScenarioDetailAdapter extends commondrf {
 
   // ── Custom endpoints ──────────────────────────────────────────────────────
 
-  // Endpoint 1: single role create on a Login scenario.
+  // Single role create on a Login scenario.
   async createRole(
     projectId: ModelOrRelationID,
     scenarioId: ModelOrRelationID,
@@ -172,7 +187,7 @@ export default class ScenarioDetailAdapter extends commondrf {
     return response;
   }
 
-  // Endpoint 2: bulk-create roles on a Login scenario.
+  // Bulk-create roles on a Login scenario.
   async bulkCreateRoles(
     projectId: ModelOrRelationID,
     scenarioId: ModelOrRelationID,
@@ -197,7 +212,7 @@ export default class ScenarioDetailAdapter extends commondrf {
     await this.ajax(url, 'DELETE');
   }
 
-  // Endpoint 3: rename a role.
+  // Rename a role.
   async updateRole(
     projectId: ModelOrRelationID,
     scenarioId: ModelOrRelationID,
@@ -212,7 +227,7 @@ export default class ScenarioDetailAdapter extends commondrf {
     return response;
   }
 
-  // Endpoint 4: per-role steps bulk update (Login only).
+  // Per-role steps bulk update (Login only).
   async bulkUpdateRoleSteps(
     projectId: ModelOrRelationID,
     scenarioId: ModelOrRelationID,
@@ -227,7 +242,7 @@ export default class ScenarioDetailAdapter extends commondrf {
     return response;
   }
 
-  // Scenario-level steps bulk update (Other scenarios).
+  // Steps bulk update (Other scenarios).
   async bulkUpdateSteps(
     projectId: ModelOrRelationID,
     scenarioId: ModelOrRelationID,

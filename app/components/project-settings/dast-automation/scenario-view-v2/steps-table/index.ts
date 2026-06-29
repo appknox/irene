@@ -142,7 +142,7 @@ export default class ProjectSettingsDastAutomationScenarioViewV2StepsTableCompon
       order: this.steps.length + 1,
       action: config.action,
       identifier: '',
-      value: '',
+      value: config.defaultValue ?? '',
       isSecure: false,
       role: this.args.userRole ?? null,
       scenario: this.args.scenarioDetail,
@@ -179,7 +179,7 @@ export default class ProjectSettingsDastAutomationScenarioViewV2StepsTableCompon
 
     step.action = config.action;
     step.identifier = '';
-    step.value = '';
+    step.value = config.defaultValue ?? '';
     step.isSecure = false;
 
     this.args.clearStepError?.(step);

@@ -24,7 +24,6 @@ type ValueValidator = (ctx: ValueContext) => string | null;
 
 // ─── Constants ────────────────────────────────────────────────────────────────
 
-const IDENTIFIER_PATTERN = /^[a-z][a-z0-9_]*$/;
 const IDENTIFIER_MAX_LENGTH = 64;
 const SECURE_MASK = '************';
 const SWIPE_DIRECTIONS = ['up', 'down', 'left', 'right'];
@@ -36,7 +35,6 @@ const SELECT_MAX_LENGTH = 32;
 const ERR = {
   identifierRequired: 'dastAutomation.validation.identifierRequired',
   identifierTooLong: 'dastAutomation.validation.identifierTooLong',
-  identifierInvalidFormat: 'dastAutomation.validation.identifierInvalidFormat',
   valueRequired: 'dastAutomation.validation.valueRequired',
   tapValueRange: 'dastAutomation.validation.tapValueRange',
   longPressValueRange: 'dastAutomation.validation.longPressValueRange',
@@ -147,10 +145,6 @@ function validateIdentifier(identifier: string): string | null {
 
   if (trimmed.length > IDENTIFIER_MAX_LENGTH) {
     return ERR.identifierTooLong;
-  }
-
-  if (!IDENTIFIER_PATTERN.test(trimmed)) {
-    return ERR.identifierInvalidFormat;
   }
 
   return null;
