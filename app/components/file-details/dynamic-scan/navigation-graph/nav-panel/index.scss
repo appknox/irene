@@ -30,5 +30,38 @@
 }
 
 .layout-select {
-  min-width: 180px;
+  width: 140px;
+}
+
+.role-select {
+  width: 235px;
+}
+
+// The dropdown renders in a portal outside this component's root, so the
+// trigger/dropdown swap rules must live at the top level. Full label shows in
+// the dropdown list; the truncated label shows only in the select trigger.
+.role-label-truncated {
+  display: none;
+}
+
+:global(.ember-power-select-trigger) {
+  .role-label-full {
+    display: none;
+  }
+
+  .role-label-truncated {
+    display: inline;
+  }
+}
+
+// Disabled role options: faint label and not-allowed cursor, but still
+// hoverable so the "why is this disabled" tooltip can show.
+.role-option-disabled {
+  display: inline-block;
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+:global(.ember-power-select-option[aria-disabled='true']) {
+  pointer-events: auto !important;
 }

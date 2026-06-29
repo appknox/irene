@@ -4,30 +4,41 @@ import { service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
 import cytoscape from 'cytoscape';
 
-import DsNavigationGraphModel, {
-  type DsNavigationGraphNode,
-} from 'irene/models/ds-navigation-graph';
-
 import {
-  GRAPH_LAYOUT_OPTIONS,
   DOUBLE_TAP_WINDOW_MS,
   RESIZE_DEBOUNCE_MS,
-  GRAPH_FIT_PADDING,
-  DEFAULT_GRAPH_ZOOM,
   MIN_GRAPH_ZOOM,
   MAX_GRAPH_ZOOM,
+  NODE_CENTER_ANIMATION_MS,
+  NODE_DRAWER_WIDTH_FALLBACK,
+  GRAPH_FIT_PADDING,
   GRAPH_STYLES,
   buildGraphElements,
   buildGraphLayoutOptions,
   compareByExecutionOrder,
   type NavigationGraphLayout,
-  type NavigationGraphLayoutOption,
 } from './graph-config';
+
+import DsNavigationGraphModel, {
+  type DsNavigationGraphNode,
+} from 'irene/models/ds-navigation-graph';
+
+import type FileModel from 'irene/models/file';
+
+// Layout the graph renders with on first paint; the nav panel owns subsequent
+// layout changes.
+const INITIAL_LAYOUT: NavigationGraphLayout = 'grid';
+
+// Fallback icon size (px) at zoom 1; scaled by the live zoom so the icon grows
+// and shrinks with the node it sits on.
+const FALLBACK_ICON_BASE_PX = 40;
 
 export interface FileDetailsDynamicScanNavigationGraphSignature {
   Element: HTMLElement;
   Args: {
     navigationGraph: DsNavigationGraphModel | null;
+    file: FileModel;
+    dynamicscanId: string;
   };
 }
 
@@ -35,11 +46,31 @@ export default class FileDetailsDynamicScanNavigationGraphComponent extends Comp
   @service('browser/document') declare document: Document;
   @service('browser/window') declare window: Window;
 
+  @tracked selectedNodeIndex: number | null = null;
+
+  // Ids of nodes whose screenshot is still loading. Drives the per-node loader
+  // overlay; an id is removed once its image has loaded.
+  @tracked loadingNodeIds: string[] = [];
+
+  // Ids of nodes whose screenshot failed to load. Drives the per-node fallback
+  // icon overlay shown in place of the (never-painted) screenshot.
+  @tracked failedNodeIds: string[] = [];
+
+  // Live canvas zoom, tracked so the fallback icon font-size scales with it.
+  @tracked graphZoom = 1;
+
   cy: cytoscape.Core | null = null;
 
-  @tracked selectedLayout: NavigationGraphLayout = 'grid';
-  @tracked selectedNodeIndex: number | null = null;
-  @tracked imageLoading = true;
+  // Canvas element captured by `{{did-insert}}` so the graph can be rebuilt
+  // in place when the route swaps to another role's scan.
+  canvasEl: HTMLElement | null = null;
+
+  // HTML layer over the canvas that holds the per-node loader overlays.
+  overlayEl: HTMLElement | null = null;
+
+  // Holds in-flight screenshot `Image` objects so the browser cannot garbage
+  // collect them (and cancel the load) before they settle. Reset per rebuild.
+  pendingScreenshotImages: HTMLImageElement[] = [];
 
   detailTapTimer: ReturnType<typeof setTimeout> | null = null;
   lastNodeTapAt = 0;
@@ -47,7 +78,13 @@ export default class FileDetailsDynamicScanNavigationGraphComponent extends Comp
 
   resizeTimer: ReturnType<typeof setTimeout> | null = null;
 
-  layoutOptions = GRAPH_LAYOUT_OPTIONS;
+  // Pan + zoom snapshot taken just before the drawer opens so we can
+  // restore the exact pre-drawer view when it closes.
+  viewBeforeDrawer: { pan: cytoscape.Position; zoom: number } | null = null;
+
+  // Drawer panel ref captured by `{{did-insert}}` so we can measure its width
+  // without scanning the DOM.
+  drawerContentEl: HTMLElement | null = null;
 
   get navigationGraph() {
     return this.args.navigationGraph;
@@ -59,6 +96,12 @@ export default class FileDetailsDynamicScanNavigationGraphComponent extends Comp
 
   get edges() {
     return this.navigationGraph?.edges ?? [];
+  }
+
+  // No graph to render when the record is missing (load failed / not found)
+  // or the selected scan's graph has no nodes or edges.
+  get hasGraphData() {
+    return this.nodes.length > 0 || this.edges.length > 0;
   }
 
   get nodesSortedByExecutionOrder(): DsNavigationGraphNode[] {
@@ -73,12 +116,6 @@ export default class FileDetailsDynamicScanNavigationGraphComponent extends Comp
 
   get transitionCount() {
     return this.edges.length;
-  }
-
-  get selectedLayoutOption() {
-    return this.layoutOptions.find(
-      (option) => option.value === this.selectedLayout
-    );
   }
 
   get selectedNode() {
@@ -120,35 +157,91 @@ export default class FileDetailsDynamicScanNavigationGraphComponent extends Comp
     return node?.title?.trim() || '—';
   }
 
-  get targetGraphZoom() {
-    const cy = this.cy;
-
-    if (!cy || this.selectedLayout !== 'breadthfirst') {
-      return DEFAULT_GRAPH_ZOOM;
-    }
-
-    const boundingBox = cy.elements().boundingBox();
-
-    if (!boundingBox.w || !boundingBox.h) {
-      return DEFAULT_GRAPH_ZOOM;
-    }
-
-    const fitZoom = Math.min(
-      (cy.width() - 2 * GRAPH_FIT_PADDING) / boundingBox.w,
-      (cy.height() - 2 * GRAPH_FIT_PADDING) / boundingBox.h
-    );
-
-    return Math.min(fitZoom, DEFAULT_GRAPH_ZOOM);
+  get fallbackIconFontSize() {
+    return `${Math.round(this.graphZoom * FALLBACK_ICON_BASE_PX)}px !important`;
   }
 
   @action
   selectNodeAtIndex(index: number | null) {
-    if (index !== null) {
-      this.imageLoading = true;
+    const drawerWasOpen = this.selectedNodeIndex !== null;
+    const drawerWillOpen = index !== null;
+
+    // Drawer opening from a closed state: snapshot the current pan + zoom
+    // so we can restore the exact pre-drawer view on close.
+    if (!drawerWasOpen && drawerWillOpen && this.cy) {
+      const pan = this.cy.pan();
+
+      this.viewBeforeDrawer = {
+        pan: { x: pan.x, y: pan.y },
+        zoom: this.cy.zoom(),
+      };
     }
 
     this.selectedNodeIndex = index;
     this.syncActiveNode();
+
+    if (drawerWillOpen) {
+      // Wait one frame so the drawer is in the DOM before we measure it.
+      this.window.requestAnimationFrame(() =>
+        this.centerSelectedNodeOnCanvas()
+      );
+    } else if (drawerWasOpen) {
+      this.restoreViewBeforeDrawer();
+    }
+  }
+
+  // Animates the canvas back to the pan + zoom captured before the drawer opened.
+  @action
+  restoreViewBeforeDrawer() {
+    const cy = this.cy;
+    const snapshot = this.viewBeforeDrawer;
+
+    if (!cy || !snapshot) {
+      return;
+    }
+
+    cy.animate({
+      pan: snapshot.pan,
+      zoom: snapshot.zoom,
+      duration: NODE_CENTER_ANIMATION_MS,
+    });
+
+    this.viewBeforeDrawer = null;
+  }
+
+  // Pans the canvas so the selected node sits at the center of the area
+  // not covered by the detail drawer.
+  @action
+  centerSelectedNodeOnCanvas() {
+    const cy = this.cy;
+    const node = this.selectedNode;
+
+    if (!cy || !node) {
+      return;
+    }
+
+    const targetNode = cy.getElementById(node.id);
+
+    if (targetNode.empty()) {
+      return;
+    }
+
+    const drawerWidth =
+      this.drawerContentEl?.getBoundingClientRect().width ??
+      NODE_DRAWER_WIDTH_FALLBACK;
+
+    const zoom = cy.zoom();
+    const pos = targetNode.position();
+    const cw = cy.width();
+    const ch = cy.height();
+
+    cy.animate({
+      pan: {
+        x: (cw - drawerWidth) / 2 - pos.x * zoom,
+        y: ch / 2 - pos.y * zoom,
+      },
+      duration: NODE_CENTER_ANIMATION_MS,
+    });
   }
 
   @action
@@ -184,21 +277,183 @@ export default class FileDetailsDynamicScanNavigationGraphComponent extends Comp
   // Graph lifecycle and events
   // ------------------------------------------------------------------
 
+  @action
+  registerDrawerContent(element: HTMLElement) {
+    this.drawerContentEl = element;
+  }
+
+  @action
+  unregisterDrawerContent() {
+    this.drawerContentEl = null;
+  }
+
+  // ------------------------------------------------------------------
+  // Per-node screenshot loaders
+  // ------------------------------------------------------------------
+
+  @action
+  updateGraphZoom() {
+    this.graphZoom = this.cy?.zoom() ?? 1;
+  }
+
+  @action
+  registerScreenshotOverlay(element: HTMLElement) {
+    this.overlayEl = element;
+  }
+
+  @action
+  unregisterScreenshotOverlay() {
+    this.overlayEl = null;
+  }
+
+  // Loads each node's screenshot once, then paints it onto the node and clears
+  // that node's loader. Runs after `buildGraph`, so `cy` always exists — no
+  // load/paint ordering race. Loading it ourselves (rather than via cytoscape's
+  // own `background-image`) keeps it to a single request per image.
+  @action
+  loadNodeScreenshots() {
+    if (!this.cy) {
+      return;
+    }
+
+    this.pendingScreenshotImages = [];
+    this.failedNodeIds = [];
+
+    // Show a loader for every node that has a screenshot before kicking off the
+    // loads, so a cached image settling synchronously still finds its id here.
+    this.loadingNodeIds = this.nodes
+      .filter((node) => node.screenshot_path)
+      .map((node) => node.id);
+
+    for (const node of this.nodes) {
+      if (node.screenshot_path) {
+        this.loadSingleNodeScreenshot(node);
+      }
+    }
+  }
+
+  // Preloads one node's screenshot; paints it on load, shows a fallback on error.
+  loadSingleNodeScreenshot(node: DsNavigationGraphNode) {
+    const image = new Image();
+
+    // Keep a reference until it settles so the load is not GC-cancelled.
+    this.pendingScreenshotImages.push(image);
+
+    // Listeners before `src` so a cache hit cannot fire before we listen.
+    image.addEventListener('load', () => this.applyNodeScreenshot(node), {
+      once: true,
+    });
+
+    image.addEventListener('error', () => this.markNodeScreenshotFailed(node), {
+      once: true,
+    });
+
+    image.src = node.screenshot_path;
+
+    // A cached image is `complete` synchronously; naturalWidth distinguishes a
+    // successful decode from a cached failure.
+    if (image.complete) {
+      if (image.naturalWidth > 0) {
+        this.applyNodeScreenshot(node);
+      } else {
+        this.markNodeScreenshotFailed(node);
+      }
+    }
+  }
+
+  // Paints the (now-cached) screenshot onto its node and removes its loader.
+  applyNodeScreenshot(node: DsNavigationGraphNode) {
+    if (this.isDestroying || this.isDestroyed) {
+      return;
+    }
+
+    this.cy?.getElementById(node.id).data('screenshot', node.screenshot_path);
+
+    this.loadingNodeIds = this.loadingNodeIds.filter((id) => id !== node.id);
+  }
+
+  // Swaps a node's loader for a fallback icon when its screenshot fails to load.
+  markNodeScreenshotFailed(node: DsNavigationGraphNode) {
+    if (this.isDestroying || this.isDestroyed) {
+      return;
+    }
+
+    this.loadingNodeIds = this.loadingNodeIds.filter((id) => id !== node.id);
+
+    if (!this.failedNodeIds.includes(node.id)) {
+      this.failedNodeIds = [...this.failedNodeIds, node.id];
+    }
+  }
+
+  // Pins each loader to its node's rendered center. Driven from cytoscape's
+  // `render` event so loaders stay glued to nodes through pan, zoom and layout.
+  @action
+  syncScreenshotLoaderPositions() {
+    const cy = this.cy;
+    const overlay = this.overlayEl;
+
+    if (!cy || !overlay) {
+      return;
+    }
+
+    const loaders = overlay.querySelectorAll<HTMLElement>(
+      '[data-node-loader-id]'
+    );
+
+    for (const loader of loaders) {
+      const node = cy.getElementById(loader.dataset['nodeLoaderId'] ?? '');
+
+      if (node.empty()) {
+        continue;
+      }
+
+      const { x, y } = node.renderedPosition();
+
+      loader.style.transform = `translate(${x}px, ${y}px) translate(-50%, -50%)`;
+    }
+  }
+
   @action initializeGraph(element: HTMLElement) {
+    this.canvasEl = element;
+    this.buildGraph();
+
+    this.document.addEventListener('keydown', this.handleKeydown);
+    this.window.addEventListener('resize', this.handleWindowResize);
+  }
+
+  // Re-runs when the route swaps to another role's scan (`@dynamicscanId`
+  // changes), rebuilding the canvas with the new graph's nodes/edges.
+  @action rebuildGraph() {
+    this.buildGraph();
+  }
+
+  @action
+  buildGraph() {
+    if (!this.canvasEl) {
+      return;
+    }
+
+    // Tear down any existing instance and reset transient view/selection
+    // state so a role switch starts from a clean graph.
+    this.cy?.destroy();
+    this.cy = null;
+    this.selectedNodeIndex = null;
+    this.viewBeforeDrawer = null;
+    this.loadingNodeIds = [];
+    this.failedNodeIds = [];
+    this.cancelPendingDetailTap();
+
     this.cy = cytoscape({
-      container: element,
+      container: this.canvasEl,
       elements: buildGraphElements(this.nodes, this.edges),
       style: GRAPH_STYLES,
-      layout: this.buildLayoutOptions(this.selectedLayout),
+      layout: this.buildLayoutOptions(INITIAL_LAYOUT),
       minZoom: MIN_GRAPH_ZOOM,
       maxZoom: MAX_GRAPH_ZOOM,
     });
 
     this.wireGraphEvents();
-    this.logCanvasAspectRatio('render');
-
-    this.document.addEventListener('keydown', this.handleKeydown);
-    this.window.addEventListener('resize', this.handleWindowResize);
+    this.loadNodeScreenshots();
   }
 
   @action
@@ -212,7 +467,11 @@ export default class FileDetailsDynamicScanNavigationGraphComponent extends Comp
     // Settle at the default zoom after the initial render and layout changes
     cy.on('layoutstop', () => this.setDefaultGraphZoom());
 
-    cy.on('zoom', () => this.logCanvasAspectRatio('zoom'));
+    // Keep the per-node loaders glued to their nodes on every redraw.
+    cy.on('render', () => this.syncScreenshotLoaderPositions());
+
+    // Track zoom so the fallback icon scales with the node.
+    cy.on('zoom', () => this.updateGraphZoom());
 
     // Tap on empty canvas clears focus
     cy.on('tap', (event) => {
@@ -279,17 +538,14 @@ export default class FileDetailsDynamicScanNavigationGraphComponent extends Comp
       return;
     }
 
-    const zoom = this.targetGraphZoom;
-
+    // `fit` pans AND zooms so every node is visible with padding; `center`
+    // alone only pans and leaves off-screen nodes when the graph is larger
+    // than the viewport.
     if (animate) {
-      cy.animate({
-        zoom,
-        center: { eles: cy.elements() },
-        duration: 200,
-      });
+      const fitProps = { eles: cy.elements(), padding: GRAPH_FIT_PADDING };
+      cy.animate({ fit: fitProps, duration: 200 });
     } else {
-      cy.zoom(zoom);
-      cy.center();
+      cy.fit(cy.elements(), GRAPH_FIT_PADDING);
     }
   }
 
@@ -313,24 +569,6 @@ export default class FileDetailsDynamicScanNavigationGraphComponent extends Comp
       this.resizeTimer = null;
       this.resetGraphView();
     }, RESIZE_DEBOUNCE_MS);
-  }
-
-  @action
-  logCanvasAspectRatio(trigger: 'render' | 'zoom') {
-    const cy = this.cy;
-
-    if (!cy) {
-      return;
-    }
-
-    const width = cy.width();
-    const height = cy.height();
-
-    console.log(
-      `[navigation-graph] canvas aspect ratio (${trigger}):`,
-      (width / height).toFixed(4),
-      { width, height, zoom: cy.zoom() }
-    );
   }
 
   // ------------------------------------------------------------------
@@ -376,8 +614,28 @@ export default class FileDetailsDynamicScanNavigationGraphComponent extends Comp
   // Keyboard and template actions
   // ------------------------------------------------------------------
 
+  // Resets the graph to its original view: closes the drawer, clears focus and
+  // selection, and re-fits the canvas. The chosen layout is left intact.
+  @action
+  resetGraph() {
+    this.cancelPendingDetailTap();
+    this.viewBeforeDrawer = null;
+    this.selectedNodeIndex = null;
+    this.syncActiveNode();
+    this.clearGraphFocus();
+    this.setDefaultGraphZoom(true);
+  }
+
   @action
   handleKeydown(event: KeyboardEvent) {
+    // Ctrl/Cmd+Z resets the graph regardless of drawer/focus state.
+    if ((event.ctrlKey || event.metaKey) && event.key.toLowerCase() === 'z') {
+      event.preventDefault();
+      this.resetGraph();
+
+      return;
+    }
+
     if (this.selectedNode) {
       if (event.key === 'Escape') {
         event.preventDefault();
@@ -399,11 +657,12 @@ export default class FileDetailsDynamicScanNavigationGraphComponent extends Comp
     }
   }
 
+  // Applies a layout chosen in the nav panel to the live graph. The panel owns
+  // the selected-layout state; the parent just runs it against cytoscape.
   @action
-  handleLayoutChange(option: NavigationGraphLayoutOption) {
-    this.selectedLayout = option.value;
+  onLayoutChange(layout: NavigationGraphLayout) {
     this.clearGraphFocus();
-    this.cy?.layout(this.buildLayoutOptions(option.value)).run();
+    this.cy?.layout(this.buildLayoutOptions(layout)).run();
   }
 
   @action
@@ -423,10 +682,6 @@ export default class FileDetailsDynamicScanNavigationGraphComponent extends Comp
     }
   }
 
-  @action onScreenshotLoad() {
-    this.imageLoading = false;
-  }
-
   willDestroy() {
     super.willDestroy();
 
@@ -439,6 +694,9 @@ export default class FileDetailsDynamicScanNavigationGraphComponent extends Comp
     }
 
     this.cancelPendingDetailTap();
+    this.loadingNodeIds = [];
+    this.failedNodeIds = [];
+    this.pendingScreenshotImages = [];
 
     this.cy?.destroy();
     this.cy = null;

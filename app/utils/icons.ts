@@ -183,6 +183,7 @@ export const MaterialSymbolsSet = [
   'distance',
   'arrow-right-alt',
   'history',
+  'family-history',
 ] as const;
 
 export const MdiIconsSet = [

@@ -18,6 +18,10 @@ export default class ProjectSettingsDastAutomationAutomationSettingsComponent ex
   get isSuperUser() {
     return this.me.org?.has_security_permission;
   }
+
+  get profileId() {
+    return String(this.args.profileId);
+  }
 }
 
 declare module '@glint/environment-ember-loose/registry' {

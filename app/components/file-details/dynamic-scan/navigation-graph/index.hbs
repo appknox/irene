@@ -4,121 +4,74 @@
     local-class='breadcrumbs-container'
   />
 
-  <div
-    local-class='graph-canvas-wrapper'
-    {{did-insert this.initializeGraph}}
-    data-test-fileDetails-dynamicScan-navigationGraph-canvas
-  ></div>
+  {{#if this.hasGraphData}}
+    <div
+      local-class='graph-canvas-wrapper'
+      {{did-insert this.initializeGraph}}
+      {{did-update this.rebuildGraph @dynamicscanId}}
+      data-test-fileDetails-dynamicScan-navigationGraph-canvas
+    >
+      <div
+        local-class='screenshot-loader-overlay'
+        {{did-insert this.registerScreenshotOverlay}}
+        {{will-destroy this.unregisterScreenshotOverlay}}
+      >
+        {{#each this.loadingNodeIds as |nodeId|}}
+          <div
+            local-class='node-screenshot-loader'
+            data-node-loader-id={{nodeId}}
+            data-test-fileDetails-dynamicScan-navigationGraph-nodeLoader
+          >
+            <AkLoader @size={{16}} />
+          </div>
+        {{/each}}
 
+        {{#each this.failedNodeIds as |nodeId|}}
+          <div
+            local-class='node-screenshot-loader'
+            data-node-loader-id={{nodeId}}
+            data-test-fileDetails-dynamicScan-navigationGraph-nodeFallback
+          >
+            <AkIcon
+              @iconName='hugeicons:image-03'
+              @color='textSecondary'
+              {{style fontSize=this.fallbackIconFontSize}}
+            />
+          </div>
+        {{/each}}
+      </div>
+    </div>
+  {{else}}
+    <FileDetails::DynamicScan::NavigationGraph::NotFound
+      @title={{t 'navigationGraph.notFoundTitle'}}
+      @description={{t 'navigationGraph.notFoundDescription'}}
+      @buttonRoute='authenticated.dashboard.file.dynamic-scan.automated'
+      @buttonModel={{@file.id}}
+      @buttonText={{t 'navigationGraph.backToDast'}}
+    />
+  {{/if}}
+
+  {{! Always shown so the user can switch between roles even when the current
+  role's graph is empty / not found. }}
   <FileDetails::DynamicScan::NavigationGraph::NavPanel
+    @hasGraphData={{this.hasGraphData}}
     @variantCount={{this.variantCount}}
     @transitionCount={{this.transitionCount}}
-    @layoutOptions={{this.layoutOptions}}
-    @selectedLayoutOption={{this.selectedLayoutOption}}
-    @onLayoutChange={{this.handleLayoutChange}}
+    @file={{@file}}
+    @dynamicscanId={{@dynamicscanId}}
+    @onLayoutChange={{this.onLayoutChange}}
   />
 
   {{#if this.selectedNode}}
-    <AkDrawer
-      data-test-fileDetails-dynamicScan-navigationGraph-drawer
-      @open={{true}}
+    <FileDetails::DynamicScan::NavigationGraph::ScreenshotDrawer
+      @node={{this.selectedNode}}
+      @hasPreviousNode={{this.hasPreviousNode}}
+      @hasNextNode={{this.hasNextNode}}
       @onClose={{this.closeNodeDetail}}
-      @anchor='right'
-      as |dr|
-    >
-      <div local-class='drawer-content'>
-        <AkAppbar @justifyContent='space-between' as |ab|>
-          <AkTypography
-            data-test-fileDetails-dynamicScan-navigationGraph-drawerTitle
-            @color='inherit'
-            @variant='h5'
-          >
-            {{or this.selectedNode.title this.selectedNode.variant_id}}
-          </AkTypography>
-
-          <AkIconButton
-            data-test-fileDetails-dynamicScan-navigationGraph-drawerClose
-            class={{ab.classes.defaultIconBtn}}
-            {{on 'click' dr.closeHandler}}
-          >
-            <AkIcon @iconName='close' />
-          </AkIconButton>
-        </AkAppbar>
-
-        <AkStack
-          @direction='column'
-          @alignItems='center'
-          @spacing='2'
-          local-class='drawer-body'
-        >
-          <div local-class='screenshot-container'>
-            {{#if this.selectedNode.screenshot_path}}
-              {{#if this.imageLoading}}
-                <div local-class='loading-container'>
-                  <AkStack @alignItems='center' @spacing='2'>
-                    <AkLoader @size={{16}} />
-                    <AkTypography>{{t 'loading'}}...</AkTypography>
-                  </AkStack>
-                </div>
-              {{/if}}
-
-              <img
-                local-class='
-                  drawer-screenshot
-                  {{if this.imageLoading "display-none"}}
-                '
-                src={{this.selectedNode.screenshot_path}}
-                alt={{t
-                  'navigationGraph.screenshotOf'
-                  title=this.selectedNode.title
-                }}
-                {{on 'load' this.onScreenshotLoad}}
-                data-test-fileDetails-dynamicScan-navigationGraph-drawerImage
-              />
-            {{else}}
-              <div local-class='drawer-screenshot-placeholder'>
-                <AkTypography @variant='body2' @color='textSecondary'>
-                  {{t 'navigationGraph.noScreenshot'}}
-                </AkTypography>
-              </div>
-            {{/if}}
-          </div>
-
-          <AkStack
-            local-class='drawer-nav'
-            @alignItems='center'
-            @justifyContent='space-between'
-          >
-            <AkButton
-              data-test-fileDetails-dynamicScan-navigationGraph-drawerPrev
-              @variant='outlined'
-              @color='neutral'
-              @disabled={{not this.hasPreviousNode}}
-              {{on 'click' this.showPreviousNode}}
-            >
-              <:leftIcon>
-                <AkIcon @iconName='arrow-left' />
-              </:leftIcon>
-
-              <:default>{{t 'previous'}}</:default>
-            </AkButton>
-
-            <AkButton
-              data-test-fileDetails-dynamicScan-navigationGraph-drawerNext
-              @variant='outlined'
-              @color='neutral'
-              @disabled={{not this.hasNextNode}}
-              {{on 'click' this.showNextNode}}
-            >
-              <:rightIcon>
-                <AkIcon @iconName='arrow-right' />
-              </:rightIcon>
-
-              <:default>{{t 'next'}}</:default>
-            </AkButton>
-          </AkStack>
-        </AkStack>
-      </div>
-    </AkDrawer>
+      @onPrevious={{this.showPreviousNode}}
+      @onNext={{this.showNextNode}}
+      @onContentInsert={{this.registerDrawerContent}}
+      @onContentDestroy={{this.unregisterDrawerContent}}
+    />
   {{/if}}
 </PageWrapper>

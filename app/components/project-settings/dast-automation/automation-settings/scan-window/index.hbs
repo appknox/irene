@@ -1,0 +1,67 @@
+{{#if this.loadPreference.isRunning}}
+  <ProjectSettings::DastAutomation::AutomationSettings::ScanWindow::SkeletonLoader
+  />
+
+{{else if this.preference}}
+  <AkStack
+    @width='full'
+    @alignItems='flex-start'
+    @spacing='4'
+    data-test-projectSettings-dastAutomationSettings-scanWindow-root
+  >
+    {{! Scan window type }}
+    <AkStack @direction='column' @spacing='1'>
+      <AkStack @alignItems='center' @spacing='0.5'>
+        <AkTypography
+          @fontWeight='medium'
+          data-test-projectSettings-dastAutomationSettings-scanWindowLabel
+        >
+          Scan Window
+        </AkTypography>
+
+        <AkTooltip @arrow={{true}} @placement='top'>
+          <:tooltipContent>
+            <div local-class='tooltip-content-container'>
+              {{t 'dastAutomation.scanWindowInfo'}}
+            </div>
+          </:tooltipContent>
+
+          <:default>
+            <AkIcon
+              @iconName='info'
+              @size='small'
+              @color='textSecondary'
+              local-class='scan-window-info-icon'
+            />
+          </:default>
+        </AkTooltip>
+      </AkStack>
+
+      <AkSelect
+        @options={{this.scanWindowTypeOptions}}
+        @selected={{this.selectedTypeOption}}
+        @onChange={{this.handleTypeChange}}
+        @disabled={{this.savePreference.isRunning}}
+        local-class='scan-window-type-select'
+        data-test-projectSettings-dastAutomationSettings-scanWindowTypeSelect
+        as |option|
+      >
+        {{option.label}}
+      </AkSelect>
+    </AkStack>
+
+    {{#if this.isSpecificTime}}
+      <ProjectSettings::DastAutomation::AutomationSettings::ScanWindow::TimeRange
+        @preference={{this.preference}}
+        @disabled={{this.savePreference.isRunning}}
+        @onSave={{this.triggerSave}}
+      />
+
+      <ProjectSettings::DastAutomation::AutomationSettings::ScanWindow::TimezoneSelect
+        @preference={{this.preference}}
+        @disabled={{this.savePreference.isRunning}}
+        @onSave={{this.triggerSave}}
+      />
+    {{/if}}
+  </AkStack>
+{{/if}}

@@ -11,11 +11,20 @@
       @color='dark'
       @placement='top'
       @arrow={{true}}
-      @title={{t 'dynamicScanTitleTooltip'}}
     >
-      <AkIconButton @size='small' local-class='info-btn'>
-        <AkIcon @iconName='info' @color='primary' />
-      </AkIconButton>
+      <:tooltipContent>
+        <div local-class='tooltip-content'>
+          <AkTypography @variant='body2' @color='inherit'>
+            {{this.expiryTooltip}}
+          </AkTypography>
+        </div>
+      </:tooltipContent>
+
+      <:default>
+        <AkIconButton @size='small' local-class='info-btn'>
+          <AkIcon @iconName='info' @color='primary' />
+        </AkIconButton>
+      </:default>
     </AkTooltip>
 
     <AkTypography

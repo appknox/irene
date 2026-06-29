@@ -322,15 +322,19 @@ export default class FileReportDrawerVaReportsComponent extends Component<FileRe
   });
 
   getFileLatestAutoDynamicScans = task(async () => {
-    this.lastAutomatedDynamicScan = await waitForPromise(
+    const scans = await waitForPromise(
       this.file.getFileLastAutomatedDynamicScan()
     );
+
+    this.lastAutomatedDynamicScan = scans[0] ?? null;
   });
 
   getFileLatestManualDynamicScans = task(async () => {
-    this.lastManualDynamicScan = await waitForPromise(
+    const scans = await waitForPromise(
       this.file.getFileLastManualDynamicScan()
     );
+
+    this.lastManualDynamicScan = scans[0] ?? null;
   });
 
   getInterimReportData = task(async () => {

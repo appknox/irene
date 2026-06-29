@@ -1,0 +1,15 @@
+.breadcrumbs-container {
+  width: fit-content;
+  padding: 10px;
+  border-radius: 8px;
+  border: 1px solid var(--neutral-grey-200);
+  background: var(--background-main);
+  box-shadow: 0 5px 5px 0 rgba(64, 64, 64, 0.1);
+  margin-bottom: 2.857em;
+}
+
+.not-found-root {
+  height: calc(100vh - 400px);
+  border: 1px solid var(--neutral-grey-200);
+  background: var(--background-main);
+}

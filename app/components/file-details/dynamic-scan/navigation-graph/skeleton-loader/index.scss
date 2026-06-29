@@ -1,0 +1,38 @@
+.navigation-skeleton-loader-root {
+  position: relative;
+  overflow: hidden;
+  background-color: var(--background-main);
+  background-image: radial-gradient(
+    circle,
+    var(--neutral-grey-300) 1px,
+    transparent 1.5px
+  );
+  background-size: 24px 24px;
+}
+
+.breadcrumbs-skeleton {
+  width: fit-content;
+  padding: 10px;
+  border-radius: 8px;
+  border: 1px solid var(--neutral-grey-200);
+  background: var(--background-main);
+  box-shadow: 0 5px 5px 0 rgba(64, 64, 64, 0.1);
+  margin-bottom: 2.857em;
+}
+
+.graph-canvas-skeleton {
+  height: calc(100vh - 320px);
+}
+
+.floating-toolbar-skeleton {
+  position: absolute;
+  z-index: 50;
+  left: 50%;
+  bottom: 20px;
+  transform: translateX(-50%);
+  width: min(600px, calc(100% - 32px));
+  padding: 17px;
+  background: var(--background-main);
+  border-radius: 24px;
+  box-shadow: var(--box-shadow-9);
+}

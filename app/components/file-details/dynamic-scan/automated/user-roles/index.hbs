@@ -1,0 +1,53 @@
+<AkStack
+  @width='full'
+  @alignItems='center'
+  @spacing='1.5'
+  local-class='user-roles-root'
+  data-test-fileDetails-dynamicScan-automated-userRoles-root
+  ...attributes
+>
+  <AkTypography
+    @fontWeight='bold'
+    {{style minWidth='78px'}}
+    data-test-fileDetails-dynamicScan-automated-userRoles-label
+  >
+    {{t 'userRoles'}}
+  </AkTypography>
+
+  <AkStack @alignItems='center' @spacing='1.5'>
+    {{#each this.userRoles as |userRoleInfo|}}
+      {{#let
+        (eq userRoleInfo.role.id this.selectedUserRole.id)
+        (this.isLoadingStatus userRoleInfo.status)
+        (this.computedNonLoadingStatusIconInfo userRoleInfo.status)
+        as |isSelected isInLoadingStatus nonLoadingStatusIconInfo|
+      }}
+        <AkStack
+          @tag='button'
+          @alignItems='center'
+          @spacing='1'
+          {{on 'click' (fn this.toggleRoleSelection userRoleInfo)}}
+          local-class='user-role-pill {{if isSelected "selected"}}'
+          data-test-fileDetails-dynamicScan-automated-userRoles-pill
+        >
+          {{#if isInLoadingStatus}}
+            <AkLoader @size={{16}} @color='info-dark' />
+          {{else}}
+            <AkIcon
+              @iconName={{nonLoadingStatusIconInfo.icon}}
+              @color={{nonLoadingStatusIconInfo.color}}
+              local-class='user-role-pill-icon'
+            />
+          {{/if}}
+
+          <AkTypography
+            @fontWeight={{if isSelected 'medium' 'regular'}}
+            data-test-fileDetails-dynamicScan-automated-userRoles-pillName
+          >
+            {{userRoleInfo.role.name}}
+          </AkTypography>
+        </AkStack>
+      {{/let}}
+    {{/each}}
+  </AkStack>
+</AkStack>

@@ -1,0 +1,11 @@
+.invalid-file-or-ds-graph-root {
+  position: relative;
+  overflow: hidden;
+  background-color: var(--background-main);
+  background-image: radial-gradient(
+    circle,
+    var(--neutral-grey-300) 1px,
+    transparent 1.5px
+  );
+  background-size: 24px 24px;
+}

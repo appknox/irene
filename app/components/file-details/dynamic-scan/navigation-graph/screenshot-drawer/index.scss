@@ -1,0 +1,45 @@
+.drawer-content {
+  width: 480px;
+  max-width: 90vw;
+}
+
+.drawer-body {
+  padding: 24px;
+}
+
+// Screenshot and nav buttons share the same width so the
+// buttons align with the image edges
+.screenshot-container,
+.drawer-nav {
+  width: 282px;
+}
+
+.screenshot-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.drawer-screenshot {
+  display: block;
+  width: 282px;
+  height: 630px;
+  object-fit: contain;
+  border: 1px solid var(--neutral-grey-300);
+}
+
+.drawer-screenshot-placeholder,
+.loading-container,
+.screenshot-fallback {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 630px;
+  background: var(--neutral-grey-100);
+  border-radius: 4px;
+}
+
+.display-none {
+  display: none;
+}

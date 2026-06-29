@@ -29,14 +29,72 @@
 
     <AkSelect
       data-test-fileDetails-dynamicScan-navigationGraph-layoutSelect
-      @options={{@layoutOptions}}
-      @selected={{@selectedLayoutOption}}
-      @onChange={{@onLayoutChange}}
+      @options={{this.layoutOptions}}
+      @selected={{this.selectedLayoutOption}}
+      @onChange={{this.handleLayoutChange}}
+      @disabled={{not @hasGraphData}}
       local-class='layout-select'
       as |aks|
     >
       {{aks.label}}
     </AkSelect>
+
+    {{#if this.loadUserRoleOptions.isRunning}}
+      <AkStack
+        @alignItems='center'
+        @spacing='1'
+        class='ml-2'
+        data-test-fileDetails-dynamicScan-navigationGraph-userRoleSkeleton
+      >
+        <AkSkeleton @width='54px' @height='18px' />
+
+        <AkSkeleton @width='235px' @height='32px' />
+      </AkStack>
+    {{else if this.hasMultipleUserRoles}}
+      <AkTypography
+        @variant='body2'
+        @color='textSecondary'
+        @noWrap={{true}}
+        class='ml-2'
+      >
+        {{t 'navigationGraph.viewing'}}
+      </AkTypography>
+
+      <AkSelect
+        data-test-fileDetails-dynamicScan-navigationGraph-userRoleSelect
+        @options={{this.userRoleOptions}}
+        @selected={{this.selectedUserRoleOption}}
+        @onChange={{this.handleUserRoleChange}}
+        @placeholder={{t 'navigationGraph.selectRole'}}
+        local-class='role-select'
+        as |aks|
+      >
+        {{#if aks.disabled}}
+          <AkTooltip
+            @arrow={{true}}
+            @title={{or aks.disabledReason ''}}
+            @renderInPlace={{true}}
+            {{style width='100%'}}
+          >
+            <span local-class='role-option role-option-disabled'>
+              <span local-class='role-label-full'>{{aks.label}}</span>
+
+              <span local-class='role-label-truncated'>
+                {{aks.truncatedLabel}}
+              </span>
+            </span>
+          </AkTooltip>
+        {{else}}
+          <span local-class='role-option'>
+            <span local-class='role-label-full'>{{aks.label}}</span>
+
+            <span local-class='role-label-truncated'>
+              {{aks.truncatedLabel}}
+            </span>
+          </span>
+        {{/if}}
+      </AkSelect>
+    {{/if}}
   </AkStack>
 
   <AkDivider
@@ -67,6 +125,14 @@
 
       <AkTypography @variant='body2' @color='textSecondary'>
         {{t 'close'}}
+      </AkTypography>
+    </AkStack>
+
+    <AkStack @alignItems='center' @spacing='0.5'>
+      <kbd local-class='hint-kbd'>{{t 'navigationGraph.ctrlZ'}}</kbd>
+
+      <AkTypography @variant='body2' @color='textSecondary'>
+        {{t 'reset'}}
       </AkTypography>
     </AkStack>
   </AkStack>

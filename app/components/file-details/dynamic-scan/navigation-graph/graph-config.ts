@@ -27,9 +27,11 @@ export const DOUBLE_TAP_WINDOW_MS = 320;
 export const RESIZE_DEBOUNCE_MS = 150;
 export const GRAPH_FIT_PADDING = 64;
 
-// The zoom level the graph settles at after rendering, layout changes
-// and resizes. Users can still zoom in/out manually from here.
-export const DEFAULT_GRAPH_ZOOM = 0.75;
+// Pan animation when the drawer opens / prev-next changes the selection
+export const NODE_CENTER_ANIMATION_MS = 280;
+
+// Fallback if the drawer DOM cannot be measured for some reason
+export const NODE_DRAWER_WIDTH_FALLBACK = 480;
 
 // Hard bounds for all zooming — user gestures, fits and animations alike
 export const MIN_GRAPH_ZOOM = 0.1;
@@ -54,14 +56,16 @@ export const GRAPH_STYLES = [
       width: 120,
       height: 160,
       shape: 'round-rectangle',
-      'background-color': GRAPH_COLORS.surface,
+      // Grey so the node box behind the loader/fallback overlay and the title
+      // background stay consistent with the screenshot placeholder colour.
+      'background-color': GRAPH_COLORS.surfaceAlt,
       color: GRAPH_COLORS.neutral,
       'text-valign': 'bottom',
       'text-halign': 'center',
       'text-margin-y': 10,
       'font-size': '12px',
       'font-weight': 500,
-      'text-background-color': GRAPH_COLORS.surface,
+      'text-background-color': GRAPH_COLORS.surfaceAlt,
       'text-background-opacity': 0.96,
       'text-background-padding': '5px',
       'text-background-shape': 'roundrectangle',
@@ -75,10 +79,16 @@ export const GRAPH_STYLES = [
     selector: 'node[screenshot]',
     style: {
       'background-image': 'data(screenshot)',
+      // Screenshots are served without CORS headers, so load them in non-CORS
+      // mode. This taints the canvas (harmless — we never export it) but lets
+      // cytoscape actually paint cross-origin images; with the default
+      // 'anonymous' mode those fail and the node stays blank.
+      'background-image-crossorigin': 'null',
       'background-fit': 'contain',
       'background-clip': 'node',
       'background-opacity': 1,
       'background-color': GRAPH_COLORS.surfaceAlt,
+      'text-background-color': GRAPH_COLORS.surfaceAlt,
     },
   },
   {
@@ -151,6 +161,9 @@ export function buildGraphElements(
   edges: DsNavigationGraphEdge[]
 ): cytoscape.ElementDefinition[] {
   return [
+    // `screenshot` is omitted so cytoscape makes no request up front. The
+    // component loads each image once and sets `screenshot` on the node when it
+    // is ready, painting from cache (see loadNodeScreenshots).
     ...nodes.map((node) => ({
       data: {
         id: node.id,
@@ -159,7 +172,6 @@ export function buildGraphElements(
         title: node.title,
         visit_count: node.visit_count,
         execution_order: node.execution_order,
-        screenshot: node.screenshot_path,
       },
     })),
     ...edges.map((edge) => ({
