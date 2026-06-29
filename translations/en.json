@@ -789,6 +789,8 @@
   "knoxIq": {
     "aeis": "AEIS",
     "aeisDescription": "Appknox Exploit Intelligence Score",
+    "allFpDescription": "KnoxIQ has flagged all findings under this vulnerability as invalid. Kindly review and then use the Edit Analysis option to take a suitable action.",
+    "allFpTitle": "KnoxIQ False Positive Analysis",
     "analysisPageTitle": "KnoxIQ Analysis",
     "attackScenario": "Attack Scenario",
     "codeExample": "Code Example",
@@ -829,6 +831,7 @@
     "findingPosition": "Finding Position",
     "knoxIQPreferenceDesc": "Choose your preference how KnoxIQ should work for this project?",
     "nameOfVulnerability": "Name of Vulnerability",
+    "needsReview": "Needs Review",
     "orgSettingsDesc": "Enable automatic execution of KnoxIQ for all CI/CD uploads",
     "originalAnalysis": "Original Analysis",
     "reasoning": "reasoning",

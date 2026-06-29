@@ -178,6 +178,26 @@ module('Integration | Component | app-file-card', function (hooks) {
       assert.dom('[data-test-fileChartSeverityLevel-chart]').doesNotExist();
     });
 
+    test('it shows KNOXIQ ERROR chip instead of Run KnoxIQ button when scan is errored', async function (assert) {
+      this.file.knoxiqStatus = ENUMS.KNOXIQ_SCAN_STATUS.ERRORED;
+
+      setupFileExploitabilityMirageEndpoint(this.server, {
+        exploitability_count_high: 0,
+        exploitability_count_medium: 0,
+        exploitability_count_low: 0,
+        exploitability_count_passed: 0,
+        exploitability_count_unknown: 0,
+      });
+
+      await render(hbs`<AppFileCard @file={{this.file}} />`);
+
+      assert.dom('[data-test-knoxiq-project-card-runKnoxIqBtn]').doesNotExist();
+      assert
+        .dom('[data-test-knoxiq-status-chip-failed]')
+        .exists()
+        .hasText(t('knoxIq.statusChip.failed'));
+    });
+
     test('it shows Run KnoxIQ button and triggers scan on click', async function (assert) {
       this.file.knoxiqStatus = ENUMS.KNOXIQ_SCAN_STATUS.NOT_TRIGGERED;
       this.file.isKnoxiqAutomated = false;

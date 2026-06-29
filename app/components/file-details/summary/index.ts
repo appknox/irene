@@ -7,6 +7,7 @@ import type IntlService from 'ember-intl/services/intl';
 
 import type FileModel from 'irene/models/file';
 import type { PoweredByAiDrawerInfo } from 'irene/components/powered-by-ai/drawer';
+import type OrganizationService from 'irene/services/organization';
 
 export interface FileDetailsSummarySignature {
   Args: {
@@ -27,6 +28,7 @@ interface FileMoreMenuItem {
 
 export default class FileDetailsSummaryComponent extends Component<FileDetailsSummarySignature> {
   @service declare intl: IntlService;
+  @service declare organization: OrganizationService;
 
   @tracked showMoreFileSummary = false;
   @tracked fileMoreMenuRef: HTMLElement | null = null;
@@ -77,7 +79,7 @@ export default class FileDetailsSummaryComponent extends Component<FileDetailsSu
     const hasMultipleFiles = this.args.file.project.get('hasMultipleFiles');
 
     return [
-      this.isLegacy &&
+      (!this.organization.isKnoxIqEnabled || this.isLegacy) &&
         hasMultipleFiles && {
           group: this.intl.t('fileLevel'),
           label: this.intl.t('compare'),

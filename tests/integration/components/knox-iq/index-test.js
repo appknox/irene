@@ -13,7 +13,7 @@ const EXPLOITABILITY_LEVEL_BY_LIKELIHOOD = {
   [ENUMS.KNOXIQ_EXPLOITABILITY.HIGH]: 'high',
   [ENUMS.KNOXIQ_EXPLOITABILITY.MEDIUM]: 'medium',
   [ENUMS.KNOXIQ_EXPLOITABILITY.LOW]: 'low',
-  [ENUMS.KNOXIQ_EXPLOITABILITY.UNKNOWN]: 'untested',
+  [ENUMS.KNOXIQ_EXPLOITABILITY.EXP_UNKNOWN]: 'untested',
 };
 
 module('Integration | Component | knox-iq', function (hooks) {
@@ -27,7 +27,7 @@ module('Integration | Component | knox-iq', function (hooks) {
       ENUMS.KNOXIQ_EXPLOITABILITY.HIGH,
       ENUMS.KNOXIQ_EXPLOITABILITY.MEDIUM,
       ENUMS.KNOXIQ_EXPLOITABILITY.LOW,
-      ENUMS.KNOXIQ_EXPLOITABILITY.UNKNOWN,
+      ENUMS.KNOXIQ_EXPLOITABILITY.EXP_UNKNOWN,
     ],
     async function (assert, likelihood) {
       this.level = EXPLOITABILITY_LEVEL_BY_LIKELIHOOD[likelihood] ?? 'untested';
@@ -111,7 +111,7 @@ module('Integration | Component | knox-iq', function (hooks) {
         [ENUMS.KNOXIQ_EXPLOITABILITY.HIGH, false],
         [ENUMS.KNOXIQ_EXPLOITABILITY.MEDIUM, false],
         [ENUMS.KNOXIQ_EXPLOITABILITY.LOW, false],
-        [ENUMS.KNOXIQ_EXPLOITABILITY.UNKNOWN, true],
+        [ENUMS.KNOXIQ_EXPLOITABILITY.EXP_UNKNOWN, true],
       ],
       async function (assert, [exploitabilityLikelihood, showsTooltip]) {
         this.analysis = pushAnalysisOverviewForKnoxiq(

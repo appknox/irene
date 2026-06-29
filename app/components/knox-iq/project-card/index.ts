@@ -95,6 +95,10 @@ export default class KnoxIqProjectCardComponent extends Component<KnoxIqProjectC
     return this.args.file?.isLegacyKnoxIQScan ?? false;
   }
 
+  get isErrored() {
+    return this.args.file?.isErroredKnoxIQScan ?? false;
+  }
+
   get shouldShowRunKnoxIq() {
     if (this.args.showRunKnoxIq !== undefined) {
       return this.args.showRunKnoxIq;

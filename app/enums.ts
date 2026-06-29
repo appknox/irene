@@ -507,7 +507,7 @@ const ENUMS = {
   },
 
   KNOXIQ_EXPLOITABILITY: {
-    UNKNOWN: 0,
+    EXP_UNKNOWN: 0,
     PASSED: 1,
     LOW: 2,
     MEDIUM: 3,

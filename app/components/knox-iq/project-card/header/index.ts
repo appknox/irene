@@ -28,6 +28,7 @@ interface KnoxIqProjectCardHeaderSignature {
     onFileSelect?: (file: FileModel | null) => void;
     showMenuButton?: boolean;
     showRunKnoxIq?: boolean;
+    isErrored?: boolean;
     onRunKnoxIq?: () => void;
     showOpenInNewTab?: boolean;
   };
