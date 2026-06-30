@@ -25,7 +25,7 @@ export type RawDeviceType = {
   vnc_mode: number;
   registration_source: number;
   extra_capabilities: string;
-  // BYOD scans: no real device — only one of these is set
+  // CYOD scans: no real device — only one of these is set
   ios_itms_url?: string;
   android_download_url?: string;
   // CYOD fields

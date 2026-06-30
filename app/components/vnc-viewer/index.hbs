@@ -74,13 +74,13 @@
     {{/if}}
 
     <div data-test-vncViewer-deviceScreen class='screen'>
-      {{#if this.isByodScan}}
+      {{#if this.isCyodScan}}
         {{#if @dynamicScan.isInstalling}}
           {{#if this.isWebusbCyod}}
             {{! WebUSB CYOD — auto-install in browser }}
             <AkStack
               data-test-vncViewer-webusbInstall
-              local-class='byod-install-note'
+              local-class='cyod-install-note'
               @direction='column'
               @alignItems='center'
               @spacing='1'
@@ -114,10 +114,10 @@
                 <AkTypography @color='inherit' @variant='subtitle2'>
                   {{t 'cyodInstallApp'}}
                 </AkTypography>
-                {{#if this.byodDownloadUrl}}
+                {{#if this.cyodDownloadUrl}}
                   <AkLink
-                    data-test-vncViewer-byodDownloadLink
-                    @href={{this.byodDownloadUrl}}
+                    data-test-vncViewer-cyodDownloadLink
+                    @href={{this.cyodDownloadUrl}}
                     @target='_blank'
                   >
                     {{t 'cyodDownloadApk'}}
@@ -126,10 +126,10 @@
               {{/if}}
             </AkStack>
           {{else}}
-            {{! Non-WebUSB BYOD — manual download }}
+            {{! Non-WebUSB CYOD — manual download }}
             <AkStack
-              data-test-vncViewer-byodDownload
-              local-class='byod-install-note'
+              data-test-vncViewer-cyodDownload
+              local-class='cyod-install-note'
               @direction='column'
               @alignItems='center'
               @spacing='1'
@@ -137,13 +137,13 @@
               <AkTypography @color='inherit' @variant='subtitle2'>
                 {{t 'cyodInstallApp'}}
               </AkTypography>
-              {{#if this.byodDownloadUrl}}
+              {{#if this.cyodDownloadUrl}}
                 <AkLink
-                  data-test-vncViewer-byodDownloadLink
-                  @href={{this.byodDownloadUrl}}
+                  data-test-vncViewer-cyodDownloadLink
+                  @href={{this.cyodDownloadUrl}}
                   @target='_blank'
                 >
-                  {{if this.byodIsIos (t 'cyodInstallIos') (t 'cyodDownloadApk')}}
+                  {{if this.cyodIsIos (t 'cyodInstallIos') (t 'cyodDownloadApk')}}
                 </AkLink>
               {{/if}}
             </AkStack>
@@ -158,8 +158,8 @@
           />
         {{else if @dynamicScan.isReady}}
           <AkStack
-            data-test-vncViewer-byodReady
-            local-class='byod-ready-note'
+            data-test-vncViewer-cyodReady
+            local-class='cyod-ready-note'
             @direction='column'
             @alignItems='center'
             @spacing='1'

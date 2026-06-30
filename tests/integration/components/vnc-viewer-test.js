@@ -244,8 +244,8 @@ module('Integration | Component | vnc-viewer | CYOD scans', function (hooks) {
       <VncViewer @file={{this.file}} @profileId={{this.activeProfileId}} @dynamicScan={{this.dynamicscan}} />
     `);
 
-    assert.dom('[data-test-vncViewer-byodDownload]').exists();
-    assert.dom('[data-test-vncViewer-byodDownloadLink]').exists();
+    assert.dom('[data-test-vncViewer-cyodDownload]').exists();
+    assert.dom('[data-test-vncViewer-cyodDownloadLink]').exists();
   });
 
   test('PROXY_CYOD + READY shows CyodViewer', async function (assert) {
@@ -272,7 +272,7 @@ module('Integration | Component | vnc-viewer | CYOD scans', function (hooks) {
     `);
 
     assert.dom('[data-test-vncViewer-cyodViewer]').exists();
-    assert.dom('[data-test-vncViewer-byodReady]').doesNotExist();
+    assert.dom('[data-test-vncViewer-cyodReady]').doesNotExist();
   });
 
   test('REMOTE_CYOD + INSTALLING shows iOS install link', async function (assert) {
@@ -298,8 +298,8 @@ module('Integration | Component | vnc-viewer | CYOD scans', function (hooks) {
       <VncViewer @file={{this.file}} @profileId={{this.activeProfileId}} @dynamicScan={{this.dynamicscan}} />
     `);
 
-    assert.dom('[data-test-vncViewer-byodDownload]').exists();
-    assert.dom('[data-test-vncViewer-byodDownloadLink]').exists();
+    assert.dom('[data-test-vncViewer-cyodDownload]').exists();
+    assert.dom('[data-test-vncViewer-cyodDownloadLink]').exists();
   });
 
   test('REMOTE_CYOD + READY shows interact on device', async function (assert) {
@@ -325,7 +325,7 @@ module('Integration | Component | vnc-viewer | CYOD scans', function (hooks) {
       <VncViewer @file={{this.file}} @profileId={{this.activeProfileId}} @dynamicScan={{this.dynamicscan}} />
     `);
 
-    assert.dom('[data-test-vncViewer-byodReady]').exists();
+    assert.dom('[data-test-vncViewer-cyodReady]').exists();
     assert.dom('[data-test-vncViewer-cyodViewer]').doesNotExist();
   });
 });

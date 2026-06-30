@@ -103,8 +103,8 @@ export default class VncViewerComponent extends Component<VncViewerSignature> {
     return this.dynamicScan?.get('startedByUser')?.get('username');
   }
 
-  // CYOD / BYOD — no VNC, user interacts on their own device
-  get isByodScan() {
+  // CYOD — no VNC, user interacts on their own device
+  get isCyodScan() {
     const deviceUsed = this.args.dynamicScan?.get('deviceUsed');
 
     return (
@@ -114,13 +114,13 @@ export default class VncViewerComponent extends Component<VncViewerSignature> {
     );
   }
 
-  get byodDownloadUrl() {
+  get cyodDownloadUrl() {
     const deviceUsed = this.args.dynamicScan?.get('deviceUsed');
 
     return deviceUsed?.android_download_url ?? deviceUsed?.ios_itms_url ?? null;
   }
 
-  get byodIsIos() {
+  get cyodIsIos() {
     const deviceUsed = this.args.dynamicScan?.get('deviceUsed');
 
     return !!deviceUsed?.ios_itms_url;
@@ -150,7 +150,7 @@ export default class VncViewerComponent extends Component<VncViewerSignature> {
 
   autoInstallViaWebUsb = task(async () => {
     const adb = this.webusbAdb;
-    const downloadUrl = this.byodDownloadUrl;
+    const downloadUrl = this.cyodDownloadUrl;
     const packageName = this.args.dynamicScan?.get('packageName');
 
     if (!adb || !downloadUrl || !packageName) {

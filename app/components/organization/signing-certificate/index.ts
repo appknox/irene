@@ -1,5 +1,5 @@
 /**
- * Organization iOS Signing Certificate (CYOD/BYOD dynamic scanning)
+ * Organization iOS Signing Certificate (CYOD dynamic scanning)
  *
  * Upload / view / delete the customer iOS signing identity (.p12 + provisioning
  * profile) used to re-sign an app for dynamic scanning. When configured, scans
