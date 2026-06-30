@@ -1,0 +1,92 @@
+{{#let @data as |row|}}
+  {{#if row}}
+    <AkStack
+      @justifyContent='flex-end'
+      @spacing='1'
+      @width='full'
+      data-test-store-release-readiness-assessment-status-cell={{row.id}}
+    >
+      {{#if this.failedSeverityChip}}
+        <span
+          local-class='chip severity-chip'
+          data-test-store-release-readiness-assessment-severity={{row.id}}
+        >
+          <AkIcon
+            @iconName={{this.failedSeverityChip.iconName}}
+            @size='small'
+            local-class='severity-failed-icon'
+          />
+
+          <AkTypography
+            @variant='body2'
+            local-class='chip-label severity-failed-label'
+          >
+            {{this.failedSeverityChip.label}}
+          </AkTypography>
+        </span>
+      {{/if}}
+
+      {{#if this.isFailed}}
+        <span
+          local-class='chip'
+          data-test-store-release-readiness-assessment-status='failed'
+        >
+          <span local-class='status-dot status-dot-failed' aria-hidden='true'>
+          </span>
+
+          <AkTypography @variant='body2' local-class='chip-label'>
+            {{t 'failed'}}
+          </AkTypography>
+        </span>
+      {{else if this.isPassed}}
+        <span
+          local-class='chip'
+          data-test-store-release-readiness-assessment-status='passed'
+        >
+          {{#if this.showFailedToPassIcon}}
+            <span local-class='status-dot status-dot-failed' aria-hidden='true'>
+            </span>
+
+            <AkTypography @variant='body2' local-class='chip-label'>
+              {{t 'failed'}}
+            </AkTypography>
+
+            <AkIcon
+              @iconName='arrow-right-alt'
+              @size='small'
+              @color='textSecondary'
+              data-test-store-release-readiness-assessment-status-failed-to-pass-icon
+            />
+          {{/if}}
+
+          <span local-class='status-dot status-dot-passed' aria-hidden='true'>
+          </span>
+
+          <AkTypography @variant='body2' local-class='chip-label'>
+            {{t 'passed'}}
+          </AkTypography>
+
+          {{#if this.showEditIcon}}
+            <AkIcon
+              @iconName='edit'
+              @size='small'
+              data-test-store-release-readiness-assessment-status-overridden-edit-icon
+            />
+          {{/if}}
+        </span>
+      {{else}}
+        <span
+          local-class='chip'
+          data-test-store-release-readiness-assessment-status='untested'
+        >
+          <span local-class='status-dot status-dot-untested' aria-hidden='true'>
+          </span>
+
+          <AkTypography @variant='body2' local-class='chip-label'>
+            {{t 'untested'}}
+          </AkTypography>
+        </span>
+      {{/if}}
+    </AkStack>
+  {{/if}}
+{{/let}}

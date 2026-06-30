@@ -8,6 +8,7 @@ export interface DrawerSignature {
     open?: boolean;
     anchor?: 'left' | 'right';
     disableBackdropClick?: boolean;
+    drawerContainerClass?: string;
     onClose: () => void;
   };
   Blocks: { default: [{ closeHandler: () => void }] };

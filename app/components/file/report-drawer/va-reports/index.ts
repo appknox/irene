@@ -174,7 +174,7 @@ export default class FileReportDrawerVaReportsComponent extends Component<FileRe
       reportType: 'csv',
     });
 
-    const pdfSecondaryText = this.intl.t('fileReport.reportPassword', {
+    const pdfSecondaryText = this.intl.t('reportPasswordDetail', {
       password: this.reportPassword,
     });
 
@@ -228,7 +228,7 @@ export default class FileReportDrawerVaReportsComponent extends Component<FileRe
           reportType: 'pdf',
         })}`,
         secondaryText: this.interimReportPassword
-          ? this.intl.t('fileReport.reportPassword', {
+          ? this.intl.t('reportPasswordDetail', {
               password: this.interimReportPassword,
             })
           : '',

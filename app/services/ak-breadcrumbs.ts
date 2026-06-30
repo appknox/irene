@@ -29,7 +29,8 @@ export interface AkBreadcrumbsItemProps {
     | 'storeknox/discovery'
     | 'storeknox/fake-apps'
     | 'privacy-module'
-    | 'ai-reporting';
+    | 'ai-reporting'
+    | 'store-release-readiness';
 
   // Fallback crumbs when no context as to what route a user is coming from. Can also be useful when switching from one route group to another.
   fallbackCrumbs?: Array<
