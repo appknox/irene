@@ -1,0 +1,77 @@
+<AkDrawer
+  @open={{@isOpen}}
+  @onClose={{@onClose}}
+  @anchor='right'
+  data-test-storeknoxFakeAppsSignalDetailDrawer-root
+  as |dr|
+>
+  <AkAppbar @justifyContent='space-between' class='px-3' as |ab|>
+    <AkTypography
+      @color='inherit'
+      @variant='h5'
+      data-test-storeknoxFakeAppsSignalDetailDrawer-title
+    >
+      {{@sectionTitle}}
+    </AkTypography>
+
+    <AkIconButton
+      {{on 'click' dr.closeHandler}}
+      class={{ab.classes.defaultIconBtn}}
+      data-test-storeknoxFakeAppsSignalDetailDrawer-closeBtn
+    >
+      <AkIcon @iconName='close' />
+    </AkIconButton>
+  </AkAppbar>
+
+  {{#if @signal}}
+    <div local-class='drawer-content'>
+      <AkStack @direction='row' @spacing='6' class='mb-2'>
+        <AkStack @direction='column' @spacing='1'>
+          <AkTypography
+            @fontWeight='bold'
+            local-class='drawer-label'
+            data-test-storeknoxFakeAppsSignalDetailDrawer-signalLabel
+          >
+            {{t 'storeknox.fakeApps.signal'}}
+          </AkTypography>
+
+          <AkTypography
+            data-test-storeknoxFakeAppsSignalDetailDrawer-signalTitle
+          >
+            {{@signal.title}}
+          </AkTypography>
+        </AkStack>
+
+        <AkStack @direction='column' @spacing='1'>
+          <AkTypography
+            @fontWeight='bold'
+            local-class='drawer-label'
+            data-test-storeknoxFakeAppsSignalDetailDrawer-resultLabel
+          >
+            {{t 'storeknox.fakeApps.result'}}
+          </AkTypography>
+
+          <AkTypography
+            local-class='result result-{{@signal.resultLevel}}'
+            @fontWeight='medium'
+            data-test-storeknoxFakeAppsSignalDetailDrawer-result
+          >
+            {{@signal.result}}
+          </AkTypography>
+        </AkStack>
+      </AkStack>
+
+      <AkTypography
+        @fontWeight='bold'
+        class='mb-1'
+        data-test-storeknoxFakeAppsSignalDetailDrawer-reasoningLabel
+      >
+        {{t 'storeknox.fakeApps.reasoning'}}
+      </AkTypography>
+
+      <AkTypography data-test-storeknoxFakeAppsSignalDetailDrawer-reasoning>
+        {{@signal.description}}
+      </AkTypography>
+    </div>
+  {{/if}}
+</AkDrawer>

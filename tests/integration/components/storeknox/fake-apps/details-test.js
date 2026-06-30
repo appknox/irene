@@ -9,18 +9,6 @@ import Service from '@ember/service';
 
 import ENUMS from 'irene/enums';
 
-function calculateScorePercentage(score) {
-  return score ? `${(score * 100).toFixed(0)}%` : '0%';
-}
-
-function capitalizeLevel(level) {
-  if (!level) {
-    return '-';
-  }
-
-  return level.charAt(0).toUpperCase() + level.slice(1).toLowerCase();
-}
-
 class SkOrganizationStub extends Service {
   selected = {
     skFeatures: {
@@ -710,38 +698,58 @@ module(
         .doesNotExist();
     });
 
-    // --- FindingsCard: count and structure ---
+    // --- Grouped analysis sections ---
 
-    test('it renders the correct title, score percentage and description for each findings card', async function (assert) {
-      // Use deterministic, non-zero scores to avoid flakiness.
-      // The component filters out cards whose numeric score is falsy (=== 0),
-      // so random faker scores can randomly produce 6 instead of 7 cards.
+    test('it renders three analysis group sections', async function (assert) {
+      await render(hbs`
+        <Storeknox::FakeApps::Details
+          @fakeApp={{this.skFakeAppRecord}}
+          @skInventoryApp={{this.skInventoryAppRecord}}
+        />
+      `);
+
+      assert
+        .dom('[data-test-storeknoxFakeAppsFindingsGroup-root]')
+        .exists({ count: 3 });
+    });
+
+    test('it renders the correct section titles for the three groups', async function (assert) {
+      await render(hbs`
+        <Storeknox::FakeApps::Details
+          @fakeApp={{this.skFakeAppRecord}}
+          @skInventoryApp={{this.skInventoryAppRecord}}
+        />
+      `);
+
+      const groupTitles = document.querySelectorAll(
+        '[data-test-storeknoxFakeAppsFindingsGroup-title]'
+      );
+
+      assert
+        .dom(groupTitles[0])
+        .hasText(t('storeknox.fakeApps.brandIdentityAnalysis'));
+      assert
+        .dom(groupTitles[1])
+        .hasText(t('storeknox.fakeApps.binarySimilarityAnalysis'));
+      assert
+        .dom(groupTitles[2])
+        .hasText(t('storeknox.fakeApps.securityRiskAssessment'));
+    });
+
+    test('it computes the correct section badge for Brand Identity using semanticAnalysisScore', async function (assert) {
       const fakeApp = this.server.create('sk-fake-app', {
+        semantic_analysis_score: 90,
+        binary_similarity_score: 40,
+        binary_risk_score: 10,
         ai_scores: {
-          final: 0.82,
-          SemanticSimilarityRule: 0.75,
-          LogoSimilarityRule: 0.65,
-          TitleBrandAbuseRule: 0.55,
-          PackageSimilarityRule: 0.45,
-          DeveloperConsistencyRule: 0.35,
-          AppFunctionalitySimilarityRule: 0.25,
-          SemanticSimilarityRule_justification: 'Semantic justification',
-          LogoSimilarityRule_justification: 'Logo justification',
-          TitleBrandAbuseRule_justification: 'Title justification',
-          PackageSimilarityRule_justification: 'Package justification',
-          DeveloperConsistencyRule_justification: 'Developer justification',
-          AppFunctionalitySimilarityRule_justification:
-            'Functional justification',
+          final: 0.9,
+          SemanticSimilarityRule: 0.9,
+          SemanticSimilarityRule_justification: 'High match',
+          SigningCertRule: 0.3,
+          SigningCertRule_justification: 'Different cert',
+          SpecialPermissionsRule: 0.1,
+          SpecialPermissionsRule_justification: 'No special perms',
         },
-        ai_score_levels: {
-          SemanticSimilarityRule: 'HIGH',
-          LogoSimilarityRule: 'MEDIUM',
-          TitleBrandAbuseRule: 'LOW',
-          PackageSimilarityRule: 'MEDIUM',
-          DeveloperConsistencyRule: 'HIGH',
-          AppFunctionalitySimilarityRule: 'LOW',
-        },
-        ai_classification_justification: 'Overall classification justification',
         reviewed_by: null,
       });
 
@@ -757,96 +765,38 @@ module(
         />
       `);
 
-      const scores = this.skFakeAppRecord.aiScores;
-      const scoreLevels = this.skFakeAppRecord.aiScoreLevels;
+      const badges = document.querySelectorAll(
+        '[data-test-storeknoxFakeAppsFindingsGroup-badge]'
+      );
 
-      const aiClassificationJustification =
-        this.skFakeAppRecord.aiClassificationJustification;
-
-      // Counts
-      assert
-        .dom('[data-test-storeknoxFakeAppsFindingsCard-root]')
-        .exists({ count: 7 });
-
-      assert
-        .dom('[data-test-storeknoxFakeAppsFindingsCard-poweredByAiChip]')
-        .exists({ count: 1 });
-
-      // Cards order: Overall first, then level cards sorted HIGH → MEDIUM → LOW
-      const expectedCards = [
-        {
-          title: t('storeknox.fakeApps.overallScore'),
-          score: calculateScorePercentage(scores.final),
-          description: aiClassificationJustification,
-        },
-        {
-          title: t('storeknox.fakeApps.brandAnalysis'),
-          score: capitalizeLevel(scoreLevels.SemanticSimilarityRule),
-          description: scores.SemanticSimilarityRule_justification,
-        },
-        {
-          title: t('storeknox.fakeApps.logoAnalysis'),
-          score: capitalizeLevel(scoreLevels.LogoSimilarityRule),
-          description: scores.LogoSimilarityRule_justification,
-        },
-        {
-          title: t('storeknox.fakeApps.appNameAnalysis'),
-          score: capitalizeLevel(scoreLevels.TitleBrandAbuseRule),
-          description: scores.TitleBrandAbuseRule_justification,
-        },
-        {
-          title: t('storeknox.fakeApps.packageAnalysis'),
-          score: capitalizeLevel(scoreLevels.PackageSimilarityRule),
-          description: scores.PackageSimilarityRule_justification,
-        },
-        {
-          title: t('storeknox.fakeApps.publisherAnalysis'),
-          score: capitalizeLevel(scoreLevels.DeveloperConsistencyRule),
-          description: scores.DeveloperConsistencyRule_justification,
-        },
-        {
-          title: t('storeknox.fakeApps.functionalAnalysis'),
-          score: capitalizeLevel(scoreLevels.AppFunctionalitySimilarityRule),
-          description: scores.AppFunctionalitySimilarityRule_justification,
-        },
-      ];
-
-      expectedCards.forEach((cardInfo) => {
-        const cardTitleSelector = `[data-test-storeknoxFakeAppsFindingsCard-title="${cardInfo.title}"]`;
-
-        const card = find(cardTitleSelector);
-        const { title, score, description } = cardInfo;
-
-        assert
-          .dom(cardTitleSelector)
-          .containsText(title, `Card "${title}" title`);
-
-        assert
-          .dom('[data-test-storeknoxFakeAppsFindingsCard-score]', card)
-          .containsText(score, `Card "${title}" score`);
-
-        assert
-          .dom('[data-test-storeknoxFakeAppsFindingsCard-description]', card)
-          .containsText(description, `Card "${title}" description`);
-      });
+      // semanticAnalysisScore=90 >= 85 → HIGH → "High Match"
+      assert.dom(badges[0]).hasText(t('storeknox.fakeApps.highMatch'));
+      // binary_similarity_score=40 < 65 → LOW → "Low Similarity"
+      assert.dom(badges[1]).hasText(t('storeknox.fakeApps.lowSimilarity'));
+      // binary_risk_score=10 < 65 → LOW → "Low Risk"
+      assert.dom(badges[2]).hasText(t('storeknox.fakeApps.lowRisk'));
     });
 
-    test('it dynamically renders the provided scores and descriptions for each findings card', async function (assert) {
+    test('it derives signal result label from numeric aiScore for Brand Identity signals', async function (assert) {
       const fakeApp = this.server.create('sk-fake-app', {
+        semantic_analysis_score: 50,
+        binary_similarity_score: 50,
+        binary_risk_score: 50,
         ai_scores: {
           final: 0.8,
-          SemanticSimilarityRule: 0.7,
-          LogoSimilarityRule: 0.6,
-          TitleBrandAbuseRule: 0.5,
-          SemanticSimilarityRule_justification: 'Semantic Rule',
-          LogoSimilarityRule_justification: 'Logo similarity description',
-          TitleBrandAbuseRule_justification: 'Title brand abuse description',
+          SemanticSimilarityRule: 0.9,
+          SemanticSimilarityRule_justification: 'Very similar',
+          LogoSimilarityRule: 0.7,
+          LogoSimilarityRule_justification: 'Similar logo',
+          PackageSimilarityRule: 0.3,
+          PackageSimilarityRule_justification: 'Different package',
         },
         ai_score_levels: {
           SemanticSimilarityRule: 'HIGH',
           LogoSimilarityRule: 'MEDIUM',
-          TitleBrandAbuseRule: 'LOW',
+          PackageSimilarityRule: 'LOW',
         },
+        reviewed_by: null,
       });
 
       this.set(
@@ -861,123 +811,397 @@ module(
         />
       `);
 
-      // Cards order: Overall first, then sorted by numeric aiScore descending
-      // Semantic=0.7 (HIGH), Logo=0.6 (MEDIUM), TitleBrandAbuse=0.5 (LOW)
-      const scores = this.skFakeAppRecord.aiScores;
-      const scoreLevels = this.skFakeAppRecord.aiScoreLevels;
+      // SemanticSimilarityRule=0.9 >= 0.85 → HIGH → "Strong Match"
+      // Check the first group's signal rows directly
+      const brandGroup = document.querySelectorAll(
+        '[data-test-storeknoxFakeAppsFindingsGroup-root]'
+      )[0];
 
-      const expectedCards = [
-        {
-          title: t('storeknox.fakeApps.overallScore'),
-          score: calculateScorePercentage(scores.final),
-          description: this.skFakeAppRecord.aiClassificationJustification,
-        },
-        {
-          title: t('storeknox.fakeApps.brandAnalysis'),
-          score: capitalizeLevel(scoreLevels.SemanticSimilarityRule), // HIGH
-          description: scores.SemanticSimilarityRule_justification,
-        },
-        {
-          title: t('storeknox.fakeApps.logoAnalysis'),
-          score: capitalizeLevel(scoreLevels.LogoSimilarityRule), // MEDIUM
-          description: scores.LogoSimilarityRule_justification,
-        },
-        {
-          title: t('storeknox.fakeApps.appNameAnalysis'),
-          score: capitalizeLevel(scoreLevels.TitleBrandAbuseRule), // LOW
-          description: scores.TitleBrandAbuseRule_justification,
-        },
-        {
-          title: t('storeknox.fakeApps.packageAnalysis'),
-          score: capitalizeLevel(scoreLevels.PackageSimilarityRule),
-          description: scores.PackageSimilarityRule_justification,
-          doesNotExist: true,
-        },
-        {
-          title: t('storeknox.fakeApps.publisherAnalysis'),
-          score: capitalizeLevel(scoreLevels.DeveloperConsistencyRule),
-          description: scores.DeveloperConsistencyRule_justification,
-          doesNotExist: true,
-        },
-        {
-          title: t('storeknox.fakeApps.functionalAnalysis'),
-          score: capitalizeLevel(scoreLevels.AppFunctionalitySimilarityRule),
-          description: scores.AppFunctionalitySimilarityRule_justification,
-          doesNotExist: true,
-        },
-      ];
-
-      // Counts
-      assert.dom('[data-test-storeknoxFakeAppsFindingsCard-root]').exists({
-        count: expectedCards.filter((cardInfo) => !cardInfo.doesNotExist)
-          .length,
-      });
-
-      assert
-        .dom('[data-test-storeknoxFakeAppsFindingsCard-poweredByAiChip]')
-        .exists({ count: 1 });
-
-      // Cards: content
-      expectedCards.forEach((cardInfo) => {
-        const cardTitleSelector = `[data-test-storeknoxFakeAppsFindingsCard-title="${cardInfo.title}"]`;
-
-        if (cardInfo.doesNotExist) {
-          assert.dom(cardTitleSelector).doesNotExist();
-
-          return;
-        }
-
-        const card = find(cardTitleSelector);
-        const { title, score, description } = cardInfo;
-
-        assert
-          .dom(cardTitleSelector)
-          .containsText(title, `Card "${title}" title`);
-
-        assert
-          .dom('[data-test-storeknoxFakeAppsFindingsCard-score]', card)
-          .containsText(score, `Card "${title}" score`);
-
-        assert
-          .dom('[data-test-storeknoxFakeAppsFindingsCard-description]', card)
-          .containsText(description, `Card "${title}" description`);
-      });
-
-      // Sort order: Overall first, then descending by numeric aiScore (0.7 → 0.6 → 0.5)
-      const renderedCards = document.querySelectorAll(
-        '[data-test-storeknoxFakeAppsFindingsCard-root]'
+      const resultElements = brandGroup?.querySelectorAll(
+        '[data-test-storeknoxFakeAppsFindingsSignalRow-result]'
       );
 
+      // Sorted by score descending: SemanticSimilarity(0.9)=Strong Match, Logo(0.7)=Partial Match, Package(0.3)=No Match
       assert
-        .dom(
-          '[data-test-storeknoxFakeAppsFindingsCard-score]',
-          renderedCards[0]
+        .dom(resultElements?.[0])
+        .hasText(t('storeknox.fakeApps.strongMatch'));
+      assert
+        .dom(resultElements?.[1])
+        .hasText(t('storeknox.fakeApps.partialMatch'));
+      assert.dom(resultElements?.[2]).hasText(t('storeknox.fakeApps.noMatch'));
+    });
+
+    test('it uses risk labels for Security Risk Assessment signals', async function (assert) {
+      const fakeApp = this.server.create('sk-fake-app', {
+        semantic_analysis_score: 50,
+        binary_similarity_score: 50,
+        binary_risk_score: 50,
+        ai_scores: {
+          final: 0.8,
+          SpecialPermissionsRule: 0.9,
+          SpecialPermissionsRule_justification: 'Dangerous permission',
+          ManifestFlagsRule: 0.5,
+          ManifestFlagsRule_justification: 'Flags ok',
+        },
+        ai_score_levels: {
+          SpecialPermissionsRule: 'HIGH',
+          ManifestFlagsRule: 'LOW',
+        },
+        reviewed_by: null,
+      });
+
+      this.set(
+        'skFakeAppRecord',
+        this.store.push(this.store.normalize('sk-fake-app', fakeApp.toJSON()))
+      );
+
+      await render(hbs`
+        <Storeknox::FakeApps::Details
+          @fakeApp={{this.skFakeAppRecord}}
+          @skInventoryApp={{this.skInventoryAppRecord}}
+        />
+      `);
+
+      const securityGroup = Array.from(
+        document.querySelectorAll(
+          '[data-test-storeknoxFakeAppsFindingsGroup-root]'
         )
-        .containsText(
-          calculateScorePercentage(scores.final),
-          'Overall card is first'
+      ).find((el) =>
+        el
+          .querySelector('[data-test-storeknoxFakeAppsFindingsGroup-title]')
+          ?.textContent?.includes(
+            t('storeknox.fakeApps.securityRiskAssessment')
+          )
+      );
+
+      const resultElements = securityGroup?.querySelectorAll(
+        '[data-test-storeknoxFakeAppsFindingsSignalRow-result]'
+      );
+
+      // SpecialPermissionsRule=0.9 → HIGH → "Risk Detected"
+      assert
+        .dom(resultElements?.[0])
+        .hasText(t('storeknox.fakeApps.riskDetected'));
+      // ManifestFlagsRule=0.5 → LOW → "No Risk Detected"
+      assert
+        .dom(resultElements?.[1])
+        .hasText(t('storeknox.fakeApps.noRiskDetected'));
+    });
+
+    // --- Security Risk Assessment: phase-2 signals ---
+
+    test.each(
+      'it renders each phase-2 security signal in the Security Risk Assessment group',
+      [
+        {
+          rule: 'NativeLibsRule',
+          titleKey: 'storeknox.fakeApps.nativeLibsAnalysis',
+        },
+        {
+          rule: 'SuspiciousApiChainsRule',
+          titleKey: 'storeknox.fakeApps.suspiciousApiChainsAnalysis',
+        },
+        {
+          rule: 'ImplicitIntentsRule',
+          titleKey: 'storeknox.fakeApps.implicitIntentsAnalysis',
+        },
+        {
+          rule: 'NetworkEndpointsRule',
+          titleKey: 'storeknox.fakeApps.networkEndpointsAnalysis',
+        },
+        {
+          rule: 'PhishingDomainsRule',
+          titleKey: 'storeknox.fakeApps.phishingDomainsAnalysis',
+        },
+        {
+          rule: 'PackerDetectionRule',
+          titleKey: 'storeknox.fakeApps.packerDetectionAnalysis',
+        },
+        {
+          rule: 'EmbeddedFilesRule',
+          titleKey: 'storeknox.fakeApps.embeddedFilesAnalysis',
+        },
+      ],
+      async function (assert, { rule, titleKey }) {
+        const fakeApp = this.server.create('sk-fake-app', {
+          binary_risk_score: 80,
+          ai_scores: {
+            final: 0.8,
+            [rule]: 0.9,
+            [`${rule}_justification`]: 'Test justification',
+          },
+          ai_score_levels: { [rule]: 'HIGH' },
+          reviewed_by: null,
+        });
+
+        this.set(
+          'skFakeAppRecord',
+          this.store.push(this.store.normalize('sk-fake-app', fakeApp.toJSON()))
+        );
+
+        await render(hbs`
+          <Storeknox::FakeApps::Details
+            @fakeApp={{this.skFakeAppRecord}}
+            @skInventoryApp={{this.skInventoryAppRecord}}
+          />
+        `);
+
+        const securityGroup = Array.from(
+          document.querySelectorAll(
+            '[data-test-storeknoxFakeAppsFindingsGroup-root]'
+          )
+        ).find((el) =>
+          el
+            .querySelector('[data-test-storeknoxFakeAppsFindingsGroup-title]')
+            ?.textContent?.includes(
+              t('storeknox.fakeApps.securityRiskAssessment')
+            )
+        );
+
+        const titleElements = securityGroup?.querySelectorAll(
+          '[data-test-storeknoxFakeAppsFindingsSignalRow-title]'
+        );
+
+        assert.ok(
+          Array.from(titleElements ?? []).some((el) =>
+            el.textContent?.includes(t(titleKey))
+          ),
+          `${rule} title is rendered`
+        );
+      }
+    );
+
+    test.each(
+      'it maps each risk level to the correct label for PhishingDomainsRule',
+      [
+        { level: 'HIGH', expectedKey: 'storeknox.fakeApps.riskDetected' },
+        { level: 'MEDIUM', expectedKey: 'storeknox.fakeApps.potentialRisk' },
+        { level: 'LOW', expectedKey: 'storeknox.fakeApps.noRiskDetected' },
+      ],
+      async function (assert, { level, expectedKey }) {
+        const score = level === 'HIGH' ? 0.9 : level === 'MEDIUM' ? 0.7 : 0.3;
+
+        const fakeApp = this.server.create('sk-fake-app', {
+          binary_risk_score: 50,
+          ai_scores: {
+            final: 0.8,
+            PhishingDomainsRule: score,
+            PhishingDomainsRule_justification: 'Phishing check result',
+          },
+          ai_score_levels: { PhishingDomainsRule: level },
+          reviewed_by: null,
+        });
+
+        this.set(
+          'skFakeAppRecord',
+          this.store.push(this.store.normalize('sk-fake-app', fakeApp.toJSON()))
+        );
+
+        await render(hbs`
+          <Storeknox::FakeApps::Details
+            @fakeApp={{this.skFakeAppRecord}}
+            @skInventoryApp={{this.skInventoryAppRecord}}
+          />
+        `);
+
+        const securityGroup = Array.from(
+          document.querySelectorAll(
+            '[data-test-storeknoxFakeAppsFindingsGroup-root]'
+          )
+        ).find((el) =>
+          el
+            .querySelector('[data-test-storeknoxFakeAppsFindingsGroup-title]')
+            ?.textContent?.includes(
+              t('storeknox.fakeApps.securityRiskAssessment')
+            )
+        );
+
+        const resultElements = securityGroup?.querySelectorAll(
+          '[data-test-storeknoxFakeAppsFindingsSignalRow-result]'
+        );
+
+        assert.ok(
+          Array.from(resultElements ?? []).some((el) =>
+            el.textContent?.includes(t(expectedKey))
+          ),
+          `PhishingDomainsRule level ${level} renders "${t(expectedKey)}"`
+        );
+      }
+    );
+
+    test('it omits phase-2 security signals from the group when their score or level is absent', async function (assert) {
+      const fakeApp = this.server.create('sk-fake-app', {
+        binary_risk_score: 50,
+        ai_scores: {
+          final: 0.8,
+          SpecialPermissionsRule: 0.9,
+          SpecialPermissionsRule_justification: 'Dangerous permission',
+        },
+        ai_score_levels: { SpecialPermissionsRule: 'HIGH' },
+        reviewed_by: null,
+      });
+
+      this.set(
+        'skFakeAppRecord',
+        this.store.push(this.store.normalize('sk-fake-app', fakeApp.toJSON()))
+      );
+
+      await render(hbs`
+        <Storeknox::FakeApps::Details
+          @fakeApp={{this.skFakeAppRecord}}
+          @skInventoryApp={{this.skInventoryAppRecord}}
+        />
+      `);
+
+      const securityGroup = Array.from(
+        document.querySelectorAll(
+          '[data-test-storeknoxFakeAppsFindingsGroup-root]'
+        )
+      ).find((el) =>
+        el
+          .querySelector('[data-test-storeknoxFakeAppsFindingsGroup-title]')
+          ?.textContent?.includes(
+            t('storeknox.fakeApps.securityRiskAssessment')
+          )
+      );
+
+      const signalRows = securityGroup?.querySelectorAll(
+        '[data-test-storeknoxFakeAppsFindingsSignalRow-root]'
+      );
+
+      assert.strictEqual(
+        signalRows?.length,
+        1,
+        'only the signal with data renders'
+      );
+
+      const allTitles = Array.from(
+        securityGroup?.querySelectorAll(
+          '[data-test-storeknoxFakeAppsFindingsSignalRow-title]'
+        ) ?? []
+      ).map((el) => el.textContent?.trim());
+
+      assert.notOk(
+        allTitles.some((title) =>
+          title?.includes(t('storeknox.fakeApps.nativeLibsAnalysis'))
+        ),
+        'NativeLibsRule is absent without data'
+      );
+
+      assert.notOk(
+        allTitles.some((title) =>
+          title?.includes(t('storeknox.fakeApps.phishingDomainsAnalysis'))
+        ),
+        'PhishingDomainsRule is absent without data'
+      );
+    });
+
+    // --- Signal detail drawer ---
+
+    test('the signal detail drawer is closed by default', async function (assert) {
+      await render(hbs`
+        <Storeknox::FakeApps::Details
+          @fakeApp={{this.skFakeAppRecord}}
+          @skInventoryApp={{this.skInventoryAppRecord}}
+        />
+      `);
+
+      assert
+        .dom('[data-test-storeknoxFakeAppsSignalDetailDrawer-root]')
+        .doesNotExist();
+    });
+
+    test('clicking a signal row expand button opens the drawer with the section title and signal details', async function (assert) {
+      const fakeApp = this.server.create('sk-fake-app', {
+        semantic_analysis_score: 50,
+        binary_similarity_score: 50,
+        binary_risk_score: 50,
+        ai_scores: {
+          final: 0.8,
+          SemanticSimilarityRule: 0.9,
+          SemanticSimilarityRule_justification: 'Very similar brands',
+        },
+        reviewed_by: null,
+      });
+
+      this.set(
+        'skFakeAppRecord',
+        this.store.push(this.store.normalize('sk-fake-app', fakeApp.toJSON()))
+      );
+
+      await render(hbs`
+        <Storeknox::FakeApps::Details
+          @fakeApp={{this.skFakeAppRecord}}
+          @skInventoryApp={{this.skInventoryAppRecord}}
+        />
+      `);
+
+      const firstExpandBtn = document
+        .querySelectorAll('[data-test-storeknoxFakeAppsFindingsGroup-root]')[0]
+        ?.querySelector(
+          '[data-test-storeknoxFakeAppsFindingsSignalRow-expandBtn]'
+        );
+
+      await click(firstExpandBtn);
+
+      assert
+        .dom('[data-test-storeknoxFakeAppsSignalDetailDrawer-root]')
+        .exists('drawer opens');
+
+      assert
+        .dom('[data-test-storeknoxFakeAppsSignalDetailDrawer-title]')
+        .hasText(
+          t('storeknox.fakeApps.brandIdentityAnalysis'),
+          'drawer title = section name'
         );
 
       assert
-        .dom(
-          '[data-test-storeknoxFakeAppsFindingsCard-score]',
-          renderedCards[1]
-        )
-        .containsText('High', 'Highest numeric score (0.7) card is second');
+        .dom('[data-test-storeknoxFakeAppsSignalDetailDrawer-reasoning]')
+        .hasText('Very similar brands', 'drawer shows justification');
+    });
+
+    test('closing the drawer resets it', async function (assert) {
+      const fakeApp = this.server.create('sk-fake-app', {
+        semantic_analysis_score: 50,
+        binary_similarity_score: 50,
+        binary_risk_score: 50,
+        ai_scores: {
+          final: 0.8,
+          SemanticSimilarityRule: 0.9,
+          SemanticSimilarityRule_justification: 'Very similar brands',
+        },
+        reviewed_by: null,
+      });
+
+      this.set(
+        'skFakeAppRecord',
+        this.store.push(this.store.normalize('sk-fake-app', fakeApp.toJSON()))
+      );
+
+      await render(hbs`
+        <Storeknox::FakeApps::Details
+          @fakeApp={{this.skFakeAppRecord}}
+          @skInventoryApp={{this.skInventoryAppRecord}}
+        />
+      `);
+
+      const expandBtn = document
+        .querySelectorAll('[data-test-storeknoxFakeAppsFindingsGroup-root]')[0]
+        ?.querySelector(
+          '[data-test-storeknoxFakeAppsFindingsSignalRow-expandBtn]'
+        );
+
+      await click(expandBtn);
 
       assert
-        .dom(
-          '[data-test-storeknoxFakeAppsFindingsCard-score]',
-          renderedCards[2]
-        )
-        .containsText('Medium', 'Middle numeric score (0.6) card is third');
+        .dom('[data-test-storeknoxFakeAppsSignalDetailDrawer-root]')
+        .exists();
+
+      await click('[data-test-storeknoxFakeAppsSignalDetailDrawer-closeBtn]');
 
       assert
-        .dom(
-          '[data-test-storeknoxFakeAppsFindingsCard-score]',
-          renderedCards[3]
-        )
-        .containsText('Low', 'Lowest numeric score (0.5) card is fourth');
+        .dom('[data-test-storeknoxFakeAppsSignalDetailDrawer-root]')
+        .doesNotExist('drawer closes');
     });
 
     // --- FindingsCard: ignored state ---
