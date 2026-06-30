@@ -1,0 +1,27 @@
+<button
+  type='button'
+  {{on 'click' @onClick}}
+  local-class='signal-row'
+  class='px-3'
+  data-test-storeknoxFakeAppsFindingsSignalRow-root
+>
+  <AkTypography data-test-storeknoxFakeAppsFindingsSignalRow-title>
+    {{@signal.title}}
+  </AkTypography>
+
+  <AkStack @spacing='1' @alignItems='center'>
+    <AkTypography
+      local-class='result result-{{@signal.resultLevel}}'
+      @fontWeight='medium'
+      data-test-storeknoxFakeAppsFindingsSignalRow-result
+    >
+      {{@signal.result}}
+    </AkTypography>
+
+    <AkIcon
+      data-test-storeknoxFakeAppsFindingsSignalRow-expandBtn
+      @iconName='chevron-right'
+      @size='small'
+    />
+  </AkStack>
+</button>

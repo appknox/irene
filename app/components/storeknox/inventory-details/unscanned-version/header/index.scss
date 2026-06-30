@@ -1,7 +1,7 @@
 .storeknox-inventory-details-unscanned-version-header-tabs {
   width: 100%;
   position: sticky;
-  top: 232px;
+  top: 188px;
   z-index: 1;
 
   background: var(
@@ -9,7 +9,7 @@
   );
 
   &.not-appknox {
-    top: 282px;
+    top: 232px;
   }
 }
 
