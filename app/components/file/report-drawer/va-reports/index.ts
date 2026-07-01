@@ -62,8 +62,8 @@ export default class FileReportDrawerVaReportsComponent extends Component<FileRe
 
   @tracked reports: FileReportQueryResponse | null = null;
   @tracked canGenerateReport = false;
-  @tracked lastManualDynamicScan: DynamicscanModel | null = null;
-  @tracked lastAutomatedDynamicScan: DynamicscanModel | null = null;
+  @tracked lastManualDynamicScans: DynamicscanModel[] = [];
+  @tracked lastAutomatedDynamicScans: DynamicscanModel[] = [];
   @tracked interimReportData: InterimReportModel | null = null;
 
   modelName = 'file-report' as const;
@@ -113,15 +113,16 @@ export default class FileReportDrawerVaReportsComponent extends Component<FileRe
     return this.generateReport.isRunning;
   }
 
-  get isDynamicScanRunning() {
-    const automated = this.lastAutomatedDynamicScan;
-    const manual = this.lastManualDynamicScan;
+  get atLeastOneDynamicScanRunning() {
+    const dynamicScans = [
+      ...this.lastAutomatedDynamicScans,
+      ...this.lastManualDynamicScans,
+    ];
 
-    return (
-      automated?.get('isStartingOrShuttingInProgress') ||
-      automated?.get('isReadyOrRunning') ||
-      manual?.get('isStartingOrShuttingInProgress') ||
-      manual?.get('isReadyOrRunning')
+    return dynamicScans.some(
+      (scan) =>
+        scan.get('isStartingOrShuttingInProgress') ||
+        scan.get('isReadyOrRunning')
     );
   }
 
@@ -131,7 +132,7 @@ export default class FileReportDrawerVaReportsComponent extends Component<FileRe
         this.file.isStaticDone &&
         !this.isReportGenerating) ||
         this.latestReportIsGenerated ||
-        !this.isDynamicScanRunning ||
+        !this.atLeastOneDynamicScanRunning ||
         !this.file.isRunningApiScan) &&
       !this.latestReportIsGenerating
     );
@@ -323,15 +324,19 @@ export default class FileReportDrawerVaReportsComponent extends Component<FileRe
   });
 
   getFileLatestAutoDynamicScans = task(async () => {
-    this.lastAutomatedDynamicScan = await waitForPromise(
+    const scans = await waitForPromise(
       this.file.getFileLastAutomatedDynamicScan()
     );
+
+    this.lastAutomatedDynamicScans = scans;
   });
 
   getFileLatestManualDynamicScans = task(async () => {
-    this.lastManualDynamicScan = await waitForPromise(
+    const scans = await waitForPromise(
       this.file.getFileLastManualDynamicScan()
     );
+
+    this.lastManualDynamicScans = scans;
   });
 
   getInterimReportData = task(async () => {

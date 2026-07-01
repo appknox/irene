@@ -1,3 +1,5 @@
-import { Model } from 'miragejs';
+import { Model, belongsTo } from 'miragejs';
 
-export default Model.extend({});
+export default Model.extend({
+  scenarioUserRole: belongsTo(),
+});

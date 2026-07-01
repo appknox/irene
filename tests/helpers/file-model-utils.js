@@ -34,22 +34,26 @@ export function setupFileModelEndpoints(server) {
 
   // File Last Automated Dynamic Scan
   server.get('/v3/files/:id/last_automated_dynamic_scan', (schema, request) => {
-    return schema.dynamicscans
+    const dynamicscan = schema.dynamicscans
       .where({
         file: request.params.id,
         mode: ENUMS.DYNAMIC_MODE.AUTOMATED,
       })
       .models[0]?.toJSON();
+
+    return dynamicscan ? [dynamicscan] : [];
   });
 
   // File Last Manual Dynamic Scan
   server.get('/v3/files/:id/last_manual_dynamic_scan', (schema, request) => {
-    return schema.dynamicscans
+    const dynamicscan = schema.dynamicscans
       .where({
         file: request.params.id,
         mode: ENUMS.DYNAMIC_MODE.MANUAL,
       })
       .models[0]?.toJSON();
+
+    return dynamicscan ? [dynamicscan] : [];
   });
 
   // File Screen Coverage

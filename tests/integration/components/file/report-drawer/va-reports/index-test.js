@@ -8,6 +8,7 @@ import { Response } from 'miragejs';
 import Service from '@ember/service';
 import { tracked } from '@glimmer/tracking';
 
+import ENUMS from 'irene/enums';
 import { serializer } from 'irene/tests/test-utils';
 import { setupFileModelEndpoints } from 'irene/tests/helpers/file-model-utils';
 
@@ -434,6 +435,65 @@ module(
 
       assert.ok(interimReportItem, 'interim report item is rendered');
     });
+
+    test.each(
+      'it disables the generate button when multiple dynamic scans exist and at least one is running',
+      [
+        {
+          mode: ENUMS.DYNAMIC_MODE.AUTOMATED,
+          runningStatus: ENUMS.DYNAMIC_SCAN_STATUS.IN_QUEUE,
+          scanEndpoint: '/v3/files/:id/last_automated_dynamic_scan',
+        },
+        {
+          mode: ENUMS.DYNAMIC_MODE.MANUAL,
+          runningStatus: ENUMS.DYNAMIC_SCAN_STATUS.READY_FOR_INTERACTION,
+          scanEndpoint: '/v3/files/:id/last_manual_dynamic_scan',
+        },
+      ],
+      async function (assert, { mode, runningStatus, scanEndpoint }) {
+        this.server.create('dynamicscan', {
+          file: this.file.id,
+          mode,
+          status: runningStatus,
+        });
+
+        this.server.create('dynamicscan', {
+          file: this.file.id,
+          mode,
+          status: ENUMS.DYNAMIC_SCAN_STATUS.ANALYSIS_COMPLETED,
+        });
+
+        // Return all matching scans so both populate lastAutomated/ManualDynamicScans.
+        this.server.get(scanEndpoint, (schema, req) =>
+          schema.dynamicscans
+            .where({ file: req.params.id, mode })
+            .models.map((s) => s.toJSON())
+        );
+
+        // No reports: latestReportIsGenerated and latestReportIsGenerating are both false.
+        this.server.get('/v2/files/:fileId/reports', () => ({
+          count: 0,
+          next: null,
+          previous: null,
+          result: [],
+        }));
+
+        this.server.get('/v3/files/:id', (schema, req) => ({
+          ...schema.files.find(req.params.id)?.toJSON(),
+          is_static_done: false,
+          api_scan_status: ENUMS.SCAN_STATUS.RUNNING,
+        }));
+
+        await render(
+          hbs`<File::ReportDrawer::VaReports @file={{this.file}} />`
+        );
+
+        assert
+          .dom('[data-test-vaReports-generateReportCTA-btn]')
+          .exists()
+          .hasAttribute('disabled');
+      }
+    );
 
     test('it hides the interim report when not visible to customer', async function (assert) {
       this.server.createList('file-report', 2, { progress: 100 });

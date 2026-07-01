@@ -1,0 +1,86 @@
+.floating-toolbar {
+  position: absolute;
+  z-index: 50;
+  left: 50%;
+  bottom: 20px;
+  transform: translateX(-50%);
+  width: min(600px, calc(100% - 32px));
+  padding: 1.21429em;
+  border-radius: 1.71429em;
+
+  background: var(
+    --file-details-dynamic-scan-navigation-graph-nav-panel-toolbar-background
+  );
+
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+
+  box-shadow: var(
+    --file-details-dynamic-scan-navigation-graph-nav-panel-toolbar-box-shadow
+  );
+}
+
+.floating-toolbar-brand {
+  margin-bottom: 16px;
+}
+
+.hint-kbd {
+  font-size: 0.85714rem;
+  padding: 0.21429em 0.5em;
+
+  border-radius: var(
+    --file-details-dynamic-scan-navigation-graph-nav-panel-hint-kbd-border-radius
+  );
+
+  border: 1px solid
+    var(
+      --file-details-dynamic-scan-navigation-graph-nav-panel-hint-kbd-border-color
+    );
+
+  background: var(
+    --file-details-dynamic-scan-navigation-graph-nav-panel-hint-kbd-background
+  );
+
+  color: var(
+    --file-details-dynamic-scan-navigation-graph-nav-panel-hint-kbd-color
+  );
+
+  white-space: nowrap;
+}
+
+.layout-select {
+  width: 140px;
+}
+
+.role-select {
+  width: 235px;
+}
+
+// The dropdown renders in a portal outside this component's root, so the
+// trigger/dropdown swap rules must live at the top level. Full label shows in
+// the dropdown list; the truncated label shows only in the select trigger.
+.role-label-truncated {
+  display: none;
+}
+
+:global(.ember-power-select-trigger) {
+  .role-label-full {
+    display: none;
+  }
+
+  .role-label-truncated {
+    display: inline;
+  }
+}
+
+// Disabled role options: faint label and not-allowed cursor, but still
+// hoverable so the "why is this disabled" tooltip can show.
+.role-option-disabled {
+  display: inline-block;
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+:global(.ember-power-select-option[aria-disabled='true']) {
+  pointer-events: auto !important;
+}

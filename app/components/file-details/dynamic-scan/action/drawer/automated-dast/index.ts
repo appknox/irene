@@ -15,12 +15,12 @@ import { dsAutomatedDevicePref } from 'irene/helpers/ds-automated-device-pref';
 import { deviceType } from 'irene/helpers/device-type';
 import type ApiScanOptionsModel from 'irene/models/api-scan-options';
 import type { DsPreferenceContext } from 'irene/components/ds-preference-provider';
-import type ScanParameterGroupModel from 'irene/models/scan-parameter-group';
+import type ScenarioModel from 'irene/models/scenario';
 import type FileModel from 'irene/models/file';
 import type ProxySettingModel from 'irene/models/proxy-setting';
 
 type ProjectScenariosArrayResponse =
-  DS.AdapterPopulatedRecordArray<ScanParameterGroupModel>;
+  DS.AdapterPopulatedRecordArray<ScenarioModel>;
 
 export interface FileDetailsDynamicScanDrawerAutomatedDastSignature {
   Element: HTMLElement;
@@ -163,7 +163,7 @@ export default class FileDetailsDynamicScanDrawerAutomatedDastComponent extends 
   });
 
   fetchProjectScenarios = task(async () => {
-    this.projectScenarios = (await this.store.query('scan-parameter-group', {
+    this.projectScenarios = (await this.store.query('scenario', {
       projectId: this.args.file.project?.get('id'),
     })) as ProjectScenariosArrayResponse;
   });

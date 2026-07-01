@@ -5,6 +5,7 @@ import { hbs } from 'ember-cli-htmlbars';
 import { setupMirage } from 'ember-cli-mirage/test-support';
 import { setupIntl, t } from 'ember-intl/test-support';
 import Service from '@ember/service';
+import { Response } from 'miragejs';
 
 class NotificationsStub extends Service {
   errorMsg = null;
@@ -173,6 +174,78 @@ module(
       assert.dom(selectors.dynScanAutoToggle).isNotChecked();
 
       assert.strictEqual(notify.successMsg, t('scheduledAutomationSuccessOff'));
+    });
+
+    test('toggle is checked when automation is already enabled', async function (assert) {
+      this.server.get('/v2/profiles/:id/automation_preference', (_, req) => ({
+        id: req.params.id,
+        dynamic_scan_automation_enabled: true,
+      }));
+
+      await render(hbs`
+        <ProjectSettings::DastAutomation::AutomationSettings
+          @project={{this.project}}
+          @profileId={{this.project.activeProfileId}}
+          @featureAvailable={{true}}
+        />
+      `);
+
+      assert.dom(selectors.dynScanAutoToggle).isChecked();
+    });
+
+    test('notifies and reverts the toggle when save fails', async function (assert) {
+      this.server.get('/v2/profiles/:id/automation_preference', (_, req) => ({
+        id: req.params.id,
+        dynamic_scan_automation_enabled: false,
+      }));
+
+      this.server.put(
+        '/v2/profiles/:id/automation_preference',
+        () => new Response(500, {}, {})
+      );
+
+      await render(hbs`
+        <ProjectSettings::DastAutomation::AutomationSettings
+          @project={{this.project}}
+          @profileId={{this.project.activeProfileId}}
+          @featureAvailable={{true}}
+        />
+      `);
+
+      assert.dom(selectors.dynScanAutoToggle).isNotChecked();
+
+      await click(selectors.dynScanAutoToggle);
+
+      const notify = this.owner.lookup('service:notifications');
+
+      assert.strictEqual(
+        notify.errorMsg,
+        'The backend responded with an error'
+      );
+
+      assert.dom(selectors.dynScanAutoToggle).isNotChecked();
+    });
+
+    test('notifies when the preference fails to load', async function (assert) {
+      this.server.get(
+        '/v2/profiles/:id/automation_preference',
+        () => new Response(500, {}, {})
+      );
+
+      await render(hbs`
+        <ProjectSettings::DastAutomation::AutomationSettings
+          @project={{this.project}}
+          @profileId={{this.project.activeProfileId}}
+          @featureAvailable={{true}}
+        />
+      `);
+
+      const notify = this.owner.lookup('service:notifications');
+
+      assert.strictEqual(
+        notify.errorMsg,
+        'The backend responded with an error'
+      );
     });
   }
 );

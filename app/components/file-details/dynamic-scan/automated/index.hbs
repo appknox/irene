@@ -16,36 +16,49 @@
     <FileDetails::DynamicScan::DeviceWrapper
       @loadingScanStatus={{this.isFetchingDynamicScan}}
       @showStatusChip={{true}}
-      @showActionButton={{not
-        (or
-          this.lastAutomatedDynamicScan.isReadyOrRunning
-          this.lastAutomatedDynamicScan.isShuttingDown
-        )
-      }}
+      @showActionButton={{this.showActionButton}}
     >
       <:statusChip>
         <FileDetails::DynamicScan::StatusChip
-          @status={{this.lastAutomatedDynamicScan.computedStatus}}
-          @statusText={{this.lastAutomatedDynamicScan.statusText}}
+          @status={{this.cumulativeScanStatus}}
+          @statusText={{this.cumulativeScanStatusText}}
         />
       </:statusChip>
 
       <:actionButton as |dw|>
-        <FileDetails::DynamicScan::Action
-          @file={{@file}}
-          @dynamicScanText={{t 'dastTabs.automatedDAST'}}
-          @isAutomatedScan={{true}}
-          @dynamicScan={{this.lastAutomatedDynamicScan}}
-          @openActionDrawer={{dw.openActionDrawer}}
-        />
+        <AkStack @alignItems='center' @spacing='1.5'>
+          {{#if this.selectedScanHasNavigationGraph}}
+            <AkLink
+              @route='authenticated.dashboard.ds-navigation-graph'
+              @models={{this.navigationGraphRouteModels}}
+              data-test-fileDetails-dynamicScan-automated-viewNavigationGraphLink
+            >
+              <AkButton
+                @variant='outlined'
+                local-class='view-navigation-graph-btn'
+                data-test-fileDetails-dynamicScan-automated-viewNavigationGraphBtn
+              >
+                <:leftIcon>
+                  <AkIcon @iconName='family-history' />
+                </:leftIcon>
+
+                <:default>{{t 'navigationGraph.viewNavigationGraph'}}</:default>
+              </AkButton>
+            </AkLink>
+          {{/if}}
+
+          <FileDetails::DynamicScan::Action
+            @file={{@file}}
+            @dynamicScanText={{t 'dastTabs.automatedDAST'}}
+            @isAutomatedScan={{true}}
+            @dynamicScans={{this.lastAutomatedDynamicScans}}
+            @openActionDrawer={{dw.openActionDrawer}}
+          />
+        </AkStack>
       </:actionButton>
 
       <:actionDrawer as |dw|>
-        <DsPreferenceProvider
-          @profileId={{this.profileId}}
-          @file={{@file}}
-          as |dpContext|
-        >
+        <DsPreferenceProvider @profileId={{this.profileId}} as |dpContext|>
           <FileDetails::DynamicScan::Action::Drawer
             @onClose={{dw.closeActionDrawer}}
             @file={{@file}}
@@ -57,12 +70,59 @@
       </:actionDrawer>
 
       <:default>
-        <VncViewer
-          @file={{@file}}
-          @profileId={{@profileId}}
-          @dynamicScan={{this.lastAutomatedDynamicScan}}
-          @isAutomated={{true}}
-        />
+        <AkStack
+          @width='full'
+          @alignItems='center'
+          @direction='column'
+          @spacing='2'
+          local-class='
+            automated-dast-viewer-container
+            {{if
+            this.dynamicScansHaveAtleastOneUserRole
+            "multiple-scans"
+            "single-scan"
+          }}
+          '
+        >
+          {{#if this.dynamicScansHaveAtleastOneUserRole}}
+            <FileDetails::DynamicScan::Automated::UserRoles
+              @lastAutomatedDynamicScans={{this.lastAutomatedDynamicScans}}
+              @onRoleChange={{this.handleRoleChange}}
+              @selectedScan={{this.selectedAutomatedDynamicScan}}
+            />
+          {{/if}}
+
+          <AkStack
+            @direction='column'
+            @justifyContent='center'
+            @alignItems='center'
+            {{style gap='2.8571em'}}
+          >
+            <VncViewer
+              @file={{@file}}
+              @profileId={{@profileId}}
+              @dynamicScan={{this.selectedAutomatedDynamicScan}}
+              @isAutomated={{true}}
+            />
+
+            {{#if this.showInteractionInfo}}
+              <AkStack @alignItems='center' @spacing='1'>
+                <AkIcon
+                  @iconName='info'
+                  @color='textPrimary'
+                  {{style fontSize='1.4286em !important'}}
+                  data-test-fileDetails-dynamicScan-automated-interactionInfoIcon
+                />
+
+                <AkTypography
+                  data-test-fileDetails-dynamicScan-automated-interactionInfoText
+                >
+                  {{this.interactionInfoText}}
+                </AkTypography>
+              </AkStack>
+            {{/if}}
+          </AkStack>
+        </AkStack>
       </:default>
     </FileDetails::DynamicScan::DeviceWrapper>
   {{else}}
