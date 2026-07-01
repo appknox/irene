@@ -6,8 +6,8 @@
 >
   <:statusChip>
     <FileDetails::DynamicScan::StatusChip
-      @status={{this.dynamicScan.computedStatus}}
-      @statusText={{this.dynamicScan.statusText}}
+      @status={{this.cumulativeScanStatus}}
+      @statusText={{this.cumulativeScanStatusText}}
     />
   </:statusChip>
 
@@ -17,27 +17,29 @@
       @dynamicScanText={{t 'modalCard.dynamicScan.title'}}
       @onScanShutdown={{this.handleScanShutdown}}
       @onBeforeShutdown={{this.requestStop}}
-      @dynamicScan={{this.dynamicScan}}
+      @dynamicScans={{this.dynamicScans}}
     />
   </:actionButton>
 
   <:default as |dw|>
-    <VncViewer
-      @file={{@file}}
-      @profileId={{@profileId}}
-      @dynamicScan={{this.dynamicScan}}
-    >
-      <:controls>
-        {{#if dw.isFullscreen}}
-          <FileDetails::DynamicScan::Action
-            @file={{@file}}
-            @dynamicScanText={{t 'modalCard.dynamicScan.title'}}
-            @onScanShutdown={{this.handleScanShutdown}}
-            @dynamicScan={{this.dynamicScan}}
-          />
-        {{/if}}
-      </:controls>
-    </VncViewer>
+    <AkStack @width='full' @justifyContent='center' @spacing='2' class='p-4'>
+      <VncViewer
+        @file={{@file}}
+        @profileId={{@profileId}}
+        @dynamicScan={{this.dynamicScan}}
+      >
+        <:controls>
+          {{#if dw.isFullscreen}}
+            <FileDetails::DynamicScan::Action
+              @file={{@file}}
+              @dynamicScanText={{t 'modalCard.dynamicScan.title'}}
+              @onScanShutdown={{this.handleScanShutdown}}
+              @dynamicScans={{this.dynamicScans}}
+            />
+          {{/if}}
+        </:controls>
+      </VncViewer>
+    </AkStack>
   </:default>
 </FileDetails::DynamicScan::DeviceWrapper>
 

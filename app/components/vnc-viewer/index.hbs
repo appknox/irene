@@ -6,7 +6,7 @@
   @direction='column'
   @spacing='3'
 >
-  {{#if this.isAutomated}}
+  {{#if (and this.isAutomated @dynamicScan.isScheduledInternally)}}
     {{#if
       (or
         @dynamicScan.isStartingOrShuttingInProgress
@@ -32,7 +32,7 @@
         {{/if}}
       </AkStack>
     {{/if}}
-  {{else}}
+  {{else if (not this.isAutomated)}}
     {{#if @dynamicScan.isReady}}
       <AkStack
         @justifyContent='center'
@@ -61,7 +61,7 @@
   {{#if this.supportsModernIOSDeviceFrame}}
     <div data-test-vncViewer-device class='ios-device-frame'>
       <div data-test-vncViewer-deviceScreen class='ios-device-screen'>
-        {{#if this.isAutomated}}
+        {{#if this.isAutomatedAndScheduledInternally}}
           {{#if
             (or
               @dynamicScan.isStartingOrShuttingInProgress
@@ -87,7 +87,7 @@
           {{/if}}
         {{else if @dynamicScan.isReadyOrRunning}}
           <NovncRfb
-            @allowInteraction={{@dynamicScan.isReady}}
+            @allowInteraction={{this.allowDeviceInteraction}}
             @deviceFarmURL={{this.deviceFarmURL}}
             @deviceFarmPassword={{this.deviceFarmPassword}}
             @containCanvas={{true}}
@@ -112,7 +112,7 @@
       {{/if}}
 
       <div data-test-vncViewer-deviceScreen class='screen'>
-        {{#if this.isAutomated}}
+        {{#if this.isAutomatedAndScheduledInternally}}
           {{#if
             (or
               @dynamicScan.isStartingOrShuttingInProgress
@@ -138,7 +138,7 @@
           {{/if}}
         {{else if @dynamicScan.isReadyOrRunning}}
           <NovncRfb
-            @allowInteraction={{@dynamicScan.isReady}}
+            @allowInteraction={{this.allowDeviceInteraction}}
             @deviceFarmURL={{this.deviceFarmURL}}
             @deviceFarmPassword={{this.deviceFarmPassword}}
           />

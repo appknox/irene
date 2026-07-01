@@ -1,0 +1,29 @@
+.breadcrumbs-container {
+  width: fit-content;
+  padding: 0.71429em;
+  margin-bottom: 2.857em;
+  border: 1px solid
+    var(--file-details-dynamic-scan-navigation-graph-not-found-border-color);
+
+  border-radius: var(
+    --file-details-dynamic-scan-navigation-graph-not-found-breadcrumbs-border-radius
+  );
+
+  background: var(
+    --file-details-dynamic-scan-navigation-graph-not-found-background
+  );
+
+  box-shadow: var(
+    --file-details-dynamic-scan-navigation-graph-not-found-breadcrumbs-box-shadow
+  );
+}
+
+.not-found-root {
+  height: calc(100vh - 400px);
+  border: 1px solid
+    var(--file-details-dynamic-scan-navigation-graph-not-found-border-color);
+
+  background: var(
+    --file-details-dynamic-scan-navigation-graph-not-found-background
+  );
+}

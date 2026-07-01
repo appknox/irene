@@ -18,4 +18,10 @@
       object-fit: contain;
     }
   }
+
+  &.no-interaction {
+    canvas {
+      cursor: not-allowed !important;
+    }
+  }
 }

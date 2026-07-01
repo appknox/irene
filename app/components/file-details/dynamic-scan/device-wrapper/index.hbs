@@ -13,26 +13,33 @@
     @alignItems='center'
     @justifyContent='space-between'
   >
-    <AkTypography
-      data-test-fileDetails-dynamicScan-deviceWrapper-headerText
-      @variant='h6'
-      @fontWeight='bold'
-    >
-      {{t 'realDevice'}}
-    </AkTypography>
+    <AkStack @alignItems='center' @spacing='1.5'>
+      <AkTypography
+        data-test-fileDetails-dynamicScan-deviceWrapper-headerText
+        @variant='h6'
+        @fontWeight='bold'
+        {{style minWidth='78px'}}
+      >
+        {{t 'realDevice'}}
+      </AkTypography>
+
+      {{#if @showStatusChip}}
+        {{#if @loadingScanStatus}}
+          <AkSkeleton @width='100px' />
+        {{else}}
+          {{yield to='statusChip'}}
+        {{/if}}
+      {{/if}}
+    </AkStack>
 
     {{#if @loadingScanStatus}}
-      <AkSkeleton @width='100px' />
+      <AkSkeleton @width='100px' height='32px' />
     {{else}}
       <AkStack
         @spacing='1'
         @alignItems='center'
         data-test-cy='deviceWrapper-statusChipAndScanCTAContainer'
       >
-        {{#if @showStatusChip}}
-          {{yield to='statusChip'}}
-        {{/if}}
-
         {{#if @showActionButton}}
           {{yield
             (hash
@@ -59,6 +66,7 @@
   <div
     data-test-fileDetails-dynamicScan-deviceWrapper-deviceViewer-root
     local-class='{{if this.isFullscreenView "device-viewer-fullscreen"}}'
+    class='w-full'
   >
     {{#if this.isFullscreenView}}
       <div
@@ -103,8 +111,8 @@
       {{/if}}
 
       <AkStack
+        @width='full'
         data-test-fileDetails-dynamicScan-deviceWrapper-deviceViewer
-        class='p-3 py-4'
       >
         {{yield
           (hash

@@ -30,7 +30,7 @@ This skill creates correctly-named component variables in `_component-variables.
 - For **hardcoded values**: search `app/styles/_theme.scss` to see if an exact match already exists.
   - If a match exists, use that theme variable as the value of the new component variable.
   - If no match exists, add a new numbered special-case variable to `app/styles/_theme.scss` (e.g. `--box-shadow-15: 0px 2px 4px -1px rgba(0, 0, 0, 0.06);`), then reference that theme variable as the value of the new component variable (e.g. `--my-component-box-shadow: var(--box-shadow-15);`). Do NOT copy the raw value into `_component-variables.scss`.
-  - Exception: for `border-radius`, do not create a special-case theme variable if no exact match exists — leave it as a hardcoded value or convert to `em` if 7px or more.
+  - Exception: for `border-radius`, if an exact theme variable match exists (e.g. `--border-radius-4: 4px`), create a bridge variable pointing to it just like any other hardcoded value. If no match exists, do not add a new theme variable — leave it as a hardcoded value, or convert to `em` if 7px or more.
 
 ### 3. Derive the correct variable name prefix
 
@@ -44,7 +44,15 @@ This skill creates correctly-named component variables in `_component-variables.
 - Example: `--storeknox-fake-apps-details-header-skeleton-background-color`
 - Choose semantic element names that describe what the variable is styling (e.g. `title-container`, `app-info`, `background`).
 
-### 5. Add the new variables to `_component-variables.scss`
+### 5. Skeleton loaders — reuse the emulated component's variables
+
+If the component is a skeleton loader (its path contains `skeleton` or `skeleton-loader`) that visually emulates another component, **do not create new bridge variables** for it. Instead, use the bridge variables of the component it emulates directly in the skeleton's SCSS file.
+
+- Identify the emulated component — usually the sibling or parent component whose layout the skeleton mirrors (e.g. a `skeleton-loader` inside `navigation-graph/` emulates `navigation-graph` and its `nav-panel`).
+- Reference those components' bridge variables (e.g. `--file-details-dynamic-scan-navigation-graph-background-main`) in place of any global theme variables in the skeleton's SCSS.
+- Skip creating a `// variables for …/skeleton-loader` section in `_component-variables.scss` entirely.
+
+### 6. Add the new variables to `_component-variables.scss`
 
 - Check if a section for this component already exists in `app/styles/_component-variables.scss`.
   - Search for `// variables for <folder-path>` (e.g. `// variables for storeknox/fake-apps/details-header/skeleton`).
@@ -53,15 +61,22 @@ This skill creates correctly-named component variables in `_component-variables.
 
   ```scss
   // variables for storeknox/fake-apps/details-header/skeleton
-  --storeknox-fake-apps-details-header-skeleton-background-color: var(--background-light);
-  --storeknox-fake-apps-details-header-skeleton-title-container-border-color: var(--border-color-1);
-  --storeknox-fake-apps-details-header-skeleton-app-info-bg-color: var(--background-main);
+  --storeknox-fake-apps-details-header-skeleton-background-color: var(
+    --background-light
+  );
+  --storeknox-fake-apps-details-header-skeleton-title-container-border-color: var(
+    --border-color-1
+  );
+  --storeknox-fake-apps-details-header-skeleton-app-info-bg-color: var(
+    --background-main
+  );
   ```
 
 - The values must be copied exactly from the resolved values of the borrowed variables (step 2). Do NOT use the borrowed variable as the value — use the underlying theme value.
 
-### 6. Update the component SCSS file
+### 7. Update the component SCSS file
 
 - Replace each borrowed variable reference and hardcoded value with the newly created component variable.
 - Remove any TODO comments that prompted this work.
+- Convert any hardcoded `px` padding values to `em` using base `14px = 1em`. Round to 5 decimal places (e.g. `10px` → `0.71429em`, `17px` → `1.21429em`, `3px 7px` → `0.21429em 0.5em`).
 - Do not change any other properties or structure.

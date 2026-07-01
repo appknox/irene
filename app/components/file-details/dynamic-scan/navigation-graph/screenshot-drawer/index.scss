@@ -1,0 +1,49 @@
+.drawer-content {
+  width: 480px;
+  max-width: 90vw;
+
+  .drawer-body {
+    padding: 1.7143em;
+  }
+
+  .screenshot-container,
+  .drawer-nav {
+    width: 282px;
+  }
+
+  .screenshot-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .drawer-screenshot {
+    display: block;
+    width: 282px;
+    height: 630px;
+    object-fit: contain;
+    border: 1px solid
+      var(
+        --file-details-dynamic-scan-navigation-graph-screenshot-drawer-screenshot-border-color
+      );
+
+    &.display-none {
+      display: none;
+    }
+  }
+
+  .drawer-screenshot-placeholder,
+  .loading-container,
+  .screenshot-fallback {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 630px;
+    background: var(
+      --file-details-dynamic-scan-navigation-graph-screenshot-drawer-placeholder-background-color
+    );
+
+    border-radius: 4px;
+  }
+}

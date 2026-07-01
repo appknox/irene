@@ -1,8 +1,13 @@
 import Component from '@glimmer/component';
-import { inject as service } from '@ember/service';
+import { service } from '@ember/service';
 import { task } from 'ember-concurrency';
 import { action } from '@ember/object';
 import type IntlService from 'ember-intl/services/intl';
+
+import {
+  DsStatusGroup,
+  getCumulativeDsStatusGroup,
+} from 'irene/utils/ds-status-group';
 
 import ENV from 'irene/config/environment';
 import parseError from 'irene/utils/parse-error';
@@ -20,7 +25,7 @@ export interface DynamicScanActionSignature {
     file: FileModel;
     dynamicScanText: string;
     isAutomatedScan?: boolean;
-    dynamicScan: DynamicscanModel | null;
+    dynamicScans: DynamicscanModel[];
   };
 }
 
@@ -39,8 +44,23 @@ export default class DynamicScanActionComponent extends Component<DynamicScanAct
     return this.file.project.get('platform');
   }
 
+  get dynamicScans() {
+    return this.args.dynamicScans ?? [];
+  }
+
+  get cumulativeStatus() {
+    return getCumulativeDsStatusGroup(
+      this.dynamicScans.map((scan) => scan.status)
+    );
+  }
+
   get dynamicScanActionButton() {
-    if (this.args.dynamicScan?.get('isStarting')) {
+    const status = this.cumulativeStatus;
+
+    if (
+      status === DsStatusGroup.IN_QUEUE ||
+      status === DsStatusGroup.STARTING
+    ) {
       return {
         icon: 'close' as const,
         text: this.intl.t('cancelScan'),
@@ -53,7 +73,7 @@ export default class DynamicScanActionComponent extends Component<DynamicScanAct
       };
     }
 
-    if (this.args.dynamicScan?.get('isReadyOrRunning')) {
+    if (status === DsStatusGroup.RUNNING) {
       return {
         icon: 'stop-circle' as const,
         text: this.intl.t('stop'),
@@ -67,8 +87,8 @@ export default class DynamicScanActionComponent extends Component<DynamicScanAct
     }
 
     if (
-      this.args.dynamicScan?.get('isCompleted') ||
-      this.args.dynamicScan?.get('isStatusError')
+      status === DsStatusGroup.COMPLETED ||
+      status === DsStatusGroup.ERRORED
     ) {
       return {
         icon: 'refresh' as const,
@@ -100,20 +120,47 @@ export default class DynamicScanActionComponent extends Component<DynamicScanAct
     this.args.openActionDrawer?.();
   }
 
-  dynamicShutdown = task({ drop: true }, async () => {
-    try {
-      await this.ajax.delete(
-        `/dynamicscans/${this.args.dynamicScan?.get('id')}`,
-        { namespace: ENV.namespace_v2 }
-      );
+  @action
+  deleteScan(scan: DynamicscanModel) {
+    return this.ajax.delete(`/dynamicscans/${scan.id}`, {
+      namespace: ENV.namespace_v2,
+    });
+  }
 
-      // Poll the dynamic scan status if the project org is different from the selected org
-      // Pertains to the case where the file is being accessed by a superuser
-      await this.dsService.pollDynamicScanStatusForSuperUser({
+  @action
+  async deleteMultipleScans(scans: DynamicscanModel[]) {
+    const results = await Promise.allSettled(scans.map(this.deleteScan));
+    const firstError = results.find((r) => r.status === 'rejected');
+
+    if (firstError) {
+      const errorMessage = this.intl.t('pleaseTryAgain');
+      this.notify.error(parseError(firstError.reason, errorMessage));
+
+      return;
+    }
+
+    this.args.onScanShutdown?.();
+  }
+
+  dynamicShutdown = task({ drop: true }, async () => {
+    const runningScans = this.dynamicScans.filter(
+      (s) => s.isReadyOrRunning || s.isStarting
+    );
+
+    // No need to delete (stop) any scans if there are no running scans
+    if (runningScans.length === 0) {
+      return;
+    }
+
+    try {
+      await this.deleteMultipleScans(runningScans);
+
+      const pollData = {
         file: this.file,
         isAutomatedScan: this.args.isAutomatedScan,
-      });
+      };
 
+      await this.dsService.pollDynamicScanStatusForSuperUser(pollData);
       this.args.onScanShutdown?.();
     } catch (error) {
       this.notify.error(parseError(error, this.intl.t('pleaseTryAgain')));

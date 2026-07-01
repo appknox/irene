@@ -1,0 +1,36 @@
+{{! Mirrors the layout of the loaded scan-window (specific-time variant) so
+the loaded UI doesn't shift in. }}
+<AkStack
+  @width='full'
+  @alignItems='flex-start'
+  @spacing='4'
+  data-test-projectSettings-dastAutomationSettings-scanWindow-skeleton
+>
+  {{! Scan window type }}
+  <AkStack @direction='column' @spacing='1'>
+    <AkSkeleton @width='100px' @height='14px' />
+
+    <AkSkeleton @width='220px' @height='35px' />
+  </AkStack>
+
+  {{! Start at }}
+  <AkStack @direction='column' @spacing='1'>
+    <AkSkeleton @width='55px' @height='14px' />
+
+    <AkSkeleton @width='120px' @height='35px' />
+  </AkStack>
+
+  {{! End before }}
+  <AkStack @direction='column' @spacing='1'>
+    <AkSkeleton @width='70px' @height='14px' />
+
+    <AkSkeleton @width='120px' @height='35px' />
+  </AkStack>
+
+  {{! Time zone }}
+  <AkStack @direction='column' @spacing='1'>
+    <AkSkeleton @width='75px' @height='14px' />
+
+    <AkSkeleton @width='300px' @height='35px' />
+  </AkStack>
+</AkStack>
