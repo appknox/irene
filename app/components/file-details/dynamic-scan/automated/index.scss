@@ -19,3 +19,18 @@
     font-style: italic;
   }
 }
+
+.automated-dast-viewer-container {
+  &.multiple-scans {
+    gap: 4.5em;
+    padding-bottom: 3.5714em;
+  }
+
+  &.single-scan {
+    padding: 2em;
+  }
+}
+
+.view-navigation-graph-btn {
+  max-height: 32px;
+}

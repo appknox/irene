@@ -47,4 +47,13 @@
       data-test-projectSettings-dastAutomationSettings-dynamicscanAutomationToggle
     />
   </AkStack>
+
+  <AkDivider @color='dark' />
+
+  {{! Scan window row }}
+  <div class='my-3'>
+    <ProjectSettings::DastAutomation::AutomationSettings::ScanWindow
+      @profileId={{@profileId}}
+    />
+  </div>
 </AkStack>

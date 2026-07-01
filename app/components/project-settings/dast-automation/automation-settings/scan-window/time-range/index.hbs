@@ -1,0 +1,99 @@
+<AkStack
+  @alignItems='flex-start'
+  @spacing='4'
+  data-test-projectSettings-dastAutomationSettings-scanWindow-timeRange
+>
+  {{! Start at }}
+  <AkStack @direction='column' @spacing='1'>
+    <AkTypography @fontWeight='medium'>
+      {{t 'dastAutomation.scanWindowStartAt'}}
+    </AkTypography>
+
+    <AkTextField
+      @type='time'
+      @value={{or @preference.scanWindowStartAt ''}}
+      @disabled={{@disabled}}
+      local-class='scan-window-time-input'
+      {{did-insert this.registerStartInput}}
+      {{on 'change' this.handleStartTimeChange}}
+      data-test-projectSettings-dastAutomationSettings-scanWindowStartAt
+    >
+      <:leftAdornment>
+        <AkStack @alignItems='center' {{style gap='0.54em'}}>
+          <AkIcon @iconName='schedule' @size='small' />
+
+          <AkDivider
+            @direction='vertical'
+            @height='35px'
+            local-class='scan-window-divider'
+          />
+        </AkStack>
+      </:leftAdornment>
+
+      <:rightAdornment>
+        <AkStack @alignItems='center' {{style gap='0.54em'}}>
+          <AkDivider
+            @direction='vertical'
+            @height='35px'
+            local-class='scan-window-divider'
+          />
+
+          <AkIconButton
+            @size='small'
+            {{on 'click' this.openStartPicker}}
+            data-test-projectSettings-dastAutomationSettings-scanWindowStartAtPicker
+          >
+            <AkIcon @iconName='mi:select' @size='small' />
+          </AkIconButton>
+        </AkStack>
+      </:rightAdornment>
+    </AkTextField>
+  </AkStack>
+
+  {{! End before }}
+  <AkStack @direction='column' @spacing='1'>
+    <AkTypography @fontWeight='medium'>
+      {{t 'dastAutomation.scanWindowEndBefore'}}
+    </AkTypography>
+
+    <AkTextField
+      @type='time'
+      @value={{or @preference.scanWindowEndBefore ''}}
+      @disabled={{@disabled}}
+      local-class='scan-window-time-input'
+      {{did-insert this.registerEndInput}}
+      {{on 'change' this.handleEndTimeChange}}
+      data-test-projectSettings-dastAutomationSettings-scanWindowEndBefore
+    >
+      <:leftAdornment>
+        <AkStack @alignItems='center' {{style gap='0.54em'}}>
+          <AkIcon @iconName='schedule' @size='small' />
+
+          <AkDivider
+            @direction='vertical'
+            @height='35px'
+            local-class='scan-window-divider'
+          />
+        </AkStack>
+      </:leftAdornment>
+
+      <:rightAdornment>
+        <AkStack @alignItems='center' {{style gap='0.54em'}}>
+          <AkDivider
+            @direction='vertical'
+            @height='35px'
+            local-class='scan-window-divider'
+          />
+
+          <AkIconButton
+            @size='small'
+            {{on 'click' this.openEndPicker}}
+            data-test-projectSettings-dastAutomationSettings-scanWindowEndBeforePicker
+          >
+            <AkIcon @iconName='mi:select' @size='small' />
+          </AkIconButton>
+        </AkStack>
+      </:rightAdornment>
+    </AkTextField>
+  </AkStack>
+</AkStack>

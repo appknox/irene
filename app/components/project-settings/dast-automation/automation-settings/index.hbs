@@ -34,11 +34,7 @@
       <AkDivider @color='dark' />
 
       <AkStack @width='9/12' class='py-3'>
-        <DsPreferenceProvider
-          @profileId={{@profileId}}
-          @file={{@project.lastFile}}
-          as |dpContext|
-        >
+        <DsPreferenceProvider @profileId={{this.profileId}} as |dpContext|>
           <ProjectSettings::DastAutomation::AutomationSettings::DevicePreferences
             @project={{@project}}
             @dpContext={{dpContext}}

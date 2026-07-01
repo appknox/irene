@@ -1,0 +1,77 @@
+<PageWrapper local-class='navigation-graph-root' ...attributes>
+  <AkBreadcrumbs::AutoTrail
+    data-test-fileDetails-dynamicScan-navigationGraph-breadcrumbs
+    local-class='breadcrumbs-container'
+  />
+
+  {{#if this.hasGraphData}}
+    <div
+      local-class='graph-canvas-wrapper'
+      {{did-insert this.initializeGraph}}
+      {{did-update this.rebuildGraph @dynamicscanId}}
+      data-test-fileDetails-dynamicScan-navigationGraph-canvas
+    >
+      <div
+        local-class='screenshot-loader-overlay'
+        {{did-insert this.registerScreenshotOverlay}}
+        {{will-destroy this.unregisterScreenshotOverlay}}
+      >
+        {{#each this.loadingNodeIds as |nodeId|}}
+          <div
+            local-class='node-screenshot-loader'
+            data-node-loader-id={{nodeId}}
+            data-test-fileDetails-dynamicScan-navigationGraph-nodeLoader
+          >
+            <AkLoader @size={{16}} />
+          </div>
+        {{/each}}
+
+        {{#each this.failedNodeIds as |nodeId|}}
+          <div
+            local-class='node-screenshot-loader'
+            data-node-loader-id={{nodeId}}
+            data-test-fileDetails-dynamicScan-navigationGraph-nodeFallback
+          >
+            <AkIcon
+              @iconName='hugeicons:image-03'
+              @color='textSecondary'
+              {{style fontSize=this.fallbackIconFontSize}}
+            />
+          </div>
+        {{/each}}
+      </div>
+    </div>
+  {{else}}
+    <FileDetails::DynamicScan::NavigationGraph::NotFound
+      @title={{t 'navigationGraph.notFoundTitle'}}
+      @description={{t 'navigationGraph.notFoundDescription'}}
+      @buttonRoute='authenticated.dashboard.file.dynamic-scan.automated'
+      @buttonModel={{@file.id}}
+      @buttonText={{t 'navigationGraph.backToDast'}}
+    />
+  {{/if}}
+
+  {{! Always shown so the user can switch between roles even when the current
+  role's graph is empty / not found. }}
+  <FileDetails::DynamicScan::NavigationGraph::NavPanel
+    @hasGraphData={{this.hasGraphData}}
+    @variantCount={{this.variantCount}}
+    @transitionCount={{this.transitionCount}}
+    @file={{@file}}
+    @dynamicscanId={{@dynamicscanId}}
+    @onLayoutChange={{this.onLayoutChange}}
+  />
+
+  {{#if this.selectedNode}}
+    <FileDetails::DynamicScan::NavigationGraph::ScreenshotDrawer
+      @node={{this.selectedNode}}
+      @hasPreviousNode={{this.hasPreviousNode}}
+      @hasNextNode={{this.hasNextNode}}
+      @onClose={{this.closeNodeDetail}}
+      @onPrevious={{this.showPreviousNode}}
+      @onNext={{this.showNextNode}}
+      @onContentInsert={{this.registerDrawerContent}}
+      @onContentDestroy={{this.unregisterDrawerContent}}
+    />
+  {{/if}}
+</PageWrapper>

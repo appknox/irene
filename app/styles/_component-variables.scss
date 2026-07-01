@@ -1823,6 +1823,16 @@ body {
     --text-disabled
   );
 
+  // variables for project-settings/dast-automation/automation-settings/scan-window
+  --project-settings-dast-automation-automation-settings-scan-window-info-icon-color: var(
+    --neutral-grey-400
+  );
+
+  // variables for project-settings/dast-automation/automation-settings/scan-window/time-range
+  --project-settings-dast-automation-automation-settings-scan-window-time-range-divider-border-color: var(
+    --border-color-2
+  );
+
   // variables for project-settings/general-settings
   --project-settings-general-settings-root-border-color: var(--border-color-1);
   --project-settings-general-settings-root-background-color: var(
@@ -2989,6 +2999,26 @@ body {
   --file-details-dynamic-scan-automated-border-radius: var(--border-radius);
   --file-details-dynamic-scan-automated-card-box-shadow: var(--box-shadow-3);
 
+  // variables for file-details/dynamic-scan/automated/user-roles
+  --file-details-dynamic-scan-automated-user-roles-border-color: var(
+    --border-color-1
+  );
+  --file-details-dynamic-scan-automated-user-roles-pill-border-color: var(
+    --neutral-grey-300
+  );
+  --file-details-dynamic-scan-automated-user-roles-pill-border-radius: var(
+    --border-radius-4
+  );
+  --file-details-dynamic-scan-automated-user-roles-pill-background: var(
+    --background-main
+  );
+  --file-details-dynamic-scan-automated-user-roles-pill-hover-background: var(
+    --background-light
+  );
+  --file-details-dynamic-scan-automated-user-roles-pill-selected-border-color: var(
+    --primary-main
+  );
+
   // variables for file-details/dynamic-scan/results
   --file-details-dynamic-scan-results-border-color: var(--border-color-1);
   --file-details-dynamic-scan-results-background-color: var(--background-light);
@@ -3081,6 +3111,73 @@ body {
   // variables for file-details/dynamic-scan/results/apis-captured
   --file-details-dynamic-scan-results-apis-captured-border-color: var(
     --border-color-1
+  );
+
+  // variables for file-details/dynamic-scan/navigation-graph/screenshot-drawer
+  --file-details-dynamic-scan-navigation-graph-screenshot-drawer-screenshot-border-color: var(
+    --neutral-grey-300
+  );
+  --file-details-dynamic-scan-navigation-graph-screenshot-drawer-placeholder-background-color: var(
+    --neutral-grey-100
+  );
+
+  // variables for file-details/dynamic-scan/navigation-graph
+  --file-details-dynamic-scan-navigation-graph-background-main: var(
+    --background-main
+  );
+  --file-details-dynamic-scan-navigation-graph-dot-color: var(
+    --neutral-grey-300
+  );
+  --file-details-dynamic-scan-navigation-graph-breadcrumbs-border-color: var(
+    --neutral-grey-200
+  );
+  --file-details-dynamic-scan-navigation-graph-breadcrumbs-box-shadow: var(
+    --box-shadow-16
+  );
+  --file-details-dynamic-scan-navigation-graph-breadcrumbs-border-radius: var(
+    --border-radius-8
+  );
+
+  // variables for file-details/dynamic-scan/navigation-graph/nav-panel
+  --file-details-dynamic-scan-navigation-graph-nav-panel-toolbar-background: var(
+    --background-main
+  );
+  --file-details-dynamic-scan-navigation-graph-nav-panel-toolbar-box-shadow: var(
+    --box-shadow-9
+  );
+  --file-details-dynamic-scan-navigation-graph-nav-panel-hint-kbd-border-radius: var(
+    --border-radius-4
+  );
+  --file-details-dynamic-scan-navigation-graph-nav-panel-hint-kbd-border-color: var(
+    --neutral-grey-200
+  );
+  --file-details-dynamic-scan-navigation-graph-nav-panel-hint-kbd-background: var(
+    --neutral-grey-200
+  );
+  --file-details-dynamic-scan-navigation-graph-nav-panel-hint-kbd-color: var(
+    --neutral-grey-500
+  );
+
+  // variables for file-details/dynamic-scan/navigation-graph/invalid-file-or-ds-graph
+  --file-details-dynamic-scan-navigation-graph-invalid-file-or-ds-graph-background-main: var(
+    --background-main
+  );
+  --file-details-dynamic-scan-navigation-graph-invalid-file-or-ds-graph-dot-color: var(
+    --neutral-grey-300
+  );
+
+  // variables for file-details/dynamic-scan/navigation-graph/not-found
+  --file-details-dynamic-scan-navigation-graph-not-found-background: var(
+    --background-main
+  );
+  --file-details-dynamic-scan-navigation-graph-not-found-border-color: var(
+    --neutral-grey-200
+  );
+  --file-details-dynamic-scan-navigation-graph-not-found-breadcrumbs-box-shadow: var(
+    --box-shadow-16
+  );
+  --file-details-dynamic-scan-navigation-graph-not-found-breadcrumbs-border-radius: var(
+    --border-radius-8
   );
 
   // variables for page-not-found

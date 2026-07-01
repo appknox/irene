@@ -189,6 +189,7 @@ export const MaterialSymbolsSet = [
   'list-alt-check',
   'border-color',
   'border-color-outline',
+  'family-history',
 ] as const;
 
 export const MdiIconsSet = [

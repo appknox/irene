@@ -112,11 +112,11 @@ export default class DynamicScanService extends Service {
         let dsScan: DynamicscanModel | null | undefined = null;
 
         // Reload the last manual and automated dynamic scans
-        if (isAutomatedScan) {
-          dsScan = await rFile?.getFileLastAutomatedDynamicScan();
-        } else {
-          dsScan = await rFile?.getFileLastManualDynamicScan();
-        }
+        const scans = isAutomatedScan
+          ? await rFile?.getFileLastAutomatedDynamicScan()
+          : await rFile?.getFileLastManualDynamicScan();
+
+        dsScan = scans?.[0] ?? null;
 
         // Stop polling if not stopped after 8 checks
         if (attempt === 60) {
