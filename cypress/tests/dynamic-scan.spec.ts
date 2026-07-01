@@ -352,8 +352,8 @@ describe('Dynamic Scan', () => {
                   });
 
                   // Change items per page to 20
-                  cy.findByTestId(
-                    'paginationItemPerPageOptions',
+                  cy.findByLabelText(
+                    'pagination item per page options',
                     DEFAULT_ASSERT_OPTS
                   )
                     .findByRole('combobox')

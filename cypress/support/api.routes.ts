@@ -33,6 +33,20 @@ export const API_ROUTES = {
     route: '/api/v2/sb_projects*',
     alias: 'sbomProjectList',
   },
+  sbomFileSummary: {
+    route: '/api/v2/sb_projects/*/sb_files/*/summary*',
+    alias: 'sbomFileSummary',
+  },
+
+  sbomFileComponents: {
+    route: '/api/v2/sb_files/*/sb_file_components*',
+    alias: 'sbomFileComponents',
+  },
+
+  sbomComponent: {
+    route: '/api/v2/sb_file_component/*',
+    alias: 'sbomComponent',
+  },
   organizationList: {
     route: '/api/organizations*',
     alias: 'availableOrgsList',
@@ -69,7 +83,8 @@ export const API_ROUTES = {
   // Single Record routes
   file: { route: '/api/v3/files', alias: 'file' },
   fileRisk: { route: '/api/v3/files/*/risk', alias: 'fileRisk' },
-  sbom: { route: '/api/v2/sb_files', alias: 'sbomFile' },
+  sbomFile: { route: '/api/v2/sb_files/*', alias: 'sbomFile' },
+  sbomFileBase: { route: '/api/v2/sb_files', alias: 'sbomFileBase' },
   unknownAnalysisStatus: {
     route: '/api/profiles/*/unknown_analysis_status*',
     alias: 'unknownAnalysisStatus',
@@ -161,5 +176,15 @@ export const API_ROUTES = {
   dynamicscan: {
     route: '/api/v3/files/*/last_manual_dynamic_scan',
     alias: 'dynamicscan',
+  },
+
+  // Download routes
+  sbomPdfDownload: {
+    route: '/api/v2/sb_reports/*/pdf/download_url',
+    alias: 'sbomPdfDownload',
+  },
+  sbCycloneDxJsonDownload: {
+    route: '/api/v2/sb_reports/*/cyclonedx_json_file/download_url',
+    alias: 'sbCycloneDxJsonDownload',
   },
 } as const;
