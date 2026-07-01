@@ -79,7 +79,7 @@ abstract class CvssVersionState<
   //  TypeScript + decorator-transform combinations used in Ember projects.)
   abstract metrics: TMetrics;
 
-  @tracked base = -1.0;
+  @tracked base = -1;
   @tracked risk: number = ENUMS.RISK.UNKNOWN;
   @tracked vector = '';
   @tracked isInvalidBase = false;
@@ -158,7 +158,7 @@ abstract class CvssVersionState<
 
 // ─── CvssV4VersionState ───────────────────────────────────────────────────────
 
-type V4MetricKey = keyof CvssV4Metrics & string;
+type V4MetricKey = keyof CvssV4Metrics;
 
 export class CvssV4VersionState extends CvssVersionState<
   CvssV4Metrics,
@@ -199,7 +199,7 @@ export class CvssV4VersionState extends CvssVersionState<
 
 // ─── CvssV3VersionState ───────────────────────────────────────────────────────
 
-type V3MetricKey = keyof CvssV3Metrics & string;
+type V3MetricKey = keyof CvssV3Metrics;
 
 export class CvssV3VersionState extends CvssVersionState<
   CvssV3Metrics,

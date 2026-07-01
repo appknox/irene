@@ -1,0 +1,50 @@
+<PageWrapper local-class='navigation-skeleton-loader-root'>
+  {{! Breadcrumbs }}
+  <AkStack @alignItems='center' @spacing='1' local-class='breadcrumbs-skeleton'>
+    <AkSkeleton @width='70px' @height='14px' />
+    <AkSkeleton @width='8px' @height='14px' />
+    <AkSkeleton @width='120px' @height='14px' />
+    <AkSkeleton @width='8px' @height='14px' />
+    <AkSkeleton @width='140px' @height='14px' />
+  </AkStack>
+
+  {{! Graph node placeholders }}
+  <AkStack
+    @width='full'
+    @alignItems='center'
+    @justifyContent='center'
+    @spacing='6'
+    local-class='graph-canvas-skeleton'
+  >
+    {{#each (array 1 2 3 4)}}
+      <AkSkeleton @width='120px' @height='160px' />
+    {{/each}}
+  </AkStack>
+
+  {{! Floating toolbar }}
+  <div local-class='floating-toolbar-skeleton'>
+    <AkStack @alignItems='center' @justifyContent='space-between' class='mb-3'>
+      <AkSkeleton @width='150px' @height='20px' />
+      <AkSkeleton @width='120px' @height='16px' />
+    </AkStack>
+
+    <AkStack @alignItems='center' @spacing='1'>
+      <AkSkeleton @width='70px' @height='16px' />
+      <AkSkeleton @width='140px' @height='36px' />
+      <AkSkeleton @width='54px' @height='16px' />
+      <AkSkeleton @width='235px' @height='36px' />
+    </AkStack>
+
+    <AkDivider @color='dark' {{style marginTop='16px' marginBottom='16px'}} />
+
+    {{! Interaction hints }}
+    <AkStack @alignItems='center' @spacing='2.5'>
+      {{#each (array 1 2 3)}}
+        <AkStack @alignItems='center' @spacing='0.5'>
+          <AkSkeleton @width='44px' @height='22px' />
+          <AkSkeleton @width='60px' @height='16px' />
+        </AkStack>
+      {{/each}}
+    </AkStack>
+  </div>
+</PageWrapper>

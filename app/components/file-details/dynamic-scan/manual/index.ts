@@ -6,6 +6,7 @@ import { waitForPromise } from '@ember/test-waiters';
 import { task } from 'ember-concurrency';
 import type IntlService from 'ember-intl/services/intl';
 
+import { getDsStatusGroupForScan } from 'irene/utils/ds-status-group';
 import type FileModel from 'irene/models/file';
 import type DynamicScanService from 'irene/services/dynamic-scan';
 import type DynamicscanModel from 'irene/models/dynamicscan';
@@ -57,6 +58,11 @@ export default class FileDetailsDastManual extends Component<FileDetailsDastManu
     return this.lastManualDynamicScan;
   }
 
+  // Action button takes an array; manual scans are always a single scan.
+  get dynamicScans() {
+    return this.dynamicScan ? [this.dynamicScan] : [];
+  }
+
   get isFetchingDynamicScan() {
     return this.getLastDynamicScans.isRunning;
   }
@@ -67,6 +73,10 @@ export default class FileDetailsDastManual extends Component<FileDetailsDastManu
 
   get showActionButton() {
     return !this.dynamicScan?.get('isShuttingDown');
+  }
+
+  get cumulativeScanStatus() {
+    return getDsStatusGroupForScan(this.dynamicScan?.status ?? 0);
   }
 
   @action
@@ -81,15 +91,17 @@ export default class FileDetailsDastManual extends Component<FileDetailsDastManu
 
   @action
   handleDynamicScanUpdate(dynamicscan: DynamicscanModel) {
-    if (String(dynamicscan.file.get('id')) === String(this.file.id)) {
-      this.getLastDynamicScans.perform();
+    if (String(dynamicscan.get('id')) === String(this.dynamicScan?.id)) {
+      this.lastManualDynamicScan = dynamicscan;
     }
   }
 
   getLastDynamicScans = task({ restartable: true }, async () => {
-    this.lastManualDynamicScan = await waitForPromise(
+    const scans = await waitForPromise(
       this.file.getFileLastManualDynamicScan()
     );
+
+    this.lastManualDynamicScan = scans[0] ?? null;
   });
 
   willDestroy(): void {

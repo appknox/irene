@@ -1,0 +1,22 @@
+.scan-window-type-select {
+  width: 180px;
+
+  :global(.ember-power-select-trigger) {
+    height: 35px;
+  }
+}
+
+.scan-window-info-icon {
+  font-size: 1em !important;
+  cursor: pointer;
+  color: var(
+    --project-settings-dast-automation-automation-settings-scan-window-info-icon-color
+  );
+}
+
+.tooltip-content-container {
+  width: 320px;
+  padding: 0.5em;
+  box-sizing: border-box;
+  white-space: normal;
+}

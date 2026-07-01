@@ -21,8 +21,116 @@ import WebsocketService from 'irene/services/websocket';
 import { analysisRiskStatus } from 'irene/helpers/analysis-risk-status';
 import { setupFileModelEndpoints } from 'irene/tests/helpers/file-model-utils';
 import { setupRequiredEndpoints } from 'irene/tests/helpers/acceptance-utils';
+import { withStubbedRfb } from 'irene/tests/helpers/rfb-stubs';
 
-const commondynamicScanStatusTextList = [
+// ─── Selectors ────────────────────────────────────────────────────────────────
+
+const SEL = {
+  // Card & header
+  breadcrumbContainer:
+    '[data-test-fileDetails-dynamicScan-header-breadcrumbContainer]',
+  fileSummary: '[data-test-fileDetailsSummary-root]',
+  deviceHeaderText:
+    '[data-test-fileDetails-dynamicScan-deviceWrapper-headerText]',
+  deviceViewer:
+    '[data-test-fileDetails-dynamicScan-deviceWrapper-deviceViewer]',
+  fullscreenBtn:
+    '[data-test-fileDetails-dynamicScan-deviceWrapper-deviceViewer-fullscreenBtn]',
+  statusChip: '[data-test-fileDetails-dynamicScan-statusChip]',
+  expiry: '[data-test-fileDetails-dynamicScan-expiry]',
+  inProgressLoader: '[data-test-fileDetails-dynamicScan-inProgress-loader]',
+
+  // Action button (with variants: startBtn, stopBtn, cancelBtn, restartBtn)
+  action: '[data-test-fileDetails-dynamicScanAction]',
+  actionBtn: (variant) =>
+    `[data-test-fileDetails-dynamicScanAction="${variant}"]`,
+
+  // Tabs
+  tab: (id) => `[data-test-fileDetails-dynamicScan-header="${id}"]`,
+  tabLink: (id) => `[data-test-fileDetails-dynamicScan-header="${id}"] a`,
+  breadcrumbItem: (route) =>
+    `[data-test-ak-breadcrumbs-auto-trail-item-key="${route}"]`,
+
+  // Drawer
+  drawer: {
+    container: '[data-test-fileDetails-dynamicScanDrawer-drawerContainer]',
+    title: '[data-test-fileDetails-dynamicScanDrawer-drawerContainer-title]',
+    startBtn: '[data-test-fileDetails-dynamicScanDrawer-startBtn]',
+  },
+
+  // VNC viewer
+  vnc: {
+    root: '[data-test-vncViewer-root]',
+    device: '[data-test-vncViewer-device]',
+    canvas: '[data-test-NovncRfb-canvasContainer]',
+    manualScanNote: '[data-test-vncViewer-manualScanNote]',
+    automatedNote: '[data-test-vncViewer-automatedNote]',
+    scanTriggeredNote: '[data-test-vncViewer-scanTriggeredNote]',
+    scanTriggeredAuto: '[data-test-vncViewer-scanTriggeredAutomaticallyText]',
+    scanStartedBy: '[data-test-vncViewer-scanStartedByText]',
+  },
+
+  // Confirm & notify-user modals
+  confirm: {
+    description: '[data-test-confirmbox-description]',
+    confirmBtn: '[data-test-confirmbox-confirmBtn]',
+    cancelBtn: '[data-test-confirmbox-cancelBtn]',
+  },
+
+  notifyUser: {
+    header:
+      '[data-test-fileDetailsDynamicScan-scheduledAutomated-notifyUserModalHeader]',
+    confirmBtn:
+      '[data-test-fileDetailsDynamicScan-scheduledAutomated-notifyUserModal-confirmBtn]',
+    cancelBtn:
+      '[data-test-fileDetailsDynamicScan-scheduledAutomated-notifyUserModal-cancelBtn]',
+  },
+
+  // User roles panel (automated multi-scan)
+  userRoles: {
+    root: '[data-test-fileDetails-dynamicScan-automated-userRoles-root]',
+    pill: (name) =>
+      `[data-test-fileDetails-dynamicScan-automated-userRoles-pillWrapper="${name}"]`,
+  },
+
+  // Interaction info banner (automated)
+  interactionInfo: {
+    icon: '[data-test-fileDetails-dynamicScan-automated-interactionInfoIcon]',
+    text: '[data-test-fileDetails-dynamicScan-automated-interactionInfoText]',
+  },
+
+  // Results view
+  results: {
+    badge: '[data-test-fileDetails-dynamicScan-header-badge-count]',
+    info: '[data-test-fileDetails-dynamicScan-info]',
+    tab: (id) => `[data-test-fileDetails-dynamicScan-results-tabs='${id}'] a`,
+    tableHead: '[data-test-vulnerability-analysis-thead] th',
+    tableRow: '[data-test-vulnerability-analysis-row]',
+    tableCell: '[data-test-vulnerability-analysis-cell]',
+    riskTag: '[data-test-analysisRiskTag-label]',
+  },
+};
+
+// ─── Constants ────────────────────────────────────────────────────────────────
+
+const DAST_TABS = [
+  { id: 'manual-dast-tab', label: 'dastTabs.manualDAST' },
+  { id: 'automated-dast-tab', label: 'dastTabs.automatedDAST' },
+  { id: 'dast-results-tab', label: 'dastTabs.dastResults' },
+];
+
+// Statuses that the automated view collapses under a single "starting" chip.
+const STARTING_STATUSES = new Set([
+  ENUMS.DYNAMIC_SCAN_STATUS.DEVICE_ALLOCATED,
+  ENUMS.DYNAMIC_SCAN_STATUS.CONNECTING_TO_DEVICE,
+  ENUMS.DYNAMIC_SCAN_STATUS.PREPARING_DEVICE,
+  ENUMS.DYNAMIC_SCAN_STATUS.DOWNLOADING_AUTOPILOT_SCRIPT,
+  ENUMS.DYNAMIC_SCAN_STATUS.CONFIGURING_AUTOPILOT,
+  ENUMS.DYNAMIC_SCAN_STATUS.INSTALLING,
+  ENUMS.DYNAMIC_SCAN_STATUS.LAUNCHING,
+]);
+
+const commonDynamicScanStatusTexts = [
   {
     status: ENUMS.DYNAMIC_SCAN_STATUS.NOT_STARTED,
     text: () => t('notStarted'),
@@ -106,7 +214,7 @@ const commondynamicScanStatusTextList = [
   },
 ];
 
-const manualDynamicScanStatusTextList = [
+const manualDynamicScanStatusTexts = [
   {
     status: ENUMS.DYNAMIC_SCAN_STATUS.READY_FOR_INTERACTION,
     text: () => t('running'),
@@ -114,7 +222,7 @@ const manualDynamicScanStatusTextList = [
   },
 ];
 
-const autoDynamicScanStatusTextList = [
+const autoDynamicScanStatusTexts = [
   {
     status: ENUMS.DYNAMIC_SCAN_STATUS.AUTOPILOT_RUNNING,
     text: () => t('running'),
@@ -124,6 +232,8 @@ const autoDynamicScanStatusTextList = [
     text: () => t('running'),
   },
 ];
+
+// ─── Service stubs ────────────────────────────────────────────────────────────
 
 class IntegrationStub extends Service {
   async configure(user) {
@@ -140,9 +250,8 @@ class IntegrationStub extends Service {
 }
 
 class WebsocketStub extends WebsocketService {
-  async connect() {}
-
-  async configure() {}
+  async connect() {} //NOSONAR
+  async configure() {} //NOSONAR
 }
 
 class NotificationsStub extends Service {
@@ -162,11 +271,155 @@ class NotificationsStub extends Service {
     this.infoMsg = msg;
   }
 
-  setDefaultAutoClear() {}
+  setDefaultAutoClear() {} //NOSONAR
 }
 
-// helper function to create a dynamic scan status helper
-function createDynamicScanStatusHelper(owner, dynamicscan) {
+// ─── Mirage helpers ───────────────────────────────────────────────────────────
+
+/**
+ * Creates a dynamicscan record with the same defaults every test uses. Any
+ * field may be overridden per test.
+ */
+function createDynamicscan(server, fileId, overrides = {}) {
+  return server.create('dynamicscan', {
+    file: fileId,
+    mode: ENUMS.DYNAMIC_MODE.MANUAL,
+    status: ENUMS.DYNAMIC_SCAN_STATUS.NOT_STARTED,
+    ended_on: null,
+    ...overrides,
+  });
+}
+
+/**
+ * Stubs the two last-scan lookup endpoints so they resolve to `getScan()` only
+ * when the mode matches the one being queried. `getScan()` is a thunk because
+ * the scan record is often created lazily inside a POST handler.
+ */
+function stubLastScanEndpoints(server, { getScan, mode }) {
+  server.get('/v3/files/:id/last_manual_dynamic_scan', (schema) => {
+    const scan = getScan();
+
+    const dynamicscan =
+      scan && mode === 'manual'
+        ? schema.dynamicscans.find(scan.id)?.toJSON()
+        : null;
+
+    return dynamicscan ? [dynamicscan] : [];
+  });
+
+  server.get('/v3/files/:id/last_automated_dynamic_scan', (schema) => {
+    const scan = getScan();
+
+    const dynamicscan =
+      scan && mode === 'automated'
+        ? schema.dynamicscans.find(scan.id)?.toJSON()
+        : null;
+
+    return dynamicscan ? [dynamicscan] : [];
+  });
+}
+
+/**
+ * Registers the profile-scoped endpoints shared by the start/stop and
+ * scheduled tests.
+ */
+function stubProfileEndpoints(server, { proxyEnabled = false } = {}) {
+  server.get('/v2/profiles/:id/ds_automated_device_preference', (schema, req) =>
+    schema.dsAutomatedDevicePreferences.find(`${req.params.id}`)?.toJSON()
+  );
+
+  server.get('/v2/profiles/:id/ds_manual_device_preference', (schema, req) =>
+    schema.dsManualDevicePreferences.find(`${req.params.id}`)?.toJSON()
+  );
+
+  server.get('/profiles/:id/api_scan_options', () => ({
+    id: '1',
+    ds_api_capture_filters: [],
+  }));
+
+  server.get('/profiles/:id/proxy_settings', () => ({
+    id: '1',
+    host: faker.internet.ip(),
+    port: faker.internet.port(),
+    enabled: proxyEnabled,
+  }));
+
+  server.get('/v2/projects/:projectId/scenarios', () => ({
+    count: 0,
+    next: null,
+    previous: null,
+    results: [],
+  }));
+}
+
+/**
+ * Stubs DELETE /v2/dynamicscans/:id to move the current scan into
+ * STOP_SCAN_REQUESTED and return 204. `getScan()` is a thunk for the same
+ * reason as `stubLastScanEndpoints`.
+ */
+function stubDeleteDynamicscan(server, getScan) {
+  server.delete('/v2/dynamicscans/:id', () => {
+    getScan().update({
+      status: ENUMS.DYNAMIC_SCAN_STATUS.STOP_SCAN_REQUESTED,
+    });
+
+    return new Response(204);
+  });
+}
+
+/**
+ * Stubs POST /v2/files/:id/dynamicscans with configurable body assertions and
+ * post-create hooks. Returns nothing; call `createScan()` inside the handler
+ * to build the scan on demand.
+ */
+function stubStartDynamicscan(server, { onRequest, createScan, afterCreate }) {
+  server.post('/v2/files/:id/dynamicscans', (schema, req) => {
+    const body = JSON.parse(req.requestBody);
+    onRequest?.(body);
+
+    const scan = createScan();
+    afterCreate?.(scan);
+
+    return scan.toJSON();
+  });
+}
+
+/**
+ * Stubs the last-automated-scan endpoint to return an array of multiple scans,
+ * with the `scenario_user_role` embedded so EmbeddedRecordsMixin resolves it.
+ * Also stubs the manual endpoint to return an empty array.
+ */
+function stubLastAutomatedScansMulti(server, getScans) {
+  server.get('/v3/files/:id/last_automated_dynamic_scan', (schema) => {
+    return getScans()
+      .map((s) => {
+        const scan = schema.dynamicscans.find(String(s.id));
+
+        if (!scan) {
+          return null;
+        }
+
+        const json = scan.toJSON();
+        const role = scan.scenarioUserRole;
+
+        json.scenario_user_role = role
+          ? { id: String(role.id), name: role.name }
+          : null;
+
+        return json;
+      })
+      .filter(Boolean);
+  });
+
+  server.get('/v3/files/:id/last_manual_dynamic_scan', () => []);
+}
+
+/**
+ * Returns an async asserter that drives one scan-status transition end-to-end:
+ * updates the mirage record, replays the WS notification, waits for the DOM
+ * to reflect the new state, and asserts the status chip + action button.
+ */
+function makeScanStatusAsserter(owner, dynamicscan) {
   const store = owner.lookup('service:store');
   const websocket = owner.lookup('service:websocket');
 
@@ -176,7 +429,6 @@ function createDynamicScanStatusHelper(owner, dynamicscan) {
     expectedStatusText,
     expectedAction = null
   ) {
-    // Update server status
     dynamicscan.update({ status });
 
     websocket.onConnect();
@@ -190,9 +442,10 @@ function createDynamicScanStatusHelper(owner, dynamicscan) {
 
     await waitUntil(() => {
       const storeScan = store.peekRecord('dynamicscan', String(dynamicscan.id));
-      const statusEl = find('[data-test-fileDetails-dynamicScan-statusChip]');
+      const statusEl = find(SEL.statusChip);
+
       const actionEl = expectedAction
-        ? find(`[data-test-fileDetails-dynamicScanAction="${expectedAction}"]`)
+        ? find(SEL.actionBtn(expectedAction))
         : null;
 
       const statusMatches = expectedStatusText
@@ -206,25 +459,165 @@ function createDynamicScanStatusHelper(owner, dynamicscan) {
       );
     });
 
-    // Assert status chip text
     if (expectedStatusText) {
-      assert
-        .dom('[data-test-fileDetails-dynamicScan-statusChip]')
-        .hasText(expectedStatusText);
+      assert.dom(SEL.statusChip).hasText(expectedStatusText);
     } else {
-      assert
-        .dom('[data-test-fileDetails-dynamicScan-statusChip]')
-        .doesNotExist();
+      assert.dom(SEL.statusChip).doesNotExist();
     }
 
-    // Assert action button if specified
     if (expectedAction) {
-      assert
-        .dom(`[data-test-fileDetails-dynamicScanAction="${expectedAction}"]`)
-        .isNotDisabled();
+      assert.dom(SEL.actionBtn(expectedAction)).isNotDisabled();
     }
   };
 }
+
+/**
+ * Asserts the VNC-panel notes shown when a scan first enters IN_QUEUE, which
+ * differ between automated (shows triggered/queued note) and manual modes.
+ */
+async function assertInQueueModeNotes(assert, mode, startedBy, user) {
+  if (mode === 'automated') {
+    assert.dom(SEL.vnc.manualScanNote).doesNotExist();
+    assert.dom(SEL.vnc.scanTriggeredNote).exists();
+
+    if (startedBy) {
+      assert
+        .dom(SEL.vnc.scanStartedBy)
+        .hasText(`${t('scanStartedBy')} ${user.username}`);
+    } else {
+      assert
+        .dom(SEL.vnc.scanTriggeredAuto)
+        .hasText(t('scanTriggeredAutomatically'));
+    }
+
+    assert
+      .dom(SEL.vnc.automatedNote)
+      .hasText(`${t('note')} - ${t('automatedScanQueuedVncNote')}`);
+
+    assert.dom(SEL.inProgressLoader).exists();
+  } else {
+    assert.dom(SEL.vnc.automatedNote).doesNotExist();
+    assert.dom(SEL.vnc.scanTriggeredNote).doesNotExist();
+
+    assert
+      .dom(SEL.vnc.manualScanNote)
+      .hasText(`${t('note')} - ${t('dynamicScanText')}`);
+  }
+}
+
+/**
+ * Either cancels mid-start (cancelInBetween=true) or advances through to the
+ * running state and triggers the stop action, asserting state at each step.
+ */
+async function assertRunOrCancelFlow(
+  assert,
+  assertScanStatus,
+  mode,
+  cancelInBetween
+) {
+  if (cancelInBetween) {
+    await click(SEL.actionBtn('cancelBtn'));
+
+    return;
+  }
+
+  const { CONFIGURING_API_CAPTURE, READY_FOR_INTERACTION, AUTOPILOT_RUNNING } =
+    ENUMS.DYNAMIC_SCAN_STATUS;
+
+  await assertScanStatus(
+    assert,
+    CONFIGURING_API_CAPTURE,
+    t('deviceHooking'),
+    'cancelBtn'
+  );
+
+  await assertScanStatus(
+    assert,
+    mode === 'manual' ? READY_FOR_INTERACTION : AUTOPILOT_RUNNING,
+    mode === 'manual' ? null : t('running'),
+    mode === 'manual' ? 'stopBtn' : null
+  );
+
+  if (mode === 'automated') {
+    assert.dom(SEL.vnc.scanTriggeredNote).exists();
+    assert.dom(SEL.vnc.automatedNote).exists();
+    assert.dom(SEL.vnc.canvas).doesNotExist();
+  } else {
+    assert.dom(SEL.vnc.manualScanNote).doesNotExist();
+    assert.dom(SEL.expiry).exists();
+    await click(SEL.actionBtn('stopBtn'));
+  }
+}
+
+/**
+ * Asserts the correct action button variant (or absence) for the given scan
+ * state and interaction mode.
+ */
+function assertActionButton(assert, dynamicscan, isManualMode) {
+  if (dynamicscan.isShuttingDown) {
+    assert.dom(SEL.action).doesNotExist();
+  } else if (dynamicscan.isStarting) {
+    assert
+      .dom(SEL.actionBtn('cancelBtn'))
+      .isNotDisabled()
+      .hasText(t('cancelScan'));
+  } else if (dynamicscan.isReadyOrRunning) {
+    if (isManualMode) {
+      assert.dom(SEL.actionBtn('stopBtn')).isNotDisabled().hasText(t('stop'));
+    } else {
+      assert.dom(SEL.actionBtn('stopBtn')).doesNotExist();
+    }
+  } else if (dynamicscan.isCompleted || dynamicscan.isStatusError) {
+    assert
+      .dom(SEL.actionBtn('restartBtn'))
+      .isNotDisabled()
+      .hasText(isManualMode ? t('dynamicScan') : t('dastTabs.automatedDAST'));
+  } else {
+    assert
+      .dom(SEL.actionBtn('startBtn'))
+      .isNotDisabled()
+      .hasText(isManualMode ? t('dynamicScan') : t('dastTabs.automatedDAST'));
+  }
+}
+
+/**
+ * Asserts VNC panel notes and the expiry strip for the current scan state and
+ * interaction mode.
+ */
+function assertVncNotes(assert, dynamicscan, isManualMode) {
+  if (isManualMode) {
+    assert.dom(SEL.vnc.automatedNote).doesNotExist();
+    assert.dom(SEL.vnc.scanTriggeredNote).doesNotExist();
+
+    if (dynamicscan.isStarting) {
+      assert
+        .dom(SEL.vnc.manualScanNote)
+        .hasText(`${t('note')} - ${t('dynamicScanText')}`);
+    } else if (dynamicscan.isReadyOrRunning) {
+      assert.dom(SEL.vnc.manualScanNote).doesNotExist();
+      assert.dom(SEL.expiry).exists();
+    }
+  } else if (
+    dynamicscan.isStartingOrShuttingInProgress ||
+    dynamicscan.isReadyOrRunning
+  ) {
+    assert.dom(SEL.vnc.manualScanNote).doesNotExist();
+    assert.dom(SEL.expiry).doesNotExist();
+    assert.dom(SEL.vnc.automatedNote).exists();
+
+    assert
+      .dom(SEL.vnc.scanTriggeredAuto)
+      .hasText(t('scanTriggeredAutomatically'));
+
+    const expectedNote = dynamicscan.isInqueue
+      ? `${t('note')} - ${t('automatedScanQueuedVncNote')}`
+      : `${t('note')} - ${t('automatedScanRunningVncNote')}`;
+
+    assert.dom(SEL.vnc.automatedNote).hasText(expectedNote);
+  }
+}
+
+// ─── Module ───────────────────────────────────────────────────────────────────
 
 module('Acceptance | file-details/dynamic-scan', function (hooks) {
   setupApplicationTest(hooks);
@@ -236,15 +629,8 @@ module('Acceptance | file-details/dynamic-scan', function (hooks) {
 
     setupFileModelEndpoints(this.server);
 
-    currentOrganizationMe.update({
-      has_security_permission: true,
-    });
-
-    organization.update({
-      features: {
-        dynamicscan_automation: true,
-      },
-    });
+    currentOrganizationMe.update({ has_security_permission: true });
+    organization.update({ features: { dynamicscan_automation: true } });
 
     const store = this.owner.lookup('service:store');
 
@@ -261,60 +647,56 @@ module('Acceptance | file-details/dynamic-scan', function (hooks) {
       last_manual_dynamic_scan: null,
     });
 
-    // Create analyses
     const analyses = vulnerabilities.map((v, id) =>
       store.push(
         store.normalize(
           'analysis',
           this.server
-            .create('analysis', {
-              id,
-              vulnerability: v.id,
-              file: file.id,
-            })
+            .create('analysis', { id, vulnerability: v.id, file: file.id })
             .toJSON()
         )
       )
     );
 
-    // service stubs
+    // Service stubs
     this.owner.register('service:notifications', NotificationsStub);
     this.owner.register('service:integration', IntegrationStub);
     this.owner.register('service:websocket', WebsocketStub);
 
-    // lookup services
     this.breadcrumbsService = this.owner.lookup('service:ak-breadcrumbs');
 
-    // server api interception
+    // Shared mirage endpoints
     this.server.get('/v2/server_configuration', () => ({
       devicefarm_url: 'https://devicefarm.app.com',
       websocket: '',
       enterprise: false,
     }));
 
-    this.server.get('/v3/files/:id', (schema, req) => {
-      return schema.files.find(`${req.params.id}`)?.toJSON();
-    });
+    this.server.get('/v3/files/:id', (schema, req) =>
+      schema.files.find(`${req.params.id}`)?.toJSON()
+    );
 
-    this.server.get('/v3/projects/:id', (schema, req) => {
-      return schema.projects.find(`${req.params.id}`)?.toJSON();
-    });
+    this.server.get('/v3/projects/:id', (schema, req) =>
+      schema.projects.find(`${req.params.id}`)?.toJSON()
+    );
 
-    this.server.get('/v2/projects/:id/scan_parameter_groups', (schema) => {
-      return schema.scanParameterGroups.all().models;
-    });
+    this.server.get(
+      '/v2/projects/:id/scan_parameter_groups',
+      (schema) => schema.scanParameterGroups.all().models
+    );
 
     this.server.get('/profiles/:id', (schema, req) =>
       schema.profiles.find(`${req.params.id}`)?.toJSON()
     );
 
-    this.server.get('/v2/dynamicscans/:id', (schema, req) => {
-      return schema.dynamicscans.find(`${req.params.id}`)?.toJSON();
-    });
+    this.server.get('/v2/dynamicscans/:id', (schema, req) =>
+      schema.dynamicscans.find(`${req.params.id}`)?.toJSON()
+    );
 
-    this.server.get('v2/profiles/:id/automation_preference', (_, req) => {
-      return { id: req.params.id, dynamic_scan_automation_enabled: true };
-    });
+    this.server.get('v2/profiles/:id/automation_preference', (_, req) => ({
+      id: req.params.id,
+      dynamic_scan_automation_enabled: true,
+    }));
 
     this.setProperties({
       organization,
@@ -326,6 +708,8 @@ module('Acceptance | file-details/dynamic-scan', function (hooks) {
     });
   });
 
+  // ─── Rendering across statuses ─────────────────────────────────────────────
+
   test.each(
     'it renders DAST page with different states of scan status',
     [
@@ -333,225 +717,108 @@ module('Acceptance | file-details/dynamic-scan', function (hooks) {
         route: 'manual',
         mode: ENUMS.DYNAMIC_MODE.MANUAL,
         statusTextList: [
-          ...commondynamicScanStatusTextList,
-          ...manualDynamicScanStatusTextList,
+          ...commonDynamicScanStatusTexts,
+          ...manualDynamicScanStatusTexts,
         ],
       },
       {
         route: 'automated',
         mode: ENUMS.DYNAMIC_MODE.AUTOMATED,
         statusTextList: [
-          ...commondynamicScanStatusTextList,
-          ...autoDynamicScanStatusTextList,
+          ...commonDynamicScanStatusTexts,
+          ...autoDynamicScanStatusTexts,
         ],
       },
-    ].reduce((acc, { route, mode, statusTextList }) => {
-      return [
-        ...acc,
-        ...statusTextList.map((it) => ({
-          mode,
-          route,
-          ...it,
-        })),
-      ];
-    }, []),
+    ].flatMap(({ route, mode, statusTextList }) =>
+      statusTextList.map((it) => ({ mode, route, ...it }))
+    ),
     async function (assert, { mode, route, status, text, statusHidden }) {
-      const { id } = this.server.create('dynamicscan', {
-        file: this.file.id,
+      const isManualMode = mode === ENUMS.DYNAMIC_MODE.MANUAL;
+
+      const { id } = createDynamicscan(this.server, this.file.id, {
         mode,
         status,
-        ended_on: null,
+        ...(mode === ENUMS.DYNAMIC_MODE.AUTOMATED && {
+          engine: ENUMS.DYNAMIC_SCAN_ENGINE.INTERNAL_MANUAL,
+        }),
       });
 
-      this.server.get('/v3/files/:id/last_manual_dynamic_scan', (schema) => {
-        return mode === ENUMS.DYNAMIC_MODE.MANUAL
-          ? schema.dynamicscans.find(id)?.toJSON()
-          : null;
+      stubLastScanEndpoints(this.server, {
+        getScan: () => this.server.schema.dynamicscans.find(id),
+        mode: isManualMode ? 'manual' : 'automated',
       });
-
-      this.server.get('/v3/files/:id/last_automated_dynamic_scan', (schema) => {
-        return mode === ENUMS.DYNAMIC_MODE.AUTOMATED
-          ? schema.dynamicscans.find(id)?.toJSON()
-          : null;
-      });
-
-      const isManualMode = mode === ENUMS.DYNAMIC_MODE.MANUAL;
 
       await visit(`/dashboard/file/${this.file.id}/dynamic-scan/${route}`);
 
-      // Breadcrumbs test
-      assert
-        .dom('[data-test-fileDetails-dynamicScan-header-breadcrumbContainer]')
-        .exists();
+      // Breadcrumbs
+      assert.dom(SEL.breadcrumbContainer).exists();
 
       this.breadcrumbsService.breadcrumbItems.map((item) => {
         assert
-          .dom(`[data-test-ak-breadcrumbs-auto-trail-item-key="${item.route}"]`)
+          .dom(SEL.breadcrumbItem(item.route))
           .exists()
           .containsText(item.title);
       });
 
-      assert.dom('[data-test-fileDetailsSummary-root]').exists();
+      assert.dom(SEL.fileSummary).exists();
 
-      const tabs = [
-        { id: 'manual-dast-tab', label: 'dastTabs.manualDAST' },
-        { id: 'automated-dast-tab', label: 'dastTabs.automatedDAST' },
-        { id: 'dast-results-tab', label: 'dastTabs.dastResults' },
-      ];
-
-      tabs.map((item) => {
-        assert
-          .dom(`[data-test-fileDetails-dynamicScan-header="${item.id}"]`)
-          .exists();
-
-        assert
-          .dom(`[data-test-fileDetails-dynamicScan-header="${item.id}"]`)
-          .containsText(t(item.label));
+      DAST_TABS.forEach((item) => {
+        assert.dom(SEL.tab(item.id)).containsText(t(item.label));
       });
 
-      assert
-        .dom('[data-test-fileDetails-dynamicScan-deviceWrapper-headerText]')
-        .exists()
-        .hasText(t('realDevice'));
+      assert.dom(SEL.deviceHeaderText).hasText(t('realDevice'));
 
       const dynamicscan = this.store.peekRecord('dynamicscan', id);
 
       assert.strictEqual(
         dynamicscan.statusText,
-        status !== ENUMS.DYNAMIC_SCAN_STATUS.NOT_STARTED ? text() : t('unknown')
+        status == ENUMS.DYNAMIC_SCAN_STATUS.NOT_STARTED ? t('unknown') : text()
       );
 
-      if (!statusHidden) {
-        assert
-          .dom('[data-test-fileDetails-dynamicScan-statusChip]')
-          .hasText(text());
+      // Status chip
+      if (statusHidden) {
+        assert.dom(SEL.statusChip).doesNotExist();
       } else {
-        assert
-          .dom('[data-test-fileDetails-dynamicScan-statusChip]')
-          .doesNotExist();
+        // The automated view collapses the STARTING bucket into a single chip.
+        const expectedChipText =
+          !isManualMode && STARTING_STATUSES.has(status)
+            ? t('starting')
+            : text();
+
+        assert.dom(SEL.statusChip).hasText(expectedChipText);
       }
 
-      if (dynamicscan.isShuttingDown) {
-        assert.dom(`[data-test-fileDetails-dynamicScanAction]`).doesNotExist();
-      } else {
-        if (dynamicscan.isStarting) {
-          assert
-            .dom(`[data-test-fileDetails-dynamicScanAction="cancelBtn"]`)
-            .isNotDisabled()
-            .hasText(t('cancelScan'));
-        } else if (dynamicscan.isReadyOrRunning) {
-          if (isManualMode) {
-            assert
-              .dom(`[data-test-fileDetails-dynamicScanAction="stopBtn"]`)
-              .isNotDisabled()
-              .hasText(t('stop'));
-          } else {
-            assert
-              .dom(`[data-test-fileDetails-dynamicScanAction="stopBtn"]`)
-              .doesNotExist();
-          }
-        } else if (dynamicscan.isCompleted || dynamicscan.isStatusError) {
-          assert
-            .dom(`[data-test-fileDetails-dynamicScanAction="restartBtn"]`)
-            .isNotDisabled()
-            .hasText(
-              isManualMode ? t('dynamicScan') : t('dastTabs.automatedDAST')
-            );
-        } else {
-          assert
-            .dom(`[data-test-fileDetails-dynamicScanAction="startBtn"]`)
-            .isNotDisabled()
-            .hasText(
-              isManualMode ? t('dynamicScan') : t('dastTabs.automatedDAST')
-            );
-        }
-      }
+      // Action button
+      assertActionButton(assert, dynamicscan, isManualMode);
 
+      // Fullscreen + device viewer
       if (dynamicscan.isReady) {
-        assert
-          .dom(
-            '[data-test-fileDetails-dynamicScan-deviceWrapper-deviceViewer-fullscreenBtn]'
-          )
-          .isNotDisabled();
+        assert.dom(SEL.fullscreenBtn).isNotDisabled();
       } else {
-        assert
-          .dom(
-            '[data-test-fileDetails-dynamicScan-deviceWrapper-deviceViewer-fullscreenBtn]'
-          )
-          .doesNotExist();
+        assert.dom(SEL.fullscreenBtn).doesNotExist();
       }
 
-      assert
-        .dom('[data-test-fileDetails-dynamicScan-deviceWrapper-deviceViewer]')
-        .exists();
+      assert.dom(SEL.deviceViewer).exists();
 
       assert
-        .dom('[data-test-vncViewer-root]')
+        .dom(SEL.vnc.root)
         .exists()
         .doesNotHaveClass(/vnc-viewer-fullscreen/);
 
-      assert.dom('[data-test-vncViewer-device]').exists();
+      assert.dom(SEL.vnc.device).exists();
 
       if (dynamicscan.isReady) {
-        assert.dom('[data-test-NovncRfb-canvasContainer]').exists();
+        assert.dom(SEL.vnc.canvas).exists();
       } else {
-        assert.dom('[data-test-NovncRfb-canvasContainer]').doesNotExist();
+        assert.dom(SEL.vnc.canvas).doesNotExist();
       }
 
-      if (isManualMode) {
-        assert.dom('[data-test-vncViewer-automatedNote]').doesNotExist();
-        assert.dom('[data-test-vncViewer-scanTriggeredNote]').doesNotExist();
-
-        if (dynamicscan.isStarting) {
-          // Check manual note
-          assert
-            .dom('[data-test-vncViewer-manualScanNote]')
-            .exists()
-            .hasText(`${t('note')} - ${t('dynamicScanText')}`);
-        } else if (dynamicscan.isReadyOrRunning) {
-          assert.dom('[data-test-vncViewer-manualScanNote]').doesNotExist();
-          assert.dom('[data-test-fileDetails-dynamicScan-expiry]').exists();
-        }
-      } else {
-        if (
-          dynamicscan.isStartingOrShuttingInProgress ||
-          dynamicscan.isReadyOrRunning
-        ) {
-          assert.dom('[data-test-vncViewer-manualScanNote]').doesNotExist();
-
-          assert
-            .dom('[data-test-fileDetails-dynamicScan-expiry]')
-            .doesNotExist();
-
-          // Check automated note
-          assert.dom('[data-test-vncViewer-automatedNote]').exists();
-
-          assert
-            .dom('[data-test-vncViewer-scanTriggeredAutomaticallyText]')
-            .exists()
-            .hasText(t('scanTriggeredAutomatically'));
-        }
-
-        if (
-          dynamicscan.isStartingOrShuttingInProgress ||
-          dynamicscan.isReadyOrRunning
-        ) {
-          // automatedNote is shown for all active states (starting, shutting down, ready, running)
-          assert.dom('[data-test-vncViewer-automatedNote]').exists();
-
-          if (dynamicscan.isInqueue) {
-            assert
-              .dom('[data-test-vncViewer-automatedNote]')
-              .hasText(`${t('note')} - ${t('automatedScanQueuedVncNote')}`);
-          } else {
-            assert
-              .dom('[data-test-vncViewer-automatedNote]')
-              .hasText(`${t('note')} - ${t('automatedScanRunningVncNote')}`);
-          }
-        }
-      }
+      // VNC notes per mode
+      assertVncNotes(assert, dynamicscan, isManualMode);
     }
   );
+
+  // ─── Start & stop / cancel ─────────────────────────────────────────────────
 
   test.each(
     'it should start & stop/cancel dynamic scan',
@@ -568,16 +835,12 @@ module('Acceptance | file-details/dynamic-scan', function (hooks) {
         expectedAssertions: 35,
         startedBy: false,
       },
-      {
-        mode: 'automated',
-        // cancelInBetween: false, For now stop while running is not supported
-        expectedAssertions: 44,
-        startedBy: true,
-      },
+      // cancelInBetween: false — stop while running not supported for automated yet.
+      { mode: 'automated', expectedAssertions: 43, startedBy: true },
       {
         mode: 'automated',
         cancelInBetween: true,
-        expectedAssertions: 38,
+        expectedAssertions: 37,
         startedBy: false,
       },
     ],
@@ -587,14 +850,7 @@ module('Acceptance | file-details/dynamic-scan', function (hooks) {
     ) {
       assert.expect(expectedAssertions);
 
-      const createDynamicscan = () =>
-        this.server.create('dynamicscan', {
-          file: this.file.id,
-          mode: ENUMS.DYNAMIC_MODE[mode.toUpperCase()],
-          status: ENUMS.DYNAMIC_SCAN_STATUS.PREPROCESSING,
-          ended_on: null,
-          started_by_user: startedBy ? this.profile.id : null,
-        });
+      const modeEnum = ENUMS.DYNAMIC_MODE[mode.toUpperCase()];
 
       const availableDevices = this.server.createList(
         'available-manual-device',
@@ -612,137 +868,77 @@ module('Acceptance | file-details/dynamic-scan', function (hooks) {
         id: this.profile.id,
       });
 
-      this.server.post('/v2/files/:id/dynamicscans', (schema, req) => {
-        const reqBody = JSON.parse(req.requestBody);
+      stubStartDynamicscan(this.server, {
+        onRequest: (body) => {
+          assert.strictEqual(body.mode, modeEnum);
+          assert.false(body.enable_api_capture);
+        },
+        createScan: () => {
+          this.dynamicscan = createDynamicscan(this.server, this.file.id, {
+            mode: modeEnum,
+            status: ENUMS.DYNAMIC_SCAN_STATUS.PREPROCESSING,
+            started_by_user: startedBy ? this.profile.id : null,
+            ...(mode === 'automated' && {
+              engine: ENUMS.DYNAMIC_SCAN_ENGINE.INTERNAL_MANUAL,
+            }),
+          });
+          return this.dynamicscan;
+        },
+        afterCreate: (scan) => {
+          // Model-created WS notification triggers the header component to
+          // reload the last automated scan (see websocket.ts:197 and
+          // file-details/dynamic-scan/header/index.ts:61).
+          const websocket = this.owner.lookup('service:websocket');
 
-        // assert request body
-        assert.strictEqual(
-          reqBody.mode,
-          ENUMS.DYNAMIC_MODE[mode.toUpperCase()]
-        );
+          websocket.onConnect();
 
-        assert.false(reqBody.enable_api_capture);
-
-        // create and set dynamicscan data reference
-        this.dynamicscan = createDynamicscan();
-
-        const websocket = this.owner.lookup('service:websocket');
-
-        // Call connect to register the handlers
-        websocket.onConnect();
-
-        // Model Created Notification for dynamic scan
-        //  Used to trigger the reload of the last automated dynamic scan in the dynamic scan header component
-        // REFER: app/services/websocket.ts (LINE: 197)
-        // REFER: app/components/file-details/dynamic-scan/header/index.ts (LINE: 61)
-        websocket.onModelCreatedNotification({
-          model_name: 'dynamicscan',
-          data: this.dynamicscan.toJSON(),
-        });
-
-        return this.dynamicscan.toJSON();
+          websocket.onModelCreatedNotification({
+            model_name: 'dynamicscan',
+            data: scan.toJSON(),
+          });
+        },
       });
 
-      this.server.get('/v3/files/:id/last_manual_dynamic_scan', (schema) => {
-        return mode === 'manual' && this.dynamicscan
-          ? schema.dynamicscans.find(this.dynamicscan.id)?.toJSON()
-          : null;
+      stubLastScanEndpoints(this.server, {
+        getScan: () => this.dynamicscan,
+        mode,
       });
 
-      this.server.get('/v3/files/:id/last_automated_dynamic_scan', (schema) => {
-        return mode === 'automated' && this.dynamicscan
-          ? schema.dynamicscans.find(this.dynamicscan.id)?.toJSON()
-          : null;
-      });
-
-      this.server.delete('/v2/dynamicscans/:id', () => {
-        this.dynamicscan.update({
-          status: ENUMS.DYNAMIC_SCAN_STATUS.STOP_SCAN_REQUESTED,
-        });
-
-        return new Response(204);
-      });
+      stubDeleteDynamicscan(this.server, () => this.dynamicscan);
 
       this.server.get('/v2/projects/:id/available_manual_devices', (schema) => {
         const results = schema.availableManualDevices.all().models;
-
         return { count: results.length, next: null, previous: null, results };
       });
 
-      this.server.get(
-        '/v2/profiles/:id/ds_manual_device_preference',
-        (schema, req) => {
-          return schema.dsManualDevicePreferences
-            .find(`${req.params.id}`)
-            ?.toJSON();
-        }
-      );
+      stubProfileEndpoints(this.server);
 
-      this.server.get(
-        '/v2/profiles/:id/ds_automated_device_preference',
-        (schema, req) => {
-          return schema.dsAutomatedDevicePreferences
-            .find(`${req.params.id}`)
-            ?.toJSON();
-        }
-      );
-
-      this.server.get('/profiles/:id/api_scan_options', () => ({
-        id: '1',
-        ds_api_capture_filters: [],
-      }));
-
-      this.server.get('/profiles/:id/proxy_settings', () => ({
-        id: '1',
-        host: faker.internet.ip(),
-        port: faker.internet.port(),
-        enabled: false,
-      }));
-
-      const user = this.server.create('user', {
-        id: this.profile.id,
-      });
+      const user = this.server.create('user', { id: this.profile.id });
 
       await visit(`/dashboard/file/${this.file.id}/dynamic-scan/${mode}`);
 
-      assert
-        .dom('[data-test-fileDetails-dynamicScan-header-breadcrumbContainer]')
-        .exists();
-
-      assert.dom('[data-test-fileDetailsSummary-root]').exists();
+      assert.dom(SEL.breadcrumbContainer).exists();
+      assert.dom(SEL.fileSummary).exists();
+      assert.dom(SEL.deviceHeaderText).hasText(t('realDevice'));
 
       assert
-        .dom('[data-test-fileDetails-dynamicScan-deviceWrapper-headerText]')
-        .hasText(t('realDevice'));
-
-      assert
-        .dom('[data-test-fileDetails-dynamicScanAction="startBtn"]')
+        .dom(SEL.actionBtn('startBtn'))
         .isNotDisabled()
         .hasText(
           mode === 'manual' ? t('dynamicScan') : t('dastTabs.automatedDAST')
         );
 
-      assert
-        .dom(
-          '[data-test-fileDetails-dynamicScan-deviceWrapper-deviceViewer-fullscreenBtn]'
-        )
-        .doesNotExist();
+      assert.dom(SEL.fullscreenBtn).doesNotExist();
+      assert.dom(SEL.deviceViewer).exists();
+      assert.dom(SEL.vnc.canvas).doesNotExist();
+
+      // Open drawer
+      await click(SEL.actionBtn('startBtn'));
+
+      assert.dom(SEL.drawer.container).exists();
 
       assert
-        .dom('[data-test-fileDetails-dynamicScan-deviceWrapper-deviceViewer]')
-        .exists();
-
-      assert.dom('[data-test-NovncRfb-canvasContainer]').doesNotExist();
-
-      // Click start button
-      await click('[data-test-fileDetails-dynamicScanAction="startBtn"]');
-
-      assert
-        .dom('[data-test-fileDetails-dynamicScanDrawer-drawerContainer]')
-        .exists();
-
-      assert
-        .dom('[data-test-fileDetails-dynamicScanDrawer-drawerContainer-title]')
+        .dom(SEL.drawer.title)
         .hasText(
           mode === 'manual'
             ? t('dastTabs.manualDAST')
@@ -750,23 +946,21 @@ module('Acceptance | file-details/dynamic-scan', function (hooks) {
         );
 
       assert
-        .dom('[data-test-fileDetails-dynamicScanDrawer-startBtn]')
+        .dom(SEL.drawer.startBtn)
         .isNotDisabled()
         .hasText(mode === 'manual' ? t('start') : t('scheduleAutomation'));
 
-      // start dynamic scan
-      await click('[data-test-fileDetails-dynamicScanDrawer-startBtn]');
+      // Start scan
+      await click(SEL.drawer.startBtn);
 
-      assert
-        .dom('[data-test-fileDetails-dynamicScanDrawer-drawerContainer]')
-        .doesNotExist();
+      assert.dom(SEL.drawer.container).doesNotExist();
 
-      const assertScanStatus = createDynamicScanStatusHelper(
+      const assertScanStatus = makeScanStatusAsserter(
         this.owner,
         this.dynamicscan
       );
 
-      // Test the scan status flow
+      // Scan status flow
       await assertScanStatus(
         assert,
         ENUMS.DYNAMIC_SCAN_STATUS.IN_QUEUE,
@@ -774,96 +968,37 @@ module('Acceptance | file-details/dynamic-scan', function (hooks) {
         'cancelBtn'
       );
 
-      if (mode === 'automated') {
-        assert.dom('[data-test-vncViewer-manualScanNote]').doesNotExist();
+      await assertInQueueModeNotes(assert, mode, startedBy, user);
 
-        assert.dom('[data-test-vncViewer-scanTriggeredNote]').exists();
-
-        if (startedBy) {
-          assert
-            .dom('[data-test-vncViewer-scanStartedByText]')
-            .exists()
-            .hasText(`${t('scanStartedBy')} ${user.username}`);
-        } else {
-          assert
-            .dom('[data-test-vncViewer-scanTriggeredAutomaticallyText]')
-            .exists()
-            .hasText(t('scanTriggeredAutomatically'));
-        }
-
-        assert
-          .dom('[data-test-vncViewer-automatedNote]')
-          .hasText(`${t('note')} - ${t('automatedScanQueuedVncNote')}`);
-
-        assert
-          .dom('[data-test-fileDetails-dynamicScan-inProgress-loader]')
-          .exists();
-      } else {
-        assert.dom('[data-test-vncViewer-automatedNote]').doesNotExist();
-        assert.dom('[data-test-vncViewer-scanTriggeredNote]').doesNotExist();
-
-        assert
-          .dom('[data-test-vncViewer-manualScanNote]')
-          .hasText(`${t('note')} - ${t('dynamicScanText')}`);
-      }
-
-      assert.dom('[data-test-fileDetails-dynamicScan-expiry]').doesNotExist();
+      assert.dom(SEL.expiry).doesNotExist();
 
       await assertScanStatus(
         assert,
         ENUMS.DYNAMIC_SCAN_STATUS.DEVICE_ALLOCATED,
-        t('deviceBooting'),
+        mode === 'automated' ? t('starting') : t('deviceBooting'),
         'cancelBtn'
       );
 
       await assertScanStatus(
         assert,
         ENUMS.DYNAMIC_SCAN_STATUS.INSTALLING,
-        t('deviceInstalling'),
+        mode === 'automated' ? t('starting') : t('deviceInstalling'),
         'cancelBtn'
       );
 
       await assertScanStatus(
         assert,
         ENUMS.DYNAMIC_SCAN_STATUS.LAUNCHING,
-        t('deviceLaunching'),
+        mode === 'automated' ? t('starting') : t('deviceLaunching'),
         'cancelBtn'
       );
 
-      if (cancelInBetween) {
-        // Cancel scan
-        await click('[data-test-fileDetails-dynamicScanAction="cancelBtn"]');
-      } else {
-        await assertScanStatus(
-          assert,
-          ENUMS.DYNAMIC_SCAN_STATUS.CONFIGURING_API_CAPTURE,
-          t('deviceHooking'),
-          'cancelBtn'
-        );
-
-        await assertScanStatus(
-          assert,
-          mode === 'manual'
-            ? ENUMS.DYNAMIC_SCAN_STATUS.READY_FOR_INTERACTION
-            : ENUMS.DYNAMIC_SCAN_STATUS.AUTOPILOT_RUNNING,
-          mode === 'manual' ? null : t('running'),
-          mode === 'manual' ? 'stopBtn' : null
-        );
-
-        if (mode === 'automated') {
-          assert.dom('[data-test-vncViewer-scanTriggeredNote]').exists();
-
-          // AUTOPILOT_RUNNING shows the automated note in the automated tab (not VNC)
-          assert.dom('[data-test-vncViewer-automatedNote]').exists();
-          assert.dom('[data-test-NovncRfb-canvasContainer]').doesNotExist();
-        } else {
-          assert.dom('[data-test-vncViewer-manualScanNote]').doesNotExist();
-          assert.dom('[data-test-fileDetails-dynamicScan-expiry]').exists();
-
-          // Stop scan currently supported when manual scan is running
-          await click('[data-test-fileDetails-dynamicScanAction="stopBtn"]');
-        }
-      }
+      await assertRunOrCancelFlow(
+        assert,
+        assertScanStatus,
+        mode,
+        cancelInBetween
+      );
 
       await assertScanStatus(
         assert,
@@ -871,7 +1006,7 @@ module('Acceptance | file-details/dynamic-scan', function (hooks) {
         t('deviceShuttingDown')
       );
 
-      assert.dom('[data-test-fileDetails-dynamicScanAction]').doesNotExist();
+      assert.dom(SEL.action).doesNotExist();
 
       await assertScanStatus(
         assert,
@@ -882,12 +1017,14 @@ module('Acceptance | file-details/dynamic-scan', function (hooks) {
         cancelInBetween ? 'startBtn' : 'restartBtn'
       );
 
-      assert.dom('[data-test-vncViewer-scanTriggeredNote]').doesNotExist();
-      assert.dom('[data-test-vncViewer-automatedNote]').doesNotExist();
-      assert.dom('[data-test-vncViewer-manualScanNote]').doesNotExist();
-      assert.dom('[data-test-fileDetails-dynamicScan-expiry]').doesNotExist();
+      assert.dom(SEL.vnc.scanTriggeredNote).doesNotExist();
+      assert.dom(SEL.vnc.automatedNote).doesNotExist();
+      assert.dom(SEL.vnc.manualScanNote).doesNotExist();
+      assert.dom(SEL.expiry).doesNotExist();
     }
   );
+
+  // ─── Scheduled automated flow ──────────────────────────────────────────────
 
   test.each(
     'dynamic scan scheduled automated flow',
@@ -907,149 +1044,96 @@ module('Acceptance | file-details/dynamic-scan', function (hooks) {
     ) {
       assert.expect(assertions);
 
-      const createDynamicscan = () =>
-        this.server.create('dynamicscan', {
-          file: this.file.id,
-          mode: ENUMS.DYNAMIC_MODE.AUTOMATED,
-          status: ENUMS.DYNAMIC_SCAN_STATUS.NOT_STARTED,
-          ended_on: null,
-        });
+      this.server.create('ds-automated-device-preference', {
+        id: this.profile.id,
+      });
 
+      // Note: /v2/files/:id/dynamicscans (GET) is queried by the header
+      // component to detect a running scan. The engine=2 & group_status=running
+      // params are the load-bearing bits of that query.
       this.server.get('/v2/files/:id/dynamicscans', (schema, req) => {
         const { limit, mode, engine, group_status } = req.queryParams || {};
 
         assert.strictEqual(engine, '2');
         assert.strictEqual(group_status, 'running');
 
-        const results = schema.dynamicscans
-          .where({
-            file: req.params.id,
-            ...(mode ? { mode: Number(mode) } : {}),
-          })
-          .models.slice(0, limit ? Number(limit) : results.length);
+        const models = schema.dynamicscans.where({
+          file: req.params.id,
+          ...(mode ? { mode: Number(mode) } : {}),
+        }).models;
 
-        return {
-          count: results.length,
-          next: null,
-          previous: null,
-          results,
-        };
+        const results = limit ? models.slice(0, Number(limit)) : models;
+
+        return { count: results.length, next: null, previous: null, results };
       });
 
-      this.server.create('ds-automated-device-preference', {
-        id: this.profile.id,
+      stubStartDynamicscan(this.server, {
+        onRequest: (body) => {
+          assert.strictEqual(body.mode, ENUMS.DYNAMIC_MODE.AUTOMATED);
+          assert.false(body.enable_api_capture);
+        },
+        createScan: () => {
+          this.dynamicscan = createDynamicscan(this.server, this.file.id, {
+            mode: ENUMS.DYNAMIC_MODE.AUTOMATED,
+            engine: ENUMS.DYNAMIC_SCAN_ENGINE.INTERNAL_MANUAL,
+          });
+
+          return this.dynamicscan;
+        },
       });
 
-      this.server.post('/v2/files/:id/dynamicscans', (schema, req) => {
-        const reqBody = JSON.parse(req.requestBody);
-
-        // assert request body
-        assert.strictEqual(reqBody.mode, ENUMS.DYNAMIC_MODE.AUTOMATED);
-
-        assert.false(reqBody.enable_api_capture);
-
-        // create and set dynamicscan data reference
-        this.dynamicscan = createDynamicscan();
-
-        return this.dynamicscan.toJSON();
+      stubLastScanEndpoints(this.server, {
+        getScan: () => this.dynamicscan,
+        mode: 'automated',
       });
 
-      this.server.get('/v3/files/:id/last_automated_dynamic_scan', (schema) => {
-        return this.dynamicscan?.id
-          ? schema.dynamicscans.find(this.dynamicscan?.id)?.toJSON()
-          : null;
-      });
+      stubDeleteDynamicscan(this.server, () => this.dynamicscan);
+      stubProfileEndpoints(this.server);
 
-      this.server.delete('/v2/dynamicscans/:id', () => {
-        this.dynamicscan.update({
-          status: ENUMS.DYNAMIC_SCAN_STATUS.STOP_SCAN_REQUESTED,
-        });
-
-        return new Response(204);
-      });
-
-      this.server.get(
-        '/v2/profiles/:id/ds_automated_device_preference',
-        (schema, req) => {
-          return schema.dsAutomatedDevicePreferences
-            .find(`${req.params.id}`)
-            ?.toJSON();
-        }
-      );
-
-      this.server.get('/profiles/:id/api_scan_options', () => ({
-        id: '1',
-        ds_api_capture_filters: [],
+      this.server.get('/profiles/:id/unknown_analysis_status', (_, req) => ({
+        id: req.params.id,
+        status: false,
       }));
 
-      this.server.get('/profiles/:id/proxy_settings', () => ({
-        id: '1',
-        host: faker.internet.ip(),
-        port: faker.internet.port(),
-        enabled: false,
-      }));
-
-      this.server.get('/profiles/:id/unknown_analysis_status', (_, req) => {
-        return {
-          id: req.params.id,
-          status: false,
-        };
-      });
-
-      this.server.post('/hudson-api/notify/:id/success', () => {
-        return withError
+      this.server.post('/hudson-api/notify/:id/success', () =>
+        withError
           ? new Response(400, {}, { detail: errorDetail })
-          : new Response(200, {}, {});
-      });
+          : new Response(200, {}, {})
+      );
 
       await visit(`/dashboard/file/${this.file.id}/dynamic-scan/automated`);
 
-      assert
-        .dom('[data-test-fileDetails-dynamicScan-deviceWrapper-headerText]')
-        .hasText(t('realDevice'));
+      assert.dom(SEL.deviceHeaderText).hasText(t('realDevice'));
 
       assert
-        .dom('[data-test-fileDetails-dynamicScanAction="startBtn"]')
+        .dom(SEL.actionBtn('startBtn'))
         .isNotDisabled()
         .hasText(t('dastTabs.automatedDAST'));
 
-      assert.dom('[data-test-NovncRfb-canvasContainer]').doesNotExist();
+      assert.dom(SEL.vnc.canvas).doesNotExist();
+      assert.dom(SEL.tab('scheduled-automated-dast-tab')).doesNotExist();
+
+      // Open drawer
+      await click(SEL.actionBtn('startBtn'));
+
+      assert.dom(SEL.drawer.container).exists();
+      assert.dom(SEL.drawer.title).hasText(t('dastTabs.automatedDAST'));
 
       assert
-        .dom(
-          '[data-test-fileDetails-dynamicScan-header="scheduled-automated-dast-tab"]'
-        )
-        .doesNotExist();
-
-      // Click start button
-      await click('[data-test-fileDetails-dynamicScanAction="startBtn"]');
-
-      assert
-        .dom('[data-test-fileDetails-dynamicScanDrawer-drawerContainer]')
-        .exists();
-
-      assert
-        .dom('[data-test-fileDetails-dynamicScanDrawer-drawerContainer-title]')
-        .hasText(t('dastTabs.automatedDAST'));
-
-      assert
-        .dom('[data-test-fileDetails-dynamicScanDrawer-startBtn]')
+        .dom(SEL.drawer.startBtn)
         .isNotDisabled()
         .hasText(t('scheduleAutomation'));
 
-      // start dynamic scan
-      await click('[data-test-fileDetails-dynamicScanDrawer-startBtn]');
+      // Start scan
+      await click(SEL.drawer.startBtn);
 
-      assert
-        .dom('[data-test-fileDetails-dynamicScanDrawer-drawerContainer]')
-        .doesNotExist();
+      assert.dom(SEL.drawer.container).doesNotExist();
 
-      const assertScanStatus = createDynamicScanStatusHelper(
+      const assertScanStatus = makeScanStatusAsserter(
         this.owner,
         this.dynamicscan
       );
 
-      // Test the scan status flow
       await assertScanStatus(
         assert,
         ENUMS.DYNAMIC_SCAN_STATUS.IN_QUEUE,
@@ -1057,61 +1141,45 @@ module('Acceptance | file-details/dynamic-scan', function (hooks) {
         'cancelBtn'
       );
 
-      assert.dom('[data-test-vncViewer-manualScanNote]').doesNotExist();
-
-      assert.dom('[data-test-vncViewer-scanTriggeredNote]').exists();
+      assert.dom(SEL.vnc.manualScanNote).doesNotExist();
+      assert.dom(SEL.vnc.scanTriggeredNote).exists();
 
       assert
-        .dom('[data-test-vncViewer-automatedNote]')
+        .dom(SEL.vnc.automatedNote)
         .hasText(`${t('note')} - ${t('automatedScanQueuedVncNote')}`);
 
-      // simulate running state
+      // Move to running state
       await assertScanStatus(
         assert,
         ENUMS.DYNAMIC_SCAN_STATUS.DEVICE_ALLOCATED,
-        t('deviceBooting'),
+        t('starting'),
         'cancelBtn'
       );
 
       assert
-        .dom('[data-test-vncViewer-automatedNote]')
+        .dom(SEL.vnc.automatedNote)
         .hasText(`${t('note')} - ${t('automatedScanRunningVncNote')}`);
 
-      // go back and come to simulate refresh
+      // Simulate a refresh via navigation away and back.
       await visit(`/dashboard/file/${this.file.id}`);
       await visit(`/dashboard/file/${this.file.id}/dynamic-scan/automated`);
 
       assert
-        .dom(
-          '[data-test-fileDetails-dynamicScan-header="scheduled-automated-dast-tab"] a'
-        )
+        .dom(SEL.tabLink('scheduled-automated-dast-tab'))
         .hasText(t('dastTabs.scheduledAutomatedDAST'));
 
-      // navigate to scheduled tab
-      await click(
-        '[data-test-fileDetails-dynamicScan-header="scheduled-automated-dast-tab"] a'
-      );
+      // Navigate to scheduled tab
+      await click(SEL.tabLink('scheduled-automated-dast-tab'));
 
       assert.strictEqual(
         currentURL(),
         `/dashboard/file/${this.file.id}/dynamic-scan/scheduled-automated`
       );
 
-      assert
-        .dom('[data-test-fileDetails-dynamicScan-deviceWrapper-headerText]')
-        .hasText(t('realDevice'));
-
-      assert
-        .dom('[data-test-fileDetails-dynamicScanAction="startBtn"]')
-        .doesNotExist();
-
-      assert
-        .dom('[data-test-fileDetails-dynamicScan-statusChip]')
-        .hasText(t('deviceBooting'));
-
-      assert
-        .dom(`[data-test-fileDetails-dynamicScanAction="cancelBtn"]`)
-        .isNotDisabled();
+      assert.dom(SEL.deviceHeaderText).hasText(t('realDevice'));
+      assert.dom(SEL.actionBtn('startBtn')).doesNotExist();
+      assert.dom(SEL.statusChip).hasText(t('starting'));
+      assert.dom(SEL.actionBtn('cancelBtn')).isNotDisabled();
 
       await assertScanStatus(
         assert,
@@ -1120,50 +1188,38 @@ module('Acceptance | file-details/dynamic-scan', function (hooks) {
         'stopBtn'
       );
 
-      // screen canvas
-      assert.dom('[data-test-NovncRfb-canvasContainer]').exists();
+      assert.dom(SEL.vnc.canvas).exists();
 
       // Stop scan
-      await click('[data-test-fileDetails-dynamicScanAction="stopBtn"]');
+      await click(SEL.actionBtn('stopBtn'));
 
-      // Stop confirmation assertions
+      // Stop confirmation
       assert
-        .dom('[data-test-confirmbox-description]')
+        .dom(SEL.confirm.description)
         .containsText(t('modalCard.scheduledAutomatedStopConfirm.headerTitle'));
 
-      assert.dom('[data-test-confirmbox-confirmBtn]').containsText(t('yes'));
-      assert.dom('[data-test-confirmbox-cancelBtn]').containsText(t('no'));
+      assert.dom(SEL.confirm.confirmBtn).containsText(t('yes'));
+      assert.dom(SEL.confirm.cancelBtn).containsText(t('no'));
 
-      await click('[data-test-confirmbox-confirmBtn]');
+      await click(SEL.confirm.confirmBtn);
 
-      // Notify User Assertions
-      const notifyUserModalHeader =
-        '[data-test-fileDetailsDynamicScan-scheduledAutomated-notifyUserModalHeader]';
-
-      const notifyConfirmBtn =
-        '[data-test-fileDetailsDynamicScan-scheduledAutomated-notifyUserModal-confirmBtn]';
-
-      const notifyCancelBtn =
-        '[data-test-fileDetailsDynamicScan-scheduledAutomated-notifyUserModal-cancelBtn]';
-
+      // Notify user modal
       assert
-        .dom(notifyUserModalHeader)
+        .dom(SEL.notifyUser.header)
         .containsText(t('modalCard.scheduledAutomatedNotifyUser.headerTitle'));
 
-      assert.dom(notifyConfirmBtn).containsText(t('yes'));
-      assert.dom(notifyCancelBtn).containsText(t('no'));
+      assert.dom(SEL.notifyUser.confirmBtn).containsText(t('yes'));
+      assert.dom(SEL.notifyUser.cancelBtn).containsText(t('no'));
 
       if (notifyUser) {
-        // Set scan status to completed
         await assertScanStatus(
           assert,
           ENUMS.DYNAMIC_SCAN_STATUS.ANALYSIS_COMPLETED,
           t('deviceCompleted')
         );
 
-        await click(notifyConfirmBtn);
+        await click(SEL.notifyUser.confirmBtn);
 
-        // assert notification after confirmation
         const notify = this.owner.lookup('service:notifications');
 
         const notifServiceMessage = withError
@@ -1176,39 +1232,35 @@ module('Acceptance | file-details/dynamic-scan', function (hooks) {
 
         assert.strictEqual(notifServiceMessage, expectedNotifMessage);
 
-        // If with error, confirmation modal should still be displayed
+        // On error the modal stays open so the user can retry or dismiss.
         if (withError) {
           assert
-            .dom(notifyUserModalHeader)
+            .dom(SEL.notifyUser.header)
             .containsText(
               t('modalCard.scheduledAutomatedNotifyUser.headerTitle')
             );
 
-          assert.dom(notifyConfirmBtn).containsText(t('yes'));
-          assert.dom(notifyCancelBtn).containsText(t('no'));
+          assert.dom(SEL.notifyUser.confirmBtn).containsText(t('yes'));
+          assert.dom(SEL.notifyUser.cancelBtn).containsText(t('no'));
 
-          // Closing modal when errored out should continue redirect flow to the Automated DAST page
-          await click(notifyCancelBtn);
+          // Cancelling still redirects back to the automated tab.
+          await click(SEL.notifyUser.cancelBtn);
         }
       } else {
-        await click(notifyCancelBtn);
+        await click(SEL.notifyUser.cancelBtn);
 
-        assert.dom(notifyUserModalHeader).doesNotExist();
-        assert.dom(notifyConfirmBtn).doesNotExist();
-        assert.dom(notifyCancelBtn).doesNotExist();
+        assert.dom(SEL.notifyUser.header).doesNotExist();
+        assert.dom(SEL.notifyUser.confirmBtn).doesNotExist();
+        assert.dom(SEL.notifyUser.cancelBtn).doesNotExist();
       }
 
-      // stops and redirects to automated tab
+      // Redirect back to the automated tab
       assert.strictEqual(
         currentURL(),
         `/dashboard/file/${this.file.id}/dynamic-scan/automated`
       );
 
-      assert
-        .dom(
-          '[data-test-fileDetails-dynamicScan-header="scheduled-automated-dast-tab"]'
-        )
-        .doesNotExist();
+      assert.dom(SEL.tab('scheduled-automated-dast-tab')).doesNotExist();
 
       await assertScanStatus(
         assert,
@@ -1216,25 +1268,355 @@ module('Acceptance | file-details/dynamic-scan', function (hooks) {
         t('deviceShuttingDown')
       );
 
-      assert.dom('[data-test-fileDetails-dynamicScanAction]').doesNotExist();
+      assert.dom(SEL.action).doesNotExist();
     }
   );
+
+  // ─── Multi-scan user role scenarios ──────────────────────────────────────────
+
+  test.each(
+    'cumulative status chip and action button (presence + text) reflect the highest-priority role across multiple user-role scans',
+    [
+      // ── Two roles ──────────────────────────────────
+      // RUNNING beats everything; treatAsAutopiloted=true → stopBtn shown
+      {
+        statuses: [
+          ENUMS.DYNAMIC_SCAN_STATUS.AUTOPILOT_RUNNING,
+          ENUMS.DYNAMIC_SCAN_STATUS.IN_QUEUE,
+        ],
+        expectedChipText: () => t('running'),
+        expectedActionBtn: { selectorID: 'stopBtn', text: () => t('stop') },
+      },
+      // STOPPING beats STARTING / IN_QUEUE / COMPLETED; isStopping=true → button hidden
+      {
+        statuses: [
+          ENUMS.DYNAMIC_SCAN_STATUS.SHUTTING_DOWN,
+          ENUMS.DYNAMIC_SCAN_STATUS.IN_QUEUE,
+        ],
+        expectedChipText: () => t('stopping'),
+        expectedActionBtn: { selectorID: null },
+      },
+      // STARTING beats IN_QUEUE / COMPLETED; treatAsAutopiloted=true → cancelBtn shown
+      {
+        statuses: [
+          ENUMS.DYNAMIC_SCAN_STATUS.INSTALLING,
+          ENUMS.DYNAMIC_SCAN_STATUS.ANALYSIS_COMPLETED,
+        ],
+        expectedChipText: () => t('starting'),
+        expectedActionBtn: {
+          selectorID: 'cancelBtn',
+          text: () => t('cancelScan'),
+        },
+      },
+      // IN_QUEUE beats COMPLETED; treatAsAutopiloted=true → cancelBtn shown
+      {
+        statuses: [
+          ENUMS.DYNAMIC_SCAN_STATUS.IN_QUEUE,
+          ENUMS.DYNAMIC_SCAN_STATUS.ANALYSIS_COMPLETED,
+        ],
+        expectedChipText: () => t('inQueue'),
+        expectedActionBtn: {
+          selectorID: 'cancelBtn',
+          text: () => t('cancelScan'),
+        },
+      },
+      // All COMPLETED → COMPLETED; no incomplete scans → treatAsAutopiloted=true → restartBtn shown
+      {
+        statuses: [
+          ENUMS.DYNAMIC_SCAN_STATUS.ANALYSIS_COMPLETED,
+          ENUMS.DYNAMIC_SCAN_STATUS.ANALYSIS_COMPLETED,
+        ],
+        expectedChipText: () => t('completed'),
+        expectedActionBtn: {
+          selectorID: 'restartBtn',
+          text: () => t('dastTabs.automatedDAST'),
+        },
+      },
+      // ERRORED beats COMPLETED; treatAsAutopiloted=true → restartBtn shown
+      {
+        statuses: [
+          ENUMS.DYNAMIC_SCAN_STATUS.ANALYSIS_COMPLETED,
+          ENUMS.DYNAMIC_SCAN_STATUS.ERROR,
+        ],
+        expectedChipText: () => t('errored'),
+        expectedActionBtn: {
+          selectorID: 'restartBtn',
+          text: () => t('dastTabs.automatedDAST'),
+        },
+      },
+      // ── Three roles ───────────────────────────────
+      // RUNNING beats STARTING and IN_QUEUE; treatAsAutopiloted=true → stopBtn shown
+      {
+        statuses: [
+          ENUMS.DYNAMIC_SCAN_STATUS.AUTOPILOT_RUNNING,
+          ENUMS.DYNAMIC_SCAN_STATUS.INSTALLING,
+          ENUMS.DYNAMIC_SCAN_STATUS.IN_QUEUE,
+        ],
+        expectedChipText: () => t('running'),
+        expectedActionBtn: { selectorID: 'stopBtn', text: () => t('stop') },
+      },
+      // All STARTING → STARTING; treatAsAutopiloted=true → cancelBtn shown
+      {
+        statuses: [
+          ENUMS.DYNAMIC_SCAN_STATUS.DEVICE_ALLOCATED,
+          ENUMS.DYNAMIC_SCAN_STATUS.PREPARING_DEVICE,
+          ENUMS.DYNAMIC_SCAN_STATUS.CONFIGURING_AUTOPILOT,
+        ],
+        expectedChipText: () => t('starting'),
+        expectedActionBtn: {
+          selectorID: 'cancelBtn',
+          text: () => t('cancelScan'),
+        },
+      },
+    ],
+    async function (assert, { statuses, expectedChipText, expectedActionBtn }) {
+      const { selectorID } = expectedActionBtn;
+      const btnTestCountFactor = selectorID ? 2 : 1;
+
+      assert.expect(2 + btnTestCountFactor);
+
+      this.server.create('ds-automated-device-preference', {
+        id: this.profile.id,
+      });
+
+      const roles = this.server.createList(
+        'scenario-user-role',
+        statuses.length
+      );
+
+      const scans = statuses.map((status, i) =>
+        createDynamicscan(this.server, this.file.id, {
+          mode: ENUMS.DYNAMIC_MODE.AUTOMATED,
+          engine: ENUMS.DYNAMIC_SCAN_ENGINE.AUTOPILOT,
+          status,
+          scenarioUserRole: roles[i],
+        })
+      );
+
+      stubLastAutomatedScansMulti(this.server, () => scans);
+      stubProfileEndpoints(this.server);
+
+      await visit(`/dashboard/file/${this.file.id}/dynamic-scan/automated`);
+
+      assert.dom(SEL.userRoles.root).exists();
+      assert.dom(SEL.statusChip).hasText(expectedChipText());
+
+      if (selectorID) {
+        assert.dom(SEL.actionBtn(selectorID)).exists();
+        assert.dom(SEL.actionBtn(selectorID)).hasText(expectedActionBtn.text());
+      } else {
+        assert.dom(SEL.action).doesNotExist();
+      }
+    }
+  );
+
+  test('cancelling automated scans only cancels starting or running scans', async function (assert) {
+    assert.expect(3);
+
+    this.server.create('ds-automated-device-preference', {
+      id: this.profile.id,
+    });
+
+    const roles = this.server.createList('scenario-user-role', 2);
+
+    const scanProps = [
+      [roles[0], ENUMS.DYNAMIC_SCAN_STATUS.LAUNCHING],
+      [roles[1], ENUMS.DYNAMIC_SCAN_STATUS.ANALYSIS_COMPLETED],
+    ];
+
+    const [scanA, scanB] = scanProps.map(([role, status]) =>
+      createDynamicscan(this.server, this.file.id, {
+        mode: ENUMS.DYNAMIC_MODE.AUTOMATED,
+        engine: ENUMS.DYNAMIC_SCAN_ENGINE.AUTOPILOT,
+        status,
+        scenarioUserRole: role,
+      })
+    );
+
+    const deletedIds = [];
+
+    this.server.delete('/v2/dynamicscans/:id', (schema, req) => {
+      deletedIds.push(req.params.id);
+
+      schema.dynamicscans
+        .find(req.params.id)
+        ?.update({ status: ENUMS.DYNAMIC_SCAN_STATUS.STOP_SCAN_REQUESTED });
+
+      return new Response(204);
+    });
+
+    stubLastAutomatedScansMulti(this.server, () => [scanA, scanB]);
+    stubProfileEndpoints(this.server);
+
+    await visit(`/dashboard/file/${this.file.id}/dynamic-scan/automated`);
+
+    // Cumulative: STARTING(LAUNCHING) + COMPLETED(ANALYSIS_COMPLETED) → STARTING wins
+    assert.dom(SEL.statusChip).hasText(t('starting'));
+    assert.dom(SEL.actionBtn('cancelBtn')).isNotDisabled();
+
+    await click(SEL.actionBtn('cancelBtn'));
+
+    // Advance scanA to a terminal state so pollDynamicScanStatusForSuperUser stops
+    const scanARecord = this.server.schema.dynamicscans.find(String(scanA.id));
+    scanARecord.update({ status: ENUMS.DYNAMIC_SCAN_STATUS.CANCELLED });
+
+    const websocket = this.owner.lookup('service:websocket');
+
+    websocket.onConnect();
+
+    websocket.onModelNotification({
+      model_name: 'dynamicscan',
+      data: scanARecord.toJSON(),
+    });
+
+    await settled();
+
+    // Only scanA (isStarting) was deleted; scanB (isCompleted) was skipped
+    assert.deepEqual(deletedIds, [String(scanA.id)]);
+  });
+
+  test('stopping automated scans only stops running or starting scans', async function (assert) {
+    assert.expect(3);
+
+    // Statuses
+    const { AUTOPILOT_RUNNING, ANALYSIS_COMPLETED, STOP_SCAN_REQUESTED } =
+      ENUMS.DYNAMIC_SCAN_STATUS;
+
+    this.server.create('ds-automated-device-preference', {
+      id: this.profile.id,
+    });
+
+    const [roleA, roleB] = this.server.createList('scenario-user-role', 2);
+
+    const scanProps = [
+      [roleA, AUTOPILOT_RUNNING],
+      [roleB, ANALYSIS_COMPLETED],
+    ];
+
+    const [scanA, scanB] = scanProps.map(([role, status]) =>
+      createDynamicscan(this.server, this.file.id, {
+        mode: ENUMS.DYNAMIC_MODE.AUTOMATED,
+        engine: ENUMS.DYNAMIC_SCAN_ENGINE.AUTOPILOT,
+        status,
+        scenarioUserRole: role,
+      })
+    );
+
+    const deletedIds = [];
+
+    this.server.delete('/v2/dynamicscans/:id', (schema, req) => {
+      deletedIds.push(req.params.id);
+
+      schema.dynamicscans
+        .find(req.params.id)
+        ?.update({ status: STOP_SCAN_REQUESTED });
+
+      return new Response(204);
+    });
+
+    stubLastAutomatedScansMulti(this.server, () => [scanA, scanB]);
+    stubProfileEndpoints(this.server);
+
+    await visit(`/dashboard/file/${this.file.id}/dynamic-scan/automated`);
+
+    // Cumulative: RUNNING(AUTOPILOT_RUNNING) + COMPLETED → RUNNING wins.
+    // treatAsAutopiloted=true (all non-completed scans are AUTOPILOT) → stopBtn shown.
+    assert.dom(SEL.statusChip).hasText(t('running'));
+    assert.dom(SEL.actionBtn('stopBtn')).isNotDisabled();
+
+    await click(SEL.actionBtn('stopBtn'));
+
+    // Update scan record to a completed state
+    const scanARecord = this.server.schema.dynamicscans.find(String(scanA.id));
+    const websocket = this.owner.lookup('service:websocket');
+
+    scanARecord.update({ status: ANALYSIS_COMPLETED });
+    websocket.onConnect();
+
+    websocket.onModelNotification({
+      model_name: 'dynamicscan',
+      data: scanARecord.toJSON(),
+    });
+
+    await settled();
+
+    // Only scanA (isReadyOrRunning) was deleted; scanB (isCompleted) was skipped
+    assert.deepEqual(deletedIds, [String(scanA.id)]);
+  });
+
+  test('switching between active user roles creates a new VNC connection', async function (assert) {
+    assert.expect(6);
+
+    this.server.create('ds-automated-device-preference', {
+      id: this.profile.id,
+    });
+
+    const roles = this.server.createList('scenario-user-role', 2);
+
+    // Both scans are AUTOPILOT_RUNNING so isReadyOrRunning is true for each.
+    const scans = roles.map((role) =>
+      createDynamicscan(this.server, this.file.id, {
+        mode: ENUMS.DYNAMIC_MODE.AUTOMATED,
+        engine: ENUMS.DYNAMIC_SCAN_ENGINE.AUTOPILOT,
+        status: ENUMS.DYNAMIC_SCAN_STATUS.AUTOPILOT_RUNNING,
+        scenarioUserRole: role,
+        moriarty_dynamicscan_token: faker.string.uuid(),
+      })
+    );
+
+    const [tokenA, tokenB] = scans.map((s) => s.moriarty_dynamicscan_token);
+
+    stubLastAutomatedScansMulti(this.server, () => scans);
+    stubProfileEndpoints(this.server);
+
+    // Stubbed RFB stubs WebSocket and ResizeObserver for the duration of the test.
+    // Important to check if a new connection is opened when the role is switched.
+    await withStubbedRfb(async (sockets) => {
+      await visit(`/dashboard/file/${this.file.id}/dynamic-scan/automated`);
+
+      assert.dom(SEL.userRoles.root).exists();
+      assert.dom(SEL.vnc.canvas).exists();
+
+      assert.strictEqual(
+        sockets.length,
+        1,
+        'RFB opens a connection for the initially selected scan'
+      );
+
+      assert.true(
+        sockets[0].url.includes(tokenA),
+        'initial connection targets the first scan token'
+      );
+
+      await click(SEL.userRoles.pill(roles[1].name));
+
+      assert.strictEqual(
+        sockets.length,
+        2,
+        'RFB opens a new connection after switching roles'
+      );
+
+      assert.true(
+        sockets[1].url.includes(tokenB),
+        'new connection targets the switched scan token'
+      );
+    });
+  });
+
+  // ─── Tab navigation ────────────────────────────────────────────────────────
 
   test('it should navigate properly on tab click', async function (assert) {
     await visit(`/dashboard/file/${this.file.id}/dynamic-scan/manual`);
 
-    const tabLink = (id) =>
-      `[data-test-fileDetails-dynamicScan-header="${id}"] a`;
-
     assert
-      .dom(tabLink('manual-dast-tab'))
+      .dom(SEL.tabLink('manual-dast-tab'))
       .hasText(t('dastTabs.manualDAST'))
       .hasClass(/active-shadow/);
 
-    await click(tabLink('automated-dast-tab'));
+    await click(SEL.tabLink('automated-dast-tab'));
 
     assert
-      .dom(tabLink('automated-dast-tab'))
+      .dom(SEL.tabLink('automated-dast-tab'))
       .hasText(t('dastTabs.automatedDAST'))
       .hasClass(/active-shadow/);
 
@@ -1243,10 +1625,10 @@ module('Acceptance | file-details/dynamic-scan', function (hooks) {
       `/dashboard/file/${this.file.id}/dynamic-scan/automated`
     );
 
-    await click(tabLink('dast-results-tab'));
+    await click(SEL.tabLink('dast-results-tab'));
 
     assert
-      .dom(tabLink('dast-results-tab'))
+      .dom(SEL.tabLink('dast-results-tab'))
       .containsText(t('dastTabs.dastResults'))
       .hasClass(/active-shadow/);
 
@@ -1256,69 +1638,56 @@ module('Acceptance | file-details/dynamic-scan', function (hooks) {
     );
   });
 
+  // ─── Results view ──────────────────────────────────────────────────────────
+
   test('it renders dynamic scan results', async function (assert) {
     await visit(`/dashboard/file/${this.file.id}/dynamic-scan/results`);
 
-    assert
-      .dom('[data-test-fileDetails-dynamicScan-header-breadcrumbContainer]')
-      .exists();
-
-    assert.dom('[data-test-fileDetailsSummary-root]').exists();
+    assert.dom(SEL.breadcrumbContainer).exists();
+    assert.dom(SEL.fileSummary).exists();
 
     if (this.file.dynamicVulnerabilityCount) {
       assert
-        .dom('[data-test-fileDetails-dynamicScan-header-badge-count]')
+        .dom(SEL.results.badge)
         .exists()
         .containsText(this.file.dynamicVulnerabilityCount);
     }
 
     assert
-      .dom(
-        "[data-test-fileDetails-dynamicScan-results-tabs='vulnerability-details-tab'] a"
-      )
+      .dom(SEL.results.tab('vulnerability-details-tab'))
       .hasText(t('vulnerabilityDetails'))
       .hasClass(/active-line/);
 
-    assert
-      .dom('[data-test-fileDetails-dynamicScan-info]')
-      .exists()
-      .containsText(t('dastResultsInfo'));
+    assert.dom(SEL.results.info).exists().containsText(t('dastResultsInfo'));
 
-    // assert vulnerability table
-    const headerCells = findAll('[data-test-vulnerability-analysis-thead] th');
+    const headerCells = findAll(SEL.results.tableHead);
 
     assert.strictEqual(headerCells.length, 2);
-
     assert.dom(headerCells[0]).hasText(t('impact'));
     assert.dom(headerCells[1]).hasText(t('title'));
 
-    const rows = findAll('[data-test-vulnerability-analysis-row]');
-
+    const rows = findAll(SEL.results.tableRow);
     const dynamicAnalyses = this.analyses.filter((a) =>
       a.hasType(ENUMS.VULNERABILITY_TYPE.DYNAMIC)
     );
 
     assert.strictEqual(rows.length, dynamicAnalyses.length);
 
-    // assert first row
-    const firstRowCells = rows[0].querySelectorAll(
-      '[data-test-vulnerability-analysis-cell]'
-    );
-
-    const analyses = dynamicAnalyses
+    const firstRowCells = rows[0].querySelectorAll(SEL.results.tableCell);
+    const sortedAnalyses = dynamicAnalyses
       .slice()
-      .sort((a, b) => b.computedRisk - a.computedRisk); // sort by computedRisk:desc
+      .sort((a, b) => b.computedRisk - a.computedRisk);
 
     const { label } = analysisRiskStatus([
-      String(analyses[0].computedRisk),
-      String(analyses[0].status),
-      analyses[0].isOverriddenRisk,
+      String(sortedAnalyses[0].computedRisk),
+      String(sortedAnalyses[0].status),
+      sortedAnalyses[0].isOverriddenRisk,
     ]);
 
-    assert
-      .dom('[data-test-analysisRiskTag-label]', firstRowCells[0])
-      .hasText(label);
+    assert.dom(SEL.results.riskTag, firstRowCells[0]).hasText(label);
 
-    assert.dom(firstRowCells[1]).hasText(analyses[0].vulnerability.get('name'));
+    assert
+      .dom(firstRowCells[1])
+      .hasText(sortedAnalyses[0].vulnerability.get('name'));
   });
 });

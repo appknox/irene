@@ -1,4 +1,6 @@
 import CommonDRFAdapter from './commondrf';
+
+import ENUMS from 'irene/enums';
 import type DynamicscanModel from 'irene/models/dynamicscan';
 import type FileModel from 'irene/models/file';
 import type SbomFileModel from 'irene/models/sbom-file';
@@ -8,6 +10,8 @@ import type FileExploitabilityModel from 'irene/models/file-exploitability';
 import FileCapiReportModel, {
   type FileCapiReportScanType,
 } from 'irene/models/file-capi-report';
+
+// ─── Types ────────────────────────────────────────────────────────────────────
 
 export interface FileCapiReportsResponse {
   message: string;
@@ -19,38 +23,110 @@ interface ProjectFilesQuery {
   projectId: string;
 }
 
-export default class FileAdapter extends CommonDRFAdapter {
-  _buildURL(_: string | number, id: string | number) {
-    if (id) {
-      const baseurl = `${this.namespace_v3}/files`;
+interface PaginatedResponse<T> {
+  results: T[];
+}
 
-      return this.buildURLFromBase(`${baseurl}/${encodeURIComponent(id)}`);
-    }
+export interface CanGenerateReportResponse {
+  can_generate_report: boolean;
+}
+
+type AdapterPayload = Record<string, unknown> | null | undefined;
+
+/** Predicate used to decide whether a response payload should be pushed. */
+type PresenceCheck = (payload: Record<string, unknown>) => boolean;
+
+const hasId: PresenceCheck = (p) => Boolean(p['id']);
+const hasFile: PresenceCheck = (p) => Boolean(p['file']);
+
+// ─── Adapter ──────────────────────────────────────────────────────────────────
+
+export default class FileAdapter extends CommonDRFAdapter {
+  // ─── URL building ──────────────────────────────────────────────────────────
+
+  _buildURL(_: string | number, id: string | number): string {
+    const baseurl = `${this.namespace_v3}/files`;
+
+    return this.buildURLFromBase(`${baseurl}/${encodeURIComponent(id)}`);
   }
 
-  _buildNestedURL(modelName: string | number, projectId: string) {
+  _buildNestedURL(projectId: string): string {
     const filesURL = `${this.namespace_v3}/projects/${projectId}/files`;
 
     return this.buildURLFromBase(filesURL);
   }
 
-  _pushDirectlyToStore<T>(
-    res: { [key: string]: string },
-    modelName: string
-  ): T | null {
-    const modelId = res?.['id'];
-
-    if (modelId) {
-      const normalized = this.store.normalize(modelName, res);
-
-      return this.store.push(normalized) as T;
-    }
-
-    return null;
+  urlForQuery(query: ProjectFilesQuery): string {
+    return this._buildNestedURL(query.projectId);
   }
 
-  urlForQuery(query: ProjectFilesQuery, modelName: string | number) {
-    return this._buildNestedURL(modelName, query.projectId);
+  /**
+   * Builds `/files/<id>/<path>` URLs for the custom endpoints below. Pass
+   * `useV2: true` for endpoints that haven't been migrated to v3 yet — this
+   * replaces the scattered inline `url.replace(namespace_v3, namespace_v2)`
+   * calls.
+   */
+  private _buildFileURL(
+    fileId: string,
+    path?: string,
+    opts: { useV2?: boolean } = {}
+  ): string {
+    const base = this._buildURL('file', fileId);
+    const fullURL = path ? `${base}/${path}` : base;
+
+    return opts.useV2
+      ? fullURL.replace(this.namespace_v3, this.namespace_v2)
+      : fullURL;
+  }
+
+  // ─── Store helpers ─────────────────────────────────────────────────────────
+
+  private _pushNormalized<T>(
+    modelName: string,
+    payload: AdapterPayload,
+    isPresent: PresenceCheck = hasId
+  ): T | null {
+    if (!payload || !isPresent(payload)) {
+      return null;
+    }
+
+    const normalized = this.store.normalize(modelName, payload);
+
+    return this.store.push(normalized) as T;
+  }
+
+  private _pushDynamicScanArray(res: unknown): DynamicscanModel[] {
+    const dynamicscans: DynamicscanModel[] = [];
+
+    // If the response is not an array and not an object, return an empty array
+    if (!Array.isArray(res) && typeof res !== 'object') {
+      return [];
+    }
+
+    const resArray = Array.isArray(res) ? res : [res];
+
+    for (const item of resArray) {
+      if (item && item.id !== null) {
+        const dynamicscan = this._pushNormalized('dynamicscan', item);
+
+        if (dynamicscan) {
+          dynamicscans.push(dynamicscan as DynamicscanModel);
+        }
+      }
+    }
+
+    return dynamicscans;
+  }
+
+  // ─── Dynamic scans ─────────────────────────────────────────────────────────
+  private async _getFileDynamicScans(
+    fileId: string,
+    endpoint: 'last_manual_dynamic_scan' | 'last_automated_dynamic_scan'
+  ): Promise<DynamicscanModel[]> {
+    const url = this._buildFileURL(fileId, endpoint);
+    const res = await this.ajax(url, 'GET');
+
+    return this._pushDynamicScanArray(res);
   }
 
   async getLastDynamicScan(
@@ -58,36 +134,49 @@ export default class FileAdapter extends CommonDRFAdapter {
     mode: number,
     isScheduledScan: boolean
   ): Promise<DynamicscanModel | null> {
-    let url = `${this._buildURL('file', fileId)}/dynamicscans?limit=1&mode=${mode}`;
+    const params = new URLSearchParams({ limit: '1', mode: String(mode) });
 
-    // TODO: update to use the namespace_v3 when the API has support for it
-    url = url.replace(this.namespace_v3, this.namespace_v2);
-
-    // Add scheduled scan filters
     if (isScheduledScan) {
-      url = url.concat('&engine=1&engine=2&group_status=running');
+      const engine = ENUMS.DYNAMIC_SCAN_ENGINE.INTERNAL_MANUAL;
+
+      params.append('engine', String(engine));
+      params.set('group_status', 'running');
     }
 
-    const res = await this.ajax(url, 'GET');
+    // TODO: update to use namespace_v3 once the API supports it.
+    const baseURL = this._buildFileURL(fileId, 'dynamicscans', { useV2: true });
+    const url = `${baseURL}?${params.toString()}`;
 
-    if (res.results[0]) {
-      const normailized = this.store.normalize('dynamicscan', res.results[0]);
+    const res = (await this.ajax(url, 'GET')) as PaginatedResponse<
+      Record<string, unknown>
+    >;
 
-      return this.store.push(normailized) as DynamicscanModel;
-    }
-
-    return null;
+    return this._pushNormalized<DynamicscanModel>(
+      'dynamicscan',
+      res.results[0]
+    );
   }
+
+  async getFileLastManualDynamicScan(
+    fileId: string
+  ): Promise<DynamicscanModel[]> {
+    return this._getFileDynamicScans(fileId, 'last_manual_dynamic_scan');
+  }
+
+  async getFileLastAutomatedDynamicScan(
+    fileId: string
+  ): Promise<DynamicscanModel[]> {
+    return this._getFileDynamicScans(fileId, 'last_automated_dynamic_scan');
+  }
+
+  // ─── Reports ───────────────────────────────────────────────────────────────
 
   async generateCapiReports(
     fileId: string,
     fileTypes: FileCapiReportScanType[]
-  ) {
-    const baseURL = this._buildURL('file', fileId);
-    let url = `${baseURL}/capi_reports`;
-
-    // TODO: update to use the namespace_v3 when the API has support for it
-    url = url.replace(this.namespace_v3, this.namespace_v2);
+  ): Promise<FileCapiReportsResponse> {
+    // TODO: update to use namespace_v3 once the API supports it.
+    const url = this._buildFileURL(fileId, 'capi_reports', { useV2: true });
 
     return this.ajax(url, 'POST', {
       data: { formats: fileTypes },
@@ -95,64 +184,47 @@ export default class FileAdapter extends CommonDRFAdapter {
     }) as Promise<FileCapiReportsResponse>;
   }
 
-  async getGenerateReportStatus(fileId: string) {
-    const url = `${this._buildURL('file', fileId)}/can_generate_report`;
-    const res = await this.ajax(url, 'GET');
+  async getGenerateReportStatus(
+    fileId: string
+  ): Promise<CanGenerateReportResponse> {
+    const url = this._buildFileURL(fileId, 'can_generate_report');
 
-    return res as { can_generate_report: boolean };
+    return (await this.ajax(url, 'GET')) as CanGenerateReportResponse;
   }
 
-  async getFileLastManualDynamicScan(fileId: string) {
-    const url = `${this._buildURL('file', fileId)}/last_manual_dynamic_scan`;
+  // ─── File-scoped resources ─────────────────────────────────────────────────
+
+  async fetchPreviousFile(fileId: string): Promise<FileModel | null> {
+    const url = this._buildFileURL(fileId, 'previous_file');
     const res = await this.ajax(url, 'GET');
 
-    return this._pushDirectlyToStore<DynamicscanModel>(res, 'dynamicscan');
+    return this._pushNormalized<FileModel>('file', res);
   }
 
-  async getFileLastAutomatedDynamicScan(fileId: string) {
-    const url = `${this._buildURL('file', fileId)}/last_automated_dynamic_scan`;
+  async getSbomFile(fileId: string): Promise<SbomFileModel | null> {
+    // TODO: update to use namespace_v3 once the API supports it.
+    const url = this._buildFileURL(fileId, 'sb_file', { useV2: true });
     const res = await this.ajax(url, 'GET');
 
-    return this._pushDirectlyToStore<DynamicscanModel>(res, 'dynamicscan');
+    return this._pushNormalized<SbomFileModel>('sbom-file', res);
   }
 
-  async fetchPreviousFile(fileId: string) {
-    const url = `${this._buildURL('file', fileId)}/previous_file`;
+  async fetchFileRisk(fileId: string): Promise<FileRiskModel | null> {
+    const url = this._buildFileURL(fileId, 'risk');
     const res = await this.ajax(url, 'GET');
 
-    return this._pushDirectlyToStore<FileModel>(res, 'file');
+    return this._pushNormalized<FileRiskModel>('file-risk', res, hasFile);
   }
 
-  async getSbomFile(fileId: string) {
-    let url = `${this._buildURL('file', fileId)}/sb_file`;
-    // TODO: update to use the namespace_v3 when the API has support for it
-    url = url.replace(this.namespace_v3, this.namespace_v2);
-
+  async fetchFileExploitability(
+    fileId: string
+  ): Promise<FileExploitabilityModel | null> {
+    const url = this._buildFileURL(fileId, 'exploitability');
     const res = await this.ajax(url, 'GET');
 
-    return this._pushDirectlyToStore<SbomFileModel>(res, 'sbom-file');
-  }
-
-  async fetchFileRisk(fileId: string) {
-    const url = `${this._buildURL('file', fileId)}/risk`;
-    const res = await this.ajax(url, 'GET');
-
-    if (res?.file) {
-      const normalized = this.store.normalize('file-risk', res);
-
-      return this.store.push(normalized) as FileRiskModel;
-    }
-
-    return null;
-  }
-
-  async fetchFileExploitability(fileId: string) {
-    const url = `${this._buildURL('file', fileId)}/exploitability`;
-    const res = await this.ajax(url, 'GET');
-
-    return this._pushDirectlyToStore<FileExploitabilityModel>(
-      res,
-      'file-exploitability'
+    return this._pushNormalized<FileExploitabilityModel>(
+      'file-exploitability',
+      res
     );
   }
 }

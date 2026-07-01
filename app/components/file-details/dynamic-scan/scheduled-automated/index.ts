@@ -8,6 +8,11 @@ import { addObserver, removeObserver } from '@ember/object/observers';
 import type RouterService from '@ember/routing/router-service';
 import type IntlService from 'ember-intl/services/intl';
 
+import {
+  DS_STATUS_GROUP_LABEL,
+  getDsStatusGroupForScan,
+} from 'irene/utils/ds-status-group';
+
 import parseError from 'irene/utils/parse-error';
 import type DynamicScanService from 'irene/services/dynamic-scan';
 import type FileModel from 'irene/models/file';
@@ -52,6 +57,11 @@ export default class FileDetailsDynamicScanScheduledAutomatedComponent extends C
     return this.dsService.scheduledScan;
   }
 
+  // Action button takes an array; scheduled scans are always a single scan.
+  get dynamicScans() {
+    return this.dynamicScan ? [this.dynamicScan] : [];
+  }
+
   get isFetchingDynamicScan() {
     return this.dsService.fetchLatestScheduledScan.isRunning;
   }
@@ -74,6 +84,14 @@ export default class FileDetailsDynamicScanScheduledAutomatedComponent extends C
 
   get disableNotifUserModalActions() {
     return this.doNotifyUserOfStatus.isRunning || this.isPerformingNotifyAction;
+  }
+
+  get cumulativeScanStatus() {
+    return getDsStatusGroupForScan(this.dynamicScan?.status ?? 0);
+  }
+
+  get cumulativeScanStatusText() {
+    return this.intl.t(DS_STATUS_GROUP_LABEL[this.cumulativeScanStatus]);
   }
 
   // cannot start from here in scheduled automated

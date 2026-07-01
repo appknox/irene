@@ -31,12 +31,16 @@
       {{else}}
         <FileDetails::DynamicScan::StatusChip
           @status={{this.status}}
+          @statusText={{this.statusLabel}}
+          @runningAsWarn={{true}}
           data-test-fileDetailScanActions-dynamicScanStatus
         />
       {{/if}}
     {{else}}
       <FileDetails::DynamicScan::StatusChip
         @status={{this.status}}
+        @statusText={{this.statusLabel}}
+        @runningAsWarn={{true}}
         data-test-fileDetailScanActions-dynamicScanStatus
       />
     {{/if}}

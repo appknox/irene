@@ -75,6 +75,12 @@ const ENUMS = {
     AUTOMATED: 1,
   },
 
+  DYNAMIC_SCAN_ENGINE: {
+    USER_MANUAL: 0,
+    AUTOPILOT: 1,
+    INTERNAL_MANUAL: 2,
+  },
+
   MANUAL: {
     NONE: 0,
     REQUESTED: 1,

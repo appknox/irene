@@ -1,0 +1,54 @@
+.navigation-skeleton-loader-root {
+  position: relative;
+  overflow: hidden;
+  background-size: 24px 24px;
+  background-color: var(
+    --file-details-dynamic-scan-navigation-graph-background-main
+  );
+  background-image: radial-gradient(
+    circle,
+    var(--file-details-dynamic-scan-navigation-graph-dot-color) 1px,
+    transparent 1.5px
+  );
+}
+
+.breadcrumbs-skeleton {
+  width: fit-content;
+  padding: 0.71429em;
+  background: var(--file-details-dynamic-scan-navigation-graph-background-main);
+  margin-bottom: 2.857em;
+
+  border-radius: var(
+    --file-details-dynamic-scan-navigation-graph-breadcrumbs-border-radius
+  );
+
+  border: 1px solid
+    var(--file-details-dynamic-scan-navigation-graph-breadcrumbs-border-color);
+
+  box-shadow: var(
+    --file-details-dynamic-scan-navigation-graph-breadcrumbs-box-shadow
+  );
+}
+
+.graph-canvas-skeleton {
+  height: calc(100vh - 320px);
+}
+
+.floating-toolbar-skeleton {
+  position: absolute;
+  z-index: 50;
+  left: 50%;
+  bottom: 20px;
+  transform: translateX(-50%);
+  width: min(600px, calc(100% - 32px));
+  padding: 1.21429em;
+  border-radius: 1.71429em;
+
+  background: var(
+    --file-details-dynamic-scan-navigation-graph-nav-panel-toolbar-background
+  );
+
+  box-shadow: var(
+    --file-details-dynamic-scan-navigation-graph-nav-panel-toolbar-box-shadow
+  );
+}
