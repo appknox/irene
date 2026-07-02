@@ -132,6 +132,7 @@ export default class AppknoxWrapperComponent extends Component<AppknoxWrapperSig
       },
       this.showSbomDashboard && {
         label: this.intl.t('SBOM'),
+        tooltipLabel: this.intl.t('sbomModule.sbomAppTitle'),
         icon: 'receipt-long',
         route: 'authenticated.dashboard.sbom.apps',
         query: { app_offset: 0 },

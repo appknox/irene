@@ -1,29 +1,21 @@
-import { service } from '@ember/service';
 import Component from '@glimmer/component';
 
-import type IntlService from 'ember-intl/services/intl';
+export interface SbomScanDetailsSkeletonLoaderListColumn {
+  name?: string;
+  width?: number;
+}
 
-export default class SbomScanDetailsSkeletonLoaderListComponent extends Component {
-  @service declare intl: IntlService;
+export interface SbomScanDetailsSkeletonLoaderListSignature {
+  Args: {
+    columns: SbomScanDetailsSkeletonLoaderListColumn[];
+  };
+}
 
-  get columns() {
-    return [
-      {
-        name: this.intl.t('sbomModule.componentName'),
-        width: 150,
-      },
-      {
-        name: this.intl.t('sbomModule.componentType'),
-      },
-      {
-        name: this.intl.t('dependencyType'),
-      },
-      {
-        name: this.intl.t('status'),
-      },
-    ];
-  }
-
+// Headings come from whichever table this skeleton stands in for -- the SBOM
+// list, its AI-filtered variant and the AI BoM list all have different
+// columns, so a hardcoded set here would show the wrong headings for two of
+// the three and make them shift once real data arrives.
+export default class SbomScanDetailsSkeletonLoaderListComponent extends Component<SbomScanDetailsSkeletonLoaderListSignature> {
   get loadingMockData() {
     return new Array(8).fill({});
   }
