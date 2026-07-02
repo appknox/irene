@@ -71,7 +71,18 @@
           </div>
         {{/unless}}
 
-        <AkStack>
+        <AkStack @alignItems='center' @spacing='1'>
+          {{#unless this.isTreeView}}
+            <AkButton
+              data-test-sbomScanDetails-aiFilterButton
+              @variant={{if this.isAiComponentFilterActive 'contained' 'outlined'}}
+              @color={{if this.isAiComponentFilterActive 'primary' 'neutral'}}
+              {{on 'click' this.handleAiComponentFilterToggle}}
+            >
+              {{t 'sbomModule.aiComponents'}}
+            </AkButton>
+          {{/unless}}
+
           {{#if this.isTreeView}}
             <AkButton
               data-test-sbomScanDetails-collapseAllButton

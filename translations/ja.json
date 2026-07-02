@@ -1753,7 +1753,18 @@
       "title": "No SBOM Report Found",
       "description": "We could not locate any report associated with this SBOM analysis."
     },
-    "noComponentsFoundFilter": "No components found for the selected filter. Please try a different filter."
+    "noComponentsFoundFilter": "No components found for the selected filter. Please try a different filter.",
+    "aiComponents": "AIコンポーネント",
+    "aiRoleColumn": "AIロール",
+    "aiLabel": {
+      "model": "モデル",
+      "library": "推論エンジン",
+      "tokenizer": "トークナイザー",
+      "config": "設定",
+      "supporting": "サポートアセット",
+      "secret": "シークレット",
+      "cloudEndpoint": "クラウドエンドポイント"
+    }
   },
   "scan": "診断",
   "scanned": "scanned",

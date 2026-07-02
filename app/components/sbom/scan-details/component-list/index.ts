@@ -113,6 +113,10 @@ export default class SbomScanDetailsComponentListComponent extends Component<Sbo
         headerComponent: 'sbom/scan-details/component-list/type-header',
       },
       {
+        name: this.intl.t('sbomModule.aiRoleColumn'),
+        component: 'sbom/scan-details/component-list/ai-artifact',
+      },
+      {
         name: this.intl.t('dependencyType'),
         component: 'sbom/scan-details/component-list/dependency-type',
         headerComponent:

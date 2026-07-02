@@ -67,6 +67,7 @@ export default class SbomScanDetailsComponent extends Component<SbomScanDetailsS
       component_type,
       component_limit,
       component_offset,
+      is_ai_component,
     } = args.queryParams;
 
     // Fetch with default queries from the route
@@ -77,6 +78,7 @@ export default class SbomScanDetailsComponent extends Component<SbomScanDetailsS
         component_query: component_query,
         dependency_type: is_dependency,
         component_type: Number(component_type),
+        is_ai_component,
       })
       .setLimitOffset({
         limit: Number(component_limit),
@@ -155,11 +157,29 @@ export default class SbomScanDetailsComponent extends Component<SbomScanDetailsS
       view_type: 'tree' as const,
       component_type: -1,
       is_dependency: null,
+      is_ai_component: null,
       component_query: '',
     };
 
     this.router.transitionTo({ queryParams });
     this.sbomScanDetailsService.setQueryData({ ...queryParams }).reload();
+  }
+
+  @action
+  handleAiComponentFilterToggle() {
+    const current = this.sbomScanDetailsService.isAiComponentFilter;
+    const next = current === true ? null : true;
+    const queryParams = { is_ai_component: next === null ? null : 'true' };
+
+    this.router.transitionTo({ queryParams });
+    this.sbomScanDetailsService
+      .setQueryData({ is_ai_component: queryParams.is_ai_component })
+      .setLimitOffset({ offset: 0 })
+      .reload();
+  }
+
+  get isAiComponentFilterActive() {
+    return this.sbomScanDetailsService.isAiComponentFilter === true;
   }
 
   @action

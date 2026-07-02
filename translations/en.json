@@ -1753,7 +1753,18 @@
       "title": "No SBOM Report Found",
       "description": "We could not locate any report associated with this SBOM analysis."
     },
-    "noComponentsFoundFilter": "No components found for the selected filter. Please try a different filter."
+    "noComponentsFoundFilter": "No components found for the selected filter. Please try a different filter.",
+    "aiComponents": "AI Components",
+    "aiRoleColumn": "AI Role",
+    "aiLabel": {
+      "model": "Model",
+      "library": "Inference Engine",
+      "tokenizer": "Tokenizer",
+      "config": "Config",
+      "supporting": "Supporting Asset",
+      "secret": "Secret",
+      "cloudEndpoint": "Cloud Endpoint"
+    }
   },
   "scan": "scan(s)",
   "scanned": "scanned",

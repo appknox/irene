@@ -65,6 +65,15 @@ export default class SbomComponentModel extends Model {
   @attr('boolean')
   declare isDependency: boolean;
 
+  @attr('boolean')
+  declare isAiComponent: boolean;
+
+  @attr('string')
+  declare aiConfidence: string;
+
+  @attr('string')
+  declare aiArtifactClass: string;
+
   @attr()
   declare evidence: SbomComponentEvidence;
 
@@ -109,6 +118,20 @@ export default class SbomComponentModel extends Model {
 
   get isMLModel() {
     return this.type === ENUMS_DISPLAY.SBOM_COMPONENT_TYPE_NAMES[3];
+  }
+
+  get aiDisplayLabelKey() {
+    if (!this.aiArtifactClass) return null;
+    const classMap: Record<string, string> = {
+      model: 'sbomModule.aiLabel.model',
+      library: 'sbomModule.aiLabel.library',
+      tokenizer: 'sbomModule.aiLabel.tokenizer',
+      config: 'sbomModule.aiLabel.config',
+      supporting: 'sbomModule.aiLabel.supporting',
+      secret: 'sbomModule.aiLabel.secret',
+      cloud_endpoint: 'sbomModule.aiLabel.cloudEndpoint',
+    };
+    return classMap[this.aiArtifactClass] || null;
   }
 }
 
