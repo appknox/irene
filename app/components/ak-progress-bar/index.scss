@@ -1,0 +1,25 @@
+.root {
+  border-radius: var(--ak-progress-bar-border-radius);
+  overflow: hidden;
+}
+
+.segment {
+  flex-shrink: 0;
+  height: 100%;
+  min-width: 2px;
+}
+
+.segment--striped {
+  background-size: 200% 100%;
+  animation: ak-progress-bar-stripe-slide 0.8s linear infinite;
+}
+
+@keyframes ak-progress-bar-stripe-slide {
+  0% {
+    background-position: 0 0;
+  }
+
+  100% {
+    background-position: 1em 0;
+  }
+}

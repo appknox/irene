@@ -174,15 +174,17 @@
 
 {{#if @expandFilesOverview}}
   <AkStack local-class='files-overview-container'>
-    <FileOverview
+    <AppFileCard
       @file={{@file1}}
+      @showMenuButton={{false}}
       @hideCTAs={{true}}
       data-test-fileCompareHeader-file1Overview
     />
 
     {{#if @file2}}
-      <FileOverview
+      <AppFileCard
         @file={{@file2}}
+        @showMenuButton={{false}}
         @hideCTAs={{true}}
         data-test-fileCompareHeader-file2Overview
       />

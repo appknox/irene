@@ -40,7 +40,20 @@ module('Acceptance | hide-upsell-features', function (hooks) {
       },
       {
         feature: 'storeknox',
-        // For brand abuse and malware detected, the upsell features would always be visible even if storeknox is enabled
+        // For malware detected, the upsell features would always be visible even if storeknox is enabled
+        featureState: true,
+        route: '/dashboard/storeknox/inventory-details/1/malware-detected',
+        redirectRoute: '/dashboard/storeknox/inventory-details/1',
+        models_info: [
+          { id: 1, name: 'sk-inventory-app' },
+          { id: 1, name: 'file', props: { project: 1 } },
+          { id: 1, name: 'profile' },
+          { id: 1, name: 'project', props: { active_profile_id: 1, file: 1 } },
+        ],
+      },
+      {
+        feature: 'storeknox',
+        // For malware detected, the upsell features would always be visible even if storeknox is enabled
         featureState: true,
         route: '/dashboard/storeknox/inventory-details/1/brand-abuse',
         redirectRoute: '/dashboard/storeknox/inventory-details/1',
@@ -73,6 +86,17 @@ module('Acceptance | hide-upsell-features', function (hooks) {
       // Server mocks
       this.server.get('/v2/server_configuration', () => {
         return { enterprise: false };
+      });
+
+      this.server.get('/v3/projects', (schema) => {
+        const projects = schema.projects.all().models;
+
+        return {
+          count: projects.length,
+          next: null,
+          previous: null,
+          results: projects,
+        };
       });
 
       this.server.get('/v3/projects/:id', (schema, req) => {

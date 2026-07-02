@@ -147,7 +147,7 @@ module('Integration | Component | privacy/pii', function (hooks) {
     const piiCategory = this.pii[0].type;
 
     const tableRow = find(
-      `[data-test-privacyModule-pii-table-row="${piiCategory}"]`
+      `[data-test-privacyModule-pii-table-row="${this.pii[0].id}"]`
     );
 
     assert

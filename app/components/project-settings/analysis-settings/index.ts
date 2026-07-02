@@ -1,5 +1,8 @@
 import Component from '@glimmer/component';
-import ProjectModel from 'irene/models/project';
+import { service } from '@ember/service';
+
+import type ProjectModel from 'irene/models/project';
+import type OrganizationService from 'irene/services/organization';
 
 interface ProjectSettingsAnalysisSettingsSignature {
   Args: {
@@ -8,8 +11,14 @@ interface ProjectSettingsAnalysisSettingsSignature {
 }
 
 export default class ProjectSettingsAnalysisSettingsComponent extends Component<ProjectSettingsAnalysisSettingsSignature> {
+  @service declare organization: OrganizationService;
+
   get project() {
     return this.args.project;
+  }
+
+  get isKnoxIqEnabled() {
+    return this.organization.isKnoxIqEnabled;
   }
 }
 

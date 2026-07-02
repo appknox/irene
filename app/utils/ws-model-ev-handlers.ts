@@ -57,12 +57,21 @@ export class DynamicScanEventHandler extends WsModelEventHandler<DynamicscanMode
     this.realtime.incrementProperty('FileAutoDynamicScanReloadCounter');
   }
 
+  private pushDynamicscanAndNotify(wsData: object) {
+    const normalized = this.store.normalize('dynamicscan', wsData);
+    const dynamicscan = this.store.push(normalized) as DynamicscanModel;
+
+    this.eventBus.trigger('ws:dynamicscan:update', dynamicscan);
+  }
+
   // Perform all dynamic scan related actions when a dynamic scan is created
   onCreate() {
     this.incrementFileAutoDynamicScanReloadCounter();
   }
 
-  onUpdate() {}
+  onUpdate(wsData: object) {
+    this.pushDynamicscanAndNotify(wsData);
+  }
 }
 
 /** Handler for submission model events*/

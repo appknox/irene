@@ -19,7 +19,8 @@
     }
   }
 
-  &.archived {
+  &.archived,
+  &.monitoring-disabled {
     top: calc(-0.5em + 44px);
     margin-bottom: calc(1.5em + 1.4286em) !important;
   }
@@ -32,11 +33,15 @@
     border: 1px solid
       var(--storeknox-inventory-details-header-app-logo-border-color);
   }
-}
 
-.tooltip-content-container {
-  width: 320px;
-  padding: 0.5em;
-  box-sizing: border-box;
-  white-space: normal;
+  .app-info-logo-placeholder {
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    background-color: var(
+      --storeknox-inventory-details-header-app-logo-placeholder-background-color
+    );
+    border: 1px solid
+      var(--storeknox-inventory-details-header-app-logo-border-color);
+  }
 }

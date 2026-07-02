@@ -1,0 +1,78 @@
+.fake-apps-item-card-root {
+  width: 100%;
+  cursor: pointer;
+  box-shadow: var(--storeknox-fake-apps-list-item-card-box-shadow);
+
+  .app-info-logo {
+    border-radius: 100%;
+    object-fit: contain;
+    width: 58px;
+    height: 58px;
+    border: 1px solid
+      var(--storeknox-fake-apps-list-item-card-app-logo-border-color);
+  }
+
+  .app-info-logo-placeholder {
+    border-radius: 50%;
+    width: 58px;
+    height: 58px;
+    background-color: var(
+      --storeknox-fake-apps-list-item-card-logo-placeholder-bg-color
+    );
+    border: 1px solid
+      var(--storeknox-fake-apps-list-item-card-app-logo-border-color);
+  }
+
+  .app-info-container {
+    padding: 1.1429em 1.7143em;
+  }
+
+  .store-logo-container {
+    min-height: 32px;
+    min-width: 32px;
+    width: 32px;
+    height: 32px;
+    border-radius: 100%;
+    border: 1px solid
+      var(--storeknox-fake-apps-list-item-card-store-logo-border-color);
+  }
+
+  .brand-abuse-count-progress {
+    :global(.ak-loader-linear-root) {
+      background-color: var(
+        --storeknox-fake-apps-list-item-card-brand-abuse-progress-bg-color
+      );
+    }
+
+    :global(.ak-loader-linear-indicator) {
+      background-color: var(
+        --storeknox-fake-apps-list-item-card-brand-abuse-progress-indicator-color
+      );
+      border-radius: 7.1429em;
+    }
+  }
+
+  .fake-app-count-progress {
+    :global(.ak-loader-linear-root) {
+      background-color: var(
+        --storeknox-fake-apps-list-item-card-fake-app-progress-bg-color
+      );
+    }
+
+    :global(.ak-loader-linear-indicator) {
+      background-color: var(
+        --storeknox-fake-apps-list-item-card-fake-app-progress-indicator-color
+      );
+      border-radius: 7.1429em;
+    }
+  }
+
+  .divider {
+    margin: 1.7143em 0;
+  }
+
+  .last-monitoring-date-container {
+    padding-top: 1.4286em;
+    padding-bottom: 2em;
+  }
+}

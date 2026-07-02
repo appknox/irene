@@ -1,0 +1,19 @@
+{{#if @loading}}
+  <AkSkeleton @width='16px' @height='16px' @variant='circular' />
+{{else if @data.skFakeApp}}
+  {{#if @data.skFakeApp.isApkModyStore}}
+    <img
+      alt={{@data.skFakeApp.skStore.name}}
+      src='/images/apkmody-icon.png'
+      {{style width='20px' height='20px'}}
+      data-test-storeknoxFakeAppListTable-apkModyIcon
+    />
+  {{else}}
+    {{#let (component this.storeIconComponent) as |StoreIcon|}}
+      <StoreIcon
+        {{style width='16px' height='16px'}}
+        data-test-storeknoxFakeAppListTable-storeIcon='{{@data.skFakeApp.skStore.identifier}}'
+      />
+    {{/let}}
+  {{/if}}
+{{/if}}

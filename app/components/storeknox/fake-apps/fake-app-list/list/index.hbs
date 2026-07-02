@@ -1,0 +1,109 @@
+<div
+  local-class='fake-apps-list-root {{if @skInventoryApp.isArchived "archived"}}'
+  data-test-storeknoxFakeAppsFakeAppListList
+>
+  <AkPaginationProvider
+    @results={{this.tableData}}
+    @onItemPerPageChange={{this.onItemPerPageChange}}
+    @totalItems={{this.totalCount}}
+    @nextAction={{this.goToPage}}
+    @prevAction={{this.goToPage}}
+    @itemPerPageOptions={{array 10 25 50}}
+    @defaultLimit={{this.limit}}
+    @offset={{this.offset}}
+    as |pgc|
+  >
+    {{#if this.hasNoResults}}
+      <AkStack
+        @alignItems='center'
+        @justifyContent='center'
+        @direction='column'
+        @spacing='1'
+        class='py-7 px-4'
+        local-class='status-container'
+        data-test-storeknoxFakeAppsFakeAppListList-empty
+      >
+        {{#if @emptyIllustration}}
+          {{#let (component @emptyIllustration) as |EmptyIllustration|}}
+            <EmptyIllustration />
+          {{/let}}
+        {{/if}}
+
+        {{#if @emptyTitle}}
+          <AkTypography @variant='h5' class='mt-4'>
+            {{@emptyTitle}}
+          </AkTypography>
+        {{/if}}
+
+        {{#if @emptyDescription}}
+          <AkTypography @align='center' {{style maxWidth='600px'}}>
+            {{@emptyDescription}}
+          </AkTypography>
+        {{/if}}
+      </AkStack>
+
+    {{else}}
+      {{#if @infoText}}
+        <AkStack local-class='info-text' class='p-2' data-test-storeknoxFakeAppList-infoText>
+          <AkTypography>
+            {{@infoText}}
+          </AkTypography>
+        </AkStack>
+      {{/if}}
+
+      <AkTable local-class='ember-table' @hoverable={{true}} as |tb|>
+        <tb.head
+          local-class='ember-table-header'
+          @scrollIndicators='all'
+          @columns={{this.columns}}
+          as |h|
+        >
+          <h.row as |r|>
+            <r.cell
+              data-test-storeknoxFakeAppsFakeAppListList-th-cell
+              as |column|
+            >
+              {{column.name}}
+            </r.cell>
+          </h.row>
+        </tb.head>
+
+        <tb.body
+          local-class='table-body'
+          @rows={{pgc.currentPageResults}}
+          data-test-storeknoxFakeAppsFakeAppListList-results
+          as |b|
+        >
+          <b.row
+            @onClick={{this.onRowClick}}
+            data-test-storeknoxFakeAppsFakeAppListList-row
+            as |r|
+          >
+            <r.cell>
+              {{#let (component r.columnValue.cellComponent) as |Cell|}}
+                <Cell @loading={{this.isFetchingData}} @data={{r.rowValue}} />
+              {{/let}}
+            </r.cell>
+          </b.row>
+        </tb.body>
+      </AkTable>
+
+      {{#unless this.isFetchingData}}
+        <AkPagination
+          @disableNext={{pgc.disableNext}}
+          @nextAction={{pgc.nextAction}}
+          @disablePrev={{pgc.disablePrev}}
+          @prevAction={{pgc.prevAction}}
+          @endItemIdx={{pgc.endItemIdx}}
+          @startItemIdx={{pgc.startItemIdx}}
+          @itemPerPageOptions={{pgc.itemPerPageOptions}}
+          @onItemPerPageChange={{pgc.onItemPerPageChange}}
+          @selectedOption={{pgc.selectedOption}}
+          @tableItemLabel={{t 'apps'}}
+          @perPageTranslation={{t 'recordPerPage'}}
+          @totalItems={{pgc.totalItems}}
+        />
+      {{/unless}}
+    {{/if}}
+  </AkPaginationProvider>
+</div>

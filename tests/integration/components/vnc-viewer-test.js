@@ -10,6 +10,10 @@ import {
   PROXY_CYOD_DEVICE_USED,
   REMOTE_CYOD_DEVICE_USED,
 } from 'irene/mirage/factories/dynamicscan';
+import {
+  IOS_MODERN_DEVICE_VERSION_CUTOFF,
+  getPlatformMajorVersion,
+} from 'irene/utils/dynamic-scan-device';
 
 module('Integration | Component | vnc-viewer', function (hooks) {
   setupRenderingTest(hooks);
@@ -102,12 +106,14 @@ module('Integration | Component | vnc-viewer', function (hooks) {
         platform: ENUMS.PLATFORM.IOS,
         isTablet: true,
         deviceClass: 'ipad black',
+        platformVersion: '16.7.10',
       },
       {
         platform: ENUMS.PLATFORM.IOS,
         isTablet: true,
         deviceClass: 'iphone5s black', // since device might not be allocated so show default
         status: ENUMS.DYNAMIC_SCAN_STATUS.IN_QUEUE,
+        platformVersion: '16.7.10',
       },
       {
         platform: ENUMS.PLATFORM.ANDROID,
@@ -118,12 +124,23 @@ module('Integration | Component | vnc-viewer', function (hooks) {
         platform: ENUMS.PLATFORM.IOS,
         isTablet: false,
         deviceClass: 'iphone5s black',
+        platformVersion: '16.7.10',
+      },
+      {
+        platform: ENUMS.PLATFORM.IOS,
+        isTablet: false,
+        deviceClass: 'iphone5s black',
+        platformVersion: '18.0',
       },
     ],
-    async function (assert, { platform, isTablet, deviceClass, status }) {
+    async function (
+      assert,
+      { platform, isTablet, deviceClass, platformVersion, status }
+    ) {
       const deviceUsed = this.server.create('device', {
         is_tablet: isTablet,
         platform,
+        platform_version: platformVersion,
       });
 
       const dynamicscan = this.server.create('dynamicscan', {
@@ -155,24 +172,41 @@ module('Integration | Component | vnc-viewer', function (hooks) {
         this.dynamicscan.isHooking ||
         this.dynamicscan.isReadyOrRunning;
 
-      deviceClass.split(' ').forEach((val) => {
-        assert.dom('[data-test-vncViewer-device]').hasClass(val);
-      });
+      const platformMajorVersion = getPlatformMajorVersion(platformVersion);
+      const usesModernIOSDeviceFrame =
+        platform === ENUMS.PLATFORM.IOS &&
+        platformMajorVersion !== null &&
+        platformMajorVersion >= IOS_MODERN_DEVICE_VERSION_CUTOFF;
+
+      if (usesModernIOSDeviceFrame) {
+        assert
+          .dom('[data-test-vncViewer-device]')
+          .doesNotHaveClass('marvel-device');
+        assert.dom('[data-test-vncViewer-deviceScreen]').exists();
+        assert.dom('[data-test-vncViewer-deviceCamera]').doesNotExist();
+        assert.dom('[data-test-vncViewer-deviceHome]').doesNotExist();
+      } else {
+        deviceClass.split(' ').forEach((val) => {
+          assert.dom('[data-test-vncViewer-device]').hasClass(val);
+        });
+
+        assert.dom('[data-test-vncViewer-deviceCamera]').exists();
+        assert.dom('[data-test-vncViewer-deviceScreen]').hasClass('screen');
+
+        if (platform === ENUMS.PLATFORM.IOS) {
+          assert.dom('[data-test-vncViewer-deviceHome]').exists();
+        }
+      }
 
       ['TopBar', 'Sleep', 'Volume'].forEach((it) => {
-        if (isScanInProgress && isTablet) {
+        if (!usesModernIOSDeviceFrame && isScanInProgress && isTablet) {
           assert.dom(`[data-test-vncViewer-device${it}]`).exists();
         } else {
           assert.dom(`[data-test-vncViewer-device${it}]`).doesNotExist();
         }
       });
 
-      assert.dom('[data-test-vncViewer-deviceCamera]').exists();
-      assert.dom('[data-test-vncViewer-deviceScreen]').hasClass('screen');
-
-      if (platform === ENUMS.PLATFORM.IOS) {
-        assert.dom('[data-test-vncViewer-deviceHome]').exists();
-
+      if (platform === ENUMS.PLATFORM.IOS && !usesModernIOSDeviceFrame) {
         ['Speaker', 'BottomBar'].forEach((it) => {
           if (isScanInProgress && isTablet) {
             assert.dom(`[data-test-vncViewer-device${it}]`).exists();
@@ -180,6 +214,15 @@ module('Integration | Component | vnc-viewer', function (hooks) {
             assert.dom(`[data-test-vncViewer-device${it}]`).doesNotExist();
           }
         });
+      }
+
+      if (this.dynamicscan.isReadyOrRunning) {
+        assert
+          .dom('[data-test-NovncRfb-canvasContainer]')
+          .hasAttribute(
+            'data-contain-canvas',
+            usesModernIOSDeviceFrame ? 'true' : 'false'
+          );
       }
     }
   );

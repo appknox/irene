@@ -16,11 +16,13 @@ export interface Features {
   privacy: boolean;
   upload_via_url: boolean;
   cyod: boolean;
+  fake_app_detection: boolean;
 }
 
 export interface AiFeatures {
   reporting: boolean;
   pii: boolean;
+  knoxiq: boolean;
 }
 
 export default class OrganizationModel extends Model {
@@ -71,6 +73,9 @@ export default class OrganizationModel extends Model {
 
   @attr('boolean')
   declare showSubscription: boolean;
+
+  @attr('boolean')
+  declare knoxiqAutomatedTrigger: boolean;
 
   get showBilling() {
     return !this.billingHidden;

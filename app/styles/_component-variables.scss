@@ -442,6 +442,15 @@ body {
   --security-analysis-details-cvss-metrics-progress-border-color: var(
     --primary-main-10
   );
+  --security-analysis-details-cvss-metrics-legacy-cvss-banner-background-color: var(
+    --error-light
+  );
+  --security-analysis-details-cvss-metrics-legacy-cvss-info-background-color: var(
+    --background-main
+  );
+  --security-analysis-details-cvss-metrics-legacy-cvss-info-border-color: var(
+    --border-color-1
+  );
 
   // variables for security/analysis-details/footer
   --security-analysis-details-footer-white-background-color: var(
@@ -967,6 +976,7 @@ body {
   // variables for analysis-risk/text
   --analysis-risk-font-family: var(--font-family);
   --analysis-risk-border-radius: var(--border-radius);
+  --analysis-risk-tag-border-radius: var(--border-radius-capsule);
   --analysis-risk-text-color: var(--common-white);
   --analysis-risk-color-critical: var(--severity-critical);
   --analysis-risk-color-high: var(--severity-high);
@@ -1134,6 +1144,9 @@ body {
     --neutral-grey-200
   );
   --file-details-summary-header-box-shadow: var(--box-shadow-3);
+  --file-details-summary-powered-by-ai-chip-accent-color: var(
+    --powered-by-ai-chip-accent-color
+  );
 
   // variables for file-details/summary/app-platform
   --file-details-summary-app-platform-color-ios: var(--ios);
@@ -1142,6 +1155,13 @@ body {
   // variables for file-details/scan-actions
   --file-details-scan-actions-border-color: var(--neutral-grey-200);
   --file-details-scan-actions-background-color: var(--common-white);
+  --file-details-scan-actions-knoxiq-border-radius: var(--border-radius-8);
+  --file-details-scan-actions-knoxiq-accent-pending-color: var(
+    --knoxiq-card-accent-pending
+  );
+  --file-details-scan-actions-knoxiq-accent-completed-color: var(
+    --knoxiq-card-accent-completed
+  );
 
   // variables for file-details/scan-actions/api-scan
   --file-details-scan-actions-api-scan-border-radius: var(--border-radius);
@@ -1221,6 +1241,15 @@ body {
     --background-light
   );
   --file-details-manual-scan-results-background-main: var(--background-main);
+
+  // variables for file-details/screenshots
+  --file-details-screenshots-border-radius: var(--border-radius);
+  --file-details-screenshots-background-color: var(--neutral-grey-100);
+  --file-details-screenshots-background-main: var(--background-main);
+  --file-details-screenshots-border-color-1: var(--border-color-1);
+  --file-details-screenshots-border-color-2: var(--border-color-2);
+  --file-details-screenshots-bg-color-white: var(--common-white);
+  --file-details-screenshots-background-disabled: var(--neutral-grey-50);
 
   // variables for file-details/vulnerability-analysis/header
   --file-details-vulnerability-analysis-header-border-color: var(
@@ -1512,6 +1541,31 @@ body {
   --file-overview-store-logo-container-background-color: var(
     --neutral-grey-200
   );
+
+  // variables for knox-iq/project-card
+  --knoxiq-project-card-background: var(--common-white);
+  --knoxiq-project-card-border-color: var(--border-color-1);
+  --knoxiq-project-card-border-radius: var(--border-radius-16);
+  --knoxiq-project-card-header-border-color: var(--border-color-1);
+  --knoxiq-project-card-header-run-knoxiq-button-background-color: var(
+    --knoxiq-run-button-background
+  );
+  --knoxiq-project-card-header-run-knoxiq-button-color: var(
+    --knoxiq-run-button-color
+  );
+  --knoxiq-project-card-header-run-knoxiq-button-border-radius: var(
+    --border-radius-capsule
+  );
+  --knoxiq-project-card-exploitability-background: var(--background-light);
+  --knoxiq-project-card-exploitability-border-color: var(--border-color-1);
+  --knoxiq-project-card-severity-chip-border-radius: var(--border-radius-16);
+  --knoxiq-project-card-scan-statuses-chip-background: var(--background-light);
+  --knoxiq-project-card-scan-statuses-chip-border-radius: var(
+    --border-radius-capsule
+  );
+
+  // variables for ak-progress-bar
+  --ak-progress-bar-border-radius: var(--border-radius-capsule);
 
   // variables for account-settings/security
   --account-settings-security-mfa-border-color: var(--border-color-1);
@@ -2064,6 +2118,56 @@ body {
     --neutral-grey-200
   );
 
+  // variables for storeknox/inventory-details/app-details/actions-list/button
+  --storeknox-inventory-details-app-details-actions-list-button-box-shadow: var(
+    --box-shadow-11
+  );
+  --storeknox-inventory-details-app-details-actions-list-button-no-action-color: var(
+    --success-main
+  );
+  --storeknox-inventory-details-app-details-actions-list-button-no-action-bg-color: var(
+    --storeknox-no-action-button-bg-color
+  );
+  --storeknox-inventory-details-app-details-actions-list-button-needs-action-color: var(
+    --primary-main
+  );
+  --storeknox-inventory-details-app-details-actions-list-button-needs-action-bg-color: var(
+    --storeknox-needs-action-button-bg-color
+  );
+  --storeknox-inventory-details-app-details-actions-list-button-feature-in-progress-color: var(
+    --new-feature-ai-color
+  );
+  --storeknox-inventory-details-app-details-actions-list-button-feature-in-progress-bg-color: var(
+    --new-feature-ai-bg-color
+  );
+  --storeknox-inventory-details-app-details-actions-list-button-status-initializing-color: var(
+    --common-black
+  );
+  --storeknox-inventory-details-app-details-actions-list-button-status-initializing-border-color: var(
+    --neutral-grey-600
+  );
+  --storeknox-inventory-details-app-details-actions-list-button-status-initializing-bg-color: var(
+    --common-white
+  );
+  --storeknox-inventory-details-app-details-actions-list-button-status-initializing-hover-box-shadow: var(
+    --box-shadow-14
+  );
+  --storeknox-inventory-details-app-details-actions-list-button-disabled-state-bg-color: var(
+    --neutral-grey-200
+  );
+  --storeknox-inventory-details-app-details-actions-list-button-disabled-state-border-color: var(
+    --neutral-grey-200
+  );
+  --storeknox-inventory-details-app-details-actions-list-button-archived-color: var(
+    --common-black
+  );
+  --storeknox-inventory-details-app-details-actions-list-button-archived-border-color: var(
+    --common-black
+  );
+  --storeknox-inventory-details-app-details-actions-list-button-archived-bg-color: var(
+    --neutral-grey-200
+  );
+
   // variables for storeknox/inventory-details/app-details/va-results
   --storeknox-inventory-details-app-details-va-results-risk-color-critical: var(
     --severity-critical
@@ -2104,6 +2208,10 @@ body {
   );
 
   --storeknox-inventory-details-header-license-icon-container-background-color: var(
+    --neutral-grey-100
+  );
+
+  --storeknox-inventory-details-header-app-logo-placeholder-background-color: var(
     --neutral-grey-100
   );
 
@@ -2191,14 +2299,10 @@ body {
     --neutral-grey-200
   );
 
-  // variables for storeknox/inventory-details/archived-banner
-  --storeknox-inventory-details-archived-banner-bg-color: var(
-    --background-main
-  );
-  --storeknox-inventory-details-archived-banner-icon-color: var(--common-white);
-  --storeknox-inventory-details-archived-banner-icon-bg-color: var(
-    --error-main
-  );
+  // variables for storeknox/inventory-details/banner
+  --storeknox-inventory-details-banner-bg-color: var(--background-main);
+  --storeknox-inventory-details-banner-icon-color: var(--common-white);
+  --storeknox-inventory-details-banner-icon-bg-color: var(--error-main);
 
   // variables for storeknox/inventory-details/header/archive-drawer
   --storeknox-inventory-details-header-archive-drawer-border-color: var(
@@ -2233,6 +2337,213 @@ body {
   --storeknox-inventory-details-header-toggle-monitoring-drawer-action-box-shadow: var(
     --box-shadow-4
   );
+
+  // variables for storeknox/fake-apps
+  --storeknox-fake-apps-header-background-color: var(--background-main);
+  --storeknox-fake-apps-header-border-color: var(--neutral-grey-200);
+  --storeknox-fake-apps-header-beta-tag-bg: var(--storeknox-beta-tag-bg);
+  --storeknox-fake-apps-header-beta-tag-color: var(--storeknox-beta-tag-color);
+
+  // variables for storeknox/fake-apps/finding-detail-card
+  --storeknox-fake-apps-finding-detail-card-bg-color: var(--background-main);
+  --storeknox-fake-apps-finding-detail-card-border-color: var(--border-color-1);
+  --storeknox-fake-apps-finding-detail-card-border-radius: var(--border-radius);
+  --storeknox-fake-apps-finding-detail-card-ignored-bg-color: var(
+    --neutral-grey-100
+  );
+  --storeknox-fake-apps-finding-detail-card-badge-bg-color: var(
+    --powered-by-ai-chip-bg-color
+  );
+  --storeknox-fake-apps-finding-detail-card-badge-text-color: var(
+    --common-white
+  );
+  --storeknox-fake-apps-finding-detail-card-app-logo-placeholder-bg: var(
+    --storeknox-app-logo-placeholder-bg
+  );
+
+  // variables for storeknox/fake-apps/finding-detail-card
+  --storeknox-fake-apps-finding-detail-card-bg-color: var(--background-main);
+  --storeknox-fake-apps-finding-detail-card-border-color: var(--border-color-1);
+  --storeknox-fake-apps-finding-detail-card-border-radius: var(--border-radius);
+  --storeknox-fake-apps-finding-detail-card-box-shadow: var(--box-shadow-2);
+  --storeknox-fake-apps-finding-detail-card-ignored-bg-color: var(
+    --neutral-grey-100
+  );
+
+  // variables for storeknox/fake-apps/empty-list
+  --storeknox-fake-apps-empty-list-border-color: var(--neutral-grey-100);
+  --storeknox-fake-apps-empty-list-background-color: var(--common-white);
+
+  // variables for storeknox/fake-apps/fake-app-list
+  --storeknox-fake-apps-fake-apps-list-background-color: var(--common-white);
+  --storeknox-fake-apps-fake-apps-list-background-light: var(
+    --background-light
+  );
+  --storeknox-fake-apps-fake-apps-list-border-color: var(--border-color-1);
+  --storeknox-fake-apps-fake-apps-list-border-radius: var(--border-radius);
+  --storeknox-fake-apps-fake-app-list-brand-abuse-color: var(
+    --brand-abuse-highlight-color
+  );
+  --storeknox-fake-apps-fake-app-list-fake-app-color: var(
+    --fake-app-highlight-color
+  );
+
+  // variables for storeknox/fake-apps/fake-app-list/header
+  --storeknox-fake-apps-fake-apps-list-header-date-bg-color: var(
+    --neutral-grey-100
+  );
+
+  // variables for storeknox/fake-apps/fake-app-list/table/logo
+  --storeknox-fake-apps-fake-app-list-table-logo-border-color: var(
+    --neutral-grey-100
+  );
+  --storeknox-fake-apps-fake-app-list-table-logo-placeholder-bg-color: var(
+    --neutral-grey-100
+  );
+
+  // variables for storeknox/fake-apps/details
+  --storeknox-fake-apps-details-background-color: var(--neutral-white-100);
+
+  // variables for storeknox/fake-apps/details-header
+  --storeknox-fake-apps-details-header-background-color: var(
+    --background-light
+  );
+  --storeknox-fake-apps-details-header-title-container-border-color: var(
+    --border-color-1
+  );
+  --storeknox-fake-apps-details-header-app-info-bg-color: var(
+    --background-main
+  );
+  --storeknox-fake-apps-details-header-app-logo-border-color: var(
+    --neutral-grey-100
+  );
+  --storeknox-fake-apps-details-header-logo-placeholder-bg-color: var(
+    --neutral-grey-100
+  );
+  --storeknox-fake-apps-details-header-store-logo-border-color: var(
+    --neutral-grey-200
+  );
+  --storeknox-fake-apps-details-header-title-indicator-color: var(
+    --fake-app-highlight-color
+  );
+  --storeknox-fake-apps-details-header-title-indicator-brand-abuse-color: var(
+    --brand-abuse-highlight-color
+  );
+  --storeknox-fake-apps-details-header-title-indicator-border-radius: var(
+    --border-radius
+  );
+
+  // variables for storeknox/fake-apps/details-header/skeleton
+  --storeknox-fake-apps-details-header-skeleton-background-color: var(
+    --background-light
+  );
+  --storeknox-fake-apps-details-header-skeleton-title-container-border-color: var(
+    --border-color-1
+  );
+  --storeknox-fake-apps-details-header-skeleton-app-info-bg-color: var(
+    --background-main
+  );
+
+  // variables for storeknox/fake-apps/list-item-card
+  --storeknox-fake-apps-list-item-card-app-logo-border-color: var(
+    --neutral-grey-100
+  );
+  --storeknox-fake-apps-list-item-card-logo-placeholder-bg-color: var(
+    --neutral-grey-100
+  );
+  --storeknox-fake-apps-list-item-card-store-logo-border-color: var(
+    --border-color-1
+  );
+  --storeknox-fake-apps-list-item-card-brand-abuse-progress-bg-color: var(
+    --brand-abuse-light-highlight-color
+  );
+  --storeknox-fake-apps-list-item-card-brand-abuse-progress-indicator-color: var(
+    --brand-abuse-highlight-color
+  );
+  --storeknox-fake-apps-list-item-card-fake-app-progress-bg-color: var(
+    --fake-app-light-highlight-color
+  );
+  --storeknox-fake-apps-list-item-card-fake-app-progress-indicator-color: var(
+    --fake-app-highlight-color
+  );
+  --storeknox-fake-apps-list-item-card-box-shadow: var(
+    --fake-apps-list-item-card-box-shadow
+  );
+
+  // variables for storeknox/fake-apps/list-item-card/skeleton
+  --storeknox-fake-apps-list-item-card-skeleton-app-logo-border-color: var(
+    --neutral-grey-100
+  );
+  --storeknox-fake-apps-list-item-card-skeleton-store-logo-border-color: var(
+    --neutral-grey-200
+  );
+  --storeknox-fake-apps-list-item-card-skeleton-box-shadow: var(
+    --box-shadow-15
+  );
+
+  // variables for storeknox/fake-apps/ignored-banner
+  --storeknox-fake-apps-ignored-banner-container-bg-color: var(
+    --background-main
+  );
+  --storeknox-fake-apps-ignored-banner-icon-color: var(--common-white);
+  --storeknox-fake-apps-ignored-banner-icon-bg-color: var(--error-main);
+  --storeknox-fake-apps-ignored-banner-inventory-btn-bg-color: var(
+    --neutral-grey-200
+  );
+  --storeknox-fake-apps-ignored-banner-inventory-btn-border-radius: var(
+    --border-radius
+  );
+
+  // variables for storeknox/fake-apps/original-app-info
+  --storeknox-fake-apps-original-app-info-border-color: var(--border-color-1);
+  --storeknox-fake-apps-original-app-info-header-indicator-color: var(
+    --success-main
+  );
+  --storeknox-fake-apps-original-app-info-app-logo-border-color: var(
+    --neutral-grey-100
+  );
+  --storeknox-fake-apps-original-app-info-logo-placeholder-bg-color: var(
+    --neutral-grey-100
+  );
+  --storeknox-fake-apps-original-app-info-header-indicator-border-radius: var(
+    --border-radius
+  );
+
+  // variables for storeknox/fake-apps/original-app-info/skeleton
+  --storeknox-fake-apps-original-app-info-skeleton-border-color: var(
+    --border-color-1
+  );
+
+  // variables for storeknox/fake-apps/findings-card
+  --storeknox-fake-apps-findings-card-ignored-background: var(
+    --neutral-white-100
+  );
+  --storeknox-fake-apps-findings-card-background: var(
+    --storeknox-fake-apps-background-color
+  );
+
+  --storeknox-fake-apps-findings-card-overall-score-color: var(
+    --storeknox-fake-app-overall-score-color
+  );
+
+  // variables for storeknox/fake-apps/ignore-drawer
+  --storeknox-fake-apps-ignore-drawer-content-border-color: var(
+    --border-color-1
+  );
+  --storeknox-fake-apps-ignore-drawer-content-border-radius: var(
+    --border-radius
+  );
+  --storeknox-fake-apps-ignore-drawer-action-container-box-shadow: var(
+    --box-shadow-13
+  );
+  --storeknox-fake-apps-ignore-drawer-textarea-border-color: var(
+    --border-color-1
+  );
+  --storeknox-fake-apps-ignore-drawer-textarea-border-radius: var(
+    --border-radius
+  );
+  --storeknox-fake-apps-ignore-drawer-textarea-color: var(--text-primary);
+  --storeknox-fake-apps-ignore-drawer-textarea-error-color: var(--error-main);
 
   // variables for page-wrapper
   --page-wrapper-background-color: var(--background-light);
@@ -2845,6 +3156,7 @@ body {
   // variables for powered-by-ai/chip
   --powered-by-ai-chip-border-radius: var(--border-radius);
   --powered-by-ai-chip-color: var(--common-white);
+  --powered-by-ai-chip-accent-color: var(--powered-by-ai-chip-bg-color);
 
   // variables for powered-by-ai/drawer
   --powered-by-ai-chip-border-color: var(--border-color-1);
@@ -2853,6 +3165,263 @@ body {
   // variables for subscription-page
   --subscription-background-color: var(--common-white);
   --subscription-border-color: var(--border-color-1);
+
+  // variables for notifications-page/messages/nf-jira-push-err
+  --notifications-page-messages-nf-jira-push-err-error-container-border-color: var(--neutral-grey-100);
+  
+  //variables for knox-iq/code-block
+  --knox-iq-code-block-background-color: var(--common-black);
+  --knox-iq-code-block-border-radius: var(--border-radius-8);
+  --knox-iq-code-block-color: var(--common-white);
+  --knox-iq-code-block-copy-button-radius: var(--border-radius-6);
+  --knox-iq-code-block-font-family: var(--font-family-mono);
+
+  // variables for knox-iq/vulnerability-analysis
+  --knoxiq-vulnerability-analysis-border-radius: var(--border-radius-8);
+  --knoxiq-vulnerability-analysis-accent-pending-color: var(
+    --knoxiq-card-accent-pending
+  );
+  --knoxiq-vulnerability-analysis-accent-completed-color: var(
+    --knoxiq-card-accent-completed
+  );
+  --knoxiq-vulnerability-analysis-edit-link-color: var(--primary-main);
+
+  // variables for knox-iq/vulnerability-analysis/table
+  --knoxiq-vulnerability-analysis-table-border-color: var(--border-color-1);
+  --knoxiq-vulnerability-analysis-table-background-color: var(
+    --background-main
+  );
+
+  // variables for knox-iq/scan-summary
+  --knoxiq-scan-summary-root-radius: var(--border-radius-12);
+  --knoxiq-scan-summary-root-bg-color: var(--common-white);
+  --knoxiq-scan-summary-accent-pending-color: var(--knoxiq-card-accent-pending);
+  --knoxiq-scan-summary-accent-completed-color: var(
+    --knoxiq-card-accent-completed
+  );
+  --knoxiq-scan-summary-border-color: var(--border-color-1);
+
+  // variables for knox-iq/status-card
+  --knoxiq-status-card-border-color: var(--border-color-1);
+  --knoxiq-status-card-border-radius: var(--border-radius-8);
+  --knoxiq-status-card-bg-color: var(--knoxiq-active-color);
+  --knoxiq-status-card-inactive-bg-color: var(
+    --knoxiq-inactive-color-secondary
+  );
+  --knoxiq-status-card-completed-color: var(--knoxiq-completed-color);
+  --knoxiq-status-card-active-bg-color: var(--knoxiq-primary-color);
+  --knoxiq-status-card-active-color: var(--knoxiq-active-color);
+  --knoxiq-status-card-icon-border-radius: var(--border-radius-4);
+  --knoxiq-status-card-inactive-button-color: var(--knoxiq-inactive-color);
+  --knoxiq-status-card-button-color: var(--knoxiq-primary-color);
+  --knoxiq-status-card-hover-button-color: var(--knoxiq-secondary-color);
+  --knoxiq-status-card-failed-color: var(--error-main);
+  --knoxiq-status-card-failed-bg-color: var(--common-white);
+
+  // variables for knox-iq/status-chip
+  --knoxiq-status-chip-border-radius: var(--border-radius-8);
+  --knoxiq-status-chip-bg-color: var(--knoxiq-completed-color);
+  --knoxiq-status-chip-color: var(--common-white);
+  --knoxiq-status-chip-stroke-color: var(--knoxiq-primary-color);
+  --knoxiq-status-chip-failed-bg-color: var(--error-bg);
+  --knoxiq-status-chip-failed-color: var(--error-main);
+
+  // variables for knox-iq/exploitability-level-icon
+  --knoxiq-exploitability-level-icon-fire-high-color: var(
+    --knoxiq-exploitability-high
+  );
+  --knoxiq-exploitability-level-icon-fire-medium-color: var(
+    --knoxiq-exploitability-medium
+  );
+  --knoxiq-exploitability-level-icon-fire-low-color: var(
+    --knoxiq-exploitability-low
+  );
+  --knoxiq-exploitability-level-icon-fire-inactive-color: var(
+    --neutral-grey-300
+  );
+
+  // variables for knox-iq/vulnerability-analysis-details
+  --knoxiq-vulnerability-analysis-details-background-main: var(
+    --background-main
+  );
+  --knoxiq-vulnerability-analysis-details-background-light: var(
+    --background-light
+  );
+  --knoxiq-vulnerability-analysis-details-header-box-shadow: var(
+    --box-shadow-5
+  );
+  --knoxiq-vulnerability-analysis-details-zIndex: var(--zIndex-appbar);
+  --knoxiq-vulnerability-analysis-details-divider-color: var(--divider-dark);
+  --knoxiq-vulnerability-analysis-details-border-color: var(--border-color-1);
+  --knoxiq-vulnerability-analysis-details-border-radius: var(--border-radius);
+  --knoxiq-vulnerability-analysis-details-color-primary: var(--primary-main);
+  --knoxiq-vulnerability-analysis-details-code-background-color: var(
+    --neutral-grey-100
+  );
+  --knoxiq-vulnerability-analysis-details-code-text-color: var(--text-primary);
+  --knoxiq-vulnerability-analysis-details-marked-passed-background-color: var(
+    --neutral-grey-100
+  );
+  --knoxiq-vulnerability-analysis-details-marked-passed-code-background-color: var(
+    --neutral-grey-50
+  );
+  --knoxiq-vulnerability-analysis-details-status-chip-border-radius: var(
+    --border-radius-capsule
+  );
+
+  // variables for knox-iq/vulnerability-analysis-details/score-metrics
+  --knoxiq-score-metrics-border-radius: var(--border-radius-8);
+  --knoxiq-score-metrics-expand-icon: var(--neutral-grey-100);
+  --knoxiq-score-metrics-expand-icon-radius: var(--border-radius-4);
+  --knoxiq-score-metrics-background-main: var(--background-main);
+  --knoxiq-score-metrics-divider-color: var(--divider-dark);
+  --knoxiq-score-metrics-marked-passed-background-color: var(
+    --neutral-grey-100
+  );
+
+  // variables for knox-iq/vulnerability-analysis-details/validated-findings/exploitability-analysis
+  --knoxiq-validated-findings-exploitability-analysis-card-background-color: var(
+    --background-main
+  );
+  --knoxiq-validated-findings-exploitability-analysis-card-border-color: var(
+    --divider-dark
+  );
+  --knoxiq-validated-findings-exploitability-analysis-card-border-radius: var(
+    --border-radius-8
+  );
+  --knoxiq-validated-findings-exploitability-analysis-step-border-color: var(
+    --divider-dark
+  );
+  --knoxiq-validated-findings-exploitability-analysis-evidence-dot-background-color: var(
+    --knoxiq-validated-findings-exploitability-analysis-evidence-dot-color
+  );
+  --knoxiq-validated-findings-exploitability-analysis-step-badge-background-color: var(
+    --knoxiq-validated-findings-exploitability-analysis-step-badge-background
+  );
+  --knoxiq-validated-findings-exploitability-analysis-step-badge-color: var(
+    --knoxiq-validated-findings-exploitability-analysis-step-badge-text
+  );
+
+  // variables for knox-iq/vulnerability-analysis-details/validated-findings/finding-detail
+  --knoxiq-validated-findings-finding-detail-confidence-high-background-color: var(
+    --knoxiq-validated-findings-finding-detail-confidence-high-background
+  );
+  --knoxiq-validated-findings-finding-detail-confidence-high-color: var(
+    --error-main
+  );
+  --knoxiq-validated-findings-finding-detail-confidence-medium-background-color: var(
+    --knoxiq-validated-findings-finding-detail-confidence-medium-background
+  );
+  --knoxiq-validated-findings-finding-detail-confidence-medium-color: var(
+    --knoxiq-validated-findings-finding-detail-confidence-medium-text
+  );
+  --knoxiq-validated-findings-finding-detail-evidence-dot-background-color: var(
+    --knoxiq-validated-findings-finding-detail-evidence-dot-color
+  );
+  --knoxiq-validated-findings-finding-detail-expand-icon-button-background-color: var(
+    --knoxiq-validated-findings-finding-detail-expand-icon-button-background
+  );
+  --knoxiq-validated-findings-finding-detail-remediation-icon-color: var(
+    --success-main
+  );
+  --knoxiq-validated-findings-finding-detail-steps-icon-color: var(
+    --knoxiq-validated-findings-finding-detail-steps-icon
+  );
+  --knoxiq-validated-findings-finding-detail-exploitability-icon-color: var(
+    --error-main
+  );
+  --knoxiq-validated-findings-finding-detail-expand-all-background-color: var(
+    --knoxiq-validated-findings-finding-detail-expand-all-background
+  );
+  --knoxiq-validated-findings-finding-detail-expand-all-color: var(
+    --knoxiq-validated-findings-finding-detail-expand-all-text
+  );
+  --knoxiq-validated-findings-finding-detail-section-border-radius: var(
+    --border-radius-8
+  );
+  --knoxiq-validated-findings-finding-detail-expand-icon-border-radius: var(
+    --border-radius-4
+  );
+  --knoxiq-validated-findings-finding-detail-chip-border-radius: var(
+    --border-radius-capsule
+  );
+
+  // variables for knox-iq/vulnerability-analysis-details/validated-findings
+  --knoxiq-validated-findings-border-radius: var(--border-radius-8);
+  --knoxiq-validated-findings-background-main: var(--background-main);
+  --knoxiq-validated-findings-divider-color: var(--divider-dark);
+  --knoxiq-validated-findings-marked-passed-background-color: var(
+    --neutral-grey-100
+  );
+
+  // variables for knox-iq/vulnerability-analysis-details/validated-findings/remediation
+  --knoxiq-validated-findings-remediation-card-background-color: var(
+    --background-main
+  );
+  --knoxiq-validated-findings-remediation-card-border-color: var(
+    --divider-dark
+  );
+  --knoxiq-validated-findings-remediation-card-border-radius: var(
+    --border-radius-8
+  );
+  --knoxiq-validated-findings-remediation-step-border-color: var(
+    --divider-dark
+  );
+  --knoxiq-validated-findings-remediation-icon-color: var(
+    --knoxiq-validated-findings-remediation-icon
+  );
+  --knoxiq-validated-findings-remediation-step-badge-background-color: var(
+    --knoxiq-validated-findings-remediation-step-badge-background
+  );
+  --knoxiq-validated-findings-remediation-step-badge-color: var(
+    --knoxiq-validated-findings-remediation-step-badge-text
+  );
+
+  // variables for knox-iq/vulnerability-analysis-details/validated-findings/steps-to-reproduce
+  --knoxiq-validated-findings-steps-to-reproduce-card-background-color: var(
+    --background-main
+  );
+  --knoxiq-validated-findings-steps-to-reproduce-card-border-color: var(
+    --divider-dark
+  );
+  --knoxiq-validated-findings-steps-to-reproduce-card-border-radius: var(
+    --border-radius-8
+  );
+  --knoxiq-validated-findings-steps-to-reproduce-step-header-background-color: var(
+    --knoxiq-validated-findings-steps-to-reproduce-step-header-background
+  );
+  --knoxiq-validated-findings-steps-to-reproduce-step-badge-background-color: var(
+    --knoxiq-validated-findings-steps-to-reproduce-step-badge-background
+  );
+  --knoxiq-validated-findings-steps-to-reproduce-step-badge-color: var(
+    --knoxiq-validated-findings-steps-to-reproduce-accent
+  );
+  --knoxiq-validated-findings-steps-to-reproduce-evidence-dot-background-color: var(
+    --knoxiq-validated-findings-steps-to-reproduce-accent
+  );
+
+  // variables for knox-iq/vulnerability-analysis-details/validated-findings/finding-nav
+  --knoxiq-validated-findings-finding-nav-button-border-color: var(
+    --knoxiq-validated-findings-finding-nav-button-border
+  );
+  --knoxiq-validated-findings-finding-nav-select-border-color: var(
+    --knoxiq-validated-findings-finding-nav-select-border
+  );
+  --knoxiq-validated-findings-finding-nav-border-radius: var(--border-radius-8);
+
+  // variables for knox-iq/vulnerability-analysis-details/edit-analysis-button/reset-confirm
+  --knoxiq-vulnerability-analysis-details-edit-analysis-reset-confirm-background-main: var(
+    --background-main
+  );
+  --knoxiq-vulnerability-analysis-details-edit-analysis-reset-confirm-border-radius: var(
+    --border-radius
+  );
+  --knoxiq-vulnerability-analysis-details-edit-analysis-reset-confirm-action-box-shadow: var(
+    --box-shadow-4
+  );
+  --knoxiq-vulnerability-analysis-details-edit-analysis-reset-confirm-note-background-color: var(
+    --neutral-grey-100
+  );
 
   &.theme-light {
     //variables for appknox-wrapper

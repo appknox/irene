@@ -1,0 +1,12 @@
+.findings-card-container {
+  &.is-ignored {
+    background-color: var(
+      --storeknox-fake-apps-details-background-color
+    ) !important;
+  }
+}
+
+.findings-card-divider {
+  align-self: flex-end;
+  width: calc(100% - 1.5em) !important;
+}

@@ -69,6 +69,17 @@ export default class FileCompareAnalysisDetailsComponent extends Component<FileC
     return htmlSafe(this.vulnerability?.get?.('nonCompliant') || '');
   }
 
+  get cvssTitle() {
+    const CVSS_VERSION_MAP = {
+      [ENUMS.SUPPORTED_CVSS_VERSIONS.V3]: this.intl.t('cvssV3'),
+      [ENUMS.SUPPORTED_CVSS_VERSIONS.V4]: this.intl.t('cvssV4'),
+    };
+
+    const cvssVersion = Number(this.analysis?.cvssVersion);
+
+    return CVSS_VERSION_MAP[cvssVersion] ?? this.intl.t('cvssV4');
+  }
+
   reloadAnalysis = task(async () => {
     if (!this.args.analysis?.id) {
       return;

@@ -6,13 +6,17 @@ import { tracked } from '@glimmer/tracking';
 import { task } from 'ember-concurrency';
 import type IntlService from 'ember-intl/services/intl';
 
+import ENUMS from 'irene/enums';
 import DynamicscanModel, { DsComputedStatus } from 'irene/models/dynamicscan';
 import type FileModel from 'irene/models/file';
+import type { KnoxiqScanStatusByType } from 'irene/components/file-details';
 
 export interface FileDetailsScanActionsDynamicScanSignature {
   Args: {
     file: FileModel;
     vulnerabilityCount: number | null;
+    isKnoxiqEnabled?: boolean;
+    knoxiqStatuses?: KnoxiqScanStatusByType;
   };
 }
 
@@ -31,6 +35,47 @@ export default class FileDetailsScanActionsDynamicScanComponent extends Componen
 
     this.loadLastManualDynamicScans.perform();
     this.loadLastAutoDynamicScans.perform();
+  }
+
+  get dastStatus() {
+    return (
+      this.args.knoxiqStatuses?.[ENUMS.KNOXIQ_SCAN_TYPE.DAST_MANUAL] ??
+      this.args.knoxiqStatuses?.[ENUMS.KNOXIQ_SCAN_TYPE.DAST_AUTOMATED]
+    );
+  }
+
+  get showKnoxiqStatusChip() {
+    return Boolean(
+      this.args.isKnoxiqEnabled && this.args.file.isKnoxiqAutomated
+    );
+  }
+
+  get knoxiqStatusChipState() {
+    const { COMPLETED, ERRORED } = ENUMS.KNOXIQ_SCAN_STATUS;
+
+    if (this.dastStatus === COMPLETED) {
+      return 'completed';
+    }
+
+    if (this.dastStatus === ERRORED) {
+      return 'failed';
+    }
+
+    return 'running';
+  }
+
+  get dynamicScanAccentClass() {
+    if (
+      !this.args.isKnoxiqEnabled ||
+      !this.args.file.isDynamicDone ||
+      this.args.file.isKnoxiqAutomated
+    ) {
+      return '';
+    }
+
+    return this.dastStatus === ENUMS.KNOXIQ_SCAN_STATUS.COMPLETED
+      ? 'dynamic-scan-accent-done'
+      : 'dynamic-scan-accent-pending';
   }
 
   get status() {

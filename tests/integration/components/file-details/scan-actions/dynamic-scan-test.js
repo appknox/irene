@@ -107,7 +107,7 @@ module(
           expectedText: () => t('inProgress'),
         },
         {
-          automatedStatus: ENUMS.DYNAMIC_SCAN_STATUS.AUTO_INTERACTION_COMPLETED,
+          automatedStatus: ENUMS.DYNAMIC_SCAN_STATUS.AUTOPILOT_COMPLETED,
           manualStatus: null,
           expectedText: () => t('inProgress'),
         },
@@ -137,8 +137,7 @@ module(
           expectedText: () => t('inProgress'),
         },
         {
-          automatedStatus:
-            ENUMS.DYNAMIC_SCAN_STATUS.INITIATING_AUTO_INTERACTION,
+          automatedStatus: ENUMS.DYNAMIC_SCAN_STATUS.AUTOPILOT_RUNNING,
           manualStatus: ENUMS.DYNAMIC_SCAN_STATUS.ANALYSIS_COMPLETED,
           expectedText: () => t('inProgress'),
         },
@@ -148,8 +147,7 @@ module(
           expectedText: () => t('inProgress'),
         },
         {
-          automatedStatus:
-            ENUMS.DYNAMIC_SCAN_STATUS.INITIATING_AUTO_INTERACTION,
+          automatedStatus: ENUMS.DYNAMIC_SCAN_STATUS.AUTOPILOT_RUNNING,
           manualStatus: ENUMS.DYNAMIC_SCAN_STATUS.ERROR,
           expectedText: () => t('inProgress'),
         },

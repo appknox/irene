@@ -1,4 +1,4 @@
-import { visit, click } from '@ember/test-helpers';
+import { visit, click, currentURL } from '@ember/test-helpers';
 import { setupMirage } from 'ember-cli-mirage/test-support';
 import { setupApplicationTest } from 'ember-qunit';
 import { module, test } from 'qunit';
@@ -62,13 +62,10 @@ module('Acceptance | breadcrumbs/storeknox-inventory', function (hooks) {
     this.owner.register('service:integration', IntegrationStub);
     this.owner.register('service:websocket', WebsocketStub);
 
-    const { organization } = await setupRequiredEndpoints(this.server);
+    const { organization, currentSkOrganization } =
+      await setupRequiredEndpoints(this.server);
 
-    organization.update({
-      features: {
-        storeknox: true,
-      },
-    });
+    organization.update({ features: { storeknox: true } });
 
     // Server mocks
     this.server.create('sk-organization');
@@ -89,8 +86,12 @@ module('Acceptance | breadcrumbs/storeknox-inventory', function (hooks) {
       3,
       'withApprovedStatus',
       {
+        monitoring_enabled: true,
         store_monitoring_status:
           ENUMS.SK_APP_MONITORING_STATUS.NO_ACTION_NEEDED,
+
+        fake_app_detection_status:
+          ENUMS.SK_FAKE_APP_DETECTION_STATUS.NO_RESULTS,
       }
     );
 
@@ -135,67 +136,100 @@ module('Acceptance | breadcrumbs/storeknox-inventory', function (hooks) {
 
     this.setProperties({
       inventoryApps,
+      currentSkOrganization,
     });
   });
 
-  test('it checks storeknox inventory breadcrumbs', async function (assert) {
-    assert.expect(15);
+  test.each(
+    'it checks storeknox inventory breadcrumbs',
+    [
+      { fake_app_detection: true, noOfAsserts: 15 },
+      { fake_app_detection: false, noOfAsserts: 16 },
+    ],
+    async function (assert, { fake_app_detection, noOfAsserts }) {
+      // Update sk organization features
+      this.currentSkOrganization.update({
+        sk_features: { fake_app_detection },
+      });
 
-    await visit(`/dashboard/storeknox/inventory/app-list`);
+      assert.expect(noOfAsserts);
 
-    await click('[data-test-storeknoxinventory-applisttable-rowid="1"]');
+      await visit(`/dashboard/storeknox/inventory/app-list`);
 
-    const packageName = this.inventoryApps[0].app_metadata.package_name;
+      await click('[data-test-storeknoxinventory-applisttable-rowid="1"]');
 
-    assertBreadcrumbsUI(
-      [
-        t('storeknox.appInventory'),
-        `${t('storeknox.inventoryDetails')} (${packageName})`,
-      ],
-      assert
-    );
+      const packageName = this.inventoryApps[0].app_metadata.package_name;
 
-    await click(
-      '[data-test-storeknoxinventorydetails-actionbtn="unscanned-version"]'
-    );
+      assertBreadcrumbsUI(
+        [
+          t('storeknox.appInventory'),
+          `${t('storeknox.inventoryDetails')} (${packageName})`,
+        ],
+        assert
+      );
 
-    assertBreadcrumbsUI(
-      [
-        t('storeknox.appInventory'),
-        `${t('storeknox.inventoryDetails')} (${packageName})`,
-        t('storeknox.unscannedVersion'),
-      ],
-      assert
-    );
+      // Navigate to unscanned version
+      await click(
+        '[data-test-storeknoxinventorydetails-actionbtn="unscanned-version"]'
+      );
 
-    await navigateBackWithBreadcrumb();
+      assertBreadcrumbsUI(
+        [
+          t('storeknox.appInventory'),
+          `${t('storeknox.inventoryDetails')} (${packageName})`,
+          t('storeknox.unscannedVersion'),
+        ],
+        assert
+      );
 
-    await click(
-      '[data-test-storeknoxinventorydetails-actionbtn="brand-abuse"]'
-    );
+      await navigateBackWithBreadcrumb();
 
-    assertBreadcrumbsUI(
-      [
-        t('storeknox.appInventory'),
-        `${t('storeknox.inventoryDetails')} (${packageName})`,
-        t('storeknox.brandAbuse'),
-      ],
-      assert
-    );
+      // Navigate to malware detected
+      await click(
+        '[data-test-storeknoxinventorydetails-actionbtn="malware-detected"]'
+      );
 
-    await navigateBackWithBreadcrumb();
+      assertBreadcrumbsUI(
+        [
+          t('storeknox.appInventory'),
+          `${t('storeknox.inventoryDetails')} (${packageName})`,
+          t('storeknox.malwareDetected'),
+        ],
+        assert
+      );
 
-    await click(
-      '[data-test-storeknoxinventorydetails-actionbtn="malware-detected"]'
-    );
+      await navigateBackWithBreadcrumb();
 
-    assertBreadcrumbsUI(
-      [
-        t('storeknox.appInventory'),
-        `${t('storeknox.inventoryDetails')} (${packageName})`,
-        t('storeknox.malwareDetected'),
-      ],
-      assert
-    );
-  });
+      // Navigate to brand abuse
+      await click(
+        '[data-test-storeknoxinventorydetails-actionbtn="brand-abuse"]'
+      );
+
+      if (fake_app_detection) {
+        assertBreadcrumbsUI(
+          [t('storeknox.fakeAppsTitle'), `${packageName}`],
+          assert
+        );
+
+        assert.strictEqual(
+          currentURL(),
+          `/dashboard/storeknox/fake-apps/${this.inventoryApps[0].id}`
+        );
+      } else {
+        assertBreadcrumbsUI(
+          [
+            t('storeknox.appInventory'),
+            `${t('storeknox.inventoryDetails')} (${packageName})`,
+            t('storeknox.brandAbuse'),
+          ],
+          assert
+        );
+
+        assert.strictEqual(
+          currentURL(),
+          `/dashboard/storeknox/inventory-details/${this.inventoryApps[0].id}/brand-abuse`
+        );
+      }
+    }
+  );
 });

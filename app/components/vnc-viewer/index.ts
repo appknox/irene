@@ -12,6 +12,10 @@ import type ProjectModel from 'irene/models/project';
 import type DynamicscanModel from 'irene/models/dynamicscan';
 import type DevicefarmService from 'irene/services/devicefarm';
 import type CyodAdbSessionService from 'irene/services/cyod-adb-session';
+import {
+  IOS_MODERN_DEVICE_VERSION_CUTOFF,
+  getPlatformMajorVersion,
+} from 'irene/utils/dynamic-scan-device';
 
 const VNC_MODE_NONE = ENUMS.DEVICE_VNC_MODE?.NONE ?? 0;
 const VNC_MODE_SCRCPY = ENUMS.DEVICE_VNC_MODE?.SCRCPY ?? 2;
@@ -39,12 +43,12 @@ export default class VncViewerComponent extends Component<VncViewerSignature> {
   @tracked webusbInstallStage: string | null = null;
   @tracked webusbInstallPercent = 0;
 
-  deviceFarmPassword = ENV.deviceFarmPassword;
-
   // Use .belongsTo().value() to get the already-loaded project synchronously
   // without triggering getBelongsTo proxy creation (which causes scheduleRevalidate during render)
   get filePlatform(): number {
-    const project = this.args.file.belongsTo('project').value() as ProjectModel | null;
+    const project = this.args.file
+      .belongsTo('project')
+      .value() as ProjectModel | null;
     return project?.platform ?? 0;
   }
 
@@ -60,6 +64,24 @@ export default class VncViewerComponent extends Component<VncViewerSignature> {
 
   get deviceUsed() {
     return this.args.dynamicScan?.get('deviceUsed');
+  }
+
+  get supportsModernIOSDeviceFrame() {
+    if (!this.isIOSDevice) {
+      return false;
+    }
+
+    const majorVersion = getPlatformMajorVersion(
+      this.deviceUsed?.platform_version
+    );
+
+    return (
+      majorVersion !== null && majorVersion >= IOS_MODERN_DEVICE_VERSION_CUTOFF
+    );
+  }
+
+  get deviceFarmPassword() {
+    return this.supportsModernIOSDeviceFrame ? null : ENV.deviceFarmPassword;
   }
 
   get deviceType() {
@@ -138,9 +160,8 @@ export default class VncViewerComponent extends Component<VncViewerSignature> {
   }
 
   get webusbAdb() {
-    const identifier = this.args.dynamicScan
-      ?.get('deviceUsed')
-      ?.device_identifier;
+    const identifier =
+      this.args.dynamicScan?.get('deviceUsed')?.device_identifier;
     return identifier ? this.cyodAdbSession.lookup(identifier) : null;
   }
 

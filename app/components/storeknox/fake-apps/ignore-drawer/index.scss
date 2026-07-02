@@ -1,0 +1,34 @@
+.ignore-drawer-content {
+  width: 650px;
+  border: 1px solid
+    var(--storeknox-fake-apps-ignore-drawer-content-border-color);
+  border-radius: var(--storeknox-fake-apps-ignore-drawer-content-border-radius);
+  margin: 1.5em;
+
+  .ignore-drawer-action-container {
+    box-shadow: var(
+      --storeknox-fake-apps-ignore-drawer-action-container-box-shadow
+    );
+  }
+
+  .textarea-input {
+    border: 1px solid
+      var(--storeknox-fake-apps-ignore-drawer-textarea-border-color);
+    border-radius: var(
+      --storeknox-fake-apps-ignore-drawer-textarea-border-radius
+    );
+    color: var(--storeknox-fake-apps-ignore-drawer-textarea-color);
+    display: inline-flex;
+    justify-content: flex-start;
+    align-items: center;
+    padding: 0.75em;
+    max-width: 100%;
+    width: 100%;
+
+    &.textarea-error {
+      border-color: var(
+        --storeknox-fake-apps-ignore-drawer-textarea-error-color
+      );
+    }
+  }
+}

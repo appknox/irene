@@ -1,10 +1,13 @@
 <div
   local-class='
-  page-wrapper-root 
+  page-wrapper-root
   page-wrapper-background-{{or @backgroundColor "dark"}}'
   ...attributes
 >
-  <div local-class='page-wrapper-container'>
+  <div
+    local-class='page-wrapper-container'
+    {{style maxWidth=(if @contentMaxWidth @contentMaxWidth '1200px')}}
+  >
     {{yield}}
   </div>
 </div>

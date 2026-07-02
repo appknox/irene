@@ -1,0 +1,33 @@
+{{#if this.showBanner}}
+  <AkStack
+    @width='full'
+    local-class='app-inventory-banner-root'
+    data-test-storeknoxInventoryDetails-banner
+  >
+    <AkStack
+      @width='full'
+      @direction='row'
+      @alignItems='center'
+      local-class='app-inventory-banner-container'
+    >
+      <AkStack
+        @alignItems='center'
+        @justifyContent='center'
+        local-class='app-inventory-banner-icon'
+      >
+        <AkIcon
+          @iconName='warning'
+          @color='inherit'
+          data-test-storeknoxInventoryDetails-bannerIcon
+        />
+      </AkStack>
+
+      <AkTypography
+        local-class='app-inventory-banner-text'
+        data-test-storeknoxInventoryDetails-bannerText
+      >
+        {{this.bannerMessage}}
+      </AkTypography>
+    </AkStack>
+  </AkStack>
+{{/if}}

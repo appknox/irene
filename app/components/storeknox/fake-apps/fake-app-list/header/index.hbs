@@ -1,0 +1,68 @@
+<Storeknox::InventoryDetails::Header
+  @hideUploadToAppknoxBanner={{true}}
+  @hideLicenseIcon={{true}}
+  @skInventoryApp={{@skInventoryApp}}
+>
+  <:actionItems>
+    <AkStack
+      @alignItems='center'
+      @justifyContent='flex-end'
+      @spacing='1.5'
+      {{style minWidth='550px'}}
+    >
+      <AkTooltip
+        @title={{t 'storeknox.lastFakeAppDetectionDate'}}
+        @color='light'
+        @arrow={{true}}
+        data-test-storeknoxFakeAppsFakeAppListHeader-lastFakeDetectionDateTooltip
+      >
+        <AkStack
+          @alignItems='center'
+          @spacing='0.5'
+          local-class='last-monitored-date'
+        >
+          <AkIcon
+            @size='small'
+            @iconName='event'
+            @color='textPrimary'
+            data-test-storeknoxFakeAppsFakeAppListHeader-lastFakeDetectionDateIcon
+          />
+
+          <AkTypography
+            data-test-storeknoxFakeAppsFakeAppListHeader-lastFakeDetectionDate
+          >
+            {{this.lastFakeDetectionDate}}
+          </AkTypography>
+        </AkStack>
+      </AkTooltip>
+
+      <AkIconButton
+        {{on 'click' this.handleOpenMenu}}
+        data-test-storeknoxFakeAppsFakeAppListHeader-menuBtn
+      >
+        <AkIcon @iconName='more-vert' />
+      </AkIconButton>
+    </AkStack>
+  </:actionItems>
+</Storeknox::InventoryDetails::Header>
+
+{{! More menu }}
+<AkMenu
+  @anchorRef={{this.anchorRef}}
+  @arrow={{true}}
+  @onClose={{this.handleCloseMenu}}
+  as |akm|
+>
+  {{#each this.menuItems as |item|}}
+    <akm.listItem
+      @button={{false}}
+      @link={{item.link}}
+      @route={{item.route}}
+      @model={{item.model}}
+      data-test-storeknoxFakeAppsFakeAppListHeader-menuItem
+      as |li|
+    >
+      <li.text @primaryText={{item.label}} />
+    </akm.listItem>
+  {{/each}}
+</AkMenu>

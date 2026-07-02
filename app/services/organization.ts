@@ -22,6 +22,10 @@ export default class OrganizationService extends Service {
     return this.selected?.aiFeatures;
   }
 
+  get isKnoxIqEnabled() {
+    return this.orgAiFeatures?.knoxiq;
+  }
+
   get hideUpsellUI() {
     return this.selected?.hideUpsellFeatures;
   }
@@ -36,6 +40,7 @@ export default class OrganizationService extends Service {
       sbom: !this.orgFeatures?.sbom && this.hideUpsellUI,
       aiReporting: !this.orgAiFeatures?.reporting && this.hideUpsellUI,
       aiPii: !this.orgAiFeatures?.pii && this.hideUpsellUI,
+      aiKnoxiq: !this.orgAiFeatures?.knoxiq && this.hideUpsellUI,
 
       dynamicScanAutomation:
         !this.orgFeatures?.dynamicscan_automation && this.hideUpsellUI,

@@ -4,6 +4,7 @@ interface PageWrapperSignature {
   Element: HTMLElement;
   Args: {
     backgroundColor?: 'dark' | 'inherit';
+    contentMaxWidth?: string;
   };
   Blocks: {
     default: [];

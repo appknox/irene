@@ -13,6 +13,7 @@ interface SkFeatures {
   inventory: boolean;
   drift_detection: boolean;
   fake_app_detection: boolean;
+  use_ai_validation: boolean;
 }
 
 export type SkOrganizationModelName = 'sk-organization';

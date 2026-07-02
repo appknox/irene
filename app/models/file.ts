@@ -76,6 +76,12 @@ export default class FileModel extends ModelBaseMixin {
   @attr('number')
   declare apiScanStatus: number;
 
+  @attr('number')
+  declare knoxiqStatus: number;
+
+  @attr('boolean')
+  declare isKnoxiqAutomated: boolean;
+
   @attr('boolean')
   declare isActive: boolean;
 
@@ -152,6 +158,34 @@ export default class FileModel extends ModelBaseMixin {
     );
   }
 
+  get isLegacyKnoxIQScan() {
+    return this.knoxiqStatus === ENUMS.KNOXIQ_SCAN_STATUS.LEGACY;
+  }
+
+  get isDisabledKnoxIQScan() {
+    return this.knoxiqStatus === ENUMS.KNOXIQ_SCAN_STATUS.DISABLED;
+  }
+
+  get isNotTriggeredKnoxIQScan() {
+    return this.knoxiqStatus === ENUMS.KNOXIQ_SCAN_STATUS.NOT_TRIGGERED;
+  }
+
+  get isPendingKnoxIQScan() {
+    return this.knoxiqStatus === ENUMS.KNOXIQ_SCAN_STATUS.PENDING;
+  }
+
+  get isRunningKnoxIQScan() {
+    return this.knoxiqStatus === ENUMS.KNOXIQ_SCAN_STATUS.RUNNING;
+  }
+
+  get isCompletedKnoxIQScan() {
+    return this.knoxiqStatus === ENUMS.KNOXIQ_SCAN_STATUS.COMPLETED;
+  }
+
+  get isErroredKnoxIQScan() {
+    return this.knoxiqStatus === ENUMS.KNOXIQ_SCAN_STATUS.ERRORED;
+  }
+
   // Utility methods
   async getLastDynamicScan(
     fileId: string,
@@ -199,10 +233,22 @@ export default class FileModel extends ModelBaseMixin {
     return await adapter.fetchFileRisk(this.id);
   }
 
+  async fetchFileExploitability() {
+    const adapter = this.store.adapterFor('file');
+
+    return await adapter.fetchFileExploitability(this.id);
+  }
+
   async generateCapiReports(fileTypes: FileCapiReportScanType[]) {
     const adapter = this.store.adapterFor('file');
 
     return await adapter.generateCapiReports(this.id, fileTypes);
+  }
+
+  async triggerKnoxiqScan() {
+    const adapter = this.store.adapterFor('knoxiq-scan');
+
+    return await adapter.triggerScan(this.id);
   }
 }
 

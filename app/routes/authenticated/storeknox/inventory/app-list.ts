@@ -36,8 +36,5 @@ export default class AuthenticatedStoreknoxInventoryAppListRoute extends AkBread
         monitoringStatusFilter: monitoring_status,
       })
       .reload();
-
-    // To get pending review count in tabs when page is visited for the first time
-    this.skPendingReview.reload();
   }
 }

@@ -75,12 +75,6 @@ export default class StoreknoxInventoryAppListTableComponent extends Component {
         headerComponent:
           'storeknox/inventory/app-list/table/monitoring-status-header',
       },
-      // {
-      //   headerComponent:
-      //     'storeknox/inventory/app-list/table/availability-header',
-      //   cellComponent: 'storeknox/inventory/app-list/table/availability',
-      //   textAlign: 'center',
-      // },
     ].filter(Boolean);
   }
 
@@ -97,7 +91,7 @@ export default class StoreknoxInventoryAppListTableComponent extends Component {
       return this.mockLoadingData;
     }
 
-    return (this.skAppsService.skApps?.map((app) => {
+    return (this.skAppsService.skApps?.slice().map((app) => {
       const { appMetadata } = app;
 
       return {

@@ -1,0 +1,20 @@
+{{#if @loading}}
+  <AkSkeleton @width='160px' @height='16px' />
+{{else}}
+  <AkLink
+    @route='authenticated.storeknox.fake-apps.fake-app-details'
+    @models={{array @data.skInventoryApp.id @data.id}}
+    data-test-storeknoxFakeAppListTable-appName
+  >
+    <AkTypography
+      @noWrap={{true}}
+      @fontWeight='medium'
+      @color='secondary'
+      @underline='always'
+      title={{@data.appName}}
+      {{style maxWidth='220px'}}
+    >
+      {{@data.appName}}
+    </AkTypography>
+  </AkLink>
+{{/if}}

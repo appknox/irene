@@ -142,7 +142,7 @@
       {{/if}}
     {{/if}}
 
-    {{#if (and (eq this.analysis.cvssVersion 3) this.analysis.cvssVector)}}
+    {{#if this.analysis.cvssVector}}
       <AkDivider @color='dark' />
 
       <AkStack data-test-analysisDetails-regulatory='cvssv3' class='p-3'>
@@ -152,7 +152,7 @@
           title='{{t "cvssExpansion"}}'
           data-test-analysisDetails-regulatoryLabel
         >
-          {{t 'cvssV3'}}
+          {{this.cvssTitle}}
         </AkTypography>
 
         <AkTypography

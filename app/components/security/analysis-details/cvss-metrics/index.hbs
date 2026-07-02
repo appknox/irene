@@ -9,115 +9,56 @@
   </AkTypography>
 
   <AkButton
-    {{on 'click' this.clearCvss}}
+    {{on 'click' this.setActiveCVSSDetailsToUntested}}
     data-test-securityAnalysisDetails-cvssMetrics-setUntestedBtn
   >
-    <:leftIcon>
-      <AkIcon @iconName='close' />
-    </:leftIcon>
-
-    <:default>
-      Set to Untested
-    </:default>
+    <:leftIcon><AkIcon @iconName='close' /></:leftIcon>
+    <:default>Set to Untested</:default>
   </AkButton>
 </AkStack>
 
 <AkDivider @color='dark' class='my-2' />
 
-<AkStack
-  @justifyContent='space-between'
-  @alignItems='center'
-  @width='full'
-  @spacing='3.5'
+{{#if this.analysisCurrentCvssIsLegacyCvss}}
+  <AkStack
+    @width='full'
+    @spacing='1.5'
+    @alignItems='center'
+    class='mb-3 p-2'
+    local-class='legacy-cvss-banner'
+    data-test-securityAnalysisDetails-cvssMetrics-legacyBanner
+  >
+    <AkIcon @iconName='info' @color='primary' />
+
+    <AkTypography @variant='body2' @fontWeight='medium'>
+      This analysis uses CVSS v3. To edit any analysis properties, please add
+      the CVSS v4 metrics. Note that the CVSS v3 metrics will become legacy.
+    </AkTypography>
+  </AkStack>
+{{/if}}
+
+<AkAccordion
+  @isExpanded={{this.isLegacyCvssExpanded}}
+  @onChange={{this.handleToggleLegacyCvss}}
+  @summaryText={{this.legacyCVSSTitle}}
+  @unmountContentOnCollapse={{true}}
+  class='mb-3'
+  data-test-securityAnalysisDetails-cvssMetrics-legacyCvssInfo
 >
-  <AkStack @width='6/12' @alignItems='center' @justifyContent='center'>
-    <AkStack
-      @justifyContent='center'
-      @alignItems='center'
-      local-class='colored-box
-        {{this.analysis.riskLabelClass}}
-        {{if @isInValidCvssBase "is-error"}}'
-      data-test-securityAnalysisDetails-cvssMetrics-cvssBaseAndRisk
-    >
+  <:content>
+    <Security::AnalysisDetails::CvssMetrics::CvssPanel
+      @cvssVersion={{this.legacyCVSSDetails.version}}
+      @cvssDetails={{this.legacyCVSSDetails}}
+      @selectDataList={{this.legacyCVSSSelectDataList}}
+      class='py-3'
+    />
+  </:content>
+</AkAccordion>
 
-      {{#if @isInValidCvssBase}}
-        <AkStack
-          @direction='column'
-          @alignItems='center'
-          @justifyContent='center'
-          @spacing='2.5'
-          data-test-securityAnalysisDetails-cvssMetrics-invalidCvssBase
-        >
-          <AkIcon
-            @iconName='warning'
-            data-test-securityAnalysisDetails-cvssMetrics-invalidCvssBaseIcon
-          />
+<AkDivider @color='dark' class='mb-2' />
 
-          <AkTypography
-            @variant='h5'
-            @color='inherit'
-            @align='center'
-            {{style textTransform='uppercase'}}
-          >
-            Invalid vector
-          </AkTypography>
-        </AkStack>
-
-      {{else}}
-        <AkStack
-          @direction='column'
-          @alignItems='center'
-          @justifyContent='center'
-        >
-          <AkTypography
-            @variant='h1'
-            @color='inherit'
-            {{style fontSize='3.42em'}}
-            data-test-securityAnalysisDetails-cvssMetrics-cvssBase
-          >
-            {{this.analysis.cvssBase}}
-          </AkTypography>
-
-          <AkTypography
-            @variant='h5'
-            @color='inherit'
-            {{style textTransform='uppercase'}}
-            data-test-securityAnalysisDetails-cvssMetrics-cvssRisk
-          >
-            {{risk-text this.analysis.risk}}
-          </AkTypography>
-        </AkStack>
-      {{/if}}
-    </AkStack>
-  </AkStack>
-
-  <AkStack @direction='column' @spacing='2.5' @width='6/12'>
-    {{#each this.cvssMetricSelectDataList as |metric|}}
-      <AkStack
-        @spacing='3.5'
-        @width='full'
-        @justifyContent='space-between'
-        @alignItems='center'
-      >
-        <AkTypography
-          {{style width='200px'}}
-          data-test-securityAnalysisDetails-cvssMetrics-metricSelectLabel='{{metric.key}}'
-        >
-          {{metric.label}}
-        </AkTypography>
-
-        <AkSelect
-          id={{metric.key}}
-          @selected={{metric.selected}}
-          @options={{metric.options}}
-          @onChange={{metric.onSelect}}
-          {{style width='250px'}}
-          data-test-securityAnalysisDetails-cvssMetrics-metricSelect='{{metric.key}}'
-          as |key|
-        >
-          {{metric.getOptionLabel key}}
-        </AkSelect>
-      </AkStack>
-    {{/each}}
-  </AkStack>
-</AkStack>
+<Security::AnalysisDetails::CvssMetrics::CvssPanel
+  @cvssVersion={{this.analysisActiveCvssVersion}}
+  @cvssDetails={{this.currentCVSSDetails}}
+  @selectDataList={{this.currentCVSSSelectDataList}}
+/>

@@ -1,0 +1,16 @@
+.app-info-logo {
+  border-radius: 100%;
+  object-fit: contain;
+  width: 32px;
+  height: 32px;
+  border: 1px solid
+    var(--storeknox-fake-apps-fake-app-list-table-logo-border-color);
+}
+
+.app-info-logo-placeholder {
+  border-radius: 50%;
+  width: 32px;
+  height: 32px;
+  background-color: var(--storeknox-fake-apps-fake-app-list-table-logo-placeholder-bg-color);
+  border: 1px solid var(--storeknox-fake-apps-fake-app-list-table-logo-border-color);
+}

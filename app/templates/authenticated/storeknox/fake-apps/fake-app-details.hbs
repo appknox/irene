@@ -1,0 +1,12 @@
+{{page-title (t 'storeknox.fakeAppDetails')}}
+
+<AkStack @width='full' @direction='column' @spacing='2'>
+  <Storeknox::FakeApps::IgnoredBanner @fakeApp={{@model.fakeApp}} />
+
+  <PageWrapper>
+    <Storeknox::FakeApps::Details
+      @fakeApp={{@model.fakeApp}}
+      @skInventoryApp={{@model.skInventoryApp}}
+    />
+  </PageWrapper>
+</AkStack>

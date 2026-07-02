@@ -21,6 +21,8 @@
 }
 
 .view-details-icon {
+  justify-content: left;
+
   :global(.ak-icon) {
     font-size: 1.5rem !important;
   }

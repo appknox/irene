@@ -1,0 +1,36 @@
+.chip-container {
+  background-color: var(--knoxiq-status-chip-bg-color);
+  border-radius: var(--knoxiq-status-chip-border-radius);
+  padding: 0.464em 0.714em;
+  color: var(--knoxiq-status-chip-color);
+}
+
+.running-loader {
+  :global(.ak-loader-circle-indicator) {
+    stroke: var(--knoxiq-status-chip-color) !important;
+  }
+
+  :global(.ak-loader-svg-track) {
+    stroke: var(--knoxiq-status-chip-stroke-color) !important;
+  }
+}
+
+.completed-chip-icon {
+  color: var(--knoxiq-status-chip-completed-color);
+}
+
+.failed-chip {
+  background-color: var(--knoxiq-status-chip-failed-bg-color);
+  color: var(--knoxiq-status-chip-failed-color);
+}
+
+.running-tooltip-content {
+  padding: 0.5em;
+}
+
+.failed-tooltip-content {
+  width: 320px;
+  padding: 0.5em;
+  box-sizing: border-box;
+  white-space: normal;
+}

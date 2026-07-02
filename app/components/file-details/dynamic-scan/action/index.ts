@@ -16,6 +16,7 @@ export interface DynamicScanActionSignature {
   Args: {
     onScanShutdown?: () => void;
     openActionDrawer?: () => void;
+    onBeforeShutdown?: (doShutdown: () => void) => void;
     file: FileModel;
     dynamicScanText: string;
     isAutomatedScan?: boolean;
@@ -58,7 +59,10 @@ export default class DynamicScanActionComponent extends Component<DynamicScanAct
         text: this.intl.t('stop'),
         testId: 'stopBtn',
         loading: this.dynamicShutdown.isRunning,
-        onClick: () => this.dynamicShutdown.perform(),
+        onClick: () =>
+          this.args.onBeforeShutdown
+            ? this.args.onBeforeShutdown(() => this.dynamicShutdown.perform())
+            : this.dynamicShutdown.perform(),
       };
     }
 

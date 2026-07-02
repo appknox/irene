@@ -1,0 +1,23 @@
+.fake-apps-grid {
+  display: grid;
+  justify-items: stretch;
+  grid-template-columns: repeat(auto-fill, minmax(430px, 1fr));
+  gap: 1.5em;
+}
+
+.header-storeknox-fake-apps-page {
+  background-color: var(--storeknox-fake-apps-header-background-color);
+  margin: 0.714em 0;
+  padding: 1.428em;
+  border: 1px solid var(--storeknox-fake-apps-header-border-color);
+}
+
+.search-package-name-input {
+  font-size: 0.857rem !important;
+}
+
+.beta-chip {
+  border-color: var(--storeknox-fake-apps-header-beta-tag-bg);
+  background-color: var(--storeknox-fake-apps-header-beta-tag-bg);
+  color: var(--storeknox-fake-apps-header-beta-tag-color) !important;
+}

@@ -11,6 +11,7 @@ import type DS from 'ember-data';
 
 import styles from './index.scss';
 import ENUMS from 'irene/enums';
+import { getIOSManualDeviceVersionParams } from 'irene/utils/dynamic-scan-device';
 import { type PaginationProviderActionsArgs } from 'irene/components/ak-pagination-provider';
 import type { DsPreferenceContext } from 'irene/components/ds-preference-provider';
 import type FileModel from 'irene/models/file';
@@ -50,6 +51,7 @@ export interface FileDetailsDynamicScanDrawerDevicePrefTableSignature {
   Args: {
     dpContext: DsPreferenceContext;
     file: FileModel;
+    onSelectedManualDeviceAvailable(deviceIdentifier: string): void;
   };
 }
 
@@ -185,6 +187,8 @@ export default class FileDetailsDynamicScanDrawerDevicePrefTableComponent extend
 
     preference.dsManualDeviceIdentifier = device.deviceIdentifier;
 
+    this.args.onSelectedManualDeviceAvailable(device.deviceIdentifier);
+
     this.dpContext.updateDsManualDevicePref(preference);
   }
 
@@ -230,8 +234,25 @@ export default class FileDetailsDynamicScanDrawerDevicePrefTableComponent extend
 
         this.availableDevicesResponse = (await this.store.query(
           'available-manual-device',
-          { ...queryParams, platform_version_min: this.args.file.minOsVersion }
+          {
+            ...queryParams,
+            ...getIOSManualDeviceVersionParams(this.args.file),
+          }
         )) as AvailableManualDeviceQueryResponse;
+
+        const selectedDeviceIdentifier =
+          this.devicePreference?.dsManualDeviceIdentifier;
+
+        const selectedDeviceIsAvailableInResponse =
+          this.availableManualDevices.some(
+            (device) => device.deviceIdentifier === selectedDeviceIdentifier
+          );
+
+        if (selectedDeviceIdentifier && selectedDeviceIsAvailableInResponse) {
+          this.args.onSelectedManualDeviceAvailable(selectedDeviceIdentifier);
+        } else {
+          this.args.onSelectedManualDeviceAvailable('');
+        }
       } catch (error) {
         const err = error as AdapterError;
         const errorStatus = err.errors?.[0]?.status;

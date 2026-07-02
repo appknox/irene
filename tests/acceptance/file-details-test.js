@@ -76,6 +76,12 @@ module('Acceptance | file details', function (hooks) {
         .toJSON()
     );
 
+    analyses.map(async (analysis) => {
+      await this.server.create('detailed-analysis', {
+        id: analysis.id,
+      });
+    });
+
     this.server.createList('unknown-analysis-status', 3, {
       status: true,
     });
@@ -231,6 +237,10 @@ module('Acceptance | file details', function (hooks) {
 
     await visit(`/dashboard/file/${this.file.id}`);
 
+    this.server.get('/v2/analyses/:id/detailed-analysis', (schema, req) => {
+      return schema.detailedAnalyses.find(`${req.params.id}`)?.toJSON();
+    });
+
     assert
       .dom('[data-test-vulnerability-analysis-title]')
       .hasText(t('vulnerabilityDetails'));
@@ -299,5 +309,94 @@ module('Acceptance | file details', function (hooks) {
       currentURL(),
       `/dashboard/file/${this.file.id}/manual-scan`
     );
+  });
+
+  test('it shows the legacy CVSS notification banner when some analyses have cvss_version !== active_cvss_version', async function (assert) {
+    this.server.get('/v3/files/:id/analyses', () => ({
+      count: 1,
+      next: null,
+      previous: null,
+      results: [
+        {
+          id: '1000',
+          risk: 2,
+          status: 3,
+          computed_risk: 2,
+          cvss_version: 3,
+          active_cvss_version: 4,
+        },
+      ],
+    }));
+
+    await visit(`/dashboard/file/${this.file.id}`);
+
+    assert
+      .dom('[data-test-ak-notification-banner]')
+      .exists(
+        'Legacy CVSS banner is visible when some analyses have legacy CVSS versions'
+      );
+
+    assert
+      .dom('[data-test-ak-notification-banner-message]')
+      .hasText(
+        t('cvssLegacyMessage'),
+        'Banner displays the legacy CVSS message'
+      );
+  });
+
+  test('it hides the legacy CVSS notification banner after the close button is clicked', async function (assert) {
+    this.server.get('/v3/files/:id/analyses', () => ({
+      count: 1,
+      next: null,
+      previous: null,
+      results: [
+        {
+          id: '1000',
+          risk: 2,
+          status: 3,
+          computed_risk: 2,
+          cvss_version: 3,
+          active_cvss_version: 4,
+        },
+      ],
+    }));
+
+    await visit(`/dashboard/file/${this.file.id}`);
+
+    assert
+      .dom('[data-test-ak-notification-banner]')
+      .exists('Banner initially visible');
+
+    await click('[data-test-ak-notification-banner-close]');
+
+    assert
+      .dom('[data-test-ak-notification-banner]')
+      .doesNotExist('Legacy CVSS banner is dismissed after clicking close');
+  });
+
+  test('it does not show the legacy CVSS notification banner when all analyses have matching cvss_version === active_cvss_version', async function (assert) {
+    this.server.get('/v3/files/:id/analyses', () => ({
+      count: 1,
+      next: null,
+      previous: null,
+      results: [
+        {
+          id: '1000',
+          risk: 2,
+          status: 3,
+          computed_risk: 2,
+          cvss_version: 4,
+          active_cvss_version: 4,
+        },
+      ],
+    }));
+
+    await visit(`/dashboard/file/${this.file.id}`);
+
+    assert
+      .dom('[data-test-ak-notification-banner]')
+      .doesNotExist(
+        'Legacy CVSS banner is absent when all analyses have matching CVSS versions'
+      );
   });
 });

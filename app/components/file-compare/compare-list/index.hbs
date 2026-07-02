@@ -80,10 +80,12 @@
       {{else if this.hasFiles}}
         <div local-class='file-compare-list-file-overviews'>
           {{#each this.otherFilesInTheProject as |file|}}
-            <FileOverview
+            <AppFileCard
               @file={{file}}
               @isSelectedFile={{eq file.id this.fileToCompare.id}}
               @onFileSelect={{this.handleFileSelect}}
+              @showCheckbox={{true}}
+              @showMenuButton={{false}}
               @hideOpenInNewTabIcon={{true}}
               data-test-fileCompare-compareList-fileOverview-item
               data-test-fileCompare-compareList-fileOverview='{{file.id}}'

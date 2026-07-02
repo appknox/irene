@@ -1,0 +1,69 @@
+{{#if (eq @state 'failed')}}
+  <AkTooltip @arrow={{true}} @placement='top'>
+    <:tooltipContent>
+      <AkStack
+        @direction='column'
+        class='p-1'
+        local-class='failed-tooltip-content'
+      >
+        <AkTypography @color='inherit' @variant='body2'>
+          {{t 'knoxIq.statusCard.failedSubtitle'}}
+        </AkTypography>
+      </AkStack>
+    </:tooltipContent>
+
+    <:default>
+      <AkStack
+        @spacing='1'
+        @alignItems='center'
+        local-class='chip-container failed-chip'
+        data-test-knoxiq-status-chip-failed
+      >
+        <AkTypography @variant='body2' @color='inherit' @fontWeight='medium'>
+          {{t 'knoxIq.statusChip.failed'}}
+        </AkTypography>
+      </AkStack>
+    </:default>
+  </AkTooltip>
+{{else if (eq @state 'completed')}}
+  <AkStack @spacing='1' @alignItems='center' local-class='chip-container'>
+    <AkIcon
+      local-class='completed-chip-icon'
+      @iconName='check-circle'
+      @size='small'
+    />
+
+    <AkTypography @variant='body2' @color='inherit' @fontWeight='medium'>
+      {{t 'completed'}}
+    </AkTypography>
+  </AkStack>
+{{else}}
+  <AkTooltip @arrow={{true}} @placement='top'>
+    <:tooltipContent>
+      <AkStack
+        @direction='column'
+        class='p-1'
+        local-class='running-tooltip-content'
+      >
+        <AkTypography @color='inherit' @variant='body2'>
+          {{t 'knoxIq.statusChip.runningTooltip'}}
+        </AkTypography>
+      </AkStack>
+    </:tooltipContent>
+
+    <:default>
+      <AkStack @spacing='1' @alignItems='center' local-class='chip-container'>
+        <AkLoader
+          @size={{16}}
+          @thickness={{6}}
+          @color='info'
+          local-class='running-loader'
+        />
+
+        <AkTypography @variant='body2' @color='inherit' @fontWeight='medium'>
+          {{t 'knoxIq.statusChip.running'}}
+        </AkTypography>
+      </AkStack>
+    </:default>
+  </AkTooltip>
+{{/if}}

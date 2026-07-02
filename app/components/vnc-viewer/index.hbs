@@ -58,59 +58,88 @@
     {{/if}}
   {{/if}}
 
-  <div data-test-vncViewer-device class='marvel-device {{this.deviceType}}'>
-    {{#if this.isTablet}}
-      <div data-test-vncViewer-deviceTopBar class='top-bar' />
-      <div data-test-vncViewer-deviceSleep class='sleep' />
-      <div data-test-vncViewer-deviceVolume class='volume' />
-    {{/if}}
-
-    <div data-test-vncViewer-deviceCamera class='camera' />
-
-    {{#if this.isIOSDevice}}
+  {{#if (or this.isCyodScan this.isScrcpyScan)}}
+    {{! CYOD / proxy — the user interacts on their own device (or via
+        cyod-viewer), so the classic device frame is used regardless of iOS
+        version (the modern iOS frame only wraps a live noVNC stream). }}
+    <div data-test-vncViewer-device class='marvel-device {{this.deviceType}}'>
       {{#if this.isTablet}}
-        <div data-test-vncViewer-deviceSpeaker class='speaker' />
+        <div data-test-vncViewer-deviceTopBar class='top-bar' />
+        <div data-test-vncViewer-deviceSleep class='sleep' />
+        <div data-test-vncViewer-deviceVolume class='volume' />
       {{/if}}
-    {{/if}}
 
-    <div data-test-vncViewer-deviceScreen class='screen'>
-      {{#if this.isCyodScan}}
-        {{#if @dynamicScan.isInstalling}}
-          {{#if this.isWebusbCyod}}
-            {{! WebUSB CYOD — auto-install in browser }}
-            <AkStack
-              data-test-vncViewer-webusbInstall
-              local-class='cyod-install-note'
-              @direction='column'
-              @alignItems='center'
-              @spacing='1'
-            >
-              {{#if this.webusbInstallIsRunning}}
-                <AkTypography @color='inherit' @variant='subtitle2'>
-                  {{#if (eq this.webusbInstallStage 'downloading')}}
-                    {{t 'cyodAutoInstallDownloading'}} ({{this.webusbInstallPercent}}%)
-                  {{else if (eq this.webusbInstallStage 'pushing')}}
-                    {{t 'cyodAutoInstallPushing'}} ({{this.webusbInstallPercent}}%)
-                  {{else if (eq this.webusbInstallStage 'installing')}}
-                    {{t 'cyodAutoInstalling'}}
-                  {{else}}
-                    {{t 'cyodAutoInstallDone'}}
+      <div data-test-vncViewer-deviceCamera class='camera' />
+
+      {{#if this.isIOSDevice}}
+        {{#if this.isTablet}}
+          <div data-test-vncViewer-deviceSpeaker class='speaker' />
+        {{/if}}
+      {{/if}}
+
+      <div data-test-vncViewer-deviceScreen class='screen'>
+        {{#if this.isCyodScan}}
+          {{#if @dynamicScan.isInstalling}}
+            {{#if this.isWebusbCyod}}
+              {{! WebUSB CYOD — auto-install in browser }}
+              <AkStack
+                data-test-vncViewer-webusbInstall
+                local-class='cyod-install-note'
+                @direction='column'
+                @alignItems='center'
+                @spacing='1'
+              >
+                {{#if this.webusbInstallIsRunning}}
+                  <AkTypography @color='inherit' @variant='subtitle2'>
+                    {{#if (eq this.webusbInstallStage 'downloading')}}
+                      {{t 'cyodAutoInstallDownloading'}}
+                      ({{this.webusbInstallPercent}}%)
+                    {{else if (eq this.webusbInstallStage 'pushing')}}
+                      {{t 'cyodAutoInstallPushing'}}
+                      ({{this.webusbInstallPercent}}%)
+                    {{else if (eq this.webusbInstallStage 'installing')}}
+                      {{t 'cyodAutoInstalling'}}
+                    {{else}}
+                      {{t 'cyodAutoInstallDone'}}
+                    {{/if}}
+                  </AkTypography>
+                {{else if this.webusbAdb}}
+                  <AkTypography @color='inherit' @variant='subtitle2'>
+                    {{t 'cyodAutoInstallReady'}}
+                  </AkTypography>
+                  <AkButton
+                    data-test-vncViewer-webusbInstallBtn
+                    @variant='contained'
+                    @size='small'
+                    {{on 'click' (perform this.autoInstallViaWebUsb)}}
+                  >
+                    {{t 'cyodAutoInstallStart'}}
+                  </AkButton>
+                {{else}}
+                  {{! No ADB session — fall back to manual download }}
+                  <AkTypography @color='inherit' @variant='subtitle2'>
+                    {{t 'cyodInstallApp'}}
+                  </AkTypography>
+                  {{#if this.cyodDownloadUrl}}
+                    <AkLink
+                      data-test-vncViewer-cyodDownloadLink
+                      @href={{this.cyodDownloadUrl}}
+                      @target='_blank'
+                    >
+                      {{t 'cyodDownloadApk'}}
+                    </AkLink>
                   {{/if}}
-                </AkTypography>
-              {{else if this.webusbAdb}}
-                <AkTypography @color='inherit' @variant='subtitle2'>
-                  {{t 'cyodAutoInstallReady'}}
-                </AkTypography>
-                <AkButton
-                  data-test-vncViewer-webusbInstallBtn
-                  @variant='contained'
-                  @size='small'
-                  {{on 'click' (perform this.autoInstallViaWebUsb)}}
-                >
-                  {{t 'cyodAutoInstallStart'}}
-                </AkButton>
-              {{else}}
-                {{! No ADB session — fall back to manual download }}
+                {{/if}}
+              </AkStack>
+            {{else}}
+              {{! Non-WebUSB CYOD — manual download }}
+              <AkStack
+                data-test-vncViewer-cyodDownload
+                local-class='cyod-install-note'
+                @direction='column'
+                @alignItems='center'
+                @spacing='1'
+              >
                 <AkTypography @color='inherit' @variant='subtitle2'>
                   {{t 'cyodInstallApp'}}
                 </AkTypography>
@@ -120,104 +149,147 @@
                     @href={{this.cyodDownloadUrl}}
                     @target='_blank'
                   >
-                    {{t 'cyodDownloadApk'}}
+                    {{if this.cyodIsIos (t 'cyodInstallIos') (t 'cyodDownloadApk')}}
                   </AkLink>
                 {{/if}}
-              {{/if}}
-            </AkStack>
-          {{else}}
-            {{! Non-WebUSB CYOD — manual download }}
+              </AkStack>
+            {{/if}}
+          {{else if this.isScrcpyScan}}
+            {{! Render outside isReady to avoid destroy/recreate on model poll }}
+            <CyodViewer
+              data-test-vncViewer-cyodViewer
+              @scanToken={{this.scrcpyScanToken}}
+              @platform={{this.filePlatform}}
+              @authToken={{this.deviceFarmPassword}}
+            />
+          {{else if @dynamicScan.isReady}}
             <AkStack
-              data-test-vncViewer-cyodDownload
-              local-class='cyod-install-note'
+              data-test-vncViewer-cyodReady
+              local-class='cyod-ready-note'
               @direction='column'
               @alignItems='center'
               @spacing='1'
             >
+              <AkIcon @iconName='smartphone' @color='inherit' />
               <AkTypography @color='inherit' @variant='subtitle2'>
-                {{t 'cyodInstallApp'}}
+                {{t 'cyodInteractOnDevice'}}
               </AkTypography>
-              {{#if this.cyodDownloadUrl}}
-                <AkLink
-                  data-test-vncViewer-cyodDownloadLink
-                  @href={{this.cyodDownloadUrl}}
-                  @target='_blank'
-                >
-                  {{if this.cyodIsIos (t 'cyodInstallIos') (t 'cyodDownloadApk')}}
-                </AkLink>
-              {{/if}}
             </AkStack>
           {{/if}}
         {{else if this.isScrcpyScan}}
-          {{! Render outside isReady to avoid destroy/recreate on model poll }}
+          {{! Proxy CYOD — Mercer streaming via scrcpy/go-ios }}
+          {{! Render outside isReady guard to avoid destroy/recreate on model poll }}
           <CyodViewer
             data-test-vncViewer-cyodViewer
             @scanToken={{this.scrcpyScanToken}}
             @platform={{this.filePlatform}}
             @authToken={{this.deviceFarmPassword}}
           />
-        {{else if @dynamicScan.isReady}}
-          <AkStack
-            data-test-vncViewer-cyodReady
-            local-class='cyod-ready-note'
-            @direction='column'
-            @alignItems='center'
-            @spacing='1'
-          >
-            <AkIcon @iconName='smartphone' @color='inherit' />
-            <AkTypography @color='inherit' @variant='subtitle2'>
-              {{t 'cyodInteractOnDevice'}}
-            </AkTypography>
-          </AkStack>
         {{/if}}
-      {{else if this.isAutomated}}
-        {{#if
-          (or
-            @dynamicScan.isStartingOrShuttingInProgress
-            @dynamicScan.isReadyOrRunning
-          )
-        }}
-          <AkStack
-            data-test-vncViewer-automatedNote
-            local-class='automated-scan-vnc-note'
-          >
-            <AkTypography @color='inherit'>
-              <strong>{{t 'note'}}</strong>
-              -
-              {{t
-                (if
-                  @dynamicScan.isInqueue
-                  'automatedScanQueuedVncNote'
-                  'automatedScanRunningVncNote'
-                )
-              }}
-            </AkTypography>
-          </AkStack>
+      </div>
+
+      {{#if this.isIOSDevice}}
+        <div data-test-vncViewer-deviceHome class='home' />
+
+        {{#if this.isTablet}}
+          <div data-test-vncViewer-deviceBottomBar class='bottom-bar' />
         {{/if}}
-      {{else if this.isScrcpyScan}}
-        {{! Proxy CYOD — Mercer streaming via scrcpy/go-ios }}
-        {{! Render outside isReady guard to avoid destroy/recreate on model poll }}
-        <CyodViewer
-          data-test-vncViewer-cyodViewer
-          @scanToken={{this.scrcpyScanToken}}
-          @platform={{this.filePlatform}}
-          @authToken={{this.deviceFarmPassword}}
-        />
-      {{else if @dynamicScan.isReady}}
-        {{! Farm device — existing noVNC }}
-        <NovncRfb
-          @deviceFarmURL={{this.deviceFarmURL}}
-          @deviceFarmPassword={{this.deviceFarmPassword}}
-        />
       {{/if}}
     </div>
-
-    {{#if this.isIOSDevice}}
-      <div data-test-vncViewer-deviceHome class='home' />
-
+  {{else if this.supportsModernIOSDeviceFrame}}
+    <div data-test-vncViewer-device class='ios-device-frame'>
+      <div data-test-vncViewer-deviceScreen class='ios-device-screen'>
+        {{#if this.isAutomated}}
+          {{#if
+            (or
+              @dynamicScan.isStartingOrShuttingInProgress
+              @dynamicScan.isReadyOrRunning
+            )
+          }}
+            <AkStack
+              data-test-vncViewer-automatedNote
+              local-class='automated-scan-vnc-note'
+            >
+              <AkTypography @color='inherit'>
+                <strong>{{t 'note'}}</strong>
+                -
+                {{t
+                  (if
+                    @dynamicScan.isInqueue
+                    'automatedScanQueuedVncNote'
+                    'automatedScanRunningVncNote'
+                  )
+                }}
+              </AkTypography>
+            </AkStack>
+          {{/if}}
+        {{else if @dynamicScan.isReadyOrRunning}}
+          <NovncRfb
+            @allowInteraction={{@dynamicScan.isReady}}
+            @deviceFarmURL={{this.deviceFarmURL}}
+            @deviceFarmPassword={{this.deviceFarmPassword}}
+            @containCanvas={{true}}
+          />
+        {{/if}}
+      </div>
+    </div>
+  {{else}}
+    <div data-test-vncViewer-device class='marvel-device {{this.deviceType}}'>
       {{#if this.isTablet}}
-        <div data-test-vncViewer-deviceBottomBar class='bottom-bar' />
+        <div data-test-vncViewer-deviceTopBar class='top-bar' />
+        <div data-test-vncViewer-deviceSleep class='sleep' />
+        <div data-test-vncViewer-deviceVolume class='volume' />
       {{/if}}
-    {{/if}}
-  </div>
+
+      <div data-test-vncViewer-deviceCamera class='camera' />
+
+      {{#if this.isIOSDevice}}
+        {{#if this.isTablet}}
+          <div data-test-vncViewer-deviceSpeaker class='speaker' />
+        {{/if}}
+      {{/if}}
+
+      <div data-test-vncViewer-deviceScreen class='screen'>
+        {{#if this.isAutomated}}
+          {{#if
+            (or
+              @dynamicScan.isStartingOrShuttingInProgress
+              @dynamicScan.isReadyOrRunning
+            )
+          }}
+            <AkStack
+              data-test-vncViewer-automatedNote
+              local-class='automated-scan-vnc-note'
+            >
+              <AkTypography @color='inherit'>
+                <strong>{{t 'note'}}</strong>
+                -
+                {{t
+                  (if
+                    @dynamicScan.isInqueue
+                    'automatedScanQueuedVncNote'
+                    'automatedScanRunningVncNote'
+                  )
+                }}
+              </AkTypography>
+            </AkStack>
+          {{/if}}
+        {{else if @dynamicScan.isReadyOrRunning}}
+          <NovncRfb
+            @allowInteraction={{@dynamicScan.isReady}}
+            @deviceFarmURL={{this.deviceFarmURL}}
+            @deviceFarmPassword={{this.deviceFarmPassword}}
+          />
+        {{/if}}
+      </div>
+
+      {{#if this.isIOSDevice}}
+        <div data-test-vncViewer-deviceHome class='home' />
+
+        {{#if this.isTablet}}
+          <div data-test-vncViewer-deviceBottomBar class='bottom-bar' />
+        {{/if}}
+      {{/if}}
+    </div>
+  {{/if}}
 </AkStack>

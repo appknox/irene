@@ -130,31 +130,6 @@ module(
 
       assert.dom(storeLogoSelector).exists();
 
-      await click(storeLogoSelector);
-
-      assert
-        .dom('[data-test-storeknox-productInfoCaptionText]')
-        .hasText(t('infoCapitalCase'));
-
-      const productTitle = inventoryAppRecord.isAndroid
-        ? t('storeknox.playStore')
-        : t('storeknox.appStore');
-
-      assert
-        .dom('[data-test-storeknox-productInfo-appIsPartOfText]')
-        .containsText(t('storeknox.appIsPartOf'))
-        .containsText(productTitle);
-
-      assert
-        .dom('[data-test-storeknox-productInfo-appStoreLink]')
-        .hasAttribute('href', inventoryAppRecord.appMetadata.url);
-
-      assert
-        .dom('[data-test-storeknox-productInfo-appStoreLinkBtn]')
-        .hasText(t('storeknox.checkOn') + ` ${productTitle}`);
-
-      await click(storeLogoSelector);
-
       assert
         .dom('[data-test-storeknoxInventoryDetails-pageInfoTag]')
         .isDisabled()

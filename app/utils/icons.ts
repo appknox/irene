@@ -69,6 +69,7 @@ export const MaterialSymbolsSet = [
   'format-list-bulleted',
   'play-arrow',
   'stop',
+  'terminal-2',
   'build',
   'person-off',
   'person-off-outline',
@@ -128,6 +129,8 @@ export const MaterialSymbolsSet = [
   'filter-list',
   'sort',
   'wb-incandescent',
+  'lightbulb',
+  'experiment',
   'drive-file-rename-outline',
   'event-note',
   'open-in-full',
@@ -169,6 +172,8 @@ export const MaterialSymbolsSet = [
   'add-column-right-outline-rounded',
   'cards-sharp',
   'distance',
+  'arrow-right-alt',
+  'history',
 ] as const;
 
 export const MdiIconsSet = [
@@ -183,9 +188,16 @@ export const MdiIconsSet = [
   'wand',
   'progress-clock',
   'file-certificate-outline',
+  'fire',
+  'calendar-month-outline',
 ] as const;
 
-export const HugeIconsSet = ['api', 'ai-brain-04'] as const;
+export const HugeIconsSet = [
+  'api',
+  'ai-brain-04',
+  'image-03',
+  'ai-magic',
+] as const;
 
 export const FaBrandsIconsSet = ['apple'] as const;
 
@@ -197,4 +209,14 @@ export const PhIconsSet = ['diamonds-four'] as const;
 
 export const MynauiIconsSet = ['frame'] as const;
 
-export const SolarIconsSet = ['library-linear'] as const;
+export const SolarIconsSet = ['library-linear', 'play-bold'] as const;
+
+export const IconoirIconsSet = ['screenshot'] as const;
+
+export const FluentIconsSet = ['app-recent-24-regular'] as const;
+
+export const StreamlinePlumpIconsSet = ['threat-phone'] as const;
+
+export const IxIconsSet = ['ai'] as const;
+
+export const MajesticonsIconsSet = ['pulse'] as const;

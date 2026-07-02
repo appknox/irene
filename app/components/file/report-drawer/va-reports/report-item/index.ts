@@ -99,6 +99,8 @@ export default class FileReportDrawerVaReportsReportItemComponent extends Compon
       );
     } else {
       this.notify.error(this.intl.t('downloadUrlNotFound'));
+
+      return Promise.reject();
     }
   }
 

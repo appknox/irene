@@ -10,6 +10,11 @@ import { icons as BxIcons } from '@iconify-json/bx';
 import { icons as PhIcons } from '@iconify-json/ph';
 import { icons as MynauiIcons } from '@iconify-json/mynaui';
 import { icons as SolarIcons } from '@iconify-json/solar';
+import { icons as IconoirIcons } from '@iconify-json/iconoir';
+import { icons as FluentIcons } from '@iconify-json/fluent';
+import { icons as StreamlinePlumpIcons } from '@iconify-json/streamline-plump';
+import { icons as IxIcons } from '@iconify-json/ix';
+import { icons as MajesticonsIcons } from '@iconify-json/majesticons';
 
 import {
   MaterialSymbolsSet,
@@ -21,6 +26,11 @@ import {
   PhIconsSet,
   MynauiIconsSet,
   SolarIconsSet,
+  IconoirIconsSet,
+  FluentIconsSet,
+  StreamlinePlumpIconsSet,
+  IxIconsSet,
+  MajesticonsIconsSet,
 } from '../app/utils/icons.ts';
 
 // Load all icon sets
@@ -28,6 +38,7 @@ const materialSymbolsCollection = getIcons(
   MaterialSymbolIcons,
   MaterialSymbolsSet
 );
+
 const mdiCollection = getIcons(MaterialDesignIcons, MdiIconsSet);
 const hugeIconsCollection = getIcons(HugeIcons, HugeIconsSet);
 const faBrandsCollection = getIcons(FaBrandsIcons, FaBrandsIconsSet);
@@ -36,6 +47,17 @@ const bxCollection = getIcons(BxIcons, BxIconsSet);
 const phCollection = getIcons(PhIcons, PhIconsSet);
 const mynauiCollection = getIcons(MynauiIcons, MynauiIconsSet);
 const solarCollection = getIcons(SolarIcons, SolarIconsSet);
+const iconoirCollection = getIcons(IconoirIcons, IconoirIconsSet);
+const fluentCollection = getIcons(FluentIcons, FluentIconsSet);
+
+const streamlinePlumpCollection = getIcons(
+  StreamlinePlumpIcons,
+  StreamlinePlumpIconsSet
+);
+
+const ixCollection = getIcons(IxIcons, IxIconsSet);
+
+const majesticonsCollection = getIcons(MajesticonsIcons, MajesticonsIconsSet);
 
 // Merge everything into one big object
 const output = {
@@ -48,6 +70,11 @@ const output = {
   phCollection,
   mynauiCollection,
   solarCollection,
+  iconoirCollection,
+  fluentCollection,
+  streamlinePlumpCollection,
+  ixCollection,
+  majesticonsCollection,
 };
 
 // Write output JSON

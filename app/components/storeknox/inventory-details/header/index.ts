@@ -6,25 +6,25 @@ import { tracked } from '@glimmer/tracking';
 import { waitForPromise } from '@ember/test-waiters';
 import dayjs from 'dayjs';
 import type IntlService from 'ember-intl/services/intl';
-import type RouterService from '@ember/routing/router-service';
-import type Store from 'ember-data/store';
 
 import parseError from 'irene/utils/parse-error';
 import type SkInventoryAppModel from 'irene/models/sk-inventory-app';
-import type OrganizationService from 'irene/services/organization';
 import type MeService from 'irene/services/me';
 import type SkOrganizationService from 'irene/services/sk-organization';
 
 interface StoreknoxInventoryDetailsHeaderSignature {
   Args: {
     skInventoryApp: SkInventoryAppModel;
+    hideUploadToAppknoxBanner?: boolean;
+    hideLicenseIcon?: boolean;
+  };
+
+  Blocks: {
+    actionItems: [];
   };
 }
 
 export default class StoreknoxInventoryDetailsHeaderComponent extends Component<StoreknoxInventoryDetailsHeaderSignature> {
-  @service declare organization: OrganizationService;
-  @service declare store: Store;
-  @service declare router: RouterService;
   @service declare intl: IntlService;
   @service declare me: MeService;
 
@@ -34,6 +34,7 @@ export default class StoreknoxInventoryDetailsHeaderComponent extends Component<
   @tracked isArchiveAppDrawerOpen = false;
   @tracked openToggleMonitoringDrawer = false;
   @tracked monitoringChecked = false;
+  @tracked failedToLoadAppIcon = false;
 
   constructor(
     owner: unknown,
@@ -42,102 +43,44 @@ export default class StoreknoxInventoryDetailsHeaderComponent extends Component<
     super(owner, args);
 
     this.monitoringChecked = args.skInventoryApp?.monitoringEnabled;
+
+    // Reload org sub to get the latest org sub data
+    this.skOrg.reloadOrgSub();
+  }
+
+  get displayFallbackAppIcon() {
+    return (
+      !this.skInventoryApp?.appMetadata.iconUrl || this.failedToLoadAppIcon
+    );
   }
 
   get skInventoryApp() {
     return this.args.skInventoryApp;
   }
 
+  get lastFakeAppDetectionDate() {
+    return dayjs(this.skInventoryApp?.lastFakeDetectionOn).format(
+      'MMM DD, YYYY'
+    );
+  }
+
   get appHasLicense() {
     return this.skInventoryApp?.hasLicense;
   }
 
-  get isOwnerOrAdmin() {
-    const isOwner = this.me.org?.is_owner;
-    const isAdmin = this.me.org?.is_admin;
-
-    return isOwner || isAdmin;
+  get showUploadToAppknoxBanner() {
+    return (
+      !this.args.hideUploadToAppknoxBanner &&
+      this.skInventoryApp?.appIsNotAvailableOnAppknox
+    );
   }
 
-  get canToggleMonitoring() {
-    return this.isOwnerOrAdmin;
-  }
-
-  get routeLocalName() {
-    return this.router.currentRoute.name;
-  }
-
-  get isBrandAbuseRoute() {
-    return this.routeLocalName.includes('brand-abuse');
-  }
-
-  get isMalwareDetectedRoute() {
-    return this.routeLocalName.includes('malware-detected');
-  }
-
-  get isUnscannedVersionRoute() {
-    return this.routeLocalName.includes('unscanned-version');
-  }
-
-  get activeRouteTagId() {
-    if (this.isBrandAbuseRoute) {
-      return 'brand-abuse';
-    } else if (this.isMalwareDetectedRoute) {
-      return 'malware-detected';
-    } else if (this.isUnscannedVersionRoute) {
-      return 'unscanned-version';
-    }
-
-    return '';
+  get showLicenseAllocatedIcon() {
+    return !this.args.hideLicenseIcon && this.appHasLicense;
   }
 
   get appCoreProjectLatestVersion() {
     return this.args.skInventoryApp?.coreProjectLatestVersion;
-  }
-
-  get routeTagList() {
-    const skInventoryAppId = this.skInventoryApp?.id as string;
-
-    return [
-      {
-        id: 'unscanned-version',
-        disabled: false,
-        label: this.intl.t('storeknox.unscannedVersion'),
-        needsAction: this.skInventoryApp?.containsUnscannedVersion,
-        route: 'authenticated.storeknox.inventory-details.unscanned-version',
-        models: [skInventoryAppId],
-      },
-      {
-        id: 'brand-abuse',
-        disabled: false,
-        label: this.intl.t('storeknox.brandAbuse'),
-        featureInProgress: true,
-        route: 'authenticated.storeknox.inventory-details.brand-abuse',
-        models: [skInventoryAppId],
-      },
-      {
-        id: 'malware-detected',
-        disabled: false,
-        label: this.intl.t('storeknox.malwareDetected'),
-        featureInProgress: true,
-        route: 'authenticated.storeknox.inventory-details.malware-detected',
-        models: [skInventoryAppId],
-      },
-    ];
-  }
-
-  get disableMonitoringToggle() {
-    return (
-      !this.canToggleMonitoring || this.toggleSkInventoryAppMonitoring.isRunning
-    );
-  }
-
-  get disableMonitoringTooltipText() {
-    return this.intl.t('storeknox.cannotPerformStatusToggleText');
-  }
-
-  get activeRouteTagProps() {
-    return this.routeTagList.find((t) => t.id === this.activeRouteTagId);
   }
 
   get archiveDateStringFromNow() {
@@ -148,21 +91,13 @@ export default class StoreknoxInventoryDetailsHeaderComponent extends Component<
     return this.skInventoryApp?.appMetadata.title;
   }
 
-  get disableArchiving() {
-    return (
-      this.skInventoryApp?.isArchived && !this.skInventoryApp?.canUnarchive
-    );
+  get isOwnerOrAdmin() {
+    return this.me.org?.is_owner || this.me.org?.is_admin;
   }
 
-  get showArchivedAppsInfoTagDivider() {
-    return (
-      !this.skInventoryApp.isArchived ||
-      (this.skInventoryApp.isArchived && this.activeRouteTagProps)
-    );
-  }
-
-  get showArchiveButton() {
-    return this.isOwnerOrAdmin;
+  @action
+  handleAppLogoImageError() {
+    this.failedToLoadAppIcon = true;
   }
 
   @action openArchiveAppDrawer() {
@@ -178,7 +113,7 @@ export default class StoreknoxInventoryDetailsHeaderComponent extends Component<
   }
 
   @action async onMonitoringActionToggle(_: Event, checked?: boolean) {
-    if (!this.canToggleMonitoring) {
+    if (!this.isOwnerOrAdmin) {
       return;
     }
 

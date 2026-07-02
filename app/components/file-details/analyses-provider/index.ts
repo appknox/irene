@@ -13,6 +13,7 @@ import type LoggerService from 'irene/services/logger';
 export interface FileDetailsAnalysesProviderContext {
   analyses: AnalysisOverviewModel[];
   isFetchingAnalyses: boolean;
+  allAnalysesCVSSAreLatest: boolean;
 }
 
 interface FileDetailsAnalysesProviderComponentSignature {
@@ -47,6 +48,12 @@ export default class FileDetailsAnalysesProviderComponent extends Component<File
 
   get file() {
     return this.args.file;
+  }
+
+  get allAnalysesCVSSAreLatest() {
+    return this.analyses.every(
+      (a) => Number(a.activeCvssVersion) === Number(a.cvssVersion)
+    );
   }
 
   @action

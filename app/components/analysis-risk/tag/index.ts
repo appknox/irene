@@ -14,6 +14,7 @@ export interface AnalysisRiskTagSignature {
     isOverridden?: boolean;
     disableOverriddenTooltip?: boolean;
     status?: number;
+    isCapsule?: boolean;
   };
 }
 

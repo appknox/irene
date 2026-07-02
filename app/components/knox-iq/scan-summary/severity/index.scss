@@ -1,0 +1,39 @@
+.severity-column {
+  min-width: 0;
+}
+
+.severity-content {
+  padding: 1.142em;
+  border: 1px solid var(--knoxiq-scan-summary-border-color);
+  border-radius: var(--knoxiq-scan-summary-root-radius);
+}
+
+.severity-counts {
+  width: 100%;
+}
+
+.severity-count-column {
+  flex: 1 1 33.33%;
+  max-width: 33.33%;
+  min-width: 0;
+}
+
+.severity-count-item {
+  width: 100%;
+  white-space: nowrap;
+}
+
+.severity-dot {
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.passed-edit-icon-tooltip-content {
+  width: 320px;
+  padding: 0.5em;
+  box-sizing: border-box;
+  white-space: normal;
+}

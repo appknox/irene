@@ -1,0 +1,42 @@
+<AkStack
+  @bgColor='white'
+  @width='full'
+  @direction='column'
+  @spacing='1.5'
+  local-class='findings-card-root {{if @isDefaultFinding "is-default"}}'
+  class='p-3'
+  ...attributes
+>
+  {{! PoweredByAi Chip - only shown for default findings }}
+  {{#if @showChip}}
+    <AkSkeleton @width='100px' @height='24px' @variant='rounded' />
+  {{/if}}
+
+  <AkStack @width='full' @direction='row' @justifyContent='space-between'>
+    {{! Left Section - Title and Description }}
+    <AkStack
+      @width='full'
+      @direction='column'
+      @alignItems='flex-start'
+      {{style maxWidth='620px'}}
+    >
+      {{! Title }}
+      <AkSkeleton @width='200px' @height='1.25rem' @variant='rounded' />
+
+      {{! Description - multiple lines }}
+      <AkStack @direction='column' @spacing='0.5' @width='full' class='mt-1'>
+        <AkSkeleton @width='100%' @height='1rem' @variant='rounded' />
+        <AkSkeleton @width='90%' @height='1rem' @variant='rounded' />
+        <AkSkeleton @width='70%' @height='1rem' @variant='rounded' />
+      </AkStack>
+    </AkStack>
+
+    {{! Right Section - Score }}
+    <AkSkeleton
+      @width='60px'
+      @height='2rem'
+      @variant='rounded'
+      {{style alignSelf='flex-end'}}
+    />
+  </AkStack>
+</AkStack>

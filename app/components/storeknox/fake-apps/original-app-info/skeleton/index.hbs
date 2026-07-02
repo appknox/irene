@@ -1,0 +1,135 @@
+<AkStack
+  @bgColor='white'
+  local-class='original-app-details-wrapper'
+  {{style width='100%' maxWidth='400px' alignSelf='stretch'}}
+  ...attributes
+>
+  <AkStack
+    @width='full'
+    @direction='column'
+    @spacing='1'
+    {{style position='sticky' top='312px'}}
+  >
+    {{! Header Section }}
+    <AkStack @width='full' @spacing='1' @alignItems='center' class='py-2 px-3'>
+      {{! Header Indicator }}
+      <AkSkeleton
+        @width='16px'
+        @height='16px'
+        @variant='rounded'
+        {{style width='16px' height='16px' borderRadius='3px'}}
+      />
+
+      {{! Header Title }}
+      <AkSkeleton @width='150px' @height='1.25rem' @variant='rounded' />
+    </AkStack>
+
+    <AkDivider @color='dark' />
+
+    {{! Details Section }}
+    <AkStack @width='full' @spacing='2.5' @direction='column' class='py-2 px-3'>
+      {{! Logo Row }}
+      <AkStack
+        @direction='row'
+        @alignItems='center'
+        @spacing='1'
+        @justifyContent='flex-start'
+      >
+        <div {{style minWidth='160px'}}>
+          <AkSkeleton @width='70px' @height='1rem' @variant='rounded' />
+        </div>
+
+        <AkSkeleton
+          @width='38px'
+          @height='38px'
+          @variant='circular'
+          {{style width='38px' height='38px' borderRadius='100%'}}
+        />
+      </AkStack>
+
+      {{! App Name Row }}
+      <AkStack
+        @direction='row'
+        @alignItems='center'
+        @spacing='1'
+        @justifyContent='flex-start'
+      >
+        <div {{style minWidth='160px'}}>
+          <AkSkeleton @width='120px' @height='1rem' @variant='rounded' />
+        </div>
+
+        <AkSkeleton @width='180px' @height='1.25rem' @variant='rounded' />
+      </AkStack>
+
+      {{! Namespace Row }}
+      <AkStack
+        @direction='row'
+        @alignItems='center'
+        @spacing='1'
+        @justifyContent='flex-start'
+      >
+        <div {{style minWidth='160px'}}>
+          <AkSkeleton @width='80px' @height='1rem' @variant='rounded' />
+        </div>
+
+        <AkSkeleton @width='200px' @height='1.25rem' @variant='rounded' />
+      </AkStack>
+
+      {{! Platform Row }}
+      <AkStack
+        @direction='row'
+        @alignItems='center'
+        @spacing='1'
+        @justifyContent='flex-start'
+      >
+        <div {{style minWidth='160px'}}>
+          <AkSkeleton @width='80px' @height='1rem' @variant='rounded' />
+        </div>
+
+        <AkSkeleton @width='24px' @height='24px' @variant='rounded' />
+      </AkStack>
+
+      {{! Store Row }}
+      <AkStack
+        @direction='row'
+        @alignItems='center'
+        @spacing='1'
+        @justifyContent='flex-start'
+      >
+        <div {{style minWidth='160px'}}>
+          <AkSkeleton @width='110px' @height='1rem' @variant='rounded' />
+        </div>
+
+        <AkSkeleton @width='16px' @height='16px' @variant='rounded' />
+      </AkStack>
+
+      {{! Developer Row }}
+      <AkStack
+        @direction='row'
+        @alignItems='center'
+        @spacing='1'
+        @justifyContent='flex-start'
+      >
+        <div {{style minWidth='160px'}}>
+          <AkSkeleton @width='140px' @height='1rem' @variant='rounded' />
+        </div>
+
+        <AkSkeleton @width='150px' @height='1.25rem' @variant='rounded' />
+      </AkStack>
+
+      {{! Last Monitoring Date Row }}
+      <AkStack
+        @direction='row'
+        @alignItems='center'
+        @spacing='1'
+        @justifyContent='flex-start'
+      >
+        <div {{style minWidth='160px'}}>
+          <AkSkeleton @width='90px' @height='1rem' @variant='rounded' />
+        </div>
+
+        <AkSkeleton @width='100px' @height='1.25rem' @variant='rounded' />
+      </AkStack>
+    </AkStack>
+  </AkStack>
+</AkStack>

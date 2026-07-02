@@ -16,8 +16,9 @@ export default class AuthenticatedStoreknoxInventoryDetailsUnscannedVersionRoute
   beforeModel() {
     // Redirect user to details page if app status is being initialized or disabled
     if (
-      this.skInventoryApp.appIsInInitializingState ||
-      this.skInventoryApp.appIsInDisabledState
+      this.skInventoryApp.storeMonitoringStatusIsPending ||
+      (this.skInventoryApp.storeMonitoringStatusIsDisabled &&
+        !this.skInventoryApp.storeMonitoringStatusIsActionNeeded)
     ) {
       this.router.transitionTo(
         'authenticated.storeknox.inventory-details.index',

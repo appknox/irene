@@ -1,4 +1,16 @@
-<AkStack @direction='column' @width='full'>
+<AkStack
+  @direction='column'
+  @width='full'
+  @justifyContent='space-between'
+  {{style flex='1'}}
+>
+  {{#if @isKnoxiqEnabled}}
+    <div
+      local-class='static-scan-accent {{this.staticScanAccentClass}}'
+      data-test-fileDetailScanActions-staticScan-accent
+    ></div>
+  {{/if}}
+
   <AkStack
     @width='full'
     @justifyContent='space-between'
@@ -12,14 +24,18 @@
     </AkTypography>
 
     {{#if @file.isStaticCompleted}}
-      <AkChip
-        @label={{t 'completed'}}
-        @color='success'
-        @variant='semi-filled'
-        @size='small'
-        local-class='chips-uppercase'
-        data-test-fileDetailScanActions-staticScanCompletedStatus
-      />
+      {{#if this.showKnoxiqStatusChip}}
+        <KnoxIq::StatusChip @state={{this.knoxiqStatusChipState}} />
+      {{else}}
+        <AkChip
+          @label={{t 'completed'}}
+          @color='success'
+          @variant='semi-filled'
+          @size='small'
+          local-class='chips-uppercase'
+          data-test-fileDetailScanActions-staticScanCompletedStatus
+        />
+      {{/if}}
     {{else}}
       <AkStack @alignItems='center' local-class='scanning-chip chips-uppercase'>
         <AkLoader @size={{12}} />

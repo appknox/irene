@@ -342,15 +342,11 @@ module('Acceptance | storeknox/inventory/archived-apps', function (hooks) {
     await visit(`/dashboard/storeknox/inventory-details/${archivedApp.id}`);
 
     // Check that archived banner exists
-    assert.dom('[data-test-storeknoxInventory-archivedApps-banner]').exists();
+    assert.dom('[data-test-storeknoxInventoryDetails-banner]').exists();
 
-    assert
-      .dom('[data-test-storeknoxInventory-archivedApps-bannerIcon]')
-      .exists();
+    assert.dom('[data-test-storeknoxInventoryDetails-bannerIcon]').exists();
 
-    assert
-      .dom('[data-test-storeknoxInventory-archivedApps-bannerText]')
-      .exists();
+    assert.dom('[data-test-storeknoxInventoryDetails-bannerText]').exists();
   });
 
   test('it shows archived apps link in inventory page', async function (assert) {

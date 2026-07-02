@@ -8,6 +8,11 @@ import {
   PhIconsSet,
   MynauiIconsSet,
   SolarIconsSet,
+  IconoirIconsSet,
+  FluentIconsSet,
+  StreamlinePlumpIconsSet,
+  IxIconsSet,
+  MajesticonsIconsSet,
 } from 'irene/utils/icons';
 
 type MaterialSymbolsIcon = (typeof MaterialSymbolsSet)[number];
@@ -19,6 +24,11 @@ type BxIcon = (typeof BxIconsSet)[number];
 type PhIcon = (typeof PhIconsSet)[number];
 type MynauiIcon = (typeof MynauiIconsSet)[number];
 type SolarIcon = (typeof SolarIconsSet)[number];
+type IconoirIcon = (typeof IconoirIconsSet)[number];
+type FluentIcon = (typeof FluentIconsSet)[number];
+type StreamlinePlumpIcon = (typeof StreamlinePlumpIconsSet)[number];
+type IxIcon = (typeof IxIconsSet)[number];
+type MajesticonsIcon = (typeof MajesticonsIconsSet)[number];
 
 export const AkIconsSet = [
   ...MaterialSymbolsSet,
@@ -30,6 +40,11 @@ export const AkIconsSet = [
   ...PhIconsSet,
   ...MynauiIconsSet,
   ...SolarIconsSet,
+  ...IconoirIconsSet,
+  ...FluentIconsSet,
+  ...StreamlinePlumpIconsSet,
+  ...IxIconsSet,
+  ...MajesticonsIconsSet,
 ] as const;
 
 export type AkIconVariantType =
@@ -41,6 +56,11 @@ export type AkIconVariantType =
   | `ph:${PhIcon}`
   | `mynaui:${MynauiIcon}`
   | `solar:${SolarIcon}`
+  | `iconoir:${IconoirIcon}`
+  | `fluent:${FluentIcon}`
+  | `streamline-plump:${StreamlinePlumpIcon}`
+  | `ix:${IxIcon}`
+  | `majesticons:${MajesticonsIcon}`
   | MaterialSymbolsIcon;
 
 // Export the icon types for reference
@@ -54,4 +74,9 @@ export type {
   PhIcon,
   MynauiIcon,
   SolarIcon,
+  IconoirIcon,
+  FluentIcon,
+  StreamlinePlumpIcon,
+  IxIcon,
+  MajesticonsIcon,
 };

@@ -1,0 +1,11 @@
+{{#if @loading}}
+  <AkSkeleton @width='120px' @height='16px' />
+{{else}}
+  <AkTypography
+    @noWrap={{true}}
+    title={{@data.developer}}
+    data-test-storeknoxFakeAppListTable-developer
+  >
+    {{@data.developer}}
+  </AkTypography>
+{{/if}}

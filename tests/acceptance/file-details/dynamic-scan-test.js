@@ -3,6 +3,7 @@ import {
   currentURL,
   find,
   findAll,
+  settled,
   visit,
   waitUntil,
 } from '@ember/test-helpers';
@@ -51,11 +52,11 @@ const commondynamicScanStatusTextList = [
     text: () => t('deviceBooting'),
   },
   {
-    status: ENUMS.DYNAMIC_SCAN_STATUS.DOWNLOADING_AUTO_SCRIPT,
+    status: ENUMS.DYNAMIC_SCAN_STATUS.DOWNLOADING_AUTOPILOT_SCRIPT,
     text: () => t('deviceBooting'),
   },
   {
-    status: ENUMS.DYNAMIC_SCAN_STATUS.CONFIGURING_AUTO_INTERACTION,
+    status: ENUMS.DYNAMIC_SCAN_STATUS.CONFIGURING_AUTOPILOT,
     text: () => t('deviceBooting'),
   },
   {
@@ -115,11 +116,11 @@ const manualDynamicScanStatusTextList = [
 
 const autoDynamicScanStatusTextList = [
   {
-    status: ENUMS.DYNAMIC_SCAN_STATUS.INITIATING_AUTO_INTERACTION,
+    status: ENUMS.DYNAMIC_SCAN_STATUS.AUTOPILOT_RUNNING,
     text: () => t('running'),
   },
   {
-    status: ENUMS.DYNAMIC_SCAN_STATUS.AUTO_INTERACTION_COMPLETED,
+    status: ENUMS.DYNAMIC_SCAN_STATUS.AUTOPILOT_COMPLETED,
     text: () => t('running'),
   },
 ];
@@ -166,6 +167,7 @@ class NotificationsStub extends Service {
 
 // helper function to create a dynamic scan status helper
 function createDynamicScanStatusHelper(owner, dynamicscan) {
+  const store = owner.lookup('service:store');
   const websocket = owner.lookup('service:websocket');
 
   return async function assertScanStatus(
@@ -177,16 +179,31 @@ function createDynamicScanStatusHelper(owner, dynamicscan) {
     // Update server status
     dynamicscan.update({ status });
 
-    // Simulate websocket message
-    websocket.onObject({ id: dynamicscan.id, type: 'dynamicscan' });
+    websocket.onConnect();
 
-    // Wait for status text to update
+    websocket.onModelNotification({
+      model_name: 'dynamicscan',
+      data: dynamicscan.toJSON(),
+    });
+
+    await settled();
+
     await waitUntil(() => {
+      const storeScan = store.peekRecord('dynamicscan', String(dynamicscan.id));
       const statusEl = find('[data-test-fileDetails-dynamicScan-statusChip]');
+      const actionEl = expectedAction
+        ? find(`[data-test-fileDetails-dynamicScanAction="${expectedAction}"]`)
+        : null;
 
-      return expectedStatusText
+      const statusMatches = expectedStatusText
         ? statusEl?.textContent.includes(expectedStatusText)
         : !statusEl;
+
+      return (
+        storeScan?.status === status &&
+        statusMatches &&
+        (!expectedAction || !actionEl?.disabled)
+      );
     });
 
     // Assert status chip text
@@ -513,6 +530,14 @@ module('Acceptance | file-details/dynamic-scan', function (hooks) {
             .dom('[data-test-vncViewer-scanTriggeredAutomaticallyText]')
             .exists()
             .hasText(t('scanTriggeredAutomatically'));
+        }
+
+        if (
+          dynamicscan.isStartingOrShuttingInProgress ||
+          dynamicscan.isReadyOrRunning
+        ) {
+          // automatedNote is shown for all active states (starting, shutting down, ready, running)
+          assert.dom('[data-test-vncViewer-automatedNote]').exists();
 
           if (dynamicscan.isInqueue) {
             assert
@@ -546,7 +571,7 @@ module('Acceptance | file-details/dynamic-scan', function (hooks) {
       {
         mode: 'automated',
         // cancelInBetween: false, For now stop while running is not supported
-        expectedAssertions: 43,
+        expectedAssertions: 44,
         startedBy: true,
       },
       {
@@ -820,7 +845,7 @@ module('Acceptance | file-details/dynamic-scan', function (hooks) {
           assert,
           mode === 'manual'
             ? ENUMS.DYNAMIC_SCAN_STATUS.READY_FOR_INTERACTION
-            : ENUMS.DYNAMIC_SCAN_STATUS.INITIATING_AUTO_INTERACTION,
+            : ENUMS.DYNAMIC_SCAN_STATUS.AUTOPILOT_RUNNING,
           mode === 'manual' ? null : t('running'),
           mode === 'manual' ? 'stopBtn' : null
         );
@@ -828,9 +853,9 @@ module('Acceptance | file-details/dynamic-scan', function (hooks) {
         if (mode === 'automated') {
           assert.dom('[data-test-vncViewer-scanTriggeredNote]').exists();
 
-          assert
-            .dom('[data-test-vncViewer-automatedNote]')
-            .hasText(`${t('note')} - ${t('automatedScanRunningVncNote')}`);
+          // AUTOPILOT_RUNNING shows the automated note in the automated tab (not VNC)
+          assert.dom('[data-test-vncViewer-automatedNote]').exists();
+          assert.dom('[data-test-NovncRfb-canvasContainer]').doesNotExist();
         } else {
           assert.dom('[data-test-vncViewer-manualScanNote]').doesNotExist();
           assert.dom('[data-test-fileDetails-dynamicScan-expiry]').exists();
@@ -867,13 +892,13 @@ module('Acceptance | file-details/dynamic-scan', function (hooks) {
   test.each(
     'dynamic scan scheduled automated flow',
     [
-      { notifyUser: true, assertions: 42 },
-      { notifyUser: false, assertions: 43 },
+      { notifyUser: true, assertions: 45 },
+      { notifyUser: false, assertions: 46 },
       {
         notifyUser: true,
         withError: true,
         errorDetail: 'This scan has already been notified to the user.',
-        assertions: 45,
+        assertions: 48,
       },
     ],
     async function (
@@ -1100,6 +1125,16 @@ module('Acceptance | file-details/dynamic-scan', function (hooks) {
 
       // Stop scan
       await click('[data-test-fileDetails-dynamicScanAction="stopBtn"]');
+
+      // Stop confirmation assertions
+      assert
+        .dom('[data-test-confirmbox-description]')
+        .containsText(t('modalCard.scheduledAutomatedStopConfirm.headerTitle'));
+
+      assert.dom('[data-test-confirmbox-confirmBtn]').containsText(t('yes'));
+      assert.dom('[data-test-confirmbox-cancelBtn]').containsText(t('no'));
+
+      await click('[data-test-confirmbox-confirmBtn]');
 
       // Notify User Assertions
       const notifyUserModalHeader =

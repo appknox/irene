@@ -25,23 +25,53 @@
   </AkStack>
 
   <AkStack @alignItems='stretch' @spacing='1.5'>
-    {{#unless this.analysis.isPassed}}
-      <AkButton
-        @variant='outlined'
-        @color='neutral'
-        local-class='mark-as-passed-button'
-        {{on 'click' this.openMarkPassedConfirmBox}}
-        data-test-securityAnalysisDetailsHeader-markAsPassedBtn
+    {{#if this.showMarkAsPassedButton}}
+      <AkTooltip
+        @arrow={{true}}
+        @placement='left'
+        @disabled={{not this.analysisCurrentCvssVersionIsLegacy}}
       >
-        <:leftIcon>
-          <AkIcon @color='success' @iconName='check' />
-        </:leftIcon>
+        <:tooltipContent>
+          <div local-class='tooltip-content-container'>
+            <AkTypography @variant='body1' @color='inherit'>
+              {{this.cannotMarkAsPassedTooltipText}}
+            </AkTypography>
+          </div>
+        </:tooltipContent>
 
         <:default>
-          Mark as Passed
+          <AkButton
+            @variant='outlined'
+            @color='neutral'
+            @disabled={{this.analysisCurrentCvssVersionIsLegacy}}
+            {{on 'click' this.openMarkPassedConfirmBox}}
+            local-class='
+              mark-as-passed-button
+              {{if this.analysisCurrentCvssVersionIsLegacy "disabled"}}
+            '
+            data-test-securityAnalysisDetailsHeader-markAsPassedBtn
+          >
+            <:leftIcon>
+              <AkIcon
+                @color={{if
+                  this.analysisCurrentCvssVersionIsLegacy
+                  'textSecondary'
+                  'success'
+                }}
+                @iconName='check'
+                {{style
+                  opacity=(if this.analysisCurrentCvssVersionIsLegacy '0.5' '1')
+                }}
+              />
+            </:leftIcon>
+
+            <:default>
+              Mark as Passed
+            </:default>
+          </AkButton>
         </:default>
-      </AkButton>
-    {{/unless}}
+      </AkTooltip>
+    {{/if}}
 
     <AkButton
       @tag='a'
@@ -50,7 +80,7 @@
       rel='noopener noreferrer'
       data-test-securityAnalysisDetailsHeader-visitDashboardButton
     >
-      Visit Dashboard
+      Visit Analysis Page
     </AkButton>
   </AkStack>
 </AkStack>

@@ -1,0 +1,15 @@
+.severity-chip {
+  height: 26px;
+  font-size: 0.857rem;
+  border-radius: var(
+    --knoxiq-project-card-severity-chip-border-radius
+  ) !important;
+}
+
+.severity-dot {
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}

@@ -1,0 +1,11 @@
+{{#if @loading}}
+  <AkSkeleton @width='50px' @height='16px' />
+{{else}}
+  <AkTypography
+    @color='primary'
+    @fontWeight='medium'
+    data-test-storeknoxFakeAppListTable-confidence
+  >
+    {{@data.confidence}}%
+  </AkTypography>
+{{/if}}

@@ -1,0 +1,28 @@
+.scan-summary-root {
+  border-radius: var(--knoxiq-scan-summary-root-radius);
+  overflow: hidden;
+  background-color: var(--knoxiq-scan-summary-root-bg-color);
+}
+
+.scan-summary-accent {
+  width: 100%;
+  height: 4px;
+  flex-shrink: 0;
+}
+
+.scan-summary-accent-pending {
+  background-color: var(--knoxiq-scan-summary-accent-pending-color);
+}
+
+.scan-summary-accent-done {
+  background-color: var(--knoxiq-scan-summary-accent-completed-color);
+}
+
+.scan-summary-header {
+  padding: 0.857em 1.143em;
+  border-bottom: 1px solid var(--knoxiq-scan-summary-header-border-color);
+}
+
+.scan-summary-body {
+  padding: 2.286em 1.714em;
+}

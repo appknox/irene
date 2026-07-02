@@ -35,6 +35,7 @@ import { NfAutomatedDastErroredContext } from './messages/nf-automated-dast-erro
 import { NfAutomatedDastInProgressContext } from './messages/nf-automated-dast-in-progress/context';
 import { NfSkSubexpContext } from './messages/nf-sk-subexp/context';
 import { NfPublicApiUserUpdatedContext } from './messages/nf-public-api-user-updated/context';
+import { NfJiraPushErrContext } from './messages/nf-jira-push-err/context';
 
 export const NotificationMap = {
   ERROR: {
@@ -192,6 +193,10 @@ export const NotificationMap = {
     component:
       'notifications-page/messages/nf-public-api-user-updated' as const,
     context: NfPublicApiUserUpdatedContext,
+  },
+  NF_JIRA_PUSH_ERR: {
+    component: 'notifications-page/messages/nf-jira-push-err' as const,
+    context: NfJiraPushErrContext,
   },
 } satisfies Record<string, { component: string; context: unknown }>;
 

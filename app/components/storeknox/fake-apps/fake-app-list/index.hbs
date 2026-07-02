@@ -1,0 +1,75 @@
+<div
+  local-class='fake-app-list-root
+  {{if @skInventoryApp.isArchived "archived"}}
+  '
+  data-test-storeknoxFakeAppsFakeAppList
+>
+  {{#if this.isInitializing}}
+    <AkStack
+      @alignItems='center'
+      @justifyContent='center'
+      @direction='column'
+      @spacing='1'
+      class='py-7 px-4'
+      local-class='status-container'
+      data-test-storeknoxFakeAppsFakeAppList-initializingState
+    >
+      <AkSvg::FakeAppInProgress />
+
+      <AkTypography @variant='h5' class='mt-4'>
+        {{t 'storeknox.fakeApps.detectionInProgress'}}
+      </AkTypography>
+
+      <AkTypography @align='center'>
+        {{t 'storeknox.fakeApps.detectionInProgressDescription'}}
+      </AkTypography>
+    </AkStack>
+
+  {{else if this.showSuccessState}}
+    <AkStack
+      @alignItems='center'
+      @justifyContent='center'
+      @direction='column'
+      @spacing='1'
+      class='py-7 px-4'
+      local-class='status-container'
+      data-test-storeknoxFakeAppsFakeAppList-successState
+    >
+      <AkSvg::FakeAppsSuccessState />
+
+      <AkTypography @variant='h5' class='mt-4'>
+        {{t 'storeknox.fakeApps.noSuspectedApps'}}
+      </AkTypography>
+
+      <AkTypography @align='center' {{style maxWidth='550px'}}>
+        {{t 'storeknox.fakeApps.noSuspectedAppsDescription'}}
+      </AkTypography>
+    </AkStack>
+
+  {{else if this.showTabs}}
+    <AkTabs as |Akt|>
+      {{#each this.tabItems as |item|}}
+        <Akt.tabItem
+          @id={{item.id}}
+          @hasBadge={{true}}
+          @badgeCount={{item.count}}
+          @route={{item.route}}
+          @model={{@skInventoryApp.id}}
+          @currentWhen={{item.route}}
+          @indicatorVariant='shadow'
+          data-test-storeknoxFakeAppsFakeAppList-tab='{{item.id}}'
+        >
+          <:tabIcon>
+            {{#if item.iconClass}}
+              <div local-class='tab-icon {{item.iconClass}}' />
+            {{/if}}
+          </:tabIcon>
+
+          <:default>
+            {{item.label}}
+          </:default>
+        </Akt.tabItem>
+      {{/each}}
+    </AkTabs>
+  {{/if}}
+</div>

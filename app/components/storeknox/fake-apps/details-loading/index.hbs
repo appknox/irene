@@ -1,0 +1,21 @@
+<Storeknox::FakeApps::DetailsHeader::Skeleton />
+
+<AkStack @width='full' @spacing='2' @alignItems='stretch'>
+  <AkStack @bgColor='white' @direction='column' {{style width='70%'}}>
+    {{#each (array 1 2 3 4 5 6) as |item index|}}
+      {{#if (not (or (eq index 0) (eq index 1)))}}
+        <AkDivider
+          @color='dark'
+          {{style alignSelf='flex-end' width='calc(100% - 1.5em)'}}
+        />
+      {{/if}}
+
+      <Storeknox::FakeApps::FindingsCard::Skeleton
+        @isDefaultFinding={{eq index 0}}
+        @showChip={{eq index 0}}
+      />
+    {{/each}}
+  </AkStack>
+
+  <Storeknox::FakeApps::OriginalAppInfo::Skeleton />
+</AkStack>

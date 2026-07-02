@@ -1,0 +1,14 @@
+.scan-statuses-row {
+  padding: 0.57em;
+  border-top: 1px solid var(--knoxiq-project-card-border-color);
+  border-bottom: 1px solid var(--knoxiq-project-card-border-color);
+}
+
+.status-chip {
+  border-radius: var(
+    --knoxiq-project-card-scan-statuses-chip-border-radius
+  ) !important;
+  background-color: var(
+    --knoxiq-project-card-scan-statuses-chip-background
+  ) !important;
+}

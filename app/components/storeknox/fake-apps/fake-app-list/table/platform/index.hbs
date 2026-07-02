@@ -1,0 +1,9 @@
+{{#if @loading}}
+  <AkSkeleton @width='20px' @height='20px' @variant='circular' />
+{{else}}
+  <AppPlatformIcon
+    @platform={{if @data.isAndroid 'android' 'apple'}}
+    {{style fontSize='1.4285rem !important'}}
+    data-test-storeknoxFakeAppListTable-platform
+  />
+{{/if}}
