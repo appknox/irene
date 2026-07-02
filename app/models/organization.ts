@@ -15,6 +15,7 @@ export interface Features {
   storeknox: boolean;
   privacy: boolean;
   upload_via_url: boolean;
+  cyod: boolean;
 }
 
 export interface AiFeatures {

@@ -1661,6 +1661,7 @@
   "cyodRegisterAndroid": "USBでAndroidデバイスを登録",
   "cyodRegisterIos": "iOSデバイスを登録",
   "cyodConnectUsb": "USBでデバイスを接続してクリック",
+  "cyodNotEnabled": "組織でCYODが有効になっていません。有効にするにはサポートにお問い合わせください。",
   "cyodDetectingDevice": "デバイスを検出中...",
   "cyodDeviceDetected": "デバイスが検出されました",
   "cyodDeviceRegistered": "デバイスが正常に登録されました",

@@ -26,6 +26,10 @@ export default class OrganizationService extends Service {
     return this.selected?.hideUpsellFeatures;
   }
 
+  get isCyodEnabled() {
+    return !!this.orgFeatures?.cyod;
+  }
+
   get hideUpsellUIStatus() {
     return {
       privacyModule: !this.orgFeatures?.privacy && this.hideUpsellUI,

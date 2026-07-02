@@ -1661,6 +1661,7 @@
   "cyodRegisterAndroid": "Register Android Device via USB",
   "cyodRegisterIos": "Register iOS Device",
   "cyodConnectUsb": "Connect your device via USB and click below",
+  "cyodNotEnabled": "CYOD is not enabled for your organization. Contact support to enable it.",
   "cyodDetectingDevice": "Detecting device...",
   "cyodDeviceDetected": "Device detected",
   "cyodDeviceRegistered": "Device registered successfully",

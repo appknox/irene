@@ -19,6 +19,7 @@ import ENUMS from 'irene/enums';
 import type DevicefarmService from 'irene/services/devicefarm';
 import type IreneAjaxService from 'irene/services/ajax';
 import type CyodAdbSessionService from 'irene/services/cyod-adb-session';
+import type OrganizationService from 'irene/services/organization';
 
 const KNOXOPS_AGENT_PORT = 17392;
 const WEBUSB_REGISTER_PATH = '/devicefarm/v2/devices/webusb-register/';
@@ -43,11 +44,16 @@ export default class CyodDeviceRegistrationComponent extends Component<CyodDevic
   @service declare ajax: IreneAjaxService;
   @service('notifications') declare notify: NotificationService;
   @service('cyod-adb-session') declare cyodAdbSession: CyodAdbSessionService;
+  @service declare organization: OrganizationService;
 
   @tracked detectedSerial: string | null = null;
   @tracked detectedModel: string | null = null;
   @tracked detectedOsVersion: string | null = null;
   @tracked detectedArch: string | null = null;
+
+  get isCyodEnabled() {
+    return this.organization.isCyodEnabled;
+  }
 
   get isAndroid() {
     return this.args.platform === ENUMS.PLATFORM.ANDROID;
