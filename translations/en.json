@@ -1672,6 +1672,7 @@
   "orgDeviceRegistrationDone": "Done",
   "orgDeviceRegistrationYourDevices": "Your registered devices",
   "orgDeviceRegistrationNoDevices": "No devices registered yet. Run the Mercer setup below on the machine your devices are connected to.",
+  "orgDeviceRegistrationNotConfigured": "CYOD device farm is not configured for your organization. Please contact your Appknox administrator to enable it.",
   "orgDeviceRegistrationSetupTitle": "Set up Mercer",
   "orgDeviceRegistrationSetupDesc": "Install Mercer on the machine your devices are plugged into, then run:",
   "orgDeviceRegistrationTokenHint": "Replace <your-developer-token> with a Personal Token from Account Settings → Developer Settings. Prefer flags? Run \"mercer help\" — \"mercer login --dev-token <token> --url <host>\" works too.",

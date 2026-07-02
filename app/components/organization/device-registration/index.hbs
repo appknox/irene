@@ -28,6 +28,15 @@
     @onClose={{this.handleClose}}
   >
     <AkStack @direction='column' @spacing='2' class='pa-3'>
+      {{#if this.notConfigured}}
+        <AkTypography
+          @variant='body2'
+          @color='textSecondary'
+          data-test-orgDeviceRegistration-notConfigured
+        >
+          {{t 'orgDeviceRegistrationNotConfigured'}}
+        </AkTypography>
+      {{else}}
       {{! Registered devices }}
       <AkStack @direction='column' @spacing='1'>
         <AkStack
@@ -131,6 +140,8 @@
       <AkTypography @variant='body3' @color='textSecondary'>
         {{t 'orgDeviceRegistrationTokenHint'}}
       </AkTypography>
+
+      {{/if}}
 
       <AkStack @spacing='1' @justifyContent='flex-end'>
         <AkButton @variant='filled' {{on 'click' this.handleClose}}>

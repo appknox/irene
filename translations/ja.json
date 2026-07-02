@@ -1672,6 +1672,7 @@
   "orgDeviceRegistrationDone": "完了",
   "orgDeviceRegistrationYourDevices": "登録済みのデバイス",
   "orgDeviceRegistrationNoDevices": "登録済みのデバイスはまだありません。デバイスを接続したマシンで以下の Mercer セットアップを実行してください。",
+  "orgDeviceRegistrationNotConfigured": "この組織では CYOD デバイスファームが構成されていません。有効にするには Appknox 管理者にお問い合わせください。",
   "orgDeviceRegistrationSetupTitle": "Mercer のセットアップ",
   "orgDeviceRegistrationSetupDesc": "デバイスを接続したマシンに Mercer をインストールし、次を実行してください：",
   "orgDeviceRegistrationTokenHint": "<your-developer-token> は アカウント設定 → デベロッパー設定 の Personal Token に置き換えてください。フラグを使う場合は \"mercer help\" を実行してください — \"mercer login --dev-token <token> --url <host>\" も利用できます。",

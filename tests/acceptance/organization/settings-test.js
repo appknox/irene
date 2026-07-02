@@ -122,4 +122,24 @@ module('Acceptance | Organization settings', function (hooks) {
       .dom('[data-test-enable-mandatory-mfa-requirement]')
       .includesText(t('enableMandatoryMFARequirement'));
   });
+
+  test('it shows the CYOD device registration only when the org has the cyod feature', async function (assert) {
+    this.organizationMe.update({ is_owner: true });
+    this.organization.update({ features: { cyod: true } });
+
+    await visit('dashboard/organization/settings');
+
+    assert.dom('[data-test-orgDeviceRegistration]').exists();
+    assert.dom('[data-test-orgSigningCert]').exists();
+  });
+
+  test('it hides the CYOD device registration when the org lacks the cyod feature', async function (assert) {
+    this.organizationMe.update({ is_owner: true });
+    this.organization.update({ features: { cyod: false } });
+
+    await visit('dashboard/organization/settings');
+
+    assert.dom('[data-test-orgDeviceRegistration]').doesNotExist();
+    assert.dom('[data-test-orgSigningCert]').doesNotExist();
+  });
 });

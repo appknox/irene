@@ -19,6 +19,7 @@ import type IntlService from 'ember-intl/services/intl';
 
 import ENV from 'irene/config/environment';
 import type IreneAjaxService from 'irene/services/ajax';
+import type { AjaxError } from 'irene/services/ajax';
 import type OrganizationService from 'irene/services/organization';
 
 type RegisteredDevice = {
@@ -45,6 +46,11 @@ export default class OrganizationDeviceRegistrationComponent extends Component<O
 
   @tracked showModal = false;
   @tracked registeredDevices: RegisteredDevice[] = [];
+
+  // The org has CYOD enabled but no devicefarm token configured (mycroft returns
+  // 400). Distinct from "configured but no devices yet" so the UI can guide the
+  // user to their admin instead of showing dead-end Mercer setup steps.
+  @tracked notConfigured = false;
 
   get hasDevices() {
     return this.registeredDevices.length > 0;
@@ -96,6 +102,8 @@ export default class OrganizationDeviceRegistrationComponent extends Component<O
   loadDevices = task(async () => {
     const orgId = this.organization.selected?.id;
 
+    this.notConfigured = false;
+
     if (!orgId) {
       this.registeredDevices = [];
       return;
@@ -108,6 +116,9 @@ export default class OrganizationDeviceRegistrationComponent extends Component<O
 
       this.registeredDevices = result.results ?? [];
     } catch (e) {
+      // 400 = CYOD device farm not configured for this org (no devicefarm
+      // token). Surface it distinctly instead of the generic empty state.
+      this.notConfigured = (e as AjaxError)?.status === 400;
       this.registeredDevices = [];
     }
   });
