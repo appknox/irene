@@ -15,6 +15,7 @@
   --primary-contrast-text: #ffffff;
 
   --primary-main-10: rgba(254, 77, 63, 0.1);
+  --primary-main-5: rgba(254, 77, 63, 0.05);
 
   --secondary-main: #424651;
   --secondary-contrast-text: #ffffff;
@@ -24,6 +25,7 @@
   --success-light: #e9f5ed;
 
   --error-main: #d72f2f;
+  --error-main-5: rgba(215, 47, 47, 0.05);
   // --error-dark -
   --error-light: #ffd1d4;
   --error-bg: #ffeeed;
@@ -235,6 +237,9 @@
   --knoxiq-validated-findings-steps-to-reproduce-step-header-background: #f8fafc;
   --knoxiq-validated-findings-steps-to-reproduce-step-badge-background: #fef3c7;
   --knoxiq-validated-findings-steps-to-reproduce-accent: #d97706;
+
+  // special case variables for project-settings/dast-automation
+  --dast-automation-row-separator-color: #f8f8f8;
 }
 
 // TODO: need to remove this so do not use it

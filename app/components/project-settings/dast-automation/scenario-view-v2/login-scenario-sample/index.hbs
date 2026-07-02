@@ -1,0 +1,98 @@
+<AkButton
+  @variant='filled'
+  {{on 'click' this.openSampleDrawer}}
+  data-test-projectSettings-viewScenarioHeader-viewSampleBtn
+>
+  {{t 'dastAutomation.viewSample'}}
+</AkButton>
+
+<AkDrawer
+  @open={{this.showSampleDrawer}}
+  @onClose={{this.closeSampleDrawer}}
+  @anchor='right'
+  data-test-projectSettings-viewScenarioHeader-sampleDrawer
+  as |dr|
+>
+  <div {{style width='950px' height='100%'}}>
+    <AkAppbar @justifyContent='space-between' as |ab|>
+      <AkTypography
+        @variant='h5'
+        @color='inherit'
+        data-test-projectSettings-viewScenarioHeader-sampleDrawerTitle
+      >
+        {{t 'dastAutomation.viewSample'}}
+      </AkTypography>
+
+      <AkIconButton
+        class={{ab.classes.defaultIconBtn}}
+        {{on 'click' dr.closeHandler}}
+        data-test-projectSettings-viewScenarioHeader-sampleDrawerCloseBtn
+      >
+        <AkIcon @iconName='close' />
+      </AkIconButton>
+    </AkAppbar>
+
+    {{#if this.mockRole}}
+      <div class='p-4'>
+        <ProjectSettings::DastAutomation::ScenarioViewV2::StepsTable
+          @userRole={{this.mockRole}}
+          @steps={{this.mockSteps}}
+          @scenarioDetail={{@scenarioDetail}}
+          @isReadOnly={{true}}
+          @isLastRole={{true}}
+          @activeSampleIndex={{2}}
+          class='px-4 py-3'
+        />
+
+        <AkStack
+          @direction='column'
+          @spacing='1.5'
+          class='pt-3'
+          data-test-projectSettings-viewScenarioHeader-sampleDrawerNotes
+        >
+          <AkTypography @variant='body1' @fontWeight='bold' class='mb-2'>
+            {{t 'note'}}
+          </AkTypography>
+
+          <ol local-class='notes-list'>
+            <li>
+              <AkTypography @variant='body2'>
+                {{t 'dastAutomation.loginScenarioSample.note1' htmlSafe=true}}
+              </AkTypography>
+            </li>
+
+            <li>
+              <AkTypography @variant='body2'>
+                {{t 'dastAutomation.loginScenarioSample.note2' htmlSafe=true}}
+              </AkTypography>
+            </li>
+
+            <li>
+              <AkTypography @variant='body2'>
+                {{t 'dastAutomation.loginScenarioSample.note3' htmlSafe=true}}
+              </AkTypography>
+            </li>
+
+            <li>
+              <AkTypography @variant='body2'>
+                {{t 'dastAutomation.loginScenarioSample.note4' htmlSafe=true}}
+              </AkTypography>
+            </li>
+
+            <li>
+              <AkTypography @variant='body2'>
+                {{t 'dastAutomation.loginScenarioSample.note5' htmlSafe=true}}
+              </AkTypography>
+            </li>
+
+            <li>
+              <AkTypography @variant='body2'>
+                {{t 'dastAutomation.loginScenarioSample.note6' htmlSafe=true}}
+              </AkTypography>
+            </li>
+          </ol>
+        </AkStack>
+      </div>
+    {{/if}}
+  </div>
+</AkDrawer>

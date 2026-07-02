@@ -1,0 +1,192 @@
+<AkStack
+  @width='full'
+  @direction='column'
+  local-class='steps-table-root {{if @isReadOnly "is-readonly"}}'
+  data-test-dastAutomationScenario-stepsTable-root
+  ...attributes
+>
+  {{! Role name input }}
+  {{#if @userRole}}
+    <AkStack
+      @width='full'
+      @alignItems='center'
+      @justifyContent='space-between'
+      class='mb-2'
+      {{style height='36px'}}
+    >
+      <AkStack @alignItems='center' @spacing='1'>
+        {{#if this.isEditingRoleName}}
+          <AkTextField
+            @value={{this.editingRoleName}}
+            {{on 'input' this.handleRoleNameInput}}
+            data-test-dastAutomationScenario-stepsTable-roleNameInput
+          />
+
+          <AkIconButton
+            @size='small'
+            @variant='outlined'
+            {{on 'click' this.cancelRoleNameEdit}}
+            data-test-dastAutomationScenario-stepsTable-cancelRoleNameBtn
+          >
+            <AkIcon @iconName='close' @color='error' @size='small' />
+          </AkIconButton>
+
+          <AkIconButton
+            @size='small'
+            @variant='outlined'
+            {{on 'click' this.confirmRoleNameEdit}}
+            data-test-dastAutomationScenario-stepsTable-confirmRoleNameBtn
+          >
+            <AkIcon @iconName='check' @color='success' @size='small' />
+          </AkIconButton>
+
+        {{else}}
+          <AkTypography
+            @variant='h5'
+            @fontWeight='bold'
+            data-test-dastAutomationScenario-stepsTable-roleName
+          >
+            {{@userRole.name}}
+          </AkTypography>
+
+          <AkIconButton
+            @size='small'
+            disabled={{@isReadOnly}}
+            local-class='{{if @isReadOnly "edit-role-name-btn-readonly"}}'
+            {{on 'click' this.startEditingRoleName}}
+            data-test-dastAutomationScenario-stepsTable-editRoleNameBtn
+          >
+            <AkIcon @iconName='edit-outline' @color='primary' @size='small' />
+          </AkIconButton>
+        {{/if}}
+      </AkStack>
+
+      <AkIconButton
+        @size='small'
+        disabled={{@isReadOnly}}
+        local-class='{{if @isReadOnly "delete-role-btn-readonly"}}'
+        {{on 'click' this.openDeleteRoleConfirmBox}}
+        data-test-dastAutomationScenario-stepsTable-deleteRoleBtn
+      >
+        <AkIcon @iconName='mdi:delete' @size='small' />
+      </AkIconButton>
+    </AkStack>
+
+  {{/if}}
+
+  {{! Steps table }}
+  {{#if this.steps.length}}
+    <div local-class='steps-table' class='mb-3'>
+      <div
+        local-class='table-header'
+        data-test-dastAutomationScenario-stepsTable-header
+      >
+        <span></span>
+
+        <AkTypography @variant='body2' @fontWeight='medium'>
+          {{t 'order'}}
+        </AkTypography>
+
+        <AkTypography @variant='body2' @fontWeight='medium'>
+          {{t 'action'}}
+        </AkTypography>
+
+        <AkTypography @variant='body2' @fontWeight='medium'>
+          {{t 'dastAutomation.tableHeaders.onButtonField'}}
+        </AkTypography>
+
+        <AkTypography @variant='body2' @fontWeight='medium'>
+          {{t 'dastAutomation.tableHeaders.inputOccurrenceValue'}}
+        </AkTypography>
+      </div>
+
+      <AkDndProvider
+        @items={{this.steps}}
+        @onReorder={{this.reorderSteps}}
+        as |dnd|
+      >
+        {{#each dnd.items as |step index|}}
+          <ProjectSettings::DastAutomation::ScenarioViewV2::StepsTable::Row
+            @step={{step}}
+            @scenarioDetail={{@scenarioDetail}}
+            @index={{index}}
+            @dnd={{dnd}}
+            @isReadOnly={{@isReadOnly}}
+            @isActiveSample={{eq index @activeSampleIndex}}
+            @stepErrors={{@stepErrors}}
+            @clearStepError={{@clearStepError}}
+            @onActionChange={{this.changeStepAction}}
+            @onDelete={{this.deleteStep}}
+          />
+        {{/each}}
+      </AkDndProvider>
+    </div>
+  {{/if}}
+
+  {{! Add steps button }}
+  <AkStack @alignItems='center' @spacing='1.5'>
+    <AkButton
+      @variant='outlined'
+      @disabled={{or this.disableAddStep @isReadOnly}}
+      local-class='dashed-add-button'
+      {{on 'click' this.openAddStepsPopover}}
+      data-test-dastAutomationScenario-stepsTable-addStepsBtn
+    >
+      <:leftIcon>
+        <AkIcon @iconName='add' @size='small' @color='primary' />
+      </:leftIcon>
+
+      <:default>{{t 'steps'}}</:default>
+    </AkButton>
+
+    {{! New user role button }}
+    {{#if @isLastRole}}
+      <AkTooltip
+        @arrow={{true}}
+        @placement='top'
+        @title={{this.newUserRoleDisabledReason}}
+        @disabled={{not this.isNewUserRoleDisabled}}
+      >
+        <AkButton
+          @variant='outlined'
+          @disabled={{this.isNewUserRoleDisabled}}
+          local-class='dashed-add-button'
+          {{on 'click' this.handleAddRole}}
+          data-test-dastAutomationScenario-stepsTable-newUserRoleBtn
+        >
+          <:leftIcon>
+            <AkIcon @iconName='add' @size='small' @color='primary' />
+          </:leftIcon>
+
+          <:default>{{t 'newUserRole'}}</:default>
+        </AkButton>
+      </AkTooltip>
+    {{/if}}
+  </AkStack>
+</AkStack>
+
+{{! Add steps popover }}
+<ProjectSettings::DastAutomation::ScenarioViewV2::AddStepsPopover
+  @anchorRef={{this.addStepsAnchorRef}}
+  @closeHandler={{this.closeAddStepsPopover}}
+  @addStep={{this.addStep}}
+/>
+
+{{! Delete role confirm box }}
+<ConfirmBox
+  @isActive={{this.showDeleteRoleConfirmBox}}
+  @cancelAction={{this.closeDeleteRoleConfirmBox}}
+  @confirmAction={{perform this.confirmDeleteRole}}
+  @disabled={{this.confirmDeleteRole.isRunning}}
+  @confirmText={{t 'delete'}}
+>
+  <:content>
+    <AkTypography {{style width='400px'}}>
+      {{t
+        'dastAutomation.roleDeleteConfirm'
+        htmlSafe=true
+        roleName=@userRole.name
+      }}
+    </AkTypography>
+  </:content>
+</ConfirmBox>

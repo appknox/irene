@@ -1,11 +1,15 @@
 <AkStack
-  @direction='row'
-  @justifyContent='space-between'
+  @direction='column'
   @spacing='2'
   @width='full'
   data-test-projectSettings-dastAutomationSettings-scenarios-root
 >
-  <AkStack @direction='column' @spacing='1' @width='9/12'>
+  <AkStack
+    @direction='row'
+    @justifyContent='space-between'
+    @spacing='1'
+    @width='full'
+  >
     <AkStack
       @direction='column'
       {{style maxWidth='700px'}}
@@ -16,6 +20,7 @@
       </AkTypography>
 
       <AkTypography
+        @color='textSecondary'
         @variant='body2'
         @gutterBottom={{true}}
         data-test-projectSettings-dastAutomationSettings-scenariosHeaderListDesc
@@ -24,28 +29,22 @@
       </AkTypography>
     </AkStack>
 
-    <ProjectSettings::DastAutomation::AutomationSettings::ScenarioTable
-      @project={{@project}}
-      @scenarioList={{this.scenarioList}}
-      @loadingScenarioList={{this.fetchProjectScenarios.isRunning}}
-      @reloadScenarioList={{this.reloadProjectScenarios}}
-    />
+    <AkButton
+      @variant='outlined'
+      {{on 'click' this.openAddScenarioModal}}
+      {{style minWidth='110px'}}
+      data-test-projectSettings-dastAutomationSettings-scenarioAddBtn
+    >
+      <:default>{{t 'dastAutomation.addScenario'}}</:default>
+    </AkButton>
   </AkStack>
 
-  <AkButton
-    @variant='outlined'
-    {{on 'click' this.openAddScenarioModal}}
-    data-test-projectSettings-dastAutomationSettings-scenarioAddBtn
-  >
-    <:leftIcon>
-      <AkIcon
-        @iconName='add'
-        data-test-projectSettings-dastAutomationSettings-scenarioAddBtnIcon
-      />
-    </:leftIcon>
-
-    <:default>{{t 'dastAutomation.addScenario'}}</:default>
-  </AkButton>
+  <ProjectSettings::DastAutomation::AutomationSettings::ScenarioTable
+    @project={{@project}}
+    @scenarioList={{this.scenarioList}}
+    @loadingScenarioList={{this.fetchProjectScenarios.isRunning}}
+    @reloadScenarioList={{this.reloadProjectScenarios}}
+  />
 </AkStack>
 
 {{#if this.showAddScenarioModal}}

@@ -1,0 +1,34 @@
+.popover-action-list {
+  min-width: 220px;
+  padding: 0.57143em 0;
+
+  background: var(
+    --project-settings-dast-automation-scenario-view-v2-add-steps-popover-list-background
+  );
+
+  border: 1px solid
+    var(
+      --project-settings-dast-automation-scenario-view-v2-add-steps-popover-list-border-color
+    );
+
+  box-shadow: var(
+    --project-settings-dast-automation-scenario-view-v2-add-steps-popover-list-box-shadow
+  );
+}
+
+.popover-action-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  padding: 0.71429em 1.14286em;
+  border: 0;
+  background: transparent;
+  cursor: pointer;
+
+  &:hover {
+    background: var(
+      --project-settings-dast-automation-scenario-view-v2-add-steps-popover-item-hover-background
+    );
+  }
+}

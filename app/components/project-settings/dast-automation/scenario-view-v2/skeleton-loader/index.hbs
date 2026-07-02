@@ -1,0 +1,130 @@
+<AkStack
+  @direction='column'
+  @width='full'
+  class='pt-1 pb-4'
+  data-test-projectSettings-dastAutomation-scenarioV2-skeleton
+  ...attributes
+>
+  <AkStack @direction='column' @width='full' {{style gap='1.4286em'}}>
+    {{! Breadcrumbs }}
+    <AkStack @alignItems='center' @spacing='1' class='px-3'>
+      <AkSkeleton @width='70px' @height='14px' />
+
+      <AkSkeleton @width='8px' @height='14px' />
+
+      <AkSkeleton @width='110px' @height='14px' />
+
+      <AkSkeleton @width='8px' @height='14px' />
+
+      <AkSkeleton @width='90px' @height='14px' />
+
+      <AkSkeleton @width='8px' @height='14px' />
+
+      <AkSkeleton @width='130px' @height='14px' />
+    </AkStack>
+
+    {{! Scenario header (name + status + actions) }}
+    <AkStack
+      @tag='header'
+      @alignItems='center'
+      @justifyContent='space-between'
+      @width='full'
+      local-class='header'
+      class='p-2 px-3'
+    >
+      <AkStack @alignItems='center' @justifyContent='flex-start' @spacing='6'>
+        <AkStack @direction='column' @spacing='1'>
+          <AkSkeleton @width='70px' @height='14px' />
+
+          <AkSkeleton @width='180px' @height='20px' />
+        </AkStack>
+
+        <AkStack @direction='column' @spacing='1.5'>
+          <AkSkeleton @width='50px' @height='14px' />
+
+          <AkSkeleton @width='44px' @height='22px' />
+        </AkStack>
+      </AkStack>
+
+      <AkStack @alignItems='center' @spacing='1.5'>
+        <AkSkeleton @width='24px' @height='24px' />
+
+        <AkSkeleton @width='1px' @height='20px' />
+
+        <AkSkeleton @width='24px' @height='24px' />
+      </AkStack>
+    </AkStack>
+
+    {{! Role name + delete }}
+    <AkStack
+      @direction='column'
+      @width='full'
+      local-class='steps-table-root'
+      class='p-3'
+    >
+      <AkStack
+        @width='full'
+        @alignItems='center'
+        @justifyContent='space-between'
+        class='mb-2'
+      >
+        <AkStack @alignItems='center' @spacing='1'>
+          <AkSkeleton @width='140px' @height='22px' />
+
+          <AkSkeleton @width='24px' @height='24px' />
+        </AkStack>
+
+        <AkSkeleton @width='24px' @height='24px' />
+      </AkStack>
+
+      {{! Steps table }}
+      <div local-class='steps-table'>
+        <div local-class='steps-table-header'>
+          <span></span>
+
+          <AkSkeleton @width='40px' @height='14px' />
+
+          <AkSkeleton @width='50px' @height='14px' />
+
+          <AkSkeleton @width='110px' @height='14px' />
+
+          <AkSkeleton @width='130px' @height='14px' />
+        </div>
+
+        {{#each this.stepRows}}
+          <div local-class='steps-table-row'>
+            <AkSkeleton @width='14px' @height='14px' />
+
+            <AkSkeleton @width='32px' @height='28px' />
+
+            <AkSkeleton @width='180px' @height='32px' />
+
+            <AkSkeleton @width='250px' @height='32px' />
+
+            <AkSkeleton @width='250px' @height='32px' />
+          </div>
+        {{/each}}
+      </div>
+
+      {{! Add steps + add user role buttons }}
+      <AkStack @alignItems='center' @spacing='1.5' class='mt-3'>
+        <AkSkeleton @width='120px' @height='36px' />
+
+        <AkSkeleton @width='150px' @height='36px' />
+      </AkStack>
+    </AkStack>
+  </AkStack>
+
+  {{! Footer (save / reset) }}
+  <AkStack
+    @width='full'
+    @alignItems='center'
+    @spacing='1.5'
+    local-class='footer'
+    class='p-3'
+  >
+    <AkSkeleton @width='80px' @height='36px' />
+
+    <AkSkeleton @width='80px' @height='36px' />
+  </AkStack>
+</AkStack>

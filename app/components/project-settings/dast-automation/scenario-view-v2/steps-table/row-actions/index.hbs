@@ -1,0 +1,55 @@
+{{! Read-only mode: non-interactive (demo only) }}
+{{#if @disabled}}
+  <AkIconButton
+    @size='small'
+    data-test-dastAutomationScenario-stepsTable-rowLockBtn
+  >
+    <AkIcon @iconName='lock' @size='small' />
+  </AkIconButton>
+
+  <AkIconButton
+    @size='small'
+    data-test-dastAutomationScenario-stepsTable-rowDeleteBtn
+  >
+    <AkIcon @iconName='delete' @size='small' />
+  </AkIconButton>
+{{else}}
+  {{#if @isMasking}}
+    <AkLoader @size={{12}} />
+
+  {{else}}
+    <AkTooltip
+      @title={{this.tooltipMaskText}}
+      @placement='top'
+      @arrow={{true}}
+      @renderInPlace={{true}}
+    >
+      <AkIconButton
+        @size='small'
+        disabled={{@maskingDisabled}}
+        {{on 'click' (fn @onToggleSecure @step)}}
+        data-test-dastAutomationScenario-stepsTable-rowLockBtn
+      >
+
+        <AkIcon @iconName='lock' @size='small' />
+      </AkIconButton>
+    </AkTooltip>
+  {{/if}}
+
+  <AkTooltip
+    @title={{this.disableDeleteTooltipText}}
+    @placement='top'
+    @arrow={{true}}
+    @disabled={{not @disableDelete}}
+    @renderInPlace={{true}}
+  >
+    <AkIconButton
+      @size='small'
+      disabled={{@disableDelete}}
+      {{on 'click' (fn @onDelete @step)}}
+      data-test-dastAutomationScenario-stepsTable-rowDeleteBtn
+    >
+      <AkIcon @iconName='delete' @size='small' />
+    </AkIconButton>
+  </AkTooltip>
+{{/if}}

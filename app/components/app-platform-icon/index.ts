@@ -3,7 +3,7 @@ import Component from '@glimmer/component';
 export interface AppPlatformIconSignature {
   Element: HTMLSpanElement;
   Args: {
-    platform: 'android' | 'apple';
+    platform?: 'apple' | 'android' | 'windows' | 'mobile';
   };
 }
 
