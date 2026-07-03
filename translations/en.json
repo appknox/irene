@@ -1764,7 +1764,23 @@
       "supporting": "Supporting Asset",
       "secret": "Secret",
       "cloudEndpoint": "Cloud Endpoint"
-    }
+    },
+    "aiTypeLabel": {
+      "model": "ML Model",
+      "library": "Library",
+      "tokenizer": "Tokenizer",
+      "config": "Config",
+      "supporting": "Supporting Asset",
+      "secret": "Secret",
+      "cloudEndpoint": "Cloud Endpoint"
+    },
+    "aiComponentColumn": "Component",
+    "aiFamilyColumn": "Family",
+    "aiPurposeColumn": "Purpose",
+    "aiConfidenceLabel": "AI Confidence",
+    "modelIdentificationMethod": "Identification Method",
+    "modelIdentifiedVerified": "Identified from the model's own embedded metadata",
+    "modelIdentifiedHeuristic": "Identified by matching tensor/operator names in the file — may be imprecise"
   },
   "scan": "scan(s)",
   "scanned": "scanned",

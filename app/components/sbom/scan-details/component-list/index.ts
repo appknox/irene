@@ -100,7 +100,43 @@ export default class SbomScanDetailsComponentListComponent extends Component<Sbo
     return this.hasNoSbomComponent && !this.isAnyFilterApplied;
   }
 
-  get columns() {
+  get isAiComponentFilterActive() {
+    return this.sbomScanDetailsService.isAiComponentFilter === true;
+  }
+
+  /**
+   * The generic "AI Role" column reads confusingly once you're already
+   * looking at an AI-only list (everything says "Model"/"Library" and the
+   * distinction that matters — which model, what it's for — is buried in a
+   * tooltip). This dedicated column set surfaces that directly instead.
+   */
+  get aiComponentColumns() {
+    return [
+      {
+        name: this.intl.t('sbomModule.aiComponentColumn'),
+        valuePath: 'name',
+        width: 150,
+      },
+      {
+        name: this.intl.t('sbomModule.componentType'),
+        valuePath: 'aiTypeLabel',
+      },
+      {
+        name: this.intl.t('sbomModule.aiFamilyColumn'),
+        valuePath: 'aiFamily',
+      },
+      {
+        name: this.intl.t('sbomModule.aiPurposeColumn'),
+        valuePath: 'aiPurpose',
+      },
+      {
+        name: this.intl.t('status'),
+        component: 'sbom/component-status',
+      },
+    ];
+  }
+
+  get defaultColumns() {
     return [
       {
         name: this.intl.t('sbomModule.componentName'),
@@ -113,10 +149,6 @@ export default class SbomScanDetailsComponentListComponent extends Component<Sbo
         headerComponent: 'sbom/scan-details/component-list/type-header',
       },
       {
-        name: this.intl.t('sbomModule.aiRoleColumn'),
-        component: 'sbom/scan-details/component-list/ai-artifact',
-      },
-      {
         name: this.intl.t('dependencyType'),
         component: 'sbom/scan-details/component-list/dependency-type',
         headerComponent:
@@ -127,6 +159,12 @@ export default class SbomScanDetailsComponentListComponent extends Component<Sbo
         component: 'sbom/component-status',
       },
     ];
+  }
+
+  get columns() {
+    return this.isAiComponentFilterActive
+      ? this.aiComponentColumns
+      : this.defaultColumns;
   }
 
   @action

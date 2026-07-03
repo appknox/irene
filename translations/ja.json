@@ -1764,7 +1764,23 @@
       "supporting": "サポートアセット",
       "secret": "シークレット",
       "cloudEndpoint": "クラウドエンドポイント"
-    }
+    },
+    "aiTypeLabel": {
+      "model": "MLモデル",
+      "library": "ライブラリ",
+      "tokenizer": "トークナイザー",
+      "config": "設定",
+      "supporting": "サポートアセット",
+      "secret": "シークレット",
+      "cloudEndpoint": "クラウドエンドポイント"
+    },
+    "aiComponentColumn": "コンポーネント",
+    "aiFamilyColumn": "ファミリー",
+    "aiPurposeColumn": "用途",
+    "aiConfidenceLabel": "AI信頼度",
+    "modelIdentificationMethod": "識別方法",
+    "modelIdentifiedVerified": "モデル自体に埋め込まれたメタデータから識別されました",
+    "modelIdentifiedHeuristic": "ファイル内のテンソル/演算子名の一致から推定されました(不正確な場合があります)"
   },
   "scan": "診断",
   "scanned": "scanned",

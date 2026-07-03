@@ -77,6 +77,10 @@
               data-test-sbomScanDetails-aiFilterButton
               @variant={{if this.isAiComponentFilterActive 'contained' 'outlined'}}
               @color={{if this.isAiComponentFilterActive 'primary' 'neutral'}}
+              local-class={{if
+                this.isAiComponentFilterActive
+                'ai-filter-button--active'
+              }}
               {{on 'click' this.handleAiComponentFilterToggle}}
             >
               {{t 'sbomModule.aiComponents'}}
