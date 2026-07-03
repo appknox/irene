@@ -84,6 +84,14 @@ export default class VncViewerComponent extends Component<VncViewerSignature> {
     return this.supportsModernIOSDeviceFrame ? null : ENV.deviceFarmPassword;
   }
 
+  // CYOD viewer (scrcpy/cyod WS) auth token — always the raw device-farm
+  // password. Unlike deviceFarmPassword, which master nulls for the modern-iOS
+  // noVNC frame, the cyod-viewer's WS handshake needs the token, so it must not
+  // be nulled for iOS 17+ CYOD devices (that produced ?token=null -> 403).
+  get cyodAuthToken() {
+    return ENV.deviceFarmPassword;
+  }
+
   get deviceType() {
     const platform = this.filePlatform;
 

@@ -160,7 +160,7 @@
               data-test-vncViewer-cyodViewer
               @scanToken={{this.scrcpyScanToken}}
               @platform={{this.filePlatform}}
-              @authToken={{this.deviceFarmPassword}}
+              @authToken={{this.cyodAuthToken}}
             />
           {{else if @dynamicScan.isReady}}
             <AkStack
@@ -183,7 +183,7 @@
             data-test-vncViewer-cyodViewer
             @scanToken={{this.scrcpyScanToken}}
             @platform={{this.filePlatform}}
-            @authToken={{this.deviceFarmPassword}}
+            @authToken={{this.cyodAuthToken}}
           />
         {{/if}}
       </div>
