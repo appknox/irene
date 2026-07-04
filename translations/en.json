@@ -220,7 +220,8 @@
     "outdated": "OUTDATED",
     "vulnerable": "VULNERABLE",
     "secure": "SECURE",
-    "unknown": "UNKNOWN"
+    "unknown": "UNKNOWN",
+    "exposed": "EXPOSED"
   },
   "circleCIPipeline": "Circle CI Pipeline",
   "clear": "Clear",
@@ -1778,9 +1779,20 @@
     "aiFamilyColumn": "Family",
     "aiPurposeColumn": "Purpose",
     "aiConfidenceLabel": "AI Confidence",
+    "foundInLocations": "Found In",
     "modelIdentificationMethod": "Identification Method",
     "modelIdentifiedVerified": "Identified from the model's own embedded metadata",
-    "modelIdentifiedHeuristic": "Identified by matching tensor/operator names in the file — may be imprecise"
+    "modelIdentifiedHeuristic": "Identified by matching tensor/operator names in the file — may be imprecise",
+    "confidenceExplanation": {
+      "formatProof": "High confidence: the file format or matched pattern itself is unambiguous proof, no other evidence needed.",
+      "libraryMatch": "High confidence: matched a known AI library package or its distinctive framework name.",
+      "cloudProviderMatch": "High confidence: the exact host matches a known cloud AI provider's API.",
+      "cloudGenericMatch": "Medium confidence: matches a common AI API request pattern, but the host isn't a recognized provider — could be self-hosted or proxied.",
+      "genericLow": "Low confidence: this file's name matches a common but generic AI-related pattern, and no other AI evidence was found in this app to confirm it.",
+      "tokenizerBaseline": "Medium confidence: the filename matches a well-known tokenizer file naming convention — a reasonably strong signal on its own.",
+      "upliftedByLibrary": "Medium confidence: raised from a low baseline because an AI library was also found in this app.",
+      "upliftedByModel": "High confidence: raised from a lower baseline because a real AI model was also found in this app."
+    }
   },
   "scan": "scan(s)",
   "scanned": "scanned",

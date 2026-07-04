@@ -220,7 +220,8 @@
     "outdated": "OUTDATED",
     "vulnerable": "VULNERABLE",
     "secure": "SECURE",
-    "unknown": "UNKNOWN"
+    "unknown": "UNKNOWN",
+    "exposed": "EXPOSED"
   },
   "circleCIPipeline": "Circle CI Pipeline",
   "clear": "Clear",
@@ -1778,9 +1779,20 @@
     "aiFamilyColumn": "ファミリー",
     "aiPurposeColumn": "用途",
     "aiConfidenceLabel": "AI信頼度",
+    "foundInLocations": "検出場所",
     "modelIdentificationMethod": "識別方法",
     "modelIdentifiedVerified": "モデル自体に埋め込まれたメタデータから識別されました",
-    "modelIdentifiedHeuristic": "ファイル内のテンソル/演算子名の一致から推定されました(不正確な場合があります)"
+    "modelIdentifiedHeuristic": "ファイル内のテンソル/演算子名の一致から推定されました(不正確な場合があります)",
+    "confidenceExplanation": {
+      "formatProof": "高信頼度: ファイル形式または一致したパターン自体が明確な証拠であり、他の裏付けは不要です。",
+      "libraryMatch": "高信頼度: 既知のAIライブラリパッケージまたはその特徴的なフレームワーク名と一致しました。",
+      "cloudProviderMatch": "高信頼度: ホストが既知のクラウドAIプロバイダーのAPIと完全に一致しました。",
+      "cloudGenericMatch": "中信頼度: 一般的なAI APIリクエストパターンと一致していますが、ホストが既知のプロバイダーではありません。セルフホストまたはプロキシ経由の可能性があります。",
+      "genericLow": "低信頼度: このファイル名は一般的でありながら曖昧なAI関連パターンと一致していますが、これを裏付ける他のAIの証拠はこのアプリ内に見つかりませんでした。",
+      "tokenizerBaseline": "中信頼度: ファイル名がよく知られたトークナイザーファイルの命名規則と一致しており、それ自体が比較的強いシグナルです。",
+      "upliftedByLibrary": "中信頼度: このアプリ内でAIライブラリも見つかったため、低い基準値から引き上げられました。",
+      "upliftedByModel": "高信頼度: このアプリ内で実際のAIモデルも見つかったため、より低い基準値から引き上げられました。"
+    }
   },
   "scan": "診断",
   "scanned": "scanned",
