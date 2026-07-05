@@ -68,6 +68,9 @@ export default class SbomScanDetailsComponent extends Component<SbomScanDetailsS
       component_limit,
       component_offset,
       is_ai_component,
+      ai_artifact_class,
+      ai_confidence,
+      ordering,
     } = args.queryParams;
 
     // Fetch with default queries from the route
@@ -79,6 +82,9 @@ export default class SbomScanDetailsComponent extends Component<SbomScanDetailsS
         dependency_type: is_dependency,
         component_type: Number(component_type),
         is_ai_component,
+        ai_artifact_class,
+        ai_confidence,
+        ordering,
       })
       .setLimitOffset({
         limit: Number(component_limit),

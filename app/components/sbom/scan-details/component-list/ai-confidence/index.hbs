@@ -1,0 +1,38 @@
+{{#if @sbomComponent.confidenceLabel}}
+  <AkStack @direction='row' @alignItems='center' @spacing='0.5'>
+    <AkChip
+      @label={{@sbomComponent.confidenceLabel}}
+      @color={{@sbomComponent.confidenceColor}}
+      @size='small'
+      @variant='outlined'
+    />
+
+    {{#if this.explanation}}
+      <AkTooltip @arrow={{true}} @placement='top'>
+        <:default>
+          <AkIcon
+            data-test-sbomScanDetails-aiConfidence-tooltipIcon
+            @iconName='info'
+            @size='small'
+            @color='secondary'
+          />
+        </:default>
+
+        <:tooltipContent>
+          <AkTypography
+            @variant='body2'
+            @color='inherit'
+            data-ak-tooltip-multiline
+            {{style width='300px' lineHeight='1.6' display='block'}}
+          >
+            {{this.explanation}}
+          </AkTypography>
+        </:tooltipContent>
+      </AkTooltip>
+    {{/if}}
+  </AkStack>
+{{else}}
+  <AkTypography @color='textSecondary'>
+    -
+  </AkTypography>
+{{/if}}

@@ -29,12 +29,24 @@
 
       <AkTypography class='mx-1'>-</AkTypography>
 
-      <AkTypography
-        @variant='h6'
-        data-test-sbomScanDetails-overview-scanSummary-value
-      >
-        {{ss.value}}
-      </AkTypography>
+      {{#if ss.isClickable}}
+        <AkTypography
+          @variant='h6'
+          @color='primary'
+          {{on 'click' this.handleMLModelsClick}}
+          {{style cursor='pointer'}}
+          data-test-sbomScanDetails-overview-scanSummary-value
+        >
+          {{ss.value}}
+        </AkTypography>
+      {{else}}
+        <AkTypography
+          @variant='h6'
+          data-test-sbomScanDetails-overview-scanSummary-value
+        >
+          {{ss.value}}
+        </AkTypography>
+      {{/if}}
 
       {{#if ss.newFeature}}
         <AkTooltip

@@ -1764,7 +1764,8 @@
       "config": "設定",
       "supporting": "サポートアセット",
       "secret": "シークレット",
-      "cloudEndpoint": "クラウドエンドポイント"
+      "cloudEndpoint": "クラウドエンドポイント",
+      "platformManagedAi": "マネージドモデルプラットフォーム"
     },
     "aiTypeLabel": {
       "model": "MLモデル",
@@ -1773,7 +1774,8 @@
       "config": "設定",
       "supporting": "サポートアセット",
       "secret": "シークレット",
-      "cloudEndpoint": "クラウドエンドポイント"
+      "cloudEndpoint": "クラウドエンドポイント",
+      "platformManagedAi": "プラットフォーム管理AI"
     },
     "aiComponentColumn": "コンポーネント",
     "aiFamilyColumn": "ファミリー",

@@ -30,6 +30,9 @@ export default class SbomScanDetailsService extends Service {
   @tracked selectedDependencyType: boolean | null = null;
   @tracked selectedComponentType = -1;
   @tracked isAiComponentFilter: boolean | null = null;
+  @tracked selectedAiArtifactClass: string | null = null;
+  @tracked selectedAiConfidence: string | null = null;
+  @tracked ordering: string | null = null;
   @tracked sbomComponentsCount = 0;
   @tracked sbomFile: SbomFileModel | null = null;
 
@@ -54,6 +57,9 @@ export default class SbomScanDetailsService extends Service {
     view_type,
     sbomFile,
     is_ai_component,
+    ai_artifact_class,
+    ai_confidence,
+    ordering,
   }: Partial<{
     sbomFile: SbomFileModel | null;
     component_query: string;
@@ -61,25 +67,44 @@ export default class SbomScanDetailsService extends Service {
     dependency_type: string | null;
     view_type: 'tree' | 'list';
     is_ai_component: string | null;
+    ai_artifact_class: string | null;
+    ai_confidence: string | null;
+    ordering: string | null;
   }>) {
-    this.sbomFile = sbomFile ?? this.sbomFile;
-    this.viewType = view_type ?? this.viewType;
-    this.searchQuery = component_query ?? this.searchQuery;
-    this.selectedComponentType = component_type ?? this.selectedComponentType;
+    // Deliberately skip the assignment (rather than reading `this.<prop>`
+    // back as a same-value fallback) when a key is omitted. Reading a
+    // tracked property and immediately writing it back — even to the same
+    // value — still counts as a write for autotracking, and triggers
+    // Ember's "updated after being used in the same computation" assertion
+    // if this runs during a render (e.g. from a component constructor, as
+    // happened here: SbomScanDetailsComponent's constructor calls this
+    // without every key, and the omitted ones took the self-read branch).
+    if (sbomFile !== undefined) this.sbomFile = sbomFile;
+    if (view_type !== undefined) this.viewType = view_type;
+    if (component_query !== undefined) this.searchQuery = component_query;
+    if (component_type !== undefined) this.selectedComponentType = component_type;
 
-    this.selectedDependencyType =
-      dependency_type === undefined
-        ? this.selectedDependencyType
-        : dependency_type === null
-          ? null
-          : dependency_type === 'true';
+    if (dependency_type !== undefined) {
+      this.selectedDependencyType =
+        dependency_type === null ? null : dependency_type === 'true';
+    }
 
-    this.isAiComponentFilter =
-      is_ai_component === undefined
-        ? this.isAiComponentFilter
-        : is_ai_component === null
-          ? null
-          : is_ai_component === 'true';
+    if (is_ai_component !== undefined) {
+      this.isAiComponentFilter =
+        is_ai_component === null ? null : is_ai_component === 'true';
+    }
+
+    if (ai_artifact_class !== undefined) {
+      this.selectedAiArtifactClass = ai_artifact_class;
+    }
+
+    if (ai_confidence !== undefined) {
+      this.selectedAiConfidence = ai_confidence;
+    }
+
+    if (ordering !== undefined) {
+      this.ordering = ordering;
+    }
 
     return this;
   }
@@ -111,6 +136,16 @@ export default class SbomScanDetailsService extends Service {
       ...(this.isAiComponentFilter !== null
         ? { is_ai_component: this.isAiComponentFilter }
         : {}),
+
+      ...(this.selectedAiArtifactClass
+        ? { ai_artifact_class: this.selectedAiArtifactClass }
+        : {}),
+
+      ...(this.selectedAiConfidence
+        ? { ai_confidence: this.selectedAiConfidence }
+        : {}),
+
+      ...(this.ordering ? { ordering: this.ordering } : {}),
     };
 
     // Query Params

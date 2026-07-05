@@ -1,0 +1,37 @@
+<div local-class='summary-bar'>
+  <AkStack @spacing='0' @alignItems='center' @width='full'>
+
+    {{#if (gt @scan.blockerCount 0)}}
+      <div
+        local-class='segment segment-error'
+        style="width: {{percent @scan.blockerCount @scan.totalChecks}}%"
+        title="{{@scan.blockerCount}} {{t 'storeReleaseReadiness.blocker'}}"
+      ></div>
+    {{/if}}
+
+    {{#if (gt @scan.warningCount 0)}}
+      <div
+        local-class='segment segment-warn'
+        style="width: {{percent @scan.warningCount @scan.totalChecks}}%"
+        title="{{@scan.warningCount}} {{t 'storeReleaseReadiness.warning'}}"
+      ></div>
+    {{/if}}
+
+    {{#if (gt @scan.passedCount 0)}}
+      <div
+        local-class='segment segment-success'
+        style="width: {{percent @scan.passedCount @scan.totalChecks}}%"
+        title="{{@scan.passedCount}} {{t 'storeReleaseReadiness.passed'}}"
+      ></div>
+    {{/if}}
+
+    {{#if (gt @scan.untestedCount 0)}}
+      <div
+        local-class='segment segment-neutral'
+        style="width: {{percent @scan.untestedCount @scan.totalChecks}}%"
+        title="{{@scan.untestedCount}} {{t 'storeReleaseReadiness.untested'}}"
+      ></div>
+    {{/if}}
+
+  </AkStack>
+</div>

@@ -88,7 +88,9 @@ export default class SbomScanDetailsComponentListComponent extends Component<Sbo
     return (
       this.searchQuery?.trim() !== '' ||
       this.selectedDependencyType !== null ||
-      this.selectedComponentType > -1
+      this.selectedComponentType > -1 ||
+      this.selectedAiArtifactClass !== null ||
+      this.selectedAiConfidence !== null
     );
   }
 
@@ -104,11 +106,27 @@ export default class SbomScanDetailsComponentListComponent extends Component<Sbo
     return this.sbomScanDetailsService.isAiComponentFilter === true;
   }
 
+  get selectedAiArtifactClass() {
+    return this.sbomScanDetailsService.selectedAiArtifactClass;
+  }
+
+  get selectedAiConfidence() {
+    return this.sbomScanDetailsService.selectedAiConfidence;
+  }
+
+  get ordering() {
+    return this.sbomScanDetailsService.ordering;
+  }
+
   /**
    * The generic "AI Role" column reads confusingly once you're already
    * looking at an AI-only list (everything says "Model"/"Library" and the
    * distinction that matters — which model, what it's for — is buried in a
    * tooltip). This dedicated column set surfaces that directly instead.
+   *
+   * Component/Family get a sort toggle (free-text, sorting is the natural
+   * fit); Type/Confidence get a filter dropdown instead (small enum of
+   * values, jumping straight to one is more useful than alphabetizing).
    */
   get aiComponentColumns() {
     return [
@@ -116,18 +134,29 @@ export default class SbomScanDetailsComponentListComponent extends Component<Sbo
         name: this.intl.t('sbomModule.aiComponentColumn'),
         valuePath: 'name',
         width: 150,
+        headerComponent: 'sbom/scan-details/component-list/ai-sortable-header',
+        sortField: 'name',
       },
       {
         name: this.intl.t('sbomModule.componentType'),
         valuePath: 'aiTypeLabel',
+        headerComponent: 'sbom/scan-details/component-list/ai-type-header',
       },
       {
         name: this.intl.t('sbomModule.aiFamilyColumn'),
         valuePath: 'aiFamily',
+        headerComponent: 'sbom/scan-details/component-list/ai-sortable-header',
+        sortField: 'ai_family',
       },
       {
         name: this.intl.t('sbomModule.aiPurposeColumn'),
         valuePath: 'aiPurpose',
+      },
+      {
+        name: this.intl.t('sbomModule.aiConfidenceLabel'),
+        component: 'sbom/scan-details/component-list/ai-confidence',
+        headerComponent:
+          'sbom/scan-details/component-list/ai-confidence-header',
       },
       {
         name: this.intl.t('status'),
@@ -204,6 +233,51 @@ export default class SbomScanDetailsComponentListComponent extends Component<Sbo
 
     this.sbomScanDetailsService
       .setQueryData({ component_type: type })
+      .setLimitOffset({ offset: 0 })
+      .reload();
+  }
+
+  @action
+  onAiArtifactClassChange(artifactClass: string | null) {
+    this.router.transitionTo({
+      queryParams: {
+        ai_artifact_class: artifactClass,
+        component_offset: 0,
+      },
+    });
+
+    this.sbomScanDetailsService
+      .setQueryData({ ai_artifact_class: artifactClass })
+      .setLimitOffset({ offset: 0 })
+      .reload();
+  }
+
+  @action
+  onAiConfidenceChange(confidence: string | null) {
+    this.router.transitionTo({
+      queryParams: {
+        ai_confidence: confidence,
+        component_offset: 0,
+      },
+    });
+
+    this.sbomScanDetailsService
+      .setQueryData({ ai_confidence: confidence })
+      .setLimitOffset({ offset: 0 })
+      .reload();
+  }
+
+  @action
+  onSortChange(ordering: string | null) {
+    this.router.transitionTo({
+      queryParams: {
+        ordering,
+        component_offset: 0,
+      },
+    });
+
+    this.sbomScanDetailsService
+      .setQueryData({ ordering })
       .setLimitOffset({ offset: 0 })
       .reload();
   }

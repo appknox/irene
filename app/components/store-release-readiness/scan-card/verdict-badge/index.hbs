@@ -1,0 +1,24 @@
+{{#if (eq @verdict 'HIGH_REJECTION_RISK')}}
+  <div local-class='verdict-pill pill-error'>
+    <AkIcon @iconName='signal_cellular_4_bar' local-class='verdict-icon' />
+    <span local-class='verdict-text'>{{t 'storeReleaseReadiness.highRejectionRisk'}}</span>
+  </div>
+
+{{else if (eq @verdict 'MODERATE_REJECTION_RISK')}}
+  <div local-class='verdict-pill pill-warn'>
+    <AkIcon @iconName='signal_cellular_3_bar' local-class='verdict-icon' />
+    <span local-class='verdict-text'>{{t 'storeReleaseReadiness.mediumRejectionRisk'}}</span>
+  </div>
+
+{{else if (eq @verdict 'LOW_REJECTION_RISK')}}
+  <div local-class='verdict-pill pill-success'>
+    <AkIcon @iconName='signal_cellular_1_bar' local-class='verdict-icon' />
+    <span local-class='verdict-text'>{{t 'storeReleaseReadiness.lowRejectionRisk'}}</span>
+  </div>
+
+{{else}}
+  <div local-class='verdict-pill pill-neutral'>
+    <AkIcon @iconName='signal_cellular_0_bar' local-class='verdict-icon' />
+    <span local-class='verdict-text'>{{t 'storeReleaseReadiness.riskAnalysisPending'}}</span>
+  </div>
+{{/if}}

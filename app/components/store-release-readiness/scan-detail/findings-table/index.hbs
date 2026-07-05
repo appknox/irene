@@ -1,0 +1,60 @@
+<div class="findings-table">
+  {{#if this.hasFindings}}
+    {{#each-in this.groupedFindings as |groupName findings|}}
+      <div class="findings-group">
+        <AkTypography @variant='h6' @fontWeight='bold'>
+          {{groupName}}
+        </AkTypography>
+
+        <table class="findings-list">
+          <thead>
+            <tr>
+              <th>{{t 'title'}}</th>
+              <th>{{t 'severity'}}</th>
+              <th>{{t 'status'}}</th>
+            </tr>
+          </thead>
+          <tbody>
+            {{#each findings as |finding|}}
+              <tr class="finding-row {{if finding.passed 'passed' 'failed'}}">
+                <td class="finding-title">
+                  <div>
+                    <AkTypography @variant='body2' @fontWeight='bold'>{{finding.title}}</AkTypography>
+                    {{#if finding.explanation}}
+                      <AkTypography @variant='caption' @color='textSecondary'>
+                        {{finding.explanation}}
+                      </AkTypography>
+                    {{/if}}
+                  </div>
+                </td>
+                <td class="finding-severity">
+                  {{#if finding.severity}}
+                    <AkChip
+                      @label={{finding.severity}}
+                      @color={{if (eq finding.severity 'BLOCKER') 'error' 'warning'}}
+                    />
+                  {{else}}
+                    <AkTypography @variant='caption'>{{t 'storeReleaseReadiness.untested'}}</AkTypography>
+                  {{/if}}
+                </td>
+                <td class="finding-status">
+                  {{#if finding.passed}}
+                    <AkChip @label={{t 'storeReleaseReadiness.passed'}} @color='success' />
+                  {{else}}
+                    <AkChip @label={{t 'storeReleaseReadiness.failed'}} @color='error' />
+                  {{/if}}
+                </td>
+              </tr>
+            {{/each}}
+          </tbody>
+        </table>
+      </div>
+    {{/each-in}}
+  {{else}}
+    <AkEmptyState
+      @icon='check-circle'
+      @title={{t 'storeReleaseReadiness.noFindings'}}
+      @description={{t 'storeReleaseReadiness.allChecksPassed'}}
+    />
+  {{/if}}
+</div>

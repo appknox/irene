@@ -1,0 +1,51 @@
+.scan-detail {
+  padding: 2rem;
+
+  .scan-results {
+    background-color: #f9f9f9;
+    border-radius: 8px;
+    padding: 2rem;
+    margin-bottom: 2rem;
+  }
+
+  .count-item {
+    text-align: center;
+    padding: 1rem;
+
+    h6 {
+      margin-bottom: 0.5rem;
+    }
+
+    caption {
+      display: block;
+      color: #666;
+    }
+  }
+
+  .progress-bar {
+    display: flex;
+    height: 12px;
+    border-radius: 6px;
+    overflow: hidden;
+
+    .progress-segment {
+      height: 100%;
+
+      &.error {
+        background-color: #d32f2f;
+      }
+
+      &.warning {
+        background-color: #f57c00;
+      }
+
+      &.success {
+        background-color: #388e3c;
+      }
+
+      &.untested {
+        background-color: #bdbdbd;
+      }
+    }
+  }
+}

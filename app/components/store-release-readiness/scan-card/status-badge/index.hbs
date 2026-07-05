@@ -1,0 +1,32 @@
+{{#if (eq @status 'COMPLETED')}}
+  <div local-class='status-badge'>
+    <AkIcon @iconName='check_circle' @color='success' local-class='status-icon' />
+    <span local-class='status-label'>{{t 'storeReleaseReadiness.completed'}}</span>
+  </div>
+
+{{else if (eq @status 'PARTIAL')}}
+  <div local-class='status-badge'>
+    <AkIcon @iconName='hourglass_empty' local-class='status-icon color-warn' />
+    <span local-class='status-label'>{{t 'storeReleaseReadiness.partial'}}</span>
+  </div>
+
+{{else if (eq @status 'IN_PROGRESS')}}
+  <div local-class='status-badge'>
+    <AkIcon @iconName='progress_activity' @color='info' local-class='status-icon' />
+    <span local-class='status-label'>{{t 'storeReleaseReadiness.inProgress'}}</span>
+  </div>
+
+{{else if (eq @status 'NOT_STARTED')}}
+  <div local-class='status-badge'>
+    <AkIcon @iconName='pending' local-class='status-icon color-neutral' />
+    <span local-class='status-label'>{{t 'storeReleaseReadiness.notStarted'}}</span>
+  </div>
+
+{{else if (eq @status 'FAILED')}}
+  <div local-class='status-badge'>
+    <AkIcon @iconName='cancel' @color='error' local-class='status-icon' />
+    <span local-class='status-label'>{{t 'storeReleaseReadiness.failed'}}</span>
+  </div>
+
+{{/if}}
+

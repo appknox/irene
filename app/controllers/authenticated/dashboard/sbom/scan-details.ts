@@ -41,6 +41,15 @@ export default class AuthenticatedDashboardSbomScanDetailsController extends Con
     {
       is_ai_component: { type: 'string' as const },
     },
+    {
+      ai_artifact_class: { type: 'string' as const },
+    },
+    {
+      ai_confidence: { type: 'string' as const },
+    },
+    {
+      ordering: { type: 'string' as const },
+    },
   ];
 
   component_limit = 25;
@@ -50,6 +59,9 @@ export default class AuthenticatedDashboardSbomScanDetailsController extends Con
   component_type = -1;
   view_type = 'tree';
   is_ai_component = null;
+  ai_artifact_class = null;
+  ai_confidence = null;
+  ordering = null;
 
   get breadcrumbs(): AkBreadcrumbsItemProps {
     return {

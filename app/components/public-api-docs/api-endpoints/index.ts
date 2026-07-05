@@ -14,7 +14,7 @@ interface PublicApiDocsApiEndpointsSignature {
 export default class PublicApiDocsApiEndpointsComponent extends Component<PublicApiDocsApiEndpointsSignature> {
   @action
   initializeAPIEndpoints(element: HTMLDivElement) {
-    const servers = this.args.data.servers;
+    const servers = [{ url: 'http://localhost:8000', description: 'Local' }];
 
     SwaggerUI({
       spec: { ...this.args.data, info: {}, servers },

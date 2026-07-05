@@ -1,0 +1,18 @@
+<AkStack
+  @alignItems='center'
+  @spacing='0.5'
+  local-class='cursor-pointer'
+  {{on 'click' this.handleClick}}
+  data-test-sbom-scanDetails-aiSortableHeader-container={{@field}}
+>
+  <AkTypography @variant='subtitle2'>
+    {{@label}}
+  </AkTypography>
+
+  <AkIcon
+    @size='small'
+    @iconName={{this.sortIconName}}
+    @color={{if this.sortDirection 'primary' 'inherit'}}
+    data-test-sbom-scanDetails-aiSortableHeader-icon={{@field}}
+  />
+</AkStack>

@@ -64,6 +64,14 @@
                       @selectedDependencyType={{this.selectedDependencyType}}
                       @onComponentTypeChange={{this.onComponentTypeChange}}
                       @selectedComponentType={{this.selectedComponentType}}
+                      @onAiArtifactClassChange={{this.onAiArtifactClassChange}}
+                      @selectedAiArtifactClass={{this.selectedAiArtifactClass}}
+                      @onAiConfidenceChange={{this.onAiConfidenceChange}}
+                      @selectedAiConfidence={{this.selectedAiConfidence}}
+                      @onSortChange={{this.onSortChange}}
+                      @currentOrdering={{this.ordering}}
+                      @field={{column.sortField}}
+                      @label={{column.name}}
                     />
                   {{/let}}
                 {{else}}

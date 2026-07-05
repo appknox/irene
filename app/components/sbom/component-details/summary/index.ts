@@ -56,6 +56,10 @@ export default class SbomComponentDetailsSummaryComponent extends Component<Sbom
       return this.intl.t('sbomModule.mlModel');
     }
 
+    if (this.args.sbomComponent?.isPlatformManagedAi) {
+      return this.intl.t('sbomModule.aiTypeLabel.platformManagedAi');
+    }
+
     return capitalize(this.args.sbomComponent?.type) || '-';
   }
 

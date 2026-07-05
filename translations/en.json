@@ -1764,7 +1764,8 @@
       "config": "Config",
       "supporting": "Supporting Asset",
       "secret": "Secret",
-      "cloudEndpoint": "Cloud Endpoint"
+      "cloudEndpoint": "Cloud Endpoint",
+      "platformManagedAi": "Managed Model Platform"
     },
     "aiTypeLabel": {
       "model": "ML Model",
@@ -1773,7 +1774,8 @@
       "config": "Config",
       "supporting": "Supporting Asset",
       "secret": "Secret",
-      "cloudEndpoint": "Cloud Endpoint"
+      "cloudEndpoint": "Cloud Endpoint",
+      "platformManagedAi": "Platform Managed AI"
     },
     "aiComponentColumn": "Component",
     "aiFamilyColumn": "Family",

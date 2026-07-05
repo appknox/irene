@@ -163,8 +163,13 @@ export default class SbomComponentModel extends Model {
       supporting: 'sbomModule.aiLabel.supporting',
       secret: 'sbomModule.aiLabel.secret',
       cloud_endpoint: 'sbomModule.aiLabel.cloudEndpoint',
+      platform_managed_ai: 'sbomModule.aiLabel.platformManagedAi',
     };
     return classMap[this.aiArtifactClass] || null;
+  }
+
+  get isPlatformManagedAi() {
+    return this.aiArtifactClass === 'platform_managed_ai';
   }
 
   /**
@@ -238,6 +243,7 @@ export default class SbomComponentModel extends Model {
       supporting: 'sbomModule.aiTypeLabel.supporting',
       secret: 'sbomModule.aiTypeLabel.secret',
       cloud_endpoint: 'sbomModule.aiTypeLabel.cloudEndpoint',
+      platform_managed_ai: 'sbomModule.aiTypeLabel.platformManagedAi',
     };
     const key = classMap[this.aiArtifactClass];
     return key ? this.intl.t(key) : '-';

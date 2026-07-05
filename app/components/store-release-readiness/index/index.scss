@@ -1,0 +1,32 @@
+.srr-page {
+  padding: 2rem 2.5rem;
+}
+
+// ── Filter bar ────────────────────────────────────────────
+.search-input {
+  width: 280px;
+}
+
+.filter-select {
+  width: 200px;
+}
+
+// ── Card grid — 2 columns max ─────────────────────────────
+.card-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1.5rem;
+
+  @media (max-width: 900px) {
+    grid-template-columns: 1fr;
+  }
+}
+
+// ── States ────────────────────────────────────────────────
+.loading-container {
+  min-height: 400px;
+}
+
+.empty-state {
+  min-height: 300px;
+}
