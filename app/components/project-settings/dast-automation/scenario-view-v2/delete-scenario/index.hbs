@@ -1,0 +1,73 @@
+<AkTooltip
+  @arrow={{true}}
+  @title={{t 'dastAutomation.deleteDefaultScenarioInfo'}}
+  @disabled={{true}}
+  data-test-projectSettings-dastAutomation-scenarioViewV2-deleteScenario-defaultInfoTooltip
+>
+  <AkIconButton
+    {{on 'click' this.handleDeleteScenario}}
+    data-test-projectSettings-dastAutomation-scenarioViewV2-deleteScenario-modalTrigger
+  >
+    <AkIcon @iconName='mdi:delete' />
+  </AkIconButton>
+</AkTooltip>
+
+{{#if this.showDeleteScenarioModal}}
+  <AkModal
+    @headerTitle={{t 'confirmation'}}
+    @onClose={{this.hideDeleteScenarioModal}}
+    @disableClose={{this.deleteProjectScenario.isRunning}}
+    @showHeader={{true}}
+    @noGutter={{true}}
+  >
+    <:default>
+      <AkStack
+        @direction='column'
+        @spacing='2'
+        class='p-3 pr-6'
+        {{style maxWidth='420px'}}
+      >
+        <AkTypography
+          data-test-projectSettings-dastAutomation-scenarioViewV2-deleteScenario-confirmText
+        >
+          {{t
+            'dastAutomation.scenarioDeleteConfirm'
+            htmlSafe=true
+            scenarioName=@scenarioDetail.name
+          }}
+        </AkTypography>
+      </AkStack>
+    </:default>
+
+    <:footer>
+      <AkDivider />
+
+      <AkStack
+        @justifyContent='flex-start'
+        @alignItems='center'
+        @spacing='1.5'
+        local-class='scenario-delete-footer-container'
+        class='px-3 py-2'
+      >
+        <AkButton
+          @variant='outlined'
+          @color='neutral'
+          @disabled={{this.deleteProjectScenario.isRunning}}
+          {{on 'click' this.hideDeleteScenarioModal}}
+          data-test-projectSettings-dastAutomation-scenarioViewV2-deleteScenario-cancelBtn
+        >
+          {{t 'cancel'}}
+        </AkButton>
+
+        <AkButton
+          @loading={{this.deleteProjectScenario.isRunning}}
+          @variant='filled'
+          {{on 'click' this.deleteScenario}}
+          data-test-projectSettings-dastAutomation-scenarioViewV2-deleteScenario-deleteBtn
+        >
+          {{t 'yesDelete'}}
+        </AkButton>
+      </AkStack>
+    </:footer>
+  </AkModal>
+{{/if}}

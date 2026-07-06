@@ -1,0 +1,44 @@
+.input-error-wrapper {
+  position: relative;
+  width: 100%;
+}
+
+.input-error-wrapper.has-error :global(.ak-text-input-outlined),
+.input-error-wrapper.has-error :global(.ember-power-select-trigger) {
+  border-radius: var(
+    --project-settings-dast-automation-scenario-view-v2-steps-table-input-error-wrapper-border-radius
+  ) !important;
+
+  border: 1px solid
+    var(
+      --project-settings-dast-automation-scenario-view-v2-steps-table-input-error-wrapper-border-color
+    ) !important;
+
+  background: var(
+    --project-settings-dast-automation-scenario-view-v2-steps-table-input-error-wrapper-background
+  ) !important;
+}
+
+.input-error-wrapper.has-error :global(.ember-power-select-status-icon) {
+  display: none;
+}
+
+.input-error-icon {
+  position: absolute;
+  right: 8px;
+  top: 50%;
+  transform: translateY(-50%);
+  height: 16px;
+
+  color: var(
+    --project-settings-dast-automation-scenario-view-v2-steps-table-input-error-wrapper-border-color
+  );
+}
+
+.tooltip-content-container {
+  min-width: 180px;
+  padding: 0.35em;
+  width: fit-content;
+  box-sizing: border-box;
+  white-space: normal;
+}

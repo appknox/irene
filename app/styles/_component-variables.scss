@@ -143,6 +143,8 @@ body {
   // variables for ak-checkbox
   --ak-checkbox-color-checked: var(--success-main);
   --ak-checkbox-color-indeterminate: var(--success-main);
+  --ak-checkbox-color-checked-primary: var(--primary-main);
+  --ak-checkbox-color-indeterminate-primary: var(--primary-main);
   --ak-checkbox-color-text-disabled: var(--text-disabled);
   --ak-checkbox-hover-background: var(--hover-light-background);
 
@@ -1644,6 +1646,183 @@ body {
     --border-color-1
   );
 
+  // variables for project-settings/dast-automation/automation-settings/scenario-table
+  --project-settings-dast-automation-automation-settings-scenario-table-row-border-color: var(
+    --neutral-grey-200
+  );
+
+  // variables for project-settings/dast-automation/automation-settings/scenario-table-v2
+  --project-settings-dast-automation-automation-settings-scenario-table-v2-row-border-color: var(
+    --neutral-grey-200
+  );
+
+  // variables for project-settings/dast-automation/automation-settings/scenario-v2
+  --project-settings-dast-automation-automation-settings-scenario-v2-textfield-bg: var(
+    --neutral-grey-100
+  );
+  --project-settings-dast-automation-automation-settings-scenario-v2-form-footer-box-shadow: var(
+    --box-shadow-4
+  );
+
+  // variables for project-settings/dast-automation/scenario-view-v2
+  --project-settings-dast-automation-scenario-view-v2-background: var(
+    --background-main
+  );
+  --project-settings-dast-automation-scenario-view-v2-border-radius: var(
+    --border-radius-4
+  );
+  --project-settings-dast-automation-scenario-view-v2-empty-steps-box-shadow: var(
+    --box-shadow-12
+  );
+  --project-settings-dast-automation-scenario-view-v2-footer-border-color: var(
+    --border-color-1
+  );
+  --project-settings-dast-automation-scenario-view-v2-footer-box-shadow: var(
+    --box-shadow-8
+  );
+  --project-settings-dast-automation-scenario-view-v2-footer-border-radius: var(
+    --border-radius
+  );
+  --project-settings-dast-automation-scenario-view-v2-dashed-button-background: var(
+    --primary-main-5
+  );
+  --project-settings-dast-automation-scenario-view-v2-dashed-button-border-color: var(
+    --primary-main
+  );
+  --project-settings-dast-automation-scenario-view-v2-dashed-button-color: var(
+    --primary-main
+  );
+
+  // variables for project-settings/dast-automation/scenario-view-v2/add-steps-popover
+  --project-settings-dast-automation-scenario-view-v2-add-steps-popover-list-background: var(
+    --background-main
+  );
+  --project-settings-dast-automation-scenario-view-v2-add-steps-popover-list-border-color: var(
+    --neutral-grey-100
+  );
+  --project-settings-dast-automation-scenario-view-v2-add-steps-popover-list-box-shadow: var(
+    --box-shadow-3
+  );
+  --project-settings-dast-automation-scenario-view-v2-add-steps-popover-item-hover-background: var(
+    --hover-light-background
+  );
+
+  // variables for project-settings/dast-automation/scenario-view-v2/delete-scenario
+  --project-settings-dast-automation-scenario-view-v2-delete-scenario-footer-box-shadow: var(
+    --box-shadow-4
+  );
+
+  // variables for project-settings/dast-automation/scenario-view-v2/edit-scenario
+  --project-settings-dast-automation-scenario-view-v2-edit-scenario-footer-box-shadow: var(
+    --box-shadow-4
+  );
+  --project-settings-dast-automation-scenario-view-v2-edit-scenario-textfield-bg: var(
+    --neutral-grey-100
+  );
+
+  // variables for project-settings/dast-automation/scenario-view-v2/header
+  --project-settings-dast-automation-scenario-view-v2-header-background: var(
+    --background-main
+  );
+  --project-settings-dast-automation-scenario-view-v2-header-border-color: var(
+    --border-color-1
+  );
+  --project-settings-dast-automation-scenario-view-v2-header-border-radius: var(
+    --border-radius
+  );
+  --project-settings-dast-automation-scenario-view-v2-header-box-shadow: var(
+    --box-shadow-8
+  );
+
+  // variables for project-settings/dast-automation/scenario-view-v2/login-scenario-sample
+  --project-settings-dast-automation-scenario-view-v2-login-scenario-sample-code-background: var(
+    --neutral-grey-100
+  );
+  --project-settings-dast-automation-scenario-view-v2-login-scenario-sample-code-border-radius: var(
+    --border-radius
+  );
+
+  // variables for project-settings/dast-automation/scenario-view-v2/steps-table
+  --project-settings-dast-automation-scenario-view-v2-steps-table-root-background: var(
+    --background-main
+  );
+  --project-settings-dast-automation-scenario-view-v2-steps-table-root-border-color: var(
+    --neutral-grey-200
+  );
+  --project-settings-dast-automation-scenario-view-v2-steps-table-root-box-shadow: var(
+    --box-shadow-8
+  );
+  --project-settings-dast-automation-scenario-view-v2-steps-table-header-background: var(
+    --neutral-grey-100
+  );
+  --project-settings-dast-automation-scenario-view-v2-steps-table-header-border-color: var(
+    --neutral-grey-100
+  );
+  --project-settings-dast-automation-scenario-view-v2-steps-table-inner-border-color: var(
+    --divider-light
+  );
+  --project-settings-dast-automation-scenario-view-v2-steps-table-readonly-primary-color: var(
+    --primary-main
+  );
+  --project-settings-dast-automation-scenario-view-v2-steps-table-readonly-text-color: var(
+    --text-primary
+  );
+  --project-settings-dast-automation-scenario-view-v2-steps-table-dashed-button-border-radius: var(
+    --border-radius-4
+  );
+  --project-settings-dast-automation-scenario-view-v2-steps-table-dashed-button-background: var(
+    --primary-main-5
+  );
+  --project-settings-dast-automation-scenario-view-v2-steps-table-dashed-button-border-color: var(
+    --primary-main
+  );
+  --project-settings-dast-automation-scenario-view-v2-steps-table-dashed-button-color: var(
+    --primary-main
+  );
+
+  // variables for project-settings/dast-automation/scenario-view-v2/steps-table/input-error-wrapper
+  --project-settings-dast-automation-scenario-view-v2-steps-table-input-error-wrapper-border-color: var(
+    --error-main
+  );
+  --project-settings-dast-automation-scenario-view-v2-steps-table-input-error-wrapper-background: var(
+    --error-main-5
+  );
+  --project-settings-dast-automation-scenario-view-v2-steps-table-input-error-wrapper-border-radius: var(
+    --border-radius
+  );
+
+  // variables for project-settings/dast-automation/scenario-view-v2/steps-table/row
+  --project-settings-dast-automation-scenario-view-v2-steps-table-row-background: var(
+    --background-main
+  );
+  --project-settings-dast-automation-scenario-view-v2-steps-table-row-hover-background: var(
+    --neutral-grey-100
+  );
+  --project-settings-dast-automation-scenario-view-v2-steps-table-row-hover-box-shadow: var(
+    --box-shadow-12
+  );
+  --project-settings-dast-automation-scenario-view-v2-steps-table-row-separator-color: var(
+    --divider-light
+  );
+  --project-settings-dast-automation-scenario-view-v2-steps-table-row-drag-over-border-color: var(
+    --primary-main
+  );
+  --project-settings-dast-automation-scenario-view-v2-steps-table-row-compact-field-border-color: var(
+    --neutral-grey-100
+  );
+  --project-settings-dast-automation-scenario-view-v2-steps-table-row-compact-field-placeholder-color: var(
+    --neutral-grey-400
+  );
+  --project-settings-dast-automation-scenario-view-v2-steps-table-row-readonly-text-color: var(
+    --text-primary
+  );
+  --project-settings-dast-automation-scenario-view-v2-steps-table-row-info-icon-color: var(
+    --neutral-grey-300
+  );
+  --project-settings-dast-automation-scenario-view-v2-steps-table-row-placeholder-color: var(
+    --text-disabled
+  );
+
   // variables for project-settings/general-settings
   --project-settings-general-settings-root-border-color: var(--border-color-1);
   --project-settings-general-settings-root-background-color: var(
@@ -1721,6 +1900,56 @@ body {
   );
   --project-settings-view-scenario-parameter-text-field-background: var(
     --neutral-grey-100
+  );
+
+  // variables for project-settings/dast-automation/scenario-view
+  --project-settings-dast-automation-scenario-view-background: var(
+    --background-main
+  );
+
+  // variables for project-settings/dast-automation/scenario-view/add-parameter-form
+  --project-settings-dast-automation-scenario-view-add-parameter-form-border-color: var(
+    --border-color-1
+  );
+  --project-settings-dast-automation-scenario-view-add-parameter-form-background: var(
+    --neutral-grey-100
+  );
+  --project-settings-dast-automation-scenario-view-add-parameter-form-text-field-background: var(
+    --background-main
+  );
+
+  // variables for project-settings/dast-automation/scenario-view/header
+  --project-settings-dast-automation-scenario-view-header-background: var(
+    --background-main
+  );
+  --project-settings-dast-automation-scenario-view-header-border-color: var(
+    --border-color-1
+  );
+  --project-settings-dast-automation-scenario-view-header-border-radius: var(
+    --border-radius
+  );
+  --project-settings-dast-automation-scenario-view-header-box-shadow: var(
+    --box-shadow-8
+  );
+  --project-settings-dast-automation-scenario-view-header-footer-box-shadow: var(
+    --box-shadow-4
+  );
+
+  // variables for project-settings/dast-automation/scenario-view/parameter-item
+  --project-settings-dast-automation-scenario-view-parameter-item-background: var(
+    --background-main
+  );
+  --project-settings-dast-automation-scenario-view-parameter-item-border-color: var(
+    --neutral-grey-100
+  );
+  --project-settings-dast-automation-scenario-view-parameter-item-text-field-background: var(
+    --neutral-grey-100
+  );
+  --project-settings-dast-automation-scenario-view-parameter-item-border-light: var(
+    --border-color-1
+  );
+  --project-settings-dast-automation-scenario-view-parameter-item-footer-box-shadow: var(
+    --box-shadow-4
   );
 
   // variables for tri-state-checkbox

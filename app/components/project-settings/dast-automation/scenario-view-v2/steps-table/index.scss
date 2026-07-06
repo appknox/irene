@@ -1,0 +1,136 @@
+.steps-table-root {
+  width: 100%;
+  background: var(
+    --project-settings-dast-automation-scenario-view-v2-steps-table-root-background
+  );
+
+  border: 1px solid
+    var(
+      --project-settings-dast-automation-scenario-view-v2-steps-table-root-border-color
+    );
+
+  box-shadow: var(
+    --project-settings-dast-automation-scenario-view-v2-steps-table-root-box-shadow
+  );
+
+  &.is-readonly {
+    .dashed-add-button:disabled,
+    .dashed-add-button:global(.ak-button-disabled) {
+      opacity: 1;
+      cursor: default;
+    }
+
+    :global(.ak-button-root):disabled,
+    :global(.ak-button-root[disabled]) {
+      opacity: 1;
+      cursor: default;
+    }
+
+    :global(.ak-button-root):disabled :global(.ak-icon),
+    :global(.ak-button-root[disabled]) :global(.ak-icon),
+    :global(.ak-button-root):disabled :global(.ak-icon-root),
+    :global(.ak-button-root[disabled]) :global(.ak-icon-root) {
+      opacity: 1;
+      color: var(
+        --project-settings-dast-automation-scenario-view-v2-steps-table-readonly-primary-color
+      );
+    }
+
+    .edit-role-name-btn-readonly :global(.ak-icon-root),
+    .edit-role-name-btn-readonly :global(.ak-icon) {
+      color: var(
+        --project-settings-dast-automation-scenario-view-v2-steps-table-readonly-primary-color
+      );
+    }
+
+    .delete-role-btn-readonly :global(.ak-icon-root),
+    .delete-role-btn-readonly :global(.ak-icon) {
+      color: var(
+        --project-settings-dast-automation-scenario-view-v2-steps-table-readonly-text-color
+      );
+    }
+  }
+
+  .steps-table {
+    width: 100%;
+    border: 1px solid
+      var(
+        --project-settings-dast-automation-scenario-view-v2-steps-table-inner-border-color
+      );
+  }
+
+  .empty-steps-container {
+    padding: 2.28571em 0;
+  }
+
+  .table-header {
+    display: grid;
+    grid-template-columns: 32px 48px 220px 1fr 1fr;
+    gap: 2em;
+    align-items: center;
+    height: 40px;
+    padding: 0 5.42857em 0 0.85714em;
+    border-radius: 2px 2px 0 0;
+
+    border: 1px solid
+      var(
+        --project-settings-dast-automation-scenario-view-v2-steps-table-header-border-color
+      );
+
+    background: var(
+      --project-settings-dast-automation-scenario-view-v2-steps-table-header-background
+    );
+  }
+
+  .dashed-add-button {
+    height: 30px;
+    min-width: 90px;
+    font-size: 0.92857rem;
+    cursor: pointer;
+
+    border-radius: var(
+      --project-settings-dast-automation-scenario-view-v2-steps-table-dashed-button-border-radius
+    );
+
+    border: 1px dashed
+      var(
+        --project-settings-dast-automation-scenario-view-v2-steps-table-dashed-button-border-color
+      );
+
+    background: var(
+      --project-settings-dast-automation-scenario-view-v2-steps-table-dashed-button-background
+    );
+
+    color: var(
+      --project-settings-dast-automation-scenario-view-v2-steps-table-dashed-button-color
+    );
+
+    &:hover,
+    &:focus {
+      box-shadow: none;
+
+      border: 1px dashed
+        var(
+          --project-settings-dast-automation-scenario-view-v2-steps-table-dashed-button-border-color
+        ) !important;
+
+      background: var(
+        --project-settings-dast-automation-scenario-view-v2-steps-table-dashed-button-background
+      );
+    }
+
+    &:disabled,
+    &:global(.ak-button-disabled) {
+      opacity: 0.5;
+      cursor: not-allowed;
+
+      border-color: var(
+        --project-settings-dast-automation-scenario-view-v2-steps-table-dashed-button-border-color
+      ) !important;
+
+      color: var(
+        --project-settings-dast-automation-scenario-view-v2-steps-table-dashed-button-color
+      ) !important;
+    }
+  }
+}
