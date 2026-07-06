@@ -1,6 +1,11 @@
 .dast-scenario-table {
   tbody tr {
+    border-top: none;
     cursor: pointer;
+    border: 1px solid
+      var(
+        --project-settings-dast-automation-automation-settings-scenario-table-row-border-color
+      );
   }
 
   tbody tr td:last-of-type,

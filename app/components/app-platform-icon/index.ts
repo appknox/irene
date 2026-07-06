@@ -5,7 +5,7 @@ export type AppPlatformIconSize = 'small' | 'medium';
 export interface AppPlatformIconSignature {
   Element: HTMLSpanElement;
   Args: {
-    platform: 'android' | 'apple';
+    platform?: 'apple' | 'android' | 'windows' | 'mobile';
     size?: AppPlatformIconSize;
   };
 }

@@ -1,0 +1,88 @@
+<AkTooltip
+  @arrow={{true}}
+  @placement='top'
+  @title={{t 'dastAutomation.editDefaultScenarioInfo'}}
+  @disabled={{not this.isDefaultScenario}}
+  data-test-projectSettings-dastAutomation-scenarioViewV2-editScenario-defaultInfoTooltip
+>
+  <AkIconButton
+    disabled={{this.isDefaultScenario}}
+    {{on 'click' this.handleEditScenario}}
+    data-test-projectSettings-dastAutomation-scenarioViewV2-editScenario-modalTrigger
+  >
+    <AkIcon @iconName='edit' />
+  </AkIconButton>
+</AkTooltip>
+
+{{#if this.showEditScenarioModal}}
+  <AkModal
+    @headerTitle={{t 'dastAutomation.editScenario'}}
+    @onClose={{this.hideEditScenarioModal}}
+    @onClickOverlay={{this.hideEditScenarioModal}}
+    @disableClose={{this.editProjectScenario.isRunning}}
+    @showHeader={{true}}
+    @noGutter={{true}}
+  >
+    <:default>
+      <AkStack
+        @direction='column'
+        @spacing='2'
+        local-class='scenario-name-form-control'
+        class='p-3 pr-6'
+      >
+        <AkStack @width='full' @spacing='4' @alignItems='center'>
+          <AkTypography
+            for='edit-scenario-name'
+            @fontWeight='regular'
+            @color='neutral'
+            @tag='label'
+            {{style minWidth='75px'}}
+            data-test-projectSettings-dastAutomation-scenarioViewV2-editScenario-nameLabel
+          >
+            {{t 'scenario'}}
+          </AkTypography>
+
+          <AkTextField
+            @id='edit-scenario-name'
+            @value={{this.editScenarioName}}
+            @placeholder={{t 'dastAutomation.enterScenarioName'}}
+            {{on 'input' this.handleEditNameChange}}
+            data-test-projectSettings-dastAutomation-scenarioViewV2-editScenario-nameTextField
+          />
+        </AkStack>
+      </AkStack>
+    </:default>
+
+    <:footer>
+      <AkDivider />
+
+      <AkStack
+        @justifyContent='flex-start'
+        @alignItems='center'
+        @spacing='1.5'
+        local-class='scenario-edit-footer-container'
+        class='px-3 py-2'
+      >
+        <AkButton
+          @variant='outlined'
+          @color='neutral'
+          @disabled={{this.editProjectScenario.isRunning}}
+          {{on 'click' this.hideEditScenarioModal}}
+          data-test-projectSettings-dastAutomation-scenarioViewV2-editScenario-cancelBtn
+        >
+          {{t 'cancel'}}
+        </AkButton>
+
+        <AkButton
+          @variant='filled'
+          @disabled={{this.disableEditSaveBtn}}
+          @loading={{this.editProjectScenario.isRunning}}
+          {{on 'click' this.saveScenario}}
+          data-test-projectSettings-dastAutomation-scenarioViewV2-editScenario-saveBtn
+        >
+          {{t 'save'}}
+        </AkButton>
+      </AkStack>
+    </:footer>
+  </AkModal>
+{{/if}}

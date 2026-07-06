@@ -64,3 +64,14 @@
 .ak-checkbox:disabled + .ak-svg-checkbox-icon {
   color: var(--ak-checkbox-color-text-disabled) !important;
 }
+
+/* Primary Color Variant */
+.ak-checkbox-color-primary {
+  .ak-checkbox:checked + .ak-svg-checkbox-icon {
+    color: var(--ak-checkbox-color-checked-primary);
+  }
+
+  .ak-checkbox[data-indeterminate='true'] + .ak-svg-checkbox-icon {
+    color: var(--ak-checkbox-color-indeterminate-primary);
+  }
+}
