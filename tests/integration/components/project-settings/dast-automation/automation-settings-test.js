@@ -19,6 +19,12 @@ class NotificationsStub extends Service {
   }
 }
 
+class MeStub extends Service {
+  org = {
+    has_security_permission: false,
+  };
+}
+
 const selectors = {
   dynScanAutoRoot:
     '[data-test-projectSettings-dastAutomation-autoSettings-root]',
@@ -77,6 +83,7 @@ module(
       );
 
       this.owner.register('service:notifications', NotificationsStub);
+      this.owner.register('service:me', MeStub);
 
       const store = this.owner.lookup('service:store');
       const file = this.server.create('file', 1);

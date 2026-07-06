@@ -2,7 +2,6 @@ import Component from '@glimmer/component';
 
 interface ProjectSettingsLoaderSignature {
   Element: HTMLElement;
-  Args: null;
 }
 
 export default class ProjectSettingsLoaderComponent extends Component<ProjectSettingsLoaderSignature> {}

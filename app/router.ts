@@ -114,6 +114,10 @@ Router.map(function () {
             this.route('dast-automation-scenario', {
               path: '/dast-automation-scenario/:scenario_id',
             });
+
+            this.route('dast-automation-scenario-v2', {
+              path: '/dast-automation-scenario-v2/:scenario_id',
+            });
           });
 
           this.route('files');
@@ -202,6 +206,10 @@ Router.map(function () {
 
               this.route('dast-automation-scenario', {
                 path: '/dast-automation-scenario/:scenario_id',
+              });
+
+              this.route('dast-automation-scenario-v2', {
+                path: '/dast-automation-scenario-v2/:scenario_id',
               });
             });
 

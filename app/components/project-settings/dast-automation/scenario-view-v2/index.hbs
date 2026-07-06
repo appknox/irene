@@ -1,0 +1,134 @@
+<AkStack
+  @direction='column'
+  @width='full'
+  class='pt-1 pb-4'
+  {{style gap=(if (gt this.roles.length 1) '1.4286em' '0em')}}
+>
+  <AkStack @direction='column' @width='full' {{style gap='1.4286em'}}>
+    <ProjectSettings::DastAutomation::ScenarioViewV2::Header
+      @project={{@project}}
+      @scenarioDetail={{@scenarioDetail}}
+    />
+
+    <AkStack
+      @width='full'
+      @direction='column'
+      {{style overflowX='auto' minHeight='0'}}
+    >
+      {{#if this.showEmptyContainer}}
+        <AkStack
+          @justifyContent='center'
+          @alignItems='center'
+          @width='full'
+          @spacing='6'
+          local-class='empty-steps-container'
+          data-test-dastAutomationScenario-stepsTable-empty
+        >
+          <AkSvg::NoParameterData
+            data-test-dastAutomationScenario-stepsTable-emptyIllustration
+          />
+
+          <AkStack @direction='column' @spacing='2'>
+            <AkStack @direction='column' @spacing='1'>
+              <AkTypography
+                @variant='h6'
+                @fontWeight='bold'
+                data-test-dastAutomationScenario-stepsTable-emptyTitle
+              >
+                {{t 'noDataAvailable'}}
+              </AkTypography>
+
+              <AkTypography
+                {{style maxWidth='356px'}}
+                data-test-dastAutomationScenario-stepsTable-emptyDesc
+              >
+                {{t 'dastAutomation.noStepsAvailable'}}
+              </AkTypography>
+            </AkStack>
+
+            <AkButton
+              @variant='outlined'
+              local-class='dashed-add-button'
+              {{on 'click' this.openAddStepsPopoverAnchorRef}}
+              data-test-dastAutomationScenario-stepsTable-emptyAddStepsBtn
+            >
+              <:leftIcon>
+                <AkIcon @iconName='add' @size='small' @color='primary' />
+              </:leftIcon>
+
+              <:default>{{t 'steps'}}</:default>
+            </AkButton>
+          </AkStack>
+        </AkStack>
+
+      {{else}}
+        <AkStack @direction='column' @width='full'>
+          {{#if this.scenarioDetail.isLoginType}}
+            {{#each this.roles as |role index|}}
+              <ProjectSettings::DastAutomation::ScenarioViewV2::StepsTable
+                @userRole={{role}}
+                @steps={{this.stepsForRole role}}
+                @scenarioDetail={{@scenarioDetail}}
+                @stepErrors={{this.stepErrors}}
+                @clearStepError={{this.clearStepError}}
+                @canAddRole={{this.canAddRole}}
+                @isLastRole={{eq (add index 1) this.roles.length}}
+                @onAddRole={{this.addRole}}
+                @onDeleteRole={{perform this.deleteRole}}
+                @onStepsChange={{fn this.handleStepsChange role}}
+                class='{{if (gt index 0) "px-3 py-3 mt-3" "px-4 py-3"}}'
+              />
+            {{/each}}
+          {{else}}
+            <ProjectSettings::DastAutomation::ScenarioViewV2::StepsTable
+              @steps={{this.allSteps}}
+              @scenarioDetail={{@scenarioDetail}}
+              @stepErrors={{this.stepErrors}}
+              @clearStepError={{this.clearStepError}}
+              @canAddRole={{this.canAddRole}}
+              @onAddRole={{this.addRole}}
+              @onStepsChange={{fn this.handleStepsChange null}}
+              class='px-3 py-3'
+            />
+          {{/if}}
+        </AkStack>
+      {{/if}}
+    </AkStack>
+  </AkStack>
+
+  {{#unless this.showEmptyContainer}}
+    <AkStack
+      @width='full'
+      @alignItems='center'
+      @spacing='1.5'
+      local-class='scenario-view-footer'
+      data-test-dastAutomationScenario-footer
+    >
+      <AkButton
+        @variant='filled'
+        @loading={{this.saveScenario.isRunning}}
+        @disabled={{not this.hasUnsavedChanges}}
+        {{on 'click' this.handleSaveClick}}
+        data-test-dastAutomationScenario-footer-saveBtn
+      >
+        {{t 'save'}}
+      </AkButton>
+
+      <AkButton
+        @variant='outlined'
+        @color='neutral'
+        @disabled={{this.saveScenario.isRunning}}
+        {{on 'click' this.cancelScenario}}
+        data-test-dastAutomationScenario-footer-cancelBtn
+      >
+        {{t 'reset'}}
+      </AkButton>
+    </AkStack>
+  {{/unless}}
+</AkStack>
+
+<ProjectSettings::DastAutomation::ScenarioViewV2::AddStepsPopover
+  @anchorRef={{this.addStepsAnchorRef}}
+  @closeHandler={{this.closeAddStepsPopover}}
+  @addStep={{this.addStep}}
+/>
