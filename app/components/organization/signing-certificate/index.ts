@@ -82,6 +82,21 @@ export default class OrganizationSigningCertificateComponent extends Component<O
     return !!(this.cert && this.cert.team_id);
   }
 
+  // Chip color for the certificate status badge in the summary card.
+  get certStatusColor() {
+    return this.cert?.is_expired ? 'error' : 'success';
+  }
+
+  // Selected file names, surfaced next to the file-picker buttons so the user
+  // can confirm their choice before uploading.
+  get p12FileName() {
+    return this.p12File?.name ?? null;
+  }
+
+  get profileFileName() {
+    return this.profileFile?.name ?? null;
+  }
+
   @action
   handleOpen() {
     this.showModal = true;

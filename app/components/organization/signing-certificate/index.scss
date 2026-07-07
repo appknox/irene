@@ -2,11 +2,71 @@
   width: 100%;
 }
 
-.cert-input {
+.panel-header {
   width: 100%;
-  padding: 8px 12px;
-  border: 1px solid var(--border-default, #d8dde4);
-  border-radius: 4px;
-  font-size: 14px;
-  box-sizing: border-box;
+}
+
+.panel-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  flex-shrink: 0;
+  border-radius: var(--border-radius);
+  background: var(--primary-light);
+}
+
+.summary-card {
+  border: 1px solid var(--divider-dark);
+  border-radius: var(--border-radius);
+  background: var(--background-light);
+  padding: 16px;
+}
+
+.summary-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  flex-shrink: 0;
+  border-radius: var(--border-radius);
+  background: var(--primary-light);
+}
+
+.summary-body {
+  flex-grow: 1;
+  min-width: 0;
+}
+
+.summary-actions {
+  margin-top: 12px;
+}
+
+.mono-value {
+  font-family: var(--font-family-mono);
+  word-break: break-all;
+}
+
+.file-name {
+  word-break: break-all;
+}
+
+.empty-state {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 16px;
+  border: 1px dashed var(--divider-dark);
+  border-radius: var(--border-radius);
+  background: var(--background-light);
+}
+
+// Stack the header action under the title on narrow viewports.
+@media (max-width: 600px) {
+  .panel-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
 }

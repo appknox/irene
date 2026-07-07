@@ -40,7 +40,7 @@ module(
         .dom('[data-test-orgDeviceRegistration-notConfigured]')
         .exists('shows the not-configured message');
       // The Mercer setup + empty state are dead ends when not configured.
-      assert.dom('[data-test-orgDeviceRegistration-commands]').doesNotExist();
+      assert.dom('[data-test-orgDeviceRegistration-setup]').doesNotExist();
       assert.dom('[data-test-orgDeviceRegistration-empty]').doesNotExist();
     });
 
@@ -60,8 +60,11 @@ module(
         .dom('[data-test-orgDeviceRegistration-notConfigured]')
         .doesNotExist();
       assert
-        .dom('[data-test-orgDeviceRegistration-commands]')
+        .dom('[data-test-orgDeviceRegistration-setup]')
         .exists('shows the Mercer setup when configured');
+      assert
+        .dom('[data-test-orgDeviceRegistration-downloadBtn]')
+        .exists('shows the download button');
     });
   }
 );

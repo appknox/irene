@@ -2,24 +2,75 @@
   width: 100%;
 }
 
-.connect-command {
-  font-family: monospace;
-  word-break: break-all;
-  padding: 8px 12px;
-  border: 1px solid var(--border-default, #d8dde4);
-  border-radius: 4px;
-  background: var(--background-light, #f6f8fa);
-  flex-grow: 1;
+.panel-header {
+  width: 100%;
 }
 
-.command-block {
-  margin: 0;
-  white-space: pre-wrap;
-  word-break: break-word;
-  font-size: 13px;
-  line-height: 1.6;
+.panel-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  flex-shrink: 0;
+  border-radius: var(--border-radius);
+  background: var(--primary-light);
 }
 
 .device-row {
   width: 100%;
+  padding: 10px 12px;
+  border: 1px solid var(--divider-dark);
+  border-radius: var(--border-radius);
+  background: var(--background-light);
+}
+
+.empty-state {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 16px;
+  border: 1px dashed var(--divider-dark);
+  border-radius: var(--border-radius);
+  background: var(--background-light);
+}
+
+.setup-step {
+  width: 100%;
+}
+
+.step-num {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 22px;
+  height: 22px;
+  flex-shrink: 0;
+  border-radius: var(--border-radius-capsule);
+  background: var(--primary-light);
+  color: var(--primary-dark);
+  font-size: 12px;
+  font-weight: var(--font-weight-medium);
+  line-height: 1;
+}
+
+.url-field {
+  width: 100%;
+  padding: 4px 4px 4px 12px;
+  border: 1px solid var(--divider-dark);
+  border-radius: var(--border-radius);
+  background: var(--background-light);
+}
+
+.url-value {
+  font-family: var(--font-family-mono);
+  word-break: break-all;
+}
+
+// Stack the header action under the title on narrow viewports.
+@media (max-width: 600px) {
+  .panel-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
 }

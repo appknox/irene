@@ -60,22 +60,16 @@ export default class OrganizationDeviceRegistrationComponent extends Component<O
     return `/api/organizations/${this.organization.selected?.id}/registered-devices`;
   }
 
-  // The mycroft API host the Mercer CLI logs in against — correct for both SaaS
-  // and on-prem installs. Falls back to the current origin.
+  // The mycroft API host to enter on the Mercer app's Login screen — correct for
+  // both SaaS and on-prem installs. Falls back to the current origin.
   get serverUrl() {
     return ENV.host || window.location.origin;
   }
 
-  // Export-style setup block. The equivalent flag form
-  // (`mercer login --dev-token <token> --url <host>`) is shown by `mercer help`.
-  get setupCommands() {
-    return [
-      'export MERCER_DEV_TOKEN=<your-developer-token>',
-      `export MERCER_APPKNOX_URL=${this.serverUrl}`,
-      'mercer login',
-      'mercer register',
-      'mercer run',
-    ].join('\n');
+  // Where the "Download Mercer" button points. Configured per deployment via
+  // IRENE_MERCER_DOWNLOAD_URL; see config/environment.js for the fallback.
+  get mercerDownloadUrl() {
+    return ENV.mercerDownloadUrl;
   }
 
   @action
