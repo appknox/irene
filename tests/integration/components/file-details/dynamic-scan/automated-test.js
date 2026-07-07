@@ -14,8 +14,6 @@ import { setupRenderingTest } from 'ember-qunit';
 import { setupBrowserFakes } from 'ember-browser-services/test-support';
 import { module, test } from 'qunit';
 import { faker } from '@faker-js/faker';
-import { Response } from 'miragejs';
-
 import ENUMS from 'irene/enums';
 import { deviceType } from 'irene/helpers/device-type';
 import { dsAutomatedDevicePref } from 'irene/helpers/ds-automated-device-pref';
@@ -36,6 +34,8 @@ const SEL = {
     '[data-test-fileDetails-dynamicScan-automated-interactionInfoIcon]',
   interactionInfoText:
     '[data-test-fileDetails-dynamicScan-automated-interactionInfoText]',
+
+  tooltipContent: '[data-test-ak-tooltip-content]',
 
   // Upselling
   upselling: {
@@ -61,6 +61,14 @@ const SEL = {
     pill: (name) =>
       `[data-test-fileDetails-dynamicScan-automated-userRoles-pillWrapper='${name}']`,
   },
+
+  // Status chip + error tooltip
+  statusChipLoader: '[data-test-fileDetails-dynamicScan-statusChip-loader]',
+  statusChipErrorTooltip:
+    '[data-test-fileDetails-dynamicScan-automated-statusChipErrorTooltip]',
+
+  // Action button variants
+  cancelBtn: '[data-test-fileDetails-dynamicScanAction="cancelBtn"]',
 
   // Navigation graph button
   navGraphBtn:
@@ -97,14 +105,22 @@ const SEL = {
     apiFilterIcon:
       '[data-test-fileDetails-dynamicScanDrawer-automatedDast-apiURLFilterIcon]',
 
-    scenariosTitle:
-      '[data-test-fileDetails-dynamicScanDrawer-automatedDast-projectScenariosTitle]',
-    scenariosEmpty:
-      '[data-test-fileDetails-dynamicScanDrawer-automatedDast-scenariosEmptyContainer]',
-    scenarioItem: (id) =>
-      `[data-test-fileDetails-dynamicScanDrawer-automatedDast-projectScenario='${id}']`,
-    scenarioIcon:
-      '[data-test-fileDetails-dynamicScanDrawer-automatedDast-projectScenarioIcon]',
+    // V1 scan parameter groups + V2 scenarios share the ScenarioSection child;
+    // the two are distinguished by their container attribute.
+    scenariosContainer:
+      '[data-test-fileDetails-dynamicScanDrawer-automatedDast-projectScenariosContainer]',
+    scenariosV2Container:
+      '[data-test-fileDetails-dynamicScanDrawer-automatedDast-projectScenariosV2Container]',
+
+    // Inner hooks shared by both sections (scope to a container when both render).
+    scenarioSectionTitle:
+      '[data-test-fileDetails-dynamicScanDrawer-automatedDast-scenarioSectionTitle]',
+    scenarioSectionEmpty:
+      '[data-test-fileDetails-dynamicScanDrawer-automatedDast-scenarioSectionEmpty]',
+    scenarioSectionItem: (id) =>
+      `[data-test-fileDetails-dynamicScanDrawer-automatedDast-scenarioSectionItem='${id}']`,
+    scenarioSectionItemIcon:
+      '[data-test-fileDetails-dynamicScanDrawer-automatedDast-scenarioSectionItemIcon]',
 
     proxyHeader:
       '[data-test-fileDetails-dynamicScanDrawer-automatedDast-proxySettingsHeader]',
@@ -114,12 +130,21 @@ const SEL = {
       '[data-test-fileDetails-dynamicScanDrawer-automatedDast-proxySettingsRoutingInfo]',
     proxyContainer:
       '[data-test-fileDetails-dynamicScanDrawer-automatedDast-proxySettingsContainer]',
-
-    tooltipContent: '[data-test-ak-tooltip-content]',
   },
 };
 
 // ─── Fixtures & helpers ───────────────────────────────────────────────────────
+
+/**
+ * Creates an openable dynamicscan for the given file ID. Returns the created dynamicscan.
+ */
+function createOpenableScan(server, fileId) {
+  server.create('dynamicscan', {
+    file: fileId,
+    status: ENUMS.DYNAMIC_SCAN_STATUS.NOT_STARTED,
+    mode: ENUMS.DYNAMIC_MODE.AUTOMATED,
+  });
+}
 
 /**
  * Builds an automated dynamicscan payload for the
@@ -135,6 +160,7 @@ function makeAutomatedScan(fileId, overrides = {}) {
     engine: ENUMS.DYNAMIC_SCAN_ENGINE.AUTOPILOT,
     file: fileId,
     scenario_user_role: null,
+    is_navigation_graph_generated: false,
     ...overrides,
   };
 }
@@ -146,26 +172,17 @@ function stubLastAutomatedScans(server, scanOverrides) {
   );
 }
 
-const graphOk = () => ({ id: '1', nodes: [], edges: [] });
-const graphMissing = () => new Response(404, {}, {});
-
-/**
- * Stubs the navigation-graph endpoint. `resolver(id)` decides per-scan
- * whether to return a graph or a 404 — pass `graphOk`, `graphMissing`, or a
- * custom resolver for per-id logic.
- */
-function stubNavigationGraph(server, resolver) {
-  server.get('/v2/dynamicscans/:id/navigation_graph', (_, req) =>
-    resolver(req.params.id)
-  );
-}
-
 /**
  * Registers the five mirage endpoints the drawer test needs. Collapses ~30
  * lines of inline stub setup into a single call per test invocation.
  */
 function stubDrawerEndpoints(server, opts = {}) {
-  const { apiUrlFilters = [], proxyEnabled = false, scenarios = [] } = opts;
+  const {
+    apiUrlFilters = [],
+    proxyEnabled = false,
+    scenarios = [],
+    scanParameterGroups = scenarios,
+  } = opts;
 
   server.get('/v2/profiles/:id/ds_automated_device_preference', (schema, req) =>
     schema.dsAutomatedDevicePreferences.find(`${req.params.id}`)?.toJSON()
@@ -192,6 +209,13 @@ function stubDrawerEndpoints(server, opts = {}) {
     next: null,
     previous: null,
     results: scenarios,
+  }));
+
+  server.get('/v2/projects/:projectId/scan_parameter_groups', () => ({
+    count: scanParameterGroups.length,
+    next: null,
+    previous: null,
+    results: scanParameterGroups,
   }));
 }
 
@@ -237,7 +261,9 @@ module(
         features: { dynamicscan_automation: true },
       });
 
-      this.server.create('organization-me', { id: organization.id });
+      const organizationMe = this.server.create('organization-me', {
+        id: organization.id,
+      });
 
       const profile = this.server.create('profile', { id: '100' });
 
@@ -291,6 +317,7 @@ module(
         file: store.push(store.normalize('file', file.toJSON())),
         project: store.push(store.normalize('project', project.toJSON())),
         organization,
+        organizationMe,
         devicePreference,
         store,
         dsService,
@@ -520,7 +547,7 @@ module(
         await triggerEvent(tooltipIcon, 'mouseenter');
 
         assert
-          .dom(SEL.drawer.tooltipContent)
+          .dom(SEL.tooltipContent)
           .hasText(t('modalCard.dynamicScan.apiScanUrlFilterTooltipText'));
 
         await triggerEvent(tooltipIcon, 'mouseleave');
@@ -554,21 +581,25 @@ module(
             );
         }
 
-        // ── Active scenarios ──
+        // ── Active scenarios (V1 scan parameter groups; V2 hidden here) ──
         assert
-          .dom(SEL.drawer.scenariosTitle)
+          .dom(SEL.drawer.scenarioSectionTitle)
           .hasText(t('modalCard.dynamicScan.activeScenarios'));
 
         if (hasActiveScenarios) {
           scenarios.forEach((scenario) => {
-            const scenarioElem = find(SEL.drawer.scenarioItem(scenario.id));
+            const scenarioElem = find(
+              SEL.drawer.scenarioSectionItem(scenario.id)
+            );
 
             assert.dom(scenarioElem).hasText(scenario.name);
-            assert.dom(SEL.drawer.scenarioIcon, scenarioElem).exists();
+            assert
+              .dom(SEL.drawer.scenarioSectionItemIcon, scenarioElem)
+              .exists();
           });
         } else {
           assert
-            .dom(SEL.drawer.scenariosEmpty)
+            .dom(SEL.drawer.scenarioSectionEmpty)
             .containsText(
               t('modalCard.dynamicScan.emptyActiveScenariosHeaderText')
             )
@@ -618,6 +649,124 @@ module(
           .hasText(t('scheduleAutomation'), 'Start scan button text');
       }
     );
+
+    // ─── AI DAST gating (scenario sections) ────────────────────────────────────
+    test('AI DAST disabled + regular user: shows only V1 scan parameter groups', async function (assert) {
+      this.organizationMe.update({ has_security_permission: false });
+
+      const scanParameterGroups = [
+        { id: '1', name: 'Classic Scenario', is_active: true },
+      ];
+
+      const scenarios = [{ id: '5', name: 'V2 Scenario', is_active: true }];
+
+      createOpenableScan(this.server, this.file.id);
+      stubDrawerEndpoints(this.server, { scenarios, scanParameterGroups });
+
+      await this.owner.lookup('service:me').fetchOrganizationMe();
+
+      this.dsService.fetchLatestScans(this.file);
+
+      await renderAutomatedScanTemplate();
+      await click(SEL.actionBtn);
+
+      assert.dom(SEL.drawer.scenariosContainer).exists('V1 section shown');
+      assert.dom(SEL.drawer.scenariosV2Container).doesNotExist('V2 hidden');
+
+      assert
+        .dom(SEL.drawer.scenarioSectionTitle)
+        .hasText(t('modalCard.dynamicScan.activeScenarios'));
+
+      assert
+        .dom(SEL.drawer.scenarioSectionItem(scanParameterGroups[0].id))
+        .hasText(scanParameterGroups[0].name);
+    });
+
+    test('AI DAST disabled + super user: shows V1 and V2 sections with "Super User Only" label', async function (assert) {
+      this.organizationMe.update({ has_security_permission: true });
+
+      const scanParameterGroups = [
+        { id: '1', name: 'Classic Scenario', is_active: true },
+      ];
+
+      const scenarios = [{ id: '5', name: 'V2 Scenario', is_active: true }];
+
+      createOpenableScan(this.server, this.file.id);
+      stubDrawerEndpoints(this.server, { scenarios, scanParameterGroups });
+
+      await this.owner.lookup('service:me').fetchOrganizationMe();
+
+      this.dsService.fetchLatestScans(this.file);
+
+      await renderAutomatedScanTemplate();
+      await click(SEL.actionBtn);
+
+      const v1Container = find(SEL.drawer.scenariosContainer);
+      const v2Container = find(SEL.drawer.scenariosV2Container);
+
+      assert.dom(v1Container).exists('V1 section shown');
+      assert.dom(v2Container).exists('V2 section shown');
+
+      // V1 section: classic title, scan-parameter-group item
+      assert
+        .dom(SEL.drawer.scenarioSectionTitle, v1Container)
+        .hasText(t('modalCard.dynamicScan.activeScenarios'));
+
+      assert
+        .dom(
+          SEL.drawer.scenarioSectionItem(scanParameterGroups[0].id),
+          v1Container
+        )
+        .hasText(scanParameterGroups[0].name);
+
+      // V2 section: automation title + super-user-only label, V2 item
+      assert
+        .dom(SEL.drawer.scenarioSectionTitle, v2Container)
+        .containsText(t('dastAutomation.automationScenarios'))
+        .containsText(t('dastAutomation.superUserOnly'));
+
+      assert
+        .dom(SEL.drawer.scenarioSectionItem(scenarios[0].id), v2Container)
+        .hasText(scenarios[0].name);
+    });
+
+    test('AI DAST enabled: shows only V2 scenarios without the "Super User Only" label', async function (assert) {
+      this.organizationMe.update({ has_security_permission: false });
+
+      const organization = this.owner.lookup('service:organization');
+
+      organization.selected.aiFeatures = {
+        ...organization.selected.aiFeatures,
+        ai_dast: true,
+      };
+
+      const scanParameterGroups = [
+        { id: '1', name: 'Classic Scenario', is_active: true },
+      ];
+
+      const scenarios = [{ id: '5', name: 'V2 Scenario', is_active: true }];
+
+      createOpenableScan(this.server, this.file.id);
+      stubDrawerEndpoints(this.server, { scenarios, scanParameterGroups });
+
+      await this.owner.lookup('service:me').fetchOrganizationMe();
+
+      this.dsService.fetchLatestScans(this.file);
+
+      await renderAutomatedScanTemplate();
+      await click(SEL.actionBtn);
+
+      assert.dom(SEL.drawer.scenariosContainer).doesNotExist('V1 hidden');
+      assert.dom(SEL.drawer.scenariosV2Container).exists('V2 section shown');
+
+      assert
+        .dom(SEL.drawer.scenarioSectionTitle)
+        .hasText(t('dastAutomation.automationScenarios'));
+
+      assert
+        .dom(SEL.drawer.scenarioSectionItem(scenarios[0].id))
+        .hasText(scenarios[0].name);
+    });
 
     // ─── User Roles ──────────────────────────────────────────────────────────
 
@@ -673,14 +822,76 @@ module(
       assertPillSelected(assert, 'Admin', false);
     });
 
+    // ─── Status chip ─────────────────────────────────────────────────────────
+
+    test('shows the Retrying label and a spinner when the scan is retrying', async function (assert) {
+      stubLastAutomatedScans(this.server, [
+        { id: '201', status: ENUMS.DYNAMIC_SCAN_STATUS.RETRYING },
+      ]);
+
+      await renderAutomatedScanTemplate();
+
+      assert.dom(SEL.statusChip).hasText(t('retrying'));
+      assert.dom(SEL.statusChipLoader).exists();
+    });
+
+    test('shows the error message in the status chip tooltip when the selected scan has an error', async function (assert) {
+      const errorMessage = 'Something went wrong during the scan.';
+
+      stubLastAutomatedScans(this.server, [
+        {
+          id: '202',
+          status: ENUMS.DYNAMIC_SCAN_STATUS.ERROR,
+          error_message: errorMessage,
+        },
+      ]);
+
+      await renderAutomatedScanTemplate();
+
+      assert.dom(SEL.tooltipContent).doesNotExist();
+
+      await triggerEvent(find(SEL.statusChipErrorTooltip), 'mouseenter');
+
+      assert.dom(SEL.tooltipContent).containsText(errorMessage);
+    });
+
+    test('shows the retrying tooltip when the scan is in retrying state', async function (assert) {
+      stubLastAutomatedScans(this.server, [
+        { id: '204', status: ENUMS.DYNAMIC_SCAN_STATUS.RETRYING },
+      ]);
+
+      await renderAutomatedScanTemplate();
+
+      assert.dom(SEL.tooltipContent).doesNotExist();
+
+      await triggerEvent(find(SEL.statusChipErrorTooltip), 'mouseenter');
+
+      assert
+        .dom(SEL.tooltipContent)
+        .containsText(t('dastAutomation.retryingStatusTooltip'));
+    });
+
+    test('the status chip tooltip is disabled when the scan has no error', async function (assert) {
+      stubLastAutomatedScans(this.server, [
+        { id: '203', status: ENUMS.DYNAMIC_SCAN_STATUS.NOT_STARTED },
+      ]);
+
+      await renderAutomatedScanTemplate();
+      await triggerEvent(find(SEL.statusChipErrorTooltip), 'mouseenter');
+
+      assert.dom(SEL.tooltipContent).doesNotExist();
+    });
+
     // ─── Navigation Graph ────────────────────────────────────────────────────
 
     test('shows the navigation graph button when the completed scan has a graph', async function (assert) {
       stubLastAutomatedScans(this.server, [
-        { id: '101', status: ENUMS.DYNAMIC_SCAN_STATUS.ANALYSIS_COMPLETED },
+        {
+          id: '101',
+          status: ENUMS.DYNAMIC_SCAN_STATUS.ANALYSIS_COMPLETED,
+          is_navigation_graph_generated: true,
+        },
       ]);
-
-      stubNavigationGraph(this.server, graphOk);
 
       await renderAutomatedScanTemplate();
 
@@ -689,10 +900,12 @@ module(
 
     test('hides the navigation graph button when the completed scan has no graph', async function (assert) {
       stubLastAutomatedScans(this.server, [
-        { id: '101', status: ENUMS.DYNAMIC_SCAN_STATUS.ANALYSIS_COMPLETED },
+        {
+          id: '101',
+          status: ENUMS.DYNAMIC_SCAN_STATUS.ANALYSIS_COMPLETED,
+          is_navigation_graph_generated: false,
+        },
       ]);
-
-      stubNavigationGraph(this.server, graphMissing);
 
       await renderAutomatedScanTemplate();
 
@@ -705,18 +918,15 @@ module(
           id: '101',
           status: ENUMS.DYNAMIC_SCAN_STATUS.ANALYSIS_COMPLETED,
           scenario_user_role: { id: '1', name: 'Admin' },
+          is_navigation_graph_generated: true,
         },
         {
           id: '102',
           status: ENUMS.DYNAMIC_SCAN_STATUS.ANALYSIS_COMPLETED,
           scenario_user_role: { id: '2', name: 'Guest' },
+          is_navigation_graph_generated: false,
         },
       ]);
-
-      // Only scan 101 has a graph — switching pills toggles the button.
-      stubNavigationGraph(this.server, (id) =>
-        id === '101' ? graphOk() : graphMissing()
-      );
 
       await renderAutomatedScanTemplate();
 
@@ -741,12 +951,10 @@ module(
 
     // ─── WS Events ───────────────────────────────────────────────────────────
 
-    test('navigation graph button appears after a WS event completes the scan', async function (assert) {
+    test('navigation graph button appears after a WS update pushes isNavigationGraphGenerated', async function (assert) {
       stubLastAutomatedScans(this.server, [
         { id: '103', status: ENUMS.DYNAMIC_SCAN_STATUS.AUTOPILOT_RUNNING },
       ]);
-
-      stubNavigationGraph(this.server, graphOk);
 
       await renderAutomatedScanTemplate();
 
@@ -754,25 +962,25 @@ module(
         .dom(SEL.navGraphBtn)
         .doesNotExist('button absent while scan is still running');
 
-      // Mark the scan as completed in the store, then fire the WS event.
-      const scan = this.store.push(
+      // Simulate a WS payload: push an updated model record with the
+      // completed status and is_navigation_graph_generated set to true.
+      // ember-data reactivity updates the model in place, so the getter
+      // re-evaluates without any additional event dispatch.
+      this.store.push(
         this.store.normalize('dynamicscan', {
           id: '103',
           status: ENUMS.DYNAMIC_SCAN_STATUS.ANALYSIS_COMPLETED,
           engine: ENUMS.DYNAMIC_SCAN_ENGINE.AUTOPILOT,
+          is_navigation_graph_generated: true,
           file: String(this.file.id),
         })
       );
-
-      this.owner
-        .lookup('service:event-bus')
-        .trigger('ws:dynamicscan:update', scan);
 
       await settled();
 
       assert
         .dom(SEL.navGraphBtn)
-        .exists('button appears after scan is marked complete via WS');
+        .exists('button appears after model is updated with graph generated');
     });
 
     // ─── showActionButton ────────────────────────────────────────────────────
@@ -814,6 +1022,16 @@ module(
         assert.dom(SEL.actionBtn).exists();
       }
     );
+
+    test('shows the cancel button when the scan is retrying', async function (assert) {
+      stubLastAutomatedScans(this.server, [
+        { id: '106', status: ENUMS.DYNAMIC_SCAN_STATUS.RETRYING },
+      ]);
+
+      await renderAutomatedScanTemplate();
+
+      assert.dom(SEL.cancelBtn).hasText(t('cancelScan'));
+    });
 
     // ─── showInteractionInfo ─────────────────────────────────────────────────
 

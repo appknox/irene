@@ -134,6 +134,17 @@ export default class ProjectSettingsDastAutomationAutomationSettingsScanWindowCo
 
     try {
       this.prepAdapter();
+
+      if (this.preference.scanWindowStartAt) {
+        this.preference.scanWindowStartAt =
+          this.preference.scanWindowStartAt.slice(0, 5);
+      }
+
+      if (this.preference.scanWindowEndBefore) {
+        this.preference.scanWindowEndBefore =
+          this.preference.scanWindowEndBefore.slice(0, 5);
+      }
+
       await this.preference.save();
 
       this.notify.success(this.intl.t('dastAutomation.scanWindowUpdated'));

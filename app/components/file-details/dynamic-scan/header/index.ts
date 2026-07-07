@@ -22,7 +22,7 @@ interface TabItem {
   activeRoutes: string;
   iconDetails?: {
     icon: 'check-circle' | 'warning' | 'block';
-    color: 'success' | 'warn';
+    color: 'success' | 'warn' | 'error';
   } | null;
   inProgress?: boolean;
   count?: number;

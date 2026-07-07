@@ -1,5 +1,5 @@
 import Component from '@glimmer/component';
-import { inject as service } from '@ember/service';
+import { service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
 import { task } from 'ember-concurrency';
 import type Store from 'ember-data/store';
@@ -11,6 +11,7 @@ import type DsAutomationPreferenceModel from 'irene/models/ds-automation-prefere
 interface ProjectSettingsDastAutomationAutomationSettingsConfigurationSignature {
   Args: {
     profileId?: string | number;
+    showScanWindow?: boolean;
   };
 }
 

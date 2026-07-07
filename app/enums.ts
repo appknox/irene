@@ -68,6 +68,7 @@ const ENUMS = {
     ERROR: 24,
     CANCELLED: 25,
     TERMINATED: 26,
+    RETRYING: 27,
   },
 
   DYNAMIC_MODE: {

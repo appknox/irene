@@ -7,6 +7,7 @@ export enum DsStatusGroup {
   NOT_STARTED,
   IN_QUEUE,
   STARTING,
+  RETRYING,
   RUNNING,
   STOPPING,
   COMPLETED,
@@ -19,6 +20,7 @@ export type DsStatusLabelKey =
   | 'notStarted'
   | 'inQueue'
   | 'starting'
+  | 'retrying'
   | 'running'
   | 'stopping'
   | 'completed'
@@ -54,6 +56,8 @@ const STARTING_STATUSES = new Set([
   STATUS.CONFIGURING_AUTOPILOT,
 ]);
 
+const RETRYING_STATUSES = new Set([STATUS.RETRYING]);
+
 const IN_QUEUE_STATUSES = new Set([
   STATUS.PREPROCESSING,
   STATUS.PROCESSING_SCAN_REQUEST,
@@ -77,6 +81,7 @@ export const DS_STATUS_GROUP_PRIORITY = {
   [DsStatusGroup.RUNNING]: 1,
   [DsStatusGroup.STOPPING]: 2,
   [DsStatusGroup.STARTING]: 3,
+  [DsStatusGroup.RETRYING]: 3,
   [DsStatusGroup.IN_QUEUE]: 4,
   [DsStatusGroup.ERRORED]: 5,
   [DsStatusGroup.COMPLETED]: 6,
@@ -89,6 +94,7 @@ export const DS_STATUS_GROUP_LABEL: Record<DsStatusGroup, DsStatusLabelKey> = {
   [DsStatusGroup.NOT_STARTED]: 'notStarted',
   [DsStatusGroup.IN_QUEUE]: 'inQueue',
   [DsStatusGroup.STARTING]: 'starting',
+  [DsStatusGroup.RETRYING]: 'retrying',
   [DsStatusGroup.RUNNING]: 'running',
   [DsStatusGroup.STOPPING]: 'stopping',
   [DsStatusGroup.COMPLETED]: 'completed',
@@ -99,12 +105,13 @@ export const DS_STATUS_GROUP_LABEL: Record<DsStatusGroup, DsStatusLabelKey> = {
 // ─── Functions ───────────────────────────────────────────────────────────────
 
 /**
- * Maps a single raw `dynamicscan.status` (0–26) to its computed bucket.
+ * Maps a single raw `dynamicscan.status` (0–27) to its computed bucket.
  * @param status - The status to map.
  * @returns The computed bucket.
  * @example
  * getDsStatusGroupForScan(STATUS.NOT_STARTED); // DsStatusGroup.NOT_STARTED
  * getDsStatusGroupForScan(STATUS.PREPROCESSING); // DsStatusGroup.IN_QUEUE
+ * getDsStatusGroupForScan(STATUS.RETRYING); // DsStatusGroup.RETRYING
  */
 
 export function getDsStatusGroupForScan(status: number) {
@@ -122,6 +129,10 @@ export function getDsStatusGroupForScan(status: number) {
 
   if (STARTING_STATUSES.has(status)) {
     return DsStatusGroup.STARTING;
+  }
+
+  if (RETRYING_STATUSES.has(status)) {
+    return DsStatusGroup.RETRYING;
   }
 
   if (COMPLETED_STATUSES.has(status)) {

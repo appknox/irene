@@ -11,10 +11,8 @@ import {
   type NavigationGraphLayoutOption,
 } from '../graph-config';
 
-import ENV from 'irene/config/environment';
 import type RouterService from '@ember/routing/router-service';
 import type FileModel from 'irene/models/file';
-import type IreneAjaxService from 'irene/services/ajax';
 
 export interface NavigationGraphUserRoleOption {
   hasNavigationGraph: boolean;
@@ -49,7 +47,6 @@ export interface FileDetailsDynamicScanNavigationGraphNavPanelSignature {
 
 export default class FileDetailsDynamicScanNavigationGraphNavPanelComponent extends Component<FileDetailsDynamicScanNavigationGraphNavPanelSignature> {
   @service declare router: RouterService;
-  @service declare ajax: IreneAjaxService;
   @service declare intl: IntlService;
 
   layoutOptions: NavigationGraphLayoutOption[];
@@ -101,18 +98,6 @@ export default class FileDetailsDynamicScanNavigationGraphNavPanelComponent exte
     );
   }
 
-  private async scanHasNavigationGraph(scanId: string) {
-    try {
-      await this.ajax.request(`/dynamicscans/${scanId}/navigation_graph`, {
-        namespace: ENV.namespace_v2,
-      });
-
-      return true;
-    } catch {
-      return false;
-    }
-  }
-
   @action
   handleLayoutChange(option: NavigationGraphLayoutOption) {
     this.selectedLayout = option.value;
@@ -143,7 +128,7 @@ export default class FileDetailsDynamicScanNavigationGraphNavPanelComponent exte
       const scanInProgress =
         scan.isReadyOrRunning || scan.isStartingOrShuttingInProgress;
 
-      const hasNavigationGraph = await this.scanHasNavigationGraph(scan.id);
+      const hasNavigationGraph = scan.isNavigationGraphGenerated;
       const disabled = scanInProgress || !hasNavigationGraph;
 
       let disabledReason: string | null = null;

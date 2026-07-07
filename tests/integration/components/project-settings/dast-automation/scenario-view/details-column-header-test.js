@@ -53,6 +53,8 @@ module(
     // ─── Tooltip ─────────────────────────────────────────────────────────────
 
     test('hovering the info icon shows the inputTypeColumnHeaderInfo tooltip', async function (assert) {
+      assert.expect(3);
+
       await render(TEMPLATE);
 
       assert.dom(selectors.tooltipIcon).exists();

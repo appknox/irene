@@ -399,7 +399,7 @@
       "identifierTooLong": "識別子は64文字以内にしてください。",
       "valueRequired": "このアクションには値が必要です。",
       "tapValueRange": "タップ回数は1〜20の整数で指定してください。",
-      "longPressValueRange": "長押しの時間は正の整数（ミリ秒）で指定してください。",
+      "longPressValueRange": "長押しの時間は1〜300,000ミリ秒（5分）の整数で指定してください。",
       "enterTextTooLong": "値は512文字以内にしてください。",
       "selectTooLong": "オプションラベルは32文字以内にしてください。",
       "checkValueInvalid": "値は「チェック済み」または「未チェック」を指定してください。",
@@ -447,7 +447,8 @@
       "note4": "<strong>鍵</strong>アイコンを使用して、パスワードなどの機密情報をマスクできます。暗号化して保存されます。",
       "note5": "行の左側にあるハンドルをドラッグして並び替え、右側の<strong>削除</strong>アイコンで削除できます。ステップは上から下へ実行されます。",
       "note6": "ログインシナリオは最大<strong>3つのロール</strong>をサポートし、各ロールに最大<strong>10のステップ</strong>を設定できます。"
-    }
+    },
+    "retryingStatusTooltip": "以前割り当てられたデバイスでアプリの起動や正常な動作に失敗したため、別のデバイスで自動DASTが再試行されています。"
   },
   "dastTabs": {
     "manualDAST": "Manual DAST",
@@ -554,7 +555,6 @@
   "enHTMLReport": "EN HTML Report",
   "enable": "Enable",
   "enableAutomation": "Enable Automation",
-  "configuration": "構成",
   "enableMFA": "MFAの有効化",
   "enableMandatoryMFADescription": "By enabling this you are mandating multi factor authentication for all users in this organization. Users who do not have MFA enabled in their user account will receive OTP via the registered email.",
   "enableMandatoryMFARequirement": "For enabling mandatory MFA for organization, you need to have MFA enabled for your user account. Enable it from here:",
@@ -1323,6 +1323,10 @@
         "prefix": "Automated DAST for",
         "suffix": " of the <strong>{platform_display}</strong> app <strong>{package_name}</strong> is now completed successfully."
       },
+      "nf-automated-dast-partially-completed": {
+        "prefix": "Automated DAST for",
+        "suffix": " of the <strong>{platform_display}</strong> app <strong>{package_name}</strong> is now partially completed."
+      },
       "nf-public-api-user-updated": "User <strong>{type}</strong> for <strong>{user_email}</strong> changed from <strong>{current}</strong> to <strong>{updated}</strong> by <strong>{changed_by}</strong>.",
       "nf-jira-push-err": "ファイル<strong>{file_id}</strong>（{package_name}）のJiraへのプッシュが<strong>失敗</strong>しました。Jira連携の設定をご確認ください。"
     },
@@ -1882,6 +1886,7 @@
   "riskThresholdIntegrationDescription": "Configure your risk threshold settings based on security risk levels.",
   "riskType": "リスクタイプ",
   "role": "役割",
+  "retrying": "再試行中",
   "running": "Running",
   "sama": "SAMA",
   "samaExpansion": "Saudi Arabian Monetary Authority",

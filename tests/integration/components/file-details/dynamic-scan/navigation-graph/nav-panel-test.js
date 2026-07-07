@@ -11,7 +11,6 @@ import { setupMirage } from 'ember-cli-mirage/test-support';
 import { setupIntl, t } from 'ember-intl/test-support';
 import { setupRenderingTest } from 'ember-qunit';
 import { module, test } from 'qunit';
-import { Response } from 'miragejs';
 
 import {
   chooseAkSelectOption,
@@ -56,9 +55,13 @@ const TEMPLATE = hbs`
 `;
 
 // Creates an automated scan, optionally tied to a user role. `roleName: null`
-// produces a scan with no role. Graph availability is controlled by stubbing
-// the navigation_graph endpoint, not a model flag.
-function createRoleScan(server, { roleName, status }) {
+// produces a scan with no role. `isNavigationGraphGenerated` controls whether
+// the nav-panel option is enabled; defaults to true so most tests get an
+// enabled option without extra setup.
+function createRoleScan(
+  server,
+  { roleName, status, isNavigationGraphGenerated = true }
+) {
   const role =
     roleName === null
       ? null
@@ -68,6 +71,7 @@ function createRoleScan(server, { roleName, status }) {
     mode: AUTOMATED,
     status,
     scenarioUserRole: role,
+    isNavigationGraphGenerated,
   });
 }
 
@@ -90,25 +94,19 @@ module(
       this.owner.register('service:router', RouterStub);
 
       // The component loads roles from `/last_automated_dynamic_scan` (an array
-      // of scans, each with an embedded role) and probes each scan's graph.
+      // of scans, each with an embedded role). Graph availability is read
+      // directly from `isNavigationGraphGenerated` on each scan model.
       this.server.get('/v3/files/:id/last_automated_dynamic_scan', (schema) =>
         schema.dynamicscans.all().models.map((ds) => ({
           id: ds.id,
           status: ds.status,
           mode: ds.mode,
+          is_navigation_graph_generated: ds.isNavigationGraphGenerated ?? false,
           scenario_user_role: ds.scenarioUserRole
             ? { id: ds.scenarioUserRole.id, name: ds.scenarioUserRole.name }
             : null,
         }))
       );
-
-      // By default every scan has a navigation graph; individual tests stub a
-      // 404 for a specific scan when they need one to be missing.
-      this.server.get('/v2/dynamicscans/:id/navigation_graph', () => ({
-        nodes: [],
-        edges: [],
-        metadata: {},
-      }));
 
       const store = this.owner.lookup('service:store');
       store.push({ data: { id: FILE_ID, type: 'file' } });
@@ -307,19 +305,12 @@ module(
         status: STATUS.ANALYSIS_COMPLETED,
       });
 
-      const noGraphScan = createRoleScan(this.server, {
+      // isNavigationGraphGenerated: false marks this scan as having no graph.
+      createRoleScan(this.server, {
         roleName: 'NoGraph',
         status: STATUS.ANALYSIS_COMPLETED,
+        isNavigationGraphGenerated: false,
       });
-
-      // Stub: this scan's graph endpoint returns 404 (no navigation graph).
-      this.server.get(
-        '/v2/dynamicscans/:id/navigation_graph',
-        (schema, request) =>
-          request.params.id === noGraphScan.id
-            ? new Response(404, {}, { detail: 'not found' })
-            : { nodes: [], edges: [], metadata: {} }
-      );
 
       await renderPanel();
 
@@ -433,8 +424,20 @@ module(
       });
 
       this.server.get(
-        '/v2/dynamicscans/:id/navigation_graph',
-        () => ({ nodes: [], edges: [], metadata: {} }),
+        '/v3/files/:id/last_automated_dynamic_scan',
+        (schema) =>
+          schema.dynamicscans.all().models.map((ds) => ({
+            id: ds.id,
+            status: ds.status,
+            mode: ds.mode,
+
+            is_navigation_graph_generated:
+              ds.isNavigationGraphGenerated ?? false,
+
+            scenario_user_role: ds.scenarioUserRole
+              ? { id: ds.scenarioUserRole.id, name: ds.scenarioUserRole.name }
+              : null,
+          })),
         { timing: 500 }
       );
 

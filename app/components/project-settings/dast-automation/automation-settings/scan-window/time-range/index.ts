@@ -83,7 +83,7 @@ export default class ProjectSettingsDastAutomationAutomationSettingsScanWindowTi
     const field = this.timeFields[key];
     const target = event.target as HTMLInputElement;
 
-    this.args.preference[field.preferenceKey] = target.value;
+    this.args.preference[field.preferenceKey] = target.value.slice(0, 5);
 
     if (field.pickerActive) {
       field.pickerActive = false;

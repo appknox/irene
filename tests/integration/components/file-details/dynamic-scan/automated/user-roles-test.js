@@ -163,6 +163,7 @@ module(
         SCAN_STATUS.INSTALLING,
         SCAN_STATUS.READY_FOR_INTERACTION,
         SCAN_STATUS.STOP_SCAN_REQUESTED,
+        SCAN_STATUS.RETRYING,
       ];
 
       const scans = loadingStatuses.map((status, index) =>

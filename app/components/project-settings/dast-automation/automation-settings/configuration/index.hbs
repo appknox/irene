@@ -48,12 +48,14 @@
     />
   </AkStack>
 
-  <AkDivider @color='dark' />
+  {{#if @showScanWindow}}
+    <AkDivider @color='dark' />
 
-  {{! Scan window row }}
-  <div class='my-3'>
-    <ProjectSettings::DastAutomation::AutomationSettings::ScanWindow
-      @profileId={{@profileId}}
-    />
-  </div>
+    {{! Scan window row }}
+    <div class='my-3'>
+      <ProjectSettings::DastAutomation::AutomationSettings::ScanWindow
+        @profileId={{@profileId}}
+      />
+    </div>
+  {{/if}}
 </AkStack>

@@ -45,6 +45,7 @@ module('Unit | Utility | ds-status-group', function () {
       [STATUS.ERROR, STATUS_GROUP.ERRORED],
       [STATUS.CANCELLED, STATUS_GROUP.CANCELLED],
       [STATUS.TERMINATED, STATUS_GROUP.ERRORED],
+      [STATUS.RETRYING, STATUS_GROUP.RETRYING],
     ],
     function (assert, [status, expected]) {
       assert.strictEqual(
@@ -90,6 +91,7 @@ module('Unit | Utility | ds-status-group', function () {
       [STATUS.ERROR, STATUS_GROUP.ERRORED],
       [STATUS.TERMINATED, STATUS_GROUP.ERRORED],
       [STATUS.CANCELLED, STATUS_GROUP.CANCELLED],
+      [STATUS.RETRYING, STATUS_GROUP.RETRYING],
     ],
     function (assert, [status, expected]) {
       assert.strictEqual(
@@ -317,6 +319,31 @@ module('Unit | Utility | ds-status-group', function () {
     }
   );
 
+  // ─── RETRYING roll-up ────────────────────────────────────────────────────────
+
+  test.each(
+    'RETRYING is outranked by RUNNING/STOPPING and outranks lower buckets',
+    [
+      // Active states beat RETRYING.
+      [[STATUS.AUTOPILOT_RUNNING, STATUS.RETRYING], STATUS_GROUP.RUNNING],
+      [[STATUS.READY_FOR_INTERACTION, STATUS.RETRYING], STATUS_GROUP.RUNNING],
+      [[STATUS.SHUTTING_DOWN, STATUS.RETRYING], STATUS_GROUP.STOPPING],
+      // RETRYING beats everything below priority 3.
+      [[STATUS.RETRYING, STATUS.IN_QUEUE], STATUS_GROUP.RETRYING],
+      [[STATUS.RETRYING, STATUS.NOT_STARTED], STATUS_GROUP.RETRYING],
+      [[STATUS.RETRYING, STATUS.ANALYSIS_COMPLETED], STATUS_GROUP.RETRYING],
+      [[STATUS.RETRYING, STATUS.ERROR], STATUS_GROUP.RETRYING],
+      [[STATUS.RETRYING, STATUS.CANCELLED], STATUS_GROUP.RETRYING],
+    ],
+    function (assert, [statuses, expected]) {
+      assert.strictEqual(
+        getCumulativeDsStatusGroup(statuses),
+        expected,
+        `${JSON.stringify(statuses)} → ${expected}`
+      );
+    }
+  );
+
   // ─── Priority + label exports ───────────────────────────────────────────────
 
   test('priority order matches the cumulative spec', function (assert) {
@@ -330,26 +357,49 @@ module('Unit | Utility | ds-status-group', function () {
         DS_STATUS_GROUP_PRIORITY[STATUS_GROUP.STARTING],
       'stopping beats starting'
     );
+
+    assert.true(
+      DS_STATUS_GROUP_PRIORITY[STATUS_GROUP.STOPPING] <
+        DS_STATUS_GROUP_PRIORITY[STATUS_GROUP.RETRYING],
+      'stopping beats retrying'
+    );
+
+    assert.strictEqual(
+      DS_STATUS_GROUP_PRIORITY[STATUS_GROUP.RETRYING],
+      DS_STATUS_GROUP_PRIORITY[STATUS_GROUP.STARTING],
+      'retrying ties with starting (intentional)'
+    );
+
+    assert.true(
+      DS_STATUS_GROUP_PRIORITY[STATUS_GROUP.RETRYING] <
+        DS_STATUS_GROUP_PRIORITY[STATUS_GROUP.IN_QUEUE],
+      'retrying beats in_queue'
+    );
+
     assert.true(
       DS_STATUS_GROUP_PRIORITY[STATUS_GROUP.STARTING] <
         DS_STATUS_GROUP_PRIORITY[STATUS_GROUP.IN_QUEUE],
       'starting beats in_queue'
     );
+
     assert.true(
       DS_STATUS_GROUP_PRIORITY[STATUS_GROUP.IN_QUEUE] <
         DS_STATUS_GROUP_PRIORITY[STATUS_GROUP.ERRORED],
       'in_queue (active) beats errored (terminal)'
     );
+
     assert.true(
       DS_STATUS_GROUP_PRIORITY[STATUS_GROUP.ERRORED] <
         DS_STATUS_GROUP_PRIORITY[STATUS_GROUP.COMPLETED],
       'errored beats completed when both present'
     );
+
     assert.true(
       DS_STATUS_GROUP_PRIORITY[STATUS_GROUP.COMPLETED] <
         DS_STATUS_GROUP_PRIORITY[STATUS_GROUP.CANCELLED],
       'completed beats cancelled'
     );
+
     assert.true(
       DS_STATUS_GROUP_PRIORITY[STATUS_GROUP.CANCELLED] <
         DS_STATUS_GROUP_PRIORITY[STATUS_GROUP.NOT_STARTED],
@@ -362,6 +412,7 @@ module('Unit | Utility | ds-status-group', function () {
       STATUS_GROUP.NOT_STARTED,
       STATUS_GROUP.IN_QUEUE,
       STATUS_GROUP.STARTING,
+      STATUS_GROUP.RETRYING,
       STATUS_GROUP.RUNNING,
       STATUS_GROUP.STOPPING,
       STATUS_GROUP.COMPLETED,
@@ -391,14 +442,16 @@ module('Unit | Utility | ds-status-group', function () {
     });
   });
 
-  test('priorities are unique across buckets', function (assert) {
-    const priorities = Object.values(DS_STATUS_GROUP_PRIORITY);
-    const unique = new Set(priorities);
+  test('exactly one priority tie exists: RETRYING shares rank with STARTING', function (assert) {
+    const allPriorities = Object.values(DS_STATUS_GROUP_PRIORITY);
+    const uniquePriorities = new Set(allPriorities);
 
+    // Every bucket has a priority, and the only intentional tie is
+    // RETRYING == STARTING (both rank equivalently in the roll-up).
     assert.strictEqual(
-      unique.size,
-      priorities.length,
-      'no two buckets share a priority'
+      allPriorities.length - uniquePriorities.size,
+      1,
+      'exactly one priority is shared (RETRYING and STARTING)'
     );
   });
 

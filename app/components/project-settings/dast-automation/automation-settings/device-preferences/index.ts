@@ -129,7 +129,7 @@ export default class ProjectSettingsDastAutomationAutomationSettingsDevicePrefer
 
     adapter.setNestedUrlNamespace(this.args.project?.id as string);
 
-    const devices = await this.store.findAll('available-automated-device');
+    const devices = await this.store.query('available-automated-device', {});
 
     this.availableAutomatedDevices = devices.slice();
   });

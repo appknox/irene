@@ -29,6 +29,7 @@
     <AkStack @direction='column' @width='full'>
       <ProjectSettings::DastAutomation::AutomationSettings::Configuration
         @profileId={{@profileId}}
+        @showScanWindow={{this.showScanWindow}}
       />
 
       <AkDivider @color='dark' />
@@ -44,22 +45,32 @@
 
       <AkDivider @color='dark' />
 
-      <AkStack @width='9/12' class='my-3'>
-        <ProjectSettings::DastAutomation::AutomationSettings::Scenario
-          @project={{@project}}
-          @profileId={{@profileId}}
-        />
-      </AkStack>
-
-      {{#if this.isSuperUser}}
-        <AkDivider @color='dark' />
-
+      {{#if this.isAiDastEnabled}}
         <AkStack @width='9/12' class='my-3'>
           <ProjectSettings::DastAutomation::AutomationSettings::ScenarioV2
             @project={{@project}}
             @profileId={{@profileId}}
+            @isAiDastEnabled={{this.isAiDastEnabled}}
           />
         </AkStack>
+      {{else}}
+        <AkStack @width='9/12' class='my-3'>
+          <ProjectSettings::DastAutomation::AutomationSettings::Scenario
+            @project={{@project}}
+            @profileId={{@profileId}}
+          />
+        </AkStack>
+
+        {{#if this.isSuperUser}}
+          <AkDivider @color='dark' />
+
+          <AkStack @width='9/12' class='my-3'>
+            <ProjectSettings::DastAutomation::AutomationSettings::ScenarioV2
+              @project={{@project}}
+              @profileId={{@profileId}}
+            />
+          </AkStack>
+        {{/if}}
       {{/if}}
     </AkStack>
   {{else}}

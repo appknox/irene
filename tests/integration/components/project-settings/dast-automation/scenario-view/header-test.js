@@ -32,8 +32,7 @@ class RouterStub extends Service {
 
 const selectors = {
   root: '[data-test-projectSettings-viewScenario-header-root]',
-  scenarioName:
-    '[data-test-projectSettings-viewScenarioHeader-scenarioName]',
+  scenarioName: '[data-test-projectSettings-viewScenarioHeader-scenarioName]',
   scenarioStatus:
     '[data-test-projectSettings-viewScenarioHeader-scenarioStatus]',
   deleteTooltip:
@@ -110,10 +109,12 @@ module(
       const defaultScenario = store.push(
         store.normalize(
           'scan-parameter-group',
-          this.server.create('scan-parameter-group', {
-            name: 'Default Scenario',
-            is_default: true,
-          }).toJSON()
+          this.server
+            .create('scan-parameter-group', {
+              name: 'Default Scenario',
+              is_default: true,
+            })
+            .toJSON()
         )
       );
 
@@ -149,12 +150,8 @@ module(
 
       // ── Modal open ─────────────────────────────────────────────────────────
       assert.dom(selectors.deleteConfirmText).exists();
-      assert
-        .dom(selectors.deleteCancelBtn)
-        .containsText(t('cancel'));
-      assert
-        .dom(selectors.deleteConfirmBtn)
-        .containsText(t('yesDelete'));
+      assert.dom(selectors.deleteCancelBtn).containsText(t('cancel'));
+      assert.dom(selectors.deleteConfirmBtn).containsText(t('yesDelete'));
 
       await click(selectors.deleteCancelBtn);
 
@@ -187,6 +184,7 @@ module(
 
       const router = this.owner.lookup('service:router');
       assert.ok(router.transitionToArgs, 'router.transitionTo was called');
+
       assert.strictEqual(
         router.transitionToArgs[0],
         'authenticated.dashboard.project.settings',
@@ -211,6 +209,7 @@ module(
       assert.ok(notify.errorMsg, 'shows error notification');
 
       const router = this.owner.lookup('service:router');
+
       assert.strictEqual(
         router.transitionToArgs,
         null,

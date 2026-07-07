@@ -1,8 +1,9 @@
-import { service } from '@ember/service';
 import Component from '@glimmer/component';
+import { service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
 import { action } from '@ember/object';
 import { task } from 'ember-concurrency';
+import { waitForPromise } from '@ember/test-waiters';
 import type Store from 'ember-data/store';
 import type IntlService from 'ember-intl/services/intl';
 
@@ -29,7 +30,7 @@ export interface DsPreferenceContext {
 }
 
 interface DsPreferenceProviderSignature {
-  Args: { profileId?: string };
+  Args: { profileId?: string | number };
   Blocks: {
     default: [DsPreferenceContext];
   };
@@ -77,9 +78,8 @@ export default class DsPreferenceProviderComponent extends Component<DsPreferenc
       const adapter = this.store.adapterFor('ds-manual-device-preference');
       adapter.setNestedUrlNamespace(this.profileId);
 
-      this.dsManualDevicePreference = await this.store.queryRecord(
-        'ds-manual-device-preference',
-        {}
+      this.dsManualDevicePreference = await waitForPromise(
+        this.store.queryRecord('ds-manual-device-preference', {})
       );
     } catch (error) {
       const err = error as AdapterError;
@@ -97,9 +97,8 @@ export default class DsPreferenceProviderComponent extends Component<DsPreferenc
       const adapter = this.store.adapterFor('ds-automated-device-preference');
       adapter.setNestedUrlNamespace(this.profileId);
 
-      this.dsAutomatedDevicePreference = await this.store.queryRecord(
-        'ds-automated-device-preference',
-        {}
+      this.dsAutomatedDevicePreference = await waitForPromise(
+        this.store.queryRecord('ds-automated-device-preference', {})
       );
     } catch (error) {
       const err = error as AdapterError;

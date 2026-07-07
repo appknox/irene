@@ -399,7 +399,7 @@
       "identifierTooLong": "Identifier must be 64 characters or fewer.",
       "valueRequired": "Value is required for this action.",
       "tapValueRange": "Tap count must be an integer between 1 and 20.",
-      "longPressValueRange": "Long press duration must be a positive integer (ms).",
+      "longPressValueRange": "Long press duration must be between 1 and 300,000 ms (5 minutes).",
       "enterTextTooLong": "Value must be 512 characters or fewer.",
       "selectTooLong": "Option label must be 32 characters or fewer.",
       "checkValueInvalid": "Value must be Checked or Unchecked.",
@@ -447,7 +447,8 @@
       "note4": "Use the <strong>lock</strong> icon to mask sensitive values like passwords — they're stored encrypted.",
       "note5": "Drag the handle on the left of a row to reorder; use the <strong>delete</strong> icon on the right to remove it. Steps run top to bottom.",
       "note6": "Login scenarios support up to <strong>three roles</strong>, each with up to <strong>ten steps</strong>."
-    }
+    },
+    "retryingStatusTooltip": "Automated DAST is being retried on a different device after the app failed to launch or function correctly on the previously assigned device."
   },
   "dastTabs": {
     "manualDAST": "Manual DAST",
@@ -554,7 +555,6 @@
   "enHTMLReport": "EN HTML Report",
   "enable": "Enable",
   "enableAutomation": "Enable Automation",
-  "configuration": "Configuration",
   "enableMFA": "Enable MFA",
   "enableMandatoryMFADescription": "By enabling this you are mandating multi factor authentication for all users in this organization. Users who do not have MFA enabled in their user account will receive OTP via the registered email.",
   "enableMandatoryMFARequirement": "For enabling mandatory MFA for organization, you need to have MFA enabled for your user account. Enable it from here:",
@@ -1323,6 +1323,10 @@
         "prefix": "Automated DAST for",
         "suffix": " of the <strong>{platform_display}</strong> app <strong>{package_name}</strong> is now completed successfully."
       },
+      "nf-automated-dast-partially-completed": {
+        "prefix": "Automated DAST for",
+        "suffix": " of the <strong>{platform_display}</strong> app <strong>{package_name}</strong> is now partially completed."
+      },
       "nf-public-api-user-updated": "User <strong>{type}</strong> for <strong>{user_email}</strong> changed from <strong>{current}</strong> to <strong>{updated}</strong> by <strong>{changed_by}</strong>.",
       "nf-jira-push-err": "Jira push <strong>failed</strong> for file <strong>{file_id}</strong> ({package_name}). Please check your Jira integration configuration."
     },
@@ -1882,6 +1886,7 @@
   "riskThresholdIntegrationDescription": "Configure your risk threshold settings based on security risk levels.",
   "riskType": "Risk Type",
   "role": "Role",
+  "retrying": "Retrying",
   "running": "Running",
   "sama": "SAMA",
   "samaExpansion": "Saudi Arabian Monetary Authority",

@@ -19,10 +19,25 @@
       @showActionButton={{this.showActionButton}}
     >
       <:statusChip>
-        <FileDetails::DynamicScan::StatusChip
-          @status={{this.cumulativeScanStatus}}
-          @statusText={{this.cumulativeScanStatusText}}
-        />
+        <AkTooltip
+          @arrow={{true}}
+          @placement='bottom'
+          @disabled={{not this.statusChipTooltipMessage}}
+          data-test-fileDetails-dynamicScan-automated-statusChipErrorTooltip
+        >
+          <:tooltipContent>
+            <div local-class='tooltip-content-container'>
+              {{this.statusChipTooltipMessage}}
+            </div>
+          </:tooltipContent>
+
+          <:default>
+            <FileDetails::DynamicScan::StatusChip
+              @status={{this.cumulativeScanStatus}}
+              @statusText={{this.cumulativeScanStatusText}}
+            />
+          </:default>
+        </AkTooltip>
       </:statusChip>
 
       <:actionButton as |dw|>
@@ -58,7 +73,7 @@
       </:actionButton>
 
       <:actionDrawer as |dw|>
-        <DsPreferenceProvider @profileId={{this.profileId}} as |dpContext|>
+        <DsPreferenceProvider @profileId={{@profileId}} as |dpContext|>
           <FileDetails::DynamicScan::Action::Drawer
             @onClose={{dw.closeActionDrawer}}
             @file={{@file}}

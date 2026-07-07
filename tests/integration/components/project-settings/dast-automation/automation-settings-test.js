@@ -226,26 +226,65 @@ module(
       assert.dom(selectors.dynScanAutoToggle).isNotChecked();
     });
 
-    test('notifies when the preference fails to load', async function (assert) {
-      this.server.get(
-        '/v2/profiles/:id/automation_preference',
-        () => new Response(500, {}, {})
-      );
+    test.each(
+      'notifies when the preference fails to load',
+      [true, false],
+      async function (assert, manual) {
+        if (manual) {
+          this.server.get(
+            '/v2/profiles/:id/ds_manual_device_preference',
+            () => new Response(400, {}, {})
+          );
 
-      await render(hbs`
-        <ProjectSettings::DastAutomation::AutomationSettings
-          @project={{this.project}}
-          @profileId={{this.project.activeProfileId}}
-          @featureAvailable={{true}}
-        />
-      `);
+          this.server.create('ds-automated-device-preference', {
+            id: this.project.activeProfileId,
+          });
 
-      const notify = this.owner.lookup('service:notifications');
+          this.server.get(
+            '/v2/profiles/:id/ds_automated_device_preference',
+            (schema, req) => {
+              return schema.dsAutomatedDevicePreferences
+                .find(`${req.params.id}`)
+                ?.toJSON();
+            }
+          );
+        } else {
+          this.server.create('ds-manual-device-preference', {
+            id: this.project.activeProfileId,
+          });
 
-      assert.strictEqual(
-        notify.errorMsg,
-        'The backend responded with an error'
-      );
-    });
+          this.server.get(
+            '/v2/profiles/:id/ds_manual_device_preference',
+            (schema, req) => {
+              return schema.dsManualDevicePreferences
+                .find(`${req.params.id}`)
+                ?.toJSON();
+            }
+          );
+
+          this.server.get(
+            '/v2/profiles/:id/ds_automated_device_preference',
+            () => new Response(400, {}, {})
+          );
+        }
+
+        await render(hbs`
+          <ProjectSettings::DastAutomation::AutomationSettings
+            @project={{this.project}}
+            @profileId={{this.project.activeProfileId}}
+            @featureAvailable={{true}}
+          />
+        `);
+
+        const notify = this.owner.lookup('service:notifications');
+
+        assert.strictEqual(
+          notify.errorMsg,
+          manual
+            ? t('errorFetchingDsManualDevicePref')
+            : t('errorFetchingDsAutomatedDevicePref')
+        );
+      }
+    );
   }
 );

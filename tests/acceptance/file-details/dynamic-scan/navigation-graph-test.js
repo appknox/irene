@@ -107,10 +107,11 @@ function getNavGraphUrl(scanId) {
 // Stubs a file with one automated scan per role and a per-scan navigation graph
 function stubRoleGraphs(server, roles) {
   server.get('/v3/files/:id/last_automated_dynamic_scan', () =>
-    roles.map(({ scanId, name }) => ({
+    roles.map(({ scanId, name, graph }) => ({
       id: scanId,
       status: ENUMS.DYNAMIC_SCAN_STATUS.ANALYSIS_COMPLETED,
       mode: ENUMS.DYNAMIC_MODE.AUTOMATED,
+      is_navigation_graph_generated: !!graph,
       scenario_user_role: { id: scanId, name },
     }))
   );

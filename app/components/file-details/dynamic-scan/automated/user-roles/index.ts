@@ -38,6 +38,7 @@ export default class FileDetailsDynamicScanAutomatedUserRolesComponent extends C
     DsStatusGroup.STARTING,
     DsStatusGroup.RUNNING,
     DsStatusGroup.STOPPING,
+    DsStatusGroup.RETRYING,
   ];
 
   constructor(

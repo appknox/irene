@@ -410,6 +410,24 @@ module(
       );
     });
 
+    test('strips seconds from HH:MM:SS time values loaded from the API before saving', async function (assert) {
+      this.preference.update({
+        scan_window_start_at: '09:00:00',
+        scan_window_end_before: '18:00:00',
+      });
+
+      await render(TEMPLATE);
+
+      // Trigger a save by changing the timezone without touching the time fields.
+      await chooseAkSelectOption({
+        selectTriggerClass: SEL.timezone,
+        optionIndex: 0,
+      });
+
+      assert.strictEqual(this.requestBody.scan_window_start_at, '09:00');
+      assert.strictEqual(this.requestBody.scan_window_end_before, '18:00');
+    });
+
     test('saves and notifies when the timezone changes', async function (assert) {
       await render(TEMPLATE);
 
