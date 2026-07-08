@@ -14,6 +14,7 @@ interface SkFeatures {
   drift_detection: boolean;
   fake_app_detection: boolean;
   use_ai_validation: boolean;
+  third_party_scanning: boolean;
 }
 
 export type SkOrganizationModelName = 'sk-organization';

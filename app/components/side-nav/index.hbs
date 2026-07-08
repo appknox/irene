@@ -65,6 +65,7 @@
             {{#if this.isSidebarExpanded}}
               <li.text
                 data-test-side-menu-item-text
+                title={{it.label}}
                 @primaryText={{it.label}}
                 @primaryTextClass={{this.classes.menuItemText}}
               />
@@ -126,6 +127,7 @@
           {{#if this.isSidebarExpanded}}
             <li.text
               data-test-side-lower-menu-item-text
+              title={{lmi.title}}
               @primaryText={{lmi.title}}
               @primaryTextClass={{lmi.textClass}}
             />

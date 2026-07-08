@@ -218,6 +218,8 @@ export const MdiIconsSet = [
   'report-problem',
   'wand',
   'xamarin',
+  'shield-tick-outline',
+  'web',
 ] as const;
 
 export const HugeIconsSet = [
@@ -241,7 +243,11 @@ export const SolarIconsSet = ['library-linear', 'play-bold'] as const;
 
 export const IconoirIconsSet = ['screenshot'] as const;
 
-export const FluentIconsSet = ['app-recent-24-regular'] as const;
+export const FluentIconsSet = [
+  'app-recent-24-regular',
+  'shield-task-24-regular',
+  'shield-error-24-regular',
+] as const;
 
 export const StreamlinePlumpIconsSet = ['threat-phone'] as const;
 
