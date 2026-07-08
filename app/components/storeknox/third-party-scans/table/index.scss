@@ -1,0 +1,13 @@
+.empty-container {
+  padding-top: 5em;
+  padding-bottom: 5em;
+  border: 1px solid
+    var(--storeknox-third-party-scans-table-empty-container-border-color);
+  background-color: var(
+    --storeknox-third-party-scans-table-empty-container-background-color
+  );
+
+  .empty-header {
+    margin-top: 1.5625em;
+  }
+}

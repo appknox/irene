@@ -103,6 +103,9 @@ export enum AkSvgComponentInvocationByNames {
   StoreReleaseReadinessScanFailed,
   StoreRealeaseReadinessUpselling,
   ComponentSearch,
+  TpMinimalRisk,
+  TpMediumRisk,
+  TpHighRisk,
 }
 
 export enum AkSvgComponentInvocationByPaths {
@@ -142,6 +145,9 @@ export enum AkSvgComponentInvocationByPaths {
   'high-risk-tower',
   'medium-risk-tower',
   'low-risk-tower',
+  'tp-minimal-risk',
+  'tp-medium-risk',
+  'tp-high-risk',
 }
 
 type AkSvgComponent = ComponentLike<{
