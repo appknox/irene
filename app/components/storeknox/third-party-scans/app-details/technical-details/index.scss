@@ -1,0 +1,67 @@
+.technical-details {
+  background-color: var(
+    --storeknox-third-party-scans-app-details-technical-details-background-color
+  );
+  border: 1px solid
+    var(
+      --storeknox-third-party-scans-app-details-technical-details-border-color
+    );
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.category-heading {
+  background-color: var(
+    --storeknox-third-party-scans-app-details-technical-details-category-heading-background-color
+  );
+  border-top: 1px solid
+    var(
+      --storeknox-third-party-scans-app-details-technical-details-border-color
+    );
+  padding: 0.7em 1.5em;
+  cursor: pointer;
+}
+
+.category-tooltip-content {
+  width: 300px;
+  padding: 0.5em;
+  box-sizing: border-box;
+  white-space: normal;
+}
+
+.section-label {
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.finding-accordion {
+  background-color: var(
+    --storeknox-third-party-scans-app-details-technical-details-finding-accordion-background-color
+  );
+  border-top: 1px solid
+    var(
+      --storeknox-third-party-scans-app-details-technical-details-border-color
+    );
+  padding: 0.7em 1.5em;
+  cursor: pointer;
+}
+
+.finding-details-list {
+  margin: 0;
+  padding-left: 1.25em;
+  list-style-type: disc;
+
+  li {
+    margin-bottom: 0.25em;
+
+    &:last-child {
+      margin-bottom: 0;
+    }
+  }
+}
+
+.finding-content {
+  margin: 0em 2em 1em 2em;
+  padding: 1em;
+  border: 1px solid var(--storeknox-third-party-scans-app-details-technical-details-border-color);
+}

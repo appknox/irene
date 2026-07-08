@@ -1,0 +1,82 @@
+{{#if this.isFetching}}
+  <AkTable::Loading @columns={{this.columns}} />
+{{else if this.hasNoApps}}
+  <AkStack
+    @direction='column'
+    @alignItems='center'
+    local-class='empty-container'
+    data-test-storeknoxThirdPartyScansTable-emptyContainer
+  >
+    <AkSvg::ProjectListEmpty />
+
+    <AkTypography
+      @variant='h5'
+      @gutterBottom={{true}}
+      local-class='empty-header'
+      data-test-storeknoxThirdPartyScansTable-emptyHeader
+    >
+      {{t 'noDataAvailable'}}
+    </AkTypography>
+  </AkStack>
+{{else}}
+  <AkPaginationProvider
+    @results={{this.tableData}}
+    @onItemPerPageChange={{this.onItemPerPageChange}}
+    @totalItems={{this.totalCount}}
+    @nextAction={{this.goToPage}}
+    @prevAction={{this.goToPage}}
+    @itemPerPageOptions={{array 10 25 50}}
+    @defaultLimit={{this.skThirdPartyApps.limit}}
+    @offset={{this.skThirdPartyApps.offset}}
+    as |pgc|
+  >
+    <AkTable @hoverable={{true}} @dense={{true}} as |tb|>
+      <tb.head @columns={{this.columns}} as |h|>
+        <h.row as |r|>
+          <r.cell as |column|>
+            {{#if column.headerComponent}}
+              {{#let (component column.headerComponent) as |Component|}}
+                <Component />
+              {{/let}}
+            {{else}}
+              {{column.name}}
+            {{/if}}
+          </r.cell>
+        </h.row>
+      </tb.head>
+
+      <tb.body @rows={{pgc.currentPageResults}} as |b|>
+        <b.row
+          data-test-storeknoxThirdPartyScansTable-row
+          {{style cursor='pointer'}}
+          {{on 'click' (fn this.onRowClick b.rowValue)}}
+          as |r|
+        >
+          <r.cell>
+            {{#let (component r.columnValue.cellComponent) as |Component|}}
+              <Component
+                @loading={{this.isFetching}}
+                @data={{r.rowValue}}
+              />
+            {{/let}}
+          </r.cell>
+        </b.row>
+      </tb.body>
+    </AkTable>
+
+    <AkPagination
+      @disableNext={{pgc.disableNext}}
+      @nextAction={{pgc.nextAction}}
+      @disablePrev={{pgc.disablePrev}}
+      @prevAction={{pgc.prevAction}}
+      @endItemIdx={{pgc.endItemIdx}}
+      @startItemIdx={{pgc.startItemIdx}}
+      @itemPerPageOptions={{pgc.itemPerPageOptions}}
+      @onItemPerPageChange={{pgc.onItemPerPageChange}}
+      @selectedOption={{pgc.selectedOption}}
+      @tableItemLabel={{t 'apps'}}
+      @perPageTranslation={{t 'recordPerPage'}}
+      @totalItems={{pgc.totalItems}}
+    />
+  </AkPaginationProvider>
+{{/if}}

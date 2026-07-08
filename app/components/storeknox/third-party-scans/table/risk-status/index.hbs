@@ -1,0 +1,14 @@
+{{#if @loading}}
+  <AkSkeleton @width='100px' @height='24px' />
+{{else}}
+  <AkChip
+    @label={{this.chipConfig.label}}
+    @color={{this.chipConfig.color}}
+    @variant='semi-filled'
+    data-test-storeknoxThirdPartyScansTableRiskStatus-chip
+  >
+    <:icon>
+      <AkIcon @iconName='security' />
+    </:icon>
+  </AkChip>
+{{/if}}
