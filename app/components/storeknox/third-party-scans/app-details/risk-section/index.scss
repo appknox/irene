@@ -1,0 +1,21 @@
+.risk-score {
+  font-size: 2.75rem;
+  line-height: 1.1;
+}
+
+.risk-score-total {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: var(
+    --storeknox-third-party-scans-app-details-risk-section-score-total-color
+  );
+}
+
+.risk-section {
+  border: 1px solid
+    var(--storeknox-third-party-scans-app-details-risk-section-border-color);
+  border-radius: 8px;
+  background-color: var(
+    --storeknox-third-party-scans-app-details-risk-section-background-color
+  );
+}

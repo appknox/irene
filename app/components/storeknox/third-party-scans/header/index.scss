@@ -1,0 +1,46 @@
+.tp-header-container {
+  background-color: var(
+    --storeknox-third-party-scans-header-container-background-color
+  );
+  border: 1px solid
+    var(--storeknox-third-party-scans-header-container-border-color);
+  margin: 0.714em 0;
+}
+
+.title-row {
+  padding: 1em 1.285em;
+}
+
+.filters-row {
+  padding: 0.785em 1.285em;
+}
+
+.search-field {
+  width: 250px !important;
+}
+
+.filter-select {
+  padding-left: 0.714em;
+}
+
+.filter-dropdown-store {
+  min-width: 150px !important;
+}
+
+.filter-dropdown-region {
+  min-width: 120px !important;
+}
+
+.filter-dropdown-risk-status {
+  min-width: 170px !important;
+}
+
+.filter-trigger {
+  white-space: nowrap;
+  width: auto !important;
+  padding: 0 8px !important;
+
+  :global(.ember-power-select-status-icon) {
+    display: none;
+  }
+}

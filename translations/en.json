@@ -1758,6 +1758,8 @@
   "risk": "The risk of",
   "riskAndCommentRequired": "Risk and comment are required fields",
   "riskOf": "Risk Of",
+  "riskScore": "Risk Score",
+  "riskStatus": "Risk Status",
   "riskThresholdIntegrationDescription": "Configure your risk threshold settings based on security risk levels.",
   "riskType": "Risk Type",
   "role": "Role",
@@ -2211,6 +2213,39 @@
   },
   "storeknox": {
     "fakeAppsTitle": "Brand Abuse & Fake Apps",
+    "region": "Region",
+    "thirdPartyScansTitle": "Third-Party App Risk Assessment",
+    "thirdPartyScansDescription": "Get comprehensive visibility into the security risk posed by third-party apps across Google PlayStore and Apple App Store, to your organization.",
+    "basedOnVersionAnalysis": "Based on <strong>v{version}</strong> analysis",
+    "thirdPartyFinding": {
+      "whatItChecks": "What it checks",
+      "findings": "Findings",
+      "potentialBusinessImpact": "Potential Business Impact",
+      "potentialRisk": "Potential Risk",
+      "noRiskDetected": "No Risk Detected",
+      "potentialRisks": "Potential Risks",
+      "noRisksDetected": "No Risks Detected",
+      "potentialRisksCount": "<strong>{count}</strong> {count, plural, one {potential risk} other {potential risks}}",
+      "countChipLabel": "{label} <strong>{count}</strong>",
+      "categoryDescriptions": {
+        "sensitiveCapabilities": "Permissions, entitlements, and service bindings that grant the app access to something sensitive — messages, contacts, location, microphone, or admin-level device control.",
+        "deviceManipulation": "Signals where the app can actively alter device state, persist itself, or be manipulated by other apps on the device — not just observe it.",
+        "monitoringIndicators": "Capabilities built for continuous, silent observation of the user rather than one-off access — usage tracking, notifications, screen capture.",
+        "controlBypass": "Signals that the app can sidestep the org's own store-review, network, or device-management controls.",
+        "suspiciousIndicators": "Heuristic and hygiene flags that read as suspicious in combination rather than individually disqualifying on their own."
+      }
+    },
+    "technicalDetails": "Risk Assessment Details",
+    "technicalDetailsDescription": "Potential risks this third-party app may introduce to your organization, by risk category.",
+    "riskScoreUnavailable": "Unavailable",
+    "riskAssessmentErrorTitle": "Something has gone wrong",
+    "riskAssessmentErrorDescription": "We couldn't load the risk assessment for this app. Please reach out to our support team for assistance.",
+    "riskStatus": {
+      "minimal": "Minimal Risk",
+      "medium": "Medium Risk",
+      "high": "High Risk",
+      "unknown": "Unknown"
+    },
     "yesIgnoreAndAddToInventory": "Yes, Ignore & Add to Inventory",
     "fakeAppIgnored": "Fake app has been ignored successfully",
     "fakeAppIgnoredAndAddedToInventory": "Fake app has been ignored and added to inventory successfully",
