@@ -281,6 +281,9 @@ body {
   --ak-pagination-divider-background: var(--divider-dark);
   --ak-pagination-button-background: var(--common-white);
 
+  // variables for ak-progress-bar
+  --ak-progress-bar-border-radius: var(--border-radius-capsule);
+
   // variables for ak-tabs
   --ak-tabs-font-family: var(--font-family);
   --ak-tabs-border-color: var(--border-color-1);
@@ -3167,8 +3170,10 @@ body {
   --subscription-border-color: var(--border-color-1);
 
   // variables for notifications-page/messages/nf-jira-push-err
-  --notifications-page-messages-nf-jira-push-err-error-container-border-color: var(--neutral-grey-100);
-  
+  --notifications-page-messages-nf-jira-push-err-error-container-border-color: var(
+    --neutral-grey-100
+  );
+
   //variables for knox-iq/code-block
   --knox-iq-code-block-background-color: var(--common-black);
   --knox-iq-code-block-border-radius: var(--border-radius-8);
@@ -3422,6 +3427,198 @@ body {
   --knoxiq-vulnerability-analysis-details-edit-analysis-reset-confirm-note-background-color: var(
     --neutral-grey-100
   );
+
+  // variables for store-release-readiness
+  --store-release-readiness-loader-border-color: var(--neutral-white-100);
+  --store-release-readiness-loader-border-radius: var(--border-radius);
+  --store-release-readiness-loader-background-color: var(--common-white);
+  --store-release-readiness-card-box-shadow: var(--box-shadow-7);
+
+  //variables for store-release-readiness/header
+  --store-release-readiness-header-background-color: var(--common-white);
+  --store-release-readiness-header-border-color: var(--neutral-white-100);
+  --store-release-readiness-header-border-radius: var(--border-radius);
+  --store-release-readiness-header-filter-border-color: var(--neutral-grey-200);
+  --store-release-readiness-header-filter-hover-border-color: var(
+    --neutral-grey-400
+  );
+  --store-release-readiness-header-filter-option-hover-background: var(
+    --hover-light-background
+  );
+  --store-release-readiness-header-clear-filter-color: var(--neutral-grey-600);
+  --store-release-readiness-header-clear-filter-hover-color: var(
+    --primary-main
+  );
+
+  //variables for store-release-readiness/policy-details
+  --store-release-readiness-policy-details-background-light: var(
+    --background-light
+  );
+  --store-release-readiness-policy-details-background-main: var(
+    --background-main
+  );
+  --store-release-readiness-policy-details-header-box-shadow: var(
+    --box-shadow-5
+  );
+  --store-release-readiness-policy-details-z-index: var(--zIndex-appbar);
+  --store-release-readiness-policy-details-divider-color: var(--border-color-1);
+  --store-release-readiness-policy-details-overridden-background-color: var(
+    --neutral-grey-100
+  );
+  --store-release-readiness-policy-details-title-background-color: var(
+    --srr-header-background-color
+  );
+  --store-release-readiness-policy-details-table-border-color: var(
+    --neutral-grey-200
+  );
+  --store-release-readiness-policy-details-category-chip-color: var(
+    --text-primary
+  );
+  --store-release-readiness-policy-details-status-chip-border-color: var(
+    --neutral-grey-200
+  );
+  --store-release-readiness-policy-details-status-chip-background-color: var(
+    --common-white
+  );
+  --store-release-readiness-policy-details-content-overridden-background-color: var(
+    --srr-header-background-color
+  );
+
+  //variables for store-release-readiness/policy-details/override-drawer-content
+  --store-release-policy-details-drawer-override-details-border-color: var(
+    --border-color-1
+  );
+  --store-release-policy-details-drawer-override-details-border-radius: var(
+    --border-radius
+  );
+  --store-release-policy-details-drawer-override-form-textarea-color: var(
+    --text-primary
+  );
+
+  //variables for store-release-readiness/release-card
+  --store-release-readiness-release-card-background-color: var(--common-white);
+  --store-release-readiness-release-card-border-color: var(--border-color-1);
+  --store-release-readiness-release-card-border-radius: var(--border-radius);
+  --store-release-readiness-release-card-header-background-color: var(
+    --srr-header-background-color
+  );
+  --store-release-readiness-high-chip-bg: var(--srr-high-chip-bg);
+  --store-release-readiness-high-chip-color: var(--srr-high-chip-color);
+  --store-release-readiness-medium-chip-bg: var(--srr-medium-chip-bg);
+  --store-release-readiness-medium-chip-color: var(--srr-medium-chip-color);
+  --store-release-readiness-low-chip-bg: var(--srr-low-chip-bg);
+  --store-release-readiness-low-chip-color: var(--srr-low-chip-color);
+  --store-release-readiness-pending-chip-bg: var(--srr-pending-chip-bg);
+  --store-release-readiness-pending-chip-color: var(--text-primary);
+  --store-release-readiness-package-name-color: var(--neutral-grey-800);
+  --store-release-readiness-meta-data-background-color: var(--background-light);
+  --store-release-readiness-meta-data-border-color: var(--neutral-grey-200);
+  --store-release-readiness-meta-data-color: var(--text-primary);
+
+  //variables for store-release-readiness/release-card/summary-progress-bar
+  --store-release-readiness-summary-progress-bar-failed-color: var(
+    --srr-failed-color
+  );
+  --store-release-readiness-summary-progress-bar-passed-color: var(
+    --srr-passed-color
+  );
+  --store-release-readiness-summary-progress-bar-untested-color: var(
+    --srr-untested-color
+  );
+  --store-release-readiness-summary-progress-bar-loading-bg-color: var(
+    --srr-loading-bg-color
+  );
+
+  //variables for store-release-readiness/release-card/summary-status-list
+  --store-release-readiness-summary-status-failed-color: var(
+    --srr-failed-color
+  );
+  --store-release-readiness-summary-status-passed-color: var(
+    --srr-passed-color
+  );
+  --store-release-readiness-summary-status-untested-color: var(
+    --srr-untested-color
+  );
+
+  //variables for store-release-readiness/scan-results
+  --store-release-readiness-scan-results-border-color: var(--neutral-white-100);
+  --store-release-readiness-scan-results-border-radius: var(--border-radius);
+  --store-release-readiness-scan-results-background-color: var(--common-white);
+  --store-release-readiness-scan-failed-color: var(--srr-failed-color);
+  --store-release-readiness-scan-passed-color: var(--srr-passed-color);
+  --store-release-readiness-scan-untested-color: var(--srr-untested-color);
+  --store-release-readiness-scan-filter-hover-color: var(--neutral-white-50);
+  --store-release-readiness-scan-filter-border-color: var(--neutral-grey-200);
+
+  //variables for store-release-readiness/scan-results/assessment-table/status-cell
+  --store-release-readiness-status-chip-border-color: var(--neutral-grey-200);
+  --store-release-readiness-status-chip-bg-color: var(--common-white);
+  --store-release-readiness-status-chip-failed-color: var(--srr-failed-color);
+  --store-release-readiness-status-chip-passed-color: var(--srr-passed-color);
+  --store-release-readiness-status-chip-untested-color: var(
+    --srr-untested-color
+  );
+
+  //variables for store-release-readiness/scan-results/details
+  --store-release-readiness-scan-results-details-border-color: var(
+    --neutral-grey-200
+  );
+  --store-release-readiness-scan-results-details-border-radius: var(
+    --border-radius
+  );
+  --store-release-readiness-scan-results-details-background-color: var(
+    --common-white
+  );
+  --store-release-readiness-scan-results-details-failed-color: var(
+    --srr-failed-color
+  );
+  --store-release-readiness-scan-results-details-passed-color: var(
+    --srr-passed-color
+  );
+  --store-release-readiness-scan-results-details-untested-color: var(
+    --srr-untested-color
+  );
+  --store-release-readiness-scan-results-details-high-text: var(
+    --srr-high-color
+  );
+  --store-release-readiness-scan-results-details-medium-text: var(
+    --srr-medium-chip-color
+  );
+  --store-release-readiness-scan-results-details-low-text: var(
+    --srr-low-chip-color
+  );
+  --store-release-readiness-scan-results-details-pending-text: var(
+    --text-primary
+  );
+
+  // variables for store-release-readiness/scan-results/file-summary
+  --store-release-readiness-scan-results-summary-background-color: var(
+    --background-main
+  );
+  --store-release-readiness-scan-results-summary-border-color: var(
+    --border-color-1
+  );
+  --store-release-readiness-scan-results-summary-header-box-shadow: var(
+    --box-shadow-3
+  );
+
+  // variables for store-release-readiness/scan-results/report-drawer/item
+  --store-release-readiness-report-dr-border-color: var(--border-color-1);
+  --store-release-readiness-report-dr-border-radius: var(--border-radius);
+
+  //variable for store-release-readiness/scan-results/skeleton-loader
+  --store-release-readiness-scan-results-skeleton-loader-border-color: var(
+    --neutral-white-100
+  );
+  --store-release-readiness-scan-results-skeleton-loader-border-radius: var(
+    --border-radius
+  );
+  --store-release-readiness-scan-results-skeleton-loader-bg-color: var(
+    --common-white
+  );
+
+  //store-release-readiness/status
+  --store-release-readiness-status-bg-color: var(--common-white);
 
   &.theme-light {
     //variables for appknox-wrapper

@@ -267,7 +267,7 @@ module(
       assert
         .dom('[data-test-sbomReportList-reportSecondaryText]', reportList[0])
         .hasText(
-          t('sbomModule.sbomDownloadPdfSecondaryText', {
+          t('reportPasswordDetail', {
             password: sbomReport.report_password,
           })
         );
