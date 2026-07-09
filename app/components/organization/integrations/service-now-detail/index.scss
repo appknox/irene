@@ -1,0 +1,42 @@
+.root {
+  display: flex;
+  flex-direction: column;
+  height: calc(100vh - 280px);
+  background-color: var(--organization-integrations-serviceNow-background-main);
+}
+
+.page-header {
+  flex-shrink: 0;
+  background-color: var(--organization-integrations-serviceNow-background-main);
+  border-bottom: 1px solid
+    var(--organization-integrations-serviceNow-border-color);
+}
+
+.step-chip {
+  padding: 0.35em 1em;
+  border: 1px solid var(--organization-integrations-serviceNow-border-color);
+  border-radius: 100px;
+  background-color: var(--neutral-grey-50);
+}
+
+.logo {
+  width: 2.29em;
+  height: 2.29em;
+  object-fit: contain;
+}
+
+.content {
+  flex: 1;
+  overflow-y: auto;
+  min-height: 0;
+}
+
+.footer {
+  flex-shrink: 0;
+  box-shadow: var(--organization-integrations-serviceNow-box-shadow);
+  padding: 1em 1.5em;
+  display: flex;
+  gap: 0.75em;
+  align-items: center;
+  background-color: var(--organization-integrations-serviceNow-background-main);
+}
