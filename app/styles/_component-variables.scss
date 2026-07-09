@@ -707,6 +707,10 @@ body {
   --organization-integrations-serviceNow-background-main: var(
     --background-main
   );
+  --organization-integrations-serviceNow-chip-background: var(--neutral-grey-50);
+  --organization-integrations-serviceNow-mapping-header-background: var(
+    --neutral-grey-50
+  );
 
   // variables for organization/integrations/splunk
   --organization-integrations-splunk-border-radius: var(--border-radius);
