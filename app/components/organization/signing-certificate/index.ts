@@ -1,11 +1,18 @@
 /**
- * Organization iOS Signing Certificate (CYOD dynamic scanning)
+ * iOS Signing Certificate (CYOD dynamic scanning)
  *
  * Upload / view / delete the customer iOS signing identity (.p12 + provisioning
- * profile) used to re-sign an app for dynamic scanning. When configured, scans
- * on the org's devices are signed with this identity instead of the built-in
- * wildcard profile. The secret material is never returned by the API — only the
- * parsed metadata (team id, expiry, enrolled UDIDs).
+ * profile) used to re-sign an app for dynamic scanning. The secret material is
+ * never returned by the API — only parsed metadata (team id, App ID, expiry,
+ * enrolled UDIDs).
+ *
+ * Scope differs:
+ *  - Organization scope: a **collection** of certs. Exactly one is marked
+ *    `is_active` (the signing fallback). A scan first auto-matches the app's
+ *    bundle id to a cert's App ID, else uses the active cert. The active cert
+ *    cannot be deleted while others exist.
+ *  - Project scope (`@project`): a single cert that overrides the org certs for
+ *    that project's iOS scans.
  */
 import Component from '@glimmer/component';
 import { action } from '@ember/object';
@@ -24,6 +31,8 @@ type CertInfo = {
   id?: number;
   name?: string;
   bundle_id?: string;
+  app_id?: string;
+  is_active?: boolean;
   team_id?: string;
   provisions_all_devices?: boolean;
   provisioned_udids?: string[];
@@ -47,7 +56,13 @@ export default class OrganizationSigningCertificateComponent extends Component<O
   @service('notifications') declare notify: NotificationService;
 
   @tracked showModal = false;
+  // Project scope: single cert. Org scope: a list of certs.
   @tracked cert: CertInfo | null = null;
+  @tracked certs: CertInfo[] = [];
+
+  // Id of the cert with an in-flight activate/delete, so only its row shows a
+  // spinner (org scope has many rows sharing one task).
+  @tracked busyCertId: number | null = null;
 
   @tracked certName = '';
   @tracked bundleId = '';
@@ -55,14 +70,14 @@ export default class OrganizationSigningCertificateComponent extends Component<O
   @tracked p12File: File | null = null;
   @tracked profileFile: File | null = null;
 
-  get url() {
+  get baseUrl() {
     const orgId = this.organization.selected?.id;
 
     if (this.args.project) {
       return `/api/organizations/${orgId}/projects/${this.args.project.id}/signing-certificate/`;
     }
 
-    return `/api/organizations/${orgId}/signing-certificate/`;
+    return `/api/organizations/${orgId}/signing-certificates/`;
   }
 
   get isProjectScope() {
@@ -73,8 +88,7 @@ export default class OrganizationSigningCertificateComponent extends Component<O
   // non-iOS projects. Org scope is always shown (gated to owners by the parent).
   get visible() {
     return (
-      !this.args.project ||
-      this.args.project.platform === ENUMS.PLATFORM.IOS
+      !this.args.project || this.args.project.platform === ENUMS.PLATFORM.IOS
     );
   }
 
@@ -82,10 +96,12 @@ export default class OrganizationSigningCertificateComponent extends Component<O
     return !!(this.cert && this.cert.team_id);
   }
 
-  // Chip color for the certificate status badge in the summary card.
-  get certStatusColor() {
-    return this.cert?.is_expired ? 'error' : 'success';
+  get hasCerts() {
+    return this.certs.length > 0;
   }
+
+  // Chip color for a certificate's validity badge.
+  certStatusColor = (cert: CertInfo) => (cert.is_expired ? 'error' : 'success');
 
   // Selected file names, surfaced next to the file-picker buttons so the user
   // can confirm their choice before uploading.
@@ -100,7 +116,7 @@ export default class OrganizationSigningCertificateComponent extends Component<O
   @action
   handleOpen() {
     this.showModal = true;
-    this.loadCert.perform();
+    this.load.perform();
   }
 
   @action
@@ -142,19 +158,26 @@ export default class OrganizationSigningCertificateComponent extends Component<O
     this.profileFile = null;
   }
 
-  loadCert = task(async () => {
+  load = task(async () => {
     const orgId = this.organization.selected?.id;
 
     if (!orgId) {
       this.cert = null;
+      this.certs = [];
       return;
     }
 
     try {
-      const res = await this.ajax.request<CertInfo>(this.url);
-      this.cert = res && (res.team_id || res.id) ? res : null;
+      if (this.isProjectScope) {
+        const res = await this.ajax.request<CertInfo>(this.baseUrl);
+        this.cert = res && (res.team_id || res.id) ? res : null;
+      } else {
+        const res = await this.ajax.request<CertInfo[]>(this.baseUrl);
+        this.certs = Array.isArray(res) ? res : [];
+      }
     } catch (e) {
       this.cert = null;
+      this.certs = [];
     }
   });
 
@@ -174,23 +197,53 @@ export default class OrganizationSigningCertificateComponent extends Component<O
       formData.append('name', this.certName);
       formData.append('bundle_id', this.bundleId.trim());
 
-      await this.ajax.post(this.url, { data: formData, contentType: null });
+      await this.ajax.post(this.baseUrl, { data: formData, contentType: null });
 
       this.notify.success(this.intl.t('orgSigningCertUploadSuccess'));
       this.resetForm();
-      await this.loadCert.perform();
+      await this.load.perform();
     } catch (err) {
       this.notify.error(parseError(err, this.intl.t('pleaseTryAgain')));
     }
   });
 
+  // Project scope only: delete the single project cert.
   deleteCert = task({ restartable: true }, async () => {
     try {
-      await this.ajax.delete(this.url);
+      await this.ajax.delete(this.baseUrl);
       this.notify.success(this.intl.t('orgSigningCertDeleted'));
       this.cert = null;
     } catch (err) {
       this.notify.error(parseError(err, this.intl.t('pleaseTryAgain')));
+    }
+  });
+
+  // Org scope: delete one cert by id. The backend returns 409 for the active
+  // cert while siblings exist — surfaced as an error toast.
+  deleteOrgCert = task({ restartable: true }, async (cert: CertInfo) => {
+    this.busyCertId = cert.id ?? null;
+    try {
+      await this.ajax.delete(`${this.baseUrl}${cert.id}/`);
+      this.notify.success(this.intl.t('orgSigningCertDeleted'));
+      await this.load.perform();
+    } catch (err) {
+      this.notify.error(parseError(err, this.intl.t('pleaseTryAgain')));
+    } finally {
+      this.busyCertId = null;
+    }
+  });
+
+  // Org scope: mark one cert active (the backend clears the previous active).
+  activateCert = task({ restartable: true }, async (cert: CertInfo) => {
+    this.busyCertId = cert.id ?? null;
+    try {
+      await this.ajax.post(`${this.baseUrl}${cert.id}/activate/`, {});
+      this.notify.success(this.intl.t('orgSigningCertActivated'));
+      await this.load.perform();
+    } catch (err) {
+      this.notify.error(parseError(err, this.intl.t('pleaseTryAgain')));
+    } finally {
+      this.busyCertId = null;
     }
   });
 }
