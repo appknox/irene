@@ -12,77 +12,86 @@ import type DS from 'ember-data';
 import type Store from 'ember-data/store';
 import type IntlService from 'ember-intl/services/intl';
 
-import dayjs from 'dayjs';
 import parseError from 'irene/utils/parse-error';
 import { REPORT } from 'irene/utils/constants';
 import { type FileReportScanType } from 'irene/models/file-report';
-import type FileReportModel from 'irene/models/file-report';
+import type FileLegacyCvssReportModel from 'irene/models/file-legacy-cvss-report';
 import type FileModel from 'irene/models/file';
 import type RealtimeService from 'irene/services/realtime';
+import type IreneAjaxService from 'irene/services/ajax';
 import type DynamicscanModel from 'irene/models/dynamicscan';
-import type InterimReportModel from 'irene/models/interim-report';
-import type AnalyticsService from 'irene/services/analytics';
 
-type FileReportQueryResponse =
-  DS.AdapterPopulatedRecordArray<FileReportModel> & {
+type FileLegacyCvssReportQueryResponse =
+  DS.AdapterPopulatedRecordArray<FileLegacyCvssReportModel> & {
     meta: { count: number };
   };
 
-type FileReportIconComponent =
+type LegacyCvssReportIconComponent =
   | 'ak-svg/pdf-report'
   | 'ak-svg/xlsx-icon'
   | 'ak-svg/csv-icon';
 
-export interface FileReportDetails {
-  fileReport?: FileReportModel | null;
+export interface FileLegacyCvssReportDetails {
+  fileReport?: FileLegacyCvssReportModel | null;
   type: FileReportScanType;
-  iconComponent?: FileReportIconComponent;
+  iconComponent?: LegacyCvssReportIconComponent;
   primaryText: string;
   secondaryText: string;
   copyText?: string;
   hideReport?: boolean;
   generatedOnDateTime?: string;
-  generatedBy?: string;
-  reportId?: string;
 }
 
-export interface FileReportDrawerVaReportsSignature {
+export interface FileReportDrawerLegacyCvssReportsSignature {
   Args: {
     file: FileModel;
     closeDrawer: () => void;
   };
 }
 
-export default class FileReportDrawerVaReportsComponent extends Component<FileReportDrawerVaReportsSignature> {
+export default class FileReportDrawerLegacyCvssReportsComponent extends Component<FileReportDrawerLegacyCvssReportsSignature> {
   @service declare store: Store;
   @service declare intl: IntlService;
+  @service declare ajax: IreneAjaxService;
   @service('notifications') declare notify: NotificationService;
   @service declare realtime: RealtimeService;
-  @service declare analytics: AnalyticsService;
 
-  @tracked reports: FileReportQueryResponse | null = null;
+  @tracked reports: FileLegacyCvssReportQueryResponse | null = null;
   @tracked canGenerateReport = false;
   @tracked lastManualDynamicScan: DynamicscanModel | null = null;
   @tracked lastAutomatedDynamicScan: DynamicscanModel | null = null;
-  @tracked interimReportData: InterimReportModel | null = null;
 
-  modelName = 'file-report' as const;
+  modelName = 'file-legacy-cvss-report' as const;
 
   constructor(
     owner: unknown,
-    args: FileReportDrawerVaReportsSignature['Args']
+    args: FileReportDrawerLegacyCvssReportsSignature['Args']
   ) {
     super(owner, args);
 
-    this.initializeDrawer();
+    addObserver(
+      this.realtime,
+      'LegacyCVSSReportCounter',
+      this,
+      this.observeReportCounter
+    );
+
+    this.getReports.perform();
+    this.getCanGenerateReportStatus.perform();
+    this.getFileLatestAutoDynamicScans.perform();
+    this.getFileLatestManualDynamicScans.perform();
   }
 
   get file() {
     return this.args.file;
   }
 
+  get fileId() {
+    return this.file.id;
+  }
+
   get hasReports() {
-    return Number(this.reports?.length) > 0 || this.interimReportData;
+    return Number(this.reports?.length) > 0;
   }
 
   get latestReport() {
@@ -93,20 +102,12 @@ export default class FileReportDrawerVaReportsComponent extends Component<FileRe
     return this.reports?.slice()?.[1];
   }
 
-  get interimReport() {
-    return this.interimReportData;
-  }
-
   get latestReportIsGenerating() {
     return this.latestReport?.isGenerating;
   }
 
   get latestReportIsGenerated() {
     return this.latestReport?.isGenerated;
-  }
-
-  get fileId() {
-    return this.file.id;
   }
 
   get isReportGenerating() {
@@ -145,35 +146,23 @@ export default class FileReportDrawerVaReportsComponent extends Component<FileRe
     return this.isReportGenerating || this.latestReportIsGenerating;
   }
 
-  get btnLabel() {
-    let btnLabel = this.intl.t('generateReport');
+  get showGenerateCta() {
+    return !this.hasReports || this.canGenerateReport;
+  }
 
+  get btnLabel() {
     if (this.latestReportIsGenerating || this.isReportGenerating) {
-      btnLabel = this.intl.t('generatingReport');
-    } else if (this.canGenerateReport) {
-      btnLabel = this.intl.t('generateReport');
+      return this.intl.t('generatingReport');
     }
 
-    return btnLabel;
+    return this.intl.t('generateReport');
   }
 
   get reportPassword() {
     return this.file.project.get('pdfPassword');
   }
 
-  get interimReportPassword() {
-    return this.interimReportData?.reportPassword ?? '';
-  }
-
-  get reportDetails(): FileReportDetails[] {
-    const xlsxPrimaryText = this.intl.t('fileReport.summaryReport', {
-      reportType: 'xlsx',
-    });
-
-    const csvPrimaryText = this.intl.t('fileReport.summaryReport', {
-      reportType: 'csv',
-    });
-
+  get reportDetails(): FileLegacyCvssReportDetails[] {
     const pdfSecondaryText = this.intl.t('reportPasswordDetail', {
       password: this.reportPassword,
     });
@@ -182,9 +171,7 @@ export default class FileReportDrawerVaReportsComponent extends Component<FileRe
       {
         fileReport: this.latestReport,
         type: 'pdf' as const,
-        primaryText: `${this.intl.t('fileReport.detailedReport', {
-          reportType: 'pdf',
-        })}`,
+        primaryText: `${this.intl.t('fileReport.detailedReport', { reportType: 'pdf' })}`,
         secondaryText: pdfSecondaryText,
         hideReport: !this.latestReport,
         copyText: this.reportPassword,
@@ -194,7 +181,7 @@ export default class FileReportDrawerVaReportsComponent extends Component<FileRe
       {
         fileReport: this.latestReport,
         type: 'xlsx' as const,
-        primaryText: xlsxPrimaryText,
+        primaryText: `${this.intl.t('fileReport.summaryReport', { reportType: 'xlsx' })}`,
         secondaryText: `${this.intl.t('noPasswordRequired')}`,
         hideReport: !this.latestReport,
         iconComponent: 'ak-svg/xlsx-icon' as const,
@@ -203,7 +190,7 @@ export default class FileReportDrawerVaReportsComponent extends Component<FileRe
       {
         fileReport: this.latestReport,
         type: 'csv' as const,
-        primaryText: csvPrimaryText,
+        primaryText: `${this.intl.t('fileReport.summaryReport', { reportType: 'csv' })}`,
         secondaryText: `${this.intl.t('noPasswordRequired')}`,
         hideReport: !this.latestReport,
         iconComponent: 'ak-svg/csv-icon' as const,
@@ -212,65 +199,27 @@ export default class FileReportDrawerVaReportsComponent extends Component<FileRe
       {
         fileReport: this.previousReport,
         type: 'pdf' as const,
-        primaryText: `${this.intl.t('fileReport.previousReport', {
-          reportType: 'pdf',
-        })}`,
+        primaryText: `${this.intl.t('fileReport.previousReport', { reportType: 'pdf' })}`,
         secondaryText: pdfSecondaryText,
         hideReport: !this.previousReport,
         copyText: this.reportPassword,
         iconComponent: 'ak-svg/pdf-report' as const,
         generatedOnDateTime: this.previousReport?.generatedOnDateTime,
       },
-      {
-        fileReport: null,
-        type: 'pdf' as const,
-        primaryText: `${this.intl.t('fileReport.interimReport', {
-          reportType: 'pdf',
-        })}`,
-        secondaryText: this.interimReportPassword
-          ? this.intl.t('reportPasswordDetail', {
-              password: this.interimReportPassword,
-            })
-          : '',
-        hideReport:
-          !this.interimReport || !this.interimReport.isVisibleToCustomer,
-        copyText: this.interimReportPassword,
-        iconComponent: 'ak-svg/pdf-report' as const,
-        generatedOnDateTime: this.interimReport?.createdOn
-          ? dayjs(this.interimReport.createdOn).format('D MMMM YYYY h:mm A')
-          : '',
-        generatedBy: this.interimReport?.generatedBy,
-        reportId: this.interimReport?.id,
-      },
     ];
   }
 
-  // Actions
   @action
   observeReportCounter() {
     this.getReports.perform();
     this.getCanGenerateReportStatus.perform();
   }
 
-  @action initializeDrawer() {
-    addObserver(
-      this.realtime,
-      'ReportCounter',
-      this,
-      this.observeReportCounter
-    );
-
-    this.getReports.perform();
-    this.getCanGenerateReportStatus.perform();
-    this.getFileLatestAutoDynamicScans.perform();
-    this.getFileLatestManualDynamicScans.perform();
-    this.getInterimReportData.perform();
-  }
-
-  @action removeReportCounterObserver() {
+  @action
+  removeReportCounterObserver() {
     removeObserver(
       this.realtime,
-      'ReportCounter',
+      'LegacyCVSSReportCounter',
       this,
       this.observeReportCounter
     );
@@ -278,21 +227,13 @@ export default class FileReportDrawerVaReportsComponent extends Component<FileRe
 
   generateReport = task(async () => {
     try {
-      const genReport = this.store.createRecord(this.modelName, {
-        fileId: this.fileId,
-      });
+      await waitForPromise(
+        this.ajax.post(`v2/files/${this.fileId}/legacy_cvss_reports`, {})
+      );
 
-      await waitForPromise(genReport.save());
       await this.getReports.perform();
 
       this.notify.success(this.intl.t('reportIsGettingGenerated'));
-
-      this.analytics.track({
-        name: 'REPORT_GENERATION_EVENT',
-        properties: {
-          feature: 'va_report_generation',
-        },
-      });
     } catch (error) {
       this.notify.error(parseError(error, this.intl.t('reportGenerateError')));
     }
@@ -300,22 +241,15 @@ export default class FileReportDrawerVaReportsComponent extends Component<FileRe
 
   getCanGenerateReportStatus = task(async () => {
     const status = await waitForPromise(this.file.getGenerateReportStatus());
-    this.canGenerateReport = status.can_generate_report;
+    this.canGenerateReport = status.can_generate_legacy_report;
   });
 
   getReports = task(async () => {
-    const query = {
-      fileId: this.fileId,
-      limit: REPORT.MAX_LIMIT,
-    };
-
     try {
-      await this.file.reload();
-
-      this.reports = (await this.store.query(
-        this.modelName,
-        query
-      )) as FileReportQueryResponse;
+      this.reports = (await this.store.query(this.modelName, {
+        fileId: this.fileId,
+        limit: REPORT.MAX_LIMIT,
+      })) as FileLegacyCvssReportQueryResponse;
     } catch (err) {
       this.notify.error(parseError(err));
       this.reports = null;
@@ -334,22 +268,15 @@ export default class FileReportDrawerVaReportsComponent extends Component<FileRe
     );
   });
 
-  getInterimReportData = task(async () => {
-    try {
-      this.interimReportData = await waitForPromise(
-        this.store.queryRecord('interim-report', {
-          fileId: this.fileId,
-        })
-      );
-    } catch {
-      this.interimReportData = null;
-    }
-  });
+  willDestroy() {
+    super.willDestroy();
+    this.removeReportCounterObserver();
+  }
 }
 
 declare module '@glint/environment-ember-loose/registry' {
   export default interface Registry {
-    'File::ReportDrawer::VaReports': typeof FileReportDrawerVaReportsComponent;
-    'file/report-drawer/va-reports': typeof FileReportDrawerVaReportsComponent;
+    'File::ReportDrawer::LegacyCvssReports': typeof FileReportDrawerLegacyCvssReportsComponent;
+    'file/report-drawer/legacy-cvss-reports': typeof FileReportDrawerLegacyCvssReportsComponent;
   }
 }

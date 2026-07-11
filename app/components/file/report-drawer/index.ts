@@ -1,5 +1,8 @@
 import Component from '@glimmer/component';
+import { tracked } from '@glimmer/tracking';
 import { service } from '@ember/service';
+import { task } from 'ember-concurrency';
+import { waitForPromise } from '@ember/test-waiters';
 import type IntlService from 'ember-intl/services/intl';
 
 import type FileModel from 'irene/models/file';
@@ -19,6 +22,16 @@ export default class FileReportDrawerComponent extends Component<FileReportDrawe
   @service declare configuration: ConfigurationService;
   @service declare organization: OrganizationService;
 
+  @tracked allFileAnalysesAreLegacy = false;
+
+  constructor(owner: unknown, args: FileReportDrawerSignature['Args']) {
+    super(owner, args);
+
+    if (this.organization.enableLegacyCvssReports) {
+      this.fetchFileAnalysesCvssInfo.perform();
+    }
+  }
+
   get orgIsAnEnterprise() {
     return this.configuration.serverData.enterprise;
   }
@@ -29,6 +42,14 @@ export default class FileReportDrawerComponent extends Component<FileReportDrawe
         id: 'va-reports',
         title: this.intl.t('fileReport.vaReports'),
         contentComponent: 'file/report-drawer/va-reports' as const,
+      },
+      {
+        id: 'legacy-cvss-reports',
+        title: this.intl.t('fileReport.legacyCvssReports'),
+        contentComponent: 'file/report-drawer/legacy-cvss-reports' as const,
+        hideGroup:
+          !this.organization.enableLegacyCvssReports ||
+          this.allFileAnalysesAreLegacy,
       },
       {
         id: 'privacy-module-reports',
@@ -58,6 +79,14 @@ export default class FileReportDrawerComponent extends Component<FileReportDrawe
       },
     ];
   }
+
+  fetchFileAnalysesCvssInfo = task(async () => {
+    const status = await waitForPromise(
+      this.args.file.getFileAnalysesCvssInfo()
+    );
+
+    this.allFileAnalysesAreLegacy = status.all_file_analyses_are_legacy;
+  });
 }
 
 declare module '@glint/environment-ember-loose/registry' {

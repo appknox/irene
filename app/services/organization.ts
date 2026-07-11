@@ -30,6 +30,10 @@ export default class OrganizationService extends Service {
     return this.selected?.hideUpsellFeatures;
   }
 
+  get enableLegacyCvssReports() {
+    return this.selected?.enableLegacyCvssReports;
+  }
+
   get hideUpsellUIStatus() {
     return {
       privacyModule: !this.orgFeatures?.privacy && this.hideUpsellUI,

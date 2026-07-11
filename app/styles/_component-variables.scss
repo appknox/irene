@@ -785,6 +785,10 @@ body {
   --file-report-dr-privacy-reports-border-color: var(--border-color-1);
   --file-report-dr-privacy-reports-border-radius: var(--border-radius);
 
+  // variables for file/report-drawer/legacy-cvss-reports
+  --file-report-dr-legacy-cvss-reports-border-color: var(--border-color-1);
+  --file-report-dr-legacy-cvss-reports-border-radius: var(--border-radius);
+
   // variables for sbom/app-list
   --sbom-app-list-background-color: var(--common-white);
 
