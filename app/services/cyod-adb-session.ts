@@ -9,25 +9,9 @@
  */
 import Service from '@ember/service';
 
-const TTL_MS = 10 * 60 * 1000; // 10 minutes
+import type { AdbLike } from 'irene/utils/webusb-adb-install';
 
-type AdbLike = {
-  close(): void;
-  subprocess: {
-    noneProtocol: {
-      spawnWaitText(args: string[]): Promise<string>;
-    };
-  };
-  sync(): Promise<{
-    write(options: {
-      filename: string;
-      file: ReadableStream<Uint8Array>;
-      permission?: number;
-      mtime?: number;
-    }): Promise<void>;
-    dispose(): Promise<void>;
-  }>;
-};
+const TTL_MS = 10 * 60 * 1000; // 10 minutes
 
 type SessionEntry = {
   adb: AdbLike;

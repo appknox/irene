@@ -4,40 +4,30 @@
     data-test-orgSigningCert
     ...attributes
   >
-    <AkStack
-      local-class='panel-header'
-      @spacing='1.5'
-      @alignItems='center'
-      @justifyContent='space-between'
+    <Organization::SettingsPanelHeader
+      @iconName='verified-user'
+      @description={{if
+        this.isProjectScope
+        (t 'orgSigningCertDescProject')
+        (t 'orgSigningCertDesc')
+      }}
     >
-      <AkStack @spacing='1.5' @alignItems='center'>
-        <div local-class='panel-icon' aria-hidden='true'>
-          <AkIcon @iconName='verified-user' @color='primary' />
-        </div>
+      <:title>
+        <AkTypography @variant='h6' data-test-orgSigningCert-title>
+          {{t 'orgSigningCertTitle'}}
+        </AkTypography>
+      </:title>
 
-        <AkStack @direction='column' @spacing='0.5'>
-          <AkTypography @variant='h6' data-test-orgSigningCert-title>
-            {{t 'orgSigningCertTitle'}}
-          </AkTypography>
-
-          <AkTypography @color='textSecondary' @variant='body2'>
-            {{if
-              this.isProjectScope
-              (t 'orgSigningCertDescProject')
-              (t 'orgSigningCertDesc')
-            }}
-          </AkTypography>
-        </AkStack>
-      </AkStack>
-
-      <AkButton
-        data-test-orgSigningCert-openBtn
-        @variant='filled'
-        {{on 'click' this.handleOpen}}
-      >
-        {{t 'orgSigningCertManage'}}
-      </AkButton>
-    </AkStack>
+      <:action>
+        <AkButton
+          data-test-orgSigningCert-openBtn
+          @variant='filled'
+          {{on 'click' this.handleOpen}}
+        >
+          {{t 'orgSigningCertManage'}}
+        </AkButton>
+      </:action>
+    </Organization::SettingsPanelHeader>
   </div>
 
   {{#if this.showModal}}

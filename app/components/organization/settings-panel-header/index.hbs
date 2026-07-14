@@ -1,0 +1,25 @@
+{{! Shared header for organization settings cards: a primary-tinted icon,
+    a caller-supplied title block, a description, and a trailing action block. }}
+<AkStack
+  local-class='panel-header'
+  @spacing='1.5'
+  @alignItems='center'
+  @justifyContent='space-between'
+  ...attributes
+>
+  <AkStack @spacing='1.5' @alignItems='center'>
+    <div local-class='panel-icon' aria-hidden='true'>
+      <AkIcon @iconName={{@iconName}} @color='primary' />
+    </div>
+
+    <AkStack @direction='column' @spacing='0.5'>
+      {{yield to='title'}}
+
+      <AkTypography @color='textSecondary' @variant='body2'>
+        {{@description}}
+      </AkTypography>
+    </AkStack>
+  </AkStack>
+
+  {{yield to='action'}}
+</AkStack>

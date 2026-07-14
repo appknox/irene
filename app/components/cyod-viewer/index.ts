@@ -23,6 +23,7 @@ import { modifier } from 'ember-modifier';
 import type IntlService from 'ember-intl/services/intl';
 
 import type DevicefarmService from 'irene/services/devicefarm';
+import type LoggerService from 'irene/services/logger';
 
 const SCRCPY_WS_PATH = '/devicefarm/ws/scrcpy/';
 
@@ -38,6 +39,7 @@ export interface CyodViewerSignature {
 export default class CyodViewerComponent extends Component<CyodViewerSignature> {
   @service declare intl: IntlService;
   @service declare devicefarm: DevicefarmService;
+  @service declare logger: LoggerService;
 
   @tracked isConnected = false;
   @tracked errorMessage: string | null = null;
@@ -161,7 +163,7 @@ export default class CyodViewerComponent extends Component<CyodViewerSignature> 
         frame.close();
       },
       error: (err: Error) => {
-        console.error('[CyodViewer] H.264 decode error:', err);
+        this.logger.error('[CyodViewer] H.264 decode error:', err);
       },
     });
 
@@ -249,7 +251,7 @@ export default class CyodViewerComponent extends Component<CyodViewerSignature> 
         })
       );
     } catch (err) {
-      console.error('[CyodViewer] decode() threw:', err);
+      this.logger.error('[CyodViewer] decode() threw:', err);
     }
   }
 

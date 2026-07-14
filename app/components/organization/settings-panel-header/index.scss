@@ -1,0 +1,22 @@
+.panel-header {
+  width: 100%;
+}
+
+.panel-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  flex-shrink: 0;
+  border-radius: var(--border-radius);
+  background: var(--primary-light);
+}
+
+// Stack the header action under the title on narrow viewports.
+@media (max-width: 600px) {
+  .panel-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}

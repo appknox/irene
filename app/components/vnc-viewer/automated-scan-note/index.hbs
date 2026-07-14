@@ -1,0 +1,19 @@
+{{! Note shown over the device screen while an automated DAST scan is queued
+    or running. Rendered in both the classic and modern-iOS device frames. }}
+<AkStack
+  data-test-vncViewer-automatedNote
+  local-class='automated-scan-vnc-note'
+  ...attributes
+>
+  <AkTypography @color='inherit'>
+    <strong>{{t 'note'}}</strong>
+    -
+    {{t
+      (if
+        @dynamicScan.isInqueue
+        'automatedScanQueuedVncNote'
+        'automatedScanRunningVncNote'
+      )
+    }}
+  </AkTypography>
+</AkStack>

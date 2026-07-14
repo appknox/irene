@@ -20,6 +20,7 @@ import type DevicefarmService from 'irene/services/devicefarm';
 import type IreneAjaxService from 'irene/services/ajax';
 import type CyodAdbSessionService from 'irene/services/cyod-adb-session';
 import type OrganizationService from 'irene/services/organization';
+import type LoggerService from 'irene/services/logger';
 
 const KNOXOPS_AGENT_PORT = 17392;
 const WEBUSB_REGISTER_PATH = '/devicefarm/v2/devices/webusb-register/';
@@ -45,6 +46,7 @@ export default class CyodDeviceRegistrationComponent extends Component<CyodDevic
   @service('notifications') declare notify: NotificationService;
   @service('cyod-adb-session') declare cyodAdbSession: CyodAdbSessionService;
   @service declare organization: OrganizationService;
+  @service declare logger: LoggerService;
 
   @tracked detectedSerial: string | null = null;
   @tracked detectedModel: string | null = null;
@@ -156,7 +158,7 @@ export default class CyodDeviceRegistrationComponent extends Component<CyodDevic
       );
     } catch (err) {
       this.notify.error(this.intl.t('cyodRegistrationFailed'));
-      console.error('[CYOD] Android registration error:', err);
+      this.logger.error('[CYOD] Android registration error:', err);
     }
   });
 

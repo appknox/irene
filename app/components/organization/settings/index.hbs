@@ -22,7 +22,7 @@
 
   <AkDivider class='my-3' @color='dark' />
 
-  {{#if (and this.me.org.is_owner @model.organization.features.cyod)}}
+  {{#if (and this.me.org.is_owner this.organization.isCyodEnabled)}}
     <Organization::DeviceRegistration />
 
     <AkDivider class='my-3' @color='dark' />

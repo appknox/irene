@@ -3,36 +3,26 @@
   data-test-orgDeviceRegistration
   ...attributes
 >
-  <AkStack
-    local-class='panel-header'
-    @spacing='1.5'
-    @alignItems='center'
-    @justifyContent='space-between'
+  <Organization::SettingsPanelHeader
+    @iconName='mobile'
+    @description={{t 'orgRegisterDeviceDesc'}}
   >
-    <AkStack @spacing='1.5' @alignItems='center'>
-      <div local-class='panel-icon' aria-hidden='true'>
-        <AkIcon @iconName='mobile' @color='primary' />
-      </div>
+    <:title>
+      <AkTypography @variant='h6' data-test-orgDeviceRegistration-title>
+        {{t 'orgRegisterDeviceTitle'}}
+      </AkTypography>
+    </:title>
 
-      <AkStack @direction='column' @spacing='0.5'>
-        <AkTypography @variant='h6' data-test-orgDeviceRegistration-title>
-          {{t 'orgRegisterDeviceTitle'}}
-        </AkTypography>
-
-        <AkTypography @color='textSecondary' @variant='body2'>
-          {{t 'orgRegisterDeviceDesc'}}
-        </AkTypography>
-      </AkStack>
-    </AkStack>
-
-    <AkButton
-      data-test-orgDeviceRegistration-openBtn
-      @variant='filled'
-      {{on 'click' this.handleOpen}}
-    >
-      {{t 'orgRegisterDevice'}}
-    </AkButton>
-  </AkStack>
+    <:action>
+      <AkButton
+        data-test-orgDeviceRegistration-openBtn
+        @variant='filled'
+        {{on 'click' this.handleOpen}}
+      >
+        {{t 'orgRegisterDevice'}}
+      </AkButton>
+    </:action>
+  </Organization::SettingsPanelHeader>
 </div>
 
 {{#if this.showModal}}

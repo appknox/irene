@@ -1,0 +1,12 @@
+{{! Manual app download link shown for CYOD scans when in-browser install is
+    unavailable (non-WebUSB, or WebUSB with no live ADB session). }}
+{{#if @url}}
+  <AkLink
+    data-test-vncViewer-cyodDownloadLink
+    @href={{@url}}
+    @target='_blank'
+    ...attributes
+  >
+    {{if @isIos (t 'cyodInstallIos') (t 'cyodDownloadApk')}}
+  </AkLink>
+{{/if}}

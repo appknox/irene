@@ -84,9 +84,14 @@ export default class OrganizationSigningCertificateComponent extends Component<O
     return !!this.args.project;
   }
 
-  // iOS signing certs only apply to iOS scans — hide the project-scoped UI for
-  // non-iOS projects. Org scope is always shown (gated to owners by the parent).
+  // Signing certs are a CYOD capability, so the panel requires the feature in
+  // both scopes. iOS signing certs only apply to iOS scans, so the
+  // project-scoped UI is additionally hidden for non-iOS projects.
   get visible() {
+    if (!this.organization.isCyodEnabled) {
+      return false;
+    }
+
     return (
       !this.args.project || this.args.project.platform === ENUMS.PLATFORM.IOS
     );

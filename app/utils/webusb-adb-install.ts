@@ -6,7 +6,8 @@
  * required.
  */
 
-type AdbLike = {
+export type AdbLike = {
+  close(): void;
   subprocess: {
     noneProtocol: {
       spawnWaitText(args: string[]): Promise<string>;
