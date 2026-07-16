@@ -2218,6 +2218,16 @@ body {
     --neutral-grey-100
   );
 
+  --storeknox-inventory-details-header-app-info-bg-color: var(--background-main);
+
+  --storeknox-inventory-details-header-title-container-border-color: var(
+    --border-color-1
+  );
+
+  --storeknox-inventory-details-header-indicator-chip-bg-color: var(
+    --neutral-grey-100
+  );
+
   // variables for storeknox/inventory-details/section-header
   --storeknox-inventory-details-section-header-root-border-color: var(
     --border-color-1
@@ -2435,6 +2445,9 @@ body {
   --storeknox-fake-apps-details-header-title-indicator-border-radius: var(
     --border-radius
   );
+  --storeknox-fake-apps-details-header-indicator-chip-bg-color: var(
+    --neutral-grey-100
+  );
 
   // variables for storeknox/fake-apps/details-header/skeleton
   --storeknox-fake-apps-details-header-skeleton-background-color: var(
@@ -2528,6 +2541,26 @@ body {
   --storeknox-fake-apps-findings-card-overall-score-color: var(
     --storeknox-fake-app-overall-score-color
   );
+  --storeknox-fake-apps-findings-card-border: var(--border-color-1);
+
+  // variables for storeknox/fake-apps/findings-group
+  --storeknox-fake-apps-findings-group-background-color: var(--common-white);
+  --storeknox-fake-apps-findings-group-border-color: var(--border-color-1);
+  --storeknox-fake-apps-findings-group-ignored-background-color: var(
+    --storeknox-fake-apps-findings-card-ignored-background
+  );
+
+  // variables for storeknox/fake-apps/findings-signal-row
+  --storeknox-fake-apps-findings-signal-row-hover-background-color: var(--background-light);
+  --storeknox-fake-apps-findings-signal-row-result-high-color: var(--severity-critical);
+  --storeknox-fake-apps-findings-signal-row-result-medium-color: var(--severity-high);
+  --storeknox-fake-apps-findings-signal-row-result-low-color: var(--severity-passed);
+
+  // variables for storeknox/fake-apps/signal-detail-drawer
+  --storeknox-fake-apps-signal-detail-drawer-content-border-color: var(--border-color-1);
+  --storeknox-fake-apps-signal-detail-drawer-result-high-color: var(--severity-critical);
+  --storeknox-fake-apps-signal-detail-drawer-result-medium-color: var(--severity-high);
+  --storeknox-fake-apps-signal-detail-drawer-result-low-color: var(--severity-passed);
 
   // variables for storeknox/fake-apps/ignore-drawer
   --storeknox-fake-apps-ignore-drawer-content-border-color: var(

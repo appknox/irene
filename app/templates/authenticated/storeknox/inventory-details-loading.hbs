@@ -1,39 +1,58 @@
 <PageWrapper>
-  <AkStack @width='full' @direction='column' class='mb-3 pt-2'>
-    <AkStack @spacing='0.5' class='pb-3'>
-      <AkSkeleton @variant='rectangular' @height='17px' @width='120px' />
+  <div class='w-full mb-3 pt-2'>
+    {{! Breadcrumbs }}
+    <div {{style height='38px'}} class='pb-3'>
+      <AkSkeleton @width='250px' @height='16px' @variant='rounded' />
+    </div>
 
-      <AkSkeleton @variant='rectangular' @height='17px' @width='200px' />
+    {{! App Info Container }}
+    <AkStack
+      @bgColor='white'
+      @width='full'
+      @justifyContent='space-between'
+      @spacing='1'
+      class='p-3'
+    >
+      <AkStack @direction='row' @spacing='2' @alignItems='center'>
+        <AkSkeleton @width='50px' @height='50px' @variant='circular' />
+
+        <AkStack @spacing='0.75' @direction='column' @alignItems='flex-start'>
+          <AkSkeleton
+            @width='200px'
+            @height='1.5rem'
+            @variant='rounded'
+            class='mt-1'
+          />
+
+          <AkSkeleton @width='280px' @height='1rem' @variant='rounded' />
+        </AkStack>
+      </AkStack>
+
+      <AkStack
+        @alignItems='center'
+        @justifyContent='flex-end'
+        @spacing='1.5'
+        {{style alignSelf='flex-end'}}
+      >
+        <AkSkeleton @width='120px' @height='36px' @variant='rounded' />
+        <AkSkeleton @width='36px' @height='36px' @variant='rounded' />
+      </AkStack>
     </AkStack>
 
-    <Storeknox::InventoryDetails::SectionInfo
+    {{! Chips Row }}
+    <AkStack
+      @bgColor='white'
       @width='full'
       @direction='column'
-      class='py-1'
+      @spacing='1'
+      class='px-6 py-2'
     >
-      <AkSkeleton @variant='circular' @height='50px' @width='50px' />
-
-      <AkSkeleton
-        @variant='rectangular'
-        @height='17px'
-        @width='150px'
-        class='my-1'
-      />
-
-      <AkSkeleton
-        @variant='rectangular'
-        @height='17px'
-        @width='200px'
-        class='mb-1'
-      />
-
-      <AkStack @spacing='1'>
-        <AkSkeleton @variant='circular' @height='32px' @width='32px' />
-
-        <AkSkeleton @variant='circular' @height='32px' @width='32px' />
+      <AkStack @spacing='1' @alignItems='center'>
+        <AkSkeleton @width='90px' @height='30px' @variant='rounded' />
+        <AkSkeleton @width='90px' @height='30px' @variant='rounded' />
       </AkStack>
-    </Storeknox::InventoryDetails::SectionInfo>
-  </AkStack>
+    </AkStack>
+  </div>
 
   <AkStack @direction='column' class=''>
     <Storeknox::InventoryDetails::SectionHeader @color='white'>
