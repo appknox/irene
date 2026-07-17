@@ -409,43 +409,42 @@ module('Integration | Component | organization-archive', function (hooks) {
             : t('organizationArchiveLatestScanDescription')
         );
 
-      if (isComprehensive) {
-        assert
-          .dom('[data-test-orgArchive-dateRangeLabel]')
-          .hasText(`${t('fromDate')} - ${t('toDate')}`);
+      // Both archive types should now have date picker
+      assert
+        .dom('[data-test-orgArchive-dateRangeLabel]')
+        .hasText(`${t('fromDate')} - ${t('toDate')}`);
 
-        assert
-          .dom('[data-test-orgArchive-dateClearBtn]')
-          .isNotDisabled()
-          .hasText(t('clear'));
+      assert
+        .dom('[data-test-orgArchive-dateClearBtn]')
+        .isNotDisabled()
+        .hasText(t('clear'));
 
-        assert.dom('[data-test-akDatePicker-calendar]').doesNotExist();
+      assert.dom('[data-test-akDatePicker-calendar]').doesNotExist();
 
-        // open date picker
-        await click('[data-test-date-picker-toggle-button]');
+      // open date picker
+      await click('[data-test-date-picker-toggle-button]');
 
-        assert.dom('[data-test-akDatePicker-calendar]').exists();
+      assert.dom('[data-test-akDatePicker-calendar]').exists();
 
-        const prevMonth = dayjs().subtract(1, 'month');
+      const prevMonth = dayjs().subtract(1, 'month');
 
-        await calendarCenter(
-          '[data-test-akDatePicker-calendar]',
-          prevMonth.toDate()
-        );
+      await calendarCenter(
+        '[data-test-akDatePicker-calendar]',
+        prevMonth.toDate()
+      );
 
-        const dateFrom = new Date(prevMonth.year(), prevMonth.month(), 1);
-        const dateTo = new Date(prevMonth.year(), prevMonth.month(), 24);
+      const dateFrom = new Date(prevMonth.year(), prevMonth.month(), 1);
+      const dateTo = new Date(prevMonth.year(), prevMonth.month(), 24);
 
-        await calendarSelect('[data-test-akDatePicker-calendar]', dateFrom);
-        await calendarSelect('[data-test-akDatePicker-calendar]', dateTo);
+      await calendarSelect('[data-test-akDatePicker-calendar]', dateFrom);
+      await calendarSelect('[data-test-akDatePicker-calendar]', dateTo);
 
-        const fomatedFrom = dayjs(dateFrom).format('DD MMM YYYY');
-        const fomatedTo = dayjs(dateTo).format('DD MMM YYYY');
+      const fomatedFrom = dayjs(dateFrom).format('DD MMM YYYY');
+      const fomatedTo = dayjs(dateTo).format('DD MMM YYYY');
 
-        assert
-          .dom('[data-test-orgArchive-dateRangeLabel]')
-          .hasText(`${fomatedFrom} - ${fomatedTo}`);
-      }
+      assert
+        .dom('[data-test-orgArchive-dateRangeLabel]')
+        .hasText(`${fomatedFrom} - ${fomatedTo}`);
 
       await click('[data-test-orgArchive-exportBtn]');
 
@@ -456,6 +455,73 @@ module('Integration | Component | organization-archive', function (hooks) {
       } else {
         assert.strictEqual(notify.successMsg, t('organizationArchiveSuccess'));
       }
+    }
+  );
+
+  test.each(
+    'it should validate date range does not exceed 2 years',
+    [
+      { archiveType: OrganizationArchiveType.COMPREHENSIVE },
+      { archiveType: OrganizationArchiveType.LATEST_SCAN },
+    ],
+    async function (assert, { archiveType }) {
+      const isComprehensive =
+        archiveType === OrganizationArchiveType.COMPREHENSIVE;
+
+      this.server.get('/organizations/:id/archives', (schema) => {
+        const results = schema.organizationArchives.all().models;
+
+        return { count: results.length, next: null, previous: null, results };
+      });
+
+      this.server.get('/organizations/:id/users/:userId', (schema, req) => {
+        const user = schema.organizationUsers.find(req.params.userId);
+
+        return user?.toJSON();
+      });
+
+      await render(hbs`<OrganizationArchive />`);
+
+      await selectChoose(
+        `[data-test-orgArchive-archiveTypeSelect] .${classes.trigger}`,
+        isComprehensive ? t('comprehensive') : t('latestScan')
+      );
+
+      // open date picker
+      await click('[data-test-date-picker-toggle-button]');
+
+      assert.dom('[data-test-akDatePicker-calendar]').exists();
+
+      // Select dates more than 2 years apart
+      const startDate = dayjs().subtract(2, 'years').subtract(1, 'day');
+      const endDate = dayjs();
+
+      await calendarCenter(
+        '[data-test-akDatePicker-calendar]',
+        startDate.toDate()
+      );
+
+      await calendarSelect(
+        '[data-test-akDatePicker-calendar]',
+        startDate.toDate()
+      );
+      await calendarSelect(
+        '[data-test-akDatePicker-calendar]',
+        endDate.toDate()
+      );
+
+      const notify = this.owner.lookup('service:notifications');
+
+      // Should show error for exceeding 2 years
+      assert.strictEqual(
+        notify.errorMsg,
+        t('organizationArchiveDateRangeExceeded')
+      );
+
+      // Dates should not be set
+      assert
+        .dom('[data-test-orgArchive-dateRangeLabel]')
+        .hasText(`${t('fromDate')} - ${t('toDate')}`);
     }
   );
 
