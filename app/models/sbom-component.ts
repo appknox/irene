@@ -93,6 +93,20 @@ export default class SbomComponentModel extends Model {
   @attr('string')
   declare aiFrameworkName: string;
 
+  // "Purpose" column — a real backend-authored value per artifact_class
+  // (e.g. "Remote Inference" for cloud endpoints, or the identified
+  // model_category for models). Replaces an earlier client-computed
+  // fallback that duplicated aiRoleColumn's text for most component types.
+  @attr('string')
+  declare aiPurpose: string;
+
+  // Set only for tokenizer/config/supporting artifacts that were
+  // unambiguously paired to a specific bundled model (see enola's
+  // link_supporting_artifacts_to_models) — "" when no single model could
+  // be identified. Bundle membership, not a real SBOM dependency edge.
+  @attr('string')
+  declare aiAssociatedModelPath: string;
+
   @attr()
   declare evidence: SbomComponentEvidence;
 
@@ -229,18 +243,20 @@ export default class SbomComponentModel extends Model {
   }
 
   /**
-   * "Type" column for the AI-components-only view — deliberately different
-   * wording from aiDisplayLabelKey (e.g. "Library" not "Inference Engine")
-   * since that concept moves to aiPurpose in this view.
+   * "Type" column for the AI-components-only view -- a small, standardized
+   * set of top-level categories. tokenizer/config/supporting all collapse
+   * to a single "Supporting Artifact" bucket here; their more specific
+   * kind is surfaced separately via aiDisplayLabelKey (drawer-only "AI
+   * Role" field), not repeated in this column.
    */
   get aiTypeLabel() {
     if (!this.aiArtifactClass) return '-';
     const classMap: Record<string, string> = {
       model: 'sbomModule.aiTypeLabel.model',
       library: 'sbomModule.aiTypeLabel.library',
-      tokenizer: 'sbomModule.aiTypeLabel.tokenizer',
-      config: 'sbomModule.aiTypeLabel.config',
-      supporting: 'sbomModule.aiTypeLabel.supporting',
+      tokenizer: 'sbomModule.supportingArtifact',
+      config: 'sbomModule.supportingArtifact',
+      supporting: 'sbomModule.supportingArtifact',
       secret: 'sbomModule.aiTypeLabel.secret',
       cloud_endpoint: 'sbomModule.aiTypeLabel.cloudEndpoint',
       platform_managed_ai: 'sbomModule.aiTypeLabel.platformManagedAi',
@@ -258,17 +274,6 @@ export default class SbomComponentModel extends Model {
    */
   get aiFamily() {
     return this.aiModelName || this.aiFrameworkName || '-';
-  }
-
-  /**
-   * "Purpose" column for the AI-components-only view. Uses the specific
-   * model_category when we identified one (e.g. "Text Generation"),
-   * otherwise falls back to the generic role label this artifact class
-   * always carries (e.g. "Inference Engine" for a library).
-   */
-  get aiPurpose() {
-    if (this.aiModelCategory) return this.aiModelCategory;
-    return this.aiDisplayLabelKey ? this.intl.t(this.aiDisplayLabelKey) : '-';
   }
 }
 

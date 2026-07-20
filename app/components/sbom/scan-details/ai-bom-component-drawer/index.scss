@@ -1,0 +1,21 @@
+.ai-bom-component-drawer-file-box {
+  border: 1px solid var(--border-color-1);
+  border-radius: var(--border-radius);
+  background: var(--common-white);
+}
+
+.ai-bom-component-drawer-file-value {
+  font-family: monospace;
+  word-break: break-all;
+}
+
+.ai-bom-component-drawer-details-box {
+  border: 1px solid var(--border-color-1);
+  border-radius: var(--border-radius);
+  background: var(--common-white);
+  overflow: hidden;
+}
+
+.ai-bom-component-drawer-section-header {
+  background: var(--neutral-grey-100);
+}

@@ -85,10 +85,6 @@ export default class SbomComponentDetailsSummaryComponent extends Component<Sbom
           ? '-'
           : this.args.sbomComponent?.cleanLatestVersion,
       },
-      {
-        label: this.intl.t('status'),
-        component: 'sbom/component-status' as const,
-      },
       this.args.sbomComponent?.author && {
         label: this.intl.t('author'),
         value: this.args.sbomComponent?.author,
@@ -120,11 +116,6 @@ export default class SbomComponentDetailsSummaryComponent extends Component<Sbom
         label: this.intl.t('sbomModule.aiPurposeColumn'),
         value: this.args.sbomComponent?.aiPurpose,
       },
-      this.args.sbomComponent?.isAiComponent && {
-        label: this.intl.t('sbomModule.aiConfidenceLabel'),
-        value: this.aiConfidenceDisplay,
-        tooltip: this.aiConfidenceExplanation,
-      },
       this.args.sbomComponent?.hasIdentifiedModelName && {
         label: this.intl.t('sbomModule.modelIdentificationMethod'),
         value:
@@ -139,16 +130,6 @@ export default class SbomComponentDetailsSummaryComponent extends Component<Sbom
   get aiPurposeLabel() {
     const key = this.args.sbomComponent?.aiDisplayLabelKey;
     return key ? this.intl.t(key) : '-';
-  }
-
-  get aiConfidenceDisplay() {
-    const confidence = this.args.sbomComponent?.aiConfidence;
-    return confidence ? capitalize(confidence) : '-';
-  }
-
-  get aiConfidenceExplanation() {
-    const key = this.args.sbomComponent?.confidenceExplanationKey;
-    return key ? this.intl.t(key) : null;
   }
 
   /**

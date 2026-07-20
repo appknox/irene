@@ -56,6 +56,7 @@ export default class SbomScanDetailsComponent extends Component<SbomScanDetailsS
   @tracked openViewReportDrawer = false;
   @tracked expandedNodes: string[] = [];
   @tracked treeNodes: AkTreeNodeProps[] = [];
+  @tracked activeTab: 'sbom' | 'aibom' = 'sbom';
 
   constructor(owner: unknown, args: SbomScanDetailsSignature['Args']) {
     super(owner, args);
@@ -73,15 +74,32 @@ export default class SbomScanDetailsComponent extends Component<SbomScanDetailsS
       ordering,
     } = args.queryParams;
 
+    // is_ai_component must always resolve to an explicit 'true'/'false' --
+    // without this default, a fresh page load (no query param in the URL)
+    // leaves the underlying filter unset, and the SBOM tab silently shows
+    // every component, AI ones included, until the user manually clicks a
+    // tab. Also keeps activeTab consistent with a direct/bookmarked link.
+    const resolvedIsAiComponent = is_ai_component ?? 'false';
+    this.activeTab = resolvedIsAiComponent === 'true' ? 'aibom' : 'sbom';
+
+    // AI-BOM has no tree view (its transitive dependency tree was removed
+    // by design). The controller's view_type default is 'tree', so a
+    // bookmarked/direct URL like "?is_ai_component=true" with no explicit
+    // view_type would otherwise leave the service in tree mode -- and its
+    // fetch task drops every list filter (including is_ai_component) when
+    // in tree mode, silently returning the app's full, unfiltered SBOM.
+    const resolvedViewType =
+      resolvedIsAiComponent === 'true' ? 'list' : view_type;
+
     // Fetch with default queries from the route
     this.sbomScanDetailsService
       .setQueryData({
         sbomFile: this.args.sbomFile,
-        view_type,
+        view_type: resolvedViewType,
         component_query: component_query,
         dependency_type: is_dependency,
         component_type: Number(component_type),
-        is_ai_component,
+        is_ai_component: resolvedIsAiComponent,
         ai_artifact_class,
         ai_confidence,
         ordering,
@@ -172,20 +190,36 @@ export default class SbomScanDetailsComponent extends Component<SbomScanDetailsS
   }
 
   @action
-  handleAiComponentFilterToggle() {
-    const current = this.sbomScanDetailsService.isAiComponentFilter;
-    const next = current === true ? null : true;
-    const queryParams = { is_ai_component: next === null ? null : 'true' };
+  selectTab(tab: 'sbom' | 'aibom') {
+    this.activeTab = tab;
+    const is_ai_component = tab === 'aibom' ? 'true' : 'false';
+
+    // AI-BOM has no tree view -- always pin it to list mode (see the
+    // matching note in the constructor for why leaving view_type
+    // untouched here would silently drop the is_ai_component filter).
+    //
+    // component_query is reset on every tab switch -- the two tabs share
+    // the same search input on the service, so without this a search
+    // typed in one tab would silently keep filtering the other.
+    const queryParams: {
+      is_ai_component: string;
+      component_query: string;
+      view_type?: 'list';
+    } = {
+      is_ai_component,
+      component_query: '',
+      ...(tab === 'aibom' ? { view_type: 'list' } : {}),
+    };
 
     this.router.transitionTo({ queryParams });
     this.sbomScanDetailsService
-      .setQueryData({ is_ai_component: queryParams.is_ai_component })
+      .setQueryData({
+        is_ai_component: queryParams.is_ai_component,
+        component_query: queryParams.component_query,
+        ...(queryParams.view_type ? { view_type: queryParams.view_type } : {}),
+      })
       .setLimitOffset({ offset: 0 })
       .reload();
-  }
-
-  get isAiComponentFilterActive() {
-    return this.sbomScanDetailsService.isAiComponentFilter === true;
   }
 
   @action

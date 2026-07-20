@@ -1,0 +1,76 @@
+<AkStack
+  local-class='summary-bar-container'
+  data-test-sbomScanDetails-summaryBar-container
+  ...attributes
+>
+  {{#each @items as |item|}}
+    <AkStack
+      @alignItems='center'
+      data-test-sbomScanDetails-summaryBar-item='{{item.label}}'
+    >
+      <AkStack @spacing='1' @alignItems='center'>
+        <AkIcon
+          data-test-sbomScanDetails-summaryBar-icon
+          @size='small'
+          @iconName={{item.iconName}}
+        />
+
+        <AkTypography
+          @fontWeight={{if item.isPrimary 'bold'}}
+          data-test-sbomScanDetails-summaryBar-label
+        >
+          {{item.label}}
+        </AkTypography>
+      </AkStack>
+
+      <AkTypography class='mx-1'>-</AkTypography>
+
+      {{#if item.isClickable}}
+        <AkTypography
+          @variant='h6'
+          @color='primary'
+          @fontWeight={{if item.isPrimary 'bold'}}
+          {{on 'click' (or item.onValueClick this.noop)}}
+          {{style cursor='pointer'}}
+          data-test-sbomScanDetails-summaryBar-value
+        >
+          {{item.value}}
+        </AkTypography>
+      {{else}}
+        <AkTypography
+          @variant='h6'
+          @fontWeight={{if item.isPrimary 'bold'}}
+          data-test-sbomScanDetails-summaryBar-value
+        >
+          {{item.value}}
+        </AkTypography>
+      {{/if}}
+
+      {{#if item.newFeature}}
+        <AkTooltip
+          @title={{t 'sbomModule.newFeature'}}
+          @arrow={{true}}
+          @placement='bottom'
+        >
+          <AkStack class='ml-1' local-class='new-feature-container'>
+            <AkIcon
+              data-test-sbomScanDetails-summaryBar-newFeatureIcon
+              @size='small'
+              @iconName='mdi:wand'
+              local-class='new-feature-icon'
+            />
+          </AkStack>
+        </AkTooltip>
+      {{/if}}
+
+      {{#unless item.hideDivider}}
+        <AkDivider
+          class='mx-1'
+          @color='dark'
+          @direction='vertical'
+          @height='18px'
+        />
+      {{/unless}}
+    </AkStack>
+  {{/each}}
+</AkStack>

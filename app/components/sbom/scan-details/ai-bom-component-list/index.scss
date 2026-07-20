@@ -1,0 +1,19 @@
+.ai-bom-component-list {
+  .skeleton-loader {
+    padding: 1rem;
+  }
+
+  .empty-state {
+    min-height: 300px;
+  }
+
+  .search-container {
+    margin-bottom: 1.5rem;
+  }
+}
+
+.listing-container {
+  background: var(--common-white);
+  border: 1px solid var(--border-color-1);
+  border-radius: var(--border-radius);
+}

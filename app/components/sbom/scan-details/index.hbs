@@ -44,19 +44,108 @@
   </Sbom::SummaryHeader>
 
   {{#if this.scanStatusCompleted}}
-    <Sbom::ScanDetails::Overview
-      @sbomFile={{@sbomFile}}
-      @sbomScanSummary={{@sbomScanSummary}}
-    />
-
     {{#if this.isNotOutdated}}
-      <AkStack
-        data-test-sbomScanDetails-switch-header
-        local-class='switch-view-header'
-        @alignItems='center'
-        @justifyContent='{{if this.isTreeView "flex-end" "space-between"}}'
-      >
-        {{#unless this.isTreeView}}
+      {{! Tab navigation for SBOM vs AI-BOM -- local-class gives this page's
+        tab bar its own grey background now that the page itself is white
+        (see sbom.hbs's PageWrapper @backgroundColor='inherit'). }}
+      <AkTabs class='mt-2' local-class='tabs-bar' as |Akt|>
+        <Akt.tabItem
+          @id='sbom'
+          @isActive={{eq this.activeTab 'sbom'}}
+          @buttonVariant={{true}}
+          @onTabClick={{fn this.selectTab 'sbom'}}
+          data-test-sbomScanDetails-sbomTab
+        >
+          {{t 'sbomModule.sbomComponents'}}
+        </Akt.tabItem>
+        <Akt.tabItem
+          @id='aibom'
+          @isActive={{eq this.activeTab 'aibom'}}
+          @buttonVariant={{true}}
+          @onTabClick={{fn this.selectTab 'aibom'}}
+          data-test-sbomScanDetails-aibomTab
+        >
+          {{t 'sbomModule.aiBomComponents'}}
+        </Akt.tabItem>
+      </AkTabs>
+
+      {{#if (eq this.activeTab 'sbom')}}
+        <Sbom::ScanDetails::Overview
+          @sbomScanSummary={{@sbomScanSummary}}
+          class='mt-2'
+        />
+
+        {{#if this.isTreeView}}
+          <AkStack
+            data-test-sbomScanDetails-switch-header
+            local-class='switch-view-header'
+            @alignItems='center'
+            @justifyContent='flex-end'
+          >
+            <AkStack @alignItems='center' @spacing='1'>
+              <AkButton
+                data-test-sbomScanDetails-collapseAllButton
+                {{on 'click' this.collapseAll}}
+                @variant='outlined'
+                @color='neutral'
+                @disabled={{not this.isTreeExpanded}}
+                local-class='toggle-button'
+                class='mr-2'
+              >
+                <:leftIcon>
+                  <AkIcon @iconName='unfold-less' />
+                </:leftIcon>
+
+                <:default>
+                  {{t 'collapseAll'}}
+                </:default>
+              </AkButton>
+
+              <AkIconButton
+                local-class='switch-button tree active'
+                @variant='outlined'
+                @size='medium'
+                {{on 'click' this.handleTreeViewClick}}
+                data-test-sbomScanDetails-switch-treeViewButton
+              >
+                <AkIcon @color='primary' @iconName='account-tree' />
+              </AkIconButton>
+
+              <AkIconButton
+                local-class='switch-button list'
+                @variant='outlined'
+                {{on 'click' this.handleListViewClick}}
+                data-test-sbomScanDetails-switch-listViewButton
+              >
+                <AkIcon @iconName='format-list-bulleted' />
+              </AkIconButton>
+            </AkStack>
+          </AkStack>
+        {{/if}}
+      {{/if}}
+    {{/if}}
+
+    {{#if (eq this.activeTab 'sbom')}}
+      {{#if (and this.isTreeView this.isNotOutdated)}}
+        <Sbom::ScanDetails::ComponentTree
+          @sbomProject={{@sbomProject}}
+          @sbomFile={{@sbomFile}}
+          @packageName={{this.packageName}}
+          @updateExpandedNodes={{this.updateExpandedNodes}}
+          @expandedNodes={{this.expandedNodes}}
+          @treeNodes={{this.treeNodes}}
+          @updateTreeNodes={{this.updateTreeNodes}}
+        />
+      {{else}}
+        {{! The AI-BOM tab has no tree/list toggle and renders its own
+          search box (see AiBomComponentList) -- this header is SBOM-only. }}
+        <AkStack
+          data-test-sbomScanDetails-switch-header
+          local-class='switch-view-header'
+          @alignItems='center'
+          @justifyContent='space-between'
+          class={{if this.isNotOutdated '' 'mt-2'}}
+        >
           <div {{style width='180px'}}>
             <AkTextField
               data-test-sbomScanDetails-componentSearchInput
@@ -69,89 +158,43 @@
               </:leftAdornment>
             </AkTextField>
           </div>
-        {{/unless}}
 
-        <AkStack @alignItems='center' @spacing='1'>
-          {{#unless this.isTreeView}}
-            <AkButton
-              data-test-sbomScanDetails-aiFilterButton
-              @variant={{if this.isAiComponentFilterActive 'contained' 'outlined'}}
-              @color={{if this.isAiComponentFilterActive 'primary' 'neutral'}}
-              local-class={{if
-                this.isAiComponentFilterActive
-                'ai-filter-button--active'
-              }}
-              {{on 'click' this.handleAiComponentFilterToggle}}
-            >
-              {{t 'sbomModule.aiComponents'}}
-            </AkButton>
-          {{/unless}}
-
-          {{#if this.isTreeView}}
-            <AkButton
-              data-test-sbomScanDetails-collapseAllButton
-              {{on 'click' this.collapseAll}}
+          <AkStack @alignItems='center' @spacing='1'>
+            <AkIconButton
+              local-class='switch-button tree'
               @variant='outlined'
-              @color='neutral'
-              @disabled={{not this.isTreeExpanded}}
-              local-class='toggle-button'
-              class='mr-2'
+              @size='medium'
+              {{on 'click' this.handleTreeViewClick}}
+              data-test-sbomScanDetails-switch-treeViewButton
             >
-              <:leftIcon>
-                <AkIcon @iconName='unfold-less' />
-              </:leftIcon>
+              <AkIcon @iconName='account-tree' />
+            </AkIconButton>
 
-              <:default>
-                {{t 'collapseAll'}}
-              </:default>
-            </AkButton>
-          {{/if}}
-
-          <AkIconButton
-            local-class='switch-button tree {{if this.isTreeView "active"}}'
-            @variant='outlined'
-            @size='medium'
-            {{on 'click' this.handleTreeViewClick}}
-            data-test-sbomScanDetails-switch-treeViewButton
-          >
-            <AkIcon
-              @color={{if this.isTreeView 'primary'}}
-              @iconName='account-tree'
-            />
-          </AkIconButton>
-
-          <AkIconButton
-            local-class='switch-button list {{if this.isTreeView "" "active"}}'
-            @variant='outlined'
-            {{on 'click' this.handleListViewClick}}
-            data-test-sbomScanDetails-switch-listViewButton
-          >
-            <AkIcon
-              @color={{unless this.isTreeView 'primary'}}
-              @iconName='format-list-bulleted'
-            />
-          </AkIconButton>
+            <AkIconButton
+              local-class='switch-button list active'
+              @variant='outlined'
+              {{on 'click' this.handleListViewClick}}
+              data-test-sbomScanDetails-switch-listViewButton
+            >
+              <AkIcon @color='primary' @iconName='format-list-bulleted' />
+            </AkIconButton>
+          </AkStack>
         </AkStack>
-      </AkStack>
-    {{/if}}
 
-    {{#if (and this.isTreeView this.isNotOutdated)}}
-      <Sbom::ScanDetails::ComponentTree
-        @sbomProject={{@sbomProject}}
-        @sbomFile={{@sbomFile}}
-        @packageName={{this.packageName}}
-        @updateExpandedNodes={{this.updateExpandedNodes}}
-        @expandedNodes={{this.expandedNodes}}
-        @treeNodes={{this.treeNodes}}
-        @updateTreeNodes={{this.updateTreeNodes}}
-      />
-    {{else}}
-      <Sbom::ScanDetails::ComponentList
+        <Sbom::ScanDetails::ComponentList
+          @sbomProject={{@sbomProject}}
+          @sbomFile={{@sbomFile}}
+          @sbomScanSummary={{@sbomScanSummary}}
+          local-class='listing-content'
+          data-test-sbomScanDetails-componentList-container
+        />
+      {{/if}}
+    {{else if (eq this.activeTab 'aibom')}}
+      <Sbom::ScanDetails::AiBomComponentList
         @sbomProject={{@sbomProject}}
         @sbomFile={{@sbomFile}}
         @sbomScanSummary={{@sbomScanSummary}}
-        class={{if this.isNotOutdated '' 'mt-2'}}
-        data-test-sbomScanDetails-componentList-container
+        data-test-sbomScanDetails-aiBomComponentList-container
       />
     {{/if}}
   {{else}}
