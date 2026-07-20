@@ -1,0 +1,14 @@
+.project-card {
+  border-radius: var(--knoxiq-project-card-border-radius);
+  background-color: var(--knoxiq-project-card-background);
+  height: 100%;
+  cursor: pointer;
+}
+
+.project-card-accent {
+  width: 100%;
+  height: 5px;
+  flex-shrink: 0;
+  border-radius: var(--knoxiq-project-card-border-radius)
+    var(--knoxiq-project-card-border-radius) 0 0;
+}

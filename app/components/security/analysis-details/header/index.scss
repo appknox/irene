@@ -3,9 +3,9 @@
   background-color: var(--security-analysis-details-header-background-color);
 }
 
-.mark-as-passed-button,
-.mark-as-passed-button:hover,
-.mark-as-passed-button:focus {
+.mark-as-passed-button:not(.disabled),
+.mark-as-passed-button:not(.disabled):hover,
+.mark-as-passed-button:not(.disabled):focus {
   background-color: var(
     --security-analysis-details-header-marked-as-passed-background-color
   );
@@ -18,4 +18,11 @@
   :global(.ak-icon) {
     color: var(--security-analysis-details-header-marked-as-passed-color);
   }
+}
+
+.tooltip-content-container {
+  width: 320px;
+  padding: 0.5em;
+  box-sizing: border-box;
+  white-space: normal;
 }

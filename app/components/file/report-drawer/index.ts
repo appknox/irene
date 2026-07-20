@@ -47,6 +47,15 @@ export default class FileReportDrawerComponent extends Component<FileReportDrawe
         hideGroup:
           this.orgIsAnEnterprise || this.organization.hideUpsellUIStatus.sbom,
       },
+      {
+        id: 'store-release-readiness-reports',
+        title: this.intl.t('fileReport.storeReleaseReadinessReports'),
+        contentComponent:
+          'file/report-drawer/store-release-readiness-reports' as const,
+
+        hideGroup:
+          !this.organization.selected?.features?.store_release_readiness,
+      },
     ];
   }
 }

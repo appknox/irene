@@ -263,7 +263,7 @@ module('Integration | Component | sbom/scan-report-drawer', function (hooks) {
     assert
       .dom('[data-test-sbomReportList-reportSecondaryText]', reportList[0])
       .hasText(
-        t('sbomModule.sbomDownloadPdfSecondaryText', {
+        t('reportPasswordDetail', {
           password: this.sbomReport.report_password,
         })
       );
@@ -403,7 +403,7 @@ module('Integration | Component | sbom/scan-report-drawer', function (hooks) {
     assert
       .dom('[data-test-sbomReportList-reportSecondaryText]', reportList[0])
       .hasText(
-        t('sbomModule.sbomDownloadPdfSecondaryText', {
+        t('reportPasswordDetail', {
           password: this.sbomReport.report_password,
         })
       );
@@ -447,7 +447,7 @@ module('Integration | Component | sbom/scan-report-drawer', function (hooks) {
     assert
       .dom('[data-test-sbomReportList-reportSecondaryText]', reportList[0])
       .hasText(
-        t('sbomModule.sbomDownloadPdfSecondaryText', {
+        t('reportPasswordDetail', {
           password: this.sbomReport.report_password,
         })
       );
@@ -494,7 +494,7 @@ module('Integration | Component | sbom/scan-report-drawer', function (hooks) {
     assert
       .dom('[data-test-sbomReportList-reportSecondaryText]', reportList[0])
       .hasText(
-        t('sbomModule.sbomDownloadPdfSecondaryText', {
+        t('reportPasswordDetail', {
           password: this.sbomReport.report_password,
         })
       );

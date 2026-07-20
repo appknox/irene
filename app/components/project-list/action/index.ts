@@ -5,6 +5,7 @@ import { tracked } from '@glimmer/tracking';
 import type IntlService from 'ember-intl/services/intl';
 
 import type ProjectModel from 'irene/models/project';
+import type OrganizationService from 'irene/services/organization';
 
 export interface ProjectListActionSignature {
   Args: {
@@ -23,6 +24,7 @@ interface FileMoreMenuItem {
 
 export default class ProjectListActionComponent extends Component<ProjectListActionSignature> {
   @service declare intl: IntlService;
+  @service declare organization: OrganizationService;
 
   @tracked fileMoreMenuRef: HTMLElement | null = null;
 
@@ -34,18 +36,28 @@ export default class ProjectListActionComponent extends Component<ProjectListAct
     return this.args.project.get('lastFile')?.get('iconUrl');
   }
 
-  get fileMoreMenuList() {
-    const hasMultipleFiles = this.args.project.get('hasMultipleFiles');
+  get hasMultipleFiles() {
+    return this.args.project.get('hasMultipleFiles');
+  }
 
+  get showCompare() {
+    if (!this.hasMultipleFiles) {
+      return false;
+    }
+
+    return !this.organization.isKnoxIqEnabled || this.file?.isLegacyKnoxIQScan;
+  }
+
+  get fileMoreMenuList() {
     return [
-      hasMultipleFiles && {
+      this.showCompare && {
         group: this.intl.t('fileLevel'),
         label: this.intl.t('compare'),
         iconName: 'compare-arrows',
         route: 'authenticated.dashboard.choose',
         routeModel: this.file?.get('id'),
       },
-      hasMultipleFiles && {
+      this.args.project.get('hasMultipleFiles') && {
         group: this.intl.t('projectLevel'),
         label: this.intl.t('allUploads'),
         iconName: 'apps',

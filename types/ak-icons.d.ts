@@ -11,6 +11,8 @@ import {
   IconoirIconsSet,
   FluentIconsSet,
   StreamlinePlumpIconsSet,
+  IxIconsSet,
+  MajesticonsIconsSet,
 } from 'irene/utils/icons';
 
 type MaterialSymbolsIcon = (typeof MaterialSymbolsSet)[number];
@@ -25,6 +27,8 @@ type SolarIcon = (typeof SolarIconsSet)[number];
 type IconoirIcon = (typeof IconoirIconsSet)[number];
 type FluentIcon = (typeof FluentIconsSet)[number];
 type StreamlinePlumpIcon = (typeof StreamlinePlumpIconsSet)[number];
+type IxIcon = (typeof IxIconsSet)[number];
+type MajesticonsIcon = (typeof MajesticonsIconsSet)[number];
 
 export const AkIconsSet = [
   ...MaterialSymbolsSet,
@@ -39,6 +43,8 @@ export const AkIconsSet = [
   ...IconoirIconsSet,
   ...FluentIconsSet,
   ...StreamlinePlumpIconsSet,
+  ...IxIconsSet,
+  ...MajesticonsIconsSet,
 ] as const;
 
 export type AkIconVariantType =
@@ -53,6 +59,8 @@ export type AkIconVariantType =
   | `iconoir:${IconoirIcon}`
   | `fluent:${FluentIcon}`
   | `streamline-plump:${StreamlinePlumpIcon}`
+  | `ix:${IxIcon}`
+  | `majesticons:${MajesticonsIcon}`
   | MaterialSymbolsIcon;
 
 // Export the icon types for reference
@@ -69,4 +77,6 @@ export type {
   IconoirIcon,
   FluentIcon,
   StreamlinePlumpIcon,
+  IxIcon,
+  MajesticonsIcon,
 };

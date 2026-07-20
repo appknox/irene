@@ -5,9 +5,13 @@ import { service } from '@ember/service';
 import type IntlService from 'ember-intl/services/intl';
 
 import type FileModel from 'irene/models/file';
+import type { FileDetailsAnalysesProviderContext } from '../analyses-provider';
 
 export interface FileDetailsInsightsWrapperSignature {
-  Args: { file: FileModel };
+  Args: {
+    file: FileModel;
+    fileAnalysesListContext: FileDetailsAnalysesProviderContext;
+  };
 }
 
 export default class FileDetailsInsightsWrapperComponent extends Component<FileDetailsInsightsWrapperSignature> {

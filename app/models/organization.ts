@@ -11,6 +11,7 @@ export interface Features {
   partner_dashboard: boolean;
   sso: boolean;
   sbom: boolean;
+  store_release_readiness: boolean;
   public_apis: boolean;
   storeknox: boolean;
   privacy: boolean;
@@ -21,6 +22,7 @@ export interface Features {
 export interface AiFeatures {
   reporting: boolean;
   pii: boolean;
+  knoxiq: boolean;
 }
 
 export default class OrganizationModel extends Model {
@@ -71,6 +73,9 @@ export default class OrganizationModel extends Model {
 
   @attr('boolean')
   declare showSubscription: boolean;
+
+  @attr('boolean')
+  declare knoxiqAutomatedTrigger: boolean;
 
   get showBilling() {
     return !this.billingHidden;

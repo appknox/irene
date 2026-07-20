@@ -1,5 +1,18 @@
 import { findAll, click } from '@ember/test-helpers';
 
+export async function clickFileDetailsSummaryMenuItem(label) {
+  await click('[data-test-fileDetailsSummary-moreMenuBtn]');
+
+  const menuItems = findAll('[data-test-fileDetailsSummary-moreMenuItem]');
+  const target = menuItems.find((el) => el.textContent.trim().includes(label));
+
+  if (!target) {
+    throw new Error(`File details menu item not found: ${label}`);
+  }
+
+  await click(target.querySelector('a'));
+}
+
 export const doBreadcrumbItemsCompare = (
   serviceItems,
   expectedItems,

@@ -25,6 +25,8 @@ export type SaveReportPreferenceData = Pick<
 
 export type SetProfileRegulatorPrefData = { value: boolean };
 
+export type SaveKnoxIqAutomatedTriggerData = { status: boolean };
+
 export type ProfileRegulatoryReportPreference =
   | 'pcidss'
   | 'hipaa'
@@ -39,6 +41,9 @@ export default class ProfileModel extends Model {
 
   @attr('boolean')
   declare showUnknownAnalysis: boolean;
+
+  @attr('boolean')
+  declare knoxiqAutomatedTrigger: boolean;
 
   @hasMany('file', { inverse: 'profile', async: true })
   declare files: AsyncHasMany<FileModel>;
@@ -65,6 +70,12 @@ export default class ProfileModel extends Model {
     const adapter = this.store.adapterFor(this.adapterName);
 
     return adapter.unsetShowPreference(this, preference);
+  }
+
+  saveKnoxIqAutomatedTrigger(data: SaveKnoxIqAutomatedTriggerData) {
+    const adapter = this.store.adapterFor(this.adapterName);
+
+    return adapter.saveKnoxIqAutomatedTrigger(this, data);
   }
 }
 

@@ -15,6 +15,7 @@ export const MaterialSymbolsSet = [
   'refresh',
   'arrow-left',
   'arrow-right',
+  'arrow-right-alt',
   'folder',
   'folder-outline',
   'graphic-eq',
@@ -69,6 +70,7 @@ export const MaterialSymbolsSet = [
   'format-list-bulleted',
   'play-arrow',
   'stop',
+  'terminal-2',
   'build',
   'person-off',
   'person-off-outline',
@@ -85,6 +87,7 @@ export const MaterialSymbolsSet = [
   'menu',
   'sync-alt',
   'home',
+  'hourglass-top',
   'android',
   'windows',
   'mobile',
@@ -102,6 +105,7 @@ export const MaterialSymbolsSet = [
   'arrow-forward',
   'calendar-month',
   'content-paste',
+  'content-paste-search',
   'email',
   'send',
   'chevron-left',
@@ -128,6 +132,8 @@ export const MaterialSymbolsSet = [
   'filter-list',
   'sort',
   'wb-incandescent',
+  'lightbulb',
+  'experiment',
   'drive-file-rename-outline',
   'event-note',
   'open-in-full',
@@ -171,6 +177,9 @@ export const MaterialSymbolsSet = [
   'distance',
   'arrow-right-alt',
   'history',
+  'list-alt-check',
+  'border-color',
+  'border-color-outline',
 ] as const;
 
 export const MdiIconsSet = [
@@ -185,9 +194,16 @@ export const MdiIconsSet = [
   'wand',
   'progress-clock',
   'file-certificate-outline',
+  'fire',
+  'calendar-month-outline',
 ] as const;
 
-export const HugeIconsSet = ['api', 'ai-brain-04', 'image-03'] as const;
+export const HugeIconsSet = [
+  'api',
+  'ai-brain-04',
+  'image-03',
+  'ai-magic',
+] as const;
 
 export const FaBrandsIconsSet = ['apple'] as const;
 
@@ -199,10 +215,14 @@ export const PhIconsSet = ['diamonds-four'] as const;
 
 export const MynauiIconsSet = ['frame'] as const;
 
-export const SolarIconsSet = ['library-linear'] as const;
+export const SolarIconsSet = ['library-linear', 'play-bold'] as const;
 
 export const IconoirIconsSet = ['screenshot'] as const;
 
 export const FluentIconsSet = ['app-recent-24-regular'] as const;
 
 export const StreamlinePlumpIconsSet = ['threat-phone'] as const;
+
+export const IxIconsSet = ['ai'] as const;
+
+export const MajesticonsIconsSet = ['pulse'] as const;

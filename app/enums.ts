@@ -180,53 +180,117 @@ const ENUMS = {
     PRODUCTION: 2,
   },
 
-  ATTACK_VECTOR: {
+  SUPPORTED_CVSS_VERSIONS: {
+    V3: 3,
+    V4: 4,
+  },
+
+  CVSS_V3_ATTACK_VECTOR: {
     NETWORK: 'N',
     ADJACENT: 'A',
     LOCAL: 'L',
     PHYSICAL: 'P',
   },
 
-  ATTACK_COMPLEXITY: {
+  CVSS_V3_ATTACK_COMPLEXITY: {
     LOW: 'L',
     HIGH: 'H',
   },
 
-  PRIVILEGES_REQUIRED: {
+  CVSS_V3_PRIVILEGES_REQUIRED: {
     NONE: 'N',
     LOW: 'L',
     HIGH: 'H',
   },
 
-  IMPACTS: {
-    NONE: 'N',
-    LOW: 'L',
-    HIGH: 'H',
-  },
-
-  USER_INTERACTION: {
+  CVSS_V3_USER_INTERACTION: {
     NOT_REQUIRED: 'N',
     REQUIRED: 'R',
   },
 
-  SCOPE: {
+  CVSS_V3_SCOPE: {
     UNCHANGED: 'U',
     CHANGED: 'C',
   },
 
-  CONFIDENTIALITY_IMPACT: {
+  CVSS_V3_CONFIDENTIALITY_IMPACT: {
     NONE: 'N',
     LOW: 'L',
     HIGH: 'H',
   },
 
-  INTEGRITY_IMPACT: {
+  CVSS_V3_INTEGRITY_IMPACT: {
     NONE: 'N',
     LOW: 'L',
     HIGH: 'H',
   },
 
-  AVAILABILITY_IMPACT: {
+  CVSS_V3_AVAILABILITY_IMPACT: {
+    NONE: 'N',
+    LOW: 'L',
+    HIGH: 'H',
+  },
+
+  CVSS_V4_ATTACK_VECTOR: {
+    NETWORK: 'N',
+    ADJACENT: 'A',
+    LOCAL: 'L',
+    PHYSICAL: 'P',
+  },
+
+  CVSS_V4_ATTACK_COMPLEXITY: {
+    LOW: 'L',
+    HIGH: 'H',
+  },
+
+  CVSS_V4_ATTACK_REQUIREMENTS: {
+    NONE: 'N',
+    PRESENT: 'P',
+  },
+
+  CVSS_V4_PRIVILEGES_REQUIRED: {
+    NONE: 'N',
+    LOW: 'L',
+    HIGH: 'H',
+  },
+
+  CVSS_V4_USER_INTERACTION: {
+    NONE: 'N',
+    PASSIVE: 'P',
+    ACTIVE: 'A',
+  },
+
+  CVSS_V4_VULN_CONFIDENTIALITY_IMPACT: {
+    NONE: 'N',
+    LOW: 'L',
+    HIGH: 'H',
+  },
+
+  CVSS_V4_VULN_INTEGRITY_IMPACT: {
+    NONE: 'N',
+    LOW: 'L',
+    HIGH: 'H',
+  },
+
+  CVSS_V4_VULN_AVAILABILITY_IMPACT: {
+    NONE: 'N',
+    LOW: 'L',
+    HIGH: 'H',
+  },
+
+  CVSS_V4_SUBSEQUENT_CONFIDENTIALITY_IMPACT: {
+    NONE: 'N',
+    LOW: 'L',
+    HIGH: 'H',
+  },
+
+  CVSS_V4_SUBSEQUENT_INTEGRITY_IMPACT: {
+    NONE: 'N',
+    LOW: 'L',
+    HIGH: 'H',
+  },
+
+  CVSS_V4_SUBSEQUENT_AVAILABILITY_IMPACT: {
     NONE: 'N',
     LOW: 'L',
     HIGH: 'H',
@@ -440,6 +504,58 @@ const ENUMS = {
     DYNAMIC_SCAN: 1,
     API_SCAN: 2,
     MANUAL_SCAN: 3,
+  },
+
+  KNOXIQ_EXPLOITABILITY: {
+    EXP_UNKNOWN: 0,
+    PASSED: 1,
+    LOW: 2,
+    MEDIUM: 3,
+    HIGH: 4,
+  },
+
+  KNOXIQ_SCAN_STATUS: {
+    LEGACY: -1,
+    DISABLED: 0,
+    NOT_TRIGGERED: 1,
+    PENDING: 2,
+    RUNNING: 3,
+    COMPLETED: 4,
+    ERRORED: 5,
+  },
+
+  KNOXIQ_SCAN_TYPE: {
+    SAST: 1,
+    DAST_MANUAL: 2,
+    DAST_AUTOMATED: 3,
+    API: 4,
+  },
+
+  STORE_RELEASE_SCAN_STATUS: {
+    NOT_STARTED: 0,
+    IN_PROGRESS: 1,
+    PARTIAL: 2,
+    COMPLETED: 3,
+    FAILED: 4,
+  },
+
+  STORE_RELEASE_VERDICT: {
+    HIGH_REJECTION_RISK: 0,
+    MODERATE_REJECTION_RISK: 1,
+    LOW_REJECTION_RISK: 2,
+  },
+
+  STORE_RELEASE_FINDING_SEVERITY: {
+    BLOCKER: 0,
+    WARNING: 1,
+  },
+
+  STORE_RELEASE_REPORT_STATUS: {
+    PENDING: 1,
+    STARTED: 2,
+    IN_PROGRESS: 3,
+    COMPLETED: 4,
+    FAILED: 5,
   },
 };
 

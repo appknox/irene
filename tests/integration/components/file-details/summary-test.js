@@ -6,8 +6,10 @@ import { setupRenderingTest } from 'ember-qunit';
 import { module, test } from 'qunit';
 import { capitalize } from '@ember/string';
 
+import ENUMS from 'irene/enums';
 import { Response } from 'miragejs';
 import Service from '@ember/service';
+import { enableKnoxiqForTests } from 'irene/tests/helpers/knoxiq-test-utils';
 
 class NotificationsStub extends Service {
   errorMsg = null;
@@ -158,6 +160,9 @@ module('Integration | Component | file-details/summary', function (hooks) {
       return schema.projects.find(`${req.params.id}`)?.toJSON();
     });
 
+    // Compare menu item is shown only for legacy KnoxIQ files
+    this.file.knoxiqStatus = ENUMS.KNOXIQ_SCAN_STATUS.LEGACY;
+
     await render(hbs`
         <FileDetails::Summary @file={{this.file}} />
     `);
@@ -172,7 +177,7 @@ module('Integration | Component | file-details/summary', function (hooks) {
 
     let menuItems = findAll('[data-test-fileDetailsSummary-moreMenuItem]');
 
-    // project file count is more than 1
+    // legacy file + project file count > 1
     assert.strictEqual(menuItems.length, 3);
 
     assert.dom(menuItems[0]).hasText(t('compare'));
@@ -384,6 +389,50 @@ module('Integration | Component | file-details/summary', function (hooks) {
       assert.strictEqual(notify.successMsg, t('fileTag.deletedSuccessMsg'));
     }
   });
+
+  test.each(
+    'compare menu item respects KnoxIQ org feature and legacy flag',
+    [
+      // [knoxiqEnabled, isLegacy, compareVisible]
+      [false, false, true],
+      [false, true, true],
+      [true, true, true],
+      [true, false, false],
+    ],
+    async function (assert, [knoxiqEnabled, isLegacy, compareVisible]) {
+      this.server.get('/v3/projects/:id', (schema, req) => {
+        return schema.projects.find(`${req.params.id}`)?.toJSON();
+      });
+
+      enableKnoxiqForTests(this, { knoxiq: knoxiqEnabled });
+
+      this.file.knoxiqStatus = isLegacy
+        ? ENUMS.KNOXIQ_SCAN_STATUS.LEGACY
+        : ENUMS.KNOXIQ_SCAN_STATUS.COMPLETED;
+
+      await render(hbs`
+        <FileDetails::Summary @file={{this.file}} />
+      `);
+
+      const project = this.store.peekRecord('project', '1');
+      project.fileCount = 3;
+
+      await click('[data-test-fileDetailsSummary-moreMenuBtn]');
+
+      const menuItems = findAll('[data-test-fileDetailsSummary-moreMenuItem]');
+      const compareItem = menuItems.find((el) =>
+        el.textContent.includes(t('compare'))
+      );
+
+      if (compareVisible) {
+        assert.ok(compareItem, 'compare menu item is shown');
+      } else {
+        assert.notOk(compareItem, 'compare menu item is hidden');
+      }
+
+      await click('[data-test-ak-popover-backdrop]');
+    }
+  );
 
   test('it renders inactive file icon', async function (assert) {
     this.file.isActive = false;

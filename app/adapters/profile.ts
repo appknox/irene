@@ -3,6 +3,7 @@ import commondrf from './commondrf';
 import ProfileModel, {
   type ProfileRegulatoryReportPreference,
   type SaveReportPreferenceData,
+  type SaveKnoxIqAutomatedTriggerData,
   type SetProfileRegulatorPrefData,
 } from 'irene/models/profile';
 
@@ -50,6 +51,18 @@ export default class ProfileAdapter extends commondrf {
     const url = this.buildURL('profile', modelId) + `/show_${preference}`;
 
     await this.ajax(url, 'DELETE');
+
+    return this.store.findRecord('profile', modelId);
+  }
+
+  async saveKnoxIqAutomatedTrigger(
+    modelInstance: ProfileModel,
+    data: SaveKnoxIqAutomatedTriggerData
+  ) {
+    const modelId = modelInstance.get('id');
+    const url = this.buildURL('profile', modelId) + '/knoxiq_automated_trigger';
+
+    await this.ajax(url, 'PUT', { data });
 
     return this.store.findRecord('profile', modelId);
   }

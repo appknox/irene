@@ -1,0 +1,42 @@
+.panel {
+  width: 100%;
+  box-sizing: border-box;
+  border: 1px solid
+    var(--store-release-readiness-scan-results-skeleton-loader-border-color);
+  border-radius: var(
+    --store-release-readiness-scan-results-skeleton-loader-border-radius
+  );
+  background-color: var(
+    --store-release-readiness-scan-results-skeleton-loader-bg-color
+  );
+}
+
+.assessment-panel {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 29px;
+  border: 1px solid
+    var(--store-release-readiness-scan-results-skeleton-loader-border-color);
+  border-radius: var(
+    --store-release-readiness-scan-results-skeleton-loader-border-radius
+  );
+  background-color: var(
+    --store-release-readiness-scan-results-skeleton-loader-bg-color
+  );
+}
+
+.table-header {
+  padding: 12px 16px;
+  border-bottom: 1px solid
+    var(--store-release-readiness-scan-results-skeleton-loader-border-color);
+}
+
+.table-row {
+  padding: 14px 16px;
+  border-bottom: 1px solid
+    var(--store-release-readiness-scan-results-skeleton-loader-border-color);
+
+  &:last-child {
+    border-bottom: none;
+  }
+}

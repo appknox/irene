@@ -6,6 +6,7 @@ import { tracked } from 'tracked-built-ins';
 
 import ENV from 'irene/config/environment';
 import ENUMS from 'irene/enums';
+import { PASSED_CVSS_V4_METRICS } from 'irene/utils/cvss-metrics';
 
 import type IntlService from 'ember-intl/services/intl';
 import type SecurityAnalysisModel from 'irene/models/security/analysis';
@@ -24,18 +25,12 @@ export default class SecurityAnalysisListTableActionComponent extends Component<
 
   @tracked showMarkPassedConfirmBox = false;
 
-  PASSED_STATE = {
+  CVSS_V4_PASSED_STATE = {
     risk: ENUMS.RISK.NONE,
     status: ENUMS.ANALYSIS_STATUS.COMPLETED,
-    cvss_vector: 'CVSS:3.0/AV:P/AC:H/PR:H/UI:R/S:U/C:N/I:N/A:N',
-    attack_vector: ENUMS.ATTACK_VECTOR.PHYSICAL,
-    attack_complexity: ENUMS.ATTACK_COMPLEXITY.HIGH,
-    privileges_required: ENUMS.PRIVILEGES_REQUIRED.HIGH,
-    user_interaction: ENUMS.USER_INTERACTION.REQUIRED,
-    scope: ENUMS.SCOPE.UNCHANGED,
-    confidentiality_impact: ENUMS.CONFIDENTIALITY_IMPACT.NONE,
-    integrity_impact: ENUMS.INTEGRITY_IMPACT.NONE,
-    availability_impact: ENUMS.AVAILABILITY_IMPACT.NONE,
+    cvss_vector:
+      'CVSS:4.0/AV:N/AC:L/AT:N/PR:N/UI:N/VC:N/VI:N/VA:N/SC:N/SI:N/SA:N',
+    ...PASSED_CVSS_V4_METRICS,
   };
 
   get tPleaseTryAgain() {
@@ -44,6 +39,13 @@ export default class SecurityAnalysisListTableActionComponent extends Component<
 
   get analysis() {
     return this.args.analysis;
+  }
+
+  get analysisCVSSVersionIsLegacy() {
+    return (
+      this.analysis.activeCvssVersion !== null &&
+      this.analysis.activeCvssVersion !== this.analysis.cvssVersion
+    );
   }
 
   @action confirmCallback() {
@@ -57,6 +59,14 @@ export default class SecurityAnalysisListTableActionComponent extends Component<
   }
 
   @action openMarkPassedConfirmBox() {
+    if (this.analysisCVSSVersionIsLegacy) {
+      this.notify.error(
+        'You cannot mark an analysis with legacy CVSS as passed. Please update the CVSS version in the analysis details page to the latest version (CVSS v4) and try again.'
+      );
+
+      return;
+    }
+
     this.showMarkPassedConfirmBox = true;
   }
 
@@ -64,10 +74,12 @@ export default class SecurityAnalysisListTableActionComponent extends Component<
     try {
       const url = [ENV.endpoints['analyses'], this.analysis.id].join('/');
 
+      const { cvss_vector, risk, status, ...cvssMetrics } =
+        this.CVSS_V4_PASSED_STATE;
+
       await this.ajax.put(url, {
         namespace: 'api/hudson-api',
         data: JSON.stringify({
-          ...this.PASSED_STATE,
           owasp: (await this.analysis.owasp).map((a) => a.get('id')),
           owaspmobile2024: (await this.analysis.owaspmobile2024).map((a) =>
             a.get('id')
@@ -95,23 +107,18 @@ export default class SecurityAnalysisListTableActionComponent extends Component<
           overridden_risk_comment: this.analysis.overriddenRiskComment || '',
           overridden_risk_to_profile:
             this.analysis.overriddenRiskToProfile || false,
+
+          cvss_vector: cvss_vector,
+          risk: risk,
+          status: status,
+          legacy_cvss_risk: this.analysis.legacyCvssRisk,
+          legacy_cvss_vector: this.analysis.legacyCvssVector,
+          active_cvss_vector_fields: cvssMetrics,
+          legacy_cvss_vector_fields: this.analysis.legacyCvssMetrics,
         }),
       });
 
-      this.analysis.setProperties({
-        risk: this.PASSED_STATE.risk,
-        status: this.PASSED_STATE.status,
-        cvssVector: this.PASSED_STATE.cvss_vector,
-        attackVector: this.PASSED_STATE.attack_vector,
-        attackComplexity: this.PASSED_STATE.attack_complexity,
-        privilegesRequired: this.PASSED_STATE.privileges_required,
-        userInteraction: this.PASSED_STATE.user_interaction,
-        scope: this.PASSED_STATE.scope,
-        confidentialityImpact: this.PASSED_STATE.confidentiality_impact,
-        integrityImpact: this.PASSED_STATE.integrity_impact,
-        availabilityImpact: this.PASSED_STATE.availability_impact,
-      });
-
+      await this.analysis.reload();
       this.notify.success(`Analysis ${this.analysis.id} marked as passed`);
     } catch (err) {
       const error = err as AdapterError;

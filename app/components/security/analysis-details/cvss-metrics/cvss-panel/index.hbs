@@ -1,0 +1,111 @@
+<AkStack
+  @justifyContent='space-between'
+  @alignItems='center'
+  @width='full'
+  @spacing='3.5'
+  ...attributes
+>
+  <AkStack
+    @width='6/12'
+    @direction='column'
+    @alignItems='center'
+    @justifyContent='center'
+    @spacing='2'
+  >
+    <AkTypography @fontWeight='medium' @color='inherit'>
+      Risk Score Based on CVSSv{{@cvssVersion}}
+      Metrics
+    </AkTypography>
+
+    <AkDivider @color='dark' @width='50%' />
+
+    <AkStack
+      @justifyContent='center'
+      @alignItems='center'
+      local-class='colored-box
+        {{@cvssDetails.riskLabelClass}}
+        {{if @cvssDetails.isInValidCvssBase "is-error"}}
+      '
+      data-test-securityAnalysisDetails-cvssMetrics-cvssBaseAndRisk
+    >
+      {{#if @cvssDetails.isInValidCvssBase}}
+        <AkStack
+          @direction='column'
+          @alignItems='center'
+          @justifyContent='center'
+          @spacing='2.5'
+          data-test-securityAnalysisDetails-cvssMetrics-invalidCvssBase
+        >
+          <AkIcon
+            @iconName='warning'
+            data-test-securityAnalysisDetails-cvssMetrics-invalidCvssBaseIcon
+          />
+
+          <AkTypography
+            @variant='h5'
+            @color='inherit'
+            @align='center'
+            {{style textTransform='uppercase'}}
+          >
+            Invalid vector
+          </AkTypography>
+        </AkStack>
+
+      {{else}}
+        <AkStack
+          @direction='column'
+          @alignItems='center'
+          @justifyContent='center'
+        >
+          <AkTypography
+            @variant='h1'
+            @color='inherit'
+            {{style fontSize='3.42em'}}
+            data-test-securityAnalysisDetails-cvssMetrics-cvssBase
+          >
+            {{@cvssDetails.base}}
+          </AkTypography>
+
+          <AkTypography
+            @variant='h5'
+            @color='inherit'
+            {{style textTransform='uppercase'}}
+            data-test-securityAnalysisDetails-cvssMetrics-cvssRisk
+          >
+            {{risk-text @cvssDetails.risk}}
+          </AkTypography>
+        </AkStack>
+      {{/if}}
+    </AkStack>
+  </AkStack>
+
+  <AkStack @direction='column' @spacing='2.5' @width='6/12'>
+    {{#each @selectDataList as |metric|}}
+      <AkStack
+        @spacing='3.5'
+        @width='full'
+        @justifyContent='space-between'
+        @alignItems='center'
+      >
+        <AkTypography
+          {{style width='320px'}}
+          data-test-securityAnalysisDetails-cvssMetrics-metricSelectLabel='{{metric.key}}'
+        >
+          {{metric.label}}
+        </AkTypography>
+
+        <AkSelect
+          id={{metric.key}}
+          @selected={{metric.selected}}
+          @options={{metric.options}}
+          @onChange={{metric.onSelect}}
+          {{style width='250px'}}
+          data-test-securityAnalysisDetails-cvssMetrics-metricSelect='{{metric.key}}'
+          as |key|
+        >
+          {{metric.getOptionLabel key}}
+        </AkSelect>
+      </AkStack>
+    {{/each}}
+  </AkStack>
+</AkStack>

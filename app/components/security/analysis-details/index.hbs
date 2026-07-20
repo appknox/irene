@@ -3,8 +3,9 @@
 
   <Security::AnalysisDetails::Header
     @analysis={{this.analysisDetails}}
+    @currentCVSSMetrics={{this.currentCVSSDetails.metrics}}
     @updateAnalysis={{this.triggerUpdateAnalysis}}
-    @updateCVSSScore={{this.triggerUpdateCVSSScore}}
+    @updateCVSSDetails={{this.triggerUpdateCurrentCVSSDetails}}
   />
 
   <AkStack
@@ -15,8 +16,10 @@
   >
     <Security::AnalysisDetails::CvssMetrics
       @analysis={{this.analysisDetails}}
-      @updateCVSSScore={{this.triggerUpdateCVSSScore}}
-      @isInValidCvssBase={{this.isInValidCvssBase}}
+      @currentCVSSDetails={{this.currentCVSSDetails}}
+      @legacyCVSSDetails={{this.legacyCVSSDetails}}
+      @updateCurrentCVSSDetails={{this.triggerUpdateCurrentCVSSDetails}}
+      @updateLegacyCVSSDetails={{this.triggerUpdateLegacyCVSSDetails}}
     />
   </AkStack>
 

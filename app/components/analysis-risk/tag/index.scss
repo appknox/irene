@@ -70,3 +70,22 @@
     color: var(--analysis-risk-color-critical);
   }
 }
+
+.analysis-risk-tag-capsule {
+  width: 96px !important;
+  padding: 0.285em 0 !important;
+  border-radius: var(--analysis-risk-tag-border-radius) !important;
+
+  .analysis-risk-overridden-icon {
+    color: var(--analysis-risk-text-color) !important;
+  }
+
+  .is-waiting,
+  .is-progress {
+    border: 1px solid var(--analysis-risk-color-waiting) !important;
+
+    .analysis-risk-tag-label {
+      color: var(--analysis-risk-color-waiting) !important;
+    }
+  }
+}

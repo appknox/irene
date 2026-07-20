@@ -1,16 +1,56 @@
 <div local-class='file-details-root'>
+
   <AkBreadcrumbs::AutoTrail
     class='mt-2 mb-3'
     data-test-fileDetails-breadcrumbContainer
   />
 
   <AkStack @direction='column' @spacing='2.5'>
-    <FileDetails::Summary @file={{@file}} />
+    <FileDetails::Summary
+      @file={{@file}}
+      @showPoweredByAiChip={{this.isKnoxiqEnabled}}
+    />
 
-    <FileDetails::ScanActions @file={{@file}} />
+    {{#if this.knoxiqStatusCardConfig}}
+      <KnoxIq::StatusCard
+        @title={{this.knoxiqStatusCardConfig.title}}
+        @subtitle={{this.knoxiqStatusCardConfig.subtitle}}
+        @state={{this.knoxiqStatusCardConfig.state}}
+        @onRunKnoxiq={{this.runKnoxiqScan}}
+      />
+    {{/if}}
 
-    <FileDetails::InsightsWrapper @file={{@file}} />
+    <FileDetails::ScanActions
+      @file={{@file}}
+      @isKnoxiqEnabled={{this.isKnoxiqEnabled}}
+      @knoxiqStatuses={{this.knoxiqScanStatuses}}
+    />
+
+    {{#if this.showKnoxiqFileDetails}}
+      <KnoxIq::ScanSummary
+        @file={{@file}}
+        @hasAnyKnoxiqScanCompleted={{this.hasAnyKnoxiqScanCompleted}}
+      />
+    {{else}}
+      <FileDetails::InsightsWrapper
+        @file={{@file}}
+        @fileAnalysesListContext={{@fileAnalysesListContext}}
+      />
+    {{/if}}
+
   </AkStack>
 
-  <FileDetails::VulnerabilityAnalysis @file={{@file}} />
+  {{#if this.hasAnyKnoxiqScanCompleted}}
+    <KnoxIq::VulnerabilityAnalysis
+      @file={{@file}}
+      @hasAnyKnoxiqScanCompleted={{this.hasAnyKnoxiqScanCompleted}}
+      @fileAnalysesListContext={{@fileAnalysesListContext}}
+    />
+  {{else}}
+    <FileDetails::VulnerabilityAnalysis
+      @file={{@file}}
+      @fileAnalysesListContext={{@fileAnalysesListContext}}
+    />
+  {{/if}}
+
 </div>

@@ -1,0 +1,87 @@
+.scan-results-details-card {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 1.143em;
+  border: 1px solid
+    var(--store-release-readiness-scan-results-details-border-color);
+  border-radius: var(
+    --store-release-readiness-scan-results-details-border-radius
+  );
+  background-color: var(
+    --store-release-readiness-scan-results-details-background-color
+  );
+}
+
+.scan-results-details-row {
+  gap: 1rem;
+}
+
+.scan-results-details-left {
+  min-width: 0;
+  width: 70%;
+}
+
+.scan-results-details-progress {
+  width: 100%;
+  margin-top: 0.286em;
+}
+
+.scan-results-details-risk {
+  font-size: 0.857em !important;
+}
+
+.scan-results-details-risk-high {
+  color: var(--store-release-readiness-scan-results-details-high-text);
+}
+
+.scan-results-details-risk-medium {
+  color: var(--store-release-readiness-scan-results-details-medium-text);
+}
+
+.scan-results-details-risk-low {
+  color: var(--store-release-readiness-scan-results-details-low-text);
+}
+
+.scan-results-details-risk-pending {
+  color: var(--store-release-readiness-scan-results-details-pending-text);
+}
+
+.scan-results-details-divider {
+  margin: 1.143em 0;
+  width: 100%;
+}
+
+.scan-results-details-counts {
+  gap: 1rem 1.25rem;
+  row-gap: 0.5rem;
+}
+
+.scan-results-details-count-segment {
+  flex-shrink: 0;
+}
+
+.status-dot {
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.status-dot-failed {
+  background-color: var(
+    --store-release-readiness-scan-results-details-failed-color
+  );
+}
+
+.status-dot-passed {
+  background-color: var(
+    --store-release-readiness-scan-results-details-passed-color
+  );
+}
+
+.status-dot-untested {
+  background-color: var(
+    --store-release-readiness-scan-results-details-untested-color
+  );
+}

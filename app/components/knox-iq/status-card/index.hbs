@@ -1,0 +1,63 @@
+<AkStack
+  @width='full'
+  @justifyContent='space-between'
+  @alignItems='center'
+  local-class='status-card {{@state}}'
+  data-test-knoxiq-status-card
+  {{did-update this.resetIsRunning @state}}
+>
+  <AkStack @direction='row' @spacing='1.5' @alignItems='center'>
+    <div
+      local-class='status-card-icon status-card-icon-{{@state}}'
+      data-test-knoxiq-status-card-icon
+    >
+      {{#if (eq @state 'failed')}}
+        <div local-class='status-card-icon-failed-circle'>
+          <AkIcon @iconName='error' @color='inherit' />
+        </div>
+      {{else}}
+        <AkIcon @iconName='ix:ai' @color='inherit' />
+      {{/if}}
+    </div>
+
+    <AkStack @direction='column' @spacing='0.5'>
+      {{#if @title}}
+        <AkTypography @variant='subtitle1' data-test-knoxiq-status-card-title>
+          {{@title}}
+        </AkTypography>
+      {{/if}}
+
+      {{#if @subtitle}}
+        <AkTypography
+          @variant='body2'
+          @color='textSecondary'
+          data-test-knoxiq-status-card-subtitle
+        >
+          {{@subtitle}}
+        </AkTypography>
+      {{/if}}
+    </AkStack>
+  </AkStack>
+
+  {{#if (eq @state 'failed')}}
+    {{! no action button or chip for failed state }}
+  {{else if this.showStatusChip}}
+    <KnoxIq::StatusChip @state={{@state}} />
+  {{else}}
+    <AkButton
+      @disabled={{eq @state 'inactive'}}
+      @loading={{this.isRunning}}
+      local-class='run-knoxiq-button {{if this.isRunning "knoxiq-button-loading"}}'
+      {{on 'click' this.handleRunKnoxiqClick}}
+      data-test-knoxiq-status-card-runBtn
+    >
+      <:leftIcon>
+        <AkIcon @iconName='solar:play-bold' />
+      </:leftIcon>
+
+      <:default>
+        {{t 'knoxIq.runKnoxIq'}}
+      </:default>
+    </AkButton>
+  {{/if}}
+</AkStack>

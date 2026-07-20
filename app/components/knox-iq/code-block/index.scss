@@ -1,0 +1,36 @@
+.code-block {
+  display: flex;
+  align-items: start;
+  gap: 1em;
+  background-color: var(--knox-iq-code-block-background-color);
+  border-radius: var(--knox-iq-code-block-border-radius);
+  padding: 0.875em 1em;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.code-content {
+  flex: 1;
+  margin: 0;
+  color: var(--knoxiq-code-block-content-color);
+  font-family: var(--knox-iq-code-block-font-family);
+  font-size: 0.875rem;
+  line-height: 1.5;
+  overflow-y: auto;
+  background: transparent;
+  max-height: 250px;
+  scrollbar-width: none;
+}
+
+.copy-button {
+  flex-shrink: 0;
+  color: var(--knoxiq-code-block-content-color) !important;
+  border: 1px solid var(--knoxiq-code-block-copy-button-border) !important;
+  border-radius: var(--knox-iq-code-block-copy-button-radius) !important;
+
+  &:hover {
+    background-color: var(
+      --knoxiq-code-block-copy-button-hover-color
+    ) !important;
+  }
+}

@@ -3,6 +3,7 @@ import type DynamicscanModel from 'irene/models/dynamicscan';
 import type FileModel from 'irene/models/file';
 import type SbomFileModel from 'irene/models/sbom-file';
 import type FileRiskModel from 'irene/models/file-risk';
+import type FileExploitabilityModel from 'irene/models/file-exploitability';
 
 import FileCapiReportModel, {
   type FileCapiReportScanType,
@@ -143,6 +144,16 @@ export default class FileAdapter extends CommonDRFAdapter {
     }
 
     return null;
+  }
+
+  async fetchFileExploitability(fileId: string) {
+    const url = `${this._buildURL('file', fileId)}/exploitability`;
+    const res = await this.ajax(url, 'GET');
+
+    return this._pushDirectlyToStore<FileExploitabilityModel>(
+      res,
+      'file-exploitability'
+    );
   }
 }
 

@@ -11,10 +11,13 @@ import { setupIntl } from 'ember-intl/test-support';
 import { setupRenderingTest } from 'ember-qunit';
 import { selectChoose } from 'ember-power-select/test-support';
 
-import { metricImpact } from 'irene/helpers/metric-impact';
-import { metricVector } from 'irene/helpers/metric-vector';
-import { metricScope } from 'irene/helpers/metric-scope';
-import { metricInteraction } from 'irene/helpers/metric-interaction';
+import {
+  getMetricLabel,
+  DEFAULT_CVSS_V3_METRICS,
+  DEFAULT_CVSS_V4_METRICS,
+  PASSED_CVSS_V3_METRICS,
+  PASSED_CVSS_V4_METRICS,
+} from 'irene/utils/cvss-metrics';
 import { fileExtension } from 'irene/helpers/file-extension';
 import { riskText } from 'irene/helpers/risk-text';
 
@@ -192,6 +195,7 @@ module('Integration | Component | security/analysis-details', function (hooks) {
             vulnerability: vulnerabilityModel.id,
             file: secFileModel.id,
             risk: ENUMS.RISK.HIGH,
+            status: ENUMS.ANALYSIS_STATUS.COMPLETED,
           })
           .toJSON()
       )
@@ -217,7 +221,7 @@ module('Integration | Component | security/analysis-details', function (hooks) {
       );
 
       await render(
-        hbs`<Security::AnalysisDetails @analysisId={{this.secAnalysis.id}} />`
+        hbs`<Security::AnalysisDetails @analysisDetails={{this.secAnalysis}} />`
       );
 
       assert
@@ -242,11 +246,13 @@ module('Integration | Component | security/analysis-details', function (hooks) {
       assert
         .dom('[data-test-securityAnalysisDetailsHeader-visitDashboardButton]')
         .exists()
-        .containsText('Visit Dashboard')
+        .containsText('Visit Analysis Page')
         .hasAttribute('target', '_blank')
         .hasAttribute(
           'href',
-          RegExp(`/dashboard/file/${this.secAnalysis.id}`, 'i')
+          new RegExp(
+            `/dashboard/file/${this.secFileModel.id}/analysis/${this.secAnalysis.id}`
+          )
         );
 
       assert
@@ -277,6 +283,10 @@ module('Integration | Component | security/analysis-details', function (hooks) {
   );
 
   test('it marks a test case as passed', async function (assert) {
+    this.secAnalysis.set('cvssVersion', 4);
+    this.secAnalysis.set('activeCvssVersion', 4);
+    this.secAnalysis.set('cvssMetrics', PASSED_CVSS_V4_METRICS);
+
     this.server.get('/cvss', () => {
       return {
         cvss_base: 0,
@@ -285,7 +295,7 @@ module('Integration | Component | security/analysis-details', function (hooks) {
     });
 
     await render(
-      hbs`<Security::AnalysisDetails @analysisId={{this.secAnalysis.id}} />`
+      hbs`<Security::AnalysisDetails @analysisDetails={{this.secAnalysis}} />`
     );
 
     assert.dom('[data-test-securityAnalysisDetails-header-container]').exists();
@@ -311,7 +321,7 @@ module('Integration | Component | security/analysis-details', function (hooks) {
     assert
       .dom('[data-test-securityAnalysisDetails-cvssMetrics-cvssBaseAndRisk]')
       .exists()
-      .containsText(this.secAnalysis.cvssBase)
+      .containsText('0')
       .containsText(riskText([ENUMS.RISK.NONE])); // Should be passed risk
   });
 
@@ -320,87 +330,115 @@ module('Integration | Component | security/analysis-details', function (hooks) {
     [
       {
         label: 'Attack Vector',
-        key: 'attackVector',
-        optionLabelGetter: metricVector,
-        currValue: ENUMS.ATTACK_VECTOR.ADJACENT,
-        nextVal: ENUMS.ATTACK_VECTOR.LOCAL,
+        key: 'attack_vector',
+        enumGroup: ENUMS.CVSS_V4_ATTACK_VECTOR,
+        currValue: ENUMS.CVSS_V4_ATTACK_VECTOR.ADJACENT,
+        nextVal: ENUMS.CVSS_V4_ATTACK_VECTOR.LOCAL,
         cvssBase: 1.2,
         cvssRisk: ENUMS.RISK.LOW,
-        valueChoices: ENUMS.ATTACK_VECTOR.VALUES,
+        valueChoices: ENUMS.CVSS_V4_ATTACK_VECTOR.VALUES,
       },
       {
         label: 'Attack Complexity',
-        key: 'attackComplexity',
-        optionLabelGetter: metricImpact,
-        currValue: ENUMS.ATTACK_COMPLEXITY.HIGH,
-        nextVal: ENUMS.ATTACK_COMPLEXITY.LOW,
+        key: 'attack_complexity',
+        enumGroup: ENUMS.CVSS_V4_ATTACK_COMPLEXITY,
+        currValue: ENUMS.CVSS_V4_ATTACK_COMPLEXITY.HIGH,
+        nextVal: ENUMS.CVSS_V4_ATTACK_COMPLEXITY.LOW,
         cvssBase: 3.3,
         cvssRisk: ENUMS.RISK.MEDIUM,
-        valueChoices: ENUMS.ATTACK_COMPLEXITY.VALUES,
+        valueChoices: ENUMS.CVSS_V4_ATTACK_COMPLEXITY.VALUES,
+      },
+      {
+        label: 'Attack Requirements',
+        key: 'attack_requirements',
+        enumGroup: ENUMS.CVSS_V4_ATTACK_REQUIREMENTS,
+        currValue: ENUMS.CVSS_V4_ATTACK_REQUIREMENTS.PRESENT,
+        nextVal: ENUMS.CVSS_V4_ATTACK_REQUIREMENTS.NONE,
+        cvssBase: 5.2,
+        cvssRisk: ENUMS.RISK.MEDIUM,
+        valueChoices: ENUMS.CVSS_V4_ATTACK_REQUIREMENTS.VALUES,
       },
       {
         label: 'Privileges Required',
-        key: 'privilegesRequired',
-        optionLabelGetter: metricImpact,
-        currValue: ENUMS.PRIVILEGES_REQUIRED.NONE,
-        nextVal: ENUMS.PRIVILEGES_REQUIRED.LOW,
+        key: 'privileges_required',
+        enumGroup: ENUMS.CVSS_V4_PRIVILEGES_REQUIRED,
+        currValue: ENUMS.CVSS_V4_PRIVILEGES_REQUIRED.HIGH,
+        nextVal: ENUMS.CVSS_V4_PRIVILEGES_REQUIRED.LOW,
         cvssBase: 9.2,
         cvssRisk: ENUMS.RISK.CRITICAL,
-        valueChoices: ENUMS.PRIVILEGES_REQUIRED.VALUES,
+        valueChoices: ENUMS.CVSS_V4_PRIVILEGES_REQUIRED.VALUES,
       },
       {
         label: 'User Interaction',
-        key: 'userInteraction',
-        optionLabelGetter: metricInteraction,
-        currValue: ENUMS.USER_INTERACTION.REQUIRED,
-        nextVal: ENUMS.USER_INTERACTION.NOT_REQUIRED,
+        key: 'user_interaction',
+        enumGroup: ENUMS.CVSS_V4_USER_INTERACTION,
+        currValue: ENUMS.CVSS_V4_USER_INTERACTION.ACTIVE,
+        nextVal: ENUMS.CVSS_V4_USER_INTERACTION.NONE,
         cvssBase: 8.9,
         cvssRisk: ENUMS.RISK.CRITICAL,
-        valueChoices: ENUMS.USER_INTERACTION.VALUES,
+        valueChoices: ENUMS.CVSS_V4_USER_INTERACTION.VALUES,
       },
       {
-        label: 'Scope',
-        key: 'scope',
-        optionLabelGetter: metricScope,
-        currValue: ENUMS.SCOPE.CHANGED,
-        nextVal: ENUMS.SCOPE.UNCHANGED,
-        cvssBase: 7.3,
-        cvssRisk: ENUMS.RISK.HIGH,
-        valueChoices: ENUMS.SCOPE.VALUES,
-      },
-
-      {
-        label: 'Confidentiality Impact',
-        key: 'confidentialityImpact',
-        optionLabelGetter: metricImpact,
-        currValue: ENUMS.CONFIDENTIALITY_IMPACT.HIGH,
-        nextVal: ENUMS.CONFIDENTIALITY_IMPACT.NONE,
+        label: 'Vulnerable Confidentiality Impact',
+        key: 'vuln_confidentiality',
+        enumGroup: ENUMS.CVSS_V4_VULN_CONFIDENTIALITY_IMPACT,
+        currValue: ENUMS.CVSS_V4_VULN_CONFIDENTIALITY_IMPACT.HIGH,
+        nextVal: ENUMS.CVSS_V4_VULN_CONFIDENTIALITY_IMPACT.NONE,
         cvssBase: 4.3,
         cvssRisk: ENUMS.RISK.MEDIUM,
-        valueChoices: ENUMS.CONFIDENTIALITY_IMPACT.VALUES,
+        valueChoices: ENUMS.CVSS_V4_VULN_CONFIDENTIALITY_IMPACT.VALUES,
       },
-
       {
-        label: 'Integrity Impact',
-        key: 'integrityImpact',
-        optionLabelGetter: metricImpact,
-        currValue: ENUMS.INTEGRITY_IMPACT.HIGH,
-        nextVal: ENUMS.INTEGRITY_IMPACT.UNKNOWN,
+        label: 'Vulnerable Integrity Impact',
+        key: 'vuln_integrity',
+        enumGroup: ENUMS.CVSS_V4_VULN_INTEGRITY_IMPACT,
+        currValue: ENUMS.CVSS_V4_VULN_INTEGRITY_IMPACT.HIGH,
+        nextVal: ENUMS.CVSS_V4_VULN_INTEGRITY_IMPACT.UNKNOWN,
         cvssBase: 5.4,
         cvssRisk: ENUMS.RISK.MEDIUM,
-        valueChoices: ENUMS.INTEGRITY_IMPACT.VALUES,
+        valueChoices: ENUMS.CVSS_V4_VULN_INTEGRITY_IMPACT.VALUES,
         isInvalidCvssMetric: true,
       },
       {
-        label: 'Availability Impact',
-        key: 'availabilityImpact',
-        optionLabelGetter: metricImpact,
-        currValue: ENUMS.AVAILABILITY_IMPACT.LOW,
-        nextVal: ENUMS.AVAILABILITY_IMPACT.UNKNOWN,
+        label: 'Vulnerable Availability Impact',
+        key: 'vuln_availability',
+        enumGroup: ENUMS.CVSS_V4_VULN_AVAILABILITY_IMPACT,
+        currValue: ENUMS.CVSS_V4_VULN_AVAILABILITY_IMPACT.LOW,
+        nextVal: ENUMS.CVSS_V4_VULN_AVAILABILITY_IMPACT.UNKNOWN,
         cvssBase: 7.6,
         cvssRisk: ENUMS.RISK.HIGH,
-        valueChoices: ENUMS.AVAILABILITY_IMPACT.VALUES,
+        valueChoices: ENUMS.CVSS_V4_VULN_AVAILABILITY_IMPACT.VALUES,
         isInvalidCvssMetric: true,
+      },
+      {
+        label: 'Subsequent Confidentiality Impact',
+        key: 'subsequent_confidentiality',
+        enumGroup: ENUMS.CVSS_V4_SUBSEQUENT_CONFIDENTIALITY_IMPACT,
+        currValue: ENUMS.CVSS_V4_SUBSEQUENT_CONFIDENTIALITY_IMPACT.HIGH,
+        nextVal: ENUMS.CVSS_V4_SUBSEQUENT_CONFIDENTIALITY_IMPACT.NONE,
+        cvssBase: 6.1,
+        cvssRisk: ENUMS.RISK.MEDIUM,
+        valueChoices: ENUMS.CVSS_V4_SUBSEQUENT_CONFIDENTIALITY_IMPACT.VALUES,
+      },
+      {
+        label: 'Subsequent Integrity Impact',
+        key: 'subsequent_integrity',
+        enumGroup: ENUMS.CVSS_V4_SUBSEQUENT_INTEGRITY_IMPACT,
+        currValue: ENUMS.CVSS_V4_SUBSEQUENT_INTEGRITY_IMPACT.HIGH,
+        nextVal: ENUMS.CVSS_V4_SUBSEQUENT_INTEGRITY_IMPACT.LOW,
+        cvssBase: 7.3,
+        cvssRisk: ENUMS.RISK.HIGH,
+        valueChoices: ENUMS.CVSS_V4_SUBSEQUENT_INTEGRITY_IMPACT.VALUES,
+      },
+      {
+        label: 'Subsequent Availability Impact',
+        key: 'subsequent_availability',
+        enumGroup: ENUMS.CVSS_V4_SUBSEQUENT_AVAILABILITY_IMPACT,
+        currValue: ENUMS.CVSS_V4_SUBSEQUENT_AVAILABILITY_IMPACT.HIGH,
+        nextVal: ENUMS.CVSS_V4_SUBSEQUENT_AVAILABILITY_IMPACT.LOW,
+        cvssBase: 8.1,
+        cvssRisk: ENUMS.RISK.CRITICAL,
+        valueChoices: ENUMS.CVSS_V4_SUBSEQUENT_AVAILABILITY_IMPACT.VALUES,
       },
     ],
     async function (
@@ -413,11 +451,22 @@ module('Integration | Component | security/analysis-details', function (hooks) {
         cvssBase,
         cvssRisk,
         valueChoices,
-        optionLabelGetter,
+        enumGroup,
         isInvalidCvssMetric,
       }
     ) {
-      this.secAnalysis.set(key, currValue);
+      // Set the server to return V4 data with currValue for the tested metric
+      const cvssMetrics = { ...PASSED_CVSS_V4_METRICS, [key]: currValue };
+
+      this.server.db['security/analyses'].update(this.secAnalysis.id, {
+        cvss_version: 4,
+        active_cvss_version: 4,
+        cvss_metrics: cvssMetrics,
+      });
+
+      this.secAnalysis.set('cvssVersion', 4);
+      this.secAnalysis.set('activeCvssVersion', 4);
+      this.secAnalysis.set('cvssMetrics', cvssMetrics);
 
       this.server.get('/cvss', () => {
         return {
@@ -427,7 +476,7 @@ module('Integration | Component | security/analysis-details', function (hooks) {
       });
 
       await render(
-        hbs`<Security::AnalysisDetails @analysisId={{this.secAnalysis.id}} />`
+        hbs`<Security::AnalysisDetails @analysisDetails={{this.secAnalysis}} />`
       );
 
       assert
@@ -437,7 +486,7 @@ module('Integration | Component | security/analysis-details', function (hooks) {
       assert
         .dom('[data-test-securityAnalysisDetails-cvssMetrics-cvssBaseAndRisk]')
         .exists()
-        .containsText(this.secAnalysis.cvssBase)
+        .containsText(String(this.secAnalysis.cvssBase))
         .containsText(riskText([this.secAnalysis.risk]));
 
       // CHECK FOR CVSS METRIC LABEL
@@ -456,17 +505,17 @@ module('Integration | Component | security/analysis-details', function (hooks) {
 
       // Check default selected
       let cvssMetricSelectOptions = findAll('.ember-power-select-option');
-      const selectedOptionIdx = valueChoices.indexOf(this.secAnalysis.get(key));
+      const selectedOptionIdx = valueChoices.indexOf(currValue);
 
       assert
         .dom(cvssMetricSelectOptions[selectedOptionIdx])
         .hasAria('selected', 'true')
-        .containsText(optionLabelGetter([currValue]));
+        .containsText(getMetricLabel(enumGroup, currValue));
 
       // Select next metric value
       const nextMetricValueIndex = valueChoices.indexOf(nextVal);
       const nextMetricValue = valueChoices[nextMetricValueIndex];
-      const nextMetricValueLabel = optionLabelGetter([nextVal]);
+      const nextMetricValueLabel = getMetricLabel(enumGroup, nextVal);
 
       await selectChoose(
         cvssMetricSelectTrigger,
@@ -476,7 +525,7 @@ module('Integration | Component | security/analysis-details', function (hooks) {
       // open cvss metric select
       await click(cvssMetricSelectTrigger);
 
-      // Affirm next metric valus is selected
+      // Affirm next metric value is selected
       cvssMetricSelectOptions = findAll('.ember-power-select-option');
 
       assert
@@ -502,7 +551,7 @@ module('Integration | Component | security/analysis-details', function (hooks) {
         assert
           .dom('[data-test-securityAnalysisDetails-cvssMetrics-cvssBase]')
           .exists()
-          .containsText(cvssBase);
+          .containsText(String(cvssBase));
 
         assert
           .dom('[data-test-securityAnalysisDetails-cvssMetrics-cvssRisk]')
@@ -518,28 +567,49 @@ module('Integration | Component | security/analysis-details', function (hooks) {
     const cvssBase = -1.0;
     const cvssRisk = ENUMS.RISK.UNKNOWN;
 
+    // Set the server to return V4 data so the V4 CVSS panel is active
+    this.server.db['security/analyses'].update(this.secAnalysis.id, {
+      cvss_version: 4,
+      active_cvss_version: 4,
+      cvss_metrics: { ...PASSED_CVSS_V4_METRICS },
+    });
+
+    this.secAnalysis.set('cvssVersion', 4);
+    this.secAnalysis.set('activeCvssVersion', 4);
+    this.secAnalysis.set('cvssMetrics', { ...PASSED_CVSS_V4_METRICS });
+
     this.server.put('/hudson-api/analyses/:id', (schema, req) => {
-      const untestedCvssState = {
-        attack_vector: ENUMS.ATTACK_VECTOR.UNKNOWN,
-        attack_complexity: ENUMS.ATTACK_COMPLEXITY.UNKNOWN,
-        privileges_required: ENUMS.PRIVILEGES_REQUIRED.UNKNOWN,
-        user_interaction: ENUMS.USER_INTERACTION.UNKNOWN,
-        scope: ENUMS.SCOPE.UNKNOWN,
-        confidentiality_impact: ENUMS.CONFIDENTIALITY_IMPACT.UNKNOWN,
-        integrity_impact: ENUMS.INTEGRITY_IMPACT.UNKNOWN,
-        availability_impact: ENUMS.AVAILABILITY_IMPACT.UNKNOWN,
-        risk: ENUMS.RISK.UNKNOWN,
+      const untestedCvssV4State = {
+        attack_vector: ENUMS.CVSS_V4_ATTACK_VECTOR.UNKNOWN,
+        attack_complexity: ENUMS.CVSS_V4_ATTACK_COMPLEXITY.UNKNOWN,
+        attack_requirements: ENUMS.CVSS_V4_ATTACK_REQUIREMENTS.UNKNOWN,
+        privileges_required: ENUMS.CVSS_V4_PRIVILEGES_REQUIRED.UNKNOWN,
+        user_interaction: ENUMS.CVSS_V4_USER_INTERACTION.UNKNOWN,
+        vuln_confidentiality: ENUMS.CVSS_V4_VULN_CONFIDENTIALITY_IMPACT.UNKNOWN,
+        vuln_integrity: ENUMS.CVSS_V4_VULN_INTEGRITY_IMPACT.UNKNOWN,
+        vuln_availability: ENUMS.CVSS_V4_VULN_AVAILABILITY_IMPACT.UNKNOWN,
+        subsequent_confidentiality:
+          ENUMS.CVSS_V4_SUBSEQUENT_CONFIDENTIALITY_IMPACT.UNKNOWN,
+        subsequent_integrity: ENUMS.CVSS_V4_SUBSEQUENT_INTEGRITY_IMPACT.UNKNOWN,
+        subsequent_availability:
+          ENUMS.CVSS_V4_SUBSEQUENT_AVAILABILITY_IMPACT.UNKNOWN,
       };
 
       const data = JSON.parse(req.requestBody);
 
-      // Sanity check for values sent to API
-      Object.keys(untestedCvssState).forEach((key) =>
+      // Sanity check: V4 untested metrics go into active_cvss_vector_fields
+      Object.keys(untestedCvssV4State).forEach((key) =>
         assert.strictEqual(
-          untestedCvssState[key],
-          data[key],
-          `API CHECK: "${key}" is sent correctly.`
+          untestedCvssV4State[key],
+          data.active_cvss_vector_fields?.[key],
+          `API CHECK: "${key}" is sent correctly in active_cvss_vector_fields.`
         )
+      );
+
+      assert.strictEqual(
+        ENUMS.RISK.UNKNOWN,
+        data.risk,
+        'API CHECK: "risk" is sent correctly.'
       );
 
       schema.db['security/analyses'].update(req.params.id, data);
@@ -555,7 +625,7 @@ module('Integration | Component | security/analysis-details', function (hooks) {
     });
 
     await render(
-      hbs`<Security::AnalysisDetails @analysisId={{this.secAnalysis.id}} />`
+      hbs`<Security::AnalysisDetails @analysisDetails={{this.secAnalysis}} />`
     );
 
     assert.dom('[data-test-securityAnalysisDetails-header-container]').exists();
@@ -563,7 +633,7 @@ module('Integration | Component | security/analysis-details', function (hooks) {
     assert
       .dom('[data-test-securityAnalysisDetails-cvssMetrics-cvssBaseAndRisk]')
       .exists()
-      .containsText(this.secAnalysis.cvssBase)
+      .containsText(String(this.secAnalysis.cvssBase))
       .containsText(riskText([this.secAnalysis.risk]));
 
     // Trigger untested button
@@ -572,14 +642,17 @@ module('Integration | Component | security/analysis-details', function (hooks) {
     );
 
     const metricKeys = [
-      'attackVector',
-      'attackComplexity',
-      'privilegesRequired',
-      'userInteraction',
-      'scope',
-      'confidentialityImpact',
-      'integrityImpact',
-      'availabilityImpact',
+      'attack_vector',
+      'attack_complexity',
+      'attack_requirements',
+      'privileges_required',
+      'user_interaction',
+      'vuln_confidentiality',
+      'vuln_integrity',
+      'vuln_availability',
+      'subsequent_confidentiality',
+      'subsequent_integrity',
+      'subsequent_availability',
     ];
 
     for (const metricKey of metricKeys) {
@@ -603,16 +676,9 @@ module('Integration | Component | security/analysis-details', function (hooks) {
       await click(cvssMetricSelectTrigger);
     }
 
-    // Checks the assigned cvss base and risk from the cvss endpoint ('/cvss')
-    assert
-      .dom('[data-test-securityAnalysisDetails-cvssMetrics-cvssBase]')
-      .exists()
-      .containsText(cvssBase);
-
-    assert
-      .dom('[data-test-securityAnalysisDetails-cvssMetrics-cvssRisk]')
-      .exists()
-      .containsText(riskText([cvssRisk]));
+    // After setting to untested, the panel shows isEmpty state (base = -1, no score display)
+    // The /cvss endpoint is NOT called when isEmpty = true (recalculateCVSSScore exits early)
+    // We verify the untested state indirectly via the save action below
 
     await click(
       '[data-test-securityAnalysisDetails-footer-saveAndContinueBtn]'
@@ -687,7 +753,7 @@ module('Integration | Component | security/analysis-details', function (hooks) {
       );
 
       await render(
-        hbs`<Security::AnalysisDetails @analysisId={{this.secAnalysis.id}} />`
+        hbs`<Security::AnalysisDetails @analysisDetails={{this.secAnalysis}} />`
       );
 
       assert
@@ -802,7 +868,7 @@ module('Integration | Component | security/analysis-details', function (hooks) {
       );
 
       await render(
-        hbs`<Security::AnalysisDetails @analysisId={{this.secAnalysis.id}} />`
+        hbs`<Security::AnalysisDetails @analysisDetails={{this.secAnalysis}} />`
       );
 
       assert
@@ -970,7 +1036,7 @@ module('Integration | Component | security/analysis-details', function (hooks) {
       });
 
       await render(
-        hbs`<Security::AnalysisDetails @analysisId={{this.secAnalysis.id}} />`
+        hbs`<Security::AnalysisDetails @analysisDetails={{this.secAnalysis}} />`
       );
 
       const selectors = {
@@ -1142,7 +1208,7 @@ module('Integration | Component | security/analysis-details', function (hooks) {
     });
 
     await render(
-      hbs`<Security::AnalysisDetails @analysisId={{this.secAnalysis.id}} />`
+      hbs`<Security::AnalysisDetails @analysisDetails={{this.secAnalysis}} />`
     );
 
     assert
@@ -1192,4 +1258,322 @@ module('Integration | Component | security/analysis-details', function (hooks) {
     // Finding will return to its original length
     assert.strictEqual(allFindingElements.length, findings.length - 1);
   });
+
+  // ── Header: legacy CVSS version guard (header changes) ───────────────────────
+
+  test('it shows the "Mark as Passed" button as disabled when the analysis has a legacy CVSS version', async function (assert) {
+    this.secAnalysis.set('cvssVersion', 3);
+    this.secAnalysis.set('activeCvssVersion', 4);
+    this.secAnalysis.set('risk', ENUMS.RISK.HIGH);
+
+    await render(
+      hbs`<Security::AnalysisDetails @analysisDetails={{this.secAnalysis}} />`
+    );
+
+    assert
+      .dom('[data-test-securityAnalysisDetailsHeader-markAsPassedBtn]')
+      .exists('Mark as Passed button is shown even for legacy analysis')
+      .isDisabled(
+        'Mark as Passed button is disabled when CVSS version is legacy'
+      );
+  });
+
+  test('it shows the "Mark as Passed" button as enabled when the analysis CVSS version matches the active version', async function (assert) {
+    this.secAnalysis.set('cvssVersion', 4);
+    this.secAnalysis.set('activeCvssVersion', 4);
+    this.secAnalysis.set('cvssMetrics', PASSED_CVSS_V4_METRICS);
+    this.secAnalysis.set('risk', ENUMS.RISK.HIGH);
+
+    await render(
+      hbs`<Security::AnalysisDetails @analysisDetails={{this.secAnalysis}} />`
+    );
+
+    assert
+      .dom('[data-test-securityAnalysisDetailsHeader-markAsPassedBtn]')
+      .exists('Mark as Passed button is shown for a non-legacy analysis')
+      .isNotDisabled(
+        'Mark as Passed button is enabled when CVSS versions match'
+      );
+  });
+
+  // ── Legacy CVSS banner & accordion (cvss-metrics changes) ────────────────────
+
+  test('it shows the legacy CVSS banner when cvss_version !== active_cvss_version', async function (assert) {
+    this.secAnalysis.set('cvssVersion', 3);
+    this.secAnalysis.set('activeCvssVersion', 4);
+
+    await render(
+      hbs`<Security::AnalysisDetails @analysisDetails={{this.secAnalysis}} />`
+    );
+
+    assert
+      .dom('[data-test-securityAnalysisDetails-cvssMetrics-legacyBanner]')
+      .exists(
+        'Legacy CVSS banner is shown when analysis uses a different CVSS version than the platform active version'
+      );
+
+    assert
+      .dom('[data-test-securityAnalysisDetails-cvssMetrics-legacyBanner]')
+      .containsText(
+        'This analysis uses CVSS v3',
+        'Banner message mentions CVSS v3'
+      );
+  });
+
+  test('it does not show the legacy CVSS banner when cvss_version is not the same as active_cvss_version', async function (assert) {
+    this.secAnalysis.set('cvssVersion', 4);
+    this.secAnalysis.set('activeCvssVersion', 4);
+    this.secAnalysis.set('cvssMetrics', PASSED_CVSS_V4_METRICS);
+
+    await render(
+      hbs`<Security::AnalysisDetails @analysisDetails={{this.secAnalysis}} />`
+    );
+
+    assert
+      .dom('[data-test-securityAnalysisDetails-cvssMetrics-legacyBanner]')
+      .doesNotExist(
+        'Legacy CVSS banner is absent when analysis CVSS version matches the platform active version'
+      );
+  });
+
+  test('it renders the legacy CVSS info accordion with the correct title', async function (assert) {
+    const legacyCvssVector = 'CVSS:3.0/AV:N/AC:L/PR:N/UI:N/S:C/C:H/I:H/A:H';
+
+    this.secAnalysis.set('cvssVersion', 3);
+    this.secAnalysis.set('activeCvssVersion', 4);
+    this.secAnalysis.set('cvssVector', legacyCvssVector);
+    this.secAnalysis.set('legacyCvssBase', -1);
+    this.secAnalysis.set('legacyCvssMetrics', null);
+    this.secAnalysis.set('legacyCvssVector', '');
+    this.secAnalysis.set('legacyCvssVersion', null);
+
+    await render(
+      hbs`<Security::AnalysisDetails @analysisDetails={{this.secAnalysis}} />`
+    );
+
+    assert
+      .dom('[data-test-securityAnalysisDetails-cvssMetrics-legacyCvssInfo]')
+      .exists('Legacy CVSS accordion is rendered');
+
+    assert
+      .dom(
+        '[data-test-securityAnalysisDetails-cvssMetrics-legacyCvssInfo] [data-test-akAccordion-summaryText]'
+      )
+      .containsText('Legacy CVSS v3', 'Accordion title includes CVSS version')
+      .containsText(legacyCvssVector, 'Accordion title includes the vector');
+  });
+
+  test('it expands the legacy CVSS accordion to show the legacy CVSS panel', async function (assert) {
+    const legacyCvssBase = 7.5;
+
+    this.secAnalysis.set('cvssVersion', 3);
+    this.secAnalysis.set('activeCvssVersion', 4);
+    this.secAnalysis.set('legacyCvssVersion', 3);
+    this.secAnalysis.set('legacyCvssBase', legacyCvssBase);
+    this.secAnalysis.set('legacyCvssRisk', ENUMS.RISK.HIGH);
+    this.secAnalysis.set('legacyCvssMetrics', { ...DEFAULT_CVSS_V3_METRICS });
+
+    await render(
+      hbs`<Security::AnalysisDetails @analysisDetails={{this.secAnalysis}} />`
+    );
+
+    const legacyAccordion =
+      '[data-test-securityAnalysisDetails-cvssMetrics-legacyCvssInfo]';
+
+    const accordionContent = `${legacyAccordion} [data-test-ak-accordion-content-wrapper]`;
+
+    assert
+      .dom(accordionContent)
+      .hasNoClass(/expanded/, 'Accordion is collapsed by default');
+
+    await click(`${legacyAccordion} [data-test-ak-accordion-summary]`);
+
+    assert
+      .dom(accordionContent)
+      .hasClass(/expanded/, 'Accordion expands after clicking summary');
+
+    assert
+      .dom(
+        `${legacyAccordion} [data-test-securityAnalysisDetails-cvssMetrics-cvssBase]`
+      )
+      .hasText(String(legacyCvssBase), 'Legacy base score is displayed');
+
+    assert
+      .dom(
+        `${legacyAccordion} [data-test-securityAnalysisDetails-cvssMetrics-cvssRisk]`
+      )
+      .containsText(
+        riskText([ENUMS.RISK.HIGH]),
+        'Legacy risk label is displayed'
+      );
+
+    const V3_METRIC_KEYS = [
+      'attack_vector',
+      'attack_complexity',
+      'privileges_required',
+      'user_interaction',
+      'scope',
+      'confidentiality_impact',
+      'integrity_impact',
+      'availability_impact',
+    ];
+
+    V3_METRIC_KEYS.forEach((key) => {
+      assert
+        .dom(
+          `${legacyAccordion} [data-test-securityAnalysisDetails-cvssMetrics-metricSelectLabel="${key}"]`
+        )
+        .exists(`Metric select label for "${key}" is rendered`);
+    });
+  });
+
+  test('it updates the legacy panel score when a v3 metric is changed (legacy CVSS present)', async function (assert) {
+    const updatedCvssBase = 6.5;
+    const updatedCvssRisk = ENUMS.RISK.MEDIUM;
+
+    // analysis is v3 (legacy), platform expects v4 (active)
+
+    this.secAnalysis.set('cvssVersion', 3);
+    this.secAnalysis.set('activeCvssVersion', 4);
+    this.secAnalysis.set('cvssMetrics', PASSED_CVSS_V4_METRICS);
+
+    // legacy (v3) data — attack_vector starts as PHYSICAL
+    this.secAnalysis.set('legacyCvssVersion', 3);
+    this.secAnalysis.set('legacyCvssBase', 9.8);
+    this.secAnalysis.set('legacyCvssRisk', ENUMS.RISK.CRITICAL);
+    this.secAnalysis.set('legacyCvssMetrics', { ...PASSED_CVSS_V3_METRICS });
+
+    this.server.get('/cvss', () => ({
+      cvss_base: updatedCvssBase,
+      risk: updatedCvssRisk,
+    }));
+
+    await render(
+      hbs`<Security::AnalysisDetails @analysisDetails={{this.secAnalysis}} />`
+    );
+
+    const legacyAccordion =
+      '[data-test-securityAnalysisDetails-cvssMetrics-legacyCvssInfo]';
+
+    // Expand the legacy accordion
+    await click(`${legacyAccordion} [data-test-ak-accordion-summary]`);
+
+    const legacyAttackVectorTrigger = `${legacyAccordion} [data-test-securityAnalysisDetails-cvssMetrics-metricSelect='attack_vector'] .${AkSelectClasses.trigger}`;
+
+    // Open the attack_vector select to verify initial selection (PHYSICAL)
+    await click(legacyAttackVectorTrigger);
+
+    const initialOptions = findAll('.ember-power-select-option');
+    const physicalIdx = ENUMS.CVSS_V3_ATTACK_VECTOR.VALUES.indexOf(
+      ENUMS.CVSS_V3_ATTACK_VECTOR.PHYSICAL
+    );
+
+    assert
+      .dom(initialOptions[physicalIdx])
+      .hasAria('selected', 'true', 'PHYSICAL is initially selected');
+
+    // Change attack_vector from PHYSICAL to NETWORK
+    await selectChoose(
+      legacyAttackVectorTrigger,
+      ENUMS.CVSS_V3_ATTACK_VECTOR.NETWORK
+    );
+
+    // Legacy panel should reflect updated score from /cvss
+    assert
+      .dom(
+        `${legacyAccordion} [data-test-securityAnalysisDetails-cvssMetrics-cvssBase]`
+      )
+      .containsText(
+        String(updatedCvssBase),
+        'Legacy base score updates after v3 metric change'
+      );
+
+    assert
+      .dom(
+        `${legacyAccordion} [data-test-securityAnalysisDetails-cvssMetrics-cvssRisk]`
+      )
+      .containsText(
+        riskText([updatedCvssRisk]),
+        'Legacy risk updates after v3 metric change'
+      );
+  });
+
+  // ── Save restrictions when legacy CVSS is present ────────────────────────────
+
+  test.each(
+    'it enforces v4 metric requirement before saving a legacy CVSS analysis',
+    [
+      {
+        label: 'empty v4 metrics (all UNKNOWN)',
+        v4Metrics: DEFAULT_CVSS_V4_METRICS,
+        expectBlocked: true,
+      },
+      {
+        label: 'valid v4 metrics provided',
+        v4Metrics: PASSED_CVSS_V4_METRICS,
+        expectBlocked: false,
+      },
+    ],
+    async function (assert, { v4Metrics, expectBlocked }) {
+      // Legacy fields are not returned by the Mirage factory so .set() persists
+      // through the component's { reload: true } findRecord call.
+      this.secAnalysis.set('legacyCvssVersion', 3);
+      this.secAnalysis.set('legacyCvssBase', 9.8);
+      this.secAnalysis.set('legacyCvssRisk', ENUMS.RISK.CRITICAL);
+      this.secAnalysis.set('legacyCvssMetrics', PASSED_CVSS_V3_METRICS);
+
+      if (expectBlocked) {
+        // Legacy analysis: cvssVersion < activeCvssVersion triggers the v4 check
+        this.server.db['security/analyses'].update(this.secAnalysis.id, {
+          cvss_version: 3,
+          active_cvss_version: 4,
+        });
+
+        this.secAnalysis.set('cvssVersion', 3);
+        this.secAnalysis.set('activeCvssVersion', 4);
+      } else {
+        // Current v4 analysis: hydrateCVSSV4State runs and fills valid v4 metrics
+        this.server.db['security/analyses'].update(this.secAnalysis.id, {
+          cvss_version: 4,
+          active_cvss_version: 4,
+          cvss_metrics: { ...v4Metrics },
+        });
+
+        this.secAnalysis.set('cvssVersion', 4);
+        this.secAnalysis.set('activeCvssVersion', 4);
+        this.secAnalysis.set('cvssMetrics', { ...v4Metrics });
+
+        this.server.put('/hudson-api/analyses/:id', (schema, req) => {
+          const data = JSON.parse(req.requestBody);
+          schema.db['security/analyses'].update(req.params.id, data);
+          return schema['security/analyses'].find(req.params.id).toJSON();
+        });
+      }
+
+      await render(
+        hbs`<Security::AnalysisDetails @analysisDetails={{this.secAnalysis}} />`
+      );
+
+      await click(
+        '[data-test-securityAnalysisDetails-footer-saveAndContinueBtn]'
+      );
+
+      const notify = this.owner.lookup('service:notifications');
+
+      if (expectBlocked) {
+        assert.ok(
+          notify.errorMsg?.includes(
+            'Please first provide a valid CVSS v4 metric'
+          ),
+          'Save is blocked with a v4 metric requirement error'
+        );
+      } else {
+        assert.strictEqual(
+          notify.successMsg,
+          'Analysis Updated',
+          'Save succeeds and shows the updated confirmation'
+        );
+      }
+    }
+  );
 });

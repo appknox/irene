@@ -221,6 +221,7 @@ Router.map(function () {
           });
 
           this.route('analysis', { path: '/analysis/:analysis_id' });
+          this.route('knox-analysis', { path: '/knox-analysis/:analysis_id' });
 
           this.route('static-scan');
 
@@ -254,6 +255,14 @@ Router.map(function () {
         });
 
         this.route('app-monitoring', { path: '/store-monitoring' });
+
+        this.route('store-release-readiness', function () {
+          this.route('index', { path: '/' });
+          this.route('scan-results', { path: '/scan-results/:scan_id' });
+          this.route('finding', {
+            path: '/scan-results/:scan_id/findings/:finding_id',
+          });
+        });
 
         this.route('marketplace');
 

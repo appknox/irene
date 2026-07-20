@@ -57,7 +57,7 @@ export default class FileReportDrawerPrivacyReportsItemComponent extends Compone
   }
 
   get reportPasswordText() {
-    return this.intl.t('privacyModule.downloadPdfSecondaryText', {
+    return this.intl.t('reportPasswordDetail', {
       password: this.privacyReport?.reportPassword || '',
     });
   }

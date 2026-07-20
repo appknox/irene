@@ -1,0 +1,48 @@
+.project-card-header {
+  padding: 1.5em 2em;
+}
+
+.run-knoxiq-button {
+  min-width: auto;
+  white-space: nowrap;
+  border-radius: var(
+    --knoxiq-project-card-header-run-knoxiq-button-border-radius
+  );
+  background-color: var(
+    --knoxiq-project-card-header-run-knoxiq-button-background-color
+  );
+  color: var(--knoxiq-project-card-header-run-knoxiq-button-color);
+
+  &:hover,
+  &:focus {
+    background-color: var(
+      --knoxiq-project-card-header-run-knoxiq-button-background-color
+    );
+    color: var(--knoxiq-project-card-header-run-knoxiq-button-color);
+    opacity: 0.85;
+  }
+
+  :global(.ak-icon) {
+    color: inherit;
+  }
+}
+
+.card-more-menu-item-group {
+  padding: 0 0.5em;
+  padding-bottom: 0.5em;
+
+  &:not(:first-child) {
+    padding-top: 0.5em;
+  }
+}
+
+.card-more-menu-item {
+  a {
+    padding: 0.5em !important;
+  }
+}
+
+.open-in-new-tab-link-class {
+  display: inline-flex;
+  margin-left: -0.5em;
+}

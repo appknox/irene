@@ -1,0 +1,21 @@
+<AkStack
+  @direction='column'
+  @alignItems='flex-start'
+  @width='full'
+  @spacing='0.5'
+  local-class='root'
+  class='p-1'
+  data-test-store-release-readiness-assessment-policy-cell={{@data.id}}
+>
+  <AkTypography
+    @fontWeight='bold'
+    @color='textSecondary'
+    local-class='category'
+  >
+    {{@data.categoryLabel}}
+  </AkTypography>
+
+  <AkTypography @color='textPrimary'>
+    {{@data.titleLabel}}
+  </AkTypography>
+</AkStack>

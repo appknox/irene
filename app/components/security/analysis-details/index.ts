@@ -1,30 +1,55 @@
 import Component from '@glimmer/component';
 import { action } from '@ember/object';
+import { runTask } from 'ember-lifeline';
 import { inject as service } from '@ember/service';
 import { isEmpty } from '@ember/utils';
 import { tracked } from '@glimmer/tracking';
 import { task } from 'ember-concurrency';
 
+import type Store from 'ember-data/store';
+import type IntlService from 'ember-intl/services/intl';
+import type RouterService from '@ember/routing/router-service';
+
 import ENV from 'irene/config/environment';
 import ENUMS from 'irene/enums';
 import parseError from 'irene/utils/parse-error';
 
-import type Store from 'ember-data/store';
-import type IntlService from 'ember-intl/services/intl';
-import type RouterService from '@ember/routing/router-service';
+import {
+  CvssV4VersionState,
+  CvssV3VersionState,
+  computeCVSSMetrics,
+  type CVSSCalculateAPIResponse,
+} from 'irene/utils/cvss';
+
 import type SecurityAnalysisModel from 'irene/models/security/analysis';
 import type IreneAjaxService from 'irene/services/ajax';
 
-export interface SecurityAnalysisDetailsComponentSignature {
-  Args: {
-    analysisId: string;
-  };
-}
+import type {
+  CvssV3Metrics,
+  CvssV4Metrics,
+} from 'irene/models/security/analysis';
 
-type CVSSResponse = {
-  cvss_base: number;
+import {
+  DEFAULT_CVSS_V3_METRICS,
+  PASSED_CVSS_V3_METRICS,
+} from 'irene/utils/cvss-metrics';
+
+export type AnalysisCvssUpdateDetails = {
+  cvssMetrics: CvssV4Metrics;
+  cvssBase: number;
   risk: number;
 };
+
+export interface AnalysisCvssUpdateDetailsLegacy
+  extends Omit<AnalysisCvssUpdateDetails, 'cvssMetrics'> {
+  cvssMetrics: CvssV3Metrics;
+}
+
+export interface SecurityAnalysisDetailsComponentSignature {
+  Args: {
+    analysisDetails: SecurityAnalysisModel | null;
+  };
+}
 
 export default class SecurityAnalysisDetailsComponent extends Component<SecurityAnalysisDetailsComponentSignature> {
   @service declare store: Store;
@@ -33,9 +58,12 @@ export default class SecurityAnalysisDetailsComponent extends Component<Security
   @service declare notifications: NotificationService;
   @service declare ajax: IreneAjaxService;
 
-  @tracked isInValidCvssBase = false;
-  @tracked analysisDetails: SecurityAnalysisModel | null = null;
   @tracked isSaveActionOnly = false;
+
+  @tracked analysisDetails: SecurityAnalysisModel | null = null;
+
+  readonly v4State = new CvssV4VersionState();
+  readonly v3State = new CvssV3VersionState();
 
   constructor(
     owner: unknown,
@@ -43,114 +71,328 @@ export default class SecurityAnalysisDetailsComponent extends Component<Security
   ) {
     super(owner, args);
 
-    this.getAnalysisDetails.perform();
+    this.analysisDetails = this.args.analysisDetails;
+
+    runTask(this, () => this.setDefaultCVSSDetails());
   }
 
   get tPleaseTryAgain() {
     return this.intl.t('pleaseTryAgain');
   }
 
-  get isEmptyCvssVector() {
+  get hasLegacyCvssData() {
+    return this.analysisDetails?.legacyCvssVersion !== null;
+  }
+
+  get cvssMetrics() {
+    return this.analysisDetails?.cvssMetrics as CvssV4Metrics | CvssV3Metrics;
+  }
+
+  get analysisActiveCvssVersion() {
+    return this.analysisDetails?.activeCvssVersion;
+  }
+
+  get analysisIsV4WithoutLegacyCvss() {
     return (
-      this.analysisDetails?.attackVector == ENUMS.ATTACK_VECTOR.UNKNOWN &&
-      this.analysisDetails?.attackComplexity ==
-        ENUMS.ATTACK_COMPLEXITY.UNKNOWN &&
-      this.analysisDetails?.privilegesRequired ==
-        ENUMS.PRIVILEGES_REQUIRED.UNKNOWN &&
-      this.analysisDetails?.userInteraction == ENUMS.USER_INTERACTION.UNKNOWN &&
-      this.analysisDetails?.scope == ENUMS.SCOPE.UNKNOWN &&
-      this.analysisDetails?.confidentialityImpact ==
-        ENUMS.CONFIDENTIALITY_IMPACT.UNKNOWN &&
-      this.analysisDetails?.integrityImpact == ENUMS.INTEGRITY_IMPACT.UNKNOWN &&
-      this.analysisDetails?.availabilityImpact ==
-        ENUMS.AVAILABILITY_IMPACT.UNKNOWN
+      !this.hasLegacyCvssData &&
+      this.analysisCurrentCvssVersion === ENUMS.SUPPORTED_CVSS_VERSIONS.V4
     );
   }
 
-  get isValidCvssVector() {
-    const isValid =
-      ENUMS.ATTACK_VECTOR.BASE_VALUES.includes(
-        this.analysisDetails?.attackVector as string
-      ) &&
-      ENUMS.ATTACK_COMPLEXITY.BASE_VALUES.includes(
-        this.analysisDetails?.attackComplexity as string
-      ) &&
-      ENUMS.PRIVILEGES_REQUIRED.BASE_VALUES.includes(
-        this.analysisDetails?.privilegesRequired as string
-      ) &&
-      ENUMS.USER_INTERACTION.BASE_VALUES.includes(
-        this.analysisDetails?.userInteraction as string
-      ) &&
-      ENUMS.SCOPE.BASE_VALUES.includes(this.analysisDetails?.scope as string) &&
-      ENUMS.CONFIDENTIALITY_IMPACT.BASE_VALUES.includes(
-        this.analysisDetails?.confidentialityImpact as string
-      ) &&
-      ENUMS.INTEGRITY_IMPACT.BASE_VALUES.includes(
-        this.analysisDetails?.integrityImpact as string
-      ) &&
-      ENUMS.AVAILABILITY_IMPACT.BASE_VALUES.includes(
-        this.analysisDetails?.availabilityImpact as string
-      );
-
-    return this.isEmptyCvssVector || isValid;
+  get legacyCVSSIsPassed() {
+    return this.analysisDetails?.legacyCvssRisk === ENUMS.RISK.NONE;
   }
 
-  @action triggerUpdateCVSSScore() {
-    this.updateCVSSScore.perform();
+  get analysisCurrentCvssVersion() {
+    return this.analysisDetails?.cvssVersion;
+  }
+
+  get analysisLegacyCvssVersion() {
+    return this.hasLegacyCvssData
+      ? this.analysisDetails?.legacyCvssVersion
+      : this.analysisIsV4WithoutLegacyCvss
+        ? ENUMS.SUPPORTED_CVSS_VERSIONS.V3
+        : this.analysisCurrentCvssVersion;
+  }
+
+  get analysisCurrentCvssIsLegacyCvss() {
+    return this.analysisCurrentCvssVersion !== this.analysisActiveCvssVersion;
+  }
+
+  get activeAnalysisRiskLabelClass() {
+    return this.v4State.riskLabelClass;
+  }
+
+  get currentCVSSDetails() {
+    return {
+      ...this.v4State.details,
+      version: Number(this.analysisCurrentCvssVersion),
+    };
+  }
+
+  get legacyCVSSDetails() {
+    return {
+      ...this.v3State.details,
+      version: Number(this.analysisLegacyCvssVersion),
+    };
+  }
+
+  @action triggerUpdateCurrentCVSSDetails(
+    details: AnalysisCvssUpdateDetails
+  ): void {
+    this.v4State.applyMetrics(details.cvssMetrics);
+    this.v4State.base = details.cvssBase;
+    this.v4State.risk = details.risk;
+
+    this.recalculateCVSSScore.perform(this.v4State);
+  }
+
+  @action triggerUpdateLegacyCVSSDetails(
+    details: AnalysisCvssUpdateDetailsLegacy
+  ): void {
+    this.v3State.applyMetrics(details.cvssMetrics);
+    this.v3State.base = details.cvssBase;
+    this.v3State.risk = details.risk;
+
+    this.recalculateCVSSScore.perform(this.v3State);
   }
 
   @action triggerSaveAnalysis(backToFilePage: boolean) {
     this.isSaveActionOnly = !backToFilePage;
-
     this.saveAnalysis.perform(backToFilePage);
   }
 
-  @action async triggerUpdateAnalysis() {
-    return this.updateAnalysis.perform();
+  @action setDefaultCVSSDetails(): void {
+    this.hydrateCVSSV4State();
+    this.hydrateCVSSV3State();
   }
 
-  updateCVSSScore = task(async () => {
-    if (this.isEmptyCvssVector) {
-      this.isInValidCvssBase = false;
+  @action async triggerUpdateAnalysis(): Promise<void> {
+    await this.updateAnalysis.perform();
+  }
 
+  private hydrateCVSSV4State(): void {
+    if (this.analysisCurrentCvssVersion !== ENUMS.SUPPORTED_CVSS_VERSIONS.V4) {
       return;
     }
 
-    if (this.isValidCvssVector) {
-      const attackVector = this.analysisDetails?.attackVector;
-      const attackComplexity = this.analysisDetails?.attackComplexity;
-      const privilegesRequired = this.analysisDetails?.privilegesRequired;
-      const userInteraction = this.analysisDetails?.userInteraction;
-      const scope = this.analysisDetails?.scope;
-      const confidentialityImpact = this.analysisDetails?.confidentialityImpact;
-      const integrityImpact = this.analysisDetails?.integrityImpact;
-      const availabilityImpact = this.analysisDetails?.availabilityImpact;
+    const metrics = this.analysisDetails?.cvssMetrics;
 
-      const vector = `CVSS:3.0/AV:${attackVector}/AC:${attackComplexity}/PR:${privilegesRequired}/UI:${userInteraction}/S:${scope}/C:${confidentialityImpact}/I:${integrityImpact}/A:${availabilityImpact}`;
-      const url = `cvss?vector=${vector}`;
+    this.v4State.applyMetrics(metrics as CvssV4Metrics);
+    this.v4State.base = this.analysisDetails?.cvssBase as number;
+    this.v4State.risk = this.analysisDetails?.risk as number;
+  }
 
-      try {
-        const data = await this.ajax.request<CVSSResponse>(url);
+  private hydrateCVSSV3State(): void {
+    const { metrics, base, vector, risk } = this.resolveV3StateSource(
+      this.analysisDetails
+    );
 
-        this.analysisDetails?.set('cvssBase', data.cvss_base);
-        this.analysisDetails?.set('risk', data.risk);
-        this.analysisDetails?.set('cvssVector', vector);
+    this.v3State.applyMetrics(metrics);
+    this.v3State.base = base;
+    this.v3State.vector = vector;
+    this.v3State.risk = risk;
+  }
 
-        this.isInValidCvssBase = false;
-      } catch (error) {
-        this.notifications.error(this.tPleaseTryAgain);
+  private resolveV3StateSource(details: SecurityAnalysisModel | null) {
+    // Case 1: legacy data exists and analysis is not passed
+    const commonLegacyCVSSDetails = {
+      base: details?.legacyCvssBase as number,
+      vector: details?.legacyCvssVector as string,
+      risk: details?.legacyCvssRisk as number,
+    };
+
+    if (this.hasLegacyCvssData && !this.legacyCVSSIsPassed) {
+      return {
+        metrics: details?.legacyCvssMetrics as CvssV3Metrics,
+        ...commonLegacyCVSSDetails,
+      };
+    }
+
+    // Case 2: legacy data exists but analysis is passed
+    if (this.hasLegacyCvssData && this.legacyCVSSIsPassed) {
+      return {
+        metrics: PASSED_CVSS_V3_METRICS,
+        ...commonLegacyCVSSDetails,
+      };
+    }
+
+    // Case 3: v4 analysis with no legacy data — v3 panel starts blank
+    if (this.analysisIsV4WithoutLegacyCvss) {
+      return {
+        metrics: DEFAULT_CVSS_V3_METRICS,
+        base: -1.0,
+        vector: '',
+        risk: ENUMS.RISK.UNKNOWN,
+      };
+    }
+
+    // Case 4: v3 analysis with no legacy data — use current CVSS fields directly
+    const isPassed =
+      !this.hasLegacyCvssData &&
+      this.analysisCurrentCvssIsLegacyCvss &&
+      details?.risk === ENUMS.RISK.NONE;
+
+    return {
+      metrics: isPassed
+        ? PASSED_CVSS_V3_METRICS
+        : (this.cvssMetrics as CvssV3Metrics),
+      base: details?.cvssBase as number,
+      vector: details?.cvssVector as string,
+      risk: details?.risk as number,
+    };
+  }
+
+  private assertVectorsAreValid(): void {
+    // If CVSS v4 is invalid, throw an error
+    if (!this.v4State.isValid) {
+      throw new Error('Invalid CVSS v4 metrics');
+    }
+
+    // If CVSS v3 is invalid, throw an error
+    if (!this.v3State.isValid) {
+      throw new Error('Invalid CVSS v3 metrics');
+    }
+
+    // If CVSS v4 is empty and the current CVSS version is not legacy, throw an error
+    if (this.analysisCurrentCvssIsLegacyCvss && this.v4State.isEmpty) {
+      throw new Error(
+        'Please first provide a valid CVSS v4 metric for the current CVSS version. Only then can you update the analysis or mark as untested.'
+      );
+    }
+
+    // If analysis status is not started and either CVSS v4 or v3 is empty, throw an error
+    if (
+      this.analysisDetails?.status === ENUMS.ANALYSIS_STATUS.WAITING &&
+      (this.v4State.isEmpty || this.v3State.isEmpty) &&
+      this.analysisCurrentCvssIsLegacyCvss
+    ) {
+      throw new Error(
+        'Please first provide a valid CVSS v4 and v3 metric for the current CVSS version. Only then can you update an UNTESTED analysis.'
+      );
+    }
+  }
+
+  private async buildAnalysisPayload(): Promise<Record<string, unknown>> {
+    const details = this.analysisDetails;
+
+    const [
+      owasp,
+      owaspmobile2024,
+      owaspapi2023,
+      pcidss,
+      pcidss4,
+      hipaa,
+      masvs,
+      mstg,
+      asvs,
+      cwe,
+      gdpr,
+      nistsp800171,
+      nistsp80053,
+      sama,
+    ] = await Promise.all([
+      details?.owasp,
+      details?.owaspmobile2024,
+      details?.owaspapi2023,
+      details?.pcidss,
+      details?.pcidss4,
+      details?.hipaa,
+      details?.masvs,
+      details?.mstg,
+      details?.asvs,
+      details?.cwe,
+      details?.gdpr,
+      details?.nistsp800171,
+      details?.nistsp80053,
+      details?.sama,
+    ]);
+
+    // Normalise status: Ember Data may hand back a boxed object pre-save.
+    const status = details?.status as number | { value: number };
+
+    if (typeof status === 'object') {
+      details?.set('status', status.value);
+    }
+
+    // Same normalisation for overridden_risk.
+    let overriddenRisk = details?.overriddenRisk as number | { value: number };
+
+    if (typeof overriddenRisk === 'object' && !isEmpty(overriddenRisk)) {
+      overriddenRisk = overriddenRisk.value;
+    }
+
+    return {
+      risk: this.v4State.risk,
+      legacy_cvss_risk: this.v3State.risk,
+      status,
+      findings: details?.findings,
+      owasp: owasp?.map((a) => a.id),
+      owaspmobile2024: owaspmobile2024?.map((a) => a.id),
+      owaspapi2023: owaspapi2023?.map((a) => a.id),
+      pcidss: pcidss?.map((a) => a.id),
+      pcidss4: pcidss4?.map((a) => a.id),
+      hipaa: hipaa?.map((a) => a.id),
+      mstg: mstg?.map((a) => a.id),
+      masvs: masvs?.map((a) => a.id),
+      asvs: asvs?.map((a) => a.id),
+      cwe: cwe?.map((a) => a.id),
+      gdpr: gdpr?.map((a) => a.id),
+      nistsp80053: nistsp80053?.map((a) => a.id),
+      nistsp800171: nistsp800171?.map((a) => a.id),
+      sama: sama?.map((a) => a.id),
+      overridden_risk: overriddenRisk,
+      overridden_risk_comment: details?.overriddenRiskComment,
+      overridden_risk_to_profile: details?.overriddenRiskToProfile,
+      cvss_vector: this.v4State.vector,
+      legacy_cvss_vector: this.v3State.vector,
+      active_cvss_vector_fields: computeCVSSMetrics(this.v4State.metrics),
+      legacy_cvss_vector_fields: computeCVSSMetrics(this.v3State.metrics),
+    };
+  }
+
+  recalculateCVSSScore = task(
+    async (state: CvssV4VersionState | CvssV3VersionState) => {
+      if (state.isEmpty) {
+        state.isInvalidBase = false;
+
+        return;
       }
 
-      return;
-    }
+      if (!state.isValid) {
+        state.isInvalidBase = true;
 
-    this.isInValidCvssBase = true;
-  });
+        return;
+      }
+
+      const vector = state.buildVector();
+
+      try {
+        const data = await this.ajax.request<CVSSCalculateAPIResponse>(
+          `cvss?vector=${vector}`
+        );
+
+        state.applyScore(data, vector);
+      } catch (error) {
+        this.notifications.error(parseError(error, this.tPleaseTryAgain));
+      }
+    }
+  );
 
   saveAnalysis = task(async (backToFilePage = false) => {
     try {
-      await this.updateAnalysis.perform();
+      const response = await this.updateAnalysis.perform();
+      await this.analysisDetails?.reload();
 
+      // This is manually set because for some weird reasons Ember Data is not updating the cvssMetrics field when doing this.analysisDetails?.reload();
+      this.analysisDetails?.set('cvssMetrics', response['cvss_metrics']);
+      this.analysisDetails?.set('cvssVector', response['cvss_vector']);
+      this.analysisDetails?.set('cvssBase', response['cvss_base']);
+      this.analysisDetails?.set('risk', response['risk']);
+
+      this.setDefaultCVSSDetails();
+
+      // Return to the file page if requested
       if (backToFilePage) {
         this.router.transitionTo(
           'authenticated.security.file',
@@ -165,94 +407,15 @@ export default class SecurityAnalysisDetailsComponent extends Component<Security
   });
 
   updateAnalysis = task(async () => {
-    const isValidCvssVector = this.isValidCvssVector;
+    this.assertVectorsAreValid();
 
-    if (!isValidCvssVector) {
-      throw new Error('Invalid CVSS metrics');
-    }
+    const payload = await this.buildAnalysisPayload();
+    const url = [ENV.endpoints['analyses'], this.analysisDetails?.id].join('/');
 
-    const risk = this.analysisDetails?.risk;
-    const owasp = await this.analysisDetails?.owasp;
-    const owaspmobile2024 = await this.analysisDetails?.owaspmobile2024;
-    const owaspapi2023 = await this.analysisDetails?.owaspapi2023;
-    const pcidss = await this.analysisDetails?.pcidss;
-    const pcidss4 = await this.analysisDetails?.pcidss4;
-    const hipaa = await this.analysisDetails?.hipaa;
-    const masvs = await this.analysisDetails?.masvs;
-    const mstg = await this.analysisDetails?.mstg;
-    const asvs = await this.analysisDetails?.asvs;
-    const cwe = await this.analysisDetails?.cwe;
-    const gdpr = await this.analysisDetails?.gdpr;
-    const nistsp800171 = await this.analysisDetails?.nistsp800171;
-    const nistsp80053 = await this.analysisDetails?.nistsp80053;
-    const sama = await this.analysisDetails?.sama;
-
-    const status = this.analysisDetails?.status as number | { value: number };
-
-    if (typeof status === 'object') {
-      this.analysisDetails?.set('status', status.value);
-    }
-
-    const analysisid = this.args.analysisId;
-    const findings = this.analysisDetails?.findings;
-
-    let overriddenRisk = this.analysisDetails?.overriddenRisk as
-      | number
-      | { value: number };
-
-    if (typeof overriddenRisk === 'object' && !isEmpty(overriddenRisk)) {
-      overriddenRisk = overriddenRisk.value;
-    }
-
-    const data = {
-      risk,
-      status,
-      owasp: owasp?.map((a) => a.id),
-      owaspmobile2024: owaspmobile2024?.map((a) => a.id),
-      owaspapi2023: owaspapi2023?.map((a) => a.id),
-      pcidss: pcidss?.map((a) => a.id),
-      pcidss4: pcidss4?.map((a) => a.id),
-      hipaa: hipaa?.map((a) => a.id),
-      mstg: mstg?.map((a) => a.id),
-      masvs: masvs?.map((a) => a.id),
-      asvs: asvs?.map((a) => a.id),
-      cwe: cwe?.map((a) => a.id),
-      gdpr: gdpr?.map((a) => a.id),
-      findings,
-      nistsp80053: nistsp80053?.map((a) => a.id),
-      nistsp800171: nistsp800171?.map((a) => a.id),
-      sama: sama?.map((a) => a.id),
-      overridden_risk: overriddenRisk,
-      overridden_risk_comment: this.analysisDetails?.overriddenRiskComment,
-      overridden_risk_to_profile: this.analysisDetails?.overriddenRiskToProfile,
-      cvss_vector: this.analysisDetails?.cvssVector,
-      attack_vector: this.analysisDetails?.attackVector,
-      attack_complexity: this.analysisDetails?.attackComplexity,
-      privileges_required: this.analysisDetails?.privilegesRequired,
-      user_interaction: this.analysisDetails?.userInteraction,
-      scope: this.analysisDetails?.scope,
-      confidentiality_impact: this.analysisDetails?.confidentialityImpact,
-      integrity_impact: this.analysisDetails?.integrityImpact,
-      availability_impact: this.analysisDetails?.availabilityImpact,
-    };
-
-    const url = [ENV.endpoints['analyses'], analysisid].join('/');
-
-    return await this.ajax.put(url, {
+    return (await this.ajax.put(url, {
       namespace: 'api/hudson-api',
-      data: JSON.stringify(data),
-    });
-  });
-
-  getAnalysisDetails = task(async () => {
-    try {
-      this.analysisDetails = await this.store.findRecord(
-        'security/analysis',
-        this.args.analysisId
-      );
-    } catch (error) {
-      this.notifications.error(parseError(error, this.tPleaseTryAgain));
-    }
+      data: JSON.stringify(payload),
+    })) as Record<string, unknown>;
   });
 }
 
