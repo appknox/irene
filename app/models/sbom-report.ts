@@ -3,6 +3,10 @@ import SbomFileModel from './sbom-file';
 
 export type SbomReportType = 'cyclonedx_json_file' | 'pdf';
 
+// Distinguishes the underlying report record (what data it covers),
+// as opposed to SbomReportType above (which file format to generate/download).
+export type SbomReportCategory = 'sbom' | 'ai_bom';
+
 export enum SbomReportStatus {
   PENDING = 1,
   STARTED = 2,
@@ -26,6 +30,9 @@ export default class SbomReportModel extends Model {
 
   @attr('string')
   declare reportPassword: string;
+
+  @attr('string')
+  declare reportType: SbomReportCategory;
 
   @attr('date')
   declare generatedOn: Date | null;

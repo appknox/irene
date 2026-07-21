@@ -122,7 +122,7 @@ module('Integration | Component | sbom/scan-report-drawer', function (hooks) {
 
     const reportList = findAll('[data-test-sbomReportList-reportlistItem]');
 
-    assert.strictEqual(reportList.length, 2);
+    assert.strictEqual(reportList.length, 3);
   });
 
   test('test pdf report generate & download flow', async function (assert) {
@@ -539,16 +539,68 @@ module('Integration | Component | sbom/scan-report-drawer', function (hooks) {
     const reportList = findAll('[data-test-sbomReportList-reportlistItem]');
 
     assert
-      .dom('[data-test-sbomReportList-reportPrimaryText]', reportList[1])
+      .dom('[data-test-sbomReportList-reportPrimaryText]', reportList[2])
       .hasText(t('sbomModule.sbomDownloadJsonPrimaryText'));
 
     assert
-      .dom('[data-test-sbomReportList-reportSecondaryText]', reportList[1])
+      .dom('[data-test-sbomReportList-reportSecondaryText]', reportList[2])
       .hasText(t('sbomModule.sbomDownloadJsonSecondaryText'));
 
     assert
-      .dom('[data-test-sbomReportList-reportDownloadBtn]', reportList[1])
+      .dom('[data-test-sbomReportList-reportDownloadBtn]', reportList[2])
       .isNotDisabled();
+
+    await click(
+      reportList[2].querySelector(
+        '[data-test-sbomReportList-reportDownloadBtn]'
+      )
+    );
+
+    const window = this.owner.lookup('service:browser/window');
+
+    assert.strictEqual(window.url, 'some_download_url.com');
+    assert.strictEqual(window.target, '_blank');
+  });
+
+  test('test ai bom pdf report is backed by its own report record', async function (assert) {
+    this.server.get('/v2/sb_files/:id/sb_reports', (schema) => {
+      const sbomReport = schema.sbomReports.first();
+      sbomReport.update({ pdf_status: SbomReportStatus.COMPLETED });
+
+      const aiBomReport = this.server.create('sbom-report', {
+        report_type: 'ai_bom',
+        pdf_status: SbomReportStatus.COMPLETED,
+        report_password: 'AIBOMPASSWORD1',
+      });
+
+      const results = [sbomReport, aiBomReport];
+
+      return { count: results.length, next: null, previous: null, results };
+    });
+
+    this.server.get('/v2/sb_reports/:id/pdf/download_url', (schema, req) => {
+      const report = schema.sbomReports.find(req.params.id);
+
+      return { url: `download-url-for-${report.report_type}` };
+    });
+
+    await render(hbs`
+      <Sbom::ScanReportDrawer @sbomFile={{this.sbomFile}} @open={{true}} @onClose={{this.onClose}} />
+    `);
+
+    assert.dom('[data-test-sbomReportDrawer-drawer]').exists();
+
+    const reportList = findAll('[data-test-sbomReportList-reportlistItem]');
+
+    assert.strictEqual(reportList.length, 3);
+
+    assert
+      .dom('[data-test-sbomReportList-reportPrimaryText]', reportList[1])
+      .hasText(t('sbomModule.aiBomDownloadPdfPrimaryText'));
+
+    assert
+      .dom('[data-test-sbomReportList-reportSecondaryText]', reportList[1])
+      .hasText(t('reportPasswordDetail', { password: 'AIBOMPASSWORD1' }));
 
     await click(
       reportList[1].querySelector(
@@ -558,7 +610,35 @@ module('Integration | Component | sbom/scan-report-drawer', function (hooks) {
 
     const window = this.owner.lookup('service:browser/window');
 
-    assert.strictEqual(window.url, 'some_download_url.com');
-    assert.strictEqual(window.target, '_blank');
+    assert.strictEqual(window.url, 'download-url-for-ai_bom');
+  });
+
+  test('test ai bom pdf generate does not crash when no ai_bom report record exists yet', async function (assert) {
+    // simulates a file scanned before ai_bom reports existed -- only a
+    // "sbom" report record comes back, so the ai bom item has no backing
+    // sbomReport.
+    this.server.get('/v2/sb_files/:id/sb_reports', (schema) => {
+      const results = schema.sbomReports.all().models;
+
+      return { count: results.length, next: null, previous: null, results };
+    });
+
+    await render(hbs`
+      <Sbom::ScanReportDrawer @sbomFile={{this.sbomFile}} @open={{true}} @onClose={{this.onClose}} />
+    `);
+
+    const reportList = findAll('[data-test-sbomReportList-reportlistItem]');
+
+    assert.strictEqual(reportList.length, 3);
+
+    await click(
+      reportList[1].querySelector(
+        '[data-test-sbomReportList-reportGenerateBtn]'
+      )
+    );
+
+    const notify = this.owner.lookup('service:notifications');
+
+    assert.strictEqual(notify.errorMsg, t('pleaseTryAgain'));
   });
 });

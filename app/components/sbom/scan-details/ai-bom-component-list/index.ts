@@ -31,6 +31,7 @@ export interface AiBomComponentListSignature {
 interface AiSummaryResponse {
   total: number;
   by_type: Record<string, number>;
+  aibom_supported: boolean;
 }
 
 export default class AiBomComponentListComponent extends Component<AiBomComponentListSignature> {
@@ -140,6 +141,22 @@ export default class AiBomComponentListComponent extends Component<AiBomComponen
 
   get tNoComponentsFoundFilter() {
     return this.intl.t('sbomModule.noComponentsFoundFilter');
+  }
+
+  // False only once the summary has actually loaded and confirmed this
+  // file's latest scan predates AI component detection -- defaults to
+  // "supported" while aiSummaryData is still null so the generic empty
+  // state (not the re-upload prompt) shows during the initial fetch.
+  get isPreAiBomScan() {
+    return this.aiSummaryData?.aibom_supported === false;
+  }
+
+  // A file only gets the "please re-upload" prompt when it BOTH predates
+  // AI BoM detection AND actually has zero AI components -- a pre-AI-BOM
+  // scan that already has real components (e.g. detected in later
+  // testing) must still show them, not this prompt.
+  get showAiBomNewFeaturePrompt() {
+    return this.isPreAiBomScan && this.isEmptyAndNoFilterApplied;
   }
 
   get isFetchingSbomComponentList() {

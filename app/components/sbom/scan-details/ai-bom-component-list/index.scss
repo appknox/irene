@@ -12,8 +12,31 @@
   }
 }
 
+.new-feature-svg-wrapper {
+  margin-bottom: 1.5rem;
+
+  svg {
+    width: 280px;
+    height: auto;
+  }
+}
+
 .listing-container {
   background: var(--common-white);
-  border: 1px solid var(--border-color-1);
-  border-radius: var(--border-radius);
+  border: 1px solid var(--sbom-scan-details-component-tree-border-color);
+  border-radius: var(--sbom-scan-details-component-tree-border-radius);
+}
+
+.pre-ai-bom-empty {
+  // standard gap below the tab row now that the summary bar is hidden --
+  // without this the tab row's bottom border and the empty state's own
+  // border sit flush against each other
+  margin-top: 1.5rem;
+  min-height: 500px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--common-white);
+  border: 1px solid var(--sbom-scan-details-component-tree-border-color);
+  border-radius: var(--sbom-scan-details-component-tree-border-radius);
 }

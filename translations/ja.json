@@ -602,7 +602,7 @@
     "summaryReport": "Summary Report ({reportType})",
     "previousReport": "Previous Report ({reportType})",
     "interimReport": "Interim PT Report ({reportType})",
-    "sbomReports": "SBOM Reports",
+    "sbomReports": "SCA Reports",
     "sbomReportInProgress": "SBOM analysis for this file is still in progress. Please check back after a few minutes.",
     "noSbomReportAvailable": "SBOM analysis does not exist for this file. Please check the latest file or upload the app now to initiate the SBOM analysis.",
     "sbomSampleReportText1": "Gain visibility into the software components used in your app and proactively manage vulnerabilities.",
@@ -619,7 +619,7 @@
     "storeReleaseReadinessReports": "Store Release Readiness Reports",
     "storeReleaseReadinessReportNotAvailableHeading": "Please upload the app or check the latest file",
     "storeReleaseReadinessReportNotAvailable": "Store Release Readiness report is not available for this file.",
-    "viewSbomDetails": "View SBOM details",
+    "viewSbomDetails": "View SCA",
     "goToLatestFile": "Go to Latest File"
   },
   "fileTag": {
@@ -1841,6 +1841,10 @@
       "title": "No Components Found",
       "description": "No components could be detected for this application. Kindly reupload and check again. If this issue persists, please reach out to the support team."
     },
+    "aiBomNewFeatureEmptyText": {
+      "title": "New Feature Available. Upload your app again.",
+      "description": "To get the AI BoM Components, please re-upload the application."
+    },
     "knownVulnerabilities": "Known Vulnerabilities",
     "knownVulnerabilitiesEmptyText": {
       "title": "No Vulnerability Found",
@@ -1857,11 +1861,12 @@
     },
     "sbomGeneratedOn": "SBOM Generated On",
     "sbomDownloadReportDescription": "Here you able to download different types of SBOM scan reports.",
-    "sbomDownloadPdfPrimaryText": "Detailed Report (pdf)",
+    "sbomDownloadPdfPrimaryText": "SBOM - Detailed Report (pdf)",
     "sbomDownloadJsonPrimaryText": "Cyclone DX (json)",
     "sbomDownloadJsonSecondaryText": "No Password Required",
+    "aiBomDownloadPdfPrimaryText": "AI BoM - Detailed Report (pdf)",
     "viewReport": "View Report",
-    "scanReports": "Scan Reports",
+    "scanReports": "SCA Reports",
     "neverInitiated": "Never Initiated",
     "noScanAlertDescription": "Upload the app to initiate SBOM analysis.",
     "generateReportDescription": "Report is not available yet. Please click on the Generate button to access the SBOM report.",
