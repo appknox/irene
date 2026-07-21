@@ -275,6 +275,30 @@ export default class SbomComponentModel extends Model {
   get aiFamily() {
     return this.aiModelName || this.aiFrameworkName || '-';
   }
+
+  /**
+   * Deterministic fallback for the "Purpose" column, mirroring enola's own
+   * appknox:ai:purpose mapping exactly (a pure function of artifact class,
+   * same table used for every other class). Only used when the backend's
+   * ai_purpose is empty -- covers components scanned before purpose-emission
+   * existed in the pipeline, so this never disagrees with what the backend
+   * would have computed itself.
+   */
+  get aiPurposeFallback() {
+    if (!this.aiArtifactClass) return null;
+    const classMap: Record<string, string> = {
+      model: 'sbomModule.aiPurposeFallback.model',
+      library: 'sbomModule.aiPurposeFallback.library',
+      tokenizer: 'sbomModule.aiPurposeFallback.tokenizer',
+      config: 'sbomModule.aiPurposeFallback.config',
+      supporting: 'sbomModule.aiPurposeFallback.supporting',
+      secret: 'sbomModule.aiPurposeFallback.secret',
+      cloud_endpoint: 'sbomModule.aiPurposeFallback.cloudEndpoint',
+      platform_managed_ai: 'sbomModule.aiPurposeFallback.platformManagedAi',
+    };
+    const key = classMap[this.aiArtifactClass];
+    return key ? this.intl.t(key) : null;
+  }
 }
 
 declare module 'ember-data/types/registries/model' {

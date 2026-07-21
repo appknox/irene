@@ -87,8 +87,20 @@ export default class AiBomComponentDrawerComponent extends Component<AiBomCompon
     return key ? this.intl.t(key) : null;
   }
 
+  // Falls back to aiModelCategory (for "model", where it's more specific
+  // than the generic fallback -- e.g. "Image Classification" vs "General AI
+  // Model"), then to aiPurposeFallback (enola's deterministic purpose-per-
+  // artifact-class mapping, covering every other class: secret, tokenizer,
+  // config, supporting, cloud_endpoint, platform_managed_ai, library).
+  // Only used when the backend's ai_purpose is empty -- covers components
+  // scanned before purpose-emission existed in the pipeline.
   get purposeValue() {
-    return this.args.component?.aiPurpose || null;
+    return (
+      this.args.component?.aiPurpose ||
+      this.args.component?.aiModelCategory ||
+      this.args.component?.aiPurposeFallback ||
+      null
+    );
   }
 
   get associatedModelValue() {
