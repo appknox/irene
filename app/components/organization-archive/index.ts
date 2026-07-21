@@ -110,6 +110,9 @@ export default class OrganizationArchiveComponent extends Component {
 
       if (endDate.isAfter(maxAllowedEndDate)) {
         this.notify.error(this.intl.t('organizationArchiveDateRangeExceeded'));
+        // Clear both dates when validation fails
+        this.startDate = null;
+        this.endDate = null;
         return;
       }
     }
