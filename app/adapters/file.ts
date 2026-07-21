@@ -99,7 +99,17 @@ export default class FileAdapter extends CommonDRFAdapter {
     const url = `${this._buildURL('file', fileId)}/can_generate_report`;
     const res = await this.ajax(url, 'GET');
 
-    return res as { can_generate_report: boolean };
+    return res as {
+      can_generate_report: boolean;
+      can_generate_legacy_report: boolean;
+    };
+  }
+
+  async getFileAnalysesCvssInfo(fileId: string) {
+    const url = `${this._buildURL('file', fileId)}/file_analyses_cvss_info`;
+    const res = await this.ajax(url, 'GET');
+
+    return res as { all_file_analyses_are_legacy: boolean };
   }
 
   async getFileLastManualDynamicScan(fileId: string) {

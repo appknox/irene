@@ -1,0 +1,96 @@
+<div
+  local-class='file-report-legacy-cvss-reports-drawer'
+  data-test-fileReportDrawer-legacyCvssReports
+>
+  {{#if this.getReports.isRunning}}
+    <AkStack
+      @alignItems='center'
+      @justifyContent='center'
+      class='p-2'
+      data-test-legacyCvssReports-reportsLoader
+    >
+      <AkLoader @size={{18}} />
+    </AkStack>
+  {{else}}
+    {{#if this.showGenerateCta}}
+      <div class='p-3'>
+        <AkStack
+          local-class='generate-container'
+          @direction='column'
+          @spacing='2'
+          data-test-legacyCvssReports-generateReport-CTA
+        >
+          <AkSvg::GenerateReport
+            data-test-legacyCvssReports-generateReportCTA-vector
+          />
+
+          <AkTypography
+            data-test-legacyCvssReports-generateReportCTA-directiveText
+          >
+            {{t 'fileReport.generateReportCTAText'}}
+          </AkTypography>
+
+          <AkButton
+            @disabled={{this.disableGenerateBtn}}
+            @loading={{this.loadingGenerateBtn}}
+            {{on 'click' (perform this.generateReport)}}
+            data-test-legacyCvssReports-generateBtn
+          >
+            {{this.btnLabel}}
+          </AkButton>
+        </AkStack>
+      </div>
+    {{/if}}
+
+    {{#if this.hasReports}}
+      {{#if this.latestReport.isGenerating}}
+        <AkStack
+          @alignItems='center'
+          @justifyContent='space-between'
+          @spacing='1.5'
+          @width='full'
+          class='px-3 py-2'
+          data-test-legacyCvssReports-generateReportProgress-container
+        >
+          <AkStack @direction='column' @spacing='1' @width='10/12'>
+            <AkTypography
+              @fontWeight='medium'
+              data-test-legacyCvssReports-generateReportProgress-text
+            >
+              {{t 'fileReport.generateReportLoaderText'}}...
+            </AkTypography>
+
+            <AkLoader::Linear
+              @variant='determinate'
+              @progress={{this.latestReport.progress}}
+              data-test-legacyCvssReports-generateReportProgress-loader
+            />
+          </AkStack>
+
+          <AkTypography
+            @variant='h6'
+            @fontWeight='medium'
+            data-test-legacyCvssReports-generateReportProgress-percent
+          >
+            {{this.latestReport.progress}}%
+          </AkTypography>
+        </AkStack>
+      {{/if}}
+
+      <AkDivider />
+
+      <AkList {{style padding='0px'}} data-test-legacyCvssReports-reportList>
+        {{#each this.reportDetails as |details|}}
+          {{#unless details.hideReport}}
+            <File::ReportDrawer::LegacyCvssReports::ReportItem
+              @reportDetails={{details}}
+              @fileReport={{details.fileReport}}
+              data-test-legacyCvssReports-reportList-reportItem
+              data-test-legacyCvssReports-reportList-Item='{{details.type}}'
+            />
+          {{/unless}}
+        {{/each}}
+      </AkList>
+    {{/if}}
+  {{/if}}
+</div>

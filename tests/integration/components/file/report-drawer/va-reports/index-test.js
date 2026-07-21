@@ -6,6 +6,7 @@ import { setupIntl, t } from 'ember-intl/test-support';
 import { setupMirage } from 'ember-cli-mirage/test-support';
 import { Response } from 'miragejs';
 import Service from '@ember/service';
+import { tracked } from '@glimmer/tracking';
 
 import { serializer } from 'irene/tests/test-utils';
 import { setupFileModelEndpoints } from 'irene/tests/helpers/file-model-utils';
@@ -23,6 +24,10 @@ class NotificationsStub extends Service {
   }
 }
 
+class RealtimeStub extends Service {
+  @tracked ReportCounter = 0;
+}
+
 module(
   'Integration | Component | file/report-drawer/va-reports',
   function (hooks) {
@@ -34,6 +39,7 @@ module(
       setupFileModelEndpoints(this.server);
 
       this.owner.register('service:notifications', NotificationsStub);
+      this.owner.register('service:realtime', RealtimeStub);
 
       const store = this.owner.lookup('service:store');
 
@@ -476,6 +482,51 @@ module(
       );
 
       assert.false(hasInterimReport, 'interim report is not rendered');
+    });
+
+    // ─── Realtime counter → reload flow ─────────────────────────────────────
+
+    test('bumping ReportCounter reloads reports and hides the generate CTA when generation is no longer allowed', async function (assert) {
+      // Schema-backed reports handler — reload picks up records created mid-test.
+      this.server.get('/v2/files/:id/reports', (schema) =>
+        serializer(schema.fileReports.all(), true)
+      );
+
+      // File-model utils already stub `/v3/files/:id/can_generate_report` to
+      // `{ can_generate_report: true }` — matches our initial state.
+
+      await render(hbs`<File::ReportDrawer::VaReports @file={{this.file}} />`);
+
+      // ── Pre-state: no reports, generation allowed → CTA visible
+      assert
+        .dom('[data-test-vaReports-generateReportCTA-btn]')
+        .containsText(t('generateReport'));
+
+      assert.dom('[data-test-vaReports-reportList]').doesNotExist();
+
+      // Server now reports: a report exists AND generation is no longer allowed
+      this.server.create('file-report', { progress: 100, file_id: '1' });
+
+      this.server.get('/v3/files/:id/can_generate_report', () => ({
+        can_generate_report: false,
+      }));
+
+      // Trigger the observer — this is what a realtime WS notification does
+      this.owner.lookup('service:realtime').ReportCounter++;
+
+      // Wait for the reload — reportList mounts once the refetch resolves.
+      // The template's outer `{{#if getReports.isRunning}}` guarantees the
+      // loader is gone by the time reportList is in the DOM.
+      await waitFor('[data-test-vaReports-reportList]', { timeout: 500 });
+
+      // ── Post-state: CTA hidden, report list rendered with pdf/xlsx/csv items
+      assert.dom('[data-test-vaReports-generateReport-CTA]').doesNotExist();
+
+      assert.dom("[data-test-vaReports-reportList-Item='pdf']").exists();
+
+      assert.dom("[data-test-vaReports-reportList-Item='xlsx']").exists();
+
+      assert.dom("[data-test-vaReports-reportList-Item='csv']").exists();
     });
   }
 );

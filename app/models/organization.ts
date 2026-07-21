@@ -39,6 +39,9 @@ export default class OrganizationModel extends Model {
   declare hideUpsellFeatures: boolean;
 
   @attr('boolean')
+  declare enableLegacyCvssReports: boolean;
+
+  @attr('boolean')
   declare isTrial: boolean;
 
   @attr('boolean')
