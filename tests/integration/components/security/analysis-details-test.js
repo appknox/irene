@@ -101,6 +101,7 @@ module('Integration | Component | security/analysis-details', function (hooks) {
       ['v2/nistsp80053s', 'nistsp80053s', 'nistsp80053'],
       ['v2/nistsp800171s', 'nistsp800171s', 'nistsp800171'],
       ['v2/samas', 'samas', 'sama'],
+      ['v2/doras', 'doras', 'dora'],
     ].forEach(([urlParam, schemaKey, key, isJsonApi]) => {
       this.server.get(`/${urlParam}/:id`, (schema, req) => {
         const json = schema[schemaKey].find(`${req.params.id}`)?.toJSON();
@@ -730,6 +731,12 @@ module('Integration | Component | security/analysis-details', function (hooks) {
         'withSama',
         'sama',
         'Saudi Arabian Monetary Authority',
+        ['code', 'title'],
+      ],
+      [
+        'withDora',
+        'dora',
+        'Digital Operational Resilience Act',
         ['code', 'title'],
       ],
     ],

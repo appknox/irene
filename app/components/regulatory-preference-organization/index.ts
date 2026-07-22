@@ -25,34 +25,40 @@ export default class RegulatoryPreferenceOrganizationComponent extends Component
   get regulatoryPreferences() {
     return [
       {
-        label: 'PCI-DSS',
+        label: this.intl.t('pcidss'),
         checked: Boolean(this.orgPreference?.reportPreference.show_pcidss),
         task: this.savePcidss,
         title: this.intl.t('pcidssExpansion'),
       },
       {
-        label: 'HIPAA',
+        label: this.intl.t('hipaa'),
         checked: Boolean(this.orgPreference?.reportPreference.show_hipaa),
         task: this.saveHipaa,
         title: this.intl.t('hipaaExpansion'),
       },
       {
-        label: 'GDPR',
+        label: this.intl.t('gdpr'),
         checked: Boolean(this.orgPreference?.reportPreference.show_gdpr),
         task: this.saveGdpr,
         title: this.intl.t('gdprExpansion'),
       },
       {
-        label: 'NIST',
+        label: this.intl.t('nist'),
         checked: Boolean(this.orgPreference?.reportPreference?.show_nist),
         task: this.saveNist,
         title: this.intl.t('nistExpansion'),
       },
       {
-        label: 'SAMA',
+        label: this.intl.t('sama'),
         checked: Boolean(this.orgPreference?.reportPreference?.show_sama),
         task: this.saveSama,
         title: this.intl.t('samaExpansion'),
+      },
+      {
+        label: this.intl.t('dora'),
+        checked: Boolean(this.orgPreference?.reportPreference?.show_dora),
+        task: this.saveDora,
+        title: this.intl.t('doraExpansion'),
       },
     ];
   }
@@ -90,6 +96,10 @@ export default class RegulatoryPreferenceOrganizationComponent extends Component
     await this.saveReportPreference.perform('show_sama', event);
   });
 
+  saveDora = task(async (event) => {
+    await this.saveReportPreference.perform('show_dora', event);
+  });
+
   saveReportPreference = task(
     async (
       regulator:
@@ -97,7 +107,8 @@ export default class RegulatoryPreferenceOrganizationComponent extends Component
         | 'show_hipaa'
         | 'show_gdpr'
         | 'show_nist'
-        | 'show_sama',
+        | 'show_sama'
+        | 'show_dora',
       event
     ) => {
       const preference = this.orgPreference as OrganizationPreferenceModel;
