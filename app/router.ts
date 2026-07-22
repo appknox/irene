@@ -319,6 +319,9 @@ Router.map(function () {
           function () {
             this.route('index', { path: '/' });
             this.route('integrations');
+            this.route('service-now', {
+              path: '/integrations/service-now',
+            });
             this.route('service-account');
             this.route('ai-powered-features');
           }
