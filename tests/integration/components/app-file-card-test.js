@@ -198,6 +198,23 @@ module('Integration | Component | app-file-card', function (hooks) {
         .hasText(t('knoxIq.statusChip.failed'));
     });
 
+    test('it hides Run KnoxIQ button when scan is not triggered but automated', async function (assert) {
+      this.file.knoxiqStatus = ENUMS.KNOXIQ_SCAN_STATUS.NOT_TRIGGERED;
+      this.file.isKnoxiqAutomated = true;
+
+      setupFileExploitabilityMirageEndpoint(this.server, {
+        exploitability_count_high: 0,
+        exploitability_count_medium: 0,
+        exploitability_count_low: 0,
+        exploitability_count_passed: 0,
+        exploitability_count_unknown: 0,
+      });
+
+      await render(hbs`<AppFileCard @file={{this.file}} />`);
+
+      assert.dom('[data-test-knoxiq-project-card-runKnoxIqBtn]').doesNotExist();
+    });
+
     test('it shows Run KnoxIQ button and triggers scan on click', async function (assert) {
       this.file.knoxiqStatus = ENUMS.KNOXIQ_SCAN_STATUS.NOT_TRIGGERED;
       this.file.isKnoxiqAutomated = false;
