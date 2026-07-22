@@ -6,7 +6,7 @@
   as |dr|
 >
   <div {{style width='640px'}}>
-    <AkAppbar @color='dark' @justifyContent='space-between' as |ab|>
+    <AkAppbar @justifyContent='space-between' as |ab|>
       <AkTypography
         data-test-sbomScanDetails-aiBomComponentDrawer-title
         @color='inherit'
@@ -90,16 +90,6 @@
           {{/each}}
         </div>
       </div>
-
-      <AkTypography
-        data-test-sbomScanDetails-aiBomComponentDrawer-note
-        @variant='body2'
-        @color='textSecondary'
-        class='mt-2'
-      >
-        <strong>{{t 'sbomModule.aiBomComponentDrawerNoteLabel'}}</strong>
-        {{t 'sbomModule.aiBomComponentDrawerNote'}}
-      </AkTypography>
     </div>
   </div>
 </AkDrawer>
