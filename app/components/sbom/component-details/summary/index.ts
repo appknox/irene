@@ -51,6 +51,20 @@ export default class SbomComponentDetailsSummaryComponent extends Component<Sbom
     return this.componentSummary.length - 1;
   }
 
+  // AI Role only adds real information for tokenizer/config/supporting --
+  // it's the specific kind within the "Supporting Artifact" bucket. For
+  // every other artifact class it would just restate Component Type in
+  // different words, so it's hidden there (see aiDisplayLabelKey's own
+  // doc comment on sbom-component.ts).
+  get isSupportingArtifactSubtype() {
+    const artifactClass = this.args.sbomComponent?.aiArtifactClass;
+    return (
+      artifactClass === 'tokenizer' ||
+      artifactClass === 'config' ||
+      artifactClass === 'supporting'
+    );
+  }
+
   get componentType() {
     if (this.args.sbomComponent?.isMLModel) {
       return this.intl.t('sbomModule.mlModel');
@@ -103,10 +117,11 @@ export default class SbomComponentDetailsSummaryComponent extends Component<Sbom
         value: this.args.sbomComponent?.primaryLink || '',
         isLink: true,
       },
-      this.args.sbomComponent?.isAiComponent && {
-        label: this.intl.t('sbomModule.aiRoleColumn'),
-        value: this.aiPurposeLabel,
-      },
+      this.args.sbomComponent?.isAiComponent &&
+        this.isSupportingArtifactSubtype && {
+          label: this.intl.t('sbomModule.aiRoleColumn'),
+          value: this.aiPurposeLabel,
+        },
       this.args.sbomComponent?.isAiComponent &&
         this.args.sbomComponent?.aiFamily !== '-' && {
           label: this.intl.t('sbomModule.aiFamilyColumn'),

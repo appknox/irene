@@ -3,6 +3,9 @@
 }
 
 .component-list-container {
-  border: 1px solid var(--sbom-scan-details-component-tree-border-color);
-  border-radius: var(--sbom-scan-details-component-tree-border-radius);
+  border: 1px solid
+    var(--sbom-scan-details-component-list-container-border-color);
+  border-radius: var(
+    --sbom-scan-details-component-list-container-border-radius
+  );
 }

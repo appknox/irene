@@ -828,6 +828,12 @@ body {
 
   // variables for sbom/scan-details/component-list
   --sbom-scan-details-component-list-background-color: var(--common-white);
+  --sbom-scan-details-component-list-container-border-color: var(
+    --border-color-1
+  );
+  --sbom-scan-details-component-list-container-border-radius: var(
+    --border-radius
+  );
 
   // variables for sbom/scan-details/component-list/type-header
   --sbom-scanDetails-componentList-typeHeader-background-color: var(
@@ -973,6 +979,49 @@ body {
   );
   --sbom-scan-details-component-tree-highlighted-text-color: var(
     --common-white
+  );
+
+  // variables for sbom/scan-details/ai-bom-component-list
+  --sbom-scan-details-ai-bom-component-list-listing-container-background-color: var(
+    --common-white
+  );
+  --sbom-scan-details-ai-bom-component-list-listing-container-border-color: var(
+    --border-color-1
+  );
+  --sbom-scan-details-ai-bom-component-list-listing-container-border-radius: var(
+    --border-radius
+  );
+  --sbom-scan-details-ai-bom-component-list-pre-ai-bom-empty-background-color: var(
+    --common-white
+  );
+  --sbom-scan-details-ai-bom-component-list-pre-ai-bom-empty-border-color: var(
+    --border-color-1
+  );
+  --sbom-scan-details-ai-bom-component-list-pre-ai-bom-empty-border-radius: var(
+    --border-radius
+  );
+
+  // variables for sbom/scan-details/ai-bom-component-drawer
+  --sbom-scan-details-ai-bom-component-drawer-file-box-border-color: var(
+    --border-color-1
+  );
+  --sbom-scan-details-ai-bom-component-drawer-file-box-border-radius: var(
+    --border-radius
+  );
+  --sbom-scan-details-ai-bom-component-drawer-file-box-background-color: var(
+    --common-white
+  );
+  --sbom-scan-details-ai-bom-component-drawer-details-box-border-color: var(
+    --border-color-1
+  );
+  --sbom-scan-details-ai-bom-component-drawer-details-box-border-radius: var(
+    --border-radius
+  );
+  --sbom-scan-details-ai-bom-component-drawer-details-box-background-color: var(
+    --common-white
+  );
+  --sbom-scan-details-ai-bom-component-drawer-section-header-background-color: var(
+    --neutral-grey-100
   );
 
   // variables for analysis-risk/tag

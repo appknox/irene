@@ -71,7 +71,7 @@ export default class AuthenticatedDashboardSbomScanDetailsController extends Con
       routeGroup: 'sbom',
 
       parentCrumb: {
-        title: this.intl.t('SBOM'),
+        title: this.intl.t('sbomModule.scaBreadcrumbTitle'),
         route: 'authenticated.dashboard.sbom.apps',
         routeGroup: 'sbom',
       },

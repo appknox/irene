@@ -16,20 +16,17 @@ export default class AiTypeHeaderComponent extends Component<AiTypeHeaderCompone
 
   @tracked anchorRef: HTMLElement | null = null;
 
+  // Mirrors the same bucketing already used for the component type column
+  // and summary bar counts: tokenizer/config/supporting collapse into one
+  // "Supporting Artifact" option here too, rather than 3 raw sub-types the
+  // rest of the AI BoM UI never shows on their own. The backend's
+  // ai_artifact_class filter accepts "supporting_artifact" as a bucket
+  // value that expands to all 3 (see SBFileComponentFilter in mycroft).
   get typeOptions() {
     return [
       { key: this.intl.t('all'), value: null },
       { key: this.intl.t('sbomModule.aiTypeLabel.model'), value: 'model' },
       { key: this.intl.t('sbomModule.aiTypeLabel.library'), value: 'library' },
-      {
-        key: this.intl.t('sbomModule.aiTypeLabel.tokenizer'),
-        value: 'tokenizer',
-      },
-      { key: this.intl.t('sbomModule.aiTypeLabel.config'), value: 'config' },
-      {
-        key: this.intl.t('sbomModule.aiTypeLabel.supporting'),
-        value: 'supporting',
-      },
       { key: this.intl.t('sbomModule.aiTypeLabel.secret'), value: 'secret' },
       {
         key: this.intl.t('sbomModule.aiTypeLabel.cloudEndpoint'),
@@ -38,6 +35,10 @@ export default class AiTypeHeaderComponent extends Component<AiTypeHeaderCompone
       {
         key: this.intl.t('sbomModule.aiTypeLabel.platformManagedAi'),
         value: 'platform_managed_ai',
+      },
+      {
+        key: this.intl.t('sbomModule.supportingArtifact'),
+        value: 'supporting_artifact',
       },
     ];
   }

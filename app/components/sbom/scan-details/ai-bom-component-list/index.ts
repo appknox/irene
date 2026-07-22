@@ -88,7 +88,7 @@ export default class AiBomComponentListComponent extends Component<AiBomComponen
     // 6 possible types, showing every "X - 0" would make the bar too long
     // and mostly noise for apps that only use one or two AI patterns.
     const totalItem: SbomScanDetailsSummaryBarItem = {
-      iconName: 'ph:diamonds-four',
+      iconName: 'summarize-outline',
       label: this.intl.t('sbomModule.aiBomComponentsTotal'),
       value: this.aiSummaryData?.total ?? 0,
       isPrimary: true,
@@ -101,12 +101,12 @@ export default class AiBomComponentListComponent extends Component<AiBomComponen
         value: byType['model'] ?? 0,
       },
       {
-        iconName: 'cloud-upload' as const,
+        iconName: 'cloud-outline' as const,
         label: this.intl.t('sbomModule.aiTypeLabel.cloudEndpoint'),
         value: byType['cloud_endpoint'] ?? 0,
       },
       {
-        iconName: 'key' as const,
+        iconName: 'key-outline' as const,
         label: this.intl.t('sbomModule.aiTypeLabel.secret'),
         value: byType['secret'] ?? 0,
       },
@@ -121,7 +121,7 @@ export default class AiBomComponentListComponent extends Component<AiBomComponen
         value: byType['platform_managed_ai'] ?? 0,
       },
       {
-        iconName: 'mdi:insert-drive-file' as const,
+        iconName: 'token-outline' as const,
         label: this.intl.t('sbomModule.supportingArtifact'),
         value: supportingArtifactCount,
       },

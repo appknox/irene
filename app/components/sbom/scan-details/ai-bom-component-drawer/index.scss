@@ -1,7 +1,12 @@
 .ai-bom-component-drawer-file-box {
-  border: 1px solid var(--border-color-1);
-  border-radius: var(--border-radius);
-  background: var(--common-white);
+  border: 1px solid
+    var(--sbom-scan-details-ai-bom-component-drawer-file-box-border-color);
+  border-radius: var(
+    --sbom-scan-details-ai-bom-component-drawer-file-box-border-radius
+  );
+  background: var(
+    --sbom-scan-details-ai-bom-component-drawer-file-box-background-color
+  );
 }
 
 .ai-bom-component-drawer-file-value {
@@ -10,12 +15,19 @@
 }
 
 .ai-bom-component-drawer-details-box {
-  border: 1px solid var(--border-color-1);
-  border-radius: var(--border-radius);
-  background: var(--common-white);
+  border: 1px solid
+    var(--sbom-scan-details-ai-bom-component-drawer-details-box-border-color);
+  border-radius: var(
+    --sbom-scan-details-ai-bom-component-drawer-details-box-border-radius
+  );
+  background: var(
+    --sbom-scan-details-ai-bom-component-drawer-details-box-background-color
+  );
   overflow: hidden;
 }
 
 .ai-bom-component-drawer-section-header {
-  background: var(--neutral-grey-100);
+  background: var(
+    --sbom-scan-details-ai-bom-component-drawer-section-header-background-color
+  );
 }

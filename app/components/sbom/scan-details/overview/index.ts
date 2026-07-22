@@ -17,7 +17,7 @@ export default class SbomScanDetailsOverviewComponent extends Component<SbomScan
   get scanSummary() {
     return [
       {
-        iconName: 'ph:diamonds-four' as const,
+        iconName: 'summarize-outline' as const,
         label: this.intl.t('sbomModule.totalComponents'),
         value: this.args.sbomScanSummary?.componentCount || 0,
         isPrimary: true,
@@ -28,12 +28,12 @@ export default class SbomScanDetailsOverviewComponent extends Component<SbomScan
         value: this.args.sbomScanSummary?.libraryCount || 0,
       },
       {
-        iconName: 'mynaui:frame' as const,
+        iconName: 'mdi:frame' as const,
         label: this.intl.t('framework'),
         value: this.args.sbomScanSummary?.frameworkCount || 0,
       },
       {
-        iconName: 'draft-outline' as const,
+        iconName: 'mdi:file-outline' as const,
         label: this.intl.t('file'),
         value: this.args.sbomScanSummary?.fileCount || 0,
         hideDivider: true,

@@ -198,16 +198,28 @@ export default class SbomScanDetailsComponent extends Component<SbomScanDetailsS
     // matching note in the constructor for why leaving view_type
     // untouched here would silently drop the is_ai_component filter).
     //
-    // component_query is reset on every tab switch -- the two tabs share
-    // the same search input on the service, so without this a search
-    // typed in one tab would silently keep filtering the other.
+    // component_query, ai_artifact_class/ai_confidence, and component_type/
+    // is_dependency are all reset on every tab switch -- both tabs share
+    // the same service, but ai_artifact_class/ai_confidence only ever mean
+    // anything for AI BoM components and component_type/is_dependency only
+    // for plain SBOM ones. Without this, a filter set on one tab would
+    // silently carry into the other and, since the other tab's components
+    // don't have that property, zero out every result there.
     const queryParams: {
       is_ai_component: string;
       component_query: string;
+      ai_artifact_class: null;
+      ai_confidence: null;
+      component_type: number;
+      is_dependency: null;
       view_type?: 'list';
     } = {
       is_ai_component,
       component_query: '',
+      ai_artifact_class: null,
+      ai_confidence: null,
+      component_type: -1,
+      is_dependency: null,
       ...(tab === 'aibom' ? { view_type: 'list' } : {}),
     };
 
@@ -216,6 +228,10 @@ export default class SbomScanDetailsComponent extends Component<SbomScanDetailsS
       .setQueryData({
         is_ai_component: queryParams.is_ai_component,
         component_query: queryParams.component_query,
+        ai_artifact_class: queryParams.ai_artifact_class,
+        ai_confidence: queryParams.ai_confidence,
+        component_type: queryParams.component_type,
+        dependency_type: queryParams.is_dependency,
         ...(queryParams.view_type ? { view_type: queryParams.view_type } : {}),
       })
       .setLimitOffset({ offset: 0 })

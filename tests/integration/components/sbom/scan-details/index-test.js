@@ -1,4 +1,5 @@
 import { render, click } from '@ember/test-helpers';
+import Service from '@ember/service';
 import dayjs from 'dayjs';
 import { hbs } from 'ember-cli-htmlbars';
 import { setupMirage } from 'ember-cli-mirage/test-support';
@@ -8,12 +9,23 @@ import { module, test } from 'qunit';
 
 import { SbomScanStatus } from 'irene/models/sbom-file';
 
+class RouterStub extends Service {
+  currentRouteName = 'authenticated.dashboard.sbom.scan-details';
+
+  transitionTo(routeNameOrQueryParams) {
+    this.currentRouteName = routeNameOrQueryParams;
+  }
+}
+
 module('Integration | Component | sbom/scan-details', function (hooks) {
   setupRenderingTest(hooks);
   setupMirage(hooks);
   setupIntl(hooks, 'en');
 
   hooks.beforeEach(async function () {
+    this.owner.unregister('service:router');
+    this.owner.register('service:router', RouterStub);
+
     const store = this.owner.lookup('service:store');
 
     const file = this.server.create('file', 1);
@@ -301,5 +313,63 @@ module('Integration | Component | sbom/scan-details', function (hooks) {
     await click('[data-test-sbomScanDetails-viewReport-btn]');
 
     assert.dom('[data-test-sbomReportDrawer-drawer]').exists();
+  });
+
+  test('it resets AI BoM-only and SBOM-only filters when switching tabs', async function (assert) {
+    this.sbomFile.status = SbomScanStatus.COMPLETED;
+
+    this.server.get('/v2/sb_files/:id/sb_file_components', (schema) => {
+      const results = schema.sbomComponents.all().models;
+
+      return {
+        count: results.length,
+        next: null,
+        previous: null,
+        results: results,
+      };
+    });
+
+    this.server.get('/v2/sb_files/:id/sb_file_components/ai_summary', () => ({
+      total: 0,
+      by_type: {},
+      aibom_supported: true,
+    }));
+
+    await render(hbs`
+      <Sbom::ScanDetails
+        @sbomProject={{this.sbomProject}}
+        @sbomFile={{this.sbomFile}}
+        @sbomScanSummary={{this.sbomScanSummary}}
+        @queryParams={{this.queryParams}}
+      />
+    `);
+
+    const sbomService = this.owner.lookup('service:sbom-scan-details');
+
+    // Simulates a filter having been applied on the AI BoM tab -- these
+    // properties only ever mean anything for AI components, and must not
+    // leak into the SBOM tab's request (plain SBOM components don't have
+    // an ai_artifact_class/ai_confidence, so any non-null value here would
+    // silently zero out every SBOM tab result).
+    await click('[data-test-sbomScanDetails-aibomTab] button');
+    sbomService.setQueryData({
+      ai_artifact_class: 'model',
+      ai_confidence: 'high',
+    });
+
+    await click('[data-test-sbomScanDetails-sbomTab] button');
+
+    assert.strictEqual(sbomService.selectedAiArtifactClass, null);
+    assert.strictEqual(sbomService.selectedAiConfidence, null);
+
+    // Simulates a filter having been applied on the SBOM tab -- these only
+    // ever mean anything for plain SBOM components, and must not leak into
+    // the AI BoM tab's request the same way.
+    sbomService.setQueryData({ component_type: 1, dependency_type: 'true' });
+
+    await click('[data-test-sbomScanDetails-aibomTab] button');
+
+    assert.strictEqual(sbomService.selectedComponentType, -1);
+    assert.strictEqual(sbomService.selectedDependencyType, null);
   });
 });
