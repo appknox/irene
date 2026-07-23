@@ -1,0 +1,53 @@
+<AkStack @direction='column' @width='full' ...attributes>
+  <AkTypography
+    @tag='header'
+    @fontWeight='bold'
+    class='px-3'
+    local-class='section-header'
+    data-test-fileDetails-dynamicScanDrawer-automatedDast-scenarioSectionTitle
+  >
+    {{@title}}
+
+    {{#if @showSuperUserLabel}}
+      -
+      {{t 'dastAutomation.superUserOnly'}}
+    {{/if}}
+  </AkTypography>
+
+  <AkStack @direction='column' @width='full'>
+    {{#if @isLoading}}
+      <FileDetails::DynamicScan::Action::Drawer::AutomatedDast::Loading />
+
+    {{else if @isEmpty}}
+      <FileDetails::DynamicScan::Action::Drawer::AutomatedDast::EmptyListState
+        @headerText={{t 'modalCard.dynamicScan.emptyActiveScenariosHeaderText'}}
+        @subText={{t 'modalCard.dynamicScan.emptyActiveScenariosSubText'}}
+        @projectId={{@projectId}}
+        @link='authenticated.dashboard.project.settings.dast-automation'
+        @linkText={{t 'modalCard.dynamicScan.goToDastAutomationSettings'}}
+        data-test-fileDetails-dynamicScanDrawer-automatedDast-scenarioSectionEmpty
+      />
+
+    {{else}}
+      {{#each @scenarios as |scenario idx|}}
+        <AkStack
+          class='px-3 {{if (eq idx 0) "py-2" "pb-2"}}'
+          @spacing='1'
+          @alignItems='center'
+          data-test-fileDetails-dynamicScanDrawer-automatedDast-scenarioSectionItem={{scenario.id}}
+        >
+          <AkIcon
+            @iconName='done'
+            @size='small'
+            @color='success'
+            data-test-fileDetails-dynamicScanDrawer-automatedDast-scenarioSectionItemIcon
+          />
+
+          <AkTypography>
+            {{scenario.name}}
+          </AkTypography>
+        </AkStack>
+      {{/each}}
+    {{/if}}
+  </AkStack>
+</AkStack>

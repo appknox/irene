@@ -1,14 +1,16 @@
-import { service } from '@ember/service';
 import Component from '@glimmer/component';
+import { service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
 import { action } from '@ember/object';
 import { task } from 'ember-concurrency';
+import { waitForPromise } from '@ember/test-waiters';
 import type Store from 'ember-data/store';
 import type IntlService from 'ember-intl/services/intl';
 
-import type FileModel from 'irene/models/file';
+import parseError from 'irene/utils/parse-error';
 import type DsManualDevicePreferenceModel from 'irene/models/ds-manual-device-preference';
 import type DsAutomatedDevicePreferenceModel from 'irene/models/ds-automated-device-preference';
+import type LoggerService from 'irene/services/logger';
 
 export interface DsPreferenceContext {
   dsManualDevicePreference: DsManualDevicePreferenceModel | null;
@@ -28,10 +30,7 @@ export interface DsPreferenceContext {
 }
 
 interface DsPreferenceProviderSignature {
-  Args: {
-    file: FileModel;
-    profileId: string;
-  };
+  Args: { profileId?: string | number };
   Blocks: {
     default: [DsPreferenceContext];
   };
@@ -41,6 +40,7 @@ export default class DsPreferenceProviderComponent extends Component<DsPreferenc
   @service declare intl: IntlService;
   @service declare store: Store;
   @service('notifications') declare notify: NotificationService;
+  @service declare logger: LoggerService;
 
   @tracked dsManualDevicePreference: DsManualDevicePreferenceModel | null =
     null;
@@ -53,6 +53,10 @@ export default class DsPreferenceProviderComponent extends Component<DsPreferenc
 
     this.fetchDsManualDevicePref.perform();
     this.fetchDsAutomatedDevicePref.perform();
+  }
+
+  get profileId() {
+    return String(this.args.profileId);
   }
 
   @action
@@ -72,11 +76,10 @@ export default class DsPreferenceProviderComponent extends Component<DsPreferenc
   fetchDsManualDevicePref = task(async () => {
     try {
       const adapter = this.store.adapterFor('ds-manual-device-preference');
-      adapter.setNestedUrlNamespace(this.args.profileId);
+      adapter.setNestedUrlNamespace(this.profileId);
 
-      this.dsManualDevicePreference = await this.store.queryRecord(
-        'ds-manual-device-preference',
-        {}
+      this.dsManualDevicePreference = await waitForPromise(
+        this.store.queryRecord('ds-manual-device-preference', {})
       );
     } catch (error) {
       const err = error as AdapterError;
@@ -92,11 +95,10 @@ export default class DsPreferenceProviderComponent extends Component<DsPreferenc
   fetchDsAutomatedDevicePref = task(async () => {
     try {
       const adapter = this.store.adapterFor('ds-automated-device-preference');
-      adapter.setNestedUrlNamespace(this.args.profileId);
+      adapter.setNestedUrlNamespace(this.profileId);
 
-      this.dsAutomatedDevicePreference = await this.store.queryRecord(
-        'ds-automated-device-preference',
-        {}
+      this.dsAutomatedDevicePreference = await waitForPromise(
+        this.store.queryRecord('ds-automated-device-preference', {})
       );
     } catch (error) {
       const err = error as AdapterError;
@@ -113,7 +115,7 @@ export default class DsPreferenceProviderComponent extends Component<DsPreferenc
     async (devicePreference: DsManualDevicePreferenceModel) => {
       try {
         const adapter = this.store.adapterFor('ds-manual-device-preference');
-        adapter.setNestedUrlNamespace(this.args.profileId);
+        adapter.setNestedUrlNamespace(this.profileId);
 
         this.dsManualDevicePreference = await devicePreference.save();
 
@@ -121,6 +123,7 @@ export default class DsPreferenceProviderComponent extends Component<DsPreferenc
       } catch (error) {
         devicePreference.rollbackAttributes();
 
+        this.logger.error(parseError(error));
         this.notify.error(this.intl.t('failedToUpdateDsManualDevicePref'));
       }
     }
@@ -130,7 +133,7 @@ export default class DsPreferenceProviderComponent extends Component<DsPreferenc
     async (devicePreference: DsAutomatedDevicePreferenceModel) => {
       try {
         const adapter = this.store.adapterFor('ds-automated-device-preference');
-        adapter.setNestedUrlNamespace(this.args.profileId);
+        adapter.setNestedUrlNamespace(this.profileId);
 
         this.dsAutomatedDevicePreference = await devicePreference.save();
 
@@ -138,6 +141,7 @@ export default class DsPreferenceProviderComponent extends Component<DsPreferenc
       } catch (error) {
         devicePreference.rollbackAttributes();
 
+        this.logger.error(parseError(error));
         this.notify.error(this.intl.t('failedToUpdateDsAutomatedDevicePref'));
       }
     }

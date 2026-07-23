@@ -1,0 +1,39 @@
+.user-roles-root {
+  border-bottom: 1px solid
+    var(--file-details-dynamic-scan-automated-user-roles-border-color);
+
+  padding: 0.5em 1.5em;
+
+  .user-role-pill {
+    height: 32px;
+    padding: 0.57143em;
+    padding-right: 0.85714em;
+    cursor: pointer;
+    border-radius: var(
+      --file-details-dynamic-scan-automated-user-roles-pill-border-radius
+    );
+
+    border: 1px solid
+      var(--file-details-dynamic-scan-automated-user-roles-pill-border-color);
+
+    background: var(
+      --file-details-dynamic-scan-automated-user-roles-pill-background
+    );
+
+    &:hover:not(.selected) {
+      background: var(
+        --file-details-dynamic-scan-automated-user-roles-pill-hover-background
+      );
+    }
+
+    &.selected {
+      border-color: var(
+        --file-details-dynamic-scan-automated-user-roles-pill-selected-border-color
+      );
+    }
+  }
+
+  .user-role-pill-icon {
+    font-size: 1.14286em !important;
+  }
+}

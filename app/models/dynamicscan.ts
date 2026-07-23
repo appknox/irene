@@ -1,10 +1,11 @@
 import Model, { attr, belongsTo, type AsyncBelongsTo } from '@ember-data/model';
-import { inject as service } from '@ember/service';
+import { service } from '@ember/service';
 import type IntlService from 'ember-intl/services/intl';
 
 import ENUMS from 'irene/enums';
 import type UserModel from './user';
 import type FileModel from './file';
+import type ScenarioUserRoleModel from './scenario-user-role';
 import type { RawDeviceType } from './device';
 
 export enum DsComputedStatus {
@@ -31,6 +32,9 @@ export default class DynamicscanModel extends Model {
 
   @attr('string')
   declare modeDisplay: string;
+
+  @attr('number')
+  declare engine: number;
 
   @attr('number')
   declare status: number;
@@ -75,58 +79,20 @@ export default class DynamicscanModel extends Model {
   @attr('string')
   declare errorMessage: string;
 
+  @attr('boolean')
+  declare isNavigationGraphGenerated: boolean;
+
+  @belongsTo('scenario-user-role', { async: false, inverse: null })
+  declare scenarioUserRole: ScenarioUserRoleModel | null;
+
   async extendTime(time: number) {
     const adapter = this.store.adapterFor('dynamicscan');
 
     return await adapter.extendTime('dynamicscan', this, time);
   }
 
-  setDynamicStatus(status: number) {
-    this.store.push({
-      data: {
-        id: this.id,
-        type: DynamicscanModel.modelName,
-        attributes: {
-          status,
-        },
-      },
-    });
-  }
-
-  setDynamicScanMode(mode: number) {
-    this.store.push({
-      data: {
-        id: this.id,
-        type: DynamicscanModel.modelName,
-        attributes: {
-          mode,
-        },
-      },
-    });
-  }
-
-  setDynamicScanModeManual() {
-    this.setDynamicScanMode(ENUMS.DYNAMIC_MODE.MANUAL);
-  }
-
-  setDynamicScanModeAuto() {
-    this.setDynamicScanMode(ENUMS.DYNAMIC_MODE.AUTOMATED);
-  }
-
-  setShuttingDown() {
-    this.setDynamicStatus(ENUMS.DYNAMIC_SCAN_STATUS.STOP_SCAN_REQUESTED);
-  }
-
-  setNone() {
-    this.setDynamicStatus(ENUMS.DYNAMIC_SCAN_STATUS.NOT_STARTED);
-  }
-
   get isNone() {
     return this.status === ENUMS.DYNAMIC_SCAN_STATUS.NOT_STARTED;
-  }
-
-  get isNotNone() {
-    return !this.isNone;
   }
 
   get isInqueue() {
@@ -166,10 +132,6 @@ export default class DynamicscanModel extends Model {
     return this.status === ENUMS.DYNAMIC_SCAN_STATUS.READY_FOR_INTERACTION;
   }
 
-  get isNotReady() {
-    return !this.isReady;
-  }
-
   get isRunning() {
     return [
       ENUMS.DYNAMIC_SCAN_STATUS.AUTOPILOT_RUNNING,
@@ -206,6 +168,10 @@ export default class DynamicscanModel extends Model {
     return this.status === ENUMS.DYNAMIC_SCAN_STATUS.CANCELLED;
   }
 
+  get isRetrying() {
+    return this.status === ENUMS.DYNAMIC_SCAN_STATUS.RETRYING;
+  }
+
   get isStarting() {
     return (
       this.isInqueue ||
@@ -218,10 +184,6 @@ export default class DynamicscanModel extends Model {
 
   get isStartingOrShuttingInProgress() {
     return this.isStarting || this.isShuttingDown;
-  }
-
-  get isDynamicStatusNoneOrError() {
-    return this.isNone || this.isStatusError;
   }
 
   get isReadyOrRunning() {
@@ -273,6 +235,10 @@ export default class DynamicscanModel extends Model {
       return this.intl.t('deviceHooking');
     }
 
+    if (this.isRetrying) {
+      return this.intl.t('retrying');
+    }
+
     if (this.isReadyOrRunning) {
       return this.intl.t('running');
     }
@@ -294,6 +260,14 @@ export default class DynamicscanModel extends Model {
     }
 
     return this.intl.t('unknown');
+  }
+
+  get isAutopiloted() {
+    return this.engine === ENUMS.DYNAMIC_SCAN_ENGINE.AUTOPILOT;
+  }
+
+  get isScheduledInternally() {
+    return this.engine === ENUMS.DYNAMIC_SCAN_ENGINE.INTERNAL_MANUAL;
   }
 }
 

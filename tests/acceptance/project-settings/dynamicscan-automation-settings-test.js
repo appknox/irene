@@ -17,6 +17,7 @@ import { t } from 'ember-intl/test-support';
 import Service from '@ember/service';
 import { Response } from 'miragejs';
 
+// ─── Service Stubs ──────────────────────────────────────────────────────────────────
 class IntegrationStub extends Service {
   async configure(user) {
     this.currentUser = user;
@@ -32,11 +33,12 @@ class IntegrationStub extends Service {
 }
 
 class WebsocketStub extends Service {
-  async connect() {}
+  async connect() {} //NOSONAR
 
-  async configure() {}
+  async configure() {} //NOSONAR
 }
 
+// ─── Selectors ────────────────────────────────────────────────────────────────
 const selectors = {
   addScenarioBtn:
     '[data-test-projectSettings-dastAutomationSettings-scenarioAddBtn]',
@@ -58,7 +60,52 @@ const selectors = {
     '[data-test-projectSettings-viewScenario-deleteScenarioDeleteBtn]',
   deleteCancelBtnSelector:
     '[data-test-projectSettings-viewScenario-deleteScenarioCancelBtn]',
+
+  // AI DAST gating
+  scenariosV1Root:
+    '[data-test-projectSettings-dastAutomationSettings-scenarios-root]',
+  scenariosV2Root:
+    '[data-test-projectSettings-dastAutomationSettings-scenariosV2-root]',
+  scenariosV2HeaderText:
+    '[data-test-projectSettings-dastAutomationSettings-scenariosV2HeaderText]',
+  scanWindowRoot:
+    '[data-test-projectSettings-dastAutomationSettings-scanWindow-root]',
 };
+
+// ─── Helpers ──────────────────────────────────────────────────────────────────
+/**
+ * Registers Mirage handlers that the ScenarioV2 section and ScanWindow
+ * component need when they are actually rendered.
+ */
+function setupV2AndScanWindowEndpoints(server) {
+  server.get('/v2/projects/:projectId/scenarios', (schema) => {
+    const results = schema.scenarios.all().models;
+
+    return { count: results.length, next: null, previous: null, results };
+  });
+
+  server.get(
+    '/v2/profiles/:profileId/ds_automated_scan_window_preference',
+    (_, req) => ({
+      id: req.params.profileId,
+      scan_window_type: 'anytime',
+      scan_window_start_at: null,
+      scan_window_end_before: null,
+      scan_window_timezone: '',
+    })
+  );
+}
+
+/** Stubs the single scenario-detail endpoint the V2 scenario route loads. */
+function stubScenarioDetail(server) {
+  server.get('/v2/projects/:projectId/scenarios/:id', (_, req) => ({
+    id: req.params.id,
+    name: 'V2 Scenario',
+    type: 1,
+    roles: [],
+    steps: [],
+  }));
+}
 
 module(
   'Acceptance | project settings/dynamicscan automation settings',
@@ -67,14 +114,18 @@ module(
     setupMirage(hooks);
 
     hooks.beforeEach(async function () {
-      const { vulnerabilities, organization } = await setupRequiredEndpoints(
-        this.server
-      );
+      const { vulnerabilities, organization, currentOrganizationMe } =
+        await setupRequiredEndpoints(this.server);
 
       organization.update({
         features: {
           dynamicscan_automation: true,
         },
+      });
+
+      this.setProperties({
+        organization,
+        currentOrganizationMe,
       });
 
       const profile = this.server.create('profile');
@@ -129,6 +180,15 @@ module(
         return { id: req.params.id, dynamic_scan_automation_enabled: true };
       });
 
+      this.server.get(
+        'v2/profiles/:id/ds_manual_device_preference',
+        (_, req) => {
+          return {
+            id: req.params.id,
+          };
+        }
+      );
+
       this.server.get('/v2/files/:id/dynamicscans', (schema, req) => {
         const { limit, mode } = req.queryParams || {};
 
@@ -146,15 +206,6 @@ module(
           results,
         };
       });
-
-      this.server.get(
-        '/v2/profiles/:id/ds_manual_device_preference',
-        (schema, req) => {
-          return schema.dsManualDevicePreferences
-            .find(`${req.params.id}`)
-            ?.toJSON();
-        }
-      );
 
       this.server.get(
         '/v2/profiles/:id/ds_automated_device_preference',
@@ -392,5 +443,157 @@ module(
         }
       }
     );
+
+    // ─── AI DAST feature-flag gating ──────────────────────────────────────────
+    test('AI DAST disabled + regular user: shows only V1 scenarios; hides V2 and scan window', async function (assert) {
+      this.currentOrganizationMe.update({ has_security_permission: false });
+
+      await visit(
+        `/dashboard/project/${this.project.id}/settings/dast-automation`
+      );
+
+      assert
+        .dom(selectors.scenariosV1Root)
+        .exists('V1 scenarios section shown');
+
+      assert
+        .dom(selectors.scenariosV2Root)
+        .doesNotExist('V2 scenarios section hidden');
+
+      assert.dom(selectors.scanWindowRoot).doesNotExist('scan window hidden');
+    });
+
+    test('AI DAST disabled + super user: shows both V1 and V2 scenarios, scan window, and "Super User Only" label', async function (assert) {
+      this.currentOrganizationMe.update({ has_security_permission: true });
+
+      setupV2AndScanWindowEndpoints(this.server);
+
+      await visit(
+        `/dashboard/project/${this.project.id}/settings/dast-automation`
+      );
+
+      assert
+        .dom(selectors.scenariosV1Root)
+        .exists('V1 scenarios section shown');
+
+      assert
+        .dom(selectors.scenariosV2Root)
+        .exists('V2 scenarios section shown');
+
+      assert.dom(selectors.scanWindowRoot).exists('scan window shown');
+
+      assert
+        .dom(selectors.scenariosV2HeaderText)
+        .containsText(t('dastAutomation.superUserOnly'));
+    });
+
+    test('AI DAST enabled: shows only V2 scenarios and scan window; hides V1 and "Super User Only" label', async function (assert) {
+      this.organization.update({
+        ai_features: {
+          ai_dast: true,
+        },
+      });
+
+      setupV2AndScanWindowEndpoints(this.server);
+
+      await visit(
+        `/dashboard/project/${this.project.id}/settings/dast-automation`
+      );
+
+      assert.dom(selectors.scenariosV1Root).doesNotExist('V1 hidden');
+
+      assert
+        .dom(selectors.scenariosV2Root)
+        .exists('V2 scenarios section shown');
+
+      assert.dom(selectors.scanWindowRoot).exists('scan window shown');
+
+      assert
+        .dom(selectors.scenariosV2HeaderText)
+        .doesNotContainText(t('dastAutomation.superUserOnly'));
+    });
+
+    // ─── AI DAST feature-flag gating (route level) ────────────────────────────
+
+    test('AI DAST disabled + regular user: V2 scenario route redirects to settings', async function (assert) {
+      this.currentOrganizationMe.update({ has_security_permission: false });
+
+      await visit(
+        `/dashboard/project/${this.project.id}/settings/dast-automation-scenario-v2/1`
+      );
+
+      assert.strictEqual(
+        currentURL(),
+        `/dashboard/project/${this.project.id}/settings/dast-automation`,
+        'regular user is redirected away from the V2 scenario route'
+      );
+    });
+
+    test('AI DAST disabled + super user: V2 scenario route is accessible', async function (assert) {
+      this.currentOrganizationMe.update({ has_security_permission: true });
+
+      stubScenarioDetail(this.server);
+
+      await visit(
+        `/dashboard/project/${this.project.id}/settings/dast-automation-scenario-v2/1`
+      );
+
+      assert.strictEqual(
+        currentURL(),
+        `/dashboard/project/${this.project.id}/settings/dast-automation-scenario-v2/1`,
+        'super user stays on the V2 scenario route'
+      );
+    });
+
+    test('AI DAST enabled: V2 scenario route is accessible for a regular user', async function (assert) {
+      this.currentOrganizationMe.update({ has_security_permission: false });
+
+      this.organization.update({ ai_features: { ai_dast: true } });
+
+      stubScenarioDetail(this.server);
+
+      await visit(
+        `/dashboard/project/${this.project.id}/settings/dast-automation-scenario-v2/1`
+      );
+
+      assert.strictEqual(
+        currentURL(),
+        `/dashboard/project/${this.project.id}/settings/dast-automation-scenario-v2/1`,
+        'stays on the V2 scenario route when AI DAST is enabled'
+      );
+    });
+
+    test('AI DAST enabled: V1 scenario route redirects to settings', async function (assert) {
+      this.organization.update({ ai_features: { ai_dast: true } });
+
+      // Landing page after redirect renders the V2 flow + scan window.
+      setupV2AndScanWindowEndpoints(this.server);
+
+      const scenario = this.server.create('scan-parameter-group');
+
+      await visit(
+        `/dashboard/project/${this.project.id}/settings/dast-automation-scenario/${scenario.id}`
+      );
+
+      assert.strictEqual(
+        currentURL(),
+        `/dashboard/project/${this.project.id}/settings/dast-automation`,
+        'V1 scenario route is blocked once AI DAST is enabled'
+      );
+    });
+
+    test('AI DAST disabled: V1 scenario route is accessible', async function (assert) {
+      const scenario = this.server.create('scan-parameter-group');
+
+      await visit(
+        `/dashboard/project/${this.project.id}/settings/dast-automation-scenario/${scenario.id}`
+      );
+
+      assert.strictEqual(
+        currentURL(),
+        `/dashboard/project/${this.project.id}/settings/dast-automation-scenario/${scenario.id}`,
+        'stays on the V1 scenario route when AI DAST is disabled'
+      );
+    });
   }
 );

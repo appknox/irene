@@ -766,38 +766,45 @@ module(
     );
 
     test('it reloads the active manual scan from realtime updates', async function (assert) {
-      await render(hbs`
-        <FileDetails::DynamicScan::Manual @file={{this.file}} @dynamicScanText={{this.dynamicScanText}} />
-      `);
+      const store = this.owner.lookup('service:store');
+      const eventBus = this.owner.lookup('service:event-bus');
 
-      assert
-        .dom('[data-test-fileDetails-dynamicScanAction="startBtn"]')
-        .exists();
-
-      const queuedScan = this.server.create('dynamicscan', {
+      // Create the scan before rendering so the endpoint stub returns it and
+      // the component loads it (establishing this.dynamicScan) with cancelBtn.
+      const inQueueScan = this.server.create('dynamicscan', {
         file: this.file.id,
         mode: ENUMS.DYNAMIC_MODE.MANUAL,
         status: ENUMS.DYNAMIC_SCAN_STATUS.IN_QUEUE,
         ended_on: null,
       });
 
-      const store = this.owner.lookup('service:store');
-      const eventBus = this.owner.lookup('service:event-bus');
-
-      const dynamicscan = store.push(
-        store.normalize('dynamicscan', queuedScan.toJSON())
-      );
-
-      eventBus.trigger('ws:dynamicscan:update', dynamicscan);
-
-      await settled();
+      await render(hbs`
+        <FileDetails::DynamicScan::Manual @file={{this.file}} @dynamicScanText={{this.dynamicScanText}} />
+      `);
 
       assert
         .dom('[data-test-fileDetails-dynamicScanAction="cancelBtn"]')
         .exists();
 
+      // Push the same scan (matching ID) with an updated status so the WS
+      // guard (String(id) === String(this.dynamicScan?.id)) passes.
+      const completedScan = store.push(
+        store.normalize('dynamicscan', {
+          ...inQueueScan.toJSON(),
+          status: ENUMS.DYNAMIC_SCAN_STATUS.ANALYSIS_COMPLETED,
+        })
+      );
+
+      eventBus.trigger('ws:dynamicscan:update', completedScan);
+
+      await settled();
+
       assert
-        .dom('[data-test-fileDetails-dynamicScanAction="startBtn"]')
+        .dom('[data-test-fileDetails-dynamicScanAction="restartBtn"]')
+        .exists();
+
+      assert
+        .dom('[data-test-fileDetails-dynamicScanAction="cancelBtn"]')
         .doesNotExist();
     });
 
@@ -916,6 +923,7 @@ module(
         const dynamicscan = this.server.create('dynamicscan', {
           file: '10',
           mode: ENUMS.DYNAMIC_MODE.MANUAL,
+          engine: ENUMS.DYNAMIC_SCAN_ENGINE.USER_MANUAL,
           status: ENUMS.DYNAMIC_SCAN_STATUS.READY_FOR_INTERACTION,
 
           auto_shutdown_on: dayjs()
@@ -943,7 +951,9 @@ module(
         });
 
         this.server.get('/v3/files/:id/last_manual_dynamic_scan', (schema) => {
-          return schema.dynamicscans.find(dynamicscan.id).toJSON();
+          const foundScan = schema.dynamicscans.find(dynamicscan.id)?.toJSON();
+
+          return foundScan ? [foundScan] : [];
         });
 
         this.server.put('/v2/dynamicscans/:id/extend', (schema, req) => {
@@ -1032,7 +1042,9 @@ module(
           );
 
           [5, 15, 30].forEach((time, idx) => {
-            assert.dom(timeOptions[idx]).hasText(`${time} mins`);
+            assert
+              .dom(timeOptions[idx])
+              .hasText(t('dynamicScanExtendTimeOption', { mins: time }));
           });
 
           await click(timeOptions[1]);

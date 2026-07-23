@@ -46,8 +46,6 @@ const selectors = {
     '[data-test-projectSettings-dastAutomationSettings-scenariosHeaderListDesc]',
   addScenarioBtn:
     '[data-test-projectSettings-dastAutomationSettings-scenarioAddBtn]',
-  addScenarioBtnIcon:
-    '[data-test-projectSettings-dastAutomationSettings-scenarioAddBtnIcon]',
 
   // Modal Selectors
   scenarioNameTextfieldTitle:
@@ -220,7 +218,7 @@ module(
     });
 
     test('it renders', async function (assert) {
-      assert.expect(8);
+      assert.expect(7);
 
       this.server.get(
         '/v2/projects/:projectId/scan_parameter_groups',
@@ -283,8 +281,6 @@ module(
         .dom(selectors.addScenarioBtn)
         .exists()
         .containsText(t('dastAutomation.addScenario'));
-
-      assert.dom(selectors.addScenarioBtnIcon).exists();
     });
 
     test('it adds and renders project scenarios', async function (assert) {

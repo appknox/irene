@@ -257,15 +257,19 @@ export default class FileReportDrawerLegacyCvssReportsComponent extends Componen
   });
 
   getFileLatestAutoDynamicScans = task(async () => {
-    this.lastAutomatedDynamicScan = await waitForPromise(
+    const scans = await waitForPromise(
       this.file.getFileLastAutomatedDynamicScan()
     );
+
+    this.lastAutomatedDynamicScan = scans[0] ?? null;
   });
 
   getFileLatestManualDynamicScans = task(async () => {
-    this.lastManualDynamicScan = await waitForPromise(
+    const scans = await waitForPromise(
       this.file.getFileLastManualDynamicScan()
     );
+
+    this.lastManualDynamicScan = scans[0] ?? null;
   });
 
   willDestroy() {

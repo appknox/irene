@@ -1,16 +1,25 @@
 export const MaterialSymbolsSet = [
   'add',
+  'arrow-selector-tool',
   'content-copy',
   'content-copy-outline',
   'delete',
   'delete-outline',
   'done',
+  'drag-indicator',
+  'drag-pan',
+  'format-size',
+  'hourglass-pause',
+  'swipe',
+  'touch-app',
+  'touch-long',
   'security',
   'arrow-drop-down',
   'arrow-drop-up',
   'group',
   'close',
   'edit',
+  'edit-outline',
   'note-add',
   'refresh',
   'arrow-left',
@@ -180,6 +189,7 @@ export const MaterialSymbolsSet = [
   'list-alt-check',
   'border-color',
   'border-color-outline',
+  'family-history',
 ] as const;
 
 export const MdiIconsSet = [
@@ -196,6 +206,7 @@ export const MdiIconsSet = [
   'file-certificate-outline',
   'fire',
   'calendar-month-outline',
+  'delete',
 ] as const;
 
 export const HugeIconsSet = [
@@ -226,3 +237,5 @@ export const StreamlinePlumpIconsSet = ['threat-phone'] as const;
 export const IxIconsSet = ['ai'] as const;
 
 export const MajesticonsIconsSet = ['pulse'] as const;
+
+export const MiIconsSet = ['select'] as const;

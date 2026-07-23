@@ -1,0 +1,229 @@
+<div
+  local-class='
+    step-row
+    {{if @isReadOnly "is-readonly"}}
+    {{if @isActiveSample "is-sample-active"}}
+    {{if this.isBeingDragged "is-dragging"}}
+    {{if this.isDragTarget "is-drag-over"}}
+  '
+  {{did-insert this.registerRow}}
+  {{on 'dragover' (fn @dnd.onDragOver @index)}}
+  {{on 'dragleave' (fn @dnd.onDragLeave @index)}}
+  {{on 'drop' (fn @dnd.onDrop @index)}}
+  data-test-dastAutomationScenario-stepsTable-row='{{@index}}'
+>
+  {{! Drag handle }}
+  <span
+    local-class='drag-handle {{if @isReadOnly "is-readonly"}}'
+    draggable='{{if @isReadOnly "false" "true"}}'
+    {{on 'dragstart' this.handleDragStart}}
+    {{on 'dragend' @dnd.onDragEnd}}
+    data-test-dastAutomationScenario-stepsTable-rowDragHandle
+  >
+    <AkIcon @iconName='drag-indicator' />
+  </span>
+
+  {{! Step order }}
+  <AkTypography
+    @variant='body2'
+    data-test-dastAutomationScenario-stepsTable-rowOrder
+  >
+    #{{add @index 1}}
+  </AkTypography>
+
+  {{! Action select }}
+  <div local-class='action-select-wrapper'>
+    <AkSelect
+      @options={{this.stepActionConfigs}}
+      @selected={{this.actionConfig}}
+      @onChange={{this.handleActionSelect}}
+      @disabled={{@isReadOnly}}
+      @triggerClass='{{if
+        this.isEnterTextAction
+        (concat this.classes.compactTrigger " " this.classes.enterInputTrigger)
+        this.classes.compactTrigger
+      }}'
+      local-class='action-select'
+      data-test-dastAutomationScenario-stepsTable-rowActionSelect
+      as |config|
+    >
+      <AkStack @alignItems='center' @spacing='1'>
+        <AkIcon @iconName={{config.icon}} local-class='action-option-icon' />
+
+        <AkTypography @variant='body2'>
+          {{t config.label}}
+        </AkTypography>
+      </AkStack>
+    </AkSelect>
+
+    {{#if this.isEnterTextAction}}
+      <AkStack
+        @alignItems='center'
+        local-class='enter-input-info-icon-container'
+      >
+        <AkTooltip
+          @title={{t 'dastAutomation.enterInputTypeInfo'}}
+          @placement='top'
+          @arrow={{true}}
+          @renderInPlace={{true}}
+          data-test-dastAutomationScenario-stepsTable-rowEnterInputInfoTooltip
+        >
+          <AkIcon
+            @iconName='info'
+            local-class='enter-input-info-icon'
+            data-test-dastAutomationScenario-stepsTable-rowEnterInputInfoIcon
+          />
+        </AkTooltip>
+      </AkStack>
+    {{/if}}
+  </div>
+
+  {{! Identifier cell }}
+  <ProjectSettings::DastAutomation::ScenarioViewV2::StepsTable::InputErrorWrapper
+    @errorMessage={{this.identifierErrorMessage}}
+  >
+    <AkTextField
+      @value={{@step.identifier}}
+      @placeholder={{t 'dastAutomation.stepPlaceholders.text'}}
+      @disabled={{@isReadOnly}}
+      @error={{if this.identifierError true false}}
+      local-class='compact-field'
+      {{on 'input' this.handleIdentifierInput}}
+      data-test-dastAutomationScenario-stepsTable-rowIdentifier
+    />
+  </ProjectSettings::DastAutomation::ScenarioViewV2::StepsTable::InputErrorWrapper>
+
+  {{! Value cell }}
+  <div local-class='value-cell'>
+    {{#if (eq this.valueKind 'count')}}
+      <ProjectSettings::DastAutomation::ScenarioViewV2::StepsTable::InputErrorWrapper
+        @errorMessage={{this.valueErrorMessage}}
+      >
+        <AkTextField
+          @type='number'
+          @value={{@step.value}}
+          @placeholder={{t this.valuePlaceholder}}
+          @disabled={{@isReadOnly}}
+          @error={{if this.valueError true false}}
+          local-class='compact-field'
+          min='1'
+          max='20'
+          {{on 'input' this.handleValueInput}}
+          data-test-dastAutomationScenario-stepsTable-rowValue
+        />
+      </ProjectSettings::DastAutomation::ScenarioViewV2::StepsTable::InputErrorWrapper>
+
+    {{else if (eq this.valueKind 'boolean')}}
+      <ProjectSettings::DastAutomation::ScenarioViewV2::StepsTable::InputErrorWrapper
+        @errorMessage={{this.valueErrorMessage}}
+      >
+        <AkSelect
+          @options={{this.checkOptions}}
+          @selected={{this.selectedCheckOption}}
+          @onChange={{this.handleCheckValueSelect}}
+          @placeholder={{t this.valuePlaceholder}}
+          @disabled={{@isReadOnly}}
+          @error={{if this.valueError true false}}
+          @triggerClass={{this.classes.compactTrigger}}
+          local-class='value-select'
+          data-test-dastAutomationScenario-stepsTable-rowValue
+          as |option|
+        >
+          {{t option.label}}
+        </AkSelect>
+      </ProjectSettings::DastAutomation::ScenarioViewV2::StepsTable::InputErrorWrapper>
+
+    {{else if (eq this.valueKind 'duration')}}
+      <AkStack @alignItems='center' @spacing='1' @width='full'>
+        <ProjectSettings::DastAutomation::ScenarioViewV2::StepsTable::InputErrorWrapper
+          @errorMessage={{this.valueErrorMessage}}
+        >
+          <AkTextField
+            @type='number'
+            @value={{@step.value}}
+            @placeholder={{t this.valuePlaceholder}}
+            @disabled={{@isReadOnly}}
+            @error={{if this.valueError true false}}
+            local-class='compact-field'
+            min='1'
+            {{on 'input' this.handleValueInput}}
+            data-test-dastAutomationScenario-stepsTable-rowValue
+          />
+        </ProjectSettings::DastAutomation::ScenarioViewV2::StepsTable::InputErrorWrapper>
+
+        <AkSelect
+          @options={{this.unitOptions}}
+          @selected={{this.selectedUnit}}
+          @onChange={{this.handleUnitSelect}}
+          @disabled={{@isReadOnly}}
+          @triggerClass={{this.classes.compactTrigger}}
+          local-class='unit-select {{if @isReadOnly "is-readonly"}}'
+          data-test-dastAutomationScenario-stepsTable-rowValueUnit
+          as |unit|
+        >
+          {{t unit}}
+        </AkSelect>
+      </AkStack>
+
+    {{else if (eq this.valueKind 'direction')}}
+      <ProjectSettings::DastAutomation::ScenarioViewV2::StepsTable::InputErrorWrapper
+        @errorMessage={{this.valueErrorMessage}}
+      >
+        <AkSelect
+          @options={{this.directionOptions}}
+          @selected={{this.selectedDirectionOption}}
+          @onChange={{this.handleDirectionSelect}}
+          @placeholder={{t this.valuePlaceholder}}
+          @disabled={{@isReadOnly}}
+          @error={{if this.valueError true false}}
+          @triggerClass={{this.classes.compactTrigger}}
+          local-class='value-select'
+          data-test-dastAutomationScenario-stepsTable-rowValue
+          as |option|
+        >
+          {{t option.label}}
+        </AkSelect>
+      </ProjectSettings::DastAutomation::ScenarioViewV2::StepsTable::InputErrorWrapper>
+
+    {{else}}
+      <ProjectSettings::DastAutomation::ScenarioViewV2::StepsTable::InputErrorWrapper
+        @errorMessage={{this.valueErrorMessage}}
+      >
+        <AkTextField
+          @type='text'
+          @value={{@step.value}}
+          @placeholder={{t this.valuePlaceholder}}
+          @disabled={{@isReadOnly}}
+          @error={{if this.valueError true false}}
+          local-class='compact-field'
+          {{on 'input' this.handleValueInput}}
+          {{on 'focus' this.handleValueFocus}}
+          {{on 'blur' this.handleValueBlur}}
+          data-test-dastAutomationScenario-stepsTable-rowValue
+        />
+      </ProjectSettings::DastAutomation::ScenarioViewV2::StepsTable::InputErrorWrapper>
+    {{/if}}
+  </div>
+
+  {{! Row hover actions }}
+  {{#if (or (not @isReadOnly) @isActiveSample)}}
+    <AkStack
+      @alignItems='center'
+      @spacing='0.5'
+      local-class='row-hover-actions'
+      data-test-dastAutomationScenario-stepsTable-rowHoverActions
+    >
+      <ProjectSettings::DastAutomation::ScenarioViewV2::StepsTable::RowActions
+        @scenarioDetail={{@scenarioDetail}}
+        @step={{@step}}
+        @disabled={{@isReadOnly}}
+        @isSecureText={{this.isSecureText}}
+        @disableDelete={{this.disableDelete}}
+        @onToggleSecure={{this.toggleStepSecure}}
+        @isMasking={{this.maskStepTask.isRunning}}
+        @maskingDisabled={{this.maskDisabled}}
+        @onDelete={{@onDelete}}
+      />
+    </AkStack>
+  {{/if}}
+</div>

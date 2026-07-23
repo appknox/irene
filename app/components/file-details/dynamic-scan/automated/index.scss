@@ -19,3 +19,25 @@
     font-style: italic;
   }
 }
+
+.automated-dast-viewer-container {
+  &.multiple-scans {
+    gap: 4.5em;
+    padding-bottom: 3.5714em;
+  }
+
+  &.single-scan {
+    padding: 2em;
+  }
+}
+
+.view-navigation-graph-btn {
+  max-height: 32px;
+}
+
+.tooltip-content-container {
+  width: 280px;
+  padding: 0.5em;
+  box-sizing: border-box;
+  white-space: normal;
+}
