@@ -40,7 +40,6 @@ export default class OrganizationArchiveComponent extends Component {
 
   readonly MAX_DATE_RANGE_YEARS = 2;
 
-
   datepickerOptions = [
     'last7Days',
     'last30Days',
