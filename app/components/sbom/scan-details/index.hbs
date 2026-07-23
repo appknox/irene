@@ -138,48 +138,51 @@
         />
       {{else}}
         {{! The AI-BOM tab has no tree/list toggle and renders its own
-          search box (see AiBomComponentList) -- this header is SBOM-only. }}
-        <AkStack
-          data-test-sbomScanDetails-switch-header
-          local-class='switch-view-header'
-          @alignItems='center'
-          @justifyContent='space-between'
-          class={{if this.isNotOutdated '' 'mt-2'}}
-        >
-          <div {{style width='180px'}}>
-            <AkTextField
-              data-test-sbomScanDetails-componentSearchInput
-              @placeholder={{t 'search'}}
-              @value={{this.sbomScanDetailsService.searchQuery}}
-              {{on 'input' this.handleSearchInput}}
-            >
-              <:leftAdornment>
-                <AkIcon @iconName='search' @color='textSecondary' />
-              </:leftAdornment>
-            </AkTextField>
-          </div>
+          search box (see AiBomComponentList) -- this header is SBOM-only.
+          Also hidden for outdated files: tree view 404s server-side for
+          them, so there's nothing to switch to/from. }}
+        {{#if this.isNotOutdated}}
+          <AkStack
+            data-test-sbomScanDetails-switch-header
+            local-class='switch-view-header'
+            @alignItems='center'
+            @justifyContent='space-between'
+          >
+            <div {{style width='180px'}}>
+              <AkTextField
+                data-test-sbomScanDetails-componentSearchInput
+                @placeholder={{t 'search'}}
+                @value={{this.sbomScanDetailsService.searchQuery}}
+                {{on 'input' this.handleSearchInput}}
+              >
+                <:leftAdornment>
+                  <AkIcon @iconName='search' @color='textSecondary' />
+                </:leftAdornment>
+              </AkTextField>
+            </div>
 
-          <AkStack @alignItems='center' @spacing='1'>
-            <AkIconButton
-              local-class='switch-button tree'
-              @variant='outlined'
-              @size='medium'
-              {{on 'click' this.handleTreeViewClick}}
-              data-test-sbomScanDetails-switch-treeViewButton
-            >
-              <AkIcon @iconName='account-tree' />
-            </AkIconButton>
+            <AkStack @alignItems='center' @spacing='1'>
+              <AkIconButton
+                local-class='switch-button tree'
+                @variant='outlined'
+                @size='medium'
+                {{on 'click' this.handleTreeViewClick}}
+                data-test-sbomScanDetails-switch-treeViewButton
+              >
+                <AkIcon @iconName='account-tree' />
+              </AkIconButton>
 
-            <AkIconButton
-              local-class='switch-button list active'
-              @variant='outlined'
-              {{on 'click' this.handleListViewClick}}
-              data-test-sbomScanDetails-switch-listViewButton
-            >
-              <AkIcon @color='primary' @iconName='format-list-bulleted' />
-            </AkIconButton>
+              <AkIconButton
+                local-class='switch-button list active'
+                @variant='outlined'
+                {{on 'click' this.handleListViewClick}}
+                data-test-sbomScanDetails-switch-listViewButton
+              >
+                <AkIcon @color='primary' @iconName='format-list-bulleted' />
+              </AkIconButton>
+            </AkStack>
           </AkStack>
-        </AkStack>
+        {{/if}}
 
         <Sbom::ScanDetails::ComponentList
           @sbomProject={{@sbomProject}}
