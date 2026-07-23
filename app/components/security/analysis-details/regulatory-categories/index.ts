@@ -25,6 +25,7 @@ import type Nistsp800171Model from 'irene/models/nistsp800171';
 import type IntlService from 'ember-intl/services/intl';
 import SamaModel from 'irene/models/sama';
 import Pcidss4Model from 'irene/models/pcidss4';
+import DoraModel from 'irene/models/dora';
 
 type RegulatoryCategoryOptionKeys =
   | 'owasp'
@@ -40,7 +41,8 @@ type RegulatoryCategoryOptionKeys =
   | 'gdpr'
   | 'nistsp800171'
   | 'nistsp80053'
-  | 'sama';
+  | 'sama'
+  | 'dora';
 
 type RegulatoryCategoryModels =
   | OwaspModel
@@ -56,7 +58,8 @@ type RegulatoryCategoryModels =
   | GdprModel
   | Nistsp80053Model
   | Nistsp800171Model
-  | SamaModel;
+  | SamaModel
+  | DoraModel;
 
 type RegulatoryDataModel<T> = ArrayProxy<T> | null;
 
@@ -86,6 +89,7 @@ export default class SecurityAnalysisDetailsRegulatoryCategoriesComponent extend
   @tracked nistsp80053sData: RegulatoryDataModel<Nistsp80053Model> = null;
   @tracked nistsp800171sData: RegulatoryDataModel<Nistsp800171Model> = null;
   @tracked samaData: RegulatoryDataModel<SamaModel> = null;
+  @tracked doraData: RegulatoryDataModel<DoraModel> = null;
 
   risks = ENUMS.RISK.CHOICES;
 
@@ -168,6 +172,10 @@ export default class SecurityAnalysisDetailsRegulatoryCategoriesComponent extend
 
   get sama() {
     return this.samaData?.slice() || [];
+  }
+
+  get doras() {
+    return this.doraData?.slice() || [];
   }
 
   get regulatoryCategories() {
@@ -300,6 +308,15 @@ export default class SecurityAnalysisDetailsRegulatoryCategoriesComponent extend
         options: this.sama,
         onChange: this.onCategorySelect('sama'),
       },
+      {
+        key: 'dora',
+        title: 'Digital Operational Resilience Act',
+        placeholder: 'Select DORA',
+        labelKeys: ['code', 'title'],
+        selected: this.analysis?.dora ?? [],
+        options: this.doras,
+        onChange: this.onCategorySelect('dora'),
+      },
     ] as Array<{
       key: string;
       title: string;
@@ -366,6 +383,8 @@ export default class SecurityAnalysisDetailsRegulatoryCategoriesComponent extend
       this.samaData = await this.store.findAll('sama');
 
       this.pcidss4sData = await this.store.findAll('pcidss4');
+
+      this.doraData = await this.store.findAll('dora');
     } catch (error) {
       this.notifications.error(parseError(error, this.tPleaseTryAgain));
     }

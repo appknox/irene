@@ -165,6 +165,14 @@ export default Factory.extend({
     },
   }),
 
+  withDora: trait({
+    afterCreate(model: ModelInstance, server: Server) {
+      model.update({
+        dora: server.createList('dora', 2).map((it) => it.id),
+      });
+    },
+  }),
+
   withAllRegulatory: trait({
     afterCreate(model: ModelInstance, server: Server) {
       model.update({
@@ -183,6 +191,7 @@ export default Factory.extend({
         nistsp80053: server.createList('nistsp80053', 2).map((it) => it.id),
         nistsp800171: server.createList('nistsp800171', 2).map((it) => it.id),
         sama: server.createList('sama', 2).map((it) => it.id),
+        dora: server.createList('dora', 2).map((it) => it.id),
       });
     },
   }),

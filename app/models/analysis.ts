@@ -32,6 +32,7 @@ import Nistsp800171Model from './nistsp800171';
 import Nistsp80053Model from './nistsp80053';
 import SamaModel from './sama';
 import Pcidss4Model from './pcidss4';
+import DoraModel from './dora';
 import { KnoxiqValidatedFindingExploitability } from './knoxiq-validated-finding';
 
 irregular('asvs', 'asvses');
@@ -149,6 +150,9 @@ export default class AnalysisModel extends Model {
 
   @hasMany('sama', { async: true, inverse: null })
   declare sama: AsyncHasMany<SamaModel>;
+
+  @hasMany('dora', { async: true, inverse: null })
+  declare dora: AsyncHasMany<DoraModel>;
 
   @belongsTo('vulnerability', { async: true, inverse: null })
   declare vulnerability: AsyncBelongsTo<VulnerabilityModel>;
@@ -298,6 +302,10 @@ export default class AnalysisModel extends Model {
 
   get showSama() {
     return this.file.get('profile')?.get('reportPreference')?.show_sama?.value;
+  }
+
+  get showDora() {
+    return this.file.get('profile')?.get('reportPreference')?.show_dora?.value;
   }
 
   get vulnerabilityTypes() {

@@ -102,6 +102,7 @@ export default class SecurityAnalysisListTableActionComponent extends Component<
             a.get('id')
           ),
           sama: (await this.analysis.sama).map((a) => a.get('id')),
+          dora: (await this.analysis.dora).map((a) => a.get('id')),
           findings: this.analysis.findings,
           overridden_risk: this.analysis.overriddenRisk || 'None',
           overridden_risk_comment: this.analysis.overriddenRiskComment || '',
