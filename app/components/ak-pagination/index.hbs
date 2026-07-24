@@ -15,9 +15,9 @@
       @renderInPlace={{true}}
       @verticalPosition={{or @paginationSelectOptionsVertPosition 'above'}}
       @triggerClass={{this.classes.selectClass}}
+      aria-label='pagination item per page options'
       {{style width='50px'}}
       data-test-pagination-select
-      data-test-cy='paginationItemPerPageOptions'
       as |aks|
     >
       {{aks.label}}
@@ -26,7 +26,11 @@
     {{#if @totalItems}}
       <div local-class='ak-pagination-divider'></div>
 
-      <AkTypography @tag='span' data-test-page-range>
+      <AkTypography
+        @tag='span'
+        aria-label='pagination page range'
+        data-test-page-range
+      >
         {{@startItemIdx}}-{{@endItemIdx}}
         of
         {{@totalItems}}
@@ -49,6 +53,7 @@
       @leftIconClass={{this.classes.prevButtonIconClass}}
       @color='neutral'
       @variant='outlined'
+      aria-label='pagination previous button'
       local-class='ak-pagination-prev-button'
       {{on 'click' (or @prevAction this.noop)}}
       data-test-pagination-prev-btn
@@ -77,6 +82,7 @@
       @color='neutral'
       @variant='outlined'
       @rightIconClass={{this.classes.nextButtonIconClass}}
+      aria-label='pagination next button'
       local-class='ak-pagination-next-button'
       {{on 'click' (or @nextAction this.noop)}}
       data-test-pagination-next-btn

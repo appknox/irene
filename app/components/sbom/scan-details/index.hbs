@@ -75,6 +75,7 @@
           {{#if this.isTreeView}}
             <AkButton
               data-test-sbomScanDetails-collapseAllButton
+              data-test-cy='sbom-scan-details-collapse-all-btn'
               {{on 'click' this.collapseAll}}
               @variant='outlined'
               @color='neutral'
@@ -98,6 +99,8 @@
             @size='medium'
             {{on 'click' this.handleTreeViewClick}}
             data-test-sbomScanDetails-switch-treeViewButton
+            data-test-cy='sbom-scan-details-tree-view-btn'
+
           >
             <AkIcon
               @color={{if this.isTreeView 'primary'}}
@@ -110,6 +113,7 @@
             @variant='outlined'
             {{on 'click' this.handleListViewClick}}
             data-test-sbomScanDetails-switch-listViewButton
+            data-test-cy='sbom-scan-details-list-view-btn'
           >
             <AkIcon
               @color={{unless this.isTreeView 'primary'}}
