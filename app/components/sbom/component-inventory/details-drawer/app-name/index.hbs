@@ -1,0 +1,11 @@
+<AkStack @alignItems='center' @spacing='1.5'>
+  <Sbom::AppLogo @sbomProject={{@sbomProject}} />
+
+  <AkTypography
+    @noWrap={{true}}
+    title={{this.name}}
+    data-test-componentInventory-appName
+  >
+    {{this.name}}
+  </AkTypography>
+</AkStack>

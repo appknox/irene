@@ -1,0 +1,187 @@
+<div local-class='component-inventory-container'>
+  <AkStack
+    @width='full'
+    @direction='column'
+    @spacing='0.5'
+    class='mb-3'
+    local-class='sbom-component-inventory-header'
+    data-test-componentInventory-header
+  >
+    <AkTypography @variant='h5' data-test-componentInventory-title>
+      {{t 'sbomModule.componentInventory.title'}}
+    </AkTypography>
+
+    <AkTypography
+      @variant='body2'
+      @color='textSecondary'
+      data-test-componentInventory-description
+    >
+      {{t 'sbomModule.componentInventory.description'}}
+    </AkTypography>
+  </AkStack>
+
+  <div local-class='search-container-main'>
+    <div local-class='search-input-width'>
+      <AkTextField
+        @placeholder={{t 'sbomModule.componentInventory.searchPlaceholder'}}
+        @value={{this.searchQuery}}
+        {{on 'input' this.handleSearchQueryChange}}
+        data-test-componentInventory-searchInput
+      >
+        <:leftAdornment>
+          <AkIcon @iconName='search' @color='textSecondary' />
+        </:leftAdornment>
+
+        <:rightAdornment>
+          {{#if this.hasSearchQuery}}
+            <AkButton
+              @variant='text'
+              @color='primary'
+              {{on 'click' this.handleClear}}
+              data-test-componentInventory-clearBtn
+            >
+              <:leftIcon>
+                <AkIcon @iconName='close' @color='primary' @size='small' />
+              </:leftIcon>
+
+              <:default>
+                {{t 'clear'}}
+              </:default>
+            </AkButton>
+          {{/if}}
+        </:rightAdornment>
+      </AkTextField>
+    </div>
+  </div>
+
+  {{#if this.hasSearchQuery}}
+    <AkPaginationProvider
+      @results={{this.componentList}}
+      @onItemPerPageChange={{this.handleItemPerPageChange}}
+      @totalItems={{this.totalComponentCount}}
+      @nextAction={{this.handlePrevNextAction}}
+      @prevAction={{this.handlePrevNextAction}}
+      @itemPerPageOptions={{array 10 25 50}}
+      @defaultLimit={{this.limit}}
+      @offset={{this.offset}}
+      as |pgc|
+    >
+      <Sbom::EmptyLoadingView
+        @empty={{this.hasNoComponent}}
+        @loading={{this.fetchComponents.isRunning}}
+      >
+        <:emptySvg>
+          <AkSvg::ComponentSearch data-test-componentInventory-noResultsSvg />
+        </:emptySvg>
+
+        <:emptyText>
+          <AkStack
+            class='mt-2'
+            @direction='column'
+            @alignItems='center'
+            @spacing='1'
+          >
+            <AkTypography
+              data-test-componentInventory-noResultsTitle
+              @variant='h5'
+            >
+              {{t 'sbomModule.componentInventory.noResultsTitle'}}
+            </AkTypography>
+
+            <AkTypography
+              data-test-componentInventory-noResultsDescription
+              {{style width='600px'}}
+              @color='textSecondary'
+              @align='center'
+            >
+              {{t 'sbomModule.componentInventory.noResultsDescription'}}
+            </AkTypography>
+          </AkStack>
+        </:emptyText>
+
+        <:default>
+          <AkTable
+            @hoverable={{true}}
+            local-class='results-table'
+            data-test-componentInventory-table
+            as |t|
+          >
+            <t.head @columns={{this.columns}} />
+
+            <t.body @rows={{pgc.currentPageResults}} as |b|>
+              <b.row
+                {{style cursor='pointer'}}
+                @onClick={{this.handleComponentRowClick}}
+                data-test-componentInventory-row
+                as |r|
+              >
+                <r.cell as |value|>
+                  {{#if r.columnValue.component}}
+                    {{#let
+                      (component r.columnValue.component)
+                      as |CellComponent|
+                    }}
+                      <CellComponent @sbomComponent={{r.rowValue}} />
+                    {{/let}}
+                  {{else}}
+                    <AkTypography title={{value}} @noWrap={{true}}>
+                      {{value}}
+                    </AkTypography>
+                  {{/if}}
+                </r.cell>
+              </b.row>
+            </t.body>
+          </AkTable>
+
+          <AkPagination
+            @disableNext={{pgc.disableNext}}
+            @nextAction={{pgc.nextAction}}
+            @disablePrev={{pgc.disablePrev}}
+            @prevAction={{pgc.prevAction}}
+            @endItemIdx={{pgc.endItemIdx}}
+            @startItemIdx={{pgc.startItemIdx}}
+            @itemPerPageOptions={{pgc.itemPerPageOptions}}
+            @onItemPerPageChange={{pgc.onItemPerPageChange}}
+            @selectedOption={{pgc.selectedOption}}
+            @tableItemLabel={{t 'sbomModule.components'}}
+            @perPageTranslation={{t 'recordPerPage'}}
+            @totalItems={{pgc.totalItems}}
+          />
+        </:default>
+      </Sbom::EmptyLoadingView>
+    </AkPaginationProvider>
+  {{else}}
+    <AkStack
+      @width='full'
+      @direction='column'
+      @alignItems='center'
+      @justifyContent='center'
+      @spacing='2.5'
+      local-class='search-prompt'
+      data-test-componentInventory-searchPrompt
+    >
+      <AkSvg::ComponentSearch data-test-componentInventory-promptSvg />
+
+      <AkStack @direction='column' @alignItems='center' @spacing='1'>
+        <AkTypography @variant='h5' data-test-componentInventory-promptTitle>
+          {{t 'sbomModule.componentInventory.searchPromptTitle'}}
+        </AkTypography>
+
+        <AkTypography
+          data-test-componentInventory-promptDescription
+          {{style width='600px'}}
+          @color='textSecondary'
+          @align='center'
+        >
+          {{t 'sbomModule.componentInventory.searchPromptDescription'}}
+        </AkTypography>
+      </AkStack>
+    </AkStack>
+  {{/if}}
+
+  <Sbom::ComponentInventory::DetailsDrawer
+    @component={{this.selectedComponent}}
+    @open={{this.isDrawerOpen}}
+    @onClose={{this.handleDrawerClose}}
+  />
+</div>

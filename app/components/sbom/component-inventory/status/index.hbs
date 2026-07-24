@@ -1,0 +1,11 @@
+{{#if this.showStatus}}
+  <AkChip
+    data-test-componentInventory-status='{{this.label}}'
+    @variant='semi-filled'
+    @color={{this.color}}
+    @label={{this.label}}
+    @size='small'
+  />
+{{else}}
+  <AkTypography data-test-componentInventory-statusEmpty>-</AkTypography>
+{{/if}}

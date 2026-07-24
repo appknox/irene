@@ -1,0 +1,36 @@
+.component-inventory-container {
+  width: 100%;
+}
+
+.sbom-component-inventory-header {
+  width: 100%;
+  padding: 1rem 1.5rem;
+  border: 1px solid var(--border-color-1);
+  background-color: var(--background-main);
+}
+
+.search-prompt {
+  width: 100%;
+  height: 500px;
+  border: 1px solid var(--border-color-1);
+  background-color: var(--background-main);
+}
+
+.search-container-main {
+  width: 100%;
+  padding: 1rem 1.5rem;
+  border: 1px solid var(--border-color-1);
+  border-bottom: none;
+  background-color: var(--background-main);
+}
+
+.search-input-width {
+  width: 360px;
+  max-width: 100%;
+}
+
+.results-table {
+  tbody {
+    background: var(--background-main);
+  }
+}

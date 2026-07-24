@@ -415,4 +415,21 @@ module('Integration | Component | sbom/app-list', function (hooks) {
 
     assert.dom('[data-test-sbomApp-emptySvg]').exists();
   });
+
+  test('it renders the component inventory button', async function (assert) {
+    // Empty list keeps the focus on the header button and avoids per-row
+    // project/file hydration requests.
+    this.server.get('/v2/sb_projects', () => {
+      return { count: 0, next: null, previous: null, results: [] };
+    });
+
+    await render(hbs`
+      <Sbom::AppList @queryParams={{this.queryParams}} />
+    `);
+
+    assert
+      .dom('[data-test-sbomApp-componentInventoryBtn]')
+      .exists()
+      .hasText(t('sbomModule.componentInventory.title'));
+  });
 });

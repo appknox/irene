@@ -20,27 +20,37 @@
       </AkTypography>
     </AkStack>
 
-    <div local-class='search-input-container-width'>
-      <AkTextField
-        @placeholder={{t 'searchQuery'}}
-        @value={{@packageNameSearchQuery}}
-        {{on 'input' this.onSearchQueryChange}}
-        local-class='search-package-name-input'
-        data-test-sbomApp-searchInput
-      >
-        <:leftAdornment>
-          <AkIcon @iconName='search' @color='textSecondary' />
-        </:leftAdornment>
+    <AkStack @alignItems='center' @spacing='1.5'>
+      <div local-class='search-input-container-width'>
+        <AkTextField
+          @placeholder={{t 'searchQuery'}}
+          @value={{@packageNameSearchQuery}}
+          {{on 'input' this.onSearchQueryChange}}
+          local-class='search-package-name-input'
+          data-test-sbomApp-searchInput
+        >
+          <:leftAdornment>
+            <AkIcon @iconName='search' @color='textSecondary' />
+          </:leftAdornment>
 
-        <:rightAdornment>
-          {{#if @packageNameSearchQuery}}
-            <AkIconButton @size='small' {{on 'click' this.clearSearchInput}}>
-              <AkIcon @iconName='close' @color='textSecondary' />
-            </AkIconButton>
-          {{/if}}
-        </:rightAdornment>
-      </AkTextField>
-    </div>
+          <:rightAdornment>
+            {{#if @packageNameSearchQuery}}
+              <AkIconButton @size='small' {{on 'click' this.clearSearchInput}}>
+                <AkIcon @iconName='close' @color='textSecondary' />
+              </AkIconButton>
+            {{/if}}
+          </:rightAdornment>
+        </AkTextField>
+      </div>
+
+      <AkButton
+        @variant='filled'
+        {{on 'click' this.goToComponentInventory}}
+        data-test-sbomApp-componentInventoryBtn
+      >
+        {{t 'sbomModule.componentInventory.title'}}
+      </AkButton>
+    </AkStack>
   </AkStack>
 
   <AkDivider @color='dark' />
