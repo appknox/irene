@@ -104,13 +104,11 @@ export default class KnoxIqProjectCardComponent extends Component<KnoxIqProjectC
       return this.args.showRunKnoxIq;
     }
 
-    const isErrored = this.args.file?.isErroredKnoxIQScan ?? false;
-
     if (this.args.file?.isKnoxiqAutomated) {
-      return isErrored;
+      return false;
     }
 
-    return isErrored || (this.args.file?.isNotTriggeredKnoxIQScan ?? false);
+    return this.args.file?.isNotTriggeredKnoxIQScan ?? false;
   }
 
   @action
