@@ -381,6 +381,9 @@ Router.map(function () {
         this.route('archived-apps', { path: '/inventory/archived-apps' });
 
         this.route('notifications');
+        this.route('third-party-scans', function () {
+          this.route('app-details', { path: '/:package_name' });
+        });
       });
 
       // Report routes

@@ -1,0 +1,262 @@
+<AkStack @direction='column' @width='full' local-class='technical-details'>
+  <AkStack
+    @justifyContent='space-between'
+    @alignItems='center'
+    @width='full'
+    class='p-3'
+  >
+    <AkStack @direction='column'>
+      <AkTypography @variant='subtitle1' @fontWeight='bold'>
+        {{t 'storeknox.technicalDetails'}}
+      </AkTypography>
+
+      <AkTypography @color='textSecondary' @variant='body2'>
+        {{t 'storeknox.technicalDetailsDescription'}}
+      </AkTypography>
+    </AkStack>
+
+    <AkStack @spacing='1' @alignItems='center'>
+      {{#each this.riskCounts as |item|}}
+        <AkChip
+          @label={{t
+            'storeknox.thirdPartyFinding.countChipLabel'
+            htmlSafe=true
+            label=item.label
+            count=item.count
+          }}
+          @color={{item.color}}
+          @variant='semi-filled'
+          @size='small'
+          data-test-storeknoxThirdPartyScansAppDetailsTechnicalDetails-riskCountChip
+        />
+      {{/each}}
+    </AkStack>
+  </AkStack>
+
+  <AkDivider />
+
+  <AkAccordion::Group
+    {{style width='100%'}}
+    @openMultiple={{true}}
+    @defaultOpen={{this.findingGroupIds}}
+    as |sactx|
+  >
+    {{#each this.findingGroups as |group|}}
+      <AkAccordion
+        @id={{group.id}}
+        @accordionCtx={{sactx}}
+        @unmountContentOnCollapse={{false}}
+        class='w-full'
+      >
+        <:summary as |s|>
+          <AkStack
+            @alignItems='center'
+            @justifyContent='space-between'
+            @width='full'
+            local-class='category-heading'
+            data-test-storeknoxThirdPartyScansAppDetailsTechnicalDetails-categoryHeading='{{group.label}}'
+            {{on 'click' s.onSummaryClick}}
+          >
+            <AkStack @spacing='0.5' @alignItems='center'>
+              <AkTypography @fontWeight='medium' @variant='subtitle1'>
+                {{group.label}}
+              </AkTypography>
+
+              {{#if group.description}}
+                <AkTooltip @color='dark' @placement='top-start' @arrow={{true}}>
+                  <:tooltipContent>
+                    <div local-class='category-tooltip-content'>
+                      <AkTypography @color='inherit' @variant='body2'>
+                        {{group.description}}
+                      </AkTypography>
+                    </div>
+                  </:tooltipContent>
+
+                  <:default>
+                    <AkIcon
+                      @iconName='info'
+                      @size='small'
+                      @color='textSecondary'
+                      data-test-storeknoxThirdPartyScansAppDetailsTechnicalDetails-categoryInfoIcon
+                    />
+                  </:default>
+                </AkTooltip>
+              {{/if}}
+            </AkStack>
+
+            <AkStack @spacing='1.5' @alignItems='center'>
+              <AkTypography
+                @color='textSecondary'
+                @variant='body2'
+                data-test-storeknoxThirdPartyScansAppDetailsTechnicalDetails-categoryRiskCount
+              >
+                {{t
+                  'storeknox.thirdPartyFinding.potentialRisksCount'
+                  htmlSafe=true
+                  count=group.potentialRiskCount
+                }}
+              </AkTypography>
+            </AkStack>
+          </AkStack>
+        </:summary>
+
+        <:content>
+          <AkAccordion::Group
+            {{style width='100%'}}
+            @openMultiple={{true}}
+            as |actx|
+          >
+            {{#each group.findings as |finding|}}
+              <AkAccordion
+                @id={{finding.rule_id}}
+                @accordionCtx={{actx}}
+                @unmountContentOnCollapse={{true}}
+                class='w-full'
+              >
+                <:summary as |s|>
+                  <AkStack
+                    @alignItems='center'
+                    @justifyContent='space-between'
+                    @width='full'
+                    local-class='finding-accordion'
+                    data-test-storeknoxThirdPartyScansAppDetailsTechnicalDetails-findingSummary='{{finding.rule_id}}'
+                    {{on 'click' s.onSummaryClick}}
+                  >
+                    <AkStack @spacing='1.5' @alignItems='center'>
+                      <AkIcon
+                        @iconName={{this.riskIcon finding}}
+                        @color={{this.riskIconColor finding}}
+                      />
+
+                      <AkTypography @fontWeight='medium' @variant='subtitle1'>
+                        {{finding.name}}
+                      </AkTypography>
+                    </AkStack>
+
+                    <AkStack @spacing='1.5' @alignItems='center'>
+                      <AkChip
+                        @label={{this.riskChipLabel finding}}
+                        @color={{this.riskChipColor finding}}
+                        @variant='semi-filled'
+                        @size='small'
+                        data-test-storeknoxThirdPartyScansAppDetailsTechnicalDetails-riskChip
+                      />
+
+                      <AkIcon
+                        @iconName={{if
+                          s.isExpanded
+                          'arrow-drop-up'
+                          'arrow-drop-down'
+                        }}
+                        @color='textSecondary'
+                      />
+                    </AkStack>
+                  </AkStack>
+                </:summary>
+
+                <:content>
+                  <AkStack
+                    @direction='column'
+                    @spacing='2'
+                    local-class='finding-content'
+                  >
+                    {{#if finding.checks}}
+                      <AkStack @direction='column' @spacing='0.5'>
+                        <AkTypography
+                          @variant='subtitle2'
+                          @fontWeight='bold'
+                          @color='textSecondary'
+                          local-class='section-label'
+                        >
+                          {{t 'storeknox.thirdPartyFinding.whatItChecks'}}
+                        </AkTypography>
+
+                        <AkTypography
+                          @variant='body2'
+                          data-test-storeknoxThirdPartyScansAppDetailsTechnicalDetails-findingChecks
+                        >
+                          {{finding.checks}}
+                        </AkTypography>
+                      </AkStack>
+                    {{/if}}
+
+                    {{#if finding.details.length}}
+                      <AkStack @direction='column' @spacing='0.5'>
+                        <AkTypography
+                          @variant='subtitle2'
+                          @fontWeight='bold'
+                          @color='textSecondary'
+                          local-class='section-label'
+                        >
+                          {{t 'storeknox.thirdPartyFinding.findings'}}
+                        </AkTypography>
+
+                        <ul local-class='finding-details-list'>
+                          {{#each finding.details as |detail|}}
+                            <li>
+                              <AkTypography @variant='body2'>
+                                {{detail}}
+                              </AkTypography>
+                            </li>
+                          {{/each}}
+                        </ul>
+                      </AkStack>
+                    {{/if}}
+
+                    {{#if
+                      (and
+                        (not finding.is_potential_risk) finding.description
+                      )
+                    }}
+                      <AkStack @direction='column' @spacing='0.5'>
+                        <AkTypography
+                          @variant='subtitle2'
+                          @fontWeight='bold'
+                          @color='textSecondary'
+                          local-class='section-label'
+                        >
+                          {{t 'description'}}
+                        </AkTypography>
+
+                        <AkTypography
+                          @variant='body2'
+                          data-test-storeknoxThirdPartyScansAppDetailsTechnicalDetails-findingDescription
+                        >
+                          {{finding.description}}
+                        </AkTypography>
+                      </AkStack>
+                    {{/if}}
+
+                    {{#if
+                      (and finding.is_potential_risk finding.business_impact)
+                    }}
+                      <AkStack @direction='column' @spacing='0.5'>
+                        <AkTypography
+                          @variant='subtitle2'
+                          @fontWeight='bold'
+                          @color='textSecondary'
+                          local-class='section-label'
+                        >
+                          {{t
+                            'storeknox.thirdPartyFinding.potentialBusinessImpact'
+                          }}
+                        </AkTypography>
+
+                        <AkTypography
+                          @variant='body2'
+                          data-test-storeknoxThirdPartyScansAppDetailsTechnicalDetails-findingBusinessImpact
+                        >
+                          {{finding.business_impact}}
+                        </AkTypography>
+                      </AkStack>
+                    {{/if}}
+                  </AkStack>
+                </:content>
+              </AkAccordion>
+            {{/each}}
+          </AkAccordion::Group>
+        </:content>
+      </AkAccordion>
+    {{/each}}
+  </AkAccordion::Group>
+</AkStack>

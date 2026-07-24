@@ -1,0 +1,61 @@
+.app-info-container {
+  background-color: var(
+    --storeknox-third-party-scans-app-details-header-app-info-container-background-color
+  );
+  border: 1px solid
+    var(
+      --storeknox-third-party-scans-app-details-header-app-info-container-border-color
+    );
+}
+
+.app-icon {
+  width: 60px;
+  height: 60px;
+  border-radius: 12px;
+  object-fit: contain;
+  border: 1px solid
+    var(--storeknox-third-party-scans-app-details-header-app-icon-border-color);
+}
+
+.app-icon-placeholder {
+  width: 60px;
+  height: 60px;
+  border-radius: 12px;
+  background-color: var(
+    --storeknox-third-party-scans-app-details-header-app-icon-placeholder-background-color
+  );
+  border: 1px solid
+    var(--storeknox-third-party-scans-app-details-header-app-icon-border-color);
+}
+
+.package-name {
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+  max-width: 250px;
+}
+
+.app-detail-container {
+  background-color: var(
+    --storeknox-third-party-scans-app-details-header-app-detail-container-background-color
+  );
+  border: 1px solid
+    var(
+      --storeknox-third-party-scans-app-details-header-app-detail-container-border-color
+    );
+  border-top: none;
+  padding: 0.5em 1.5em;
+}
+
+.version-trigger {
+  padding: 0 1.5em 0 1em !important;
+}
+
+.indicator-chip {
+  border-radius: 25px;
+  padding: 0.5em 1em;
+  font-size: 0.75rem;
+  background-color: var(
+    --storeknox-third-party-scans-app-details-header-indicator-chip-background-color
+  );
+}

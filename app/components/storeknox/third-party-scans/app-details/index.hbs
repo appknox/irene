@@ -1,0 +1,36 @@
+<AkBreadcrumbs::AutoTrail class='pb-2' />
+
+<AkStack @direction='column' @spacing='2' @width='full'>
+  <Storeknox::ThirdPartyScans::AppDetails::Header
+    @app={{@app}}
+    @selectedVersion={{@selectedVersion}}
+  />
+
+  <Storeknox::ThirdPartyScans::AppDetails::RiskSection @app={{@app}} />
+
+  {{#if this.hasScore}}
+    <Storeknox::ThirdPartyScans::AppDetails::TechnicalDetails @app={{@app}} />
+  {{else}}
+    <AkStack
+      @direction='column'
+      @alignItems='center'
+      @justifyContent='center'
+      @spacing='2'
+      @width='full'
+      local-class='error-state'
+      data-test-storeknoxThirdPartyScansAppDetails-errorState
+    >
+      <AkSvg::ScvErrored />
+
+      <AkStack @direction='column' @alignItems='center' @spacing='0.5'>
+        <AkTypography @variant='h6' @fontWeight='medium'>
+          {{t 'storeknox.riskAssessmentErrorTitle'}}
+        </AkTypography>
+
+        <AkTypography @variant='body2' @color='textSecondary'>
+          {{t 'storeknox.riskAssessmentErrorDescription'}}
+        </AkTypography>
+      </AkStack>
+    </AkStack>
+  {{/if}}
+</AkStack>

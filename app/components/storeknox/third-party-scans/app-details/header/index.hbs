@@ -1,0 +1,114 @@
+<AkStack local-class='app-header-root' @direction='column' @width='full'>
+  <AkStack
+    local-class='app-info-container'
+    @spacing='2'
+    @alignItems='center'
+    @justifyContent='space-between'
+    @width='full'
+    class='p-3'
+  >
+    <AkStack @spacing='2' @alignItems='center'>
+      {{#if this.displayFallbackIcon}}
+        <AkStack
+          @alignItems='center'
+          @justifyContent='center'
+          local-class='app-icon-placeholder'
+          data-test-storeknoxThirdPartyScansAppDetailsHeader-appIconPlaceholder
+        >
+          <AkIcon @iconName='hugeicons:image-03' @color='textSecondary' />
+        </AkStack>
+      {{else}}
+        <img
+          local-class='app-icon'
+          src={{@app.iconUrl}}
+          alt={{@app.title}}
+          {{on 'error' this.handleIconError}}
+          data-test-storeknoxThirdPartyScansAppDetailsHeader-appIcon
+        />
+      {{/if}}
+
+      <AkStack @direction='column' @spacing='0.5'>
+        <AkTypography
+          @variant='h5'
+          @fontWeight='bold'
+          data-test-storeknoxThirdPartyScansAppDetailsHeader-appTitle
+        >
+          {{@app.title}}
+        </AkTypography>
+
+        <AkStack @spacing='1' @alignItems='center'>
+          <AkTypography
+            @color='textPrimary'
+            local-class='package-name'
+            data-test-storeknoxThirdPartyScansAppDetailsHeader-packageName
+          >
+            {{@app.packageName}}
+          </AkTypography>
+
+          <AkTypography @color='textSecondary' @fontWeight='bold'>
+            •
+          </AkTypography>
+
+          <AkTypography
+            @color='textSecondary'
+            data-test-storeknoxThirdPartyScansAppDetailsHeader-devName
+          >
+            {{@app.devName}}
+          </AkTypography>
+        </AkStack>
+      </AkStack>
+    </AkStack>
+
+    {{#if @app.versions.length}}
+      <AkSelect
+        @options={{@app.versions}}
+        @selected={{this.selectedVersion}}
+        @onChange={{this.onVersionChange}}
+        @verticalPosition='auto'
+        @triggerClass={{this.versionTriggerClass}}
+        data-test-storeknoxThirdPartyScansAppDetailsHeader-versionSelect
+        as |version|
+      >
+        v{{version}}
+      </AkSelect>
+    {{/if}}
+  </AkStack>
+
+  <AkStack local-class='app-detail-container' @width='full'>
+    <AkStack @spacing='1' @alignItems='center'>
+      <AkStack
+        local-class='indicator-chip'
+        @spacing='1'
+        @alignItems='center'
+        data-test-storeknoxThirdPartyScansAppDetailsHeader-platformChip
+      >
+        <AppPlatformIcon @platform={{if @app.isAndroid 'android' 'apple'}} />
+
+        <AkTypography @fontWeight='medium'>
+          {{if @app.isAndroid (t 'android') (t 'ios')}}
+        </AkTypography>
+      </AkStack>
+
+      <AkStack
+        local-class='indicator-chip'
+        @spacing='1'
+        @alignItems='center'
+        data-test-storeknoxThirdPartyScansAppDetailsHeader-storeChip
+      >
+        {{#if @app.isAndroid}}
+          <AkSvg::PlaystoreLogo {{style width='16px' height='16px'}} />
+        {{else}}
+          <AkSvg::AppstoreLogo {{style width='16px' height='16px'}} />
+        {{/if}}
+
+        <AkTypography @fontWeight='medium'>
+          {{if
+            @app.isAndroid
+            (t 'storeknox.playStore')
+            (t 'storeknox.appStore')
+          }}
+        </AkTypography>
+      </AkStack>
+    </AkStack>
+  </AkStack>
+</AkStack>

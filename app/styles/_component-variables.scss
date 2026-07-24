@@ -2552,6 +2552,83 @@ body {
   --storeknox-fake-apps-ignore-drawer-textarea-color: var(--text-primary);
   --storeknox-fake-apps-ignore-drawer-textarea-error-color: var(--error-main);
 
+  // variables for storeknox/third-party-scans
+  --storeknox-third-party-scans-table-container-background-color: var(
+    --background-main
+  );
+
+  // variables for storeknox/third-party-scans/header
+  --storeknox-third-party-scans-header-container-background-color: var(
+    --common-white
+  );
+  --storeknox-third-party-scans-header-container-border-color: var(
+    --border-color-1
+  );
+
+  // variables for storeknox/third-party-scans/table
+  --storeknox-third-party-scans-table-empty-container-background-color: var(
+    --common-white
+  );
+  --storeknox-third-party-scans-table-empty-container-border-color: var(
+    --border-color-1
+  );
+
+  // variables for storeknox/third-party-scans/app-details/header
+  --storeknox-third-party-scans-app-details-header-app-info-container-background-color: var(
+    --common-white
+  );
+  --storeknox-third-party-scans-app-details-header-app-info-container-border-color: var(
+    --border-color-1
+  );
+  --storeknox-third-party-scans-app-details-header-app-icon-border-color: var(
+    --border-color
+  );
+  --storeknox-third-party-scans-app-details-header-app-icon-placeholder-background-color: var(
+    --neutral-grey-100
+  );
+  --storeknox-third-party-scans-app-details-header-app-detail-container-background-color: var(
+    --common-white
+  );
+  --storeknox-third-party-scans-app-details-header-app-detail-container-border-color: var(
+    --border-color-1
+  );
+  --storeknox-third-party-scans-app-details-header-indicator-chip-background-color: var(
+    --neutral-grey-100
+  );
+
+  // variables for storeknox/third-party-scans/app-details
+  --storeknox-third-party-scans-app-details-error-state-background-color: var(
+    --background-main
+  );
+  --storeknox-third-party-scans-app-details-error-state-border-color: var(
+    --border-color-1
+  );
+
+  // variables for storeknox/third-party-scans/app-details/risk-section
+  --storeknox-third-party-scans-app-details-risk-section-background-color: var(
+    --common-white
+  );
+  --storeknox-third-party-scans-app-details-risk-section-border-color: var(
+    --border-color-1
+  );
+  --storeknox-third-party-scans-app-details-risk-section-score-total-color: var(
+    --text-secondary
+  );
+
+  // variables for storeknox/third-party-scans/app-details/technical-details
+  --storeknox-third-party-scans-app-details-technical-details-background-color: var(
+    --common-white
+  );
+  --storeknox-third-party-scans-app-details-technical-details-border-color: var(
+    --border-color-1
+  );
+  --storeknox-third-party-scans-app-details-technical-details-category-heading-background-color: var(
+    --neutral-grey-100
+  );
+  --storeknox-third-party-scans-app-details-technical-details-finding-accordion-background-color: var(
+    --common-white
+  );
+
   // variables for page-wrapper
   --page-wrapper-background-color: var(--background-light);
 

@@ -28,6 +28,7 @@ export interface AkBreadcrumbsItemProps {
     | 'storeknox/inventory'
     | 'storeknox/discovery'
     | 'storeknox/fake-apps'
+    | 'storeknox/third-party-scans'
     | 'privacy-module'
     | 'ai-reporting'
     | 'store-release-readiness';
