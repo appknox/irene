@@ -1,0 +1,66 @@
+{{!-- Render the appropriate freestyle section based on componentId --}}
+{{#if (eq @componentId 'ak-accordion')}}
+  <AkAccordion::FreestyleSection />
+{{else if (eq @componentId 'ak-appbar')}}
+  <AkAppbar::FreestyleSection />
+{{else if (eq @componentId 'ak-autocomplete')}}
+  <AkAutocomplete::FreestyleSection />
+{{else if (eq @componentId 'ak-button')}}
+  <AkButton::FreestyleSection />
+{{else if (eq @componentId 'ak-checkbox')}}
+  <AkCheckbox::FreestyleSection />
+{{else if (eq @componentId 'ak-checkbox-tree')}}
+  <AkCheckboxTree::FreestyleSection />
+{{else if (eq @componentId 'ak-chip')}}
+  <AkChip::FreestyleSection />
+{{else if (eq @componentId 'ak-clipboard')}}
+  <AkClipboard::FreestyleSection />
+{{else if (eq @componentId 'ak-date-picker')}}
+  <AkDatePicker::FreestyleSection />
+{{else if (eq @componentId 'ak-divider')}}
+  <AkDivider::FreestyleSection />
+{{else if (eq @componentId 'ak-drawer')}}
+  <AkDrawer::FreestyleSection />
+{{else if (eq @componentId 'ak-icon')}}
+  <AkIcon::FreestyleSection />
+{{else if (eq @componentId 'ak-icon-button')}}
+  <AkIconButton::FreestyleSection />
+{{else if (eq @componentId 'ak-link')}}
+  <AkLink::FreestyleSection />
+{{else if (eq @componentId 'ak-list')}}
+  <AkList::FreestyleSection />
+{{else if (eq @componentId 'ak-loader')}}
+  <AkLoader::FreestyleSection />
+{{else if (eq @componentId 'ak-menu')}}
+  <AkMenu::FreestyleSection />
+{{else if (eq @componentId 'ak-modal')}}
+  <AkModal::FreestyleSection />
+{{else if (eq @componentId 'ak-pagination')}}
+  <AkPagination::FreestyleSection />
+{{else if (eq @componentId 'ak-popover')}}
+  <AkPopover::FreestyleSection />
+{{else if (eq @componentId 'ak-radio')}}
+  <AkRadio::FreestyleSection />
+{{else if (eq @componentId 'ak-select')}}
+  <AkSelect::FreestyleSection />
+{{else if (eq @componentId 'ak-skeleton')}}
+  <AkSkeleton::FreestyleSection />
+{{else if (eq @componentId 'ak-stack')}}
+  <AkStack::FreestyleSection />
+{{else if (eq @componentId 'ak-table')}}
+  <AkTable::FreestyleSection />
+{{else if (eq @componentId 'ak-tabs')}}
+  <AkTabs::FreestyleSection />
+{{else if (eq @componentId 'ak-text-field')}}
+  <AkTextField::FreestyleSection />
+{{else if (eq @componentId 'ak-toggle')}}
+  <AkToggle::FreestyleSection />
+{{else if (eq @componentId 'ak-tooltip')}}
+  <AkTooltip::FreestyleSection />
+{{else if (eq @componentId 'ak-tree')}}
+  <AkTree::FreestyleSection />
+{{else if (eq @componentId 'ak-typography')}}
+  <AkTypography::FreestyleSection />
+{{else}}
+  <p class='text-secondary'>Component not found: {{@componentId}}</p>
+{{/if}}

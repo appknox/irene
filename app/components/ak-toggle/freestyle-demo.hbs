@@ -1,0 +1,41 @@
+{{#if (eq @variant 'label')}}
+  <AkFormControlLabel @label='Check me' @disabled={{false}} as |fcl|>
+    <AkToggle
+      @checked={{this.checkedLabel}}
+      @size='small'
+      @disabled={{fcl.disabled}}
+      @readonly={{false}}
+      @onChange={{this.handleLabelChange}}
+    />
+  </AkFormControlLabel>
+{{else if (eq @variant 'sizes')}}
+  <AkToggle
+    @checked={{this.checkedSmall}}
+    @size='small'
+    @disabled={{false}}
+    @readonly={{false}}
+    @onChange={{fn this.handleSizeChange 'small'}}
+  />
+  <AkToggle
+    @checked={{this.checkedMedium}}
+    @size='medium'
+    @disabled={{false}}
+    @readonly={{false}}
+    @onChange={{fn this.handleSizeChange 'medium'}}
+  />
+  <AkToggle
+    @checked={{this.checkedLarge}}
+    @size='large'
+    @disabled={{false}}
+    @readonly={{false}}
+    @onChange={{fn this.handleSizeChange 'large'}}
+  />
+{{else}}
+  <AkToggle
+    @checked={{this.checked}}
+    @size='small'
+    @disabled={{false}}
+    @readonly={{false}}
+    @onChange={{this.handleChange}}
+  />
+{{/if}}

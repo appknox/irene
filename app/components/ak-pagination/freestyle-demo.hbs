@@ -1,0 +1,35 @@
+<div class='flex-column mt-1 p-2'>
+  <AkPaginationProvider
+    @results={{this.tableData}}
+    @onItemPerPageChange={{this.onItemPerPageChange}}
+    @totalItems={{50}}
+    @nextAction={{this.nextAction}}
+    @prevAction={{this.prevAction}}
+    @itemPerPageOptions={{array 5 10 15}}
+    @defaultLimit={{this.limit}}
+    @offset={{this.offset}}
+    as |pgc|
+  >
+    <AkPagination
+      @disableNext={{pgc.disableNext}}
+      @nextAction={{pgc.nextAction}}
+      @disablePrev={{pgc.disablePrev}}
+      @prevAction={{pgc.prevAction}}
+      @endItemIdx={{pgc.endItemIdx}}
+      @startItemIdx={{pgc.startItemIdx}}
+      @itemPerPageOptions={{pgc.itemPerPageOptions}}
+      @onItemPerPageChange={{pgc.onItemPerPageChange}}
+      @selectedOption={{pgc.selectedOption}}
+      @perPageTranslation='Items Per Page'
+      @tableItemLabel='Projects'
+      @totalItems={{pgc.totalItems}}
+      @nextBtnLabel='Next'
+      @prevBtnLabel='Previous'
+      @paginationSelectOptionsVertPosition='below'
+      {{style marginBottom='15px'}}
+    />
+    {{#each pgc.currentPageResults as |item idx|}}
+      <span class='flex-column'>{{add idx pgc.startItemIdx}} - {{item}}</span>
+    {{/each}}
+  </AkPaginationProvider>
+</div>

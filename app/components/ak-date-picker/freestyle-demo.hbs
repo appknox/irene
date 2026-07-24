@@ -1,0 +1,17 @@
+<AkDatePicker
+  @selected={{this.selected}}
+  @onSelect={{this.onSelect}}
+  @quickSelectOptions={{array 'clear'}}
+>
+  <AkButton>Open date picker</AkButton>
+</AkDatePicker>
+
+<div class='p-2'>
+  <AkTypography>
+    {{#if this.selected}}
+      Date selected. Open the picker to change.
+    {{else}}
+      No date selected
+    {{/if}}
+  </AkTypography>
+</div>

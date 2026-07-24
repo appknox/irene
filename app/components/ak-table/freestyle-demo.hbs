@@ -1,0 +1,12 @@
+<AkTable @dense={{false}} @headerColor='neutral' @borderColor='light' @hoverable={{false}} @variant={{@variant}} as |t|>
+  <t.head @columns={{this.columns}} as |h|>
+    <h.row as |r|>
+      <r.cell as |column|>{{column.name}}</r.cell>
+    </h.row>
+  </t.head>
+  <t.body @rows={{this.rows}} as |b|>
+    <b.row as |r|>
+      <r.cell as |value|>{{value}}</r.cell>
+    </b.row>
+  </t.body>
+</AkTable>

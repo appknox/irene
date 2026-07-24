@@ -1,0 +1,29 @@
+<div {{style backgroundColor='#f5f5f5'}} class='flex-row flex-align-center w-full mt-3'>
+  <div {{style backgroundColor='#ffffff'}} class='w-full'>
+    <AkTabs as |Akt|>
+      {{#each this.tabItems as |item|}}
+        <Akt.tabItem
+          @hidden={{item.hidden}}
+          @id={{item.id}}
+          @hasBadge={{item.hasBadge}}
+          @badgeCount={{item.badgeCount}}
+          @isActive={{eq this.activeTab item.id}}
+          @buttonVariant={{true}}
+          @onTabClick={{this.onTabClick}}
+          @indicatorVariant='line'
+        >
+          <:tabIcon>
+            <AkIcon @iconName={{item.iconName}} {{style fontSize='1.29rem !important'}} />
+          </:tabIcon>
+          <:default>{{item.label}}</:default>
+        </Akt.tabItem>
+      {{/each}}
+    </AkTabs>
+    <div class='flex-column p-3'>
+      <div class='flex-row pb-1'>
+        This is the content for
+        <AkTypography @color='success' @underline='always' class='ml-1 bold'>{{this.currentTabDetails.label}}</AkTypography>
+      </div>
+    </div>
+  </div>
+</div>

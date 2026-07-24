@@ -1,0 +1,22 @@
+<FreestyleSection @name='Tabs'>
+  <FreestyleUsage @slug='ak-tabs-button' @title='Button Variant' @source='<AkTabs as |Akt|>
+  \{{#each this.tabItems as |item|}}
+    <Akt.tabItem
+      @id=\{{item.id}}
+      @hasBadge=\{{item.hasBadge}}
+      @badgeCount=\{{item.badgeCount}}
+      @isActive=\{{eq this.activeTab item.id}}
+      @buttonVariant=\{{true}}
+      @onTabClick=\{{this.onTabClick}}
+      @indicatorVariant="line"
+    >
+      <:tabIcon>
+        <AkIcon @iconName=\{{item.iconName}} />
+      </:tabIcon>
+      <:default>\{{item.label}}</:default>
+    </Akt.tabItem>
+  \{{/each}}
+</AkTabs>'>
+    <AkTabs::FreestyleDemo />
+  </FreestyleUsage>
+</FreestyleSection>

@@ -1,0 +1,46 @@
+<FreestyleSection @name='Accordion'>
+  <FreestyleUsage @slug='ak-accordion-group' @title='Accordion Group'>
+    <AkAccordion::Group @openMultiple={{true}} @defaultOpen={{array 'accordion-open'}} class='w-full' as |actx|>
+      <AkAccordion @id='accordion-secondary' @accordionCtx={{actx}} @summaryText='Secondary Variant - Summary Text' @variant='secondary'>
+        <:content>
+          <div class='p-3 m-2' {{style color='#ffffff' backgroundColor='#424651'}}>
+            <AkTypography @variant='subtitle1' @color='inherit'>This is an accordion content</AkTypography>
+          </div>
+        </:content>
+      </AkAccordion>
+      <AkAccordion @id='accordion-primary' @accordionCtx={{actx}} @summaryText='Primary Variant - Summary Text' @variant='primary'>
+        <:content>
+          <div class='p-3 m-2' {{style color='#ffffff' backgroundColor='#424651'}}>
+            <AkTypography @variant='subtitle1' @color='inherit'>This is an accordion content</AkTypography>
+          </div>
+        </:content>
+      </AkAccordion>
+      <AkAccordion @id='accordion-disabled' @accordionCtx={{actx}} @summaryText='Disabled Variant' @disabled={{true}} @variant='secondary'>
+        <:content>
+          <div class='p-3 m-2' {{style color='#ffffff' backgroundColor='#424651'}}>
+            <AkTypography @variant='subtitle1' @color='inherit'>Disabled content</AkTypography>
+          </div>
+        </:content>
+      </AkAccordion>
+      <AkAccordion @id='accordion-open' @accordionCtx={{actx}} @summaryText='Default Open - Summary Text' @variant='secondary'>
+        <:content>
+          <div class='p-3 m-2' {{style color='#ffffff' backgroundColor='#424651'}}>
+            <AkTypography @variant='subtitle1' @color='inherit'>This accordion is open by default</AkTypography>
+          </div>
+        </:content>
+      </AkAccordion>
+    </AkAccordion::Group>
+  </FreestyleUsage>
+
+  <FreestyleUsage @slug='ak-accordion-with-icon' @title='With Icon'>
+    <AkAccordion::Group @openMultiple={{true}} class='w-full' as |actx|>
+      <AkAccordion @id='with-icon-1' @accordionCtx={{actx}} @summaryText='Secondary with Icon' @variant='secondary' @summaryIconName='people'>
+        <:content>
+          <div class='p-3 m-2' {{style color='#ffffff' backgroundColor='#424651'}}>
+            <AkTypography @variant='subtitle1' @color='inherit'>Accordion content</AkTypography>
+          </div>
+        </:content>
+      </AkAccordion>
+    </AkAccordion::Group>
+  </FreestyleUsage>
+</FreestyleSection>
