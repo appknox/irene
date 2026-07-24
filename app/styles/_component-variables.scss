@@ -806,6 +806,29 @@ body {
   --sbom-app-list-header-clear-filter-color: var(--neutral-grey-600);
   --sbom-app-list-header-clear-filter-hover-color: var(--primary-main);
 
+  // variables for sbom/component-inventory
+  --sbom-component-inventory-header-border-color: var(--border-color-1);
+  --sbom-component-inventory-header-background-color: var(--background-main);
+  --sbom-component-inventory-search-container-border-color: var(
+    --border-color-1
+  );
+  --sbom-component-inventory-search-container-background-color: var(
+    --background-main
+  );
+  --sbom-component-inventory-search-prompt-border-color: var(--border-color-1);
+  --sbom-component-inventory-search-prompt-background-color: var(
+    --background-main
+  );
+  --sbom-component-inventory-results-table-background-color: var(
+    --background-main
+  );
+
+  // variables for sbom/component-inventory/details-drawer
+  --sbom-component-inventory-details-drawer-bom-ref-box-text-color: var(--common-white);
+  --sbom-component-inventory-details-drawer-bom-ref-box-background-color: var(
+    --common-black
+  );
+
   // variables for sbom/app-platform
   --sbom-app-platform-border-radius: var(--border-radius);
   --sbom-app-platform-border-color: var(--neutral-grey-100);
@@ -850,6 +873,20 @@ body {
     --neutral-grey-200
   );
   --sbom-scanDetails-componentList-typeHeader-filter-header-background-color: var(
+    --neutral-grey-100
+  );
+
+  // variables for sbom/component-inventory/type-filter
+  --sbom-componentInventory-typeFilter-background-color: var(--background-main);
+  --sbom-componentInventory-typeFilter-box-shadow: var(--box-shadow-7);
+  --sbom-componentInventory-typeFilter-border-radius: var(--box-shadow-7);
+  --sbom-componentInventory-typeFilter-filter-option-hover-background-color: var(
+    --neutral-grey-200
+  );
+  --sbom-componentInventory-typeFilter-filter-option-clear-filter-background-color: var(
+    --neutral-grey-200
+  );
+  --sbom-componentInventory-typeFilter-filter-header-background-color: var(
     --neutral-grey-100
   );
 

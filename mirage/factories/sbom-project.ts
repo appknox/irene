@@ -1,4 +1,5 @@
 import { Factory } from 'miragejs';
+import { faker } from '@faker-js/faker';
 
 export const SBOM_PROJECT_FACTORY_DEF = {
   id(i: number) {
@@ -12,6 +13,14 @@ export const SBOM_PROJECT_FACTORY_DEF = {
   latest_sb_file(i: number) {
     return 100 + i + 1;
   },
+
+  name: () => faker.commerce.productName(),
+
+  package_name: () => faker.internet.domainName(),
+
+  icon_url: () => faker.image.url(),
+
+  last_sca_analysis_on: () => faker.date.past().toISOString(),
 };
 
 export default Factory.extend(SBOM_PROJECT_FACTORY_DEF);
