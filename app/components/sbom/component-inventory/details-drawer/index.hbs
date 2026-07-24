@@ -1,0 +1,212 @@
+<AkDrawer
+  @open={{@open}}
+  @onClose={{@onClose}}
+  @anchor='right'
+  data-test-componentInventory-detailsDrawer
+  as |dr|
+>
+  <div
+    local-class='drawer-content'
+    {{did-insert this.loadApps}}
+    {{did-update this.loadApps @component}}
+  >
+    <AkAppbar @justifyContent='space-between' as |ab|>
+      <AkTypography
+        data-test-componentInventory-detailsTitle
+        @color='inherit'
+        @variant='h5'
+      >
+        {{t 'sbomModule.componentInventory.detailsTitle'}}
+      </AkTypography>
+
+      <AkIconButton
+        data-test-componentInventory-detailsCloseBtn
+        {{on 'click' dr.closeHandler}}
+        class={{ab.classes.defaultIconBtn}}
+      >
+        <AkIcon @iconName='close' />
+      </AkIconButton>
+    </AkAppbar>
+
+    {{#if @component}}
+      <AkStack
+        @direction='column'
+        @spacing='2'
+        class='p-3'
+        data-test-componentInventory-detailsFields
+      >
+        <AkStack
+          @width='full'
+          @justifyContent='space-between'
+          @alignItems='flex-start'
+        >
+          <AkStack @direction='column' @spacing='0.5'>
+            <AkTypography @variant='body2' @color='textSecondary'>
+              {{t 'sbomModule.componentName'}}
+            </AkTypography>
+
+            <AkTypography
+              @tag='span'
+              local-class='bom-ref-box'
+              data-test-componentInventory-detailsName
+            >
+              {{@component.bomRef}}
+            </AkTypography>
+          </AkStack>
+
+          <AkButton
+            @variant='outlined'
+            @color='neutral'
+            @disabled={{this.downloadExport.isRunning}}
+            {{on 'click' this.handleDownload}}
+            data-test-componentInventory-downloadBtn
+          >
+            <:leftIcon>
+              {{#if this.downloadExport.isRunning}}
+                <AkLoader
+                  data-test-componentInventory-downloadLoader
+                  @size={{16}}
+                />
+              {{else}}
+                <span local-class='xlsx-icon'>
+                  <AkSvg::XlsxIcon />
+                </span>
+              {{/if}}
+            </:leftIcon>
+
+            <:default>
+              {{t 'sbomModule.componentInventory.downloadXlsx'}}
+            </:default>
+          </AkButton>
+        </AkStack>
+
+        <AkStack @direction='column' @spacing='0.5'>
+          <AkTypography @variant='body2' @color='textSecondary'>
+            {{t 'sbomModule.componentType'}}
+          </AkTypography>
+
+          <AkTypography data-test-componentInventory-detailsType>
+            {{@component.typeLabel}}
+          </AkTypography>
+        </AkStack>
+
+        {{#if @component.hasVersion}}
+          <AkStack @direction='column' @spacing='0.5'>
+            <AkTypography @variant='body2' @color='textSecondary'>
+              {{t 'sbomModule.componentVersion'}}
+            </AkTypography>
+
+            <AkTypography data-test-componentInventory-detailsVersion>
+              {{@component.version}}
+            </AkTypography>
+          </AkStack>
+        {{/if}}
+
+        {{#if @component.latestVersion}}
+          <AkStack @direction='column' @spacing='0.5'>
+            <AkTypography @variant='body2' @color='textSecondary'>
+              {{t 'sbomModule.latestVersion'}}
+            </AkTypography>
+
+            <AkTypography data-test-componentInventory-detailsLatestVersion>
+              {{@component.latestVersion}}
+            </AkTypography>
+          </AkStack>
+        {{/if}}
+
+        <AkStack @direction='column' @spacing='0.5'>
+          <AkTypography @variant='body2' @color='textSecondary'>
+            {{t 'status'}}
+          </AkTypography>
+
+          <Sbom::ComponentStatus @sbomComponent={{@component}} />
+        </AkStack>
+      </AkStack>
+
+      <AkDivider @color='dark' />
+
+      <AkTypography
+        @color='textSecondary'
+        class='pt-3 px-3'
+        data-test-componentInventory-detailsAppsTitle
+      >
+        {{t 'sbomModule.componentInventory.appsTitle'}}
+      </AkTypography>
+
+      <div class='p-3'>
+        <AkPaginationProvider
+          @results={{this.sbomProjectList}}
+          @onItemPerPageChange={{this.handleItemPerPageChange}}
+          @totalItems={{this.totalSbomProjectCount}}
+          @nextAction={{this.handlePrevNextAction}}
+          @prevAction={{this.handlePrevNextAction}}
+          @itemPerPageOptions={{array 10 25 50}}
+          @defaultLimit={{this.limit}}
+          @offset={{this.offset}}
+          as |pgc|
+        >
+          <Sbom::EmptyLoadingView
+            @empty={{this.hasNoSbomProject}}
+            @loading={{this.fetchSbomProjects.isRunning}}
+            @height='200px'
+          >
+            <:emptyText>
+              <AkTypography @color='textSecondary'>
+                {{t 'sbomModule.componentInventory.noAppsFound'}}
+              </AkTypography>
+            </:emptyText>
+
+            <:default>
+              <AkTable
+                @hoverable={{true}}
+                data-test-componentInventory-appsTable
+                as |t|
+              >
+                <t.head @columns={{this.columns}} />
+
+                <t.body @rows={{pgc.currentPageResults}} as |b|>
+                  <b.row
+                    {{style cursor='pointer'}}
+                    @onClick={{this.handleAppRowClick}}
+                    data-test-componentInventory-appsRow
+                    as |r|
+                  >
+                    <r.cell as |value|>
+                      {{#if r.columnValue.component}}
+                        {{#let
+                          (component r.columnValue.component)
+                          as |CellComponent|
+                        }}
+                          <CellComponent @sbomProject={{r.rowValue}} />
+                        {{/let}}
+                      {{else}}
+                        <AkTypography title={{value}} @noWrap={{true}}>
+                          {{value}}
+                        </AkTypography>
+                      {{/if}}
+                    </r.cell>
+                  </b.row>
+                </t.body>
+              </AkTable>
+
+              <AkPagination
+                @disableNext={{pgc.disableNext}}
+                @nextAction={{pgc.nextAction}}
+                @disablePrev={{pgc.disablePrev}}
+                @prevAction={{pgc.prevAction}}
+                @endItemIdx={{pgc.endItemIdx}}
+                @startItemIdx={{pgc.startItemIdx}}
+                @itemPerPageOptions={{pgc.itemPerPageOptions}}
+                @onItemPerPageChange={{pgc.onItemPerPageChange}}
+                @selectedOption={{pgc.selectedOption}}
+                @tableItemLabel={{t 'apps'}}
+                @perPageTranslation={{t 'recordPerPage'}}
+                @totalItems={{pgc.totalItems}}
+              />
+            </:default>
+          </Sbom::EmptyLoadingView>
+        </AkPaginationProvider>
+      </div>
+    {{/if}}
+  </div>
+</AkDrawer>

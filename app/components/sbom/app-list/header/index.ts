@@ -1,12 +1,13 @@
-import { inject as service } from '@ember/service';
 import Component from '@glimmer/component';
-import IntlService from 'ember-intl/services/intl';
+import { service } from '@ember/service';
 import { action } from '@ember/object';
+import type IntlService from 'ember-intl/services/intl';
+import type RouterService from '@ember/routing/router-service';
 
 import ENUMS from 'irene/enums';
 import styles from './index.scss';
-import MeService from 'irene/services/me';
-import OrganizationService from 'irene/services/organization';
+import type MeService from 'irene/services/me';
+import type OrganizationService from 'irene/services/organization';
 
 interface PlatformObject {
   key: string;
@@ -25,6 +26,7 @@ export default class SbomAppListHeaderComponent extends Component<SbomAppListHea
   @service declare intl: IntlService;
   @service declare me: MeService;
   @service declare organization: OrganizationService;
+  @service declare router: RouterService;
 
   get selectedPlatform() {
     return this.args.selectedPlatformValue
@@ -84,6 +86,12 @@ export default class SbomAppListHeaderComponent extends Component<SbomAppListHea
 
   @action onSearchQueryChange(event: Event) {
     this.args.onQueryChange(event);
+  }
+
+  @action goToComponentInventory() {
+    this.router.transitionTo(
+      'authenticated.dashboard.sbom.component-inventory'
+    );
   }
 
   @action clearFilters() {

@@ -1,0 +1,26 @@
+.drawer-content {
+  width: 600px;
+  max-width: 100%;
+}
+
+.bom-ref-box {
+  display: inline-block;
+  max-width: 21.875rem;
+  overflow-wrap: break-word;
+  padding: 0.25rem 0.5rem;
+  border-radius: 4px;
+  background-color: var(
+    --sbom-component-inventory-details-drawer-bom-ref-box-background-color
+  );
+  color: var(--sbom-component-inventory-details-drawer-bom-ref-box-text-color);
+  font-family: monospace;
+}
+
+.xlsx-icon {
+  display: inline-flex;
+
+  svg {
+    width: 1rem;
+    height: 1.1875rem;
+  }
+}
