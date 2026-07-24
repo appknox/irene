@@ -136,7 +136,7 @@ export default class UploadAppStatusComponent extends Component {
     const running: SubmissionModel[] = [];
 
     (this.uploadApp.systemFileQueue?.files || []).forEach((file) => {
-      uploading.push({
+      uploading.unshift({
         file,
         statusHumanized: this.intl.t('uploading'),
       });
