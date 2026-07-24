@@ -1,0 +1,105 @@
+<div class='docs-layout'>
+  <aside class='docs-sidebar'>
+    <nav class='docs-sidebar-nav'>
+      <DocfyOutput @scope='docs' as |node|>
+        {{! Top-level pages }}
+        {{#each node.pages as |page|}}
+          <div style='margin-bottom: 4px;'>
+            <DocfyLink
+              @to={{page.url}}
+              @activeClass='active'
+              class='docs-nav-link'
+              style='display: block; padding: 8px 12px; color: #333; text-decoration: none; border-radius: 4px; font-weight: 500;'
+            >
+              {{page.title}}
+            </DocfyLink>
+          </div>
+        {{/each}}
+
+        {{! Nested sections (e.g. Components) }}
+        {{#each node.children as |child|}}
+          <div style='margin-top: 16px;'>
+            <div
+              style='font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; color: #666; padding: 8px 12px 4px;'
+            >
+              {{child.label}}
+            </div>
+            {{#each child.pages as |page|}}
+              <div style='margin-bottom: 4px;'>
+                <DocfyLink
+                  @to={{page.url}}
+                  @activeClass='active'
+                  class='docs-nav-link'
+                  style='display: block; padding: 6px 12px 6px 20px; color: #333; text-decoration: none; border-radius: 4px; font-size: 14px;'
+                >
+                  {{page.title}}
+                </DocfyLink>
+              </div>
+            {{/each}}
+
+            {{! Sub-sections (e.g. components/ak-button under components) }}
+            {{#each child.children as |subChild|}}
+              <div style='margin-top: 8px;'>
+                <div
+                  style='font-size: 11px; font-weight: 600; color: #888; padding: 4px 12px 2px 20px;'
+                >
+                  {{subChild.label}}
+                </div>
+                {{#each subChild.pages as |page|}}
+                  <div style='margin-bottom: 4px;'>
+                    <DocfyLink
+                      @to={{page.url}}
+                      @activeClass='active'
+                      class='docs-nav-link'
+                      style='display: block; padding: 6px 12px 6px 28px; color: #333; text-decoration: none; border-radius: 4px; font-size: 13px;'
+                    >
+                      {{page.title}}
+                    </DocfyLink>
+                  </div>
+                {{/each}}
+              </div>
+            {{/each}}
+          </div>
+        {{/each}}
+      </DocfyOutput>
+    </nav>
+  </aside>
+
+  <DocsContent class='docs-content'>
+    <main class='docs-content-inner'>
+      <div class='docs-prose'>
+        {{outlet}}
+      </div>
+
+      <DocfyPreviousAndNextPage as |previous next|>
+      <div
+        class='docs-page-nav'
+        style='display: flex; justify-content: space-between; margin-top: 48px; padding-top: 24px; border-top: 1px solid #e0e0e0;'
+      >
+        {{#if previous}}
+          <DocfyLink
+            @to={{previous.url}}
+            class='docs-prev-link'
+            style='color: #1976d2; text-decoration: none;'
+          >
+            ←
+            {{previous.title}}
+          </DocfyLink>
+        {{else}}
+          <span></span>
+        {{/if}}
+        {{#if next}}
+          <DocfyLink
+            @to={{next.url}}
+            class='docs-next-link'
+            style='color: #1976d2; text-decoration: none;'
+          >
+            {{next.title}}
+            →
+          </DocfyLink>
+        {{/if}}
+      </div>
+    </DocfyPreviousAndNextPage>
+    </main>
+  </DocsContent>
+</div>

@@ -1,0 +1,195 @@
+// Docs layout - independent scroll for sidebar and content
+.docs-layout {
+  display: flex;
+  height: 100vh;
+  overflow: hidden;
+}
+
+.docs-sidebar {
+  width: 280px;
+  flex-shrink: 0;
+  padding: 24px;
+  border-right: 1px solid #e0e0e0;
+  background: #fafafa;
+  overflow-y: auto;
+}
+
+.docs-sidebar-nav {
+  position: relative;
+}
+
+.docs-content {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+}
+
+.docs-content-inner {
+  padding: 32px 48px;
+  max-width: 900px;
+}
+
+// Docfy documentation styling - Storybook-inspired
+.docs-prose {
+  // Typography
+  font-size: 15px;
+  line-height: 1.6;
+  color: #24292e;
+
+  h1 {
+    font-size: 2rem;
+    font-weight: 700;
+    margin: 0 0 1rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid #e1e4e8;
+  }
+
+  h2 {
+    font-size: 1.5rem;
+    font-weight: 600;
+    margin: 2rem 0 1rem;
+    color: #1a1a1a;
+  }
+
+  h3 {
+    font-size: 1.25rem;
+    font-weight: 600;
+    margin: 1.5rem 0 0.75rem;
+    color: #333;
+  }
+
+  p {
+    margin: 0 0 1rem;
+    color: #444;
+  }
+
+  // Props table - Storybook style
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 1.5rem 0;
+    font-size: 14px;
+    background: #fff;
+    border: 1px solid #e1e4e8;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+  }
+
+  thead {
+    background: #f6f8fa;
+    border-bottom: 2px solid #e1e4e8;
+  }
+
+  th {
+    padding: 12px 16px;
+    text-align: left;
+    font-weight: 600;
+    color: #24292e;
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+
+  td {
+    padding: 12px 16px;
+    border-top: 1px solid #e1e4e8;
+    vertical-align: top;
+  }
+
+  tr:hover td {
+    background: #fafbfc;
+  }
+
+  // Code in tables
+  td code,
+  th code {
+    font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace;
+    font-size: 13px;
+    background: #f6f8fa;
+    padding: 2px 6px;
+    border-radius: 4px;
+    color: #e83e8c;
+  }
+
+  // Code blocks
+  pre {
+    margin: 1.5rem 0;
+    padding: 16px 20px;
+    background: #1e1e1e;
+    border-radius: 8px;
+    overflow-x: auto;
+    font-size: 13px;
+    line-height: 1.5;
+  }
+
+  pre code {
+    color: #d4d4d4;
+    font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace;
+    background: transparent;
+    padding: 0;
+  }
+
+  // Inline code
+  :not(pre) > code {
+    font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace;
+    font-size: 13px;
+    background: #f6f8fa;
+    padding: 2px 6px;
+    border-radius: 4px;
+    color: #e83e8c;
+    border: 1px solid #e1e4e8;
+  }
+
+  // Demo/preview blocks
+  .docfy-demo {
+    margin: 1.5rem 0;
+    padding: 24px;
+    background: #fafbfc;
+    border: 1px solid #e1e4e8;
+    border-radius: 8px;
+  }
+
+  // Lists
+  ul,
+  ol {
+    margin: 0 0 1rem;
+    padding-left: 1.5rem;
+  }
+
+  li {
+    margin-bottom: 0.25rem;
+  }
+
+  // Links
+  a {
+    color: #0366d6;
+    text-decoration: none;
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+
+  // Blockquote
+  blockquote {
+    margin: 1rem 0;
+    padding: 0.5rem 1rem;
+    border-left: 4px solid #0366d6;
+    background: #f6f8fa;
+    color: #586069;
+    border-radius: 0 4px 4px 0;
+  }
+}
+
+// Sidebar nav link hover
+.docs-nav-link:hover {
+  background: #e8eaed !important;
+  color: #1a1a1a !important;
+}
+
+.docs-nav-link.active {
+  background: #e3f2fd !important;
+  color: #1565c0 !important;
+  font-weight: 600 !important;
+}
