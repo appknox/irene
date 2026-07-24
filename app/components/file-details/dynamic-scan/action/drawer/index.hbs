@@ -68,20 +68,37 @@
       class='px-3 py-2'
       local-class='dynamic-scan-drawer-cta'
     >
-      <AkButton
-        {{on 'click' this.runDynamicScan}}
-        @loading={{this.startDynamicScan.isRunning}}
-        @disabled={{not this.enableStartDynamicScanBtn}}
-        data-test-fileDetails-dynamicScanDrawer-startBtn
+      <AkTooltip
+        @arrow={{true}}
+        @placement='top'
+        @disabled={{not this.isDastBlockedByBackend}}
+        data-test-fileDetails-dynamicScanDrawer-startBtn-disabledTooltip
       >
-        <:leftIcon>
-          <AkIcon @iconName={{if @isAutomatedScan 'schedule' 'play-arrow'}} />
-        </:leftIcon>
+        <:tooltipContent>
+          <div local-class='start-btn-disabled-tooltip-content'>
+            {{this.startDynamicScanDisabledReason}}
+          </div>
+        </:tooltipContent>
 
         <:default>
-          {{t (if @isAutomatedScan 'scheduleAutomation' 'start')}}
+          <AkButton
+            {{on 'click' this.runDynamicScan}}
+            @loading={{this.startDynamicScan.isRunning}}
+            @disabled={{not this.enableStartDynamicScanBtn}}
+            data-test-fileDetails-dynamicScanDrawer-startBtn
+          >
+            <:leftIcon>
+              <AkIcon
+                @iconName={{if @isAutomatedScan 'schedule' 'play-arrow'}}
+              />
+            </:leftIcon>
+
+            <:default>
+              {{t (if @isAutomatedScan 'scheduleAutomation' 'start')}}
+            </:default>
+          </AkButton>
         </:default>
-      </AkButton>
+      </AkTooltip>
 
       <AkButton
         @variant='outlined'
