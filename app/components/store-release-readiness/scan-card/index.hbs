@@ -1,0 +1,123 @@
+<div local-class='scan-card' role='button' {{on 'click' @onCardClick}}>
+
+  {{! ── Card Header ── }}
+  <div local-class='card-header'>
+    <StoreReleaseReadiness::ScanCard::VerdictBadge @verdict={{@scan.verdict}} />
+    <StoreReleaseReadiness::ScanCard::StatusBadge @status={{@scan.status}} />
+  </div>
+
+  {{! ── Card Body ── }}
+  <div local-class='card-body'>
+
+    {{! 1. App icon }}
+    <div local-class='app-icon-box'>
+      {{#if @scan.iconUrl}}
+        <AppLogo @src={{@scan.iconUrl}} @border={{true}} @size='medium' />
+      {{else if this.platformKey}}
+        <AppPlatformIcon @platform={{this.platformKey}} local-class='app-icon-platform' />
+      {{/if}}
+    </div>
+
+    {{! 2. App name }}
+    <AkTypography @variant='h6' @fontWeight='bold'>
+      {{@scan.fileName}}
+    </AkTypography>
+
+    {{! 3. Single row: package name (left) | platform icon + date (right) }}
+    <div local-class='meta-row'>
+      <AkTypography @variant='caption' @color='textSecondary' local-class='package-name'>
+        {{@scan.packageName}}
+      </AkTypography>
+
+      <div local-class='meta-chips'>
+        {{#if this.platformKey}}
+          <div local-class='platform-chip'>
+            <AppPlatformIcon @platform={{this.platformKey}} />
+          </div>
+        {{/if}}
+
+        <div local-class='date-chip'>
+          <AkIcon @iconName='calendar_today' @color='textSecondary' local-class='date-icon' />
+          <AkTypography @variant='caption' @fontWeight='medium'>
+            {{day-js date=@scan.createdAt format='MMM DD, YYYY'}}
+          </AkTypography>
+        </div>
+      </div>
+    </div>
+
+    <AkDivider @color='light' />
+
+    {{! ── Summary ── }}
+    <div local-class='summary-section'>
+      <p local-class='summary-label'>{{t 'storeReleaseReadiness.summary'}}</p>
+      <StoreReleaseReadiness::ScanCard::SummaryBar @scan={{@scan}} />
+    </div>
+
+    {{! ── Breakdown ── }}
+    <div local-class='breakdown'>
+
+      {{! Failed + sub-items }}
+      <div local-class='breakdown-section'>
+        <div local-class='breakdown-main-row'>
+          <AkStack @alignItems='center' @spacing='1'>
+            <span local-class='dot dot-error'></span>
+            <AkTypography @variant='body1' @fontWeight='bold'>
+              {{t 'storeReleaseReadiness.failed'}}
+            </AkTypography>
+          </AkStack>
+          <AkTypography @variant='body1' @fontWeight='bold'>{{@scan.failedCount}}</AkTypography>
+        </div>
+
+        <div local-class='sub-items'>
+          <div local-class='sub-row'>
+            <AkStack @alignItems='center' @spacing='1'>
+              <AkIcon @iconName='do_not_disturb_on' @color='error' local-class='sub-icon' />
+              <AkTypography @variant='body2' @color='textSecondary'>
+                {{t 'storeReleaseReadiness.blocker'}}
+              </AkTypography>
+            </AkStack>
+            <AkTypography @variant='body2' @color='textSecondary'>{{@scan.blockerCount}}</AkTypography>
+          </div>
+
+          <div local-class='sub-row'>
+            <AkStack @alignItems='center' @spacing='1'>
+              <AkIcon @iconName='warning' local-class='sub-icon icon-warn' />
+              <AkTypography @variant='body2' @color='textSecondary'>
+                {{t 'storeReleaseReadiness.warning'}}
+              </AkTypography>
+            </AkStack>
+            <AkTypography @variant='body2' @color='textSecondary'>{{@scan.warningCount}}</AkTypography>
+          </div>
+        </div>
+      </div>
+
+      <AkDivider @color='light' />
+
+      {{! Passed }}
+      <div local-class='breakdown-main-row'>
+        <AkStack @alignItems='center' @spacing='1'>
+          <span local-class='dot dot-success'></span>
+          <AkTypography @variant='body1' @fontWeight='bold'>
+            {{t 'storeReleaseReadiness.passed'}}
+          </AkTypography>
+        </AkStack>
+        <AkTypography @variant='body1' @fontWeight='bold'>{{@scan.passedCount}}</AkTypography>
+      </div>
+
+      <AkDivider @color='light' />
+
+      {{! Untested }}
+      <div local-class='breakdown-main-row'>
+        <AkStack @alignItems='center' @spacing='1'>
+          <span local-class='dot dot-neutral'></span>
+          <AkTypography @variant='body1' @fontWeight='bold'>
+            {{t 'storeReleaseReadiness.untested'}}
+          </AkTypography>
+        </AkStack>
+        <AkTypography @variant='body1' @fontWeight='bold'>{{@scan.untestedCount}}</AkTypography>
+      </div>
+
+    </div>
+  </div>
+
+</div>

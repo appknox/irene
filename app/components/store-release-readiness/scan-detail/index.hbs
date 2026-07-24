@@ -1,0 +1,48 @@
+<div class="scan-detail">
+  <AkStack @direction='column' @spacing='3'>
+    {{! Scan Results Header }}
+    <StoreReleaseReadiness::ScanDetail::ScanResults @scan={{@scan}} />
+
+    {{! Action Buttons }}
+    <AkStack @spacing='2'>
+      {{#if @scan.isCompleted}}
+        <AkButton
+          @variant='outlined'
+          @startIcon='download'
+          @onClick={{this.downloadReport}}
+        >
+          {{t 'storeReleaseReadiness.downloadReport'}}
+        </AkButton>
+      {{/if}}
+
+      <AkButton
+        @variant='outlined'
+        @startIcon='refresh'
+        @onClick={{this.triggerRescan}}
+      >
+        {{t 'storeReleaseReadiness.retriggerScan'}}
+      </AkButton>
+    </AkStack>
+
+    {{! Grouping Options }}
+    <AkStack @spacing='2' @alignItems='center'>
+      <AkTypography @variant='subtitle2'>{{t 'storeReleaseReadiness.groupBy'}}</AkTypography>
+
+      {{#each this.groupingOptions as |option|}}
+        <AkButton
+          @variant={{if (eq this.groupBy option.value) 'contained' 'text'}}
+          @size='small'
+          @onClick={{fn this.setGroupBy option}}
+        >
+          {{option.label}}
+        </AkButton>
+      {{/each}}
+    </AkStack>
+
+    {{! Findings Table }}
+    <StoreReleaseReadiness::ScanDetail::FindingsTable
+      @scan={{@scan}}
+      @groupBy={{this.groupBy}}
+    />
+  </AkStack>
+</div>

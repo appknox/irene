@@ -38,6 +38,18 @@ export default class AuthenticatedDashboardSbomScanDetailsController extends Con
     {
       view_type: { type: 'string' as const },
     },
+    {
+      is_ai_component: { type: 'string' as const },
+    },
+    {
+      ai_artifact_class: { type: 'string' as const },
+    },
+    {
+      ai_confidence: { type: 'string' as const },
+    },
+    {
+      ordering: { type: 'string' as const },
+    },
   ];
 
   component_limit = 25;
@@ -46,6 +58,10 @@ export default class AuthenticatedDashboardSbomScanDetailsController extends Con
   is_dependency = null;
   component_type = -1;
   view_type = 'tree';
+  is_ai_component = null;
+  ai_artifact_class = null;
+  ai_confidence = null;
+  ordering = null;
 
   get breadcrumbs(): AkBreadcrumbsItemProps {
     return {
@@ -55,7 +71,7 @@ export default class AuthenticatedDashboardSbomScanDetailsController extends Con
       routeGroup: 'sbom',
 
       parentCrumb: {
-        title: this.intl.t('SBOM'),
+        title: this.intl.t('sbomModule.scaBreadcrumbTitle'),
         route: 'authenticated.dashboard.sbom.apps',
         routeGroup: 'sbom',
       },

@@ -56,6 +56,7 @@ export default class SbomScanDetailsComponent extends Component<SbomScanDetailsS
   @tracked openViewReportDrawer = false;
   @tracked expandedNodes: string[] = [];
   @tracked treeNodes: AkTreeNodeProps[] = [];
+  @tracked activeTab: 'sbom' | 'aibom' = 'sbom';
 
   constructor(owner: unknown, args: SbomScanDetailsSignature['Args']) {
     super(owner, args);
@@ -67,16 +68,41 @@ export default class SbomScanDetailsComponent extends Component<SbomScanDetailsS
       component_type,
       component_limit,
       component_offset,
+      is_ai_component,
+      ai_artifact_class,
+      ai_confidence,
+      ordering,
     } = args.queryParams;
+
+    // is_ai_component must always resolve to an explicit 'true'/'false' --
+    // without this default, a fresh page load (no query param in the URL)
+    // leaves the underlying filter unset, and the SBOM tab silently shows
+    // every component, AI ones included, until the user manually clicks a
+    // tab. Also keeps activeTab consistent with a direct/bookmarked link.
+    const resolvedIsAiComponent = is_ai_component ?? 'false';
+    this.activeTab = resolvedIsAiComponent === 'true' ? 'aibom' : 'sbom';
+
+    // AI-BOM has no tree view (its transitive dependency tree was removed
+    // by design). The controller's view_type default is 'tree', so a
+    // bookmarked/direct URL like "?is_ai_component=true" with no explicit
+    // view_type would otherwise leave the service in tree mode -- and its
+    // fetch task drops every list filter (including is_ai_component) when
+    // in tree mode, silently returning the app's full, unfiltered SBOM.
+    const resolvedViewType =
+      resolvedIsAiComponent === 'true' ? 'list' : view_type;
 
     // Fetch with default queries from the route
     this.sbomScanDetailsService
       .setQueryData({
         sbomFile: this.args.sbomFile,
-        view_type,
+        view_type: resolvedViewType,
         component_query: component_query,
         dependency_type: is_dependency,
         component_type: Number(component_type),
+        is_ai_component: resolvedIsAiComponent,
+        ai_artifact_class,
+        ai_confidence,
+        ordering,
       })
       .setLimitOffset({
         limit: Number(component_limit),
@@ -155,11 +181,61 @@ export default class SbomScanDetailsComponent extends Component<SbomScanDetailsS
       view_type: 'tree' as const,
       component_type: -1,
       is_dependency: null,
+      is_ai_component: null,
       component_query: '',
     };
 
     this.router.transitionTo({ queryParams });
     this.sbomScanDetailsService.setQueryData({ ...queryParams }).reload();
+  }
+
+  @action
+  selectTab(tab: 'sbom' | 'aibom') {
+    this.activeTab = tab;
+    const is_ai_component = tab === 'aibom' ? 'true' : 'false';
+
+    // AI-BOM has no tree view -- always pin it to list mode (see the
+    // matching note in the constructor for why leaving view_type
+    // untouched here would silently drop the is_ai_component filter).
+    //
+    // component_query, ai_artifact_class/ai_confidence, and component_type/
+    // is_dependency are all reset on every tab switch -- both tabs share
+    // the same service, but ai_artifact_class/ai_confidence only ever mean
+    // anything for AI BoM components and component_type/is_dependency only
+    // for plain SBOM ones. Without this, a filter set on one tab would
+    // silently carry into the other and, since the other tab's components
+    // don't have that property, zero out every result there.
+    const queryParams: {
+      is_ai_component: string;
+      component_query: string;
+      ai_artifact_class: null;
+      ai_confidence: null;
+      component_type: number;
+      is_dependency: null;
+      view_type?: 'list';
+    } = {
+      is_ai_component,
+      component_query: '',
+      ai_artifact_class: null,
+      ai_confidence: null,
+      component_type: -1,
+      is_dependency: null,
+      ...(tab === 'aibom' ? { view_type: 'list' } : {}),
+    };
+
+    this.router.transitionTo({ queryParams });
+    this.sbomScanDetailsService
+      .setQueryData({
+        is_ai_component: queryParams.is_ai_component,
+        component_query: queryParams.component_query,
+        ai_artifact_class: queryParams.ai_artifact_class,
+        ai_confidence: queryParams.ai_confidence,
+        component_type: queryParams.component_type,
+        dependency_type: queryParams.is_dependency,
+        ...(queryParams.view_type ? { view_type: queryParams.view_type } : {}),
+      })
+      .setLimitOffset({ offset: 0 })
+      .reload();
   }
 
   @action

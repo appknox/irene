@@ -1,4 +1,5 @@
 <div ...attributes>
+  <div local-class='component-list-container'>
   <AkPaginationProvider
     @results={{this.sbomComponentList}}
     @onItemPerPageChange={{this.handleItemPerPageChange}}
@@ -64,6 +65,14 @@
                       @selectedDependencyType={{this.selectedDependencyType}}
                       @onComponentTypeChange={{this.onComponentTypeChange}}
                       @selectedComponentType={{this.selectedComponentType}}
+                      @onAiArtifactClassChange={{this.onAiArtifactClassChange}}
+                      @selectedAiArtifactClass={{this.selectedAiArtifactClass}}
+                      @onAiConfidenceChange={{this.onAiConfidenceChange}}
+                      @selectedAiConfidence={{this.selectedAiConfidence}}
+                      @onSortChange={{this.onSortChange}}
+                      @currentOrdering={{this.ordering}}
+                      @field={{column.sortField}}
+                      @label={{column.name}}
                     />
                   {{/let}}
                 {{else}}
@@ -137,4 +146,5 @@
       </:default>
     </Sbom::EmptyLoadingView>
   </AkPaginationProvider>
+  </div>
 </div>

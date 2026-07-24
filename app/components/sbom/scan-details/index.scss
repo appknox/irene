@@ -54,3 +54,7 @@
   border-color: var(--sbom-scan-details-border-color) !important;
   height: 32px;
 }
+
+.ai-filter-button--active {
+  border-bottom: 2px solid var(--error-light) !important;
+}

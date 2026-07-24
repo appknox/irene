@@ -1,0 +1,61 @@
+<div class="scan-results">
+  <AkStack @direction='column' @spacing='2'>
+    {{! Status and Verdict }}
+    <AkStack @spacing='2' @alignItems='center'>
+      <StoreReleaseReadiness::ScanCard::StatusBadge @status={{@scan.status}} />
+      <StoreReleaseReadiness::ScanCard::VerdictBadge @verdict={{@scan.verdict}} />
+    </AkStack>
+
+    {{! Summary Info }}
+    <AkStack @direction='column' @spacing='1'>
+      <AkTypography @variant='subtitle2' @fontWeight='bold'>{{@scan.fileName}}</AkTypography>
+      <AkTypography @variant='body2' @color='textSecondary'>{{@scan.packageName}}</AkTypography>
+      {{#if @scan.completedAt}}
+        <AkTypography @variant='caption' @color='textSecondary'>
+          {{t 'completedOn'}}: {{dayjs-format @scan.completedAt 'lll'}}
+        </AkTypography>
+      {{/if}}
+    </AkStack>
+
+    {{! Counts }}
+    <AkStack @spacing='3'>
+      <div class="count-item">
+        <AkTypography @variant='h6' @color='error'>{{@scan.blockerCount}}</AkTypography>
+        <AkTypography @variant='caption'>{{t 'storeReleaseReadiness.blocker'}}</AkTypography>
+      </div>
+
+      <div class="count-item">
+        <AkTypography @variant='h6' @color='warning'>{{@scan.warningCount}}</AkTypography>
+        <AkTypography @variant='caption'>{{t 'storeReleaseReadiness.warning'}}</AkTypography>
+      </div>
+
+      <div class="count-item">
+        <AkTypography @variant='h6' @color='success'>{{@scan.passedCount}}</AkTypography>
+        <AkTypography @variant='caption'>{{t 'storeReleaseReadiness.passed'}}</AkTypography>
+      </div>
+
+      <div class="count-item">
+        <AkTypography @variant='h6'>{{@scan.untestedCount}}</AkTypography>
+        <AkTypography @variant='caption'>{{t 'storeReleaseReadiness.untested'}}</AkTypography>
+      </div>
+    </AkStack>
+
+    {{! Progress Bar }}
+    <div class="progress-bar">
+      <AkStack @spacing='0.5' @alignItems='center' @fullWidth={{true}}>
+        {{#if (gt @scan.blockerCount 0)}}
+          <div class="progress-segment error" style="width: {{percent @scan.blockerCount @scan.totalChecks}}%;"></div>
+        {{/if}}
+        {{#if (gt @scan.warningCount 0)}}
+          <div class="progress-segment warning" style="width: {{percent @scan.warningCount @scan.totalChecks}}%;"></div>
+        {{/if}}
+        {{#if (gt @scan.passedCount 0)}}
+          <div class="progress-segment success" style="width: {{percent @scan.passedCount @scan.totalChecks}}%;"></div>
+        {{/if}}
+        {{#if (gt @scan.untestedCount 0)}}
+          <div class="progress-segment untested" style="width: {{percent @scan.untestedCount @scan.totalChecks}}%;"></div>
+        {{/if}}
+      </AkStack>
+    </div>
+  </AkStack>
+</div>

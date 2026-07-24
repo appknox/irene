@@ -1,0 +1,17 @@
+.summary-bar-container {
+  width: 100%;
+  padding: 0.5em 1em;
+  background-color: var(--background-light);
+  border: 1px solid var(--border-color-1);
+  border-radius: var(--border-radius);
+}
+
+.new-feature-container {
+  background-color: var(--sbom-scan-details-overview-new-feature-background-color);
+  border-radius: var(--border-radius);
+  padding: 0.2em;
+}
+
+.new-feature-icon {
+  color: var(--sbom-scan-details-overview-new-feature-text-color);
+}

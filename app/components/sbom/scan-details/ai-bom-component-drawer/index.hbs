@@ -1,0 +1,95 @@
+<AkDrawer
+  @open={{@open}}
+  @onClose={{@onClose}}
+  @anchor='right'
+  data-test-sbomScanDetails-aiBomComponentDrawer
+  as |dr|
+>
+  <div {{style width='640px'}}>
+    <AkAppbar @justifyContent='space-between' as |ab|>
+      <AkTypography
+        data-test-sbomScanDetails-aiBomComponentDrawer-title
+        @color='inherit'
+        @variant='h5'
+      >
+        {{t 'sbomModule.componentDetails'}}
+      </AkTypography>
+
+      <AkIconButton
+        data-test-sbomScanDetails-aiBomComponentDrawer-closeBtn
+        {{on 'click' dr.closeHandler}}
+        class={{ab.classes.defaultIconBtn}}
+      >
+        <AkIcon @iconName='close' />
+      </AkIconButton>
+    </AkAppbar>
+
+    <div class='px-3 pt-3'>
+      <AkStack local-class='ai-bom-component-drawer-file-box' class='p-2 mb-2'>
+        <AkTypography
+          data-test-sbomScanDetails-aiBomComponentDrawer-fileName
+          @variant='h6'
+          local-class='ai-bom-component-drawer-file-value'
+        >
+          file:{{this.componentName}}
+        </AkTypography>
+      </AkStack>
+
+      <div local-class='ai-bom-component-drawer-details-box'>
+        <AkStack
+          local-class='ai-bom-component-drawer-section-header'
+          class='px-2 py-1'
+        >
+          <AkTypography @variant='subtitle1' @fontWeight='medium'>
+            {{t 'sbomModule.componentDetails'}}
+          </AkTypography>
+        </AkStack>
+
+        <div class='px-2'>
+          {{#each this.drawerFields as |field idx|}}
+            {{#unless (eq idx 0)}}
+              <AkDivider @color='light' />
+            {{/unless}}
+
+            <AkStack
+              @width='full'
+              class='py-2'
+              data-test-sbomScanDetails-aiBomComponentDrawer-field
+            >
+              <AkTypography class='w-4/12' @color='textSecondary'>
+                {{field.label}}
+              </AkTypography>
+
+              {{#if field.isLink}}
+                <a
+                  href={{field.value}}
+                  target='_blank'
+                  rel='noopener noreferrer'
+                  class='w-8/12'
+                  data-test-sbomScanDetails-aiBomComponentDrawer-link
+                >
+                  <AkTypography
+                    {{style word-break='break-all'}}
+                    @fontWeight='medium'
+                    @underline='always'
+                  >
+                    {{field.value}}
+                  </AkTypography>
+                </a>
+              {{else}}
+                <AkTypography
+                  {{style word-break='break-all'}}
+                  class='w-8/12'
+                  @fontWeight='medium'
+                  data-test-sbomScanDetails-aiBomComponentDrawer-value
+                >
+                  {{field.value}}
+                </AkTypography>
+              {{/if}}
+            </AkStack>
+          {{/each}}
+        </div>
+      </div>
+    </div>
+  </div>
+</AkDrawer>

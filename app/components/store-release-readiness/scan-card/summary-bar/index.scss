@@ -1,0 +1,27 @@
+.summary-bar {
+  width: 100%;
+}
+
+.segment {
+  height: 8px;
+  border-radius: 4px;
+  display: flex;
+  flex: 0 0 auto;
+  transition: width 0.3s ease;
+}
+
+.segment-error {
+  background-color: var(--error-main);
+}
+
+.segment-warn {
+  background-color: var(--warn-main);
+}
+
+.segment-success {
+  background-color: var(--success-main);
+}
+
+.segment-neutral {
+  background-color: var(--neutral-grey-300);
+}

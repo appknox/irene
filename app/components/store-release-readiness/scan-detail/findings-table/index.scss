@@ -1,0 +1,67 @@
+.findings-table {
+  .findings-group {
+    margin-bottom: 2rem;
+
+    h6 {
+      margin-bottom: 1rem;
+      padding-bottom: 0.5rem;
+      border-bottom: 2px solid #e0e0e0;
+    }
+  }
+
+  .findings-list {
+    width: 100%;
+    border-collapse: collapse;
+    background-color: #fff;
+    border-radius: 8px;
+    overflow: hidden;
+
+    thead {
+      background-color: #f5f5f5;
+      border-bottom: 2px solid #e0e0e0;
+
+      th {
+        padding: 1rem;
+        text-align: left;
+        font-weight: 600;
+        color: #333;
+      }
+    }
+
+    tbody {
+      tr {
+        border-bottom: 1px solid #f0f0f0;
+        transition: background-color 0.2s;
+
+        &:hover {
+          background-color: #fafafa;
+        }
+
+        &.passed {
+          opacity: 0.75;
+        }
+
+        &.failed {
+          background-color: #fff8f8;
+        }
+
+        td {
+          padding: 1rem;
+          vertical-align: top;
+        }
+
+        .finding-title {
+          flex: 1;
+        }
+
+        .finding-severity {
+          width: 120px;
+        }
+
+        .finding-status {
+          width: 120px;
+        }
+      }
+    }
+  }
+}

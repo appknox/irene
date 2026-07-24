@@ -5,8 +5,6 @@ import { setupIntl, t } from 'ember-intl/test-support';
 import { setupRenderingTest } from 'ember-qunit';
 import { module, test } from 'qunit';
 
-import { SbomScanStatus } from 'irene/models/sbom-file';
-
 module(
   'Integration | Component | sbom/scan-details/overview',
   function (hooks) {
@@ -17,33 +15,7 @@ module(
     hooks.beforeEach(async function () {
       const store = this.owner.lookup('service:store');
 
-      const file = this.server.create('file', 1);
-      const project = this.server.create('project', 1, {
-        last_file: file,
-      });
       const sbomScanSummary = this.server.create('sbom-scan-summary', 1);
-
-      this.server.createList('sbom-component', 10);
-
-      const sbomProject = this.server.create('sbom-project', 1, {
-        project: project.id,
-      });
-
-      const sbomFile = this.server.create('sbom-file', 1, {
-        file: file.id,
-        sb_project: sbomProject.id,
-      });
-
-      sbomProject.latest_sb_file = sbomFile.id;
-
-      const sbomProjectNormalized = store.normalize(
-        'sbom-project',
-        sbomProject.toJSON()
-      );
-      const sbomFileNormalized = store.normalize(
-        'sbom-file',
-        sbomFile.toJSON()
-      );
 
       const sbomScanSummaryNormalized = store.normalize(
         'sbom-scan-summary',
@@ -51,104 +23,90 @@ module(
       );
 
       this.setProperties({
-        sbomProject: store.push(sbomProjectNormalized),
-        sbomFile: store.push(sbomFileNormalized),
         sbomScanSummary: store.push(sbomScanSummaryNormalized),
-      });
-
-      // Server mock
-      this.server.get('/v3/projects/:id', (schema, req) => {
-        return schema.projects.find(`${req.params.id}`)?.toJSON();
-      });
-
-      this.server.get('/v3/files/:id', (schema, req) => {
-        return schema.files.find(`${req.params.id}`)?.toJSON();
       });
     });
 
-    test('it renders scan summary details', async function (assert) {
-      this.server.get('/v2/sb_files/:id/sb_file_components', (schema) => {
-        const results = schema.sbomComponents.all().models;
-
-        return {
-          count: results.length,
-          next: null,
-          previous: null,
-          results: results,
-        };
-      });
-
-      this.sbomFile.status = SbomScanStatus.COMPLETED;
-
+    test('it renders scan summary details without an ML Model entry or a heading', async function (assert) {
       await render(hbs`
-        <Sbom::ScanDetails::Overview
-          @sbomFile={{this.sbomFile}}
-          @sbomScanSummary={{this.sbomScanSummary}}
-        />
+        <Sbom::ScanDetails::Overview @sbomScanSummary={{this.sbomScanSummary}} />
       `);
 
       assert.dom('[data-test-sbomScanDetails-overview-container]').exists();
-      assert
-        .dom('[data-test-sbomScanDetails-overview-title]')
-        .hasText(t('overview'));
+      assert.dom('[data-test-sbomScanDetails-overview-title]').doesNotExist();
 
       const expectedScanSummaryItems = [
         {
-          iconName: 'ph:diamonds-four',
           label: t('sbomModule.totalComponents'),
           value: this.sbomScanSummary.componentCount,
+          isPrimary: true,
         },
         {
-          iconName: 'hugeicons:ai-brain-04',
-          label: t('sbomModule.mlModel'),
-          value: this.sbomScanSummary.machineLearningModelCount,
-          newFeature: true,
-        },
-        {
-          iconName: 'solar:library-linear',
           label: t('library'),
           value: this.sbomScanSummary.libraryCount,
         },
         {
-          iconName: 'mynaui:frame',
           label: t('framework'),
           value: this.sbomScanSummary.frameworkCount,
         },
         {
-          iconName: 'draft',
           label: t('file'),
           value: this.sbomScanSummary.fileCount,
-          hideDivider: true,
         },
       ];
 
       expectedScanSummaryItems.forEach((item) => {
-        const summarySelector = `[data-test-sbomScanDetails-overview-scanSummary="${item.label}"]`;
+        const summarySelector = `[data-test-sbomScanDetails-summaryBar-item="${item.label}"]`;
+        const boldClass = /ak-typography-font-weight-bold/i;
 
         assert
           .dom(
-            `${summarySelector} [data-test-sbomScanDetails-overview-scanSummary-label]`
+            `${summarySelector} [data-test-sbomScanDetails-summaryBar-label]`
           )
           .hasText(item.label);
 
         assert
           .dom(
-            `${summarySelector} [data-test-sbomScanDetails-overview-scanSummary-value]`
+            `${summarySelector} [data-test-sbomScanDetails-summaryBar-value]`
           )
           .hasText(`${item.value}`);
 
-        if (item.newFeature) {
+        if (item.isPrimary) {
           assert
             .dom(
-              `${summarySelector} [data-test-sbomScanDetails-overview-newFeatureIcon]`
+              `${summarySelector} [data-test-sbomScanDetails-summaryBar-label]`
             )
-            .exists();
+            .hasClass(boldClass);
+
+          assert
+            .dom(
+              `${summarySelector} [data-test-sbomScanDetails-summaryBar-value]`
+            )
+            .hasClass(boldClass);
+        } else {
+          assert
+            .dom(
+              `${summarySelector} [data-test-sbomScanDetails-summaryBar-label]`
+            )
+            .doesNotHaveClass(boldClass);
+
+          assert
+            .dom(
+              `${summarySelector} [data-test-sbomScanDetails-summaryBar-value]`
+            )
+            .doesNotHaveClass(boldClass);
         }
       });
 
       assert
-        .dom('[data-test-sbomScanDetails-overview-icon]')
+        .dom('[data-test-sbomScanDetails-summaryBar-item]')
         .exists({ count: expectedScanSummaryItems.length });
+
+      assert
+        .dom(
+          `[data-test-sbomScanDetails-summaryBar-item="${t('sbomModule.mlModel')}"]`
+        )
+        .doesNotExist();
     });
   }
 );

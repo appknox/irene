@@ -75,7 +75,11 @@ export default class SbomScanReportDrawerReportListComponent extends Component<S
   }
 
   get latestSbomScanReport() {
-    return this.sbomReports[0];
+    return this.sbomReports.find((report) => report.reportType !== 'ai_bom');
+  }
+
+  get latestAiBomScanReport() {
+    return this.sbomReports.find((report) => report.reportType === 'ai_bom');
   }
 
   get reportDetails() {
@@ -89,6 +93,18 @@ export default class SbomScanReportDrawerReportListComponent extends Component<S
         copyText: this.latestSbomScanReport?.reportPassword,
         iconComponent: 'ak-svg/pdf-report' as const,
         status: this.latestSbomScanReport?.pdfStatus,
+        sbomReport: this.latestSbomScanReport,
+      },
+      {
+        type: 'pdf' as const,
+        primaryText: this.intl.t('sbomModule.aiBomDownloadPdfPrimaryText'),
+        secondaryText: this.intl.t('reportPasswordDetail', {
+          password: this.latestAiBomScanReport?.reportPassword || '',
+        }),
+        copyText: this.latestAiBomScanReport?.reportPassword,
+        iconComponent: 'ak-svg/pdf-report' as const,
+        status: this.latestAiBomScanReport?.pdfStatus,
+        sbomReport: this.latestAiBomScanReport,
       },
       {
         type: 'cyclonedx_json_file' as const,
@@ -96,12 +112,14 @@ export default class SbomScanReportDrawerReportListComponent extends Component<S
         secondaryText: this.intl.t('sbomModule.sbomDownloadJsonSecondaryText'),
         iconComponent: 'ak-svg/json-report' as const,
         status: SbomReportStatus.COMPLETED,
+        sbomReport: this.latestSbomScanReport,
       },
     ];
   }
 
   observeSbomReportCounter() {
     this.latestSbomScanReport?.reload();
+    this.latestAiBomScanReport?.reload();
   }
 
   removeSbomReportCounterObserver() {

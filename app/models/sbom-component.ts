@@ -1,4 +1,6 @@
+import { inject as service } from '@ember/service';
 import Model, { attr, belongsTo, AsyncBelongsTo } from '@ember-data/model';
+import IntlService from 'ember-intl/services/intl';
 import SbomFileModel from './sbom-file';
 import { ENUMS_DISPLAY } from 'irene/enums';
 
@@ -17,6 +19,8 @@ export interface SbomComponentExternalReferences {
 }
 
 export default class SbomComponentModel extends Model {
+  @service declare intl: IntlService;
+
   @belongsTo('sbom-file', { async: true, inverse: null })
   declare sbFile: AsyncBelongsTo<SbomFileModel>;
 
@@ -65,6 +69,44 @@ export default class SbomComponentModel extends Model {
   @attr('boolean')
   declare isDependency: boolean;
 
+  @attr('boolean')
+  declare isAiComponent: boolean;
+
+  @attr('string')
+  declare aiConfidence: string;
+
+  @attr('string')
+  declare aiArtifactClass: string;
+
+  @attr('string')
+  declare aiModelName: string;
+
+  @attr('string')
+  declare aiModelCategory: string;
+
+  @attr('string')
+  declare aiModelIdentificationConfidence: string;
+
+  // Set only for artifact_class=library, from the AI library registry match
+  // (e.g. "TensorFlow Lite") — a different pipeline than aiModelName, which
+  // only ever comes from inference against a bundled file's own bytes.
+  @attr('string')
+  declare aiFrameworkName: string;
+
+  // "Purpose" column — a real backend-authored value per artifact_class
+  // (e.g. "Remote Inference" for cloud endpoints, or the identified
+  // model_category for models). Replaces an earlier client-computed
+  // fallback that duplicated aiRoleColumn's text for most component types.
+  @attr('string')
+  declare aiPurpose: string;
+
+  // Set only for tokenizer/config/supporting artifacts that were
+  // unambiguously paired to a specific bundled model (see enola's
+  // link_supporting_artifacts_to_models) — "" when no single model could
+  // be identified. Bundle membership, not a real SBOM dependency edge.
+  @attr('string')
+  declare aiAssociatedModelPath: string;
+
   @attr()
   declare evidence: SbomComponentEvidence;
 
@@ -89,6 +131,20 @@ export default class SbomComponentModel extends Model {
       : ['-'];
   }
 
+  /**
+   * True only when this component carries real file-location evidence
+   * (models, cloud endpoints, and secrets all set this from the scanner
+   * side — see ComponentEvidence.occurrences in enola). Named "found",
+   * not "used": static scanning only proves where the pattern/file was
+   * detected, not where it's actually invoked from at runtime. Distinct
+   * from checking evidenceLocations directly since that getter always
+   * returns a non-empty array (falling back to ['-']) to keep templates
+   * simple.
+   */
+  get hasFoundLocations() {
+    return (this.evidence?.occurrences?.location?.length ?? 0) > 0;
+  }
+
   get externalReferenceLinks() {
     return this.externalReferences?.website?.length
       ? this.externalReferences.website
@@ -109,6 +165,139 @@ export default class SbomComponentModel extends Model {
 
   get isMLModel() {
     return this.type === ENUMS_DISPLAY.SBOM_COMPONENT_TYPE_NAMES[3];
+  }
+
+  get aiDisplayLabelKey() {
+    if (!this.aiArtifactClass) return null;
+    const classMap: Record<string, string> = {
+      model: 'sbomModule.aiLabel.model',
+      library: 'sbomModule.aiLabel.library',
+      tokenizer: 'sbomModule.aiLabel.tokenizer',
+      config: 'sbomModule.aiLabel.config',
+      supporting: 'sbomModule.aiLabel.supporting',
+      secret: 'sbomModule.aiLabel.secret',
+      cloud_endpoint: 'sbomModule.aiLabel.cloudEndpoint',
+      platform_managed_ai: 'sbomModule.aiLabel.platformManagedAi',
+    };
+    return classMap[this.aiArtifactClass] || null;
+  }
+
+  get isPlatformManagedAi() {
+    return this.aiArtifactClass === 'platform_managed_ai';
+  }
+
+  /**
+   * The specific identified model (e.g. "GPT-2"), distinct from the generic
+   * role label ("Model"). Only ever set when model_family_inference actually
+   * found a match in the file's own bytes — never derived from the filename.
+   */
+  get hasIdentifiedModelName() {
+    return this.aiArtifactClass === 'model' && !!this.aiModelName;
+  }
+
+  get confidenceLabel() {
+    if (this.aiConfidence === 'high') return 'High';
+    if (this.aiConfidence === 'medium') return 'Medium';
+    if (this.aiConfidence === 'low') return 'Low';
+    return null;
+  }
+
+  get confidenceColor() {
+    if (this.aiConfidence === 'high') return 'success';
+    if (this.aiConfidence === 'medium') return 'warn';
+    return 'default';
+  }
+
+  /**
+   * Explains WHY this artifact got the confidence it did — e.g. a tokenizer
+   * filename alone is a weak signal, but gets raised to "high" once a real
+   * model is found elsewhere in the same app. Deterministic from
+   * (artifactClass, confidence): model/library/secret only ever reach a
+   * baseline of "high" directly; tokenizer/config/supporting only ever reach
+   * "medium"/"high" via the confidence-uplift pass (see
+   * apply_confidence_uplift in ml_model_scanner.py), never as a baseline —
+   * so the pair alone tells us which explanation applies, with no need for
+   * the backend to separately track "was this uplifted".
+   */
+  get confidenceExplanationKey() {
+    if (!this.aiArtifactClass || !this.aiConfidence) return null;
+
+    const key = `${this.aiArtifactClass}:${this.aiConfidence}`;
+    const explanationMap: Record<string, string> = {
+      'model:high': 'sbomModule.confidenceExplanation.formatProof',
+      'secret:high': 'sbomModule.confidenceExplanation.formatProof',
+      'library:high': 'sbomModule.confidenceExplanation.libraryMatch',
+      'cloud_endpoint:high': 'sbomModule.confidenceExplanation.cloudProviderMatch',
+      'cloud_endpoint:medium': 'sbomModule.confidenceExplanation.cloudGenericMatch',
+      'tokenizer:low': 'sbomModule.confidenceExplanation.genericLow',
+      'config:low': 'sbomModule.confidenceExplanation.genericLow',
+      'supporting:low': 'sbomModule.confidenceExplanation.genericLow',
+      'tokenizer:medium': 'sbomModule.confidenceExplanation.tokenizerBaseline',
+      'config:medium': 'sbomModule.confidenceExplanation.upliftedByLibrary',
+      'supporting:medium': 'sbomModule.confidenceExplanation.upliftedByLibrary',
+      'tokenizer:high': 'sbomModule.confidenceExplanation.upliftedByModel',
+      'config:high': 'sbomModule.confidenceExplanation.upliftedByModel',
+      'supporting:high': 'sbomModule.confidenceExplanation.upliftedByModel',
+    };
+    return explanationMap[key] || null;
+  }
+
+  /**
+   * "Type" column for the AI-components-only view -- a small, standardized
+   * set of top-level categories. tokenizer/config/supporting all collapse
+   * to a single "Supporting Artifact" bucket here; their more specific
+   * kind is surfaced separately via aiDisplayLabelKey (drawer-only "AI
+   * Role" field), not repeated in this column.
+   */
+  get aiTypeLabel() {
+    if (!this.aiArtifactClass) return '-';
+    const classMap: Record<string, string> = {
+      model: 'sbomModule.aiTypeLabel.model',
+      library: 'sbomModule.aiTypeLabel.library',
+      tokenizer: 'sbomModule.supportingArtifact',
+      config: 'sbomModule.supportingArtifact',
+      supporting: 'sbomModule.supportingArtifact',
+      secret: 'sbomModule.aiTypeLabel.secret',
+      cloud_endpoint: 'sbomModule.aiTypeLabel.cloudEndpoint',
+      platform_managed_ai: 'sbomModule.aiTypeLabel.platformManagedAi',
+    };
+    const key = classMap[this.aiArtifactClass];
+    return key ? this.intl.t(key) : '-';
+  }
+
+  /**
+   * "Family" column for the AI-components-only view — the named AI
+   * technology this artifact belongs to, from whichever pipeline actually
+   * identified it. Never fabricated: empty for anything neither pipeline
+   * could identify (e.g. tokenizer/config files, or a model file with no
+   * recognizable tensor names/metadata).
+   */
+  get aiFamily() {
+    return this.aiModelName || this.aiFrameworkName || '-';
+  }
+
+  /**
+   * Deterministic fallback for the "Purpose" column, mirroring enola's own
+   * appknox:ai:purpose mapping exactly (a pure function of artifact class,
+   * same table used for every other class). Only used when the backend's
+   * ai_purpose is empty -- covers components scanned before purpose-emission
+   * existed in the pipeline, so this never disagrees with what the backend
+   * would have computed itself.
+   */
+  get aiPurposeFallback() {
+    if (!this.aiArtifactClass) return null;
+    const classMap: Record<string, string> = {
+      model: 'sbomModule.aiPurposeFallback.model',
+      library: 'sbomModule.aiPurposeFallback.library',
+      tokenizer: 'sbomModule.aiPurposeFallback.tokenizer',
+      config: 'sbomModule.aiPurposeFallback.config',
+      supporting: 'sbomModule.aiPurposeFallback.supporting',
+      secret: 'sbomModule.aiPurposeFallback.secret',
+      cloud_endpoint: 'sbomModule.aiPurposeFallback.cloudEndpoint',
+      platform_managed_ai: 'sbomModule.aiPurposeFallback.platformManagedAi',
+    };
+    const key = classMap[this.aiArtifactClass];
+    return key ? this.intl.t(key) : null;
   }
 }
 

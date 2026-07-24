@@ -1,0 +1,54 @@
+.ai-bom-component-list {
+  .skeleton-loader {
+    padding: 1em;
+  }
+
+  .empty-state {
+    min-height: 300px;
+  }
+
+  .search-container {
+    margin-bottom: 1.5em;
+  }
+}
+
+.new-feature-svg-wrapper {
+  svg {
+    width: 280px;
+    height: auto;
+  }
+}
+
+.listing-container {
+  background: var(
+    --sbom-scan-details-ai-bom-component-list-listing-container-background-color
+  );
+  border: 1px solid
+    var(
+      --sbom-scan-details-ai-bom-component-list-listing-container-border-color
+    );
+  border-radius: var(
+    --sbom-scan-details-ai-bom-component-list-listing-container-border-radius
+  );
+}
+
+.pre-ai-bom-empty {
+  // standard gap below the tab row now that the summary bar is hidden --
+  // without this the tab row's bottom border and the empty state's own
+  // border sit flush against each other
+  margin-top: 1.5em;
+  min-height: 500px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(
+    --sbom-scan-details-ai-bom-component-list-pre-ai-bom-empty-background-color
+  );
+  border: 1px solid
+    var(
+      --sbom-scan-details-ai-bom-component-list-pre-ai-bom-empty-border-color
+    );
+  border-radius: var(
+    --sbom-scan-details-ai-bom-component-list-pre-ai-bom-empty-border-radius
+  );
+}

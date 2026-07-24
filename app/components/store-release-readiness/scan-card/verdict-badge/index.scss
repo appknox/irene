@@ -1,0 +1,39 @@
+.verdict-pill {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  border-radius: 4px;
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.verdict-icon {
+  font-size: 18px !important;
+  line-height: 1;
+  flex-shrink: 0;
+}
+
+.pill-error {
+  background-color: #FEE2E2;
+  color: var(--error-main);
+}
+
+.pill-warn {
+  background-color: #FFEDD5;
+  color: var(--warn-dark);
+}
+
+.pill-success {
+  background-color: #DBEAFE;
+  color: var(--success-main);
+}
+
+.pill-neutral {
+  background-color: #E1E1E1;
+  color: var(--neutral-grey-600);
+}
+
+.verdict-text {
+  white-space: nowrap;
+}

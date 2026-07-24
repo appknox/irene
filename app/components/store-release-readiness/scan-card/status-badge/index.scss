@@ -1,0 +1,28 @@
+.status-badge {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 8px;
+  border-radius: 4px;
+  background-color: var(--background-main);
+  font-size: 11px;
+  font-weight: 500;
+}
+
+.status-icon {
+  font-size: 16px !important;
+  line-height: 1;
+  flex-shrink: 0;
+}
+
+.status-label {
+  white-space: nowrap;
+}
+
+.color-warn {
+  color: var(--warn-dark) !important;
+}
+
+.color-neutral {
+  color: var(--neutral-grey-400) !important;
+}

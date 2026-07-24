@@ -1,0 +1,172 @@
+// ── Card shell ─────────────────────────────────────────────
+.scan-card {
+  background-color: var(--background-main);
+  border-radius: 8px;
+  border: 1px solid var(--border-color-1);
+  box-shadow: var(--box-shadow-6);
+  overflow: hidden;
+  cursor: pointer;
+  transition: box-shadow 0.2s ease;
+
+  &:hover {
+    box-shadow: var(--box-shadow-7);
+  }
+}
+
+// ── Card header (light grey strip) ─────────────────────────
+.card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.875rem 1.25rem;
+  background-color: #F7F8FC;
+  border-bottom: 1px solid var(--border-color-1);
+}
+
+// ── Card body ───────────────────────────────────────────────
+.card-body {
+  padding: 1.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.875rem;
+}
+
+// ── App icon box ────────────────────────────────────────────
+.app-icon-box {
+  width: 72px;
+  height: 72px;
+  border-radius: 12px;
+  border: 1px solid var(--border-color-1);
+  background-color: var(--neutral-grey-50);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.app-icon-platform {
+  font-size: 36px !important;
+}
+
+// ── Meta row: package name (left) | platform + date (right) ────
+.meta-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+}
+
+.package-name {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.meta-chips {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-shrink: 0;
+}
+
+// Platform icon in a small grey pill
+.platform-chip {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 6px;
+  background-color: var(--neutral-grey-100);
+}
+
+.platform-icon {
+  font-size: 18px;
+  color: #3ddc84; // Android green
+  line-height: 1;
+}
+
+// Date in a bordered rounded pill
+.date-chip {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px 10px;
+  border-radius: 6px;
+  border: 1px solid var(--border-color-1);
+  background-color: var(--background-main);
+  white-space: nowrap;
+}
+
+.date-icon {
+  font-size: 14px !important;
+  line-height: 1;
+}
+
+// ── Summary section ──────────────────────────────────────────
+.summary-section {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.summary-label {
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--text-primary);
+  margin: 0;
+}
+
+// ── Breakdown ────────────────────────────────────────────────
+.breakdown {
+  display: flex;
+  flex-direction: column;
+  gap: 0.875rem;
+}
+
+.breakdown-section {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.breakdown-main-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+// Colored dots
+.dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.dot-error   { background-color: var(--error-main); }
+.dot-success { background-color: var(--success-main); }
+.dot-neutral { background-color: var(--neutral-grey-400); }
+
+// Sub-items (indented Blocker / Warning)
+.sub-items {
+  padding-left: 1.375rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.sub-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.sub-icon {
+  font-size: 17px;
+  line-height: 1;
+}
+
+.sub-icon { font-size: 17px !important; }
+.icon-warn { color: var(--warn-dark) !important; }

@@ -221,7 +221,8 @@
     "outdated": "OUTDATED",
     "vulnerable": "VULNERABLE",
     "secure": "SECURE",
-    "unknown": "UNKNOWN"
+    "unknown": "UNKNOWN",
+    "exposed": "EXPOSED"
   },
   "circleCIPipeline": "Circle CI Pipeline",
   "clear": "Clear",
@@ -602,9 +603,9 @@
     "summaryReport": "Summary Report ({reportType})",
     "previousReport": "Previous Report ({reportType})",
     "interimReport": "Interim PT Report ({reportType})",
-    "sbomReports": "SBOM Reports",
-    "sbomReportInProgress": "SBOM analysis for this file is still in progress. Please check back after a few minutes.",
-    "noSbomReportAvailable": "SBOM analysis does not exist for this file. Please check the latest file or upload the app now to initiate the SBOM analysis.",
+    "sbomReports": "SCA Reports",
+    "sbomReportInProgress": "SCA analysis for this file is still in progress. Please check back after a few minutes.",
+    "noSbomReportAvailable": "SCA analysis does not exist for this file. Please check the latest file or upload the app now to initiate the SCA analysis.",
     "sbomSampleReportText1": "Gain visibility into the software components used in your app and proactively manage vulnerabilities.",
     "sbomSampleReportText2": "to activate a free trial of SBOM.",
     "sbomSampleContactSuccessMsg": "Thanks for requesting the free trial of SBOM. Someone from our team will get in touch with you shortly.",
@@ -619,7 +620,7 @@
     "storeReleaseReadinessReports": "Store Release Readiness Reports",
     "storeReleaseReadinessReportNotAvailableHeading": "Please re-upload the app or check the latest file",
     "storeReleaseReadinessReportNotAvailable": "Store Release Readiness failed or report is not available for this file.",
-    "viewSbomDetails": "View SBOM details",
+    "viewSbomDetails": "View SCA",
     "goToLatestFile": "Go to Latest File"
   },
   "fileTag": {
@@ -1161,7 +1162,7 @@
       "nf-nsreqstd2": "{current_requester_username} has <strong>requested for an unapproved {platform_display} namespace {namespace_value}</strong> (initially requested by {initial_requester_username} on {namespace_created_on}).",
       "nf-sastcmpltd1": "<strong>Static scan completed</strong> for {platform_display} app <strong>{file_name} ({package_name})</strong>.",
       "nf-sbomcmpltd": {
-        "prefix": "<strong>SBOM generated successfully</strong> for the ",
+        "prefix": "<strong>SCA generated successfully</strong> for the ",
         "suffix": ", {platform_display} app <strong>{file_name} ({package_name})</strong>.",
         "summary": "<span>Total Components: {total_components}</span> <span>Vulnerable Components: {vulnerable_components}</span> <span>Components with version updates: {outdated_components}</span>"
       },
@@ -1219,7 +1220,7 @@
     "viewProjectSettings": "View project settings",
     "viewStoreMonitoring": "View store monitoring",
     "viewStoreMonitoringResults": "View store monitoring results",
-    "viewSBOMResults": "View SBOM results",
+    "viewSBOMResults": "View SCA results",
     "viewMonitoringResults": "View monitoring results",
     "viewAppOnStore": "View App on Store"
   },
@@ -1776,7 +1777,7 @@
   "saveAndProceed": "Save and Proceed",
   "saveCredentials": "Save Credentials",
   "savedPreferences": "Successfully saved the preferences",
-  "SBOM": "SBOM",
+  "SBOM": "SCA",
   "sbomModule": {
     "applicationName": "Application Name",
     "applicationVersion": "Application Version",
@@ -1788,22 +1789,22 @@
     "fixedVersions": "Fixed Versions",
     "generatedDate": "Generated Date",
     "versionCode": "Version Code",
-    "lastSbomAnalysisOn": "Last SBOM Analysis On",
+    "lastSbomAnalysisOn": "Last SCA Analysis On",
     "latestVersion": "Latest Version",
     "parentComponentNotFound": "Parent component not found",
-    "pastSbomAnalyses": "Past SBOM Analyses",
-    "pastSbomAnalysesDescription": "Here you see all SBOM reports related to the {projectName} project.",
+    "pastSbomAnalyses": "Past SCA Analyses",
+    "pastSbomAnalysesDescription": "Here you see all SCA reports related to the {projectName} project.",
     "appScanEmptyText": {
-      "title": "No SBOM Analyses",
-      "description": "No SBOM analyses has been done for this application (Project). Kindly upload the app to initiate an SBOM analysis"
+      "title": "No SCA Analyses",
+      "description": "No SCA analyses has been done for this application (Project). Kindly upload the app to initiate an SCA analysis"
     },
     "sbomScanStatusError": {
-      "title": "SBOM Analysis Error",
-      "description": "SBOM analysis for this application could not be completed due to some issues. Kindly reupload and check again. If this issue persists, please reach out to the support team."
+      "title": "SCA Analysis Error",
+      "description": "SCA analysis for this application could not be completed due to some issues. Kindly reupload and check again. If this issue persists, please reach out to the support team."
     },
     "sbomScanStatusProgress": {
-      "title": "SBOM Analysis in Progress",
-      "description": "SBOM Analysis for this application is currently in progress. Please wait for a few moments for it to be completed."
+      "title": "SCA Analysis in Progress",
+      "description": "SCA Analysis for this application is currently in progress. Please wait for a few moments for it to be completed."
     },
     "sbomReport": "SBOM Report",
     "sbomSummary": "SBOM Summary",
@@ -1816,6 +1817,7 @@
       "componentInsights": "Get valuable insights related to the components, such as the Author, License, and the Version used."
     },
     "sbomContactMessage": "Thanks for showing interest in SBOM. Our team will get back to you.",
+    "scaBreadcrumbTitle": "Software Composition Analysis (SCA)",
     "totalComponents": "Total Components",
     "allComponents": "All Components",
     "allComponentsAndVulnerabilities": "All Components and Vulnerabilities",
@@ -1825,9 +1827,24 @@
     "componentDetailsDescription": "View additional information related to each component.",
     "componentDescription": "View the list of components detected in your application.",
     "componentName": "Component Name",
+    "sbomComponents": "SBOM Components",
+    "aiBomComponents": "AI BoM Components",
+    "aiBomComponentsTotal": "AI BoM Components Total",
+    "purpose": "Purpose",
+    "referenceLink": "Reference Link",
+    "cloudEndpoint": "Cloud Endpoint",
+    "secret": "Secret",
+    "config": "Config",
+    "platformManagedAI": "Platform Managed AI",
+    "aiRuntime": "AI Runtime",
+    "supportingArtifact": "Supporting Artifact",
     "componentListEmptyText": {
       "title": "No Components Found",
       "description": "No components could be detected for this application. Kindly reupload and check again. If this issue persists, please reach out to the support team."
+    },
+    "aiBomNewFeatureEmptyText": {
+      "title": "New Feature Available. Upload your app again.",
+      "description": "To get the AI BoM Components, please re-upload the application."
     },
     "knownVulnerabilities": "Known Vulnerabilities",
     "knownVulnerabilitiesEmptyText": {
@@ -1837,30 +1854,79 @@
     "vulnerabilityId": "Vulnerability ID",
     "cvssV3Score": "CVSS V3 Score",
     "severity": "Severity",
-    "sbomAppTitle": "Software Bill of Materials (SBOM)",
+    "sbomAppTitle": "Software Composition Analysis (SCA)",
     "sbomAppDescription": "Identify the components used in your mobile application and any vulnerabilities associated with it.",
     "sbomAppEmptyText": {
-      "title": "No SBOM Applications",
+      "title": "No SCA Applications",
       "description": "Uh, Oh!. Looks like you have not been granted access to any application (Project) or there have been no applications uploaded yet. Please contact the 'Owner' in your organization for more details."
     },
-    "sbomGeneratedOn": "SBOM Generated On",
-    "sbomDownloadReportDescription": "Here you able to download different types of SBOM scan reports.",
-    "sbomDownloadPdfPrimaryText": "Detailed Report (pdf)",
+    "sbomGeneratedOn": "SCA Generated On",
+    "sbomDownloadReportDescription": "Here you able to download different types of SCA scan reports.",
+    "sbomDownloadPdfPrimaryText": "SBOM - Detailed Report (pdf)",
     "sbomDownloadJsonPrimaryText": "Cyclone DX (json)",
     "sbomDownloadJsonSecondaryText": "No Password Required",
+    "aiBomDownloadPdfPrimaryText": "AI BoM - Detailed Report (pdf)",
     "viewReport": "View Report",
-    "scanReports": "Scan Reports",
+    "scanReports": "SCA Reports",
     "mlModel": "ML Model",
     "machineLearningModel": "Machine Learning Model",
     "newFeature": "New Feature (Beta) - Now SBOM detects ML Models in the Apps",
     "neverInitiated": "Never Initiated",
-    "noScanAlertDescription": "Upload the app to initiate SBOM analysis.",
-    "generateReportDescription": "Report is not available yet. Please click on the Generate button to access the SBOM report.",
+    "noScanAlertDescription": "Upload the app to initiate SCA analysis.",
+    "generateReportDescription": "Report is not available yet. Please click on the Generate button to access the SCA report.",
     "scanReportEmptyText": {
-      "title": "No SBOM Report Found",
-      "description": "We could not locate any report associated with this SBOM analysis."
+      "title": "No SCA Report Found",
+      "description": "We could not locate any report associated with this SCA analysis."
     },
-    "noComponentsFoundFilter": "No components found for the selected filter. Please try a different filter."
+    "noComponentsFoundFilter": "No components found for the selected filter. Please try a different filter.",
+    "aiComponents": "AI Components",
+    "aiRoleColumn": "AI Role",
+    "aiLabel": {
+      "model": "Model",
+      "library": "Inference Engine",
+      "tokenizer": "Tokenizer",
+      "config": "Config",
+      "supporting": "Supporting Asset",
+      "secret": "Secret",
+      "cloudEndpoint": "Cloud Endpoint",
+      "platformManagedAi": "Managed Model Platform"
+    },
+    "aiTypeLabel": {
+      "model": "ML Model",
+      "library": "AI SDK",
+      "secret": "Secret",
+      "cloudEndpoint": "Cloud Endpoint",
+      "platformManagedAi": "Platform Managed AI"
+    },
+    "aiComponentColumn": "Component",
+    "aiFamilyColumn": "Family",
+    "aiPurposeColumn": "Purpose",
+    "aiPurposeFallback": {
+      "model": "General AI Model",
+      "library": "On-Device Inference Runtime",
+      "tokenizer": "Text Tokenization",
+      "config": "Model Configuration",
+      "supporting": "Supporting Artifact",
+      "secret": "Authentication Credential",
+      "cloudEndpoint": "Remote Inference",
+      "platformManagedAi": "On-Device AI Capability"
+    },
+    "aiAssociatedModel": "Associated Model",
+    "aiConfidenceLabel": "AI Confidence",
+    "foundInLocations": "Found In",
+    "modelIdentificationMethod": "Identification Method",
+    "modelIdentifiedVerified": "Identified from the model's own embedded metadata",
+    "modelIdentifiedHeuristic": "Identified by matching tensor/operator names in the file — may be imprecise",
+    "confidenceExplanation": {
+      "formatProof": "High confidence: the file format or matched pattern itself is unambiguous proof, no other evidence needed.",
+      "libraryMatch": "High confidence: matched a known AI library package or its distinctive framework name.",
+      "cloudProviderMatch": "High confidence: the exact host matches a known cloud AI provider's API.",
+      "cloudGenericMatch": "Medium confidence: matches a common AI API request pattern, but the host isn't a recognized provider — could be self-hosted or proxied.",
+      "genericLow": "Low confidence: this file's name matches a common but generic AI-related pattern, and no other AI evidence was found in this app to confirm it.",
+      "tokenizerBaseline": "Medium confidence: the filename matches a well-known tokenizer file naming convention — a reasonably strong signal on its own.",
+      "upliftedByLibrary": "Medium confidence: raised from a low baseline because an AI library was also found in this app.",
+      "upliftedByModel": "High confidence: raised from a lower baseline because a real AI model was also found in this app."
+    }
   },
   "scan": "scan(s)",
   "scanned": "scanned",
