@@ -18,8 +18,10 @@
     >
       <AkTypography @fontWeight='bold' @gutterBottom={{true}}>
         {{t 'dastAutomation.automationScenarios'}}
-        -
-        {{t 'dastAutomation.superUserOnly'}}
+
+        {{#unless @isAiDastEnabled}}
+          - v2
+        {{/unless}}
       </AkTypography>
 
       <AkTypography

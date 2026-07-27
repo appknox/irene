@@ -26,6 +26,7 @@ export default class DynamicScanStatusChipComponent extends Component<DynamicSca
   LOADING_STATUS_GROUPS = [
     DsStatusGroup.IN_QUEUE,
     DsStatusGroup.STARTING,
+    DsStatusGroup.RETRYING,
     DsStatusGroup.RUNNING,
     DsStatusGroup.STOPPING,
   ];

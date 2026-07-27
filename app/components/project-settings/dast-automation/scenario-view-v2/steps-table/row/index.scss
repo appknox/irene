@@ -186,10 +186,9 @@
         --project-settings-dast-automation-scenario-view-v2-steps-table-row-background
       );
 
-      border-color: 1px solid
-        var(
-          --project-settings-dast-automation-scenario-view-v2-steps-table-row-compact-field-border-color
-        );
+      border-color: var(
+        --project-settings-dast-automation-scenario-view-v2-steps-table-row-compact-field-border-color
+      );
     }
 
     :global(.ember-power-select-trigger[aria-disabled='true']),

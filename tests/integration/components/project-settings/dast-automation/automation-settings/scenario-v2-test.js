@@ -125,7 +125,7 @@ module(
       assert
         .dom(selectors.headerText)
         .containsText(t('dastAutomation.automationScenarios'))
-        .containsText(t('dastAutomation.superUserOnly'));
+        .containsText('v2');
 
       assert
         .dom(selectors.headerDesc)

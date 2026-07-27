@@ -36,6 +36,7 @@ export default class FileDetailsScanActionsDynamicScanComponent extends Componen
     [DsStatusGroup.NOT_STARTED]: 'notStarted',
     [DsStatusGroup.IN_QUEUE]: 'inQueue',
     [DsStatusGroup.STARTING]: 'starting',
+    [DsStatusGroup.RETRYING]: 'retrying',
     [DsStatusGroup.RUNNING]: 'inProgress',
     [DsStatusGroup.STOPPING]: 'stopping',
     [DsStatusGroup.COMPLETED]: 'completed',

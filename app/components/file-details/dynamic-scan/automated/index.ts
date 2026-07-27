@@ -3,7 +3,6 @@ import { tracked } from '@glimmer/tracking';
 import { action } from '@ember/object';
 import { task } from 'ember-concurrency';
 import { service } from '@ember/service';
-import { TrackedMap } from 'tracked-built-ins';
 import type IntlService from 'ember-intl/services/intl';
 import type RouterService from '@ember/routing/router-service';
 import type Store from 'ember-data/store';
@@ -21,7 +20,6 @@ import type DsAutomationPreferenceModel from 'irene/models/ds-automation-prefere
 import type OrganizationService from 'irene/services/organization';
 import type DynamicscanModel from 'irene/models/dynamicscan';
 import type LoggerService from 'irene/services/logger';
-import type EventBusService from 'irene/services/event-bus';
 
 export interface FileDetailsDastAutomatedSignature {
   Args: {
@@ -37,17 +35,15 @@ export default class FileDetailsDastAutomated extends Component<FileDetailsDastA
   @service declare organization: OrganizationService;
   @service('notifications') declare notify: NotificationService;
   @service declare logger: LoggerService;
-  @service declare eventBus: EventBusService;
 
   @tracked automationPreference: DsAutomationPreferenceModel | null = null;
   @tracked lastAutomatedDynamicScans: DynamicscanModel[] = [];
   @tracked selectedAutomatedDynamicScan: DynamicscanModel | null = null;
 
-  navigationGraphAvailability = new TrackedMap<string, boolean>();
-
   DS_STATUS_GROUP_DISPLAY_PRIORITY = {
     [DsStatusGroup.RUNNING]: 0,
     [DsStatusGroup.STARTING]: 1,
+    [DsStatusGroup.RETRYING]: 1,
     [DsStatusGroup.IN_QUEUE]: 1,
     [DsStatusGroup.COMPLETED]: 2,
     [DsStatusGroup.ERRORED]: 3,
@@ -61,20 +57,10 @@ export default class FileDetailsDastAutomated extends Component<FileDetailsDastA
 
     this.getDsAutomationPreference.perform();
     this.getLastAutomatedDynamicScan.perform();
-
-    this.eventBus.on(
-      'ws:dynamicscan:update',
-      this,
-      this.handleDynamicScanUpdate
-    );
   }
 
   get file() {
     return this.args.file;
-  }
-
-  get profileId() {
-    return this.file.profile.get('id') as string;
   }
 
   get isFetchingDynamicScan() {
@@ -119,11 +105,9 @@ export default class FileDetailsDastAutomated extends Component<FileDetailsDastA
   }
 
   get selectedScanHasNavigationGraph() {
-    const scanId = this.selectedAutomatedDynamicScan?.id;
-
-    return scanId
-      ? this.navigationGraphAvailability.get(scanId) === true
-      : false;
+    return (
+      this.selectedAutomatedDynamicScan?.isNavigationGraphGenerated === true
+    );
   }
 
   get cumulativeScanStatus() {
@@ -134,6 +118,22 @@ export default class FileDetailsDastAutomated extends Component<FileDetailsDastA
 
   get cumulativeScanStatusText() {
     return this.intl.t(DS_STATUS_GROUP_LABEL[this.cumulativeScanStatus]);
+  }
+
+  get selectedScanErrorMessage() {
+    if (!this.selectedAutomatedDynamicScan?.isStatusError) {
+      return '';
+    }
+
+    return this.selectedAutomatedDynamicScan.errorMessage;
+  }
+
+  get statusChipTooltipMessage() {
+    if (this.cumulativeScanStatus === DsStatusGroup.RETRYING) {
+      return this.intl.t('dastAutomation.retryingStatusTooltip');
+    }
+
+    return this.selectedScanErrorMessage;
   }
 
   get navigationGraphRouteModels() {
@@ -198,37 +198,6 @@ export default class FileDetailsDastAutomated extends Component<FileDetailsDastA
   @action
   handleRoleChange(dynamicscan: DynamicscanModel) {
     this.selectedAutomatedDynamicScan = dynamicscan;
-    this.checkAndSetNavigationGraphAvailability.perform(dynamicscan);
-  }
-
-  @action
-  handleDynamicScanUpdate(dsScan: DynamicscanModel) {
-    const dynamicScanIsForThisFile =
-      String(dsScan.file.get('id')) === String(this.file.id);
-
-    const scanIsInList = this.lastAutomatedDynamicScans.some(
-      (scan) => scan.id === dsScan.id
-    );
-
-    // Ignore updates for other files or scans not in our list.
-    if (!dynamicScanIsForThisFile || !scanIsInList) {
-      return;
-    }
-
-    if (dsScan.isCompleted) {
-      this.checkAndSetNavigationGraphAvailability.perform(dsScan);
-    }
-  }
-
-  @action
-  setSelectedScanAndLoadNavigationGraph(scans: DynamicscanModel[]) {
-    // Set the first scan as the default selected scan
-    if (scans.length > 0) {
-      const selectedScan = scans[0] ?? null;
-      this.selectedAutomatedDynamicScan = selectedScan;
-
-      this.checkAndSetNavigationGraphAvailability.perform(selectedScan);
-    }
   }
 
   @action
@@ -237,36 +206,6 @@ export default class FileDetailsDastAutomated extends Component<FileDetailsDastA
       getDsStatusGroupForScan(status)
     ];
   }
-
-  // `enqueue` runs probes one at a time instead of concurrently, so a burst of
-  // WS updates can't fire overlapping requests.
-  checkAndSetNavigationGraphAvailability = task(
-    { enqueue: true },
-    async (scan: DynamicscanModel | null) => {
-      // No need to probe for navigation graph if the scan is not provided
-      if (!scan) {
-        return;
-      }
-
-      // Skip if the scan isn't completed or has already been checked (the
-      // result is cached either way).
-      const scanHasNavGraph = this.navigationGraphAvailability.get(scan.id);
-
-      if (!scan.isCompleted || scanHasNavGraph) {
-        return;
-      }
-
-      const adapter = this.store.adapterFor('ds-navigation-graph');
-      adapter.setNestedUrlNamespace(scan.id);
-
-      try {
-        const graph = await this.store.queryRecord('ds-navigation-graph', {});
-        this.navigationGraphAvailability.set(scan.id, Boolean(graph));
-      } catch {
-        this.navigationGraphAvailability.set(scan.id, false);
-      }
-    }
-  );
 
   getLastAutomatedDynamicScan = task(async () => {
     try {
@@ -280,7 +219,9 @@ export default class FileDetailsDastAutomated extends Component<FileDetailsDastA
 
       this.lastAutomatedDynamicScans = sortedScans;
 
-      this.setSelectedScanAndLoadNavigationGraph(sortedScans);
+      if (scans.length > 0) {
+        this.selectedAutomatedDynamicScan = scans[0] ?? null;
+      }
     } catch (error) {
       this.logger.error(parseError(error, this.intl.t('pleaseTryAgain')));
     }
@@ -299,16 +240,6 @@ export default class FileDetailsDastAutomated extends Component<FileDetailsDastA
       this.notify.error(parseError(error, this.intl.t('pleaseTryAgain')));
     }
   });
-
-  willDestroy(): void {
-    super.willDestroy();
-
-    this.eventBus.off(
-      'ws:dynamicscan:update',
-      this,
-      this.handleDynamicScanUpdate
-    );
-  }
 }
 
 declare module '@glint/environment-ember-loose/registry' {

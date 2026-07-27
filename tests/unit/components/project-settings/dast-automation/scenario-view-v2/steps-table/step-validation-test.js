@@ -96,12 +96,14 @@ module('Unit | Utility | step-validation', function () {
   // ─── LONG_PRESS ──────────────────────────────────────────────────────────
 
   test.each(
-    'LONG_PRESS: empty passes (whenPresent); positive integers valid; non-positive error',
+    'LONG_PRESS: empty passes (whenPresent); 1-300000 valid; outside range errors',
     [
       ['', null],
       ['1', null],
+      ['300000', null],
       ['0', 'dastAutomation.validation.longPressValueRange'],
       ['-1', 'dastAutomation.validation.longPressValueRange'],
+      ['300001', 'dastAutomation.validation.longPressValueRange'],
       ['abc', 'dastAutomation.validation.longPressValueRange'],
     ],
     function (assert, [value, expectedError]) {

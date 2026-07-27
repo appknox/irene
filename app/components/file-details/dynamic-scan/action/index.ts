@@ -59,7 +59,8 @@ export default class DynamicScanActionComponent extends Component<DynamicScanAct
 
     if (
       status === DsStatusGroup.IN_QUEUE ||
-      status === DsStatusGroup.STARTING
+      status === DsStatusGroup.STARTING ||
+      status === DsStatusGroup.RETRYING
     ) {
       return {
         icon: 'close' as const,
@@ -135,16 +136,12 @@ export default class DynamicScanActionComponent extends Component<DynamicScanAct
     if (firstError) {
       const errorMessage = this.intl.t('pleaseTryAgain');
       this.notify.error(parseError(firstError.reason, errorMessage));
-
-      return;
     }
-
-    this.args.onScanShutdown?.();
   }
 
   dynamicShutdown = task({ drop: true }, async () => {
     const runningScans = this.dynamicScans.filter(
-      (s) => s.isReadyOrRunning || s.isStarting
+      (s) => s.isReadyOrRunning || s.isStarting || s.isRetrying
     );
 
     // No need to delete (stop) any scans if there are no running scans

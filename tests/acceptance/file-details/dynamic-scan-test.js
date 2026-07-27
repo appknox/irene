@@ -180,6 +180,7 @@ const commonDynamicScanStatusTexts = [
     text: () => t('deviceHooking'),
   },
   { status: ENUMS.DYNAMIC_SCAN_STATUS.HOOKING, text: () => t('deviceHooking') },
+  { status: ENUMS.DYNAMIC_SCAN_STATUS.RETRYING, text: () => t('retrying') },
   {
     status: ENUMS.DYNAMIC_SCAN_STATUS.STOP_SCAN_REQUESTED,
     text: () => t('deviceShuttingDown'),
@@ -556,7 +557,7 @@ async function assertRunOrCancelFlow(
 function assertActionButton(assert, dynamicscan, isManualMode) {
   if (dynamicscan.isShuttingDown) {
     assert.dom(SEL.action).doesNotExist();
-  } else if (dynamicscan.isStarting) {
+  } else if (dynamicscan.isStarting || dynamicscan.isRetrying) {
     assert
       .dom(SEL.actionBtn('cancelBtn'))
       .isNotDisabled()
@@ -1410,139 +1411,89 @@ module('Acceptance | file-details/dynamic-scan', function (hooks) {
     }
   );
 
-  test('cancelling automated scans only cancels starting or running scans', async function (assert) {
-    assert.expect(3);
+  test.each(
+    'automated scan shutdown only deletes active scans, skipping completed ones',
+    [
+      {
+        activeStatus: ENUMS.DYNAMIC_SCAN_STATUS.LAUNCHING,
+        expectedChipText: () => t('starting'),
+        expectedBtn: 'cancelBtn',
+      },
+      {
+        activeStatus: ENUMS.DYNAMIC_SCAN_STATUS.RETRYING,
+        expectedChipText: () => t('retrying'),
+        expectedBtn: 'cancelBtn',
+      },
+      {
+        activeStatus: ENUMS.DYNAMIC_SCAN_STATUS.AUTOPILOT_RUNNING,
+        expectedChipText: () => t('running'),
+        expectedBtn: 'stopBtn',
+      },
+    ],
+    async function (assert, { activeStatus, expectedChipText, expectedBtn }) {
+      assert.expect(3);
 
-    this.server.create('ds-automated-device-preference', {
-      id: this.profile.id,
-    });
+      this.server.create('ds-automated-device-preference', {
+        id: this.profile.id,
+      });
 
-    const roles = this.server.createList('scenario-user-role', 2);
+      const roles = this.server.createList('scenario-user-role', 2);
+      const scansRolesMap = [
+        [roles[0], activeStatus],
+        [roles[1], ENUMS.DYNAMIC_SCAN_STATUS.ANALYSIS_COMPLETED],
+      ];
 
-    const scanProps = [
-      [roles[0], ENUMS.DYNAMIC_SCAN_STATUS.LAUNCHING],
-      [roles[1], ENUMS.DYNAMIC_SCAN_STATUS.ANALYSIS_COMPLETED],
-    ];
+      const [scanA, scanB] = scansRolesMap.map(([role, status]) =>
+        createDynamicscan(this.server, this.file.id, {
+          mode: ENUMS.DYNAMIC_MODE.AUTOMATED,
+          engine: ENUMS.DYNAMIC_SCAN_ENGINE.AUTOPILOT,
+          status,
+          scenarioUserRole: role,
+        })
+      );
 
-    const [scanA, scanB] = scanProps.map(([role, status]) =>
-      createDynamicscan(this.server, this.file.id, {
-        mode: ENUMS.DYNAMIC_MODE.AUTOMATED,
-        engine: ENUMS.DYNAMIC_SCAN_ENGINE.AUTOPILOT,
-        status,
-        scenarioUserRole: role,
-      })
-    );
+      const deletedIds = [];
 
-    const deletedIds = [];
+      this.server.delete('/v2/dynamicscans/:id', (schema, req) => {
+        deletedIds.push(req.params.id);
 
-    this.server.delete('/v2/dynamicscans/:id', (schema, req) => {
-      deletedIds.push(req.params.id);
+        schema.dynamicscans
+          .find(req.params.id)
+          ?.update({ status: ENUMS.DYNAMIC_SCAN_STATUS.STOP_SCAN_REQUESTED });
 
-      schema.dynamicscans
-        .find(req.params.id)
-        ?.update({ status: ENUMS.DYNAMIC_SCAN_STATUS.STOP_SCAN_REQUESTED });
+        return new Response(204);
+      });
 
-      return new Response(204);
-    });
+      stubLastAutomatedScansMulti(this.server, () => [scanA, scanB]);
+      stubProfileEndpoints(this.server);
 
-    stubLastAutomatedScansMulti(this.server, () => [scanA, scanB]);
-    stubProfileEndpoints(this.server);
+      await visit(`/dashboard/file/${this.file.id}/dynamic-scan/automated`);
 
-    await visit(`/dashboard/file/${this.file.id}/dynamic-scan/automated`);
+      assert.dom(SEL.statusChip).hasText(expectedChipText());
+      assert.dom(SEL.actionBtn(expectedBtn)).isNotDisabled();
 
-    // Cumulative: STARTING(LAUNCHING) + COMPLETED(ANALYSIS_COMPLETED) → STARTING wins
-    assert.dom(SEL.statusChip).hasText(t('starting'));
-    assert.dom(SEL.actionBtn('cancelBtn')).isNotDisabled();
+      await click(SEL.actionBtn(expectedBtn));
 
-    await click(SEL.actionBtn('cancelBtn'));
+      const scanARecord = this.server.schema.dynamicscans.find(
+        String(scanA.id)
+      );
+      scanARecord.update({ status: ENUMS.DYNAMIC_SCAN_STATUS.CANCELLED });
 
-    // Advance scanA to a terminal state so pollDynamicScanStatusForSuperUser stops
-    const scanARecord = this.server.schema.dynamicscans.find(String(scanA.id));
-    scanARecord.update({ status: ENUMS.DYNAMIC_SCAN_STATUS.CANCELLED });
+      const websocket = this.owner.lookup('service:websocket');
 
-    const websocket = this.owner.lookup('service:websocket');
+      websocket.onConnect();
 
-    websocket.onConnect();
+      websocket.onModelNotification({
+        model_name: 'dynamicscan',
+        data: scanARecord.toJSON(),
+      });
 
-    websocket.onModelNotification({
-      model_name: 'dynamicscan',
-      data: scanARecord.toJSON(),
-    });
+      await settled();
 
-    await settled();
-
-    // Only scanA (isStarting) was deleted; scanB (isCompleted) was skipped
-    assert.deepEqual(deletedIds, [String(scanA.id)]);
-  });
-
-  test('stopping automated scans only stops running or starting scans', async function (assert) {
-    assert.expect(3);
-
-    // Statuses
-    const { AUTOPILOT_RUNNING, ANALYSIS_COMPLETED, STOP_SCAN_REQUESTED } =
-      ENUMS.DYNAMIC_SCAN_STATUS;
-
-    this.server.create('ds-automated-device-preference', {
-      id: this.profile.id,
-    });
-
-    const [roleA, roleB] = this.server.createList('scenario-user-role', 2);
-
-    const scanProps = [
-      [roleA, AUTOPILOT_RUNNING],
-      [roleB, ANALYSIS_COMPLETED],
-    ];
-
-    const [scanA, scanB] = scanProps.map(([role, status]) =>
-      createDynamicscan(this.server, this.file.id, {
-        mode: ENUMS.DYNAMIC_MODE.AUTOMATED,
-        engine: ENUMS.DYNAMIC_SCAN_ENGINE.AUTOPILOT,
-        status,
-        scenarioUserRole: role,
-      })
-    );
-
-    const deletedIds = [];
-
-    this.server.delete('/v2/dynamicscans/:id', (schema, req) => {
-      deletedIds.push(req.params.id);
-
-      schema.dynamicscans
-        .find(req.params.id)
-        ?.update({ status: STOP_SCAN_REQUESTED });
-
-      return new Response(204);
-    });
-
-    stubLastAutomatedScansMulti(this.server, () => [scanA, scanB]);
-    stubProfileEndpoints(this.server);
-
-    await visit(`/dashboard/file/${this.file.id}/dynamic-scan/automated`);
-
-    // Cumulative: RUNNING(AUTOPILOT_RUNNING) + COMPLETED → RUNNING wins.
-    // treatAsAutopiloted=true (all non-completed scans are AUTOPILOT) → stopBtn shown.
-    assert.dom(SEL.statusChip).hasText(t('running'));
-    assert.dom(SEL.actionBtn('stopBtn')).isNotDisabled();
-
-    await click(SEL.actionBtn('stopBtn'));
-
-    // Update scan record to a completed state
-    const scanARecord = this.server.schema.dynamicscans.find(String(scanA.id));
-    const websocket = this.owner.lookup('service:websocket');
-
-    scanARecord.update({ status: ANALYSIS_COMPLETED });
-    websocket.onConnect();
-
-    websocket.onModelNotification({
-      model_name: 'dynamicscan',
-      data: scanARecord.toJSON(),
-    });
-
-    await settled();
-
-    // Only scanA (isReadyOrRunning) was deleted; scanB (isCompleted) was skipped
-    assert.deepEqual(deletedIds, [String(scanA.id)]);
-  });
+      // Only scanA (the active scan) was deleted; scanB (isCompleted) was skipped
+      assert.deepEqual(deletedIds, [String(scanA.id)]);
+    }
+  );
 
   test('switching between active user roles creates a new VNC connection', async function (assert) {
     assert.expect(6);

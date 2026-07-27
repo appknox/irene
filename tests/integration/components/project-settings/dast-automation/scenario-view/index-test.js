@@ -20,7 +20,7 @@ class NotificationsStub extends Service {
 }
 
 class RouterStub extends Service {
-  transitionTo() {}
+  transitionTo() {} //NOSONAR
 }
 
 // ─── Selectors ───────────────────────────────────────────────────────────────
@@ -34,8 +34,7 @@ const selectors = {
     '[data-test-projectSettings-viewScenario-paramListEmptyHeaderText]',
   emptyDescText:
     '[data-test-projectSettings-viewScenario-paramListEmptyDescText]',
-  parameterItem:
-    '[data-test-projectSettings-viewScenario-parameterItem-root]',
+  parameterItem: '[data-test-projectSettings-viewScenario-parameterItem-root]',
 };
 
 // ─── Template ────────────────────────────────────────────────────────────────
@@ -64,6 +63,7 @@ module(
       const store = this.owner.lookup('service:store');
 
       const projectRecord = this.server.create('project');
+
       const project = store.push(
         store.normalize('project', projectRecord.toJSON())
       );
@@ -72,6 +72,7 @@ module(
         name: 'Login Flow',
         is_default: false,
       });
+
       const scenario = store.push(
         store.normalize('scan-parameter-group', scenarioRecord.toJSON())
       );
@@ -107,16 +108,22 @@ module(
 
       await render(TEMPLATE);
 
-      assert.dom('[data-test-projectSettings-viewScenario-header-root]').exists();
+      assert
+        .dom('[data-test-projectSettings-viewScenario-header-root]')
+        .exists();
+
       assert
         .dom('[data-test-projectSettings-viewScenario-addParameterRoot]')
         .exists();
+
       assert.dom(selectors.emptyContainer).exists();
       assert.dom(selectors.emptyIllustration).exists();
       assert.dom(selectors.emptyHeaderText).containsText(t('noDataAvailable'));
+
       assert
         .dom(selectors.emptyDescText)
         .containsText(t('dastAutomation.noParamaterAvailable'));
+
       assert.dom(selectors.parameterItem).doesNotExist();
     });
 
@@ -151,6 +158,7 @@ module(
       assert.dom(selectors.emptyContainer).doesNotExist();
 
       const items = findAll(selectors.parameterItem);
+
       assert.strictEqual(
         items.length,
         2,
@@ -159,24 +167,46 @@ module(
 
       // First item (insecure)
       assert
-        .dom('[data-test-projectSettings-viewScenario-parameterItem-name]', items[0])
+        .dom(
+          '[data-test-projectSettings-viewScenario-parameterItem-name]',
+          items[0]
+        )
         .containsText('username');
+
       assert
-        .dom('[data-test-projectSettings-viewScenario-parameterItem-valueTextField]', items[0])
+        .dom(
+          '[data-test-projectSettings-viewScenario-parameterItem-valueTextField]',
+          items[0]
+        )
         .hasValue('admin');
+
       assert
-        .dom('[data-test-projectSettings-parameterItem-valueTextField-secureIcon]', items[0])
+        .dom(
+          '[data-test-projectSettings-parameterItem-valueTextField-secureIcon]',
+          items[0]
+        )
         .hasAttribute('icon', /lock-open-outline/);
 
       // Second item (secure)
       assert
-        .dom('[data-test-projectSettings-viewScenario-parameterItem-name]', items[1])
+        .dom(
+          '[data-test-projectSettings-viewScenario-parameterItem-name]',
+          items[1]
+        )
         .containsText('password');
+
       assert
-        .dom('[data-test-projectSettings-viewScenario-parameterItem-valueTextField]', items[1])
+        .dom(
+          '[data-test-projectSettings-viewScenario-parameterItem-valueTextField]',
+          items[1]
+        )
         .hasValue('secret');
+
       assert
-        .dom('[data-test-projectSettings-parameterItem-valueTextField-secureIcon]', items[1])
+        .dom(
+          '[data-test-projectSettings-parameterItem-valueTextField-secureIcon]',
+          items[1]
+        )
         .hasAttribute('icon', /lock/);
     });
   }

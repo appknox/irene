@@ -106,7 +106,7 @@ const VALUE_VALIDATORS: Partial<Record<ScenarioStepAction, ValueValidator>> = {
   ),
 
   [ScenarioStepAction.LONG_PRESS]: whenPresent(
-    integerInRange(1, Number.MAX_SAFE_INTEGER, ERR.longPressValueRange)
+    integerInRange(1, 300_000, ERR.longPressValueRange)
   ),
 
   [ScenarioStepAction.ENTER_TEXT]: all(

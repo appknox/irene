@@ -1,7 +1,7 @@
 import Component from '@glimmer/component';
 import { service } from '@ember/service';
 import type RouterService from '@ember/routing/router-service';
-import IntlService from 'ember-intl/services/intl';
+import type IntlService from 'ember-intl/services/intl';
 
 export interface FileDetailsDynamicScanNavigationGraphInvalidFileOrDsGraphSignature {
   Element: HTMLElement;
@@ -35,24 +35,28 @@ export default class FileDetailsDynamicScanNavigationGraphInvalidFileOrDsGraphCo
     return this.intl.t('navigationGraph.notFoundInvalidFile');
   }
 
+  get fileIsValidAndExists() {
+    return this.isFileValid && this.fileId;
+  }
+
   get backButtonRoute() {
-    return this.isFileValid && this.fileId
+    return this.fileIsValidAndExists
       ? 'authenticated.dashboard.file'
       : 'authenticated.home';
   }
 
   get backButtonModel() {
-    return this.isFileValid && this.fileId ? this.fileId : undefined;
+    return this.fileIsValidAndExists ? this.fileId : undefined;
   }
 
   get backButtonText() {
-    return this.isFileValid && this.fileId
+    return this.fileIsValidAndExists
       ? this.intl.t('navigationGraph.backToFileDetails')
       : this.intl.t('gotoHome');
   }
 
   get isErrorSubstate() {
-    return this.args.isFileValid !== undefined;
+    return this.isFileValid !== undefined;
   }
 }
 

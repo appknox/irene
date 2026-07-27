@@ -79,6 +79,9 @@ export default class DynamicscanModel extends Model {
   @attr('string')
   declare errorMessage: string;
 
+  @attr('boolean')
+  declare isNavigationGraphGenerated: boolean;
+
   @belongsTo('scenario-user-role', { async: false, inverse: null })
   declare scenarioUserRole: ScenarioUserRoleModel | null;
 
@@ -165,6 +168,10 @@ export default class DynamicscanModel extends Model {
     return this.status === ENUMS.DYNAMIC_SCAN_STATUS.CANCELLED;
   }
 
+  get isRetrying() {
+    return this.status === ENUMS.DYNAMIC_SCAN_STATUS.RETRYING;
+  }
+
   get isStarting() {
     return (
       this.isInqueue ||
@@ -226,6 +233,10 @@ export default class DynamicscanModel extends Model {
 
     if (this.isHooking) {
       return this.intl.t('deviceHooking');
+    }
+
+    if (this.isRetrying) {
+      return this.intl.t('retrying');
     }
 
     if (this.isReadyOrRunning) {

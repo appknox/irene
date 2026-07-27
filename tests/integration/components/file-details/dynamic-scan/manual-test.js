@@ -923,6 +923,7 @@ module(
         const dynamicscan = this.server.create('dynamicscan', {
           file: '10',
           mode: ENUMS.DYNAMIC_MODE.MANUAL,
+          engine: ENUMS.DYNAMIC_SCAN_ENGINE.USER_MANUAL,
           status: ENUMS.DYNAMIC_SCAN_STATUS.READY_FOR_INTERACTION,
 
           auto_shutdown_on: dayjs()
