@@ -15,6 +15,14 @@ class NotificationsStub extends Service {
   error() {}
 }
 
+// The modal opens on the Add tab; the cert list lives behind the second tab.
+// AkTabs puts the test attribute on the wrapping <li> and the click handler on
+// the inner <button>, so the button is what has to be clicked.
+async function openExistingTab() {
+  await click('[data-test-orgSigningCert-openBtn]');
+  await click('[data-test-orgSigningCert-existingTab] button');
+}
+
 module(
   'Integration | Component | organization/signing-certificate',
   function (hooks) {
@@ -26,7 +34,7 @@ module(
       this.owner.register('service:notifications', NotificationsStub);
     });
 
-    test('it renders the panel header and manage button', async function (assert) {
+    test('it renders the panel header and add button', async function (assert) {
       class AjaxStub extends Service {
         request() {
           return Promise.resolve(null);
@@ -40,7 +48,7 @@ module(
       assert.dom('[data-test-orgSigningCert-openBtn]').exists();
     });
 
-    test('it shows the empty state when no certificate is configured', async function (assert) {
+    test('it opens on the add tab with save disabled until both files are chosen', async function (assert) {
       class AjaxStub extends Service {
         request() {
           return Promise.resolve(null);
@@ -50,6 +58,27 @@ module(
 
       await render(hbs`<Organization::SigningCertificate />`);
       await click('[data-test-orgSigningCert-openBtn]');
+
+      assert.dom('[data-test-orgSigningCert-tabs]').exists();
+      assert.dom('[data-test-orgSigningCert-p12]').exists();
+      assert.dom('[data-test-orgSigningCert-profile]').exists();
+      assert.dom('[data-test-orgSigningCert-tip]').exists();
+
+      assert
+        .dom('[data-test-orgSigningCert-uploadBtn]')
+        .isDisabled('a .p12 and a .mobileprovision are both required');
+    });
+
+    test('it shows the empty state on the existing tab when no certificate is configured', async function (assert) {
+      class AjaxStub extends Service {
+        request() {
+          return Promise.resolve(null);
+        }
+      }
+      this.owner.register('service:ajax', AjaxStub);
+
+      await render(hbs`<Organization::SigningCertificate />`);
+      await openExistingTab();
 
       assert.dom('[data-test-orgSigningCert-empty]').exists();
       assert.dom('[data-test-orgSigningCert-info]').doesNotExist();
@@ -83,9 +112,8 @@ module(
       this.owner.register('service:ajax', AjaxStub);
 
       await render(hbs`<Organization::SigningCertificate />`);
-      await click('[data-test-orgSigningCert-openBtn]');
+      await openExistingTab();
 
-      assert.dom('[data-test-orgSigningCert-list]').exists();
       assert.dom('[data-test-orgSigningCert-info]').exists({ count: 2 });
       assert.dom('[data-test-orgSigningCert-activeBadge]').exists({ count: 1 });
       assert.dom('[data-test-orgSigningCert-activateBtn]').exists({ count: 1 });
@@ -116,7 +144,7 @@ module(
       this.owner.register('service:ajax', AjaxStub);
 
       await render(hbs`<Organization::SigningCertificate />`);
-      await click('[data-test-orgSigningCert-openBtn]');
+      await openExistingTab();
 
       const deleteButtons = this.element.querySelectorAll(
         '[data-test-orgSigningCert-deleteBtn]'
@@ -158,8 +186,44 @@ module(
       this.owner.register('service:ajax', AjaxStub);
 
       await render(hbs`<Organization::SigningCertificate />`);
-      await click('[data-test-orgSigningCert-openBtn]');
+      await openExistingTab();
       await click('[data-test-orgSigningCert-activateBtn]');
+    });
+
+    test('project scope shows its single cert with no activate action', async function (assert) {
+      class AjaxStub extends Service {
+        request() {
+          return Promise.resolve({
+            id: 7,
+            name: 'Project cert',
+            team_id: 'AB12CD34',
+            app_id: 'com.acme.app',
+            provisioned_udids: [],
+            is_expired: false,
+          });
+        }
+      }
+      this.owner.register('service:ajax', AjaxStub);
+
+      this.project = { id: 9, platform: 1 };
+
+      await render(
+        hbs`<Organization::SigningCertificate @project={{this.project}} />`
+      );
+
+      assert
+        .dom('[data-test-orgSigningCert-sectionTitle]')
+        .exists('project settings gets the CYOD section heading');
+
+      await openExistingTab();
+
+      assert.dom('[data-test-orgSigningCert-info]').exists({ count: 1 });
+
+      assert
+        .dom('[data-test-orgSigningCert-activateBtn]')
+        .doesNotExist('nothing to switch between in project scope');
+
+      assert.dom('[data-test-orgSigningCert-deleteBtn]').exists({ count: 1 });
     });
 
     test('it is hidden when the CYOD feature is disabled', async function (assert) {

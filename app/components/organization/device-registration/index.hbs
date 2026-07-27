@@ -3,225 +3,52 @@
   data-test-orgDeviceRegistration
   ...attributes
 >
-  <Organization::SettingsPanelHeader
-    @iconName='mobile'
-    @description={{t 'orgRegisterDeviceDesc'}}
-  >
-    <:title>
+  <AkStack @alignItems='flex-start' @justifyContent='space-between' @spacing='2'>
+    <AkStack @direction='column' @spacing='0.5'>
       <AkTypography @variant='h6' data-test-orgDeviceRegistration-title>
-        {{t 'orgRegisterDeviceTitle'}}
+        {{t 'cyodRegistration.title'}}
       </AkTypography>
-    </:title>
 
-    <:action>
-      <AkButton
-        data-test-orgDeviceRegistration-openBtn
-        @variant='filled'
-        {{on 'click' this.handleOpen}}
+      <AkTypography
+        @variant='body2'
+        @color='textSecondary'
+        data-test-orgDeviceRegistration-description
       >
-        {{t 'orgRegisterDevice'}}
-      </AkButton>
-    </:action>
-  </Organization::SettingsPanelHeader>
-</div>
-
-{{#if this.showModal}}
-  <AkModal
-    data-test-orgDeviceRegistration-modal
-    @showHeader={{true}}
-    @headerTitle={{t 'orgRegisterDevice'}}
-    @onClose={{this.handleClose}}
-  >
-    <AkStack @direction='column' @spacing='2.5' class='pa-3'>
-      {{#if this.notConfigured}}
-        <div
-          local-class='empty-state'
-          data-test-orgDeviceRegistration-notConfigured
-        >
-          <AkIcon @iconName='info' @color='textSecondary' />
-          <AkTypography @variant='body2' @color='textSecondary'>
-            {{t 'orgDeviceRegistrationNotConfigured'}}
-          </AkTypography>
-        </div>
-      {{else}}
-        {{! Registered devices }}
-        <AkStack @direction='column' @spacing='1'>
-          <AkStack
-            @spacing='1'
-            @alignItems='center'
-            @justifyContent='space-between'
-          >
-            <AkTypography
-              @variant='subtitle1'
-              data-test-orgDeviceRegistration-devicesTitle
-            >
-              {{t 'orgDeviceRegistrationYourDevices'}}
-            </AkTypography>
-            <AkIconButton
-              data-test-orgDeviceRegistration-refreshBtn
-              @size='small'
-              {{on 'click' this.handleRefresh}}
-            >
-              <AkIcon @iconName='refresh' @color='primary' />
-            </AkIconButton>
-          </AkStack>
-
-          {{#if this.loadDevices.isRunning}}
-            <AkStack @spacing='1' @alignItems='center'>
-              <AkLoader @size={{16}} />
-              <AkTypography @variant='body2' @color='textSecondary'>
-                {{t 'loading'}}
-              </AkTypography>
-            </AkStack>
-
-          {{else if this.hasDevices}}
-            <AkStack @direction='column' @spacing='0.5'>
-              {{#each this.registeredDevices as |device|}}
-                <AkStack
-                  data-test-orgDeviceRegistration-device
-                  local-class='device-row'
-                  @spacing='1'
-                  @alignItems='center'
-                  @justifyContent='space-between'
-                >
-                  <AkStack @spacing='1' @alignItems='center'>
-                    <AkIcon
-                      @iconName={{if
-                        device.is_connected
-                        'check-circle'
-                        'mdi:radio-button-unchecked'
-                      }}
-                      @color={{if device.is_connected 'success' 'textSecondary'}}
-                    />
-                    <AkTypography @variant='body2'>
-                      {{if device.model device.model device.serial_number}}
-                    </AkTypography>
-                  </AkStack>
-                  <AkChip
-                    @variant='semi-filled'
-                    @size='small'
-                    @color={{if device.is_connected 'success' 'secondary'}}
-                    @label={{if
-                      device.is_connected
-                      (t 'orgDeviceRegistrationOnline')
-                      (t 'orgDeviceRegistrationOffline')
-                    }}
-                  />
-                </AkStack>
-              {{/each}}
-            </AkStack>
-
-          {{else}}
-            <div
-              local-class='empty-state'
-              data-test-orgDeviceRegistration-empty
-            >
-              <AkIcon @iconName='mobile' @color='textSecondary' />
-              <AkTypography @variant='body2' @color='textSecondary'>
-                {{t 'orgDeviceRegistrationNoDevices'}}
-              </AkTypography>
-            </div>
-          {{/if}}
-        </AkStack>
-
-        <AkDivider @color='light' />
-
-        {{! Mercer app setup steps }}
-        <AkStack
-          data-test-orgDeviceRegistration-setup
-          @direction='column'
-          @spacing='1.5'
-        >
-          <AkTypography @variant='subtitle1'>
-            {{t 'orgDeviceRegistrationSetupTitle'}}
-          </AkTypography>
-          <AkTypography @color='textSecondary' @variant='body2'>
-            {{t 'orgDeviceRegistrationSetupDesc'}}
-          </AkTypography>
-
-          {{! Step 1 — download the app }}
-          <AkStack local-class='setup-step' @spacing='1' @alignItems='flex-start'>
-            <div local-class='step-num' aria-hidden='true'>1</div>
-            <AkStack @direction='column' @spacing='0.5'>
-              <AkTypography @variant='body2'>
-                {{t 'orgDeviceRegistrationStepDownload'}}
-              </AkTypography>
-              <AkButton
-                data-test-orgDeviceRegistration-downloadBtn
-                @tag='a'
-                href={{this.mercerDownloadUrl}}
-                target='_blank'
-                rel='noopener noreferrer'
-                @variant='filled'
-              >
-                <AkIcon @iconName='download' @size='small' />
-                <span class='ml-1'>{{t 'orgDeviceRegistrationDownload'}}</span>
-              </AkButton>
-            </AkStack>
-          </AkStack>
-
-          {{! Step 2 — sign in with token + server URL }}
-          <AkStack local-class='setup-step' @spacing='1' @alignItems='flex-start'>
-            <div local-class='step-num' aria-hidden='true'>2</div>
-            <AkStack @direction='column' @spacing='0.5'>
-              <AkTypography @variant='body2'>
-                {{t 'orgDeviceRegistrationStepSignIn'}}
-              </AkTypography>
-
-              <AkStack
-                local-class='url-field'
-                @spacing='1'
-                @alignItems='center'
-                @justifyContent='space-between'
-              >
-                <AkTypography
-                  data-test-orgDeviceRegistration-serverUrl
-                  local-class='url-value'
-                  @variant='body3'
-                >
-                  {{this.serverUrl}}
-                </AkTypography>
-                <AkClipboard @onSuccess={{this.handleCopySuccess}} as |ac|>
-                  <AkIconButton
-                    data-test-orgDeviceRegistration-copyBtn
-                    data-clipboard-text={{this.serverUrl}}
-                    id={{ac.triggerId}}
-                    @size='small'
-                  >
-                    <AkIcon @iconName='content-copy-outline' @color='primary' />
-                  </AkIconButton>
-                </AkClipboard>
-              </AkStack>
-
-              <AkTypography @variant='body3' @color='textSecondary'>
-                {{t 'orgDeviceRegistrationTokenHint'}}
-              </AkTypography>
-            </AkStack>
-          </AkStack>
-
-          {{! Step 3 — register the device in the app }}
-          <AkStack local-class='setup-step' @spacing='1' @alignItems='flex-start'>
-            <div local-class='step-num' aria-hidden='true'>3</div>
-            <AkTypography @variant='body2'>
-              {{t 'orgDeviceRegistrationStepRegister'}}
-            </AkTypography>
-          </AkStack>
-
-          {{! Step 4 — start the proxy }}
-          <AkStack local-class='setup-step' @spacing='1' @alignItems='flex-start'>
-            <div local-class='step-num' aria-hidden='true'>4</div>
-            <AkTypography @variant='body2'>
-              {{t 'orgDeviceRegistrationStepRun'}}
-            </AkTypography>
-          </AkStack>
-        </AkStack>
-      {{/if}}
-
-      <AkStack @spacing='1' @justifyContent='flex-end'>
-        <AkButton @variant='filled' {{on 'click' this.handleClose}}>
-          {{t 'orgDeviceRegistrationDone'}}
-        </AkButton>
-      </AkStack>
+        {{t 'cyodRegistration.description'}}
+      </AkTypography>
     </AkStack>
-  </AkModal>
-{{/if}}
+
+    <AkToggle
+      data-test-orgDeviceRegistration-toggle
+      @id='cyod-registration'
+      @checked={{this.isRegistrationEnabled}}
+      @disabled={{this.isSaving}}
+      @size='small'
+      @onChange={{perform this.setRegistrationEnabled}}
+    />
+  </AkStack>
+
+  {{#if this.isRegistrationEnabled}}
+    <div class='mt-2'>
+      <Cyod::DeviceTable @emptyHint={{t 'cyodRegistration.emptyHint'}}>
+        <:emptyAction>
+          <AkLink
+            data-test-orgDeviceRegistration-goToCyodSettings
+            @route='authenticated.dashboard.account-settings.cyod-settings'
+            @color='primary'
+            @underline='always'
+            @typographyVariant='body2'
+          >
+            <:default>
+              {{t 'cyodRegistration.goToCyodSettings'}}
+            </:default>
+
+            <:rightIcon>
+              <AkIcon @iconName='open-in-new' @size='small' @color='primary' />
+            </:rightIcon>
+          </AkLink>
+        </:emptyAction>
+      </Cyod::DeviceTable>
+    </div>
+  {{/if}}
+</div>

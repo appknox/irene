@@ -2,62 +2,30 @@
   width: 100%;
 }
 
-.summary-card {
-  border: 1px solid var(--divider-dark);
-  border-radius: var(--border-radius);
-  background: var(--background-light);
-  padding: 16px;
-}
-
-.summary-icon {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 32px;
-  height: 32px;
-  flex-shrink: 0;
-  border-radius: var(--border-radius);
-  background: var(--primary-light);
-}
-
-.summary-body {
-  flex-grow: 1;
-  min-width: 0;
-}
-
-.summary-actions {
-  margin-top: 12px;
-}
-
 .mono-value {
   font-family: var(--font-family-mono);
   word-break: break-all;
 }
 
-.cert-list {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-}
-
-.cert-row {
-  display: flex;
-  align-items: flex-start;
-  justify-content: space-between;
-  gap: 12px;
-  border: 1px solid var(--divider-dark);
-  border-radius: var(--border-radius);
-  background: var(--background-light);
-  padding: 12px 16px;
-}
-
-.cert-row-main {
-  flex-grow: 1;
+// Name and Bundle ID Override sit side by side, each taking half the row.
+.form-field {
+  flex: 1 1 0;
   min-width: 0;
 }
 
-.cert-row-actions {
-  flex-shrink: 0;
+// Bordered note under the Bundle ID field explaining when the override is
+// required (wildcard / enterprise profiles).
+.tip-callout {
+  padding: 12px 16px;
+  border-left: 3px solid var(--ak-color-primary);
+  background: var(--background-light);
+}
+
+.cert-card {
+  border: 1px solid var(--divider-dark);
+  border-radius: var(--border-radius);
+  background: var(--ak-color-white);
+  padding: 16px;
 }
 
 .file-name {

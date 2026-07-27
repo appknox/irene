@@ -2,16 +2,37 @@ import { module, test } from 'qunit';
 import { setupRenderingTest } from 'ember-qunit';
 import { render, click } from '@ember/test-helpers';
 import { hbs } from 'ember-cli-htmlbars';
-import { setupIntl } from 'ember-intl/test-support';
+import { setupIntl, t } from 'ember-intl/test-support';
 import Service from '@ember/service';
 
-class OrganizationStub extends Service {
-  selected = { id: 42 };
+function organizationStub({ registrationEnabled = true } = {}) {
+  return class OrganizationStub extends Service {
+    selected = {
+      id: 42,
+      cyodRegistrationEnabled: registrationEnabled,
+      set(key, value) {
+        this[key] = value;
+      },
+      save() {
+        return Promise.resolve();
+      },
+    };
+  };
 }
+
+// AkToggle puts the test attribute on the wrapping <span> and renders the real
+// checkbox inside it, so assertions and clicks have to target the input.
+const TOGGLE_INPUT = '[data-test-orgDeviceRegistration-toggle] input';
 
 class NotificationsStub extends Service {
   success() {}
   error() {}
+}
+
+class EmptyAjaxStub extends Service {
+  request() {
+    return Promise.resolve({ results: [] });
+  }
 }
 
 module(
@@ -21,50 +42,68 @@ module(
     setupIntl(hooks, 'en');
 
     hooks.beforeEach(function () {
-      this.owner.register('service:organization', OrganizationStub);
       this.owner.register('service:notifications', NotificationsStub);
+      this.owner.register('service:ajax', EmptyAjaxStub);
     });
 
-    test('it shows the not-configured message on a 400 (no devicefarm token)', async function (assert) {
-      class AjaxStub extends Service {
-        request() {
-          return Promise.reject({ status: 400 });
-        }
-      }
-      this.owner.register('service:ajax', AjaxStub);
+    test('it renders the CYOD registration switch turned on', async function (assert) {
+      this.owner.register('service:organization', organizationStub());
 
       await render(hbs`<Organization::DeviceRegistration />`);
-      await click('[data-test-orgDeviceRegistration-openBtn]');
 
       assert
-        .dom('[data-test-orgDeviceRegistration-notConfigured]')
-        .exists('shows the not-configured message');
-      // The Mercer setup + empty state are dead ends when not configured.
-      assert.dom('[data-test-orgDeviceRegistration-setup]').doesNotExist();
-      assert.dom('[data-test-orgDeviceRegistration-empty]').doesNotExist();
+        .dom('[data-test-orgDeviceRegistration-title]')
+        .hasText(t('cyodRegistration.title'));
+
+      assert.dom(TOGGLE_INPUT).isChecked();
     });
 
-    test('it shows the empty state (not the not-configured message) when configured with no devices', async function (assert) {
-      class AjaxStub extends Service {
-        request() {
-          return Promise.resolve({ results: [] });
-        }
-      }
-      this.owner.register('service:ajax', AjaxStub);
+    test('it hides the device table when the switch is off', async function (assert) {
+      this.owner.register(
+        'service:organization',
+        organizationStub({ registrationEnabled: false })
+      );
 
       await render(hbs`<Organization::DeviceRegistration />`);
-      await click('[data-test-orgDeviceRegistration-openBtn]');
 
-      assert.dom('[data-test-orgDeviceRegistration-empty]').exists();
+      assert.dom(TOGGLE_INPUT).isNotChecked();
+      assert.dom('[data-test-cyodDeviceTable]').doesNotExist();
+    });
+
+    test('it persists the switch when toggled', async function (assert) {
+      assert.expect(1);
+
+      class OrganizationStub extends Service {
+        selected = {
+          id: 42,
+          cyodRegistrationEnabled: true,
+          set(key, value) {
+            this[key] = value;
+          },
+          save: () => {
+            assert.ok(true, 'persists the organization');
+
+            return Promise.resolve();
+          },
+        };
+      }
+
+      this.owner.register('service:organization', OrganizationStub);
+
+      await render(hbs`<Organization::DeviceRegistration />`);
+      await click(TOGGLE_INPUT);
+    });
+
+    test('it links to the account CYOD settings from the empty state', async function (assert) {
+      this.owner.register('service:organization', organizationStub());
+
+      await render(hbs`<Organization::DeviceRegistration />`);
+
+      assert.dom('[data-test-cyodDeviceTable-empty]').exists();
+
       assert
-        .dom('[data-test-orgDeviceRegistration-notConfigured]')
-        .doesNotExist();
-      assert
-        .dom('[data-test-orgDeviceRegistration-setup]')
-        .exists('shows the Mercer setup when configured');
-      assert
-        .dom('[data-test-orgDeviceRegistration-downloadBtn]')
-        .exists('shows the download button');
+        .dom('[data-test-orgDeviceRegistration-goToCyodSettings]')
+        .exists('points members at where they can register a device');
     });
   }
 );

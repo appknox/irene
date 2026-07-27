@@ -34,6 +34,13 @@ export default class OrganizationService extends Service {
     return !!this.orgFeatures?.cyod;
   }
 
+  // Whether members may currently register CYOD devices: the paid entitlement
+  // AND the owner's switch. Surfaces the CYOD registration UI; enforcement lives
+  // server-side in mycroft's Mercer device-register endpoint.
+  get isCyodRegistrationEnabled() {
+    return this.isCyodEnabled && !!this.selected?.cyodRegistrationEnabled;
+  }
+
   get hideUpsellUIStatus() {
     return {
       privacyModule: !this.orgFeatures?.privacy && this.hideUpsellUI,

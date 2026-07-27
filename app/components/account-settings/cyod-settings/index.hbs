@@ -1,0 +1,173 @@
+<div
+  local-class='cyod-settings-container'
+  data-test-cyodSettings
+  ...attributes
+>
+  <AkTypography @variant='h6' class='mb-2' data-test-cyodSettings-title>
+    {{t 'cyodRegistration.title'}}
+  </AkTypography>
+
+  {{! Device Registration }}
+  <AkStack @alignItems='flex-start' @justifyContent='space-between' @spacing='2'>
+    <AkStack @direction='column' @spacing='0.5'>
+      <AkTypography @variant='subtitle1' data-test-cyodSettings-registerTitle>
+        {{t 'cyodSettings.deviceRegistration'}}
+      </AkTypography>
+
+      <AkTypography @variant='body2' @color='textSecondary'>
+        {{t 'cyodSettings.deviceRegistrationDesc'}}
+      </AkTypography>
+    </AkStack>
+
+    <AkButton
+      data-test-cyodSettings-registerBtn
+      @variant='filled'
+      @disabled={{not this.isRegistrationEnabled}}
+      {{on 'click' this.handleOpen}}
+    >
+      {{t 'cyodSettings.registerADevice'}}
+    </AkButton>
+  </AkStack>
+
+  {{#unless this.isRegistrationEnabled}}
+    <div local-class='disabled-note' class='mt-2' data-test-cyodSettings-disabled>
+      <AkIcon @iconName='info' @color='textSecondary' />
+
+      <AkTypography @variant='body2' @color='textSecondary'>
+        {{t 'cyodSettings.registrationDisabled'}}
+      </AkTypography>
+    </div>
+  {{/unless}}
+
+  <AkDivider class='my-3' @color='light' />
+
+  {{! Your connected device }}
+  <Cyod::DeviceTable
+    @heading={{t 'cyodSettings.connectedDevice'}}
+    @subheading={{t 'cyodSettings.connectedDeviceDesc'}}
+    @emptyHint={{t 'cyodSettings.emptyHint'}}
+  />
+</div>
+
+{{#if this.showModal}}
+  <AkModal
+    data-test-cyodSettings-modal
+    @showHeader={{true}}
+    @headerTitle={{t 'cyodSettings.registerADevice'}}
+    @onClose={{this.handleClose}}
+  >
+    <AkStack @direction='column' @spacing='2.5' class='pa-3'>
+      <AkStack @direction='column' @spacing='0.5'>
+        <AkTypography @variant='subtitle1'>
+          {{t 'cyodSettings.yourRegisteredDevices'}}
+        </AkTypography>
+
+        <AkTypography @variant='body2' @color='textSecondary'>
+          {{t 'cyodSettings.stepsIntro'}}
+        </AkTypography>
+      </AkStack>
+
+      {{! Step 1 — iOS signing certificate }}
+      <AkStack local-class='setup-step' @spacing='1' @alignItems='flex-start'>
+        <div local-class='step-num' aria-hidden='true'>1</div>
+
+        <AkStack @direction='column' @spacing='0.5'>
+          <AkTypography @variant='body2'>
+            {{t 'cyodSettings.stepCertificate'}}
+          </AkTypography>
+
+          <AkTypography @variant='body3' @color='textSecondary'>
+            {{t 'cyodSettings.stepCertificateNote'}}
+          </AkTypography>
+        </AkStack>
+      </AkStack>
+
+      {{! Step 2 — download the app }}
+      <AkStack local-class='setup-step' @spacing='1' @alignItems='flex-start'>
+        <div local-class='step-num' aria-hidden='true'>2</div>
+
+        <AkStack @direction='column' @spacing='0.5'>
+          <AkTypography @variant='body2'>
+            {{t 'cyodSettings.stepDownload'}}
+          </AkTypography>
+
+          <AkButton
+            data-test-cyodSettings-downloadBtn
+            @tag='a'
+            href={{this.mercerDownloadUrl}}
+            target='_blank'
+            rel='noopener noreferrer'
+            @variant='filled'
+          >
+            <AkIcon @iconName='download' @size='small' />
+
+            <span class='ml-1'>{{t 'cyodSettings.downloadMercer'}}</span>
+          </AkButton>
+
+          <AkTypography @variant='body3' @color='textSecondary'>
+            {{t 'cyodSettings.stepDownloadNote'}}
+          </AkTypography>
+        </AkStack>
+      </AkStack>
+
+      {{! Step 3 — sign in with token + server URL }}
+      <AkStack local-class='setup-step' @spacing='1' @alignItems='flex-start'>
+        <div local-class='step-num' aria-hidden='true'>3</div>
+
+        <AkStack @direction='column' @spacing='0.5'>
+          <AkTypography @variant='body2'>
+            {{t 'cyodSettings.stepSignIn'}}
+          </AkTypography>
+
+          <AkStack
+            local-class='url-field'
+            @spacing='1'
+            @alignItems='center'
+            @justifyContent='space-between'
+          >
+            <AkTypography
+              data-test-cyodSettings-serverUrl
+              local-class='url-value'
+              @variant='body3'
+            >
+              {{this.serverUrl}}
+            </AkTypography>
+
+            <AkClipboard @onSuccess={{this.handleCopySuccess}} as |ac|>
+              <AkIconButton
+                data-test-cyodSettings-copyBtn
+                data-clipboard-text={{this.serverUrl}}
+                id={{ac.triggerId}}
+                @size='small'
+              >
+                <AkIcon @iconName='content-copy-outline' @color='primary' />
+              </AkIconButton>
+            </AkClipboard>
+          </AkStack>
+
+          <AkTypography @variant='body3' @color='textSecondary'>
+            {{t 'cyodSettings.stepSignInNote'}}
+          </AkTypography>
+        </AkStack>
+      </AkStack>
+
+      {{! Step 4 — register the device in the app }}
+      <AkStack local-class='setup-step' @spacing='1' @alignItems='flex-start'>
+        <div local-class='step-num' aria-hidden='true'>4</div>
+
+        <AkTypography @variant='body2'>
+          {{t 'cyodSettings.stepRegister'}}
+        </AkTypography>
+      </AkStack>
+
+      {{! Step 5 — start the proxy }}
+      <AkStack local-class='setup-step' @spacing='1' @alignItems='flex-start'>
+        <div local-class='step-num' aria-hidden='true'>5</div>
+
+        <AkTypography @variant='body2'>
+          {{t 'cyodSettings.stepRun'}}
+        </AkTypography>
+      </AkStack>
+    </AkStack>
+  </AkModal>
+{{/if}}

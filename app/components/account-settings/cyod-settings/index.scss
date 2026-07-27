@@ -1,0 +1,47 @@
+.cyod-settings-container {
+  width: 100%;
+  padding: 24px;
+  background: var(--ak-color-white);
+}
+
+.disabled-note {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 16px;
+  border: 1px dashed var(--divider-dark);
+  border-radius: var(--border-radius);
+  background: var(--background-light);
+}
+
+.setup-step {
+  width: 100%;
+}
+
+.step-num {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 22px;
+  height: 22px;
+  flex-shrink: 0;
+  border-radius: var(--border-radius-capsule);
+  background: var(--primary-light);
+  color: var(--primary-dark);
+  font-size: 12px;
+  font-weight: var(--font-weight-medium);
+  line-height: 1;
+}
+
+.url-field {
+  width: 100%;
+  padding: 4px 4px 4px 12px;
+  border: 1px solid var(--divider-dark);
+  border-radius: var(--border-radius);
+  background: var(--background-light);
+}
+
+.url-value {
+  font-family: var(--font-family-mono);
+  word-break: break-all;
+}

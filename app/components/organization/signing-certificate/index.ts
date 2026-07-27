@@ -56,6 +56,9 @@ export default class OrganizationSigningCertificateComponent extends Component<O
   @service('notifications') declare notify: NotificationService;
 
   @tracked showModal = false;
+  // Which modal tab is showing. Opens on 'add' — the common case is uploading a
+  // new certificate; existing ones are reviewed less often.
+  @tracked activeTab: 'add' | 'existing' = 'add';
   // Project scope: single cert. Org scope: a list of certs.
   @tracked cert: CertInfo | null = null;
   @tracked certs: CertInfo[] = [];
@@ -118,8 +121,35 @@ export default class OrganizationSigningCertificateComponent extends Component<O
     return this.profileFile?.name ?? null;
   }
 
+  // Both files are mandatory server-side; disabling Save until they are picked
+  // avoids a round-trip that can only fail.
+  get canSave() {
+    return !!this.p12File && !!this.profileFile;
+  }
+
+  // Project scope holds exactly one certificate, so there is nothing to switch
+  // between — the Activate action is meaningless there.
+  get canActivate() {
+    return !this.isProjectScope;
+  }
+
+  // The Existing tab renders one list in both scopes; project scope just has a
+  // single-element list.
+  get existingCerts(): CertInfo[] {
+    if (this.isProjectScope) {
+      return this.cert ? [this.cert] : [];
+    }
+
+    return this.certs;
+  }
+
+  get hasExistingCerts() {
+    return this.existingCerts.length > 0;
+  }
+
   @action
   handleOpen() {
+    this.activeTab = 'add';
     this.showModal = true;
     this.load.perform();
   }
@@ -128,6 +158,11 @@ export default class OrganizationSigningCertificateComponent extends Component<O
   handleClose() {
     this.resetForm();
     this.showModal = false;
+  }
+
+  @action
+  handleTabChange(tab: 'add' | 'existing') {
+    this.activeTab = tab;
   }
 
   @action
