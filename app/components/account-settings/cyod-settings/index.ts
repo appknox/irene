@@ -30,6 +30,13 @@ export default class AccountSettingsCyodSettingsComponent extends Component<Acco
 
   @tracked showModal = false;
 
+  // The tab is hidden without the entitlement, but the route is always
+  // registered — guard the panel too so a direct URL doesn't surface CYOD UI to
+  // an org that cannot use it.
+  get visible() {
+    return this.organization.isCyodEnabled;
+  }
+
   get isRegistrationEnabled() {
     return this.organization.isCyodRegistrationEnabled;
   }

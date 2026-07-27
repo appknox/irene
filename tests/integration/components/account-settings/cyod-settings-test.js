@@ -5,10 +5,13 @@ import { hbs } from 'ember-cli-htmlbars';
 import { setupIntl, t } from 'ember-intl/test-support';
 import Service from '@ember/service';
 
-function organizationStub({ registrationEnabled = true } = {}) {
+function organizationStub({
+  registrationEnabled = true,
+  cyodEnabled = true,
+} = {}) {
   return class OrganizationStub extends Service {
     selected = { id: 42 };
-    isCyodEnabled = true;
+    isCyodEnabled = cyodEnabled;
     isCyodRegistrationEnabled = registrationEnabled;
   };
 }
@@ -61,6 +64,19 @@ module(
 
       assert.dom('[data-test-cyodSettings-registerBtn]').isDisabled();
       assert.dom('[data-test-cyodSettings-disabled]').exists();
+    });
+
+    test('it renders nothing without the CYOD entitlement', async function (assert) {
+      this.owner.register(
+        'service:organization',
+        organizationStub({ cyodEnabled: false })
+      );
+
+      await render(hbs`<AccountSettings::CyodSettings />`);
+
+      assert
+        .dom('[data-test-cyodSettings]')
+        .doesNotExist('direct URL access must not surface CYOD UI');
     });
 
     test('it opens the five-step Mercer setup modal', async function (assert) {
