@@ -4,6 +4,7 @@ import type FileModel from 'irene/models/file';
 import type SbomFileModel from 'irene/models/sbom-file';
 import type FileRiskModel from 'irene/models/file-risk';
 import type FileExploitabilityModel from 'irene/models/file-exploitability';
+import type FileHealthScoreAuditModel from 'irene/models/file-health-score-audit';
 
 import FileCapiReportModel, {
   type FileCapiReportScanType,
@@ -164,6 +165,18 @@ export default class FileAdapter extends CommonDRFAdapter {
       res,
       'file-exploitability'
     );
+  }
+
+  async fetchFileHealthScoreAudit(fileId: string) {
+    const url = `${this._buildURL('file', fileId)}/health_score_audit`;
+    const res = await this.ajax(url, 'GET');
+
+    const normalized = this.store.normalize('file-health-score-audit', {
+      ...res,
+      id: fileId,
+    });
+
+    return this.store.push(normalized) as FileHealthScoreAuditModel;
   }
 }
 
