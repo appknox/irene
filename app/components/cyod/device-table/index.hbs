@@ -75,20 +75,38 @@
     </div>
 
   {{else}}
+    {{! Same composition as the other settings empty states (see
+    organization/service-account/empty), inside a frame because the design
+    shows it boxed within the settings panel. }}
     <div local-class='empty-state-block' data-test-cyodDeviceTable-empty>
-      <AkSvg::OrgDataEmpty local-class='empty-illustration' />
+      <AkStack
+        @alignItems='center'
+        @justifyContent='center'
+        @direction='column'
+        @spacing='1'
+        class='py-7 px-4'
+      >
+        <AkSvg::NotificationEmpty data-test-cyodDeviceTable-emptySvg />
 
-      <AkTypography @variant='body1' @fontWeight='medium'>
-        {{t 'cyodDeviceTable.emptyTitle'}}
-      </AkTypography>
-
-      {{#if @emptyHint}}
-        <AkTypography @variant='body3' @color='textSecondary'>
-          {{@emptyHint}}
+        <AkTypography
+          @variant='h5'
+          class='mt-4'
+          data-test-cyodDeviceTable-emptyTitle
+        >
+          {{t 'cyodDeviceTable.emptyTitle'}}
         </AkTypography>
-      {{/if}}
 
-      {{yield to='emptyAction'}}
+        {{#if @emptyHint}}
+          <AkTypography
+            @align='center'
+            data-test-cyodDeviceTable-emptyDescription
+          >
+            {{@emptyHint}}
+          </AkTypography>
+        {{/if}}
+
+        {{yield to='emptyAction'}}
+      </AkStack>
     </div>
   {{/if}}
 </div>
