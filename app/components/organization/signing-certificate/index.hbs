@@ -319,45 +319,38 @@
                       />
                     </AkStack>
 
-                    <AkStack @direction='column' @spacing='0.5'>
-                      <AkStack @spacing='1' @alignItems='center'>
+                    {{! Label/value grid so the values line up in a column,
+                    as in the design. }}
+                    <div local-class='cert-meta'>
+                      <AkTypography @variant='body3' @color='textSecondary'>
+                        {{t 'orgSigningCertTeam'}}:
+                      </AkTypography>
+
+                      <AkTypography local-class='mono-value' @variant='body3'>
+                        {{cert.team_id}}
+                      </AkTypography>
+
+                      {{#if cert.app_id}}
                         <AkTypography @variant='body3' @color='textSecondary'>
-                          {{t 'orgSigningCertTeam'}}
+                          {{t 'orgSigningCertAppId'}}:
                         </AkTypography>
 
                         <AkTypography local-class='mono-value' @variant='body3'>
-                          {{cert.team_id}}
+                          {{cert.app_id}}
                         </AkTypography>
-                      </AkStack>
-
-                      {{#if cert.app_id}}
-                        <AkStack @spacing='1' @alignItems='center'>
-                          <AkTypography @variant='body3' @color='textSecondary'>
-                            {{t 'orgSigningCertAppId'}}
-                          </AkTypography>
-
-                          <AkTypography
-                            local-class='mono-value'
-                            @variant='body3'
-                          >
-                            {{cert.app_id}}
-                          </AkTypography>
-                        </AkStack>
                       {{/if}}
 
-                      <AkStack @spacing='1' @alignItems='center'>
-                        <AkTypography @variant='body3' @color='textSecondary'>
-                          {{t 'orgSigningCertExpires'}}
-                        </AkTypography>
+                      <AkTypography @variant='body3' @color='textSecondary'>
+                        {{t 'orgSigningCertExpires'}}:
+                      </AkTypography>
 
-                        <AkTypography
-                          @variant='body3'
-                          @color={{if cert.is_expired 'error' 'textPrimary'}}
-                        >
-                          {{cert.expiresOn}}
-                        </AkTypography>
-                      </AkStack>
-                    </AkStack>
+                      <AkTypography
+                        @variant='body3'
+                        @color={{if cert.is_expired 'error' 'textPrimary'}}
+                      >
+                        {{cert.expiresOn}}
+                      </AkTypography>
+                    </div>
                   </AkStack>
 
                   <AkStack @spacing='1' @alignItems='center'>
@@ -365,6 +358,7 @@
                       <AkButton
                         data-test-orgSigningCert-activateBtn
                         @variant='outlined'
+                        @color='primary'
                         @loading={{and
                           this.activateCert.isRunning
                           (eq this.busyCertId cert.id)

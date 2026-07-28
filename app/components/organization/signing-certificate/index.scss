@@ -50,6 +50,16 @@
   background: var(--background-light);
 }
 
+// Two columns: a fixed label gutter and the value, so Team / ID / Expires
+// values start at the same x.
+.cert-meta {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  column-gap: 12px;
+  row-gap: 6px;
+  align-items: baseline;
+}
+
 .cert-card {
   border: 1px solid var(--divider-dark);
   border-radius: var(--border-radius);
