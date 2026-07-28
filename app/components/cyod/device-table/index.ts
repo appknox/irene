@@ -51,6 +51,10 @@ export interface CyodDeviceTableSignature {
     // description, refresh button). Omit it to render the bare table.
     heading?: string;
     subheading?: string;
+    // Show only devices currently online. Used by the account-settings view
+    // ("Your connected device"), where an offline device is not actionable.
+    // The org view leaves this off so owners see the full inventory.
+    onlyConnected?: boolean;
   };
   Blocks: {
     emptyAction?: [];
@@ -79,8 +83,16 @@ export default class CyodDeviceTableComponent extends Component<CyodDeviceTableS
     return `/api/organizations/${this.organization.selected?.id}/registered-devices`;
   }
 
+  get visibleDevices() {
+    if (this.args.onlyConnected) {
+      return this.devices.filter((device) => device.is_connected);
+    }
+
+    return this.devices;
+  }
+
   get hasDevices() {
-    return this.devices.length > 0;
+    return this.visibleDevices.length > 0;
   }
 
   get isLoading() {
@@ -105,7 +117,7 @@ export default class CyodDeviceTableComponent extends Component<CyodDeviceTableS
   }
 
   get rows(): DeviceRow[] {
-    return this.devices.map((device) => ({
+    return this.visibleDevices.map((device) => ({
       id: device.id,
       deviceName: device.name || device.model || device.serial_number,
       registeredOn: device.created_on
