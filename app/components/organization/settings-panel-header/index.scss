@@ -13,6 +13,13 @@
   background: var(--primary-light);
 }
 
+// Keep the action button on one line — without this the description column
+// takes the space and labels like "Add certificate" wrap mid-button.
+.panel-action {
+  flex-shrink: 0;
+  white-space: nowrap;
+}
+
 // Stack the header action under the title on narrow viewports.
 @media (max-width: 600px) {
   .panel-header {
