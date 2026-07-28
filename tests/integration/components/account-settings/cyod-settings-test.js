@@ -66,6 +66,16 @@ module(
       assert.dom('[data-test-cyodSettings-disabled]').exists();
     });
 
+    test('the empty hint emphasises the register action as markup', async function (assert) {
+      this.owner.register('service:organization', organizationStub());
+
+      await render(hbs`<AccountSettings::CyodSettings />`);
+
+      assert
+        .dom('[data-test-cyodDeviceTable-emptyDescription] strong')
+        .hasText('Register a device', 'renders as markup, not literal tags');
+    });
+
     test('it renders nothing without the CYOD entitlement', async function (assert) {
       this.owner.register(
         'service:organization',

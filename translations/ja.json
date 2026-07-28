@@ -1834,7 +1834,7 @@
     "registrationDisabled": "現在、組織のCYODデバイス登録は無効になっています。有効にするには組織のオーナーにお問い合わせください。",
     "connectedDevice": "接続中のデバイス",
     "connectedDeviceDesc": "CYOD設定に追加されたデバイスの詳細をご確認ください。",
-    "emptyHint": "「デバイスを登録」をクリックして新しいデバイスを追加してください",
+    "emptyHint": "<strong>デバイスを登録</strong>をクリックして新しいデバイスを追加してください",
     "yourRegisteredDevices": "登録済みのデバイス",
     "stepsIntro": "デバイスを追加するには、次の手順に従ってください:",
     "stepCertificate": "iOSデバイスにiOS署名証明書を追加する場合は、アカウント設定からCYOD設定を選択し、「iOS署名証明書」の「証明書を追加」ボタンをクリックしてください。",

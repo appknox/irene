@@ -46,7 +46,9 @@
     <Cyod::DeviceTable
       @heading={{t 'cyodSettings.connectedDevice'}}
       @subheading={{t 'cyodSettings.connectedDeviceDesc'}}
-      @emptyHint={{t 'cyodSettings.emptyHint'}}
+      {{! Emphasises "Register a device", pointing at the button above. It is
+      deliberately not a link -- the button is the affordance. }}
+      @emptyHint={{t 'cyodSettings.emptyHint' htmlSafe=true}}
       @onlyConnected={{true}}
     />
   </div>

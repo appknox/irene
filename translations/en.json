@@ -1834,7 +1834,7 @@
     "registrationDisabled": "CYOD device registration is currently turned off for your organization. Contact your organization owner to enable it.",
     "connectedDevice": "Your connected device",
     "connectedDeviceDesc": "Check out the details of the devices that have been added to the CYOD settings.",
-    "emptyHint": "Click on the Register a device to add a new device",
+    "emptyHint": "Click on the <strong>Register a device</strong> to add a new device",
     "yourRegisteredDevices": "Your registered devices",
     "stepsIntro": "To add a device, follow these steps:",
     "stepCertificate": "If you have an iOS device to add an iOS Signing Certificate, navigate to Account Settings, then select CYOD Settings. Click on 'iOS Signing Certificate' and hit the 'Add Certificate' button to proceed.",
