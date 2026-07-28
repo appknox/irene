@@ -99,19 +99,29 @@ export default class CyodDeviceTableComponent extends Component<CyodDeviceTableS
     return this.reload.isRunning;
   }
 
+  // ember-table spreads leftover width across every column, so the name column
+  // only gets a fair share of it unless it is given a much larger base width.
+  // Weighting it this way pulls the two trailing columns left and leaves room
+  // for long device names before they truncate.
   get columns() {
     return [
-      { name: this.intl.t('cyodDeviceTable.name'), valuePath: 'deviceName' },
+      {
+        name: this.intl.t('cyodDeviceTable.name'),
+        valuePath: 'deviceName',
+        width: 340,
+        minWidth: 180,
+      },
       {
         name: this.intl.t('cyodDeviceTable.registeredOn'),
         valuePath: 'registeredOn',
-        width: 160,
+        textAlign: 'left',
+        width: 130,
       },
       {
         name: this.intl.t('cyodDeviceTable.status'),
         component: 'cyod/device-table/status',
-        textAlign: 'center',
-        width: 140,
+        textAlign: 'left',
+        width: 120,
       },
     ];
   }

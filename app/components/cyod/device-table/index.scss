@@ -2,6 +2,19 @@
   width: 100%;
 }
 
+// AkTable's default variant draws the header rule and row separators but no
+// outer box, and it drops the last row's bottom border. This frames the table
+// so it reads as one bordered block, as in the design.
+.table-frame {
+  border: 1px solid var(--divider-dark);
+  border-radius: var(--border-radius);
+  overflow: hidden;
+
+  :global(tbody tr:last-child td) {
+    border-bottom: none;
+  }
+}
+
 .empty-state {
   display: flex;
   align-items: center;

@@ -52,25 +52,27 @@
     </div>
 
   {{else if this.hasDevices}}
-    <AkTable data-test-cyodDeviceTable-table as |t|>
-      <t.head data-test-cyodDeviceTable-thead @columns={{this.columns}} />
+    <div local-class='table-frame'>
+      <AkTable data-test-cyodDeviceTable-table as |t|>
+        <t.head data-test-cyodDeviceTable-thead @columns={{this.columns}} />
 
-      <t.body @rows={{this.rows}} as |b|>
-        <b.row data-test-cyodDeviceTable-row as |r|>
-          <r.cell data-test-cyodDeviceTable-cell as |value|>
-            {{#if r.columnValue.component}}
-              {{#let (component r.columnValue.component) as |Component|}}
-                <Component @device={{r.rowValue}} />
-              {{/let}}
-            {{else}}
-              <AkTypography @noWrap={{true}} title={{value}}>
-                {{value}}
-              </AkTypography>
-            {{/if}}
-          </r.cell>
-        </b.row>
-      </t.body>
-    </AkTable>
+        <t.body @rows={{this.rows}} as |b|>
+          <b.row data-test-cyodDeviceTable-row as |r|>
+            <r.cell data-test-cyodDeviceTable-cell as |value|>
+              {{#if r.columnValue.component}}
+                {{#let (component r.columnValue.component) as |Component|}}
+                  <Component @device={{r.rowValue}} />
+                {{/let}}
+              {{else}}
+                <AkTypography @noWrap={{true}} title={{value}}>
+                  {{value}}
+                </AkTypography>
+              {{/if}}
+            </r.cell>
+          </b.row>
+        </t.body>
+      </AkTable>
+    </div>
 
   {{else}}
     <div local-class='empty-state-block' data-test-cyodDeviceTable-empty>
