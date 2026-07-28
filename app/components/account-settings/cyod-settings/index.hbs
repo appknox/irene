@@ -12,7 +12,10 @@
       </AkTypography>
 
       {{! Device Registration }}
+      {{! @width='full' so the button lands on the table's right edge below;
+      without it the row only spans its content. }}
       <AkStack
+        @width='full'
         @alignItems='flex-start'
         @justifyContent='space-between'
         @spacing='2'
@@ -110,7 +113,7 @@
               {{t 'cyodSettings.stepCertificate'}}
             </AkTypography>
 
-            <AkTypography @variant='body3' @color='textSecondary'>
+            <AkTypography @variant='body2' @color='textSecondary'>
               {{t 'cyodSettings.stepCertificateNote'}}
             </AkTypography>
           </AkStack>
@@ -138,7 +141,7 @@
               <span class='ml-1'>{{t 'cyodSettings.downloadMercer'}}</span>
             </AkButton>
 
-            <AkTypography @variant='body3' @color='textSecondary'>
+            <AkTypography @variant='body2' @color='textSecondary'>
               {{t 'cyodSettings.stepDownloadNote'}}
             </AkTypography>
           </AkStack>
@@ -179,7 +182,7 @@
               </AkClipboard>
             </AkStack>
 
-            <AkTypography @variant='body3' @color='textSecondary'>
+            <AkTypography @variant='body2' @color='textSecondary'>
               {{t 'cyodSettings.stepSignInNote'}}
             </AkTypography>
           </AkStack>
