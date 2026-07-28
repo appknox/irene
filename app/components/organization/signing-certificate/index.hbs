@@ -111,30 +111,47 @@
                 {{t 'orgSigningCertP12'}}
               </AkTypography>
 
-              <AkStack @spacing='1' @alignItems='center'>
-                <AkButton @tag='label' @variant='outlined'>
-                  <AkIcon @iconName='cloud-upload' @size='small' />
+              {{#if this.p12FileName}}
+                <div local-class='file-chip' data-test-orgSigningCert-p12Chip>
+                  <AkTypography local-class='file-name' @variant='body3'>
+                    {{this.p12FileName}}
+                  </AkTypography>
 
-                  <span class='ml-1'>{{t 'chooseFile'}}</span>
+                  <AkIconButton
+                    data-test-orgSigningCert-p12Clear
+                    @size='small'
+                    title={{t 'remove'}}
+                    {{on 'click' this.clearP12}}
+                  >
+                    <AkIcon @iconName='close' @size='small' />
+                  </AkIconButton>
+                </div>
+              {{else}}
+                <AkStack @spacing='1' @alignItems='center'>
+                  <AkButton @tag='label' @variant='outlined'>
+                    <AkIcon @iconName='cloud-upload' @size='small' />
 
-                  <input
-                    type='file'
-                    accept='.p12,.pfx'
-                    aria-label={{t 'orgSigningCertP12'}}
-                    data-test-orgSigningCert-p12
-                    {{style display='none'}}
-                    {{on 'change' this.setP12}}
-                  />
-                </AkButton>
+                    <span class='ml-1'>{{t 'chooseFile'}}</span>
 
-                <AkTypography
-                  local-class='file-name'
-                  @variant='body3'
-                  @color={{if this.p12FileName 'textPrimary' 'textSecondary'}}
-                >
-                  {{if this.p12FileName this.p12FileName (t 'noFileChosen')}}
-                </AkTypography>
-              </AkStack>
+                    <input
+                      type='file'
+                      accept='.p12,.pfx'
+                      aria-label={{t 'orgSigningCertP12'}}
+                      data-test-orgSigningCert-p12
+                      {{style display='none'}}
+                      {{on 'change' this.setP12}}
+                    />
+                  </AkButton>
+
+                  <AkTypography
+                    local-class='file-name'
+                    @variant='body3'
+                    @color='textSecondary'
+                  >
+                    {{t 'noFileChosen'}}
+                  </AkTypography>
+                </AkStack>
+              {{/if}}
             </AkStack>
 
             <AkTextField
@@ -153,38 +170,50 @@
                 {{t 'orgSigningCertProfile'}}
               </AkTypography>
 
-              <AkStack @spacing='1' @alignItems='center'>
-                <AkButton @tag='label' @variant='outlined'>
-                  <AkIcon @iconName='cloud-upload' @size='small' />
-
-                  <span class='ml-1'>{{t 'chooseFile'}}</span>
-
-                  <input
-                    type='file'
-                    accept='.mobileprovision'
-                    aria-label={{t 'orgSigningCertProfile'}}
-                    data-test-orgSigningCert-profile
-                    {{style display='none'}}
-                    {{on 'change' this.setProfile}}
-                  />
-                </AkButton>
-
-                <AkTypography
-                  local-class='file-name'
-                  @variant='body3'
-                  @color={{if
-                    this.profileFileName
-                    'textPrimary'
-                    'textSecondary'
-                  }}
+              {{#if this.profileFileName}}
+                <div
+                  local-class='file-chip'
+                  data-test-orgSigningCert-profileChip
                 >
-                  {{if
-                    this.profileFileName
-                    this.profileFileName
-                    (t 'noFileChosen')
-                  }}
-                </AkTypography>
-              </AkStack>
+                  <AkTypography local-class='file-name' @variant='body3'>
+                    {{this.profileFileName}}
+                  </AkTypography>
+
+                  <AkIconButton
+                    data-test-orgSigningCert-profileClear
+                    @size='small'
+                    title={{t 'remove'}}
+                    {{on 'click' this.clearProfile}}
+                  >
+                    <AkIcon @iconName='close' @size='small' />
+                  </AkIconButton>
+                </div>
+              {{else}}
+                <AkStack @spacing='1' @alignItems='center'>
+                  <AkButton @tag='label' @variant='outlined'>
+                    <AkIcon @iconName='cloud-upload' @size='small' />
+
+                    <span class='ml-1'>{{t 'chooseFile'}}</span>
+
+                    <input
+                      type='file'
+                      accept='.mobileprovision'
+                      aria-label={{t 'orgSigningCertProfile'}}
+                      data-test-orgSigningCert-profile
+                      {{style display='none'}}
+                      {{on 'change' this.setProfile}}
+                    />
+                  </AkButton>
+
+                  <AkTypography
+                    local-class='file-name'
+                    @variant='body3'
+                    @color='textSecondary'
+                  >
+                    {{t 'noFileChosen'}}
+                  </AkTypography>
+                </AkStack>
+              {{/if}}
             </AkStack>
 
             <AkDivider @color='light' />

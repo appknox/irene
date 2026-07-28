@@ -190,6 +190,19 @@ export default class OrganizationSigningCertificateComponent extends Component<O
     this.profileFile = (event.target as HTMLInputElement).files?.[0] ?? null;
   }
 
+  // The chip and the file picker are mutually exclusive in the template, so
+  // clearing swaps a fresh <input type='file'> back in — no need to reset the
+  // old input's value for re-picking the same file to register.
+  @action
+  clearP12() {
+    this.p12File = null;
+  }
+
+  @action
+  clearProfile() {
+    this.profileFile = null;
+  }
+
   resetForm() {
     this.certName = '';
     this.bundleId = '';

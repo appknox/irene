@@ -1,6 +1,6 @@
 import { module, test } from 'qunit';
 import { setupRenderingTest } from 'ember-qunit';
-import { render, click } from '@ember/test-helpers';
+import { render, click, triggerEvent } from '@ember/test-helpers';
 import { hbs } from 'ember-cli-htmlbars';
 import { setupIntl } from 'ember-intl/test-support';
 import Service from '@ember/service';
@@ -67,6 +67,42 @@ module(
       assert
         .dom('[data-test-orgSigningCert-uploadBtn]')
         .isDisabled('a .p12 and a .mobileprovision are both required');
+    });
+
+    test('a chosen file becomes a removable chip', async function (assert) {
+      class AjaxStub extends Service {
+        request() {
+          return Promise.resolve(null);
+        }
+      }
+      this.owner.register('service:ajax', AjaxStub);
+
+      await render(hbs`<Organization::SigningCertificate />`);
+      await click('[data-test-orgSigningCert-openBtn]');
+
+      assert.dom('[data-test-orgSigningCert-p12Chip]').doesNotExist();
+      assert.dom('[data-test-orgSigningCert-p12]').exists();
+
+      const file = new File(['x'], 'identity.p12');
+      await triggerEvent('[data-test-orgSigningCert-p12]', 'change', {
+        files: [file],
+      });
+
+      assert
+        .dom('[data-test-orgSigningCert-p12Chip]')
+        .containsText('identity.p12');
+
+      assert
+        .dom('[data-test-orgSigningCert-p12]')
+        .doesNotExist('the picker is replaced by the chip');
+
+      await click('[data-test-orgSigningCert-p12Clear]');
+
+      assert.dom('[data-test-orgSigningCert-p12Chip]').doesNotExist();
+
+      assert
+        .dom('[data-test-orgSigningCert-p12]')
+        .exists('clearing brings the picker back');
     });
 
     test('it shows the empty state on the existing tab when no certificate is configured', async function (assert) {

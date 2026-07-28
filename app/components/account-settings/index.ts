@@ -8,8 +8,23 @@ export default class AccountSettingsComponent extends Component {
   @service declare intl: IntlService;
   @service declare organization: OrganizationService;
 
+  // CYOD Settings sits between Developer Settings and Notification Preferences,
+  // per the reviewed design — the Mercer setup steps send the user to Developer
+  // Settings for a Personal Token, so the two belong next to each other.
   get tabs() {
-    return [...this.baseTabs, ...this.cyodTabs];
+    const notificationsIndex = this.baseTabs.findIndex((tab) =>
+      tab.route.endsWith('.notification-settings')
+    );
+
+    if (notificationsIndex === -1) {
+      return [...this.baseTabs, ...this.cyodTabs];
+    }
+
+    return [
+      ...this.baseTabs.slice(0, notificationsIndex),
+      ...this.cyodTabs,
+      ...this.baseTabs.slice(notificationsIndex),
+    ];
   }
 
   // Every user role registers their own CYOD device here, so the tab is gated on

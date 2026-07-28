@@ -32,6 +32,19 @@
   word-break: break-all;
 }
 
+// A chosen file shows as a removable chip in place of the picker button.
+.file-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  align-self: flex-start;
+  max-width: 100%;
+  padding: 4px 4px 4px 12px;
+  border: 1px solid var(--divider-dark);
+  border-radius: var(--border-radius);
+  background: var(--background-light);
+}
+
 .empty-state {
   display: flex;
   align-items: center;
