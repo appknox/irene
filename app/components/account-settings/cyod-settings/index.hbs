@@ -4,7 +4,7 @@
     data-test-cyodSettings
     ...attributes
   >
-    <AkTypography @variant='h6' class='mb-2' data-test-cyodSettings-title>
+    <AkTypography @variant='h5' class='mb-3' data-test-cyodSettings-title>
       {{t 'cyodRegistration.title'}}
     </AkTypography>
 
@@ -64,7 +64,7 @@
       local-class='register-drawer'
       {{style height='100%'}}
     >
-      <AkAppbar @justifyContent='space-between' as |ab|>
+      <AkAppbar @justifyContent='space-between' @color='dark' as |ab|>
         <AkTypography
           data-test-cyodSettings-drawerTitle
           @variant='h5'
