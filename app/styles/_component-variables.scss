@@ -1077,6 +1077,58 @@ body {
   // variables for file-details/severity-level
   --file-details-severity-level-border-color: var(--border-color-1);
 
+  // variables for file-details/severity-level/health-score
+  --file-details-severity-level-health-score-background-color: var(
+    --background-light
+  );
+  --file-details-severity-level-health-score-border-color: var(
+    --neutral-grey-100
+  );
+  --file-details-severity-level-health-score-border-radius: var(
+    --border-radius-4
+  );
+  --file-details-severity-level-health-score-border-radius-compact: var(
+    --border-radius-12
+  );
+  --file-details-severity-level-health-score-heading-color: var(
+    --neutral-grey-800
+  );
+  --file-details-severity-level-health-score-connector-color: var(
+    --neutral-grey-400
+  );
+  --file-details-severity-level-health-score-positive-color: var(
+    --success-main
+  );
+  --file-details-severity-level-health-score-negative-color: var(--error-main);
+  --file-details-severity-level-health-score-date-chip-border-color: var(
+    --neutral-grey-200
+  );
+  --file-details-severity-level-health-score-knoxiq-color: var(
+    --knoxiq-completed-color
+  );
+  --file-details-severity-level-health-score-neutral-color: var(--text-primary);
+  --file-details-severity-level-health-score-status-chip-text-color: var(
+    --common-white
+  );
+  --file-details-severity-level-health-score-status-chip-bg-very-poor: var(
+    --severity-critical
+  );
+  --file-details-severity-level-health-score-status-chip-bg-poor: var(
+    --severity-high
+  );
+  --file-details-severity-level-health-score-status-chip-bg-fair: var(
+    --severity-medium
+  );
+  --file-details-severity-level-health-score-status-chip-bg-good: var(
+    --file-details-severity-level-health-score-rating-chip-bg-good
+  );
+  --file-details-severity-level-health-score-status-chip-bg-excellent: var(
+    --severity-passed
+  );
+  --file-details-severity-level-health-score-rating-chip-bg-good: var(
+    --low-health-score
+  );
+
   // variables for file-details/api-scan
   --file-details-api-scan-background-color: var(--background-light);
   --file-details-api-scan-footer-background-color: var(--background-main);

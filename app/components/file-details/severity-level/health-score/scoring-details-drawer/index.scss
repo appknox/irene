@@ -1,0 +1,220 @@
+.scoring-details-drawer {
+  width: 620px;
+  height: 100%;
+  overflow-y: auto;
+}
+
+.scoring-details-header {
+  padding: 1.714em;
+}
+
+.scoring-details-score-box {
+  width: 100%;
+  padding: 1.143em 1.429em;
+  background-color: var(
+    --file-details-severity-level-health-score-background-color
+  );
+  border: 1px solid var(--file-details-severity-level-health-score-border-color);
+  border-radius: var(--file-details-severity-level-health-score-border-radius);
+
+  .scoring-details-score-label {
+    font-size: 0.857rem;
+    margin-bottom: 0.571em !important;
+  }
+
+  .scoring-details-score-value {
+    align-items: baseline;
+
+    .scoring-details-score-number,
+    .scoring-details-score-max {
+      font-size: 2.5rem;
+      line-height: 1;
+    }
+
+    .scoring-details-score-max {
+      color: var(--file-details-severity-level-health-score-neutral-color);
+    }
+  }
+}
+
+.scoring-details-divider {
+  background-color: var(
+    --file-details-severity-level-health-score-connector-color
+  );
+}
+
+.scoring-details-timeline-section {
+  padding: 1.714em;
+}
+
+.scoring-details-timeline-header {
+  margin-bottom: 1.714em;
+}
+
+.scoring-details-timeline-heading {
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  font-size: 0.928rem !important;
+  color: var(
+    --file-details-severity-level-health-score-heading-color
+  ) !important;
+}
+
+.scoring-details-timeline {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.scoring-details-timeline-entry {
+  position: relative;
+  padding-left: 2em;
+  padding-bottom: 2em;
+
+  &::before {
+    content: '';
+    position: absolute;
+    left: 0.357em;
+    top: 0.429em;
+    bottom: -0.357em;
+    width: 1px;
+    background-color: var(
+      --file-details-severity-level-health-score-connector-color
+    );
+  }
+
+  &:last-child {
+    padding-bottom: 0;
+
+    &::before {
+      display: none;
+    }
+  }
+
+  .scoring-details-timeline-marker {
+    position: absolute;
+    left: 0;
+    top: 0.286em;
+    width: 0.786em;
+    height: 0.786em;
+    border-radius: 50%;
+    background-color: var(
+      --file-details-severity-level-health-score-positive-color
+    );
+  }
+}
+
+.scoring-details-timeline-main {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.143em;
+}
+
+.scoring-details-entry-title {
+  margin-top: 0.5em;
+}
+
+.scoring-details-entry-title--knoxiq {
+  color: var(
+    --file-details-severity-level-health-score-knoxiq-color
+  ) !important;
+}
+
+.scoring-details-score-change {
+  white-space: nowrap;
+  font-size: 1.286rem !important;
+}
+
+.scoring-details-score-change--positive {
+  color: var(
+    --file-details-severity-level-health-score-positive-color
+  ) !important;
+}
+
+.scoring-details-score-change--negative {
+  color: var(
+    --file-details-severity-level-health-score-negative-color
+  ) !important;
+}
+
+.scoring-details-score-change--neutral {
+  color: var(
+    --file-details-severity-level-health-score-neutral-color
+  ) !important;
+}
+
+.scoring-details-status-chip {
+  color: var(
+    --file-details-severity-level-health-score-status-chip-text-color
+  ) !important;
+  border-radius: var(
+    --file-details-severity-level-health-score-border-radius
+  ) !important;
+}
+
+.scoring-details-status-chip--very-poor {
+  background-color: var(
+    --file-details-severity-level-health-score-status-chip-bg-very-poor
+  ) !important;
+}
+
+.scoring-details-status-chip--poor {
+  background-color: var(
+    --file-details-severity-level-health-score-status-chip-bg-poor
+  ) !important;
+}
+
+.scoring-details-status-chip--fair {
+  background-color: var(
+    --file-details-severity-level-health-score-status-chip-bg-fair
+  ) !important;
+}
+
+.scoring-details-status-chip--good {
+  background-color: var(
+    --file-details-severity-level-health-score-status-chip-bg-good
+  ) !important;
+}
+
+.scoring-details-status-chip--excellent {
+  background-color: var(
+    --file-details-severity-level-health-score-status-chip-bg-excellent
+  ) !important;
+}
+
+.scoring-details-summary {
+  font-size: 0.857rem !important;
+  color: var(
+    --file-details-severity-level-health-score-heading-color
+  ) !important;
+}
+
+.scoring-details-date-chip {
+  background-color: var(
+    --file-details-severity-level-health-score-border-color
+  ) !important;
+  border-color: var(
+    --file-details-severity-level-health-score-date-chip-border-color
+  ) !important;
+  padding-left: 0.5em !important;
+  padding-right: 0.5em !important;
+}
+
+.scoring-details-latest-chip {
+  background-color: var(
+    --file-details-severity-level-health-score-positive-color
+  ) !important;
+  color: var(
+    --file-details-severity-level-health-score-status-chip-text-color
+  ) !important;
+}
+
+.scoring-details-aeis-chip {
+  background-color: var(
+    --file-details-severity-level-health-score-knoxiq-color
+  ) !important;
+  color: var(
+    --file-details-severity-level-health-score-status-chip-text-color
+  ) !important;
+}

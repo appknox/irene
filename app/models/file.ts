@@ -245,6 +245,16 @@ export default class FileModel extends ModelBaseMixin {
     return await adapter.fetchFileExploitability(this.id);
   }
 
+  /**
+   * Fetches this file's health score audit trail (current score + timeline)
+   * and returns the pushed `file-health-score-audit` record.
+   */
+  async fetchFileHealthScoreAudit() {
+    const adapter = this.store.adapterFor('file');
+
+    return await adapter.fetchFileHealthScoreAudit(this.id);
+  }
+
   async generateCapiReports(fileTypes: FileCapiReportScanType[]) {
     const adapter = this.store.adapterFor('file');
 
