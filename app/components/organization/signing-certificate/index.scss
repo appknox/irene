@@ -62,6 +62,14 @@
   align-items: baseline;
 }
 
+// The body is a flex column, so its children default to shrink-to-fit: the
+// certificate cards, the Name/Bundle row and the file-picker blocks all
+// collapsed to their content width instead of spanning the panel.
+.drawer-body > * {
+  width: 100%;
+  box-sizing: border-box;
+}
+
 .cert-card {
   border: 1px solid var(--divider-dark);
   border-radius: var(--border-radius);
