@@ -89,23 +89,27 @@ module(
         .doesNotExist('direct URL access must not surface CYOD UI');
     });
 
-    test('it opens the five-step Mercer setup modal', async function (assert) {
+    test('it opens the five-step Mercer setup drawer', async function (assert) {
       this.owner.register('service:organization', organizationStub());
 
       await render(hbs`<AccountSettings::CyodSettings />`);
 
-      assert.dom('[data-test-cyodSettings-modal]').doesNotExist();
+      assert.dom('[data-test-cyodSettings-drawer]').doesNotExist();
 
       await click('[data-test-cyodSettings-registerBtn]');
 
-      assert.dom('[data-test-cyodSettings-modal]').exists();
+      assert.dom('[data-test-cyodSettings-drawer]').exists();
       assert.dom('[data-test-cyodSettings-downloadBtn]').exists();
       assert.dom('[data-test-cyodSettings-serverUrl]').exists();
       assert.dom('[data-test-cyodSettings-copyBtn]').exists();
 
       assert
-        .dom('[data-test-cyodSettings-modal]')
+        .dom('[data-test-cyodSettings-drawer]')
         .containsText(t('cyodSettings.stepRun'), 'renders the final step');
+
+      await click('[data-test-cyodSettings-drawerCloseBtn]');
+
+      assert.dom('[data-test-cyodSettings-drawer]').doesNotExist();
     });
   }
 );

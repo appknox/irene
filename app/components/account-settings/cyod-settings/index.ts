@@ -28,7 +28,7 @@ export default class AccountSettingsCyodSettingsComponent extends Component<Acco
   @service declare organization: OrganizationService;
   @service('notifications') declare notify: NotificationService;
 
-  @tracked showModal = false;
+  @tracked showDrawer = false;
 
   // The tab is hidden without the entitlement, but the route is always
   // registered — guard the panel too so a direct URL doesn't surface CYOD UI to
@@ -55,12 +55,12 @@ export default class AccountSettingsCyodSettingsComponent extends Component<Acco
 
   @action
   handleOpen() {
-    this.showModal = true;
+    this.showDrawer = true;
   }
 
   @action
   handleClose() {
-    this.showModal = false;
+    this.showDrawer = false;
   }
 
   @action
