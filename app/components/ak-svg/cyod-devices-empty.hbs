@@ -1,0 +1,50 @@
+{{! Empty-inbox mark for the CYOD "No Device Registered" state: an open tray
+    with three radiating strokes above it. Hand-authored to match the design;
+    replace wholesale with the Figma export when it is available. }}
+<svg
+  width='120'
+  height='90'
+  viewBox='0 0 120 90'
+  fill='none'
+  ...attributes
+  xmlns='http://www.w3.org/2000/svg'
+>
+  {{! radiating strokes }}
+  <path
+    d='M60 20V8'
+    stroke='#FE4D3F'
+    stroke-width='3'
+    stroke-linecap='round'
+  />
+  <path
+    d='M40 26L33 16'
+    stroke='#FE4D3F'
+    stroke-width='3'
+    stroke-linecap='round'
+  />
+  <path
+    d='M80 26L87 16'
+    stroke='#FE4D3F'
+    stroke-width='3'
+    stroke-linecap='round'
+  />
+
+  {{! tray body }}
+  <path
+    d='M18 52L32 36H88L102 52V76C102 78.2091 100.209 80 98 80H22C19.7909 80 18 78.2091 18 76V52Z'
+    fill='#FE4D3F'
+    fill-opacity='0.08'
+    stroke='#FE4D3F'
+    stroke-width='3'
+    stroke-linejoin='round'
+  />
+
+  {{! tray opening }}
+  <path
+    d='M18 52H44L48 60H72L76 52H102'
+    stroke='#FE4D3F'
+    stroke-width='3'
+    stroke-linecap='round'
+    stroke-linejoin='round'
+  />
+</svg>
