@@ -19,6 +19,7 @@ import { action } from '@ember/object';
 import { service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
 import { task } from 'ember-concurrency';
+import dayjs from 'dayjs';
 import type IntlService from 'ember-intl/services/intl';
 
 import ENUMS from 'irene/enums';
@@ -38,6 +39,8 @@ type CertInfo = {
   provisioned_udids?: string[];
   expires_at?: string | null;
   is_expired?: boolean;
+  // Derived for display by `existingCerts`; not part of the API payload.
+  expiresOn?: string;
 };
 
 export interface OrganizationSigningCertificateSignature {
@@ -55,9 +58,9 @@ export default class OrganizationSigningCertificateComponent extends Component<O
   @service declare organization: OrganizationService;
   @service('notifications') declare notify: NotificationService;
 
-  @tracked showModal = false;
-  // Which modal tab is showing. Opens on 'add' — the common case is uploading a
-  // new certificate; existing ones are reviewed less often.
+  @tracked showDrawer = false;
+  // Which drawer tab is showing. Opens on 'add' — the common case is uploading
+  // a new certificate; existing ones are reviewed less often.
   @tracked activeTab: 'add' | 'existing' = 'add';
   // Project scope: single cert. Org scope: a list of certs.
   @tracked cert: CertInfo | null = null;
@@ -138,13 +141,21 @@ export default class OrganizationSigningCertificateComponent extends Component<O
   }
 
   // The Existing tab renders one list in both scopes; project scope just has a
-  // single-element list.
+  // single-element list. `expires_at` arrives as an ISO string, so it is
+  // formatted here rather than dumped raw into the card.
   get existingCerts(): CertInfo[] {
-    if (this.isProjectScope) {
-      return this.cert ? [this.cert] : [];
-    }
+    const certs = this.isProjectScope
+      ? this.cert
+        ? [this.cert]
+        : []
+      : this.certs;
 
-    return this.certs;
+    return certs.map((cert) => ({
+      ...cert,
+      expiresOn: cert.expires_at
+        ? dayjs(cert.expires_at).format('MMMM D, YYYY, hh:mm A')
+        : '',
+    }));
   }
 
   get hasExistingCerts() {
@@ -154,14 +165,14 @@ export default class OrganizationSigningCertificateComponent extends Component<O
   @action
   handleOpen() {
     this.activeTab = 'add';
-    this.showModal = true;
+    this.showDrawer = true;
     this.load.perform();
   }
 
   @action
   handleClose() {
     this.resetForm();
-    this.showModal = false;
+    this.showDrawer = false;
   }
 
   @action

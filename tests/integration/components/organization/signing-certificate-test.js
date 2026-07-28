@@ -16,7 +16,7 @@ class NotificationsStub extends Service {
   error() {}
 }
 
-// The modal opens on the Add tab; the cert list lives behind the second tab.
+// The drawer opens on the Add tab; the cert list lives behind the second tab.
 // AkTabs puts the test attribute on the wrapping <li> and the click handler on
 // the inner <button>, so the button is what has to be clicked.
 async function openExistingTab() {
@@ -68,6 +68,10 @@ module(
       assert
         .dom('[data-test-orgSigningCert-uploadBtn]')
         .isDisabled('a .p12 and a .mobileprovision are both required');
+
+      await click('[data-test-orgSigningCert-drawerCloseBtn]');
+
+      assert.dom('[data-test-orgSigningCert-drawer]').doesNotExist();
     });
 
     test('a chosen file becomes a removable chip', async function (assert) {
@@ -155,6 +159,34 @@ module(
       assert.dom('[data-test-orgSigningCert-activeBadge]').exists({ count: 1 });
       assert.dom('[data-test-orgSigningCert-activateBtn]').exists({ count: 1 });
       assert.dom('[data-test-orgSigningCert-empty]').doesNotExist();
+    });
+
+    test('it formats the expiry rather than showing the raw timestamp', async function (assert) {
+      class AjaxStub extends Service {
+        request() {
+          return Promise.resolve([
+            {
+              id: 1,
+              name: 'Acme iOS',
+              team_id: 'AB12CD34',
+              is_active: true,
+              provisioned_udids: [],
+              is_expired: false,
+              expires_at: '2027-07-03T13:49:03Z',
+            },
+          ]);
+        }
+      }
+      this.owner.register('service:ajax', AjaxStub);
+
+      await render(hbs`<Organization::SigningCertificate />`);
+      await openExistingTab();
+
+      assert
+        .dom('[data-test-orgSigningCert-info]')
+        .doesNotContainText('2027-07-03T13:49:03Z', 'no raw ISO string');
+
+      assert.dom('[data-test-orgSigningCert-info]').containsText('July 3, 2027');
     });
 
     test('it disables delete for the active cert', async function (assert) {
