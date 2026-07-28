@@ -2,11 +2,13 @@
   width: 100%;
 }
 
-// Right-anchored drawer, matching the Register-a-device panel.
+// Right-anchored drawer. Wider than the Register-a-device panel because the
+// certificate cards carry a label/value grid plus two actions per row; the
+// design gives this one roughly half the app width.
 .cert-drawer {
   display: flex;
   flex-direction: column;
-  width: 640px;
+  width: 780px;
   max-width: 100vw;
 }
 

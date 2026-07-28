@@ -124,7 +124,7 @@
             </AkStack>
 
             <div local-class='tip-callout' data-test-orgSigningCert-tip>
-              <AkTypography @variant='body3' @color='textSecondary'>
+              <AkTypography @variant='body2' @color='textSecondary'>
                 <strong>{{t 'orgSigningCertTipLabel'}}</strong>
                 {{t 'orgSigningCertBundleIdHint'}}
               </AkTypography>
@@ -134,13 +134,13 @@
 
             {{! Signing identity (.p12) }}
             <AkStack @direction='column' @spacing='0.5'>
-              <AkTypography @variant='body3' @color='textSecondary' @tag='label'>
+              <AkTypography @variant='body2' @color='textSecondary' @tag='label'>
                 {{t 'orgSigningCertP12'}}
               </AkTypography>
 
               {{#if this.p12FileName}}
                 <div local-class='file-chip' data-test-orgSigningCert-p12Chip>
-                  <AkTypography local-class='file-name' @variant='body3'>
+                  <AkTypography local-class='file-name' @variant='body2'>
                     {{this.p12FileName}}
                   </AkTypography>
 
@@ -172,7 +172,7 @@
 
                   <AkTypography
                     local-class='file-name'
-                    @variant='body3'
+                    @variant='body2'
                     @color='textSecondary'
                   >
                     {{t 'noFileChosen'}}
@@ -193,7 +193,7 @@
 
             {{! Provisioning profile }}
             <AkStack @direction='column' @spacing='0.5'>
-              <AkTypography @variant='body3' @color='textSecondary' @tag='label'>
+              <AkTypography @variant='body2' @color='textSecondary' @tag='label'>
                 {{t 'orgSigningCertProfile'}}
               </AkTypography>
 
@@ -202,7 +202,7 @@
                   local-class='file-chip'
                   data-test-orgSigningCert-profileChip
                 >
-                  <AkTypography local-class='file-name' @variant='body3'>
+                  <AkTypography local-class='file-name' @variant='body2'>
                     {{this.profileFileName}}
                   </AkTypography>
 
@@ -234,7 +234,7 @@
 
                   <AkTypography
                     local-class='file-name'
-                    @variant='body3'
+                    @variant='body2'
                     @color='textSecondary'
                   >
                     {{t 'noFileChosen'}}
@@ -322,30 +322,30 @@
                     {{! Label/value grid so the values line up in a column,
                     as in the design. }}
                     <div local-class='cert-meta'>
-                      <AkTypography @variant='body3' @color='textSecondary'>
+                      <AkTypography @variant='body2' @color='textSecondary'>
                         {{t 'orgSigningCertTeam'}}:
                       </AkTypography>
 
-                      <AkTypography local-class='mono-value' @variant='body3'>
+                      <AkTypography local-class='mono-value' @variant='body2'>
                         {{cert.team_id}}
                       </AkTypography>
 
                       {{#if cert.app_id}}
-                        <AkTypography @variant='body3' @color='textSecondary'>
+                        <AkTypography @variant='body2' @color='textSecondary'>
                           {{t 'orgSigningCertAppId'}}:
                         </AkTypography>
 
-                        <AkTypography local-class='mono-value' @variant='body3'>
+                        <AkTypography local-class='mono-value' @variant='body2'>
                           {{cert.app_id}}
                         </AkTypography>
                       {{/if}}
 
-                      <AkTypography @variant='body3' @color='textSecondary'>
+                      <AkTypography @variant='body2' @color='textSecondary'>
                         {{t 'orgSigningCertExpires'}}:
                       </AkTypography>
 
                       <AkTypography
-                        @variant='body3'
+                        @variant='body2'
                         @color={{if cert.is_expired 'error' 'textPrimary'}}
                       >
                         {{cert.expiresOn}}
