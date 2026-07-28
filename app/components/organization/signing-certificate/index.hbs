@@ -73,7 +73,7 @@
       {{#if (eq this.activeTab 'add')}}
         {{! ---------------- Add certificate ---------------- }}
         <form {{on 'submit' (perform this.upload)}}>
-          <AkStack @direction='column' @spacing='2.5' class='pa-3'>
+          <AkStack @direction='column' @spacing='2.5' class='p-3'>
             <AkStack @spacing='2' @alignItems='flex-start'>
               <div local-class='form-field'>
                 <AkTextField
@@ -238,7 +238,7 @@
 
       {{else}}
         {{! ---------------- Existing certificates ---------------- }}
-        <AkStack @direction='column' @spacing='2' class='pa-3'>
+        <AkStack @direction='column' @spacing='2' class='p-3'>
           {{#if this.load.isRunning}}
             <AkStack @spacing='1' @alignItems='center'>
               <AkLoader @size={{16}} />

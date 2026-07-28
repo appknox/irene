@@ -4,53 +4,61 @@
     data-test-cyodSettings
     ...attributes
   >
-    <AkTypography @variant='h5' class='mb-3' data-test-cyodSettings-title>
-      {{t 'cyodRegistration.title'}}
-    </AkTypography>
+    {{! Spacing lives on the stack rather than margin utilities: AkTypography
+    sets its own margin-bottom, which silently overrides mb-* classes. }}
+    <AkStack @direction='column' @spacing='3'>
+      <AkTypography @variant='h5' data-test-cyodSettings-title>
+        {{t 'cyodRegistration.title'}}
+      </AkTypography>
 
-    {{! Device Registration }}
-    <AkStack @alignItems='flex-start' @justifyContent='space-between' @spacing='2'>
-      <AkStack @direction='column' @spacing='0.5'>
-        <AkTypography @variant='subtitle1' data-test-cyodSettings-registerTitle>
-          {{t 'cyodSettings.deviceRegistration'}}
-        </AkTypography>
+      {{! Device Registration }}
+      <AkStack
+        @alignItems='flex-start'
+        @justifyContent='space-between'
+        @spacing='2'
+      >
+        <AkStack @direction='column' @spacing='1'>
+          <AkTypography @variant='subtitle1' data-test-cyodSettings-registerTitle>
+            {{t 'cyodSettings.deviceRegistration'}}
+          </AkTypography>
 
-        <AkTypography @variant='body2' @color='textSecondary'>
-          {{t 'cyodSettings.deviceRegistrationDesc'}}
-        </AkTypography>
+          <AkTypography @variant='body2' @color='textSecondary'>
+            {{t 'cyodSettings.deviceRegistrationDesc'}}
+          </AkTypography>
+        </AkStack>
+
+        <AkButton
+          data-test-cyodSettings-registerBtn
+          @variant='filled'
+          @disabled={{not this.isRegistrationEnabled}}
+          {{on 'click' this.handleOpen}}
+        >
+          {{t 'cyodSettings.registerADevice'}}
+        </AkButton>
       </AkStack>
 
-      <AkButton
-        data-test-cyodSettings-registerBtn
-        @variant='filled'
-        @disabled={{not this.isRegistrationEnabled}}
-        {{on 'click' this.handleOpen}}
-      >
-        {{t 'cyodSettings.registerADevice'}}
-      </AkButton>
+      {{#unless this.isRegistrationEnabled}}
+        <div local-class='disabled-note' data-test-cyodSettings-disabled>
+          <AkIcon @iconName='info' @color='textSecondary' />
+
+          <AkTypography @variant='body2' @color='textSecondary'>
+            {{t 'cyodSettings.registrationDisabled'}}
+          </AkTypography>
+        </div>
+      {{/unless}}
+
+      <AkDivider @color='light' />
+
+      {{! Your connected device }}
+      <Cyod::DeviceTable
+        @heading={{t 'cyodSettings.connectedDevice'}}
+        @subheading={{t 'cyodSettings.connectedDeviceDesc'}}
+        {{! Emphasises "Register a device", pointing at the button above. It is
+        deliberately not a link -- the button is the affordance. }}
+        @emptyHint={{t 'cyodSettings.emptyHint' htmlSafe=true}}
+        @onlyConnected={{true}}
+      />
     </AkStack>
-
-    {{#unless this.isRegistrationEnabled}}
-      <div local-class='disabled-note' class='mt-2' data-test-cyodSettings-disabled>
-        <AkIcon @iconName='info' @color='textSecondary' />
-
-        <AkTypography @variant='body2' @color='textSecondary'>
-          {{t 'cyodSettings.registrationDisabled'}}
-        </AkTypography>
-      </div>
-    {{/unless}}
-
-    <AkDivider class='my-3' @color='light' />
-
-    {{! Your connected device }}
-    <Cyod::DeviceTable
-      @heading={{t 'cyodSettings.connectedDevice'}}
-      @subheading={{t 'cyodSettings.connectedDeviceDesc'}}
-      {{! Emphasises "Register a device", pointing at the button above. It is
-      deliberately not a link -- the button is the affordance. }}
-      @emptyHint={{t 'cyodSettings.emptyHint' htmlSafe=true}}
-      @onlyConnected={{true}}
-    />
   </div>
 
   <AkDrawer
@@ -82,8 +90,8 @@
         </AkIconButton>
       </AkAppbar>
 
-      <AkStack @direction='column' @spacing='2.5' class='pa-3'>
-        <AkStack @direction='column' @spacing='0.5'>
+      <AkStack @direction='column' @spacing='3' class='p-4'>
+        <AkStack @direction='column' @spacing='1'>
           <AkTypography @variant='subtitle1'>
             {{t 'cyodSettings.yourRegisteredDevices'}}
           </AkTypography>

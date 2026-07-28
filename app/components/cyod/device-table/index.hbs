@@ -1,12 +1,12 @@
 <div local-class='device-table-container' data-test-cyodDeviceTable ...attributes>
   {{#if @heading}}
     <AkStack
-      class='mb-1'
+      class='mb-2'
       @alignItems='flex-start'
       @justifyContent='space-between'
       @spacing='2'
     >
-      <AkStack @direction='column' @spacing='0.5'>
+      <AkStack @direction='column' @spacing='1'>
         <AkTypography @variant='subtitle1' data-test-cyodDeviceTable-heading>
           {{@heading}}
         </AkTypography>
@@ -32,7 +32,7 @@
   {{#if this.isLoading}}
     <AkStack
       data-test-cyodDeviceTable-loading
-      class='pa-2'
+      class='p-2'
       @spacing='1'
       @alignItems='center'
     >
