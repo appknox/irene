@@ -8,6 +8,7 @@ import Service from '@ember/service';
 class OrganizationStub extends Service {
   selected = { id: 42 };
   isCyodEnabled = true;
+  isCyodRegistrationEnabled = true;
 }
 
 class NotificationsStub extends Service {
@@ -262,10 +263,34 @@ module(
       assert.dom('[data-test-orgSigningCert-deleteBtn]').exists({ count: 1 });
     });
 
+    test('it is hidden when the owner turns CYOD registration off', async function (assert) {
+      class RegistrationOffOrganizationStub extends Service {
+        selected = { id: 42 };
+        isCyodEnabled = true;
+        isCyodRegistrationEnabled = false;
+      }
+
+      this.owner.unregister('service:organization');
+      this.owner.register('service:organization', RegistrationOffOrganizationStub);
+
+      class AjaxStub extends Service {
+        request() {
+          return Promise.resolve(null);
+        }
+      }
+      this.owner.register('service:ajax', AjaxStub);
+
+      await render(hbs`<Organization::SigningCertificate />`);
+
+      assert.dom('[data-test-orgSigningCert-title]').doesNotExist();
+      assert.dom('[data-test-orgSigningCert-openBtn]').doesNotExist();
+    });
+
     test('it is hidden when the CYOD feature is disabled', async function (assert) {
       class CyodDisabledOrganizationStub extends Service {
         selected = { id: 42 };
         isCyodEnabled = false;
+        isCyodRegistrationEnabled = false;
       }
       this.owner.unregister('service:organization');
       this.owner.register('service:organization', CyodDisabledOrganizationStub);

@@ -91,7 +91,11 @@ export default class OrganizationSigningCertificateComponent extends Component<O
   // both scopes. iOS signing certs only apply to iOS scans, so the
   // project-scoped UI is additionally hidden for non-iOS projects.
   get visible() {
-    if (!this.organization.isCyodEnabled) {
+    // Follows the owner's CYOD Registration switch, not just the entitlement:
+    // turning CYOD off collapses the whole CYOD configuration surface, in both
+    // organization and project settings. Scans on already-registered devices
+    // keep running server-side — this only hides the setup UI.
+    if (!this.organization.isCyodRegistrationEnabled) {
       return false;
     }
 

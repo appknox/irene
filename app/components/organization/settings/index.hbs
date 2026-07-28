@@ -27,9 +27,13 @@
 
     <AkDivider class='my-3' @color='dark' />
 
-    <Organization::SigningCertificate />
+    {{! Certificates are part of the CYOD setup, so they collapse with it.
+    Guarded here as well as in the component so the divider goes too. }}
+    {{#if this.organization.isCyodRegistrationEnabled}}
+      <Organization::SigningCertificate />
 
-    <AkDivider class='my-3' @color='dark' />
+      <AkDivider class='my-3' @color='dark' />
+    {{/if}}
   {{/if}}
 
   <OrganizationArchive />

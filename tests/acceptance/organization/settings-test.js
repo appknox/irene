@@ -125,12 +125,33 @@ module('Acceptance | Organization settings', function (hooks) {
 
   test('it shows the CYOD device registration only when the org has the cyod feature', async function (assert) {
     this.organizationMe.update({ is_owner: true });
-    this.organization.update({ features: { cyod: true } });
+    this.organization.update({
+      features: { cyod: true },
+      cyod_registration_enabled: true,
+    });
 
     await visit('dashboard/organization/settings');
 
     assert.dom('[data-test-orgDeviceRegistration]').exists();
     assert.dom('[data-test-orgSigningCert]').exists();
+  });
+
+  test('turning CYOD registration off collapses the certificate section', async function (assert) {
+    this.organizationMe.update({ is_owner: true });
+    this.organization.update({
+      features: { cyod: true },
+      cyod_registration_enabled: false,
+    });
+
+    await visit('dashboard/organization/settings');
+
+    assert
+      .dom('[data-test-orgDeviceRegistration]')
+      .exists('the switch itself stays reachable so it can be turned back on');
+
+    assert
+      .dom('[data-test-orgSigningCert]')
+      .doesNotExist('certificates are part of the CYOD setup');
   });
 
   test('it hides the CYOD device registration when the org lacks the cyod feature', async function (assert) {
