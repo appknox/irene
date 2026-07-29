@@ -1,0 +1,40 @@
+<FreestyleSection @name='Text Field'>
+  <FreestyleUsage @slug='ak-text-field-basic' @title='Basic'>
+    <AkTextField @label='Experiment with me' @placeholder='Enter something' @value='' @helperText='' @disabled={{false}} @readonly={{false}} @required={{false}} @error={{false}} />
+    <div class='flex-row flex-row-gap-3 mt-1'>
+      <AkTextField @placeholder='Without label' />
+      <AkTextField @placeholder='Without label has value' @value='Hello world' />
+    </div>
+    <div class='flex-row flex-row-gap-3 mt-1'>
+      <AkTextField @label='Helper Text' @placeholder='Enter something' @helperText='I am an helper text' />
+      <AkTextField @label='Helper Text Error State' @placeholder='Enter something' @helperText='I am an helper text in error state' @error={{true}} />
+    </div>
+    <div class='flex-row flex-row-gap-3 mt-1'>
+      <AkTextField @label='Disabled' @placeholder='Enter something' @disabled={{true}} />
+      <AkTextField @label='Disabled with value' @placeholder='Enter something' @value='I am disabled' @disabled={{true}} />
+    </div>
+    <div class='flex-row flex-row-gap-3 mt-1'>
+      <AkTextField @label='Readonly' @placeholder='Enter something' @readonly={{true}} />
+      <AkTextField @label='Readonly with value' @placeholder='Enter something' @value='I am readonly' @readonly={{true}} />
+    </div>
+    <div class='flex-row flex-row-gap-3 mt-1'>
+      <AkTextField @label='Required' @placeholder='Enter something' @required={{true}} />
+      <AkTextField @label='Password' @placeholder='Enter password' @type='password' />
+    </div>
+  </FreestyleUsage>
+
+  <FreestyleUsage @slug='ak-text-field-with-icon' @title='With Adornments'>
+    <AkTextField @label='Experiment with me' @placeholder='Enter something' @value=''>
+      <:leftAdornment><span class='ak-icon ak-icon-credit-card'></span></:leftAdornment>
+      <:rightAdornment><span class='ak-icon ak-icon-close'></span></:rightAdornment>
+    </AkTextField>
+    <div class='flex-row flex-row-gap-3 mt-1'>
+      <AkTextField @placeholder='Only left adornment'>
+        <:leftAdornment><span>$</span></:leftAdornment>
+      </AkTextField>
+      <AkTextField @value='Only right adornment'>
+        <:rightAdornment><span class='ak-icon ak-icon-close'></span></:rightAdornment>
+      </AkTextField>
+    </div>
+  </FreestyleUsage>
+</FreestyleSection>

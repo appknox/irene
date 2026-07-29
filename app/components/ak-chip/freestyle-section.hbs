@@ -1,0 +1,28 @@
+<FreestyleSection @name='Chip'>
+  <FreestyleUsage @slug='ak-chip-default' @title='Default'>
+    <AkTypography @color='textSecondary' @gutterBottom={{true}}>Experiment with me</AkTypography>
+    <AkChip @label='Chip filled' @variant='filled' @size='medium' @color='default' />
+  </FreestyleUsage>
+
+  <FreestyleUsage @slug='ak-chip-with-icon' @title='With Icon'>
+    <AkChip @label='Security' @variant='filled' @size='medium' @color='default'>
+      <:icon><AkIcon @iconName='security' /></:icon>
+    </AkChip>
+    <AkChip @label='Security' @variant='outlined' @size='medium' @color='default'>
+      <:icon><AkIcon @iconName='security' /></:icon>
+    </AkChip>
+    <AkChip @label='Security' @variant='semi-filled' @size='medium' @color='default'>
+      <:icon><AkIcon @iconName='security' /></:icon>
+    </AkChip>
+    <AkChip @label='Security' @variant='semi-filled-outlined' @size='medium' @color='default'>
+      <:icon><AkIcon @iconName='security' /></:icon>
+    </AkChip>
+  </FreestyleUsage>
+
+  <FreestyleUsage @slug='ak-chip-deletable' @title='Deletable'>
+    <AkChip @label='Deletable filled' @variant='filled' @size='medium' @color='default' @button={{true}} />
+    <AkChip @label='Deletable outlined' @variant='outlined' @size='medium' @color='default' @button={{true}} />
+    <AkChip @label='Deletable semi-filled' @variant='semi-filled' @size='medium' @color='default' @button={{true}} />
+    <AkChip @label='Deletable semi-filled-outlined' @variant='semi-filled-outlined' @size='medium' @color='default' @button={{true}} />
+  </FreestyleUsage>
+</FreestyleSection>

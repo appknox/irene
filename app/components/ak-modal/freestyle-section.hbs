@@ -1,0 +1,21 @@
+<FreestyleSection @name='Modal'>
+  <FreestyleUsage @slug='ak-modal-default' @title='Default' @source='<AkButton \{{on "click" this.handleOpenModal}}>Open Modal</AkButton>
+
+\{{#if this.showModal}}
+  <AkModal
+    @showHeader=\{{true}}
+    @headerTitle="Greetings"
+    @onClose=\{{this.handleClose}}
+    @onClickOverlay=\{{this.handleClose}}
+  >
+    <div class="flex-column flex-align-center flex-justify-center">
+      <AkTypography>Hey there, I am inside a modal</AkTypography>
+      <AkButton \{{on "click" this.handleClose}}>OK</AkButton>
+      <AkButton @variant="outlined" @color="neutral" \{{on "click" this.handleClose}}>Cancel</AkButton>
+    </div>
+  </AkModal>
+\{{/if}}'>
+    <AkTypography @color='textSecondary' @gutterBottom={{true}}>Click the button to open the modal</AkTypography>
+    <AkModal::FreestyleDemo />
+  </FreestyleUsage>
+</FreestyleSection>

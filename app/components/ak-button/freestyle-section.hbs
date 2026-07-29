@@ -1,0 +1,40 @@
+<FreestyleSection @name='Buttons'>
+  <FreestyleUsage @slug='ak-button-default' @title='Default variants'>
+    <AkTypography @color='textSecondary' @gutterBottom={{true}}>Experiment with me</AkTypography>
+    <AkButton @tag='button' @type='button' @disabled={{false}}>Filled Primary</AkButton>
+    <AkButton @tag='button' @type='button' @variant='outlined' @disabled={{false}}>Outlined Primary</AkButton>
+    <AkButton @tag='button' @type='button' @color='neutral' @variant='outlined' @disabled={{false}}>Outlined Neutral</AkButton>
+    <AkButton @tag='button' @type='button' @color='primary' @variant='text' @disabled={{false}}>Text Primary</AkButton>
+  </FreestyleUsage>
+
+  <FreestyleUsage @slug='ak-button-disabled' @title='Disabled'>
+    <AkButton @tag='button' @disabled={{true}}>Filled Primary</AkButton>
+    <AkButton @tag='button' @variant='outlined' @disabled={{true}}>Outlined Primary</AkButton>
+    <AkButton @tag='button' @color='neutral' @variant='outlined' @disabled={{true}}>Outlined Neutral</AkButton>
+    <AkButton @tag='button' @color='primary' @variant='text' @disabled={{true}}>Text Primary</AkButton>
+  </FreestyleUsage>
+
+  <FreestyleUsage @slug='ak-button-with-icons' @title='With Icons'>
+    <AkButton @tag='button'>
+      <:leftIcon><AkIcon @iconName='delete' /></:leftIcon>
+      <:default>Delete</:default>
+    </AkButton>
+    <AkButton @tag='button' @variant='outlined'>
+      <:leftIcon><AkIcon @iconName='note-add' /></:leftIcon>
+      <:default>Add Note</:default>
+    </AkButton>
+    <AkButton @tag='button' @color='neutral' @variant='outlined'>
+      <:leftIcon><AkIcon @iconName='refresh' /></:leftIcon>
+      <:default>Refresh</:default>
+    </AkButton>
+  </FreestyleUsage>
+
+  <FreestyleUsage @slug='ak-button-loading' @title='Loading'>
+    <AkButton @tag='button' @loading={{true}}>Loading Button</AkButton>
+    <AkButton @tag='button' @loading={{true}}>
+      <:leftIcon><AkIcon @iconName='note-add' /></:leftIcon>
+      <:default>Loading With Icons</:default>
+      <:rightIcon><AkIcon @iconName='arrow-drop-down' /></:rightIcon>
+    </AkButton>
+  </FreestyleUsage>
+</FreestyleSection>

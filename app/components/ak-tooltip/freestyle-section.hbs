@@ -1,0 +1,35 @@
+<FreestyleSection @name='Tooltip'>
+  <FreestyleUsage @slug='ak-tooltip-default' @title='Default'>
+    <AkTypography @color='textSecondary' @gutterBottom={{true}}>Experiment with me</AkTypography>
+    <div class='flex-row flex-justify-center flex-align-center w-full'>
+      <AkTooltip @title='I am a tooltip!' @placement='bottom' @color='dark' @arrow={{true}} @disabled={{false}}>
+        <AkLink>Link with tooltip</AkLink>
+      </AkTooltip>
+    </div>
+  </FreestyleUsage>
+
+  <FreestyleUsage @slug='ak-tooltip-placements' @title='Placements'>
+    <div class='flex-row flex-row-gap-3 flex-justify-center flex-align-center w-full mt-3'>
+      <AkTooltip @title='left' @placement='left' @color='dark' @arrow={{true}}>
+        <AkLink>Left</AkLink>
+      </AkTooltip>
+      <AkTooltip @title='top' @placement='top' @color='dark' @arrow={{true}}>
+        <AkLink>Top</AkLink>
+      </AkTooltip>
+      <AkTooltip @title='bottom' @placement='bottom' @color='dark' @arrow={{true}}>
+        <AkLink>Bottom</AkLink>
+      </AkTooltip>
+      <AkTooltip @title='right' @placement='right' @color='dark' @arrow={{true}}>
+        <AkLink>Right</AkLink>
+      </AkTooltip>
+    </div>
+  </FreestyleUsage>
+
+  <FreestyleUsage @slug='ak-tooltip-delay' @title='With Delay'>
+    <div class='p-6 flex-row flex-justify-center flex-align-center w-full'>
+      <AkTooltip @title='I am a delayed tooltip!' @placement='bottom' @color='dark' @arrow={{true}} @enterDelay={{500}} @leaveDelay={{200}}>
+        <AkLink>Delay Tooltip</AkLink>
+      </AkTooltip>
+    </div>
+  </FreestyleUsage>
+</FreestyleSection>
