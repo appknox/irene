@@ -1,5 +1,5 @@
 // @ts-expect-error no type defs
-import SwaggerUI from 'swagger-ui';
+import { SwaggerUIBundle, SwaggerUIStandalonePreset } from 'swagger-ui-dist';
 
 import Component from '@glimmer/component';
 import { action } from '@ember/object';
@@ -14,10 +14,10 @@ interface PublicApiDocsSchemasSignature {
 export default class PublicApiDocsSchemasComponent extends Component<PublicApiDocsSchemasSignature> {
   @action
   initializeSchemas(element: HTMLDivElement) {
-    SwaggerUI({
+    SwaggerUIBundle({
       spec: { ...this.args.data, info: {}, paths: {} },
       domNode: element,
-      presets: [SwaggerUI.presets.apis, SwaggerUI.SwaggerUIStandalonePreset],
+      presets: [SwaggerUIBundle['presets'].apis, SwaggerUIStandalonePreset],
     });
   }
 }

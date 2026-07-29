@@ -7,8 +7,10 @@ import {
   type AkTreeProviderSignature,
 } from 'irene/components/ak-tree/provider';
 
-export interface AkTreeSignature<N extends AkTreeNodeProps>
-  extends Omit<AkTreeProviderSignature<N>, 'Blocks'> {
+export interface AkTreeSignature<N extends AkTreeNodeProps> extends Omit<
+  AkTreeProviderSignature<N>,
+  'Blocks'
+> {
   Blocks: {
     default: [
       node: AkTreeNodeFlattenedProps | undefined,

@@ -32,6 +32,7 @@ module.exports = {
     // node files
     {
       files: [
+        './.docfy-config.js',
         './.stylelintrc.js',
         './.eslintrc.js',
         './.prettierrc.js',
