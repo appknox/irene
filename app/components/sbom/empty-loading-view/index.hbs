@@ -4,6 +4,7 @@
     local-class='empty-loading-container
     {{if @skeleton "skeleton"}}'
     {{style height=(or @height '500px')}}
+    data-test-cy='sbomApp-emptyLoadingView-{{if @empty "empty" "loading"}}'
     @direction='column'
     @spacing='2.5'
   >
