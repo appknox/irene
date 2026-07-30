@@ -54,7 +54,7 @@ module(
         .hasText(t('cyodSettings.connectedDevice'));
     });
 
-    test('it disables registration when the org owner turned the switch off', async function (assert) {
+    test('the switch being off replaces the whole surface with a notice', async function (assert) {
       this.owner.register(
         'service:organization',
         organizationStub({ registrationEnabled: false })
@@ -62,8 +62,26 @@ module(
 
       await render(hbs`<AccountSettings::CyodSettings />`);
 
-      assert.dom('[data-test-cyodSettings-registerBtn]').isDisabled();
       assert.dom('[data-test-cyodSettings-disabled]').exists();
+      assert.dom('[data-test-cyodSettings-disabledSvg]').exists();
+
+      assert
+        .dom('[data-test-cyodSettings-disabledTitle]')
+        .hasText(t('cyodSettings.turnOnTitle'));
+
+      assert
+        .dom('[data-test-cyodSettings-disabledDesc]')
+        .hasText(t('cyodSettings.turnOnDesc'));
+
+      // Nothing actionable is left on the page — a disabled button over an
+      // empty table would just be dead weight.
+      assert.dom('[data-test-cyodSettings-registerBtn]').doesNotExist();
+      assert.dom('[data-test-cyodDeviceTable]').doesNotExist();
+
+      // The heading stays so the tab still identifies itself.
+      assert
+        .dom('[data-test-cyodSettings-title]')
+        .hasText(t('cyodRegistration.title'));
     });
 
     test('the empty hint emphasises the register action as markup', async function (assert) {

@@ -1831,7 +1831,6 @@
     "deviceRegistration": "デバイス登録",
     "deviceRegistrationDesc": "組織に登録されたCYODデバイスを表示し、Mercerを設定します。デバイスは、オペレーターのマシンからMercerアプリを使用して登録されます。",
     "registerADevice": "デバイスを登録",
-    "registrationDisabled": "現在、組織のCYODデバイス登録は無効になっています。有効にするには組織のオーナーにお問い合わせください。",
     "connectedDevice": "接続中のデバイス",
     "connectedDeviceDesc": "CYOD設定に追加されたデバイスの詳細をご確認ください。",
     "emptyHint": "<strong>デバイスを登録</strong>をクリックして新しいデバイスを追加してください",
@@ -1845,7 +1844,9 @@
     "stepSignIn": "Mercerを開き、パーソナルトークンとこのサーバーURLでサインインします:",
     "stepSignInNote": "パーソナルトークンは、アカウント設定 → 開発者設定から取得できます。",
     "stepRegister": "「Devices」タブで、接続したデバイスを登録します。",
-    "stepRun": "「Run」タブでプロキシを開始します。接続されている間、スキャンはこのデバイスを使用します。"
+    "stepRun": "「Run」タブでプロキシを開始します。接続されている間、スキャンはこのデバイスを使用します。",
+    "turnOnTitle": "CYOD を有効にする",
+    "turnOnDesc": "この組織では CYOD デバイス登録が現在オフになっています。有効にするには組織のオーナーにお問い合わせください。"
   },
   "cyodUsbNotSupported": "WebUSBはChrome/Edgeのみサポートされています。",
   "cyodIosAgentNotFound": "iOSエージェントが見つかりません。KnoxOpsエージェントが起動していることを確認してください。",

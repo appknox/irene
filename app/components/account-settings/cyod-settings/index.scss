@@ -13,14 +13,13 @@
   overflow-y: auto;
 }
 
-.disabled-note {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  padding: 12px 16px;
-  border: 1px dashed var(--divider-dark);
+// Shown in place of the whole registration surface when the owner's switch is
+// off. Boxed inside the panel, as the design shows.
+.disabled-state {
+  width: 100%;
+  box-sizing: border-box;
+  border: 1px solid var(--divider-dark);
   border-radius: var(--border-radius);
-  background: var(--background-light);
 }
 
 .setup-step {

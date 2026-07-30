@@ -1831,7 +1831,6 @@
     "deviceRegistration": "Device Registration",
     "deviceRegistrationDesc": "View your organization's registered CYOD devices and set up Mercer. Devices are registered from the operator's machine using the Mercer app.",
     "registerADevice": "Register a device",
-    "registrationDisabled": "CYOD device registration is currently turned off for your organization. Contact your organization owner to enable it.",
     "connectedDevice": "Your connected device",
     "connectedDeviceDesc": "Check out the details of the devices that have been added to the CYOD settings.",
     "emptyHint": "Click on the <strong>Register a device</strong> to add a new device",
@@ -1845,7 +1844,9 @@
     "stepSignIn": "Open Mercer and sign in with your Personal Token and this server URL:",
     "stepSignInNote": "Get a Personal Token from Account Settings → Developer Settings.",
     "stepRegister": "On the Devices tab, register your connected device.",
-    "stepRun": "On the Run tab, start the proxy. Scans use this device while it stays connected."
+    "stepRun": "On the Run tab, start the proxy. Scans use this device while it stays connected.",
+    "turnOnTitle": "Turn on the CYOD",
+    "turnOnDesc": "CYOD device registration is currently turned off for your organization. Contact your organization owner to enable it."
   },
   "cyodUsbNotSupported": "WebUSB is only supported in Chrome/Edge. Please use a supported browser.",
   "cyodIosAgentNotFound": "iOS agent not found. Please ensure KnoxOps agent is running on this machine.",

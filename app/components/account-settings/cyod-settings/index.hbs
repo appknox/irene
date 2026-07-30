@@ -11,56 +11,82 @@
         {{t 'cyodRegistration.title'}}
       </AkTypography>
 
-      {{! Device Registration }}
-      {{! @width='full' so the button lands on the table's right edge below;
-      without it the row only spans its content. }}
-      <AkStack
-        @width='full'
-        @alignItems='flex-start'
-        @justifyContent='space-between'
-        @spacing='2'
-      >
-        <AkStack @direction='column' @spacing='1'>
-          <AkTypography @variant='subtitle1' data-test-cyodSettings-registerTitle>
-            {{t 'cyodSettings.deviceRegistration'}}
-          </AkTypography>
+      {{#if this.isRegistrationEnabled}}
+        {{! Device Registration }}
+        {{! @width='full' so the button lands on the table's right edge below;
+        without it the row only spans its content. }}
+        <AkStack
+          @width='full'
+          @alignItems='flex-start'
+          @justifyContent='space-between'
+          @spacing='2'
+        >
+          <AkStack @direction='column' @spacing='1'>
+            <AkTypography
+              @variant='subtitle1'
+              data-test-cyodSettings-registerTitle
+            >
+              {{t 'cyodSettings.deviceRegistration'}}
+            </AkTypography>
 
-          <AkTypography @variant='body2' @color='textSecondary'>
-            {{t 'cyodSettings.deviceRegistrationDesc'}}
-          </AkTypography>
+            <AkTypography @variant='body2' @color='textSecondary'>
+              {{t 'cyodSettings.deviceRegistrationDesc'}}
+            </AkTypography>
+          </AkStack>
+
+          <AkButton
+            data-test-cyodSettings-registerBtn
+            @variant='filled'
+            {{on 'click' this.handleOpen}}
+          >
+            {{t 'cyodSettings.registerADevice'}}
+          </AkButton>
         </AkStack>
 
-        <AkButton
-          data-test-cyodSettings-registerBtn
-          @variant='filled'
-          @disabled={{not this.isRegistrationEnabled}}
-          {{on 'click' this.handleOpen}}
-        >
-          {{t 'cyodSettings.registerADevice'}}
-        </AkButton>
-      </AkStack>
+        <AkDivider @color='light' />
 
-      {{#unless this.isRegistrationEnabled}}
-        <div local-class='disabled-note' data-test-cyodSettings-disabled>
-          <AkIcon @iconName='info' @color='textSecondary' />
+        {{! Your connected device }}
+        <Cyod::DeviceTable
+          @heading={{t 'cyodSettings.connectedDevice'}}
+          @subheading={{t 'cyodSettings.connectedDeviceDesc'}}
+          {{! Emphasises "Register a device", pointing at the button above. It is
+          deliberately not a link -- the button is the affordance. }}
+          @emptyHint={{t 'cyodSettings.emptyHint' htmlSafe=true}}
+          @onlyConnected={{true}}
+        />
+      {{else}}
+        {{! The owner's switch is off, so there is nothing a member can do here.
+        The whole surface collapses to one notice pointing at the owner, rather
+        than showing a dead register button over an empty table. Mirrors
+        ai-reporting/chat-generate/turn-on-settings. }}
+        <div local-class='disabled-state' data-test-cyodSettings-disabled>
+          <AkStack
+            @direction='column'
+            @alignItems='center'
+            @justifyContent='center'
+            @spacing='1'
+            class='py-7 px-4'
+          >
+            <AkSvg::TurnOnSettings data-test-cyodSettings-disabledSvg />
 
-          <AkTypography @variant='body2' @color='textSecondary'>
-            {{t 'cyodSettings.registrationDisabled'}}
-          </AkTypography>
+            <AkTypography
+              @variant='h5'
+              class='mt-4'
+              data-test-cyodSettings-disabledTitle
+            >
+              {{t 'cyodSettings.turnOnTitle'}}
+            </AkTypography>
+
+            <AkTypography
+              @align='center'
+              @color='textSecondary'
+              data-test-cyodSettings-disabledDesc
+            >
+              {{t 'cyodSettings.turnOnDesc'}}
+            </AkTypography>
+          </AkStack>
         </div>
-      {{/unless}}
-
-      <AkDivider @color='light' />
-
-      {{! Your connected device }}
-      <Cyod::DeviceTable
-        @heading={{t 'cyodSettings.connectedDevice'}}
-        @subheading={{t 'cyodSettings.connectedDeviceDesc'}}
-        {{! Emphasises "Register a device", pointing at the button above. It is
-        deliberately not a link -- the button is the affordance. }}
-        @emptyHint={{t 'cyodSettings.emptyHint' htmlSafe=true}}
-        @onlyConnected={{true}}
-      />
+      {{/if}}
     </AkStack>
   </div>
 
