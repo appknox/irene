@@ -57,8 +57,12 @@
       {{else}}
         {{! The owner's switch is off, so there is nothing a member can do here.
         The whole surface collapses to one notice pointing at the owner, rather
-        than showing a dead register button over an empty table. Mirrors
-        ai-reporting/chat-generate/turn-on-settings. }}
+        than showing a dead register button over an empty table.
+
+        ToggleAutomatedDast is the illustration the design uses here -- the same
+        one that prompts you to switch automated DAST on
+        (file-details/dynamic-scan/automated). TurnOnSettings looks close by name
+        but is a much simpler 5-path mark and does not match. }}
         <div local-class='disabled-state' data-test-cyodSettings-disabled>
           <AkStack
             @direction='column'
@@ -67,7 +71,7 @@
             @spacing='1'
             class='py-7 px-4'
           >
-            <AkSvg::TurnOnSettings data-test-cyodSettings-disabledSvg />
+            <AkSvg::ToggleAutomatedDast data-test-cyodSettings-disabledSvg />
 
             <AkTypography
               @variant='h5'
