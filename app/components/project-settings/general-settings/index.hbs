@@ -66,4 +66,8 @@
       @project={{this.project}}
     />
   </AkStack>
+
+  {{! Brings its own leading divider and padding, and hides itself for non-iOS
+  projects or when CYOD is switched off. }}
+  <Organization::SigningCertificate @project={{@project}} />
 </AkStack>

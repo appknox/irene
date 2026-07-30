@@ -1,6 +1,16 @@
 {{#if this.visible}}
+  {{#if this.isProjectScope}}
+    {{! Project scope renders as a section INSIDE the General Settings card, so
+    it supplies the same leading divider and horizontal padding as its sibling
+    sections. The divider lives here rather than in the caller so it disappears
+    together with the section when the panel is hidden (non-iOS project, or CYOD
+    switched off) instead of leaving a dangling rule. }}
+    <AkDivider @color='dark' />
+  {{/if}}
+
   <div
     local-class='signing-cert-container'
+    class={{if this.isProjectScope 'px-3 py-3'}}
     data-test-orgSigningCert
     ...attributes
   >

@@ -295,6 +295,52 @@ module(
       assert.dom('[data-test-orgSigningCert-deleteBtn]').exists({ count: 1 });
     });
 
+    test('project scope brings its own divider so it sits inside the settings card', async function (assert) {
+      class AjaxStub extends Service {
+        request() {
+          return Promise.resolve(null);
+        }
+      }
+      this.owner.register('service:ajax', AjaxStub);
+
+      this.project = { id: 9, platform: 1 };
+
+      await render(
+        hbs`<Organization::SigningCertificate @project={{this.project}} />`
+      );
+
+      assert
+        .dom('[data-test-ak-divider]')
+        .exists('separates it from the section above, as the sibling sections do');
+
+      // Org scope is its own panel, so it must not gain the divider or padding.
+      await render(hbs`<Organization::SigningCertificate />`);
+
+      assert.dom('[data-test-ak-divider]').doesNotExist();
+    });
+
+    test('a hidden project panel leaves no dangling divider', async function (assert) {
+      class AjaxStub extends Service {
+        request() {
+          return Promise.resolve(null);
+        }
+      }
+      this.owner.register('service:ajax', AjaxStub);
+
+      // Android project — iOS signing certs do not apply.
+      this.project = { id: 9, platform: 0 };
+
+      await render(
+        hbs`<Organization::SigningCertificate @project={{this.project}} />`
+      );
+
+      assert.dom('[data-test-orgSigningCert]').doesNotExist();
+
+      assert
+        .dom('[data-test-ak-divider]')
+        .doesNotExist('the divider goes with the section it introduces');
+    });
+
     test('it is hidden when the owner turns CYOD registration off', async function (assert) {
       class RegistrationOffOrganizationStub extends Service {
         selected = { id: 42 };
