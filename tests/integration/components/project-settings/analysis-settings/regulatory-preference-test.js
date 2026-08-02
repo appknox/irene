@@ -145,6 +145,7 @@ module(
         t('nist'),
         t('sama'),
         t('dora'),
+        t('eucra'),
       ];
 
       optionalRegulatoriesLabels.map((regLabel) =>
@@ -180,6 +181,10 @@ module(
             is_inherited: false,
           },
           show_dora: {
+            value: false,
+            is_inherited: false,
+          },
+          show_eucra: {
             value: false,
             is_inherited: false,
           },
@@ -279,6 +284,21 @@ module(
         return profile.report_preference.show_dora;
       });
 
+      this.server.put('profiles/:id/show_eucra', (schema, request) => {
+        const body = JSON.parse(request.requestBody);
+
+        const profile = schema['profiles'].find(request.params.id);
+
+        profile.report_preference.show_eucra = {
+          value: body.value,
+          is_inherited: false,
+        };
+
+        profile.save();
+
+        return profile.report_preference.show_eucra;
+      });
+
       await render(
         hbs`<ProjectSettings::AnalysisSettings::RegulatoryPreference @project={{this.project}}/>`
       );
@@ -355,6 +375,19 @@ module(
       await click(doraInput);
 
       assert.strictEqual(doraInput.checked, !doraInitialValue);
+
+      const eucra = this.element.querySelector(
+        `[data-test-projectSetting-analysisSettings-regulatoryPreferences="${t('eucra')}"]`
+      );
+
+      const eucraInitialValue = profile.report_preference.show_eucra.value;
+      const eucraInput = eucra.querySelector('[data-test-input]');
+
+      assert.strictEqual(eucraInput.checked, eucraInitialValue);
+
+      await click(eucraInput);
+
+      assert.strictEqual(eucraInput.checked, !eucraInitialValue);
     });
 
     test('it does not toggle preference value on error', async function (assert) {
@@ -381,6 +414,10 @@ module(
             is_inherited: false,
           },
           show_dora: {
+            value: false,
+            is_inherited: false,
+          },
+          show_eucra: {
             value: false,
             is_inherited: false,
           },
@@ -421,6 +458,10 @@ module(
       });
 
       this.server.put('profiles/:id/show_dora', () => {
+        return new Response(400, {}, { value: ['Must be a valid boolean.'] });
+      });
+
+      this.server.put('profiles/:id/show_eucra', () => {
         return new Response(400, {}, { value: ['Must be a valid boolean.'] });
       });
 
@@ -499,6 +540,19 @@ module(
       await click(doraInput);
 
       assert.strictEqual(doraInput.checked, doraInitialValue);
+
+      const eucra = this.element.querySelector(
+        `[data-test-projectSetting-analysisSettings-regulatoryPreferences="${t('eucra')}"]`
+      );
+
+      const eucraInitialValue = profile.report_preference.show_eucra.value;
+      const eucraInput = eucra.querySelector('[data-test-input]');
+
+      assert.strictEqual(eucraInput.checked, eucraInitialValue);
+
+      await click(eucraInput);
+
+      assert.strictEqual(eucraInput.checked, eucraInitialValue);
     });
 
     test('it displays overridden state with reset button if a preference is updated', async function (assert) {

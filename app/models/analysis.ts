@@ -25,6 +25,7 @@ import type Nistsp80053Model from './nistsp80053';
 import type SamaModel from './sama';
 import type Pcidss4Model from './pcidss4';
 import type DoraModel from './dora';
+import type EucraModel from './eucra';
 import type { KnoxiqValidatedFindingExploitability } from './knoxiq-validated-finding';
 
 irregular('asvs', 'asvses');
@@ -145,6 +146,9 @@ export default class AnalysisModel extends Model {
 
   @hasMany('dora', { async: true, inverse: null })
   declare dora: AsyncHasMany<DoraModel>;
+
+  @hasMany('eucra', { async: true, inverse: null })
+  declare eucra: AsyncHasMany<EucraModel>;
 
   @belongsTo('vulnerability', { async: true, inverse: null })
   declare vulnerability: AsyncBelongsTo<VulnerabilityModel>;
@@ -301,6 +305,10 @@ export default class AnalysisModel extends Model {
 
   get showDora() {
     return this.file.get('profile')?.get('reportPreference')?.show_dora?.value;
+  }
+
+  get showEucra() {
+    return this.file.get('profile')?.get('reportPreference')?.show_eucra?.value;
   }
 
   get vulnerabilityTypes() {

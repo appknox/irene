@@ -7,6 +7,7 @@ interface ReportPreferenceData {
   show_nist: boolean;
   show_sama: boolean;
   show_dora: boolean;
+  show_eucra: boolean;
 }
 
 export default class OrganizationPreferenceModel extends Model {
