@@ -81,6 +81,15 @@ export default class ProjectSettingsAnalysisSettingsRegulatoryPreferenceComponen
         isSaving: this.onSaveSama.isRunning,
         isOverriden: !this.profile?.reportPreference.show_sama?.is_inherited,
       },
+      {
+        label: this.intl.t('eucra'),
+        title: this.intl.t('eucraExpansion'),
+        value: this.profile?.reportPreference.show_eucra?.value,
+        toggleHandler: this.onSaveEucra,
+        resetHandler: this.onResetEucra,
+        isSaving: this.onSaveEucra.isRunning,
+        isOverriden: !this.profile?.reportPreference.show_eucra?.is_inherited,
+      },
     ];
   }
 
@@ -153,6 +162,10 @@ export default class ProjectSettingsAnalysisSettingsRegulatoryPreferenceComponen
     await this.savePreference.perform(event, 'sama');
   });
 
+  onSaveEucra = task(async (event: Event) => {
+    await this.savePreference.perform(event, 'eucra');
+  });
+
   onResetPcidss = task(async () => {
     await this.resetPreference.perform('pcidss');
   });
@@ -171,6 +184,10 @@ export default class ProjectSettingsAnalysisSettingsRegulatoryPreferenceComponen
 
   onResetSama = task(async () => {
     await this.resetPreference.perform('sama');
+  });
+
+  onResetEucra = task(async () => {
+    await this.resetPreference.perform('eucra');
   });
 }
 

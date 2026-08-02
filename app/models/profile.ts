@@ -16,6 +16,7 @@ export interface ProfileReportPreference {
   show_gdpr: ValueObject;
   show_nist: ValueObject;
   show_sama: ValueObject;
+  show_eucra: ValueObject;
 }
 
 export type SaveReportPreferenceData = Pick<
@@ -32,7 +33,8 @@ export type ProfileRegulatoryReportPreference =
   | 'hipaa'
   | 'gdpr'
   | 'nist'
-  | 'sama';
+  | 'sama'
+  | 'eucra';
 
 type ProfileAdapterName = 'profile';
 
