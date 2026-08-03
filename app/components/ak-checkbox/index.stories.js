@@ -18,11 +18,12 @@ const actions = {
 
 const Template = (args) => ({
   template: hbs`
-    <AkCheckbox 
-      @checked={{this.checked}} 
-      @indeterminate={{this.indeterminate}} 
-      @disabled={{this.disabled}} 
+    <AkCheckbox
+      @checked={{this.checked}}
+      @indeterminate={{this.indeterminate}}
+      @disabled={{this.disabled}}
       @readonly={{this.readonly}}
+      @color={{this.color}}
       @onClick={{this.handleClick}}
       @onChange={{this.handleChange}} />
   `,
@@ -31,20 +32,28 @@ const Template = (args) => ({
 
 export const Basic = Template.bind({});
 
+Basic.argTypes = {
+  color: {
+    control: { type: 'select' },
+    options: ['default', 'primary'],
+  },
+};
+
 Basic.args = {
   disabled: false,
   readonly: false,
   checked: true,
   indeterminate: false,
+  color: 'default',
 };
 
 const LabelTemplate = (args) => ({
   template: hbs`
     <AkFormControlLabel @label={{this.label}} @disabled={{this.disabled}} as |fcl|>
-        <AkCheckbox 
-          @checked={{this.checked}} 
-          @indeterminate={{this.indeterminate}} 
-          @disabled={{fcl.disabled}} 
+        <AkCheckbox
+          @checked={{this.checked}}
+          @indeterminate={{this.indeterminate}}
+          @disabled={{fcl.disabled}}
           @readonly={{this.readonly}}
           @onClick={{this.handleClick}}
           @onChange={{this.handleChange}} />

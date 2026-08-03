@@ -22,7 +22,7 @@ interface TabItem {
   activeRoutes: string;
   iconDetails?: {
     icon: 'check-circle' | 'warning' | 'block';
-    color: 'success' | 'warn';
+    color: 'success' | 'warn' | 'error';
   } | null;
   inProgress?: boolean;
   count?: number;
@@ -172,17 +172,15 @@ export default class FileDetailsDastHeader extends Component<FileDetailsDastHead
   });
 
   getLastManualDynamicScan = task(async () => {
-    const lastManualDynamicScan =
-      await this.file.getFileLastManualDynamicScan();
+    const scans = await this.file.getFileLastManualDynamicScan();
 
-    this.lastManualDynamicScan = lastManualDynamicScan;
+    this.lastManualDynamicScan = scans[0] ?? null;
   });
 
   getLastAutoDynamicScan = task(async () => {
-    const lastAutomatedDynamicScan =
-      await this.file.getFileLastAutomatedDynamicScan();
+    const scans = await this.file.getFileLastAutomatedDynamicScan();
 
-    this.lastAutomatedDynamicScan = lastAutomatedDynamicScan;
+    this.lastAutomatedDynamicScan = scans[0] ?? null;
   });
 
   fetchFileRisk = task(async () => {

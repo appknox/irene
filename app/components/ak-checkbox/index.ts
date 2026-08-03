@@ -2,6 +2,8 @@ import Component from '@glimmer/component';
 import { guidFor } from '@ember/object/internals';
 import { action } from '@ember/object';
 
+export type AkCheckboxColor = 'default' | 'primary';
+
 export interface AkCheckboxSignature {
   Element: HTMLInputElement;
   Args: {
@@ -10,6 +12,7 @@ export interface AkCheckboxSignature {
     checked?: boolean;
     disabled?: boolean;
     readonly?: boolean;
+    color?: AkCheckboxColor;
     onClick?: (event: MouseEvent) => void;
     onChange?: (event: Event, checked: boolean) => void;
   };
@@ -18,6 +21,10 @@ export interface AkCheckboxSignature {
 export default class AkCheckboxComponent extends Component<AkCheckboxSignature> {
   get id() {
     return this.args.id || `ak-checkbox-${guidFor(this)}`;
+  }
+
+  get color() {
+    return this.args.color || 'default';
   }
 
   @action

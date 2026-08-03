@@ -1,0 +1,88 @@
+.empty-steps-container {
+  padding: 5.14286em 0;
+
+  background-color: var(
+    --project-settings-dast-automation-scenario-view-v2-background
+  );
+
+  box-shadow: var(
+    --project-settings-dast-automation-scenario-view-v2-empty-steps-box-shadow
+  );
+}
+
+.scenario-view-footer {
+  position: sticky;
+  bottom: -6px;
+  z-index: 1;
+  padding: 1.2143em 1.5em;
+
+  border-radius: var(
+    --project-settings-dast-automation-scenario-view-v2-footer-border-radius
+  );
+
+  border: 1px solid
+    var(--project-settings-dast-automation-scenario-view-v2-footer-border-color);
+
+  background: var(
+    --project-settings-dast-automation-scenario-view-v2-background
+  );
+
+  box-shadow: var(
+    --project-settings-dast-automation-scenario-view-v2-footer-box-shadow
+  );
+}
+
+.dashed-add-button {
+  height: 30px;
+  min-width: 90px;
+
+  border-radius: var(
+    --project-settings-dast-automation-scenario-view-v2-border-radius
+  );
+
+  border: 1px dashed
+    var(
+      --project-settings-dast-automation-scenario-view-v2-dashed-button-border-color
+    );
+
+  background: var(
+    --project-settings-dast-automation-scenario-view-v2-dashed-button-background
+  );
+
+  color: var(
+    --project-settings-dast-automation-scenario-view-v2-dashed-button-color
+  );
+
+  font-size: 0.92857rem;
+  cursor: pointer;
+
+  // AkButton resets border on hover/focus — preserve the dashed style
+  &:hover,
+  &:focus {
+    border: 1px dashed
+      var(
+        --project-settings-dast-automation-scenario-view-v2-dashed-button-border-color
+      ) !important;
+
+    background: var(
+      --project-settings-dast-automation-scenario-view-v2-dashed-button-background
+    );
+
+    box-shadow: none;
+  }
+
+  // AkButton switches disabled border/color to neutral — keep primary
+  &:disabled,
+  &:global(.ak-button-disabled) {
+    opacity: 0.5;
+    cursor: not-allowed;
+
+    border-color: var(
+      --project-settings-dast-automation-scenario-view-v2-dashed-button-border-color
+    ) !important;
+
+    color: var(
+      --project-settings-dast-automation-scenario-view-v2-dashed-button-color
+    ) !important;
+  }
+}

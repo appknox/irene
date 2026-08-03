@@ -68,11 +68,18 @@ const ENUMS = {
     ERROR: 24,
     CANCELLED: 25,
     TERMINATED: 26,
+    RETRYING: 27,
   },
 
   DYNAMIC_MODE: {
     MANUAL: 0,
     AUTOMATED: 1,
+  },
+
+  DYNAMIC_SCAN_ENGINE: {
+    USER_MANUAL: 0,
+    AUTOPILOT: 1,
+    INTERNAL_MANUAL: 2,
   },
 
   MANUAL: {

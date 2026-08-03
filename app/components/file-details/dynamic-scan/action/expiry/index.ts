@@ -6,18 +6,18 @@ import { inject as service } from '@ember/service';
 import { runTask } from 'ember-lifeline';
 import { EmberRunTimer } from '@ember/runloop/types';
 import type Store from 'ember-data/store';
-import type { AsyncBelongsTo } from '@ember-data/model';
+import type IntlService from 'ember-intl/services/intl';
 
 import { Duration } from 'dayjs/plugin/duration';
 import dayjs from 'dayjs';
 
+import ENV from 'irene/config/environment';
 import type DatetimeService from 'irene/services/datetime';
 import type DynamicscanModel from 'irene/models/dynamicscan';
-import ENV from 'irene/config/environment';
 
 export interface DynamicScanExpirySignature {
   Args: {
-    dynamicscan: AsyncBelongsTo<DynamicscanModel>;
+    dynamicscan: DynamicscanModel;
   };
 }
 
@@ -25,6 +25,7 @@ export default class DynamicScanExpiryComponent extends Component<DynamicScanExp
   @service('notifications') declare notify: NotificationService;
   @service declare store: Store;
   @service declare datetime: DatetimeService;
+  @service declare intl: IntlService;
 
   @tracked durationRemaining: null | Duration = null;
   @tracked clockStop = false;
@@ -76,6 +77,12 @@ export default class DynamicScanExpiryComponent extends Component<DynamicScanExp
     };
   }
 
+  get expiryTooltip() {
+    return this.dynamicscan.isAutopiloted
+      ? this.intl.t('dynamicScanDeviceInteractionDisabled')
+      : this.intl.t('dynamicScanTitleTooltip');
+  }
+
   clock(): EmberRunTimer | undefined {
     if (this.clockStop) {
       return;
@@ -93,9 +100,7 @@ export default class DynamicScanExpiryComponent extends Component<DynamicScanExp
   }
 
   updateDurationRemaining() {
-    const expiresOn = this.dynamicscan
-      ? this.dynamicscan.get('autoShutdownOn')
-      : null;
+    const expiresOn = this.dynamicscan.autoShutdownOn;
 
     if (!expiresOn) {
       return;
@@ -112,14 +117,14 @@ export default class DynamicScanExpiryComponent extends Component<DynamicScanExp
     this.handleExtendTimeMenuClose();
 
     try {
-      const ds = await this.dynamicscan;
+      const ds = this.dynamicscan;
 
       await ds.extendTime(time);
       await ds.reload();
     } catch (error) {
       const err = error as AdapterError;
 
-      if (err.errors && err.errors[0]?.detail) {
+      if (err.errors?.[0]?.detail) {
         this.notify.error(err.errors[0].detail);
 
         return;

@@ -5,6 +5,7 @@ import { hbs } from 'ember-cli-htmlbars';
 import { setupMirage } from 'ember-cli-mirage/test-support';
 import { setupIntl, t } from 'ember-intl/test-support';
 import Service from '@ember/service';
+import { Response } from 'miragejs';
 
 class NotificationsStub extends Service {
   errorMsg = null;
@@ -17,6 +18,12 @@ class NotificationsStub extends Service {
   success(msg) {
     this.successMsg = msg;
   }
+}
+
+class MeStub extends Service {
+  org = {
+    has_security_permission: false,
+  };
 }
 
 const selectors = {
@@ -77,6 +84,7 @@ module(
       );
 
       this.owner.register('service:notifications', NotificationsStub);
+      this.owner.register('service:me', MeStub);
 
       const store = this.owner.lookup('service:store');
       const file = this.server.create('file', 1);
@@ -167,5 +175,116 @@ module(
 
       assert.strictEqual(notify.successMsg, t('scheduledAutomationSuccessOff'));
     });
+
+    test('toggle is checked when automation is already enabled', async function (assert) {
+      this.server.get('/v2/profiles/:id/automation_preference', (_, req) => ({
+        id: req.params.id,
+        dynamic_scan_automation_enabled: true,
+      }));
+
+      await render(hbs`
+        <ProjectSettings::DastAutomation::AutomationSettings
+          @project={{this.project}}
+          @profileId={{this.project.activeProfileId}}
+          @featureAvailable={{true}}
+        />
+      `);
+
+      assert.dom(selectors.dynScanAutoToggle).isChecked();
+    });
+
+    test('notifies and reverts the toggle when save fails', async function (assert) {
+      this.server.get('/v2/profiles/:id/automation_preference', (_, req) => ({
+        id: req.params.id,
+        dynamic_scan_automation_enabled: false,
+      }));
+
+      this.server.put(
+        '/v2/profiles/:id/automation_preference',
+        () => new Response(500, {}, {})
+      );
+
+      await render(hbs`
+        <ProjectSettings::DastAutomation::AutomationSettings
+          @project={{this.project}}
+          @profileId={{this.project.activeProfileId}}
+          @featureAvailable={{true}}
+        />
+      `);
+
+      assert.dom(selectors.dynScanAutoToggle).isNotChecked();
+
+      await click(selectors.dynScanAutoToggle);
+
+      const notify = this.owner.lookup('service:notifications');
+
+      assert.strictEqual(
+        notify.errorMsg,
+        'The backend responded with an error'
+      );
+
+      assert.dom(selectors.dynScanAutoToggle).isNotChecked();
+    });
+
+    test.each(
+      'notifies when the preference fails to load',
+      [true, false],
+      async function (assert, manual) {
+        if (manual) {
+          this.server.get(
+            '/v2/profiles/:id/ds_manual_device_preference',
+            () => new Response(400, {}, {})
+          );
+
+          this.server.create('ds-automated-device-preference', {
+            id: this.project.activeProfileId,
+          });
+
+          this.server.get(
+            '/v2/profiles/:id/ds_automated_device_preference',
+            (schema, req) => {
+              return schema.dsAutomatedDevicePreferences
+                .find(`${req.params.id}`)
+                ?.toJSON();
+            }
+          );
+        } else {
+          this.server.create('ds-manual-device-preference', {
+            id: this.project.activeProfileId,
+          });
+
+          this.server.get(
+            '/v2/profiles/:id/ds_manual_device_preference',
+            (schema, req) => {
+              return schema.dsManualDevicePreferences
+                .find(`${req.params.id}`)
+                ?.toJSON();
+            }
+          );
+
+          this.server.get(
+            '/v2/profiles/:id/ds_automated_device_preference',
+            () => new Response(400, {}, {})
+          );
+        }
+
+        await render(hbs`
+          <ProjectSettings::DastAutomation::AutomationSettings
+            @project={{this.project}}
+            @profileId={{this.project.activeProfileId}}
+            @featureAvailable={{true}}
+          />
+        `);
+
+        const notify = this.owner.lookup('service:notifications');
+
+        assert.strictEqual(
+          notify.errorMsg,
+          manual
+            ? t('errorFetchingDsManualDevicePref')
+            : t('errorFetchingDsAutomatedDevicePref')
+        );
+      }
+    );
   }
 );
