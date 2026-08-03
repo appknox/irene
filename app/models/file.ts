@@ -52,6 +52,15 @@ export default class FileModel extends ModelBaseMixin {
   @attr('string')
   declare minOsVersion: string;
 
+  @attr('boolean')
+  declare canStartDast: boolean;
+
+  @attr('string', { allowNull: true })
+  declare dastBlockedReason: string | null;
+
+  @attr('string', { allowNull: true })
+  declare dastBlockedMessage: string | null;
+
   @attr('string')
   declare supportedCpuArchitectures: string;
 

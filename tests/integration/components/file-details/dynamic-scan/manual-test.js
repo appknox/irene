@@ -489,6 +489,68 @@ module(
       assert.dom(deviceSelectRadioSelector, deviceElemList[1]).isChecked();
     });
 
+    test('it disables start when backend reports canStartDast=false', async function (assert) {
+      const dastBlockedMessage =
+        'Dynamic scan is not supported for App Store (FairPlay-encrypted) iOS 17+ builds.';
+
+      this.file.set('canStartDast', false);
+      this.file.set('dastBlockedReason', 'fairplay_encrypted_ios17_plus');
+      this.file.set('dastBlockedMessage', dastBlockedMessage);
+
+      this.server.get(
+        '/v2/profiles/:id/ds_manual_device_preference',
+        (schema, req) =>
+          schema.dsManualDevicePreferences.find(`${req.params.id}`)?.toJSON()
+      );
+
+      this.server.get('/v2/projects/:id/available_manual_devices', (schema) => {
+        const results = schema.availableManualDevices.all().models;
+        return { count: results.length, next: null, previous: null, results };
+      });
+
+      this.server.get('/profiles/:id', (schema, req) =>
+        schema.profiles.find(`${req.params.id}`)?.toJSON()
+      );
+
+      this.server.get('/profiles/:id/api_scan_options', (_, req) => ({
+        ds_api_capture_filters: [],
+        id: req.params.id,
+      }));
+
+      this.server.get('/profiles/:id/proxy_settings', (_, req) => ({
+        id: req.params.id,
+        host: '',
+        port: '',
+        enabled: false,
+      }));
+
+      await render(hbs`
+        <FileDetails::DynamicScan::Manual @file={{this.file}} @dynamicScanText={{this.dynamicScanText}} />
+      `);
+
+      await click('[data-test-fileDetails-dynamicScanAction="startBtn"]');
+
+      assert
+        .dom('[data-test-fileDetails-dynamicScanDrawer-startBtn]')
+        .isDisabled();
+
+      const disabledTooltipTrigger = find(
+        '[data-test-fileDetails-dynamicScanDrawer-startBtn-disabledTooltip]'
+      );
+
+      assert.ok(
+        disabledTooltipTrigger,
+        'tooltip wrapper exists around the disabled start button'
+      );
+
+      await triggerEvent(disabledTooltipTrigger, 'mouseenter');
+
+      assert
+        .dom('[data-test-ak-tooltip-content]')
+        .exists()
+        .containsText(dastBlockedMessage);
+    });
+
     test('it enables start after selecting a visible available specific device', async function (assert) {
       this.devicePreference.update({
         ds_manual_device_selection: ENUMS.DS_MANUAL_DEVICE_SELECTION.ANY_DEVICE,
