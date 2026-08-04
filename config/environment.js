@@ -315,6 +315,8 @@ module.exports = function (environment) {
       profiles: 'profiles',
       analyses: 'analyses',
       vulnerabilityPreferences: 'vulnerability_preferences',
+      overrideRequests: 'override_requests',
+      memberOverrideRequestFeature: 'member_override_request_feature',
       uploadFile: 'attachments',
       uploadedAttachment: 'attachments/upload_finished',
       deleteAttachment: 'delete_attachment',

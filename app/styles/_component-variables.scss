@@ -1034,6 +1034,19 @@ body {
     --border-color-2
   );
 
+  // file-details/vulnerability-analysis-details/edit-analysis-button/request-override-drawer
+  --file-details-edit-analysis-request-drawer-pending-banner-bg: var(--warn-light);
+  --file-details-edit-analysis-request-drawer-pending-banner-color: var(
+    --warn-dark
+  );
+  --file-details-edit-analysis-request-drawer-border-color: var(--border-color-1);
+  --file-details-edit-analysis-request-drawer-border-radius: var(--border-radius);
+  --file-details-edit-analysis-request-drawer-textarea-border-color: var(
+    --border-color-1
+  );
+  --file-details-edit-analysis-request-drawer-textarea-color: var(--text-primary);
+  --file-details-edit-analysis-request-drawer-error-color: var(--error-main);
+
   // variables for file-details
   --file-details-background-color: var(--background-light);
 

@@ -4,6 +4,7 @@ import IntlService from 'ember-intl/services/intl';
 
 import ENUMS from 'irene/enums';
 import { analysisRiskStatus } from 'irene/helpers/analysis-risk-status';
+import type MeService from 'irene/services/me';
 
 export interface AnalysisRiskTagSignature {
   Element: HTMLElement;
@@ -13,6 +14,8 @@ export interface AnalysisRiskTagSignature {
     overriddenRisk?: number | null;
     isOverridden?: boolean;
     disableOverriddenTooltip?: boolean;
+    isPending?: boolean;
+    pendingRequestedRisk?: number | null;
     status?: number;
     isCapsule?: boolean;
   };
@@ -20,6 +23,13 @@ export interface AnalysisRiskTagSignature {
 
 export default class AnalysisRiskTagComponent extends Component<AnalysisRiskTagSignature> {
   @service declare intl: IntlService;
+  @service declare me: MeService;
+
+  get showPendingApprovalIcon() {
+    return (
+      this.me.org?.is_member && this.args.isPending && !this.args.isOverridden
+    );
+  }
 
   get analysisRiskStatus() {
     return analysisRiskStatus([

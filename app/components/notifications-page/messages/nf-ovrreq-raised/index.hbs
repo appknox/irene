@@ -1,0 +1,21 @@
+<AkStack @direction='column' @spacing='1.5' class='pb-1'>
+  <span data-test-nf-ovrreq-raised-primary-message>
+    {{t
+      'notificationModule.messages.nf-ovrreq-raised'
+      htmlSafe=true
+      requester_email=@context.requester_email
+    }}
+  </span>
+
+  <div data-test-nf-ovrreq-raised-link>
+    <AkLink
+      @underline='none'
+      @route='authenticated.dashboard.file.analysis'
+      @models={{array @context.file_id @context.analysis_id}}
+    >
+      <AkButton @variant='outlined' @color='neutral'>
+        {{t 'viewRequest'}}
+      </AkButton>
+    </AkLink>
+  </div>
+</AkStack>

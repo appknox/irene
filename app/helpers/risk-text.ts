@@ -10,7 +10,7 @@ export function riskText(params: [Risk | string | number]) {
     risk = risk.value;
   }
 
-  risk = parseInt(String(risk));
+  risk = Number.parseInt(String(risk));
 
   switch (risk) {
     case ENUMS.RISK.UNKNOWN:

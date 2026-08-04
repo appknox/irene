@@ -1,9 +1,24 @@
 .edit-analysis-content {
+  margin: 1.5em;
+  position: relative;
   width: 650px;
+
   border: 1px solid
     var(--analysis-risk-override-edit-drawer-content-border-color);
+
   border-radius: var(
     --analysis-risk-override-edit-drawer-content-border-radius
   );
-  margin: 1.5em;
+}
+
+.pending-banner {
+  height: 45px;
+  width: 100%;
+  background-color: #be9a1d1a;
+  filter: drop-shadow(0 4px 12px rgba(64, 64, 64, 0.25));
+
+  .mail-icon-container {
+    height: 100%;
+    background-color: #be9a1d;
+  }
 }

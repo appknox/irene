@@ -37,6 +37,9 @@ import { NfAutomatedDastPartiallyCompletedContext } from './messages/nf-automate
 import { NfSkSubexpContext } from './messages/nf-sk-subexp/context';
 import { NfPublicApiUserUpdatedContext } from './messages/nf-public-api-user-updated/context';
 import { NfJiraPushErrContext } from './messages/nf-jira-push-err/context';
+import { NfOvrreqApprovedReqstrContext } from './messages/nf-ovrreq-approved-reqstr/context';
+import { NfOvrreqRaisedContext } from './messages/nf-ovrreq-raised/context';
+import { NfOvrreqRejectedContext } from './messages/nf-ovrreq-rejected/context';
 
 export const NotificationMap = {
   ERROR: {
@@ -203,6 +206,19 @@ export const NotificationMap = {
   NF_JIRA_PUSH_ERR: {
     component: 'notifications-page/messages/nf-jira-push-err' as const,
     context: NfJiraPushErrContext,
+  },
+  NF_OVRREQ_APPROVED_REQSTR: {
+    component:
+      'notifications-page/messages/nf-ovrreq-approved-reqstr' as const,
+    context: NfOvrreqApprovedReqstrContext,
+  },
+  NF_OVRREQ_RAISED: {
+    component: 'notifications-page/messages/nf-ovrreq-raised' as const,
+    context: NfOvrreqRaisedContext,
+  },
+  NF_OVRREQ_REJECTED: {
+    component: 'notifications-page/messages/nf-ovrreq-rejected' as const,
+    context: NfOvrreqRejectedContext,
   },
 } satisfies Record<string, { component: string; context: unknown }>;
 

@@ -102,6 +102,8 @@ export enum AkSvgComponentInvocationByNames {
   NotStartedTower,
   StoreReleaseReadinessScanFailed,
   StoreRealeaseReadinessUpselling,
+  EditAnalysisRequestSuccess,
+  EditAnalysisMailIcon,
 }
 
 export enum AkSvgComponentInvocationByPaths {
@@ -141,6 +143,7 @@ export enum AkSvgComponentInvocationByPaths {
   'high-risk-tower',
   'medium-risk-tower',
   'low-risk-tower',
+  'edit-analysis-request-success',
 }
 
 type AkSvgComponent = ComponentLike<{

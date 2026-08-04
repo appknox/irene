@@ -1,0 +1,9 @@
+{{#let (component @dataModel.rejectConfirmComponent) as |RejectConfirm|}}
+  <RejectConfirm
+    @dataModel={{@dataModel}}
+    @rejectHandler={{this.handleReject}}
+    @rejectCancelHandler={{this.handleRejectCancel}}
+    @isRejectRunning={{this.rejectHandlerTask.isRunning}}
+    @isRejectSuccess={{this.showRejectSuccess}}
+  />
+{{/let}}
