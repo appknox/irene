@@ -123,7 +123,7 @@ module(
           '[data-test-projectSettings-dastAutomationSettings-headerInfoChip]'
         )
         .exists()
-        .hasText(t('experimentalFeature'));
+        .hasText(t('beta'));
 
       assert
         .dom(
