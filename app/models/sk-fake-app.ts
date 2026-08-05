@@ -14,29 +14,71 @@ export interface SkFakeAppStoreData {
 
 export interface SkFakeAppAiScores {
   final: number;
-  LogoSimilarityRule?: number;
+  NativeLibsRule?: number;
+  ObfuscationRule?: number;
+  SigningCertRule?: number;
+  EmbeddedFilesRule?: number;
+  ManifestFlagsRule?: number;
+  CertAttributesRule?: number;
+  DynamicLoadingRule?: number;
+  ImplicitIntentsRule?: number;
+  PackerDetectionRule?: number;
+  PermissionDeltaRule?: number;
+  PhishingDomainsRule?: number;
   TitleBrandAbuseRule?: number;
+  NetworkEndpointsRule?: number;
   PackageSimilarityRule?: number;
   SemanticSimilarityRule?: number;
+  SpecialPermissionsRule?: number;
+  SuspiciousApiChainsRule?: number;
   DeveloperConsistencyRule?: number;
+  LogoSimilarityRule?: number;
   AppFunctionalitySimilarityRule?: number;
-  LogoSimilarityRule_justification?: string;
+  NativeLibsRule_justification?: string;
+  ObfuscationRule_justification?: string;
+  SigningCertRule_justification?: string;
+  EmbeddedFilesRule_justification?: string;
+  ManifestFlagsRule_justification?: string;
+  CertAttributesRule_justification?: string;
+  DynamicLoadingRule_justification?: string;
+  ImplicitIntentsRule_justification?: string;
+  PackerDetectionRule_justification?: string;
+  PermissionDeltaRule_justification?: string;
+  PhishingDomainsRule_justification?: string;
   TitleBrandAbuseRule_justification?: string;
+  NetworkEndpointsRule_justification?: string;
   PackageSimilarityRule_justification?: string;
   SemanticSimilarityRule_justification?: string;
+  SpecialPermissionsRule_justification?: string;
+  SuspiciousApiChainsRule_justification?: string;
   DeveloperConsistencyRule_justification?: string;
+  LogoSimilarityRule_justification?: string;
   AppFunctionalitySimilarityRule_justification?: string;
 }
 
 export type SkFakeAppAiScoreLevel = 'LOW' | 'MEDIUM' | 'HIGH';
 
 export interface SkFakeAppAiScoreLevels {
-  LogoSimilarityRule: SkFakeAppAiScoreLevel;
-  TitleBrandAbuseRule: SkFakeAppAiScoreLevel;
-  PackageSimilarityRule: SkFakeAppAiScoreLevel;
-  SemanticSimilarityRule: SkFakeAppAiScoreLevel;
-  DeveloperConsistencyRule: SkFakeAppAiScoreLevel;
-  AppFunctionalitySimilarityRule: SkFakeAppAiScoreLevel;
+  NativeLibsRule?: SkFakeAppAiScoreLevel;
+  ObfuscationRule?: SkFakeAppAiScoreLevel;
+  SigningCertRule?: SkFakeAppAiScoreLevel;
+  EmbeddedFilesRule?: SkFakeAppAiScoreLevel;
+  ManifestFlagsRule?: SkFakeAppAiScoreLevel;
+  CertAttributesRule?: SkFakeAppAiScoreLevel;
+  DynamicLoadingRule?: SkFakeAppAiScoreLevel;
+  ImplicitIntentsRule?: SkFakeAppAiScoreLevel;
+  PackerDetectionRule?: SkFakeAppAiScoreLevel;
+  PermissionDeltaRule?: SkFakeAppAiScoreLevel;
+  PhishingDomainsRule?: SkFakeAppAiScoreLevel;
+  TitleBrandAbuseRule?: SkFakeAppAiScoreLevel;
+  NetworkEndpointsRule?: SkFakeAppAiScoreLevel;
+  PackageSimilarityRule?: SkFakeAppAiScoreLevel;
+  SemanticSimilarityRule?: SkFakeAppAiScoreLevel;
+  SpecialPermissionsRule?: SkFakeAppAiScoreLevel;
+  SuspiciousApiChainsRule?: SkFakeAppAiScoreLevel;
+  DeveloperConsistencyRule?: SkFakeAppAiScoreLevel;
+  LogoSimilarityRule?: SkFakeAppAiScoreLevel;
+  AppFunctionalitySimilarityRule?: SkFakeAppAiScoreLevel;
 }
 
 export interface SkFakeAppSimilarityScores {
@@ -126,6 +168,15 @@ export default class SkFakeAppModel extends Model {
 
   @attr('number')
   declare aiConfidence: number;
+
+  @attr('number')
+  declare semanticAnalysisScore: number;
+
+  @attr('number')
+  declare binarySimilarityScore: number;
+
+  @attr('number')
+  declare binaryRiskScore: number;
 
   @attr('string')
   declare aiClassificationLabel: SkFakeAppClassificationLabel;
