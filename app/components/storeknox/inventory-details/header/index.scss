@@ -4,25 +4,19 @@
   top: -0.5em;
   background-color: var(--storeknox-inventory-details-header-background-color);
 
-  .app-inventory-header-info {
-    position: relative;
-
-    .license-icon-container {
-      background-color: var(
-        --storeknox-inventory-details-header-license-icon-container-background-color
-      );
-
-      border-radius: 3px;
-      position: absolute;
-      right: 1em;
-      top: 1em;
-    }
-  }
-
   &.archived,
   &.monitoring-disabled {
     top: calc(-0.5em + 44px);
     margin-bottom: calc(1.5em + 1.4286em) !important;
+  }
+
+  .app-inventory-header-info-container {
+    background-color: var(
+      --storeknox-inventory-details-header-app-info-bg-color
+    );
+
+    border: 1px solid
+      var(--storeknox-inventory-details-header-title-container-border-color);
   }
 
   .app-info-logo {
@@ -36,12 +30,28 @@
 
   .app-info-logo-placeholder {
     border-radius: 50%;
-    width: 50px;
-    height: 50px;
+    min-width: 50px;
+    min-height: 50px;
     background-color: var(
       --storeknox-inventory-details-header-app-logo-placeholder-background-color
     );
     border: 1px solid
       var(--storeknox-inventory-details-header-app-logo-border-color);
+  }
+
+  .app-inventory-detail-container {
+    border: 1px solid
+      var(--storeknox-inventory-details-header-title-container-border-color);
+    border-top: none;
+    padding: 0.5em 1.5em;
+  }
+
+  .indicator-chip {
+    border-radius: 25px;
+    padding: 0.5em 1em;
+    font-size: 0.75rem;
+    background-color: var(
+      --storeknox-inventory-details-header-indicator-chip-bg-color
+    );
   }
 }

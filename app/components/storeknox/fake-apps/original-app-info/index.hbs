@@ -48,6 +48,8 @@
         {{/if}}
       </AkStack>
 
+      <AkDivider @color='dark' @width='full' />
+
       <AkStack
         @direction='row'
         @alignItems='center'
@@ -69,7 +71,6 @@
           href={{@skInventoryApp.appMetadata.url}}
           target='_blank'
           rel='noopener noreferrer'
-          class='mt-1'
           {{style justifyContent='flex-start'}}
         >
           <AkTypography
@@ -80,6 +81,8 @@
           </AkTypography>
         </AkButton>
       </AkStack>
+
+      <AkDivider @color='dark' @width='full' />
 
       <AkStack
         @direction='row'
@@ -105,6 +108,8 @@
         </AkTypography>
       </AkStack>
 
+      <AkDivider @color='dark' @width='full' />
+
       <AkStack
         @direction='row'
         @alignItems='center'
@@ -122,7 +127,16 @@
           @platform={{if @skInventoryApp.isAndroid 'android' 'apple'}}
           data-test-storeknoxFakeAppsOriginalAppInfo-platformIcon
         />
+
+        <AkTypography
+          @fontWeight='medium'
+          data-test-storeknoxFakeAppsOriginalAppInfo-platformName
+        >
+          {{if @skInventoryApp.isAndroid (t 'android') (t 'ios')}}
+        </AkTypography>
       </AkStack>
+
+      <AkDivider @color='dark' @width='full' />
 
       <AkStack
         @direction='row'
@@ -142,14 +156,26 @@
             {{style width='16px'}}
             data-test-storeknoxFakeAppsOriginalAppInfo-playStoreLogo
           />
-
         {{else}}
           <AkSvg::AppstoreLogo
             {{style width='16px'}}
             data-test-storeknoxFakeAppsOriginalAppInfo-appStoreLogo
           />
         {{/if}}
+
+        <AkTypography
+          @fontWeight='medium'
+          data-test-storeknoxFakeAppsOriginalAppInfo-storeName
+        >
+          {{if
+            @skInventoryApp.isAndroid
+            (t 'storeknox.playStore')
+            (t 'storeknox.appStore')
+          }}
+        </AkTypography>
       </AkStack>
+
+      <AkDivider @color='dark' @width='full' />
 
       <AkStack
         @direction='row'
@@ -171,6 +197,8 @@
           {{@skInventoryApp.appMetadata.devName}}
         </AkTypography>
       </AkStack>
+
+      <AkDivider @color='dark' @width='full' />
 
       <AkStack
         @direction='row'

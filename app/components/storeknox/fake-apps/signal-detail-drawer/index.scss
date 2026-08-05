@@ -1,0 +1,26 @@
+.drawer-content {
+  height: inherit;
+  min-height: fit-content;
+  width: 620px;
+  border: 1px solid var(--storeknox-fake-apps-signal-detail-drawer-content-border-color);
+  margin: 1.214em 1.57em;
+  padding: 1.428em;
+}
+
+.drawer-label {
+  min-width: 90px;
+}
+
+.result {
+  &.result-high {
+    color: var(--storeknox-fake-apps-signal-detail-drawer-result-high-color);
+  }
+
+  &.result-medium {
+    color: var(--storeknox-fake-apps-signal-detail-drawer-result-medium-color);
+  }
+
+  &.result-low {
+    color: var(--storeknox-fake-apps-signal-detail-drawer-result-low-color);
+  }
+}
