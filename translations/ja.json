@@ -77,6 +77,8 @@
   "allScans": "全診断",
   "allUploads": "全アップロード",
   "allowEdit": "Allow Edit",
+  "allowEditAnalysisForMembers": "メンバーによる解析編集を許可する",
+  "allowEditAnalysisForMembersChanged": "メンバーの解析編集設定を更新しました",
   "alreadyHaveAccount": "すでにアカウントをお持ちですか？",
   "amountPaid": "支払い金額",
   "analysisPageTitle": "Analysis",
@@ -555,6 +557,7 @@
   "editTeamName": "Edit Team Name",
   "editTeamNameInputLabel": "Here you can edit the team name",
   "editAnalysis": "Edit Analysis",
+  "editAnalysisForMembersDescription": "メンバーが脆弱性解析のリスクレベルの編集をリクエストできるようにします（管理者のレビューと承認が必要）。",
   "editAnalyses": "Edit Analyses",
   "editAnalysisRequest": {
     "successTitle": "リクエストの送信完了",
@@ -1366,6 +1369,7 @@
       },
       "nf-public-api-user-updated": "User <strong>{type}</strong> for <strong>{user_email}</strong> changed from <strong>{current}</strong> to <strong>{updated}</strong> by <strong>{changed_by}</strong>.",
       "nf-jira-push-err": "ファイル<strong>{file_id}</strong>（{package_name}）のJiraへのプッシュが<strong>失敗</strong>しました。Jira連携の設定をご確認ください。",
+      "nf-ovrreq-approved": "<strong>{reviewer_email}</strong>が<strong>{requester_email}</strong>による脆弱性のオーバーライドリクエストを承認しました。",
       "nf-ovrreq-approved-reqstr": "<strong>{reviewer_email}</strong>が脆弱性のオーバーライドリクエストを承認しました。",
       "nf-ovrreq-raised": "<strong>{requester_email}</strong>が脆弱性のオーバーライドリクエストを送信しました。",
       "nf-ovrreq-rejected": "<strong>{reviewer_email}</strong>が次の脆弱性のオーバーライドリクエストを拒否しました："

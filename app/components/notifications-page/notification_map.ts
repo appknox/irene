@@ -37,6 +37,7 @@ import { NfAutomatedDastPartiallyCompletedContext } from './messages/nf-automate
 import { NfSkSubexpContext } from './messages/nf-sk-subexp/context';
 import { NfPublicApiUserUpdatedContext } from './messages/nf-public-api-user-updated/context';
 import { NfJiraPushErrContext } from './messages/nf-jira-push-err/context';
+import { NfOvrreqApprovedContext } from './messages/nf-ovrreq-approved/context';
 import { NfOvrreqApprovedReqstrContext } from './messages/nf-ovrreq-approved-reqstr/context';
 import { NfOvrreqRaisedContext } from './messages/nf-ovrreq-raised/context';
 import { NfOvrreqRejectedContext } from './messages/nf-ovrreq-rejected/context';
@@ -207,9 +208,12 @@ export const NotificationMap = {
     component: 'notifications-page/messages/nf-jira-push-err' as const,
     context: NfJiraPushErrContext,
   },
+  NF_OVRREQ_APPROVED: {
+    component: 'notifications-page/messages/nf-ovrreq-approved' as const,
+    context: NfOvrreqApprovedContext,
+  },
   NF_OVRREQ_APPROVED_REQSTR: {
-    component:
-      'notifications-page/messages/nf-ovrreq-approved-reqstr' as const,
+    component: 'notifications-page/messages/nf-ovrreq-approved-reqstr' as const,
     context: NfOvrreqApprovedReqstrContext,
   },
   NF_OVRREQ_RAISED: {

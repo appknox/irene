@@ -1,5 +1,9 @@
 <div local-class='org-settings-container'>
   {{#if this.me.org.is_owner}}
+    <Organization::EditAnalysis @organization={{@model.organization}} />
+
+    <AkDivider class='my-3' @color='dark' />
+
     <RegulatoryPreferenceOrganization />
 
     <AkDivider class='my-3' @color='dark' />

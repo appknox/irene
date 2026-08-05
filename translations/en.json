@@ -77,6 +77,8 @@
   "allScans": "All Scans",
   "allUploads": "All Uploads",
   "allowEdit": "Allow Edit",
+  "allowEditAnalysisForMembers": "Allow Edit Analysis for members",
+  "allowEditAnalysisForMembersChanged": "Edit Analysis for members setting updated",
   "alreadyHaveAccount": "Already have an account?",
   "amountPaid": "AMOUNT PAID",
   "analysisPageTitle": "Analysis",
@@ -555,6 +557,7 @@
   "editTeamName": "Edit Team Name",
   "editTeamNameInputLabel": "Here you can edit the team name",
   "editAnalysis": "Edit Analysis",
+  "editAnalysisForMembersDescription": "Enables members to request edits to vulnerability analysis risk levels, subject to admin review and approval.",
   "editAnalyses": "Edit Analyses",
   "editAnalysisRequest": {
     "successTitle": "Successful Raise Request",
@@ -1366,6 +1369,7 @@
       },
       "nf-public-api-user-updated": "User <strong>{type}</strong> for <strong>{user_email}</strong> changed from <strong>{current}</strong> to <strong>{updated}</strong> by <strong>{changed_by}</strong>.",
       "nf-jira-push-err": "Jira push <strong>failed</strong> for file <strong>{file_id}</strong> ({package_name}). Please check your Jira integration configuration.",
+      "nf-ovrreq-approved": "<strong>{reviewer_email}</strong> has approved the vulnerability override request raised by <strong>{requester_email}</strong>.",
       "nf-ovrreq-approved-reqstr": "<strong>{reviewer_email}</strong> has approved the vulnerability override request.",
       "nf-ovrreq-raised": "<strong>{requester_email}</strong> has sent an edit request to override a vulnerability.",
       "nf-ovrreq-rejected": "<strong>{reviewer_email}</strong> has rejected the vulnerability override request for"

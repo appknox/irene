@@ -5,6 +5,7 @@ import IntlService from 'ember-intl/services/intl';
 import ENUMS from 'irene/enums';
 import { analysisRiskStatus } from 'irene/helpers/analysis-risk-status';
 import type MeService from 'irene/services/me';
+import type OrganizationService from 'irene/services/organization';
 
 export interface AnalysisRiskTagSignature {
   Element: HTMLElement;
@@ -24,10 +25,18 @@ export interface AnalysisRiskTagSignature {
 export default class AnalysisRiskTagComponent extends Component<AnalysisRiskTagSignature> {
   @service declare intl: IntlService;
   @service declare me: MeService;
+  @service declare organization: OrganizationService;
+
+  get memberOverrideRequestFeature() {
+    return this.organization.selected?.features?.member_override_request;
+  }
 
   get showPendingApprovalIcon() {
     return (
-      this.me.org?.is_member && this.args.isPending && !this.args.isOverridden
+      this.me.org?.is_member &&
+      !!this.memberOverrideRequestFeature &&
+      this.args.isPending &&
+      !this.args.isOverridden
     );
   }
 
