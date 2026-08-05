@@ -62,60 +62,28 @@
     {{/each}}
   </AkStack>
 
-  <AkStack
-    @direction='column'
-    @width='full'
-    local-class='scan-modal-section'
-    data-test-fileDetails-dynamicScanDrawer-automatedDast-projectScenariosContainer
-  >
-    <AkTypography
-      @tag='header'
-      @fontWeight='bold'
-      class='px-3'
-      data-test-fileDetails-dynamicScanDrawer-automatedDast-projectScenariosTitle
-    >
-      {{t 'modalCard.dynamicScan.activeScenarios'}}
-    </AkTypography>
+  {{#if this.showScanParameterGroups}}
+    <FileDetails::DynamicScan::Action::Drawer::AutomatedDast::ScenarioSection
+      @title={{t 'modalCard.dynamicScan.activeScenarios'}}
+      @projectId={{this.projectId}}
+      @scenarios={{this.activeScanParameterGroupList}}
+      @isLoading={{this.fetchScanParameterGroups.isRunning}}
+      @isEmpty={{this.showEmptyScanParameterGroupListUI}}
+      data-test-fileDetails-dynamicScanDrawer-automatedDast-projectScenariosContainer
+    />
+  {{/if}}
 
-    <AkStack @direction='column' @width='full'>
-      {{#if this.fetchProjectScenarios.isRunning}}
-        <FileDetails::DynamicScan::Action::Drawer::AutomatedDast::Loading />
-
-      {{else if this.showEmptyScenarioListUI}}
-        <FileDetails::DynamicScan::Action::Drawer::AutomatedDast::EmptyListState
-          @headerText={{t
-            'modalCard.dynamicScan.emptyActiveScenariosHeaderText'
-          }}
-          @subText={{t 'modalCard.dynamicScan.emptyActiveScenariosSubText'}}
-          @projectId={{this.projectId}}
-          @link='authenticated.dashboard.project.settings.dast-automation'
-          @linkText={{t 'modalCard.dynamicScan.goToDastAutomationSettings'}}
-          data-test-fileDetails-dynamicScanDrawer-automatedDast-scenariosEmptyContainer
-        />
-
-      {{else}}
-        {{#each this.activeScenarioList as |scenario idx|}}
-          <AkStack
-            class='px-3 {{if (eq idx 0) "py-2" "pb-2"}}'
-            @spacing='1'
-            @alignItems='center'
-            data-test-fileDetails-dynamicScanDrawer-automatedDast-projectScenario={{scenario.id}}
-          >
-            <AkIcon
-              @iconName='done'
-              @size='small'
-              @color='success'
-              data-test-fileDetails-dynamicScanDrawer-automatedDast-projectScenarioIcon
-            />
-
-            <AkTypography>
-              {{scenario.name}}
-            </AkTypography>
-          </AkStack>
-        {{/each}}
-      {{/if}}
-    </AkStack>
-  </AkStack>
+  {{#if this.showV2Scenarios}}
+    <FileDetails::DynamicScan::Action::Drawer::AutomatedDast::ScenarioSection
+      @title={{t 'dastAutomation.automationScenarios'}}
+      @projectId={{this.projectId}}
+      @scenarios={{this.activeScenarioList}}
+      @isLoading={{this.fetchProjectScenarios.isRunning}}
+      @isEmpty={{this.showEmptyScenarioListUI}}
+      @showSuperUserLabel={{this.showSuperUserV2Label}}
+      data-test-fileDetails-dynamicScanDrawer-automatedDast-projectScenariosV2Container
+    />
+  {{/if}}
 
   {{#if this.apiProxyIsEnabled}}
     <AkStack

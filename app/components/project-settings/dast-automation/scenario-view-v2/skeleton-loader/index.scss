@@ -1,0 +1,59 @@
+.header {
+  background: var(
+    --project-settings-dast-automation-scenario-view-v2-header-background
+  );
+
+  border: 1px solid
+    var(--project-settings-dast-automation-scenario-view-v2-header-border-color);
+
+  border-radius: var(
+    --project-settings-dast-automation-scenario-view-v2-border-radius
+  );
+}
+
+.steps-table-root {
+  background: var(
+    --project-settings-dast-automation-scenario-view-v2-steps-table-root-background
+  );
+
+  border: 1px solid
+    var(
+      --project-settings-dast-automation-scenario-view-v2-steps-table-root-border-color
+    );
+
+  box-shadow: var(
+    --project-settings-dast-automation-scenario-view-v2-steps-table-root-box-shadow
+  );
+}
+
+.steps-table {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5em;
+  width: 100%;
+}
+
+.steps-table-header,
+.steps-table-row {
+  display: grid;
+  grid-template-columns: 24px 60px 200px 260px 260px;
+  align-items: center;
+  column-gap: 0.85em;
+  padding: 0.43em 0;
+}
+
+.steps-table-header {
+  border-bottom: 1px solid
+    var(--project-settings-dast-automation-scenario-view-v2-header-border-color);
+}
+
+.footer {
+  border: 1px solid
+    var(--project-settings-dast-automation-scenario-view-v2-header-border-color);
+  background: var(
+    --project-settings-dast-automation-scenario-view-v2-steps-table-root-background
+  );
+  box-shadow: var(
+    --project-settings-dast-automation-scenario-view-v2-steps-table-root-box-shadow
+  );
+}

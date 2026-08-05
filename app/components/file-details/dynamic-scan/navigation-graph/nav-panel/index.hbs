@@ -1,0 +1,139 @@
+<nav
+  data-test-fileDetails-dynamicScan-navigationGraph-toolbar
+  local-class='floating-toolbar'
+  aria-label={{t 'navigationGraph.graphControls'}}
+  ...attributes
+>
+  <AkStack
+    @alignItems='center'
+    @justifyContent='space-between'
+    local-class='floating-toolbar-brand'
+  >
+    <AkTypography @variant='h5'>
+      {{t 'navigationGraph.title'}}
+    </AkTypography>
+
+    <AkTypography @variant='body2' @color='textSecondary'>
+      {{@variantCount}}
+      {{t 'navigationGraph.variants'}}
+      ·
+      {{@transitionCount}}
+      {{t 'navigationGraph.transitions'}}
+    </AkTypography>
+  </AkStack>
+
+  <AkStack @alignItems='center' @spacing='1'>
+    <AkTypography @variant='body2' @color='textSecondary' @noWrap={{true}}>
+      {{t 'navigationGraph.arrangeAs'}}
+    </AkTypography>
+
+    <AkSelect
+      data-test-fileDetails-dynamicScan-navigationGraph-layoutSelect
+      @options={{this.layoutOptions}}
+      @selected={{this.selectedLayoutOption}}
+      @onChange={{this.handleLayoutChange}}
+      @disabled={{not @hasGraphData}}
+      local-class='layout-select'
+      as |aks|
+    >
+      {{aks.label}}
+    </AkSelect>
+
+    {{#if this.loadUserRoleOptions.isRunning}}
+      <AkStack
+        @alignItems='center'
+        @spacing='1'
+        class='ml-2'
+        data-test-fileDetails-dynamicScan-navigationGraph-userRoleSkeleton
+      >
+        <AkSkeleton @width='54px' @height='18px' />
+
+        <AkSkeleton @width='235px' @height='32px' />
+      </AkStack>
+    {{else if this.hasMultipleUserRoles}}
+      <AkTypography
+        @variant='body2'
+        @color='textSecondary'
+        @noWrap={{true}}
+        class='ml-2'
+      >
+        {{t 'navigationGraph.viewing'}}
+      </AkTypography>
+
+      <AkSelect
+        data-test-fileDetails-dynamicScan-navigationGraph-userRoleSelect
+        @options={{this.userRoleOptions}}
+        @selected={{this.selectedUserRoleOption}}
+        @onChange={{this.handleUserRoleChange}}
+        @placeholder={{t 'navigationGraph.selectRole'}}
+        local-class='role-select'
+        as |aks|
+      >
+        {{#if aks.disabled}}
+          <AkTooltip
+            @arrow={{true}}
+            @title={{or aks.disabledReason ''}}
+            @renderInPlace={{true}}
+            {{style width='100%'}}
+          >
+            <span local-class='role-option role-option-disabled'>
+              <span local-class='role-label-full'>{{aks.label}}</span>
+
+              <span local-class='role-label-truncated'>
+                {{aks.truncatedLabel}}
+              </span>
+            </span>
+          </AkTooltip>
+        {{else}}
+          <span local-class='role-option'>
+            <span local-class='role-label-full'>{{aks.label}}</span>
+
+            <span local-class='role-label-truncated'>
+              {{aks.truncatedLabel}}
+            </span>
+          </span>
+        {{/if}}
+      </AkSelect>
+    {{/if}}
+  </AkStack>
+
+  <AkDivider
+    @color='dark'
+    {{style marginTop='1.1429em' marginBottom='1.1429em'}}
+    data-test-fileDetails-dynamicScan-navigationGraph-toolbarDivider
+  />
+
+  <AkStack @alignItems='center' @spacing='2.5' role='note'>
+    <AkStack @alignItems='center' @spacing='0.5'>
+      <kbd local-class='hint-kbd'>{{t 'navigationGraph.click'}}</kbd>
+
+      <AkTypography @variant='body2' @color='textSecondary'>
+        {{t 'navigationGraph.detail'}}
+      </AkTypography>
+    </AkStack>
+
+    <AkStack @alignItems='center' @spacing='0.5'>
+      <kbd local-class='hint-kbd'>{{t 'navigationGraph.doubleClick'}}</kbd>
+
+      <AkTypography @variant='body2' @color='textSecondary'>
+        {{t 'navigationGraph.focus'}}
+      </AkTypography>
+    </AkStack>
+
+    <AkStack @alignItems='center' @spacing='0.5'>
+      <kbd local-class='hint-kbd'>{{t 'navigationGraph.esc'}}</kbd>
+
+      <AkTypography @variant='body2' @color='textSecondary'>
+        {{t 'close'}}
+      </AkTypography>
+    </AkStack>
+
+    <AkStack @alignItems='center' @spacing='0.5'>
+      <kbd local-class='hint-kbd'>{{t 'navigationGraph.ctrlZ'}}</kbd>
+
+      <AkTypography @variant='body2' @color='textSecondary'>
+        {{t 'reset'}}
+      </AkTypography>
+    </AkStack>
+  </AkStack>
+</nav>

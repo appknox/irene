@@ -1,0 +1,22 @@
+.view-scenario-header-root {
+  background-color: var(
+    --project-settings-dast-automation-scenario-view-header-background
+  );
+
+  border: 1px solid
+    var(--project-settings-dast-automation-scenario-view-header-border-color);
+
+  border-radius: var(
+    --project-settings-dast-automation-scenario-view-header-border-radius
+  );
+
+  box-shadow: var(
+    --project-settings-dast-automation-scenario-view-header-box-shadow
+  );
+}
+
+.scenario-delete-footer-container {
+  box-shadow: var(
+    --project-settings-dast-automation-scenario-view-header-footer-box-shadow
+  );
+}

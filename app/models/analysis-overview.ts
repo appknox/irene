@@ -24,6 +24,9 @@ export default class AnalysisOverviewModel extends Model {
   @attr('number')
   declare exploitabilityLikelihood: number;
 
+  @attr('boolean')
+  declare isKnoxiqAllFp: boolean;
+
   @attr('number', { defaultValue: null })
   declare overriddenRisk: number | null;
 

@@ -6,7 +6,7 @@
 >
   <:statusChip>
     <FileDetails::DynamicScan::StatusChip
-      @status={{this.dynamicScan.computedStatus}}
+      @status={{this.cumulativeScanStatus}}
       @statusText={{this.dynamicScan.statusText}}
     />
   </:statusChip>
@@ -16,17 +16,13 @@
       @file={{@file}}
       @dynamicScanText={{t 'modalCard.dynamicScan.title'}}
       @onScanShutdown={{fn this.handleScanShutdown dw.closeFullscreen}}
-      @dynamicScan={{this.dynamicScan}}
+      @dynamicScans={{this.dynamicScans}}
       @openActionDrawer={{dw.openActionDrawer}}
     />
   </:actionButton>
 
   <:actionDrawer as |dw|>
-    <DsPreferenceProvider
-      @profileId={{this.profileId}}
-      @file={{@file}}
-      as |dpContext|
-    >
+    <DsPreferenceProvider @profileId={{this.profileId}} as |dpContext|>
       <FileDetails::DynamicScan::Action::Drawer
         @onClose={{dw.closeActionDrawer}}
         @file={{@file}}
@@ -37,21 +33,23 @@
   </:actionDrawer>
 
   <:default as |dw|>
-    <VncViewer
-      @file={{@file}}
-      @profileId={{@profileId}}
-      @dynamicScan={{this.dynamicScan}}
-    >
-      <:controls>
-        {{#if dw.isFullscreen}}
-          <FileDetails::DynamicScan::Action
-            @file={{@file}}
-            @dynamicScanText={{t 'modalCard.dynamicScan.title'}}
-            @onScanShutdown={{fn this.handleScanShutdown dw.closeFullscreen}}
-            @dynamicScan={{this.dynamicScan}}
-          />
-        {{/if}}
-      </:controls>
-    </VncViewer>
+    <AkStack @width='full' @justifyContent='center' @spacing='2' class='p-4'>
+      <VncViewer
+        @file={{@file}}
+        @profileId={{@profileId}}
+        @dynamicScan={{this.dynamicScan}}
+      >
+        <:controls>
+          {{#if dw.isFullscreen}}
+            <FileDetails::DynamicScan::Action
+              @file={{@file}}
+              @dynamicScanText={{t 'modalCard.dynamicScan.title'}}
+              @onScanShutdown={{fn this.handleScanShutdown dw.closeFullscreen}}
+              @dynamicScans={{this.dynamicScans}}
+            />
+          {{/if}}
+        </:controls>
+      </VncViewer>
+    </AkStack>
   </:default>
 </FileDetails::DynamicScan::DeviceWrapper>

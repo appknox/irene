@@ -1,0 +1,11 @@
+.generate-container {
+  width: 100%;
+  border: 1px solid var(--store-release-readiness-report-dr-border-color);
+  border-radius: var(--store-release-readiness-report-dr-border-radius);
+  padding: 1.5em;
+}
+
+.report-item-root {
+  flex-direction: column;
+  gap: 1em;
+}

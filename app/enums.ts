@@ -68,11 +68,18 @@ const ENUMS = {
     ERROR: 24,
     CANCELLED: 25,
     TERMINATED: 26,
+    RETRYING: 27,
   },
 
   DYNAMIC_MODE: {
     MANUAL: 0,
     AUTOMATED: 1,
+  },
+
+  DYNAMIC_SCAN_ENGINE: {
+    USER_MANUAL: 0,
+    AUTOPILOT: 1,
+    INTERNAL_MANUAL: 2,
   },
 
   MANUAL: {
@@ -507,7 +514,7 @@ const ENUMS = {
   },
 
   KNOXIQ_EXPLOITABILITY: {
-    UNKNOWN: 0,
+    EXP_UNKNOWN: 0,
     PASSED: 1,
     LOW: 2,
     MEDIUM: 3,
@@ -529,6 +536,33 @@ const ENUMS = {
     DAST_MANUAL: 2,
     DAST_AUTOMATED: 3,
     API: 4,
+  },
+
+  STORE_RELEASE_SCAN_STATUS: {
+    NOT_STARTED: 0,
+    IN_PROGRESS: 1,
+    PARTIAL: 2,
+    COMPLETED: 3,
+    FAILED: 4,
+  },
+
+  STORE_RELEASE_VERDICT: {
+    HIGH_REJECTION_RISK: 0,
+    MODERATE_REJECTION_RISK: 1,
+    LOW_REJECTION_RISK: 2,
+  },
+
+  STORE_RELEASE_FINDING_SEVERITY: {
+    BLOCKER: 0,
+    WARNING: 1,
+  },
+
+  STORE_RELEASE_REPORT_STATUS: {
+    PENDING: 1,
+    STARTED: 2,
+    IN_PROGRESS: 3,
+    COMPLETED: 4,
+    FAILED: 5,
   },
 };
 

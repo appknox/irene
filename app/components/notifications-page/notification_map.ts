@@ -33,6 +33,7 @@ import { NfSystmFileUploadSuccessContext } from './messages/nf-systm-file-upload
 import { NfAutomatedDastCompletedContext } from './messages/nf-automated-dast-completed/context';
 import { NfAutomatedDastErroredContext } from './messages/nf-automated-dast-errored/context';
 import { NfAutomatedDastInProgressContext } from './messages/nf-automated-dast-in-progress/context';
+import { NfAutomatedDastPartiallyCompletedContext } from './messages/nf-automated-dast-partially-completed/context';
 import { NfSkSubexpContext } from './messages/nf-sk-subexp/context';
 import { NfPublicApiUserUpdatedContext } from './messages/nf-public-api-user-updated/context';
 import { NfJiraPushErrContext } from './messages/nf-jira-push-err/context';
@@ -183,6 +184,11 @@ export const NotificationMap = {
   NF_AUTOMATED_DAST_ERRORED: {
     component: 'notifications-page/messages/nf-automated-dast-errored' as const,
     context: NfAutomatedDastErroredContext,
+  },
+  NF_AUTOMATED_DAST_PARTIALLY_COMPLETED: {
+    component:
+      'notifications-page/messages/nf-automated-dast-partially-completed' as const,
+    context: NfAutomatedDastPartiallyCompletedContext,
   },
   NF_AUTOMATED_DAST_IN_PROGRESS: {
     component:

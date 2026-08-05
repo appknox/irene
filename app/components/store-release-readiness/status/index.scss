@@ -1,0 +1,13 @@
+.text-width {
+  width: 500px;
+}
+
+.status-wrapper {
+  background-color: var(--store-release-readiness-status-bg-color);
+  width: 100%;
+}
+
+.status-wrapper-transparent {
+  background-color: transparent;
+  width: 100%;
+}

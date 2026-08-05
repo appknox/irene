@@ -1,0 +1,19 @@
+.scan-window-time-input {
+  width: 120px;
+  height: 35px;
+  box-sizing: border-box;
+
+  &::-webkit-calendar-picker-indicator {
+    display: none;
+    -webkit-appearance: none;
+    opacity: 0;
+    pointer-events: none;
+    width: 0;
+  }
+}
+
+.scan-window-divider {
+  border-color: var(
+    --project-settings-dast-automation-automation-settings-scan-window-time-range-divider-border-color
+  ) !important;
+}

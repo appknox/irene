@@ -223,7 +223,7 @@ module(
       assert
         .dom('[data-test-privacyReport-reportSecondaryText]', reportList[0])
         .hasText(
-          t('privacyModule.downloadPdfSecondaryText', {
+          t('reportPasswordDetail', {
             password: privacyReport.report_password,
           })
         );
@@ -381,7 +381,7 @@ module(
       assert
         .dom('[data-test-privacyReport-reportSecondaryText]', reportList[0])
         .hasText(
-          t('privacyModule.downloadPdfSecondaryText', {
+          t('reportPasswordDetail', {
             password: privacyReport.report_password,
           })
         );
@@ -427,7 +427,7 @@ module(
       assert
         .dom('[data-test-privacyReport-reportSecondaryText]', reportList[0])
         .hasText(
-          t('privacyModule.downloadPdfSecondaryText', {
+          t('reportPasswordDetail', {
             password: privacyReport.report_password,
           })
         );

@@ -1,0 +1,179 @@
+<div
+  local-class='summary-status-list'
+  data-test-store-release-readiness-summary-status-list
+>
+  <div
+    local-class='status-section'
+    data-test-store-release-readiness-summary-failed-section
+  >
+    <AkStack
+      @direction='row'
+      @justifyContent='space-between'
+      @alignItems='center'
+      @width='full'
+      local-class='status-row'
+      data-test-store-release-readiness-summary-failed-row
+    >
+      <AkStack @direction='row' @alignItems='center' @spacing='0.5'>
+        <span local-class='status-dot status-dot-failed' aria-hidden='true'>
+        </span>
+
+        <AkTypography @variant='body2' @fontWeight='bold'>
+          {{t 'failed'}}
+        </AkTypography>
+      </AkStack>
+
+      <AkTypography @variant='body2' @fontWeight='bold'>
+        {{@failed}}
+      </AkTypography>
+    </AkStack>
+
+    <AkStack
+      @direction='row'
+      @justifyContent='space-between'
+      @alignItems='center'
+      @width='full'
+      local-class='status-row status-row-nested'
+      data-test-store-release-readiness-summary-blocker-row
+    >
+      <AkStack @direction='row' @alignItems='center' @spacing='0.5'>
+        <AkIcon @iconName='block' @color='error' @size='small' />
+
+        <AkTypography @variant='body2' @color='textSecondary'>
+          {{t 'storeReleaseReadiness.summaryBlocker'}}
+        </AkTypography>
+      </AkStack>
+
+      <AkTypography @variant='body2' @color='textSecondary'>
+        {{@blocker}}
+      </AkTypography>
+    </AkStack>
+
+    <AkStack
+      @direction='row'
+      @justifyContent='space-between'
+      @alignItems='center'
+      @width='full'
+      local-class='status-row status-row-nested'
+      data-test-store-release-readiness-summary-warning-row
+    >
+      <AkStack @direction='row' @alignItems='center' @spacing='0.5'>
+        <AkIcon @iconName='warning' @color='error' @size='small' />
+
+        <AkTypography @variant='body2' @color='textSecondary'>
+          {{t 'storeReleaseReadiness.summaryWarning'}}
+        </AkTypography>
+      </AkStack>
+
+      <AkTypography @variant='body2' @color='textSecondary'>
+        {{@warning}}
+      </AkTypography>
+    </AkStack>
+  </div>
+
+  <AkDivider
+    @color='dark'
+    local-class='status-divider'
+    data-test-store-release-readiness-summary-divider-after-failed
+  />
+
+  <AkStack
+    @direction='row'
+    @justifyContent='space-between'
+    @alignItems='center'
+    @width='full'
+    local-class='status-row'
+    data-test-store-release-readiness-summary-passed-row
+  >
+    <AkStack @direction='row' @alignItems='center' @spacing='0.5'>
+      <span local-class='status-dot status-dot-passed' aria-hidden='true'>
+      </span>
+
+      <AkTypography @variant='body2' @fontWeight='bold'>
+        {{t 'passed'}}
+      </AkTypography>
+    </AkStack>
+
+    {{#if this.passedValueLoading}}
+      <AkLoader
+        @size={{16}}
+        @color='error'
+        data-test-store-release-readiness-summary-passed-loader
+      />
+    {{else}}
+      <AkStack @direction='row' @alignItems='center' @spacing='0.5'>
+        {{#if this.isOverridden}}
+          <AkTooltip
+            @arrow={{true}}
+            @placement='bottom'
+            data-test-store-release-readiness-summary-passed-override-tooltip
+          >
+            <:tooltipContent>
+              <AkStack
+                @direction='column'
+                local-class='override-tooltip-content'
+                data-test-store-release-readiness-summary-passed-override-tooltipContent
+              >
+                <AkTypography @color='inherit' @variant='body2'>
+                  {{t
+                    'storeReleaseReadiness.summaryOverrideMessage'
+                    overriddenCount=this.overriddenCount
+                  }}
+                </AkTypography>
+              </AkStack>
+            </:tooltipContent>
+
+            <:default>
+              <AkIcon
+                @iconName='border-color-outline'
+                @color='secondary'
+                @size='small'
+                data-test-store-release-readiness-summary-passed-override-icon
+              />
+            </:default>
+          </AkTooltip>
+        {{/if}}
+
+        <AkTypography @variant='body2' @fontWeight='bold'>
+          {{@passed}}
+        </AkTypography>
+      </AkStack>
+    {{/if}}
+  </AkStack>
+
+  <AkDivider
+    @color='dark'
+    local-class='status-divider'
+    data-test-store-release-readiness-summary-divider-after-passed
+  />
+
+  <AkStack
+    @direction='row'
+    @justifyContent='space-between'
+    @alignItems='center'
+    @width='full'
+    local-class='status-row'
+    data-test-store-release-readiness-summary-untested-row
+  >
+    <AkStack @direction='row' @alignItems='center' @spacing='0.5'>
+      <span local-class='status-dot status-dot-untested' aria-hidden='true'>
+      </span>
+
+      <AkTypography @variant='body2' @fontWeight='bold'>
+        {{t 'untested'}}
+      </AkTypography>
+    </AkStack>
+
+    {{#if this.untestedValueLoading}}
+      <AkLoader
+        @size={{16}}
+        @color='error'
+        data-test-store-release-readiness-summary-untested-loader
+      />
+    {{else}}
+      <AkTypography @variant='body2' @fontWeight='bold'>
+        {{@untested}}
+      </AkTypography>
+    {{/if}}
+  </AkStack>
+</div>

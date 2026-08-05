@@ -30,6 +30,10 @@ class WindowStub extends Service {
   }
 }
 
+class OrganizationStub extends Service {
+  enableLegacyCvssReports = false;
+}
+
 module(
   'Integration | Component | security/analysis-report-btn',
   function (hooks) {
@@ -41,6 +45,7 @@ module(
       // Services
       this.owner.register('service:browser/window', WindowStub);
       this.owner.register('service:notifications', NotificationsStub);
+      this.owner.register('service:organization', OrganizationStub);
 
       const window = this.owner.lookup('service:browser/window');
       const store = this.owner.lookup('service:store');
@@ -236,5 +241,117 @@ module(
         }
       }
     );
+
+    // ─── Legacy CVSS toggle ─────────────────────────────────────────────────
+
+    // Selectors used by the legacy-cvss-toggle tests below.
+    const legacyCvss = {
+      row: '[data-test-securityAnalysisReportBtn-genReportModal-legacyCvssRow]',
+      toggle:
+        '[data-test-securityAnalysisReportBtn-genReportModal-useLegacyCvssToggle]',
+      toggleInput:
+        '[data-test-securityAnalysisReportBtn-genReportModal-useLegacyCvssToggle] [data-test-toggle-input]',
+      emails:
+        '[data-test-securityAnalysisReportBtn-genReportModal-emailsToSendTextfield]',
+      submit: '[data-test-securityAnalysisReportBtn-genReportModal-submitBtn]',
+      modal: '[data-test-securityAnalysisReportBtn-genReportModal]',
+    };
+
+    test('hides the legacy CVSS toggle when the org feature is disabled', async function (assert) {
+      await render(
+        hbs`<Security::AnalysisReportBtn @file={{this.secFileModel}} />`
+      );
+
+      await click('[data-test-securityAnalysisReportBtn]');
+
+      assert.dom(legacyCvss.row).doesNotExist();
+    });
+
+    test('shows the legacy CVSS toggle with its label when the org feature is enabled', async function (assert) {
+      this.owner.lookup('service:organization').enableLegacyCvssReports = true;
+
+      await render(
+        hbs`<Security::AnalysisReportBtn @file={{this.secFileModel}} />`
+      );
+
+      await click('[data-test-securityAnalysisReportBtn]');
+
+      assert.dom(legacyCvss.row).containsText(t('useLegacyCvss'));
+      assert.dom(legacyCvss.toggleInput).isNotChecked();
+    });
+
+    test('turning on the legacy CVSS toggle sends use_legacy_cvss=true and shows the success screen', async function (assert) {
+      assert.expect(4);
+
+      this.owner.lookup('service:organization').enableLegacyCvssReports = true;
+
+      this.server.put('/hudson-api/reports/:id', (_, req) => {
+        const body = JSON.parse(req.requestBody);
+
+        assert.true(
+          body.use_legacy_cvss,
+          'sends use_legacy_cvss=true in the request body'
+        );
+
+        return new Response(200);
+      });
+
+      await render(
+        hbs`<Security::AnalysisReportBtn @file={{this.secFileModel}} />`
+      );
+
+      await click('[data-test-securityAnalysisReportBtn]');
+
+      // ── Pre-state: toggle unchecked ──────────────────────────────────────
+      assert.dom(legacyCvss.toggleInput).isNotChecked();
+
+      await click(legacyCvss.toggleInput);
+
+      // ── Post-toggle: input is now checked ───────────────────────────────
+      assert.dom(legacyCvss.toggleInput).isChecked();
+
+      await fillIn(legacyCvss.emails, 'user@test.com');
+      await click(legacyCvss.submit);
+
+      // ── Post-submit: success screen rendered ────────────────────────────
+      assert
+        .dom(legacyCvss.modal)
+        .containsText(t('reportGeneratedSuccessfully'));
+    });
+
+    test('leaving the legacy CVSS toggle off omits use_legacy_cvss from the payload', async function (assert) {
+      assert.expect(3);
+
+      const organization = this.owner.lookup('service:organization');
+      organization.enableLegacyCvssReports = true;
+
+      this.server.put('/hudson-api/reports/:id', (_, req) => {
+        const body = JSON.parse(req.requestBody);
+
+        assert.strictEqual(
+          body.use_legacy_cvss,
+          undefined,
+          'use_legacy_cvss is absent from the request body when toggle is off'
+        );
+
+        return new Response(200);
+      });
+
+      await render(
+        hbs`<Security::AnalysisReportBtn @file={{this.secFileModel}} />`
+      );
+
+      await click('[data-test-securityAnalysisReportBtn]');
+
+      // Toggle is available but the user never flips it.
+      assert.dom(legacyCvss.toggleInput).isNotChecked();
+
+      await fillIn(legacyCvss.emails, 'user@test.com');
+      await click(legacyCvss.submit);
+
+      assert
+        .dom(legacyCvss.modal)
+        .containsText(t('reportGeneratedSuccessfully'));
+    });
   }
 );

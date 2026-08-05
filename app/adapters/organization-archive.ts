@@ -21,11 +21,21 @@ export default class OrganizationArchiveAdapter extends commondrf {
     return this.ajax(downloadURL, 'GET');
   }
 
-  async generateLatestScanArchive() {
+  async generateLatestScanArchive(fromDate?: Date, toDate?: Date) {
     const archiveBaseURL = this._buildURL('organization-archive');
     const url = `${archiveBaseURL}/generate_excel_project_latest_scans`;
 
-    return this.ajax(url, 'POST');
+    const data: Record<string, string> = {};
+
+    if (fromDate) {
+      data['from_date'] = fromDate.toISOString();
+    }
+
+    if (toDate) {
+      data['to_date'] = toDate.toISOString();
+    }
+
+    return this.ajax(url, 'POST', { data });
   }
 }
 

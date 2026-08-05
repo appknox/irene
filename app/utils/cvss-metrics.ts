@@ -68,7 +68,7 @@ function buildLabelMap(enumGroup: CvssEnumGroup): Map<string | number, string> {
       continue;
     }
 
-    map.set(value, key.replace(/_/g, ' '));
+    map.set(value, key.replaceAll('_', ' '));
   }
 
   return map;

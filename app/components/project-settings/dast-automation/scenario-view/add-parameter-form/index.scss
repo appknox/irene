@@ -1,0 +1,30 @@
+.scenario-add-form-container {
+  width: 100%;
+  display: grid;
+  grid-template-columns: 260px 260px 80px;
+  column-gap: 2.1428em;
+  align-content: center;
+  min-width: 800px;
+  border: 1px solid
+    var(
+      --project-settings-dast-automation-scenario-view-add-parameter-form-border-color
+    );
+
+  background: var(
+    --project-settings-dast-automation-scenario-view-add-parameter-form-background
+  );
+
+  margin-bottom: 1.4286em;
+
+  .add-parameter-text-field-form-root {
+    background-color: var(
+      --project-settings-dast-automation-scenario-view-add-parameter-form-text-field-background
+    );
+  }
+
+  .tooltip-content {
+    width: 264px;
+    padding: 0.5em;
+    box-sizing: border-box;
+  }
+}

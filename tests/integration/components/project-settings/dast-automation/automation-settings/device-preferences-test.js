@@ -108,7 +108,6 @@ module(
         await render(hbs`
           <DsPreferenceProvider
             @profileId={{this.project.activeProfileId}}
-            @file={{this.project.lastFile}}
             as |dpContext|
           >
             <ProjectSettings::DastAutomation::AutomationSettings::DevicePreferences @project={{this.project}} @dpContext={{dpContext}} />
@@ -206,7 +205,6 @@ module(
       await render(hbs`
         <DsPreferenceProvider
           @profileId={{this.project.activeProfileId}}
-          @file={{this.project.lastFile}}
           as |dpContext|
         >
           <ProjectSettings::DastAutomation::AutomationSettings::DevicePreferences @project={{this.project}} @dpContext={{dpContext}} />
@@ -305,7 +303,6 @@ module(
       await render(hbs`
         <DsPreferenceProvider
           @profileId={{this.project.activeProfileId}}
-          @file={{this.project.lastFile}}
           as |dpContext|
         >
           <ProjectSettings::DastAutomation::AutomationSettings::DevicePreferences @project={{this.project}} @dpContext={{dpContext}} />

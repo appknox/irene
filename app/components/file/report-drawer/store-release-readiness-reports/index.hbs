@@ -1,0 +1,53 @@
+<AkStack
+  @direction='column'
+  @tag='section'
+  @justifyContent='center'
+  @width='full'
+  class='p-0'
+  data-test-fileReportDrawer-storeReleaseReadinessReports-root
+>
+  {{#if this.reportNotAvailable}}
+    <AkStack
+      @direction='column'
+      @alignItems='center'
+      @width='full'
+      @spacing='0.5'
+      class='p-4'
+    >
+      <AkSvg::PrivacyUpload />
+
+      <AkTypography @fontWeight='bold' class='mt-1'>
+        {{t 'fileReport.storeReleaseReadinessReportNotAvailableHeading'}}
+      </AkTypography>
+
+      <AkTypography
+        data-test-fileReportDrawer-storeReleaseReadinessReports-emptyText
+      >
+        {{t 'fileReport.storeReleaseReadinessReportNotAvailable'}}
+      </AkTypography>
+    </AkStack>
+  {{else}}
+    {{#if this.fetchReport.isRunning}}
+      <AkStack
+        data-test-fileReportDrawer-storeReleaseReadinessReports-loader
+        class='p-2'
+        @alignItems='center'
+        @justifyContent='center'
+      >
+        <AkLoader @size={{18}} />
+      </AkStack>
+    {{else}}
+      <AkStack
+        @width='full'
+        @direction='column'
+        @spacing='0'
+        data-test-fileReportDrawer-storeReleaseReadinessReports-reportsList
+      >
+        <StoreReleaseReadiness::ScanResults::ReportDrawer::Item
+          @report={{this.report}}
+          @loading={{this.initialLoading}}
+        />
+      </AkStack>
+    {{/if}}
+  {{/if}}
+</AkStack>

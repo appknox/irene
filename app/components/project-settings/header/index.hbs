@@ -1,7 +1,6 @@
 <div local-class='project-settings-header-root'>
   <AkBreadcrumbs::AutoTrail
-    local-class='settings-header-breadcrumbs'
-    class='pt-2'
+    class={{if @isDASTScenarioPage 'py-2' 'pt-2'}}
     data-test-projectSettingsHeader-breadcrumbsContainer
   />
 

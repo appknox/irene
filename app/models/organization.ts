@@ -11,6 +11,7 @@ export interface Features {
   partner_dashboard: boolean;
   sso: boolean;
   sbom: boolean;
+  store_release_readiness: boolean;
   public_apis: boolean;
   storeknox: boolean;
   privacy: boolean;
@@ -22,6 +23,7 @@ export interface AiFeatures {
   reporting: boolean;
   pii: boolean;
   knoxiq: boolean;
+  ai_dast: boolean;
 }
 
 export default class OrganizationModel extends Model {
@@ -36,6 +38,9 @@ export default class OrganizationModel extends Model {
 
   @attr('boolean')
   declare hideUpsellFeatures: boolean;
+
+  @attr('boolean')
+  declare enableLegacyCvssReports: boolean;
 
   @attr('boolean')
   declare isTrial: boolean;

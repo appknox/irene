@@ -35,7 +35,9 @@
   </AkStack>
 
   <AkStack @alignItems='center' @justifyContent='flex-end' @spacing='1'>
-    {{#if @showRunKnoxIq}}
+    {{#if @isErrored}}
+      <KnoxIq::StatusChip @state='failed' />
+    {{else if @showRunKnoxIq}}
       <AkButton
         local-class='run-knoxiq-button'
         {{on 'click' this.handleRunKnoxIq}}
