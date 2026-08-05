@@ -6,53 +6,93 @@
 
 <FileDetails::Summary @file={{@file}} />
 
-<AkTabs local-class='dast-results-sticky-tabs' as |Akt|>
-  {{#each this.tabs as |item|}}
-    <Akt.tabItem
-      data-test-fileDetails-dynamicScan-header='{{item.id}}-tab'
-      data-test-cy='{{item.id}}-tab'
-      @id={{item.id}}
-      @route={{item.route}}
-      @currentWhen={{item.activeRoutes}}
-      @indicatorVariant='shadow'
-      @hasBadge={{this.showTabIcon item}}
-      @badgeBackground={{if item.count true false}}
+<div
+  local-class='tabs-toolbar {{if this.showPoweredByAiChip "tabs-toolbar-with-ai-chip"}}'
+  data-test-fileDetails-dynamicScan-header-tabsRow
+>
+  <AkTabs
+    local-class='sticky-tabs {{if this.showPoweredByAiChip "sticky-tabs-borderless"}}'
+    as |Akt|
+  >
+    {{#each this.tabs as |item|}}
+      <Akt.tabItem
+        data-test-fileDetails-dynamicScan-header='{{item.id}}-tab'
+        data-test-cy='{{item.id}}-tab'
+        @id={{item.id}}
+        @route={{item.route}}
+        @currentWhen={{item.activeRoutes}}
+        @indicatorVariant='shadow'
+        @hasBadge={{this.showTabIcon item}}
+        @badgeBackground={{if item.count true false}}
+      >
+        <:badge>
+          {{#if item.count}}
+            <AkStack @alignItems='center'>
+              <AkIcon @iconName='bug-report' @size='small' />
+
+              <AkTypography
+                data-test-fileDetails-dynamicScan-header-badge-count
+                local-class='tab-badge-count'
+                @color='inherit'
+                @tag='span'
+                @fontWeight='bold'
+              >
+                {{item.count}}
+              </AkTypography>
+            </AkStack>
+          {{/if}}
+
+          {{#if item.inProgress}}
+            <AkLoader
+              data-test-fileDetails-dynamicScan-inProgress-loader
+              @size={{15}}
+              @thickness={{6}}
+            />
+          {{else if item.iconDetails}}
+            <AkIcon
+              @size='small'
+              @iconName={{item.iconDetails.icon}}
+              @color={{if item.isActive item.iconDetails.color 'inherit'}}
+            />
+          {{/if}}
+        </:badge>
+
+        <:default>
+          {{item.label}}
+        </:default>
+      </Akt.tabItem>
+    {{/each}}
+  </AkTabs>
+
+  {{#if this.showPoweredByAiChip}}
+    <PoweredByAi::Chip
+      @clickable={{true}}
+      @variant='filled'
+      @drawerInfo={{this.aiDastDrawerInfo}}
+      local-class='powered-by-ai-chip'
+      data-test-fileDetails-dynamicScan-header-poweredByAiChip
     >
-      <:badge>
-        {{#if item.count}}
-          <AkStack @alignItems='center'>
-            <AkIcon @iconName='bug-report' @size='small' />
+      <:content>
+        <AkStack
+          local-class='powered-by-ai-drawer-intro'
+          data-test-fileDetails-dynamicScan-header-poweredByAiChip-intro
+        >
+          <AkTypography @variant='body2'>
+            {{t 'dastAutomation.aiDrawer.intro' htmlSafe=true}}
+          </AkTypography>
+        </AkStack>
 
-            <AkTypography
-              data-test-fileDetails-dynamicScan-header-badge-count
-              local-class='badge-count-text'
-              @color='inherit'
-              @tag='span'
-              @fontWeight='bold'
-            >
-              {{item.count}}
-            </AkTypography>
-          </AkStack>
-        {{/if}}
+        <AkDivider @color='dark' class='mb-2 mt-1' />
 
-        {{#if item.inProgress}}
-          <AkLoader
-            data-test-fileDetails-dynamicScan-inProgress-loader
-            @size={{15}}
-            @thickness={{6}}
-          />
-        {{else if item.iconDetails}}
-          <AkIcon
-            @size='small'
-            @iconName={{item.iconDetails.icon}}
-            @color={{if item.isActive item.iconDetails.color 'inherit'}}
-          />
-        {{/if}}
-      </:badge>
-
-      <:default>
-        {{item.label}}
-      </:default>
-    </Akt.tabItem>
-  {{/each}}
-</AkTabs>
+        <AkTypography
+          @variant='subtitle2'
+          @fontWeight='bold'
+          @color='textSecondary'
+          data-test-fileDetails-dynamicScan-header-poweredByAiChip-faqTitle
+        >
+          {{t 'dastAutomation.aiDrawer.faqTitle'}}
+        </AkTypography>
+      </:content>
+    </PoweredByAi::Chip>
+  {{/if}}
+</div>

@@ -14,6 +14,7 @@ import type FileModel from 'irene/models/file';
 import type ConfigurationService from 'irene/services/configuration';
 import type DynamicScanService from 'irene/services/dynamic-scan';
 import type OrganizationService from 'irene/services/organization';
+import type { PoweredByAiDrawerInfo } from 'irene/components/powered-by-ai/drawer';
 
 interface TabItem {
   id: string;
@@ -92,6 +93,55 @@ export default class FileDetailsDastHeader extends Component<FileDetailsDastHead
 
   get orgIsAnEnterprise() {
     return this.configuration.serverData.enterprise;
+  }
+
+  get isAiDastEnabled() {
+    return !!this.organization.selected?.aiFeatures?.ai_dast;
+  }
+
+  get isAutomatedDastTabActive() {
+    return (
+      this.currentRoute ===
+      'authenticated.dashboard.file.dynamic-scan.automated'
+    );
+  }
+
+  get showPoweredByAiChip() {
+    return this.isAiDastEnabled && this.isAutomatedDastTabActive;
+  }
+
+  get aiDastDrawerInfo(): PoweredByAiDrawerInfo[] {
+    return [
+      {
+        title: this.intl.t('dastAutomation.aiDrawer.q1Title'),
+        body: this.intl.t('dastAutomation.aiDrawer.q1Body'),
+        marginTop: 'mt-2',
+      },
+      {
+        title: this.intl.t('dastAutomation.aiDrawer.q2Title'),
+        body: this.intl.t('dastAutomation.aiDrawer.q2Body'),
+        contentList: [
+          this.intl.t('dastAutomation.aiDrawer.q2List1'),
+          this.intl.t('dastAutomation.aiDrawer.q2List2'),
+          this.intl.t('dastAutomation.aiDrawer.q2List3'),
+          this.intl.t('dastAutomation.aiDrawer.q2List4'),
+          this.intl.t('dastAutomation.aiDrawer.q2List5'),
+          this.intl.t('dastAutomation.aiDrawer.q2List6'),
+        ],
+        marginTop: 'mt-3',
+      },
+      {
+        title: this.intl.t('dastAutomation.aiDrawer.q3Title'),
+        body: this.intl.t('dastAutomation.aiDrawer.q3Body'),
+        contentList: [
+          this.intl.t('dastAutomation.aiDrawer.q3List1'),
+          this.intl.t('dastAutomation.aiDrawer.q3List2'),
+          this.intl.t('dastAutomation.aiDrawer.q3List3'),
+          this.intl.t('dastAutomation.aiDrawer.q3List4'),
+        ],
+        marginTop: 'mt-3',
+      },
+    ];
   }
 
   get tabs() {

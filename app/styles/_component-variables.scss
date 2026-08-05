@@ -2984,6 +2984,12 @@ body {
 
   // variables for file-details/dynamic-scan/header
   --file-details-dynamic-scan-header-background-color: var(--background-light);
+  --file-details-dynamic-scan-header-tabs-toolbar-border-color: var(
+    --border-color-1
+  );
+  --file-details-dynamic-scan-header-powered-by-ai-drawer-intro-accent-color: var(
+    --powered-by-ai-chip-accent-color
+  );
 
   // variables for file-details/dynamic-scan/device-wrapper
   --file-details-dynamic-scan-device-wrapper-border-color: var(

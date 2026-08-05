@@ -99,6 +99,21 @@ const SEL = {
     text: '[data-test-fileDetails-dynamicScan-automated-interactionInfoText]',
   },
 
+  // Powered by AI chip + drawer
+  tabsRow: '[data-test-fileDetails-dynamicScan-header-tabsRow]',
+  aiChip: '[data-test-fileDetails-dynamicScan-header-poweredByAiChip]',
+  aiChipIntro:
+    '[data-test-fileDetails-dynamicScan-header-poweredByAiChip-intro]',
+  aiChipFaqTitle:
+    '[data-test-fileDetails-dynamicScan-header-poweredByAiChip-faqTitle]',
+  aiDrawer: '[data-test-poweredByAi-drawer]',
+  aiDrawerTitle: '[data-test-poweredByAi-drawer-title]',
+  aiDrawerChip: '[data-test-poweredByAi-drawer-chip]',
+  aiDrawerCloseBtn: '[data-test-poweredByAi-drawer-close-btn]',
+  aiDrawerSectionTitle: '[data-test-poweredByAi-drawer-section-title]',
+  aiDrawerSectionBody: '[data-test-poweredByAi-drawer-section-body]',
+  aiDrawerSectionListItem: '[data-test-poweredByAi-drawer-section-list-item]',
+
   // Results view
   results: {
     badge: '[data-test-fileDetails-dynamicScan-header-badge-count]',
@@ -1587,6 +1602,131 @@ module('Acceptance | file-details/dynamic-scan', function (hooks) {
       currentURL(),
       `/dashboard/file/${this.file.id}/dynamic-scan/results`
     );
+  });
+
+  // ─── Powered by AI chip ────────────────────────────────────────────────────
+
+  test('hides the Powered by AI chip when AI DAST is not enabled', async function (assert) {
+    await visit(`/dashboard/file/${this.file.id}/dynamic-scan/automated`);
+
+    assert.dom(SEL.aiChip).doesNotExist();
+  });
+
+  test('shows the Powered by AI chip inline with the tabs and opens the AI drawer when AI DAST is enabled', async function (assert) {
+    assert.expect(26);
+
+    this.organization.update({
+      ai_features: {
+        reporting: false,
+        pii: false,
+        knoxiq: false,
+        ai_dast: true,
+      },
+    });
+
+    await visit(`/dashboard/file/${this.file.id}/dynamic-scan/automated`);
+
+    assert
+      .dom(`${SEL.tabsRow} ${SEL.aiChip}`)
+      .exists('chip renders inline with the tabs row');
+
+    assert
+      .dom(SEL.aiDrawer)
+      .doesNotExist('drawer is closed until the chip is clicked');
+
+    await click(SEL.aiChip);
+
+    assert.dom(SEL.aiDrawer).exists('drawer opens on chip click');
+
+    assert
+      .dom(SEL.aiDrawerTitle)
+      .hasText(t('aiPoweredFeatures'), 'drawer has the AI title');
+
+    assert.dom(SEL.aiDrawerChip).exists('drawer shows the decorative AI chip');
+
+    assert
+      .dom(SEL.aiChipIntro)
+      .containsText(
+        t('dastAutomation.aiDrawer.intro').replace(/<[^>]*>/g, ''),
+        'drawer intro renders translated content'
+      );
+
+    assert
+      .dom(SEL.aiChipFaqTitle)
+      .hasText(t('dastAutomation.aiDrawer.faqTitle'));
+
+    const drawerInfo = [
+      {
+        title: t('dastAutomation.aiDrawer.q1Title'),
+        body: t('dastAutomation.aiDrawer.q1Body'),
+      },
+      {
+        title: t('dastAutomation.aiDrawer.q2Title'),
+        body: t('dastAutomation.aiDrawer.q2Body'),
+        contentList: [
+          t('dastAutomation.aiDrawer.q2List1'),
+          t('dastAutomation.aiDrawer.q2List2'),
+          t('dastAutomation.aiDrawer.q2List3'),
+          t('dastAutomation.aiDrawer.q2List4'),
+          t('dastAutomation.aiDrawer.q2List5'),
+          t('dastAutomation.aiDrawer.q2List6'),
+        ],
+      },
+      {
+        title: t('dastAutomation.aiDrawer.q3Title'),
+        body: t('dastAutomation.aiDrawer.q3Body'),
+        contentList: [
+          t('dastAutomation.aiDrawer.q3List1'),
+          t('dastAutomation.aiDrawer.q3List2'),
+          t('dastAutomation.aiDrawer.q3List3'),
+          t('dastAutomation.aiDrawer.q3List4'),
+        ],
+      },
+    ];
+
+    const sectionTitles = findAll(SEL.aiDrawerSectionTitle);
+    const sectionBodies = findAll(SEL.aiDrawerSectionBody);
+    const listItems = findAll(SEL.aiDrawerSectionListItem);
+
+    assert.strictEqual(
+      sectionTitles.length,
+      drawerInfo.length,
+      'drawer renders all FAQ section titles'
+    );
+
+    let bodyIndex = 0;
+    let listItemIndex = 0;
+
+    drawerInfo.forEach((section) => {
+      assert
+        .dom(`[data-test-poweredByAi-drawer-section-title="${section.title}"]`)
+        .hasText(section.title);
+
+      if (section.body) {
+        assert
+          .dom(sectionBodies[bodyIndex])
+          .containsText(section.body, `section "${section.title}" body`);
+
+        bodyIndex++;
+      }
+
+      section.contentList?.forEach((content) => {
+        assert
+          .dom(listItems[listItemIndex])
+          .containsText(content, `section "${section.title}" list item`);
+
+        listItemIndex++;
+      });
+    });
+
+    await click(SEL.aiDrawerCloseBtn);
+
+    assert.dom(SEL.aiDrawer).doesNotExist('drawer closes');
+
+    // Chip only shows on the automated DAST tab
+    await visit(`/dashboard/file/${this.file.id}/dynamic-scan/results`);
+
+    assert.dom(SEL.aiChip).doesNotExist('chip hidden on the DAST results tab');
   });
 
   // ─── Results view ──────────────────────────────────────────────────────────
