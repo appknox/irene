@@ -2,7 +2,8 @@ import Component from '@glimmer/component';
 import { inject as service } from '@ember/service';
 import { task } from 'ember-concurrency';
 
-import OidcService, { OidcAuthorizationResponse } from 'irene/services/oidc';
+import type { OidcAuthorizationResponse } from 'irene/services/oidc';
+import type OidcService from 'irene/services/oidc';
 
 export interface OidcAuthorizeSignature {
   Args: {

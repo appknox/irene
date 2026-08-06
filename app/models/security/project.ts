@@ -1,13 +1,8 @@
-import Model, {
-  AsyncBelongsTo,
-  AsyncHasMany,
-  attr,
-  belongsTo,
-  hasMany,
-} from '@ember-data/model';
+import type { AsyncBelongsTo, AsyncHasMany } from '@ember-data/model';
+import Model, { attr, belongsTo, hasMany } from '@ember-data/model';
 
-import UserModel from '../user';
-import SecurityFileModel from './file';
+import type UserModel from '../user';
+import type SecurityFileModel from './file';
 
 export default class SecurityProjectModel extends Model {
   @attr('string')

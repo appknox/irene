@@ -1,5 +1,6 @@
 import ENV from 'irene/config/environment';
-import BaseAuthenticator, { LoginSuccessDataProps, processData } from './base';
+import type { LoginSuccessDataProps } from './base';
+import BaseAuthenticator, { processData } from './base';
 import parseError from 'irene/utils/parse-error';
 
 export default class Saml2Auth extends BaseAuthenticator {

@@ -1,4 +1,5 @@
-import Model, { AsyncBelongsTo, belongsTo, attr } from '@ember-data/model';
+import type { AsyncBelongsTo } from '@ember-data/model';
+import Model, { belongsTo, attr } from '@ember-data/model';
 
 import type FileModel from './file';
 import type PrivacyProjectModel from './privacy-project';

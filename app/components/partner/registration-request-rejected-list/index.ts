@@ -4,16 +4,16 @@ import { action } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
 import { service } from '@ember/service';
 import { task } from 'ember-concurrency';
-import IntlService from 'ember-intl/services/intl';
-import Store from 'ember-data/store';
+import type IntlService from 'ember-intl/services/intl';
+import type Store from 'ember-data/store';
 import dayjs from 'dayjs';
 
 // eslint-disable-next-line ember/use-ember-data-rfc-395-imports
-import { DS } from 'ember-data';
+import type { DS } from 'ember-data';
 
 import parseError from 'irene/utils/parse-error';
-import RealtimeService from 'irene/services/realtime';
-import PartnerRegistrationRequestModel from 'irene/models/partner/registration-request';
+import type RealtimeService from 'irene/services/realtime';
+import type PartnerRegistrationRequestModel from 'irene/models/partner/registration-request';
 
 type PartnerRegistrationRequestResponseModel =
   DS.AdapterPopulatedRecordArray<PartnerRegistrationRequestModel> & {

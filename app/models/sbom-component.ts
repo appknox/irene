@@ -1,5 +1,6 @@
-import Model, { attr, belongsTo, AsyncBelongsTo } from '@ember-data/model';
-import SbomFileModel from './sbom-file';
+import type { AsyncBelongsTo } from '@ember-data/model';
+import Model, { attr, belongsTo } from '@ember-data/model';
+import type SbomFileModel from './sbom-file';
 import { ENUMS_DISPLAY } from 'irene/enums';
 
 export interface SbomComponentProperty {

@@ -1,6 +1,6 @@
 import Component from '@glimmer/component';
 
-import FileModel from 'irene/models/file';
+import type FileModel from 'irene/models/file';
 
 export interface FileDetailsScanActionsApiScanSignature {
   Args: {

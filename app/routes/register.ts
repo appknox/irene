@@ -1,6 +1,6 @@
 import Route from '@ember/routing/route';
 import { inject as service } from '@ember/service';
-import RegistrationService from 'irene/services/registration';
+import type RegistrationService from 'irene/services/registration';
 
 export default class RegisterViaInviteRoute extends Route {
   @service declare registration: RegistrationService;

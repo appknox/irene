@@ -1,7 +1,7 @@
 import { inject as service } from '@ember/service';
 import Component from '@glimmer/component';
-import IntlService from 'ember-intl/services/intl';
-import FileModel from 'irene/models/file';
+import type IntlService from 'ember-intl/services/intl';
+import type FileModel from 'irene/models/file';
 
 interface FileOverviewScanStatusesSignature {
   Element: HTMLElement;

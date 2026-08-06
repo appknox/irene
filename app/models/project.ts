@@ -1,19 +1,14 @@
 /* eslint-disable ember/no-mixins */
-import {
-  AsyncBelongsTo,
-  AsyncHasMany,
-  attr,
-  belongsTo,
-  hasMany,
-} from '@ember-data/model';
+import type { AsyncBelongsTo, AsyncHasMany } from '@ember-data/model';
+import { attr, belongsTo, hasMany } from '@ember-data/model';
 
 import { isEmpty } from '@ember/utils';
 import ENUMS from 'irene/enums';
 import { ModelBaseMixin } from 'irene/mixins/base-model';
 
-import FileModel from './file';
-import UserModel from './user';
-import OrganizationModel from './organization';
+import type FileModel from './file';
+import type UserModel from './user';
+import type OrganizationModel from './organization';
 
 export default class ProjectModel extends ModelBaseMixin {
   @attr('string')

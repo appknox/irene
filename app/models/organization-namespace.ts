@@ -1,10 +1,11 @@
 /* eslint-disable ember/no-computed-properties-in-native-classes */
-import Model, { attr, belongsTo, AsyncBelongsTo } from '@ember-data/model';
+import type { AsyncBelongsTo } from '@ember-data/model';
+import Model, { attr, belongsTo } from '@ember-data/model';
 import ENUMS from 'irene/enums';
 import { computed } from '@ember/object';
 
-import OrganizationModel from './organization';
-import OrganizationUserModel from './organization-user';
+import type OrganizationModel from './organization';
+import type OrganizationUserModel from './organization-user';
 
 export default class OrganizationNamespaceModel extends Model {
   @attr('string')

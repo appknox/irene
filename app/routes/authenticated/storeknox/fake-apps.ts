@@ -1,4 +1,4 @@
-import RouterService from '@ember/routing/router-service';
+import type RouterService from '@ember/routing/router-service';
 import { service } from '@ember/service';
 
 import AkBreadcrumbsRoute from 'irene/utils/ak-breadcrumbs-route';

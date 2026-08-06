@@ -1,7 +1,7 @@
 import { inject as service } from '@ember/service';
 import Component from '@glimmer/component';
 import { task } from 'ember-concurrency';
-import WhitelabelService from 'irene/services/whitelabel';
+import type WhitelabelService from 'irene/services/whitelabel';
 
 export interface UserLoginViaUsernamePasswordComponentSignature {
   Args: {

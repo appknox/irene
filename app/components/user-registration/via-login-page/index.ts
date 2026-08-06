@@ -11,8 +11,8 @@ import {
   validateFormat,
 } from 'ember-changeset-validations/validators';
 
-import { ChangesetBufferProps } from '../form';
-import IntlService from 'ember-intl/services/intl';
+import type { ChangesetBufferProps } from '../form';
+import type IntlService from 'ember-intl/services/intl';
 import type IreneAjaxService from 'irene/services/ajax';
 import type { AjaxError } from 'irene/services/ajax';
 

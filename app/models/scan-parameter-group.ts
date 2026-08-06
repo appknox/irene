@@ -1,14 +1,9 @@
-import Model, {
-  AsyncBelongsTo,
-  AsyncHasMany,
-  attr,
-  belongsTo,
-  hasMany,
-} from '@ember-data/model';
+import type { AsyncBelongsTo, AsyncHasMany } from '@ember-data/model';
+import Model, { attr, belongsTo, hasMany } from '@ember-data/model';
 
-import ProjectModel from './project';
-import UserModel from './user';
-import ScanParameterModel from './scan-parameter';
+import type ProjectModel from './project';
+import type UserModel from './user';
+import type ScanParameterModel from './scan-parameter';
 
 export default class ScanParameterGroupModel extends Model {
   @attr('string')

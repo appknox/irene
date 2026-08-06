@@ -2,7 +2,7 @@ import Component from '@glimmer/component';
 import { action } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
 import { service } from '@ember/service';
-import { htmlSafe } from '@ember/template';
+import type { htmlSafe } from '@ember/template';
 import type IntlService from 'ember-intl/services/intl';
 
 interface MarketplacePluginCardSignature {

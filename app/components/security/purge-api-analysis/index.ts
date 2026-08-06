@@ -2,7 +2,7 @@ import { inject as service } from '@ember/service';
 import Component from '@glimmer/component';
 import { tracked } from '@glimmer/tracking';
 import { task } from 'ember-concurrency';
-import IntlService from 'ember-intl/services/intl';
+import type IntlService from 'ember-intl/services/intl';
 import ENV from 'irene/config/environment';
 import type IreneAjaxService from 'irene/services/ajax';
 

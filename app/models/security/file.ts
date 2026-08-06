@@ -1,16 +1,11 @@
 /* eslint-disable ember/no-computed-properties-in-native-classes */
-import Model, {
-  attr,
-  belongsTo,
-  hasMany,
-  AsyncBelongsTo,
-  AsyncHasMany,
-} from '@ember-data/model';
+import type { AsyncBelongsTo, AsyncHasMany } from '@ember-data/model';
+import Model, { attr, belongsTo, hasMany } from '@ember-data/model';
 
 import ENUMS from 'irene/enums';
-import UserModel from '../user';
-import SecurityProjectModel from './project';
-import SecurityAnalysisModel from './analysis';
+import type UserModel from '../user';
+import type SecurityProjectModel from './project';
+import type SecurityAnalysisModel from './analysis';
 
 export default class SecurityFileModel extends Model {
   @attr('string')

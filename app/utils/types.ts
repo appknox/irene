@@ -1,4 +1,4 @@
-import Route from '@ember/routing/route';
+import type Route from '@ember/routing/route';
 
 /**
   Get the resolved type of an item.

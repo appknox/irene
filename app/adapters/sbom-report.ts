@@ -1,4 +1,4 @@
-import { SbomReportType } from 'irene/models/sbom-report';
+import type { SbomReportType } from 'irene/models/sbom-report';
 import CommonDRFAdapter from './commondrf';
 
 export interface SbomScanDownloadReportDetails {

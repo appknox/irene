@@ -1,6 +1,6 @@
 import Model from '@ember-data/model';
 import { findRecord } from 'ember-data-resources';
-import OrganizationUserModel from './organization-user';
+import type OrganizationUserModel from './organization-user';
 import { tracked } from 'tracked-built-ins';
 
 export default class OrganizationTeamMemberModel extends Model {

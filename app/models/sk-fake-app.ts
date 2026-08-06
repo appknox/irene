@@ -1,7 +1,7 @@
 import Model, { attr, belongsTo, type AsyncBelongsTo } from '@ember-data/model';
 
 import ENUMS from 'irene/enums';
-import SkInventoryAppModel from './sk-inventory-app';
+import type SkInventoryAppModel from './sk-inventory-app';
 
 export interface SkFakeAppStoreData {
   id: number;

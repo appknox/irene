@@ -1,12 +1,12 @@
 import { inject as service } from '@ember/service';
 import Component from '@glimmer/component';
 import { task } from 'ember-concurrency';
-import IntlService from 'ember-intl/services/intl';
-import Store from 'ember-data/store';
+import type IntlService from 'ember-intl/services/intl';
+import type Store from 'ember-data/store';
 
-import ProjectModel from 'irene/models/project';
-import OrganizationTeamModel from 'irene/models/organization-team';
-import RealtimeService from 'irene/services/realtime';
+import type ProjectModel from 'irene/models/project';
+import type OrganizationTeamModel from 'irene/models/organization-team';
+import type RealtimeService from 'irene/services/realtime';
 import parseError from 'irene/utils/parse-error';
 
 interface ProjectSettingsGeneralSettingsAddProjectTeamTableActionSignature {

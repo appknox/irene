@@ -4,15 +4,15 @@ import { action } from '@ember/object';
 import { debounceTask } from 'ember-lifeline';
 import { task } from 'ember-concurrency';
 import { tracked } from '@glimmer/tracking';
-import IntlService from 'ember-intl/services/intl';
-import Store from 'ember-data/store';
-import RouterService from '@ember/routing/router-service';
-import MeService from 'irene/services/me';
-import OrganizationModel from 'irene/models/organization';
-import OrganizationMemberModel from 'irene/models/organization-member';
-import { OrganizationMembersRouteQueryParams } from 'irene/routes/authenticated/dashboard/organization/users';
+import type IntlService from 'ember-intl/services/intl';
+import type Store from 'ember-data/store';
+import type RouterService from '@ember/routing/router-service';
+import type MeService from 'irene/services/me';
+import type OrganizationModel from 'irene/models/organization';
+import type OrganizationMemberModel from 'irene/models/organization-member';
+import type { OrganizationMembersRouteQueryParams } from 'irene/routes/authenticated/dashboard/organization/users';
 // eslint-disable-next-line ember/use-ember-data-rfc-395-imports
-import DS from 'ember-data';
+import type DS from 'ember-data';
 
 export interface OrganizationMemberListComponentSignature {
   Args: {

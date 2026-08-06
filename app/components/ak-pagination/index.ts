@@ -1,5 +1,5 @@
 import Component from '@glimmer/component';
-import { PaginationItemPerPageOptionProps } from '../ak-pagination-provider';
+import type { PaginationItemPerPageOptionProps } from '../ak-pagination-provider';
 import styles from './index.scss';
 
 export interface AkPaginationSignature {

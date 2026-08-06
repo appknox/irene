@@ -1,5 +1,5 @@
 import Component from '@glimmer/component';
-import OrganizationProjectModel from 'irene/models/organization-project';
+import type OrganizationProjectModel from 'irene/models/organization-project';
 
 export interface OrganizationTeamProjectListProjectInfoComponentSignature {
   Args: {

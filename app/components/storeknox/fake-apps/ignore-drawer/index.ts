@@ -6,7 +6,7 @@ import dayjs from 'dayjs';
 import { task } from 'ember-concurrency';
 import type IntlService from 'ember-intl/services/intl';
 
-import { BufferedChangeset } from 'ember-changeset/types';
+import type { BufferedChangeset } from 'ember-changeset/types';
 import { waitForPromise } from '@ember/test-waiters';
 import { validatePresence } from 'ember-changeset-validations/validators';
 import lookupValidator from 'ember-changeset-validations';

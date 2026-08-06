@@ -1,7 +1,7 @@
 import Component from '@glimmer/component';
 import styles from './index.scss';
 
-import { AkStackSignature } from '../ak-stack';
+import type { AkStackSignature } from '../ak-stack';
 
 type DefaultBlock = {
   classes: {

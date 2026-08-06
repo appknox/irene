@@ -1,4 +1,5 @@
-import { AsyncBelongsTo, attr, belongsTo } from '@ember-data/model';
+import type { AsyncBelongsTo } from '@ember-data/model';
+import { attr, belongsTo } from '@ember-data/model';
 
 import SkAppModel from './sk-app';
 import type ProjectModel from './project';

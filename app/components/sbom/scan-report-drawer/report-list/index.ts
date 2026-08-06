@@ -2,19 +2,20 @@
 import { inject as service } from '@ember/service';
 import Component from '@glimmer/component';
 import { task } from 'ember-concurrency';
-import IntlService from 'ember-intl/services/intl';
+import type IntlService from 'ember-intl/services/intl';
 import { tracked } from '@glimmer/tracking';
 import { addObserver, removeObserver } from '@ember/object/observers';
 
 // eslint-disable-next-line ember/use-ember-data-rfc-395-imports
-import { DS } from 'ember-data';
-import Store from 'ember-data/store';
+import type { DS } from 'ember-data';
+import type Store from 'ember-data/store';
 import parseError from 'irene/utils/parse-error';
 
-import SbomFileModel from 'irene/models/sbom-file';
+import type SbomFileModel from 'irene/models/sbom-file';
 
-import SbomReportModel, { SbomReportStatus } from 'irene/models/sbom-report';
-import RealtimeService from 'irene/services/realtime';
+import type SbomReportModel from 'irene/models/sbom-report';
+import { SbomReportStatus } from 'irene/models/sbom-report';
+import type RealtimeService from 'irene/services/realtime';
 
 type SbomScanReportQueryResponse =
   DS.AdapterPopulatedRecordArray<SbomReportModel> & {

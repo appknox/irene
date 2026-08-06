@@ -2,10 +2,10 @@ import { action } from '@ember/object';
 import { inject as service } from '@ember/service';
 import Component from '@glimmer/component';
 import { tracked } from '@glimmer/tracking';
-import IntlService from 'ember-intl/services/intl';
+import type IntlService from 'ember-intl/services/intl';
 import { isEmpty } from '@ember/utils';
 
-import SbomProjectModel from 'irene/models/sbom-project';
+import type SbomProjectModel from 'irene/models/sbom-project';
 import { SbomScanStatus } from 'irene/models/sbom-file';
 
 export interface SbomProjectListActionSignature {

@@ -1,7 +1,7 @@
 import Component from '@glimmer/component';
 import { inject as service } from '@ember/service';
-import MeService from 'irene/services/me';
-import OrganizationMemberModel from 'irene/models/organization-member';
+import type MeService from 'irene/services/me';
+import type OrganizationMemberModel from 'irene/models/organization-member';
 
 interface OrganizationMemberInfoSignature {
   Args: {

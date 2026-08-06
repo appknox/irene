@@ -31,6 +31,21 @@ module.exports = {
       'error',
       { blankLine: 'always', prev: '*', next: 'return' },
     ],
+
+    // Enforced — codebase is clean or autofixable
+    '@typescript-eslint/consistent-type-imports': [
+      'error',
+      { prefer: 'type-imports', fixStyle: 'separate-type-imports' },
+    ],
+    'prefer-const': 'error',
+    'ember/no-runloop': 'error',
+
+    // Burn-down — existing violations need human judgement, so warn for now
+    eqeqeq: ['warn', 'smart'],
+    'no-console': 'warn',
+    'no-nested-ternary': 'warn',
+    '@typescript-eslint/no-non-null-assertion': 'warn',
+    '@typescript-eslint/no-unused-expressions': 'warn',
   },
   overrides: [
     // node files

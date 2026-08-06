@@ -2,7 +2,7 @@ import { action } from '@ember/object';
 import Component from '@glimmer/component';
 import { tracked } from '@glimmer/tracking';
 
-import { AnalysisRiskDataModel, OverrideEditDrawerAppBarData } from '..';
+import type { AnalysisRiskDataModel, OverrideEditDrawerAppBarData } from '..';
 
 export interface AnalysisRiskOverrideEditDrawerContentSignature {
   Args: {

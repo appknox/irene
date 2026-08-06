@@ -1,13 +1,13 @@
 import Component from '@glimmer/component';
 import { tracked } from '@glimmer/tracking';
 import { inject as service } from '@ember/service';
-import Store from 'ember-data/store';
+import type Store from 'ember-data/store';
 import { task } from 'ember-concurrency';
 
-import MeService from 'irene/services/me';
-import OrganizationNamespaceModel from 'irene/models/organization-namespace';
-import UserModel from 'irene/models/user';
-import OrganizationUserModel from 'irene/models/organization-user';
+import type MeService from 'irene/services/me';
+import type OrganizationNamespaceModel from 'irene/models/organization-namespace';
+import type UserModel from 'irene/models/user';
+import type OrganizationUserModel from 'irene/models/organization-user';
 
 import { type NfNsreqstd2Context } from '../messages/nf-nsreqstd2/context';
 import { type NfNsreqstd1Context } from '../messages/nf-nsreqstd1/context';

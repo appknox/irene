@@ -23,8 +23,8 @@ import type GdprModel from 'irene/models/gdpr';
 import type Nistsp80053Model from 'irene/models/nistsp80053';
 import type Nistsp800171Model from 'irene/models/nistsp800171';
 import type IntlService from 'ember-intl/services/intl';
-import SamaModel from 'irene/models/sama';
-import Pcidss4Model from 'irene/models/pcidss4';
+import type SamaModel from 'irene/models/sama';
+import type Pcidss4Model from 'irene/models/pcidss4';
 
 type RegulatoryCategoryOptionKeys =
   | 'owasp'

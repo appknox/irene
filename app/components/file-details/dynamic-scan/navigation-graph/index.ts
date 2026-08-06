@@ -19,9 +19,8 @@ import {
   type NavigationGraphLayout,
 } from './graph-config';
 
-import DsNavigationGraphModel, {
-  type DsNavigationGraphNode,
-} from 'irene/models/ds-navigation-graph';
+import type DsNavigationGraphModel from 'irene/models/ds-navigation-graph';
+import { type DsNavigationGraphNode } from 'irene/models/ds-navigation-graph';
 
 import type FileModel from 'irene/models/file';
 

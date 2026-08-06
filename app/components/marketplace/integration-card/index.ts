@@ -1,9 +1,9 @@
 import Component from '@glimmer/component';
 import { inject as service } from '@ember/service';
 import { action } from '@ember/object';
-import IntlService from 'ember-intl/services/intl';
+import type IntlService from 'ember-intl/services/intl';
 
-import MeService from 'irene/services/me';
+import type MeService from 'irene/services/me';
 
 interface MarketplaceIntegrationCardSignature {
   Args: {

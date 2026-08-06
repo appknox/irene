@@ -1,12 +1,10 @@
 /* eslint-disable ember/no-mixins */
-import {
+import type {
   AsyncBelongsTo,
   AsyncHasMany,
-  attr,
-  belongsTo,
-  hasMany,
   SyncHasMany,
 } from '@ember-data/model';
+import { attr, belongsTo, hasMany } from '@ember-data/model';
 
 import { service } from '@ember/service';
 import type IntlService from 'ember-intl/services/intl';
@@ -14,7 +12,7 @@ import type Store from 'ember-data/store';
 
 import { ModelBaseMixin } from 'irene/mixins/base-model';
 import ENUMS from 'irene/enums';
-import { FileCapiReportScanType } from './file-capi-report';
+import type { FileCapiReportScanType } from './file-capi-report';
 import type ProjectModel from './project';
 import type TagModel from './tag';
 import type FileReportModel from './file-report';
