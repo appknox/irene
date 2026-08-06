@@ -1,24 +1,24 @@
 /* eslint-disable ember/no-observers */
 /* eslint-disable ember/use-ember-data-rfc-395-imports */
-import DS from 'ember-data';
+import type DS from 'ember-data';
 import { tracked } from 'tracked-built-ins';
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
 
 import Component from '@glimmer/component';
 import { action } from '@ember/object';
-import Store from 'ember-data/store';
+import type Store from 'ember-data/store';
 import { inject as service } from '@ember/service';
 import { addObserver, removeObserver } from '@ember/object/observers';
 import { task } from 'ember-concurrency';
 import { waitForPromise } from '@ember/test-waiters';
-import IntlService from 'ember-intl/services/intl';
+import type IntlService from 'ember-intl/services/intl';
 
 import ENUMS from 'irene/enums';
 import parseError from 'irene/utils/parse-error';
-import RealtimeService from 'irene/services/realtime';
-import UploadAppService from 'irene/services/upload-app';
-import SubmissionModel from 'irene/models/submission';
+import type RealtimeService from 'irene/services/realtime';
+import type UploadAppService from 'irene/services/upload-app';
+import type SubmissionModel from 'irene/models/submission';
 
 dayjs.extend(relativeTime);
 

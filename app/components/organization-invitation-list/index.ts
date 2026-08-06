@@ -1,19 +1,19 @@
 /* eslint-disable ember/no-observers */
 // eslint-disable-next-line ember/use-ember-data-rfc-395-imports
-import DS from 'ember-data';
+import type DS from 'ember-data';
 import Component from '@glimmer/component';
 import { inject as service } from '@ember/service';
 import { action } from '@ember/object';
 import { task } from 'ember-concurrency';
 import { tracked } from '@glimmer/tracking';
-import IntlService from 'ember-intl/services/intl';
-import Store from 'ember-data/store';
-import RouterService from '@ember/routing/router-service';
-import { PaginationProviderActionsArgs } from '../ak-pagination-provider';
-import OrganizationModel from 'irene/models/organization';
-import OrganizationMemberModel from 'irene/models/organization-member';
+import type IntlService from 'ember-intl/services/intl';
+import type Store from 'ember-data/store';
+import type RouterService from '@ember/routing/router-service';
+import type { PaginationProviderActionsArgs } from '../ak-pagination-provider';
+import type OrganizationModel from 'irene/models/organization';
+import type OrganizationMemberModel from 'irene/models/organization-member';
 import { addObserver, removeObserver } from '@ember/object/observers';
-import RealtimeService from 'irene/services/realtime';
+import type RealtimeService from 'irene/services/realtime';
 
 type InvitationQueryResponse =
   DS.AdapterPopulatedRecordArray<OrganizationMemberModel> & {

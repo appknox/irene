@@ -10,6 +10,7 @@ export function requestToUrl(params: [Request]) {
     if (requiredFields.every((f) => f in req)) {
       return `${req.scheme}://${req.host}${port}${req.path}`;
     }
+
     return '';
   } catch (_) {
     return '';

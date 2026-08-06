@@ -1,5 +1,5 @@
 import Component from '@glimmer/component';
-import { AkLoaderCommonArgs } from '..';
+import type { AkLoaderCommonArgs } from '..';
 
 interface AkLoaderLinearArgs extends AkLoaderCommonArgs {
   height?: number;

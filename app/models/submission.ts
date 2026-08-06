@@ -1,5 +1,6 @@
 /* eslint-disable ember/no-computed-properties-in-native-classes, ember/no-mixins */
-import { AsyncBelongsTo, attr, belongsTo } from '@ember-data/model';
+import type { AsyncBelongsTo } from '@ember-data/model';
+import { attr, belongsTo } from '@ember-data/model';
 import { isEmpty } from '@ember/utils';
 import { ModelBaseMixin } from 'irene/mixins/base-model';
 

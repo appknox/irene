@@ -176,6 +176,7 @@ export default class PrivacyModuleAppListHeaderComponent extends Component<Priva
     if (hasChanges) {
       this.pendingTab = nextTab;
       this.showConfirmation = true;
+
       return;
     }
 

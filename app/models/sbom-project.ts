@@ -1,7 +1,8 @@
-import Model, { AsyncBelongsTo, belongsTo } from '@ember-data/model';
+import type { AsyncBelongsTo } from '@ember-data/model';
+import Model, { belongsTo } from '@ember-data/model';
 
-import ProjectModel from './project';
-import SbomFileModel from './sbom-file';
+import type ProjectModel from './project';
+import type SbomFileModel from './sbom-file';
 
 export default class SbomProjectModel extends Model {
   @belongsTo('project', { async: true, inverse: null })

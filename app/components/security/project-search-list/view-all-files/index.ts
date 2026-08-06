@@ -1,5 +1,5 @@
 import Component from '@glimmer/component';
-import SecurityProjectModel from 'irene/models/security/project';
+import type SecurityProjectModel from 'irene/models/security/project';
 
 export interface SecurityProjectSearchListViewAllFilesComponentSignature {
   Args: {

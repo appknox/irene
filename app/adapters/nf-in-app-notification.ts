@@ -4,6 +4,7 @@ export default class NfInAppNotificationAdapter extends commondrf {
   get baseurl() {
     return `${this.namespace}/v2/nf_in_app_notifications`;
   }
+
   _buildURL(modelName: string, id: number | string) {
     const baseurl = this.baseurl;
 

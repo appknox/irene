@@ -1,38 +1,33 @@
-import Model, {
-  AsyncBelongsTo,
-  AsyncHasMany,
-  attr,
-  belongsTo,
-  hasMany,
-} from '@ember-data/model';
+import type { AsyncBelongsTo, AsyncHasMany } from '@ember-data/model';
+import Model, { attr, belongsTo, hasMany } from '@ember-data/model';
 
 import { irregular } from '@ember-data/request-utils/string';
 
 import { inject as service } from '@ember/service';
 import { isEmpty } from '@ember/utils';
-import IntlService from 'ember-intl/services/intl';
+import type IntlService from 'ember-intl/services/intl';
 
 import ENUMS from 'irene/enums';
 import { riskClass } from 'irene/helpers/risk-class';
 
-import AsvsModel from './asvs';
-import AttachmentModel from './attachment';
-import CweModel from './cwe';
-import FileModel from './file';
-import GdprModel from './gdpr';
-import HipaaModel from './hipaa';
-import MstgModel from './mstg';
-import OwaspModel from './owasp';
-import OwaspMobile2024Model from './owaspmobile2024';
-import PcidssModel from './pcidss';
-import MasvsModel from './masvs';
-import VulnerabilityModel from './vulnerability';
-import OwaspApi2023Model from './owaspapi2023';
-import Nistsp800171Model from './nistsp800171';
-import Nistsp80053Model from './nistsp80053';
-import SamaModel from './sama';
-import Pcidss4Model from './pcidss4';
-import { KnoxiqValidatedFindingExploitability } from './knoxiq-validated-finding';
+import type AsvsModel from './asvs';
+import type AttachmentModel from './attachment';
+import type CweModel from './cwe';
+import type FileModel from './file';
+import type GdprModel from './gdpr';
+import type HipaaModel from './hipaa';
+import type MstgModel from './mstg';
+import type OwaspModel from './owasp';
+import type OwaspMobile2024Model from './owaspmobile2024';
+import type PcidssModel from './pcidss';
+import type MasvsModel from './masvs';
+import type VulnerabilityModel from './vulnerability';
+import type OwaspApi2023Model from './owaspapi2023';
+import type Nistsp800171Model from './nistsp800171';
+import type Nistsp80053Model from './nistsp80053';
+import type SamaModel from './sama';
+import type Pcidss4Model from './pcidss4';
+import type { KnoxiqValidatedFindingExploitability } from './knoxiq-validated-finding';
 
 irregular('asvs', 'asvses');
 
@@ -178,6 +173,7 @@ export default class AnalysisModel extends Model {
   get tNone() {
     return this.intl.t('none');
   }
+
   get tHigh() {
     return this.intl.t('high');
   }
@@ -242,11 +238,13 @@ export default class AnalysisModel extends Model {
 
   get isScanning() {
     const risk = this.computedRisk;
+
     return risk === ENUMS.RISK.UNKNOWN;
   }
 
   get isRisky() {
     const risk = this.computedRisk;
+
     return ![ENUMS.RISK.NONE, ENUMS.RISK.UNKNOWN].includes(risk);
   }
 

@@ -1,8 +1,9 @@
-import Model, { attr, hasMany, AsyncHasMany } from '@ember-data/model';
-import OrganizationMemberModel from './organization-member';
-import OrganizationNamespaceModel from './organization-namespace';
-import OrganizationProjectModel from './organization-project';
-import OrganizationTeamModel from './organization-team';
+import type { AsyncHasMany } from '@ember-data/model';
+import Model, { attr, hasMany } from '@ember-data/model';
+import type OrganizationMemberModel from './organization-member';
+import type OrganizationNamespaceModel from './organization-namespace';
+import type OrganizationProjectModel from './organization-project';
+import type OrganizationTeamModel from './organization-team';
 
 export interface Features {
   app_monitoring: boolean;

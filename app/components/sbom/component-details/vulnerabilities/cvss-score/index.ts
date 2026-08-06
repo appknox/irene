@@ -1,7 +1,6 @@
 import Component from '@glimmer/component';
-import SbomVulnerabilityModel, {
-  VulnerabilitySeverity,
-} from 'irene/models/sbom-vulnerability';
+import type SbomVulnerabilityModel from 'irene/models/sbom-vulnerability';
+import { VulnerabilitySeverity } from 'irene/models/sbom-vulnerability';
 
 export interface SbomComponentDetailsVulnerabilitiesCvssScoreSignature {
   Args: {

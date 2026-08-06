@@ -6,7 +6,7 @@ import ENUMS from 'irene/enums';
 
 import type { PreviewFilterProps } from 'irene/components/ai-reporting/preview/advance-filter-drawer';
 
-import {
+import type {
   PreviewFilterField,
   PreviewFilterDetails,
   AdditionalFilterErroredFieldProp,

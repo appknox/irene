@@ -1,6 +1,6 @@
-import { AsyncBelongsTo } from '@ember-data/model';
+import type { AsyncBelongsTo } from '@ember-data/model';
 import ENUMS from 'irene/enums';
-import AnalysisOverviewModel from 'irene/models/analysis-overview';
+import type AnalysisOverviewModel from 'irene/models/analysis-overview';
 import type VulnerabilityModel from 'irene/models/vulnerability';
 
 export type FileComparisonItem = {

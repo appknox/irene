@@ -1,9 +1,9 @@
 import Service from '@ember/service';
 import { service } from '@ember/service';
-import Store from 'ember-data/store';
+import type Store from 'ember-data/store';
 import { tracked } from '@glimmer/tracking';
 
-import OrganizationMeModel from 'irene/models/organization-me';
+import type OrganizationMeModel from 'irene/models/organization-me';
 
 export default class MeService extends Service {
   @service declare store: Store;

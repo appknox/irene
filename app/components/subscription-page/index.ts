@@ -30,6 +30,7 @@ export default class SubscriptionPageComponent extends Component<SubscriptionPag
     if (!this.subscriptionInfo?.expiryDate) {
       return '-';
     }
+
     return dayjs(this.subscriptionInfo.expiryDate).format('MMM DD, YYYY');
   }
 

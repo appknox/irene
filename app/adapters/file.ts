@@ -7,9 +7,8 @@ import type SbomFileModel from 'irene/models/sbom-file';
 import type FileRiskModel from 'irene/models/file-risk';
 import type FileExploitabilityModel from 'irene/models/file-exploitability';
 
-import FileCapiReportModel, {
-  type FileCapiReportScanType,
-} from 'irene/models/file-capi-report';
+import type FileCapiReportModel from 'irene/models/file-capi-report';
+import { type FileCapiReportScanType } from 'irene/models/file-capi-report';
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 

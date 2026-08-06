@@ -1,5 +1,5 @@
 import Component from '@glimmer/component';
-import SecurityFileModel from 'irene/models/security/file';
+import type SecurityFileModel from 'irene/models/security/file';
 
 export interface SecurityFileSearchListViewComponentSignature {
   Args: {

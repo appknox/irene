@@ -1,4 +1,4 @@
-import { ValidatorMapFunc } from 'ember-changeset/types';
+import type { ValidatorMapFunc } from 'ember-changeset/types';
 
 export default function validateEquality({
   expected,

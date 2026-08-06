@@ -5,7 +5,7 @@ import { action } from '@ember/object';
 import { waitForPromise } from '@ember/test-waiters';
 import type IntlService from 'ember-intl/services/intl';
 
-import ClipboardJS from 'clipboard/src/clipboard';
+import type ClipboardJS from 'clipboard/src/clipboard';
 
 import { type FileLegacyCvssReportModelName } from 'irene/models/file-legacy-cvss-report';
 import type { FileLegacyCvssReportDetails } from 'irene/components/file/report-drawer/legacy-cvss-reports';

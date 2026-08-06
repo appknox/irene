@@ -1,8 +1,7 @@
-import ProjectCollaboratorModel, {
-  ProjectCollaboratorModelName,
-} from 'irene/models/project-collaborator';
+import type { ProjectCollaboratorModelName } from 'irene/models/project-collaborator';
+import type ProjectCollaboratorModel from 'irene/models/project-collaborator';
 import commondrf from './commondrf';
-import Store from 'ember-data/store';
+import type Store from 'ember-data/store';
 
 interface ProjectCollaboratorQuery {
   projectId: string | number;

@@ -1,8 +1,9 @@
-import Model, { AsyncBelongsTo, attr, belongsTo } from '@ember-data/model';
+import type { AsyncBelongsTo } from '@ember-data/model';
+import Model, { attr, belongsTo } from '@ember-data/model';
 import { inject as service } from '@ember/service';
-import LoggerService from 'irene/services/logger';
+import type LoggerService from 'irene/services/logger';
 import type OrganizationUserModel from './organization-user';
-import IntlService from 'ember-intl/services/intl';
+import type IntlService from 'ember-intl/services/intl';
 
 export enum OrganizationArchiveModelGeneratedVia {
   DASHBOARD = 0,

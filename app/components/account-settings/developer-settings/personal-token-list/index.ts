@@ -2,13 +2,13 @@ import Component from '@glimmer/component';
 import { inject as service } from '@ember/service';
 import { isEmpty } from '@ember/utils';
 import ENV from 'irene/config/environment';
-import Store from 'ember-data/store';
-import IntlService from 'ember-intl/services/intl';
+import type Store from 'ember-data/store';
+import type IntlService from 'ember-intl/services/intl';
 import { tracked } from '@glimmer/tracking';
 import { task } from 'ember-concurrency';
 import { query } from 'ember-data-resources';
 
-import PersonaltokenModel from 'irene/models/personaltoken';
+import type PersonaltokenModel from 'irene/models/personaltoken';
 import type IreneAjaxService from 'irene/services/ajax';
 import type { AjaxError } from 'irene/services/ajax';
 

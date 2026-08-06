@@ -2,9 +2,9 @@ import { inject as service } from '@ember/service';
 import Component from '@glimmer/component';
 import { action } from '@ember/object';
 import { task } from 'ember-concurrency';
-import IntlService from 'ember-intl/services/intl';
+import type IntlService from 'ember-intl/services/intl';
 
-import SecurityFileModel from 'irene/models/security/file';
+import type SecurityFileModel from 'irene/models/security/file';
 import ENV from 'irene/config/environment';
 import parseError from 'irene/utils/parse-error';
 import type IreneAjaxService from 'irene/services/ajax';

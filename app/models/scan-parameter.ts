@@ -1,7 +1,8 @@
-import Model, { AsyncBelongsTo, attr, belongsTo } from '@ember-data/model';
+import type { AsyncBelongsTo } from '@ember-data/model';
+import Model, { attr, belongsTo } from '@ember-data/model';
 
-import UserModel from './user';
-import ScanParameterGroupModel from './scan-parameter-group';
+import type UserModel from './user';
+import type ScanParameterGroupModel from './scan-parameter-group';
 
 export default class ScanParameterModel extends Model {
   @attr('string')

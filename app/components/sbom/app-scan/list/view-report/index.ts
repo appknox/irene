@@ -1,6 +1,7 @@
 import Component from '@glimmer/component';
 
-import SbomFileModel, { SbomScanStatus } from 'irene/models/sbom-file';
+import type SbomFileModel from 'irene/models/sbom-file';
+import { SbomScanStatus } from 'irene/models/sbom-file';
 
 export interface SbomAppScanListViewReportSignature {
   Args: {

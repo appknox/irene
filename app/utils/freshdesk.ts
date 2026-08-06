@@ -1,7 +1,7 @@
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-nocheck
-import OrganizationModel from 'irene/models/organization';
-import UserModel from 'irene/models/user';
+import type OrganizationModel from 'irene/models/organization';
+import type UserModel from 'irene/models/user';
 
 // Inject freshdesk support script that enables widget in the application
 const injectSupportWidget = (widgetId: string) => {

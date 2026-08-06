@@ -1,10 +1,10 @@
 /* eslint-disable ember/use-ember-data-rfc-395-imports */
-import { ModelSchema } from 'ember-data';
 import commondrf from './commondrf';
-import Store from 'ember-data/store';
-import { Snapshot } from '@ember-data/store';
-import ModelRegistry from 'ember-data/types/registries/model';
-import { FileReportScanType } from 'irene/models/file-report';
+import type { ModelSchema } from 'ember-data';
+import type Store from 'ember-data/store';
+import type { Snapshot } from '@ember-data/store';
+import type ModelRegistry from 'ember-data/types/registries/model';
+import type { FileReportScanType } from 'irene/models/file-report';
 
 interface FileReportQuery {
   fileId: string;
@@ -34,6 +34,7 @@ export default class FileReport extends commondrf {
     snapshot: Snapshot<K>
   ) {
     const url = this._buildURL(modelClass.modelName, snapshot.record.fileId);
+
     return this.ajax(url, 'POST', {
       data: {},
     });

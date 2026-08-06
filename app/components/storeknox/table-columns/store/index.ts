@@ -1,5 +1,5 @@
 import Component from '@glimmer/component';
-import { StoreknoxCommonTableColumnsData } from '..';
+import type { StoreknoxCommonTableColumnsData } from '..';
 
 export interface StoreknoxDiscoverTableColumnsStoreSignature {
   Element: HTMLElement;

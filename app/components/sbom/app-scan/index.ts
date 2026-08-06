@@ -1,7 +1,7 @@
 import Component from '@glimmer/component';
 
-import SbomProjectModel from 'irene/models/sbom-project';
-import { SbomAppScanQueryParam } from 'irene/routes/authenticated/dashboard/sbom/app-scans';
+import type SbomProjectModel from 'irene/models/sbom-project';
+import type { SbomAppScanQueryParam } from 'irene/routes/authenticated/dashboard/sbom/app-scans';
 
 export interface SbomAppScanSignature {
   Args: {

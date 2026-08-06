@@ -1,5 +1,5 @@
 import Component from '@glimmer/component';
-import { TypographyFontWeight } from 'irene/components/ak-typography';
+import type { TypographyFontWeight } from 'irene/components/ak-typography';
 import { riskText } from 'irene/helpers/risk-text';
 
 export interface AnalysisRiskTextSignature {

@@ -1,11 +1,11 @@
 import Route from '@ember/routing/route';
 import { service } from '@ember/service';
 import { action } from '@ember/object';
-import Store from 'ember-data/store';
-import RouterService from '@ember/routing/router-service';
+import type Store from 'ember-data/store';
+import type RouterService from '@ember/routing/router-service';
 
-import OrganizationService from 'irene/services/organization';
-import PartnerService from 'irene/services/partner';
+import type OrganizationService from 'irene/services/organization';
+import type PartnerService from 'irene/services/partner';
 
 interface RouteParams {
   client_id: string;

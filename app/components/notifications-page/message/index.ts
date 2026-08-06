@@ -2,13 +2,11 @@ import Component from '@glimmer/component';
 import { guidFor } from '@ember/object/internals';
 import { inject as service } from '@ember/service';
 import { action } from '@ember/object';
-import LoggerService from 'irene/services/logger';
-import NfInAppNotificationModel from 'irene/models/nf-in-app-notification';
-import {
-  NotificationMap,
-  NotificationMessageKey,
-} from 'irene/components/notifications-page/notification_map';
-import SkNfInAppNotificationModel from 'irene/models/sk-nf-in-app-notification';
+import type LoggerService from 'irene/services/logger';
+import type NfInAppNotificationModel from 'irene/models/nf-in-app-notification';
+import type { NotificationMessageKey } from 'irene/components/notifications-page/notification_map';
+import { NotificationMap } from 'irene/components/notifications-page/notification_map';
+import type SkNfInAppNotificationModel from 'irene/models/sk-nf-in-app-notification';
 
 export interface NotificationsPageMessageComponentArgs {
   Args: {

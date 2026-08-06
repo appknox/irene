@@ -1,6 +1,6 @@
 import { action } from '@ember/object';
 import Component from '@glimmer/component';
-import { Select } from 'ember-power-select/components/power-select';
+import type { Select } from 'ember-power-select/components/power-select';
 import { runTask, scheduleTask } from 'ember-lifeline';
 
 interface AkSelectBeforeOptionArgs {

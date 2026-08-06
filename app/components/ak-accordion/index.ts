@@ -3,13 +3,13 @@ import { action } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
 import { guidFor } from '@ember/object/internals';
 
-import { AkIconColorVariant } from 'irene/components/ak-icon';
-import {
+import type { AkIconColorVariant } from 'irene/components/ak-icon';
+import type {
   TypographyColors,
   TypographyVariant,
   TypographyFontWeight,
 } from '../ak-typography';
-import { AccordionCtxProps } from './group';
+import type { AccordionCtxProps } from './group';
 
 export type AkAccordionVariant = 'primary' | 'secondary' | 'light';
 export type AkAccordionTypographyVariant = TypographyVariant;

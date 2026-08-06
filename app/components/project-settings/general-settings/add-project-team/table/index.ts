@@ -1,16 +1,16 @@
 // eslint-disable-next-line ember/use-ember-data-rfc-395-imports
-import { DS } from 'ember-data';
+import type { DS } from 'ember-data';
 import Component from '@glimmer/component';
 import { tracked } from '@glimmer/tracking';
 import { inject as service } from '@ember/service';
 import { task } from 'ember-concurrency';
-import IntlService from 'ember-intl/services/intl';
-import Store from 'ember-data/store';
+import type IntlService from 'ember-intl/services/intl';
+import type Store from 'ember-data/store';
 import { action } from '@ember/object';
 import { debounceTask } from 'ember-lifeline';
 
-import OrganizationTeamModel from 'irene/models/organization-team';
-import ProjectModel from 'irene/models/project';
+import type OrganizationTeamModel from 'irene/models/organization-team';
+import type ProjectModel from 'irene/models/project';
 import parseError from 'irene/utils/parse-error';
 import dayjs from 'dayjs';
 

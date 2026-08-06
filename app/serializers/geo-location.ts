@@ -1,7 +1,8 @@
 import DRFSerializer from 'ember-django-adapter/serializers/drf';
 import type Store from 'ember-data/store';
 
-import GeoLocationModel, { type HostUrl } from 'irene/models/geo-location';
+import type GeoLocationModel from 'irene/models/geo-location';
+import { type HostUrl } from 'irene/models/geo-location';
 
 type GeoLocationPayload = {
   countryCode: string;

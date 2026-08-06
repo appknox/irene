@@ -1,12 +1,12 @@
 import { inject as service } from '@ember/service';
 import Component from '@glimmer/component';
-import IntlService from 'ember-intl/services/intl';
+import type IntlService from 'ember-intl/services/intl';
 import { action } from '@ember/object';
 
 import ENUMS from 'irene/enums';
 import styles from './index.scss';
-import MeService from 'irene/services/me';
-import OrganizationService from 'irene/services/organization';
+import type MeService from 'irene/services/me';
+import type OrganizationService from 'irene/services/organization';
 
 interface PlatformObject {
   key: string;

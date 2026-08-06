@@ -1,11 +1,11 @@
 import { inject as service } from '@ember/service';
 import Service from '@ember/service';
 import ENV from 'irene/config/environment';
-import UserModel from 'irene/models/user';
+import type UserModel from 'irene/models/user';
 
-import ConfigurationService from './configuration';
-import LoggerService from './logger';
-import FreshdeskService from './freshdesk';
+import type ConfigurationService from './configuration';
+import type LoggerService from './logger';
+import type FreshdeskService from './freshdesk';
 
 export default class IntegrationService extends Service {
   // https://github.com/ember-cli/ember-page-title/blob/a886af4d83c7a3a3c716372e8a322258a4f92991/addon/services/page-title-list.js#L27

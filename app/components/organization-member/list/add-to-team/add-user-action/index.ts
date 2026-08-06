@@ -2,10 +2,10 @@ import Component from '@glimmer/component';
 import { inject as service } from '@ember/service';
 import { capitalize } from '@ember/string';
 import { task } from 'ember-concurrency';
-import IntlService from 'ember-intl/services/intl';
-import MeService from 'irene/services/me';
-import OrganizationMemberModel from 'irene/models/organization-member';
-import OrganizationTeamModel from 'irene/models/organization-team';
+import type IntlService from 'ember-intl/services/intl';
+import type MeService from 'irene/services/me';
+import type OrganizationMemberModel from 'irene/models/organization-member';
+import type OrganizationTeamModel from 'irene/models/organization-team';
 import { tracked } from '@glimmer/tracking';
 import { waitForPromise } from '@ember/test-waiters';
 

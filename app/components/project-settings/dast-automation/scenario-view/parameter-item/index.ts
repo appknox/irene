@@ -1,15 +1,15 @@
 import Component from '@glimmer/component';
 import { inject as service } from '@ember/service';
-import IntlService from 'ember-intl/services/intl';
+import type IntlService from 'ember-intl/services/intl';
 import { tracked } from '@glimmer/tracking';
 import { action } from '@ember/object';
 import { task } from 'ember-concurrency';
-import Store from 'ember-data/store';
+import type Store from 'ember-data/store';
 import { waitForPromise } from '@ember/test-waiters';
 
-import ScanParameterGroupModel from 'irene/models/scan-parameter-group';
+import type ScanParameterGroupModel from 'irene/models/scan-parameter-group';
 import parseError from 'irene/utils/parse-error';
-import ScanParameterModel from 'irene/models/scan-parameter';
+import type ScanParameterModel from 'irene/models/scan-parameter';
 
 import styles from './index.scss';
 

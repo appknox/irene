@@ -1,14 +1,14 @@
 import { service } from '@ember/service';
-import Store from 'ember-data/store';
+import type Store from 'ember-data/store';
 
 import AkBreadcrumbsRoute from 'irene/utils/ak-breadcrumbs-route';
 
-import {
+import type {
   CompareChildrenRoutesModel,
   CompareRouteQueryParams,
 } from 'irene/routes/authenticated/dashboard/compare';
 
-import RouterService from '@ember/routing/router-service';
+import type RouterService from '@ember/routing/router-service';
 
 export default class AuthenticatedDashboardCompareUntestedCasesRoute extends AkBreadcrumbsRoute {
   @service declare store: Store;

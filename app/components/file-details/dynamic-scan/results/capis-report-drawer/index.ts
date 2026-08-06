@@ -15,9 +15,8 @@ import { REPORT } from 'irene/utils/constants';
 import type FileModel from 'irene/models/file';
 import type RealtimeService from 'irene/services/realtime';
 
-import FileCapiReportModel, {
-  type FileCapiReportScanType,
-} from 'irene/models/file-capi-report';
+import type FileCapiReportModel from 'irene/models/file-capi-report';
+import { type FileCapiReportScanType } from 'irene/models/file-capi-report';
 
 type FileCapiReportQueryResponse =
   DS.AdapterPopulatedRecordArray<FileCapiReportModel> & {

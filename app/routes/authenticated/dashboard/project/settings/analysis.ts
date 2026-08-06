@@ -1,4 +1,4 @@
-import ProjectModel from 'irene/models/project';
+import type ProjectModel from 'irene/models/project';
 import AkBreadcrumbsRoute from 'irene/utils/ak-breadcrumbs-route';
 import { ScrollToTop } from 'irene/utils/scroll-to-top';
 
