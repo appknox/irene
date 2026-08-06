@@ -1,5 +1,5 @@
 import Component from '@glimmer/component';
-import ProjectModel from 'irene/models/project';
+import type ProjectModel from 'irene/models/project';
 
 export interface ProjectListAppNameSignature {
   Args: {

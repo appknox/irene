@@ -1,5 +1,5 @@
 import Helper from '@ember/component/helper';
-import IntlService from 'ember-intl/services/intl';
+import type IntlService from 'ember-intl/services/intl';
 import { inject as service } from '@ember/service';
 
 type Positional = [string];

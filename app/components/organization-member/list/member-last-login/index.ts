@@ -1,9 +1,9 @@
 import { inject as service } from '@ember/service';
 import Component from '@glimmer/component';
 import dayjs from 'dayjs';
-import IntlService from 'ember-intl/services/intl';
-import { TypographyFontWeight } from 'irene/components/ak-typography';
-import OrganizationMemberModel from 'irene/models/organization-member';
+import type IntlService from 'ember-intl/services/intl';
+import type { TypographyFontWeight } from 'irene/components/ak-typography';
+import type OrganizationMemberModel from 'irene/models/organization-member';
 
 interface OrganizationMemberLastLoginSignature {
   Args: {

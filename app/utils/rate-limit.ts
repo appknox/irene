@@ -1,5 +1,5 @@
-import { Timer } from '@ember/runloop';
-import { EmberRunTimer } from '@ember/runloop/types';
+import type { Timer } from '@ember/runloop';
+import type { EmberRunTimer } from '@ember/runloop/types';
 import { runTask, cancelTask } from 'ember-lifeline';
 
 export interface RateLimitState {

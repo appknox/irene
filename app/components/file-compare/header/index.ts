@@ -1,8 +1,8 @@
 import { action } from '@ember/object';
 import { inject as service } from '@ember/service';
 import Component from '@glimmer/component';
-import RouterService from '@ember/routing/router-service';
-import IntlService from 'ember-intl/services/intl';
+import type RouterService from '@ember/routing/router-service';
+import type IntlService from 'ember-intl/services/intl';
 
 import styles from './index.scss';
 import ENUMS from 'irene/enums';

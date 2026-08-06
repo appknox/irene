@@ -5,15 +5,15 @@ import { tracked } from '@glimmer/tracking';
 import { task } from 'ember-concurrency';
 import type IntlService from 'ember-intl/services/intl';
 
-import { BufferedChangeset } from 'ember-changeset/types';
+import type { BufferedChangeset } from 'ember-changeset/types';
 import { validatePresence } from 'ember-changeset-validations/validators';
 import lookupValidator from 'ember-changeset-validations';
 import { Changeset } from 'ember-changeset';
 
 import ENUMS from 'irene/enums';
 import { riskText } from 'irene/helpers/risk-text';
-import { AnalysisRiskDataModel, OverrideEditDrawerAppBarData } from '..';
-import { ActiveContentComponent } from '../content';
+import type { AnalysisRiskDataModel, OverrideEditDrawerAppBarData } from '..';
+import type { ActiveContentComponent } from '../content';
 import parseError from 'irene/utils/parse-error';
 import type AnalysisModel from 'irene/models/analysis';
 import type AnalyticsService from 'irene/services/analytics';

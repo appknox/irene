@@ -1,21 +1,21 @@
 import { inject as service } from '@ember/service';
 import Component from '@glimmer/component';
-import IntlService from 'ember-intl/services/intl';
+import type IntlService from 'ember-intl/services/intl';
 import { task } from 'ember-concurrency';
 import { tracked } from '@glimmer/tracking';
 import { action } from '@ember/object';
 import { debounceTask } from 'ember-lifeline';
 
 // eslint-disable-next-line ember/use-ember-data-rfc-395-imports
-import { DS } from 'ember-data';
-import Store from 'ember-data/store';
-import RouterService from '@ember/routing/router-service';
+import type { DS } from 'ember-data';
+import type Store from 'ember-data/store';
+import type RouterService from '@ember/routing/router-service';
 
-import { SbomAppQueryParam } from 'irene/routes/authenticated/dashboard/sbom/apps';
-import { PaginationProviderActionsArgs } from 'irene/components/ak-pagination-provider';
-import SbomProjectModel from 'irene/models/sbom-project';
+import type { SbomAppQueryParam } from 'irene/routes/authenticated/dashboard/sbom/apps';
+import type { PaginationProviderActionsArgs } from 'irene/components/ak-pagination-provider';
+import type SbomProjectModel from 'irene/models/sbom-project';
 import parseError from 'irene/utils/parse-error';
-import SbomFileModel from 'irene/models/sbom-file';
+import type SbomFileModel from 'irene/models/sbom-file';
 
 type SbomProjectQueryResponse =
   DS.AdapterPopulatedRecordArray<SbomProjectModel> & {

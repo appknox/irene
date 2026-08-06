@@ -1,4 +1,4 @@
-import { Snapshot } from '@ember-data/store';
+import type { Snapshot } from '@ember-data/store';
 import commondrf from './commondrf';
 
 export default class CapturedAPIAdapter extends commondrf {

@@ -2,16 +2,16 @@ import Component from '@glimmer/component';
 import { action } from '@ember/object';
 import { service } from '@ember/service';
 import { task } from 'ember-concurrency';
-import IntlService from 'ember-intl/services/intl';
-import Store from 'ember-data/store';
+import type IntlService from 'ember-intl/services/intl';
+import type Store from 'ember-data/store';
 import { tracked } from '@glimmer/tracking';
 
 // eslint-disable-next-line ember/use-ember-data-rfc-395-imports
-import { DS } from 'ember-data';
+import type { DS } from 'ember-data';
 
-import PartnerService from 'irene/services/partner';
+import type PartnerService from 'irene/services/partner';
 
-import PartnerclientModel from 'irene/models/partner/partnerclient';
+import type PartnerclientModel from 'irene/models/partner/partnerclient';
 import parseError from 'irene/utils/parse-error';
 
 type PartnerClientResponseModel =

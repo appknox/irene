@@ -1,10 +1,10 @@
 import Component from '@glimmer/component';
-import {
+import type {
   TypographyColors,
   TypographyFontWeight,
   TypographyVariant,
 } from '../ak-typography';
-import { ComponentLike } from '@glint/template';
+import type { ComponentLike } from '@glint/template';
 
 type LabelTypographyVariant = TypographyVariant;
 type LabelTypographyFontWeight = TypographyFontWeight;

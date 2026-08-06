@@ -1,7 +1,7 @@
 import Route from '@ember/routing/route';
 import { inject as service } from '@ember/service';
 
-import ConfigurationService from 'irene/services/configuration';
+import type ConfigurationService from 'irene/services/configuration';
 
 export default class StatusRoute extends Route {
   @service declare configuration: ConfigurationService;

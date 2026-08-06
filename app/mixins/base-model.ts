@@ -1,7 +1,8 @@
-import Model, { AsyncBelongsTo, attr, belongsTo } from '@ember-data/model';
+import type { AsyncBelongsTo } from '@ember-data/model';
+import Model, { attr, belongsTo } from '@ember-data/model';
 import { isEmpty } from '@ember/utils';
 
-import UserModel from 'irene/models/user';
+import type UserModel from 'irene/models/user';
 
 // Class based mixin support for non classic models
 export class ModelBaseMixin extends Model {

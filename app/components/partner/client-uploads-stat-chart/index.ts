@@ -25,7 +25,7 @@ import type {
   CalendarDay,
 } from 'irene/components/ak-date-picker';
 
-import {
+import type {
   TopLevelFormatterParams,
   CallbackDataParams,
 } from 'echarts/types/dist/shared';

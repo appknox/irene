@@ -8,7 +8,7 @@ import type Store from 'ember-data/store';
 import type IntlService from 'ember-intl/services/intl';
 
 import ENV from 'irene/config/environment';
-import ApiScanOptionsModel from 'irene/models/api-scan-options';
+import type ApiScanOptionsModel from 'irene/models/api-scan-options';
 import type IreneAjaxService from 'irene/services/ajax';
 import type { AjaxError } from 'irene/services/ajax';
 import type AnalyticsService from 'irene/services/analytics';

@@ -8,7 +8,7 @@ import type Store from 'ember-data/store';
 
 import lookupValidator from 'ember-changeset-validations';
 import { Changeset } from 'ember-changeset';
-import { BufferedChangeset } from 'ember-changeset/types';
+import type { BufferedChangeset } from 'ember-changeset/types';
 import { validatePresence } from 'ember-changeset-validations/validators';
 import { waitForPromise } from '@ember/test-waiters';
 

@@ -1,6 +1,6 @@
 /* eslint-disable ember/no-computed-properties-in-native-classes */
 import Model, { attr } from '@ember-data/model';
-import ComputedProperty from '@ember/object/computed';
+import type ComputedProperty from '@ember/object/computed';
 
 export default class AutomationScriptModel extends Model {
   @attr('string')

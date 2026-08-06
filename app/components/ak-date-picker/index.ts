@@ -1,5 +1,5 @@
 import Component from '@glimmer/component';
-import { Placement, Modifier } from '@popperjs/core';
+import type { Placement, Modifier } from '@popperjs/core';
 import { tracked } from '@glimmer/tracking';
 import { action } from '@ember/object';
 import dayjs from 'dayjs';

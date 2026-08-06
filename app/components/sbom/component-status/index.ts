@@ -1,8 +1,8 @@
-import { inject as service } from '@ember/service';
+import { service } from '@ember/service';
 import Component from '@glimmer/component';
-import IntlService from 'ember-intl/services/intl';
-import SbomComponentModel from 'irene/models/sbom-component';
 import type SbomComponentInventoryModel from 'irene/models/sbom-component-inventory';
+import type IntlService from 'ember-intl/services/intl';
+import type SbomComponentModel from 'irene/models/sbom-component';
 import * as semver from 'semver';
 
 export interface SbomComponentStatusSignature {

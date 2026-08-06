@@ -1,5 +1,5 @@
 import Component from '@glimmer/component';
-import ProjectTeamModel from 'irene/models/project-team';
+import type ProjectTeamModel from 'irene/models/project-team';
 
 interface ProjectSettingsGeneralSettingsProjectTeamTableTeamsSignature {
   Args: {

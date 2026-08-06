@@ -2,8 +2,8 @@ import Component from '@glimmer/component';
 import { action } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
 import { task } from 'ember-concurrency';
-import OrganizationModel from 'irene/models/organization';
-import OrganizationMemberModel from 'irene/models/organization-member';
+import type OrganizationModel from 'irene/models/organization';
+import type OrganizationMemberModel from 'irene/models/organization-member';
 
 interface OrganizationMemberInviteUserSignature {
   Args: {

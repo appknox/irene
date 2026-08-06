@@ -1,12 +1,12 @@
 /* eslint-disable ember/no-observers */
 import Component from '@glimmer/component';
 import { action } from '@ember/object';
-import {
-  createPopper,
+import type {
   Placement,
   Modifier,
   Instance as PopperInstance,
 } from '@popperjs/core';
+import { createPopper } from '@popperjs/core';
 import { inject as service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
 import { addObserver, removeObserver } from '@ember/object/observers';

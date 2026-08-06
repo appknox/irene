@@ -1,6 +1,7 @@
 import commondrf from './commondrf';
 
-import ProfileModel, {
+import type ProfileModel from 'irene/models/profile';
+import {
   type ProfileRegulatoryReportPreference,
   type SaveReportPreferenceData,
   type SaveKnoxIqAutomatedTriggerData,

@@ -3,14 +3,14 @@ import { action } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
 import { inject as service } from '@ember/service';
 import { task } from 'ember-concurrency';
-import IntlService from 'ember-intl/services/intl';
-import Store from 'ember-data/store';
+import type IntlService from 'ember-intl/services/intl';
+import type Store from 'ember-data/store';
 
 // eslint-disable-next-line ember/use-ember-data-rfc-395-imports
-import { DS } from 'ember-data';
+import type { DS } from 'ember-data';
 
 import parseError from 'irene/utils/parse-error';
-import OrganizationCleanupModel from 'irene/models/organization-cleanup';
+import type OrganizationCleanupModel from 'irene/models/organization-cleanup';
 
 type OrganizationCleanupResponseModel =
   DS.AdapterPopulatedRecordArray<OrganizationCleanupModel> & {

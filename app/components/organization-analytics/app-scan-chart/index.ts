@@ -5,14 +5,14 @@ import ENV from 'irene/config/environment';
 import { inject as service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
 import dayjs from 'dayjs';
-import { BarSeriesOption } from 'echarts/charts';
+import type { BarSeriesOption } from 'echarts/charts';
 
-import OrganizationService from 'irene/services/organization';
-import { ECInstance, ECOption } from 'irene/components/ak-chart';
+import type OrganizationService from 'irene/services/organization';
+import type { ECInstance, ECOption } from 'irene/components/ak-chart';
 import parseError from 'irene/utils/parse-error';
 import { humanizeMonths } from 'irene/utils/date-time';
 
-import {
+import type {
   CalendarOnSelectFunc,
   RangeDateObject,
 } from 'irene/components/ak-date-picker';

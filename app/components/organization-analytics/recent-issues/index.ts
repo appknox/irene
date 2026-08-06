@@ -1,7 +1,7 @@
 import Component from '@glimmer/component';
 import { findAll } from 'ember-data-resources';
 
-import AnalyticsRecentIssueModel from 'irene/models/analytics/recent-issue';
+import type AnalyticsRecentIssueModel from 'irene/models/analytics/recent-issue';
 
 export default class OrganizationAnalyticsRecentIssuesComponent extends Component {
   recentIssues = findAll<AnalyticsRecentIssueModel>(

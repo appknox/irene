@@ -1,7 +1,7 @@
 import Component from '@glimmer/component';
 import { action } from '@ember/object';
-import OrganizationTeamModel from 'irene/models/organization-team';
-import OrganizationModel from 'irene/models/organization';
+import type OrganizationTeamModel from 'irene/models/organization-team';
+import type OrganizationModel from 'irene/models/organization';
 
 export interface OrganizationTeamOverviewComponentSignature {
   Args: {

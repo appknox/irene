@@ -1,15 +1,16 @@
 import Component from '@glimmer/component';
 import { inject as service } from '@ember/service';
 import { task } from 'ember-concurrency';
-import IntlService from 'ember-intl/services/intl';
+import type IntlService from 'ember-intl/services/intl';
 import { action } from '@ember/object';
-import Store from 'ember-data/store';
+import type Store from 'ember-data/store';
 import { waitForPromise } from '@ember/test-waiters';
 
-import ClipboardJS from 'clipboard/src/clipboard';
+import type ClipboardJS from 'clipboard/src/clipboard';
 
-import FileReportModel, { FileReportModelName } from 'irene/models/file-report';
-import { FileReportDetails } from 'irene/components/file/report-drawer/va-reports';
+import type { FileReportModelName } from 'irene/models/file-report';
+import type FileReportModel from 'irene/models/file-report';
+import type { FileReportDetails } from 'irene/components/file/report-drawer/va-reports';
 
 export interface FileReportDrawerVaReportsReportItemSignature {
   Element: HTMLElement;

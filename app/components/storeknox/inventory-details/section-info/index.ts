@@ -1,5 +1,5 @@
 import Component from '@glimmer/component';
-import { AkStackArgs } from 'irene/components/ak-stack';
+import type { AkStackArgs } from 'irene/components/ak-stack';
 
 interface StoreknoxInventoryDetailsSectionInfoSignature {
   Element: HTMLElement;

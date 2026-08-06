@@ -6,28 +6,28 @@ import { addObserver, removeObserver } from '@ember/object/observers';
 import * as echarts from 'echarts/core';
 
 // Import charts
-import {
-  BarChart,
+import type {
   BarSeriesOption,
-  PieChart,
   PieSeriesOption,
-  LineChart,
   LineSeriesOption,
 } from 'echarts/charts';
+import { BarChart, PieChart, LineChart } from 'echarts/charts';
 
 // Import the tooltip, title, rectangular coordinate system, dataset and transform components
+import type {
+  TitleComponentOption,
+  TooltipComponentOption,
+  GridComponentOption,
+  DatasetComponentOption,
+  LegendComponentOption,
+} from 'echarts/components';
 import {
   TitleComponent,
-  TitleComponentOption,
   TooltipComponent,
-  TooltipComponentOption,
   GridComponent,
-  GridComponentOption,
   DatasetComponent,
-  DatasetComponentOption,
   TransformComponent,
   LegendComponent,
-  LegendComponentOption,
 } from 'echarts/components';
 
 // Features like Universal Transition and Label Layout

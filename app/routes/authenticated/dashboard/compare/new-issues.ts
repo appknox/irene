@@ -1,9 +1,9 @@
 import { inject as service } from '@ember/service';
-import Store from 'ember-data/store';
+import type Store from 'ember-data/store';
 
 import AkBreadcrumbsRoute from 'irene/utils/ak-breadcrumbs-route';
 
-import {
+import type {
   CompareChildrenRoutesModel,
   CompareRouteQueryParams,
 } from 'irene/routes/authenticated/dashboard/compare';

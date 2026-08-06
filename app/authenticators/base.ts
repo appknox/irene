@@ -2,11 +2,11 @@
 // @ts-ignore
 import Base from 'ember-simple-auth/authenticators/base';
 import { service } from '@ember/service';
-import RouterService from '@ember/routing/router-service';
+import type RouterService from '@ember/routing/router-service';
 
 import ENV from 'irene/config/environment';
-import OidcService from 'irene/services/oidc';
-import FreshdeskService from 'irene/services/freshdesk';
+import type OidcService from 'irene/services/oidc';
+import type FreshdeskService from 'irene/services/freshdesk';
 import { getB64Token } from 'irene/utils/b64-encode-unicode';
 import type IreneAjaxService from 'irene/services/ajax';
 import type { SessionService } from 'irene/adapters/auth-base';

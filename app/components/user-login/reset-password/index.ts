@@ -6,7 +6,7 @@ import { task } from 'ember-concurrency';
 
 import lookupValidator from 'ember-changeset-validations';
 import { Changeset } from 'ember-changeset';
-import { BufferedChangeset } from 'ember-changeset/types';
+import type { BufferedChangeset } from 'ember-changeset/types';
 
 import {
   validatePresence,

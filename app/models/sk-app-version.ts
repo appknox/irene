@@ -1,10 +1,5 @@
-import Model, {
-  AsyncBelongsTo,
-  attr,
-  belongsTo,
-  hasMany,
-  SyncHasMany,
-} from '@ember-data/model';
+import type { AsyncBelongsTo, SyncHasMany } from '@ember-data/model';
+import Model, { attr, belongsTo, hasMany } from '@ember-data/model';
 
 import type SkInventoryAppModel from './sk-inventory-app';
 import type FileModel from './file';

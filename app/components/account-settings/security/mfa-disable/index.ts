@@ -3,7 +3,7 @@ import { tracked } from '@glimmer/tracking';
 import { service } from '@ember/service';
 import { action } from '@ember/object';
 import { task } from 'ember-concurrency';
-import Owner from '@ember/owner';
+import type Owner from '@ember/owner';
 import type IntlService from 'ember-intl/services/intl';
 
 import ENUMS from 'irene/enums';

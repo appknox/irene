@@ -1,17 +1,17 @@
 import Component from '@glimmer/component';
 import { inject as service } from '@ember/service';
-import IntlService from 'ember-intl/services/intl';
+import type IntlService from 'ember-intl/services/intl';
 import { tracked } from '@glimmer/tracking';
 import { action } from '@ember/object';
 import { task } from 'ember-concurrency';
-import Store from 'ember-data/store';
-import RouterService from '@ember/routing/router-service';
+import type Store from 'ember-data/store';
+import type RouterService from '@ember/routing/router-service';
 import { waitForPromise } from '@ember/test-waiters';
 
-import ProjectModel from 'irene/models/project';
-import ScanParameterGroupModel from 'irene/models/scan-parameter-group';
+import type ProjectModel from 'irene/models/project';
+import type ScanParameterGroupModel from 'irene/models/scan-parameter-group';
 import parseError from 'irene/utils/parse-error';
-import ScanParameterModel from 'irene/models/scan-parameter';
+import type ScanParameterModel from 'irene/models/scan-parameter';
 
 interface ProjectSettingsDastAutomationScenarioViewSignature {
   Args: {

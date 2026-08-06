@@ -1,6 +1,6 @@
 import Component from '@glimmer/component';
 import { inject as service } from '@ember/service';
-import WhitelabelService from 'irene/services/whitelabel';
+import type WhitelabelService from 'irene/services/whitelabel';
 
 export interface RegisterOidcErrorSignature {
   Args: {
