@@ -19,8 +19,7 @@ type ComponentStatus = {
 // purl (see ml_model_scanner.py / cloud_ai_scanner.py) — no vulnerability
 // database tracks CVEs against them, so vulnerabilitiesCount is always 0 and
 // "Secure" would falsely imply we checked and found nothing, when we never
-// had anything real to check. "secret" is handled separately below — it's a
-// real, actionable finding, not an absence of information.
+// had anything real to check.
 const NO_VULNERABILITY_FEED_ARTIFACT_CLASSES = new Set([
   'model',
   'tokenizer',
@@ -56,12 +55,7 @@ export default class SbomComponentStatusComponent extends Component<SbomComponen
     const component = this.args.sbomComponent;
 
     if (component) {
-      if (component.aiArtifactClass === 'secret') {
-        status.push({
-          label: this.intl.t('chipStatus.exposed'),
-          color: 'primary',
-        });
-      } else if (
+      if (
         component.isMLModel ||
         NO_VULNERABILITY_FEED_ARTIFACT_CLASSES.has(component.aiArtifactClass)
       ) {

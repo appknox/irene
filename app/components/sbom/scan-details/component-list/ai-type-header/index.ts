@@ -27,7 +27,6 @@ export default class AiTypeHeaderComponent extends Component<AiTypeHeaderCompone
       { key: this.intl.t('all'), value: null },
       { key: this.intl.t('sbomModule.aiTypeLabel.model'), value: 'model' },
       { key: this.intl.t('sbomModule.aiTypeLabel.library'), value: 'library' },
-      { key: this.intl.t('sbomModule.aiTypeLabel.secret'), value: 'secret' },
       {
         key: this.intl.t('sbomModule.aiTypeLabel.cloudEndpoint'),
         value: 'cloud_endpoint',

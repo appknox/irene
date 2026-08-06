@@ -98,11 +98,6 @@ export default class AiBomComponentListComponent extends Component<AiBomComponen
         value: byType['cloud_endpoint'] ?? 0,
       },
       {
-        iconName: 'key-outline' as const,
-        label: this.intl.t('sbomModule.aiTypeLabel.secret'),
-        value: byType['secret'] ?? 0,
-      },
-      {
         iconName: 'solar:library-linear' as const,
         label: this.intl.t('sbomModule.aiTypeLabel.library'),
         value: byType['library'] ?? 0,
