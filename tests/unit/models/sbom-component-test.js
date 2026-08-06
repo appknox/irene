@@ -95,9 +95,9 @@ module('Unit | Model | sbom component', function (hooks) {
     );
 
     assert.strictEqual(
-      store.createRecord('sbom-component', { aiArtifactClass: 'secret' })
+      store.createRecord('sbom-component', { aiArtifactClass: 'cloud_endpoint' })
         .aiPurposeDisplay,
-      t('sbomModule.aiPurposeFallback.secret')
+      t('sbomModule.aiPurposeFallback.cloudEndpoint')
     );
 
     assert.strictEqual(

@@ -214,13 +214,13 @@ module(
       this.server.create('sbom-component', {
         ai_purpose: '',
         ai_model_category: '',
-        ai_artifact_class: 'secret',
+        ai_artifact_class: 'cloud_endpoint',
         is_ai_component: true,
       });
 
       this.server.get(
         `/v2/sb_files/${this.sbomFileModelId}/sb_file_components/ai_summary`,
-        () => ({ total: 1, by_type: { secret: 1 }, aibom_supported: true })
+        () => ({ total: 1, by_type: { cloud_endpoint: 1 }, aibom_supported: true })
       );
 
       const sbomService = this.owner.lookup('service:sbom-scan-details');
@@ -242,7 +242,10 @@ module(
 
       assert
         .dom(cells[2])
-        .hasText(t('sbomModule.aiPurposeFallback.secret'), 'purpose not blank');
+        .hasText(
+          t('sbomModule.aiPurposeFallback.cloudEndpoint'),
+          'purpose not blank'
+        );
     });
 
     test('it shows real components instead of the re-upload prompt when the file predates ai bom detection but already has components', async function (assert) {

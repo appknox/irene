@@ -207,7 +207,7 @@ export default class SbomComponentModel extends Model {
    * Explains WHY this artifact got the confidence it did — e.g. a tokenizer
    * filename alone is a weak signal, but gets raised to "high" once a real
    * model is found elsewhere in the same app. Deterministic from
-   * (artifactClass, confidence): model/library/secret only ever reach a
+   * (artifactClass, confidence): model/library only ever reach a
    * baseline of "high" directly; tokenizer/config/supporting only ever reach
    * "medium"/"high" via the confidence-uplift pass (see
    * apply_confidence_uplift in ml_model_scanner.py), never as a baseline —
@@ -222,7 +222,6 @@ export default class SbomComponentModel extends Model {
     const key = `${this.aiArtifactClass}:${this.aiConfidence}`;
     const explanationMap: Record<string, string> = {
       'model:high': 'sbomModule.confidenceExplanation.formatProof',
-      'secret:high': 'sbomModule.confidenceExplanation.formatProof',
       'library:high': 'sbomModule.confidenceExplanation.libraryMatch',
       'cloud_endpoint:high':
         'sbomModule.confidenceExplanation.cloudProviderMatch',
@@ -258,7 +257,6 @@ export default class SbomComponentModel extends Model {
       tokenizer: 'sbomModule.supportingArtifact',
       config: 'sbomModule.supportingArtifact',
       supporting: 'sbomModule.supportingArtifact',
-      secret: 'sbomModule.aiTypeLabel.secret',
       cloud_endpoint: 'sbomModule.aiTypeLabel.cloudEndpoint',
       platform_managed_ai: 'sbomModule.aiTypeLabel.platformManagedAi',
     };
@@ -295,7 +293,6 @@ export default class SbomComponentModel extends Model {
       tokenizer: 'sbomModule.aiPurposeFallback.tokenizer',
       config: 'sbomModule.aiPurposeFallback.config',
       supporting: 'sbomModule.aiPurposeFallback.supporting',
-      secret: 'sbomModule.aiPurposeFallback.secret',
       cloud_endpoint: 'sbomModule.aiPurposeFallback.cloudEndpoint',
       platform_managed_ai: 'sbomModule.aiPurposeFallback.platformManagedAi',
     };

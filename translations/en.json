@@ -221,8 +221,7 @@
     "outdated": "OUTDATED",
     "vulnerable": "VULNERABLE",
     "secure": "SECURE",
-    "unknown": "UNKNOWN",
-    "exposed": "EXPOSED"
+    "unknown": "UNKNOWN"
   },
   "circleCIPipeline": "Circle CI Pipeline",
   "clear": "Clear",
@@ -2004,7 +2003,6 @@
     "aiTypeLabel": {
       "model": "ML Model",
       "library": "AI SDK",
-      "secret": "Secret",
       "cloudEndpoint": "Cloud Endpoint",
       "platformManagedAi": "Platform Managed AI"
     },
@@ -2017,7 +2015,6 @@
       "tokenizer": "Text Tokenization",
       "config": "Model Configuration",
       "supporting": "Supporting Artifact",
-      "secret": "Authentication Credential",
       "cloudEndpoint": "Remote Inference",
       "platformManagedAi": "On-Device AI Capability"
     },
