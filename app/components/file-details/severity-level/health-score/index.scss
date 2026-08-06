@@ -1,0 +1,77 @@
+.health-score-value {
+  align-items: baseline;
+
+  .health-score-value-score,
+  .health-score-value-max {
+    font-size: 2.5rem;
+  }
+
+  .health-score-value-max {
+    color: var(--file-details-severity-level-health-score-neutral-color);
+  }
+}
+
+.health-score-status-chip {
+  color: var(
+    --file-details-severity-level-health-score-status-chip-text-color
+  ) !important;
+}
+
+.health-score-status-chip--very-poor {
+  background-color: var(
+    --file-details-severity-level-health-score-status-chip-bg-very-poor
+  ) !important;
+}
+
+.health-score-status-chip--poor {
+  background-color: var(
+    --file-details-severity-level-health-score-status-chip-bg-poor
+  ) !important;
+}
+
+.health-score-status-chip--fair {
+  background-color: var(
+    --file-details-severity-level-health-score-status-chip-bg-fair
+  );
+}
+
+.health-score-status-chip--good {
+  background-color: var(
+    --file-details-severity-level-health-score-status-chip-bg-good
+  ) !important;
+}
+
+.health-score-status-chip--excellent {
+  background-color: var(
+    --file-details-severity-level-health-score-status-chip-bg-excellent
+  ) !important;
+}
+
+.health-score-root {
+  height: 100%;
+  padding: 1.714em;
+  box-sizing: border-box;
+  background-color: var(
+    --file-details-severity-level-health-score-background-color
+  );
+  border: 1px solid var(--file-details-severity-level-health-score-border-color);
+  border-radius: var(--file-details-severity-level-health-score-border-radius);
+}
+
+.health-score-compact {
+  height: 100%;
+
+  .health-score-compact-box {
+    flex: 1;
+    padding: 1.714em;
+    box-sizing: border-box;
+    background-color: var(
+      --file-details-severity-level-health-score-background-color
+    );
+    border: 1px solid
+      var(--file-details-severity-level-health-score-border-color);
+    border-radius: var(
+      --file-details-severity-level-health-score-border-radius-compact
+    );
+  }
+}

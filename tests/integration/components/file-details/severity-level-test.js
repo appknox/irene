@@ -122,5 +122,57 @@ module(
         });
       }
     );
+
+    // ─── Health score integration ───────────────────────────────────────────────
+    test('divider and health score section are visible when the file has a score', async function (assert) {
+      this.server.get('/v3/projects/:id', (_, req) => ({
+        id: req.params.id,
+        active_profile_id: '100',
+        show_unknown_analysis: false,
+      }));
+
+      this.server.get('/v3/files/:id/health_score_audit', () => ({
+        current_score: {
+          knoxiq_enabled: false,
+          score: 73,
+          score_type: 'severity_based',
+          status: 'fair',
+        },
+        audit_trail: [],
+      }));
+
+      await render(hbs`<FileDetails::SeverityLevel @file={{this.file}} />`);
+
+      assert
+        .dom('[data-test-fileDetailSeverityLevel-healthScore]')
+        .exists('health score section renders');
+
+      assert
+        .dom('[data-test-fileDetailSeverityLevel-divider]')
+        .exists('divider is in the DOM when health score is present');
+    });
+
+    test('divider and health score section are absent when current_score is null', async function (assert) {
+      this.server.get('/v3/projects/:id', (_, req) => ({
+        id: req.params.id,
+        active_profile_id: '100',
+        show_unknown_analysis: false,
+      }));
+
+      this.server.get('/v3/files/:id/health_score_audit', () => ({
+        current_score: null,
+        audit_trail: [],
+      }));
+
+      await render(hbs`<FileDetails::SeverityLevel @file={{this.file}} />`);
+
+      assert
+        .dom('[data-test-fileDetailSeverityLevel-healthScore]')
+        .doesNotExist('health score section is not rendered');
+
+      assert
+        .dom('[data-test-fileDetailSeverityLevel-divider]')
+        .doesNotExist('divider is absent when no health score');
+    });
   }
 );
