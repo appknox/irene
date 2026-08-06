@@ -16,6 +16,7 @@ import type AnalyticsService from 'irene/services/analytics';
 const isRegexFailed = function (url: string) {
   const reg =
     /^(([a-zA-Z0-9]|[a-zA-Z0-9][a-zA-Z0-9-]*[a-zA-Z0-9])\.)*([A-Za-z0-9]|[A-Za-z0-9][A-Za-z0-9-]*[A-Za-z0-9])$/;
+
   return reg.test(url);
 };
 

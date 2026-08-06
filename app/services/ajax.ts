@@ -75,6 +75,7 @@ function stripSlashes(path: string) {
   if (endsWithSlash(path)) {
     path = removeTrailingSlash(path);
   }
+
   return path;
 }
 
@@ -254,6 +255,7 @@ export default class IreneAjaxService extends Service {
   private _matchHosts(hostname: string, pattern: string): boolean {
     // Convert pattern to regex-compatible string
     const regexPattern = pattern.replace(/\./g, '\\.').replace(/\*/g, '.*');
+
     return new RegExp(`^${regexPattern}$`).test(hostname);
   }
 

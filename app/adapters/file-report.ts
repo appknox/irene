@@ -34,6 +34,7 @@ export default class FileReport extends commondrf {
     snapshot: Snapshot<K>
   ) {
     const url = this._buildURL(modelClass.modelName, snapshot.record.fileId);
+
     return this.ajax(url, 'POST', {
       data: {},
     });

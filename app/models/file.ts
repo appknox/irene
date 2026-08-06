@@ -132,6 +132,7 @@ export default class FileModel extends ModelBaseMixin {
 
   get isRunningApiScan() {
     const apiScanStatus = this.apiScanStatus;
+
     return apiScanStatus == ENUMS.SCAN_STATUS.RUNNING;
   }
 
@@ -141,6 +142,7 @@ export default class FileModel extends ModelBaseMixin {
 
   get isStaticCompleted() {
     const isStaticDone = this.isStaticDone;
+
     return this.scanProgressClass(isStaticDone);
   }
 
@@ -149,6 +151,7 @@ export default class FileModel extends ModelBaseMixin {
     if (platform === ENUMS.PLATFORM.IOS) {
       return this.version;
     }
+
     return this.versionCode;
   }
 

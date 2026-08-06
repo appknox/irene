@@ -11,6 +11,7 @@ export default class DatetimeService extends Service {
    */
   duration(value = 0) {
     dayjs.extend(duration);
+
     return dayjs.duration(value);
   }
 
@@ -21,6 +22,7 @@ export default class DatetimeService extends Service {
    */
   setLocale(lang = 'en') {
     dayjs.locale(lang);
+
     return true;
   }
 }

@@ -28,6 +28,7 @@ export default class PartnerClientPlanComponent extends Component<PartnerClientP
       );
     } catch (err) {
       this.clientPlan = null;
+
       return;
     }
   });

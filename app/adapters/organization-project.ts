@@ -31,6 +31,7 @@ export default class OrganizationProjectAdapter extends commondrf {
       snapshot,
       collaboratorId
     );
+
     return this.ajax(url, 'PUT', {
       data,
     });

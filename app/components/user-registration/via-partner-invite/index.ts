@@ -104,6 +104,7 @@ export default class ViaPartnerInviteComponent extends Component<ViaPartnerInvit
           changeset.addError(key, errors.payload[key]);
         } else {
           this.notify.error(this.intl.t('somethingWentWrong'));
+
           return;
         }
       });

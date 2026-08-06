@@ -85,6 +85,7 @@ export default class PartnerClientReportSummaryComponent extends Component<Partn
       );
     } catch (err) {
       this.fileSummary = null;
+
       return;
     }
   });

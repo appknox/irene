@@ -101,6 +101,7 @@ export default class ViaOrgInviteComponent extends Component<ViaOrgInviteSignatu
             changeset.addError(key, errors.payload[key]);
           } else {
             this.notify.error(this.intl.t('somethingWentWrong'));
+
             return;
           }
         });

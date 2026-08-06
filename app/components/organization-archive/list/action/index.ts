@@ -22,6 +22,7 @@ export default class OrganizationArchiveListActionComponent extends Component<Or
 
     if (downloadURL) {
       this.window.open(downloadURL);
+
       return;
     }
 
