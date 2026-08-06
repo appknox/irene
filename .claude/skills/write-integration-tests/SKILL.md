@@ -18,16 +18,16 @@ Before writing any test, read:
 
 Then build a scenario inventory by cross-referencing **all** of these:
 
-| Source | What to capture |
-|--------|----------------|
-| `{{#if condition}}` blocks in `.hbs` | Both the truthy and falsy render paths |
-| `{{#each}}` loops | Empty-collection state + populated state |
-| `@tracked` properties | Every distinct value that changes rendered output |
+| Source                                                       | What to capture                                                                              |
+| ------------------------------------------------------------ | -------------------------------------------------------------------------------------------- |
+| `{{#if condition}}` blocks in `.hbs`                         | Both the truthy and falsy render paths                                                       |
+| `{{#each}}` loops                                            | Empty-collection state + populated state                                                     |
+| `@tracked` properties                                        | Every distinct value that changes rendered output                                            |
 | Computed getters (e.g. `renamedRoles`, `showEmptyContainer`) | Each branch of the getter — especially cases where the getter returns a subset or empty list |
-| Action handlers | The happy path, error path, and any in-progress/loading state |
-| Nullish-coalescing / optional-chaining in actions | Both sides: when the left value exists vs. when it auto-creates/falls back |
-| `rollbackAttributes()` calls | Cancel flows for **persisted** (id-bearing) records, not just new ones |
-| Adapter calls | Each endpoint called — including update/rename paths that differ from create paths |
+| Action handlers                                              | The happy path, error path, and any in-progress/loading state                                |
+| Nullish-coalescing / optional-chaining in actions            | Both sides: when the left value exists vs. when it auto-creates/falls back                   |
+| `rollbackAttributes()` calls                                 | Cancel flows for **persisted** (id-bearing) records, not just new ones                       |
+| Adapter calls                                                | Each endpoint called — including update/rename paths that differ from create paths           |
 
 **Only declare the test suite complete once every cell in this inventory has a corresponding test.**
 
@@ -231,7 +231,9 @@ If a `data-test-*` attribute is missing, add it to the template before writing t
 
 ```hbs
 {{! ✅ Give the element its own attribute }}
-<AkTypography data-test-myComponent-scenarioName>{{@scenario.name}}</AkTypography>
+<AkTypography
+  data-test-myComponent-scenarioName
+>{{@scenario.name}}</AkTypography>
 
 {{! ❌ Don't rely on the generic component selector }}
 <AkTypography>{{@scenario.name}}</AkTypography>
@@ -303,7 +305,8 @@ compareInnerHTMLWithIntlTranslation(assert, {
   ```
 - Use **`new RegExp(variable)`** when the icon name comes from a variable:
   ```js
-  assert.dom(`${selectors.popoverItem(config.label)} [data-test-ak-icon]`)
+  assert
+    .dom(`${selectors.popoverItem(config.label)} [data-test-ak-icon]`)
     .hasAttribute('icon', new RegExp(config.icon));
   ```
 - Never use a plain string:
@@ -400,11 +403,13 @@ import {
 ```
 
 **Assert a trigger is rendered:**
+
 ```js
 assertAkSelectTriggerExists(assert, selectors.mySelect);
 ```
 
 **Read all options (opens dropdown):**
+
 ```js
 const options = await getAllAkSelectOptions(selectors.mySelect);
 
@@ -415,6 +420,7 @@ expectedOptions.forEach((opt, i) => {
 ```
 
 **Select an option by label text and assert side effects:**
+
 ```js
 await chooseAkSelectOption({
   selectTriggerClass: selectors.mySelect,
@@ -426,6 +432,7 @@ assert.deepEqual(this.callbackCalledWith, [this.model, 'field']);
 ```
 
 **Select by index instead of label:**
+
 ```js
 await chooseAkSelectOption({
   selectTriggerClass: selectors.mySelect,
@@ -457,16 +464,19 @@ test.each(
 ```
 
 **Title rules:**
+
 - Use a plain descriptive string — no `${0}`, `${1}`, or index placeholders in titles; they do not work in this project's QUnit setup.
 - The title describes what the whole group tests, not individual cases (e.g. `'renders value cell and unit select visibility per action type'`, not `'renders ${0} action'`).
 
 Good candidates for `test.each`:
+
 - Value cell rendering per action type (same existence checks, different action)
 - Validation error counts (identifier-only / value-only / both)
 - Input interaction → callback called with correct field key
 - Read-only state per field type
 
 For dynamic method calls based on a boolean param:
+
 ```js
 assert.dom(selector)[condition ? 'exists' : 'doesNotExist']();
 ```
@@ -560,6 +570,7 @@ test('confirming role deletion calls onDeleteRole with the role and closes the c
 ## Step 16 — Checklist before writing
 
 **Scenario coverage (Step 1)**
+
 - [ ] Every `{{#if}}` / `{{#unless}}` branch has a test for the truthy and falsy path
 - [ ] Every computed getter's distinct output cases are covered (empty subset, full subset, etc.)
 - [ ] Auto-create side effects (`?? createX()`) tested with the left-side-absent case
@@ -568,12 +579,14 @@ test('confirming role deletion calls onDeleteRole with the role and closes the c
 - [ ] No `assert.ok(notify.errorMsg)` or `assert.ok(notify.successMsg)` — always `assert.strictEqual` with exact message
 
 **File structure**
+
 - [ ] All `data-test-*` attributes identified from the template
 - [ ] Shared model-setup boilerplate (≥3 tests, ≥3 lines each) extracted into a helper in `// ─── Helpers` (Step 6a)
 - [ ] Store fixtures use `store.normalize(model, record.toJSON())` without spread
 - [ ] Stubs registered for `notifications` and `router` if used
 
 **Assertions**
+
 - [ ] Cancel/close tests assert list state before AND after (Step 10)
 - [ ] Every interaction test has explicit pre-state and post-state assertions (Step 15)
 - [ ] Post-state assertions verify content/values, not just existence
@@ -584,5 +597,6 @@ test('confirming role deletion calls onDeleteRole with the role and closes the c
 - [ ] Tooltip tests trigger `mouseenter` before asserting content
 
 **Mirage**
+
 - [ ] Mirage routes set up for every network call the component makes on render and on interaction
 - [ ] Reload-after-mutate tests use schema-backed GET handlers
