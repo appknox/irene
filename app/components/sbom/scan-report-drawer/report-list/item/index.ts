@@ -78,10 +78,14 @@ export default class SbomScanReportDrawerReportListItemComponent extends Compone
   }
 
   handleDownloadReport = task(async (type: SbomReportType) => {
+    if (!this.sbomReport) {
+      this.notify.error(this.tPleaseTryAgain);
+
+      return;
+    }
+
     try {
-      const data = await waitForPromise(
-        (this.sbomReport as SbomReportModel).downloadReport(type)
-      );
+      const data = await waitForPromise(this.sbomReport.downloadReport(type));
 
       this.window.open(data.url, '_blank');
     } catch (e) {
@@ -90,12 +94,16 @@ export default class SbomScanReportDrawerReportListItemComponent extends Compone
   });
 
   handleGenerateReport = task(async (type: SbomReportType) => {
-    try {
-      await waitForPromise(
-        (this.sbomReport as SbomReportModel).generateReport(type)
-      );
+    if (!this.sbomReport) {
+      this.notify.error(this.tPleaseTryAgain);
 
-      await waitForPromise((this.sbomReport as SbomReportModel).reload());
+      return;
+    }
+
+    try {
+      await waitForPromise(this.sbomReport.generateReport(type));
+
+      await waitForPromise(this.sbomReport.reload());
     } catch (e) {
       this.notify.error(parseError(e, this.tPleaseTryAgain));
     }

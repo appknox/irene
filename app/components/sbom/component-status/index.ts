@@ -15,6 +15,20 @@ type ComponentStatus = {
   color: 'default' | 'primary' | 'success';
 };
 
+// These artifact classes only ever get a synthetic pkg:file/* or pkg:generic/*
+// purl (see ml_model_scanner.py / cloud_ai_scanner.py) — no vulnerability
+// database tracks CVEs against them, so vulnerabilitiesCount is always 0 and
+// "Secure" would falsely imply we checked and found nothing, when we never
+// had anything real to check.
+const NO_VULNERABILITY_FEED_ARTIFACT_CLASSES = new Set([
+  'model',
+  'tokenizer',
+  'config',
+  'supporting',
+  'cloud_endpoint',
+  'platform_managed_ai',
+]);
+
 export default class SbomComponentStatusComponent extends Component<SbomComponentStatusSignature> {
   @service declare intl: IntlService;
 
@@ -41,7 +55,10 @@ export default class SbomComponentStatusComponent extends Component<SbomComponen
     const component = this.args.sbomComponent;
 
     if (component) {
-      if (component.isMLModel && !component.isVulnerable) {
+      if (
+        component.isMLModel ||
+        NO_VULNERABILITY_FEED_ARTIFACT_CLASSES.has(component.aiArtifactClass)
+      ) {
         status.push({
           label: this.intl.t('chipStatus.unknown'),
           color: 'default',

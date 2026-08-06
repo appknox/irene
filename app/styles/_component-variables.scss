@@ -834,6 +834,12 @@ body {
 
   // variables for sbom/scan-details/component-list
   --sbom-scan-details-component-list-background-color: var(--common-white);
+  --sbom-scan-details-component-list-container-border-color: var(
+    --border-color-1
+  );
+  --sbom-scan-details-component-list-container-border-radius: var(
+    --border-radius
+  );
 
   // variables for sbom/scan-details/component-list/type-header
   --sbom-scanDetails-componentList-typeHeader-background-color: var(
@@ -870,6 +876,42 @@ body {
     --neutral-grey-200
   );
   --sbom-scanDetails-componentList-dependencyTypeHeader-filter-header-background-color: var(
+    --neutral-grey-100
+  );
+
+  // variables for sbom/scan-details/component-list/ai-confidence-header
+  --sbom-scan-details-component-list-ai-confidence-header-background-color: var(
+    --background-main
+  );
+  --sbom-scan-details-component-list-ai-confidence-header-box-shadow: var(--box-shadow-7);
+  --sbom-scan-details-component-list-ai-confidence-header-border-radius: var(
+    --box-shadow-7
+  );
+  --sbom-scan-details-component-list-ai-confidence-header-filter-option-hover-background-color: var(
+    --neutral-grey-200
+  );
+  --sbom-scan-details-component-list-ai-confidence-header-filter-option-clear-filter-background-color: var(
+    --neutral-grey-200
+  );
+  --sbom-scan-details-component-list-ai-confidence-header-filter-header-background-color: var(
+    --neutral-grey-100
+  );
+
+  // variables for sbom/scan-details/component-list/ai-type-header
+  --sbom-scan-details-component-list-ai-type-header-background-color: var(
+    --background-main
+  );
+  --sbom-scan-details-component-list-ai-type-header-box-shadow: var(--box-shadow-7);
+  --sbom-scan-details-component-list-ai-type-header-border-radius: var(
+    --box-shadow-7
+  );
+  --sbom-scan-details-component-list-ai-type-header-filter-option-hover-background-color: var(
+    --neutral-grey-200
+  );
+  --sbom-scan-details-component-list-ai-type-header-filter-option-clear-filter-background-color: var(
+    --neutral-grey-200
+  );
+  --sbom-scan-details-component-list-ai-type-header-filter-header-background-color: var(
     --neutral-grey-100
   );
 
@@ -980,6 +1022,59 @@ body {
   --sbom-scan-details-component-tree-highlighted-text-color: var(
     --common-white
   );
+
+  // variables for sbom/scan-details/ai-bom-component-list
+  --sbom-scan-details-ai-bom-component-list-listing-container-background-color: var(
+    --common-white
+  );
+  --sbom-scan-details-ai-bom-component-list-listing-container-border-color: var(
+    --border-color-1
+  );
+  --sbom-scan-details-ai-bom-component-list-listing-container-border-radius: var(
+    --border-radius
+  );
+  --sbom-scan-details-ai-bom-component-list-pre-ai-bom-empty-background-color: var(
+    --common-white
+  );
+  --sbom-scan-details-ai-bom-component-list-pre-ai-bom-empty-border-color: var(
+    --border-color-1
+  );
+  --sbom-scan-details-ai-bom-component-list-pre-ai-bom-empty-border-radius: var(
+    --border-radius
+  );
+
+  // variables for sbom/scan-details/ai-bom-component-drawer
+  --sbom-scan-details-ai-bom-component-drawer-file-box-border-color: var(
+    --border-color-1
+  );
+  --sbom-scan-details-ai-bom-component-drawer-file-box-border-radius: var(
+    --border-radius
+  );
+  --sbom-scan-details-ai-bom-component-drawer-file-box-background-color: var(
+    --common-white
+  );
+  --sbom-scan-details-ai-bom-component-drawer-details-box-border-color: var(
+    --border-color-1
+  );
+  --sbom-scan-details-ai-bom-component-drawer-details-box-border-radius: var(
+    --border-radius
+  );
+  --sbom-scan-details-ai-bom-component-drawer-details-box-background-color: var(
+    --common-white
+  );
+  --sbom-scan-details-ai-bom-component-drawer-section-header-background-color: var(
+    --neutral-grey-100
+  );
+
+  // variables for sbom/scan-details/summary-bar
+  --sbom-scan-details-summary-bar-container-background-color: var(--background-main);
+  --sbom-scan-details-summary-bar-container-border-color: var(--border-color-1);
+  --sbom-scan-details-summary-bar-container-border-radius: var(--border-radius);
+  --sbom-scan-details-summary-bar-new-feature-container-background-color: var(
+    --new-feature-ai-bg-color
+  );
+  --sbom-scan-details-summary-bar-new-feature-container-border-radius: var(--border-radius);
+  --sbom-scan-details-summary-bar-new-feature-icon-color: var(--new-feature-ai-color);
 
   // variables for analysis-risk/tag
   // variables for analysis-risk/text

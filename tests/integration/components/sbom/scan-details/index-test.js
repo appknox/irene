@@ -1,4 +1,5 @@
 import { render, click } from '@ember/test-helpers';
+import Service from '@ember/service';
 import dayjs from 'dayjs';
 import { hbs } from 'ember-cli-htmlbars';
 import { setupMirage } from 'ember-cli-mirage/test-support';
@@ -8,12 +9,23 @@ import { module, test } from 'qunit';
 
 import { SbomScanStatus } from 'irene/models/sbom-file';
 
+class RouterStub extends Service {
+  currentRouteName = 'authenticated.dashboard.sbom.scan-details';
+
+  transitionTo(routeNameOrQueryParams) {
+    this.currentRouteName = routeNameOrQueryParams;
+  }
+}
+
 module('Integration | Component | sbom/scan-details', function (hooks) {
   setupRenderingTest(hooks);
   setupMirage(hooks);
   setupIntl(hooks, 'en');
 
   hooks.beforeEach(async function () {
+    this.owner.unregister('service:router');
+    this.owner.register('service:router', RouterStub);
+
     const store = this.owner.lookup('service:store');
 
     const file = this.server.create('file', 1);
@@ -130,6 +142,10 @@ module('Integration | Component | sbom/scan-details', function (hooks) {
 
       if (status === SbomScanStatus.COMPLETED) {
         assert.dom('[data-test-component-tree]').exists();
+
+        // a current file has a tab bar naming the section, so no heading
+        assert.dom('[data-test-sbomScanDetails-sbomTab]').exists();
+        assert.dom('[data-test-sbomScanDetails-overview-title]').doesNotExist();
       } else {
         if (status === SbomScanStatus.FAILED) {
           assert
@@ -301,5 +317,182 @@ module('Integration | Component | sbom/scan-details', function (hooks) {
     await click('[data-test-sbomScanDetails-viewReport-btn]');
 
     assert.dom('[data-test-sbomReportDrawer-drawer]').exists();
+  });
+
+  test('it fetches an outdated file in list mode, not tree mode', async function (assert) {
+    this.sbomFile.status = SbomScanStatus.COMPLETED;
+    this.sbomFile.isOutdated = true;
+
+    let componentsQuery = null;
+
+    this.server.get(
+      '/v2/sb_files/:id/sb_file_components',
+      (schema, request) => {
+        componentsQuery = request.queryParams;
+
+        const results = schema.sbomComponents.all().models;
+
+        return { count: results.length, next: null, previous: null, results };
+      }
+    );
+
+    // queryParams still carries the controller's view_type: 'tree' default
+    await render(hbs`
+      <Sbom::ScanDetails
+        @sbomProject={{this.sbomProject}}
+        @sbomFile={{this.sbomFile}}
+        @sbomScanSummary={{this.sbomScanSummary}}
+        @queryParams={{this.queryParams}}
+      />
+    `);
+
+    // the tree is gated on isNotOutdated, so an outdated file always renders
+    // the flat list...
+    assert.dom('[data-test-sbomScanDetails-componentList-container]').exists();
+    assert.dom('[data-test-component-tree]').doesNotExist();
+
+    // ...so the fetch has to match it. type=1 is the tree-mode marker, and
+    // tree mode drops every list filter server-side.
+    assert.notOk(componentsQuery.type, 'no tree-mode marker in the request');
+  });
+
+  test('it pins an outdated file to the SBOM tab when the url asks for AI BoM', async function (assert) {
+    this.sbomFile.status = SbomScanStatus.COMPLETED;
+    this.sbomFile.isOutdated = true;
+
+    this.server.get('/v2/sb_files/:id/sb_file_components', (schema) => {
+      const results = schema.sbomComponents.all().models;
+
+      return { count: results.length, next: null, previous: null, results };
+    });
+
+    this.server.get('/v2/sb_files/:id/sb_file_components/ai_summary', () => ({
+      total: 0,
+      by_type: {},
+      aibom_supported: true,
+    }));
+
+    // a bookmarked/shared link straight to the AI BoM tab
+    this.set('queryParams', { ...this.queryParams, is_ai_component: 'true' });
+
+    await render(hbs`
+      <Sbom::ScanDetails
+        @sbomProject={{this.sbomProject}}
+        @sbomFile={{this.sbomFile}}
+        @sbomScanSummary={{this.sbomScanSummary}}
+        @queryParams={{this.queryParams}}
+      />
+    `);
+
+    // an outdated scan renders no tab bar at all...
+    assert.dom('[data-test-sbomScanDetails-sbomTab]').doesNotExist();
+    assert.dom('[data-test-sbomScanDetails-aibomTab]').doesNotExist();
+
+    // ...so the AI BoM list must not render either -- there would be no way
+    // back to the SBOM tab without hand-editing the URL.
+    assert.dom('[data-test-sbomScanDetails-aiBomComponentList]').doesNotExist();
+
+    // the SBOM tab's own content is unaffected by the pin -- an outdated
+    // scan still shows its overview and component list, only the view-switch
+    // header is withheld.
+    assert.dom('[data-test-sbomScanDetails-overview-container]').exists();
+    assert.dom('[data-test-sbomScanDetails-componentList-container]').exists();
+
+    // with no tab bar to label the section, the overview gets a heading
+    assert
+      .dom('[data-test-sbomScanDetails-overview-title]')
+      .exists()
+      .hasText(t('overview'));
+    assert.dom('[data-test-sbomScanDetails-switch-header]').doesNotExist();
+  });
+
+  test('it still opens the AI BoM tab from the url for a current file', async function (assert) {
+    this.sbomFile.status = SbomScanStatus.COMPLETED;
+    this.sbomFile.isOutdated = false;
+
+    this.server.get('/v2/sb_files/:id/sb_file_components', (schema) => {
+      const results = schema.sbomComponents.all().models;
+
+      return { count: results.length, next: null, previous: null, results };
+    });
+
+    this.server.get('/v2/sb_files/:id/sb_file_components/ai_summary', () => ({
+      total: 0,
+      by_type: {},
+      aibom_supported: true,
+    }));
+
+    this.set('queryParams', { ...this.queryParams, is_ai_component: 'true' });
+
+    await render(hbs`
+      <Sbom::ScanDetails
+        @sbomProject={{this.sbomProject}}
+        @sbomFile={{this.sbomFile}}
+        @sbomScanSummary={{this.sbomScanSummary}}
+        @queryParams={{this.queryParams}}
+      />
+    `);
+
+    assert.dom('[data-test-sbomScanDetails-aibomTab]').exists();
+
+    assert.dom('[data-test-sbomScanDetails-aiBomComponentList]').exists();
+  });
+
+  test('it resets AI BoM-only and SBOM-only filters when switching tabs', async function (assert) {
+    this.sbomFile.status = SbomScanStatus.COMPLETED;
+
+    this.server.get('/v2/sb_files/:id/sb_file_components', (schema) => {
+      const results = schema.sbomComponents.all().models;
+
+      return {
+        count: results.length,
+        next: null,
+        previous: null,
+        results: results,
+      };
+    });
+
+    this.server.get('/v2/sb_files/:id/sb_file_components/ai_summary', () => ({
+      total: 0,
+      by_type: {},
+      aibom_supported: true,
+    }));
+
+    await render(hbs`
+      <Sbom::ScanDetails
+        @sbomProject={{this.sbomProject}}
+        @sbomFile={{this.sbomFile}}
+        @sbomScanSummary={{this.sbomScanSummary}}
+        @queryParams={{this.queryParams}}
+      />
+    `);
+
+    const sbomService = this.owner.lookup('service:sbom-scan-details');
+
+    // Simulates a filter having been applied on the AI BoM tab -- these
+    // properties only ever mean anything for AI components, and must not
+    // leak into the SBOM tab's request (plain SBOM components don't have
+    // an ai_artifact_class/ai_confidence, so any non-null value here would
+    // silently zero out every SBOM tab result).
+    await click('[data-test-sbomScanDetails-aibomTab] button');
+    sbomService.setQueryData({
+      ai_artifact_class: 'model',
+      ai_confidence: 'high',
+    });
+
+    await click('[data-test-sbomScanDetails-sbomTab] button');
+
+    assert.strictEqual(sbomService.selectedAiArtifactClass, null);
+    assert.strictEqual(sbomService.selectedAiConfidence, null);
+
+    // Simulates a filter having been applied on the SBOM tab -- these only
+    // ever mean anything for plain SBOM components, and must not leak into
+    // the AI BoM tab's request the same way.
+    sbomService.setQueryData({ component_type: 1, dependency_type: 'true' });
+
+    await click('[data-test-sbomScanDetails-aibomTab] button');
+
+    assert.strictEqual(sbomService.selectedComponentType, -1);
+    assert.strictEqual(sbomService.selectedDependencyType, null);
   });
 });

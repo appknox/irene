@@ -11,6 +11,10 @@ export interface SbomComponentQueryParam {
   view_type: 'tree' | 'list';
   component_type: number | null;
   is_dependency: string | null;
+  is_ai_component: string | null;
+  ai_artifact_class: string | null;
+  ai_confidence: string | null;
+  ordering: string | null;
 }
 
 export interface SbomScanDetailParam extends SbomComponentQueryParam {
@@ -40,6 +44,18 @@ export default class AuthenticatedDashboardSbomScanDetailsRoute extends AkBreadc
       refreshModel: false,
     },
     is_dependency: {
+      refreshModel: false,
+    },
+    is_ai_component: {
+      refreshModel: false,
+    },
+    ai_artifact_class: {
+      refreshModel: false,
+    },
+    ai_confidence: {
+      refreshModel: false,
+    },
+    ordering: {
       refreshModel: false,
     },
   };
