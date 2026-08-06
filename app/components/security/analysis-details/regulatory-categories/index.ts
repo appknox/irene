@@ -74,6 +74,7 @@ export default class SecurityAnalysisDetailsRegulatoryCategoriesComponent extend
   @tracked owaspsData: RegulatoryDataModel<OwaspModel> = null;
   @tracked owaspmobile2024sData: RegulatoryDataModel<OwaspMobile2024Model> =
     null;
+
   @tracked owaspapi2023sData: RegulatoryDataModel<OwaspApi2023Model> = null;
   @tracked pcidssesData: RegulatoryDataModel<PcidssModel> = null;
   @tracked pcidss4sData: RegulatoryDataModel<Pcidss4Model> = null;

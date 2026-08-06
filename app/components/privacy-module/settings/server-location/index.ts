@@ -37,6 +37,7 @@ export default class PrivacyModuleSettingsServerLocationComponent extends Compon
 
   @tracked serverLocationSettings: PrivacyServerLocationSettingsModel | null =
     null;
+
   @tracked customCountriesList: string[] = [];
   @tracked defaultCountriesList: GeoSettingItem[] = [];
 

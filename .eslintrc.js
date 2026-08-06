@@ -39,6 +39,11 @@ module.exports = {
     ],
     'prefer-const': 'error',
     'ember/no-runloop': 'error',
+    'lines-between-class-members': [
+      'error',
+      'always',
+      { exceptAfterSingleLine: true },
+    ],
 
     // Burn-down — existing violations need human judgement, so warn for now
     eqeqeq: ['warn', 'smart'],
