@@ -98,6 +98,7 @@ export default class ProjectModel extends ModelBaseMixin {
 
   get isAPIScanEnabled() {
     const platform = this.platform;
+
     return [ENUMS.PLATFORM.ANDROID, ENUMS.PLATFORM.IOS].includes(platform);
   }
 }

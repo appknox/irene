@@ -22,6 +22,7 @@ export class ModelBaseMixin extends Model {
     if (isEmpty(createdOn)) {
       return;
     }
+
     return `${createdOn.toLocaleDateString()}`;
   }
 

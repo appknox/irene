@@ -233,6 +233,7 @@ export default class RateLimitManager {
       );
 
       newState.lastNotification = now;
+
       return newState;
     }
 

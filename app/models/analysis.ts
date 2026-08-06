@@ -242,11 +242,13 @@ export default class AnalysisModel extends Model {
 
   get isScanning() {
     const risk = this.computedRisk;
+
     return risk === ENUMS.RISK.UNKNOWN;
   }
 
   get isRisky() {
     const risk = this.computedRisk;
+
     return ![ENUMS.RISK.NONE, ENUMS.RISK.UNKNOWN].includes(risk);
   }
 

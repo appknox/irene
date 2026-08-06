@@ -27,6 +27,10 @@ module.exports = {
     'no-debugger': 'error',
     'ember/no-empty-glimmer-component-classes': 'off',
     'ember/no-pause-test': 'error',
+    '@typescript-eslint/padding-line-between-statements': [
+      'error',
+      { blankLine: 'always', prev: '*', next: 'return' },
+    ],
   },
   overrides: [
     // node files

@@ -71,6 +71,7 @@ export default class FileReportDrawerSbomReportsComponent extends Component<File
   get currentFileIsLatestFile() {
     const currentRouteFileId =
       this.router?.currentRoute?.parent?.params['fileid'];
+
     return currentRouteFileId === this.latestFileId;
   }
 

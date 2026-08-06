@@ -24,6 +24,7 @@ export interface IreneLastTransitionInfoProps {
 
 export const processData = (data: LoginSuccessDataProps) => {
   data.b64token = getB64Token(data.user_id, data.token);
+
   return data;
 };
 

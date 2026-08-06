@@ -189,6 +189,7 @@ export default class ProjectSettingsDastAutomationScenarioViewV2Component extend
     });
 
     this.roles = [...this.roles, role];
+
     return role;
   }
 

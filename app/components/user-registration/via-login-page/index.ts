@@ -98,6 +98,7 @@ export default class RegistrationComponent extends Component<RegistrationCompone
 
       if (errors.payload.recaptcha && errors.payload.recaptcha.length) {
         this.notify.error(errors.payload.recaptcha[0]);
+
         return;
       }
 
@@ -107,11 +108,13 @@ export default class RegistrationComponent extends Component<RegistrationCompone
             changeset.addError(key, errors.payload[key]);
           } else {
             this.notify.error(this.intl.t('somethingWentWrong'));
+
             return;
           }
         });
       } else if (errors.message) {
         this.notify.error(errors.message);
+
         return;
       }
     }

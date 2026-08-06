@@ -185,6 +185,7 @@ export default class OrganizationAiPoweredFeaturesComponent extends Component {
 
       if (!feature?.clickable) {
         this.toggleFeature.perform(featureKey, !this.targettedToggle.checked);
+
         return;
       }
 

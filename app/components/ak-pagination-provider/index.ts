@@ -74,6 +74,7 @@ export default class AkPaginationProviderComponent<R> extends Component<
     if (this.args.offset > this.maxOffset) {
       return this.maxOffset;
     }
+
     return this.args.offset;
   }
 
@@ -105,6 +106,7 @@ export default class AkPaginationProviderComponent<R> extends Component<
 
   get disableNext() {
     const nextOffset = this.offset + this.limit;
+
     return nextOffset >= this.maxOffset;
   }
 

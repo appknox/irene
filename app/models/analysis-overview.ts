@@ -66,6 +66,7 @@ export default class AnalysisOverviewModel extends Model {
 
   get isRisky() {
     const risk = this.computedRisk;
+
     return ![ENUMS.RISK.NONE, ENUMS.RISK.UNKNOWN].includes(risk);
   }
 
@@ -77,6 +78,7 @@ export default class AnalysisOverviewModel extends Model {
 
   get isScanning() {
     const risk = this.computedRisk;
+
     return risk === ENUMS.RISK.UNKNOWN;
   }
 
