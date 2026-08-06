@@ -1,4 +1,4 @@
-import Model, { AsyncBelongsTo, attr, belongsTo } from '@ember-data/model';
+import Model, { attr, belongsTo, type AsyncBelongsTo } from '@ember-data/model';
 import type FileModel from './file';
 
 export interface HealthScoreAuditTrailEntry {

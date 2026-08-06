@@ -5,7 +5,10 @@ module('Unit | Route | authenticated/dashboard/organization', function (hooks) {
   setupTest(hooks);
 
   test('it exists', function (assert) {
-    let route = this.owner.lookup('route:authenticated/dashboard/organization');
+    const route = this.owner.lookup(
+      'route:authenticated/dashboard/organization'
+    );
+
     assert.ok(route);
   });
 });

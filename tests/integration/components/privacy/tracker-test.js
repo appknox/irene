@@ -13,6 +13,7 @@ class NotificationsStub extends Service {
   error(msg) {
     this.errorMsg = msg;
   }
+
   success(msg) {
     this.successMsg = msg;
   }
@@ -72,7 +73,7 @@ module('Integration | Component | privacy/tracker', function (hooks) {
     });
 
     this.server.get('/v2/tracker_request/:requestId/tracker_data', (schema) => {
-      let trackers = schema.trackers.all().models;
+      const trackers = schema.trackers.all().models;
 
       return {
         count: trackers.length,
@@ -89,7 +90,7 @@ module('Integration | Component | privacy/tracker', function (hooks) {
     this.server.get(
       '/v2/permission_request/:requestId/permission_data',
       (schema) => {
-        let permissions = schema.dangerousPermissionRequests.all().models;
+        const permissions = schema.dangerousPermissionRequests.all().models;
 
         return {
           count: permissions.length,

@@ -1,5 +1,5 @@
 import { belongsTo, hasMany, Model } from 'miragejs';
-import { BelongsTo, HasMany } from 'miragejs/-types';
+import type { BelongsTo, HasMany } from 'miragejs/-types';
 
 interface BelongsWithAttrs extends BelongsTo<'file'> {
   id: string;

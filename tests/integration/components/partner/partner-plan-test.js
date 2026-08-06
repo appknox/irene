@@ -12,6 +12,7 @@ function serializer(payload) {
   Object.keys(payload.attrs).map((_key) => {
     serializedPayload[underscore(_key)] = payload[_key];
   });
+
   return serializedPayload;
 }
 

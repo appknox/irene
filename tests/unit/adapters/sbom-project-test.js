@@ -5,7 +5,7 @@ module('Unit | Adapter | sbom project', function (hooks) {
   setupTest(hooks);
 
   test('it exists', function (assert) {
-    let adapter = this.owner.lookup('adapter:sbom-project');
+    const adapter = this.owner.lookup('adapter:sbom-project');
     assert.ok(adapter);
   });
 

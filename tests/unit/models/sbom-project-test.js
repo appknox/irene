@@ -6,8 +6,8 @@ module('Unit | Model | sbom-project', function (hooks) {
 
   // Replace this with your real tests.
   test('it exists', function (assert) {
-    let store = this.owner.lookup('service:store');
-    let model = store.createRecord('sbom-project', {});
+    const store = this.owner.lookup('service:store');
+    const model = store.createRecord('sbom-project', {});
     assert.ok(model);
   });
 });

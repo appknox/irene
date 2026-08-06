@@ -7,6 +7,7 @@ const installPendo = function() {
     // eslint-disable-next-line no-console
     return console.log("Pendo Disabled");
   }
+
   return (function(apiKey) {
     (function(p, e, n, d, o) {
       let v = undefined;

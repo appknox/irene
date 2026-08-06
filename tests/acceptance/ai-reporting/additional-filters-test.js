@@ -692,7 +692,7 @@ module('Acceptance | ai-reporting/additional-filters', function (hooks) {
     const DATA_COUNT = 5;
     const testData = AI_REPORT_UTILS.generateTestData(DATA_COUNT);
     const mockFilterGroups = testData.filter_details;
-    let selectedFiltersInfo = [];
+    const selectedFiltersInfo = [];
 
     const reportRequest = this.server.create('ai-reporting/report-request', {
       is_relevant: true,
@@ -891,7 +891,7 @@ module('Acceptance | ai-reporting/additional-filters', function (hooks) {
       '[data-test-aiReporting-preview-table-head] th'
     );
 
-    let reportDataElements = findAll(
+    const reportDataElements = findAll(
       '[data-test-aiReporting-preview-table-row]'
     );
 

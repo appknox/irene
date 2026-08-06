@@ -5,7 +5,7 @@ module('Unit | Route | authenticated/dashboard/choose', function (hooks) {
   setupTest(hooks);
 
   test('it exists', function (assert) {
-    let route = this.owner.lookup('route:authenticated/dashboard/choose');
+    const route = this.owner.lookup('route:authenticated/dashboard/choose');
     assert.ok(route);
   });
 });

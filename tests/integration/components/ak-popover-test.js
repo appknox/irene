@@ -30,6 +30,7 @@ module('Integration | Component | ak-popover', function (hooks) {
       handleMoreClick: (event) => {
         if (!this.anchorRef) {
           this.set('anchorRef', event.currentTarget);
+
           return;
         }
 

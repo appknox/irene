@@ -26,6 +26,7 @@ function serializer(data, many = false) {
       }),
     };
   }
+
   return {
     id: data.id,
     data: data.attrs,
@@ -121,6 +122,7 @@ module(
         'v2/partnerclients/:clientId/projects/:projectId/files',
         (schema) => {
           const data = schema['partner/partnerclientProjectFiles'].all();
+
           return serializer(data, true);
         }
       );
@@ -157,6 +159,7 @@ module(
         'v2/partnerclients/:clientId/projects/:projectId/files',
         (schema) => {
           const data = schema['partner/partnerclientProjectFiles'].all();
+
           return serializer(data, true);
         }
       );
@@ -198,6 +201,7 @@ module(
         'v2/partnerclients/:clientId/projects/:projectId/files',
         (schema) => {
           const data = schema['partner/partnerclientProjectFiles'].all();
+
           return serializer(data, true);
         }
       );
@@ -247,6 +251,7 @@ module(
         'v2/partnerclients/:clientId/projects/:projectId/files',
         (schema) => {
           const data = schema['partner/partnerclientProjectFiles'].all();
+
           return serializer(data, true);
         }
       );
@@ -312,6 +317,7 @@ module(
         'v2/partnerclients/:clientId/projects/:projectId/files',
         (schema) => {
           const data = schema['partner/partnerclientProjectFiles'].all();
+
           return serializer(data, true);
         }
       );
@@ -385,6 +391,7 @@ module(
         'v2/partnerclients/:clientId/projects/:projectId/files',
         (schema) => {
           const data = schema['partner/partnerclientProjectFiles'].all();
+
           return serializer(data, true);
         }
       );

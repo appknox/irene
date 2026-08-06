@@ -95,6 +95,7 @@ export default class SecurityAnalysisModel extends Model {
 
   @attr()
   declare legacyCvssMetrics: CvssV3Metrics | CvssV4Metrics | null;
+
   @attr('number') declare analiserVersion: number;
 
   @attr('number', { defaultValue: null }) declare overriddenRisk: number;

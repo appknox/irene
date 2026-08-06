@@ -152,6 +152,7 @@ module('Acceptance | file compare', function (hooks) {
       '/organizations/:id/projects/:projectID/collaborators',
       (schema) => {
         const results = schema.projectCollaborators.all().models;
+
         return { count: results.length, next: null, previous: null, results };
       }
     );
@@ -160,6 +161,7 @@ module('Acceptance | file compare', function (hooks) {
       '/organizations/:id/projects/:projectID/teams',
       (schema) => {
         const results = schema.projectTeams.all().models;
+
         return { count: results.length, next: null, previous: null, results };
       }
     );

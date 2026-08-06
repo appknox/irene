@@ -1,4 +1,4 @@
-import { ComponentLike } from '@glint/template';
+import type { ComponentLike } from '@glint/template';
 
 export enum AkSvgComponentInvocationByNames {
   AmPlaystoreLogo,

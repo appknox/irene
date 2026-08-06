@@ -174,6 +174,7 @@ export default class AnalysisModel extends Model {
   get tNone() {
     return this.intl.t('none');
   }
+
   get tHigh() {
     return this.intl.t('high');
   }

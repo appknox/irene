@@ -38,6 +38,7 @@ export default class ProjectSettingsGeneralSettingsCollaboratorsTableComponent e
 
   @tracked
   projectCollaboratorsResponse: ProjectCollaboratorsQueryResponse | null = null;
+
   @tracked offset = 0;
   @tracked limit = 10;
 

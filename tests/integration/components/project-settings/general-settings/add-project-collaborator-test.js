@@ -22,6 +22,7 @@ module(
       // Server mocks
       this.server.get('/organizations/:id/members', (schema) => {
         const results = schema.organizationMembers.all().models;
+
         return { count: results.length, next: null, previous: null, results };
       });
 
@@ -149,6 +150,7 @@ module(
           .all()
           .models.filter((member) => {
             const user = schema.organizationUsers.find(member.member);
+
             return user.username.includes(req.queryParams.q);
           });
 

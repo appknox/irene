@@ -6,7 +6,7 @@ module('Unit | Adapter | nistsp80053', function (hooks) {
 
   // Replace this with your real tests.
   test('it exists', function (assert) {
-    let adapter = this.owner.lookup('adapter:nistsp80053');
+    const adapter = this.owner.lookup('adapter:nistsp80053');
     assert.ok(adapter);
   });
 });

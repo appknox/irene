@@ -8,7 +8,7 @@ module(
 
     // TODO: Replace this with your real tests.
     test('it exists', function (assert) {
-      let controller = this.owner.lookup(
+      const controller = this.owner.lookup(
         'controller:authenticated/dashboard/organization-settings/service-account'
       );
       assert.ok(controller);

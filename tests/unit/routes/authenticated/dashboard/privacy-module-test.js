@@ -7,9 +7,10 @@ module(
     setupTest(hooks);
 
     test('it exists', function (assert) {
-      let route = this.owner.lookup(
+      const route = this.owner.lookup(
         'route:authenticated/dashboard/privacy-module'
       );
+
       assert.ok(route);
     });
   }

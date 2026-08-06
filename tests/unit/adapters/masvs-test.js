@@ -6,7 +6,7 @@ module('Unit | Adapter | masvs', function (hooks) {
 
   // Replace this with your real tests.
   test('it exists', function (assert) {
-    let adapter = this.owner.lookup('adapter:masvs');
+    const adapter = this.owner.lookup('adapter:masvs');
     assert.ok(adapter);
   });
 });

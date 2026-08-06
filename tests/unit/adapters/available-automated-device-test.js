@@ -6,7 +6,7 @@ module('Unit | Adapter | available automated device', function (hooks) {
 
   // Replace this with your real tests.
   test('it exists', function (assert) {
-    let adapter = this.owner.lookup('adapter:available-automated-device');
+    const adapter = this.owner.lookup('adapter:available-automated-device');
     assert.ok(adapter);
   });
 });

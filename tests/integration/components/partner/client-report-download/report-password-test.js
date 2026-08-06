@@ -94,6 +94,7 @@ module(
         'v2/partnerclients/:clientId/reports/:id/unlock_key',
         () => {
           this.set('unlockKeyAPICalled', true);
+
           return new Response(403);
         }
       );
@@ -130,6 +131,7 @@ module(
         (schema) => {
           this.set('unlockKeyAPICalled', true);
           const data = schema['partner/partnerclientReportUnlockkeys'].find(1);
+
           return serializer(data);
         }
       );
@@ -170,6 +172,7 @@ module(
         'v2/partnerclients/:clientId/reports/:id/unlock_key',
         (schema) => {
           const data = schema['partner/partnerclientReportUnlockkeys'].find(1);
+
           return serializer(data);
         }
       );
@@ -223,6 +226,7 @@ module(
         'v2/partnerclients/:clientId/reports/:id/unlock_key',
         (schema) => {
           const data = schema['partner/partnerclientReportUnlockkeys'].find(1);
+
           return serializer(data);
         }
       );

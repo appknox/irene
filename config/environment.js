@@ -33,6 +33,7 @@ const ENVHandlerCONST = {
     if (possibleENVS.indexOf(key) > -1) {
       acc[key] = process.env[key];
     }
+
     return acc;
   }, {}),
 };
@@ -56,6 +57,7 @@ class ENVHandler {
           return '';
         }
       }
+
       return runtimeValue;
     }
     if (this.isAvailableInProcessENV(env_key)) {
@@ -65,8 +67,10 @@ class ENVHandler {
           return '';
         }
       }
+
       return processValue;
     }
+
     return this.getDefault(env_key);
   }
 
@@ -85,11 +89,13 @@ class ENVHandler {
     if (this.isRuntimeAvailable()) {
       return runtimeGlobalConfig; // eslint-disable-line
     }
+
     return {};
   }
 
   isAvailableInRuntimeENV(env_key) {
     const runtimeObj = this.getRuntimeObject();
+
     return env_key in runtimeObj;
   }
 
@@ -105,6 +111,7 @@ class ENVHandler {
 
   isTrue(value) {
     value = String(value).toLowerCase();
+
     return value === 'true';
   }
 
@@ -114,6 +121,7 @@ class ENVHandler {
 
   getDefault(env_key) {
     this.assertEnvKey(env_key);
+
     return this.envHandlerConst.defaults[env_key];
   }
 
