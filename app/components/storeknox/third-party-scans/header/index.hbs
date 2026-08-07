@@ -1,0 +1,148 @@
+<AkStack local-class='tp-header-container' @direction='column' @width='full'>
+  <AkStack
+    @width='full'
+    @justifyContent='space-between'
+    @alignItems='center'
+    local-class='title-row'
+  >
+    <AkStack @direction='column' @spacing='0.5'>
+      <AkTypography
+        @variant='h5'
+        data-test-storeknoxThirdPartyScansHeader-title
+      >
+        {{t 'storeknox.thirdPartyScansTitle'}}
+      </AkTypography>
+
+      <AkTypography
+        @variant='body2'
+        data-test-storeknoxThirdPartyScansHeader-description
+      >
+        {{t 'storeknox.thirdPartyScansDescription'}}
+      </AkTypography>
+    </AkStack>
+
+    <AkTextField
+      @value={{this.filterQuery}}
+      @placeholder={{t 'searchQuery'}}
+      {{on 'input' this.onSearchInput}}
+      @formControlClass={{this.searchFieldClass}}
+      data-test-storeknoxThirdPartyScansHeader-searchInput
+    >
+      <:leftAdornment>
+        <AkIcon @iconName='search' @color='textSecondary' />
+      </:leftAdornment>
+
+      <:rightAdornment>
+        {{#if this.filterQuery}}
+          <AkIconButton @size='small' {{on 'click' this.onSearchClear}}>
+            <AkIcon @iconName='close' @color='textSecondary' />
+          </AkIconButton>
+        {{/if}}
+      </:rightAdornment>
+    </AkTextField>
+  </AkStack>
+
+  <AkDivider @color='dark' />
+
+  <AkStack
+    @alignItems='center'
+    @justifyContent='space-between'
+    @width='full'
+    local-class='filters-row'
+  >
+    <AkStack @alignItems='center'>
+      <AkSelect
+        @options={{this.storeOptions}}
+        @selected={{this.selectedStoreOption}}
+        @onChange={{this.onStoreChange}}
+        @verticalPosition='auto'
+        @optionTitle={{t 'storeknox.store'}}
+        @extra={{hash
+          selectedItem=this.selectedStoreOption.label
+          showLabel=true
+          iconName='filter-list'
+        }}
+        @selectedItemComponent={{component 'project-list/filter-selected-item'}}
+        @triggerClass={{this.triggerClass}}
+        @dropdownClass={{this.storeDropdownClass}}
+        {{style width='auto'}}
+        data-test-storeknoxThirdPartyScansHeader-storeSelect
+        as |option|
+      >
+        <AkStack @spacing='1' @alignItems='center'>
+          <AkRadio
+            @checked={{eq this.selectedStoreOption.value option.value}}
+          />
+          {{option.label}}
+        </AkStack>
+      </AkSelect>
+
+      {{#if this.showRegionFilter}}
+        <AkSelect
+          @options={{this.regionOptions}}
+          @selected={{this.selectedRegionOption}}
+          @onChange={{this.onRegionChange}}
+          @verticalPosition='auto'
+          @optionTitle={{t 'storeknox.region'}}
+          @extra={{hash
+            selectedItem=this.selectedRegionOption.label
+            showLabel=true
+            iconName='filter-list'
+          }}
+          @selectedItemComponent={{component
+            'project-list/filter-selected-item'
+          }}
+          @triggerClass={{this.triggerClass}}
+          @dropdownClass={{this.regionDropdownClass}}
+          {{style width='auto'}}
+          local-class='filter-select'
+          data-test-storeknoxThirdPartyScansHeader-regionSelect
+          as |option|
+        >
+          <AkStack @spacing='1' @alignItems='center'>
+            <AkRadio
+              @checked={{eq this.selectedRegionOption.value option.value}}
+            />
+            {{option.label}}
+          </AkStack>
+        </AkSelect>
+      {{/if}}
+
+      <AkSelect
+        @options={{this.riskStatusOptions}}
+        @selected={{this.selectedRiskStatusOption}}
+        @onChange={{this.onRiskStatusChange}}
+        @verticalPosition='auto'
+        @optionTitle={{t 'riskStatus'}}
+        @extra={{hash
+          selectedItem=this.selectedRiskStatusOption.label
+          showLabel=true
+          iconName='filter-list'
+        }}
+        @selectedItemComponent={{component 'project-list/filter-selected-item'}}
+        @triggerClass={{this.triggerClass}}
+        @dropdownClass={{this.riskStatusDropdownClass}}
+        {{style width='auto'}}
+        local-class='filter-select'
+        data-test-storeknoxThirdPartyScansHeader-riskStatusSelect
+        as |option|
+      >
+        <AkStack @spacing='1' @alignItems='center'>
+          <AkRadio
+            @checked={{eq this.selectedRiskStatusOption.value option.value}}
+          />
+          {{option.label}}
+        </AkStack>
+      </AkSelect>
+    </AkStack>
+
+    {{#if this.singleRegion}}
+      <AkChip
+        @label='{{t "storeknox.region"}} - {{this.singleRegion}}'
+        @size='small'
+        @variant='outlined'
+        data-test-storeknoxThirdPartyScansHeader-regionChip
+      />
+    {{/if}}
+  </AkStack>
+</AkStack>

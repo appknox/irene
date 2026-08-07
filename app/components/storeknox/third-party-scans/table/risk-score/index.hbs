@@ -1,0 +1,17 @@
+{{#if @loading}}
+  <AkSkeleton @width='60px' @height='16px' />
+{{else if this.hasScore}}
+  <AkTypography
+    @fontWeight='bold'
+    data-test-storeknoxThirdPartyScansTableRiskScore-score
+  >
+    {{@data.score}}/100
+  </AkTypography>
+{{else}}
+  <AkTypography
+    @fontWeight='bold'
+    data-test-storeknoxThirdPartyScansTableRiskScore-unavailable
+  >
+    {{t 'storeknox.riskScoreUnavailable'}}
+  </AkTypography>
+{{/if}}
