@@ -29,3 +29,9 @@
   border: 1px solid var(--divider-dark);
   border-radius: var(--border-radius);
 }
+
+// Wraps the hint onto short lines under the illustration, as the design shows,
+// rather than running the full width of the panel.
+.empty-description {
+  max-width: 345px;
+}

@@ -118,9 +118,11 @@ export default class CyodDeviceTableComponent extends Component<CyodDeviceTableS
         width: 130,
       },
       {
+        // ember-table puts `ember-table__text-align-center` on the header and
+        // body cells alike, so the chip centres under its own heading.
         name: this.intl.t('cyodDeviceTable.status'),
         component: 'cyod/device-table/status',
-        textAlign: 'left',
+        textAlign: 'center',
         width: 120,
       },
     ];

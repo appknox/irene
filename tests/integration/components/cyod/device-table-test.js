@@ -43,11 +43,30 @@ module('Integration | Component | cyod/device-table', function (hooks) {
     assert.dom('[data-test-cyodDeviceTable-table]').exists();
     assert.dom('[data-test-cyodDeviceTable-row]').exists({ count: 1 });
     assert.dom('[data-test-cyodDeviceTable-table]').containsText('Pixel 7a');
-    assert.dom('[data-test-cyodDeviceTable-table]').containsText('20 July 2026');
-
     assert
-      .dom('[data-test-cyodDeviceTable-statusChip]')
-      .hasText(t('orgDeviceRegistrationOnline'));
+      .dom('[data-test-cyodDeviceTable-table]')
+      .containsText('20 July 2026');
+
+    const chip = this.element.querySelector(
+      '[data-test-cyodDeviceTable-statusChip]'
+    );
+
+    assert.dom(chip).hasText(t('orgDeviceRegistrationOnline'));
+
+    // The chip centres via the column's textAlign, which ember-table turns
+    // into a class on the cell — the chip itself is inline-flex.
+    assert
+      .dom(chip.closest('td'))
+      .hasClass(
+        'ember-table__text-align-center',
+        'status column is centre-aligned'
+      );
+
+    assert.strictEqual(
+      window.getComputedStyle(chip.querySelector('span')).fontWeight,
+      '600',
+      'chip label is medium weight'
+    );
   });
 
   test('it falls back to the serial number and a dash when name and date are absent', async function (assert) {
@@ -160,15 +179,32 @@ module('Integration | Component | cyod/device-table', function (hooks) {
     await render(hbs`<Cyod::DeviceTable @emptyHint='Register one first' />`);
 
     assert.dom('[data-test-cyodDeviceTable-empty]').exists();
-    assert.dom('[data-test-cyodDeviceTable-empty]').containsText(
-      t('cyodDeviceTable.emptyTitle')
-    );
+    assert
+      .dom('[data-test-cyodDeviceTable-empty]')
+      .containsText(t('cyodDeviceTable.emptyTitle'));
 
     assert
       .dom('[data-test-cyodDeviceTable-empty]')
       .containsText('Register one first');
 
     assert.dom('[data-test-cyodDeviceTable-table]').doesNotExist();
+
+    // Design spec: 14px header, 13px subtext capped at 345px and centred.
+    const style = (s) => window.getComputedStyle(this.element.querySelector(s));
+
+    const title = style('[data-test-cyodDeviceTable-emptyTitle]');
+    const desc = style('[data-test-cyodDeviceTable-emptyDescription]');
+
+    assert.strictEqual(title.fontSize, '14px', 'header is 14px');
+
+    assert.strictEqual(
+      Math.round(parseFloat(desc.fontSize)),
+      13,
+      'subtext is 13px'
+    );
+
+    assert.strictEqual(desc.maxWidth, '345px');
+    assert.strictEqual(desc.textAlign, 'center');
   });
 
   test('it distinguishes an unconfigured device farm (400) from an empty list', async function (assert) {

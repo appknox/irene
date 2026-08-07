@@ -1,4 +1,8 @@
-<div local-class='device-table-container' data-test-cyodDeviceTable ...attributes>
+<div
+  local-class='device-table-container'
+  data-test-cyodDeviceTable
+  ...attributes
+>
   {{#if @heading}}
     <AkStack
       class='mb-2'
@@ -89,22 +93,29 @@
       >
         <AkSvg::CyodDevicesEmpty data-test-cyodDeviceTable-emptySvg />
 
-        <AkTypography
-          @variant='h5'
-          class='mt-4'
-          data-test-cyodDeviceTable-emptyTitle
-        >
-          {{t 'cyodDeviceTable.emptyTitle'}}
-        </AkTypography>
-
-        {{#if @emptyHint}}
+        <AkStack @direction='column' @alignItems='center' @spacing='0.5'>
+          {{! body1 for the design's 14px/medium, but still an <h5> so the
+          empty state keeps its place in the document outline. }}
           <AkTypography
-            @align='center'
-            data-test-cyodDeviceTable-emptyDescription
+            @variant='body1'
+            @tag='h5'
+            @fontWeight='medium'
+            data-test-cyodDeviceTable-emptyTitle
           >
-            {{@emptyHint}}
+            {{t 'cyodDeviceTable.emptyTitle'}}
           </AkTypography>
-        {{/if}}
+
+          {{#if @emptyHint}}
+            <AkTypography
+              local-class='empty-description'
+              @variant='body2'
+              @align='center'
+              data-test-cyodDeviceTable-emptyDescription
+            >
+              {{@emptyHint}}
+            </AkTypography>
+          {{/if}}
+        </AkStack>
 
         {{yield to='emptyAction'}}
       </AkStack>
