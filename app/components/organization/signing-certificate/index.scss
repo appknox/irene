@@ -145,12 +145,7 @@
   font-size: 1rem;
 }
 
-.empty-state {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  padding: 16px;
-  border: 1px dashed var(--divider-dark);
-  border-radius: var(--border-radius);
-  background: var(--background-light);
+// Figma measures this subtext block at 376px wide.
+.empty-description {
+  max-width: 376px;
 }

@@ -1782,7 +1782,7 @@
   "orgSigningCertTitle": "iOS Signing Certificate",
   "orgSigningCertDesc": "Upload your iOS signing certificate (.p12 + provisioning profile) to re-sign apps for dynamic scanning on your own devices. When set, it replaces the built-in wildcard profile.",
   "orgSigningCertDescProject": "Upload a project-specific iOS signing certificate. It overrides the organization certificate for this project's dynamic scans.",
-  "orgSigningCertNone": "No signing certificate configured. Dynamic scans use the built-in wildcard profile.",
+  "orgSigningCertNone": "Once you have added the certificate you will get to see the details",
   "orgSigningCertUnnamed": "Unnamed certificate",
   "orgSigningCertTeam": "Team",
   "orgSigningCertStatusActive": "Active",
@@ -2698,5 +2698,6 @@
   "yesTurnOn": "Yes, Turn On",
   "youCanCreateTeam": "you can create a new team by",
   "youWillBeChargedOn": "You will be charged on",
-  "yourPlan": "Your Plan"
+  "yourPlan": "Your Plan",
+  "orgSigningCertNoneTitle": "No Existing certificates"
 }

@@ -205,6 +205,33 @@ module(
 
       assert.dom('[data-test-orgSigningCert-empty]').exists();
       assert.dom('[data-test-orgSigningCert-info]').doesNotExist();
+
+      // Same shape as the other two CYOD empty states: illustration, a 14px
+      // medium title, then a 13px subtext capped and centred under it.
+      assert.dom('[data-test-orgSigningCert-emptySvg]').exists();
+
+      assert
+        .dom('[data-test-orgSigningCert-emptyTitle]')
+        .hasText(t('orgSigningCertNoneTitle'))
+        .hasTagName('h5');
+
+      const style = (selector) =>
+        window.getComputedStyle(this.element.querySelector(selector));
+
+      const title = style('[data-test-orgSigningCert-emptyTitle]');
+      const desc = style('[data-test-orgSigningCert-emptyDescription]');
+
+      assert.strictEqual(title.fontSize, '14px', 'title is 14px');
+      assert.strictEqual(title.fontWeight, '600', 'title is medium');
+
+      assert.strictEqual(
+        Math.round(parseFloat(desc.fontSize)),
+        13,
+        'subtext is 13px'
+      );
+
+      assert.strictEqual(desc.maxWidth, '376px');
+      assert.strictEqual(desc.textAlign, 'center');
     });
 
     test('it lists org certs and flags the active one', async function (assert) {

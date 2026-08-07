@@ -1782,7 +1782,7 @@
   "orgSigningCertTitle": "iOS署名証明書",
   "orgSigningCertDesc": "iOS署名証明書（.p12 + プロビジョニングプロファイル）をアップロードして、自社デバイスでの動的スキャン用にアプリを再署名します。設定すると、組み込みのワイルドカードプロファイルの代わりに使用されます。",
   "orgSigningCertDescProject": "このプロジェクト専用のiOS署名証明書をアップロードします。このプロジェクトの動的スキャンでは、組織の証明書よりも優先されます。",
-  "orgSigningCertNone": "署名証明書が設定されていません。動的スキャンは組み込みのワイルドカードプロファイルを使用します。",
+  "orgSigningCertNone": "証明書を追加すると、ここに詳細が表示されます。",
   "orgSigningCertUnnamed": "名称未設定の証明書",
   "orgSigningCertTeam": "チーム",
   "orgSigningCertStatusActive": "有効",
@@ -2698,5 +2698,6 @@
   "yesTurnOn": "Yes, Turn On",
   "youCanCreateTeam": "you can create a new team by",
   "youWillBeChargedOn": "次のとおり請求されます：",
-  "yourPlan": "Your Plan"
+  "yourPlan": "Your Plan",
+  "orgSigningCertNoneTitle": "既存の証明書がありません"
 }

@@ -530,13 +530,41 @@ padding shell as its Teams and Collaborators sections. }}
               {{/each}}
 
             {{else}}
-              <div local-class='empty-state' data-test-orgSigningCert-empty>
-                <AkIcon @iconName='verified-user' @color='textSecondary' />
+              {{! Same shape as the device-list and turn-on empty states:
+              illustration, a 14px medium title, then a 13px textPrimary
+              subtext centred under it. }}
+              <AkStack
+                @direction='column'
+                @alignItems='center'
+                @justifyContent='center'
+                @spacing='1'
+                class='py-7 px-4'
+                data-test-orgSigningCert-empty
+              >
+                <AkSvg::CyodDevicesEmpty data-test-orgSigningCert-emptySvg />
 
-                <AkTypography @variant='body2' @color='textSecondary'>
-                  {{t 'orgSigningCertNone'}}
-                </AkTypography>
-              </div>
+                <AkStack @direction='column' @alignItems='center' @spacing='0.5'>
+                  {{! body1 for the design's 14px/medium, kept as an <h5> so the
+                  empty state keeps its place in the document outline. }}
+                  <AkTypography
+                    @variant='body1'
+                    @tag='h5'
+                    @fontWeight='medium'
+                    data-test-orgSigningCert-emptyTitle
+                  >
+                    {{t 'orgSigningCertNoneTitle'}}
+                  </AkTypography>
+
+                  <AkTypography
+                    local-class='empty-description'
+                    @variant='body2'
+                    @align='center'
+                    data-test-orgSigningCert-emptyDescription
+                  >
+                    {{t 'orgSigningCertNone'}}
+                  </AkTypography>
+                </AkStack>
+              </AkStack>
             {{/if}}
           </AkStack>
         {{/if}}
