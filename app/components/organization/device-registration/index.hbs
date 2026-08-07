@@ -3,29 +3,37 @@
   data-test-orgDeviceRegistration
   ...attributes
 >
-  <AkStack @alignItems='flex-start' @justifyContent='space-between' @spacing='2'>
-    <AkStack @direction='column' @spacing='0.5'>
-      <AkTypography @variant='h6' data-test-orgDeviceRegistration-title>
+  <AkStack @direction='column' @spacing='0.5'>
+    {{! Title and toggle are siblings in one row so they centre against each
+    other; nesting the title with the description below made that impossible. }}
+    <AkStack
+      @width='full'
+      @alignItems='center'
+      @justifyContent='space-between'
+      @spacing='2'
+    >
+      <AkTypography @variant='h5' data-test-orgDeviceRegistration-title>
         {{t 'cyodRegistration.title'}}
       </AkTypography>
 
-      <AkTypography
-        @variant='body2'
-        @color='textSecondary'
-        data-test-orgDeviceRegistration-description
-      >
-        {{t 'cyodRegistration.description'}}
-      </AkTypography>
+      <AkToggle
+        data-test-orgDeviceRegistration-toggle
+        @id='cyod-registration'
+        @checked={{this.isRegistrationEnabled}}
+        @disabled={{this.isSaving}}
+        @size='small'
+        @onChange={{perform this.setRegistrationEnabled}}
+      />
     </AkStack>
 
-    <AkToggle
-      data-test-orgDeviceRegistration-toggle
-      @id='cyod-registration'
-      @checked={{this.isRegistrationEnabled}}
-      @disabled={{this.isSaving}}
-      @size='small'
-      @onChange={{perform this.setRegistrationEnabled}}
-    />
+    <AkTypography
+      local-class='registration-description'
+      @variant='body2'
+      @color='textSecondary'
+      data-test-orgDeviceRegistration-description
+    >
+      {{t 'cyodRegistration.description'}}
+    </AkTypography>
   </AkStack>
 
   {{#if this.isRegistrationEnabled}}
@@ -38,6 +46,7 @@
             @color='primary'
             @underline='always'
             @typographyVariant='body2'
+            @fontWeight='medium'
           >
             <:default>
               {{t 'cyodRegistration.goToCyodSettings'}}

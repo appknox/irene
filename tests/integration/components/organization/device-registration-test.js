@@ -53,9 +53,42 @@ module(
 
       assert
         .dom('[data-test-orgDeviceRegistration-title]')
-        .hasText(t('cyodRegistration.title'));
+        .hasText(t('cyodRegistration.title'))
+        .hasTagName('h5', 'title sits at the 16px section size');
 
       assert.dom(TOGGLE_INPUT).isChecked();
+
+      // Title and toggle have to be siblings for the row to centre them
+      // against each other.
+      const title = this.element.querySelector(
+        '[data-test-orgDeviceRegistration-title]'
+      );
+
+      const toggle = this.element.querySelector(
+        '[data-test-orgDeviceRegistration-toggle]'
+      );
+
+      assert.strictEqual(
+        title.parentElement,
+        toggle.parentElement,
+        'title and toggle share one container'
+      );
+
+      assert.strictEqual(
+        window.getComputedStyle(title.parentElement).alignItems,
+        'center',
+        'that container centre-aligns them'
+      );
+
+      assert.strictEqual(
+        window.getComputedStyle(
+          this.element.querySelector(
+            '[data-test-orgDeviceRegistration-description]'
+          )
+        ).maxWidth,
+        '500px',
+        'subtext keeps the design measure'
+      );
     });
 
     test('it hides the device table when the switch is off', async function (assert) {
@@ -104,6 +137,17 @@ module(
       assert
         .dom('[data-test-orgDeviceRegistration-goToCyodSettings]')
         .exists('points members at where they can register a device');
+
+      // The link carries the action, so it reads at medium weight.
+      const label = this.element.querySelector(
+        '[data-test-orgDeviceRegistration-goToCyodSettings] [data-test-ak-typography]'
+      );
+
+      assert.strictEqual(
+        window.getComputedStyle(label).fontWeight,
+        '600',
+        'link label is medium'
+      );
     });
   }
 );

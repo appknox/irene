@@ -18,7 +18,14 @@
     <AkStack @direction='column' @spacing='0.5'>
       {{yield to='title'}}
 
-      <AkTypography @color='textSecondary' @variant='body2'>
+      {{! @descriptionMaxWidth is opt-in: panels that want the design's measure
+      pass one, the rest keep running the full width of the card. }}
+      <AkTypography
+        data-test-orgSettingsPanelHeader-description
+        @color='textSecondary'
+        @variant='body2'
+        {{style maxWidth=@descriptionMaxWidth}}
+      >
         {{@description}}
       </AkTypography>
     </AkStack>
