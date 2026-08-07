@@ -102,6 +102,7 @@ export enum AkSvgComponentInvocationByNames {
   NotStartedTower,
   StoreReleaseReadinessScanFailed,
   StoreRealeaseReadinessUpselling,
+  ComponentSearch,
 }
 
 export enum AkSvgComponentInvocationByPaths {

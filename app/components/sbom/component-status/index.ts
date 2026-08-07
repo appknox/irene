@@ -2,11 +2,14 @@ import { inject as service } from '@ember/service';
 import Component from '@glimmer/component';
 import IntlService from 'ember-intl/services/intl';
 import SbomComponentModel from 'irene/models/sbom-component';
+import type SbomComponentInventoryModel from 'irene/models/sbom-component-inventory';
 import * as semver from 'semver';
 
 export interface SbomComponentStatusSignature {
   Args: {
-    sbomComponent: SbomComponentModel | null;
+    // Accepts either the per-file component model or the org-level component
+    // inventory model; both expose the fields read below.
+    sbomComponent: SbomComponentModel | SbomComponentInventoryModel | null;
   };
 }
 

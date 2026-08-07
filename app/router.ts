@@ -283,6 +283,8 @@ Router.map(function () {
         this.route('sbom', function () {
           this.route('apps');
 
+          this.route('component-inventory');
+
           this.route('app-scans', {
             path: 'apps/:sbom_project_id/scans',
           });

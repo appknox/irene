@@ -564,6 +564,13 @@ const ENUMS = {
     COMPLETED: 4,
     FAILED: 5,
   },
+
+  SBOM_COMPONENT_EXPORT_STATUS: {
+    PENDING: 1,
+    IN_PROGRESS: 2,
+    COMPLETED: 3,
+    FAILED: 4,
+  },
 };
 
 export const ENUMS_DISPLAY = {

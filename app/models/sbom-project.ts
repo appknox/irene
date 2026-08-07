@@ -1,4 +1,4 @@
-import Model, { AsyncBelongsTo, belongsTo } from '@ember-data/model';
+import Model, { attr, AsyncBelongsTo, belongsTo } from '@ember-data/model';
 
 import ProjectModel from './project';
 import SbomFileModel from './sbom-file';
@@ -9,6 +9,18 @@ export default class SbomProjectModel extends Model {
 
   @belongsTo('sbom-file', { async: true, inverse: null })
   declare latestSbFile: AsyncBelongsTo<SbomFileModel> | null;
+
+  @attr('date')
+  declare lastScaAnalysisOn: Date | null;
+
+  @attr('string')
+  declare name: string;
+
+  @attr('string')
+  declare packageName: string;
+
+  @attr('string')
+  declare iconUrl: string;
 }
 
 declare module 'ember-data/types/registries/model' {
