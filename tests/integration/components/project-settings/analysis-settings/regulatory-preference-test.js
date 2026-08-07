@@ -144,6 +144,7 @@ module(
         t('gdpr'),
         t('nist'),
         t('sama'),
+        t('dora'),
       ];
 
       optionalRegulatoriesLabels.map((regLabel) =>
@@ -175,6 +176,10 @@ module(
             is_inherited: false,
           },
           show_sama: {
+            value: false,
+            is_inherited: false,
+          },
+          show_dora: {
             value: false,
             is_inherited: false,
           },
@@ -259,6 +264,21 @@ module(
         return profile.report_preference.show_sama;
       });
 
+      this.server.put('profiles/:id/show_dora', (schema, request) => {
+        const body = JSON.parse(request.requestBody);
+
+        const profile = schema['profiles'].find(request.params.id);
+
+        profile.report_preference.show_dora = {
+          value: body.value,
+          is_inherited: false,
+        };
+
+        profile.save();
+
+        return profile.report_preference.show_dora;
+      });
+
       await render(
         hbs`<ProjectSettings::AnalysisSettings::RegulatoryPreference @project={{this.project}}/>`
       );
@@ -322,6 +342,19 @@ module(
       await click(samaInput);
 
       assert.strictEqual(samaInput.checked, !samaInitialValue);
+
+      const dora = this.element.querySelector(
+        `[data-test-projectSetting-analysisSettings-regulatoryPreferences="${t('dora')}"]`
+      );
+
+      const doraInitialValue = profile.report_preference.show_dora.value;
+      const doraInput = dora.querySelector('[data-test-input]');
+
+      assert.strictEqual(doraInput.checked, doraInitialValue);
+
+      await click(doraInput);
+
+      assert.strictEqual(doraInput.checked, !doraInitialValue);
     });
 
     test('it does not toggle preference value on error', async function (assert) {
@@ -344,6 +377,10 @@ module(
             is_inherited: false,
           },
           show_sama: {
+            value: false,
+            is_inherited: false,
+          },
+          show_dora: {
             value: false,
             is_inherited: false,
           },
@@ -380,6 +417,10 @@ module(
       });
 
       this.server.put('profiles/:id/show_sama', () => {
+        return new Response(400, {}, { value: ['Must be a valid boolean.'] });
+      });
+
+      this.server.put('profiles/:id/show_dora', () => {
         return new Response(400, {}, { value: ['Must be a valid boolean.'] });
       });
 
@@ -445,6 +486,19 @@ module(
       await click(samaInput);
 
       assert.strictEqual(samaInput.checked, samaInitialValue);
+
+      const dora = this.element.querySelector(
+        `[data-test-projectSetting-analysisSettings-regulatoryPreferences="${t('dora')}"]`
+      );
+
+      const doraInitialValue = profile.report_preference.show_dora.value;
+      const doraInput = dora.querySelector('[data-test-input]');
+
+      assert.strictEqual(doraInput.checked, doraInitialValue);
+
+      await click(doraInput);
+
+      assert.strictEqual(doraInput.checked, doraInitialValue);
     });
 
     test('it displays overridden state with reset button if a preference is updated', async function (assert) {
