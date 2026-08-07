@@ -41,6 +41,10 @@
 }
 
 // Name and Bundle ID Override sit side by side, each taking half the row.
+//
+// Figma renders the field text and placeholders at 16px against AkTextField's
+// 14px. Left alone deliberately: that is a global control default, so changing
+// it would move every form in the app rather than this drawer.
 .form-field {
   flex: 1 1 0;
   min-width: 0;
@@ -68,6 +72,10 @@
 
 // 12px is off the AkTypography ramp (body2 is 13px). Doubled to out-specify
 // ak-typography, whose stylesheet is concatenated after this one.
+//
+// Figma sets this run at weight 700 in Inter; every other node on the frame is
+// Open Sans, so that reads as a stray override rather than intent. Kept at the
+// inherited family and weight.
 .tip-text.tip-text {
   font-size: 0.857rem;
 }
@@ -131,6 +139,8 @@
 }
 
 // The chosen name reads as a value, a step up from the 13px picker row.
+// Figma additionally sets it to weight 600; left at the inherited weight
+// pending design review, since it is the only file-row text carrying one.
 .file-chip .file-name {
   font-size: 1rem;
 }

@@ -32,6 +32,9 @@
   width: 100%;
 }
 
+// Figma draws these numerals in #EF4444 (Tailwind red-500), which is not a
+// value in _theme.scss -- reading it as a stray non-token red, so this tracks
+// the brand token (--primary-main, #ff4d3f) instead.
 .step-num {
   display: flex;
   align-items: center;

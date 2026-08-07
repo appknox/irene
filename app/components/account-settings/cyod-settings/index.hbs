@@ -127,7 +127,13 @@
       </AkAppbar>
 
       {{! Spacing per the design: 1.5em between steps, 1em between a step's
-      number and its content, 0.75em between a step's content and its note. }}
+      number and its content, 0.75em between a step's content and its note.
+
+      Step content is medium (600) and each note opens with a bold "Note -"
+      run, per design review. The Figma frame (40071:120106 era, node
+      39358:123700) has both at regular 400 and separates the note label from
+      its body by colour instead -- #171717 against #434343. Review wins here;
+      the frame is the older of the two. }}
       <AkStack @direction='column' @spacing='3' class='p-4'>
         <AkStack @direction='column' @spacing='1'>
           <AkTypography @variant='subtitle1'>
