@@ -22,11 +22,11 @@ import { task } from 'ember-concurrency';
 import dayjs from 'dayjs';
 import type IntlService from 'ember-intl/services/intl';
 
-import ENUMS from 'irene/enums';
 import type IreneAjaxService from 'irene/services/ajax';
 import type OrganizationService from 'irene/services/organization';
 import type ProjectModel from 'irene/models/project';
 import parseError from 'irene/utils/parse-error';
+import { showsProjectSigningCertificate } from 'irene/utils/cyod';
 
 type CertInfo = {
   id?: number;
@@ -70,6 +70,11 @@ export default class OrganizationSigningCertificateComponent extends Component<O
   // spinner (org scope has many rows sharing one task).
   @tracked busyCertId: number | null = null;
 
+  // Deleting a certificate is irreversible and breaks signing for every scan
+  // that depends on it, so the trash icon stages the cert here and the drawer
+  // swaps to a confirmation step instead of deleting on click.
+  @tracked pendingDelete: CertInfo | null = null;
+
   @tracked certName = '';
   @tracked bundleId = '';
   @tracked password = '';
@@ -98,13 +103,15 @@ export default class OrganizationSigningCertificateComponent extends Component<O
     // turning CYOD off collapses the whole CYOD configuration surface, in both
     // organization and project settings. Scans on already-registered devices
     // keep running server-side — this only hides the setup UI.
-    if (!this.organization.isCyodRegistrationEnabled) {
-      return false;
+    const enabled = this.organization.isCyodRegistrationEnabled;
+
+    if (!this.args.project) {
+      return enabled;
     }
 
-    return (
-      !this.args.project || this.args.project.platform === ENUMS.PLATFORM.IOS
-    );
+    // Shared with the project settings template that places this section, so
+    // the panel and its divider cannot disagree.
+    return showsProjectSigningCertificate(enabled, this.args.project.platform);
   }
 
   get hasCert() {
@@ -172,6 +179,7 @@ export default class OrganizationSigningCertificateComponent extends Component<O
   @action
   handleClose() {
     this.resetForm();
+    this.pendingDelete = null;
     this.showDrawer = false;
   }
 
@@ -273,6 +281,38 @@ export default class OrganizationSigningCertificateComponent extends Component<O
     } catch (err) {
       this.notify.error(parseError(err, this.intl.t('pleaseTryAgain')));
     }
+  });
+
+  /** Stage a certificate for deletion, showing the confirmation step. */
+  @action
+  requestDelete(cert: CertInfo) {
+    this.pendingDelete = cert;
+  }
+
+  /** Back out of the confirmation, returning to the certificate list. */
+  @action
+  cancelDelete() {
+    this.pendingDelete = null;
+  }
+
+  /**
+   * Run the delete the confirmation was staged for. Project scope has a single
+   * certificate at a fixed URL; org scope deletes one of many by id.
+   */
+  confirmDelete = task({ drop: true }, async () => {
+    const cert = this.pendingDelete;
+
+    if (!cert) {
+      return;
+    }
+
+    if (this.isProjectScope) {
+      await this.deleteCert.perform();
+    } else {
+      await this.deleteOrgCert.perform(cert);
+    }
+
+    this.pendingDelete = null;
   });
 
   // Project scope only: delete the single project cert.

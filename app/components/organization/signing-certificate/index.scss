@@ -33,7 +33,9 @@
   background: var(--common-white);
 }
 
-.mono-value {
+// Doubled to out-specify ak-typography's own font-family, which is a single
+// class in a stylesheet concatenated after this one.
+.mono-value.mono-value {
   font-family: var(--font-family-mono);
   word-break: break-all;
 }
@@ -44,12 +46,38 @@
   min-width: 0;
 }
 
+// Fields outside that row still line up with its left column. The row gap is
+// AkStack spacing 2 (1em), so a column is half the width less half the gap.
+//
+// Doubled to beat `.drawer-body > *`, which stretches direct children to the
+// full panel width and is declared later in this file.
+.form-field-half.form-field-half {
+  width: calc(50% - 0.5em);
+  min-width: 0;
+}
+
 // Bordered note under the Bundle ID field explaining when the override is
-// required (wildcard / enterprise profiles).
+// required (wildcard / enterprise profiles). Figma: 4px radius on all four
+// corners, a 4px accent bar down the leading edge, 16px padding.
 .tip-callout {
+  padding: 16px;
+  border-left: 4px solid var(--primary-main);
+  border-radius: var(--border-radius-4);
+  background: var(--neutral-grey-100);
+}
+
+// 12px is off the AkTypography ramp (body2 is 13px). Doubled to out-specify
+// ak-typography, whose stylesheet is concatenated after this one.
+.tip-text.tip-text {
+  font-size: 0.857rem;
+}
+
+// Read-only explanation of what deleting costs, boxed so it reads as a notice
+// rather than another paragraph of the question above it.
+.confirm-reason {
   padding: 12px 16px;
-  border-left: 3px solid var(--primary-main);
-  background: var(--background-light);
+  border: 1px solid var(--divider-dark);
+  border-radius: var(--border-radius);
 }
 
 // Two columns: a fixed label gutter and the value, so Team / ID / Expires
@@ -81,17 +109,30 @@
   word-break: break-all;
 }
 
-// A chosen file shows as a removable chip in place of the picker button.
+// Placeholder rather than a real value, so it reads as one.
+.no-file-chosen {
+  font-style: italic;
+}
+
+// A chosen file shows as a removable box in place of the picker button: white
+// rather than the grey fill, on the wider 8px radius.
 .file-chip {
   display: inline-flex;
   align-items: center;
+  justify-content: space-between;
   gap: 8px;
   align-self: flex-start;
+  min-width: 240px;
   max-width: 100%;
-  padding: 4px 4px 4px 12px;
+  padding: 6px 8px 6px 12px;
   border: 1px solid var(--divider-dark);
-  border-radius: var(--border-radius);
-  background: var(--background-light);
+  border-radius: var(--border-radius-8);
+  background: var(--common-white);
+}
+
+// The chosen name reads as a value, a step up from the 13px picker row.
+.file-chip .file-name {
+  font-size: 1rem;
 }
 
 .empty-state {
