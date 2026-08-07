@@ -1,0 +1,13 @@
+<AkStack @direction='column' @spacing='1'>
+  <AkTypography data-test-nf-sbom-vuln-update-primary-message>
+    {{t
+      'notificationModule.messages.nf-sbom-vuln-update'
+      htmlSafe=true
+      component_name=@context.component_name
+      max_severity=@context.max_severity
+      fixed_version=@context.fixed_version
+      affected_apps_count=@context.affected_apps_count
+      ghsa_ids_display=@context.ghsa_ids_display
+    }}
+  </AkTypography>
+</AkStack>

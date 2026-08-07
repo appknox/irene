@@ -1,0 +1,13 @@
+<AkStack @direction='column' @spacing='1'>
+  <AkTypography data-test-nf-sbom-comp-update-primary-message>
+    {{t
+      'notificationModule.messages.nf-sbom-comp-update'
+      htmlSafe=true
+      component_name=@context.component_name
+      old_version=@context.old_version
+      new_version=@context.new_version
+      source=@context.source
+      affected_apps_count=@context.affected_apps_count
+    }}
+  </AkTypography>
+</AkStack>
