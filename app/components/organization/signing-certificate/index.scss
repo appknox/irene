@@ -33,10 +33,23 @@
   background: var(--common-white);
 }
 
-// Doubled to out-specify ak-typography's own font-family, which is a single
-// class in a stylesheet concatenated after this one.
-.mono-value.mono-value {
-  font-family: var(--font-family-mono);
+// Certificate meta rows. Figma puts the labels at 12px/500 and the values at
+// 12px/600 -- both off the AkTypography ramp, so the sizes are explicit.
+// Doubled to out-specify ak-typography, a single class in a stylesheet
+// concatenated after this one.
+//
+// The frame sets the labels in Inter while every other node on it is Open
+// Sans, same as the tip callout; read as a stray override, so the family is
+// left inherited. Values are Open Sans in Figma, not mono -- the previous
+// DM Mono treatment here was ours, not the spec.
+.cert-meta-label.cert-meta-label {
+  font-size: 0.857rem;
+  font-weight: 500;
+}
+
+.cert-meta-value.cert-meta-value {
+  font-size: 0.857rem;
+  font-weight: 600;
   word-break: break-all;
 }
 

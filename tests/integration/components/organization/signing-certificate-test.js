@@ -268,6 +268,39 @@ module(
       assert.dom('[data-test-orgSigningCert-activeBadge]').exists({ count: 1 });
       assert.dom('[data-test-orgSigningCert-activateBtn]').exists({ count: 1 });
       assert.dom('[data-test-orgSigningCert-empty]').doesNotExist();
+
+      // Card ramp from Figma: name 14px bold, meta labels 12px/500, meta
+      // values 12px/600 in the body face (not mono).
+      const cs = (sel) =>
+        window.getComputedStyle(this.element.querySelector(sel));
+
+      const name = cs('[data-test-orgSigningCert-cardName]');
+      const metaLabel = cs('[data-test-orgSigningCert-metaLabel]');
+      const metaValue = cs('[data-test-orgSigningCert-metaValue]');
+
+      assert.strictEqual(name.fontSize, '14px', 'cert name is 14px');
+      assert.strictEqual(name.fontWeight, '700', 'cert name is bold');
+
+      assert.strictEqual(
+        Math.round(parseFloat(metaLabel.fontSize)),
+        12,
+        'meta label is 12px'
+      );
+
+      assert.strictEqual(metaLabel.fontWeight, '500');
+
+      assert.strictEqual(
+        Math.round(parseFloat(metaValue.fontSize)),
+        12,
+        'meta value is 12px'
+      );
+
+      assert.strictEqual(metaValue.fontWeight, '600');
+
+      assert.notOk(
+        metaValue.fontFamily.includes('DM Mono'),
+        'meta values use the body face, not mono'
+      );
     });
 
     test('it formats the expiry rather than showing the raw timestamp', async function (assert) {

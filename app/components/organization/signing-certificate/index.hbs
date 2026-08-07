@@ -420,7 +420,11 @@ padding shell as its Teams and Collaborators sections. }}
                   >
                     <AkStack @direction='column' @spacing='1'>
                       <AkStack @spacing='1' @alignItems='center'>
-                        <AkTypography @variant='body1' @fontWeight='medium'>
+                        <AkTypography
+                          @variant='body1'
+                          @fontWeight='bold'
+                          data-test-orgSigningCert-cardName
+                        >
                           {{if cert.name cert.name (t 'orgSigningCertUnnamed')}}
                         </AkTypography>
 
@@ -450,33 +454,49 @@ padding shell as its Teams and Collaborators sections. }}
                       {{! Label/value grid so the values line up in a column,
                     as in the design. }}
                       <div local-class='cert-meta'>
-                        <AkTypography @variant='body2' @color='textSecondary'>
+                        <AkTypography
+                          local-class='cert-meta-label'
+                          @color='textSecondary'
+                          data-test-orgSigningCert-metaLabel
+                        >
                           {{t 'orgSigningCertTeam'}}:
                         </AkTypography>
 
-                        <AkTypography local-class='mono-value' @variant='body2'>
+                        <AkTypography
+                          local-class='cert-meta-value'
+                          data-test-orgSigningCert-metaValue
+                        >
                           {{cert.team_id}}
                         </AkTypography>
 
                         {{#if cert.app_id}}
-                          <AkTypography @variant='body2' @color='textSecondary'>
+                          <AkTypography
+                            local-class='cert-meta-label'
+                            @color='textSecondary'
+                            data-test-orgSigningCert-metaLabel
+                          >
                             {{t 'orgSigningCertAppId'}}:
                           </AkTypography>
 
                           <AkTypography
-                            local-class='mono-value'
-                            @variant='body2'
+                            local-class='cert-meta-value'
+                            data-test-orgSigningCert-metaValue
                           >
                             {{cert.app_id}}
                           </AkTypography>
                         {{/if}}
 
-                        <AkTypography @variant='body2' @color='textSecondary'>
+                        <AkTypography
+                          local-class='cert-meta-label'
+                          @color='textSecondary'
+                          data-test-orgSigningCert-metaLabel
+                        >
                           {{t 'orgSigningCertExpires'}}:
                         </AkTypography>
 
                         <AkTypography
-                          @variant='body2'
+                          local-class='cert-meta-value'
+                          data-test-orgSigningCert-metaValue
                           @color={{if cert.is_expired 'error' 'textPrimary'}}
                         >
                           {{cert.expiresOn}}
