@@ -41,6 +41,8 @@ import { NfOvrreqApprovedContext } from './messages/nf-ovrreq-approved/context';
 import { NfOvrreqApprovedReqstrContext } from './messages/nf-ovrreq-approved-reqstr/context';
 import { NfOvrreqRaisedContext } from './messages/nf-ovrreq-raised/context';
 import { NfOvrreqRejectedContext } from './messages/nf-ovrreq-rejected/context';
+import { NfSbomCompUpdateContext } from './messages/nf-sbom-comp-update/context';
+import { NfSbomVulnUpdateContext } from './messages/nf-sbom-vuln-update/context';
 
 export const NotificationMap = {
   ERROR: {
@@ -223,6 +225,15 @@ export const NotificationMap = {
   NF_OVRREQ_REJECTED: {
     component: 'notifications-page/messages/nf-ovrreq-rejected' as const,
     context: NfOvrreqRejectedContext,
+  },
+  NF_SBOM_COMP_UPDATE: {
+    component: 'notifications-page/messages/nf-sbom-comp-update' as const,
+    context: NfSbomCompUpdateContext,
+  },
+  NF_SBOM_VULN_UPDATE: {
+    component: 'notifications-page/messages/nf-sbom-vuln-update' as const,
+    context: NfSbomVulnUpdateContext,
+  },
   },
 } satisfies Record<string, { component: string; context: unknown }>;
 
