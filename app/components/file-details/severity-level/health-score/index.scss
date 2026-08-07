@@ -4,11 +4,40 @@
   .health-score-value-score,
   .health-score-value-max {
     font-size: 2.5rem;
+    color: #fff;
   }
 
   .health-score-value-max {
-    color: var(--file-details-severity-level-health-score-neutral-color);
+    opacity: 0.7;
   }
+}
+
+.health-score-scoring-details-btn {
+  color: rgba(255, 255, 255, 0.7) !important;
+
+  &:hover {
+    color: rgba(255, 255, 255, 0.7) !important;
+  }
+
+  & button,
+  & span,
+  & a,
+  & * {
+    color: rgba(255, 255, 255, 0.7) !important;
+    text-decoration-color: rgba(255, 255, 255, 0.7) !important;
+  }
+
+  &:hover button,
+  &:hover span,
+  &:hover a,
+  &:hover * {
+    color: rgba(255, 255, 255, 0.7) !important;
+    text-decoration-color: rgba(255, 255, 255, 0.7) !important;
+  }
+}
+
+.health-score-title {
+  color: rgba(255, 255, 255, 0.7) !important;
 }
 
 .health-score-status-chip {
@@ -51,9 +80,6 @@
   height: 100%;
   padding: 1.714em;
   box-sizing: border-box;
-  background-color: var(
-    --file-details-severity-level-health-score-background-color
-  );
   border: 1px solid var(--file-details-severity-level-health-score-border-color);
   border-radius: var(--file-details-severity-level-health-score-border-radius);
 }
@@ -65,9 +91,6 @@
     flex: 1;
     padding: 1.714em;
     box-sizing: border-box;
-    background-color: var(
-      --file-details-severity-level-health-score-background-color
-    );
     border: 1px solid
       var(--file-details-severity-level-health-score-border-color);
     border-radius: var(

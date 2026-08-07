@@ -49,7 +49,10 @@
         </AkIconButton>
       </AkStack>
 
-      <div local-class='scoring-details-score-box'>
+      <div
+        local-class='scoring-details-score-box'
+        {{style backgroundImage=this.scoreBoxGradient}}
+      >
         <AkTypography
           local-class='scoring-details-score-label'
           @fontWeight='bold'
@@ -94,6 +97,166 @@
       >
         {{t 'healthScoreSummary'}}
       </AkTypography>
+
+      <AkAccordion
+        @isExpanded={{this.showScoringMethodology}}
+        @summaryText={{t 'scoringMethodologyTitle'}}
+        @summaryIconName='info'
+        @onChange={{this.toggleScoringMethodology}}
+        data-test-healthScoreScoringDetails-methodologyAccordion
+      >
+        <:content>
+          <div local-class='score-methodology'>
+
+            <AkTypography
+              @variant='body2'
+              local-class='methodology-description'
+            >
+              {{t 'scoringMethodologyDesc1'}}
+            </AkTypography>
+
+            <div local-class='formula-item'>
+              <AkTypography
+                @variant='subtitle2'
+                @fontWeight='medium'
+              >
+                1. {{t 'scoringMethodologyQ1Title'}}
+              </AkTypography>
+
+              <div local-class='answer-box'>
+                <AkTypography @variant='body2'>
+                  {{t 'scoringMethodologyQ1Answer'}}
+                </AkTypography>
+              </div>
+            </div>
+
+            <div local-class='formula-item'>
+              <AkTypography
+                @variant='subtitle2'
+                @fontWeight='medium'
+              >
+                2. {{t 'scoringMethodologyQ2Title'}}
+              </AkTypography>
+
+              <div local-class='answer-box'>
+                <AkTypography @variant='body2'>
+                  {{t 'scoringMethodologyQ2Answer'}}
+                </AkTypography>
+              </div>
+            </div>
+
+            <AkTypography
+              @variant='subtitle2'
+              @fontWeight='medium'
+              local-class='adjustments-title'
+            >
+              {{t 'scoringMethodologyAdjustmentsTitle'}}
+            </AkTypography>
+
+            <ul local-class='adjustments-list'>
+              <li>
+                <strong>{{t 'scoringMethodologyAdjustmentCoverageTitle'}}</strong>
+                — {{t 'scoringMethodologyAdjustmentCoverageDesc'}}
+              </li>
+              <li>
+                <strong>{{t 'scoringMethodologyAdjustmentAcceptedTitle'}}</strong>
+                — {{t 'scoringMethodologyAdjustmentAcceptedDesc'}}
+              </li>
+              <li>
+                <strong>{{t 'scoringMethodologyAdjustmentSeverityTitle'}}</strong>
+                — {{t 'scoringMethodologyAdjustmentSeverityDesc'}}
+              </li>
+            </ul>
+
+            <AkTypography
+              @variant='subtitle1'
+              @fontWeight='bold'
+              local-class='adjustments-title'
+            >
+              {{t 'scoringMethodologyScoreBands'}}
+            </AkTypography>
+
+            <table local-class='score-table'>
+              <thead>
+                <tr>
+                  <th>{{t 'scoringMethodologyScore'}}</th>
+                  <th>{{t 'scoringMethodologyRating'}}</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>90 – 100</td>
+                  <td>{{t 'scoringMethodologyRatingExcellent'}}</td>
+                </tr>
+                <tr>
+                  <td>75 – 89</td>
+                  <td>{{t 'scoringMethodologyRatingGood'}}</td>
+                </tr>
+                <tr>
+                  <td>60 – 74</td>
+                  <td>{{t 'scoringMethodologyRatingFair'}}</td>
+                </tr>
+                <tr>
+                  <td>40 – 59</td>
+                  <td>{{t 'scoringMethodologyRatingPoor'}}</td>
+                </tr>
+                <tr>
+                  <td>0 – 39</td>
+                  <td>{{t 'scoringMethodologyRatingVeryPoor'}}</td>
+                </tr>
+              </tbody>
+            </table>
+
+            <AkTypography
+              @variant='subtitle1'
+              @fontWeight='bold'
+              local-class='examples-title'
+            >
+              {{t 'scoringMethodologyExamples'}}
+            </AkTypography>
+
+            <div local-class='example-card'>
+              <div>
+                <strong>{{t 'scoringMethodologyExampleAppA'}}</strong><br>
+                {{t 'scoringMethodologyExampleAppADesc'}}
+              </div>
+              <div local-class='example-score'>
+                <strong>49/100</strong>
+                <span local-class='badge poor'>{{t 'scoringMethodologyRatingPoor'}}</span>
+              </div>
+            </div>
+
+            <div local-class='example-card'>
+              <div>
+                <strong>{{t 'scoringMethodologyExampleAppB'}}</strong><br>
+                {{t 'scoringMethodologyExampleAppBDesc'}}
+              </div>
+              <div local-class='example-score'>
+                <strong>87/100</strong>
+                <span local-class='badge good'>{{t 'scoringMethodologyRatingGood'}}</span>
+              </div>
+            </div>
+
+            <div local-class='example-card'>
+              <div>
+                <strong>{{t 'scoringMethodologyExampleAppC'}}</strong><br>
+                {{t 'scoringMethodologyExampleAppCDesc'}}
+              </div>
+              <div local-class='example-score'>
+                <strong>27/100</strong>
+                <span local-class='badge very-poor'>{{t 'scoringMethodologyRatingVeryPoor'}}</span>
+              </div>
+            </div>
+
+            <AkTypography
+              @variant='body2'
+              local-class='examples-note'
+            >
+              {{t 'scoringMethodologyExamplesNote'}}
+            </AkTypography>
+          </div>
+        </:content>
+      </AkAccordion>
     </AkStack>
 
     <AkDivider local-class='scoring-details-divider' @color='dark' />

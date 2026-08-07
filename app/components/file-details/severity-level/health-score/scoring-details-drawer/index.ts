@@ -1,5 +1,7 @@
 import Component from '@glimmer/component';
 import { service } from '@ember/service';
+import { tracked } from '@glimmer/tracking';
+import { action } from '@ember/object';
 import dayjs from 'dayjs';
 import type IntlService from 'ember-intl/services/intl';
 
@@ -70,8 +72,45 @@ const SCAN_TYPE_SHORT_LABELS: Record<string, string> = {
 export default class FileDetailsSeverityLevelHealthScoreScoringDetailsDrawerComponent extends Component<FileDetailsSeverityLevelHealthScoreScoringDetailsDrawerSignature> {
   @service declare intl: IntlService;
 
+  @tracked showScoringMethodology = false;
+
+  @action
+  toggleScoringMethodology() {
+    this.showScoringMethodology = !this.showScoringMethodology;
+  }
+
   get score() {
     return this.args.currentScore?.score ?? null;
+  }
+
+  get scoreBoxGradient(): string {
+    const score = this.score;
+
+    if (score === null) {
+      return '';
+    }
+
+    let start: string;
+    let end: string;
+
+    if (score >= 90) {
+      start = '#43A047';
+      end = '#2DB421';
+    } else if (score >= 75) {
+      start = '#A8D65E';
+      end = '#94C436';
+    } else if (score >= 60) {
+      start = '#FBD54A';
+      end = '#FAD34A';
+    } else if (score >= 40) {
+      start = '#FB9E5E';
+      end = '#F98746';
+    } else {
+      start = '#E53935';
+      end = '#D72F2F';
+    }
+
+    return `linear-gradient(135deg, ${start}, ${end})`;
   }
 
   get statusLabel() {

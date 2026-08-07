@@ -9,6 +9,7 @@
     >
       <AkTypography
         data-test-fileDetailSeverityLevel-healthScore-title
+        local-class='health-score-title'
         @variant='subtitle1'
         @fontWeight='bold'
       >
@@ -22,6 +23,7 @@
         @justifyContent='center'
         @spacing='2'
         @width='full'
+        {{style backgroundImage=this.scoreBoxGradient}}
       >
         {{#if this.isFetching}}
           <AkSkeleton
@@ -62,8 +64,8 @@
 
           <AkButton
             data-test-fileDetailSeverityLevel-healthScore-scoringDetails
+            local-class='health-score-scoring-details-btn'
             @variant='text'
-            @color='primary'
             @underline='always'
             @typographyVariant='body2'
             @typographyFontWeight='medium'
@@ -82,9 +84,11 @@
       @spacing='2'
       @width='full'
       ...attributes
+      {{style backgroundImage=this.scoreBoxGradient}}
     >
       <AkTypography
         data-test-fileDetailSeverityLevel-healthScore-title
+        local-class='health-score-title'
         @fontWeight='bold'
       >
         {{t 'securityHealthScore'}}
@@ -129,8 +133,8 @@
 
         <AkButton
           data-test-fileDetailSeverityLevel-healthScore-scoringDetails
+          local-class='health-score-scoring-details-btn'
           @variant='text'
-          @color='primary'
           @underline='always'
           @typographyVariant='body2'
           @typographyFontWeight='medium'
@@ -141,7 +145,7 @@
           </:default>
 
           <:rightIcon>
-            <AkIcon @iconName='chevron-right' @color='primary' @size='small' />
+            <AkIcon @iconName='chevron-right' @size='small' />
           </:rightIcon>
         </AkButton>
       {{/if}}

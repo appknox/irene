@@ -11,15 +11,13 @@
 .scoring-details-score-box {
   width: 100%;
   padding: 1.143em 1.429em;
-  background-color: var(
-    --file-details-severity-level-health-score-background-color
-  );
   border: 1px solid var(--file-details-severity-level-health-score-border-color);
   border-radius: var(--file-details-severity-level-health-score-border-radius);
 
   .scoring-details-score-label {
     font-size: 0.857rem;
     margin-bottom: 0.571em !important;
+    color: #fff;
   }
 
   .scoring-details-score-value {
@@ -29,10 +27,11 @@
     .scoring-details-score-max {
       font-size: 2.5rem;
       line-height: 1;
+      color: #fff;
     }
 
     .scoring-details-score-max {
-      color: var(--file-details-severity-level-health-score-neutral-color);
+      opacity: 0.7;
     }
   }
 }
@@ -188,6 +187,139 @@
   color: var(
     --file-details-severity-level-health-score-heading-color
   ) !important;
+}
+
+.score-methodology {
+  padding: 1.429em;
+}
+
+.methodology-description {
+  margin-bottom: 0.429em;
+  color: var(
+    --file-details-severity-level-health-score-heading-color
+  );
+}
+
+.formula-item {
+  margin-bottom: 1.429em;
+}
+
+.answer-box {
+  margin-top: 0.571em;
+  padding: 0.857em 1.143em;
+  background-color: var(
+    --file-details-severity-level-health-score-background-color
+  );
+  border: 1px solid var(--file-details-severity-level-health-score-border-color);
+  border-radius: var(--file-details-severity-level-health-score-border-radius);
+}
+
+.code-block {
+  margin-top: 0.571em;
+  padding: 0.857em 1.143em;
+  background-color: var(
+    --file-details-severity-level-health-score-background-color
+  );
+  border: 1px solid var(--file-details-severity-level-health-score-border-color);
+  border-radius: var(--file-details-severity-level-health-score-border-radius);
+  overflow-x: auto;
+
+  code {
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 0.786rem;
+    color: var(
+      --file-details-severity-level-health-score-heading-color
+    );
+  }
+}
+
+.adjustments-title {
+  margin-top: 1.714em;
+  margin-bottom: 0.857em;
+}
+
+.adjustments-list {
+  padding-left: 1.286em;
+
+  li {
+    margin-bottom: 0.857em;
+    line-height: 1.5;
+    font-size: 0.857rem;
+  }
+}
+
+.score-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 0.857em;
+
+  th,
+  td {
+    border: 1px solid var(--file-details-severity-level-health-score-border-color);
+    padding: 0.714em;
+    text-align: left;
+    font-size: 0.857rem;
+  }
+
+  th {
+    background-color: var(
+      --file-details-severity-level-health-score-background-color
+    );
+  }
+}
+
+.examples-title {
+  margin-top: 1.714em;
+  margin-bottom: 0.857em;
+}
+
+.example-card {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border: 1px solid var(--file-details-severity-level-health-score-border-color);
+  border-radius: var(--file-details-severity-level-health-score-border-radius);
+  padding: 0.857em;
+  margin-bottom: 0.714em;
+  font-size: 0.857rem;
+}
+
+.example-score {
+  text-align: right;
+}
+
+.badge {
+  display: inline-block;
+  margin-top: 0.429em;
+  padding: 0.214em 0.571em;
+  border-radius: 0.286em;
+  color: #fff;
+  font-size: 0.786rem;
+}
+
+.badge.good {
+  background-color: var(
+    --file-details-severity-level-health-score-positive-color
+  );
+}
+
+.badge.poor {
+  background-color: var(
+    --file-details-severity-level-health-score-status-chip-bg-poor
+  );
+}
+
+.badge.very-poor {
+  background-color: var(
+    --file-details-severity-level-health-score-status-chip-bg-very-poor
+  );
+}
+
+.examples-note {
+  margin-top: 1.143em;
+  color: var(
+    --file-details-severity-level-health-score-heading-color
+  );
 }
 
 .scoring-details-date-chip {

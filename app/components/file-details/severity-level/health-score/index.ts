@@ -68,6 +68,36 @@ export default class FileDetailsSeverityLevelHealthScoreComponent extends Compon
     return this.currentScore?.score ?? null;
   }
 
+  get scoreBoxGradient(): string {
+    const score = this.score;
+
+    if (score === null) {
+      return '';
+    }
+
+    let start: string;
+    let end: string;
+
+    if (score >= 90) {
+      start = '#43A047';
+      end = '#2DB421';
+    } else if (score >= 75) {
+      start = '#A8D65E';
+      end = '#94C436';
+    } else if (score >= 60) {
+      start = '#FBD54A';
+      end = '#FAD34A';
+    } else if (score >= 40) {
+      start = '#FB9E5E';
+      end = '#F98746';
+    } else {
+      start = '#E53935';
+      end = '#D72F2F';
+    }
+
+    return `linear-gradient(135deg, ${start}, ${end})`;
+  }
+
   get status() {
     return this.currentScore?.status ?? '';
   }
