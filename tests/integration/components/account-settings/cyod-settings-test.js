@@ -125,6 +125,44 @@ module(
         .dom('[data-test-cyodSettings-drawer]')
         .containsText(t('cyodSettings.stepRun'), 'renders the final step');
 
+      // The "Note -" label is a separate bold run, so the two notes carry it
+      // as markup rather than baked into the translated sentence.
+      const noteLabels = this.element.querySelectorAll(
+        '[data-test-cyodSettings-noteLabel]'
+      );
+
+      assert.strictEqual(noteLabels.length, 2, 'both steps carry a note label');
+
+      assert.dom(noteLabels[0]).hasText(t('cyodSettings.noteLabel'));
+
+      assert.ok(
+        parseInt(window.getComputedStyle(noteLabels[0]).fontWeight, 10) >= 700,
+        'the label renders bold'
+      );
+
+      assert
+        .dom('[data-test-cyodSettings-drawer]')
+        .containsText(t('cyodSettings.stepCertificateNote'));
+
+      // The server URL sits off the AkTypography size ramp, so its style comes
+      // from a local class that has to out-specify the component's own rules.
+      // A plain single-class selector loses that tie and silently does
+      // nothing, which is invisible in markup-only assertions.
+      const urlStyle = window.getComputedStyle(
+        this.element.querySelector('[data-test-cyodSettings-serverUrl]')
+      );
+
+      assert.strictEqual(
+        Math.round(parseFloat(urlStyle.fontSize)),
+        12,
+        'server URL renders at 12px'
+      );
+
+      assert.ok(
+        urlStyle.fontFamily.includes('DM Mono'),
+        `server URL renders in DM Mono, got ${urlStyle.fontFamily}`
+      );
+
       await click('[data-test-cyodSettings-drawerCloseBtn]');
 
       assert.dom('[data-test-cyodSettings-drawer]').doesNotExist();

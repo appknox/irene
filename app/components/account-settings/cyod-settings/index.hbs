@@ -57,37 +57,40 @@
       {{else}}
         {{! The owner's switch is off, so there is nothing a member can do here.
         The whole surface collapses to one notice pointing at the owner, rather
-        than showing a dead register button over an empty table.
-
-        ToggleAutomatedDast is the illustration the design uses here -- the same
-        one that prompts you to switch automated DAST on
-        (file-details/dynamic-scan/automated). TurnOnSettings looks close by name
-        but is a much simpler 5-path mark and does not match. }}
+        than showing a dead register button over an empty table. }}
+        {{! Illustration and text block are separated by the stack's gap rather
+        than a margin utility, so the two groups stay one spacing decision. }}
         <div local-class='disabled-state' data-test-cyodSettings-disabled>
           <AkStack
             @direction='column'
             @alignItems='center'
             @justifyContent='center'
-            @spacing='1'
+            @spacing='2'
             class='py-7 px-4'
           >
-            <AkSvg::ToggleAutomatedDast data-test-cyodSettings-disabledSvg />
+            <AkSvg::CyodTurnOn data-test-cyodSettings-disabledSvg />
 
-            <AkTypography
-              @variant='h5'
-              class='mt-4'
-              data-test-cyodSettings-disabledTitle
-            >
-              {{t 'cyodSettings.turnOnTitle'}}
-            </AkTypography>
+            <AkStack @direction='column' @alignItems='center' @spacing='0.5'>
+              {{! body1 for the design's 14px/medium, but still an <h5> so the
+              empty state keeps its place in the document outline. }}
+              <AkTypography
+                @variant='body1'
+                @tag='h5'
+                @fontWeight='medium'
+                data-test-cyodSettings-disabledTitle
+              >
+                {{t 'cyodSettings.turnOnTitle'}}
+              </AkTypography>
 
-            <AkTypography
-              @align='center'
-              @color='textSecondary'
-              data-test-cyodSettings-disabledDesc
-            >
-              {{t 'cyodSettings.turnOnDesc'}}
-            </AkTypography>
+              <AkTypography
+                local-class='disabled-desc'
+                @variant='body2'
+                @align='center'
+                data-test-cyodSettings-disabledDesc
+              >
+                {{t 'cyodSettings.turnOnDesc'}}
+              </AkTypography>
+            </AkStack>
           </AkStack>
         </div>
       {{/if}}
@@ -123,6 +126,8 @@
         </AkIconButton>
       </AkAppbar>
 
+      {{! Spacing per the design: 1.5em between steps, 1em between a step's
+      number and its content, 0.75em between a step's content and its note. }}
       <AkStack @direction='column' @spacing='3' class='p-4'>
         <AkStack @direction='column' @spacing='1'>
           <AkTypography @variant='subtitle1'>
@@ -135,54 +140,64 @@
         </AkStack>
 
         {{! Step 1 — iOS signing certificate }}
-        <AkStack local-class='setup-step' @spacing='1' @alignItems='flex-start'>
+        <AkStack local-class='setup-step' @spacing='2' @alignItems='flex-start'>
           <div local-class='step-num' aria-hidden='true'>1</div>
 
-          <AkStack @direction='column' @spacing='0.5'>
-            <AkTypography @variant='body2'>
+          <AkStack @direction='column' @spacing='1.5'>
+            <AkTypography @variant='body1' @fontWeight='medium'>
               {{t 'cyodSettings.stepCertificate'}}
             </AkTypography>
 
-            <AkTypography @variant='body2' @color='textSecondary'>
+            <AkTypography @variant='body1' @color='textSecondary'>
+              <strong data-test-cyodSettings-noteLabel>{{t
+                  'cyodSettings.noteLabel'
+                }}</strong>
               {{t 'cyodSettings.stepCertificateNote'}}
             </AkTypography>
           </AkStack>
         </AkStack>
 
         {{! Step 2 — download the app }}
-        <AkStack local-class='setup-step' @spacing='1' @alignItems='flex-start'>
+        <AkStack local-class='setup-step' @spacing='2' @alignItems='flex-start'>
           <div local-class='step-num' aria-hidden='true'>2</div>
 
-          <AkStack @direction='column' @spacing='0.5'>
-            <AkTypography @variant='body2'>
-              {{t 'cyodSettings.stepDownload'}}
-            </AkTypography>
+          <AkStack @direction='column' @spacing='1.5'>
+            <AkStack @direction='column' @spacing='2' @alignItems='flex-start'>
+              <AkTypography @variant='body1' @fontWeight='medium'>
+                {{t 'cyodSettings.stepDownload'}}
+              </AkTypography>
 
-            <AkButton
-              data-test-cyodSettings-downloadBtn
-              @tag='a'
-              href={{this.mercerDownloadUrl}}
-              target='_blank'
-              rel='noopener noreferrer'
-              @variant='filled'
-            >
-              <AkIcon @iconName='download' @size='small' />
+              <AkButton
+                data-test-cyodSettings-downloadBtn
+                @tag='a'
+                href={{this.mercerDownloadUrl}}
+                target='_blank'
+                rel='noopener noreferrer'
+                @variant='filled'
+              >
+                <AkIcon @iconName='download' @size='small' />
 
-              <span class='ml-1'>{{t 'cyodSettings.downloadMercer'}}</span>
-            </AkButton>
+                <span class='ml-1'>{{t 'cyodSettings.downloadMercer'}}</span>
+              </AkButton>
+            </AkStack>
 
-            <AkTypography @variant='body2' @color='textSecondary'>
+            <AkTypography @variant='body1' @color='textSecondary'>
+              <strong data-test-cyodSettings-noteLabel>{{t
+                  'cyodSettings.noteLabel'
+                }}</strong>
               {{t 'cyodSettings.stepDownloadNote'}}
             </AkTypography>
           </AkStack>
         </AkStack>
 
         {{! Step 3 — sign in with token + server URL }}
-        <AkStack local-class='setup-step' @spacing='1' @alignItems='flex-start'>
+        <AkStack local-class='setup-step' @spacing='2' @alignItems='flex-start'>
           <div local-class='step-num' aria-hidden='true'>3</div>
 
-          <AkStack @direction='column' @spacing='0.5'>
-            <AkTypography @variant='body2'>
+          {{! @width='full' so the URL field can span the step's content column;
+          without it the column shrinks to its widest line of text. }}
+          <AkStack @direction='column' @spacing='1.5' @width='full'>
+            <AkTypography @variant='body1' @fontWeight='medium'>
               {{t 'cyodSettings.stepSignIn'}}
             </AkTypography>
 
@@ -192,10 +207,10 @@
               @alignItems='center'
               @justifyContent='space-between'
             >
+              {{! 12px, off the variant ramp -- see .url-value. }}
               <AkTypography
                 data-test-cyodSettings-serverUrl
                 local-class='url-value'
-                @variant='body3'
               >
                 {{this.serverUrl}}
               </AkTypography>
@@ -207,31 +222,32 @@
                   id={{ac.triggerId}}
                   @size='small'
                 >
-                  <AkIcon @iconName='content-copy-outline' @color='primary' />
+                  <AkIcon @iconName='content-copy' @color='primary' />
                 </AkIconButton>
               </AkClipboard>
             </AkStack>
 
-            <AkTypography @variant='body2' @color='textSecondary'>
+            {{! 11px, off the variant ramp -- see .token-hint. }}
+            <AkTypography local-class='token-hint' @color='textSecondary'>
               {{t 'cyodSettings.stepSignInNote'}}
             </AkTypography>
           </AkStack>
         </AkStack>
 
         {{! Step 4 — register the device in the app }}
-        <AkStack local-class='setup-step' @spacing='1' @alignItems='flex-start'>
+        <AkStack local-class='setup-step' @spacing='2' @alignItems='flex-start'>
           <div local-class='step-num' aria-hidden='true'>4</div>
 
-          <AkTypography @variant='body2'>
+          <AkTypography @variant='body1' @fontWeight='medium'>
             {{t 'cyodSettings.stepRegister'}}
           </AkTypography>
         </AkStack>
 
         {{! Step 5 — start the proxy }}
-        <AkStack local-class='setup-step' @spacing='1' @alignItems='flex-start'>
+        <AkStack local-class='setup-step' @spacing='2' @alignItems='flex-start'>
           <div local-class='step-num' aria-hidden='true'>5</div>
 
-          <AkTypography @variant='body2'>
+          <AkTypography @variant='body1' @fontWeight='medium'>
             {{t 'cyodSettings.stepRun'}}
           </AkTypography>
         </AkStack>
