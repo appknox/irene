@@ -37,6 +37,8 @@ import { NfAutomatedDastPartiallyCompletedContext } from './messages/nf-automate
 import { NfSkSubexpContext } from './messages/nf-sk-subexp/context';
 import { NfPublicApiUserUpdatedContext } from './messages/nf-public-api-user-updated/context';
 import { NfJiraPushErrContext } from './messages/nf-jira-push-err/context';
+import { NfSbomCompUpdateContext } from './messages/nf-sbom-comp-update/context';
+import { NfSbomVulnUpdateContext } from './messages/nf-sbom-vuln-update/context';
 
 export const NotificationMap = {
   ERROR: {
@@ -203,6 +205,14 @@ export const NotificationMap = {
   NF_JIRA_PUSH_ERR: {
     component: 'notifications-page/messages/nf-jira-push-err' as const,
     context: NfJiraPushErrContext,
+  },
+  NF_SBOM_COMP_UPDATE: {
+    component: 'notifications-page/messages/nf-sbom-comp-update' as const,
+    context: NfSbomCompUpdateContext,
+  },
+  NF_SBOM_VULN_UPDATE: {
+    component: 'notifications-page/messages/nf-sbom-vuln-update' as const,
+    context: NfSbomVulnUpdateContext,
   },
 } satisfies Record<string, { component: string; context: unknown }>;
 

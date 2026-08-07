@@ -1347,7 +1347,9 @@
         "suffix": " of the <strong>{platform_display}</strong> app <strong>{package_name}</strong> is now partially completed."
       },
       "nf-public-api-user-updated": "User <strong>{type}</strong> for <strong>{user_email}</strong> changed from <strong>{current}</strong> to <strong>{updated}</strong> by <strong>{changed_by}</strong>.",
-      "nf-jira-push-err": "ファイル<strong>{file_id}</strong>（{package_name}）のJiraへのプッシュが<strong>失敗</strong>しました。Jira連携の設定をご確認ください。"
+      "nf-jira-push-err": "ファイル<strong>{file_id}</strong>（{package_name}）のJiraへのプッシュが<strong>失敗</strong>しました。Jira連携の設定をご確認ください。",
+      "nf-sbom-comp-update": "コンポーネント<strong>{component_name}</strong>の新しいバージョン<strong>{new_version}</strong>が利用可能です（現在 {old_version}、ソース: {source}）。<strong>{affected_apps_count}</strong> 個のアプリに影響します。",
+      "nf-sbom-vuln-update": "コンポーネント<strong>{component_name}</strong>に新しい脆弱性アドバイザリ<strong>{max_severity}</strong>が検出されました（アドバイザリ: {ghsa_ids_display}、修正バージョン: {fixed_version}）。<strong>{affected_apps_count}</strong> 個のアプリに影響します。"
     },
     "namespaceMessage": {
       "approved": "{moderaterName} approved this namespace",
