@@ -33,6 +33,17 @@
     </ApiFilter>
   </AkStack>
 
+  {{! Sits directly under the API filter so it is seen without scrolling past
+  Teams and Collaborators. Vertical spacing comes from the wrapper stack, so
+  the section adds no padding of its own. }}
+  {{#if this.showCyodSection}}
+    <AkDivider @color='dark' />
+
+    <AkStack @width='9/12' @direction='column' @spacing='2' class='px-3'>
+      <Organization::SigningCertificate @project={{@project}} />
+    </AkStack>
+  {{/if}}
+
   <AkDivider @color='dark' />
 
   <AkStack @width='9/12' @direction='column' @spacing='2' class='px-3'>
@@ -66,8 +77,4 @@
       @project={{this.project}}
     />
   </AkStack>
-
-  {{! Brings its own leading divider and padding, and hides itself for non-iOS
-  projects or when CYOD is switched off. }}
-  <Organization::SigningCertificate @project={{@project}} />
 </AkStack>
