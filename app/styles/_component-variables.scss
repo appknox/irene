@@ -1685,6 +1685,45 @@ body {
     --border-color-1
   );
 
+  // variables for account-settings/cyod-settings
+  --account-settings-cyod-settings-background: var(--common-white);
+  --account-settings-cyod-settings-disabled-state-border-color: var(
+    --divider-dark
+  );
+  --account-settings-cyod-settings-disabled-state-border-radius: var(
+    --border-radius
+  );
+  --account-settings-cyod-settings-step-num-background: var(--primary-light);
+  --account-settings-cyod-settings-step-num-color: var(--primary-dark);
+  --account-settings-cyod-settings-step-num-border-radius: var(
+    --border-radius-capsule
+  );
+  --account-settings-cyod-settings-step-num-font-weight: var(
+    --font-weight-medium
+  );
+  --account-settings-cyod-settings-url-field-background: var(
+    --background-light
+  );
+  --account-settings-cyod-settings-url-field-border-color: var(--divider-dark);
+  --account-settings-cyod-settings-url-field-border-radius: var(
+    --border-radius
+  );
+  --account-settings-cyod-settings-url-value-font-family: var(
+    --font-family-mono
+  );
+
+  // variables for cyod/device-table
+  --cyod-device-table-frame-border-color: var(--divider-dark);
+  --cyod-device-table-frame-border-radius: var(--border-radius);
+  --cyod-device-table-header-font-weight: var(--font-weight-medium);
+  --cyod-device-table-empty-state-background: var(--background-light);
+  --cyod-device-table-empty-state-border-color: var(--divider-dark);
+  --cyod-device-table-empty-state-border-radius: var(--border-radius);
+  --cyod-device-table-empty-state-block-border-color: var(--divider-dark);
+  --cyod-device-table-empty-state-block-border-radius: var(--border-radius);
+  --cyod-device-table-loading-state-border-color: var(--divider-dark);
+  --cyod-device-table-loading-state-border-radius: var(--border-radius);
+
   // variables for account-settings-page-content-wrapper-border-color
   --account-settings-page-content-wrapper-border-color: var(--border-color-1);
 

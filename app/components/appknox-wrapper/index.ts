@@ -167,7 +167,7 @@ export default class AppknoxWrapperComponent extends Component<AppknoxWrapperSig
         icon: 'account-box',
         route: 'authenticated.dashboard.account-settings.general',
         currentWhen:
-          'authenticated.dashboard.account-settings.general authenticated.dashboard.account-settings.security authenticated.dashboard.account-settings.developersettings authenticated.dashboard.account-settings.notification-settings',
+          'authenticated.dashboard.account-settings.general authenticated.dashboard.account-settings.security authenticated.dashboard.account-settings.developersettings authenticated.dashboard.account-settings.notification-settings authenticated.dashboard.account-settings.cyod-settings',
       },
       this.showMarketplace && {
         label: this.intl.t('marketplace'),
