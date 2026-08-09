@@ -53,3 +53,15 @@ html {
   overflow-y: auto;
   font-size: var(--html-font-size);
 }
+
+// Toast position. ember-cli-notifications drives both insets from a single
+// --ecn-container-position (10px), which for top-right would put the toast
+// under the 56px app bar. The design places it clear of the bar and inset from
+// the right edge, so top and right are set independently here.
+// The addon injects its own rule from an inline stylesheet, which lands after
+// irene.css at equal specificity -- so the base class is compounded with the
+// modifier here to win the cascade rather than reaching for !important.
+.ember-cli-notifications-notification__container.ember-cli-notifications-notification__container--top-right {
+  top: 80px;
+  right: 24px;
+}
