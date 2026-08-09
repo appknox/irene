@@ -16,6 +16,7 @@ export interface DynamicScanStatusChipSignature {
   Args: {
     status: DsStatusGroup | undefined;
     statusText?: string;
+    errorMessage?: string;
     runningAsWarn?: boolean;
   };
 }
@@ -37,6 +38,15 @@ export default class DynamicScanStatusChipComponent extends Component<DynamicSca
 
   get statusText() {
     return this.args.statusText;
+  }
+
+  // Surfaced inline only for errored scans when the caller opts in by passing
+  // @errorMessage (e.g. "device UDID ... is not enrolled in the signing
+  // profile"). Other call sites are unaffected.
+  get errorMessageToShow() {
+    return this.status === DsStatusGroup.ERRORED
+      ? this.args.errorMessage
+      : undefined;
   }
 
   get chipColor() {

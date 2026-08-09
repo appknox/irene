@@ -1,7 +1,24 @@
-<AkTypography>
-  {{t
-    (device-type
-      (if @deviceProps.isTablet this.isTabletDevice this.isPhoneDevice)
-    )
-  }}
-</AkTypography>
+<AkStack @spacing='0.5' @alignItems='center'>
+  <AkTypography>
+    {{t
+      (device-type
+        (if @deviceProps.isTablet this.isTabletDevice this.isPhoneDevice)
+      )
+    }}
+  </AkTypography>
+
+  {{#if this.isCyodDevice}}
+    <AkTooltip
+      @title='{{t "modalCard.dynamicScan.cyodDevice"}}'
+      @arrow={{true}}
+      @placement='top'
+    >
+      <AkIcon
+        data-test-fileDetails-dynamicScanDrawer-devicePrefTable-cyodBadge
+        @iconName='mobile'
+        @size='small'
+        @color='textSecondary'
+      />
+    </AkTooltip>
+  {{/if}}
+</AkStack>

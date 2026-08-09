@@ -32,9 +32,13 @@
           </:tooltipContent>
 
           <:default>
+            {{! @errorMessage renders the failure inline under the chip; the
+            tooltip above repeats it on hover. Both kept through the develop
+            merge -- the inline copy is what CYOD signing errors rely on. }}
             <FileDetails::DynamicScan::StatusChip
               @status={{this.cumulativeScanStatus}}
               @statusText={{this.cumulativeScanStatusText}}
+              @errorMessage={{this.selectedScanErrorMessage}}
             />
           </:default>
         </AkTooltip>
