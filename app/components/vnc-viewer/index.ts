@@ -1,17 +1,26 @@
 import Component from '@glimmer/component';
 import { inject as service } from '@ember/service';
+import { tracked } from '@glimmer/tracking';
+import { task } from 'ember-concurrency';
 import type Store from 'ember-data/store';
 import type IntlService from 'ember-intl/services/intl';
 
 import ENUMS from 'irene/enums';
 import ENV from 'irene/config/environment';
 import type FileModel from 'irene/models/file';
+import type ProjectModel from 'irene/models/project';
 import type DynamicscanModel from 'irene/models/dynamicscan';
 import type DevicefarmService from 'irene/services/devicefarm';
+import type CyodAdbSessionService from 'irene/services/cyod-adb-session';
 import {
   IOS_MODERN_DEVICE_VERSION_CUTOFF,
   getPlatformMajorVersion,
 } from 'irene/utils/dynamic-scan-device';
+import { resolveFileProject } from 'irene/utils/resolve-file-project';
+
+const VNC_MODE_NONE = ENUMS.DEVICE_VNC_MODE?.NONE ?? 0;
+const VNC_MODE_SCRCPY = ENUMS.DEVICE_VNC_MODE?.SCRCPY ?? 2;
+const REGISTRATION_SOURCE_WEBUSB = 2;
 
 export interface VncViewerSignature {
   Args: {
@@ -29,6 +38,37 @@ export default class VncViewerComponent extends Component<VncViewerSignature> {
   @service declare intl: IntlService;
   @service declare store: Store;
   @service declare devicefarm: DevicefarmService;
+  @service('cyod-adb-session') declare cyodAdbSession: CyodAdbSessionService;
+  @service('notifications') declare notify: NotificationService;
+
+  @tracked webusbInstallStage: string | null = null;
+  @tracked webusbInstallPercent = 0;
+  @tracked resolvedProject: ProjectModel | null = null;
+
+  constructor(owner: unknown, args: VncViewerSignature['Args']) {
+    super(owner, args);
+
+    this.loadProject.perform();
+  }
+
+  // The project drives which device skin is drawn. Reading belongsTo().value()
+  // alone is not enough: it is null until the relationship happens to be
+  // loaded, and the old `?? 0` fallback meant ANDROID, so an unresolved project
+  // silently rendered the Android skin for iOS scans. Fall back to an async
+  // resolve and treat "unknown" as -1 so no skin is drawn rather than a wrong one.
+  loadProject = task(async () => {
+    this.resolvedProject = await resolveFileProject(this.args.file, this.store);
+  });
+
+  // .belongsTo().value() is preferred when already loaded: it avoids creating
+  // the getBelongsTo proxy during render (which triggers scheduleRevalidate).
+  get filePlatform(): number {
+    const project =
+      (this.args.file.belongsTo('project').value() as ProjectModel | null) ??
+      this.resolvedProject;
+
+    return project?.platform ?? -1;
+  }
 
   get dynamicScan() {
     return this.args.dynamicScan;
@@ -74,8 +114,16 @@ export default class VncViewerComponent extends Component<VncViewerSignature> {
     return this.supportsModernIOSDeviceFrame ? null : ENV.deviceFarmPassword;
   }
 
+  // CYOD viewer (scrcpy/cyod WS) auth token — always the raw device-farm
+  // password. Unlike deviceFarmPassword, which master nulls for the modern-iOS
+  // noVNC frame, the cyod-viewer's WS handshake needs the token, so it must not
+  // be nulled for iOS 17+ CYOD devices (that produced ?token=null -> 403).
+  get cyodAuthToken() {
+    return ENV.deviceFarmPassword;
+  }
+
   get deviceType() {
-    const platform = this.args.file.project.get('platform');
+    const platform = this.filePlatform;
 
     if (platform === ENUMS.PLATFORM.ANDROID) {
       return 'nexus5';
@@ -104,13 +152,101 @@ export default class VncViewerComponent extends Component<VncViewerSignature> {
   }
 
   get isIOSDevice() {
-    const platform = this.args.file.project.get('platform');
-
-    return platform === ENUMS.PLATFORM.IOS;
+    return this.filePlatform === ENUMS.PLATFORM.IOS;
   }
 
   get startedBy() {
     return this.dynamicScan?.get('startedByUser')?.get('username');
+  }
+
+  // CYOD — no VNC, user interacts on their own device
+  get isCyodScan() {
+    const deviceUsed = this.args.dynamicScan?.get('deviceUsed');
+
+    return (
+      deviceUsed?.vnc_mode === VNC_MODE_NONE ||
+      !!deviceUsed?.ios_itms_url ||
+      !!deviceUsed?.android_download_url
+    );
+  }
+
+  get cyodDownloadUrl() {
+    const deviceUsed = this.args.dynamicScan?.get('deviceUsed');
+
+    return deviceUsed?.android_download_url ?? deviceUsed?.ios_itms_url ?? null;
+  }
+
+  get cyodIsIos() {
+    const deviceUsed = this.args.dynamicScan?.get('deviceUsed');
+
+    return !!deviceUsed?.ios_itms_url;
+  }
+
+  // WebUSB CYOD — user registered their device via WebUSB; auto-install in browser
+  get isWebusbCyod() {
+    const deviceUsed = this.args.dynamicScan?.get('deviceUsed');
+
+    return (
+      !!deviceUsed?.android_download_url &&
+      deviceUsed?.registration_source === REGISTRATION_SOURCE_WEBUSB &&
+      !!deviceUsed?.device_identifier
+    );
+  }
+
+  get webusbAdb() {
+    const identifier =
+      this.args.dynamicScan?.get('deviceUsed')?.device_identifier;
+    return identifier ? this.cyodAdbSession.lookup(identifier) : null;
+  }
+
+  get webusbInstallIsRunning() {
+    return this.autoInstallViaWebUsb.isRunning;
+  }
+
+  autoInstallViaWebUsb = task(async () => {
+    const adb = this.webusbAdb;
+    const downloadUrl = this.cyodDownloadUrl;
+    const packageName = this.args.dynamicScan?.get('packageName');
+
+    if (!adb || !downloadUrl || !packageName) {
+      return;
+    }
+
+    try {
+      const { installApkViaWebUsb } = await import(
+        'irene/utils/webusb-adb-install'
+      );
+
+      await installApkViaWebUsb(adb, downloadUrl, packageName, {
+        onProgress: (progress) => {
+          this.webusbInstallStage = progress.stage;
+          if ('percent' in progress) {
+            this.webusbInstallPercent = progress.percent;
+          }
+        },
+      });
+
+      const { launchAppViaWebUsb } = await import(
+        'irene/utils/webusb-adb-install'
+      );
+      await launchAppViaWebUsb(adb, packageName);
+
+      this.webusbInstallStage = 'done';
+    } catch (err) {
+      this.notify.error(this.intl.t('cyodAutoInstallFailed'));
+      throw err;
+    }
+  });
+
+  // Proxy CYOD — Mercer is streaming; use cyod-viewer instead of noVNC
+  get isScrcpyScan() {
+    const deviceUsed = this.args.dynamicScan?.get('deviceUsed');
+
+    return deviceUsed?.vnc_mode === VNC_MODE_SCRCPY;
+  }
+
+  get scrcpyScanToken() {
+    return this.args.dynamicScan?.get('moriartyDynamicscanToken') ?? null;
   }
 }
 
