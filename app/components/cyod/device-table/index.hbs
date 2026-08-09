@@ -1,0 +1,128 @@
+<div
+  local-class='device-table-container'
+  data-test-cyodDeviceTable
+  ...attributes
+>
+  {{#if @heading}}
+    <AkStack
+      class='mb-2'
+      @alignItems='flex-start'
+      @justifyContent='space-between'
+      @spacing='2'
+    >
+      <AkStack @direction='column' @spacing='1'>
+        <AkTypography @variant='subtitle1' data-test-cyodDeviceTable-heading>
+          {{@heading}}
+        </AkTypography>
+
+        {{#if @subheading}}
+          <AkTypography @variant='body2' @color='textSecondary'>
+            {{@subheading}}
+          </AkTypography>
+        {{/if}}
+      </AkStack>
+
+      <AkIconButton
+        data-test-cyodDeviceTable-refreshBtn
+        @size='small'
+        @variant='outlined'
+        {{on 'click' this.handleRefresh}}
+      >
+        <AkIcon @iconName='refresh' />
+      </AkIconButton>
+    </AkStack>
+  {{/if}}
+
+  {{#if this.isLoading}}
+    <AkStack
+      local-class='loading-state'
+      data-test-cyodDeviceTable-loading
+      @spacing='1'
+      @alignItems='center'
+      @justifyContent='center'
+    >
+      <AkLoader @size={{16}} />
+
+      <AkTypography @variant='body2' @color='textSecondary'>
+        {{t 'loading'}}
+      </AkTypography>
+    </AkStack>
+
+  {{else if this.notConfigured}}
+    <div local-class='empty-state' data-test-cyodDeviceTable-notConfigured>
+      <AkIcon @iconName='info' @color='textSecondary' />
+
+      <AkTypography @variant='body2' @color='textSecondary'>
+        {{t 'cyod.deviceRegistration.notConfigured'}}
+      </AkTypography>
+    </div>
+
+  {{else if this.hasDevices}}
+    <AkTable
+      @dense={{true}}
+      @variant='semi-bordered'
+      @borderColor='dark'
+      data-test-cyodDeviceTable-table
+      as |t|
+    >
+      <t.head data-test-cyodDeviceTable-thead @columns={{this.columns}} />
+
+      <t.body local-class='table-body' @rows={{this.rows}} as |b|>
+        <b.row data-test-cyodDeviceTable-row as |r|>
+          <r.cell data-test-cyodDeviceTable-cell as |value|>
+            {{#if r.columnValue.component}}
+              {{#let (component r.columnValue.component) as |Component|}}
+                <Component @device={{r.rowValue}} />
+              {{/let}}
+            {{else}}
+              <AkTypography @noWrap={{true}} title={{value}}>
+                {{value}}
+              </AkTypography>
+            {{/if}}
+          </r.cell>
+        </b.row>
+      </t.body>
+    </AkTable>
+
+  {{else}}
+    <div local-class='empty-state-block' data-test-cyodDeviceTable-empty>
+      <AkStack
+        @alignItems='center'
+        @justifyContent='center'
+        @direction='column'
+        @spacing='1'
+        class='py-7 px-4'
+      >
+        <AkSvg::ProjectListEmpty
+          width='155px'
+          height='63px'
+          data-test-cyodDeviceTable-emptySvg
+        />
+
+        <AkStack @direction='column' @alignItems='center' @spacing='0.5'>
+          <AkTypography
+            @variant='body1'
+            @tag='h5'
+            @fontWeight='medium'
+            data-test-cyodDeviceTable-emptyTitle
+          >
+            {{t 'cyod.deviceTable.emptyTitle'}}
+          </AkTypography>
+
+          {{#if @emptyHint}}
+            <AkTypography
+              local-class='empty-description'
+              @variant='body2'
+              @align='center'
+              data-test-cyodDeviceTable-emptyDescription
+            >
+              {{@emptyHint}}
+            </AkTypography>
+          {{/if}}
+        </AkStack>
+
+        {{yield to='emptyAction'}}
+      </AkStack>
+    </div>
+  {{/if}}
+</div>
