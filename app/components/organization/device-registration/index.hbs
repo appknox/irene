@@ -1,0 +1,57 @@
+<div class='w-full' data-test-orgDeviceRegistration ...attributes>
+  <AkStack @direction='column' @spacing='0.5'>
+    <AkStack
+      @width='full'
+      @alignItems='center'
+      @justifyContent='space-between'
+      @spacing='2'
+    >
+      <AkTypography @variant='h5' data-test-orgDeviceRegistration-title>
+        {{t 'cyod.registration.title'}}
+      </AkTypography>
+
+      <AkToggle
+        data-test-orgDeviceRegistration-toggle
+        @id='cyod-registration'
+        @checked={{this.isRegistrationEnabled}}
+        @disabled={{this.isSaving}}
+        @size='small'
+        @onChange={{perform this.setRegistrationEnabled}}
+      />
+    </AkStack>
+
+    <AkTypography
+      @variant='body2'
+      @color='textSecondary'
+      {{style maxWidth='500px'}}
+      data-test-orgDeviceRegistration-description
+    >
+      {{t 'cyod.registration.description'}}
+    </AkTypography>
+  </AkStack>
+
+  {{#if this.isRegistrationEnabled}}
+    <div class='mt-2'>
+      <Cyod::DeviceTable @emptyHint={{t 'cyod.registration.emptyHint'}}>
+        <:emptyAction>
+          <AkLink
+            data-test-orgDeviceRegistration-goToCyodSettings
+            @route='authenticated.dashboard.account-settings.cyod-settings'
+            @color='primary'
+            @underline='always'
+            @typographyVariant='body2'
+            @fontWeight='medium'
+          >
+            <:default>
+              {{t 'cyod.registration.goToCyodSettings'}}
+            </:default>
+
+            <:rightIcon>
+              <AkIcon @iconName='open-in-new' @size='small' @color='primary' />
+            </:rightIcon>
+          </AkLink>
+        </:emptyAction>
+      </Cyod::DeviceTable>
+    </div>
+  {{/if}}
+</div>
