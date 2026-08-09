@@ -1,0 +1,49 @@
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.286em;
+  padding: 0.179em 0.429em;
+  border-radius: 0.286em;
+  border: 1px solid var(--store-release-readiness-status-chip-border-color);
+  background-color: var(--store-release-readiness-status-chip-bg-color);
+  box-sizing: border-box;
+}
+
+.chip-label {
+  line-height: 1.25;
+  white-space: nowrap;
+}
+
+.severity-chip {
+  border-color: var(--store-release-readiness-status-chip-border-color);
+  background-color: var(--store-release-readiness-status-chip-bg-color);
+}
+
+.severity-failed-icon {
+  font-size: 13px;
+  color: var(--store-release-readiness-status-chip-failed-color);
+}
+
+.severity-failed-label {
+  color: var(--store-release-readiness-status-chip-failed-color);
+}
+
+.status-dot {
+  display: inline-block;
+  width: 0.571em;
+  height: 0.571em;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.status-dot-failed {
+  background-color: var(--store-release-readiness-status-chip-failed-color);
+}
+
+.status-dot-passed {
+  background-color: var(--store-release-readiness-status-chip-passed-color);
+}
+
+.status-dot-untested {
+  background-color: var(--store-release-readiness-status-chip-untested-color);
+}

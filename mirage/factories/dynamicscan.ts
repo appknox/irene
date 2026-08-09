@@ -1,5 +1,6 @@
-// @ts-expect-error "trait" prop missing from miragejs typings
-import { Factory, trait } from 'miragejs';
+/* eslint-disable @typescript-eslint/ban-ts-comment */
+// @ts-expect-error "trait" prop missing from miragejs
+import { Factory, ModelInstance, Server, trait } from 'miragejs';
 import { faker } from '@faker-js/faker';
 import ENUMS from 'irene/enums';
 
@@ -52,6 +53,7 @@ export default Factory.extend({
   created_on: () => faker.date.recent().toISOString(),
   ended_on: () => faker.date.recent().toISOString(),
   auto_shutdown_on: () => faker.date.recent().toISOString(),
+  engine: faker.helpers.arrayElement(ENUMS.DYNAMIC_SCAN_ENGINE.VALUES),
   device_used: null,
   device_preference: null,
   error_code: '',
@@ -72,6 +74,16 @@ export default Factory.extend({
   withRemoteCyodDevice: trait({
     afterCreate(ds: any) {
       ds.update({ device_used: REMOTE_CYOD_DEVICE_USED });
+    },
+  }),
+
+  scenarioUserRole: null,
+
+  withUserRole: trait({
+    afterCreate(model: ModelInstance, server: Server) {
+      model.update({
+        scenarioUserRole: server.create('scenario-user-role'),
+      });
     },
   }),
 });

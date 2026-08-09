@@ -109,6 +109,10 @@ export default class AppknoxWrapperComponent extends Component<AppknoxWrapperSig
     );
   }
 
+  get showStoreReleaseReadinessDashboard() {
+    return !this.organization.hideUpsellUIStatus.storeReleaseReadiness;
+  }
+
   get menuItems() {
     return [
       {
@@ -132,6 +136,13 @@ export default class AppknoxWrapperComponent extends Component<AppknoxWrapperSig
         route: 'authenticated.dashboard.sbom.apps',
         query: { app_offset: 0 },
         currentWhen: 'authenticated.dashboard.sbom',
+      },
+      this.showStoreReleaseReadinessDashboard && {
+        label: this.intl.t('storeReleaseReadiness.title'),
+        icon: 'list-alt-check',
+        route: 'authenticated.dashboard.store-release-readiness',
+        currentWhen:
+          'authenticated.dashboard.store-release-readiness authenticated.dashboard.store-release-readiness.index authenticated.dashboard.store-release-readiness.scan-results authenticated.dashboard.store-release-readiness.finding',
       },
       this.isShowAnalytics && {
         label: this.intl.t('analytics'),

@@ -38,6 +38,8 @@ export default class OrganizationArchiveComponent extends Component {
   @tracked archiveListRef: ArchiveListRef = {};
   @tracked selectedArchiveType: ArchiveTypeOption | null = null;
 
+  readonly MAX_DATE_RANGE_YEARS = 2;
+
   datepickerOptions = [
     'last7Days',
     'last30Days',
@@ -73,20 +75,47 @@ export default class OrganizationArchiveComponent extends Component {
     );
   }
 
-  get showExportButton() {
+  get showDatePicker() {
     return (
       this.isComprehensiveArchiveSelected || this.isLatestScanArchiveSelected
     );
   }
 
+  get showExportButton() {
+    return this.showDatePicker;
+  }
+
   @action
   setArchiveType(selection: ArchiveTypeOption) {
     this.selectedArchiveType = selection;
+    this.startDate = null;
+    this.endDate = null;
   }
 
   @action
   setDuration(...args: Parameters<CalendarOnSelectFunc>) {
     const { date } = args[0] as RangeDateObject;
+
+    // Validate date range for both archive types (max 2 years)
+    if (date.start && date.end) {
+      const startDate = dayjs(date.start);
+      const endDate = dayjs(date.end);
+
+      const maxAllowedEndDate = startDate.add(
+        this.MAX_DATE_RANGE_YEARS,
+        'years'
+      );
+
+      if (endDate.isAfter(maxAllowedEndDate)) {
+        this.notify.error(this.intl.t('organizationArchiveDateRangeExceeded'));
+
+        // Clear both dates when validation fails
+        this.startDate = null;
+        this.endDate = null;
+
+        return;
+      }
+    }
 
     this.startDate = date.start;
     this.endDate = date.end;
@@ -108,30 +137,26 @@ export default class OrganizationArchiveComponent extends Component {
       const startDateObj = dayjs(this.startDate);
 
       // model serializer expects native date object;
-      requestParams['from_date'] = startDateObj
-        .set('hour', 0)
-        .set('minute', 0)
-        .set('second', 0)
-        .toDate();
+      requestParams['from_date'] = startDateObj.startOf('day').toDate();
     }
 
     if (this.endDate) {
-      const endDateObj = dayjs(this.endDate);
       const now = dayjs();
-
+      const endDateObj = dayjs(this.endDate);
       const isBeforeNow = endDateObj.isBefore(now, 'day');
 
       // model serializer expects native date object;
-      requestParams['to_date'] = endDateObj
-        .set('hour', isBeforeNow ? 23 : now.hour())
-        .set('minute', isBeforeNow ? 59 : now.minute())
-        .set('second', isBeforeNow ? 59 : 0)
-        .toDate();
+      const requestToDate = isBeforeNow
+        ? endDateObj.endOf('day')
+        : now.startOf('minute');
+
+      requestParams['to_date'] = requestToDate.toDate();
     }
 
     const archiveRecord = this.store.createRecord('organization-archive', {
       fromDate: requestParams['from_date'],
       toDate: requestParams['to_date'],
+      archiveType: OrganizationArchiveType.COMPREHENSIVE,
     });
 
     await archiveRecord.save();
@@ -139,9 +164,32 @@ export default class OrganizationArchiveComponent extends Component {
 
   @action
   async generateLatestScanArchive() {
+    const requestParams: Partial<Record<'from_date' | 'to_date', Date>> = {};
+
+    if (this.startDate) {
+      const startDateObj = dayjs(this.startDate);
+
+      requestParams['from_date'] = startDateObj.startOf('day').toDate();
+    }
+
+    if (this.endDate) {
+      const now = dayjs();
+      const endDateObj = dayjs(this.endDate);
+      const isBeforeNow = endDateObj.isBefore(now, 'day');
+
+      const requestToDate = isBeforeNow
+        ? endDateObj.endOf('day')
+        : now.startOf('minute');
+
+      requestParams['to_date'] = requestToDate.toDate();
+    }
+
     const archiveAdapter = this.store.adapterFor('organization-archive');
 
-    await archiveAdapter.generateLatestScanArchive();
+    await archiveAdapter.generateLatestScanArchive(
+      requestParams['from_date'],
+      requestParams['to_date']
+    );
   }
 
   triggerGenerateArchive = task(async () => {
@@ -164,7 +212,7 @@ export default class OrganizationArchiveComponent extends Component {
           feature: 'organization_archive_excel',
         },
       });
-    } catch (err) {
+    } catch {
       this.notify.error(this.intl.t('organizationArchiveFailed'));
     }
   });

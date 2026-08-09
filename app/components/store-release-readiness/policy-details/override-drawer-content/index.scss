@@ -1,0 +1,30 @@
+.edit-policy-details-content {
+  border: 1px solid
+    var(--store-release-policy-details-drawer-override-details-border-color);
+  border-radius: var(
+    --store-release-policy-details-drawer-override-details-border-radius
+  );
+  margin: 1.5em;
+}
+
+.textarea-input {
+  border: 1px solid
+    var(--store-release-policy-details-drawer-override-details-border-color);
+  border-radius: var(
+    --store-release-policy-details-drawer-override-details-border-radius
+  );
+  color: var(
+    --store-release-policy-details-drawer-override-form-textarea-color
+  );
+  display: inline-flex;
+  justify-content: flex-start;
+  align-items: flex-start;
+  padding: 0.75em;
+  max-width: 100%;
+  width: 100%;
+}
+
+.reason-readonly {
+  white-space: pre-wrap;
+  word-break: break-word;
+}

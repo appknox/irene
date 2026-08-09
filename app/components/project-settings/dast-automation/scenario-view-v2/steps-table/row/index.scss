@@ -1,0 +1,250 @@
+.step-row {
+  position: relative;
+  display: grid;
+  grid-template-columns: 32px 48px 220px 1fr 1fr;
+  align-items: center;
+  gap: 2em;
+  min-height: 50px;
+  padding: 0 5.42857em 0 0.85714em;
+
+  border-top: 1px solid
+    var(
+      --project-settings-dast-automation-scenario-view-v2-steps-table-row-separator-color
+    );
+
+  border-bottom: 1px solid
+    var(
+      --project-settings-dast-automation-scenario-view-v2-steps-table-row-separator-color
+    );
+
+  background: var(
+    --project-settings-dast-automation-scenario-view-v2-steps-table-row-background
+  );
+
+  &:hover {
+    cursor: pointer;
+    background: var(
+      --project-settings-dast-automation-scenario-view-v2-steps-table-row-hover-background
+    );
+
+    box-shadow: var(
+      --project-settings-dast-automation-scenario-view-v2-steps-table-row-hover-box-shadow
+    );
+
+    .row-hover-actions {
+      display: flex;
+    }
+  }
+
+  .row-hover-actions {
+    display: none;
+    position: absolute;
+    right: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+  }
+
+  // Compact field hover state
+  &:hover .compact-field {
+    background: var(
+      --project-settings-dast-automation-scenario-view-v2-steps-table-row-background
+    );
+  }
+
+  // Subtle drag states
+  &.is-dragging {
+    opacity: 0.4;
+  }
+
+  // Drag over state
+  &.is-drag-over {
+    border-top: 2px solid
+      var(
+        --project-settings-dast-automation-scenario-view-v2-steps-table-row-drag-over-border-color
+      );
+  }
+
+  .compact-field {
+    padding-top: 0;
+    padding-bottom: 0;
+    height: 30px;
+    box-sizing: border-box;
+
+    & + :global(.ak-text-input-outlined) {
+      border: 1px solid
+        var(
+          --project-settings-dast-automation-scenario-view-v2-steps-table-row-compact-field-border-color
+        );
+    }
+
+    &::placeholder {
+      color: var(
+        --project-settings-dast-automation-scenario-view-v2-steps-table-row-compact-field-placeholder-color
+      );
+    }
+  }
+
+  .action-select-wrapper {
+    position: relative;
+    width: 100%;
+  }
+
+  .action-select,
+  .value-select {
+    width: 100%;
+  }
+
+  .unit-select {
+    width: 120px;
+    flex-shrink: 0;
+
+    &.is-readonly {
+      width: 50%;
+    }
+  }
+
+  // Drag handle
+  .drag-handle {
+    display: inline-flex;
+    align-items: center;
+    cursor: grab;
+
+    &:active {
+      cursor: grabbing;
+    }
+  }
+
+  // Read-only sample mode: one row is "active" — gets the hover styling and
+  // exposes its action buttons (non-clickable, demo only).
+  &.is-readonly.is-sample-active {
+    background: var(
+      --project-settings-dast-automation-scenario-view-v2-steps-table-row-hover-background
+    );
+
+    box-shadow: var(
+      --project-settings-dast-automation-scenario-view-v2-steps-table-row-hover-box-shadow
+    );
+
+    .row-hover-actions {
+      display: flex;
+    }
+  }
+
+  // Drag handle is non-interactive in read-only mode.
+  .drag-handle.is-readonly {
+    cursor: default;
+
+    &:active {
+      cursor: default;
+    }
+  }
+
+  // Read-only mode (View Sample drawer): suppress hover affordances and make
+  // disabled inputs/selects render as if enabled so the table matches the
+  // main editing view visually.
+  &.is-readonly {
+    &:not(.is-sample-active):hover {
+      cursor: default;
+      box-shadow: none;
+
+      background: var(
+        --project-settings-dast-automation-scenario-view-v2-steps-table-row-background
+      );
+    }
+
+    &:hover .compact-field {
+      background: inherit;
+    }
+
+    :global(input):disabled,
+    :global(input):disabled:hover,
+    :global(input[disabled]),
+    :global(input[disabled]):hover {
+      cursor: default;
+      opacity: 1;
+      background: var(
+        --project-settings-dast-automation-scenario-view-v2-steps-table-row-background
+      );
+
+      border: 1px solid
+        var(
+          --project-settings-dast-automation-scenario-view-v2-steps-table-row-compact-field-border-color
+        );
+
+      color: var(
+        --project-settings-dast-automation-scenario-view-v2-steps-table-row-readonly-text-color
+      ) !important;
+
+      -webkit-text-fill-color: var(
+        --project-settings-dast-automation-scenario-view-v2-steps-table-row-readonly-text-color
+      ) !important;
+    }
+
+    :global(input):disabled ~ :global(.ak-text-input-outlined),
+    :global(input[disabled]) ~ :global(.ak-text-input-outlined) {
+      background-color: var(
+        --project-settings-dast-automation-scenario-view-v2-steps-table-row-background
+      );
+
+      border-color: var(
+        --project-settings-dast-automation-scenario-view-v2-steps-table-row-compact-field-border-color
+      );
+    }
+
+    :global(.ember-power-select-trigger[aria-disabled='true']),
+    :global(.ember-power-select-trigger[aria-disabled='true']):hover,
+    :global(.ember-power-select-trigger.ember-power-select-trigger--disabled),
+    :global(
+        .ember-power-select-trigger.ember-power-select-trigger--disabled
+      ):hover {
+      cursor: default;
+      color: inherit;
+      opacity: 1;
+
+      background: var(
+        --project-settings-dast-automation-scenario-view-v2-steps-table-row-background
+      );
+    }
+  }
+}
+
+.action-option-icon {
+  min-width: 1.14286em;
+  min-height: 1.14286em;
+  font-size: 1em !important;
+}
+
+.steps-table-compact-trigger {
+  height: 30px !important;
+  border: 1px solid
+    var(
+      --project-settings-dast-automation-scenario-view-v2-steps-table-row-compact-field-border-color
+    ) !important;
+
+  & :global(.ember-power-select-placeholder) {
+    color: var(
+      --project-settings-dast-automation-scenario-view-v2-steps-table-row-placeholder-color
+    );
+  }
+}
+
+.steps-table-enter-input-trigger {
+  :global(.ember-power-select-status-icon) {
+    display: none;
+  }
+}
+
+.enter-input-info-icon-container {
+  position: absolute;
+  right: 8px;
+  top: 50%;
+  transform: translateY(-50%);
+  height: 16px;
+}
+
+.enter-input-info-icon {
+  font-size: 1em !important;
+  color: var(
+    --project-settings-dast-automation-scenario-view-v2-steps-table-row-info-icon-color
+  );
+}

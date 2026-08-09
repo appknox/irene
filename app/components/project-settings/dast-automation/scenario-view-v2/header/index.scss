@@ -1,0 +1,16 @@
+.view-scenario-header-root {
+  background-color: var(
+    --project-settings-dast-automation-scenario-view-v2-header-background
+  );
+
+  border: 1px solid
+    var(--project-settings-dast-automation-scenario-view-v2-header-border-color);
+
+  border-radius: var(
+    --project-settings-dast-automation-scenario-view-v2-header-border-radius
+  );
+
+  box-shadow: var(
+    --project-settings-dast-automation-scenario-view-v2-header-box-shadow
+  );
+}

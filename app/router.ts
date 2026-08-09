@@ -115,6 +115,10 @@ Router.map(function () {
             this.route('dast-automation-scenario', {
               path: '/dast-automation-scenario/:scenario_id',
             });
+
+            this.route('dast-automation-scenario-v2', {
+              path: '/dast-automation-scenario-v2/:scenario_id',
+            });
           });
 
           this.route('files');
@@ -204,6 +208,10 @@ Router.map(function () {
               this.route('dast-automation-scenario', {
                 path: '/dast-automation-scenario/:scenario_id',
               });
+
+              this.route('dast-automation-scenario-v2', {
+                path: '/dast-automation-scenario-v2/:scenario_id',
+              });
             });
 
             this.route('files');
@@ -238,6 +246,10 @@ Router.map(function () {
           });
         });
 
+        this.route('ds-navigation-graph', {
+          path: '/file/:fileid/dynamic-scan/:dynamicscan_id/navigation-graph',
+        });
+
         this.route('choose', {
           path: '/choose/:fileid',
         });
@@ -257,6 +269,14 @@ Router.map(function () {
         });
 
         this.route('app-monitoring', { path: '/store-monitoring' });
+
+        this.route('store-release-readiness', function () {
+          this.route('index', { path: '/' });
+          this.route('scan-results', { path: '/scan-results/:scan_id' });
+          this.route('finding', {
+            path: '/scan-results/:scan_id/findings/:finding_id',
+          });
+        });
 
         this.route('marketplace');
 

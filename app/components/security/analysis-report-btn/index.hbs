@@ -77,6 +77,28 @@
 
         {{else}}
           <AkStack @direction='column' @width='full'>
+            {{#if this.showLegacyCvssToggle}}
+              <AkStack
+                @direction='row'
+                @alignItems='center'
+                @spacing='1'
+                class='mb-2'
+                data-test-securityAnalysisReportBtn-genReportModal-legacyCvssRow
+              >
+                <AkToggle
+                  @size='small'
+                  @checked={{this.useLegacyCvss}}
+                  @onChange={{this.handleLegacyCvssToggle}}
+                  {{style marginLeft='0em'}}
+                  data-test-securityAnalysisReportBtn-genReportModal-useLegacyCvssToggle
+                />
+
+                <AkTypography @variant='body2'>
+                  {{t 'useLegacyCvss'}}
+                </AkTypography>
+              </AkStack>
+            {{/if}}
+
             <AkStack
               @tag='label'
               @direction='column'

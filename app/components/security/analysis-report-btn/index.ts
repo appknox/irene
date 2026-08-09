@@ -11,6 +11,7 @@ import ENV from 'irene/config/environment';
 import type IntlService from 'ember-intl/services/intl';
 import type SecurityFileModel from 'irene/models/security/file';
 import type IreneAjaxService from 'irene/services/ajax';
+import type OrganizationService from 'irene/services/organization';
 
 export interface SecurityFileAnalysisReportBtnSignature {
   Element: HTMLElement;
@@ -36,12 +37,18 @@ export default class SecurityFileAnalysisReportBtnComponent extends Component<Se
   @service('notifications') declare notify: NotificationService;
   @service('browser/window') declare window: Window;
   @service declare ajax: IreneAjaxService;
+  @service declare organization: OrganizationService;
 
   @tracked isShowGenerateReportModal = false;
   @tracked emailsToSend = '';
   @tracked sentEmailIds: string[] = [];
   @tracked isReportGenerated = false;
   @tracked reportMoreMenuRef: HTMLElement | null = null;
+  @tracked useLegacyCvss = false;
+
+  get showLegacyCvssToggle() {
+    return this.organization.enableLegacyCvssReports;
+  }
 
   get externalReportTypes() {
     return [
@@ -109,17 +116,24 @@ export default class SecurityFileAnalysisReportBtnComponent extends Component<Se
     this.reportMoreMenuRef = null;
   }
 
+  @action
+  handleLegacyCvssToggle(event: Event) {
+    this.useLegacyCvss = (event.target as HTMLInputElement).checked;
+  }
+
   /**
    * Method to re-generate a new report from security dashboard
    */
   generateReport = task(async () => {
     const emails = this.emailsToSend;
-    let data: { emails?: string[] } = {};
+    const data: { emails?: string[]; use_legacy_cvss?: boolean } = {};
 
     if (!isEmpty(emails)) {
-      data = {
-        emails: emails.split(',').map((item) => item.trim()),
-      };
+      data.emails = emails.split(',').map((item) => item.trim());
+    }
+
+    if (this.useLegacyCvss) {
+      data.use_legacy_cvss = true;
     }
 
     try {

@@ -1,0 +1,48 @@
+.multi-select-trigger-root {
+  display: flex;
+  align-items: center;
+  box-sizing: border-box;
+  width: 100%;
+  min-width: 0;
+  max-width: 100%;
+  padding: 0 0.285em;
+  margin: 0;
+  min-height: 1.85em;
+}
+
+.multi-select-trigger-item {
+  display: flex;
+  flex: 1;
+  min-width: 0;
+  max-width: 100%;
+  background: none !important;
+  border: none !important;
+  padding: 0 !important;
+  margin: 0 !important;
+}
+
+.multi-select-trigger-summary-inner {
+  flex: 1;
+  min-width: 0;
+  max-width: 100%;
+}
+
+.multi-select-trigger-summary-prefix {
+  flex-shrink: 0;
+}
+
+.multi-select-trigger-summary-selection {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.trigger-label-small {
+  font-size: 0.857rem !important;
+}
+
+.trigger-label-medium {
+  font-size: 1rem !important;
+}

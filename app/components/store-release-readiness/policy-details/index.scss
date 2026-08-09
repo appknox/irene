@@ -1,0 +1,136 @@
+.policy-details-root {
+  min-height: calc(100vh - 56px);
+  margin: -0.5em;
+  background-color: var(
+    --store-release-readiness-policy-details-background-light
+  );
+
+  .policy-details-header {
+    padding-bottom: 1.5em;
+    background-color: var(
+      --store-release-readiness-policy-details-background-light
+    );
+    position: sticky;
+    top: -0.5em;
+    z-index: calc(var(--store-release-readiness-policy-details-z-index) - 1);
+
+    .policy-details-header-root {
+      background-color: var(
+        --store-release-readiness-policy-details-background-main
+      );
+
+      box-shadow: var(
+        --store-release-readiness-policy-details-header-box-shadow
+      );
+
+      padding: 1.75em 1.5em;
+      box-sizing: border-box;
+    }
+  }
+
+  .policy-details-header-container,
+  .policy-details-body-container {
+    width: 80%;
+    max-width: 960px;
+    margin: 0 auto;
+  }
+
+  .policy-section {
+    width: 100%;
+    background-color: var(
+      --store-release-readiness-policy-details-background-main
+    );
+    margin-bottom: 1em;
+  }
+
+  .policy-content-title-container {
+    width: 100%;
+    padding: 1.5em 1em;
+    background-color: var(
+      --store-release-readiness-policy-details-title-background-color
+    );
+    position: sticky;
+    top: calc(132px + 1.25em);
+    z-index: 1;
+    border: 1px solid
+      var(--store-release-readiness-policy-details-divider-color);
+
+    &.overridden {
+      background-color: var(
+        --store-release-readiness-policy-details-status-chip-background-color
+      );
+    }
+  }
+
+  .policy-content-container {
+    width: 100%;
+    border-width: 0 1px 1px;
+    border-style: solid;
+    overflow-wrap: anywhere;
+    border-color: var(--store-release-readiness-policy-details-divider-color);
+
+    &.overridden {
+      background-color: var(
+        --store-release-readiness-policy-details-overriden-background-color
+      );
+    }
+  }
+
+  .policy-plain-text {
+    word-break: break-word;
+  }
+
+  .policy-explanation-table {
+    box-sizing: border-box;
+    width: 100%;
+    border: 1px solid
+      var(--store-release-readiness-policy-details-table-border-color);
+  }
+
+  .policy-explanation-row {
+    display: grid;
+    grid-template-columns: minmax(140px, 20%) 1fr;
+    border-top: 1px solid
+      var(--store-release-readiness-policy-details-divider-color);
+
+    &:first-child {
+      border-top: none;
+    }
+  }
+
+  .policy-explanation-label {
+    box-sizing: border-box;
+    padding: 0.75rem 1rem;
+    border-right: 1px solid
+      var(--store-release-readiness-policy-details-divider-color);
+  }
+
+  .policy-explanation-value {
+    box-sizing: border-box;
+    padding: 0.75rem 1rem;
+  }
+
+  .category-chip {
+    color: var(
+      --store-release-readiness-policy-details-category-chip-color
+    ) !important;
+    font-size: 12px !important;
+  }
+
+  .status-action-chip {
+    height: 22.5px;
+    padding: 0 3px;
+    border: 1px solid
+      var(--store-release-readiness-policy-details-status-chip-border-color);
+    border-radius: 4px;
+    background-color: var(
+      --store-release-readiness-policy-details-status-chip-background-color
+    );
+    cursor: pointer;
+  }
+}
+
+.policy-details-wide-drawer-container {
+  width: 650px;
+  max-width: 92vw;
+}

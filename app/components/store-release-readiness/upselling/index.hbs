@@ -1,0 +1,15 @@
+<UpsellingModule
+  @title={{t 'storeReleaseReadiness.introducing'}}
+  @subtitle={{t 'storeReleaseReadiness.overview'}}
+  @features={{this.features}}
+  @successMessage={{t 'storeReleaseReadiness.contactMessage' htmlSafe=true}}
+  @showSuccess={{this.hasContactedSupport}}
+  @onClickContactCTA={{this.onClickContactCTA}}
+>
+  <:gradientContent>
+    <AkSvg::StoreRealeaseReadinessUpselling
+      data-test-store-release-readiness-upselling-image
+      {{style width='434px' height='274px'}}
+    />
+  </:gradientContent>
+</UpsellingModule>

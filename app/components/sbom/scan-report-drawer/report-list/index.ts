@@ -83,7 +83,7 @@ export default class SbomScanReportDrawerReportListComponent extends Component<S
       {
         type: 'pdf' as const,
         primaryText: this.intl.t('sbomModule.sbomDownloadPdfPrimaryText'),
-        secondaryText: this.intl.t('sbomModule.sbomDownloadPdfSecondaryText', {
+        secondaryText: this.intl.t('reportPasswordDetail', {
           password: this.latestSbomScanReport?.reportPassword || '',
         }),
         copyText: this.latestSbomScanReport?.reportPassword,

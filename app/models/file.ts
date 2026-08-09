@@ -209,6 +209,12 @@ export default class FileModel extends ModelBaseMixin {
     return await adapter.getGenerateReportStatus(this.id);
   }
 
+  async getFileAnalysesCvssInfo() {
+    const adapter = this.store.adapterFor('file');
+
+    return await adapter.getFileAnalysesCvssInfo(this.id);
+  }
+
   async getSbomFile() {
     const adapter = this.store.adapterFor('file');
 

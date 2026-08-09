@@ -6,6 +6,7 @@ export default class DynamicscanSerializer extends DRFSerializer.extend(
 ) {
   attrs = {
     deviceUsed: { embedded: 'always' },
+    scenarioUserRole: { embedded: 'always' },
   };
 }
 

@@ -1,6 +1,9 @@
 <span
   data-test-ak-checkbox-root
-  local-class='ak-checkbox-root {{unless @disabled "ak-checkbox-hover-focus"}}'
+  local-class='
+      ak-checkbox-root ak-checkbox-color-{{this.color}}
+      {{unless @disabled "ak-checkbox-hover-focus"}}
+    '
 >
   <Input
     data-test-checkbox

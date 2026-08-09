@@ -41,10 +41,16 @@ export default class OrganizationService extends Service {
     return this.isCyodEnabled && !!this.selected?.cyodRegistrationEnabled;
   }
 
+  get enableLegacyCvssReports() {
+    return this.selected?.enableLegacyCvssReports;
+  }
+
   get hideUpsellUIStatus() {
     return {
       privacyModule: !this.orgFeatures?.privacy && this.hideUpsellUI,
       sbom: !this.orgFeatures?.sbom && this.hideUpsellUI,
+      storeReleaseReadiness:
+        !this.orgFeatures?.store_release_readiness && this.hideUpsellUI,
       aiReporting: !this.orgAiFeatures?.reporting && this.hideUpsellUI,
       aiPii: !this.orgAiFeatures?.pii && this.hideUpsellUI,
       aiKnoxiq: !this.orgAiFeatures?.knoxiq && this.hideUpsellUI,

@@ -104,7 +104,7 @@ module(
         {
           automatedStatus: ENUMS.DYNAMIC_SCAN_STATUS.IN_QUEUE,
           manualStatus: null,
-          expectedText: () => t('inProgress'),
+          expectedText: () => t('inQueue'),
         },
         {
           automatedStatus: ENUMS.DYNAMIC_SCAN_STATUS.AUTOPILOT_COMPLETED,
@@ -134,7 +134,7 @@ module(
         {
           automatedStatus: ENUMS.DYNAMIC_SCAN_STATUS.IN_QUEUE,
           manualStatus: ENUMS.DYNAMIC_SCAN_STATUS.ANALYSIS_COMPLETED,
-          expectedText: () => t('inProgress'),
+          expectedText: () => t('inQueue'),
         },
         {
           automatedStatus: ENUMS.DYNAMIC_SCAN_STATUS.AUTOPILOT_RUNNING,
@@ -144,7 +144,7 @@ module(
         {
           automatedStatus: ENUMS.DYNAMIC_SCAN_STATUS.IN_QUEUE,
           manualStatus: ENUMS.DYNAMIC_SCAN_STATUS.ERROR,
-          expectedText: () => t('inProgress'),
+          expectedText: () => t('inQueue'),
         },
         {
           automatedStatus: ENUMS.DYNAMIC_SCAN_STATUS.AUTOPILOT_RUNNING,
@@ -183,12 +183,12 @@ module(
         {
           automatedStatus: ENUMS.DYNAMIC_SCAN_STATUS.ANALYSIS_COMPLETED,
           manualStatus: ENUMS.DYNAMIC_SCAN_STATUS.ERROR,
-          expectedText: () => t('completed'),
+          expectedText: () => t('errored'),
         },
         {
           automatedStatus: ENUMS.DYNAMIC_SCAN_STATUS.ERROR,
           manualStatus: ENUMS.DYNAMIC_SCAN_STATUS.ANALYSIS_COMPLETED,
-          expectedText: () => t('completed'),
+          expectedText: () => t('errored'),
         },
         {
           automatedStatus: ENUMS.DYNAMIC_SCAN_STATUS.ANALYSIS_COMPLETED,
@@ -237,7 +237,12 @@ module(
         this.file = this.store.push(
           this.store.normalize(
             'file',
-            this.server.create('file', { id: '10', is_active: true }).toJSON()
+            this.server
+              .create('file', {
+                id: '10',
+                is_active: true,
+              })
+              .toJSON()
           )
         );
 
@@ -262,13 +267,15 @@ module(
         this.server.get(
           '/v3/files/:id/last_automated_dynamic_scan',
           (schema) => {
+            let scan = null;
+
             if (automatedStatus) {
-              return schema.dynamicscans
+              scan = schema.dynamicscans
                 .find(this.dsAutomatedScan?.id)
                 ?.toJSON();
             }
 
-            return null;
+            return scan ? [scan] : [];
           }
         );
 

@@ -52,8 +52,12 @@ export default class VncViewerComponent extends Component<VncViewerSignature> {
     return project?.platform ?? 0;
   }
 
+  get dynamicScan() {
+    return this.args.dynamicScan;
+  }
+
   get deviceFarmURL() {
-    const token = this.args.dynamicScan?.get('moriartyDynamicscanToken');
+    const token = this.dynamicScan?.get('moriartyDynamicscanToken');
 
     if (token) {
       return this.devicefarm.getTokenizedWSURL(token);
@@ -63,7 +67,15 @@ export default class VncViewerComponent extends Component<VncViewerSignature> {
   }
 
   get deviceUsed() {
-    return this.args.dynamicScan?.get('deviceUsed');
+    return this.dynamicScan?.get('deviceUsed');
+  }
+
+  get allowDeviceInteraction() {
+    return this.dynamicScan?.isReady && !this.dynamicScan?.isAutopiloted;
+  }
+
+  get isAutomatedAndScheduledInternally() {
+    return this.args.isAutomated && this.dynamicScan?.isScheduledInternally;
   }
 
   get supportsModernIOSDeviceFrame() {
@@ -123,10 +135,6 @@ export default class VncViewerComponent extends Component<VncViewerSignature> {
 
   get isIOSDevice() {
     return this.filePlatform === ENUMS.PLATFORM.IOS;
-  }
-
-  get dynamicScan() {
-    return this.args.dynamicScan;
   }
 
   get startedBy() {

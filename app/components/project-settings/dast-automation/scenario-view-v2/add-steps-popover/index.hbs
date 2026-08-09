@@ -1,0 +1,29 @@
+<AkPopover
+  @anchorRef={{@anchorRef}}
+  @placement='bottom-start'
+  @arrow={{false}}
+  @clickOutsideToClose={{true}}
+  @closeHandler={{@closeHandler}}
+  data-test-dastAutomationScenario-stepsTable-addStepsPopover
+>
+  <AkStack @direction='column' local-class='popover-action-list'>
+    {{#each this.stepActionConfigs as |config|}}
+      <button
+        type='button'
+        local-class='popover-action-item'
+        {{on 'click' (fn @addStep config)}}
+        data-test-dastAutomationScenario-stepsTable-addStepsPopoverItem='{{config.label}}'
+      >
+        <AkIcon
+          @iconName={{config.icon}}
+          @size='small'
+          {{style minWidth='1.14286em' minHeight='1.14286em'}}
+        />
+
+        <AkTypography @variant='body2'>
+          {{t config.label}}
+        </AkTypography>
+      </button>
+    {{/each}}
+  </AkStack>
+</AkPopover>

@@ -27,44 +27,44 @@ export interface AkProgressBarSignature {
 
 export default class AkProgressBarComponent extends Component<AkProgressBarSignature> {
   get renderedSegments(): AkProgressBarRenderedSegment[] {
-    const input = this.args.segments ?? [];
+    const segments = this.args.segments ?? [];
 
     let reserved = 0;
     let totalCount = 0;
 
-    for (const s of input) {
-      if (s.share != null && s.share > 0) {
-        reserved += s.share;
-      } else if (s.count != null && s.count > 0) {
-        totalCount += s.count;
+    for (const segment of segments) {
+      if (segment.share != null && segment.share > 0) {
+        reserved += segment.share;
+      } else if (segment.count != null && segment.count > 0) {
+        totalCount += segment.count;
       }
     }
 
     reserved = Math.min(100, reserved);
     const remainder = Math.max(0, 100 - reserved);
 
-    const out: AkProgressBarRenderedSegment[] = [];
+    const renderedSegments: AkProgressBarRenderedSegment[] = [];
 
-    for (const s of input) {
+    for (const segment of segments) {
       let pct = 0;
 
-      if (s.share != null && s.share > 0) {
-        pct = s.share;
-      } else if (s.count != null && s.count > 0 && totalCount > 0) {
-        pct = (s.count / totalCount) * remainder;
+      if (segment.share != null && segment.share > 0) {
+        pct = segment.share;
+      } else if (segment.count != null && segment.count > 0 && totalCount > 0) {
+        pct = (segment.count / totalCount) * remainder;
       }
 
       if (pct > SLIVER_EPSILON) {
-        out.push({
-          key: s.key,
+        renderedSegments.push({
+          key: segment.key,
           pct,
-          background: s.background,
-          striped: s.striped ?? false,
+          background: segment.background,
+          striped: segment.striped ?? false,
         });
       }
     }
 
-    return out;
+    return renderedSegments;
   }
 }
 

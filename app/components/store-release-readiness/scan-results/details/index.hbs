@@ -1,0 +1,127 @@
+<AkStack
+  @direction='column'
+  @width='full'
+  local-class='scan-results-details-card'
+  class='mb-4'
+  data-test-store-release-readiness-scan-results-details
+>
+  <AkStack
+    @direction='row'
+    @justifyContent='space-between'
+    @alignItems='flex-start'
+    @width='full'
+    local-class='scan-results-details-row'
+  >
+    <AkStack
+      @direction='column'
+      @spacing='1'
+      @alignItems='flex-start'
+      local-class='scan-results-details-left'
+      data-test-store-release-readiness-scan-results-details-main
+    >
+      <AkTypography
+        @variant='h5'
+        data-test-store-release-readiness-scan-results-details-heading
+      >
+        {{t 'scanResults'}}
+      </AkTypography>
+
+      <div
+        local-class='scan-results-details-progress'
+        data-test-store-release-readiness-scan-results-details-progress
+      >
+        <StoreReleaseReadiness::ReleaseCard::SummaryProgressBar
+          @failed={{@scanData.summaryFailed}}
+          @passed={{@scanData.summaryPassed}}
+          @untested={{@scanData.summaryUntested}}
+          @isLoading={{@scanData.summaryLoading}}
+        />
+      </div>
+    </AkStack>
+
+    <AkStack
+      @direction='column'
+      @alignItems='flex-end'
+      @spacing='0.5'
+      data-test-store-release-readiness-scan-results-details-risk
+    >
+      {{#let this.rejectionRisk as |risk|}}
+        {{#let (component risk.towerSvgComponent) as |RiskTowerSvg|}}
+          <RiskTowerSvg
+            data-test-store-release-readiness-scan-results-details-risk-svg
+          />
+        {{/let}}
+
+        <AkTypography
+          @color='inherit'
+          @fontWeight='medium'
+          local-class='scan-results-details-risk'
+          class={{risk.variantClass}}
+          data-test-store-release-readiness-scan-results-details-risk-label
+        >
+          {{risk.label}}
+        </AkTypography>
+      {{/let}}
+    </AkStack>
+  </AkStack>
+
+  <AkDivider @color='dark' local-class='scan-results-details-divider' />
+
+  <AkStack
+    @direction='row'
+    @alignItems='center'
+    @flexWrap='wrap'
+    @width='full'
+    local-class='scan-results-details-counts'
+    data-test-store-release-readiness-scan-results-details-counts
+  >
+    {{#each this.summaryCountsSections key='@index' as |section sectionIdx|}}
+      {{#unless (eq sectionIdx 0)}}
+        <AkDivider @color='dark' @direction='vertical' @height='34px' />
+      {{/unless}}
+
+      {{#each section.rows key='summaryKind' as |row|}}
+        <AkStack
+          @direction='column'
+          @spacing='0.5'
+          local-class='scan-results-details-count-segment'
+          data-test-store-release-readiness-scan-results-details-metric={{row.summaryKind}}
+        >
+          <AkStack @spacing='0.5' @alignItems='center'>
+            {{#if row.leadingDotClass}}
+              <span class={{row.leadingDotClass}} aria-hidden='true'></span>
+            {{else if row.leadingIcon}}
+              <AkIcon
+                @iconName={{row.leadingIcon.iconName}}
+                @color={{row.leadingIcon.iconColor}}
+                @size='small'
+              />
+            {{/if}}
+
+            <AkTypography
+              @variant='body2'
+              @fontWeight={{if row.labelStrong 'bold'}}
+              @color={{if row.labelMuted 'textSecondary'}}
+              class='mr-2'
+            >
+              {{t row.labelKey}}
+            </AkTypography>
+
+          </AkStack>
+
+          {{#if row.valueLoading}}
+            <AkLoader @size={{16}} @color='error' />
+          {{else}}
+            <AkTypography
+              @variant='body2'
+              @fontWeight={{if row.valueStrong 'bold'}}
+              @color={{if row.valueMuted 'textSecondary'}}
+            >
+              {{row.value}}
+            </AkTypography>
+          {{/if}}
+        </AkStack>
+      {{/each}}
+    {{/each}}
+  </AkStack>
+</AkStack>

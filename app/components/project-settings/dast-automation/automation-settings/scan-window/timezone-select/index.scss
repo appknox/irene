@@ -1,0 +1,23 @@
+.scan-window-timezone-select-root {
+  .scan-window-timezone-select {
+    width: 320px;
+
+    :global(.ember-power-select-trigger) {
+      height: 35px;
+    }
+  }
+}
+
+.tz-label-truncated {
+  display: none;
+}
+
+:global(.ember-power-select-trigger) {
+  .tz-label-full {
+    display: none;
+  }
+
+  .tz-label-truncated {
+    display: inline;
+  }
+}
