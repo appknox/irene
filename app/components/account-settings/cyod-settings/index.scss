@@ -1,0 +1,76 @@
+// The settings page wrapper is grey, so each panel supplies its own white card.
+.cyod-settings-container {
+  width: 100%;
+  padding: 32px;
+  background: var(--common-white);
+}
+
+// The setup steps are a tall, narrow read, so the drawer is sized like the
+// other right-anchored drawers in settings rather than full width.
+.register-drawer {
+  width: 500px;
+  max-width: 100vw;
+  overflow-y: auto;
+}
+
+// Shown in place of the whole registration surface when the owner's switch is
+// off. Boxed inside the panel, as the design shows.
+.disabled-state {
+  width: 100%;
+  box-sizing: border-box;
+  border: 1px solid var(--divider-dark);
+  border-radius: var(--border-radius);
+}
+
+// Wraps the notice onto three short lines under the illustration, as the
+// design shows, rather than running the full width of the panel.
+.disabled-desc {
+  max-width: 345px;
+}
+
+.setup-step {
+  width: 100%;
+}
+
+// Figma draws these numerals in #EF4444 (Tailwind red-500), which is not a
+// value in _theme.scss -- reading it as a stray non-token red, so this tracks
+// the brand token (--primary-main, #ff4d3f) instead.
+.step-num {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 22px;
+  height: 22px;
+  flex-shrink: 0;
+  border-radius: var(--border-radius-capsule);
+  background: var(--primary-light);
+  color: var(--primary-dark);
+  font-size: 12px;
+  font-weight: var(--font-weight-medium);
+  line-height: 1;
+}
+
+.url-field {
+  width: 100%;
+  padding: 4px 4px 4px 12px;
+  border: 1px solid var(--divider-dark);
+  border-radius: var(--border-radius);
+  background: var(--background-light);
+}
+
+// 12px and 11px are both off the AkTypography variant ramp (body2 is 13px,
+// body3 is 10px), so the size is set here and everything else comes from the
+// component.
+//
+// The class is doubled to win on specificity: ak-typography's own rules are a
+// single class too, and its stylesheet is concatenated after this one, so a
+// plain `.url-value` loses the tie and the override silently does nothing.
+.url-value.url-value {
+  font-family: var(--font-family-mono);
+  font-size: 0.857rem; // 12px
+  word-break: break-all;
+}
+
+.token-hint.token-hint {
+  font-size: 0.786rem; // 11px
+}

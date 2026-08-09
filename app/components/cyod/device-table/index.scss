@@ -1,0 +1,44 @@
+.device-table-container {
+  width: 100%;
+}
+
+// AkTable's default variant draws the header rule and row separators but no
+// outer box, and it drops the last row's bottom border. This frames the table
+// so it reads as one bordered block, as in the design.
+.table-frame {
+  border: 1px solid var(--divider-dark);
+  border-radius: var(--border-radius);
+  overflow: hidden;
+
+  :global(tbody tr:last-child td) {
+    border-bottom: none;
+  }
+
+  // Figma sets the column headers at 14px/600. AkTable puts that weight on the
+  // <th> but its inner wrapper resets to 400, and the wrapper is what renders,
+  // so the weight has to be restated on the descendant.
+  :global(thead th *) {
+    font-weight: var(--font-weight-medium);
+  }
+}
+
+.empty-state {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 16px;
+  border: 1px dashed var(--divider-dark);
+  border-radius: var(--border-radius);
+  background: var(--background-light);
+}
+
+.empty-state-block {
+  border: 1px solid var(--divider-dark);
+  border-radius: var(--border-radius);
+}
+
+// Wraps the hint onto short lines under the illustration, as the design shows,
+// rather than running the full width of the panel.
+.empty-description {
+  max-width: 345px;
+}
