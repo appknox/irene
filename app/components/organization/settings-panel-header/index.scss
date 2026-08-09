@@ -1,0 +1,16 @@
+.panel-icon {
+  width: 40px;
+  height: 40px;
+  flex-shrink: 0;
+  border-radius: var(--organization-settings-panel-header-icon-border-radius);
+  background: var(--organization-settings-panel-header-icon-background);
+}
+
+.panel-description {
+  max-width: 620px;
+}
+
+.panel-action {
+  flex-shrink: 0;
+  white-space: nowrap;
+}
