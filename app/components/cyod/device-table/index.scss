@@ -1,0 +1,33 @@
+.device-table-container {
+  width: 100%;
+}
+
+.table-body {
+  border: 1px solid var(--cyod-device-table-empty-state-border-color);
+  border-radius: var(--cyod-device-table-empty-state-border-radius);
+}
+
+.loading-state {
+  padding: 1.71429em;
+  border: 1px solid var(--cyod-device-table-loading-state-border-color);
+  border-radius: var(--cyod-device-table-loading-state-border-radius);
+}
+
+.empty-state {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 1.14286em;
+  border: 1px solid var(--cyod-device-table-empty-state-border-color);
+  border-radius: var(--cyod-device-table-empty-state-border-radius);
+  background: var(--cyod-device-table-empty-state-background);
+}
+
+.empty-state-block {
+  border: 1px solid var(--cyod-device-table-empty-state-block-border-color);
+  border-radius: var(--cyod-device-table-empty-state-block-border-radius);
+}
+
+.empty-description {
+  max-width: 345px;
+}

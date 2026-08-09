@@ -1,0 +1,55 @@
+.cyod-settings-container {
+  width: 100%;
+  background: var(--account-settings-cyod-settings-background);
+}
+
+.register-drawer {
+  width: 500px;
+  overflow-y: auto;
+}
+
+.disabled-state {
+  box-sizing: border-box;
+  border: 1px solid
+    var(--account-settings-cyod-settings-disabled-state-border-color);
+  border-radius: var(
+    --account-settings-cyod-settings-disabled-state-border-radius
+  );
+}
+
+.disabled-desc {
+  max-width: 345px;
+}
+
+.step-num {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 22px;
+  height: 22px;
+  flex-shrink: 0;
+  border-radius: var(--account-settings-cyod-settings-step-num-border-radius);
+  background: var(--account-settings-cyod-settings-step-num-background);
+  color: var(--account-settings-cyod-settings-step-num-color);
+  font-size: 12px;
+  font-weight: var(--account-settings-cyod-settings-step-num-font-weight);
+  line-height: 1;
+}
+
+.url-field {
+  width: 100%;
+  padding: 0.28571em 0.28571em 0.28571em 0.85714em;
+  border: 1px solid var(--account-settings-cyod-settings-url-field-border-color);
+  border-radius: var(--account-settings-cyod-settings-url-field-border-radius);
+  background: var(--account-settings-cyod-settings-url-field-background);
+}
+
+.url-value.url-value {
+  font-family: var(--account-settings-cyod-settings-url-value-font-family);
+  font-size: 0.857rem; // 12px
+  word-break: break-all;
+}
+
+.token-hint.token-hint {
+  font-size: 0.786rem; // 11px
+}
