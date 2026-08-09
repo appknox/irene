@@ -1,0 +1,168 @@
+.signing-cert-container {
+  width: 100%;
+}
+
+// Right-anchored drawer. Wider than the Register-a-device panel because the
+// certificate cards carry a label/value grid plus two actions per row; the
+// design gives this one roughly half the app width.
+.cert-drawer {
+  display: flex;
+  flex-direction: column;
+  width: 780px;
+  max-width: 100vw;
+}
+
+// The form fills the remaining height so its footer can sit at the bottom.
+.cert-form {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-height: 0;
+}
+
+// Scrolls independently of the header, tabs and footer.
+.drawer-body {
+  flex: 1;
+  overflow-y: auto;
+}
+
+.drawer-footer {
+  margin-top: auto;
+  padding: 16px 24px;
+  border-top: 1px solid var(--divider-dark);
+  background: var(--common-white);
+}
+
+// Certificate meta rows. Figma puts the labels at 12px/500 and the values at
+// 12px/600 -- both off the AkTypography ramp, so the sizes are explicit.
+// Doubled to out-specify ak-typography, a single class in a stylesheet
+// concatenated after this one.
+//
+// The frame sets the labels in Inter while every other node on it is Open
+// Sans, same as the tip callout; read as a stray override, so the family is
+// left inherited. Values are Open Sans in Figma, not mono -- the previous
+// DM Mono treatment here was ours, not the spec.
+.cert-meta-label.cert-meta-label {
+  font-size: 0.857rem;
+  font-weight: 500;
+}
+
+.cert-meta-value.cert-meta-value {
+  font-size: 0.857rem;
+  font-weight: 600;
+  word-break: break-all;
+}
+
+// Name and Bundle ID Override sit side by side, each taking half the row.
+//
+// Figma renders the field text and placeholders at 16px against AkTextField's
+// 14px. Left alone deliberately: that is a global control default, so changing
+// it would move every form in the app rather than this drawer.
+.form-field {
+  flex: 1 1 0;
+  min-width: 0;
+}
+
+// Fields outside that row still line up with its left column. The row gap is
+// AkStack spacing 2 (1em), so a column is half the width less half the gap.
+//
+// Doubled to beat `.drawer-body > *`, which stretches direct children to the
+// full panel width and is declared later in this file.
+.form-field-half.form-field-half {
+  width: calc(50% - 0.5em);
+  min-width: 0;
+}
+
+// Bordered note under the Bundle ID field explaining when the override is
+// required (wildcard / enterprise profiles). Figma: 4px radius on all four
+// corners, a 4px accent bar down the leading edge, 16px padding.
+.tip-callout {
+  padding: 16px;
+  border-left: 4px solid var(--primary-main);
+  border-radius: var(--border-radius-4);
+  background: var(--neutral-grey-100);
+}
+
+// 12px is off the AkTypography ramp (body2 is 13px). Doubled to out-specify
+// ak-typography, whose stylesheet is concatenated after this one.
+//
+// Figma sets this run at weight 700 in Inter; every other node on the frame is
+// Open Sans, so that reads as a stray override rather than intent. Kept at the
+// inherited family and weight.
+.tip-text.tip-text {
+  font-size: 0.857rem;
+}
+
+// Read-only explanation of what deleting costs, boxed so it reads as a notice
+// rather than another paragraph of the question above it.
+.confirm-reason {
+  padding: 12px 16px;
+  border: 1px solid var(--divider-dark);
+  border-radius: var(--border-radius);
+}
+
+// Two columns: a fixed label gutter and the value, so Team / ID / Expires
+// values start at the same x.
+.cert-meta {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  column-gap: 12px;
+  row-gap: 6px;
+  align-items: baseline;
+}
+
+// The body is a flex column, so its children default to shrink-to-fit: the
+// certificate cards, the Name/Bundle row and the file-picker blocks all
+// collapsed to their content width instead of spanning the panel.
+.drawer-body > * {
+  width: 100%;
+  box-sizing: border-box;
+}
+
+// Figma measures the card at 638x134 on an 8px radius (rx 7.5 on the 1px
+// stroke) -- not the 2px default the rest of the drawer uses. Its border is
+// #E5E7EB against our --divider-dark (#e9e9e9); close enough to keep the
+// token rather than introduce a one-off.
+.cert-card {
+  border: 1px solid var(--divider-dark);
+  border-radius: var(--border-radius-8);
+  background: var(--common-white);
+  padding: 16px;
+}
+
+.file-name {
+  word-break: break-all;
+}
+
+// Placeholder rather than a real value, so it reads as one.
+.no-file-chosen {
+  font-style: italic;
+}
+
+// A chosen file shows as a removable box in place of the picker button: white
+// rather than the grey fill, on the wider 8px radius.
+.file-chip {
+  display: inline-flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  align-self: flex-start;
+  min-width: 240px;
+  max-width: 100%;
+  padding: 6px 8px 6px 12px;
+  border: 1px solid var(--divider-dark);
+  border-radius: var(--border-radius-8);
+  background: var(--common-white);
+}
+
+// The chosen name reads as a value, a step up from the 13px picker row.
+// Figma additionally sets it to weight 600; left at the inherited weight
+// pending design review, since it is the only file-row text carrying one.
+.file-chip .file-name {
+  font-size: 1rem;
+}
+
+// Figma measures this subtext block at 376px wide.
+.empty-description {
+  max-width: 376px;
+}

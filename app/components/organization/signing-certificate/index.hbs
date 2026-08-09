@@ -1,0 +1,598 @@
+{{! Layout is the caller's business: in project scope
+project-settings/general-settings wraps this in the same divider + width +
+padding shell as its Teams and Collaborators sections. }}
+{{#if this.visible}}
+  <div
+    local-class='signing-cert-container'
+    data-test-orgSigningCert
+    ...attributes
+  >
+    {{! Spacing comes from the stack: AkTypography sets its own margin-bottom,
+    which silently overrides mb-* utility classes. }}
+    <AkStack @direction='column' @spacing='1.5'>
+      {{#if this.isProjectScope}}
+        {{! Section heading for the project's General Settings page, at h5
+        (16px, bold) to sit level with its Teams and Collaborators siblings.
+        The org scope needs no such heading -- it already sits under
+        "Organization Settings". }}
+        <AkTypography @variant='h5' data-test-orgSigningCert-sectionTitle>
+          {{t 'cyod'}}
+        </AkTypography>
+      {{/if}}
+
+      <Organization::SettingsPanelHeader
+        @descriptionMaxWidth='620px'
+        @description={{if
+          this.isProjectScope
+          (t 'orgSigningCertDescProject')
+          (t 'orgSigningCertDesc')
+        }}
+      >
+        <:title>
+          <AkTypography @variant='h6' data-test-orgSigningCert-title>
+            {{t 'orgSigningCertTitle'}}
+          </AkTypography>
+        </:title>
+
+        <:action>
+          <AkButton
+            data-test-orgSigningCert-openBtn
+            @variant='filled'
+            {{on 'click' this.handleOpen}}
+          >
+            {{t 'orgSigningCertAdd'}}
+          </AkButton>
+        </:action>
+      </Organization::SettingsPanelHeader>
+    </AkStack>
+  </div>
+
+  <AkDrawer
+    @open={{this.showDrawer}}
+    @onClose={{this.handleClose}}
+    @anchor='right'
+    as |dr|
+  >
+    <div
+      data-test-orgSigningCert-drawer
+      local-class='cert-drawer'
+      {{style height='100%'}}
+    >
+      <AkAppbar @justifyContent='space-between' @color='dark' as |ab|>
+        {{#if this.pendingDelete}}
+          {{! The confirmation takes over the drawer, so the back arrow returns
+          to the list rather than closing out of the flow entirely. }}
+          <AkStack @alignItems='center' @spacing='1.5'>
+            <AkIconButton
+              data-test-orgSigningCert-deleteBackBtn
+              class={{ab.classes.defaultIconBtn}}
+              title={{t 'back'}}
+              {{on 'click' this.cancelDelete}}
+            >
+              <AkIcon @iconName='arrow-back' />
+            </AkIconButton>
+
+            <AkTypography
+              data-test-orgSigningCert-drawerTitle
+              @variant='h5'
+              @color='inherit'
+            >
+              {{t 'confirmation'}}
+            </AkTypography>
+          </AkStack>
+        {{else}}
+          <AkTypography
+            data-test-orgSigningCert-drawerTitle
+            @variant='h5'
+            @color='inherit'
+          >
+            {{t 'orgSigningCertAdd'}}
+          </AkTypography>
+        {{/if}}
+
+        <AkIconButton
+          data-test-orgSigningCert-drawerCloseBtn
+          class={{ab.classes.defaultIconBtn}}
+          {{on 'click' dr.closeHandler}}
+        >
+          <AkIcon @iconName='close' />
+        </AkIconButton>
+      </AkAppbar>
+
+      {{#if this.pendingDelete}}
+        {{! ---------------- Delete confirmation ---------------- }}
+        <div local-class='cert-form' data-test-orgSigningCert-deleteConfirm>
+          <AkStack
+            local-class='drawer-body'
+            @direction='column'
+            @spacing='2'
+            class='py-2 px-4'
+          >
+            <AkTypography data-test-orgSigningCert-deleteConfirmTitle>
+              {{t 'orgSigningCertDeleteQuestion'}}
+              <strong>{{if
+                  this.pendingDelete.name
+                  this.pendingDelete.name
+                  (t 'orgSigningCertUnnamed')
+                }}?</strong>
+            </AkTypography>
+
+            <AkStack @direction='column' @spacing='1'>
+              <AkTypography @variant='body2' @color='textSecondary'>
+                {{t 'reason'}}
+              </AkTypography>
+
+              <div local-class='confirm-reason'>
+                <AkTypography @variant='body2'>
+                  {{t 'orgSigningCertDeleteReason'}}
+                </AkTypography>
+              </div>
+            </AkStack>
+          </AkStack>
+
+          <div local-class='drawer-footer'>
+            <AkStack @spacing='1'>
+              <AkButton
+                data-test-orgSigningCert-deleteCancelBtn
+                @variant='outlined'
+                @color='neutral'
+                @disabled={{this.confirmDelete.isRunning}}
+                {{on 'click' this.cancelDelete}}
+              >
+                {{t 'orgSigningCertDeleteNo'}}
+              </AkButton>
+
+              {{! No @color: AkButton composes `ak-button-{variant}-{color}`
+              and only filled-primary, outlined-primary and outlined-neutral
+              exist. `filled` + `error` produced a class with no rule, so the
+              button rendered as bare text. Same pairing the Splunk revoke
+              confirmation uses. }}
+              <AkButton
+                data-test-orgSigningCert-deleteConfirmBtn
+                @variant='filled'
+                @loading={{this.confirmDelete.isRunning}}
+                {{on 'click' (perform this.confirmDelete)}}
+              >
+                {{t 'orgSigningCertDeleteYes'}}
+              </AkButton>
+            </AkStack>
+          </div>
+        </div>
+
+      {{else}}
+        {{! The tabs sit inside the drawer's padding, not flush to its edge. }}
+        <div class='px-4 pt-2'>
+          <AkTabs data-test-orgSigningCert-tabs as |Akt|>
+            <Akt.tabItem
+              data-test-orgSigningCert-addTab
+              @id='add'
+              @buttonVariant={{true}}
+              @isActive={{eq this.activeTab 'add'}}
+              @onTabClick={{fn this.handleTabChange 'add'}}
+            >
+              {{t 'orgSigningCertAdd'}}
+            </Akt.tabItem>
+
+            <Akt.tabItem
+              data-test-orgSigningCert-existingTab
+              @id='existing'
+              @buttonVariant={{true}}
+              @isActive={{eq this.activeTab 'existing'}}
+              @onTabClick={{fn this.handleTabChange 'existing'}}
+            >
+              {{t 'orgSigningCertExistingTab'}}
+            </Akt.tabItem>
+          </AkTabs>
+        </div>
+
+        {{#if (eq this.activeTab 'add')}}
+          {{! ---------------- Add certificate ---------------- }}
+          <form local-class='cert-form' {{on 'submit' (perform this.upload)}}>
+            <AkStack
+              local-class='drawer-body'
+              @direction='column'
+              @spacing='2.5'
+              class='py-2 px-4'
+            >
+              <AkStack @width='full' @spacing='2' @alignItems='flex-start'>
+                <div local-class='form-field'>
+                  <AkTextField
+                    data-test-orgSigningCert-name
+                    @label={{t 'orgSigningCertName'}}
+                    @labelTypographyFontWeight='medium'
+                    @placeholder={{t 'orgSigningCertNamePlaceholder'}}
+                    @value={{this.certName}}
+                    {{on 'input' this.setName}}
+                  />
+                </div>
+
+                <div local-class='form-field'>
+                  <AkTextField
+                    data-test-orgSigningCert-bundleId
+                    @label={{t 'orgSigningCertBundleIdLabel'}}
+                    @labelTypographyFontWeight='medium'
+                    @placeholder='com.mfva.myapp'
+                    @value={{this.bundleId}}
+                    {{on 'input' this.setBundleId}}
+                  />
+                </div>
+              </AkStack>
+
+              <div local-class='tip-callout' data-test-orgSigningCert-tip>
+                <AkTypography local-class='tip-text' @variant='body2'>
+                  <strong>{{t 'orgSigningCertTipLabel'}}</strong>
+                  {{t 'orgSigningCertBundleIdHint'}}
+                </AkTypography>
+              </div>
+
+              <AkDivider @color='dark' />
+
+              {{! Signing identity (.p12) }}
+              <AkStack @direction='column' @spacing='1'>
+                {{! Figma: 14px regular. The medium weight belongs to the
+                AkTextField labels above, not to these file-section labels. }}
+                <AkTypography
+                  @variant='body1'
+                  @color='textSecondary'
+                  @tag='label'
+                >
+                  {{t 'orgSigningCertP12'}}
+                </AkTypography>
+
+                {{#if this.p12FileName}}
+                  <div local-class='file-chip' data-test-orgSigningCert-p12Chip>
+                    <AkTypography local-class='file-name' @variant='body2'>
+                      {{this.p12FileName}}
+                    </AkTypography>
+
+                    <AkIconButton
+                      data-test-orgSigningCert-p12Clear
+                      @size='small'
+                      title={{t 'remove'}}
+                      {{on 'click' this.clearP12}}
+                    >
+                      <AkIcon @iconName='close' @size='small' />
+                    </AkIconButton>
+                  </div>
+                {{else}}
+                  <AkStack @spacing='1' @alignItems='center'>
+                    <AkButton @tag='label' @variant='outlined'>
+                      <AkIcon @iconName='file-upload' @size='small' />
+
+                      <AkTypography
+                        class='ml-1'
+                        @tag='span'
+                        @variant='body2'
+                        @color='inherit'
+                        @fontWeight='medium'
+                      >
+                        {{t 'chooseFile'}}
+                      </AkTypography>
+
+                      <input
+                        type='file'
+                        accept='.p12,.pfx'
+                        aria-label={{t 'orgSigningCertP12'}}
+                        data-test-orgSigningCert-p12
+                        {{style display='none'}}
+                        {{on 'change' this.setP12}}
+                      />
+                    </AkButton>
+
+                    <AkTypography
+                      local-class='file-name no-file-chosen'
+                      @variant='body2'
+                      @color='textSecondary'
+                    >
+                      {{t 'noFileChosen'}}
+                    </AkTypography>
+                  </AkStack>
+                {{/if}}
+              </AkStack>
+
+              {{! Sits in the left column, level with Name above it, rather than
+            spanning the drawer. }}
+              <div local-class='form-field-half'>
+                <AkTextField
+                  data-test-orgSigningCert-password
+                  @label={{t 'orgSigningCertPassword'}}
+                  @labelTypographyFontWeight='medium'
+                  @placeholder={{t 'orgSigningCertPasswordPlaceholder'}}
+                  @type='password'
+                  @value={{this.password}}
+                  autocomplete='new-password'
+                  {{on 'input' this.setPassword}}
+                />
+              </div>
+
+              {{! The p12 and its password are one credential; the provisioning
+            profile is a separate upload, so a rule divides them. }}
+              <AkDivider @color='dark' />
+
+              {{! Provisioning profile }}
+              <AkStack @direction='column' @spacing='1'>
+                {{! Figma: 14px regular. The medium weight belongs to the
+                AkTextField labels above, not to these file-section labels. }}
+                <AkTypography
+                  @variant='body1'
+                  @color='textSecondary'
+                  @tag='label'
+                >
+                  {{t 'orgSigningCertProfile'}}
+                </AkTypography>
+
+                {{#if this.profileFileName}}
+                  <div
+                    local-class='file-chip'
+                    data-test-orgSigningCert-profileChip
+                  >
+                    <AkTypography local-class='file-name' @variant='body2'>
+                      {{this.profileFileName}}
+                    </AkTypography>
+
+                    <AkIconButton
+                      data-test-orgSigningCert-profileClear
+                      @size='small'
+                      title={{t 'remove'}}
+                      {{on 'click' this.clearProfile}}
+                    >
+                      <AkIcon @iconName='close' @size='small' />
+                    </AkIconButton>
+                  </div>
+                {{else}}
+                  <AkStack @spacing='1' @alignItems='center'>
+                    <AkButton @tag='label' @variant='outlined'>
+                      <AkIcon @iconName='file-upload' @size='small' />
+
+                      <AkTypography
+                        class='ml-1'
+                        @tag='span'
+                        @variant='body2'
+                        @color='inherit'
+                        @fontWeight='medium'
+                      >
+                        {{t 'chooseFile'}}
+                      </AkTypography>
+
+                      <input
+                        type='file'
+                        accept='.mobileprovision'
+                        aria-label={{t 'orgSigningCertProfile'}}
+                        data-test-orgSigningCert-profile
+                        {{style display='none'}}
+                        {{on 'change' this.setProfile}}
+                      />
+                    </AkButton>
+
+                    <AkTypography
+                      local-class='file-name no-file-chosen'
+                      @variant='body2'
+                      @color='textSecondary'
+                    >
+                      {{t 'noFileChosen'}}
+                    </AkTypography>
+                  </AkStack>
+                {{/if}}
+              </AkStack>
+
+            </AkStack>
+
+            {{! Pinned to the foot of the drawer, as in the design. }}
+            <div local-class='drawer-footer'>
+              <AkStack @spacing='1'>
+                <AkButton
+                  data-test-orgSigningCert-uploadBtn
+                  @type='submit'
+                  @variant='filled'
+                  @disabled={{not this.canSave}}
+                  @loading={{this.upload.isRunning}}
+                >
+                  {{t 'save'}}
+                </AkButton>
+
+                <AkButton @variant='outlined' {{on 'click' this.handleClose}}>
+                  {{t 'cancel'}}
+                </AkButton>
+              </AkStack>
+            </div>
+          </form>
+
+        {{else}}
+          {{! ---------------- Existing certificates ---------------- }}
+          <AkStack
+            local-class='drawer-body'
+            @direction='column'
+            @spacing='2'
+            class='py-2 px-4'
+          >
+            {{#if this.load.isRunning}}
+              <AkStack @spacing='1' @alignItems='center'>
+                <AkLoader @size={{16}} />
+
+                <AkTypography @variant='body2' @color='textSecondary'>
+                  {{t 'loading'}}
+                </AkTypography>
+              </AkStack>
+
+            {{else if this.hasExistingCerts}}
+              {{#each this.existingCerts as |cert|}}
+                <div local-class='cert-card' data-test-orgSigningCert-info>
+                  <AkStack
+                    @alignItems='flex-start'
+                    @justifyContent='space-between'
+                    @spacing='2'
+                  >
+                    <AkStack @direction='column' @spacing='1'>
+                      <AkStack @spacing='1' @alignItems='center'>
+                        <AkTypography
+                          @variant='body1'
+                          @fontWeight='bold'
+                          data-test-orgSigningCert-cardName
+                        >
+                          {{if cert.name cert.name (t 'orgSigningCertUnnamed')}}
+                        </AkTypography>
+
+                        {{#if (or cert.is_active this.isProjectScope)}}
+                          <AkChip
+                            data-test-orgSigningCert-activeBadge
+                            @variant='filled'
+                            @size='small'
+                            @color='success'
+                            @label={{t 'orgSigningCertActiveBadge'}}
+                          />
+                        {{/if}}
+
+                        <AkChip
+                          data-test-orgSigningCert-status
+                          @variant='semi-filled'
+                          @size='small'
+                          @color={{this.certStatusColor cert}}
+                          @label={{if
+                            cert.is_expired
+                            (t 'orgSigningCertStatusExpired')
+                            (t 'orgSigningCertStatusValid')
+                          }}
+                        />
+                      </AkStack>
+
+                      {{! Label/value grid so the values line up in a column,
+                    as in the design. }}
+                      <div local-class='cert-meta'>
+                        <AkTypography
+                          local-class='cert-meta-label'
+                          @color='textSecondary'
+                          data-test-orgSigningCert-metaLabel
+                        >
+                          {{t 'orgSigningCertTeam'}}:
+                        </AkTypography>
+
+                        <AkTypography
+                          local-class='cert-meta-value'
+                          data-test-orgSigningCert-metaValue
+                        >
+                          {{cert.team_id}}
+                        </AkTypography>
+
+                        {{#if cert.app_id}}
+                          <AkTypography
+                            local-class='cert-meta-label'
+                            @color='textSecondary'
+                            data-test-orgSigningCert-metaLabel
+                          >
+                            {{t 'orgSigningCertAppId'}}:
+                          </AkTypography>
+
+                          <AkTypography
+                            local-class='cert-meta-value'
+                            data-test-orgSigningCert-metaValue
+                          >
+                            {{cert.app_id}}
+                          </AkTypography>
+                        {{/if}}
+
+                        <AkTypography
+                          local-class='cert-meta-label'
+                          @color='textSecondary'
+                          data-test-orgSigningCert-metaLabel
+                        >
+                          {{t 'orgSigningCertExpires'}}:
+                        </AkTypography>
+
+                        <AkTypography
+                          local-class='cert-meta-value'
+                          data-test-orgSigningCert-metaValue
+                          @color={{if cert.is_expired 'error' 'textPrimary'}}
+                        >
+                          {{cert.expiresOn}}
+                        </AkTypography>
+                      </div>
+                    </AkStack>
+
+                    <AkStack @spacing='1' @alignItems='center'>
+                      {{#if (and this.canActivate (not cert.is_active))}}
+                        <AkButton
+                          data-test-orgSigningCert-activateBtn
+                          @variant='outlined'
+                          @color='primary'
+                          @loading={{and
+                            this.activateCert.isRunning
+                            (eq this.busyCertId cert.id)
+                          }}
+                          {{on 'click' (fn (perform this.activateCert) cert)}}
+                        >
+                          {{t 'orgSigningCertMakeActive'}}
+                        </AkButton>
+                      {{/if}}
+
+                      {{#if this.isProjectScope}}
+                        <AkIconButton
+                          data-test-orgSigningCert-deleteBtn
+                          @size='small'
+                          title={{t 'delete'}}
+                          {{on 'click' (fn this.requestDelete cert)}}
+                        >
+                          <AkIcon @iconName='delete' @color='textSecondary' />
+                        </AkIconButton>
+                      {{else}}
+                        <AkIconButton
+                          data-test-orgSigningCert-deleteBtn
+                          @size='small'
+                          disabled={{cert.is_active}}
+                          title={{if
+                            cert.is_active
+                            (t 'orgSigningCertDeleteActiveHint')
+                            (t 'delete')
+                          }}
+                          {{on 'click' (fn this.requestDelete cert)}}
+                        >
+                          <AkIcon @iconName='delete' @color='textSecondary' />
+                        </AkIconButton>
+                      {{/if}}
+                    </AkStack>
+                  </AkStack>
+                </div>
+              {{/each}}
+
+            {{else}}
+              {{! Same shape as the device-list and turn-on empty states:
+              illustration, a 14px medium title, then a 13px textPrimary
+              subtext centred under it. }}
+              <AkStack
+                @direction='column'
+                @alignItems='center'
+                @justifyContent='center'
+                @spacing='1'
+                class='py-7 px-4'
+                data-test-orgSigningCert-empty
+              >
+                <AkSvg::CyodDevicesEmpty data-test-orgSigningCert-emptySvg />
+
+                <AkStack @direction='column' @alignItems='center' @spacing='0.5'>
+                  {{! body1 for the design's 14px/medium, kept as an <h5> so the
+                  empty state keeps its place in the document outline. }}
+                  <AkTypography
+                    @variant='body1'
+                    @tag='h5'
+                    @fontWeight='medium'
+                    data-test-orgSigningCert-emptyTitle
+                  >
+                    {{t 'orgSigningCertNoneTitle'}}
+                  </AkTypography>
+
+                  <AkTypography
+                    local-class='empty-description'
+                    @variant='body2'
+                    @align='center'
+                    data-test-orgSigningCert-emptyDescription
+                  >
+                    {{t 'orgSigningCertNone'}}
+                  </AkTypography>
+                </AkStack>
+              </AkStack>
+            {{/if}}
+          </AkStack>
+        {{/if}}
+      {{/if}}
+    </div>
+  </AkDrawer>
+{{/if}}

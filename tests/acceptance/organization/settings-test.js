@@ -1,6 +1,6 @@
 import { module, test } from 'qunit';
 import { setupApplicationTest } from 'ember-qunit';
-import { visit } from '@ember/test-helpers';
+import { find, visit } from '@ember/test-helpers';
 import { setupMirage } from 'ember-cli-mirage/test-support';
 import { t } from 'ember-intl/test-support';
 import Service from '@ember/service';
@@ -121,5 +121,69 @@ module('Acceptance | Organization settings', function (hooks) {
     assert
       .dom('[data-test-enable-mandatory-mfa-requirement]')
       .includesText(t('enableMandatoryMFARequirement'));
+  });
+
+  test('it shows the CYOD device registration only when the org has the cyod feature', async function (assert) {
+    this.organizationMe.update({ is_owner: true });
+    this.organization.update({
+      features: { cyod: true },
+      cyod_registration_enabled: true,
+    });
+
+    await visit('dashboard/organization/settings');
+
+    assert.dom('[data-test-orgDeviceRegistration]').exists();
+    assert.dom('[data-test-orgSigningCert]').exists();
+
+    // The two are separate settings sections, so a rule has to sit between the
+    // devices table and the certificate panel.
+    const registration = find('[data-test-orgDeviceRegistration]');
+    const certificate = find('[data-test-orgSigningCert]');
+
+    const between = [...document.querySelectorAll('[data-test-ak-divider]')]
+      .filter(
+        (hr) =>
+          registration.compareDocumentPosition(hr) &
+          Node.DOCUMENT_POSITION_FOLLOWING
+      )
+      .filter(
+        (hr) =>
+          certificate.compareDocumentPosition(hr) &
+          Node.DOCUMENT_POSITION_PRECEDING
+      );
+
+    assert.strictEqual(
+      between.length,
+      1,
+      'exactly one divider separates the devices table from Add Certificate'
+    );
+  });
+
+  test('turning CYOD registration off collapses the certificate section', async function (assert) {
+    this.organizationMe.update({ is_owner: true });
+    this.organization.update({
+      features: { cyod: true },
+      cyod_registration_enabled: false,
+    });
+
+    await visit('dashboard/organization/settings');
+
+    assert
+      .dom('[data-test-orgDeviceRegistration]')
+      .exists('the switch itself stays reachable so it can be turned back on');
+
+    assert
+      .dom('[data-test-orgSigningCert]')
+      .doesNotExist('certificates are part of the CYOD setup');
+  });
+
+  test('it hides the CYOD device registration when the org lacks the cyod feature', async function (assert) {
+    this.organizationMe.update({ is_owner: true });
+    this.organization.update({ features: { cyod: false } });
+
+    await visit('dashboard/organization/settings');
+
+    assert.dom('[data-test-orgDeviceRegistration]').doesNotExist();
+    assert.dom('[data-test-orgSigningCert]').doesNotExist();
   });
 });
