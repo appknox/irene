@@ -1,0 +1,103 @@
+.cert-drawer {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  width: 780px;
+  max-width: 100vw;
+}
+
+.cert-form {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-height: 0;
+}
+
+.drawer-body {
+  flex: 1;
+  overflow-y: auto;
+}
+
+.drawer-footer {
+  margin-top: auto;
+  padding: 1.14286em 1.71429em;
+  border-top: 1px solid var(--organization-signing-certificate-border-color);
+  background: var(--organization-signing-certificate-background);
+}
+
+.cert-meta-label.cert-meta-label {
+  font-size: 0.857rem;
+  font-weight: 500;
+}
+
+.cert-meta-value.cert-meta-value {
+  font-size: 0.857rem;
+  font-weight: 600;
+  word-break: break-all;
+}
+
+.form-field {
+  flex: 1 1 0;
+  min-width: 0;
+}
+
+.form-field-half.form-field-half {
+  width: calc(50% - 0.5em);
+  min-width: 0;
+}
+
+.tip-callout {
+  padding: 1.14286em;
+  border-left: 4px solid
+    var(--organization-signing-certificate-tip-callout-border-color);
+  border-radius: var(
+    --organization-signing-certificate-tip-callout-border-radius
+  );
+  background: var(--organization-signing-certificate-tip-callout-background);
+}
+
+.tip-text.tip-text {
+  font-size: 0.857rem;
+}
+
+.cert-meta {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  column-gap: 12px;
+  row-gap: 6px;
+  align-items: baseline;
+}
+
+.cert-card {
+  border: 1px solid var(--organization-signing-certificate-border-color);
+  border-radius: var(--organization-signing-certificate-border-radius);
+  background: var(--organization-signing-certificate-background);
+  padding: 1.14286em;
+}
+
+.file-name {
+  word-break: break-all;
+}
+
+.file-chip {
+  display: inline-flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  align-self: flex-start;
+  min-width: 240px;
+  max-width: 100%;
+  padding: 0.42857em 0.57143em 0.42857em 0.85714em;
+  border: 1px solid var(--organization-signing-certificate-border-color);
+  border-radius: var(--organization-signing-certificate-border-radius);
+  background: var(--organization-signing-certificate-background);
+}
+
+.empty-state-block {
+  border: 1px solid var(--organization-signing-certificate-border-color);
+  border-radius: var(--organization-signing-certificate-border-radius);
+}
+
+.empty-description {
+  max-width: 376px;
+}
