@@ -1,0 +1,15 @@
+<AkStack
+  data-test-vncViewer-automatedNote
+  local-class='automated-scan-vnc-note'
+  ...attributes
+>
+  <AkTypography @color='inherit'>
+    <strong>{{t 'note'}}</strong>
+    -
+    {{if
+      @dynamicScan.isInqueue
+      (t 'automatedScanQueuedVncNote')
+      (t 'automatedScanRunningVncNote')
+    }}
+  </AkTypography>
+</AkStack>
