@@ -16,6 +16,7 @@ export interface Features {
   storeknox: boolean;
   privacy: boolean;
   upload_via_url: boolean;
+  cyod: boolean;
   fake_app_detection: boolean;
 }
 
@@ -47,6 +48,12 @@ export default class OrganizationModel extends Model {
 
   @attr('boolean')
   declare mandatoryMfa: boolean;
+
+  // Owner-controlled switch for CYOD device self-registration. Sits *under* the
+  // `cyod` entitlement in `features`: the entitlement says the org may use CYOD,
+  // this says its members may currently register new devices.
+  @attr('boolean')
+  declare cyodRegistrationEnabled: boolean;
 
   @hasMany('organization-member', { async: true, inverse: null })
   declare members: AsyncHasMany<OrganizationMemberModel>;
