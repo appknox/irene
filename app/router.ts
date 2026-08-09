@@ -95,6 +95,7 @@ Router.map(function () {
         this.route('security');
         this.route('developersettings');
         this.route('notification-settings');
+        this.route('cyod-settings');
       });
 
       this.route('billing');
@@ -264,6 +265,7 @@ Router.map(function () {
           this.route('security');
           this.route('developersettings');
           this.route('notification-settings');
+          this.route('cyod-settings');
         });
 
         this.route('app-monitoring', { path: '/store-monitoring' });
