@@ -297,6 +297,14 @@ module(
 
       assert.strictEqual(metaValue.fontWeight, '600');
 
+      assert.strictEqual(
+        window.getComputedStyle(
+          this.element.querySelector('[data-test-orgSigningCert-info]')
+        ).borderRadius,
+        '8px',
+        'card uses the wider 8px radius from the frame'
+      );
+
       assert.notOk(
         metaValue.fontFamily.includes('DM Mono'),
         'meta values use the body face, not mono'

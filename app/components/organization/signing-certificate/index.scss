@@ -119,9 +119,13 @@
   box-sizing: border-box;
 }
 
+// Figma measures the card at 638x134 on an 8px radius (rx 7.5 on the 1px
+// stroke) -- not the 2px default the rest of the drawer uses. Its border is
+// #E5E7EB against our --divider-dark (#e9e9e9); close enough to keep the
+// token rather than introduce a one-off.
 .cert-card {
   border: 1px solid var(--divider-dark);
-  border-radius: var(--border-radius);
+  border-radius: var(--border-radius-8);
   background: var(--common-white);
   padding: 16px;
 }
