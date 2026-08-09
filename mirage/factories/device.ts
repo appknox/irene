@@ -1,4 +1,6 @@
-import { Factory } from 'miragejs';
+/* eslint-disable @typescript-eslint/ban-ts-comment */
+// @ts-expect-error "trait" prop missing from miragejs
+import { Factory, trait } from 'miragejs';
 import { faker } from '@faker-js/faker';
 
 import ENUMS from 'irene/enums';
@@ -28,6 +30,19 @@ export const DEVICE_FACTORY_DEF = {
   has_persistent_apps: () => faker.datatype.boolean(),
   persistent_apps: () => [],
   has_vnc: () => faker.datatype.boolean(),
+
+  // Unset would leave the CYOD badge's positive match untested.
+  registration_source: ENUMS.DEVICE_REGISTRATION_SOURCE.FARM,
 };
 
-export default Factory.extend(DEVICE_FACTORY_DEF);
+export default Factory.extend({
+  ...DEVICE_FACTORY_DEF,
+
+  proxyCyod: trait({
+    registration_source: ENUMS.DEVICE_REGISTRATION_SOURCE.PROXY,
+  }),
+
+  webusbCyod: trait({
+    registration_source: ENUMS.DEVICE_REGISTRATION_SOURCE.WEBUSB,
+  }),
+});
