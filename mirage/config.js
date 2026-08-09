@@ -105,8 +105,16 @@ function routes() {
     return { count: results.length, next: null, previous: null, results };
   });
 
-  this.put('/organizations/:id', () => {
-    return {};
+  this.put('/organizations/:id', (schema, req) => {
+    const organization = schema.organizations.find(req.params.id);
+
+    if (!organization) {
+      return {};
+    }
+
+    organization.update(JSON.parse(req.requestBody));
+
+    return organization.toJSON();
   });
 
   this.get('/organizations/:id/preference', () => {
