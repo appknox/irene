@@ -6,4 +6,6 @@
 
 <BasicDropdownWormhole />
 
-<NotificationContainer @position='bottom-right' @zindex='1400' />
+{{! Toasts sit top-right per the design. The addon's default 10px offset would
+tuck them under the 56px app bar, so _global-styles.scss restates the inset. }}
+<NotificationContainer @position='top-right' @zindex='1400' />
