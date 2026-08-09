@@ -1516,11 +1516,14 @@ body {
   );
   --vnc-viewer-modal-background: var(--background-main);
   --vnc-viewer-modal-text-color: var(--text-primary);
-  --vnc-viewer-note-border-radius: var(--border-radius);
-  --vnc-viewer-note-background: var(--secondary-main);
-  --vnc-viewer-note-text-color: var(--common-white);
   --vnc-viewer-info-border-color: var(--neutral-grey-300);
   --vnc-viewer-info-background: var(--neutral-grey-100);
+  --vnc-viewer-info-border-radius: var(--border-radius);
+
+  // variables for vnc-viewer/automated-scan-note
+  --vnc-viewer-automated-scan-note-background: var(--secondary-main);
+  --vnc-viewer-automated-scan-note-text-color: var(--common-white);
+  --vnc-viewer-automated-scan-note-border-radius: var(--border-radius);
 
   // variables for file-list
   --file-list-selected-file-chip-color: var(--text-primary);

@@ -1,0 +1,15 @@
+{{#if @url}}
+  <AkButton
+    data-test-vncViewer-cyodDownloadLink
+    @tag='a'
+    @variant='text'
+    @color='primary'
+    @underline='always'
+    href={{@url}}
+    target='_blank'
+    rel='noopener noreferrer'
+    ...attributes
+  >
+    {{if @isIos (t 'cyod.installIos') (t 'cyod.downloadApk')}}
+  </AkButton>
+{{/if}}
