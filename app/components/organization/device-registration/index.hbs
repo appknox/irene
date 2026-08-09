@@ -1,0 +1,63 @@
+<div
+  local-class='device-registration-container'
+  data-test-orgDeviceRegistration
+  ...attributes
+>
+  <AkStack @direction='column' @spacing='0.5'>
+    {{! Title and toggle are siblings in one row so they centre against each
+    other; nesting the title with the description below made that impossible. }}
+    <AkStack
+      @width='full'
+      @alignItems='center'
+      @justifyContent='space-between'
+      @spacing='2'
+    >
+      <AkTypography @variant='h5' data-test-orgDeviceRegistration-title>
+        {{t 'cyodRegistration.title'}}
+      </AkTypography>
+
+      <AkToggle
+        data-test-orgDeviceRegistration-toggle
+        @id='cyod-registration'
+        @checked={{this.isRegistrationEnabled}}
+        @disabled={{this.isSaving}}
+        @size='small'
+        @onChange={{perform this.setRegistrationEnabled}}
+      />
+    </AkStack>
+
+    <AkTypography
+      local-class='registration-description'
+      @variant='body2'
+      @color='textSecondary'
+      data-test-orgDeviceRegistration-description
+    >
+      {{t 'cyodRegistration.description'}}
+    </AkTypography>
+  </AkStack>
+
+  {{#if this.isRegistrationEnabled}}
+    <div class='mt-2'>
+      <Cyod::DeviceTable @emptyHint={{t 'cyodRegistration.emptyHint'}}>
+        <:emptyAction>
+          <AkLink
+            data-test-orgDeviceRegistration-goToCyodSettings
+            @route='authenticated.dashboard.account-settings.cyod-settings'
+            @color='primary'
+            @underline='always'
+            @typographyVariant='body2'
+            @fontWeight='medium'
+          >
+            <:default>
+              {{t 'cyodRegistration.goToCyodSettings'}}
+            </:default>
+
+            <:rightIcon>
+              <AkIcon @iconName='open-in-new' @size='small' @color='primary' />
+            </:rightIcon>
+          </AkLink>
+        </:emptyAction>
+      </Cyod::DeviceTable>
+    </div>
+  {{/if}}
+</div>

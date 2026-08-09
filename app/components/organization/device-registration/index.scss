@@ -1,0 +1,9 @@
+.device-registration-container {
+  width: 100%;
+}
+
+// Keeps the subtext to the design's measure instead of running the full width
+// of the settings card.
+.registration-description {
+  max-width: 500px;
+}
