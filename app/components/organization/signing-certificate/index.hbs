@@ -142,10 +142,14 @@ padding shell as its Teams and Collaborators sections. }}
                 {{t 'orgSigningCertDeleteNo'}}
               </AkButton>
 
+              {{! No @color: AkButton composes `ak-button-{variant}-{color}`
+              and only filled-primary, outlined-primary and outlined-neutral
+              exist. `filled` + `error` produced a class with no rule, so the
+              button rendered as bare text. Same pairing the Splunk revoke
+              confirmation uses. }}
               <AkButton
                 data-test-orgSigningCert-deleteConfirmBtn
                 @variant='filled'
-                @color='error'
                 @loading={{this.confirmDelete.isRunning}}
                 {{on 'click' (perform this.confirmDelete)}}
               >

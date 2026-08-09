@@ -440,6 +440,19 @@ module(
         .dom('[data-test-orgSigningCert-deleteConfirmTitle]')
         .containsText('cyod_xcode_9thjuly', 'names the cert being deleted');
 
+      // AkButton composes `ak-button-{variant}-{color}`; an unsupported pair
+      // yields a class with no rule and the button renders as bare text.
+      // Assert it actually has a fill rather than asserting the class name.
+      const confirmBg = window.getComputedStyle(
+        this.element.querySelector('[data-test-orgSigningCert-deleteConfirmBtn]')
+      ).backgroundColor;
+
+      assert.notStrictEqual(
+        confirmBg,
+        'rgba(0, 0, 0, 0)',
+        'confirm button is filled, not an unstyled variant/color pairing'
+      );
+
       // Backing out leaves the certificate alone.
       await click('[data-test-orgSigningCert-deleteCancelBtn]');
 
