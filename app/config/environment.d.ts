@@ -29,6 +29,7 @@ declare const config: {
   posthogApiHost: string;
   notifications: Notifications;
   deviceFarmPassword: string;
+  mercerDownloadUrl: string;
   namespace: string;
   namespace_v2: string;
   namespace_v3: string;
