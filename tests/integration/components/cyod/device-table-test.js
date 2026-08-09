@@ -67,6 +67,14 @@ module('Integration | Component | cyod/device-table', function (hooks) {
       '600',
       'chip label is medium weight'
     );
+
+    // Figma sets the column headers at 14px/600. AkTable puts the weight on
+    // the <th> but its inner wrapper resets to 400, and the wrapper renders.
+    const headerInner = this.element.querySelector('thead th *');
+    const headerStyle = window.getComputedStyle(headerInner);
+
+    assert.strictEqual(headerStyle.fontSize, '14px', 'header is 14px');
+    assert.strictEqual(headerStyle.fontWeight, '600', 'header is medium');
   });
 
   test('it falls back to the serial number and a dash when name and date are absent', async function (assert) {

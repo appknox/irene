@@ -13,6 +13,13 @@
   :global(tbody tr:last-child td) {
     border-bottom: none;
   }
+
+  // Figma sets the column headers at 14px/600. AkTable puts that weight on the
+  // <th> but its inner wrapper resets to 400, and the wrapper is what renders,
+  // so the weight has to be restated on the descendant.
+  :global(thead th *) {
+    font-weight: var(--font-weight-medium);
+  }
 }
 
 .empty-state {
