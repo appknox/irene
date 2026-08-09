@@ -16,6 +16,7 @@ import {
   IOS_MODERN_DEVICE_VERSION_CUTOFF,
   getPlatformMajorVersion,
 } from 'irene/utils/dynamic-scan-device';
+import { resolveFileProject } from 'irene/utils/resolve-file-project';
 
 const VNC_MODE_NONE = ENUMS.DEVICE_VNC_MODE?.NONE ?? 0;
 const VNC_MODE_SCRCPY = ENUMS.DEVICE_VNC_MODE?.SCRCPY ?? 2;
@@ -42,14 +43,31 @@ export default class VncViewerComponent extends Component<VncViewerSignature> {
 
   @tracked webusbInstallStage: string | null = null;
   @tracked webusbInstallPercent = 0;
+  @tracked resolvedProject: ProjectModel | null = null;
 
-  // Use .belongsTo().value() to get the already-loaded project synchronously
-  // without triggering getBelongsTo proxy creation (which causes scheduleRevalidate during render)
+  constructor(owner: unknown, args: VncViewerSignature['Args']) {
+    super(owner, args);
+
+    this.loadProject.perform();
+  }
+
+  // The project drives which device skin is drawn. Reading belongsTo().value()
+  // alone is not enough: it is null until the relationship happens to be
+  // loaded, and the old `?? 0` fallback meant ANDROID, so an unresolved project
+  // silently rendered the Android skin for iOS scans. Fall back to an async
+  // resolve and treat "unknown" as -1 so no skin is drawn rather than a wrong one.
+  loadProject = task(async () => {
+    this.resolvedProject = await resolveFileProject(this.args.file, this.store);
+  });
+
+  // .belongsTo().value() is preferred when already loaded: it avoids creating
+  // the getBelongsTo proxy during render (which triggers scheduleRevalidate).
   get filePlatform(): number {
-    const project = this.args.file
-      .belongsTo('project')
-      .value() as ProjectModel | null;
-    return project?.platform ?? 0;
+    const project =
+      (this.args.file.belongsTo('project').value() as ProjectModel | null) ??
+      this.resolvedProject;
+
+    return project?.platform ?? -1;
   }
 
   get dynamicScan() {

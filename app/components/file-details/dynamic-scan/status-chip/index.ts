@@ -44,7 +44,7 @@ export default class DynamicScanStatusChipComponent extends Component<DynamicSca
   // @errorMessage (e.g. "device UDID ... is not enrolled in the signing
   // profile"). Other call sites are unaffected.
   get errorMessageToShow() {
-    return this.status === DsComputedStatus.ERROR
+    return this.status === DsStatusGroup.ERRORED
       ? this.args.errorMessage
       : undefined;
   }
