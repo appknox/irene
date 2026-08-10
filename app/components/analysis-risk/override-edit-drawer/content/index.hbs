@@ -1,3 +1,28 @@
+{{#if this.showPendingOverrideRequestConfirmBanner}}
+  <AkStack
+    @width='full'
+    @direction='row'
+    @alignItems='center'
+    @justifyContent='center'
+    local-class='pending-banner'
+    data-test-analysisRisk-overrideEditDrawer-pendingRequestDetails-banner
+  >
+    <AkStack
+      @alignItems='center'
+      @justifyContent='center'
+      local-class='mail-icon-container'
+    >
+      <AkSvg::EditAnalysisMailIcon />
+    </AkStack>
+
+    <AkStack @width='full' @alignItems='center' class='p-2'>
+      <AkTypography>
+        {{t 'editAnalysisRequest.pendingStatus'}}
+      </AkTypography>
+    </AkStack>
+  </AkStack>
+{{/if}}
+
 <div local-class='edit-analysis-content'>
   {{#let (component this.activeComponent) as |ActiveComponent|}}
     <ActiveComponent

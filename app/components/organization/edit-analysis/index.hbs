@@ -1,0 +1,45 @@
+<AkStack
+  @width='full'
+  @direction='column'
+  @spacing='1'
+  data-test-orgEditAnalysis-container
+>
+  <AkTypography @variant='h5' data-test-orgEditAnalysis-title>
+    {{t 'editAnalysis'}}
+  </AkTypography>
+
+  <AkStack @justifyContent='space-between' @width='full' @alignItems='center'>
+    <AkStack @direction='column'>
+      <AkTypography
+        @gutterBottom={{true}}
+        @fontWeight='medium'
+        data-test-orgEditAnalysis-toggleLabel
+      >
+        {{t 'allowEditAnalysisForMembers'}}
+      </AkTypography>
+
+      <AkTypography
+        @variant='body2'
+        @color='textSecondary'
+        data-test-orgEditAnalysis-description
+      >
+        {{t 'editAnalysisForMembersDescription'}}
+      </AkTypography>
+    </AkStack>
+
+    <AkStack @direction='row' @alignItems='center' @spacing='1'>
+      {{#if this.setMemberOverrideRequest.isRunning}}
+        <AkLoader @size={{14}} data-test-orgEditAnalysis-loader />
+      {{/if}}
+
+      <AkToggle
+        @id='enable-edit-analysis-for-members'
+        @checked={{this.isFeatureEnabled}}
+        @disabled={{this.setMemberOverrideRequest.isRunning}}
+        @size='small'
+        @onChange={{perform this.setMemberOverrideRequest}}
+        data-test-orgEditAnalysis-toggle
+      />
+    </AkStack>
+  </AkStack>
+</AkStack>

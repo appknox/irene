@@ -1039,6 +1039,15 @@ body {
   --analysis-risk-override-edit-drawer-content-border-radius: var(
     --border-radius
   );
+  --analysis-risk-override-edit-drawer-content-pending-banner-background-color: var(
+    --analysis-risk-override-edit-drawer-pending-banner-bg-color
+  );
+  --analysis-risk-override-edit-drawer-content-pending-banner-drop-shadow: var(
+    --box-shadow-17
+  );
+  --analysis-risk-override-edit-drawer-content-pending-banner-icon-background-color: var(
+    --analysis-risk-override-edit-drawer-pending-banner-icon-bg-color
+  );
 
   // analysis-risk/override-edit-drawer/divider
   --analysis-risk-override-edit-drawer-divider-color: var(--border-color-1);
@@ -1069,6 +1078,14 @@ body {
   );
   --analysis-risk-override-edit-drawer-override-form-severity-container-border-color: var(
     --border-color-2
+  );
+
+  // analysis-risk/override-edit-drawer/pending-request-details
+  --analysis-risk-override-edit-drawer-pending-request-details-border-color: var(
+    --border-color-1
+  );
+  --analysis-risk-override-edit-drawer-pending-request-details-border-radius: var(
+    --border-radius
   );
 
   // variables for file-details
@@ -1482,6 +1499,29 @@ body {
   // variables for file-details/vulnerability-analysis-details/edit-analysis-button
   --file-details-vulnerability-analysis-details-edit-analysis-button-divider-color: var(
     --neutral-grey-300
+  );
+  --file-details-vulnerability-analysis-details-edit-analysis-button-override-request-indicator-background-color: var(
+    --primary-main
+  );
+
+  // variables for file-details/vulnerability-analysis-details/edit-analysis-button/reject-confirm
+  --file-details-vulnerability-analysis-details-edit-analysis-button-reject-confirm-textarea-border-color: var(
+    --border-color-1
+  );
+  --file-details-vulnerability-analysis-details-edit-analysis-button-reject-confirm-textarea-color: var(
+    --text-primary
+  );
+  --file-details-vulnerability-analysis-details-edit-analysis-button-reject-confirm-border-radius: var(
+    --border-radius
+  );
+  --file-details-vulnerability-analysis-details-edit-analysis-button-reject-confirm-error-color: var(
+    --error-main
+  );
+  --file-details-vulnerability-analysis-details-edit-analysis-button-reject-confirm-action-background-color: var(
+    --background-main
+  );
+  --file-details-vulnerability-analysis-details-edit-analysis-button-reject-confirm-action-box-shadow: var(
+    --box-shadow-4
   );
 
   // variables for file-details/vulnerability-analysis-details/edit-analysis-button/reset-confirm

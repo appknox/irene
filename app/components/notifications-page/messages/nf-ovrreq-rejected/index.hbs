@@ -1,0 +1,47 @@
+<AkStack @direction='column' @spacing='2'>
+  <span data-test-nf-ovrreq-rejected-primary-message>
+    {{t
+      'notificationModule.messages.nf-ovrreq-rejected'
+      htmlSafe=true
+      reviewer_email=@context.reviewer_email
+    }}
+
+    <AkLink
+      @color='primary'
+      @route='authenticated.dashboard.file.analysis'
+      @models={{array @context.file_id @context.analysis_id}}
+      @underline='always'
+      @fontWeight='medium'
+    >
+      {{t 'vulnerabilityId'}}
+      -
+      {{@context.vulnerability_id}}
+    </AkLink>
+  </span>
+
+  <AkStack @direction='column' @spacing='0.5'>
+    <AkTypography
+      data-test-nf-ovrreq-rejected-rejection-reason-label
+      @fontWeight='medium'
+    >
+      {{t 'reasoningToReject'}}
+    </AkTypography>
+
+    <AkTypography data-test-nf-ovrreq-rejected-rejection-reason>
+      {{@context.rejection_reason}}
+    </AkTypography>
+  </AkStack>
+
+  <div data-test-nf-ovrreq-rejected-link>
+    <AkLink
+      @color='primary'
+      @route='authenticated.dashboard.file.analysis'
+      @models={{array @context.file_id @context.analysis_id}}
+      @underline='always'
+      @title={{t 'viewTheVulnerability'}}
+      @fontWeight='medium'
+    >
+      {{t 'viewTheVulnerability'}}
+    </AkLink>
+  </div>
+</AkStack>

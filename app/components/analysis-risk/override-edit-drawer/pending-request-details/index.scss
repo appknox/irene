@@ -1,0 +1,31 @@
+.overridden-as-value-container {
+  padding: 0.75em 1em;
+  border: 1px solid
+    var(--analysis-risk-override-edit-drawer-pending-request-details-border-color);
+  border-radius: var(
+    --analysis-risk-override-edit-drawer-pending-request-details-border-radius
+  );
+  box-sizing: border-box;
+}
+
+.details-divider {
+  border-color: var(
+    --analysis-risk-override-edit-drawer-pending-request-details-border-color
+  ) !important;
+}
+
+.audit-chip {
+  border: 1px solid
+    var(--analysis-risk-override-edit-drawer-pending-request-details-border-color);
+  border-radius: 2.142em;
+  padding: 0.35em 1em;
+  box-sizing: border-box;
+
+  .audit-chip-icon-container {
+    width: 20px;
+  }
+
+  .audit-chip-icon {
+    font-size: 1.2857em !important;
+  }
+}

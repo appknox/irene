@@ -259,6 +259,8 @@ export default class AnalysisRiskOverrideEditDrawerOverrideFormComponent extends
         all
       );
 
+      this.changeset?.rollback();
+
       this.analytics.track({
         name: 'RISK_OVERRIDE_EVENT',
         properties: {
