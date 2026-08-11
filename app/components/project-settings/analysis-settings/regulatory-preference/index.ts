@@ -81,6 +81,15 @@ export default class ProjectSettingsAnalysisSettingsRegulatoryPreferenceComponen
         isSaving: this.onSaveSama.isRunning,
         isOverriden: !this.profile?.reportPreference.show_sama?.is_inherited,
       },
+      {
+        label: this.intl.t('dora'),
+        title: this.intl.t('doraExpansion'),
+        value: this.profile?.reportPreference.show_dora?.value,
+        toggleHandler: this.onSaveDora,
+        resetHandler: this.onResetDora,
+        isSaving: this.onSaveDora.isRunning,
+        isOverriden: !this.profile?.reportPreference.show_dora?.is_inherited,
+      },
     ];
   }
 
@@ -153,6 +162,10 @@ export default class ProjectSettingsAnalysisSettingsRegulatoryPreferenceComponen
     await this.savePreference.perform(event, 'sama');
   });
 
+  onSaveDora = task(async (event: Event) => {
+    await this.savePreference.perform(event, 'dora');
+  });
+
   onResetPcidss = task(async () => {
     await this.resetPreference.perform('pcidss');
   });
@@ -171,6 +184,10 @@ export default class ProjectSettingsAnalysisSettingsRegulatoryPreferenceComponen
 
   onResetSama = task(async () => {
     await this.resetPreference.perform('sama');
+  });
+
+  onResetDora = task(async () => {
+    await this.resetPreference.perform('dora');
   });
 }
 

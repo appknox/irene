@@ -28,6 +28,7 @@ import Nistsp80053Model from '../nistsp80053';
 import Nistsp800171Model from '../nistsp800171';
 import SamaModel from '../sama';
 import Pcidss4Model from '../pcidss4';
+import DoraModel from '../dora';
 
 irregular('asvs', 'asvses');
 
@@ -153,6 +154,9 @@ export default class SecurityAnalysisModel extends Model {
 
   @hasMany('sama', { async: true, inverse: null })
   declare sama: AsyncHasMany<SamaModel>;
+
+  @hasMany('dora', { async: true, inverse: null })
+  declare dora: AsyncHasMany<DoraModel>;
 
   @hasMany('security/attachment', { async: true, inverse: null })
   declare attachments: AsyncHasMany<SecurityAttachmentModel>;
