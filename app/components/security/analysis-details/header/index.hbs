@@ -26,51 +26,21 @@
 
   <AkStack @alignItems='stretch' @spacing='1.5'>
     {{#if this.showMarkAsPassedButton}}
-      <AkTooltip
-        @arrow={{true}}
-        @placement='left'
-        @disabled={{not this.analysisCurrentCvssVersionIsLegacy}}
+      <AkButton
+        @variant='outlined'
+        @color='neutral'
+        {{on 'click' this.openMarkPassedConfirmBox}}
+        local-class='mark-as-passed-button'
+        data-test-securityAnalysisDetailsHeader-markAsPassedBtn
       >
-        <:tooltipContent>
-          <div local-class='tooltip-content-container'>
-            <AkTypography @variant='body1' @color='inherit'>
-              {{this.cannotMarkAsPassedTooltipText}}
-            </AkTypography>
-          </div>
-        </:tooltipContent>
+        <:leftIcon>
+          <AkIcon @color='success' @iconName='check' />
+        </:leftIcon>
 
         <:default>
-          <AkButton
-            @variant='outlined'
-            @color='neutral'
-            @disabled={{this.analysisCurrentCvssVersionIsLegacy}}
-            {{on 'click' this.openMarkPassedConfirmBox}}
-            local-class='
-              mark-as-passed-button
-              {{if this.analysisCurrentCvssVersionIsLegacy "disabled"}}
-            '
-            data-test-securityAnalysisDetailsHeader-markAsPassedBtn
-          >
-            <:leftIcon>
-              <AkIcon
-                @color={{if
-                  this.analysisCurrentCvssVersionIsLegacy
-                  'textSecondary'
-                  'success'
-                }}
-                @iconName='check'
-                {{style
-                  opacity=(if this.analysisCurrentCvssVersionIsLegacy '0.5' '1')
-                }}
-              />
-            </:leftIcon>
-
-            <:default>
-              Mark as Passed
-            </:default>
-          </AkButton>
+          Mark as Passed
         </:default>
-      </AkTooltip>
+      </AkButton>
     {{/if}}
 
     <AkButton
