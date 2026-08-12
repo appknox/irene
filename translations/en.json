@@ -1348,7 +1348,7 @@
       },
       "nf-public-api-user-updated": "User <strong>{type}</strong> for <strong>{user_email}</strong> changed from <strong>{current}</strong> to <strong>{updated}</strong> by <strong>{changed_by}</strong>.",
       "nf-jira-push-err": "Jira push <strong>failed</strong> for file <strong>{file_id}</strong> ({package_name}). Please check your Jira integration configuration.",
-      "nf-sbom-comp-update": "A new version <strong>{new_version}</strong> is available for component <strong>{component_name}</strong> (currently {old_version}, source: {source}). This affects <strong>{affected_apps_count}</strong> app(s).",
+      "nf-sbom-comp-update": "A new version <strong>{new_version}</strong> is available for component <strong>{component_name}</strong>. This affects <strong>{affected_apps_count}</strong> app(s).",
       "nf-sbom-vuln-update": "New vulnerability advisory <strong>{max_severity}</strong> detected for component <strong>{component_name}</strong> (advisories: {ghsa_ids_display}, fixed version: {fixed_version}). This affects <strong>{affected_apps_count}</strong> app(s)."
     },
     "namespaceMessage": {
