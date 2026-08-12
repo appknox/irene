@@ -1426,7 +1426,7 @@
       "nf-ovrreq-approved-reqstr": "<strong>{reviewer_email}</strong> has approved the vulnerability override request.",
       "nf-ovrreq-raised": "<strong>{requester_email}</strong> has sent an edit request to override a vulnerability.",
       "nf-ovrreq-rejected": "<strong>{reviewer_email}</strong> has rejected the vulnerability override request",
-      "nf-sbom-comp-update": "コンポーネント<strong>{component_name}</strong>の新しいバージョン<strong>{new_version}</strong>が利用可能です（現在 {old_version}、ソース: {source}）。<strong>{affected_apps_count}</strong> 個のアプリに影響します。",
+      "nf-sbom-comp-update": "コンポーネント<strong>{component_name}</strong>の新しいバージョン<strong>{new_version}</strong>が利用可能です。<strong>{affected_apps_count}</strong> 個のアプリに影響します。",
       "nf-sbom-vuln-update": "コンポーネント<strong>{component_name}</strong>に新しい脆弱性アドバイザリ<strong>{max_severity}</strong>が検出されました（アドバイザリ: {ghsa_ids_display}、修正バージョン: {fixed_version}）。<strong>{affected_apps_count}</strong> 個のアプリに影響します。"
     },
     "namespaceMessage": {
