@@ -2,6 +2,7 @@
   data-test-sbomApp-actionBtn
   {{on 'click' this.handleOpenMenu}}
   disabled={{this.hasNoSbomScan}}
+  data-test-cy='sbomApp-actionBtn'
 >
   <AkIcon @iconName='more-vert' />
 </AkIconButton>
@@ -22,6 +23,7 @@
         @model={{it.model}}
         @onClick={{it.onClick}}
         @divider={{it.divider}}
+        aria-label='sbom app action menu item'
         as |li|
       >
         <li.leftIcon>
