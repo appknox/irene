@@ -1,0 +1,33 @@
+{{#if (eq @variant 'label')}}
+  <AkFormControlLabel @label='Check me' @disabled={{false}} as |fcl|>
+    <AkCheckbox
+      @checked={{this.checked}}
+      @indeterminate={{false}}
+      @disabled={{fcl.disabled}}
+      @readonly={{false}}
+      @onChange={{this.handleChange}}
+    />
+  </AkFormControlLabel>
+{{else if (eq @variant 'indeterminate')}}
+  <AkFormControlLabel @label='Select all'>
+    <AkCheckbox
+      @checked={{this.selectAllChecked}}
+      @indeterminate={{this.selectAllIndeterminate}}
+      @onChange={{this.handleSelectAllChange}}
+    />
+  </AkFormControlLabel>
+  <AkFormControlLabel @label='Check 1'>
+    <AkCheckbox @checked={{this.checked1}} @onChange={{fn this.updateChecked 1}} />
+  </AkFormControlLabel>
+  <AkFormControlLabel @label='Check 2'>
+    <AkCheckbox @checked={{this.checked2}} @onChange={{fn this.updateChecked 2}} />
+  </AkFormControlLabel>
+{{else}}
+  <AkCheckbox
+    @checked={{this.checked}}
+    @indeterminate={{this.indeterminate}}
+    @disabled={{false}}
+    @readonly={{false}}
+    @onChange={{this.handleChange}}
+  />
+{{/if}}

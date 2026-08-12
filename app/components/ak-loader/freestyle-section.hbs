@@ -1,0 +1,45 @@
+<FreestyleSection @name='Loader'>
+  <FreestyleUsage @slug='ak-loader-circular' @title='Circular'>
+    <AkStack @direction='column' @spacing='2.5' @width='full'>
+      <div class='w-full'>
+        <AkTypography @variant='h5' @gutterBottom={{true}}>Default Loader</AkTypography>
+        <AkLoader @size={{100}} @thickness={{3}} @color='primary' />
+      </div>
+      <AkDivider />
+      <div class='w-full'>
+        <AkTypography @variant='h5' @gutterBottom={{true}}>Indeterminate loader with label</AkTypography>
+        <AkLoader @size={{100}} @thickness={{3}} @color='primary'>
+          <:label><AkTypography @variant='h6'>Label</AkTypography></:label>
+        </AkLoader>
+      </div>
+      <AkDivider />
+      <div class='w-full'>
+        <AkTypography @variant='h5' @gutterBottom={{true}}>Determinate loader</AkTypography>
+        <AkLoader @variant='determinate' @size={{100}} @thickness={{3}} @progress={{22.5}} @color='primary' />
+      </div>
+      <AkDivider />
+      <div class='w-full'>
+        <AkTypography @variant='h5' @gutterBottom={{true}}>Determinate loader with label</AkTypography>
+        <AkLoader @variant='determinate' @size={{100}} @thickness={{3}} @progress={{22.5}} @color='primary'>
+          <:label><AkTypography @variant='h6'>22.5%</AkTypography></:label>
+        </AkLoader>
+      </div>
+    </AkStack>
+  </FreestyleUsage>
+
+  <FreestyleUsage @slug='ak-loader-linear' @title='Linear'>
+    <AkStack @direction='column' @spacing='2.5' @width='6/12'>
+      <div class='w-full'>
+        <AkTypography @variant='h5' @gutterBottom={{true}}>Determinate Loader with label</AkTypography>
+        <AkLoader::Linear @variant='determinate' @height={{4}} @progress={{22.5}} @color='primary'>
+          <:label><AkTypography @variant='h6'>22.5%</AkTypography></:label>
+        </AkLoader::Linear>
+      </div>
+      <AkDivider />
+      <div class='w-full'>
+        <AkTypography @variant='h5' @gutterBottom={{true}}>Indeterminate Loader</AkTypography>
+        <AkLoader::Linear @height={{4}} @color='primary' />
+      </div>
+    </AkStack>
+  </FreestyleUsage>
+</FreestyleSection>

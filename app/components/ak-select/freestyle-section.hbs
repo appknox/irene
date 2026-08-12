@@ -1,0 +1,31 @@
+<FreestyleSection @name='Select'>
+  <FreestyleUsage @slug='ak-select-default' @title='Default' @source='<AkSelect
+  @onChange=\{{this.handleSelectChange}}
+  @options=\{{this.selectItems}}
+  @selected=\{{this.selectedValue}}
+  @renderInPlace=\{{true}}
+  @label="Experiment with me"
+  @placeholder="Select"
+  @multiple=\{{false}}
+  as |aks|
+>
+  \{{aks.label}}
+</AkSelect>'>
+    <AkSelect::FreestyleDemo />
+  </FreestyleUsage>
+
+  <FreestyleUsage @slug='ak-select-multiple' @title='Multiple Selection' @source='<AkSelect
+  @onChange=\{{this.handleSelectChange}}
+  @options=\{{this.selectItems}}
+  @selected=\{{this.selectedValue}}
+  @renderInPlace=\{{true}}
+  @label="Experiment with me"
+  @placeholder="Select"
+  @multiple=\{{true}}
+  as |aks|
+>
+  \{{aks.label}}
+</AkSelect>'>
+    <AkSelect::FreestyleDemo @multiple={{true}} />
+  </FreestyleUsage>
+</FreestyleSection>
