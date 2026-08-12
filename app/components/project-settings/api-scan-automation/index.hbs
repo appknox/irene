@@ -1,0 +1,12 @@
+<AkStack @direction='column' @spacing='1'>
+  <AkStack @alignItems='center' @justifyContent='space-between'>
+    <AkStack @direction='column' @spacing='0.25'>
+      <AkTypography @variant='h5'>API Scan Automation</AkTypography>
+      <AkTypography @variant='body2' @color='textSecondary'>Start API Scan automatically when DAST completes. Exclude rules take precedence over include rules.</AkTypography>
+    </AkStack>
+    <AkToggle @checked={{this.enabled}} @onChange={{this.updateEnabled}} />
+  </AkStack>
+  <AkTextField @label='Include host/path patterns' @value={{this.includeFilters}} @helperText='One wildcard pattern per line, for example api.example.com/v1/*.' {{on 'input' this.updateIncludes}} />
+  <AkTextField @label='Exclude host/path patterns' @value={{this.excludeFilters}} @helperText='Optional. Matching exclusions are never scanned.' {{on 'input' this.updateExcludes}} />
+  <AkButton @variant='filled' @disabled={{this.save.isRunning}} {{on 'click' (perform this.save)}}>Save automation settings</AkButton>
+</AkStack>
