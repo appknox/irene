@@ -509,7 +509,7 @@ padding shell as its Teams and Collaborators sections. }}
                     </AkStack>
 
                     <AkStack @spacing='1' @alignItems='center'>
-                      {{#if (and this.canActivate (not cert.is_active))}}
+                      {{#if (and this.canActivate (not cert.is_active) (not cert.is_expired))}}
                         <AkButton
                           data-test-orgSigningCert-activateBtn
                           @variant='outlined'

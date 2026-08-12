@@ -234,6 +234,57 @@ module(
       assert.strictEqual(desc.textAlign, 'center');
     });
 
+    test('an expired cert offers no activate button', async function (assert) {
+      // The API refuses to activate an expired certificate (400), so offering
+      // the button would only produce a guaranteed error. The row already
+      // carries an Expired chip, so its absence is explained on screen -- and
+      // an already-active cert has no button either, so this matches.
+      class AjaxStub extends Service {
+        request() {
+          return Promise.resolve([
+            {
+              id: 1,
+              name: 'Active iOS',
+              team_id: 'AB12CD34',
+              app_id: 'com.acme.*',
+              is_active: true,
+              provisioned_udids: [],
+              is_expired: false,
+            },
+            {
+              id: 2,
+              name: 'Expired iOS',
+              team_id: 'EF56GH78',
+              app_id: 'com.foo.app',
+              is_active: false,
+              provisioned_udids: [],
+              is_expired: true,
+            },
+            {
+              id: 3,
+              name: 'Spare iOS',
+              team_id: 'IJ90KL12',
+              app_id: 'com.bar.app',
+              is_active: false,
+              provisioned_udids: [],
+              is_expired: false,
+            },
+          ]);
+        }
+      }
+      this.owner.register('service:ajax', AjaxStub);
+
+      await render(hbs`<Organization::SigningCertificate />`);
+      await openExistingTab();
+
+      assert.dom('[data-test-orgSigningCert-info]').exists({ count: 3 });
+      // Only the spare, valid, inactive cert is activatable: not the active
+      // one, and not the expired one.
+      assert
+        .dom('[data-test-orgSigningCert-activateBtn]')
+        .exists({ count: 1 }, 'neither the active nor the expired cert offers it');
+    });
+
     test('it lists org certs and flags the active one', async function (assert) {
       class AjaxStub extends Service {
         request() {
