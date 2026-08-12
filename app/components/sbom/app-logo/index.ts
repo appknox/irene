@@ -9,7 +9,10 @@ export interface SbomAppLogoSignature {
 
 export default class SbomAppLogoComponent extends Component<SbomAppLogoSignature> {
   get iconUrl() {
-    return this.args.sbomProject?.project.get('lastFile')?.get('iconUrl');
+    return (
+      this.args.sbomProject?.iconUrl ??
+      this.args.sbomProject?.project.get('lastFile')?.get('iconUrl')
+    );
   }
 }
 

@@ -1,0 +1,84 @@
+<div ...attributes>
+  <AkButton
+    @variant='outlined'
+    @color='neutral'
+    {{on 'click' this.handleClick}}
+    data-test-componentInventory-typeFilter-trigger
+  >
+    <:leftIcon>
+      <AkIcon
+        @iconName='filter-list'
+        @color={{if this.filterApplied 'primary' 'inherit'}}
+        data-test-componentInventory-typeFilter-icon
+      />
+    </:leftIcon>
+
+    <:default>
+      <AkTypography data-test-componentInventory-typeFilter-triggerLabel>
+        {{this.triggerLabel}}
+      </AkTypography>
+    </:default>
+  </AkButton>
+</div>
+
+<AkPopover
+  @anchorRef={{this.anchorRef}}
+  @placement='bottom-end'
+  @arrow={{false}}
+  @closeHandler={{this.handleOptionsClose}}
+  @clickOutsideToClose={{true}}
+  data-test-componentInventory-typeFilter-popover
+>
+  <AkStack @direction='column' local-class='type-filter'>
+    <AkStack @width='full' local-class='filter-header'>
+      <AkTypography
+        @variant='subtitle2'
+        local-class='filter-header-text'
+        data-test-componentInventory-typeFilter-popover-headerText
+      >
+        {{t 'sbomModule.componentType'}}
+      </AkTypography>
+    </AkStack>
+
+    {{#each this.typeOptions as |type|}}
+      <AkStack
+        @spacing='1'
+        @width='full'
+        local-class='filter-option cursor-pointer'
+        class='py-1 pl-2'
+        {{on 'click' (fn this.selectComponentType type.value)}}
+        data-test-componentInventory-typeFilter-option={{type.key}}
+      >
+        <AkStack @alignItems='center' @spacing='1'>
+          <AkRadio
+            @checked={{eq this.selectedComponentType type.value}}
+            data-test-componentInventory-typeFilter-radio
+          />
+
+          <AkTypography data-test-componentInventory-typeFilter-option-text>
+            {{type.key}}
+          </AkTypography>
+        </AkStack>
+      </AkStack>
+    {{/each}}
+
+    {{#if this.filterApplied}}
+      <AkStack
+        class='py-1 pl-2'
+        local-class='clear-filter-section'
+        @width='full'
+        data-test-componentInventory-typeFilter-clearFilter
+      >
+        <AkTypography
+          @underline='always'
+          @color='primary'
+          local-class='cursor-pointer'
+          {{on 'click' this.clearFilter}}
+          data-test-componentInventory-typeFilter-clearFilter-text
+        >
+          {{t 'clearFilter'}}
+        </AkTypography>
+      </AkStack>
+    {{/if}}
+  </AkStack>
+</AkPopover>
