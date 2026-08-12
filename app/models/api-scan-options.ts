@@ -8,6 +8,15 @@ export default class ApiScanOptionsModel extends Model {
   @attr
   declare dsApiCaptureFilters: string[];
 
+  @attr
+  declare apiScanAutomationEnabled: boolean;
+
+  @attr
+  declare apiScanAutomationIncludeFilters: string[];
+
+  @attr
+  declare apiScanAutomationExcludeFilters: string[];
+
   get hasApiUrlFilters() {
     return !isEmpty(this.dsApiCaptureFilters);
   }
