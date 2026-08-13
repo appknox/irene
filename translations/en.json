@@ -1362,6 +1362,7 @@
     "viewStoreMonitoring": "View store monitoring",
     "viewStoreMonitoringResults": "View store monitoring results",
     "viewSBOMResults": "View SBOM results",
+    "viewComponent": "View component",
     "viewMonitoringResults": "View monitoring results",
     "viewAppOnStore": "View App on Store"
   },
