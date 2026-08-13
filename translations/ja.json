@@ -1572,6 +1572,7 @@
     "viewStoreMonitoringResults": "View store monitoring results",
     "viewMonitoringResults": "View monitoring results",
     "viewSBOMResults": "View SCA results",
+    "viewComponent": "View component",
     "viewAppOnStore": "View App on Store"
   },
   "notificationPreferences": "Notification Preferences",
