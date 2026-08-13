@@ -10,4 +10,16 @@
       ghsa_ids_display=@context.ghsa_ids_display
     }}
   </AkTypography>
+
+  <div data-test-nf-sbom-vuln-update-link>
+    <AkLink
+      @color='primary'
+      @route='authenticated.dashboard.sbom.component-inventory'
+      @query={{hash component_query=@context.component_name}}
+      @underline='always'
+      @title={{t 'notificationModule.viewComponent'}}
+    >
+      {{t 'notificationModule.viewComponent'}}
+    </AkLink>
+  </div>
 </AkStack>
