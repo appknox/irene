@@ -11,11 +11,15 @@ export default class ApiScanOptionsModel extends Model {
   @attr
   declare apiScanAutomationEnabled: boolean;
 
+  // Empty means "no domain restriction" - every captured host is in scope.
   @attr
-  declare apiScanAutomationIncludeFilters: string[];
+  declare apiScanAutomationIncludedDomains: string[];
 
   @attr
-  declare apiScanAutomationExcludeFilters: string[];
+  declare apiScanAutomationExcludedDomains: string[];
+
+  @attr
+  declare apiScanAutomationExcludedEndpoints: string[];
 
   get hasApiUrlFilters() {
     return !isEmpty(this.dsApiCaptureFilters);

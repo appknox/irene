@@ -1,0 +1,65 @@
+<AkStack
+  @width='full'
+  @direction='column'
+  @spacing='0.5'
+  data-test-apiScanAutomation-ruleList={{@testId}}
+>
+  <AkTypography
+    data-test-apiScanAutomation-ruleList-label
+    @variant='body1'
+    @fontWeight='medium'
+  >
+    {{@label}}
+  </AkTypography>
+
+  <AkTypography
+    data-test-apiScanAutomation-ruleList-description
+    @variant='body3'
+    @color='textSecondary'
+  >
+    {{@description}}
+  </AkTypography>
+
+  <AkStack class='mt-1' @spacing='1.5' @width='full' {{style maxWidth='750px'}}>
+    <AkTextField
+      data-test-apiScanAutomation-ruleList-input
+      @formControlClass='w-9/12'
+      @placeholder={{@placeholder}}
+      @value={{this.newEntry}}
+      @disabled={{@disabled}}
+      {{on 'input' this.updateNewEntry}}
+      {{style maxWidth='600px'}}
+    />
+
+    <AkButton
+      data-test-apiScanAutomation-ruleList-addBtn
+      @variant='outlined'
+      @disabled={{@disabled}}
+      {{on 'click' this.addEntry}}
+    >
+      <:leftIcon>
+        <AkIcon @iconName='add' />
+      </:leftIcon>
+
+      <:default>{{t 'apiScanAutomation.addRule'}}</:default>
+    </AkButton>
+  </AkStack>
+
+  {{#if this.hasItems}}
+    <AkStack
+      class='mt-1'
+      @spacing='1'
+      @flexWrap='wrap'
+      data-test-apiScanAutomation-ruleList-chips
+    >
+      {{#each this.items as |item|}}
+        <AkChip
+          data-test-apiScanAutomation-ruleList-chip
+          @label={{item}}
+          @size='small'
+          @onDelete={{unless @disabled (fn this.removeEntry item)}}
+        />
+      {{/each}}
+    </AkStack>
+  {{/if}}
+</AkStack>

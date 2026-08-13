@@ -1,0 +1,84 @@
+<AkStack
+  @width='full'
+  @direction='column'
+  @spacing='1.5'
+  data-test-projectSettings-apiScanAutomation-root
+>
+  <AkStack @width='full' @alignItems='center' @justifyContent='space-between'>
+    <AkStack @direction='column' @spacing='0.5'>
+      <AkTypography data-test-apiScanAutomation-title @variant='h5'>
+        {{t 'apiScanAutomation.title'}}
+      </AkTypography>
+
+      <AkTypography
+        data-test-apiScanAutomation-description
+        @variant='body2'
+        @color='textSecondary'
+      >
+        {{t 'apiScanAutomation.description'}}
+      </AkTypography>
+    </AkStack>
+
+    <AkToggle
+      data-test-apiScanAutomation-toggle
+      @checked={{this.enabled}}
+      @onChange={{this.updateEnabled}}
+    />
+  </AkStack>
+
+  {{#if this.enabled}}
+    <AkStack @width='full' @direction='column' @spacing='2'>
+      {{#if this.scansEveryCapturedHost}}
+        <AkTypography
+          data-test-apiScanAutomation-scanAllWarning
+          @variant='body3'
+          @color='warn'
+        >
+          {{t 'apiScanAutomation.scansEveryCapturedHost'}}
+        </AkTypography>
+      {{/if}}
+
+      <ProjectSettings::ApiScanAutomation::Settings::RuleList
+        @testId='includedDomains'
+        @label={{t 'apiScanAutomation.includedDomains'}}
+        @description={{t 'apiScanAutomation.includedDomainsDescription'}}
+        @placeholder={{t 'apiScanAutomation.domainPlaceholder'}}
+        @items={{this.includedDomains}}
+        @validate={{this.validateDomain}}
+        @onChange={{this.updateIncludedDomains}}
+      />
+
+      <ProjectSettings::ApiScanAutomation::Settings::RuleList
+        @testId='excludedDomains'
+        @label={{t 'apiScanAutomation.excludedDomains'}}
+        @description={{t 'apiScanAutomation.excludedDomainsDescription'}}
+        @placeholder={{t 'apiScanAutomation.domainPlaceholder'}}
+        @items={{this.excludedDomains}}
+        @validate={{this.validateDomain}}
+        @onChange={{this.updateExcludedDomains}}
+      />
+
+      <ProjectSettings::ApiScanAutomation::Settings::RuleList
+        @testId='excludedEndpoints'
+        @label={{t 'apiScanAutomation.excludedEndpoints'}}
+        @description={{t 'apiScanAutomation.excludedEndpointsDescription'}}
+        @placeholder={{t 'apiScanAutomation.endpointPlaceholder'}}
+        @items={{this.excludedEndpoints}}
+        @validate={{this.validateEndpoint}}
+        @onChange={{this.updateExcludedEndpoints}}
+      />
+    </AkStack>
+  {{/if}}
+
+  <AkStack>
+    <AkButton
+      data-test-apiScanAutomation-saveBtn
+      @variant='filled'
+      @loading={{this.save.isRunning}}
+      @disabled={{this.saveDisabled}}
+      {{on 'click' (perform this.save)}}
+    >
+      {{t 'apiScanAutomation.save'}}
+    </AkButton>
+  </AkStack>
+</AkStack>
