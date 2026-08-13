@@ -1,0 +1,21 @@
+.overline {
+  font-family: var(--offensive-security-attack-runs-overline-font-family);
+  font-size: 0.857em;
+  letter-spacing: 0.05em;
+  color: var(--offensive-security-attack-runs-overline-color);
+}
+
+.section-heading {
+  max-width: 32em;
+}
+
+.search-input {
+  width: 21.42em;
+  flex-shrink: 0;
+  background-color: var(--offensive-security-attack-runs-bg-color);
+}
+
+.empty-state {
+  color: var(--offensive-security-attack-runs-empty-color);
+  text-align: center;
+}

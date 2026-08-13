@@ -1,0 +1,79 @@
+<AkStack
+  @width='full'
+  @direction='column'
+  @spacing='2'
+  local-class='summary-card'
+  class='p-3'
+  data-test-offensiveSecurity-summaryCard
+>
+  <AkStack @width='full' @justifyContent='space-between' @alignItems='center'>
+    <AkTypography @variant='body1' @fontWeight='medium'>
+      {{t 'offensiveSecurity.summary'}}
+    </AkTypography>
+
+    {{#if @scan.isCompleted}}
+      <span
+        local-class='risk-badge risk-{{@scan.riskClass}}'
+        data-test-offensiveSecurity-summaryCard-risk
+      >
+        {{t (concat 'offensiveSecurity.riskLevel.' @scan.riskClass)}}
+      </span>
+    {{/if}}
+  </AkStack>
+
+  <AkStack
+    @width='full'
+    @spacing='2'
+    @justifyContent='space-between'
+    local-class='stats-row'
+  >
+    {{#each this.stats as |stat|}}
+      <AkStack
+        @direction='column'
+        @alignItems='center'
+        local-class='stat {{stat.tone}}'
+        data-test-offensiveSecurity-summaryCard-stat
+      >
+        <AkTypography @variant='h5' @fontWeight='medium' @color='inherit'>
+          {{stat.value}}
+        </AkTypography>
+
+        <AkTypography @variant='body3' @color='textSecondary'>
+          {{stat.label}}
+        </AkTypography>
+      </AkStack>
+    {{/each}}
+  </AkStack>
+
+  {{#if this.showUnassessed}}
+    <AkTypography
+      @variant='body3'
+      @color='textSecondary'
+      data-test-offensiveSecurity-summaryCard-unassessed
+    >
+      {{this.unassessedLabel}}
+    </AkTypography>
+  {{/if}}
+
+  {{#if this.showResilience}}
+    <AkDivider />
+
+    <AkStack @width='full' @justifyContent='space-between' @alignItems='center'>
+      <AkTypography @variant='body2' @color='textSecondary'>
+        {{t 'offensiveSecurity.overallResilience'}}
+      </AkTypography>
+
+      <AkStack @alignItems='center' @spacing='1'>
+        <AkTypography @variant='body2' @fontWeight='medium'>
+          {{@scan.overallResilience}}
+        </AkTypography>
+
+        {{#if this.resilienceBandLabel}}
+          <AkTypography @variant='body3' @color='textSecondary'>
+            ({{this.resilienceBandLabel}})
+          </AkTypography>
+        {{/if}}
+      </AkStack>
+    </AkStack>
+  {{/if}}
+</AkStack>

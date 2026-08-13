@@ -48,6 +48,10 @@ export default class HomePageComponent extends Component {
     );
   }
 
+  get showOffensiveSecurity() {
+    return !this.organization.hideUpsellUIStatus.offensiveSecurity;
+  }
+
   get productCardDetails() {
     return [
       {
@@ -82,6 +86,13 @@ export default class HomePageComponent extends Component {
         indicatorSvg: 'ak-svg/security-indicator',
         coverBackgroundImage: 'ak-svg/security-bg-img',
         openInNewTab: true,
+      },
+      this.showOffensiveSecurity && {
+        title: this.intl.t('offensiveSecurity.title'),
+        description: this.intl.t('offensiveSecurity.homeCardDescription'),
+        route: 'authenticated.dashboard.offensive-security',
+        indicatorSvg: 'ak-svg/offensive-security-indicator',
+        coverBackgroundImage: 'ak-svg/offensive-security-bg-img',
       },
     ].filter(Boolean) as ProductCardDetails[];
   }

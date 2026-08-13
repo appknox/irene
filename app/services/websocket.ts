@@ -19,6 +19,7 @@ import type EventBusService from 'irene/services/event-bus';
 import {
   AnalysisEventHandler,
   DynamicScanEventHandler,
+  OffsecScanEventHandler,
   WsModelEventHandler,
 } from 'irene/utils/ws-model-ev-handlers';
 
@@ -160,6 +161,7 @@ export default class WebsocketService extends Service {
     const handlers = [
       new AnalysisEventHandler(this.store, this.eventBus, this.realtime),
       new DynamicScanEventHandler(this.store, this.eventBus, this.realtime),
+      new OffsecScanEventHandler(this.store, this.eventBus, this.realtime),
     ];
 
     handlers.forEach((handler) => {

@@ -1,0 +1,53 @@
+<AkStack
+  @width='full'
+  @direction='column'
+  @spacing='2'
+  local-class='artifacts-card'
+  class='p-3'
+  data-test-offensiveSecurity-artifactsCard
+>
+  <AkTypography @variant='body1' @fontWeight='medium'>
+    {{t 'offensiveSecurity.artifacts'}}
+  </AkTypography>
+
+  {{#if this.hasArtifacts}}
+    <AkStack @width='full' @direction='column' @spacing='1'>
+      {{#each @artifacts as |artifact|}}
+        <AkStack
+          @width='full'
+          @alignItems='center'
+          @justifyContent='space-between'
+          @spacing='1'
+          local-class='artifact-row'
+          data-test-offensiveSecurity-artifactsCard-row
+        >
+          <AkStack @direction='column' local-class='artifact-meta'>
+            <AkTypography @variant='body2' @fontWeight='medium'>
+              {{artifact.name}}
+            </AkTypography>
+
+            <AkTypography @variant='body3' @color='textSecondary'>
+              {{this.sizeLabel artifact.size}}
+            </AkTypography>
+          </AkStack>
+
+          <AkIconButton
+            @onClick={{fn this.handleDownload artifact.name}}
+            @disabled={{@isDownloading}}
+            data-test-offensiveSecurity-artifactsCard-download
+          >
+            <AkIcon @iconName='download' @size='small' />
+          </AkIconButton>
+        </AkStack>
+      {{/each}}
+    </AkStack>
+  {{else}}
+    <AkTypography
+      @variant='body2'
+      @color='textSecondary'
+      data-test-offensiveSecurity-artifactsCard-empty
+    >
+      {{t 'offensiveSecurity.noArtifacts'}}
+    </AkTypography>
+  {{/if}}
+</AkStack>

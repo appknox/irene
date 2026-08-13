@@ -1,0 +1,53 @@
+.log-card {
+  flex: 1 1 auto;
+  min-width: 0;
+  background-color: var(--offensive-security-scan-results-card-bg-color);
+  border: var(--offensive-security-scan-results-card-border);
+  border-radius: var(--offensive-security-scan-results-card-border-radius);
+}
+
+// The card is as tall as the summary column beside it, so the log body claims
+// the leftover height instead of leaving a void under a short log.
+.log-placeholder,
+.log-pane {
+  flex: 1 1 auto;
+  width: 100%;
+  min-height: 320px;
+}
+
+.log-placeholder {
+  text-align: center;
+}
+
+.log-pane {
+  max-height: 420px;
+  overflow: auto;
+  padding: 1em;
+  border-radius: var(--offensive-security-agent-log-border-radius);
+  background-color: var(--offensive-security-agent-log-bg-color);
+  color: var(--offensive-security-agent-log-color);
+  font-family: monospace;
+  font-size: 0.786em;
+  line-height: 1.6;
+}
+
+.log-line {
+  white-space: pre-wrap;
+  word-break: break-word;
+
+  &.accent {
+    color: var(--offensive-security-agent-log-accent-color);
+  }
+
+  &.error {
+    color: var(--offensive-security-agent-log-error-color);
+  }
+
+  &.success {
+    color: var(--offensive-security-agent-log-success-color);
+  }
+
+  &.dim {
+    color: var(--offensive-security-agent-log-dim-color);
+  }
+}

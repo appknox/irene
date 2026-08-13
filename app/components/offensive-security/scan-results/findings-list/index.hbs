@@ -1,0 +1,64 @@
+<AkStack
+  @width='full'
+  @direction='column'
+  @spacing='2'
+  local-class='findings-card'
+  class='p-3'
+  data-test-offensiveSecurity-findingsList
+>
+  <AkStack @width='full' @direction='column' @spacing='1'>
+    <AkTypography @variant='body1' @fontWeight='medium'>
+      {{t 'offensiveSecurity.findings'}}
+    </AkTypography>
+
+    <AkTypography @variant='body2' @color='textSecondary'>
+      {{t 'offensiveSecurity.findingsSubtitle'}}
+    </AkTypography>
+  </AkStack>
+
+  {{#if this.hasFindings}}
+    {{! Rows stretch rather than being set to `full`, so the negative margin in
+        `.finding-row` can bleed the hover into the card padding. }}
+    <AkStack @width='full' @direction='column' @alignItems='stretch'>
+      {{#each this.sortedFindings as |finding|}}
+        <AkStack
+          @alignItems='center'
+          @justifyContent='space-between'
+          @spacing='2'
+          local-class='finding-row'
+          tabindex='0'
+          {{on 'click' (fn this.handleClick finding.id)}}
+          {{on 'keydown' (fn this.handleKeydown finding.id)}}
+          data-test-offensiveSecurity-findingsList-row
+        >
+          <AkStack @direction='column'>
+            <AkTypography @variant='body2' @fontWeight='medium'>
+              {{finding.name}}
+            </AkTypography>
+
+            {{#if finding.category}}
+              <AkTypography @variant='body3' @color='textSecondary'>
+                {{finding.category}}
+              </AkTypography>
+            {{/if}}
+          </AkStack>
+
+          <span
+            local-class='outcome-tag {{this.outcomeClass finding.outcome}}'
+            data-test-offensiveSecurity-findingsList-outcome
+          >
+            {{t (concat 'offensiveSecurity.outcome.' finding.outcome)}}
+          </span>
+        </AkStack>
+      {{/each}}
+    </AkStack>
+  {{else}}
+    <AkTypography
+      @variant='body2'
+      @color='textSecondary'
+      data-test-offensiveSecurity-findingsList-empty
+    >
+      {{t 'offensiveSecurity.noFindings'}}
+    </AkTypography>
+  {{/if}}
+</AkStack>

@@ -1,0 +1,106 @@
+<AkStack @direction='column' @spacing='3' class='p-3'>
+  {{#if this.isLoading}}
+    <AkSkeleton @width='100%' @height='120px' />
+    <AkSkeleton @width='100%' @height='320px' />
+  {{else if this.scan}}
+    {{! Target header }}
+    <AkStack
+      @width='full'
+      @justifyContent='space-between'
+      @alignItems='center'
+      local-class='card'
+      class='p-3'
+      data-test-offensiveSecurity-scanResults-header
+    >
+      <AkStack @direction='column' @spacing='1'>
+        <AkTypography @variant='h5' @fontWeight='medium'>
+          {{this.scan.displayName}}
+        </AkTypography>
+
+        <AkStack @alignItems='center' @spacing='1'>
+          <AkIcon @iconName={{this.scan.platformIcon}} @size='small' />
+
+          <AkTypography @variant='body2' @color='textSecondary'>
+            {{this.scan.packageName}}
+          </AkTypography>
+        </AkStack>
+      </AkStack>
+
+      <OffensiveSecurity::StatusChip @scan={{this.scan}} />
+    </AkStack>
+
+    {{#if this.scan.isFailed}}
+      <AkStack
+        @width='full'
+        @alignItems='center'
+        @spacing='1'
+        local-class='failure-banner'
+        class='p-2'
+        data-test-offensiveSecurity-scanResults-failureBanner
+      >
+        <AkIcon @iconName='error' @size='small' @color='error' />
+
+        <AkTypography @variant='body2' @color='inherit'>
+          {{if
+            this.scan.errorMessage
+            this.scan.errorMessage
+            (t 'offensiveSecurity.scanFailed')
+          }}
+        </AkTypography>
+      </AkStack>
+    {{/if}}
+
+    {{! Objective }}
+    {{#if this.scan.objective}}
+      <AkStack
+        @width='full'
+        @direction='column'
+        @spacing='1'
+        local-class='card'
+        class='p-3'
+        data-test-offensiveSecurity-scanResults-objective
+      >
+        <AkTypography
+          @variant='body2'
+          @fontWeight='medium'
+          local-class='section-label'
+        >
+          {{t 'offensiveSecurity.objective'}}
+        </AkTypography>
+
+        <AkTypography @variant='body2'>{{this.scan.objective}}</AkTypography>
+      </AkStack>
+    {{/if}}
+
+    {{! Log + summary split }}
+    <AkStack
+      @width='full'
+      @spacing='3'
+      @alignItems='stretch'
+      local-class='run-split'
+    >
+      <OffensiveSecurity::ScanResults::AgentLog
+        @scan={{this.scan}}
+        @lines={{this.logLines}}
+        @loadFailed={{this.logLoadFailed}}
+        @isLoading={{this.loadLog.isRunning}}
+      />
+
+      <AkStack @direction='column' @spacing='3' local-class='run-split-side'>
+        <OffensiveSecurity::ScanResults::SummaryCard @scan={{this.scan}} />
+
+        <OffensiveSecurity::ScanResults::ArtifactsCard
+          @artifacts={{this.artifacts}}
+          @onDownload={{perform this.downloadArtifact}}
+          @isDownloading={{this.downloadArtifact.isRunning}}
+        />
+      </AkStack>
+    </AkStack>
+
+    {{! Findings }}
+    <OffensiveSecurity::ScanResults::FindingsList
+      @findings={{this.findings}}
+      @onFindingClick={{this.handleFindingClick}}
+    />
+  {{/if}}
+</AkStack>

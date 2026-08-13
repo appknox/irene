@@ -1,0 +1,9 @@
+{{page-title (t 'offensiveSecurity.title')}}
+
+{{#if @model.isOffensiveSecurityEnabled}}
+  {{outlet}}
+{{else}}
+  <PageWrapper>
+    <OffensiveSecurity::Upselling />
+  </PageWrapper>
+{{/if}}

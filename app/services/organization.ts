@@ -40,6 +40,8 @@ export default class OrganizationService extends Service {
       sbom: !this.orgFeatures?.sbom && this.hideUpsellUI,
       storeReleaseReadiness:
         !this.orgFeatures?.store_release_readiness && this.hideUpsellUI,
+      offensiveSecurity:
+        !this.orgFeatures?.offensive_security && this.hideUpsellUI,
       aiReporting: !this.orgAiFeatures?.reporting && this.hideUpsellUI,
       aiPii: !this.orgAiFeatures?.pii && this.hideUpsellUI,
       aiKnoxiq: !this.orgAiFeatures?.knoxiq && this.hideUpsellUI,

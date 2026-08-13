@@ -1,0 +1,60 @@
+{{#if @scan.isFailed}}
+  <AkStack
+    @spacing='1'
+    @alignItems='center'
+    local-class='chip-container failed-chip'
+    data-test-offensiveSecurity-statusChip-failed
+  >
+    <AkIcon local-class='failed-chip-icon' @iconName='error' @size='small' />
+
+    <AkTypography @variant='body2' @color='inherit' @fontWeight='medium'>
+      {{t 'offensiveSecurity.status.failed'}}
+    </AkTypography>
+  </AkStack>
+{{else if @scan.isCompleted}}
+  <AkStack
+    @spacing='1'
+    @alignItems='center'
+    local-class='chip-container completed-chip'
+    data-test-offensiveSecurity-statusChip-completed
+  >
+    <AkIcon
+      local-class='completed-chip-icon'
+      @iconName='check-circle'
+      @size='small'
+    />
+
+    <AkTypography @variant='body2' @color='inherit' @fontWeight='medium'>
+      {{t 'offensiveSecurity.status.completed'}}
+    </AkTypography>
+  </AkStack>
+{{else if @scan.isNotStarted}}
+  <AkStack
+    @spacing='1'
+    @alignItems='center'
+    local-class='chip-container pending-chip'
+    data-test-offensiveSecurity-statusChip-pending
+  >
+    <AkTypography @variant='body2' @color='inherit' @fontWeight='medium'>
+      {{t 'offensiveSecurity.status.pending'}}
+    </AkTypography>
+  </AkStack>
+{{else}}
+  <AkStack
+    @spacing='1'
+    @alignItems='center'
+    local-class='chip-container running-chip'
+    data-test-offensiveSecurity-statusChip-running
+  >
+    <AkLoader
+      @size={{16}}
+      @thickness={{6}}
+      @color='info'
+      local-class='running-loader'
+    />
+
+    <AkTypography @variant='body2' @color='inherit' @fontWeight='medium'>
+      {{t 'offensiveSecurity.status.running'}}
+    </AkTypography>
+  </AkStack>
+{{/if}}

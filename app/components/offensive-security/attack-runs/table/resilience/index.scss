@@ -1,0 +1,55 @@
+.resilience-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5em;
+  padding: 0.286em 0.714em;
+  border-radius: var(--offensive-security-attack-runs-resilience-border-radius);
+  font-family: var(--offensive-security-attack-runs-resilience-font-family);
+  font-size: 0.857em;
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+.resilience-band {
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.resilience-separator {
+  opacity: 0.6;
+}
+
+.resilience-weak {
+  background-color: var(
+    --offensive-security-attack-runs-resilience-weak-bg-color
+  );
+  color: var(--offensive-security-attack-runs-resilience-weak-color);
+}
+
+.resilience-medium {
+  background-color: var(
+    --offensive-security-attack-runs-resilience-medium-bg-color
+  );
+  color: var(--offensive-security-attack-runs-resilience-medium-color);
+}
+
+.resilience-strong {
+  background-color: var(
+    --offensive-security-attack-runs-resilience-strong-bg-color
+  );
+  color: var(--offensive-security-attack-runs-resilience-strong-color);
+}
+
+.resilience-very-strong {
+  background-color: var(
+    --offensive-security-attack-runs-resilience-very-strong-bg-color
+  );
+  color: var(--offensive-security-attack-runs-resilience-very-strong-color);
+}
+
+.resilience-unknown {
+  background-color: var(
+    --offensive-security-attack-runs-resilience-unknown-bg-color
+  );
+  color: var(--offensive-security-attack-runs-resilience-unknown-color);
+}

@@ -1,0 +1,104 @@
+.card {
+  background-color: var(--offensive-security-finding-detail-card-bg-color);
+  border: var(--offensive-security-finding-detail-card-border);
+  border-radius: var(--offensive-security-finding-detail-card-border-radius);
+}
+
+.header-row {
+  flex-wrap: wrap;
+}
+
+.label {
+  color: var(--offensive-security-finding-detail-label-color);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  font-size: 0.786em;
+}
+
+.mono {
+  padding: 0.143em 0.429em;
+  border-radius: var(--offensive-security-agent-log-border-radius);
+  background-color: var(--offensive-security-finding-detail-mono-bg-color);
+  font-family: monospace;
+  word-break: break-all;
+}
+
+.tab-row {
+  border-bottom: 1px solid
+    var(--offensive-security-scan-results-divider-color);
+}
+
+.tab-btn {
+  padding: 0.714em 1.143em;
+  border: none;
+  border-bottom: 2px solid transparent;
+  background: none;
+  cursor: pointer;
+  font-size: 0.929em;
+  color: var(--offensive-security-finding-detail-label-color);
+
+  &.active {
+    border-bottom-color: var(
+      --offensive-security-finding-detail-exploited-color
+    );
+    color: var(--offensive-security-scan-results-value-color);
+    font-weight: 500;
+  }
+}
+
+.evidence-item {
+  padding: 0.714em 0;
+  border-bottom: 1px solid
+    var(--offensive-security-scan-results-divider-color);
+
+  &:last-child {
+    border-bottom: none;
+  }
+}
+
+.outcome-tag,
+.severity-tag {
+  padding: 0.286em 0.714em;
+  border-radius: var(--offensive-security-attack-runs-border-radius);
+  font-size: 0.857em;
+  font-weight: 500;
+  text-transform: capitalize;
+}
+
+.exploited {
+  background-color: var(--offensive-security-finding-detail-exploited-bg-color);
+  color: var(--offensive-security-finding-detail-exploited-color);
+}
+
+.defended {
+  background-color: var(--offensive-security-finding-detail-defended-bg-color);
+  color: var(--offensive-security-finding-detail-defended-color);
+}
+
+.errored,
+.not-applicable {
+  background-color: var(--offensive-security-finding-detail-neutral-bg-color);
+  color: var(--offensive-security-finding-detail-neutral-color);
+}
+
+.severity-critical {
+  background-color: var(
+    --offensive-security-attack-runs-risk-critical-bg-color
+  );
+  color: var(--offensive-security-attack-runs-risk-critical-color);
+}
+
+.severity-high {
+  background-color: var(--offensive-security-attack-runs-risk-high-bg-color);
+  color: var(--offensive-security-attack-runs-risk-high-color);
+}
+
+.severity-medium {
+  background-color: var(--offensive-security-attack-runs-risk-medium-bg-color);
+  color: var(--offensive-security-attack-runs-risk-medium-color);
+}
+
+.severity-low {
+  background-color: var(--offensive-security-attack-runs-risk-low-bg-color);
+  color: var(--offensive-security-attack-runs-risk-low-color);
+}

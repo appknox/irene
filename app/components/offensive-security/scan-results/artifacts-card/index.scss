@@ -1,0 +1,27 @@
+.artifacts-card {
+  background-color: var(--offensive-security-scan-results-card-bg-color);
+  border: var(--offensive-security-scan-results-card-border);
+  border-radius: var(--offensive-security-scan-results-card-border-radius);
+}
+
+.artifact-row {
+  padding: 0.5em 0;
+  border-bottom: 1px solid
+    var(--offensive-security-scan-results-divider-color);
+
+  &:last-child {
+    border-bottom: none;
+  }
+}
+
+.artifact-meta {
+  min-width: 0;
+  overflow: hidden;
+
+  // Artifact names can be long; keep the row from pushing the button off-card.
+  * {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+}
