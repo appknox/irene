@@ -2,6 +2,7 @@ import Service from '@ember/service';
 import Evented from '@ember/object/evented';
 import type AnalysisOverviewModel from 'irene/models/analysis-overview';
 import type DynamicscanModel from 'irene/models/dynamicscan';
+import type OffsecScanModel from 'irene/models/offsec-scan';
 import type { EmberMethod } from 'ember/-private/type-utils';
 
 /**
@@ -14,6 +15,9 @@ export interface EventBusEventMap {
 
   /** Triggered when a websocket update message for a dynamicscan is received */
   'ws:dynamicscan:update': [dynamicscan: DynamicscanModel];
+
+  /** Triggered when a websocket update message for an offsec scan is received */
+  'ws:offsec-scan:update': [scan: OffsecScanModel];
 }
 
 type EventBusSupportedEventNames = keyof EventBusEventMap;

@@ -1,0 +1,54 @@
+.summary-card {
+  background-color: var(--offensive-security-scan-results-card-bg-color);
+  border: var(--offensive-security-scan-results-card-border);
+  border-radius: var(--offensive-security-scan-results-card-border-radius);
+}
+
+.stat {
+  flex: 1 1 0;
+  color: var(--offensive-security-scan-results-value-color);
+
+  &.exploited {
+    color: var(--offensive-security-finding-detail-exploited-color);
+  }
+
+  &.defended {
+    color: var(--offensive-security-finding-detail-defended-color);
+  }
+}
+
+.risk-badge {
+  display: inline-block;
+  padding: 0.286em 0.714em;
+  border-radius: var(--offensive-security-attack-runs-border-radius);
+  font-size: 0.857em;
+  font-weight: 500;
+  text-transform: capitalize;
+}
+
+.risk-critical {
+  background-color: var(
+    --offensive-security-attack-runs-risk-critical-bg-color
+  );
+  color: var(--offensive-security-attack-runs-risk-critical-color);
+}
+
+.risk-high {
+  background-color: var(--offensive-security-attack-runs-risk-high-bg-color);
+  color: var(--offensive-security-attack-runs-risk-high-color);
+}
+
+.risk-medium {
+  background-color: var(--offensive-security-attack-runs-risk-medium-bg-color);
+  color: var(--offensive-security-attack-runs-risk-medium-color);
+}
+
+.risk-low {
+  background-color: var(--offensive-security-attack-runs-risk-low-bg-color);
+  color: var(--offensive-security-attack-runs-risk-low-color);
+}
+
+.risk-unknown {
+  background-color: var(--offensive-security-attack-runs-risk-unknown-bg-color);
+  color: var(--offensive-security-attack-runs-risk-unknown-color);
+}

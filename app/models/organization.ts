@@ -17,6 +17,7 @@ export interface Features {
   privacy: boolean;
   upload_via_url: boolean;
   fake_app_detection: boolean;
+  offensive_security: boolean;
 }
 
 export interface AiFeatures {

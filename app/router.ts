@@ -276,6 +276,14 @@ Router.map(function () {
           });
         });
 
+        this.route('offensive-security', function () {
+          this.route('index', { path: '/' });
+          this.route('scan', { path: '/scans/:scan_id' });
+          this.route('finding', {
+            path: '/scans/:scan_id/findings/:finding_id',
+          });
+        });
+
         this.route('marketplace');
 
         this.route('analytics');

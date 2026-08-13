@@ -1,0 +1,44 @@
+.chip-container {
+  border-radius: var(--offensive-security-status-chip-border-radius);
+  padding: 0.464em 0.714em;
+  background-color: var(--offensive-security-status-chip-bg-color);
+  color: var(--offensive-security-status-chip-color);
+}
+
+.completed-chip {
+  background-color: var(--offensive-security-status-chip-completed-bg-color);
+  color: var(--offensive-security-status-chip-completed-color);
+}
+
+.completed-chip-icon {
+  color: var(--offensive-security-status-chip-completed-color);
+}
+
+.failed-chip {
+  background-color: var(--offensive-security-status-chip-failed-bg-color);
+  color: var(--offensive-security-status-chip-failed-color);
+}
+
+.failed-chip-icon {
+  color: var(--offensive-security-status-chip-failed-color);
+}
+
+.pending-chip {
+  background-color: var(--offensive-security-status-chip-pending-bg-color);
+  color: var(--offensive-security-status-chip-pending-color);
+}
+
+.running-chip {
+  background-color: var(--offensive-security-status-chip-running-bg-color);
+  color: var(--offensive-security-status-chip-running-color);
+}
+
+.running-loader {
+  :global(.ak-loader-circle-indicator) {
+    stroke: var(--offensive-security-status-chip-running-color) !important;
+  }
+
+  :global(.ak-loader-svg-track) {
+    stroke: var(--offensive-security-status-chip-running-track-color) !important;
+  }
+}

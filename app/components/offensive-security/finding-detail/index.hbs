@@ -1,0 +1,227 @@
+<AkStack @direction='column' @spacing='3' class='p-3'>
+  {{#if this.isLoading}}
+    <AkSkeleton @width='100%' @height='96px' />
+    <AkSkeleton @width='100%' @height='240px' />
+  {{else if this.finding}}
+    {{! Header }}
+    <AkStack @width='full' @direction='column' @spacing='2'>
+      <AkStack
+        @width='full'
+        @alignItems='center'
+        @spacing='2'
+        local-class='header-row'
+      >
+        <AkTypography @variant='h5' @fontWeight='medium'>
+          {{this.finding.name}}
+        </AkTypography>
+
+        {{#if this.finding.isExploited}}
+          <span
+            local-class='severity-tag severity-{{this.finding.severity}}'
+            data-test-offensiveSecurity-findingDetail-severity
+          >
+            {{t (concat 'offensiveSecurity.severity.' this.finding.severity)}}
+          </span>
+        {{/if}}
+
+        <span
+          local-class='outcome-tag {{this.finding.outcomeClass}}'
+          data-test-offensiveSecurity-findingDetail-outcome
+        >
+          {{t (concat 'offensiveSecurity.outcome.' this.finding.outcome)}}
+        </span>
+      </AkStack>
+
+      {{#if this.finding.category}}
+        <AkTypography @variant='body2' @color='textSecondary'>
+          {{this.finding.category}}
+        </AkTypography>
+      {{/if}}
+    </AkStack>
+
+    {{! Tabs }}
+    <AkStack @width='full' @spacing='1' local-class='tab-row'>
+      <button
+        type='button'
+        local-class='tab-btn {{if this.isFindingTab "active"}}'
+        {{on 'click' (fn this.setTab 'finding')}}
+        data-test-offensiveSecurity-findingDetail-findingTab
+      >
+        {{t 'offensiveSecurity.finding'}}
+      </button>
+
+      <button
+        type='button'
+        local-class='tab-btn {{unless this.isFindingTab "active"}}'
+        {{on 'click' (fn this.setTab 'exploitation')}}
+        data-test-offensiveSecurity-findingDetail-exploitationTab
+      >
+        {{t 'offensiveSecurity.exploitation'}}
+      </button>
+    </AkStack>
+
+    {{#if this.isFindingTab}}
+      <AkStack
+        @width='full'
+        @direction='column'
+        @spacing='2'
+        local-class='card'
+        class='p-3'
+        data-test-offensiveSecurity-findingDetail-findingPanel
+      >
+        <AkTypography @variant='body2' @fontWeight='medium' local-class='label'>
+          {{t 'offensiveSecurity.detection'}}
+        </AkTypography>
+
+        <AkTypography @variant='body2'>
+          {{if
+            this.finding.detected
+            (t 'offensiveSecurity.protectionDetected')
+            (t 'offensiveSecurity.protectionNotDetected')
+          }}
+        </AkTypography>
+
+        <AkDivider />
+
+        <AkStack @width='full' @justifyContent='space-between'>
+          <AkTypography @variant='body2' @color='textSecondary'>
+            {{t 'offensiveSecurity.signatureId'}}
+          </AkTypography>
+
+          <AkTypography @variant='body2' local-class='mono'>
+            {{this.finding.signatureId}}
+          </AkTypography>
+        </AkStack>
+
+        {{#if this.finding.checkType}}
+          <AkStack @width='full' @justifyContent='space-between'>
+            <AkTypography @variant='body2' @color='textSecondary'>
+              {{t 'offensiveSecurity.checkType'}}
+            </AkTypography>
+
+            <AkTypography @variant='body2'>
+              {{this.finding.checkType}}
+            </AkTypography>
+          </AkStack>
+        {{/if}}
+      </AkStack>
+    {{else}}
+      <AkStack
+        @width='full'
+        @direction='column'
+        @spacing='3'
+        data-test-offensiveSecurity-findingDetail-exploitationPanel
+      >
+        <AkStack
+          @width='full'
+          @direction='column'
+          @spacing='2'
+          local-class='card'
+          class='p-3'
+        >
+          <AkTypography
+            @variant='body2'
+            @fontWeight='medium'
+            local-class='label'
+          >
+            {{this.techniqueLabel}}
+          </AkTypography>
+
+          <AkTypography @variant='body2'>
+            {{if
+              this.finding.rationale
+              this.finding.rationale
+              (t 'offensiveSecurity.noRationale')
+            }}
+          </AkTypography>
+        </AkStack>
+
+        <AkStack
+          @width='full'
+          @direction='column'
+          @spacing='2'
+          local-class='card'
+          class='p-3'
+        >
+          <AkTypography
+            @variant='body2'
+            @fontWeight='medium'
+            local-class='label'
+          >
+            {{t 'offensiveSecurity.resilience'}}
+          </AkTypography>
+
+          <AkStack @spacing='3'>
+            <AkStack @direction='column'>
+              <AkTypography @variant='h5' @fontWeight='medium'>
+                {{if this.finding.score this.finding.score '—'}}
+              </AkTypography>
+
+              <AkTypography @variant='body3' @color='textSecondary'>
+                {{t 'offensiveSecurity.scoreOutOf'}}
+              </AkTypography>
+            </AkStack>
+
+            <AkStack @direction='column'>
+              <AkTypography @variant='body1' @fontWeight='medium'>
+                {{if this.finding.bandLabel this.finding.bandLabel '—'}}
+              </AkTypography>
+
+              <AkTypography @variant='body3' @color='textSecondary'>
+                {{t 'offensiveSecurity.band'}}
+              </AkTypography>
+            </AkStack>
+          </AkStack>
+        </AkStack>
+
+        <AkStack
+          @width='full'
+          @direction='column'
+          @spacing='2'
+          local-class='card'
+          class='p-3'
+        >
+          <AkTypography
+            @variant='body2'
+            @fontWeight='medium'
+            local-class='label'
+          >
+            {{t 'offensiveSecurity.evidence'}}
+          </AkTypography>
+
+          {{#each this.evidence as |item|}}
+            <AkStack
+              @width='full'
+              @direction='column'
+              @spacing='1'
+              local-class='evidence-item'
+              data-test-offensiveSecurity-findingDetail-evidence
+            >
+              <AkStack @alignItems='center' @spacing='1'>
+                <AkTypography @variant='body3' local-class='mono'>
+                  {{item.evidence_id}}
+                </AkTypography>
+
+                {{#if item.tool}}
+                  <AkTypography @variant='body3' @color='textSecondary'>
+                    {{item.tool}}
+                  </AkTypography>
+                {{/if}}
+              </AkStack>
+
+              <AkTypography @variant='body2'>{{item.summary}}</AkTypography>
+            </AkStack>
+          {{else}}
+            <AkTypography
+              @variant='body2'
+              @color='textSecondary'
+              data-test-offensiveSecurity-findingDetail-noEvidence
+            >
+              {{t 'offensiveSecurity.noEvidence'}}
+            </AkTypography>
+          {{/each}}
+        </AkStack>
+      </AkStack>
+    {{/if}}
+  {{/if}}
+</AkStack>

@@ -1,0 +1,46 @@
+.findings-card {
+  background-color: var(--offensive-security-scan-results-card-bg-color);
+  border: var(--offensive-security-scan-results-card-border);
+  border-radius: var(--offensive-security-scan-results-card-border-radius);
+}
+
+.finding-row {
+  // Bleed into the card's `p-3` padding so the hover and the row divider run
+  // edge to edge instead of stopping short of the card border.
+  margin: 0 -1.5em;
+  padding: 0.857em 1.5em;
+  cursor: pointer;
+  border-bottom: 1px solid
+    var(--offensive-security-scan-results-divider-color);
+
+  &:last-child {
+    border-bottom: none;
+  }
+
+  &:hover {
+    background-color: var(--offensive-security-attack-runs-row-hover-bg-color);
+  }
+}
+
+.outcome-tag {
+  flex-shrink: 0;
+  padding: 0.286em 0.714em;
+  border-radius: var(--offensive-security-attack-runs-border-radius);
+  font-size: 0.857em;
+  font-weight: 500;
+}
+
+.exploited {
+  background-color: var(--offensive-security-finding-detail-exploited-bg-color);
+  color: var(--offensive-security-finding-detail-exploited-color);
+}
+
+.defended {
+  background-color: var(--offensive-security-finding-detail-defended-bg-color);
+  color: var(--offensive-security-finding-detail-defended-color);
+}
+
+.neutral {
+  background-color: var(--offensive-security-finding-detail-neutral-bg-color);
+  color: var(--offensive-security-finding-detail-neutral-color);
+}

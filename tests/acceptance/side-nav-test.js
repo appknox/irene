@@ -198,7 +198,22 @@ module('Acceptance | side nav test', function (hooks) {
 
         assert.dom('[data-test-side-menu-switcher-modal]').exists();
 
+        // Offensive Security is always offered as a switch target (as an
+        // upsell entry when the feature is off), so it adds one more item and
+        // sorts last in the popover.
         if (products.security && products.storeknox) {
+          assert
+            .dom('[data-test-switcher-popover-item-link]')
+            .exists({ count: 3 });
+
+          const items = findAll('[data-test-switcher-popover-item-link]');
+
+          assert.dom(items[0]).hasText(t('appMonitoring'));
+
+          assert.dom(items[1]).hasText(t('securityDashboard'));
+
+          assert.dom(items[2]).hasText(t('offensiveSecurity.title'));
+        } else if (products.storeknox && !products.security) {
           assert
             .dom('[data-test-switcher-popover-item-link]')
             .exists({ count: 2 });
@@ -207,17 +222,17 @@ module('Acceptance | side nav test', function (hooks) {
 
           assert.dom(items[0]).hasText(t('appMonitoring'));
 
-          assert.dom(items[1]).hasText(t('securityDashboard'));
-        } else if (products.storeknox && !products.security) {
-          assert
-            .dom('[data-test-switcher-popover-item-link]')
-            .exists({ count: 1 })
-            .hasText(t('appMonitoring'));
+          assert.dom(items[1]).hasText(t('offensiveSecurity.title'));
         } else if (!products.storeknox && products.security) {
           assert
             .dom('[data-test-switcher-popover-item-link]')
-            .exists({ count: 1 })
-            .hasText(t('securityDashboard'));
+            .exists({ count: 2 });
+
+          const items = findAll('[data-test-switcher-popover-item-link]');
+
+          assert.dom(items[0]).hasText(t('securityDashboard'));
+
+          assert.dom(items[1]).hasText(t('offensiveSecurity.title'));
         }
       }
     }

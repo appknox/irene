@@ -15,7 +15,8 @@ interface SwitcherMenuItem {
   svg:
     | 'ak-svg/sm-indicator'
     | 'ak-svg/vapt-indicator'
-    | 'ak-svg/security-indicator';
+    | 'ak-svg/security-indicator'
+    | 'ak-svg/offensive-security-indicator';
   label: string;
   route: string;
   key: string;
@@ -76,6 +77,10 @@ export default class SideNavProductSwitcherComponent extends Component<SideNavPr
     );
   }
 
+  get showOffensiveSecurity() {
+    return !this.organization.hideUpsellUIStatus.offensiveSecurity;
+  }
+
   get switcherMenuItems() {
     const allMenuItems = [
       {
@@ -108,6 +113,13 @@ export default class SideNavProductSwitcherComponent extends Component<SideNavPr
         label: this.intl.t('reportModule.title'),
         route: 'authenticated.reports',
         key: 'report',
+      },
+      this.showOffensiveSecurity && {
+        id: 'offensive-security-svg',
+        svg: 'ak-svg/offensive-security-indicator',
+        label: this.intl.t('offensiveSecurity.title'),
+        route: 'authenticated.dashboard.offensive-security',
+        key: 'offensive-security',
       },
     ];
 

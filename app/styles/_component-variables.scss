@@ -3956,6 +3956,129 @@ body {
   //store-release-readiness/status
   --store-release-readiness-status-bg-color: var(--common-white);
 
+  // variables for offensive-security/status-chip
+  --offensive-security-status-chip-border-radius: var(--border-radius-8);
+  --offensive-security-status-chip-bg-color: var(--background-light);
+  --offensive-security-status-chip-color: var(--text-secondary);
+  --offensive-security-status-chip-completed-bg-color: var(--success-light);
+  --offensive-security-status-chip-completed-color: var(--success-main);
+  --offensive-security-status-chip-failed-bg-color: var(--error-bg);
+  --offensive-security-status-chip-failed-color: var(--error-main);
+  --offensive-security-status-chip-pending-bg-color: var(--background-light);
+  --offensive-security-status-chip-pending-color: var(--text-secondary);
+  --offensive-security-status-chip-running-bg-color: var(--info-light);
+  --offensive-security-status-chip-running-color: var(--info-main);
+  --offensive-security-status-chip-running-track-color: var(--border-color-1);
+
+  // variables for offensive-security/attack-runs
+  --offensive-security-attack-runs-bg-color: var(--common-white);
+  --offensive-security-attack-runs-border: 1px solid var(--border-color-1);
+  --offensive-security-attack-runs-border-radius: var(--border-radius-8);
+  --offensive-security-attack-runs-row-hover-bg-color: var(--background-light);
+  --offensive-security-attack-runs-empty-color: var(--text-secondary);
+  --offensive-security-attack-runs-overline-color: var(--text-secondary);
+
+  // Risk tokens outlived the Risk column: scan-results/summary-card and
+  // finding-detail still colour their badges from them.
+  --offensive-security-attack-runs-risk-critical-color: var(--error-main);
+  --offensive-security-attack-runs-risk-critical-bg-color: var(--error-bg);
+  --offensive-security-attack-runs-risk-high-color: var(--severity-high);
+  --offensive-security-attack-runs-risk-high-bg-color: var(--error-bg);
+  --offensive-security-attack-runs-risk-medium-color: var(--warn-main);
+  --offensive-security-attack-runs-risk-medium-bg-color: var(--warn-light);
+  --offensive-security-attack-runs-risk-low-color: var(--success-main);
+  --offensive-security-attack-runs-risk-low-bg-color: var(--success-light);
+  --offensive-security-attack-runs-risk-unknown-color: var(--text-secondary);
+  --offensive-security-attack-runs-risk-unknown-bg-color: var(
+    --background-light
+  );
+  --offensive-security-attack-runs-overline-font-family: var(
+    --font-family-mono
+  );
+
+  // variables for offensive-security/attack-runs/table/resilience
+  --offensive-security-attack-runs-resilience-border-radius: var(
+    --border-radius-8
+  );
+  --offensive-security-attack-runs-resilience-font-family: var(
+    --font-family-mono
+  );
+  --offensive-security-attack-runs-resilience-weak-color: var(--error-main);
+  --offensive-security-attack-runs-resilience-weak-bg-color: var(--error-bg);
+  --offensive-security-attack-runs-resilience-medium-color: var(--warn-dark);
+  --offensive-security-attack-runs-resilience-medium-bg-color: var(
+    --warn-light
+  );
+  --offensive-security-attack-runs-resilience-strong-color: var(--success-main);
+  --offensive-security-attack-runs-resilience-strong-bg-color: var(
+    --success-light
+  );
+  --offensive-security-attack-runs-resilience-very-strong-color: var(
+    --success-main
+  );
+  --offensive-security-attack-runs-resilience-very-strong-bg-color: var(
+    --success-light
+  );
+  --offensive-security-attack-runs-resilience-unknown-color: var(
+    --text-secondary
+  );
+  --offensive-security-attack-runs-resilience-unknown-bg-color: var(
+    --background-light
+  );
+
+  // variables for offensive-security/attack-runs column filter popovers
+  --offensive-security-attack-runs-filter-bg-color: var(--common-white);
+  --offensive-security-attack-runs-filter-box-shadow: var(--box-shadow-1);
+  --offensive-security-attack-runs-filter-border-radius: var(
+    --border-radius-4
+  );
+  --offensive-security-attack-runs-filter-header-bg-color: var(
+    --background-light
+  );
+  --offensive-security-attack-runs-filter-option-hover-bg-color: var(
+    --background-light
+  );
+  --offensive-security-attack-runs-filter-clear-bg-color: var(
+    --background-light
+  );
+
+  // variables for offensive-security/scan-results
+  --offensive-security-scan-results-card-bg-color: var(--common-white);
+  --offensive-security-scan-results-card-border: 1px solid
+    var(--border-color-1);
+  --offensive-security-scan-results-card-border-radius: var(--border-radius-8);
+  --offensive-security-scan-results-label-color: var(--text-secondary);
+  --offensive-security-scan-results-value-color: var(--text-primary);
+  --offensive-security-scan-results-divider-color: var(--border-color-1);
+
+  // variables for offensive-security/scan-results/agent-log
+  // The log pane is a terminal transcript, so it stays dark in both themes.
+  --offensive-security-agent-log-bg-color: var(--background-dark);
+  --offensive-security-agent-log-color: var(--common-white);
+  --offensive-security-agent-log-border-radius: var(--border-radius-4);
+  --offensive-security-agent-log-dim-color: var(--text-disabled);
+  --offensive-security-agent-log-error-color: var(--error-main);
+  --offensive-security-agent-log-success-color: var(--success-main);
+  --offensive-security-agent-log-accent-color: var(--info-main);
+
+  // variables for offensive-security/finding-detail
+  --offensive-security-finding-detail-card-bg-color: var(--common-white);
+  --offensive-security-finding-detail-card-border: 1px solid
+    var(--border-color-1);
+  --offensive-security-finding-detail-card-border-radius: var(
+    --border-radius-8
+  );
+  --offensive-security-finding-detail-label-color: var(--text-secondary);
+  --offensive-security-finding-detail-mono-bg-color: var(--background-light);
+  --offensive-security-finding-detail-exploited-color: var(--error-main);
+  --offensive-security-finding-detail-exploited-bg-color: var(--error-bg);
+  --offensive-security-finding-detail-defended-color: var(--success-main);
+  --offensive-security-finding-detail-defended-bg-color: var(--success-light);
+  --offensive-security-finding-detail-neutral-color: var(--text-secondary);
+  --offensive-security-finding-detail-neutral-bg-color: var(
+    --background-light
+  );
+
   &.theme-light {
     //variables for appknox-wrapper
     --appknox-wrapper-text-color: var(--text-primary);

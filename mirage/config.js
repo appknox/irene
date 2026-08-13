@@ -7,6 +7,8 @@ import {
 } from 'ember-cli-mirage';
 import Inflector from 'ember-inflector';
 
+import { OFFSEC_SAMPLE_LOG } from 'irene/utils/offsec-sample-log';
+
 const inflector = Inflector.inflector;
 inflector.uncountable('sk-app-metadata');
 inflector.uncountable('api-scan-options');
@@ -81,6 +83,47 @@ function routes() {
       },
       url: '',
     };
+  });
+
+  // ─── Offensive security: scan list ─────────────────────────────────────────
+  // Paginated like the real endpoint so the scan-targets table can be driven in
+  // `ember s --mirage` without stubbing the route per test.
+  this.get('/api/v2/offsec/scans', (schema, request) => {
+    const scans = schema.db.offsecScans;
+    const limit = Number(request.queryParams.limit ?? 25);
+    const offset = Number(request.queryParams.offset ?? 0);
+
+    return {
+      count: scans.length,
+      next: null,
+      previous: null,
+      results: scans.slice(offset, offset + limit),
+    };
+  });
+
+  // ─── Offensive security: scan detail ───────────────────────────────────────
+  // The scan page fetches the record itself, so without this the detail request
+  // falls through to `passthrough()` and the page cannot render under mirage.
+  this.get('/api/v2/offsec/scans/:id', (schema, request) => {
+    return schema.db.offsecScans.find(Number(request.params.id));
+  });
+
+  // ─── Offensive security: agent log ─────────────────────────────────────────
+  // The persisted log is a two-hop fetch: the client asks for a presigned URL,
+  // then GETs the blob. Mirage points the URL back at itself so the sample
+  // transcript renders in the run view.
+  this.get('/api/v2/offsec/scans/:id/log_url', (schema, request) => {
+    return {
+      url: `${config.host}/api/v2/offsec/scans/${request.params.id}/log`,
+    };
+  });
+
+  this.get('/api/v2/offsec/scans/:id/log', () => {
+    return new Response(
+      200,
+      { 'Content-Type': 'text/plain' },
+      OFFSEC_SAMPLE_LOG
+    );
   });
 
   this.get('/api/hudson-api/reports/:fileId/download_url', () => {

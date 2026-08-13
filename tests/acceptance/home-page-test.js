@@ -81,7 +81,7 @@ module('Acceptance | home page', function (hooks) {
       .hasText(t('logout'));
 
     assert.dom('[data-test-home-page-product-card]').exists({
-      count: 3,
+      count: 4,
     });
   });
 
@@ -89,10 +89,10 @@ module('Acceptance | home page', function (hooks) {
     await visit('/dashboard/home');
 
     assert.dom('[data-test-home-page-product-card]').exists({
-      count: 3,
+      count: 4,
     });
 
-    assert.dom('[data-test-home-page-product-card-title]').exists({ count: 3 });
+    assert.dom('[data-test-home-page-product-card-title]').exists({ count: 4 });
 
     const titles = this.element.querySelectorAll(
       '[data-test-home-page-product-card-title]'
@@ -101,6 +101,10 @@ module('Acceptance | home page', function (hooks) {
     assert.strictEqual(titles[0].textContent.trim(), t('vapt'));
     assert.strictEqual(titles[1].textContent.trim(), t('appMonitoring'));
     assert.strictEqual(titles[2].textContent.trim(), t('securityDashboard'));
+    assert.strictEqual(
+      titles[3].textContent.trim(),
+      t('offensiveSecurity.title')
+    );
 
     const links = this.element.querySelectorAll(
       '[data-test-home-page-product-card-link]'
@@ -108,7 +112,7 @@ module('Acceptance | home page', function (hooks) {
 
     assert
       .dom('[data-test-home-page-product-card-indicator-icon]')
-      .exists({ count: 3 });
+      .exists({ count: 4 });
 
     await click(links[0]);
 
@@ -146,7 +150,7 @@ module('Acceptance | home page', function (hooks) {
     await visit('/dashboard/home');
 
     assert.dom('[data-test-home-page-product-card]').exists({
-      count: 3,
+      count: 4,
     });
 
     const links = this.element.querySelectorAll(
@@ -155,7 +159,7 @@ module('Acceptance | home page', function (hooks) {
 
     assert
       .dom('[data-test-home-page-product-card-indicator-icon]')
-      .exists({ count: 3 });
+      .exists({ count: 4 });
 
     await click(links[1]);
 
@@ -212,13 +216,15 @@ module('Acceptance | home page', function (hooks) {
 
       await visit('/dashboard/home');
 
+      // Offensive Security is always surfaced as a card (as an upsell entry
+      // when the feature is off), so each case carries one extra card.
       if (products.security && products.storeknox) {
         assert.dom('[data-test-home-page-product-card]').exists({
-          count: 3,
+          count: 4,
         });
       } else if (products.security && !products.storeknox) {
         assert.dom('[data-test-home-page-product-card]').exists({
-          count: 2,
+          count: 3,
         });
 
         const productTitles = findAll(
@@ -228,9 +234,11 @@ module('Acceptance | home page', function (hooks) {
         assert.dom(productTitles[0]).hasText(t('vapt'));
 
         assert.dom(productTitles[1]).hasText(t('securityDashboard'));
+
+        assert.dom(productTitles[2]).hasText(t('offensiveSecurity.title'));
       } else if (!products.security && products.storeknox) {
         assert.dom('[data-test-home-page-product-card]').exists({
-          count: 2,
+          count: 3,
         });
 
         const productTitles = findAll(
@@ -240,6 +248,8 @@ module('Acceptance | home page', function (hooks) {
         assert.dom(productTitles[0]).hasText(t('vapt'));
 
         assert.dom(productTitles[1]).hasText(t('appMonitoring'));
+
+        assert.dom(productTitles[2]).hasText(t('offensiveSecurity.title'));
       }
     }
   );
