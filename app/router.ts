@@ -202,6 +202,7 @@ Router.map(function () {
             this.route('settings', function () {
               this.route('analysis');
               this.route('dast-automation');
+              this.route('api-scan-automation');
               this.route('integrations');
 
               this.route('dast-automation-scenario', {
