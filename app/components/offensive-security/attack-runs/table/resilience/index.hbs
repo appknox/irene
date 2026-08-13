@@ -1,0 +1,17 @@
+{{#if (or @scan.effectiveRiskRating @scan.riskRating @scan.isTerminal)}}
+  <span
+    local-class='risk-badge risk-{{@scan.riskClass}}'
+    data-test-offensiveSecurity-attackRuns-riskBadge
+    data-test-offensiveSecurity-attackRuns-resilienceBadge
+  >
+    {{t (concat 'offensiveSecurity.riskLevel.' @scan.riskClass)}}
+  </span>
+{{else}}
+  <AkTypography
+    @variant='body2'
+    @color='textSecondary'
+    data-test-offensiveSecurity-attackRuns-resilienceEmpty
+  >
+    &mdash;
+  </AkTypography>
+{{/if}}

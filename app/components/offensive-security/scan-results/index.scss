@@ -1,0 +1,59 @@
+.card {
+  background-color: var(--offensive-security-scan-results-card-bg-color);
+  border: var(--offensive-security-scan-results-card-border);
+  border-radius: var(--offensive-security-scan-results-card-border-radius);
+}
+
+.file-summary-root {
+  width: 100%;
+  border: 1px solid var(--file-details-summary-border-color);
+  background-color: var(--file-details-summary-background-color);
+  border-radius: var(--offensive-security-scan-results-card-border-radius);
+  box-sizing: border-box;
+
+  .file-summary-header {
+    box-shadow: var(--file-details-summary-header-box-shadow);
+  }
+
+  .file-summary-padding {
+    padding: 0.75em 0;
+
+    .show-more-icon {
+      font-size: 1.5rem !important;
+    }
+  }
+}
+
+.file-summary-more-menu-btn {
+  padding: 0.5em;
+  min-width: 34px;
+}
+
+.failure-banner {
+  border-radius: var(--offensive-security-scan-results-card-border-radius);
+  background-color: var(--offensive-security-finding-detail-exploited-bg-color);
+  color: var(--offensive-security-finding-detail-exploited-color);
+}
+
+.section-label {
+  color: var(--offensive-security-scan-results-label-color);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  font-size: 0.786em;
+}
+
+.run-split-side {
+  flex: 0 0 320px;
+  min-width: 0;
+}
+
+// The log is the wide half; below tablet the two halves stack.
+@media (max-width: 1024px) {
+  .run-split {
+    flex-direction: column;
+  }
+
+  .run-split-side {
+    flex: 1 1 auto;
+  }
+}

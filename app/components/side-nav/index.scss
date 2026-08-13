@@ -25,6 +25,12 @@
     .side-menu-list {
       margin: auto;
     }
+
+    &.offsec-sidenav {
+      .side-menu-list {
+        margin: 0;
+      }
+    }
   }
 
   .app-logo {
@@ -163,6 +169,7 @@
   }
 
   .no-hover {
+
     &:hover,
     &:focus {
       background-color: transparent !important;

@@ -42,7 +42,7 @@ module('Acceptance | home page', function (hooks) {
     });
 
     organization.update({
-      features: { storeknox: true },
+      features: { storeknox: true, offensive_security: true },
     });
 
     // Services
@@ -81,7 +81,7 @@ module('Acceptance | home page', function (hooks) {
       .hasText(t('logout'));
 
     assert.dom('[data-test-home-page-product-card]').exists({
-      count: 3,
+      count: 4,
     });
   });
 
@@ -89,10 +89,10 @@ module('Acceptance | home page', function (hooks) {
     await visit('/dashboard/home');
 
     assert.dom('[data-test-home-page-product-card]').exists({
-      count: 3,
+      count: 4,
     });
 
-    assert.dom('[data-test-home-page-product-card-title]').exists({ count: 3 });
+    assert.dom('[data-test-home-page-product-card-title]').exists({ count: 4 });
 
     const titles = this.element.querySelectorAll(
       '[data-test-home-page-product-card-title]'
@@ -100,7 +100,11 @@ module('Acceptance | home page', function (hooks) {
 
     assert.strictEqual(titles[0].textContent.trim(), t('vapt'));
     assert.strictEqual(titles[1].textContent.trim(), t('appMonitoring'));
-    assert.strictEqual(titles[2].textContent.trim(), t('securityDashboard'));
+    assert.strictEqual(
+      titles[2].textContent.trim(),
+      t('offensiveSecurity.title')
+    );
+    assert.strictEqual(titles[3].textContent.trim(), t('securityDashboard'));
 
     const links = this.element.querySelectorAll(
       '[data-test-home-page-product-card-link]'
@@ -108,7 +112,7 @@ module('Acceptance | home page', function (hooks) {
 
     assert
       .dom('[data-test-home-page-product-card-indicator-icon]')
-      .exists({ count: 3 });
+      .exists({ count: 4 });
 
     await click(links[0]);
 
@@ -146,7 +150,7 @@ module('Acceptance | home page', function (hooks) {
     await visit('/dashboard/home');
 
     assert.dom('[data-test-home-page-product-card]').exists({
-      count: 3,
+      count: 4,
     });
 
     const links = this.element.querySelectorAll(
@@ -155,7 +159,7 @@ module('Acceptance | home page', function (hooks) {
 
     assert
       .dom('[data-test-home-page-product-card-indicator-icon]')
-      .exists({ count: 3 });
+      .exists({ count: 4 });
 
     await click(links[1]);
 
@@ -170,6 +174,7 @@ module('Acceptance | home page', function (hooks) {
     this.organization.update({
       features: {
         storeknox: false,
+        offensive_security: false,
       },
     });
 
@@ -195,9 +200,10 @@ module('Acceptance | home page', function (hooks) {
   test.each(
     'it should show right product cards',
     [
-      { storeknox: true, security: false },
-      { storeknox: true, security: true },
-      { storeknox: false, security: true },
+      { storeknox: true, security: false, offensive_security: true },
+      { storeknox: true, security: true, offensive_security: true },
+      { storeknox: true, security: true, offensive_security: false },
+      { storeknox: false, security: true, offensive_security: true },
     ],
     async function (assert, products) {
       this.currentOrganizationMe.update({
@@ -207,18 +213,43 @@ module('Acceptance | home page', function (hooks) {
       this.organization.update({
         features: {
           storeknox: products.storeknox,
+          offensive_security: products.offensive_security,
         },
       });
 
       await visit('/dashboard/home');
 
-      if (products.security && products.storeknox) {
+      if (
+        products.security &&
+        products.storeknox &&
+        products.offensive_security
+      ) {
+        assert.dom('[data-test-home-page-product-card]').exists({
+          count: 4,
+        });
+      } else if (
+        products.security &&
+        products.storeknox &&
+        !products.offensive_security
+      ) {
         assert.dom('[data-test-home-page-product-card]').exists({
           count: 3,
         });
-      } else if (products.security && !products.storeknox) {
+
+        const productTitles = findAll(
+          '[data-test-home-page-product-card-title]'
+        );
+
+        assert.dom(productTitles[0]).hasText(t('vapt'));
+        assert.dom(productTitles[1]).hasText(t('appMonitoring'));
+        assert.dom(productTitles[2]).hasText(t('securityDashboard'));
+      } else if (
+        products.security &&
+        !products.storeknox &&
+        products.offensive_security
+      ) {
         assert.dom('[data-test-home-page-product-card]').exists({
-          count: 2,
+          count: 3,
         });
 
         const productTitles = findAll(
@@ -227,10 +258,16 @@ module('Acceptance | home page', function (hooks) {
 
         assert.dom(productTitles[0]).hasText(t('vapt'));
 
-        assert.dom(productTitles[1]).hasText(t('securityDashboard'));
-      } else if (!products.security && products.storeknox) {
+        assert.dom(productTitles[1]).hasText(t('offensiveSecurity.title'));
+
+        assert.dom(productTitles[2]).hasText(t('securityDashboard'));
+      } else if (
+        !products.security &&
+        products.storeknox &&
+        products.offensive_security
+      ) {
         assert.dom('[data-test-home-page-product-card]').exists({
-          count: 2,
+          count: 3,
         });
 
         const productTitles = findAll(
@@ -240,6 +277,8 @@ module('Acceptance | home page', function (hooks) {
         assert.dom(productTitles[0]).hasText(t('vapt'));
 
         assert.dom(productTitles[1]).hasText(t('appMonitoring'));
+
+        assert.dom(productTitles[2]).hasText(t('offensiveSecurity.title'));
       }
     }
   );

@@ -15,7 +15,8 @@ interface SwitcherMenuItem {
   svg:
     | 'ak-svg/sm-indicator'
     | 'ak-svg/vapt-indicator'
-    | 'ak-svg/security-indicator';
+    | 'ak-svg/security-indicator'
+    | 'ak-svg/offensive-security-indicator';
   label: string;
   route: string;
   key: string;
@@ -76,7 +77,14 @@ export default class SideNavProductSwitcherComponent extends Component<SideNavPr
     );
   }
 
-  get switcherMenuItems() {
+  get showOffensiveSecurity() {
+    return (
+      !this.organization.hideUpsellUIStatus.offensiveSecurity &&
+      this.organization.selected?.features?.offensive_security
+    );
+  }
+
+  get allMenuItemsList() {
     const allMenuItems = [
       {
         id: 'vapt-svg',
@@ -109,11 +117,22 @@ export default class SideNavProductSwitcherComponent extends Component<SideNavPr
         route: 'authenticated.reports',
         key: 'report',
       },
+      this.showOffensiveSecurity && {
+        id: 'offensive-security-svg',
+        svg: 'ak-svg/offensive-security-indicator',
+        label: this.intl.t('offensiveSecurity.title'),
+        route: 'authenticated.offensive-security',
+        key: 'offensive-security',
+      },
     ];
 
-    return allMenuItems.filter(
-      (item) => item && item.key !== this.args.productSwitcherFilterKey
-    ) as SwitcherMenuItem[];
+    return allMenuItems.filter(Boolean) as SwitcherMenuItem[];
+  }
+
+  get switcherMenuItems() {
+    return this.allMenuItemsList.filter(
+      (item) => item.key !== this.args.productSwitcherFilterKey
+    );
   }
 
   @action onClickSwitcher(event: MouseEvent) {

@@ -1,0 +1,114 @@
+<div
+  local-class='findings-card'
+  data-test-offensiveSecurity-findingsList
+>
+  <div local-class='findings-header'>
+    <AkTypography
+      @variant='body1'
+      @fontWeight='bold'
+      local-class='findings-title'
+    >
+      {{t 'offensiveSecurity.findings'}}
+    </AkTypography>
+
+    <AkTypography
+      @variant='body2'
+      @color='textSecondary'
+      local-class='findings-subtitle'
+    >
+      {{t 'offensiveSecurity.findingsSubtitle'}}
+    </AkTypography>
+  </div>
+
+  {{#if this.hasFindings}}
+    <div local-class='groups-list'>
+      {{#each this.groupedFindings as |group|}}
+        <div
+          local-class='group-card'
+          data-test-offensiveSecurity-findingsList-group={{group.key}}
+        >
+          {{! template-lint-disable require-presentational-children }}
+          <div
+            local-class='group-header {{if (this.isGroupExpanded group.key) "expanded"}}'
+            role='button'
+            tabindex='0'
+            aria-expanded={{if (this.isGroupExpanded group.key) 'true' 'false'}}
+            {{on 'click' (fn this.toggleGroup group.key)}}
+            {{on 'keydown' (fn this.handleGroupKeydown group.key)}}
+            data-test-offensiveSecurity-findingsList-groupHeader={{group.key}}
+          >
+            <AkStack
+              @alignItems='center'
+              @justifyContent='space-between'
+              @width='full'
+            >
+              <AkStack @alignItems='center' @spacing='0.5'>
+                <AkTypography
+                  @variant='subtitle2'
+                  @fontWeight='bold'
+                  local-class='group-title'
+                  data-test-offensiveSecurity-findingsList-groupTitle
+                >
+                  {{group.title}}
+                </AkTypography>
+                <span local-class='group-count'>({{group.findings.length}})</span>
+              </AkStack>
+
+              <AkIcon
+                @iconName='expand-more'
+                @color='textSecondary'
+                local-class='group-expand-icon {{if (this.isGroupExpanded group.key) "expanded"}}'
+                data-test-offensiveSecurity-findingsList-expandIcon
+              />
+            </AkStack>
+          </div>
+
+          <div
+            local-class='group-content {{if (this.isGroupExpanded group.key) "expanded" "collapsed"}}'
+            data-test-offensiveSecurity-findingsList-groupContent={{group.key}}
+          >
+            {{#each group.findings as |finding|}}
+              <AkStack
+                @alignItems='center'
+                @justifyContent='space-between'
+                @spacing='2'
+                local-class='finding-row'
+                tabindex='0'
+                {{on 'click' (fn this.handleClick finding.id)}}
+                {{on 'keydown' (fn this.handleKeydown finding.id)}}
+                data-test-offensiveSecurity-findingsList-row
+              >
+                <AkStack @direction='column' @spacing='0.25'>
+                  <AkTypography @variant='body2' @fontWeight='medium' local-class='finding-name'>
+                    {{finding.name}}
+                  </AkTypography>
+
+                  {{#if finding.category}}
+                    <AkTypography @variant='body3' @color='textSecondary' local-class='finding-category'>
+                      {{finding.category}}
+                    </AkTypography>
+                  {{/if}}
+                </AkStack>
+
+                <span
+                  local-class='outcome-tag {{this.outcomeClass (this.statusKey finding)}}'
+                  data-test-offensiveSecurity-findingsList-outcome
+                >
+                  {{t (concat 'offensiveSecurity.outcome.' (this.statusKey finding))}}
+                </span>
+              </AkStack>
+            {{/each}}
+          </div>
+        </div>
+      {{/each}}
+    </div>
+  {{else}}
+    <AkTypography
+      @variant='body2'
+      @color='textSecondary'
+      data-test-offensiveSecurity-findingsList-empty
+    >
+      {{t 'offensiveSecurity.noFindings'}}
+    </AkTypography>
+  {{/if}}
+</div>

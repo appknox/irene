@@ -1,6 +1,9 @@
 <aside
   data-test-side-nav
-  local-class='side-menu-root {{if @isCollapsed "collapsed" "expanded"}}'
+  local-class='side-menu-root {{if @isCollapsed "collapsed" "expanded"}} {{if
+    @isOffsec
+    "offsec-sidenav"
+  }}'
   ...attributes
 >
   {{yield (hash classes=this.classes)}}
@@ -25,7 +28,7 @@
 
   <div local-class='scroll-container'>
     <AkList
-      local-class='side-menu-list {{if this.showStoreknox "" "no-switcher"}}'
+      local-class='side-menu-list {{if this.showProductSwitcher "" "no-switcher"}}'
       as |akl|
     >
       {{#each @menuItems as |it|}}

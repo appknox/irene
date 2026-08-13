@@ -1,0 +1,179 @@
+.header-card {
+  width: 100%;
+  padding: 1rem 1.25rem;
+  background-color: var(--offensive-security-scan-results-card-bg-color);
+  border: var(--offensive-security-scan-results-card-border);
+  border-radius: 8px;
+}
+
+.header-shield-box {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 8px;
+  background-color: var(--offensive-security-attack-runs-header-shield-bg);
+
+  .shield-icon {
+    color: var(--offensive-security-attack-runs-header-shield-color);
+  }
+}
+
+.metric-cards-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1rem;
+  width: 100%;
+
+  @media (max-width: 1024px) {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  @media (max-width: 600px) {
+    grid-template-columns: 1fr;
+  }
+}
+
+.metric-card {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1.25rem;
+  background-color: var(--offensive-security-scan-results-card-bg-color);
+  border: 1px solid var(--offensive-security-scan-results-card-border);
+  border-radius: 8px;
+}
+
+.stat-icon-box {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  border-radius: 8px;
+
+  &.stat-icon-pink {
+    background-color: var(
+      --offensive-security-attack-runs-stat-icon-neutral-bg
+    );
+    color: var(--offensive-security-attack-runs-stat-icon-neutral-color);
+  }
+
+  &.stat-icon-blue {
+    background-color: var(--offensive-security-attack-runs-stat-icon-blue-bg);
+    color: var(--offensive-security-attack-runs-stat-icon-blue-color);
+
+    :global(.ak-loader-circle-indicator) {
+      stroke: var(
+        --offensive-security-attack-runs-stat-icon-blue-color
+      ) !important;
+    }
+
+    &.paused {
+      svg,
+      :global(.ak-loader-svg),
+      :global(.indeterminate) {
+        animation: none !important;
+      }
+    }
+  }
+
+  &.stat-icon-green {
+    background-color: var(--offensive-security-attack-runs-stat-icon-green-bg);
+    color: var(--offensive-security-attack-runs-stat-icon-green-color);
+  }
+
+  &.stat-icon-red {
+    background-color: var(--offensive-security-attack-runs-stat-icon-red-bg);
+    color: var(--offensive-security-attack-runs-stat-icon-red-color);
+  }
+}
+
+.stat-details {
+  display: flex;
+  flex-direction: column;
+  gap: 0.1rem;
+}
+
+.stat-label {
+  font-size: 0.8125rem;
+  color: var(--text-secondary);
+  font-weight: 500;
+}
+
+.stat-number {
+  font-size: 1.5rem;
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+.stat-subtext {
+  font-size: 0.75rem;
+  color: var(--text-secondary);
+}
+
+.controls-bar {
+  gap: 1rem;
+  margin-top: 0.5rem;
+}
+
+.search-input {
+  width: 20rem;
+  flex-shrink: 0;
+}
+
+.empty-state {
+  color: var(--offensive-security-attack-runs-empty-color);
+  text-align: center;
+}
+
+
+
+.attack-runs-table-container {
+  width: 100%;
+  background-color: var(--offensive-security-scan-results-card-bg-color);
+  border: 1px solid var(--file-details-summary-border-color);
+  border-radius: var(--offensive-security-scan-results-card-border-radius);
+  overflow: hidden;
+
+  :global(.ak-table-root) table {
+    width: 100%;
+
+    thead tr th {
+      background-color: var(--ak-table-header-background-neutral) !important;
+      border-bottom: 1px solid var(--file-details-summary-border-color);
+      color: var(--text-primary);
+      font-weight: 600;
+    }
+
+    tbody tr {
+      background-color: var(--offensive-security-scan-results-card-bg-color);
+      transition: background-color 0.15s ease;
+
+      td {
+        border-bottom: 1px solid var(--file-details-summary-border-color);
+        color: var(--text-primary);
+        background-color: var(--offensive-security-scan-results-card-bg-color);
+      }
+
+      &:last-child td {
+        border-bottom: none;
+      }
+
+      &:hover td {
+        background-color: var(--ak-table-hover-background) !important;
+      }
+    }
+  }
+}
+
+.sort-icon {
+  transition: transform 0.2s ease;
+  min-width: 1.143em !important;
+  margin-left: 0.25rem;
+}
+
+.sort-icon-desc {
+  transform: rotate(180deg);
+}
