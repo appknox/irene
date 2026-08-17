@@ -1,0 +1,202 @@
+<AkDrawer
+  data-test-healthScoreScoringDetails-drawer
+  @open={{@open}}
+  @onClose={{@onClose}}
+  @anchor='right'
+  as |dr|
+>
+  <AkStack
+    data-test-healthScoreScoringDetails-drawerContainer
+    local-class='scoring-details-drawer'
+    @direction='column'
+    @spacing='0'
+  >
+    <AkStack
+      local-class='scoring-details-header'
+      @direction='column'
+      @spacing='2'
+    >
+      <AkStack
+        @justifyContent='space-between'
+        @width='full'
+        @alignItems='flex-start'
+      >
+        <AkStack @direction='column' @spacing='0.5'>
+          <AkTypography
+            data-test-healthScoreScoringDetails-title
+            @variant='h5'
+            @fontWeight='bold'
+          >
+            {{t 'healthScore.scoringAudit'}}
+          </AkTypography>
+
+          {{#if @fileId}}
+            <AkTypography
+              data-test-healthScoreScoringDetails-subtitle
+              @variant='body2'
+              @color='textSecondary'
+            >
+              {{t 'healthScore.scoringAuditSubtitle' fileId=@fileId}}
+            </AkTypography>
+          {{/if}}
+        </AkStack>
+
+        <AkIconButton
+          data-test-healthScoreScoringDetails-drawerCloseBtn
+          {{on 'click' dr.closeHandler}}
+        >
+          <AkIcon @iconName='close' />
+        </AkIconButton>
+      </AkStack>
+
+      <div local-class='scoring-details-score-box'>
+        <AkTypography
+          local-class='scoring-details-score-label'
+          @fontWeight='bold'
+        >
+          {{t 'healthScore.title'}}
+        </AkTypography>
+
+        <AkStack @justifyContent='space-between' @alignItems='center'>
+          <AkStack local-class='scoring-details-score-value' @direction='row'>
+            <AkTypography
+              data-test-healthScoreScoringDetails-score
+              local-class='scoring-details-score-number'
+              @fontWeight='bold'
+            >
+              {{this.score}}
+            </AkTypography>
+
+            <AkTypography
+              local-class='scoring-details-score-max'
+              @fontWeight='regular'
+            >
+              /{{this.HEALTH_SCORE_TOTAL_VALUE}}
+            </AkTypography>
+          </AkStack>
+
+          {{#if this.statusLabel}}
+            <AkChip
+              data-test-healthScoreScoringDetails-statusChip
+              local-class='scoring-details-status-chip scoring-details-status-chip--{{this.statusChipClass}}'
+              @label={{this.statusLabel}}
+              @size='small'
+              @fontWeight='medium'
+            />
+          {{/if}}
+        </AkStack>
+      </div>
+
+      <AkTypography
+        data-test-healthScoreScoringDetails-summary
+        local-class='scoring-details-summary'
+        @variant='body2'
+      >
+        {{t 'healthScore.summary'}}
+      </AkTypography>
+
+      <AkAccordion
+        @isExpanded={{this.showScoringMethodology}}
+        @summaryText={{t 'healthScore.scoringMethodology.title'}}
+        @summaryIconName='info'
+        @onChange={{this.toggleScoringMethodology}}
+        data-test-healthScoreScoringDetails-methodologyAccordion
+      >
+        <:content>
+          <FileDetails::SeverityLevel::HealthScore::ScoringDetailsDrawer::ScoringMethodology />
+        </:content>
+      </AkAccordion>
+    </AkStack>
+
+    <AkDivider local-class='scoring-details-divider' @color='dark' />
+
+    <div local-class='scoring-details-timeline-section'>
+      <AkStack
+        local-class='scoring-details-timeline-header'
+        @justifyContent='space-between'
+        @alignItems='center'
+      >
+        <AkTypography
+          local-class='scoring-details-timeline-heading'
+          @fontWeight='bold'
+        >
+          {{t 'healthScore.scoreBreakdownTimeline'}}
+        </AkTypography>
+      </AkStack>
+
+      <ul local-class='scoring-details-timeline'>
+        {{#each this.timelineEntries as |entry|}}
+          <li
+            data-test-healthScoreScoringDetails-timelineEntry
+            local-class='scoring-details-timeline-entry'
+          >
+            <span local-class='scoring-details-timeline-marker' />
+
+            <div local-class='scoring-details-timeline-content'>
+              <AkStack
+                @justifyContent='space-between'
+                @alignItems='flex-start'
+                @spacing='2'
+              >
+                <div local-class='scoring-details-timeline-main'>
+                  <AkStack @direction='row' @spacing='1' @alignItems='center'>
+                    <AkChip
+                      data-test-healthScoreScoringDetails-dateChip
+                      local-class='scoring-details-date-chip'
+                      @label={{entry.dateLabel}}
+                      @variant='outlined'
+                      @size='small'
+                    />
+
+                    {{#if entry.isKnoxiqRan}}
+                      <AkChip
+                        data-test-healthScoreScoringDetails-aeisChip
+                        local-class='scoring-details-aeis-chip'
+                        @label={{t 'healthScore.aeisApplied'}}
+                        @size='small'
+                        @fontWeight='medium'
+                      />
+                    {{/if}}
+
+                    {{#if entry.isLatest}}
+                      <AkChip
+                        data-test-healthScoreScoringDetails-latestChip
+                        local-class='scoring-details-latest-chip'
+                        @label={{t 'healthScore.latest'}}
+                        @size='small'
+                        @fontWeight='medium'
+                      />
+                    {{/if}}
+                  </AkStack>
+
+                  <AkTypography
+                    data-test-healthScoreScoringDetails-entryTitle
+                    local-class='scoring-details-entry-title {{if
+                      entry.isKnoxiqRan
+                      "scoring-details-entry-title--knoxiq"
+                    }}'
+                    @fontWeight='medium'
+                  >
+                    {{entry.title}}
+                  </AkTypography>
+
+                  <AkTypography @variant='body2' @color='textSecondary'>
+                    {{entry.description}}
+                  </AkTypography>
+                </div>
+
+                <AkTypography
+                  data-test-healthScoreScoringDetails-scoreChange
+                  local-class='scoring-details-score-change scoring-details-score-change--{{entry.scoreChangeClass}}'
+                  @fontWeight='bold'
+                >
+                  {{entry.scoreChange}}
+                </AkTypography>
+              </AkStack>
+            </div>
+          </li>
+        {{/each}}
+      </ul>
+    </div>
+  </AkStack>
+</AkDrawer>

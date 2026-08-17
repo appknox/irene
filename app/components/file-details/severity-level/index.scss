@@ -7,6 +7,25 @@
     padding: 0.75em 1.5em;
     border-bottom: 1px solid var(--file-details-severity-level-border-color);
   }
+
+  .severity-level-body {
+    padding: 1em;
+  }
+
+  .severity-level-chart-section {
+    flex: 1 1 0%;
+    min-width: 0;
+
+    .severity-level-chart {
+      max-width: 350px;
+    }
+  }
+
+  .severity-level-health-score-section {
+    display: flex;
+    flex: 0 0 30%;
+    max-width: 30%;
+  }
 }
 
 .severity-indicator {
