@@ -1,0 +1,16 @@
+{{#if this.isStale}}
+  <AkStack @alignItems='center' @justifyContent='center' data-test-sbomScan-stale>
+    <AkTooltip @title={{this.tooltip}} @arrow={{true}} @placement='bottom'>
+      <AkIcon
+        data-test-sbomScan-staleIcon
+        @size='small'
+        @iconName='mdi:clock-alert-outline'
+        @color='warn'
+      />
+    </AkTooltip>
+  </AkStack>
+{{else}}
+  <AkTypography data-test-sbomScan-stale-none @color='textSecondary'>
+    -
+  </AkTypography>
+{{/if}}
