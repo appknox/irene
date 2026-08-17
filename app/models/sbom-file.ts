@@ -33,6 +33,14 @@ export default class SbomFileModel extends Model {
   @attr('boolean')
   declare isOutdated: boolean;
 
+  /**
+   * Server-side aggregate flag: true if any SBFileComponent for this file
+   * references a component whose is_stale_vuln_data or is_stale_version_data
+   * is true. Used for the app-level staleness indicator on the SBFile list.
+   */
+  @attr('boolean')
+  declare isStale: boolean;
+
   get statusValue() {
     switch (this.status) {
       case SbomScanStatus.PENDING:

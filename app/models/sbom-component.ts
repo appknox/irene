@@ -71,8 +71,29 @@ export default class SbomComponentModel extends Model {
   @attr()
   declare externalReferences: SbomComponentExternalReferences;
 
+  /**
+   * Server-side flag: GHSA published new vulnerability data for this
+   * package after the file's last vulnerability scan. Re-scan recommended.
+   * False when no SBComponentGlobalUpdate row exists, the vuln scan never
+   * completed, or the global update timestamp <= scan's completed_at.
+   */
+  @attr('boolean')
+  declare isStaleVulnData: boolean;
+
+  /**
+   * Server-side flag: Enola published a newer upstream version for this
+   * package after the file's last composition scan. Re-scan recommended.
+   * Same false-conditions as isStaleVulnData but for composition scans.
+   */
+  @attr('boolean')
+  declare isStaleVersionData: boolean;
+
   get isVulnerable() {
     return this.vulnerabilitiesCount > 0;
+  }
+
+  get isStale() {
+    return this.isStaleVulnData || this.isStaleVersionData;
   }
 
   get cleanVersion() {

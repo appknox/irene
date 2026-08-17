@@ -1990,6 +1990,10 @@
     "componentDetailsDescription": "View additional information related to each component.",
     "componentDescription": "View the list of components detected in your application.",
     "componentName": "Component Name",
+    "stale": "Stale",
+    "staleVulnDataTooltip": "Vulnerability info may be outdated — re-scan recommended.",
+    "staleVersionDataTooltip": "A newer upstream version is available than what was captured at scan time.",
+    "staleFileTooltip": "One or more components in this scan have stale data — re-scan recommended.",
     "componentListEmptyText": {
       "title": "No Components Found",
       "description": "No components could be detected for this application. Kindly reupload and check again. If this issue persists, please reach out to the support team."
