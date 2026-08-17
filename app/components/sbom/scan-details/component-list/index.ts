@@ -122,6 +122,12 @@ export default class SbomScanDetailsComponentListComponent extends Component<Sbo
         name: this.intl.t('status'),
         component: 'sbom/component-status',
       },
+      {
+        name: this.intl.t('sbomModule.stale'),
+        component: 'sbom/scan-details/component-list/stale',
+        textAlign: 'center',
+        width: 80,
+      },
     ];
   }
 
