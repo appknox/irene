@@ -6,14 +6,31 @@
     @spacing='0.5'
     {{style maxWidth='calc(100% - 40px)'}}
   >
-    <AkTypography
-      data-test-sbomApp-packageName
-      @noWrap={{true}}
-      title={{this.packageName}}
-      {{style width='100%'}}
-    >
-      {{this.packageName}}
-    </AkTypography>
+    <AkStack @alignItems='center' @spacing='0.5'>
+      <AkTypography
+        data-test-sbomApp-packageName
+        @noWrap={{true}}
+        title={{this.packageName}}
+        {{style width='100%'}}
+      >
+        {{this.packageName}}
+      </AkTypography>
+
+      {{#if this.isStale}}
+        <AkTooltip
+          @title={{this.staleTooltip}}
+          @arrow={{true}}
+          @placement='bottom'
+        >
+          <AkIcon
+            data-test-sbomApp-staleIcon
+            @iconName='mdi:clock-alert-outline'
+            @size='small'
+            @color='warn'
+          />
+        </AkTooltip>
+      {{/if}}
+    </AkStack>
 
     <AkTypography data-test-sbomApp-name @tag='span' @color='textSecondary'>
       {{this.name}}
