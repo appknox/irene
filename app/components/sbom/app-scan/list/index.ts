@@ -107,12 +107,6 @@ export default class SbomAppScanListComponent extends Component<SbomAppScanListS
         textAlign: 'center',
       },
       {
-        name: this.intl.t('sbomModule.stale'),
-        component: 'sbom/app-scan/list/stale',
-        textAlign: 'center',
-        width: 70,
-      },
-      {
         name: this.intl.t('sbomModule.viewReport'),
         component: 'sbom/app-scan/list/view-report',
         textAlign: 'center',

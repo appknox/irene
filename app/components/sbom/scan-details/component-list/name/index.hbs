@@ -1,0 +1,35 @@
+<AkStack @alignItems='center' @spacing='1'>
+  <AkTypography
+    data-test-sbomComponent-name
+    title={{this.name}}
+    @noWrap={{true}}
+  >
+    {{this.name}}
+  </AkTypography>
+
+  {{#if this.isStaleVulnData}}
+    <AkTooltip @title={{this.vulnTooltip}} @arrow={{true}} @placement='bottom'>
+      <AkIcon
+        data-test-sbomComponent-staleVulnIcon
+        @iconName='mdi:shield-alert-outline'
+        @size='small'
+        @color='warn'
+      />
+    </AkTooltip>
+  {{/if}}
+
+  {{#if this.isStaleVersionData}}
+    <AkTooltip
+      @title={{this.versionTooltip}}
+      @arrow={{true}}
+      @placement='bottom'
+    >
+      <AkIcon
+        data-test-sbomComponent-staleVersionIcon
+        @iconName='mdi:clock-alert-outline'
+        @size='small'
+        @color='warn'
+      />
+    </AkTooltip>
+  {{/if}}
+</AkStack>
