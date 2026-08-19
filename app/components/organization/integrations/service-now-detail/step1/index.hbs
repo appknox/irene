@@ -1,0 +1,58 @@
+<div class='py-3 px-4'>
+  <AkStack @direction='column' @spacing='2' local-class='fields'>
+    <AkTextField
+      @placeholder={{t 'serviceNow.enterInstanceURL'}}
+      @label={{t 'instanceURL'}}
+      @labelTypographyVariant='subtitle2'
+      @labelTypographyColor='textPrimary'
+      @value={{@changeset.instanceURL}}
+      @error={{@changeset.error.instanceURL}}
+      data-test-orgIntegrations-serviceNowDetail-instanceURLInput
+    />
+
+    <AkTextField
+      @placeholder={{t 'enterUsername'}}
+      @label={{t 'username'}}
+      @labelTypographyVariant='subtitle2'
+      @labelTypographyColor='textPrimary'
+      @value={{@changeset.username}}
+      @error={{@changeset.error.username}}
+      data-test-orgIntegrations-serviceNowDetail-usernameInput
+    />
+
+    <AkTextField
+      @placeholder={{t 'enterPassword'}}
+      @label={{t 'password'}}
+      @labelTypographyVariant='subtitle2'
+      @labelTypographyColor='textPrimary'
+      @type='password'
+      @value={{@changeset.password}}
+      @error={{@changeset.error.password}}
+      autocomplete='service-now-detail-password'
+      data-test-orgIntegrations-serviceNowDetail-passwordInput
+    />
+  </AkStack>
+</div>
+
+<AkDivider @color='dark' />
+
+<div class='py-3 px-4'>
+  <AkStack @direction='column' @spacing='0.5' @width='full'>
+    <AkStack @justifyContent='space-between' @alignItems='center' @width='full'>
+      <AkTypography @fontWeight='medium'>
+        {{t 'serviceNow.autoPush'}}
+      </AkTypography>
+
+      <AkToggle
+        @size='small'
+        @checked={{@autoPush}}
+        @onChange={{@onToggleAutoPush}}
+        data-test-orgIntegrations-serviceNowDetail-autoPushToggle
+      />
+    </AkStack>
+
+    <AkTypography @variant='body2' @color='textSecondary'>
+      {{t 'serviceNow.autoPushDesc'}}
+    </AkTypography>
+  </AkStack>
+</div>
