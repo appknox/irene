@@ -10,7 +10,7 @@ import parseError from 'irene/utils/parse-error';
 import type OrganizationService from 'irene/services/organization';
 import type OrganizationAiFeatureModel from 'irene/models/organization-ai-feature';
 
-type AiFeatureKey = 'pii' | 'reporting' | 'autoExecuteKnoxiqOnCicdUpload';
+type AiFeatureKey = 'pii' | 'reporting';
 
 type AiFeatureDrawerInfo = {
   title: string;
@@ -81,20 +81,6 @@ export default class OrganizationAiPoweredFeaturesComponent extends Component {
         isToggling:
           this.featureToToggle === 'pii' && this.toggleFeature.isRunning,
       },
-      !this.organization.hideUpsellUIStatus.aiKnoxiq && {
-        featureKey: 'autoExecuteKnoxiqOnCicdUpload' as const,
-        isChecked: Boolean(this.aiFeatures?.autoExecuteKnoxiqOnCicdUpload),
-        enabled: this.features?.knoxiq,
-        label: this.intl.t('knoxIq.title'),
-        description: this.intl.t('knoxIq.orgSettingsDesc'),
-        header: this.intl.t('knoxIq.title'),
-        drawerInfo: null,
-        clickable: false,
-
-        isToggling:
-          this.featureToToggle === 'autoExecuteKnoxiqOnCicdUpload' &&
-          this.toggleFeature.isRunning,
-      },
     ].filter(Boolean) as Array<AiFeature>;
   }
 
@@ -128,8 +114,6 @@ export default class OrganizationAiPoweredFeaturesComponent extends Component {
         return this.piiDrawerInfo;
       case 'reporting':
         return this.reportDrawerInfo;
-      case 'autoExecuteKnoxiqOnCicdUpload':
-        return [];
       default:
         return null;
     }

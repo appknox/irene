@@ -42,7 +42,6 @@ export default class OrganizationService extends Service {
         !this.orgFeatures?.store_release_readiness && this.hideUpsellUI,
       aiReporting: !this.orgAiFeatures?.reporting && this.hideUpsellUI,
       aiPii: !this.orgAiFeatures?.pii && this.hideUpsellUI,
-      aiKnoxiq: !this.orgAiFeatures?.knoxiq && this.hideUpsellUI,
 
       dynamicScanAutomation:
         !this.orgFeatures?.dynamicscan_automation && this.hideUpsellUI,
