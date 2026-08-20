@@ -1572,6 +1572,7 @@
     "viewStoreMonitoringResults": "View store monitoring results",
     "viewSBOMResults": "View SCA results",
     "viewComponent": "View component",
+    "viewOnRegistry": "View on registry",
     "viewMonitoringResults": "View monitoring results",
     "viewAppOnStore": "View App on Store"
   },
