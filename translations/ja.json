@@ -1364,6 +1364,7 @@
     "viewMonitoringResults": "View monitoring results",
     "viewSBOMResults": "View SBOM results",
     "viewComponent": "View component",
+    "viewOnRegistry": "View on registry",
     "viewAppOnStore": "View App on Store"
   },
   "notificationPreferences": "Notification Preferences",

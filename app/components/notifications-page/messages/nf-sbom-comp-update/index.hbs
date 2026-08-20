@@ -3,13 +3,29 @@
     {{t
       'notificationModule.messages.nf-sbom-comp-update'
       htmlSafe=true
-      component_name=@context.component_name
+      component_name=@context.displayName
       old_version=@context.old_version
       new_version=@context.new_version
       source=@context.source
       affected_apps_count=@context.affected_apps_count
     }}
   </AkTypography>
+
+  {{#if @context.registry_url}}
+    <div data-test-nf-sbom-comp-update-registry-link>
+      <AkButton
+        @tag='a'
+        @variant='text'
+        @color='primary'
+        @underline='always'
+        target='_blank'
+        href={{@context.registry_url}}
+        rel='noopener noreferrer'
+      >
+        {{t 'notificationModule.viewOnRegistry'}}
+      </AkButton>
+    </div>
+  {{/if}}
 
   <div data-test-nf-sbom-comp-update-link>
     <AkLink
