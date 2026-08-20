@@ -51,3 +51,16 @@
 .chips-uppercase {
   text-transform: uppercase;
 }
+
+.initiate-scan-btn {
+  font-size: 0.75rem;
+  padding: 0.2em 0.6em;
+  min-height: 22px;
+  border-radius: 4px;
+  text-transform: uppercase;
+  font-weight: 600;
+  letter-spacing: 0.03em;
+  white-space: nowrap;
+  flex-shrink: 0;
+  margin-left: 0.5rem;
+}

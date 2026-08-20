@@ -113,7 +113,29 @@ export default class AppknoxWrapperComponent extends Component<AppknoxWrapperSig
     return !this.organization.hideUpsellUIStatus.storeReleaseReadiness;
   }
 
+  get isOffensiveSecurityRoute() {
+    return this.router.currentRouteName?.includes('offensive-security');
+  }
+
+  get showOffensiveSecurity() {
+    return (
+      !this.organization.hideUpsellUIStatus.offensiveSecurity &&
+      this.organization.selected?.features?.offensive_security
+    );
+  }
+
   get menuItems() {
+    if (this.isOffensiveSecurityRoute) {
+      return [
+        {
+          label: this.intl.t('allProjects'),
+          icon: 'folder',
+          route: 'authenticated.dashboard.offensive-security',
+          currentWhen: 'authenticated.dashboard.offensive-security',
+        },
+      ] as MenuItem[];
+    }
+
     return [
       {
         label: this.intl.t('allProjects'),
@@ -123,6 +145,12 @@ export default class AppknoxWrapperComponent extends Component<AppknoxWrapperSig
         badgeLabel: this.organization.selected?.projectsCount,
         currentWhen:
           'authenticated.dashboard.projects authenticated.dashboard.project.files authenticated.dashboard.project.settings authenticated.dashboard.compare authenticated.dashboard.file authenticated.dashboard.file-vul-compare authenticated.dashboard.choose authenticated.dashboard.file',
+      },
+      this.showOffensiveSecurity && {
+        label: this.intl.t('offensiveSecurity.attackRuns'),
+        icon: 'shield-outline',
+        route: 'authenticated.dashboard.offensive-security',
+        currentWhen: 'authenticated.dashboard.offensive-security',
       },
       this.showPrivacyDashboard && {
         label: this.intl.t('privacyModule.title'),
@@ -239,6 +267,13 @@ export default class AppknoxWrapperComponent extends Component<AppknoxWrapperSig
         ],
       },
     ];
+  }
+
+  get productSwitcherFilterKey(): string {
+    if (this.router.currentRouteName?.includes('offensive-security')) {
+      return 'offensive-security';
+    }
+    return 'appknox';
   }
 
   get orgIsAnEnterprise() {

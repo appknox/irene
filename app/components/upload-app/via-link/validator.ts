@@ -59,4 +59,18 @@ export function validateStorePathname() {
   };
 }
 
+export function validateAnyUrlFormat() {
+  return function (key: string, value: string) {
+    if (!value) {
+      return 'URL is required';
+    }
+    try {
+      new URL(value);
+      return true;
+    } catch {
+      return 'Please enter a valid URL';
+    }
+  };
+}
+
 export default {};

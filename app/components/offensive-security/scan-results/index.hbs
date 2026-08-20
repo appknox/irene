@@ -3,31 +3,178 @@
     <AkSkeleton @width='100%' @height='120px' />
     <AkSkeleton @width='100%' @height='320px' />
   {{else if this.scan}}
-    {{! Target header }}
-    <AkStack
-      @width='full'
-      @justifyContent='space-between'
-      @alignItems='center'
-      local-class='card'
-      class='p-3'
-      data-test-offensiveSecurity-scanResults-header
-    >
-      <AkStack @direction='column' @spacing='1'>
-        <AkTypography @variant='h5' @fontWeight='medium'>
-          {{this.scan.displayName}}
-        </AkTypography>
+    {{! Breadcrumb navigation }}
+    <AkStack @alignItems='center' @spacing='1' local-class='breadcrumb-bar'>
+      <AkLink
+        @route='authenticated.dashboard.offensive-security.index'
+        @color='textSecondary'
+        @underline='hover'
+        local-class='breadcrumb-link'
+        data-test-offensiveSecurity-scanResults-breadcrumb
+      >
+        {{t 'offensiveSecurity.attackRuns'}}
+      </AkLink>
+
+      <AkTypography @variant='body2' @color='textSecondary' class='px-1'>
+        /
+      </AkTypography>
+
+      <AkTypography @variant='body2' @fontWeight='bold' class='font-mono'>
+        {{this.scan.displayName}}
+      </AkTypography>
+      {{#if this.scan.objective}}
+        <span class='sr-only' data-test-offensiveSecurity-scanResults-objective>
+          {{this.scan.objective}}
+        </span>
+      {{/if}}
+    </AkStack>
+
+    {{! Target header banner matching existing dashboard file details summary }}
+    <div local-class='file-summary-root' data-test-offensiveSecurity-scanResults-header>
+      <AkStack
+        class='p-2'
+        local-class='file-summary-header'
+        @alignItems='center'
+        @justifyContent='space-between'
+      >
+        <AkStack @alignItems='center' @spacing='1.5'>
+          <AppLogo
+            @src={{if this.scan.appLogoUrl this.scan.appLogoUrl this.scan.iconUrl}}
+            @size='large'
+            @alt={{concat this.scan.displayName ' - logo'}}
+          />
+
+          <AkStack @direction='column' @spacing='0.5'>
+            <AkTypography @variant='subtitle1' @fontWeight='bold'>
+              {{this.scan.displayName}}
+            </AkTypography>
+
+            <AkTypography @color='textSecondary' class='font-mono'>
+              {{this.scan.packageName}}
+            </AkTypography>
+          </AkStack>
+        </AkStack>
 
         <AkStack @alignItems='center' @spacing='1'>
-          <AkIcon @iconName={{this.scan.platformIcon}} @size='small' />
-
-          <AkTypography @variant='body2' @color='textSecondary'>
-            {{this.scan.packageName}}
-          </AkTypography>
+          {{#unless this.scan.isStaticScanStartedValue}}
+            <div>
+              <AkButton
+                @variant='filled'
+                @color='primary'
+                @loading={{this.initiateStaticScanTask.isRunning}}
+                {{on 'click' this.handleInitiateStaticScan}}
+                data-test-offensiveSecurity-scanResults-initiateStaticScanBtn
+              >
+                Initiate static scan
+              </AkButton>
+            </div>
+          {{/unless}}
         </AkStack>
       </AkStack>
 
-      <OffensiveSecurity::StatusChip @scan={{this.scan}} />
-    </AkStack>
+      <AkDivider @color='dark' />
+
+      <div class='px-2'>
+        <AkStack
+          local-class='file-summary-padding'
+          @alignItems='center'
+          @justifyContent='space-between'
+        >
+          <AkStack @alignItems='center'>
+            <AkIconButton
+              @size='small'
+              {{on 'click' this.toggleFileDetails}}
+              data-test-offensiveSecurity-scanResults-accordionToggle
+            >
+              <AkIcon
+                @iconName={{if
+                  this.isFileDetailsExpanded
+                  'arrow-drop-up'
+                  'arrow-drop-down'
+                }}
+                local-class='show-more-icon'
+              />
+            </AkIconButton>
+
+            <AkTypography @variant='subtitle1'>
+              {{t 'fileID'}} - <strong>{{if this.scan.fileId this.scan.fileId this.scan.id}}</strong>
+            </AkTypography>
+          </AkStack>
+
+          <AppPlatformIcon @platform={{this.scan.platformIcon}} />
+        </AkStack>
+
+        {{#if this.isFileDetailsExpanded}}
+          <AkDivider />
+
+          <AkStack local-class='file-summary-padding'>
+            <AkTypography {{style width='190px'}} @color='textSecondary'>
+              Version
+            </AkTypography>
+            <AkTypography @variant='h6'>
+              {{if this.scan.version this.scan.version '—'}}
+            </AkTypography>
+          </AkStack>
+
+          <AkDivider />
+
+          <AkStack local-class='file-summary-padding'>
+            <AkTypography {{style width='190px'}} @color='textSecondary'>
+              Version code
+            </AkTypography>
+            <AkTypography @variant='h6'>
+              {{if this.scan.versionCode this.scan.versionCode '—'}}
+            </AkTypography>
+          </AkStack>
+
+          <AkDivider />
+
+          <AkStack local-class='file-summary-padding'>
+            <AkTypography {{style width='190px'}} @color='textSecondary'>
+              Uploaded on
+            </AkTypography>
+            <AkTypography @variant='h6'>
+              {{if this.scan.formattedUploadedOn this.scan.formattedUploadedOn '—'}}
+            </AkTypography>
+          </AkStack>
+
+          <AkDivider />
+
+          <AkStack local-class='file-summary-padding'>
+            <AkTypography {{style width='190px'}} @color='textSecondary'>
+              SHA1 hash
+            </AkTypography>
+            <AkTypography @variant='h6'>
+              {{if this.scan.sha1Value this.scan.sha1Value '—'}}
+            </AkTypography>
+          </AkStack>
+
+          <AkDivider />
+
+          <AkStack local-class='file-summary-padding'>
+            <AkTypography {{style width='190px'}} @color='textSecondary'>
+              MD5 hash
+            </AkTypography>
+            <AkTypography @variant='h6'>
+              {{if this.scan.md5Value this.scan.md5Value '—'}}
+            </AkTypography>
+          </AkStack>
+
+          <AkDivider />
+
+          <AkStack local-class='file-summary-padding'>
+            <AkTypography {{style width='190px'}} @color='textSecondary'>
+              Development framework
+            </AkTypography>
+            <AkTypography @variant='h6'>
+              {{this.scan.devFrameworkLabel}}
+            </AkTypography>
+          </AkStack>
+
+          <AkDivider />
+        {{/if}}
+      </div>
+    </div>
 
     {{#if this.scan.isFailed}}
       <AkStack
@@ -47,28 +194,6 @@
             (t 'offensiveSecurity.scanFailed')
           }}
         </AkTypography>
-      </AkStack>
-    {{/if}}
-
-    {{! Objective }}
-    {{#if this.scan.objective}}
-      <AkStack
-        @width='full'
-        @direction='column'
-        @spacing='1'
-        local-class='card'
-        class='p-3'
-        data-test-offensiveSecurity-scanResults-objective
-      >
-        <AkTypography
-          @variant='body2'
-          @fontWeight='medium'
-          local-class='section-label'
-        >
-          {{t 'offensiveSecurity.objective'}}
-        </AkTypography>
-
-        <AkTypography @variant='body2'>{{this.scan.objective}}</AkTypography>
       </AkStack>
     {{/if}}
 

@@ -1,33 +1,128 @@
 <AkStack @direction='column' @spacing='3' class='p-3'>
-  <AkStack @width='full' @direction='column' @spacing='1'>
-    <span
-      local-class='overline'
-      data-test-offensiveSecurity-attackRuns-overline
-    >
-      {{t 'offensiveSecurity.aiRedTeamOverline'}}
-    </span>
-
-    <AkTypography @variant='h5' @fontWeight='medium'>
-      {{t 'offensiveSecurity.scanTargets'}}
-    </AkTypography>
-  </AkStack>
-
+  {{! Page Header }}
   <AkStack
     @width='full'
-    @alignItems='flex-start'
+    @alignItems='center'
     @justifyContent='space-between'
-    @spacing='2'
   >
-    <AkStack @direction='column' @spacing='0.5' local-class='section-heading'>
-      <AkTypography @variant='body1' @fontWeight='medium'>
-        {{t 'offensiveSecurity.allTargets'}}
-      </AkTypography>
+    <AkStack @direction='column' @spacing='0.5'>
+      <AkStack @alignItems='center' @spacing='1.5'>
+        <div local-class='header-shield-box'>
+          <AkIcon @iconName='shield-outline' @size='medium' local-class='shield-icon' />
+        </div>
 
-      <AkTypography @variant='body2' @color='textSecondary'>
+        <AkTypography
+          @variant='h4'
+          @fontWeight='bold'
+        >
+          {{t 'offensiveSecurity.allTargets'}}
+        </AkTypography>
+        <span class='sr-only' data-test-offensiveSecurity-attackRuns-overline>
+          {{t 'offensiveSecurity.aiRedTeamOverline'}}
+        </span>
+      </AkStack>
+
+      <AkTypography @variant='body2' @color='textSecondary' class='mt-1'>
         {{t 'offensiveSecurity.allTargetsSubtitle'}}
       </AkTypography>
     </AkStack>
+  </AkStack>
 
+  {{! 4 Metric Summary Stat Cards }}
+  <div local-class='metric-cards-grid'>
+    {{! Card 1: Total Runs }}
+    <div local-class='metric-card'>
+      <div local-class='stat-icon-box stat-icon-pink'>
+        <AkIcon @iconName='trending-up' @size='small' />
+      </div>
+      <div local-class='stat-details'>
+        <span local-class='stat-label'>Total Runs</span>
+        <span local-class='stat-number'>{{if this.totalCount this.totalCount this.scans.length}}</span>
+        <span local-class='stat-subtext'>All time</span>
+      </div>
+    </div>
+
+    {{! Card 2: Running }}
+    <div local-class='metric-card'>
+      <div local-class='stat-icon-box stat-icon-blue'>
+        <AkLoader @size={{14}} />
+      </div>
+      <div local-class='stat-details'>
+        <span local-class='stat-label'>Running</span>
+        <span local-class='stat-number'>{{this.runningCount}}</span>
+        <span local-class='stat-subtext'>In progress</span>
+      </div>
+    </div>
+
+    {{! Card 3: Completed }}
+    <div local-class='metric-card'>
+      <div local-class='stat-icon-box stat-icon-green'>
+        <AkIcon @iconName='check-circle-outline' @size='small' />
+      </div>
+      <div local-class='stat-details'>
+        <span local-class='stat-label'>Completed</span>
+        <span local-class='stat-number'>{{this.completedCount}}</span>
+        <span local-class='stat-subtext'>Successfully finished</span>
+      </div>
+    </div>
+
+    {{! Card 4: Failed }}
+    <div local-class='metric-card'>
+      <div local-class='stat-icon-box stat-icon-red'>
+        <AkIcon @iconName='cancel' @size='small' />
+      </div>
+      <div local-class='stat-details'>
+        <span local-class='stat-label'>Failed</span>
+        <span local-class='stat-number'>{{this.failedCount}}</span>
+        <span local-class='stat-subtext'>With errors</span>
+      </div>
+    </div>
+  </div>
+
+  {{! Filter Tabs & Controls Row }}
+  <AkStack
+    @width='full'
+    @alignItems='center'
+    @justifyContent='space-between'
+    @flexWrap='wrap'
+    local-class='controls-bar'
+  >
+    {{! Status Tabs }}
+    <div local-class='status-tabs'>
+      <button
+        type='button'
+        local-class='tab-btn {{if (eq this.selectedStatusTab "all") "active"}}'
+        {{on 'click' (fn this.setStatusTab 'all')}}
+      >
+        All ({{if this.totalCount this.totalCount this.scans.length}})
+      </button>
+
+      <button
+        type='button'
+        local-class='tab-btn {{if (eq this.selectedStatusTab "running") "active"}}'
+        {{on 'click' (fn this.setStatusTab 'running')}}
+      >
+        Running ({{this.runningCount}})
+      </button>
+
+      <button
+        type='button'
+        local-class='tab-btn {{if (eq this.selectedStatusTab "completed") "active"}}'
+        {{on 'click' (fn this.setStatusTab 'completed')}}
+      >
+        Completed ({{this.completedCount}})
+      </button>
+
+      <button
+        type='button'
+        local-class='tab-btn {{if (eq this.selectedStatusTab "failed") "active"}}'
+        {{on 'click' (fn this.setStatusTab 'failed')}}
+      >
+        Failed ({{this.failedCount}})
+      </button>
+    </div>
+
+    {{! Search Box }}
     <div local-class='search-input'>
       <AkTextField
         @placeholder={{t 'offensiveSecurity.searchByTarget'}}
@@ -92,53 +187,55 @@
         </AkTypography>
       </AkStack>
     {{else}}
-      <AkTable
-        @hoverable={{true}}
-        data-test-offensiveSecurity-attackRuns-table
-        as |t|
-      >
-        <t.head @columns={{this.columns}} as |h|>
-          <h.row as |r|>
-            <r.cell as |column|>
-              {{#if column.headerComponent}}
-                {{#let (component column.headerComponent) as |Component|}}
-                  <Component
-                    @selectedPlatform={{this.platformFilter}}
-                    @onPlatformChange={{this.handlePlatformFilterChange}}
-                    @selectedResilience={{this.resilienceFilter}}
-                    @onResilienceChange={{this.handleResilienceFilterChange}}
-                    @sortDirection={{this.sortDirection}}
-                    @onSortChange={{this.handleSortChange}}
-                  />
-                {{/let}}
-              {{else}}
-                {{column.name}}
-              {{/if}}
-            </r.cell>
-          </h.row>
-        </t.head>
+      <div local-class='attack-runs-table-container'>
+        <AkTable
+          @hoverable={{true}}
+          data-test-offensiveSecurity-attackRuns-table
+          as |t|
+        >
+          <t.head @columns={{this.columns}} as |h|>
+            <h.row as |r|>
+              <r.cell as |column|>
+                {{#if column.headerComponent}}
+                  {{#let (component column.headerComponent) as |Component|}}
+                    <Component
+                      @selectedPlatform={{this.platformFilter}}
+                      @onPlatformChange={{this.handlePlatformFilterChange}}
+                      @selectedResilience={{this.resilienceFilter}}
+                      @onResilienceChange={{this.handleResilienceFilterChange}}
+                      @sortDirection={{this.sortDirection}}
+                      @onSortChange={{this.handleSortChange}}
+                    />
+                  {{/let}}
+                {{else}}
+                  {{column.name}}
+                {{/if}}
+              </r.cell>
+            </h.row>
+          </t.head>
 
-        <t.body @rows={{pgc.currentPageResults}} as |b|>
-          <b.row
-            {{style cursor='pointer'}}
-            @onClick={{this.handleRowClick}}
-            data-test-offensiveSecurity-attackRuns-row
-            as |r|
-          >
-            <r.cell as |value|>
-              {{#if r.columnValue.component}}
-                {{#let (component r.columnValue.component) as |Component|}}
-                  <Component @scan={{r.rowValue}} />
-                {{/let}}
-              {{else}}
-                <AkTypography @variant='body2' @noWrap={{true}} title={{value}}>
-                  {{if value value '—'}}
-                </AkTypography>
-              {{/if}}
-            </r.cell>
-          </b.row>
-        </t.body>
-      </AkTable>
+          <t.body @rows={{pgc.currentPageResults}} as |b|>
+            <b.row
+              {{style cursor='pointer'}}
+              @onClick={{this.handleRowClick}}
+              data-test-offensiveSecurity-attackRuns-row
+              as |r|
+            >
+              <r.cell as |value|>
+                {{#if r.columnValue.component}}
+                  {{#let (component r.columnValue.component) as |Component|}}
+                    <Component @scan={{r.rowValue}} />
+                  {{/let}}
+                {{else}}
+                  <AkTypography @variant='body2' @noWrap={{true}} title={{value}}>
+                    {{if value value '—'}}
+                  </AkTypography>
+                {{/if}}
+              </r.cell>
+            </b.row>
+          </t.body>
+        </AkTable>
+      </div>
 
       {{#if this.showPagination}}
         <AkPagination

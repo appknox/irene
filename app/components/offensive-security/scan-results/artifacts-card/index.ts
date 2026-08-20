@@ -22,7 +22,44 @@ export default class OffensiveSecurityScanResultsArtifactsCardComponent extends 
       return '—';
     }
 
-    return `${Math.max(1, Math.round(bytes / 1024))} KB`;
+    return `${(bytes / 1024).toFixed(1)} KB`;
+  }
+
+  @action
+  getArtifactDescription(name: string): string {
+    const lowerName = name.toLowerCase();
+    if (lowerName.includes('exploit')) {
+      return 'Runnable Frida exploit for exploited findings';
+    }
+    if (lowerName.includes('resilience')) {
+      return 'Risk rating + per-finding results';
+    }
+    if (lowerName.includes('evidence')) {
+      return 'Before/after on-device screens (OCR text)';
+    }
+    if (lowerName.includes('loadout')) {
+      return 'Techniques deployed, order + sha256';
+    }
+    if (lowerName.includes('summary')) {
+      return 'Human-readable attack-run summary';
+    }
+
+    return 'Downloadable run artifact';
+  }
+
+  @action
+  getArtifactIcon(name: string): string {
+    const lowerName = name.toLowerCase();
+    if (lowerName.endsWith('.js')) {
+      return 'code';
+    }
+    if (lowerName.endsWith('.md')) {
+      return 'description';
+    }
+    if (lowerName.endsWith('.png') || lowerName.endsWith('.jpg')) {
+      return 'image';
+    }
+    return 'insert-drive-file';
   }
 
   @action

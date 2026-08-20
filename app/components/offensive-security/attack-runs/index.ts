@@ -111,7 +111,7 @@ export default class OffensiveSecurityAttackRunsComponent extends Component<Offe
   // ─── Derived view state ────────────────────────────────────────────────────
 
   get isLoading(): boolean {
-    return this.loadScans.isRunning;
+    return this.loadScans.isRunning && this.scans.length === 0;
   }
 
   get hasNoScans(): boolean {
@@ -121,9 +121,14 @@ export default class OffensiveSecurityAttackRunsComponent extends Component<Offe
   get columns() {
     return [
       {
+        name: this.intl.t('fileID'),
+        valuePath: 'targetFileId',
+        width: 110,
+      },
+      {
         name: this.intl.t('offensiveSecurity.target'),
         component: 'offensive-security/attack-runs/table/target',
-        minWidth: 200,
+        minWidth: 180,
       },
       {
         name: this.intl.t('platform'),
@@ -133,7 +138,7 @@ export default class OffensiveSecurityAttackRunsComponent extends Component<Offe
       },
       {
         name: this.intl.t('version'),
-        valuePath: 'version',
+        valuePath: 'versionLabel',
         width: 120,
       },
       {
@@ -143,7 +148,7 @@ export default class OffensiveSecurityAttackRunsComponent extends Component<Offe
         width: 140,
       },
       {
-        name: this.intl.t('offensiveSecurity.resilience'),
+        name: this.intl.t('offensiveSecurity.risk'),
         component: 'offensive-security/attack-runs/table/resilience',
         headerComponent:
           'offensive-security/attack-runs/table/resilience-header',
@@ -163,6 +168,26 @@ export default class OffensiveSecurityAttackRunsComponent extends Component<Offe
     ];
   }
 
+  @tracked selectedStatusTab: 'all' | 'running' | 'completed' | 'failed' =
+    'all';
+
+  get runningCount(): number {
+    return this.scans.filter((s) => s.isInProgress || s.isRunning).length;
+  }
+
+  get completedCount(): number {
+    return this.scans.filter((s) => s.isCompleted).length;
+  }
+
+  get failedCount(): number {
+    return this.scans.filter((s) => s.isFailed).length;
+  }
+
+  @action
+  setStatusTab(tab: 'all' | 'running' | 'completed' | 'failed'): void {
+    this.selectedStatusTab = tab;
+  }
+
   /**
    * Filtering and sorting happen client-side over the loaded page. The API paginates,
    * so this narrows the current page rather than the whole history — enough for the
@@ -173,7 +198,11 @@ export default class OffensiveSecurityAttackRunsComponent extends Component<Offe
 
     const rows = this.scans.filter((scan) => {
       const matchesSearch =
-        !query || scan.displayName.toLowerCase().includes(query);
+        !query ||
+        scan.displayName.toLowerCase().includes(query) ||
+        (scan.packageName && scan.packageName.toLowerCase().includes(query)) ||
+        (scan.targetFileId &&
+          String(scan.targetFileId).toLowerCase().includes(query));
 
       const matchesPlatform =
         this.platformFilter === 'all' || scan.platform === this.platformFilter;
@@ -183,7 +212,19 @@ export default class OffensiveSecurityAttackRunsComponent extends Component<Offe
         this.resilienceFilter === 'all' ||
         (scan.hasResilience && scan.resilienceClass === this.resilienceFilter);
 
-      return matchesSearch && matchesPlatform && matchesResilience;
+      const matchesStatusTab =
+        this.selectedStatusTab === 'all' ||
+        (this.selectedStatusTab === 'running' &&
+          (scan.isInProgress || scan.isRunning)) ||
+        (this.selectedStatusTab === 'completed' && scan.isCompleted) ||
+        (this.selectedStatusTab === 'failed' && scan.isFailed);
+
+      return (
+        matchesSearch &&
+        matchesPlatform &&
+        matchesResilience &&
+        matchesStatusTab
+      );
     });
 
     const direction = this.sortDirection === 'desc' ? -1 : 1;
@@ -201,7 +242,7 @@ export default class OffensiveSecurityAttackRunsComponent extends Component<Offe
   }
 
   get showPagination(): boolean {
-    return !this.hasNoScans && this.totalCount > this.limit;
+    return !this.hasNoScans && this.totalCount > 0;
   }
 
   // ─── Actions ───────────────────────────────────────────────────────────────
@@ -225,16 +266,24 @@ export default class OffensiveSecurityAttackRunsComponent extends Component<Offe
 
   setSearchQuery(query: string): void {
     this.setRouteQueryParams({ scan_query: query, scan_offset: 0 });
+    this.loadScans.perform(this.limit, 0);
   }
 
   @action
   handlePlatformFilterChange(value: PlatformFilter): void {
     this.setRouteQueryParams({ scan_platform: value, scan_offset: 0 });
+    this.loadScans.perform(this.limit, 0);
   }
 
   @action
   handleResilienceFilterChange(value: ResilienceFilter): void {
     this.setRouteQueryParams({ scan_resilience: value, scan_offset: 0 });
+    this.loadScans.perform(this.limit, 0);
+  }
+
+  @action
+  handleUploadSuccess(): void {
+    this.loadScans.perform();
   }
 
   @action
@@ -279,10 +328,25 @@ export default class OffensiveSecurityAttackRunsComponent extends Component<Offe
    */
   loadScans = task({ drop: true }, async (limit?: number, offset?: number) => {
     try {
-      const scans = (await this.store.query('offsec-scan', {
+      const queryParams: Record<string, unknown> = {
         limit: limit ?? this.limit,
         offset: offset ?? this.offset,
-      })) as ScanResponseModel;
+      };
+
+      if (this.searchQuery) {
+        queryParams['search'] = this.searchQuery;
+      }
+      if (this.platformFilter !== 'all') {
+        queryParams['platform'] = this.platformFilter;
+      }
+      if (this.resilienceFilter !== 'all') {
+        queryParams['resilience'] = this.resilienceFilter;
+      }
+
+      const scans = (await this.store.query(
+        'offsec-scan',
+        queryParams
+      )) as ScanResponseModel;
 
       this.scans = scans.slice();
       this.totalCount = scans.meta?.count ?? this.scans.length;

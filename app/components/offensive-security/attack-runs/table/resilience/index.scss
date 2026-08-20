@@ -1,55 +1,36 @@
-.resilience-badge {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.5em;
-  padding: 0.286em 0.714em;
-  border-radius: var(--offensive-security-attack-runs-resilience-border-radius);
-  font-family: var(--offensive-security-attack-runs-resilience-font-family);
-  font-size: 0.857em;
-  font-weight: 500;
+.risk-badge {
+  display: inline-block;
+  padding: 0.25em 0.75em;
+  border-radius: 4px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  border: 1px solid currentColor;
   white-space: nowrap;
 }
 
-.resilience-band {
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
+.risk-critical {
+  background-color: var(--offensive-security-attack-runs-risk-critical-bg-color);
+  color: var(--offensive-security-attack-runs-risk-critical-color);
 }
 
-.resilience-separator {
-  opacity: 0.6;
+.risk-high {
+  background-color: var(--offensive-security-attack-runs-risk-high-bg-color);
+  color: var(--offensive-security-attack-runs-risk-high-color);
 }
 
-.resilience-weak {
-  background-color: var(
-    --offensive-security-attack-runs-resilience-weak-bg-color
-  );
-  color: var(--offensive-security-attack-runs-resilience-weak-color);
+.risk-medium {
+  background-color: var(--offensive-security-attack-runs-risk-medium-bg-color);
+  color: var(--offensive-security-attack-runs-risk-medium-color);
 }
 
-.resilience-medium {
-  background-color: var(
-    --offensive-security-attack-runs-resilience-medium-bg-color
-  );
-  color: var(--offensive-security-attack-runs-resilience-medium-color);
+.risk-low {
+  background-color: var(--offensive-security-attack-runs-risk-low-bg-color);
+  color: var(--offensive-security-attack-runs-risk-low-color);
 }
 
-.resilience-strong {
-  background-color: var(
-    --offensive-security-attack-runs-resilience-strong-bg-color
-  );
-  color: var(--offensive-security-attack-runs-resilience-strong-color);
-}
-
-.resilience-very-strong {
-  background-color: var(
-    --offensive-security-attack-runs-resilience-very-strong-bg-color
-  );
-  color: var(--offensive-security-attack-runs-resilience-very-strong-color);
-}
-
-.resilience-unknown {
-  background-color: var(
-    --offensive-security-attack-runs-resilience-unknown-bg-color
-  );
-  color: var(--offensive-security-attack-runs-resilience-unknown-color);
+.risk-unknown {
+  background-color: var(--offensive-security-attack-runs-risk-unknown-bg-color);
+  color: var(--offensive-security-attack-runs-risk-unknown-color);
 }

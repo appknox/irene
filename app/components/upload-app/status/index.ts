@@ -14,6 +14,8 @@ import { task } from 'ember-concurrency';
 import { waitForPromise } from '@ember/test-waiters';
 import IntlService from 'ember-intl/services/intl';
 
+import type RouterService from '@ember/routing/router-service';
+
 import ENUMS from 'irene/enums';
 import parseError from 'irene/utils/parse-error';
 import RealtimeService from 'irene/services/realtime';
@@ -45,6 +47,7 @@ export default class UploadAppStatusComponent extends Component {
   @service declare realtime: RealtimeService;
   @service declare uploadApp: UploadAppService;
   @service declare intl: IntlService;
+  @service declare router: RouterService;
   @service('notifications') declare notify: NotificationService;
 
   @tracked submissions: DS.AdapterPopulatedRecordArray<SubmissionModel> | null =
@@ -219,17 +222,25 @@ export default class UploadAppStatusComponent extends Component {
 
   getSubmissions = task(async () => {
     try {
+      const isOffsec =
+        this.router.currentRouteName?.includes('offensive-security');
+      const queryParams: Record<string, unknown> = {
+        status: ENUMS.SUBMISSION_STATUS.VALIDATING,
+      };
+
+      if (isOffsec) {
+        queryParams['offsec'] = true;
+      }
+
       const validatingSubs = await waitForPromise(
-        this.store.query('submission', {
-          status: ENUMS.SUBMISSION_STATUS.VALIDATING,
-        })
+        this.store.query('submission', queryParams)
       );
 
       // Add new submissions to submission set once the client receives them
       // To persist submissions in the popover even if the popover is not opened
       validatingSubs.forEach((sub) => this.uploadApp.submissionSet.add(sub.id));
 
-      this.submissions = this.store.peekAll('submission');
+      this.submissions = validatingSubs;
     } catch (err) {
       this.notify.error(parseError(err));
     }

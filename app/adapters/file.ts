@@ -247,6 +247,11 @@ export default class FileAdapter extends CommonDRFAdapter {
 
     return this.store.push(normalized) as FileHealthScoreAuditModel;
   }
+
+  async startStaticScan(fileId: string) {
+    const url = `${this._buildURL('file', fileId)}/start_static_scan`;
+    return this.ajax(url, 'POST');
+  }
 }
 
 declare module 'ember-data/types/registries/adapter' {

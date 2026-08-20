@@ -59,6 +59,20 @@
         </PoweredByAi::Chip>
       {{/if}}
 
+      {{#if this.showInitiateOffsecBtn}}
+        <div>
+          <AkButton
+            @variant='filled'
+            @color='primary'
+            @loading={{this.initiateOffsecPentestTask.isRunning}}
+            {{on 'click' this.handleInitiateOffsecPentest}}
+            data-test-fileDetailsSummary-initiateOffsecBtn
+          >
+            Initiate offsec pentest
+          </AkButton>
+        </div>
+      {{/if}}
+
       <div>
         <File::ReportBtn @file={{@file}} />
       </div>

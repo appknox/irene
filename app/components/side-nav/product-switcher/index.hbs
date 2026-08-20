@@ -67,6 +67,22 @@
   @placement='right-start'
 >
   <div local-class='switcher-menu-container'>
+    {{#if this.currentMenuItem}}
+      <div local-class='switcher-current-header'>
+        <AkStack @direction='row' @alignItems='center' @spacing='1'>
+          {{#let (component this.currentMenuItem.svg) as |CurrentSvgIcon|}}
+            <CurrentSvgIcon local-class='switcher-menu-item-icon' />
+          {{/let}}
+
+          <AkTypography @variant='h6' @fontWeight='bold'>
+            {{this.currentMenuItem.label}}
+          </AkTypography>
+        </AkStack>
+      </div>
+
+      <AkDivider class='my-2' />
+    {{/if}}
+
     <AkTypography local-class='switcher-menu-title' @fontWeight='bold'>
       {{t 'switchTo'}}
     </AkTypography>

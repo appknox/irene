@@ -92,6 +92,21 @@ export default class FileModel extends ModelBaseMixin {
   declare isStaticDone: boolean;
 
   @attr('boolean')
+  declare isStaticScanStarted: boolean;
+
+  @attr('boolean')
+  declare offsecInitiated: boolean;
+
+  @attr('boolean')
+  declare isOffsecInitiated: boolean;
+
+  @attr('boolean')
+  declare offsecEligible: boolean;
+
+  @attr('boolean')
+  declare isOffsecEligible: boolean;
+
+  @attr('boolean')
   declare isManualDone: boolean;
 
   @attr('boolean')

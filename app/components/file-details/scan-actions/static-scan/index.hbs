@@ -15,7 +15,7 @@
     @width='full'
     @justifyContent='space-between'
     @alignItems='center'
-    @flexWrap='wrap'
+    @flexWrap='nowrap'
     class='p-2'
     data-test-cy='staticScan-infoContainer'
   >
@@ -36,7 +36,7 @@
           data-test-fileDetailScanActions-staticScanCompletedStatus
         />
       {{/if}}
-    {{else}}
+    {{else if (or (eq @file.isStaticScanStarted true) (eq @file.isStaticScanStarted undefined))}}
       <AkStack @alignItems='center' local-class='scanning-chip chips-uppercase'>
         <AkLoader @size={{12}} />
 
@@ -50,6 +50,17 @@
           {{@file.staticScanProgress}}%
         </AkTypography>
       </AkStack>
+    {{else}}
+      <AkButton
+        @variant='filled'
+        @color='primary'
+        @loading={{this.initiateStaticScanTask.isRunning}}
+        {{on 'click' this.handleInitiateStaticScan}}
+        local-class='initiate-scan-btn'
+        data-test-fileDetailScanActions-initiateStaticScanBtn
+      >
+        Initiate static scan
+      </AkButton>
     {{/if}}
   </AkStack>
 

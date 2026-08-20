@@ -34,6 +34,9 @@ export default class OffsecScanModel extends Model {
   declare projectId: number;
 
   @attr('string')
+  declare fileName: string;
+
+  @attr('string')
   declare packageName: string;
 
   /**
@@ -102,6 +105,51 @@ export default class OffsecScanModel extends Model {
   declare findings: OffsecScanEmbeddedFinding[] | undefined;
 
   @attr('string')
+  declare appLogoUrl: string;
+
+  @attr('string')
+  declare iconUrl: string;
+
+  @attr('string')
+  declare versionCode: string;
+
+  @attr('number')
+  declare devFramework: number;
+
+  @attr('boolean')
+  declare isStaticScanStarted: boolean;
+
+  @attr('boolean')
+  declare staticScanStarted: boolean;
+
+  @attr('string')
+  declare sha1hash: string;
+
+  @attr('string')
+  declare sha1: string;
+
+  @attr('string')
+  declare md5hash: string;
+
+  @attr('string')
+  declare md5: string;
+
+  @attr('string')
+  declare sha256: string;
+
+  @attr('string')
+  declare injection: string;
+
+  @attr('number')
+  declare attacksLaunched: number;
+
+  @attr('number')
+  declare attacksExploited: number;
+
+  @attr('number')
+  declare attacksDefended: number;
+
+  @attr('string')
   declare errorMessage: string | null;
 
   @attr('date')
@@ -113,8 +161,95 @@ export default class OffsecScanModel extends Model {
   @attr('date')
   declare updatedAt: Date | null;
 
+  get formattedUploadedOn(): string | null {
+    if (!this.createdAt) {
+      return null;
+    }
+    return dayjs(this.createdAt).format('ddd MMM DD YYYY, h:mm:ss A');
+  }
+
+  get targetFileId(): number | string | null {
+    const raw =
+      this.fileId ??
+      (this as unknown as Record<string, unknown>)['file_id'] ??
+      (this as unknown as Record<string, unknown>)['file'];
+
+    if (raw !== null && raw !== undefined && String(raw).trim() !== '') {
+      return raw as number | string;
+    }
+    return this.id ? String(this.id) : null;
+  }
+
+  get sha1Value(): string | null {
+    return this.sha1hash || this.sha1 || null;
+  }
+
+  get md5Value(): string | null {
+    return this.md5hash || this.md5 || null;
+  }
+
+  get versionLabel(): string {
+    if (
+      this.version !== null &&
+      this.version !== undefined &&
+      String(this.version).trim() !== ''
+    ) {
+      return String(this.version);
+    }
+    return '—';
+  }
+
+  get devFrameworkLabel(): string {
+    const raw =
+      this.devFramework ??
+      (this as unknown as Record<string, unknown>)['dev_framework'] ??
+      (this as unknown as Record<string, unknown>)['development_framework'];
+
+    const frameworkMap: Record<number, string> = {
+      [-1]: 'Unknown',
+      0: 'Android Native',
+      1: 'React Native',
+      2: 'Flutter',
+      3: 'Xamarin',
+      4: 'Cordova',
+      5: 'Android (Unknown)',
+      6: 'iOS Native',
+      7: 'Swift',
+      8: 'React Native',
+      9: 'Flutter',
+      10: 'Xamarin',
+      11: 'Cordova',
+      12: 'iOS (Unknown)',
+    };
+
+    if (raw !== null && raw !== undefined && String(raw).trim() !== '') {
+      const numKey = Number(raw);
+      if (!isNaN(numKey) && numKey in frameworkMap) {
+        return frameworkMap[numKey] ?? '—';
+      }
+      if (typeof raw === 'string' && (raw as string).trim()) {
+        return raw as string;
+      }
+    }
+
+    return '—';
+  }
+
+  get isStaticScanStartedValue(): boolean {
+    return Boolean(
+      this.isStaticScanStarted ??
+        this.staticScanStarted ??
+        (this as unknown as Record<string, unknown>)[
+          'is_static_scan_started'
+        ] ??
+        (this as unknown as Record<string, unknown>)['static_scan_started']
+    );
+  }
+
   get displayName(): string {
-    return this.appName || this.packageName || `scan ${this.id}`;
+    return (
+      this.fileName || this.appName || this.packageName || `scan ${this.id}`
+    );
   }
 
   get platformIcon(): 'android' | 'apple' {

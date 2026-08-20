@@ -3,11 +3,16 @@ import { service } from '@ember/service';
 import { capitalize } from '@ember/string';
 import Component from '@glimmer/component';
 import { tracked } from '@glimmer/tracking';
+import { task } from 'ember-concurrency';
+import type RouterService from '@ember/routing/router-service';
+import type Store from '@ember-data/store';
 import type IntlService from 'ember-intl/services/intl';
 
 import type FileModel from 'irene/models/file';
+import type OffsecScanAdapter from 'irene/adapters/offsec-scan';
 import type { PoweredByAiDrawerInfo } from 'irene/components/powered-by-ai/drawer';
 import type OrganizationService from 'irene/services/organization';
+import parseError from 'irene/utils/parse-error';
 
 export interface FileDetailsSummarySignature {
   Args: {
@@ -27,8 +32,11 @@ interface FileMoreMenuItem {
 }
 
 export default class FileDetailsSummaryComponent extends Component<FileDetailsSummarySignature> {
+  @service declare store: Store;
+  @service declare router: RouterService;
   @service declare intl: IntlService;
   @service declare organization: OrganizationService;
+  @service('notifications') declare notify: NotificationService;
 
   @tracked showMoreFileSummary = false;
   @tracked fileMoreMenuRef: HTMLElement | null = null;
@@ -131,6 +139,52 @@ export default class FileDetailsSummaryComponent extends Component<FileDetailsSu
   @action
   handleFileSummaryToggle() {
     this.showMoreFileSummary = !this.showMoreFileSummary;
+  }
+
+  get isOffsecEligible(): boolean {
+    return Boolean(
+      this.args.file.offsecEligible ?? this.args.file.isOffsecEligible
+    );
+  }
+
+  get isOffsecInitiated(): boolean {
+    return Boolean(
+      this.args.file.offsecInitiated ?? this.args.file.isOffsecInitiated
+    );
+  }
+
+  get showInitiateOffsecBtn(): boolean {
+    return this.isOffsecEligible && !this.isOffsecInitiated;
+  }
+
+  initiateOffsecPentestTask = task(async () => {
+    try {
+      const adapter = this.store.adapterFor('offsec-scan') as OffsecScanAdapter;
+      const res = (await adapter.triggerScan(this.args.file.id)) as {
+        id?: string | number;
+        scan_id?: string | number;
+        scanId?: string | number;
+      };
+
+      this.args.file.offsecInitiated = true;
+      this.args.file.isOffsecInitiated = true;
+      this.notify.success('Offsec pentest scan initiated successfully!');
+
+      const scanId =
+        res?.scan_id ?? res?.scanId ?? res?.id ?? this.args.file.id;
+
+      this.router.transitionTo(
+        'authenticated.dashboard.offensive-security.scan',
+        scanId
+      );
+    } catch (err) {
+      this.notify.error(parseError(err));
+    }
+  });
+
+  @action
+  handleInitiateOffsecPentest() {
+    this.initiateOffsecPentestTask.perform();
   }
 }
 

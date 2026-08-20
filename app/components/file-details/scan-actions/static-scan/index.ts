@@ -1,8 +1,14 @@
 import Component from '@glimmer/component';
+import { action } from '@ember/object';
+import { service } from '@ember/service';
+import { task } from 'ember-concurrency';
+import type Store from '@ember-data/store';
 
 import ENUMS from 'irene/enums';
 import type FileModel from 'irene/models/file';
+import type FileAdapter from 'irene/adapters/file';
 import type { KnoxiqScanStatusByType } from 'irene/components/file-details';
+import parseError from 'irene/utils/parse-error';
 
 export interface FileDetailsScanActionsStaticScanSignature {
   Args: {
@@ -14,6 +20,9 @@ export interface FileDetailsScanActionsStaticScanSignature {
 }
 
 export default class FileDetailsScanActionsStaticScanComponent extends Component<FileDetailsScanActionsStaticScanSignature> {
+  @service declare store: Store;
+  @service('notifications') declare notify: NotificationService;
+
   get sastStatus() {
     return this.args.knoxiqStatuses?.[ENUMS.KNOXIQ_SCAN_TYPE.SAST];
   }
@@ -50,6 +59,21 @@ export default class FileDetailsScanActionsStaticScanComponent extends Component
     return this.sastStatus === ENUMS.KNOXIQ_SCAN_STATUS.COMPLETED
       ? 'static-scan-accent-done'
       : 'static-scan-accent-pending';
+  }
+
+  initiateStaticScanTask = task(async () => {
+    try {
+      const adapter = this.store.adapterFor('file') as FileAdapter;
+      await adapter.startStaticScan(this.args.file.id);
+      this.args.file.isStaticScanStarted = true;
+    } catch (err) {
+      this.notify.error(parseError(err));
+    }
+  });
+
+  @action
+  handleInitiateStaticScan() {
+    this.initiateStaticScanTask.perform();
   }
 }
 

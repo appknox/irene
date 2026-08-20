@@ -7,41 +7,52 @@
   data-test-offensiveSecurity-summaryCard
 >
   <AkStack @width='full' @justifyContent='space-between' @alignItems='center'>
-    <AkTypography @variant='body1' @fontWeight='medium'>
+    <AkTypography @variant='body1' @fontWeight='bold'>
       {{t 'offensiveSecurity.summary'}}
     </AkTypography>
 
-    {{#if @scan.isCompleted}}
+    <AkStack @alignItems='center' @spacing='1'>
+      <AkTypography @variant='body1' @color='textSecondary'>
+        {{t 'offensiveSecurity.riskRating'}}
+      </AkTypography>
+
       <span
         local-class='risk-badge risk-{{@scan.riskClass}}'
         data-test-offensiveSecurity-summaryCard-risk
       >
         {{t (concat 'offensiveSecurity.riskLevel.' @scan.riskClass)}}
       </span>
-    {{/if}}
+    </AkStack>
   </AkStack>
 
   <AkStack
     @width='full'
-    @spacing='2'
+    @spacing='1.5'
     @justifyContent='space-between'
     local-class='stats-row'
   >
     {{#each this.stats as |stat|}}
-      <AkStack
-        @direction='column'
-        @alignItems='center'
-        local-class='stat {{stat.tone}}'
+      <div
+        local-class='stat-box {{stat.tone}}'
         data-test-offensiveSecurity-summaryCard-stat
       >
-        <AkTypography @variant='h5' @fontWeight='medium' @color='inherit'>
+        <AkTypography @variant='h4' @fontWeight='bold' local-class='stat-number'>
           {{stat.value}}
         </AkTypography>
 
-        <AkTypography @variant='body3' @color='textSecondary'>
+        <AkTypography @variant='caption' @color='textSecondary' local-class='stat-label'>
           {{stat.label}}
+          <span class='sr-only'>
+            {{#if (eq stat.tone 'neutral')}}
+              Protections detected
+            {{else if (eq stat.tone 'exploited')}}
+              Bypassed
+            {{else if (eq stat.tone 'defended')}}
+              Resisted
+            {{/if}}
+          </span>
         </AkTypography>
-      </AkStack>
+      </div>
     {{/each}}
   </AkStack>
 

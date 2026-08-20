@@ -13,6 +13,7 @@ import { OFFSEC_SAMPLE_LOG_LINES } from 'irene/utils/offsec-sample-log';
 import type OffsecScanModel from 'irene/models/offsec-scan';
 import type { OffsecScanArtifact } from 'irene/models/offsec-scan';
 import type OffsecScanAdapter from 'irene/adapters/offsec-scan';
+import type FileAdapter from 'irene/adapters/file';
 import type PollService from 'irene/services/poll';
 
 const POLL_INTERVAL_MS = 5000;
@@ -34,6 +35,12 @@ export default class OffensiveSecurityScanResultsComponent extends Component<Off
   @tracked scan: OffsecScanModel | null = null;
   @tracked logLines: string[] = [];
   @tracked logLoadFailed = false;
+  @tracked isFileDetailsExpanded = false;
+
+  @action
+  toggleFileDetails(): void {
+    this.isFileDetailsExpanded = !this.isFileDetailsExpanded;
+  }
 
   stopPolling?: () => void;
 
@@ -79,6 +86,32 @@ export default class OffensiveSecurityScanResultsComponent extends Component<Off
       this.args.scanId,
       String(findingId)
     );
+  }
+
+  initiateStaticScanTask = task({ drop: true }, async () => {
+    try {
+      const targetFileId = String(
+        this.scan?.fileId ??
+          (this.scan as unknown as Record<string, unknown>)?.['file'] ??
+          this.args.scanId
+      );
+      const fileAdapter = this.store.adapterFor('file') as FileAdapter;
+      await fileAdapter.startStaticScan(targetFileId);
+
+      if (this.scan) {
+        this.scan.isStaticScanStarted = true;
+        this.scan.staticScanStarted = true;
+      }
+      this.notify.success('Static scan initiated successfully!');
+      this.loadScan.perform(this.args.scanId);
+    } catch (error) {
+      this.notify.error(parseError(error, this.intl.t('pleaseTryAgain')));
+    }
+  });
+
+  @action
+  handleInitiateStaticScan(): void {
+    this.initiateStaticScanTask.perform();
   }
 
   /**

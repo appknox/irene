@@ -6,39 +6,47 @@
   class='p-3'
   data-test-offensiveSecurity-artifactsCard
 >
-  <AkTypography @variant='body1' @fontWeight='medium'>
+  <AkTypography @variant='body1' @fontWeight='bold'>
     {{t 'offensiveSecurity.artifacts'}}
   </AkTypography>
 
   {{#if this.hasArtifacts}}
-    <AkStack @width='full' @direction='column' @spacing='1'>
+    <AkStack @width='full' @direction='column' @spacing='1.5'>
       {{#each @artifacts as |artifact|}}
-        <AkStack
-          @width='full'
-          @alignItems='center'
-          @justifyContent='space-between'
-          @spacing='1'
-          local-class='artifact-row'
+        <div
+          local-class='artifact-box'
           data-test-offensiveSecurity-artifactsCard-row
         >
-          <AkStack @direction='column' local-class='artifact-meta'>
-            <AkTypography @variant='body2' @fontWeight='medium'>
-              {{artifact.name}}
-            </AkTypography>
+          <AkStack @alignItems='center' @spacing='1.5' local-class='artifact-left'>
+            <div local-class='artifact-icon-box'>
+              <AkIcon @iconName={{this.getArtifactIcon artifact.name}} @size='small' />
+            </div>
 
-            <AkTypography @variant='body3' @color='textSecondary'>
-              {{this.sizeLabel artifact.size}}
-            </AkTypography>
+            <AkStack @direction='column' local-class='artifact-meta'>
+              <AkTypography @variant='body2' @fontWeight='bold' class='font-mono'>
+                {{artifact.name}}
+              </AkTypography>
+
+              <AkTypography @variant='caption' @color='textSecondary'>
+                {{this.getArtifactDescription artifact.name}}
+              </AkTypography>
+            </AkStack>
           </AkStack>
 
-          <AkIconButton
-            @onClick={{fn this.handleDownload artifact.name}}
-            @disabled={{@isDownloading}}
-            data-test-offensiveSecurity-artifactsCard-download
-          >
-            <AkIcon @iconName='download' @size='small' />
-          </AkIconButton>
-        </AkStack>
+          <AkStack @alignItems='center' @spacing='1' local-class='artifact-right'>
+            <AkTypography @variant='caption' @color='textSecondary' class='font-mono'>
+              {{this.sizeLabel artifact.size}}
+            </AkTypography>
+
+            <AkIconButton
+              @onClick={{fn this.handleDownload artifact.name}}
+              @disabled={{@isDownloading}}
+              data-test-offensiveSecurity-artifactsCard-download
+            >
+              <AkIcon @iconName='download' @size='small' />
+            </AkIconButton>
+          </AkStack>
+        </div>
       {{/each}}
     </AkStack>
   {{else}}

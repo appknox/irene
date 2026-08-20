@@ -81,12 +81,12 @@ export default class SideNavProductSwitcherComponent extends Component<SideNavPr
     return !this.organization.hideUpsellUIStatus.offensiveSecurity;
   }
 
-  get switcherMenuItems() {
+  get allMenuItemsList() {
     const allMenuItems = [
       {
         id: 'vapt-svg',
         svg: this.isWhitelabel ? 'ak-svg/vapt-indicator' : 'ak-svg/ak-icon',
-        label: this.isWhitelabel ? this.intl.t('vapt') : this.intl.t('appknox'),
+        label: this.isWhitelabel ? this.intl.t('vapt') : 'VAPT',
         route: 'authenticated.dashboard.projects',
         key: 'appknox',
       },
@@ -123,9 +123,19 @@ export default class SideNavProductSwitcherComponent extends Component<SideNavPr
       },
     ];
 
-    return allMenuItems.filter(
-      (item) => item && item.key !== this.args.productSwitcherFilterKey
-    ) as SwitcherMenuItem[];
+    return allMenuItems.filter(Boolean) as SwitcherMenuItem[];
+  }
+
+  get currentMenuItem() {
+    return this.allMenuItemsList.find(
+      (item) => item.key === this.args.productSwitcherFilterKey
+    );
+  }
+
+  get switcherMenuItems() {
+    return this.allMenuItemsList.filter(
+      (item) => item.key !== this.args.productSwitcherFilterKey
+    );
   }
 
   @action onClickSwitcher(event: MouseEvent) {

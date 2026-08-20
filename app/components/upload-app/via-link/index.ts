@@ -13,7 +13,11 @@ import { validatePresence } from 'ember-changeset-validations/validators';
 import { waitForPromise } from '@ember/test-waiters';
 
 import parseError from 'irene/utils/parse-error';
-import { validateStoreDomain, validateStorePathname } from './validator';
+import {
+  validateAnyUrlFormat,
+  validateStoreDomain,
+  validateStorePathname,
+} from './validator';
 import type AnalyticsService from 'irene/services/analytics';
 import type UploadAppService from 'irene/services/upload-app';
 import type UploadAppUrlModel from 'irene/models/upload-app-url';
@@ -26,7 +30,14 @@ const StoreUrlValidator = {
   url: [validatePresence(true), validateStoreDomain(), validateStorePathname()],
 };
 
-export default class UploadAppViaLinkComponent extends Component {
+export interface UploadAppViaLinkSignature {
+  Args: {
+    isOffsec?: boolean;
+    onUploadSuccess?: () => void;
+  };
+}
+
+export default class UploadAppViaLinkComponent extends Component<UploadAppViaLinkSignature> {
   @service declare store: Store;
   @service declare intl: IntlService;
   @service declare uploadApp: UploadAppService;
@@ -38,13 +49,17 @@ export default class UploadAppViaLinkComponent extends Component {
 
   model = {};
 
-  constructor(owner: unknown, args: object) {
+  constructor(owner: unknown, args: UploadAppViaLinkSignature['Args']) {
     super(owner, args);
+
+    const validatorSchema = args.isOffsec
+      ? { url: [validatePresence(true), validateAnyUrlFormat()] }
+      : StoreUrlValidator;
 
     this.changeset = Changeset(
       this.model,
-      lookupValidator(StoreUrlValidator),
-      StoreUrlValidator
+      lookupValidator(validatorSchema),
+      validatorSchema
     ) as ChangesetBufferProps;
   }
 
@@ -67,6 +82,19 @@ export default class UploadAppViaLinkComponent extends Component {
     }
 
     try {
+      if (this.args.isOffsec) {
+        const offsecRecord = this.store.createRecord('offsec-upload-app-url', {
+          url: this.changeset.url,
+        });
+
+        await waitForPromise(offsecRecord.save());
+
+        this.notify.success('Offsec app upload via URL initiated!');
+        this.closeLinkUploadModal();
+        this.args.onUploadSuccess?.();
+        return;
+      }
+
       const uploadAppUrl = this.store.createRecord('upload-app-url', {
         url: this.changeset.url,
       });

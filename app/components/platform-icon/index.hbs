@@ -1,0 +1,138 @@
+{{#if (eq this.numCode 0)}}
+  {{! 0: ANDROID_NATIVE (Android Green) }}
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    viewBox="0 0 48 48"
+    width={{this.iconSize}}
+    height={{this.iconSize}}
+    ...attributes
+  >
+    <path fill="#3DDC84" d="M14 20h20v17a3 3 0 0 1-3 3H17a3 3 0 0 1-3-3V20Zm2-2.5a8 8 0 0 1 16 0v3H16v-3Z"/>
+    <path stroke="#3DDC84" stroke-width="2" d="m17 15-2-4m16 4 2-4"/>
+    <circle cx="20" cy="17" r="1" fill="white"/>
+    <circle cx="28" cy="17" r="1" fill="white"/>
+  </svg>
+
+{{else if (or (eq this.numCode 1) (eq this.numCode 8))}}
+  {{! 1 & 8: REACT_NATIVE (Cyan / Light Blue) }}
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    viewBox="0 0 48 48"
+    width={{this.iconSize}}
+    height={{this.iconSize}}
+    ...attributes
+  >
+    <g fill="none" stroke="#00D8FF" stroke-width="3">
+      <ellipse cx="24" cy="24" rx="20" ry="8"/>
+      <ellipse cx="24" cy="24" rx="20" ry="8" transform="rotate(60 24 24)"/>
+      <ellipse cx="24" cy="24" rx="20" ry="8" transform="rotate(120 24 24)"/>
+    </g>
+    <circle cx="24" cy="24" r="4" fill="#00D8FF"/>
+  </svg>
+
+{{else if (or (eq this.numCode 2) (eq this.numCode 9))}}
+  {{! 2 & 9: FLUTTER (Blue dual chevron) }}
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    viewBox="0 0 48 48"
+    width={{this.iconSize}}
+    height={{this.iconSize}}
+    ...attributes
+  >
+    <path fill="#02569B" d="m9 28 20-20h10L19 28h10l-5 5H14l-5-5Zm15 8 5-5 10 10H29l-5-5Zm0-8 5-5h10l-5 5H24Z"/>
+  </svg>
+
+{{else if (or (eq this.numCode 3) (eq this.numCode 10))}}
+  {{! 3 & 10: XAMARIN (Xamarin Blue Hexagon) }}
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    viewBox="0 0 48 48"
+    width={{this.iconSize}}
+    height={{this.iconSize}}
+    ...attributes
+  >
+    <path fill="#1FAECE" d="M12 7h24l7 7v20l-7 7H12l-7-7V14l7-7Z"/>
+    <path fill="white" d="m15 14 7 9 7-9h6L25 27l10 13h-6l-7-9-7 9H9l10-13L9 14h6Z"/>
+  </svg>
+
+{{else if (or (eq this.numCode 4) (eq this.numCode 11))}}
+  {{! 4 & 11: CORDOVA (Dark Gray / Charcoal) }}
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    viewBox="0 0 48 48"
+    width={{this.iconSize}}
+    height={{this.iconSize}}
+    ...attributes
+  >
+    <path fill="none" stroke="#4A5568" stroke-width="3" d="M13 16h22l3 5-3 18H13L10 21l3-5Z"/>
+    <path fill="#4A5568" d="M18 12h12l3 5H15l3-5Z"/>
+  </svg>
+
+{{else if (eq this.numCode 5)}}
+  {{! 5: ANDROID_UNKNOWN (Android Green with ? badge) }}
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    viewBox="0 0 52 48"
+    width={{this.iconSize}}
+    height={{this.iconSize}}
+    ...attributes
+  >
+    <path fill="#3DDC84" d="M14 20h20v17a3 3 0 0 1-3 3H17a3 3 0 0 1-3-3V20Zm2-2.5a8 8 0 0 1 16 0v3H16v-3Z"/>
+    <path stroke="#3DDC84" stroke-width="2" d="m17 15-2-4m16 4 2-4"/>
+    <circle cx="20" cy="17" r="1" fill="white"/>
+    <circle cx="28" cy="17" r="1" fill="white"/>
+    <circle cx="38" cy="38" r="10" fill="#718096"/>
+    <text x="38" y="42" text-anchor="middle" font-family="Arial" font-size="13" font-weight="700" fill="white">?</text>
+  </svg>
+
+{{else if (eq this.numCode 6)}}
+  {{! 6: IOS_NATIVE (Black / Dark Apple) }}
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    viewBox="0 0 48 48"
+    width={{this.iconSize}}
+    height={{this.iconSize}}
+    ...attributes
+  >
+    <path fill="#000000" d="M33 25c0-4 3-6 4-6-2-3-5-3-6-3-3 0-5 2-6 2s-3-2-5-1c-3 0-5 2-7 5-3 5-1 12 2 16 1 2 3 4 5 4s3-1 5-1 3 1 5 1 4-2 5-4c2-2 2-4 2-4s-4-2-4-7Zm-4-12c1-1 2-3 2-5-2 0-4 1-5 2-1 1-2 3-2 5 2 0 4-1 5-2Z"/>
+  </svg>
+
+{{else if (eq this.numCode 7)}}
+  {{! 7: IOS_SWIFT (Swift Orange) }}
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    viewBox="0 0 48 48"
+    width={{this.iconSize}}
+    height={{this.iconSize}}
+    ...attributes
+  >
+    <path fill="#F05138" d="M38 31c-2 2-6 4-10 4-8 0-14-6-15-13 2 2 5 4 8 5-4-3-7-7-8-11 4 4 9 6 14 8-2-2-4-4-6-7 4 3 9 6 14 7v-3c0-3 1-5 2-7 1 3 2 5 2 8 0 1 0 2-.3 3 2 0 3-1 4-1-1 2-2 3-3 4 1 0 2 0 3-1-1 2-2 3-5 4Z"/>
+  </svg>
+
+{{else if (eq this.numCode 12)}}
+  {{! 12: IOS_UNKNOWN (Apple Black with ? badge) }}
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    viewBox="0 0 52 48"
+    width={{this.iconSize}}
+    height={{this.iconSize}}
+    ...attributes
+  >
+    <path fill="#000000" d="M33 25c0-4 3-6 4-6-2-3-5-3-6-3-3 0-5 2-6 2s-3-2-5-1c-3 0-5 2-7 5-3 5-1 12 2 16 1 2 3 4 5 4s3-1 5-1 3 1 5 1 4-2 5-4c2-2 2-4 2-4s-4-2-4-7Zm-4-12c1-1 2-3 2-5-2 0-4 1-5 2-1 1-2 3-2 5 2 0 4-1 5-2Z"/>
+    <circle cx="38" cy="38" r="10" fill="#718096"/>
+    <text x="38" y="42" text-anchor="middle" font-family="Arial" font-size="13" font-weight="700" fill="white">?</text>
+  </svg>
+
+{{else}}
+  {{! -1 or default: UNKNOWN (Gray circle with ?) }}
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    viewBox="0 0 48 48"
+    width={{this.iconSize}}
+    height={{this.iconSize}}
+    ...attributes
+  >
+    <circle cx="24" cy="24" r="19" fill="none" stroke="#718096" stroke-width="3"/>
+    <text x="24" y="33" text-anchor="middle" font-family="Arial" font-size="27" font-weight="700" fill="#718096">?</text>
+  </svg>
+{{/if}}

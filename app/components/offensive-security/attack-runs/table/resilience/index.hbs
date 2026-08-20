@@ -1,17 +1,18 @@
 {{#if @scan.hasResilience}}
   <span
-    local-class='resilience-badge resilience-{{@scan.resilienceClass}}'
+    local-class='risk-badge risk-{{@scan.resilienceClass}}'
     data-test-offensiveSecurity-attackRuns-resilienceBadge
   >
-    <span local-class='resilience-score'>
-      {{@scan.overallResilience}}/100
-    </span>
-
-    <span local-class='resilience-separator'>&middot;</span>
-
-    <span local-class='resilience-band'>
-      {{t (concat 'offensiveSecurity.resilienceLevel.' @scan.resilienceClass)}}
-    </span>
+    <strong>{{@scan.overallResilience}}/100</strong>
+    {{t (concat 'offensiveSecurity.resilienceLevel.' @scan.resilienceClass)}}
+  </span>
+{{else if @scan.riskClass}}
+  <span
+    local-class='risk-badge risk-{{@scan.riskClass}}'
+    data-test-offensiveSecurity-attackRuns-riskBadge
+    data-test-offensiveSecurity-attackRuns-resilienceEmpty
+  >
+    {{t (concat 'offensiveSecurity.riskLevel.' @scan.riskClass)}}
   </span>
 {{else}}
   <AkTypography
