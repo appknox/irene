@@ -106,7 +106,7 @@ export default class SbomComponentInventoryComponent extends Component<SbomCompo
     return [
       {
         name: this.intl.t('sbomModule.componentName'),
-        valuePath: 'bomRef',
+        valuePath: 'displayName',
         width: 300,
       },
       {

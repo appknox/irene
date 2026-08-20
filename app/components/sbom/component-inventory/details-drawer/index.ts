@@ -156,7 +156,7 @@ export default class SbomComponentInventoryDetailsDrawerComponent extends Compon
       try {
         const response = await this.store.query('sbom-component', {
           sbomFileId: sbomFile.id,
-          q: component.name,
+          q: component.componentName || component.name,
           limit: 100,
         });
 
