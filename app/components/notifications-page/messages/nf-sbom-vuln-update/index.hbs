@@ -3,13 +3,29 @@
     {{t
       'notificationModule.messages.nf-sbom-vuln-update'
       htmlSafe=true
-      component_name=@context.component_name
+      component_name=@context.displayName
       max_severity=@context.max_severity
       fixed_version=@context.fixed_version
       affected_apps_count=@context.affected_apps_count
       ghsa_ids_display=@context.ghsa_ids_display
     }}
   </AkTypography>
+
+  {{#each @context.advisoryLinks as |link|}}
+    <div data-test-nf-sbom-vuln-update-advisory-link>
+      <AkButton
+        @tag='a'
+        @variant='text'
+        @color='primary'
+        @underline='always'
+        target='_blank'
+        href={{link.url}}
+        rel='noopener noreferrer'
+      >
+        {{link.label}}
+      </AkButton>
+    </div>
+  {{/each}}
 
   <div data-test-nf-sbom-vuln-update-link>
     <AkLink
