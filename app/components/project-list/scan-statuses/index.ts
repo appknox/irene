@@ -2,7 +2,7 @@ import { service } from '@ember/service';
 import Component from '@glimmer/component';
 import type IntlService from 'ember-intl/services/intl';
 
-import ProjectModel from 'irene/models/project';
+import type ProjectModel from 'irene/models/project';
 
 interface ProjectListScanStatusesSignature {
   Element: HTMLElement;

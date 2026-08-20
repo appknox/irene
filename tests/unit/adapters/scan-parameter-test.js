@@ -6,7 +6,7 @@ module('Unit | Adapter | scan parameter', function (hooks) {
 
   // Replace this with your real tests.
   test('it exists', function (assert) {
-    let adapter = this.owner.lookup('adapter:scan-parameter');
+    const adapter = this.owner.lookup('adapter:scan-parameter');
     assert.ok(adapter);
   });
 });

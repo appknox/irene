@@ -133,6 +133,7 @@ export function analysisRiskStatus(
         label: labels.status[status] || '',
       };
     }
+
     return {
       cssclass: classes.status[status] || '',
       icon: icons.status[status] || '',

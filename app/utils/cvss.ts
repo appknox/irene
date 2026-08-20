@@ -50,6 +50,7 @@ export function computeCVSSMetrics<T extends CvssV4Metrics | CvssV3Metrics>(
     (acc, key) => {
       const k = key as keyof T;
       acc[k] = metrics[k] as string | number;
+
       return acc;
     },
     {} as Record<keyof T, string | number>

@@ -1,9 +1,9 @@
 import Component from '@glimmer/component';
 import { tracked } from '@glimmer/tracking';
 import { action } from '@ember/object';
-import OrganizationTeamModel from 'irene/models/organization-team';
-import OrganizationModel from 'irene/models/organization';
-import { ActiveActionDetailsType } from './active-action';
+import type OrganizationTeamModel from 'irene/models/organization-team';
+import type OrganizationModel from 'irene/models/organization';
+import type { ActiveActionDetailsType } from './active-action';
 
 export interface OrganizationTeamDetailsComponentSignature {
   Args: {

@@ -852,7 +852,7 @@ module('Acceptance | sbom', function (hooks) {
       `/dashboard/sbom/apps?app_query=${this.projects[0].package_name}`
     );
 
-    let projectContainerList = findAll('[data-test-sbomapp-row]');
+    const projectContainerList = findAll('[data-test-sbomapp-row]');
 
     assert.strictEqual(
       projectContainerList.length,
@@ -1008,8 +1008,8 @@ module('Acceptance | sbom', function (hooks) {
     await click('[data-test-sbomScanDetails-switch-listViewButton]');
 
     // Sanity check: Verify initial state before filtering
-    let initialComponentRows = findAll('[data-test-sbomComponent-row]');
-    let totalComponents = this.sbomComponents.length;
+    const initialComponentRows = findAll('[data-test-sbomComponent-row]');
+    const totalComponents = this.sbomComponents.length;
 
     assert.strictEqual(
       initialComponentRows.length,
@@ -1040,9 +1040,9 @@ module('Acceptance | sbom', function (hooks) {
     assert.strictEqual(this.query, searchQuery);
 
     // Sanity check: Verify filtered results are reflected in the table
-    let filteredComponentRows = findAll('[data-test-sbomComponent-row]');
+    const filteredComponentRows = findAll('[data-test-sbomComponent-row]');
 
-    let expectedFilteredCount = this.sbomComponents.filter(
+    const expectedFilteredCount = this.sbomComponents.filter(
       (component) =>
         component.name.toLowerCase().includes(searchQuery) ||
         component.package_name?.toLowerCase().includes(searchQuery) ||
@@ -1069,7 +1069,7 @@ module('Acceptance | sbom', function (hooks) {
       .hasNoValue();
 
     // Sanity check: Verify table returns to showing all components
-    let clearedComponentRows = findAll('[data-test-sbomComponent-row]');
+    const clearedComponentRows = findAll('[data-test-sbomComponent-row]');
     assert.strictEqual(
       clearedComponentRows.length,
       totalComponents,
@@ -1116,8 +1116,8 @@ module('Acceptance | sbom', function (hooks) {
     await click('[data-test-sbomScanDetails-switch-listViewButton]');
 
     // Sanity check: Verify initial state before filtering
-    let initialComponentRows = findAll('[data-test-sbomComponent-row]');
-    let totalComponents = this.sbomComponents.length;
+    const initialComponentRows = findAll('[data-test-sbomComponent-row]');
+    const totalComponents = this.sbomComponents.length;
 
     assert.strictEqual(
       initialComponentRows.length,
@@ -1150,9 +1150,9 @@ module('Acceptance | sbom', function (hooks) {
     assert.strictEqual(this.is_dependency, 'false');
 
     // Sanity check: Verify filtered results for direct dependencies
-    let directDependencyRows = findAll('[data-test-sbomComponent-row]');
+    const directDependencyRows = findAll('[data-test-sbomComponent-row]');
 
-    let expectedDirectCount = this.sbomComponents.filter(
+    const expectedDirectCount = this.sbomComponents.filter(
       (component) => component.is_dependency === false
     ).length;
 
@@ -1172,7 +1172,7 @@ module('Acceptance | sbom', function (hooks) {
     assert.strictEqual(this.is_dependency, undefined);
 
     // Sanity check: Verify table returns to showing all components
-    let clearedDependencyRows = findAll('[data-test-sbomComponent-row]');
+    const clearedDependencyRows = findAll('[data-test-sbomComponent-row]');
 
     assert.strictEqual(
       clearedDependencyRows.length,
@@ -1203,9 +1203,9 @@ module('Acceptance | sbom', function (hooks) {
 
     assert.strictEqual(this.component_type, 'library');
 
-    let libraryComponentRows = findAll('[data-test-sbomComponent-row]');
+    const libraryComponentRows = findAll('[data-test-sbomComponent-row]');
 
-    let expectedLibraryCount = this.sbomComponents.filter(
+    const expectedLibraryCount = this.sbomComponents.filter(
       (component) => component.component_type === 'library'
     ).length;
 
@@ -1225,7 +1225,7 @@ module('Acceptance | sbom', function (hooks) {
     assert.strictEqual(this.component_type, undefined);
 
     // Sanity check: Verify table returns to showing all components
-    let clearedComponentTypeRows = findAll('[data-test-sbomComponent-row]');
+    const clearedComponentTypeRows = findAll('[data-test-sbomComponent-row]');
     assert.strictEqual(
       clearedComponentTypeRows.length,
       totalComponents,
@@ -1285,7 +1285,7 @@ module('Acceptance | sbom', function (hooks) {
     await click('[data-test-sbomScanDetails-switch-listViewButton]');
 
     // Sanity check: Initial state
-    let initialRows = findAll('[data-test-sbomComponent-row]');
+    const initialRows = findAll('[data-test-sbomComponent-row]');
     assert.strictEqual(initialRows.length, this.sbomComponents.length);
 
     // Apply multiple filters
@@ -1312,8 +1312,8 @@ module('Acceptance | sbom', function (hooks) {
     );
 
     // Sanity check: Verify combined filters work
-    let combinedFilterRows = findAll('[data-test-sbomComponent-row]');
-    let expectedCombinedCount = this.sbomComponents.filter((component) => {
+    const combinedFilterRows = findAll('[data-test-sbomComponent-row]');
+    const expectedCombinedCount = this.sbomComponents.filter((component) => {
       const matchesSearch =
         component.name.toLowerCase().includes(searchQuery) ||
         component.package_name?.toLowerCase().includes(searchQuery) ||

@@ -7,7 +7,7 @@ module('Unit | Adapter | service account project', function (hooks) {
 
   // Replace this with your real tests.
   test('it exists', function (assert) {
-    let adapter = this.owner.lookup('adapter:service-account-project');
+    const adapter = this.owner.lookup('adapter:service-account-project');
     assert.ok(adapter);
   });
 });

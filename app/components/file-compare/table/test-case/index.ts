@@ -1,5 +1,5 @@
 import Component from '@glimmer/component';
-import { FileCompareTableData } from 'irene/components/file-compare/table';
+import type { FileCompareTableData } from 'irene/components/file-compare/table';
 
 interface FileCompareTableTestCaseSignature {
   Args: {

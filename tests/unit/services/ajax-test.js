@@ -114,6 +114,7 @@ module('Unit | Service | ajax', function (hooks) {
         request.requestHeaders['X-Custom-Header'],
         'Custom header is present'
       );
+
       return fakeResponse;
     });
 

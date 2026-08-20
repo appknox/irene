@@ -6,7 +6,7 @@ module('Unit | Adapter | sbom scan summary', function (hooks) {
 
   // Replace this with your real tests.
   test('it exists', function (assert) {
-    let adapter = this.owner.lookup('adapter:sbom-scan-summary');
+    const adapter = this.owner.lookup('adapter:sbom-scan-summary');
     assert.ok(adapter);
   });
 });

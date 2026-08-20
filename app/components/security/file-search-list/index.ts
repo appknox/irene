@@ -1,20 +1,20 @@
 /* eslint-disable ember/no-observers */
 // eslint-disable-next-line ember/use-ember-data-rfc-395-imports
-import DS from 'ember-data';
-import IntlService from 'ember-intl/services/intl';
+import type DS from 'ember-data';
+import type IntlService from 'ember-intl/services/intl';
 import { inject as service } from '@ember/service';
 import Component from '@glimmer/component';
 import { tracked } from '@glimmer/tracking';
 import { task } from 'ember-concurrency';
-import Store from 'ember-data/store';
+import type Store from 'ember-data/store';
 import { action } from '@ember/object';
-import RouterService from '@ember/routing/router-service';
+import type RouterService from '@ember/routing/router-service';
 
-import SecurityFileModel from 'irene/models/security/file';
+import type SecurityFileModel from 'irene/models/security/file';
 import parseError from 'irene/utils/parse-error';
-import { PaginationProviderActionsArgs } from 'irene/components/ak-pagination-provider';
-import RealtimeService from 'irene/services/realtime';
-import { SecurityFilesQueryParam } from 'irene/routes/authenticated/security/files';
+import type { PaginationProviderActionsArgs } from 'irene/components/ak-pagination-provider';
+import type RealtimeService from 'irene/services/realtime';
+import type { SecurityFilesQueryParam } from 'irene/routes/authenticated/security/files';
 
 export interface SecurityFileSearchListSignature {
   Element: HTMLElement;

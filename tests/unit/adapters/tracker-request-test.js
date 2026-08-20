@@ -6,7 +6,7 @@ module('Unit | Adapter | tracker request', function (hooks) {
 
   // Replace this with your real tests.
   test('it exists', function (assert) {
-    let adapter = this.owner.lookup('adapter:tracker-request');
+    const adapter = this.owner.lookup('adapter:tracker-request');
     assert.ok(adapter);
   });
 });

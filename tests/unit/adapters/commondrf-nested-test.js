@@ -6,7 +6,7 @@ module('Unit | Adapter | commondrf nested', function (hooks) {
 
   // Replace this with your real tests.
   test('it exists', function (assert) {
-    let adapter = this.owner.lookup('adapter:commondrf-nested');
+    const adapter = this.owner.lookup('adapter:commondrf-nested');
     assert.ok(adapter);
   });
 });

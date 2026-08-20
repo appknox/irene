@@ -1,10 +1,10 @@
 import Component from '@glimmer/component';
 import { inject as service } from '@ember/service';
-import MeService from 'irene/services/me';
-import OrganizationService from 'irene/services/organization';
-import OrganizationModel from 'irene/models/organization';
-import OrganizationMemberModel from 'irene/models/organization-member';
-import { OrganizationMembersRouteQueryParams } from 'irene/routes/authenticated/dashboard/organization/users';
+import type MeService from 'irene/services/me';
+import type OrganizationService from 'irene/services/organization';
+import type OrganizationModel from 'irene/models/organization';
+import type OrganizationMemberModel from 'irene/models/organization-member';
+import type { OrganizationMembersRouteQueryParams } from 'irene/routes/authenticated/dashboard/organization/users';
 
 interface OrganizationMemberSignature {
   Args: {

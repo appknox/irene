@@ -1,5 +1,5 @@
 import cyTranslate from '../../translations';
-import { MirageFactoryDefProps } from '../../Mirage';
+import type { MirageFactoryDefProps } from '../../Mirage';
 
 export interface AppInteraction {
   name: string;

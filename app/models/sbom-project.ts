@@ -1,7 +1,7 @@
-import Model, { attr, AsyncBelongsTo, belongsTo } from '@ember-data/model';
-
-import ProjectModel from './project';
-import SbomFileModel from './sbom-file';
+import Model, { attr, belongsTo } from '@ember-data/model';
+import type { AsyncBelongsTo } from '@ember-data/model';
+import type ProjectModel from './project';
+import type SbomFileModel from './sbom-file';
 
 export default class SbomProjectModel extends Model {
   @attr('date')

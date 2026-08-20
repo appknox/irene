@@ -261,8 +261,8 @@ module('Acceptance | DRF: CRUD Failure', function (hooks) {
         Related discussion: https://github.com/json-api/json-api/issues/899
         */
 
-      let postBodyErrors = comment.get('errors.post/body');
-      let postPostTitleErrors = comment.get('errors.post/post_title');
+      const postBodyErrors = comment.get('errors.post/body');
+      const postPostTitleErrors = comment.get('errors.post/post_title');
 
       assert.strictEqual(postBodyErrors.length, 2);
       assert.strictEqual(postBodyErrors[0].message, 'This field is required.');

@@ -1,4 +1,5 @@
-import Model, { AsyncBelongsTo, attr, belongsTo } from '@ember-data/model';
+import type { AsyncBelongsTo } from '@ember-data/model';
+import Model, { attr, belongsTo } from '@ember-data/model';
 import { isEmpty } from '@ember/utils';
 
 import ENUMS from 'irene/enums';
@@ -66,6 +67,7 @@ export default class AnalysisOverviewModel extends Model {
 
   get isRisky() {
     const risk = this.computedRisk;
+
     return ![ENUMS.RISK.NONE, ENUMS.RISK.UNKNOWN].includes(risk);
   }
 
@@ -77,6 +79,7 @@ export default class AnalysisOverviewModel extends Model {
 
   get isScanning() {
     const risk = this.computedRisk;
+
     return risk === ENUMS.RISK.UNKNOWN;
   }
 

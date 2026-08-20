@@ -107,6 +107,7 @@ module('Unit | Service | websocket', function (hooks) {
 
     store.normalize = (modelName, data) => {
       normalizedData = { modelName, data };
+
       return { data: { id: '1', type: modelName, attributes: data } };
     };
 
@@ -409,7 +410,7 @@ module('Unit | Service | websocket', function (hooks) {
       'file-2': { modelName: 'file', id: '2' },
     };
 
-    let pullCalls = [];
+    const pullCalls = [];
 
     service.pullModel = {
       perform: (modelName, id) => {
@@ -444,6 +445,7 @@ module('Unit | Service | websocket', function (hooks) {
       modelForCalled = true;
 
       assert.strictEqual(modelName, 'file');
+
       return originalModelFor.call(store, modelName);
     };
 

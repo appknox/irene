@@ -6,7 +6,7 @@ module('Unit | Adapter | ds automation preference', function (hooks) {
 
   // Replace this with your real tests.
   test('it exists', function (assert) {
-    let adapter = this.owner.lookup('adapter:ds-automation-preference');
+    const adapter = this.owner.lookup('adapter:ds-automation-preference');
     assert.ok(adapter);
   });
 });

@@ -2,17 +2,17 @@ import { action } from '@ember/object';
 import { inject as service } from '@ember/service';
 import Component from '@glimmer/component';
 import { tracked } from '@glimmer/tracking';
-import IntlService from 'ember-intl/services/intl';
+import type IntlService from 'ember-intl/services/intl';
 import { task } from 'ember-concurrency';
 
 // eslint-disable-next-line ember/use-ember-data-rfc-395-imports
-import { DS } from 'ember-data';
-import Store from 'ember-data/store';
-import { PaginationProviderActionsArgs } from 'irene/components/ak-pagination-provider';
+import type { DS } from 'ember-data';
+import type Store from 'ember-data/store';
+import type { PaginationProviderActionsArgs } from 'irene/components/ak-pagination-provider';
 import parseError from 'irene/utils/parse-error';
 
-import SbomComponentModel from 'irene/models/sbom-component';
-import SbomVulnerabilityAuditModel from 'irene/models/sbom-vulnerability-audit';
+import type SbomComponentModel from 'irene/models/sbom-component';
+import type SbomVulnerabilityAuditModel from 'irene/models/sbom-vulnerability-audit';
 
 export interface SbomComponentDetailsVulnerabilitiesSignature {
   Element: HTMLDivElement;

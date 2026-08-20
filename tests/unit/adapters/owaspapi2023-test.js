@@ -6,7 +6,7 @@ module('Unit | Adapter | owaspapi2023', function (hooks) {
 
   // Replace this with your real tests.
   test('it exists', function (assert) {
-    let adapter = this.owner.lookup('adapter:owaspapi2023');
+    const adapter = this.owner.lookup('adapter:owaspapi2023');
     assert.ok(adapter);
   });
 });

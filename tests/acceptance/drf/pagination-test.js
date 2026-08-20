@@ -81,14 +81,14 @@ module('Acceptance | DRF: Pagination', function (hooks) {
         }
       }
 
-      let nextPage = page + 1;
+      const nextPage = page + 1;
       let nextUrl = null;
 
       if (nextPage <= maxPages) {
         nextUrl = '/test-api/posts/?page=' + nextPage;
       }
 
-      let previousPage = page - 1;
+      const previousPage = page - 1;
       let previousUrl = null;
 
       if (previousPage > 1) {
@@ -98,7 +98,7 @@ module('Acceptance | DRF: Pagination', function (hooks) {
         previousUrl = '/test-api/posts/';
       }
 
-      let offset = (page - 1) * pageSize;
+      const offset = (page - 1) * pageSize;
 
       return new Response(
         200,

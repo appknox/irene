@@ -188,6 +188,7 @@ module('Acceptance | organization members', function (hooks) {
 
     this.server.get('/organizations/:id/invitations', (schema) => {
       const results = schema.organizationInvitations.all().models;
+
       return { count: results.length, next: null, previous: null, results };
     });
 

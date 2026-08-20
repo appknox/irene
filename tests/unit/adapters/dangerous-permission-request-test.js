@@ -6,7 +6,7 @@ module('Unit | Adapter | dangerous permission request', function (hooks) {
 
   // Replace this with your real tests.
   test('it exists', function (assert) {
-    let adapter = this.owner.lookup('adapter:dangerous-permission-request');
+    const adapter = this.owner.lookup('adapter:dangerous-permission-request');
     assert.ok(adapter);
   });
 });

@@ -1,4 +1,5 @@
-import { hasMany, SyncHasMany } from '@ember-data/model';
+import type { SyncHasMany } from '@ember-data/model';
+import { hasMany } from '@ember-data/model';
 
 import ScenarioModel from './scenario';
 import type ScenarioUserRoleModel from './scenario-user-role';

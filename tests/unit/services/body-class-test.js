@@ -4,12 +4,12 @@ import { setupTest } from 'ember-qunit';
 module('Unit | Service | body-class', function (hooks) {
   setupTest(hooks);
   test('it exists', function (assert) {
-    let service = this.owner.lookup('service:body-class');
+    const service = this.owner.lookup('service:body-class');
     assert.ok(service);
   });
 
   test('should add class', function (assert) {
-    let service = this.owner.lookup('service:body-class');
+    const service = this.owner.lookup('service:body-class');
     service.push({
       id: '23',
       clazzes: 'test1 test2',
@@ -18,7 +18,7 @@ module('Unit | Service | body-class', function (hooks) {
   });
 
   test('should remmove class', function (assert) {
-    let service = this.owner.lookup('service:body-class');
+    const service = this.owner.lookup('service:body-class');
     service.push({
       id: '23',
       clazzes: 'test1 test2',
@@ -29,7 +29,7 @@ module('Unit | Service | body-class', function (hooks) {
   });
 
   test('should handle adding empty class', function (assert) {
-    let service = this.owner.lookup('service:body-class');
+    const service = this.owner.lookup('service:body-class');
     service.push({
       id: '23',
       clazzes: ' ',

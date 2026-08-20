@@ -5,7 +5,7 @@ module('Unit | Adapter | sama', function (hooks) {
   setupTest(hooks);
 
   test('it exists', function (assert) {
-    let adapter = this.owner.lookup('adapter:sama');
+    const adapter = this.owner.lookup('adapter:sama');
     assert.ok(adapter);
   });
 });

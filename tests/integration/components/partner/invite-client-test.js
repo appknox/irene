@@ -214,7 +214,7 @@ module('Integration | Component | partner/invite-client', function (hooks) {
       (schema, request) => {
         const rrSchema = schema['partner/registrationRequests'];
         const body = JSON.parse(request.requestBody);
-        let obj = rrSchema.create({
+        const obj = rrSchema.create({
           email: body.email,
           data: {
             company: body.company,
@@ -222,6 +222,7 @@ module('Integration | Component | partner/invite-client', function (hooks) {
             last_name: body.last_name,
           },
         });
+
         return { ...rrInvitationSample.attrs, ...obj.attrs };
       }
     );
@@ -264,7 +265,7 @@ module('Integration | Component | partner/invite-client', function (hooks) {
       (schema, request) => {
         const rrSchema = schema['partner/registrationRequests'];
         const body = JSON.parse(request.requestBody);
-        let obj = rrSchema.create({
+        const obj = rrSchema.create({
           email: body.email,
           data: {
             company: body.company,
@@ -272,6 +273,7 @@ module('Integration | Component | partner/invite-client', function (hooks) {
             last_name: body.last_name,
           },
         });
+
         return { ...rrInvitationSample.attrs, ...obj.attrs };
       }
     );
@@ -314,7 +316,7 @@ module('Integration | Component | partner/invite-client', function (hooks) {
       (schema, request) => {
         const rrSchema = schema['partner/registrationRequests'];
         const body = JSON.parse(request.requestBody);
-        let obj = rrSchema.create({
+        const obj = rrSchema.create({
           email: body.email,
           data: {
             company: body.company,
@@ -322,6 +324,7 @@ module('Integration | Component | partner/invite-client', function (hooks) {
             last_name: body.last_name,
           },
         });
+
         return { ...rrInvitationSample.attrs, ...obj.attrs };
       }
     );

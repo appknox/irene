@@ -1,7 +1,7 @@
 import Component from '@glimmer/component';
 import dayjs from 'dayjs';
 
-import SbomProjectModel from 'irene/models/sbom-project';
+import type SbomProjectModel from 'irene/models/sbom-project';
 
 export interface SbomComponentInventoryDetailsDrawerLastAnalysedOnSignature {
   Args: {

@@ -1,5 +1,4 @@
 import cyTranslate from '../support/translations';
-import { MirageFactoryDefProps } from '../support/Mirage';
 
 import LoginActions from '../support/Actions/auth/LoginActions';
 import NetworkActions from '../support/Actions/common/NetworkActions';
@@ -7,7 +6,8 @@ import UploadAppActions from '../support/Actions/common/UploadAppActions';
 
 import { API_ROUTES } from '../support/api.routes';
 import { APPLICATION_ROUTES } from '../support/application.routes';
-import { WS_MODEL_CREATED_PAYLOAD_MAP } from '../support/Websocket';
+import type { MirageFactoryDefProps } from '../support/Mirage';
+import type { WS_MODEL_CREATED_PAYLOAD_MAP } from '../support/Websocket';
 
 // Grouped test Actions
 const loginActions = new LoginActions();

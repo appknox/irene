@@ -125,6 +125,7 @@ module(
         '/organizations/:orgID/projects/:projectID/teams',
         (schema) => {
           const results = schema.projectTeams.all().models;
+
           return { count: results.length, next: null, previous: null, results };
         }
       );
@@ -179,6 +180,7 @@ module(
         '/organizations/:id/projects/:projectID/teams',
         (schema) => {
           const results = schema.projectTeams.all().models;
+
           return { count: results.length, next: null, previous: null, results };
         }
       );
@@ -270,6 +272,7 @@ module(
             }
 
             this.set('teamRemoved', true);
+
             return new Response(204);
           }
         );

@@ -2,7 +2,7 @@ import { action } from '@ember/object';
 import Component from '@glimmer/component';
 import { tracked } from '@glimmer/tracking';
 // eslint-disable-next-line ember/use-ember-data-rfc-395-imports
-import { DS } from 'ember-data';
+import type { DS } from 'ember-data';
 
 type ResultDependency =
   | string // e.g., "search", "category", etc.
@@ -74,6 +74,7 @@ export default class AkPaginationProviderComponent<R> extends Component<
     if (this.args.offset > this.maxOffset) {
       return this.maxOffset;
     }
+
     return this.args.offset;
   }
 
@@ -105,6 +106,7 @@ export default class AkPaginationProviderComponent<R> extends Component<
 
   get disableNext() {
     const nextOffset = this.offset + this.limit;
+
     return nextOffset >= this.maxOffset;
   }
 

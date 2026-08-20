@@ -24,6 +24,7 @@ export default Base.extend({
     for (let i = 0; i < 5; i++) {
       desc.push(faker.lorem.words(2).split(' ').join(' -> '));
     }
+
     return desc.join(',');
   },
 });

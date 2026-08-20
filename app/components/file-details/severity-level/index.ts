@@ -3,7 +3,7 @@ import { tracked } from '@glimmer/tracking';
 import { service } from '@ember/service';
 import { task } from 'ember-concurrency';
 import { waitForPromise } from '@ember/test-waiters';
-import FileModel from 'irene/models/file';
+import type FileModel from 'irene/models/file';
 import type LoggerService from 'irene/services/logger';
 
 export interface FileDetailsSeverityLevelSignature {

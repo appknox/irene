@@ -23,9 +23,9 @@ import type GdprModel from 'irene/models/gdpr';
 import type Nistsp80053Model from 'irene/models/nistsp80053';
 import type Nistsp800171Model from 'irene/models/nistsp800171';
 import type IntlService from 'ember-intl/services/intl';
-import SamaModel from 'irene/models/sama';
-import Pcidss4Model from 'irene/models/pcidss4';
-import DoraModel from 'irene/models/dora';
+import type DoraModel from 'irene/models/dora';
+import type SamaModel from 'irene/models/sama';
+import type Pcidss4Model from 'irene/models/pcidss4';
 
 type RegulatoryCategoryOptionKeys =
   | 'owasp'
@@ -77,6 +77,7 @@ export default class SecurityAnalysisDetailsRegulatoryCategoriesComponent extend
   @tracked owaspsData: RegulatoryDataModel<OwaspModel> = null;
   @tracked owaspmobile2024sData: RegulatoryDataModel<OwaspMobile2024Model> =
     null;
+
   @tracked owaspapi2023sData: RegulatoryDataModel<OwaspApi2023Model> = null;
   @tracked pcidssesData: RegulatoryDataModel<PcidssModel> = null;
   @tracked pcidss4sData: RegulatoryDataModel<Pcidss4Model> = null;

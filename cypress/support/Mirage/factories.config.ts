@@ -1,55 +1,35 @@
-import { FactoryDefinition } from 'miragejs/-types';
+import type { FactoryDefinition } from 'miragejs/-types';
 
-import { BASE_FACTORY_DEF } from 'irene/mirage/factories/base';
-import FileFactory, { FILE_FACTORY_DEF } from 'irene/mirage/factories/file';
-import User, { USER_FACTORY_DEF } from 'irene/mirage/factories/user';
-import FileRiskFactory, {
-  FILE_RISK_FACTORY_DEF,
-} from 'irene/mirage/factories/file-risk';
+import FileFactory from 'irene/mirage/factories/file';
+import User from 'irene/mirage/factories/user';
+import FileRiskFactory from 'irene/mirage/factories/file-risk';
+import AnalysisFactory from 'irene/mirage/factories/analysis';
+import SbomProjectFactory from 'irene/mirage/factories/sbom-project';
+import SbomFileFactory from 'irene/mirage/factories/sbom-file';
+import ProjectFactory from 'irene/mirage/factories/project';
+import VulnerabilityFactory from 'irene/mirage/factories/vulnerability';
+import UnknownAnalysisStatus from 'irene/mirage/factories/unknown-analysis-status';
+import OrganizationMember from 'irene/mirage/factories/organization-member';
+import UploadApp from 'irene/mirage/factories/upload-app';
+import UploadAppLink from 'irene/mirage/factories/upload-app-link';
+import Submission from 'irene/mirage/factories/submission';
+import DeviceFactory from 'irene/mirage/factories/device';
 
-import AnalysisFactory, {
-  ANALYSIS_FACTORY_DEF,
-} from 'irene/mirage/factories/analysis';
-
-import SbomProjectFactory, {
-  SBOM_PROJECT_FACTORY_DEF,
-} from 'irene/mirage/factories/sbom-project';
-
-import SbomFileFactory, {
-  SBOM_FILE_FACTORY_DEF,
-} from 'irene/mirage/factories/sbom-file';
-
-import ProjectFactory, {
-  PROJECT_FACTORY_DEF,
-} from 'irene/mirage/factories/project';
-
-import VulnerabilityFactory, {
-  VULNERABLITY_FACTORY_DEF,
-} from 'irene/mirage/factories/vulnerability';
-
-import UnknownAnalysisStatus, {
-  UNKNOWN_ANALYSIS_STATUS_FACTORY_DEF,
-} from 'irene/mirage/factories/unknown-analysis-status';
-
-import OrganizationMember, {
-  ORGANIZATION_MEMBER_FACTORY_DEF,
-} from 'irene/mirage/factories/organization-member';
-
-import UploadApp, {
-  UPLOAD_APP_FACTORY_DEF,
-} from 'irene/mirage/factories/upload-app';
-
-import UploadAppLink, {
-  UPLOAD_APP_LINK_FACTORY_DEF,
-} from 'irene/mirage/factories/upload-app-link';
-
-import Submission, {
-  SUBMISSION_FACTORY_DEF,
-} from 'irene/mirage/factories/submission';
-
-import DeviceFactory, {
-  DEVICE_FACTORY_DEF,
-} from 'irene/mirage/factories/device';
+import type { BASE_FACTORY_DEF } from 'irene/mirage/factories/base';
+import type { FILE_FACTORY_DEF } from 'irene/mirage/factories/file';
+import type { USER_FACTORY_DEF } from 'irene/mirage/factories/user';
+import type { FILE_RISK_FACTORY_DEF } from 'irene/mirage/factories/file-risk';
+import type { ANALYSIS_FACTORY_DEF } from 'irene/mirage/factories/analysis';
+import type { SBOM_PROJECT_FACTORY_DEF } from 'irene/mirage/factories/sbom-project';
+import type { SBOM_FILE_FACTORY_DEF } from 'irene/mirage/factories/sbom-file';
+import type { PROJECT_FACTORY_DEF } from 'irene/mirage/factories/project';
+import type { VULNERABLITY_FACTORY_DEF } from 'irene/mirage/factories/vulnerability';
+import type { UNKNOWN_ANALYSIS_STATUS_FACTORY_DEF } from 'irene/mirage/factories/unknown-analysis-status';
+import type { ORGANIZATION_MEMBER_FACTORY_DEF } from 'irene/mirage/factories/organization-member';
+import type { UPLOAD_APP_FACTORY_DEF } from 'irene/mirage/factories/upload-app';
+import type { UPLOAD_APP_LINK_FACTORY_DEF } from 'irene/mirage/factories/upload-app-link';
+import type { SUBMISSION_FACTORY_DEF } from 'irene/mirage/factories/submission';
+import type { DEVICE_FACTORY_DEF } from 'irene/mirage/factories/device';
 
 // Extract factory method return values from a factory definition
 export type FlattenFactoryMethods<T> = {

@@ -1,13 +1,8 @@
-import Model, {
-  attr,
-  hasMany,
-  AsyncHasMany,
-  belongsTo,
-  AsyncBelongsTo,
-} from '@ember-data/model';
+import type { AsyncHasMany, AsyncBelongsTo } from '@ember-data/model';
+import Model, { attr, hasMany, belongsTo } from '@ember-data/model';
 
-import OrganizationTeamModel from './organization-team';
-import OrganizationUserModel from './organization-user';
+import type OrganizationTeamModel from './organization-team';
+import type OrganizationUserModel from './organization-user';
 
 export default class OrganizationMemberModel extends Model {
   @belongsTo('organization-user', { async: true, inverse: null })

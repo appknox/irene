@@ -2,8 +2,8 @@ import Component from '@glimmer/component';
 import { action } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
 import { runTask, cancelTask } from 'ember-lifeline';
-import { Placement } from '@popperjs/core';
-import { EmberRunTimer } from '@ember/runloop/types';
+import type { Placement } from '@popperjs/core';
+import type { EmberRunTimer } from '@ember/runloop/types';
 
 import styles from './index.scss';
 

@@ -31,6 +31,7 @@ class NotificationsStub extends Service {
   error(msg) {
     this.errorMsg = msg;
   }
+
   success(msg) {
     this.successMsg = msg;
   }
@@ -171,6 +172,7 @@ module(
         'v2/partnerclients/:clientId/files/:fileId/reports',
         (schema) => {
           const data = schema['partner/partnerclientFileReports'].all();
+
           return serializer(data, true);
         }
       );
@@ -217,6 +219,7 @@ module(
         'v2/partnerclients/:clientId/files/:fileId/reports',
         (schema) => {
           const data = schema['partner/partnerclientFileReports'].all();
+
           return serializer(data, true);
         }
       );
@@ -226,6 +229,7 @@ module(
       });
       this.server.get('v2/partnerclients/:clientId/reports/:id', (schema) => {
         const data = schema['partner/partnerclientReports'].find(1);
+
         return serializer(data);
       });
 
@@ -275,6 +279,7 @@ module(
         'v2/partnerclients/:clientId/files/:fileId/reports',
         (schema) => {
           const data = schema['partner/partnerclientFileReports'].all();
+
           return serializer(data, true);
         }
       );
@@ -284,6 +289,7 @@ module(
       });
       this.server.get('v2/partnerclients/:clientId/reports/:id', (schema) => {
         const data = schema['partner/partnerclientReports'].find(1);
+
         return serializer(data);
       });
 
@@ -365,6 +371,7 @@ module(
         'v2/partnerclients/:clientId/files/:fileId/reports',
         (schema) => {
           const data = schema['partner/partnerclientFileReports'].all();
+
           return serializer(data, true);
         }
       );
@@ -374,6 +381,7 @@ module(
       });
       this.server.get('v2/partnerclients/:clientId/reports/:id', (schema) => {
         const data = schema['partner/partnerclientReports'].find(1);
+
         return serializer(data);
       });
 
@@ -414,6 +422,7 @@ module(
         'v2/partnerclients/:clientId/files/:fileId/reports',
         (schema) => {
           const data = schema['partner/partnerclientFileReports'].all();
+
           return serializer(data, true);
         }
       );
@@ -423,6 +432,7 @@ module(
       });
       this.server.get('v2/partnerclients/:clientId/reports/:id', (schema) => {
         const data = schema['partner/partnerclientReports'].find(1);
+
         return serializer(data);
       });
 
@@ -516,6 +526,7 @@ module(
         'v2/partnerclients/:clientId/files/:fileId/reports',
         (schema) => {
           const data = schema['partner/partnerclientFileReports'].all();
+
           return serializer(data, true);
         }
       );
@@ -525,6 +536,7 @@ module(
       });
       this.server.get('v2/partnerclients/:clientId/reports/:id', (schema) => {
         const data = schema['partner/partnerclientReports'].find(1);
+
         return serializer(data);
       });
       this.set('clientId', 1);
@@ -553,6 +565,7 @@ module(
         'v2/partnerclients/:clientId/files/:fileId/reports',
         (schema) => {
           const data = schema['partner/partnerclientFileReports'].all();
+
           return serializer(data, true);
         }
       );
@@ -562,6 +575,7 @@ module(
       });
       this.server.get('v2/partnerclients/:clientId/reports/:id', (schema) => {
         const data = schema['partner/partnerclientReports'].find(1);
+
         return serializer(data);
       });
       this.set('clientId', 1);
@@ -590,6 +604,7 @@ module(
         'v2/partnerclients/:clientId/files/:fileId/reports',
         (schema) => {
           const data = schema['partner/partnerclientFileReports'].all();
+
           return serializer(data, true);
         }
       );
@@ -599,6 +614,7 @@ module(
       });
       this.server.get('v2/partnerclients/:clientId/reports/:id', (schema) => {
         const data = schema['partner/partnerclientReports'].find(1);
+
         return serializer(data);
       });
 
@@ -615,6 +631,7 @@ module(
         'v2/partnerclients/:clientId/reports/:id/unlock_key',
         (schema) => {
           const data = schema['partner/partnerclientReportUnlockkeys'].find(1);
+
           return serializer(data);
         }
       );
@@ -652,6 +669,7 @@ module(
         'v2/partnerclients/:clientId/files/:fileId/reports',
         (schema) => {
           const data = schema['partner/partnerclientFileReports'].all();
+
           return serializer(data, true);
         }
       );
@@ -662,6 +680,7 @@ module(
 
       this.server.get('v2/partnerclients/:clientId/reports/:id', (schema) => {
         const data = schema['partner/partnerclientReports'].find(1);
+
         return serializer(data);
       });
 
@@ -680,6 +699,7 @@ module(
         'v2/partnerclients/:clientId/reports/:id/unlock_key',
         (schema) => {
           const data = schema['partner/partnerclientReportUnlockkeys'].find(1);
+
           return serializer(data);
         }
       );
@@ -736,6 +756,7 @@ module(
         'v2/partnerclients/:clientId/files/:fileId/reports',
         (schema) => {
           const data = schema['partner/partnerclientFileReports'].all();
+
           return serializer(data, true);
         }
       );
@@ -745,6 +766,7 @@ module(
       });
       this.server.get('v2/partnerclients/:clientId/reports/:id', (schema) => {
         const data = schema['partner/partnerclientReports'].find(1);
+
         return serializer(data);
       });
 
@@ -785,6 +807,7 @@ module(
       this.server.create('partner/partnerclient-file');
       this.server.get('v2/partnerclients/:clientId/files/:fileId', (schema) => {
         const data = schema['partner/partnerclientFiles'].find(1);
+
         return serializer(data);
       });
 
@@ -800,6 +823,7 @@ module(
         'v2/partnerclients/:clientId/files/:fileId/reports',
         (schema) => {
           const data = schema['partner/partnerclientFileReports'].all();
+
           return serializer(data, true);
         }
       );
@@ -809,6 +833,7 @@ module(
       });
       this.server.get('v2/partnerclients/:clientId/reports/:id', (schema) => {
         const data = schema['partner/partnerclientReports'].find(1);
+
         return serializer(data);
       });
 
@@ -846,6 +871,7 @@ module(
       this.server.create('partner/partnerclient-file');
       this.server.get('v2/partnerclients/:clientId/files/:fileId', (schema) => {
         const data = schema['partner/partnerclientFiles'].find(1);
+
         return serializer(data);
       });
 
@@ -867,6 +893,7 @@ module(
         'v2/partnerclients/:clientId/files/:fileId/reports',
         (schema) => {
           const data = schema['partner/partnerclientFileReports'].all();
+
           return serializer(data, true);
         }
       );
@@ -876,6 +903,7 @@ module(
       });
       this.server.get('v2/partnerclients/:clientId/reports/:id', (schema) => {
         const data = schema['partner/partnerclientReports'].find(1);
+
         return serializer(data);
       });
 
@@ -913,6 +941,7 @@ module(
       this.server.create('partner/partnerclient-file');
       this.server.get('v2/partnerclients/:clientId/files/:fileId', (schema) => {
         const data = schema['partner/partnerclientFiles'].find(1);
+
         return serializer(data);
       });
 
@@ -934,6 +963,7 @@ module(
         'v2/partnerclients/:clientId/files/:fileId/reports',
         (schema) => {
           const data = schema['partner/partnerclientFileReports'].all();
+
           return serializer(data, true);
         }
       );
@@ -943,6 +973,7 @@ module(
       });
       this.server.get('v2/partnerclients/:clientId/reports/:id', (schema) => {
         const data = schema['partner/partnerclientReports'].find(1);
+
         return serializer(data);
       });
 

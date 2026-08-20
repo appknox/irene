@@ -1,5 +1,5 @@
 import Component from '@glimmer/component';
-import {
+import type {
   TypographyFontWeight,
   TypographyVariant,
 } from '../ak-typography/index';

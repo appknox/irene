@@ -64,7 +64,7 @@ module('Integration | Component | plus-n-list', function (hooks) {
   });
 
   test('it should not render remaining count button', async function (assert) {
-    let emails = ['test+0@test.app'];
+    const emails = ['test+0@test.app'];
 
     this.set('emails', emails);
 

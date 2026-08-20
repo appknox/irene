@@ -1,5 +1,6 @@
-import Model, { AsyncBelongsTo, attr, belongsTo } from '@ember-data/model';
-import SbomFileModel from './sbom-file';
+import type { AsyncBelongsTo } from '@ember-data/model';
+import Model, { attr, belongsTo } from '@ember-data/model';
+import type SbomFileModel from './sbom-file';
 
 export type SbomReportType = 'cyclonedx_json_file' | 'pdf';
 

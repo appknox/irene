@@ -15,6 +15,7 @@ class NotificationsStub extends Service {
   error(msg) {
     this.errorMsg = msg;
   }
+
   success(msg) {
     this.successMsg = msg;
   }
@@ -37,6 +38,7 @@ function serializer(data, many = false) {
       }),
     };
   }
+
   return {
     id: data.id,
     data: data.attrs,
@@ -102,6 +104,7 @@ module(
 
       this.server.get('v2/partnerclients/:clientId/projects', (schema) => {
         const data = schema['partner/partnerclientProjects'].all();
+
         return serializer(data, true);
       });
       this.set('clientId', 1);
@@ -156,6 +159,7 @@ module(
 
       this.server.get('v2/partnerclients/:clientId/projects', (schema) => {
         const data = schema['partner/partnerclientProjects'].all();
+
         return serializer(data, true);
       });
       this.set('clientId', 1);
@@ -187,6 +191,7 @@ module(
 
       this.server.get('v2/partnerclients/:clientId/projects', (schema) => {
         const data = schema['partner/partnerclientProjects'].all();
+
         return serializer(data, true);
       });
       this.set('clientId', 1);

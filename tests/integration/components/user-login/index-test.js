@@ -28,6 +28,7 @@ class SessionStub extends Service {
     this.lastUsername = username;
     this.lastPassword = password;
     this.lastOtp = otp;
+
     return this.authenticateTestHook();
   }
 

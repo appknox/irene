@@ -35,6 +35,7 @@ export default class SbomComponentDetailsComponent extends Component<SbomCompone
     const bomRef = this.args.sbomComponent?.bomRef;
 
     const truncatedBomRef = bomRef?.substring(0, bomRef.lastIndexOf(':'));
+
     return `${truncatedBomRef}  :  ${this.args.sbomComponent?.name}`;
   }
 

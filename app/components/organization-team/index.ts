@@ -4,14 +4,14 @@ import { debounceTask } from 'ember-lifeline';
 import { task } from 'ember-concurrency';
 import Component from '@glimmer/component';
 import { tracked } from '@glimmer/tracking';
-import MeService from 'irene/services/me';
-import IntlService from 'ember-intl/services/intl';
-import RouterService from '@ember/routing/router-service';
-import OrganizationService from 'irene/services/organization';
-import Store from 'ember-data/store';
-import OrganizationTeamModel from 'irene/models/organization-team';
+import type MeService from 'irene/services/me';
+import type IntlService from 'ember-intl/services/intl';
+import type RouterService from '@ember/routing/router-service';
+import type OrganizationService from 'irene/services/organization';
+import type Store from 'ember-data/store';
+import type OrganizationTeamModel from 'irene/models/organization-team';
 // eslint-disable-next-line ember/use-ember-data-rfc-395-imports
-import DS from 'ember-data';
+import type DS from 'ember-data';
 
 export interface OrganizationTeamComponentSignature {
   Args: {

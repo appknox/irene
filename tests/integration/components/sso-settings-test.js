@@ -57,6 +57,7 @@ class NotificationsStub extends Service {
   error(msg) {
     this.errorMsg = msg;
   }
+
   success(msg) {
     this.successMsg = msg;
   }
@@ -545,6 +546,7 @@ module('Integration | Component | sso-settings', function (hooks) {
 
     this.server.delete('/organizations/:id/sso/oidc', () => {
       providerDeleted = true;
+
       return new Response(204, {}, '');
     });
 
@@ -805,7 +807,7 @@ module('Integration | Component | sso-settings', function (hooks) {
 
       const { metadata } = this.metadata;
 
-      let file = new File([metadata], 'appknox.xml', { type: 'text/xml' });
+      const file = new File([metadata], 'appknox.xml', { type: 'text/xml' });
 
       if (dragDrop) {
         await dragAndDrop('[data-test-ssoSettings-idpUploadFileInput]', file);

@@ -70,6 +70,7 @@ export default class PrivacyModuleService extends Service {
   @tracked pii: PiiRequestModel | null = null;
   @tracked privacyProjectQueryResponse: PrivacyProjectQueryResponse | null =
     null;
+
   @tracked updatedSettings: PrivacySettingsUpdatePayload = {};
 
   setRouteQueryParams(

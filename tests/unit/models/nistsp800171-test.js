@@ -6,8 +6,8 @@ module('Unit | Model | nistsp800171', function (hooks) {
 
   // Replace this with your real tests.
   test('it exists', function (assert) {
-    let store = this.owner.lookup('service:store');
-    let model = store.createRecord('nistsp800171', {});
+    const store = this.owner.lookup('service:store');
+    const model = store.createRecord('nistsp800171', {});
     assert.ok(model);
   });
 });

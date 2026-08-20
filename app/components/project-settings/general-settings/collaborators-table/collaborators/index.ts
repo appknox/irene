@@ -2,11 +2,11 @@ import { inject as service } from '@ember/service';
 import Component from '@glimmer/component';
 import { task } from 'ember-concurrency';
 
-import ProjectModel from 'irene/models/project';
-import ProjectCollaboratorModel from 'irene/models/project-collaborator';
-import Store from 'ember-data/store';
+import type ProjectModel from 'irene/models/project';
+import type ProjectCollaboratorModel from 'irene/models/project-collaborator';
+import type Store from 'ember-data/store';
 import { tracked } from '@glimmer/tracking';
-import OrganizationUserModel from 'irene/models/organization-user';
+import type OrganizationUserModel from 'irene/models/organization-user';
 
 interface ProjectSettingsGeneralSettingsCollaboratorsTableCollaboratorsSignature {
   Args: {

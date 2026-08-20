@@ -1,9 +1,9 @@
 import { inject as service } from '@ember/service';
 import Component from '@glimmer/component';
-import IntlService from 'ember-intl/services/intl';
+import type IntlService from 'ember-intl/services/intl';
 import { task } from 'ember-concurrency';
 import { tracked } from 'tracked-built-ins';
-import WhitelabelService from 'irene/services/whitelabel';
+import type WhitelabelService from 'irene/services/whitelabel';
 
 export interface UserLoginPerformMFAComponentSignature {
   Args: {

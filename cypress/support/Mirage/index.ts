@@ -1,5 +1,6 @@
-import { Instantiate, Model, Server } from 'miragejs';
-import { ModelDefinition } from 'miragejs/-types';
+import { Model, Server } from 'miragejs';
+import type { Instantiate } from 'miragejs';
+import type { ModelDefinition } from 'miragejs/-types';
 
 import { MIRAGE_FACTORIES, MirageFactoryDefProps } from './factories.config';
 

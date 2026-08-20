@@ -1,9 +1,9 @@
 import Service from '@ember/service';
 import { inject as service } from '@ember/service';
-import Store from 'ember-data/store';
+import type Store from 'ember-data/store';
 
-import OrganizationService from 'irene/services/organization';
-import { PartnerAccessData } from 'irene/models/partner/partner';
+import type OrganizationService from 'irene/services/organization';
+import type { PartnerAccessData } from 'irene/models/partner/partner';
 import parseError from 'irene/utils/parse-error';
 
 export default class PartnerService extends Service {

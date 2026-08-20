@@ -1,7 +1,7 @@
 /* eslint-disable ember/use-ember-data-rfc-395-imports */
 import commondrf from './commondrf';
-import { Snapshot } from '@ember-data/store';
-import ModelRegistry from 'ember-data/types/registries/model';
+import type { Snapshot } from '@ember-data/store';
+import type ModelRegistry from 'ember-data/types/registries/model';
 
 export default class JiraRepoAdapter extends commondrf {
   _buildURL(modelName: string | number, id: string) {

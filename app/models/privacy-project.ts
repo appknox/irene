@@ -1,4 +1,5 @@
-import Model, { AsyncBelongsTo, belongsTo, attr } from '@ember-data/model';
+import type { AsyncBelongsTo } from '@ember-data/model';
+import Model, { belongsTo, attr } from '@ember-data/model';
 import { service } from '@ember/service';
 import type IntlService from 'ember-intl/services/intl';
 

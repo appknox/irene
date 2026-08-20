@@ -1,10 +1,10 @@
 import { action } from '@ember/object';
 import { inject as service } from '@ember/service';
 import Component from '@glimmer/component';
-import IntlService from 'ember-intl/services/intl';
-import ClipboardJS from 'clipboard/src/clipboard';
+import type IntlService from 'ember-intl/services/intl';
+import type ClipboardJS from 'clipboard/src/clipboard';
 
-import PersonaltokenModel from 'irene/models/personaltoken';
+import type PersonaltokenModel from 'irene/models/personaltoken';
 
 export interface AccountSettingsDeveloperSettingsPersonaltokenListCopyTokenSignature {
   Args: {

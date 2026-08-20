@@ -65,6 +65,7 @@ module(
 
       this.server.get('/v2/sb_files/:id/sb_reports', (schema) => {
         const results = schema.sbomReports.all().models;
+
         return { count: results.length, next: null, previous: null, results };
       });
     });

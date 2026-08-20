@@ -2,12 +2,12 @@ import { action } from '@ember/object';
 import { service } from '@ember/service';
 import Component from '@glimmer/component';
 import { tracked } from '@glimmer/tracking';
-import IntlService from 'ember-intl/services/intl';
+import type IntlService from 'ember-intl/services/intl';
 import { runTask } from 'ember-lifeline';
-import { ComponentLike } from '@glint/template';
+import type { ComponentLike } from '@glint/template';
 
-import AnalysisModel from 'irene/models/analysis';
-import VulnerabilityPreferenceModel from 'irene/models/vulnerability-preference';
+import type AnalysisModel from 'irene/models/analysis';
+import type VulnerabilityPreferenceModel from 'irene/models/vulnerability-preference';
 
 export interface AnalysisRiskOverrideEditDrawerSignature {
   Args: {

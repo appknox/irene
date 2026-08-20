@@ -8,9 +8,8 @@ import type FileRiskModel from 'irene/models/file-risk';
 import type FileExploitabilityModel from 'irene/models/file-exploitability';
 import type FileHealthScoreAuditModel from 'irene/models/file-health-score-audit';
 
-import FileCapiReportModel, {
-  type FileCapiReportScanType,
-} from 'irene/models/file-capi-report';
+import type FileCapiReportModel from 'irene/models/file-capi-report';
+import { type FileCapiReportScanType } from 'irene/models/file-capi-report';
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 

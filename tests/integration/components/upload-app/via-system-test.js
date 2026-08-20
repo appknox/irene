@@ -16,6 +16,7 @@ class NotificationsStub extends Service {
   error(msg) {
     this.errorMsg = msg;
   }
+
   success(msg) {
     this.successMsg = msg;
   }
@@ -74,7 +75,7 @@ module('Integration | Component | upload-app/via-system', function (hooks) {
 
       assert.dom('[data-test-uploadApp-uploadBtn]').hasText(t('uploadApp'));
 
-      let file = new File(['Test apk file'], 'test.apk', {
+      const file = new File(['Test apk file'], 'test.apk', {
         type: 'application/vnd.android.package-archive',
       });
 

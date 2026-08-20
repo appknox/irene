@@ -1,9 +1,10 @@
 import commondrf from './commondrf';
-import Store from 'ember-data/store';
-import OrganizationProjectModel, {
+import type Store from 'ember-data/store';
+import type {
   OrganizationProjectModelName,
   AddProjectData,
 } from 'irene/models/organization-project';
+import type OrganizationProjectModel from 'irene/models/organization-project';
 
 export default class OrganizationProjectAdapter extends commondrf {
   _buildURL(modelName?: string | number, id?: string | number) {
@@ -31,6 +32,7 @@ export default class OrganizationProjectAdapter extends commondrf {
       snapshot,
       collaboratorId
     );
+
     return this.ajax(url, 'PUT', {
       data,
     });

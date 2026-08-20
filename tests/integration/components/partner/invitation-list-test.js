@@ -38,6 +38,7 @@ function registrationRequestSerializer(data, many = false) {
       }),
     };
   }
+
   return {
     id: data.attrs.id,
     email: data.attrs.email,
@@ -80,6 +81,7 @@ module('Integration | Component | partner/invitation-list', function (hooks) {
           is_activated: is_activated,
           approval_status: status,
         });
+
         return registrationRequestSerializer(data, true);
       }
     );
@@ -89,7 +91,7 @@ module('Integration | Component | partner/invitation-list', function (hooks) {
       (schema, request) => {
         const rrSchema = schema['partner/registrationRequests'];
         const body = JSON.parse(request.requestBody);
-        let obj = rrSchema.create({
+        const obj = rrSchema.create({
           email: body.email,
           data: {
             company: body.company,
@@ -101,6 +103,7 @@ module('Integration | Component | partner/invitation-list', function (hooks) {
           is_activated: false,
         });
         const serData = registrationRequestSerializer(obj);
+
         return serData;
       }
     );
