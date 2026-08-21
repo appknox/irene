@@ -199,11 +199,17 @@ export default class OffsecScanModel extends Model {
     return '—';
   }
 
-  get devFrameworkLabel(): string {
-    const raw =
+  get devFrameworkCode(): number | string | null {
+    return (
       this.devFramework ??
       (this as unknown as Record<string, unknown>)['dev_framework'] ??
-      (this as unknown as Record<string, unknown>)['development_framework'];
+      (this as unknown as Record<string, unknown>)['development_framework'] ??
+      null
+    );
+  }
+
+  get devFrameworkLabel(): string {
+    const raw = this.devFrameworkCode;
 
     const frameworkMap: Record<number, string> = {
       [-1]: 'Unknown',

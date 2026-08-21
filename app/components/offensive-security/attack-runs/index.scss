@@ -45,8 +45,8 @@
   align-items: center;
   gap: 1rem;
   padding: 1.25rem;
-  background-color: var(--offensive-security-scan-results-card-bg-color, rgba(255, 255, 255, 0.02));
-  border: 1px solid var(--offensive-security-scan-results-card-border, rgba(255, 255, 255, 0.08));
+  background-color: var(--offensive-security-scan-results-card-bg-color);
+  border: 1px solid var(--offensive-security-scan-results-card-border);
   border-radius: 8px;
 }
 
@@ -91,7 +91,7 @@
 
 .stat-label {
   font-size: 0.8125rem;
-  color: var(--text-secondary, #9e9e9e);
+  color: var(--text-secondary);
   font-weight: 500;
 }
 
@@ -103,7 +103,7 @@
 
 .stat-subtext {
   font-size: 0.75rem;
-  color: var(--text-secondary, #9e9e9e);
+  color: var(--text-secondary);
 }
 
 .controls-bar {
@@ -123,13 +123,13 @@
   padding: 0.5rem 0.85rem;
   font-size: 0.875rem;
   font-weight: 500;
-  color: var(--text-secondary, #9e9e9e);
+  color: var(--text-secondary);
   cursor: pointer;
   border-bottom: 2px solid transparent;
   transition: all 0.15s ease;
 
   &:hover {
-    color: var(--text-primary, #ffffff);
+    color: var(--text-primary);
   }
 
   &.active {
@@ -151,29 +151,29 @@
 
 .attack-runs-table-container {
   width: 100%;
-  background-color: var(--offensive-security-scan-results-card-bg-color, #ffffff);
-  border: 1px solid var(--file-details-summary-border-color, rgba(0, 0, 0, 0.12));
-  border-radius: var(--offensive-security-scan-results-card-border-radius, 8px);
+  background-color: var(--offensive-security-scan-results-card-bg-color);
+  border: 1px solid var(--file-details-summary-border-color);
+  border-radius: var(--offensive-security-scan-results-card-border-radius);
   overflow: hidden;
 
   :global(.ak-table-root) table {
     width: 100%;
 
     thead tr th {
-      background-color: var(--ak-table-header-background-neutral, rgba(0, 0, 0, 0.04)) !important;
-      border-bottom: 1px solid var(--file-details-summary-border-color, rgba(0, 0, 0, 0.12));
+      background-color: var(--ak-table-header-background-neutral) !important;
+      border-bottom: 1px solid var(--file-details-summary-border-color);
       color: var(--text-primary);
       font-weight: 600;
     }
 
     tbody tr {
-      background-color: var(--offensive-security-scan-results-card-bg-color, #ffffff);
+      background-color: var(--offensive-security-scan-results-card-bg-color);
       transition: background-color 0.15s ease;
 
       td {
-        border-bottom: 1px solid var(--file-details-summary-border-color, rgba(0, 0, 0, 0.08));
+        border-bottom: 1px solid var(--file-details-summary-border-color);
         color: var(--text-primary);
-        background-color: var(--offensive-security-scan-results-card-bg-color, #ffffff);
+        background-color: var(--offensive-security-scan-results-card-bg-color);
       }
 
       &:last-child td {
@@ -181,7 +181,7 @@
       }
 
       &:hover td {
-        background-color: var(--ak-table-hover-background, rgba(0, 0, 0, 0.02)) !important;
+        background-color: var(--ak-table-hover-background) !important;
       }
     }
   }

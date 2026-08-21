@@ -1,5 +1,7 @@
 import Component from '@glimmer/component';
 import { action } from '@ember/object';
+import { service } from '@ember/service';
+import type IntlService from 'ember-intl/services/intl';
 
 import type { OffsecScanArtifact } from 'irene/models/offsec-scan';
 
@@ -12,6 +14,8 @@ export interface OffensiveSecurityScanResultsArtifactsCardSignature {
 }
 
 export default class OffensiveSecurityScanResultsArtifactsCardComponent extends Component<OffensiveSecurityScanResultsArtifactsCardSignature> {
+  @service declare intl: IntlService;
+
   get hasArtifacts(): boolean {
     return this.args.artifacts.length > 0;
   }
@@ -29,22 +33,22 @@ export default class OffensiveSecurityScanResultsArtifactsCardComponent extends 
   getArtifactDescription(name: string): string {
     const lowerName = name.toLowerCase();
     if (lowerName.includes('exploit')) {
-      return 'Runnable Frida exploit for exploited findings';
+      return this.intl.t('offensiveSecurity.artifactDesc.exploit');
     }
     if (lowerName.includes('resilience')) {
-      return 'Risk rating + per-finding results';
+      return this.intl.t('offensiveSecurity.artifactDesc.resilience');
     }
     if (lowerName.includes('evidence')) {
-      return 'Before/after on-device screens (OCR text)';
+      return this.intl.t('offensiveSecurity.artifactDesc.evidence');
     }
     if (lowerName.includes('loadout')) {
-      return 'Techniques deployed, order + sha256';
+      return this.intl.t('offensiveSecurity.artifactDesc.loadout');
     }
     if (lowerName.includes('summary')) {
-      return 'Human-readable attack-run summary';
+      return this.intl.t('offensiveSecurity.artifactDesc.summary');
     }
 
-    return 'Downloadable run artifact';
+    return this.intl.t('offensiveSecurity.artifactDesc.default');
   }
 
   @action

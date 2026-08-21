@@ -162,13 +162,16 @@
 
           <AkDivider />
 
-          <AkStack local-class='file-summary-padding'>
+          <AkStack local-class='file-summary-padding' @alignItems='center'>
             <AkTypography {{style width='190px'}} @color='textSecondary'>
               Development framework
             </AkTypography>
-            <AkTypography @variant='h6'>
-              {{this.scan.devFrameworkLabel}}
-            </AkTypography>
+            <AkStack @alignItems='center' @spacing='1'>
+              <PlatformIcon @code={{this.scan.devFrameworkCode}} @size='18px' />
+              <AkTypography @variant='h6'>
+                {{this.scan.devFrameworkLabel}}
+              </AkTypography>
+            </AkStack>
           </AkStack>
 
           <AkDivider />

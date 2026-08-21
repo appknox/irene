@@ -24,17 +24,17 @@ export default class OffensiveSecurityScanResultsSummaryCardComponent extends Co
 
     return [
       {
-        label: 'Attacks Launched',
+        label: this.intl.t('offensiveSecurity.protectionsDetected'),
         value: scan.attacksLaunched ?? scan.protectionsDetected ?? 0,
         tone: 'neutral',
       },
       {
-        label: 'Exploited',
+        label: this.intl.t('offensiveSecurity.bypassed'),
         value: scan.attacksExploited ?? scan.protectionsBypassed ?? 0,
         tone: 'exploited',
       },
       {
-        label: 'Defended',
+        label: this.intl.t('offensiveSecurity.resisted'),
         value: scan.attacksDefended ?? scan.protectionsResisted ?? 0,
         tone: 'defended',
       },

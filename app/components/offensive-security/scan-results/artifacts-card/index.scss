@@ -9,7 +9,7 @@
   align-items: center;
   justify-content: space-between;
   padding: 0.75rem;
-  border: 1px solid var(--file-details-summary-border-color, rgba(0, 0, 0, 0.12));
+  border: 1px solid var(--file-details-summary-border-color);
   border-radius: 6px;
   background-color: var(--offensive-security-scan-results-card-bg-color);
 }
@@ -21,7 +21,7 @@
   width: 32px;
   height: 32px;
   border-radius: 6px;
-  background-color: var(--file-details-summary-border-color, rgba(0, 0, 0, 0.04));
+  background-color: var(--file-details-summary-border-color);
   color: var(--text-secondary);
 }
 

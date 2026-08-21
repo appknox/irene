@@ -29,6 +29,7 @@
     @width='full'
     @spacing='1.5'
     @justifyContent='space-between'
+    @alignItems='stretch'
     local-class='stats-row'
   >
     {{#each this.stats as |stat|}}
@@ -44,11 +45,11 @@
           {{stat.label}}
           <span class='sr-only'>
             {{#if (eq stat.tone 'neutral')}}
-              Protections detected
+              {{t 'offensiveSecurity.protectionsDetected'}}
             {{else if (eq stat.tone 'exploited')}}
-              Bypassed
+              {{t 'offensiveSecurity.bypassed'}}
             {{else if (eq stat.tone 'defended')}}
-              Resisted
+              {{t 'offensiveSecurity.resisted'}}
             {{/if}}
           </span>
         </AkTypography>

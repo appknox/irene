@@ -36,9 +36,9 @@
         <AkIcon @iconName='trending-up' @size='small' />
       </div>
       <div local-class='stat-details'>
-        <span local-class='stat-label'>Total Runs</span>
+        <span local-class='stat-label'>{{t 'offensiveSecurity.totalRuns'}}</span>
         <span local-class='stat-number'>{{if this.totalCount this.totalCount this.scans.length}}</span>
-        <span local-class='stat-subtext'>All time</span>
+        <span local-class='stat-subtext'>{{t 'offensiveSecurity.allTime'}}</span>
       </div>
     </div>
 
@@ -48,9 +48,9 @@
         <AkLoader @size={{14}} />
       </div>
       <div local-class='stat-details'>
-        <span local-class='stat-label'>Running</span>
+        <span local-class='stat-label'>{{t 'offensiveSecurity.status.running'}}</span>
         <span local-class='stat-number'>{{this.runningCount}}</span>
-        <span local-class='stat-subtext'>In progress</span>
+        <span local-class='stat-subtext'>{{t 'offensiveSecurity.inProgress'}}</span>
       </div>
     </div>
 
@@ -60,9 +60,9 @@
         <AkIcon @iconName='check-circle-outline' @size='small' />
       </div>
       <div local-class='stat-details'>
-        <span local-class='stat-label'>Completed</span>
+        <span local-class='stat-label'>{{t 'offensiveSecurity.status.completed'}}</span>
         <span local-class='stat-number'>{{this.completedCount}}</span>
-        <span local-class='stat-subtext'>Successfully finished</span>
+        <span local-class='stat-subtext'>{{t 'offensiveSecurity.successfullyFinished'}}</span>
       </div>
     </div>
 
@@ -72,9 +72,9 @@
         <AkIcon @iconName='cancel' @size='small' />
       </div>
       <div local-class='stat-details'>
-        <span local-class='stat-label'>Failed</span>
+        <span local-class='stat-label'>{{t 'offensiveSecurity.status.failed'}}</span>
         <span local-class='stat-number'>{{this.failedCount}}</span>
-        <span local-class='stat-subtext'>With errors</span>
+        <span local-class='stat-subtext'>{{t 'offensiveSecurity.withErrors'}}</span>
       </div>
     </div>
   </div>
@@ -94,7 +94,7 @@
         local-class='tab-btn {{if (eq this.selectedStatusTab "all") "active"}}'
         {{on 'click' (fn this.setStatusTab 'all')}}
       >
-        All ({{if this.totalCount this.totalCount this.scans.length}})
+        {{t 'offensiveSecurity.all'}} ({{if this.totalCount this.totalCount this.scans.length}})
       </button>
 
       <button
@@ -102,7 +102,7 @@
         local-class='tab-btn {{if (eq this.selectedStatusTab "running") "active"}}'
         {{on 'click' (fn this.setStatusTab 'running')}}
       >
-        Running ({{this.runningCount}})
+        {{t 'offensiveSecurity.status.running'}} ({{this.runningCount}})
       </button>
 
       <button
@@ -110,7 +110,7 @@
         local-class='tab-btn {{if (eq this.selectedStatusTab "completed") "active"}}'
         {{on 'click' (fn this.setStatusTab 'completed')}}
       >
-        Completed ({{this.completedCount}})
+        {{t 'offensiveSecurity.status.completed'}} ({{this.completedCount}})
       </button>
 
       <button
@@ -118,7 +118,7 @@
         local-class='tab-btn {{if (eq this.selectedStatusTab "failed") "active"}}'
         {{on 'click' (fn this.setStatusTab 'failed')}}
       >
-        Failed ({{this.failedCount}})
+        {{t 'offensiveSecurity.status.failed'}} ({{this.failedCount}})
       </button>
     </div>
 

@@ -3,11 +3,11 @@
 }
 
 .breadcrumb-link {
-  color: var(--text-secondary, #9e9e9e);
+  color: var(--text-secondary);
   font-size: 0.9375rem;
 
   &:hover {
-    color: var(--text-primary, #ffffff);
+    color: var(--text-primary);
   }
 }
 
@@ -19,9 +19,9 @@
 
 .file-summary-root {
   width: 100%;
-  border: 1px solid var(--file-details-summary-border-color, rgba(255, 255, 255, 0.12));
-  background-color: var(--file-details-summary-background-color, transparent);
-  border-radius: var(--offensive-security-scan-results-card-border-radius, 8px);
+  border: 1px solid var(--file-details-summary-border-color);
+  background-color: var(--file-details-summary-background-color);
+  border-radius: var(--offensive-security-scan-results-card-border-radius);
   box-sizing: border-box;
 
   .file-summary-header {
