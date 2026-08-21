@@ -295,6 +295,22 @@ export default class OffsecScanModel extends Model {
    * Risk bucket for the table's colour coding. Falls back to the resilience band
    * when the agent did not emit a rating, so a completed run is never blank.
    */
+  get effectiveResilience(): number | null {
+    if (this.overallResilience !== null) {
+      return this.overallResilience;
+    }
+
+    const detected = this.protectionsDetected ?? 0;
+
+    if (detected === 0) {
+      return null;
+    }
+
+    const bypassed = this.protectionsBypassed ?? 0;
+
+    return Math.round(((detected - bypassed) / detected) * 100);
+  }
+
   get riskClass(): 'critical' | 'high' | 'medium' | 'low' | 'unknown' {
     const rating = (this.riskRating || '').toLowerCase();
 
@@ -302,30 +318,44 @@ export default class OffsecScanModel extends Model {
       return rating as 'critical' | 'high' | 'medium' | 'low';
     }
 
-    switch ((this.resilienceBand || '').toLowerCase()) {
-      case 'weak':
-        return 'critical';
-      case 'moderate':
-        return 'medium';
-      case 'strong':
-      case 'very_strong':
-        return 'low';
-      default:
-        return 'unknown';
+    const band = (this.resilienceBand || '').toLowerCase();
+
+    if (band) {
+      switch (band) {
+        case 'weak':
+          return 'critical';
+        case 'moderate':
+          return 'medium';
+        case 'strong':
+        case 'very_strong':
+          return 'low';
+      }
     }
+
+    const score = this.effectiveResilience;
+
+    if (score === null) {
+      return 'unknown';
+    }
+
+    if (score < 40) {
+      return 'critical';
+    }
+
+    if (score < 80) {
+      return 'medium';
+    }
+
+    return 'low';
   }
 
-  /**
-   * Resilience bucket derived from the score rather than the API's `resilience_band`,
-   * so the number and the word on the list pill can never disagree.
-   */
   get resilienceClass():
     | 'weak'
     | 'medium'
     | 'strong'
     | 'very-strong'
     | 'unknown' {
-    const score = this.overallResilience;
+    const score = this.effectiveResilience;
 
     if (score === null || score === undefined) {
       return 'unknown';
@@ -346,21 +376,15 @@ export default class OffsecScanModel extends Model {
     return 'very-strong';
   }
 
-  /**
-   * How many protections held. Not sent by the agent, which reports what it assessed
-   * and what it got past — the remainder is what resisted. Clamped, so a half-synced
-   * run shows nothing rather than a negative count.
-   */
   get protectionsResisted(): number {
     return Math.max(
-      (this.findingsAssessed ?? 0) - (this.protectionsBypassed ?? 0),
+      (this.protectionsDetected ?? 0) - (this.protectionsBypassed ?? 0),
       0
     );
   }
 
-  /** Resilience only means something once a run has actually finished scoring. */
   get hasResilience(): boolean {
-    return this.isCompleted && this.overallResilience !== null;
+    return this.isCompleted && this.protectionsDetected > 0;
   }
 
   /** Single source for the date the list both shows and sorts on. */
