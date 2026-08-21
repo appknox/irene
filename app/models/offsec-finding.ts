@@ -68,7 +68,7 @@ export default class OffsecFindingModel extends Model {
    * How the outcome should read in the UI. Kept here rather than in a helper so the
    * table, the detail header and the tabs cannot drift apart.
    */
-  get outcomeClass(): 'exploited' | 'defended' | 'errored' | 'not-applicable' {
+  get outcomeClass(): 'exploited' | 'defended' | 'errored' | 'detected' | 'not-applicable' {
     switch (this.outcome) {
       case 'bypassed':
         return 'exploited';
@@ -76,6 +76,8 @@ export default class OffsecFindingModel extends Model {
         return 'defended';
       case 'error':
         return 'errored';
+      case 'not_attempted':
+        return 'detected';
       default:
         return 'not-applicable';
     }
