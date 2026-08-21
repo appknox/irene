@@ -40,6 +40,16 @@
   color: var(--offensive-security-finding-detail-defended-color);
 }
 
+.detected {
+  background-color: #e8f4fd;
+  color: #1565c0;
+}
+
+.errored {
+  background-color: #fff3e0;
+  color: #e65100;
+}
+
 .neutral {
   background-color: var(--offensive-security-finding-detail-neutral-bg-color);
   color: var(--offensive-security-finding-detail-neutral-color);

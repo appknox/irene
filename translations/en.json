@@ -802,10 +802,10 @@
     "notAssessedCount": "{count} of {total} not assessed",
     "objective": "Objective",
     "outcome": {
-      "bypassed": "Exploited",
+      "bypassed": "Bypassed",
       "error": "Error",
-      "not_attempted": "Not attempted",
-      "resisted": "Defended"
+      "not_attempted": "Untriggered",
+      "resisted": "Resisted"
     },
     "overallResilience": "Overall resilience",
     "protectionDetected": "This protection was detected in the target during the run.",

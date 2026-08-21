@@ -20,7 +20,7 @@ export default class OffensiveSecurityScanResultsFindingsListComponent extends C
    */
   get sortedFindings(): OffsecScanEmbeddedFinding[] {
     const weight = (outcome: string) =>
-      ({ bypassed: 0, error: 1, resisted: 2, not_attempted: 3 })[outcome] ?? 4;
+      ({ bypassed: 0, resisted: 1, error: 2, not_attempted: 3 })[outcome] ?? 4;
 
     return [...this.args.findings].sort(
       (a, b) => weight(a.outcome) - weight(b.outcome) || a.order - b.order
@@ -34,6 +34,10 @@ export default class OffensiveSecurityScanResultsFindingsListComponent extends C
         return 'exploited';
       case 'resisted':
         return 'defended';
+      case 'not_attempted':
+        return 'detected';
+      case 'error':
+        return 'errored';
       default:
         return 'neutral';
     }

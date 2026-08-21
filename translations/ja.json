@@ -802,9 +802,9 @@
     "notAssessedCount": "{total} 件中 {count} 件は未評価",
     "objective": "目的",
     "outcome": {
-      "bypassed": "悪用に成功",
+      "bypassed": "突破",
       "error": "エラー",
-      "not_attempted": "未試行",
+      "not_attempted": "未発動",
       "resisted": "防御済み"
     },
     "overallResilience": "総合耐性",
