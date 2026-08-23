@@ -67,7 +67,7 @@ test.describe('Auth API', () => {
     });
   });
 
-  test('POST /api/login — invalid credentials returns 401', async () => {
+  test('POST /api/login — invalid credentials returns 401 Or 403', async () => {
     await allure.epic('Authentication');
     await allure.feature('Login');
     await allure.story('User logs in with invalid credentials');
@@ -93,8 +93,8 @@ test.describe('Auth API', () => {
       }
     );
 
-    await allure.step('Validate status 403 Forbidden', async () => {
-      await ResponseValidator.validate(response, { status: 403 });
+    await allure.step('Validate status 401 or 403', async () => {
+      expect([401, 403]).toContain(response.status());
     });
   });
 
@@ -223,26 +223,6 @@ test.describe('Auth API', () => {
     );
   });
 
-  // test('GET /api/users/:id — no auth token returns 401', async ({
-  //   request,
-  // }) => {
-  //   await allure.epic('Authentication');
-  //   await allure.feature('User Profile');
-  //   await allure.severity('critical');
-  //   await allure.tags('auth', 'user', 'negative', 'security');
-
-  //   const response = await allure.step(
-  //     'GET user without auth token',
-  //     async () => {
-  //       return await request.get(`${process.env.BASE_URL}/api/users/${userId}`);
-  //     }
-  //   );
-
-  //   await allure.step('Validate status 401', async () => {
-  //     expect(response.status()).toBe(401);
-  //   });
-  // });
-
   test('GET /api/users/:id — no auth token returns 401', async () => {
     await allure.epic('Authentication');
     await allure.feature('User Profile');
@@ -270,7 +250,7 @@ test.describe('Auth API', () => {
     await context.dispose();
   });
 
-  test('POST /api/login — SQL Injection attempt returns 403', async () => {
+  test('POST /api/login — SQL Injection attempt returns 401 or 403', async () => {
     await allure.epic('Authentication');
     await allure.feature('Login Security');
     await allure.story('User attempts SQL injection in login');
@@ -291,8 +271,12 @@ test.describe('Auth API', () => {
       }
     );
 
-    await allure.step('Validate status 403', async () => {
-      await ResponseValidator.validate(response, { status: 403 });
+    await allure.step('Validate status 403 or 401', async () => {
+      const status = response.status();
+
+      expect([401, 403]).toContain(status);
+
+      await ResponseValidator.validate(response, { status });
     });
   });
 

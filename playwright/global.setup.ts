@@ -60,23 +60,6 @@ async function globalSetup() {
   console.log('[Setup] Features:', JSON.stringify(orgFeatures));
 
   /**
-  4. Get projectId and fileId
-  Before we can generate reports, we need to have a project with an uploaded file. We will upload the MFVA.apk file, which is a known test app in our system. When we upload this app,
-  it will be associated with a project (if it doesn't already exist) and a file record will be created for that upload.
-  We need the projectId to upload our app and the fileId to generate reports, so we have to find these IDs before we can proceed with the rest of the setup.
-  */
-  const projectListResponse = await wrapper.get({
-    endpoint: resolveRoute(API_ROUTES.projectList.route, orgId),
-  });
-  const projectListBody = await projectListResponse.json();
-  const mfvaProject = projectListBody.results.find(
-    (p: Record<string, unknown>) => p.package_name === 'com.appknox.mfva'
-  );
-  if (!mfvaProject) throw new Error('[Setup] MFVA project not found');
-  const projectId = mfvaProject.id as number;
-  console.log(`[Setup] projectId: ${projectId}`);
-
-  /**
   5. Upload MFVA.apk fresh
   To ensure we have a consistent test file to work with, we upload the MFVA.apk file at the start of our setup. 
   fresh upload ensures that we have a known fileId and reportId that we can use in our tests, 
@@ -135,7 +118,6 @@ async function globalSetup() {
       console.log(`[Setup] fileId: ${fileId}`);
       break;
     }
-
     if (Date.now() - startTime > POLL_TIMEOUT) {
       throw new Error('[Setup] File processing timed out');
     }
@@ -143,6 +125,26 @@ async function globalSetup() {
     console.log('[Setup] Waiting for file... 15s');
     await new Promise((r) => setTimeout(r, POLL_INTERVAL));
   }
+
+  /**
+  4. Get projectId and fileId
+  Before we can generate reports, we need to have a project with an uploaded file. We will upload the MFVA.apk file, which is a known test app in our system. When we upload this app,
+  it will be associated with a project (if it doesn't already exist) and a file record will be created for that upload.
+  We need the projectId to upload our app and the fileId to generate reports, so we have to find these IDs before we can proceed with the rest of the setup.
+  */
+
+  const projectListResponse = await wrapper.get({
+    endpoint: `${API_ROUTES.v3ProjectList.route.replace('*', '')}?limit=1&q=com.appknox.mfva`,
+  });
+  const projectListBody = await projectListResponse.json();
+  const mfvaProject = projectListBody.results[0];
+
+  if (!mfvaProject) throw new Error('[Setup] MFVA project not found');
+
+  const projectId = mfvaProject.id as number;
+  const profileId = mfvaProject.active_profile_id as number;
+  console.log(`[Setup] projectId: ${projectId}, profileId: ${profileId}`);
+
   /** 
   7. Poll until static scan done
   After the file is processed, the backend will start running static analysis on it. This can take some time, so we need to poll the file details until 
@@ -333,7 +335,7 @@ async function globalSetup() {
     sbReportId,
     analysisId,
     vulnerabilityId,
-    profileId: projectId,
+    profileId,
     features: {
       privacy: orgFeatures.privacy as boolean,
       sbom: orgFeatures.sbom as boolean,

@@ -7,6 +7,8 @@
     "declarationMap": false,
     "resolveJsonModule": true,
     "baseUrl": ".",
+    "ignoreDeprecations": "6.0",
+
     "verbatimModuleSyntax": false, // TODO: remove this later
     "paths": {
       "fetch": ["node_modules/ember-fetch"],

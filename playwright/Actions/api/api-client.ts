@@ -40,7 +40,7 @@ export default class ApiClient {
   async post(endpoint: string, body?: object) {
     return this.context.post(endpoint, {
       headers: this.getAuthHeaders(),
-      ...(body && Object.keys(body).length > 0 ? { data: body } : {}), // ← only send data if body has content
+      ...(body && Object.keys(body).length > 0 ? { data: body } : {}), // only send data if body has content
     });
   }
 
