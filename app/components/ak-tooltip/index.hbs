@@ -23,7 +23,10 @@
     >
       <div
         data-test-ak-tooltip-content
-        local-class='ak-tooltip-root ak-tooltip-color-{{or @color "dark"}}'
+        local-class='ak-tooltip-root ak-tooltip-color-{{or @color "dark"}} {{if
+          @multiline
+          "ak-tooltip-multiline"
+        }}'
       >
         {{#if (has-block 'tooltipContent')}}
           {{yield to='tooltipContent'}}

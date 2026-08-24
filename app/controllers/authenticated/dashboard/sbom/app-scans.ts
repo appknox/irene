@@ -22,7 +22,7 @@ export default class AuthenticatedDashboardSbomAppScansController extends Contro
       routeGroup: 'sbom',
 
       parentCrumb: {
-        title: this.intl.t('SBOM'),
+        title: this.intl.t('sbomModule.scaBreadcrumbTitle'),
         route: 'authenticated.dashboard.sbom.apps',
         routeGroup: 'sbom',
       },

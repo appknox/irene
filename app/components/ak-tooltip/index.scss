@@ -21,6 +21,11 @@
   font-weight: var(--ak-tooltip-font-weight-regular);
   font-family: var(--ak-tooltip-font-family);
   box-shadow: var(--ak-tooltip-box-shadow-2);
+
+}
+
+.ak-tooltip-multiline {
+  white-space: normal;
 }
 
 .ak-tooltip-color-light {

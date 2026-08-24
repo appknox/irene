@@ -32,13 +32,29 @@ module('Integration | Component | sbom/upselling', function (hooks) {
 
     assert
       .dom('[data-test-upselling-module-title]')
-      .hasText(t('sbomModule.introducingSBOM'));
+      .hasText(t('sbomModule.introducingSCA'));
 
     assert
       .dom('[data-test-upselling-module-subtitle]')
-      .hasText(t('sbomModule.sbomOverview'));
+      .hasText(t('sbomModule.scaOverview'));
 
-    assert.dom('[data-test-upselling-module-feature]').exists({ count: 4 });
+    assert
+      .dom('[data-test-upselling-module-feature-group-title]')
+      .exists({ count: 2 });
+
+    const groupTitleElements = document.querySelectorAll(
+      '[data-test-upselling-module-feature-group-title]'
+    );
+
+    assert
+      .dom(groupTitleElements[0])
+      .hasText(t('sbomModule.sbomFeaturesTitle'));
+
+    assert
+      .dom(groupTitleElements[1])
+      .hasText(t('sbomModule.aiBomFeaturesTitle'));
+
+    assert.dom('[data-test-upselling-module-feature]').exists({ count: 8 });
 
     const featureElements = document.querySelectorAll(
       '[data-test-upselling-module-feature]'
@@ -59,6 +75,22 @@ module('Integration | Component | sbom/upselling', function (hooks) {
     assert
       .dom(featureElements[3])
       .hasText(t('sbomModule.sbomFeatures.componentInsights'));
+
+    assert
+      .dom(featureElements[4])
+      .hasText(t('sbomModule.aiBomFeatures.discoverAiComponents'));
+
+    assert
+      .dom(featureElements[5])
+      .hasText(t('sbomModule.aiBomFeatures.uncoverAiSecrets'));
+
+    assert
+      .dom(featureElements[6])
+      .hasText(t('sbomModule.aiBomFeatures.providerModelInsights'));
+
+    assert
+      .dom(featureElements[7])
+      .hasText(t('sbomModule.aiBomFeatures.unifiedVisibility'));
 
     assert.dom('[data-test-upselling-module-contact-cta]').exists();
     assert.dom('[data-test-upselling-module-successMessage]').doesNotExist();

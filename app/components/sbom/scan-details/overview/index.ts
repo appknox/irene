@@ -2,13 +2,11 @@ import Component from '@glimmer/component';
 import { service } from '@ember/service';
 import type IntlService from 'ember-intl/services/intl';
 
-import { SbomScanStatus } from 'irene/models/sbom-file';
 import type SbomScanSummaryModel from 'irene/models/sbom-scan-summary';
-import type SbomFileModel from 'irene/models/sbom-file';
 
 export interface SbomScanDetailsOverviewSignature {
+  Element: HTMLElement;
   Args: {
-    sbomFile: SbomFileModel;
     sbomScanSummary: SbomScanSummaryModel | null;
   };
 }
@@ -16,22 +14,13 @@ export interface SbomScanDetailsOverviewSignature {
 export default class SbomScanDetailsOverviewComponent extends Component<SbomScanDetailsOverviewSignature> {
   @service declare intl: IntlService;
 
-  get scanStatusCompleted() {
-    return this.args.sbomFile.status === SbomScanStatus.COMPLETED;
-  }
-
   get scanSummary() {
     return [
       {
-        iconName: 'ph:diamonds-four' as const,
+        iconName: 'summarize-outline' as const,
         label: this.intl.t('sbomModule.totalComponents'),
         value: this.args.sbomScanSummary?.componentCount || 0,
-      },
-      {
-        iconName: 'hugeicons:ai-brain-04' as const,
-        label: this.intl.t('sbomModule.mlModel'),
-        value: this.args.sbomScanSummary?.machineLearningModelCount || 0,
-        newFeature: true,
+        isPrimary: true,
       },
       {
         iconName: 'solar:library-linear' as const,
@@ -39,12 +28,12 @@ export default class SbomScanDetailsOverviewComponent extends Component<SbomScan
         value: this.args.sbomScanSummary?.libraryCount || 0,
       },
       {
-        iconName: 'mynaui:frame' as const,
+        iconName: 'mdi:frame' as const,
         label: this.intl.t('framework'),
         value: this.args.sbomScanSummary?.frameworkCount || 0,
       },
       {
-        iconName: 'draft-outline' as const,
+        iconName: 'mdi:file-outline' as const,
         label: this.intl.t('file'),
         value: this.args.sbomScanSummary?.fileCount || 0,
         hideDivider: true,

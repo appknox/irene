@@ -196,6 +196,10 @@ export const MaterialSymbolsSet = [
   'pending-actions-sharp',
   'flutter',
   'ios',
+  'summarize-outline',
+  'cloud-outline',
+  'key-outline',
+  'token-outline',
 ] as const;
 
 export const MdiIconsSet = [
@@ -220,6 +224,8 @@ export const MdiIconsSet = [
   'xamarin',
   'shield-tick-outline',
   'web',
+  'frame',
+  'file-outline',
 ] as const;
 
 export const HugeIconsSet = [
@@ -239,7 +245,11 @@ export const PhIconsSet = ['diamonds-four'] as const;
 
 export const MynauiIconsSet = ['frame'] as const;
 
-export const SolarIconsSet = ['library-linear', 'play-bold'] as const;
+export const SolarIconsSet = [
+  'library-linear',
+  'play-bold',
+  'link-linear',
+] as const;
 
 export const IconoirIconsSet = ['screenshot'] as const;
 
