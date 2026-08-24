@@ -1195,7 +1195,7 @@ module('Acceptance | sbom', function (hooks) {
 
     assert
       .dom('[data-test-sbom-scanDetails-componentTypeHeader-option]')
-      .exists({ count: 5 });
+      .exists({ count: 4 });
 
     await click(
       `[data-test-sbom-scanDetails-componentTypeHeader-radio="${t('library')}"]`

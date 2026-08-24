@@ -41,15 +41,6 @@ module('Acceptance | side nav test', function (hooks) {
     this.owner.register('service:integration', IntegrationStub);
     this.owner.register('service:websocket', WebsocketStub);
 
-    const menuItems = [
-      { label: 'SBOM', url: '/dashboard/sbom/apps?app_offset=0' },
-      { label: 'Analytics', url: '/dashboard/analytics' },
-      { label: 'Organization', url: '/dashboard/organization/namespaces' },
-      { label: 'API Documentation', url: '/dashboard/public-api/docs' },
-      { label: 'Account Settings', url: '/dashboard/settings/general' },
-      { label: 'Billing', url: '/dashboard/billing' },
-    ];
-
     const notify = this.owner.lookup('service:notifications');
 
     notify.setDefaultClearDuration(0);
@@ -65,7 +56,6 @@ module('Acceptance | side nav test', function (hooks) {
 
     this.setProperties({
       organization,
-      menuItems,
       currentOrganizationMe,
     });
   });
@@ -82,6 +72,15 @@ module('Acceptance | side nav test', function (hooks) {
     assert.expect(12);
 
     await visit('/dashboard/projects');
+
+    const menuItems = [
+      { label: t('SBOM'), url: '/dashboard/sbom/apps?app_offset=0' },
+      { label: t('analytics'), url: '/dashboard/analytics' },
+      { label: t('organization'), url: '/dashboard/organization/namespaces' },
+      { label: t('apiDocumentation'), url: '/dashboard/public-api/docs' },
+      { label: t('accountSettings'), url: '/dashboard/settings/general' },
+      { label: t('billing'), url: '/dashboard/billing' },
+    ];
 
     this.server.get('organizations/:id/am_configuration', (schema, req) => {
       return { id: 1, enabled: false, organization: req.params.id };
@@ -111,7 +110,7 @@ module('Acceptance | side nav test', function (hooks) {
       return { count: 0, next: null, previous: null, results: [] };
     });
 
-    for (const item of this.menuItems) {
+    for (const item of menuItems) {
       assert.dom(`[data-test-side-menu-item="${item.label}"]`).exists();
 
       await click(`[data-test-side-menu-item="${item.label}"] a`);

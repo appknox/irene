@@ -8,7 +8,7 @@ export default class AuthenticatedDashboardSbomAppsController extends Controller
 
   get breadcrumbs(): AkBreadcrumbsItemProps {
     return {
-      title: this.intl.t('SBOM'),
+      title: this.intl.t('sbomModule.scaBreadcrumbTitle'),
       route: 'authenticated.dashboard.sbom.apps',
       routeGroup: 'sbom',
       isRootCrumb: true,

@@ -190,6 +190,10 @@ export const MaterialSymbolsSet = [
   'border-color',
   'border-color-outline',
   'family-history',
+  'summarize-outline',
+  'cloud-outline',
+  'key-outline',
+  'token-outline',
 ] as const;
 
 export const MdiIconsSet = [
@@ -207,6 +211,8 @@ export const MdiIconsSet = [
   'fire',
   'calendar-month-outline',
   'delete',
+  'frame',
+  'file-outline',
 ] as const;
 
 export const HugeIconsSet = [

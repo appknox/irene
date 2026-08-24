@@ -3,13 +3,6 @@
   background-color: var(--sbom-empty-loading-view-background-color);
   border: 1px solid var(--sbom-empty-loading-view-border-color);
   border-radius: var(--sbom-empty-loading-view-border-radius);
-  justify-content: center;
-  align-items: center;
-
-  &.skeleton {
-    justify-content: flex-start;
-    align-items: flex-start;
-  }
 
   .empty-loading-content-bordered {
     padding: 2em;
