@@ -14,6 +14,7 @@ export interface AkTooltipSignature {
     disabled?: boolean;
     placement?: Placement;
     arrow?: boolean;
+    multiline?: boolean;
     color?: 'light' | 'dark';
     onClose?: (event: MouseEvent) => void;
     onOpen?: (event: MouseEvent) => void;

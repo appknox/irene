@@ -29,6 +29,10 @@ export default class SbomScanDetailsService extends Service {
   @tracked searchQuery: string = '';
   @tracked selectedDependencyType: boolean | null = null;
   @tracked selectedComponentType = -1;
+  @tracked isAiComponentFilter: boolean | null = null;
+  @tracked selectedAiArtifactClass: string | null = null;
+  @tracked selectedAiConfidence: string | null = null;
+  @tracked ordering: string | null = null;
   @tracked sbomComponentsCount = 0;
   @tracked sbomFile: SbomFileModel | null = null;
 
@@ -52,24 +56,59 @@ export default class SbomScanDetailsService extends Service {
     dependency_type,
     view_type,
     sbomFile,
+    is_ai_component,
+    ai_artifact_class,
+    ai_confidence,
+    ordering,
   }: Partial<{
     sbomFile: SbomFileModel | null;
     component_query: string;
     component_type: number;
     dependency_type: string | null;
     view_type: 'tree' | 'list';
+    is_ai_component: string | null;
+    ai_artifact_class: string | null;
+    ai_confidence: string | null;
+    ordering: string | null;
   }>) {
-    this.sbomFile = sbomFile ?? this.sbomFile;
-    this.viewType = view_type ?? this.viewType;
-    this.searchQuery = component_query ?? this.searchQuery;
-    this.selectedComponentType = component_type ?? this.selectedComponentType;
+    // Skip omitted keys to avoid same-value tracked-property writes and Ember's render-time autotracking assertion.
+    if (sbomFile !== undefined) {
+      this.sbomFile = sbomFile;
+    }
 
-    this.selectedDependencyType =
-      dependency_type === undefined
-        ? this.selectedDependencyType
-        : dependency_type === null
-          ? null
-          : dependency_type === 'true';
+    if (view_type !== undefined) {
+      this.viewType = view_type;
+    }
+
+    if (component_query !== undefined) {
+      this.searchQuery = component_query;
+    }
+
+    if (component_type !== undefined) {
+      this.selectedComponentType = component_type;
+    }
+
+    if (dependency_type !== undefined) {
+      this.selectedDependencyType =
+        dependency_type === null ? null : dependency_type === 'true';
+    }
+
+    if (is_ai_component !== undefined) {
+      this.isAiComponentFilter =
+        is_ai_component === null ? null : is_ai_component === 'true';
+    }
+
+    if (ai_artifact_class !== undefined) {
+      this.selectedAiArtifactClass = ai_artifact_class;
+    }
+
+    if (ai_confidence !== undefined) {
+      this.selectedAiConfidence = ai_confidence;
+    }
+
+    if (ordering !== undefined) {
+      this.ordering = ordering;
+    }
 
     return this;
   }
@@ -97,6 +136,20 @@ export default class SbomScanDetailsService extends Service {
               ],
           }
         : {}),
+
+      ...(this.isAiComponentFilter !== null
+        ? { is_ai_component: this.isAiComponentFilter }
+        : {}),
+
+      ...(this.selectedAiArtifactClass
+        ? { ai_artifact_class: this.selectedAiArtifactClass }
+        : {}),
+
+      ...(this.selectedAiConfidence
+        ? { ai_confidence: this.selectedAiConfidence }
+        : {}),
+
+      ...(this.ordering ? { ordering: this.ordering } : {}),
     };
 
     // Query Params
