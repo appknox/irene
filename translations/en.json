@@ -2661,7 +2661,7 @@
       "suspectedApps": "Suspected Apps",
       "originalAppDetails": "Original App Details",
       "ignoredBannerIgnoredAndAddedToInventory": "Note - This app has been Ignored & Add to Inventory on",
-      "ignoredBannerAddedToInventory": "Note - This app was added to Inventory on",
+      "ignoredBannerIgnored": "Note - This app has been Ignored on",
       "findings": "Findings",
       "overallScore": "Overall Score",
       "overallScoreInfo": "Similarity score based on semantic, package, logo, and developer analysis",
