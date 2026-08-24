@@ -1268,7 +1268,7 @@ module('Integration | Component | security/analysis-details', function (hooks) {
 
   // ── Header: legacy CVSS version guard (header changes) ───────────────────────
 
-  test('it shows the "Mark as Passed" button as disabled when the analysis has a legacy CVSS version', async function (assert) {
+  test('it shows the "Mark as Passed" button as enabled when the analysis has a legacy CVSS version', async function (assert) {
     this.secAnalysis.set('cvssVersion', 3);
     this.secAnalysis.set('activeCvssVersion', 4);
     this.secAnalysis.set('risk', ENUMS.RISK.HIGH);
@@ -1279,9 +1279,9 @@ module('Integration | Component | security/analysis-details', function (hooks) {
 
     assert
       .dom('[data-test-securityAnalysisDetailsHeader-markAsPassedBtn]')
-      .exists('Mark as Passed button is shown even for legacy analysis')
-      .isDisabled(
-        'Mark as Passed button is disabled when CVSS version is legacy'
+      .exists('Mark as Passed button is shown for a legacy analysis')
+      .isNotDisabled(
+        'Marking as passed zeroes both vectors, so legacy is no longer blocked'
       );
   });
 
