@@ -46,11 +46,14 @@ export default class OffensiveSecurityScanResultsSummaryCardComponent extends Co
    * because the three counters above otherwise read as the whole story.
    */
   get showUnassessed(): boolean {
-    return false;
+    return (this.args.scan.findingsUnassessed ?? 0) > 0;
   }
 
   get unassessedLabel(): string {
-    return '';
+    return this.intl.t('offensiveSecurity.notAssessedCount', {
+      count: this.args.scan.findingsUnassessed,
+      total: this.args.scan.protectionsDetected,
+    });
   }
 
   get showResilience(): boolean {

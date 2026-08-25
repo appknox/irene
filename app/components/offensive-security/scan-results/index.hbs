@@ -42,6 +42,7 @@
             @src={{if this.scan.appLogoUrl this.scan.appLogoUrl this.scan.iconUrl}}
             @size='large'
             @alt={{concat this.scan.displayName ' - logo'}}
+            @fallbackName={{this.scan.displayName}}
           />
 
           <AkStack @direction='column' @spacing='0.5'>

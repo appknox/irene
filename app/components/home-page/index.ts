@@ -49,7 +49,10 @@ export default class HomePageComponent extends Component {
   }
 
   get showOffensiveSecurity() {
-    return !this.organization.hideUpsellUIStatus.offensiveSecurity;
+    return (
+      !this.organization.hideUpsellUIStatus.offensiveSecurity &&
+      this.organization.selected?.features?.offensive_security
+    );
   }
 
   get productCardDetails() {

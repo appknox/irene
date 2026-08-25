@@ -1,3 +1,5 @@
+import { action } from '@ember/object';
+import { tracked } from '@glimmer/tracking';
 import { isEmpty } from '@ember/utils';
 import Component from '@glimmer/component';
 
@@ -6,6 +8,8 @@ interface AppLogoSignature {
   Args: {
     src?: string;
     alt?: string;
+    name?: string;
+    fallbackName?: string;
     padding?: boolean;
     loading?: boolean;
     rounded?: boolean;
@@ -16,6 +20,8 @@ interface AppLogoSignature {
 }
 
 export default class AppLogoComponent extends Component<AppLogoSignature> {
+  @tracked isError = false;
+
   get size() {
     return this.args.size || 'small';
   }
@@ -46,6 +52,22 @@ export default class AppLogoComponent extends Component<AppLogoSignature> {
 
   get borderClass() {
     return this.border ? 'app-logo-container-border' : '';
+  }
+
+  get hasImage() {
+    return Boolean(this.src) && !this.isError;
+  }
+
+  get initialLetter(): string {
+    const rawName =
+      this.args.fallbackName || this.args.name || this.args.alt || '';
+    const cleaned = rawName.replace(/- logo$/i, '').trim();
+    return cleaned ? cleaned.charAt(0).toUpperCase() : '?';
+  }
+
+  @action
+  handleError() {
+    this.isError = true;
   }
 }
 

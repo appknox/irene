@@ -12,13 +12,21 @@
       @height='100%'
       @variant='rectangular'
     />
-  {{else}}
+  {{else if this.hasImage}}
     <img
       data-test-appLogo-img
       local-class='app-logo-image {{if @rounded "app-logo-image-rounded"}}'
       src={{this.src}}
       alt={{this.alt}}
       role={{this.role}}
+      {{on 'error' this.handleError}}
     />
+  {{else}}
+    <div
+      local-class='app-logo-fallback {{if @rounded "app-logo-image-rounded"}}'
+      data-test-appLogo-fallback
+    >
+      {{this.initialLetter}}
+    </div>
   {{/if}}
 </AkStack>

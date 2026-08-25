@@ -254,7 +254,7 @@ export default class OffsecScanModel extends Model {
 
   get displayName(): string {
     return (
-      this.fileName || this.appName || this.packageName || `scan ${this.id}`
+      this.appName || this.fileName || this.packageName || `scan ${this.id}`
     );
   }
 
@@ -377,14 +377,16 @@ export default class OffsecScanModel extends Model {
   }
 
   get protectionsResisted(): number {
-    return Math.max(
-      (this.protectionsDetected ?? 0) - (this.protectionsBypassed ?? 0),
-      0
-    );
+    const total = this.findingsAssessed ?? this.protectionsDetected ?? 0;
+    return Math.max(total - (this.protectionsBypassed ?? 0), 0);
   }
 
   get hasResilience(): boolean {
-    return this.isCompleted && this.protectionsDetected > 0;
+    return (
+      this.isCompleted &&
+      this.overallResilience !== null &&
+      this.overallResilience !== undefined
+    );
   }
 
   /** Single source for the date the list both shows and sorts on. */

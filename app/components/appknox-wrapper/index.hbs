@@ -12,15 +12,17 @@
     as |topNav|
   >
     <AkStack local-class='top-nav-content' @justifyContent='space-between'>
-      <AkStack @alignItems='center' @spacing='1'>
-        {{! <div local-class='divider' /> }}
+      {{#unless this.isOffsecUpsellingPage}}
+        <AkStack @alignItems='center' @spacing='1'>
+          {{! <div local-class='divider' /> }}
 
-        <AkTypography data-test-topNav-startScanLabel @color='inherit'>
-          {{t 'startNewScan'}}
-        </AkTypography>
+          <AkTypography data-test-topNav-startScanLabel @color='inherit'>
+            {{t 'startNewScan'}}
+          </AkTypography>
 
-        <UploadApp />
-      </AkStack>
+          <UploadApp />
+        </AkStack>
+      {{/unless}}
 
       <AkStack @alignItems='center' @spacing='0.5'>
         {{#unless this.orgIsAnEnterprise}}

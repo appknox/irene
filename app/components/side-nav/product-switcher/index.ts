@@ -78,7 +78,10 @@ export default class SideNavProductSwitcherComponent extends Component<SideNavPr
   }
 
   get showOffensiveSecurity() {
-    return !this.organization.hideUpsellUIStatus.offensiveSecurity;
+    return (
+      !this.organization.hideUpsellUIStatus.offensiveSecurity &&
+      this.organization.selected?.features?.offensive_security
+    );
   }
 
   get allMenuItemsList() {

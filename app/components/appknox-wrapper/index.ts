@@ -124,6 +124,10 @@ export default class AppknoxWrapperComponent extends Component<AppknoxWrapperSig
     );
   }
 
+  get isOffsecUpsellingPage() {
+    return this.isOffensiveSecurityRoute && !this.showOffensiveSecurity;
+  }
+
   get menuItems() {
     if (this.isOffensiveSecurityRoute) {
       return [

@@ -42,7 +42,7 @@ module('Acceptance | home page', function (hooks) {
     });
 
     organization.update({
-      features: { storeknox: true },
+      features: { storeknox: true, offensive_security: true },
     });
 
     // Services
@@ -174,6 +174,7 @@ module('Acceptance | home page', function (hooks) {
     this.organization.update({
       features: {
         storeknox: false,
+        offensive_security: false,
       },
     });
 
@@ -199,9 +200,10 @@ module('Acceptance | home page', function (hooks) {
   test.each(
     'it should show right product cards',
     [
-      { storeknox: true, security: false },
-      { storeknox: true, security: true },
-      { storeknox: false, security: true },
+      { storeknox: true, security: false, offensive_security: true },
+      { storeknox: true, security: true, offensive_security: true },
+      { storeknox: true, security: true, offensive_security: false },
+      { storeknox: false, security: true, offensive_security: true },
     ],
     async function (assert, products) {
       this.currentOrganizationMe.update({
@@ -211,18 +213,29 @@ module('Acceptance | home page', function (hooks) {
       this.organization.update({
         features: {
           storeknox: products.storeknox,
+          offensive_security: products.offensive_security,
         },
       });
 
       await visit('/dashboard/home');
 
-      // Offensive Security is always surfaced as a card (as an upsell entry
-      // when the feature is off), so each case carries one extra card.
-      if (products.security && products.storeknox) {
+      if (products.security && products.storeknox && products.offensive_security) {
         assert.dom('[data-test-home-page-product-card]').exists({
           count: 4,
         });
-      } else if (products.security && !products.storeknox) {
+      } else if (products.security && products.storeknox && !products.offensive_security) {
+        assert.dom('[data-test-home-page-product-card]').exists({
+          count: 3,
+        });
+
+        const productTitles = findAll(
+          '[data-test-home-page-product-card-title]'
+        );
+
+        assert.dom(productTitles[0]).hasText(t('vapt'));
+        assert.dom(productTitles[1]).hasText(t('appMonitoring'));
+        assert.dom(productTitles[2]).hasText(t('securityDashboard'));
+      } else if (products.security && !products.storeknox && products.offensive_security) {
         assert.dom('[data-test-home-page-product-card]').exists({
           count: 3,
         });
@@ -236,7 +249,7 @@ module('Acceptance | home page', function (hooks) {
         assert.dom(productTitles[1]).hasText(t('securityDashboard'));
 
         assert.dom(productTitles[2]).hasText(t('offensiveSecurity.title'));
-      } else if (!products.security && products.storeknox) {
+      } else if (!products.security && products.storeknox && products.offensive_security) {
         assert.dom('[data-test-home-page-product-card]').exists({
           count: 3,
         });
