@@ -9,6 +9,7 @@
   <AkStack @spacing='1' @alignItems='center' {{style width='85%'}}>
     <AppLogo
       @src={{@file.iconUrl}}
+      @name={{@file.name}}
       @loading={{if @file.iconUrl false true}}
       @size='medium'
       @rounded={{true}}

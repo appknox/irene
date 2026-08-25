@@ -219,11 +219,19 @@ module('Acceptance | home page', function (hooks) {
 
       await visit('/dashboard/home');
 
-      if (products.security && products.storeknox && products.offensive_security) {
+      if (
+        products.security &&
+        products.storeknox &&
+        products.offensive_security
+      ) {
         assert.dom('[data-test-home-page-product-card]').exists({
           count: 4,
         });
-      } else if (products.security && products.storeknox && !products.offensive_security) {
+      } else if (
+        products.security &&
+        products.storeknox &&
+        !products.offensive_security
+      ) {
         assert.dom('[data-test-home-page-product-card]').exists({
           count: 3,
         });
@@ -235,7 +243,11 @@ module('Acceptance | home page', function (hooks) {
         assert.dom(productTitles[0]).hasText(t('vapt'));
         assert.dom(productTitles[1]).hasText(t('appMonitoring'));
         assert.dom(productTitles[2]).hasText(t('securityDashboard'));
-      } else if (products.security && !products.storeknox && products.offensive_security) {
+      } else if (
+        products.security &&
+        !products.storeknox &&
+        products.offensive_security
+      ) {
         assert.dom('[data-test-home-page-product-card]').exists({
           count: 3,
         });
@@ -249,7 +261,11 @@ module('Acceptance | home page', function (hooks) {
         assert.dom(productTitles[1]).hasText(t('securityDashboard'));
 
         assert.dom(productTitles[2]).hasText(t('offensiveSecurity.title'));
-      } else if (!products.security && products.storeknox && products.offensive_security) {
+      } else if (
+        !products.security &&
+        products.storeknox &&
+        products.offensive_security
+      ) {
         assert.dom('[data-test-home-page-product-card]').exists({
           count: 3,
         });

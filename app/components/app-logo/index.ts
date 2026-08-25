@@ -55,7 +55,16 @@ export default class AppLogoComponent extends Component<AppLogoSignature> {
   }
 
   get hasImage() {
-    return Boolean(this.src) && !this.isError;
+    if (this.isError) {
+      return false;
+    }
+    if (this.src) {
+      return true;
+    }
+    const hasName = Boolean(
+      this.args.name || this.args.fallbackName || this.args.alt
+    );
+    return !hasName;
   }
 
   get initialLetter(): string {
