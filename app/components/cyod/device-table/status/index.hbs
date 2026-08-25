@@ -1,0 +1,12 @@
+<AkChip
+  data-test-cyodDeviceTable-statusChip
+  @variant='semi-filled'
+  @size='small'
+  @fontWeight='medium'
+  @color={{if @device.isConnected 'success' 'secondary'}}
+  @label={{if
+    @device.isConnected
+    (t 'cyod.deviceRegistration.online')
+    (t 'cyod.deviceRegistration.offline')
+  }}
+/>

@@ -97,6 +97,14 @@ function routes() {
     return schema.projects.all().models;
   });
 
+  this.get('/organizations/:id/registered-devices', (schema) => {
+    const results = schema.registeredDevices
+      .all()
+      .models.map((d) => d.toJSON());
+
+    return { count: results.length, next: null, previous: null, results };
+  });
+
   this.put('/organizations/:id', () => {
     return {};
   });
