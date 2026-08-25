@@ -126,16 +126,16 @@ hierarchy is the least obvious part of this codebase.
 
 Cross-cutting state. The ones almost everything depends on:
 
-| Service | Owns |
-|---|---|
-| `session` (ember-simple-auth) | Authentication |
-| `me` | The current user's org membership and role |
-| `organization` | The selected organization, its features and AI features |
-| `notifications` | Toasts |
-| `ajax` | Direct HTTP outside Ember Data |
-| `intl` (ember-intl) | Translation |
-| `realtime`, `websocket`, `poll` | Live scan-status updates |
-| `whitelabel` | White-label deployment behaviour |
+| Service                         | Owns                                                    |
+| ------------------------------- | ------------------------------------------------------- |
+| `session` (ember-simple-auth)   | Authentication                                          |
+| `me`                            | The current user's org membership and role              |
+| `organization`                  | The selected organization, its features and AI features |
+| `notifications`                 | Toasts                                                  |
+| `ajax`                          | Direct HTTP outside Ember Data                          |
+| `intl` (ember-intl)             | Translation                                             |
+| `realtime`, `websocket`, `poll` | Live scan-status updates                                |
+| `whitelabel`                    | White-label deployment behaviour                        |
 
 #### `app/styles`
 
@@ -210,12 +210,12 @@ triggering a scan, posting an override request.
 
 They fail differently, and code that handles one does not handle the other:
 
-| | Ember Data adapters | `IreneAjaxService` |
-|---|---|---|
-| Rejects with | `AdapterError` with an `errors` array | non-429 failures: `{ ...response, payload }` |
-| `parseError` reads | `errors[0].detail` / `.title` | `payload.detail` |
-| Available verbs | Full REST | `request`, `post`, `put`, `delete` — **no `patch`**; use `makeRequest(url, { method: 'PATCH' })` |
-| HTTP 429 | Rejects like any other error | **Resolves.** Handed to `rateLimit.handleResponse`, then the parsed body is returned as a success value |
+|                    | Ember Data adapters                   | `IreneAjaxService`                                                                                      |
+| ------------------ | ------------------------------------- | ------------------------------------------------------------------------------------------------------- |
+| Rejects with       | `AdapterError` with an `errors` array | non-429 failures: `{ ...response, payload }`                                                            |
+| `parseError` reads | `errors[0].detail` / `.title`         | `payload.detail`                                                                                        |
+| Available verbs    | Full REST                             | `request`, `post`, `put`, `delete` — **no `patch`**; use `makeRequest(url, { method: 'PATCH' })`        |
+| HTTP 429           | Rejects like any other error          | **Resolves.** Handed to `rateLimit.handleResponse`, then the parsed body is returned as a success value |
 
 `IreneAjaxService` treats 429 as a rate-limit event, not a request failure:
 `makeRequest` skips the throw for that status and returns the parsed body. A
@@ -228,11 +228,11 @@ the failure.
 
 Four namespaces coexist. The resource decides which:
 
-| Namespace | Value |
-|---|---|
-| `namespace` | `api` |
-| `namespace_v2` | `api/v2` |
-| `namespace_v3` | `api/v3` |
+| Namespace          | Value            |
+| ------------------ | ---------------- |
+| `namespace`        | `api`            |
+| `namespace_v2`     | `api/v2`         |
+| `namespace_v3`     | `api/v3`         |
 | `hudson_namespace` | `api/hudson-api` |
 
 An adapter picks its namespace when building the URL. There is no global rule —
@@ -270,11 +270,11 @@ Permission checks read `me.org`; feature gating reads
 The `configuration` service fetches three endpoints at boot and holds the
 result for the session:
 
-| Endpoint | Supplies |
-|---|---|
-| `/v2/server_configuration` | websocket host, enterprise flag, device farm URL |
-| `/v2/frontend_configuration` | branding, theme colours, logos, registration links, and the integration keys — Pendo, Freshchat, Freshdesk widget |
-| `/v2/dashboard_configuration` | dashboard URL, device farm URL |
+| Endpoint                      | Supplies                                                                                                          |
+| ----------------------------- | ----------------------------------------------------------------------------------------------------------------- |
+| `/v2/server_configuration`    | websocket host, enterprise flag, device farm URL                                                                  |
+| `/v2/frontend_configuration`  | branding, theme colours, logos, registration links, and the integration keys — Pendo, Freshchat, Freshdesk widget |
+| `/v2/dashboard_configuration` | dashboard URL, device farm URL                                                                                    |
 
 The `whitelabel` service reads from it to override branding. Because this is
 runtime data, the same build serves every deployment — never gate on `ENV` for
@@ -341,50 +341,50 @@ Things that are true, that reading the code will not tell you:
 
 ## 6. Sharp edges
 
-| Edge | Consequence |
-|---|---|
-| **`MeService` fetches in its constructor** | Merely *touching* `this.me` issues `GET /organizations/:id/me`. A component that injects `me` forces a request on every render context — and fails in any test that doesn't mock it. Guard access behind cheaper conditions. |
-| **`organization.selected` must be loaded first** | Org-scoped adapters build `/organizations/undefined/…` when it is null. |
-| **Serializers may override `primaryKey`** | `analysis-override-request` uses `uuid`. A payload keyed by `id` normalizes to an id-less record that silently never materialises. |
-| **`parseError` returns `undefined` for HTTP 500 via `IreneAjaxService`** | It takes the `status == 500` branch and reads `error.title`, which that shape lacks. The user sees an empty toast. |
-| **`AkButton` applies `...attributes` before its own `disabled` binding** | A passed-through `disabled` attribute is silently overwritten. Always use `@disabled=`. |
-| **`riskText` has no default branch** | Its `switch` covers `UNKNOWN` and `NONE`–`CRITICAL`; anything else — an unmapped number, or `NaN` from a non-numeric arg — returns `undefined`. `override-form` casts the result with `as string` and passes it straight to `intl.t()`, which throws. Give every call a fallback, as `analysis-risk/text` does with `\|\| 'untested'`. |
-| **`IreneAjaxService` has no `patch`** | Use `makeRequest(url, { method: 'PATCH' })`. |
-| **HTTP 429 resolves instead of rejecting** | `makeRequest` routes it to `rateLimit.handleResponse` and returns the body. Your `catch` never fires — check the payload, or leave the message to `RateLimitService`. |
-| **Mirage: later route registrations win** | A `beforeEach` default can be overridden per test. Convenient, and easy to trip over. |
+| Edge                                                                     | Consequence                                                                                                                                                                                                                                                                                                                            |
+| ------------------------------------------------------------------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **`MeService` fetches in its constructor**                               | Merely _touching_ `this.me` issues `GET /organizations/:id/me`. A component that injects `me` forces a request on every render context — and fails in any test that doesn't mock it. Guard access behind cheaper conditions.                                                                                                           |
+| **`organization.selected` must be loaded first**                         | Org-scoped adapters build `/organizations/undefined/…` when it is null.                                                                                                                                                                                                                                                                |
+| **Serializers may override `primaryKey`**                                | `analysis-override-request` uses `uuid`. A payload keyed by `id` normalizes to an id-less record that silently never materialises.                                                                                                                                                                                                     |
+| **`parseError` returns `undefined` for HTTP 500 via `IreneAjaxService`** | It takes the `status == 500` branch and reads `error.title`, which that shape lacks. The user sees an empty toast.                                                                                                                                                                                                                     |
+| **`AkButton` applies `...attributes` before its own `disabled` binding** | A passed-through `disabled` attribute is silently overwritten. Always use `@disabled=`.                                                                                                                                                                                                                                                |
+| **`riskText` has no default branch**                                     | Its `switch` covers `UNKNOWN` and `NONE`–`CRITICAL`; anything else — an unmapped number, or `NaN` from a non-numeric arg — returns `undefined`. `override-form` casts the result with `as string` and passes it straight to `intl.t()`, which throws. Give every call a fallback, as `analysis-risk/text` does with `\|\| 'untested'`. |
+| **`IreneAjaxService` has no `patch`**                                    | Use `makeRequest(url, { method: 'PATCH' })`.                                                                                                                                                                                                                                                                                           |
+| **HTTP 429 resolves instead of rejecting**                               | `makeRequest` routes it to `rateLimit.handleResponse` and returns the body. Your `catch` never fires — check the payload, or leave the message to `RateLimitService`.                                                                                                                                                                  |
+| **Mirage: later route registrations win**                                | A `beforeEach` default can be overridden per test. Convenient, and easy to trip over.                                                                                                                                                                                                                                                  |
 
 ---
 
 ## 7. Glossary
 
-| Term | Meaning |
-|---|---|
-| **Analysis** | The result of testing one vulnerability against one file |
-| **Analysis overview** | The summarised analysis row shown in listing tables |
-| **Override** | A manual change to an analysis's severity, with a reason |
-| **Override request** | A member's request for an override, pending owner/admin review |
-| **File** | One uploaded build of an app |
-| **Project** | An app across all its uploaded files |
-| **Profile** | Per-project scan configuration |
-| **Namespace** | Both an API version prefix *and* an app-identifier grouping — context decides |
-| **VA / SAST / DAST / API scan** | Vulnerability assessment and its scan types |
-| **SBOM** | Software Bill of Materials |
-| **Storeknox** | App-store discovery and monitoring module |
-| **KnoxIQ** | AI-assisted analysis module |
-| **Partner** | Reseller-facing dashboard |
-| **Whitelabel** | Rebranded deployment of the same app |
+| Term                            | Meaning                                                                       |
+| ------------------------------- | ----------------------------------------------------------------------------- |
+| **Analysis**                    | The result of testing one vulnerability against one file                      |
+| **Analysis overview**           | The summarised analysis row shown in listing tables                           |
+| **Override**                    | A manual change to an analysis's severity, with a reason                      |
+| **Override request**            | A member's request for an override, pending owner/admin review                |
+| **File**                        | One uploaded build of an app                                                  |
+| **Project**                     | An app across all its uploaded files                                          |
+| **Profile**                     | Per-project scan configuration                                                |
+| **Namespace**                   | Both an API version prefix _and_ an app-identifier grouping — context decides |
+| **VA / SAST / DAST / API scan** | Vulnerability assessment and its scan types                                   |
+| **SBOM**                        | Software Bill of Materials                                                    |
+| **Storeknox**                   | App-store discovery and monitoring module                                     |
+| **KnoxIQ**                      | AI-assisted analysis module                                                   |
+| **Partner**                     | Reseller-facing dashboard                                                     |
+| **Whitelabel**                  | Rebranded deployment of the same app                                          |
 
 ---
 
 ## 8. Where to make a change
 
-| Task | Start at |
-|---|---|
-| Change how a screen looks | `app/components/<feature>/…` |
-| Add a field from the API | `app/models/…`, then the serializer |
-| Change an endpoint URL | `app/adapters/…` and `config/environment.js` |
-| Add a page | `app/router.ts`, then `app/routes/…` |
-| Add user-facing text | `translations/en.json` **and** `ja.json` |
+| Task                       | Start at                                                     |
+| -------------------------- | ------------------------------------------------------------ |
+| Change how a screen looks  | `app/components/<feature>/…`                                 |
+| Add a field from the API   | `app/models/…`, then the serializer                          |
+| Change an endpoint URL     | `app/adapters/…` and `config/environment.js`                 |
+| Add a page                 | `app/router.ts`, then `app/routes/…`                         |
+| Add user-facing text       | `translations/en.json` **and** `ja.json`                     |
 | Change a colour or spacing | `_theme.scss` → `_component-variables.scss` → component SCSS |
-| Add a shared UI primitive | `app/components/ak-*` (plus a story) |
-| Mock an endpoint for tests | `mirage/factories`, `mirage/models`, `mirage/config.js` |
+| Add a shared UI primitive  | `app/components/ak-*` (plus a story)                         |
+| Mock an endpoint for tests | `mirage/factories`, `mirage/models`, `mirage/config.js`      |
