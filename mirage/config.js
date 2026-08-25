@@ -105,6 +105,48 @@ function routes() {
     return { count: results.length, next: null, previous: null, results };
   });
 
+  this.get('/organizations/:id/signing-certificates/', (schema) =>
+    schema.signingCertificates.all().models.map((c) => c.toJSON())
+  );
+
+  this.post('/organizations/:id/signing-certificates/', (schema) =>
+    schema.signingCertificates.create({}).toJSON()
+  );
+
+  this.del(
+    '/organizations/:id/signing-certificates/:certId/',
+    (schema, req) => {
+      schema.signingCertificates.find(req.params.certId)?.destroy();
+
+      return {};
+    }
+  );
+
+  this.post(
+    '/organizations/:id/signing-certificates/:certId/activate/',
+    (schema, req) => {
+      schema.signingCertificates.all().models.forEach((c) => {
+        c.update({ is_active: c.id === req.params.certId });
+      });
+
+      return schema.signingCertificates.find(req.params.certId).toJSON();
+    }
+  );
+
+  this.get(
+    '/organizations/:id/projects/:projectId/signing-certificate/',
+    (schema) => schema.signingCertificates.first()?.toJSON() ?? {}
+  );
+
+  this.del(
+    '/organizations/:id/projects/:projectId/signing-certificate/',
+    (schema) => {
+      schema.signingCertificates.first()?.destroy();
+
+      return {};
+    }
+  );
+
   this.put('/organizations/:id', (schema, req) => {
     const organization = schema.organizations.find(req.params.id);
 
