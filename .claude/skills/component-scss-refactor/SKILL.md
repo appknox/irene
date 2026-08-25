@@ -80,3 +80,82 @@ If the component is a skeleton loader (its path contains `skeleton` or `skeleton
 - Remove any TODO comments that prompted this work.
 - Convert any hardcoded `px` padding values to `em` using base `14px = 1em`. Round to 5 decimal places (e.g. `10px` → `0.71429em`, `17px` → `1.21429em`, `3px 7px` → `0.21429em 0.5em`).
 - Do not change any other properties or structure.
+
+---
+
+## Writing rules
+
+These apply to any component stylesheet, not only refactors.
+
+### No fallback values in `var()`
+
+```scss
+/* ❌ */
+border-color: var(--file-details-summary-border-color, rgba(0, 0, 0, 0.04));
+/* ✅ */
+border-color: var(--file-details-summary-border-color);
+```
+
+The bridge variable is always defined in `_component-variables.scss`. A fallback
+hides a missing definition instead of failing visibly, and silently bypasses the
+theme.
+
+### `em` for spacing, `px` where px is correct
+
+Use `em` (base `14px = 1em`) for **padding, margin and gap**. Round to five
+decimals: `10px` → `0.71429em`, `17px` → `1.21429em`.
+
+Keep `px` where a fixed value is the point: borders (`1px solid`), fixed icon or
+avatar dimensions, `1px` offsets. Do not convert everything.
+
+A shape-specific radius can stay a literal — prefer `em` over `px` there too
+(`4px` → `0.28571em`). Keep `px` only where the radius must not scale with the
+font size. Route it through a bridge variable when it is a theme radius the rest
+of the app shares.
+
+### `:global()` — only for classes you cannot reach
+
+The product uses it for exactly two things:
+
+```scss
+:global(.ember-power-select-option) { ... }   // third-party addon internals
+:global(.ak-icon) { ... }                     // ak-* component internals
+```
+
+Never use it for your own component's elements — those get `local-class`.
+`:global()` on markup you control is an escape hatch around CSS modules.
+
+### No descendant chains into other components
+
+```scss
+/* ❌ */ .drawer > div > span { ... }
+/* ✅ */ .drawer-title { ... }          // local-class on the element itself
+```
+
+A chain like this breaks when the child component changes its markup, and it
+reaches across a component boundary.
+
+### `!important` only against a third-party or `ak-*` rule
+
+Legitimate when overriding an addon or design-system rule you cannot outrank.
+Not legitimate for your own styles — raise specificity or fix the selector
+instead.
+
+### One definition per variable
+
+Within a component's block in `_component-variables.scss`, do not define the
+same variable name twice, and do not define two names that resolve to the same
+value for the same purpose. Check the block before adding:
+
+```bash
+grep -A20 "// variables for <component-path>" app/styles/_component-variables.scss
+```
+
+### Do not add dark-mode handling
+
+The product has no dark theme. Do not add `prefers-color-scheme` blocks,
+`*-dark` variants, or theme-switching styles.
+
+> Existing code predates these rules — `:global()`, `!important` and `px` all
+> appear widely. Apply them to new and changed code; do not flag untouched
+> lines.
