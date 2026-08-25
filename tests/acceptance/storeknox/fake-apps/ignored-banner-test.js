@@ -108,7 +108,7 @@ module('Acceptance | storeknox/fake-apps/ignored-banner', function (hooks) {
 
     assert
       .dom(bannerText)
-      .containsText(t('storeknox.fakeApps.ignoredBannerAddedToInventory'))
+      .containsText(t('storeknox.fakeApps.ignoredBannerIgnored'))
       .containsText(dayjs(reviewedOn).format('MMM DD, YYYY'));
 
     assert
