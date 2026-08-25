@@ -12,6 +12,9 @@
   border: 1px solid var(--file-details-summary-border-color);
   border-radius: 6px;
   background-color: var(--offensive-security-scan-results-card-bg-color);
+  min-width: 0;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .artifact-icon-box {
@@ -23,11 +26,13 @@
   border-radius: 6px;
   background-color: var(--file-details-summary-border-color);
   color: var(--text-secondary);
+  flex-shrink: 0;
 }
 
 .artifact-left {
   flex: 1 1 auto;
   min-width: 0;
+  overflow: hidden;
 }
 
 .artifact-right {
@@ -35,13 +40,25 @@
 }
 
 .artifact-meta {
+  flex: 1 1 auto;
   min-width: 0;
   overflow: hidden;
 
   // Artifact names can be long; keep the row from pushing the button off-card.
   * {
+    max-width: 100%;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
   }
+}
+
+.artifact-name,
+.artifact-description {
+  display: block;
+  width: 100%;
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }

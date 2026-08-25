@@ -23,11 +23,22 @@
             </div>
 
             <AkStack @direction='column' local-class='artifact-meta'>
-              <AkTypography @variant='body2' @fontWeight='bold' class='font-mono'>
+              <AkTypography
+                @variant='body2'
+                @fontWeight='bold'
+                class='font-mono'
+                local-class='artifact-name'
+                title={{artifact.name}}
+              >
                 {{artifact.name}}
               </AkTypography>
 
-              <AkTypography @variant='caption' @color='textSecondary'>
+              <AkTypography
+                @variant='caption'
+                @color='textSecondary'
+                local-class='artifact-description'
+                title={{this.getArtifactDescription artifact.name}}
+              >
                 {{this.getArtifactDescription artifact.name}}
               </AkTypography>
             </AkStack>
