@@ -1,24 +1,44 @@
 {{#if this.showOverrideSuccess}}
   <AkStack
     @direction='column'
-    @spacing='2'
+    @spacing='3'
     @alignItems='center'
     @justifyContent='center'
     class='py-6 px-3'
   >
-    <AkSvg::SeverityOverrideSuccess
-      data-test-analysisRisk-overrideEditDrawer-overrideForm-successSvg
-    />
+    {{#if @dataModel.successSvgComponent}}
+      {{#let
+        (component @dataModel.successSvgComponent)
+        as |EditAnalysisRequestSuccess|
+      }}
+        <EditAnalysisRequestSuccess />
+      {{/let}}
+    {{else}}
+      <AkSvg::SeverityOverrideSuccess
+        data-test-analysisRisk-overrideEditDrawer-overrideForm-successSvg
+      />
+    {{/if}}
 
-    <AkTypography
-      {{style width='300px'}}
-      class='mt-3'
-      @variant='h6'
-      @align='center'
-      data-test-analysisRisk-overrideEditDrawer-overrideForm-successMsg
-    >
-      {{@dataModel.overrideSuccessMessage}}
-    </AkTypography>
+    <AkStack @direction='column' @spacing='1' @alignItems='center'>
+      <AkTypography
+        @variant='h6'
+        @fontWeight='medium'
+        @align='center'
+        data-test-analysisRisk-overrideEditDrawer-overrideForm-successMsg
+      >
+        {{@dataModel.overrideSuccessMessage}}
+      </AkTypography>
+
+      {{#if @dataModel.successSubtext}}
+        <AkTypography
+          @align='center'
+          @color='textSecondary'
+          data-test-analysisRisk-overrideEditDrawer-overrideForm-successSubtext
+        >
+          {{@dataModel.successSubtext}}
+        </AkTypography>
+      {{/if}}
+    </AkStack>
 
     {{#if @dataModel.showOverrideSuccessOriginalToOverriddenRisk}}
       <AkStack
@@ -183,7 +203,7 @@
       @loading={{this.editSaveOverrideHandlerTask.isRunning}}
       {{on 'click' this.markAnalysis}}
     >
-      {{t 'save'}}
+      {{if @dataModel.saveButtonLabel @dataModel.saveButtonLabel (t 'save')}}
     </AkButton>
 
     <AkButton

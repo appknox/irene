@@ -6,6 +6,7 @@ import dayjs from 'dayjs';
 import type IntlService from 'ember-intl/services/intl';
 
 import ENUMS from 'irene/enums';
+import type MeService from 'irene/services/me';
 import { type ActiveContentComponent } from '../content';
 
 import {
@@ -14,6 +15,7 @@ import {
 } from '..';
 
 import type { AkIconVariantType } from 'ak-icons';
+import { riskText } from 'irene/helpers/risk-text';
 
 type OverrideAuditDetail = {
   label: string;
@@ -32,6 +34,7 @@ export interface AnalysisRiskOverrideEditDrawerOverrideDetailsSignature {
 
 export default class AnalysisRiskOverrideEditDrawerOverrideDetailsComponent extends Component<AnalysisRiskOverrideEditDrawerOverrideDetailsSignature> {
   @service declare intl: IntlService;
+  @service declare me: MeService;
 
   constructor(
     owner: unknown,
@@ -46,10 +49,20 @@ export default class AnalysisRiskOverrideEditDrawerOverrideDetailsComponent exte
     return this.args.dataModel;
   }
 
+  get canEditOverride() {
+    return this.me.org?.is_owner || this.me.org?.is_admin;
+  }
+
+  get overriddenRisk() {
+    return this.dataModel.overriddenRisk;
+  }
+
   get showOriginalAndOverriddenSeverity() {
-    return (
-      !isEmpty(this.dataModel.risk) && !isEmpty(this.dataModel.overriddenRisk)
-    );
+    return !isEmpty(this.dataModel.risk) && !isEmpty(this.overriddenRisk);
+  }
+
+  get overridenRiskLabel() {
+    return this.intl.t(riskText([String(this.overriddenRisk)]) as string);
   }
 
   get overrideAuditDetails() {
@@ -63,6 +76,11 @@ export default class AnalysisRiskOverrideEditDrawerOverrideDetailsComponent exte
         label: this.intl.t('editOverrideVulnerability.overriddenBy'),
         icon: 'account-circle',
         value: this.dataModel.overriddenBy,
+      },
+      this.dataModel.approvedBy && {
+        label: this.intl.t('approvedBy'),
+        icon: 'account-circle',
+        value: this.dataModel.approvedBy,
       },
       this.showOriginalAndOverriddenSeverity && {
         label: this.intl.t('editOverrideVulnerability.overriddenSeverity'),

@@ -124,6 +124,55 @@ store.normalize('model', { ...record.toJSON() });
 
 Use `this.setProperties({ ... })` to set multiple properties at once in `beforeEach`.
 
+### Never hand-write fixture payloads
+
+Every record a test needs must come from a **Mirage factory**. Do not write
+object literals that imitate an API response, and do not build them in a local
+helper function.
+
+```js
+// ✅ Correct — factory owns the shape
+const overrideRequest = this.server.create('analysis-override-request');
+
+this.server.get('/analyses/:id/override_requests', () =>
+  overrideRequest.toJSON()
+);
+
+// ❌ Wrong — hand-stubbed payload drifts from the real serializer
+function buildPendingOverrideRequest(payload = {}) {
+  return { id: 'ovr-uuid-1', status: 1, requested_by: { id: 5, ... }, ...payload };
+}
+```
+
+**If no factory exists for the model, create one before writing the test:**
+
+1. `mirage/models/<model>.ts` — `Model.extend({})` (needed for `schema.*` access)
+2. `mirage/factories/<model>.ts` — export a `<MODEL>_FACTORY_DEF` const and
+   `Factory.extend(...)`, matching the sibling factories' style:
+   - snake_case keys, mirroring the API payload
+   - `faker` for every value that isn't semantically fixed
+   - functions (`comment: () => faker.lorem.sentence()`) for per-record values
+   - `trait(...)` for named state variants (e.g. `approved`), never a
+     separate factory
+   - import real enums (`OverrideRequestStatus`, `ENUMS.RISK`) rather than
+     hardcoding their numeric values
+
+**Never assert against a hardcoded factory value.** Faker values change per
+run — read the value off the created record:
+
+```js
+// ✅ Correct
+const overrideRequest = this.server.create('analysis-override-request');
+assert.deepEqual(approveCalls, [String(overrideRequest.id)]);
+
+// ❌ Wrong — breaks as soon as the factory changes
+assert.deepEqual(approveCalls, ['ovr-uuid-1']);
+```
+
+When a value must be deterministic for the assertion, pass it explicitly at
+create time (`this.server.create('model', { status: 1 })`) instead of relying
+on the factory default.
+
 ---
 
 ## Step 6a — Helper extraction for shared model setup
@@ -571,6 +620,9 @@ test('confirming role deletion calls onDeleteRole with the role and closes the c
 - [ ] All `data-test-*` attributes identified from the template
 - [ ] Shared model-setup boilerplate (≥3 tests, ≥3 lines each) extracted into a helper in `// ─── Helpers` (Step 6a)
 - [ ] Store fixtures use `store.normalize(model, record.toJSON())` without spread
+- [ ] Every fixture comes from a Mirage factory — no hand-written payload literals (Step 5)
+- [ ] A factory (and model) was created for any model that lacked one
+- [ ] No assertion hardcodes a faker-generated value; it reads off the created record
 - [ ] Stubs registered for `notifications` and `router` if used
 
 **Assertions**

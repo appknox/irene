@@ -64,7 +64,7 @@ export default class AnalysisRiskOverrideEditDrawerResetConfirmComponent extends
     }
 
     try {
-      await this.dataModel.resetOverrideHandler(all);
+      await this.dataModel.resetOverrideHandler?.(all);
 
       if (!this.isDestroyed) {
         this.showResetSuccess = true;

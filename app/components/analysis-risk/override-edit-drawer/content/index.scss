@@ -1,9 +1,30 @@
 .edit-analysis-content {
+  margin: 1.5em;
+  position: relative;
   width: 650px;
+
   border: 1px solid
     var(--analysis-risk-override-edit-drawer-content-border-color);
+
   border-radius: var(
     --analysis-risk-override-edit-drawer-content-border-radius
   );
-  margin: 1.5em;
+}
+
+.pending-banner {
+  height: 45px;
+  background-color: var(
+    --analysis-risk-override-edit-drawer-content-pending-banner-background-color
+  );
+  filter: drop-shadow(
+    var(--analysis-risk-override-edit-drawer-content-pending-banner-drop-shadow)
+  );
+
+  .mail-icon-container {
+    width: 54px;
+    height: 100%;
+    background-color: var(
+      --analysis-risk-override-edit-drawer-content-pending-banner-icon-background-color
+    );
+  }
 }

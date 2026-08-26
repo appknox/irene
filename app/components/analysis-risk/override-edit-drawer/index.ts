@@ -2,12 +2,12 @@ import { action } from '@ember/object';
 import { service } from '@ember/service';
 import Component from '@glimmer/component';
 import { tracked } from '@glimmer/tracking';
-import type IntlService from 'ember-intl/services/intl';
 import { runTask } from 'ember-lifeline';
-import type { ComponentLike } from '@glint/template';
+import type IntlService from 'ember-intl/services/intl';
 
 import type AnalysisModel from 'irene/models/analysis';
 import type VulnerabilityPreferenceModel from 'irene/models/vulnerability-preference';
+import type AnalysisOverrideRequestModel from 'irene/models/analysis-override-request';
 
 export interface AnalysisRiskOverrideEditDrawerSignature {
   Args: {
@@ -16,14 +16,6 @@ export interface AnalysisRiskOverrideEditDrawerSignature {
     onClose: () => void;
   };
 }
-
-type ResetConfirmComponent = ComponentLike<{
-  dataModel: AnalysisRiskDataModel;
-  resetHandler: (all?: boolean) => void;
-  resetCancelHandler?: () => void;
-  isResetRunning: boolean;
-  isResetSuccess: boolean;
-}>;
 
 export interface AnalysisRiskDataModel {
   model: AnalysisModel | VulnerabilityPreferenceModel;
@@ -35,6 +27,7 @@ export interface AnalysisRiskDataModel {
   status?: number;
   overriddenRiskComment: string | null;
   overriddenBy: string | null;
+  approvedBy?: string | null;
   overrideCriteria: string | null;
   overrideCriteriaOptions: { label: string; value: string }[];
   overriddenOn: Date | null;
@@ -42,9 +35,15 @@ export interface AnalysisRiskDataModel {
   showOverrideSuccessOriginalToOverriddenRisk?: boolean;
   ignoreVulnerabilityHelperText: string;
 
-  resetConfirmComponent: ResetConfirmComponent;
-
-  resetOverrideHandler: (all: boolean) => Promise<void>;
+  saveButtonLabel?: string;
+  successSvgComponent?: 'ak-svg/edit-analysis-request-success';
+  successSubtext?: string;
+  pendingOverrideRequest?: AnalysisOverrideRequestModel | null;
+  approveOverrideHandler?: (successHandler?: () => void) => Promise<void>;
+  rejectOverrideHandler?: (reason: string) => Promise<void>;
+  resetConfirmComponent?: 'file-details/vulnerability-analysis-details/edit-analysis-button/reset-confirm';
+  rejectConfirmComponent?: 'file-details/vulnerability-analysis-details/edit-analysis-button/reject-confirm';
+  resetOverrideHandler?: (all: boolean) => Promise<void>;
 
   editSaveOverrideHandler: (
     risk: number,
