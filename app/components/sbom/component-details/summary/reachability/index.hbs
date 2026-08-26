@@ -1,0 +1,32 @@
+<AkStack
+  @alignItems='center'
+  @spacing='3'
+  @flexWrap='wrap'
+  data-test-sbomScanDetails-componentDetails-reachabilityValue
+>
+  {{#each this.countItems as |item|}}
+    <AkStack
+      @alignItems='center'
+      @spacing='1'
+      data-test-sbomScanDetails-componentDetails-reachabilityCount={{item.key}}
+    >
+      <div
+        local-class='indicator indicator-{{item.key}}'
+        data-test-sbomScanDetails-componentDetails-reachabilityIndicator={{item.key}}
+      ></div>
+
+      <AkTypography
+        data-test-sbomScanDetails-componentDetails-reachabilityCountLabel={{item.key}}
+      >
+        {{item.label}}
+      </AkTypography>
+
+      <AkTypography
+        @variant='subtitle1'
+        data-test-sbomScanDetails-componentDetails-reachabilityCountValue={{item.key}}
+      >
+        {{item.count}}
+      </AkTypography>
+    </AkStack>
+  {{/each}}
+</AkStack>

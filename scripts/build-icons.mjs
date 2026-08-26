@@ -18,6 +18,7 @@ import { icons as IxIcons } from '@iconify-json/ix';
 import { icons as MajesticonsIcons } from '@iconify-json/majesticons';
 import { icons as MiIcons } from '@iconify-json/mi';
 import { icons as AntDesignIcons } from '@iconify-json/ant-design';
+import { icons as CodiconIcons } from '@iconify-json/codicon';
 
 import {
   MaterialSymbolsSet,
@@ -37,6 +38,7 @@ import {
   MajesticonsIconsSet,
   MiIconsSet,
   AntDesignIconsSet,
+  CodiconIconsSet,
 } from '../app/utils/icons.ts';
 
 // Load all icon sets
@@ -74,6 +76,7 @@ const majesticonsCollection = getIcons(MajesticonsIcons, MajesticonsIconsSet);
 const miCollection = getIcons(MiIcons, MiIconsSet);
 
 const antDesignCollection = getIcons(AntDesignIcons, AntDesignIconsSet);
+const codiconCollection = getIcons(CodiconIcons, CodiconIconsSet);
 
 // Merge everything into one big object
 const output = {
@@ -94,6 +97,7 @@ const output = {
   majesticonsCollection,
   miCollection,
   antDesignCollection,
+  codiconCollection,
 };
 
 // Write output JSON

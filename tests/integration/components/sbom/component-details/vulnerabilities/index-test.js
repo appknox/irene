@@ -13,6 +13,10 @@ import { setupRenderingTest } from 'ember-qunit';
 import { module, test } from 'qunit';
 
 import { VulnerabilitySeverity } from 'irene/models/sbom-vulnerability';
+import {
+  reachabilityLabelKey,
+  shouldShowReachabilityChip,
+} from 'irene/utils/sbom-reachability';
 
 module(
   'Integration | Component | sbom/component-details/vulnerabilities',
@@ -92,16 +96,20 @@ module(
         '[data-test-sbomComponentVulnerabilities-listHead]'
       );
 
-      assert.strictEqual(vulnerabilityColHeaders.length, 3);
+      assert.strictEqual(vulnerabilityColHeaders.length, 4);
 
       assert
         .dom(vulnerabilityColHeaders[0])
         .hasText(t('sbomModule.vulnerabilityId'));
 
-      assert.dom(vulnerabilityColHeaders[1]).hasText(t('sbomModule.severity'));
+      assert
+        .dom(vulnerabilityColHeaders[1])
+        .hasText(t('sbomModule.reachability.title'));
+
+      assert.dom(vulnerabilityColHeaders[2]).hasText(t('sbomModule.severity'));
 
       assert
-        .dom(vulnerabilityColHeaders[2])
+        .dom(vulnerabilityColHeaders[3])
         .hasText(t('sbomModule.cvssV3Score'));
 
       const vulnerabilityRows = findAll(
@@ -132,8 +140,18 @@ module(
         .dom(rowCell[0])
         .hasText(`${sbomVulnerabilityAudit.sbVulnerability.vulnerabilityId}`);
 
+      const reachabilityVerdict = sbomVulnerabilityAudit.reachability?.verdict;
+
       assert
         .dom(rowCell[1])
+        .hasText(
+          shouldShowReachabilityChip(reachabilityVerdict)
+            ? t(reachabilityLabelKey(reachabilityVerdict))
+            : '-'
+        );
+
+      assert
+        .dom(rowCell[2])
         .hasText(sbomVulnerabilityAudit.sbVulnerability.severityDisplayValue);
 
       const isUnknown =
@@ -141,7 +159,7 @@ module(
         VulnerabilitySeverity.UNKNOWN;
 
       assert
-        .dom(rowCell[2])
+        .dom(rowCell[3])
         .hasText(
           isUnknown ? '-' : `${sbomVulnerabilityAudit.sbVulnerability.score}`
         );
@@ -227,6 +245,19 @@ module(
           vulnerabilityRows[0]
         )
         .hasText(sbomVulnerabilityAudit.sbVulnerability.description);
+
+      assert
+        .dom(
+          '[data-test-sbomComponentVulnerabilities-detailReachabilityTitle]',
+          vulnerabilityRows[0]
+        )
+        .hasText(t('sbomModule.reachability.title'));
+
+      assert
+        .dom('[data-test-sbomReachability-status]', vulnerabilityRows[0])
+        .hasText(
+          t(reachabilityLabelKey(sbomVulnerabilityAudit.reachability?.verdict))
+        );
 
       // affected & fixed version
       assert

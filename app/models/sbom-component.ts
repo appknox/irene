@@ -5,6 +5,10 @@ import type IntlService from 'ember-intl/services/intl';
 
 import { ENUMS_DISPLAY } from 'irene/enums';
 import type SbomFileModel from './sbom-file';
+import {
+  shouldShowReachabilityChip,
+  type SbomComponentReachability,
+} from 'irene/utils/sbom-reachability';
 
 export interface SbomComponentProperty {
   [key: string]: string;
@@ -125,12 +129,19 @@ export default class SbomComponentModel extends Model {
   @attr('boolean')
   declare isStaleVersionData: boolean;
 
+  @attr()
+  declare reachability: SbomComponentReachability | null;
+
   get isVulnerable() {
     return this.vulnerabilitiesCount > 0;
   }
 
   get isStale() {
     return this.isStaleVulnData || this.isStaleVersionData;
+  }
+
+  get hasReachabilitySummary() {
+    return shouldShowReachabilityChip(this.reachability?.verdict);
   }
 
   get cleanVersion() {

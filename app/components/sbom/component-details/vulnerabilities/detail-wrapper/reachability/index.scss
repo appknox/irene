@@ -1,0 +1,59 @@
+.reachability-root {
+  width: 100%;
+}
+
+.panel-box {
+  width: 100%;
+  min-width: 0;
+  max-height: 200px;
+  margin-top: 0.5em;
+  padding: 0.5em 1.5em;
+  box-sizing: border-box;
+  overflow: auto;
+  border: 1px solid
+    var(
+      --sbom-component-details-vulnerabilities-detail-wrapper-reachability-box-border-color
+    );
+  border-radius: var(
+    --sbom-component-details-vulnerabilities-detail-wrapper-reachability-box-border-radius
+  );
+}
+
+.signature {
+  font-family: var(
+    --sbom-component-details-vulnerabilities-detail-wrapper-reachability-font-family-mono
+  );
+  font-variant-ligatures: none;
+  font-feature-settings: 'liga' 0, 'calt' 0;
+  white-space: nowrap;
+}
+
+.witness-step {
+  display: flex;
+  align-items: center;
+  min-width: 0;
+  line-height: 1.4;
+}
+
+.witness-step-indented {
+  margin-top: 0.5em;
+  padding-left: 1.5em;
+  gap: 0.35em;
+}
+
+.witness-arrow {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  line-height: 1;
+  color: var(
+    --sbom-component-details-vulnerabilities-detail-wrapper-reachability-arrow-color
+  );
+
+  :global(iconify-icon) {
+    display: block;
+    font-size: 1.5em !important;
+    line-height: 1;
+  }
+}

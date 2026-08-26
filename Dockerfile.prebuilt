@@ -1,0 +1,17 @@
+# Local-dev Dockerfile: skips the in-container Ember build.
+# Run `npm run deploy:server` locally first, then:
+#   docker build -f Dockerfile.prebuilt -t irene .
+FROM node:24-alpine
+
+LABEL maintainer "Appknox <engineering@appknox.com>"
+
+EXPOSE 4200
+
+RUN mkdir /app && chown node -R /app
+USER node
+WORKDIR /app/
+COPY --chown=node staticserver/package*.json ./
+RUN npm ci
+COPY --chown=node staticserver/. ./
+
+CMD ["node", "/app/index.js"]

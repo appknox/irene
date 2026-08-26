@@ -38,6 +38,13 @@ export default class SbomFileModel extends Model {
   @attr('boolean')
   declare isStale: boolean;
 
+  /**
+   * Latest reachability scan status. Independent of SBOM `status`.
+   * Matches Mycroft SBReachabilityScan.Status (1–5, including SKIPPED).
+   */
+  @attr('number')
+  declare reachabilityStatus: number | null;
+
   get statusValue() {
     switch (this.status) {
       case SbomScanStatus.PENDING:

@@ -1,0 +1,14 @@
+{{#if this.showChip}}
+  <AkChip
+    local-class='reachability-chip'
+    data-test-sbomReachability-status
+    @variant='semi-filled'
+    @size='small'
+    @color={{this.color}}
+    @label={{this.label}}
+  />
+{{else}}
+  <AkTypography data-test-sbomReachability-empty @fontWeight='bold'>
+    -
+  </AkTypography>
+{{/if}}

@@ -11,7 +11,10 @@ import { hbs } from 'ember-cli-htmlbars';
 import { setupMirage } from 'ember-cli-mirage/test-support';
 import { setupIntl, t } from 'ember-intl/test-support';
 import { setupRenderingTest } from 'ember-qunit';
-import { module, test } from 'qunit';
+import {
+  ReachabilityVerdict,
+  reachabilityLabelKey,
+} from 'irene/utils/sbom-reachability';
 
 module(
   'Integration | Component | sbom/scan-details/component-tree',
@@ -325,5 +328,104 @@ module(
         }
       }
     );
+
+    test('it renders a reachability chip on each scannable tree node', async function (assert) {
+      const component = await this.store.findRecord(
+        'sbom-component',
+        this.sbomComponents[0].id
+      );
+
+      component.reachability = {
+        verdict: ReachabilityVerdict.CONFIRMED_REACHABLE,
+        path_found_count: 1,
+        potential_count: 0,
+        no_path_found_count: 0,
+        advisory_count: 1,
+        unknown_count: 0,
+      };
+
+      this.server.get('/v2/sb_files/:id/sb_file_components', (schema, request) => {
+        const results = schema.sbomComponents.all().models;
+        const retdata = results.slice(
+          request.queryParams.offset,
+          Number(request.queryParams.offset) + Number(request.queryParams.limit)
+        );
+
+        return {
+          count: results.length,
+          next: null,
+          previous: null,
+          results: retdata,
+        };
+      });
+
+      await render(hbs`
+        <Sbom::ScanDetails::ComponentTree
+          @sbomProject={{this.sbomProject}}
+          @sbomFile={{this.sbomFile}}
+          @packageName={{this.packageName}}
+          @updateExpandedNodes={{this.updateExpandedNodes}}
+          @expandedNodes={{this.expandedNodes}}
+          @treeNodes={{this.treeNodes}}
+          @updateTreeNodes={{this.updateTreeNodes}}
+        />
+      `);
+
+      await waitFor('[data-test-component-tree]', { timeout: 500 });
+
+      const nodes = findAll('[data-test-component-tree-node]');
+
+      assert
+        .dom('[data-test-sbomReachability-status]', nodes[0])
+        .hasText(t(reachabilityLabelKey(ReachabilityVerdict.CONFIRMED_REACHABLE)));
+    });
+
+    test('it hides reachability on tree nodes when the verdict is unknown', async function (assert) {
+      const component = await this.store.findRecord(
+        'sbom-component',
+        this.sbomComponents[0].id
+      );
+
+      component.reachability = {
+        verdict: ReachabilityVerdict.UNKNOWN,
+        path_found_count: 0,
+        advisory_count: 4,
+        unknown_count: 4,
+      };
+
+      this.server.get('/v2/sb_files/:id/sb_file_components', (schema, request) => {
+        const results = schema.sbomComponents.all().models;
+        const retdata = results.slice(
+          request.queryParams.offset,
+          Number(request.queryParams.offset) + Number(request.queryParams.limit)
+        );
+
+        return {
+          count: results.length,
+          next: null,
+          previous: null,
+          results: retdata,
+        };
+      });
+
+      await render(hbs`
+        <Sbom::ScanDetails::ComponentTree
+          @sbomProject={{this.sbomProject}}
+          @sbomFile={{this.sbomFile}}
+          @packageName={{this.packageName}}
+          @updateExpandedNodes={{this.updateExpandedNodes}}
+          @expandedNodes={{this.expandedNodes}}
+          @treeNodes={{this.treeNodes}}
+          @updateTreeNodes={{this.updateTreeNodes}}
+        />
+      `);
+
+      await waitFor('[data-test-component-tree]', { timeout: 500 });
+
+      const nodes = findAll('[data-test-component-tree-node]');
+
+      assert.dom('[data-test-sbomReachability-status]', nodes[0]).doesNotExist();
+      assert.dom('[data-test-sbomReachability-empty]', nodes[0]).doesNotExist();
+    });
   }
 );

@@ -6,6 +6,7 @@ import { setupIntl, t } from 'ember-intl/test-support';
 import { setupRenderingTest } from 'ember-qunit';
 import { module, test } from 'qunit';
 import { capitalize } from '@ember/string';
+import { reachabilityLabelKey } from 'irene/utils/sbom-reachability';
 
 module(
   'Integration | Component | sbom/scan-details/component-list',
@@ -111,6 +112,7 @@ module(
       assert.dom(headerRow[1]).hasText(t('sbomModule.componentType'));
       assert.dom(headerRow[2]).hasText(t('dependencyType'));
       assert.dom(headerRow[3]).hasText(t('status'));
+      assert.dom(headerRow[4]).hasText(t('sbomModule.reachability.title'));
 
       const contentRows = findAll('[data-test-sbomComponent-row]');
 
@@ -168,6 +170,14 @@ module(
           )
           .hasText(t('chipStatus.secure'));
       }
+
+      assert
+        .dom('[data-test-sbomComponent-reachability]', firstRow[4])
+        .exists();
+
+      assert
+        .dom('[data-test-sbomReachability-status]', firstRow[4])
+        .hasText(t(reachabilityLabelKey(sbomComponent.reachability?.verdict)));
     });
 
     test('test sbom scan component outdated version', async function (assert) {

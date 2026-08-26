@@ -9,7 +9,10 @@ import type SbomComponentModel from 'irene/models/sbom-component';
 interface ComponentSummaryItem {
   label: string;
   value?: string | null;
-  component?: 'sbom/component-status' | null;
+  component?:
+    | 'sbom/component-status'
+    | 'sbom/component-details/summary/reachability'
+    | null;
   isLink?: boolean;
   tooltip?: string | null;
 }
@@ -84,6 +87,14 @@ export default class SbomComponentDetailsSummaryComponent extends Component<Sbom
         value: this.isLatestVersionLess
           ? '-'
           : this.args.sbomComponent?.cleanLatestVersion,
+      },
+      {
+        label: this.intl.t('status'),
+        component: 'sbom/component-status' as const,
+      },
+      this.args.sbomComponent?.hasReachabilitySummary && {
+        label: this.intl.t('sbomModule.reachability.title'),
+        component: 'sbom/component-details/summary/reachability' as const,
       },
       this.args.sbomComponent?.author && {
         label: this.intl.t('author'),
