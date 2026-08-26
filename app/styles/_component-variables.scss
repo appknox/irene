@@ -960,6 +960,20 @@ body {
     --border-radius
   );
 
+  // variables for sbom/component-details/vulnerabilities/detail-wrapper/reachability
+  --sbom-component-details-vulnerabilities-detail-wrapper-reachability-font-family-mono: var(
+    --font-family-mono
+  );
+  --sbom-component-details-vulnerabilities-detail-wrapper-reachability-box-border-color: var(
+    --border-color-1
+  );
+  --sbom-component-details-vulnerabilities-detail-wrapper-reachability-box-border-radius: var(
+    --border-radius-6
+  );
+  --sbom-component-details-vulnerabilities-detail-wrapper-reachability-arrow-color: var(
+    --text-primary
+  );
+
   // variables for sbom/component-details/vulnerabilities/severity
   --sbom-component-details-vulnerabilities-severity-critical: var(
     --severity-critical
@@ -1002,6 +1016,20 @@ body {
   --sbom-component-details-overview-background-color: var(--neutral-grey-100);
   --sbom-component-details-overview-section-background-color: var(
     --common-white
+  );
+
+  // variables for sbom/component-details/summary/reachability
+  --sbom-component-details-summary-reachability-indicator-path-found-color: var(
+    --primary-main
+  );
+  --sbom-component-details-summary-reachability-indicator-potential-color: var(
+    --warn-main
+  );
+  --sbom-component-details-summary-reachability-indicator-no-path-found-color: var(
+    --neutral-grey-500
+  );
+  --sbom-component-details-summary-reachability-indicator-unknown-color: var(
+    --severity-none
   );
 
   //variables for sbom/scan-details/component-tree

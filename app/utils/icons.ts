@@ -239,3 +239,5 @@ export const IxIconsSet = ['ai'] as const;
 export const MajesticonsIconsSet = ['pulse'] as const;
 
 export const MiIconsSet = ['select'] as const;
+
+export const CodiconIconsSet = ['arrow-small-right'] as const;

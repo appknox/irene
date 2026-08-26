@@ -30,6 +30,10 @@
         </AkTypography>
       </AkStack>
 
+      <Sbom::ComponentDetails::Vulnerabilities::DetailWrapper::Reachability
+        @sbomVulnerabilityAudit={{@sbomVulnerabilityAudit}}
+      />
+
       <AkStack @direction='column' @spacing='2' @width='full'>
         <AkTypography
           data-test-sbomComponentVulnerabilities-affectedFixedVersionTitle

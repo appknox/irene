@@ -1,0 +1,120 @@
+{{#if this.shouldShow}}
+  <AkStack
+    local-class='reachability-root'
+    @direction='column'
+    @spacing='1.5'
+    @width='full'
+    data-test-sbomComponentVulnerabilities-detailReachability
+  >
+  <AkTypography
+    data-test-sbomComponentVulnerabilities-detailReachabilityTitle
+    @variant='subtitle1'
+  >
+    {{t 'sbomModule.reachability.title'}}
+  </AkTypography>
+
+  <AkStack @direction='column' @spacing='0.5' @width='full'>
+    <AkTypography
+      data-test-sbomComponentVulnerabilities-detailReachabilityTargetLabel
+      @variant='body2'
+      @color='textSecondary'
+    >
+      {{t 'sbomModule.reachability.target'}}
+    </AkTypography>
+
+    <div
+      local-class='panel-box'
+      data-test-sbomComponentVulnerabilities-detailReachabilityTarget
+    >
+      {{#if this.target}}
+        <AkTypography
+          data-test-sbomComponentVulnerabilities-detailReachabilityTargetValue
+          local-class='signature'
+          title={{this.target}}
+        >
+          {{this.target}}
+        </AkTypography>
+      {{else}}
+        <AkTypography
+          data-test-sbomComponentVulnerabilities-detailReachabilityTargetValue
+          @color='textSecondary'
+        >
+          {{t 'sbomModule.reachability.noReviewedTarget'}}
+        </AkTypography>
+      {{/if}}
+    </div>
+  </AkStack>
+
+  {{#if this.hasWitnessPath}}
+    <AkStack @direction='column' @spacing='0.5' @width='full'>
+      <AkTypography
+        data-test-sbomComponentVulnerabilities-detailReachabilityWitnessLabel
+        @variant='body2'
+        @color='textSecondary'
+      >
+        {{t 'sbomModule.reachability.witnessPath'}}
+      </AkTypography>
+
+      <div
+        local-class='panel-box'
+        data-test-sbomComponentVulnerabilities-detailReachabilityWitness
+      >
+        {{#each this.witnessPathItems as |item|}}
+          <div
+            local-class='witness-step {{if item.showArrow "witness-step-indented"}}'
+            data-test-sbomComponentVulnerabilities-detailReachabilityWitnessStep='{{item.testIndex}}'
+          >
+            {{#if item.showArrow}}
+              <span local-class='witness-arrow'>
+                <AkIcon
+                  data-test-sbomComponentVulnerabilities-detailReachabilityWitnessArrow
+                  @iconName='codicon:arrow-small-right'
+                  @size='small'
+                  @color='textPrimary'
+                />
+              </span>
+            {{/if}}
+
+            <AkTypography
+              local-class='signature'
+              @variant='body2'
+              title={{item.step}}
+            >
+              {{item.step}}
+            </AkTypography>
+          </div>
+        {{/each}}
+      </div>
+    </AkStack>
+  {{/if}}
+
+  {{#if this.hasBlockers}}
+    <AkStack
+      @direction='column'
+      @spacing='0.5'
+      @width='full'
+      data-test-sbomComponentVulnerabilities-detailReachabilityBlockers
+    >
+      <AkTypography
+        data-test-sbomComponentVulnerabilities-detailReachabilityBlockersLabel
+        @variant='body2'
+        @color='textSecondary'
+      >
+        {{t 'sbomModule.reachability.blockers'}}
+      </AkTypography>
+
+      <AkStack @spacing='0.5' @flexWrap='wrap'>
+        {{#each this.blockers as |blocker|}}
+          <AkChip
+            data-test-sbomComponentVulnerabilities-detailReachabilityBlocker='{{blocker.code}}'
+            @variant='semi-filled'
+            @size='small'
+            @color='warn'
+            @label={{blocker.label}}
+          />
+        {{/each}}
+      </AkStack>
+    </AkStack>
+  {{/if}}
+</AkStack>
+{{/if}}

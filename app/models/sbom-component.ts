@@ -2,6 +2,10 @@ import type { AsyncBelongsTo } from '@ember-data/model';
 import Model, { attr, belongsTo } from '@ember-data/model';
 import type SbomFileModel from './sbom-file';
 import { ENUMS_DISPLAY } from 'irene/enums';
+import {
+  shouldShowReachabilityChip,
+  type SbomComponentReachability,
+} from 'irene/utils/sbom-reachability';
 
 export interface SbomComponentProperty {
   [key: string]: string;
@@ -72,8 +76,15 @@ export default class SbomComponentModel extends Model {
   @attr()
   declare externalReferences: SbomComponentExternalReferences;
 
+  @attr()
+  declare reachability: SbomComponentReachability | null;
+
   get isVulnerable() {
     return this.vulnerabilitiesCount > 0;
+  }
+
+  get hasReachabilitySummary() {
+    return shouldShowReachabilityChip(this.reachability?.verdict);
   }
 
   get cleanVersion() {

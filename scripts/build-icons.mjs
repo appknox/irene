@@ -16,6 +16,7 @@ import { icons as StreamlinePlumpIcons } from '@iconify-json/streamline-plump';
 import { icons as IxIcons } from '@iconify-json/ix';
 import { icons as MajesticonsIcons } from '@iconify-json/majesticons';
 import { icons as MiIcons } from '@iconify-json/mi';
+import { icons as CodiconIcons } from '@iconify-json/codicon';
 
 import {
   MaterialSymbolsSet,
@@ -33,6 +34,7 @@ import {
   IxIconsSet,
   MajesticonsIconsSet,
   MiIconsSet,
+  CodiconIconsSet,
 } from '../app/utils/icons.ts';
 
 // Load all icon sets
@@ -63,6 +65,8 @@ const majesticonsCollection = getIcons(MajesticonsIcons, MajesticonsIconsSet);
 
 const miCollection = getIcons(MiIcons, MiIconsSet);
 
+const codiconCollection = getIcons(CodiconIcons, CodiconIconsSet);
+
 // Merge everything into one big object
 const output = {
   materialSymbolsCollection,
@@ -80,6 +84,7 @@ const output = {
   ixCollection,
   majesticonsCollection,
   miCollection,
+  codiconCollection,
 };
 
 // Write output JSON

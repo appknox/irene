@@ -73,6 +73,12 @@ export default class SbomComponentDetailsVulnerabilitiesComponent extends Compon
         width: 450,
       },
       {
+        name: this.intl.t('sbomModule.reachability.title'),
+        component:
+          'sbom/component-details/vulnerabilities/reachability' as const,
+        textAlign: 'center' as const,
+      },
+      {
         name: this.intl.t('sbomModule.severity'),
         component: 'sbom/component-details/vulnerabilities/severity' as const,
         textAlign: 'center' as const,

@@ -141,6 +141,13 @@
               @sbomComponent={{node.dataObject.originalComponent}}
             />
 
+            {{#if node.dataObject.originalComponent.hasReachabilitySummary}}
+              <Sbom::ReachabilityStatus
+                @verdict={{node.dataObject.originalComponent.reachability.verdict}}
+                @compact={{true}}
+              />
+            {{/if}}
+
             {{#if node.dataObject.isHighlighted}}
               <AkTooltip
                 @title={{t 'highlightedNodeTooltip'}}

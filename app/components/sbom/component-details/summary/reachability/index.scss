@@ -1,0 +1,30 @@
+.indicator {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.indicator-path-found {
+  background-color: var(
+    --sbom-component-details-summary-reachability-indicator-path-found-color
+  );
+}
+
+.indicator-potential {
+  background-color: var(
+    --sbom-component-details-summary-reachability-indicator-potential-color
+  );
+}
+
+.indicator-no-path-found {
+  background-color: var(
+    --sbom-component-details-summary-reachability-indicator-no-path-found-color
+  );
+}
+
+.indicator-unknown {
+  background-color: var(
+    --sbom-component-details-summary-reachability-indicator-unknown-color
+  );
+}
