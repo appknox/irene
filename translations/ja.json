@@ -1348,8 +1348,8 @@
       },
       "nf-public-api-user-updated": "User <strong>{type}</strong> for <strong>{user_email}</strong> changed from <strong>{current}</strong> to <strong>{updated}</strong> by <strong>{changed_by}</strong>.",
       "nf-jira-push-err": "ファイル<strong>{file_id}</strong>（{package_name}）のJiraへのプッシュが<strong>失敗</strong>しました。Jira連携の設定をご確認ください。",
-      "nf-sbom-comp-update": "コンポーネント<strong>{component_name}</strong>の新しいバージョン<strong>{new_version}</strong>が利用可能です。<strong>{affected_apps_count}</strong> 個のアプリに影響します。",
-      "nf-sbom-vuln-update": "コンポーネント<strong>{component_name}</strong>に新しい脆弱性アドバイザリ<strong>{max_severity}</strong>が検出されました（アドバイザリ: {ghsa_ids_display}、修正バージョン: {fixed_version}）。<strong>{affected_apps_count}</strong> 個のアプリに影響します。"
+      "nf-sbom-comp-update": "このコンポーネントの新しいバージョンが利用可能です",
+      "nf-sbom-vuln-update": "新しい脆弱性アドバイザリ<strong>{max_severity}</strong>が検出されました"
     },
     "namespaceMessage": {
       "approved": "{moderaterName} approved this namespace",
@@ -1365,6 +1365,11 @@
     "viewSBOMResults": "View SBOM results",
     "viewComponent": "View component",
     "viewOnRegistry": "View on registry",
+    "viewDirectory": "View Directory",
+    "advisory": "アドバイザリ",
+    "fixedInVersion": "修正バージョン",
+    "affects": "影響",
+    "newVersion": "新しいバージョン",
     "viewAppOnStore": "View App on Store"
   },
   "notificationPreferences": "Notification Preferences",

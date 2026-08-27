@@ -1,34 +1,37 @@
-<AkStack @direction='column' @spacing='1'>
+<AkStack @direction='column' @spacing='1.5'>
   <AkTypography data-test-nf-sbom-comp-update-primary-message>
-    {{t
-      'notificationModule.messages.nf-sbom-comp-update'
-      htmlSafe=true
-      component_name=@context.displayName
-      old_version=@context.old_version
-      new_version=@context.new_version
-      source=@context.source
-      affected_apps_count=@context.affected_apps_count
-    }}
+    {{t 'notificationModule.messages.nf-sbom-comp-update'}}
   </AkTypography>
 
-  {{#if @context.registry_url}}
-    <div data-test-nf-sbom-comp-update-registry-link>
-      <AkButton
-        @tag='a'
-        @variant='text'
-        @color='primary'
-        @underline='always'
-        target='_blank'
-        href={{@context.registry_url}}
-        rel='noopener noreferrer'
-      >
-        {{t 'notificationModule.viewOnRegistry'}}
-      </AkButton>
-    </div>
-  {{/if}}
+  <div local-class='component-card' data-test-nf-sbom-comp-update-card>
+    <AkTypography local-class='component-name' @tag='p' @fontWeight='bold'>
+      {{@context.displayName}}
+    </AkTypography>
 
-  <div data-test-nf-sbom-comp-update-link>
+    <div local-class='component-details'>
+      <AkTypography @tag='p' @color='textSecondary'>
+        {{t 'notificationModule.newVersion'}}:
+        <AkTypography
+          @tag='span'
+          @color='textPrimary'
+          @fontWeight='bold'
+        >{{@context.new_version}}</AkTypography>
+      </AkTypography>
+
+      <AkTypography @tag='p' @color='textSecondary'>
+        {{t 'notificationModule.affects'}}:
+        <AkTypography
+          @tag='span'
+          @color='textPrimary'
+          @fontWeight='bold'
+        >{{@context.affected_apps_count}}</AkTypography>
+      </AkTypography>
+    </div>
+  </div>
+
+  <AkStack @spacing='1.5'>
     <AkLink
+      data-test-nf-sbom-comp-update-link
       @color='primary'
       @route='authenticated.dashboard.sbom.component-inventory'
       @query={{hash component_query=@context.component_name}}
@@ -37,5 +40,15 @@
     >
       {{t 'notificationModule.viewComponent'}}
     </AkLink>
-  </div>
+
+    <AkLink
+      data-test-nf-sbom-comp-update-directory-link
+      @color='textPrimary'
+      @route='authenticated.dashboard.sbom.apps'
+      @underline='always'
+      @title={{t 'notificationModule.viewDirectory'}}
+    >
+      {{t 'notificationModule.viewDirectory'}}
+    </AkLink>
+  </AkStack>
 </AkStack>

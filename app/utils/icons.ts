@@ -176,6 +176,8 @@ export const MaterialSymbolsSet = [
   'license-outline-rounded',
   'shield',
   'shield-outline',
+  'shield-question',
+  'clock-arrow-up',
   'indeterminate-check-box',
   'supervisor-account',
   'supervisor-account-outline',
