@@ -10,12 +10,13 @@ export interface SbomComponentDetailsVulnerabilitiesCvssScoreSignature {
 
 export default class SbomComponentDetailsVulnerabilitiesCvssScoreComponent extends Component<SbomComponentDetailsVulnerabilitiesCvssScoreSignature> {
   get score() {
-    return this.args.sbomVulnerability.score;
+    return this.args.sbomVulnerability.effectiveScore;
   }
 
   get isUnknownSeverity() {
     return (
-      this.args.sbomVulnerability.severity === VulnerabilitySeverity.UNKNOWN
+      this.args.sbomVulnerability.effectiveSeverity ===
+      VulnerabilitySeverity.UNKNOWN
     );
   }
 }

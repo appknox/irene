@@ -5,6 +5,10 @@
   {{#if this.isUnknownSeverity}}
     -
   {{else}}
-    {{this.score}}
+    {{#if this.score}}
+      {{this.score}}
+    {{else}}
+      -
+    {{/if}}
   {{/if}}
 </AkTypography>

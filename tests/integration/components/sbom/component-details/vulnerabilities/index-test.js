@@ -311,6 +311,93 @@ module(
         .doesNotExist();
     });
 
+    test('it derives severity from ratings when top-level severity is unknown (GHSA)', async function (assert) {
+      const ghsaId = 'GHSA-67w4-w877-jv29';
+      const genericSourceUrl = 'https://github.com/advisories';
+
+      this.server.get(
+        '/v2/sb_file_component/:comp_id/sb_vulnerability_audits',
+        () => {
+          return {
+            count: 1,
+            next: null,
+            previous: null,
+            results: [
+              {
+                id: 101,
+                sb_vulnerability: {
+                  id: 101,
+                  vulnerability_id: ghsaId,
+                  description: 'Missing permission check',
+                  detail: '',
+                  recommendation: '',
+                  source_name: 'GitHub Advisories',
+                  source_url: genericSourceUrl,
+                  ratings: [
+                    {
+                      method: 'other',
+                      source: {
+                        name: 'GitHub Advisories',
+                        url: genericSourceUrl,
+                      },
+                      vector: '',
+                      severity: 'high',
+                      score: '7.5',
+                    },
+                  ],
+                  // top-level computed severity is UNKNOWN because no
+                  // CVSS v3 vector exists; score is -1 for the same reason.
+                  severity: VulnerabilitySeverity.UNKNOWN,
+                  score: '-1.0',
+                  cwes: [],
+                  references: [],
+                  advisories: [],
+                },
+                versions: [],
+              },
+            ],
+          };
+        }
+      );
+
+      await render(hbs`
+        <Sbom::ComponentDetails::Vulnerabilities @sbomComponent={{this.sbomComponent}} />
+      `);
+
+      const vulnerabilityRows = findAll(
+        '[data-test-sbomComponentVulnerabilities-listItem]'
+      );
+
+      assert.strictEqual(vulnerabilityRows.length, 1);
+
+      const rowCell = vulnerabilityRows[0].querySelectorAll(
+        '[data-test-sbomComponentVulnerabilities-listCell]'
+      );
+
+      // severity chip should fall back to ratings[].severity -> "high"
+      assert.dom(rowCell[1]).hasText(t('high'));
+
+      // cvss score should fall back to ratings[].score -> "7.5"
+      assert.dom(rowCell[2]).hasText('7.5');
+
+      // expand the row to reveal the source link
+      await click(
+        rowCell[0].querySelector(
+          '[data-test-sbomComponentVulnerabilities-toggleDetailsBtn]'
+        )
+      );
+
+      // source link should point to the specific GHSA advisory, not the
+      // generic advisories page.
+      assert
+        .dom(
+          '[data-test-sbomComponentVulnerabilities-detailSourceLink]',
+          vulnerabilityRows[0]
+        )
+        .hasAttribute('href', `https://github.com/advisories/${ghsaId}`)
+        .hasText(`https://github.com/advisories/${ghsaId}`);
+    });
+
     test.each(
       'test vulnerability details with empty affected & fixed version',
       [
