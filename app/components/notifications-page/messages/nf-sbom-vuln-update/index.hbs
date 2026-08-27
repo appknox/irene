@@ -1,34 +1,50 @@
-<AkStack @direction='column' @spacing='1'>
+<AkStack @direction='column' @spacing='1.5'>
   <AkTypography data-test-nf-sbom-vuln-update-primary-message>
     {{t
       'notificationModule.messages.nf-sbom-vuln-update'
       htmlSafe=true
-      component_name=@context.displayName
       max_severity=@context.max_severity
-      fixed_version=@context.fixed_version
-      affected_apps_count=@context.affected_apps_count
-      ghsa_ids_display=@context.ghsa_ids_display
     }}
   </AkTypography>
 
-  {{#each @context.advisoryLinks as |link|}}
-    <div data-test-nf-sbom-vuln-update-advisory-link>
-      <AkButton
-        @tag='a'
-        @variant='text'
-        @color='primary'
-        @underline='always'
-        target='_blank'
-        href={{link.url}}
-        rel='noopener noreferrer'
-      >
-        {{link.label}}
-      </AkButton>
-    </div>
-  {{/each}}
+  <div local-class='component-card' data-test-nf-sbom-vuln-update-card>
+    <AkTypography local-class='component-name' @tag='p' @fontWeight='bold'>
+      {{@context.displayName}}
+    </AkTypography>
 
-  <div data-test-nf-sbom-vuln-update-link>
+    <div local-class='component-details'>
+      <AkTypography @tag='p' @color='textSecondary'>
+        {{t 'notificationModule.advisory'}}:
+        <AkTypography
+          @tag='span'
+          @color='textPrimary'
+          @fontWeight='bold'
+        >{{@context.ghsa_ids_display}}</AkTypography>
+      </AkTypography>
+
+      <AkTypography @tag='p' @color='textSecondary'>
+        {{t 'notificationModule.fixedInVersion'}}:
+        <AkTypography
+          @tag='span'
+          @color='textPrimary'
+          @fontWeight='bold'
+        >{{@context.fixed_version}}</AkTypography>
+      </AkTypography>
+
+      <AkTypography @tag='p' @color='textSecondary'>
+        {{t 'notificationModule.affects'}}:
+        <AkTypography
+          @tag='span'
+          @color='textPrimary'
+          @fontWeight='bold'
+        >{{@context.affected_apps_count}}</AkTypography>
+      </AkTypography>
+    </div>
+  </div>
+
+  <AkStack @spacing='1.5'>
     <AkLink
+      data-test-nf-sbom-vuln-update-link
       @color='primary'
       @route='authenticated.dashboard.sbom.component-inventory'
       @query={{hash component_query=@context.component_name}}
@@ -37,5 +53,15 @@
     >
       {{t 'notificationModule.viewComponent'}}
     </AkLink>
-  </div>
+
+    <AkLink
+      data-test-nf-sbom-vuln-update-directory-link
+      @color='textPrimary'
+      @route='authenticated.dashboard.sbom.apps'
+      @underline='always'
+      @title={{t 'notificationModule.viewDirectory'}}
+    >
+      {{t 'notificationModule.viewDirectory'}}
+    </AkLink>
+  </AkStack>
 </AkStack>

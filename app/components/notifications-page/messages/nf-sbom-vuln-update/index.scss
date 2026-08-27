@@ -1,0 +1,27 @@
+.component-card {
+  border: 1px solid var(--neutral-grey-100);
+  border-radius: 0.2em;
+  overflow: hidden;
+}
+
+.component-name {
+  background-color: var(--neutral-grey-50);
+  padding: 0.5em 0.9em;
+  margin: 0;
+  word-break: break-all;
+  font-family: monospace;
+  font-size: 0.9em;
+}
+
+.component-details {
+  border-top: 1px solid var(--neutral-grey-100);
+  padding: 0.9em;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25em;
+
+  p {
+    margin: 0;
+    font-size: 0.9em;
+  }
+}
