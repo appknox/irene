@@ -1,11 +1,11 @@
 import Component from '@glimmer/component';
 import type { ThirdPartyAppTableData } from '..';
 
-interface Signature {
+interface StoreknoxThirdPartyScansTableRiskScoreSignature {
   Args: { data: ThirdPartyAppTableData; loading?: boolean };
 }
 
-export default class StoreknoxThirdPartyScansTableRiskScoreComponent extends Component<Signature> {
+export default class StoreknoxThirdPartyScansTableRiskScoreComponent extends Component<StoreknoxThirdPartyScansTableRiskScoreSignature> {
   get hasScore() {
     return (
       this.args.data?.score !== null && this.args.data?.score !== undefined

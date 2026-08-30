@@ -1,14 +1,15 @@
 import Component from '@glimmer/component';
+
 import type SkThirdPartyAppModel from 'irene/models/sk-third-party-app';
 
-interface Signature {
+interface StoreknoxThirdPartyScansAppDetailsSignature {
   Args: {
     app: SkThirdPartyAppModel;
     selectedVersion: string;
   };
 }
 
-export default class StoreknoxThirdPartyScansAppDetailsComponent extends Component<Signature> {
+export default class StoreknoxThirdPartyScansAppDetailsComponent extends Component<StoreknoxThirdPartyScansAppDetailsSignature> {
   get hasScore() {
     return this.args.app?.score !== null && this.args.app?.score !== undefined;
   }

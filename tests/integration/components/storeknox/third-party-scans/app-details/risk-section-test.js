@@ -6,7 +6,26 @@ import { setupIntl, t } from 'ember-intl/test-support';
 import { setupMirage } from 'ember-cli-mirage/test-support';
 
 import ENUMS from 'irene/enums';
+import { compareInnerHTMLWithIntlTranslation } from 'irene/tests/test-utils';
 
+const RISK_STATUS = ENUMS.SK_THIRD_PARTY_APP_RISK_STATUS;
+
+// ─── Selectors ───────────────────────────────────────────────────────────────
+const selectors = {
+  score: '[data-test-storeknoxThirdPartyScansAppDetailsRiskSection-score]',
+  versionAnalysis:
+    '[data-test-storeknoxThirdPartyScansAppDetailsRiskSection-versionAnalysis]',
+  unavailable:
+    '[data-test-storeknoxThirdPartyScansAppDetailsRiskSection-unavailable]',
+  riskSvg: 'svg',
+};
+
+// ─── Template ────────────────────────────────────────────────────────────────
+const TEMPLATE = hbs`
+  <Storeknox::ThirdPartyScans::AppDetails::RiskSection @app={{this.app}} />
+`;
+
+// ─── Test suite ──────────────────────────────────────────────────────────────
 module(
   'Integration | Component | storeknox/third-party-scans/app-details/risk-section',
   function (hooks) {
@@ -15,76 +34,63 @@ module(
     setupMirage(hooks);
 
     hooks.beforeEach(function () {
-      const store = this.owner.lookup('service:store');
+      this.store = this.owner.lookup('service:store');
 
-      const skApp = this.server.create('sk-third-party-app', {
-        score: 85,
-        version: '2.3.4',
-        risk_status: ENUMS.SK_THIRD_PARTY_APP_RISK_STATUS.HIGH,
+      this.createApp = (overrides = {}) => {
+        const record = this.server.create('sk-third-party-app', {
+          score: 85,
+          version: '2.3.4',
+          risk_status: RISK_STATUS.HIGH,
+          ...overrides,
+        });
+
+        return this.store.push(
+          this.store.normalize('sk-third-party-app', record.toJSON())
+        );
+      };
+
+      this.set('app', this.createApp());
+    });
+
+    // ─── Score present ───────────────────────────────────────────────────────────
+    test('it renders the risk score, version analysis and risk svg', async function (assert) {
+      assert.expect(4);
+
+      await render(TEMPLATE);
+
+      assert.dom(selectors.score).hasText('85/100');
+
+      compareInnerHTMLWithIntlTranslation(assert, {
+        selector: selectors.versionAnalysis,
+        message: t('storeknox.basedOnVersionAnalysis', { version: '2.3.4' }),
       });
 
-      this.app = store.push(
-        store.normalize('sk-third-party-app', skApp.toJSON())
-      );
+      assert.dom(selectors.riskSvg).exists();
+      assert.dom(selectors.unavailable).doesNotExist();
     });
 
-    test('it renders the risk score out of 100', async function (assert) {
-      await render(hbs`
-        <Storeknox::ThirdPartyScans::AppDetails::RiskSection
-          @app={{this.app}}
-        />
-      `);
+    test('it renders a zero risk score', async function (assert) {
+      this.set('app', this.createApp({ score: 0 }));
 
-      assert
-        .dom('[data-test-storeknoxThirdPartyScansAppDetailsRiskSection-score]')
-        .hasText('85/100');
+      await render(TEMPLATE);
+
+      assert.dom(selectors.score).hasText('0/100');
+      assert.dom(selectors.riskSvg).exists();
     });
 
-    test('it renders the version analysis text with a bold version', async function (assert) {
-      await render(hbs`
-        <Storeknox::ThirdPartyScans::AppDetails::RiskSection
-          @app={{this.app}}
-        />
-      `);
+    // ─── Score absent ────────────────────────────────────────────────────────────
+    test('it renders "Unavailable" with no version analysis or risk svg when the score is null', async function (assert) {
+      this.set('app', this.createApp({ score: null }));
 
-      const versionAnalysis = this.element.querySelector(
-        '[data-test-storeknoxThirdPartyScansAppDetailsRiskSection-versionAnalysis]'
-      );
-
-      assert.dom(versionAnalysis).hasText('Based on v2.3.4 analysis');
-      assert.dom(versionAnalysis.querySelector('strong')).hasText('v2.3.4');
-    });
-
-    test('it renders "Unavailable" with no risk svg when the score is null', async function (assert) {
-      const store = this.owner.lookup('service:store');
-
-      const skApp = this.server.create('sk-third-party-app', {
-        score: null,
-        version: '2.3.4',
-        risk_status: ENUMS.SK_THIRD_PARTY_APP_RISK_STATUS.MINIMAL,
-      });
-
-      this.app = store.push(
-        store.normalize('sk-third-party-app', skApp.toJSON())
-      );
-
-      await render(hbs`
-        <Storeknox::ThirdPartyScans::AppDetails::RiskSection
-          @app={{this.app}}
-        />
-      `);
+      await render(TEMPLATE);
 
       assert
-        .dom('[data-test-storeknoxThirdPartyScansAppDetailsRiskSection-score]')
-        .doesNotExist();
-
-      assert
-        .dom(
-          '[data-test-storeknoxThirdPartyScansAppDetailsRiskSection-unavailable]'
-        )
+        .dom(selectors.unavailable)
         .hasText(t('storeknox.riskScoreUnavailable'));
 
-      assert.dom('svg').doesNotExist();
+      assert.dom(selectors.score).doesNotExist();
+      assert.dom(selectors.versionAnalysis).doesNotExist();
+      assert.dom(selectors.riskSvg).doesNotExist();
     });
   }
 );

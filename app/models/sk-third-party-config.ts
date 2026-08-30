@@ -5,7 +5,10 @@ export default class SkThirdPartyConfigModel extends Model {
   declare frequency: number;
 
   @attr()
-  declare regionsOpted: string[];
+  declare playstoreRegionsOpted: string[];
+
+  @attr()
+  declare appstoreRegionsOpted: string[];
 
   @attr('number')
   declare topAppsCount: number;

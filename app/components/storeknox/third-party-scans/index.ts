@@ -4,13 +4,13 @@ import { service } from '@ember/service';
 import type SkThirdPartyAppsService from 'irene/services/sk-third-party-apps';
 import type SkThirdPartyConfigModel from 'irene/models/sk-third-party-config';
 
-interface Signature {
+interface StoreknoxThirdPartyScansSignature {
   Args: {
     config: SkThirdPartyConfigModel | null;
   };
 }
 
-export default class StoreknoxThirdPartyScansComponent extends Component<Signature> {
+export default class StoreknoxThirdPartyScansComponent extends Component<StoreknoxThirdPartyScansSignature> {
   @service('sk-third-party-apps')
   declare skThirdPartyApps: SkThirdPartyAppsService;
 }

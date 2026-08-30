@@ -7,11 +7,13 @@ import type IntlService from 'ember-intl/services/intl';
 import type RouterService from '@ember/routing/router-service';
 
 import ENUMS from 'irene/enums';
+import type { SkThirdPartyAppStoreFilter } from 'irene/services/sk-third-party-apps';
+
 import styles from './index.scss';
 
 interface StoreOption {
   label: string;
-  value: string;
+  value: SkThirdPartyAppStoreFilter;
 }
 
 interface RiskStatusOption {
@@ -24,26 +26,43 @@ interface RegionOption {
   value: string;
 }
 
-interface Signature {
+interface StoreknoxThirdPartyScansHeaderSignature {
   Args: {
     selectedStore: string;
     selectedRegion: string;
     selectedRiskStatus: number;
     filterQuery: string;
-    regionsOpted: string[] | null | undefined;
+    playstoreRegionsOpted: string[] | null | undefined;
+    appstoreRegionsOpted: string[] | null | undefined;
   };
 }
 
-export default class StoreknoxThirdPartyScansHeaderComponent extends Component<Signature> {
+export default class StoreknoxThirdPartyScansHeaderComponent extends Component<StoreknoxThirdPartyScansHeaderSignature> {
   @service declare intl: IntlService;
   @service declare router: RouterService;
 
-  @tracked filterQuery = this.args.filterQuery ?? '';
+  @tracked filterQuery = '';
+
+  constructor(
+    owner: unknown,
+    args: StoreknoxThirdPartyScansHeaderSignature['Args']
+  ) {
+    super(owner, args);
+
+    this.filterQuery = this.args.filterQuery ?? '';
+  }
+
+  get regionsOptedForSelectedStore(): string[] {
+    return this.args.selectedStore === 'playstore'
+      ? (this.args.playstoreRegionsOpted ?? [])
+      : (this.args.appstoreRegionsOpted ?? []);
+  }
 
   get regionOptions(): RegionOption[] {
-    const regions = this.args.regionsOpted ?? [];
-
-    return regions.map((r) => ({ label: r, value: r }));
+    return this.regionsOptedForSelectedStore.map((r) => ({
+      label: this.regionLabel(r),
+      value: r,
+    }));
   }
 
   get showRegionFilter() {
@@ -65,11 +84,32 @@ export default class StoreknoxThirdPartyScansHeaderComponent extends Component<S
     return styles['filter-dropdown-region'];
   }
 
+  get showStoreFilter() {
+    // Only offer the store filter when both stores actually have data
+    return (
+      (this.args.appstoreRegionsOpted ?? []).length > 0 &&
+      (this.args.playstoreRegionsOpted ?? []).length > 0
+    );
+  }
+
   get storeOptions(): StoreOption[] {
-    return [
-      { label: this.intl.t('storeknox.appStore'), value: 'appstore' },
-      { label: this.intl.t('storeknox.playStore'), value: 'playstore' },
-    ];
+    const options: StoreOption[] = [];
+
+    if ((this.args.appstoreRegionsOpted ?? []).length > 0) {
+      options.push({
+        label: this.intl.t('storeknox.appStore'),
+        value: 'appstore',
+      });
+    }
+
+    if ((this.args.playstoreRegionsOpted ?? []).length > 0) {
+      options.push({
+        label: this.intl.t('storeknox.playStore'),
+        value: 'playstore',
+      });
+    }
+
+    return options;
   }
 
   get riskStatusOptions(): RiskStatusOption[] {
@@ -114,9 +154,18 @@ export default class StoreknoxThirdPartyScansHeaderComponent extends Component<S
     );
   }
 
+  regionLabel(code: string) {
+    const key = `storeknox.regionNames.${code}`;
+
+    return this.intl.exists(key) ? this.intl.t(key) : code;
+  }
+
   @action onStoreChange(option: StoreOption) {
+    // Each store has its own region list - clear tp_region so the route
+    // picks the new store's first opted region instead of carrying over a
+    // region that may not even apply to it.
     this.router.transitionTo({
-      queryParams: { tp_store: option.value, tp_offset: 0 },
+      queryParams: { tp_store: option.value, tp_region: '', tp_offset: 0 },
     });
   }
 

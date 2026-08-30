@@ -5,6 +5,22 @@ import { hbs } from 'ember-cli-htmlbars';
 import { setupIntl, t } from 'ember-intl/test-support';
 import { setupMirage } from 'ember-cli-mirage/test-support';
 
+// ─── Selectors ───────────────────────────────────────────────────────────────
+const selectors = {
+  technicalDetails:
+    '[data-test-storeknoxThirdPartyScansAppDetails-technicalDetails]',
+  errorState: '[data-test-storeknoxThirdPartyScansAppDetails-errorState]',
+};
+
+// ─── Template ────────────────────────────────────────────────────────────────
+const TEMPLATE = hbs`
+  <Storeknox::ThirdPartyScans::AppDetails
+    @app={{this.app}}
+    @selectedVersion=''
+  />
+`;
+
+// ─── Test suite ──────────────────────────────────────────────────────────────
 module(
   'Integration | Component | storeknox/third-party-scans/app-details',
   function (hooks) {
@@ -14,58 +30,38 @@ module(
 
     hooks.beforeEach(function () {
       this.store = this.owner.lookup('service:store');
+
+      this.createApp = (overrides = {}) => {
+        const record = this.server.create('sk-third-party-app', overrides);
+
+        return this.store.push(
+          this.store.normalize('sk-third-party-app', record.toJSON())
+        );
+      };
     });
 
+    // ─── Score present ───────────────────────────────────────────────────────────
     test('it renders the risk assessment details when the score is present', async function (assert) {
-      const skApp = this.server.create('sk-third-party-app', { score: 60 });
+      this.set('app', this.createApp({ score: 60 }));
 
-      this.app = this.store.push(
-        this.store.normalize('sk-third-party-app', skApp.toJSON())
-      );
+      await render(TEMPLATE);
 
-      await render(hbs`
-        <Storeknox::ThirdPartyScans::AppDetails
-          @app={{this.app}}
-          @selectedVersion=''
-        />
-      `);
-
-      assert.dom(this.element).containsText(t('storeknox.technicalDetails'));
-
-      assert
-        .dom('[data-test-storeknoxThirdPartyScansAppDetails-errorState]')
-        .doesNotExist();
+      assert.dom(selectors.technicalDetails).exists();
+      assert.dom(selectors.errorState).doesNotExist();
     });
 
+    // ─── Score absent ────────────────────────────────────────────────────────────
     test('it renders the error state instead of risk assessment details when the score is null', async function (assert) {
-      const skApp = this.server.create('sk-third-party-app', { score: null });
+      this.set('app', this.createApp({ score: null }));
 
-      this.app = this.store.push(
-        this.store.normalize('sk-third-party-app', skApp.toJSON())
-      );
+      await render(TEMPLATE);
 
-      await render(hbs`
-        <Storeknox::ThirdPartyScans::AppDetails
-          @app={{this.app}}
-          @selectedVersion=''
-        />
-      `);
+      assert.dom(selectors.technicalDetails).doesNotExist();
 
       assert
-        .dom('[data-test-storeknoxThirdPartyScansAppDetails-errorState]')
-        .exists();
-
-      assert
-        .dom('[data-test-storeknoxThirdPartyScansAppDetails-errorState]')
-        .containsText(t('storeknox.riskAssessmentErrorTitle'));
-
-      assert
-        .dom('[data-test-storeknoxThirdPartyScansAppDetails-errorState]')
+        .dom(selectors.errorState)
+        .containsText(t('storeknox.riskAssessmentErrorTitle'))
         .containsText(t('storeknox.riskAssessmentErrorDescription'));
-
-      assert
-        .dom(this.element)
-        .doesNotContainText(t('storeknox.technicalDetails'));
     });
   }
 );

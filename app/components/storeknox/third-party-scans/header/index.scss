@@ -16,7 +16,7 @@
 }
 
 .search-field {
-  width: 250px !important;
+  width: 17.857em !important;
 }
 
 .filter-select {
@@ -24,21 +24,21 @@
 }
 
 .filter-dropdown-store {
-  min-width: 150px !important;
+  min-width: 10.714em !important;
 }
 
 .filter-dropdown-region {
-  min-width: 120px !important;
+  min-width: 8.571em !important;
 }
 
 .filter-dropdown-risk-status {
-  min-width: 170px !important;
+  min-width: 12.143em !important;
 }
 
 .filter-trigger {
   white-space: nowrap;
   width: auto !important;
-  padding: 0 8px !important;
+  padding: 0 0.571em !important;
 
   :global(.ember-power-select-status-icon) {
     display: none;

@@ -6,51 +6,60 @@ import { setupIntl, t } from 'ember-intl/test-support';
 
 import ENUMS from 'irene/enums';
 
+const RISK_STATUS = ENUMS.SK_THIRD_PARTY_APP_RISK_STATUS;
+
+// ─── Selectors ───────────────────────────────────────────────────────────────
+const selectors = {
+  chip: '[data-test-storeknoxThirdPartyScansTableRiskStatus-chip]',
+};
+
+// ─── Template ────────────────────────────────────────────────────────────────
+const TEMPLATE = hbs`
+  <Storeknox::ThirdPartyScans::Table::RiskStatus
+    @data={{this.data}}
+    @loading={{this.loading}}
+  />
+`;
+
+// ─── Test suite ──────────────────────────────────────────────────────────────
 module(
   'Integration | Component | storeknox/third-party-scans/table/risk-status',
   function (hooks) {
     setupRenderingTest(hooks);
     setupIntl(hooks, 'en');
 
-    const RISK_STATUS = ENUMS.SK_THIRD_PARTY_APP_RISK_STATUS;
-
-    const scenarios = [
-      {
-        riskStatus: RISK_STATUS.MINIMAL,
-        label: 'storeknox.riskStatus.minimal',
-      },
-      { riskStatus: RISK_STATUS.MEDIUM, label: 'storeknox.riskStatus.medium' },
-      { riskStatus: RISK_STATUS.HIGH, label: 'storeknox.riskStatus.high' },
-      { riskStatus: 99, label: 'storeknox.riskStatus.unknown' },
-    ];
-
-    scenarios.forEach(({ riskStatus, label }) => {
-      test(`it renders the "${label}" chip for risk status ${riskStatus}`, async function (assert) {
-        this.data = { riskStatus };
-
-        await render(hbs`
-          <Storeknox::ThirdPartyScans::Table::RiskStatus @data={{this.data}} />
-        `);
-
-        assert
-          .dom('[data-test-storeknoxThirdPartyScansTableRiskStatus-chip]')
-          .hasText(t(label));
+    hooks.beforeEach(function () {
+      this.setProperties({
+        data: { riskStatus: RISK_STATUS.HIGH },
+        loading: false,
       });
     });
 
-    test('it renders a skeleton when loading', async function (assert) {
-      this.data = { riskStatus: RISK_STATUS.HIGH };
+    // ─── Chip label per risk status ──────────────────────────────────────────────
+    test.each(
+      'it renders the chip label for each risk status',
+      [
+        [RISK_STATUS.MINIMAL, 'storeknox.riskStatus.minimal'],
+        [RISK_STATUS.MEDIUM, 'storeknox.riskStatus.medium'],
+        [RISK_STATUS.HIGH, 'storeknox.riskStatus.high'],
+        [99, 'storeknox.riskStatus.unknown'],
+      ],
+      async function (assert, [riskStatus, label]) {
+        this.set('data', { riskStatus });
 
-      await render(hbs`
-        <Storeknox::ThirdPartyScans::Table::RiskStatus
-          @data={{this.data}}
-          @loading={{true}}
-        />
-      `);
+        await render(TEMPLATE);
 
-      assert
-        .dom('[data-test-storeknoxThirdPartyScansTableRiskStatus-chip]')
-        .doesNotExist();
+        assert.dom(selectors.chip).hasText(t(label));
+      }
+    );
+
+    // ─── Loading ─────────────────────────────────────────────────────────────────
+    test('it does not render the chip while loading', async function (assert) {
+      this.set('loading', true);
+
+      await render(TEMPLATE);
+
+      assert.dom(selectors.chip).doesNotExist();
     });
   }
 );

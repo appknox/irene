@@ -2,7 +2,7 @@ import Component from '@glimmer/component';
 import ENUMS from 'irene/enums';
 import type SkThirdPartyAppModel from 'irene/models/sk-third-party-app';
 
-interface Signature {
+interface StoreknoxThirdPartyScansAppDetailsRiskSectionSignature {
   Args: {
     app: SkThirdPartyAppModel;
   };
@@ -10,7 +10,7 @@ interface Signature {
 
 const RS = ENUMS.SK_THIRD_PARTY_APP_RISK_STATUS;
 
-export default class StoreknoxThirdPartyScansAppDetailsRiskSectionComponent extends Component<Signature> {
+export default class StoreknoxThirdPartyScansAppDetailsRiskSectionComponent extends Component<StoreknoxThirdPartyScansAppDetailsRiskSectionSignature> {
   get hasScore() {
     return this.args.app?.score !== null && this.args.app?.score !== undefined;
   }
