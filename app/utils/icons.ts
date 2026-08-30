@@ -208,6 +208,7 @@ export const MdiIconsSet = [
   'calendar-month-outline',
   'delete',
   'shield-tick-outline',
+  'web',
 ] as const;
 
 export const HugeIconsSet = [

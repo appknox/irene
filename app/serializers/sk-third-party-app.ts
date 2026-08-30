@@ -4,7 +4,7 @@ export default class SkThirdPartyAppSerializer extends DRFSerializer {
   primaryKey = 'package_name';
 
   attrs = {
-    skStore: 'store',
+    skStore: { key: 'store' },
   };
 }
 

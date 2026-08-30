@@ -2437,6 +2437,11 @@
   "storeknox": {
     "fakeAppsTitle": "Brand Abuse & Fake Apps",
     "region": "Region",
+    "regionNames": {
+      "US": "United States",
+      "SG": "Singapore",
+      "SA": "Saudi Arabia"
+    },
     "thirdPartyScansTitle": "Third-Party App Risk Assessment",
     "thirdPartyScansDescription": "Get comprehensive visibility into the security risk posed by third-party apps across Google PlayStore and Apple App Store, to your organization.",
     "basedOnVersionAnalysis": "Based on <strong>v{version}</strong> analysis",

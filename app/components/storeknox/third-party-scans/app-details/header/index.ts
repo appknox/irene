@@ -3,18 +3,19 @@ import { tracked } from '@glimmer/tracking';
 import { action } from '@ember/object';
 import { service } from '@ember/service';
 import type RouterService from '@ember/routing/router-service';
+
 import type SkThirdPartyAppModel from 'irene/models/sk-third-party-app';
 
 import styles from './index.scss';
 
-interface Signature {
+interface StoreknoxThirdPartyScansAppDetailsHeaderSignature {
   Args: {
     app: SkThirdPartyAppModel;
     selectedVersion: string;
   };
 }
 
-export default class StoreknoxThirdPartyScansAppDetailsHeaderComponent extends Component<Signature> {
+export default class StoreknoxThirdPartyScansAppDetailsHeaderComponent extends Component<StoreknoxThirdPartyScansAppDetailsHeaderSignature> {
   @service declare router: RouterService;
 
   @tracked failedToLoadAppIcon = false;

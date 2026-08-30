@@ -1,12 +1,12 @@
 import Component from '@glimmer/component';
-import type IntlService from 'ember-intl/services/intl';
 import { service } from '@ember/service';
+import type IntlService from 'ember-intl/services/intl';
 
 import ENUMS from 'irene/enums';
 import type { AkChipColor } from 'irene/components/ak-chip';
 import type { ThirdPartyAppTableData } from '..';
 
-interface Signature {
+interface StoreknoxThirdPartyScansTableRiskStatusSignature {
   Args: { data: ThirdPartyAppTableData; loading?: boolean };
 }
 
@@ -17,7 +17,7 @@ interface RiskChipConfig {
 
 const RISK_STATUS = ENUMS.SK_THIRD_PARTY_APP_RISK_STATUS;
 
-export default class StoreknoxThirdPartyScansTableRiskStatusComponent extends Component<Signature> {
+export default class StoreknoxThirdPartyScansTableRiskStatusComponent extends Component<StoreknoxThirdPartyScansTableRiskStatusSignature> {
   @service declare intl: IntlService;
 
   get chipConfig(): RiskChipConfig {

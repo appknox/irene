@@ -40,13 +40,30 @@ export default class AuthenticatedStoreknoxThirdPartyScansIndexRoute extends AkB
     } = params;
 
     const config = await this.store.queryRecord('sk-third-party-config', {});
-    const region = tp_region || config?.regionsOpted?.[0] || 'US';
+
+    // Only a store with at least one opted region is actually usable - a
+    // store the org hasn't opted into any region for (e.g. appstore with
+    // regions_opted: []) must not be selectable at all.
+    const regionsByStore: Record<SkThirdPartyAppStoreFilter, string[]> = {
+      playstore: config?.playstoreRegionsOpted ?? [],
+      appstore: config?.appstoreRegionsOpted ?? [],
+    };
+    const availableStores = (
+      Object.keys(regionsByStore) as SkThirdPartyAppStoreFilter[]
+    ).filter((storeOption) => regionsByStore[storeOption].length > 0);
+
+    const requestedStore = tp_store as SkThirdPartyAppStoreFilter;
+    const storeFilter = availableStores.includes(requestedStore)
+      ? requestedStore
+      : (availableStores[0] ?? 'playstore');
+
+    const region = tp_region || regionsByStore[storeFilter][0] || '';
 
     this.skThirdPartyApps
       .setQueryParams({
         limit: tp_limit,
         offset: tp_offset,
-        storeFilter: (tp_store as SkThirdPartyAppStoreFilter) || 'appstore',
+        storeFilter,
         region,
         riskStatusFilter: tp_risk_status,
         filterQuery: tp_filter,

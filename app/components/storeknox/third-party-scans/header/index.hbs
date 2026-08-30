@@ -51,31 +51,35 @@
     local-class='filters-row'
   >
     <AkStack @alignItems='center'>
-      <AkSelect
-        @options={{this.storeOptions}}
-        @selected={{this.selectedStoreOption}}
-        @onChange={{this.onStoreChange}}
-        @verticalPosition='auto'
-        @optionTitle={{t 'storeknox.store'}}
-        @extra={{hash
-          selectedItem=this.selectedStoreOption.label
-          showLabel=true
-          iconName='filter-list'
-        }}
-        @selectedItemComponent={{component 'project-list/filter-selected-item'}}
-        @triggerClass={{this.triggerClass}}
-        @dropdownClass={{this.storeDropdownClass}}
-        {{style width='auto'}}
-        data-test-storeknoxThirdPartyScansHeader-storeSelect
-        as |option|
-      >
-        <AkStack @spacing='1' @alignItems='center'>
-          <AkRadio
-            @checked={{eq this.selectedStoreOption.value option.value}}
-          />
-          {{option.label}}
-        </AkStack>
-      </AkSelect>
+      {{#if this.showStoreFilter}}
+        <AkSelect
+          @options={{this.storeOptions}}
+          @selected={{this.selectedStoreOption}}
+          @onChange={{this.onStoreChange}}
+          @verticalPosition='auto'
+          @optionTitle={{t 'storeknox.store'}}
+          @extra={{hash
+            selectedItem=this.selectedStoreOption.label
+            showLabel=true
+            iconName='filter-list'
+          }}
+          @selectedItemComponent={{component
+            'project-list/filter-selected-item'
+          }}
+          @triggerClass={{this.triggerClass}}
+          @dropdownClass={{this.storeDropdownClass}}
+          {{style width='auto'}}
+          data-test-storeknoxThirdPartyScansHeader-storeSelect
+          as |option|
+        >
+          <AkStack @spacing='1' @alignItems='center'>
+            <AkRadio
+              @checked={{eq this.selectedStoreOption.value option.value}}
+            />
+            {{option.label}}
+          </AkStack>
+        </AkSelect>
+      {{/if}}
 
       {{#if this.showRegionFilter}}
         <AkSelect
@@ -137,12 +141,19 @@
     </AkStack>
 
     {{#if this.singleRegion}}
-      <AkChip
-        @label='{{t "storeknox.region"}} - {{this.singleRegion}}'
-        @size='small'
-        @variant='outlined'
+      <AkStack
+        @spacing='0.5'
+        @alignItems='center'
         data-test-storeknoxThirdPartyScansHeader-regionChip
-      />
+      >
+        <AkIcon @iconName='mdi:web' @size='small' @color='textSecondary' />
+
+        <AkTypography @variant='body2' @color='textSecondary'>
+          {{t 'storeknox.region'}}
+          -
+          {{this.singleRegion}}
+        </AkTypography>
+      </AkStack>
     {{/if}}
   </AkStack>
 </AkStack>

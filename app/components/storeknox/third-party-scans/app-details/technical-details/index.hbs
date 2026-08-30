@@ -1,4 +1,9 @@
-<AkStack @direction='column' @width='full' local-class='technical-details'>
+<AkStack
+  @direction='column'
+  @width='full'
+  local-class='technical-details'
+  ...attributes
+>
   <AkStack
     @justifyContent='space-between'
     @alignItems='center'
@@ -6,11 +11,19 @@
     class='p-3'
   >
     <AkStack @direction='column'>
-      <AkTypography @variant='subtitle1' @fontWeight='bold'>
+      <AkTypography
+        @variant='subtitle1'
+        @fontWeight='bold'
+        data-test-storeknoxThirdPartyScansAppDetailsTechnicalDetails-title
+      >
         {{t 'storeknox.technicalDetails'}}
       </AkTypography>
 
-      <AkTypography @color='textSecondary' @variant='body2'>
+      <AkTypography
+        @color='textSecondary'
+        @variant='body2'
+        data-test-storeknoxThirdPartyScansAppDetailsTechnicalDetails-description
+      >
         {{t 'storeknox.technicalDetailsDescription'}}
       </AkTypography>
     </AkStack>
@@ -124,8 +137,8 @@
                   >
                     <AkStack @spacing='1.5' @alignItems='center'>
                       <AkIcon
-                        @iconName={{this.riskIcon finding}}
-                        @color={{this.riskIconColor finding}}
+                        @iconName={{finding.riskIcon}}
+                        @color={{finding.riskIconColor}}
                       />
 
                       <AkTypography @fontWeight='medium' @variant='subtitle1'>
@@ -135,8 +148,8 @@
 
                     <AkStack @spacing='1.5' @alignItems='center'>
                       <AkChip
-                        @label={{this.riskChipLabel finding}}
-                        @color={{this.riskChipColor finding}}
+                        @label={{finding.riskLabel}}
+                        @color={{finding.riskColor}}
                         @variant='semi-filled'
                         @size='small'
                         data-test-storeknoxThirdPartyScansAppDetailsTechnicalDetails-riskChip

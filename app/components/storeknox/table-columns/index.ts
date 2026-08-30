@@ -13,8 +13,8 @@ export interface StoreknoxCommonTableColumnsData {
   companyName: string;
   mailId?: string;
   title: string;
-  reason: string;
-  svg: string;
+  reason?: string;
+  svg?: string;
   docUlid: string;
 }
 

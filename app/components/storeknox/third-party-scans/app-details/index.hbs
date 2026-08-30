@@ -9,7 +9,10 @@
   <Storeknox::ThirdPartyScans::AppDetails::RiskSection @app={{@app}} />
 
   {{#if this.hasScore}}
-    <Storeknox::ThirdPartyScans::AppDetails::TechnicalDetails @app={{@app}} />
+    <Storeknox::ThirdPartyScans::AppDetails::TechnicalDetails
+      @app={{@app}}
+      data-test-storeknoxThirdPartyScansAppDetails-technicalDetails
+    />
   {{else}}
     <AkStack
       @direction='column'

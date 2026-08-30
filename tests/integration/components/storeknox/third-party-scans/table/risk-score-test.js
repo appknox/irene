@@ -4,65 +4,70 @@ import { render } from '@ember/test-helpers';
 import { hbs } from 'ember-cli-htmlbars';
 import { setupIntl, t } from 'ember-intl/test-support';
 
+// ─── Selectors ───────────────────────────────────────────────────────────────
+const selectors = {
+  score: '[data-test-storeknoxThirdPartyScansTableRiskScore-score]',
+  unavailable: '[data-test-storeknoxThirdPartyScansTableRiskScore-unavailable]',
+};
+
+// ─── Template ────────────────────────────────────────────────────────────────
+const TEMPLATE = hbs`
+  <Storeknox::ThirdPartyScans::Table::RiskScore
+    @data={{this.data}}
+    @loading={{this.loading}}
+  />
+`;
+
+// ─── Test suite ──────────────────────────────────────────────────────────────
 module(
   'Integration | Component | storeknox/third-party-scans/table/risk-score',
   function (hooks) {
     setupRenderingTest(hooks);
     setupIntl(hooks, 'en');
 
-    test('it renders the score out of 100', async function (assert) {
-      this.data = { score: 85 };
-
-      await render(hbs`
-        <Storeknox::ThirdPartyScans::Table::RiskScore @data={{this.data}} />
-      `);
-
-      assert
-        .dom('[data-test-storeknoxThirdPartyScansTableRiskScore-score]')
-        .hasText('85/100');
+    hooks.beforeEach(function () {
+      this.setProperties({ data: { score: 85 }, loading: false });
     });
 
-    test('it renders "Unavailable" when the score is null', async function (assert) {
-      this.data = { score: null };
+    // ─── Score present ───────────────────────────────────────────────────────────
+    test.each(
+      'it renders the score out of 100',
+      [85, 0],
+      async function (assert, score) {
+        this.set('data', { score });
 
-      await render(hbs`
-        <Storeknox::ThirdPartyScans::Table::RiskScore @data={{this.data}} />
-      `);
+        await render(TEMPLATE);
 
-      assert
-        .dom('[data-test-storeknoxThirdPartyScansTableRiskScore-score]')
-        .doesNotExist();
+        assert.dom(selectors.score).hasText(`${score}/100`);
+        assert.dom(selectors.unavailable).doesNotExist();
+      }
+    );
 
-      assert
-        .dom('[data-test-storeknoxThirdPartyScansTableRiskScore-unavailable]')
-        .hasText(t('storeknox.riskScoreUnavailable'));
-    });
+    // ─── Score absent ────────────────────────────────────────────────────────────
+    test.each(
+      'it renders "Unavailable" when the score is absent',
+      [null, undefined],
+      async function (assert, score) {
+        this.set('data', { score });
 
-    test('it renders the score when it is zero', async function (assert) {
-      this.data = { score: 0 };
+        await render(TEMPLATE);
 
-      await render(hbs`
-        <Storeknox::ThirdPartyScans::Table::RiskScore @data={{this.data}} />
-      `);
+        assert
+          .dom(selectors.unavailable)
+          .hasText(t('storeknox.riskScoreUnavailable'));
 
-      assert
-        .dom('[data-test-storeknoxThirdPartyScansTableRiskScore-score]')
-        .hasText('0/100');
-    });
+        assert.dom(selectors.score).doesNotExist();
+      }
+    );
 
-    test('it renders a skeleton when loading', async function (assert) {
-      this.data = { score: 85 };
+    // ─── Loading ─────────────────────────────────────────────────────────────────
+    test('it renders neither score nor unavailable while loading', async function (assert) {
+      this.set('loading', true);
 
-      await render(hbs`
-        <Storeknox::ThirdPartyScans::Table::RiskScore
-          @data={{this.data}}
-          @loading={{true}}
-        />
-      `);
+      await render(TEMPLATE);
 
-      assert
-        .dom('[data-test-storeknoxThirdPartyScansTableRiskScore-score]')
-        .doesNotExist();
+      assert.dom(selectors.score).doesNotExist();
+      assert.dom(selectors.unavailable).doesNotExist();
     });
   }
 );
