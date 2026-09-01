@@ -77,9 +77,15 @@
       {{/if}}
 
       <div data-test-vncViewer-deviceScreen class='screen'>
+        {{! A scrcpy scan is auto-installed on the proxy device, so it never wants
+            the manual install prompt -- and it must not be swapped for one, since
+            that destroys the viewer and its stream socket mid-connection. }}
         {{#if
           (and
-            this.manualInstallEnabled this.isCyodScan @dynamicScan.isInstalling
+            this.manualInstallEnabled
+            this.isCyodScan
+            @dynamicScan.isInstalling
+            (not this.isScrcpyScan)
           )
         }}
           {{#if this.isWebusbCyod}}

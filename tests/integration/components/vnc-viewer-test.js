@@ -294,8 +294,10 @@ module('Integration | Component | vnc-viewer | CYOD scans', function (hooks) {
 
     await render(TEMPLATE);
 
-    // The manual install prompt is disabled (MANUAL_INSTALL_ENABLED), so a
-    // proxy scan falls through to its viewer instead.
+    // Two independent reasons, both pointing the same way: the manual prompt is
+    // disabled outright (MANUAL_INSTALL_ENABLED), and swapping the viewer out
+    // for it would tear down the stream socket every time a scan passed through
+    // INSTALLING.
     assert.dom(selectors.cyodDownload).doesNotExist();
     assert.dom(selectors.cyodDownloadLink).doesNotExist();
     assert.dom(selectors.cyodViewer).exists();

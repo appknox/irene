@@ -1981,7 +1981,8 @@
     "iosAgentNotFound": "iOS agent not found. Please ensure KnoxOps agent is running on this machine.",
     "viewer": {
       "connectionFailed": "Connection failed",
-      "unsupportedBrowser": "Screen streaming needs Chrome 94 or newer."
+      "unsupportedBrowser": "Screen streaming needs Chrome 94 or newer.",
+      "retry": "Retry"
     },
     "autoInstall": {
       "ready": "Device connected — ready to install automatically",
