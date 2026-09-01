@@ -4,6 +4,7 @@ export type KnoxiqValidatedFindingQuery = {
   analysisId?: string | number;
   limit?: number;
   offset?: number;
+  is_valid?: boolean;
 };
 
 export default class KnoxiqValidatedFindingAdapter extends CommonDRFAdapter {

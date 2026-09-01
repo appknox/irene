@@ -6,8 +6,10 @@ import { task } from 'ember-concurrency';
 import type Store from 'ember-data/store';
 import type IntlService from 'ember-intl/services/intl';
 import { waitForPromise } from '@ember/test-waiters';
+import type OrganizationService from 'irene/services/organization';
 import type ProjectModel from 'irene/models/project';
 import type ProfileModel from 'irene/models/profile';
+import type { SaveReportPreferenceData } from 'irene/models/profile';
 
 interface ProjectSettingsAnalysisSettingsReportPreferenceSignature {
   Args: {
@@ -18,6 +20,7 @@ interface ProjectSettingsAnalysisSettingsReportPreferenceSignature {
 export default class ProjectSettingsAnalysisSettingsReportPreferenceComponent extends Component<ProjectSettingsAnalysisSettingsReportPreferenceSignature> {
   @service declare store: Store;
   @service declare intl: IntlService;
+  @service declare organization: OrganizationService;
 
   @tracked profile: ProfileModel | null = null;
 
@@ -52,6 +55,13 @@ export default class ProjectSettingsAnalysisSettingsReportPreferenceComponent ex
         isSaving: this.saveManualReportPreference.isRunning,
         hidden: !this.project?.isManualScanAvailable,
       },
+      {
+        label: this.intl.t('knoxIq.needsReviewAnalyses'),
+        onChecboxClick: this.saveNeedsReviewAnalyses,
+        checked: this.reportPreference?.show_needs_review_analyses,
+        isSaving: this.saveNeedsReviewAnalysesReportPreference.isRunning,
+        hidden: !this.organization.isKnoxIqEnabled,
+      },
     ];
   }
 
@@ -74,47 +84,55 @@ export default class ProjectSettingsAnalysisSettingsReportPreferenceComponent ex
     this.saveAPIReportPreference.perform(target.checked);
   }
 
-  saveDynamicReportPreference = task(async (dynamicScanChecked: boolean) => {
-    const dynamicScan = dynamicScanChecked;
-    const apiScan = !!this.reportPreference?.show_api_scan;
-    const manualScan = !!this.reportPreference?.show_manual_scan;
+  @action saveNeedsReviewAnalyses(event: Event) {
+    const target = event.target as HTMLInputElement;
+    this.saveNeedsReviewAnalysesReportPreference.perform(target.checked);
+  }
 
+  saveDynamicReportPreference = task(async (checked: boolean) => {
     await waitForPromise(
-      this.saveReportPreference.perform(dynamicScan, apiScan, manualScan)
+      this.saveReportPreference.perform({ show_dynamic_scan: checked })
     );
   });
 
-  saveAPIReportPreference = task(async (apiScanChecked: boolean) => {
-    const dynamicScan = !!this.reportPreference?.show_dynamic_scan;
-    const apiScan = apiScanChecked;
-    const manualScan = !!this.reportPreference?.show_manual_scan;
-
+  saveAPIReportPreference = task(async (checked: boolean) => {
     await waitForPromise(
-      this.saveReportPreference.perform(dynamicScan, apiScan, manualScan)
+      this.saveReportPreference.perform({ show_api_scan: checked })
     );
   });
 
-  saveManualReportPreference = task(async (manualScanChecked: boolean) => {
-    const dynamicScan = !!this.reportPreference?.show_dynamic_scan;
-    const apiScan = !!this.reportPreference?.show_api_scan;
-    const manualScan = manualScanChecked;
-
+  saveManualReportPreference = task(async (checked: boolean) => {
     await waitForPromise(
-      this.saveReportPreference.perform(dynamicScan, apiScan, manualScan)
+      this.saveReportPreference.perform({ show_manual_scan: checked })
     );
   });
 
+  saveNeedsReviewAnalysesReportPreference = task(async (checked: boolean) => {
+    await waitForPromise(
+      this.saveReportPreference.perform({
+        show_needs_review_analyses: checked,
+      })
+    );
+  });
+
+  /**
+   * The endpoint takes the whole preference set, so the toggled field is
+   * layered over what is currently stored.
+   */
   saveReportPreference = task(
-    async (dynamicScan: boolean, apiScan: boolean, manualScan: boolean) => {
+    async (changes: Partial<SaveReportPreferenceData>) => {
       const profile = this.store.peekRecord(
         'profile',
         String(this.profile?.id)
       );
 
       await profile?.saveReportPreference({
-        show_dynamic_scan: dynamicScan,
-        show_api_scan: apiScan,
-        show_manual_scan: manualScan,
+        show_dynamic_scan: !!this.reportPreference?.show_dynamic_scan,
+        show_api_scan: !!this.reportPreference?.show_api_scan,
+        show_manual_scan: !!this.reportPreference?.show_manual_scan,
+        show_needs_review_analyses:
+          !!this.reportPreference?.show_needs_review_analyses,
+        ...changes,
       });
     }
   );

@@ -25,6 +25,7 @@ export enum AkSvgComponentInvocationByNames {
   FileCompareError,
   NoInsights,
   NoTestCase,
+  ChecklistDone,
   AffectedFixedVersionEmpty,
   MainLoaderImage1,
   MainLoaderImage2,
@@ -142,6 +143,7 @@ export enum AkSvgComponentInvocationByPaths {
   'high-risk-tower',
   'medium-risk-tower',
   'low-risk-tower',
+  'checklist-done',
 }
 
 type AkSvgComponent = ComponentLike<{

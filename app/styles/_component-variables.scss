@@ -3649,8 +3649,14 @@ body {
   );
   --knoxiq-vulnerability-analysis-edit-link-color: var(--primary-main);
 
+  // variables for knox-iq/triage-status-banner
+  --knoxiq-triage-status-banner-background-color: var(--error-light);
+  --knoxiq-triage-status-banner-border-color: var(--border-color-1);
+  --knoxiq-triage-status-banner-icon-color: var(--error-main);
+
   // variables for knox-iq/vulnerability-analysis/table
   --knoxiq-vulnerability-analysis-table-border-color: var(--border-color-1);
+  --knoxiq-vulnerability-analysis-table-border-radius: var(--border-radius-8);
   --knoxiq-vulnerability-analysis-table-background-color: var(
     --background-main
   );

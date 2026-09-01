@@ -77,6 +77,14 @@ export default class AnalysisOverviewModel extends Model {
     );
   }
 
+  /**
+   * KnoxIQ marked every finding under this analysis as a false positive and
+   * no one has acted on it yet by overriding the risk as Passed.
+   */
+  get needsKnoxiqReview() {
+    return this.isKnoxiqAllFp && !this.isOverriddenAsPassed;
+  }
+
   get isScanning() {
     const risk = this.computedRisk;
 
