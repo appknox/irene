@@ -2,23 +2,27 @@
   <AkStack @spacing='1' @alignItems='center' data-test-sbomComponent-stale>
     {{#if this.isStaleVulnData}}
       <AkTooltip @title={{this.vulnTooltip}} @arrow={{true}} @placement='bottom'>
-        <AkIcon
-          data-test-sbomComponent-staleVuln
-          @size='small'
-          @iconName='shield-question'
-          @color='warn'
-        />
+        <span local-class='stale-icon-wrap'>
+          <AkIcon
+            data-test-sbomComponent-staleVuln
+            @size='small'
+            @iconName='shield-question'
+            @color='info'
+          />
+        </span>
       </AkTooltip>
     {{/if}}
 
     {{#if this.isStaleVersionData}}
       <AkTooltip @title={{this.versionTooltip}} @arrow={{true}} @placement='bottom'>
-        <AkIcon
-          data-test-sbomComponent-staleVersion
-          @size='small'
-          @iconName='clock-arrow-up'
-          @color='warn'
-        />
+        <span local-class='stale-icon-wrap'>
+          <AkIcon
+            data-test-sbomComponent-staleVersion
+            @size='small'
+            @iconName='clock-arrow-up'
+            @color='info'
+          />
+        </span>
       </AkTooltip>
     {{/if}}
   </AkStack>

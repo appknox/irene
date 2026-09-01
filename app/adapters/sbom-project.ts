@@ -11,8 +11,9 @@ export default class SbomProjectAdapter extends CommonDRFAdapter {
     return this.buildURLFromBase(baseURL);
   }
 
-  urlForQuery(query: { sbomComponentId?: string | number }) {
+  urlForQuery(query: { sbomComponentId?: string | number; history?: boolean }) {
     // Drill-down: apps whose latest SBOM contains the given component.
+    // When history=true, returns one row per historical scan instead.
     if (query.sbomComponentId) {
       const baseURL = this.buildURLFromBase(
         `${this.namespace_v2}/sb_components/${query.sbomComponentId}`

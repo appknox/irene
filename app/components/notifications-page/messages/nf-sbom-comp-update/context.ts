@@ -27,4 +27,8 @@ export class NfSbomCompUpdateContext {
 
     return parts[1] || this.component_name;
   }
+
+  get affectedAppsLabel(): string {
+    return `${this.affected_apps_count} ${this.affected_apps_count === 1 ? 'app' : 'apps'}`;
+  }
 }
