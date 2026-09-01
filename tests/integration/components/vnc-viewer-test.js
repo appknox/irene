@@ -285,8 +285,8 @@ module('Integration | Component | vnc-viewer | CYOD scans', function (hooks) {
     };
   });
 
-  test('PROXY_CYOD + INSTALLING shows download link', async function (assert) {
-    const scan = createCyodScan(
+  test('PROXY_CYOD + INSTALLING does not offer a manual install', async function (assert) {
+    createCyodScan(
       this,
       'withProxyCyodDevice',
       ENUMS.DYNAMIC_SCAN_STATUS.INSTALLING
@@ -294,11 +294,11 @@ module('Integration | Component | vnc-viewer | CYOD scans', function (hooks) {
 
     await render(TEMPLATE);
 
-    assert.dom(selectors.cyodDownload).exists();
-
-    assert
-      .dom(selectors.cyodDownloadLink)
-      .hasAttribute('href', scan.device_used.android_download_url);
+    // The manual install prompt is disabled (MANUAL_INSTALL_ENABLED), so a
+    // proxy scan falls through to its viewer instead.
+    assert.dom(selectors.cyodDownload).doesNotExist();
+    assert.dom(selectors.cyodDownloadLink).doesNotExist();
+    assert.dom(selectors.cyodViewer).exists();
   });
 
   test('PROXY_CYOD + READY shows CyodViewer', async function (assert) {
@@ -314,8 +314,8 @@ module('Integration | Component | vnc-viewer | CYOD scans', function (hooks) {
     assert.dom(selectors.cyodReady).doesNotExist();
   });
 
-  test('REMOTE_CYOD + INSTALLING shows iOS install link', async function (assert) {
-    const scan = createCyodScan(
+  test('REMOTE_CYOD + INSTALLING does not offer an iOS install link', async function (assert) {
+    createCyodScan(
       this,
       'withRemoteCyodDevice',
       ENUMS.DYNAMIC_SCAN_STATUS.INSTALLING
@@ -323,11 +323,12 @@ module('Integration | Component | vnc-viewer | CYOD scans', function (hooks) {
 
     await render(TEMPLATE);
 
-    assert.dom(selectors.cyodDownload).exists();
-
-    assert
-      .dom(selectors.cyodDownloadLink)
-      .hasAttribute('href', scan.device_used.ios_itms_url);
+    // A remote scan has no viewer to fall through to, so the device screen is
+    // simply empty while the app installs.
+    assert.dom(selectors.cyodDownload).doesNotExist();
+    assert.dom(selectors.cyodDownloadLink).doesNotExist();
+    assert.dom(selectors.cyodViewer).doesNotExist();
+    assert.dom(selectors.deviceScreen).exists();
   });
 
   test('REMOTE_CYOD + READY shows interact on device', async function (assert) {

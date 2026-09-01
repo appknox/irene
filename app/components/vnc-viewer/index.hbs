@@ -77,7 +77,11 @@
       {{/if}}
 
       <div data-test-vncViewer-deviceScreen class='screen'>
-        {{#if (and this.isCyodScan @dynamicScan.isInstalling)}}
+        {{#if
+          (and
+            this.manualInstallEnabled this.isCyodScan @dynamicScan.isInstalling
+          )
+        }}
           {{#if this.isWebusbCyod}}
             <AkStack
               data-test-vncViewer-webusbInstall
