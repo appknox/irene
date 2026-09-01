@@ -143,12 +143,14 @@
                 @arrow={{true}}
                 @placement='bottom'
               >
-                <AkIcon
-                  data-test-component-tree-staleVulnIcon
-                  @iconName='shield-question'
-                  @size='small'
-                  @color='warn'
-                />
+                <span local-class='stale-icon-wrap'>
+                  <AkIcon
+                    data-test-component-tree-staleVulnIcon
+                    @iconName='shield-question'
+                    @size='small'
+                    @color='info'
+                  />
+                </span>
               </AkTooltip>
             {{/if}}
 
@@ -158,12 +160,14 @@
                 @arrow={{true}}
                 @placement='bottom'
               >
-                <AkIcon
-                  data-test-component-tree-staleVersionIcon
-                  @iconName='clock-arrow-up'
-                  @size='small'
-                  @color='warn'
-                />
+                <span local-class='stale-icon-wrap'>
+                  <AkIcon
+                    data-test-component-tree-staleVersionIcon
+                    @iconName='clock-arrow-up'
+                    @size='small'
+                    @color='info'
+                  />
+                </span>
               </AkTooltip>
             {{/if}}
 

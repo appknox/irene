@@ -45,4 +45,8 @@ export class NfSbomVulnUpdateContext {
   get ghsa_ids_display(): string {
     return this.ghsa_ids.join(', ');
   }
+
+  get affectedAppsLabel(): string {
+    return `${this.affected_apps_count} ${this.affected_apps_count === 1 ? 'app' : 'apps'}`;
+  }
 }
