@@ -9,5 +9,6 @@ export default Factory.extend({
     show_nist: faker.datatype.boolean(),
     show_sama: faker.datatype.boolean(),
     show_dora: faker.datatype.boolean(),
+    show_eucra: faker.datatype.boolean(),
   }),
 });

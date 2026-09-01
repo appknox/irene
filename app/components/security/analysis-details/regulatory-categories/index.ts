@@ -26,6 +26,7 @@ import type IntlService from 'ember-intl/services/intl';
 import type DoraModel from 'irene/models/dora';
 import type SamaModel from 'irene/models/sama';
 import type Pcidss4Model from 'irene/models/pcidss4';
+import type EucraModel from 'irene/models/eucra';
 
 type RegulatoryCategoryOptionKeys =
   | 'owasp'
@@ -42,7 +43,8 @@ type RegulatoryCategoryOptionKeys =
   | 'nistsp800171'
   | 'nistsp80053'
   | 'sama'
-  | 'dora';
+  | 'dora'
+  | 'eucra';
 
 type RegulatoryCategoryModels =
   | OwaspModel
@@ -59,7 +61,8 @@ type RegulatoryCategoryModels =
   | Nistsp80053Model
   | Nistsp800171Model
   | SamaModel
-  | DoraModel;
+  | DoraModel
+  | EucraModel;
 
 type RegulatoryDataModel<T> = ArrayProxy<T> | null;
 
@@ -91,6 +94,7 @@ export default class SecurityAnalysisDetailsRegulatoryCategoriesComponent extend
   @tracked nistsp800171sData: RegulatoryDataModel<Nistsp800171Model> = null;
   @tracked samaData: RegulatoryDataModel<SamaModel> = null;
   @tracked doraData: RegulatoryDataModel<DoraModel> = null;
+  @tracked eucraData: RegulatoryDataModel<EucraModel> = null;
 
   risks = ENUMS.RISK.CHOICES;
 
@@ -177,6 +181,10 @@ export default class SecurityAnalysisDetailsRegulatoryCategoriesComponent extend
 
   get doras() {
     return this.doraData?.slice() || [];
+  }
+
+  get eucras() {
+    return this.eucraData?.slice() || [];
   }
 
   get regulatoryCategories() {
@@ -318,6 +326,15 @@ export default class SecurityAnalysisDetailsRegulatoryCategoriesComponent extend
         options: this.doras,
         onChange: this.onCategorySelect('dora'),
       },
+      {
+        key: 'eucra',
+        title: 'EU Cyber Resilience Act',
+        placeholder: 'Select EU CRA',
+        labelKeys: ['code', 'title'],
+        selected: this.analysis?.eucra ?? [],
+        options: this.eucras,
+        onChange: this.onCategorySelect('eucra'),
+      },
     ] as Array<{
       key: string;
       title: string;
@@ -386,6 +403,8 @@ export default class SecurityAnalysisDetailsRegulatoryCategoriesComponent extend
       this.pcidss4sData = await this.store.findAll('pcidss4');
 
       this.doraData = await this.store.findAll('dora');
+
+      this.eucraData = await this.store.findAll('eucra');
     } catch (error) {
       this.notifications.error(parseError(error, this.tPleaseTryAgain));
     }

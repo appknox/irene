@@ -25,6 +25,7 @@ import type Nistsp80053Model from '../nistsp80053';
 import type Nistsp800171Model from '../nistsp800171';
 import type SamaModel from '../sama';
 import type Pcidss4Model from '../pcidss4';
+import type EucraModel from '../eucra';
 
 irregular('asvs', 'asvses');
 
@@ -154,6 +155,9 @@ export default class SecurityAnalysisModel extends Model {
 
   @hasMany('dora', { async: true, inverse: null })
   declare dora: AsyncHasMany<DoraModel>;
+
+  @hasMany('eucra', { async: true, inverse: null })
+  declare eucra: AsyncHasMany<EucraModel>;
 
   @hasMany('security/attachment', { async: true, inverse: null })
   declare attachments: AsyncHasMany<SecurityAttachmentModel>;

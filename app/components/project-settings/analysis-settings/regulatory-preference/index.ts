@@ -89,6 +89,15 @@ export default class ProjectSettingsAnalysisSettingsRegulatoryPreferenceComponen
         isSaving: this.onSaveDora.isRunning,
         isOverriden: !this.profile?.reportPreference.show_dora?.is_inherited,
       },
+      {
+        label: this.intl.t('eucra'),
+        title: this.intl.t('eucraExpansion'),
+        value: this.profile?.reportPreference.show_eucra?.value,
+        toggleHandler: this.onSaveEucra,
+        resetHandler: this.onResetEucra,
+        isSaving: this.onSaveEucra.isRunning,
+        isOverriden: !this.profile?.reportPreference.show_eucra?.is_inherited,
+      },
     ];
   }
 
@@ -165,6 +174,10 @@ export default class ProjectSettingsAnalysisSettingsRegulatoryPreferenceComponen
     await this.savePreference.perform(event, 'dora');
   });
 
+  onSaveEucra = task(async (event: Event) => {
+    await this.savePreference.perform(event, 'eucra');
+  });
+
   onResetPcidss = task(async () => {
     await this.resetPreference.perform('pcidss');
   });
@@ -187,6 +200,10 @@ export default class ProjectSettingsAnalysisSettingsRegulatoryPreferenceComponen
 
   onResetDora = task(async () => {
     await this.resetPreference.perform('dora');
+  });
+
+  onResetEucra = task(async () => {
+    await this.resetPreference.perform('eucra');
   });
 }
 

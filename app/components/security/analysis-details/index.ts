@@ -292,6 +292,7 @@ export default class SecurityAnalysisDetailsComponent extends Component<Security
       nistsp80053,
       sama,
       dora,
+      eucra,
     ] = await Promise.all([
       details?.owasp,
       details?.owaspmobile2024,
@@ -308,6 +309,7 @@ export default class SecurityAnalysisDetailsComponent extends Component<Security
       details?.nistsp80053,
       details?.sama,
       details?.dora,
+      details?.eucra,
     ]);
 
     // Normalise status: Ember Data may hand back a boxed object pre-save.
@@ -344,6 +346,7 @@ export default class SecurityAnalysisDetailsComponent extends Component<Security
       nistsp800171: nistsp800171?.map((a) => a.id),
       sama: sama?.map((a) => a.id),
       dora: dora?.map((a) => a.id),
+      eucra: eucra?.map((a) => a.id),
       overridden_risk: overriddenRisk,
       overridden_risk_comment: details?.overriddenRiskComment,
       overridden_risk_to_profile: details?.overriddenRiskToProfile,

@@ -87,6 +87,13 @@ module(
       assert
         .dom('[data-test-ak-form-label]', find('[data-test-preference="DORA"]'))
         .hasText('DORA');
+
+      assert
+        .dom(
+          '[data-test-ak-form-label]',
+          find('[data-test-preference="EU CRA"]')
+        )
+        .hasText('EU CRA');
     });
 
     test('it renders regulatory list tooltip', async function (assert) {
@@ -102,6 +109,7 @@ module(
       const nistContainer = find('[data-test-preference="NIST"]');
       const samaContainer = find('[data-test-preference="SAMA"]');
       const doraContainer = find('[data-test-preference="DORA"]');
+      const eucraContainer = find('[data-test-preference="EU CRA"]');
 
       // pci-dss
       await triggerEvent(
@@ -194,6 +202,21 @@ module(
       );
 
       assert.dom('[data-test-ak-tooltip-content]').doesNotExist();
+
+      // eucra
+      await triggerEvent(
+        `#${eucraContainer.id} [data-test-ak-tooltip-root]`,
+        'mouseenter'
+      );
+
+      assert.dom('[data-test-ak-tooltip-content]').hasText(t('eucraExpansion'));
+
+      await triggerEvent(
+        `#${eucraContainer.id} [data-test-ak-tooltip-root]`,
+        'mouseleave'
+      );
+
+      assert.dom('[data-test-ak-tooltip-content]').doesNotExist();
     });
 
     test('it renders regulatory inclusion status based on organization preference', async function (assert) {
@@ -205,6 +228,7 @@ module(
         json.report_preference.show_nist = true;
         json.report_preference.show_sama = true;
         json.report_preference.show_dora = false;
+        json.report_preference.show_eucra = false;
 
         return json;
       });
@@ -252,6 +276,13 @@ module(
           find('[data-test-preference="DORA"]')
         )
         .isNotChecked();
+
+      assert
+        .dom(
+          '[data-test-preference-checkbox]',
+          find('[data-test-preference="EU CRA"]')
+        )
+        .isNotChecked();
     });
 
     test('it toggles regulatory preference on label click', async function (assert) {
@@ -263,6 +294,7 @@ module(
         json.report_preference.show_nist = false;
         json.report_preference.show_sama = false;
         json.report_preference.show_dora = false;
+        json.report_preference.show_eucra = false;
 
         return json;
       });
@@ -287,6 +319,7 @@ module(
       const nistContainer = find('[data-test-preference="NIST"]');
       const samaContainer = find('[data-test-preference="SAMA"]');
       const doraContainer = find('[data-test-preference="DORA"]');
+      const eucraContainer = find('[data-test-preference="EU CRA"]');
 
       assert
         .dom('[data-test-preference-checkbox]', pcidssContainer)
@@ -315,6 +348,11 @@ module(
 
       assert
         .dom('[data-test-preference-checkbox]', doraContainer)
+        .isNotDisabled()
+        .isNotChecked();
+
+      assert
+        .dom('[data-test-preference-checkbox]', eucraContainer)
         .isNotDisabled()
         .isNotChecked();
 
@@ -344,6 +382,10 @@ module(
 
       assert.dom('[data-test-preference-checkbox]', doraContainer).isChecked();
 
+      await click(`#${eucraContainer.id} [data-test-ak-form-label]`);
+
+      assert.dom('[data-test-preference-checkbox]', eucraContainer).isChecked();
+
       await click(`#${pcidssContainer.id} [data-test-ak-form-label]`);
 
       assert
@@ -378,6 +420,12 @@ module(
 
       assert
         .dom('[data-test-preference-checkbox]', doraContainer)
+        .isNotChecked();
+
+      await click(`#${eucraContainer.id} [data-test-ak-form-label]`);
+
+      assert
+        .dom('[data-test-preference-checkbox]', eucraContainer)
         .isNotChecked();
     });
 
@@ -409,6 +457,7 @@ module(
       const nistContainer = find('[data-test-preference="NIST"]');
       const samaContainer = find('[data-test-preference="SAMA"]');
       const doraContainer = find('[data-test-preference="DORA"]');
+      const eucraContainer = find('[data-test-preference="EU CRA"]');
 
       await click(`#${pcidssContainer.id} [data-test-ak-form-label]`);
 
@@ -486,6 +535,20 @@ module(
       assert
         .dom('[data-test-preference-checkbox]', doraContainer)
         [pref.show_dora ? 'isChecked' : 'isNotChecked']();
+
+      assert.strictEqual(
+        notify.errorMsg,
+        errorObj.report_preference.non_field_errors[0]
+      );
+
+      notify.errorMsg = null;
+
+      await click(`#${eucraContainer.id} [data-test-ak-form-label]`);
+
+      // no change to state
+      assert
+        .dom('[data-test-preference-checkbox]', eucraContainer)
+        [pref.show_eucra ? 'isChecked' : 'isNotChecked']();
 
       assert.strictEqual(
         notify.errorMsg,
