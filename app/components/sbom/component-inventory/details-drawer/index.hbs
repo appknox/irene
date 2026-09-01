@@ -133,6 +133,21 @@
         {{t 'sbomModule.componentInventory.appsTitle'}}
       </AkTypography>
 
+      <div class='px-3 pt-2'>
+        <AkStack @width='full' @justifyContent='flex-end' @alignItems='center'>
+          <AkTypography @color='textSecondary'>
+            {{t 'sbomModule.componentInventory.showHistory'}}
+          </AkTypography>
+
+          <AkCheckbox
+            @checked={{this.showHistory}}
+            @onChange={{this.toggleHistory}}
+            @color='primary'
+            data-test-componentInventory-historyToggle
+          />
+        </AkStack>
+      </div>
+
       <div class='p-3'>
         <AkPaginationProvider
           @results={{this.sbomProjectList}}

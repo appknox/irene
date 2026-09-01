@@ -9,12 +9,14 @@
 
   {{#if this.isStaleVulnData}}
     <AkTooltip @title={{this.vulnTooltip}} @arrow={{true}} @placement='bottom'>
-      <AkIcon
-        data-test-sbomComponent-staleVulnIcon
-        @iconName='shield-question'
-        @size='small'
-        @color='warn'
-      />
+      <span local-class='stale-icon-wrap'>
+        <AkIcon
+          data-test-sbomComponent-staleVulnIcon
+          @iconName='shield-question'
+          @size='small'
+          @color='info'
+        />
+      </span>
     </AkTooltip>
   {{/if}}
 
@@ -24,12 +26,14 @@
       @arrow={{true}}
       @placement='bottom'
     >
-      <AkIcon
-        data-test-sbomComponent-staleVersionIcon
-        @iconName='clock-arrow-up'
-        @size='small'
-        @color='warn'
-      />
+      <span local-class='stale-icon-wrap'>
+        <AkIcon
+          data-test-sbomComponent-staleVersionIcon
+          @iconName='clock-arrow-up'
+          @size='small'
+          @color='info'
+        />
+      </span>
     </AkTooltip>
   {{/if}}
 </AkStack>

@@ -1,0 +1,9 @@
+.stale-icon-wrap {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  background-color: var(--info-light);
+  border-radius: 50%;
+  padding: 0.2em;
+}

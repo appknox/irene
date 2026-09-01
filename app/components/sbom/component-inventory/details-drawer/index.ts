@@ -49,6 +49,7 @@ export default class SbomComponentInventoryDetailsDrawerComponent extends Compon
   @tracked sbomProjectResponse: SbomProjectQueryResponse | null = null;
   @tracked limit = 10;
   @tracked offset = 0;
+  @tracked showHistory = false;
 
   tPleaseTryAgain: string;
 
@@ -82,6 +83,10 @@ export default class SbomComponentInventoryDetailsDrawerComponent extends Compon
       {
         name: this.intl.t('namespace'),
         component: 'sbom/component-inventory/details-drawer/namespace',
+      },
+      {
+        name: this.intl.t('sbomModule.dependencyType'),
+        component: 'sbom/component-inventory/details-drawer/dependency-type',
       },
       {
         name: this.intl.t('sbomModule.lastSbomAnalysisOn'),
@@ -128,6 +133,12 @@ export default class SbomComponentInventoryDetailsDrawerComponent extends Compon
   @action
   handleDownload() {
     this.downloadExport.perform();
+  }
+
+  @action
+  toggleHistory() {
+    this.showHistory = !this.showHistory;
+    this.fetchSbomProjects.perform(this.limit, 0);
   }
 
   /* Reload the apps list whenever a different component is selected. */
@@ -238,6 +249,7 @@ export default class SbomComponentInventoryDetailsDrawerComponent extends Compon
           sbomComponentId: component.id,
           limit,
           offset,
+          ...(this.showHistory ? { history: true } : {}),
         })) as SbomProjectQueryResponse;
       } catch (e) {
         this.notify.error(parseError(e, this.tPleaseTryAgain));

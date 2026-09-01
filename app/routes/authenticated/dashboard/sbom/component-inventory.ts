@@ -25,7 +25,7 @@ export default class AuthenticatedDashboardSbomComponentInventoryRoute extends A
 
   model(params: Partial<SbomComponentInventoryQueryParam>) {
     const {
-      component_limit = '10',
+      component_limit = '50',
       component_offset = '0',
       component_query = '',
       component_type = '',
