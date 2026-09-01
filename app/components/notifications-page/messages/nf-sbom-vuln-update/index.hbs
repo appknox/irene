@@ -1,4 +1,4 @@
-<AkStack @direction='column' @spacing='1.5'>
+<AkStack @direction='column' @spacing='1.5' @alignItems='stretch'>
   <AkTypography data-test-nf-sbom-vuln-update-primary-message>
     {{t
       'notificationModule.messages.nf-sbom-vuln-update'
@@ -37,31 +37,28 @@
           @tag='span'
           @color='textPrimary'
           @fontWeight='bold'
-        >{{@context.affected_apps_count}}</AkTypography>
+        >{{@context.affectedAppsLabel}}</AkTypography>
       </AkTypography>
     </div>
   </div>
 
-  <AkStack @spacing='1.5'>
-    <AkLink
+  <AkStack @spacing='1'>
+    <AkButton
       data-test-nf-sbom-vuln-update-link
+      @variant='filled'
       @color='primary'
-      @route='authenticated.dashboard.sbom.component-inventory'
-      @query={{hash component_query=@context.component_name}}
-      @underline='always'
-      @title={{t 'notificationModule.viewComponent'}}
+      {{on 'click' this.viewComponent}}
     >
       {{t 'notificationModule.viewComponent'}}
-    </AkLink>
+    </AkButton>
 
-    <AkLink
+    <AkButton
       data-test-nf-sbom-vuln-update-directory-link
-      @color='textPrimary'
-      @route='authenticated.dashboard.sbom.apps'
-      @underline='always'
-      @title={{t 'notificationModule.viewDirectory'}}
+      @variant='outlined'
+      @color='neutral'
+      {{on 'click' this.viewDirectory}}
     >
       {{t 'notificationModule.viewDirectory'}}
-    </AkLink>
+    </AkButton>
   </AkStack>
 </AkStack>
