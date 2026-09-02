@@ -1,11 +1,13 @@
 {{! @glint-nocheck: or}}
 {{#if (or @empty @loading)}}
   <AkStack
-    local-class='empty-loading-container
-    {{if @skeleton "skeleton"}}'
+    local-class='empty-loading-container'
     {{style height=(or @height '500px')}}
     @direction='column'
     @spacing='2.5'
+    @alignItems={{this.contentAlignment}}
+    @justifyContent={{this.contentAlignment}}
+    data-test-sbom-emptyLoadingView
   >
     {{#if @loading}}
       {{#if this.skeleton}}
@@ -14,7 +16,9 @@
             @isFilteredTree={{this.isFilteredTree}}
           />
         {{else}}
-          <Sbom::ScanDetails::SkeletonLoaderList />
+          <Sbom::ScanDetails::SkeletonLoaderList
+            @columns={{@skeletonColumns}}
+          />
         {{/if}}
       {{else}}
         {{#if (has-block 'loadingSvg')}}

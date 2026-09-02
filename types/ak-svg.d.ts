@@ -142,6 +142,7 @@ export enum AkSvgComponentInvocationByPaths {
   'high-risk-tower',
   'medium-risk-tower',
   'low-risk-tower',
+  'ai-bom-upload',
 }
 
 type AkSvgComponent = ComponentLike<{

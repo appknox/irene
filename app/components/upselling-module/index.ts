@@ -1,10 +1,16 @@
 import Component from '@glimmer/component';
 
+export interface UpsellingFeatureGroup {
+  title: string;
+  features: string[];
+}
+
 export interface UpsellingModuleSignature {
   Args: {
     title: string;
     subtitle: string;
-    features: string[];
+    features?: string[];
+    featureGroups?: UpsellingFeatureGroup[];
     onClickContactCTA: () => void;
     showSuccess: boolean;
     successMessage: string;

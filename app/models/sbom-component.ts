@@ -1,7 +1,10 @@
-import type { AsyncBelongsTo } from '@ember-data/model';
 import Model, { attr, belongsTo } from '@ember-data/model';
-import type SbomFileModel from './sbom-file';
+import { service } from '@ember/service';
+import type { AsyncBelongsTo } from '@ember-data/model';
+import type IntlService from 'ember-intl/services/intl';
+
 import { ENUMS_DISPLAY } from 'irene/enums';
+import type SbomFileModel from './sbom-file';
 
 export interface SbomComponentProperty {
   [key: string]: string;
@@ -17,7 +20,18 @@ export interface SbomComponentExternalReferences {
   website: string[];
 }
 
+type SbomArtifactClass =
+  | 'model'
+  | 'library'
+  | 'tokenizer'
+  | 'config'
+  | 'supporting'
+  | 'cloud_endpoint'
+  | 'platform_managed_ai';
+
 export default class SbomComponentModel extends Model {
+  @service declare intl: IntlService;
+
   @belongsTo('sbom-file', { async: true, inverse: null })
   declare sbFile: AsyncBelongsTo<SbomFileModel>;
 
@@ -66,6 +80,36 @@ export default class SbomComponentModel extends Model {
   @attr('boolean')
   declare isDependency: boolean;
 
+  @attr('boolean')
+  declare isAiComponent: boolean;
+
+  @attr('string')
+  declare aiConfidence: string;
+
+  @attr('string')
+  declare aiArtifactClass: SbomArtifactClass;
+
+  @attr('string')
+  declare aiModelName: string;
+
+  @attr('string')
+  declare aiModelCategory: string;
+
+  @attr('string')
+  declare aiModelIdentificationConfidence: string;
+
+  // Set for library artifacts from the AI library registry; unlike aiModelName, it comes from registry matching.
+  @attr('string')
+  declare aiFrameworkName: string;
+
+  // Backend-authored purpose per artifact class, replacing the duplicated client-side aiRoleColumn fallback.
+  @attr('string')
+  declare aiPurpose: string;
+
+  // Set for supporting artifacts uniquely linked to a bundled model; otherwise empty. This is bundle membership, not an SBOM dependency.
+  @attr('string')
+  declare aiAssociatedModelPath: string;
+
   @attr()
   declare evidence: SbomComponentEvidence;
 
@@ -90,6 +134,10 @@ export default class SbomComponentModel extends Model {
       : ['-'];
   }
 
+  get hasFoundLocations() {
+    return (this.evidence?.occurrences?.location?.length ?? 0) > 0;
+  }
+
   get externalReferenceLinks() {
     return this.externalReferences?.website?.length
       ? this.externalReferences.website
@@ -110,6 +158,64 @@ export default class SbomComponentModel extends Model {
 
   get isMLModel() {
     return this.type === ENUMS_DISPLAY.SBOM_COMPONENT_TYPE_NAMES[3];
+  }
+
+  get isPlatformManagedAi() {
+    return this.aiArtifactClass === 'platform_managed_ai';
+  }
+
+  get hasIdentifiedModelName() {
+    return this.aiArtifactClass === 'model' && !!this.aiModelName;
+  }
+
+  get aiTypeLabel() {
+    if (!this.aiArtifactClass) {
+      return '-';
+    }
+
+    const classMap: Record<SbomArtifactClass, string> = {
+      model: 'sbomModule.aiTypeLabel.model',
+      library: 'sbomModule.aiTypeLabel.library',
+      tokenizer: 'sbomModule.supportingArtifact',
+      config: 'sbomModule.supportingArtifact',
+      supporting: 'sbomModule.supportingArtifact',
+      cloud_endpoint: 'sbomModule.aiTypeLabel.cloudEndpoint',
+      platform_managed_ai: 'sbomModule.aiTypeLabel.platformManagedAi',
+    };
+
+    const key = classMap[this.aiArtifactClass];
+
+    return key ? this.intl.t(key) : '-';
+  }
+
+  get aiFamily() {
+    return this.aiModelName || this.aiFrameworkName || '-';
+  }
+
+  get aiPurposeFallback() {
+    if (!this.aiArtifactClass) {
+      return null;
+    }
+
+    const classMap: Record<SbomArtifactClass, string> = {
+      model: 'sbomModule.aiPurposeFallback.model',
+      library: 'sbomModule.aiPurposeFallback.library',
+      tokenizer: 'sbomModule.aiPurposeFallback.tokenizer',
+      config: 'sbomModule.aiPurposeFallback.config',
+      supporting: 'sbomModule.aiPurposeFallback.supporting',
+      cloud_endpoint: 'sbomModule.aiPurposeFallback.cloudEndpoint',
+      platform_managed_ai: 'sbomModule.aiPurposeFallback.platformManagedAi',
+    };
+
+    const key = classMap[this.aiArtifactClass];
+
+    return key ? this.intl.t(key) : null;
+  }
+
+  get aiPurposeDisplay() {
+    return (
+      this.aiPurpose || this.aiModelCategory || this.aiPurposeFallback || null
+    );
   }
 }
 

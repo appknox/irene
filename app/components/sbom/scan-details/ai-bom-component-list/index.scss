@@ -1,0 +1,34 @@
+.listing-container {
+  background: var(
+    --sbom-scan-details-ai-bom-component-list-listing-container-background-color
+  );
+  border-radius: var(
+    --sbom-scan-details-ai-bom-component-list-listing-container-border-radius
+  );
+  margin-top: 1em;
+}
+
+.search-input-container {
+  padding: 0.7em 1em;
+  border-width: 1px 1px 0px 1px;
+  border-style: solid;
+  border-color: var(--sbom-scan-details-ai-bom-component-list-listing-container-border-color);
+}
+
+.pre-ai-bom-empty {
+  margin-top: 1.5em;
+  min-height: 500px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(
+    --sbom-scan-details-ai-bom-component-list-pre-ai-bom-empty-background-color
+  );
+  border: 1px solid
+    var(
+      --sbom-scan-details-ai-bom-component-list-pre-ai-bom-empty-border-color
+    );
+  border-radius: var(
+    --sbom-scan-details-ai-bom-component-list-pre-ai-bom-empty-border-radius
+  );
+}
