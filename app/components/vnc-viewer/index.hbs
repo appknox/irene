@@ -152,13 +152,34 @@
               />
             </AkStack>
           {{/if}}
-        {{else if this.isScrcpyScan}}
+        {{! The stream source exists only between the transition to
+            READY_FOR_INTERACTION, which starts it, and the stop request, which
+            tears it down (moriarty start_proxy_screen_stream /
+            stop_screen_stream). Mounted outside that window the viewer opens a
+            socket with nothing on the far end and can only report a connection
+            failure -- which is what was shown while a scan was still starting
+            and again once it had been cancelled. }}
+        {{else if (and this.isScrcpyScan @dynamicScan.isReadyOrRunning)}}
           <CyodViewer
             data-test-vncViewer-cyodViewer
             @scanToken={{this.scrcpyScanToken}}
             @platform={{this.filePlatform}}
             @authToken={{this.cyodAuthToken}}
           />
+        {{else if (and this.isScrcpyScan @dynamicScan.isStarting)}}
+          <AkStack
+            data-test-vncViewer-cyodPreparing
+            local-class='cyod-ready-note'
+            @direction='column'
+            @alignItems='center'
+            @spacing='1'
+          >
+            <AkLoader @size={{24}} />
+
+            <AkTypography @color='inherit' @variant='subtitle2'>
+              {{t 'cyod.viewer.preparing'}}
+            </AkTypography>
+          </AkStack>
         {{else if (and this.isCyodScan @dynamicScan.isReady)}}
           <AkStack
             data-test-vncViewer-cyodReady

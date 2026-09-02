@@ -1982,7 +1982,8 @@
     "viewer": {
       "connectionFailed": "接続に失敗しました",
       "unsupportedBrowser": "画面ストリーミングにはChrome 94以降が必要です。",
-      "retry": "Retry"
+      "retry": "Retry",
+      "preparing": "デバイスストリームを準備しています..."
     },
     "autoInstall": {
       "ready": "デバイスが接続されました — 自動インストールの準備ができました",

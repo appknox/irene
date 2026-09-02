@@ -1982,7 +1982,8 @@
     "viewer": {
       "connectionFailed": "Connection failed",
       "unsupportedBrowser": "Screen streaming needs Chrome 94 or newer.",
-      "retry": "Retry"
+      "retry": "Retry",
+      "preparing": "Preparing the device stream..."
     },
     "autoInstall": {
       "ready": "Device connected — ready to install automatically",

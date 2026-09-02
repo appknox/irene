@@ -23,6 +23,7 @@ const selectors = {
   cyodDownloadLink: '[data-test-vncViewer-cyodDownloadLink]',
   cyodViewer: '[data-test-vncViewer-cyodViewer]',
   cyodReady: '[data-test-vncViewer-cyodReady]',
+  cyodPreparing: '[data-test-vncViewer-cyodPreparing]',
 };
 
 // ─── Template ──────────────────────────────────────────────────────────────────
@@ -285,7 +286,7 @@ module('Integration | Component | vnc-viewer | CYOD scans', function (hooks) {
     };
   });
 
-  test('PROXY_CYOD + INSTALLING does not offer a manual install', async function (assert) {
+  test('PROXY_CYOD + INSTALLING waits instead of connecting', async function (assert) {
     createCyodScan(
       this,
       'withProxyCyodDevice',
@@ -294,13 +295,49 @@ module('Integration | Component | vnc-viewer | CYOD scans', function (hooks) {
 
     await render(TEMPLATE);
 
-    // Two independent reasons, both pointing the same way: the manual prompt is
-    // disabled outright (MANUAL_INSTALL_ENABLED), and swapping the viewer out
-    // for it would tear down the stream socket every time a scan passed through
-    // INSTALLING.
+    // moriarty starts the stream on the INSTALLING -> READY transition, so
+    // there is nothing to connect to yet. Mounting the viewer here opened a
+    // socket against a source that did not exist and reported it as a failure.
+    assert.dom(selectors.cyodPreparing).exists();
+    assert.dom(selectors.cyodViewer).doesNotExist();
+
+    // And the manual prompt is disabled outright (MANUAL_INSTALL_ENABLED), so
+    // neither path is offered while the server installs.
     assert.dom(selectors.cyodDownload).doesNotExist();
     assert.dom(selectors.cyodDownloadLink).doesNotExist();
+  });
+
+  test('PROXY_CYOD + AUTOPILOT_RUNNING keeps the viewer mounted', async function (assert) {
+    createCyodScan(
+      this,
+      'withProxyCyodDevice',
+      ENUMS.DYNAMIC_SCAN_STATUS.AUTOPILOT_RUNNING
+    );
+
+    await render(TEMPLATE);
+
     assert.dom(selectors.cyodViewer).exists();
+    assert.dom(selectors.cyodPreparing).doesNotExist();
+  });
+
+  // Stopping a scan tears the Mercer source down (moriarty stop_screen_stream),
+  // so anything still holding the socket open can only watch it close. The
+  // viewer has to come out of the DOM with it, otherwise its reconnect attempts
+  // exhaust and it reports a connection failure for a scan that simply ended.
+  [
+    ['STOP_SCAN_REQUESTED', ENUMS.DYNAMIC_SCAN_STATUS.STOP_SCAN_REQUESTED],
+    ['SHUTTING_DOWN', ENUMS.DYNAMIC_SCAN_STATUS.SHUTTING_DOWN],
+    ['CANCELLED', ENUMS.DYNAMIC_SCAN_STATUS.CANCELLED],
+    ['ANALYZING', ENUMS.DYNAMIC_SCAN_STATUS.ANALYZING],
+  ].forEach(([label, status]) => {
+    test(`PROXY_CYOD + ${label} unmounts the viewer`, async function (assert) {
+      createCyodScan(this, 'withProxyCyodDevice', status);
+
+      await render(TEMPLATE);
+
+      assert.dom(selectors.cyodViewer).doesNotExist();
+      assert.dom(selectors.cyodPreparing).doesNotExist();
+    });
   });
 
   test('PROXY_CYOD + READY shows CyodViewer', async function (assert) {
