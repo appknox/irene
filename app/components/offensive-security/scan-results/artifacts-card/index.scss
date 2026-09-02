@@ -15,18 +15,41 @@
   min-width: 0;
   width: 100%;
   box-sizing: border-box;
+  transition: border-color 0.15s ease-in-out;
+
+  &:hover {
+    border-color: #cbd5e0;
+  }
 }
 
 .artifact-icon-box {
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 32px;
-  height: 32px;
-  border-radius: 6px;
-  background-color: var(--file-details-summary-border-color);
-  color: var(--text-secondary);
+  width: 36px;
+  height: 36px;
+  border-radius: 8px;
   flex-shrink: 0;
+
+  &.icon-blue {
+    background-color: #ebf8ff;
+    color: #3182ce;
+  }
+
+  &.icon-purple {
+    background-color: #faf5ff;
+    color: #805ad5;
+  }
+
+  &.icon-orange {
+    background-color: #fffaf0;
+    color: #dd6b20;
+  }
+
+  &.icon-green {
+    background-color: #f0fff4;
+    color: #38a169;
+  }
 }
 
 .artifact-left {

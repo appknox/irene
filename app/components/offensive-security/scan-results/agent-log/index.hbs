@@ -14,45 +14,21 @@
   </AkStack>
 
   {{#if this.showInProgress}}
-    <AkStack
-      @width='full'
-      @direction='column'
-      @alignItems='center'
-      @justifyContent='center'
-      @spacing='2'
-      class='p-4'
-      local-class='log-placeholder'
-      data-test-offensiveSecurity-agentLog-inProgress
-    >
-      <AkLoader @size={{32}} />
-
-      <AkTypography @variant='body2' @color='textSecondary'>
-        {{t 'offensiveSecurity.runInProgress'}}
-      </AkTypography>
-
-      <AkTypography @variant='body3' @color='textSecondary'>
-        {{t 'offensiveSecurity.runInProgressSubtitle'}}
-      </AkTypography>
-    </AkStack>
+    <div local-class='log-pane' data-test-offensiveSecurity-agentLog-pane>
+      <div local-class='log-line dim'>{{this.statusMessage}}{{this.dotsText}}</div>
+    </div>
   {{else if @isLoading}}
     <AkSkeleton @width='100%' @height='320px' />
   {{else if this.showEmptyState}}
-    <AkStack
-      @width='full'
-      @alignItems='center'
-      @justifyContent='center'
-      class='p-4'
-      local-class='log-placeholder'
-      data-test-offensiveSecurity-agentLog-empty
-    >
-      <AkTypography @variant='body2' @color='textSecondary'>
+    <div local-class='log-pane' data-test-offensiveSecurity-agentLog-pane>
+      <div local-class='log-line dim'>
         {{if
           @loadFailed
           (t 'offensiveSecurity.logUnavailable')
           (t 'offensiveSecurity.noLogRecorded')
         }}
-      </AkTypography>
-    </AkStack>
+      </div>
+    </div>
   {{else}}
     <div local-class='log-pane' data-test-offensiveSecurity-agentLog-pane>
       {{#each this.styledLines as |line|}}

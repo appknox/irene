@@ -2,6 +2,7 @@ import Component from '@glimmer/component';
 import { action } from '@ember/object';
 import { service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
+import { htmlSafe } from '@ember/template';
 import { task } from 'ember-concurrency';
 import type Store from '@ember-data/store';
 import type IntlService from 'ember-intl/services/intl';
@@ -49,6 +50,27 @@ export default class OffensiveSecurityFindingDetailComponent extends Component<O
     return this.finding?.evidenceList ?? [];
   }
 
+  get checkTypeLabel(): string {
+    if (!this.finding?.checkType) {
+      return 'Findings';
+    }
+    return this.finding.checkType
+      .replace(/_/g, ' ')
+      .replace(/\b\w/g, (l) => l.toUpperCase());
+  }
+
+  get scoreProgressStyle() {
+    const rawScore = this.finding?.score;
+    const scoreVal =
+      typeof rawScore === 'number'
+        ? rawScore
+        : parseInt(String(rawScore || '10'), 10);
+    const validScore = isNaN(scoreVal)
+      ? 10
+      : Math.max(0, Math.min(100, scoreVal));
+    return htmlSafe(`width: ${validScore}%;`);
+  }
+
   /** Labels the technique block honestly — attempted is not the same as used. */
   get techniqueLabel(): string {
     if (!this.finding) {
@@ -66,17 +88,74 @@ export default class OffensiveSecurityFindingDetailComponent extends Component<O
     return this.intl.t('offensiveSecurity.techniqueUsed');
   }
 
+  @tracked expandedEvidenceId: string | number | null = null;
+
   @action
   setTab(tab: FindingDetailTab): void {
     this.activeTab = tab;
   }
 
   @action
+  selectFindingTab(): void {
+    this.activeTab = 'finding';
+  }
+
+  @action
+  selectExploitationTab(): void {
+    this.activeTab = 'exploitation';
+  }
+
+  @action
+  toggleEvidencePayload(id: string | number): void {
+    if (this.expandedEvidenceId === id) {
+      this.expandedEvidenceId = null;
+    } else {
+      this.expandedEvidenceId = id;
+    }
+  }
+
+  @action
+  formatPayload(content: unknown): string {
+    if (!content) {
+      return '';
+    }
+
+    if (typeof content === 'string') {
+      try {
+        const parsed = JSON.parse(content);
+        return JSON.stringify(parsed, null, 2);
+      } catch {
+        return content;
+      }
+    }
+
+    return JSON.stringify(content, null, 2);
+  }
+
+  @tracked isCopied = false;
+
+  @action
+  copySha(text: string): void {
+    if (navigator?.clipboard) {
+      navigator.clipboard.writeText(text);
+      this.isCopied = true;
+      setTimeout(() => {
+        this.isCopied = false;
+      }, 2000);
+    }
+  }
+
+  @action
   goBackToScan(): void {
-    this.router.transitionTo(
-      'authenticated.dashboard.offensive-security.scan',
-      this.args.scanId
-    );
+    const scanId = this.args.scanId || (this.finding as any)?.scan_id;
+    if (scanId) {
+      this.router.transitionTo(
+        'authenticated.dashboard.offensive-security.scan',
+        scanId
+      );
+    } else {
+      window.history.back();
+    }
   }
 
   loadFinding = task({ drop: true }, async (findingId: string) => {

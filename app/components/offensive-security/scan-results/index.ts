@@ -9,7 +9,10 @@ import type RouterService from '@ember/routing/router-service';
 
 import ENV from 'irene/config/environment';
 import parseError from 'irene/utils/parse-error';
-import { OFFSEC_SAMPLE_LOG_LINES } from 'irene/utils/offsec-sample-log';
+import {
+  OFFSEC_SAMPLE_LOG_LINES,
+  OFFSEC_FAILED_LOG_LINES,
+} from 'irene/utils/offsec-sample-log';
 import type OffsecScanModel from 'irene/models/offsec-scan';
 import type { OffsecScanArtifact } from 'irene/models/offsec-scan';
 import type OffsecScanAdapter from 'irene/adapters/offsec-scan';
@@ -126,7 +129,33 @@ export default class OffensiveSecurityScanResultsComponent extends Component<Off
         artifactName
       );
 
-      this.window.open(url, '_blank');
+      if (!url) {
+        throw new Error('No download URL returned');
+      }
+
+      try {
+        const response = await fetch(url);
+        if (!response.ok) {
+          throw new Error(`HTTP ${response.status}`);
+        }
+        const blob = await response.blob();
+        const blobUrl = URL.createObjectURL(blob);
+        const link = document.createElement('a');
+        link.href = blobUrl;
+        link.download = artifactName;
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        URL.revokeObjectURL(blobUrl);
+      } catch {
+        const link = document.createElement('a');
+        link.href = url;
+        link.download = artifactName;
+        link.setAttribute('rel', 'noopener noreferrer');
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+      }
     } catch (error) {
       this.notify.error(parseError(error, this.intl.t('pleaseTryAgain')));
     }
@@ -140,10 +169,12 @@ export default class OffensiveSecurityScanResultsComponent extends Component<Off
 
       this.managePolling();
 
-      // The persisted log only exists once the run is over — there is no live
-      // stream in this version.
-      if (this.scan.isTerminal && !this.hasLog) {
-        this.loadLog.perform();
+      if (this.scan.isCompleted) {
+        if (!this.hasLog) {
+          this.loadLog.perform();
+        }
+      } else {
+        this.loadLogStream.perform();
       }
     } catch (error) {
       this.notify.error(parseError(error, this.intl.t('pleaseTryAgain')));
@@ -151,6 +182,50 @@ export default class OffensiveSecurityScanResultsComponent extends Component<Off
       this.router.transitionTo(
         'authenticated.dashboard.offensive-security.index'
       );
+    }
+  });
+
+  loadLogStream = task({ drop: true }, async () => {
+    try {
+      const res: Record<string, unknown> = (await this.adapter.fetchLogStream(
+        'offsec-scan',
+        this.args.scanId
+      )) as unknown as Record<string, unknown>;
+
+      const rawLogs: unknown = res['logs'] ?? res['lines'] ?? res;
+      let lines: string[] = [];
+
+      if (typeof rawLogs === 'string') {
+        lines = rawLogs.split('\n').filter((l: string) => l.trim().length > 0);
+      } else if (Array.isArray(rawLogs)) {
+        lines = rawLogs as string[];
+      }
+
+      if (lines.length > 0) {
+        this.logLines = lines;
+      }
+      this.logLoadFailed = false;
+
+      const rawStatusStr = String(
+        res['status'] ?? res['scan_status'] ?? res['state'] ?? ''
+      ).toLowerCase();
+
+      if (
+        ['completed', 'failed', 'terminal', '3', '4'].includes(rawStatusStr) ||
+        (this.scan && this.scan.isTerminal)
+      ) {
+        this.stopPolling?.();
+        this.stopPolling = undefined;
+        this.scan = (await this.store.findRecord('offsec-scan', this.args.scanId, {
+          reload: true,
+        })) as OffsecScanModel;
+      }
+    } catch {
+      if (ENV.environment === 'development' && this.logLines.length === 0) {
+        if (this.scan?.isFailed) {
+          this.logLines = [...OFFSEC_FAILED_LOG_LINES];
+        }
+      }
     }
   });
 
@@ -172,13 +247,10 @@ export default class OffensiveSecurityScanResultsComponent extends Component<Off
       this.logLines = text.split('\n').filter(Boolean);
       this.logLoadFailed = false;
     } catch {
-      // In development the backend log endpoint may not be wired yet, so fall
-      // back to a sample transcript to keep the run view populated. Staging and
-      // production show the real empty/failed state instead — never fake logs.
       if (ENV.environment === 'development') {
-        this.logLines = [...OFFSEC_SAMPLE_LOG_LINES];
-        this.logLoadFailed = false;
-
+        this.logLines = this.scan?.isFailed
+          ? [...OFFSEC_FAILED_LOG_LINES]
+          : [...OFFSEC_SAMPLE_LOG_LINES];
         return;
       }
 
@@ -200,7 +272,7 @@ export default class OffensiveSecurityScanResultsComponent extends Component<Off
     }
 
     this.stopPolling = this.poll.startPolling(
-      () => this.loadScan.perform(this.args.scanId),
+      () => this.loadLogStream.perform(),
       POLL_INTERVAL_MS
     );
   }

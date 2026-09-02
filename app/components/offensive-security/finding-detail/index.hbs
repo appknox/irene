@@ -1,216 +1,320 @@
-<AkStack @direction='column' @spacing='3' class='p-3'>
+<AkStack @direction='column' @spacing='3' class='p-3' local-class='finding-detail-container'>
   {{#if this.isLoading}}
     <AkSkeleton @width='100%' @height='96px' />
-    <AkSkeleton @width='100%' @height='240px' />
+    <AkSkeleton @width='100%' @height='320px' />
   {{else if this.finding}}
-    {{! Header }}
-    <AkStack @width='full' @direction='column' @spacing='2'>
-      <AkStack
-        @width='full'
-        @alignItems='center'
-        @spacing='2'
-        local-class='header-row'
-      >
-        <AkTypography @variant='h5' @fontWeight='medium'>
+    {{! Top Header Area }}
+    <div local-class='top-header' class='mb-4'>
+      {{! Line 1: Main Title + Severity Pill + Outcome Pill }}
+      <div local-class='title-header-row mb-2'>
+        <AkTypography @variant='h4' @fontWeight='bold' local-class='page-title'>
           {{this.finding.name}}
         </AkTypography>
 
-        {{#if this.finding.isExploited}}
-          <span
-            local-class='severity-tag severity-{{this.finding.severity}}'
-            data-test-offensiveSecurity-findingDetail-severity
-          >
-            {{t (concat 'offensiveSecurity.severity.' this.finding.severity)}}
+        {{#if (or this.finding.bandLabel this.finding.band)}}
+          <span local-class='severity-pill severity-{{if this.finding.band this.finding.band "critical"}}'>
+            {{if this.finding.bandLabel this.finding.bandLabel 'Critical'}}
           </span>
         {{/if}}
 
-        <span
-          local-class='outcome-tag {{this.finding.outcomeClass}}'
-          data-test-offensiveSecurity-findingDetail-outcome
-        >
+        <span local-class='outcome-pill outcome-{{this.finding.outcomeClass}}'>
           {{t (concat 'offensiveSecurity.outcome.' this.finding.outcome)}}
         </span>
-      </AkStack>
+      </div>
 
-      {{#if this.finding.category}}
-        <AkTypography @variant='body2' @color='textSecondary'>
-          {{this.finding.category}}
-        </AkTypography>
-      {{/if}}
-    </AkStack>
-
-    {{! Tabs }}
-    <AkStack @width='full' @spacing='1' local-class='tab-row'>
-      <button
-        type='button'
-        local-class='tab-btn {{if this.isFindingTab "active"}}'
-        {{on 'click' (fn this.setTab 'finding')}}
-        data-test-offensiveSecurity-findingDetail-findingTab
-      >
-        {{t 'offensiveSecurity.finding'}}
-      </button>
-
-      <button
-        type='button'
-        local-class='tab-btn {{unless this.isFindingTab "active"}}'
-        {{on 'click' (fn this.setTab 'exploitation')}}
-        data-test-offensiveSecurity-findingDetail-exploitationTab
-      >
-        {{t 'offensiveSecurity.exploitation'}}
-      </button>
-    </AkStack>
-
-    {{#if this.isFindingTab}}
-      <AkStack
-        @width='full'
-        @direction='column'
-        @spacing='2'
-        local-class='card'
-        class='p-3'
-        data-test-offensiveSecurity-findingDetail-findingPanel
-      >
-        <AkTypography @variant='body2' @fontWeight='medium' local-class='label'>
-          {{t 'offensiveSecurity.detection'}}
-        </AkTypography>
-
-        <AkTypography @variant='body2'>
-          {{if
-            this.finding.detected
-            (t 'offensiveSecurity.protectionDetected')
-            (t 'offensiveSecurity.protectionNotDetected')
-          }}
-        </AkTypography>
-
-        <AkDivider />
-
-        <AkStack @width='full' @justifyContent='space-between'>
-          <AkTypography @variant='body2' @color='textSecondary'>
-            {{t 'offensiveSecurity.signatureId'}}
-          </AkTypography>
-
-          <AkTypography @variant='body2' local-class='mono'>
-            {{this.finding.signatureId}}
-          </AkTypography>
-        </AkStack>
-
-        {{#if this.finding.checkType}}
-          <AkStack @width='full' @justifyContent='space-between'>
-            <AkTypography @variant='body2' @color='textSecondary'>
-              {{t 'offensiveSecurity.checkType'}}
-            </AkTypography>
-
-            <AkTypography @variant='body2'>
-              {{this.finding.checkType}}
-            </AkTypography>
-          </AkStack>
-        {{/if}}
-      </AkStack>
-    {{else}}
-      <AkStack
-        @width='full'
-        @direction='column'
-        @spacing='3'
-        data-test-offensiveSecurity-findingDetail-exploitationPanel
-      >
-        <AkStack
-          @width='full'
-          @direction='column'
-          @spacing='2'
-          local-class='card'
-          class='p-3'
+      {{! Line 2: Subtitle Breadcrumb Row: 🛡️ Resilience > Root Detection (Enlarged styling) }}
+      <div local-class='breadcrumb-row'>
+        <div local-class='breadcrumb-shield-circle'>
+          <AkIcon @iconName='shield' @size='small' />
+        </div>
+        <button
+          type='button'
+          local-class='breadcrumb-link'
+          {{on 'click' this.goBackToScan}}
         >
-          <AkTypography
-            @variant='body2'
-            @fontWeight='medium'
-            local-class='label'
-          >
-            {{this.techniqueLabel}}
-          </AkTypography>
+          Resilience
+        </button>
+        <span local-class='breadcrumb-separator'>&gt;</span>
+        <span local-class='breadcrumb-title'>
+          {{if this.checkTypeLabel this.checkTypeLabel 'Root Detection'}}
+        </span>
+      </div>
+    </div>
 
-          <AkTypography @variant='body2'>
-            {{if
-              this.finding.rationale
-              this.finding.rationale
-              (t 'offensiveSecurity.noRationale')
-            }}
-          </AkTypography>
-        </AkStack>
+    {{! ROW 1: Detection (Larged ~68%) & Resilience Score (Short ~32%) }}
+    <div local-class='row1-grid' class='mb-3'>
+      {{! Card 1: Detection }}
+      <div local-class='finding-card'>
+        <div local-class='card-split'>
+          <div local-class='card-left'>
+            <div local-class='card-header-row'>
+              <div local-class='icon-circle circle-blue'>
+                <AkIcon @iconName='center-focus-strong' @size='small' />
+              </div>
 
-        <AkStack
-          @width='full'
-          @direction='column'
-          @spacing='2'
-          local-class='card'
-          class='p-3'
-        >
-          <AkTypography
-            @variant='body2'
-            @fontWeight='medium'
-            local-class='label'
-          >
-            {{t 'offensiveSecurity.resilience'}}
-          </AkTypography>
-
-          <AkStack @spacing='3'>
-            <AkStack @direction='column'>
-              <AkTypography @variant='h5' @fontWeight='medium'>
-                {{if this.finding.score this.finding.score '—'}}
-              </AkTypography>
-
-              <AkTypography @variant='body3' @color='textSecondary'>
-                {{t 'offensiveSecurity.scoreOutOf'}}
-              </AkTypography>
-            </AkStack>
-
-            <AkStack @direction='column'>
-              <AkTypography @variant='body1' @fontWeight='medium'>
-                {{if this.finding.bandLabel this.finding.bandLabel '—'}}
-              </AkTypography>
-
-              <AkTypography @variant='body3' @color='textSecondary'>
-                {{t 'offensiveSecurity.band'}}
-              </AkTypography>
-            </AkStack>
-          </AkStack>
-        </AkStack>
-
-        <AkStack
-          @width='full'
-          @direction='column'
-          @spacing='2'
-          local-class='card'
-          class='p-3'
-        >
-          <AkTypography
-            @variant='body2'
-            @fontWeight='medium'
-            local-class='label'
-          >
-            {{t 'offensiveSecurity.evidence'}}
-          </AkTypography>
-
-          {{#each this.evidence as |item|}}
-            <AkStack
-              @width='full'
-              @direction='column'
-              @spacing='1'
-              local-class='evidence-item'
-              data-test-offensiveSecurity-findingDetail-evidence
-            >
-              <AkStack @alignItems='center' @spacing='1'>
-                <AkTypography @variant='body3' local-class='mono'>
-                  {{item.evidence_id}}
+              <div local-class='header-text-group'>
+                <AkTypography @variant='body1' @fontWeight='bold' local-class='card-title'>
+                  {{t 'offensiveSecurity.detection'}}
                 </AkTypography>
 
-                {{#if item.tool}}
-                  <AkTypography @variant='body3' @color='textSecondary'>
-                    {{item.tool}}
-                  </AkTypography>
-                {{/if}}
-              </AkStack>
+                <AkTypography @variant='body2' @color='textSecondary' local-class='detection-desc'>
+                  {{if
+                    this.finding.detected
+                    (t 'offensiveSecurity.protectionDetected')
+                    (t 'offensiveSecurity.protectionNotDetected')
+                  }}
+                </AkTypography>
+              </div>
+            </div>
+          </div>
 
-              <AkTypography @variant='body2'>{{item.summary}}</AkTypography>
-            </AkStack>
+          <div local-class='card-right'>
+            <div local-class='kv-table'>
+              <div local-class='kv-row'>
+                <span local-class='kv-label'>{{t 'offensiveSecurity.signatureId'}}</span>
+                <span local-class='kv-val mono'>{{this.finding.signatureId}}</span>
+              </div>
+
+              {{#if this.finding.checkType}}
+                <div local-class='kv-row'>
+                  <span local-class='kv-label'>{{t 'offensiveSecurity.checkType'}}</span>
+                  <span local-class='kv-val mono'>{{this.finding.checkType}}</span>
+                </div>
+              {{/if}}
+
+              {{#if this.finding.category}}
+                <div local-class='kv-row'>
+                  <span local-class='kv-label'>{{t 'offensiveSecurity.category'}}</span>
+                  <span local-class='kv-val'>{{this.finding.category}}</span>
+                </div>
+              {{/if}}
+
+              {{#if this.finding.order}}
+                <div local-class='kv-row'>
+                  <span local-class='kv-label'>{{t 'offensiveSecurity.order'}}</span>
+                  <span local-class='kv-val'>{{this.finding.order}}</span>
+                </div>
+              {{/if}}
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {{! Card 4: Resilience Score }}
+      <div local-class='finding-card'>
+        <div local-class='card-header-row mb-3'>
+          <div local-class='icon-circle circle-blue'>
+            <AkIcon @iconName='shield' @size='small' />
+          </div>
+
+          <AkTypography @variant='body1' @fontWeight='bold' local-class='card-title'>
+            {{t 'offensiveSecurity.resilience'}} Score
+          </AkTypography>
+        </div>
+
+        <div local-class='resilience-score-box mb-3'>
+          <div local-class='score-row mb-2'>
+            <span local-class='score-num'>{{if this.finding.score this.finding.score '10'}}</span>
+            <span local-class='score-den'>/ 100</span>
+            <span local-class='score-pill-tag'>
+              {{if this.finding.bandLabel this.finding.bandLabel 'Weak'}}
+            </span>
+          </div>
+
+          <div local-class='band-label-row mb-1'>
+            <span local-class='band-text-label'>Band</span>
+          </div>
+
+          <div local-class='score-progress-bar mb-2'>
+            <div
+              local-class='score-progress-fill'
+              style={{this.scoreProgressStyle}}
+            ></div>
+          </div>
+
+          <div local-class='sub-resilience-text'>
+            {{if this.finding.bandLabel this.finding.bandLabel 'Weak'}} Resilience
+          </div>
+        </div>
+      </div>
+    </div>
+
+    {{! ROW 2: Bypass Strategy Catalog & Execution Attempts stacked vertically (Short ~54%), Evidence on Right (Bit Bigger ~46%) }}
+    <div local-class='row2-grid'>
+      {{! LEFT COLUMN: Bypass Strategy Catalog & Execution Attempts (1) stacked vertically }}
+      <div local-class='row2-left-column'>
+        {{! Card 2: Bypass Strategy Catalog }}
+        {{#if this.finding.bypassAttempted}}
+          <div local-class='finding-card'>
+            <div local-class='card-header-row mb-3'>
+              <div local-class='icon-circle circle-purple'>
+                <AkIcon @iconName='import-contacts' @size='small' />
+              </div>
+
+              <AkTypography @variant='body1' @fontWeight='bold' local-class='card-title'>
+                {{t 'offensiveSecurity.bypassStrategy'}}
+              </AkTypography>
+            </div>
+
+            <div local-class='catalog-kv-list'>
+              {{#if this.finding.bypassAttempted.catalog_id}}
+                <div local-class='catalog-row'>
+                  <span local-class='catalog-label'>{{t 'offensiveSecurity.catalogId'}}</span>
+                  <span local-class='catalog-pill'>{{this.finding.bypassAttempted.catalog_id}}</span>
+                </div>
+              {{/if}}
+
+              {{#if this.finding.bypassAttempted.asset_sha256}}
+                <div local-class='catalog-row'>
+                  <span local-class='catalog-label'>{{t 'offensiveSecurity.assetSha256'}}</span>
+                  <span local-class='sha-pill'>{{this.finding.bypassAttempted.asset_sha256}}</span>
+                </div>
+              {{/if}}
+            </div>
+          </div>
+        {{/if}}
+
+        {{! Card 3: Execution Attempts (1) }}
+        {{#if this.finding.attempts.length}}
+          <div local-class='finding-card attempts-card'>
+            <div local-class='card-header-row mb-3'>
+              <div local-class='icon-circle circle-green'>
+                <AkIcon @iconName='show-chart' @size='small' />
+              </div>
+
+              <AkTypography @variant='body1' @fontWeight='bold' local-class='card-title'>
+                {{t 'offensiveSecurity.attempts'}} ({{this.finding.attempts.length}})
+              </AkTypography>
+            </div>
+
+            {{#each this.finding.attempts as |attempt|}}
+              <div local-class='attempt-card-box'>
+                <div local-class='attempt-header-row mb-2'>
+                  <AkTypography @variant='body1' @fontWeight='bold'>
+                    Attempt #{{attempt.attempt_no}}
+                  </AkTypography>
+
+                  {{#if attempt.state}}
+                    <span local-class='verified-status'>
+                      <AkIcon @iconName='check-circle' @size='small' />
+                      {{attempt.state}}
+                    </span>
+                  {{/if}}
+                </div>
+
+                <div local-class='technique-full-row mb-3'>
+                  {{#if attempt.technique_id}}
+                    <div local-class='technique-block mb-1'>
+                      <span local-class='technique-label'>Technique</span>
+                      <span local-class='technique-code'>{{attempt.technique_id}}</span>
+                    </div>
+                  {{/if}}
+
+                  {{#if attempt.evidence}}
+                    <div local-class='attempt-bullets'>
+                      {{#each attempt.evidence as |evNote|}}
+                        <div local-class='bullet-row'>
+                          <span local-class='green-bullet'>•</span>
+                          <span local-class='bullet-text'>{{evNote}}</span>
+                        </div>
+                      {{/each}}
+                    </div>
+                  {{/if}}
+                </div>
+
+                <div local-class='attempt-kv-bottom-row'>
+                  <div local-class='kv-cell'>
+                    <span local-class='kv-label'>Attempt No.</span>
+                    <span local-class='kv-val'>{{attempt.attempt_no}}</span>
+                  </div>
+
+                  {{#if attempt.state}}
+                    <div local-class='kv-cell'>
+                      <span local-class='kv-label'>State</span>
+                      <span local-class='kv-val mono'>{{attempt.state}}</span>
+                    </div>
+                  {{/if}}
+
+                  {{#if attempt.protection_id}}
+                    <div local-class='kv-cell'>
+                      <span local-class='kv-label'>Protection ID</span>
+                      <span local-class='kv-val mono'>{{attempt.protection_id}}</span>
+                    </div>
+                  {{/if}}
+
+                  {{#if attempt.verifier_ids}}
+                    <div local-class='kv-cell'>
+                      <span local-class='kv-label'>Verifier IDs</span>
+                      <span local-class='kv-val mono'>{{attempt.verifier_ids}}</span>
+                    </div>
+                  {{else if attempt.verifier_id}}
+                    <div local-class='kv-cell'>
+                      <span local-class='kv-label'>Verifier IDs</span>
+                      <span local-class='kv-val mono'>{{attempt.verifier_id}}</span>
+                    </div>
+                  {{/if}}
+                </div>
+              </div>
+            {{/each}}
+          </div>
+        {{/if}}
+      </div>
+
+      {{! RIGHT COLUMN: Card 5 Evidence (1) }}
+      <div local-class='row2-right-column'>
+        <div local-class='finding-card evidence-card'>
+          <div local-class='card-header-row mb-3'>
+            <div local-class='icon-circle circle-green'>
+              <AkIcon @iconName='code' @size='small' />
+            </div>
+
+            <AkTypography @variant='body1' @fontWeight='bold' local-class='card-title'>
+              {{t 'offensiveSecurity.evidence'}} ({{this.evidence.length}})
+            </AkTypography>
+          </div>
+
+          {{#each this.evidence as |item|}}
+            <div local-class='evidence-item-card'>
+              <div local-class='evidence-meta-header'>
+                <AkStack @width='full' @justifyContent='space-between' @alignItems='center' class='mb-2'>
+                  <AkStack @alignItems='center' @spacing='1.5'>
+                    <span local-class='mono bold-id'>{{item.evidence_id}}</span>
+
+                    {{#if item.tool}}
+                      <span local-class='tool-badge'>{{item.tool}}</span>
+                    {{/if}}
+
+                    {{#if item.source}}
+                      <AkTypography @variant='caption' @color='textSecondary'>
+                        ({{item.source}})
+                      </AkTypography>
+                    {{/if}}
+                  </AkStack>
+
+                  {{#if item.ok}}
+                    <span local-class='ok-pill'>OK</span>
+                  {{/if}}
+                </AkStack>
+
+                <AkTypography @variant='body2' class='mb-2' local-class='evidence-summary'>{{item.summary}}</AkTypography>
+              </div>
+
+              {{#if (or item.content item.metadata)}}
+                <div local-class='payload-wrapper'>
+                  <pre local-class='dark-payload'>{{this.formatPayload (if item.content item.content item.metadata)}}</pre>
+                  <div local-class='payload-actions'>
+                    <button
+                      type='button'
+                      local-class='copy-payload-btn'
+                      {{on 'click' (fn this.copySha (this.formatPayload (if item.content item.content item.metadata)))}}
+                      title='Copy Payload'
+                    >
+                      <AkIcon @iconName='content-copy' @size='small' />
+                    </button>
+                  </div>
+                </div>
+              {{/if}}
+            </div>
           {{else}}
             <AkTypography
               @variant='body2'
@@ -220,8 +324,25 @@
               {{t 'offensiveSecurity.noEvidence'}}
             </AkTypography>
           {{/each}}
-        </AkStack>
-      </AkStack>
-    {{/if}}
+        </div>
+      </div>
+    </div>
+
+    {{! ROW 3: About this finding / Rationale alert banner (Full width 100%) }}
+    <div local-class='about-banner mt-3'>
+      <AkIcon @iconName='info' @size='small' class='mr-2 flex-shrink-0' />
+      <div>
+        <AkTypography @variant='body2' @fontWeight='bold' class='mb-1'>
+          {{t 'offensiveSecurity.aboutThisFinding'}}
+        </AkTypography>
+        <AkTypography @variant='body2'>
+          {{if
+            this.finding.rationale
+            this.finding.rationale
+            (t 'offensiveSecurity.noRationale')
+          }}
+        </AkTypography>
+      </div>
+    </div>
   {{/if}}
 </AkStack>

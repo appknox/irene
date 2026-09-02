@@ -37,6 +37,15 @@ export default class OffsecScanAdapter extends CommonDRFAdapter {
     return this.ajax(url, 'GET') as Promise<OffsecDownloadDetails>;
   }
 
+  fetchLogStream(modelName: string | number, scanId: string | number) {
+    const url = `${this._buildURL(modelName, scanId)}/logstream`;
+
+    return this.ajax(url, 'GET') as Promise<{
+      logs?: string | string[];
+      lines?: string | string[];
+    }>;
+  }
+
   /** As above, for one named artifact of the run. */
   fetchArtifactDownloadUrl(
     modelName: string | number,

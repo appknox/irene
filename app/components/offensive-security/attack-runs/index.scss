@@ -11,6 +11,14 @@
   border: 0 !important;
 }
 
+.header-card {
+  width: 100%;
+  padding: 1rem 1.25rem;
+  background-color: var(--offensive-security-scan-results-card-bg-color, #ffffff);
+  border: 1px solid var(--offensive-security-scan-results-card-border, #e5e7eb);
+  border-radius: 8px;
+}
+
 .header-shield-box {
   display: inline-flex;
   align-items: center;
@@ -59,27 +67,27 @@
   border-radius: 8px;
 
   &.stat-icon-pink {
-    background-color: rgba(244, 143, 177, 0.15);
-    color: #f48fb1;
+    background-color: #f5f5f5;
+    color: #7b7b7b;
   }
 
   &.stat-icon-blue {
-    background-color: rgba(100, 181, 246, 0.15);
-    color: #64b5f6;
+    background-color: #deebff;
+    color: #087edb;
 
     :global(.ak-loader-circle-indicator) {
-      stroke: #64b5f6 !important;
+      stroke: #087edb !important;
     }
   }
 
   &.stat-icon-green {
-    background-color: rgba(129, 199, 132, 0.15);
-    color: #81c784;
+    background-color: #e9f5ed;
+    color: #2db421;
   }
 
   &.stat-icon-red {
-    background-color: rgba(229, 115, 115, 0.15);
-    color: #e57373;
+    background-color: #ffd1d4;
+    color: #d72f2f;
   }
 }
 
@@ -111,34 +119,6 @@
   margin-top: 0.5rem;
 }
 
-.status-tabs {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-}
-
-.tab-btn {
-  background: transparent;
-  border: none;
-  padding: 0.5rem 0.85rem;
-  font-size: 0.875rem;
-  font-weight: 500;
-  color: var(--text-secondary);
-  cursor: pointer;
-  border-bottom: 2px solid transparent;
-  transition: all 0.15s ease;
-
-  &:hover {
-    color: var(--text-primary);
-  }
-
-  &.active {
-    color: #ef5350;
-    border-bottom-color: #ef5350;
-    font-weight: 600;
-  }
-}
-
 .search-input {
   width: 20rem;
   flex-shrink: 0;
@@ -148,6 +128,8 @@
   color: var(--offensive-security-attack-runs-empty-color);
   text-align: center;
 }
+
+
 
 .attack-runs-table-container {
   width: 100%;

@@ -7,7 +7,7 @@ import type OffsecScanModel from 'irene/models/offsec-scan';
 export interface SummaryStat {
   label: string;
   value: number;
-  tone: 'neutral' | 'exploited' | 'defended';
+  tone: 'neutral' | 'exploited' | 'defended' | 'unassessed';
 }
 
 export interface OffensiveSecurityScanResultsSummaryCardSignature {
@@ -38,22 +38,12 @@ export default class OffensiveSecurityScanResultsSummaryCardComponent extends Co
         value: scan.attacksDefended ?? scan.protectionsResisted ?? 0,
         tone: 'defended',
       },
+      {
+        label: this.intl.t('offensiveSecurity.unassessed'),
+        value: scan.findingsUnassessed ?? 0,
+        tone: 'unassessed',
+      },
     ];
-  }
-
-  /**
-   * Mechanisms the agent found but never attempted. Shown only when there are any,
-   * because the three counters above otherwise read as the whole story.
-   */
-  get showUnassessed(): boolean {
-    return (this.args.scan.findingsUnassessed ?? 0) > 0;
-  }
-
-  get unassessedLabel(): string {
-    return this.intl.t('offensiveSecurity.notAssessedCount', {
-      count: this.args.scan.findingsUnassessed,
-      total: this.args.scan.protectionsDetected,
-    });
   }
 
   get showResilience(): boolean {

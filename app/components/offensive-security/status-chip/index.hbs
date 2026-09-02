@@ -7,7 +7,7 @@
   >
     <AkIcon local-class='failed-chip-icon' @iconName='error' @size='small' />
 
-    <AkTypography @variant='body2' @color='inherit' @fontWeight='medium'>
+    <AkTypography @variant='body2' @color='inherit' @fontWeight='medium' @noWrap={{true}}>
       {{t 'offensiveSecurity.status.failed'}}
     </AkTypography>
   </AkStack>
@@ -24,7 +24,7 @@
       @size='small'
     />
 
-    <AkTypography @variant='body2' @color='inherit' @fontWeight='medium'>
+    <AkTypography @variant='body2' @color='inherit' @fontWeight='medium' @noWrap={{true}}>
       {{t 'offensiveSecurity.status.completed'}}
     </AkTypography>
   </AkStack>
@@ -35,8 +35,26 @@
     local-class='chip-container pending-chip'
     data-test-offensiveSecurity-statusChip-pending
   >
-    <AkTypography @variant='body2' @color='inherit' @fontWeight='medium'>
-      {{t 'offensiveSecurity.status.pending'}}
+    <AkTypography @variant='body2' @color='inherit' @fontWeight='medium' @noWrap={{true}}>
+      Not Started
+    </AkTypography>
+  </AkStack>
+{{else if @scan.isQueued}}
+  <AkStack
+    @spacing='1'
+    @alignItems='center'
+    local-class='chip-container running-chip'
+    data-test-offensiveSecurity-statusChip-queued
+  >
+    <AkLoader
+      @size={{16}}
+      @thickness={{6}}
+      @color='info'
+      local-class='running-loader'
+    />
+
+    <AkTypography @variant='body2' @color='inherit' @fontWeight='medium' @noWrap={{true}}>
+      Queued
     </AkTypography>
   </AkStack>
 {{else}}
@@ -53,7 +71,7 @@
       local-class='running-loader'
     />
 
-    <AkTypography @variant='body2' @color='inherit' @fontWeight='medium'>
+    <AkTypography @variant='body2' @color='inherit' @fontWeight='medium' @noWrap={{true}}>
       {{t 'offensiveSecurity.status.running'}}
     </AkTypography>
   </AkStack>

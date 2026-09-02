@@ -152,7 +152,7 @@ export default class AppknoxWrapperComponent extends Component<AppknoxWrapperSig
       },
       this.showOffensiveSecurity && {
         label: this.intl.t('offensiveSecurity.attackRuns'),
-        icon: 'shield-outline',
+        icon: 'security',
         route: 'authenticated.dashboard.offensive-security',
         currentWhen: 'authenticated.dashboard.offensive-security',
       },

@@ -1,4 +1,8 @@
 .chip-container {
+  display: inline-flex;
+  align-items: center;
+  white-space: nowrap;
+  flex-shrink: 0;
   border-radius: var(--offensive-security-status-chip-border-radius);
   padding: 0.464em 0.714em;
   background-color: var(--offensive-security-status-chip-bg-color);

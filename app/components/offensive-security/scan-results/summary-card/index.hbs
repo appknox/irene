@@ -50,22 +50,14 @@
               {{t 'offensiveSecurity.bypassed'}}
             {{else if (eq stat.tone 'defended')}}
               {{t 'offensiveSecurity.resisted'}}
+            {{else if (eq stat.tone 'unassessed')}}
+              {{t 'offensiveSecurity.unassessed'}}
             {{/if}}
           </span>
         </AkTypography>
       </div>
     {{/each}}
   </AkStack>
-
-  {{#if this.showUnassessed}}
-    <AkTypography
-      @variant='body3'
-      @color='textSecondary'
-      data-test-offensiveSecurity-summaryCard-unassessed
-    >
-      {{this.unassessedLabel}}
-    </AkTypography>
-  {{/if}}
 
   {{#if this.showResilience}}
     <AkDivider />

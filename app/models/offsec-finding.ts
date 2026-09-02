@@ -115,6 +115,36 @@ export default class OffsecFindingModel extends Model {
   get evidenceList(): OffsecFindingEvidence[] {
     return this.evidence ?? [];
   }
+
+  get attempts(): Array<Record<string, unknown>> {
+    return (this.detail?.['attempts'] as Array<Record<string, unknown>>) ?? [];
+  }
+
+  get bypassAttempted(): Record<string, unknown> | null {
+    return (this.detail?.['bypass_attempted'] as Record<string, unknown>) ?? null;
+  }
+
+  get detectionEvidence(): Array<Record<string, unknown>> {
+    return (
+      (this.detail?.['detection_evidence'] as Array<Record<string, unknown>>) ?? []
+    );
+  }
+
+  get techniqueId(): string {
+    const firstAttempt = this.attempts[0];
+    return (
+      (firstAttempt?.['technique_id'] as string) ||
+      (this.bypassAttempted?.['catalog_id'] as string) ||
+      ''
+    );
+  }
+
+  get techniqueTags(): string[] {
+    if (!this.techniqueId) {
+      return [];
+    }
+    return this.techniqueId.split('+').filter(Boolean);
+  }
 }
 
 declare module 'ember-data/types/registries/model' {

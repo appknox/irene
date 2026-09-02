@@ -112,6 +112,18 @@ function routes() {
   // The persisted log is a two-hop fetch: the client asks for a presigned URL,
   // then GETs the blob. Mirage points the URL back at itself so the sample
   // transcript renders in the run view.
+  this.get('/api/v2/offsec/scans/:id/logstream', () => {
+    return {
+      lines: OFFSEC_SAMPLE_LOG_LINES,
+    };
+  });
+
+  this.get('/api/v2/offsec/scans/:id/artifacts/:artifactName/download_url', (schema, request) => {
+    return {
+      url: `${config.host}/api/v2/offsec/scans/${request.params.id}/log`,
+    };
+  });
+
   this.get('/api/v2/offsec/scans/:id/log_url', (schema, request) => {
     return {
       url: `${config.host}/api/v2/offsec/scans/${request.params.id}/log`,

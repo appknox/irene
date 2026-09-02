@@ -23,6 +23,14 @@ export type ResilienceFilter =
   | 'strong'
   | 'very-strong';
 
+export type StatusFilter =
+  | 'all'
+  | 'running'
+  | 'queued'
+  | 'completed'
+  | 'failed'
+  | 'not_started';
+
 export type SortDirection = 'asc' | 'desc';
 
 type ScanResponseModel = DS.AdapterPopulatedRecordArray<OffsecScanModel> & {
@@ -123,49 +131,56 @@ export default class OffensiveSecurityAttackRunsComponent extends Component<Offe
       {
         name: this.intl.t('fileID'),
         valuePath: 'targetFileId',
-        width: 110,
-      },
-      {
-        name: this.intl.t('offensiveSecurity.target'),
-        component: 'offensive-security/attack-runs/table/target',
-        minWidth: 180,
+        width: 100,
       },
       {
         name: this.intl.t('platform'),
         component: 'offensive-security/attack-runs/table/platform',
         headerComponent: 'offensive-security/attack-runs/table/platform-header',
-        width: 140,
+        width: 90,
+      },
+      {
+        name: this.intl.t('offensiveSecurity.application'),
+        component: 'offensive-security/attack-runs/table/target',
+        minWidth: 160,
+      },
+      {
+        name: this.intl.t('offensiveSecurity.package'),
+        valuePath: 'packageName',
+        minWidth: 180,
       },
       {
         name: this.intl.t('version'),
         valuePath: 'versionLabel',
-        width: 120,
+        width: 110,
       },
       {
-        name: this.intl.t('offensiveSecurity.date'),
-        valuePath: 'scannedOnLabel',
-        headerComponent: 'offensive-security/attack-runs/table/date-header',
-        width: 140,
-      },
-      {
-        name: this.intl.t('offensiveSecurity.risk'),
+        name: this.intl.t('offensiveSecurity.exploitability'),
         component: 'offensive-security/attack-runs/table/resilience',
         headerComponent:
           'offensive-security/attack-runs/table/resilience-header',
-        width: 180,
+        width: 140,
+      },
+      {
+        name: this.intl.t('offensiveSecurity.runOn'),
+        valuePath: 'scannedOnLabel',
+        headerComponent: 'offensive-security/attack-runs/table/date-header',
+        width: 130,
       },
       {
         name: this.intl.t('status'),
         component: 'offensive-security/attack-runs/table/status',
-        width: 140,
-      },
-      {
-        name: this.intl.t('action'),
-        component: 'offensive-security/attack-runs/table/action',
-        width: 80,
-        textAlign: 'center',
+        headerComponent: 'offensive-security/attack-runs/table/status-header',
+        width: 150,
       },
     ];
+  }
+
+  @tracked selectedStatusFilter: StatusFilter = 'all';
+
+  @action
+  handleStatusFilterChange(value: StatusFilter): void {
+    this.selectedStatusFilter = value;
   }
 
   @tracked selectedStatusTab: 'all' | 'running' | 'completed' | 'failed' =
@@ -219,11 +234,21 @@ export default class OffensiveSecurityAttackRunsComponent extends Component<Offe
         (this.selectedStatusTab === 'completed' && scan.isCompleted) ||
         (this.selectedStatusTab === 'failed' && scan.isFailed);
 
+      const matchesStatusHeader =
+        this.selectedStatusFilter === 'all' ||
+        (this.selectedStatusFilter === 'running' &&
+          (scan.isInProgress || scan.isRunning)) ||
+        (this.selectedStatusFilter === 'queued' && scan.isQueued) ||
+        (this.selectedStatusFilter === 'completed' && scan.isCompleted) ||
+        (this.selectedStatusFilter === 'failed' && scan.isFailed) ||
+        (this.selectedStatusFilter === 'not_started' && scan.isNotStarted);
+
       return (
         matchesSearch &&
         matchesPlatform &&
         matchesResilience &&
-        matchesStatusTab
+        matchesStatusTab &&
+        matchesStatusHeader
       );
     });
 
@@ -242,7 +267,7 @@ export default class OffensiveSecurityAttackRunsComponent extends Component<Offe
   }
 
   get showPagination(): boolean {
-    return !this.hasNoScans && this.totalCount > 0;
+    return !this.hasNoScans && this.filteredScans.length > 0 && this.totalCount > 0;
   }
 
   // ─── Actions ───────────────────────────────────────────────────────────────

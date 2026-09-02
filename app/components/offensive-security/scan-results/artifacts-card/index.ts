@@ -38,7 +38,7 @@ export default class OffensiveSecurityScanResultsArtifactsCardComponent extends 
     if (lowerName.includes('resilience')) {
       return this.intl.t('offensiveSecurity.artifactDesc.resilience');
     }
-    if (lowerName.includes('evidence')) {
+    if (lowerName.includes('evidence') || lowerName.includes('investigation')) {
       return this.intl.t('offensiveSecurity.artifactDesc.evidence');
     }
     if (lowerName.includes('loadout')) {
@@ -54,16 +54,61 @@ export default class OffensiveSecurityScanResultsArtifactsCardComponent extends 
   @action
   getArtifactIcon(name: string): string {
     const lowerName = name.toLowerCase();
-    if (lowerName.endsWith('.js')) {
+    if (
+      lowerName.includes('risk') ||
+      lowerName.includes('rating') ||
+      lowerName.includes('resilience')
+    ) {
+      return 'shield';
+    }
+    if (
+      lowerName.includes('exploit') ||
+      lowerName.includes('script') ||
+      lowerName.endsWith('.js') ||
+      lowerName.endsWith('.py')
+    ) {
       return 'code';
     }
-    if (lowerName.endsWith('.md')) {
-      return 'description';
+    if (
+      lowerName.includes('evidence') ||
+      lowerName.includes('log') ||
+      lowerName.endsWith('.json')
+    ) {
+      return 'text-snippet-outline';
     }
-    if (lowerName.endsWith('.png') || lowerName.endsWith('.jpg')) {
+    if (
+      lowerName.endsWith('.png') ||
+      lowerName.endsWith('.jpg') ||
+      lowerName.endsWith('.jpeg')
+    ) {
       return 'image';
     }
-    return 'insert-drive-file';
+
+    return 'folder-outline';
+  }
+
+  @action
+  getArtifactIconClass(name: string): string {
+    const lowerName = name.toLowerCase();
+    if (
+      lowerName.includes('risk') ||
+      lowerName.includes('rating') ||
+      lowerName.includes('resilience')
+    ) {
+      return 'icon-purple';
+    }
+    if (
+      lowerName.includes('exploit') ||
+      lowerName.includes('script') ||
+      lowerName.endsWith('.js')
+    ) {
+      return 'icon-orange';
+    }
+    if (lowerName.includes('evidence') || lowerName.endsWith('.json')) {
+      return 'icon-green';
+    }
+
+    return 'icon-blue';
   }
 
   @action

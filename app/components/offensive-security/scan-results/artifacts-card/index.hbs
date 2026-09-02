@@ -14,11 +14,12 @@
     <AkStack @width='full' @direction='column' @spacing='1.5'>
       {{#each @artifacts as |artifact|}}
         <div
-          local-class='artifact-box'
+          local-class='artifact-box cursor-pointer'
+          {{on 'click' (fn this.handleDownload artifact.name)}}
           data-test-offensiveSecurity-artifactsCard-row
         >
           <AkStack @alignItems='center' @spacing='1.5' local-class='artifact-left'>
-            <div local-class='artifact-icon-box'>
+            <div local-class='artifact-icon-box {{this.getArtifactIconClass artifact.name}}'>
               <AkIcon @iconName={{this.getArtifactIcon artifact.name}} @size='small' />
             </div>
 
@@ -26,29 +27,23 @@
               <AkTypography
                 @variant='body2'
                 @fontWeight='bold'
-                class='font-mono'
-                local-class='artifact-name'
-                title={{artifact.name}}
-              >
-                {{artifact.name}}
-              </AkTypography>
-
-              <AkTypography
-                @variant='caption'
-                @color='textSecondary'
                 local-class='artifact-description'
                 title={{this.getArtifactDescription artifact.name}}
               >
                 {{this.getArtifactDescription artifact.name}}
               </AkTypography>
+
+              <AkTypography
+                @variant='caption'
+                @color='textSecondary'
+                class='font-mono'
+              >
+                {{this.sizeLabel artifact.size}}
+              </AkTypography>
             </AkStack>
           </AkStack>
 
-          <AkStack @alignItems='center' @spacing='1' local-class='artifact-right'>
-            <AkTypography @variant='caption' @color='textSecondary' class='font-mono'>
-              {{this.sizeLabel artifact.size}}
-            </AkTypography>
-
+          <AkStack @alignItems='center' local-class='artifact-right'>
             <AkIconButton
               @onClick={{fn this.handleDownload artifact.name}}
               @disabled={{@isDownloading}}

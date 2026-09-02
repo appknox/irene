@@ -52,5 +52,10 @@ export const OFFSEC_SAMPLE_LOG_LINES: string[] = [
   'done. overall resilience 18/100 (weak)',
 ];
 
+export const OFFSEC_FAILED_LOG_LINES: string[] = [
+  '✗ attack run failed — execution terminated with errors',
+];
+
 /** The persisted log is served/handled as a single blob; callers split on \n. */
 export const OFFSEC_SAMPLE_LOG = OFFSEC_SAMPLE_LOG_LINES.join('\n');
+export const OFFSEC_FAILED_LOG = OFFSEC_FAILED_LOG_LINES.join('\n');
