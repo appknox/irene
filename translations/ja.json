@@ -1981,7 +1981,9 @@
     "iosAgentNotFound": "iOSエージェントが見つかりません。KnoxOpsエージェントが起動していることを確認してください。",
     "viewer": {
       "connectionFailed": "接続に失敗しました",
-      "unsupportedBrowser": "画面ストリーミングにはChrome 94以降が必要です。"
+      "unsupportedBrowser": "画面ストリーミングにはChrome 94以降が必要です。",
+      "retry": "Retry",
+      "preparing": "デバイスストリームを準備しています..."
     },
     "autoInstall": {
       "ready": "デバイスが接続されました — 自動インストールの準備ができました",

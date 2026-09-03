@@ -10,6 +10,10 @@ import type LoggerService from 'irene/services/logger';
 
 const SCRCPY_WS_PATH = '/devicefarm/ws/scrcpy/';
 
+const MAX_RECONNECT_ATTEMPTS = 5;
+const RECONNECT_BASE_DELAY_MS = 1000;
+const RECONNECT_MAX_DELAY_MS = 8000;
+
 export interface CyodViewerSignature {
   Args: {
     scanToken: string;
@@ -28,6 +32,8 @@ export default class CyodViewerComponent extends Component<CyodViewerSignature> 
   @tracked errorMessage: string | null = null;
 
   private ws: WebSocket | null = null;
+  private reconnectTimer: ReturnType<typeof setTimeout> | null = null;
+  private reconnectAttempt = 0;
   private canvas: HTMLCanvasElement | null = null;
   private ctx: CanvasRenderingContext2D | null = null;
   private videoDecoder: VideoDecoder | null = null;
@@ -92,6 +98,13 @@ export default class CyodViewerComponent extends Component<CyodViewerSignature> 
     this.sendTouch('up', event);
   }
 
+  @action
+  retry() {
+    this.reconnectAttempt = 0;
+    this.errorMessage = null;
+    this.connect();
+  }
+
   private sendTouch(action: string, event: PointerEvent) {
     if (!this.ws || this.ws.readyState !== WebSocket.OPEN || !this.canvas) {
       return;
@@ -113,44 +126,111 @@ export default class CyodViewerComponent extends Component<CyodViewerSignature> 
 
     this.errorMessage = null;
 
-    this.ws = new WebSocket(this.wsUrl);
-    this.ws.binaryType = 'arraybuffer';
+    let ws: WebSocket;
 
-    this.ws.onopen = () => {
-      if (this.isDestroyed || this.isDestroying) {
+    // A bad devicefarm URL throws here, on the modifier's install path, which
+    // would take the whole render down with it.
+    try {
+      ws = new WebSocket(this.wsUrl);
+    } catch (err) {
+      this.logger.error('[CyodViewer] could not open the stream socket:', err);
+      this.errorMessage = this.intl.t('cyod.viewer.connectionFailed');
+
+      return;
+    }
+
+    ws.binaryType = 'arraybuffer';
+    this.ws = ws;
+
+    // A superseded socket keeps firing; without this it reports its own failure
+    // over the replacement, leaving the viewer stuck until a page refresh.
+    const isCurrent = () =>
+      this.ws === ws && !this.isDestroyed && !this.isDestroying;
+
+    ws.onopen = () => {
+      if (!isCurrent()) {
         return;
       }
+      this.reconnectAttempt = 0;
       this.isConnected = true;
       this.initH264Decoder();
     };
 
-    this.ws.onclose = () => {
-      if (this.isDestroyed || this.isDestroying) {
+    ws.onclose = () => {
+      if (!isCurrent()) {
         return;
       }
       this.isConnected = false;
       this.cleanupDecoder();
+      this.ws = null;
+      this.scheduleReconnect();
     };
 
-    this.ws.onerror = () => {
-      if (this.isDestroyed || this.isDestroying) {
+    // onerror is always followed by onclose, which drives the retry; recording
+    // the failure here as well would surface an error the retry may clear.
+    ws.onerror = () => {
+      if (!isCurrent()) {
         return;
       }
-      this.errorMessage = this.intl.t('cyod.viewer.connectionFailed');
       this.isConnected = false;
     };
 
-    this.ws.onmessage = (event: MessageEvent) => {
+    ws.onmessage = (event: MessageEvent) => {
+      if (!isCurrent()) {
+        return;
+      }
       if (event.data instanceof ArrayBuffer) {
         this.decodeH264Frame(new Uint8Array(event.data));
       }
     };
   }
 
+  private scheduleReconnect() {
+    if (this.reconnectTimer || this.isDestroyed || this.isDestroying) {
+      return;
+    }
+
+    if (this.reconnectAttempt >= MAX_RECONNECT_ATTEMPTS) {
+      this.errorMessage = this.intl.t('cyod.viewer.connectionFailed');
+
+      return;
+    }
+
+    const delay = Math.min(
+      RECONNECT_BASE_DELAY_MS * 2 ** this.reconnectAttempt,
+      RECONNECT_MAX_DELAY_MS
+    );
+
+    this.reconnectAttempt++;
+
+    this.reconnectTimer = setTimeout(() => {
+      this.reconnectTimer = null;
+
+      if (this.isDestroyed || this.isDestroying) {
+        return;
+      }
+
+      this.connect();
+    }, delay);
+  }
+
   private disconnect() {
-    if (this.ws) {
-      this.ws.close();
-      this.ws = null;
+    if (this.reconnectTimer) {
+      clearTimeout(this.reconnectTimer);
+      this.reconnectTimer = null;
+    }
+
+    const ws = this.ws;
+    this.ws = null;
+
+    if (ws) {
+      // Detach before closing: closing a still-connecting socket fires onclose,
+      // which would otherwise queue a reconnect for a canvas being torn down.
+      ws.onopen = null;
+      ws.onclose = null;
+      ws.onerror = null;
+      ws.onmessage = null;
+      ws.close();
     }
 
     this.cleanupDecoder();

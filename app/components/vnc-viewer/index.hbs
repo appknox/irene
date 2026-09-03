@@ -77,7 +77,7 @@
       {{/if}}
 
       <div data-test-vncViewer-deviceScreen class='screen'>
-        {{#if (and this.isCyodScan @dynamicScan.isInstalling)}}
+        {{#if this.needsManualInstall}}
           {{#if this.isWebusbCyod}}
             <AkStack
               data-test-vncViewer-webusbInstall
@@ -142,13 +142,26 @@
               />
             </AkStack>
           {{/if}}
-        {{else if this.isScrcpyScan}}
+        {{else if this.showsScrcpyStream}}
           <CyodViewer
             data-test-vncViewer-cyodViewer
             @scanToken={{this.scrcpyScanToken}}
             @platform={{this.filePlatform}}
             @authToken={{this.cyodAuthToken}}
           />
+        {{else if this.isPreparingScrcpyStream}}
+          <AkStack
+            data-test-vncViewer-cyodPreparing
+            @direction='column'
+            @alignItems='center'
+            @spacing='1'
+          >
+            <AkLoader data-test-vncViewer-cyodPreparingLoader @size={{24}} />
+
+            <AkTypography @color='inherit' @variant='subtitle2'>
+              {{t 'cyod.viewer.preparing'}}
+            </AkTypography>
+          </AkStack>
         {{else if (and this.isCyodScan @dynamicScan.isReady)}}
           <AkStack
             data-test-vncViewer-cyodReady
