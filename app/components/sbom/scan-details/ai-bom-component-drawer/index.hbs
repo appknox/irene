@@ -1,0 +1,179 @@
+<AkDrawer
+  @open={{@open}}
+  @onClose={{@onClose}}
+  @anchor='right'
+  data-test-sbomScanDetails-aiBomComponentDrawer
+  as |dr|
+>
+  <div {{style width='640px'}}>
+    <AkAppbar @justifyContent='space-between' as |ab|>
+      <AkTypography
+        data-test-sbomScanDetails-aiBomComponentDrawer-title
+        @color='inherit'
+        @variant='h5'
+      >
+        {{t 'sbomModule.componentDetails'}}
+      </AkTypography>
+
+      <AkIconButton
+        data-test-sbomScanDetails-aiBomComponentDrawer-closeBtn
+        {{on 'click' dr.closeHandler}}
+        class={{ab.classes.defaultIconBtn}}
+      >
+        <AkIcon @iconName='close' />
+      </AkIconButton>
+    </AkAppbar>
+
+    <div class='px-3 pt-3'>
+      <AkStack local-class='ai-bom-component-drawer-file-box' class='p-2 mb-2'>
+        <AkTypography
+          data-test-sbomScanDetails-aiBomComponentDrawer-fileName
+          @variant='h6'
+          local-class='ai-bom-component-drawer-file-value'
+        >
+          file:{{this.componentName}}
+        </AkTypography>
+      </AkStack>
+
+      <div local-class='ai-bom-component-drawer-details-box'>
+        <AkStack
+          local-class='ai-bom-component-drawer-section-header'
+          class='px-2 py-1'
+        >
+          <AkTypography @variant='subtitle1' @fontWeight='medium'>
+            {{t 'sbomModule.componentDetails'}}
+          </AkTypography>
+        </AkStack>
+
+        <div class='px-2'>
+          {{#each this.drawerFields as |field idx|}}
+            {{#unless (eq idx 0)}}
+              <AkDivider @color='light' />
+            {{/unless}}
+
+            <AkStack
+              @width='full'
+              class='py-2'
+              data-test-sbomScanDetails-aiBomComponentDrawer-field
+            >
+              <AkTypography class='w-4/12' @color='textSecondary'>
+                {{field.label}}
+              </AkTypography>
+
+              {{#if field.isLink}}
+                <a
+                  href={{field.value}}
+                  target='_blank'
+                  rel='noopener noreferrer'
+                  class='w-8/12'
+                  data-test-sbomScanDetails-aiBomComponentDrawer-link
+                >
+                  <AkTypography
+                    {{style word-break='break-all'}}
+                    @fontWeight='medium'
+                    @underline='always'
+                  >
+                    {{field.value}}
+                  </AkTypography>
+                </a>
+              {{else if field.isExpandable}}
+                <div class='w-8/12'>
+                  <AkTypography
+                    {{style word-break='break-all'}}
+                    @fontWeight='medium'
+                    data-test-sbomScanDetails-aiBomComponentDrawer-foundInValue
+                  >
+                    {{field.value}}
+                  </AkTypography>
+                </div>
+              {{else}}
+                <AkTypography
+                  {{style word-break='break-all'}}
+                  class='w-8/12'
+                  @fontWeight='medium'
+                  data-test-sbomScanDetails-aiBomComponentDrawer-value
+                >
+                  {{field.value}}
+                </AkTypography>
+              {{/if}}
+            </AkStack>
+
+            {{#if field.isExpandable}}
+              {{#each this.alwaysVisibleFoundInLocations as |location|}}
+                <AkStack
+                  @width='full'
+                  class='pb-2'
+                  data-test-sbomScanDetails-aiBomComponentDrawer-foundInRow
+                >
+                  <AkTypography class='w-4/12'></AkTypography>
+
+                  <AkTypography
+                    {{style word-break='break-all'}}
+                    class='w-8/12'
+                    @fontWeight='medium'
+                  >
+                    {{location}}
+                  </AkTypography>
+                </AkStack>
+              {{/each}}
+
+              {{#if this.hasHiddenFoundInLocations}}
+                {{#if this.isFoundInExpanded}}
+                  {{#each this.additionalFoundInLocations as |location|}}
+                    <AkStack
+                      @width='full'
+                      class='pb-2'
+                      data-test-sbomScanDetails-aiBomComponentDrawer-foundInRow
+                    >
+                      <AkTypography class='w-4/12'></AkTypography>
+
+                      <AkTypography
+                        {{style word-break='break-all'}}
+                        class='w-8/12'
+                        @fontWeight='medium'
+                      >
+                        {{location}}
+                      </AkTypography>
+                    </AkStack>
+                  {{/each}}
+
+                  <AkStack @width='full' class='pb-2'>
+                    <AkTypography class='w-4/12'></AkTypography>
+
+                    <AkTypography
+                      @variant='body2'
+                      @color='primary'
+                      @underline='always'
+                      class='w-8/12'
+                      local-class='cursor-pointer'
+                      {{on 'click' this.toggleFoundInExpanded}}
+                      data-test-sbomScanDetails-aiBomComponentDrawer-foundInToggleBtn
+                    >
+                      {{t 'showLess'}}
+                    </AkTypography>
+                  </AkStack>
+                {{else}}
+                  <AkStack @width='full' class='pb-2'>
+                    <AkTypography class='w-4/12'></AkTypography>
+
+                    <AkTypography
+                      @variant='body2'
+                      @color='primary'
+                      @underline='always'
+                      class='w-8/12'
+                      local-class='cursor-pointer'
+                      {{on 'click' this.toggleFoundInExpanded}}
+                      data-test-sbomScanDetails-aiBomComponentDrawer-foundInToggleBtn
+                    >
+                      {{t 'showMore'}}
+                    </AkTypography>
+                  </AkStack>
+                {{/if}}
+              {{/if}}
+            {{/if}}
+          {{/each}}
+        </div>
+      </div>
+    </div>
+  </div>
+</AkDrawer>

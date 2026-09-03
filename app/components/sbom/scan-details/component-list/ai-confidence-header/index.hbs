@@ -1,0 +1,88 @@
+<AkStack @width='full' @alignItems='center' @justifyContent='flex-start'>
+  <AkStack
+    @width='full'
+    @spacing='0.5'
+    @alignItems='center'
+    data-test-sbom-scanDetails-aiConfidenceHeader-container
+    {{style width='150px'}}
+  >
+    <AkIcon
+      @iconName='filter-list'
+      @color={{if this.filterApplied 'primary' 'inherit'}}
+      local-class='cursor-pointer'
+      {{on 'click' this.handleClick}}
+      data-test-sbom-scanDetails-aiConfidenceHeader-icon
+    />
+
+    <AkTypography
+      @variant='subtitle2'
+      data-test-sbom-scanDetails-aiConfidenceHeader-text
+    >
+      {{t 'sbomModule.aiConfidenceLabel'}}
+    </AkTypography>
+  </AkStack>
+</AkStack>
+
+<AkPopover
+  @anchorRef={{this.anchorRef}}
+  @placement='bottom'
+  @arrow={{false}}
+  @closeHandler={{this.handleOptionsClose}}
+  @clickOutsideToClose={{true}}
+  data-test-sbom-scanDetails-aiConfidenceHeader-popover
+>
+  <AkStack @direction='column' local-class='type-filter'>
+    <AkStack @width='full' local-class='filter-header'>
+      <AkTypography
+        @variant='subtitle2'
+        local-class='filter-header-text'
+        data-test-sbom-scanDetails-aiConfidenceHeader-popover-headerText
+      >
+        {{t 'sbomModule.aiConfidenceLabel'}}
+      </AkTypography>
+    </AkStack>
+
+    {{#each this.confidenceOptions as |option|}}
+      <AkStack
+        @spacing='1'
+        @width='full'
+        local-class='filter-option cursor-pointer'
+        class='py-1 pl-2'
+        {{on 'click' (fn this.selectAiConfidence option.value)}}
+        data-test-sbom-scanDetails-aiConfidenceHeader-option
+      >
+        <AkStack @alignItems='center' @spacing='1'>
+          <AkRadio
+            @checked={{eq this.selectedAiConfidence option.value}}
+            data-test-sbom-scanDetails-aiConfidenceHeader-radio={{option.key}}
+          />
+
+          <AkTypography
+            data-test-sbom-scanDetails-aiConfidenceHeader-option-text
+          >
+            {{option.key}}
+          </AkTypography>
+        </AkStack>
+      </AkStack>
+    {{/each}}
+
+    {{#if this.filterApplied}}
+      <AkStack
+        class='py-1 pl-2'
+        local-class='clear-filter-section'
+        @width='full'
+        data-test-sbom-scanDetails-aiConfidenceHeader-clearFilter
+      >
+        <AkTypography
+          @underline='always'
+          @color='primary'
+          local-class='cursor-pointer'
+          {{on 'click' this.clearFilter}}
+          data-test-sbom-scanDetails-aiConfidenceHeader-clearFilter-text
+        >
+          {{t 'clearFilter'}}
+        </AkTypography>
+      </AkStack>
+    {{/if}}
+  </AkStack>
+</AkPopover>

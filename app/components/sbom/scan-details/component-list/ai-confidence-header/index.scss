@@ -1,0 +1,28 @@
+.type-filter {
+  width: 10em;
+  background-color: var(--sbom-scan-details-component-list-ai-confidence-header-background-color);
+  box-shadow: var(--sbom-scan-details-component-list-ai-confidence-header-box-shadow);
+  border-radius: var(--sbom-scan-details-component-list-ai-confidence-header-border-radius);
+
+  .filter-option:hover {
+    background-color: var(--sbom-scan-details-component-list-ai-confidence-header-filter-option-hover-background-color);
+  }
+
+  .clear-filter-section {
+    background-color: var(--sbom-scan-details-component-list-ai-confidence-header-filter-option-clear-filter-background-color);
+  }
+
+  .filter-header {
+    background-color: var(--sbom-scan-details-component-list-ai-confidence-header-filter-header-background-color);
+    padding: 0.5em 1em;
+
+    .filter-header-text {
+      text-transform: uppercase;
+      font-size: 0.825rem;
+    }
+  }
+}
+
+.cursor-pointer {
+  cursor: pointer;
+}

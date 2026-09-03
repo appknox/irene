@@ -203,15 +203,15 @@ module(
 
       // static JSON report check
       assert
-        .dom('[data-test-sbomReportList-reportPrimaryText]', reportList[1])
+        .dom('[data-test-sbomReportList-reportPrimaryText]', reportList[2])
         .hasText(t('sbomModule.sbomDownloadJsonPrimaryText'));
 
       assert
-        .dom('[data-test-sbomReportList-reportSecondaryText]', reportList[1])
+        .dom('[data-test-sbomReportList-reportSecondaryText]', reportList[2])
         .hasText(t('sbomModule.sbomDownloadJsonSecondaryText'));
 
       assert
-        .dom('[data-test-sbomReportList-reportDownloadBtn]', reportList[1])
+        .dom('[data-test-sbomReportList-reportDownloadBtn]', reportList[2])
         .isNotDisabled();
 
       await waitUntil(

@@ -26,6 +26,14 @@
   z-index: var(--ak-drawer-zIndex);
   position: fixed;
   outline: 0px;
+  // Keeps the element GPU-composited for the whole slide-in, not just
+  // during the transition -- without this, the browser drops the
+  // compositing layer the instant `transform` settles to `none` (its
+  // final value has no transform at all), forcing a main-thread repaint
+  // at exactly the moment the slide finishes. That hand-off is what reads
+  // as a slight flicker right at the end of the animation.
+  will-change: transform;
+  backface-visibility: hidden;
 }
 
 .drawer-anchor-left {
