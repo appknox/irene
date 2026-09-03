@@ -6,9 +6,6 @@ export default class OrganizationAiFeatureModel extends Model {
 
   @attr('boolean')
   declare pii: boolean;
-
-  @attr('boolean')
-  declare autoExecuteKnoxiqOnCicdUpload: boolean;
 }
 
 declare module 'ember-data/types/registries/model' {
