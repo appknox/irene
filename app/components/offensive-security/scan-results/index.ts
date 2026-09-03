@@ -18,6 +18,7 @@ import type { OffsecScanArtifact } from 'irene/models/offsec-scan';
 import type OffsecScanAdapter from 'irene/adapters/offsec-scan';
 import type FileAdapter from 'irene/adapters/file';
 import type PollService from 'irene/services/poll';
+import type EventBusService from 'irene/services/event-bus';
 
 const POLL_INTERVAL_MS = 5000;
 
@@ -34,6 +35,7 @@ export default class OffensiveSecurityScanResultsComponent extends Component<Off
   @service('notifications') declare notify: NotificationService;
   @service declare poll: PollService;
   @service declare window: Window;
+  @service declare eventBus: EventBusService;
 
   @tracked scan: OffsecScanModel | null = null;
   @tracked logLines: string[] = [];
@@ -53,13 +55,29 @@ export default class OffensiveSecurityScanResultsComponent extends Component<Off
   ) {
     super(owner, args);
 
+    this.eventBus.on('ws:offsec-scan:update', this, this.handleWsOffsecScanUpdate);
     this.loadScan.perform(args.scanId);
   }
 
   willDestroy(): void {
     super.willDestroy();
 
+    this.eventBus.off('ws:offsec-scan:update', this, this.handleWsOffsecScanUpdate);
     this.stopPolling?.();
+  }
+
+  @action
+  handleWsOffsecScanUpdate(updatedScan: OffsecScanModel): void {
+    if (updatedScan && String(updatedScan.id) === String(this.args.scanId)) {
+      this.scan = updatedScan;
+      if (updatedScan.isTerminal) {
+        this.stopPolling?.();
+        this.stopPolling = undefined;
+        if (!this.hasLog) {
+          this.loadLog.perform();
+        }
+      }
+    }
   }
 
   get adapter(): OffsecScanAdapter {

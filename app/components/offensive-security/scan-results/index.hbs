@@ -39,7 +39,7 @@
       >
         <AkStack @alignItems='center' @spacing='1.5'>
           <AppLogo
-            @src={{if this.scan.appLogoUrl this.scan.appLogoUrl this.scan.iconUrl}}
+            @src={{this.scan.appIconUrl}}
             @size='large'
             @alt={{concat this.scan.displayName ' - logo'}}
             @fallbackName={{this.scan.displayName}}

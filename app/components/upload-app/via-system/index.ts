@@ -12,6 +12,7 @@ import type RouterService from '@ember/routing/router-service';
 import type AnalyticsService from 'irene/services/analytics';
 import type UploadAppService from 'irene/services/upload-app';
 import type UploadAppModel from 'irene/models/upload-app';
+import type RealtimeService from 'irene/services/realtime';
 
 export default class UploadAppViaSystemComponent extends Component {
   @service declare store: Store;
@@ -21,6 +22,7 @@ export default class UploadAppViaSystemComponent extends Component {
   @service declare fileQueue: FileQueueService;
   @service declare analytics: AnalyticsService;
   @service declare router: RouterService;
+  @service declare realtime: RealtimeService;
 
   tErrorWhileFetching: string;
   tErrorWhileUploading: string;
@@ -88,6 +90,8 @@ export default class UploadAppViaSystemComponent extends Component {
       await waitForPromise(
         uploadItem.save({ adapterOptions: { offsec: isOffsec } })
       );
+
+      this.realtime.incrementProperty('SubmissionCounter');
 
       this.analytics.track({
         name: 'UPLOAD_APP_EVENT',

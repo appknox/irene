@@ -13,6 +13,9 @@ import type RouterService from '@ember/routing/router-service';
 import parseError from 'irene/utils/parse-error';
 import type OffsecScanModel from 'irene/models/offsec-scan';
 import type PollService from 'irene/services/poll';
+import type EventBusService from 'irene/services/event-bus';
+import type RealtimeService from 'irene/services/realtime';
+import { addObserver, removeObserver } from '@ember/object/observers';
 
 export type PlatformFilter = 'all' | 'android' | 'ios';
 
@@ -64,9 +67,13 @@ export default class OffensiveSecurityAttackRunsComponent extends Component<Offe
   @service declare router: RouterService;
   @service('notifications') declare notify: NotificationService;
   @service declare poll: PollService;
+  @service declare eventBus: EventBusService;
+  @service declare realtime: RealtimeService;
 
   @tracked scans: OffsecScanModel[] = [];
   @tracked totalCount = 0;
+  @tracked validatingSubmissionsCount = 0;
+  @tracked isRecentlyUploaded = false;
 
   /**
    * The search box is the one control that cannot read straight from the URL:
@@ -83,13 +90,30 @@ export default class OffensiveSecurityAttackRunsComponent extends Component<Offe
   ) {
     super(owner, args);
 
+    this.eventBus.on('ws:offsec-scan:update', this, this.handleRealtimeUpdate);
+    addObserver(this.realtime, 'SubmissionCounter', this, this.handleRealtimeUpdate);
+
     this.loadScans.perform();
   }
 
   willDestroy(): void {
     super.willDestroy();
 
+    this.eventBus.off('ws:offsec-scan:update', this, this.handleRealtimeUpdate);
+    removeObserver(this.realtime, 'SubmissionCounter', this, this.handleRealtimeUpdate);
     this.stopPolling?.();
+  }
+
+  @action
+  handleRealtimeUpdate(): void {
+    this.isRecentlyUploaded = true;
+    this.loadScans.perform();
+    debounceTask(this, 'clearRecentlyUploaded', 30000);
+  }
+
+  clearRecentlyUploaded(): void {
+    this.isRecentlyUploaded = false;
+    this.managePolling();
   }
 
   // ─── Query-param backed state ──────────────────────────────────────────────
@@ -263,7 +287,8 @@ export default class OffensiveSecurityAttackRunsComponent extends Component<Offe
   }
 
   get hasActiveScans(): boolean {
-    return this.scans.some((scan) => scan.isInProgress);
+    const activeScans = this.scans.some((scan) => scan.isInProgress);
+    return activeScans || this.validatingSubmissionsCount > 0 || this.isRecentlyUploaded;
   }
 
   get showPagination(): boolean {
@@ -308,7 +333,7 @@ export default class OffensiveSecurityAttackRunsComponent extends Component<Offe
 
   @action
   handleUploadSuccess(): void {
-    this.loadScans.perform();
+    this.handleRealtimeUpdate();
   }
 
   @action
@@ -351,7 +376,7 @@ export default class OffensiveSecurityAttackRunsComponent extends Component<Offe
    * handlers fire the fetch alongside a transition, and the new query params are
    * not readable until that transition settles.
    */
-  loadScans = task({ drop: true }, async (limit?: number, offset?: number) => {
+  loadScans = task({ restartable: true }, async (limit?: number, offset?: number) => {
     try {
       const queryParams: Record<string, unknown> = {
         limit: limit ?? this.limit,
@@ -368,13 +393,19 @@ export default class OffensiveSecurityAttackRunsComponent extends Component<Offe
         queryParams['resilience'] = this.resilienceFilter;
       }
 
-      const scans = (await this.store.query(
-        'offsec-scan',
-        queryParams
-      )) as ScanResponseModel;
+      const [scans, submissions] = await Promise.all([
+        this.store.query('offsec-scan', queryParams) as Promise<ScanResponseModel>,
+        this.store
+          .query('submission', { offsec: true, status: 4 })
+          .catch(() => null),
+      ]);
 
-      this.scans = scans.slice();
+      const recordList = scans.slice();
+
+      this.scans = recordList;
       this.totalCount = scans.meta?.count ?? this.scans.length;
+      const subLen = submissions?.length;
+      this.validatingSubmissionsCount = typeof subLen === 'number' ? subLen : 0;
 
       this.managePolling();
     } catch (error) {

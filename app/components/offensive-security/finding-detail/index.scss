@@ -151,7 +151,7 @@
   display: grid;
   grid-template-columns: 54% calc(46% - 1.25rem);
   gap: 1.25rem;
-  align-items: stretch;
+  align-items: start;
   width: 100%;
   box-sizing: border-box;
 
@@ -165,18 +165,14 @@
   flex-direction: column;
   gap: 1.25rem;
   min-width: 0;
-  height: 100%;
 
   .attempts-card {
-    flex: 1 1 auto;
     display: flex;
     flex-direction: column;
 
     .attempt-card-box {
-      flex: 1 1 auto;
       display: flex;
       flex-direction: column;
-      justify-content: space-between;
     }
   }
 }
@@ -185,10 +181,8 @@
   display: flex;
   flex-direction: column;
   min-width: 0;
-  height: 100%;
 
   .evidence-card {
-    height: 100%;
     display: flex;
     flex-direction: column;
   }
@@ -592,7 +586,7 @@
   padding: 0.875rem 0;
   display: flex;
   flex-direction: column;
-  flex: 1 1 auto;
+  flex: 0 0 auto;
   border-bottom: 1px solid #edf2f7;
 
   &:last-child {
@@ -643,14 +637,14 @@
   position: relative;
   margin-top: 0.5rem;
   padding-left: 0;
-  flex: 1 1 auto;
+  flex: 0 0 auto;
   display: flex;
   flex-direction: column;
 }
 
 .dark-payload {
-  max-height: 380px;
-  flex: 1 1 auto;
+  max-height: 360px;
+  flex: 0 0 auto;
   overflow: auto;
   padding: 0.875rem;
   padding-right: 2.5rem;
