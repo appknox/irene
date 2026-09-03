@@ -1,4 +1,4 @@
-<AkStack @spacing='1'>
+<AkStack @spacing='1' @alignItems='center'>
   {{#each this.componentStatus as |status|}}
     <AkChip
       data-test-sbomComponent-status='{{status.label}}'
@@ -8,4 +8,34 @@
       @size='small'
     />
   {{/each}}
+
+  {{#if this.isStaleVulnData}}
+    <AkTooltip @title={{this.vulnTooltip}} @arrow={{true}} @placement='bottom'>
+      <span local-class='stale-icon-wrap'>
+        <AkIcon
+          data-test-sbomComponent-staleVulnIcon
+          @iconName='shield-question'
+          @size='small'
+          @color='info'
+        />
+      </span>
+    </AkTooltip>
+  {{/if}}
+
+  {{#if this.showStaleVersionIcon}}
+    <AkTooltip
+      @title={{this.versionTooltip}}
+      @arrow={{true}}
+      @placement='bottom'
+    >
+      <span local-class='stale-icon-wrap'>
+        <AkIcon
+          data-test-sbomComponent-staleVersionIcon
+          @iconName='clock-arrow-up'
+          @size='small'
+          @color='info'
+        />
+      </span>
+    </AkTooltip>
+  {{/if}}
 </AkStack>

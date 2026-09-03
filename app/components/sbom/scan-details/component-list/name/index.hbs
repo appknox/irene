@@ -6,34 +6,4 @@
   >
     {{this.name}}
   </AkTypography>
-
-  {{#if this.isStaleVulnData}}
-    <AkTooltip @title={{this.vulnTooltip}} @arrow={{true}} @placement='bottom'>
-      <span local-class='stale-icon-wrap'>
-        <AkIcon
-          data-test-sbomComponent-staleVulnIcon
-          @iconName='shield-question'
-          @size='small'
-          @color='info'
-        />
-      </span>
-    </AkTooltip>
-  {{/if}}
-
-  {{#if this.isStaleVersionData}}
-    <AkTooltip
-      @title={{this.versionTooltip}}
-      @arrow={{true}}
-      @placement='bottom'
-    >
-      <span local-class='stale-icon-wrap'>
-        <AkIcon
-          data-test-sbomComponent-staleVersionIcon
-          @iconName='clock-arrow-up'
-          @size='small'
-          @color='info'
-        />
-      </span>
-    </AkTooltip>
-  {{/if}}
 </AkStack>

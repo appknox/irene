@@ -158,7 +158,9 @@ export default class SbomComponentInventoryDetailsDrawerComponent extends Compon
     { drop: true },
     async (sbomProject: SbomProjectModel) => {
       const component = this.args.component;
-      const sbomFile = await sbomProject.latestSbFile;
+      const sbomFile = this.showHistory
+        ? await sbomProject.sbFile
+        : await sbomProject.latestSbFile;
 
       if (!component || !sbomFile) {
         return;
