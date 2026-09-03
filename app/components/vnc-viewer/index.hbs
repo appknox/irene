@@ -77,17 +77,7 @@
       {{/if}}
 
       <div data-test-vncViewer-deviceScreen class='screen'>
-        {{! A scrcpy scan is auto-installed on the proxy device, so it never wants
-            the manual install prompt -- and it must not be swapped for one, since
-            that destroys the viewer and its stream socket mid-connection. }}
-        {{#if
-          (and
-            this.manualInstallEnabled
-            this.isCyodScan
-            @dynamicScan.isInstalling
-            (not this.isScrcpyScan)
-          )
-        }}
+        {{#if this.needsManualInstall}}
           {{#if this.isWebusbCyod}}
             <AkStack
               data-test-vncViewer-webusbInstall
@@ -152,29 +142,21 @@
               />
             </AkStack>
           {{/if}}
-        {{! The stream source exists only between the transition to
-            READY_FOR_INTERACTION, which starts it, and the stop request, which
-            tears it down (moriarty start_proxy_screen_stream /
-            stop_screen_stream). Mounted outside that window the viewer opens a
-            socket with nothing on the far end and can only report a connection
-            failure -- which is what was shown while a scan was still starting
-            and again once it had been cancelled. }}
-        {{else if (and this.isScrcpyScan @dynamicScan.isReadyOrRunning)}}
+        {{else if this.showsScrcpyStream}}
           <CyodViewer
             data-test-vncViewer-cyodViewer
             @scanToken={{this.scrcpyScanToken}}
             @platform={{this.filePlatform}}
             @authToken={{this.cyodAuthToken}}
           />
-        {{else if (and this.isScrcpyScan @dynamicScan.isStarting)}}
+        {{else if this.isPreparingScrcpyStream}}
           <AkStack
             data-test-vncViewer-cyodPreparing
-            local-class='cyod-ready-note'
             @direction='column'
             @alignItems='center'
             @spacing='1'
           >
-            <AkLoader @size={{24}} />
+            <AkLoader data-test-vncViewer-cyodPreparingLoader @size={{24}} />
 
             <AkTypography @color='inherit' @variant='subtitle2'>
               {{t 'cyod.viewer.preparing'}}

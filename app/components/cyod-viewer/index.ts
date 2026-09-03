@@ -98,6 +98,13 @@ export default class CyodViewerComponent extends Component<CyodViewerSignature> 
     this.sendTouch('up', event);
   }
 
+  @action
+  retry() {
+    this.reconnectAttempt = 0;
+    this.errorMessage = null;
+    this.connect();
+  }
+
   private sendTouch(action: string, event: PointerEvent) {
     if (!this.ws || this.ws.readyState !== WebSocket.OPEN || !this.canvas) {
       return;
@@ -107,13 +114,6 @@ export default class CyodViewerComponent extends Component<CyodViewerSignature> 
     const x = (event.clientX - rect.left) / rect.width;
     const y = (event.clientY - rect.top) / rect.height;
     this.ws.send(JSON.stringify({ type: 'touch', action, x, y }));
-  }
-
-  @action
-  retry() {
-    this.reconnectAttempt = 0;
-    this.errorMessage = null;
-    this.connect();
   }
 
   private connect() {

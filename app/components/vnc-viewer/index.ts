@@ -203,6 +203,29 @@ export default class VncViewerComponent extends Component<VncViewerSignature> {
     return deviceUsed?.vnc_mode === ENUMS.DEVICE_VNC_MODE.SCRCPY;
   }
 
+  get needsManualInstall() {
+    // Two independent reasons to withhold the prompt: it is disabled outright,
+    // and a scrcpy scan is auto-installed on the proxy device anyway -- swapping
+    // the viewer out for it destroys the stream socket mid-connection.
+    return (
+      this.manualInstallEnabled &&
+      this.isCyodScan &&
+      this.args.dynamicScan?.get('isInstalling') &&
+      !this.isScrcpyScan
+    );
+  }
+
+  get showsScrcpyStream() {
+    // moriarty starts the Mercer relay on the transition to
+    // READY_FOR_INTERACTION and tears it down on the stop request, so outside
+    // that window the viewer dials a source that does not exist.
+    return this.isScrcpyScan && this.args.dynamicScan?.get('isReadyOrRunning');
+  }
+
+  get isPreparingScrcpyStream() {
+    return this.isScrcpyScan && this.args.dynamicScan?.get('isStarting');
+  }
+
   get scrcpyScanToken() {
     return this.args.dynamicScan?.get('moriartyDynamicscanToken') ?? null;
   }

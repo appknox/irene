@@ -251,12 +251,12 @@ module('Integration | Component | cyod-viewer', function (hooks) {
 
     await render(TEMPLATE);
 
-    assert.dom(selectors.error).exists('the failure is reported');
     assert
       .dom(selectors.error)
       .hasTextContaining(t('cyod.viewer.connectionFailed'));
     assert.dom(selectors.canvas).exists('the canvas survives the error state');
-    assert.dom(selectors.retryBtn).exists();
+    assert.dom(selectors.retryBtn).hasText(t('cyod.viewer.retry'));
+    assert.dom(selectors.retryBtn).isNotDisabled();
 
     shouldThrow = false;
 

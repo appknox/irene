@@ -2,7 +2,7 @@ import { render } from '@ember/test-helpers';
 import { hbs } from 'ember-cli-htmlbars';
 import { setupMirage } from 'ember-cli-mirage/test-support';
 import { setupRenderingTest } from 'ember-qunit';
-import { setupIntl } from 'ember-intl/test-support';
+import { setupIntl, t } from 'ember-intl/test-support';
 import { module, test } from 'qunit';
 
 import ENUMS from 'irene/enums';
@@ -24,6 +24,7 @@ const selectors = {
   cyodViewer: '[data-test-vncViewer-cyodViewer]',
   cyodReady: '[data-test-vncViewer-cyodReady]',
   cyodPreparing: '[data-test-vncViewer-cyodPreparing]',
+  cyodPreparingLoader: '[data-test-vncViewer-cyodPreparingLoader]',
 };
 
 // ─── Template ──────────────────────────────────────────────────────────────────
@@ -298,7 +299,8 @@ module('Integration | Component | vnc-viewer | CYOD scans', function (hooks) {
     // moriarty starts the stream on the INSTALLING -> READY transition, so
     // there is nothing to connect to yet. Mounting the viewer here opened a
     // socket against a source that did not exist and reported it as a failure.
-    assert.dom(selectors.cyodPreparing).exists();
+    assert.dom(selectors.cyodPreparing).hasText(t('cyod.viewer.preparing'));
+    assert.dom(selectors.cyodPreparingLoader).exists();
     assert.dom(selectors.cyodViewer).doesNotExist();
 
     // And the manual prompt is disabled outright (MANUAL_INSTALL_ENABLED), so
