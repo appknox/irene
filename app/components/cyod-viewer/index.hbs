@@ -1,4 +1,4 @@
-<div data-test-cyodViewer local-class='cyod-viewer-root' ...attributes>
+<div data-test-cyodViewer-root local-class='cyod-viewer-root' ...attributes>
   {{! The canvas stays mounted in every state. Swapping it out tears down the
       modifier, which closes a socket that may still be connecting -- and then
       nothing is left to reconnect with. Status is drawn over it instead. }}
@@ -17,7 +17,6 @@
       <AkButton
         data-test-cyodViewer-retryBtn
         @variant='outlined'
-        @size='small'
         {{on 'click' this.retry}}
       >
         {{t 'cyod.viewer.retry'}}

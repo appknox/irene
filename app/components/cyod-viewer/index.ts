@@ -142,10 +142,8 @@ export default class CyodViewerComponent extends Component<CyodViewerSignature> 
     ws.binaryType = 'arraybuffer';
     this.ws = ws;
 
-    // A socket abandoned mid-handshake keeps firing its handlers. Every one of
-    // them must confirm it is still the live socket first, or a superseded
-    // connection reports its own failure over the replacement that took its
-    // place -- which is what left the viewer stuck until a page refresh.
+    // A superseded socket keeps firing; without this it reports its own failure
+    // over the replacement, leaving the viewer stuck until a page refresh.
     const isCurrent = () =>
       this.ws === ws && !this.isDestroyed && !this.isDestroying;
 
