@@ -125,16 +125,20 @@
 
       <AkDivider @color='dark' />
 
-      <AkTypography
-        @color='textSecondary'
+      <AkStack
+        @width='full'
+        @justifyContent='space-between'
+        @alignItems='center'
         class='pt-3 px-3'
-        data-test-componentInventory-detailsAppsTitle
       >
-        {{t 'sbomModule.componentInventory.appsTitle'}}
-      </AkTypography>
+        <AkTypography
+          @color='textSecondary'
+          data-test-componentInventory-detailsAppsTitle
+        >
+          {{t 'sbomModule.componentInventory.appsTitle'}}
+        </AkTypography>
 
-      <div class='px-3 pt-2'>
-        <AkStack @width='full' @justifyContent='flex-end' @alignItems='center'>
+        <AkStack @alignItems='center' @spacing='1'>
           <AkTypography @color='textSecondary'>
             {{t 'sbomModule.componentInventory.showHistory'}}
           </AkTypography>
@@ -146,7 +150,7 @@
             data-test-componentInventory-historyToggle
           />
         </AkStack>
-      </div>
+      </AkStack>
 
       <div class='p-3'>
         <AkPaginationProvider
