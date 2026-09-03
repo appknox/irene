@@ -58,7 +58,136 @@
     {{/if}}
   {{/if}}
 
-  {{#if this.supportsModernIOSDeviceFrame}}
+  {{#if (or this.isCyodScan this.isScrcpyScan)}}
+    <div data-test-vncViewer-device class='marvel-device {{this.deviceType}}'>
+      {{#if this.isTablet}}
+        <div data-test-vncViewer-deviceTopBar class='top-bar' />
+
+        <div data-test-vncViewer-deviceSleep class='sleep' />
+
+        <div data-test-vncViewer-deviceVolume class='volume' />
+      {{/if}}
+
+      <div data-test-vncViewer-deviceCamera class='camera' />
+
+      {{#if this.isIOSDevice}}
+        {{#if this.isTablet}}
+          <div data-test-vncViewer-deviceSpeaker class='speaker' />
+        {{/if}}
+      {{/if}}
+
+      <div data-test-vncViewer-deviceScreen class='screen'>
+        {{#if this.needsManualInstall}}
+          {{#if this.isWebusbCyod}}
+            <AkStack
+              data-test-vncViewer-webusbInstall
+              local-class='cyod-install-note'
+              @direction='column'
+              @alignItems='center'
+              @spacing='1'
+            >
+              {{#if this.webusbInstallIsRunning}}
+                <AkTypography @color='inherit' @variant='subtitle2'>
+                  {{#if (eq this.webusbInstallStage 'downloading')}}
+                    {{t 'cyod.autoInstall.downloading'}}
+                    ({{this.webusbInstallPercent}}%)
+                  {{else if (eq this.webusbInstallStage 'pushing')}}
+                    {{t 'cyod.autoInstall.pushing'}}
+                    ({{this.webusbInstallPercent}}%)
+                  {{else if (eq this.webusbInstallStage 'installing')}}
+                    {{t 'cyod.autoInstall.installing'}}
+                  {{else}}
+                    {{t 'cyod.autoInstall.done'}}
+                  {{/if}}
+                </AkTypography>
+              {{else if this.webusbAdb}}
+                <AkTypography @color='inherit' @variant='subtitle2'>
+                  {{t 'cyod.autoInstall.ready'}}
+                </AkTypography>
+
+                <AkButton
+                  data-test-vncViewer-webusbInstallBtn
+                  @variant='contained'
+                  @size='small'
+                  {{on 'click' (perform this.autoInstallViaWebUsb)}}
+                >
+                  {{t 'cyod.autoInstall.start'}}
+                </AkButton>
+              {{else}}
+                <AkTypography @color='inherit' @variant='subtitle2'>
+                  {{t 'cyod.installApp'}}
+                </AkTypography>
+
+                <VncViewer::CyodDownloadLink
+                  @url={{this.cyodDownloadUrl}}
+                  @isIos={{false}}
+                />
+              {{/if}}
+            </AkStack>
+          {{else}}
+            <AkStack
+              data-test-vncViewer-cyodDownload
+              local-class='cyod-install-note'
+              @direction='column'
+              @alignItems='center'
+              @spacing='1'
+            >
+              <AkTypography @color='inherit' @variant='subtitle2'>
+                {{t 'cyod.installApp'}}
+              </AkTypography>
+
+              <VncViewer::CyodDownloadLink
+                @url={{this.cyodDownloadUrl}}
+                @isIos={{this.cyodIsIos}}
+              />
+            </AkStack>
+          {{/if}}
+        {{else if this.showsScrcpyStream}}
+          <CyodViewer
+            data-test-vncViewer-cyodViewer
+            @scanToken={{this.scrcpyScanToken}}
+            @platform={{this.filePlatform}}
+            @authToken={{this.cyodAuthToken}}
+          />
+        {{else if this.isPreparingScrcpyStream}}
+          <AkStack
+            data-test-vncViewer-cyodPreparing
+            @direction='column'
+            @alignItems='center'
+            @spacing='1'
+          >
+            <AkLoader data-test-vncViewer-cyodPreparingLoader @size={{24}} />
+
+            <AkTypography @color='inherit' @variant='subtitle2'>
+              {{t 'cyod.viewer.preparing'}}
+            </AkTypography>
+          </AkStack>
+        {{else if (and this.isCyodScan @dynamicScan.isReady)}}
+          <AkStack
+            data-test-vncViewer-cyodReady
+            local-class='cyod-ready-note'
+            @direction='column'
+            @alignItems='center'
+            @spacing='1'
+          >
+            <AkIcon @iconName='smartphone' @color='inherit' />
+
+            <AkTypography @color='inherit' @variant='subtitle2'>
+              {{t 'cyod.interactOnDevice'}}
+            </AkTypography>
+          </AkStack>
+        {{/if}}
+      </div>
+
+      {{#if this.isIOSDevice}}
+        <div data-test-vncViewer-deviceHome class='home' />
+
+        {{#if this.isTablet}}
+          <div data-test-vncViewer-deviceBottomBar class='bottom-bar' />
+        {{/if}}
+      {{/if}}
+    </div>
+  {{else if this.supportsModernIOSDeviceFrame}}
     <div data-test-vncViewer-device class='ios-device-frame'>
       <div data-test-vncViewer-deviceScreen class='ios-device-screen'>
         {{#if this.isAutomatedAndScheduledInternally}}
@@ -68,22 +197,7 @@
               @dynamicScan.isReadyOrRunning
             )
           }}
-            <AkStack
-              data-test-vncViewer-automatedNote
-              local-class='automated-scan-vnc-note'
-            >
-              <AkTypography @color='inherit'>
-                <strong>{{t 'note'}}</strong>
-                -
-                {{t
-                  (if
-                    @dynamicScan.isInqueue
-                    'automatedScanQueuedVncNote'
-                    'automatedScanRunningVncNote'
-                  )
-                }}
-              </AkTypography>
-            </AkStack>
+            <VncViewer::AutomatedScanNote @dynamicScan={{@dynamicScan}} />
           {{/if}}
         {{else if @dynamicScan.isReadyOrRunning}}
           <NovncRfb
@@ -99,7 +213,9 @@
     <div data-test-vncViewer-device class='marvel-device {{this.deviceType}}'>
       {{#if this.isTablet}}
         <div data-test-vncViewer-deviceTopBar class='top-bar' />
+
         <div data-test-vncViewer-deviceSleep class='sleep' />
+
         <div data-test-vncViewer-deviceVolume class='volume' />
       {{/if}}
 
@@ -119,22 +235,7 @@
               @dynamicScan.isReadyOrRunning
             )
           }}
-            <AkStack
-              data-test-vncViewer-automatedNote
-              local-class='automated-scan-vnc-note'
-            >
-              <AkTypography @color='inherit'>
-                <strong>{{t 'note'}}</strong>
-                -
-                {{t
-                  (if
-                    @dynamicScan.isInqueue
-                    'automatedScanQueuedVncNote'
-                    'automatedScanRunningVncNote'
-                  )
-                }}
-              </AkTypography>
-            </AkStack>
+            <VncViewer::AutomatedScanNote @dynamicScan={{@dynamicScan}} />
           {{/if}}
         {{else if @dynamicScan.isReadyOrRunning}}
           <NovncRfb

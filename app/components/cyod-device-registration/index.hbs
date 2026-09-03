@@ -1,0 +1,79 @@
+<AkStack data-test-cyodRegistration @direction='column' @spacing='2'>
+  {{#if this.isCyodEnabled}}
+    {{#if this.isAndroid}}
+      {{#if this.isWebUsbSupported}}
+        {{#if this.isDeviceDetected}}
+          <AkStack @spacing='1' @alignItems='center'>
+            <AkIcon @iconName='check-circle' @color='success' />
+
+            <AkTypography @variant='subtitle2'>
+              {{t 'cyod.deviceDetected'}}
+              <strong>{{this.detectedModel}}</strong>
+              {{t 'cyod.deviceDetectedOs'}}:
+              {{this.platformLabel}}
+              {{this.detectedOsVersion}}
+            </AkTypography>
+          </AkStack>
+        {{else}}
+          <AkTypography @color='textSecondary'>
+            {{t 'cyod.connectUsb'}}
+          </AkTypography>
+
+          <AkButton
+            data-test-cyodRegistration-registerAndroidBtn
+            @variant='outlined'
+            @loading={{this.registerAndroidDevice.isRunning}}
+            {{on 'click' this.handleRegisterClick}}
+          >
+            {{t 'cyod.registerAndroid'}}
+          </AkButton>
+        {{/if}}
+      {{else}}
+        <AkStack @spacing='1' @alignItems='center'>
+          <AkIcon @iconName='warning' @color='warn' />
+          <AkTypography @color='textSecondary'>
+            {{t 'cyod.usbNotSupported'}}
+          </AkTypography>
+        </AkStack>
+      {{/if}}
+    {{else if this.isIos}}
+      {{#if this.isDeviceDetected}}
+        <AkStack @spacing='1' @alignItems='center'>
+          <AkIcon @iconName='check-circle' @color='success' />
+
+          <AkTypography @variant='subtitle2'>
+            {{t 'cyod.deviceDetected'}}
+            <strong>{{this.detectedModel}}</strong>
+            {{t 'cyod.deviceDetectedOs'}}:
+            {{this.platformLabel}}
+            {{this.detectedOsVersion}}
+          </AkTypography>
+        </AkStack>
+      {{else}}
+        <AkTypography @color='textSecondary'>
+          {{t 'cyod.connectUsb'}}
+        </AkTypography>
+
+        <AkButton
+          data-test-cyodRegistration-registerIosBtn
+          @variant='outlined'
+          @loading={{this.registerIosDevice.isRunning}}
+          {{on 'click' this.handleRegisterClick}}
+        >
+          {{t 'cyod.registerIos'}}
+        </AkButton>
+      {{/if}}
+    {{/if}}
+  {{else}}
+    <AkStack
+      data-test-cyodRegistration-notEnabled
+      @spacing='1'
+      @alignItems='center'
+    >
+      <AkIcon @iconName='info' @color='textSecondary' />
+      <AkTypography @color='textSecondary'>
+        {{t 'cyod.notEnabled'}}
+      </AkTypography>
+    </AkStack>
+  {{/if}}
+</AkStack>

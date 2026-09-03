@@ -1,0 +1,28 @@
+.cyod-viewer-root {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+
+.cyod-canvas {
+  width: 100%;
+  height: 100%;
+  display: block;
+  cursor: pointer;
+
+  &.hidden {
+    display: none;
+  }
+}
+
+// Status is drawn over the canvas rather than replacing it, so tearing the
+// canvas out never kills a live (or connecting) stream socket.
+.cyod-overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+}

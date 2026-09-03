@@ -1,0 +1,53 @@
+<div data-test-cyodViewer-root local-class='cyod-viewer-root' ...attributes>
+  {{! The canvas stays mounted in every state. Swapping it out tears down the
+      modifier, which closes a socket that may still be connecting -- and then
+      nothing is left to reconnect with. Status is drawn over it instead. }}
+  {{#if this.errorMessage}}
+    <AkStack
+      data-test-cyodViewer-error
+      local-class='cyod-overlay'
+      @direction='column'
+      @alignItems='center'
+      @spacing='1'
+    >
+      <AkIcon @iconName='warning' @color='warn' />
+
+      <AkTypography @color='textSecondary'>{{this.errorMessage}}</AkTypography>
+
+      <AkButton
+        data-test-cyodViewer-retryBtn
+        @variant='outlined'
+        {{on 'click' this.retry}}
+      >
+        {{t 'cyod.viewer.retry'}}
+      </AkButton>
+    </AkStack>
+  {{else if (not this.isConnected)}}
+    <AkStack
+      data-test-cyodViewer-connecting
+      local-class='cyod-overlay'
+      @direction='column'
+      @alignItems='center'
+      @spacing='1'
+    >
+      <AkLoader @size={{24}} />
+
+      <AkTypography @color='textSecondary'>
+        {{t 'cyod.detectingDevice'}}
+      </AkTypography>
+    </AkStack>
+  {{/if}}
+
+  {{! Remote input, not a click target: a drag needs down/move/up as they happen. }}
+  {{! template-lint-disable no-pointer-down-event-binding }}
+  <canvas
+    data-test-cyodViewer-canvas
+    local-class='cyod-canvas {{unless this.isConnected "hidden"}}'
+    {{this.setupCanvas}}
+    {{on 'pointerdown' this.handlePointerDown}}
+    {{on 'pointermove' this.handlePointerMove}}
+    {{on 'pointerup' this.handlePointerUp}}
+    {{on 'pointercancel' this.handlePointerCancel}}
+    {{on 'pointerleave' this.handlePointerCancel}}
+  />
+</div>
