@@ -18,3 +18,11 @@
     display: none;
   }
 }
+
+// Status is drawn over the canvas rather than replacing it, so tearing the
+// canvas out never kills a live (or connecting) stream socket.
+.cyod-overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+}

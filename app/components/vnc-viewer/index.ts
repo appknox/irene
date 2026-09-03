@@ -18,6 +18,17 @@ import type DynamicscanModel from 'irene/models/dynamicscan';
 import type DevicefarmService from 'irene/services/devicefarm';
 import type CyodAdbSessionService from 'irene/services/cyod-adb-session';
 
+/**
+ * Whether a CYOD scan may ask the user to install the app themselves -- the
+ * WebUSB auto-install prompt, the APK download link and the iOS itms-services
+ * link.
+ *
+ * Disabled: CYOD installs the app on the device server-side, so the manual path
+ * no longer applies. The prompt and everything behind it are left in place; flip
+ * this to true to bring them back.
+ */
+const MANUAL_INSTALL_ENABLED = false;
+
 export interface VncViewerSignature {
   Args: {
     file: FileModel;
@@ -40,6 +51,8 @@ export default class VncViewerComponent extends Component<VncViewerSignature> {
   @tracked webusbInstallStage: string | null = null;
   @tracked webusbInstallPercent = 0;
   @tracked resolvedProject: ProjectModel | null = null;
+
+  manualInstallEnabled = MANUAL_INSTALL_ENABLED;
 
   constructor(owner: unknown, args: VncViewerSignature['Args']) {
     super(owner, args);
@@ -188,6 +201,29 @@ export default class VncViewerComponent extends Component<VncViewerSignature> {
     const deviceUsed = this.args.dynamicScan?.get('deviceUsed');
 
     return deviceUsed?.vnc_mode === ENUMS.DEVICE_VNC_MODE.SCRCPY;
+  }
+
+  get needsManualInstall() {
+    // Two independent reasons to withhold the prompt: it is disabled outright,
+    // and a scrcpy scan is auto-installed on the proxy device anyway -- swapping
+    // the viewer out for it destroys the stream socket mid-connection.
+    return (
+      this.manualInstallEnabled &&
+      this.isCyodScan &&
+      this.args.dynamicScan?.get('isInstalling') &&
+      !this.isScrcpyScan
+    );
+  }
+
+  get showsScrcpyStream() {
+    // moriarty starts the Mercer relay on the transition to
+    // READY_FOR_INTERACTION and tears it down on the stop request, so outside
+    // that window the viewer dials a source that does not exist.
+    return this.isScrcpyScan && this.args.dynamicScan?.get('isReadyOrRunning');
+  }
+
+  get isPreparingScrcpyStream() {
+    return this.isScrcpyScan && this.args.dynamicScan?.get('isStarting');
   }
 
   get scrcpyScanToken() {
