@@ -121,12 +121,15 @@ export default class OffsecFindingModel extends Model {
   }
 
   get bypassAttempted(): Record<string, unknown> | null {
-    return (this.detail?.['bypass_attempted'] as Record<string, unknown>) ?? null;
+    return (
+      (this.detail?.['bypass_attempted'] as Record<string, unknown>) ?? null
+    );
   }
 
   get detectionEvidence(): Array<Record<string, unknown>> {
     return (
-      (this.detail?.['detection_evidence'] as Array<Record<string, unknown>>) ?? []
+      (this.detail?.['detection_evidence'] as Array<Record<string, unknown>>) ??
+      []
     );
   }
 

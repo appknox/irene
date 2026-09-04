@@ -55,14 +55,22 @@ export default class OffensiveSecurityScanResultsComponent extends Component<Off
   ) {
     super(owner, args);
 
-    this.eventBus.on('ws:offsec-scan:update', this, this.handleWsOffsecScanUpdate);
+    this.eventBus.on(
+      'ws:offsec-scan:update',
+      this,
+      this.handleWsOffsecScanUpdate
+    );
     this.loadScan.perform(args.scanId);
   }
 
   willDestroy(): void {
     super.willDestroy();
 
-    this.eventBus.off('ws:offsec-scan:update', this, this.handleWsOffsecScanUpdate);
+    this.eventBus.off(
+      'ws:offsec-scan:update',
+      this,
+      this.handleWsOffsecScanUpdate
+    );
     this.stopPolling?.();
   }
 
@@ -234,9 +242,13 @@ export default class OffensiveSecurityScanResultsComponent extends Component<Off
       ) {
         this.stopPolling?.();
         this.stopPolling = undefined;
-        this.scan = (await this.store.findRecord('offsec-scan', this.args.scanId, {
-          reload: true,
-        })) as OffsecScanModel;
+        this.scan = (await this.store.findRecord(
+          'offsec-scan',
+          this.args.scanId,
+          {
+            reload: true,
+          }
+        )) as OffsecScanModel;
       }
     } catch {
       if (ENV.environment === 'development' && this.logLines.length === 0) {

@@ -7,7 +7,10 @@ import {
 } from 'ember-cli-mirage';
 import Inflector from 'ember-inflector';
 
-import { OFFSEC_SAMPLE_LOG } from 'irene/utils/offsec-sample-log';
+import {
+  OFFSEC_SAMPLE_LOG,
+  OFFSEC_SAMPLE_LOG_LINES,
+} from 'irene/utils/offsec-sample-log';
 
 const inflector = Inflector.inflector;
 inflector.uncountable('sk-app-metadata');
@@ -118,11 +121,14 @@ function routes() {
     };
   });
 
-  this.get('/api/v2/offsec/scans/:id/artifacts/:artifactName/download_url', (schema, request) => {
-    return {
-      url: `${config.host}/api/v2/offsec/scans/${request.params.id}/log`,
-    };
-  });
+  this.get(
+    '/api/v2/offsec/scans/:id/artifacts/:artifactName/download_url',
+    (schema, request) => {
+      return {
+        url: `${config.host}/api/v2/offsec/scans/${request.params.id}/log`,
+      };
+    }
+  );
 
   this.get('/api/v2/offsec/scans/:id/log_url', (schema, request) => {
     return {

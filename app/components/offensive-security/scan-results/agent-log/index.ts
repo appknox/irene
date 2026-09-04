@@ -48,7 +48,7 @@ export default class OffensiveSecurityScanResultsAgentLogComponent extends Compo
    * plain text, so a missed match costs nothing but a grey line.
    */
   get styledLines(): AgentLogLine[] {
-    let lines = [...(this.args.lines ?? [])];
+    const lines = [...(this.args.lines ?? [])];
 
     if (this.args.scan?.isFailed) {
       const lastLine = lines[lines.length - 1] ?? '';

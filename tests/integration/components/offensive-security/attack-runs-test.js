@@ -102,6 +102,7 @@ function serveScans(test, scans) {
     previous: null,
     results: scans,
   }));
+  test.server.get('/submissions', () => []);
 }
 
 function buildScan(overrides = {}) {

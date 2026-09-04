@@ -91,7 +91,13 @@ export default class OffensiveSecurityAttackRunsComponent extends Component<Offe
     super(owner, args);
 
     this.eventBus.on('ws:offsec-scan:update', this, this.handleRealtimeUpdate);
-    addObserver(this.realtime, 'SubmissionCounter', this, this.handleRealtimeUpdate);
+    // eslint-disable-next-line ember/no-observers
+    addObserver(
+      this.realtime,
+      'SubmissionCounter',
+      this,
+      this.handleRealtimeUpdate
+    );
 
     this.loadScans.perform();
   }
@@ -100,7 +106,12 @@ export default class OffensiveSecurityAttackRunsComponent extends Component<Offe
     super.willDestroy();
 
     this.eventBus.off('ws:offsec-scan:update', this, this.handleRealtimeUpdate);
-    removeObserver(this.realtime, 'SubmissionCounter', this, this.handleRealtimeUpdate);
+    removeObserver(
+      this.realtime,
+      'SubmissionCounter',
+      this,
+      this.handleRealtimeUpdate
+    );
     this.stopPolling?.();
   }
 
@@ -197,6 +208,11 @@ export default class OffensiveSecurityAttackRunsComponent extends Component<Offe
         headerComponent: 'offensive-security/attack-runs/table/status-header',
         width: 150,
       },
+      {
+        name: '',
+        component: 'offensive-security/attack-runs/table/action',
+        width: 60,
+      },
     ];
   }
 
@@ -288,11 +304,17 @@ export default class OffensiveSecurityAttackRunsComponent extends Component<Offe
 
   get hasActiveScans(): boolean {
     const activeScans = this.scans.some((scan) => scan.isInProgress);
-    return activeScans || this.validatingSubmissionsCount > 0 || this.isRecentlyUploaded;
+    return (
+      activeScans ||
+      this.validatingSubmissionsCount > 0 ||
+      this.isRecentlyUploaded
+    );
   }
 
   get showPagination(): boolean {
-    return !this.hasNoScans && this.filteredScans.length > 0 && this.totalCount > 0;
+    return (
+      !this.hasNoScans && this.filteredScans.length > 0 && this.totalCount > 0
+    );
   }
 
   // ─── Actions ───────────────────────────────────────────────────────────────
@@ -376,42 +398,49 @@ export default class OffensiveSecurityAttackRunsComponent extends Component<Offe
    * handlers fire the fetch alongside a transition, and the new query params are
    * not readable until that transition settles.
    */
-  loadScans = task({ restartable: true }, async (limit?: number, offset?: number) => {
-    try {
-      const queryParams: Record<string, unknown> = {
-        limit: limit ?? this.limit,
-        offset: offset ?? this.offset,
-      };
+  loadScans = task(
+    { restartable: true },
+    async (limit?: number, offset?: number) => {
+      try {
+        const queryParams: Record<string, unknown> = {
+          limit: limit ?? this.limit,
+          offset: offset ?? this.offset,
+        };
 
-      if (this.searchQuery) {
-        queryParams['search'] = this.searchQuery;
+        if (this.searchQuery) {
+          queryParams['search'] = this.searchQuery;
+        }
+        if (this.platformFilter !== 'all') {
+          queryParams['platform'] = this.platformFilter;
+        }
+        if (this.resilienceFilter !== 'all') {
+          queryParams['resilience'] = this.resilienceFilter;
+        }
+
+        const [scans, submissions] = await Promise.all([
+          this.store.query(
+            'offsec-scan',
+            queryParams
+          ) as Promise<ScanResponseModel>,
+          this.store
+            .query('submission', { offsec: true, status: 4 })
+            .catch(() => null),
+        ]);
+
+        const recordList = scans.slice();
+
+        this.scans = recordList;
+        this.totalCount = scans.meta?.count ?? this.scans.length;
+        const subLen = submissions?.length;
+        this.validatingSubmissionsCount =
+          typeof subLen === 'number' ? subLen : 0;
+
+        this.managePolling();
+      } catch (error) {
+        this.notify.error(parseError(error, this.intl.t('pleaseTryAgain')));
       }
-      if (this.platformFilter !== 'all') {
-        queryParams['platform'] = this.platformFilter;
-      }
-      if (this.resilienceFilter !== 'all') {
-        queryParams['resilience'] = this.resilienceFilter;
-      }
-
-      const [scans, submissions] = await Promise.all([
-        this.store.query('offsec-scan', queryParams) as Promise<ScanResponseModel>,
-        this.store
-          .query('submission', { offsec: true, status: 4 })
-          .catch(() => null),
-      ]);
-
-      const recordList = scans.slice();
-
-      this.scans = recordList;
-      this.totalCount = scans.meta?.count ?? this.scans.length;
-      const subLen = submissions?.length;
-      this.validatingSubmissionsCount = typeof subLen === 'number' ? subLen : 0;
-
-      this.managePolling();
-    } catch (error) {
-      this.notify.error(parseError(error, this.intl.t('pleaseTryAgain')));
     }
-  });
+  );
 
   /**
    * Refresh only while something is actually running. The websocket already pushes
