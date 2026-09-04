@@ -26,6 +26,8 @@ export const SBOM_PROJECT_FACTORY_DEF = {
   dependency_type: () => faker.helpers.arrayElement(['direct', 'transitive']),
 
   // History-mode fields
+  sb_file: () => faker.number.int({ min: 1, max: 100 }),
+
   vulnerabilities_count: () => faker.number.int({ min: 0, max: 20 }),
 
   status: () => faker.helpers.arrayElement(['VULNERABLE', 'SECURE']),

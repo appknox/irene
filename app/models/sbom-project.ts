@@ -41,9 +41,9 @@ export default class SbomProjectModel extends Model {
   @belongsTo('sbom-file', { async: true, inverse: null })
   declare latestSbFile: AsyncBelongsTo<SbomFileModel> | null;
 
-  // History mode: the specific scan's sbom-file (vs latestSbFile in default mode)
-  @belongsTo('sbom-file', { async: true, inverse: null })
-  declare sbFile: AsyncBelongsTo<SbomFileModel> | null;
+  // History mode: the specific scan's sbom-file ID (vs latestSbFile in default mode)
+  @attr('number')
+  declare sbFile: number | null;
 
   get isVulnerable() {
     return this.status === 'VULNERABLE';
