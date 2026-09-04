@@ -234,7 +234,6 @@ export const NotificationMap = {
     component: 'notifications-page/messages/nf-sbom-vuln-update' as const,
     context: NfSbomVulnUpdateContext,
   },
-  },
 } satisfies Record<string, { component: string; context: unknown }>;
 
 // Notification contexts
