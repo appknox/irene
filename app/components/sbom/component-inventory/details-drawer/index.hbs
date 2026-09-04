@@ -167,7 +167,9 @@
           <Sbom::EmptyLoadingView
             @empty={{this.hasNoSbomProject}}
             @loading={{this.fetchSbomProjects.isRunning}}
-            @height='200px'
+            @height='120px'
+            @emptySvgHeight='60px'
+            @loadingSvgHeight='60px'
           >
             <:emptyText>
               <AkTypography @color='textSecondary'>
