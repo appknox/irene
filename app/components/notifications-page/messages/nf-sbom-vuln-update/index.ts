@@ -13,6 +13,7 @@ export interface NotificationsPageMessagesNfSbomVulnUpdateComponentArgs {
 
 export default class NotificationsPageMessagesNfSbomVulnUpdateComponent extends Component<NotificationsPageMessagesNfSbomVulnUpdateComponentArgs> {
   @service declare router: RouterService;
+  @service('browser/window') declare window: Window;
 
   @action
   viewComponent() {
@@ -24,7 +25,11 @@ export default class NotificationsPageMessagesNfSbomVulnUpdateComponent extends 
 
   @action
   viewDirectory() {
-    this.router.transitionTo('authenticated.dashboard.sbom.apps');
+    const url = this.args.context.advisoryLinks[0]?.url;
+
+    if (url) {
+      this.window.open(url, '_blank');
+    }
   }
 }
 
