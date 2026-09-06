@@ -842,7 +842,8 @@
       "high": "高",
       "low": "低",
       "medium": "中",
-      "unknown": "保留中"
+      "unknown": "保留中",
+      "not_assessed": "評価なし"
     },
     "runID": "実行ID",
     "runInProgress": "攻撃シミュレーション進行中",

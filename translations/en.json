@@ -818,7 +818,7 @@
     "notAssessedCount": "{count} of {total} not assessed",
     "objective": "Objective",
     "outcome": {
-      "bypassed": "Successful Exploits",
+      "bypassed": "Exploit Successful",
       "error": "Error",
       "not_attempted": "Unassessed",
       "resisted": "Attacks Resisted"
@@ -842,7 +842,8 @@
       "high": "High",
       "low": "Low",
       "medium": "Medium",
-      "unknown": "Pending"
+      "unknown": "Pending",
+      "not_assessed": "No Rating"
     },
     "runID": "Run ID",
     "runInProgress": "Attack simulation in progress",

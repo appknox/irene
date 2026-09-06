@@ -1,6 +1,14 @@
 import CommonDRFAdapter from './commondrf';
 
 export default class OffsecFindingAdapter extends CommonDRFAdapter {
+  shouldReloadRecord(): boolean {
+    return false;
+  }
+
+  shouldBackgroundReloadRecord(): boolean {
+    return false;
+  }
+
   _buildURL(modelName?: string | number, id?: string | number) {
     const baseURL = `${this.namespace_v2}/offsec/findings`;
 

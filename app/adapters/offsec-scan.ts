@@ -1,10 +1,20 @@
 import CommonDRFAdapter from './commondrf';
 
 export interface OffsecDownloadDetails {
-  url: string;
+  url?: string;
+  log_url?: string;
+  download_url?: string;
 }
 
 export default class OffsecScanAdapter extends CommonDRFAdapter {
+  shouldReloadRecord(): boolean {
+    return false;
+  }
+
+  shouldBackgroundReloadRecord(): boolean {
+    return false;
+  }
+
   _buildURL(modelName?: string | number, id?: string | number) {
     const baseURL = `${this.namespace_v2}/offsec/scans`;
 

@@ -9,10 +9,7 @@ import type RouterService from '@ember/routing/router-service';
 
 import ENV from 'irene/config/environment';
 import parseError from 'irene/utils/parse-error';
-import {
-  OFFSEC_SAMPLE_LOG_LINES,
-  OFFSEC_FAILED_LOG_LINES,
-} from 'irene/utils/offsec-sample-log';
+import { OFFSEC_SAMPLE_LOG_LINES } from 'irene/utils/offsec-sample-log';
 import type OffsecScanModel from 'irene/models/offsec-scan';
 import type { OffsecScanArtifact } from 'irene/models/offsec-scan';
 import type OffsecScanAdapter from 'irene/adapters/offsec-scan';
@@ -81,7 +78,7 @@ export default class OffensiveSecurityScanResultsComponent extends Component<Off
       if (updatedScan.isTerminal) {
         this.stopPolling?.();
         this.stopPolling = undefined;
-        if (!this.hasLog) {
+        if (!this.hasLog && !this.scan.logAttempted) {
           this.loadLog.perform();
         }
       }
@@ -102,6 +99,17 @@ export default class OffensiveSecurityScanResultsComponent extends Component<Off
 
   get artifacts(): OffsecScanArtifact[] {
     return this.scan?.artifactList ?? [];
+  }
+
+  get formattedStatusReason(): string {
+    const reason = this.scan?.statusReason;
+    if (!reason) {
+      return this.intl.t('offensiveSecurity.scanFailed');
+    }
+    const resilienceTitle =
+      this.intl.t('offensiveSecurity.artifactDesc.resilience') ||
+      'Risk rating + per-finding results';
+    return reason.replace(/result\.resilience\.json/g, `"${resilienceTitle}"`);
   }
 
   get hasLog(): boolean {
@@ -132,7 +140,7 @@ export default class OffensiveSecurityScanResultsComponent extends Component<Off
         this.scan.staticScanStarted = true;
       }
       this.notify.success('Static scan initiated successfully!');
-      this.loadScan.perform(this.args.scanId);
+      this.loadScan.perform(this.args.scanId, { reload: true });
     } catch (error) {
       this.notify.error(parseError(error, this.intl.t('pleaseTryAgain')));
     }
@@ -144,72 +152,169 @@ export default class OffensiveSecurityScanResultsComponent extends Component<Off
   }
 
   /**
-   * Artifact and log URLs are presigned and expire in an hour, so they are fetched
-   * at click time rather than rendered into the page.
+   * Artifact and log URLs may arrive presigned on the artifact payload, or are fetched
+   * at click time via the adapter.
    */
-  downloadArtifact = task({ drop: true }, async (artifactName: string) => {
-    try {
-      const { url } = await this.adapter.fetchArtifactDownloadUrl(
-        'offsec-scan',
-        this.args.scanId,
-        artifactName
-      );
-
-      if (!url) {
-        throw new Error('No download URL returned');
-      }
-
+  downloadArtifact = task(
+    { drop: true },
+    async (artifactOrName: OffsecScanArtifact | string) => {
       try {
-        const response = await fetch(url);
-        if (!response.ok) {
-          throw new Error(`HTTP ${response.status}`);
+        const artifactName =
+          typeof artifactOrName === 'string'
+            ? artifactOrName
+            : artifactOrName.name;
+
+        let url: string | undefined;
+
+        // Try adapter first to get fresh presigned download URL
+        try {
+          const res = await this.adapter.fetchArtifactDownloadUrl(
+            'offsec-scan',
+            this.args.scanId,
+            artifactName
+          );
+          url = res?.url || res?.download_url || res?.log_url;
+        } catch {
+          // If adapter fetch fails, fallback to artifact download_url
         }
+
+        // If not directly present from adapter, check passed object or scan artifacts
+        if (!url) {
+          if (typeof artifactOrName === 'object' && artifactOrName !== null) {
+            url = artifactOrName.download_url;
+          }
+        }
+
+        if (!url && this.scan?.artifacts) {
+          const matched = this.scan.artifacts.find(
+            (a) => a.name === artifactName
+          );
+          url = matched?.download_url;
+        }
+
+        if (!url) {
+          throw new Error('No download URL returned');
+        }
+
+        await this.triggerFileDownload(url, artifactName);
+      } catch (error) {
+        this.notify.error(parseError(error, this.intl.t('pleaseTryAgain')));
+      }
+    }
+  );
+
+  async triggerFileDownload(url: string, fileName: string): Promise<void> {
+    // 1. Try fetching as a blob first. If CORS allows it (e.g. in staging/prod or same-origin),
+    // this creates an object URL and guarantees a direct file download with the correct fileName.
+    try {
+      const response = await fetch(url);
+      if (response.ok) {
         const blob = await response.blob();
         const blobUrl = URL.createObjectURL(blob);
         const link = document.createElement('a');
+        link.style.display = 'none';
         link.href = blobUrl;
-        link.download = artifactName;
+        link.download = fileName;
         document.body.appendChild(link);
         link.click();
-        document.body.removeChild(link);
-        URL.revokeObjectURL(blobUrl);
-      } catch {
-        const link = document.createElement('a');
-        link.href = url;
-        link.download = artifactName;
-        link.setAttribute('rel', 'noopener noreferrer');
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
+        setTimeout(() => {
+          if (link.parentNode) {
+            document.body.removeChild(link);
+          }
+          URL.revokeObjectURL(blobUrl);
+        }, 100);
+        return;
       }
-    } catch (error) {
-      this.notify.error(parseError(error, this.intl.t('pleaseTryAgain')));
+    } catch {
+      // Direct fetch failed (e.g. CORS restriction on localhost)
     }
-  });
 
-  loadScan = task({ drop: true }, async (scanId: string) => {
-    try {
-      this.scan = (await this.store.findRecord('offsec-scan', scanId, {
-        reload: true,
-      })) as OffsecScanModel;
+    // 2. Binary artifacts (.apk, .ipa, .zip):
+    // Trigger download silently via hidden iframe so the page is not navigated and no new tab opens.
+    const isBinary =
+      fileName.endsWith('.apk') ||
+      fileName.endsWith('.ipa') ||
+      fileName.endsWith('.zip');
 
-      this.managePolling();
-
-      if (this.scan.isCompleted) {
-        if (!this.hasLog) {
-          this.loadLog.perform();
+    if (isBinary) {
+      const iframe = document.createElement('iframe');
+      iframe.style.display = 'none';
+      iframe.src = url;
+      document.body.appendChild(iframe);
+      setTimeout(() => {
+        if (iframe.parentNode) {
+          document.body.removeChild(iframe);
         }
-      } else {
-        this.loadLogStream.perform();
-      }
-    } catch (error) {
-      this.notify.error(parseError(error, this.intl.t('pleaseTryAgain')));
-
-      this.router.transitionTo(
-        'authenticated.dashboard.offensive-security.index'
-      );
+      }, 60000);
+      return;
     }
-  });
+
+    // 3. For non-binary artifacts, trigger download via anchor WITHOUT target='_blank'
+    // so it never opens in a new tab.
+    const link = document.createElement('a');
+    link.style.display = 'none';
+    link.href = url;
+    link.download = fileName;
+    link.rel = 'noopener noreferrer';
+    document.body.appendChild(link);
+    link.click();
+    setTimeout(() => {
+      if (link.parentNode) {
+        document.body.removeChild(link);
+      }
+    }, 1000);
+  }
+
+  loadScan = task(
+    { drop: true },
+    async (scanId: string, options?: { reload?: boolean }) => {
+      try {
+        const cached = !options?.reload
+          ? (this.store.peekRecord(
+              'offsec-scan',
+              scanId
+            ) as OffsecScanModel | null)
+          : null;
+
+        // A scan is only usable from cache if:
+        // 1. It is terminal (completed or failed) - queued or running scans MUST remain live!
+        // 2. Its detail payload has been fetched, i.e. `cached.findings !== undefined`
+        const isFullyLoadedTerminalScan = Boolean(
+          cached && cached.isTerminal && cached.findings !== undefined
+        );
+
+        if (isFullyLoadedTerminalScan && cached) {
+          this.scan = cached;
+        } else {
+          this.scan = (await this.store.findRecord(
+            'offsec-scan',
+            scanId,
+            { reload: true }
+          )) as OffsecScanModel;
+        }
+
+        if (this.scan.cachedLogLines?.length) {
+          this.logLines = this.scan.cachedLogLines;
+        }
+
+        this.managePolling();
+
+        if (this.scan.isQueued || this.scan.isRunning) {
+          this.loadLogStream.perform();
+        } else {
+          if (!this.hasLog && !this.scan.logAttempted) {
+            this.loadLog.perform();
+          }
+        }
+      } catch (error) {
+        this.notify.error(parseError(error, this.intl.t('pleaseTryAgain')));
+
+        this.router.transitionTo(
+          'authenticated.dashboard.offensive-security.index'
+        );
+      }
+    }
+  );
 
   loadLogStream = task({ drop: true }, async () => {
     try {
@@ -229,6 +334,9 @@ export default class OffensiveSecurityScanResultsComponent extends Component<Off
 
       if (lines.length > 0) {
         this.logLines = lines;
+        if (this.scan) {
+          this.scan.cachedLogLines = lines;
+        }
       }
       this.logLoadFailed = false;
 
@@ -236,37 +344,65 @@ export default class OffensiveSecurityScanResultsComponent extends Component<Off
         res['status'] ?? res['scan_status'] ?? res['state'] ?? ''
       ).toLowerCase();
 
-      if (
+      const wasTerminal = this.scan?.isTerminal;
+      const isNowTerminal =
         ['completed', 'failed', 'terminal', '3', '4'].includes(rawStatusStr) ||
-        (this.scan && this.scan.isTerminal)
-      ) {
+        Boolean(wasTerminal);
+
+      if (isNowTerminal) {
         this.stopPolling?.();
         this.stopPolling = undefined;
-        this.scan = (await this.store.findRecord(
-          'offsec-scan',
-          this.args.scanId,
-          {
-            reload: true,
-          }
-        )) as OffsecScanModel;
-      }
-    } catch {
-      if (ENV.environment === 'development' && this.logLines.length === 0) {
-        if (this.scan?.isFailed) {
-          this.logLines = [...OFFSEC_FAILED_LOG_LINES];
+
+        // Only reload the scan if it was actively in progress and just transitioned
+        // to terminal. If it was already terminal, loadScan just fetched the latest record.
+        if (!wasTerminal) {
+          this.scan = (await this.store.findRecord(
+            'offsec-scan',
+            this.args.scanId,
+            {
+              reload: true,
+            }
+          )) as OffsecScanModel;
+          this.loadLog.perform();
         }
       }
+    } catch {
+      // Stream polling failed
     }
   });
 
   loadLog = task({ drop: true }, async () => {
     try {
-      const { url } = await this.adapter.fetchLogUrl(
+      if (this.scan?.cachedLogLines?.length) {
+        this.logLines = this.scan.cachedLogLines;
+        this.logLoadFailed = false;
+        return;
+      }
+ 
+      if (this.scan?.isTerminal && this.scan.logAttempted) {
+        return;
+      }
+
+      if (this.scan) {
+        this.scan.logAttempted = true;
+      }
+
+      const res = await this.adapter.fetchLogUrl(
         'offsec-scan',
         this.args.scanId
       );
 
-      const response = await fetch(url);
+      const targetUrl = res?.url || res?.log_url;
+
+      if (!targetUrl) {
+        throw new Error('No log URL returned');
+      }
+
+      if (this.scan) {
+        this.scan.cachedLogUrl = targetUrl;
+      }
+
+      const response = await fetch(targetUrl);
 
       if (!response.ok) {
         throw new Error(`log fetch failed: ${response.status}`);
@@ -275,12 +411,32 @@ export default class OffensiveSecurityScanResultsComponent extends Component<Off
       const text = await response.text();
 
       this.logLines = text.split('\n').filter(Boolean);
+      if (this.scan) {
+        this.scan.cachedLogLines = this.logLines;
+      }
       this.logLoadFailed = false;
     } catch {
+      if (this.scan) {
+        this.scan.logAttempted = true;
+      }
+
+      if (this.scan?.isQueued || this.scan?.isRunning) {
+        try {
+          await this.loadLogStream.perform();
+          if (this.logLines.length > 0) {
+            this.logLoadFailed = false;
+            return;
+          }
+        } catch {
+          // Fallback failed
+        }
+      }
+
       if (ENV.environment === 'development') {
-        this.logLines = this.scan?.isFailed
-          ? [...OFFSEC_FAILED_LOG_LINES]
-          : [...OFFSEC_SAMPLE_LOG_LINES];
+        this.logLines = this.scan?.isFailed ? [] : [...OFFSEC_SAMPLE_LOG_LINES];
+        if (this.scan && this.logLines.length > 0) {
+          this.scan.cachedLogLines = this.logLines;
+        }
         return;
       }
 

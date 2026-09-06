@@ -1,4 +1,5 @@
 import Model, { attr } from '@ember-data/model';
+import { tracked } from '@glimmer/tracking';
 import dayjs from 'dayjs';
 
 import ENUMS from 'irene/enums';
@@ -8,6 +9,9 @@ export interface OffsecScanArtifact {
   name: string;
   size: number;
   content_type: string;
+  download_url?: string;
+  description?: string;
+  desc?: string;
 }
 
 /** Findings arrive embedded on the detail response; absent on list payloads. */
@@ -149,9 +153,6 @@ export default class OffsecScanModel extends Model {
   @attr('number')
   declare attacksDefended: number;
 
-  @attr('string')
-  declare errorMessage: string | null;
-
   @attr('date')
   declare completedAt: Date | null;
 
@@ -160,6 +161,10 @@ export default class OffsecScanModel extends Model {
 
   @attr('date')
   declare updatedAt: Date | null;
+
+  @tracked cachedLogLines?: string[];
+  @tracked cachedLogUrl?: string;
+  @tracked logAttempted?: boolean;
 
   get formattedUploadedOn(): string | null {
     if (!this.createdAt) {
@@ -186,6 +191,18 @@ export default class OffsecScanModel extends Model {
 
   get md5Value(): string | null {
     return this.md5hash || this.md5 || null;
+  }
+
+  get appIconUrl(): string | null {
+    return (
+      this.iconUrl ||
+      this.appLogoUrl ||
+      ((this as unknown as Record<string, unknown>)['icon_url'] as string) ||
+      ((this as unknown as Record<string, unknown>)[
+        'app_logo_url'
+      ] as string) ||
+      null
+    );
   }
 
   get versionLabel(): string {
@@ -252,6 +269,19 @@ export default class OffsecScanModel extends Model {
     );
   }
 
+  get displayErrorMessage(): string | null {
+    const reason = this.statusReason;
+    if (reason && String(reason).trim()) {
+      return String(reason)
+        .trim()
+        .replace(
+          /result\.resilience\.json/g,
+          '"Risk rating + per-finding results"'
+        );
+    }
+    return null;
+  }
+
   get displayName(): string {
     return (
       this.appName || this.fileName || this.packageName || `scan ${this.id}`
@@ -311,11 +341,21 @@ export default class OffsecScanModel extends Model {
     return Math.round(((detected - bypassed) / detected) * 100);
   }
 
-  get riskClass(): 'critical' | 'high' | 'medium' | 'low' | 'unknown' {
-    const rating = (this.riskRating || '').toLowerCase();
+  get riskClass():
+    | 'critical'
+    | 'high'
+    | 'medium'
+    | 'low'
+    | 'unknown'
+    | 'not_assessed' {
+    const rating = (this.riskRating || '').toLowerCase().trim();
 
     if (['critical', 'high', 'medium', 'low'].includes(rating)) {
       return rating as 'critical' | 'high' | 'medium' | 'low';
+    }
+
+    if (this.isTerminal) {
+      return 'not_assessed';
     }
 
     const band = (this.resilienceBand || '').toLowerCase();
@@ -403,7 +443,12 @@ export default class OffsecScanModel extends Model {
   }
 
   get findingList(): OffsecScanEmbeddedFinding[] {
-    return this.findings ?? [];
+    return (this.findings ?? []).filter(
+      (finding) =>
+        finding.outcome !== 'not_attempted' &&
+        finding.outcome !== 'unassessed' &&
+        Boolean(finding.outcome)
+    );
   }
 }
 

@@ -179,4 +179,86 @@ module('Unit | Model | offsec-scan', function (hooks) {
 
     assert.strictEqual(scan.scannedOnLabel, '-');
   });
+
+  // ─── findingList ───────────────────────────────────────────────────────────
+
+  test('findingList filters out unassessed findings', function (assert) {
+    const scan = this.store.createRecord('offsec-scan', {
+      findings: [
+        { id: 1, outcome: 'bypassed', name: 'Exploited' },
+        { id: 2, outcome: 'not_attempted', name: 'Unassessed' },
+        { id: 3, outcome: 'resisted', name: 'Resisted' },
+        { id: 4, outcome: 'unassessed', name: 'Unassessed 2' },
+      ],
+    });
+
+    assert.strictEqual(scan.findingList.length, 2);
+    assert.strictEqual(scan.findingList[0].id, 1);
+    assert.strictEqual(scan.findingList[1].id, 3);
+  });
+
+  // ─── displayErrorMessage ──────────────────────────────────────────────────
+
+  test('displayErrorMessage returns statusReason', function (assert) {
+    const scan = this.store.createRecord('offsec-scan', {
+      statusReason: 'Device connection timeout',
+    });
+
+    assert.strictEqual(scan.displayErrorMessage, 'Device connection timeout');
+  });
+
+  test('displayErrorMessage returns null when statusReason is empty', function (assert) {
+    const scan = this.store.createRecord('offsec-scan', {
+      statusReason: '',
+    });
+
+    assert.strictEqual(scan.displayErrorMessage, null);
+  });
+
+  // ─── riskClass ─────────────────────────────────────────────────────────────
+
+  test('riskClass returns lowercase rating when valid', function (assert) {
+    const scan = this.store.createRecord('offsec-scan', {
+      status: SCAN_STATUS.COMPLETED,
+      riskRating: 'HIGH',
+    });
+
+    assert.strictEqual(scan.riskClass, 'high');
+  });
+
+  test('riskClass returns not_assessed for completed scan with empty riskRating', function (assert) {
+    const scan = this.store.createRecord('offsec-scan', {
+      status: SCAN_STATUS.COMPLETED,
+      riskRating: '',
+    });
+
+    assert.strictEqual(scan.riskClass, 'not_assessed');
+  });
+
+  test('riskClass returns not_assessed for failed scan with empty riskRating', function (assert) {
+    const scan = this.store.createRecord('offsec-scan', {
+      status: SCAN_STATUS.FAILED,
+      riskRating: '',
+    });
+
+    assert.strictEqual(scan.riskClass, 'not_assessed');
+  });
+
+  test('riskClass returns unknown for running scan with empty riskRating', function (assert) {
+    const scan = this.store.createRecord('offsec-scan', {
+      status: SCAN_STATUS.RUNNING,
+      riskRating: '',
+    });
+
+    assert.strictEqual(scan.riskClass, 'unknown');
+  });
+
+  test('riskClass returns rating for failed scan when riskRating is provided', function (assert) {
+    const scan = this.store.createRecord('offsec-scan', {
+      status: SCAN_STATUS.FAILED,
+      riskRating: 'LOW',
+    });
+
+    assert.strictEqual(scan.riskClass, 'low');
+  });
 });

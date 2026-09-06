@@ -192,11 +192,7 @@
         <AkIcon @iconName='error' @size='small' @color='error' />
 
         <AkTypography @variant='body2' @color='inherit'>
-          {{if
-            this.scan.errorMessage
-            this.scan.errorMessage
-            (t 'offensiveSecurity.scanFailed')
-          }}
+          {{this.formattedStatusReason}}
         </AkTypography>
       </AkStack>
     {{/if}}

@@ -2,12 +2,15 @@
   background-color: var(--offensive-security-scan-results-card-bg-color);
   border: var(--offensive-security-scan-results-card-border);
   border-radius: var(--offensive-security-scan-results-card-border-radius);
+  overflow: hidden;
+}
+
+.findings-header {
+  box-shadow: var(--file-details-summary-header-box-shadow);
+  z-index: 1;
 }
 
 .finding-row {
-  // Bleed into the card's `p-3` padding so the hover and the row divider run
-  // edge to edge instead of stopping short of the card border.
-  margin: 0 -1.5em;
   padding: 0.857em 1.5em;
   cursor: pointer;
   border-bottom: 1px solid

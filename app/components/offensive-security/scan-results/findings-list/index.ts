@@ -12,19 +12,28 @@ export interface OffensiveSecurityScanResultsFindingsListSignature {
 
 export default class OffensiveSecurityScanResultsFindingsListComponent extends Component<OffensiveSecurityScanResultsFindingsListSignature> {
   get hasFindings(): boolean {
-    return this.args.findings.length > 0;
+    return this.sortedFindings.length > 0;
   }
 
   /**
    * Bypassed protections first — the whole point of the run is what got through.
+   * Unassessed checks (not attempted) are excluded because they are static checks
+   * not confirmed to exist in the application.
    */
   get sortedFindings(): OffsecScanEmbeddedFinding[] {
     const weight = (outcome: string) =>
-      ({ bypassed: 0, resisted: 1, error: 2, not_attempted: 3 })[outcome] ?? 4;
+      ({ bypassed: 0, resisted: 1, error: 2 })[outcome] ?? 3;
 
-    return [...this.args.findings].sort(
-      (a, b) => weight(a.outcome) - weight(b.outcome) || a.order - b.order
-    );
+    return (this.args.findings ?? [])
+      .filter(
+        (finding) =>
+          finding.outcome !== 'not_attempted' &&
+          finding.outcome !== 'unassessed' &&
+          Boolean(finding.outcome)
+      )
+      .sort(
+        (a, b) => weight(a.outcome) - weight(b.outcome) || a.order - b.order
+      );
   }
 
   @action

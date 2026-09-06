@@ -8,7 +8,7 @@ import type { OffsecScanArtifact } from 'irene/models/offsec-scan';
 export interface OffensiveSecurityScanResultsArtifactsCardSignature {
   Args: {
     artifacts: OffsecScanArtifact[];
-    onDownload: (artifactName: string) => void;
+    onDownload: (artifact: OffsecScanArtifact | string) => void;
     isDownloading?: boolean;
   };
 }
@@ -17,21 +17,62 @@ export default class OffensiveSecurityScanResultsArtifactsCardComponent extends 
   @service declare intl: IntlService;
 
   get hasArtifacts(): boolean {
-    return this.args.artifacts.length > 0;
+    return (this.args.artifacts || []).length > 0;
   }
 
   @action
   sizeLabel(bytes: number): string {
-    if (!bytes) {
+    if (!bytes && bytes !== 0) {
       return '—';
+    }
+
+    if (bytes >= 1024 * 1024) {
+      return `${(bytes / (1024 * 1024)).toFixed(1)} MB`;
     }
 
     return `${(bytes / 1024).toFixed(1)} KB`;
   }
 
   @action
-  getArtifactDescription(name: string): string {
+  getArtifactDescription(artifactOrName: OffsecScanArtifact | string): string {
+    const artifact =
+      typeof artifactOrName === 'object' && artifactOrName !== null
+        ? artifactOrName
+        : ({ name: artifactOrName } as Partial<OffsecScanArtifact>);
+
+    // If description is explicitly provided from the API response, use it!
+    const explicitDesc = artifact.description || artifact.desc;
+    if (typeof explicitDesc === 'string' && explicitDesc.trim().length > 0) {
+      return explicitDesc.trim();
+    }
+
+    const name = artifact.name || '';
+    const description = artifact.description || '';
     const lowerName = name.toLowerCase();
+    const contentType = (artifact.content_type || '').toLowerCase();
+
+    if (description) {
+      return description;
+    }
+
+    if (
+      lowerName.endsWith('.apk') ||
+      contentType.includes('android') ||
+      contentType.includes('package-archive')
+    ) {
+      return 'Android application package (APK)';
+    }
+
+    if (
+      lowerName.endsWith('.ipa') ||
+      contentType.includes('iphone') ||
+      contentType.includes('apple') ||
+      contentType.includes('ios') ||
+      contentType.includes('x-itunes-ipa')
+    ) {
+      return 'iOS application archive (IPA)';
+    }
+
     if (lowerName.includes('exploit')) {
       return this.intl.t('offensiveSecurity.artifactDesc.exploit');
     }
@@ -52,8 +93,33 @@ export default class OffensiveSecurityScanResultsArtifactsCardComponent extends 
   }
 
   @action
-  getArtifactIcon(name: string): string {
-    const lowerName = name.toLowerCase();
+  getArtifactIcon(artifactOrName: OffsecScanArtifact | string): string {
+    const artifact =
+      typeof artifactOrName === 'object' && artifactOrName !== null
+        ? artifactOrName
+        : ({ name: artifactOrName } as Partial<OffsecScanArtifact>);
+
+    const lowerName = (artifact.name || '').toLowerCase();
+    const contentType = (artifact.content_type || '').toLowerCase();
+
+    if (
+      lowerName.endsWith('.apk') ||
+      contentType.includes('android') ||
+      contentType.includes('package-archive')
+    ) {
+      return 'android';
+    }
+
+    if (
+      lowerName.endsWith('.ipa') ||
+      contentType.includes('iphone') ||
+      contentType.includes('apple') ||
+      contentType.includes('ios') ||
+      contentType.includes('x-itunes-ipa')
+    ) {
+      return 'apple';
+    }
+
     if (
       lowerName.includes('risk') ||
       lowerName.includes('rating') ||
@@ -61,6 +127,7 @@ export default class OffensiveSecurityScanResultsArtifactsCardComponent extends 
     ) {
       return 'shield';
     }
+
     if (
       lowerName.includes('exploit') ||
       lowerName.includes('script') ||
@@ -69,17 +136,21 @@ export default class OffensiveSecurityScanResultsArtifactsCardComponent extends 
     ) {
       return 'code';
     }
+
     if (
       lowerName.includes('evidence') ||
       lowerName.includes('log') ||
-      lowerName.endsWith('.json')
+      lowerName.endsWith('.json') ||
+      contentType.includes('json')
     ) {
       return 'text-snippet-outline';
     }
+
     if (
       lowerName.endsWith('.png') ||
       lowerName.endsWith('.jpg') ||
-      lowerName.endsWith('.jpeg')
+      lowerName.endsWith('.jpeg') ||
+      contentType.startsWith('image/')
     ) {
       return 'image';
     }
@@ -88,8 +159,33 @@ export default class OffensiveSecurityScanResultsArtifactsCardComponent extends 
   }
 
   @action
-  getArtifactIconClass(name: string): string {
-    const lowerName = name.toLowerCase();
+  getArtifactIconClass(artifactOrName: OffsecScanArtifact | string): string {
+    const artifact =
+      typeof artifactOrName === 'object' && artifactOrName !== null
+        ? artifactOrName
+        : ({ name: artifactOrName } as Partial<OffsecScanArtifact>);
+
+    const lowerName = (artifact.name || '').toLowerCase();
+    const contentType = (artifact.content_type || '').toLowerCase();
+
+    if (
+      lowerName.endsWith('.apk') ||
+      contentType.includes('android') ||
+      contentType.includes('package-archive')
+    ) {
+      return 'icon-green';
+    }
+
+    if (
+      lowerName.endsWith('.ipa') ||
+      contentType.includes('iphone') ||
+      contentType.includes('apple') ||
+      contentType.includes('ios') ||
+      contentType.includes('x-itunes-ipa')
+    ) {
+      return 'icon-blue';
+    }
+
     if (
       lowerName.includes('risk') ||
       lowerName.includes('rating') ||
@@ -97,6 +193,7 @@ export default class OffensiveSecurityScanResultsArtifactsCardComponent extends 
     ) {
       return 'icon-purple';
     }
+
     if (
       lowerName.includes('exploit') ||
       lowerName.includes('script') ||
@@ -104,7 +201,12 @@ export default class OffensiveSecurityScanResultsArtifactsCardComponent extends 
     ) {
       return 'icon-orange';
     }
-    if (lowerName.includes('evidence') || lowerName.endsWith('.json')) {
+
+    if (
+      lowerName.includes('evidence') ||
+      lowerName.endsWith('.json') ||
+      contentType.includes('json')
+    ) {
       return 'icon-green';
     }
 
@@ -112,8 +214,10 @@ export default class OffensiveSecurityScanResultsArtifactsCardComponent extends 
   }
 
   @action
-  handleDownload(artifactName: string): void {
-    this.args.onDownload(artifactName);
+  handleDownload(artifact: OffsecScanArtifact | string, event?: Event): void {
+    event?.stopPropagation?.();
+    event?.preventDefault?.();
+    this.args.onDownload(artifact);
   }
 }
 

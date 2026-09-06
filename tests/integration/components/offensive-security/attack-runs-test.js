@@ -70,6 +70,7 @@ const SELECTORS = {
   search: 'input[data-test-offensiveSecurity-attackRuns-search]',
   overline: '[data-test-offensiveSecurity-attackRuns-overline]',
   targetCell: '[data-test-offensiveSecurity-attackRuns-targetCell]',
+  riskBadge: '[data-test-offensiveSecurity-attackRuns-riskBadge]',
   resilienceBadge: '[data-test-offensiveSecurity-attackRuns-resilienceBadge]',
   resilienceEmpty: '[data-test-offensiveSecurity-attackRuns-resilienceEmpty]',
   emptyState: '[data-test-offensiveSecurity-attackRuns-emptyState]',
@@ -285,6 +286,30 @@ module('Integration | Component | offensive-security/attack-runs', (hooks) => {
 
     assert.dom(SELECTORS.resilienceBadge).doesNotExist();
     assert.dom(SELECTORS.resilienceEmpty).exists();
+  });
+
+  test('a failed or completed scan with empty risk rating shows No Rating', async function (assert) {
+    serveScans(this, [
+      buildScan({
+        id: 1,
+        status: SCAN_STATUS.FAILED,
+        risk_rating: '',
+        overall_resilience: null,
+      }),
+      buildScan({
+        id: 2,
+        status: SCAN_STATUS.COMPLETED,
+        risk_rating: '',
+        overall_resilience: null,
+      }),
+    ]);
+
+    await render(TEMPLATE);
+
+    const riskBadges = findAll(SELECTORS.riskBadge);
+    assert.strictEqual(riskBadges.length, 2);
+    assert.dom(riskBadges[0]).containsText('No Rating');
+    assert.dom(riskBadges[1]).containsText('No Rating');
   });
 
   // ─── Filtering ─────────────────────────────────────────────────────────────

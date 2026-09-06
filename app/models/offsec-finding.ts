@@ -51,6 +51,18 @@ export default class OffsecFindingModel extends Model {
   @attr()
   declare evidence: OffsecFindingEvidence[] | undefined;
 
+  @attr('string')
+  declare fridaScript?: string;
+
+  @attr()
+  declare impact?: unknown;
+
+  @attr()
+  declare businessRisk?: unknown;
+
+  @attr()
+  declare exploitEvidence?: unknown;
+
   /** The agent got past this protection — the finding that actually matters. */
   get isExploited(): boolean {
     return this.outcome === 'bypassed';

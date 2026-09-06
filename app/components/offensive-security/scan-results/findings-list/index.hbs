@@ -1,12 +1,16 @@
 <AkStack
   @width='full'
   @direction='column'
-  @spacing='2'
   local-class='findings-card'
-  class='p-3'
   data-test-offensiveSecurity-findingsList
 >
-  <AkStack @width='full' @direction='column' @spacing='1'>
+  <AkStack
+    @width='full'
+    @direction='column'
+    @spacing='1'
+    class='p-3'
+    local-class='findings-header'
+  >
     <AkTypography @variant='body1' @fontWeight='medium'>
       {{t 'offensiveSecurity.findings'}}
     </AkTypography>
@@ -16,9 +20,9 @@
     </AkTypography>
   </AkStack>
 
+  <AkDivider @color='dark' />
+
   {{#if this.hasFindings}}
-    {{! Rows stretch rather than being set to `full`, so the negative margin in
-        `.finding-row` can bleed the hover into the card padding. }}
     <AkStack @width='full' @direction='column' @alignItems='stretch'>
       {{#each this.sortedFindings as |finding|}}
         <AkStack
@@ -53,12 +57,14 @@
       {{/each}}
     </AkStack>
   {{else}}
-    <AkTypography
-      @variant='body2'
-      @color='textSecondary'
-      data-test-offensiveSecurity-findingsList-empty
-    >
-      {{t 'offensiveSecurity.noFindings'}}
-    </AkTypography>
+    <div class='p-3'>
+      <AkTypography
+        @variant='body2'
+        @color='textSecondary'
+        data-test-offensiveSecurity-findingsList-empty
+      >
+        {{t 'offensiveSecurity.noFindings'}}
+      </AkTypography>
+    </div>
   {{/if}}
 </AkStack>

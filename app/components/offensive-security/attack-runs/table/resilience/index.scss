@@ -1,6 +1,10 @@
 .risk-badge {
-  display: inline-block;
-  padding: 0.25em 0.75em;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 96px;
+  box-sizing: border-box;
+  padding: 0.25em 0.5em;
   border-radius: 4px;
   font-size: 0.75rem;
   font-weight: 600;
@@ -8,6 +12,7 @@
   letter-spacing: 0.05em;
   border: 1px solid currentColor;
   white-space: nowrap;
+  text-align: center;
 }
 
 .risk-critical {
@@ -30,7 +35,10 @@
   color: var(--offensive-security-attack-runs-risk-low-color);
 }
 
-.risk-unknown {
+.risk-unknown,
+.risk-not_assessed,
+.risk-not-assessed {
   background-color: var(--offensive-security-attack-runs-risk-unknown-bg-color);
   color: var(--offensive-security-attack-runs-risk-unknown-color);
 }
+

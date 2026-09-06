@@ -16,12 +16,12 @@
       {{#each @artifacts as |artifact|}}
         <div
           local-class='artifact-box cursor-pointer'
-          {{on 'click' (fn this.handleDownload artifact.name)}}
+          {{on 'click' (fn this.handleDownload artifact)}}
           data-test-offensiveSecurity-artifactsCard-row
         >
           <AkStack @alignItems='center' @spacing='1.5' local-class='artifact-left'>
-            <div local-class='artifact-icon-box {{this.getArtifactIconClass artifact.name}}'>
-              <AkIcon @iconName={{this.getArtifactIcon artifact.name}} @size='small' />
+            <div local-class='artifact-icon-box {{this.getArtifactIconClass artifact}}'>
+              <AkIcon @iconName={{this.getArtifactIcon artifact}} @size='small' />
             </div>
 
             <AkStack @direction='column' local-class='artifact-meta'>
@@ -29,9 +29,9 @@
                 @variant='body2'
                 @fontWeight='bold'
                 local-class='artifact-description'
-                title={{this.getArtifactDescription artifact.name}}
+                title={{this.getArtifactDescription artifact}}
               >
-                {{this.getArtifactDescription artifact.name}}
+                {{this.getArtifactDescription artifact}}
               </AkTypography>
 
               <AkTypography
@@ -46,7 +46,7 @@
 
           <AkStack @alignItems='center' local-class='artifact-right'>
             <AkIconButton
-              @onClick={{fn this.handleDownload artifact.name}}
+              {{on 'click' (fn this.handleDownload artifact)}}
               @disabled={{@isDownloading}}
               data-test-offensiveSecurity-artifactsCard-download
             >

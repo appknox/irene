@@ -104,7 +104,7 @@ module('Integration | Component | offensive-security/scan-results', (hooks) => {
     assert.dom(SELECTORS.header).exists();
     assert.dom(SELECTORS.header).containsText('com.example.app');
     assert.dom(SELECTORS.summaryCard).exists();
-    assert.strictEqual(findAll(SELECTORS.summaryStat).length, 4);
+    assert.strictEqual(findAll(SELECTORS.summaryStat).length, 3);
   });
 
   test('it counts protections detected, bypassed and resisted', async function (assert) {
@@ -188,6 +188,53 @@ module('Integration | Component | offensive-security/scan-results', (hooks) => {
       .hasText(t('offensiveSecurity.noArtifacts'));
   });
 
+  test('it displays custom artifact description when present in response', async function (assert) {
+    const scan = createScan(this, {
+      artifacts: [
+        {
+          name: 'custom_output.json',
+          size: 1024,
+          content_type: 'application/json',
+          description: 'Custom Human-Readable Description',
+          download_url: 'https://example.com/custom_output.json',
+        },
+      ],
+    });
+    serveScan(this, scan);
+
+    this.set('scanId', String(scan.id));
+    await render(TEMPLATE);
+
+    assert.dom(SELECTORS.artifactRow).containsText('Custom Human-Readable Description');
+  });
+
+  test('it displays APK and IPA artifacts with appropriate descriptions', async function (assert) {
+    const scan = createScan(this, {
+      artifacts: [
+        {
+          name: 'instrumented-app.apk',
+          size: 15728640,
+          content_type: 'application/vnd.android.package-archive',
+        },
+        {
+          name: 'target-build.ipa',
+          size: 20971520,
+          content_type: 'application/x-itunes-ipa',
+        },
+      ],
+    });
+    serveScan(this, scan);
+
+    this.set('scanId', String(scan.id));
+    await render(TEMPLATE);
+
+    assert.dom(SELECTORS.artifactRow).exists({ count: 2 });
+    assert.dom(SELECTORS.artifactsCard).containsText('Android application package (APK)');
+    assert.dom(SELECTORS.artifactsCard).containsText('iOS application archive (IPA)');
+    assert.dom(SELECTORS.artifactsCard).containsText('15.0 MB');
+    assert.dom(SELECTORS.artifactsCard).containsText('20.0 MB');
+  });
+
   test('it lists findings for the scan', async function (assert) {
     const scan = createScan(this, {
       findings: [
@@ -218,10 +265,69 @@ module('Integration | Component | offensive-security/scan-results', (hooks) => {
 
     assert.dom(SELECTORS.findingsList).exists();
     assert.strictEqual(findAll(SELECTORS.findingRow).length, 2);
+    assert.dom(SELECTORS.findingRow).includesText('Exploit Successful');
   });
 
   test('it shows an empty state when there are no findings', async function (assert) {
     const scan = createScan(this, { findings: [] });
+    serveScan(this, scan);
+
+    this.set('scanId', String(scan.id));
+    await render(TEMPLATE);
+
+    assert
+      .dom(SELECTORS.findingsEmpty)
+      .hasText(t('offensiveSecurity.noFindings'));
+  });
+
+  test('it filters out unassessed findings from the findings list', async function (assert) {
+    const scan = createScan(this, {
+      findings: [
+        {
+          id: 1,
+          signature_id: 'root-01',
+          name: 'Root detection',
+          category: 'root_detection',
+          outcome: 'bypassed',
+          order: 0,
+          evidence_ids: [],
+        },
+        {
+          id: 2,
+          signature_id: 'usb-01',
+          name: 'USB debugging probe',
+          category: 'resilience',
+          outcome: 'not_attempted',
+          order: 1,
+          evidence_ids: [],
+        },
+      ],
+    });
+    serveScan(this, scan);
+
+    this.set('scanId', String(scan.id));
+    await render(TEMPLATE);
+
+    assert.dom(SELECTORS.findingsList).exists();
+    assert.strictEqual(findAll(SELECTORS.findingRow).length, 1);
+    assert.dom(SELECTORS.findingRow).containsText('Root detection');
+    assert.dom(SELECTORS.findingsList).doesNotContainText('USB debugging probe');
+  });
+
+  test('it shows an empty state when all findings are unassessed', async function (assert) {
+    const scan = createScan(this, {
+      findings: [
+        {
+          id: 1,
+          signature_id: 'usb-01',
+          name: 'USB debugging probe',
+          category: 'resilience',
+          outcome: 'not_attempted',
+          order: 0,
+          evidence_ids: [],
+        },
+      ],
+    });
     serveScan(this, scan);
 
     this.set('scanId', String(scan.id));
@@ -254,10 +360,10 @@ module('Integration | Component | offensive-security/scan-results', (hooks) => {
     assert.dom(SELECTORS.statusCompleted).exists();
   });
 
-  test('a failed scan surfaces its error message', async function (assert) {
+  test('a failed scan surfaces its status reason', async function (assert) {
     const scan = createScan(this, {
       status: SCAN_STATUS.FAILED,
-      error_message: 'Device unreachable',
+      status_reason: 'Device unreachable',
     });
     serveScan(this, scan);
 
@@ -266,6 +372,62 @@ module('Integration | Component | offensive-security/scan-results', (hooks) => {
 
     assert.dom(SELECTORS.statusFailed).exists();
     assert.dom(SELECTORS.failureBanner).containsText('Device unreachable');
+  });
+
+  test('a failed scan formats result.resilience.json in status_reason as human-readable title', async function (assert) {
+    const scan = createScan(this, {
+      status: SCAN_STATUS.FAILED,
+      status_reason:
+        'investigate exited rc=1 (Resilience report written to result.resilience.json)',
+    });
+    serveScan(this, scan);
+
+    this.set('scanId', String(scan.id));
+    await render(TEMPLATE);
+
+    assert
+      .dom(SELECTORS.failureBanner)
+      .containsText(
+        'investigate exited rc=1 (Resilience report written to "Risk rating + per-finding results")'
+      );
+  });
+
+  test('a failed scan falls back to default message when status_reason is empty', async function (assert) {
+    const scan = createScan(this, {
+      status: SCAN_STATUS.FAILED,
+      status_reason: '',
+    });
+    serveScan(this, scan);
+
+    this.set('scanId', String(scan.id));
+    await render(TEMPLATE);
+
+    assert.dom(SELECTORS.statusFailed).exists();
+    assert
+      .dom(SELECTORS.failureBanner)
+      .containsText(t('offensiveSecurity.scanFailed'));
+  });
+
+  test('clicking artifact download button does not open in new tab', async function (assert) {
+    const scan = createScan(this, {
+      artifacts: [
+        {
+          name: 'result.json',
+          size: 254133,
+          content_type: 'application/json',
+          download_url: 'https://example.com/result.json',
+        },
+      ],
+    });
+    serveScan(this, scan);
+
+    this.set('scanId', String(scan.id));
+    await render(TEMPLATE);
+
+    assert.dom(SELECTORS.artifactRow).exists({ count: 1 });
+    await click('[data-test-offensiveSecurity-artifactsCard-download]');
+
+    assert.dom('a[target="_blank"]').doesNotExist();
   });
 
   // ─── Interaction ───────────────────────────────────────────────────────────

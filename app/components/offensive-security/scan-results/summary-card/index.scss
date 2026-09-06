@@ -97,7 +97,10 @@
   color: var(--offensive-security-attack-runs-risk-low-color);
 }
 
-.risk-unknown {
+.risk-unknown,
+.risk-not_assessed,
+.risk-not-assessed {
   background-color: var(--offensive-security-attack-runs-risk-unknown-bg-color);
   color: var(--offensive-security-attack-runs-risk-unknown-color);
 }
+

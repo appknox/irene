@@ -1,6 +1,5 @@
 import Component from '@glimmer/component';
 import { tracked } from '@glimmer/tracking';
-import { OFFSEC_FAILED_LOG_LINES } from 'irene/utils/offsec-sample-log';
 import type OffsecScanModel from 'irene/models/offsec-scan';
 
 export interface AgentLogLine {
@@ -48,15 +47,7 @@ export default class OffensiveSecurityScanResultsAgentLogComponent extends Compo
    * plain text, so a missed match costs nothing but a grey line.
    */
   get styledLines(): AgentLogLine[] {
-    const lines = [...(this.args.lines ?? [])];
-
-    if (this.args.scan?.isFailed) {
-      const lastLine = lines[lines.length - 1] ?? '';
-      if (!/failed/i.test(lastLine)) {
-        lines.push(...OFFSEC_FAILED_LOG_LINES);
-      }
-    }
-
+    const lines = this.args.lines ?? [];
     return lines.map((text) => ({ text, tone: toneFor(text) }));
   }
 

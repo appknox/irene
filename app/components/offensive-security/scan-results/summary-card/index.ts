@@ -7,7 +7,7 @@ import type OffsecScanModel from 'irene/models/offsec-scan';
 export interface SummaryStat {
   label: string;
   value: number;
-  tone: 'neutral' | 'exploited' | 'defended' | 'unassessed';
+  tone: 'neutral' | 'exploited' | 'defended';
 }
 
 export interface OffensiveSecurityScanResultsSummaryCardSignature {
@@ -37,11 +37,6 @@ export default class OffensiveSecurityScanResultsSummaryCardComponent extends Co
         label: this.intl.t('offensiveSecurity.resisted'),
         value: scan.attacksDefended ?? scan.protectionsResisted ?? 0,
         tone: 'defended',
-      },
-      {
-        label: this.intl.t('offensiveSecurity.unassessed'),
-        value: scan.findingsUnassessed ?? 0,
-        tone: 'unassessed',
       },
     ];
   }

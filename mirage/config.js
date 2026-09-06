@@ -111,6 +111,16 @@ function routes() {
     return schema.db.offsecScans.find(Number(request.params.id));
   });
 
+  this.get('/api/v2/offsec/findings/:id', (schema, request) => {
+    return schema.db.offsecFindings.find(Number(request.params.id));
+  });
+
+  this.get('/api/v2/offsec/scans/:id/findings', (schema, request) => {
+    return schema.db.offsecFindings.where({
+      scan_id: Number(request.params.id),
+    });
+  });
+
   // ─── Offensive security: agent log ─────────────────────────────────────────
   // The persisted log is a two-hop fetch: the client asks for a presigned URL,
   // then GETs the blob. Mirage points the URL back at itself so the sample
