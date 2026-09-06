@@ -27,7 +27,8 @@ type SbomArtifactClass =
   | 'config'
   | 'supporting'
   | 'cloud_endpoint'
-  | 'platform_managed_ai';
+  | 'platform_managed_ai'
+  | 'runtime_reference';
 
 export default class SbomComponentModel extends Model {
   @service declare intl: IntlService;
