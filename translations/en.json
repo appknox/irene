@@ -2107,7 +2107,8 @@
       "model": "ML Model",
       "library": "AI SDK",
       "cloudEndpoint": "Cloud Endpoint",
-      "platformManagedAi": "Platform Managed AI"
+      "platformManagedAi": "Platform Managed AI",
+      "runtimeModelReference": "Runtime Model Reference"
     },
     "aiFamilyColumn": "Family",
     "aiPurposeColumn": "Purpose",
@@ -2118,7 +2119,8 @@
       "config": "Model Configuration",
       "supporting": "Supporting Artifact",
       "cloudEndpoint": "Remote Inference",
-      "platformManagedAi": "On-Device AI Capability"
+      "platformManagedAi": "On-Device AI Capability",
+      "runtimeModelReference": "Runtime Model Reference"
     },
     "aiAssociatedModel": "Associated Model",
     "foundInLocations": "Found In",

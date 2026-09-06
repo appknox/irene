@@ -2107,7 +2107,8 @@
       "model": "MLモデル",
       "library": "AI SDK",
       "cloudEndpoint": "クラウドエンドポイント",
-      "platformManagedAi": "プラットフォーム管理AI"
+      "platformManagedAi": "プラットフォーム管理AI",
+      "runtimeModelReference": "Runtime Model Reference"
     },
     "aiFamilyColumn": "ファミリー",
     "aiPurposeColumn": "用途",
@@ -2118,7 +2119,8 @@
       "config": "Model Configuration",
       "supporting": "Supporting Artifact",
       "cloudEndpoint": "Remote Inference",
-      "platformManagedAi": "On-Device AI Capability"
+      "platformManagedAi": "On-Device AI Capability",
+      "runtimeModelReference": "Runtime Model Reference"
     },
     "aiAssociatedModel": "関連モデル",
     "foundInLocations": "検出場所",

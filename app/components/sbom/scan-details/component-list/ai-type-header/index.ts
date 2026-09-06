@@ -31,6 +31,10 @@ export default class AiTypeHeaderComponent extends Component<AiTypeHeaderCompone
         value: 'platform_managed_ai',
       },
       {
+        key: this.intl.t('sbomModule.aiTypeLabel.runtimeModelReference'),
+        value: 'runtime_reference',
+      },
+      {
         key: this.intl.t('sbomModule.supportingArtifact'),
         value: 'supporting_artifact',
       },
