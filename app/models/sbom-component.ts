@@ -181,6 +181,7 @@ export default class SbomComponentModel extends Model {
       supporting: 'sbomModule.supportingArtifact',
       cloud_endpoint: 'sbomModule.aiTypeLabel.cloudEndpoint',
       platform_managed_ai: 'sbomModule.aiTypeLabel.platformManagedAi',
+      runtime_reference: 'sbomModule.aiTypeLabel.runtimeModelReference',
     };
 
     const key = classMap[this.aiArtifactClass];
@@ -205,6 +206,7 @@ export default class SbomComponentModel extends Model {
       supporting: 'sbomModule.aiPurposeFallback.supporting',
       cloud_endpoint: 'sbomModule.aiPurposeFallback.cloudEndpoint',
       platform_managed_ai: 'sbomModule.aiPurposeFallback.platformManagedAi',
+      runtime_reference: 'sbomModule.aiPurposeFallback.runtimeModelReference',
     };
 
     const key = classMap[this.aiArtifactClass];
