@@ -1,0 +1,48 @@
+<FreestyleSection @name='Link'>
+  <FreestyleUsage @slug='ak-link-default' @title='Default'>
+    <AkTypography @color='textSecondary' @gutterBottom={{true}}>Experiment with me</AkTypography>
+    <AkLink @color='textPrimary' @underline='hover' @disabled={{false}}>
+      <:leftIcon><AkIcon @iconName='arrow-back' /></:leftIcon>
+      <:default>Link</:default>
+    </AkLink>
+  </FreestyleUsage>
+
+  <FreestyleUsage @slug='ak-link-colors' @title='Colors'>
+    <AkLink>Text primary</AkLink>
+    <AkLink @color='textSecondary'>Text secondary</AkLink>
+    <AkLink @color='primary'>Primary</AkLink>
+    <AkLink @color='secondary'>Secondary</AkLink>
+  </FreestyleUsage>
+
+  <FreestyleUsage @slug='ak-link-with-icons' @title='With Icons'>
+    <AkLink>
+      <:leftIcon><AkIcon @iconName='arrow-back' /></:leftIcon>
+      <:default>Back</:default>
+    </AkLink>
+    <AkLink @color='textSecondary'>
+      <:leftIcon><AkIcon @iconName='arrow-back' /></:leftIcon>
+      <:default>Back</:default>
+    </AkLink>
+    <AkLink @color='primary'>
+      <:leftIcon><AkIcon @iconName='arrow-back' /></:leftIcon>
+      <:default>Back</:default>
+    </AkLink>
+    <AkLink @color='secondary'>
+      <:leftIcon><AkIcon @iconName='arrow-back' /></:leftIcon>
+      <:default>Back</:default>
+    </AkLink>
+  </FreestyleUsage>
+
+  <FreestyleUsage @slug='ak-link-underline' @title='Underline'>
+    <AkLink @underline='none'>Text primary</AkLink>
+    <AkLink @underline='hover' @color='primary'>Primary</AkLink>
+    <AkLink @underline='always' @color='secondary'>Secondary</AkLink>
+  </FreestyleUsage>
+
+  <FreestyleUsage @slug='ak-link-disabled' @title='Disabled'>
+    <AkLink @disabled={{true}}>Text primary</AkLink>
+    <AkLink @color='textSecondary' @disabled={{true}}>Text secondary</AkLink>
+    <AkLink @color='primary' @disabled={{true}}>Primary</AkLink>
+    <AkLink @color='secondary' @disabled={{true}}>Secondary</AkLink>
+  </FreestyleUsage>
+</FreestyleSection>

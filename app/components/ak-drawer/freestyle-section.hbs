@@ -1,0 +1,18 @@
+<FreestyleSection @name='Drawer'>
+  <FreestyleUsage @slug='ak-drawer-basic' @title='Basic' @source='<AkButton \{{on "click" this.handleOpen}}>Open drawer</AkButton>
+
+<AkDrawer
+  @anchor="left"
+  @open=\{{this.open}}
+  @disableBackdropClick=\{{false}}
+  @onClose=\{{this.handleClose}}
+>
+  <div class="p-4" \{{style width="250px"}}>
+    <AkTypography>Drawer content goes here</AkTypography>
+    <AkButton class="mt-2" \{{on "click" this.handleClose}}>Close</AkButton>
+  </div>
+</AkDrawer>'>
+    <AkTypography @color='textSecondary' @gutterBottom={{true}}>Click the button to open the drawer</AkTypography>
+    <AkDrawer::FreestyleDemo />
+  </FreestyleUsage>
+</FreestyleSection>

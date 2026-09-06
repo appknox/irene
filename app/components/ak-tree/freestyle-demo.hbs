@@ -1,0 +1,26 @@
+<AkTree
+  @treeData={{this.treeData}}
+  @expanded={{this.expanded}}
+  @cascade={{true}}
+  @checked={{this.checked}}
+  @onCheck={{this.onCheck}}
+  @onExpand={{this.onExpand}}
+  as |node tree|
+>
+  <AkStack @alignItems='center' {{style paddingLeft=(this.calculatePadding node.treeDepth)}}>
+    {{#if node.isParent}}
+      <AkIcon
+        @iconName='arrow-drop-down'
+        @color='secondary'
+        {{style cursor='pointer'}}
+        {{on 'click' (fn tree.onExpand node)}}
+      />
+    {{/if}}
+    <div
+      class='pl-1 py-1'
+      {{style paddingLeft=(if (and node.isLeaf (not node.hasParentSibling)) (this.calculatePadding node.treeDepth))}}
+    >
+      {{node.label}}
+    </div>
+  </AkStack>
+</AkTree>

@@ -1,0 +1,13 @@
+<AkButton {{on 'click' this.handleOpen}}>Open drawer</AkButton>
+
+<AkDrawer
+  @anchor='left'
+  @open={{this.open}}
+  @disableBackdropClick={{false}}
+  @onClose={{this.handleClose}}
+>
+  <div class='p-4' {{style width='250px'}}>
+    <AkTypography>Drawer content goes here</AkTypography>
+    <AkButton class='mt-2' {{on 'click' this.handleClose}}>Close</AkButton>
+  </div>
+</AkDrawer>

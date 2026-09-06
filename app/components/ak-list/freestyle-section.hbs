@@ -1,0 +1,41 @@
+<FreestyleSection @name='List'>
+  <FreestyleUsage @slug='ak-list-default' @title='Default' @source='<AkList as |akl|>
+  \{{#each this.listData as |data|}}
+    <akl.listItem @noGutters=\{{false}} @disabled=\{{false}} @selected=\{{false}} as |li|>
+      <li.leftIcon>
+        <AkIcon @iconName=\{{data.icon}} />
+      </li.leftIcon>
+      <li.text @primaryText=\{{data.label}} />
+    </akl.listItem>
+  \{{/each}}
+</AkList>'>
+    <AkTypography @color='textSecondary' @gutterBottom={{true}}>Experiment with me</AkTypography>
+    <AkList::FreestyleDemo />
+  </FreestyleUsage>
+
+  <FreestyleUsage @slug='ak-list-button' @title='Button Variant' @source='<AkList as |akl|>
+  \{{#each this.listData as |data|}}
+    <akl.listItem @button=\{{true}} @noGutters=\{{false}} as |li|>
+      <li.leftIcon>
+        <AkIcon @iconName=\{{data.icon}} />
+      </li.leftIcon>
+      <li.text @primaryText=\{{data.label}} />
+    </akl.listItem>
+  \{{/each}}
+</AkList>'>
+    <AkList::FreestyleDemo @button={{true}} />
+  </FreestyleUsage>
+
+  <FreestyleUsage @slug='ak-list-link' @title='Link Variant' @source='<AkList as |akl|>
+  \{{#each this.listData as |data|}}
+    <akl.listItem @link=\{{true}} @noGutters=\{{false}} as |li|>
+      <li.leftIcon>
+        <AkIcon @iconName=\{{data.icon}} />
+      </li.leftIcon>
+      <li.text @primaryText=\{{data.label}} />
+    </akl.listItem>
+  \{{/each}}
+</AkList>'>
+    <AkList::FreestyleDemo @link={{true}} />
+  </FreestyleUsage>
+</FreestyleSection>

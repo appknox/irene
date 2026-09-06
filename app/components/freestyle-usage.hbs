@@ -1,0 +1,17 @@
+{{!-- Override: Show source only when @source is passed (actual component code) --}}
+<div class='FreestyleUsage {{if @inline "FreestyleUsage--inline"}}' {{ensure-freestyle-theme}} ...attributes>
+  {{#if this.hasLabels}}
+    <div class='FreestyleUsage-title'>
+      {{@title}}
+      <FreestyleFocusButton {{on 'click' this.setFocus}} class='FreestyleUsage-focusCta' />
+    </div>
+  {{/if}}
+  <div class='FreestyleUsage-rendered'>{{yield}}</div>
+  {{#if this.hasCode}}
+    <div class='FreestyleUsage-usage'>
+      <div class='FreestyleUsage-sourceContainer'>
+        <FreestyleSource @source={{@source}} />
+      </div>
+    </div>
+  {{/if}}
+</div>

@@ -1,0 +1,39 @@
+<FreestyleSection @name='Checkbox'>
+  <FreestyleUsage @slug='ak-checkbox-basic' @title='Basic' @source='<AkCheckbox
+  @checked=\{{this.checked}}
+  @indeterminate=\{{this.indeterminate}}
+  @disabled=\{{false}}
+  @readonly=\{{false}}
+  @onChange=\{{this.handleChange}}
+/>'>
+    <AkCheckbox::FreestyleDemo />
+  </FreestyleUsage>
+
+  <FreestyleUsage @slug='ak-checkbox-label' @title='With Label' @source='<AkFormControlLabel @label="Check me" @disabled=\{{false}} as |fcl|>
+  <AkCheckbox
+    @checked=\{{this.checked}}
+    @indeterminate=\{{false}}
+    @disabled=\{{fcl.disabled}}
+    @readonly=\{{false}}
+    @onChange=\{{this.handleChange}}
+  />
+</AkFormControlLabel>'>
+    <AkCheckbox::FreestyleDemo @variant='label' />
+  </FreestyleUsage>
+
+  <FreestyleUsage @slug='ak-checkbox-indeterminate' @title='Indeterminate' @source='<AkFormControlLabel @label="Select all">
+  <AkCheckbox
+    @checked=\{{this.selectAllChecked}}
+    @indeterminate=\{{this.selectAllIndeterminate}}
+    @onChange=\{{this.handleSelectAllChange}}
+  />
+</AkFormControlLabel>
+<AkFormControlLabel @label="Check 1">
+  <AkCheckbox @checked=\{{this.checked1}} @onChange=\{{fn this.updateChecked 1}} />
+</AkFormControlLabel>
+<AkFormControlLabel @label="Check 2">
+  <AkCheckbox @checked=\{{this.checked2}} @onChange=\{{fn this.updateChecked 2}} />
+</AkFormControlLabel>'>
+    <AkCheckbox::FreestyleDemo @variant='indeterminate' />
+  </FreestyleUsage>
+</FreestyleSection>

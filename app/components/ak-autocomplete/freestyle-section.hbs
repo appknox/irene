@@ -1,0 +1,26 @@
+<FreestyleSection @name='Autocomplete'>
+  <FreestyleUsage @slug='ak-autocomplete-basic' @title='Basic' @source='<AkAutocomplete
+  @options=\{{this.options}}
+  @searchQuery=\{{this.searchQuery}}
+  @onChange=\{{this.handleChange}}
+  @loading=\{{this.loadingOptions}}
+  as |ac|
+>
+  <AkTypography>\{{ac}}</AkTypography>
+</AkAutocomplete>'>
+    <AkTypography @color='textSecondary' @gutterBottom={{true}}>Type to search</AkTypography>
+    <AkAutocomplete::FreestyleDemo />
+  </FreestyleUsage>
+
+  <FreestyleUsage @slug='ak-autocomplete-loading' @title='Loading State' @source='<AkAutocomplete
+  @options=\{{this.options}}
+  @searchQuery=\{{this.searchQuery}}
+  @onChange=\{{this.handleChange}}
+  @loading=\{{true}}
+  as |ac|
+>
+  <AkTypography>\{{ac}}</AkTypography>
+</AkAutocomplete>'>
+    <AkAutocomplete::FreestyleDemo @loading={{true}} />
+  </FreestyleUsage>
+</FreestyleSection>
