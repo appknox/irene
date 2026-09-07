@@ -83,7 +83,7 @@ module('Acceptance | breadcrumbs/privacy-module', function (hooks) {
     );
 
     this.server.get('/v2/privacy_project', (schema) => {
-      let records = schema.privacyProjects.all().models;
+      const records = schema.privacyProjects.all().models;
 
       return {
         count: records.length,

@@ -2,7 +2,7 @@ import Component from '@glimmer/component';
 import constants from 'irene/components/marketplace/plugin-list/constants';
 import { htmlSafe } from '@ember/template';
 import { inject as service } from '@ember/service';
-import IntlService from 'ember-intl/services/intl';
+import type IntlService from 'ember-intl/services/intl';
 
 export default class MarketplacePluginListComponent extends Component {
   @service declare intl: IntlService;

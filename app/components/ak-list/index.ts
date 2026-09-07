@@ -1,5 +1,5 @@
 import Component from '@glimmer/component';
-import AkListItemComponent from './item';
+import type AkListItemComponent from './item';
 
 export interface AkListSignature {
   Element: HTMLUListElement;

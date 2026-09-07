@@ -56,12 +56,6 @@ export default class DrawerComponent extends Component<DrawerSignature> {
   backdropInserted(element: HTMLElement) {
     this.backdropElement = element;
 
-    // A 0ms delay doesn't reliably let the browser paint the starting
-    // opacity/transform before this flips to the ending state -- some
-    // browsers coalesce both into a single frame, so the drawer just pops
-    // in instead of sliding/fading. A short, non-zero delay (still routed
-    // through runTask, so it stays test-safe and destroy-safe) gives the
-    // initial state a real paint first.
     runTask(
       this,
       () => {

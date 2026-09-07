@@ -43,6 +43,7 @@ export default class ProjectSettingsGeneralSettingsComponent extends Component<P
       );
     } catch (e) {
       this.profile = null;
+
       return;
     }
   });

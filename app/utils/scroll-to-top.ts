@@ -1,5 +1,5 @@
-import Route from '@ember/routing/route';
-import Transition from '@ember/routing/transition';
+import type Route from '@ember/routing/route';
+import type Transition from '@ember/routing/transition';
 
 // Route constructor
 type Constructor<T = object> = new (...args: (object | undefined)[]) => T;

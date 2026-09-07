@@ -9,9 +9,9 @@ import type AnalysisOverviewModel from 'irene/models/analysis-overview';
 import type EventBusService from 'irene/services/event-bus';
 import type FileModel from 'irene/models/file';
 
+import type { FileComparisonItem } from 'irene/utils/compare-files';
 import {
   compareFileAnalyses,
-  FileComparisonItem,
   getFileComparisonCategories,
   type FileCompareFilterKey,
 } from 'irene/utils/compare-files';

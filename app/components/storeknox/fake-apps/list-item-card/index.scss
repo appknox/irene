@@ -14,8 +14,8 @@
 
   .app-info-logo-placeholder {
     border-radius: 50%;
-    width: 58px;
-    height: 58px;
+    min-width: 58px;
+    min-height: 58px;
     background-color: var(
       --storeknox-fake-apps-list-item-card-logo-placeholder-bg-color
     );

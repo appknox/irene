@@ -25,6 +25,7 @@ class NotificationsStub extends Service {
   error(msg) {
     this.errorMsg = msg;
   }
+
   success(msg) {
     this.successMsg = msg;
   }
@@ -86,7 +87,7 @@ module('Integration | Component | privacy/app-list', function (hooks) {
     );
 
     this.server.get('/v2/privacy_project', (schema) => {
-      let records = schema.privacyProjects.all().models;
+      const records = schema.privacyProjects.all().models;
 
       return {
         count: records.length,
@@ -198,7 +199,7 @@ module('Integration | Component | privacy/app-list', function (hooks) {
     ],
     async function (assert, { status, showReportButton }) {
       this.server.get('/v2/privacy_project', (schema) => {
-        let projects = schema.privacyProjects.all().models;
+        const projects = schema.privacyProjects.all().models;
 
         return {
           count: projects.length,
@@ -243,7 +244,7 @@ module('Integration | Component | privacy/app-list', function (hooks) {
 
   test('it opens drawer with correct data', async function (assert) {
     this.server.get('/v2/privacy_project', (schema) => {
-      let projects = schema.privacyProjects.all().models;
+      const projects = schema.privacyProjects.all().models;
 
       return {
         count: projects.length,
@@ -356,7 +357,7 @@ module('Integration | Component | privacy/app-list', function (hooks) {
 
   test('it shows unread when highlight true', async function (assert) {
     this.server.get('/v2/privacy_project', (schema) => {
-      let projects = schema.privacyProjects.all().models;
+      const projects = schema.privacyProjects.all().models;
 
       return {
         count: projects.length,

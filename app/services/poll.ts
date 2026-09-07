@@ -82,6 +82,7 @@ export default class PollService extends Service {
     }
 
     window.requestAnimationFrame(repeat); //NOSONAR
+
     return stop;
   }
 }

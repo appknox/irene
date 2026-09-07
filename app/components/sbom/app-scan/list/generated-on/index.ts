@@ -1,7 +1,7 @@
 import Component from '@glimmer/component';
 import dayjs from 'dayjs';
 
-import SbomFileModel from 'irene/models/sbom-file';
+import type SbomFileModel from 'irene/models/sbom-file';
 
 export interface SbomAppScanListGeneratedOnSignature {
   Args: {

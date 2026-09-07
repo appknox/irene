@@ -2,7 +2,7 @@
 import Model, { attr } from '@ember-data/model';
 import { inject as service } from '@ember/service';
 import { computed } from '@ember/object';
-import IntlService from 'ember-intl/services/intl';
+import type IntlService from 'ember-intl/services/intl';
 
 export default class SubscriptionModel extends Model {
   @service declare intl: IntlService;

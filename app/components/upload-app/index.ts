@@ -1,7 +1,7 @@
 import Component from '@glimmer/component';
 import { inject as service } from '@ember/service';
 
-import OrganizationService from 'irene/services/organization';
+import type OrganizationService from 'irene/services/organization';
 
 export default class UploadAppComponent extends Component {
   @service declare organization: OrganizationService;

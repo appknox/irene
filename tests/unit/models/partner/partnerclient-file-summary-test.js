@@ -6,8 +6,9 @@ module('Unit | Model | partner/partnerclient file summary', function (hooks) {
 
   // Replace this with your real tests.
   test('it exists', function (assert) {
-    let store = this.owner.lookup('service:store');
-    let model = store.createRecord('partner/partnerclient-file-summary', {});
+    const store = this.owner.lookup('service:store');
+    const model = store.createRecord('partner/partnerclient-file-summary', {});
+
     assert.ok(model);
   });
 });

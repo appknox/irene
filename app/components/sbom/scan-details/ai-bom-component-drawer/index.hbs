@@ -1,6 +1,6 @@
 <AkDrawer
   @open={{@open}}
-  @onClose={{@onClose}}
+  @onClose={{this.handleClose}}
   @anchor='right'
   data-test-sbomScanDetails-aiBomComponentDrawer
   as |dr|
@@ -31,7 +31,7 @@
           @variant='h6'
           local-class='ai-bom-component-drawer-file-value'
         >
-          file:{{this.componentName}}
+          {{this.componentName}}
         </AkTypography>
       </AkStack>
 

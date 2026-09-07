@@ -8,8 +8,6 @@ export interface SbomEmptyLoadingViewSignature {
     loading: boolean;
     tree?: 'filtered' | 'full';
     skeleton?: boolean;
-    /* Headings for the list skeleton -- pass the same columns the real table
-       renders, so the two don't disagree while loading. */
     skeletonColumns?: SbomScanDetailsSkeletonLoaderListColumn[];
     loadingSvgWidth?: string;
     loadingSvgHeight?: string;
@@ -40,17 +38,6 @@ export default class SbomEmptyLoadingViewComponent extends Component<SbomEmptyLo
     return this.args.skeleton ?? false;
   }
 
-  /**
-   * A skeleton table has to fill the box from the top-left, but the empty and
-   * loading states centre their svg and text. Driven through AkStack's own
-   * args rather than CSS, because the alignment classes AkStack always emits
-   * are exactly as specific as this component's stylesheet -- overriding them
-   * from here would come down to bundle order.
-   *
-   * Keyed on a skeleton actually being on screen, not on the caller merely
-   * opting into skeleton loading: `@skeleton={{true}}` with `@empty` must
-   * still centre.
-   */
   get contentAlignment() {
     return this.args.loading && this.skeleton ? 'flex-start' : 'center';
   }

@@ -1,203 +1,230 @@
-/* eslint-disable prettier/prettier, qunit/no-assert-equal */
 import { module, test } from 'qunit';
 import ENUMS from 'irene/enums';
 import { analysisRiskStatus } from 'irene/helpers/analysis-risk-status';
 
-
-module('Unit | Helper | analysis risk status', function() {
-  test('it return risk status for completed analysis', function(assert) {
+module('Unit | Helper | analysis risk status', function () {
+  test('it return risk status for completed analysis', function (assert) {
     const status = ENUMS.ANALYSIS.COMPLETED;
 
-    let unknown = analysisRiskStatus([ENUMS.RISK.UNKNOWN, status]);
-    assert.equal(unknown.cssclass, 'is-default');
-    assert.equal(unknown.icon, 'fa-close');
-    assert.equal(unknown.label, 'Untested');
+    const unknown = analysisRiskStatus([ENUMS.RISK.UNKNOWN, status]);
+    assert.strictEqual(unknown.cssclass, 'is-default');
+    assert.strictEqual(unknown.icon, 'fa-close');
+    assert.strictEqual(unknown.label, 'Untested');
 
-    let passed = analysisRiskStatus([ENUMS.RISK.NONE, status]);
-    assert.equal(passed.cssclass, 'is-success');
-    assert.equal(passed.icon, 'fa-check');
-    assert.equal(passed.label, 'Passed');
+    const passed = analysisRiskStatus([ENUMS.RISK.NONE, status]);
+    assert.strictEqual(passed.cssclass, 'is-success');
+    assert.strictEqual(passed.icon, 'fa-check');
+    assert.strictEqual(passed.label, 'Passed');
 
-    let low = analysisRiskStatus([ENUMS.RISK.LOW, status]);
-    assert.equal(low.cssclass, 'is-info');
-    assert.equal(low.icon, 'fa-warning');
-    assert.equal(low.label, 'Low');
+    const low = analysisRiskStatus([ENUMS.RISK.LOW, status]);
+    assert.strictEqual(low.cssclass, 'is-info');
+    assert.strictEqual(low.icon, 'fa-warning');
+    assert.strictEqual(low.label, 'Low');
 
-    let medium = analysisRiskStatus([ENUMS.RISK.MEDIUM, status]);
-    assert.equal(medium.cssclass, 'is-warning');
-    assert.equal(medium.icon, 'fa-warning');
-    assert.equal(medium.label, 'Medium');
+    const medium = analysisRiskStatus([ENUMS.RISK.MEDIUM, status]);
+    assert.strictEqual(medium.cssclass, 'is-warning');
+    assert.strictEqual(medium.icon, 'fa-warning');
+    assert.strictEqual(medium.label, 'Medium');
 
-    let high = analysisRiskStatus([ENUMS.RISK.HIGH, status]);
-    assert.equal(high.cssclass, 'is-danger');
-    assert.equal(high.icon, 'fa-warning');
-    assert.equal(high.label, 'High');
+    const high = analysisRiskStatus([ENUMS.RISK.HIGH, status]);
+    assert.strictEqual(high.cssclass, 'is-danger');
+    assert.strictEqual(high.icon, 'fa-warning');
+    assert.strictEqual(high.label, 'High');
 
-    let critical = analysisRiskStatus([ENUMS.RISK.CRITICAL, status]);
-    assert.equal(critical.cssclass, 'is-critical');
-    assert.equal(critical.icon, 'fa-warning');
-    assert.equal(critical.label, 'Critical');
+    const critical = analysisRiskStatus([ENUMS.RISK.CRITICAL, status]);
+    assert.strictEqual(critical.cssclass, 'is-critical');
+    assert.strictEqual(critical.icon, 'fa-warning');
+    assert.strictEqual(critical.label, 'Critical');
   });
 
-  test('it return error status for errored analysis', function(assert) {
-    let riskStatus = analysisRiskStatus([ENUMS.RISK.UNKNOWN, ENUMS.ANALYSIS.ERROR]);
-    assert.equal(riskStatus.cssclass, 'is-errored');
-    assert.equal(riskStatus.icon, 'fa-warning');
-    assert.equal(riskStatus.label, 'Errored');
+  test('it return error status for errored analysis', function (assert) {
+    const riskStatus = analysisRiskStatus([
+      ENUMS.RISK.UNKNOWN,
+      ENUMS.ANALYSIS.ERROR,
+    ]);
+
+    assert.strictEqual(riskStatus.cssclass, 'is-errored');
+    assert.strictEqual(riskStatus.icon, 'fa-warning');
+    assert.strictEqual(riskStatus.label, 'Errored');
   });
 
-  test('it return not-started status for waiting analysis', function(assert) {
-    let riskStatus = analysisRiskStatus([ENUMS.RISK.UNKNOWN, ENUMS.ANALYSIS.WAITING]);
-    assert.equal(riskStatus.cssclass, 'is-waiting');
-    assert.equal(riskStatus.icon, 'fa-minus-circle');
-    assert.equal(riskStatus.label, 'Not started');
+  test('it return not-started status for waiting analysis', function (assert) {
+    const riskStatus = analysisRiskStatus([
+      ENUMS.RISK.UNKNOWN,
+      ENUMS.ANALYSIS.WAITING,
+    ]);
+
+    assert.strictEqual(riskStatus.cssclass, 'is-waiting');
+    assert.strictEqual(riskStatus.icon, 'fa-minus-circle');
+    assert.strictEqual(riskStatus.label, 'Not started');
   });
 
-  test('it return scanning status for running analysis', function(assert) {
-    let riskStatus = analysisRiskStatus([ENUMS.RISK.UNKNOWN, ENUMS.ANALYSIS.RUNNING]);
-    assert.equal(riskStatus.cssclass, 'is-progress');
-    assert.equal(riskStatus.icon, 'fa-spinner fa-spin');
-    assert.equal(riskStatus.label, 'Scanning');
+  test('it return scanning status for running analysis', function (assert) {
+    const riskStatus = analysisRiskStatus([
+      ENUMS.RISK.UNKNOWN,
+      ENUMS.ANALYSIS.RUNNING,
+    ]);
+
+    assert.strictEqual(riskStatus.cssclass, 'is-progress');
+    assert.strictEqual(riskStatus.icon, 'fa-spinner fa-spin');
+    assert.strictEqual(riskStatus.label, 'Scanning');
   });
 
-  test('it return risk status if status param is empty', function(assert) {
-    let riskStatus = analysisRiskStatus([ENUMS.RISK.UNKNOWN]);
-    assert.equal(riskStatus.cssclass, 'is-default');
-    assert.equal(riskStatus.icon, 'fa-close');
-    assert.equal(riskStatus.label, 'Untested');
+  test('it return risk status if status param is empty', function (assert) {
+    const riskStatus = analysisRiskStatus([ENUMS.RISK.UNKNOWN]);
+    assert.strictEqual(riskStatus.cssclass, 'is-default');
+    assert.strictEqual(riskStatus.icon, 'fa-close');
+    assert.strictEqual(riskStatus.label, 'Untested');
 
-    let undefinedStatus = analysisRiskStatus([ENUMS.RISK.UNKNOWN, undefined]);
-    assert.equal(undefinedStatus.cssclass, 'is-default');
-    assert.equal(undefinedStatus.icon, 'fa-close');
-    assert.equal(undefinedStatus.label, 'Untested');
+    const undefinedStatus = analysisRiskStatus([ENUMS.RISK.UNKNOWN, undefined]);
+    assert.strictEqual(undefinedStatus.cssclass, 'is-default');
+    assert.strictEqual(undefinedStatus.icon, 'fa-close');
+    assert.strictEqual(undefinedStatus.label, 'Untested');
 
-    let emptyStrStatus = analysisRiskStatus([ENUMS.RISK.UNKNOWN, '']);
-    assert.equal(emptyStrStatus.cssclass, 'is-default');
-    assert.equal(emptyStrStatus.icon, 'fa-close');
-    assert.equal(emptyStrStatus.label, 'Untested');
+    const emptyStrStatus = analysisRiskStatus([ENUMS.RISK.UNKNOWN, '']);
+    assert.strictEqual(emptyStrStatus.cssclass, 'is-default');
+    assert.strictEqual(emptyStrStatus.icon, 'fa-close');
+    assert.strictEqual(emptyStrStatus.label, 'Untested');
 
-    let nullStatus = analysisRiskStatus([ENUMS.RISK.UNKNOWN, null]);
-    assert.equal(nullStatus.cssclass, 'is-default');
-    assert.equal(nullStatus.icon, 'fa-close');
-    assert.equal(nullStatus.label, 'Untested');
+    const nullStatus = analysisRiskStatus([ENUMS.RISK.UNKNOWN, null]);
+    assert.strictEqual(nullStatus.cssclass, 'is-default');
+    assert.strictEqual(nullStatus.icon, 'fa-close');
+    assert.strictEqual(nullStatus.label, 'Untested');
   });
 
-  test('it return empty if risk param is empty & completed status', function(assert) {
+  test('it return empty if risk param is empty & completed status', function (assert) {
     const status = ENUMS.ANALYSIS.COMPLETED;
 
-    let undefinedRisk = analysisRiskStatus([undefined, status]);
-    assert.equal(undefinedRisk.cssclass, '');
-    assert.equal(undefinedRisk.icon, '');
-    assert.equal(undefinedRisk.label, '');
+    const undefinedRisk = analysisRiskStatus([undefined, status]);
+    assert.strictEqual(undefinedRisk.cssclass, '');
+    assert.strictEqual(undefinedRisk.icon, '');
+    assert.strictEqual(undefinedRisk.label, '');
 
-    let emptyStrRisk = analysisRiskStatus(['', status]);
-    assert.equal(emptyStrRisk.cssclass, '');
-    assert.equal(emptyStrRisk.icon, '');
-    assert.equal(emptyStrRisk.label, '');
+    const emptyStrRisk = analysisRiskStatus(['', status]);
+    assert.strictEqual(emptyStrRisk.cssclass, '');
+    assert.strictEqual(emptyStrRisk.icon, '');
+    assert.strictEqual(emptyStrRisk.label, '');
 
-    let nullRisk = analysisRiskStatus([null, status]);
-    assert.equal(nullRisk.cssclass, '');
-    assert.equal(nullRisk.icon, '');
-    assert.equal(nullRisk.label, '');
+    const nullRisk = analysisRiskStatus([null, status]);
+    assert.strictEqual(nullRisk.cssclass, '');
+    assert.strictEqual(nullRisk.icon, '');
+    assert.strictEqual(nullRisk.label, '');
   });
 
-  test('it return status if risk param is empty & non-completed status', function(assert) {
+  test('it return status if risk param is empty & non-completed status', function (assert) {
     const status = ENUMS.ANALYSIS.ERROR;
 
-    let undefinedRisk = analysisRiskStatus([undefined, status]);
-    assert.equal(undefinedRisk.cssclass, 'is-errored');
-    assert.equal(undefinedRisk.icon, 'fa-warning');
-    assert.equal(undefinedRisk.label, 'Errored');
+    const undefinedRisk = analysisRiskStatus([undefined, status]);
+    assert.strictEqual(undefinedRisk.cssclass, 'is-errored');
+    assert.strictEqual(undefinedRisk.icon, 'fa-warning');
+    assert.strictEqual(undefinedRisk.label, 'Errored');
 
-    let emptyStrRisk = analysisRiskStatus(['', status]);
-    assert.equal(emptyStrRisk.cssclass, 'is-errored');
-    assert.equal(emptyStrRisk.icon, 'fa-warning');
-    assert.equal(emptyStrRisk.label, 'Errored');
+    const emptyStrRisk = analysisRiskStatus(['', status]);
+    assert.strictEqual(emptyStrRisk.cssclass, 'is-errored');
+    assert.strictEqual(emptyStrRisk.icon, 'fa-warning');
+    assert.strictEqual(emptyStrRisk.label, 'Errored');
 
-    let nullRisk = analysisRiskStatus([null, status]);
-    assert.equal(nullRisk.cssclass, 'is-errored');
-    assert.equal(nullRisk.icon, 'fa-warning');
-    assert.equal(nullRisk.label, 'Errored');
+    const nullRisk = analysisRiskStatus([null, status]);
+    assert.strictEqual(nullRisk.cssclass, 'is-errored');
+    assert.strictEqual(nullRisk.icon, 'fa-warning');
+    assert.strictEqual(nullRisk.label, 'Errored');
   });
 
-  test('it return empty values for invalid risk & invalid status', function(assert) {
-    let invalidRiskStatus = analysisRiskStatus([5, 4]);
-    assert.equal(invalidRiskStatus.cssclass, '');
-    assert.equal(invalidRiskStatus.icon, '');
-    assert.equal(invalidRiskStatus.label, '');
+  test('it return empty values for invalid risk & invalid status', function (assert) {
+    const invalidRiskStatus = analysisRiskStatus([5, 4]);
+    assert.strictEqual(invalidRiskStatus.cssclass, '');
+    assert.strictEqual(invalidRiskStatus.icon, '');
+    assert.strictEqual(invalidRiskStatus.label, '');
 
-    let invalidStatus2 = analysisRiskStatus([-2, -2]);
-    assert.equal(invalidStatus2.cssclass, '');
-    assert.equal(invalidStatus2.icon, '');
-    assert.equal(invalidStatus2.label, '');
+    const invalidStatus2 = analysisRiskStatus([-2, -2]);
+    assert.strictEqual(invalidStatus2.cssclass, '');
+    assert.strictEqual(invalidStatus2.icon, '');
+    assert.strictEqual(invalidStatus2.label, '');
   });
 
-  test('it return empty values for valid risk & invalid status', function(assert) {
-    let invalidStatus = analysisRiskStatus([ENUMS.RISK.UNKNOWN, -5]);
-    assert.equal(invalidStatus.cssclass, '');
-    assert.equal(invalidStatus.icon, '');
-    assert.equal(invalidStatus.label, '');
+  test('it return empty values for valid risk & invalid status', function (assert) {
+    const invalidStatus = analysisRiskStatus([ENUMS.RISK.UNKNOWN, -5]);
+    assert.strictEqual(invalidStatus.cssclass, '');
+    assert.strictEqual(invalidStatus.icon, '');
+    assert.strictEqual(invalidStatus.label, '');
   });
 
-  test('it return empty values for invalid risk & completed status', function(assert) {
-    let invalidRiskCompletedStatus = analysisRiskStatus([-2, ENUMS.ANALYSIS.COMPLETED]);
-    assert.equal(invalidRiskCompletedStatus.cssclass, '');
-    assert.equal(invalidRiskCompletedStatus.icon, '');
-    assert.equal(invalidRiskCompletedStatus.label, '');
+  test('it return empty values for invalid risk & completed status', function (assert) {
+    const invalidRiskCompletedStatus = analysisRiskStatus([
+      -2,
+      ENUMS.ANALYSIS.COMPLETED,
+    ]);
+
+    assert.strictEqual(invalidRiskCompletedStatus.cssclass, '');
+    assert.strictEqual(invalidRiskCompletedStatus.icon, '');
+    assert.strictEqual(invalidRiskCompletedStatus.label, '');
   });
 
-  test('it return empty values for invalid risk & non-completed status', function(assert) {
-    let invalidRiskErroredStatus = analysisRiskStatus([-2, ENUMS.ANALYSIS.ERROR]);
-    assert.equal(invalidRiskErroredStatus.cssclass, 'is-errored');
-    assert.equal(invalidRiskErroredStatus.icon, 'fa-warning');
-    assert.equal(invalidRiskErroredStatus.label, 'Errored');
+  test('it return empty values for invalid risk & non-completed status', function (assert) {
+    const invalidRiskErroredStatus = analysisRiskStatus([
+      -2,
+      ENUMS.ANALYSIS.ERROR,
+    ]);
+    assert.strictEqual(invalidRiskErroredStatus.cssclass, 'is-errored');
+    assert.strictEqual(invalidRiskErroredStatus.icon, 'fa-warning');
+    assert.strictEqual(invalidRiskErroredStatus.label, 'Errored');
   });
 
-  test('it works for non integer inputs', function(assert) {
-    let boolInput1 = analysisRiskStatus([true]);
-    assert.equal(boolInput1.cssclass, '');
-    assert.equal(boolInput1.icon, '');
-    assert.equal(boolInput1.label, '');
+  test('it works for non integer inputs', function (assert) {
+    const boolInput1 = analysisRiskStatus([true]);
+    assert.strictEqual(boolInput1.cssclass, '');
+    assert.strictEqual(boolInput1.icon, '');
+    assert.strictEqual(boolInput1.label, '');
 
-    let boolInput2 = analysisRiskStatus([true, false]);
-    assert.equal(boolInput2.cssclass, '');
-    assert.equal(boolInput2.icon, '');
-    assert.equal(boolInput2.label, '');
+    const boolInput2 = analysisRiskStatus([true, false]);
+    assert.strictEqual(boolInput2.cssclass, '');
+    assert.strictEqual(boolInput2.icon, '');
+    assert.strictEqual(boolInput2.label, '');
 
-    let boolInput3 = analysisRiskStatus([true, ENUMS.ANALYSIS.COMPLETED]);
-    assert.equal(boolInput3.cssclass, '');
-    assert.equal(boolInput3.icon, '');
-    assert.equal(boolInput3.label, '');
+    const boolInput3 = analysisRiskStatus([true, ENUMS.ANALYSIS.COMPLETED]);
+    assert.strictEqual(boolInput3.cssclass, '');
+    assert.strictEqual(boolInput3.icon, '');
+    assert.strictEqual(boolInput3.label, '');
 
-    let objInput1 = analysisRiskStatus([{}]);
-    assert.equal(objInput1.cssclass, '');
-    assert.equal(objInput1.icon, '');
-    assert.equal(objInput1.label, '');
+    const objInput1 = analysisRiskStatus([{}]);
+    assert.strictEqual(objInput1.cssclass, '');
+    assert.strictEqual(objInput1.icon, '');
+    assert.strictEqual(objInput1.label, '');
 
-    let objInput2 = analysisRiskStatus([{}, ENUMS.ANALYSIS.COMPLETED]);
-    assert.equal(objInput2.cssclass, '');
-    assert.equal(objInput2.icon, '');
-    assert.equal(objInput2.label, '');
+    const objInput2 = analysisRiskStatus([{}, ENUMS.ANALYSIS.COMPLETED]);
+    assert.strictEqual(objInput2.cssclass, '');
+    assert.strictEqual(objInput2.icon, '');
+    assert.strictEqual(objInput2.label, '');
   });
 
-  test('it works for empty input', function(assert) {
-    let emptyInput = analysisRiskStatus([]);
-    assert.equal(emptyInput.cssclass, '');
-    assert.equal(emptyInput.icon, '');
-    assert.equal(emptyInput.label, '');
+  test('it works for empty input', function (assert) {
+    const emptyInput = analysisRiskStatus([]);
+    assert.strictEqual(emptyInput.cssclass, '');
+    assert.strictEqual(emptyInput.icon, '');
+    assert.strictEqual(emptyInput.label, '');
   });
 
-  test('it return status for overriddenRisk with risk class & status label', function(assert) {
-    let overriddenCriticalWaiting = analysisRiskStatus([ENUMS.RISK.CRITICAL, ENUMS.ANALYSIS.WAITING, true]);
-    assert.equal(overriddenCriticalWaiting.cssclass, 'is-critical');
-    assert.equal(overriddenCriticalWaiting.icon, 'fa-minus-circle');
-    assert.equal(overriddenCriticalWaiting.label, 'Not started');
+  test('it return status for overriddenRisk with risk class & status label', function (assert) {
+    const overriddenCriticalWaiting = analysisRiskStatus([
+      ENUMS.RISK.CRITICAL,
+      ENUMS.ANALYSIS.WAITING,
+      true,
+    ]);
+
+    assert.strictEqual(overriddenCriticalWaiting.cssclass, 'is-critical');
+    assert.strictEqual(overriddenCriticalWaiting.icon, 'fa-minus-circle');
+    assert.strictEqual(overriddenCriticalWaiting.label, 'Not started');
   });
 
-  test('it return status for overriddenRisk with status class & label if risk is invalid', function(assert) {
-    let overriddenInvalidWaiting = analysisRiskStatus([-2, ENUMS.ANALYSIS.WAITING, true]);
-    assert.equal(overriddenInvalidWaiting.cssclass, 'is-waiting');
-    assert.equal(overriddenInvalidWaiting.icon, 'fa-minus-circle');
-    assert.equal(overriddenInvalidWaiting.label, 'Not started');
+  test('it return status for overriddenRisk with status class & label if risk is invalid', function (assert) {
+    const overriddenInvalidWaiting = analysisRiskStatus([
+      -2,
+      ENUMS.ANALYSIS.WAITING,
+      true,
+    ]);
+
+    assert.strictEqual(overriddenInvalidWaiting.cssclass, 'is-waiting');
+    assert.strictEqual(overriddenInvalidWaiting.icon, 'fa-minus-circle');
+    assert.strictEqual(overriddenInvalidWaiting.label, 'Not started');
   });
 });

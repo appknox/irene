@@ -1,5 +1,5 @@
 import Component from '@glimmer/component';
-import Owner from '@ember/owner';
+import type Owner from '@ember/owner';
 import { tracked } from '@glimmer/tracking';
 import { task } from 'ember-concurrency';
 import { service } from '@ember/service';

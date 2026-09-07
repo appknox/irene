@@ -1,12 +1,12 @@
 import Component from '@glimmer/component';
 import { inject as service } from '@ember/service';
-import IntlService from 'ember-intl/services/intl';
+import type IntlService from 'ember-intl/services/intl';
 import { tracked } from '@glimmer/tracking';
 import { action } from '@ember/object';
 
 import ENUMS from 'irene/enums';
 import ENV from 'irene/config/environment';
-import PlanModel from 'irene/models/plan';
+import type PlanModel from 'irene/models/plan';
 
 interface OrganizationBillingPlanSignature {
   Args: {

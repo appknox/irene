@@ -4,7 +4,7 @@ import { find, render } from '@ember/test-helpers';
 import { hbs } from 'ember-cli-htmlbars';
 import { setupIntl } from 'ember-intl/test-support';
 
-const CONTAINER = '[class*="empty-loading-container"]';
+const CONTAINER = '[data-test-sbom-emptyLoadingView]';
 
 module('Integration | Component | sbom/empty-loading-view', function (hooks) {
   setupRenderingTest(hooks);

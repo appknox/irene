@@ -454,7 +454,7 @@ module('Acceptance | Organization Service Account List', function (hooks) {
 
     await visit('/dashboard/organization/settings/service-account');
 
-    let rows = findAll('[data-test-serviceAccountList-row]');
+    const rows = findAll('[data-test-serviceAccountList-row]');
 
     assert.strictEqual(rows.length, serviceAccounts.length);
 

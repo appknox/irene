@@ -1,8 +1,8 @@
 import Component from '@glimmer/component';
-import { WithBoundArgs } from '@glint/template';
+import type { WithBoundArgs } from '@glint/template';
 
-import AkListItemIconComponent from '../item-icon';
-import AkListItemTextComponent from '../item-text';
+import type AkListItemIconComponent from '../item-icon';
+import type AkListItemTextComponent from '../item-text';
 
 export interface AkListItemSignature {
   Element: HTMLLIElement;

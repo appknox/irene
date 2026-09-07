@@ -1,19 +1,19 @@
 import { inject as service } from '@ember/service';
 import Component from '@glimmer/component';
-import IntlService from 'ember-intl/services/intl';
+import type IntlService from 'ember-intl/services/intl';
 import { task } from 'ember-concurrency';
 import { tracked } from '@glimmer/tracking';
 import { action } from '@ember/object';
 
 // eslint-disable-next-line ember/use-ember-data-rfc-395-imports
-import { DS } from 'ember-data';
-import Store from 'ember-data/store';
-import RouterService from '@ember/routing/router-service';
+import type { DS } from 'ember-data';
+import type Store from 'ember-data/store';
+import type RouterService from '@ember/routing/router-service';
 
-import { PaginationProviderActionsArgs } from 'irene/components/ak-pagination-provider';
-import { SbomAppScanQueryParam } from 'irene/routes/authenticated/dashboard/sbom/app-scans';
-import SbomFileModel from 'irene/models/sbom-file';
-import SbomProjectModel from 'irene/models/sbom-project';
+import type { PaginationProviderActionsArgs } from 'irene/components/ak-pagination-provider';
+import type { SbomAppScanQueryParam } from 'irene/routes/authenticated/dashboard/sbom/app-scans';
+import type SbomFileModel from 'irene/models/sbom-file';
+import type SbomProjectModel from 'irene/models/sbom-project';
 import parseError from 'irene/utils/parse-error';
 
 export interface SbomAppScanListSignature {

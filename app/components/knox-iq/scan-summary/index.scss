@@ -26,3 +26,13 @@
 .scan-summary-body {
   padding: 2.286em 1.714em;
 }
+
+.scan-summary-primary {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.scan-summary-health-score {
+  flex: 0 0 34%;
+  max-width: 34%;
+}

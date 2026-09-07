@@ -4,6 +4,7 @@ import { find } from '@ember/test-helpers';
 function _serialize_object(payload) {
   return Object.keys(payload.attrs).reduce((acc, curr) => {
     acc[underscore(curr)] = payload[curr];
+
     return acc;
   }, {});
 }
@@ -29,6 +30,7 @@ export function objectifyEncodedReqBody(reqBody = '') {
   const paramsObject = pairs.reduce((acc, pair) => {
     const [key, value] = pair.split('=');
     acc[key] = decodeURIComponent(value.replace(/\+/g, ' '));
+
     return acc;
   }, {});
 

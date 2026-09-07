@@ -7,7 +7,7 @@ import { debounceTask } from 'ember-lifeline';
 import type IntlService from 'ember-intl/services/intl';
 
 // eslint-disable-next-line ember/use-ember-data-rfc-395-imports
-import { DS } from 'ember-data';
+import type { DS } from 'ember-data';
 import type Store from 'ember-data/store';
 import type RouterService from '@ember/routing/router-service';
 

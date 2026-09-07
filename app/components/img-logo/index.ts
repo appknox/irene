@@ -1,7 +1,7 @@
 import { inject as service } from '@ember/service';
 import Component from '@glimmer/component';
 
-import WhitelabelService from 'irene/services/whitelabel';
+import type WhitelabelService from 'irene/services/whitelabel';
 
 interface ImgLogoSignature {
   Element: HTMLImageElement;

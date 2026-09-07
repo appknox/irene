@@ -1,7 +1,7 @@
 import { action } from '@ember/object';
 import Component from '@glimmer/component';
 import { tracked } from '@glimmer/tracking';
-import { TypographyVariant, TypographyColors } from '../ak-typography';
+import type { TypographyVariant, TypographyColors } from '../ak-typography';
 import styles from './index.scss';
 
 type LabelTypographyVariant = TypographyVariant;

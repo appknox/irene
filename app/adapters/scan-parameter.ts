@@ -1,11 +1,11 @@
 /* eslint-disable ember/use-ember-data-rfc-395-imports */
 import commondrf from './commondrf';
-import { ModelSchema } from 'ember-data';
-import ModelRegistry from 'ember-data/types/registries/model';
+import type { ModelSchema } from 'ember-data';
+import type ModelRegistry from 'ember-data/types/registries/model';
 import { underscore } from '@ember/string';
-import Store from 'ember-data/store';
-import { Snapshot } from '@ember-data/store';
-import ScanParameterModel from 'irene/models/scan-parameter';
+import type Store from 'ember-data/store';
+import type { Snapshot } from '@ember-data/store';
+import type ScanParameterModel from 'irene/models/scan-parameter';
 
 interface ScanParameterQuery {
   groupId?: string | number;

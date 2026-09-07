@@ -20,24 +20,24 @@ module('Unit | Adapter | DRFAdapter', function (hooks) {
   });
 
   test('host config override', function (assert) {
-    let adapter = this.adapter;
+    const adapter = this.adapter;
     assert.strictEqual(adapter.get('host'), 'test-host');
   });
 
   test('namespace config override', function (assert) {
-    let adapter = this.adapter;
+    const adapter = this.adapter;
     assert.strictEqual(adapter.get('namespace'), 'test-api');
   });
 
   test('pathForType', function (assert) {
-    let adapter = this.adapter;
+    const adapter = this.adapter;
 
     assert.strictEqual(adapter.pathForType('Animal'), 'animals');
     assert.strictEqual(adapter.pathForType('FurryAnimals'), 'furry-animals');
   });
 
   test('buildURL', function (assert) {
-    let adapter = this.adapter;
+    const adapter = this.adapter;
 
     assert.strictEqual(
       adapter.buildURL('Animal', 5, null),
@@ -56,7 +56,7 @@ module('Unit | Adapter | DRFAdapter', function (hooks) {
   });
 
   test('buildURL - no trailing slashes', function (assert) {
-    let adapter = this.adapter;
+    const adapter = this.adapter;
 
     adapter.set('addTrailingSlashes', false);
 
@@ -87,8 +87,8 @@ module('Unit | Adapter | DRFAdapter', function (hooks) {
         ],
       };
 
-    let adapter = this.adapter;
-    let error = adapter.handleResponse(status, headers, payload);
+    const adapter = this.adapter;
+    const error = adapter.handleResponse(status, headers, payload);
 
     assert.strictEqual(error.errors[0].detail, 'This field cannot be blank.');
     assert.strictEqual(error.errors[0].source.pointer, '/data/attributes/name');
@@ -121,7 +121,7 @@ module('Unit | Adapter | DRFAdapter', function (hooks) {
       },
       adapter = this.adapter;
 
-    let error = adapter.handleResponse(status, headers, payload);
+    const error = adapter.handleResponse(status, headers, payload);
 
     assert.strictEqual(error.errors[0].detail, payload.detail);
   });
@@ -132,7 +132,7 @@ module('Unit | Adapter | DRFAdapter', function (hooks) {
       payload = {},
       adapter = this.adapter;
 
-    let error = adapter.handleResponse(status, headers, payload);
+    const error = adapter.handleResponse(status, headers, payload);
 
     assert.strictEqual(error.errors[0].detail, '');
   });
@@ -143,18 +143,18 @@ module('Unit | Adapter | DRFAdapter', function (hooks) {
       payload = {},
       adapter = this.adapter;
 
-    let error = adapter.handleResponse(status, headers, payload);
+    const error = adapter.handleResponse(status, headers, payload);
 
     assert.strictEqual(error.errors[0].detail, '');
     assert.strictEqual(error.message, 'Internal Server Error');
   });
 
   test('_stripIDFromURL - returns base URL for type', function (assert) {
-    let snapshot = {
+    const snapshot = {
       modelName: 'furry-animal',
     };
 
-    let adapter = this.adapter;
+    const adapter = this.adapter;
 
     assert.strictEqual(
       adapter._stripIDFromURL('store', snapshot),
@@ -163,11 +163,11 @@ module('Unit | Adapter | DRFAdapter', function (hooks) {
   });
 
   test('_stripIDFromURL without trailing slash - returns base URL for type', function (assert) {
-    let snapshot = {
+    const snapshot = {
       modelName: 'furry-animal',
     };
 
-    let adapter = this.adapter;
+    const adapter = this.adapter;
 
     adapter.set('addTrailingSlashes', false);
 
@@ -178,11 +178,11 @@ module('Unit | Adapter | DRFAdapter', function (hooks) {
   });
 
   test('_formatPayload returns array when string received', function (assert) {
-    let payload = {
+    const payload = {
       key: 'value',
     };
 
-    let adapter = this.adapter;
+    const adapter = this.adapter;
 
     assert.deepEqual(adapter._formatPayload(payload), {
       key: ['value'],

@@ -16,10 +16,10 @@ import type SkNotificationsService from 'irene/services/sk-notifications';
 import type LoggerService from 'irene/services/logger';
 import type EventBusService from 'irene/services/event-bus';
 
+import type { WsModelEventHandler } from 'irene/utils/ws-model-ev-handlers';
 import {
   AnalysisEventHandler,
   DynamicScanEventHandler,
-  WsModelEventHandler,
 } from 'irene/utils/ws-model-ev-handlers';
 
 interface SocketIOService {

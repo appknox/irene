@@ -11,7 +11,7 @@ const isProduction = environment === 'production' || environment === 'staging';
 const minifyEnabled = isProduction;
 
 module.exports = function (defaults) {
-  let app = new EmberApp(defaults, {
+  const app = new EmberApp(defaults, {
     // Add options here
     storeConfigInMeta: false,
     babel: {

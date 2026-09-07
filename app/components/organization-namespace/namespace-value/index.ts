@@ -1,5 +1,5 @@
 import Component from '@glimmer/component';
-import OrganizationNamespaceModel from 'irene/models/organization-namespace';
+import type OrganizationNamespaceModel from 'irene/models/organization-namespace';
 
 export interface OrganizationNamespaceComponentSignature {
   Args: {

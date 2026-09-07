@@ -12,9 +12,7 @@ interface DrawerField {
   isExpandable?: boolean;
 }
 
-// Show More only ever hides the 5th location onward -- the first 4 are
-// always visible so a user doesn't need to click through for the common
-// case of a component found in a handful of places.
+// Show More only hides locations after the first 4, which remain visible by default.
 const VISIBLE_FOUND_IN_COUNT = 4;
 
 export interface AiBomComponentDrawerSignature {
@@ -31,18 +29,10 @@ export default class AiBomComponentDrawerComponent extends Component<AiBomCompon
 
   @tracked isFoundInExpanded = false;
 
-  @action toggleFoundInExpanded() {
-    this.isFoundInExpanded = !this.isFoundInExpanded;
-  }
-
   get componentName() {
     return this.args.component?.name || '-';
   }
 
-  // Delegates to the model's aiTypeLabel rather than keeping a second,
-  // independent artifact-class-to-label map here -- this field and the
-  // AI-BOM table's "Component Type" column must always show the exact
-  // same bucketed label (see sbom-component.ts#aiTypeLabel).
   get componentType() {
     return this.args.component?.aiTypeLabel ?? '-';
   }
@@ -81,11 +71,13 @@ export default class AiBomComponentDrawerComponent extends Component<AiBomCompon
 
   get referenceLink() {
     const link = this.args.component?.primaryLink;
+
     return link && link !== '-' ? link : null;
   }
 
   get familyValue() {
     const family = this.args.component?.aiFamily;
+
     return family && family !== '-' ? family : null;
   }
 
@@ -126,6 +118,16 @@ export default class AiBomComponentDrawerComponent extends Component<AiBomCompon
         value: this.associatedModelValue,
       },
     ].filter((field) => field.value !== null) as DrawerField[];
+  }
+
+  @action toggleFoundInExpanded() {
+    this.isFoundInExpanded = !this.isFoundInExpanded;
+  }
+
+  @action handleClose() {
+    this.isFoundInExpanded = false;
+
+    this.args.onClose();
   }
 }
 

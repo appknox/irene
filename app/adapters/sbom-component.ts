@@ -1,6 +1,12 @@
 import commondrf from './commondrf';
 import ENUMS from 'irene/enums';
 
+export interface SbomAiSummaryResponse {
+  total: number;
+  by_type: Record<string, number>;
+  aibom_supported: boolean;
+}
+
 export default class SbomComponentAdapter extends commondrf {
   _buildURL(modelName?: string | number, id?: string | number) {
     const baseURL = `${this.namespace_v2}/sb_files`;
@@ -59,11 +65,7 @@ export default class SbomComponentAdapter extends commondrf {
   getAiSummary(sbomFileId: string | number) {
     const url = `${this._buildNestedURL('sbom-component', sbomFileId)}/ai_summary`;
 
-    return this.ajax(url, 'GET') as Promise<{
-      total: number;
-      by_type: Record<string, number>;
-      aibom_supported: boolean;
-    }>;
+    return this.ajax(url, 'GET') as Promise<SbomAiSummaryResponse>;
   }
 
   urlForQueryRecord(query: { sbomComponentId: string | number }) {

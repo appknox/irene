@@ -15,6 +15,7 @@ module('Integration | Component | notifications-page/header', function (hooks) {
     get notifications() {
       return [];
     }
+
     showUnReadOnly = false;
     unReadCount = 0;
     refresh = {};

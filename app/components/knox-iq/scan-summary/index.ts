@@ -20,11 +20,13 @@ export default class KnoxIqScanSummaryComponent extends Component<KnoxIqScanSumm
   @service('notifications') declare notify: NotificationService;
   @service declare logger: LoggerService;
 
+  @tracked hasHealthScore = false;
   @tracked previousFile: FileModel | null = null;
 
   constructor(owner: unknown, args: KnoxIqScanSummarySignature['Args']) {
     super(owner, args);
 
+    this.loadHealthScore.perform();
     this.fetchPreviousFile.perform();
   }
 
@@ -41,6 +43,18 @@ export default class KnoxIqScanSummaryComponent extends Component<KnoxIqScanSumm
 
     return null;
   }
+
+  loadHealthScore = task(async () => {
+    try {
+      const audit = await waitForPromise(
+        this.args.file.fetchFileHealthScoreAudit()
+      );
+
+      this.hasHealthScore = audit?.currentScore?.score != null;
+    } catch (error) {
+      this.logger.error(parseError(error));
+    }
+  });
 
   fetchPreviousFile = task(async () => {
     try {

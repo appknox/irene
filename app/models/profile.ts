@@ -1,4 +1,5 @@
-import Model, { AsyncHasMany, attr, hasMany } from '@ember-data/model';
+import type { AsyncHasMany } from '@ember-data/model';
+import Model, { attr, hasMany } from '@ember-data/model';
 import type FileModel from './file';
 
 interface ValueObject {

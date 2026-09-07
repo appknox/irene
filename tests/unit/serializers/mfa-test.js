@@ -6,9 +6,9 @@ module('Unit | Serializer | mfa', function (hooks) {
 
   // Replace this with your real tests.
   test('it serializes records', function (assert) {
-    let record = this.owner.lookup('service:store').createRecord('mfa');
+    const record = this.owner.lookup('service:store').createRecord('mfa');
 
-    let serializedRecord = record.serialize();
+    const serializedRecord = record.serialize();
 
     assert.ok(serializedRecord);
   });

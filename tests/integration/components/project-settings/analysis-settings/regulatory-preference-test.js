@@ -616,7 +616,7 @@ module(
       );
       let pcidssCheck = pcidss.querySelector('[data-test-check]');
       let pcidssInput = pcidss.querySelector('[data-test-input]');
-      let pcidssReset = pcidss.querySelector('[data-test-reset]');
+      const pcidssReset = pcidss.querySelector('[data-test-reset]');
 
       assert.true(pcidssInput.checked);
       assert.true(pcidssCheck.classList.contains(checkboxStyles['overridden']));

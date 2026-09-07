@@ -1,14 +1,15 @@
 // eslint-disable-next-line ember/use-ember-data-rfc-395-imports
-import DS from 'ember-data';
+import type DS from 'ember-data';
 import Component from '@glimmer/component';
 import { tracked } from '@glimmer/tracking';
 import { inject as service } from '@ember/service';
-import IntlService from 'ember-intl/services/intl';
+import type IntlService from 'ember-intl/services/intl';
 import { task } from 'ember-concurrency';
-import Store from 'ember-data/store';
+import type Store from 'ember-data/store';
 import { waitForPromise } from '@ember/test-waiters';
 
-import SbomReportModel, { SbomReportType } from 'irene/models/sbom-report';
+import type { SbomReportType } from 'irene/models/sbom-report';
+import type SbomReportModel from 'irene/models/sbom-report';
 import parseError from 'irene/utils/parse-error';
 import type IreneAjaxService from 'irene/services/ajax';
 import type AnalyticsService from 'irene/services/analytics';

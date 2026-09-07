@@ -898,6 +898,7 @@ module('Acceptance | file-details/dynamic-scan', function (hooks) {
               engine: ENUMS.DYNAMIC_SCAN_ENGINE.INTERNAL_MANUAL,
             }),
           });
+
           return this.dynamicscan;
         },
         afterCreate: (scan) => {
@@ -924,6 +925,7 @@ module('Acceptance | file-details/dynamic-scan', function (hooks) {
 
       this.server.get('/v2/projects/:id/available_manual_devices', (schema) => {
         const results = schema.availableManualDevices.all().models;
+
         return { count: results.length, next: null, previous: null, results };
       });
 

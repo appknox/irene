@@ -1,7 +1,9 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
 // @ts-expect-error "trait" prop missing from miragejs
-import { Factory, ModelInstance, Server, trait } from 'miragejs';
+import { Factory, trait } from 'miragejs';
 import { faker } from '@faker-js/faker';
+import type { ModelInstance, Server } from 'miragejs';
+
 import ENUMS from 'irene/enums';
 
 function getEnumDisplay(

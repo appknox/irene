@@ -1,9 +1,9 @@
 import { service } from '@ember/service';
 import Service from '@ember/service';
-import Store from 'ember-data/store';
+import type Store from 'ember-data/store';
 
-import LoggerService from './logger';
-import IreneAjaxService from './ajax';
+import type LoggerService from './logger';
+import type IreneAjaxService from './ajax';
 import type { SessionService } from 'irene/adapters/auth-base';
 
 type ServerData = {

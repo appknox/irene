@@ -1,13 +1,14 @@
 import commondrf from './commondrf';
-import Store from 'ember-data/store';
+import type Store from 'ember-data/store';
 
-import OrganizationTeamModel, {
+import type {
   AddMemberData,
   AddProjectData,
   CreateInviteData,
   OrganizationTeamModelName,
 } from 'irene/models/organization-team';
-import OrganizationUserModel from 'irene/models/organization-user';
+import type OrganizationTeamModel from 'irene/models/organization-team';
+import type OrganizationUserModel from 'irene/models/organization-user';
 
 export default class OrganizationTeamAdapter extends commondrf {
   _buildURL(modelName?: string | number, id?: string | number) {

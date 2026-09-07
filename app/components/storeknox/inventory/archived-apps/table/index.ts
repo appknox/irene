@@ -6,7 +6,7 @@ import type IntlService from 'ember-intl/services/intl';
 import type Store from 'ember-data/store';
 
 import ENUMS from 'irene/enums';
-import SkArchivedAppsService from 'irene/services/sk-archived-apps';
+import type SkArchivedAppsService from 'irene/services/sk-archived-apps';
 import type MeService from 'irene/services/me';
 import type { StoreknoxCommonTableColumnsData } from 'irene/components/storeknox/table-columns';
 import type { PaginationProviderActionsArgs } from 'irene/components/ak-pagination-provider';

@@ -1,6 +1,6 @@
 import cyTranslate from '../../translations';
 import { API_ROUTES } from '../../../support/api.routes';
-import { MirageFactoryDefProps } from '../../../support/Mirage';
+import type { MirageFactoryDefProps } from '../../../support/Mirage';
 
 export default class UploadAppActions {
   uploadAppStatusLoader = 'uploadAppStatus-loader' as const;

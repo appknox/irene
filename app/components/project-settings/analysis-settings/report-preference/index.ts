@@ -3,11 +3,11 @@ import { inject as service } from '@ember/service';
 import Component from '@glimmer/component';
 import { tracked } from '@glimmer/tracking';
 import { task } from 'ember-concurrency';
-import Store from 'ember-data/store';
-import IntlService from 'ember-intl/services/intl';
+import type Store from 'ember-data/store';
+import type IntlService from 'ember-intl/services/intl';
 import { waitForPromise } from '@ember/test-waiters';
-import ProjectModel from 'irene/models/project';
-import ProfileModel from 'irene/models/profile';
+import type ProjectModel from 'irene/models/project';
+import type ProfileModel from 'irene/models/profile';
 
 interface ProjectSettingsAnalysisSettingsReportPreferenceSignature {
   Args: {

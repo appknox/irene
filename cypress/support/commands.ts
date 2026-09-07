@@ -102,11 +102,13 @@ Cypress.Commands.add(
                   'model_created' | 'model_updated',
                   T,
                 ];
+
                 return predicate(event, payload, raw);
               } catch {
                 // ignore malformed frames
               }
             }
+
             return false;
           };
 
@@ -115,6 +117,7 @@ Cypress.Commands.add(
             for (const raw of messages) {
               if (parseAndCheck(raw)) {
                 resolve();
+
                 return;
               }
             }

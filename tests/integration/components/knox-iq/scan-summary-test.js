@@ -1,4 +1,4 @@
-import { find, render, waitFor } from '@ember/test-helpers';
+import { find, findAll, render, waitFor } from '@ember/test-helpers';
 import { hbs } from 'ember-cli-htmlbars';
 import { setupMirage } from 'ember-cli-mirage/test-support';
 import { setupIntl } from 'ember-intl/test-support';
@@ -137,6 +137,72 @@ module('Integration | Component | knox-iq/scan-summary', function (hooks) {
     assert
       .dom('[data-test-knoxiq-scan-summary-exploitability-count="low"]')
       .includesText('07');
+  });
+
+  // ─── Health score column ─────────────────────────────────────────────────────
+  test('shows health score column when a score is available in the store', async function (assert) {
+    setupFileExploitabilityMirageEndpoint(this.server);
+
+    this.server.get('/v3/files/:id/health_score_audit', () => ({
+      current_score: {
+        knoxiq_enabled: false,
+        score: 73,
+        score_type: 'severity_based',
+        status: 'fair',
+      },
+      audit_trail: [],
+    }));
+
+    await render(hbs`
+      <KnoxIq::ScanSummary
+        @file={{this.file}}
+        @hasAnyKnoxiqScanCompleted={{true}}
+      />
+    `);
+
+    await waitFor('[data-test-fileDetailSeverityLevel-healthScore]', {
+      timeout: 3000,
+    });
+
+    assert.dom('[data-test-fileDetailSeverityLevel-healthScore]').exists();
+    assert.dom('[data-test-knoxiq-scan-summary-exploitability]').exists();
+    assert.dom('[data-test-knoxiq-scan-summary-severity]').exists();
+  });
+
+  test('hides health score column and keeps exploitability and severity when no score exists', async function (assert) {
+    setupFileExploitabilityMirageEndpoint(this.server);
+
+    this.server.get('/v3/files/:id/health_score_audit', () => ({
+      current_score: null,
+      audit_trail: [],
+    }));
+
+    await render(hbs`
+      <KnoxIq::ScanSummary
+        @file={{this.file}}
+        @hasAnyKnoxiqScanCompleted={{false}}
+      />
+    `);
+
+    await waitFor('[data-test-knoxiq-scan-summary-exploitability]', {
+      timeout: 3000,
+    });
+
+    assert
+      .dom('[data-test-fileDetailSeverityLevel-healthScore]')
+      .doesNotExist();
+
+    const exploitability = findAll(
+      '[data-test-knoxiq-scan-summary-exploitability]'
+    );
+    const severity = findAll('[data-test-knoxiq-scan-summary-severity]');
+
+    assert.strictEqual(
+      exploitability.length,
+      1,
+      'exploitability section renders'
+    );
+    assert.strictEqual(severity.length, 1, 'severity section renders');
   });
 
   test('displays severity counts from file-risk data', async function (assert) {

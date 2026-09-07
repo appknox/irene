@@ -5,8 +5,8 @@ module('Unit | Model | store-release-readiness-scan', function (hooks) {
   setupTest(hooks);
 
   test('it exists', function (assert) {
-    let store = this.owner.lookup('service:store');
-    let model = store.createRecord('store-release-readiness-scan', {});
+    const store = this.owner.lookup('service:store');
+    const model = store.createRecord('store-release-readiness-scan', {});
     assert.ok(model);
   });
 });

@@ -46,6 +46,7 @@ export default class FileDetailsActionsComponent extends Component<FileDetailsAc
   // https://github.com/cibernox/ember-power-select/issues/962
   get manualToString() {
     const manual = this.file.manual;
+
     return String(manual);
   }
 

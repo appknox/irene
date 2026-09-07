@@ -1,5 +1,6 @@
-import Model, { AsyncBelongsTo, attr, belongsTo } from '@ember-data/model';
-import ProjectModel from 'irene/models/project';
+import type { AsyncBelongsTo } from '@ember-data/model';
+import Model, { attr, belongsTo } from '@ember-data/model';
+import type ProjectModel from 'irene/models/project';
 
 export default class JiraRepoModel extends Model {
   @attr('string')

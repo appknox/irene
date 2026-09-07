@@ -1,6 +1,7 @@
-import Model, { AsyncBelongsTo, attr, belongsTo } from '@ember-data/model';
-import OrganizationModel from './organization';
-import OrganizationTeamModel from './organization-team';
+import type { AsyncBelongsTo } from '@ember-data/model';
+import Model, { attr, belongsTo } from '@ember-data/model';
+import type OrganizationModel from './organization';
+import type OrganizationTeamModel from './organization-team';
 
 export default class OrganizationInvitationModel extends Model {
   @attr('string')

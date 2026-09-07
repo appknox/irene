@@ -41,11 +41,13 @@ export default class FreshdeskService extends Service {
 
   get supportWidgetIsEnabled() {
     const key = this.supportWidgetKey;
+
     return !!key;
   }
 
   get freshchatEnabled() {
     const key = this.freshchatKey;
+
     return !!key;
   }
 

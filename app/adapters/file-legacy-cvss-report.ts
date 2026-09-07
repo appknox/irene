@@ -1,6 +1,6 @@
 /* eslint-disable ember/use-ember-data-rfc-395-imports */
 import commondrf from './commondrf';
-import Store from 'ember-data/store';
+import type Store from 'ember-data/store';
 import type { ModelSchema } from 'ember-data';
 import type { Snapshot } from '@ember-data/store';
 import type ModelRegistry from 'ember-data/types/registries/model';

@@ -1,6 +1,6 @@
 import Component from '@glimmer/component';
-import SecurityFileModel from 'irene/models/security/file';
-import SecurityAnalysisModel from 'irene/models/security/analysis';
+import type SecurityFileModel from 'irene/models/security/file';
+import type SecurityAnalysisModel from 'irene/models/security/analysis';
 
 export interface SecurityAnalysisListTableComponentSignature {
   Args: {

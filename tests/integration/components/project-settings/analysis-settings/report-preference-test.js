@@ -138,7 +138,7 @@ module(
     });
 
     test('manual scan preference is checked if show_manual_scan report preference value is "true"', async function (assert) {
-      let report_preference = {
+      const report_preference = {
         show_manual_scan: true,
       };
 
@@ -206,7 +206,7 @@ module(
     });
 
     test('api scan preference is checked if show_api_scan report preference value is "true"', async function (assert) {
-      let report_preference = {
+      const report_preference = {
         show_api_scan: true,
       };
 

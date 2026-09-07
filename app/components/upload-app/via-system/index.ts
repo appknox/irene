@@ -54,6 +54,7 @@ export default class UploadAppViaSystemComponent extends Component {
       const queue = this.fileQueue.find(this.fileQueueName);
 
       queue?.remove(file);
+
       return;
     }
 

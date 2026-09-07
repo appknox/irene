@@ -19,6 +19,7 @@ module('Unit | Adapter | nf in app notification', function (hooks) {
       'v2/nf_in_app_notifications/mark_all_as_read',
       function () {
         assert.ok(true);
+
         return new Response(200, {}, {});
       }
     );

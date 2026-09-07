@@ -1,8 +1,8 @@
 import Component from '@glimmer/component';
 import { tracked } from '@glimmer/tracking';
 import { action } from '@ember/object';
-import OrganizationMemberModel from 'irene/models/organization-member';
-import OrganizationModel from 'irene/models/organization';
+import type OrganizationMemberModel from 'irene/models/organization-member';
+import type OrganizationModel from 'irene/models/organization';
 
 interface MemberDrawerComponentSignature {
   Args: {

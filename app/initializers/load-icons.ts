@@ -1,4 +1,5 @@
-import { addCollection, IconifyJSON } from 'iconify-icon';
+import type { IconifyJSON } from 'iconify-icon';
+import { addCollection } from 'iconify-icon';
 
 export async function initialize() {
   try {

@@ -1,14 +1,12 @@
-import { inject as service } from '@ember/service';
+import { service } from '@ember/service';
 import Component from '@glimmer/component';
-import IntlService from 'ember-intl/services/intl';
-import SbomComponentModel from 'irene/models/sbom-component';
 import type SbomComponentInventoryModel from 'irene/models/sbom-component-inventory';
+import type IntlService from 'ember-intl/services/intl';
+import type SbomComponentModel from 'irene/models/sbom-component';
 import * as semver from 'semver';
 
 export interface SbomComponentStatusSignature {
   Args: {
-    // Accepts either the per-file component model or the org-level component
-    // inventory model; both expose the fields read below.
     sbomComponent: SbomComponentModel | SbomComponentInventoryModel | null;
   };
 }
@@ -18,11 +16,8 @@ type ComponentStatus = {
   color: 'default' | 'primary' | 'success';
 };
 
-// These artifact classes only ever get a synthetic pkg:file/* or pkg:generic/*
-// purl (see ml_model_scanner.py / cloud_ai_scanner.py) — no vulnerability
-// database tracks CVEs against them, so vulnerabilitiesCount is always 0 and
-// "Secure" would falsely imply we checked and found nothing, when we never
-// had anything real to check.
+// Synthetic pkg:file/* or pkg:generic/* artifacts aren't CVE-tracked, so vulnerabilitiesCount is always 0;
+// "Secure" would imply a vulnerability check that never occurred.
 const NO_VULNERABILITY_FEED_ARTIFACT_CLASSES = new Set([
   'model',
   'tokenizer',
@@ -83,9 +78,12 @@ export default class SbomComponentStatusComponent extends Component<SbomComponen
     const component = this.args.sbomComponent;
 
     if (component) {
+      const aiArtifactClass =
+        'aiArtifactClass' in component ? component.aiArtifactClass : '';
+
       if (
         component.isMLModel ||
-        NO_VULNERABILITY_FEED_ARTIFACT_CLASSES.has(component.aiArtifactClass)
+        NO_VULNERABILITY_FEED_ARTIFACT_CLASSES.has(aiArtifactClass)
       ) {
         status.push({
           label: this.intl.t('chipStatus.unknown'),

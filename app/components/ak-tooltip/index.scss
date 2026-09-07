@@ -22,10 +22,10 @@
   font-family: var(--ak-tooltip-font-family);
   box-shadow: var(--ak-tooltip-box-shadow-2);
 
-  // Allow rich multi-line tooltip content when a tooltipContent block is used
-  &:has(> [data-ak-tooltip-multiline]) {
-    white-space: normal;
-  }
+}
+
+.ak-tooltip-multiline {
+  white-space: normal;
 }
 
 .ak-tooltip-color-light {

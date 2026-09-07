@@ -1,4 +1,4 @@
-import ModelRegistry from 'ember-data/types/registries/model';
+import type ModelRegistry from 'ember-data/types/registries/model';
 import { underscore } from '@ember/string';
 
 // eslint-disable-next-line ember/use-ember-data-rfc-395-imports

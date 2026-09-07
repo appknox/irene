@@ -1,6 +1,6 @@
 import Component from '@glimmer/component';
-import { ECOption } from 'irene/components/ak-chart';
-import { IScanCount } from '..';
+import type { ECOption } from 'irene/components/ak-chart';
+import type { IScanCount } from '..';
 
 export interface OrganizationAnalyticsScanCountChartSignature {
   Args: {

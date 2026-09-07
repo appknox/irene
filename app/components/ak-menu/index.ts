@@ -1,9 +1,9 @@
 import Component from '@glimmer/component';
 import { action } from '@ember/object';
-import { Modifier } from '@popperjs/core';
-import { WithBoundArgs } from '@glint/template';
+import type { Modifier } from '@popperjs/core';
+import type { WithBoundArgs } from '@glint/template';
 
-import AkListItemComponent from 'irene/components/ak-list/item';
+import type AkListItemComponent from 'irene/components/ak-list/item';
 import styles from './index.scss';
 
 export interface AkMenuSignature {

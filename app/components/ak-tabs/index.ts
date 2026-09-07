@@ -1,5 +1,5 @@
 import Component from '@glimmer/component';
-import AkTabsItemComponent from './item';
+import type AkTabsItemComponent from './item';
 
 export interface AkTabsSignature {
   Element: HTMLElement;

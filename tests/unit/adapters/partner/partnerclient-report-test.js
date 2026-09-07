@@ -6,7 +6,7 @@ module('Unit | Adapter | partner/partnerclient report', function (hooks) {
 
   // Replace this with your real tests.
   test('it exists', function (assert) {
-    let adapter = this.owner.lookup('adapter:partner/partnerclient-report');
+    const adapter = this.owner.lookup('adapter:partner/partnerclient-report');
     assert.ok(adapter);
   });
 });

@@ -1,5 +1,5 @@
 import commondrf from './commondrf';
-import OrganizationModel from 'irene/models/organization';
+import type OrganizationModel from 'irene/models/organization';
 
 export default class OrganizationAdapter extends commondrf {
   async saveReportPreference(modelInstance: OrganizationModel, data: object) {

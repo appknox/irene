@@ -1,16 +1,11 @@
 /* eslint-disable ember/no-computed-properties-in-native-classes */
 import { computed } from '@ember/object';
-import Model, {
-  attr,
-  hasMany,
-  AsyncHasMany,
-  belongsTo,
-  AsyncBelongsTo,
-} from '@ember-data/model';
+import type { AsyncHasMany, AsyncBelongsTo } from '@ember-data/model';
+import Model, { attr, hasMany, belongsTo } from '@ember-data/model';
 import ENUMS from 'irene/enums';
 
-import OrganizationModel from './organization';
-import FileModel from './file';
+import type OrganizationModel from './organization';
+import type FileModel from './file';
 
 export type AddProjectData = { write: boolean };
 export type OrganizationProjectModelName = 'organization-project';

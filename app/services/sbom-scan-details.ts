@@ -71,23 +71,19 @@ export default class SbomScanDetailsService extends Service {
     ai_confidence: string | null;
     ordering: string | null;
   }>) {
-    // Deliberately skip the assignment (rather than reading `this.<prop>`
-    // back as a same-value fallback) when a key is omitted. Reading a
-    // tracked property and immediately writing it back — even to the same
-    // value — still counts as a write for autotracking, and triggers
-    // Ember's "updated after being used in the same computation" assertion
-    // if this runs during a render (e.g. from a component constructor, as
-    // happened here: SbomScanDetailsComponent's constructor calls this
-    // without every key, and the omitted ones took the self-read branch).
+    // Skip omitted keys to avoid same-value tracked-property writes and Ember's render-time autotracking assertion.
     if (sbomFile !== undefined) {
       this.sbomFile = sbomFile;
     }
+
     if (view_type !== undefined) {
       this.viewType = view_type;
     }
+
     if (component_query !== undefined) {
       this.searchQuery = component_query;
     }
+
     if (component_type !== undefined) {
       this.selectedComponentType = component_type;
     }

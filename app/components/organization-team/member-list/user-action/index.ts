@@ -4,11 +4,11 @@ import { action } from '@ember/object';
 import { capitalize } from '@ember/string';
 import { task } from 'ember-concurrency';
 import { tracked } from '@glimmer/tracking';
-import IntlService from 'ember-intl/services/intl';
-import MeService from 'irene/services/me';
-import RealtimeService from 'irene/services/realtime';
-import OrganizationTeamModel from 'irene/models/organization-team';
-import OrganizationTeamMemberModel from 'irene/models/organization-team-member';
+import type IntlService from 'ember-intl/services/intl';
+import type MeService from 'irene/services/me';
+import type RealtimeService from 'irene/services/realtime';
+import type OrganizationTeamModel from 'irene/models/organization-team';
+import type OrganizationTeamMemberModel from 'irene/models/organization-team-member';
 import { waitForPromise } from '@ember/test-waiters';
 
 export interface OrganizationTeamMemberListUserActionComponentSignature {

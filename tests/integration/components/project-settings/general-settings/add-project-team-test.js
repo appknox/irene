@@ -23,6 +23,7 @@ module(
       // Server mocks
       this.server.get('/organizations/:id/teams', (schema) => {
         const results = schema.organizationTeams.all().models;
+
         return { count: results.length, next: null, previous: null, results };
       });
 

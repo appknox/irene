@@ -1,6 +1,6 @@
 import Route from '@ember/routing/route';
 import { inject as service } from '@ember/service';
-import AkNotificationsService from 'irene/services/ak-notifications';
+import type AkNotificationsService from 'irene/services/ak-notifications';
 
 interface QueryParams {
   notification_limit: number;

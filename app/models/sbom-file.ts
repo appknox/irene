@@ -1,9 +1,10 @@
-import Model, { AsyncBelongsTo, belongsTo, attr } from '@ember-data/model';
+import type { AsyncBelongsTo } from '@ember-data/model';
+import Model, { belongsTo, attr } from '@ember-data/model';
 import { inject as service } from '@ember/service';
-import IntlService from 'ember-intl/services/intl';
+import type IntlService from 'ember-intl/services/intl';
 
-import FileModel from './file';
-import SbomProjectModel from './sbom-project';
+import type FileModel from './file';
+import type SbomProjectModel from './sbom-project';
 
 export enum SbomScanStatus {
   PENDING = 1,

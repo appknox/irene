@@ -3,12 +3,12 @@ import { inject as service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
 import { action } from '@ember/object';
 import { task } from 'ember-concurrency';
-import IntlService from 'ember-intl/services/intl';
+import type IntlService from 'ember-intl/services/intl';
 import styles from './index.scss';
 
-import FileModel from 'irene/models/file';
+import type FileModel from 'irene/models/file';
 import ENV from 'irene/config/environment';
-import TagModel from 'irene/models/tag';
+import type TagModel from 'irene/models/tag';
 import type IreneAjaxService from 'irene/services/ajax';
 
 export interface FileDetailsSummaryFileTagsSignature {

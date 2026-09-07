@@ -1,0 +1,163 @@
+{{#if this.shouldShow}}
+  {{#if this.isCompact}}
+    <AkStack
+      data-test-fileDetailSeverityLevel-healthScore
+      local-class='health-score-compact'
+      @direction='column'
+      @spacing='2'
+      @width='full'
+    >
+      <AkTypography
+        data-test-fileDetailSeverityLevel-healthScore-title
+        @variant='subtitle1'
+        @fontWeight='bold'
+      >
+        {{t 'healthScore.title'}}
+      </AkTypography>
+
+      <AkStack
+        local-class='health-score-compact-box'
+        @direction='column'
+        @alignItems='center'
+        @justifyContent='center'
+        @spacing='2'
+        @width='full'
+      >
+        {{#if this.isFetching}}
+          <AkSkeleton
+            @width='4.571rem'
+            @height='1.714rem'
+            @variant='rectangular'
+          />
+
+          <AkSkeleton @width='8.571rem' @height='3rem' @variant='rectangular' />
+        {{else}}
+          {{#if this.statusLabel}}
+            <AkChip
+              data-test-fileDetailSeverityLevel-healthScore-statusChip
+              local-class='health-score-status-chip health-score-status-chip--{{this.statusChipClass}}'
+              @label={{this.statusLabel}}
+              @size='small'
+              @fontWeight='medium'
+            />
+          {{/if}}
+
+          <AkStack local-class='health-score-value' @direction='row'>
+            <AkTypography
+              data-test-fileDetailSeverityLevel-healthScore-score
+              local-class='health-score-value-score'
+              @fontWeight='bold'
+            >
+              {{this.score}}
+            </AkTypography>
+
+            <AkTypography
+              data-test-fileDetailSeverityLevel-healthScore-maxScore
+              local-class='health-score-value-max'
+              @fontWeight='regular'
+            >
+              /{{this.maxScore}}
+            </AkTypography>
+          </AkStack>
+
+          <AkButton
+            data-test-fileDetailSeverityLevel-healthScore-scoringDetails
+            @variant='text'
+            @color='primary'
+            @underline='always'
+            @typographyVariant='body2'
+            @typographyFontWeight='medium'
+            {{on 'click' this.openScoringDetailsDrawer}}
+          >
+            {{t 'healthScore.scoringDetails'}}
+          </AkButton>
+        {{/if}}
+      </AkStack>
+    </AkStack>
+  {{else}}
+    <AkStack
+      data-test-fileDetailSeverityLevel-healthScore
+      local-class='health-score-root'
+      @direction='column'
+      @spacing='2'
+      @width='full'
+      ...attributes
+    >
+      <AkTypography
+        data-test-fileDetailSeverityLevel-healthScore-title
+        @fontWeight='bold'
+      >
+        {{t 'healthScore.title'}}
+      </AkTypography>
+
+      {{#if this.isFetching}}
+        <AkSkeleton
+          data-test-fileDetailSeverityLevel-healthScore-skeleton
+          @width='8.571rem'
+          @height='3rem'
+          @variant='rectangular'
+        />
+
+        <AkSkeleton
+          @width='4.286rem'
+          @height='1.714rem'
+          @variant='rectangular'
+        />
+      {{else}}
+        <AkStack local-class='health-score-value' @direction='row'>
+          <AkTypography
+            data-test-fileDetailSeverityLevel-healthScore-score
+            local-class='health-score-value-score'
+            @fontWeight='bold'
+          >
+            {{this.score}}
+          </AkTypography>
+
+          <AkTypography
+            data-test-fileDetailSeverityLevel-healthScore-maxScore
+            local-class='health-score-value-max'
+            @fontWeight='regular'
+          >
+            /{{this.maxScore}}
+          </AkTypography>
+        </AkStack>
+
+        {{#if this.statusLabel}}
+          <AkChip
+            data-test-fileDetailSeverityLevel-healthScore-statusChip
+            local-class='health-score-status-chip health-score-status-chip--{{this.statusChipClass}}'
+            @label={{this.statusLabel}}
+            @size='small'
+            @fontWeight='medium'
+          />
+        {{/if}}
+
+        <AkButton
+          data-test-fileDetailSeverityLevel-healthScore-scoringDetails
+          @variant='text'
+          @color='primary'
+          @underline='always'
+          @typographyVariant='body2'
+          @typographyFontWeight='medium'
+          {{on 'click' this.openScoringDetailsDrawer}}
+        >
+          <:default>
+            {{t 'healthScore.scoringDetails'}}
+          </:default>
+
+          <:rightIcon>
+            <AkIcon @iconName='chevron-right' @color='primary' @size='small' />
+          </:rightIcon>
+        </AkButton>
+      {{/if}}
+    </AkStack>
+  {{/if}}
+
+  <FileDetails::SeverityLevel::HealthScore::ScoringDetailsDrawer
+    @open={{this.isScoringDetailsDrawerOpen}}
+    @onClose={{this.closeScoringDetailsDrawer}}
+    @fileId={{@file.id}}
+    @currentScore={{this.currentScore}}
+    @auditTrail={{this.auditTrail}}
+  />
+{{/if}}

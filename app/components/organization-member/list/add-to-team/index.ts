@@ -4,15 +4,15 @@ import { tracked } from '@glimmer/tracking';
 import { inject as service } from '@ember/service';
 import { task } from 'ember-concurrency';
 import { debounceTask } from 'ember-lifeline';
-import Store from 'ember-data/store';
-import IntlService from 'ember-intl/services/intl';
+import type Store from 'ember-data/store';
+import type IntlService from 'ember-intl/services/intl';
 // eslint-disable-next-line ember/use-ember-data-rfc-395-imports
-import DS from 'ember-data';
-import RouterService from '@ember/routing/router-service';
-import OrganizationMemberModel from 'irene/models/organization-member';
-import OrganizationTeamModel from 'irene/models/organization-team';
-import MeService from 'irene/services/me';
-import OrganizationModel from 'irene/models/organization';
+import type DS from 'ember-data';
+import type RouterService from '@ember/routing/router-service';
+import type OrganizationMemberModel from 'irene/models/organization-member';
+import type OrganizationTeamModel from 'irene/models/organization-team';
+import type MeService from 'irene/services/me';
+import type OrganizationModel from 'irene/models/organization';
 
 interface AddToTeamComponentSignature {
   Args: {

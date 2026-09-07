@@ -23,15 +23,16 @@ $ appknox upload &lt;path to apk/ipa file&gt;
 </pre>
       </li>
       <li class="mb-2">
-        Check if the automated scanner detected any vulnerability above (or equal to) the specified risk level:<br>
+        Check if the automated scanner detected any vulnerability above (or equal to) the specified risk level, and optionally enforce a minimum health score:<br>
 <pre class="marketplace-code-block">
-$ appknox cicheck &lt;file-id&gt; --risk_threshold &lt;low|medium|high|critical&gt;
+$ appknox cicheck &lt;file-id&gt; --risk-threshold &lt;low|medium|high|critical&gt; --health-score-threshold &lt;0-100&gt;
 </pre>
+        <small><code class="marketplace-black-text">--health-score-threshold</code> (optional) — fails the check if the app's health score falls below the specified value (0–100).</small>
       </li>
       <li class="mb-2">
         Tip: You can combine the upload and cicheck command as below which will list down all the vulnerabilities equal to or above the specified risk threshold and will exit with an error status.<br>
 <pre class="marketplace-code-block">
-$ appknox upload &lt;path to apk/ipa file&gt; | xargs appknox cicheck --risk-threshold &lt;low|medium|high|critical&gt;
+$ appknox upload &lt;path to apk/ipa file&gt; | xargs appknox cicheck --risk-threshold &lt;low|medium|high|critical&gt; --health-score-threshold &lt;0-100&gt;
 </pre>
       </li>
     </ul>

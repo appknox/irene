@@ -1,7 +1,7 @@
 import Component from '@glimmer/component';
 import { inject as service } from '@ember/service';
 import ENV from 'irene/config/environment';
-import AttachmentModel from 'irene/models/attachment';
+import type AttachmentModel from 'irene/models/attachment';
 import { task } from 'ember-concurrency';
 import type IreneAjaxService from 'irene/services/ajax';
 import type { AjaxError } from 'irene/services/ajax';

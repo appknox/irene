@@ -1,9 +1,9 @@
 import Route from '@ember/routing/route';
 import { ScrollToTop } from 'irene/utils/scroll-to-top';
 import { inject as service } from '@ember/service';
-import RouterService from '@ember/routing/router-service';
+import type RouterService from '@ember/routing/router-service';
 
-import MeService from 'irene/services/me';
+import type MeService from 'irene/services/me';
 
 export default class AuthenticatedDashboardAnalyticsRoute extends ScrollToTop(
   Route

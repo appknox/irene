@@ -4,7 +4,7 @@ import ENV from 'irene/config/environment';
 import { inject as service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
 
-import OrganizationService from 'irene/services/organization';
+import type OrganizationService from 'irene/services/organization';
 import type IreneAjaxService from 'irene/services/ajax';
 
 export interface IScanCount {

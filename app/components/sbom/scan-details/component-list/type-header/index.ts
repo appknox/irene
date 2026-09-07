@@ -33,10 +33,7 @@ export default class FileDetailsDynamicScanResultsCoverageTableComponentTypeHead
         key: this.intl.t('file'),
         value: ENUMS.SBOM_COMPONENT_TYPE.FILE,
       },
-      // Machine-learning-model is deliberately excluded here -- AI/ML
-      // components no longer appear in the SBOM tab at all (they live in
-      // the AI BoM tab now), so this option would always return zero
-      // results if left in.
+      // Exclude machine-learning-model here since AI/ML components now appear only in the AI BoM tab.
     ];
   }
 

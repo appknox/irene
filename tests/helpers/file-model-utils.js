@@ -4,10 +4,18 @@ import { setupKnoxiqMirageEndpoints } from 'irene/tests/helpers/knoxiq-test-util
 export function setupFileModelEndpoints(server) {
   const previous_file = server.create('file', { id: 10000 });
   const file_risk_info = server.create('file-risk').toJSON();
+  const file_health_score_audit = server
+    .create('file-health-score-audit')
+    .toJSON();
 
   // File Risk Info
   server.get('/v3/files/:id/risk', () => {
     return file_risk_info;
+  });
+
+  // File Health Score Audit
+  server.get('/v3/files/:id/health_score_audit', () => {
+    return file_health_score_audit;
   });
 
   // File Previous File
@@ -63,6 +71,7 @@ export function setupFileModelEndpoints(server) {
 
   return {
     file_risk_info,
+    file_health_score_audit,
     previous_file,
   };
 }

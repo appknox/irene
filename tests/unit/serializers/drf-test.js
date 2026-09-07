@@ -6,11 +6,11 @@ module('Unit | Serializer | DRFSerializer', function (hooks) {
   setupTest(hooks);
 
   test.skip('serializeIntoHash', function (assert) {
-    let serializer = this.owner.lookup('serializer:application');
+    const serializer = this.owner.lookup('serializer:application');
 
     // serializer.serialize = sinon.stub().returns({ serialized: 'record' });
 
-    let hash = { existing: 'hash' };
+    const hash = { existing: 'hash' };
 
     serializer.serializeIntoHash(hash, 'type', 'record', 'options');
 
@@ -23,23 +23,23 @@ module('Unit | Serializer | DRFSerializer', function (hooks) {
   });
 
   test('keyForAttribute', function (assert) {
-    let serializer = this.owner.lookup('serializer:application');
+    const serializer = this.owner.lookup('serializer:application');
 
-    let result = serializer.keyForAttribute('firstName');
+    const result = serializer.keyForAttribute('firstName');
 
     assert.strictEqual(result, 'first_name');
   });
 
   test('keyForRelationship', function (assert) {
-    let serializer = this.owner.lookup('serializer:application');
+    const serializer = this.owner.lookup('serializer:application');
 
-    let result = serializer.keyForRelationship('projectManagers', 'hasMany');
+    const result = serializer.keyForRelationship('projectManagers', 'hasMany');
 
     assert.strictEqual(result, 'project_managers');
   });
 
   test('extractPageNumber', function (assert) {
-    let serializer = this.owner.lookup('serializer:application');
+    const serializer = this.owner.lookup('serializer:application');
 
     assert.strictEqual(
       serializer.extractPageNumber('https://xmpl.com/a/p/?page=3234'),

@@ -1,5 +1,6 @@
 import ENV from 'irene/config/environment';
-import BaseAuthenticator, { LoginSuccessDataProps, processData } from './base';
+import type { LoginSuccessDataProps } from './base';
+import BaseAuthenticator, { processData } from './base';
 
 class IreneAuthenticator extends BaseAuthenticator {
   async authenticate(identification: string, password: string, otp: string) {

@@ -2,13 +2,9 @@
   position: sticky;
   z-index: 10;
   top: -0.5em;
-  background-color: var(--storeknox-fake-apps-details-header-skeleton-background-color);
-
-  .fake-app-title-container {
-    border: 1px solid
-      var(--storeknox-fake-apps-details-header-skeleton-title-container-border-color);
-    border-bottom: none;
-  }
+  background-color: var(
+    --storeknox-fake-apps-details-header-skeleton-background-color
+  );
 
   .fake-apps-details-header-app-info-container {
     background-color: var(
@@ -16,12 +12,17 @@
     );
 
     border: 1px solid
-      var(--storeknox-fake-apps-details-header-skeleton-title-container-border-color);
+      var(
+        --storeknox-fake-apps-details-header-skeleton-title-container-border-color
+      );
   }
 
-  .app-info-logo {
-    border-radius: 100%;
-    width: 58px;
-    height: 58px;
+  .fake-app-detail-container {
+    border: 1px solid
+      var(
+        --storeknox-fake-apps-details-header-skeleton-title-container-border-color
+      );
+    border-top: none;
+    padding: 0.5em 1.5em;
   }
 }

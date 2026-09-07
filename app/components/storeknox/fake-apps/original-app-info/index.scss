@@ -6,7 +6,11 @@
 
   .original-app-details-container {
     position: sticky;
-    top: 312px;
+    top: 195px;
+
+    &.is-ignored {
+      top: 240px;
+    }
 
     .original-app-details-header-indicator {
       width: 16px;

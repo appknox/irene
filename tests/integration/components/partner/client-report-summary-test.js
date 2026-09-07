@@ -44,6 +44,7 @@ module(
         'v2/partnerclients/:clientId/files/:fileId/summary',
         (schema) => {
           const data = schema['partner/partnerclientFileSummaries'].find(1);
+
           return serializer(data);
         }
       );
@@ -93,6 +94,7 @@ module(
         'v2/partnerclients/:clientId/files/:fileId/summary',
         (schema) => {
           const data = schema['partner/partnerclientFileSummaries'].find(1);
+
           return serializer(data);
         }
       );
@@ -224,6 +226,7 @@ module(
         'v2/partnerclients/:clientId/files/:fileId/summary',
         (schema) => {
           const data = schema['partner/partnerclientFileSummaries'].find(1);
+
           return serializer(data);
         }
       );

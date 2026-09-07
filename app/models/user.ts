@@ -1,15 +1,16 @@
 /* eslint-disable ember/no-computed-properties-in-native-classes */
-import Model, { AsyncHasMany, attr, hasMany } from '@ember-data/model';
+import type { AsyncHasMany } from '@ember-data/model';
+import Model, { attr, hasMany } from '@ember-data/model';
 import { inject as service } from '@ember/service';
 import { computed } from '@ember/object';
 import { isEmpty } from '@ember/utils';
 import ENUMS from 'irene/enums';
 import ENV from 'irene/config/environment';
-import IntlService from 'ember-intl/services/intl';
+import type IntlService from 'ember-intl/services/intl';
 
-import ProjectModel from './project';
-import PricingModel from './pricing';
-import SubmissionModel from './submission';
+import type ProjectModel from './project';
+import type PricingModel from './pricing';
+import type SubmissionModel from './submission';
 
 export default class UserModel extends Model {
   @service declare intl: IntlService;

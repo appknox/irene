@@ -6,8 +6,8 @@ module('Unit | Model | nf in app notification', function (hooks) {
 
   // Replace this with your real tests.
   test('it exists', function (assert) {
-    let store = this.owner.lookup('service:store');
-    let model = store.createRecord('nf-in-app-notification', {});
+    const store = this.owner.lookup('service:store');
+    const model = store.createRecord('nf-in-app-notification', {});
     assert.ok(model);
   });
 });

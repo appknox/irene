@@ -6,8 +6,8 @@ module('Unit | Model | scan parameter group', function (hooks) {
 
   // Replace this with your real tests.
   test('it exists', function (assert) {
-    let store = this.owner.lookup('service:store');
-    let model = store.createRecord('scan-parameter-group', {});
+    const store = this.owner.lookup('service:store');
+    const model = store.createRecord('scan-parameter-group', {});
     assert.ok(model);
   });
 });

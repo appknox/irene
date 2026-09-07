@@ -10,7 +10,7 @@ import type OrganizationTeamModel from 'irene/models/organization-team';
 import type OrganizationModel from 'irene/models/organization';
 import type MeService from 'irene/services/me';
 import type AnalyticsService from 'irene/services/analytics';
-import { ActiveActionDetailsType } from '../active-action';
+import type { ActiveActionDetailsType } from '../active-action';
 
 export interface OrganizationTeamDetailsTeamInfoComponentSignature {
   Args: {

@@ -1,9 +1,9 @@
 import { action } from '@ember/object';
 import Component from '@glimmer/component';
-import FileModel from 'irene/models/file';
+import type FileModel from 'irene/models/file';
 import styles from './index.scss';
 import { tracked } from '@glimmer/tracking';
-import IntlService from 'ember-intl/services/intl';
+import type IntlService from 'ember-intl/services/intl';
 import { inject as service } from '@ember/service';
 
 interface FileOverviewHeaderSignature {

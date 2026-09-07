@@ -1,21 +1,21 @@
 /* eslint-disable ember/no-observers */
 // eslint-disable-next-line ember/use-ember-data-rfc-395-imports
-import DS from 'ember-data';
+import type DS from 'ember-data';
 
 import Component from '@glimmer/component';
 import { inject as service } from '@ember/service';
 import { task } from 'ember-concurrency';
 import { tracked } from '@glimmer/tracking';
-import Store from 'ember-data/store';
+import type Store from 'ember-data/store';
 import { action } from '@ember/object';
-import IntlService from 'ember-intl/services/intl';
+import type IntlService from 'ember-intl/services/intl';
 
-import MeService from 'irene/services/me';
-import RealtimeService from 'irene/services/realtime';
-import ProjectModel from 'irene/models/project';
+import type MeService from 'irene/services/me';
+import type RealtimeService from 'irene/services/realtime';
+import type ProjectModel from 'irene/models/project';
 import { addObserver, removeObserver } from '@ember/object/observers';
-import { PaginationProviderActionsArgs } from 'irene/components/ak-pagination-provider';
-import ProjectCollaboratorModel from 'irene/models/project-collaborator';
+import type { PaginationProviderActionsArgs } from 'irene/components/ak-pagination-provider';
+import type ProjectCollaboratorModel from 'irene/models/project-collaborator';
 import parseError from 'irene/utils/parse-error';
 
 type ProjectCollaboratorsQueryResponse =
@@ -38,6 +38,7 @@ export default class ProjectSettingsGeneralSettingsCollaboratorsTableComponent e
 
   @tracked
   projectCollaboratorsResponse: ProjectCollaboratorsQueryResponse | null = null;
+
   @tracked offset = 0;
   @tracked limit = 10;
 

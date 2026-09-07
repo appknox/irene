@@ -2,15 +2,14 @@ import Component from '@glimmer/component';
 import { inject as service } from '@ember/service';
 import { task } from 'ember-concurrency';
 import { tracked } from '@glimmer/tracking';
-import Store from 'ember-data/store';
-import IntlService from 'ember-intl/services/intl';
+import type Store from 'ember-data/store';
+import type IntlService from 'ember-intl/services/intl';
 import { waitForPromise } from '@ember/test-waiters';
 
 import parseError from 'irene/utils/parse-error';
-import ProjectModel from 'irene/models/project';
-import ProfileModel, {
-  ProfileRegulatoryReportPreference,
-} from 'irene/models/profile';
+import type ProjectModel from 'irene/models/project';
+import type { ProfileRegulatoryReportPreference } from 'irene/models/profile';
+import type ProfileModel from 'irene/models/profile';
 
 interface ProjectSettingsAnalysisSettingsRegulatoryPreferenceSignature {
   Args: {

@@ -6,11 +6,18 @@ import { tracked } from 'tracked-built-ins';
 
 import ENV from 'irene/config/environment';
 import ENUMS from 'irene/enums';
-import { PASSED_CVSS_V4_METRICS } from 'irene/utils/cvss-metrics';
+
+import {
+  PASSED_CVSS_V3_METRICS,
+  PASSED_CVSS_V3_VECTOR,
+  PASSED_CVSS_V4_METRICS,
+  PASSED_CVSS_V4_VECTOR,
+} from 'irene/utils/cvss-metrics';
 
 import type IntlService from 'ember-intl/services/intl';
 import type SecurityAnalysisModel from 'irene/models/security/analysis';
 import type IreneAjaxService from 'irene/services/ajax';
+import parseError from 'irene/utils/parse-error';
 
 export interface SecurityAnalysisListTableActionComponentSignature {
   Args: {
@@ -28,9 +35,14 @@ export default class SecurityAnalysisListTableActionComponent extends Component<
   CVSS_V4_PASSED_STATE = {
     risk: ENUMS.RISK.NONE,
     status: ENUMS.ANALYSIS_STATUS.COMPLETED,
-    cvss_vector:
-      'CVSS:4.0/AV:N/AC:L/AT:N/PR:N/UI:N/VC:N/VI:N/VA:N/SC:N/SI:N/SA:N',
+    cvss_vector: PASSED_CVSS_V4_VECTOR,
     ...PASSED_CVSS_V4_METRICS,
+  };
+
+  CVSS_V3_PASSED_STATE = {
+    legacy_cvss_risk: ENUMS.RISK.NONE,
+    legacy_cvss_vector: PASSED_CVSS_V3_VECTOR,
+    legacy_cvss_vector_fields: PASSED_CVSS_V3_METRICS,
   };
 
   get tPleaseTryAgain() {
@@ -39,13 +51,6 @@ export default class SecurityAnalysisListTableActionComponent extends Component<
 
   get analysis() {
     return this.args.analysis;
-  }
-
-  get analysisCVSSVersionIsLegacy() {
-    return (
-      this.analysis.activeCvssVersion !== null &&
-      this.analysis.activeCvssVersion !== this.analysis.cvssVersion
-    );
   }
 
   @action confirmCallback() {
@@ -59,14 +64,6 @@ export default class SecurityAnalysisListTableActionComponent extends Component<
   }
 
   @action openMarkPassedConfirmBox() {
-    if (this.analysisCVSSVersionIsLegacy) {
-      this.notify.error(
-        'You cannot mark an analysis with legacy CVSS as passed. Please update the CVSS version in the analysis details page to the latest version (CVSS v4) and try again.'
-      );
-
-      return;
-    }
-
     this.showMarkPassedConfirmBox = true;
   }
 
@@ -112,26 +109,15 @@ export default class SecurityAnalysisListTableActionComponent extends Component<
           cvss_vector: cvss_vector,
           risk: risk,
           status: status,
-          legacy_cvss_risk: this.analysis.legacyCvssRisk,
-          legacy_cvss_vector: this.analysis.legacyCvssVector,
           active_cvss_vector_fields: cvssMetrics,
-          legacy_cvss_vector_fields: this.analysis.legacyCvssMetrics,
+          ...this.CVSS_V3_PASSED_STATE,
         }),
       });
 
       await this.analysis.reload();
       this.notify.success(`Analysis ${this.analysis.id} marked as passed`);
     } catch (err) {
-      const error = err as AdapterError;
-      let errMsg = this.tPleaseTryAgain;
-
-      if (error.errors && error.errors.length) {
-        errMsg = error.errors[0]?.detail || errMsg;
-      } else if (error.message) {
-        errMsg = error.message;
-      }
-
-      this.notify.error(errMsg);
+      this.notify.error(parseError(err, this.tPleaseTryAgain));
     }
   });
 }

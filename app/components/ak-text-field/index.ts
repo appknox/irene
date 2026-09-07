@@ -1,7 +1,7 @@
 import Component from '@glimmer/component';
 import { guidFor } from '@ember/object/internals';
 
-import { TypographyVariant, TypographyColors } from '../ak-typography';
+import type { TypographyVariant, TypographyColors } from '../ak-typography';
 
 type LabelTypographyVariant = TypographyVariant;
 type LabelTypographyColor = TypographyColors;

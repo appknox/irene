@@ -1,13 +1,13 @@
 import Service from '@ember/service';
 import { inject as service } from '@ember/service';
 import { task } from 'ember-concurrency';
-import Store from '@ember-data/store';
-import IntlService from 'ember-intl/services/intl';
+import type Store from '@ember-data/store';
+import type IntlService from 'ember-intl/services/intl';
 
 // eslint-disable-next-line ember/use-ember-data-rfc-395-imports
-import DS from 'ember-data';
+import type DS from 'ember-data';
 
-import ProjectModel from 'irene/models/project';
+import type ProjectModel from 'irene/models/project';
 import { tracked } from '@glimmer/tracking';
 import { action } from '@ember/object';
 

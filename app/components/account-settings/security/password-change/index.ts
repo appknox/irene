@@ -3,7 +3,7 @@ import { service } from '@ember/service';
 import { task } from 'ember-concurrency';
 import { tracked } from '@glimmer/tracking';
 import lookupValidator from 'ember-changeset-validations';
-import { BufferedChangeset } from 'ember-changeset/types';
+import type { BufferedChangeset } from 'ember-changeset/types';
 import {
   validatePresence,
   validateConfirmation,

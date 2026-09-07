@@ -1,9 +1,9 @@
 import Route from '@ember/routing/route';
 import { inject as service } from '@ember/service';
-import RouterService from '@ember/routing/router-service';
-import Transition from '@ember/routing/transition';
+import type RouterService from '@ember/routing/router-service';
+import type Transition from '@ember/routing/transition';
 
-import OrganizationService from 'irene/services/organization';
+import type OrganizationService from 'irene/services/organization';
 import type IreneAjaxService from 'irene/services/ajax';
 import type { AjaxError } from 'irene/services/ajax';
 

@@ -1,9 +1,4 @@
-<AkStack
-  @alignItems='center'
-  @justifyContent='flex-end'
-  @spacing='1'
-  {{style minWidth='300px'}}
->
+<AkStack @alignItems='center' @justifyContent='flex-end' @spacing='1'>
   {{#if this.activeRouteTagProps}}
     <Storeknox::InventoryDetails::AppDetails::ActionsList::Button
       @skInventoryApp={{@skInventoryApp}}

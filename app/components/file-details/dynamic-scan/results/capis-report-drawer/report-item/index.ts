@@ -13,7 +13,8 @@ import type { FileCapiReportDetails } from 'irene/components/file-details/dynami
 import type FileModel from 'irene/models/file';
 import type IreneAjaxService from 'irene/services/ajax';
 
-import FileCapiReportModel, {
+import type FileCapiReportModel from 'irene/models/file-capi-report';
+import {
   type FileCapiReportModelName,
   type FileCapiReportScanType,
 } from 'irene/models/file-capi-report';

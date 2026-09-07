@@ -1,5 +1,5 @@
 import Component from '@glimmer/component';
-import UserModel from 'irene/models/user';
+import type UserModel from 'irene/models/user';
 
 export interface AccountSettingsSecuritySignature {
   Args: {

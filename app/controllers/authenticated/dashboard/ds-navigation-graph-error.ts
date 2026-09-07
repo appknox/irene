@@ -3,7 +3,7 @@ import { service } from '@ember/service';
 
 import type IntlService from 'ember-intl/services/intl';
 import { type AkBreadcrumbsItemProps } from 'irene/services/ak-breadcrumbs';
-import { NavigationGraphRouteError } from 'irene/routes/authenticated/dashboard/ds-navigation-graph-error';
+import type { NavigationGraphRouteError } from 'irene/routes/authenticated/dashboard/ds-navigation-graph-error';
 
 export default class AuthenticatedDashboardDsNavigationGraphErrorController extends Controller {
   @service declare intl: IntlService;

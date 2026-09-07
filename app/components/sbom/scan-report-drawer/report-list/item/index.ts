@@ -1,17 +1,16 @@
 import { inject as service } from '@ember/service';
 import Component from '@glimmer/component';
 import { task } from 'ember-concurrency';
-import IntlService from 'ember-intl/services/intl';
+import type IntlService from 'ember-intl/services/intl';
 import { action } from '@ember/object';
 import { waitForPromise } from '@ember/test-waiters';
 
 import parseError from 'irene/utils/parse-error';
-import ClipboardJS from 'clipboard/src/clipboard';
+import type ClipboardJS from 'clipboard/src/clipboard';
 
-import SbomReportModel, {
-  SbomReportStatus,
-  SbomReportType,
-} from 'irene/models/sbom-report';
+import type { SbomReportType } from 'irene/models/sbom-report';
+import type SbomReportModel from 'irene/models/sbom-report';
+import { SbomReportStatus } from 'irene/models/sbom-report';
 
 interface SbomScanReportDetails {
   type: SbomReportType;

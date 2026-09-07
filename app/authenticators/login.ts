@@ -1,5 +1,6 @@
 import { Promise } from 'rsvp';
-import BaseAuthenticator, { LoginSuccessDataProps, processData } from './base';
+import type { LoginSuccessDataProps } from './base';
+import BaseAuthenticator, { processData } from './base';
 
 export default class LoginAuth extends BaseAuthenticator {
   authenticate(data: LoginSuccessDataProps) {

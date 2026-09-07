@@ -5,6 +5,7 @@ export default class SkRequestedAppAdapter extends CommonDRFAdapter {
 
   _buildURL() {
     const baseurl = `${this.namespace}/sk_requested_apps`;
+
     return this.buildURLFromBase(baseurl);
   }
 }

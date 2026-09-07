@@ -1,5 +1,6 @@
 import cyTranslate from '../support/translations';
-import { mirageServer, MirageFactoryDefProps } from '../support/Mirage';
+import { mirageServer } from '../support/Mirage';
+import type { MirageFactoryDefProps } from '../support/Mirage';
 
 import LoginActions from '../support/Actions/auth/LoginActions';
 import NetworkActions from '../support/Actions/common/NetworkActions';

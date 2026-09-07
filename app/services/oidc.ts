@@ -120,6 +120,7 @@ export default class OidcService extends Service {
       if (err.status === 400 || err.payload.error) {
         if (err.payload.redirect_url) {
           this.window.location.href = err.payload.redirect_url;
+
           return;
         } else {
           throw {
@@ -162,6 +163,7 @@ export default class OidcService extends Service {
         if (err.payload.validation_result.redirect_url) {
           this.window.location.href =
             err.payload.validation_result.redirect_url;
+
           return;
         } else {
           throw {

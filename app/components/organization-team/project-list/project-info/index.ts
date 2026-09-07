@@ -1,11 +1,11 @@
 import Component from '@glimmer/component';
 import { inject as service } from '@ember/service';
-import Store from 'ember-data/store';
+import type Store from 'ember-data/store';
 import { tracked } from '@glimmer/tracking';
 import { task } from 'ember-concurrency';
 
-import OrganizationProjectModel from 'irene/models/organization-project';
-import ProjectModel from 'irene/models/project';
+import type OrganizationProjectModel from 'irene/models/organization-project';
+import type ProjectModel from 'irene/models/project';
 import parseError from 'irene/utils/parse-error';
 
 export interface OrganizationTeamProjectListProjectInfoComponentSignature {

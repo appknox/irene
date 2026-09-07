@@ -3,8 +3,8 @@ import Component from '@glimmer/component';
 import { action } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
 
-import ProjectModel from 'irene/models/project';
-import MeService from 'irene/services/me';
+import type ProjectModel from 'irene/models/project';
+import type MeService from 'irene/services/me';
 
 interface ProjectSettingsGeneralSettingsAddProjectTeamSignature {
   Args: {

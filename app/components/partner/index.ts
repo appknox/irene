@@ -7,7 +7,7 @@ import type IntlService from 'ember-intl/services/intl';
 import type RouterService from '@ember/routing/router-service';
 import type OrganizationService from 'irene/services/organization';
 import type PartnerService from 'irene/services/partner';
-import UserModel from 'irene/models/user';
+import type UserModel from 'irene/models/user';
 
 export interface PartnerComponentSignature {
   Element: HTMLElement;

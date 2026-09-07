@@ -20,6 +20,7 @@ class SkFakeAppsListServiceStub extends Service {
   setQueryParams(params) {
     this.limit = params.limit ?? this.limit;
     this.offset = params.offset ?? this.offset;
+
     return this;
   }
 

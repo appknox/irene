@@ -20,6 +20,7 @@ class NotificationsStub extends Service {
   error(msg) {
     this.errorMsg = msg;
   }
+
   success(msg) {
     this.successMsg = msg;
   }
@@ -214,7 +215,7 @@ module('Integration | Component | upload-app', function (hooks) {
       .dom('[data-test-uploadAppStatus-submissionCount="failed"]')
       .hasText('00');
 
-    let submissionDetails = findAll('[data-test-uploadAppStatus-submission]');
+    const submissionDetails = findAll('[data-test-uploadAppStatus-submission]');
 
     // there should be 1 submission
     assert.strictEqual(submissionDetails.length, 1);

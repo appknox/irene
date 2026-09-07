@@ -6,9 +6,8 @@ import { tracked } from '@glimmer/tracking';
 
 import type Store from 'ember-data/store';
 
-import SecurityAnalysisModel, {
-  type SecurityAnalysisFinding,
-} from 'irene/models/security/analysis';
+import type SecurityAnalysisModel from 'irene/models/security/analysis';
+import { type SecurityAnalysisFinding } from 'irene/models/security/analysis';
 
 export interface SecurityAnalysisDetailsFindingsAddFormComponentSignature {
   Args: {

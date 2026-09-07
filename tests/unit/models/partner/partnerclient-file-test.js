@@ -1,14 +1,14 @@
-/* eslint-disable prettier/prettier */
 import { module, test } from 'qunit';
 import { setupTest } from 'ember-qunit';
 
-module('Unit | Model | partner partnerclient file', function(hooks) {
+module('Unit | Model | partner partnerclient file', function (hooks) {
   setupTest(hooks);
 
   // Replace this with your real tests.
-  test('it exists', function(assert) {
-    let store = this.owner.lookup('service:store');
-    let model = store.createRecord('partner/partnerclient-file', {});
+  test('it exists', function (assert) {
+    const store = this.owner.lookup('service:store');
+    const model = store.createRecord('partner/partnerclient-file', {});
+
     assert.ok(model);
   });
 });

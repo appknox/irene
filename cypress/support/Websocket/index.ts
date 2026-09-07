@@ -1,4 +1,4 @@
-import { MirageFactoryDefProps } from '../Mirage';
+import type { MirageFactoryDefProps } from '../Mirage';
 
 export type WS_MODEL_CREATED_PAYLOAD_MAP = {
   submission: {

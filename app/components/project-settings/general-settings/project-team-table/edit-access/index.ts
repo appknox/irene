@@ -2,13 +2,13 @@ import Component from '@glimmer/component';
 import { inject as service } from '@ember/service';
 import { task } from 'ember-concurrency';
 import { tracked } from '@glimmer/tracking';
-import Store from 'ember-data/store';
+import type Store from 'ember-data/store';
 import { action } from '@ember/object';
-import IntlService from 'ember-intl/services/intl';
+import type IntlService from 'ember-intl/services/intl';
 import { waitForPromise } from '@ember/test-waiters';
 
-import ProjectTeamModel from 'irene/models/project-team';
-import ProjectModel from 'irene/models/project';
+import type ProjectTeamModel from 'irene/models/project-team';
+import type ProjectModel from 'irene/models/project';
 import parseError from 'irene/utils/parse-error';
 
 interface ProjectSettingsGeneralSettingsProjectTeamTableEditAccessSignature {

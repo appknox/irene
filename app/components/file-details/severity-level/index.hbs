@@ -5,12 +5,30 @@
     </AkTypography>
   </div>
 
-  <AkStack class='p-3' @spacing='5' @alignItems='center' @flexWrap='wrap'>
-    <FileChart
-      {{style maxWidth='350px'}}
-      @file={{@file}}
-      @legendMaxWidth={{350}}
-      @size='large'
-    />
+  <AkStack
+    local-class='severity-level-body'
+    @alignItems='stretch'
+    @spacing='3'
+  >
+    <AkStack local-class='severity-level-chart-section' @alignItems='center'>
+      <FileChart
+        local-class='severity-level-chart'
+        @file={{@file}}
+        @legendMaxWidth={{350}}
+        @size='large'
+      />
+    </AkStack>
+
+    {{#if this.hasHealthScore}}
+      <AkDivider
+        data-test-fileDetailSeverityLevel-divider
+        local-class='severity-level-divider'
+        @direction='vertical'
+      />
+
+      <div local-class='severity-level-health-score-section'>
+        <FileDetails::SeverityLevel::HealthScore @file={{@file}} />
+      </div>
+    {{/if}}
   </AkStack>
 </div>

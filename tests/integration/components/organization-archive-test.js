@@ -39,6 +39,7 @@ class NotificationsStub extends Service {
   error(msg) {
     this.errorMsg = msg;
   }
+
   success(msg) {
     this.successMsg = msg;
   }
@@ -559,9 +560,10 @@ module('Integration | Component | organization-archive', function (hooks) {
 
     this.server.get('/organizations/:id/users/:userId', (schema, req) => {
       const user = schema.organizationUsers.find(req.params.userId);
-      if (user.id == systemUser.id) {
+      if (user.id === systemUser.id) {
         return new Response(404, {});
       }
+
       return user?.toJSON();
     });
 

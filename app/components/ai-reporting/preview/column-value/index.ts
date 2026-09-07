@@ -55,6 +55,7 @@ export default class AiReportingPreviewColumnValue extends Component<AiReporting
 
   get shouldShowToggle() {
     const value = String(this.value || '');
+
     return value.length > this.CONTENT_THRESHOLD;
   }
 

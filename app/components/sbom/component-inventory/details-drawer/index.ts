@@ -9,7 +9,7 @@ import type RouterService from '@ember/routing/router-service';
 import type Store from 'ember-data/store';
 
 // eslint-disable-next-line ember/use-ember-data-rfc-395-imports
-import { DS } from 'ember-data';
+import type { DS } from 'ember-data';
 
 import parseError from 'irene/utils/parse-error';
 import ENUMS from 'irene/enums';

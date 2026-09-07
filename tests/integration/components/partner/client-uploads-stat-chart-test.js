@@ -134,6 +134,7 @@ module(
 
       this.server.get('v2/partners/:id/analytics', (_, req) => {
         chart_analytics_request = req;
+
         return {
           id: req.params.id,
           upload_timeline: [

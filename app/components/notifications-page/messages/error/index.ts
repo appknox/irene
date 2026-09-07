@@ -1,6 +1,6 @@
 import Component from '@glimmer/component';
 import config from 'irene/config/environment';
-import NfInAppNotificationModel from 'irene/models/nf-in-app-notification';
+import type NfInAppNotificationModel from 'irene/models/nf-in-app-notification';
 import { type ErrorContext } from './context';
 
 interface NotificationsPageMessagesErrorArgs {

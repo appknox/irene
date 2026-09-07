@@ -3,8 +3,8 @@ import { service } from '@ember/service';
 import Component from '@glimmer/component';
 import { tracked } from '@glimmer/tracking';
 import { task } from 'ember-concurrency';
-import IntlService from 'ember-intl/services/intl';
-import OrganizationMemberModel from 'irene/models/organization-member';
+import type IntlService from 'ember-intl/services/intl';
+import type OrganizationMemberModel from 'irene/models/organization-member';
 
 interface OrganizationMemberChangeActivitySignature {
   Args: {

@@ -1,24 +1,3 @@
-.ai-bom-component-list {
-  .skeleton-loader {
-    padding: 1em;
-  }
-
-  .empty-state {
-    min-height: 300px;
-  }
-
-  .search-container {
-    margin-bottom: 1.5em;
-  }
-}
-
-.new-feature-svg-wrapper {
-  svg {
-    width: 280px;
-    height: auto;
-  }
-}
-
 .listing-container {
   background: var(
     --sbom-scan-details-ai-bom-component-list-listing-container-background-color

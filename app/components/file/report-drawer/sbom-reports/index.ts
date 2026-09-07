@@ -6,7 +6,8 @@ import { action } from '@ember/object';
 import { waitForPromise } from '@ember/test-waiters';
 import type RouterService from '@ember/routing/router-service';
 
-import SbomFileModel, { SbomScanStatus } from 'irene/models/sbom-file';
+import type SbomFileModel from 'irene/models/sbom-file';
+import { SbomScanStatus } from 'irene/models/sbom-file';
 import type OrganizationService from 'irene/services/organization';
 import type FileModel from 'irene/models/file';
 
@@ -71,6 +72,7 @@ export default class FileReportDrawerSbomReportsComponent extends Component<File
   get currentFileIsLatestFile() {
     const currentRouteFileId =
       this.router?.currentRoute?.parent?.params['fileid'];
+
     return currentRouteFileId === this.latestFileId;
   }
 

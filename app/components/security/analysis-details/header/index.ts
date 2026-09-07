@@ -11,14 +11,27 @@ import parseError from 'irene/utils/parse-error';
 
 import type SecurityAnalysisModel from 'irene/models/security/analysis';
 import type { CvssV4Metrics } from 'irene/models/security/analysis';
-import type { AnalysisCvssUpdateDetails } from '..';
-import { PASSED_CVSS_V4_METRICS } from 'irene/utils/cvss-metrics';
+
+import type {
+  AnalysisCvssUpdateDetails,
+  AnalysisCvssUpdateDetailsLegacy,
+} from '..';
+
+import {
+  PASSED_CVSS_V3_METRICS,
+  PASSED_CVSS_V3_VECTOR,
+  PASSED_CVSS_V4_METRICS,
+  PASSED_CVSS_V4_VECTOR,
+} from 'irene/utils/cvss-metrics';
 
 export interface SecurityAnalysisDetailsHeaderComponentSignature {
   Args: {
     analysis: SecurityAnalysisModel | null;
     currentCVSSMetrics: CvssV4Metrics;
     updateCVSSDetails(analysisCvssDetails: AnalysisCvssUpdateDetails): void;
+    updateLegacyCVSSDetails(
+      analysisCvssDetails: AnalysisCvssUpdateDetailsLegacy
+    ): void;
     updateAnalysis(): Promise<unknown>;
   };
 }
@@ -43,31 +56,12 @@ export default class SecurityAnalysisDetailsHeaderComponent extends Component<Se
     return this.analysis?.cvssVersion;
   }
 
-  get analysisCurrentCvssVersionIsLegacy() {
-    return (
-      this.activeCvssVersion !== null &&
-      this.activeCvssVersion !== this.currentCvssVersion
-    );
-  }
-
   get showMarkAsPassedButton() {
-    if (this.analysisCurrentCvssVersionIsLegacy) {
-      return true;
-    }
-
     return !this.analysis?.isPassed;
-  }
-
-  get hideMarkAsPassedButton() {
-    return this.activeCvssVersion !== this.currentCvssVersion;
   }
 
   get analysisStatus() {
     return this.statuses.find((s) => s.value === this.analysis?.status);
-  }
-
-  get cannotMarkAsPassedTooltipText() {
-    return `You cannot mark an analysis as passed if the CVSS version is not updated to the latest version (CVSS v${this.activeCvssVersion})`;
   }
 
   get ireneFilePath() {
@@ -100,34 +94,37 @@ export default class SecurityAnalysisDetailsHeaderComponent extends Component<Se
   }
 
   @action triggerMarkAsPassed() {
-    if (this.analysisCurrentCvssVersionIsLegacy) {
-      this.notifications.error(this.cannotMarkAsPassedTooltipText);
-
-      return;
-    }
-
     this.markAsPassed.perform();
   }
 
   markAsPassed = task(async () => {
     try {
-      const PASSED_CVSS_VECTOR =
-        'CVSS:4.0/AV:N/AC:L/AT:N/PR:N/UI:N/VC:N/VI:N/VA:N/SC:N/SI:N/SA:N';
-
       const passedCVSSProperties = {
         cvssMetrics: PASSED_CVSS_V4_METRICS,
         cvssBase: 0.0,
         risk: ENUMS.RISK.NONE,
       };
 
+      const passedLegacyCVSSProperties = {
+        cvssMetrics: PASSED_CVSS_V3_METRICS,
+        cvssBase: 0.0,
+        risk: ENUMS.RISK.NONE,
+      };
+
       this.args.updateCVSSDetails(passedCVSSProperties);
+      this.args.updateLegacyCVSSDetails(passedLegacyCVSSProperties);
       this.analysis?.set('status', ENUMS.ANALYSIS_STATUS.COMPLETED);
 
       // Update the analysis with the passed CVSS metrics
       await this.args.updateAnalysis();
 
       this.analysis?.setProperties({
-        cvssVector: PASSED_CVSS_VECTOR,
+        cvssVector: PASSED_CVSS_V4_VECTOR,
+        cvssVersion: this.activeCvssVersion ?? this.currentCvssVersion,
+        legacyCvssVector: PASSED_CVSS_V3_VECTOR,
+        legacyCvssMetrics: PASSED_CVSS_V3_METRICS,
+        legacyCvssBase: 0.0,
+        legacyCvssRisk: ENUMS.RISK.NONE,
         ...passedCVSSProperties,
       });
 

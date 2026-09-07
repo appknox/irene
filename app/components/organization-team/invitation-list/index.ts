@@ -3,11 +3,11 @@ import { inject as service } from '@ember/service';
 import { action } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
 import { debounceTask } from 'ember-lifeline';
-import IntlService from 'ember-intl/services/intl';
-import MeService from 'irene/services/me';
-import OrganizationTeamModel from 'irene/models/organization-team';
-import OrganizationModel from 'irene/models/organization';
-import { ActiveActionDetailsType } from '../details/active-action';
+import type IntlService from 'ember-intl/services/intl';
+import type MeService from 'irene/services/me';
+import type OrganizationTeamModel from 'irene/models/organization-team';
+import type OrganizationModel from 'irene/models/organization';
+import type { ActiveActionDetailsType } from '../details/active-action';
 
 export interface OrganizationTeamInvitationListComponentSignature {
   Args: {

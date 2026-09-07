@@ -72,6 +72,7 @@ export default class SbomScanDetailsComponentTreeComponent extends Component<Sbo
     if (container) {
       // Use a small buffer to account for potential minor height differences
       const scrollThreshold = 10;
+
       return container.scrollHeight > container.clientHeight + scrollThreshold;
     }
 
@@ -86,6 +87,7 @@ export default class SbomScanDetailsComponentTreeComponent extends Component<Sbo
     ) {
       return true;
     }
+
     return false;
   }
 
@@ -344,6 +346,7 @@ export default class SbomScanDetailsComponentTreeComponent extends Component<Sbo
     // Extract the last part of the composite key (after the last colon)
     // or use the entire key if no colon exists
     const parts = key.split(':');
+
     return Number(parts[parts.length - 1]);
   }
 
@@ -425,6 +428,7 @@ export default class SbomScanDetailsComponentTreeComponent extends Component<Sbo
         }
 
         this.args.updateExpandedNodes(newExpandedKeys);
+
         return newExpandedKeys;
       }
     }
@@ -432,6 +436,7 @@ export default class SbomScanDetailsComponentTreeComponent extends Component<Sbo
     // If we get here, either we're collapsing or the node doesn't have children
     if (!isExpanding) {
       this.args.updateExpandedNodes(newExpandedKeys);
+
       return newExpandedKeys;
     }
 

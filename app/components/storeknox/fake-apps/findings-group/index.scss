@@ -1,0 +1,19 @@
+.column-header {
+  text-transform: uppercase;
+}
+
+.group-badge {
+  white-space: nowrap;
+  border-radius: 25px;
+  padding: 0.25em 0.5em;
+}
+
+.findings-group-root {
+  margin-top: 1em;
+  border: 1px solid var(--storeknox-fake-apps-findings-group-border-color);
+  background-color: var(--storeknox-fake-apps-findings-group-background-color);
+
+  &.is-ignored {
+    background-color: var(--storeknox-fake-apps-findings-group-ignored-background-color);
+  }
+}

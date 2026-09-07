@@ -8,9 +8,10 @@ module(
 
     // Replace this with your real tests.
     test('it exists', function (assert) {
-      let adapter = this.owner.lookup(
+      const adapter = this.owner.lookup(
         'adapter:partner/partnerclient-report-unlockkey'
       );
+
       assert.ok(adapter);
     });
   }

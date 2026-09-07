@@ -7,5 +7,6 @@ import localeData from 'dayjs/plugin/localeData';
  */
 export function humanizeMonths() {
   dayjs.extend(localeData);
+
   return dayjs().localeData().months();
 }

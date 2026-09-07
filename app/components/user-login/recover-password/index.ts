@@ -5,8 +5,8 @@ import lookupValidator from 'ember-changeset-validations';
 import { validatePresence } from 'ember-changeset-validations/validators';
 import { tracked } from '@glimmer/tracking';
 import { Changeset } from 'ember-changeset';
-import { Owner } from '@ember/test-helpers/build-owner';
-import { BufferedChangeset } from 'ember-changeset/types';
+import type { Owner } from '@ember/test-helpers/build-owner';
+import type { BufferedChangeset } from 'ember-changeset/types';
 import type IntlService from 'ember-intl/services/intl';
 
 import ENV from 'irene/config/environment';

@@ -29,6 +29,7 @@ export default class RegistrationService extends Service {
     if (!link) {
       return false;
     }
+
     return this.externalURLRegex.test(link);
   }
 
@@ -41,6 +42,7 @@ export default class RegistrationService extends Service {
       return this.router.urlFor('register');
     } catch (err) {
       this.logger.warn(err);
+
       return '';
     }
   }

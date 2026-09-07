@@ -669,6 +669,51 @@ module('Integration | Component | sbom/scan-report-drawer', function (hooks) {
       .doesNotContainText(t('sbomModule.aiBomDownloadPdfPrimaryText'));
   });
 
+  test('it hides the ai bom report item when the scan found no ai components', async function (assert) {
+    // ai detection ran for this scan, but there is nothing to report on, so the
+    // row would only ever download an empty report.
+    this.server.get('/v2/sb_files/:id/sb_reports', (schema) => {
+      const sbomReport = schema.sbomReports.first();
+      sbomReport.update({ pdf_status: SbomReportStatus.COMPLETED });
+
+      const results = [sbomReport];
+
+      return { count: results.length, next: null, previous: null, results };
+    });
+
+    this.server.get(
+      `/v2/sb_files/${this.sbomFile.id}/sb_file_components/ai_summary`,
+      () => {
+        return { total: 0, by_type: {}, aibom_supported: true };
+      }
+    );
+
+    await render(hbs`
+      <Sbom::ScanReportDrawer @sbomFile={{this.sbomFile}} @open={{true}} @onClose={{this.onClose}} />
+    `);
+
+    const reportList = findAll('[data-test-sbomReportList-reportlistItem]');
+
+    assert.strictEqual(reportList.length, 2);
+
+    assert
+      .dom('[data-test-sbomReportList-reportPrimaryText]', reportList[0])
+      .hasText(t('sbomModule.sbomDownloadPdfPrimaryText'));
+
+    assert
+      .dom('[data-test-sbomReportList-reportPrimaryText]', reportList[1])
+      .hasText(t('sbomModule.sbomDownloadJsonPrimaryText'));
+
+    const titles = findAll(
+      '[data-test-sbomReportList-reportPrimaryText], [data-test-sbomReportList-reportGenerateTitle]'
+    ).map((el) => el.textContent.trim());
+
+    assert.false(
+      titles.includes(t('sbomModule.aiBomDownloadPdfPrimaryText')),
+      'ai bom report row is not offered'
+    );
+  });
+
   test('it still shows the ai bom report item for a pre ai bom scan that already has ai components', async function (assert) {
     // a pre-AI-BOM scan can still have real AI components attached (e.g.
     // detected by a later rescan) -- it must not be hidden in that case,

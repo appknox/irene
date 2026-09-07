@@ -177,6 +177,7 @@ export default class PrivacyModuleSettingsPiiComponent extends Component {
         .sort((a, b) => {
           const aIsGlobal = a.resolvedKey.startsWith('global') ? 0 : 1;
           const bIsGlobal = b.resolvedKey.startsWith('global') ? 0 : 1;
+
           return aIsGlobal - bIsGlobal;
         });
 

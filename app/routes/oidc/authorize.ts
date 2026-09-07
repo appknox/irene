@@ -1,6 +1,6 @@
 import Route from '@ember/routing/route';
 import { inject as service } from '@ember/service';
-import OidcService from 'irene/services/oidc';
+import type OidcService from 'irene/services/oidc';
 
 export default class OidcAuthorizeRoute extends Route {
   @service declare oidc: OidcService;

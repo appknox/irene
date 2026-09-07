@@ -5,13 +5,13 @@ import { task } from 'ember-concurrency';
 import { inject as service } from '@ember/service';
 import lookupValidator from 'ember-changeset-validations';
 import { Changeset } from 'ember-changeset';
-import RouterService from '@ember/routing/router-service';
+import type RouterService from '@ember/routing/router-service';
 
 import ENV from 'irene/config/environment';
 import InviteRegisterValidation from '../../../validations/invite-register';
 import SSOInviteRegisterValidation from '../../../validations/sso-invite-register';
-import { ChangesetBufferProps } from '../form';
-import IntlService from 'ember-intl/services/intl';
+import type { ChangesetBufferProps } from '../form';
+import type IntlService from 'ember-intl/services/intl';
 import type IreneAjaxService from 'irene/services/ajax';
 import type { AjaxError } from 'irene/services/ajax';
 
@@ -101,6 +101,7 @@ export default class ViaOrgInviteComponent extends Component<ViaOrgInviteSignatu
             changeset.addError(key, errors.payload[key]);
           } else {
             this.notify.error(this.intl.t('somethingWentWrong'));
+
             return;
           }
         });

@@ -1,6 +1,6 @@
 import commondrf from './commondrf';
-import Store from 'ember-data/store';
-import OrganizationTeamProjectModel from '../models/organization-team-project';
+import type Store from 'ember-data/store';
+import type OrganizationTeamProjectModel from '../models/organization-team-project';
 
 type OrganizationTeamProjectQuery = {
   teamId: string | number;

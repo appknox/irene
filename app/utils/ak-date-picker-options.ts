@@ -1,5 +1,5 @@
 import dayjs from 'dayjs';
-import { RangeDateObject } from 'irene/components/ak-date-picker';
+import type { RangeDateObject } from 'irene/components/ak-date-picker';
 
 const setRangeSelectionValue = (
   start: dayjs.Dayjs | null,

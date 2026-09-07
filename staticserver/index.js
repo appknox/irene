@@ -30,6 +30,7 @@ function getRuntimeConfig() {
       content[env] = value;
     }
   }
+
   return JSON.stringify(content);
 }
 app.use(morgan('tiny'));

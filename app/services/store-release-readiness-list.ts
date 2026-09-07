@@ -53,11 +53,14 @@ export default class StoreReleaseReadinessListService extends Service {
 
   private lastLimit: ScanListPaginationParam =
     DEFAULT_STORE_RELEASE_READINESS_LIST_QUERY.limit;
+
   private lastOffset: ScanListPaginationParam =
     DEFAULT_SCAN_LIST_FILTERS.offset;
+
   private lastQuery: string = DEFAULT_SCAN_LIST_FILTERS.query;
   private lastPlatform: ScanListFilterParam =
     DEFAULT_SCAN_LIST_FILTERS.platform;
+
   private lastVerdict: ScanListFilterParam = DEFAULT_SCAN_LIST_FILTERS.verdict;
 
   @action

@@ -11,9 +11,6 @@ export interface SbomScanDetailsSummaryBarItem {
   onValueClick?: () => void;
   newFeature?: boolean;
   hideDivider?: boolean;
-  // The leading "Total" item (SBOM Components / AI BoM Components) is
-  // always bold in the design, distinguishing it from the per-type
-  // breakdown that follows it.
   isPrimary?: boolean;
 }
 

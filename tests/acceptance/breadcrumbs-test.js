@@ -950,7 +950,7 @@ module('Acceptance | Breadcrumbs Test', function (hooks) {
     // Go to route with model with ID of 1
     await click('[data-test-linkToRootBParentWithModel1]');
 
-    let akBreadcrumbsService = this.owner.lookup('service:ak-breadcrumbs');
+    const akBreadcrumbsService = this.owner.lookup('service:ak-breadcrumbs');
 
     let expectedCrumbs = [
       ALL_ROUTE_CRUMB_PROPS['tr-b-root'],
@@ -1081,7 +1081,7 @@ module('Acceptance | Breadcrumbs Test', function (hooks) {
 
     const akBreadcrumbsService = this.owner.lookup('service:ak-breadcrumbs');
 
-    let expectedCrumbs = [
+    const expectedCrumbs = [
       ALL_ROUTE_CRUMB_PROPS['tr-b-root'],
       {
         ...ALL_ROUTE_CRUMB_PROPS['tr-b-root/parent-with-model'],

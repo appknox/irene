@@ -2,9 +2,9 @@ import { action } from '@ember/object';
 import { inject as service } from '@ember/service';
 import Component from '@glimmer/component';
 import { tracked } from '@glimmer/tracking';
-import IntlService from 'ember-intl/services/intl';
+import type IntlService from 'ember-intl/services/intl';
 
-import SbomVulnerabilityAuditModel from 'irene/models/sbom-vulnerability-audit';
+import type SbomVulnerabilityAuditModel from 'irene/models/sbom-vulnerability-audit';
 
 type HumanizedVersionRange = {
   affectedRange: string | null;

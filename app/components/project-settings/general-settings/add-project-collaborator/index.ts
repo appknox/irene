@@ -1,9 +1,9 @@
 import Component from '@glimmer/component';
 import { action } from '@ember/object';
 
-import ProjectModel from 'irene/models/project';
+import type ProjectModel from 'irene/models/project';
 import { tracked } from '@glimmer/tracking';
-import MeService from 'irene/services/me';
+import type MeService from 'irene/services/me';
 import { inject as service } from '@ember/service';
 
 interface ProjectSettingsGeneralSettingsAddProjectCollaboratorSignature {

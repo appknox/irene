@@ -1,9 +1,5 @@
-import Model, {
-  AsyncBelongsTo,
-  AsyncHasMany,
-  belongsTo,
-  hasMany,
-} from '@ember-data/model';
+import type { AsyncBelongsTo, AsyncHasMany } from '@ember-data/model';
+import Model, { belongsTo, hasMany } from '@ember-data/model';
 
 import type FileModel from './file';
 import type OwaspModel from './owasp';

@@ -4,11 +4,11 @@ import { task } from 'ember-concurrency';
 import { action } from '@ember/object';
 import { inject as service } from '@ember/service';
 import { runTask } from 'ember-lifeline';
-import { EmberRunTimer } from '@ember/runloop/types';
+import type { EmberRunTimer } from '@ember/runloop/types';
 import type Store from 'ember-data/store';
 import type IntlService from 'ember-intl/services/intl';
 
-import { Duration } from 'dayjs/plugin/duration';
+import type { Duration } from 'dayjs/plugin/duration';
 import dayjs from 'dayjs';
 
 import ENV from 'irene/config/environment';

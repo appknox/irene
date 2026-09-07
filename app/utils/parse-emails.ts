@@ -8,5 +8,6 @@ function validateEmail(email: string): boolean {
 
 export default function parseEmails(emailsStr: string): string[] {
   const emails: string[] = emailsStr.replace(/[\n\s\t]/g, '').split(',');
+
   return emails.filter((m) => m).filter((m) => validateEmail(m));
 }

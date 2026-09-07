@@ -1,8 +1,8 @@
 import Route from '@ember/routing/route';
 import { service } from '@ember/service';
-import RouterService from '@ember/routing/router-service';
+import type RouterService from '@ember/routing/router-service';
 
-import MeService from 'irene/services/me';
+import type MeService from 'irene/services/me';
 
 export default class AuthenticatedPartnerClientsOverviewRoute extends Route {
   @service declare me: MeService;

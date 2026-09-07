@@ -6,7 +6,10 @@ module('Unit | Adapter | privacy server location settings', function (hooks) {
 
   // Replace this with your real tests.
   test('it exists', function (assert) {
-    let adapter = this.owner.lookup('adapter:privacy-server-location-settings');
+    const adapter = this.owner.lookup(
+      'adapter:privacy-server-location-settings'
+    );
+
     assert.ok(adapter);
   });
 });

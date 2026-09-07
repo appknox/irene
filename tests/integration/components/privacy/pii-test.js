@@ -14,6 +14,7 @@ class NotificationsStub extends Service {
   error(msg) {
     this.errorMsg = msg;
   }
+
   success(msg) {
     this.successMsg = msg;
   }
@@ -76,7 +77,7 @@ module('Integration | Component | privacy/pii', function (hooks) {
     });
 
     this.server.get('/v2/pii_request/:requestId/pii_data', (schema) => {
-      let pii = schema.piis.all().models;
+      const pii = schema.piis.all().models;
 
       return {
         count: pii.length,
@@ -359,7 +360,7 @@ module('Integration | Component | privacy/pii', function (hooks) {
 
   test('it shows unread marker and goes off once read', async function (assert) {
     this.server.get('/v2/pii_request/:requestId/pii_data', (schema) => {
-      let pii = schema.piis.all().models;
+      const pii = schema.piis.all().models;
       const firstPii = pii[0];
 
       return {

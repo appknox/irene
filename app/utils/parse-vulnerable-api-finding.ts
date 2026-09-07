@@ -1,4 +1,4 @@
-import { NestedKeyOf } from './types';
+import type { NestedKeyOf } from './types';
 
 /**
  * Represents a vulnerable API request.

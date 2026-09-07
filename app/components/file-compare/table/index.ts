@@ -3,14 +3,14 @@ import Component from '@glimmer/component';
 import { tracked } from '@glimmer/tracking';
 import { inject as service } from '@ember/service';
 import { runTask } from 'ember-lifeline';
-import RouterService from '@ember/routing/router-service';
-import IntlService from 'ember-intl/services/intl';
+import type RouterService from '@ember/routing/router-service';
+import type IntlService from 'ember-intl/services/intl';
 
-import FileModel from 'irene/models/file';
+import type FileModel from 'irene/models/file';
 import { scrollDashboardMainContainerTo } from 'irene/utils/scroll-to-top';
-import { PaginationProviderActionsArgs } from 'irene/components/ak-pagination-provider/index';
+import type { PaginationProviderActionsArgs } from 'irene/components/ak-pagination-provider/index';
 
-import {
+import type {
   FileCompareFilterKey,
   FileComparisonItem,
 } from 'irene/utils/compare-files';

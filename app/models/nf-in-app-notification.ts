@@ -1,6 +1,6 @@
 import Model, { attr } from '@ember-data/model';
 
-import {
+import type {
   NotificationContexts,
   NotificationMessageKey,
 } from 'irene/components/notifications-page/notification_map';

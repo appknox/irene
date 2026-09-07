@@ -4,14 +4,14 @@ import { inject as service } from '@ember/service';
 import { action } from '@ember/object';
 import { debounceTask } from 'ember-lifeline';
 import { tracked } from '@glimmer/tracking';
-import Store from 'ember-data/store';
-import IntlService from 'ember-intl/services/intl';
-import RealtimeService from 'irene/services/realtime';
-import OrganizationTeamModel from 'irene/models/organization-team';
-import OrganizationProjectModel from 'irene/models/organization-project';
+import type Store from 'ember-data/store';
+import type IntlService from 'ember-intl/services/intl';
+import type RealtimeService from 'irene/services/realtime';
+import type OrganizationTeamModel from 'irene/models/organization-team';
+import type OrganizationProjectModel from 'irene/models/organization-project';
 // eslint-disable-next-line ember/use-ember-data-rfc-395-imports
-import DS from 'ember-data';
-import { ActionContentType } from '../details/active-action';
+import type DS from 'ember-data';
+import type { ActionContentType } from '../details/active-action';
 import { waitForPromise } from '@ember/test-waiters';
 
 export interface OrganizationTeamAddTeamProjectComponentSignature {

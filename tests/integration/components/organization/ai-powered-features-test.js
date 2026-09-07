@@ -38,6 +38,7 @@ module(
 
       this.server.post('/organizations/:id/ai_features', (_schema, request) => {
         const requestBody = JSON.parse(request.requestBody);
+
         return { ...requestBody };
       });
 

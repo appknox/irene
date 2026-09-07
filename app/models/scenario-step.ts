@@ -1,4 +1,5 @@
-import Model, { attr, belongsTo, AsyncBelongsTo } from '@ember-data/model';
+import type { AsyncBelongsTo } from '@ember-data/model';
+import Model, { attr, belongsTo } from '@ember-data/model';
 import type ScenarioUserRoleModel from './scenario-user-role';
 
 export enum ScenarioStepAction {

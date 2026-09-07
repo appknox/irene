@@ -5,7 +5,7 @@ module('Unit | Service | privacy-module', function (hooks) {
   setupTest(hooks);
 
   test('it exists', function (assert) {
-    let service = this.owner.lookup('service:privacy-module');
+    const service = this.owner.lookup('service:privacy-module');
     assert.ok(service);
   });
 });

@@ -666,7 +666,7 @@ module('Integration | Component | security/analysis-details', function (hooks) {
       await click(cvssMetricSelectTrigger);
 
       // Check default selected
-      let cvssMetricSelectOptions = findAll('.ember-power-select-option');
+      const cvssMetricSelectOptions = findAll('.ember-power-select-option');
 
       assert
         .dom(cvssMetricSelectOptions.slice(-1)[0]) // 'Unknown' option is always the last by ENUM value choices
@@ -782,7 +782,7 @@ module('Integration | Component | security/analysis-details', function (hooks) {
       await click(regulatorySelectTrigger);
 
       // Check default selected
-      let regulatorySelectOptions = findAll('.ember-power-select-option');
+      const regulatorySelectOptions = findAll('.ember-power-select-option');
 
       const selectedOptions = (await this.secAnalysis.get(valueKey)).slice();
 
@@ -1067,7 +1067,7 @@ module('Integration | Component | security/analysis-details', function (hooks) {
 
       // Verify initial findings state
       const getFindingElements = () => findAll(selectors.findingsTable);
-      let allFindingElements = getFindingElements();
+      const allFindingElements = getFindingElements();
 
       assert.strictEqual(allFindingElements.length, findings.length);
 
@@ -1268,7 +1268,7 @@ module('Integration | Component | security/analysis-details', function (hooks) {
 
   // ── Header: legacy CVSS version guard (header changes) ───────────────────────
 
-  test('it shows the "Mark as Passed" button as disabled when the analysis has a legacy CVSS version', async function (assert) {
+  test('it shows the "Mark as Passed" button as enabled when the analysis has a legacy CVSS version', async function (assert) {
     this.secAnalysis.set('cvssVersion', 3);
     this.secAnalysis.set('activeCvssVersion', 4);
     this.secAnalysis.set('risk', ENUMS.RISK.HIGH);
@@ -1279,9 +1279,9 @@ module('Integration | Component | security/analysis-details', function (hooks) {
 
     assert
       .dom('[data-test-securityAnalysisDetailsHeader-markAsPassedBtn]')
-      .exists('Mark as Passed button is shown even for legacy analysis')
-      .isDisabled(
-        'Mark as Passed button is disabled when CVSS version is legacy'
+      .exists('Mark as Passed button is shown for a legacy analysis')
+      .isNotDisabled(
+        'Marking as passed zeroes both vectors, so legacy is no longer blocked'
       );
   });
 
@@ -1553,6 +1553,7 @@ module('Integration | Component | security/analysis-details', function (hooks) {
         this.server.put('/hudson-api/analyses/:id', (schema, req) => {
           const data = JSON.parse(req.requestBody);
           schema.db['security/analyses'].update(req.params.id, data);
+
           return schema['security/analyses'].find(req.params.id).toJSON();
         });
       }

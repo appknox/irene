@@ -220,7 +220,11 @@ module(
 
       this.server.get(
         `/v2/sb_files/${this.sbomFileModelId}/sb_file_components/ai_summary`,
-        () => ({ total: 1, by_type: { cloud_endpoint: 1 }, aibom_supported: true })
+        () => ({
+          total: 1,
+          by_type: { cloud_endpoint: 1 },
+          aibom_supported: true,
+        })
       );
 
       const sbomService = this.owner.lookup('service:sbom-scan-details');

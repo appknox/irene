@@ -4,10 +4,10 @@ import { action } from '@ember/object';
 import { capitalize } from '@ember/string';
 import { task } from 'ember-concurrency';
 import { tracked } from '@glimmer/tracking';
-import IntlService from 'ember-intl/services/intl';
-import MeService from 'irene/services/me';
-import OrganizationTeamModel from 'irene/models/organization-team';
-import OrganizationUserModel from 'irene/models/organization-user';
+import type IntlService from 'ember-intl/services/intl';
+import type MeService from 'irene/services/me';
+import type OrganizationTeamModel from 'irene/models/organization-team';
+import type OrganizationUserModel from 'irene/models/organization-user';
 import { waitForPromise } from '@ember/test-waiters';
 
 interface MemberRemoveActionSignature {

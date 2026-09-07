@@ -7,8 +7,8 @@ module('Unit | Model | sbom component', function (hooks) {
   setupIntl(hooks, 'en');
 
   test('it exists', function (assert) {
-    let store = this.owner.lookup('service:store');
-    let model = store.createRecord('sbom-component', {});
+    const store = this.owner.lookup('service:store');
+    const model = store.createRecord('sbom-component', {});
     assert.ok(model);
   });
 
@@ -41,39 +41,6 @@ module('Unit | Model | sbom component', function (hooks) {
     assert.false(model.hasFoundLocations);
   });
 
-  test('confidenceLabel is translated for every confidence level', function (assert) {
-    assert.expect(3);
-
-    const store = this.owner.lookup('service:store');
-
-    ['high', 'medium', 'low'].forEach((level) => {
-      const model = store.createRecord('sbom-component', {
-        aiConfidence: level,
-      });
-
-      assert.strictEqual(
-        model.confidenceLabel,
-        t(`sbomModule.confidenceLevel.${level}`),
-        `${level} routes through intl`
-      );
-    });
-  });
-
-  test('confidenceLabel is null when confidence is missing or unrecognized', function (assert) {
-    const store = this.owner.lookup('service:store');
-
-    assert.strictEqual(
-      store.createRecord('sbom-component', {}).confidenceLabel,
-      null
-    );
-
-    assert.strictEqual(
-      store.createRecord('sbom-component', { aiConfidence: 'bogus' })
-        .confidenceLabel,
-      null
-    );
-  });
-
   test('aiPurposeDisplay prefers backend purpose, then model category, then class fallback', function (assert) {
     const store = this.owner.lookup('service:store');
 
@@ -95,8 +62,9 @@ module('Unit | Model | sbom component', function (hooks) {
     );
 
     assert.strictEqual(
-      store.createRecord('sbom-component', { aiArtifactClass: 'cloud_endpoint' })
-        .aiPurposeDisplay,
+      store.createRecord('sbom-component', {
+        aiArtifactClass: 'cloud_endpoint',
+      }).aiPurposeDisplay,
       t('sbomModule.aiPurposeFallback.cloudEndpoint')
     );
 

@@ -1,9 +1,9 @@
 import Component from '@glimmer/component';
 import { task } from 'ember-concurrency';
 import { inject as service } from '@ember/service';
-import IntlService from 'ember-intl/services/intl';
-import OrganizationTeamModel from 'irene/models/organization-team';
-import OrganizationTeamProjectModel from 'irene/models/organization-team-project';
+import type IntlService from 'ember-intl/services/intl';
+import type OrganizationTeamModel from 'irene/models/organization-team';
+import type OrganizationTeamProjectModel from 'irene/models/organization-team-project';
 import { waitForPromise } from '@ember/test-waiters';
 
 export interface OrganizationTeamProjectListAccessPermissionComponentSignature {

@@ -2,10 +2,10 @@ import Component from '@glimmer/component';
 import { inject as service } from '@ember/service';
 import { task } from 'ember-concurrency';
 import ENUMS from 'irene/enums';
-import IntlService from 'ember-intl/services/intl';
-import MeService from 'irene/services/me';
-import OrganizationMemberModel from 'irene/models/organization-member';
-import { TypographyFontWeight } from 'irene/components/ak-typography';
+import type IntlService from 'ember-intl/services/intl';
+import type MeService from 'irene/services/me';
+import type OrganizationMemberModel from 'irene/models/organization-member';
+import type { TypographyFontWeight } from 'irene/components/ak-typography';
 
 interface OrganizationMemberListMemberRoleSignature {
   Args: {

@@ -154,6 +154,7 @@ export default class SbomComponentDetailsOverviewComponent extends Component<Sbo
     try {
       if (!this.args.queryParams.sbom_component_id || !this.parentId) {
         this.parentVerificationStatus = false;
+
         return;
       }
 

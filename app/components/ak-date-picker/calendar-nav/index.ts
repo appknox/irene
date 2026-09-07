@@ -2,7 +2,7 @@ import Component from '@glimmer/component';
 import dayjs from 'dayjs';
 import { action } from '@ember/object';
 
-import { Calendar } from '..';
+import type { Calendar } from '..';
 import { humanizeMonths } from 'irene/utils/date-time';
 
 export interface AkDatePickerCalendarNavSignature {

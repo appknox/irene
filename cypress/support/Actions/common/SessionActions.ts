@@ -1,4 +1,4 @@
-import { UserLoginCredentialProps } from '../auth/LoginActions';
+import type { UserLoginCredentialProps } from '../auth/LoginActions';
 
 export default class SessionActions {
   createSessionIdWithCreds({ username, password }: UserLoginCredentialProps) {

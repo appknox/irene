@@ -7,7 +7,7 @@ import { waitForPromise } from '@ember/test-waiters';
 import type Store from 'ember-data/store';
 import type IntlService from 'ember-intl/services/intl';
 
-import ClipboardJS from 'clipboard/src/clipboard';
+import type ClipboardJS from 'clipboard/src/clipboard';
 
 import parseError from 'irene/utils/parse-error';
 import type { InterimReportDetails } from 'irene/components/security/interim-report-drawer';

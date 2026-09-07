@@ -2,11 +2,11 @@ import Component from '@glimmer/component';
 import { task } from 'ember-concurrency';
 import { inject as service } from '@ember/service';
 import { action } from '@ember/object';
-import IntlService from 'ember-intl/services/intl';
+import type IntlService from 'ember-intl/services/intl';
 import { waitForPromise } from '@ember/test-waiters';
 
-import ScanParameterGroupModel from 'irene/models/scan-parameter-group';
-import ProjectModel from 'irene/models/project';
+import type ScanParameterGroupModel from 'irene/models/scan-parameter-group';
+import type ProjectModel from 'irene/models/project';
 import parseError from 'irene/utils/parse-error';
 
 export interface ProjectSettingsDastScenarioStatusToggleSignature {

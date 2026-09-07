@@ -133,6 +133,7 @@ export function normalizeMultipleActionValue(val: MultipleDateValue) {
 
 export function normalizeCalendarDay(day: CalendarDay) {
   day.dayjs = dayjs(day.date);
+
   return day;
 }
 

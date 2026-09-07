@@ -1,0 +1,84 @@
+<AkStack
+  ...attributes
+  @direction='column'
+  @width='full'
+  local-class='findings-group-root {{if @isIgnored "is-ignored"}}'
+  data-test-storeknoxFakeAppsFindingsGroup-root
+>
+  <AkStack
+    @width='full'
+    @direction='row'
+    @justifyContent='space-between'
+    @alignItems='center'
+    class='p-3'
+    data-test-storeknoxFakeAppsFindingsGroup-header
+  >
+    <AkStack @direction='column' @spacing='0.5'>
+      <AkTypography
+        @fontWeight='bold'
+        data-test-storeknoxFakeAppsFindingsGroup-title
+      >
+        {{@groupData.title}}
+      </AkTypography>
+
+      <AkTypography
+        @color='textSecondary'
+        data-test-storeknoxFakeAppsFindingsGroup-description
+      >
+        {{@groupData.description}}
+      </AkTypography>
+    </AkStack>
+
+    <AkChip
+      @variant='semi-filled'
+      @fontWeight='bold'
+      @color={{if
+        (eq @groupData.badgeLevel 'high')
+        'error'
+        (if (eq @groupData.badgeLevel 'medium') 'warn' 'success')
+      }}
+      @label={{@groupData.badge}}
+      local-class='group-badge'
+      data-test-storeknoxFakeAppsFindingsGroup-badge
+    />
+  </AkStack>
+
+  <AkDivider @color='dark' />
+
+  <AkStack
+    @width='full'
+    @direction='row'
+    @justifyContent='space-between'
+    class='px-3 py-2'
+  >
+    <AkTypography
+      @variant='body2'
+      @fontWeight='bold'
+      local-class='column-header'
+      data-test-storeknoxFakeAppsFindingsGroup-signalHeader
+    >
+      {{t 'storeknox.fakeApps.signal'}}
+    </AkTypography>
+
+    <AkTypography
+      @variant='body2'
+      @fontWeight='bold'
+      local-class='column-header'
+      class='pr-2'
+      data-test-storeknoxFakeAppsFindingsGroup-resultHeader
+    >
+      {{t 'storeknox.fakeApps.result'}}
+    </AkTypography>
+  </AkStack>
+
+  <AkStack @direction='column' @width='full'>
+    {{#each @groupData.signals as |signal|}}
+      <AkDivider @color='dark' />
+
+      <Storeknox::FakeApps::FindingsSignalRow
+        @signal={{signal}}
+        @onClick={{fn @onSignalClick signal @groupData.title}}
+      />
+    {{/each}}
+  </AkStack>
+</AkStack>

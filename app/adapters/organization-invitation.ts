@@ -1,6 +1,6 @@
-import Store from 'ember-data/store';
+import type Store from 'ember-data/store';
 import commondrf from './commondrf';
-import OrganizationInvitationModel from 'irene/models/organization-invitation';
+import type OrganizationInvitationModel from 'irene/models/organization-invitation';
 
 export default class OrganizationInvitationAdapter extends commondrf {
   _buildURL(modelName?: string | number, id?: string | number) {

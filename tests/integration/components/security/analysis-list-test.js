@@ -12,6 +12,11 @@ import { analysisRiskStatus } from 'irene/helpers/analysis-risk-status';
 import { riskText } from 'irene/helpers/risk-text';
 import ENUMS from 'irene/enums';
 import styles from 'irene/components/ak-select/index.scss';
+import {
+  PASSED_CVSS_V3_METRICS,
+  PASSED_CVSS_V3_VECTOR,
+  PASSED_CVSS_V4_VECTOR,
+} from 'irene/utils/cvss-metrics';
 
 const serializeForJsonApi = (payload, type) => ({
   data: {
@@ -374,7 +379,7 @@ module('Integration | Component | security/analysis-list', function (hooks) {
   });
 
   test('it marks an analysis as passed', async function (assert) {
-    assert.expect(13);
+    assert.expect(17);
 
     const selectedAnalysis = this.secAnalyses[0];
 
@@ -383,6 +388,15 @@ module('Integration | Component | security/analysis-list', function (hooks) {
       const id = req.params.id;
 
       assert.strictEqual(selectedAnalysis.id, id);
+
+      // Marking as passed zeroes both the active (v4) and legacy (v3) vectors.
+      assert.strictEqual(reqBody.cvss_vector, PASSED_CVSS_V4_VECTOR);
+      assert.strictEqual(reqBody.legacy_cvss_vector, PASSED_CVSS_V3_VECTOR);
+      assert.strictEqual(reqBody.legacy_cvss_risk, ENUMS.RISK.NONE);
+      assert.deepEqual(
+        reqBody.legacy_cvss_vector_fields,
+        PASSED_CVSS_V3_METRICS
+      );
 
       return schema['security/analyses']
         .find(id)
@@ -630,12 +644,27 @@ module('Integration | Component | security/analysis-list', function (hooks) {
     }
   );
 
-  test('it shows an error notification instead of the confirm modal when marking a legacy CVSS analysis as passed', async function (assert) {
+  test('it marks a legacy CVSS analysis as passed', async function (assert) {
+    assert.expect(6);
+
     const selectedAnalysis = this.secAnalyses[0];
 
-    // Make the analysis a legacy CVSS scenario (cvss_version !== active_cvss_version)
+    // Legacy CVSS scenario (cvss_version !== active_cvss_version)
     selectedAnalysis.set('cvssVersion', 3);
     selectedAnalysis.set('activeCvssVersion', 4);
+
+    this.server.put('/hudson-api/analyses/:id', (schema, req) => {
+      const reqBody = JSON.parse(req.requestBody);
+
+      assert.strictEqual(reqBody.cvss_vector, PASSED_CVSS_V4_VECTOR);
+      assert.strictEqual(reqBody.legacy_cvss_vector, PASSED_CVSS_V3_VECTOR);
+      assert.strictEqual(reqBody.legacy_cvss_risk, ENUMS.RISK.NONE);
+
+      return schema['security/analyses']
+        .find(req.params.id)
+        .update({ ...reqBody, overridden_risk: null })
+        .toJSON();
+    });
 
     await render(hbs`<Security::AnalysisList @file={{this.secFileModel}} />`);
 
@@ -651,13 +680,17 @@ module('Integration | Component | security/analysis-list', function (hooks) {
 
     assert
       .dom('[data-test-ak-modal-header]')
-      .doesNotExist('Confirm modal is not shown for legacy CVSS analysis');
+      .exists('Confirm modal is shown for a legacy CVSS analysis');
+
+    await click('[data-test-confirmbox-confirmbtn]');
 
     const notify = this.owner.lookup('service:notifications');
 
+    assert.strictEqual(notify.errorMsg, null);
+
     assert.strictEqual(
-      notify.errorMsg,
-      'You cannot mark an analysis with legacy CVSS as passed. Please update the CVSS version in the analysis details page to the latest version (CVSS v4) and try again.'
+      notify.successMsg,
+      `Analysis ${selectedAnalysis.id} marked as passed`
     );
   });
 });

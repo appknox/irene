@@ -2,7 +2,7 @@ import Service from '@ember/service';
 import ENV from 'irene/config/environment';
 import { inject as service } from '@ember/service';
 
-import ConfigurationService from './configuration';
+import type ConfigurationService from './configuration';
 
 export default class WhitelabelService extends Service {
   @service declare configuration: ConfigurationService;

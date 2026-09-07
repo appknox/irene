@@ -1,4 +1,4 @@
-import Store from 'ember-data/store';
+import type Store from 'ember-data/store';
 import { service } from '@ember/service';
 import Component from '@glimmer/component';
 import { tracked } from '@glimmer/tracking';
@@ -85,6 +85,7 @@ export default class PartnerClientReportSummaryComponent extends Component<Partn
       );
     } catch (err) {
       this.fileSummary = null;
+
       return;
     }
   });

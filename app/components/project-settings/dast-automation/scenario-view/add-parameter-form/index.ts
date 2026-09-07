@@ -1,17 +1,17 @@
 import Component from '@glimmer/component';
 import { inject as service } from '@ember/service';
-import IntlService from 'ember-intl/services/intl';
+import type IntlService from 'ember-intl/services/intl';
 import { tracked } from '@glimmer/tracking';
 import { action } from '@ember/object';
 import { task } from 'ember-concurrency';
-import Store from 'ember-data/store';
+import type Store from 'ember-data/store';
 
 import lookupValidator from 'ember-changeset-validations';
 import { Changeset } from 'ember-changeset';
-import { BufferedChangeset } from 'ember-changeset/types';
+import type { BufferedChangeset } from 'ember-changeset/types';
 import { validatePresence } from 'ember-changeset-validations/validators';
 
-import ScanParameterGroupModel from 'irene/models/scan-parameter-group';
+import type ScanParameterGroupModel from 'irene/models/scan-parameter-group';
 import parseError from 'irene/utils/parse-error';
 
 import styles from './index.scss';

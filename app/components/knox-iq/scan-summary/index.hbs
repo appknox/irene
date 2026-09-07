@@ -50,12 +50,27 @@
     @direction='row'
     @width='full'
     @spacing='6'
-    @alignItems='flex-start'
+    @alignItems='stretch'
     local-class='scan-summary-body'
     data-test-knoxiq-scan-summary-body
   >
-    <KnoxIq::ScanSummary::Exploitability @file={{@file}} />
+    <AkStack
+      @direction={{if this.hasHealthScore 'column' 'row'}}
+      @spacing='6'
+      local-class='scan-summary-primary'
+    >
+      <KnoxIq::ScanSummary::Exploitability @file={{@file}} />
 
-    <KnoxIq::ScanSummary::Severity @file={{@file}} />
+      <KnoxIq::ScanSummary::Severity @file={{@file}} />
+    </AkStack>
+
+    {{#if this.hasHealthScore}}
+      <AkStack local-class='scan-summary-health-score'>
+        <FileDetails::SeverityLevel::HealthScore
+          @file={{@file}}
+          @isCompact={{true}}
+        />
+      </AkStack>
+    {{/if}}
   </AkStack>
 </AkStack>

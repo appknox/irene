@@ -1,4 +1,4 @@
-import { ComponentLike } from '@glint/template';
+import type { ComponentLike } from '@glint/template';
 
 export enum AkSvgComponentInvocationByNames {
   AmPlaystoreLogo,
@@ -142,6 +142,7 @@ export enum AkSvgComponentInvocationByPaths {
   'high-risk-tower',
   'medium-risk-tower',
   'low-risk-tower',
+  'ai-bom-upload',
 }
 
 type AkSvgComponent = ComponentLike<{

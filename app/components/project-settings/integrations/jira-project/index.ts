@@ -109,6 +109,7 @@ export default class ProjectSettingsIntegrationsJiraProjectComponent extends Com
   get project() {
     return this.args.project;
   }
+
   get data() {
     return {
       id: 'JIRA',

@@ -1,22 +1,22 @@
 /* eslint-disable ember/no-observers */
 // eslint-disable-next-line ember/use-ember-data-rfc-395-imports
-import DS from 'ember-data';
+import type DS from 'ember-data';
 
 import Component from '@glimmer/component';
 import { inject as service } from '@ember/service';
 import { task } from 'ember-concurrency';
 import { tracked } from '@glimmer/tracking';
-import Store from 'ember-data/store';
+import type Store from 'ember-data/store';
 import { action } from '@ember/object';
-import IntlService from 'ember-intl/services/intl';
+import type IntlService from 'ember-intl/services/intl';
 import { waitForPromise } from '@ember/test-waiters';
 
-import ProjectTeamModel from 'irene/models/project-team';
-import MeService from 'irene/services/me';
-import RealtimeService from 'irene/services/realtime';
-import ProjectModel from 'irene/models/project';
+import type ProjectTeamModel from 'irene/models/project-team';
+import type MeService from 'irene/services/me';
+import type RealtimeService from 'irene/services/realtime';
+import type ProjectModel from 'irene/models/project';
 import { addObserver, removeObserver } from '@ember/object/observers';
-import { PaginationProviderActionsArgs } from 'irene/components/ak-pagination-provider';
+import type { PaginationProviderActionsArgs } from 'irene/components/ak-pagination-provider';
 import parseError from 'irene/utils/parse-error';
 
 type ProjectTeamQueryResponse =

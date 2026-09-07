@@ -15,7 +15,7 @@
         </AkTypography>
 
         {{#if cs.tooltip}}
-          <AkTooltip @arrow={{true}} @placement='right'>
+          <AkTooltip @arrow={{true}} @placement='right' @multiline={{true}}>
             <:default>
               <AkIcon
                 data-test-sbomScanDetails-componentDetails-summary-tooltipIcon
@@ -29,8 +29,7 @@
               <AkTypography
                 @variant='body2'
                 @color='inherit'
-                data-ak-tooltip-multiline
-                {{style width='300px' lineHeight='1.6' display='block'}}
+                {{style width='300px'}}
               >
                 {{cs.tooltip}}
               </AkTypography>

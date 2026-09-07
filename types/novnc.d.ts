@@ -65,6 +65,7 @@ declare module '@novnc/novnc/lib/rfb' {
       type?: string,
       quality?: number
     ): void;
+
     toDataURL(type?: string, quality?: number): string;
 
     // ─── Internal ──────────────────────────────────────────────────────────

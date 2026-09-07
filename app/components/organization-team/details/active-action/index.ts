@@ -1,6 +1,6 @@
 import Component from '@glimmer/component';
-import OrganizationTeamModel from 'irene/models/organization-team';
-import OrganizationModel from 'irene/models/organization';
+import type OrganizationTeamModel from 'irene/models/organization-team';
+import type OrganizationModel from 'irene/models/organization';
 
 export interface ActionContentType {
   action: () => void;

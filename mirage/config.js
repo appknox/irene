@@ -13,7 +13,7 @@ inflector.uncountable('api-scan-options');
 inflector.irregular('asvs', 'asvses');
 
 export default function makeServer(config) {
-  let finalConfig = {
+  const finalConfig = {
     ...config,
     trackRequests: true,
     models: {
@@ -174,7 +174,7 @@ function routes() {
   });
 
   this.get('/organizations/:id/namespaces', function (schema, request) {
-    let data = schema.organizationNamespaces.all();
+    const data = schema.organizationNamespaces.all();
     let limit = data.length;
     let offset = 0;
     if (request.queryParams.limit) {
@@ -185,6 +185,7 @@ function routes() {
     }
 
     const retdata = data.slice(offset, offset + limit);
+
     return {
       count: data.length,
       next: null,
@@ -208,6 +209,7 @@ function routes() {
           }
         );
       }
+
       return this.serialize(namespace).organizationNamespace;
     }
   );
@@ -248,6 +250,7 @@ function routes() {
         };
       }
       namespace.update(updateObject);
+
       return this.serialize(namespace).organizationNamespace;
     }
   );
@@ -268,6 +271,7 @@ function routes() {
         );
       }
       namespace.destroy();
+
       return new Response(204, {}, '');
     }
   );
@@ -287,6 +291,7 @@ function routes() {
         }
       );
     }
+
     return this.serialize(orgUser).organizationUser;
   });
 
@@ -630,6 +635,7 @@ function routes() {
       .models.find((user) => user.organizationId === req.params.id);
 
     const me = schema.organizationMes.find(currentUser.id);
+
     return this.serialize(me).organizationMe;
   });
 
@@ -682,6 +688,7 @@ function routes() {
   this.post('v2/nf_in_app_notifications/mark_all_as_read', function (schema) {
     const notifications = schema.nfInAppNotifications.all();
     notifications.update('hasRead', true);
+
     return new Response(204, {}, {});
   });
 

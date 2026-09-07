@@ -193,6 +193,7 @@ module(
           }
 
           scanParameterGroup.destroy();
+
           return new Response(204, {}, '');
         }
       );

@@ -1,7 +1,8 @@
-import Model, { attr, hasMany, AsyncHasMany } from '@ember-data/model';
+import type { AsyncHasMany } from '@ember-data/model';
+import Model, { attr, hasMany } from '@ember-data/model';
 
-import OrganizationTeamMemberModel from './organization-team-member';
-import OrganizationUserModel from './organization-user';
+import type OrganizationTeamMemberModel from './organization-team-member';
+import type OrganizationUserModel from './organization-user';
 
 export type AddMemberData = { write: boolean };
 export type AddProjectData = { write: boolean };

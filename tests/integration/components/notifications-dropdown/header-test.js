@@ -17,6 +17,7 @@ module(
       get notifications() {
         return [];
       }
+
       showUnReadOnly = false;
       unReadCount = 0;
       refresh = {};

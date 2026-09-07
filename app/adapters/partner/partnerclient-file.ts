@@ -1,5 +1,5 @@
 /* eslint-disable ember/use-ember-data-rfc-395-imports */
-import ModelRegistry from 'ember-data/types/registries/model';
+import type ModelRegistry from 'ember-data/types/registries/model';
 import commondrf from '../commondrf';
 
 export default class PartnerclientFileAdapter extends commondrf {

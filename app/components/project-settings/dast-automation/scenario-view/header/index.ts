@@ -1,13 +1,13 @@
-import RouterService from '@ember/routing/router-service';
+import type RouterService from '@ember/routing/router-service';
 import { inject as service } from '@ember/service';
 import Component from '@glimmer/component';
 import { task } from 'ember-concurrency';
-import IntlService from 'ember-intl/services/intl';
+import type IntlService from 'ember-intl/services/intl';
 import { action } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
 
-import ProjectModel from 'irene/models/project';
-import ScanParameterGroupModel from 'irene/models/scan-parameter-group';
+import type ProjectModel from 'irene/models/project';
+import type ScanParameterGroupModel from 'irene/models/scan-parameter-group';
 import parseError from 'irene/utils/parse-error';
 
 interface ProjectSettingsDastAutomationScenarioViewHeaderSignature {

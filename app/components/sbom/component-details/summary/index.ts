@@ -6,7 +6,7 @@ import type IntlService from 'ember-intl/services/intl';
 import * as semver from 'semver';
 import type SbomComponentModel from 'irene/models/sbom-component';
 
-interface componentSummaryItem {
+interface ComponentSummaryItem {
   label: string;
   value?: string | null;
   component?: 'sbom/component-status' | null;
@@ -120,7 +120,26 @@ export default class SbomComponentDetailsSummaryComponent extends Component<Sbom
             ? this.intl.t('sbomModule.modelIdentifiedVerified')
             : this.intl.t('sbomModule.modelIdentifiedHeuristic'),
       },
-    ].filter(Boolean) as componentSummaryItem[];
+    ].filter(Boolean) as ComponentSummaryItem[];
+  }
+
+  /** First detected file location, with "+N more" when applicable;
+   * "Found In" reflects static evidence, not runtime usage. */
+  get foundInValue() {
+    const locations = this.args.sbomComponent?.evidenceLocations ?? [];
+
+    if (locations.length <= 1) {
+      return locations[0] || '-';
+    }
+
+    return `${locations[0]} (+${locations.length - 1} more)`;
+  }
+
+  // Full newline-separated location list for the tooltip, shown only when multiple locations exist.
+  get foundInTooltip() {
+    const locations = this.args.sbomComponent?.evidenceLocations ?? [];
+
+    return locations.length > 1 ? locations.join('\n') : null;
   }
 
   /**

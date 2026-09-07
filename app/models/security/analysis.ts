@@ -1,34 +1,30 @@
-import Model, {
-  attr,
-  hasMany,
-  belongsTo,
-  AsyncBelongsTo,
-  AsyncHasMany,
-} from '@ember-data/model';
+import type { AsyncBelongsTo, AsyncHasMany } from '@ember-data/model';
+import Model, { attr, hasMany, belongsTo } from '@ember-data/model';
 import { isEmpty } from '@ember/utils';
 import { irregular } from '@ember-data/request-utils/string';
 
 import ENUMS from 'irene/enums';
 import { riskClass } from 'irene/helpers/risk-class';
 export type { RiskLabelClass as SecurityAnalysisRiskLabelClass } from 'irene/helpers/risk-class';
-import SecurityFileModel from './file';
-import OwaspModel from '../owasp';
-import OwaspMobile2024Model from '../owaspmobile2024';
-import OwaspApi2023Model from '../owaspapi2023';
-import PcidssModel from '../pcidss';
-import MstgModel from '../mstg';
-import MasvsModel from '../masvs';
-import AsvsModel from '../asvs';
-import CweModel from '../cwe';
-import GdprModel from '../gdpr';
-import HipaaModel from '../hipaa';
-import SecurityAttachmentModel from './attachment';
-import VulnerabilityModel from '../vulnerability';
-import Nistsp80053Model from '../nistsp80053';
-import Nistsp800171Model from '../nistsp800171';
-import SamaModel from '../sama';
-import Pcidss4Model from '../pcidss4';
-import DoraModel from '../dora';
+
+import type DoraModel from '../dora';
+import type SecurityFileModel from './file';
+import type OwaspModel from '../owasp';
+import type OwaspMobile2024Model from '../owaspmobile2024';
+import type OwaspApi2023Model from '../owaspapi2023';
+import type PcidssModel from '../pcidss';
+import type MstgModel from '../mstg';
+import type MasvsModel from '../masvs';
+import type AsvsModel from '../asvs';
+import type CweModel from '../cwe';
+import type GdprModel from '../gdpr';
+import type HipaaModel from '../hipaa';
+import type SecurityAttachmentModel from './attachment';
+import type VulnerabilityModel from '../vulnerability';
+import type Nistsp80053Model from '../nistsp80053';
+import type Nistsp800171Model from '../nistsp800171';
+import type SamaModel from '../sama';
+import type Pcidss4Model from '../pcidss4';
 
 irregular('asvs', 'asvses');
 
@@ -99,6 +95,7 @@ export default class SecurityAnalysisModel extends Model {
 
   @attr()
   declare legacyCvssMetrics: CvssV3Metrics | CvssV4Metrics | null;
+
   @attr('number') declare analiserVersion: number;
 
   @attr('number', { defaultValue: null }) declare overriddenRisk: number;

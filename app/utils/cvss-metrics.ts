@@ -155,6 +155,12 @@ export const PASSED_CVSS_V3_METRICS: CvssV3Metrics = {
   availability_impact: ENUMS.CVSS_V3_AVAILABILITY_IMPACT.NONE,
 };
 
+export const PASSED_CVSS_V4_VECTOR =
+  'CVSS:4.0/AV:N/AC:L/AT:N/PR:N/UI:N/VC:N/VI:N/VA:N/SC:N/SI:N/SA:N';
+
+export const PASSED_CVSS_V3_VECTOR =
+  'CVSS:3.1/AV:P/AC:L/PR:H/UI:R/S:U/C:N/I:N/A:N';
+
 // ─── Metric definitions ───────────────────────────────────────────────────────
 
 /**

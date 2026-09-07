@@ -10,6 +10,7 @@ import type Store from 'ember-data/store';
 import type RouterService from '@ember/routing/router-service';
 
 import type SbomComponentAdapter from 'irene/adapters/sbom-component';
+import type { SbomAiSummaryResponse } from 'irene/adapters/sbom-component';
 import type { PaginationProviderActionsArgs } from 'irene/components/ak-pagination-provider';
 import type { SbomScanDetailsSummaryBarItem } from 'irene/components/sbom/scan-details/summary-bar';
 
@@ -28,12 +29,6 @@ export interface AiBomComponentListSignature {
   };
 }
 
-interface AiSummaryResponse {
-  total: number;
-  by_type: Record<string, number>;
-  aibom_supported: boolean;
-}
-
 export default class AiBomComponentListComponent extends Component<AiBomComponentListSignature> {
   @service declare intl: IntlService;
   @service declare store: Store;
@@ -44,29 +39,13 @@ export default class AiBomComponentListComponent extends Component<AiBomComponen
 
   @tracked selectedComponent: SbomComponentModel | null = null;
   @tracked openComponentDrawer = false;
-  @tracked aiSummaryData: AiSummaryResponse | null = null;
+  @tracked aiSummaryData: SbomAiSummaryResponse | null = null;
 
   constructor(owner: unknown, args: AiBomComponentListSignature['Args']) {
     super(owner, args);
 
     this.fetchAiSummary.perform();
   }
-
-  // Deliberately its own fetch, independent of the main component-list
-  // reload cycle -- this summary bar always reflects the file's full AI
-  // BoM inventory, not what's visible under the current search/filter
-  // (see the matching note on the backend's ai_summary action).
-  fetchAiSummary = task({ drop: true }, async () => {
-    const adapter = this.store.adapterFor(
-      'sbom-component'
-    ) as SbomComponentAdapter;
-
-    try {
-      this.aiSummaryData = await adapter.getAiSummary(this.args.sbomFile.id);
-    } catch (error) {
-      this.aiSummaryData = null;
-    }
-  });
 
   get summaryItems(): SbomScanDetailsSummaryBarItem[] {
     const byType = this.aiSummaryData?.by_type ?? {};
@@ -75,10 +54,7 @@ export default class AiBomComponentListComponent extends Component<AiBomComponen
       (byType['config'] ?? 0) +
       (byType['supporting'] ?? 0);
 
-    // Total always shows, even at 0 -- it's the anchor metric. The per-type
-    // breakdown only shows categories that actually have components: with
-    // 6 possible types, showing every "X - 0" would make the bar too long
-    // and mostly noise for apps that only use one or two AI patterns.
+    // Always show Total; only show per-type categories with components to avoid "X - 0" noise.
     const totalItem: SbomScanDetailsSummaryBarItem = {
       iconName: 'summarize-outline',
       label: this.intl.t('sbomModule.totalComponents'),
@@ -130,18 +106,12 @@ export default class AiBomComponentListComponent extends Component<AiBomComponen
     return this.intl.t('sbomModule.noComponentsFoundFilter');
   }
 
-  // False only once the summary has actually loaded and confirmed this
-  // file's latest scan predates AI component detection -- defaults to
-  // "supported" while aiSummaryData is still null so the generic empty
-  // state (not the re-upload prompt) shows during the initial fetch.
+  // Defaults to supported until the summary loads and confirms the scan predates AI component detection.
   get isPreAiBomScan() {
     return this.aiSummaryData?.aibom_supported === false;
   }
 
-  // A file only gets the "please re-upload" prompt when it BOTH predates
-  // AI BoM detection AND actually has zero AI components -- a pre-AI-BOM
-  // scan that already has real components (e.g. detected in later
-  // testing) must still show them, not this prompt.
+  // Show "please re-upload" only for pre-AI-BOM scans with zero AI components.
   get showAiBomNewFeaturePrompt() {
     return this.isPreAiBomScan && this.isEmptyAndNoFilterApplied;
   }
@@ -280,6 +250,19 @@ export default class AiBomComponentListComponent extends Component<AiBomComponen
 
     this.sbomScanDetailsService.setLimitOffset({ limit, offset: 0 }).reload();
   }
+
+  // Independent fetch so the summary reflects the full AI BoM, not the current search/filter.
+  fetchAiSummary = task({ drop: true }, async () => {
+    const adapter = this.store.adapterFor(
+      'sbom-component'
+    ) as SbomComponentAdapter;
+
+    try {
+      this.aiSummaryData = await adapter.getAiSummary(this.args.sbomFile.id);
+    } catch (error) {
+      this.aiSummaryData = null;
+    }
+  });
 }
 
 declare module '@glint/environment-ember-loose/registry' {

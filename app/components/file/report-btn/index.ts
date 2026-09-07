@@ -2,7 +2,7 @@ import { action } from '@ember/object';
 import Component from '@glimmer/component';
 import { tracked } from '@glimmer/tracking';
 
-import FileModel from 'irene/models/file';
+import type FileModel from 'irene/models/file';
 
 export interface FileReportBtnSignature {
   Args: {

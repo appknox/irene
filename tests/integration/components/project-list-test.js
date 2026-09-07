@@ -232,7 +232,7 @@ module('Integration | Component | project list', function (hooks) {
 
       await render(hbs`<ProjectList />`);
 
-      let projectContainerList = findAll(
+      const projectContainerList = findAll(
         '[data-test-project-overview-container]'
       );
 
@@ -542,7 +542,7 @@ module('Integration | Component | project list', function (hooks) {
     // Clear Filter
     await click('[data-test-project-list-header-clear-filter]');
 
-    let projectContainerList = findAll(
+    const projectContainerList = findAll(
       '[data-test-project-overview-container]'
     );
 

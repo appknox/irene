@@ -7,7 +7,7 @@ module('Unit | Route | authenticated/security/file', function (hooks) {
   test('it exists', function (assert) {
     assert.expect(1);
 
-    let route = this.owner.lookup('route:authenticated/security/file');
+    const route = this.owner.lookup('route:authenticated/security/file');
 
     assert.ok(route);
   });

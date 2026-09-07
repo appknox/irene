@@ -1,11 +1,11 @@
 import Route from '@ember/routing/route';
 import { inject as service } from '@ember/service';
-import Store from 'ember-data/store';
+import type Store from 'ember-data/store';
 
 import ENV from 'irene/config/environment';
-import OrganizationService from 'irene/services/organization';
+import type OrganizationService from 'irene/services/organization';
 import { ScrollToTop } from 'irene/utils/scroll-to-top';
-import LicenseModel from 'irene/models/license';
+import type LicenseModel from 'irene/models/license';
 
 export default class AuthenticatedDashboardBillingRoute extends ScrollToTop(
   Route

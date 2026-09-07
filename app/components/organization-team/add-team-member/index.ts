@@ -5,7 +5,7 @@ import { task } from 'ember-concurrency';
 import { action } from '@ember/object';
 import { debounceTask } from 'ember-lifeline';
 // eslint-disable-next-line ember/use-ember-data-rfc-395-imports
-import DS from 'ember-data';
+import type DS from 'ember-data';
 import { waitForPromise } from '@ember/test-waiters';
 import type Store from 'ember-data/store';
 import type IntlService from 'ember-intl/services/intl';

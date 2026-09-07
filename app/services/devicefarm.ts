@@ -40,6 +40,7 @@ export default class DevicefarmService extends Service {
   get urlbase() {
     try {
       const base = new URL('/', this.devicefarmURL).href;
+
       return base;
     } catch {
       // empty catch;
@@ -48,12 +49,14 @@ export default class DevicefarmService extends Service {
     try {
       const API_HOST = ENV.host;
       const base = new URL('/', API_HOST).href;
+
       return base;
     } catch {
       // empty catch;
     }
 
     const base = new URL('/', window.location.href).href;
+
     return base;
   }
 

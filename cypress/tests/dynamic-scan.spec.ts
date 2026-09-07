@@ -1,19 +1,21 @@
-import DynamicScanActions, {
+import type {
   AppInformation,
   AppInteraction,
+} from '../support/Actions/common/DynamicScanActions';
+
+import DynamicScanActions, {
   DEFAULT_ASSERT_OPTS,
   DYNAMIC_SCAN_STATUS_TIMEOUT,
   DYNAMIC_SCAN_STOP_BTN_ALIAS,
   NETWORK_WAIT_OPTS,
 } from '../support/Actions/common/DynamicScanActions';
 
-import LoginActions from '../support/Actions/auth/LoginActions';
-import NetworkActions from '../support/Actions/common/NetworkActions';
-
 import { API_ROUTES } from '../support/api.routes';
 import { APPLICATION_ROUTES } from '../support/application.routes';
-import { MirageFactoryDefProps } from '../support/Mirage';
+import LoginActions from '../support/Actions/auth/LoginActions';
+import NetworkActions from '../support/Actions/common/NetworkActions';
 import cyTranslate from '../support/translations';
+import type { MirageFactoryDefProps } from '../support/Mirage';
 
 type AvailableManualDeviceProps =
   MirageFactoryDefProps['available-manual-device'];

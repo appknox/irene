@@ -136,6 +136,7 @@ module('Integration | Modifier | vnc-connection', function (hooks) {
 
     rfb._display.autoscale = (...args) => {
       autoscaleCalls++;
+
       return originalAutoscale(...args);
     };
 

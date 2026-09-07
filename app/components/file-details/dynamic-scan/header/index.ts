@@ -7,7 +7,8 @@ import { task } from 'ember-concurrency';
 import type IntlService from 'ember-intl/services/intl';
 import type RouterService from '@ember/routing/router-service';
 
-import DynamicscanModel, { DsComputedStatus } from 'irene/models/dynamicscan';
+import type DynamicscanModel from 'irene/models/dynamicscan';
+import { DsComputedStatus } from 'irene/models/dynamicscan';
 import type RealtimeService from 'irene/services/realtime';
 import type FileRiskModel from 'irene/models/file-risk';
 import type FileModel from 'irene/models/file';
