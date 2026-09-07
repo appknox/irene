@@ -218,6 +218,8 @@
     "@popperjs/core": "^2.11.6",
     "@storybook/types": "^8.4.6",
     "@vvo/tzdb": "^6.198.0",
+    "@yume-chan/adb": "^2.6.0",
+    "@yume-chan/adb-backend-webusb": "^0.0.19",
     "clipboard": "^2.0.6",
     "cypress": "^13.6.3",
     "cytoscape": "^3.34.0",
