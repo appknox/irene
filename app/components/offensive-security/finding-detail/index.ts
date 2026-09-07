@@ -13,6 +13,7 @@ import parseError from 'irene/utils/parse-error';
 import type OffsecFindingModel from 'irene/models/offsec-finding';
 import type { OffsecFindingEvidence } from 'irene/models/offsec-finding';
 import type OffsecScanModel from 'irene/models/offsec-scan';
+import type OffsecScanAdapter from 'irene/adapters/offsec-scan';
 
 export interface OffensiveSecurityFindingDetailSignature {
   Args: {
@@ -70,13 +71,20 @@ export default class OffensiveSecurityFindingDetailComponent extends Component<O
 
   get evidence(): OffsecFindingEvidence[] {
     const raw = this.finding?.evidence;
+    let list: OffsecFindingEvidence[];
     if (Array.isArray(raw)) {
-      return raw;
+      list = raw;
+    } else if (raw && typeof raw === 'object') {
+      list = Object.values(raw) as OffsecFindingEvidence[];
+    } else {
+      list = this.finding?.evidenceList ?? [];
     }
-    if (raw && typeof raw === 'object') {
-      return Object.values(raw) as OffsecFindingEvidence[];
-    }
-    return this.finding?.evidenceList ?? [];
+
+    return list.filter(
+      (item) =>
+        item?.tool !== 'android:ui_get_text' &&
+        (item?.source || '').toLowerCase() !== 'ui'
+    );
   }
 
   get checkTypeLabel(): string {
@@ -314,6 +322,46 @@ export default class OffensiveSecurityFindingDetailComponent extends Component<O
 
   get hasExploit(): boolean {
     return this.exploitScript.trim().length > 0;
+  }
+
+  get detectionBacktrace(): Array<Record<string, unknown>> {
+    const raw = this.finding?.detail?.['detection_backtrace'];
+    return Array.isArray(raw) ? (raw as Array<Record<string, unknown>>) : [];
+  }
+
+  get hasBacktrace(): boolean {
+    return this.detectionBacktrace.length > 0;
+  }
+
+  get smaliPatch(): Record<string, unknown> | null {
+    const raw = this.finding?.detail?.['smali_patch'];
+    return raw && typeof raw === 'object'
+      ? (raw as Record<string, unknown>)
+      : null;
+  }
+
+  get smaliPatchText(): string {
+    const patch = this.smaliPatch;
+    const diff = patch?.['diff'] ?? patch?.['new_body'];
+    return typeof diff === 'string' ? diff : '';
+  }
+
+  get smaliPatchPath(): string {
+    const path = this.smaliPatch?.['path'];
+    return typeof path === 'string' ? path : '';
+  }
+
+  get patchedApkName(): string {
+    const raw = this.finding?.detail?.['patched_apk'];
+    const name =
+      raw && typeof raw === 'object'
+        ? (raw as Record<string, unknown>)['name']
+        : undefined;
+    return typeof name === 'string' ? name : '';
+  }
+
+  get hasPatchedApk(): boolean {
+    return this.patchedApkName.length > 0 && Boolean(this.scanId);
   }
 
   get reproduceSteps(): ReproduceStep[] {
@@ -575,6 +623,35 @@ export default class OffensiveSecurityFindingDetailComponent extends Component<O
         this.fallbackCopy(this.exploitScript);
       }
     }
+  }
+
+  downloadPatchedApk = task({ drop: true }, async () => {
+    const name = this.patchedApkName;
+    const scanId = this.scanId;
+    if (!name || !scanId) {
+      return;
+    }
+    try {
+      const adapter = this.store.adapterFor(
+        'offsec-scan'
+      ) as unknown as OffsecScanAdapter;
+      const details = await adapter.fetchArtifactDownloadUrl(
+        'offsec-scan',
+        scanId,
+        name
+      );
+      const url = details?.download_url || details?.url;
+      if (url) {
+        window.open(url, '_blank', 'noopener');
+      }
+    } catch (error) {
+      this.notify?.error?.(parseError(error, this.intl.t('pleaseTryAgain')));
+    }
+  });
+
+  @action
+  triggerApkDownload(): void {
+    this.downloadPatchedApk.perform();
   }
 
   @action

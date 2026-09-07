@@ -293,7 +293,10 @@ module(
               attempt_no: 2,
               state: 'verified_effective',
               technique_id: 'libc_hook',
-              evidence: ['Hooked execve successfully', 'Neutralized /system/bin/su check'],
+              evidence: [
+                'Hooked execve successfully',
+                'Neutralized /system/bin/su check',
+              ],
               verifier_ids: 'V1, V2',
             },
           ],
@@ -325,6 +328,108 @@ module(
 
       assert.dom(this.element).includesText('Native libc path/exec probes');
       assert.dom(this.element).doesNotIncludeText('Execution attempts');
+    });
+
+    test('it renders the detection backtrace as evidence of presence', async function (assert) {
+      const finding = this.server.create('offsec-finding', {
+        signature_id: 'root-file-probe',
+        name: 'Root artifact file probe',
+        outcome: 'bypassed',
+        detail: {
+          detection_backtrace: [
+            {
+              kind: 'file-exists',
+              arg: '/system/xbin/su',
+              layer: 'java',
+              app_frame: 'o.im.p',
+              smali_path: 'apktool/smali/o/im.smali',
+            },
+          ],
+        },
+      });
+
+      this.set('scanId', '9');
+      this.set('findingId', String(finding.id));
+
+      await render(hbs`
+        <OffensiveSecurity::FindingDetail
+          @scanId={{this.scanId}}
+          @findingId={{this.findingId}}
+        />
+      `);
+
+      assert.dom(this.element).includesText('Detection backtrace');
+      assert.dom(this.element).includesText('o.im.p');
+      assert.dom(this.element).includesText('apktool/smali/o/im.smali');
+      assert.dom(this.element).includesText('/system/xbin/su');
+    });
+
+    test('it renders the smali patch and the patched APK download', async function (assert) {
+      const finding = this.server.create('offsec-finding', {
+        signature_id: 'root-file-probe',
+        name: 'Root artifact file probe',
+        outcome: 'bypassed',
+        detail: {
+          smali_patch: {
+            path: 'apktool/smali/o/im.smali',
+            diff: '- if-eqz v0, :cond_0\n+ goto :cond_0',
+          },
+          patched_apk: { name: 'patched.apk' },
+        },
+      });
+
+      this.set('scanId', '9');
+      this.set('findingId', String(finding.id));
+
+      await render(hbs`
+        <OffensiveSecurity::FindingDetail
+          @scanId={{this.scanId}}
+          @findingId={{this.findingId}}
+        />
+      `);
+
+      assert.dom(this.element).includesText('Bypass artifacts');
+      assert.dom(this.element).includesText('apktool/smali/o/im.smali');
+      assert.dom(this.element).includesText('goto :cond_0');
+      assert.dom(this.element).includesText('Patched APK');
+      assert.dom(this.element).includesText('Download');
+    });
+
+    test('it drops the raw UI screen dump from the evidence card', async function (assert) {
+      const finding = this.server.create('offsec-finding', {
+        signature_id: 'root-file-probe',
+        name: 'Root artifact file probe',
+        outcome: 'bypassed',
+        evidence: [
+          {
+            evidence_id: 'E11',
+            tool: 'android:ui_get_text',
+            source: 'ui',
+            summary: 'POST_BYPASS_SCREEN_DUMP',
+            ok: true,
+          },
+          {
+            evidence_id: 'E0',
+            tool: 'frida_diagnose',
+            source: 'frida_diagnostic',
+            summary: 'DIAGNOSTIC_KEEP',
+            ok: true,
+          },
+        ],
+      });
+
+      this.set('scanId', '9');
+      this.set('findingId', String(finding.id));
+
+      await render(hbs`
+        <OffensiveSecurity::FindingDetail
+          @scanId={{this.scanId}}
+          @findingId={{this.findingId}}
+        />
+      `);
+
+      assert.dom(this.element).doesNotIncludeText('POST_BYPASS_SCREEN_DUMP');
+      assert.dom(this.element).includesText('DIAGNOSTIC_KEEP');
     });
   }
 );

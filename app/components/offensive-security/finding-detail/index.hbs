@@ -169,6 +169,85 @@
         </section>
       {{/if}}
 
+      {{! DETECTION BACKTRACE }}
+      {{#if this.hasBacktrace}}
+        <section local-class='card verify'>
+          <div local-class='card-h'>
+            <span local-class='glyph glyph-verify'>
+              <svg viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2'>
+                <path d='M3 3v18h18' />
+                <path d='m7 14 4-4 3 3 5-6' />
+              </svg>
+            </span>
+            <h2>Detection backtrace</h2>
+            <span local-class='meta'>{{this.detectionBacktrace.length}} triggered checks</span>
+          </div>
+          <div local-class='card-b'>
+            {{#each this.detectionBacktrace as |trigger|}}
+              <div local-class='evi'>
+                <div local-class='evi-h'>
+                  <span local-class='evi-id'>{{or trigger.kind 'check'}}</span>
+                  {{#if trigger.arg}}
+                    <span local-class='evi-name'>{{trigger.arg}}</span>
+                  {{/if}}
+                  {{#if trigger.layer}}
+                    <span local-class='evi-surface'>{{trigger.layer}}</span>
+                  {{/if}}
+                </div>
+                {{#if trigger.app_frame}}
+                  <p local-class='evi-cap'>{{trigger.app_frame}}</p>
+                {{/if}}
+                {{#if trigger.smali_path}}
+                  <pre local-class='evi-code'><code>{{trigger.smali_path}}</code></pre>
+                {{/if}}
+              </div>
+            {{/each}}
+          </div>
+        </section>
+      {{/if}}
+
+      {{! BYPASS ARTIFACTS }}
+      {{#if (or this.smaliPatch this.hasPatchedApk)}}
+        <section local-class='card verify'>
+          <div local-class='card-h'>
+            <span local-class='glyph glyph-code'>
+              <svg viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2'>
+                <path d='M12 2 3 7v10l9 5 9-5V7z' />
+              </svg>
+            </span>
+            <h2>Bypass artifacts</h2>
+          </div>
+          <div local-class='card-b'>
+            {{#if this.smaliPatch}}
+              <div local-class='term'>
+                <div local-class='term-bar'>
+                  <span local-class='fname'>{{this.smaliPatchPath}}</span>
+                  <span local-class='lang'>smali patch</span>
+                </div>
+                <pre local-class='code-block'><code>{{this.smaliPatchText}}</code></pre>
+              </div>
+            {{/if}}
+            {{#if this.hasPatchedApk}}
+              <div local-class='step'>
+                <span local-class='step-text'>Patched APK · {{this.patchedApkName}}</span>
+                <button
+                  type='button'
+                  local-class='copy'
+                  {{on 'click' this.triggerApkDownload}}
+                  disabled={{this.downloadPatchedApk.isRunning}}
+                >
+                  {{#if this.downloadPatchedApk.isRunning}}
+                    Preparing…
+                  {{else}}
+                    Download
+                  {{/if}}
+                </button>
+              </div>
+            {{/if}}
+          </div>
+        </section>
+      {{/if}}
+
       {{! EVIDENCE }}
       <section local-class='card verify'>
         <div local-class='card-h'>
