@@ -1416,7 +1416,13 @@
     "viewStoreMonitoringResults": "View store monitoring results",
     "viewMonitoringResults": "View monitoring results",
     "viewSBOMResults": "View SCA results",
-    "viewAppOnStore": "View App on Store"
+    "viewAppOnStore": "View App on Store",
+    "advisory": "アドバイザリ",
+    "fixedInVersion": "修正バージョン",
+    "affects": "影響",
+    "newVersion": "新しいバージョン",
+    "viewComponent": "コンポーネントを表示",
+    "viewDirectory": "ディレクトリを表示"
   },
   "notificationPreferences": "Notification Preferences",
   "off": "off",

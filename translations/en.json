@@ -1416,7 +1416,13 @@
     "viewStoreMonitoringResults": "View store monitoring results",
     "viewSBOMResults": "View SCA results",
     "viewMonitoringResults": "View monitoring results",
-    "viewAppOnStore": "View App on Store"
+    "viewAppOnStore": "View App on Store",
+    "advisory": "Advisory",
+    "fixedInVersion": "Fixed in version",
+    "affects": "Affects",
+    "newVersion": "New version",
+    "viewComponent": "View component",
+    "viewDirectory": "View Directory"
   },
   "notificationPreferences": "Notification Preferences",
   "off": "off",
