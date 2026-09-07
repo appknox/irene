@@ -49,7 +49,7 @@
       </div>
       <div local-class='stat-details'>
         <span local-class='stat-label'>{{t 'offensiveSecurity.totalRuns'}}</span>
-        <span local-class='stat-number'>{{if this.totalCount this.totalCount this.scans.length}}</span>
+        <span local-class='stat-number'>{{this.totalRunsDisplay}}</span>
         <span local-class='stat-subtext'>{{t 'offensiveSecurity.allTime'}}</span>
       </div>
     </div>
@@ -168,8 +168,13 @@
                       <Component @scan={{r.rowValue}} />
                     {{/let}}
                   {{else}}
-                    <AkTypography @variant='body2' @noWrap={{true}} title={{value}}>
-                      {{if value value '—'}}
+                    <AkTypography
+                      @variant='body2'
+                      @noWrap={{true}}
+                      @align={{or r.columnValue.textAlign 'inherit'}}
+                      title={{value}}
+                    >
+                      {{if (or value (eq value 0)) value '—'}}
                     </AkTypography>
                   {{/if}}
                 </r.cell>

@@ -24,36 +24,83 @@
 
   {{#if this.hasFindings}}
     <AkStack @width='full' @direction='column' @alignItems='stretch'>
-      {{#each this.sortedFindings as |finding|}}
-        <AkStack
-          @alignItems='center'
-          @justifyContent='space-between'
-          @spacing='2'
-          local-class='finding-row'
-          tabindex='0'
-          {{on 'click' (fn this.handleClick finding.id)}}
-          {{on 'keydown' (fn this.handleKeydown finding.id)}}
-          data-test-offensiveSecurity-findingsList-row
+      {{#each this.groupedFindings as |group|}}
+        <div
+          local-class='group-section'
+          data-test-offensiveSecurity-findingsList-group={{group.key}}
         >
-          <AkStack @direction='column'>
-            <AkTypography @variant='body2' @fontWeight='medium'>
-              {{finding.name}}
-            </AkTypography>
-
-            {{#if finding.category}}
-              <AkTypography @variant='body3' @color='textSecondary'>
-                {{finding.category}}
-              </AkTypography>
-            {{/if}}
-          </AkStack>
-
-          <span
-            local-class='outcome-tag {{this.outcomeClass finding.outcome}}'
-            data-test-offensiveSecurity-findingsList-outcome
+          <div
+            local-class='group-header {{if (this.isGroupExpanded group.key) "expanded"}}'
+            role='button'
+            tabindex='0'
+            aria-expanded={{if (this.isGroupExpanded group.key) 'true' 'false'}}
+            {{on 'click' (fn this.toggleGroup group.key)}}
+            {{on 'keydown' (fn this.handleGroupKeydown group.key)}}
+            data-test-offensiveSecurity-findingsList-groupHeader={{group.key}}
           >
-            {{t (concat 'offensiveSecurity.outcome.' finding.outcome)}}
-          </span>
-        </AkStack>
+            <AkStack
+              @alignItems='center'
+              @justifyContent='space-between'
+              @width='full'
+            >
+              <AkStack @alignItems='center' @spacing='1'>
+                <AkTypography
+                  @variant='subtitle2'
+                  @fontWeight='bold'
+                  local-class='group-title'
+                  data-test-offensiveSecurity-findingsList-groupTitle
+                >
+                  {{group.title}}
+                </AkTypography>
+                <span local-class='group-count'>({{group.findings.length}})</span>
+              </AkStack>
+
+              <AkIcon
+                @iconName='arrow-drop-down'
+                @color='textSecondary'
+                local-class='group-expand-icon {{if (this.isGroupExpanded group.key) "expanded"}}'
+                data-test-offensiveSecurity-findingsList-expandIcon
+              />
+            </AkStack>
+          </div>
+
+          <div
+            local-class='group-content {{if (this.isGroupExpanded group.key) "expanded" "collapsed"}}'
+            data-test-offensiveSecurity-findingsList-groupContent={{group.key}}
+          >
+            {{#each group.findings as |finding|}}
+              <AkStack
+                @alignItems='center'
+                @justifyContent='space-between'
+                @spacing='2'
+                local-class='finding-row'
+                tabindex='0'
+                {{on 'click' (fn this.handleClick finding.id)}}
+                {{on 'keydown' (fn this.handleKeydown finding.id)}}
+                data-test-offensiveSecurity-findingsList-row
+              >
+                <AkStack @direction='column'>
+                  <AkTypography @variant='body2' @fontWeight='medium'>
+                    {{finding.name}}
+                  </AkTypography>
+
+                  {{#if finding.category}}
+                    <AkTypography @variant='body3' @color='textSecondary'>
+                      {{finding.category}}
+                    </AkTypography>
+                  {{/if}}
+                </AkStack>
+
+                <span
+                  local-class='outcome-tag {{this.outcomeClass finding.outcome}}'
+                  data-test-offensiveSecurity-findingsList-outcome
+                >
+                  {{t (concat 'offensiveSecurity.outcome.' (if finding.outcome finding.outcome 'not_attempted'))}}
+                </span>
+              </AkStack>
+            {{/each}}
+          </div>
+        </div>
       {{/each}}
     </AkStack>
   {{else}}

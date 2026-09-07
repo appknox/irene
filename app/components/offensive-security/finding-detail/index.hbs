@@ -112,60 +112,62 @@
 
     {{! ---------- MAIN STACK ---------- }}
     <div local-class='content-grid'>
-      {{! WORKING EXPLOIT }}
-      <section local-class='card exploit'>
-        <div local-class='card-h'>
-          <span local-class='glyph glyph-code'>
-            <svg viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2'>
-              <polyline points='4 17 10 11 4 5' />
-              <line x1='12' y1='19' x2='20' y2='19' />
-            </svg>
-          </span>
-          <h2>Working exploit</h2>
-        </div>
-        <div local-class='card-b'>
-          <div local-class='term'>
-            <div local-class='term-bar'>
-              <span local-class='fname'>{{this.exploitFileName}}</span>
-              <span local-class='lang'>Frida · JavaScript</span>
-              <button
-                type='button'
-                local-class='copy {{if this.isExploitCopied "done"}}'
-                {{on 'click' this.copyExploit}}
-              >
-                {{#if this.isExploitCopied}}
-                  <svg width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2.5'>
-                    <polyline points='20 6 9 17 4 12' />
-                  </svg>
-                  Copied
-                {{else}}
-                  <svg width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2'>
-                    <rect x='9' y='9' width='13' height='13' rx='2' />
-                    <path d='M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1' />
-                  </svg>
-                  Copy
-                {{/if}}
-              </button>
-            </div>
-            <pre local-class='code-block'><code>{{this.exploitScript}}</code></pre>
+      {{! WORKING EXPLOIT - Only displayed when frida_script is provided by API }}
+      {{#if this.hasExploit}}
+        <section local-class='card exploit'>
+          <div local-class='card-h'>
+            <span local-class='glyph glyph-code'>
+              <svg viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2'>
+                <polyline points='4 17 10 11 4 5' />
+                <line x1='12' y1='19' x2='20' y2='19' />
+              </svg>
+            </span>
+            <h2>Working exploit</h2>
           </div>
-
-          <div local-class='repro'>
-            <h3>Reproduce</h3>
-            {{#each this.reproduceSteps as |step|}}
-              <div local-class='step'>
-                <span local-class='step-num'>{{step.step}}</span>
-                <span local-class='step-text'>
-                  {{step.text}}
-                  {{#if step.code}}
-                    <code>{{step.code}}</code>
+          <div local-class='card-b'>
+            <div local-class='term'>
+              <div local-class='term-bar'>
+                <span local-class='fname'>{{this.exploitFileName}}</span>
+                <span local-class='lang'>Frida · JavaScript</span>
+                <button
+                  type='button'
+                  local-class='copy {{if this.isExploitCopied "done"}}'
+                  {{on 'click' this.copyExploit}}
+                >
+                  {{#if this.isExploitCopied}}
+                    <svg width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2.5'>
+                      <polyline points='20 6 9 17 4 12' />
+                    </svg>
+                    Copied
+                  {{else}}
+                    <svg width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2'>
+                      <rect x='9' y='9' width='13' height='13' rx='2' />
+                      <path d='M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1' />
+                    </svg>
+                    Copy
                   {{/if}}
-                </span>
+                </button>
               </div>
-            {{/each}}
+              <pre local-class='code-block'><code>{{this.exploitScript}}</code></pre>
+            </div>
+
+            <div local-class='repro'>
+              <h3>Reproduce</h3>
+              {{#each this.reproduceSteps as |step|}}
+                <div local-class='step'>
+                  <span local-class='step-num'>{{step.step}}</span>
+                  <span local-class='step-text'>
+                    {{step.text}}
+                    {{#if step.code}}
+                      <code>{{step.code}}</code>
+                    {{/if}}
+                  </span>
+                </div>
+              {{/each}}
+            </div>
           </div>
-        </div>
-      </section>
+        </section>
+      {{/if}}
 
       {{! EVIDENCE }}
       <section local-class='card verify'>
@@ -216,7 +218,7 @@
         </div>
       </section>
 
-      {{! EXECUTION ATTEMPTS (when attempts exist) }}
+      {{!-- EXECUTION ATTEMPTS - Commented out as requested
       {{#if this.finding.attempts.length}}
         <section local-class='card attempts'>
           <div local-class='card-h'>
@@ -303,51 +305,66 @@
           </div>
         </section>
       {{/if}}
+      --}}
 
-      {{! IMPACT }}
-      <section local-class='card impact'>
-        <div local-class='card-h'>
-          <span local-class='glyph glyph-impact'>
-            <svg viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2'>
-              <path d='M13 2 3 14h7l-1 8 10-12h-7z' />
-            </svg>
-          </span>
-          <h2>Impact</h2>
-        </div>
-        <div local-class='card-b'>
-          <p local-class='desc-para'>{{this.impactSummary}}</p>
-          <ul local-class='unlocks'>
-            {{#each this.impactPoints as |pt|}}
-              <li>{{pt}}</li>
-            {{/each}}
-          </ul>
-          <div local-class='attack'>
-            <span local-class='attack-code'>{{this.mitreAttack.code}}</span>
-            <span local-class='attack-name'>{{this.mitreAttack.name}}</span>
+      {{! IMPACT - Only displayed when impact is provided by API }}
+      {{#if this.hasImpact}}
+        <section local-class='card impact'>
+          <div local-class='card-h'>
+            <span local-class='glyph glyph-impact'>
+              <svg viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2'>
+                <path d='M13 2 3 14h7l-1 8 10-12h-7z' />
+              </svg>
+            </span>
+            <h2>Impact</h2>
           </div>
-        </div>
-      </section>
+          <div local-class='card-b'>
+            {{#if this.impactSummary}}
+              <p local-class='desc-para'>{{this.impactSummary}}</p>
+            {{/if}}
+            {{#if this.impactPoints.length}}
+              <ul local-class='unlocks'>
+                {{#each this.impactPoints as |pt|}}
+                  <li>{{pt}}</li>
+                {{/each}}
+              </ul>
+            {{/if}}
+            {{#if this.mitreAttack}}
+              <div local-class='attack'>
+                <span local-class='attack-code'>{{this.mitreAttack.code}}</span>
+                <span local-class='attack-name'>{{this.mitreAttack.name}}</span>
+              </div>
+            {{/if}}
+          </div>
+        </section>
+      {{/if}}
 
-      {{! BUSINESS RISK }}
-      <section local-class='card bizrisk'>
-        <div local-class='card-h'>
-          <span local-class='glyph glyph-risk'>
-            <svg viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2'>
-              <path d='M12 2 2 20h20z' />
-              <path d='M12 9v5M12 17v.5' />
-            </svg>
-          </span>
-          <h2>Business risk</h2>
-        </div>
-        <div local-class='card-b'>
-          <p local-class='desc-para'>{{this.businessRiskSummary}}</p>
-          <ul local-class='risks'>
-            {{#each this.businessRisks as |risk|}}
-              <li>{{risk}}</li>
-            {{/each}}
-          </ul>
-        </div>
-      </section>
+      {{! BUSINESS RISK - Only displayed when business_risk is provided by API }}
+      {{#if this.hasBusinessRisk}}
+        <section local-class='card bizrisk'>
+          <div local-class='card-h'>
+            <span local-class='glyph glyph-risk'>
+              <svg viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2'>
+                <path d='M12 2 2 20h20z' />
+                <path d='M12 9v5M12 17v.5' />
+              </svg>
+            </span>
+            <h2>Business risk</h2>
+          </div>
+          <div local-class='card-b'>
+            {{#if this.businessRiskSummary}}
+              <p local-class='desc-para'>{{this.businessRiskSummary}}</p>
+            {{/if}}
+            {{#if this.businessRisks.length}}
+              <ul local-class='risks'>
+                {{#each this.businessRisks as |risk|}}
+                  <li>{{risk}}</li>
+                {{/each}}
+              </ul>
+            {{/if}}
+          </div>
+        </section>
+      {{/if}}
     </div>
 
     {{! ---------- SCORING DRAWER ---------- }}

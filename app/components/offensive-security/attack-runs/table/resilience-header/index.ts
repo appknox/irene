@@ -4,7 +4,17 @@ import { service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
 import type IntlService from 'ember-intl/services/intl';
 
-import type { ResilienceFilter } from 'irene/components/offensive-security/attack-runs';
+export type ResilienceFilter =
+  | 'all'
+  | 'critical'
+  | 'high'
+  | 'medium'
+  | 'low'
+  | 'weak'
+  | 'moderate'
+  | 'strong'
+  | 'very-strong'
+  | 'very_strong';
 
 export interface OffensiveSecurityAttackRunsTableResilienceHeaderSignature {
   Args: {
@@ -22,20 +32,20 @@ export default class OffensiveSecurityAttackRunsTableResilienceHeaderComponent e
     return [
       { label: this.intl.t('all'), value: 'all' },
       {
-        label: this.intl.t('offensiveSecurity.resilienceLevel.weak'),
-        value: 'weak',
+        label: this.intl.t('offensiveSecurity.riskLevel.critical'),
+        value: 'critical',
       },
       {
-        label: this.intl.t('offensiveSecurity.resilienceLevel.medium'),
+        label: this.intl.t('offensiveSecurity.riskLevel.high'),
+        value: 'high',
+      },
+      {
+        label: this.intl.t('offensiveSecurity.riskLevel.medium'),
         value: 'medium',
       },
       {
-        label: this.intl.t('offensiveSecurity.resilienceLevel.strong'),
-        value: 'strong',
-      },
-      {
-        label: this.intl.t('offensiveSecurity.resilienceLevel.very-strong'),
-        value: 'very-strong',
+        label: this.intl.t('offensiveSecurity.riskLevel.low'),
+        value: 'low',
       },
     ];
   }

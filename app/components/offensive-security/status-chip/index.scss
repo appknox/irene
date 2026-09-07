@@ -1,8 +1,13 @@
 .chip-container {
   display: inline-flex;
   align-items: center;
+  justify-content: center;
+  text-align: center;
   white-space: nowrap;
   flex-shrink: 0;
+  box-sizing: border-box;
+  width: 120px;
+  min-width: 120px;
   border-radius: var(--offensive-security-status-chip-border-radius);
   padding: 0.464em 0.714em;
   background-color: var(--offensive-security-status-chip-bg-color);

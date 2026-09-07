@@ -790,7 +790,8 @@
     "order": "Order",
     "showPayload": "View payload detail",
     "viewAllEvidence": "View All Evidence",
-    "bypassed": "Successful Exploits",
+    "bypassed": "Defenses Exploits",
+    "defensesBypassed": "Defenses Bypassed",
     "checkType": "Check type",
     "risk": "Risk",
     "riskRating": "Overall Risk",
@@ -821,7 +822,8 @@
       "bypassed": "Exploit Successful",
       "error": "Error",
       "not_attempted": "Unassessed",
-      "resisted": "Attacks Resisted"
+      "unassessed": "Unassessed",
+      "resisted": "Defenses Resisted"
     },
     "overallResilience": "Overall resilience",
     "protectionDetected": "This protection was detected in the target during the run.",
@@ -835,7 +837,7 @@
       "very-strong": "Very strong",
       "unknown": "Pending"
     },
-    "resisted": "Attacks Resisted",
+    "resisted": "Defenses Resisted",
     "unassessed": "Defenses Unassessed",
     "riskLevel": {
       "critical": "Critical",

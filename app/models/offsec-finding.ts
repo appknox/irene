@@ -73,7 +73,11 @@ export default class OffsecFindingModel extends Model {
   }
 
   get wasAttempted(): boolean {
-    return this.outcome !== 'not_attempted' && this.outcome !== '';
+    return (
+      this.outcome !== 'not_attempted' &&
+      this.outcome !== 'unassessed' &&
+      this.outcome !== ''
+    );
   }
 
   /**
@@ -94,6 +98,7 @@ export default class OffsecFindingModel extends Model {
       case 'error':
         return 'errored';
       case 'not_attempted':
+      case 'unassessed':
         return 'detected';
       default:
         return 'not-applicable';

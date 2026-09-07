@@ -50,6 +50,8 @@ const SELECTORS = {
   findingsList: '[data-test-offensiveSecurity-findingsList]',
   findingRow: '[data-test-offensiveSecurity-findingsList-row]',
   findingsEmpty: '[data-test-offensiveSecurity-findingsList-empty]',
+  groupTitle: '[data-test-offensiveSecurity-findingsList-groupTitle]',
+  groupHeader: '[data-test-offensiveSecurity-findingsList-groupHeader]',
   agentLog: '[data-test-offensiveSecurity-agentLog]',
   agentLogInProgress: '[data-test-offensiveSecurity-agentLog-inProgress]',
   agentLogPane: '[data-test-offensiveSecurity-agentLog-pane]',
@@ -205,7 +207,9 @@ module('Integration | Component | offensive-security/scan-results', (hooks) => {
     this.set('scanId', String(scan.id));
     await render(TEMPLATE);
 
-    assert.dom(SELECTORS.artifactRow).containsText('Custom Human-Readable Description');
+    assert
+      .dom(SELECTORS.artifactRow)
+      .containsText('Custom Human-Readable Description');
   });
 
   test('it displays APK and IPA artifacts with appropriate descriptions', async function (assert) {
@@ -229,8 +233,12 @@ module('Integration | Component | offensive-security/scan-results', (hooks) => {
     await render(TEMPLATE);
 
     assert.dom(SELECTORS.artifactRow).exists({ count: 2 });
-    assert.dom(SELECTORS.artifactsCard).containsText('Android application package (APK)');
-    assert.dom(SELECTORS.artifactsCard).containsText('iOS application archive (IPA)');
+    assert
+      .dom(SELECTORS.artifactsCard)
+      .containsText('Android application package (APK)');
+    assert
+      .dom(SELECTORS.artifactsCard)
+      .containsText('iOS application archive (IPA)');
     assert.dom(SELECTORS.artifactsCard).containsText('15.0 MB');
     assert.dom(SELECTORS.artifactsCard).containsText('20.0 MB');
   });
@@ -266,6 +274,222 @@ module('Integration | Component | offensive-security/scan-results', (hooks) => {
     assert.dom(SELECTORS.findingsList).exists();
     assert.strictEqual(findAll(SELECTORS.findingRow).length, 2);
     assert.dom(SELECTORS.findingRow).includesText('Exploit Successful');
+  });
+
+  test('it groups findings by dictionary key and formats the group header in title case', async function (assert) {
+    const scan = createScan(this, {
+      findings: {
+        'anti-debug-ptrace': {
+          id: 1,
+          signature_id: 'anti-debug-ptrace',
+          name: 'ptrace PTRACE_TRACEME check',
+          category: 'resilience',
+          outcome: 'bypassed',
+          order: 0,
+        },
+        'debug-settings-probe': {
+          id: 2,
+          signature_id: 'debug-settings-probe',
+          name: 'Developer-options / USB-debugging settings probe',
+          category: 'resilience',
+          outcome: 'bypassed',
+          order: 1,
+        },
+        'frida-port-scan': {
+          id: 3,
+          signature_id: 'frida-port-scan',
+          name: 'Frida server port scan (27042)',
+          category: 'resilience',
+          outcome: 'not_attempted',
+          order: 2,
+        },
+      },
+    });
+    serveScan(this, scan);
+
+    this.set('scanId', String(scan.id));
+    await render(TEMPLATE);
+
+    assert.dom(SELECTORS.findingsList).exists();
+    assert.strictEqual(findAll(SELECTORS.findingRow).length, 3);
+
+    const groupTitles = findAll(SELECTORS.groupTitle).map((el) =>
+      el.textContent.trim()
+    );
+    assert.true(groupTitles.includes('Anti Debug Ptrace'));
+    assert.true(groupTitles.includes('Debug Settings Probe'));
+    assert.false(groupTitles.includes('Frida Port Scan'));
+
+    assert.dom(SELECTORS.findingsList).containsText('Anti Debug Ptrace');
+    assert.dom(SELECTORS.findingsList).containsText('Debug Settings Probe');
+    assert
+      .dom(SELECTORS.findingsList)
+      .containsText('ptrace PTRACE_TRACEME check');
+    assert.dom(SELECTORS.findingsList).containsText('Developer-options');
+    assert
+      .dom(SELECTORS.findingsList)
+      .containsText('USB-debugging settings probe');
+  });
+
+  test('findings groups have accordions for all and format keys with slashes', async function (assert) {
+    const scan = createScan(this, {
+      findings: {
+        'anti-debug-ptrace': {
+          id: 1,
+          signature_id: 'anti-debug-ptrace',
+          name: 'ptrace PTRACE_TRACEME check',
+          category: 'resilience',
+          outcome: 'bypassed',
+          order: 0,
+        },
+        'dev-options/usb-debugging': {
+          id: 2,
+          signature_id: 'dev-options/usb-debugging',
+          name: 'Developer-options detection',
+          category: 'resilience',
+          outcome: 'bypassed',
+          order: 1,
+        },
+      },
+    });
+    serveScan(this, scan);
+
+    this.set('scanId', String(scan.id));
+    await render(TEMPLATE);
+
+    const headers = findAll(SELECTORS.groupHeader);
+    assert.strictEqual(headers.length, 2, 'Two group headers rendered');
+
+    // Key with slash formatted to Title Case
+    assert.dom(headers[1]).includesText('Dev Options USB Debugging');
+
+    // All groups start closed by default on reload
+    assert.strictEqual(headers[0].getAttribute('aria-expanded'), 'false');
+    assert.strictEqual(headers[1].getAttribute('aria-expanded'), 'false');
+
+    // Click first group header to expand it
+    await click(headers[0]);
+    assert.strictEqual(headers[0].getAttribute('aria-expanded'), 'true');
+    assert.strictEqual(headers[1].getAttribute('aria-expanded'), 'false');
+
+    // Click first group header again to collapse it
+    await click(headers[0]);
+    assert.strictEqual(headers[0].getAttribute('aria-expanded'), 'false');
+    assert.strictEqual(headers[1].getAttribute('aria-expanded'), 'false');
+  });
+
+  test('finding names with slashes split into multiple list items under that group', async function (assert) {
+    const scan = createScan(this, {
+      findings: {
+        'debug-settings-probe': {
+          id: 1,
+          signature_id: 'debug-settings-probe',
+          name: 'Developer-options / USB-debugging settings probe',
+          category: 'resilience',
+          outcome: 'bypassed',
+          order: 0,
+        },
+        'freerasp-talsec': {
+          id: 2,
+          signature_id: 'freerasp-talsec',
+          name: 'FreeRASP / Talsec SDK',
+          category: 'resilience',
+          outcome: 'bypassed',
+          order: 1,
+        },
+      },
+    });
+    serveScan(this, scan);
+
+    this.set('scanId', String(scan.id));
+    await render(TEMPLATE);
+
+    const rows = findAll(SELECTORS.findingRow);
+    assert.strictEqual(rows.length, 4, 'Four list items rendered from two slash findings');
+
+    assert.dom(rows[0]).includesText('Developer-options');
+    assert.dom(rows[1]).includesText('USB-debugging settings probe');
+    assert.dom(rows[2]).includesText('FreeRASP');
+    assert.dom(rows[3]).includesText('Talsec SDK');
+
+    // Counts on headers show 2 for each
+    const headers = findAll(SELECTORS.groupHeader);
+    assert.dom(headers[0]).includesText('(2)');
+    assert.dom(headers[1]).includesText('(2)');
+  });
+
+  test('it groups findings when API findings object contains arrays of findings under category keys', async function (assert) {
+    const scan = createScan(this, {
+      findings: {
+        root_detection: [
+          {
+            id: 8,
+            signature_id: 'root-aggregate-guard',
+            name: 'Obfuscated aggregate root verdict method',
+            category: 'resilience',
+            outcome: 'bypassed',
+          },
+          {
+            id: 9,
+            signature_id: 'root-build-props',
+            name: 'Build tags and system properties',
+            category: 'resilience',
+            outcome: 'bypassed',
+          },
+        ],
+        debugger_detection: [
+          {
+            id: 1,
+            signature_id: 'anti-debug-ptrace',
+            name: 'ptrace check',
+            category: 'resilience',
+            outcome: 'bypassed',
+          },
+          {
+            id: 2,
+            signature_id: 'debug-settings-probe',
+            name: 'Developer-options / USB-debugging settings probe',
+            category: 'resilience',
+            outcome: 'bypassed',
+          },
+        ],
+        ssl_pinning: [
+          {
+            id: 6,
+            signature_id: 'okhttp-pinning',
+            name: 'OkHttp Certificate Pinner',
+            category: 'resilience',
+            outcome: 'bypassed',
+          },
+        ],
+      },
+    });
+    serveScan(this, scan);
+
+    this.set('scanId', String(scan.id));
+    await render(TEMPLATE);
+
+    const headers = findAll(SELECTORS.groupHeader);
+    assert.strictEqual(headers.length, 3, 'Three group headers rendered');
+
+    // Title formatting and acronym handling
+    assert.dom(headers[0]).includesText('Root Detection');
+    assert.dom(headers[0]).includesText('(2)');
+
+    assert.dom(headers[1]).includesText('Debugger Detection');
+    assert.dom(headers[1]).includesText('(3)'); // 1 for ptrace + 2 for split dev options
+
+    assert.dom(headers[2]).includesText('SSL Pinning');
+    assert.dom(headers[2]).includesText('(1)');
+
+    // Starts closed
+    assert.strictEqual(headers[0].getAttribute('aria-expanded'), 'false');
+
+    // Expand Root Detection
+    await click(headers[0]);
+    assert.strictEqual(headers[0].getAttribute('aria-expanded'), 'true');
+    assert.dom(SELECTORS.findingsList).containsText('Obfuscated aggregate root verdict method');
+    assert.dom(SELECTORS.findingsList).containsText('Build tags and system properties');
   });
 
   test('it shows an empty state when there are no findings', async function (assert) {
@@ -311,7 +535,9 @@ module('Integration | Component | offensive-security/scan-results', (hooks) => {
     assert.dom(SELECTORS.findingsList).exists();
     assert.strictEqual(findAll(SELECTORS.findingRow).length, 1);
     assert.dom(SELECTORS.findingRow).containsText('Root detection');
-    assert.dom(SELECTORS.findingsList).doesNotContainText('USB debugging probe');
+    assert
+      .dom(SELECTORS.findingsList)
+      .doesNotContainText('USB debugging probe');
   });
 
   test('it shows an empty state when all findings are unassessed', async function (assert) {
@@ -451,6 +677,7 @@ module('Integration | Component | offensive-security/scan-results', (hooks) => {
     this.set('scanId', String(scan.id));
     await render(TEMPLATE);
 
+    await click(SELECTORS.groupHeader);
     await click(SELECTORS.findingRow);
 
     const router = this.owner.lookup('service:router');

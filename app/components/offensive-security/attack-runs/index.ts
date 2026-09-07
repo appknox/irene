@@ -21,10 +21,15 @@ export type PlatformFilter = 'all' | 'android' | 'ios';
 
 export type ResilienceFilter =
   | 'all'
-  | 'weak'
+  | 'critical'
+  | 'high'
   | 'medium'
+  | 'low'
+  | 'weak'
+  | 'moderate'
   | 'strong'
-  | 'very-strong';
+  | 'very-strong'
+  | 'very_strong';
 
 export type StatusFilter =
   | 'all'
@@ -74,6 +79,12 @@ export default class OffensiveSecurityAttackRunsComponent extends Component<Offe
   @tracked totalCount = 0;
   @tracked validatingSubmissionsCount = 0;
   @tracked isRecentlyUploaded = false;
+  @tracked totalAllScansCount: number | null = null;
+  @tracked totalRunningScansCount: number | null = null;
+  @tracked totalCompletedScansCount: number | null = null;
+  @tracked totalFailedScansCount: number | null = null;
+  @tracked selectedResilienceFilter: ResilienceFilter | null = null;
+  @tracked selectedPlatformFilter: PlatformFilter | null = null;
 
   /**
    * The search box is the one control that cannot read straight from the URL:
@@ -140,11 +151,19 @@ export default class OffensiveSecurityAttackRunsComponent extends Component<Offe
   }
 
   get platformFilter(): PlatformFilter {
-    return this.args.queryParams?.scan_platform ?? 'all';
+    return (
+      this.selectedPlatformFilter ??
+      this.args.queryParams?.scan_platform ??
+      'all'
+    );
   }
 
   get resilienceFilter(): ResilienceFilter {
-    return this.args.queryParams?.scan_resilience ?? 'all';
+    return (
+      this.selectedResilienceFilter ??
+      this.args.queryParams?.scan_resilience ??
+      'all'
+    );
   }
 
   get sortDirection(): SortDirection {
@@ -157,8 +176,23 @@ export default class OffensiveSecurityAttackRunsComponent extends Component<Offe
     return this.loadScans.isRunning && this.scans.length === 0;
   }
 
+  get hasFiltersApplied(): boolean {
+    return (
+      Boolean(this.searchQuery && this.searchQuery.trim()) ||
+      this.platformFilter !== 'all' ||
+      this.resilienceFilter !== 'all' ||
+      this.selectedStatusTab !== 'all' ||
+      this.selectedStatusFilter !== 'all'
+    );
+  }
+
   get hasNoScans(): boolean {
-    return !this.isLoading && this.scans.length === 0;
+    return (
+      !this.isLoading &&
+      this.scans.length === 0 &&
+      !this.hasFiltersApplied &&
+      (this.totalAllScansCount === null || this.totalAllScansCount === 0)
+    );
   }
 
   get columns() {
@@ -190,11 +224,17 @@ export default class OffensiveSecurityAttackRunsComponent extends Component<Offe
         width: 110,
       },
       {
-        name: this.intl.t('offensiveSecurity.exploitability'),
+        name: this.intl.t('offensiveSecurity.risk'),
         component: 'offensive-security/attack-runs/table/resilience',
         headerComponent:
           'offensive-security/attack-runs/table/resilience-header',
         width: 140,
+      },
+      {
+        name: this.intl.t('offensiveSecurity.defensesBypassed'),
+        valuePath: 'protectionsBypassedLabel',
+        textAlign: 'center',
+        width: 100,
       },
       {
         name: this.intl.t('offensiveSecurity.runOn'),
@@ -207,11 +247,6 @@ export default class OffensiveSecurityAttackRunsComponent extends Component<Offe
         component: 'offensive-security/attack-runs/table/status',
         headerComponent: 'offensive-security/attack-runs/table/status-header',
         width: 150,
-      },
-      {
-        name: '',
-        component: 'offensive-security/attack-runs/table/action',
-        width: 60,
       },
     ];
   }
@@ -226,15 +261,31 @@ export default class OffensiveSecurityAttackRunsComponent extends Component<Offe
   @tracked selectedStatusTab: 'all' | 'running' | 'completed' | 'failed' =
     'all';
 
+  get totalRunsDisplay(): number {
+    if (this.totalAllScansCount !== null) {
+      return this.totalAllScansCount;
+    }
+    return this.totalCount ?? this.scans.length;
+  }
+
   get runningCount(): number {
+    if (this.totalRunningScansCount !== null) {
+      return this.totalRunningScansCount;
+    }
     return this.scans.filter((s) => s.isInProgress || s.isRunning).length;
   }
 
   get completedCount(): number {
+    if (this.totalCompletedScansCount !== null) {
+      return this.totalCompletedScansCount;
+    }
     return this.scans.filter((s) => s.isCompleted).length;
   }
 
   get failedCount(): number {
+    if (this.totalFailedScansCount !== null) {
+      return this.totalFailedScansCount;
+    }
     return this.scans.filter((s) => s.isFailed).length;
   }
 
@@ -262,10 +313,27 @@ export default class OffensiveSecurityAttackRunsComponent extends Component<Offe
       const matchesPlatform =
         this.platformFilter === 'all' || scan.platform === this.platformFilter;
 
-      // Resilience is only scored once a run has finished.
-      const matchesResilience =
-        this.resilienceFilter === 'all' ||
-        (scan.hasResilience && scan.resilienceClass === this.resilienceFilter);
+      // Risk / resilience filter
+      let matchesResilience = true;
+      if (this.resilienceFilter !== 'all') {
+        const filterUpper = this.resilienceFilter.toUpperCase();
+        const riskRatingMap: Record<string, string> = {
+          CRITICAL: 'CRITICAL',
+          HIGH: 'HIGH',
+          MEDIUM: 'MEDIUM',
+          LOW: 'LOW',
+          WEAK: 'CRITICAL',
+          MODERATE: 'HIGH',
+          STRONG: 'MEDIUM',
+          'VERY-STRONG': 'LOW',
+          VERY_STRONG: 'LOW',
+        };
+        const targetRisk = riskRatingMap[filterUpper] ?? filterUpper;
+        matchesResilience =
+          scan.effectiveRiskRating === targetRisk ||
+          scan.riskClass === this.resilienceFilter.toLowerCase() ||
+          (scan.hasResilience && scan.resilienceClass === this.resilienceFilter);
+      }
 
       const matchesStatusTab =
         this.selectedStatusTab === 'all' ||
@@ -338,19 +406,21 @@ export default class OffensiveSecurityAttackRunsComponent extends Component<Offe
 
   setSearchQuery(query: string): void {
     this.setRouteQueryParams({ scan_query: query, scan_offset: 0 });
-    this.loadScans.perform(this.limit, 0);
+    this.loadScans.perform(this.limit, 0, { search: query });
   }
 
   @action
   handlePlatformFilterChange(value: PlatformFilter): void {
+    this.selectedPlatformFilter = value;
     this.setRouteQueryParams({ scan_platform: value, scan_offset: 0 });
-    this.loadScans.perform(this.limit, 0);
+    this.loadScans.perform(this.limit, 0, { platform: value });
   }
 
   @action
   handleResilienceFilterChange(value: ResilienceFilter): void {
+    this.selectedResilienceFilter = value;
     this.setRouteQueryParams({ scan_resilience: value, scan_offset: 0 });
-    this.loadScans.perform(this.limit, 0);
+    this.loadScans.perform(this.limit, 0, { resilience: value });
   }
 
   @action
@@ -400,21 +470,48 @@ export default class OffensiveSecurityAttackRunsComponent extends Component<Offe
    */
   loadScans = task(
     { restartable: true },
-    async (limit?: number, offset?: number) => {
+    async (
+      limit?: number,
+      offset?: number,
+      options?: {
+        resilience?: ResilienceFilter;
+        platform?: PlatformFilter;
+        search?: string;
+      }
+    ) => {
       try {
+        const currentLimit = limit ?? this.limit;
+        const currentOffset = offset ?? this.offset;
+        const currentSearch = options?.search ?? this.searchQuery;
+        const currentPlatform = options?.platform ?? this.platformFilter;
+        const currentResilience = options?.resilience ?? this.resilienceFilter;
+
         const queryParams: Record<string, unknown> = {
-          limit: limit ?? this.limit,
-          offset: offset ?? this.offset,
+          limit: currentLimit,
+          offset: currentOffset,
         };
 
-        if (this.searchQuery) {
-          queryParams['search'] = this.searchQuery;
+        if (currentSearch) {
+          queryParams['search'] = currentSearch;
         }
-        if (this.platformFilter !== 'all') {
-          queryParams['platform'] = this.platformFilter;
+        if (currentPlatform !== 'all') {
+          queryParams['platform'] = currentPlatform;
         }
-        if (this.resilienceFilter !== 'all') {
-          queryParams['resilience'] = this.resilienceFilter;
+        if (currentResilience !== 'all') {
+          const filterUpper = currentResilience.toUpperCase();
+          const riskRatingMap: Record<string, string> = {
+            CRITICAL: 'CRITICAL',
+            HIGH: 'HIGH',
+            MEDIUM: 'MEDIUM',
+            LOW: 'LOW',
+            WEAK: 'CRITICAL',
+            MODERATE: 'HIGH',
+            STRONG: 'MEDIUM',
+            'VERY-STRONG': 'LOW',
+            VERY_STRONG: 'LOW',
+          };
+          const mappedRiskRating = riskRatingMap[filterUpper] ?? filterUpper;
+          queryParams['risk_rating'] = mappedRiskRating;
         }
 
         const [scans, submissions] = await Promise.all([
@@ -435,12 +532,52 @@ export default class OffensiveSecurityAttackRunsComponent extends Component<Offe
         this.validatingSubmissionsCount =
           typeof subLen === 'number' ? subLen : 0;
 
+        const hasActiveFilters =
+          Boolean(currentSearch && currentSearch.trim()) ||
+          currentPlatform !== 'all' ||
+          currentResilience !== 'all' ||
+          this.selectedStatusTab !== 'all' ||
+          this.selectedStatusFilter !== 'all';
+
+        if (!hasActiveFilters) {
+          this.totalAllScansCount = scans.meta?.count ?? recordList.length;
+          this.totalRunningScansCount = recordList.filter(
+            (s) => s.isInProgress || s.isRunning
+          ).length;
+          this.totalCompletedScansCount = recordList.filter(
+            (s) => s.isCompleted
+          ).length;
+          this.totalFailedScansCount = recordList.filter(
+            (s) => s.isFailed
+          ).length;
+        } else if (this.totalAllScansCount === null) {
+          this.loadOverallStats.perform();
+        }
+
         this.managePolling();
       } catch (error) {
         this.notify.error(parseError(error, this.intl.t('pleaseTryAgain')));
       }
     }
   );
+
+  loadOverallStats = task(async () => {
+    try {
+      const overallScans = (await this.store.query('offsec-scan', {
+        limit: 100,
+        offset: 0,
+      })) as ScanResponseModel;
+      const list = overallScans.slice();
+      this.totalAllScansCount = overallScans.meta?.count ?? list.length;
+      this.totalRunningScansCount = list.filter(
+        (s) => s.isInProgress || s.isRunning
+      ).length;
+      this.totalCompletedScansCount = list.filter((s) => s.isCompleted).length;
+      this.totalFailedScansCount = list.filter((s) => s.isFailed).length;
+    } catch {
+      // Non-critical, ignore
+    }
+  });
 
   /**
    * Refresh only while something is actually running. The websocket already pushes

@@ -11,6 +11,7 @@ import type RouterService from '@ember/routing/router-service';
 
 import parseError from 'irene/utils/parse-error';
 import type OffsecFindingModel from 'irene/models/offsec-finding';
+import type { OffsecFindingEvidence } from 'irene/models/offsec-finding';
 import type OffsecScanModel from 'irene/models/offsec-scan';
 
 export interface OffensiveSecurityFindingDetailSignature {
@@ -129,10 +130,14 @@ export default class OffensiveSecurityFindingDetailComponent extends Component<O
   get attemptsList(): Array<Record<string, unknown>> {
     const rawAttempts = this.finding?.attempts;
     if (Array.isArray(rawAttempts)) {
-      return rawAttempts.filter((a) => a && typeof a === 'object');
+      return rawAttempts.filter(
+        (a): a is Record<string, unknown> => Boolean(a) && typeof a === 'object'
+      );
     }
     if (rawAttempts && typeof rawAttempts === 'object') {
-      return Object.values(rawAttempts).filter((a) => a && typeof a === 'object');
+      return (Object.values(rawAttempts) as unknown[]).filter(
+        (a): a is Record<string, unknown> => Boolean(a) && typeof a === 'object'
+      );
     }
     return [];
   }
@@ -202,38 +207,13 @@ export default class OffensiveSecurityFindingDetailComponent extends Component<O
       return false;
     }
 
-    // 1. Check frida_script from model, detail, or bypassAttempted
-    const fridaScriptCandidate =
-      this.finding.fridaScript ||
-      (this.finding.detail?.['frida_script'] as string | undefined) ||
-      ((this.finding as unknown as Record<string, unknown>)?.[
-        'frida_script'
-      ] as string | undefined) ||
-      (this.finding.bypassAttempted?.['frida_script'] as string | undefined);
-
-    if (
-      typeof fridaScriptCandidate === 'string' &&
-      fridaScriptCandidate.trim().length > 0
-    ) {
+    // 1. Check if an exploit script is present
+    if (this.hasExploit) {
       return true;
     }
 
-    // 2. Check exploit / script in detail or bypassAttempted
+    // 2. Exploit evidence explicitly attached on finding or detail
     const detail = this.finding.detail;
-    if (
-      (typeof detail?.['script'] === 'string' &&
-        detail['script'].trim().length > 0) ||
-      (typeof detail?.['exploit_script'] === 'string' &&
-        detail['exploit_script'].trim().length > 0) ||
-      (typeof detail?.['exploit'] === 'string' &&
-        detail['exploit'].trim().length > 0) ||
-      (typeof this.finding.bypassAttempted?.['script'] === 'string' &&
-        (this.finding.bypassAttempted['script'] as string).trim().length > 0)
-    ) {
-      return true;
-    }
-
-    // 3. Exploit evidence explicitly attached on finding or detail
     const exploitEv =
       this.finding.exploitEvidence ||
       detail?.['exploit_evidence'] ||
@@ -249,21 +229,10 @@ export default class OffensiveSecurityFindingDetailComponent extends Component<O
       return true;
     }
 
-    // 4. Evidence notes attached to the effective / bypass attempt
-    const effAttemptEv = this.effectiveAttempt?.['evidence'];
-    if (Array.isArray(effAttemptEv) && effAttemptEv.length > 0) {
-      return true;
-    }
-
-    // 5. Evidence list has an item associated with the exploit
+    // 3. Evidence list has an item associated with the exploit tool or source
     return this.evidence.some(
       (ev) =>
-        ev.source === 'exploit' ||
-        ev.tool === 'frida' ||
-        ev.tool === 'exploit' ||
-        ev.evidence_id?.toLowerCase().includes('exploit') ||
-        (typeof ev.summary === 'string' &&
-          ev.summary.toLowerCase().includes('exploit'))
+        ev.source === 'exploit' || ev.tool === 'frida' || ev.tool === 'exploit'
     );
   }
 
@@ -305,7 +274,6 @@ export default class OffensiveSecurityFindingDetailComponent extends Component<O
   }
 
   get exploitScript(): string {
-    // 1. Check if frida_script is provided on finding or detail
     const fridaScriptCandidate =
       this.finding?.fridaScript ||
       (this.finding?.detail?.['frida_script'] as string | undefined) ||
@@ -323,91 +291,29 @@ export default class OffensiveSecurityFindingDetailComponent extends Component<O
 
     const detail = this.finding?.detail;
     if (detail?.['script'] && typeof detail['script'] === 'string') {
-      return detail['script'];
+      return detail['script'].trim();
     }
     if (
       detail?.['exploit_script'] &&
       typeof detail['exploit_script'] === 'string'
     ) {
-      return detail['exploit_script'];
+      return detail['exploit_script'].trim();
     }
     if (detail?.['exploit'] && typeof detail['exploit'] === 'string') {
-      return detail['exploit'];
+      return detail['exploit'].trim();
     }
     if (
       this.finding?.bypassAttempted?.['script'] &&
       typeof this.finding.bypassAttempted['script'] === 'string'
     ) {
-      return this.finding.bypassAttempted['script'];
+      return (this.finding.bypassAttempted['script'] as string).trim();
     }
 
-    const sig = (this.finding?.signatureId || '').toLowerCase();
-
-    // Contextual Frida bypass script generator matching the finding type
-    if (
-      sig.includes('debug') ||
-      sig.includes('devopt') ||
-      sig.includes('setting')
-    ) {
-      return `Java.perform(function () {
-  const Secure = Java.use('android.provider.Settings$Secure');
-  const Global = Java.use('android.provider.Settings$Global');
-
-  // force the two flags the probe reads to look disabled
-  const SPOOF = { adb_enabled: '0', development_settings_enabled: '0' };
-
-  function hook(cls) {
-    cls.getInt.overload('android.content.ContentResolver', 'java.lang.String', 'int')
-      .implementation = function (cr, key, def) {
-        if (key in SPOOF) return parseInt(SPOOF[key]);
-        return this.getInt(cr, key, def);
-      };
-    cls.getString.overload('android.content.ContentResolver', 'java.lang.String')
-      .implementation = function (cr, key) {
-        if (key in SPOOF) return SPOOF[key];
-        return this.getString(cr, key);
-      };
+    return '';
   }
 
-  hook(Secure); hook(Global);
-  console.log('[+] dev-options / usb-debugging probe neutralized');
-});`;
-    }
-
-    if (
-      sig.includes('root') ||
-      sig.includes('build-props') ||
-      sig.includes('props')
-    ) {
-      return `Java.perform(function () {
-  const Build = Java.use('android.os.Build');
-  Build.TAGS.value = 'release-keys';
-
-  const SystemProperties = Java.use('android.os.SystemProperties');
-  SystemProperties.get.overload('java.lang.String').implementation = function (key) {
-    if (key === 'ro.build.tags') return 'release-keys';
-    if (key === 'ro.debuggable') return '0';
-    if (key === 'ro.secure') return '1';
-    return this.get(key);
-  };
-  console.log('[+] root-build-props probe neutralized');
-});`;
-    }
-
-    if (sig.includes('ssl') || sig.includes('pinning')) {
-      return `Java.perform(function () {
-  const TrustManagerImpl = Java.use('com.android.org.conscrypt.TrustManagerImpl');
-  TrustManagerImpl.verifyChain.implementation = function (untrustedChain, trustAnchorChain, host, clientAuth, ocspData, tlsSctData) {
-    return untrustedChain;
-  };
-  console.log('[+] ssl-pinning bypass applied');
-});`;
-    }
-
-    return `Java.perform(function () {
-  console.log('[*] neutralizing security check: ${this.finding?.signatureId || 'probe'}');
-  // Runtime bypass hook injected
-});`;
+  get hasExploit(): boolean {
+    return this.exploitScript.trim().length > 0;
   }
 
   get reproduceSteps(): ReproduceStep[] {
@@ -434,7 +340,7 @@ export default class OffensiveSecurityFindingDetailComponent extends Component<O
     if (this.finding?.rationale) {
       return this.finding.rationale;
     }
-    return 'The app inspects runtime flags to refuse running under analysis. A generic runtime hook forces checks to report clean, so the guard never fires — no app-specific knowledge required.';
+    return '';
   }
 
   get rawImpact(): unknown {
@@ -443,6 +349,23 @@ export default class OffensiveSecurityFindingDetailComponent extends Component<O
       this.finding?.detail?.['impact'] ||
       (this.finding as unknown as Record<string, unknown>)?.['impact']
     );
+  }
+
+  get hasImpact(): boolean {
+    const raw = this.rawImpact;
+    if (!raw) {
+      return false;
+    }
+    if (typeof raw === 'string') {
+      return raw.trim().length > 0;
+    }
+    if (typeof raw === 'object') {
+      if (Array.isArray(raw)) {
+        return raw.length > 0;
+      }
+      return Object.keys(raw).length > 0;
+    }
+    return false;
   }
 
   get impactSummary(): string {
@@ -457,7 +380,7 @@ export default class OffensiveSecurityFindingDetailComponent extends Component<O
         return summary.trim();
       }
     }
-    return `This control exists to stop the app from running on instrumented or modified devices. A generic runtime hook neutralizes it, so the production build now runs unmodified on an instrumented device — the exact condition it was built to block.`;
+    return '';
   }
 
   get impactPoints(): string[] {
@@ -483,14 +406,10 @@ export default class OffensiveSecurityFindingDetailComponent extends Component<O
         }
       }
     }
-    return [
-      'Trace and tamper with live internals — method calls, arguments, decrypted values — at runtime',
-      'Removes the foothold the app’s other runtime guards sit behind: pinning, root, and integrity checks can now be attacked in turn',
-      'Offers no real resistance — an off-the-shelf hook defeats it, so the control adds effectively zero security value',
-    ];
+    return [];
   }
 
-  get mitreAttack(): { code: string; name: string } {
+  get mitreAttack(): { code: string; name: string } | null {
     const raw = this.rawImpact;
     if (typeof raw === 'object' && raw !== null && !Array.isArray(raw)) {
       const obj = raw as Record<string, unknown>;
@@ -508,24 +427,7 @@ export default class OffensiveSecurityFindingDetailComponent extends Component<O
         };
       }
     }
-
-    const sig = (this.finding?.signatureId || '').toLowerCase();
-    if (sig.includes('root')) {
-      return {
-        code: 'T1407',
-        name: 'Rootkit / Privilege Escalation Detection — evaded (ATT&CK Mobile)',
-      };
-    }
-    if (sig.includes('pinning') || sig.includes('ssl')) {
-      return {
-        code: 'T1453',
-        name: 'Network Traffic Interception — achieved (ATT&CK Mobile)',
-      };
-    }
-    return {
-      code: 'T1633.001',
-      name: 'System Checks — evaded (ATT&CK Mobile)',
-    };
+    return null;
   }
 
   get rawBusinessRisk(): unknown {
@@ -534,6 +436,23 @@ export default class OffensiveSecurityFindingDetailComponent extends Component<O
       this.finding?.detail?.['business_risk'] ||
       (this.finding as unknown as Record<string, unknown>)?.['business_risk']
     );
+  }
+
+  get hasBusinessRisk(): boolean {
+    const raw = this.rawBusinessRisk;
+    if (!raw) {
+      return false;
+    }
+    if (typeof raw === 'string') {
+      return raw.trim().length > 0;
+    }
+    if (typeof raw === 'object') {
+      if (Array.isArray(raw)) {
+        return raw.length > 0;
+      }
+      return Object.keys(raw).length > 0;
+    }
+    return false;
   }
 
   get businessRiskSummary(): string {
@@ -547,7 +466,7 @@ export default class OffensiveSecurityFindingDetailComponent extends Component<O
     } else if (typeof raw === 'string' && raw.trim().length > 0) {
       return raw.trim();
     }
-    return 'Downstream exposure if the technical impact above goes unaddressed. Confirm against this app’s data sensitivity and compliance requirements before reporting.';
+    return '';
   }
 
   get businessRisks(): string[] {
@@ -573,11 +492,7 @@ export default class OffensiveSecurityFindingDetailComponent extends Component<O
         }
       }
     }
-    return [
-      'Instrumentation-based reverse engineering of app logic and secrets',
-      'Weaker protection for any credentials, tokens, or keys held in-app',
-      'Reduced assurance where anti-tamper is a compliance expectation',
-    ];
+    return [];
   }
 
   get scoringFactors(): ScoringFactor[] {

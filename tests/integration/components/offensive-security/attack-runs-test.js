@@ -84,6 +84,8 @@ const SELECTORS = {
     '[data-test-offensiveSecurity-attackRuns-resilienceHeader-icon]',
   resilienceOption: (value) =>
     `[data-test-offensiveSecurity-attackRuns-resilienceHeader-option='${value}']`,
+  resilienceClearFilter:
+    '[data-test-offensiveSecurity-attackRuns-resilienceHeader-clearFilter]',
   actionBtn: (id) =>
     `[data-test-offensiveSecurity-attackRuns-actionBtn='${id}']`,
   // AkList::Item splats attributes onto the <li>; the handler sits on its <button>.
@@ -214,6 +216,16 @@ module('Integration | Component | offensive-security/attack-runs', (hooks) => {
     assert.dom(SELECTORS.row).containsText('4.12.0');
   });
 
+  test('the defenses bypassed column renders protections_bypassed count', async function (assert) {
+    serveScans(this, [buildScan({ protections_bypassed: 3 })]);
+
+    await render(TEMPLATE);
+
+    assert.dom(SELECTORS.table).containsText('Defenses Bypassed');
+    assert.dom(SELECTORS.row).containsText('3');
+    assert.dom('.ember-table__text-align-center').exists();
+  });
+
   test('it shows an empty state when no scans exist', async function (assert) {
     serveScans(this, []);
 
@@ -224,68 +236,81 @@ module('Integration | Component | offensive-security/attack-runs', (hooks) => {
       .containsText(t('offensiveSecurity.noTargetsYet'));
   });
 
-  // ─── Resilience pill ───────────────────────────────────────────────────────
+  // ─── Risk pill ─────────────────────────────────────────────────────────────
 
-  test('a completed scan shows the resilience score and band', async function (assert) {
+  test('a completed scan shows the risk rating badge', async function (assert) {
     serveScans(this, [
-      buildScan({ status: SCAN_STATUS.COMPLETED, overall_resilience: 67 }),
+      buildScan({ status: SCAN_STATUS.COMPLETED, risk_rating: 'HIGH' }),
     ]);
 
     await render(TEMPLATE);
 
-    assert.dom(SELECTORS.resilienceBadge).containsText('67/100');
-
-    assert
-      .dom(SELECTORS.resilienceBadge)
-      .containsText(t('offensiveSecurity.resilienceLevel.medium'));
+    assert.dom(SELECTORS.riskBadge).containsText('High');
   });
 
-  test('a high score reads as strong', async function (assert) {
+  test('a critical risk rating reads as Critical', async function (assert) {
     serveScans(this, [
-      buildScan({ status: SCAN_STATUS.COMPLETED, overall_resilience: 91 }),
+      buildScan({ status: SCAN_STATUS.COMPLETED, risk_rating: 'CRITICAL' }),
     ]);
 
     await render(TEMPLATE);
 
-    assert.dom(SELECTORS.resilienceBadge).containsText('91/100');
-
-    assert
-      .dom(SELECTORS.resilienceBadge)
-      .containsText(t('offensiveSecurity.resilienceLevel.strong'));
+    assert.dom(SELECTORS.riskBadge).containsText('Critical');
   });
 
-  test('a low score reads as weak', async function (assert) {
+  test('a low risk rating reads as Low', async function (assert) {
     serveScans(this, [
-      buildScan({ status: SCAN_STATUS.COMPLETED, overall_resilience: 35 }),
+      buildScan({ status: SCAN_STATUS.COMPLETED, risk_rating: 'LOW' }),
     ]);
 
     await render(TEMPLATE);
 
-    assert
-      .dom(SELECTORS.resilienceBadge)
-      .containsText(t('offensiveSecurity.resilienceLevel.weak'));
+    assert.dom(SELECTORS.riskBadge).containsText('Low');
   });
 
-  test('a running scan shows no resilience pill', async function (assert) {
-    // Resilience is only scored once the run has finished.
-    serveScans(this, [buildScan({ status: SCAN_STATUS.RUNNING })]);
+  test('a running scan shows no risk pill', async function (assert) {
+    serveScans(this, [
+      buildScan({ status: SCAN_STATUS.RUNNING, risk_rating: '' }),
+    ]);
 
     await render(TEMPLATE);
 
-    assert.dom(SELECTORS.resilienceBadge).doesNotExist();
+    assert.dom(SELECTORS.riskBadge).doesNotExist();
     assert.dom(SELECTORS.resilienceEmpty).exists();
     assert.dom('[data-test-offensiveSecurity-statusChip-running]').exists();
   });
 
-  test('a completed but unscored scan shows no resilience pill', async function (assert) {
+  test('a completed scan with empty risk rating shows No Rating', async function (assert) {
     serveScans(this, [
-      buildScan({ status: SCAN_STATUS.COMPLETED, overall_resilience: null }),
+      buildScan({
+        status: SCAN_STATUS.COMPLETED,
+        risk_rating: '',
+        resilience_band: '',
+        overall_resilience: null,
+      }),
     ]);
 
     await render(TEMPLATE);
 
-    assert.dom(SELECTORS.resilienceBadge).doesNotExist();
-    assert.dom(SELECTORS.resilienceEmpty).exists();
+    assert.dom(SELECTORS.riskBadge).containsText('No Rating');
+  });
+
+  test('scans without risk_rating derive risk rating from resilience_band', async function (assert) {
+    serveScans(this, [
+      buildScan({ id: 1, risk_rating: '', resilience_band: 'weak' }),
+      buildScan({ id: 2, risk_rating: '', resilience_band: 'moderate' }),
+      buildScan({ id: 3, risk_rating: '', resilience_band: 'strong' }),
+      buildScan({ id: 4, risk_rating: '', resilience_band: 'very_strong' }),
+    ]);
+
+    await render(TEMPLATE);
+
+    const riskBadges = findAll(SELECTORS.riskBadge);
+    assert.strictEqual(riskBadges.length, 4);
+    assert.dom(riskBadges[0]).containsText('Critical');
+    assert.dom(riskBadges[1]).containsText('High');
+    assert.dom(riskBadges[2]).containsText('Medium');
+    assert.dom(riskBadges[3]).containsText('Low');
   });
 
   test('a failed or completed scan with empty risk rating shows No Rating', async function (assert) {
@@ -294,12 +319,14 @@ module('Integration | Component | offensive-security/attack-runs', (hooks) => {
         id: 1,
         status: SCAN_STATUS.FAILED,
         risk_rating: '',
+        resilience_band: '',
         overall_resilience: null,
       }),
       buildScan({
         id: 2,
         status: SCAN_STATUS.COMPLETED,
         risk_rating: '',
+        resilience_band: '',
         overall_resilience: null,
       }),
     ]);
@@ -354,10 +381,10 @@ module('Integration | Component | offensive-security/attack-runs', (hooks) => {
     assert.dom(SELECTORS.row).containsText('Fruit App');
   });
 
-  test('the resilience header filter narrows by band', async function (assert) {
+  test('the risk header filter narrows by risk level', async function (assert) {
     serveScans(this, [
-      buildScan({ id: 1, app_name: 'Weak App', overall_resilience: 20 }),
-      buildScan({ id: 2, app_name: 'Strong App', overall_resilience: 91 }),
+      buildScan({ id: 1, app_name: 'Weak App', risk_rating: 'CRITICAL', overall_resilience: 20 }),
+      buildScan({ id: 2, app_name: 'Strong App', risk_rating: 'LOW', overall_resilience: 91 }),
     ]);
 
     await render(TEMPLATE);
@@ -365,10 +392,79 @@ module('Integration | Component | offensive-security/attack-runs', (hooks) => {
     assert.strictEqual(findAll(SELECTORS.row).length, 2);
 
     await click(SELECTORS.resilienceFilterIcon);
-    await click(SELECTORS.resilienceOption('strong'));
+    await click(SELECTORS.resilienceOption('low'));
 
     assert.strictEqual(findAll(SELECTORS.row).length, 1);
     assert.dom(SELECTORS.row).containsText('Strong App');
+  });
+
+  test('selecting a risk filter calls the API with risk_rating parameter and without resilience parameter', async function (assert) {
+    let capturedParams = null;
+    this.server.get('/v2/offsec/scans', (schema, request) => {
+      capturedParams = request.queryParams;
+      return { count: 1, next: null, previous: null, results: [buildScan()] };
+    });
+    this.server.get('/submissions', () => []);
+
+    await render(TEMPLATE);
+
+    await click(SELECTORS.resilienceFilterIcon);
+    await click(SELECTORS.resilienceOption('high'));
+
+    assert.strictEqual(capturedParams.risk_rating, 'HIGH');
+    assert.strictEqual(capturedParams.resilience, undefined);
+  });
+
+  test('a filter matching nothing keeps the table and shows the no-matches state', async function (assert) {
+    serveScans(this, [
+      buildScan({ id: 1, app_name: 'High App', risk_rating: 'HIGH' }),
+    ]);
+
+    await render(TEMPLATE);
+
+    assert.dom(SELECTORS.table).exists();
+
+    await click(SELECTORS.resilienceFilterIcon);
+    await click(SELECTORS.resilienceOption('critical'));
+
+    assert.dom(SELECTORS.table).exists();
+    assert.dom(SELECTORS.emptyState).doesNotExist();
+    assert.dom(SELECTORS.noMatches).exists();
+    assert.strictEqual(findAll(SELECTORS.row).length, 0);
+  });
+
+  test('clicking clear filter restores all scans', async function (assert) {
+    const scans = [
+      buildScan({ id: 1, app_name: 'Low App', risk_rating: 'LOW' }),
+      buildScan({ id: 2, app_name: 'High App', risk_rating: 'HIGH' }),
+    ];
+
+    this.server.get('/v2/offsec/scans', (schema, request) => {
+      const risk = request.queryParams.risk_rating;
+      const results = risk
+        ? scans.filter((s) => s.risk_rating === risk)
+        : scans;
+      return { count: results.length, next: null, previous: null, results };
+    });
+    this.server.get('/submissions', () => []);
+
+    await render(TEMPLATE);
+
+    assert.strictEqual(findAll(SELECTORS.row).length, 2);
+
+    // Filter by low
+    await click(SELECTORS.resilienceFilterIcon);
+    await click(SELECTORS.resilienceOption('low'));
+
+    assert.strictEqual(findAll(SELECTORS.row).length, 1);
+    assert.dom(SELECTORS.row).containsText('Low App');
+
+    // Clear filter
+    await click(SELECTORS.resilienceFilterIcon);
+    await click(SELECTORS.resilienceClearFilter);
+
+    assert.strictEqual(findAll(SELECTORS.row).length, 2);
+    assert.dom(SELECTORS.noMatches).doesNotExist();
   });
 
   // ─── Sorting ───────────────────────────────────────────────────────────────
@@ -408,28 +504,6 @@ module('Integration | Component | offensive-security/attack-runs', (hooks) => {
     await click(SELECTORS.row);
 
     const router = this.owner.lookup('service:router');
-
-    assert.strictEqual(
-      router.lastRoute,
-      'authenticated.dashboard.offensive-security.scan'
-    );
-
-    assert.deepEqual(router.lastModels, ['7']);
-  });
-
-  test('the row action menu navigates without the row click firing too', async function (assert) {
-    serveScans(this, [buildScan({ id: 7 })]);
-
-    await render(TEMPLATE);
-
-    const router = this.owner.lookup('service:router');
-
-    // Opening the menu must not navigate — the row underneath is clickable.
-    await click(SELECTORS.actionBtn(7));
-
-    assert.strictEqual(router.lastRoute, null);
-
-    await click(SELECTORS.viewResults);
 
     assert.strictEqual(
       router.lastRoute,

@@ -4,6 +4,24 @@ import dayjs from 'dayjs';
 
 import ENUMS from 'irene/enums';
 
+export enum ResilienceBandEnum {
+  WEAK = 'weak',
+  MODERATE = 'moderate',
+  STRONG = 'strong',
+  VERY_STRONG = 'very_strong',
+}
+
+export const BAND_TO_RISK_RATING: Record<
+  string,
+  'CRITICAL' | 'HIGH' | 'MEDIUM' | 'LOW'
+> = {
+  [ResilienceBandEnum.WEAK]: 'CRITICAL',
+  [ResilienceBandEnum.MODERATE]: 'HIGH',
+  [ResilienceBandEnum.STRONG]: 'MEDIUM',
+  [ResilienceBandEnum.VERY_STRONG]: 'LOW',
+  'very-strong': 'LOW',
+};
+
 /** Artifact metadata. Download URLs are minted on demand — see the adapter. */
 export interface OffsecScanArtifact {
   name: string;
@@ -18,6 +36,7 @@ export interface OffsecScanArtifact {
 export interface OffsecScanEmbeddedFinding {
   id: number;
   signature_id: string;
+  group?: string;
   name: string;
   category: string;
   check_type: string;
@@ -106,7 +125,15 @@ export default class OffsecScanModel extends Model {
   declare artifacts: OffsecScanArtifact[] | undefined;
 
   @attr()
-  declare findings: OffsecScanEmbeddedFinding[] | undefined;
+  declare findings:
+    | OffsecScanEmbeddedFinding[]
+    | Record<
+        string,
+        | OffsecScanEmbeddedFinding
+        | OffsecScanEmbeddedFinding[]
+        | Record<string, unknown>
+      >
+    | undefined;
 
   @attr('string')
   declare appLogoUrl: string;
@@ -326,7 +353,10 @@ export default class OffsecScanModel extends Model {
    * when the agent did not emit a rating, so a completed run is never blank.
    */
   get effectiveResilience(): number | null {
-    if (this.overallResilience !== null) {
+    if (
+      this.overallResilience !== null &&
+      this.overallResilience !== undefined
+    ) {
       return this.overallResilience;
     }
 
@@ -341,6 +371,30 @@ export default class OffsecScanModel extends Model {
     return Math.round(((detected - bypassed) / detected) * 100);
   }
 
+  get effectiveRiskRating(): 'CRITICAL' | 'HIGH' | 'MEDIUM' | 'LOW' | null {
+    if (!this.isTerminal) {
+      return null;
+    }
+
+    const rating = (this.riskRating || '').trim().toUpperCase();
+
+    if (['CRITICAL', 'HIGH', 'MEDIUM', 'LOW'].includes(rating)) {
+      return rating as 'CRITICAL' | 'HIGH' | 'MEDIUM' | 'LOW';
+    }
+
+    if (rating === 'MODERATE') {
+      return 'HIGH';
+    }
+
+    const band = (this.resilienceBand || '').toLowerCase().replace('-', '_');
+
+    if (band && BAND_TO_RISK_RATING[band]) {
+      return BAND_TO_RISK_RATING[band];
+    }
+
+    return null;
+  }
+
   get riskClass():
     | 'critical'
     | 'high'
@@ -348,45 +402,17 @@ export default class OffsecScanModel extends Model {
     | 'low'
     | 'unknown'
     | 'not_assessed' {
-    const rating = (this.riskRating || '').toLowerCase().trim();
+    const effective = this.effectiveRiskRating;
 
-    if (['critical', 'high', 'medium', 'low'].includes(rating)) {
-      return rating as 'critical' | 'high' | 'medium' | 'low';
+    if (effective) {
+      return effective.toLowerCase() as 'critical' | 'high' | 'medium' | 'low';
     }
 
-    if (this.isTerminal) {
-      return 'not_assessed';
-    }
-
-    const band = (this.resilienceBand || '').toLowerCase();
-
-    if (band) {
-      switch (band) {
-        case 'weak':
-          return 'critical';
-        case 'moderate':
-          return 'medium';
-        case 'strong':
-        case 'very_strong':
-          return 'low';
-      }
-    }
-
-    const score = this.effectiveResilience;
-
-    if (score === null) {
+    if (!this.isTerminal) {
       return 'unknown';
     }
 
-    if (score < 40) {
-      return 'critical';
-    }
-
-    if (score < 80) {
-      return 'medium';
-    }
-
-    return 'low';
+    return 'not_assessed';
   }
 
   get resilienceClass():
@@ -438,12 +464,54 @@ export default class OffsecScanModel extends Model {
     return this.scannedOn ? dayjs(this.scannedOn).format('DD-MM-YYYY') : '-';
   }
 
+  get protectionsBypassedLabel(): string {
+    if (
+      this.protectionsBypassed !== null &&
+      this.protectionsBypassed !== undefined
+    ) {
+      return String(this.protectionsBypassed);
+    }
+    return '—';
+  }
+
   get artifactList(): OffsecScanArtifact[] {
     return this.artifacts ?? [];
   }
 
   get findingList(): OffsecScanEmbeddedFinding[] {
-    return (this.findings ?? []).filter(
+    const raw = this.findings;
+    let list: OffsecScanEmbeddedFinding[] = [];
+
+    if (Array.isArray(raw)) {
+      list = raw;
+    } else if (raw && typeof raw === 'object') {
+      for (const [key, val] of Object.entries(raw)) {
+        if (Array.isArray(val)) {
+          let itemIndex = 0;
+          for (const item of val) {
+            if (item && typeof item === 'object') {
+              const findingItem = item as OffsecScanEmbeddedFinding;
+              list.push({
+                ...findingItem,
+                group: findingItem.group || key,
+                signature_id: findingItem.signature_id || key,
+                order: findingItem.order ?? itemIndex,
+              });
+              itemIndex++;
+            }
+          }
+        } else if (val && typeof val === 'object') {
+          const findingItem = val as OffsecScanEmbeddedFinding;
+          list.push({
+            ...findingItem,
+            group: findingItem.group || key,
+            signature_id: findingItem.signature_id || key,
+          });
+        }
+      }
+    }
+
+    return list.filter(
       (finding) =>
         finding.outcome !== 'not_attempted' &&
         finding.outcome !== 'unassessed' &&

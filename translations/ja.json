@@ -790,7 +790,8 @@
     "order": "順序",
     "showPayload": "詳細ペイロードを表示",
     "viewAllEvidence": "すべての証拠を表示",
-    "bypassed": "悪用に成功",
+    "bypassed": "悪用された防御機能",
+    "defensesBypassed": "バイパスされた防御",
     "checkType": "チェック種別",
     "risk": "リスク",
     "riskRating": "総合リスク",
@@ -821,7 +822,8 @@
       "bypassed": "悪用に成功",
       "error": "エラー",
       "not_attempted": "未評価",
-      "resisted": "攻撃を防御"
+      "unassessed": "未評価",
+      "resisted": "防御された防御機能"
     },
     "overallResilience": "総合耐性",
     "protectionDetected": "この保護機構は実行中にターゲットで検出されました。",
@@ -835,7 +837,7 @@
       "very-strong": "非常に強い",
       "unknown": "保留中"
     },
-    "resisted": "攻撃を防御",
+    "resisted": "防御された防御機能",
     "unassessed": "未評価の防御機能",
     "riskLevel": {
       "critical": "重大",

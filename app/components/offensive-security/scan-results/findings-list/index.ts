@@ -1,7 +1,14 @@
 import Component from '@glimmer/component';
 import { action } from '@ember/object';
+import { tracked } from '@glimmer/tracking';
 
 import type { OffsecScanEmbeddedFinding } from 'irene/models/offsec-scan';
+
+export interface FindingGroup {
+  key: string;
+  title: string;
+  findings: OffsecScanEmbeddedFinding[];
+}
 
 export interface OffensiveSecurityScanResultsFindingsListSignature {
   Args: {
@@ -11,29 +18,138 @@ export interface OffensiveSecurityScanResultsFindingsListSignature {
 }
 
 export default class OffensiveSecurityScanResultsFindingsListComponent extends Component<OffensiveSecurityScanResultsFindingsListSignature> {
+  @tracked expandedGroups: Record<string, boolean> = {};
+
   get hasFindings(): boolean {
-    return this.sortedFindings.length > 0;
+    return this.groupedFindings.length > 0;
+  }
+
+  @action
+  isGroupExpanded(key: string): boolean {
+    return Boolean(this.expandedGroups[key]);
+  }
+
+  formatGroupTitle(key: string): string {
+    if (!key) {
+      return '';
+    }
+
+    const acronyms: Record<string, string> = {
+      ssl: 'SSL',
+      tls: 'TLS',
+      usb: 'USB',
+      sdk: 'SDK',
+      ocr: 'OCR',
+      api: 'API',
+      cwe: 'CWE',
+      cve: 'CVE',
+      apk: 'APK',
+      ipa: 'IPA',
+    };
+
+    return key
+      .split(/[-_/]+/)
+      .filter(Boolean)
+      .map((word) => {
+        const lower = word.toLowerCase();
+        if (acronyms[lower]) {
+          return acronyms[lower];
+        }
+        return word.charAt(0).toUpperCase() + word.slice(1).toLowerCase();
+      })
+      .join(' ');
   }
 
   /**
-   * Bypassed protections first — the whole point of the run is what got through.
-   * Unassessed checks (not attempted) are excluded because they are static checks
-   * not confirmed to exist in the application.
+   * Groups findings by their key (e.g. "anti-debug-ptrace", "debug-settings-probe")
+   * and formats the group title to Title Case ("Anti Debug Ptrace").
+   * If a finding name contains '/', it is split into separate items in the list.
    */
-  get sortedFindings(): OffsecScanEmbeddedFinding[] {
+  get groupedFindings(): FindingGroup[] {
     const weight = (outcome: string) =>
       ({ bypassed: 0, resisted: 1, error: 2 })[outcome] ?? 3;
 
-    return (this.args.findings ?? [])
-      .filter(
-        (finding) =>
-          finding.outcome !== 'not_attempted' &&
-          finding.outcome !== 'unassessed' &&
-          Boolean(finding.outcome)
-      )
-      .sort(
-        (a, b) => weight(a.outcome) - weight(b.outcome) || a.order - b.order
+    const activeFindings = (this.args.findings ?? []).filter(
+      (finding) =>
+        finding.outcome !== 'not_attempted' &&
+        finding.outcome !== 'unassessed' &&
+        Boolean(finding.outcome)
+    );
+
+    if (activeFindings.length === 0) {
+      return [];
+    }
+
+    const groupMap = new Map<string, OffsecScanEmbeddedFinding[]>();
+
+    for (const finding of activeFindings) {
+      const groupKey =
+        finding.group || finding.signature_id || finding.category || 'other';
+
+      const rawName =
+        finding.name ||
+        this.formatGroupTitle(finding.signature_id || '');
+      const nameParts = rawName.includes('/')
+        ? rawName.split('/').map((p) => p.trim()).filter(Boolean)
+        : [rawName];
+
+      const splitFindings: OffsecScanEmbeddedFinding[] =
+        nameParts.length > 1
+          ? nameParts.map((partName, partIdx) => ({
+              ...finding,
+              name: partName,
+              order: (finding.order ?? 0) + partIdx * 0.1,
+            }))
+          : [finding];
+
+      const existing = groupMap.get(groupKey);
+      if (existing) {
+        existing.push(...splitFindings);
+      } else {
+        groupMap.set(groupKey, [...splitFindings]);
+      }
+    }
+
+    const groups: FindingGroup[] = [];
+
+    for (const [key, list] of groupMap.entries()) {
+      const sortedInGroup = list.sort(
+        (a, b) =>
+          weight(a.outcome) - weight(b.outcome) ||
+          (a.order ?? 0) - (b.order ?? 0)
       );
+
+      groups.push({
+        key,
+        title: this.formatGroupTitle(key),
+        findings: sortedInGroup,
+      });
+    }
+
+    return groups;
+  }
+
+  get sortedFindings(): OffsecScanEmbeddedFinding[] {
+    return this.groupedFindings.flatMap((group) => group.findings);
+  }
+
+  @action
+  toggleGroup(key: string): void {
+    const isExpanded = this.isGroupExpanded(key);
+    this.expandedGroups = {
+      ...this.expandedGroups,
+      [key]: !isExpanded,
+    };
+  }
+
+  @action
+  handleGroupKeydown(key: string, event: KeyboardEvent): void {
+    if (event.key !== 'Enter' && event.key !== ' ') {
+      return;
+    }
+
+    event.preventDefault();
+    this.toggleGroup(key);
   }
 
   @action
@@ -44,6 +160,7 @@ export default class OffensiveSecurityScanResultsFindingsListComponent extends C
       case 'resisted':
         return 'defended';
       case 'not_attempted':
+      case 'unassessed':
         return 'detected';
       case 'error':
         return 'errored';

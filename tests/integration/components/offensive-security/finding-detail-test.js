@@ -77,10 +77,7 @@ module(
       assert.dom(this.element).includesText('Bypassed');
       assert.dom(this.element).includesText('14');
       assert.dom(this.element).includesText('WEAK RESILIENCE');
-      assert.dom(this.element).includesText('Working exploit');
       assert.dom(this.element).includesText('Evidence');
-      assert.dom(this.element).includesText('Impact');
-      assert.dom(this.element).includesText('Business risk');
     });
 
     test('view details button is commented out for now', async function (assert) {
@@ -207,7 +204,7 @@ module(
       assert.dom(this.element).includesText('Custom business risk bullet 1');
     });
 
-    test('it falls back to signature-tailored frida script and default impact/risk when API values are null or empty', async function (assert) {
+    test('it does not render Working exploit, Impact, or Business risk when API values are missing or empty', async function (assert) {
       const findingEmpty = this.server.create('offsec-finding', {
         signature_id: 'root-build-props',
         name: 'Build tags',
@@ -226,18 +223,9 @@ module(
       />
     `);
 
-      assert
-        .dom(this.element)
-        .includesText('root-build-props probe neutralized');
-      assert
-        .dom(this.element)
-        .includesText('This control exists to stop the app from running');
-      assert
-        .dom(this.element)
-        .includesText('Trace and tamper with live internals');
-      assert
-        .dom(this.element)
-        .includesText('Instrumentation-based reverse engineering');
+      assert.dom(this.element).doesNotIncludeText('Working exploit');
+      assert.dom(this.element).doesNotIncludeText('Impact');
+      assert.dom(this.element).doesNotIncludeText('Business risk');
     });
 
     test('it renders Exploit attached only when exploit evidence or script is attached', async function (assert) {
@@ -284,7 +272,7 @@ module(
       assert.dom(this.element).doesNotIncludeText('Exploit attached');
     });
 
-    test('it renders execution attempts and supports re-visiting cached finding', async function (assert) {
+    test('it omits execution attempts card and supports re-visiting cached finding', async function (assert) {
       const finding = this.server.create('offsec-finding', {
         signature_id: 'native-libc-exec',
         name: 'Native libc path/exec probes',
@@ -324,9 +312,8 @@ module(
     `);
 
       assert.dom(this.element).includesText('Native libc path/exec probes');
-      assert.dom(this.element).includesText('Execution attempts');
-      assert.dom(this.element).includesText('Attempt #2');
-      assert.dom(this.element).includesText('Hooked execve successfully');
+      assert.dom(this.element).doesNotIncludeText('Execution attempts');
+      assert.dom(this.element).doesNotIncludeText('Attempt #2');
 
       // Second render (simulates visiting an already-visited finding from cache)
       await render(hbs`
@@ -337,7 +324,7 @@ module(
     `);
 
       assert.dom(this.element).includesText('Native libc path/exec probes');
-      assert.dom(this.element).includesText('Execution attempts');
+      assert.dom(this.element).doesNotIncludeText('Execution attempts');
     });
   }
 );

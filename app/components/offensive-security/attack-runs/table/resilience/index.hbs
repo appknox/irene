@@ -1,16 +1,8 @@
-{{#if @scan.hasResilience}}
-  <span
-    local-class='risk-badge risk-{{@scan.resilienceClass}}'
-    data-test-offensiveSecurity-attackRuns-resilienceBadge
-  >
-    <strong>{{@scan.overallResilience}}/100</strong>
-    {{t (concat 'offensiveSecurity.resilienceLevel.' @scan.resilienceClass)}}
-  </span>
-{{else if @scan.riskClass}}
+{{#if (or @scan.effectiveRiskRating @scan.riskRating @scan.isTerminal)}}
   <span
     local-class='risk-badge risk-{{@scan.riskClass}}'
     data-test-offensiveSecurity-attackRuns-riskBadge
-    data-test-offensiveSecurity-attackRuns-resilienceEmpty
+    data-test-offensiveSecurity-attackRuns-resilienceBadge
   >
     {{t (concat 'offensiveSecurity.riskLevel.' @scan.riskClass)}}
   </span>
