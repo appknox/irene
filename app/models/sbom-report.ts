@@ -3,7 +3,6 @@ import Model, { attr, belongsTo } from '@ember-data/model';
 import type SbomFileModel from './sbom-file';
 
 export type SbomReportType = 'cyclonedx_json_file' | 'pdf';
-export type SbomReportCategory = 'sbom' | 'ai_bom';
 
 // Distinguishes the underlying report record (what data it covers),
 // as opposed to SbomReportType above (which file format to generate/download).
