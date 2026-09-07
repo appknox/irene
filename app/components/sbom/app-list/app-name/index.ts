@@ -1,4 +1,6 @@
 import Component from '@glimmer/component';
+import { service } from '@ember/service';
+import type IntlService from 'ember-intl/services/intl';
 import type SbomProjectModel from 'irene/models/sbom-project';
 
 export interface SbomProjectListAppNameSignature {
