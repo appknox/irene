@@ -533,6 +533,20 @@ function routes() {
     return {};
   });
 
+  this.get('/profiles/:id/apiscanautomation_preference', (_, req) => {
+    return {
+      id: req.params.id,
+      api_scan_automation_enabled: false,
+      api_scan_automation_included_domains: [],
+      api_scan_automation_excluded_domains: [],
+      api_scan_automation_excluded_endpoints: [],
+    };
+  });
+
+  this.put('/profiles/:id/apiscanautomation_preference', (_, req) => {
+    return { id: req.params.id, ...JSON.parse(req.requestBody) };
+  });
+
   this.get('/invoices/:id/download_url', () => {
     return {};
   });

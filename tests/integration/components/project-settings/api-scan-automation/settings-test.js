@@ -43,9 +43,10 @@ const TEMPLATE = hbs`
   <ProjectSettings::ApiScanAutomation::Settings @profileId={{this.profileId}} />
 `;
 
+const PREFERENCE_URL = '/profiles/:id/apiscanautomation_preference';
+
 const DEFAULT_OPTIONS = {
   id: '1',
-  ds_api_capture_filters: [],
   api_scan_automation_enabled: false,
   api_scan_automation_included_domains: [],
   api_scan_automation_excluded_domains: [],
@@ -67,7 +68,7 @@ module(
     });
 
     const stubGet = (server, overrides = {}) => {
-      server.get('/profiles/:id/api_scan_options', () => ({
+      server.get(PREFERENCE_URL, () => ({
         ...DEFAULT_OPTIONS,
         ...overrides,
       }));
@@ -243,7 +244,7 @@ module(
 
       stubGet(this.server);
 
-      this.server.put('/profiles/:id/api_scan_options', (_, req) => {
+      this.server.put(PREFERENCE_URL, (_, req) => {
         const body = JSON.parse(req.requestBody);
 
         assert.true(body.api_scan_automation_enabled);
@@ -286,7 +287,7 @@ module(
 
       let handlerCalled = false;
 
-      this.server.put('/profiles/:id/api_scan_options', () => {
+      this.server.put(PREFERENCE_URL, () => {
         handlerCalled = true;
 
         return new Response(400, {}, { detail: 'Scope rules are invalid' });
