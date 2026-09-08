@@ -80,11 +80,31 @@ export default class OffensiveSecurityFindingDetailComponent extends Component<O
       list = this.finding?.evidenceList ?? [];
     }
 
+    // On-device navigation and housekeeping steps show how the agent drove the screen, not whether
+    // a protection is present. Nebula already drops these, but old scans may still carry them.
+    const navigationTools = new Set([
+      'android',
+      'android:ui_click',
+      'android:ui_get_text',
+      'android:app_start',
+      'app_logcat',
+      'workspace_prepare',
+      'completion_gate',
+    ]);
     return list.filter(
       (item) =>
-        item?.tool !== 'android:ui_get_text' &&
+        !navigationTools.has(item?.tool || '') &&
         (item?.source || '').toLowerCase() !== 'ui'
     );
+  }
+
+  get staticEvidence(): Array<Record<string, unknown>> {
+    const raw = this.finding?.detail?.['static_evidence'];
+    return Array.isArray(raw) ? (raw as Array<Record<string, unknown>>) : [];
+  }
+
+  get hasStaticEvidence(): boolean {
+    return this.staticEvidence.length > 0;
   }
 
   get checkTypeLabel(): string {

@@ -208,6 +208,36 @@
         </section>
       {{/if}}
 
+      {{! STATIC EVIDENCE }}
+      {{#if this.hasStaticEvidence}}
+        <section local-class='card verify'>
+          <div local-class='card-h'>
+            <span local-class='glyph glyph-verify'>
+              <svg viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2'>
+                <path d='M4 4h16v4H4zM4 12h16v4H4zM4 20h10' />
+              </svg>
+            </span>
+            <h2>Static evidence</h2>
+            <span local-class='meta'>{{this.staticEvidence.length}} from static analysis</span>
+          </div>
+          <div local-class='card-b'>
+            {{#each this.staticEvidence as |item|}}
+              <div local-class='evi'>
+                <div local-class='evi-h'>
+                  <span local-class='evi-id'>{{item.kind}}</span>
+                  {{#if item.summary}}
+                    <span local-class='evi-name'>{{item.summary}}</span>
+                  {{/if}}
+                </div>
+                {{#if item.detail}}
+                  <pre local-class='evi-code'><code>{{item.detail}}</code></pre>
+                {{/if}}
+              </div>
+            {{/each}}
+          </div>
+        </section>
+      {{/if}}
+
       {{! BYPASS ARTIFACTS }}
       {{#if (or this.smaliPatch this.hasPatchedApk)}}
         <section local-class='card verify'>

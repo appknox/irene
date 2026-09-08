@@ -431,5 +431,72 @@ module(
       assert.dom(this.element).doesNotIncludeText('POST_BYPASS_SCREEN_DUMP');
       assert.dom(this.element).includesText('DIAGNOSTIC_KEEP');
     });
+
+    test('it drops the raw UI click dump from the evidence card', async function (assert) {
+      const finding = this.server.create('offsec-finding', {
+        signature_id: 'root-file-probe',
+        name: 'Root artifact file probe',
+        outcome: 'bypassed',
+        evidence: [
+          {
+            evidence_id: 'E27',
+            tool: 'android:ui_click',
+            summary: 'CLICK_START_SETUP_DUMP',
+            ok: true,
+          },
+        ],
+      });
+
+      this.set('scanId', '9');
+      this.set('findingId', String(finding.id));
+
+      await render(hbs`
+        <OffensiveSecurity::FindingDetail
+          @scanId={{this.scanId}}
+          @findingId={{this.findingId}}
+        />
+      `);
+
+      assert.dom(this.element).doesNotIncludeText('CLICK_START_SETUP_DUMP');
+    });
+
+    test('it showcases static evidence of presence', async function (assert) {
+      const finding = this.server.create('offsec-finding', {
+        signature_id: 'root-file-probe',
+        name: 'Root artifact file probe',
+        outcome: 'bypassed',
+        detail: {
+          static_evidence: [
+            {
+              id: 'E0_rasp',
+              kind: 'rasp_scan',
+              summary: 'Protection families detected by APKiD',
+              detail: 'anti_vm: Build.MODEL check; root_detection: su path',
+            },
+            {
+              id: 'E18',
+              kind: 'native_inspect',
+              summary: 'Inspected native library libhnb.so',
+              detail: 'ELF arm64 libhnb.so exports',
+            },
+          ],
+        },
+      });
+
+      this.set('scanId', '9');
+      this.set('findingId', String(finding.id));
+
+      await render(hbs`
+        <OffensiveSecurity::FindingDetail
+          @scanId={{this.scanId}}
+          @findingId={{this.findingId}}
+        />
+      `);
+
+      assert.dom(this.element).includesText('Static evidence');
+      assert.dom(this.element).includesText('Protection families detected by APKiD');
+      assert.dom(this.element).includesText('root_detection: su path');
+      assert.dom(this.element).includesText('libhnb.so');
+    });
   }
 );
