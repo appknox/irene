@@ -6,10 +6,8 @@ import { task } from 'ember-concurrency';
 import type Store from 'ember-data/store';
 import type IntlService from 'ember-intl/services/intl';
 
-import ENV from 'irene/config/environment';
 import parseError from 'irene/utils/parse-error';
-import type ApiScanOptionsModel from 'irene/models/api-scan-options';
-import type IreneAjaxService from 'irene/services/ajax';
+import type ApiscanAutomationPreferenceModel from 'irene/models/apiscan-automation-preference';
 
 /** Hostname, optionally with wildcards. Rejects schemes, paths and ports. */
 const HOST_PATTERN =
@@ -22,12 +20,11 @@ export interface ProjectSettingsApiScanAutomationSettingsSignature {
 }
 
 export default class ProjectSettingsApiScanAutomationSettingsComponent extends Component<ProjectSettingsApiScanAutomationSettingsSignature> {
-  @service declare ajax: IreneAjaxService;
   @service declare intl: IntlService;
   @service declare store: Store;
   @service('notifications') declare notify: NotificationService;
 
-  @tracked options?: ApiScanOptionsModel;
+  @tracked options?: ApiscanAutomationPreferenceModel;
   @tracked enabled = false;
   @tracked includedDomains: string[] = [];
   @tracked excludedDomains: string[] = [];
@@ -42,11 +39,24 @@ export default class ProjectSettingsApiScanAutomationSettingsComponent extends C
     this.fetchOptions.perform();
   }
 
+  /**
+   * The preference endpoint is nested under the profile and the adapter resets
+   * its namespace after every response, so this runs before each request.
+   */
+  private setPreferenceNamespace() {
+    this.store
+      .adapterFor('apiscan-automation-preference')
+      .setNestedUrlNamespace(String(this.args.profileId));
+  }
+
   fetchOptions = task(async () => {
     try {
-      this.options = await this.store.queryRecord('api-scan-options', {
-        id: this.args.profileId,
-      });
+      this.setPreferenceNamespace();
+
+      this.options = await this.store.queryRecord(
+        'apiscan-automation-preference',
+        {}
+      );
 
       this.enabled = this.options.apiScanAutomationEnabled;
       this.includedDomains =
@@ -113,21 +123,6 @@ export default class ProjectSettingsApiScanAutomationSettingsComponent extends C
 
   save = task(async () => {
     try {
-      const url = [
-        ENV.endpoints['profiles'],
-        this.args.profileId,
-        ENV.endpoints['apiScanOptions'],
-      ].join('/');
-
-      const data = {
-        api_scan_automation_enabled: this.enabled,
-        api_scan_automation_included_domains: this.includedDomains,
-        api_scan_automation_excluded_domains: this.excludedDomains,
-        api_scan_automation_excluded_endpoints: this.excludedEndpoints,
-      };
-
-      await this.ajax.put(url, { data });
-
       this.options?.setProperties({
         apiScanAutomationEnabled: this.enabled,
         apiScanAutomationIncludedDomains: this.includedDomains,
@@ -135,8 +130,14 @@ export default class ProjectSettingsApiScanAutomationSettingsComponent extends C
         apiScanAutomationExcludedEndpoints: this.excludedEndpoints,
       });
 
+      this.setPreferenceNamespace();
+
+      await this.options?.save();
+
       this.notify.success(this.intl.t('apiScanAutomation.settingsUpdated'));
     } catch (error) {
+      this.options?.rollbackAttributes();
+
       this.notify.error(parseError(error, this.intl.t('pleaseTryAgain')));
     }
   });
