@@ -183,25 +183,27 @@
             <span local-class='meta'>{{this.detectionBacktrace.length}} triggered checks</span>
           </div>
           <div local-class='card-b'>
-            {{#each this.detectionBacktrace as |trigger|}}
-              <div local-class='evi'>
-                <div local-class='evi-h'>
-                  <span local-class='evi-id'>{{or trigger.kind 'check'}}</span>
-                  {{#if trigger.arg}}
-                    <span local-class='evi-name'>{{trigger.arg}}</span>
+            <div local-class='backtrace-scroll'>
+              {{#each this.detectionBacktrace as |trigger|}}
+                <div local-class='evi'>
+                  <div local-class='evi-h'>
+                    <span local-class='evi-id'>{{or trigger.kind 'check'}}</span>
+                    {{#if trigger.arg}}
+                      <span local-class='evi-name'>{{trigger.arg}}</span>
+                    {{/if}}
+                    {{#if trigger.layer}}
+                      <span local-class='evi-surface'>{{trigger.layer}}</span>
+                    {{/if}}
+                  </div>
+                  {{#if trigger.app_frame}}
+                    <p local-class='evi-cap'>{{trigger.app_frame}}</p>
                   {{/if}}
-                  {{#if trigger.layer}}
-                    <span local-class='evi-surface'>{{trigger.layer}}</span>
+                  {{#if trigger.smali_path}}
+                    <pre local-class='evi-code'><code>{{trigger.smali_path}}</code></pre>
                   {{/if}}
                 </div>
-                {{#if trigger.app_frame}}
-                  <p local-class='evi-cap'>{{trigger.app_frame}}</p>
-                {{/if}}
-                {{#if trigger.smali_path}}
-                  <pre local-class='evi-code'><code>{{trigger.smali_path}}</code></pre>
-                {{/if}}
-              </div>
-            {{/each}}
+              {{/each}}
+            </div>
           </div>
         </section>
       {{/if}}
@@ -216,6 +218,28 @@
               </svg>
             </span>
             <h2>Bypass artifacts</h2>
+            {{#if this.hasPatchedApk}}
+              <button
+                type='button'
+                local-class='download-apk-btn'
+                {{on 'click' this.triggerApkDownload}}
+                disabled={{this.downloadPatchedApk.isRunning}}
+                title='Download {{this.patchedApkName}}'
+              >
+                <svg viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2'>
+                  <path d='M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4' />
+                  <polyline points='7 10 12 15 17 10' />
+                  <line x1='12' y1='15' x2='12' y2='3' />
+                </svg>
+                <span>
+                  {{#if this.downloadPatchedApk.isRunning}}
+                    Preparing…
+                  {{else}}
+                    Download Patched APK
+                  {{/if}}
+                </span>
+              </button>
+            {{/if}}
           </div>
           <div local-class='card-b'>
             {{#if this.smaliPatch}}
@@ -226,22 +250,9 @@
                 </div>
                 <pre local-class='code-block'><code>{{this.smaliPatchText}}</code></pre>
               </div>
-            {{/if}}
-            {{#if this.hasPatchedApk}}
-              <div local-class='step'>
-                <span local-class='step-text'>Patched APK · {{this.patchedApkName}}</span>
-                <button
-                  type='button'
-                  local-class='copy'
-                  {{on 'click' this.triggerApkDownload}}
-                  disabled={{this.downloadPatchedApk.isRunning}}
-                >
-                  {{#if this.downloadPatchedApk.isRunning}}
-                    Preparing…
-                  {{else}}
-                    Download
-                  {{/if}}
-                </button>
+            {{else if this.hasPatchedApk}}
+              <div local-class='empty-msg'>
+                Patched APK ({{this.patchedApkName}}) is available for download.
               </div>
             {{/if}}
           </div>

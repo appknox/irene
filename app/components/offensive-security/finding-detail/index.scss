@@ -282,6 +282,43 @@
   }
 }
 
+.download-apk-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  padding: 0.35rem 0.75rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: #0f172a;
+  background-color: #ffffff;
+  border: 1px solid #cbd5e1;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  margin-left: auto;
+
+  svg {
+    width: 14px;
+    height: 14px;
+    color: #475569;
+  }
+
+  &:hover:not(:disabled) {
+    background-color: #f8fafc;
+    border-color: #94a3b8;
+    color: #020617;
+
+    svg {
+      color: #0f172a;
+    }
+  }
+
+  &:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+  }
+}
+
 .glyph {
   width: 28px;
   height: 28px;
@@ -328,6 +365,13 @@
 
 .card-b {
   padding: 1.25rem;
+}
+
+.backtrace-scroll {
+  max-height: 560px;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  padding: 2px 4px 1rem 2px;
 }
 
 /* ---------- WORKING EXPLOIT ---------- */

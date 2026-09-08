@@ -226,7 +226,7 @@ export default class OffensiveSecurityFindingDetailComponent extends Component<O
       this.finding.exploitEvidence ||
       detail?.['exploit_evidence'] ||
       (this.finding as unknown as Record<string, unknown>)?.[
-        'exploit_evidence'
+      'exploit_evidence'
       ];
     if (
       (Array.isArray(exploitEv) && exploitEv.length > 0) ||
@@ -769,9 +769,9 @@ export default class OffensiveSecurityFindingDetailComponent extends Component<O
       try {
         const cachedFinding = !options?.reload
           ? (this.store.peekRecord(
-              'offsec-finding',
-              findingId
-            ) as OffsecFindingModel | null)
+            'offsec-finding',
+            findingId
+          ) as OffsecFindingModel | null)
           : null;
 
         if (cachedFinding) {
