@@ -27,6 +27,7 @@ import type MeService from 'irene/services/me';
 import type OrganizationService from 'irene/services/organization';
 import type ProjectModel from 'irene/models/project';
 import parseError from 'irene/utils/parse-error';
+import { fileToBase64 } from 'irene/utils/file-to-base64';
 import {
   canManageSigningCertificates,
   showsProjectSigningCertificate,
@@ -292,14 +293,22 @@ export default class OrganizationSigningCertificateComponent extends Component<O
     }
 
     try {
-      const formData = new FormData();
-      formData.append('p12', this.p12File);
-      formData.append('password', this.password);
-      formData.append('mobileprovision', this.profileFile);
-      formData.append('name', this.certName);
-      formData.append('bundle_id', this.bundleId.trim());
+      // The API takes the signing material base64-encoded in a JSON body, so
+      // the request stays on application/json rather than multipart/form-data.
+      const [p12, mobileprovision] = await Promise.all([
+        fileToBase64(this.p12File),
+        fileToBase64(this.profileFile),
+      ]);
 
-      await this.ajax.post(this.baseUrl, { data: formData, contentType: null });
+      await this.ajax.post(this.baseUrl, {
+        data: {
+          p12,
+          mobileprovision,
+          password: this.password,
+          name: this.certName,
+          bundle_id: this.bundleId.trim(),
+        },
+      });
 
       this.notify.success(this.intl.t('cyod.signingCert.uploadSuccess'));
 
