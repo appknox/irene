@@ -1,0 +1,127 @@
+<AnalysisRisk::OverrideEditDrawer::VulnerabilityName
+  @dataModel={{@dataModel}}
+/>
+
+<AkDivider @color='dark' class='mt-2 mb-1' />
+
+<div class='p-3'>
+  <AkStack
+    @direction='column'
+    @spacing='1'
+    data-test-analysisRisk-overrideEditDrawer-pendingRequestDetails-overriddenRiskInfo
+  >
+    <AkTypography
+      @variant='subtitle1'
+      {{style fontSize='0.857rem'}}
+      data-test-analysisRisk-overrideEditDrawer-pendingRequestDetails-requestOverriddenAsTitle
+    >
+      {{if
+        this.isApprovalView
+        (t 'editAnalysisRequest.requestedUpdate')
+        (t 'editAnalysisRequest.requestOverriddenAs')
+      }}
+    </AkTypography>
+
+    <AkStack local-class='overridden-as-value-container' @alignItems='center'>
+      <AkTypography
+        data-test-analysisRisk-overrideEditDrawer-pendingRequestDetails-requestedRisk
+      >
+        {{this.requestedRiskLabel}}
+      </AkTypography>
+
+      {{#if this.overrideCriteriaLabel}}
+        <AnalysisRisk::OverrideEditDrawer::Divider @label='{{t "for"}}' />
+
+        <AkTypography
+          data-test-analysisRisk-overrideEditDrawer-pendingRequestDetails-overrideCriteria
+        >
+          {{this.overrideCriteriaLabel}}
+        </AkTypography>
+      {{/if}}
+    </AkStack>
+
+    <AkDivider local-class='details-divider' class='my-2' />
+
+    <AkStack @direction='column' @spacing='1'>
+      <AkTypography
+        @variant='subtitle1'
+        {{style fontSize='0.857rem'}}
+        data-test-analysisRisk-overrideEditDrawer-pendingRequestDetails-requestedDetailsTitle
+      >
+        {{t 'editAnalysisRequest.requestedDetails'}}
+      </AkTypography>
+
+      <AkTypography
+        data-test-analysisRisk-overrideEditDrawer-pendingRequestDetails-requestedDetailsValue
+      >
+        {{this.pendingRequest.comment}}
+      </AkTypography>
+    </AkStack>
+  </AkStack>
+
+  <AkDivider local-class='details-divider' class='my-3' />
+
+  <AkStack
+    @direction='column'
+    @spacing='2'
+    data-test-analysisRisk-overrideEditDrawer-pendingRequestDetails-auditDetails
+  >
+    {{#each this.auditChips as |chip|}}
+      <AkStack
+        local-class='audit-chip'
+        @alignItems='center'
+        @spacing='1'
+        data-test-analysisRisk-overrideEditDrawer-pendingRequestDetails-auditChip='{{chip.label}}'
+      >
+        {{#if chip.icon}}
+          <AkIcon @size='small' @iconName={{chip.icon}} />
+        {{else}}
+          <AnalysisRisk::OverriddenIcon />
+        {{/if}}
+
+        <AkTypography @variant='subtitle1' {{style fontSize='0.857rem'}}>
+          {{chip.label}}
+          -
+        </AkTypography>
+
+        {{#if chip.renderRiskChange}}
+          <AkStack @alignItems='center' @justifyContent='center' @spacing='1'>
+            <AnalysisRisk::Text @risk={{@dataModel.computedRisk}} />
+
+            <AkIcon @size='small' @color='textSecondary' @iconName='east' />
+
+            <AnalysisRisk::Text @risk={{this.pendingRequest.requestedStatus}} />
+          </AkStack>
+        {{else}}
+          <AkTypography @color='secondary'>
+            {{chip.value}}
+          </AkTypography>
+        {{/if}}
+      </AkStack>
+    {{/each}}
+  </AkStack>
+</div>
+
+{{#if this.isApprovalView}}
+  <AkDivider @color='dark' />
+
+  <AkStack class='px-3 py-2' @spacing='2'>
+    <AkButton
+      @loading={{this.approveTask.isRunning}}
+      {{on 'click' this.handleApproveClick}}
+      data-test-analysisRisk-overrideEditDrawer-pendingRequestDetails-approveBtn
+    >
+      {{t 'approve'}}
+    </AkButton>
+
+    <AkButton
+      @variant='outlined'
+      @color='neutral'
+      @disabled={{this.approveTask.isRunning}}
+      {{on 'click' this.handleRejectClick}}
+      data-test-analysisRisk-overrideEditDrawer-pendingRequestDetails-rejectBtn
+    >
+      {{t 'reject'}}
+    </AkButton>
+  </AkStack>
+{{/if}}

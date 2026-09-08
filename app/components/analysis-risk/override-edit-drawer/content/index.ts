@@ -1,7 +1,6 @@
 import { action } from '@ember/object';
 import Component from '@glimmer/component';
 import { tracked } from '@glimmer/tracking';
-
 import type { AnalysisRiskDataModel, OverrideEditDrawerAppBarData } from '..';
 
 export interface AnalysisRiskOverrideEditDrawerContentSignature {
@@ -15,7 +14,9 @@ export interface AnalysisRiskOverrideEditDrawerContentSignature {
 export type ActiveContentComponent =
   | 'analysis-risk/override-edit-drawer/override-details'
   | 'analysis-risk/override-edit-drawer/override-form'
-  | 'analysis-risk/override-edit-drawer/reset-confirm';
+  | 'analysis-risk/override-edit-drawer/reset-confirm'
+  | 'analysis-risk/override-edit-drawer/reject-confirm'
+  | 'analysis-risk/override-edit-drawer/pending-request-details';
 
 export default class AnalysisRiskOverrideEditDrawerContentComponent extends Component<AnalysisRiskOverrideEditDrawerContentSignature> {
   @tracked showOverrideFormToEdit = false;
@@ -27,9 +28,29 @@ export default class AnalysisRiskOverrideEditDrawerContentComponent extends Comp
   ) {
     super(owner, args);
 
-    this.activeComponent = this.args.dataModel.isOverridden
-      ? 'analysis-risk/override-edit-drawer/override-details'
-      : 'analysis-risk/override-edit-drawer/override-form';
+    this.activeComponent = this.overrideRequestIsPending
+      ? 'analysis-risk/override-edit-drawer/pending-request-details'
+      : this.getDefaultOverrideComponent();
+  }
+
+  get overrideRequestIsPending() {
+    return this.pendingOverrideRequest?.isPending;
+  }
+
+  get isApprovalView() {
+    return Boolean(this.args.dataModel.approveOverrideHandler);
+  }
+
+  get pendingOverrideRequest() {
+    return this.args.dataModel.pendingOverrideRequest;
+  }
+
+  get showPendingOverrideRequestConfirmBanner() {
+    return (
+      this.pendingOverrideRequest &&
+      this.pendingOverrideRequest.isPending &&
+      !this.isApprovalView
+    );
   }
 
   @action
@@ -40,6 +61,12 @@ export default class AnalysisRiskOverrideEditDrawerContentComponent extends Comp
   @action
   setActiveComponent(component: ActiveContentComponent) {
     this.activeComponent = component;
+  }
+
+  getDefaultOverrideComponent() {
+    return this.args.dataModel.isOverridden
+      ? 'analysis-risk/override-edit-drawer/override-details'
+      : 'analysis-risk/override-edit-drawer/override-form';
   }
 }
 

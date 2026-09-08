@@ -190,6 +190,8 @@ export const MaterialSymbolsSet = [
   'border-color',
   'border-color-outline',
   'family-history',
+  'rate-review',
+  'pending-actions-sharp',
 ] as const;
 
 export const MdiIconsSet = [

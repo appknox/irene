@@ -86,6 +86,7 @@
   --box-shadow-14: 4px 4px 15px 0px rgba(0, 0, 0, 0.031);
   --box-shadow-15: 0px 2px 4px -1px rgba(0, 0, 0, 0.06);
   --box-shadow-16: 0 5px 5px 0 rgba(64, 64, 64, 0.1);
+  --box-shadow-17: 0 4px 12px rgba(64, 64, 64, 0.25);
 
   --hover-dark-background: rgba(255, 255, 255, 0.15);
   --hover-light-background: rgba(0, 0, 0, 0.04);
@@ -263,6 +264,10 @@
 
   //special case variable for health-score
   --low-health-score: #a8d65e;
+
+  // special case variables for analysis-risk/override-edit-drawer/content
+  --analysis-risk-override-edit-drawer-pending-banner-bg-color: #be9a1d1a;
+  --analysis-risk-override-edit-drawer-pending-banner-icon-bg-color: #be9a1d;
 }
 
 // TODO: need to remove this so do not use it

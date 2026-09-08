@@ -3,6 +3,7 @@ import Model, { attr, belongsTo } from '@ember-data/model';
 import { isEmpty } from '@ember/utils';
 
 import ENUMS from 'irene/enums';
+import { OverrideRequestStatus } from './analysis-override-request';
 import type FileModel from './file';
 import type VulnerabilityModel from './vulnerability';
 
@@ -31,6 +32,12 @@ export default class AnalysisOverviewModel extends Model {
   @attr('number', { defaultValue: null })
   declare overriddenRisk: number | null;
 
+  @attr('number', { defaultValue: null })
+  declare overrideRequestStatus: number | null;
+
+  @attr('number', { defaultValue: null })
+  declare overrideRequestedRisk: number | null;
+
   @attr('date')
   declare updatedOn: Date;
 
@@ -55,6 +62,10 @@ export default class AnalysisOverviewModel extends Model {
 
   get isOverriddenRisk() {
     return !isEmpty(this.overriddenRisk);
+  }
+
+  get hasPendingOverrideRequest() {
+    return this.overrideRequestStatus === OverrideRequestStatus.PENDING;
   }
 
   get isNonPassedRiskOverridden() {
