@@ -92,10 +92,10 @@
                 </AkStack>
 
                 <span
-                  local-class='outcome-tag {{this.outcomeClass finding.outcome}}'
+                  local-class='outcome-tag {{this.outcomeClass (this.statusKey finding)}}'
                   data-test-offensiveSecurity-findingsList-outcome
                 >
-                  {{t (concat 'offensiveSecurity.outcome.' (if finding.outcome finding.outcome 'not_attempted'))}}
+                  {{t (concat 'offensiveSecurity.outcome.' (this.statusKey finding))}}
                 </span>
               </AkStack>
             {{/each}}

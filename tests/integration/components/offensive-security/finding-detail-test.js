@@ -80,6 +80,57 @@ module(
       assert.dom(this.element).includesText('Evidence');
     });
 
+    test('the hero pill reads Untriggered for a detected but not-attempted finding', async function (assert) {
+      const finding = this.server.create('offsec-finding', {
+        signature_id: 'frida-port-scan',
+        name: 'Frida port scan',
+        category: 'resilience',
+        check_type: 'frida_detection',
+        outcome: 'not_attempted',
+        detected: true,
+        triggered: false,
+      });
+
+      this.set('scanId', '9');
+      this.set('findingId', String(finding.id));
+
+      await render(hbs`
+        <OffensiveSecurity::FindingDetail
+          @scanId={{this.scanId}}
+          @findingId={{this.findingId}}
+        />
+      `);
+
+      assert.dom(this.element).includesText('Untriggered');
+      // The raw outcome token must not leak into the hero.
+      assert.dom(this.element).doesNotIncludeText('not_attempted');
+    });
+
+    test('the hero pill reads Triggered when the check fired at runtime', async function (assert) {
+      const finding = this.server.create('offsec-finding', {
+        signature_id: 'root-package-query',
+        name: 'Superuser package-manager query',
+        category: 'resilience',
+        check_type: 'root_detection',
+        outcome: 'not_attempted',
+        detected: true,
+        triggered: true,
+      });
+
+      this.set('scanId', '9');
+      this.set('findingId', String(finding.id));
+
+      await render(hbs`
+        <OffensiveSecurity::FindingDetail
+          @scanId={{this.scanId}}
+          @findingId={{this.findingId}}
+        />
+      `);
+
+      assert.dom(this.element).includesText('Triggered');
+      assert.dom(this.element).doesNotIncludeText('Untriggered');
+    });
+
     test('view details button is commented out for now', async function (assert) {
       const finding = this.server.create('offsec-finding', {
         signature_id: 'debug_settings_probe',
@@ -494,7 +545,9 @@ module(
       `);
 
       assert.dom(this.element).includesText('Static evidence');
-      assert.dom(this.element).includesText('Protection families detected by APKiD');
+      assert
+        .dom(this.element)
+        .includesText('Protection families detected by APKiD');
       assert.dom(this.element).includesText('root_detection: su path');
       assert.dom(this.element).includesText('libhnb.so');
     });

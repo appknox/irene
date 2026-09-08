@@ -276,6 +276,70 @@ module('Integration | Component | offensive-security/scan-results', (hooks) => {
     assert.dom(SELECTORS.findingRow).includesText('Exploit Successful');
   });
 
+  test('it lists a detected but untriggered finding with an untriggered badge', async function (assert) {
+    const scan = createScan(this, {
+      findings: [
+        {
+          id: 1,
+          signature_id: 'root-file-probe',
+          name: 'Root artifact file probe',
+          category: 'root_detection',
+          outcome: 'bypassed',
+          detected: true,
+          order: 0,
+          evidence_ids: [],
+        },
+        // Detected statically but never triggered at runtime — must still appear.
+        {
+          id: 2,
+          signature_id: 'frida-port-scan',
+          name: 'Frida port scan',
+          category: 'frida_detection',
+          outcome: 'not_attempted',
+          detected: true,
+          triggered: false,
+          order: 1,
+          evidence_ids: [],
+        },
+      ],
+    });
+    serveScan(this, scan);
+
+    this.set('scanId', String(scan.id));
+    await render(TEMPLATE);
+
+    assert.strictEqual(findAll(SELECTORS.findingRow).length, 2);
+    assert.dom(SELECTORS.findingsList).includesText('Frida port scan');
+    // Detected statically but never fired at runtime: untriggered, not unassessed.
+    assert.dom(SELECTORS.findingsList).includesText('Untriggered');
+  });
+
+  test('a finding whose check fired reads Triggered, not Untriggered', async function (assert) {
+    const scan = createScan(this, {
+      findings: [
+        // outcome not_attempted (no bypass tried) but it fired at runtime — triggered.
+        {
+          id: 1,
+          signature_id: 'root-package-query',
+          name: 'Superuser package-manager query',
+          category: 'root_detection',
+          outcome: 'not_attempted',
+          detected: true,
+          triggered: true,
+          order: 0,
+          evidence_ids: [],
+        },
+      ],
+    });
+    serveScan(this, scan);
+
+    this.set('scanId', String(scan.id));
+    await render(TEMPLATE);
+
+    assert.dom(SELECTORS.findingsList).includesText('Triggered');
+    assert.dom(SELECTORS.findingsList).doesNotIncludeText('Untriggered');
+  });
+
   test('it groups findings by dictionary key and formats the group header in title case', async function (assert) {
     const scan = createScan(this, {
       findings: {
@@ -405,7 +469,11 @@ module('Integration | Component | offensive-security/scan-results', (hooks) => {
     await render(TEMPLATE);
 
     const rows = findAll(SELECTORS.findingRow);
-    assert.strictEqual(rows.length, 4, 'Four list items rendered from two slash findings');
+    assert.strictEqual(
+      rows.length,
+      4,
+      'Four list items rendered from two slash findings'
+    );
 
     assert.dom(rows[0]).includesText('Developer-options');
     assert.dom(rows[1]).includesText('USB-debugging settings probe');
@@ -488,8 +556,12 @@ module('Integration | Component | offensive-security/scan-results', (hooks) => {
     // Expand Root Detection
     await click(headers[0]);
     assert.strictEqual(headers[0].getAttribute('aria-expanded'), 'true');
-    assert.dom(SELECTORS.findingsList).containsText('Obfuscated aggregate root verdict method');
-    assert.dom(SELECTORS.findingsList).containsText('Build tags and system properties');
+    assert
+      .dom(SELECTORS.findingsList)
+      .containsText('Obfuscated aggregate root verdict method');
+    assert
+      .dom(SELECTORS.findingsList)
+      .containsText('Build tags and system properties');
   });
 
   test('it shows an empty state when there are no findings', async function (assert) {

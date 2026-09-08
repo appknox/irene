@@ -58,6 +58,16 @@
                 <span local-class='dot'></span>
                 Resisted
               </span>
+            {{else if this.finding.isTriggered}}
+              <span local-class='pill detected'>
+                <span local-class='dot'></span>
+                Triggered
+              </span>
+            {{else if this.finding.isUntriggered}}
+              <span local-class='pill neutral'>
+                <span local-class='dot'></span>
+                Untriggered
+              </span>
             {{else}}
               <span local-class='pill neutral'>
                 <span local-class='dot'></span>

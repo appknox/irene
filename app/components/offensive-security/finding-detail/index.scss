@@ -140,6 +140,16 @@
       background-color: var(--text-secondary, #94a3b8);
     }
   }
+
+  &.detected {
+    color: #1565c0;
+    border-color: #bbdefb;
+    background-color: #e8f4fd;
+
+    .dot {
+      background-color: #1976d2;
+    }
+  }
 }
 
 .lede {

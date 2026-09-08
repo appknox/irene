@@ -182,19 +182,28 @@ module('Unit | Model | offsec-scan', function (hooks) {
 
   // ─── findingList ───────────────────────────────────────────────────────────
 
-  test('findingList filters out unassessed findings', function (assert) {
+  test('findingList keeps detected protections and drops undetected noise', function (assert) {
     const scan = this.store.createRecord('offsec-scan', {
       findings: [
-        { id: 1, outcome: 'bypassed', name: 'Exploited' },
-        { id: 2, outcome: 'not_attempted', name: 'Unassessed' },
-        { id: 3, outcome: 'resisted', name: 'Resisted' },
-        { id: 4, outcome: 'unassessed', name: 'Unassessed 2' },
+        { id: 1, outcome: 'bypassed', detected: true, name: 'Exploited' },
+        // Detected but never triggered — belongs in the list with its unassessed badge.
+        {
+          id: 2,
+          outcome: 'not_attempted',
+          detected: true,
+          name: 'Untriggered',
+        },
+        { id: 3, outcome: 'resisted', detected: true, name: 'Resisted' },
+        // Neither detected nor attempted — dropped as noise.
+        { id: 4, outcome: 'not_attempted', detected: false, name: 'Noise' },
+        { id: 5, outcome: 'unassessed', detected: false, name: 'Noise 2' },
       ],
     });
 
-    assert.strictEqual(scan.findingList.length, 2);
-    assert.strictEqual(scan.findingList[0].id, 1);
-    assert.strictEqual(scan.findingList[1].id, 3);
+    assert.deepEqual(
+      scan.findingList.map((f) => f.id),
+      [1, 2, 3]
+    );
   });
 
   // ─── displayErrorMessage ──────────────────────────────────────────────────

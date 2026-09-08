@@ -41,6 +41,9 @@ export interface OffsecScanEmbeddedFinding {
   category: string;
   check_type: string;
   detected: boolean;
+  // True when the check fired at runtime (it has a detection backtrace), as opposed to being
+  // detected only by static analysis. Distinguishes a triggered check from an untriggered one.
+  triggered?: boolean;
   outcome: string;
   score: number | null;
   band: string;
@@ -511,11 +514,15 @@ export default class OffsecScanModel extends Model {
       }
     }
 
+    // Keep every detected protection and every attempted one; drop only entries that were neither
+    // detected nor attempted (noise). A detected-but-untested protection (a probe the run never
+    // reached) still belongs in the list, with its unassessed badge.
     return list.filter(
       (finding) =>
-        finding.outcome !== 'not_attempted' &&
-        finding.outcome !== 'unassessed' &&
-        Boolean(finding.outcome)
+        Boolean(finding.outcome) &&
+        (finding.detected ||
+          (finding.outcome !== 'not_attempted' &&
+            finding.outcome !== 'unassessed'))
     );
   }
 }

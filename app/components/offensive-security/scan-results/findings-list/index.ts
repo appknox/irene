@@ -69,11 +69,14 @@ export default class OffensiveSecurityScanResultsFindingsListComponent extends C
     const weight = (outcome: string) =>
       ({ bypassed: 0, resisted: 1, error: 2 })[outcome] ?? 3;
 
+    // Keep detected protections and attempted ones; drop only entries neither detected nor
+    // attempted. A detected-but-untested finding belongs in the list with its unassessed badge.
     const activeFindings = (this.args.findings ?? []).filter(
       (finding) =>
-        finding.outcome !== 'not_attempted' &&
-        finding.outcome !== 'unassessed' &&
-        Boolean(finding.outcome)
+        Boolean(finding.outcome) &&
+        (finding.detected ||
+          (finding.outcome !== 'not_attempted' &&
+            finding.outcome !== 'unassessed'))
     );
 
     if (activeFindings.length === 0) {
@@ -87,10 +90,12 @@ export default class OffensiveSecurityScanResultsFindingsListComponent extends C
         finding.group || finding.signature_id || finding.category || 'other';
 
       const rawName =
-        finding.name ||
-        this.formatGroupTitle(finding.signature_id || '');
+        finding.name || this.formatGroupTitle(finding.signature_id || '');
       const nameParts = rawName.includes('/')
-        ? rawName.split('/').map((p) => p.trim()).filter(Boolean)
+        ? rawName
+            .split('/')
+            .map((p) => p.trim())
+            .filter(Boolean)
         : [rawName];
 
       const splitFindings: OffsecScanEmbeddedFinding[] =
@@ -152,6 +157,27 @@ export default class OffensiveSecurityScanResultsFindingsListComponent extends C
     this.toggleGroup(key);
   }
 
+  /**
+   * The status a finding's badge shows. A not-yet-bypassed check splits on whether it fired at
+   * runtime: `triggered` (its mechanism fired, it has a backtrace) versus `not_attempted`
+   * (detected only statically, never fired). Bypassed/resisted/error keep their own outcome.
+   */
+  @action
+  statusKey(finding: OffsecScanEmbeddedFinding): string {
+    const outcome = finding.outcome || '';
+    if (
+      outcome === 'bypassed' ||
+      outcome === 'resisted' ||
+      outcome === 'error'
+    ) {
+      return outcome;
+    }
+    if (finding.triggered) {
+      return 'triggered';
+    }
+    return outcome || 'not_attempted';
+  }
+
   @action
   outcomeClass(outcome: string): string {
     switch (outcome) {
@@ -159,9 +185,11 @@ export default class OffensiveSecurityScanResultsFindingsListComponent extends C
         return 'exploited';
       case 'resisted':
         return 'defended';
+      case 'triggered':
+        return 'detected';
       case 'not_attempted':
       case 'unassessed':
-        return 'detected';
+        return 'neutral';
       case 'error':
         return 'errored';
       default:

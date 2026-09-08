@@ -821,9 +821,10 @@
     "outcome": {
       "bypassed": "Exploit Successful",
       "error": "Error",
-      "not_attempted": "Unassessed",
-      "unassessed": "Unassessed",
-      "resisted": "Defenses Resisted"
+      "not_attempted": "Untriggered",
+      "unassessed": "Untriggered",
+      "resisted": "Defenses Resisted",
+      "triggered": "Triggered"
     },
     "overallResilience": "Overall resilience",
     "protectionDetected": "This protection was detected in the target during the run.",

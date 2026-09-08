@@ -30,6 +30,10 @@ export default class OffsecFindingModel extends Model {
   @attr('boolean')
   declare detected: boolean;
 
+  /** True when the check fired at runtime (it has a detection backtrace), not just detected. */
+  @attr('boolean')
+  declare triggered: boolean;
+
   @attr('string')
   declare outcome: string;
 
@@ -70,6 +74,24 @@ export default class OffsecFindingModel extends Model {
 
   get isResisted(): boolean {
     return this.outcome === 'resisted';
+  }
+
+  get isNotBypassedOrResisted(): boolean {
+    return !this.isExploited && !this.isResisted;
+  }
+
+  /** The check fired at runtime but no bypass was completed — active, observed, not defeated. */
+  get isTriggered(): boolean {
+    return this.triggered && this.isNotBypassedOrResisted;
+  }
+
+  /** Detected in the app, but the check never fired during the run — present, not triggered. */
+  get isUntriggered(): boolean {
+    return (
+      !this.triggered &&
+      this.isNotBypassedOrResisted &&
+      (this.outcome === 'not_attempted' || this.outcome === 'unassessed')
+    );
   }
 
   get wasAttempted(): boolean {

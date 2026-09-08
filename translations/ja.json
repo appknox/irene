@@ -821,9 +821,10 @@
     "outcome": {
       "bypassed": "悪用に成功",
       "error": "エラー",
-      "not_attempted": "未評価",
-      "unassessed": "未評価",
-      "resisted": "防御された防御機能"
+      "not_attempted": "未発動",
+      "unassessed": "未発動",
+      "resisted": "防御された防御機能",
+      "triggered": "発動"
     },
     "overallResilience": "総合耐性",
     "protectionDetected": "この保護機構は実行中にターゲットで検出されました。",
