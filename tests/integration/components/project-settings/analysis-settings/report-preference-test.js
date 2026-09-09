@@ -39,11 +39,37 @@ module(
 
       const apiScanCheckbox = `[data-test-projectSetting-analysisSettings-reportPreference="${t('apiScan')}"]`;
 
+      const needsReviewCheckbox = `[data-test-projectSetting-analysisSettings-reportPreference="${t('knoxIq.needsReviewAnalyses')}"]`;
+
       this.setProperties({
         dynamicScanCheckbox,
         manualScanCheckbox,
         apiScanCheckbox,
+        needsReviewCheckbox,
       });
+
+      // The Needs Review option only applies where KnoxIQ is switched on, so
+      // the org has to be loaded before it can render.
+      this.enableKnoxiq = async (knoxiq = true) => {
+        this.server.createList('organization', 1);
+
+        const orgId = this.server.schema.organizations.all().models[0]?.id;
+
+        this.server.create('organization-me', { id: orgId });
+
+        this.server.get('/organizations/:id/me', (schema, req) =>
+          schema.organizationMes.find(`${req.params.id}`)?.toJSON()
+        );
+
+        const organization = this.owner.lookup('service:organization');
+
+        await organization.load();
+
+        organization.selected?.set('aiFeatures', {
+          ...(organization.selected?.aiFeatures ?? {}),
+          knoxiq,
+        });
+      };
     });
 
     test('it renders', async function (assert) {
@@ -271,6 +297,95 @@ module(
       await click(this.apiScanCheckbox);
 
       assert.dom(this.apiScanCheckbox).isChecked();
+    });
+
+    // ─── Needs Review analyses ───────────────────────────────────────────────
+    test('needs review analyses preference is hidden when KnoxIQ is off for the org', async function (assert) {
+      await this.enableKnoxiq(false);
+
+      this.server.create('profile');
+
+      await render(
+        hbs`<ProjectSettings::AnalysisSettings::ReportPreference @project={{this.project}} />`
+      );
+
+      assert.dom(this.dynamicScanCheckbox).exists('the other options remain');
+      assert.dom(this.needsReviewCheckbox).doesNotExist();
+    });
+
+    test.each(
+      'needs review analyses preference reflects show_needs_review_analyses',
+      [[true], [false]],
+      async function (assert, [showNeedsReviewAnalyses]) {
+        await this.enableKnoxiq();
+
+        this.profile = this.server.create('profile', {
+          report_preference: {
+            show_needs_review_analyses: showNeedsReviewAnalyses,
+          },
+        });
+
+        await render(
+          hbs`<ProjectSettings::AnalysisSettings::ReportPreference @project={{this.project}} />`
+        );
+
+        if (showNeedsReviewAnalyses) {
+          assert.dom(this.needsReviewCheckbox).isChecked();
+        } else {
+          assert.dom(this.needsReviewCheckbox).isNotChecked();
+        }
+      }
+    );
+
+    test('it toggles needs review analyses preference, leaving the rest untouched', async function (assert) {
+      await this.enableKnoxiq();
+
+      this.profile = this.server.create('profile', {
+        report_preference: {
+          show_dynamic_scan: true,
+          show_api_scan: false,
+          show_manual_scan: true,
+          show_needs_review_analyses: false,
+        },
+      });
+
+      this.server.put('profiles/:id/report_preference', (schema, request) => {
+        const profile = schema['profiles'].find(request.params.id);
+
+        this.putBody = JSON.parse(request.requestBody);
+
+        profile.report_preference = {
+          ...profile.report_preference,
+          ...this.putBody,
+        };
+
+        profile.save();
+
+        return profile.report_preference;
+      });
+
+      await render(
+        hbs`<ProjectSettings::AnalysisSettings::ReportPreference @project={{this.project}} />`
+      );
+
+      await click(this.needsReviewCheckbox);
+
+      assert.dom(this.needsReviewCheckbox).isChecked();
+
+      assert.deepEqual(
+        this.putBody,
+        {
+          show_dynamic_scan: true,
+          show_api_scan: false,
+          show_manual_scan: true,
+          show_needs_review_analyses: true,
+        },
+        'the endpoint receives the whole preference set, not just the toggle'
+      );
+
+      await click(this.needsReviewCheckbox);
+
+      assert.dom(this.needsReviewCheckbox).isNotChecked();
     });
 
     test('it hides manual scan preference when manual scan is disabled', async function (assert) {
