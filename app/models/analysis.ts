@@ -265,6 +265,16 @@ export default class AnalysisModel extends Model {
     );
   }
 
+  /**
+   * KnoxIQ marked every finding under this analysis as a false positive and
+   * no one has acted on it yet by overriding the risk as Passed. Mirrors the
+   * getter of the same name on AnalysisOverviewModel, so the details page and
+   * the table agree on which analyses still need review.
+   */
+  get needsKnoxiqReview() {
+    return Boolean(this.isKnoxiqAllFp) && !this.isOverriddenAsPassed;
+  }
+
   get riskIconClass() {
     return this.iconClass(this.risk);
   }

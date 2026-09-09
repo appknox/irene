@@ -12,6 +12,7 @@ export interface ProfileReportPreference {
   show_dynamic_scan: boolean;
   show_api_scan: boolean;
   show_manual_scan: boolean;
+  show_needs_review_analyses: boolean;
   show_pcidss: ValueObject;
   show_hipaa: ValueObject;
   show_gdpr: ValueObject;
@@ -23,7 +24,10 @@ export interface ProfileReportPreference {
 
 export type SaveReportPreferenceData = Pick<
   ProfileReportPreference,
-  'show_api_scan' | 'show_dynamic_scan' | 'show_manual_scan'
+  | 'show_api_scan'
+  | 'show_dynamic_scan'
+  | 'show_manual_scan'
+  | 'show_needs_review_analyses'
 >;
 
 export type SetProfileRegulatorPrefData = { value: boolean };
