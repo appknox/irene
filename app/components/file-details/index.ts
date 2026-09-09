@@ -136,6 +136,19 @@ export default class FileDetailsComponent extends Component<FileDetailsSignature
     );
   }
 
+  /**
+   * KnoxIQ being underway is enough to switch the table over. Rows it has not
+   * scored yet show the untested flames and fill in as verdicts arrive.
+   */
+  get hasAnyKnoxiqScanStarted() {
+    const { PENDING, RUNNING, COMPLETED } = ENUMS.KNOXIQ_SCAN_STATUS;
+
+    return Object.values(this.knoxiqScanStatuses).some(
+      (status) =>
+        status === PENDING || status === RUNNING || status === COMPLETED
+    );
+  }
+
   get sastKnoxiqStatus() {
     return this.knoxiqScanRecord?.sastStatus;
   }
