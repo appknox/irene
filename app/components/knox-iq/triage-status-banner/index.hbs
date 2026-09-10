@@ -1,0 +1,53 @@
+{{! The wrapper always renders so the modifiers survive the change that hides
+the banner — the status reaching COMPLETED. isTriageInProgress is watched
+alongside the status because it also turns on when the analysis's async file
+and vulnerability relationships resolve. }}
+<div
+  {{did-insert this.handleTriageStateChange}}
+  {{did-update this.handleTriageStateChange this.triageStateKey}}
+  data-test-knoxiq-triageStatusBanner-root
+  ...attributes
+>
+  {{#if this.isVisible}}
+    <AkStack
+      @width='full'
+      @justifyContent='space-between'
+      @alignItems='center'
+      @spacing='2'
+      local-class='triage-status-banner'
+      data-test-knoxiq-triageStatusBanner
+    >
+      <AkStack @alignItems='center' @spacing='1.5'>
+        <AkIcon
+          @iconName='warning'
+          local-class='triage-status-banner-icon'
+          data-test-knoxiq-triageStatusBanner-icon
+        />
+
+        <AkTypography data-test-knoxiq-triageStatusBanner-message>
+          {{this.message}}
+        </AkTypography>
+      </AkStack>
+
+      {{#if this.isTriageNotInitiated}}
+        <AkLink
+          @route='authenticated.dashboard.file'
+          @model={{this.fileId}}
+          @color='textPrimary'
+          @fontWeight='medium'
+          @underline='always'
+          @noWrap={{true}}
+          data-test-knoxiq-triageStatusBanner-scanDetailsLink
+        >
+          <:default>
+            {{t 'scanDetails'}}
+          </:default>
+
+          <:rightIcon>
+            <AkIcon @iconName='arrow-outward' @size='small' />
+          </:rightIcon>
+        </AkLink>
+      {{/if}}
+    </AkStack>
+  {{/if}}
+</div>
