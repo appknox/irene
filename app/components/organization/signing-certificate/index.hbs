@@ -1,0 +1,142 @@
+{{#if this.canConfigureCertificates}}
+  <AkStack
+    data-test-orgSigningCert
+    @width='full'
+    @direction='column'
+    @spacing='1.5'
+    ...attributes
+  >
+    {{#if this.isProjectScope}}
+      <AkTypography @variant='h5' data-test-orgSigningCert-sectionTitle>
+        {{t 'cyod.label'}}
+      </AkTypography>
+    {{/if}}
+
+    <Organization::SettingsPanelHeader
+      @description={{if
+        this.isProjectScope
+        (t 'cyod.signingCert.descProject')
+        (t 'cyod.signingCert.desc')
+      }}
+    >
+      <:title>
+        <AkTypography @variant='h6' data-test-orgSigningCert-title>
+          {{t 'cyod.signingCert.title'}}
+        </AkTypography>
+      </:title>
+
+      <:action>
+        <AkButton
+          data-test-orgSigningCert-openBtn
+          @variant='filled'
+          {{on 'click' this.handleOpen}}
+        >
+          {{t 'cyod.signingCert.add'}}
+        </AkButton>
+      </:action>
+    </Organization::SettingsPanelHeader>
+  </AkStack>
+
+  <AkDrawer
+    @open={{this.showDrawer}}
+    @onClose={{this.handleClose}}
+    @anchor='right'
+    as |dr|
+  >
+    <AkStack
+      @direction='column'
+      local-class='cert-drawer'
+      data-test-orgSigningCert-drawer
+    >
+      <AkAppbar @justifyContent='space-between' as |ab|>
+        {{#if this.pendingDelete}}
+          <AkStack @alignItems='center' @spacing='1.5'>
+            <AkIconButton
+              data-test-orgSigningCert-deleteBackBtn
+              class={{ab.classes.defaultIconBtn}}
+              title={{t 'back'}}
+              {{on 'click' this.cancelDelete}}
+            >
+              <AkIcon @iconName='arrow-back' />
+            </AkIconButton>
+
+            <AkTypography
+              data-test-orgSigningCert-drawerTitle
+              @variant='h5'
+              @color='inherit'
+            >
+              {{t 'confirmation'}}
+            </AkTypography>
+          </AkStack>
+        {{else}}
+          <AkTypography
+            data-test-orgSigningCert-drawerTitle
+            @variant='h5'
+            @color='inherit'
+          >
+            {{t 'cyod.signingCert.add'}}
+          </AkTypography>
+        {{/if}}
+
+        <AkIconButton
+          data-test-orgSigningCert-drawerCloseBtn
+          class={{ab.classes.defaultIconBtn}}
+          {{on 'click' dr.closeHandler}}
+        >
+          <AkIcon @iconName='close' />
+        </AkIconButton>
+      </AkAppbar>
+
+      {{#if this.pendingDelete}}
+        <Organization::SigningCertificate::DeleteConfirm
+          @cert={{this.pendingDelete}}
+          @isDeleting={{this.confirmDelete.isRunning}}
+          @onConfirm={{perform this.confirmDelete}}
+          @onCancel={{this.cancelDelete}}
+        />
+      {{else}}
+        <div class='px-4 pt-2 w-full'>
+          <AkTabs data-test-orgSigningCert-tabs as |Akt|>
+            <Akt.tabItem
+              data-test-orgSigningCert-addTab
+              @id='add'
+              @buttonVariant={{true}}
+              @isActive={{this.isAddTab}}
+              @onTabClick={{fn this.handleTabChange 'add'}}
+            >
+              {{t 'cyod.signingCert.add'}}
+            </Akt.tabItem>
+
+            <Akt.tabItem
+              data-test-orgSigningCert-existingTab
+              @id='existing'
+              @buttonVariant={{true}}
+              @isActive={{this.isExistingTab}}
+              @onTabClick={{fn this.handleTabChange 'existing'}}
+            >
+              {{t 'cyod.signingCert.existingTab'}}
+            </Akt.tabItem>
+          </AkTabs>
+        </div>
+
+        {{#if this.isAddTab}}
+          <Organization::SigningCertificate::UploadForm
+            data-test-orgSigningCert-uploadForm
+            @baseUrl={{this.uploadUrl}}
+            @onUploaded={{perform this.fetchCertificates}}
+            @onCancel={{this.handleClose}}
+          />
+        {{else}}
+          <Organization::SigningCertificate::CertList
+            @certs={{this.existingCerts}}
+            @isLoading={{this.fetchCertificates.isRunning}}
+            @isActivating={{this.activateCert.isRunning}}
+            @isProjectScope={{this.isProjectScope}}
+            @onActivate={{perform this.activateCert}}
+            @onDelete={{this.requestDelete}}
+          />
+        {{/if}}
+      {{/if}}
+    </AkStack>
+  </AkDrawer>
+{{/if}}

@@ -3,6 +3,7 @@ import { service } from '@ember/service';
 import type Store from 'ember-data/store';
 
 import { ScrollToTop } from 'irene/utils/scroll-to-top';
+import { resolveFileProject } from 'irene/utils/resolve-file-project';
 import type OrganizationService from 'irene/services/organization';
 import type RouterService from '@ember/routing/router-service';
 
@@ -30,10 +31,11 @@ export default class AuthenticatedFileDastRoute extends ScrollToTop(Route) {
 
   async model() {
     const file = await this.store.findRecord('file', this.fileId);
+    const project = await resolveFileProject(file, this.store);
 
     return {
       file,
-      profileId: (await file.project)?.activeProfileId,
+      profileId: project?.activeProfileId ?? null,
     };
   }
 }

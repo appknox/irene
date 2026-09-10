@@ -1,6 +1,6 @@
 import { module, test } from 'qunit';
 import { setupApplicationTest } from 'ember-qunit';
-import { visit } from '@ember/test-helpers';
+import { find, visit } from '@ember/test-helpers';
 import { setupMirage } from 'ember-cli-mirage/test-support';
 import { t } from 'ember-intl/test-support';
 import Service from '@ember/service';
@@ -40,6 +40,30 @@ class NotificationsStub extends Service {
   }
 
   setDefaultAutoClear() {}
+}
+
+// ─── Selectors ───────────────────────────────────────────────────────────────
+const selectors = {
+  deviceRegistration: '[data-test-orgDeviceRegistration]',
+  deviceRegistrationToggle: '[data-test-orgDeviceRegistration-toggle] input',
+  signingCert: '[data-test-orgSigningCert]',
+  signingCertOpenBtn: '[data-test-orgSigningCert-openBtn]',
+  goToCyodSettings: '[data-test-orgDeviceRegistration-goToCyodSettings]',
+  divider: '[data-test-ak-divider]',
+};
+
+/**
+ * The CYOD fields a given organization-factory trait sets, without the rest of
+ * the built record — the suite's organization already exists, so only these
+ * attributes should change.
+ */
+function cyodAttrs(context, trait) {
+  const { features, cyod_registration_enabled } = context.server.build(
+    'organization',
+    trait
+  );
+
+  return { features, cyod_registration_enabled };
 }
 
 module('Acceptance | Organization settings', function (hooks) {
@@ -122,5 +146,100 @@ module('Acceptance | Organization settings', function (hooks) {
     assert
       .dom('[data-test-enable-mandatory-mfa-requirement]')
       .includesText(t('enableMandatoryMFARequirement'));
+  });
+
+  test('it shows the CYOD device registration only when the org has the cyod feature', async function (assert) {
+    this.organizationMe.update({ is_owner: true });
+    this.organization.update(cyodAttrs(this, 'withCyodEnabled'));
+
+    await visit('dashboard/organization/settings');
+
+    assert.dom(selectors.deviceRegistration).exists();
+    assert.dom(selectors.signingCert).exists();
+
+    // The two are separate settings sections, so a rule has to sit between the
+    // devices table and the certificate panel.
+    const registration = find(selectors.deviceRegistration);
+    const certificate = find(selectors.signingCert);
+
+    const between = [...document.querySelectorAll(selectors.divider)]
+      .filter(
+        (hr) =>
+          registration.compareDocumentPosition(hr) &
+          Node.DOCUMENT_POSITION_FOLLOWING
+      )
+      .filter(
+        (hr) =>
+          certificate.compareDocumentPosition(hr) &
+          Node.DOCUMENT_POSITION_PRECEDING
+      );
+
+    assert.strictEqual(
+      between.length,
+      1,
+      'exactly one divider separates the devices table from Add Certificate'
+    );
+  });
+
+  test('a non-owner sees no CYOD settings at all', async function (assert) {
+    this.organizationMe.update({ is_owner: false, is_admin: true });
+    this.organization.update(cyodAttrs(this, 'withCyodEnabled'));
+
+    await visit('dashboard/organization/settings');
+
+    assert
+      .dom(selectors.deviceRegistration)
+      .doesNotExist("the registration switch is the owner's to flip");
+
+    assert.dom(selectors.signingCert).doesNotExist();
+  });
+
+  test('the owner can reach the certificate drawer from settings', async function (assert) {
+    this.organizationMe.update({ is_owner: true });
+    this.organization.update(cyodAttrs(this, 'withCyodEnabled'));
+
+    await visit('dashboard/organization/settings');
+
+    assert
+      .dom(selectors.signingCertOpenBtn)
+      .hasText(t('cyod.signingCert.add'))
+      .isNotDisabled();
+
+    assert.dom(selectors.deviceRegistrationToggle).isChecked();
+
+    assert
+      .dom(selectors.goToCyodSettings)
+      .hasAttribute(
+        'href',
+        /\/settings\/cyod-settings$/,
+        'the empty state links to where a member registers a device'
+      );
+  });
+
+  test('turning CYOD registration off collapses the certificate section', async function (assert) {
+    this.organizationMe.update({ is_owner: true });
+    this.organization.update(cyodAttrs(this, 'withCyodRegistrationDisabled'));
+
+    await visit('dashboard/organization/settings');
+
+    assert
+      .dom(selectors.deviceRegistration)
+      .exists('the switch itself stays reachable so it can be turned back on');
+
+    assert
+      .dom(selectors.signingCert)
+      .doesNotExist('certificates are part of the CYOD setup');
+  });
+
+  test('it hides the CYOD device registration when the org lacks the cyod feature', async function (assert) {
+    this.organizationMe.update({ is_owner: true });
+    this.organization.update({
+      features: { ...this.organization.features, cyod: false },
+    });
+
+    await visit('dashboard/organization/settings');
+
+    assert.dom(selectors.deviceRegistration).doesNotExist();
+    assert.dom(selectors.signingCert).doesNotExist();
   });
 });

@@ -97,8 +97,72 @@ function routes() {
     return schema.projects.all().models;
   });
 
-  this.put('/organizations/:id', () => {
-    return {};
+  this.get('/organizations/:id/registered-devices', (schema) => {
+    const results = schema.organizationCyodRegisteredDevices
+      .all()
+      .models.map((d) => d.toJSON());
+
+    return { count: results.length, next: null, previous: null, results };
+  });
+
+  this.get('/organizations/:id/signing-certificates/', (schema) =>
+    schema.signingCertificates.all().models.map((c) => c.toJSON())
+  );
+
+  this.post('/organizations/:id/signing-certificates/', (schema) =>
+    schema.signingCertificates.create({}).toJSON()
+  );
+
+  this.del(
+    '/organizations/:id/signing-certificates/:certId/',
+    (schema, req) => {
+      schema.signingCertificates.find(req.params.certId)?.destroy();
+
+      return new Response(204);
+    }
+  );
+
+  this.post(
+    '/organizations/:id/signing-certificates/:certId/activate/',
+    (schema, req) => {
+      schema.signingCertificates.all().models.forEach((c) => {
+        c.update({ is_active: c.id === req.params.certId });
+      });
+
+      return schema.signingCertificates.find(req.params.certId).toJSON();
+    }
+  );
+
+  this.get(
+    '/organizations/:id/projects/:projectId/signing-certificate/',
+    (schema) => {
+      const cert = schema.signingCertificates.first();
+
+      return cert
+        ? cert.toJSON()
+        : new Response(404, {}, { detail: 'Not found.' });
+    }
+  );
+
+  this.del(
+    '/organizations/:id/projects/:projectId/signing-certificate/',
+    (schema) => {
+      schema.signingCertificates.first()?.destroy();
+
+      return new Response(204);
+    }
+  );
+
+  this.put('/organizations/:id', (schema, req) => {
+    const organization = schema.organizations.find(req.params.id);
+
+    if (!organization) {
+      return {};
+    }
+
+    organization.update(JSON.parse(req.requestBody));
+
+    return organization.toJSON();
   });
 
   this.get('/organizations/:id/preference', () => {
