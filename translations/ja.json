@@ -995,7 +995,6 @@
     "knoxIQPreferenceDesc": "Choose your preference how KnoxIQ should work for this project?",
     "nameOfVulnerability": "Name of Vulnerability",
     "needsReview": "Needs Review",
-    "orgSettingsDesc": "Enable automatic execution of KnoxIQ for all CI/CD uploads",
     "originalAnalysis": "Original Analysis",
     "reasoning": "reasoning",
     "remediation": "Remediation",
