@@ -69,6 +69,16 @@ export default class StoreknoxWrapperComponent extends Component<StoreknoxWrappe
             },
           ]
         : []),
+      ...(this.skOrganization.selected?.skFeatures.third_party_scanning
+        ? [
+            {
+              label: this.intl.t('storeknox.thirdPartyScansTitle'),
+              icon: 'security',
+              route: 'authenticated.storeknox.third-party-scans',
+              currentWhen: 'authenticated.storeknox.third-party-scans',
+            },
+          ]
+        : []),
     ] as MenuItem[];
   }
 

@@ -3,6 +3,7 @@ import Component from '@glimmer/component';
 export interface StoreknoxCommonTableColumnsData {
   devName?: string;
   devEmail?: string;
+  hideDevEmail?: boolean;
   appUrl: string;
   isAndroid?: boolean;
   isIos?: boolean;
@@ -12,8 +13,8 @@ export interface StoreknoxCommonTableColumnsData {
   companyName: string;
   mailId?: string;
   title: string;
-  reason: string;
-  svg: string;
+  reason?: string;
+  svg?: string;
   docUlid: string;
 }
 

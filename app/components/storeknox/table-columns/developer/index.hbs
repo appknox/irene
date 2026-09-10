@@ -16,19 +16,21 @@
       {{@data.devName}}
     </AkTypography>
 
-    {{#if @data.devEmail}}
-      <AkTypography
-        @color='neutral'
-        @noWrap={{true}}
-        title={{@data.devEmail}}
-        data-test-storeknoxTableColumns-applicationDevEmail
-      >
-        {{@data.devEmail}}
-      </AkTypography>
-    {{else}}
-      <AkTypography @color='neutral' @noWrap={{true}} class='pr-4'>
-        {{t 'noDataAvailable'}}
-      </AkTypography>
-    {{/if}}
+    {{#unless @data.hideDevEmail}}
+      {{#if @data.devEmail}}
+        <AkTypography
+          @color='neutral'
+          @noWrap={{true}}
+          title={{@data.devEmail}}
+          data-test-storeknoxTableColumns-applicationDevEmail
+        >
+          {{@data.devEmail}}
+        </AkTypography>
+      {{else}}
+        <AkTypography @color='neutral' @noWrap={{true}} class='pr-4'>
+          {{t 'noDataAvailable'}}
+        </AkTypography>
+      {{/if}}
+    {{/unless}}
   </AkStack>
 {{/if}}
