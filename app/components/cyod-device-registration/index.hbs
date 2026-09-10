@@ -1,68 +1,73 @@
 <AkStack data-test-cyodRegistration @direction='column' @spacing='2'>
   {{#if this.isCyodEnabled}}
-    {{#if this.isAndroid}}
+    {{#if this.isDeviceDetected}}
+      <AkStack
+        data-test-cyodRegistration-detected
+        @spacing='1'
+        @alignItems='center'
+      >
+        <AkIcon @iconName='check-circle' @color='success' />
+
+        <AkTypography @variant='subtitle2'>
+          {{t 'cyod.deviceDetected'}}
+          <strong>{{this.detectedModel}}</strong>
+          {{t 'cyod.deviceDetectedOs'}}
+          {{this.platformLabel}}
+          {{this.detectedOsVersion}}
+        </AkTypography>
+      </AkStack>
+    {{else if this.isAndroid}}
       {{#if this.isWebUsbSupported}}
-        {{#if this.isDeviceDetected}}
-          <AkStack @spacing='1' @alignItems='center'>
-            <AkIcon @iconName='check-circle' @color='success' />
+        <AkTypography @color='textSecondary'>
+          {{t 'cyod.connectUsb'}}
+        </AkTypography>
 
-            <AkTypography @variant='subtitle2'>
-              {{t 'cyod.deviceDetected'}}
-              <strong>{{this.detectedModel}}</strong>
-              {{t 'cyod.deviceDetectedOs'}}:
-              {{this.platformLabel}}
-              {{this.detectedOsVersion}}
-            </AkTypography>
-          </AkStack>
-        {{else}}
-          <AkTypography @color='textSecondary'>
-            {{t 'cyod.connectUsb'}}
-          </AkTypography>
-
-          <AkButton
-            data-test-cyodRegistration-registerAndroidBtn
-            @variant='outlined'
-            @loading={{this.registerAndroidDevice.isRunning}}
-            {{on 'click' this.handleRegisterClick}}
-          >
-            {{t 'cyod.registerAndroid'}}
-          </AkButton>
-        {{/if}}
+        <AkButton
+          data-test-cyodRegistration-registerAndroidBtn
+          @variant='outlined'
+          @loading={{this.registerAndroidDevice.isRunning}}
+          {{on 'click' this.handleRegisterClick}}
+        >
+          {{t 'cyod.registerAndroid'}}
+        </AkButton>
       {{else}}
-        <AkStack @spacing='1' @alignItems='center'>
+        <AkStack
+          data-test-cyodRegistration-usbNotSupported
+          @spacing='1'
+          @alignItems='center'
+        >
           <AkIcon @iconName='warning' @color='warn' />
+
           <AkTypography @color='textSecondary'>
             {{t 'cyod.usbNotSupported'}}
           </AkTypography>
         </AkStack>
       {{/if}}
     {{else if this.isIos}}
-      {{#if this.isDeviceDetected}}
-        <AkStack @spacing='1' @alignItems='center'>
-          <AkIcon @iconName='check-circle' @color='success' />
+      <AkTypography @color='textSecondary'>
+        {{t 'cyod.connectUsb'}}
+      </AkTypography>
 
-          <AkTypography @variant='subtitle2'>
-            {{t 'cyod.deviceDetected'}}
-            <strong>{{this.detectedModel}}</strong>
-            {{t 'cyod.deviceDetectedOs'}}:
-            {{this.platformLabel}}
-            {{this.detectedOsVersion}}
-          </AkTypography>
-        </AkStack>
-      {{else}}
+      <AkButton
+        data-test-cyodRegistration-registerIosBtn
+        @variant='outlined'
+        @loading={{this.registerIosDevice.isRunning}}
+        {{on 'click' this.handleRegisterClick}}
+      >
+        {{t 'cyod.registerIos'}}
+      </AkButton>
+    {{else}}
+      <AkStack
+        data-test-cyodRegistration-unsupportedPlatform
+        @spacing='1'
+        @alignItems='center'
+      >
+        <AkIcon @iconName='warning' @color='warn' />
+
         <AkTypography @color='textSecondary'>
-          {{t 'cyod.connectUsb'}}
+          {{t 'cyod.unsupportedPlatform'}}
         </AkTypography>
-
-        <AkButton
-          data-test-cyodRegistration-registerIosBtn
-          @variant='outlined'
-          @loading={{this.registerIosDevice.isRunning}}
-          {{on 'click' this.handleRegisterClick}}
-        >
-          {{t 'cyod.registerIos'}}
-        </AkButton>
-      {{/if}}
+      </AkStack>
     {{/if}}
   {{else}}
     <AkStack
@@ -71,6 +76,7 @@
       @alignItems='center'
     >
       <AkIcon @iconName='info' @color='textSecondary' />
+
       <AkTypography @color='textSecondary'>
         {{t 'cyod.notEnabled'}}
       </AkTypography>

@@ -1,4 +1,12 @@
-<div data-test-cyodViewer-root local-class='cyod-viewer-root' ...attributes>
+<AkStack
+  data-test-cyodViewer-root
+  local-class='cyod-viewer-root'
+  @width='full'
+  @direction='column'
+  @alignItems='center'
+  @justifyContent='center'
+  ...attributes
+>
   {{! The canvas stays mounted in every state. Swapping it out tears down the
       modifier, which closes a socket that may still be connecting -- and then
       nothing is left to reconnect with. Status is drawn over it instead. }}
@@ -17,7 +25,7 @@
       <AkButton
         data-test-cyodViewer-retryBtn
         @variant='outlined'
-        {{on 'click' this.retry}}
+        {{on 'click' this.retryConnection}}
       >
         {{t 'cyod.viewer.retry'}}
       </AkButton>
@@ -50,4 +58,4 @@
     {{on 'pointercancel' this.handlePointerCancel}}
     {{on 'pointerleave' this.handlePointerCancel}}
   />
-</div>
+</AkStack>

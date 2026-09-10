@@ -1,4 +1,4 @@
-{{#if this.visible}}
+{{#if this.showCYODSettings}}
   <AkStack
     class='p-3'
     @direction='column'
@@ -31,13 +31,15 @@
             </AkTypography>
           </AkStack>
 
-          <AkButton
-            data-test-cyodSettings-registerBtn
-            @variant='filled'
-            {{on 'click' this.handleOpen}}
-          >
-            {{t 'cyod.settings.registerADevice'}}
-          </AkButton>
+          <AkStack @justifyContent='flex-end' {{style minWidth='150px'}}>
+            <AkButton
+              data-test-cyodSettings-registerBtn
+              @variant='filled'
+              {{on 'click' this.handleOpen}}
+            >
+              {{t 'cyod.settings.registerADevice'}}
+            </AkButton>
+          </AkStack>
         </AkStack>
 
         <AkDivider @color='dark' />
@@ -133,109 +135,88 @@
           </AkTypography>
         </AkStack>
 
-        <AkStack @width='full' @spacing='2' @alignItems='flex-start'>
-          <div local-class='step-num' aria-hidden='true'>1</div>
+        <AccountSettings::CyodSettings::Step
+          @number='1'
+          @title={{t 'cyod.settings.stepCertificate'}}
+        >
+          <AkTypography
+            data-test-cyodSettings-stepCertificateNote
+            @variant='body1'
+            @color='textSecondary'
+          >
+            {{t 'cyod.settings.stepCertificateNote' htmlSafe=true}}
+          </AkTypography>
+        </AccountSettings::CyodSettings::Step>
 
-          <AkStack @direction='column' @spacing='1.5'>
-            <AkTypography @variant='body1' @fontWeight='medium'>
-              {{t 'cyod.settings.stepCertificate'}}
-            </AkTypography>
+        <AccountSettings::CyodSettings::Step
+          @number='2'
+          @title={{t 'cyod.settings.stepDownload'}}
+        >
+          <AkButton
+            data-test-cyodSettings-downloadBtn
+            @tag='a'
+            href={{this.mercerDownloadUrl}}
+            target='_blank'
+            rel='noopener noreferrer'
+            @variant='filled'
+          >
+            <AkIcon @iconName='download' @size='small' />
 
-            <AkTypography @variant='body1' @color='textSecondary'>
-              <strong data-test-cyodSettings-noteLabel>{{t
-                  'cyod.settings.noteLabel'
-                }}</strong>
-              {{t 'cyod.settings.stepCertificateNote'}}
-            </AkTypography>
-          </AkStack>
-        </AkStack>
+            <span class='ml-1'>{{t 'cyod.settings.downloadMercer'}}</span>
+          </AkButton>
 
-        <AkStack @width='full' @spacing='2' @alignItems='flex-start'>
-          <div local-class='step-num' aria-hidden='true'>2</div>
+          <AkTypography
+            data-test-cyodSettings-stepDownloadNote
+            @variant='body1'
+            @color='textSecondary'
+          >
+            {{t 'cyod.settings.stepDownloadNote' htmlSafe=true}}
+          </AkTypography>
+        </AccountSettings::CyodSettings::Step>
 
-          <AkStack @direction='column' @spacing='1.5'>
-            <AkStack @direction='column' @spacing='2' @alignItems='flex-start'>
-              <AkTypography @variant='body1' @fontWeight='medium'>
-                {{t 'cyod.settings.stepDownload'}}
-              </AkTypography>
-
-              <AkButton
-                data-test-cyodSettings-downloadBtn
-                @tag='a'
-                href={{this.mercerDownloadUrl}}
-                target='_blank'
-                rel='noopener noreferrer'
-                @variant='filled'
-              >
-                <AkIcon @iconName='download' @size='small' />
-
-                <span class='ml-1'>{{t 'cyod.settings.downloadMercer'}}</span>
-              </AkButton>
-            </AkStack>
-
-            <AkTypography @variant='body1' @color='textSecondary'>
-              <strong data-test-cyodSettings-noteLabel>{{t
-                  'cyod.settings.noteLabel'
-                }}</strong>
-              {{t 'cyod.settings.stepDownloadNote'}}
-            </AkTypography>
-          </AkStack>
-        </AkStack>
-
-        <AkStack @width='full' @spacing='2' @alignItems='flex-start'>
-          <div local-class='step-num' aria-hidden='true'>3</div>
-
-          <AkStack @direction='column' @spacing='1.5' @width='full'>
-            <AkTypography @variant='body1' @fontWeight='medium'>
-              {{t 'cyod.settings.stepSignIn'}}
-            </AkTypography>
-
-            <AkStack
-              local-class='url-field'
-              @spacing='1'
-              @alignItems='center'
-              @justifyContent='space-between'
+        <AccountSettings::CyodSettings::Step
+          @number='3'
+          @title={{t 'cyod.settings.stepSignIn'}}
+        >
+          <AkStack
+            local-class='url-field'
+            @spacing='1'
+            @alignItems='center'
+            @justifyContent='space-between'
+          >
+            <AkTypography
+              data-test-cyodSettings-serverUrl
+              local-class='url-value'
             >
-              <AkTypography
-                data-test-cyodSettings-serverUrl
-                local-class='url-value'
-              >
-                {{this.serverUrl}}
-              </AkTypography>
-
-              <AkClipboard @onSuccess={{this.handleCopySuccess}} as |ac|>
-                <AkIconButton
-                  data-test-cyodSettings-copyBtn
-                  data-clipboard-text={{this.serverUrl}}
-                  id={{ac.triggerId}}
-                  @size='small'
-                >
-                  <AkIcon @iconName='content-copy' @color='primary' />
-                </AkIconButton>
-              </AkClipboard>
-            </AkStack>
-
-            <AkTypography local-class='token-hint' @color='textSecondary'>
-              {{t 'cyod.settings.stepSignInNote'}}
+              {{this.serverUrl}}
             </AkTypography>
+
+            <AkClipboard @onSuccess={{this.handleCopySuccess}} as |ac|>
+              <AkIconButton
+                data-test-cyodSettings-copyBtn
+                data-clipboard-text={{this.serverUrl}}
+                id={{ac.triggerId}}
+                @size='small'
+              >
+                <AkIcon @iconName='content-copy' @color='primary' />
+              </AkIconButton>
+            </AkClipboard>
           </AkStack>
-        </AkStack>
 
-        <AkStack @width='full' @spacing='2' @alignItems='flex-start'>
-          <div local-class='step-num' aria-hidden='true'>4</div>
-
-          <AkTypography @variant='body1' @fontWeight='medium'>
-            {{t 'cyod.settings.stepRegister'}}
+          <AkTypography local-class='token-hint' @color='textSecondary'>
+            {{t 'cyod.settings.stepSignInNote'}}
           </AkTypography>
-        </AkStack>
+        </AccountSettings::CyodSettings::Step>
 
-        <AkStack @width='full' @spacing='2' @alignItems='flex-start'>
-          <div local-class='step-num' aria-hidden='true'>5</div>
+        <AccountSettings::CyodSettings::Step
+          @number='4'
+          @title={{t 'cyod.settings.stepRegister'}}
+        />
 
-          <AkTypography @variant='body1' @fontWeight='medium'>
-            {{t 'cyod.settings.stepRun'}}
-          </AkTypography>
-        </AkStack>
+        <AccountSettings::CyodSettings::Step
+          @number='5'
+          @title={{t 'cyod.settings.stepRun'}}
+        />
       </AkStack>
     </div>
   </AkDrawer>

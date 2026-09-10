@@ -1,0 +1,202 @@
+<AkStack
+  @width='full'
+  @direction='column'
+  @spacing='2'
+  @alignItems='stretch'
+  local-class='drawer-body'
+  class='py-2 px-4'
+  data-test-orgSigningCert-certList
+  ...attributes
+>
+  {{#if @isLoading}}
+    <Organization::SigningCertificate::CertList::SkeletonLoader />
+
+  {{else if this.hasCerts}}
+    {{#each @certs as |row|}}
+      <div local-class='cert-card' data-test-orgSigningCert-info>
+        <AkStack
+          @alignItems='flex-start'
+          @justifyContent='space-between'
+          @spacing='2'
+        >
+          <AkStack @direction='column' @spacing='1'>
+            <AkStack @spacing='1' @alignItems='center'>
+              <AkTypography
+                @variant='body1'
+                @fontWeight='bold'
+                data-test-orgSigningCert-cardName
+              >
+                {{if
+                  row.cert.name
+                  row.cert.name
+                  (t 'cyod.signingCert.unnamed')
+                }}
+              </AkTypography>
+
+              {{#if row.showsActiveBadge}}
+                <AkChip
+                  data-test-orgSigningCert-activeBadge
+                  @variant='filled'
+                  @size='small'
+                  @color='success'
+                  @label={{t 'activeCapital'}}
+                />
+              {{/if}}
+
+              <AkChip
+                data-test-orgSigningCert-status
+                @variant='semi-filled'
+                @size='small'
+                @color={{row.cert.statusColor}}
+                @label={{if
+                  row.cert.isExpired
+                  (t 'expired')
+                  (t 'cyod.signingCert.statusValid')
+                }}
+              />
+            </AkStack>
+
+            <div local-class='cert-meta'>
+              <AkTypography
+                local-class='cert-meta-label'
+                @color='textSecondary'
+                data-test-orgSigningCert-metaLabel
+              >
+                {{t 'team'}}:
+              </AkTypography>
+
+              <AkTypography
+                @fontWeight='medium'
+                local-class='cert-meta-value'
+                data-test-orgSigningCert-metaValue
+              >
+                {{row.cert.teamId}}
+              </AkTypography>
+
+              {{#if row.cert.appId}}
+                <AkTypography
+                  local-class='cert-meta-label'
+                  @color='textSecondary'
+                  data-test-orgSigningCert-metaLabel
+                >
+                  {{t 'cyod.signingCert.appId'}}:
+                </AkTypography>
+
+                <AkTypography
+                  local-class='cert-meta-value'
+                  data-test-orgSigningCert-metaValue
+                >
+                  {{row.cert.appId}}
+                </AkTypography>
+              {{/if}}
+
+              <AkTypography
+                local-class='cert-meta-label'
+                @color='textSecondary'
+                data-test-orgSigningCert-metaLabel
+              >
+                {{t 'expires'}}:
+              </AkTypography>
+
+              <AkTypography
+                local-class='cert-meta-value'
+                data-test-orgSigningCert-metaValue
+                @color={{if row.cert.isExpired 'error' 'textPrimary'}}
+              >
+                {{row.cert.expiresOn}}
+              </AkTypography>
+            </div>
+          </AkStack>
+
+          <AkStack @spacing='1' @alignItems='center'>
+            {{#if row.showsActivate}}
+              <AkButton
+                data-test-orgSigningCert-activateBtn
+                @variant='outlined'
+                @color='primary'
+                @loading={{and @isActivating row.isBusy}}
+                @disabled={{and @isActivating row.isBusy}}
+                {{on 'click' (fn @onActivate row.cert)}}
+              >
+                {{t 'cyod.signingCert.makeActive'}}
+              </AkButton>
+            {{/if}}
+
+            {{#if @isProjectScope}}
+              <AkTooltip
+                data-test-orgSigningCert-deleteTooltip
+                @placement='top'
+                @arrow={{true}}
+                @title={{t 'delete'}}
+              >
+                <AkIconButton
+                  data-test-orgSigningCert-deleteBtn
+                  @size='small'
+                  {{on 'click' (fn @onDelete row.cert)}}
+                >
+                  <AkIcon @iconName='delete' @color='textPrimary' />
+                </AkIconButton>
+              </AkTooltip>
+            {{else}}
+              <AkTooltip
+                data-test-orgSigningCert-deleteTooltip
+                @placement='top'
+                @arrow={{true}}
+                @title={{if
+                  row.deleteDisabled
+                  (t 'cyod.signingCert.deleteActiveHint')
+                  (t 'delete')
+                }}
+              >
+                <AkIconButton
+                  data-test-orgSigningCert-deleteBtn
+                  @size='small'
+                  disabled={{row.deleteDisabled}}
+                  {{on 'click' (fn @onDelete row.cert)}}
+                >
+                  <AkIcon @iconName='delete' @color='textPrimary' />
+                </AkIconButton>
+              </AkTooltip>
+            {{/if}}
+          </AkStack>
+        </AkStack>
+      </div>
+    {{/each}}
+  {{else}}
+    <div local-class='empty-state-block' data-test-orgSigningCert-empty>
+      <AkStack
+        @direction='column'
+        @alignItems='center'
+        @justifyContent='center'
+        @spacing='2'
+        class='py-7 px-4'
+      >
+        <AkSvg::ProjectListEmpty
+          width='155px'
+          height='63px'
+          data-test-orgSigningCert-emptySvg
+        />
+
+        <AkStack @direction='column' @alignItems='center' @spacing='0.5'>
+          <AkTypography
+            @variant='body1'
+            @tag='h5'
+            @fontWeight='medium'
+            data-test-orgSigningCert-emptyTitle
+          >
+            {{t 'cyod.signingCert.noneTitle'}}
+          </AkTypography>
+
+          <AkTypography
+            local-class='empty-description'
+            @variant='body2'
+            @align='center'
+            data-test-orgSigningCert-emptyDescription
+          >
+            {{t 'cyod.signingCert.none'}}
+          </AkTypography>
+        </AkStack>
+      </AkStack>
+    </div>
+  {{/if}}
+</AkStack>

@@ -9,24 +9,24 @@ import type DevicefarmService from 'irene/services/devicefarm';
 import type LoggerService from 'irene/services/logger';
 
 const SCRCPY_WS_PATH = '/devicefarm/ws/scrcpy/';
-
 const MAX_RECONNECT_ATTEMPTS = 5;
 const RECONNECT_BASE_DELAY_MS = 1000;
 const RECONNECT_MAX_DELAY_MS = 8000;
 
 export interface CyodViewerSignature {
+  Element: HTMLElement;
   Args: {
-    scanToken: string;
+    scanToken: string | null;
     platform: number;
     authToken: string;
   };
-  Element: HTMLDivElement;
 }
 
 export default class CyodViewerComponent extends Component<CyodViewerSignature> {
   @service declare intl: IntlService;
   @service declare devicefarm: DevicefarmService;
   @service declare logger: LoggerService;
+  @service('browser/window') declare window: Window;
 
   @tracked isConnected = false;
   @tracked errorMessage: string | null = null;
@@ -99,28 +99,26 @@ export default class CyodViewerComponent extends Component<CyodViewerSignature> 
   }
 
   @action
-  retry() {
+  retryConnection() {
     this.reconnectAttempt = 0;
     this.errorMessage = null;
     this.connect();
   }
 
   private sendTouch(action: string, event: PointerEvent) {
-    if (!this.ws || this.ws.readyState !== WebSocket.OPEN || !this.canvas) {
+    if (this.ws?.readyState !== WebSocket.OPEN || !this.canvas) {
       return;
     }
 
     const rect = this.canvas.getBoundingClientRect();
     const x = (event.clientX - rect.left) / rect.width;
     const y = (event.clientY - rect.top) / rect.height;
+
     this.ws.send(JSON.stringify({ type: 'touch', action, x, y }));
   }
 
   private connect() {
-    if (this.ws) {
-      return;
-    }
-    if (!this.args.scanToken) {
+    if (this.ws || !this.args.scanToken) {
       return;
     }
 
@@ -151,6 +149,7 @@ export default class CyodViewerComponent extends Component<CyodViewerSignature> 
       if (!isCurrent()) {
         return;
       }
+
       this.reconnectAttempt = 0;
       this.isConnected = true;
       this.initH264Decoder();
@@ -160,6 +159,7 @@ export default class CyodViewerComponent extends Component<CyodViewerSignature> 
       if (!isCurrent()) {
         return;
       }
+
       this.isConnected = false;
       this.cleanupDecoder();
       this.ws = null;
@@ -172,6 +172,7 @@ export default class CyodViewerComponent extends Component<CyodViewerSignature> 
       if (!isCurrent()) {
         return;
       }
+
       this.isConnected = false;
     };
 
@@ -179,6 +180,7 @@ export default class CyodViewerComponent extends Component<CyodViewerSignature> 
       if (!isCurrent()) {
         return;
       }
+
       if (event.data instanceof ArrayBuffer) {
         this.decodeH264Frame(new Uint8Array(event.data));
       }
@@ -238,7 +240,11 @@ export default class CyodViewerComponent extends Component<CyodViewerSignature> 
   }
 
   private initH264Decoder(codec = 'avc1.42001f') {
-    if (!('VideoDecoder' in window)) {
+    const Decoder = (
+      this.window as unknown as { VideoDecoder?: typeof VideoDecoder }
+    ).VideoDecoder;
+
+    if (!Decoder) {
       this.errorMessage = this.intl.t('cyod.viewer.unsupportedBrowser');
 
       return;
@@ -250,7 +256,7 @@ export default class CyodViewerComponent extends Component<CyodViewerSignature> 
 
     this.hasReceivedKeyFrame = false;
 
-    this.videoDecoder = new VideoDecoder({
+    this.videoDecoder = new Decoder({
       output: (frame: VideoFrame) => {
         if (this.ctx && this.canvas) {
           this.canvas.width = frame.displayWidth;
@@ -269,12 +275,15 @@ export default class CyodViewerComponent extends Component<CyodViewerSignature> 
 
   private hasNalType(bytes: Uint8Array, type: number): boolean {
     for (let i = 0; i < bytes.length - 4; i++) {
+      const byte4 = bytes[i + 4];
+
       if (
         bytes[i] === 0 &&
         bytes[i + 1] === 0 &&
         bytes[i + 2] === 0 &&
         bytes[i + 3] === 1 &&
-        (bytes[i + 4]! & 0x1f) === type
+        byte4 &&
+        (byte4 & 0x1f) === type
       ) {
         return true;
       }
@@ -291,22 +300,25 @@ export default class CyodViewerComponent extends Component<CyodViewerSignature> 
       return;
     }
 
-    const firstNalType = bytes[4]! & 0x1f;
+    const firstNalType = bytes[4] && bytes[4] & 0x1f;
     const isSps = firstNalType === 7;
     const isIdr = firstNalType === 5 || this.hasNalType(bytes, 5);
 
     if (isSps) {
       if (bytes.length > 7) {
-        const profile = bytes[5]!.toString(16).padStart(2, '0');
-        const constraints = bytes[6]!.toString(16).padStart(2, '0');
-        const level = bytes[7]!.toString(16).padStart(2, '0');
+        const profile = bytes[5]?.toString(16).padStart(2, '0');
+        const constraints = bytes[6]?.toString(16).padStart(2, '0');
+        const level = bytes[7]?.toString(16).padStart(2, '0');
         const codec = `avc1.${profile}${constraints}${level}`;
+
         this.initH264Decoder(codec);
         const decoder = this.videoDecoder;
+
         if (!decoder || decoder.state === 'closed') {
           return;
         }
       }
+
       this.spsBuffer = bytes;
 
       if (this.hasNalType(bytes, 5)) {
@@ -321,12 +333,14 @@ export default class CyodViewerComponent extends Component<CyodViewerSignature> 
       // Scrcpy sends config and IDR separately; the decoder needs the parameter
       // sets first, so prepend them.
       let frameData = bytes;
+
       if (this.spsBuffer) {
         const combined = new Uint8Array(this.spsBuffer.length + bytes.length);
         combined.set(this.spsBuffer);
         combined.set(bytes, this.spsBuffer.length);
         frameData = combined;
       }
+
       this.submitVideoChunk(frameData, 'key');
       this.hasReceivedKeyFrame = true;
 
@@ -344,6 +358,7 @@ export default class CyodViewerComponent extends Component<CyodViewerSignature> 
     if (!this.videoDecoder || this.videoDecoder.state === 'closed') {
       return;
     }
+
     try {
       this.videoDecoder.decode(
         new EncodedVideoChunk({

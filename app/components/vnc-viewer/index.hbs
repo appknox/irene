@@ -107,8 +107,7 @@
 
                 <AkButton
                   data-test-vncViewer-webusbInstallBtn
-                  @variant='contained'
-                  @size='small'
+                  @variant='filled'
                   {{on 'click' (perform this.autoInstallViaWebUsb)}}
                 >
                   {{t 'cyod.autoInstall.start'}}
@@ -170,7 +169,7 @@
             @alignItems='center'
             @spacing='1'
           >
-            <AkIcon @iconName='smartphone' @color='inherit' />
+            <AkIcon @iconName='mobile' @color='inherit' />
 
             <AkTypography @color='inherit' @variant='subtitle2'>
               {{t 'cyod.interactOnDevice'}}

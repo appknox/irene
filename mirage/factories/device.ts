@@ -38,11 +38,11 @@ export const DEVICE_FACTORY_DEF = {
 export default Factory.extend({
   ...DEVICE_FACTORY_DEF,
 
-  proxyCyod: trait({
+  withProxyCyod: trait({
     registration_source: ENUMS.DEVICE_REGISTRATION_SOURCE.PROXY,
   }),
 
-  webusbCyod: trait({
+  withWebusbCyod: trait({
     registration_source: ENUMS.DEVICE_REGISTRATION_SOURCE.WEBUSB,
   }),
 });

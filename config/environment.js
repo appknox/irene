@@ -222,9 +222,6 @@ module.exports = function (environment) {
       duration: 7000, // Milliseconds
     },
     deviceFarmPassword: '1234',
-    // Where the "Download Mercer" button (CYOD device registration) points.
-    // Override per deployment via IRENE_MERCER_DOWNLOAD_URL once the installers
-    // are published; defaults to the product page (see ENVHandlerCONST above).
     mercerDownloadUrl: handler.getEnv('IRENE_MERCER_DOWNLOAD_URL'),
     namespace: 'api',
     namespace_v2: 'api/v2',

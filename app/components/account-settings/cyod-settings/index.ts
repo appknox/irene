@@ -1,15 +1,3 @@
-/**
- * Account Settings → CYOD Settings (all user roles).
- *
- * Where an individual member enrols their own CYOD device and sees it once it is
- * connected. Registration happens on the member's own machine via the Mercer
- * desktop app (sign in with a Personal Token → register on the Devices tab →
- * start the proxy on the Run tab); the dashboard only explains the steps and
- * shows the resulting device.
- *
- * The org-wide view and the owner's kill-switch live in Organization Settings
- * (`Organization::DeviceRegistration`).
- */
 import Component from '@glimmer/component';
 import { action } from '@ember/object';
 import { service } from '@ember/service';
@@ -21,21 +9,19 @@ import type MeService from 'irene/services/me';
 import type OrganizationService from 'irene/services/organization';
 
 export interface AccountSettingsCyodSettingsSignature {
-  Element: HTMLDivElement;
+  Element: HTMLElement;
 }
 
 export default class AccountSettingsCyodSettingsComponent extends Component<AccountSettingsCyodSettingsSignature> {
   @service declare intl: IntlService;
   @service declare organization: OrganizationService;
   @service declare me: MeService;
+  @service('browser/window') declare window: Window;
   @service('notifications') declare notify: NotificationService;
 
   @tracked showDrawer = false;
 
-  // The tab is hidden without the entitlement, but the route is always
-  // registered — guard the panel too so a direct URL doesn't surface CYOD UI to
-  // an org that cannot use it.
-  get visible() {
+  get showCYODSettings() {
     return this.organization.isCyodEnabled;
   }
 
@@ -43,20 +29,14 @@ export default class AccountSettingsCyodSettingsComponent extends Component<Acco
     return this.organization.isCyodRegistrationEnabled;
   }
 
-  // The switch lives in Organization Settings and only the owner can flip it, so
-  // the owner gets sent there while everyone else is told who to ask.
   get isOwner() {
     return !!this.me.org?.is_owner;
   }
 
-  // The mycroft API host to enter on the Mercer app's Login screen — correct for
-  // both SaaS and on-prem installs. Falls back to the current origin.
   get serverUrl() {
-    return ENV.host || window.location.origin;
+    return ENV.host || this.window.location.origin;
   }
 
-  // Where the "Download Mercer" button points. Configured per deployment via
-  // IRENE_MERCER_DOWNLOAD_URL; see config/environment.js for the fallback.
   get mercerDownloadUrl() {
     return ENV.mercerDownloadUrl;
   }

@@ -14,20 +14,20 @@ export default Factory.extend({
   provisioned_udids: () => [],
   expires_at: () => faker.date.future().toISOString(),
 
-  active: trait({
+  withActiveStatus: trait({
     is_active: true,
   }),
 
-  expired: trait({
+  withExpiredStatus: trait({
     is_expired: true,
     expires_at: () => faker.date.past().toISOString(),
   }),
 
-  enterprise: trait({
+  withEnterpriseProvisioning: trait({
     provisions_all_devices: true,
   }),
 
-  unnamed: trait({
+  withoutName: trait({
     name: null,
   }),
 });

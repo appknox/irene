@@ -1690,14 +1690,7 @@ body {
     --border-color-1
   );
 
-  // variables for account-settings/cyod-settings
-  --account-settings-cyod-settings-background: var(--common-white);
-  --account-settings-cyod-settings-disabled-state-border-color: var(
-    --divider-dark
-  );
-  --account-settings-cyod-settings-disabled-state-border-radius: var(
-    --border-radius
-  );
+  // variables for account-settings/cyod-settings/step
   --account-settings-cyod-settings-step-num-background: var(--primary-light);
   --account-settings-cyod-settings-step-num-color: var(--primary-dark);
   --account-settings-cyod-settings-step-num-border-radius: var(
@@ -1705,6 +1698,15 @@ body {
   );
   --account-settings-cyod-settings-step-num-font-weight: var(
     --font-weight-medium
+  );
+
+  // variables for account-settings/cyod-settings
+  --account-settings-cyod-settings-background: var(--common-white);
+  --account-settings-cyod-settings-disabled-state-border-color: var(
+    --divider-dark
+  );
+  --account-settings-cyod-settings-disabled-state-border-radius: var(
+    --border-radius
   );
   --account-settings-cyod-settings-url-field-background: var(
     --background-light
@@ -1718,9 +1720,6 @@ body {
   );
 
   // variables for cyod/device-table
-  --cyod-device-table-frame-border-color: var(--divider-dark);
-  --cyod-device-table-frame-border-radius: var(--border-radius);
-  --cyod-device-table-header-font-weight: var(--font-weight-medium);
   --cyod-device-table-empty-state-background: var(--background-light);
   --cyod-device-table-empty-state-border-color: var(--divider-dark);
   --cyod-device-table-empty-state-border-radius: var(--border-radius);
@@ -3159,6 +3158,21 @@ body {
   );
   --organization-signing-certificate-tip-callout-border-radius: var(
     --border-radius-4
+  );
+  --organization-signing-certificate-delete-confirm-background-main: var(
+    --background-main
+  );
+  --organization-signing-certificate-delete-confirm-border-radius: var(
+    --border-radius
+  );
+  --organization-signing-certificate-delete-confirm-border-color: var(
+    --border-color-1
+  );
+  --organization-signing-certificate-delete-confirm-action-box-shadow: var(
+    --box-shadow-4
+  );
+  --organization-signing-certificate-delete-confirm-note-background-color: var(
+    --neutral-grey-100
   );
 
   // variables for organization/ai-powered-features

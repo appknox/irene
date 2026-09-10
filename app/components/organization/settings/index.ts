@@ -18,11 +18,10 @@ export default class OrganizationSettingsComponent extends Component<Organizatio
     return Boolean(this.me.org?.is_owner && this.organization.isCyodEnabled);
   }
 
-  // Certificates are part of the CYOD setup, so they collapse with it.
   get showsSigningCertificate() {
     return (
       this.showsDeviceRegistration &&
-      Boolean(this.organization.isCyodRegistrationEnabled)
+      this.organization.isCyodRegistrationEnabled
     );
   }
 }

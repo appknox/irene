@@ -1,6 +1,13 @@
 import { module, test } from 'qunit';
 import { setupRenderingTest } from 'ember-qunit';
-import { render, click, fillIn, triggerEvent, find } from '@ember/test-helpers';
+import {
+  click,
+  fillIn,
+  find,
+  findAll,
+  render,
+  triggerEvent,
+} from '@ember/test-helpers';
 import { hbs } from 'ember-cli-htmlbars';
 import { setupMirage } from 'ember-cli-mirage/test-support';
 import { setupIntl, t } from 'ember-intl/test-support';
@@ -8,11 +15,24 @@ import Service from '@ember/service';
 import dayjs from 'dayjs';
 
 import ENUMS from 'irene/enums';
+import { Response } from 'miragejs';
 
 // ─── Stubs ─────────────────────────────────────────────────────────────────────
 class NotificationsStub extends Service {
-  success() {}
-  error() {}
+  successMsg = null;
+  errorMsg = null;
+  errorCount = 0;
+
+  success(msg) {
+    this.successMsg = msg;
+  }
+
+  error(msg) {
+    this.errorMsg = msg;
+    this.errorCount += 1;
+  }
+
+  setDefaultAutoClear() {}
 }
 
 // ─── Selectors ─────────────────────────────────────────────────────────────────
@@ -49,6 +69,8 @@ const selectors = {
   activeBadge: '[data-test-orgSigningCert-activeBadge]',
   activateBtn: '[data-test-orgSigningCert-activateBtn]',
   deleteBtn: '[data-test-orgSigningCert-deleteBtn]',
+  deleteTooltip: '[data-test-orgSigningCert-deleteTooltip]',
+  tooltipContent: '[data-test-ak-tooltip-content]',
 
   empty: '[data-test-orgSigningCert-empty]',
   emptySvg: '[data-test-orgSigningCert-emptySvg]',
@@ -58,8 +80,9 @@ const selectors = {
   deleteConfirm: '[data-test-orgSigningCert-deleteConfirm]',
   deleteConfirmTitle: '[data-test-orgSigningCert-deleteConfirmTitle]',
   deleteConfirmInfo: '[data-test-orgSigningCert-deleteConfirmInfo]',
-  deleteConfirmBtn: '[data-test-orgSigningCert-deleteConfirmBtn]',
-  deleteCancelBtn: '[data-test-orgSigningCert-deleteCancelBtn]',
+  deleteConfirmBtn: "[data-test-orgSigningCert-deleteAction='confirm']",
+  deleteCancelBtn: "[data-test-orgSigningCert-deleteAction='cancel']",
+  deleteActions: '[data-test-orgSigningCert-deleteAction]',
   deleteBackBtn: '[data-test-orgSigningCert-deleteBackBtn]',
   nameLabel: '[data-test-orgSigningCert-nameLabel]',
   bundleIdLabel: '[data-test-orgSigningCert-bundleIdLabel]',
@@ -119,7 +142,9 @@ module(
       this.owner.register('service:organization', OrganizationStub);
       this.owner.register('service:notifications', NotificationsStub);
 
-      setupMe(this, 'admin');
+      this.notify = this.owner.lookup('service:notifications');
+
+      setupMe(this, 'withAdminRole');
 
       this.setProperties({
         organization,
@@ -327,7 +352,10 @@ module(
     });
 
     test('it lists org certs and flags the active one', async function (assert) {
-      const active = this.server.create('signing-certificate', 'active');
+      const active = this.server.create(
+        'signing-certificate',
+        'withActiveStatus'
+      );
       this.server.create('signing-certificate');
 
       await render(ORG_SCOPE);
@@ -343,8 +371,8 @@ module(
     });
 
     test('an expired cert offers no activate button', async function (assert) {
-      this.server.create('signing-certificate', 'active');
-      this.server.create('signing-certificate', 'expired');
+      this.server.create('signing-certificate', 'withActiveStatus');
+      this.server.create('signing-certificate', 'withExpiredStatus');
       this.server.create('signing-certificate');
 
       await render(ORG_SCOPE);
@@ -361,7 +389,10 @@ module(
     });
 
     test('it formats the expiry rather than showing the raw timestamp', async function (assert) {
-      const cert = this.server.create('signing-certificate', 'active');
+      const cert = this.server.create(
+        'signing-certificate',
+        'withActiveStatus'
+      );
 
       await render(ORG_SCOPE);
       await openExistingTab();
@@ -376,13 +407,13 @@ module(
     });
 
     test('it disables delete for the active cert while siblings exist', async function (assert) {
-      this.server.create('signing-certificate', 'active');
+      this.server.create('signing-certificate', 'withActiveStatus');
       this.server.create('signing-certificate');
 
       await render(ORG_SCOPE);
       await openExistingTab();
 
-      const deleteButtons = this.element.querySelectorAll(selectors.deleteBtn);
+      const deleteButtons = findAll(selectors.deleteBtn);
 
       assert.strictEqual(deleteButtons.length, 2);
 
@@ -400,7 +431,10 @@ module(
     test('a lone active cert can still be deleted', async function (assert) {
       // Exactly one cert is always active, so gating on is_active alone locked an
       // org with a single cert out of ever removing it.
-      const cert = this.server.create('signing-certificate', 'active');
+      const cert = this.server.create(
+        'signing-certificate',
+        'withActiveStatus'
+      );
 
       await render(ORG_SCOPE);
       await openExistingTab();
@@ -411,7 +445,9 @@ module(
         .dom(selectors.deleteBtn)
         .isNotDisabled('nothing else depends on it, so it can go');
 
-      assert.dom(selectors.deleteBtn).hasAttribute('title', t('delete'));
+      await triggerEvent(find(selectors.deleteTooltip), 'mouseenter');
+
+      assert.dom(selectors.tooltipContent).hasText(t('delete'));
 
       await click(selectors.deleteBtn);
 
@@ -423,40 +459,95 @@ module(
     });
 
     test('it activates a cert via the activate endpoint', async function (assert) {
-      this.server.create('signing-certificate', 'active');
+      assert.expect(6);
+
+      const previous = this.server.create(
+        'signing-certificate',
+        'withActiveStatus'
+      );
+
       const spare = this.server.create('signing-certificate');
+
+      let listRequests = 0;
+
+      this.server.get('/organizations/:id/signing-certificates/', (schema) => {
+        listRequests += 1;
+
+        return schema.signingCertificates.all().models.map((c) => c.toJSON());
+      });
+
+      this.server.post(
+        '/organizations/:id/signing-certificates/:certId/activate/',
+        (schema, req) => {
+          assert.strictEqual(
+            req.params.certId,
+            spare.id,
+            'activates the cert whose button was clicked'
+          );
+
+          schema.signingCertificates.all().models.forEach((cert) => {
+            cert.update({ is_active: cert.id === req.params.certId });
+          });
+
+          return schema.signingCertificates.find(req.params.certId).toJSON();
+        }
+      );
 
       await render(ORG_SCOPE);
       await openExistingTab();
+
+      assert.strictEqual(listRequests, 1, 'the list loads once');
+
       await click(selectors.activateBtn);
 
-      const activate = this.server.pretender.handledRequests.find((r) =>
-        r.url.includes(`/signing-certificates/${spare.id}/activate/`)
+      assert.true(spare.reload().is_active, 'the backend marks it active');
+
+      assert.strictEqual(
+        listRequests,
+        2,
+        'the list reloads so the cert that lost the flag updates too'
       );
 
-      assert.ok(activate, 'posts to the activate endpoint for that cert');
+      // Activation is exclusive, so the badge has to move off the cert that
+      // held it as well as onto the one that was clicked.
+      const cards = findAll(selectors.info);
 
-      assert.true(spare.reload().is_active, 'the backend marks it active');
+      const activated = cards.find((card) =>
+        card.textContent.includes(spare.name)
+      );
+
+      const deactivated = cards.find((card) =>
+        card.textContent.includes(previous.name)
+      );
+
+      assert.dom(selectors.activeBadge, activated).exists();
+      assert.dom(selectors.activeBadge, deactivated).doesNotExist();
     });
 
     // ─── Delete confirmation ─────────────────────────────────────────────────
     test('deleting asks for confirmation before calling the endpoint', async function (assert) {
+      assert.expect(7);
+
       const cert = this.server.create('signing-certificate');
+      let confirmed = false;
+
+      this.server.del(
+        '/organizations/:id/signing-certificates/:certId/',
+        (schema, req) => {
+          assert.true(
+            confirmed,
+            'the endpoint is only reached once the delete is confirmed'
+          );
+
+          schema.signingCertificates.find(req.params.certId)?.destroy();
+
+          return new Response(204);
+        }
+      );
 
       await render(ORG_SCOPE);
       await openExistingTab();
       await click(selectors.deleteBtn);
-
-      const deletes = () =>
-        this.server.pretender.handledRequests.filter(
-          (r) => r.method === 'DELETE'
-        );
-
-      assert.strictEqual(
-        deletes().length,
-        0,
-        'the trash icon alone deletes nothing'
-      );
 
       assert.dom(selectors.deleteConfirm).exists();
       assert.dom(selectors.tabs).doesNotExist();
@@ -467,14 +558,14 @@ module(
 
       await click(selectors.deleteCancelBtn);
 
-      assert.strictEqual(deletes().length, 0, 'cancelling deletes nothing');
       assert.dom(selectors.deleteConfirm).doesNotExist();
       assert.dom(selectors.tabs).exists('returns to the list');
+
+      confirmed = true;
 
       await click(selectors.deleteBtn);
       await click(selectors.deleteConfirmBtn);
 
-      assert.strictEqual(deletes().length, 1, 'confirming runs the delete');
       assert.dom(selectors.deleteConfirm).doesNotExist();
     });
 
@@ -495,60 +586,79 @@ module(
           'the consequence of deleting renders as its own line'
         );
 
-      assert.strictEqual(
-        info.parentElement,
-        title.parentElement,
-        'title and explanation share one block'
-      );
-
       assert
         .dom('[data-test-orgSigningCert-deleteReason]')
         .doesNotExist('the confirmation no longer collects a reason');
 
-      // The actions sit in the scrolling body right under the question rather
-      // than pinned to the drawer footer, so they read as part of the prompt.
-      assert.strictEqual(
+      // Question, consequence and actions are three sections divided by rules,
+      // so each sits in its own direct child of the root.
+      assert.notStrictEqual(
+        info.closest(`${selectors.deleteConfirm} > *`),
+        title.closest(`${selectors.deleteConfirm} > *`),
+        'a divider separates the question from the consequence'
+      );
+
+      assert.notStrictEqual(
         find(selectors.deleteConfirmBtn).closest(
           `${selectors.deleteConfirm} > *`
         ),
-        title.closest(`${selectors.deleteConfirm} > *`),
-        'the actions share the body with the question, not a footer'
+        info.closest(`${selectors.deleteConfirm} > *`),
+        'the actions form their own section below the consequence'
       );
+
+      const actions = findAll(selectors.deleteActions);
+
+      assert.dom(actions[0]).hasText(t('yesDelete'), 'confirm leads');
+      assert
+        .dom(actions[1])
+        .hasText(t('cyod.signingCert.deleteNo'), 'cancel follows');
     });
 
     test('it deletes the staged cert with a bodyless request', async function (assert) {
+      assert.expect(5);
+
       const cert = this.server.create('signing-certificate');
       const other = this.server.create('signing-certificate');
+      const deleted = [];
+
+      this.server.del(
+        '/organizations/:id/signing-certificates/:certId/',
+        (schema, req) => {
+          deleted.push(req.params.certId);
+
+          assert.notOk(
+            req.requestBody,
+            'no reason is collected, so the delete carries no body'
+          );
+
+          schema.signingCertificates.find(req.params.certId)?.destroy();
+
+          return new Response(204);
+        }
+      );
 
       await render(ORG_SCOPE);
       await openExistingTab();
+
       await click(selectors.deleteBtn);
       await click(selectors.deleteConfirmBtn);
 
-      const deletes = () =>
-        this.server.pretender.handledRequests.filter(
-          (r) => r.method === 'DELETE'
-        );
-
-      assert.ok(
-        deletes()[0].url.endsWith(
-          `/api/organizations/${this.organization.id}/signing-certificates/${cert.id}/`
-        ),
+      assert.deepEqual(
+        deleted,
+        [cert.id],
         'deletes the cert the confirmation was staged for'
       );
 
-      assert.notOk(
-        deletes()[0].requestBody,
-        'no reason is collected, so the delete carries no body'
-      );
+      assert
+        .dom(selectors.info)
+        .exists({ count: 1 }, 'the list reloads without the deleted cert');
 
       await click(selectors.deleteBtn);
       await click(selectors.deleteConfirmBtn);
 
-      assert.ok(
-        deletes()[1].url.endsWith(
-          `/api/organizations/${this.organization.id}/signing-certificates/${other.id}/`
-        ),
+      assert.deepEqual(
+        deleted,
+        [cert.id, other.id],
         'the second confirmation deletes the other cert'
       );
     });
@@ -566,6 +676,146 @@ module(
 
       assert.dom(selectors.deleteConfirm).doesNotExist();
       assert.dom(selectors.tabs).exists();
+    });
+
+    // ─── Failure paths ───────────────────────────────────────────────────────
+
+    test('a failed upload reports the reason and keeps the form open', async function (assert) {
+      this.server.post(
+        '/organizations/:id/signing-certificates/',
+        () => ({
+          detail: 'p12 password is incorrect',
+        }),
+        400
+      );
+
+      await render(ORG_SCOPE);
+      await click(selectors.openBtn);
+
+      await triggerEvent(selectors.p12, 'change', {
+        files: [new File(['x'], 'identity.p12')],
+      });
+
+      await triggerEvent(selectors.profile, 'change', {
+        files: [new File(['x'], 'team.mobileprovision')],
+      });
+
+      await fillIn(selectors.password, 'secret');
+      await click(selectors.uploadBtn);
+
+      assert.strictEqual(
+        this.notify.errorMsg,
+        'p12 password is incorrect',
+        'surfaces the field error the backend returned'
+      );
+
+      assert.strictEqual(this.notify.successMsg, null);
+      assert.dom(selectors.p12Chip).exists('the chosen files are not cleared');
+    });
+
+    test('a successful upload confirms and reloads the list', async function (assert) {
+      await render(ORG_SCOPE);
+      await click(selectors.openBtn);
+
+      await triggerEvent(selectors.p12, 'change', {
+        files: [new File(['x'], 'identity.p12')],
+      });
+
+      await triggerEvent(selectors.profile, 'change', {
+        files: [new File(['x'], 'team.mobileprovision')],
+      });
+
+      await fillIn(selectors.password, 'secret');
+      await click(selectors.uploadBtn);
+
+      assert.strictEqual(
+        this.notify.successMsg,
+        t('cyod.signingCert.uploadSuccess')
+      );
+
+      assert.dom(selectors.p12Chip).doesNotExist('the form is reset');
+    });
+
+    test('a failed activate reports the reason and leaves the cert inactive', async function (assert) {
+      assert.expect(6);
+
+      this.server.create('signing-certificate', 'withActiveStatus');
+      const spare = this.server.create('signing-certificate');
+
+      this.server.post(
+        '/organizations/:id/signing-certificates/:certId/activate/',
+        (_schema, req) => {
+          assert.strictEqual(
+            req.params.certId,
+            spare.id,
+            'the activate endpoint is reached for the clicked cert'
+          );
+
+          return new Response(409, {}, { detail: 'Certificate has expired' });
+        }
+      );
+
+      await render(ORG_SCOPE);
+      await openExistingTab();
+      await click(selectors.activateBtn);
+
+      assert.strictEqual(
+        this.notify.errorCount,
+        1,
+        'the failure is reported exactly once'
+      );
+
+      assert.strictEqual(this.notify.errorMsg, 'Certificate has expired');
+
+      assert.strictEqual(
+        this.notify.successMsg,
+        null,
+        'a rejected activate is never reported as a success'
+      );
+
+      assert.false(spare.reload().is_active);
+      assert.dom(selectors.activateBtn).exists('the action stays available');
+    });
+
+    test('a failed delete reports the reason and keeps the cert', async function (assert) {
+      const cert = this.server.create('signing-certificate');
+
+      this.server.del(
+        '/organizations/:id/signing-certificates/:certId/',
+        () =>
+          new Response(
+            409,
+            {},
+            { detail: 'Cannot delete the active certificate' }
+          )
+      );
+
+      await render(ORG_SCOPE);
+      await openExistingTab();
+      await click(selectors.deleteBtn);
+      await click(selectors.deleteConfirmBtn);
+
+      assert.strictEqual(
+        this.notify.errorMsg,
+        'Cannot delete the active certificate'
+      );
+
+      assert.ok(cert.reload(), 'the certificate is still there');
+    });
+
+    test('a failed load falls back to the empty state', async function (assert) {
+      this.server.create('signing-certificate');
+
+      this.server.get(
+        '/organizations/:id/signing-certificates/',
+        () => new Response(500)
+      );
+
+      await render(ORG_SCOPE);
+      await openExistingTab();
+
+      assert.dom(selectors.empty).exists();
+      assert.dom(selectors.info).doesNotExist();
     });
 
     // ─── Project scope ───────────────────────────────────────────────────────
@@ -588,6 +838,18 @@ module(
         .doesNotExist('nothing to switch between in project scope');
 
       assert.dom(selectors.deleteBtn).exists({ count: 1 });
+    });
+
+    test('project scope shows the empty state before a cert is uploaded', async function (assert) {
+      // The endpoint answers 404 rather than an empty body when the project has
+      // no override, so absence arrives as a rejection.
+      await render(PROJECT_SCOPE);
+      await openExistingTab();
+
+      assert.dom(selectors.empty).exists();
+      assert.dom(selectors.info).doesNotExist();
+
+      assert.dom(selectors.emptyTitle).hasText(t('cyod.signingCert.noneTitle'));
     });
 
     test('it emits no section layout of its own', async function (assert) {
@@ -619,7 +881,7 @@ module(
       // The certificate holds the customer's iOS signing identity and the
       // org-scope panel is owner-only, so the project-scope override must not
       // become a way for a member to upload or delete one.
-      setupMe(this, 'member');
+      setupMe(this, 'withMemberRole');
 
       await render(PROJECT_SCOPE);
 
@@ -632,13 +894,13 @@ module(
     test('project scope renders for either management role', async function (assert) {
       // `is_admin` and `is_owner` are independent flags, so an owner who is not
       // also flagged admin still gets the panel.
-      setupMe(this, 'owner');
+      setupMe(this, 'withOwnerRole');
 
       await render(PROJECT_SCOPE);
 
       assert.dom(selectors.root).exists('an owner sees it');
 
-      setupMe(this, 'admin');
+      setupMe(this, 'withAdminRole');
 
       await render(PROJECT_SCOPE);
 

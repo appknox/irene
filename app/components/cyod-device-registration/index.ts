@@ -1,21 +1,14 @@
-/**
- * CYOD Device Registration Wizard
- *
- * Handles two registration paths:
- *   Android — WebUSB via @yume-chan/adb (Chrome/Edge only)
- *   iOS     — KnoxOps localhost agent on port 17392
- *
- * On success, calls @onDeviceRegistered with the device_identifier
- * returned by moriarty's POST /devicefarm/v2/devices/webusb-register/.
- */
 import Component from '@glimmer/component';
 import { action } from '@ember/object';
 import { service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
 import { task } from 'ember-concurrency';
+import { AdbDaemonWebUsbDeviceManager } from '@yume-chan/adb-daemon-webusb';
+import { Adb, AdbDaemonTransport } from '@yume-chan/adb';
 import type IntlService from 'ember-intl/services/intl';
 
 import ENUMS from 'irene/enums';
+import parseError from 'irene/utils/parse-error';
 import type DevicefarmService from 'irene/services/devicefarm';
 import type IreneAjaxService from 'irene/services/ajax';
 import type CyodAdbSessionService from 'irene/services/cyod-adb-session';
@@ -23,7 +16,7 @@ import type OrganizationService from 'irene/services/organization';
 import type LoggerService from 'irene/services/logger';
 
 const KNOXOPS_AGENT_PORT = 17392;
-const WEBUSB_REGISTER_PATH = '/devicefarm/v2/devices/webusb-register/';
+const DEFAULT_IOS_ARCH = 'arm64e';
 
 type WebUSBRegisteredDevice = {
   device_identifier: string;
@@ -32,7 +25,27 @@ type WebUSBRegisteredDevice = {
   serial_number: string;
 };
 
+type DetectedDevice = {
+  serial: string;
+  model: string;
+  osVersion: string;
+  arch: string;
+};
+
+type IosDeviceInfo = {
+  udid: string;
+  model: string;
+  product_version: string;
+  cpu_architecture: string;
+};
+
+type AdbProtocolPropertyKey =
+  | 'ro.product.model'
+  | 'ro.build.version.release'
+  | 'ro.product.cpu.abi';
+
 export interface CyodDeviceRegistrationSignature {
+  Element: HTMLElement;
   Args: {
     platform: number;
     onDeviceRegistered: (device: WebUSBRegisteredDevice) => void;
@@ -47,6 +60,7 @@ export default class CyodDeviceRegistrationComponent extends Component<CyodDevic
   @service('cyod-adb-session') declare cyodAdbSession: CyodAdbSessionService;
   @service declare organization: OrganizationService;
   @service declare logger: LoggerService;
+  @service('browser/window') declare window: Window;
 
   @tracked detectedSerial: string | null = null;
   @tracked detectedModel: string | null = null;
@@ -70,11 +84,34 @@ export default class CyodDeviceRegistrationComponent extends Component<CyodDevic
   }
 
   get isWebUsbSupported() {
-    return typeof navigator !== 'undefined' && 'usb' in navigator;
+    return (
+      this.window.navigator !== undefined && 'usb' in this.window.navigator
+    );
   }
 
   get isDeviceDetected() {
     return !!this.detectedSerial;
+  }
+
+  async getProtocolProp(adb: Adb, property: AdbProtocolPropertyKey) {
+    const result = await adb.subprocess.noneProtocol.spawnWaitText([
+      'getprop',
+      property,
+    ]);
+
+    return result.trim();
+  }
+
+  setDetectedDevice(device: DetectedDevice) {
+    this.detectedSerial = device.serial;
+    this.detectedModel = device.model;
+    this.detectedOsVersion = device.osVersion;
+    this.detectedArch = device.arch;
+  }
+
+  reportRegistrationError(context: string, err: unknown) {
+    this.notify.error(parseError(err, this.intl.t('cyod.registrationFailed')));
+    this.logger.error(`[CYOD] ${context}:`, err);
   }
 
   @action
@@ -94,95 +131,53 @@ export default class CyodDeviceRegistrationComponent extends Component<CyodDevic
     }
 
     try {
-      // Dynamically import to avoid SSR/test issues
-      const { AdbWebUsbBackendManager } = await import(
-        '@yume-chan/adb-backend-webusb'
-      );
-      const { Adb, AdbDaemonTransport } = await import('@yume-chan/adb');
+      const usbDevice =
+        await AdbDaemonWebUsbDeviceManager.BROWSER?.requestDevice();
 
-      const usbDevice = await AdbWebUsbBackendManager.BROWSER?.requestDevice();
-
+      // The user dismissed the browser's device picker.
       if (!usbDevice) {
         return;
       }
 
-      const transport = await AdbDaemonTransport.authenticate({
-        serial: usbDevice.serial,
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        connection: (await usbDevice.connect()) as any,
-        credentialStore: {
-          // Generate a throwaway RSA key (POC — production should persist this)
-          generateKey: async () => {
-            const keyPair = await crypto.subtle.generateKey(
-              {
-                name: 'RSASSA-PKCS1-v1_5',
-                modulusLength: 2048,
-                publicExponent: new Uint8Array([1, 0, 1]),
-                hash: 'SHA-1',
-              },
-              true,
-              ['sign', 'verify']
-            );
-            const pkcs8 = await crypto.subtle.exportKey(
-              'pkcs8',
-              keyPair.privateKey
-            );
+      const serial = usbDevice.serial;
 
-            return { buffer: new Uint8Array(pkcs8) };
-          },
-          iterateKeys: async function* () {
-            /* no stored keys */
-          },
+      const transport = await AdbDaemonTransport.authenticate({
+        serial,
+        connection: await usbDevice.connect(),
+        credentialStore: {
+          iterateKeys: async function* () {}, // No stored keys
+
+          // A new key each time, so the device re-prompts for USB debugging
+          // authorisation on every registration.
+          generateKey: () => this.generateAuthenticationKey.perform(),
         },
       });
 
-      const adb = new Adb(transport);
+      const { adb, device } = await this.readDeviceProps.perform(
+        transport,
+        serial
+      );
 
-      const serial = usbDevice.serial;
-      const model = (
-        await adb.subprocess.noneProtocol.spawnWaitText([
-          'getprop',
-          'ro.product.model',
-        ])
-      ).trim();
-      const osVersion = (
-        await adb.subprocess.noneProtocol.spawnWaitText([
-          'getprop',
-          'ro.build.version.release',
-        ])
-      ).trim();
-      const arch = (
-        await adb.subprocess.noneProtocol.spawnWaitText([
-          'getprop',
-          'ro.product.cpu.abi',
-        ])
-      ).trim();
-
-      this.detectedSerial = serial;
-      this.detectedModel = model;
-      this.detectedOsVersion = osVersion;
-      this.detectedArch = arch;
+      this.setDetectedDevice(device);
 
       // Keep the ADB connection alive for auto-install once the scan starts.
       // CyodAdbSessionService will dispose it after 10 min or on scan stop.
       this.cyodAdbSession.store(serial, adb);
 
-      await this._postRegistration(
-        serial,
-        ENUMS.PLATFORM.ANDROID,
-        model,
-        osVersion,
-        arch
-      );
+      await this.postRegistration.perform(ENUMS.PLATFORM.ANDROID, device);
     } catch (err) {
-      this.notify.error(this.intl.t('cyod.registrationFailed'));
-      this.logger.error('[CYOD] Android registration error:', err);
+      this.reportRegistrationError('Android registration error', err);
     }
   });
 
   registerIosDevice = task(async () => {
+    let info: IosDeviceInfo;
+
+    // The KnoxOps agent runs on the user's machine, so an unreachable agent is
+    // the expected failure here and needs its own message.
     try {
-      // KnoxOps agent: GET http://localhost:17392/device-info
+      // Plain fetch, not IreneAjaxService: the KnoxOps agent runs on the
+      // user's own machine and takes none of mycroft's auth headers.
       const agentUrl = `http://localhost:${KNOXOPS_AGENT_PORT}/device-info`;
       const response = await fetch(agentUrl);
 
@@ -192,54 +187,85 @@ export default class CyodDeviceRegistrationComponent extends Component<CyodDevic
         return;
       }
 
-      const info = (await response.json()) as {
-        udid: string;
-        model: string;
-        product_version: string;
-        cpu_architecture: string;
-      };
-
-      this.detectedSerial = info.udid;
-      this.detectedModel = info.model;
-      this.detectedOsVersion = info.product_version;
-      this.detectedArch = info.cpu_architecture ?? 'arm64e';
-
-      await this._postRegistration(
-        info.udid,
-        ENUMS.PLATFORM.IOS,
-        info.model,
-        info.product_version,
-        this.detectedArch
-      );
-    } catch {
+      info = await response.json();
+    } catch (err) {
       this.notify.error(this.intl.t('cyod.iosAgentNotFound'));
+      this.logger.error('[CYOD] KnoxOps agent unreachable:', err);
+
+      return;
+    }
+
+    const device: DetectedDevice = {
+      serial: info.udid,
+      model: info.model,
+      osVersion: info.product_version,
+      arch: info.cpu_architecture ?? DEFAULT_IOS_ARCH,
+    };
+
+    this.setDetectedDevice(device);
+
+    try {
+      await this.postRegistration.perform(ENUMS.PLATFORM.IOS, device);
+    } catch (err) {
+      this.reportRegistrationError('iOS registration error', err);
     }
   });
 
-  async _postRegistration(
-    serialNumber: string,
-    platform: number,
-    model: string,
-    platformVersion: string,
-    cpuArchitecture: string
-  ) {
-    const url = new URL(WEBUSB_REGISTER_PATH, this.devicefarm.urlbase).href;
+  generateAuthenticationKey = task(async () => {
+    const keyPairConfig = {
+      name: 'RSASSA-PKCS1-v1_5',
+      modulusLength: 2048,
+      publicExponent: new Uint8Array([1, 0, 1]),
+      hash: 'SHA-1',
+    };
 
-    const device = await this.ajax.post<WebUSBRegisteredDevice>(url, {
-      data: JSON.stringify({
-        serial_number: serialNumber,
-        platform,
-        model,
-        platform_version: platformVersion,
-        cpu_architecture: cpuArchitecture,
-        name: model,
-      }),
+    const cryptoSubtle = this.window.crypto.subtle;
+
+    const keyPair = await cryptoSubtle.generateKey(keyPairConfig, true, [
+      'sign',
+      'verify',
+    ]);
+
+    const pkcs8 = await cryptoSubtle.exportKey('pkcs8', keyPair.privateKey);
+
+    return { buffer: new Uint8Array(pkcs8) };
+  });
+
+  readDeviceProps = task(
+    async (transport: AdbDaemonTransport, serial: string) => {
+      const adb = new Adb(transport);
+
+      const [model, osVersion, arch] = await Promise.all([
+        this.getProtocolProp(adb, 'ro.product.model'),
+        this.getProtocolProp(adb, 'ro.build.version.release'),
+        this.getProtocolProp(adb, 'ro.product.cpu.abi'),
+      ]);
+
+      return { adb, device: { serial, model, osVersion, arch } };
+    }
+  );
+
+  postRegistration = task(async (platform: number, device: DetectedDevice) => {
+    const { webusbRegisterEndpoint, urlbase } = this.devicefarm;
+    const url = new URL(webusbRegisterEndpoint, urlbase).href;
+
+    const requestBody = JSON.stringify({
+      serial_number: device.serial,
+      platform,
+      model: device.model,
+      platform_version: device.osVersion,
+      cpu_architecture: device.arch,
+      name: device.model,
+    });
+
+    const registeredDevice = await this.ajax.post<WebUSBRegisteredDevice>(url, {
+      data: requestBody,
       contentType: 'application/json',
     });
 
     this.notify.success(this.intl.t('cyod.deviceRegistered'));
-    this.args.onDeviceRegistered(device);
-  }
+    this.args.onDeviceRegistered(registeredDevice);
+  });
 }
 
 declare module '@glint/environment-ember-loose/registry' {

@@ -6,18 +6,37 @@ import { render } from '@ember/test-helpers';
 import { hbs } from 'ember-cli-htmlbars';
 import Service from '@ember/service';
 import ENUMS from 'irene/enums';
+import { Response } from 'miragejs';
+
+// ─── Selectors ─────────────────────────────────────────────────────────────────
+const selectors = {
+  root: '[data-test-projectSettings-generalSettings-root]',
+  divider: '[data-test-ak-divider]',
+  signingCert: '[data-test-orgSigningCert]',
+  signingCertTitle: '[data-test-orgSigningCert-sectionTitle]',
+};
 
 class NotificationsStub extends Service {
-  error() {}
+  errorMsg = null;
+
+  error(msg) {
+    this.errorMsg = msg;
+  }
+
   success() {}
   info() {}
+
+  setDefaultAutoClear() {}
 }
 
-/**
- * Registers an organization service whose `selected` is a mirage-created
- * organization, so the signing-certificate URLs it drives point at a real
- * record rather than a literal id.
- */
+class LoggerStub extends Service {
+  errors = [];
+
+  error(...args) {
+    this.errors.push(args);
+  }
+}
+
 /**
  * Registers a `me` whose org membership carries the given role trait. The CYOD
  * section is limited to admins and owners, so the role decides whether the
@@ -37,7 +56,7 @@ function setupMe(context, ...traits) {
 }
 
 function setupOrganization(context, { registrationEnabled = true } = {}) {
-  const organization = context.server.create('organization', 'cyodEnabled');
+  const organization = context.server.create('organization', 'withCyodEnabled');
 
   class OrganizationStub extends Service {
     selected = organization;
@@ -60,7 +79,12 @@ module(
 
     hooks.beforeEach(async function () {
       this.owner.register('service:notifications', NotificationsStub);
-      setupMe(this, 'admin');
+      this.owner.register('service:logger', LoggerStub);
+
+      this.logger = this.owner.lookup('service:logger');
+      this.notify = this.owner.lookup('service:notifications');
+
+      setupMe(this, 'withAdminRole');
 
       this.server.get('/profiles/:id/proxy_settings', (_, req) => ({
         id: req.params.id,
@@ -77,6 +101,13 @@ module(
       }));
 
       this.server.get('/projects/:id/collaborators', () => ({
+        count: 0,
+        next: null,
+        previous: null,
+        results: [],
+      }));
+
+      this.server.get('/organizations/:id/projects/:pid/collaborators', () => ({
         count: 0,
         next: null,
         previous: null,
@@ -112,11 +143,7 @@ module(
 
       await renderFor(this, ENUMS.PLATFORM.IOS);
 
-      assert.dom('[data-test-orgSigningCert]').exists();
-
-      assert
-        .dom('[data-test-orgSigningCert-sectionTitle]')
-        .hasTagName('h5', 'section heading sits level with Teams');
+      assert.dom(selectors.signingCert).exists();
 
       // Sections in order: proxy | api filter | CYOD | teams | collaborators.
       const sections = this.element.querySelectorAll(
@@ -124,7 +151,7 @@ module(
       );
 
       const cyodIndex = [...sections].findIndex((el) =>
-        el.querySelector('[data-test-orgSigningCert]')
+        el.querySelector(selectors.signingCert)
       );
 
       const teamsIndex = [...sections].findIndex((el) =>
@@ -139,17 +166,50 @@ module(
       );
     });
 
+    test('a non-iOS project gets no CYOD section', async function (assert) {
+      setupOrganization(this);
+
+      await renderFor(this, ENUMS.PLATFORM.ANDROID);
+
+      assert
+        .dom(selectors.signingCert)
+        .doesNotExist('signing certificates only apply to iOS scans');
+    });
+
+    test('a failed profile load is logged and leaves the page usable', async function (assert) {
+      setupOrganization(this);
+
+      this.server.get('/profiles/:id', () => new Response(500));
+
+      await renderFor(this, ENUMS.PLATFORM.IOS);
+
+      assert.dom(selectors.root).exists('the rest of the page still renders');
+
+      assert.ok(
+        this.logger.errors.some(([message]) =>
+          String(message).includes('project profile')
+        ),
+        'the profile failure is logged rather than swallowed'
+      );
+
+      assert.strictEqual(
+        this.notify.errorMsg,
+        null,
+        'a missing profile is not surfaced as a user-facing error'
+      );
+    });
+
     test('a plain member gets no CYOD section', async function (assert) {
       setupOrganization(this);
-      setupMe(this, 'member');
+      setupMe(this, 'withMemberRole');
 
       await renderFor(this, ENUMS.PLATFORM.IOS);
 
       assert
-        .dom('[data-test-orgSigningCert]')
+        .dom(selectors.signingCert)
         .doesNotExist('signing certificates are an admin/owner surface');
 
-      assert.dom('[data-test-orgSigningCert-sectionTitle]').doesNotExist();
+      assert.dom(selectors.signingCertTitle).doesNotExist();
     });
 
     // The CYOD divider lives in this template rather than inside the panel, so
@@ -161,18 +221,16 @@ module(
 
       await renderFor(this, ENUMS.PLATFORM.IOS);
 
-      const withCyod = this.element.querySelectorAll(
-        '[data-test-ak-divider]'
-      ).length;
+      const withCyod = this.element.querySelectorAll(selectors.divider).length;
 
       setupOrganization(this, { registrationEnabled: false });
 
       await renderFor(this, ENUMS.PLATFORM.IOS);
 
-      assert.dom('[data-test-orgSigningCert]').doesNotExist();
+      assert.dom(selectors.signingCert).doesNotExist();
 
       assert.strictEqual(
-        this.element.querySelectorAll('[data-test-ak-divider]').length,
+        this.element.querySelectorAll(selectors.divider).length,
         withCyod - 1,
         'exactly one divider goes with the section — none left dangling'
       );

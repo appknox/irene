@@ -15,15 +15,15 @@ export default Factory.extend({
   is_connected: true,
   created_on: () => faker.date.recent().toISOString(),
 
-  offline: trait({
+  withOfflineStatus: trait({
     is_connected: false,
   }),
 
-  ios: trait({
+  withIosPlatform: trait({
     platform: ENUMS.PLATFORM.IOS,
   }),
 
-  unnamed: trait({
+  withoutName: trait({
     name: null,
   }),
 });

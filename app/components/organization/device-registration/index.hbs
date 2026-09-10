@@ -13,8 +13,8 @@
       <AkToggle
         data-test-orgDeviceRegistration-toggle
         @id='cyod-registration'
-        @checked={{this.isRegistrationEnabled}}
-        @disabled={{this.isSaving}}
+        @checked={{this.organization.selected.cyodRegistrationEnabled}}
+        @disabled={{this.setRegistrationEnabled.isRunning}}
         @size='small'
         @onChange={{perform this.setRegistrationEnabled}}
       />

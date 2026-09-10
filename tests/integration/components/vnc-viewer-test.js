@@ -355,6 +355,25 @@ module('Integration | Component | vnc-viewer | CYOD scans', function (hooks) {
     assert.dom(selectors.cyodReady).doesNotExist();
   });
 
+  test('a queued scrcpy scan is preparing, not just an installing one', async function (assert) {
+    createCyodScan(
+      this,
+      'withProxyCyodDevice',
+      ENUMS.DYNAMIC_SCAN_STATUS.IN_QUEUE
+    );
+
+    await render(TEMPLATE);
+
+    assert
+      .dom(selectors.cyodPreparing)
+      .hasText(
+        t('cyod.viewer.preparing'),
+        'every isStarting status waits, not INSTALLING alone'
+      );
+
+    assert.dom(selectors.cyodViewer).doesNotExist();
+  });
+
   test('REMOTE_CYOD + INSTALLING does not offer an iOS install link', async function (assert) {
     createCyodScan(
       this,
@@ -381,7 +400,16 @@ module('Integration | Component | vnc-viewer | CYOD scans', function (hooks) {
 
     await render(TEMPLATE);
 
-    assert.dom(selectors.cyodReady).exists();
+    assert.dom(selectors.cyodReady).containsText(t('cyod.interactOnDevice'));
+
+    assert
+      .dom(`${selectors.cyodReady} [data-test-ak-icon]`)
+      .hasAttribute(
+        'icon',
+        /mobile/,
+        'the device icon resolves to a generated iconify name'
+      );
+
     assert.dom(selectors.cyodViewer).doesNotExist();
   });
 });

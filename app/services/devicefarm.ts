@@ -16,6 +16,7 @@ export default class DevicefarmService extends Service {
   @service declare configuration: ConfigurationService;
 
   pingEndpoint = '/devicefarm/ping';
+  webusbRegisterEndpoint = '/devicefarm/v2/devices/webusb-register/';
   websockifyEndpoint = '/websockify';
 
   get devicefarmURL(): string {

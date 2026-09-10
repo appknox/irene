@@ -98,7 +98,7 @@ function routes() {
   });
 
   this.get('/organizations/:id/registered-devices', (schema) => {
-    const results = schema.registeredDevices
+    const results = schema.organizationCyodRegisteredDevices
       .all()
       .models.map((d) => d.toJSON());
 
@@ -118,7 +118,7 @@ function routes() {
     (schema, req) => {
       schema.signingCertificates.find(req.params.certId)?.destroy();
 
-      return {};
+      return new Response(204);
     }
   );
 
@@ -135,7 +135,13 @@ function routes() {
 
   this.get(
     '/organizations/:id/projects/:projectId/signing-certificate/',
-    (schema) => schema.signingCertificates.first()?.toJSON() ?? {}
+    (schema) => {
+      const cert = schema.signingCertificates.first();
+
+      return cert
+        ? cert.toJSON()
+        : new Response(404, {}, { detail: 'Not found.' });
+    }
   );
 
   this.del(
@@ -143,7 +149,7 @@ function routes() {
     (schema) => {
       schema.signingCertificates.first()?.destroy();
 
-      return {};
+      return new Response(204);
     }
   );
 

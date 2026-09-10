@@ -6,6 +6,8 @@ import {
   waitUntil,
   clearRender,
   click,
+  find,
+  triggerEvent,
 } from '@ember/test-helpers';
 import { hbs } from 'ember-cli-htmlbars';
 import { setupIntl, t } from 'ember-intl/test-support';
@@ -53,7 +55,11 @@ class FakeWebSocket {
     FakeWebSocket.instances.push(this);
   }
 
-  send() {}
+  sent = [];
+
+  send(payload) {
+    this.sent.push(payload);
+  }
 
   close() {
     this.closeCallCount++;
@@ -96,6 +102,29 @@ module('Integration | Component | cyod-viewer', function (hooks) {
       urlbase = 'http://devicefarm.test/';
     }
 
+    // The component refuses to decode without WebCodecs, so a browser lacking
+    // VideoDecoder would render the error overlay instead of the stream.
+    class FakeVideoDecoder {
+      state = 'unconfigured';
+
+      configure() {
+        this.state = 'configured';
+      }
+
+      decode() {}
+
+      close() {
+        this.state = 'closed';
+      }
+    }
+
+    class WindowStub extends Service {
+      VideoDecoder = FakeVideoDecoder;
+      navigator = window.navigator;
+      location = window.location;
+      crypto = window.crypto;
+    }
+
     class LoggerStub extends Service {
       error() {}
       warn() {}
@@ -104,6 +133,8 @@ module('Integration | Component | cyod-viewer', function (hooks) {
 
     this.owner.register('service:devicefarm', DevicefarmStub);
     this.owner.register('service:logger', LoggerStub);
+    this.owner.unregister('service:browser/window');
+    this.owner.register('service:browser/window', WindowStub);
 
     this.setProperties({
       scanToken: 'SCAN123',
@@ -267,6 +298,95 @@ module('Integration | Component | cyod-viewer', function (hooks) {
       FakeWebSocket.instances.length,
       1,
       'retry opens a fresh socket'
+    );
+  });
+
+  // ─── Remote input ──────────────────────────────────────────────────────────
+
+  test('a pointer press sends normalised touch coordinates', async function (assert) {
+    await render(TEMPLATE);
+
+    FakeWebSocket.last.open();
+    await settled();
+
+    const canvas = find(selectors.canvas);
+    const rect = canvas.getBoundingClientRect();
+
+    await triggerEvent(canvas, 'pointerdown', {
+      clientX: rect.left + rect.width / 2,
+      clientY: rect.top + rect.height / 4,
+    });
+
+    assert.strictEqual(FakeWebSocket.last.sent.length, 1);
+
+    const payload = JSON.parse(FakeWebSocket.last.sent[0]);
+
+    assert.strictEqual(payload.type, 'touch');
+    assert.strictEqual(payload.action, 'down');
+
+    assert.ok(
+      Math.abs(payload.x - 0.5) < 0.01,
+      'x is the fraction across the canvas, not a page coordinate'
+    );
+
+    assert.ok(
+      Math.abs(payload.y - 0.25) < 0.01,
+      'y is the fraction down the canvas'
+    );
+  });
+
+  test('a drag sends down, move and up in order', async function (assert) {
+    await render(TEMPLATE);
+
+    FakeWebSocket.last.open();
+    await settled();
+
+    const canvas = find(selectors.canvas);
+    const rect = canvas.getBoundingClientRect();
+    const at = (fraction) => ({
+      clientX: rect.left + rect.width * fraction,
+      clientY: rect.top + rect.height * fraction,
+    });
+
+    await triggerEvent(canvas, 'pointerdown', at(0.2));
+    await triggerEvent(canvas, 'pointermove', at(0.5));
+    await triggerEvent(canvas, 'pointerup', at(0.8));
+
+    const actions = FakeWebSocket.last.sent.map(
+      (payload) => JSON.parse(payload).action
+    );
+
+    assert.deepEqual(actions, ['down', 'move', 'up']);
+  });
+
+  test('a pointer move without a press sends nothing', async function (assert) {
+    await render(TEMPLATE);
+
+    FakeWebSocket.last.open();
+    await settled();
+
+    const canvas = find(selectors.canvas);
+
+    await triggerEvent(canvas, 'pointermove', { clientX: 10, clientY: 10 });
+
+    assert.deepEqual(
+      FakeWebSocket.last.sent,
+      [],
+      'a hover is not a drag, so nothing goes over the wire'
+    );
+  });
+
+  test('nothing is sent while the socket is still connecting', async function (assert) {
+    await render(TEMPLATE);
+
+    const canvas = find(selectors.canvas);
+
+    await triggerEvent(canvas, 'pointerdown', { clientX: 10, clientY: 10 });
+
+    assert.deepEqual(
+      FakeWebSocket.last.sent,
+      [],
+      'input before the handshake would be lost, so it is dropped'
     );
   });
 });

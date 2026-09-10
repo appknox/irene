@@ -67,7 +67,7 @@
     >
       <t.head data-test-cyodDeviceTable-thead @columns={{this.columns}} />
 
-      <t.body local-class='table-body' @rows={{this.rows}} as |b|>
+      <t.body local-class='table-body' @rows={{this.visibleDevices}} as |b|>
         <b.row data-test-cyodDeviceTable-row as |r|>
           <r.cell data-test-cyodDeviceTable-cell as |value|>
             {{#if r.columnValue.component}}
