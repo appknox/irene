@@ -1,11 +1,14 @@
 import Component from '@glimmer/component';
 
+import type { SbomScanDetailsSkeletonLoaderListColumn } from 'irene/components/sbom/scan-details/skeleton-loader-list';
+
 export interface SbomEmptyLoadingViewSignature {
   Args: {
     empty: boolean;
     loading: boolean;
     tree?: 'filtered' | 'full';
     skeleton?: boolean;
+    skeletonColumns?: SbomScanDetailsSkeletonLoaderListColumn[];
     loadingSvgWidth?: string;
     loadingSvgHeight?: string;
     emptySvgWidth?: string;
@@ -33,6 +36,10 @@ export default class SbomEmptyLoadingViewComponent extends Component<SbomEmptyLo
 
   get skeleton() {
     return this.args.skeleton ?? false;
+  }
+
+  get contentAlignment() {
+    return this.args.loading && this.skeleton ? 'flex-start' : 'center';
   }
 }
 

@@ -1,0 +1,181 @@
+<div ...attributes data-test-sbomScanDetails-aiBomComponentList>
+  {{#if this.showAiBomNewFeaturePrompt}}
+    {{! Standalone empty state for files scanned before AI BoM detection;
+     avoid Sbom::EmptyLoadingView to prevent shared styling side effects. }}
+    <div
+      local-class='pre-ai-bom-empty'
+      data-test-sbomScanDetails-aiBomComponentListing-container
+    >
+      <AkStack @direction='column' @alignItems='center' @spacing='1.5'>
+        <AkSvg::AiBomUpload />
+
+        <AkStack
+          @direction='column'
+          @alignItems='center'
+          @spacing='1'
+          data-test-sbomScanDetails-aiBomComponent-newFeatureText
+        >
+          <AkTypography
+            data-test-sbomScanDetails-aiBomComponent-newFeatureTitle
+            @variant='h6'
+          >
+            {{t 'sbomModule.aiBomNewFeatureEmptyText.title'}}
+          </AkTypography>
+
+          <AkTypography
+            data-test-sbomScanDetails-aiBomComponent-newFeatureDescription
+            @color='textSecondary'
+          >
+            {{t 'sbomModule.aiBomNewFeatureEmptyText.description'}}
+          </AkTypography>
+        </AkStack>
+      </AkStack>
+    </div>
+  {{else}}
+    <Sbom::ScanDetails::SummaryBar @items={{this.summaryItems}} class='mt-2' />
+
+    <div
+      local-class='listing-container'
+      data-test-sbomScanDetails-aiBomComponentListing-container
+    >
+      <AkStack @width='full' local-class='search-input-container'>
+        <div {{style width='250px'}}>
+          <AkTextField
+            data-test-sbomScanDetails-aiBomComponentSearch
+            @placeholder={{t 'search'}}
+            @value={{this.searchQuery}}
+            {{on 'input' this.handleSearchInput}}
+          >
+            <:leftAdornment>
+              <AkIcon @iconName='search' @color='textSecondary' />
+            </:leftAdornment>
+          </AkTextField>
+        </div>
+      </AkStack>
+
+      <AkPaginationProvider
+        @results={{this.sbomComponentList}}
+        @onItemPerPageChange={{this.handleItemPerPageChange}}
+        @totalItems={{this.totalAiBomComponentCount}}
+        @nextAction={{this.handlePrevNextAction}}
+        @prevAction={{this.handlePrevNextAction}}
+        @itemPerPageOptions={{array 10 25 50}}
+        @defaultLimit={{this.limit}}
+        @offset={{this.offset}}
+        as |pgc|
+      >
+        <Sbom::EmptyLoadingView
+          @empty={{this.isEmptyAndNoFilterApplied}}
+          @loading={{this.isFetchingSbomComponentList}}
+          @skeleton={{true}}
+          @skeletonColumns={{this.columns}}
+        >
+          <:emptySvg>
+            <AkSvg::NoResult
+              data-test-sbomScanDetails-aiBomComponent-emptySvg
+            />
+          </:emptySvg>
+
+          <:emptyText>
+            <AkTypography
+              data-test-sbomScanDetails-aiBomComponent-emptyTextTitle
+              @variant='h6'
+              class='mt-3'
+            >
+              {{this.tNoComponentsFound}}
+            </AkTypography>
+          </:emptyText>
+
+          <:default>
+            <AkTable
+              @hoverable={{true}}
+              data-test-sbomScanDetails-aiBomComponentTable
+              as |t|
+            >
+              <t.head
+                @columns={{this.columns}}
+                data-test-sbomScanDetails-aiBomComponentThead
+                as |h|
+              >
+                <h.row as |r|>
+                  <r.cell as |column|>
+                    {{#if column.headerComponent}}
+                      {{#let (component column.headerComponent) as |Component|}}
+                        <Component
+                          @onAiArtifactClassChange={{this.onAiArtifactClassChange}}
+                          @selectedAiArtifactClass={{this.selectedAiArtifactClass}}
+                        />
+                      {{/let}}
+                    {{else}}
+                      {{column.name}}
+                    {{/if}}
+                  </r.cell>
+                </h.row>
+              </t.head>
+
+              <t.body @rows={{pgc.currentPageResults}} as |b|>
+                <b.row
+                  {{style cursor='pointer'}}
+                  @onClick={{this.handleComponentClick}}
+                  data-test-sbomScanDetails-aiBomComponentRow
+                  as |r|
+                >
+                  <r.cell
+                    data-test-sbomScanDetails-aiBomComponentCell
+                    as |value|
+                  >
+                    <AkTypography title={{value}} @noWrap={{true}}>
+                      {{value}}
+                    </AkTypography>
+                  </r.cell>
+                </b.row>
+              </t.body>
+            </AkTable>
+
+            {{#if this.isEmptyAndFilterApplied}}
+              <AkStack
+                @direction='column'
+                @alignItems='center'
+                @justifyContent='center'
+                @spacing='1'
+                class='py-5'
+              >
+                <AkSvg::NoResult
+                  data-test-sbomScanDetails-aiBomComponent-noFilterResultSvg
+                />
+
+                <AkTypography
+                  data-test-sbomScanDetails-aiBomComponent-noFilterResultText
+                  @variant='h6'
+                >
+                  {{this.tNoComponentsFoundFilter}}
+                </AkTypography>
+              </AkStack>
+            {{/if}}
+
+            <AkPagination
+              @disableNext={{pgc.disableNext}}
+              @nextAction={{pgc.nextAction}}
+              @disablePrev={{pgc.disablePrev}}
+              @prevAction={{pgc.prevAction}}
+              @endItemIdx={{pgc.endItemIdx}}
+              @startItemIdx={{pgc.startItemIdx}}
+              @itemPerPageOptions={{pgc.itemPerPageOptions}}
+              @onItemPerPageChange={{pgc.onItemPerPageChange}}
+              @selectedOption={{pgc.selectedOption}}
+              @tableItemLabel={{t 'sbomModule.aiBomComponents'}}
+              @perPageTranslation={{t 'recordPerPage'}}
+              @totalItems={{pgc.totalItems}}
+            />
+          </:default>
+        </Sbom::EmptyLoadingView>
+      </AkPaginationProvider>
+    </div>
+  {{/if}}
+
+  <Sbom::ScanDetails::AiBomComponentDrawer
+    @component={{this.selectedComponent}}
+    @open={{this.openComponentDrawer}}
+    @onClose={{this.handleDrawerClose}}
+  />
+</div>

@@ -7,8 +7,6 @@ import * as semver from 'semver';
 
 export interface SbomComponentStatusSignature {
   Args: {
-    // Accepts either the per-file component model or the org-level component
-    // inventory model; both expose the fields read below.
     sbomComponent: SbomComponentModel | SbomComponentInventoryModel | null;
   };
 }
@@ -17,6 +15,17 @@ type ComponentStatus = {
   label: string;
   color: 'default' | 'primary' | 'success';
 };
+
+// Synthetic pkg:file/* or pkg:generic/* artifacts aren't CVE-tracked, so vulnerabilitiesCount is always 0;
+// "Secure" would imply a vulnerability check that never occurred.
+const NO_VULNERABILITY_FEED_ARTIFACT_CLASSES = new Set([
+  'model',
+  'tokenizer',
+  'config',
+  'supporting',
+  'cloud_endpoint',
+  'platform_managed_ai',
+]);
 
 export default class SbomComponentStatusComponent extends Component<SbomComponentStatusSignature> {
   @service declare intl: IntlService;
@@ -44,7 +53,13 @@ export default class SbomComponentStatusComponent extends Component<SbomComponen
     const component = this.args.sbomComponent;
 
     if (component) {
-      if (component.isMLModel && !component.isVulnerable) {
+      const aiArtifactClass =
+        'aiArtifactClass' in component ? component.aiArtifactClass : '';
+
+      if (
+        component.isMLModel ||
+        NO_VULNERABILITY_FEED_ARTIFACT_CLASSES.has(aiArtifactClass)
+      ) {
         status.push({
           label: this.intl.t('chipStatus.unknown'),
           color: 'default',

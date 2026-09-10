@@ -43,7 +43,7 @@ export default class AuthenticatedDashboardSbomComponentDetailsController extend
       parentCrumb,
       fallbackCrumbs: [
         {
-          title: this.intl.t('SBOM'),
+          title: this.intl.t('sbomModule.scaBreadcrumbTitle'),
           route: 'authenticated.dashboard.sbom.apps',
           isRootCrumb: true,
           stopCrumbGeneration: true,

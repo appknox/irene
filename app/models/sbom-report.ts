@@ -3,6 +3,7 @@ import Model, { attr, belongsTo } from '@ember-data/model';
 import type SbomFileModel from './sbom-file';
 
 export type SbomReportType = 'cyclonedx_json_file' | 'pdf';
+export type SbomReportCategory = 'sbom' | 'ai_bom';
 
 export enum SbomReportStatus {
   PENDING = 1,
@@ -27,6 +28,9 @@ export default class SbomReportModel extends Model {
 
   @attr('string')
   declare reportPassword: string;
+
+  @attr('string')
+  declare reportType: SbomReportCategory;
 
   @attr('date')
   declare generatedOn: Date | null;

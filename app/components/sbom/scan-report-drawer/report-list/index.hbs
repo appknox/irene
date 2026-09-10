@@ -37,7 +37,7 @@
     {{#each this.reportDetails as |details|}}
       <Sbom::ScanReportDrawer::ReportList::Item
         @reportDetails={{details}}
-        @sbomReport={{this.latestSbomScanReport}}
+        @sbomReport={{details.sbomReport}}
       />
     {{/each}}
   </AkList>

@@ -9,6 +9,7 @@ import type IntlService from 'ember-intl/services/intl';
 import parseError from 'irene/utils/parse-error';
 import type IreneAjaxService from 'irene/services/ajax';
 import type AnalyticsService from 'irene/services/analytics';
+import type { UpsellingFeatureGroup } from 'irene/components/upselling-module';
 
 export default class SbomUpsellingComponent extends Component {
   @service declare intl: IntlService;
@@ -29,12 +30,26 @@ export default class SbomUpsellingComponent extends Component {
     this.hasContactedSupport = storedState === 'true';
   }
 
-  get features() {
+  get featureGroups(): UpsellingFeatureGroup[] {
     return [
-      this.intl.t('sbomModule.sbomFeatures.oneClickAnalysis'),
-      this.intl.t('sbomModule.sbomFeatures.identifyDependencies'),
-      this.intl.t('sbomModule.sbomFeatures.uncoverVulnerabilities'),
-      this.intl.t('sbomModule.sbomFeatures.componentInsights'),
+      {
+        title: this.intl.t('sbomModule.sbomFeaturesTitle'),
+        features: [
+          this.intl.t('sbomModule.sbomFeatures.oneClickAnalysis'),
+          this.intl.t('sbomModule.sbomFeatures.identifyDependencies'),
+          this.intl.t('sbomModule.sbomFeatures.uncoverVulnerabilities'),
+          this.intl.t('sbomModule.sbomFeatures.componentInsights'),
+        ],
+      },
+      {
+        title: this.intl.t('sbomModule.aiBomFeaturesTitle'),
+        features: [
+          this.intl.t('sbomModule.aiBomFeatures.discoverAiComponents'),
+          this.intl.t('sbomModule.aiBomFeatures.uncoverAiSecrets'),
+          this.intl.t('sbomModule.aiBomFeatures.providerModelInsights'),
+          this.intl.t('sbomModule.aiBomFeatures.unifiedVisibility'),
+        ],
+      },
     ];
   }
 

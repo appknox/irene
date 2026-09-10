@@ -26,6 +26,9 @@
   z-index: var(--ak-drawer-zIndex);
   position: fixed;
   outline: 0px;
+  // fix slight flicker right at the end of the animation.
+  will-change: transform;
+  backface-visibility: hidden;
 }
 
 .drawer-anchor-left {
