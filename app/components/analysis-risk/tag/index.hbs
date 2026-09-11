@@ -1,12 +1,57 @@
 <AkStack
   ...attributes
-  local-class='analysis-risk-tag 
+  local-class='analysis-risk-tag
     {{this.analysisRiskStatus.cssclass}}
     {{if @isCapsule "analysis-risk-tag-capsule"}}'
   @spacing='1'
   @alignItems='center'
   data-test-analysisRiskTag-root='{{this.analysisRiskStatus.label}}'
 >
+  {{#if this.showPendingApprovalIcon}}
+    <AkTooltip @arrow={{true}} @placement='bottom'>
+      <:tooltipContent>
+        <AkStack
+          data-test-analysisRiskTag-pendingTooltipContent
+          @direction='column'
+          @spacing='0.5'
+        >
+          <AkTypography local-class='tooltip-content-text' @tag='span'>
+            {{t 'pendingApproval'}}
+          </AkTypography>
+
+          <AkStack @alignItems='center' @spacing='1'>
+            <AnalysisRisk::Text
+              data-test-analysisRiskTag-pendingOriginalRisk
+              @risk={{@computedRisk}}
+            />
+
+            <AkIcon
+              local-class='tooltip-content-icon'
+              @size='small'
+              @color='textSecondary'
+              @iconName='east'
+            />
+
+            <AnalysisRisk::Text
+              @risk={{@pendingRequestedRisk}}
+              data-test-analysisRiskTag-pendingRequestedRisk
+            />
+          </AkStack>
+        </AkStack>
+      </:tooltipContent>
+
+      <:default>
+        <AkIcon
+          @color='inherit'
+          @iconName='pending-actions-sharp'
+          @size='small'
+          local-class='analysis-risk-overridden-icon'
+          data-test-analysisRiskTag-pendingIcon
+        />
+      </:default>
+    </AkTooltip>
+  {{/if}}
+
   {{#if @isOverridden}}
     <AkTooltip
       @arrow={{true}}

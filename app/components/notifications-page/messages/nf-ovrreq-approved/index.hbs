@@ -1,0 +1,22 @@
+<AkStack @direction='column' @spacing='1.5' class='pb-1'>
+  <span data-test-nf-ovrreq-approved-primary-message>
+    {{t
+      'notificationModule.messages.nf-ovrreq-approved'
+      htmlSafe=true
+      reviewer_email=@context.reviewer_email
+      requester_email=@context.requester_email
+    }}
+  </span>
+
+  <div data-test-nf-ovrreq-approved-link>
+    <AkLink
+      @underline='none'
+      @route='authenticated.dashboard.file.analysis'
+      @models={{array @context.file_id @context.analysis_id}}
+    >
+      <AkButton @variant='outlined' @color='neutral'>
+        {{t 'viewVulnerabilityDetails'}}
+      </AkButton>
+    </AkLink>
+  </div>
+</AkStack>

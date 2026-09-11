@@ -93,6 +93,9 @@ export default class AnalysisModel extends Model {
   @attr('string', { defaultValue: null })
   declare overriddenBy: string | null;
 
+  @attr('string', { defaultValue: null })
+  declare approvedBy: string | null;
+
   @attr('date')
   declare overriddenDate: Date | null;
 

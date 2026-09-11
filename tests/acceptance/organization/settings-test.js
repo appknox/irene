@@ -105,7 +105,11 @@ module('Acceptance | Organization settings', function (hooks) {
 
     assert.dom('[data-test-mfa-title]').hasText(t('multiFactorAuth'));
 
-    assert.dom('[data-test-toggle-input]').exists().isDisabled().isNotChecked();
+    // Scoped to the MFA toggle: the settings page renders other toggles too.
+    assert
+      .dom('[data-test-enable-mandatory-mfa-label] [data-test-toggle-input]')
+      .isDisabled()
+      .isNotChecked();
 
     assert
       .dom('[data-test-enable-mandatory-mfa-label]')

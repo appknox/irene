@@ -2,7 +2,7 @@
   @dataModel={{@dataModel}}
 />
 
-<AkDivider @color='dark' class='my-2' />
+<AkDivider @color='dark' class='mt-2 mb-1' />
 
 <div class='p-3'>
   <AkStack
@@ -22,7 +22,7 @@
       <AkTypography
         data-test-analysisRisk-overrideEditDrawer-overrideDetails-overriddenRiskText
       >
-        {{t (risk-text @dataModel.overriddenRisk)}}
+        {{this.overridenRiskLabel}}
       </AkTypography>
 
       <AnalysisRisk::OverrideEditDrawer::Divider @label='{{t "for"}}' />
@@ -35,7 +35,7 @@
       <AkStack />
     </AkStack>
 
-    <AkDivider local-class='details-divider' />
+    <AkDivider local-class='details-divider' class='my-2' />
 
     <AkStack @direction='column' @spacing='1'>
       <AkTypography
@@ -54,11 +54,11 @@
     </AkStack>
   </AkStack>
 
-  <AkDivider @color='dark' class='my-2' />
+  <AkDivider @color='dark' class='my-3' />
 
   <AkStack
     @direction='column'
-    @spacing='1'
+    @spacing='2'
     data-test-cy='overrideEditDrawer-overrideDetails-auditDetails'
   >
     {{#each this.overrideAuditDetails as |oad|}}
@@ -97,22 +97,24 @@
   </AkStack>
 </div>
 
-<AkDivider @color='dark' />
+{{#if this.canEditOverride}}
+  <AkDivider @color='dark' />
 
-<AkStack class='px-3 py-2' @alignItems='center' @spacing='2'>
-  <AkButton
-    data-test-analysisRisk-overrideEditDrawer-overrideDetails-editBtn
-    {{on 'click' this.handleEditOverrideClick}}
-  >
-    {{t 'edit'}}
-  </AkButton>
+  <AkStack class='px-3 py-2' @alignItems='center' @spacing='2'>
+    <AkButton
+      data-test-analysisRisk-overrideEditDrawer-overrideDetails-editBtn
+      {{on 'click' this.handleEditOverrideClick}}
+    >
+      {{t 'edit'}}
+    </AkButton>
 
-  <AkButton
-    data-test-analysisRisk-overrideEditDrawer-overrideDetails-resetBtn
-    @variant='outlined'
-    @color='neutral'
-    {{on 'click' this.handleResetOverrideClick}}
-  >
-    {{t 'resetOverride'}}
-  </AkButton>
-</AkStack>
+    <AkButton
+      data-test-analysisRisk-overrideEditDrawer-overrideDetails-resetBtn
+      @variant='outlined'
+      @color='neutral'
+      {{on 'click' this.handleResetOverrideClick}}
+    >
+      {{t 'resetOverride'}}
+    </AkButton>
+  </AkStack>
+{{/if}}
