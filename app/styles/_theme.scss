@@ -262,6 +262,64 @@
     #e8e8e8 10px
   );
 
+  // special case variables for offensive-security
+  --offensive-security-header-shield-bg: rgba(239, 83, 80, 0.15);
+  --offensive-security-header-shield-color: #ef5350;
+  --offensive-security-detected-bg: #e8f4fd;
+  --offensive-security-detected-color: #1565c0;
+  --offensive-security-errored-bg: #fff3e0;
+  --offensive-security-errored-color: #e65100;
+  --offensive-security-artifact-hover-border: #cbd5e0;
+  --offensive-security-artifact-blue-bg: #ebf8ff;
+  --offensive-security-artifact-blue-color: #3182ce;
+  --offensive-security-artifact-purple-bg: #faf5ff;
+  --offensive-security-artifact-purple-color: #805ad5;
+  --offensive-security-artifact-orange-bg: #fffaf0;
+  --offensive-security-artifact-orange-color: #dd6b20;
+  --offensive-security-artifact-green-bg: #f0fff4;
+  --offensive-security-artifact-green-color: #38a169;
+
+  // special case variables for offensive-security/finding-detail
+  --offensive-security-finding-detail-hero-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+  --offensive-security-finding-detail-amber-kicker: #b45309;
+  --offensive-security-finding-detail-amber-border: #fde68a;
+  --offensive-security-finding-detail-amber-bg: #fef3c7;
+  --offensive-security-finding-detail-amber-accent: #d97706;
+  --offensive-security-finding-detail-amber-shadow: 0 0 0 2px rgba(217, 119, 6, 0.2);
+  --offensive-security-finding-detail-green-dark: #15803d;
+  --offensive-security-finding-detail-green-border: #bbf7d0;
+  --offensive-security-finding-detail-green-bg: #f0fdf4;
+  --offensive-security-finding-detail-green-accent: #16a34a;
+  --offensive-security-finding-detail-emerald-dark: #047857;
+  --offensive-security-finding-detail-emerald-border: #a7f3d0;
+  --offensive-security-finding-detail-emerald-bg: #ecfdf5;
+  --offensive-security-finding-detail-emerald-accent: #059669;
+  --offensive-security-finding-detail-emerald-light: #34d399;
+  --offensive-security-finding-detail-emerald-tint: rgba(5, 150, 105, 0.2);
+  --offensive-security-finding-detail-blue-border: #bbdefb;
+  --offensive-security-finding-detail-blue-accent: #1976d2;
+  --offensive-security-finding-detail-blue-main: #2563eb;
+  --offensive-security-finding-detail-blue-dark: #1d4ed8;
+  --offensive-security-finding-detail-blue-subtle-border: #bfdbfe;
+  --offensive-security-finding-detail-blue-subtle-bg: #eff6ff;
+  --offensive-security-finding-detail-purple-main: #7c3aed;
+  --offensive-security-finding-detail-purple-border: #ddd6fe;
+  --offensive-security-finding-detail-purple-bg: #f5f3ff;
+  --offensive-security-finding-detail-slate-900: #0f172a;
+  --offensive-security-finding-detail-slate-800: #1e293b;
+  --offensive-security-finding-detail-slate-700: #334155;
+  --offensive-security-finding-detail-slate-600: #475569;
+  --offensive-security-finding-detail-slate-500: #64748b;
+  --offensive-security-finding-detail-slate-400: #94a3b8;
+  --offensive-security-finding-detail-slate-300: #cbd5e1;
+  --offensive-security-finding-detail-slate-200: #e2e8f0;
+  --offensive-security-finding-detail-slate-100: #f1f5f9;
+  --offensive-security-finding-detail-slate-50: #f8fafc;
+  --offensive-security-finding-detail-term-bg: #0b1120;
+  --offensive-security-finding-detail-score-gradient: linear-gradient(90deg, #d97706, #f59e0b);
+  --offensive-security-finding-detail-overlay-bg: rgba(15, 23, 42, 0.45);
+  --offensive-security-finding-detail-drawer-shadow: -10px 0 25px rgba(0, 0, 0, 0.1);
+
   //special case variable for health-score
   --low-health-score: #a8d65e;
 

@@ -1,0 +1,68 @@
+{{! template-lint-disable no-invalid-interactive }}
+<AkStack
+  @width='full'
+  @direction='column'
+  @spacing='2'
+  local-class='artifacts-card'
+  class='p-3'
+  data-test-offensiveSecurity-artifactsCard
+>
+  <AkTypography @variant='body1' @fontWeight='bold'>
+    {{t 'offensiveSecurity.artifacts'}}
+  </AkTypography>
+
+  {{#if this.hasArtifacts}}
+    <AkStack @width='full' @direction='column' @spacing='1.5'>
+      {{#each @artifacts as |artifact|}}
+        <div
+          local-class='artifact-box cursor-pointer'
+          {{on 'click' (fn this.handleDownload artifact)}}
+          data-test-offensiveSecurity-artifactsCard-row
+        >
+          <AkStack @alignItems='center' @spacing='1.5' local-class='artifact-left'>
+            <div local-class='artifact-icon-box {{this.getArtifactIconClass artifact}}'>
+              <AkIcon @iconName={{this.getArtifactIcon artifact}} @size='small' />
+            </div>
+
+            <AkStack @direction='column' local-class='artifact-meta'>
+              <AkTypography
+                @variant='body2'
+                @fontWeight='bold'
+                local-class='artifact-description'
+                title={{this.getArtifactDescription artifact}}
+              >
+                {{this.getArtifactDescription artifact}}
+              </AkTypography>
+
+              <AkTypography
+                @variant='caption'
+                @color='textSecondary'
+                class='font-mono'
+              >
+                {{this.sizeLabel artifact.size}}
+              </AkTypography>
+            </AkStack>
+          </AkStack>
+
+          <AkStack @alignItems='center' local-class='artifact-right'>
+            <AkIconButton
+              {{on 'click' (fn this.handleDownload artifact)}}
+              @disabled={{@isDownloading}}
+              data-test-offensiveSecurity-artifactsCard-download
+            >
+              <AkIcon @iconName='download' @size='small' />
+            </AkIconButton>
+          </AkStack>
+        </div>
+      {{/each}}
+    </AkStack>
+  {{else}}
+    <AkTypography
+      @variant='body2'
+      @color='textSecondary'
+      data-test-offensiveSecurity-artifactsCard-empty
+    >
+      {{t 'offensiveSecurity.noArtifacts'}}
+    </AkTypography>
+  {{/if}}
+</AkStack>

@@ -1,0 +1,72 @@
+<AkStack
+  @width='full'
+  @direction='column'
+  @spacing='2'
+  local-class='summary-card'
+  class='p-3'
+  data-test-offensiveSecurity-summaryCard
+>
+  <AkStack @width='full' @justifyContent='space-between' @alignItems='center'>
+    <AkTypography @variant='body1' @fontWeight='bold'>
+      {{t 'offensiveSecurity.summary'}}
+    </AkTypography>
+
+    <AkStack @alignItems='center' @spacing='1'>
+      <AkTypography @variant='body1' @color='textSecondary'>
+        {{t 'offensiveSecurity.riskRating'}}
+      </AkTypography>
+
+      <span
+        local-class='risk-badge risk-{{@scan.riskClass}}'
+        data-test-offensiveSecurity-summaryCard-risk
+      >
+        {{t (concat 'offensiveSecurity.riskLevel.' @scan.riskClass)}}
+      </span>
+    </AkStack>
+  </AkStack>
+
+  <AkStack
+    @width='full'
+    @spacing='1.5'
+    @justifyContent='space-between'
+    @alignItems='stretch'
+    local-class='stats-row'
+  >
+    {{#each this.stats as |stat|}}
+      <div
+        local-class='stat-box {{stat.tone}}'
+        data-test-offensiveSecurity-summaryCard-stat
+      >
+        <AkTypography @variant='h4' @fontWeight='bold' local-class='stat-number'>
+          {{stat.value}}
+        </AkTypography>
+
+        <AkTypography @variant='caption' @color='textSecondary' local-class='stat-label'>
+          {{stat.label}}
+        </AkTypography>
+      </div>
+    {{/each}}
+  </AkStack>
+
+  {{#if this.showResilience}}
+    <AkDivider />
+
+    <AkStack @width='full' @justifyContent='space-between' @alignItems='center'>
+      <AkTypography @variant='body2' @color='textSecondary'>
+        {{t 'offensiveSecurity.overallResilience'}}
+      </AkTypography>
+
+      <AkStack @alignItems='center' @spacing='1'>
+        <AkTypography @variant='body2' @fontWeight='medium'>
+          {{this.effectiveResilience}}
+        </AkTypography>
+
+        {{#if this.resilienceBandLabel}}
+          <AkTypography @variant='body3' @color='textSecondary'>
+            ({{this.resilienceBandLabel}})
+          </AkTypography>
+        {{/if}}
+      </AkStack>
+    </AkStack>
+  {{/if}}
+</AkStack>

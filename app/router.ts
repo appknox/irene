@@ -351,6 +351,19 @@ Router.map(function () {
         });
       });
 
+      // Offensive security routes
+      this.route(
+        'offensive-security',
+        { path: '/dashboard/offensive-security' },
+        function () {
+          this.route('index', { path: '/' });
+          this.route('scan', { path: '/scans/:scan_id' });
+          this.route('finding', {
+            path: '/scans/:scan_id/findings/:finding_id',
+          });
+        }
+      );
+
       // Storeknox routes
       this.route('storeknox', { path: '/dashboard/storeknox' }, function () {
         this.route('index', { path: '/' });

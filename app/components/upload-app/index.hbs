@@ -1,7 +1,7 @@
 <UploadApp::ViaSystem />
 
 {{#if this.urlUploadAllowed}}
-  <UploadApp::ViaLink />
+  <UploadApp::ViaLink @isOffsec={{this.isOffsec}} />
 {{/if}}
 
 <UploadApp::Status />

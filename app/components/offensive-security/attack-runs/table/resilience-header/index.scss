@@ -1,0 +1,34 @@
+.column-filter {
+  width: 12.5em;
+  background-color: var(--offensive-security-attack-runs-filter-bg-color);
+  box-shadow: var(--offensive-security-attack-runs-filter-box-shadow);
+  border-radius: var(--offensive-security-attack-runs-filter-border-radius);
+
+  .filter-option:hover {
+    background-color: var(
+      --offensive-security-attack-runs-filter-option-hover-bg-color
+    );
+  }
+
+  .clear-filter-section {
+    background-color: var(
+      --offensive-security-attack-runs-filter-clear-bg-color
+    );
+  }
+
+  .filter-header {
+    padding: 0.5em 1em;
+    background-color: var(
+      --offensive-security-attack-runs-filter-header-bg-color
+    );
+
+    .filter-header-text {
+      text-transform: uppercase;
+      font-size: 0.825rem !important;
+    }
+  }
+}
+
+.cursor-pointer {
+  cursor: pointer;
+}

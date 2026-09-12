@@ -3,8 +3,6 @@ import { action } from '@ember/object';
 import { inject as service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
 import type IntlService from 'ember-intl/services/intl';
-import type RouterService from '@ember/routing/router-service';
-
 import ENV from 'irene/config/environment';
 import type UserModel from 'irene/models/user';
 import type MeService from 'irene/services/me';
@@ -28,7 +26,6 @@ export default class AppknoxWrapperComponent extends Component<AppknoxWrapperSig
   @service declare session: SessionService;
   @service declare me: MeService;
   @service declare intl: IntlService;
-  @service declare router: RouterService;
   @service declare integration: IntegrationService;
   @service declare organization: OrganizationService;
   @service declare notifications: NotificationService;

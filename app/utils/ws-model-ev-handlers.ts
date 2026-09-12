@@ -3,6 +3,7 @@ import type EventBusService from 'irene/services/event-bus';
 import type RealtimeService from 'irene/services/realtime';
 import type AnalysisOverviewModel from 'irene/models/analysis-overview';
 import type DynamicscanModel from 'irene/models/dynamicscan';
+import type OffsecScanModel from 'irene/models/offsec-scan';
 import type SubmissionModel from 'irene/models/submission';
 
 /**Base class for model event handlers*/
@@ -71,6 +72,33 @@ export class DynamicScanEventHandler extends WsModelEventHandler<DynamicscanMode
 
   onUpdate(wsData: object) {
     this.pushDynamicscanAndNotify(wsData);
+  }
+}
+
+/** Handler for offensive-security scan events
+ *
+ * Mycroft pushes the serialized scan on every status transition, so the store stays
+ * current without polling. The components keep a poll as a fallback for a dropped
+ * socket, not as the primary signal.
+ */
+export class OffsecScanEventHandler extends WsModelEventHandler<OffsecScanModel> {
+  get modelName() {
+    return 'offsec-scan' as const;
+  }
+
+  private pushOffsecScanAndNotify(wsData: object) {
+    const normalized = this.store.normalize('offsec-scan', wsData);
+    const scan = this.store.push(normalized) as OffsecScanModel;
+
+    this.eventBus.trigger('ws:offsec-scan:update', scan);
+  }
+
+  onCreate(wsData: object) {
+    this.pushOffsecScanAndNotify(wsData);
+  }
+
+  onUpdate(wsData: object) {
+    this.pushOffsecScanAndNotify(wsData);
   }
 }
 

@@ -1,0 +1,21 @@
+<AkStack
+  @spacing='0.5'
+  @alignItems='center'
+  data-test-offensiveSecurity-attackRuns-dateHeader
+>
+  <AkTypography @variant='subtitle2'>
+    {{t 'offensiveSecurity.date'}}
+  </AkTypography>
+
+  <AkIconButton
+    {{on 'click' this.toggleSort}}
+    data-test-offensiveSecurity-attackRuns-dateHeader-sortToggle
+  >
+    <AkIcon
+      @iconName='arrow-upward'
+      @size='small'
+      local-class='sort-icon {{if this.isDescending "sort-icon-desc"}}'
+      data-test-offensiveSecurity-attackRuns-dateHeader-sortIcon
+    />
+  </AkIconButton>
+</AkStack>

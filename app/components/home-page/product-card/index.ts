@@ -17,13 +17,15 @@ export interface ProductCardDetails {
     | 'ak-svg/storeknox-bg-img'
     | 'ak-svg/appknox-bg-img'
     | 'ak-svg/security-bg-img'
-    | 'ak-svg/report-bg-img';
+    | 'ak-svg/report-bg-img'
+    | 'ak-svg/offensive-security-bg-img';
 
   indicatorSvg:
     | 'ak-svg/sm-indicator'
     | 'ak-svg/vapt-indicator'
     | 'ak-svg/security-indicator'
-    | 'ak-svg/report-indicator';
+    | 'ak-svg/report-indicator'
+    | 'ak-svg/offensive-security-indicator';
 }
 
 export interface ProductCardComponentSignature {

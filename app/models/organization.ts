@@ -19,6 +19,7 @@ export interface Features {
   store_release_readiness: boolean;
   storeknox: boolean;
   upload_via_url: boolean;
+  offensive_security: boolean;
 }
 
 export interface AiFeatures {

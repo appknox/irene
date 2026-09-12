@@ -48,6 +48,13 @@ export default class HomePageComponent extends Component {
     );
   }
 
+  get showOffensiveSecurity() {
+    return (
+      !this.organization.hideUpsellUIStatus.offensiveSecurity &&
+      this.organization.selected?.features?.offensive_security
+    );
+  }
+
   get productCardDetails() {
     return [
       {
@@ -67,6 +74,13 @@ export default class HomePageComponent extends Component {
         indicatorSvg: 'ak-svg/sm-indicator',
         coverBackgroundImage: 'ak-svg/storeknox-bg-img',
         pendoContainerId: 'sk-pendo-version-container',
+      },
+      this.showOffensiveSecurity && {
+        title: this.intl.t('offensiveSecurity.title'),
+        description: this.intl.t('offensiveSecurity.homeCardDescription'),
+        route: 'authenticated.offensive-security',
+        indicatorSvg: 'ak-svg/offensive-security-indicator',
+        coverBackgroundImage: 'ak-svg/offensive-security-bg-img',
       },
       this.showReporting && {
         title: this.intl.t('reportModule.title'),

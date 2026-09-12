@@ -20,6 +20,7 @@ import type { WsModelEventHandler } from 'irene/utils/ws-model-ev-handlers';
 import {
   AnalysisEventHandler,
   DynamicScanEventHandler,
+  OffsecScanEventHandler,
 } from 'irene/utils/ws-model-ev-handlers';
 
 interface SocketIOService {
@@ -160,6 +161,7 @@ export default class WebsocketService extends Service {
     const handlers = [
       new AnalysisEventHandler(this.store, this.eventBus, this.realtime),
       new DynamicScanEventHandler(this.store, this.eventBus, this.realtime),
+      new OffsecScanEventHandler(this.store, this.eventBus, this.realtime),
     ];
 
     handlers.forEach((handler) => {

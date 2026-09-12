@@ -10,7 +10,9 @@ module('Integration | Component | app-logo', function (hooks) {
     await render(hbs`<AppLogo />`);
 
     assert.dom('[data-test-app-logo-container]').exists();
-    assert.dom('[data-test-appLogo-img]').exists();
+    assert
+      .dom('[data-test-appLogo-img], [data-test-appLogo-fallback]')
+      .exists();
   });
 
   test.each(
@@ -53,12 +55,15 @@ module('Integration | Component | app-logo', function (hooks) {
   test('it renders app-logo correctly with skeleton', async function (assert) {
     await render(hbs`<AppLogo />`);
 
-    assert.dom('[data-test-appLogo-img]').exists();
+    assert
+      .dom('[data-test-appLogo-img], [data-test-appLogo-fallback]')
+      .exists();
     assert.dom('[data-test-app-logo-skeleton]').doesNotExist();
 
     await render(hbs`<AppLogo @loading={{true}}/>`);
 
     assert.dom('[data-test-appLogo-img]').doesNotExist();
+    assert.dom('[data-test-appLogo-fallback]').doesNotExist();
     assert.dom('[data-test-app-logo-skeleton]').exists();
   });
 
@@ -66,14 +71,14 @@ module('Integration | Component | app-logo', function (hooks) {
     await render(hbs`<AppLogo />`);
 
     assert
-      .dom('[data-test-appLogo-img]')
+      .dom('[data-test-appLogo-img], [data-test-appLogo-fallback]')
       .exists()
       .hasNoClass(/app-logo-image-rounded/i);
 
     await render(hbs`<AppLogo @rounded={{true}}/>`);
 
     assert
-      .dom('[data-test-appLogo-img]')
+      .dom('[data-test-appLogo-img], [data-test-appLogo-fallback]')
       .exists()
       .hasClass(/app-logo-image-rounded/i);
   });

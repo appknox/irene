@@ -105,6 +105,11 @@ export enum AkSvgComponentInvocationByNames {
   ComponentSearch,
   EditAnalysisRequestSuccess,
   EditAnalysisMailIcon,
+  OffensiveSecurityBgImg,
+  OffensiveSecurityIndicator,
+  PlatformAndroidUnknown,
+  PlatformAndroid,
+  PlatformIosUnknown,
 }
 
 export enum AkSvgComponentInvocationByPaths {
@@ -145,6 +150,11 @@ export enum AkSvgComponentInvocationByPaths {
   'medium-risk-tower',
   'low-risk-tower',
   'edit-analysis-request-success',
+  'offensive-security-bg-img',
+  'offensive-security-indicator',
+  'platform-android-unknown',
+  'platform-android',
+  'platform-ios-unknown',
 }
 
 type AkSvgComponent = ComponentLike<{

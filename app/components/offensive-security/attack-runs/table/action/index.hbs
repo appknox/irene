@@ -1,0 +1,21 @@
+<AkIconButton
+  {{on 'click' this.handleOpenMenu}}
+  data-test-offensiveSecurity-attackRuns-actionBtn='{{@scan.id}}'
+>
+  <AkIcon @iconName='more-vert' @size='small' />
+</AkIconButton>
+
+<AkMenu
+  @anchorRef={{this.anchorRef}}
+  @arrow={{true}}
+  @onClose={{this.handleCloseMenu}}
+  as |akm|
+>
+  <akm.listItem
+    @onClick={{this.handleViewResults}}
+    data-test-offensiveSecurity-attackRuns-viewResults
+    as |li|
+  >
+    <li.text @primaryText={{t 'offensiveSecurity.viewResults'}} />
+  </akm.listItem>
+</AkMenu>
