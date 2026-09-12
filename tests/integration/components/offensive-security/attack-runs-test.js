@@ -91,6 +91,10 @@ const SELECTORS = {
     `[data-test-offensiveSecurity-attackRuns-actionBtn='${id}']`,
   // AkList::Item splats attributes onto the <li>; the handler sits on its <button>.
   viewResults: '[data-test-offensiveSecurity-attackRuns-viewResults] button',
+  totalRuns: '[data-test-offensiveSecurity-attackRuns-totalRuns]',
+  runningCount: '[data-test-offensiveSecurity-attackRuns-runningCount]',
+  completedCount: '[data-test-offensiveSecurity-attackRuns-completedCount]',
+  failedCount: '[data-test-offensiveSecurity-attackRuns-failedCount]',
 };
 
 const TEMPLATE = hbs`<OffensiveSecurity::AttackRuns
@@ -514,5 +518,27 @@ module('Integration | Component | offensive-security/attack-runs', (hooks) => {
     );
 
     assert.deepEqual(router.lastModels, ['7']);
+  });
+
+  test('it uses status_counts from the API for the summary metric cards', async function (assert) {
+    this.server.get('/v2/offsec/scans', () => ({
+      count: 9,
+      next: null,
+      previous: null,
+      results: [buildScan({ id: 1, status: 3 })],
+      status_counts: {
+        completed: 4,
+        in_processing: 0,
+        failed: 5,
+      },
+    }));
+    this.server.get('/submissions', () => []);
+
+    await render(TEMPLATE);
+
+    assert.dom(SELECTORS.totalRuns).hasText('9');
+    assert.dom(SELECTORS.runningCount).hasText('0');
+    assert.dom(SELECTORS.completedCount).hasText('4');
+    assert.dom(SELECTORS.failedCount).hasText('5');
   });
 });

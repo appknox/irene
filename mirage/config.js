@@ -96,11 +96,22 @@ function routes() {
     const limit = Number(request.queryParams.limit ?? 25);
     const offset = Number(request.queryParams.offset ?? 0);
 
+    const completed = scans.filter((s) => s.status === 3).length;
+    const inProcessing = scans.filter(
+      (s) => s.status === 1 || s.status === 2
+    ).length;
+    const failed = scans.filter((s) => s.status === 4).length;
+
     return {
       count: scans.length,
       next: null,
       previous: null,
       results: scans.slice(offset, offset + limit),
+      status_counts: {
+        completed,
+        in_processing: inProcessing,
+        failed,
+      },
     };
   });
 

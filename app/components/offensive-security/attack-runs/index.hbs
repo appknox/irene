@@ -46,7 +46,10 @@
       </div>
       <div local-class='stat-details'>
         <span local-class='stat-label'>{{t 'offensiveSecurity.totalRuns'}}</span>
-        <span local-class='stat-number'>{{this.totalRunsDisplay}}</span>
+        <span
+          local-class='stat-number'
+          data-test-offensiveSecurity-attackRuns-totalRuns
+        >{{this.totalRunsDisplay}}</span>
         <span local-class='stat-subtext'>{{t 'offensiveSecurity.allTime'}}</span>
       </div>
     </div>
@@ -60,7 +63,10 @@
       </div>
       <div local-class='stat-details'>
         <span local-class='stat-label'>{{t 'offensiveSecurity.status.running'}}</span>
-        <span local-class='stat-number'>{{this.runningCount}}</span>
+        <span
+          local-class='stat-number'
+          data-test-offensiveSecurity-attackRuns-runningCount
+        >{{this.runningCount}}</span>
         <span local-class='stat-subtext'>{{t 'offensiveSecurity.inProgress'}}</span>
       </div>
     </div>
@@ -72,7 +78,10 @@
       </div>
       <div local-class='stat-details'>
         <span local-class='stat-label'>{{t 'offensiveSecurity.status.completed'}}</span>
-        <span local-class='stat-number'>{{this.completedCount}}</span>
+        <span
+          local-class='stat-number'
+          data-test-offensiveSecurity-attackRuns-completedCount
+        >{{this.completedCount}}</span>
         <span local-class='stat-subtext'>{{t 'offensiveSecurity.successfullyFinished'}}</span>
       </div>
     </div>
@@ -84,7 +93,10 @@
       </div>
       <div local-class='stat-details'>
         <span local-class='stat-label'>{{t 'offensiveSecurity.status.failed'}}</span>
-        <span local-class='stat-number'>{{this.failedCount}}</span>
+        <span
+          local-class='stat-number'
+          data-test-offensiveSecurity-attackRuns-failedCount
+        >{{this.failedCount}}</span>
         <span local-class='stat-subtext'>{{t 'offensiveSecurity.withErrors'}}</span>
       </div>
     </div>

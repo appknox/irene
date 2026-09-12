@@ -42,8 +42,19 @@ export type StatusFilter =
 
 export type SortDirection = 'asc' | 'desc';
 
+export interface OffsecStatusCounts {
+  completed?: number;
+  in_processing?: number;
+  failed?: number;
+  in_progress?: number;
+  running?: number;
+}
+
 type ScanResponseModel = DS.AdapterPopulatedRecordArray<OffsecScanModel> & {
-  meta?: { count: number };
+  meta?: {
+    count?: number;
+    status_counts?: OffsecStatusCounts;
+  };
 };
 
 export interface OffensiveSecurityAttackRunsQueryParams {
@@ -599,17 +610,13 @@ export default class OffensiveSecurityAttackRunsComponent extends Component<Offe
           this.selectedStatusTab !== 'all' ||
           this.selectedStatusFilter !== 'all';
 
-        if (!hasActiveFilters) {
-          this.totalAllScansCount = scans.meta?.count ?? recordList.length;
-          this.totalRunningScansCount = recordList.filter(
-            (s) => s.isInProgress || s.isRunning
-          ).length;
-          this.totalCompletedScansCount = recordList.filter(
-            (s) => s.isCompleted
-          ).length;
-          this.totalFailedScansCount = recordList.filter(
-            (s) => s.isFailed
-          ).length;
+        const statusCounts = scans.meta?.status_counts;
+        const total = scans.meta?.count ?? recordList.length;
+
+        if (statusCounts) {
+          this.updateCountsFromStatusCounts(statusCounts, total);
+        } else if (!hasActiveFilters) {
+          this.updateCountsFromRecordList(recordList, total);
         } else if (this.totalAllScansCount === null) {
           this.loadOverallStats.perform();
         }
@@ -621,6 +628,34 @@ export default class OffensiveSecurityAttackRunsComponent extends Component<Offe
     }
   );
 
+  private updateCountsFromStatusCounts(
+    statusCounts: OffsecStatusCounts,
+    totalCount: number
+  ): void {
+    this.totalAllScansCount = totalCount;
+    this.totalCompletedScansCount = statusCounts.completed ?? 0;
+    this.totalRunningScansCount =
+      statusCounts.in_processing ??
+      statusCounts.in_progress ??
+      statusCounts.running ??
+      0;
+    this.totalFailedScansCount = statusCounts.failed ?? 0;
+  }
+
+  private updateCountsFromRecordList(
+    recordList: OffsecScanModel[],
+    totalCount: number
+  ): void {
+    this.totalAllScansCount = totalCount;
+    this.totalRunningScansCount = recordList.filter(
+      (s) => s.isInProgress || s.isRunning
+    ).length;
+    this.totalCompletedScansCount = recordList.filter(
+      (s) => s.isCompleted
+    ).length;
+    this.totalFailedScansCount = recordList.filter((s) => s.isFailed).length;
+  }
+
   loadOverallStats = task(async () => {
     try {
       const overallScans = (await this.store.query('offsec-scan', {
@@ -628,12 +663,14 @@ export default class OffensiveSecurityAttackRunsComponent extends Component<Offe
         offset: 0,
       })) as ScanResponseModel;
       const list = overallScans.slice();
-      this.totalAllScansCount = overallScans.meta?.count ?? list.length;
-      this.totalRunningScansCount = list.filter(
-        (s) => s.isInProgress || s.isRunning
-      ).length;
-      this.totalCompletedScansCount = list.filter((s) => s.isCompleted).length;
-      this.totalFailedScansCount = list.filter((s) => s.isFailed).length;
+      const statusCounts = overallScans.meta?.status_counts;
+      const total = overallScans.meta?.count ?? list.length;
+
+      if (statusCounts) {
+        this.updateCountsFromStatusCounts(statusCounts, total);
+      } else {
+        this.updateCountsFromRecordList(list, total);
+      }
     } catch {
       // Non-critical, ignore
     }
