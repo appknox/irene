@@ -28,6 +28,10 @@ export type RawDeviceType = {
   // CYOD scans: no real device — only one of these is set
   ios_itms_url?: string;
   android_download_url?: string;
+  // Per-scan secret for the CYOD screen-stream socket, minted with the scan.
+  // Scoped to this scan alone, so it replaces the deployment-wide token the
+  // viewer used to send. Absent on FARM scans and on scans predating it.
+  viewer_token?: string;
 };
 
 export default class DeviceModel extends Model {

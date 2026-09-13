@@ -112,7 +112,12 @@ export default class VncViewerComponent extends Component<VncViewerSignature> {
   }
 
   get cyodAuthToken() {
-    return ENV.deviceFarmPassword;
+    // The scan's own viewer_token, minted with the scan and readable only
+    // through this project-scoped record. Previously ENV.deviceFarmPassword --
+    // the noVNC RFB password doing double duty as an API credential, shared by
+    // every deployment and hardcoded in this bundle. deviceFarmPassword above
+    // keeps that value for noVNC, which is its actual purpose.
+    return this.args.dynamicScan?.get('deviceUsed')?.viewer_token ?? null;
   }
 
   get deviceType() {

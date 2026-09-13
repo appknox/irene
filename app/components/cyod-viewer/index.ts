@@ -9,6 +9,8 @@ import type DevicefarmService from 'irene/services/devicefarm';
 import type LoggerService from 'irene/services/logger';
 
 const SCRCPY_WS_PATH = '/devicefarm/ws/scrcpy/';
+// Must match ScrcpyBrowserConsumer.AUTH_SUBPROTOCOL in moriarty.
+const AUTH_SUBPROTOCOL = 'moriarty-token';
 const MAX_RECONNECT_ATTEMPTS = 5;
 const RECONNECT_BASE_DELAY_MS = 1000;
 const RECONNECT_MAX_DELAY_MS = 8000;
@@ -18,7 +20,9 @@ export interface CyodViewerSignature {
   Args: {
     scanToken: string | null;
     platform: number;
-    authToken: string;
+    // Null until the scan record carries a viewer_token — FARM scans, and CYOD
+    // scans started before it existed, never will.
+    authToken: string | null;
   };
 }
 
@@ -44,8 +48,11 @@ export default class CyodViewerComponent extends Component<CyodViewerSignature> 
   get wsUrl() {
     const base = this.devicefarm.urlbase.replace(/^http/, 'ws');
     const url = new URL(`${SCRCPY_WS_PATH}${this.args.scanToken}/`, base);
-    url.searchParams.set('token', this.args.authToken);
 
+    // The auth token is deliberately NOT in the query string: the request line
+    // is recorded by every proxy that terminates TLS on the way here
+    // (Cloudflare, traefik), which would write the credential into their logs.
+    // It travels in Sec-WebSocket-Protocol instead — see AUTH_SUBPROTOCOL.
     return url.href;
   }
 
@@ -122,6 +129,16 @@ export default class CyodViewerComponent extends Component<CyodViewerSignature> 
       return;
     }
 
+    // Without the scan's viewer_token the socket would be rejected, and the
+    // reconnect loop would retry five times before surfacing anything. Fail
+    // once, with a message, instead.
+    if (!this.args.authToken) {
+      this.logger.error('[CyodViewer] scan has no viewer token; cannot stream');
+      this.errorMessage = this.intl.t('cyod.viewer.connectionFailed');
+
+      return;
+    }
+
     this.errorMessage = null;
 
     let ws: WebSocket;
@@ -129,7 +146,10 @@ export default class CyodViewerComponent extends Component<CyodViewerSignature> 
     // A bad devicefarm URL throws here, on the modifier's install path, which
     // would take the whole render down with it.
     try {
-      ws = new WebSocket(this.wsUrl);
+      // moriarty reads the credential from Sec-WebSocket-Protocol: the marker
+      // followed by the token. It echoes the marker back on accept, so the
+      // handshake only succeeds if the server understood it.
+      ws = new WebSocket(this.wsUrl, [AUTH_SUBPROTOCOL, this.args.authToken]);
     } catch (err) {
       this.logger.error('[CyodViewer] could not open the stream socket:', err);
       this.errorMessage = this.intl.t('cyod.viewer.connectionFailed');
